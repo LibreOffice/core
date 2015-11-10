@@ -82,7 +82,7 @@ class ThesDummy_Impl :
     void GetThes_Impl();
 
 public:
-    ThesDummy_Impl() : pLocaleSeq(0)  {}
+    ThesDummy_Impl() : pLocaleSeq(nullptr)  {}
     virtual ~ThesDummy_Impl();
 
     // XSupportedLocales
@@ -139,7 +139,7 @@ void ThesDummy_Impl::GetThes_Impl()
         if (xThes.is())
         {
             // no longer needed...
-            delete pLocaleSeq;    pLocaleSeq = 0;
+            delete pLocaleSeq;    pLocaleSeq = nullptr;
         }
     }
 }
@@ -456,7 +456,7 @@ LinguMgrExitLstnr::~LinguMgrExitLstnr()
     if (xDesktop.is())
     {
         xDesktop->removeEventListener( this );
-        xDesktop = NULL;    //! release reference to desktop
+        xDesktop = nullptr;    //! release reference to desktop
     }
     OSL_ENSURE(!xDesktop.is(), "reference to desktop should be realeased");
 }
@@ -467,7 +467,7 @@ void LinguMgrExitLstnr::disposing(const EventObject& rSource)
     if (xDesktop.is()  &&  rSource.Source == xDesktop)
     {
         xDesktop->removeEventListener( this );
-        xDesktop = NULL;    //! release reference to desktop
+        xDesktop = nullptr;    //! release reference to desktop
 
         AtExit();
     }
@@ -478,37 +478,37 @@ void LinguMgrExitLstnr::AtExit()
     SolarMutexGuard g;
 
     // release references
-    LinguMgr::xLngSvcMgr    = 0;
-    LinguMgr::xSpell        = 0;
-    LinguMgr::xHyph         = 0;
-    LinguMgr::xThes         = 0;
-    LinguMgr::xDicList      = 0;
-    LinguMgr::xProp         = 0;
-    LinguMgr::xIgnoreAll    = 0;
-    LinguMgr::xChangeAll    = 0;
+    LinguMgr::xLngSvcMgr    = nullptr;
+    LinguMgr::xSpell        = nullptr;
+    LinguMgr::xHyph         = nullptr;
+    LinguMgr::xThes         = nullptr;
+    LinguMgr::xDicList      = nullptr;
+    LinguMgr::xProp         = nullptr;
+    LinguMgr::xIgnoreAll    = nullptr;
+    LinguMgr::xChangeAll    = nullptr;
 
     LinguMgr::bExiting      = true;
 
-    LinguMgr::pExitLstnr    = 0;
+    LinguMgr::pExitLstnr    = nullptr;
 }
 
 
-LinguMgrExitLstnr *             LinguMgr::pExitLstnr    = 0;
+LinguMgrExitLstnr *             LinguMgr::pExitLstnr    = nullptr;
 bool                            LinguMgr::bExiting      = false;
-uno::Reference< XLinguServiceManager2 >  LinguMgr::xLngSvcMgr    = 0;
-uno::Reference< XSpellChecker1 >    LinguMgr::xSpell        = 0;
-uno::Reference< XHyphenator >       LinguMgr::xHyph         = 0;
-uno::Reference< XThesaurus >        LinguMgr::xThes         = 0;
-uno::Reference< XSearchableDictionaryList >   LinguMgr::xDicList      = 0;
-uno::Reference< XLinguProperties >  LinguMgr::xProp         = 0;
-uno::Reference< XDictionary >       LinguMgr::xIgnoreAll    = 0;
-uno::Reference< XDictionary >       LinguMgr::xChangeAll    = 0;
+uno::Reference< XLinguServiceManager2 >  LinguMgr::xLngSvcMgr    = nullptr;
+uno::Reference< XSpellChecker1 >    LinguMgr::xSpell        = nullptr;
+uno::Reference< XHyphenator >       LinguMgr::xHyph         = nullptr;
+uno::Reference< XThesaurus >        LinguMgr::xThes         = nullptr;
+uno::Reference< XSearchableDictionaryList >   LinguMgr::xDicList      = nullptr;
+uno::Reference< XLinguProperties >  LinguMgr::xProp         = nullptr;
+uno::Reference< XDictionary >       LinguMgr::xIgnoreAll    = nullptr;
+uno::Reference< XDictionary >       LinguMgr::xChangeAll    = nullptr;
 
 
 uno::Reference< XLinguServiceManager2 > LinguMgr::GetLngSvcMgr()
 {
     if (bExiting)
-        return 0;
+        return nullptr;
 
     if (!pExitLstnr)
         pExitLstnr = new LinguMgrExitLstnr;
@@ -566,7 +566,7 @@ uno::Reference< XDictionary > LinguMgr::GetChangeAllList()
 uno::Reference< XSpellChecker1 > LinguMgr::GetSpell()
 {
     if (bExiting)
-        return 0;
+        return nullptr;
 
     if (!pExitLstnr)
         pExitLstnr = new LinguMgrExitLstnr;
@@ -579,7 +579,7 @@ uno::Reference< XSpellChecker1 > LinguMgr::GetSpell()
 uno::Reference< XHyphenator > LinguMgr::GetHyph()
 {
     if (bExiting)
-        return 0;
+        return nullptr;
 
     if (!pExitLstnr)
         pExitLstnr = new LinguMgrExitLstnr;
@@ -592,7 +592,7 @@ uno::Reference< XHyphenator > LinguMgr::GetHyph()
 uno::Reference< XThesaurus > LinguMgr::GetThes()
 {
     if (bExiting)
-        return 0;
+        return nullptr;
 
     if (!pExitLstnr)
         pExitLstnr = new LinguMgrExitLstnr;
@@ -608,7 +608,7 @@ uno::Reference< XThesaurus > LinguMgr::GetThes()
 uno::Reference< XSearchableDictionaryList > LinguMgr::GetDicList()
 {
     if (bExiting)
-        return 0;
+        return nullptr;
 
     if (!pExitLstnr)
         pExitLstnr = new LinguMgrExitLstnr;
@@ -620,7 +620,7 @@ uno::Reference< XSearchableDictionaryList > LinguMgr::GetDicList()
 uno::Reference< linguistic2::XLinguProperties > LinguMgr::GetProp()
 {
     if (bExiting)
-        return 0;
+        return nullptr;
 
     if (!pExitLstnr)
         pExitLstnr = new LinguMgrExitLstnr;
@@ -632,7 +632,7 @@ uno::Reference< linguistic2::XLinguProperties > LinguMgr::GetProp()
 uno::Reference< XDictionary > LinguMgr::GetIgnoreAll()
 {
     if (bExiting)
-        return 0;
+        return nullptr;
 
     if (!pExitLstnr)
         pExitLstnr = new LinguMgrExitLstnr;
@@ -648,7 +648,7 @@ uno::Reference< XDictionary > LinguMgr::GetIgnoreAll()
 uno::Reference< XDictionary > LinguMgr::GetChangeAll()
 {
     if (bExiting)
-        return 0;
+        return nullptr;
 
     if (!pExitLstnr)
         pExitLstnr = new LinguMgrExitLstnr;
@@ -671,11 +671,11 @@ uno::Reference< XDictionary > LinguMgr::GetStandard()
     // persistent and not read-only.
 
     if (bExiting)
-        return 0;
+        return nullptr;
 
     uno::Reference< XSearchableDictionaryList >  xTmpDicList( GetDictionaryList() );
     if (!xTmpDicList.is())
-        return NULL;
+        return nullptr;
 
     const OUString aDicName( "standard.dic" );
     uno::Reference< XDictionary >   xDic( xTmpDicList->getDictionaryByName( aDicName ),

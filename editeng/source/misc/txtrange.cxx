@@ -32,7 +32,7 @@ TextRanger::TextRanger( const basegfx::B2DPolyPolygon& rPolyPolygon,
                         const basegfx::B2DPolyPolygon* pLinePolyPolygon,
                         sal_uInt16 nCacheSz, sal_uInt16 nLft, sal_uInt16 nRght,
                         bool bSimpl, bool bInnr, bool bVert ) :
-    pBound( NULL ),
+    pBound( nullptr ),
     nCacheSize( nCacheSz ),
     nRight( nRght ),
     nLeft( nLft ),
@@ -66,7 +66,7 @@ TextRanger::TextRanger( const basegfx::B2DPolyPolygon& rPolyPolygon,
         }
     }
     else
-        mpLinePolyPolygon = NULL;
+        mpLinePolyPolygon = nullptr;
 }
 
 
@@ -658,7 +658,7 @@ LongDqPtr TextRanger::GetTextRanges( const Range& rRange )
 
 const Rectangle& TextRanger::_GetBoundRect()
 {
-    DBG_ASSERT( 0 == pBound, "Don't call twice." );
+    DBG_ASSERT( nullptr == pBound, "Don't call twice." );
     pBound = new Rectangle( mpPolyPolygon->GetBoundRect() );
     return *pBound;
 }

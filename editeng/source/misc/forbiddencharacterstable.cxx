@@ -32,7 +32,7 @@ SvxForbiddenCharactersTable::SvxForbiddenCharactersTable( const css::uno::Refere
 
 const css::i18n::ForbiddenCharacters* SvxForbiddenCharactersTable::GetForbiddenCharacters( sal_uInt16 nLanguage, bool bGetDefault )
 {
-    css::i18n::ForbiddenCharacters* pForbiddenCharacters = NULL;
+    css::i18n::ForbiddenCharacters* pForbiddenCharacters = nullptr;
     Map::iterator it = maMap.find( nLanguage );
     if ( it != maMap.end() )
         pForbiddenCharacters = &(it->second);

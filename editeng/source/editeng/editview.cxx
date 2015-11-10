@@ -655,12 +655,12 @@ SfxStyleSheet* EditView::GetStyleSheet()
     sal_Int32 nStartPara = pImpEditView->pEditEngine->GetEditDoc().GetPos( aSel.Min().GetNode() );
     sal_Int32 nEndPara = pImpEditView->pEditEngine->GetEditDoc().GetPos( aSel.Max().GetNode() );
 
-    SfxStyleSheet* pStyle = NULL;
+    SfxStyleSheet* pStyle = nullptr;
     for ( sal_Int32 n = nStartPara; n <= nEndPara; n++ )
     {
         SfxStyleSheet* pTmpStyle = pImpEditView->pEditEngine->GetStyleSheet( n );
         if ( ( n != nStartPara ) && ( pStyle != pTmpStyle ) )
-            return NULL;    // Not unique.
+            return nullptr;    // Not unique.
         pStyle = pTmpStyle;
     }
     return pStyle;
@@ -878,7 +878,7 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link<SpellCallbackInfo
         Sequence< Reference< linguistic2::XDictionary >  > aDics;
         if (xDicList.is())
         {
-            const Reference< linguistic2::XDictionary >  *pDic = NULL;
+            const Reference< linguistic2::XDictionary >  *pDic = nullptr;
             // add the default positive dictionary to dic-list (if not already done).
             // This is to ensure that there is at least one dictionary to which
             // words could be added.
@@ -1115,7 +1115,7 @@ const SvxFieldItem* EditView::GetFieldAtSelection() const
                 }
         }
     }
-    return 0;
+    return nullptr;
 }
 
 void EditView::SetInvalidateMore( sal_uInt16 nPixel )

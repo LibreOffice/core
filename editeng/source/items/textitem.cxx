@@ -3378,7 +3378,7 @@ SfxPoolItem* SvxScriptSetItem::Clone( SfxItemPool * ) const
 
 SfxPoolItem* SvxScriptSetItem::Create( SvStream &, sal_uInt16 ) const
 {
-    return 0;
+    return nullptr;
 }
 
 const SfxPoolItem* SvxScriptSetItem::GetItemOfScriptSet(
@@ -3387,7 +3387,7 @@ const SfxPoolItem* SvxScriptSetItem::GetItemOfScriptSet(
     const SfxPoolItem* pI;
     SfxItemState eSt = rSet.GetItemState( nId, false, &pI );
     if( SfxItemState::SET != eSt )
-        pI = SfxItemState::DEFAULT == eSt ? &rSet.Get( nId ) : 0;
+        pI = SfxItemState::DEFAULT == eSt ? &rSet.Get( nId ) : nullptr;
     return pI;
 }
 
@@ -3405,29 +3405,29 @@ const SfxPoolItem* SvxScriptSetItem::GetItemOfScript( sal_uInt16 nSlotId, const 
         pRet = GetItemOfScriptSet( rSet, nComplex );
     } else if (nScript == (SvtScriptType::LATIN|SvtScriptType::ASIAN))
     {
-        if( 0 == (pRet = GetItemOfScriptSet( rSet, nLatin )) ||
-            0 == (pAsn = GetItemOfScriptSet( rSet, nAsian )) ||
+        if( nullptr == (pRet = GetItemOfScriptSet( rSet, nLatin )) ||
+            nullptr == (pAsn = GetItemOfScriptSet( rSet, nAsian )) ||
             *pRet != *pAsn )
-            pRet = 0;
+            pRet = nullptr;
     } else if (nScript == (SvtScriptType::LATIN|SvtScriptType::COMPLEX))
     {
-        if( 0 == (pRet = GetItemOfScriptSet( rSet, nLatin )) ||
-            0 == (pCmplx = GetItemOfScriptSet( rSet, nComplex )) ||
+        if( nullptr == (pRet = GetItemOfScriptSet( rSet, nLatin )) ||
+            nullptr == (pCmplx = GetItemOfScriptSet( rSet, nComplex )) ||
             *pRet != *pCmplx )
-            pRet = 0;
+            pRet = nullptr;
     } else if (nScript == (SvtScriptType::ASIAN|SvtScriptType::COMPLEX))
     {
-        if( 0 == (pRet = GetItemOfScriptSet( rSet, nAsian )) ||
-            0 == (pCmplx = GetItemOfScriptSet( rSet, nComplex )) ||
+        if( nullptr == (pRet = GetItemOfScriptSet( rSet, nAsian )) ||
+            nullptr == (pCmplx = GetItemOfScriptSet( rSet, nComplex )) ||
             *pRet != *pCmplx )
-            pRet = 0;
+            pRet = nullptr;
     } else if (nScript == (SvtScriptType::LATIN|SvtScriptType::ASIAN|SvtScriptType::COMPLEX))
     {
-        if( 0 == (pRet = GetItemOfScriptSet( rSet, nLatin )) ||
-            0 == (pAsn = GetItemOfScriptSet( rSet, nAsian )) ||
-            0 == (pCmplx = GetItemOfScriptSet( rSet, nComplex )) ||
+        if( nullptr == (pRet = GetItemOfScriptSet( rSet, nLatin )) ||
+            nullptr == (pAsn = GetItemOfScriptSet( rSet, nAsian )) ||
+            nullptr == (pCmplx = GetItemOfScriptSet( rSet, nComplex )) ||
             *pRet != *pAsn || *pRet != *pCmplx )
-            pRet = 0;
+            pRet = nullptr;
     } else {
         //no one valid -> match to latin
         pRet = GetItemOfScriptSet( rSet, nLatin );

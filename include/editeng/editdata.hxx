@@ -340,7 +340,7 @@ struct EENotify
     sal_Int32       nParam2;
 
     EENotify( EENotifyType eType )
-        { eNotificationType = eType; pEditEngine = NULL; pEditView = NULL; nParagraph = EE_PARA_NOT_FOUND; nParam1 = 0; nParam2 = 0; }
+        { eNotificationType = eType; pEditEngine = nullptr; pEditView = nullptr; nParagraph = EE_PARA_NOT_FOUND; nParam1 = 0; nParam2 = 0; }
 };
 
 #endif // INCLUDED_EDITENG_EDITDATA_HXX

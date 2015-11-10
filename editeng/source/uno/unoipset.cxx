@@ -61,7 +61,7 @@ uno::Any* SvxItemPropertySet::GetUsrAnyForID(sal_uInt16 nWID) const
         if( pActual->nWID == nWID )
             return &pActual->aAny;
     }
-    return NULL;
+    return nullptr;
 }
 
 
@@ -101,10 +101,10 @@ uno::Any SvxItemPropertySet::getPropertyValue( const SfxItemPropertySimpleEntry*
     if(!pMap || !pMap->nWID)
         return aVal;
 
-    const SfxPoolItem* pItem = 0;
+    const SfxPoolItem* pItem = nullptr;
     SfxItemPool* pPool = rSet.GetPool();
     rSet.GetItemState( pMap->nWID, bSearchInParent, &pItem );
-    if( NULL == pItem && pPool )
+    if( nullptr == pItem && pPool )
         pItem = &(pPool->GetDefaultItem( pMap->nWID ));
 
     const SfxMapUnit eMapUnit = pPool ? pPool->GetMetric((sal_uInt16)pMap->nWID) : SFX_MAPUNIT_100TH_MM;
@@ -147,14 +147,14 @@ void SvxItemPropertySet::setPropertyValue( const SfxItemPropertySimpleEntry* pMa
         return;
 
     // Get item
-    const SfxPoolItem* pItem = 0;
+    const SfxPoolItem* pItem = nullptr;
     SfxItemState eState = rSet.GetItemState( pMap->nWID, true, &pItem );
     SfxItemPool* pPool = rSet.GetPool();
 
     // Put UnoAny in the item value
-    if(eState < SfxItemState::DEFAULT || pItem == NULL)
+    if(eState < SfxItemState::DEFAULT || pItem == nullptr)
     {
-        if( pPool == NULL )
+        if( pPool == nullptr )
         {
             OSL_FAIL( "No default item and no pool?" );
             return;
@@ -217,7 +217,7 @@ uno::Any SvxItemPropertySet::getPropertyValue( const SfxItemPropertySimpleEntry*
 
     if(aSet.Count())
     {
-        const SfxPoolItem* pItem = NULL;
+        const SfxPoolItem* pItem = nullptr;
         SfxItemState eState = aSet.GetItemState( pMap->nWID, true, &pItem );
         if(eState >= SfxItemState::DEFAULT && pItem)
         {

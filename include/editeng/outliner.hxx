@@ -225,8 +225,8 @@ public:
 
     void        Scroll( long nHorzScroll, long nVertScroll );
 
-    void        Paint( const Rectangle& rRect, OutputDevice* pTargetDevice = 0 );
-    bool        PostKeyEvent( const KeyEvent& rKEvt, vcl::Window* pFrameWin = NULL );
+    void        Paint( const Rectangle& rRect, OutputDevice* pTargetDevice = nullptr );
+    bool        PostKeyEvent( const KeyEvent& rKEvt, vcl::Window* pFrameWin = nullptr );
     bool        MouseButtonDown( const MouseEvent& );
     bool        MouseButtonUp( const MouseEvent& );
     void        ReleaseMouse();
@@ -263,7 +263,7 @@ public:
 
     bool        AdjustHeight( long nDY );
 
-    sal_uLong   Read( SvStream& rInput, const OUString& rBaseURL, EETextFormat eFormat, bool bSelect = false, SvKeyValueIterator* pHTTPHeaderAttrs = NULL );
+    sal_uLong   Read( SvStream& rInput, const OUString& rBaseURL, EETextFormat eFormat, bool bSelect = false, SvKeyValueIterator* pHTTPHeaderAttrs = nullptr );
 
     void        InsertText( const OUString& rNew, bool bSelect = false );
     void        InsertText( const OutlinerParaObject& rParaObj );
@@ -332,7 +332,7 @@ public:
     void ToggleBulletsNumbering(
         const bool bToggle,
         const bool bHandleBullets,
-        const SvxNumRule* pNumRule = NULL );
+        const SvxNumRule* pNumRule = nullptr );
 
     /** apply bullets/numbering for paragraphs
 
@@ -369,7 +369,7 @@ public:
 
     bool        IsCursorAtWrongSpelledWord( bool bMarkIfWrong = false );
     bool        IsWrongSpelledWordAtPos( const Point& rPosPixel, bool bMarkIfWrong = false );
-    void        ExecuteSpellPopup( const Point& rPosPixel, Link<SpellCallbackInfo&,void>* pCallBack = 0 );
+    void        ExecuteSpellPopup( const Point& rPosPixel, Link<SpellCallbackInfo&,void>* pCallBack = nullptr );
 
     void        SetInvalidateMore( sal_uInt16 nPixel );
     sal_uInt16  GetInvalidateMore() const;
@@ -517,8 +517,8 @@ public:
                     {
                         pOutliner = pOutl;
                         nPara = nPa; nPos = nPo;
-                        pTxtColor = 0; pFldColor = 0; bSimpleClick = false;
-                        mpSdrPage = 0;
+                        pTxtColor = nullptr; pFldColor = nullptr; bSimpleClick = false;
+                        mpSdrPage = nullptr;
                     }
                     ~EditFieldInfo()
                     {
@@ -538,7 +538,7 @@ public:
     void            SetFieldColor( const Color& rColor )
                         { delete pFldColor; pFldColor = new Color( rColor ); }
     void            ClearFieldColor()
-                        { delete pFldColor; pFldColor = 0; }
+                        { delete pFldColor; pFldColor = nullptr; }
 
     sal_Int32       GetPara() const { return nPara; }
     sal_Int32       GetPos() const { return nPos; }
@@ -641,12 +641,12 @@ class EDITENG_DLLPUBLIC Outliner : public SfxBroadcaster
     OUString            ImplGetBulletText( sal_Int32 nPara );
     void                ImplCheckNumBulletItem( sal_Int32 nPara );
     void                ImplInitDepth( sal_Int32 nPara, sal_Int16 nDepth, bool bCreateUndo, bool bUndoAction = false );
-    void                ImplSetLevelDependendStyleSheet( sal_Int32 nPara, SfxStyleSheet* pLevelStyle = NULL );
+    void                ImplSetLevelDependendStyleSheet( sal_Int32 nPara, SfxStyleSheet* pLevelStyle = nullptr );
 
     void                ImplBlockInsertionCallbacks( bool b );
 
     void        ImpFilterIndents( sal_Int32 nFirstPara, sal_Int32 nLastPara );
-    bool        ImpConvertEdtToOut( sal_Int32 nPara, EditView* pView = 0 );
+    bool        ImpConvertEdtToOut( sal_Int32 nPara, EditView* pView = nullptr );
 
     void        ImpTextPasted( sal_Int32 nStartPara, sal_Int32 nCount );
     vcl::Font   ImpCalcBulletFont( sal_Int32 nPara ) const;
@@ -893,7 +893,7 @@ public:
     sal_Int32           GetLineLen( sal_Int32 nParagraph, sal_Int32 nLine ) const;
     sal_uLong           GetLineHeight( sal_Int32 nParagraph, sal_Int32 nLine = 0 );
 
-    sal_uLong           Read( SvStream& rInput, const OUString& rBaseURL, sal_uInt16, SvKeyValueIterator* pHTTPHeaderAttrs = NULL );
+    sal_uLong           Read( SvStream& rInput, const OUString& rBaseURL, sal_uInt16, SvKeyValueIterator* pHTTPHeaderAttrs = nullptr );
 
     ::svl::IUndoManager& GetUndoManager();
     ::svl::IUndoManager* SetUndoManager(::svl::IUndoManager* pNew);

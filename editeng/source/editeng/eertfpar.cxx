@@ -44,7 +44,7 @@ ImportInfo::ImportInfo( ImportState eSt, SvParser* pPrsrs, const ESelection& rSe
 
     nToken      = 0;
     nTokenValue = 0;
-    pAttrs      = NULL;
+    pAttrs      = nullptr;
 }
 
 ImportInfo::~ImportInfo()
@@ -53,7 +53,7 @@ ImportInfo::~ImportInfo()
 
 EditRTFParser::EditRTFParser(
     SvStream& rIn, EditSelection aSel, SfxItemPool& rAttrPool, EditEngine* pEditEngine) :
-    SvxRTFParser(rAttrPool, rIn, 0),
+    SvxRTFParser(rAttrPool, rIn, nullptr),
     mpEditEngine(pEditEngine),
     aRTFMapMode(MAP_TWIP)
 {
@@ -438,7 +438,7 @@ SvxRTFStyleType* EditRTFParser::FindStyleSheet( const OUString& rName )
         if (iter.second->sName == rName)
             return iter.second.get();
     }
-    return NULL;
+    return nullptr;
 }
 
 SfxStyleSheet* EditRTFParser::CreateStyleSheet( SvxRTFStyleType* pRTFStyle )

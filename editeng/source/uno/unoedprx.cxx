@@ -323,7 +323,7 @@ SvxEditSource* SvxEditSourceAdapter::Clone() const
         }
     }
 
-    return NULL;
+    return nullptr;
 }
 
 SvxAccessibleTextAdapter* SvxEditSourceAdapter::GetTextForwarderAdapter()
@@ -340,7 +340,7 @@ SvxAccessibleTextAdapter* SvxEditSourceAdapter::GetTextForwarderAdapter()
         }
     }
 
-    return NULL;
+    return nullptr;
 }
 
 SvxTextForwarder* SvxEditSourceAdapter::GetTextForwarder()
@@ -353,7 +353,7 @@ SvxViewForwarder* SvxEditSourceAdapter::GetViewForwarder()
     if( mbEditSourceValid && mpAdaptee.get() )
         return mpAdaptee->GetViewForwarder();
 
-    return NULL;
+    return nullptr;
 }
 
 SvxAccessibleTextEditViewAdapter* SvxEditSourceAdapter::GetEditViewForwarderAdapter( bool bCreate )
@@ -375,7 +375,7 @@ SvxAccessibleTextEditViewAdapter* SvxEditSourceAdapter::GetEditViewForwarderAdap
         }
     }
 
-    return NULL;
+    return nullptr;
 }
 
 SvxEditViewForwarder* SvxEditSourceAdapter::GetEditViewForwarder( bool bCreate )
@@ -414,7 +414,7 @@ void SvxEditSourceAdapter::SetEditSource( ::std::unique_ptr< SvxEditSource > && 
 }
 
 SvxAccessibleTextAdapter::SvxAccessibleTextAdapter()
-    : mpTextForwarder(NULL)
+    : mpTextForwarder(nullptr)
 {
 }
 
@@ -719,7 +719,7 @@ Rectangle SvxAccessibleTextAdapter::GetCharBounds( sal_Int32 nPara, sal_Int32 nI
 
         OutputDevice* pOutDev = GetRefDevice();
 
-        DBG_ASSERT(pOutDev!=NULL, "SvxAccessibleTextAdapter::GetCharBounds: No ref device");
+        DBG_ASSERT(pOutDev!=nullptr, "SvxAccessibleTextAdapter::GetCharBounds: No ref device");
 
         // preset if anything goes wrong below
         aRect = aBulletInfo.aBounds; // better than nothing
@@ -738,7 +738,7 @@ Rectangle SvxAccessibleTextAdapter::GetCharBounds( sal_Int32 nPara, sal_Int32 nI
         {
             OutputDevice* pOutDev = GetRefDevice();
 
-            DBG_ASSERT(pOutDev!=NULL, "SvxAccessibleTextAdapter::GetCharBounds: No ref device");
+            DBG_ASSERT(pOutDev!=nullptr, "SvxAccessibleTextAdapter::GetCharBounds: No ref device");
 
             if( pOutDev )
             {
@@ -821,7 +821,7 @@ bool SvxAccessibleTextAdapter::GetIndexAtPoint( const Point& rPoint, sal_Int32& 
         {
             OutputDevice* pOutDev = GetRefDevice();
 
-            DBG_ASSERT(pOutDev!=NULL, "SvxAccessibleTextAdapter::GetIndexAtPoint: No ref device");
+            DBG_ASSERT(pOutDev!=nullptr, "SvxAccessibleTextAdapter::GetIndexAtPoint: No ref device");
 
             if( !pOutDev )
                 return false;
@@ -844,7 +844,7 @@ bool SvxAccessibleTextAdapter::GetIndexAtPoint( const Point& rPoint, sal_Int32& 
     {
         OutputDevice* pOutDev = GetRefDevice();
 
-        DBG_ASSERT(pOutDev!=NULL, "SvxAccessibleTextAdapter::GetIndexAtPoint: No ref device");
+        DBG_ASSERT(pOutDev!=nullptr, "SvxAccessibleTextAdapter::GetIndexAtPoint: No ref device");
 
         if( !pOutDev )
             return false;
@@ -1111,7 +1111,7 @@ bool SvxAccessibleTextAdapter::IsEditable( const ESelection& rSel )
 const SfxItemSet * SvxAccessibleTextAdapter::GetEmptyItemSetPtr()
 {
     OSL_FAIL( "not implemented" );
-    return 0;
+    return nullptr;
 }
 
 void SvxAccessibleTextAdapter::AppendParagraph()
@@ -1130,8 +1130,8 @@ void        SvxAccessibleTextAdapter::CopyText(const SvxTextForwarder&)
 }
 
 SvxAccessibleTextEditViewAdapter::SvxAccessibleTextEditViewAdapter()
-    : mpViewForwarder(NULL)
-    , mpTextForwarder(NULL)
+    : mpViewForwarder(nullptr)
+    , mpTextForwarder(nullptr)
 {
 }
 

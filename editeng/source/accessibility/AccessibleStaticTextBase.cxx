@@ -192,8 +192,8 @@ namespace accessibility
 
 
     AccessibleStaticTextBase_Impl::AccessibleStaticTextBase_Impl() :
-        mxThis( NULL ),
-        mpTextParagraph( new AccessibleEditableTextPara(NULL) ),
+        mxThis( nullptr ),
+        mpTextParagraph( new AccessibleEditableTextPara(nullptr) ),
         mxParagraph( mpTextParagraph ),
         maEditSource(),
         maMutex(),
@@ -237,9 +237,9 @@ namespace accessibility
             mpTextParagraph->Dispose();
 
         // drop references
-        mxParagraph = NULL;
-        mxThis = NULL;
-        mpTextParagraph = NULL;
+        mxParagraph = nullptr;
+        mxThis = nullptr;
+        mpTextParagraph = nullptr;
     }
 
     AccessibleEditableTextPara& AccessibleStaticTextBase_Impl::GetParagraph( sal_Int32 nPara ) const

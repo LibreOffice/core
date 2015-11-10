@@ -36,11 +36,11 @@ public:
 
     SvxCharHiddenItem( const bool bHidden /*= false*/, const sal_uInt16 nId );
 
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const override;
+    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
     virtual bool GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
-                                    OUString &rText, const IntlWrapper * = 0 ) const override;
+                                    OUString &rText, const IntlWrapper * = nullptr ) const override;
 
     inline SvxCharHiddenItem& operator=(const SvxCharHiddenItem& rHidden) {
             SetValue(rHidden.GetValue());

@@ -62,12 +62,12 @@ SvxEditSource::~SvxEditSource()
 
 SvxViewForwarder* SvxEditSource::GetViewForwarder()
 {
-    return NULL;
+    return nullptr;
 }
 
 SvxEditViewForwarder* SvxEditSource::GetEditViewForwarder( bool )
 {
-    return NULL;
+    return nullptr;
 }
 
 SfxBroadcaster& SvxEditSource::GetBroadcaster() const

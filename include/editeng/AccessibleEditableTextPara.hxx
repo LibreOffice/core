@@ -76,7 +76,7 @@ namespace accessibility
         //   This has to be the instance of <AccessibleParaManager>, which
         //   created and manages this accessible paragraph.
         AccessibleEditableTextPara ( const css::uno::Reference< css::accessibility::XAccessible >& rParent,
-                                     const AccessibleParaManager* _pParaManager = NULL );
+                                     const AccessibleParaManager* _pParaManager = nullptr );
 
         virtual ~AccessibleEditableTextPara ();
 

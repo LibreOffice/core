@@ -187,8 +187,8 @@ ESelection OFlowChainedText::GetOverflowPointSel() const
 OutlinerParaObject *OFlowChainedText::InsertOverflowingText(Outliner *pOutliner, OutlinerParaObject *pTextToBeMerged)
 {
     // Just return the roughly merged paras for now
-    if (mpOverflowingTxt == NULL)
-        return NULL;
+    if (mpOverflowingTxt == nullptr)
+        return nullptr;
 
     if (mbIsDeepMerge) {
         SAL_INFO("editeng.chaining", "[TEXTCHAINFLOW - OF] Deep merging paras" );
@@ -202,8 +202,8 @@ OutlinerParaObject *OFlowChainedText::InsertOverflowingText(Outliner *pOutliner,
 
 OutlinerParaObject *OFlowChainedText::RemoveOverflowingText(Outliner *pOutliner)
 {
-    if (mpNonOverflowingTxt == NULL)
-        return NULL;
+    if (mpNonOverflowingTxt == nullptr)
+        return nullptr;
 
     return mpNonOverflowingTxt->RemoveOverflowingText(pOutliner);
 }
@@ -224,7 +224,7 @@ UFlowChainedText::UFlowChainedText(Outliner *pOutl, bool bIsDeepMerge)
 
 OutlinerParaObject *UFlowChainedText::CreateMergedUnderflowParaObject(Outliner *pOutl, OutlinerParaObject *pNextLinkWholeText)
 {
-    OutlinerParaObject *pNewText = NULL;
+    OutlinerParaObject *pNewText = nullptr;
 
     if (mbIsDeepMerge) {
         SAL_INFO("editeng.chaining", "[TEXTCHAINFLOW - UF] Deep merging paras" );

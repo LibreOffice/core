@@ -69,13 +69,13 @@ namespace editeng {
         Color            (*m_pColorGapFn)( Color );
 
     public:
-        SvxBorderLine( const Color *pCol = 0,
+        SvxBorderLine( const Color *pCol = nullptr,
                 long nWidth = 0,
                 SvxBorderStyle nStyle = css::table::BorderLineStyle::SOLID,
                 bool bUseLeftTop = false,
                 Color (*pColorOutFn)( Color ) = &darkColor,
                 Color (*pColorInFn)( Color ) = &darkColor,
-                Color (*pColorGapFn)( Color ) = NULL );
+                Color (*pColorGapFn)( Color ) = nullptr );
         SvxBorderLine( const SvxBorderLine& r );
 
         SvxBorderLine& operator=( const SvxBorderLine& r );
@@ -83,7 +83,7 @@ namespace editeng {
         const Color&    GetColor() const { return aColor; }
         Color           GetColorOut( bool bLeftOrTop = true ) const;
         Color           GetColorIn( bool bLeftOrTop = true ) const;
-        bool            HasGapColor() const { return m_pColorGapFn != NULL; }
+        bool            HasGapColor() const { return m_pColorGapFn != nullptr; }
         Color           GetColorGap() const;
 
         void SetWidth( long nWidth = 0 );

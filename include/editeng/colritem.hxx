@@ -51,9 +51,9 @@ public:
 
     virtual bool GetPresentation(SfxItemPresentation ePres,
                                  SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric,
-                                 OUString &rText, const IntlWrapper* pIntlWrapper = 0) const override;
+                                 OUString &rText, const IntlWrapper* pIntlWrapper = nullptr) const override;
 
-    virtual SfxPoolItem* Clone(SfxItemPool* pPool = 0) const override;
+    virtual SfxPoolItem* Clone(SfxItemPool* pPool = nullptr) const override;
     virtual SfxPoolItem* Create(SvStream& rStream, sal_uInt16 nVersion) const override;
     virtual SvStream& Store(SvStream& rStream, sal_uInt16 nVersion) const override;
 
@@ -81,7 +81,7 @@ class EDITENG_DLLPUBLIC SvxBackgroundColorItem : public SvxColorItem
         SvxBackgroundColorItem(SvStream& rStrm, const sal_uInt16 nId);
         SvxBackgroundColorItem(const SvxBackgroundColorItem& rCopy);
 
-        virtual SfxPoolItem* Clone(SfxItemPool* pPool = 0) const override;
+        virtual SfxPoolItem* Clone(SfxItemPool* pPool = nullptr) const override;
         virtual SvStream& Store(SvStream& rStream, sal_uInt16 nVersion) const override;
         virtual SfxPoolItem* Create(SvStream &, sal_uInt16) const override;
         virtual bool QueryValue(css::uno::Any& rVal, sal_uInt8 nMemberId = 0) const override;

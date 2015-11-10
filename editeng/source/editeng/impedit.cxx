@@ -75,16 +75,16 @@ ImpEditView::ImpEditView( EditView* pView, EditEngine* pEng, vcl::Window* pWindo
     pEditView           = pView;
     pEditEngine         = pEng;
     pOutWin             = pWindow;
-    pPointer            = NULL;
-    pBackgroundColor    = NULL;
+    pPointer            = nullptr;
+    pBackgroundColor    = nullptr;
     mbTiledRendering    = false;
-    mpLibreOfficeKitCallback = 0;
-    mpLibreOfficeKitData = 0;
+    mpLibreOfficeKitCallback = nullptr;
+    mpLibreOfficeKitData = nullptr;
     nScrollDiffX        = 0;
     nExtraCursorFlags   = 0;
     nCursorBidiLevel    = CURSOR_BIDILEVEL_DONTKNOW;
-    pCursor             = NULL;
-       pDragAndDropInfo = NULL;
+    pCursor             = nullptr;
+       pDragAndDropInfo = nullptr;
     bReadOnly           = false;
     bClickedInSelection = false;
     eSelectionMode      = EE_SELMODE_TXTONLY;
@@ -103,7 +103,7 @@ ImpEditView::~ImpEditView()
     RemoveDragAndDropListeners();
 
     if ( pOutWin && ( pOutWin->GetCursor() == pCursor ) )
-        pOutWin->SetCursor( NULL );
+        pOutWin->SetCursor( nullptr );
 
     delete pCursor;
     delete pBackgroundColor;
@@ -190,7 +190,7 @@ void ImpEditView::DrawSelection( EditSelection aTmpSel, vcl::Region* pRegion, Ou
     if (isTiledRendering() && !pRegion)
         pRegion = &aRegion;
 
-    tools::PolyPolygon* pPolyPoly = NULL;
+    tools::PolyPolygon* pPolyPoly = nullptr;
     if ( pRegion )
         pPolyPoly = new tools::PolyPolygon;
 
@@ -1287,7 +1287,7 @@ void ImpEditView::DeleteSelected()
 const SvxFieldItem* ImpEditView::GetField( const Point& rPos, sal_Int32* pPara, sal_Int32* pPos ) const
 {
     if( !GetOutputArea().IsInside( rPos ) )
-        return 0;
+        return nullptr;
 
     Point aDocPos( GetDocPos( rPos ) );
     EditPaM aPaM = pEditEngine->GetPaM(aDocPos, false);
@@ -1295,7 +1295,7 @@ const SvxFieldItem* ImpEditView::GetField( const Point& rPos, sal_Int32* pPara, 
     if ( aPaM.GetIndex() == aPaM.GetNode()->Len() )
     {
         // Otherwise, whenever the Field at the very end and mouse under the text
-        return 0;
+        return nullptr;
     }
 
     const CharAttribList::AttribsType& rAttrs = aPaM.GetNode()->GetCharAttribs().GetAttribs();
@@ -1316,7 +1316,7 @@ const SvxFieldItem* ImpEditView::GetField( const Point& rPos, sal_Int32* pPara, 
             }
         }
     }
-    return NULL;
+    return nullptr;
 }
 
 bool ImpEditView::IsBulletArea( const Point& rPos, sal_Int32* pPara )
@@ -1362,7 +1362,7 @@ void ImpEditView::CutCopy( css::uno::Reference< css::datatransfer::clipboard::XC
 
             try
                 {
-                    rxClipboard->setContents( xData, NULL );
+                    rxClipboard->setContents( xData, nullptr );
 
                     // #87756# FlushClipboard, but it would be better to become a TerminateListener to the Desktop and flush on demand...
                     uno::Reference< datatransfer::clipboard::XFlushableClipboard > xFlushableClipboard( rxClipboard, uno::UNO_QUERY );
@@ -1642,7 +1642,7 @@ void ImpEditView::dragGestureRecognized(const css::datatransfer::dnd::DragGestur
 
     SolarMutexGuard aVclGuard;
 
-    pDragAndDropInfo = NULL;
+    pDragAndDropInfo = nullptr;
 
     Point aMousePosPixel( rDGE.DragOriginX, rDGE.DragOriginY );
 
@@ -1808,7 +1808,7 @@ void ImpEditView::dragDropEnd( const css::datatransfer::dnd::DragSourceDropEvent
         HideDDCursor();
         ShowCursor( DoAutoScroll(), true );
         delete pDragAndDropInfo;
-        pDragAndDropInfo = NULL;
+        pDragAndDropInfo = nullptr;
         pEditEngine->GetEndDropHdl().Call(GetEditViewPtr());
     }
 }
@@ -1881,7 +1881,7 @@ void ImpEditView::drop( const css::datatransfer::dnd::DropTargetDropEvent& rDTDE
         if ( !pDragAndDropInfo->bStarterOfDD )
         {
             delete pDragAndDropInfo;
-            pDragAndDropInfo = NULL;
+            pDragAndDropInfo = nullptr;
         }
 
         rDTDE.Context->dropComplete( bChanges );
@@ -1924,7 +1924,7 @@ void ImpEditView::dragExit( const css::datatransfer::dnd::DropTargetEvent& ) thr
     if ( pDragAndDropInfo && !pDragAndDropInfo->bStarterOfDD )
     {
         delete pDragAndDropInfo;
-        pDragAndDropInfo = NULL;
+        pDragAndDropInfo = nullptr;
     }
 }
 

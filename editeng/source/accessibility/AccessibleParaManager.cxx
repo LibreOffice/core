@@ -386,7 +386,7 @@ namespace accessibility
         WeakPara::HardRefType aChild( rChild.first.get() );
 
         if( IsReferencable( aChild ) )
-            aChild->SetEditSource( NULL );
+            aChild->SetEditSource( nullptr );
     }
 
 }

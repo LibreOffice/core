@@ -40,7 +40,7 @@ public:
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     OUString &rText,
-                                    const IntlWrapper * pIntlWrapper = 0 )
+                                    const IntlWrapper * pIntlWrapper = nullptr )
         const override;
 
     inline SvxLineColorItem& operator=(const SvxLineColorItem& rColor)

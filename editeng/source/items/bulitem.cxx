@@ -109,7 +109,7 @@ SvxBulletItem::SvxBulletItem( sal_uInt16 _nWhich ) : SfxPoolItem( _nWhich )
 
 SvxBulletItem::SvxBulletItem( SvStream& rStrm, sal_uInt16 _nWhich )
     : SfxPoolItem(_nWhich)
-    , pGraphicObject(NULL)
+    , pGraphicObject(nullptr)
     , nStart(0)
     , nStyle(SvxBulletStyle::ABC_BIG)
     , nScale(0)
@@ -167,7 +167,7 @@ SvxBulletItem::SvxBulletItem( SvStream& rStrm, sal_uInt16 _nWhich )
 SvxBulletItem::SvxBulletItem( const SvxBulletItem& rItem) : SfxPoolItem( rItem )
 {
     aFont           = rItem.aFont;
-    pGraphicObject  = ( rItem.pGraphicObject ? new GraphicObject( *rItem.pGraphicObject ) : NULL );
+    pGraphicObject  = ( rItem.pGraphicObject ? new GraphicObject( *rItem.pGraphicObject ) : nullptr );
     aPrevText       = rItem.aPrevText;
     aFollowText     = rItem.aFollowText;
     nStart          = rItem.nStart;
@@ -211,7 +211,7 @@ void SvxBulletItem::SetDefaultFont_Impl()
 
 void SvxBulletItem::SetDefaults_Impl()
 {
-    pGraphicObject  = NULL;
+    pGraphicObject  = nullptr;
     nWidth          = 1200;  // 1.2cm
     nStart          = 1;
     nStyle          = SvxBulletStyle::N123;
@@ -294,7 +294,7 @@ SvStream& SvxBulletItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ ) c
         if( pGraphicObject )
         {
             delete( const_cast< SvxBulletItem* >( this )->pGraphicObject );
-            const_cast< SvxBulletItem* >( this )->pGraphicObject = NULL;
+            const_cast< SvxBulletItem* >( this )->pGraphicObject = nullptr;
         }
 
         const_cast< SvxBulletItem* >( this )->nStyle = SvxBulletStyle::NONE;
@@ -391,7 +391,7 @@ void SvxBulletItem::SetGraphicObject( const GraphicObject& rGraphicObject )
         if( pGraphicObject )
         {
             delete pGraphicObject;
-            pGraphicObject = NULL;
+            pGraphicObject = nullptr;
         }
     }
     else

@@ -61,12 +61,12 @@ public:
     virtual bool GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
-                                    OUString &rText, const IntlWrapper * = 0 ) const override;
+                                    OUString &rText, const IntlWrapper * = nullptr ) const override;
     virtual sal_uInt16       GetValueCount() const override;
     virtual OUString         GetValueTextByPos( sal_uInt16 nPos ) const override;
     virtual sal_uInt16       GetEnumValue() const override;
     virtual void             SetEnumValue( sal_uInt16 nNewVal ) override;
-    virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const override;
+    virtual SfxPoolItem*     Clone( SfxItemPool *pPool = nullptr ) const override;
     virtual SfxPoolItem*     Create(SvStream &, sal_uInt16) const override;
     virtual SvStream&        Store(SvStream &, sal_uInt16 nItemVersion ) const override;
     virtual sal_uInt16       GetVersion( sal_uInt16 nFileVersion ) const override;

@@ -459,7 +459,7 @@ void SvxUnoNumberingRules::setNumberingRuleByIndex(const Sequence<beans::Propert
     // check that we always have a brush item for bitmap numbering
     if( aFmt.GetNumberingType() == SVX_NUM_BITMAP )
     {
-        if( NULL == aFmt.GetBrush() )
+        if( nullptr == aFmt.GetBrush() )
         {
             GraphicObject aGrafObj;
             SvxBrushItem aBrushItem( aGrafObj, GPOS_AREA, SID_ATTR_BRUSH );
@@ -472,7 +472,7 @@ void SvxUnoNumberingRules::setNumberingRuleByIndex(const Sequence<beans::Propert
 const SvxNumRule& SvxGetNumRule( Reference< XIndexReplace > xRule ) throw( IllegalArgumentException )
 {
     SvxUnoNumberingRules* pRule = SvxUnoNumberingRules::getImplementation( xRule );
-    if( pRule == NULL )
+    if( pRule == nullptr )
         throw IllegalArgumentException();
 
     return pRule->getNumRule();

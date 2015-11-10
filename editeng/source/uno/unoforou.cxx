@@ -43,8 +43,8 @@ using namespace ::com::sun::star;
 SvxOutlinerForwarder::SvxOutlinerForwarder( Outliner& rOutl, bool bOutlText /* = false */ ) :
     rOutliner( rOutl ),
     bOutlinerText( bOutlText ),
-    mpAttribsCache( NULL ),
-    mpParaAttribsCache( NULL ),
+    mpAttribsCache( nullptr ),
+    mpParaAttribsCache( nullptr ),
     mnParaAttribsCache( 0 )
 {
 }
@@ -114,7 +114,7 @@ SfxItemSet SvxOutlinerForwarder::GetAttribs( const ESelection& rSel, EditEngineA
         {
             // no, we need delete the old cache
             delete mpAttribsCache;
-            mpAttribsCache = NULL;
+            mpAttribsCache = nullptr;
         }
     }
 
@@ -151,7 +151,7 @@ SfxItemSet SvxOutlinerForwarder::GetParaAttribs( sal_Int32 nPara ) const
         {
             // no, we need delete the old cache
             delete mpParaAttribsCache;
-            mpParaAttribsCache = NULL;
+            mpParaAttribsCache = nullptr;
         }
     }
 
@@ -173,7 +173,7 @@ void SvxOutlinerForwarder::SetParaAttribs( sal_Int32 nPara, const SfxItemSet& rS
 
     const SfxItemSet* pOldParent = rSet.GetParent();
     if( pOldParent )
-        const_cast<SfxItemSet*>(&rSet)->SetParent( NULL );
+        const_cast<SfxItemSet*>(&rSet)->SetParent( nullptr );
 
     rOutliner.SetParaAttribs( nPara, rSet );
 
@@ -261,13 +261,13 @@ void SvxOutlinerForwarder::flushCache()
     if( mpAttribsCache )
     {
         delete mpAttribsCache;
-        mpAttribsCache = NULL;
+        mpAttribsCache = nullptr;
     }
 
     if( mpParaAttribsCache )
     {
         delete mpParaAttribsCache;
-        mpParaAttribsCache = NULL;
+        mpParaAttribsCache = nullptr;
     }
 }
 

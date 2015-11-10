@@ -43,7 +43,7 @@ TrieNode::TrieNode(sal_Unicode aCharacter) :
 {
     for (int i=0; i<LATIN_ARRAY_SIZE; i++)
     {
-        mLatinArray[i] = NULL;
+        mLatinArray[i] = nullptr;
     }
 }
 
@@ -96,7 +96,7 @@ TrieNode* TrieNode::findChild(sal_Unicode aInputCharacter)
             return pCurrent;
     }
 
-    return NULL;
+    return nullptr;
 }
 
 void TrieNode::collectSuggestions(const OUString& sPath, vector<OUString>& rSuggestionList)
@@ -105,7 +105,7 @@ void TrieNode::collectSuggestions(const OUString& sPath, vector<OUString>& rSugg
     for (int i=0; i<LATIN_ARRAY_SIZE; i++)
     {
         TrieNode* pCurrent = mLatinArray[i];
-        if (pCurrent != NULL)
+        if (pCurrent != nullptr)
             collectSuggestionsForCurrentNode(pCurrent, sPath, rSuggestionList);
     }
 
@@ -114,7 +114,7 @@ void TrieNode::collectSuggestions(const OUString& sPath, vector<OUString>& rSugg
     for(iNode = mChildren.begin(); iNode != mChildren.end(); ++iNode)
     {
         TrieNode* pCurrent = *iNode;
-        if (pCurrent != NULL)
+        if (pCurrent != nullptr)
             collectSuggestionsForCurrentNode(pCurrent, sPath, rSuggestionList);
     }
 }
@@ -138,8 +138,8 @@ TrieNode* TrieNode::traversePath(const OUString& sPath)
     {
         sal_Unicode aCurrentChar = sPath[i];
         pCurrent = pCurrent->findChild(aCurrentChar);
-        if ( pCurrent == NULL )
-            return NULL;
+        if ( pCurrent == nullptr )
+            return nullptr;
     }
 
     return pCurrent;
@@ -171,7 +171,7 @@ void Trie::insert(const OUString& sInputString) const
     {
         aCurrentChar = sInputString[i];
         TrieNode* pChild = pCurrent->findChild(aCurrentChar);
-        if ( pChild == NULL )
+        if ( pChild == nullptr )
         {
             TrieNode* pNewNode = new TrieNode(aCurrentChar);
             pCurrent->addNewChild(pNewNode);
@@ -190,7 +190,7 @@ void Trie::findSuggestions(const OUString& sWordPart, vector<OUString>& rSuggest
 {
     TrieNode* pNode = mRoot->traversePath(sWordPart);
 
-    if (pNode != NULL)
+    if (pNode != nullptr)
     {
         pNode->collectSuggestions(sWordPart, rSuggestionList);
     }

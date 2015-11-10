@@ -178,7 +178,7 @@ public:
     void            SetStart(sal_uInt16 nSet) {nStart = nSet;}
     sal_uInt16          GetStart() const {return nStart;}
 
-    virtual void    SetGraphicBrush( const SvxBrushItem* pBrushItem, const Size* pSize = 0, const sal_Int16* pOrient = 0);
+    virtual void    SetGraphicBrush( const SvxBrushItem* pBrushItem, const Size* pSize = nullptr, const sal_Int16* pOrient = nullptr);
     const SvxBrushItem*         GetBrush() const {return pGraphicBrush;}
     void            SetGraphic( const OUString& rName );
     virtual void        SetVertOrient(sal_Int16 eSet);
@@ -298,7 +298,7 @@ public:
     SvxNumBulletItem(const SvxNumBulletItem& rCopy);
     virtual ~SvxNumBulletItem();
 
-    virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const override;
+    virtual SfxPoolItem*     Clone( SfxItemPool *pPool = nullptr ) const override;
     virtual SfxPoolItem*     Create(SvStream &rStream, sal_uInt16 nItemVersion) const override;
     sal_uInt16  GetVersion( sal_uInt16 nFileVersion ) const override;
     virtual SvStream&        Store(SvStream &rStream, sal_uInt16 nItemVersion ) const override;

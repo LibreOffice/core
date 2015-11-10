@@ -70,7 +70,7 @@ sal_Bool SvxUnoForbiddenCharsTable::hasForbiddenCharacters( const lang::Locale& 
     const LanguageType eLang = LanguageTag::convertToLanguageType( rLocale );
     const ForbiddenCharacters* pForbidden = mxForbiddenChars->GetForbiddenCharacters( eLang, false );
 
-    return NULL != pForbidden;
+    return nullptr != pForbidden;
 }
 
 void SvxUnoForbiddenCharsTable::setForbiddenCharacters(const lang::Locale& rLocale, const ForbiddenCharacters& rForbiddenCharacters )

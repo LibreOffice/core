@@ -83,7 +83,7 @@ EditDLL& EditDLL::Get()
 
 GlobalEditData::GlobalEditData()
 {
-    ppDefItems = NULL;
+    ppDefItems = nullptr;
 }
 
 GlobalEditData::~GlobalEditData()
@@ -206,7 +206,7 @@ EditDLL::~EditDLL()
     delete pGlobalData;
 }
 
-static ResMgr* pResMgr=0;
+static ResMgr* pResMgr=nullptr;
 
 ResMgr* EditDLL::GetResMgr()
 {

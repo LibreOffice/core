@@ -89,7 +89,7 @@ using namespace ::com::sun::star::linguistic2;
 static bool bDebugPaint = false;
 #endif
 
-static SfxItemPool* pGlobalPool=0;
+static SfxItemPool* pGlobalPool=nullptr;
 
 EditEngine::EditEngine( SfxItemPool* pItemPool )
 {
@@ -320,7 +320,7 @@ EditView* EditEngine::RemoveView( EditView* pView )
 {
 
     pView->HideCursor();
-    EditView* pRemoved = NULL;
+    EditView* pRemoved = nullptr;
     ImpEditEngine::ViewsType& rViews = pImpEditEngine->GetEditViews();
     ImpEditEngine::ViewsType::iterator it = std::find(rViews.begin(), rViews.end(), pView);
 
@@ -331,8 +331,8 @@ EditView* EditEngine::RemoveView( EditView* pView )
         rViews.erase(it);
         if ( pImpEditEngine->GetActiveView() == pView )
         {
-            pImpEditEngine->SetActiveView( 0 );
-            pImpEditEngine->GetSelEngine().SetCurView( 0 );
+            pImpEditEngine->SetActiveView( nullptr );
+            pImpEditEngine->GetSelEngine().SetCurView( nullptr );
         }
         pView->pImpEditView->RemoveDragAndDropListeners();
 
@@ -344,12 +344,12 @@ EditView* EditEngine::RemoveView(size_t nIndex)
 {
     ImpEditEngine::ViewsType& rViews = pImpEditEngine->GetEditViews();
     if (nIndex >= rViews.size())
-        return NULL;
+        return nullptr;
 
     EditView* pView = rViews[nIndex];
     if ( pView )
         return RemoveView( pView );
-    return NULL;
+    return nullptr;
 }
 
 EditView* EditEngine::GetView(size_t nIndex) const
@@ -501,7 +501,7 @@ void EditEngine::SetAddExtLeading( bool b )
 
 void EditEngine::SetPolygon( const basegfx::B2DPolyPolygon& rPolyPolygon )
 {
-    SetPolygon( rPolyPolygon, 0L );
+    SetPolygon( rPolyPolygon, nullptr );
 }
 
 void EditEngine::SetPolygon(const basegfx::B2DPolyPolygon& rPolyPolygon, const basegfx::B2DPolyPolygon* pLinePolyPolygon)
@@ -524,7 +524,7 @@ void EditEngine::SetPolygon(const basegfx::B2DPolyPolygon& rPolyPolygon, const b
 
 void EditEngine::ClearPolygon()
 {
-    pImpEditEngine->SetTextRanger( 0 );
+    pImpEditEngine->SetTextRanger( nullptr );
 }
 
 const Size& EditEngine::GetMinAutoPaperSize() const
@@ -1572,7 +1572,7 @@ EditTextObject* EditEngine::CreateTextObject( sal_Int32 nPara, sal_Int32 nParas 
         aTmpSel.Max() = EditPaM( pEndNode, pEndNode->Len() );
         return pImpEditEngine->CreateTextObject( aTmpSel );
     }
-    return 0;
+    return nullptr;
 }
 
 void EditEngine::RemoveParagraph( sal_Int32 nPara )
@@ -1853,7 +1853,7 @@ void EditEngine::SetControlWord( EEControlBits nWord )
                     ContentNode* pNode = pImpEditEngine->GetEditDoc().GetObject( n );
                     const ParaPortion* pPortion = pImpEditEngine->GetParaPortions()[n];
                     bool bWrongs = false;
-                    if (pNode->GetWrongList() != NULL)
+                    if (pNode->GetWrongList() != nullptr)
                         bWrongs = !pNode->GetWrongList()->empty();
                     pNode->DestroyWrongList();
                     if ( bWrongs )
@@ -1943,7 +1943,7 @@ const SvxNumberFormat* EditEngine::GetNumberFormat( sal_Int32 nPara ) const
     // derived objects may override this function to give access to
     // bullet information (see Outliner)
     (void) nPara;
-    return 0;
+    return nullptr;
 }
 
 bool EditEngine::IsRightToLeft( sal_Int32 nPara ) const
@@ -2333,7 +2333,7 @@ void EditEngine::CompleteOnlineSpelling()
             pImpEditEngine->FormatAndUpdate();
 
         pImpEditEngine->StopOnlineSpellTimer();
-        pImpEditEngine->DoOnlineSpelling( 0, true, false );
+        pImpEditEngine->DoOnlineSpelling( nullptr, true, false );
     }
 }
 
@@ -2384,7 +2384,7 @@ ParagraphInfos EditEngine::GetParagraphInfos( sal_Int32 nPara )
     {
         const ParaPortion* pParaPortion = pImpEditEngine->GetParaPortions()[nPara];
         const EditLine* pLine = (pParaPortion && pParaPortion->GetLines().Count()) ?
-                &pParaPortion->GetLines()[0] : NULL;
+                &pParaPortion->GetLines()[0] : nullptr;
         DBG_ASSERT( pParaPortion && pLine, "GetParagraphInfos - Paragraph out of range" );
         if ( pParaPortion && pLine )
         {
@@ -2764,7 +2764,7 @@ bool EditEngine::IsPageOverflow() {
 
 EFieldInfo::EFieldInfo()
 {
-    pFieldItem = NULL;
+    pFieldItem = nullptr;
 }
 
 
@@ -2779,7 +2779,7 @@ EFieldInfo::~EFieldInfo()
 }
 
 EFieldInfo::EFieldInfo( const EFieldInfo& rFldInfo )
-    : pFieldItem(0)
+    : pFieldItem(nullptr)
 {
     *this = rFldInfo;
 }
@@ -2789,7 +2789,7 @@ EFieldInfo& EFieldInfo::operator= ( const EFieldInfo& rFldInfo )
     if( this == &rFldInfo )
         return *this;
 
-    pFieldItem = rFldInfo.pFieldItem ? new SvxFieldItem( *rFldInfo.pFieldItem ) : 0;
+    pFieldItem = rFldInfo.pFieldItem ? new SvxFieldItem( *rFldInfo.pFieldItem ) : nullptr;
     aCurrentText = rFldInfo.aCurrentText;
     aPosition = rFldInfo.aPosition;
 

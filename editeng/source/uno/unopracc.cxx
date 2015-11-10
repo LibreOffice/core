@@ -68,15 +68,15 @@ void SAL_CALL SvxAccessibleTextPropertySet::release()
 // XTypeProvider
 uno::Sequence< uno::Type > SAL_CALL SvxAccessibleTextPropertySet::getTypes() throw ( uno::RuntimeException, std::exception )
 {
-    static ::cppu::OTypeCollection* pTypeCollection = NULL ;
+    static ::cppu::OTypeCollection* pTypeCollection = nullptr ;
 
     // double-checked locking pattern.
-    if ( pTypeCollection == NULL )
+    if ( pTypeCollection == nullptr )
     {
         osl::MutexGuard aGuard( osl::Mutex::getGlobalMutex() ) ;
 
         // Control these pointer again ... it can be, that another instance will be faster then these!
-        if ( pTypeCollection == NULL )
+        if ( pTypeCollection == nullptr )
         {
             // Create a static typecollection ...
             static ::cppu::OTypeCollection aTypeCollection(

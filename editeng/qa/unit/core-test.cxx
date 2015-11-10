@@ -70,7 +70,7 @@ private:
     EditEngineItemPool* mpItemPool;
 };
 
-Test::Test() : mpItemPool(NULL) {}
+Test::Test() : mpItemPool(nullptr) {}
 
 void Test::setUp()
 {
@@ -273,7 +273,7 @@ private:
     virtual OUString const* GetPrevPara(bool) override
     {
         //fprintf(stderr, "TestAutoCorrDoc::GetPrevPara\n");
-        return 0;
+        return nullptr;
     }
     virtual bool ChgAutoCorrWord( sal_Int32& rSttPos,
                 sal_Int32 nEndPos, SvxAutoCorrect& rACorrect,

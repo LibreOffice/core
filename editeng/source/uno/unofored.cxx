@@ -169,7 +169,7 @@ SfxItemState GetSvxEditEngineItemState( EditEngine& rEditEngine, const ESelectio
 {
     std::vector<EECharAttrib> aAttribs;
 
-    const SfxPoolItem*  pLastItem = NULL;
+    const SfxPoolItem*  pLastItem = nullptr;
 
     SfxItemState eState = SfxItemState::DEFAULT;
 
@@ -195,7 +195,7 @@ SfxItemState GetSvxEditEngineItemState( EditEngine& rEditEngine, const ESelectio
         bool bGaps  = false;    // we found items but theire gaps between them
         sal_Int32 nLastEnd = nPos;
 
-        const SfxPoolItem* pParaItem = NULL;
+        const SfxPoolItem* pParaItem = nullptr;
 
         for(std::vector<EECharAttrib>::const_iterator i = aAttribs.begin(); i < aAttribs.end(); ++i)
         {
@@ -245,7 +245,7 @@ SfxItemState GetSvxEditEngineItemState( EditEngine& rEditEngine, const ESelectio
         // if we already found an item check if we found the same
         if( pLastItem )
         {
-            if( (pParaItem == NULL) || (*pLastItem != *pParaItem) )
+            if( (pParaItem == nullptr) || (*pLastItem != *pParaItem) )
                 return SfxItemState::DONTCARE;
         }
         else

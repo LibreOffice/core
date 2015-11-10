@@ -38,7 +38,7 @@ static void lcl_DoSetSelection( EditView* pView, sal_uInt16 nPara )
 
 EditUndoManager::EditUndoManager(sal_uInt16 nMaxUndoActionCount )
 :   SfxUndoManager(nMaxUndoActionCount),
-    mpEditEngine(0)
+    mpEditEngine(nullptr)
 {
 }
 
@@ -420,14 +420,14 @@ void EditUndoMoveParagraphs::Undo()
     else
         nTmpDest += aTmpRange.Len();
 
-    EditSelection aNewSel = GetEditEngine()->MoveParagraphs(aTmpRange, nTmpDest, 0);
+    EditSelection aNewSel = GetEditEngine()->MoveParagraphs(aTmpRange, nTmpDest, nullptr);
     GetEditEngine()->GetActiveView()->GetImpEditView()->SetEditSelection( aNewSel );
 }
 
 void EditUndoMoveParagraphs::Redo()
 {
     DBG_ASSERT( GetEditEngine()->GetActiveView(), "Undo/Redo: No Active View!" );
-    EditSelection aNewSel = GetEditEngine()->MoveParagraphs(nParagraphs, nDest, 0);
+    EditSelection aNewSel = GetEditEngine()->MoveParagraphs(nParagraphs, nDest, nullptr);
     GetEditEngine()->GetActiveView()->GetImpEditView()->SetEditSelection( aNewSel );
 }
 
@@ -580,7 +580,7 @@ void EditUndoSetAttribs::ImpSetSelection( EditView* /*pView*/ )
 
 EditUndoTransliteration::EditUndoTransliteration(EditEngine* pEE, const ESelection& rESel, sal_Int32 nM) :
     EditUndo(EDITUNDO_TRANSLITERATE, pEE),
-    aOldESel(rESel), nMode(nM), pTxtObj(NULL) {}
+    aOldESel(rESel), nMode(nM), pTxtObj(nullptr) {}
 
 EditUndoTransliteration::~EditUndoTransliteration()
 {

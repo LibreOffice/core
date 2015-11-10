@@ -51,7 +51,7 @@ SfxPoolItem* SvxWritingModeItem::Clone( SfxItemPool * ) const
 SfxPoolItem* SvxWritingModeItem::Create( SvStream & , sal_uInt16  ) const
 {
     OSL_FAIL("SvxWritingModeItem should not be streamed!");
-    return NULL;
+    return nullptr;
 }
 
 SvStream& SvxWritingModeItem::Store( SvStream & rStrm, sal_uInt16  ) const

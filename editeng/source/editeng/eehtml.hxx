@@ -62,7 +62,7 @@ private:
 
     void                    ImpInsertParaBreak();
     void                    ImpInsertText( const OUString& rText );
-    void                    ImpSetAttribs( const SfxItemSet& rItems, EditSelection* pSel = 0 );
+    void                    ImpSetAttribs( const SfxItemSet& rItems, EditSelection* pSel = nullptr );
     void                    ImpSetStyleSheet( sal_uInt16 nHeadingLevel );
 
 protected:

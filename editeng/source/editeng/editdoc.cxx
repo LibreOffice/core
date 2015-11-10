@@ -264,7 +264,7 @@ EditCharAttrib* MakeCharAttrib( SfxItemPool& rPool, const SfxPoolItem& rAttr, sa
     // Create a new attribute in the pool
     const SfxPoolItem& rNew = rPool.Put( rAttr );
 
-    EditCharAttrib* pNew = 0;
+    EditCharAttrib* pNew = nullptr;
     switch( rNew.Which() )
     {
         case EE_CHAR_LANGUAGE:
@@ -531,7 +531,7 @@ ExtraPortionInfo::ExtraPortionInfo()
 , nAsianCompressionTypes(0)
 , bFirstCharIsRightPunktuation(false)
 , bCompressed(false)
-, pOrgDXArray(NULL)
+, pOrgDXArray(nullptr)
 , lineBreaksList()
 {
 }
@@ -550,7 +550,7 @@ void ExtraPortionInfo::SaveOrgDXArray( const long* pDXArray, sal_Int32 nLen )
         memcpy( pOrgDXArray, pDXArray, nLen * sizeof(long) );
     }
     else
-        pOrgDXArray = NULL;
+        pOrgDXArray = nullptr;
 }
 
 ParaPortion::ParaPortion( ContentNode* pN )
@@ -740,12 +740,12 @@ sal_Int32 ParaPortionList::GetPos(const ParaPortion* p) const
 
 ParaPortion* ParaPortionList::operator [](sal_Int32 nPos)
 {
-    return 0 <= nPos && nPos < (sal_Int32)maPortions.size() ? &maPortions[nPos] : NULL;
+    return 0 <= nPos && nPos < (sal_Int32)maPortions.size() ? &maPortions[nPos] : nullptr;
 }
 
 const ParaPortion* ParaPortionList::operator [](sal_Int32 nPos) const
 {
-    return 0 <= nPos && nPos < (sal_Int32)maPortions.size() ? &maPortions[nPos] : NULL;
+    return 0 <= nPos && nPos < (sal_Int32)maPortions.size() ? &maPortions[nPos] : nullptr;
 }
 
 ParaPortion* ParaPortionList::Release(sal_Int32 nPos)
@@ -753,7 +753,7 @@ ParaPortion* ParaPortionList::Release(sal_Int32 nPos)
     if (nPos < 0 || (sal_Int32)maPortions.size() <= nPos)
     {
         SAL_WARN( "editeng", "ParaPortionList::Release - out of bounds pos " << nPos);
-        return NULL;
+        return nullptr;
     }
     return maPortions.release(maPortions.begin()+nPos).release();
 }
@@ -827,12 +827,12 @@ sal_Int32 ParaPortionList::FindParagraph(long nYOffset) const
 
 const ParaPortion* ParaPortionList::SafeGetObject(sal_Int32 nPos) const
 {
-    return 0 <= nPos && nPos < (sal_Int32)maPortions.size() ? &maPortions[nPos] : NULL;
+    return 0 <= nPos && nPos < (sal_Int32)maPortions.size() ? &maPortions[nPos] : nullptr;
 }
 
 ParaPortion* ParaPortionList::SafeGetObject(sal_Int32 nPos)
 {
-    return 0 <= nPos && nPos < (sal_Int32)maPortions.size() ? &maPortions[nPos] : NULL;
+    return 0 <= nPos && nPos < (sal_Int32)maPortions.size() ? &maPortions[nPos] : nullptr;
 }
 
 #if OSL_DEBUG_LEVEL > 0
@@ -1162,7 +1162,7 @@ void EditLineList::Insert(sal_Int32 nPos, EditLine* p)
     maLines.insert(maLines.begin()+nPos, p);
 }
 
-EditPaM::EditPaM() : pNode(NULL), nIndex(0) {}
+EditPaM::EditPaM() : pNode(nullptr), nIndex(0) {}
 EditPaM::EditPaM(const EditPaM& r) : pNode(r.pNode), nIndex(r.nIndex) {}
 EditPaM::EditPaM(ContentNode* p, sal_Int32 n) : pNode(p), nIndex(n) {}
 
@@ -1639,7 +1639,7 @@ void ContentNode::CreateDefFont()
 
     // ... then iron out the hard paragraph formatting...
     CreateFont( GetCharAttribs().GetDefFont(),
-        GetContentAttribs().GetItems(), pS == NULL );
+        GetContentAttribs().GetItems(), pS == nullptr );
 }
 
 void ContentNode::SetStyleSheet( SfxStyleSheet* pS, const SvxFont& rFontFromStyle )
@@ -1651,7 +1651,7 @@ void ContentNode::SetStyleSheet( SfxStyleSheet* pS, const SvxFont& rFontFromStyl
     GetCharAttribs().GetDefFont() = rFontFromStyle;
     // ... then iron out the hard paragraph formatting...
     CreateFont( GetCharAttribs().GetDefFont(),
-        GetContentAttribs().GetItems(), pS == NULL );
+        GetContentAttribs().GetItems(), pS == nullptr );
 }
 
 void ContentNode::SetStyleSheet( SfxStyleSheet* pS, bool bRecalcFont )
@@ -1706,7 +1706,7 @@ OUString ContentNode::GetExpandedText(sal_Int32 nStartPos, sal_Int32 nEndPos, bo
         if ( pNextFeature && ( pNextFeature->GetStart() < nEnd ) )
             nEnd = pNextFeature->GetStart();
         else
-            pNextFeature = 0;   // Feature does not interest the below
+            pNextFeature = nullptr;   // Feature does not interest the below
 
         DBG_ASSERT( nEnd >= nIndex, "End in front of the index?" );
         //!! beware of sub string length  of -1
@@ -1858,7 +1858,7 @@ void ContentNode::DestroyWrongList()
 }
 
 ContentAttribs::ContentAttribs( SfxItemPool& rPool )
-: pStyle(0)
+: pStyle(nullptr)
 , aAttribSet( rPool, EE_PARA_START, EE_CHAR_END )
 {
 }
@@ -1939,7 +1939,7 @@ ItemList::ItemList() : CurrentItem( 0 )
 const SfxPoolItem* ItemList::First()
 {
     CurrentItem = 0;
-    return aItemPool.empty() ? NULL : aItemPool[ 0 ];
+    return aItemPool.empty() ? nullptr : aItemPool[ 0 ];
 }
 
 const SfxPoolItem* ItemList::Next()
@@ -1949,7 +1949,7 @@ const SfxPoolItem* ItemList::Next()
         ++CurrentItem;
         return aItemPool[ CurrentItem ];
     }
-    return NULL;
+    return nullptr;
 }
 
 void ItemList::Insert( const SfxPoolItem* pItem )
@@ -2116,12 +2116,12 @@ sal_Int32 EditDoc::GetPos(const ContentNode* p) const
 
 const ContentNode* EditDoc::GetObject(sal_Int32 nPos) const
 {
-    return 0 <= nPos && nPos < (sal_Int32)maContents.size() ? &maContents[nPos] : NULL;
+    return 0 <= nPos && nPos < (sal_Int32)maContents.size() ? &maContents[nPos] : nullptr;
 }
 
 ContentNode* EditDoc::GetObject(sal_Int32 nPos)
 {
-    return 0 <= nPos && nPos < (sal_Int32)maContents.size() ? &maContents[nPos] : NULL;
+    return 0 <= nPos && nPos < (sal_Int32)maContents.size() ? &maContents[nPos] : nullptr;
 }
 
 const ContentNode* EditDoc::operator[](sal_Int32 nPos) const
@@ -2267,7 +2267,7 @@ void EditDoc::SetModified( bool b )
     bModified = b;
     if ( bModified )
     {
-        aModifyHdl.Call( NULL );
+        aModifyHdl.Call( nullptr );
     }
 }
 
@@ -2406,9 +2406,9 @@ void EditDoc::InsertAttribInSelection( ContentNode* pNode, sal_Int32 nStart, sal
 
     // for Optimization:
     // This ends at the beginning of the selection => can be expanded
-    EditCharAttrib* pEndingAttrib = 0;
+    EditCharAttrib* pEndingAttrib = nullptr;
     // This starts at the end of the selection => can be expanded
-    EditCharAttrib* pStartingAttrib = 0;
+    EditCharAttrib* pStartingAttrib = nullptr;
 
     DBG_ASSERT( nStart <= nEnd, "Small miscalculations in InsertAttribInSelection" );
 
@@ -2450,9 +2450,9 @@ bool EditDoc::RemoveAttribs( ContentNode* pNode, sal_Int32 nStart, sal_Int32 nEn
     DBG_ASSERT( nEnd <= pNode->Len(), "InsertAttrib: Attribute to large!" );
 
     // This ends at the beginning of the selection => can be expanded
-    rpEnding = 0;
+    rpEnding = nullptr;
     // This starts at the end of the selection => can be expanded
-    rpStarting = 0;
+    rpStarting = nullptr;
 
     bool bChanged = false;
 
@@ -2626,7 +2626,7 @@ void EditDoc::FindAttribs( ContentNode* pNode, sal_Int32 nStartPos, sal_Int32 nE
     {
         while ( pAttr && ( pAttr->GetStart() <= nEndPos) )
         {
-            const SfxPoolItem* pItem = 0;
+            const SfxPoolItem* pItem = nullptr;
             // Attribute is about...
             if ( ( pAttr->GetStart() < nStartPos ) && ( pAttr->GetEnd() > nStartPos ) )
                 pItem = pAttr->GetItem();
@@ -2672,7 +2672,7 @@ void EditDoc::FindAttribs( ContentNode* pNode, sal_Int32 nStartPos, sal_Int32 nE
     {
         while ( pAttr && ( pAttr->GetStart() < nEndPos) )
         {
-            const SfxPoolItem* pItem = 0;
+            const SfxPoolItem* pItem = nullptr;
             // Attribut is about...
             if ( ( pAttr->GetStart() <= nStartPos ) && ( pAttr->GetEnd() >= nEndPos ) )
                 pItem = pAttr->GetItem();
@@ -2839,7 +2839,7 @@ const EditCharAttrib* CharAttribList::FindAttrib( sal_uInt16 nWhich, sal_Int32 n
         if (rAttr.Which() == nWhich && rAttr.IsIn(nPos))
             return &rAttr;
     }
-    return NULL;
+    return nullptr;
 }
 
 EditCharAttrib* CharAttribList::FindAttrib( sal_uInt16 nWhich, sal_Int32 nPos )
@@ -2853,7 +2853,7 @@ EditCharAttrib* CharAttribList::FindAttrib( sal_uInt16 nWhich, sal_Int32 nPos )
         if (rAttr.Which() == nWhich && rAttr.IsIn(nPos))
             return &rAttr;
     }
-    return NULL;
+    return nullptr;
 }
 
 const EditCharAttrib* CharAttribList::FindNextAttrib( sal_uInt16 nWhich, sal_Int32 nFromPos ) const
@@ -2866,7 +2866,7 @@ const EditCharAttrib* CharAttribList::FindNextAttrib( sal_uInt16 nWhich, sal_Int
         if (rAttr.GetStart() >= nFromPos && rAttr.Which() == nWhich)
             return &rAttr;
     }
-    return NULL;
+    return nullptr;
 }
 
 bool CharAttribList::HasAttrib( sal_Int32 nStartPos, sal_Int32 nEndPos ) const
@@ -2945,7 +2945,7 @@ bool CharAttribList::HasBoundingAttrib( sal_Int32 nBound ) const
 const EditCharAttrib* CharAttribList::FindEmptyAttrib( sal_uInt16 nWhich, sal_Int32 nPos ) const
 {
     if ( !bHasEmptyAttribs )
-        return NULL;
+        return nullptr;
 
     AttribsType::const_iterator it = aAttribs.begin(), itEnd = aAttribs.end();
     for (; it != itEnd; ++it)
@@ -2954,13 +2954,13 @@ const EditCharAttrib* CharAttribList::FindEmptyAttrib( sal_uInt16 nWhich, sal_In
         if (rAttr.GetStart() == nPos && rAttr.GetEnd() == nPos && rAttr.Which() == nWhich)
             return &rAttr;
     }
-    return NULL;
+    return nullptr;
 }
 
 EditCharAttrib* CharAttribList::FindEmptyAttrib( sal_uInt16 nWhich, sal_Int32 nPos )
 {
     if ( !bHasEmptyAttribs )
-        return NULL;
+        return nullptr;
 
     AttribsType::iterator it = aAttribs.begin(), itEnd = aAttribs.end();
     for (; it != itEnd; ++it)
@@ -2969,7 +2969,7 @@ EditCharAttrib* CharAttribList::FindEmptyAttrib( sal_uInt16 nWhich, sal_Int32 nP
         if (rAttr.GetStart() == nPos && rAttr.GetEnd() == nPos && rAttr.Which() == nWhich)
             return &rAttr;
     }
-    return NULL;
+    return nullptr;
 }
 
 namespace {
@@ -2995,11 +2995,11 @@ const EditCharAttrib* CharAttribList::FindFeature( sal_Int32 nPos ) const
 
     if (it == aAttribs.end())
         // All attributes are before the specified position.
-        return NULL;
+        return nullptr;
 
     // And find the first attribute with feature.
     it = std::find_if(it, aAttribs.end(), [](const EditCharAttrib& aAttrib) { return aAttrib.IsFeature(); } );
-    return it == aAttribs.end() ? NULL : &(*it);
+    return it == aAttribs.end() ? nullptr : &(*it);
 }
 
 namespace {
@@ -3050,7 +3050,7 @@ void CharAttribList::DbgCheckAttribs(CharAttribList const& rAttribs)
 
 EditEngineItemPool::EditEngineItemPool( bool bPersistenRefCounts )
     : SfxItemPool( "EditEngineItemPool", EE_ITEMS_START, EE_ITEMS_END,
-                    aItemInfos, 0, bPersistenRefCounts )
+                    aItemInfos, nullptr, bPersistenRefCounts )
 {
     SetVersionMap( 1, 3999, 4015, aV1Map );
     SetVersionMap( 2, 3999, 4019, aV2Map );

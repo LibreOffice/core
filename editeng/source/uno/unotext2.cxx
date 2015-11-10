@@ -47,7 +47,7 @@ SvxUnoTextContentEnumeration::SvxUnoTextContentEnumeration( const SvxUnoTextBase
     if( mrText.GetEditSource() )
         mpEditSource = mrText.GetEditSource()->Clone();
     else
-        mpEditSource = NULL;
+        mpEditSource = nullptr;
     mnNextParagraph = 0;
 }
 
@@ -74,18 +74,18 @@ uno::Any SvxUnoTextContentEnumeration::nextElement() throw( container::NoSuchEle
     if(!hasMoreElements())
         throw container::NoSuchElementException();
 
-    SvxUnoTextContent* pContent = 0;
+    SvxUnoTextContent* pContent = nullptr;
 
     const SvxUnoTextRangeBaseList& rRanges( mpEditSource->getRanges() );
     SvxUnoTextRangeBaseList::const_iterator aIter;
-    for( aIter = rRanges.begin(); (aIter != rRanges.end()) && (pContent == 0); ++aIter )
+    for( aIter = rRanges.begin(); (aIter != rRanges.end()) && (pContent == nullptr); ++aIter )
     {
         SvxUnoTextContent* pIterContent = dynamic_cast< SvxUnoTextContent* >( (*aIter ) );
         if( pIterContent && (pIterContent->mnParagraph == mnNextParagraph) )
             pContent = pIterContent;
     }
 
-    if( pContent == 0 )
+    if( pContent == nullptr )
      pContent = new SvxUnoTextContent( mrText, mnNextParagraph );
 
     mnNextParagraph++;
@@ -281,7 +281,7 @@ sal_Bool SAL_CALL SvxUnoTextContent::hasElements()
 {
     SolarMutexGuard aGuard;
 
-    SvxTextForwarder* pForwarder = GetEditSource() ? GetEditSource()->GetTextForwarder() : NULL;
+    SvxTextForwarder* pForwarder = GetEditSource() ? GetEditSource()->GetTextForwarder() : nullptr;
     if( pForwarder )
     {
         std::vector<sal_Int32> aPortions;
@@ -385,7 +385,7 @@ SvxUnoTextRangeEnumeration::SvxUnoTextRangeEnumeration( const SvxUnoTextBase& rT
     mnParagraph( nPara ),
     mnNextPortion( 0 )
 {
-    mpEditSource = rText.GetEditSource() ? rText.GetEditSource()->Clone() : NULL;
+    mpEditSource = rText.GetEditSource() ? rText.GetEditSource()->Clone() : nullptr;
 
     if( mpEditSource && mpEditSource->GetTextForwarder() )
     {
@@ -394,7 +394,7 @@ SvxUnoTextRangeEnumeration::SvxUnoTextRangeEnumeration( const SvxUnoTextBase& rT
     }
     else
     {
-        mpPortions = NULL;
+        mpPortions = nullptr;
     }
 }
 
@@ -419,7 +419,7 @@ uno::Any SAL_CALL SvxUnoTextRangeEnumeration::nextElement()
 {
     SolarMutexGuard aGuard;
 
-    if( mpPortions == NULL || mnNextPortion >= mpPortions->size() )
+    if( mpPortions == nullptr || mnNextPortion >= mpPortions->size() )
         throw container::NoSuchElementException();
 
     sal_uInt16 nStartPos = 0;
@@ -432,17 +432,17 @@ uno::Any SAL_CALL SvxUnoTextRangeEnumeration::nextElement()
 
     const SvxUnoTextRangeBaseList& rRanges( mpEditSource->getRanges() );
 
-    SvxUnoTextRange* pRange = 0;
+    SvxUnoTextRange* pRange = nullptr;
 
     SvxUnoTextRangeBaseList::const_iterator aIter;
-    for( aIter = rRanges.begin(); (aIter != rRanges.end()) && (pRange == 0); ++aIter )
+    for( aIter = rRanges.begin(); (aIter != rRanges.end()) && (pRange == nullptr); ++aIter )
     {
         SvxUnoTextRange* pIterRange = dynamic_cast< SvxUnoTextRange* >( (*aIter ) );
         if( pIterRange && pIterRange->mbPortion && (aSel.IsEqual( pIterRange->maSelection ) ) )
             pRange = pIterRange;
     }
 
-    if( pRange == 0 )
+    if( pRange == nullptr )
     {
         pRange = new SvxUnoTextRange( mrParentText, true );
         pRange->SetSelection(aSel);

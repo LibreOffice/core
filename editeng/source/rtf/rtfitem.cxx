@@ -102,7 +102,7 @@ inline const SvxULSpaceItem& GetULSpace(const SfxItemSet& rSet,sal_uInt16 nId,bo
 void SvxRTFParser::SetScriptAttr( RTF_CharTypeDef eType, SfxItemSet& rSet,
                                     SfxPoolItem& rItem )
 {
-    const sal_uInt16 *pNormal = 0, *pCJK = 0, *pCTL = 0;
+    const sal_uInt16 *pNormal = nullptr, *pCJK = nullptr, *pCTL = nullptr;
     switch( rItem.Which() )
     {
     case SID_ATTR_CHAR_FONT:
@@ -233,7 +233,7 @@ void SvxRTFParser::ReadAttr( int nToken, SfxItemSet* pSet )
                 if( !bChkStkPos )
                     break;
 
-                SvxRTFItemStackType* pAkt = aAttrStack.empty() ? 0 : aAttrStack.back();
+                SvxRTFItemStackType* pAkt = aAttrStack.empty() ? nullptr : aAttrStack.back();
                 if( !pAkt || (pAkt->pSttNd->GetIdx() == pInsPos->GetNodeIdx() &&
                     pAkt->nSttCnt == pInsPos->GetCntIdx() ))
                     break;
@@ -252,8 +252,8 @@ void SvxRTFParser::ReadAttr( int nToken, SfxItemSet* pSet )
 
                     // "Set" all valid attributes up until this point
                     AttrGroupEnd();
-                    pAkt = aAttrStack.empty() ? 0 : aAttrStack.back();  // can be changed after AttrGroupEnd!
-                    pNew->aAttrSet.SetParent( pAkt ? &pAkt->aAttrSet : 0 );
+                    pAkt = aAttrStack.empty() ? nullptr : aAttrStack.back();  // can be changed after AttrGroupEnd!
+                    pNew->aAttrSet.SetParent( pAkt ? &pAkt->aAttrSet : nullptr );
 
                     aAttrStack.push_back( pNew );
                     pAkt = pNew;
@@ -289,7 +289,7 @@ void SvxRTFParser::ReadAttr( int nToken, SfxItemSet* pSet )
                     /* setze am akt. auf dem AttrStack stehenden Style die
                        I sit on akt. which is on the immediate style AttrStack */
                     // StyleNummer
-                    SvxRTFItemStackType* pAkt = aAttrStack.empty() ? 0 : aAttrStack.back();
+                    SvxRTFItemStackType* pAkt = aAttrStack.empty() ? nullptr : aAttrStack.back();
                     if( !pAkt )
                         break;
 
@@ -1394,7 +1394,7 @@ void SvxRTFParser::ReadBorderAttr( int nToken, SfxItemSet& rSet,
     if( SfxItemState::SET == rSet.GetItemState( aPardMap.nBox, false, &pItem ) )
         aAttr = *static_cast<const SvxBoxItem*>(pItem);
 
-    SvxBorderLine aBrd( 0, DEF_LINE_WIDTH_0 );  // Simple plain line
+    SvxBorderLine aBrd( nullptr, DEF_LINE_WIDTH_0 );  // Simple plain line
     bool bContinue = true;
     int nBorderTyp = 0;
 
@@ -1721,8 +1721,8 @@ void SvxRTFParser::RTFPardPlain( bool const bPard, SfxItemSet** ppSet )
 
                 // Set all until here valid attributes
                 AttrGroupEnd();
-                pAkt = aAttrStack.empty() ? 0 : aAttrStack.back();  // can be changed after AttrGroupEnd!
-                pNew->aAttrSet.SetParent( pAkt ? &pAkt->aAttrSet : 0 );
+                pAkt = aAttrStack.empty() ? nullptr : aAttrStack.back();  // can be changed after AttrGroupEnd!
+                pNew->aAttrSet.SetParent( pAkt ? &pAkt->aAttrSet : nullptr );
                 aAttrStack.push_back( pNew );
                 pAkt = pNew;
             }

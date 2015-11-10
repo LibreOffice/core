@@ -292,7 +292,7 @@ static void lcl_FindValidAttribs( ItemList& rLst, ContentNode* pNode, sal_Int32 
 
 sal_uInt32 ImpEditEngine::WriteBin(SvStream& rOutput, const EditSelection& rSel, bool bStoreUnicodeStrings)
 {
-    std::unique_ptr<EditTextObject> xObj(CreateTextObject(rSel, NULL));
+    std::unique_ptr<EditTextObject> xObj(CreateTextObject(rSel, nullptr));
     xObj->mpImpl->StoreUnicodeStrings(bStoreUnicodeStrings);
     xObj->Store(rOutput);
     return 0;
@@ -1515,7 +1515,7 @@ EESpellState ImpEditEngine::Spell( EditView* pEditView, bool bMultipleDoc )
     }
     EESpellState eState = pSpellInfo->eState;
     delete pSpellInfo;
-    pSpellInfo = 0;
+    pSpellInfo = nullptr;
     return eState;
 }
 
@@ -1639,7 +1639,7 @@ void ImpEditEngine::Convert( EditView* pEditView,
         pEditView->ShowCursor( true, false );
     }
     delete pConvInfo;
-    pConvInfo = 0;
+    pConvInfo = nullptr;
 }
 
 
@@ -1987,7 +1987,7 @@ bool ImpEditEngine::SpellSentence(EditView& rEditView,
         //add the portion preceding the error
         EditSelection aStartSelection(aSentencePaM.Min(), aCurSel.Min());
         if(aStartSelection.HasRange())
-            AddPortionIterated(rEditView, aStartSelection, 0, rToFill);
+            AddPortionIterated(rEditView, aStartSelection, nullptr, rToFill);
         //add the error portion
         AddPortionIterated(rEditView, aCurSel, xAlt, rToFill);
         //find the end of the sentence
@@ -1999,7 +1999,7 @@ bool ImpEditEngine::SpellSentence(EditView& rEditView,
             if(xAlt.is())
             {
                 //add the part between the previous and the current error
-                AddPortionIterated(rEditView, EditSelection(aCurSel.Max(), aNextSel.Min()), 0, rToFill);
+                AddPortionIterated(rEditView, EditSelection(aCurSel.Max(), aNextSel.Min()), nullptr, rToFill);
                 //add the current error
                 AddPortionIterated(rEditView, aNextSel, xAlt, rToFill);
             }
@@ -2732,7 +2732,7 @@ EditSelection ImpEditEngine::TransliterateText( const EditSelection& rSelection,
 
     bool bChanges = false;
     bool bLenChanged = false;
-    EditUndoTransliteration* pUndo = NULL;
+    EditUndoTransliteration* pUndo = nullptr;
 
     utl::TransliterationWrapper aTransliterationWrapper( ::comphelper::getProcessComponentContext(), nTransliterationMode );
     bool bConsiderLanguage = aTransliterationWrapper.needLanguageForTheMode();
@@ -2972,7 +2972,7 @@ EditSelection ImpEditEngine::TransliterateText( const EditSelection& rSelection,
                 if (bSingleNode && !bHasAttribs)
                     pUndo->SetText( aSel.Min().GetNode()->Copy( aSel.Min().GetIndex(), aSel.Max().GetIndex()-aSel.Min().GetIndex() ) );
                 else
-                    pUndo->SetText( CreateTextObject( aSel, NULL ) );
+                    pUndo->SetText( CreateTextObject( aSel, nullptr ) );
             }
 
             // now apply the changes from end to start to leave the offsets of the
@@ -3117,7 +3117,7 @@ sal_Int32 ImpEditEngine::LogicToTwips(sal_Int32 n)
 {
     Size aSz(n, 0);
     MapMode aTwipsMode( MAP_TWIP );
-    aSz = pRefDev->LogicToLogic( aSz, NULL, &aTwipsMode );
+    aSz = pRefDev->LogicToLogic( aSz, nullptr, &aTwipsMode );
     return aSz.Width();
 }
 

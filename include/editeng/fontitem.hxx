@@ -50,7 +50,7 @@ public:
 
     // "pure virtual Methods" from SfxPoolItem
     virtual bool operator==(const SfxPoolItem& rItem) const override;
-    virtual SfxPoolItem* Clone(SfxItemPool *pPool = 0) const override;
+    virtual SfxPoolItem* Clone(SfxItemPool *pPool = nullptr) const override;
     virtual SfxPoolItem* Create(SvStream& rStream, sal_uInt16) const override;
     virtual SvStream& Store(SvStream& rStream, sal_uInt16 nItemVersion) const override;
     virtual bool QueryValue(css::uno::Any& rVal, sal_uInt8 nMemberId = 0) const override;
@@ -58,7 +58,7 @@ public:
 
     virtual bool GetPresentation(SfxItemPresentation ePres,
                                  SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric,
-                                 OUString &rText, const IntlWrapper* = 0) const override;
+                                 OUString &rText, const IntlWrapper* = nullptr) const override;
 
     // Access methods:
     void SetFamilyName(const OUString& rFamilyName)

@@ -76,8 +76,8 @@ SvxSwAutoFormatFlags::SvxSwAutoFormatFlags()
 
     nAutoCmpltWordLen = 8;
     nAutoCmpltListLen = 1000;
-    m_pAutoCompleteList = 0;
-    pSmartTagMgr = 0;
+    m_pAutoCompleteList = nullptr;
+    pSmartTagMgr = nullptr;
 }
 
 

@@ -430,7 +430,7 @@ Point Outliner::GetDocPosTopLeft( sal_Int32 nParagraph )
 
 bool Outliner::IsTextPos( const Point& rPaperPos, sal_uInt16 nBorder )
 {
-    return IsTextPos( rPaperPos, nBorder, NULL );
+    return IsTextPos( rPaperPos, nBorder, nullptr );
 }
 
 bool Outliner::IsTextPos( const Point& rPaperPos, sal_uInt16 nBorder, bool* pbBullet )

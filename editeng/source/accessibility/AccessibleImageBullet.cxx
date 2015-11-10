@@ -53,7 +53,7 @@ namespace accessibility
     AccessibleImageBullet::AccessibleImageBullet ( const uno::Reference< XAccessible >& rParent ) :
         mnParagraphIndex( 0 ),
         mnIndexInParent( 0 ),
-        mpEditSource( NULL ),
+        mpEditSource( nullptr ),
         maEEOffset( 0, 0 ),
         mxParent( rParent ),
         // well, that's strictly (UNO) exception safe, though not
@@ -394,9 +394,9 @@ namespace accessibility
         int nClientId( getNotifierClientId() );
 
         // #108212# drop all references before notifying dispose
-        mxParent = NULL;
+        mxParent = nullptr;
         mnNotifierClientId = -1;
-        mpEditSource = NULL;
+        mpEditSource = nullptr;
 
         // notify listeners
         if( nClientId != -1 )
@@ -460,7 +460,7 @@ namespace accessibility
     {
 
         ::utl::AccessibleStateSetHelper* pStateSet = static_cast< ::utl::AccessibleStateSetHelper*>(mxStateSet.get());
-        if( pStateSet != NULL &&
+        if( pStateSet != nullptr &&
             !pStateSet->contains(nStateId) )
         {
             pStateSet->AddState( nStateId );
@@ -472,7 +472,7 @@ namespace accessibility
     {
 
         ::utl::AccessibleStateSetHelper* pStateSet = static_cast< ::utl::AccessibleStateSetHelper*>(mxStateSet.get());
-        if( pStateSet != NULL &&
+        if( pStateSet != nullptr &&
             pStateSet->contains(nStateId) )
         {
             pStateSet->RemoveState( nStateId );

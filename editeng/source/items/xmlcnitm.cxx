@@ -84,9 +84,9 @@ bool SvXMLAttrContainerItem::QueryValue( css::uno::Any& rVal, sal_uInt8 /*nMembe
 bool SvXMLAttrContainerItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
 {
     Reference<XInterface> xRef;
-    SvUnoAttributeContainer* pContainer = NULL;
+    SvUnoAttributeContainer* pContainer = nullptr;
 
-    if( rVal.getValue() != NULL && rVal.getValueType().getTypeClass() == TypeClass_INTERFACE )
+    if( rVal.getValue() != nullptr && rVal.getValueType().getTypeClass() == TypeClass_INTERFACE )
     {
         xRef = *static_cast<Reference<XInterface> const *>(rVal.getValue());
         Reference<XUnoTunnel> xTunnel(xRef, UNO_QUERY);
@@ -120,7 +120,7 @@ bool SvXMLAttrContainerItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /*nM
                 const OUString aName( *pNames++ );
 
                 aAny = xContainer->getByName( aName );
-                if( aAny.getValue() == NULL || aAny.getValueType() != cppu::UnoType<AttributeData>::get() )
+                if( aAny.getValue() == nullptr || aAny.getValueType() != cppu::UnoType<AttributeData>::get() )
                     return false;
 
                 AttributeData const * pData = static_cast<AttributeData const *>(aAny.getValue());

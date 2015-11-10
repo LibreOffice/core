@@ -323,7 +323,7 @@ void EditDbg::ShowEditEngineData( EditEngine* pEE, bool bInfoBox )
 #else
     FILE* fp = fopen( "d:\\debug.log", "w" );
 #endif
-    if ( fp == 0 )
+    if ( fp == nullptr )
     {
         OSL_FAIL( "Log file could not be created!" );
         return;

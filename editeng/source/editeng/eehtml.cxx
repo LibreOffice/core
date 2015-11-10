@@ -41,8 +41,8 @@
 EditHTMLParser::EditHTMLParser( SvStream& rIn, const OUString& rBaseURL, SvKeyValueIterator* pHTTPHeaderAttrs )
     : HTMLParser( rIn, true ),
     aBaseURL( rBaseURL ),
-    mpEditEngine(NULL),
-    pCurAnchor(NULL),
+    mpEditEngine(nullptr),
+    pCurAnchor(nullptr),
     bInPara(false),
     bWasInPara(false),
     bFieldsInserted(false),
@@ -806,7 +806,7 @@ void EditHTMLParser::AnchorEnd()
         aCurSel = mpEditEngine->InsertField(aCurSel, aFld);
         bFieldsInserted = true;
         delete pCurAnchor;
-        pCurAnchor = NULL;
+        pCurAnchor = nullptr;
 
         if (mpEditEngine->IsImportHandlerSet())
         {

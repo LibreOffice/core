@@ -80,7 +80,7 @@ XEditAttribute::XEditAttribute( const SfxPoolItem& rAttr, sal_uInt16 nS, sal_uIn
 
 XEditAttribute::~XEditAttribute()
 {
-    pItem = 0;  // belongs to the Pool.
+    pItem = nullptr;  // belongs to the Pool.
 }
 
 bool XEditAttribute::IsFeature() const
@@ -163,7 +163,7 @@ OUString ContentInfo::GetText() const
 
 void ContentInfo::SetText( const OUString& rStr )
 {
-    maText = svl::SharedString(rStr.pData, NULL);
+    maText = svl::SharedString(rStr.pData, nullptr);
 }
 
 const WrongList* ContentInfo::GetWrongList() const
@@ -414,11 +414,11 @@ EditTextObject* EditTextObject::Create( SvStream& rIStream, SfxItemPool* pGlobal
     {
         // Unknown object we no longer support.
         rIStream.SetError(EE_READWRITE_WRONGFORMAT);
-        return NULL;
+        return nullptr;
     }
 
     if ( rIStream.GetError() )
-        return NULL;
+        return nullptr;
 
     EditTextObject* pTxtObj = new EditTextObject(pGlobalTextObjectPool);;
     pTxtObj->CreateData(rIStream);
@@ -542,7 +542,7 @@ EditTextObjectImpl::EditTextObjectImpl( EditTextObject* pFront, SfxItemPool* pP 
     nMetric = 0xFFFF;
     nUserType = 0;
     nObjSettings = 0;
-    pPortionInfo = 0;
+    pPortionInfo = nullptr;
 
     // #i101239# ensure target is a EditEngineItemPool, else
     // fallback to pool ownership. This is needed to ensure that at
@@ -582,7 +582,7 @@ EditTextObjectImpl::EditTextObjectImpl( EditTextObject* pFront, const EditTextOb
     nObjSettings = r.nObjSettings;
     bVertical = r.bVertical;
     nScriptType = r.nScriptType;
-    pPortionInfo = NULL;    // Do not copy PortionInfo
+    pPortionInfo = nullptr;    // Do not copy PortionInfo
     bStoreUnicodeStrings = false;
 
     if ( !r.bOwnerOfPool )
@@ -721,7 +721,7 @@ void EditTextObjectImpl::ClearPortionInfo()
     if ( pPortionInfo )
     {
         delete pPortionInfo;
-        pPortionInfo = NULL;
+        pPortionInfo = nullptr;
     }
 }
 
@@ -776,18 +776,18 @@ const SvxFieldItem* EditTextObjectImpl::GetField() const
             }
         }
     }
-    return 0;
+    return nullptr;
 }
 
 const SvxFieldData* EditTextObjectImpl::GetFieldData(sal_Int32 nPara, size_t nPos, sal_Int32 nType) const
 {
     if (nPara < 0 || static_cast<size_t>(nPara) >= aContents.size())
-        return NULL;
+        return nullptr;
 
     const ContentInfo& rC = aContents[nPara];
     if (nPos >= rC.aAttribs.size())
         // URL position is out-of-bound.
-        return NULL;
+        return nullptr;
 
     ContentInfo::XEditAttributesType::const_iterator it = rC.aAttribs.begin(), itEnd = rC.aAttribs.end();
     size_t nCurPos = 0;
@@ -811,7 +811,7 @@ const SvxFieldData* EditTextObjectImpl::GetFieldData(sal_Int32 nPara, size_t nPo
         ++nCurPos;
     }
 
-    return NULL; // field not found.
+    return nullptr; // field not found.
 }
 
 bool EditTextObjectImpl::HasField( sal_Int32 nType ) const
@@ -1182,7 +1182,7 @@ void EditTextObjectImpl::StoreData( SvStream& rOStream ) const
         // Convert StarSymbol back to StarBats
         // StarSymbol as paragraph attribute or in StyleSheet?
 
-        FontToSubsFontConverter hConv = NULL;
+        FontToSubsFontConverter hConv = nullptr;
         if (rC.GetParaAttribs().GetItemState( EE_CHAR_FONTINFO ) == SfxItemState::SET)
         {
             hConv = CreateFontToSubsFontConverter( static_cast<const SvxFontItem&>(rC.GetParaAttribs().Get( EE_CHAR_FONTINFO )).GetFamilyName(), FontToSubsFontFlags::EXPORT | FontToSubsFontFlags::ONLYOLDSOSYMBOLFONTS );

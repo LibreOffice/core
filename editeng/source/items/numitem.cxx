@@ -60,7 +60,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::style;
 
 sal_Int32 SvxNumberType::nRefCount = 0;
-css::uno::Reference<css::text::XNumberingFormatter> SvxNumberType::xFormatter = 0;
+css::uno::Reference<css::text::XNumberingFormatter> SvxNumberType::xFormatter = nullptr;
 static void lcl_getFormatter(css::uno::Reference<css::text::XNumberingFormatter>& _xFormatter)
 {
     if(!_xFormatter.is())
@@ -95,7 +95,7 @@ SvxNumberType::SvxNumberType(const SvxNumberType& rType) :
 SvxNumberType::~SvxNumberType()
 {
     if(!--nRefCount)
-        xFormatter = 0;
+        xFormatter = nullptr;
 }
 
 OUString SvxNumberType::GetNumStr( sal_uLong nNo ) const
@@ -164,17 +164,17 @@ SvxNumberFormat::SvxNumberFormat( sal_Int16 eType,
       mnListtabPos( 0 ),
       mnFirstLineIndent( 0 ),
       mnIndentAt( 0 ),
-      pGraphicBrush(0),
+      pGraphicBrush(nullptr),
       eVertOrient(text::VertOrientation::NONE),
-      pBulletFont(0)
+      pBulletFont(nullptr)
 {
 }
 
 SvxNumberFormat::SvxNumberFormat(const SvxNumberFormat& rFormat) :
     SvxNumberType(rFormat),
     mePositionAndSpaceMode( rFormat.mePositionAndSpaceMode ),
-    pGraphicBrush(0),
-    pBulletFont(0)
+    pGraphicBrush(nullptr),
+    pBulletFont(nullptr)
 {
     *this = rFormat;
 }
@@ -213,7 +213,7 @@ SvxNumberFormat::SvxNumberFormat( SvStream &rStream )
         pGraphicBrush = new SvxBrushItem( SID_ATTR_BRUSH );
         pGraphicBrush = static_cast<SvxBrushItem*>(pGraphicBrush->Create( rStream, BRUSH_GRAPHIC_VERSION ));
     }
-    else pGraphicBrush = 0;
+    else pGraphicBrush = nullptr;
     rStream.ReadUInt16( nTmp16 ); eVertOrient = nTmp16;
 
     sal_uInt16 hasBulletFont = 0;
@@ -223,7 +223,7 @@ SvxNumberFormat::SvxNumberFormat( SvStream &rStream )
         pBulletFont = new vcl::Font( );
         ReadFont( rStream, *pBulletFont );
     }
-    else pBulletFont = NULL;
+    else pBulletFont = nullptr;
     ReadPair( rStream, aGraphicSize );
 
     ReadColor( rStream, nBulletColor );
@@ -398,7 +398,7 @@ void SvxNumberFormat::SetGraphicBrush( const SvxBrushItem* pBrushItem,
     if(!pBrushItem)
     {
         delete pGraphicBrush;
-        pGraphicBrush = 0;
+        pGraphicBrush = nullptr;
     }
     else if ( !pGraphicBrush || (*pBrushItem != *pGraphicBrush) )
     {
@@ -442,7 +442,7 @@ sal_Int16    SvxNumberFormat::GetVertOrient() const
 void SvxNumberFormat::SetBulletFont(const vcl::Font* pFont)
 {
     delete pBulletFont;
-    pBulletFont = pFont ? new vcl::Font(*pFont): 0;
+    pBulletFont = pFont ? new vcl::Font(*pFont): nullptr;
 }
 
 void SvxNumberFormat::SetPositionAndSpaceMode( SvxNumPositionAndSpaceMode ePositionAndSpaceMode )
@@ -554,8 +554,8 @@ OUString SvxNumberFormat::GetCharFormatName()const
 }
 
 sal_Int32 SvxNumRule::nRefCount = 0;
-static SvxNumberFormat* pStdNumFmt = 0;
-static SvxNumberFormat* pStdOutlineNumFmt = 0;
+static SvxNumberFormat* pStdNumFmt = nullptr;
+static SvxNumberFormat* pStdOutlineNumFmt = nullptr;
 SvxNumRule::SvxNumRule( SvxNumRuleFlags nFeatures,
                         sal_uInt16 nLevels,
                         bool bCont,
@@ -604,7 +604,7 @@ SvxNumRule::SvxNumRule( SvxNumRuleFlags nFeatures,
             }
         }
         else
-            aFmts[i] = 0;
+            aFmts[i] = nullptr;
         aFmtsSet[i] = false;
     }
 }
@@ -623,7 +623,7 @@ SvxNumRule::SvxNumRule(const SvxNumRule& rCopy)
         if(rCopy.aFmts[i])
             aFmts[i] = new SvxNumberFormat(*rCopy.aFmts[i]);
         else
-            aFmts[i] = 0;
+            aFmts[i] = nullptr;
         aFmtsSet[i] = rCopy.aFmtsSet[i];
     }
 }
@@ -650,7 +650,7 @@ SvxNumRule::SvxNumRule( SvStream &rStream )
         }
         else
         {
-            aFmts[i] = 0;
+            aFmts[i] = nullptr;
             aFmtsSet[i] = false; // actually only false is valid
         }
     }
@@ -667,7 +667,7 @@ SvStream& SvxNumRule::Store( SvStream &rStream )
     rStream.WriteUInt16( sal_uInt16(bContinuousNumbering) );
     rStream.WriteUInt16( static_cast<sal_uInt16>(eNumberingType) );
 
-    FontToSubsFontConverter pConverter = 0;
+    FontToSubsFontConverter pConverter = nullptr;
     bool bConvertBulletFont = ( rStream.GetVersion() <= SOFFICE_FILEFORMAT_50 ) && ( rStream.GetVersion() );
     for(sal_uInt16 i = 0; i < SVX_MAX_NUM; i++)
     {
@@ -717,7 +717,7 @@ SvxNumRule& SvxNumRule::operator=( const SvxNumRule& rCopy )
         if(rCopy.aFmts[i])
             aFmts[i] = new SvxNumberFormat(*rCopy.aFmts[i]);
         else
-            aFmts[i] = 0;
+            aFmts[i] = nullptr;
         aFmtsSet[i] = rCopy.aFmtsSet[i];
     }
     return *this;
@@ -749,9 +749,9 @@ const SvxNumberFormat*  SvxNumRule::Get(sal_uInt16 nLevel)const
 {
     DBG_ASSERT(nLevel < SVX_MAX_NUM, "Wrong Level" );
     if( nLevel < SVX_MAX_NUM )
-        return aFmtsSet[nLevel] ? aFmts[nLevel] : 0;
+        return aFmtsSet[nLevel] ? aFmts[nLevel] : nullptr;
     else
-        return 0;
+        return nullptr;
 }
 
 const SvxNumberFormat&  SvxNumRule::GetLevel(sal_uInt16 nLevel)const
@@ -797,13 +797,13 @@ void SvxNumRule::SetLevel(sal_uInt16 nLevel, const SvxNumberFormat* pFmt)
 
     if( nLevel < SVX_MAX_NUM )
     {
-        aFmtsSet[nLevel] = 0 != pFmt;
+        aFmtsSet[nLevel] = nullptr != pFmt;
         if(pFmt)
             SetLevel(nLevel, *pFmt);
         else
         {
             delete aFmts[nLevel];
-            aFmts[nLevel] = 0;
+            aFmts[nLevel] = nullptr;
         }
     }
 }
@@ -872,10 +872,10 @@ bool SvxNumRule::UnLinkGraphics()
         const SvxBrushItem* pBrush = aFmt.GetBrush();
         if(SVX_NUM_BITMAP == aFmt.GetNumberingType())
         {
-            const Graphic* pGraphic = NULL;
+            const Graphic* pGraphic = nullptr;
             if(pBrush &&
                 !pBrush->GetGraphicLink().isEmpty() &&
-                    0 != (pGraphic = pBrush->GetGraphic()))
+                    nullptr != (pGraphic = pBrush->GetGraphic()))
             {
                 SvxBrushItem aTempItem(*pBrush);
                 aTempItem.SetGraphicLink("");

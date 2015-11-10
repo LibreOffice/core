@@ -336,8 +336,8 @@ EditCharAttribField::EditCharAttribField( const SvxFieldItem& rAttr, sal_uInt16 
     : EditCharAttrib( rAttr, nPos, nPos+1 )
 {
     SetFeature( true ); // !!!
-    pTxtColor = 0;
-    pFldColor = 0;
+    pTxtColor = nullptr;
+    pFldColor = nullptr;
 }
 
 void EditCharAttribField::SetFont( SvxFont& rFont, OutputDevice* )
@@ -360,8 +360,8 @@ void EditCharAttribField::SetFieldValue(const OUString& rVal)
 void EditCharAttribField::Reset()
 {
     aFieldValue.clear();
-    delete pTxtColor; pTxtColor = NULL;
-    delete pFldColor; pFldColor = NULL;
+    delete pTxtColor; pTxtColor = nullptr;
+    delete pFldColor; pFldColor = nullptr;
 }
 
 EditCharAttribField::EditCharAttribField( const EditCharAttribField& rAttr )
@@ -369,8 +369,8 @@ EditCharAttribField::EditCharAttribField( const EditCharAttribField& rAttr )
         aFieldValue( rAttr.aFieldValue )
 {
     // Use this constructor only for temporary Objects, Item is not pooled.
-    pTxtColor = rAttr.pTxtColor ? new Color( *rAttr.pTxtColor ) : 0;
-    pFldColor = rAttr.pFldColor ? new Color( *rAttr.pFldColor ) : 0;
+    pTxtColor = rAttr.pTxtColor ? new Color( *rAttr.pTxtColor ) : nullptr;
+    pFldColor = rAttr.pFldColor ? new Color( *rAttr.pFldColor ) : nullptr;
 }
 
 EditCharAttribField::~EditCharAttribField()

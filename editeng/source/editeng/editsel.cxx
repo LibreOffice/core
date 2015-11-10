@@ -30,7 +30,7 @@
 
 EditSelFunctionSet::EditSelFunctionSet()
 {
-    pCurView = NULL;
+    pCurView = nullptr;
 }
 
 void EditSelFunctionSet::CreateAnchor()

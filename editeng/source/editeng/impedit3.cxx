@@ -293,7 +293,7 @@ void ImpEditEngine::UpdateViews( EditView* pCurView )
 
             // For tiled rendering, we have to always go via Invalidate().
             if ( pView == pCurView && !pView->isTiledRendering())
-                Paint( pView->pImpEditView, aClipRect, 0, true );
+                Paint( pView->pImpEditView, aClipRect, nullptr, true );
             else
                 pView->GetWindow()->Invalidate( aClipRect );
         }
@@ -569,7 +569,7 @@ void ImpEditEngine::CheckPageOverflow()
     sal_uInt32 nBoxHeight = GetMaxAutoPaperSize().Height();
     SAL_INFO("editeng.chaining", "[OVERFLOW-CHECK] Current MaxAutoPaperHeight is " << nBoxHeight);
 
-    sal_uInt32 nTxtHeight = CalcTextHeight(NULL);
+    sal_uInt32 nTxtHeight = CalcTextHeight(nullptr);
     SAL_INFO("editeng.chaining", "[OVERFLOW-CHECK] Current Text Height is " << nTxtHeight);
 
     sal_uInt32 nParaCount = GetParaPortions().Count();
@@ -823,7 +823,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
         if ( nXWidth <= nTmpWidth ) // while has to be looped once
             nXWidth = nTmpWidth+1;
 
-        LongDqPtr pTextRanges = 0;
+        LongDqPtr pTextRanges = nullptr;
         long nTextExtraYOffset = 0;
         long nTextXOffset = 0;
         long nTextLineHeight = 0;
@@ -901,7 +901,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
         }
 
         // search for Portion that no longer fits in line ....
-        TextPortion* pPortion = 0;
+        TextPortion* pPortion = nullptr;
         bool bBrokenLine = false;
         bLineBreak = false;
         const EditCharAttrib* pNextFeature = pNode->GetCharAttribs().FindFeature( pLine->GetStart() );
@@ -1033,7 +1033,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
                                 sal_Int32 nApproxWC         = nXWidth / ( nWidthOrg / nChars );
                                 ExtraPortionInfo *pExtraInfo= pPortion->GetExtraInfos();
                                 if( !nApproxWC ) nApproxWC++;
-                                if( pExtraInfo == NULL )
+                                if( pExtraInfo == nullptr )
                                 {
                                     pExtraInfo = new ExtraPortionInfo();
                                     pExtraInfo->nOrgWidth = nXWidth;
@@ -1280,7 +1280,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
             if ( bCompressedChars && pPortion && ( pPortion->GetLen() > 1 ) && pPortion->GetExtraInfos() && pPortion->GetExtraInfos()->bCompressed )
             {
                 // I need the manipulated DXArray for determining the break position...
-                long* pDXArray = NULL;
+                long* pDXArray = nullptr;
                 if (!pLine->GetCharPosArray().empty())
                 {
                     pDXArray = &pLine->GetCharPosArray()[0] + (nPortionStart - pLine->GetStart());
@@ -1540,7 +1540,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
             sal_Int32 nEndPortion = pLine->GetEndPortion();
 
             // Next line or maybe a new line....
-            pLine = 0;
+            pLine = nullptr;
             if ( nLine < pParaPortion->GetLines().Count()-1 )
                 pLine = &pParaPortion->GetLines()[++nLine];
             if ( pLine && ( nIndex >= pNode->Len() ) )
@@ -2263,7 +2263,7 @@ sal_Int32 ImpEditEngine::SplitTextPortion( ParaPortion* pPortion, sal_Int32 nPos
 
     sal_Int32 nSplitPortion;
     sal_Int32 nTmpPos = 0;
-    TextPortion* pTextPortion = NULL;
+    TextPortion* pTextPortion = nullptr;
     sal_Int32 nPortions = pPortion->GetTextPortions().Count();
     for ( nSplitPortion = 0; nSplitPortion < nPortions; nSplitPortion++ )
     {
@@ -2468,7 +2468,7 @@ void ImpEditEngine::RecalcTextPortion( ParaPortion* pParaPortion, sal_Int32 nSta
         sal_Int32 nPos = 0;
         sal_Int32 nEnd = nStartPos-nNewChars;
         sal_Int32 nPortions = pParaPortion->GetTextPortions().Count();
-        TextPortion* pTP = 0;
+        TextPortion* pTP = nullptr;
         for ( nPortion = 0; nPortion < nPortions; nPortion++ )
         {
             pTP = &pParaPortion->GetTextPortions()[ nPortion ];
@@ -2633,7 +2633,7 @@ void ImpEditEngine::SeekCursor( ContentNode* pNode, sal_Int32 nPos, SvxFont& rFo
             pOut->SetOverlineColor();
     }
 
-    const SvxLanguageItem* pCJKLanguageItem = NULL;
+    const SvxLanguageItem* pCJKLanguageItem = nullptr;
 
     /*
      * Scan through char attributes of pNode
@@ -2761,7 +2761,7 @@ void ImpEditEngine::SeekCursor( ContentNode* pNode, sal_Int32 nPos, SvxFont& rFo
     {
         // #i75566# Do not use AutoColor when printing OR Pdf export
         const bool bPrinting(OUTDEV_PRINTER == pOut->GetOutDevType());
-        const bool bPDFExporting(0 != pOut->GetPDFWriter());
+        const bool bPDFExporting(nullptr != pOut->GetPDFWriter());
 
         if ( IsAutoColorEnabled() && !bPrinting && !bPDFExporting)
         {
@@ -2886,7 +2886,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRect, Point aSt
     long nFirstVisXPos = - pOutDev->GetMapMode().GetOrigin().X();
     long nFirstVisYPos = - pOutDev->GetMapMode().GetOrigin().Y();
 
-    const EditLine* pLine = NULL;
+    const EditLine* pLine = nullptr;
     Point aTmpPos;
     Point aRedLineTmpPos;
     DBG_ASSERT( GetParaPortions().Count(), "No ParaPortion?!" );
@@ -2910,7 +2910,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRect, Point aSt
     // #110496# Added some more optional metafile comments. This
     // change: factored out some duplicated code.
     GDIMetaFile* pMtf = pOutDev->GetConnectMetaFile();
-    const bool bMetafileValid( pMtf != NULL );
+    const bool bMetafileValid( pMtf != nullptr );
 
     long nVertLineSpacing = CalcVertLineSpacing(aStartPos);
 
@@ -3071,7 +3071,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRect, Point aSt
                                 OUString aText;
                                 sal_Int32 nTextStart = 0;
                                 sal_Int32 nTextLen = 0;
-                                const long* pDXArray = 0;
+                                const long* pDXArray = nullptr;
                                 std::unique_ptr<long[]> pTmpDXArray;
 
                                 if ( rTextPortion.GetKind() == PortionKind::TEXT )
@@ -3313,7 +3313,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRect, Point aSt
                                         }
                                     }
 
-                                    const SvxFieldData* pFieldData = 0;
+                                    const SvxFieldData* pFieldData = nullptr;
 
                                     if(PortionKind::FIELD == rTextPortion.GetKind())
                                     {
@@ -3350,7 +3350,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRect, Point aSt
                                     // StripPortions() data callback
                                     GetEditEnginePtr()->DrawingText( aOutPos, aText, nTextStart, nTextLen, pDXArray,
                                         aTmpFont, n, nIndex, rTextPortion.GetRightToLeft(),
-                                        aWrongSpellVector.size() ? &aWrongSpellVector : 0,
+                                        aWrongSpellVector.size() ? &aWrongSpellVector : nullptr,
                                         pFieldData,
                                         bEndOfLine, bEndOfParagraph, false, // support for EOL/EOP TEXT comments
                                         &aLocale,
@@ -3596,12 +3596,12 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRect, Point aSt
                                     const Color aTextLineColor(pOutDev->GetTextLineColor());
 
                                     GetEditEnginePtr()->DrawingText(
-                                        aTmpPos, OUString(), 0, 0, 0,
+                                        aTmpPos, OUString(), 0, 0, nullptr,
                                         aTmpFont, n, nIndex, 0,
-                                        0,
-                                        0,
+                                        nullptr,
+                                        nullptr,
                                         bEndOfLine, bEndOfParagraph, false,
-                                        0,
+                                        nullptr,
                                         aOverlineColor,
                                         aTextLineColor);
                                 }
@@ -3653,12 +3653,12 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRect, Point aSt
                 const Color aTextLineColor(pOutDev->GetTextLineColor());
 
                 GetEditEnginePtr()->DrawingText(
-                    aTmpPos, OUString(), 0, 0, 0,
+                    aTmpPos, OUString(), 0, 0, nullptr,
                     aTmpFont, n, nIndex, 0,
-                    0,
-                    0,
+                    nullptr,
+                    nullptr,
                     false, true, false, // support for EOL/EOP TEXT comments
-                    0,
+                    nullptr,
                     aOverlineColor,
                     aTextLineColor);
             }
@@ -3840,7 +3840,7 @@ void ImpEditEngine::Paint( ImpEditView* pView, const Rectangle& rRect, OutputDev
             pTarget->SetMapMode( aOldMapMode );
         }
 
-        pView->DrawSelection(pView->GetEditSelection(), 0, pTarget);
+        pView->DrawSelection(pView->GetEditSelection(), nullptr, pTarget);
     }
     else
     {
@@ -3885,7 +3885,7 @@ void ImpEditEngine::Paint( ImpEditView* pView, const Rectangle& rRect, OutputDev
         // In case of tiled rendering pass a region to DrawSelection(), so that
         // selection callbacks are not emitted during every repaint.
         vcl::Region aRegion;
-        pView->DrawSelection(pView->GetEditSelection(), pView->isTiledRendering() ? &aRegion : 0, pTarget);
+        pView->DrawSelection(pView->GetEditSelection(), pView->isTiledRendering() ? &aRegion : nullptr, pTarget);
     }
 }
 
@@ -4072,7 +4072,7 @@ ContentNode* ImpEditEngine::GetPrevVisNode( ContentNode* pCurNode )
     pPortion = GetPrevVisPortion( pPortion );
     if ( pPortion )
         return pPortion->GetNode();
-    return 0;
+    return nullptr;
 }
 
 ContentNode* ImpEditEngine::GetNextVisNode( ContentNode* pCurNode )
@@ -4082,16 +4082,16 @@ ContentNode* ImpEditEngine::GetNextVisNode( ContentNode* pCurNode )
     pPortion = GetNextVisPortion( pPortion );
     if ( pPortion )
         return pPortion->GetNode();
-    return 0;
+    return nullptr;
 }
 
 const ParaPortion* ImpEditEngine::GetPrevVisPortion( const ParaPortion* pCurPortion ) const
 {
     sal_Int32 nPara = GetParaPortions().GetPos( pCurPortion );
     DBG_ASSERT( nPara < GetParaPortions().Count() , "Portion not found: GetPrevVisPortion" );
-    const ParaPortion* pPortion = nPara ? GetParaPortions()[--nPara] : 0;
+    const ParaPortion* pPortion = nPara ? GetParaPortions()[--nPara] : nullptr;
     while ( pPortion && !pPortion->IsVisible() )
-        pPortion = nPara ? GetParaPortions()[--nPara] : 0;
+        pPortion = nPara ? GetParaPortions()[--nPara] : nullptr;
 
     return pPortion;
 }
@@ -4177,7 +4177,7 @@ EditPaM ImpEditEngine::InsertParagraph( sal_Int32 nPara )
 
 EditSelection* ImpEditEngine::SelectParagraph( sal_Int32 nPara )
 {
-    EditSelection* pSel = 0;
+    EditSelection* pSel = nullptr;
     ContentNode* pNode = GetEditDoc().GetObject( nPara );
     SAL_WARN_IF( !pNode, "editeng", "Paragraph does not exist: SelectParagraph" );
     if ( pNode )
@@ -4245,7 +4245,7 @@ void ImpEditEngine::SetCharStretching( sal_uInt16 nX, sal_uInt16 nY )
 
 const SvxNumberFormat* ImpEditEngine::GetNumberFormat( const ContentNode *pNode ) const
 {
-    const SvxNumberFormat *pRes = 0;
+    const SvxNumberFormat *pRes = nullptr;
 
     if (pNode)
     {
@@ -4437,7 +4437,7 @@ bool ImpEditEngine::ImplCalcAsianCompression(ContentNode* pNode,
 
     // Percent is 1/100 Percent...
     if ( n100thPercentFromMax == 10000 )
-        pTextPortion->SetExtraInfos( NULL );
+        pTextPortion->SetExtraInfos( nullptr );
 
     bool bCompressed = false;
 
@@ -4572,7 +4572,7 @@ void ImpEditEngine::ImplExpandCompressedPortions( EditLine* pLine, ParaPortion* 
             nCompressed += pTP->GetExtraInfos()->nOrgWidth - pTP->GetSize().Width();
             aCompressedPortions.push_back(pTP);
         }
-        pTP = ( nPortion > pLine->GetStartPortion() ) ? &pParaPortion->GetTextPortions()[ --nPortion ] : NULL;
+        pTP = ( nPortion > pLine->GetStartPortion() ) ? &pParaPortion->GetTextPortions()[ --nPortion ] : nullptr;
     }
 
     if ( bFoundCompressedPortion )
@@ -4596,7 +4596,7 @@ void ImpEditEngine::ImplExpandCompressedPortions( EditLine* pLine, ParaPortion* 
                 sal_Int32 nTxtPortion = pParaPortion->GetTextPortions().GetPos( pTP );
                 sal_Int32 nTxtPortionStart = pParaPortion->GetTextPortions().GetStartPos( nTxtPortion );
                 DBG_ASSERT( nTxtPortionStart >= pLine->GetStart(), "Portion doesn't belong to the line!!!" );
-                long* pDXArray = NULL;
+                long* pDXArray = nullptr;
                 if (!pLine->GetCharPosArray().empty())
                 {
                     pDXArray = &pLine->GetCharPosArray()[0]+( nTxtPortionStart-pLine->GetStart() );

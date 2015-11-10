@@ -46,8 +46,8 @@ AccessibleContextBase::AccessibleContextBase (
         const uno::Reference<XAccessible>& rxParent,
         const sal_Int16 aRole)
     :   WeakComponentImplHelper(MutexOwner::maMutex),
-        mxStateSet (NULL),
-        mxRelationSet (NULL),
+        mxStateSet (nullptr),
+        mxRelationSet (nullptr),
         mxParent(rxParent),
         msDescription(),
         meDescriptionOrigin(NotSet),
@@ -83,7 +83,7 @@ bool AccessibleContextBase::SetState (sal_Int16 aState)
     ::osl::ClearableMutexGuard aGuard (maMutex);
     ::utl::AccessibleStateSetHelper* pStateSet =
         static_cast< ::utl::AccessibleStateSetHelper*>(mxStateSet.get());
-    if ((pStateSet != NULL) && !pStateSet->contains(aState))
+    if ((pStateSet != nullptr) && !pStateSet->contains(aState))
     {
         pStateSet->AddState (aState);
         // Clear the mutex guard so that it is not locked during calls to
@@ -114,7 +114,7 @@ bool AccessibleContextBase::ResetState (sal_Int16 aState)
     ::osl::ClearableMutexGuard aGuard (maMutex);
     ::utl::AccessibleStateSetHelper* pStateSet =
         static_cast< ::utl::AccessibleStateSetHelper*>(mxStateSet.get());
-    if ((pStateSet != NULL) && pStateSet->contains(aState))
+    if ((pStateSet != nullptr) && pStateSet->contains(aState))
     {
         pStateSet->RemoveState (aState);
         // Clear the mutex guard so that it is not locked during calls to listeners.
@@ -140,7 +140,7 @@ bool AccessibleContextBase::GetState (sal_Int16 aState)
     ::osl::MutexGuard aGuard (maMutex);
     ::utl::AccessibleStateSetHelper* pStateSet =
         static_cast< ::utl::AccessibleStateSetHelper*>(mxStateSet.get());
-    if (pStateSet != NULL)
+    if (pStateSet != nullptr)
         return pStateSet->contains(aState);
     else
         // If there is no state set then return false as a default value.
@@ -216,7 +216,7 @@ uno::Reference<XAccessible> SAL_CALL
     ThrowIfDisposed ();
     throw lang::IndexOutOfBoundsException (
         "no child with index " + OUString::number(nIndex),
-        NULL);
+        nullptr);
 }
 
 
@@ -323,13 +323,13 @@ uno::Reference<XAccessibleRelationSet> SAL_CALL
     // Create a copy of the relation set and return it.
     ::utl::AccessibleRelationSetHelper* pRelationSet =
         static_cast< ::utl::AccessibleRelationSetHelper*>(mxRelationSet.get());
-    if (pRelationSet != NULL)
+    if (pRelationSet != nullptr)
     {
         return uno::Reference<XAccessibleRelationSet> (
             new ::utl::AccessibleRelationSetHelper (*pRelationSet));
     }
     else
-        return uno::Reference<XAccessibleRelationSet>(NULL);
+        return uno::Reference<XAccessibleRelationSet>(nullptr);
 }
 
 
@@ -345,7 +345,7 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
     AccessibleContextBase::getAccessibleStateSet()
     throw (css::uno::RuntimeException, std::exception)
 {
-    ::utl::AccessibleStateSetHelper* pStateSet = NULL;
+    ::utl::AccessibleStateSetHelper* pStateSet = nullptr;
 
     if (rBHelper.bDisposed)
     {
@@ -371,7 +371,7 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
                 pStateSet->RemoveState (aState);
         }
 #endif
-        if (pStateSet != NULL)
+        if (pStateSet != nullptr)
             pStateSet = new ::utl::AccessibleStateSetHelper (*pStateSet);
     }
 

@@ -59,7 +59,7 @@ class ContentNode;
 class EditNodeIdx
 {
 public:
-    EditNodeIdx(EditEngine* pEE, ContentNode* pNd = NULL);
+    EditNodeIdx(EditEngine* pEE, ContentNode* pNd = nullptr);
     ~EditNodeIdx() {}
     sal_Int32   GetIdx() const;
     EditNodeIdx* Clone() const;  // Cloning itself
@@ -269,7 +269,7 @@ protected:
     // Read Document-Info
     css::util::DateTime GetDateTimeStamp( );
     OUString& GetTextToEndGroup( OUString& rStr );
-    void ReadInfo( const sal_Char* pChkForVerNo = 0 );
+    void ReadInfo( const sal_Char* pChkForVerNo = nullptr );
 
     inline SfxItemSet& GetAttrSet();
     // no text yet inserted? (SttPos from the top stack entry!)
@@ -395,7 +395,7 @@ inline const Color& SvxRTFParser::GetColor( size_t nId ) const
 inline SfxItemSet& SvxRTFParser::GetAttrSet()
 {
     SvxRTFItemStackType* pTmp;
-    if( bNewGroup || 0 == ( pTmp = aAttrStack.empty() ? 0 : aAttrStack.back()) )
+    if( bNewGroup || nullptr == ( pTmp = aAttrStack.empty() ? nullptr : aAttrStack.back()) )
         pTmp = _GetAttrSet();
     return pTmp->aAttrSet;
 }

@@ -81,7 +81,7 @@ public:
 SvxEditEngineSourceImpl::SvxEditEngineSourceImpl( EditEngine* pEditEngine )
 : maRefCount(0),
   mpEditEngine( pEditEngine ),
-  mpTextForwarder(NULL)
+  mpTextForwarder(nullptr)
 {
 }
 

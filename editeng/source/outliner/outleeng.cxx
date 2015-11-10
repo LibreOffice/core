@@ -57,7 +57,7 @@ void OutlinerEditEng::PaintingFirstLine( sal_Int32 nPara, const Point& rStartPos
 
 const SvxNumberFormat* OutlinerEditEng::GetNumberFormat( sal_Int32 nPara ) const
 {
-    const SvxNumberFormat* pFmt = NULL;
+    const SvxNumberFormat* pFmt = nullptr;
     if (pOwner)
         pFmt = pOwner->GetNumberFormat( nPara );
     return pFmt;

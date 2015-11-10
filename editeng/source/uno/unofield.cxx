@@ -240,7 +240,7 @@ sal_Int64 SAL_CALL SvxUnoTextField::getSomething( const css::uno::Sequence< sal_
 
 SvxUnoTextField::SvxUnoTextField( sal_Int32 nServiceId ) throw()
 :   OComponentHelper( getMutex() )
-,   mpPropSet(NULL)
+,   mpPropSet(nullptr)
 ,   mnServiceId(nServiceId)
 ,   mpImpl( new SvxUnoFieldData_Impl )
 {
@@ -294,7 +294,7 @@ SvxUnoTextField::SvxUnoTextField( sal_Int32 nServiceId ) throw()
 SvxUnoTextField::SvxUnoTextField( uno::Reference< text::XTextRange > xAnchor, const OUString& rPresentation, const SvxFieldData* pData ) throw()
 :   OComponentHelper( getMutex() )
 ,   mxAnchor( xAnchor )
-,   mpPropSet(NULL)
+,   mpPropSet(nullptr)
 ,   mnServiceId(text::textfield::Type::UNSPECIFIED)
 ,   mpImpl( new SvxUnoFieldData_Impl )
 {
@@ -382,7 +382,7 @@ SvxUnoTextField::~SvxUnoTextField() throw()
 
 SvxFieldData* SvxUnoTextField::CreateFieldData() const throw()
 {
-    SvxFieldData* pData = NULL;
+    SvxFieldData* pData = nullptr;
 
     switch( mnServiceId )
     {
@@ -629,7 +629,7 @@ void SAL_CALL SvxUnoTextField::attach( const uno::Reference< text::XTextRange >&
     throw(lang::IllegalArgumentException, uno::RuntimeException, std::exception)
 {
     SvxUnoTextRangeBase* pRange = SvxUnoTextRange::getImplementation( xTextRange );
-    if(pRange == NULL)
+    if(pRange == nullptr)
         throw lang::IllegalArgumentException();
 
     SvxFieldData* pData = CreateFieldData();
@@ -678,7 +678,7 @@ void SAL_CALL SvxUnoTextField::setPropertyValue( const OUString& aPropertyName, 
 {
     SolarMutexGuard aGuard;
 
-    if( mpImpl == NULL )
+    if( mpImpl == nullptr )
         throw uno::RuntimeException();
 
     if (aPropertyName == UNO_TC_PROP_ANCHOR)

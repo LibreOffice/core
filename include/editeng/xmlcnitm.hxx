@@ -47,14 +47,14 @@ public:
                                 SfxMapUnit eCoreMetric,
                                 SfxMapUnit ePresentationMetric,
                                 OUString &rText,
-                                const IntlWrapper *pIntlWrapper = 0 ) const override;
+                                const IntlWrapper *pIntlWrapper = nullptr ) const override;
 
     virtual sal_uInt16 GetVersion( sal_uInt16 nFileFormatVersion ) const override;
 
     virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
     virtual bool            PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
-    virtual SfxPoolItem *Clone( SfxItemPool * = 0) const override
+    virtual SfxPoolItem *Clone( SfxItemPool * = nullptr) const override
     { return new SvXMLAttrContainerItem( *this ); }
 
     bool AddAttr( const OUString& rLName,

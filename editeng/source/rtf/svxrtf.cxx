@@ -65,10 +65,10 @@ SvxRTFParser::SvxRTFParser( SfxItemPool& rPool, SvStream& rIn,
     , rStrm(rIn)
     , aPlainMap(rPool)
     , aPardMap(rPool)
-    , pInsPos( 0 )
+    , pInsPos( nullptr )
     , pAttrPool( &rPool )
     , m_xDocProps( i_xDocProps )
-    , pRTFDefaults( 0 )
+    , pRTFDefaults( nullptr )
     , nVersionNo( 0 )
     , nDfltFont( 0)
     , bNewDoc( bReadNewDoc )
@@ -814,7 +814,7 @@ const vcl::Font& SvxRTFParser::GetFont( sal_uInt16 nId )
 
 SvxRTFItemStackType* SvxRTFParser::_GetAttrSet( bool const bCopyAttr )
 {
-    SvxRTFItemStackType* pAkt = aAttrStack.empty() ? 0 : aAttrStack.back();
+    SvxRTFItemStackType* pAkt = aAttrStack.empty() ? nullptr : aAttrStack.back();
     SvxRTFItemStackType* pNew;
     if( pAkt )
         pNew = new SvxRTFItemStackType( *pAkt, *pInsPos, bCopyAttr );
@@ -877,9 +877,9 @@ void SvxRTFParser::AttrGroupEnd()   // process the current, delete from Stack
 {
     if( !aAttrStack.empty() )
     {
-        SvxRTFItemStackType *pOld = aAttrStack.empty() ? 0 : aAttrStack.back();
+        SvxRTFItemStackType *pOld = aAttrStack.empty() ? nullptr : aAttrStack.back();
         aAttrStack.pop_back();
-        SvxRTFItemStackType *pAkt = aAttrStack.empty() ? 0 : aAttrStack.back();
+        SvxRTFItemStackType *pAkt = aAttrStack.empty() ? nullptr : aAttrStack.back();
 
         do {        // middle check loop
             sal_Int32 nOldSttNdIdx = pOld->pSttNd->GetIdx();
@@ -983,7 +983,7 @@ void SvxRTFParser::AttrGroupEnd()   // process the current, delete from Stack
                                 m_AttrSetList.push_back(std::unique_ptr<SvxRTFItemStackType>(pOld));
                                 m_AttrSetList.push_back(std::move(pNew));
                             }
-                            pOld = 0;   // Do not delete pOld
+                            pOld = nullptr;   // Do not delete pOld
                             break;
                         }
                     }
@@ -1023,8 +1023,8 @@ void SvxRTFParser::AttrGroupEnd()   // process the current, delete from Stack
 
                         // Set all until here valid Attributes
                         AttrGroupEnd();
-                        pAkt = aAttrStack.empty() ? 0 : aAttrStack.back();  // can be changed after AttrGroupEnd!
-                        pNew->aAttrSet.SetParent( pAkt ? &pAkt->aAttrSet : 0 );
+                        pAkt = aAttrStack.empty() ? nullptr : aAttrStack.back();  // can be changed after AttrGroupEnd!
+                        pNew->aAttrSet.SetParent( pAkt ? &pAkt->aAttrSet : nullptr );
                         aAttrStack.push_back( pNew );
                     }
                 }
@@ -1033,7 +1033,7 @@ void SvxRTFParser::AttrGroupEnd()   // process the current, delete from Stack
                     // read. (Span no attributes!)
                     m_AttrSetList.push_back(std::unique_ptr<SvxRTFItemStackType>(pOld));
 
-                pOld = 0;
+                pOld = nullptr;
             }
 
             if( bCrsrBack )
@@ -1083,7 +1083,7 @@ void SvxRTFParser::SetAttrSet( SvxRTFItemStackType &rSet )
 // Has no text been inserted yet? (SttPos from the top Stack entry!)
 bool SvxRTFParser::IsAttrSttPos()
 {
-    SvxRTFItemStackType* pAkt = aAttrStack.empty() ? 0 : aAttrStack.back();
+    SvxRTFItemStackType* pAkt = aAttrStack.empty() ? nullptr : aAttrStack.back();
     return !pAkt || (pAkt->pSttNd->GetIdx() == pInsPos->GetNodeIdx() &&
         pAkt->nSttCnt == pInsPos->GetCntIdx());
 }

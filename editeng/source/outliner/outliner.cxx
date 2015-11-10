@@ -395,7 +395,7 @@ OutlinerParaObject* Outliner::CreateParaObject( sal_Int32 nStartPara, sal_Int32 
         nCount = pEditEngine->GetParagraphCount() - nStartPara;
 
     if (nCount <= 0)
-        return NULL;
+        return nullptr;
 
     EditTextObject* pText = pEditEngine->CreateTextObject( nStartPara, nCount );
     const bool bIsEditDoc(OUTLINERMODE_TEXTOBJECT == ImplGetOutlinerMode());
@@ -686,7 +686,7 @@ OUString Outliner::CalcFieldValue( const SvxFieldItem& rField, sal_Int32 nPara, 
     }
 
     delete rpFldColor;
-    rpFldColor = aFldInfo.GetFieldColor() ? new Color( *aFldInfo.GetFieldColor() ) : 0;
+    rpFldColor = aFldInfo.GetFieldColor() ? new Color( *aFldInfo.GetFieldColor() ) : nullptr;
 
     return aFldInfo.GetRepresentation();
 }
@@ -792,13 +792,13 @@ bool Outliner::Expand( Paragraph* pPara )
 {
     if ( pParaList->HasHiddenChildren( pPara ) )
     {
-        OLUndoExpand* pUndo = 0;
+        OLUndoExpand* pUndo = nullptr;
         bool bUndo = IsUndoEnabled() && !IsInUndo();
         if( bUndo )
         {
             UndoActionStart( OLUNDO_EXPAND );
             pUndo = new OLUndoExpand( this, OLUNDO_EXPAND );
-            pUndo->pParas = 0;
+            pUndo->pParas = nullptr;
             pUndo->nCount = pParaList->GetAbsPos( pPara );
         }
         pHdlParagraph = pPara;
@@ -819,7 +819,7 @@ bool Outliner::Collapse( Paragraph* pPara )
 {
     if ( pParaList->HasVisibleChildren( pPara ) ) // expanded
     {
-        OLUndoExpand* pUndo = 0;
+        OLUndoExpand* pUndo = nullptr;
         bool bUndo = false;
 
         if( !IsInUndo() && IsUndoEnabled() )
@@ -828,7 +828,7 @@ bool Outliner::Collapse( Paragraph* pPara )
         {
             UndoActionStart( OLUNDO_COLLAPSE );
             pUndo = new OLUndoExpand( this, OLUNDO_COLLAPSE );
-            pUndo->pParas = 0;
+            pUndo->pParas = nullptr;
             pUndo->nCount = pParaList->GetAbsPos( pPara );
         }
 
@@ -864,7 +864,7 @@ vcl::Font Outliner::ImpCalcBulletFont( sal_Int32 nPara ) const
     }
 
     vcl::Font aBulletFont;
-    const vcl::Font *pSourceFont = 0;
+    const vcl::Font *pSourceFont = nullptr;
     if ( pFmt->GetNumberingType() == SVX_NUM_CHAR_SPECIAL )
     {
         pSourceFont = pFmt->GetBulletFont();
@@ -1010,7 +1010,7 @@ void Outliner::PaintBullet( sal_Int32 nPara, const Point& rStartPos,
                     }
 
                     DrawingText(aTextPos, pPara->GetText(), 0, pPara->GetText().getLength(), pBuf.get(),
-                        aSvxFont, nPara, -1, bRightToLeftPara ? 1 : 0, 0, 0, false, false, true, 0, Color(), Color());
+                        aSvxFont, nPara, -1, bRightToLeftPara ? 1 : 0, nullptr, nullptr, false, false, true, nullptr, Color(), Color());
                 }
                 else
                 {
@@ -1164,7 +1164,7 @@ void Outliner::ImpFilterIndents( sal_Int32 nFirstPara, sal_Int32 nLastPara )
     bool bUpdate = pEditEngine->GetUpdateMode();
     pEditEngine->SetUpdateMode( false );
 
-    Paragraph* pLastConverted = NULL;
+    Paragraph* pLastConverted = nullptr;
     for( sal_Int32 nPara = nFirstPara; nPara <= nLastPara; nPara++ )
     {
         Paragraph* pPara = pParaList->GetParagraph( nPara );
@@ -1347,7 +1347,7 @@ OutlinerView* Outliner::RemoveView( OutlinerView* pView )
             break;
         }
     }
-    return NULL;    // return superfluous
+    return nullptr;    // return superfluous
 }
 
 OutlinerView* Outliner::RemoveView( size_t nIndex )
@@ -1364,13 +1364,13 @@ OutlinerView* Outliner::RemoveView( size_t nIndex )
         aViewList.erase( it );
     }
 
-    return NULL;    // return superfluous
+    return nullptr;    // return superfluous
 }
 
 
 OutlinerView* Outliner::GetView( size_t nIndex ) const
 {
-    return ( nIndex >= aViewList.size() ) ? NULL : aViewList[ nIndex ];
+    return ( nIndex >= aViewList.size() ) ? nullptr : aViewList[ nIndex ];
 }
 
 size_t Outliner::GetViewCount() const
@@ -1422,7 +1422,7 @@ bool Outliner::HasChildren( Paragraph* pParagraph ) const
 
 bool Outliner::ImplHasNumberFormat( sal_Int32 nPara ) const
 {
-    return GetNumberFormat(nPara) != 0;
+    return GetNumberFormat(nPara) != nullptr;
 #if 0 // The below code is obviously unreachable
     if ( GetNumberFormat(nPara) )
     {
@@ -1436,11 +1436,11 @@ bool Outliner::ImplHasNumberFormat( sal_Int32 nPara ) const
 
 const SvxNumberFormat* Outliner::GetNumberFormat( sal_Int32 nPara ) const
 {
-    const SvxNumberFormat* pFmt = NULL;
+    const SvxNumberFormat* pFmt = nullptr;
 
     Paragraph* pPara = pParaList->GetParagraph( nPara );
     if (!pPara)
-        return NULL;
+        return nullptr;
 
     sal_Int16 nDepth = pPara->GetDepth();
 
@@ -1754,8 +1754,8 @@ void Outliner::DrawingTab( const Point& rStartPos, long nWidth, const OUString& 
 {
     if(aDrawPortionHdl.IsSet())
     {
-        DrawPortionInfo aInfo( rStartPos, rChar, 0, rChar.getLength(), rFont, nPara, nIndex, NULL, NULL,
-            NULL, NULL, rOverlineColor, rTextLineColor, nRightToLeft, true, nWidth, bEndOfLine, bEndOfParagraph, false);
+        DrawPortionInfo aInfo( rStartPos, rChar, 0, rChar.getLength(), rFont, nPara, nIndex, nullptr, nullptr,
+            nullptr, nullptr, rOverlineColor, rTextLineColor, nRightToLeft, true, nWidth, bEndOfLine, bEndOfParagraph, false);
 
         aDrawPortionHdl.Call( &aInfo );
     }
@@ -1771,7 +1771,7 @@ bool Outliner::ImpCanDeleteSelectedPages( OutlinerView* pCurView, sal_Int32 _nFi
 
     nDepthChangedHdlPrevDepth = nPages;
     mnFirstSelPage = _nFirstPage;
-    pHdlParagraph = 0;
+    pHdlParagraph = nullptr;
     return RemovingPagesHdl( pCurView );
 }
 
@@ -1854,7 +1854,7 @@ sal_uInt16 Outliner::ImplGetNumbering( sal_Int32 nPara, const SvxNumberFormat* p
 
         const SvxNumberFormat* pFmt = GetNumberFormat( nPara );
 
-        if( pFmt == 0 )
+        if( pFmt == nullptr )
             continue; // ignore paragraphs without bullets
 
         // check if numbering less than or equal to pParaFmt
@@ -1925,11 +1925,11 @@ void Outliner::ImplCalcBulletText( sal_Int32 nPara, bool bRecalcLevel, bool bRec
             }
 
             if ( pPara && ( pPara->GetDepth() < nDepth ) )
-                pPara = NULL;
+                pPara = nullptr;
         }
         else
         {
-            pPara = NULL;
+            pPara = nullptr;
         }
     }
 }
@@ -2074,7 +2074,7 @@ NonOverflowingText *Outliner::GetNonOverflowingText() const
     */
 
     if ( GetParagraphCount() < 1 )
-        return NULL;
+        return nullptr;
 
     // last non-overflowing paragraph is before the first overflowing one
     sal_Int32 nCount = pEditEngine->GetOverflowingParaNum();
@@ -2085,14 +2085,14 @@ NonOverflowingText *Outliner::GetNonOverflowingText() const
         SAL_INFO("editeng.chaining",
                  "[Overflowing] Ops, trying to retrieve para "
                  << nCount << " when max index is " << GetParagraphCount()-1 );
-        return NULL;
+        return nullptr;
     }
 
      if (nCount < 0)
      {
         SAL_INFO("editeng.chaining",
                  "[Overflowing] No Overflowing text but GetNonOverflowinText called?!");
-        return NULL;
+        return nullptr;
      }
 
     // NOTE: We want the selection of the overflowing text from here
@@ -2184,7 +2184,7 @@ OutlinerParaObject *Outliner::GetEmptyParaObject() const
 OverflowingText *Outliner::GetOverflowingText() const
 {
     if ( pEditEngine->GetOverflowingParaNum() < 0)
-        return NULL;
+        return nullptr;
 
 
     // Defensive check: oveflowing para index beyond actual # of paragraphs?
@@ -2193,7 +2193,7 @@ OverflowingText *Outliner::GetOverflowingText() const
                  "[Overflowing] Ops, trying to retrieve para "
                  << pEditEngine->GetOverflowingParaNum() << " when max index is "
                  << GetParagraphCount()-1 );
-        return NULL;
+        return nullptr;
     }
 
     sal_Int32 nHeadPara = pEditEngine->GetOverflowingParaNum();

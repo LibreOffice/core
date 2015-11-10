@@ -237,7 +237,7 @@ namespace editeng
                                                             sal_Int32 _nOptions,
                                                             bool _bIsInteractive,
                                                             HangulHanjaConversion* _pAntiImpl )
-        : m_pConversionDialog( NULL )
+        : m_pConversionDialog( nullptr )
         , m_pUIParent( _pUIParent )
         , m_xContext( rxContext )
         , m_aSourceLocale( _rSourceLocale )
@@ -734,7 +734,7 @@ namespace editeng
         //remind this decision
         m_aRecentlyUsedList[ GetCurrentUnit() ] = _rChangeInto;
 
-        LanguageType *pNewUnitLang = 0;
+        LanguageType *pNewUnitLang = nullptr;
         LanguageType  nNewUnitLang = LANGUAGE_NONE;
         if (m_eConvType == HHC::eConvSimplifiedTraditional)
         {
@@ -917,7 +917,7 @@ namespace editeng
                 bool bHaveToHanja = ( aToHanja.Boundary.startPos < aToHanja.Boundary.endPos );
                 bool bHaveToHangul = ( aToHangul.Boundary.startPos < aToHangul.Boundary.endPos );
 
-                TextConversionResult* pResult = NULL;
+                TextConversionResult* pResult = nullptr;
                 if ( bHaveToHanja && bHaveToHangul )
                 {   // it found convertibles in both directions -> use the first
                     if ( aToHangul.Boundary.startPos < aToHanja.Boundary.startPos )

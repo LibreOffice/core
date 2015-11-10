@@ -31,7 +31,7 @@
 
 
 OutlinerUndoBase::OutlinerUndoBase( sal_uInt16 _nId, Outliner* pOutliner )
-    : EditUndo( _nId, NULL )
+    : EditUndo( _nId, nullptr )
 {
     DBG_ASSERT( pOutliner, "Undo: Outliner?!" );
     mpOutliner = pOutliner;
@@ -139,12 +139,12 @@ void OutlinerUndoCheckPara::Redo()
 }
 
 OLUndoExpand::OLUndoExpand(Outliner* pOut, sal_uInt16 _nId )
-    : EditUndo( _nId, 0 )
+    : EditUndo( _nId, nullptr )
 {
     DBG_ASSERT(pOut,"Undo:No Outliner");
     pOutliner = pOut;
     nCount = 0;
-    pParas = 0;
+    pParas = nullptr;
 }
 
 

@@ -383,7 +383,7 @@ void TextConvWrapper::ReplaceUnit(
     if (bIsChineseConversion)
         ChangeText( aNewTxt, rOrigText, &rOffsets, &aOldSel );
     else
-        ChangeText( aNewTxt, rOrigText, NULL, NULL );
+        ChangeText( aNewTxt, rOrigText, nullptr, nullptr );
 
     // change language and font if necessary
     if (bIsChineseConversion)

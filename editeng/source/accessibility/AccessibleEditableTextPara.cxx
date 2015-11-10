@@ -111,7 +111,7 @@ namespace accessibility
         : AccessibleTextParaInterfaceBase( m_aMutex ),
           mnParagraphIndex( 0 ),
           mnIndexInParent( 0 ),
-          mpEditSource( NULL ),
+          mpEditSource( nullptr ),
           maEEOffset( 0, 0 ),
           mxParent( rParent ),
           // well, that's strictly (UNO) exception safe, though not
@@ -300,9 +300,9 @@ namespace accessibility
         int nClientId( getNotifierClientId() );
 
         // #108212# drop all references before notifying dispose
-        mxParent = NULL;
+        mxParent = nullptr;
         mnNotifierClientId = -1;
-        mpEditSource = NULL;
+        mpEditSource = nullptr;
 
         // notify listeners
         if( nClientId != -1 )
@@ -604,7 +604,7 @@ namespace accessibility
     void AccessibleEditableTextPara::SetState( const sal_Int16 nStateId )
     {
         ::utl::AccessibleStateSetHelper* pStateSet = static_cast< ::utl::AccessibleStateSetHelper*>(mxStateSet.get());
-        if( pStateSet != NULL &&
+        if( pStateSet != nullptr &&
             !pStateSet->contains(nStateId) )
         {
             pStateSet->AddState( nStateId );
@@ -615,7 +615,7 @@ namespace accessibility
     void AccessibleEditableTextPara::UnSetState( const sal_Int16 nStateId )
     {
         ::utl::AccessibleStateSetHelper* pStateSet = static_cast< ::utl::AccessibleStateSetHelper*>(mxStateSet.get());
-        if( pStateSet != NULL &&
+        if( pStateSet != nullptr &&
             pStateSet->contains(nStateId) )
         {
             pStateSet->RemoveState( nStateId );
@@ -852,9 +852,9 @@ namespace accessibility
 
     static uno::Sequence< OUString > getAttributeNames()
     {
-        static uno::Sequence< OUString >* pNames = NULL;
+        static uno::Sequence< OUString >* pNames = nullptr;
 
-        if( pNames == NULL )
+        if( pNames == nullptr )
         {
             uno::Sequence< OUString >* pSeq = new uno::Sequence< OUString >( 21 );
             OUString* pStrings = pSeq->getArray();

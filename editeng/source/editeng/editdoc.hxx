@@ -387,7 +387,7 @@ private:
 
 
                 TextPortion()
-                : pExtraInfos( NULL )
+                : pExtraInfos( nullptr )
                 , nLen( 0 )
                 , aOutSz()
                 , nKind( PortionKind::TEXT )
@@ -398,7 +398,7 @@ private:
 
 public:
                 TextPortion( sal_Int32 nL )
-                : pExtraInfos( NULL )
+                : pExtraInfos( nullptr )
                 , nLen( nL )
                 , aOutSz( -1, -1 )
                 , nKind( PortionKind::TEXT )
@@ -408,7 +408,7 @@ public:
                 }
 
                 TextPortion( const TextPortion& r )
-                : pExtraInfos( NULL )
+                : pExtraInfos( nullptr )
                 , nLen( r.nLen )
                 , aOutSz( r.aOutSz )
                 , nKind( r.nKind )
@@ -828,7 +828,7 @@ public:
 
 inline EditCharAttrib* GetAttrib(CharAttribList::AttribsType& rAttribs, sal_Int32 nAttr)
 {
-    return (nAttr < (sal_Int32)rAttribs.size()) ? &rAttribs[nAttr] : NULL;
+    return (nAttr < (sal_Int32)rAttribs.size()) ? &rAttribs[nAttr] : nullptr;
 }
 
 void CheckOrderedList(const CharAttribList::AttribsType& rAttribs, bool bStart);

@@ -38,13 +38,13 @@ void ImpEditEngine::SetStyleSheetPool( SfxStyleSheetPool* pSPool )
 const SfxStyleSheet* ImpEditEngine::GetStyleSheet( sal_Int32 nPara ) const
 {
     const ContentNode* pNode = aEditDoc.GetObject( nPara );
-    return pNode ? pNode->GetContentAttribs().GetStyleSheet() : NULL;
+    return pNode ? pNode->GetContentAttribs().GetStyleSheet() : nullptr;
 }
 
 SfxStyleSheet* ImpEditEngine::GetStyleSheet( sal_Int32 nPara )
 {
     ContentNode* pNode = aEditDoc.GetObject( nPara );
-    return pNode ? pNode->GetContentAttribs().GetStyleSheet() : NULL;
+    return pNode ? pNode->GetContentAttribs().GetStyleSheet() : nullptr;
 }
 
 void ImpEditEngine::SetStyleSheet( EditSelection aSel, SfxStyleSheet* pStyle )
@@ -130,7 +130,7 @@ void ImpEditEngine::RemoveStyleFromParagraphs( SfxStyleSheet* pStyle )
         ContentNode* pNode = aEditDoc.GetObject(nNode);
         if ( pNode->GetStyleSheet() == pStyle )
         {
-            pNode->SetStyleSheet( NULL );
+            pNode->SetStyleSheet( nullptr );
             ParaAttribsChanged( pNode );
         }
     }
@@ -143,7 +143,7 @@ void ImpEditEngine::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
     if ( !bDowning )
     {
 
-        SfxStyleSheet* pStyle = NULL;
+        SfxStyleSheet* pStyle = nullptr;
         sal_uLong nId = 0;
 
         const SfxStyleSheetHint* pStyleSheetHint = dynamic_cast<const SfxStyleSheetHint*>(&rHint);
@@ -188,7 +188,7 @@ EditUndoSetAttribs* ImpEditEngine::CreateAttribUndo( EditSelection aSel, const S
 
     DBG_ASSERT( nStartNode <= nEndNode, "CreateAttribUndo: Start > End ?!" );
 
-    EditUndoSetAttribs* pUndo = NULL;
+    EditUndoSetAttribs* pUndo = nullptr;
     if ( rSet.GetPool() != &aEditDoc.GetItemPool() )
     {
         SfxItemSet aTmpSet( GetEmptyItemSet() );
@@ -247,7 +247,7 @@ void ImpEditEngine::UndoActionEnd( sal_uInt16 )
     {
         GetUndoManager().LeaveListAction();
         delete pUndoMarkSelection;
-        pUndoMarkSelection = NULL;
+        pUndoMarkSelection = nullptr;
     }
 }
 
@@ -259,7 +259,7 @@ void ImpEditEngine::InsertUndo( EditUndo* pUndo, bool bTryMerge )
         EditUndoMarkSelection* pU = new EditUndoMarkSelection(pEditEngine, *pUndoMarkSelection);
         GetUndoManager().AddUndoAction( pU );
         delete pUndoMarkSelection;
-        pUndoMarkSelection = NULL;
+        pUndoMarkSelection = nullptr;
     }
     GetUndoManager().AddUndoAction( pUndo, bTryMerge );
 
@@ -350,7 +350,7 @@ SfxItemSet ImpEditEngine::GetAttribs( EditSelection aSel, EditEngineAttribs nOnl
                 }
                 else if ( aCurSet.GetItemState( nWhich ) == SfxItemState::SET )
                 {
-                    const SfxPoolItem* pItem = NULL;
+                    const SfxPoolItem* pItem = nullptr;
                     if ( nOnlyHardAttrib == EditEngineAttribs_All )
                     {
                         pItem = &pNode->GetContentAttribs().GetItem( nWhich );
@@ -583,7 +583,7 @@ void ImpEditEngine::RemoveCharAttribs( EditSelection aSel, bool bRemoveParaAttri
     sal_Int32 nStartNode = aEditDoc.GetPos( aSel.Min().GetNode() );
     sal_Int32 nEndNode = aEditDoc.GetPos( aSel.Max().GetNode() );
 
-    const SfxItemSet* _pEmptyItemSet = bRemoveParaAttribs ? &GetEmptyItemSet() : 0;
+    const SfxItemSet* _pEmptyItemSet = bRemoveParaAttribs ? &GetEmptyItemSet() : nullptr;
 
     if ( IsUndoEnabled() && !IsInUndo() && aStatus.DoUndoAttribs() )
     {
@@ -761,7 +761,7 @@ void ImpEditEngine::ParaAttribsToCharAttribs( ContentNode* pNode )
                 if ( pAttr->GetStart() > nLastEnd )
                     aEditDoc.InsertAttrib( pNode, nLastEnd, pAttr->GetStart(), rItem );
                 // #112831# Last Attr might go from 0xffff to 0x0000
-                pAttr = nLastEnd ? pNode->GetCharAttribs().FindNextAttrib( nWhich, nLastEnd ) : NULL;
+                pAttr = nLastEnd ? pNode->GetCharAttribs().FindNextAttrib( nWhich, nLastEnd ) : nullptr;
             }
 
             // And the Rest:
@@ -775,13 +775,13 @@ void ImpEditEngine::ParaAttribsToCharAttribs( ContentNode* pNode )
 
 IdleFormattter::IdleFormattter()
 {
-    pView = 0;
+    pView = nullptr;
     nRestarts = 0;
 }
 
 IdleFormattter::~IdleFormattter()
 {
-    pView = 0;
+    pView = nullptr;
 }
 
 void IdleFormattter::DoIdleFormat( EditView* pV )
@@ -812,7 +812,7 @@ ImplIMEInfos::ImplIMEInfos( const EditPaM& rPos, const OUString& rOldTextAfterSt
     aPos = rPos;
     nLen = 0;
     bCursor = true;
-    pAttribs = NULL;
+    pAttribs = nullptr;
     bWasCursorOverwrite = false;
 }
 
@@ -832,7 +832,7 @@ void ImplIMEInfos::CopyAttribs( const sal_uInt16* pA, sal_uInt16 nL )
 void ImplIMEInfos::DestroyAttribs()
 {
     delete[] pAttribs;
-    pAttribs = NULL;
+    pAttribs = nullptr;
     nLen = 0;
 }
 

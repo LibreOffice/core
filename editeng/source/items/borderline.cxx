@@ -573,19 +573,19 @@ void SvxBorderLine::SetBorderLineStyle( SvxBorderStyle nNew )
             m_pColorOutFn = lightColor;
             m_pColorInFn  = darkColor;
             m_bUseLeftTop = true;
-            m_pColorGapFn = NULL;
+            m_pColorGapFn = nullptr;
             break;
         case INSET:
             m_pColorOutFn = darkColor;
             m_pColorInFn  = lightColor;
             m_bUseLeftTop = true;
-            m_pColorGapFn = NULL;
+            m_pColorGapFn = nullptr;
             break;
         default:
             m_pColorOutFn = darkColor;
             m_pColorInFn = darkColor;
             m_bUseLeftTop = false;
-            m_pColorGapFn = NULL;
+            m_pColorGapFn = nullptr;
             break;
     }
 }
@@ -594,7 +594,7 @@ Color SvxBorderLine::GetColorOut( bool bLeftOrTop ) const
 {
     Color aResult = aColor;
 
-    if ( m_aWidthImpl.IsDouble() && m_pColorOutFn != NULL )
+    if ( m_aWidthImpl.IsDouble() && m_pColorOutFn != nullptr )
     {
         if ( !bLeftOrTop && m_bUseLeftTop )
             aResult = (*m_pColorInFn)( aColor );
@@ -609,7 +609,7 @@ Color SvxBorderLine::GetColorIn( bool bLeftOrTop ) const
 {
     Color aResult = aColor;
 
-    if ( m_aWidthImpl.IsDouble() && m_pColorInFn != NULL )
+    if ( m_aWidthImpl.IsDouble() && m_pColorInFn != nullptr )
     {
         if ( !bLeftOrTop && m_bUseLeftTop )
             aResult = (*m_pColorOutFn)( aColor );
@@ -624,7 +624,7 @@ Color SvxBorderLine::GetColorGap( ) const
 {
     Color aResult = aColor;
 
-    if ( m_aWidthImpl.IsDouble() && m_pColorGapFn != NULL )
+    if ( m_aWidthImpl.IsDouble() && m_pColorGapFn != nullptr )
     {
         aResult = (*m_pColorGapFn)( aColor );
     }

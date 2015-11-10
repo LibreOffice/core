@@ -40,7 +40,7 @@ SvxFieldData* SvxFieldData::Create(const uno::Reference<text::XTextContent>& xTe
 {
     uno::Reference<beans::XPropertySet> xPropSet(xTextContent, uno::UNO_QUERY);
     if (!xPropSet.is())
-        return NULL;
+        return nullptr;
 
     // we do not support these fields from Writer, so make sure we do not throw
     // here - see fdo#63436 how to possibly extend Writer to make use of this
@@ -48,7 +48,7 @@ SvxFieldData* SvxFieldData::Create(const uno::Reference<text::XTextContent>& xTe
     try {
         aAny = xPropSet->getPropertyValue(UNO_TC_PROP_TEXTFIELD_TYPE);
         if ( !aAny.has<sal_Int32>() )
-            return NULL;
+            return nullptr;
 
         sal_Int32 nFieldType = aAny.get<sal_Int32>();
 
@@ -214,10 +214,10 @@ SvxFieldData* SvxFieldData::Create(const uno::Reference<text::XTextContent>& xTe
         };
     } catch ( const beans::UnknownPropertyException& )
     {
-        return NULL;
+        return nullptr;
     }
 
-    return NULL;
+    return nullptr;
 }
 
 TYPEINIT1( SvxFieldItem, SfxPoolItem );
@@ -296,7 +296,7 @@ SvxFieldItem::SvxFieldItem( const SvxFieldData& rField, const sal_uInt16 nId ) :
 SvxFieldItem::SvxFieldItem( const SvxFieldItem& rItem ) :
     SfxPoolItem ( rItem )
 {
-    pField = rItem.GetField() ? rItem.GetField()->Clone() : 0;
+    pField = rItem.GetField() ? rItem.GetField()->Clone() : nullptr;
 }
 
 
@@ -317,7 +317,7 @@ SfxPoolItem* SvxFieldItem::Clone( SfxItemPool* ) const
 
 SfxPoolItem* SvxFieldItem::Create( SvStream& rStrm, sal_uInt16 ) const
 {
-    SvxFieldData* pData = 0;
+    SvxFieldData* pData = nullptr;
     SvPersistStream aPStrm( GetClassManager(), &rStrm );
     aPStrm >> pData;
 
@@ -501,7 +501,7 @@ OUString SvxDateField::GetFormatted( Date& aDate, SvxDateFormat eFormat, SvNumbe
 
     double fDiffDate = aDate - *(rFormatter.GetNullDate());
     OUString aStr;
-    Color* pColor = NULL;
+    Color* pColor = nullptr;
     rFormatter.GetOutputString( fDiffDate, nFormatKey, aStr, &pColor );
     return aStr;
 }
@@ -561,7 +561,7 @@ static void write_unicode( SvPersistStream & rStm, const OUString& rString )
 
 static OUString read_unicode( SvPersistStream & rStm )
 {
-    rtl_uString *pStr = NULL;
+    rtl_uString *pStr = nullptr;
     sal_uInt16 nL = 0;
     rStm.ReadUInt16( nL );
     const size_t nMaxRecords = rStm.remainingSize() / sizeof(sal_Unicode);
@@ -917,7 +917,7 @@ OUString SvxExtTimeField::GetFormatted( tools::Time& aTime, SvxTimeFormat eForma
 
     double fFracTime = aTime.GetTimeInDays();
     OUString aStr;
-    Color* pColor = NULL;
+    Color* pColor = nullptr;
     rFormatter.GetOutputString( fFracTime, nFormatKey, aStr, &pColor );
     return aStr;
 }
@@ -1180,7 +1180,7 @@ OUString SvxAuthorField::GetFormatted() const
     return aString;
 }
 
-static SvClassManager* pClassMgr=0;
+static SvClassManager* pClassMgr=nullptr;
 
 SvClassManager& SvxFieldItem::GetClassManager()
 {

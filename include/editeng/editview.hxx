@@ -106,7 +106,7 @@ public:
     void            SetWindow( vcl::Window* pWin );
     vcl::Window*         GetWindow() const;
 
-    void            Paint( const Rectangle& rRect, OutputDevice* pTargetDevice = 0 );
+    void            Paint( const Rectangle& rRect, OutputDevice* pTargetDevice = nullptr );
     void            Invalidate();
     Pair            Scroll( long nHorzScroll, long nVertScroll, ScrollRangeCheck nRangeCheck = ScrollRangeCheck::NoNegative );
 
@@ -149,7 +149,7 @@ public:
 
     void            InsertText( const OUString& rNew, bool bSelect = false );
 
-    bool            PostKeyEvent( const KeyEvent& rKeyEvent, vcl::Window* pFrameWin = NULL );
+    bool            PostKeyEvent( const KeyEvent& rKeyEvent, vcl::Window* pFrameWin = nullptr );
 
     bool            MouseButtonUp( const MouseEvent& rMouseEvent );
     bool            MouseButtonDown( const MouseEvent& rMouseEvent );
@@ -177,7 +177,7 @@ public:
     void                RemoveCharAttribs( sal_Int32 nPara, sal_uInt16 nWhich = 0 );
     void                RemoveAttribsKeepLanguages( bool bRemoveParaAttribs = false );
 
-    sal_uInt32          Read( SvStream& rInput, const OUString& rBaseURL, EETextFormat eFormat, bool bSelect = false, SvKeyValueIterator* pHTTPHeaderAttrs = NULL );
+    sal_uInt32          Read( SvStream& rInput, const OUString& rBaseURL, EETextFormat eFormat, bool bSelect = false, SvKeyValueIterator* pHTTPHeaderAttrs = nullptr );
 
     void            SetBackgroundColor( const Color& rColor );
     Color           GetBackgroundColor() const;
@@ -206,7 +206,7 @@ public:
     void            SetAnchorMode( EVAnchorMode eMode );
     EVAnchorMode    GetAnchorMode() const;
 
-    void            CompleteAutoCorrect( vcl::Window* pFrameWin = NULL );
+    void            CompleteAutoCorrect( vcl::Window* pFrameWin = nullptr );
 
     EESpellState    StartSpeller( bool bMultipleDoc = false );
     EESpellState    StartThesaurus();
@@ -219,12 +219,12 @@ public:
 
     bool            IsCursorAtWrongSpelledWord( bool bMarkIfWrong = false );
     bool            IsWrongSpelledWordAtPos( const Point& rPosPixel, bool bMarkIfWrong = false );
-    void            ExecuteSpellPopup( const Point& rPosPixel, Link<SpellCallbackInfo&,void>* pCallBack = 0 );
+    void            ExecuteSpellPopup( const Point& rPosPixel, Link<SpellCallbackInfo&,void>* pCallBack = nullptr );
 
     void                InsertField( const SvxFieldItem& rFld );
     const SvxFieldItem* GetFieldUnderMousePointer() const;
     const SvxFieldItem* GetFieldUnderMousePointer( sal_Int32& nPara, sal_Int32& nPos ) const;
-    const SvxFieldItem* GetField( const Point& rPos, sal_Int32* pnPara = NULL, sal_Int32* pnPos = NULL ) const;
+    const SvxFieldItem* GetField( const Point& rPos, sal_Int32* pnPara = nullptr, sal_Int32* pnPos = nullptr ) const;
 
     const SvxFieldItem* GetFieldAtSelection() const;
 
