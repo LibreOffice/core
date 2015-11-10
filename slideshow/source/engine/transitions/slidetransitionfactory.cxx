@@ -44,6 +44,7 @@
 #include "clippingfunctor.hxx"
 #include "combtransition.hxx"
 #include "tools.hxx"
+#include <memory>
 
 
 
@@ -882,7 +883,7 @@ NumberAnimationSharedPtr createPluginTransition(
     const SoundPlayerSharedPtr&              pSoundPlayer,
     EventMultiplexer&                        rEventMultiplexer)
 {
-    PluginSlideChange* pTransition =
+    std::unique_ptr<PluginSlideChange> pTransition(
         new PluginSlideChange(
             nTransitionType,
             nTransitionSubType,
@@ -892,13 +893,12 @@ NumberAnimationSharedPtr createPluginTransition(
             rScreenUpdater,
             xFactory,
             pSoundPlayer,
-            rEventMultiplexer );
+            rEventMultiplexer ));
 
     if( pTransition->Success() )
-        return NumberAnimationSharedPtr( pTransition );
+        return NumberAnimationSharedPtr( pTransition.release() );
     else
     {
-        delete pTransition;
         return NumberAnimationSharedPtr();
     }
 }

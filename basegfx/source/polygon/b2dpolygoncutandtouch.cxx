@@ -29,6 +29,7 @@
 
 #include <vector>
 #include <algorithm>
+#include <memory>
 
 #define SUBDIVIDE_FOR_CUT_TEST_COUNT        (50)
 
@@ -887,7 +888,7 @@ namespace basegfx
                 else
                 {
                     // first solve self cuts and self touches for all contained single polygons
-                    temporaryPolygonData *pTempData = new temporaryPolygonData[nCount];
+                    std::unique_ptr<temporaryPolygonData[]> pTempData(new temporaryPolygonData[nCount]);
                     sal_uInt32 a, b;
 
                     for(a = 0L; a < nCount; a++)
@@ -934,8 +935,6 @@ namespace basegfx
                     {
                         aRetval.append(mergeTemporaryPointsAndPolygon(pTempData[a].getPolygon(), pTempData[a].getTemporaryPointVector()));
                     }
-
-                    delete[] pTempData;
                 }
 
                 return aRetval;

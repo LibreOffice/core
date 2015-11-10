@@ -18,6 +18,7 @@
  */
 
 #include <rtl/crc.h>
+#include <memory>
 #include <tools/stream.hxx>
 #include <tools/vcompat.hxx>
 #include <tools/fract.hxx>
@@ -2753,18 +2754,14 @@ SvStream& ReadGDIMetaFile( SvStream& rIStm, GDIMetaFile& rGDIMetaFile )
         if ( !strcmp( aId, "VCLMTF" ) )
         {
             // new format
-            VersionCompat* pCompat;
             sal_uInt32     nStmCompressMode = 0;
             sal_uInt32     nCount = 0;
-
-            pCompat = new VersionCompat( rIStm, StreamMode::READ );
+            std::unique_ptr<VersionCompat> pCompat(new VersionCompat( rIStm, StreamMode::READ ));
 
             rIStm.ReadUInt32( nStmCompressMode );
             ReadMapMode( rIStm, rGDIMetaFile.aPrefMapMode );
             ReadPair( rIStm, rGDIMetaFile.aPrefSize );
             rIStm.ReadUInt32( nCount );
-
-            delete pCompat;
 
             ImplMetaReadData aReadData;
             aReadData.meActualCharSet = rIStm.GetStreamCharSet();

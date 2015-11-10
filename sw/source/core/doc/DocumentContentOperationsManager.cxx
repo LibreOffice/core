@@ -73,6 +73,7 @@
 #include <svx/svdouno.hxx>
 #include <editeng/formatbreakitem.hxx>
 #include <com/sun/star/i18n/Boundary.hpp>
+#include <memory>
 
 
 using namespace ::com::sun::star::i18n;
@@ -294,7 +295,7 @@ namespace
         {
             SwDoc* pDestDoc = rCpyPam.GetDoc();
             SwPosition* pCpyStt = rCpyPam.Start(), *pCpyEnd = rCpyPam.End();
-            SwPaM* pDelPam = nullptr;
+            std::unique_ptr<SwPaM> pDelPam;
             const SwPosition *pStt = rPam.Start(), *pEnd = rPam.End();
             // We have to count the "non-copied" nodes
             sal_uLong nDelCount = 0;
@@ -325,7 +326,7 @@ namespace
 
                     default:
                         {
-                            pDelPam = new SwPaM( *pCpyStt, pDelPam );
+                            pDelPam.reset(new SwPaM( *pCpyStt, pDelPam.get() ));
                             if( *pStt < *pRStt )
                             {
                                 lcl_NonCopyCount( rPam, aCorrIdx, pRStt->nNode.GetIndex(), nDelCount );
@@ -360,7 +361,6 @@ namespace
                         break;
                     delete pDelPam->GetNext();
                 } while( true );
-                delete pDelPam;
 
                 pDestDoc->getIDocumentRedlineAccess().SetRedlineMode_intern( eOld );
             }

@@ -21,6 +21,7 @@
 
 #include <map>
 #include <algorithm>
+#include <memory>
 
 #include <com/sun/star/beans/PropertyState.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
@@ -955,7 +956,7 @@ void InsertFile(SwUnoCrsr* pUnoCrsr, const OUString& rURL,
     throw (lang::IllegalArgumentException, io::IOException,
            uno::RuntimeException, std::exception)
 {
-    SfxMedium* pMed = nullptr;
+    std::unique_ptr<SfxMedium> pMed;
     SwDoc* pDoc = pUnoCrsr->GetDoc();
     SwDocShell* pDocSh = pDoc->GetDocShell();
     utl::MediaDescriptor aMediaDescriptor( rOptions );
@@ -1003,52 +1004,45 @@ void InsertFile(SwUnoCrsr* pUnoCrsr, const OUString& rURL,
     {
         if( xInputStream.is() && !xReadStorage.is())
         {
-            pMed = new SfxMedium;
+            pMed.reset(new SfxMedium);
             pMed->setStreamToLoadFrom(xInputStream, true );
         }
         else
-            pMed = xReadStorage.is() ?
+            pMed.reset(xReadStorage.is() ?
                 new SfxMedium(xReadStorage, sBaseURL, nullptr ) :
-                new SfxMedium(sFileName, StreamMode::READ, nullptr, nullptr );
+                new SfxMedium(sFileName, StreamMode::READ, nullptr, nullptr ));
         if( !sBaseURL.isEmpty() )
             pMed->GetItemSet()->Put( SfxStringItem( SID_DOC_BASEURL, sBaseURL ) );
 
         SfxFilterMatcher aMatcher( rFact.GetFilterContainer()->GetName() );
         ErrCode nErr = aMatcher.GuessFilter(*pMed, &pFilter, SfxFilterFlags::NONE);
         if ( nErr || !pFilter)
-            DELETEZ(pMed);
-        else
-            pMed->SetFilter( pFilter );
+            return;
+        pMed->SetFilter( pFilter );
     }
     else
     {
-        if(!pMed)
+        if( xInputStream.is() && !xReadStorage.is())
         {
-            if( xInputStream.is() && !xReadStorage.is())
+            pMed.reset(new SfxMedium);
+            pMed->setStreamToLoadFrom(xInputStream, true );
+            pMed->SetFilter( pFilter );
+        }
+        else
+        {
+            if( xReadStorage.is() )
             {
-                pMed = new SfxMedium;
-                pMed->setStreamToLoadFrom(xInputStream, true );
+                pMed.reset(new SfxMedium(xReadStorage, sBaseURL, nullptr ));
                 pMed->SetFilter( pFilter );
             }
             else
-            {
-                if( xReadStorage.is() )
-                {
-                    pMed = new SfxMedium(xReadStorage, sBaseURL, nullptr );
-                    pMed->SetFilter( pFilter );
-                }
-                else
-                    pMed = new SfxMedium(sFileName, StreamMode::READ, pFilter, nullptr);
-            }
+                pMed.reset(new SfxMedium(sFileName, StreamMode::READ, pFilter, nullptr));
         }
         if(!sFilterOptions.isEmpty())
             pMed->GetItemSet()->Put( SfxStringItem( SID_FILE_FILTEROPTIONS, sFilterOptions ) );
         if(!sBaseURL.isEmpty())
             pMed->GetItemSet()->Put( SfxStringItem( SID_DOC_BASEURL, sBaseURL ) );
     }
-
-    if( !pMed )
-        return;
 
     // this sourcecode is not responsible for the lifetime of the shell, SfxObjectShellLock should not be used
     SfxObjectShellRef aRef( pDocSh );
@@ -1091,7 +1085,6 @@ void InsertFile(SwUnoCrsr* pUnoCrsr, const OUString& rURL,
 
         }
     }
-    delete pMed;
 }
 
 // insert text and scan for CR characters in order to insert
