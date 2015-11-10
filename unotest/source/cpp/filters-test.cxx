@@ -23,12 +23,12 @@ namespace test {
 void decode(const OUString& rIn, const OUString &rOut)
 {
     rtlCipher cipher = rtl_cipher_create(rtl_Cipher_AlgorithmARCFOUR, rtl_Cipher_ModeStream);
-    CPPUNIT_ASSERT_MESSAGE("cipher creation failed", cipher != 0);
+    CPPUNIT_ASSERT_MESSAGE("cipher creation failed", cipher != nullptr);
 
     //mcrypt --bare -a arcfour -o hex -k 435645 -s 3
     const sal_uInt8 aKey[3] = {'C', 'V', 'E'};
 
-    rtlCipherError result = rtl_cipher_init(cipher, rtl_Cipher_DirectionDecode, aKey, SAL_N_ELEMENTS(aKey), 0, 0);
+    rtlCipherError result = rtl_cipher_init(cipher, rtl_Cipher_DirectionDecode, aKey, SAL_N_ELEMENTS(aKey), nullptr, 0);
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE("cipher init failed", rtl_Cipher_E_None, result);
 
@@ -111,7 +111,7 @@ void FiltersTest::recursiveScan(filterStatus nExpected,
         OUString realUrl;
         if (bEncrypted)
         {
-            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, osl::FileBase::createTempFile(NULL, NULL, &sTmpFile));
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, osl::FileBase::createTempFile(nullptr, nullptr, &sTmpFile));
             decode(sURL, sTmpFile);
             realUrl = sTmpFile;
         }

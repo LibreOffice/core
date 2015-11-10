@@ -31,7 +31,7 @@ OUString uniquePipeName(OUString const & name) {
     info.Size = sizeof info;
     CPPUNIT_ASSERT_EQUAL(
         osl_Process_E_None,
-        osl_getProcessInfo(0, osl_Process_IDENTIFIER, &info));
+        osl_getProcessInfo(nullptr, osl_Process_IDENTIFIER, &info));
     return name + OUString::number(info.Ident);
 }
 

@@ -38,7 +38,7 @@
 
 namespace test {
 
-OfficeConnection::OfficeConnection(): process_(0) {}
+OfficeConnection::OfficeConnection(): process_(nullptr) {}
 
 OfficeConnection::~OfficeConnection() {}
 
@@ -72,7 +72,7 @@ void OfficeConnection::setUp() {
             noquickArg.pData, norestoreArg.pData,
             nologoArg.pData, headlessArg.pData, acceptArg.pData, userArg.pData,
             jreArg.pData, classpathArg.pData };
-        rtl_uString ** envs = 0;
+        rtl_uString ** envs = nullptr;
         OUString argEnv;
         if (detail::getArgument("env", &argEnv))
         {
@@ -84,7 +84,7 @@ void OfficeConnection::setUp() {
             osl_executeProcess(
                 toAbsoluteFileUrl(
                     argSoffice.copy(RTL_CONSTASCII_LENGTH("path:"))).pData,
-                args, SAL_N_ELEMENTS(args), 0, 0, 0, envs, envs == 0 ? 0 : 1,
+                args, SAL_N_ELEMENTS(args), 0, nullptr, nullptr, envs, envs == nullptr ? 0 : 1,
                 &process_));
     } else if (argSoffice.match("connect:")) {
         desc = argSoffice.copy(RTL_CONSTASCII_LENGTH("connect:"));
@@ -102,7 +102,7 @@ void OfficeConnection::setUp() {
                     css::uno::UNO_QUERY_THROW);
             break;
         } catch (css::connection::NoConnectException &) {}
-        if (process_ != 0) {
+        if (process_ != nullptr) {
             TimeValue delay = { 1, 0 }; // 1 sec
             CPPUNIT_ASSERT_EQUAL(
                 osl_Process_E_TimedOut,
@@ -112,7 +112,7 @@ void OfficeConnection::setUp() {
 }
 
 void OfficeConnection::tearDown() {
-    if (process_ != 0) {
+    if (process_ != nullptr) {
         if (context_.is()) {
             css::uno::Reference< css::frame::XDesktop2 > desktop = css::frame::Desktop::create( context_ );
             context_.clear();
@@ -131,13 +131,13 @@ void OfficeConnection::tearDown() {
             osl_getProcessInfo(process_, osl_Process_EXITCODE, &info));
         CPPUNIT_ASSERT_EQUAL(oslProcessExitCode(0), info.Code);
         osl_freeProcessHandle(process_);
-        process_ = 0; // guard against subsequent calls to isStillAlive
+        process_ = nullptr; // guard against subsequent calls to isStillAlive
     }
 }
 
 
 bool OfficeConnection::isStillAlive() const {
-    if (process_ == 0) {
+    if (process_ == nullptr) {
         // In case "soffice" argument starts with "connect:" we have no direct
         // control over the liveness of the soffice.bin process (would need to
         // directly monitor the bridge) so can only assume the best here:
