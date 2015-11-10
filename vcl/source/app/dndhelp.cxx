@@ -86,7 +86,7 @@ void vcl::unohelper::DragAndDropWrapper::disposing( const ::com::sun::star::lang
 {
     // Empty Source means it's the client, because the client is not a XInterface
     if ( !rEvent.Source.is() )
-        mpClient = NULL;
+        mpClient = nullptr;
 }
 
 // ::com::sun::star::datatransfer::dnd::XDragGestureListener

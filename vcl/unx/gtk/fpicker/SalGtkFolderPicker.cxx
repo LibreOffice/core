@@ -53,7 +53,7 @@ SalGtkFolderPicker::SalGtkFolderPicker( const uno::Reference< uno::XComponentCon
 {
     m_pDialog = gtk_file_chooser_dialog_new(
         OUStringToOString( getResString( FOLDERPICKER_TITLE ), RTL_TEXTENCODING_UTF8 ).getStr(),
-        NULL, GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+        nullptr, GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
         GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, nullptr );
 
     gtk_dialog_set_default_response( GTK_DIALOG (m_pDialog), GTK_RESPONSE_ACCEPT );
@@ -68,7 +68,7 @@ void SAL_CALL SalGtkFolderPicker::setDisplayDirectory( const OUString& aDirector
 {
     SolarMutexGuard g;
 
-    OSL_ASSERT( m_pDialog != NULL );
+    OSL_ASSERT( m_pDialog != nullptr );
 
     OString aTxt = unicodetouri( aDirectory );
     if( aTxt.isEmpty() ){
@@ -88,7 +88,7 @@ OUString SAL_CALL SalGtkFolderPicker::getDisplayDirectory() throw( uno::RuntimeE
 {
     SolarMutexGuard g;
 
-    OSL_ASSERT( m_pDialog != NULL );
+    OSL_ASSERT( m_pDialog != nullptr );
 
     gchar* pCurrentFolder =
         gtk_file_chooser_get_current_folder_uri( GTK_FILE_CHOOSER( m_pDialog ) );
@@ -102,7 +102,7 @@ OUString SAL_CALL SalGtkFolderPicker::getDirectory() throw( uno::RuntimeExceptio
 {
     SolarMutexGuard g;
 
-    OSL_ASSERT( m_pDialog != NULL );
+    OSL_ASSERT( m_pDialog != nullptr );
 
     gchar* pSelectedFolder =
         gtk_file_chooser_get_uri( GTK_FILE_CHOOSER( m_pDialog ) );
@@ -123,7 +123,7 @@ void SAL_CALL SalGtkFolderPicker::setTitle( const OUString& aTitle ) throw( uno:
 {
     SolarMutexGuard g;
 
-    OSL_ASSERT( m_pDialog != NULL );
+    OSL_ASSERT( m_pDialog != nullptr );
 
     OString aWindowTitle = OUStringToOString( aTitle, RTL_TEXTENCODING_UTF8 );
 
@@ -135,7 +135,7 @@ sal_Int16 SAL_CALL SalGtkFolderPicker::execute() throw( uno::RuntimeException, s
     SolarMutexGuard g;
 
     OSL_TRACE( "1: HERE WE ARE");
-    OSL_ASSERT( m_pDialog != NULL );
+    OSL_ASSERT( m_pDialog != nullptr );
 
     sal_Int16 retVal = 0;
 
@@ -173,7 +173,7 @@ void SAL_CALL SalGtkFolderPicker::cancel() throw( uno::RuntimeException, std::ex
 {
     SolarMutexGuard g;
 
-    OSL_ASSERT( m_pDialog != NULL );
+    OSL_ASSERT( m_pDialog != nullptr );
 
     // TODO m_pImpl->cancel();
 }

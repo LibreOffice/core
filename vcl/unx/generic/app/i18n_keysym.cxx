@@ -339,13 +339,13 @@ KeysymToUnicode (KeySym nKeySym)
         if (n_byte2 != 0)
             return 0;
 
-        keymap_t const* p_map = NULL;
+        keymap_t const* p_map = nullptr;
         if (n_byte3 < INITIAL_KEYMAPS)
             p_map = p_keymap[n_byte3];
         else if (n_byte3 == 255)
             p_map = &keymap255;
 
-        if ((p_map != NULL) && (n_byte4 >= p_map->first) && (n_byte4 <= p_map->last) )
+        if ((p_map != nullptr) && (n_byte4 >= p_map->first) && (n_byte4 <= p_map->last) )
             return p_map->map[n_byte4 - p_map->first];
     }
 

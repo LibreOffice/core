@@ -99,7 +99,7 @@ VclCanvasBitmap::VclCanvasBitmap( const BitmapEx& rBitmap ) :
     m_aBitmap( rBitmap.GetBitmap() ),
     m_aAlpha(),
     m_pBmpAcc( m_aBitmap.AcquireReadAccess() ),
-    m_pAlphaAcc( NULL ),
+    m_pAlphaAcc( nullptr ),
     m_aComponentTags(),
     m_aComponentBitCounts(),
     m_aLayout(),

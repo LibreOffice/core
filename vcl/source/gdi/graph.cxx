@@ -41,7 +41,7 @@ static void ImplDrawDefault( OutputDevice* pOutDev, const OUString* pText,
     sal_uInt16      nPixelWidth = nPixel;
     Point       aPoint( rDestPt.X() + nPixelWidth, rDestPt.Y() + nPixelWidth );
     Size        aSize( rDestSize.Width() - ( nPixelWidth << 1 ), rDestSize.Height() - ( nPixelWidth << 1 ) );
-    bool        bFilled = ( pBitmap != NULL || pBitmapEx != NULL || pFont != NULL );
+    bool        bFilled = ( pBitmap != nullptr || pBitmapEx != nullptr || pFont != nullptr );
     Rectangle   aBorderRect( aPoint, aSize );
 
     pOutDev->Push();
@@ -93,7 +93,7 @@ static void ImplDrawDefault( OutputDevice* pOutDev, const OUString* pText,
          && !(!pOutDev->IsOutputEnabled() /*&& pOutDev->GetConnectMetaFile() */) )
     {
         MapMode aMapMode( MAP_POINT );
-        Size    aSz = pOutDev->LogicToLogic( Size( 0, 12 ), &aMapMode, NULL );
+        Size    aSz = pOutDev->LogicToLogic( Size( 0, 12 ), &aMapMode, nullptr );
         long    nThreshold = aSz.Height() / 2;
         long    nStep = nThreshold / 3;
 
@@ -225,7 +225,7 @@ Graphic::Graphic( const ::com::sun::star::uno::Reference< ::com::sun::star::grap
     uno::Reference< lang::XUnoTunnel >      xTunnel( rxGraphic, uno::UNO_QUERY );
     const ::Graphic*                        pGraphic = ( xTunnel.is() ?
                                                          reinterpret_cast< ::Graphic* >( xTunnel->getSomething( getUnoTunnelId() ) ) :
-                                                          NULL );
+                                                          nullptr );
 
     if( pGraphic )
     {
@@ -433,7 +433,7 @@ void Graphic::Draw( OutputDevice* pOutDev,
                     const Point& rDestPt, const Size& rDestSz ) const
 {
     if( GRAPHIC_DEFAULT == mpImpGraphic->ImplGetType() )
-        ImplDrawDefault( pOutDev, NULL, NULL, NULL, NULL, rDestPt, rDestSz );
+        ImplDrawDefault( pOutDev, nullptr, nullptr, nullptr, nullptr, rDestPt, rDestSz );
     else
         mpImpGraphic->ImplDraw( pOutDev, rDestPt, rDestSz );
 }
@@ -442,7 +442,7 @@ void Graphic::DrawEx( OutputDevice* pOutDev, const OUString& rText,
                     vcl::Font& rFont, const BitmapEx& rBitmap,
                     const Point& rDestPt, const Size& rDestSz )
 {
-    ImplDrawDefault( pOutDev, &rText, &rFont, NULL, &rBitmap, rDestPt, rDestSz );
+    ImplDrawDefault( pOutDev, &rText, &rFont, nullptr, &rBitmap, rDestPt, rDestSz );
 }
 
 void Graphic::StartAnimation( OutputDevice* pOutDev, const Point& rDestPt,

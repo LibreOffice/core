@@ -128,7 +128,7 @@ value_wrapper_set_current_value( AtkValue     *value,
 void
 valueIfaceInit (AtkValueIface *iface)
 {
-  g_return_if_fail (iface != NULL);
+  g_return_if_fail (iface != nullptr);
 
   iface->get_current_value = value_wrapper_get_current_value;
   iface->get_maximum_value = value_wrapper_get_maximum_value;

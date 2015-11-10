@@ -72,7 +72,7 @@ atk_wrapper_focus_idle_handler (gpointer data)
     uno::Reference< accessibility::XAccessible > xAccessible = theNextFocusObject::get();
     if( xAccessible.get() == static_cast < accessibility::XAccessible * > (data) )
     {
-        AtkObject *atk_obj = xAccessible.is() ? atk_object_wrapper_ref( xAccessible ) : NULL;
+        AtkObject *atk_obj = xAccessible.is() ? atk_object_wrapper_ref( xAccessible ) : nullptr;
         // Gail does not notify focus changes to NULL, so do we ..
         if( atk_obj )
         {
@@ -654,7 +654,7 @@ void WindowEventHandler(void *, VclSimpleEvent& rEvent)
     }
 }
 
-static Link<VclSimpleEvent&,void> g_aEventListenerLink( NULL, WindowEventHandler );
+static Link<VclSimpleEvent&,void> g_aEventListenerLink( nullptr, WindowEventHandler );
 
 /*****************************************************************************/
 
@@ -732,11 +732,11 @@ ooo_atk_util_get_type()
             nullptr,
             reinterpret_cast<GClassInitFunc>(ooo_atk_util_class_init),
             nullptr,
-            NULL,
+            nullptr,
             static_cast<guint16>(type_query.instance_size),
             0,
             nullptr,
-            NULL
+            nullptr
         } ;
 
         type = g_type_register_static (parent_type, "OOoUtil", &typeInfo, (GTypeFlags)0) ;

@@ -43,7 +43,7 @@ void OutputDevice::SetClipRegion()
     if ( mpMetaFile )
         mpMetaFile->AddAction( new MetaClipRegionAction( vcl::Region(), false ) );
 
-    SetDeviceClipRegion( NULL );
+    SetDeviceClipRegion( nullptr );
 
     if( mpAlphaVDev )
         mpAlphaVDev->SetClipRegion();
@@ -57,7 +57,7 @@ void OutputDevice::SetClipRegion( const vcl::Region& rRegion )
 
     if ( rRegion.IsNull() )
     {
-        SetDeviceClipRegion( NULL );
+        SetDeviceClipRegion( nullptr );
     }
     else
     {

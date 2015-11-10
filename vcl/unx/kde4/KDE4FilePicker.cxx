@@ -116,7 +116,7 @@ KDE4FilePicker::KDE4FilePicker( const uno::Reference<uno::XComponentContext>& )
     _extraControls = new QWidget();
     _layout = new QGridLayout(_extraControls);
 
-    _dialog = new KFileDialog(KUrl("~"), QString(""), 0, _extraControls);
+    _dialog = new KFileDialog(KUrl("~"), QString(""), nullptr, _extraControls);
 #if ALLOW_REMOTE_URLS
     if( KFileWidget* fileWidget = dynamic_cast< KFileWidget* >( _dialog->fileWidget()))
     {
@@ -545,7 +545,7 @@ QString KDE4FilePicker::getResString( sal_Int16 aRedId )
 
 void KDE4FilePicker::addCustomControl(sal_Int16 controlId)
 {
-    QWidget* widget = 0;
+    QWidget* widget = nullptr;
     sal_Int32 resId = -1;
 
     switch (controlId)

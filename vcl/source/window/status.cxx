@@ -53,7 +53,7 @@ public:
 
 StatusBar::ImplData::ImplData()
 {
-    mpVirDev = NULL;
+    mpVirDev = nullptr;
     mbDrawItemFrames = false;
     mnItemBorderWidth = 0;
 }
@@ -120,7 +120,7 @@ void StatusBar::ImplInit( vcl::Window* pParent, WinBits nStyle )
     if ( !(nStyle & (WB_LEFT | WB_RIGHT)) )
         nStyle |= WB_RIGHT;
 
-    Window::ImplInit( pParent, nStyle & ~WB_BORDER, NULL );
+    Window::ImplInit( pParent, nStyle & ~WB_BORDER, nullptr );
 
     // remember WinBits
     mpItemList      = new ImplStatusItemList;
@@ -300,7 +300,7 @@ Rectangle StatusBar::ImplGetItemRectPos( sal_uInt16 nPos ) const
 {
     Rectangle       aRect;
     ImplStatusItem* pItem;
-    pItem = ( nPos < mpItemList->size() ) ? (*mpItemList)[ nPos ] : NULL;
+    pItem = ( nPos < mpItemList->size() ) ? (*mpItemList)[ nPos ] : nullptr;
     if ( pItem )
     {
         if ( pItem->mbVisible )
@@ -940,7 +940,7 @@ void StatusBar::InsertItem( sal_uInt16 nItemId, sal_uLong nWidth,
     pItem->mnBits           = nBits;
     pItem->mnWidth          = (long)nWidth+nFudge+STATUSBAR_OFFSET;
     pItem->mnOffset         = nOffset;
-    pItem->mpUserData       = 0;
+    pItem->mpUserData       = nullptr;
     pItem->mbVisible        = true;
 
     // add item to list
@@ -1255,7 +1255,7 @@ void* StatusBar::GetItemData( sal_uInt16 nItemId ) const
     if ( nPos != STATUSBAR_ITEM_NOTFOUND )
         return (*mpItemList)[ nPos ]->mpUserData;
 
-    return NULL;
+    return nullptr;
 }
 
 void StatusBar::RedrawItem(sal_uInt16 nItemId)

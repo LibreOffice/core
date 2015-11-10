@@ -85,7 +85,7 @@ public:
     void                StartDrag();
 
     void                SetDragRectPixel( const Rectangle& rDragRect,
-                                          vcl::Window* pRefWin = NULL );
+                                          vcl::Window* pRefWin = nullptr );
 
     void                SetSplitPosPixel( long nPos );
     long                GetSplitPosPixel() const { return mnSplitPos; }

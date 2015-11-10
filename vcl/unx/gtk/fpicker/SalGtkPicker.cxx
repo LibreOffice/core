@@ -56,7 +56,7 @@ OUString SalGtkPicker::uritounicode(const gchar* pIn)
     {
         // all the URLs are handled by office in UTF-8
         // so the Gnome FP related URLs should be converted accordingly
-        gchar *pEncodedFileName = g_filename_from_uri(pIn, NULL, NULL);
+        gchar *pEncodedFileName = g_filename_from_uri(pIn, nullptr, nullptr);
         if ( pEncodedFileName )
         {
             OUString sEncoded(pEncodedFileName, strlen(pEncodedFileName),
@@ -107,7 +107,7 @@ extern "C"
 
 GtkWindow* RunDialog::GetTransientFor()
 {
-    GtkWindow *pParent = NULL;
+    GtkWindow *pParent = nullptr;
 
     vcl::Window * pWindow = ::Application::GetActiveTopWindow();
     if( pWindow )
@@ -151,7 +151,7 @@ void SAL_CALL RunDialog::windowOpened(const css::lang::EventObject& e)
         }
     }
 
-    g_timeout_add_full(G_PRIORITY_HIGH_IDLE, 0, reinterpret_cast<GSourceFunc>(canceldialog), this, NULL);
+    g_timeout_add_full(G_PRIORITY_HIGH_IDLE, 0, reinterpret_cast<GSourceFunc>(canceldialog), this, nullptr);
 }
 
 void SAL_CALL RunDialog::queryTermination( const ::com::sun::star::lang::EventObject& )
@@ -164,7 +164,7 @@ void SAL_CALL RunDialog::notifyTermination( const ::com::sun::star::lang::EventO
 {
     SolarMutexGuard g;
 
-    g_timeout_add_full(G_PRIORITY_HIGH_IDLE, 0, reinterpret_cast<GSourceFunc>(canceldialog), this, NULL);
+    g_timeout_add_full(G_PRIORITY_HIGH_IDLE, 0, reinterpret_cast<GSourceFunc>(canceldialog), this, nullptr);
 }
 
 void RunDialog::cancel()
@@ -190,7 +190,7 @@ gint RunDialog::run()
 }
 
 SalGtkPicker::SalGtkPicker( const uno::Reference<uno::XComponentContext>& xContext )
-    : m_pDialog( 0 ), m_xContext( xContext )
+    : m_pDialog( nullptr ), m_xContext( xContext )
 {
 }
 
@@ -207,7 +207,7 @@ SalGtkPicker::~SalGtkPicker()
 void SAL_CALL SalGtkPicker::implsetDisplayDirectory( const OUString& aDirectory )
     throw( lang::IllegalArgumentException, uno::RuntimeException )
 {
-    OSL_ASSERT( m_pDialog != NULL );
+    OSL_ASSERT( m_pDialog != nullptr );
 
     OString aTxt = unicodetouri(aDirectory);
     if( aTxt.isEmpty() ){
@@ -225,7 +225,7 @@ void SAL_CALL SalGtkPicker::implsetDisplayDirectory( const OUString& aDirectory 
 
 OUString SAL_CALL SalGtkPicker::implgetDisplayDirectory() throw( uno::RuntimeException )
 {
-    OSL_ASSERT( m_pDialog != NULL );
+    OSL_ASSERT( m_pDialog != nullptr );
 
     gchar* pCurrentFolder =
         gtk_file_chooser_get_current_folder_uri( GTK_FILE_CHOOSER( m_pDialog ) );
@@ -237,7 +237,7 @@ OUString SAL_CALL SalGtkPicker::implgetDisplayDirectory() throw( uno::RuntimeExc
 
 void SAL_CALL SalGtkPicker::implsetTitle( const OUString& aTitle ) throw( uno::RuntimeException )
 {
-    OSL_ASSERT( m_pDialog != NULL );
+    OSL_ASSERT( m_pDialog != nullptr );
 
     OString aWindowTitle = OUStringToOString( aTitle, RTL_TEXTENCODING_UTF8 );
 

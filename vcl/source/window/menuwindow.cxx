@@ -99,9 +99,9 @@ bool MenuWindow::ImplHandleHelpEvent(vcl::Window* pMenuWindow, Menu* pMenu, sal_
                 aHelpId = OOO_HELP_INDEX;
 
             if ( !aCommand.isEmpty() )
-                pHelp->Start( aCommand, NULL );
+                pHelp->Start( aCommand, nullptr );
             else
-                pHelp->Start( OStringToOUString( aHelpId, RTL_TEXTENCODING_UTF8 ), NULL );
+                pHelp->Start( OStringToOUString( aHelpId, RTL_TEXTENCODING_UTF8 ), nullptr );
         }
         bDone = true;
     }

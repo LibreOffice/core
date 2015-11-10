@@ -31,7 +31,7 @@ namespace vcl { class Window; }
 class VCL_DLLPUBLIC Sound
 {
 public:
-    static void         Beep( vcl::Window* pWindow = NULL );
+    static void         Beep( vcl::Window* pWindow = nullptr );
 };
 
 #endif // INCLUDED_VCL_SOUND_HXX

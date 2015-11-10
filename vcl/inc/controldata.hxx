@@ -33,8 +33,8 @@ namespace vcl
         VclPtr<OutputDevice>        mpReferenceDevice;
 
         ImplControlData()
-            :mpLayoutData( NULL )
-            ,mpReferenceDevice( NULL )
+            :mpLayoutData( nullptr )
+            ,mpReferenceDevice( nullptr )
         {
         }
 

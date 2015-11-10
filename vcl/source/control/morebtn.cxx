@@ -36,7 +36,7 @@ void MoreButton::ImplInit( vcl::Window* pParent, WinBits nStyle )
     meUnit       = MAP_PIXEL;
     mbState      = false;
 
-    mpMBData->mpItemList = NULL;
+    mpMBData->mpItemList = nullptr;
 
     PushButton::ImplInit( pParent, nStyle );
 

@@ -35,7 +35,7 @@ namespace cairo
 
     const SystemEnvData* GetSysData(const vcl::Window *pOutputWindow)
     {
-        const SystemEnvData* pSysData = NULL;
+        const SystemEnvData* pSysData = nullptr;
         // check whether we're a SysChild: have to fetch system data
         // directly from SystemChildWindow, because the GetSystemData
         // method is unfortunately not virtual

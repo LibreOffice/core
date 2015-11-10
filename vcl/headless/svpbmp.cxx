@@ -136,7 +136,7 @@ sal_uInt16 SvpSalBitmap::GetBitCount() const
 
 BitmapBuffer* SvpSalBitmap::AcquireBuffer( BitmapAccessMode )
 {
-    BitmapBuffer* pBuf = NULL;
+    BitmapBuffer* pBuf = nullptr;
     if( m_aBitmap.get() )
     {
         pBuf = new BitmapBuffer();

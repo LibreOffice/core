@@ -215,7 +215,7 @@ public:
 
 PaintHelper::PaintHelper(vcl::Window *pWindow, sal_uInt16 nPaintFlags)
     : m_pWindow(pWindow)
-    , m_pChildRegion(NULL)
+    , m_pChildRegion(nullptr)
     , m_nPaintFlags(nPaintFlags)
     , m_bPop(false)
     , m_bRestoreCursor(false)
@@ -519,7 +519,7 @@ void Window::PopPaintHelper(PaintHelper *pHelper)
     }
     mpWindowImpl->mbInPaint = false;
     mbInitClipRegion = true;
-    mpWindowImpl->mpPaintRegion = NULL;
+    mpWindowImpl->mpPaintRegion = nullptr;
     if (mpWindowImpl->mpCursor)
         mpWindowImpl->mpCursor->ImplResume(pHelper->GetRestoreCursor());
 }
@@ -628,7 +628,7 @@ void Window::ImplCallOverlapPaint()
         // - RTL - notify ImplCallPaint to check for re-mirroring (CHECKRTL)
         //         because we were called from the Sal layer
         OutputDevice::PaintScope aScope( GetOutDev() );
-        ImplCallPaint(NULL, mpWindowImpl->mnPaintFlags /*| IMPL_PAINT_CHECKRTL */);
+        ImplCallPaint(nullptr, mpWindowImpl->mnPaintFlags /*| IMPL_PAINT_CHECKRTL */);
     }
 }
 
@@ -671,12 +671,12 @@ IMPL_LINK_NOARG_TYPED(Window, ImplHandleResizeTimerHdl, Idle *, void)
         ImplCallResize();
         if( ImplDoTiledRendering() )
         {
-            ImplHandlePaintHdl(NULL);
+            ImplHandlePaintHdl(nullptr);
         }
         else if( mpWindowImpl->mpFrameData->maPaintIdle.IsActive() )
         {
             mpWindowImpl->mpFrameData->maPaintIdle.Stop();
-            mpWindowImpl->mpFrameData->maPaintIdle.GetIdleHdl().Call( NULL );
+            mpWindowImpl->mpFrameData->maPaintIdle.GetIdleHdl().Call( nullptr );
         }
     }
 }
@@ -811,7 +811,7 @@ void Window::ImplInvalidate( const vcl::Region* pRegion, InvalidateFlags nFlags 
     if ( (nFlags & InvalidateFlags::NoChildren) && mpWindowImpl->mpFirstChild )
         bInvalidateAll = false;
     if ( bInvalidateAll )
-        ImplInvalidateFrameRegion( NULL, nFlags );
+        ImplInvalidateFrameRegion( nullptr, nFlags );
     else
     {
         Rectangle   aRect( Point( mnOutOffX, mnOutOffY ), Size( mnOutWidth, mnOutHeight ) );
@@ -970,7 +970,7 @@ void Window::ImplValidate( const vcl::Region* pRegion, ValidateFlags nFlags )
     if ( (nFlags & ValidateFlags::NoChildren) && mpWindowImpl->mpFirstChild )
         bValidateAll = false;
     if ( bValidateAll )
-        ImplValidateFrameRegion( NULL, nFlags );
+        ImplValidateFrameRegion( nullptr, nFlags );
     else
     {
         Rectangle   aRect( Point( mnOutOffX, mnOutOffY ), Size( mnOutWidth, mnOutHeight ) );
@@ -1017,7 +1017,7 @@ void Window::ImplUpdateAll( bool bOverlapWindows )
     else
     {
         if (pWindow->mpWindowImpl->mnPaintFlags & (IMPL_PAINT_PAINT | IMPL_PAINT_PAINTCHILDREN))
-            pWindow->ImplCallPaint(NULL, pWindow->mpWindowImpl->mnPaintFlags);
+            pWindow->ImplCallPaint(nullptr, pWindow->mpWindowImpl->mnPaintFlags);
     }
 
     if ( bFlush )
@@ -1208,8 +1208,8 @@ void Window::Invalidate( InvalidateFlags nFlags )
     if ( !comphelper::LibreOfficeKit::isActive() && (!IsDeviceOutputNecessary() || !mnOutWidth || !mnOutHeight) )
         return;
 
-    ImplInvalidate( NULL, nFlags );
-    LogicInvalidate(0);
+    ImplInvalidate( nullptr, nFlags );
+    LogicInvalidate(nullptr);
 }
 
 void Window::Invalidate( const Rectangle& rRect, InvalidateFlags nFlags )
@@ -1235,8 +1235,8 @@ void Window::Invalidate( const vcl::Region& rRegion, InvalidateFlags nFlags )
 
     if ( rRegion.IsNull() )
     {
-        ImplInvalidate( NULL, nFlags );
-        LogicInvalidate(0);
+        ImplInvalidate( nullptr, nFlags );
+        LogicInvalidate(nullptr);
     }
     else
     {
@@ -1255,7 +1255,7 @@ void Window::Validate( ValidateFlags nFlags )
     if ( !comphelper::LibreOfficeKit::isActive() && (!IsDeviceOutputNecessary() || !mnOutWidth || !mnOutHeight) )
         return;
 
-    ImplValidate( NULL, nFlags );
+    ImplValidate( nullptr, nFlags );
 }
 
 bool Window::HasPaintEvent() const
@@ -1345,7 +1345,7 @@ void Window::Update()
              pUpdateOverlapWindow = pUpdateOverlapWindow->mpWindowImpl->mpNext;
          }
 
-        pUpdateWindow->ImplCallPaint(NULL, pUpdateWindow->mpWindowImpl->mnPaintFlags);
+        pUpdateWindow->ImplCallPaint(nullptr, pUpdateWindow->mpWindowImpl->mnPaintFlags);
 
         if (aDogTag.IsDead())
            return;
@@ -1485,7 +1485,7 @@ void Window::PaintToDevice( OutputDevice* pDev, const Point& rPos, const Size& /
     DBG_ASSERT( ! pDev->HasMirroredGraphics(), "PaintToDevice to mirroring graphics" );
     DBG_ASSERT( ! pDev->IsRTLEnabled(), "PaintToDevice to mirroring device" );
 
-    vcl::Window* pRealParent = NULL;
+    vcl::Window* pRealParent = nullptr;
     if( ! mpWindowImpl->mbVisible )
     {
         vcl::Window* pTempParent = ImplGetDefaultWindow();

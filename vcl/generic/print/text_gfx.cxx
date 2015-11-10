@@ -336,7 +336,7 @@ PrinterGfx::DrawText (
 
     // setup a new delta array, use virtual resolution of 1000
     sal_Int32* pNewDeltaArray = static_cast<sal_Int32*>(alloca( sizeof( sal_Int32 )*nLen ));
-    if ( pDeltaArray != 0)
+    if ( pDeltaArray != nullptr)
     {
         for (int i = 0; i < nLen - 1; i++)
             pNewDeltaArray[i] = 1000 * pDeltaArray[i];
@@ -405,7 +405,7 @@ PrinterGfx::DrawText (
             drawText(
                     Point(nCurrentPointX + nDelta, nCurrentPointY),
                     pEffectiveStr + nFrom, nTo - nFrom,
-                    pDeltaArray == NULL ? NULL : pNewDeltaArray + nFrom );
+                    pDeltaArray == nullptr ? nullptr : pNewDeltaArray + nFrom );
         }
         nDelta += pNewDeltaArray[ nTo - 1 ];
     }

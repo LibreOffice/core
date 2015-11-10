@@ -77,7 +77,7 @@ using namespace ::com::sun::star::lang;
 // - Redo
 // - Bei Tracking-Cancel DefaultSelection wieder herstellen
 
-static FncGetSpecialChars pImplFncGetSpecialChars = NULL;
+static FncGetSpecialChars pImplFncGetSpecialChars = nullptr;
 
 #define EDIT_ALIGN_LEFT             1
 #define EDIT_ALIGN_CENTER           2
@@ -133,7 +133,7 @@ Impl_IMEInfos::Impl_IMEInfos(sal_Int32 nP, const OUString& rOldTextAfterStartPos
     nPos = nP;
     nLen = 0;
     bCursor = true;
-    pAttribs = NULL;
+    pAttribs = nullptr;
     bWasCursorOverwrite = false;
 }
 
@@ -153,7 +153,7 @@ void Impl_IMEInfos::CopyAttribs(const sal_uInt16* pA, sal_Int32 nL)
 void Impl_IMEInfos::DestroyAttribs()
 {
     delete[] pAttribs;
-    pAttribs = NULL;
+    pAttribs = nullptr;
     nLen = 0;
 }
 
@@ -256,20 +256,20 @@ Edit::~Edit()
 void Edit::dispose()
 {
     delete mpDDInfo;
-    mpDDInfo = NULL;
+    mpDDInfo = nullptr;
 
     vcl::Cursor* pCursor = GetCursor();
     if ( pCursor )
     {
-        SetCursor( NULL );
+        SetCursor( nullptr );
         delete pCursor;
     }
 
     delete mpIMEInfos;
-    mpIMEInfos = NULL;
+    mpIMEInfos = nullptr;
 
     delete mpUpdateDataTimer;
-    mpUpdateDataTimer = NULL;
+    mpUpdateDataTimer = nullptr;
 
     if ( mxDnDListener.is() )
     {
@@ -298,8 +298,8 @@ void Edit::dispose()
 void Edit::ImplInitEditData()
 {
     mpSubEdit               = VclPtr<Edit>();
-    mpUpdateDataTimer       = NULL;
-    mpFilterText            = NULL;
+    mpUpdateDataTimer       = nullptr;
+    mpFilterText            = nullptr;
     mnXOffset               = 0;
     mnAlign                 = EDIT_ALIGN_LEFT;
     mnMaxTextLen            = EDIT_NOLIMIT;
@@ -314,8 +314,8 @@ void Edit::ImplInitEditData()
     mbActivePopup           = false;
     mbIsSubEdit             = false;
     mbInMBDown              = false;
-    mpDDInfo                = NULL;
-    mpIMEInfos              = NULL;
+    mpDDInfo                = nullptr;
+    mpIMEInfos              = nullptr;
     mcEchoChar              = 0;
 
     // --- RTL --- no default mirroring for Edit controls
@@ -349,7 +349,7 @@ void Edit::ImplInit(vcl::Window* pParent, WinBits nStyle)
     if (!(nStyle & (WB_CENTER | WB_RIGHT)))
         nStyle |= WB_LEFT;
 
-    Control::ImplInit(pParent, nStyle, NULL);
+    Control::ImplInit(pParent, nStyle, nullptr);
 
     mbReadOnly = (nStyle & WB_READONLY) != 0;
 
@@ -1758,7 +1758,7 @@ bool Edit::ImplHandleKeyEvent( const KeyEvent& rKEvt )
                     bDone = true;   // read characters also when in ReadOnly
                     if ( !mbReadOnly )
                     {
-                        ImplInsertText(OUString(rKEvt.GetCharCode()), 0, true);
+                        ImplInsertText(OUString(rKEvt.GetCharCode()), nullptr, true);
                         if (!m_pImpl->m_AutocompleteSignal.empty())
                         {
                             if ( (maSelection.Min() == maSelection.Max()) && (maSelection.Min() == maText.getLength()) )
@@ -2117,7 +2117,7 @@ void Edit::Command( const CommandEvent& rCEvt )
     {
         bool bInsertMode = !mpIMEInfos->bWasCursorOverwrite;
         delete mpIMEInfos;
-        mpIMEInfos = NULL;
+        mpIMEInfos = nullptr;
 
         SetInsertMode(bInsertMode);
         ImplModified();
@@ -2185,7 +2185,7 @@ void Edit::Command( const CommandEvent& rCEvt )
         if ( mpIMEInfos )
         {
             sal_Int32 nCursorPos = GetSelection().Max();
-            SetCursorRect( NULL, GetTextWidth( maText.toString(), nCursorPos, mpIMEInfos->nPos+mpIMEInfos->nLen-nCursorPos ) );
+            SetCursorRect( nullptr, GetTextWidth( maText.toString(), nCursorPos, mpIMEInfos->nPos+mpIMEInfos->nLen-nCursorPos ) );
         }
         else
         {
@@ -2936,7 +2936,7 @@ void Edit::dragDropEnd( const ::com::sun::star::datatransfer::dnd::DragSourceDro
 
     ImplHideDDCursor();
     delete mpDDInfo;
-    mpDDInfo = NULL;
+    mpDDInfo = nullptr;
 }
 
 // ::com::sun::star::datatransfer::dnd::XDropTargetListener
@@ -2980,7 +2980,7 @@ void Edit::drop( const ::com::sun::star::datatransfer::dnd::DropTargetDropEvent&
         if ( !mpDDInfo->bStarterOfDD )
         {
             delete mpDDInfo;
-            mpDDInfo = NULL;
+            mpDDInfo = nullptr;
         }
     }
 

@@ -716,7 +716,7 @@ namespace
     bool identifyTrueTypeFont( const void* i_pBuffer, sal_uInt32 i_nSize, Font& o_rResult )
     {
         bool bResult = false;
-        TrueTypeFont* pTTF = NULL;
+        TrueTypeFont* pTTF = nullptr;
         if( OpenTTFontBuffer( i_pBuffer, i_nSize, 0, &pTTF ) == SF_OK )
         {
             TTGlobalFontInfo aInfo;

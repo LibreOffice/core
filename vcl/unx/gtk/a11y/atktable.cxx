@@ -29,7 +29,7 @@ atk_object_wrapper_conditional_ref( const uno::Reference< accessibility::XAccess
     if( rxAccessible.is() )
         return atk_object_wrapper_ref( rxAccessible );
 
-    return NULL;
+    return nullptr;
 }
 
 /*****************************************************************************/
@@ -84,7 +84,7 @@ table_wrapper_ref_at (AtkTable *table,
         g_warning( "Exception in getAccessibleCellAt()" );
     }
 
-    return NULL;
+    return nullptr;
 }
 
 /*****************************************************************************/
@@ -237,7 +237,7 @@ table_wrapper_get_caption( AtkTable *table )
         g_warning( "Exception in getAccessibleCaption()" );
     }
 
-    return NULL;
+    return nullptr;
 }
 
 /*****************************************************************************/
@@ -256,7 +256,7 @@ table_wrapper_get_row_description( AtkTable *table,
         g_warning( "Exception in getAccessibleRowDescription()" );
     }
 
-    return NULL;
+    return nullptr;
 }
 
 /*****************************************************************************/
@@ -275,7 +275,7 @@ table_wrapper_get_column_description( AtkTable *table,
         g_warning( "Exception in getAccessibleColumnDescription()" );
     }
 
-    return NULL;
+    return nullptr;
 }
 
 /*****************************************************************************/
@@ -298,7 +298,7 @@ table_wrapper_get_row_header( AtkTable *table,
         g_warning( "Exception in getAccessibleRowHeaders()" );
     }
 
-    return NULL;
+    return nullptr;
 }
 
 /*****************************************************************************/
@@ -321,7 +321,7 @@ table_wrapper_get_column_header( AtkTable *table,
         g_warning( "Exception in getAccessibleColumnHeaders()" );
     }
 
-    return NULL;
+    return nullptr;
 }
 
 /*****************************************************************************/
@@ -341,7 +341,7 @@ table_wrapper_get_summary( AtkTable *table )
         g_warning( "Exception in getAccessibleSummary()" );
     }
 
-    return NULL;
+    return nullptr;
 }
 
 /*****************************************************************************/
@@ -366,7 +366,7 @@ static gint
 table_wrapper_get_selected_columns( AtkTable      *table,
                                     gint          **pSelected )
 {
-    *pSelected = NULL;
+    *pSelected = nullptr;
     try {
         css::uno::Reference<css::accessibility::XAccessibleTable> pTable
             = getTable( table );
@@ -386,7 +386,7 @@ static gint
 table_wrapper_get_selected_rows( AtkTable      *table,
                                  gint          **pSelected )
 {
-    *pSelected = NULL;
+    *pSelected = nullptr;
     try {
         css::uno::Reference<css::accessibility::XAccessibleTable> pTable
             = getTable( table );
@@ -543,7 +543,7 @@ table_wrapper_set_summary( AtkTable *, AtkObject * )
 void
 tableIfaceInit (AtkTableIface *iface)
 {
-  g_return_if_fail (iface != NULL);
+  g_return_if_fail (iface != nullptr);
 
   iface->ref_at = table_wrapper_ref_at;
   iface->get_n_rows = table_wrapper_get_n_rows;

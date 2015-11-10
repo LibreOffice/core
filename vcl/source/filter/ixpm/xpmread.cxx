@@ -26,8 +26,8 @@
 
 XPMReader::XPMReader(SvStream& rStm)
     : mrIStm(rStm)
-    , mpAcc(NULL)
-    , mpMaskAcc(NULL)
+    , mpAcc(nullptr)
+    , mpMaskAcc(nullptr)
     , mnLastPos(rStm.Tell())
     , mnWidth(0)
     , mnHeight(0)
@@ -40,14 +40,14 @@ XPMReader::XPMReader(SvStream& rStm)
     , mcThisByte(0)
     , mcLastByte(0)
     , mnTempAvail(0)
-    , mpTempBuf(NULL)
-    , mpTempPtr(NULL)
-    , mpFastColorTable(NULL)
-    , mpColMap(NULL)
+    , mpTempBuf(nullptr)
+    , mpTempPtr(nullptr)
+    , mpFastColorTable(nullptr)
+    , mpColMap(nullptr)
     , mnStringSize(0)
-    , mpStringBuf(NULL)
+    , mpStringBuf(nullptr)
     , mnParaSize(0)
-    , mpPara(NULL)
+    , mpPara(nullptr)
 {
 }
 
@@ -128,7 +128,7 @@ ReadState XPMReader::ReadXPM( Graphic& rGraphic )
                     if ( mbTransparent )
                     {
                         maMaskBmp = Bitmap( Size( mnWidth, mnHeight ), 1 );
-                        if ( ( mpMaskAcc = maMaskBmp.AcquireWriteAccess() ) == NULL )
+                        if ( ( mpMaskAcc = maMaskBmp.AcquireWriteAccess() ) == nullptr )
                             mbStatus = false;
                     }
                     if( mpAcc && mbStatus )
@@ -181,21 +181,21 @@ ReadState XPMReader::ReadXPM( Graphic& rGraphic )
         {
             if ( mpMaskAcc )
             {
-                Bitmap::ReleaseAccess ( mpMaskAcc), mpMaskAcc = NULL;
-                Bitmap::ReleaseAccess( mpAcc ), mpAcc = NULL;
+                Bitmap::ReleaseAccess ( mpMaskAcc), mpMaskAcc = nullptr;
+                Bitmap::ReleaseAccess( mpAcc ), mpAcc = nullptr;
                 rGraphic = Graphic( BitmapEx( maBmp, maMaskBmp ) );
             }
             else
             {
-                Bitmap::ReleaseAccess( mpAcc ), mpAcc = NULL;
+                Bitmap::ReleaseAccess( mpAcc ), mpAcc = nullptr;
                 rGraphic = maBmp;
             }
             eReadState = XPMREAD_OK;
         }
         else
         {
-            if ( mpMaskAcc ) Bitmap::ReleaseAccess ( mpMaskAcc), mpMaskAcc = NULL;
-            if ( mpAcc ) Bitmap::ReleaseAccess( mpAcc ), mpAcc = NULL;
+            if ( mpMaskAcc ) Bitmap::ReleaseAccess ( mpMaskAcc), mpMaskAcc = nullptr;
+            if ( mpAcc ) Bitmap::ReleaseAccess( mpAcc ), mpAcc = nullptr;
             eReadState = XPMREAD_ERROR;
         }
     }
@@ -336,7 +336,7 @@ bool XPMReader::ImplGetColSub( sal_uInt8* pDest )
             sal_uLong i = 0;
             while ( true )
             {
-                if ( pRGBTable[ i ].name == NULL )
+                if ( pRGBTable[ i ].name == nullptr )
                     break;
                 if ( std::strlen(pRGBTable[i].name) > mnParaSize &&
                         pRGBTable[ i ].name[ mnParaSize ] == 0 )
@@ -500,7 +500,7 @@ bool XPMReader::ImplGetPara ( sal_uLong nNumb )
     }
     else
     {
-        mpPara = NULL;
+        mpPara = nullptr;
         nCount = 0xffffffff;
     }
 
@@ -515,7 +515,7 @@ bool XPMReader::ImplGetPara ( sal_uLong nNumb )
                 if ( nCount == nNumb )
                     break;
                 else
-                    mpPara = NULL;
+                    mpPara = nullptr;
             }
             else
                 mnParaSize++;
@@ -644,7 +644,7 @@ VCL_DLLPUBLIC bool ImportXPM( SvStream& rStm, Graphic& rGraphic )
     if( !pXPMReader )
         pXPMReader = new XPMReader( rStm );
 
-    rGraphic.SetContext( NULL );
+    rGraphic.SetContext( nullptr );
     eReadState = pXPMReader->ReadXPM( rGraphic );
 
     if( eReadState == XPMREAD_ERROR )

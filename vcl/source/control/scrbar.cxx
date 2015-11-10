@@ -76,7 +76,7 @@ struct ImplScrollBarData
 
 void ScrollBar::ImplInit( vcl::Window* pParent, WinBits nStyle )
 {
-    mpData              = NULL;
+    mpData              = nullptr;
     mnThumbPixRange     = 0;
     mnThumbPixPos       = 0;
     mnThumbPixSize      = 0;
@@ -102,7 +102,7 @@ void ScrollBar::ImplInit( vcl::Window* pParent, WinBits nStyle )
     }
 
     ImplInitStyle( nStyle );
-    Control::ImplInit( pParent, nStyle, NULL );
+    Control::ImplInit( pParent, nStyle, nullptr );
 
     long nScrollSize = GetSettings().GetStyleSettings().GetScrollBarSize();
     SetSizePixel( Size( nScrollSize, nScrollSize ) );
@@ -129,7 +129,7 @@ ScrollBar::~ScrollBar()
 
 void ScrollBar::dispose()
 {
-    delete mpData; mpData = NULL;
+    delete mpData; mpData = nullptr;
     Control::dispose();
 }
 
@@ -1258,14 +1258,14 @@ Rectangle* ScrollBar::ImplFindPartRect( const Point& rPt )
              maThumbRect.IsInside( rPt ) )
         return &maThumbRect;
     else
-        return NULL;
+        return nullptr;
 }
 
 bool ScrollBar::PreNotify( NotifyEvent& rNEvt )
 {
-    const MouseEvent* pMouseEvt = NULL;
+    const MouseEvent* pMouseEvt = nullptr;
 
-    if( (rNEvt.GetType() == MouseNotifyEvent::MOUSEMOVE) && (pMouseEvt = rNEvt.GetMouseEvent()) != NULL )
+    if( (rNEvt.GetType() == MouseNotifyEvent::MOUSEMOVE) && (pMouseEvt = rNEvt.GetMouseEvent()) != nullptr )
     {
         if( !pMouseEvt->GetButtons() && !pMouseEvt->IsSynthetic() && !pMouseEvt->IsModifierChanged() )
         {
@@ -1436,7 +1436,7 @@ Size ScrollBar::getCurrentCalcSize() const
 
 void ScrollBarBox::ImplInit(vcl::Window* pParent, WinBits nStyle)
 {
-    Window::ImplInit( pParent, nStyle, NULL );
+    Window::ImplInit( pParent, nStyle, nullptr );
 
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
     long nScrollSize = rStyleSettings.GetScrollBarSize();

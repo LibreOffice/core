@@ -30,7 +30,7 @@ typedef unsigned char PIXBYTE;
 class BasePixelPtr
 {
 public:
-    explicit BasePixelPtr( PIXBYTE* p = NULL ) : mpPixel( p ) {}
+    explicit BasePixelPtr( PIXBYTE* p = nullptr ) : mpPixel( p ) {}
     void    SetRawPtr( PIXBYTE* pRawPtr )               { mpPixel = pRawPtr; }
     PIXBYTE* GetRawPtr() const                    { return mpPixel; }
     void    AddByteOffset( int nByteOffset )            { mpPixel += nByteOffset; }

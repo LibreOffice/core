@@ -196,8 +196,8 @@ static void ImplSetMousePointer( vcl::Window* pChild )
         pChild->ImplGetFrame()->SetPointer( pChild->ImplGetMousePointer() );
 }
 
-static bool ImplCallCommand( vcl::Window* pChild, CommandEventId nEvt, void* pData = NULL,
-                             bool bMouse = false, Point* pPos = NULL )
+static bool ImplCallCommand( vcl::Window* pChild, CommandEventId nEvt, void* pData = nullptr,
+                             bool bMouse = false, Point* pPos = nullptr )
 {
     Point aPos;
     if ( pPos )
@@ -255,7 +255,7 @@ static void ContextMenuEventLink( void* pCEvent, void* )
     if( ! pEv->aDelData.IsDead() )
     {
         pEv->pWindow->ImplRemoveDel( &pEv->aDelData );
-        ImplCallCommand( pEv->pWindow, CommandEventId::ContextMenu, NULL, true, &pEv->aChildPos );
+        ImplCallCommand( pEv->pWindow, CommandEventId::ContextMenu, nullptr, true, &pEv->aChildPos );
     }
     delete pEv;
 }
@@ -266,7 +266,7 @@ bool ImplHandleMouseEvent( vcl::Window* pWindow, MouseNotifyEvent nSVEvent, bool
 {
     ImplSVData* pSVData = ImplGetSVData();
     Point       aMousePos( nX, nY );
-    vcl::Window*     pChild(NULL);
+    vcl::Window*     pChild(nullptr);
     bool        bRet(false);
     sal_uInt16  nClicks(0);
     ImplFrameData* pWinFrameData = pWindow->ImplGetFrameData();
@@ -349,7 +349,7 @@ bool ImplHandleMouseEvent( vcl::Window* pWindow, MouseNotifyEvent nSVEvent, bool
     else
     {
         if ( bMouseLeave )
-            pChild = NULL;
+            pChild = nullptr;
         else
             pChild = pWindow->ImplFindWindow( aMousePos );
     }
@@ -488,7 +488,7 @@ bool ImplHandleMouseEvent( vcl::Window* pWindow, MouseNotifyEvent nSVEvent, bool
 
                                 // create a uno mouse event out of the available data
                                 ::com::sun::star::awt::MouseEvent aMouseEvent(
-                                    static_cast < ::com::sun::star::uno::XInterface * > ( 0 ),
+                                    static_cast < ::com::sun::star::uno::XInterface * > ( nullptr ),
 #ifdef MACOSX
                     nCode & (KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_MOD3),
 #else
@@ -544,13 +544,13 @@ bool ImplHandleMouseEvent( vcl::Window* pWindow, MouseNotifyEvent nSVEvent, bool
                         aNLeaveEvt.GetWindow()->ImplNotifyKeyMouseCommandEventListeners( aNLeaveEvt );
                 }
 
-                pWinFrameData->mpMouseMoveWin = NULL;
+                pWinFrameData->mpMouseMoveWin = nullptr;
                 pWinFrameData->mbInMouseMove = false;
 
                 if ( pChild )
                 {
                     if ( aDelData2.IsDead() )
-                        pChild = NULL;
+                        pChild = nullptr;
                     else
                         pChild->ImplRemoveDel( &aDelData2 );
                 }
@@ -787,9 +787,9 @@ bool ImplHandleMouseEvent( vcl::Window* pWindow, MouseNotifyEvent nSVEvent, bool
             {
                 MouseMiddleButtonAction nMiddleAction = pChild->GetSettings().GetMouseSettings().GetMiddleButtonAction();
                 if ( nMiddleAction == MouseMiddleButtonAction::AutoScroll )
-                    bRet = !ImplCallCommand( pChild, CommandEventId::StartAutoScroll, NULL, true, &aChildPos );
+                    bRet = !ImplCallCommand( pChild, CommandEventId::StartAutoScroll, nullptr, true, &aChildPos );
                 else if ( nMiddleAction == MouseMiddleButtonAction::PasteSelection )
-                    bRet = !ImplCallCommand( pChild, CommandEventId::PasteSelection, NULL, true, &aChildPos );
+                    bRet = !ImplCallCommand( pChild, CommandEventId::PasteSelection, nullptr, true, &aChildPos );
             }
             else
             {
@@ -818,7 +818,7 @@ bool ImplHandleMouseEvent( vcl::Window* pWindow, MouseNotifyEvent nSVEvent, bool
                             Application::PostUserEvent( Link<void*,void>( pEv, ContextMenuEventLink ) );
                         }
                         else
-                            bRet = ! ImplCallCommand( pChild, CommandEventId::ContextMenu, NULL, true, &aChildPos );
+                            bRet = ! ImplCallCommand( pChild, CommandEventId::ContextMenu, nullptr, true, &aChildPos );
                     }
                 }
             }
@@ -836,8 +836,8 @@ static vcl::Window* ImplGetKeyInputWindow( vcl::Window* pWindow )
     pSVData->maAppData.mnLastInputTime = tools::Time::GetSystemTicks();
 
     // #127104# workaround for destroyed windows
-    if( pWindow->ImplGetWindowImpl() == NULL )
-        return 0;
+    if( pWindow->ImplGetWindowImpl() == nullptr )
+        return nullptr;
 
     // find window - is every time the window which has currently the
     // focus or the last time the focus.
@@ -853,7 +853,7 @@ static vcl::Window* ImplGetKeyInputWindow( vcl::Window* pWindow )
 
     // no child - than no input
     if ( !pChild )
-        return 0;
+        return nullptr;
 
     // We call also KeyInput if we haven't the focus, because on Unix
     // system this is often the case when a Lookup Choice Window has
@@ -864,7 +864,7 @@ static vcl::Window* ImplGetKeyInputWindow( vcl::Window* pWindow )
 
     // no keyinput to disabled windows
     if ( !pChild->IsEnabled() || !pChild->IsInputEnabled() || pChild->IsInModalMode() )
-        return 0;
+        return nullptr;
 
     return pChild;
 }
@@ -1153,7 +1153,7 @@ static bool ImplHandleExtTextInput( vcl::Window* pWindow,
                                     sal_Int32 nCursorPos, sal_uInt16 nCursorFlags )
 {
     ImplSVData* pSVData = ImplGetSVData();
-    vcl::Window*     pChild = NULL;
+    vcl::Window*     pChild = nullptr;
 
     int nTries = 200;
     while( nTries-- )
@@ -1180,7 +1180,7 @@ static bool ImplHandleExtTextInput( vcl::Window* pWindow,
         if ( pWinData->mpExtOldAttrAry )
         {
             delete [] pWinData->mpExtOldAttrAry;
-            pWinData->mpExtOldAttrAry = NULL;
+            pWinData->mpExtOldAttrAry = nullptr;
         }
         pSVData->maWinData.mpExtTextInputWin = pChild;
         ImplCallCommand( pChild, CommandEventId::StartExtTextInput );
@@ -1230,7 +1230,7 @@ static bool ImplHandleExtTextInput( vcl::Window* pWindow,
     if ( pWinData->mpExtOldAttrAry )
     {
         delete [] pWinData->mpExtOldAttrAry;
-        pWinData->mpExtOldAttrAry = NULL;
+        pWinData->mpExtOldAttrAry = nullptr;
     }
     if ( pTextAttr )
     {
@@ -1249,17 +1249,17 @@ static bool ImplHandleEndExtTextInput( vcl::Window* /* pWindow */ )
     if ( pChild )
     {
         pChild->ImplGetWindowImpl()->mbExtTextInput = false;
-        pSVData->maWinData.mpExtTextInputWin = NULL;
+        pSVData->maWinData.mpExtTextInputWin = nullptr;
         ImplWinData* pWinData = pChild->ImplGetWinData();
         if ( pWinData->mpExtOldText )
         {
             delete pWinData->mpExtOldText;
-            pWinData->mpExtOldText = NULL;
+            pWinData->mpExtOldText = nullptr;
         }
         if ( pWinData->mpExtOldAttrAry )
         {
             delete [] pWinData->mpExtOldAttrAry;
-            pWinData->mpExtOldAttrAry = NULL;
+            pWinData->mpExtOldAttrAry = nullptr;
         }
         nRet = !ImplCallCommand( pChild, CommandEventId::EndExtTextInput );
     }
@@ -1308,9 +1308,9 @@ static void ImplHandleExtTextInputPos( vcl::Window* pWindow,
         if ( !rInputWidth )
             rInputWidth = rRect.GetWidth();
     }
-    if (pVertical != 0)
+    if (pVertical != nullptr)
         *pVertical
-            = pChild != 0 && pChild->GetInputContext().GetFont().IsVertical();
+            = pChild != nullptr && pChild->GetInputContext().GetFont().IsVertical();
 }
 
 static bool ImplHandleInputContextChange( vcl::Window* pWindow, LanguageType eNewLang )
@@ -1395,7 +1395,7 @@ bool HandleGestureEventBase::Setup()
 vcl::Window* HandleGestureEventBase::FindTarget()
 {
     // first check any floating window ( eg. drop down listboxes)
-    vcl::Window *pMouseWindow = NULL;
+    vcl::Window *pMouseWindow = nullptr;
 
     if (m_pSVData->maWinData.mpFirstFloat && !m_pSVData->maWinData.mpCaptureWin &&
          !m_pSVData->maWinData.mpFirstFloat->ImplIsFloatPopupModeWindow( m_pWindow ) )
@@ -1433,7 +1433,7 @@ vcl::Window* HandleGestureEventBase::FindTarget()
 
 vcl::Window *HandleGestureEventBase::Dispatch(vcl::Window* pMouseWindow)
 {
-    vcl::Window *pDispatchedTo = NULL;
+    vcl::Window *pDispatchedTo = nullptr;
 
     if (acceptableWheelScrollTarget(pMouseWindow) && pMouseWindow->IsEnabled())
     {
@@ -1529,7 +1529,7 @@ bool HandleWheelEvent::HandleEvent(const SalWheelMouseEvent& rEvt)
 
     pPreviousWindow = Dispatch(pMouseWindow);
 
-    return pPreviousWindow != NULL;
+    return pPreviousWindow != nullptr;
 }
 
 class HandleGestureEvent : public HandleGestureEventBase
@@ -1549,7 +1549,7 @@ bool HandleGestureEvent::HandleEvent()
 
     vcl::Window *pTarget = FindTarget();
 
-    bool bHandled = Dispatch(pTarget) != NULL;
+    bool bHandled = Dispatch(pTarget) != nullptr;
     return bHandled;
 }
 
@@ -1771,7 +1771,7 @@ static void ImplActivateFloatingWindows( vcl::Window* pWindow, bool bActive )
 
 IMPL_LINK_NOARG_TYPED(vcl::Window, ImplAsyncFocusHdl, void*, void)
 {
-    ImplGetWindowImpl()->mpFrameData->mnFocusId = 0;
+    ImplGetWindowImpl()->mpFrameData->mnFocusId = nullptr;
 
     // If the status has been preserved, because we got back the focus
     // in the meantime, we do nothing
@@ -1829,7 +1829,7 @@ IMPL_LINK_NOARG_TYPED(vcl::Window, ImplAsyncFocusHdl, void*, void)
                 // FocusWindow umsetzen
                 vcl::Window* pOverlapWindow = pFocusWin->ImplGetFirstOverlapWindow();
                 pOverlapWindow->ImplGetWindowImpl()->mpLastFocusWindow = pFocusWin;
-                pSVData->maWinData.mpFocusWin = NULL;
+                pSVData->maWinData.mpFocusWin = nullptr;
 
                 if ( pFocusWin->ImplGetWindowImpl()->mpCursor )
                     pFocusWin->ImplGetWindowImpl()->mpCursor->ImplHide( true );
@@ -1864,7 +1864,7 @@ IMPL_LINK_NOARG_TYPED(vcl::Window, ImplAsyncFocusHdl, void*, void)
                     NotifyEvent aNEvt( MouseNotifyEvent::LOSEFOCUS, pFocusWin );
                     if ( !ImplCallPreNotify( aNEvt ) )
                         pFocusWin->CompatLoseFocus();
-                    pFocusWin->ImplCallDeactivateListeners( NULL );
+                    pFocusWin->ImplCallDeactivateListeners( nullptr );
                 }
                 // XXX
             }
@@ -1885,7 +1885,7 @@ static void ImplHandleGetFocus( vcl::Window* pWindow )
     if ( !pWindow->ImplGetWindowImpl()->mpFrameData->mnFocusId )
     {
         pWindow->ImplGetWindowImpl()->mpFrameData->mbStartFocusState = !pWindow->ImplGetWindowImpl()->mpFrameData->mbHasFocus;
-        pWindow->ImplGetWindowImpl()->mpFrameData->mnFocusId = Application::PostUserEvent( LINK( pWindow, vcl::Window, ImplAsyncFocusHdl ), NULL, true);
+        pWindow->ImplGetWindowImpl()->mpFrameData->mnFocusId = Application::PostUserEvent( LINK( pWindow, vcl::Window, ImplAsyncFocusHdl ), nullptr, true);
         vcl::Window* pFocusWin = pWindow->ImplGetWindowImpl()->mpFrameData->mpFocusWin;
         if ( pFocusWin && pFocusWin->ImplGetWindowImpl()->mpCursor )
             pFocusWin->ImplGetWindowImpl()->mpCursor->ImplShow();
@@ -1914,7 +1914,7 @@ static void ImplHandleLoseFocus( vcl::Window* pWindow )
     if ( !pWindow->ImplGetWindowImpl()->mpFrameData->mnFocusId )
     {
         pWindow->ImplGetWindowImpl()->mpFrameData->mbStartFocusState = !pWindow->ImplGetWindowImpl()->mpFrameData->mbHasFocus;
-        pWindow->ImplGetWindowImpl()->mpFrameData->mnFocusId = Application::PostUserEvent( LINK( pWindow, vcl::Window, ImplAsyncFocusHdl ), NULL, true );
+        pWindow->ImplGetWindowImpl()->mpFrameData->mnFocusId = Application::PostUserEvent( LINK( pWindow, vcl::Window, ImplAsyncFocusHdl ), nullptr, true );
     }
 
     vcl::Window* pFocusWin = pWindow->ImplGetWindowImpl()->mpFrameData->mpFocusWin;
@@ -2379,7 +2379,7 @@ bool ImplWindowFrameProc( vcl::Window* _pWindow, SalFrame* /*pFrame*/,
     // #119709# for some unknown reason it is possible to receive events (in this case key events)
     // although the corresponding VCL window must have been destroyed already
     // at least ImplGetWindowImpl() was NULL in these cases, so check this here
-    if( pWindow->ImplGetWindowImpl() == NULL )
+    if( pWindow->ImplGetWindowImpl() == nullptr )
         return false;
 
     switch ( nEvent )

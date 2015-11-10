@@ -64,7 +64,7 @@ public:
         GrFontMap::const_iterator i = m_fonts.find(GrFontMapKey(ppm, styleKey));
         if (i != m_fonts.end())
             return i->second;
-        return NULL;
+        return nullptr;
     };
     void addFont(int ppm, gr_font * pFont, bool isBold, bool isItalic)
     {
@@ -104,8 +104,8 @@ private:
     const grutils::GrFeatureParser * mpFeatures;
 
 public:
-    GraphiteLayout(const gr_face * pFace, gr_font * pFont = NULL,
-        const grutils::GrFeatureParser * features = NULL) throw();
+    GraphiteLayout(const gr_face * pFace, gr_font * pFont = nullptr,
+        const grutils::GrFeatureParser * features = nullptr) throw();
 
     // used by upper layers
     virtual bool  LayoutText( ImplLayoutArgs& ) override;    // first step of layout
@@ -122,8 +122,8 @@ public:
 
     // methods using glyph indexing
     virtual int   GetNextGlyphs(int nLen, sal_GlyphId* pGlyphIdxAry, ::Point & rPos, int&,
-            long* pGlyphAdvAry = NULL, int* pCharPosAry = NULL,
-            const PhysicalFontFace** pFallbackFonts = NULL ) const override;
+            long* pGlyphAdvAry = nullptr, int* pCharPosAry = nullptr,
+            const PhysicalFontFace** pFallbackFonts = nullptr ) const override;
 
     // used by glyph+font+script fallback
     virtual void    MoveGlyph( int nStart, long nNewXPos ) override;

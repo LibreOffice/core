@@ -56,7 +56,7 @@ public:
     virtual void setWMName( X11SalFrame* pFrame, const OUString& rWMName ) const override;
     virtual void maximizeFrame( X11SalFrame* pFrame, bool bHorizontal = true, bool bVertical = true ) const override;
     virtual void shade( X11SalFrame* pFrame, bool bToShaded ) const override;
-    virtual void setFrameTypeAndDecoration( X11SalFrame* pFrame, WMWindowType eType, int nDecorationFlags, X11SalFrame* pTransientFrame = NULL ) const override;
+    virtual void setFrameTypeAndDecoration( X11SalFrame* pFrame, WMWindowType eType, int nDecorationFlags, X11SalFrame* pTransientFrame = nullptr ) const override;
     virtual void enableAlwaysOnTop( X11SalFrame* pFrame, bool bEnable ) const override;
     virtual int handlePropertyNotify( X11SalFrame* pFrame, XPropertyEvent* pEvent ) const override;
     virtual void showFullScreen( X11SalFrame* pFrame, bool bFullScreen ) const override;
@@ -176,12 +176,12 @@ static int compareProtocol( const void* pLeft, const void* pRight )
 
 WMAdaptor* WMAdaptor::createWMAdaptor( SalDisplay* pSalDisplay )
 {
-    WMAdaptor*          pAdaptor    = NULL;
+    WMAdaptor*          pAdaptor    = nullptr;
 
     // try a NetWM
     pAdaptor = new NetWMAdaptor( pSalDisplay );
     if( ! pAdaptor->isValid() )
-        delete pAdaptor, pAdaptor = NULL;
+        delete pAdaptor, pAdaptor = nullptr;
 #if OSL_DEBUG_LEVEL > 1
     else
         fprintf( stderr, "WM supports extended WM hints\n" );
@@ -192,7 +192,7 @@ WMAdaptor* WMAdaptor::createWMAdaptor( SalDisplay* pSalDisplay )
     {
         pAdaptor = new GnomeWMAdaptor( pSalDisplay );
         if( ! pAdaptor->isValid() )
-            delete pAdaptor, pAdaptor = NULL;
+            delete pAdaptor, pAdaptor = nullptr;
 #if OSL_DEBUG_LEVEL > 1
         else
             fprintf( stderr, "WM supports GNOME WM hints\n" );
@@ -228,7 +228,7 @@ WMAdaptor::WMAdaptor( SalDisplay* pDisplay ) :
     int                 nFormat     = 8;
     unsigned long       nItems      = 0;
     unsigned long       nBytesLeft  = 0;
-    unsigned char*  pProperty   = NULL;
+    unsigned char*  pProperty   = nullptr;
 
     // default desktops
     m_nDesktops = 1;
@@ -336,7 +336,7 @@ NetWMAdaptor::NetWMAdaptor( SalDisplay* pSalDisplay ) :
     int                 nFormat     = 8;
     unsigned long       nItems      = 0;
     unsigned long       nBytesLeft  = 0;
-    unsigned char*  pProperty   = NULL;
+    unsigned char*  pProperty   = nullptr;
 
     initAtoms();
 
@@ -361,7 +361,7 @@ NetWMAdaptor::NetWMAdaptor( SalDisplay* pSalDisplay ) :
         if( pProperty )
         {
             XFree( pProperty );
-            pProperty = NULL;
+            pProperty = nullptr;
         }
         // collect supported protocols
         if( XGetWindowProperty( m_pDisplay,
@@ -388,7 +388,7 @@ NetWMAdaptor::NetWMAdaptor( SalDisplay* pSalDisplay ) :
                 for( unsigned long i = 0; i < nItems; i++ )
                 {
                     // #i80971# protect against invalid atoms
-                    if( pAtomNames[i] == NULL )
+                    if( pAtomNames[i] == nullptr )
                         continue;
 
                     WMAdaptorProtocol aSearch;
@@ -412,12 +412,12 @@ NetWMAdaptor::NetWMAdaptor( SalDisplay* pSalDisplay ) :
                 }
             }
             XFree( pProperty );
-            pProperty = NULL;
+            pProperty = nullptr;
         }
         else if( pProperty )
         {
             XFree( pProperty );
-            pProperty = NULL;
+            pProperty = nullptr;
         }
 
         // get number of desktops
@@ -438,7 +438,7 @@ NetWMAdaptor::NetWMAdaptor( SalDisplay* pSalDisplay ) :
         {
             m_nDesktops = *reinterpret_cast<long*>(pProperty);
             XFree( pProperty );
-            pProperty = NULL;
+            pProperty = nullptr;
             // get work areas
             if( m_aWMAtoms[ NET_WORKAREA ]
                 && XGetWindowProperty( m_pDisplay,
@@ -487,20 +487,20 @@ NetWMAdaptor::NetWMAdaptor( SalDisplay* pSalDisplay ) :
                 if( pProperty )
                 {
                     XFree(pProperty);
-                    pProperty = NULL;
+                    pProperty = nullptr;
                 }
             }
         }
         else if( pProperty )
         {
             XFree( pProperty );
-            pProperty = NULL;
+            pProperty = nullptr;
         }
     }
     else if( pProperty )
     {
         XFree( pProperty );
-        pProperty = NULL;
+        pProperty = nullptr;
     }
 }
 
@@ -526,7 +526,7 @@ GnomeWMAdaptor::GnomeWMAdaptor( SalDisplay* pSalDisplay ) :
     int                 nFormat     = 8;
     unsigned long       nItems      = 0;
     unsigned long       nBytesLeft  = 0;
-    unsigned char*  pProperty   = NULL;
+    unsigned char*  pProperty   = nullptr;
 
     initAtoms();
 
@@ -552,7 +552,7 @@ GnomeWMAdaptor::GnomeWMAdaptor( SalDisplay* pSalDisplay ) :
         {
             aWMChild = *reinterpret_cast< ::Window* >(pProperty);
             XFree( pProperty );
-            pProperty = NULL;
+            pProperty = nullptr;
             ::Window aCheckWindow = None;
             GetGenericData()->ErrorTrapPush();
             if( XGetWindowProperty( m_pDisplay,
@@ -576,7 +576,7 @@ GnomeWMAdaptor::GnomeWMAdaptor( SalDisplay* pSalDisplay ) :
 
                     aCheckWindow =  *reinterpret_cast< ::Window* >(pProperty);
                     XFree( pProperty );
-                    pProperty = NULL;
+                    pProperty = nullptr;
                     if( aCheckWindow == aWMChild )
                     {
                         m_bValid = true;
@@ -597,7 +597,7 @@ GnomeWMAdaptor::GnomeWMAdaptor( SalDisplay* pSalDisplay ) :
         else if( pProperty )
         {
             XFree( pProperty );
-            pProperty = NULL;
+            pProperty = nullptr;
         }
     }
     if( m_bValid
@@ -619,7 +619,7 @@ GnomeWMAdaptor::GnomeWMAdaptor( SalDisplay* pSalDisplay ) :
         if( pProperty )
         {
             XFree( pProperty );
-            pProperty = NULL;
+            pProperty = nullptr;
         }
         // collect supported protocols
         if( XGetWindowProperty( m_pDisplay,
@@ -646,7 +646,7 @@ GnomeWMAdaptor::GnomeWMAdaptor( SalDisplay* pSalDisplay ) :
                 for( unsigned long i = 0; i < nItems; i++ )
                 {
                     // #i80971# protect against invalid atoms
-                    if( pAtomNames[i] == NULL )
+                    if( pAtomNames[i] == nullptr )
                         continue;
 
                     WMAdaptorProtocol aSearch;
@@ -676,12 +676,12 @@ GnomeWMAdaptor::GnomeWMAdaptor( SalDisplay* pSalDisplay ) :
                 }
             }
             XFree( pProperty );
-            pProperty = NULL;
+            pProperty = nullptr;
         }
         else if( pProperty )
         {
             XFree( pProperty );
-            pProperty = NULL;
+            pProperty = nullptr;
         }
 
         // get number of desktops
@@ -702,18 +702,18 @@ GnomeWMAdaptor::GnomeWMAdaptor( SalDisplay* pSalDisplay ) :
         {
             m_nDesktops = *reinterpret_cast<long*>(pProperty);
             XFree( pProperty );
-            pProperty = NULL;
+            pProperty = nullptr;
         }
         else if( pProperty )
         {
             XFree( pProperty );
-            pProperty = NULL;
+            pProperty = nullptr;
         }
     }
     else if( pProperty )
     {
         XFree( pProperty );
-        pProperty = NULL;
+        pProperty = nullptr;
     }
 }
 
@@ -733,7 +733,7 @@ bool WMAdaptor::getNetWmName()
     int                 nFormat     = 8;
     unsigned long       nItems      = 0;
     unsigned long       nBytesLeft  = 0;
-    unsigned char*  pProperty   = NULL;
+    unsigned char*  pProperty   = nullptr;
     bool                bNetWM      = false;
 
     if( m_aWMAtoms[ NET_SUPPORTING_WM_CHECK ] && m_aWMAtoms[ NET_WM_NAME ] )
@@ -757,7 +757,7 @@ bool WMAdaptor::getNetWmName()
         {
             aWMChild = *reinterpret_cast< ::Window* >(pProperty);
             XFree( pProperty );
-            pProperty = NULL;
+            pProperty = nullptr;
             ::Window aCheckWindow = None;
             GetGenericData()->ErrorTrapPush();
             if( XGetWindowProperty( m_pDisplay,
@@ -780,7 +780,7 @@ bool WMAdaptor::getNetWmName()
                         GetGenericData()->ErrorTrapPush();
                         aCheckWindow =  *reinterpret_cast< ::Window* >(pProperty);
                         XFree( pProperty );
-                        pProperty = NULL;
+                        pProperty = nullptr;
                         if( aCheckWindow == aWMChild )
                         {
                             bNetWM = true;
@@ -806,12 +806,12 @@ bool WMAdaptor::getNetWmName()
                                     m_aWMName = OUString( reinterpret_cast<char*>(pProperty), nItems, RTL_TEXTENCODING_ISO_8859_1 );
 
                                 XFree( pProperty );
-                                pProperty = NULL;
+                                pProperty = nullptr;
                             }
                             else if( pProperty )
                             {
                                 XFree( pProperty );
-                                pProperty = NULL;
+                                pProperty = nullptr;
                             }
 
                             // if this is metacity, check for version to enable a legacy workaround
@@ -842,7 +842,7 @@ bool WMAdaptor::getNetWmName()
                                     if( pProperty )
                                     {
                                         XFree( pProperty );
-                                        pProperty = NULL;
+                                        pProperty = nullptr;
                                     }
                                 }
                                 if( nVersionMajor < 2 || (nVersionMajor == 2 && nVersionMinor < 12) )
@@ -855,7 +855,7 @@ bool WMAdaptor::getNetWmName()
                         if( pProperty )
                         {
                             XFree( pProperty );
-                            pProperty = NULL;
+                            pProperty = nullptr;
                         }
                         GetGenericData()->ErrorTrapPush();
                     }
@@ -866,7 +866,7 @@ bool WMAdaptor::getNetWmName()
         else if( pProperty )
         {
             XFree( pProperty );
-            pProperty = NULL;
+            pProperty = nullptr;
         }
     }
     return bNetWM;
@@ -977,7 +977,7 @@ void WMAdaptor::setWMName( X11SalFrame* pFrame, const OUString& rWMName ) const
         osl_getThreadTextEncoding()));
 
     OString aWMLocale;
-    rtl_Locale* pLocale = NULL;
+    rtl_Locale* pLocale = nullptr;
     osl_getProcessLocale( &pLocale );
     if( pLocale )
     {
@@ -993,7 +993,7 @@ void WMAdaptor::setWMName( X11SalFrame* pFrame, const OUString& rWMName ) const
     static bool bTrustXmb = true;
 
     char* pT = const_cast<char*>(aTitle.getStr());
-    XTextProperty aProp = { NULL, None, 0, 0 };
+    XTextProperty aProp = { nullptr, None, 0, 0 };
     if( bTrustXmb )
     {
         XmbTextListToTextProperty( m_pDisplay,
@@ -1032,7 +1032,7 @@ void WMAdaptor::setWMName( X11SalFrame* pFrame, const OUString& rWMName ) const
                      PropModeReplace,
                      reinterpret_cast<unsigned char const *>(aWMLocale.getStr()),
                      aWMLocale.getLength() );
-    if (aProp.value != NULL)
+    if (aProp.value != nullptr)
         XFree( aProp.value );
 }
 
@@ -1797,7 +1797,7 @@ int NetWMAdaptor::handlePropertyNotify( X11SalFrame* pFrame, XPropertyEvent* pEv
             Atom nType, *pStates;
             int nFormat;
             unsigned long nItems, nBytesLeft;
-            unsigned char* pData = NULL;
+            unsigned char* pData = nullptr;
             long nOffset = 0;
             do
             {
@@ -1827,7 +1827,7 @@ int NetWMAdaptor::handlePropertyNotify( X11SalFrame* pFrame, XPropertyEvent* pEv
                         }
                     }
                     XFree( pData );
-                    pData = NULL;
+                    pData = nullptr;
                     nOffset += nItems * nFormat / 32;
                 }
                 else
@@ -1874,7 +1874,7 @@ int GnomeWMAdaptor::handlePropertyNotify( X11SalFrame* pFrame, XPropertyEvent* p
             int nFormat = 0;
             unsigned long nItems = 0;
             unsigned long nBytesLeft = 0;
-            unsigned char* pData = 0;
+            unsigned char* pData = nullptr;
             XGetWindowProperty( m_pDisplay,
                                 pEvent->window,
                                 m_aWMAtoms[ WIN_STATE ],
@@ -2090,7 +2090,7 @@ void NetWMAdaptor::showFullScreen( X11SalFrame* pFrame, bool bFullScreen ) const
                 pFrame->maGeometry.nWidth   = aSize.Width();
                 pFrame->maGeometry.nHeight  = aSize.Height();
             }
-            pFrame->CallCallback( SALEVENT_MOVERESIZE, NULL );
+            pFrame->CallCallback( SALEVENT_MOVERESIZE, nullptr );
         }
     }
     else WMAdaptor::showFullScreen( pFrame, bFullScreen );
@@ -2109,7 +2109,7 @@ int WMAdaptor::getCurrentWorkArea() const
         int                 nFormat     = 8;
         unsigned long       nItems      = 0;
         unsigned long       nBytesLeft  = 0;
-        unsigned char*  pProperty   = NULL;
+        unsigned char*  pProperty   = nullptr;
         if( XGetWindowProperty( m_pDisplay,
                                 m_pSalDisplay->GetRootWindow( m_pSalDisplay->GetDefaultXScreen() ),
                                 m_aWMAtoms[ NET_CURRENT_DESKTOP ],
@@ -2130,7 +2130,7 @@ int WMAdaptor::getCurrentWorkArea() const
         else if( pProperty )
         {
             XFree( pProperty );
-            pProperty = NULL;
+            pProperty = nullptr;
         }
     }
     return nCurrent;
@@ -2148,7 +2148,7 @@ int WMAdaptor::getWindowWorkArea( ::Window aWindow ) const
         int                 nFormat     = 8;
         unsigned long       nItems      = 0;
         unsigned long       nBytesLeft  = 0;
-        unsigned char*  pProperty   = NULL;
+        unsigned char*  pProperty   = nullptr;
         if( XGetWindowProperty( m_pDisplay,
                                 aWindow,
                                 m_aWMAtoms[ NET_WM_DESKTOP ],
@@ -2169,7 +2169,7 @@ int WMAdaptor::getWindowWorkArea( ::Window aWindow ) const
         else if( pProperty )
         {
             XFree( pProperty );
-            pProperty = NULL;
+            pProperty = nullptr;
         }
     }
     return nCurrent;

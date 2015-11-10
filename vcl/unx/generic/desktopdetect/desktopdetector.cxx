@@ -40,7 +40,7 @@ static bool is_gnome_desktop( Display* pDisplay )
 
     // warning: these checks are coincidental, GNOME does not
     // explicitly advertise itself
-    if ( NULL != getenv( "GNOME_DESKTOP_SESSION_ID" ) )
+    if ( nullptr != getenv( "GNOME_DESKTOP_SESSION_ID" ) )
         ret = true;
 
     if( ! ret )
@@ -71,7 +71,7 @@ static bool is_gnome_desktop( Display* pDisplay )
         if( nUTFAtom && nNetWMNameAtom )
         {
             // another, more expensive check: search for a gnome-panel
-            ::Window aRoot, aParent, *pChildren = NULL;
+            ::Window aRoot, aParent, *pChildren = nullptr;
             unsigned int nChildren = 0;
             XQueryTree( pDisplay, DefaultRootWindow( pDisplay ),
                         &aRoot, &aParent, &pChildren, &nChildren );
@@ -82,7 +82,7 @@ static bool is_gnome_desktop( Display* pDisplay )
                     Atom nType = None;
                     int nFormat = 0;
                     unsigned long nItems = 0, nBytes = 0;
-                    unsigned char* pProp = NULL;
+                    unsigned char* pProp = nullptr;
                     XGetWindowProperty( pDisplay,
                                         pChildren[i],
                                         nNetWMNameAtom,
@@ -152,7 +152,7 @@ static int TDEVersion( Display* pDisplay )
         int                 nFormat     = 8;
         unsigned long       nItems      = 0;
         unsigned long       nBytesLeft  = 0;
-        unsigned char*  pProperty   = NULL;
+        unsigned char*  pProperty   = nullptr;
         XGetWindowProperty( pDisplay,
                             DefaultRootWindow( pDisplay ),
                             nTDEVersion,
@@ -171,7 +171,7 @@ static int TDEVersion( Display* pDisplay )
         if( pProperty )
         {
             XFree( pProperty );
-            pProperty = NULL;
+            pProperty = nullptr;
         }
     }
     return nRet;
@@ -193,7 +193,7 @@ static int KDEVersion( Display* pDisplay )
         int                 nFormat     = 8;
         unsigned long       nItems      = 0;
         unsigned long       nBytesLeft  = 0;
-        unsigned char*  pProperty   = NULL;
+        unsigned char*  pProperty   = nullptr;
         XGetWindowProperty( pDisplay,
                             DefaultRootWindow( pDisplay ),
                             nKDEVersion,
@@ -212,7 +212,7 @@ static int KDEVersion( Display* pDisplay )
         if( pProperty )
         {
             XFree( pProperty );
-            pProperty = NULL;
+            pProperty = nullptr;
         }
     }
     return nRet;
@@ -220,7 +220,7 @@ static int KDEVersion( Display* pDisplay )
 
 static bool is_tde_desktop( Display* pDisplay )
 {
-    if ( NULL != getenv( "TDE_FULL_SESSION" ) )
+    if ( nullptr != getenv( "TDE_FULL_SESSION" ) )
     {
         return true; // TDE
     }
@@ -381,7 +381,7 @@ DESKTOP_DETECTOR_PUBLIC DesktopType get_desktop_environment()
             XInitThreads();
 
         Display* pDisplay = XOpenDisplay( pDisplayStr );
-        if( pDisplay == NULL )
+        if( pDisplay == nullptr )
             return DESKTOP_NONE;
 
         XErrorHandler pOldHdl = XSetErrorHandler( autodect_error_handler );

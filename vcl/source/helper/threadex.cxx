@@ -66,7 +66,7 @@ long SolarThreadExecutor::impl_execute( const TimeValue* _pTimeout )
             Application::RemoveUserEvent( nEvent );
         }
         else
-            osl_waitCondition( m_aFinish, NULL );
+            osl_waitCondition( m_aFinish, nullptr );
     }
     return m_nReturn;
 }

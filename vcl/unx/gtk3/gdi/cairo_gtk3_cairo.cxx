@@ -33,8 +33,8 @@ namespace cairo
      * Set the mpSurface as pSurface
      **/
     Gtk3Surface::Gtk3Surface(const CairoSurfaceSharedPtr& pSurface)
-        : mpGraphics(NULL)
-        , cr(NULL)
+        : mpGraphics(nullptr)
+        , cr(nullptr)
         , mpSurface(pSurface)
     {}
 

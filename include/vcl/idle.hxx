@@ -29,7 +29,7 @@ protected:
     Link<Idle *, void> maIdleHdl;          // Callback Link
 
 public:
-    Idle( const sal_Char *pDebugName = NULL );
+    Idle( const sal_Char *pDebugName = nullptr );
     Idle( const Idle& rIdle );
 
     virtual void    Start() override;

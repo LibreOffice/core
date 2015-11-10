@@ -29,9 +29,9 @@ GIFReader::GIFReader( SvStream& rStm )
     : aGPalette ( 256 )
     , aLPalette ( 256 )
     , rIStm ( rStm )
-    , pDecomp ( NULL )
-    , pAcc8 ( NULL )
-    , pAcc1 ( NULL )
+    , pDecomp ( nullptr )
+    , pAcc8 ( nullptr )
+    , pAcc1 ( nullptr )
     , nYAcc ( 0 )
     , nLastPos ( rStm.Tell() )
     , nLogWidth100 ( 0UL )
@@ -66,7 +66,7 @@ GIFReader::GIFReader( SvStream& rStm )
 
 GIFReader::~GIFReader()
 {
-    aImGraphic.SetContext( NULL );
+    aImGraphic.SetContext( nullptr );
 
     if( pAcc1 )
         Bitmap::ReleaseAccess( pAcc1 );
@@ -133,7 +133,7 @@ bool GIFReader::CreateBitmaps( long nWidth, long nHeight, BitmapPalette* pPal,
           aBmp8.Erase( Color( COL_WHITE ) );
 
         pAcc8 = aBmp8.AcquireWriteAccess();
-        bStatus = ( pAcc8 != NULL );
+        bStatus = ( pAcc8 != nullptr );
     }
 
     return bStatus;
@@ -459,7 +459,7 @@ void GIFReader::FillImages( sal_uInt8* pBytes, sal_uLong nCount )
                     {
                         sal_uInt8*  pScanline8 = pAcc8->GetScanline( nYAcc );
                         sal_uLong   nSize8 = pAcc8->GetScanlineSize();
-                        sal_uInt8*  pScanline1 = 0;
+                        sal_uInt8*  pScanline1 = nullptr;
                         sal_uLong   nSize1 = 0;
 
                         if( bGCTransparent )
@@ -545,12 +545,12 @@ void GIFReader::CreateNewBitmaps()
     AnimationBitmap aAnimBmp;
 
     Bitmap::ReleaseAccess( pAcc8 );
-    pAcc8 = NULL;
+    pAcc8 = nullptr;
 
     if( bGCTransparent )
     {
         Bitmap::ReleaseAccess( pAcc1 );
-        pAcc1 = NULL;
+        pAcc1 = nullptr;
         aAnimBmp.aBmpEx = BitmapEx( aBmp8, aBmp1 );
     }
     else
@@ -593,13 +593,13 @@ const Graphic& GIFReader::GetIntermediateGraphic()
             aImGraphic = BitmapEx( aBmp8, aBmp1 );
 
             pAcc1 = aBmp1.AcquireWriteAccess();
-            bStatus = bStatus && ( pAcc1 != NULL );
+            bStatus = bStatus && ( pAcc1 != nullptr );
         }
         else
             aImGraphic = aBmp8;
 
         pAcc8 = aBmp8.AcquireWriteAccess();
-        bStatus = bStatus && ( pAcc8 != NULL );
+        bStatus = bStatus && ( pAcc8 != nullptr );
     }
 
     return aImGraphic;
@@ -814,7 +814,7 @@ VCL_DLLPUBLIC bool ImportGIF( SvStream & rStm, Graphic& rGraphic )
     if( !pGIFReader )
         pGIFReader = new GIFReader( rStm );
 
-    rGraphic.SetContext( NULL );
+    rGraphic.SetContext( nullptr );
     eReadState = pGIFReader->ReadGIF( rGraphic );
 
     if( eReadState == GIFREAD_ERROR )

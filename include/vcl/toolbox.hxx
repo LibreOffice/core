@@ -51,15 +51,15 @@ public:
                 ToolBoxCustomizeEvent();
                 ToolBoxCustomizeEvent( ToolBox* pDropBox,
                                        sal_uInt16 nId, sal_uInt16 nPos = 0,
-                                       void* pUserData = NULL );
+                                       void* pUserData = nullptr );
 };
 
 inline ToolBoxCustomizeEvent::ToolBoxCustomizeEvent()
 {
-    mpTargetBox = NULL;
+    mpTargetBox = nullptr;
     mnIdFrom    = 0;
     mnPosTo     = 0;
-    mpData      = NULL;
+    mpData      = nullptr;
 }
 
 inline ToolBoxCustomizeEvent::ToolBoxCustomizeEvent( ToolBox* pDropBox,
@@ -233,7 +233,7 @@ private:
                           ToolBox& operator= (const ToolBox &) = delete;
 
 public:
-    SAL_DLLPRIVATE void            ImplFloatControl( bool bStart, FloatingWindow* pWindow = NULL );
+    SAL_DLLPRIVATE void            ImplFloatControl( bool bStart, FloatingWindow* pWindow = nullptr );
     SAL_DLLPRIVATE void            ImplDisableFlatButtons();
 
     static SAL_DLLPRIVATE int ImplGetDragWidth( ToolBox* pThis );

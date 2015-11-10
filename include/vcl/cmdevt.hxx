@@ -392,7 +392,7 @@ private:
 public:
                                         CommandEvent();
                                         CommandEvent( const Point& rMousePos, CommandEventId nCmd,
-                                                      bool bMEvt = false, const void* pCmdData = NULL );
+                                                      bool bMEvt = false, const void* pCmdData = nullptr );
 
     CommandEventId                      GetCommand() const { return mnCommand; }
     const Point&                        GetMousePosPixel() const { return maPos; }
@@ -412,7 +412,7 @@ public:
 
 inline CommandEvent::CommandEvent()
 {
-    mpData          = NULL;
+    mpData          = nullptr;
     mnCommand       = CommandEventId::NONE;
     mbMouseEvent    = false;
 }
@@ -431,7 +431,7 @@ inline const CommandExtTextInputData* CommandEvent::GetExtTextInputData() const
     if ( mnCommand == CommandEventId::ExtTextInput )
         return static_cast<const CommandExtTextInputData*>(mpData);
     else
-        return NULL;
+        return nullptr;
 }
 
 inline const CommandWheelData* CommandEvent::GetWheelData() const
@@ -439,7 +439,7 @@ inline const CommandWheelData* CommandEvent::GetWheelData() const
     if ( mnCommand == CommandEventId::Wheel )
         return static_cast<const CommandWheelData*>(mpData);
     else
-        return NULL;
+        return nullptr;
 }
 
 inline const CommandScrollData* CommandEvent::GetAutoScrollData() const
@@ -447,7 +447,7 @@ inline const CommandScrollData* CommandEvent::GetAutoScrollData() const
     if ( mnCommand == CommandEventId::AutoScroll )
         return static_cast<const CommandScrollData*>(mpData);
     else
-        return NULL;
+        return nullptr;
 }
 
 inline const CommandModKeyData* CommandEvent::GetModKeyData() const
@@ -455,7 +455,7 @@ inline const CommandModKeyData* CommandEvent::GetModKeyData() const
     if( mnCommand == CommandEventId::ModKeyChange )
         return static_cast<const CommandModKeyData*>(mpData);
     else
-        return NULL;
+        return nullptr;
 }
 
 inline const CommandDialogData* CommandEvent::GetDialogData() const
@@ -463,7 +463,7 @@ inline const CommandDialogData* CommandEvent::GetDialogData() const
     if( mnCommand == CommandEventId::ShowDialog )
         return static_cast<const CommandDialogData*>(mpData);
     else
-        return NULL;
+        return nullptr;
 }
 
 inline CommandMediaData* CommandEvent::GetMediaData() const
@@ -471,7 +471,7 @@ inline CommandMediaData* CommandEvent::GetMediaData() const
     if( mnCommand == CommandEventId::Media )
         return static_cast<CommandMediaData*>(mpData);
     else
-        return NULL;
+        return nullptr;
 }
 
 inline const CommandSelectionChangeData* CommandEvent::GetSelectionChangeData() const
@@ -479,7 +479,7 @@ inline const CommandSelectionChangeData* CommandEvent::GetSelectionChangeData() 
     if( mnCommand == CommandEventId::SelectionChange )
     return static_cast<const CommandSelectionChangeData*>(mpData);
     else
-    return NULL;
+    return nullptr;
 }
 
 inline const CommandSwipeData* CommandEvent::GetSwipeData() const
@@ -487,7 +487,7 @@ inline const CommandSwipeData* CommandEvent::GetSwipeData() const
     if( mnCommand == CommandEventId::Swipe )
         return static_cast<const CommandSwipeData*>(mpData);
     else
-        return NULL;
+        return nullptr;
 }
 
 inline const CommandLongPressData* CommandEvent::GetLongPressData() const
@@ -495,7 +495,7 @@ inline const CommandLongPressData* CommandEvent::GetLongPressData() const
     if( mnCommand == CommandEventId::LongPress )
         return static_cast<const CommandLongPressData*>(mpData);
     else
-        return NULL;
+        return nullptr;
 }
 
 #endif // INCLUDED_VCL_CMDEVT_HXX

@@ -124,8 +124,8 @@ MenuBarWindow::MenuBarWindow( vcl::Window* pParent ) :
     aHideBtn(VclPtr<PushButton>::Create(this, WB_NOPOINTERFOCUS | WB_SMALLSTYLE | WB_RECTSTYLE))
 {
     SetType(WINDOW_MENUBARWINDOW);
-    pMenu = NULL;
-    pActivePopup = NULL;
+    pMenu = nullptr;
+    pActivePopup = nullptr;
     nSaveFocusId = 0;
     nHighlightedItem = ITEMPOS_INVALID;
     nRolloveredItem = ITEMPOS_INVALID;
@@ -287,7 +287,7 @@ IMPL_LINK_TYPED( MenuBarWindow, ShowHideListener, VclWindowEvent&, rEvent, void 
 
 void MenuBarWindow::ImplCreatePopup( bool bPreSelectFirst )
 {
-    MenuItemData* pItemData = pMenu ? pMenu->GetItemList()->GetDataFromPos( nHighlightedItem ) : NULL;
+    MenuItemData* pItemData = pMenu ? pMenu->GetItemList()->GetDataFromPos( nHighlightedItem ) : nullptr;
     if ( pItemData )
     {
         bIgnoreFirstMove = true;
@@ -300,7 +300,7 @@ void MenuBarWindow::ImplCreatePopup( bool bPreSelectFirst )
         {
             pActivePopup = static_cast<PopupMenu*>(pItemData->pSubMenu);
             long nX = 0;
-            MenuItemData* pData = 0;
+            MenuItemData* pData = nullptr;
             for ( sal_uLong n = 0; n < nHighlightedItem; n++ )
             {
                 pData = pMenu->GetItemList()->GetDataFromPos( n );
@@ -353,9 +353,9 @@ void MenuBarWindow::KillActivePopup()
             pActivePopup->ImplGetFloatingWindow()->StopExecute();
             pActivePopup->ImplGetFloatingWindow()->doShutdown();
             pActivePopup->pWindow->doLazyDelete();
-            pActivePopup->pWindow = NULL;
+            pActivePopup->pWindow = nullptr;
         }
-        pActivePopup = 0;
+        pActivePopup = nullptr;
     }
 }
 
@@ -544,7 +544,7 @@ static int ImplGetTopDockingAreaHeight( vcl::Window *pWindow )
                 vcl::Window *pChildWin = pWin->GetWindow( GetWindowType::FirstChild ); //mpWindowImpl->mpFirstChild;
                 while( pChildWin )
                 {
-                    DockingAreaWindow *pDockingArea = NULL;
+                    DockingAreaWindow *pDockingArea = nullptr;
                     if ( pChildWin->GetType() == WINDOW_DOCKINGAREA )
                         pDockingArea = static_cast< DockingAreaWindow* >( pChildWin );
 

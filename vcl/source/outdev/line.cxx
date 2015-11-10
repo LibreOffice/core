@@ -225,7 +225,7 @@ void OutputDevice::drawLine( basegfx::B2DPolyPolygon aLinePolyPolygon, const Lin
     }
 
     GDIMetaFile* pOldMetaFile = mpMetaFile;
-    mpMetaFile = NULL;
+    mpMetaFile = nullptr;
 
     if(aLinePolyPolygon.count())
     {

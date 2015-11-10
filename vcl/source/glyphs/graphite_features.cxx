@@ -38,14 +38,14 @@ const char GrFeatureParser::FEAT_SEPARATOR = '&';
 const char GrFeatureParser::FEAT_ID_VALUE_SEPARATOR = '=';
 
 GrFeatureParser::GrFeatureParser(const gr_face * pFace, const OString& lang)
-    : mnNumSettings(0), mbErrors(false), mpSettings(NULL)
+    : mnNumSettings(0), mbErrors(false), mpSettings(nullptr)
 {
     maLang.label[0] = maLang.label[1] = maLang.label[2] = maLang.label[3] = '\0';
     setLang(pFace, lang);
 }
 
 GrFeatureParser::GrFeatureParser(const gr_face * pFace, const OString& features, const OString& lang)
-    : mnNumSettings(0), mbErrors(false), mpSettings(NULL)
+    : mnNumSettings(0), mbErrors(false), mpSettings(nullptr)
 {
     sal_Int32 nEquals = 0;
     sal_Int32 nFeatEnd = 0;
@@ -196,7 +196,7 @@ GrFeatureParser::~GrFeatureParser()
     if (mpSettings)
     {
         gr_featureval_destroy(mpSettings);
-        mpSettings = NULL;
+        mpSettings = nullptr;
     }
 }
 

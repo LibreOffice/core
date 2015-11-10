@@ -26,7 +26,7 @@
 
 XRenderPeer::XRenderPeer()
     : mpDisplay( vcl_sal::getSalDisplay(GetGenericData())->GetDisplay() )
-    , mpStandardFormatA8( NULL )
+    , mpStandardFormatA8( nullptr )
 {
     InitRenderLib();
 }

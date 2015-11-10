@@ -66,7 +66,7 @@ void
 XKeyEventOp::init()
 {
     type        = 0; /* serial = 0; */
-    send_event  = 0; display   = 0;
+    send_event  = 0; display   = nullptr;
     window      = 0; root      = 0;
     subwindow   = 0; /* time   = 0; */
  /* x           = 0; y         = 0; */
@@ -135,7 +135,7 @@ SetSystemLocale( const char* p_inlocale )
 {
     char *p_outlocale;
 
-    if ( (p_outlocale = setlocale(LC_ALL, p_inlocale)) == NULL )
+    if ( (p_outlocale = setlocale(LC_ALL, p_inlocale)) == nullptr )
     {
         fprintf( stderr, "I18N: Operating system doesn't support locale \"%s\"\n",
             p_inlocale );
@@ -159,7 +159,7 @@ SetSystemEnvironment( const OUString& rLocale )
 static Bool
 IsPosixLocale( const char* p_locale )
 {
-    if ( p_locale == NULL )
+    if ( p_locale == nullptr )
         return False;
     if ( (p_locale[ 0 ] == 'C') && (p_locale[ 1 ] == '\0') )
         return True;
@@ -174,7 +174,7 @@ IsPosixLocale( const char* p_locale )
 static Bool
 IsXWindowCompatibleLocale( const char* p_locale )
 {
-    if ( p_locale == NULL )
+    if ( p_locale == nullptr )
         return False;
 
     if ( !XSupportsLocale() )
@@ -222,7 +222,7 @@ SalI18N_InputMethod::SetLocale( const char* pLocale )
         }
 
         // must not fail if mbUseable since XSupportsLocale() asserts success
-        if ( mbUseable && XSetLocaleModifiers("") == NULL )
+        if ( mbUseable && XSetLocaleModifiers("") == nullptr )
         {
             fprintf (stderr, "I18N: Can't set X modifiers for locale \"%s\"\n",
                 locale);
@@ -251,16 +251,16 @@ SalI18N_InputMethod::SalI18N_InputMethod( )
     maDestroyCallback.callback = nullptr;
     maDestroyCallback.client_data = nullptr;
     const char *pUseInputMethod = getenv( "SAL_USEINPUTMETHOD" );
-    if ( pUseInputMethod != NULL )
+    if ( pUseInputMethod != nullptr )
         mbUseable = pUseInputMethod[0] != '\0' ;
 }
 
 SalI18N_InputMethod::~SalI18N_InputMethod()
 {
     vcl::I18NStatus::free();
-    if ( mpStyles != NULL )
+    if ( mpStyles != nullptr )
         XFree( mpStyles );
-    if ( maMethod != NULL )
+    if ( maMethod != nullptr )
         XCloseIM ( maMethod );
 }
 
@@ -336,20 +336,20 @@ SalI18N_InputMethod::CreateMethod ( Display *pDisplay )
 {
     if ( mbUseable )
     {
-        maMethod = XOpenIM(pDisplay, NULL, NULL, NULL);
+        maMethod = XOpenIM(pDisplay, nullptr, nullptr, nullptr);
 
-        if ((maMethod == nullptr) && (getenv("XMODIFIERS") != NULL))
+        if ((maMethod == nullptr) && (getenv("XMODIFIERS") != nullptr))
         {
                 OUString envVar("XMODIFIERS");
                 osl_clearEnvironment(envVar.pData);
                 XSetLocaleModifiers("");
-                maMethod = XOpenIM(pDisplay, NULL, NULL, NULL);
+                maMethod = XOpenIM(pDisplay, nullptr, nullptr, nullptr);
         }
 
         if ( maMethod != nullptr )
         {
             if (   XGetIMValues(maMethod, XNQueryInputStyle, &mpStyles, NULL)
-                != NULL)
+                != nullptr)
                 mbUseable = False;
             #if OSL_DEBUG_LEVEL > 1
             fprintf(stderr, "Creating Mono-Lingual InputMethod\n" );
@@ -369,7 +369,7 @@ SalI18N_InputMethod::CreateMethod ( Display *pDisplay )
 
     maDestroyCallback.callback    = static_cast<XIMProc>(IM_IMDestroyCallback);
     maDestroyCallback.client_data = reinterpret_cast<XPointer>(this);
-    if (mbUseable && maMethod != NULL)
+    if (mbUseable && maMethod != nullptr)
         XSetIMValues(maMethod, XNDestroyCallback, &maDestroyCallback, NULL);
 
     return mbUseable;
@@ -415,7 +415,7 @@ void
 SalI18N_InputMethod::HandleDestroyIM()
 {
     mbUseable       = False;
-    maMethod        = NULL;
+    maMethod        = nullptr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

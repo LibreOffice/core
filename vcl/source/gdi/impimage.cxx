@@ -102,7 +102,7 @@ void ImplImageList::RemoveImage( sal_uInt16 nPos )
 }
 
 ImplImageData::ImplImageData( const BitmapEx& rBmpEx ) :
-    mpImageBitmap( NULL ),
+    mpImageBitmap( nullptr ),
     maBmpEx( rBmpEx )
 {
 }
@@ -119,7 +119,7 @@ bool ImplImageData::IsEqual( const ImplImageData& rData )
 
 ImplImage::ImplImage()
     : mnRefCount(1)
-    , mpData(NULL)
+    , mpData(nullptr)
     , meType(IMAGETYPE_BITMAP)
 {
 }
@@ -158,7 +158,7 @@ void ImplImageBmp::Create( const BitmapEx& rBmpEx, long nItemWidth, long nItemHe
     maDisabledBmpEx.SetEmpty();
 
     delete mpDisplayBmp;
-    mpDisplayBmp = NULL;
+    mpDisplayBmp = nullptr;
 
     maSize = Size( nItemWidth, nItemHeight );
     mnSize = nInitSize;

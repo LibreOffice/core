@@ -135,7 +135,7 @@ struct ExtGlyphData
     basebmp::Format  meInfo;
     SvpGcpHelper*    mpData;
 
-    ExtGlyphData() : meInfo(basebmp::Format::NONE), mpData(NULL) {}
+    ExtGlyphData() : meInfo(basebmp::Format::NONE), mpData(nullptr) {}
 };
 
 class GlyphData

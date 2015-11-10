@@ -236,7 +236,7 @@ private:
 // - Inlines -
 inline bool BitmapInfoAccess::operator!() const
 {
-    return mpBuffer == NULL;
+    return mpBuffer == nullptr;
 }
 
 inline long BitmapInfoAccess::Width() const
@@ -337,7 +337,7 @@ inline Scanline BitmapReadAccess::GetBuffer() const
 {
     assert(mpBuffer && "Access is not valid!");
 
-    return mpBuffer ? mpBuffer->mpBits : NULL;
+    return mpBuffer ? mpBuffer->mpBits : nullptr;
 }
 
 inline Scanline BitmapReadAccess::GetScanline(long nY) const

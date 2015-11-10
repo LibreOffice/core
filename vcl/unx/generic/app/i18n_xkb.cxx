@@ -38,11 +38,11 @@ SalI18N_KeyboardExtension::SalI18N_KeyboardExtension( Display* pDisplay )
     //      setenv SAL_XKEYBOARDGROUP 2     sets the keyboard group index to 2
     // keyboard group index must be in [1,4], may be specified in hex or decimal
     static char *pUseKeyboardExtension = getenv( "SAL_XKEYBOARDGROUP" );
-    if ( pUseKeyboardExtension != NULL )
+    if ( pUseKeyboardExtension != nullptr )
     {
         mbUseExtension = pUseKeyboardExtension[0] != '\0' ;
         if ( mbUseExtension )
-            mnDefaultGroup = strtol( pUseKeyboardExtension, NULL, 0 );
+            mnDefaultGroup = strtol( pUseKeyboardExtension, nullptr, 0 );
         if ( mnDefaultGroup > XkbMaxKbdGroup )
             mnDefaultGroup = 0;
     }

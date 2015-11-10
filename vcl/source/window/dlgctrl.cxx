@@ -70,8 +70,8 @@ static vcl::Window* ImplGetTopParentOfTabHierarchy( vcl::Window* pParent )
 
 static vcl::Window* ImplGetSubChildWindow( vcl::Window* pParent, sal_uInt16 n, sal_uInt16& nIndex )
 {
-    vcl::Window*     pTabPage = NULL;
-    vcl::Window*     pFoundWindow = NULL;
+    vcl::Window*     pTabPage = nullptr;
+    vcl::Window*     pFoundWindow = nullptr;
 
     vcl::Window*     pWindow = firstLogicalChildOfParent(pParent);
     vcl::Window*     pNextWindow = pWindow;
@@ -86,7 +86,7 @@ static vcl::Window* ImplGetSubChildWindow( vcl::Window* pParent, sal_uInt16 n, s
             if ( pTabPage )
             {
                 pFoundWindow = ImplGetSubChildWindow( pTabPage, n, nIndex );
-                pTabPage = NULL;
+                pTabPage = nullptr;
             }
             else
             {
@@ -189,7 +189,7 @@ vcl::Window* Window::ImplGetDlgWindow( sal_uInt16 nIndex, GetDlgWindowType nType
     DBG_ASSERT( (nIndex >= nFormStart) && (nIndex <= nFormEnd),
                 "Window::ImplGetDlgWindow() - nIndex not in Form" );
 
-    vcl::Window* pWindow = NULL;
+    vcl::Window* pWindow = nullptr;
     sal_uInt16  i;
     sal_uInt16  nTemp;
     sal_uInt16  nStartIndex;
@@ -275,7 +275,7 @@ vcl::Window* Window::ImplGetDlgWindow( sal_uInt16 nIndex, GetDlgWindowType nType
                 }
 
                 if ( !(pWindow->GetStyle() & WB_TABSTOP) )
-                    pWindow = NULL;
+                    pWindow = nullptr;
             }
         }
     }
@@ -292,8 +292,8 @@ vcl::Window* ImplFindDlgCtrlWindow( vcl::Window* pParent, vcl::Window* pWindow, 
                                sal_uInt16& rFormStart, sal_uInt16& rFormEnd )
 {
     vcl::Window* pSWindow;
-    vcl::Window* pSecondWindow = NULL;
-    vcl::Window* pTempWindow = NULL;
+    vcl::Window* pSecondWindow = nullptr;
+    vcl::Window* pTempWindow = nullptr;
     sal_uInt16  i;
     sal_uInt16  nSecond_i = 0;
     sal_uInt16  nFormStart = 0;
@@ -303,7 +303,7 @@ vcl::Window* ImplFindDlgCtrlWindow( vcl::Window* pParent, vcl::Window* pWindow, 
     // find focus window in the child list
     vcl::Window* pFirstChildWindow = pSWindow = ImplGetChildWindow( pParent, 0, i, false );
 
-    if( pWindow == NULL )
+    if( pWindow == nullptr )
         pWindow = pSWindow;
 
     while ( pSWindow )
@@ -325,14 +325,14 @@ vcl::Window* ImplFindDlgCtrlWindow( vcl::Window* pParent, vcl::Window* pWindow, 
 
         pSWindow = ImplGetNextWindow( pParent, i, i, false );
         if ( !i )
-            pSWindow = NULL;
+            pSWindow = nullptr;
     }
 
     if ( !pSWindow )
     {
         // Window not found; we cannot handle it
         if ( !pSecondWindow )
-            return NULL;
+            return nullptr;
         else
         {
             pSWindow = pSecondWindow;
@@ -445,7 +445,7 @@ vcl::Window* ImplFindAccelWindow( vcl::Window* pParent, sal_uInt16& rIndex, sal_
             sal_uInt16  nChildFormEnd;
 
             // get form start and end
-            ::ImplFindDlgCtrlWindow( pWindow, NULL,
+            ::ImplFindDlgCtrlWindow( pWindow, nullptr,
                                      nChildIndex, nChildFormStart, nChildFormEnd );
             vcl::Window* pAccelWin = ImplFindAccelWindow( pWindow, nChildIndex, cCharCode,
                                                      nChildFormStart, nChildFormEnd,
@@ -467,7 +467,7 @@ vcl::Window* ImplFindAccelWindow( vcl::Window* pParent, sal_uInt16& rIndex, sal_
             pWindow = ImplGetChildWindow( pParent, nFormStart, i, bCheckEnable );
     }
 
-    return NULL;
+    return nullptr;
 }
 
 namespace vcl {
@@ -619,7 +619,7 @@ bool Window::ImplDlgCtrl( const KeyEvent& rKEvt, bool bKeyInput )
     }
     while ( pTempWindow );
 
-    pButtonWindow = NULL;
+    pButtonWindow = nullptr;
 
     if ( nKeyCode == KEY_RETURN )
     {
@@ -634,7 +634,7 @@ bool Window::ImplDlgCtrl( const KeyEvent& rKEvt, bool bKeyInput )
 
             pButtonWindow = ImplGetNextWindow( this, iButton, iButton, true );
             if ( (iButton <= iButtonStart) || (iButton > nFormEnd) )
-                pButtonWindow = NULL;
+                pButtonWindow = nullptr;
         }
 
         if ( bKeyInput && !pButtonWindow && (nDlgCtrlFlags & DialogControlFlags::Return) )
@@ -679,7 +679,7 @@ bool Window::ImplDlgCtrl( const KeyEvent& rKEvt, bool bKeyInput )
                     pTempWindow = ImplGetDlgWindow( i, nType, nFormStart, nFormEnd, &nNewIndex );
                 }
                 if ( (i <= iStart) || (i > nFormEnd) )
-                    pTempWindow = NULL;
+                    pTempWindow = nullptr;
             }
             // if this is the same window, simulate a Get/LoseFocus,
             // in case AROUND is being processed
@@ -709,7 +709,7 @@ bool Window::ImplDlgCtrl( const KeyEvent& rKEvt, bool bKeyInput )
 
             pButtonWindow = ImplGetNextWindow( this, iButton, iButton, true );
             if ( (iButton <= iButtonStart) || (iButton > nFormEnd) )
-                pButtonWindow = NULL;
+                pButtonWindow = nullptr;
         }
 
         if ( bKeyInput && mpWindowImpl->mpDlgCtrlDownWindow )
@@ -717,7 +717,7 @@ bool Window::ImplDlgCtrl( const KeyEvent& rKEvt, bool bKeyInput )
             if ( mpWindowImpl->mpDlgCtrlDownWindow.get() != pButtonWindow )
             {
                 static_cast<PushButton*>(mpWindowImpl->mpDlgCtrlDownWindow.get())->SetPressed( false );
-                mpWindowImpl->mpDlgCtrlDownWindow = NULL;
+                mpWindowImpl->mpDlgCtrlDownWindow = nullptr;
                 return true;
             }
         }
@@ -738,10 +738,10 @@ bool Window::ImplDlgCtrl( const KeyEvent& rKEvt, bool bKeyInput )
                 if ( aKeyCode.IsMod1() )
                 {
                     // search group
-                    vcl::Window* pFormularFirstWindow = NULL;
-                    vcl::Window* pLastFormularFirstWindow = NULL;
+                    vcl::Window* pFormularFirstWindow = nullptr;
+                    vcl::Window* pLastFormularFirstWindow = nullptr;
                     pTempWindow = ImplGetChildWindow( this, 0, iTemp, false );
-                    vcl::Window* pPrevFirstFormularFirstWindow = NULL;
+                    vcl::Window* pPrevFirstFormularFirstWindow = nullptr;
                     vcl::Window* pFirstFormularFirstWindow = pTempWindow;
                     while ( pTempWindow )
                     {
@@ -765,7 +765,7 @@ bool Window::ImplDlgCtrl( const KeyEvent& rKEvt, bool bKeyInput )
 
                         pTempWindow = ImplGetNextWindow( this, iTemp, iTemp, false );
                         if ( !iTemp )
-                            pTempWindow = NULL;
+                            pTempWindow = nullptr;
                     }
 
                     if ( bFormular )
@@ -929,7 +929,7 @@ bool Window::ImplDlgCtrl( const KeyEvent& rKEvt, bool bKeyInput )
             if ( mpWindowImpl->mpDlgCtrlDownWindow && (mpWindowImpl->mpDlgCtrlDownWindow.get() != pButtonWindow) )
             {
                 static_cast<PushButton*>(mpWindowImpl->mpDlgCtrlDownWindow.get())->SetPressed( false );
-                mpWindowImpl->mpDlgCtrlDownWindow = NULL;
+                mpWindowImpl->mpDlgCtrlDownWindow = nullptr;
             }
 
             static_cast<PushButton*>(pButtonWindow)->SetPressed( true );
@@ -937,7 +937,7 @@ bool Window::ImplDlgCtrl( const KeyEvent& rKEvt, bool bKeyInput )
         }
         else if ( mpWindowImpl->mpDlgCtrlDownWindow.get() == pButtonWindow )
         {
-            mpWindowImpl->mpDlgCtrlDownWindow = NULL;
+            mpWindowImpl->mpDlgCtrlDownWindow = nullptr;
             static_cast<PushButton*>(pButtonWindow)->SetPressed( false );
             static_cast<PushButton*>(pButtonWindow)->Click();
         }
@@ -1000,8 +1000,8 @@ if ( !pDlgCtrlParent || (GetStyle() & WB_NODIALOGCONTROL) || ((pDlgCtrlParent->G
 static void ImplDlgCtrlUpdateDefButton( vcl::Window* pParent, vcl::Window* pFocusWindow,
                                         bool bGetFocus )
 {
-    PushButton* pOldDefButton   = NULL;
-    PushButton* pNewDefButton   = NULL;
+    PushButton* pOldDefButton   = nullptr;
+    PushButton* pNewDefButton   = nullptr;
     vcl::Window*     pSWindow;
     sal_uInt16      i;
     sal_uInt16      nFormStart;
@@ -1031,7 +1031,7 @@ static void ImplDlgCtrlUpdateDefButton( vcl::Window* pParent, vcl::Window* pFocu
 
         pSWindow = ImplGetNextWindow( pParent, i, i, false );
         if ( !i || (i > nFormEnd) )
-            pSWindow = NULL;
+            pSWindow = nullptr;
     }
 
     if ( !bGetFocus )
@@ -1039,10 +1039,10 @@ static void ImplDlgCtrlUpdateDefButton( vcl::Window* pParent, vcl::Window* pFocu
         sal_uInt16 nDummy;
         vcl::Window* pNewFocusWindow = Application::GetFocusWindow();
         if ( !pNewFocusWindow || !pParent->ImplIsWindowOrChild( pNewFocusWindow ) )
-            pNewDefButton = NULL;
+            pNewDefButton = nullptr;
         else if ( !::ImplFindDlgCtrlWindow( pParent, pNewFocusWindow, i, nDummy, nDummy ) ||
                   (i < nFormStart) || (i > nFormEnd) )
-            pNewDefButton = NULL;
+            pNewDefButton = nullptr;
     }
 
     if ( pOldDefButton != pNewDefButton )
@@ -1059,7 +1059,7 @@ void Window::ImplDlgCtrlFocusChanged( vcl::Window* pWindow, bool bGetFocus )
     if ( mpWindowImpl->mpDlgCtrlDownWindow && !bGetFocus )
     {
         static_cast<PushButton*>(mpWindowImpl->mpDlgCtrlDownWindow.get())->SetPressed( false );
-        mpWindowImpl->mpDlgCtrlDownWindow = NULL;
+        mpWindowImpl->mpDlgCtrlDownWindow = nullptr;
     }
 
     ImplDlgCtrlUpdateDefButton( this, pWindow, bGetFocus );
@@ -1077,12 +1077,12 @@ vcl::Window* Window::ImplFindDlgCtrlWindow( vcl::Window* pWindow )
 
 vcl::Window* Window::GetParentLabelFor( const vcl::Window* ) const
 {
-    return NULL;
+    return nullptr;
 }
 
 vcl::Window* Window::GetParentLabeledBy( const vcl::Window* ) const
 {
-    return NULL;
+    return nullptr;
 }
 
 KeyEvent Window::GetActivationKey() const

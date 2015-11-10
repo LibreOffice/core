@@ -138,7 +138,7 @@ public:
         const PPDKey*       m_pKey2;
         const PPDValue*     m_pOption2;
 
-        PPDConstraint() : m_pKey1( NULL ), m_pOption1( NULL ), m_pKey2( NULL ), m_pOption2( NULL ) {}
+        PPDConstraint() : m_pKey1( nullptr ), m_pOption1( nullptr ), m_pKey2( nullptr ), m_pOption2( nullptr ) {}
     };
 private:
     hash_type                                   m_aKeys;
@@ -258,7 +258,7 @@ class VCL_DLLPUBLIC PPDContext
     bool checkConstraints( const PPDKey*, const PPDValue*, bool bDoReset );
     bool resetValue( const PPDKey*, bool bDefaultable = false );
 public:
-    PPDContext( const PPDParser* pParser = NULL );
+    PPDContext( const PPDParser* pParser = nullptr );
     PPDContext( const PPDContext& rContext ) { operator=( rContext ); }
     PPDContext& operator=( const PPDContext& rContext );
     ~PPDContext();

@@ -571,7 +571,7 @@ void PrintDialog::OutputOptPage::storeToSettings()
 
 PrintDialog::PrintDialog( vcl::Window* i_pParent, const std::shared_ptr<PrinterController>& i_rController )
     : ModalDialog(i_pParent, "PrintDialog", "vcl/ui/printdialog.ui")
-    , mpCustomOptionsUIBuilder(NULL)
+    , mpCustomOptionsUIBuilder(nullptr)
     , maPController( i_rController )
     , maNUpPage(m_pUIBuilder)
     , maJobPage(m_pUIBuilder)
@@ -1002,7 +1002,7 @@ void PrintDialog::setupOptionalUI()
             if( pVal )
                 pVal->Value >>= bVal;
             maNUpPage.mpBrochureBtn->Check( bVal );
-            maNUpPage.mpBrochureBtn->Enable( maPController->isUIOptionEnabled( aPropertyName ) && pVal != NULL );
+            maNUpPage.mpBrochureBtn->Enable( maPController->isUIOptionEnabled( aPropertyName ) && pVal != nullptr );
             maNUpPage.mpBrochureBtn->SetToggleHdl( LINK( this, PrintDialog, ToggleRadioHdl ) );
 
             maPropertyToWindowMap[ aPropertyName ].push_back( maNUpPage.mpBrochureBtn );
@@ -1671,7 +1671,7 @@ IMPL_LINK_TYPED( PrintDialog, ModifyHdl, Edit&, rEdit, void )
 
 PropertyValue* PrintDialog::getValueForWindow( vcl::Window* i_pWindow ) const
 {
-    PropertyValue* pVal = NULL;
+    PropertyValue* pVal = nullptr;
     auto it = maControlToPropertyMap.find( i_pWindow );
     if( it != maControlToPropertyMap.end() )
     {

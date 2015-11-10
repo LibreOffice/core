@@ -147,9 +147,9 @@ public:
 };
 
 ImpVclMEdit::ImpVclMEdit( VclMultiLineEdit* pEdt, WinBits nWinStyle )
-    :mpHScrollBar(NULL)
-    ,mpVScrollBar(NULL)
-    ,mpScrollBox(NULL)
+    :mpHScrollBar(nullptr)
+    ,mpVScrollBar(nullptr)
+    ,mpScrollBox(nullptr)
 {
     pVclMultiLineEdit = pEdt;
     mnTextWidth = 0;
@@ -735,9 +735,9 @@ TextWindow::~TextWindow()
 void TextWindow::dispose()
 {
     delete mpExtTextView;
-    mpExtTextView = NULL;
+    mpExtTextView = nullptr;
     delete mpExtTextEngine;
-    mpExtTextEngine = NULL;
+    mpExtTextEngine = nullptr;
     Window::dispose();
 }
 
@@ -936,7 +936,7 @@ VclMultiLineEdit::VclMultiLineEdit( vcl::Window* pParent, WinBits nWinStyle )
     SetType( WINDOW_MULTILINEEDIT );
     pImpVclMEdit = new ImpVclMEdit( this, nWinStyle );
     ImplInitSettings( true, true, true );
-    pUpdateDataTimer = 0;
+    pUpdateDataTimer = nullptr;
 
     SetCompoundControl( true );
     SetStyle( ImplInitStyle( nWinStyle ) );
@@ -951,10 +951,10 @@ void VclMultiLineEdit::dispose()
 {
     {
         std::unique_ptr< ImpVclMEdit > xDelete(pImpVclMEdit);
-        pImpVclMEdit = NULL;
+        pImpVclMEdit = nullptr;
     }
     delete pUpdateDataTimer;
-    pUpdateDataTimer = NULL;
+    pUpdateDataTimer = nullptr;
 
     Edit::dispose();
 }

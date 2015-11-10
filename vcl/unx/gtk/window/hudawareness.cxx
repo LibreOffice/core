@@ -44,7 +44,7 @@ hud_awareness_method_call (GDBusConnection       * /* connection */,
       (* handle->callback) (active, handle->user_data);
     }
 
-  g_dbus_method_invocation_return_value (invocation, NULL);
+  g_dbus_method_invocation_return_value (invocation, nullptr);
 }
 
 guint
@@ -64,9 +64,9 @@ hud_awareness_register (GDBusConnection       *connection,
   memset (static_cast<void *>(&vtable), 0, sizeof (vtable));
   vtable.method_call = hud_awareness_method_call;
 
-  if G_UNLIKELY (iface == NULL)
+  if G_UNLIKELY (iface == nullptr)
     {
-      GError *local_error = NULL;
+      GError *local_error = nullptr;
 
       info = g_dbus_node_info_new_for_xml ("<node>"
                                              "<interface name='com.canonical.hud.Awareness'>"
@@ -79,7 +79,7 @@ hud_awareness_register (GDBusConnection       *connection,
                                            &local_error);
       g_assert_no_error (local_error);
       iface = g_dbus_node_info_lookup_interface (info, "com.canonical.hud.Awareness");
-      g_assert (iface != NULL);
+      g_assert (iface != nullptr);
     }
 
   handle = static_cast<HudAwarenessHandle*>(g_malloc (sizeof (HudAwarenessHandle)));

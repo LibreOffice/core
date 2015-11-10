@@ -139,7 +139,7 @@ public:
                             meAutoHint(AUTOHINT_DONTKNOW),
                             meHinting(HINTING_DONTKNOW),
                             meHintStyle(HINT_SLIGHT),
-                            mpPattern(0) {}
+                            mpPattern(nullptr) {}
                         FontConfigFontOptions(FcPattern* pPattern) :
                             meEmbeddedBitmap(EMBEDDEDBITMAP_DONTKNOW),
                             meAntiAlias(ANTIALIAS_DONTKNOW),
@@ -205,8 +205,8 @@ class VCL_PLUGIN_PUBLIC CmapResult
 {
 public:
     explicit            CmapResult( bool bSymbolic = false,
-                            const sal_uInt32* pRangeCodes = NULL, int nRangeCount = 0,
-                            const int* pStartGlyphs = 0, const sal_uInt16* pGlyphIds = NULL );
+                            const sal_uInt32* pRangeCodes = nullptr, int nRangeCount = 0,
+                            const int* pStartGlyphs = nullptr, const sal_uInt16* pGlyphIds = nullptr );
 
     const sal_uInt32*   mpRangeCodes;
     const int*          mpStartGlyphs;

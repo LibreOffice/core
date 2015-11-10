@@ -148,7 +148,7 @@ GraphiteLayout::fillFrom(gr_segment * pSegment, ImplLayoutArgs &rArgs, float fSc
     if (!nGlyphs || lastCharPos - mnSegCharOffset == 0) return;
     const gr_slot* baseSlot = bRtl ? gr_seg_last_slot(pSegment) : gr_seg_first_slot(pSegment);
     // find first base
-    while (baseSlot && gr_slot_attached_to(baseSlot) != NULL && !gr_slot_can_insert_before(baseSlot))
+    while (baseSlot && gr_slot_attached_to(baseSlot) != nullptr && !gr_slot_can_insert_before(baseSlot))
         baseSlot = bRtl ? gr_slot_prev_in_segment(baseSlot) : gr_slot_next_in_segment(baseSlot);
     assert(baseSlot);
     int nextChar = gr_cinfo_base(gr_seg_cinfo(pSegment, gr_slot_before(baseSlot))) + mnSegCharOffset;
@@ -354,7 +354,7 @@ GraphiteLayout::append(gr_segment *pSeg, ImplLayoutArgs &rArgs,
 
     // Recursively append all the attached glyphs.
     float cOrigin = nextGlyphOrigin;
-    for (const gr_slot * agi = gr_slot_first_attachment(gi); agi != NULL; agi = gr_slot_next_sibling_attachment(agi))
+    for (const gr_slot * agi = gr_slot_first_attachment(gi); agi != nullptr; agi = gr_slot_next_sibling_attachment(agi))
         if (!gr_slot_can_insert_before(agi))
             cOrigin = append(pSeg, rArgs, agi, cOrigin, nextGlyphOrigin, scaling, rDXOffset, false, baseChar, baseGlyph, bRtl);
 
@@ -379,8 +379,8 @@ GraphiteLayout::~GraphiteLayout() throw()
 {
     clear();
     // the features and font are owned by the platform layers
-    mpFeatures = NULL;
-    mpFont = NULL;
+    mpFeatures = nullptr;
+    mpFont = nullptr;
 }
 
 void GraphiteLayout::clear()
@@ -436,11 +436,11 @@ bool GraphiteLayout::LayoutText(ImplLayoutArgs & rArgs)
             nBidiEndRunPos = minimum<int>(nLength, nBidiEndRunPos + EXTRA_CONTEXT_LENGTH);
         const sal_Unicode *pStr = rArgs.mrStr.getStr();
         size_t numchars = gr_count_unicode_characters(gr_utf16, pStr + nBidiMinRunPos,
-                 pStr + nBidiEndRunPos, NULL);
-        gr_segment * pSegment = gr_make_seg(mpFont, mpFace, 0, mpFeatures ? mpFeatures->values() : NULL,
+                 pStr + nBidiEndRunPos, nullptr);
+        gr_segment * pSegment = gr_make_seg(mpFont, mpFace, 0, mpFeatures ? mpFeatures->values() : nullptr,
                                 gr_utf16, pStr + nBidiMinRunPos, numchars, 2 | int(bRightToLeft));
 
-        if (pSegment != NULL)
+        if (pSegment != nullptr)
         {
             success = true;
             mnSegCharOffset = nBidiMinRunPos;

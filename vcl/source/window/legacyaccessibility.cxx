@@ -40,7 +40,7 @@ using namespace ::com::sun::star;
 
 static vcl::Window* ImplGetLabelFor( vcl::Window* pFrameWindow, WindowType nMyType, vcl::Window* pLabel, sal_Unicode nAccel )
 {
-    vcl::Window* pWindow = NULL;
+    vcl::Window* pWindow = nullptr;
 
     if( nMyType == WINDOW_FIXEDTEXT     ||
         nMyType == WINDOW_FIXEDLINE     ||
@@ -103,14 +103,14 @@ namespace vcl {
 
 Window* Window::getLegacyNonLayoutAccessibleRelationLabelFor() const
 {
-    Window* pWindow = NULL;
+    Window* pWindow = nullptr;
     Window* pFrameWindow = ImplGetFrameWindow();
 
     WinBits nFrameStyle = pFrameWindow->GetStyle();
     if( ! ( nFrameStyle & WB_DIALOGCONTROL )
         || ( nFrameStyle & WB_NODIALOGCONTROL )
         )
-        return NULL;
+        return nullptr;
 
     if ( mpWindowImpl->mpRealParent )
         pWindow = mpWindowImpl->mpRealParent->GetParentLabelFor( this );
@@ -128,7 +128,7 @@ Window* Window::getLegacyNonLayoutAccessibleRelationLabelFor() const
 
 static Window* ImplGetLabeledBy( Window* pFrameWindow, WindowType nMyType, Window* pLabeled )
 {
-    Window* pWindow = NULL;
+    Window* pWindow = nullptr;
     if ( (nMyType != WINDOW_GROUPBOX) && (nMyType != WINDOW_FIXEDLINE) )
     {
         // search for a control that labels this window
@@ -183,7 +183,7 @@ static Window* ImplGetLabeledBy( Window* pFrameWindow, WindowType nMyType, Windo
 
 Window* Window::getLegacyNonLayoutAccessibleRelationLabeledBy() const
 {
-    Window* pWindow = NULL;
+    Window* pWindow = nullptr;
     Window* pFrameWindow = ImplGetFrameWindow();
 
     if ( mpWindowImpl->mpRealParent )
@@ -196,7 +196,7 @@ Window* Window::getLegacyNonLayoutAccessibleRelationLabeledBy() const
 
     // #i62723#, #104191# checkboxes and radiobuttons are not supposed to have labels
     if( GetType() == WINDOW_CHECKBOX || GetType() == WINDOW_RADIOBUTTON )
-        return NULL;
+        return nullptr;
 
 //    if( ! ( GetType() == WINDOW_FIXEDTEXT     ||
 //            GetType() == WINDOW_FIXEDLINE     ||
@@ -213,7 +213,7 @@ Window* Window::getLegacyNonLayoutAccessibleRelationLabeledBy() const
 
 Window* Window::getLegacyNonLayoutAccessibleRelationMemberOf() const
 {
-    Window* pWindow = NULL;
+    Window* pWindow = nullptr;
     Window* pFrameWindow = GetParent();
     if ( !pFrameWindow )
     {

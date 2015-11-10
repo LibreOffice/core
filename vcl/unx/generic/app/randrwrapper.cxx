@@ -190,7 +190,7 @@ public:
     }
     XRRScreenConfiguration* XRRGetScreenInfo( Display* i_pDisp, Drawable i_aDrawable )
     {
-        return m_bValid ? ::XRRGetScreenInfo( i_pDisp, i_aDrawable ) : NULL;
+        return m_bValid ? ::XRRGetScreenInfo( i_pDisp, i_aDrawable ) : nullptr;
     }
     void XRRFreeScreenConfigInfo( XRRScreenConfiguration* i_pConfig )
     {
@@ -208,7 +208,7 @@ public:
     }
     XRRScreenSize* XRRConfigSizes( XRRScreenConfiguration* i_pConfig, int* o_nSizes )
     {
-        return m_bValid ? ::XRRConfigSizes( i_pConfig, o_nSizes ) : NULL;
+        return m_bValid ? ::XRRConfigSizes( i_pConfig, o_nSizes ) : nullptr;
     }
     SizeID XRRConfigCurrentConfiguration( XRRScreenConfiguration* i_pConfig, Rotation* o_pRot )
     {
@@ -228,7 +228,7 @@ RandRWrapper::RandRWrapper( Display* pDisplay ) :
         m_bValid = false;
 }
 
-static RandRWrapper* pWrapper = NULL;
+static RandRWrapper* pWrapper = nullptr;
 
 RandRWrapper& RandRWrapper::get( Display* i_pDisplay )
 {
@@ -240,7 +240,7 @@ RandRWrapper& RandRWrapper::get( Display* i_pDisplay )
 void RandRWrapper::releaseWrapper()
 {
     delete pWrapper;
-    pWrapper = NULL;
+    pWrapper = nullptr;
 }
 
 #endif
@@ -295,8 +295,8 @@ int SalDisplay::processRandREvent( XEvent* pEvent )
             {
                 if( m_aScreens[i].m_bInit )
                 {
-                    XRRScreenConfiguration *pConfig = NULL;
-                    XRRScreenSize *pSizes = NULL;
+                    XRRScreenConfiguration *pConfig = nullptr;
+                    XRRScreenSize *pSizes = nullptr;
                     int nSizes = 0;
                     Rotation nRot = 0;
                     SizeID nId = 0;

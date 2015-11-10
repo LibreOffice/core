@@ -156,7 +156,7 @@ void jpeg_svstream_src (j_decompress_ptr cinfo, void* input)
      * manager serially with the same JPEG object.  Caveat programmer.
      */
 
-    if (cinfo->src == NULL)
+    if (cinfo->src == nullptr)
     { /* first time for this JPEG object? */
         cinfo->src = static_cast<jpeg_source_mgr *>(
             (*cinfo->mem->alloc_small) (reinterpret_cast<j_common_ptr>(cinfo), JPOOL_PERMANENT, sizeof(SourceManagerStruct)));
@@ -173,14 +173,14 @@ void jpeg_svstream_src (j_decompress_ptr cinfo, void* input)
     source->pub.term_source = term_source;
     source->stream = stream;
     source->pub.bytes_in_buffer = 0; /* forces fill_input_buffer on first read */
-    source->pub.next_input_byte = NULL; /* until buffer loaded */
+    source->pub.next_input_byte = nullptr; /* until buffer loaded */
 }
 
 JPEGReader::JPEGReader( SvStream& rStream, void* /*pCallData*/, bool bSetLogSize ) :
     mrStream         ( rStream ),
-    mpAcc            ( NULL ),
-    mpAcc1           ( NULL ),
-    mpBuffer         ( NULL ),
+    mpAcc            ( nullptr ),
+    mpAcc1           ( nullptr ),
+    mpBuffer         ( nullptr ),
     mnLastPos        ( rStream.Tell() ),
     mnLastLines      ( 0 ),
     mbSetLogSize     ( bSetLogSize )
@@ -203,34 +203,34 @@ JPEGReader::~JPEGReader()
 unsigned char * JPEGReader::CreateBitmap(JPEGCreateBitmapParam& rParam)
 {
     if (rParam.nWidth > SAL_MAX_INT32 / 8 || rParam.nHeight > SAL_MAX_INT32 / 8)
-        return NULL; // avoid overflows later
+        return nullptr; // avoid overflows later
 
     if (rParam.nWidth == 0 || rParam.nHeight == 0)
-        return NULL;
+        return nullptr;
 
     Size        aSize(rParam.nWidth, rParam.nHeight );
     bool        bGray = rParam.bGray != 0;
 
-    unsigned char * pBmpBuf = NULL;
+    unsigned char * pBmpBuf = nullptr;
 
     if( mpAcc )
     {
         Bitmap::ReleaseAccess( mpAcc );
         maBmp = Bitmap();
-        mpAcc = NULL;
+        mpAcc = nullptr;
     }
 
     sal_uInt64 nSize = aSize.Width();
     nSize *= aSize.Height();
     if (nSize > SAL_MAX_INT32 / (bGray?1:3))
-        return NULL;
+        return nullptr;
 
     // Check if the bitmap is untypically large.
     if (nSize*(bGray?1:3) > MAX_BITMAP_BYTE_SIZE)
     {
         // Do not try to acquire resources for the large bitmap or to
         // read the bitmap into memory.
-        return NULL;
+        return nullptr;
     }
 
     if( bGray )
@@ -295,7 +295,7 @@ unsigned char * JPEGReader::CreateBitmap(JPEGCreateBitmapParam& rParam)
     {
         Bitmap::ReleaseAccess( mpAcc );
         maBmp = Bitmap();
-        mpAcc = NULL;
+        mpAcc = nullptr;
     }
 
     return pBmpBuf;
@@ -460,11 +460,11 @@ ReadState JPEGReader::Read( Graphic& rGraphic )
         {
             FillBitmap();
             delete[] mpBuffer;
-            mpBuffer = NULL;
+            mpBuffer = nullptr;
         }
 
         Bitmap::ReleaseAccess( mpAcc );
-        mpAcc = NULL;
+        mpAcc = nullptr;
 
         if( mrStream.GetError() == ERRCODE_IO_PENDING )
         {

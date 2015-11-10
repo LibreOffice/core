@@ -93,16 +93,16 @@ Window::Window( vcl::Window* pParent, WinBits nStyle )
 {
 
     ImplInitWindowData( WINDOW_WINDOW );
-    ImplInit( pParent, nStyle, NULL );
+    ImplInit( pParent, nStyle, nullptr );
 }
 
 Window::Window( vcl::Window* pParent, const ResId& rResId )
-    : mpWindowImpl(NULL)
+    : mpWindowImpl(nullptr)
 {
     rResId.SetRT( RSC_WINDOW );
     WinBits nStyle = ImplInitRes( rResId );
     ImplInitWindowData( WINDOW_WINDOW );
-    ImplInit( pParent, nStyle, NULL );
+    ImplInit( pParent, nStyle, nullptr );
     ImplLoadRes( rResId );
 
     if ( !(nStyle & WB_HIDE) )
@@ -258,7 +258,7 @@ void Window::dispose()
     if ( pSVData->maWinData.mpCaptureWin == this )
         ReleaseMouse();
     if ( pSVData->maWinData.mpDefDialogParent == this )
-        pSVData->maWinData.mpDefDialogParent = NULL;
+        pSVData->maWinData.mpDefDialogParent = nullptr;
 
 #if OSL_DEBUG_LEVEL > 0
     if ( true ) // always perform these tests in debug builds
@@ -282,7 +282,7 @@ void Window::dispose()
             Application::Abort(OStringToOUString(aTempStr.makeStringAndClear(), RTL_TEXTENCODING_UTF8));   // abort in debug builds, this must be fixed!
         }
 
-        if (mpWindowImpl->mpFrameData != 0)
+        if (mpWindowImpl->mpFrameData != nullptr)
         {
             pTempWin = mpWindowImpl->mpFrameData->mpFirstOverlap;
             while ( pTempWin )
@@ -345,7 +345,7 @@ void Window::dispose()
         }
 
         vcl::Window* pMyParent = GetParent();
-        SystemWindow* pMySysWin = NULL;
+        SystemWindow* pMySysWin = nullptr;
 
         while ( pMyParent )
         {
@@ -369,7 +369,7 @@ void Window::dispose()
     if( mpWindowImpl->mbIsInTaskPaneList )
     {
         vcl::Window* pMyParent = GetParent();
-        SystemWindow* pMySysWin = NULL;
+        SystemWindow* pMySysWin = nullptr;
 
         while ( pMyParent )
         {
@@ -416,7 +416,7 @@ void Window::dispose()
     {
         EndExtTextInput( EndExtTextInputFlags::Complete );
         if ( pSVData->maWinData.mpExtTextInputWin == this )
-            pSVData->maWinData.mpExtTextInputWin = NULL;
+            pSVData->maWinData.mpExtTextInputWin = nullptr;
     }
 
     // check if the focus window is our child
@@ -442,8 +442,8 @@ void Window::dispose()
     {
         if ( mpWindowImpl->mbFrame )
         {
-            pSVData->maWinData.mpFocusWin = NULL;
-            pOverlapWindow->mpWindowImpl->mpLastFocusWindow = NULL;
+            pSVData->maWinData.mpFocusWin = nullptr;
+            pOverlapWindow->mpWindowImpl->mpLastFocusWindow = nullptr;
         }
         else
         {
@@ -467,43 +467,43 @@ void Window::dispose()
             // If the focus was set back to 'this' set it to nothing
             if ( pSVData->maWinData.mpFocusWin == this )
             {
-                pSVData->maWinData.mpFocusWin = NULL;
-                pOverlapWindow->mpWindowImpl->mpLastFocusWindow = NULL;
+                pSVData->maWinData.mpFocusWin = nullptr;
+                pOverlapWindow->mpWindowImpl->mpLastFocusWindow = nullptr;
             }
         }
     }
 
-    if ( pOverlapWindow != 0 &&
+    if ( pOverlapWindow != nullptr &&
          pOverlapWindow->mpWindowImpl->mpLastFocusWindow == this )
-        pOverlapWindow->mpWindowImpl->mpLastFocusWindow = NULL;
+        pOverlapWindow->mpWindowImpl->mpLastFocusWindow = nullptr;
 
     // reset hint for DefModalDialogParent
     if( pSVData->maWinData.mpActiveApplicationFrame == this )
-        pSVData->maWinData.mpActiveApplicationFrame = NULL;
+        pSVData->maWinData.mpActiveApplicationFrame = nullptr;
 
     // reset marked windows
-    if ( mpWindowImpl->mpFrameData != 0 )
+    if ( mpWindowImpl->mpFrameData != nullptr )
     {
         if ( mpWindowImpl->mpFrameData->mpFocusWin == this )
-            mpWindowImpl->mpFrameData->mpFocusWin = NULL;
+            mpWindowImpl->mpFrameData->mpFocusWin = nullptr;
         if ( mpWindowImpl->mpFrameData->mpMouseMoveWin == this )
-            mpWindowImpl->mpFrameData->mpMouseMoveWin = NULL;
+            mpWindowImpl->mpFrameData->mpMouseMoveWin = nullptr;
         if ( mpWindowImpl->mpFrameData->mpMouseDownWin == this )
-            mpWindowImpl->mpFrameData->mpMouseDownWin = NULL;
+            mpWindowImpl->mpFrameData->mpMouseDownWin = nullptr;
     }
 
     // reset Deactivate-Window
     if ( pSVData->maWinData.mpLastDeacWin == this )
-        pSVData->maWinData.mpLastDeacWin = NULL;
+        pSVData->maWinData.mpLastDeacWin = nullptr;
 
     if ( mpWindowImpl->mpFrameData )
     {
         if ( mpWindowImpl->mpFrameData->mnFocusId )
             Application::RemoveUserEvent( mpWindowImpl->mpFrameData->mnFocusId );
-        mpWindowImpl->mpFrameData->mnFocusId = NULL;
+        mpWindowImpl->mpFrameData->mnFocusId = nullptr;
         if ( mpWindowImpl->mpFrameData->mnMouseMoveId )
             Application::RemoveUserEvent( mpWindowImpl->mpFrameData->mnMouseMoveId );
-        mpWindowImpl->mpFrameData->mnMouseMoveId = NULL;
+        mpWindowImpl->mpFrameData->mnMouseMoveId = nullptr;
     }
 
     // release SalGraphics
@@ -568,15 +568,15 @@ void Window::dispose()
             assert (mpWindowImpl->mpFrameData->mpNextFrame.get() != pSysWin);
             pSysWin->mpWindowImpl->mpFrameData->mpNextFrame = mpWindowImpl->mpFrameData->mpNextFrame;
         }
-        mpWindowImpl->mpFrame->SetCallback( NULL, NULL );
+        mpWindowImpl->mpFrame->SetCallback( nullptr, nullptr );
         pSVData->mpDefInst->DestroyFrame( mpWindowImpl->mpFrame );
-        assert (mpWindowImpl->mpFrameData->mnFocusId == NULL);
-        assert (mpWindowImpl->mpFrameData->mnMouseMoveId == NULL);
+        assert (mpWindowImpl->mpFrameData->mnFocusId == nullptr);
+        assert (mpWindowImpl->mpFrameData->mnMouseMoveId == nullptr);
         delete mpWindowImpl->mpFrameData;
     }
 
     // should be the last statements
-    delete mpWindowImpl; mpWindowImpl = NULL;
+    delete mpWindowImpl; mpWindowImpl = nullptr;
 
     OutputDevice::dispose();
 }
@@ -611,32 +611,32 @@ WindowImpl::WindowImpl( WindowType nType )
     maZoom                              = Fraction( 1, 1 );
     maWinRegion                         = vcl::Region(true);
     maWinClipRegion                     = vcl::Region(true);
-    mpWinData                           = NULL;                      // Extra Window Data, that we don't need for all windows
-    mpOverlapData                       = NULL;                      // Overlap Data
-    mpFrameData                         = NULL;                      // Frame Data
-    mpFrame                             = NULL;                      // Pointer to frame window
-    mpSysObj                            = NULL;
-    mpFrameWindow                       = NULL;                      // window to top level parent (same as frame window)
-    mpOverlapWindow                     = NULL;                      // first overlap parent
-    mpBorderWindow                      = NULL;                      // Border-Window
-    mpClientWindow                      = NULL;                      // Client-Window of a FrameWindow
-    mpParent                            = NULL;                      // parent (incl. BorderWindow)
-    mpRealParent                        = NULL;                      // real parent (excl. BorderWindow)
-    mpFirstChild                        = NULL;                      // first child window
-    mpLastChild                         = NULL;                      // last child window
-    mpFirstOverlap                      = NULL;                      // first overlap window (only set in overlap windows)
-    mpLastOverlap                       = NULL;                      // last overlap window (only set in overlap windows)
-    mpPrev                              = NULL;                      // prev window
-    mpNext                              = NULL;                      // next window
-    mpNextOverlap                       = NULL;                      // next overlap window of frame
-    mpLastFocusWindow                   = NULL;                      // window for focus restore
-    mpDlgCtrlDownWindow                 = NULL;                      // window for dialog control
-    mpFirstDel                          = NULL;                      // Dtor notification list
-    mpUserData                          = NULL;                      // user data
-    mpCursor                            = NULL;                      // cursor
-    mpControlFont                       = NULL;                      // font properties
-    mpVCLXWindow                        = NULL;
-    mpAccessibleInfos                   = NULL;
+    mpWinData                           = nullptr;                      // Extra Window Data, that we don't need for all windows
+    mpOverlapData                       = nullptr;                      // Overlap Data
+    mpFrameData                         = nullptr;                      // Frame Data
+    mpFrame                             = nullptr;                      // Pointer to frame window
+    mpSysObj                            = nullptr;
+    mpFrameWindow                       = nullptr;                      // window to top level parent (same as frame window)
+    mpOverlapWindow                     = nullptr;                      // first overlap parent
+    mpBorderWindow                      = nullptr;                      // Border-Window
+    mpClientWindow                      = nullptr;                      // Client-Window of a FrameWindow
+    mpParent                            = nullptr;                      // parent (incl. BorderWindow)
+    mpRealParent                        = nullptr;                      // real parent (excl. BorderWindow)
+    mpFirstChild                        = nullptr;                      // first child window
+    mpLastChild                         = nullptr;                      // last child window
+    mpFirstOverlap                      = nullptr;                      // first overlap window (only set in overlap windows)
+    mpLastOverlap                       = nullptr;                      // last overlap window (only set in overlap windows)
+    mpPrev                              = nullptr;                      // prev window
+    mpNext                              = nullptr;                      // next window
+    mpNextOverlap                       = nullptr;                      // next overlap window of frame
+    mpLastFocusWindow                   = nullptr;                      // window for focus restore
+    mpDlgCtrlDownWindow                 = nullptr;                      // window for dialog control
+    mpFirstDel                          = nullptr;                      // Dtor notification list
+    mpUserData                          = nullptr;                      // user data
+    mpCursor                            = nullptr;                      // cursor
+    mpControlFont                       = nullptr;                      // font properties
+    mpVCLXWindow                        = nullptr;
+    mpAccessibleInfos                   = nullptr;
     maControlForeground                 = Color( COL_TRANSPARENT );  // no foreground set
     maControlBackground                 = Color( COL_TRANSPARENT );  // no background set
     mnLeftBorder                        = 0;                         // left border
@@ -650,8 +650,8 @@ WindowImpl::WindowImpl( WindowType nType )
     mnX                                 = 0;                         // X-Position to Parent
     mnY                                 = 0;                         // Y-Position to Parent
     mnAbsScreenX                        = 0;                         // absolute X-position on screen, used for RTL window positioning
-    mpChildClipRegion                   = NULL;                      // Child-Clip-Region when ClipChildren
-    mpPaintRegion                       = NULL;                      // Paint-ClipRegion
+    mpChildClipRegion                   = nullptr;                      // Child-Clip-Region when ClipChildren
+    mpPaintRegion                       = nullptr;                      // Paint-ClipRegion
     mnStyle                             = 0;                         // style (init in ImplInitWindow)
     mnPrevStyle                         = 0;                         // prevstyle (set in SetStyle)
     mnExtendedStyle                     = 0;                         // extended style (init in ImplInitWindow)
@@ -863,9 +863,9 @@ void Window::ReleaseGraphics( bool bRelease )
     else
         pSVData->maGDIData.mpLastWinGraphics = mpPrevGraphics;
 
-    mpGraphics      = NULL;
-    mpPrevGraphics  = NULL;
-    mpNextGraphics  = NULL;
+    mpGraphics      = nullptr;
+    mpPrevGraphics  = nullptr;
+    mpNextGraphics  = nullptr;
 }
 
 static sal_Int32 CountDPIScaleFactor(sal_Int32 nDPI)
@@ -933,9 +933,9 @@ void Window::ImplInit( vcl::Window* pParent, WinBits nStyle, SystemParentData* p
     if ( mpWindowImpl->mbOverlapWin )
     {
         mpWindowImpl->mpOverlapData                   = new ImplOverlapData;
-        mpWindowImpl->mpOverlapData->mpSaveBackDev    = NULL;
-        mpWindowImpl->mpOverlapData->mpSaveBackRgn    = NULL;
-        mpWindowImpl->mpOverlapData->mpNextBackWin    = NULL;
+        mpWindowImpl->mpOverlapData->mpSaveBackDev    = nullptr;
+        mpWindowImpl->mpOverlapData->mpSaveBackRgn    = nullptr;
+        mpWindowImpl->mpOverlapData->mpNextBackWin    = nullptr;
         mpWindowImpl->mpOverlapData->mnSaveBackSize   = 0;
         mpWindowImpl->mpOverlapData->mbSaveBack       = false;
         mpWindowImpl->mpOverlapData->mnTopLevel       = 1;
@@ -1001,7 +1001,7 @@ void Window::ImplInit( vcl::Window* pParent, WinBits nStyle, SystemParentData* p
                 break;
         }
 
-        SalFrame* pParentFrame = NULL;
+        SalFrame* pParentFrame = nullptr;
         if ( pParent )
             pParentFrame = pParent->mpWindowImpl->mpFrame;
         SalFrame* pFrame;
@@ -1029,16 +1029,16 @@ void Window::ImplInit( vcl::Window* pParent, WinBits nStyle, SystemParentData* p
         assert (pSVData->maWinData.mpFirstFrame.get() != this);
         mpWindowImpl->mpFrameData->mpNextFrame        = pSVData->maWinData.mpFirstFrame;
         pSVData->maWinData.mpFirstFrame = this;
-        mpWindowImpl->mpFrameData->mpFirstOverlap     = NULL;
-        mpWindowImpl->mpFrameData->mpFocusWin         = NULL;
-        mpWindowImpl->mpFrameData->mpMouseMoveWin     = NULL;
-        mpWindowImpl->mpFrameData->mpMouseDownWin     = NULL;
-        mpWindowImpl->mpFrameData->mpFirstBackWin     = NULL;
+        mpWindowImpl->mpFrameData->mpFirstOverlap     = nullptr;
+        mpWindowImpl->mpFrameData->mpFocusWin         = nullptr;
+        mpWindowImpl->mpFrameData->mpMouseMoveWin     = nullptr;
+        mpWindowImpl->mpFrameData->mpMouseDownWin     = nullptr;
+        mpWindowImpl->mpFrameData->mpFirstBackWin     = nullptr;
         mpWindowImpl->mpFrameData->mpFontCollection   = pSVData->maGDIData.mpScreenFontList;
         mpWindowImpl->mpFrameData->mpFontCache        = pSVData->maGDIData.mpScreenFontCache;
         mpWindowImpl->mpFrameData->mnAllSaveBackSize  = 0;
-        mpWindowImpl->mpFrameData->mnFocusId          = 0;
-        mpWindowImpl->mpFrameData->mnMouseMoveId      = 0;
+        mpWindowImpl->mpFrameData->mnFocusId          = nullptr;
+        mpWindowImpl->mpFrameData->mnMouseMoveId      = nullptr;
         mpWindowImpl->mpFrameData->mnLastMouseX       = -1;
         mpWindowImpl->mpFrameData->mnLastMouseY       = -1;
         mpWindowImpl->mpFrameData->mnBeforeLastMouseX = -1;
@@ -1259,7 +1259,7 @@ void Window::drawFrameDev( const Point& rPt, const Point& rDevPt, const Size& rD
     GDIMetaFile*    pOldMetaFile = mpMetaFile;
     bool            bOldMap = mbMap;
     RasterOp        eOldROP = GetRasterOp();
-    mpMetaFile = NULL;
+    mpMetaFile = nullptr;
     mbMap = false;
     SetRasterOp( ROP_OVERPAINT );
 
@@ -1297,14 +1297,14 @@ ImplWinData* Window::ImplGetWinData() const
         static const char* pNoNWF = getenv( "SAL_NO_NWF" );
 
         const_cast<vcl::Window*>(this)->mpWindowImpl->mpWinData = new ImplWinData;
-        mpWindowImpl->mpWinData->mpExtOldText     = NULL;
-        mpWindowImpl->mpWinData->mpExtOldAttrAry  = NULL;
-        mpWindowImpl->mpWinData->mpCursorRect     = NULL;
+        mpWindowImpl->mpWinData->mpExtOldText     = nullptr;
+        mpWindowImpl->mpWinData->mpExtOldAttrAry  = nullptr;
+        mpWindowImpl->mpWinData->mpCursorRect     = nullptr;
         mpWindowImpl->mpWinData->mnCursorExtWidth = 0;
-        mpWindowImpl->mpWinData->mpCompositionCharRects = NULL;
+        mpWindowImpl->mpWinData->mpCompositionCharRects = nullptr;
         mpWindowImpl->mpWinData->mnCompositionCharRects = 0;
-        mpWindowImpl->mpWinData->mpFocusRect      = NULL;
-        mpWindowImpl->mpWinData->mpTrackRect      = NULL;
+        mpWindowImpl->mpWinData->mpFocusRect      = nullptr;
+        mpWindowImpl->mpWinData->mpTrackRect      = nullptr;
         mpWindowImpl->mpWinData->mnTrackFlags     = 0;
         mpWindowImpl->mpWinData->mnIsTopWindow  = (sal_uInt16) ~0;  // not initialized yet, 0/1 will indicate TopWindow (see IsTopWindow())
         mpWindowImpl->mpWinData->mbMouseOver      = false;
@@ -1352,7 +1352,7 @@ SalGraphics* Window::ImplGetFrameGraphics() const
         OutputDevice* pFrameWinOutDev = mpWindowImpl->mpFrameWindow;
         if ( ! pFrameWinOutDev->AcquireGraphics() )
         {
-            return NULL;
+            return nullptr;
         }
     }
     mpWindowImpl->mpFrameWindow->mpGraphics->ResetClipRegion();
@@ -1418,7 +1418,7 @@ void Window::ImplAddDel( ImplDelData* pDel ) // TODO: make "const" when incompat
 
 void Window::ImplRemoveDel( ImplDelData* pDel ) // TODO: make "const" when incompatibility ok
 {
-    pDel->mpWindow = NULL;      // #112873# pDel is not associated with a Window anymore
+    pDel->mpWindow = nullptr;      // #112873# pDel is not associated with a Window anymore
 
     if ( IsDisposed() )
         return;
@@ -1577,8 +1577,8 @@ void Window::ImplPosSizeWindow( long nX, long nY,
     long    nOldOutOffY     = mnOutOffY;
     long    nOldOutWidth    = mnOutWidth;
     long    nOldOutHeight   = mnOutHeight;
-    vcl::Region* pOverlapRegion  = NULL;
-    vcl::Region* pOldRegion      = NULL;
+    vcl::Region* pOverlapRegion  = nullptr;
+    vcl::Region* pOldRegion      = nullptr;
 
     if ( IsReallyVisible() )
     {
@@ -1829,7 +1829,7 @@ void Window::ImplPosSizeWindow( long nX, long nY,
                     else
                         bInvalidate = true;
                     if ( bInvalidate )
-                        ImplInvalidateFrameRegion( NULL, InvalidateFlags::Children );
+                        ImplInvalidateFrameRegion( nullptr, InvalidateFlags::Children );
                 }
                 else
                 {
@@ -1888,8 +1888,8 @@ void Window::ImplNewInputContext()
     SalInputContext         aNewContext;
     const vcl::Font&        rFont = rInputContext.GetFont();
     const OUString&         rFontName = rFont.GetName();
-    ImplFontEntry*          pFontEntry = NULL;
-    aNewContext.mpFont = NULL;
+    ImplFontEntry*          pFontEntry = nullptr;
+    aNewContext.mpFont = nullptr;
     if (!rFontName.isEmpty())
     {
         OutputDevice *pFocusWinOutDev = pFocusWin->GetOutDev();
@@ -2153,8 +2153,8 @@ void Window::SetBorderStyle( WindowBorderStyle nBorderStyle )
             // borders in case of NWF drawing. So they need a method to remove their border window
             VclPtr<vcl::Window> pBorderWin = mpWindowImpl->mpBorderWindow;
             // remove us as border window's client
-            pBorderWin->mpWindowImpl->mpClientWindow = NULL;
-            mpWindowImpl->mpBorderWindow = NULL;
+            pBorderWin->mpWindowImpl->mpClientWindow = nullptr;
+            mpWindowImpl->mpBorderWindow = nullptr;
             mpWindowImpl->mpRealParent = pBorderWin->mpWindowImpl->mpParent;
             // reparent us above the border window
             SetParent( pBorderWin->mpWindowImpl->mpParent );
@@ -2246,7 +2246,7 @@ void Window::SetCursorRect( const Rectangle* pRect, long nExtTextInputWidth )
         else
         {
             delete pWinData->mpCursorRect;
-            pWinData->mpCursorRect = NULL;
+            pWinData->mpCursorRect = nullptr;
         }
     }
     else
@@ -2278,7 +2278,7 @@ void Window::SetCompositionCharRect( const Rectangle* pRect, long nCompositionLe
     ImplWinData* pWinData = ImplGetWinData();
     delete[] pWinData->mpCompositionCharRects;
     pWinData->mbVertical = bVertical;
-    pWinData->mpCompositionCharRects = NULL;
+    pWinData->mpCompositionCharRects = nullptr;
     pWinData->mnCompositionCharRects = nCompositionLength;
     if ( pRect && (nCompositionLength > 0) )
     {
@@ -2468,7 +2468,7 @@ void Window::Show(bool bVisible, ShowFlags nFlags)
                 InvalidateFlags nInvalidateFlags = InvalidateFlags::Children;
                 if( ! IsPaintTransparent() )
                     nInvalidateFlags |= InvalidateFlags::NoTransparent;
-                ImplInvalidate( NULL, nInvalidateFlags );
+                ImplInvalidate( nullptr, nInvalidateFlags );
                 ImplGenerateMouseMove();
             }
         }
@@ -2555,7 +2555,7 @@ Size Window::GetSizePixel() const
     {
         ImplDelData aDogtag( const_cast<Window*>(this) );
         mpWindowImpl->mpFrameData->maResizeIdle.Stop();
-        mpWindowImpl->mpFrameData->maResizeIdle.GetIdleHdl().Call( NULL );
+        mpWindowImpl->mpFrameData->maResizeIdle.GetIdleHdl().Call( nullptr );
         if( aDogtag.IsDead() )
             return Size(0,0);
     }
@@ -3400,7 +3400,7 @@ Reference< XClipboard > Window::GetClipboard()
         return mpWindowImpl->mpFrameData->mxClipboard;
     }
 
-    return static_cast < XClipboard * > (0);
+    return static_cast < XClipboard * > (nullptr);
 }
 
 Reference< XClipboard > Window::GetPrimarySelection()
@@ -3443,7 +3443,7 @@ Reference< XClipboard > Window::GetPrimarySelection()
         return mpWindowImpl->mpFrameData->mxSelection;
     }
 
-    return static_cast < XClipboard * > (0);
+    return static_cast < XClipboard * > (nullptr);
 }
 
 void Window::RecordLayoutData( vcl::ControlLayoutData* pLayout, const Rectangle& rRect )
@@ -3452,12 +3452,12 @@ void Window::RecordLayoutData( vcl::ControlLayoutData* pLayout, const Rectangle&
     mpOutDevData->mpRecordLayout = pLayout;
     mpOutDevData->maRecordRect = rRect;
     Paint(*this, rRect);
-    mpOutDevData->mpRecordLayout = NULL;
+    mpOutDevData->mpRecordLayout = nullptr;
 }
 
 void Window::DrawSelectionBackground( const Rectangle& rRect, sal_uInt16 highlight, bool bChecked, bool bDrawBorder, bool bDrawExtBorderOnly )
 {
-    DrawSelectionBackground( rRect, highlight, bChecked, bDrawBorder, bDrawExtBorderOnly, 0, NULL, NULL );
+    DrawSelectionBackground( rRect, highlight, bChecked, bDrawBorder, bDrawExtBorderOnly, 0, nullptr, nullptr );
 }
 
 void Window::DrawSelectionBackground( const Rectangle& rRect,
@@ -3662,7 +3662,7 @@ void Window::ImplIncModalCount()
         {
             pParent = pParent->GetParent();
         }
-        pFrameWindow = pParent ? pParent->mpWindowImpl->mpFrameWindow.get() : NULL;
+        pFrameWindow = pParent ? pParent->mpWindowImpl->mpFrameWindow.get() : nullptr;
     }
 }
 void Window::ImplDecModalCount()
@@ -3676,7 +3676,7 @@ void Window::ImplDecModalCount()
         {
             pParent = pParent->GetParent();
         }
-        pFrameWindow = pParent ? pParent->mpWindowImpl->mpFrameWindow.get() : NULL;
+        pFrameWindow = pParent ? pParent->mpWindowImpl->mpFrameWindow.get() : nullptr;
     }
 }
 
@@ -3897,7 +3897,7 @@ void Window::ApplySettings(vcl::RenderContext& /*rRenderContext*/)
 const SystemEnvData* Window::GetSystemData() const
 {
 
-    return mpWindowImpl->mpFrame ? mpWindowImpl->mpFrame->GetSystemData() : NULL;
+    return mpWindowImpl->mpFrame ? mpWindowImpl->mpFrame->GetSystemData() : nullptr;
 }
 
 Any Window::GetSystemDataAny() const

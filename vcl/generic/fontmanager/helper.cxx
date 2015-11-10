@@ -79,7 +79,7 @@ OUString getOfficePath( enum whichOfficePath ePath )
         #if OSL_DEBUG_LEVEL > 1
         oslFileError eErr =
         #endif
-        osl_createDirectoryPath( aUPath.pData, NULL, NULL );
+        osl_createDirectoryPath( aUPath.pData, nullptr, nullptr );
         #if OSL_DEBUG_LEVEL > 1
         fprintf( stderr, "try to create \"%s\" = %d\n", OUStringToOString( aUPath, RTL_TEXTENCODING_UTF8 ).getStr(), eErr );
         #endif

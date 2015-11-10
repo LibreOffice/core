@@ -77,7 +77,7 @@ extern "C" {
         if( atk_get_focus_object() == atk_obj )
         {
             SAL_WNODEPRECATED_DECLARATIONS_PUSH
-            atk_focus_tracker_notify( NULL );
+            atk_focus_tracker_notify( nullptr );
             SAL_WNODEPRECATED_DECLARATIONS_POP
         }
         g_object_unref( G_OBJECT( atk_obj ) );
@@ -101,7 +101,7 @@ void AtkListener::disposing( const lang::EventObject& ) throw (uno::RuntimeExcep
 
         // Release the wrapper object so that it can vanish ..
         g_object_unref( mpWrapper );
-        mpWrapper = NULL;
+        mpWrapper = nullptr;
     }
 }
 
@@ -111,7 +111,7 @@ static AtkObject *getObjFromAny( const uno::Any &rAny )
 {
     uno::Reference< accessibility::XAccessible > xAccessible;
     rAny >>= xAccessible;
-    return xAccessible.is() ? atk_object_wrapper_ref( xAccessible ) : NULL;
+    return xAccessible.is() ? atk_object_wrapper_ref( xAccessible ) : nullptr;
 }
 
 /*****************************************************************************/
@@ -154,7 +154,7 @@ void AtkListener::handleChildAdded(
     const uno::Reference< accessibility::XAccessibleContext >& rxParent,
     const uno::Reference< accessibility::XAccessible>& rxAccessible)
 {
-    AtkObject * pChild = rxAccessible.is() ? atk_object_wrapper_ref( rxAccessible ) : NULL;
+    AtkObject * pChild = rxAccessible.is() ? atk_object_wrapper_ref( rxAccessible ) : nullptr;
 
     if( pChild )
     {
@@ -490,7 +490,7 @@ void AtkListener::notifyEvent( const accessibility::AccessibleEventObject& aEven
                     const char *col;
             } aSignalNames[] =
             {
-                { NULL, NULL }, // dummy
+                { nullptr, nullptr }, // dummy
                 { "row_inserted", "column_inserted" }, // INSERT = 1
                 { "row_deleted", "column_deleted" } // DELETE = 2
             };

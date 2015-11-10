@@ -1124,7 +1124,7 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
             aTmpSize  = pThis->GetPaperSizePixel();
         }
         const Rectangle aOutputRect( aPageOffset, aTmpSize );
-        bool bTiling = dynamic_cast<Printer*>(this) != NULL;
+        bool bTiling = dynamic_cast<Printer*>(this) != nullptr;
 
         // iterate over all aCCList members and generate bitmaps for the special ones
         for( aCurr = aCCList.begin(); aCurr != aLast; ++aCurr )

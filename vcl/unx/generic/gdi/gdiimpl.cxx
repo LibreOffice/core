@@ -124,7 +124,7 @@ namespace
 X11SalGraphicsImpl::X11SalGraphicsImpl(X11SalGraphics& rParent):
     mrParent(rParent),
     mnBrushColor( MAKE_SALCOLOR( 0xFF, 0xFF, 0XFF ) ),
-    mpBrushGC(NULL),
+    mpBrushGC(nullptr),
     mnBrushPixel(0),
     mbPenGC(false),
     mbBrushGC(false),
@@ -136,16 +136,16 @@ X11SalGraphicsImpl::X11SalGraphicsImpl(X11SalGraphics& rParent):
     mbTrackingGC(false),
     mbDitherBrush(false),
     mbXORMode(false),
-    mpPenGC(NULL),
+    mpPenGC(nullptr),
     mnPenColor( MAKE_SALCOLOR( 0x00, 0x00, 0x00 ) ),
     mnPenPixel(0),
-    mpMonoGC(NULL),
-    mpCopyGC(NULL),
-    mpMaskGC(NULL),
-    mpInvertGC(NULL),
-    mpInvert50GC(NULL),
-    mpStippleGC(NULL),
-    mpTrackingGC(NULL)
+    mpMonoGC(nullptr),
+    mpCopyGC(nullptr),
+    mpMaskGC(nullptr),
+    mpInvertGC(nullptr),
+    mpInvert50GC(nullptr),
+    mpStippleGC(nullptr),
+    mpTrackingGC(nullptr)
 {
 }
 
@@ -163,7 +163,7 @@ bool X11SalGraphicsImpl::FillPixmapFromScreen( X11Pixmap* pPixmap, int nX, int n
 {
     //TODO lfrb: don't hardcode the depth
     Display* pDpy = mrParent.GetXDisplay();
-    GC aTmpGC = XCreateGC( pDpy, pPixmap->GetPixmap(), 0, NULL );
+    GC aTmpGC = XCreateGC( pDpy, pPixmap->GetPixmap(), 0, nullptr );
 
     if( !aTmpGC )
     {
@@ -191,7 +191,7 @@ bool X11SalGraphicsImpl::RenderPixmapToScreen( X11Pixmap* pPixmap, X11Pixmap* /*
     GC aFontGC = mrParent.GetFontGC();
 
     // The GC can't be null, otherwise we'd have no clip region
-    if( aFontGC == NULL )
+    if( aFontGC == nullptr )
     {
         SAL_WARN( "vcl", "no valid GC to render pixmap" );
         return false;
@@ -234,7 +234,7 @@ XID X11SalGraphicsImpl::GetXRenderPicture()
         if( !pXRenderFormat )
             return 0;
         // get the matching xrender target for drawable
-        mrParent.m_aXRenderPicture = rRenderPeer.CreatePicture( mrParent.hDrawable_, pXRenderFormat, 0, NULL );
+        mrParent.m_aXRenderPicture = rRenderPeer.CreatePicture( mrParent.hDrawable_, pXRenderFormat, 0, nullptr );
     }
 
     {
@@ -623,7 +623,7 @@ void X11SalGraphicsImpl::copyArea ( long nDestX,    long nDestY,
                                 sal_uInt16 )
 {
     SalTwoRect aPosAry(nSrcX, nSrcY, nSrcWidth, nSrcHeight, nDestX, nDestY, nSrcWidth, nSrcHeight);
-    copyBits(aPosAry, 0);
+    copyBits(aPosAry, nullptr);
 }
 
 void X11SalGraphicsImpl::drawBitmap( const SalTwoRect& rPosAry, const SalBitmap& rSalBitmap )
@@ -660,7 +660,7 @@ void X11SalGraphicsImpl::drawBitmap( const SalTwoRect& rPosAry,
 
     // decide if alpha masking or transparency masking is needed
     BitmapBuffer* pAlphaBuffer = const_cast<SalBitmap&>(rMaskBitmap).AcquireBuffer( BITMAP_READ_ACCESS );
-    if( pAlphaBuffer != NULL )
+    if( pAlphaBuffer != nullptr )
     {
         int nMaskFormat = pAlphaBuffer->mnFormat;
         const_cast<SalBitmap&>(rMaskBitmap).ReleaseBuffer( pAlphaBuffer, BITMAP_READ_ACCESS );
@@ -829,7 +829,7 @@ bool X11SalGraphicsImpl::drawAlphaBitmap( const SalTwoRect& rTR,
     XRenderPictFormat* pSrcVisFmt = rPeer.FindVisualFormat( pSrcXVisual );
     if( !pSrcVisFmt )
         return false;
-    Picture aSrcPic = rPeer.CreatePicture( aSrcPM, pSrcVisFmt, 0, NULL );
+    Picture aSrcPic = rPeer.CreatePicture( aSrcPM, pSrcVisFmt, 0, nullptr );
     if( !aSrcPic )
         return false;
 
@@ -1003,7 +1003,7 @@ void X11SalGraphicsImpl::ResetClipRegion()
         mbTrackingGC    = false;
 
         XDestroyRegion( mrParent.mpClipRegion );
-        mrParent.mpClipRegion    = NULL;
+        mrParent.mpClipRegion    = nullptr;
     }
 }
 
@@ -1069,7 +1069,7 @@ bool X11SalGraphicsImpl::setClipRegion( const vcl::Region& i_rClip )
     if( XEmptyRegion( mrParent.mpClipRegion ) )
     {
         XDestroyRegion( mrParent.mpClipRegion );
-        mrParent.mpClipRegion= NULL;
+        mrParent.mpClipRegion= nullptr;
     }
     return true;
 }
@@ -1335,7 +1335,7 @@ void X11SalGraphicsImpl::drawPolyPolygon( sal_uInt32 nPoly,
     if( mnBrushColor != SALCOLOR_NONE )
     {
         sal_uInt32      i, n;
-        Region          pXRegA  = NULL;
+        Region          pXRegA  = nullptr;
 
         for( i = 0; i < nPoly; i++ ) {
             n = pPoints[i];
@@ -1695,7 +1695,7 @@ SalColor X11SalGraphicsImpl::getPixel( long nX, long nY )
 SalBitmap *X11SalGraphicsImpl::getBitmap( long nX, long nY, long nDX, long nDY )
 {
     if( mrParent.bPrinter_ && !mrParent.bVirDev_ )
-        return NULL;
+        return nullptr;
 
     bool bFakeWindowBG = false;
 

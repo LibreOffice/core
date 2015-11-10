@@ -81,13 +81,13 @@ struct GLWindow
       char* lookHere;
       char* deleteThis;
 
-      if (extString==NULL)
+      if (extString==nullptr)
       {
          return GL_FALSE;
       }
 
       deleteThis=lookHere=static_cast<char*>(malloc(strlen(reinterpret_cast<const char*>(extString))+1));
-      if (lookHere==NULL)
+      if (lookHere==nullptr)
       {
          return GL_FALSE;
       }
@@ -95,14 +95,14 @@ struct GLWindow
       /* strtok() will modify string, so copy it somewhere */
       strcpy(lookHere, reinterpret_cast<const char*>(extString));
 
-      while ((word=strtok(lookHere, " "))!=NULL)
+      while ((word=strtok(lookHere, " "))!=nullptr)
       {
          if (strcmp(word, reinterpret_cast<const char*>(extName))==0)
          {
             flag=GL_TRUE;
             break;
          }
-         lookHere=NULL; /* get next token */
+         lookHere=nullptr; /* get next token */
       }
       free(static_cast<void*>(deleteThis));
 
@@ -149,22 +149,22 @@ struct GLWindow
 #elif defined( ANDROID )
 #elif defined( LIBO_HEADLESS )
 #elif defined( UNX )
-        dpy(NULL),
+        dpy(nullptr),
         screen(0),
         win(0),
         pix(0),
 #if defined( GLX_EXT_texture_from_pixmap )
-        fbc(0),
+        fbc(nullptr),
 #endif
-        vi(NULL),
-        ctx(0),
+        vi(nullptr),
+        ctx(nullptr),
         glPix(0),
-        GLXExtensions(NULL),
+        GLXExtensions(nullptr),
 #endif
         bpp(0),
         Width(0),
         Height(0),
-        GLExtensions(NULL),
+        GLExtensions(nullptr),
         bMultiSampleSupported(false)
     {
     }
@@ -186,7 +186,7 @@ public:
     void requestLegacyContext();
     void requestSingleBufferedRendering();
 
-    bool init(vcl::Window* pParent = 0);
+    bool init(vcl::Window* pParent = nullptr);
     bool init(SystemChildWindow* pChildWindow);
 
 // these methods are for the deep platform layer, don't use them in normal code

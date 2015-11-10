@@ -168,9 +168,9 @@ struct ImplPostEventData
     ScrollEvent     maScrollEvent;
 
        ImplPostEventData( sal_uLong nEvent, vcl::Window* pWin, const KeyEvent& rKeyEvent ) :
-        mnEvent( nEvent ), mpWin( pWin ), mnEventId( 0 ), maKeyEvent( rKeyEvent ) {}
+        mnEvent( nEvent ), mpWin( pWin ), mnEventId( nullptr ), maKeyEvent( rKeyEvent ) {}
        ImplPostEventData( sal_uLong nEvent, vcl::Window* pWin, const MouseEvent& rMouseEvent ) :
-        mnEvent( nEvent ), mpWin( pWin ), mnEventId( 0 ), maMouseEvent( rMouseEvent ) {}
+        mnEvent( nEvent ), mpWin( pWin ), mnEventId( nullptr ), maMouseEvent( rMouseEvent ) {}
 #if !HAVE_FEATURE_DESKTOP
        ImplPostEventData( sal_uLong nEvent, vcl::Window* pWin, const ZoomEvent& rZoomEvent ) :
         mnEvent( nEvent ), mpWin( pWin ), mnEventId( 0 ), maZoomEvent( rZoomEvent ) {}
@@ -189,7 +189,7 @@ Application* GetpApp()
 {
     ImplSVData* pSVData = ImplGetSVData();
     if ( !pSVData )
-        return NULL;
+        return nullptr;
     return pSVData->mpApp;
 }
 
@@ -207,7 +207,7 @@ Application::~Application()
 {
     ImplDeInitSVData();
     DeInitSalData();
-    ImplGetSVData()->mpApp = NULL;
+    ImplGetSVData()->mpApp = nullptr;
 }
 
 int Application::Main()
@@ -326,7 +326,7 @@ sal_uLong Application::GetReservedKeyCodeCount()
 const vcl::KeyCode* Application::GetReservedKeyCode( sal_uLong i )
 {
     if( i >= GetReservedKeyCodeCount() )
-        return NULL;
+        return nullptr;
     else
         return &ImplReservedKeys::get()->first[i].mKeyCode;
 }
@@ -350,12 +350,12 @@ IMPL_STATIC_LINK_NOARG_TYPED( ImplSVAppData, ImplEndAllDialogsMsg, void*, void )
 
 void Application::EndAllDialogs()
 {
-    Application::PostUserEvent( LINK( NULL, ImplSVAppData, ImplEndAllDialogsMsg ) );
+    Application::PostUserEvent( LINK( nullptr, ImplSVAppData, ImplEndAllDialogsMsg ) );
 }
 
 void Application::EndAllPopups()
 {
-    Application::PostUserEvent( LINK( NULL, ImplSVAppData, ImplEndAllPopupsMsg ) );
+    Application::PostUserEvent( LINK( nullptr, ImplSVAppData, ImplEndAllPopupsMsg ) );
 }
 
 
@@ -406,7 +406,7 @@ namespace
     {
         Application::EndAllPopups();
         Application::EndAllDialogs();
-        Application::PostUserEvent( LINK( NULL, ImplSVAppData, ImplPrepareExitMsg ) );
+        Application::PostUserEvent( LINK( nullptr, ImplSVAppData, ImplPrepareExitMsg ) );
     }
 }
 
@@ -418,7 +418,7 @@ IMPL_LINK_NOARG_TYPED(ImplSVAppData, VclEventTestingHdl, Idle *, void)
     }
     else
     {
-        Application::PostUserEvent( LINK( NULL, ImplSVAppData, ImplVclEventTestingHdl ) );
+        Application::PostUserEvent( LINK( nullptr, ImplSVAppData, ImplVclEventTestingHdl ) );
     }
 }
 
@@ -441,7 +441,7 @@ IMPL_STATIC_LINK_NOARG_TYPED( ImplSVAppData, ImplVclEventTestingHdl, void*, void
             SAL_INFO("vcl.eventtesting", "Event Input exhausted, exit next cycle");
             pSVData->maAppData.mnEventTestLimit = 0;
         }
-        Application::PostUserEvent( LINK( NULL, ImplSVAppData, ImplVclEventTestingHdl ) );
+        Application::PostUserEvent( LINK( nullptr, ImplSVAppData, ImplVclEventTestingHdl ) );
     }
 }
 
@@ -565,7 +565,7 @@ IMPL_STATIC_LINK_NOARG_TYPED( ImplSVAppData, ImplQuitMsg, void*, void )
 
 void Application::Quit()
 {
-    Application::PostUserEvent( LINK( NULL, ImplSVAppData, ImplQuitMsg ) );
+    Application::PostUserEvent( LINK( nullptr, ImplSVAppData, ImplQuitMsg ) );
 }
 
 comphelper::SolarMutex& Application::GetSolarMutex()
@@ -679,7 +679,7 @@ void Application::SetSettings( const AllSettings& rSettings )
                 pSVData->mpResMgr )
         {
             delete pSVData->mpResMgr;
-            pSVData->mpResMgr = NULL;
+            pSVData->mpResMgr = nullptr;
         }
         ResMgr::SetDefaultLocale( rSettings.GetUILanguageTag() );
         *pSVData->maAppData.mpSettings = rSettings;
@@ -689,7 +689,7 @@ void Application::SetSettings( const AllSettings& rSettings )
             DataChangedEvent aDCEvt( DataChangedEventType::SETTINGS, &aOldSettings, nChangeFlags );
 
             // notify data change handler
-            ImplCallEventListeners( VCLEVENT_APPLICATION_DATACHANGED, NULL, &aDCEvt);
+            ImplCallEventListeners( VCLEVENT_APPLICATION_DATACHANGED, nullptr, &aDCEvt);
 
             // Update all windows
             vcl::Window* pFirstFrame = pSVData->maWinData.mpFirstFrame;
@@ -883,14 +883,14 @@ bool Application::HandleKey( sal_uLong nEvent, vcl::Window *pWin, KeyEvent* pKey
 ImplSVEvent * Application::PostKeyEvent( sal_uLong nEvent, vcl::Window *pWin, KeyEvent* pKeyEvent )
 {
     const SolarMutexGuard aGuard;
-    ImplSVEvent * nEventId = 0;
+    ImplSVEvent * nEventId = nullptr;
 
     if( pWin && pKeyEvent )
     {
         ImplPostEventData* pPostEventData = new ImplPostEventData( nEvent, pWin, *pKeyEvent );
 
         nEventId = PostUserEvent(
-                       LINK( NULL, Application, PostEventHandler ),
+                       LINK( nullptr, Application, PostEventHandler ),
                        pPostEventData );
 
         if( nEventId )
@@ -908,7 +908,7 @@ ImplSVEvent * Application::PostKeyEvent( sal_uLong nEvent, vcl::Window *pWin, Ke
 ImplSVEvent * Application::PostMouseEvent( sal_uLong nEvent, vcl::Window *pWin, MouseEvent* pMouseEvent )
 {
     const SolarMutexGuard aGuard;
-    ImplSVEvent * nEventId = 0;
+    ImplSVEvent * nEventId = nullptr;
 
     if( pWin && pMouseEvent )
     {
@@ -923,7 +923,7 @@ ImplSVEvent * Application::PostMouseEvent( sal_uLong nEvent, vcl::Window *pWin, 
         ImplPostEventData* pPostEventData = new ImplPostEventData( nEvent, pWin, aTransformedEvent );
 
         nEventId = PostUserEvent(
-                       LINK( NULL, Application, PostEventHandler ),
+                       LINK( nullptr, Application, PostEventHandler ),
                        pPostEventData );
 
         if( nEventId )
@@ -986,12 +986,12 @@ IMPL_STATIC_LINK_TYPED( Application, PostEventHandler, void*, pCallData, void )
 
         default:
             nEvent = 0;
-            pEventData = NULL;
+            pEventData = nullptr;
         break;
     };
 
     if( pData->mpWin && pData->mpWin.get()->mpWindowImpl->mpFrameWindow.get() && pEventData )
-        ImplWindowFrameProc( pData->mpWin.get()->mpWindowImpl->mpFrameWindow.get(), NULL, (sal_uInt16) nEvent, pEventData );
+        ImplWindowFrameProc( pData->mpWin.get()->mpWindowImpl->mpFrameWindow.get(), nullptr, (sal_uInt16) nEvent, pEventData );
 
     // remove this event from list of posted events, watch for destruction of internal data
     ::std::list< ImplPostEventPair >::iterator aIter( aPostedEventList.begin() );
@@ -1036,7 +1036,7 @@ ImplSVEvent * Application::PostUserEvent( const Link<void*,void>& rLink, void* p
     ImplSVEvent* pSVEvent = new ImplSVEvent;
     pSVEvent->mpData    = pCaller;
     pSVEvent->maLink    = rLink;
-    pSVEvent->mpWindow  = NULL;
+    pSVEvent->mpWindow  = nullptr;
     pSVEvent->mbCall    = true;
     if (bReferenceLink)
     {
@@ -1049,10 +1049,10 @@ ImplSVEvent * Application::PostUserEvent( const Link<void*,void>& rLink, void* p
     }
 
     vcl::Window* pDefWindow = ImplGetDefaultWindow();
-    if ( pDefWindow == 0 || !pDefWindow->ImplGetFrame()->PostEvent( pSVEvent ) )
+    if ( pDefWindow == nullptr || !pDefWindow->ImplGetFrame()->PostEvent( pSVEvent ) )
     {
         delete pSVEvent;
-        pSVEvent = 0;
+        pSVEvent = nullptr;
     }
     return pSVEvent;
 }
@@ -1159,7 +1159,7 @@ long    Application::GetTopWindowCount()
 {
     long nRet = 0;
     ImplSVData* pSVData = ImplGetSVData();
-    vcl::Window *pWin = pSVData ? pSVData->maWinData.mpFirstFrame.get() : NULL;
+    vcl::Window *pWin = pSVData ? pSVData->maWinData.mpFirstFrame.get() : nullptr;
     while( pWin )
     {
         if( pWin->ImplGetWindow()->IsTopWindow() )
@@ -1173,7 +1173,7 @@ vcl::Window* Application::GetTopWindow( long nIndex )
 {
     long nIdx = 0;
     ImplSVData* pSVData = ImplGetSVData();
-    vcl::Window *pWin = pSVData ? pSVData->maWinData.mpFirstFrame.get() : NULL;
+    vcl::Window *pWin = pSVData ? pSVData->maWinData.mpFirstFrame.get() : nullptr;
     while( pWin )
     {
         if( pWin->ImplGetWindow()->IsTopWindow() )
@@ -1185,7 +1185,7 @@ vcl::Window* Application::GetTopWindow( long nIndex )
         }
         pWin = pWin->mpWindowImpl->mpFrameData->mpNextFrame;
     }
-    return NULL;
+    return nullptr;
 }
 
 vcl::Window* Application::GetActiveTopWindow()
@@ -1197,7 +1197,7 @@ vcl::Window* Application::GetActiveTopWindow()
             return pWin;
         pWin = pWin->mpWindowImpl->mpParent;
     }
-    return NULL;
+    return nullptr;
 }
 
 void Application::SetAppName( const OUString& rUniqueName )
@@ -1417,7 +1417,7 @@ vcl::Window* Application::GetDefDialogParent()
     // #103442# find some useful dialog parent if there
     // was no default set
     // NOTE: currently even the default is not used
-    if( false && pSVData->maWinData.mpDefDialogParent.get() != NULL )
+    if( false && pSVData->maWinData.mpDefDialogParent.get() != nullptr )
         return pSVData->maWinData.mpDefDialogParent;
     else
     {
@@ -1426,8 +1426,8 @@ vcl::Window* Application::GetDefDialogParent()
         // as DefDialogParent
 
         // current focus frame
-        vcl::Window *pWin = NULL;
-        if( (pWin = pSVData->maWinData.mpFocusWin) != NULL )
+        vcl::Window *pWin = nullptr;
+        if( (pWin = pSVData->maWinData.mpFocusWin) != nullptr )
         {
             while( pWin->mpWindowImpl && pWin->mpWindowImpl->mpParent )
                 pWin = pWin->mpWindowImpl->mpParent;
@@ -1436,8 +1436,8 @@ vcl::Window* Application::GetDefDialogParent()
             if( !pWin->mpWindowImpl )
             {
                 OSL_FAIL( "Window hierarchy corrupted!" );
-                pSVData->maWinData.mpFocusWin = NULL;   // avoid further access
-                return NULL;
+                pSVData->maWinData.mpFocusWin = nullptr;   // avoid further access
+                return nullptr;
             }
 
             if( (pWin->mpWindowImpl->mnStyle & WB_INTROWIN) == 0 )
@@ -1446,7 +1446,7 @@ vcl::Window* Application::GetDefDialogParent()
             }
         }
         // last active application frame
-        if( NULL != (pWin = pSVData->maWinData.mpActiveApplicationFrame) )
+        if( nullptr != (pWin = pSVData->maWinData.mpActiveApplicationFrame) )
         {
             return pWin->mpWindowImpl->mpFrameWindow->ImplGetWindow();
         }
@@ -1468,7 +1468,7 @@ vcl::Window* Application::GetDefDialogParent()
                 pWin = pWin->mpWindowImpl->mpFrameData->mpNextFrame;
             }
             // use the desktop
-            return NULL;
+            return nullptr;
         }
     }
 }
@@ -1599,7 +1599,7 @@ void ImplFreeHotKeyData()
         pHotKeyData = pTempHotKeyData;
     }
 
-    pSVData->maAppData.mpFirstHotKey = NULL;
+    pSVData->maAppData.mpFirstHotKey = nullptr;
 }
 
 void ImplFreeEventHookData()
@@ -1614,7 +1614,7 @@ void ImplFreeEventHookData()
         pEventHookData = pTempEventHookData;
     }
 
-    pSVData->maAppData.mpFirstEventHook = NULL;
+    pSVData->maAppData.mpFirstEventHook = nullptr;
 }
 
 long Application::CallEventHooks( NotifyEvent& rEvt )
@@ -1790,8 +1790,8 @@ void Application::setDeInitHook(Link<LinkParamNone*,void> const & hook) {
 }
 
 ImplDelData::ImplDelData( vcl::Window* pWindow ) :
-                             mpNext( NULL ),
-                             mpWindow( NULL ),
+                             mpNext( nullptr ),
+                             mpWindow( nullptr ),
                              mbDel( false )
 {
     if( pWindow ) AttachToWindow( pWindow );
@@ -1818,7 +1818,7 @@ ImplDelData::~ImplDelData()
     {
         // the window still exists but we were not removed
         mpWindow.get()->ImplRemoveDel( this );
-        mpWindow = NULL;
+        mpWindow = nullptr;
     }
 }
 

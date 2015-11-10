@@ -124,7 +124,7 @@ public:
     void            StartDragging( ToolBox* pDragBox,
                                    const Point& rPos, const Rectangle& rRect,
                                    sal_uInt16 nLineMode, bool bResizeItem,
-                                   void* pData = NULL );
+                                   void* pData = nullptr );
     void            Dragging( const Point& rPos );
     void            EndDragging( bool bOK = true );
     void            HideDragRect() { if ( mbShowDragRect ) mpDragBox->HideTracking(); }
@@ -658,7 +658,7 @@ const ImplToolItem *ToolBox::ImplGetFirstClippedItem( const ToolBox* pThis )
             return &(*it);
         ++it;
     }
-    return NULL;
+    return nullptr;
 }
 
 Size ToolBox::ImplCalcSize( const ToolBox* pThis, sal_uInt16 nCalcLines, sal_uInt16 nCalcMode )
@@ -1128,12 +1128,12 @@ sal_uInt16 ToolBox::ImplFindItemPos( ToolBox* pBox, const Point& rPos )
 
 ImplTBDragMgr::ImplTBDragMgr()
     : mpBoxList(new ImplTBList())
-    , mpDragBox(NULL)
+    , mpDragBox(nullptr)
     , mnMinWidth(0)
     , mnMaxWidth(0)
     , mnLineMode(0)
     , mnStartLines(0)
-    , mpCustomizeData(NULL)
+    , mpCustomizeData(nullptr)
     , mbResizeMode(false)
     , mbShowDragRect(false)
 {
@@ -1173,7 +1173,7 @@ ToolBox* ImplTBDragMgr::FindToolBox( const Rectangle& rRect )
         }
     }
 
-    return NULL;
+    return nullptr;
 }
 
 void ImplTBDragMgr::StartDragging( ToolBox* pToolBox,
@@ -1319,12 +1319,12 @@ void ImplTBDragMgr::EndDragging( bool bOK )
                 }
             }
         }
-        mpCustomizeData = NULL;
+        mpCustomizeData = nullptr;
         mbResizeMode = false;
         mpDragBox->Deactivate();
     }
 
-    mpDragBox = NULL;
+    mpDragBox = nullptr;
 }
 
 void ImplTBDragMgr::UpdateDragRect()
@@ -1349,7 +1349,7 @@ void ToolBox::ImplInit( vcl::Window* pParent, WinBits nStyle )
     // initialize variables
     ImplGetWindowImpl()->mbToolBox         = true;
     mpData                = new ImplToolBoxPrivateData;
-    mpFloatWin        = NULL;
+    mpFloatWin        = nullptr;
     mnDX              = 0;
     mnDY              = 0;
     mnMaxItemWidth    = 0;
@@ -1642,11 +1642,11 @@ void ToolBox::dispose()
     // still connected
     if ( mpFloatWin )
         mpFloatWin->EndPopupMode( FloatWinPopupEndFlags::Cancel );
-    mpFloatWin = NULL;
+    mpFloatWin = nullptr;
 
     // delete private data
     delete mpData;
-    mpData = NULL;
+    mpData = nullptr;
 
     // remove the lists when there are no more toolbox references to
     // the lists
@@ -1660,7 +1660,7 @@ void ToolBox::dispose()
         if ( !pSVData->maCtrlData.mpTBDragMgr->size() )
         {
             delete pSVData->maCtrlData.mpTBDragMgr;
-            pSVData->maCtrlData.mpTBDragMgr = NULL;
+            pSVData->maCtrlData.mpTBDragMgr = nullptr;
         }
     }
     mpFloatWin.clear();
@@ -1670,7 +1670,7 @@ void ToolBox::dispose()
 ImplToolItem* ToolBox::ImplGetItem( sal_uInt16 nItemId ) const
 {
     if (!mpData)
-        return NULL;
+        return nullptr;
 
     std::vector< ImplToolItem >::iterator it = mpData->m_aItems.begin();
     while ( it != mpData->m_aItems.end() )
@@ -1680,7 +1680,7 @@ ImplToolItem* ToolBox::ImplGetItem( sal_uInt16 nItemId ) const
         ++it;
     }
 
-    return NULL;
+    return nullptr;
 }
 
 static void ImplAddButtonBorder( long &rWidth, long& rHeight, bool bNativeButtons )
@@ -2399,7 +2399,7 @@ void ToolBox::ImplFormat( bool bResize )
 
             // compute line breaks and visible lines give the current window width (nMax)
             // the break indicators will be stored within each item (it->mbBreak)
-            mnCurLines = ImplCalcBreaks( nMax, NULL, mbHorz );
+            mnCurLines = ImplCalcBreaks( nMax, nullptr, mbHorz );
 
             // check for scrollbar buttons or dropdown menu
             // (if a menu is enabled, this will be used to store clipped
@@ -2411,7 +2411,7 @@ void ToolBox::ImplFormat( bool bResize )
                 if( !IsMenuEnabled() )
                 {
                     nMax -= TB_SPIN_SIZE+TB_SPIN_OFFSET;
-                    mnCurLines = ImplCalcBreaks( nMax, NULL, mbHorz );
+                    mnCurLines = ImplCalcBreaks( nMax, nullptr, mbHorz );
                 }
 
                 // compute scroll rectangles or menu button
@@ -2972,7 +2972,7 @@ void ToolBox::ImplDrawButton(vcl::RenderContext& rRenderContext, const Rectangle
     }
 
     if (!bNativeOk)
-        vcl::RenderTools::DrawSelectionBackground(rRenderContext, *this, rRect, bIsWindow ? 3 : highlight, bChecked, true, bIsWindow, NULL, 2);
+        vcl::RenderTools::DrawSelectionBackground(rRenderContext, *this, rRect, bIsWindow ? 3 : highlight, bChecked, true, bIsWindow, nullptr, 2);
 }
 
 void ToolBox::ImplDrawItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos, sal_uInt16 nHighlight, bool bPaint, bool bLayout)
@@ -2988,8 +2988,8 @@ void ToolBox::ImplDrawItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos, 
     rRenderContext.SetFillColor();
 
     ImplToolItem* pItem = &mpData->m_aItems[nPos];
-    MetricVector* pVector = bLayout ? &mpData->m_pLayoutData->m_aUnicodeBoundRects : NULL;
-    OUString* pDisplayText = bLayout ? &mpData->m_pLayoutData->m_aDisplayText : NULL;
+    MetricVector* pVector = bLayout ? &mpData->m_pLayoutData->m_aUnicodeBoundRects : nullptr;
+    OUString* pDisplayText = bLayout ? &mpData->m_pLayoutData->m_aDisplayText : nullptr;
 
     if (!pItem->mbEnabled)
         nHighlight = 0;
@@ -3057,7 +3057,7 @@ void ToolBox::ImplDrawItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos, 
         pMgr->HideDragRect();
     }
     else
-        pMgr = NULL;
+        pMgr = nullptr;
 
     // during configuration mode visible windows will be drawn in a special way
     if ( mbCustomizeMode && pItem->mbShowWindow )
@@ -3346,7 +3346,7 @@ void ToolBox::ImplFloatControl( bool bStart, FloatingWindow* pFloatWindow )
     }
     else
     {
-        mpFloatWin = NULL;
+        mpFloatWin = nullptr;
 
         // if focus is still in this toolbox, then the floater was opened by keyboard
         // draw current item with highlight and keep old state
@@ -4953,7 +4953,7 @@ void ToolBox::GetFocus()
 
 void ToolBox::LoseFocus()
 {
-    ImplChangeHighlight( NULL, true );
+    ImplChangeHighlight( nullptr, true );
 
     DockingWindow::LoseFocus();
 }
@@ -5069,7 +5069,7 @@ bool ToolBox::ImplOpenItem( vcl::KeyCode aKeyCode )
             return bRet;
 
         UpdateCustomMenu();
-        mpData->mnEventId = Application::PostUserEvent( LINK( this, ToolBox, ImplCallExecuteCustomMenu ), NULL, true );
+        mpData->mnEventId = Application::PostUserEvent( LINK( this, ToolBox, ImplCallExecuteCustomMenu ), nullptr, true );
     }
     else if( mnHighItemId &&  ImplGetItem( mnHighItemId ) &&
         (ImplGetItem( mnHighItemId )->mnBits & ToolBoxItemBits::DROPDOWN) )
@@ -5186,13 +5186,13 @@ void ToolBox::KeyInput( const KeyEvent& rKEvt )
         break;
         case KEY_END:
             {
-                ImplChangeHighlight( NULL );
+                ImplChangeHighlight( nullptr );
                 ImplChangeHighlightUpDn( false );
             }
             break;
         case KEY_HOME:
             {
-                ImplChangeHighlight( NULL );
+                ImplChangeHighlight( nullptr );
                 ImplChangeHighlightUpDn( true );
             }
             break;
@@ -5235,7 +5235,7 @@ void ToolBox::KeyInput( const KeyEvent& rKEvt )
         default:
             {
             sal_uInt16 aKeyGroup = aKeyCode.GetGroup();
-            ImplToolItem *pItem = NULL;
+            ImplToolItem *pItem = nullptr;
             if( mnHighItemId )
                 pItem = ImplGetItem( mnHighItemId );
             // #i13931# forward alphanum keyinput into embedded control
@@ -5306,7 +5306,7 @@ sal_uInt16 ToolBox::ImplGetItemLine( ImplToolItem* pCurrentItem )
 ImplToolItem* ToolBox::ImplGetFirstValidItem( sal_uInt16 nLine )
 {
     if( !nLine || nLine > mnCurLines )
-        return NULL;
+        return nullptr;
 
     nLine--;
 
@@ -5324,14 +5324,14 @@ ImplToolItem* ToolBox::ImplGetFirstValidItem( sal_uInt16 nLine )
             {
                 ++it;
                 if( it == mpData->m_aItems.end() || it->mbBreak )
-                    return NULL;    // no valid items in this line
+                    return nullptr;    // no valid items in this line
             }
             return &(*it);
         }
         ++it;
     }
 
-    return (it == mpData->m_aItems.end()) ? NULL : &(*it);
+    return (it == mpData->m_aItems.end()) ? nullptr : &(*it);
 }
 
 sal_uInt16 ToolBox::ImplFindItemPos( const ImplToolItem* pItem, const std::vector< ImplToolItem >& rList )
@@ -5362,7 +5362,7 @@ void ToolBox::ImplChangeHighlight( ImplToolItem* pItem, bool bNoGrabFocus )
 
     mbChangingHighlight = true;
 
-    ImplToolItem* pOldItem = NULL;
+    ImplToolItem* pOldItem = nullptr;
 
     if ( mnHighItemId )
     {
@@ -5452,7 +5452,7 @@ bool ToolBox::ImplChangeHighlightUpDn( bool bUp, bool bNoCycle )
             {
                 // select last valid non-clipped item
                 std::vector< ImplToolItem >::iterator it = mpData->m_aItems.end();
-                ImplToolItem* pItem = NULL;
+                ImplToolItem* pItem = nullptr;
                 while( it != mpData->m_aItems.begin() )
                 {
                     --it;
@@ -5498,11 +5498,11 @@ bool ToolBox::ImplChangeHighlightUpDn( bool bUp, bool bNoCycle )
             // select the menu button if a clipped item would be selected
             if( (it != mpData->m_aItems.end() && &(*it) == ImplGetFirstClippedItem( this )) && IsMenuEnabled() )
             {
-                ImplChangeHighlight( NULL );
+                ImplChangeHighlight( nullptr );
                 InvalidateMenuButton();
             }
             else
-                ImplChangeHighlight( (it != mpData->m_aItems.end()) ? &(*it) : NULL );
+                ImplChangeHighlight( (it != mpData->m_aItems.end()) ? &(*it) : nullptr );
             return true;
         }
         else
@@ -5512,13 +5512,13 @@ bool ToolBox::ImplChangeHighlightUpDn( bool bUp, bool bNoCycle )
             // docked toolbars have the menubutton as last item - if this button is enabled
             if( IsMenuEnabled() && !ImplIsFloatingMode() )
             {
-                ImplChangeHighlight( NULL );
+                ImplChangeHighlight( nullptr );
                 InvalidateMenuButton();
             }
             else
             {
                 std::vector< ImplToolItem >::iterator it = mpData->m_aItems.end();
-                ImplToolItem* pItem = NULL;
+                ImplToolItem* pItem = nullptr;
                 while( it != mpData->m_aItems.begin() )
                 {
                     --it;
@@ -5552,7 +5552,7 @@ bool ToolBox::ImplChangeHighlightUpDn( bool bUp, bool bNoCycle )
                     // highlight the menu button if it is the last item
                     if( IsMenuEnabled() && !ImplIsFloatingMode() )
                     {
-                        ImplChangeHighlight( NULL );
+                        ImplChangeHighlight( nullptr );
                         InvalidateMenuButton();
                         return true;
                     }
@@ -5570,7 +5570,7 @@ bool ToolBox::ImplChangeHighlightUpDn( bool bUp, bool bNoCycle )
                     // highlight the menu button if it is the last item
                     if( IsMenuEnabled() && !ImplIsFloatingMode() )
                     {
-                        ImplChangeHighlight( NULL );
+                        ImplChangeHighlight( nullptr );
                         InvalidateMenuButton();
                         return true;
                     }
@@ -5589,7 +5589,7 @@ bool ToolBox::ImplChangeHighlightUpDn( bool bUp, bool bNoCycle )
         if( pToolItem->IsClipped() && IsMenuEnabled() )
         {
             // select the menu button if a clipped item would be selected
-            ImplChangeHighlight( NULL );
+            ImplChangeHighlight( nullptr );
             InvalidateMenuButton();
         }
         else if( i != nCount )

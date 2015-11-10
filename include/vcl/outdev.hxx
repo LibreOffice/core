@@ -721,7 +721,7 @@ public:
     vcl::Region                 GetClipRegion() const;
     void                        SetClipRegion();
     void                        SetClipRegion( const vcl::Region& rRegion );
-    bool                        SelectClipRegion( const vcl::Region&, SalGraphics* pGraphics = NULL );
+    bool                        SelectClipRegion( const vcl::Region&, SalGraphics* pGraphics = nullptr );
 
     bool                        IsClipRegion() const { return mbClipRegion; }
 
@@ -750,7 +750,7 @@ public:
 
     void                        DrawPixel( const Point& rPt );
     void                        DrawPixel( const Point& rPt, const Color& rColor );
-    void                        DrawPixel( const tools::Polygon& rPts, const Color* pColors = NULL );
+    void                        DrawPixel( const tools::Polygon& rPts, const Color* pColors = nullptr );
     void                        DrawPixel( const tools::Polygon& rPts, const Color& rColor );
 
     Color                       GetPixel( const Point& rPt ) const;
@@ -894,8 +894,8 @@ public:
 
 private:
 
-    SAL_DLLPRIVATE void         ImplDrawPolygon( const tools::Polygon& rPoly, const tools::PolyPolygon* pClipPolyPoly = NULL );
-    SAL_DLLPRIVATE void         ImplDrawPolyPolygon( const tools::PolyPolygon& rPolyPoly, const tools::PolyPolygon* pClipPolyPoly = NULL );
+    SAL_DLLPRIVATE void         ImplDrawPolygon( const tools::Polygon& rPoly, const tools::PolyPolygon* pClipPolyPoly = nullptr );
+    SAL_DLLPRIVATE void         ImplDrawPolyPolygon( const tools::PolyPolygon& rPolyPoly, const tools::PolyPolygon* pClipPolyPoly = nullptr );
     SAL_DLLPRIVATE void         ImplDrawPolyPolygon( sal_uInt16 nPoly, const tools::PolyPolygon& rPolyPoly );
     // #i101491#
     // Helper who implements the DrawPolyPolygon functionality for basegfx::B2DPolyPolygon
@@ -1017,12 +1017,12 @@ public:
 
     void                        DrawText( const Point& rStartPt, const OUString& rStr,
                                           sal_Int32 nIndex = 0, sal_Int32 nLen = -1,
-                                          MetricVector* pVector = NULL, OUString* pDisplayText = NULL );
+                                          MetricVector* pVector = nullptr, OUString* pDisplayText = nullptr );
 
     void                        DrawText( const Rectangle& rRect,
                                           const OUString& rStr, DrawTextFlags nStyle = DrawTextFlags::NONE,
-                                          MetricVector* pVector = NULL, OUString* pDisplayText = NULL,
-                                          vcl::ITextLayout* _pTextLayout = NULL );
+                                          MetricVector* pVector = nullptr, OUString* pDisplayText = nullptr,
+                                          vcl::ITextLayout* _pTextLayout = nullptr );
 
     static void                 ImplDrawText( OutputDevice& rTargetDevice, const Rectangle& rRect,
                                               const OUString& rOrigStr, DrawTextFlags nStyle,
@@ -1034,7 +1034,7 @@ public:
 
     void                        DrawCtrlText( const Point& rPos, const OUString& rStr,
                                               sal_Int32 nIndex = 0, sal_Int32 nLen = -1,
-                                              DrawTextFlags nStyle = DrawTextFlags::Mnemonic, MetricVector* pVector = NULL, OUString* pDisplayText = NULL );
+                                              DrawTextFlags nStyle = DrawTextFlags::Mnemonic, MetricVector* pVector = nullptr, OUString* pDisplayText = nullptr );
 
     void                        DrawTextLine( const Point& rPos, long nWidth,
                                               FontStrikeout eStrikeout,
@@ -1055,8 +1055,8 @@ public:
 
     Rectangle                   GetTextRect( const Rectangle& rRect,
                                              const OUString& rStr, DrawTextFlags nStyle = DrawTextFlags::WordBreak,
-                                             TextRectInfo* pInfo = NULL,
-                                             const vcl::ITextLayout* _pTextLayout = NULL ) const;
+                                             TextRectInfo* pInfo = nullptr,
+                                             const vcl::ITextLayout* _pTextLayout = nullptr ) const;
 
     /** Return the exact bounding rectangle of rStr.
 
@@ -1109,24 +1109,24 @@ public:
     */
     bool                        GetTextBoundRect( Rectangle& rRect,
                                                   const OUString& rStr, sal_Int32 nBase = 0, sal_Int32 nIndex = 0, sal_Int32 nLen = -1,
-                                                  sal_uLong nLayoutWidth = 0, const long* pDXArray = NULL ) const;
+                                                  sal_uLong nLayoutWidth = 0, const long* pDXArray = nullptr ) const;
 
     Rectangle                   ImplGetTextBoundRect( const SalLayout& );
 
     bool                        GetTextOutline( tools::PolyPolygon&,
                                                 const OUString& rStr, sal_Int32 nBase = 0, sal_Int32 nIndex = 0,
                                                 sal_Int32 nLen = -1, bool bOptimize = true,
-                                                sal_uLong nLayoutWidth = 0, const long* pDXArray = NULL ) const;
+                                                sal_uLong nLayoutWidth = 0, const long* pDXArray = nullptr ) const;
 
     bool                        GetTextOutlines( PolyPolyVector&,
                                                  const OUString& rStr, sal_Int32 nBase = 0, sal_Int32 nIndex = 0,
                                                  sal_Int32 nLen = -1, bool bOptimize = true,
-                                                 sal_uLong nLayoutWidth = 0, const long* pDXArray = NULL ) const;
+                                                 sal_uLong nLayoutWidth = 0, const long* pDXArray = nullptr ) const;
 
     bool                        GetTextOutlines( ::basegfx::B2DPolyPolygonVector &rVector,
                                                  const OUString& rStr, sal_Int32 nBase = 0, sal_Int32 nIndex = 0,
                                                  sal_Int32 nLen = -1, bool bOptimize = true,
-                                                 sal_uLong nLayoutWidth = 0, const long* pDXArray = NULL ) const;
+                                                 sal_uLong nLayoutWidth = 0, const long* pDXArray = nullptr ) const;
 
 
     OUString                    GetEllipsisString( const OUString& rStr, long nMaxWidth,
@@ -1190,17 +1190,17 @@ public:
     float                       approximate_char_width() const;
 
     void                        DrawTextArray( const Point& rStartPt, const OUString& rStr,
-                                               const long* pDXAry = NULL,
+                                               const long* pDXAry = nullptr,
                                                sal_Int32 nIndex = 0,
                                                sal_Int32 nLen = -1,
                                                SalLayoutFlags flags = SalLayoutFlags::NONE);
-    long                        GetTextArray( const OUString& rStr, long* pDXAry = NULL,
+    long                        GetTextArray( const OUString& rStr, long* pDXAry = nullptr,
                                               sal_Int32 nIndex = 0, sal_Int32 nLen = -1,
                                               vcl::TextLayoutCache const* = nullptr) const;
 
     bool                        GetCaretPositions( const OUString&, long* pCaretXArray,
                                               sal_Int32 nIndex, sal_Int32 nLen,
-                                              long* pDXAry = NULL, long nWidth = 0,
+                                              long* pDXAry = nullptr, long nWidth = 0,
                                               bool bCellBreaking = true ) const;
     void                        DrawStretchText( const Point& rStartPt, sal_uLong nWidth,
                                                  const OUString& rStr,
@@ -1306,7 +1306,7 @@ public:
     static vcl::Font            GetDefaultFont( DefaultFontType nType,
                                                 LanguageType eLang,
                                                 GetDefaultFontFlags nFlags,
-                                                const OutputDevice* pOutDev = NULL );
+                                                const OutputDevice* pOutDev = nullptr );
 
     SAL_DLLPRIVATE void         ImplInitFontList() const;
     SAL_DLLPRIVATE void         ImplUpdateFontData( bool bNewFontLists );
@@ -1355,7 +1355,7 @@ public:
 
     SystemTextLayoutData        GetSysTextLayoutData( const Point& rStartPt, const OUString& rStr,
                                                       sal_Int32 nIndex = 0, sal_Int32 nLen = -1,
-                                                      const long* pDXAry = NULL ) const;
+                                                      const long* pDXAry = nullptr ) const;
 
     SAL_DLLPRIVATE bool         ImplIsAntiparallel() const ;
     SAL_DLLPRIVATE void         ReMirror( Point &rPoint ) const;
@@ -1365,7 +1365,7 @@ public:
     virtual bool                HasMirroredGraphics() const;
     SAL_DLLPRIVATE SalLayout*   ImplLayout( const OUString&, sal_Int32 nIndex, sal_Int32 nLen,
                                             const Point& rLogicPos = Point(0,0), long nLogicWidth=0,
-                                            const long* pLogicDXArray=NULL, SalLayoutFlags flags = SalLayoutFlags::NONE,
+                                            const long* pLogicDXArray=nullptr, SalLayoutFlags flags = SalLayoutFlags::NONE,
                                             vcl::TextLayoutCache const* = nullptr) const;
     SAL_DLLPRIVATE ImplLayoutArgs ImplPrepareLayoutArgs( OUString&, const sal_Int32 nIndex, const sal_Int32 nLen,
                                                          DeviceCoordinate nPixelWidth, const DeviceCoordinate* pPixelDXArray,
@@ -2033,7 +2033,7 @@ public:
         that's too much for now, wrote \#i107046# for this */
     bool                        DrawEPS(
                                     const Point& rPt, const Size& rSz,
-                                    const GfxLink& rGfxLink, GDIMetaFile* pSubst = NULL );
+                                    const GfxLink& rGfxLink, GDIMetaFile* pSubst = nullptr );
     ///@}
 };
 

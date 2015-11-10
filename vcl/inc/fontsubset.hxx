@@ -56,7 +56,7 @@ public:
     bool        CreateFontSubset( int nOutFontTypeMask,
                     FILE* pOutFile, const char* pOutFontName,
                     const sal_GlyphId* pGlyphIds, const sal_uInt8* pEncodedIds,
-                    int nReqGlyphCount, sal_Int32* pOutGlyphWidths = NULL );
+                    int nReqGlyphCount, sal_Int32* pOutGlyphWidths = nullptr );
 
 public: // TODO: make subsetter results private and provide accessor methods instead
         // subsetter-provided subset details needed by e.g. Postscript or PDF
@@ -83,9 +83,9 @@ private:
     int                     mnReqGlyphCount;
 
 protected:
-    bool    CreateFontSubsetFromCff( sal_Int32* pOutGlyphWidths = NULL );
-    bool    CreateFontSubsetFromSfnt( sal_Int32* pOutGlyphWidths = NULL );
-    static bool CreateFontSubsetFromType1( sal_Int32* pOutGlyphWidths = NULL );
+    bool    CreateFontSubsetFromCff( sal_Int32* pOutGlyphWidths = nullptr );
+    bool    CreateFontSubsetFromSfnt( sal_Int32* pOutGlyphWidths = nullptr );
+    static bool CreateFontSubsetFromType1( sal_Int32* pOutGlyphWidths = nullptr );
 };
 
 #endif // INCLUDED_VCL_INC_FONTSUBSET_HXX

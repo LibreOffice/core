@@ -91,7 +91,7 @@ void ImplWheelWindow::dispose()
 {
     ImplStop();
     delete mpTimer;
-    mpTimer = NULL;
+    mpTimer = nullptr;
 
     FloatingWindow::dispose();
 }
@@ -123,7 +123,7 @@ void ImplWheelWindow::ImplCreateImageList()
     ResMgr* pResMgr = ImplGetResMgr();
     if( pResMgr )
         maImgList.InsertFromHorizontalBitmap
-            ( ResId( SV_RESID_BITMAP_SCROLLBMP, *pResMgr ), 6, NULL );
+            ( ResId( SV_RESID_BITMAP_SCROLLBMP, *pResMgr ), 6, nullptr );
 }
 
 void ImplWheelWindow::ImplSetWheelMode( sal_uLong nWheelMode )

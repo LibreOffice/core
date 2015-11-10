@@ -109,7 +109,7 @@ class FileInputStream
 };
 
 FileInputStream::FileInputStream(const char* pFilename)
-    : m_pMemory(NULL)
+    : m_pMemory(nullptr)
     , m_nPos(0)
     , m_nLen(0)
 {
@@ -357,7 +357,7 @@ static inline enum parseKey recognize( char* ident, int len)
 
 static int parseGlobals( FileInputStream* fp, GlobalFontInfo* gfi )
 {
-    bool cont = true, save = (gfi != NULL);
+    bool cont = true, save = (gfi != nullptr);
     int error = ok;
     int direction = -1;
     int tokenlen;
@@ -366,7 +366,7 @@ static int parseGlobals( FileInputStream* fp, GlobalFontInfo* gfi )
     {
         char *keyword = token(fp, tokenlen);
 
-        if (keyword == NULL)
+        if (keyword == nullptr)
             /* Have reached an early and unexpected EOF. */
             /* Set flag and stop parsing */
         {
@@ -394,38 +394,38 @@ static int parseGlobals( FileInputStream* fp, GlobalFontInfo* gfi )
             switch(recognize(keyword, tokenlen))
             {
                 case STARTFONTMETRICS:
-                    if ((keyword = token(fp,tokenlen)) != NULL)
+                    if ((keyword = token(fp,tokenlen)) != nullptr)
                         gfi->afmVersion = strdup( keyword );
                     break;
                 case COMMENT:
                     linetoken(fp);
                     break;
                 case FONTNAME:
-                    if ((keyword = token(fp,tokenlen)) != NULL)
+                    if ((keyword = token(fp,tokenlen)) != nullptr)
                         gfi->fontName = strdup( keyword );
                     break;
                 case ENCODINGSCHEME:
-                    if ((keyword = token(fp,tokenlen)) != NULL)
+                    if ((keyword = token(fp,tokenlen)) != nullptr)
                         gfi->encodingScheme = strdup( keyword );
                     break;
                 case FULLNAME:
-                    if ((keyword = linetoken(fp)) != NULL)
+                    if ((keyword = linetoken(fp)) != nullptr)
                         gfi->fullName = strdup( keyword );
                     break;
                 case FAMILYNAME:
-                    if ((keyword = linetoken(fp)) != NULL)
+                    if ((keyword = linetoken(fp)) != nullptr)
                         gfi->familyName = strdup( keyword );
                     break;
                 case WEIGHT:
-                    if ((keyword = token(fp,tokenlen)) != NULL)
+                    if ((keyword = token(fp,tokenlen)) != nullptr)
                         gfi->weight = strdup( keyword );
                     break;
                 case ITALICANGLE:
-                    if ((keyword = token(fp,tokenlen)) != NULL)
+                    if ((keyword = token(fp,tokenlen)) != nullptr)
                         gfi->italicAngle = StringToDouble( keyword );
                     break;
                 case ISFIXEDPITCH:
-                    if ((keyword = token(fp,tokenlen)) != NULL)
+                    if ((keyword = token(fp,tokenlen)) != nullptr)
                     {
                         if (MATCH(keyword, False))
                             gfi->isFixedPitch = false;
@@ -434,50 +434,50 @@ static int parseGlobals( FileInputStream* fp, GlobalFontInfo* gfi )
                     }
                     break;
                 case UNDERLINEPOSITION:
-                    if ((keyword = token(fp,tokenlen)) != NULL)
+                    if ((keyword = token(fp,tokenlen)) != nullptr)
                         gfi->underlinePosition = atoi(keyword);
                     break;
                 case UNDERLINETHICKNESS:
-                    if ((keyword = token(fp,tokenlen)) != NULL)
+                    if ((keyword = token(fp,tokenlen)) != nullptr)
                         gfi->underlineThickness = atoi(keyword);
                     break;
                 case VERSION:
-                    if ((keyword = token(fp,tokenlen)) != NULL)
+                    if ((keyword = token(fp,tokenlen)) != nullptr)
                         gfi->version = strdup( keyword );
                     break;
                 case NOTICE:
-                    if ((keyword = linetoken(fp)) != NULL)
+                    if ((keyword = linetoken(fp)) != nullptr)
                         gfi->notice = strdup( keyword );
                     break;
                 case FONTBBOX:
-                    if ((keyword = token(fp,tokenlen)) != NULL)
+                    if ((keyword = token(fp,tokenlen)) != nullptr)
                         gfi->fontBBox.llx = atoi(keyword);
-                    if ((keyword = token(fp,tokenlen)) != NULL)
+                    if ((keyword = token(fp,tokenlen)) != nullptr)
                         gfi->fontBBox.lly = atoi(keyword);
-                    if ((keyword = token(fp,tokenlen)) != NULL)
+                    if ((keyword = token(fp,tokenlen)) != nullptr)
                         gfi->fontBBox.urx = atoi(keyword);
-                    if ((keyword = token(fp,tokenlen)) != NULL)
+                    if ((keyword = token(fp,tokenlen)) != nullptr)
                         gfi->fontBBox.ury = atoi(keyword);
                     break;
                 case CAPHEIGHT:
-                    if ((keyword = token(fp,tokenlen)) != NULL)
+                    if ((keyword = token(fp,tokenlen)) != nullptr)
                         gfi->capHeight = atoi(keyword);
                     break;
                 case XHEIGHT:
-                    if ((keyword = token(fp,tokenlen)) != NULL)
+                    if ((keyword = token(fp,tokenlen)) != nullptr)
                         gfi->xHeight = atoi(keyword);
                     break;
                 case DESCENT:
-                    if ((keyword = token(fp,tokenlen)) != NULL)
+                    if ((keyword = token(fp,tokenlen)) != nullptr)
                         gfi->descender = -atoi(keyword);
                     break;
                 case DESCENDER:
-                    if ((keyword = token(fp,tokenlen)) != NULL)
+                    if ((keyword = token(fp,tokenlen)) != nullptr)
                         gfi->descender = atoi(keyword);
                     break;
                 case ASCENT:
                 case ASCENDER:
-                    if ((keyword = token(fp,tokenlen)) != NULL)
+                    if ((keyword = token(fp,tokenlen)) != nullptr)
                         gfi->ascender = atoi(keyword);
                     break;
                 case STARTCHARMETRICS:
@@ -492,7 +492,7 @@ static int parseGlobals( FileInputStream* fp, GlobalFontInfo* gfi )
                     token(fp,tokenlen);
                     break;
                 case STARTDIRECTION:
-                    if ((keyword = token(fp,tokenlen)) != NULL)
+                    if ((keyword = token(fp,tokenlen)) != nullptr)
                         direction = atoi(keyword);
                     break; /* ignore this for now */
                 case ENDDIRECTION:
@@ -516,7 +516,7 @@ static int parseGlobals( FileInputStream* fp, GlobalFontInfo* gfi )
                     token(fp,tokenlen); //ignore
                     break;
                 case CHARWIDTH:
-                    if ((keyword = token(fp,tokenlen)) != NULL)
+                    if ((keyword = token(fp,tokenlen)) != nullptr)
                     {
                         if (direction == 0)
                             gfi->charwidth = atoi(keyword);
@@ -560,7 +560,7 @@ static int parseGlobals( FileInputStream* fp, GlobalFontInfo* gfi )
 
 static int parseCharWidths( FileInputStream* fp, int* cwi)
 {
-    bool cont = true, save = (cwi != NULL);
+    bool cont = true, save = (cwi != nullptr);
     int pos = 0, error = ok, tokenlen;
 
     while (cont)
@@ -568,7 +568,7 @@ static int parseCharWidths( FileInputStream* fp, int* cwi)
         char *keyword = token(fp,tokenlen);
         /* Have reached an early and unexpected EOF. */
         /* Set flag and stop parsing */
-        if (keyword == NULL)
+        if (keyword == nullptr)
         {
             error = earlyEOF;
             break; /* get out of loop */
@@ -597,7 +597,7 @@ static int parseCharWidths( FileInputStream* fp, int* cwi)
                     linetoken(fp); /*eat token*/
                     break;
                 case CODE:
-                    if ((keyword = token(fp,tokenlen)) != NULL)
+                    if ((keyword = token(fp,tokenlen)) != nullptr)
                         pos = atoi(keyword);
                     break;
                 case XYWIDTH:
@@ -606,14 +606,14 @@ static int parseCharWidths( FileInputStream* fp, int* cwi)
                     error = parseError;
                     break;
                 case CODEHEX:
-                    if ((keyword = token(fp,tokenlen)) != NULL)
+                    if ((keyword = token(fp,tokenlen)) != nullptr)
                         sscanf(keyword, "<%x>", &pos);
                     break;
                 case X0WIDTH:
                     (void) token(fp,tokenlen);
                     break;
                 case XWIDTH:
-                    if ((keyword = token(fp,tokenlen)) != NULL)
+                    if ((keyword = token(fp,tokenlen)) != nullptr)
                         if (pos >= 0) /* ignore unmapped chars */
                             cwi[pos] = atoi(keyword);
                     break;
@@ -657,16 +657,16 @@ static int parseCharWidths( FileInputStream* fp, int* cwi)
 static int
 reallocFontMetrics( void **pp_fontmetrics, int *p_oldcount, int n_newcount, unsigned int n_size )
 {
-    char *p_tmpmetrics = NULL;
+    char *p_tmpmetrics = nullptr;
 
-    if ((pp_fontmetrics == NULL) || (*pp_fontmetrics == NULL))
+    if ((pp_fontmetrics == nullptr) || (*pp_fontmetrics == nullptr))
         return storageProblem;
 
     if (*p_oldcount == n_newcount)
         return ok;
 
     p_tmpmetrics = static_cast<char*>(realloc(*pp_fontmetrics, n_newcount * n_size));
-    if (p_tmpmetrics == NULL)
+    if (p_tmpmetrics == nullptr)
         return storageProblem;
 
     if ( n_newcount > *p_oldcount )
@@ -718,7 +718,7 @@ static int parseCharMetrics( FileInputStream* fp, FontInfo* fi)
     while (cont)
     {
         char *keyword = token(fp,tokenlen);
-        if (keyword == NULL)
+        if (keyword == nullptr)
         {
             error = earlyEOF;
             break; /* get out of loop */
@@ -740,7 +740,7 @@ static int parseCharMetrics( FileInputStream* fp, FontInfo* fi)
                 {
                     if (firstTime) firstTime = false;
                     else temp++;
-                    if ((keyword = token(fp,tokenlen)) != NULL)
+                    if ((keyword = token(fp,tokenlen)) != nullptr)
                         temp->code = atoi(keyword);
                     if (fi->gfi && fi->gfi->charwidth)
                         temp->wx = fi->gfi->charwidth;
@@ -765,7 +765,7 @@ static int parseCharMetrics( FileInputStream* fp, FontInfo* fi)
                         firstTime = false;
                     else
                         temp++;
-                    if ((keyword = token(fp,tokenlen)) != NULL)
+                    if ((keyword = token(fp,tokenlen)) != nullptr)
                         sscanf(keyword,"<%x>", &temp->code);
                     if (fi->gfi && fi->gfi->charwidth)
                         temp->wx = fi->gfi->charwidth;
@@ -777,48 +777,48 @@ static int parseCharMetrics( FileInputStream* fp, FontInfo* fi)
                 }
                 break;
             case XYWIDTH:
-                if ((keyword = token(fp,tokenlen)) != NULL)
+                if ((keyword = token(fp,tokenlen)) != nullptr)
                     temp->wx = atoi(keyword);
-                if ((keyword = token(fp,tokenlen)) != NULL)
+                if ((keyword = token(fp,tokenlen)) != nullptr)
                     temp->wy = atoi(keyword);
                 break;
             case X0WIDTH:
-                if ((keyword = token(fp,tokenlen)) != NULL)
+                if ((keyword = token(fp,tokenlen)) != nullptr)
                     temp->wx = atoi(keyword);
                 break;
             case XWIDTH:
-                if ((keyword = token(fp,tokenlen)) != NULL)
+                if ((keyword = token(fp,tokenlen)) != nullptr)
                     temp->wx = atoi(keyword);
                 break;
             case CHARNAME:
-                if ((keyword = token(fp,tokenlen)) != NULL)
+                if ((keyword = token(fp,tokenlen)) != nullptr)
                     temp->name = strdup(keyword);
                 break;
             case CHARBBOX:
-                if ((keyword = token(fp,tokenlen)) != NULL)
+                if ((keyword = token(fp,tokenlen)) != nullptr)
                     temp->charBBox.llx = atoi(keyword);
-                if ((keyword = token(fp,tokenlen)) != NULL)
+                if ((keyword = token(fp,tokenlen)) != nullptr)
                     temp->charBBox.lly = atoi(keyword);
-                if ((keyword = token(fp,tokenlen)) != NULL)
+                if ((keyword = token(fp,tokenlen)) != nullptr)
                     temp->charBBox.urx = atoi(keyword);
-                if ((keyword = token(fp,tokenlen)) != NULL)
+                if ((keyword = token(fp,tokenlen)) != nullptr)
                     temp->charBBox.ury = atoi(keyword);
                 break;
             case LIGATURE: {
                 Ligature **tail = &(temp->ligs);
                 Ligature *node = *tail;
 
-                if (*tail != NULL)
+                if (*tail != nullptr)
                 {
-                    while (node->next != NULL)
+                    while (node->next != nullptr)
                         node = node->next;
                     tail = &(node->next);
                 }
 
                 *tail = static_cast<Ligature *>(calloc(1, sizeof(Ligature)));
-                if ((keyword = token(fp,tokenlen)) != NULL)
+                if ((keyword = token(fp,tokenlen)) != nullptr)
                     (*tail)->succ = strdup(keyword);
-                if ((keyword = token(fp,tokenlen)) != NULL)
+                if ((keyword = token(fp,tokenlen)) != nullptr)
                     (*tail)->lig = strdup(keyword);
                 break; }
             case ENDCHARMETRICS:
@@ -867,14 +867,14 @@ static int parseCharMetrics( FileInputStream* fp, FontInfo* fi)
 
 static int parseTrackKernData( FileInputStream* fp, FontInfo* fi)
 {
-    bool cont = true, save = (fi->tkd != NULL);
+    bool cont = true, save = (fi->tkd != nullptr);
     int pos = 0, error = ok, tcount = 0, tokenlen;
 
     while (cont)
     {
         char *keyword = token(fp,tokenlen);
 
-        if (keyword == NULL)
+        if (keyword == nullptr)
         {
             error = earlyEOF;
             break; /* get out of loop */
@@ -912,15 +912,15 @@ static int parseTrackKernData( FileInputStream* fp, FontInfo* fi)
 
                     if (tcount < fi->numOfTracks)
                     {
-                        if ((keyword = token(fp,tokenlen)) != NULL)
+                        if ((keyword = token(fp,tokenlen)) != nullptr)
                             fi->tkd[pos].degree = atoi(keyword);
-                        if ((keyword = token(fp,tokenlen)) != NULL)
+                        if ((keyword = token(fp,tokenlen)) != nullptr)
                             fi->tkd[pos].minPtSize = StringToDouble(keyword);
-                        if ((keyword = token(fp,tokenlen)) != NULL)
+                        if ((keyword = token(fp,tokenlen)) != nullptr)
                             fi->tkd[pos].minKernAmt = StringToDouble(keyword);
-                        if ((keyword = token(fp,tokenlen)) != NULL)
+                        if ((keyword = token(fp,tokenlen)) != nullptr)
                             fi->tkd[pos].maxPtSize = StringToDouble(keyword);
-                        if ((keyword = token(fp,tokenlen)) != NULL)
+                        if ((keyword = token(fp,tokenlen)) != nullptr)
                             fi->tkd[pos++].maxKernAmt = StringToDouble(keyword);
                         tcount++;
                     }
@@ -973,14 +973,14 @@ static int parseTrackKernData( FileInputStream* fp, FontInfo* fi)
 
 static int parsePairKernData( FileInputStream* fp, FontInfo* fi)
 {
-    bool cont = true, save = (fi->pkd != NULL);
+    bool cont = true, save = (fi->pkd != nullptr);
     int pos = 0, error = ok, pcount = 0, tokenlen;
 
     while (cont)
     {
         char *keyword = token(fp,tokenlen);
 
-        if (keyword == NULL)
+        if (keyword == nullptr)
         {
             error = earlyEOF;
             break; /* get out of loop */
@@ -1017,13 +1017,13 @@ static int parsePairKernData( FileInputStream* fp, FontInfo* fi)
                     }
                     if (pcount < fi->numOfPairs)
                     {
-                        if ((keyword = token(fp,tokenlen)) != NULL)
+                        if ((keyword = token(fp,tokenlen)) != nullptr)
                             fi->pkd[pos].name1 = strdup( keyword );
-                        if ((keyword = token(fp,tokenlen)) != NULL)
+                        if ((keyword = token(fp,tokenlen)) != nullptr)
                             fi->pkd[pos].name2 = strdup( keyword );
-                        if ((keyword = token(fp,tokenlen)) != NULL)
+                        if ((keyword = token(fp,tokenlen)) != nullptr)
                             fi->pkd[pos].xamt = atoi(keyword);
-                        if ((keyword = token(fp,tokenlen)) != NULL)
+                        if ((keyword = token(fp,tokenlen)) != nullptr)
                             fi->pkd[pos++].yamt = atoi(keyword);
                         pcount++;
                     }
@@ -1041,11 +1041,11 @@ static int parsePairKernData( FileInputStream* fp, FontInfo* fi)
                     }
                     if (pcount < fi->numOfPairs)
                     {
-                        if ((keyword = token(fp,tokenlen)) != NULL)
+                        if ((keyword = token(fp,tokenlen)) != nullptr)
                             fi->pkd[pos].name1 = strdup( keyword );
-                        if ((keyword = token(fp,tokenlen)) != NULL)
+                        if ((keyword = token(fp,tokenlen)) != nullptr)
                             fi->pkd[pos].name2 = strdup( keyword );
-                        if ((keyword = token(fp,tokenlen)) != NULL)
+                        if ((keyword = token(fp,tokenlen)) != nullptr)
                             fi->pkd[pos++].xamt = atoi(keyword);
                         pcount++;
                     }
@@ -1101,13 +1101,13 @@ static int parsePairKernData( FileInputStream* fp, FontInfo* fi)
 
 static int parseCompCharData( FileInputStream* fp, FontInfo* fi)
 {
-    bool cont = true, firstTime = true, save = (fi->ccd != NULL);
+    bool cont = true, firstTime = true, save = (fi->ccd != nullptr);
     int pos = 0, j = 0, error = ok, ccount = 0, pcount = 0, tokenlen;
 
     while (cont)
     {
         char *keyword = token(fp,tokenlen);
-        if (keyword == NULL)
+        if (keyword == nullptr)
             /* Have reached an early and unexpected EOF. */
             /* Set flag and stop parsing */
         {
@@ -1166,7 +1166,7 @@ static int parseCompCharData( FileInputStream* fp, FontInfo* fi)
                         if (firstTime) firstTime = false;
                         else pos++;
                         fi->ccd[pos].ccName = strdup( keyword );
-                        if ((keyword = token(fp,tokenlen)) != NULL)
+                        if ((keyword = token(fp,tokenlen)) != nullptr)
                             fi->ccd[pos].numOfPieces = atoi(keyword);
                         fi->ccd[pos].pieces = static_cast<Pcc *>(
                             calloc(fi->ccd[pos].numOfPieces, sizeof(Pcc)));
@@ -1182,11 +1182,11 @@ static int parseCompCharData( FileInputStream* fp, FontInfo* fi)
                 case COMPCHARPIECE:
                     if (pcount < fi->ccd[pos].numOfPieces)
                     {
-                        if ((keyword = token(fp,tokenlen)) != NULL)
+                        if ((keyword = token(fp,tokenlen)) != nullptr)
                             fi->ccd[pos].pieces[j].pccName = strdup( keyword );
-                        if ((keyword = token(fp,tokenlen)) != NULL)
+                        if ((keyword = token(fp,tokenlen)) != nullptr)
                             fi->ccd[pos].pieces[j].deltax = atoi(keyword);
-                        if ((keyword = token(fp,tokenlen)) != NULL)
+                        if ((keyword = token(fp,tokenlen)) != nullptr)
                             fi->ccd[pos].pieces[j++].deltay = atoi(keyword);
                         pcount++;
                     }
@@ -1252,12 +1252,12 @@ int parseFile( const char* pFilename, FontInfo** fi, FLAGS flags)
     char *keyword; /* used to store a token */
 
     (*fi) = static_cast<FontInfo *>(calloc(1, sizeof(FontInfo)));
-    if ((*fi) == NULL) { error = storageProblem; return error; }
+    if ((*fi) == nullptr) { error = storageProblem; return error; }
 
     if (flags & P_G)
     {
         (*fi)->gfi = static_cast<GlobalFontInfo *>(calloc(1, sizeof(GlobalFontInfo)));
-        if ((*fi)->gfi == NULL) { error = storageProblem; return error; }
+        if ((*fi)->gfi == nullptr) { error = storageProblem; return error; }
     }
 
     /* The AFM file begins with Global Font Information. This section */
@@ -1276,13 +1276,13 @@ int parseFile( const char* pFilename, FontInfo** fi, FLAGS flags)
 
     if ((code != normalEOF) && (code != earlyEOF))
     {
-        if ((keyword = token(&aFile,tokenlen)) != NULL)
+        if ((keyword = token(&aFile,tokenlen)) != nullptr)
             (*fi)->numOfChars = atoi(keyword);
         if (flags & (P_M ^ P_W))
         {
             (*fi)->cmi = static_cast<CharMetricInfo *>(
                 calloc((*fi)->numOfChars, sizeof(CharMetricInfo)));
-            if ((*fi)->cmi == NULL) { error = storageProblem; return error; }
+            if ((*fi)->cmi == nullptr) { error = storageProblem; return error; }
             code = parseCharMetrics(&aFile, *fi);
         }
         else
@@ -1290,7 +1290,7 @@ int parseFile( const char* pFilename, FontInfo** fi, FLAGS flags)
             if (flags & P_W)
             {
                 (*fi)->cwi = static_cast<int *>(calloc(256, sizeof(int)));
-                if ((*fi)->cwi == NULL)
+                if ((*fi)->cwi == nullptr)
                 {
                     error = storageProblem;
                     return error;
@@ -1312,7 +1312,7 @@ int parseFile( const char* pFilename, FontInfo** fi, FLAGS flags)
     while ((code != normalEOF) && (code != earlyEOF))
     {
         keyword = token(&aFile,tokenlen);
-        if (keyword == NULL)
+        if (keyword == nullptr)
             /* Have reached an early and unexpected EOF. */
             /* Set flag and stop parsing */
         {
@@ -1332,7 +1332,7 @@ int parseFile( const char* pFilename, FontInfo** fi, FLAGS flags)
                     (*fi)->numOfTracks = atoi(keyword);
                     (*fi)->tkd = static_cast<TrackKernData *>(
                         calloc((*fi)->numOfTracks, sizeof(TrackKernData)));
-                    if ((*fi)->tkd == NULL)
+                    if ((*fi)->tkd == nullptr)
                     {
                         error = storageProblem;
                         return error;
@@ -1347,7 +1347,7 @@ int parseFile( const char* pFilename, FontInfo** fi, FLAGS flags)
                     (*fi)->numOfPairs = atoi(keyword);
                     (*fi)->pkd = static_cast<PairKernData *>(
                         calloc((*fi)->numOfPairs, sizeof(PairKernData)));
-                    if ((*fi)->pkd == NULL)
+                    if ((*fi)->pkd == nullptr)
                     {
                         error = storageProblem;
                         return error;
@@ -1362,7 +1362,7 @@ int parseFile( const char* pFilename, FontInfo** fi, FLAGS flags)
                     (*fi)->numOfComps = atoi(keyword);
                     (*fi)->ccd = static_cast<CompCharData *>(
                         calloc((*fi)->numOfComps, sizeof(CompCharData)));
-                    if ((*fi)->ccd == NULL)
+                    if ((*fi)->ccd == nullptr)
                     {
                         error = storageProblem;
                         return error;

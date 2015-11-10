@@ -180,7 +180,7 @@ void OutputDevice::DrawBitmapWallpaper( long nX, long nY,
         aSize = Size( nWidth, nHeight );
     }
 
-    mpMetaFile = NULL;
+    mpMetaFile = nullptr;
     EnableMapMode( false );
     Push( PushFlags::CLIPREGION );
     IntersectClipRegion( Rectangle( Point( nX, nY ), Size( nWidth, nHeight ) ) );
@@ -355,7 +355,7 @@ void OutputDevice::DrawGradientWallpaper( long nX, long nY,
 
     aBound = Rectangle( Point( nX, nY ), Size( nWidth, nHeight ) );
 
-    mpMetaFile = NULL;
+    mpMetaFile = nullptr;
     EnableMapMode( false );
     Push( PushFlags::CLIPREGION );
     IntersectClipRegion( Rectangle( Point( nX, nY ), Size( nWidth, nHeight ) ) );

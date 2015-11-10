@@ -239,7 +239,7 @@ bool FilterConfigItem::ImplGetPropertyValue( Any& rAny, const Reference< XProper
 // otherwise the result is null
 PropertyValue* FilterConfigItem::GetPropertyValue( Sequence< PropertyValue >& rPropSeq, const OUString& rName )
 {
-    PropertyValue* pPropValue = NULL;
+    PropertyValue* pPropValue = nullptr;
 
     sal_Int32 i, nCount;
     for ( i = 0, nCount = rPropSeq.getLength(); i < nCount; i++ )

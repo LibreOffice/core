@@ -78,7 +78,7 @@ void X11SalGraphics::Init( X11SalVirtualDevice *pDevice, SalColormap* pColormap,
         delete pOrigDeleteColormap;
 
     m_pVDev      = pDevice;
-    m_pFrame     = NULL;
+    m_pFrame     = nullptr;
 
     bWindow_     = pDisplay->IsDisplay();
     bVirDev_     = true;
@@ -95,7 +95,7 @@ X11SalVirtualDevice::X11SalVirtualDevice(SalGraphics* pGraphics, long &nDX, long
     m_nXScreen(0),
     bGraphics_(false)
 {
-    SalColormap* pColormap = NULL;
+    SalColormap* pColormap = nullptr;
     bool bDeleteColormap = false;
 
     if( !nBitCount && pGraphics )
@@ -140,7 +140,7 @@ X11SalVirtualDevice::X11SalVirtualDevice(SalGraphics* pGraphics, long &nDX, long
         bExternPixmap_ = false;
     }
 
-    XRenderPictFormat* pXRenderFormat = pData ? static_cast<XRenderPictFormat*>(pData->pXRenderFormat) : NULL;
+    XRenderPictFormat* pXRenderFormat = pData ? static_cast<XRenderPictFormat*>(pData->pXRenderFormat) : nullptr;
     if( pXRenderFormat )
     {
         pGraphics_->SetXRenderFormat( pXRenderFormat );
@@ -163,7 +163,7 @@ X11SalVirtualDevice::X11SalVirtualDevice(SalGraphics* pGraphics, long &nDX, long
 X11SalVirtualDevice::~X11SalVirtualDevice()
 {
     delete pGraphics_;
-    pGraphics_ = NULL;
+    pGraphics_ = nullptr;
 
     if( GetDrawable() && !bExternPixmap_ )
         XFreePixmap( GetXDisplay(), GetDrawable() );
@@ -172,7 +172,7 @@ X11SalVirtualDevice::~X11SalVirtualDevice()
 SalGraphics* X11SalVirtualDevice::AcquireGraphics()
 {
     if( bGraphics_ )
-        return NULL;
+        return nullptr;
 
     if( pGraphics_ )
         bGraphics_ = true;

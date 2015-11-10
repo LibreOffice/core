@@ -36,7 +36,7 @@ namespace vcl
 
     public:
 
-        explicit PNGWriter(const BitmapEx&, const css::uno::Sequence<css::beans::PropertyValue>* pFilterData = NULL);
+        explicit PNGWriter(const BitmapEx&, const css::uno::Sequence<css::beans::PropertyValue>* pFilterData = nullptr);
         ~PNGWriter();
 
         bool Write(SvStream& rStream);

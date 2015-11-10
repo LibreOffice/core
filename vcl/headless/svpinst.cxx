@@ -60,7 +60,7 @@ bool SvpSalInstance::isFrameAlive( const SalFrame* pFrame ) const
     return false;
 }
 
-SvpSalInstance* SvpSalInstance::s_pDefaultInstance = NULL;
+SvpSalInstance* SvpSalInstance::s_pDefaultInstance = nullptr;
 
 SvpSalInstance::SvpSalInstance( SalYieldMutex *pMutex ) :
     SalGenericInstance( pMutex )
@@ -100,14 +100,14 @@ SvpSalInstance::SvpSalInstance( SalYieldMutex *pMutex ) :
         }
     }
     m_aEventGuard = osl_createMutex();
-    if( s_pDefaultInstance == NULL )
+    if( s_pDefaultInstance == nullptr )
         s_pDefaultInstance = this;
 }
 
 SvpSalInstance::~SvpSalInstance()
 {
     if( s_pDefaultInstance == this )
-        s_pDefaultInstance = NULL;
+        s_pDefaultInstance = nullptr;
 
     // close 'wakeup' pipe.
     close (m_pTimeoutFDS[0]);
@@ -173,7 +173,7 @@ bool SvpSalInstance::CheckTimeout( bool bExecuteTimers )
     if( m_aTimeout.tv_sec ) // timer is started
     {
         timeval aTimeOfDay;
-        gettimeofday( &aTimeOfDay, 0 );
+        gettimeofday( &aTimeOfDay, nullptr );
         if( aTimeOfDay >= m_aTimeout )
         {
             bRet = true;
@@ -200,7 +200,7 @@ bool SvpSalInstance::CheckTimeout( bool bExecuteTimers )
 
 SalFrame* SvpSalInstance::CreateChildFrame( SystemParentData* pParent, SalFrameStyleFlags nStyle )
 {
-    return new SvpSalFrame( this, NULL, nStyle, false, SVP_DEFAULT_BITMAP_FORMAT, pParent );
+    return new SvpSalFrame( this, nullptr, nStyle, false, SVP_DEFAULT_BITMAP_FORMAT, pParent );
 }
 
 SalFrame* SvpSalInstance::CreateFrame( SalFrame* pParent, SalFrameStyleFlags nStyle )
@@ -317,7 +317,7 @@ void SvpSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents, sal_uLong
         {
             timeval Timeout;
             // determine remaining timeout.
-            gettimeofday (&Timeout, 0);
+            gettimeofday (&Timeout, nullptr);
             nTimeoutMS = (m_aTimeout.tv_sec - Timeout.tv_sec) * 1000
                          + m_aTimeout.tv_usec/1000 - Timeout.tv_usec/1000;
             if( nTimeoutMS < 0 )
@@ -364,7 +364,7 @@ bool SvpSalInstance::AnyInput( VclInputFlags nType )
 
 SalSession* SvpSalInstance::CreateSalSession()
 {
-    return NULL;
+    return nullptr;
 }
 
 void* SvpSalInstance::GetConnectionIdentifier( ConnectionIdentifierType& rReturnedType, int& rReturnedBytes )
@@ -384,7 +384,7 @@ void SvpSalInstance::StopTimer()
 void SvpSalInstance::StartTimer( sal_uLong nMS )
 {
     timeval aPrevTimeout (m_aTimeout);
-    gettimeofday (&m_aTimeout, 0);
+    gettimeofday (&m_aTimeout, nullptr);
 
     m_nTimeoutMS  = nMS;
     m_aTimeout    += m_nTimeoutMS;

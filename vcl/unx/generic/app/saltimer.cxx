@@ -45,7 +45,7 @@ void SalXLib::StopTimer()
 void SalXLib::StartTimer( sal_uLong nMS )
 {
     timeval Timeout (m_aTimeout); // previous timeout.
-    gettimeofday (&m_aTimeout, 0);
+    gettimeofday (&m_aTimeout, nullptr);
 
     m_nTimeoutMS  = nMS;
     m_aTimeout    += m_nTimeoutMS;

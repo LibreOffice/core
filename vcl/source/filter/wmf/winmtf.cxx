@@ -532,7 +532,7 @@ tools::PolyPolygon& WinMtfOutput::ImplMap( tools::PolyPolygon& rPolyPolygon )
 
 void WinMtfOutput::SelectObject( sal_Int32 nIndex )
 {
-    GDIObj* pGDIObj = NULL;
+    GDIObj* pGDIObj = nullptr;
 
     if ( nIndex & ENHMETA_STOCK_OBJECT )
         pGDIObj = new GDIObj();
@@ -544,7 +544,7 @@ void WinMtfOutput::SelectObject( sal_Int32 nIndex )
             pGDIObj = vGDIObj[ nIndex ];
     }
 
-    if( pGDIObj == NULL )
+    if( pGDIObj == nullptr )
         return;
 
     if ( nIndex & ENHMETA_STOCK_OBJECT )
@@ -649,7 +649,7 @@ void WinMtfOutput::SetTextAlign( sal_uInt32 nAlign )
 
 void WinMtfOutput::ImplResizeObjectArry( sal_uInt32 nNewEntrys )
 {
-    vGDIObj.resize(nNewEntrys, NULL);
+    vGDIObj.resize(nNewEntrys, nullptr);
 }
 
 void WinMtfOutput::ImplDrawClippedPolyPolygon( const tools::PolyPolygon& rPolyPoly )
@@ -703,7 +703,7 @@ void WinMtfOutput::CreateObject( GDIObjectType eType, void* pStyle )
     sal_uInt32 nIndex;
     for ( nIndex = 0; nIndex < vGDIObj.size(); nIndex++ )
     {
-        if ( vGDIObj[ nIndex ] == NULL )
+        if ( vGDIObj[ nIndex ] == nullptr )
             break;
     }
     if ( nIndex == vGDIObj.size() )
@@ -737,7 +737,7 @@ void WinMtfOutput::CreateObject( sal_Int32 nIndex, GDIObjectType eType, void* pS
         if ( (sal_uInt32)nIndex >= vGDIObj.size() )
             ImplResizeObjectArry( nIndex + 16 );
 
-        if ( vGDIObj[ nIndex ] != NULL )
+        if ( vGDIObj[ nIndex ] != nullptr )
             delete vGDIObj[ nIndex ];
 
         vGDIObj[ nIndex ] = new GDIObj( eType, pStyle );
@@ -770,7 +770,7 @@ void WinMtfOutput::DeleteObject( sal_Int32 nIndex )
         if ( (sal_uInt32)nIndex < vGDIObj.size() )
         {
             delete vGDIObj[ nIndex ];
-            vGDIObj[ nIndex ] = NULL;
+            vGDIObj[ nIndex ] = nullptr;
         }
     }
 }

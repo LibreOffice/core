@@ -42,7 +42,7 @@ private:
     sal_Int8            mnAlphaDepth;
     sal_uInt8           meRefDevMode;
 
-    SAL_DLLPRIVATE void ImplInitVirDev( const OutputDevice* pOutDev, long nDX, long nDY, sal_uInt16 nBitCount, const SystemGraphicsData *pData = NULL );
+    SAL_DLLPRIVATE void ImplInitVirDev( const OutputDevice* pOutDev, long nDX, long nDY, sal_uInt16 nBitCount, const SystemGraphicsData *pData = nullptr );
     SAL_DLLPRIVATE bool InnerImplSetOutputSizePixel( const Size& rNewSize, bool bErase,
                                                      const basebmp::RawMemorySharedArray &pBuffer,
                                                      const bool bTopDown );

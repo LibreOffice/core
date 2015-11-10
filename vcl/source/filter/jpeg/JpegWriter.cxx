@@ -90,7 +90,7 @@ void jpeg_svstream_dest (j_compress_ptr cinfo, void* output)
      * manager serially with the same JPEG object, because their private object
      * sizes may be different.  Caveat programmer.
      */
-    if (cinfo->dest == NULL)
+    if (cinfo->dest == nullptr)
     {    /* first time for this JPEG object? */
         cinfo->dest = static_cast<jpeg_destination_mgr*>(
         (*cinfo->mem->alloc_small) (reinterpret_cast<j_common_ptr>(cinfo), JPOOL_PERMANENT, sizeof(DestinationManagerStruct)));
@@ -105,8 +105,8 @@ void jpeg_svstream_dest (j_compress_ptr cinfo, void* output)
 
 JPEGWriter::JPEGWriter( SvStream& rStream, const css::uno::Sequence< css::beans::PropertyValue >* pFilterData, bool* pExportWasGrey ) :
     mrStream     ( rStream ),
-    mpReadAccess ( NULL ),
-    mpBuffer     ( NULL ),
+    mpReadAccess ( nullptr ),
+    mpBuffer     ( nullptr ),
     mbNative     ( false ),
     mpExpWasGrey ( pExportWasGrey )
 {
@@ -132,7 +132,7 @@ JPEGWriter::JPEGWriter( SvStream& rStream, const css::uno::Sequence< css::beans:
 
 void* JPEGWriter::GetScanline( long nY )
 {
-    void* pScanline = NULL;
+    void* pScanline = nullptr;
 
     if( mpReadAccess )
     {
@@ -233,10 +233,10 @@ bool JPEGWriter::Write( const Graphic& rGraphic )
         bRet = WriteJPEG( this, &mrStream, mpReadAccess->Width(), mpReadAccess->Height(), mbGreys, mnQuality, maChromaSubsampling, mxStatusIndicator );
 
         delete[] mpBuffer;
-        mpBuffer = NULL;
+        mpBuffer = nullptr;
 
         Bitmap::ReleaseAccess( mpReadAccess );
-        mpReadAccess = NULL;
+        mpReadAccess = nullptr;
     }
     if ( mxStatusIndicator.is() )
         mxStatusIndicator->end();

@@ -58,7 +58,7 @@ public:
 
 SystemWindow::ImplData::ImplData()
 {
-    mpTaskPaneList = NULL;
+    mpTaskPaneList = nullptr;
     maMaxOutSize = Size( SHRT_MAX, SHRT_MAX );
 }
 
@@ -73,7 +73,7 @@ void SystemWindow::Init()
     mpWindowImpl->mbSysWin            = true;
     mpWindowImpl->mnActivateMode      = ActivateModeFlags::GrabFocus;
 
-    mpMenuBar           = NULL;
+    mpMenuBar           = nullptr;
     mbPinned            = false;
     mbRollUp            = false;
     mbRollFunc          = false;
@@ -84,7 +84,7 @@ void SystemWindow::Init()
     mbInitialLayoutDone = false;
     mnMenuBarMode       = MenuBarMode::Normal;
     mnIcon              = 0;
-    mpDialogParent      = NULL;
+    mpDialogParent      = nullptr;
 
     //To-Do, reuse maResizeTimer
     maLayoutIdle.SetPriority(SchedulerPriority::RESIZE);
@@ -115,7 +115,7 @@ void SystemWindow::dispose()
 {
     maLayoutIdle.Stop();
     delete mpImplData;
-    mpImplData = NULL;
+    mpImplData = nullptr;
 
     // Hack to make sure code called from base ~Window does not interpret this
     // as a SystemWindow (which it no longer is by then):
@@ -198,7 +198,7 @@ bool SystemWindow::PreNotify( NotifyEvent& rNEvt )
 TaskPaneList* SystemWindow::GetTaskPaneList()
 {
     if( !mpImplData )
-        return NULL;
+        return nullptr;
     if( mpImplData->mpTaskPaneList )
         return mpImplData->mpTaskPaneList ;
     else
@@ -909,8 +909,8 @@ void SystemWindow::SetMenuBar(MenuBar* pMenuBar)
     if ( mpMenuBar != pMenuBar )
     {
         MenuBar* pOldMenuBar = mpMenuBar;
-        vcl::Window*  pOldWindow = NULL;
-        vcl::Window*  pNewWindow=NULL;
+        vcl::Window*  pOldWindow = nullptr;
+        vcl::Window*  pNewWindow=nullptr;
         mpMenuBar = pMenuBar;
 
         if ( mpWindowImpl->mpBorderWindow && (mpWindowImpl->mpBorderWindow->GetType() == WINDOW_BORDERWINDOW) )
@@ -918,7 +918,7 @@ void SystemWindow::SetMenuBar(MenuBar* pMenuBar)
             if ( pOldMenuBar )
                 pOldWindow = pOldMenuBar->ImplGetWindow();
             else
-                pOldWindow = NULL;
+                pOldWindow = nullptr;
             if ( pOldWindow )
             {
                 CallEventListeners( VCLEVENT_WINDOW_MENUBARREMOVED, static_cast<void*>(pOldMenuBar) );
@@ -934,11 +934,11 @@ void SystemWindow::SetMenuBar(MenuBar* pMenuBar)
                 CallEventListeners( VCLEVENT_WINDOW_MENUBARADDED, static_cast<void*>(pMenuBar) );
             }
             else
-                static_cast<ImplBorderWindow*>(mpWindowImpl->mpBorderWindow.get())->SetMenuBarWindow( NULL );
+                static_cast<ImplBorderWindow*>(mpWindowImpl->mpBorderWindow.get())->SetMenuBarWindow( nullptr );
             ImplToBottomChild();
             if ( pOldMenuBar )
             {
-                bool bDelete = (pMenuBar == 0);
+                bool bDelete = (pMenuBar == nullptr);
                 if( bDelete && pOldWindow )
                 {
                     if( mpImplData->mpTaskPaneList )
@@ -946,7 +946,7 @@ void SystemWindow::SetMenuBar(MenuBar* pMenuBar)
                 }
                 MenuBar::ImplDestroy( pOldMenuBar, bDelete );
                 if( bDelete )
-                    pOldWindow = NULL;  // will be deleted in MenuBar::ImplDestroy,
+                    pOldWindow = nullptr;  // will be deleted in MenuBar::ImplDestroy,
             }
 
         }

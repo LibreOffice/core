@@ -35,12 +35,12 @@
 #include <memory>
 
 Bitmap::Bitmap() :
-    mpImpBmp( NULL )
+    mpImpBmp( nullptr )
 {
 }
 
 Bitmap::Bitmap( const ResId& rResId ) :
-    mpImpBmp( NULL )
+    mpImpBmp( nullptr )
 {
     const BitmapEx aBmpEx( rResId );
 
@@ -70,7 +70,7 @@ Bitmap::Bitmap( const Size& rSizePixel, sal_uInt16 nBitCount, const BitmapPalett
     if( rSizePixel.Width() && rSizePixel.Height() )
     {
         BitmapPalette   aPal;
-        BitmapPalette*  pRealPal = NULL;
+        BitmapPalette*  pRealPal = nullptr;
 
         if( nBitCount <= 8 )
         {
@@ -125,7 +125,7 @@ Bitmap::Bitmap( const Size& rSizePixel, sal_uInt16 nBitCount, const BitmapPalett
         mpImpBmp->ImplCreate( rSizePixel, nBitCount, pRealPal ? *pRealPal : aPal );
     }
     else
-        mpImpBmp = NULL;
+        mpImpBmp = nullptr;
 }
 
 Bitmap::~Bitmap()
@@ -255,7 +255,7 @@ void Bitmap::SetEmpty()
     maPrefSize = Size();
 
     ImplReleaseRef();
-    mpImpBmp = NULL;
+    mpImpBmp = nullptr;
 }
 
 Size Bitmap::GetSizePixel() const
@@ -305,7 +305,7 @@ void Bitmap::ImplReleaseRef()
         else
         {
             delete mpImpBmp;
-            mpImpBmp = NULL;
+            mpImpBmp = nullptr;
         }
     }
 }
@@ -361,7 +361,7 @@ BitmapInfoAccess* Bitmap::AcquireInfoAccess()
     if( !*pInfoAccess )
     {
         delete pInfoAccess;
-        pInfoAccess = NULL;
+        pInfoAccess = nullptr;
     }
 
     return pInfoAccess;
@@ -374,7 +374,7 @@ BitmapReadAccess* Bitmap::AcquireReadAccess()
     if( !*pReadAccess )
     {
         delete pReadAccess;
-        pReadAccess = NULL;
+        pReadAccess = nullptr;
     }
 
     return pReadAccess;
@@ -387,7 +387,7 @@ BitmapWriteAccess* Bitmap::AcquireWriteAccess()
     if( !*pWriteAccess )
     {
         delete pWriteAccess;
-        pWriteAccess = NULL;
+        pWriteAccess = nullptr;
     }
 
     return pWriteAccess;

@@ -971,7 +971,7 @@ public:
     void translate( double tx, double ty );
     bool invert();
 
-    void append( PDFWriterImpl::PDFPage& rPage, OStringBuffer& rBuffer, Point* pBack = NULL );
+    void append( PDFWriterImpl::PDFPage& rPage, OStringBuffer& rBuffer, Point* pBack = nullptr );
 
     Point transform( const Point& rPoint ) const;
 };
@@ -1288,7 +1288,7 @@ bool PDFWriterImpl::PDFPage::emit(sal_Int32 nParentObject )
         aLine.append( "/Trans<</D " );
         appendDouble( (double)m_nTransTime/1000.0, aLine, 3 );
         aLine.append( "\n" );
-        const char *pStyle = NULL, *pDm = NULL, *pM = NULL, *pDi = NULL;
+        const char *pStyle = nullptr, *pDm = nullptr, *pM = nullptr, *pDi = nullptr;
         switch( m_eTransition )
         {
             case PDFWriter::SplitHorizontalInward:
@@ -1517,9 +1517,9 @@ void PDFWriterImpl::PDFPage::appendPolygon( const basegfx::B2DPolygon& rPoly, OS
         basegfx::B2DPoint aBL( aRange.getMinX(), aRange.getMaxY() );
         appendPixelPoint( aBL, rBuffer );
         rBuffer.append( ' ' );
-        appendMappedLength( aRange.getWidth(), rBuffer, false, NULL, nLog10Divisor );
+        appendMappedLength( aRange.getWidth(), rBuffer, false, nullptr, nLog10Divisor );
         rBuffer.append( ' ' );
-        appendMappedLength( aRange.getHeight(), rBuffer, true, NULL, nLog10Divisor );
+        appendMappedLength( aRange.getHeight(), rBuffer, true, nullptr, nLog10Divisor );
         rBuffer.append( " re\n" );
         return;
     }
@@ -1737,7 +1737,7 @@ void PDFWriterImpl::PDFPage::appendWaveLine( sal_Int32 nWidth, sal_Int32 nY, sal
                                const com::sun::star::uno::Reference< com::sun::star::beans::XMaterialHolder >& xEnc,
                                PDFWriter& i_rOuterFace)
         :
-        m_pReferenceDevice( NULL ),
+        m_pReferenceDevice( nullptr ),
         m_aMapMode( MAP_POINT, Point(), Fraction( 1L, pointToPixel(1) ), Fraction( 1L, pointToPixel(1) ) ),
         m_nCurrentStructElement( 0 ),
         m_bEmitStructure( true ),
@@ -1756,16 +1756,16 @@ void PDFWriterImpl::PDFPage::appendWaveLine( sal_Int32 nWidth, sal_Int32 nY, sal
         m_aContext(rContext),
         m_aFile(m_aContext.URL),
         m_bOpen(false),
-        m_pCodec( NULL ),
-        m_pMemStream(NULL),
+        m_pCodec( nullptr ),
+        m_pMemStream(nullptr),
         m_aDocDigest( rtl_digest_createMD5() ),
         m_aCipher( nullptr ),
-        m_aDigest( NULL ),
+        m_aDigest( nullptr ),
         m_nKeyLength(0),
         m_nRC4KeyLength(0),
         m_bEncryptThisStream( false ),
         m_nAccessPermissions(0),
-        m_pEncryptionBuffer( NULL ),
+        m_pEncryptionBuffer( nullptr ),
         m_nEncryptionBufferSize( 0 ),
         m_bIsPDF_A1( false ),
         m_rOuterFace( i_rOuterFace )
@@ -2007,7 +2007,7 @@ void PDFWriterImpl::computeDocumentIdentifier( std::vector< sal_uInt8 >& o_rIden
     o_rCString2 = aCreationMetaDateString.makeStringAndClear();
 
     rtlDigest aDigest = rtl_digest_createMD5();
-    OSL_ENSURE( aDigest != NULL, "PDFWriterImpl::computeDocumentIdentifier: cannot obtain a digest object !" );
+    OSL_ENSURE( aDigest != nullptr, "PDFWriterImpl::computeDocumentIdentifier: cannot obtain a digest object !" );
     if( aDigest )
     {
         rtlDigestError nError = rtl_digest_updateMD5( aDigest, &aGMT, sizeof( aGMT ) );
@@ -2158,12 +2158,12 @@ void PDFWriterImpl::endCompression()
     {
         m_pCodec->EndCompression();
         delete m_pCodec;
-        m_pCodec = NULL;
+        m_pCodec = nullptr;
         sal_uInt64 nLen = m_pMemStream->Tell();
         m_pMemStream->Seek( 0 );
         writeBuffer( m_pMemStream->GetData(), nLen );
         delete m_pMemStream;
-        m_pMemStream = NULL;
+        m_pMemStream = nullptr;
     }
 #endif
 }
@@ -2257,7 +2257,7 @@ public:
 
 inline const ImplPdfBuiltinFontData* GetPdfFontData( const PhysicalFontFace* pFontData )
 {
-    const ImplPdfBuiltinFontData* pFD = NULL;
+    const ImplPdfBuiltinFontData* pFD = nullptr;
     if( pFontData && pFontData->CheckMagic( ImplPdfBuiltinFontData::PDF_FONT_MAGIC ) )
         pFD = static_cast<const ImplPdfBuiltinFontData*>( pFontData );
     return pFD;
@@ -2360,7 +2360,7 @@ void PDFWriterImpl::endPage()
             {
                 writeJPG( *jpeg );
                 delete jpeg->m_pStream;
-                jpeg->m_pStream = NULL;
+                jpeg->m_pStream = nullptr;
                 jpeg->m_aMask = Bitmap();
             }
         }
@@ -2371,7 +2371,7 @@ void PDFWriterImpl::endPage()
             {
                 writeTransparentObject( *t );
                 delete t->m_pContentStream;
-                t->m_pContentStream = NULL;
+                t->m_pContentStream = nullptr;
             }
         }
     }
@@ -2928,7 +2928,7 @@ bool PDFWriterImpl::emitTilings()
         checkAndEnableStreamEncryption( it->m_nObject );
         bool written = writeBuffer( it->m_pTilingStream->GetData(), nTilingStreamSize );
         delete it->m_pTilingStream;
-        it->m_pTilingStream = NULL;
+        it->m_pTilingStream = nullptr;
         if( !written )
             return false;
         disableStreamEncryption();
@@ -2985,7 +2985,7 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitSystemFont( const PhysicalFo
 
     if( pFont->IsEmbeddable() )
     {
-        const unsigned char* pFontData = NULL;
+        const unsigned char* pFontData = nullptr;
         long nFontLen = 0;
         sal_Ucs nEncodedCodes[256];
         sal_Int32 pEncWidths[256];
@@ -3013,7 +3013,7 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitSystemFont( const PhysicalFo
         pGraphics->GetGlyphWidths( pFont, false, aGlyphWidths, aUnicodeMap );
 
         OUString aTmpName;
-        osl_createTempFile( NULL, NULL, &aTmpName.pData );
+        osl_createTempFile( nullptr, nullptr, &aTmpName.pData );
         sal_GlyphId aGlyphIds[ 256 ];
         sal_uInt8 pEncoding[ 256 ];
         sal_Int32 pDuWidths[ 256 ];
@@ -3128,7 +3128,7 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitEmbeddedFont( const Physical
     assert(pGraphics);
 
     // prepare font encoding
-    std::set<sal_Unicode> const * pPriority(0);
+    std::set<sal_Unicode> const * pPriority(nullptr);
     const Ucs2SIntMap *const pEncoding =
         pGraphics->GetFontEncodingVector( pFont, nullptr, &pPriority );
     sal_Int32 nToUnicodeStream = 0;
@@ -3193,12 +3193,12 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitEmbeddedFont( const Physical
 
     FontSubsetInfo aInfo;
     sal_Int32 pWidths[256];
-    const unsigned char* pFontData = NULL;
+    const unsigned char* pFontData = nullptr;
     long nFontLen = 0;
     sal_Int32 nLength1, nLength2;
     try
     {
-        if( (pFontData = static_cast<const unsigned char*>(pGraphics->GetEmbedFontData(pFont, nEncodedCodes, pWidths, 256, aInfo, &nFontLen))) != NULL )
+        if( (pFontData = static_cast<const unsigned char*>(pGraphics->GetEmbedFontData(pFont, nEncodedCodes, pWidths, 256, aInfo, &nFontLen))) != nullptr )
         {
             if( (aInfo.m_nFontType & FontSubsetInfo::ANY_TYPE1) == 0 )
                 throw FontException();
@@ -3587,7 +3587,7 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitEmbeddedFont( const Physical
                 "<</Type/Font/Subtype/Type1/BaseFont/" );
             appendName( aInfo.m_aPSName, aLine );
             aLine.append( "\n" );
-            if( !pFont->IsSymbolFont() &&  pEncoding == 0 )
+            if( !pFont->IsSymbolFont() &&  pEncoding == nullptr )
                 aLine.append( "/Encoding/WinAnsiEncoding\n" );
             if( nToUnicodeStream )
             {
@@ -3939,7 +3939,7 @@ bool PDFWriterImpl::emitFonts()
     std::map< sal_Int32, sal_Int32 > aFontIDToObject;
 
     OUString aTmpName;
-    osl_createTempFile( NULL, NULL, &aTmpName.pData );
+    osl_createTempFile( nullptr, nullptr, &aTmpName.pData );
     for( FontSubsetData::iterator it = m_aSubsets.begin(); it != m_aSubsets.end(); ++it )
     {
         for( FontEmitList::iterator lit = it->second.m_aSubsets.begin(); lit != it->second.m_aSubsets.end(); ++lit )
@@ -5262,7 +5262,7 @@ bool PDFWriterImpl::emitAppearances( PDFWidget& rWidget, OStringBuffer& rAnnotDi
                  stream_it != dict_it->second.end(); ++stream_it )
             {
                 SvMemoryStream* pApppearanceStream = stream_it->second;
-                dict_it->second[ stream_it->first ] = NULL;
+                dict_it->second[ stream_it->first ] = nullptr;
 
                 bool bDeflate = compressStream( pApppearanceStream );
 
@@ -6056,7 +6056,7 @@ class HashContextScope {
 public:
     explicit HashContextScope(HASHContext *pPtr) : mpPtr(pPtr) {}
     ~HashContextScope() { clear(); }
-    void clear() { if (mpPtr) { HASH_Destroy(mpPtr); } mpPtr = NULL; }
+    void clear() { if (mpPtr) { HASH_Destroy(mpPtr); } mpPtr = nullptr; }
     HASHContext *get() { return mpPtr; }
 };
 
@@ -6304,19 +6304,19 @@ TimeStampResp ::= SEQUENCE  {
 
 const SEC_ASN1Template MessageImprint_Template[] =
 {
-    { SEC_ASN1_SEQUENCE, 0, NULL, sizeof(MessageImprint) },
+    { SEC_ASN1_SEQUENCE, 0, nullptr, sizeof(MessageImprint) },
     { SEC_ASN1_INLINE, offsetof(MessageImprint, hashAlgorithm), SECOID_AlgorithmIDTemplate, 0 },
-    { SEC_ASN1_OCTET_STRING, offsetof(MessageImprint, hashedMessage), 0, 0 },
-    { 0, 0, 0, 0 }
+    { SEC_ASN1_OCTET_STRING, offsetof(MessageImprint, hashedMessage), nullptr, 0 },
+    { 0, 0, nullptr, 0 }
 };
 
 const SEC_ASN1Template Extension_Template[] =
 {
-    { SEC_ASN1_SEQUENCE, 0, NULL, sizeof(Extension) },
-    { SEC_ASN1_OBJECT_ID, offsetof(Extension, extnID), 0, 0 },
-    { SEC_ASN1_BOOLEAN, offsetof(Extension, critical), 0, 0 },
-    { SEC_ASN1_OCTET_STRING, offsetof(Extension, extnValue), 0, 0 },
-    { 0, 0, 0, 0 }
+    { SEC_ASN1_SEQUENCE, 0, nullptr, sizeof(Extension) },
+    { SEC_ASN1_OBJECT_ID, offsetof(Extension, extnID), nullptr, 0 },
+    { SEC_ASN1_BOOLEAN, offsetof(Extension, critical), nullptr, 0 },
+    { SEC_ASN1_OCTET_STRING, offsetof(Extension, extnValue), nullptr, 0 },
+    { 0, 0, nullptr, 0 }
 };
 
 const SEC_ASN1Template Extensions_Template[] =
@@ -6326,14 +6326,14 @@ const SEC_ASN1Template Extensions_Template[] =
 
 const SEC_ASN1Template TimeStampReq_Template[] =
 {
-    { SEC_ASN1_SEQUENCE, 0, NULL, sizeof(TimeStampReq) },
-    { SEC_ASN1_INTEGER, offsetof(TimeStampReq, version), 0, 0 },
+    { SEC_ASN1_SEQUENCE, 0, nullptr, sizeof(TimeStampReq) },
+    { SEC_ASN1_INTEGER, offsetof(TimeStampReq, version), nullptr, 0 },
     { SEC_ASN1_INLINE, offsetof(TimeStampReq, messageImprint), MessageImprint_Template, 0 },
-    { SEC_ASN1_OBJECT_ID | SEC_ASN1_OPTIONAL, offsetof(TimeStampReq, reqPolicy), 0, 0 },
-    { SEC_ASN1_INTEGER | SEC_ASN1_OPTIONAL, offsetof(TimeStampReq, nonce), 0, 0 },
-    { SEC_ASN1_BOOLEAN | SEC_ASN1_OPTIONAL, offsetof(TimeStampReq, certReq), 0, 0 },
+    { SEC_ASN1_OBJECT_ID | SEC_ASN1_OPTIONAL, offsetof(TimeStampReq, reqPolicy), nullptr, 0 },
+    { SEC_ASN1_INTEGER | SEC_ASN1_OPTIONAL, offsetof(TimeStampReq, nonce), nullptr, 0 },
+    { SEC_ASN1_BOOLEAN | SEC_ASN1_OPTIONAL, offsetof(TimeStampReq, certReq), nullptr, 0 },
     { SEC_ASN1_OPTIONAL | SEC_ASN1_CONTEXT_SPECIFIC | 0, offsetof(TimeStampReq, extensions), Extensions_Template, 0 },
-    { 0, 0, 0, 0 }
+    { 0, 0, nullptr, 0 }
 };
 
 typedef struct {
@@ -6344,16 +6344,16 @@ typedef struct {
 
 const SEC_ASN1Template PKIStatusInfo_Template[] =
 {
-    { SEC_ASN1_SEQUENCE, 0, NULL, sizeof(PKIStatusInfo) },
-    { SEC_ASN1_INTEGER, offsetof(PKIStatusInfo, status), 0, 0 },
-    { SEC_ASN1_CONSTRUCTED | SEC_ASN1_SEQUENCE | SEC_ASN1_OPTIONAL, offsetof(PKIStatusInfo, statusString), 0, 0 },
-    { SEC_ASN1_BIT_STRING | SEC_ASN1_OPTIONAL, offsetof(PKIStatusInfo, failInfo), 0, 0 },
-    { 0, 0, 0, 0 }
+    { SEC_ASN1_SEQUENCE, 0, nullptr, sizeof(PKIStatusInfo) },
+    { SEC_ASN1_INTEGER, offsetof(PKIStatusInfo, status), nullptr, 0 },
+    { SEC_ASN1_CONSTRUCTED | SEC_ASN1_SEQUENCE | SEC_ASN1_OPTIONAL, offsetof(PKIStatusInfo, statusString), nullptr, 0 },
+    { SEC_ASN1_BIT_STRING | SEC_ASN1_OPTIONAL, offsetof(PKIStatusInfo, failInfo), nullptr, 0 },
+    { 0, 0, nullptr, 0 }
 };
 
 const SEC_ASN1Template Any_Template[] =
 {
-    { SEC_ASN1_ANY, 0, NULL, sizeof(SECItem) }
+    { SEC_ASN1_ANY, 0, nullptr, sizeof(SECItem) }
 };
 
 typedef struct {
@@ -6363,10 +6363,10 @@ typedef struct {
 
 const SEC_ASN1Template TimeStampResp_Template[] =
 {
-    { SEC_ASN1_SEQUENCE, 0, NULL, sizeof(TimeStampResp) },
+    { SEC_ASN1_SEQUENCE, 0, nullptr, sizeof(TimeStampResp) },
     { SEC_ASN1_INLINE, offsetof(TimeStampResp, status), PKIStatusInfo_Template, 0 },
     { SEC_ASN1_ANY | SEC_ASN1_OPTIONAL, offsetof(TimeStampResp, timeStampToken), Any_Template, 0 },
-    { 0, 0, 0, 0 }
+    { 0, 0, nullptr, 0 }
 };
 
 /* Will see if these are needed or not
@@ -6523,7 +6523,7 @@ bad_data:
         PORT_Memcpy(to->data, result, to->len = result_bytes);
     rv = SECSuccess;
     } else {
-        SECItem result_item = {siBuffer, NULL, 0 };
+        SECItem result_item = {siBuffer, nullptr, 0 };
     result_item.data = result;
     result_item.len  = result_bytes;
     rv = SECITEM_CopyItem(pool, to, &result_item);
@@ -6537,35 +6537,35 @@ my_NSS_CMSAttributeArray_FindAttrByOidTag(NSSCMSAttribute **attrs, SECOidTag oid
     SECOidData *oid;
     NSSCMSAttribute *attr1, *attr2;
 
-    if (attrs == NULL)
-        return NULL;
+    if (attrs == nullptr)
+        return nullptr;
 
     oid = SECOID_FindOIDByTag(oidtag);
-    if (oid == NULL)
-        return NULL;
+    if (oid == nullptr)
+        return nullptr;
 
-    while ((attr1 = *attrs++) != NULL) {
+    while ((attr1 = *attrs++) != nullptr) {
     if (attr1->type.len == oid->oid.len && PORT_Memcmp (attr1->type.data,
                                 oid->oid.data,
                                 oid->oid.len) == 0)
         break;
     }
 
-    if (attr1 == NULL)
-        return NULL;
+    if (attr1 == nullptr)
+        return nullptr;
 
     if (!only)
         return attr1;
 
-    while ((attr2 = *attrs++) != NULL) {
+    while ((attr2 = *attrs++) != nullptr) {
     if (attr2->type.len == oid->oid.len && PORT_Memcmp (attr2->type.data,
                                 oid->oid.data,
                                 oid->oid.len) == 0)
         break;
     }
 
-    if (attr2 != NULL)
-        return NULL;
+    if (attr2 != nullptr)
+        return nullptr;
 
     return attr1;
 }
@@ -6577,10 +6577,10 @@ my_NSS_CMSArray_Add(PLArenaPool *poolp, void ***array, void *obj)
     void **dest;
 
     PORT_Assert(array != NULL);
-    if (array == NULL)
+    if (array == nullptr)
         return SECFailure;
 
-    if (*array == NULL) {
+    if (*array == nullptr) {
         dest = static_cast<void **>(PORT_ArenaAlloc(poolp, 2 * sizeof(void *)));
     } else {
         void **p = *array;
@@ -6592,11 +6592,11 @@ my_NSS_CMSArray_Add(PLArenaPool *poolp, void ***array, void *obj)
                       (n + 2) * sizeof(void *)));
     }
 
-    if (dest == NULL)
+    if (dest == nullptr)
         return SECFailure;
 
     dest[n] = obj;
-    dest[n+1] = NULL;
+    dest[n+1] = nullptr;
     *array = dest;
     return SECSuccess;
 }
@@ -6607,7 +6607,7 @@ my_NSS_CMSAttribute_GetType(NSSCMSAttribute *attr)
     SECOidData *typetag;
 
     typetag = SECOID_FindOID(&(attr->type));
-    if (typetag == NULL)
+    if (typetag == nullptr)
         return SEC_OID_UNKNOWN;
 
     return typetag->offset;
@@ -6628,7 +6628,7 @@ my_NSS_CMSAttributeArray_AddAttr(PLArenaPool *poolp, NSSCMSAttribute ***attrs, N
     /* see if we have one already */
     oattr = my_NSS_CMSAttributeArray_FindAttrByOidTag(*attrs, type, PR_FALSE);
     PORT_Assert (oattr == NULL);
-    if (oattr != NULL)
+    if (oattr != nullptr)
         goto loser; /* XXX or would it be better to replace it? */
 
     /* no, shove it in */
@@ -6655,11 +6655,11 @@ NSSCMSMessage *CreateCMSMessage(PRTime time,
                                 CERTCertificate *cert,
                                 SECItem *digest)
 {
-    NSSCMSMessage *result = NSS_CMSMessage_Create(NULL);
+    NSSCMSMessage *result = NSS_CMSMessage_Create(nullptr);
     if (!result)
     {
         SAL_WARN("vcl.pdfwriter", "NSS_CMSMessage_Create failed");
-        return NULL;
+        return nullptr;
     }
 
     *cms_sd = NSS_CMSSignedData_Create(result);
@@ -6667,7 +6667,7 @@ NSSCMSMessage *CreateCMSMessage(PRTime time,
     {
         SAL_WARN("vcl.pdfwriter", "NSS_CMSSignedData_Create failed");
         NSS_CMSMessage_Destroy(result);
-        return NULL;
+        return nullptr;
     }
 
     NSSCMSContentInfo *cms_cinfo = NSS_CMSMessage_GetContentInfo(result);
@@ -6676,18 +6676,18 @@ NSSCMSMessage *CreateCMSMessage(PRTime time,
         SAL_WARN("vcl.pdfwriter", "NSS_CMSContentInfo_SetContent_SignedData failed");
         NSS_CMSSignedData_Destroy(*cms_sd);
         NSS_CMSMessage_Destroy(result);
-        return NULL;
+        return nullptr;
     }
 
     cms_cinfo = NSS_CMSSignedData_GetContentInfo(*cms_sd);
 
     // Attach NULL data as detached data
-    if (NSS_CMSContentInfo_SetContent_Data(result, cms_cinfo, NULL, PR_TRUE) != SECSuccess)
+    if (NSS_CMSContentInfo_SetContent_Data(result, cms_cinfo, nullptr, PR_TRUE) != SECSuccess)
     {
         SAL_WARN("vcl.pdfwriter", "NSS_CMSContentInfo_SetContent_Data failed");
         NSS_CMSSignedData_Destroy(*cms_sd);
         NSS_CMSMessage_Destroy(result);
-        return NULL;
+        return nullptr;
     }
 
     *cms_signer = NSS_CMSSignerInfo_Create(result, cert, SEC_OID_SHA1);
@@ -6696,7 +6696,7 @@ NSSCMSMessage *CreateCMSMessage(PRTime time,
         SAL_WARN("vcl.pdfwriter", "NSS_CMSSignerInfo_Create failed");
         NSS_CMSSignedData_Destroy(*cms_sd);
         NSS_CMSMessage_Destroy(result);
-        return NULL;
+        return nullptr;
     }
 
     if (NSS_CMSSignerInfo_AddSigningTime(*cms_signer, time) != SECSuccess)
@@ -6704,7 +6704,7 @@ NSSCMSMessage *CreateCMSMessage(PRTime time,
         SAL_WARN("vcl.pdfwriter", "NSS_CMSSignerInfo_AddSigningTime failed");
         NSS_CMSSignedData_Destroy(*cms_sd);
         NSS_CMSMessage_Destroy(result);
-        return NULL;
+        return nullptr;
     }
 
     if (NSS_CMSSignerInfo_IncludeCerts(*cms_signer, NSSCMSCM_CertChain, certUsageEmailSigner) != SECSuccess)
@@ -6712,7 +6712,7 @@ NSSCMSMessage *CreateCMSMessage(PRTime time,
         SAL_WARN("vcl.pdfwriter", "NSS_CMSSignerInfo_IncludeCerts failed");
         NSS_CMSSignedData_Destroy(*cms_sd);
         NSS_CMSMessage_Destroy(result);
-        return NULL;
+        return nullptr;
     }
 
     if (NSS_CMSSignedData_AddCertificate(*cms_sd, cert) != SECSuccess)
@@ -6720,7 +6720,7 @@ NSSCMSMessage *CreateCMSMessage(PRTime time,
         SAL_WARN("vcl.pdfwriter", "NSS_CMSSignedData_AddCertificate failed");
         NSS_CMSSignedData_Destroy(*cms_sd);
         NSS_CMSMessage_Destroy(result);
-        return NULL;
+        return nullptr;
     }
 
     if (NSS_CMSSignedData_AddSignerInfo(*cms_sd, *cms_signer) != SECSuccess)
@@ -6728,7 +6728,7 @@ NSSCMSMessage *CreateCMSMessage(PRTime time,
         SAL_WARN("vcl.pdfwriter", "NSS_CMSSignedData_AddSignerInfo failed");
         NSS_CMSSignedData_Destroy(*cms_sd);
         NSS_CMSMessage_Destroy(result);
-        return NULL;
+        return nullptr;
     }
 
     if (NSS_CMSSignedData_SetDigestValue(*cms_sd, SEC_OID_SHA1, digest) != SECSuccess)
@@ -6736,7 +6736,7 @@ NSSCMSMessage *CreateCMSMessage(PRTime time,
         SAL_WARN("vcl.pdfwriter", "NSS_CMSSignedData_SetDigestValue failed");
         NSS_CMSSignedData_Destroy(*cms_sd);
         NSS_CMSMessage_Destroy(result);
-        return NULL;
+        return nullptr;
     }
 
     return result;
@@ -6869,7 +6869,7 @@ bool PDFWriterImpl::finalizeSignature()
     SECItem values[2];
     SECItem *valuesp[2];
     valuesp[0] = values;
-    valuesp[1] = NULL;
+    valuesp[1] = nullptr;
     SECOidData typetag;
 
     if( !m_aContext.SignTSA.isEmpty() )
@@ -6888,11 +6888,11 @@ bool PDFWriterImpl::finalizeSignature()
         }
 
         SECItem ts_cms_output;
-        ts_cms_output.data = 0;
+        ts_cms_output.data = nullptr;
         ts_cms_output.len = 0;
         PLArenaPool *ts_arena = PORT_NewArena(10000);
         NSSCMSEncoderContext *ts_cms_ecx;
-        ts_cms_ecx = NSS_CMSEncoder_Start(ts_cms_msg, NULL, NULL, &ts_cms_output, ts_arena, PDFSigningPKCS7PasswordCallback, pass, NULL, NULL, NULL, NULL);
+        ts_cms_ecx = NSS_CMSEncoder_Start(ts_cms_msg, nullptr, nullptr, &ts_cms_output, ts_arena, PDFSigningPKCS7PasswordCallback, pass, nullptr, nullptr, nullptr, nullptr);
 
         if (NSS_CMSEncoder_Finish(ts_cms_ecx) != SECSuccess)
         {
@@ -6943,13 +6943,13 @@ bool PDFWriterImpl::finalizeSignature()
         src.version.data = &cOne;
         src.version.len = sizeof(cOne);
 
-        src.messageImprint.hashAlgorithm.algorithm.data = NULL;
-        src.messageImprint.hashAlgorithm.parameters.data = NULL;
-        SECOID_SetAlgorithmID(NULL, &src.messageImprint.hashAlgorithm, SEC_OID_SHA1, NULL);
+        src.messageImprint.hashAlgorithm.algorithm.data = nullptr;
+        src.messageImprint.hashAlgorithm.parameters.data = nullptr;
+        SECOID_SetAlgorithmID(nullptr, &src.messageImprint.hashAlgorithm, SEC_OID_SHA1, nullptr);
         src.messageImprint.hashedMessage = ts_digest;
 
         src.reqPolicy.type = siBuffer;
-        src.reqPolicy.data = NULL;
+        src.reqPolicy.data = nullptr;
         src.reqPolicy.len = 0;
 
         unsigned int nNonce = comphelper::rng::uniform_uint_distribution(0, SAL_MAX_UINT32);
@@ -6961,17 +6961,17 @@ bool PDFWriterImpl::finalizeSignature()
         src.certReq.data = &cOne;
         src.certReq.len = sizeof(cOne);
 
-        src.extensions = NULL;
+        src.extensions = nullptr;
 
-        SECItem* timestamp_request = SEC_ASN1EncodeItem(NULL, NULL, &src, TimeStampReq_Template);
-        if (timestamp_request == NULL)
+        SECItem* timestamp_request = SEC_ASN1EncodeItem(nullptr, nullptr, &src, TimeStampReq_Template);
+        if (timestamp_request == nullptr)
         {
             SAL_WARN("vcl.pdfwriter", "SEC_ASN1EncodeItem failed");
             free(pass);
             return false;
         }
 
-        if (timestamp_request->data == NULL)
+        if (timestamp_request->data == nullptr)
         {
             SAL_WARN("vcl.pdfwriter", "SEC_ASN1EncodeItem succeeded but got NULL data");
             free(pass);
@@ -6993,7 +6993,7 @@ bool PDFWriterImpl::finalizeSignature()
 
         CURL* curl = curl_easy_init();
         CURLcode rc;
-        struct curl_slist* slist = NULL;
+        struct curl_slist* slist = nullptr;
 
         if (!curl)
         {
@@ -7106,7 +7106,7 @@ bool PDFWriterImpl::finalizeSignature()
         response_item.data = reinterpret_cast<unsigned char*>(const_cast<char*>(response_buffer.getStr()));
         response_item.len = response_buffer.getLength();
 
-        if (SEC_ASN1DecodeItem(NULL, &response, TimeStampResp_Template, &response_item) != SECSuccess)
+        if (SEC_ASN1DecodeItem(nullptr, &response, TimeStampResp_Template, &response_item) != SECSuccess)
         {
             SAL_WARN("vcl.pdfwriter", "SEC_ASN1DecodeItem failed");
             free(pass);
@@ -7130,16 +7130,16 @@ bool PDFWriterImpl::finalizeSignature()
         // like experimenting.
         values[0] = response.timeStampToken;
         values[1].type = siBuffer;
-        values[1].data = NULL;
+        values[1].data = nullptr;
         values[1].len = 0;
 
         timestamp.values = valuesp;
 
-        typetag.oid.data = NULL;
+        typetag.oid.data = nullptr;
         // id-aa-timeStampToken OBJECT IDENTIFIER ::= { iso(1)
         // member-body(2) us(840) rsadsi(113549) pkcs(1) pkcs-9(9)
         // smime(16) aa(2) 14 }
-        if (my_SEC_StringToOID(NULL, &typetag.oid, "1.2.840.113549.1.9.16.2.14", 0) != SECSuccess)
+        if (my_SEC_StringToOID(nullptr, &typetag.oid, "1.2.840.113549.1.9.16.2.14", 0) != SECSuccess)
         {
             SAL_WARN("vcl.pdfwriter", "SEC_StringToOID failed");
             free(pass);
@@ -7169,7 +7169,7 @@ bool PDFWriterImpl::finalizeSignature()
     }
 
     SECItem cms_output;
-    cms_output.data = 0;
+    cms_output.data = nullptr;
     cms_output.len = 0;
     PLArenaPool *arena = PORT_NewArena(10000);
     NSSCMSEncoderContext *cms_ecx;
@@ -7179,7 +7179,7 @@ bool PDFWriterImpl::finalizeSignature()
     // with, the software itself pops up a dialog asking for the PIN (password). But I am not going
     // to test it and risk locking up my token...
 
-    cms_ecx = NSS_CMSEncoder_Start(cms_msg, NULL, NULL, &cms_output, arena, PDFSigningPKCS7PasswordCallback, pass, NULL, NULL, NULL, NULL);
+    cms_ecx = NSS_CMSEncoder_Start(cms_msg, nullptr, nullptr, &cms_output, arena, PDFSigningPKCS7PasswordCallback, pass, nullptr, nullptr, nullptr, nullptr);
 
     if (!cms_ecx)
     {
@@ -7758,7 +7758,7 @@ sal_Int32 PDFWriterImpl::emitOutputIntent()
     //force ICC profile version 2.1
     cmsSetProfileVersion(hProfile, 2.1);
     cmsUInt32Number nBytesNeeded = 0;
-    cmsSaveProfileToMem(hProfile, NULL, &nBytesNeeded);
+    cmsSaveProfileToMem(hProfile, nullptr, &nBytesNeeded);
     if (!nBytesNeeded)
       return 0;
     std::vector<unsigned char> xBuffer(nBytesNeeded);
@@ -8314,7 +8314,7 @@ bool PDFWriterImpl::emitAdditionalStreams()
         rStream.m_pStream->write( xStream );
         xStream.clear();
         delete rStream.m_pStream;
-        rStream.m_pStream = NULL;
+        rStream.m_pStream = nullptr;
         disableStreamEncryption();
 
         if( rStream.m_bCompress )
@@ -8501,11 +8501,11 @@ bool PDFWriterImpl::registerGlyphs( int nGlyphs,
             }
             EmbedFont& rEmbedFont = m_aEmbeddedFonts[pCurrentFont];
 
-            const Ucs2SIntMap* pEncoding = NULL;
-            const Ucs2OStrMap* pNonEncoded = NULL;
+            const Ucs2SIntMap* pEncoding = nullptr;
+            const Ucs2OStrMap* pNonEncoded = nullptr;
             if (!getReferenceDevice()->AcquireGraphics())
                 return false;
-            pEncoding = pGraphics->GetFontEncodingVector( pCurrentFont, &pNonEncoded, 0);
+            pEncoding = pGraphics->GetFontEncodingVector( pCurrentFont, &pNonEncoded, nullptr);
 
             Ucs2SIntMap::const_iterator enc_it;
             Ucs2OStrMap::const_iterator nonenc_it;
@@ -8552,7 +8552,7 @@ bool PDFWriterImpl::registerGlyphs( int nGlyphs,
                     }
                 }
                 else
-                    pEncoding = NULL;
+                    pEncoding = nullptr;
             }
             if( ! pEncoding )
             {
@@ -8864,7 +8864,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
     sal_Int32 pUnicodesPerGlyph[nMaxGlyphs];
     int pCharPosAry[nMaxGlyphs];
     DeviceCoordinate nAdvanceWidths[nMaxGlyphs];
-    const PhysicalFontFace* pFallbackFonts[nMaxGlyphs] = { NULL };
+    const PhysicalFontFace* pFallbackFonts[nMaxGlyphs] = { nullptr };
     bool bVertical = m_aCurrentPDFState.m_aFont.IsVertical();
     int nGlyphs;
     int nIndex = 0;
@@ -10139,7 +10139,7 @@ void PDFWriterImpl::beginRedirect( SvStream* pStream, const Rectangle& rTargetRe
 
 SvStream* PDFWriterImpl::endRedirect()
 {
-    SvStream* pStream = NULL;
+    SvStream* pStream = nullptr;
     if( ! m_aOutputStreams.empty() )
     {
         pStream     = m_aOutputStreams.front().m_pStream;

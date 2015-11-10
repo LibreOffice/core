@@ -95,7 +95,7 @@ selection_ref_selection( AtkSelection *selection,
         g_warning( "Exception in getSelectedAccessibleChild()" );
     }
 
-    return NULL;
+    return nullptr;
 }
 
 static gint
@@ -175,7 +175,7 @@ selection_select_all_selection( AtkSelection   *selection)
 void
 selectionIfaceInit( AtkSelectionIface *iface)
 {
-  g_return_if_fail (iface != NULL);
+  g_return_if_fail (iface != nullptr);
 
   iface->add_selection = selection_add_selection;
   iface->clear_selection = selection_clear_selection;

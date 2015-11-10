@@ -113,7 +113,7 @@ public:
     TextPaM             InsertParaBreak( const TextPaM& rPaM, bool bKeepEndingAttribs );
     TextPaM             ConnectParagraphs( TextNode* pLeft, TextNode* pRight );
 
-    sal_Int32           GetTextLen( const sal_Unicode* pSep, const TextSelection* pSel = NULL ) const;
+    sal_Int32           GetTextLen( const sal_Unicode* pSep, const TextSelection* pSel = nullptr ) const;
     OUString            GetText( const sal_Unicode* pSep ) const;
     OUString            GetText( sal_uInt32 nPara ) const;
 

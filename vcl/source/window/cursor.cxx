@@ -175,7 +175,7 @@ void vcl::Cursor::ImplDoShow( bool bDrawDirect, bool bRestore )
             pWindow = Application::GetFocusWindow();
             if ( !pWindow || (pWindow->mpWindowImpl->mpCursor != this) || pWindow->mpWindowImpl->mbInPaint
                 || !pWindow->mpWindowImpl->mpFrameData->mbHasFocus )
-                pWindow = NULL;
+                pWindow = nullptr;
         }
 
         if ( pWindow )
@@ -216,7 +216,7 @@ bool vcl::Cursor::ImplDoHide( bool bSuspend )
         if ( !bSuspend )
         {
             mpData->maTimer.Stop();
-            mpData->mpWindow = NULL;
+            mpData->mpWindow = nullptr;
         }
     }
     return bWasCurVisible;
@@ -269,8 +269,8 @@ IMPL_LINK_NOARG_TYPED(vcl::Cursor, ImplTimerHdl, Timer *, void)
 
 vcl::Cursor::Cursor()
 {
-    mpData          = NULL;
-    mpWindow        = NULL;
+    mpData          = nullptr;
+    mpWindow        = nullptr;
     mnSlant         = 0;
     mnOrientation   = 0;
     mnDirection     = CursorDirection::NONE;
@@ -282,8 +282,8 @@ vcl::Cursor::Cursor( const Cursor& rCursor ) :
     maSize( rCursor.maSize ),
     maPos( rCursor.maPos )
 {
-    mpData          = NULL;
-    mpWindow        = NULL;
+    mpData          = nullptr;
+    mpWindow        = nullptr;
     mnSlant         = rCursor.mnSlant;
     mnOrientation   = rCursor.mnOrientation;
     mnDirection     = rCursor.mnDirection;

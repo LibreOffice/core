@@ -95,7 +95,7 @@ BitmapEx::BitmapEx( const ResId& rResId ) :
         eTransparent( TRANSPARENT_NONE ),
         bAlpha      ( false )
 {
-    ResMgr*                             pResMgr = NULL;
+    ResMgr*                             pResMgr = nullptr;
 
     ResMgr::GetResourceSkipHeader( rResId.SetRT( RSC_BITMAP ), &pResMgr );
     pResMgr->ReadLong();

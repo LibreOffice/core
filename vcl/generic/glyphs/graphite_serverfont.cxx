@@ -45,7 +45,7 @@ float freetypeServerFontAdvance(const void* appFontHandle, gr_uint16 glyphId)
 GraphiteServerFontLayout::GraphiteServerFontLayout(ServerFont& rServerFont) throw()
     : ServerFontLayout(rServerFont),
         maImpl(rServerFont.GetGraphiteFace()->face(), rServerFont)
-    , mpFeatures(NULL)
+    , mpFeatures(nullptr)
 {
     gr_font * pFont = rServerFont.GetGraphiteFace()->font(rServerFont.GetFontSelData().mnHeight, rServerFont.NeedsArtificialBold(), rServerFont.NeedsArtificialItalic());
     if (!pFont)
@@ -102,7 +102,7 @@ GraphiteServerFontLayout::GraphiteServerFontLayout(ServerFont& rServerFont) thro
 GraphiteServerFontLayout::~GraphiteServerFontLayout() throw()
 {
     delete mpFeatures;
-    mpFeatures = NULL;
+    mpFeatures = nullptr;
 }
 
 bool GraphiteServerFontLayout::IsGraphiteEnabledFont(ServerFont& rServerFont)

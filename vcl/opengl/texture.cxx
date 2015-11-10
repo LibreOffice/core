@@ -44,7 +44,7 @@ ImplOpenGLTexture::ImplOpenGLTexture( int nWidth, int nHeight, bool bAllocate ) 
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST );
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST );
     if( bAllocate )
-        glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA, nWidth, nHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL );
+        glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA, nWidth, nHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr );
     glBindTexture( GL_TEXTURE_2D, 0 );
 
     VCL_GL_INFO( "vcl.opengl", "OpenGLTexture " << mnTexture << " " << nWidth << "x" << nHeight << " allocate" );
@@ -165,7 +165,7 @@ int ImplOpenGLTexture::FindFreeSlot()
 
 OpenGLTexture::OpenGLTexture() :
     maRect( 0, 0, 0, 0 ),
-    mpImpl(NULL),
+    mpImpl(nullptr),
     mnSlotNumber(-1)
 {
 }
@@ -234,7 +234,7 @@ OpenGLTexture::~OpenGLTexture()
 
 bool OpenGLTexture::IsUnique() const
 {
-    return ( mpImpl == NULL || mpImpl->mnRefCount == 1 );
+    return ( mpImpl == nullptr || mpImpl->mnRefCount == 1 );
 }
 
 GLuint OpenGLTexture::Id() const
@@ -258,7 +258,7 @@ void OpenGLTexture::GetCoord( GLfloat* pCoord, const SalTwoRect& rPosAry, bool b
 {
     VCL_GL_INFO( "vcl.opengl", "Getting coord " << Id() << " [" << maRect.Left() << "," << maRect.Top() << "] " << GetWidth() << "x" << GetHeight() );
 
-    if( mpImpl == NULL )
+    if( mpImpl == nullptr )
     {
         pCoord[0] = pCoord[1] = pCoord[2] = pCoord[3] = 0.0f;
         pCoord[4] = pCoord[5] = pCoord[6] = pCoord[7] = 0.0f;
@@ -355,7 +355,7 @@ void OpenGLTexture::SaveToFile(const OUString& rFileName)
 
 void OpenGLTexture::Read( GLenum nFormat, GLenum nType, sal_uInt8* pData )
 {
-    if( mpImpl == NULL )
+    if( mpImpl == nullptr )
     {
         SAL_WARN( "vcl.opengl", "Can't read invalid texture" );
         return;
@@ -392,7 +392,7 @@ void OpenGLTexture::Read( GLenum nFormat, GLenum nType, sal_uInt8* pData )
 
 OpenGLTexture::operator bool() const
 {
-    return ( mpImpl != NULL );
+    return ( mpImpl != nullptr );
 }
 
 OpenGLTexture&  OpenGLTexture::operator=( const OpenGLTexture& rTexture )

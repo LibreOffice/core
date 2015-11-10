@@ -62,13 +62,13 @@ protected:
     void                ShowSelection();
     void                HideSelection();
     void                ShowSelection( const TextSelection& rSel );
-    void                ImpShowHideSelection( bool bShow, const TextSelection* pRange = NULL );
+    void                ImpShowHideSelection( bool bShow, const TextSelection* pRange = nullptr );
 
     TextSelection       ImpMoveCursor( const KeyEvent& rKeyEvent );
     TextPaM             ImpDelete( sal_uInt8 nMode, sal_uInt8 nDelMode );
     bool                IsInSelection( const TextPaM& rPaM );
 
-    void                ImpPaint(vcl::RenderContext& rRenderContext, const Point& rStartPos, Rectangle const* pPaintArea, TextSelection const* pPaintRange = 0, TextSelection const* pSelection = 0);
+    void                ImpPaint(vcl::RenderContext& rRenderContext, const Point& rStartPos, Rectangle const* pPaintArea, TextSelection const* pPaintRange = nullptr, TextSelection const* pSelection = nullptr);
     void                ImpPaint(vcl::RenderContext& rRenderContext, const Rectangle& rRect, bool bUseVirtDev);
     void                ImpShowCursor( bool bGotoCursor, bool bForceVisCursor, bool bEndKey );
     void                ImpHighlight( const TextSelection& rSel );

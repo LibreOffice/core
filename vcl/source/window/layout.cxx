@@ -20,7 +20,7 @@ VclContainer::VclContainer(vcl::Window *pParent, WinBits nStyle)
     : Window(WINDOW_CONTAINER)
     , m_bLayoutDirty(true)
 {
-    ImplInit(pParent, nStyle, NULL);
+    ImplInit(pParent, nStyle, nullptr);
     EnableChildTransparentMode();
     SetPaintTransparent(true);
     SetBackground();
@@ -757,7 +757,7 @@ struct GridEntry
     int x;
     int y;
     GridEntry()
-        : pChild(0)
+        : pChild(nullptr)
         , nSpanWidth(0)
         , nSpanHeight(0)
         , x(-1)
@@ -1370,7 +1370,7 @@ void VclFrame::setAllocation(const Size &rAllocation)
 IMPL_LINK_TYPED(VclFrame, WindowEventListener, VclWindowEvent&, rEvent, void)
 {
     if (rEvent.GetId() == VCLEVENT_OBJECT_DYING)
-        designate_label(NULL);
+        designate_label(nullptr);
 }
 
 void VclFrame::designate_label(vcl::Window *pWindow)
@@ -1391,7 +1391,7 @@ const vcl::Window *VclFrame::get_label_widget() const
     //The label widget is normally the first (of two) children
     const WindowImpl* pWindowImpl = ImplGetWindowImpl();
     if (pWindowImpl->mpFirstChild == pWindowImpl->mpLastChild) //no label exists
-        return NULL;
+        return nullptr;
     return pWindowImpl->mpFirstChild;
 }
 
@@ -1408,7 +1408,7 @@ const vcl::Window *VclFrame::get_child() const
     if (!m_pLabel)
         return pWindowImpl->mpLastChild;
     if (pWindowImpl->mpFirstChild == pWindowImpl->mpLastChild) //only label exists
-        return NULL;
+        return nullptr;
     return pWindowImpl->mpLastChild;
 }
 
@@ -1520,7 +1520,7 @@ Size VclExpander::calculateRequisition() const
     WindowImpl* pWindowImpl = ImplGetWindowImpl();
 
     const vcl::Window *pChild = get_child();
-    const vcl::Window *pLabel = pChild != pWindowImpl->mpLastChild ? pWindowImpl->mpLastChild.get() : NULL;
+    const vcl::Window *pLabel = pChild != pWindowImpl->mpLastChild ? pWindowImpl->mpLastChild.get() : nullptr;
 
     if (pChild && pChild->IsVisible() && m_pDisclosureButton->IsChecked())
         aRet = getLayoutRequisition(*pChild);
@@ -1557,7 +1557,7 @@ void VclExpander::setAllocation(const Size &rAllocation)
 
     //The label widget is the last (of two) children
     vcl::Window *pChild = get_child();
-    vcl::Window *pLabel = pChild != pWindowImpl->mpLastChild.get() ? pWindowImpl->mpLastChild.get() : NULL;
+    vcl::Window *pLabel = pChild != pWindowImpl->mpLastChild.get() ? pWindowImpl->mpLastChild.get() : nullptr;
 
     Size aButtonSize = getLayoutRequisition(*m_pDisclosureButton);
     Size aLabelSize;
@@ -1631,7 +1631,7 @@ IMPL_LINK_TYPED( VclExpander, ClickHdl, CheckBox&, rBtn, void )
     {
         pChild->Show(rBtn.IsChecked());
         queue_resize();
-        Dialog* pResizeDialog = m_bResizeTopLevel ? GetParentDialog() : NULL;
+        Dialog* pResizeDialog = m_bResizeTopLevel ? GetParentDialog() : nullptr;
         if (pResizeDialog)
             pResizeDialog->setOptimalLayoutSize();
     }
@@ -1999,12 +1999,12 @@ MessageDialog::MessageDialog(vcl::Window* pParent, WinBits nStyle)
     : Dialog(pParent, nStyle)
     , m_eButtonsType(VCL_BUTTONS_NONE)
     , m_eMessageType(VCL_MESSAGE_INFO)
-    , m_pOwnedContentArea(NULL)
-    , m_pOwnedActionArea(NULL)
-    , m_pGrid(NULL)
-    , m_pImage(NULL)
-    , m_pPrimaryMessage(NULL)
-    , m_pSecondaryMessage(NULL)
+    , m_pOwnedContentArea(nullptr)
+    , m_pOwnedActionArea(nullptr)
+    , m_pGrid(nullptr)
+    , m_pImage(nullptr)
+    , m_pPrimaryMessage(nullptr)
+    , m_pSecondaryMessage(nullptr)
 {
     SetType(WINDOW_MESSBOX);
 }
@@ -2017,10 +2017,10 @@ MessageDialog::MessageDialog(vcl::Window* pParent,
     : Dialog(pParent, nStyle)
     , m_eButtonsType(eButtonsType)
     , m_eMessageType(eMessageType)
-    , m_pGrid(NULL)
-    , m_pImage(NULL)
-    , m_pPrimaryMessage(NULL)
-    , m_pSecondaryMessage(NULL)
+    , m_pGrid(nullptr)
+    , m_pImage(nullptr)
+    , m_pPrimaryMessage(nullptr)
+    , m_pSecondaryMessage(nullptr)
     , m_sPrimaryString(rMessage)
 {
     SetType(WINDOW_MESSBOX);
@@ -2031,12 +2031,12 @@ MessageDialog::MessageDialog(vcl::Window* pParent, const OString& rID, const OUS
     : Dialog(pParent, OStringToOUString(rID, RTL_TEXTENCODING_UTF8), rUIXMLDescription, WINDOW_MESSBOX)
     , m_eButtonsType(VCL_BUTTONS_NONE)
     , m_eMessageType(VCL_MESSAGE_INFO)
-    , m_pOwnedContentArea(NULL)
-    , m_pOwnedActionArea(NULL)
-    , m_pGrid(NULL)
-    , m_pImage(NULL)
-    , m_pPrimaryMessage(NULL)
-    , m_pSecondaryMessage(NULL)
+    , m_pOwnedContentArea(nullptr)
+    , m_pOwnedActionArea(nullptr)
+    , m_pGrid(nullptr)
+    , m_pImage(nullptr)
+    , m_pPrimaryMessage(nullptr)
+    , m_pSecondaryMessage(nullptr)
 {
 }
 
@@ -2194,7 +2194,7 @@ short MessageDialog::Execute()
         m_pSecondaryMessage->SetText(m_sSecondaryString);
         m_pSecondaryMessage->Show(bHasSecondaryText);
 
-        MessageDialog::SetMessagesWidths(this, m_pPrimaryMessage, bHasSecondaryText ? m_pSecondaryMessage.get() : NULL);
+        MessageDialog::SetMessagesWidths(this, m_pPrimaryMessage, bHasSecondaryText ? m_pSecondaryMessage.get() : nullptr);
 
         VclButtonBox *pButtonBox = get_action_area();
         assert(pButtonBox);
@@ -2417,13 +2417,13 @@ bool isEnabledInLayout(const vcl::Window *pWindow)
 bool isLayoutEnabled(const vcl::Window *pWindow)
 {
     //Child is a container => we're layout enabled
-    const vcl::Window *pChild = pWindow ? pWindow->GetWindow(GetWindowType::FirstChild) : NULL;
+    const vcl::Window *pChild = pWindow ? pWindow->GetWindow(GetWindowType::FirstChild) : nullptr;
     return pChild && isContainerWindow(*pChild) && !pChild->GetWindow(GetWindowType::Next);
 }
 
 bool isInitialLayout(const vcl::Window *pWindow)
 {
-    Dialog *pParentDialog = pWindow ? pWindow->GetParentDialog() : NULL;
+    Dialog *pParentDialog = pWindow ? pWindow->GetParentDialog() : nullptr;
     return pParentDialog && pParentDialog->isCalculatingInitialLayoutSize();
 }
 

@@ -209,9 +209,9 @@ std::unordered_map< OUString, SelectionManager*, OUStringHash >& SelectionManage
 
 SelectionManager::SelectionManager() :
         m_nIncrementalThreshold( 15*1024 ),
-        m_pDisplay( NULL ),
-        m_aThread( NULL ),
-        m_aDragExecuteThread( NULL ),
+        m_pDisplay( nullptr ),
+        m_aThread( nullptr ),
+        m_aDragExecuteThread( nullptr ),
         m_aWindow( None ),
         m_nSelectionTimeout( 0 ),
         m_nSelectionTimestamp( CurrentTime ),
@@ -354,7 +354,7 @@ void SelectionManager::initialize( const Sequence< Any >& arguments ) throw (::c
 
         OString aDisplayName( OUStringToOString( aUDisplay, RTL_TEXTENCODING_ISO_8859_1 ) );
 
-        m_pDisplay = XOpenDisplay( aDisplayName.isEmpty() ? NULL : aDisplayName.getStr());
+        m_pDisplay = XOpenDisplay( aDisplayName.isEmpty() ? nullptr : aDisplayName.getStr());
 
         if( m_pDisplay )
         {
@@ -485,7 +485,7 @@ SelectionManager::~SelectionManager()
     {
         osl_terminateThread( m_aDragExecuteThread );
         osl_joinWithThread( m_aDragExecuteThread );
-        m_aDragExecuteThread = NULL;
+        m_aDragExecuteThread = nullptr;
         // thread handle is freed in dragDoDispatch()
     }
 
@@ -524,7 +524,7 @@ SelectionAdaptor* SelectionManager::getAdaptor( Atom selection )
 {
     std::unordered_map< Atom, Selection* >::iterator it =
           m_aSelections.find( selection );
-    return it != m_aSelections.end() ? it->second->m_pAdaptor : NULL;
+    return it != m_aSelections.end() ? it->second->m_pAdaptor : nullptr;
 }
 
 OUString SelectionManager::convertFromCompound( const char* pText, int nLen )
@@ -534,7 +534,7 @@ OUString SelectionManager::convertFromCompound( const char* pText, int nLen )
     if( nLen < 0 )
         nLen = strlen( pText );
 
-    char** pTextList = NULL;
+    char** pTextList = nullptr;
     int nTexts = 0;
 
     XTextProperty aProp;
@@ -560,7 +560,7 @@ OString SelectionManager::convertToCompound( const OUString& rText )
 {
     osl::MutexGuard aGuard( m_aMutex );
     XTextProperty aProp;
-    aProp.value = NULL;
+    aProp.value = nullptr;
     aProp.encoding = XA_STRING;
     aProp.format = 8;
     aProp.nitems = 0;
@@ -679,7 +679,7 @@ SelectionManager& SelectionManager::get( const OUString& rDisplayName )
     OUString aDisplayName( rDisplayName );
     if( aDisplayName.isEmpty() )
         aDisplayName = OStringToOUString( getenv( "DISPLAY" ), RTL_TEXTENCODING_ISO_8859_1 );
-    SelectionManager* pInstance = NULL;
+    SelectionManager* pInstance = nullptr;
 
     std::unordered_map< OUString, SelectionManager*, OUStringHash >::iterator it = getInstances().find( aDisplayName );
     if( it != getInstances().end() )
@@ -696,7 +696,7 @@ const OUString& SelectionManager::getString( Atom aAtom )
     if( m_aAtomToString.find( aAtom ) == m_aAtomToString.end() )
     {
         static OUString aEmpty;
-        char* pAtom = m_pDisplay ? XGetAtomName( m_pDisplay, aAtom ) : NULL;
+        char* pAtom = m_pDisplay ? XGetAtomName( m_pDisplay, aAtom ) : nullptr;
         if( ! pAtom )
             return aEmpty;
         OUString aString( OStringToOUString( pAtom, RTL_TEXTENCODING_ISO_8859_1 ) );
@@ -742,7 +742,7 @@ bool SelectionManager::requestOwnership( Atom selection )
             Selection* pSel = m_aSelections[ selection ];
             pSel->m_bOwner = bSuccess;
             delete pSel->m_pPixmap;
-            pSel->m_pPixmap = NULL;
+            pSel->m_pPixmap = nullptr;
             pSel->m_nOrigTimestamp = m_nSelectionTimestamp;
         }
 #if OSL_DEBUG_LEVEL > 1
@@ -904,7 +904,7 @@ bool SelectionManager::getPasteData( Atom selection, Atom type, Sequence< sal_In
 
     // do a reschedule
     struct timeval tv_last, tv_current;
-    gettimeofday( &tv_last, NULL );
+    gettimeofday( &tv_last, nullptr );
     tv_current = tv_last;
 
     XEvent aEvent;
@@ -966,7 +966,7 @@ bool SelectionManager::getPasteData( Atom selection, Atom type, Sequence< sal_In
                 aGuard.reset();
             }
         }
-        gettimeofday( &tv_current, NULL );
+        gettimeofday( &tv_current, nullptr );
         if( bAdjustTime )
             tv_last = tv_current;
     } while( ! it->second->m_aDataArrived.check() && (tv_current.tv_sec - tv_last.tv_sec) < getSelectionTimeout() );
@@ -1114,14 +1114,14 @@ bool SelectionManager::getPasteData( Atom selection, const OUString& rType, Sequ
                     int format = 0;
                     unsigned long nItems = 0;
                     unsigned long nBytes = 0;
-                    unsigned char* pReturn = NULL;
+                    unsigned char* pReturn = nullptr;
                     XGetWindowProperty( m_pDisplay, m_aWindow, XA_PIXMAP, 0, 1, True, XA_PIXMAP, &type, &format, &nItems, &nBytes, &pReturn );
                     if( pReturn )
                     {
                         if( type == XA_PIXMAP )
                             aPixmap = *reinterpret_cast<Pixmap*>(pReturn);
                         XFree( pReturn );
-                        pReturn = NULL;
+                        pReturn = nullptr;
                         if( pReturnedTypes[2] == XA_COLORMAP && pReturnedTypes[3] == XA_COLORMAP )
                         {
                             XGetWindowProperty( m_pDisplay, m_aWindow, XA_COLORMAP, 0, 1, True, XA_COLORMAP, &type, &format, &nItems, &nBytes, &pReturn );
@@ -1210,7 +1210,7 @@ bool SelectionManager::getPasteDataTypes( Atom selection, Sequence< DataFlavor >
         it = m_aSelections.find( selection );
         if( it != m_aSelections.end()                           &&
             it->second->m_aTypes.getLength()                    &&
-            std::abs( it->second->m_nLastTimestamp - time( NULL ) ) < 2
+            std::abs( it->second->m_nLastTimestamp - time( nullptr ) ) < 2
             )
         {
             rTypes = it->second->m_aTypes;
@@ -1240,7 +1240,7 @@ bool SelectionManager::getPasteDataTypes( Atom selection, Sequence< DataFlavor >
                 Atom nType;
                 int nFormat;
                 unsigned long nItems, nBytes;
-                unsigned char* pBytes = NULL;
+                unsigned char* pBytes = nullptr;
 
                 XGetWindowProperty( m_pDisplay, m_aDropEnterEvent.data.l[0],
                                     m_nXdndTypeList, 0, atomcount, False,
@@ -1255,7 +1255,7 @@ bool SelectionManager::getPasteDataTypes( Atom selection, Sequence< DataFlavor >
                     aAtoms.realloc( sizeof( Atom )*atomcount+nBytes );
                     memcpy( aAtoms.getArray(), pBytes, sizeof( Atom )*atomcount );
                     XFree( pBytes );
-                    pBytes = NULL;
+                    pBytes = nullptr;
                     XGetWindowProperty( m_pDisplay, m_aDropEnterEvent.data.l[0],
                                         m_nXdndTypeList, atomcount, nBytes/sizeof(Atom),
                                         False, XA_ATOM,
@@ -1374,7 +1374,7 @@ bool SelectionManager::getPasteDataTypes( Atom selection, Sequence< DataFlavor >
             {
                 it->second->m_aTypes            = rTypes;
                 it->second->m_aNativeTypes      = aNativeTypes;
-                it->second->m_nLastTimestamp    = time( NULL );
+                it->second->m_nLastTimestamp    = time( nullptr );
                 it->second->m_bHaveUTF16        = bHaveUTF16;
                 it->second->m_aUTF8Type         = aUTF8Type;
                 it->second->m_bHaveCompound     = bHaveCompound;
@@ -1406,7 +1406,7 @@ PixmapHolder* SelectionManager::getPixmapHolder( Atom selection )
 {
     std::unordered_map< Atom, Selection* >::const_iterator it = m_aSelections.find( selection );
     if( it == m_aSelections.end() )
-        return NULL;
+        return nullptr;
     if( ! it->second->m_pPixmap )
         it->second->m_pPixmap = new PixmapHolder( m_pDisplay );
     return it->second->m_pPixmap;
@@ -1530,7 +1530,7 @@ bool SelectionManager::sendData( SelectionAdaptor* pAdaptor,
             rInc.m_aProperty            = property;
             rInc.m_aTarget              = target;
             rInc.m_nFormat              = nFormat;
-            rInc.m_nTransferStartTime   = time( NULL );
+            rInc.m_nTransferStartTime   = time( nullptr );
 
             // use incr protocol, signal start to requestor
             long nMinSize = m_nIncrementalThreshold;
@@ -1633,7 +1633,7 @@ bool SelectionManager::handleSelectionRequest( XSelectionRequestEvent& rRequest 
                 Atom nType = None;
                 int nFormat = 0;
                 unsigned long nItems = 0, nBytes = 0;
-                unsigned char* pData = NULL;
+                unsigned char* pData = nullptr;
 
                 // get number of atoms
                 XGetWindowProperty( m_pDisplay,
@@ -1650,7 +1650,7 @@ bool SelectionManager::handleSelectionRequest( XSelectionRequestEvent& rRequest 
                     if( pData ) // ?? should not happen
                     {
                         XFree( pData );
-                        pData = NULL;
+                        pData = nullptr;
                     }
                     XGetWindowProperty( m_pDisplay,
                                         rRequest.requestor,
@@ -1798,7 +1798,7 @@ bool SelectionManager::handleReceivePropertyNotify( XPropertyEvent& rNotify )
         Atom nType = None;
         int nFormat = 0;
         unsigned long nItems = 0, nBytes = 0;
-        unsigned char* pData = NULL;
+        unsigned char* pData = nullptr;
 
         // get type and length
         XGetWindowProperty( m_pDisplay,
@@ -1819,7 +1819,7 @@ bool SelectionManager::handleReceivePropertyNotify( XPropertyEvent& rNotify )
         if( pData )
         {
             XFree( pData );
-            pData = NULL;
+            pData = nullptr;
         }
 
         if( nType == m_nINCRAtom )
@@ -1905,7 +1905,7 @@ bool SelectionManager::handleSendPropertyNotify( XPropertyEvent& rNotify )
         if( it != m_aIncrementals.end() )
         {
             bHandled = true;
-            int nCurrentTime = time( NULL );
+            int nCurrentTime = time( nullptr );
             std::unordered_map< Atom, IncrementalTransfer >::iterator inc_it;
             // throw out aborted transfers
             std::list< Atom > aTimeouts;
@@ -2019,7 +2019,7 @@ bool SelectionManager::handleSelectionNotify( XSelectionEvent& rNotify )
             Atom nType = None;
             int nFormat = 0;
             unsigned long nItems = 0, nBytes = 0;
-            unsigned char* pData = NULL;
+            unsigned char* pData = nullptr;
 
             // get type and length
             XGetWindowProperty( m_pDisplay,
@@ -2725,7 +2725,7 @@ bool SelectionManager::handleDragEvent( XEvent& rMessage )
                     dtde.SourceActions  = m_nSourceActions;
                     dtde.Transferable   = m_xDragSourceTransferable;
                     m_bDropSent                 = true;
-                    m_nDropTimeout              = time( NULL );
+                    m_nDropTimeout              = time( nullptr );
                     m_bDropWaitingForCompletion = true;
                     aGuard.clear();
                     it->second->drop( dtde );
@@ -2750,7 +2750,7 @@ bool SelectionManager::handleDragEvent( XEvent& rMessage )
                 aEvent.xclient.data.l[4]    = 0;
 
                 m_bDropSent                 = true;
-                m_nDropTimeout              = time( NULL );
+                m_nDropTimeout              = time( nullptr );
                 XSendEvent( m_pDisplay, m_aDropProxy, False, NoEventMask, &aEvent );
                 bCancel = false;
             }
@@ -2789,11 +2789,11 @@ bool SelectionManager::handleDragEvent( XEvent& rMessage )
                     XSendEvent( m_pDisplay, m_aDropWindow, False, ButtonReleaseMask, &aEvent );
 
                     m_bDropSent                 = true;
-                    m_nDropTimeout              = time( NULL );
+                    m_nDropTimeout              = time( nullptr );
                     XSendEvent( m_pDisplay, m_aDropProxy, False, NoEventMask, &aEvent );
                     m_bWaitingForPrimaryConversion  = true;
                     m_bDropSent                     = true;
-                    m_nDropTimeout                  = time( NULL );
+                    m_nDropTimeout                  = time( nullptr );
                     // HACK :-)
                     aGuard.clear();
                     static_cast< X11Clipboard* >( pAdaptor )->setContents( m_xDragSourceTransferable, css::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboardOwner >() );
@@ -2887,12 +2887,12 @@ sal_Int32 SelectionManager::getDefaultCursor( sal_Int8 dragAction ) throw(std::e
 
 int SelectionManager::getXdndVersion( ::Window aWindow, ::Window& rProxy )
 {
-    Atom* pProperties = NULL;
+    Atom* pProperties = nullptr;
     int nProperties = 0;
     Atom nType;
     int nFormat;
     unsigned long nItems, nBytes;
-    unsigned char* pBytes = NULL;
+    unsigned char* pBytes = nullptr;
 
     int nVersion = -1;
     rProxy = None;
@@ -2915,7 +2915,7 @@ int SelectionManager::getXdndVersion( ::Window aWindow, ::Window& rProxy )
                 if( nType == XA_WINDOW )
                     rProxy = *reinterpret_cast< ::Window* >(pBytes);
                 XFree( pBytes );
-                pBytes = NULL;
+                pBytes = nullptr;
                 if( rProxy != None )
                 {
                     // now check proxy whether it points to itself
@@ -2926,7 +2926,7 @@ int SelectionManager::getXdndVersion( ::Window aWindow, ::Window& rProxy )
                         if( nType == XA_WINDOW && *reinterpret_cast< ::Window* >(pBytes) != rProxy )
                             rProxy = None;
                         XFree( pBytes );
-                        pBytes = NULL;
+                        pBytes = nullptr;
                     }
                     else
                         rProxy = None;
@@ -3145,7 +3145,7 @@ void SelectionManager::startDrag(
         return;
     }
 
-    SalFrame* pCaptureFrame = NULL;
+    SalFrame* pCaptureFrame = nullptr;
 
     {
         osl::ClearableMutexGuard aGuard(m_aMutex);
@@ -3229,7 +3229,7 @@ void SelectionManager::startDrag(
                 pCaptureFrame = vcl_sal::getSalDisplay(GetGenericData())->GetCaptureFrame();
                 if( pCaptureFrame )
                 {
-                    vcl_sal::getSalDisplay(GetGenericData())->CaptureMouse( NULL );
+                    vcl_sal::getSalDisplay(GetGenericData())->CaptureMouse( nullptr );
                     nPointerGrabSuccess =
                                 XGrabPointer( m_pDisplay, it->second.m_aRootWindow, True,
                                               DRAG_EVENT_MASK,
@@ -3387,7 +3387,7 @@ void SelectionManager::dragDoDispatch()
     aTVal.Seconds = 0;
     aTVal.Nanosec = 200000000;
     oslThread aThread = m_aDragExecuteThread;
-    while( m_xDragSourceListener.is() && ( ! m_bDropSent || time(NULL)-m_nDropTimeout < 5 ) && osl_scheduleThread( aThread ) )
+    while( m_xDragSourceListener.is() && ( ! m_bDropSent || time(nullptr)-m_nDropTimeout < 5 ) && osl_scheduleThread( aThread ) )
     {
         // let the thread in the run method do the dispatching
         // just look occasionally here whether drop timed out or is completed
@@ -3435,7 +3435,7 @@ void SelectionManager::dragDoDispatch()
         XUngrabKeyboard( m_pDisplay, CurrentTime );
         XFlush( m_pDisplay );
 
-        m_aDragExecuteThread = NULL;
+        m_aDragExecuteThread = nullptr;
         m_aDragRunning.reset();
 
         aGuard.clear();
@@ -3653,7 +3653,7 @@ void SelectionManager::run( void* pThis )
     SelectionManager* This = static_cast<SelectionManager*>(pThis);
 
     timeval aLast;
-    gettimeofday( &aLast, 0 );
+    gettimeofday( &aLast, nullptr );
 
     css::uno::Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
     This->m_xDesktop.set( Desktop::create(xContext) );
@@ -3668,7 +3668,7 @@ void SelectionManager::run( void* pThis )
         This->dispatchEvent( timeout );
 
         timeval aNow;
-        gettimeofday( &aNow, 0 );
+        gettimeofday( &aNow, nullptr );
 
         if( (aNow.tv_sec - aLast.tv_sec) > 0 )
         {
@@ -3757,7 +3757,7 @@ void SelectionManager::shutdown() throw()
         }
         osl_joinWithThread( m_aThread );
         osl_destroyThread( m_aThread );
-        m_aThread = NULL;
+        m_aThread = nullptr;
         aGuard.reset();
     }
     m_xDesktop.clear();

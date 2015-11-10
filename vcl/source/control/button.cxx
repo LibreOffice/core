@@ -256,8 +256,8 @@ void Button::ImplDrawAlignedImage(OutputDevice* pDev, Point& rPos,
 
     WinBits nWinStyle = GetStyle();
     Rectangle aOutRect( rPos, rSize );
-    MetricVector* pVector = bLayout ? &mpControlData->mpLayoutData->m_aUnicodeBoundRects : NULL;
-    OUString* pDisplayText = bLayout ? &mpControlData->mpLayoutData->m_aDisplayText : NULL;
+    MetricVector* pVector = bLayout ? &mpControlData->mpLayoutData->m_aUnicodeBoundRects : nullptr;
+    OUString* pDisplayText = bLayout ? &mpControlData->mpLayoutData->m_aDisplayText : nullptr;
     ImageAlign eImageAlign = mpButtonData->meImageAlign;
     Size aImageSize = mpButtonData->maImage.GetSizePixel();
 
@@ -611,7 +611,7 @@ bool Button::set_property(const OString &rKey, const OString &rValue)
 
 IMPL_STATIC_LINK_TYPED( Button, dispatchCommandHandler, Button*, pButton, void )
 {
-    if (pButton == NULL)
+    if (pButton == nullptr)
         return;
 
     comphelper::dispatchCommand(pButton->maCommand, uno::Sequence<beans::PropertyValue>());
@@ -633,14 +633,14 @@ namespace
 {
     vcl::Window* getPreviousSibling(vcl::Window *pParent)
     {
-        return pParent ? pParent->GetWindow(GetWindowType::LastChild) : NULL;
+        return pParent ? pParent->GetWindow(GetWindowType::LastChild) : nullptr;
     }
 }
 
 void PushButton::ImplInit( vcl::Window* pParent, WinBits nStyle )
 {
     nStyle = ImplInitStyle(getPreviousSibling(pParent), nStyle);
-    Button::ImplInit( pParent, nStyle, NULL );
+    Button::ImplInit( pParent, nStyle, nullptr );
 
     if ( nStyle & WB_NOLIGHTBORDER )
         ImplGetButtonState() |= DrawButtonFlags::NoLightBorder;
@@ -868,7 +868,7 @@ void PushButton::ImplDrawPushButtonContent(OutputDevice* pDev, DrawFlags nDrawFl
             aSymbolRect.Left()  = aSymbolRect.Right() - nSymbolSize;
 
             ImplDrawAlignedImage( pDev, aPos, aSize, bLayout, nImageSep,
-                                  nDrawFlags, nTextStyle, NULL, true );
+                                  nDrawFlags, nTextStyle, nullptr, true );
         }
         else
             ImplCalcSymbolRect( aSymbolRect );
@@ -893,7 +893,7 @@ void PushButton::ImplDrawPushButtonContent(OutputDevice* pDev, DrawFlags nDrawFl
     {
         Rectangle aSymbolRect;
         ImplDrawAlignedImage( pDev, aPos, aSize, bLayout, nImageSep, nDrawFlags,
-                              nTextStyle, IsSymbol() ? &aSymbolRect : NULL, true );
+                              nTextStyle, IsSymbol() ? &aSymbolRect : nullptr, true );
 
         if ( IsSymbol() && ! bLayout )
         {
@@ -1479,9 +1479,9 @@ void PushButton::DataChanged( const DataChangedEvent& rDCEvt )
 
 bool PushButton::PreNotify( NotifyEvent& rNEvt )
 {
-    const MouseEvent* pMouseEvt = NULL;
+    const MouseEvent* pMouseEvt = nullptr;
 
-    if( (rNEvt.GetType() == MouseNotifyEvent::MOUSEMOVE) && (pMouseEvt = rNEvt.GetMouseEvent()) != NULL )
+    if( (rNEvt.GetType() == MouseNotifyEvent::MOUSEMOVE) && (pMouseEvt = rNEvt.GetMouseEvent()) != nullptr )
     {
         if( pMouseEvt->IsEnterWindow() || pMouseEvt->IsLeaveWindow() )
         {
@@ -1817,7 +1817,7 @@ void RadioButton::ImplInitRadioButtonData()
 void RadioButton::ImplInit( vcl::Window* pParent, WinBits nStyle )
 {
     nStyle = ImplInitStyle(getPreviousSibling(pParent), nStyle);
-    Button::ImplInit( pParent, nStyle, NULL );
+    Button::ImplInit( pParent, nStyle, nullptr );
 
     ImplInitSettings( true, true, true );
 }
@@ -2003,8 +2003,8 @@ void RadioButton::ImplDraw( OutputDevice* pDev, DrawFlags nDrawFlags,
 {
     WinBits                 nWinStyle = GetStyle();
     OUString                aText( GetText() );
-    MetricVector*           pVector = bLayout ? &mpControlData->mpLayoutData->m_aUnicodeBoundRects : NULL;
-    OUString*               pDisplayText = bLayout ? &mpControlData->mpLayoutData->m_aDisplayText : NULL;
+    MetricVector*           pVector = bLayout ? &mpControlData->mpLayoutData->m_aUnicodeBoundRects : nullptr;
+    OUString*               pDisplayText = bLayout ? &mpControlData->mpLayoutData->m_aDisplayText : nullptr;
 
     pDev->Push( PushFlags::CLIPREGION );
     pDev->IntersectClipRegion( Rectangle( rPos, rSize ) );
@@ -2610,9 +2610,9 @@ void RadioButton::DataChanged( const DataChangedEvent& rDCEvt )
 
 bool RadioButton::PreNotify( NotifyEvent& rNEvt )
 {
-    const MouseEvent* pMouseEvt = NULL;
+    const MouseEvent* pMouseEvt = nullptr;
 
-    if( (rNEvt.GetType() == MouseNotifyEvent::MOUSEMOVE) && (pMouseEvt = rNEvt.GetMouseEvent()) != NULL )
+    if( (rNEvt.GetType() == MouseNotifyEvent::MOUSEMOVE) && (pMouseEvt = rNEvt.GetMouseEvent()) != nullptr )
     {
         if( !pMouseEvt->GetButtons() && !pMouseEvt->IsSynthetic() && !pMouseEvt->IsModifierChanged() )
         {
@@ -2960,7 +2960,7 @@ void CheckBox::ImplInitCheckBoxData()
 void CheckBox::ImplInit( vcl::Window* pParent, WinBits nStyle )
 {
     nStyle = ImplInitStyle(getPreviousSibling(pParent), nStyle);
-    Button::ImplInit( pParent, nStyle, NULL );
+    Button::ImplInit( pParent, nStyle, nullptr );
 
     ImplInitSettings( true, true, true );
 }
@@ -3565,9 +3565,9 @@ void CheckBox::DataChanged( const DataChangedEvent& rDCEvt )
 
 bool CheckBox::PreNotify( NotifyEvent& rNEvt )
 {
-    const MouseEvent* pMouseEvt = NULL;
+    const MouseEvent* pMouseEvt = nullptr;
 
-    if( (rNEvt.GetType() == MouseNotifyEvent::MOUSEMOVE) && (pMouseEvt = rNEvt.GetMouseEvent()) != NULL )
+    if( (rNEvt.GetType() == MouseNotifyEvent::MOUSEMOVE) && (pMouseEvt = rNEvt.GetMouseEvent()) != nullptr )
     {
         if( !pMouseEvt->GetButtons() && !pMouseEvt->IsSynthetic() && !pMouseEvt->IsModifierChanged() )
         {
@@ -3896,7 +3896,7 @@ void DisclosureButton::ImplDrawCheckBoxState(vcl::RenderContext& rRenderContext)
         if (!rCtrlData.mpDisclosureMinus)
             rCtrlData.mpDisclosureMinus = new Image(BitmapEx(VclResId(SV_DISCLOSURE_MINUS)));
 
-        Image* pImg = NULL;
+        Image* pImg = nullptr;
         pImg = IsChecked() ? rCtrlData.mpDisclosureMinus : rCtrlData.mpDisclosurePlus;
 
         DBG_ASSERT(pImg, "no disclosure image");

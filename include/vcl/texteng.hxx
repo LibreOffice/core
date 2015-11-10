@@ -151,7 +151,7 @@ protected:
     TextPaM             ImpInsertText( const TextSelection& rSel, const OUString& rText );
     TextPaM             ImpInsertParaBreak( const TextSelection& rTextSelection, bool bKeepEndingAttribs = true );
     TextPaM             ImpInsertParaBreak( const TextPaM& rPaM, bool bKeepEndingAttribs = true );
-    void                ImpRemoveChars( const TextPaM& rPaM, sal_Int32 nChars, SfxUndoAction* pCurUndo = 0 );
+    void                ImpRemoveChars( const TextPaM& rPaM, sal_Int32 nChars, SfxUndoAction* pCurUndo = nullptr );
     TextPaM             ImpConnectParagraphs( sal_uInt32 nLeft, sal_uInt32 nRight );
     void                ImpRemoveParagraph( sal_uInt32 nPara );
     void                ImpInitWritingDirections( sal_uInt32 nPara );
@@ -176,7 +176,7 @@ protected:
 
     DECL_LINK_TYPED(    IdleFormatHdl, Idle *, void );
     void                CheckIdleFormatter();
-    void                IdleFormatAndUpdate( TextView* pCurView = 0, sal_uInt16 nMaxTimerRestarts = 5 );
+    void                IdleFormatAndUpdate( TextView* pCurView = nullptr, sal_uInt16 nMaxTimerRestarts = 5 );
 
     bool                CreateLines( sal_uInt32 nPara );
     void                CreateAndInsertEmptyLine( sal_uInt32 nPara );
@@ -188,11 +188,11 @@ protected:
 
     void                FormatDoc();
     void                FormatFullDoc();
-    void                FormatAndUpdate( TextView* pCurView = 0 );
+    void                FormatAndUpdate( TextView* pCurView = nullptr );
     bool                IsFormatting() const { return mbIsFormatting; }
-    void                UpdateViews( TextView* pCurView = 0 );
+    void                UpdateViews( TextView* pCurView = nullptr );
 
-    void                ImpPaint( OutputDevice* pOut, const Point& rStartPos, Rectangle const* pPaintArea, TextSelection const* pPaintRange = 0, TextSelection const* pSelection = 0 );
+    void                ImpPaint( OutputDevice* pOut, const Point& rStartPos, Rectangle const* pPaintArea, TextSelection const* pPaintRange = nullptr, TextSelection const* pSelection = nullptr );
 
     bool                IsFormatted() const { return mbFormatted; }
 
@@ -202,14 +202,14 @@ protected:
     long                ImpGetPortionXOffset( sal_uInt32 nPara, TextLine* pLine, sal_uInt16 nTextPortion );
     long                ImpGetXPos( sal_uInt32 nPara, TextLine* pLine, sal_Int32 nIndex, bool bPreferPortionStart = false );
     long                ImpGetOutputOffset( sal_uInt32 nPara, TextLine* pLine, sal_Int32 nIndex, sal_Int32 nIndex2 );
-    sal_uInt8           ImpGetRightToLeft( sal_uInt32 nPara, sal_Int32 nPos, sal_Int32* pStart = NULL, sal_Int32* pEnd = NULL );
+    sal_uInt8           ImpGetRightToLeft( sal_uInt32 nPara, sal_Int32 nPos, sal_Int32* pStart = nullptr, sal_Int32* pEnd = nullptr );
     static void         ImpInitLayoutMode( OutputDevice* pOutDev, bool bDrawingR2LPortion = false );
     TxtAlign            ImpGetAlign() const;
 
     long                CalcTextHeight();
     long                CalcParaHeight( sal_uInt32 nParagraph ) const;
     long                CalcTextWidth( sal_uInt32 nPara );
-    long                CalcTextWidth( sal_uInt32 nPara, sal_Int32 nPortionStart, sal_Int32 nPortionLen, const vcl::Font* pFont = 0 );
+    long                CalcTextWidth( sal_uInt32 nPara, sal_Int32 nPortionStart, sal_Int32 nPortionLen, const vcl::Font* pFont = nullptr );
     Range               GetInvalidYOffsets( sal_uInt32 nPortion );
 
     // for Undo/Redo
@@ -286,13 +286,13 @@ public:
     void                SetModified( bool bModified )   { mbModified = bModified; }
     bool                IsModified() const              { return mbModified; }
 
-    bool                Read( SvStream& rInput, const TextSelection* pSel = NULL );
+    bool                Read( SvStream& rInput, const TextSelection* pSel = nullptr );
 
-    bool                Write( SvStream& rOutput, const TextSelection* pSel = NULL, bool bHTML = false );
+    bool                Write( SvStream& rOutput, const TextSelection* pSel = nullptr, bool bHTML = false );
 
     TextPaM             GetPaM( const Point& rDocPos, bool bSmart = true );
     Rectangle           PaMtoEditCursor( const TextPaM& rPaM, bool bSpecial = false );
-    OUString            GetWord( const TextPaM& rCursorPos, TextPaM* pStartOfWord = 0 );
+    OUString            GetWord( const TextPaM& rCursorPos, TextPaM* pStartOfWord = nullptr );
 
     bool                HasAttrib( sal_uInt16 nWhich ) const;
     const TextAttrib*       FindAttrib( const TextPaM& rPaM, sal_uInt16 nWhich ) const;

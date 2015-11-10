@@ -278,7 +278,7 @@ public:
     void            PSDeltaArray (const sal_Int32 *pArray, sal_Int16 nEntries);
     void            PSShowText (const unsigned char* pString,
                                 sal_Int16 nGlyphs, sal_Int16 nBytes,
-                                const sal_Int32* pDeltaArray = NULL);
+                                const sal_Int32* pDeltaArray = nullptr);
     void            PSComment (const sal_Char* pComment );
     void            LicenseWarning (const Point& rPoint, const sal_Unicode* pStr,
                                     sal_Int16 nLen, const sal_Int32* pDeltaArray);
@@ -293,7 +293,7 @@ public:
                                           const sal_Int32* pDeltaArray );
     void            drawText (const Point& rPoint,
                               const sal_Unicode* pStr, sal_Int16 nLen,
-                              const sal_Int32* pDeltaArray = NULL);
+                              const sal_Int32* pDeltaArray = nullptr);
 
     void            drawGlyphs( const Point& rPoint,
                                 sal_GlyphId* pGlyphIds,
@@ -378,7 +378,7 @@ public:
     { return maVirtualStatus.mbArtBold; }
     void            DrawText (const Point& rPoint,
                               const sal_Unicode* pStr, sal_Int16 nLen,
-                              const sal_Int32* pDeltaArray = NULL);
+                              const sal_Int32* pDeltaArray = nullptr);
     void            SetTextColor (PrinterColor& rTextColor)
     { maTextColor = rTextColor; }
     sal_Int32       GetCharWidth (sal_uInt16 nFrom, sal_uInt16 nTo,

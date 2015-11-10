@@ -30,9 +30,9 @@ void MenuButton::ImplInitMenuButtonData()
 {
     mnDDStyle       = PushButtonDropdownStyle::MenuButton;
 
-    mpMenuTimer     = NULL;
-    mpMenu          = NULL;
-    mpOwnMenu       = NULL;
+    mpMenuTimer     = nullptr;
+    mpMenu          = nullptr;
+    mpOwnMenu       = nullptr;
     mnCurItemId     = 0;
     mnMenuMode      = 0;
 }

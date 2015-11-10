@@ -398,7 +398,7 @@ struct ImplDelData
     VclPtr<vcl::Window> mpWindow;
     bool                mbDel;
 
-                        ImplDelData( vcl::Window* pWindow = NULL );
+                        ImplDelData( vcl::Window* pWindow = nullptr );
     virtual             ~ImplDelData();
 
     bool                IsDead() const

@@ -29,15 +29,15 @@ FontSubsetInfo::FontSubsetInfo()
     , m_nDescent( 0)
     , m_nCapHeight( 0)
     , m_nFontType( FontSubsetInfo::NO_FONT)
-    , mpInFontBytes( NULL)
+    , mpInFontBytes( nullptr)
     , mnInByteLength( 0)
     , meInFontType( FontSubsetInfo::NO_FONT)
-    , mpSftTTFont( NULL)
+    , mpSftTTFont( nullptr)
     , mnReqFontTypeMask(0)
-    , mpOutFile(NULL)
-    , mpReqFontName(NULL)
-    , mpReqGlyphIds(NULL)
-    , mpReqEncodedIds(NULL)
+    , mpOutFile(nullptr)
+    , mpReqFontName(nullptr)
+    , mpReqGlyphIds(nullptr)
+    , mpReqEncodedIds(nullptr)
     , mnReqGlyphCount(0)
 {
 }
@@ -51,7 +51,7 @@ bool FontSubsetInfo::LoadFont(
     FontSubsetInfo::FontType eInFontType,
     const unsigned char* pInFontBytes, int nInByteLength)
 {
-    DBG_ASSERT( (mpSftTTFont == NULL), "Subset from SFT and from mapped font-file requested");
+    DBG_ASSERT( (mpSftTTFont == nullptr), "Subset from SFT and from mapped font-file requested");
     meInFontType = eInFontType;
     mpInFontBytes = pInFontBytes;
     mnInByteLength = nInByteLength;
@@ -61,10 +61,10 @@ bool FontSubsetInfo::LoadFont(
 // prepare subsetting for fonts that are known to the SFT-parser
 bool FontSubsetInfo::LoadFont( vcl::_TrueTypeFont* pSftTTFont )
 {
-    DBG_ASSERT( (mpInFontBytes == NULL), "Subset from SFT and from mapped font-file requested");
+    DBG_ASSERT( (mpInFontBytes == nullptr), "Subset from SFT and from mapped font-file requested");
     mpSftTTFont = pSftTTFont;
     meInFontType = ANY_SFNT;
-    return (mpSftTTFont == NULL);
+    return (mpSftTTFont == nullptr);
 }
 
 bool FontSubsetInfo::CreateFontSubset(
@@ -117,7 +117,7 @@ bool FontSubsetInfo::CreateFontSubsetFromSfnt( sal_Int32* pOutGlyphWidths )
 {
     // handle SFNT_CFF fonts
     int nCffLength = 0;
-    const sal_uInt8* pCffBytes = NULL;
+    const sal_uInt8* pCffBytes = nullptr;
     if( GetSfntTable( mpSftTTFont, O_CFF, &pCffBytes, &nCffLength))
     {
         LoadFont( CFF_FONT, pCffBytes, nCffLength);

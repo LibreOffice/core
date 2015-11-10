@@ -32,7 +32,7 @@ static const sal_uInt8 pImplMask[8] = { 0x80, 0x40, 0x20, 0x10, 0x08, 0x04, 0x02
 // - NodeCache -
 
 ImpNodeCache::ImpNodeCache( const sal_uLong nInitSize ) :
-            pActNode( NULL )
+            pActNode( nullptr )
 {
     const sal_uLong nSize = nInitSize + 4;
 
@@ -61,7 +61,7 @@ ImpNodeCache::~ImpNodeCache()
 Octree::Octree( const BitmapReadAccess& rReadAcc, sal_uLong nColors ) :
             nMax        ( nColors ),
             nLeafCount  ( 0L ),
-            pTree       ( NULL ),
+            pTree       ( nullptr ),
             pAcc        ( &rReadAcc )
 {
     pNodeCache = new ImpNodeCache( nColors );
@@ -128,7 +128,7 @@ void Octree::ImplDeleteOctree( NODE** ppNode )
     }
 
     pNodeCache->ImplReleaseNode( *ppNode );
-    *ppNode = NULL;
+    *ppNode = nullptr;
 }
 
 void Octree::ImplAdd( NODE** ppNode )
@@ -194,7 +194,7 @@ void Octree::ImplReduce()
             pNode->nCount += pChild->nCount;
 
             pNodeCache->ImplReleaseNode( pNode->pChild[ i ] );
-            pNode->pChild[ i ] = NULL;
+            pNode->pChild[ i ] = nullptr;
             nChildren++;
         }
     }

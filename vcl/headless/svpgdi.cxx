@@ -822,7 +822,7 @@ bool SvpSalGraphics::drawEPS( long, long, long, long, void*, sal_uLong )
 cairo_t* SvpSalGraphics::createCairoContext(const basebmp::BitmapDeviceSharedPtr &rBuffer)
 {
     if (!isCairoCompatible(rBuffer))
-        return NULL;
+        return nullptr;
 
     basegfx::B2IVector size = rBuffer->getSize();
     sal_Int32 nStride = rBuffer->getScanlineStride();

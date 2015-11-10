@@ -246,7 +246,7 @@ bool Animation::Start( OutputDevice* pOut, const Point& rDestPt, const Size& rDe
           )
         {
             ImplAnimView*   pView;
-            ImplAnimView*   pMatch = NULL;
+            ImplAnimView*   pMatch = nullptr;
 
             for( size_t i = 0; i < maViewList.size(); ++i )
             {
@@ -263,7 +263,7 @@ bool Animation::Start( OutputDevice* pOut, const Point& rDestPt, const Size& rDe
                     {
                         delete maViewList[ i ];
                         maViewList.erase( maViewList.begin() + i );
-                        pView = NULL;
+                        pView = nullptr;
                     }
 
                     break;
@@ -421,7 +421,7 @@ IMPL_LINK_NOARG_TYPED(Animation, ImplTimeoutHdl, Timer *, void)
             ImplRestartTimer( 10 );
         else
         {
-            AnimationBitmap* pStepBmp = (++mnPos < maList.size()) ? maList[ mnPos ] : NULL;
+            AnimationBitmap* pStepBmp = (++mnPos < maList.size()) ? maList[ mnPos ] : nullptr;
 
             if( !pStepBmp )
             {
@@ -799,8 +799,8 @@ SvStream& ReadAnimation( SvStream& rIStm, Animation& rAnimation )
     return rIStm;
 }
 
-AInfo::AInfo() : pOutDev( NULL ),
-                              pViewData( NULL ),
+AInfo::AInfo() : pOutDev( nullptr ),
+                              pViewData( nullptr ),
                               nExtraData( 0L ),
                               bWithSize( false ),
                               bPause( false ) {}

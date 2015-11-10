@@ -76,7 +76,7 @@ bool ReadWindowMetafile( SvStream& rStream, GDIMetaFile& rMTF, FilterConfigItem*
 
     if ( nMetaType == 0x464d4520 )
     {
-        if ( !EnhWMFReader( rStream, rMTF, NULL ).ReadEnhWMF() )
+        if ( !EnhWMFReader( rStream, rMTF, nullptr ).ReadEnhWMF() )
             rStream.SetError( SVSTREAM_FILEFORMAT_ERROR );
     }
     else
@@ -122,7 +122,7 @@ bool ConvertGDIMetaFileToEMF(const GDIMetaFile & rMTF, SvStream & rTargetStream)
 
 bool WriteWindowMetafileBits( SvStream& rStream, const GDIMetaFile& rMTF )
 {
-    return WMFWriter().WriteWMF( rMTF, rStream, NULL, false );
+    return WMFWriter().WriteWMF( rMTF, rStream, nullptr, false );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

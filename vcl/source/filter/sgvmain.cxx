@@ -92,7 +92,7 @@
 //  - no rotated ellipses
 
 // for font translation
-SgfFontLst* pSgfFonts = 0;
+SgfFontLst* pSgfFonts = nullptr;
 
 // for circle kinds, text and rotated rectangles
 void RotatePoint(PointType& P, sal_Int16 cx, sal_Int16 cy, double sn, double cs)
@@ -250,7 +250,7 @@ SvStream& ReadTextType(SvStream& rInp, TextType& rText)
     SWAPPOINT(rText.FitSize);
     rText.FitBreit      = OSL_SWAPWORD(rText.FitBreit);
 #endif
-    rText.Buffer=NULL;
+    rText.Buffer=nullptr;
     return rInp;
 }
 SvStream& ReadBmapType(SvStream& rInp, BmapType& rBmap)

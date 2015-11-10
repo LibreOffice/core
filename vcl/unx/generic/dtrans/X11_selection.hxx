@@ -208,7 +208,7 @@ namespace x11 {
             Time                        m_nOrigTimestamp;
 
             Selection() : m_eState( Inactive ),
-                          m_pAdaptor( NULL ),
+                          m_pAdaptor( nullptr ),
                           m_aAtom( None ),
                           m_aRequestedType( None ),
                           m_nLastTimestamp( 0 ),
@@ -217,7 +217,7 @@ namespace x11 {
                           m_bHaveCompound( false ),
                           m_bOwner( false ),
                           m_aLastOwner( None ),
-                          m_pPixmap( NULL ),
+                          m_pPixmap( nullptr ),
                           m_nOrigTimestamp( CurrentTime )
                 {}
         };
@@ -228,7 +228,7 @@ namespace x11 {
             DropTarget*     m_pTarget;
             ::Window        m_aRootWindow;
 
-            DropTargetEntry() : m_pTarget( NULL ), m_aRootWindow( None ) {}
+            DropTargetEntry() : m_pTarget( nullptr ), m_aRootWindow( None ) {}
             explicit DropTargetEntry( DropTarget* pTarget ) :
                     m_pTarget( pTarget ),
                     m_aRootWindow( None )

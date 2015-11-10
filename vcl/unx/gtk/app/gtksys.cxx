@@ -25,7 +25,7 @@
 
 GtkSalSystem *GtkSalSystem::GetSingleton()
 {
-    static GtkSalSystem *pSingleton = NULL;
+    static GtkSalSystem *pSingleton = nullptr;
     if (!pSingleton)
         pSingleton = new GtkSalSystem();
     return pSingleton;
@@ -130,7 +130,7 @@ GtkSalSystem::getXScreenFromDisplayScreen(unsigned int nScreen)
 GdkScreen *
 GtkSalSystem::getScreenMonitorFromIdx (int nIdx, gint &nMonitor)
 {
-    GdkScreen *pScreen = NULL;
+    GdkScreen *pScreen = nullptr;
     for (ScreenMonitors_t::const_iterator aIt(maScreenMonitors.begin()), aEnd(maScreenMonitors.end()); aIt != aEnd; ++aIt)
     {
         pScreen = aIt->first;
@@ -145,7 +145,7 @@ GtkSalSystem::getScreenMonitorFromIdx (int nIdx, gint &nMonitor)
 
     // handle invalid monitor indexes as non-existent screens
     if (nMonitor < 0 || (pScreen && nMonitor >= gdk_screen_get_n_monitors (pScreen)))
-        pScreen = NULL;
+        pScreen = nullptr;
 
     return pScreen;
 }
@@ -205,14 +205,14 @@ static int _fallback_get_primary_monitor (GdkScreen *pScreen)
 
 static int _get_primary_monitor (GdkScreen *pScreen)
 {
-    static int (*get_fn) (GdkScreen *) = NULL;
+    static int (*get_fn) (GdkScreen *) = nullptr;
 #if GTK_CHECK_VERSION(3,0,0)
     get_fn = gdk_screen_get_primary_monitor;
 #endif
     // Perhaps we have a newer gtk+ with this symbol:
     if (!get_fn)
     {
-        get_fn = reinterpret_cast<int(*)(GdkScreen*)>(osl_getAsciiFunctionSymbol(NULL,
+        get_fn = reinterpret_cast<int(*)(GdkScreen*)>(osl_getAsciiFunctionSymbol(nullptr,
             "gdk_screen_get_primary_monitor"));
     }
     if (!get_fn)

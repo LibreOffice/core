@@ -33,7 +33,7 @@ extern "C" VclAbstractDialogFactory* CreateDialogFactory();
 
 VclAbstractDialogFactory* VclAbstractDialogFactory::Create()
 {
-    FuncPtrCreateDialogFactory fp = 0;
+    FuncPtrCreateDialogFactory fp = nullptr;
 #if HAVE_FEATURE_DESKTOP
 #ifndef DISABLE_DYNLOADING
     static ::osl::Module aDialogLibrary;
@@ -50,7 +50,7 @@ VclAbstractDialogFactory* VclAbstractDialogFactory::Create()
 #endif
     if ( fp )
         return fp();
-    return 0;
+    return nullptr;
 }
 
 VclAbstractDialog::~VclAbstractDialog()

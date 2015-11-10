@@ -376,9 +376,9 @@ VclBuilder::VclBuilder(vcl::Window *pParent, const OUString& sUIDir, const OUStr
     for (std::vector<ButtonImageWidgetMap>::iterator aI = m_pParserState->m_aButtonImageWidgetMaps.begin(),
          aEnd = m_pParserState->m_aButtonImageWidgetMaps.end(); aI != aEnd; ++aI)
     {
-        PushButton *pTargetButton = NULL;
-        RadioButton *pTargetRadio = NULL;
-        Button *pTarget = NULL;
+        PushButton *pTargetButton = nullptr;
+        RadioButton *pTargetRadio = nullptr;
+        Button *pTarget = nullptr;
 
         if (!aI->m_bRadio)
         {
@@ -1851,7 +1851,7 @@ VclPtr<vcl::Window> VclBuilder::insertObject(vcl::Window *pParent, const OString
         //deferred due to waiting to encounter it in this .ui, and it hasn't
         //been seen yet, then make unattached widgets parent-less toplevels
         if (pParent == m_pParent.get() && m_bToplevelHasDeferredInit)
-            pParent = NULL;
+            pParent = nullptr;
         pCurrentChild = makeObject(pParent, rClass, rID, rProps);
     }
 
@@ -2029,7 +2029,7 @@ bool VclBuilder::sortIntoBestTabTraversalOrder::operator()(const vcl::Window *pA
 
 void VclBuilder::handleChild(vcl::Window *pParent, xmlreader::XmlReader &reader)
 {
-    vcl::Window *pCurrentChild = NULL;
+    vcl::Window *pCurrentChild = nullptr;
 
     xmlreader::Span name;
     int nsId;
@@ -2102,7 +2102,7 @@ void VclBuilder::handleChild(vcl::Window *pParent, xmlreader::XmlReader &reader)
                         else if (sInternalChild.startsWith("action_area") || sInternalChild.startsWith("messagedialog-action_area"))
                         {
                             vcl::Window *pContentArea = pCurrentChild->GetParent();
-                            if (Dialog *pBoxParent = dynamic_cast<Dialog*>(pContentArea ? pContentArea->GetParent() : NULL))
+                            if (Dialog *pBoxParent = dynamic_cast<Dialog*>(pContentArea ? pContentArea->GetParent() : nullptr))
                             {
                                 pBoxParent->set_action_area(static_cast<VclButtonBox*>(pCurrentChild)); // FIXME-VCLPTR
                             }
@@ -2117,7 +2117,7 @@ void VclBuilder::handleChild(vcl::Window *pParent, xmlreader::XmlReader &reader)
                             aChilds.push_back(pChild);
                         }
 
-                        bool bIsButtonBox = dynamic_cast<VclButtonBox*>(pCurrentChild) != NULL;
+                        bool bIsButtonBox = dynamic_cast<VclButtonBox*>(pCurrentChild) != nullptr;
 
                         //sort child order within parent so that tabbing
                         //between controls goes in a visually sensible sequence
@@ -2945,12 +2945,12 @@ VclPtr<vcl::Window> VclBuilder::handleObject(vcl::Window *pParent, xmlreader::Xm
     if (sClass == "GtkAdjustment")
     {
         handleAdjustment(sID, aProperties);
-        return NULL;
+        return nullptr;
     }
     else if (sClass == "GtkTextBuffer")
     {
         handleTextBuffer(sID, aProperties);
-        return NULL;
+        return nullptr;
     }
 
     if (!pCurrentChild)
@@ -3010,7 +3010,7 @@ void VclBuilder::applyPackingProperty(vcl::Window *pCurrent,
 
     //ToolBoxItems are not true widgets just elements
     //of the ToolBox itself
-    ToolBox *pToolBoxParent = NULL;
+    ToolBox *pToolBoxParent = nullptr;
     if (pCurrent == pParent)
         pToolBoxParent = dynamic_cast<ToolBox*>(pParent);
 
@@ -3217,7 +3217,7 @@ void VclBuilder::collectAccelerator(xmlreader::XmlReader &reader, stringmap &rMa
 
 vcl::Window *VclBuilder::get_widget_root()
 {
-    return m_aChildren.empty() ? NULL : m_aChildren[0].m_pWindow.get();
+    return m_aChildren.empty() ? nullptr : m_aChildren[0].m_pWindow.get();
 }
 
 vcl::Window *VclBuilder::get_by_name(const OString& sID)
@@ -3229,7 +3229,7 @@ vcl::Window *VclBuilder::get_by_name(const OString& sID)
             return aI->m_pWindow;
     }
 
-    return NULL;
+    return nullptr;
 }
 
 PopupMenu *VclBuilder::get_menu(const OString& sID)
@@ -3241,7 +3241,7 @@ PopupMenu *VclBuilder::get_menu(const OString& sID)
             return aI->m_pMenu;
     }
 
-    return NULL;
+    return nullptr;
 }
 
 short VclBuilder::get_response(const vcl::Window *pWindow) const
@@ -3355,7 +3355,7 @@ const VclBuilder::ListStore *VclBuilder::get_model_by_name(const OString& sID) c
     std::map<OString, ListStore>::const_iterator aI = m_pParserState->m_aModels.find(sID);
     if (aI != m_pParserState->m_aModels.end())
         return &(aI->second);
-    return NULL;
+    return nullptr;
 }
 
 const VclBuilder::TextBuffer *VclBuilder::get_buffer_by_name(const OString& sID) const
@@ -3363,7 +3363,7 @@ const VclBuilder::TextBuffer *VclBuilder::get_buffer_by_name(const OString& sID)
     std::map<OString, TextBuffer>::const_iterator aI = m_pParserState->m_aTextBuffers.find(sID);
     if (aI != m_pParserState->m_aTextBuffers.end())
         return &(aI->second);
-    return NULL;
+    return nullptr;
 }
 
 const VclBuilder::Adjustment *VclBuilder::get_adjustment_by_name(const OString& sID) const
@@ -3371,7 +3371,7 @@ const VclBuilder::Adjustment *VclBuilder::get_adjustment_by_name(const OString& 
     std::map<OString, Adjustment>::const_iterator aI = m_pParserState->m_aAdjustments.find(sID);
     if (aI != m_pParserState->m_aAdjustments.end())
         return &(aI->second);
-    return NULL;
+    return nullptr;
 }
 
 void VclBuilder::mungeModel(ListBox &rTarget, const ListStore &rStore, sal_uInt16 nActiveId)

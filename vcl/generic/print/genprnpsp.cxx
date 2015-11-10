@@ -185,8 +185,8 @@ static void copyJobDataToJobSetup( ImplJobSetup* pJobSetup, JobData& rData )
     }
 
     // copy input slot
-    const PPDKey* pKey = NULL;
-    const PPDValue* pValue = NULL;
+    const PPDKey* pKey = nullptr;
+    const PPDValue* pValue = nullptr;
 
     pJobSetup->mnPaperBin = 0;
     if( rData.m_pParser )
@@ -205,8 +205,8 @@ static void copyJobDataToJobSetup( ImplJobSetup* pJobSetup, JobData& rData )
     }
 
     // copy duplex
-    pKey = NULL;
-    pValue = NULL;
+    pKey = nullptr;
+    pValue = nullptr;
 
     pJobSetup->meDuplexMode = DUPLEX_UNKNOWN;
     if( rData.m_pParser )
@@ -236,7 +236,7 @@ static void copyJobDataToJobSetup( ImplJobSetup* pJobSetup, JobData& rData )
         rtl_freeMemory( pJobSetup->mpDriverData );
 
     int nBytes;
-    void* pBuffer = NULL;
+    void* pBuffer = nullptr;
     if( rData.getStreamBuffer( pBuffer, nBytes ) )
     {
         pJobSetup->mnDriverDataLen = nBytes;
@@ -245,7 +245,7 @@ static void copyJobDataToJobSetup( ImplJobSetup* pJobSetup, JobData& rData )
     else
     {
         pJobSetup->mnDriverDataLen = 0;
-        pJobSetup->mpDriverData = NULL;
+        pJobSetup->mpDriverData = nullptr;
     }
 }
 
@@ -279,7 +279,7 @@ static bool passFileToCommandLine( const OUString& rFilename, const OUString& rC
         argv[ 0 ] = "/bin/sh";
     argv[ 1 ] = "-c";
     argv[ 2 ] = aCmdLine.getStr();
-    argv[ 3 ] = 0;
+    argv[ 3 ] = nullptr;
 
     bool bHavePipes = false;
     int pid, fd[2];
@@ -445,7 +445,7 @@ void SalGenericInstance::GetPrinterQueueInfo( ImplPrnQueueList* pList )
         pInfo->maDriver         = rInfo.m_aDriverName;
         pInfo->maLocation       = rInfo.m_aLocation;
         pInfo->maComment        = rInfo.m_aComment;
-        pInfo->mpSysData        = NULL;
+        pInfo->mpSysData        = nullptr;
 
         sal_Int32 nIndex = 0;
         while( nIndex != -1 )
@@ -480,7 +480,7 @@ OUString SalGenericInstance::GetDefaultPrinter()
 }
 
 PspSalInfoPrinter::PspSalInfoPrinter()
-    : m_pGraphics( NULL )
+    : m_pGraphics( nullptr )
 {
 }
 
@@ -489,7 +489,7 @@ PspSalInfoPrinter::~PspSalInfoPrinter()
     if( m_pGraphics )
     {
         delete m_pGraphics;
-        m_pGraphics = NULL;
+        m_pGraphics = nullptr;
     }
 }
 
@@ -527,7 +527,7 @@ SalGraphics* PspSalInfoPrinter::AcquireGraphics()
     // the reasoning behind this is that we could have different
     // SalGraphics that can run in multiple threads
     // (future plans)
-    SalGraphics* pRet = NULL;
+    SalGraphics* pRet = nullptr;
     if( ! m_pGraphics )
     {
         m_pGraphics = GetGenericInstance()->CreatePrintGraphics();
@@ -542,7 +542,7 @@ void PspSalInfoPrinter::ReleaseGraphics( SalGraphics* pGraphics )
     if( pGraphics == m_pGraphics )
     {
         delete pGraphics;
-        m_pGraphics = NULL;
+        m_pGraphics = nullptr;
     }
     return;
 }
@@ -566,10 +566,10 @@ bool PspSalInfoPrinter::Setup( SalFrame* pFrame, ImplJobSetup* pJobSetup )
     {
         aInfo.resolveDefaultBackend();
         rtl_freeMemory( pJobSetup->mpDriverData );
-        pJobSetup->mpDriverData = NULL;
+        pJobSetup->mpDriverData = nullptr;
 
         int nBytes;
-        void* pBuffer = NULL;
+        void* pBuffer = nullptr;
         aInfo.getStreamBuffer( pBuffer, nBytes );
         pJobSetup->mnDriverDataLen  = nBytes;
         pJobSetup->mpDriverData     = static_cast<sal_uInt8*>(pBuffer);
@@ -626,7 +626,7 @@ bool PspSalInfoPrinter::SetData(
                 aPaper = OStringToOUString(PaperInfo::toPSName(pJobSetup->mePaperFormat), RTL_TEXTENCODING_ISO_8859_1);
 
             pKey = aData.m_pParser->getKey( OUString("PageSize") );
-            pValue = pKey ? pKey->getValueCaseInsensitive( aPaper ) : NULL;
+            pValue = pKey ? pKey->getValueCaseInsensitive( aPaper ) : nullptr;
 
             // some PPD files do not specify the standard paper names (e.g. C5 instead of EnvC5)
             // try to find the correct paper anyway using the size
@@ -673,12 +673,12 @@ bool PspSalInfoPrinter::SetData(
             pKey = aData.m_pParser->getKey( OUString("Duplex") );
             if( pKey )
             {
-                pValue = NULL;
+                pValue = nullptr;
                 switch( pJobSetup->meDuplexMode )
                 {
                 case DUPLEX_OFF:
                     pValue = pKey->getValue( OUString("None") );
-                    if( pValue == NULL )
+                    if( pValue == nullptr )
                         pValue = pKey->getValue( OUString("SimplexNoTumble") );
                     break;
                 case DUPLEX_SHORTEDGE:
@@ -689,7 +689,7 @@ bool PspSalInfoPrinter::SetData(
                     break;
                 case DUPLEX_UNKNOWN:
                 default:
-                    pValue = 0;
+                    pValue = nullptr;
                     break;
                 }
                 if( ! pValue )
@@ -755,7 +755,7 @@ sal_uLong PspSalInfoPrinter::GetPaperBinCount( const ImplJobSetup* pJobSetup )
     JobData aData;
     JobData::constructFromStreamBuffer( pJobSetup->mpDriverData, pJobSetup->mnDriverDataLen, aData );
 
-    const PPDKey* pKey = aData.m_pParser ? aData.m_pParser->getKey( OUString("InputSlot") ): NULL;
+    const PPDKey* pKey = aData.m_pParser ? aData.m_pParser->getKey( OUString("InputSlot") ): nullptr;
     return pKey ? pKey->countValues() : 0;
 }
 
@@ -767,7 +767,7 @@ OUString PspSalInfoPrinter::GetPaperBinName( const ImplJobSetup* pJobSetup, sal_
     OUString aRet;
     if( aData.m_pParser )
     {
-        const PPDKey* pKey = aData.m_pParser ? aData.m_pParser->getKey( OUString("InputSlot") ): NULL;
+        const PPDKey* pKey = aData.m_pParser ? aData.m_pParser->getKey( OUString("InputSlot") ): nullptr;
         if( ! pKey || nPaperBin >= (sal_uLong)pKey->countValues() )
             aRet = aData.m_pParser->getDefaultInputSlot();
         else
@@ -812,8 +812,8 @@ sal_uLong PspSalInfoPrinter::GetCapabilities( const ImplJobSetup* pJobSetup, Pri
                 JobData aData = PrinterInfoManager::get().getPrinterInfo(pJobSetup->maPrinterName);
                 if( pJobSetup->mpDriverData )
                     JobData::constructFromStreamBuffer( pJobSetup->mpDriverData, pJobSetup->mnDriverDataLen, aData );
-                const PPDKey* pKey = aData.m_pParser ? aData.m_pParser->getKey(OUString("Dial")) : NULL;
-                const PPDValue* pValue = pKey ? aData.m_aContext.getValue(pKey) : NULL;
+                const PPDKey* pKey = aData.m_pParser ? aData.m_pParser->getKey(OUString("Dial")) : nullptr;
+                const PPDValue* pValue = pKey ? aData.m_aContext.getValue(pKey) : nullptr;
                 if (pValue && !pValue->m_aOption.equalsIgnoreAsciiCase("Manually"))
                     return 1;
                 return 0;
@@ -851,7 +851,7 @@ sal_uLong PspSalInfoPrinter::GetCapabilities( const ImplJobSetup* pJobSetup, Pri
 PspSalPrinter::PspSalPrinter( SalInfoPrinter* pInfoPrinter )
  : m_bPdf( false ),
    m_bIsPDFWriterJob( false ),
-   m_pGraphics( NULL ),
+   m_pGraphics( nullptr ),
    m_nCopies( 1 ),
    m_bCollate( false ),
    m_pInfoPrinter( pInfoPrinter )
@@ -865,7 +865,7 @@ PspSalPrinter::~PspSalPrinter()
 static OUString getTmpName()
 {
     OUString aTmp, aSys;
-    osl_createTempFile( NULL, NULL, &aTmp.pData );
+    osl_createTempFile( nullptr, nullptr, &aTmp.pData );
     osl_getSystemPathFromFileURL( aTmp.pData, &aSys.pData );
 
     return aSys;
@@ -1122,7 +1122,7 @@ bool PspSalPrinter::StartJob( const OUString* i_pFileName, const OUString& i_rJo
                 if( i_pFileName )
                     aPDFUrl = *i_pFileName;
                 else
-                    osl_createTempFile( NULL, NULL, &aPDFUrl.pData );
+                    osl_createTempFile( nullptr, nullptr, &aPDFUrl.pData );
                 // normalize to file URL
                 if( !comphelper::isFileUrl(aPDFUrl) )
                 {
@@ -1210,7 +1210,7 @@ bool PspSalPrinter::StartJob( const OUString* i_pFileName, const OUString& i_rJo
             {
                 for( size_t i = 0; i < aPDFFiles.size(); i++ )
                 {
-                    oslFileHandle pFile = NULL;
+                    oslFileHandle pFile = nullptr;
                     osl_openFile( aPDFFiles[i].maTmpURL.pData, &pFile, osl_File_OpenFlag_Read );
                     if (pFile && (osl_setFilePos(pFile, osl_Pos_Absolut, 0) == osl_File_E_None))
                     {
@@ -1288,7 +1288,7 @@ public:
     static void jobEnded();
 };
 
-Idle* PrinterUpdate::pPrinterUpdateIdle = NULL;
+Idle* PrinterUpdate::pPrinterUpdateIdle = nullptr;
 int PrinterUpdate::nActiveJobs = 0;
 
 void PrinterUpdate::doUpdate()
@@ -1305,7 +1305,7 @@ IMPL_STATIC_LINK_NOARG_TYPED( PrinterUpdate, UpdateTimerHdl, Idle*, void )
     {
         doUpdate();
         delete pPrinterUpdateIdle;
-        pPrinterUpdateIdle = NULL;
+        pPrinterUpdateIdle = nullptr;
     }
     else
         pPrinterUpdateIdle->Start();
@@ -1329,7 +1329,7 @@ void PrinterUpdate::update(SalGenericInstance &rInstance)
     {
         pPrinterUpdateIdle = new Idle();
         pPrinterUpdateIdle->SetPriority( SchedulerPriority::LOWEST );
-        pPrinterUpdateIdle->SetIdleHdl( LINK( NULL, PrinterUpdate, UpdateTimerHdl ) );
+        pPrinterUpdateIdle->SetIdleHdl( LINK( nullptr, PrinterUpdate, UpdateTimerHdl ) );
         pPrinterUpdateIdle->Start();
     }
 }
@@ -1353,7 +1353,7 @@ void PrinterUpdate::jobEnded()
         {
             pPrinterUpdateIdle->Stop();
             delete pPrinterUpdateIdle;
-            pPrinterUpdateIdle = NULL;
+            pPrinterUpdateIdle = nullptr;
             doUpdate();
         }
     }

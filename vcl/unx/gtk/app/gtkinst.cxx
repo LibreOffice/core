@@ -68,7 +68,7 @@ extern "C"
             ( gtk_major_version == 2 && gtk_minor_version < 4 ) )
         {
             g_warning("require a newer gtk than %d.%d for gdk_threads_set_lock_functions", (int) gtk_major_version, gtk_minor_version);
-            return NULL;
+            return nullptr;
         }
 
         /* #i92121# workaround deadlocks in the X11 implementation
@@ -85,14 +85,14 @@ extern "C"
         if (gtk_minor_version < 14)
         {
             g_warning("require a newer gtk than 3.%d for theme expectations", gtk_minor_version);
-            return NULL;
+            return nullptr;
         }
 
         const gchar* pVersion = gtk_check_version( 3, 2, 0 );
         if( pVersion )
         {
             SAL_WARN("vcl.gtk", "gtk version conflict: " << pVersion);
-            return NULL;
+            return nullptr;
         }
 #endif
 
@@ -100,7 +100,7 @@ extern "C"
 
         // init gdk thread protection
         if ( !g_thread_supported() )
-            g_thread_init( NULL );
+            g_thread_init( nullptr );
 
         gdk_threads_set_lock_functions (GdkThreadsEnter, GdkThreadsLeave);
         SAL_INFO("vcl.gtk", "Hooked gdk threads locks");
@@ -245,7 +245,7 @@ void GtkInstance::AddToRecentDocumentList(const OUString& rFileUrl, const OUStri
         //Convert back to system locale encoding
         OString sSystemUrl = OUStringToOString(sDecodedUri, aSystemEnc);
         //Encode to an escaped ASCII-encoded URI
-        gchar *g_uri = g_filename_to_uri(sSystemUrl.getStr(), NULL, NULL);
+        gchar *g_uri = g_filename_to_uri(sSystemUrl.getStr(), nullptr, nullptr);
         sGtkURL = OString(g_uri);
         g_free(g_uri);
     }
@@ -372,9 +372,9 @@ void GtkInstance::DestroyMenuItem( SalMenuItem* pItem )
 
 #else // not ENABLE_GMENU_INTEGRATION
 
-SalMenu*     GtkInstance::CreateMenu( bool, Menu* )          { return NULL; }
+SalMenu*     GtkInstance::CreateMenu( bool, Menu* )          { return nullptr; }
 void         GtkInstance::DestroyMenu( SalMenu* )                {}
-SalMenuItem* GtkInstance::CreateMenuItem( const SalItemParams* ) { return NULL; }
+SalMenuItem* GtkInstance::CreateMenuItem( const SalItemParams* ) { return nullptr; }
 void         GtkInstance::DestroyMenuItem( SalMenuItem* )        {}
 
 #endif
@@ -431,7 +431,7 @@ bool GtkInstance::AnyInput( VclInputFlags nType )
 
     bool bRet = false;
     std::stack<GdkEvent*> aEvents;
-    GdkEvent *pEvent = NULL;
+    GdkEvent *pEvent = nullptr;
     while ((pEvent = gdk_event_get()))
     {
         aEvents.push(pEvent);

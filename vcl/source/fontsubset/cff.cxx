@@ -146,9 +146,9 @@ static const char* pDictOps[] = {
     "dFamilyBlues",     "dFamilyOtherBlues",    "nStdHW",           "nStdVW",
     "xESC",             "nUniqueID",            "aXUID",            "nCharset",
     "nEncoding",        "nCharStrings",         "PPrivate",         "nSubrs",
-    "nDefaultWidthX",   "nNominalWidthX",       NULL,               NULL,
-    NULL,               NULL,                   NULL,               NULL,
-    "shortint",         "longint",              "BCD",              NULL
+    "nDefaultWidthX",   "nNominalWidthX",       nullptr,               nullptr,
+    nullptr,               nullptr,                   nullptr,               nullptr,
+    "shortint",         "longint",              "BCD",              nullptr
 };
 
 // TOP DICT escapes (also covers PRIV DICT escapes)
@@ -156,36 +156,36 @@ static const char* pDictEscs[] = {
     "sCopyright",           "bIsFixedPitch",    "nItalicAngle",     "nUnderlinePosition",
     "nUnderlineThickness",  "nPaintType",       "tCharstringType",  "aFontMatrix",
     "nStrokeWidth",         "nBlueScale",       "nBlueShift",       "nBlueFuzz",
-    "dStemSnapH",           "dStemSnapV",       "bForceBold",       NULL,
-    NULL,                   "nLanguageGroup",   "nExpansionFactor", "nInitialRandomSeed",
+    "dStemSnapH",           "dStemSnapV",       "bForceBold",       nullptr,
+    nullptr,                   "nLanguageGroup",   "nExpansionFactor", "nInitialRandomSeed",
     "nSyntheticBase",       "sPostScript",      "sBaseFontName",    "dBaseFontBlend",
-    NULL,                   NULL,               NULL,               NULL,
-    NULL,                   NULL,               "rROS",             "nCIDFontVersion",
+    nullptr,                   nullptr,               nullptr,               nullptr,
+    nullptr,                   nullptr,               "rROS",             "nCIDFontVersion",
     "nCIDFontRevision",     "nCIDFontType",     "nCIDCount",        "nUIDBase",
     "nFDArray",             "nFDSelect",        "sFontName"
 };
 
 static const char* pType1Ops[] = {
-    NULL,               "2hstem",           NULL,               "2vstem",
+    nullptr,               "2hstem",           nullptr,               "2vstem",
     "1vmoveto",         "Arlineto",         "1hlineto",         "1vlineto",
     "Crrcurveto",       "0closepath",       "Lcallsubr",        "0return",
-    "xT1ESC",           "2hsbw",            "0endchar",         NULL,
-    NULL,               NULL,               NULL,               NULL,
-    NULL,               "2rmoveto",         "1hmoveto",         NULL,
-    NULL,               NULL,               NULL,               NULL,
-    NULL,               NULL,               "4vhcurveto",       "4hvcurveto"
+    "xT1ESC",           "2hsbw",            "0endchar",         nullptr,
+    nullptr,               nullptr,               nullptr,               nullptr,
+    nullptr,               "2rmoveto",         "1hmoveto",         nullptr,
+    nullptr,               nullptr,               nullptr,               nullptr,
+    nullptr,               nullptr,               "4vhcurveto",       "4hvcurveto"
 };
 
 static const char* pT1EscOps[] = {
-    "0dotsection",      "6vstem3",          "6hstem3",          NULL,
-    NULL,               NULL,               "5seac",            "4sbw",
-    NULL,               "1abs",             "2add",             "2sub",
-    "2div",             NULL,               NULL,               NULL,
-    "Gcallothersubr",   "1pop",             NULL,               NULL,
-    NULL,               NULL,               NULL,               NULL,
-    NULL,               NULL,               NULL,               NULL,
-    NULL,               NULL,               NULL,               NULL,
-    NULL,               "2setcurrentpoint"
+    "0dotsection",      "6vstem3",          "6hstem3",          nullptr,
+    nullptr,               nullptr,               "5seac",            "4sbw",
+    nullptr,               "1abs",             "2add",             "2sub",
+    "2div",             nullptr,               nullptr,               nullptr,
+    "Gcallothersubr",   "1pop",             nullptr,               nullptr,
+    nullptr,               nullptr,               nullptr,               nullptr,
+    nullptr,               nullptr,               nullptr,               nullptr,
+    nullptr,               nullptr,               nullptr,               nullptr,
+    nullptr,               "2setcurrentpoint"
 };
 
 struct TYPE1OP
@@ -208,26 +208,26 @@ struct TYPE1OP
 };
 
 static const char* pType2Ops[] = {
-    NULL,           "hhstem",       NULL,           "vvstem",
+    nullptr,           "hhstem",       nullptr,           "vvstem",
     "mvmoveto",     "Arlineto",     "Ehlineto",     "Evlineto",
-    "Crrcurveto",   NULL,           "Lcallsubr",    "Xreturn",
-    "xT2ESC",       NULL,           "eendchar",     NULL,
-    NULL,           NULL,           "Hhstemhm",     "Khintmask",
+    "Crrcurveto",   nullptr,           "Lcallsubr",    "Xreturn",
+    "xT2ESC",       nullptr,           "eendchar",     nullptr,
+    nullptr,           nullptr,           "Hhstemhm",     "Khintmask",
     "Kcntrmask",    "Mrmoveto",     "mhmoveto",     "Vvstemhm",
     ".rcurveline",  ".rlinecurve",  ".vvcurveto",   ".hhcurveto",
     ".shortint",    "Gcallgsubr",   ".vhcurveto",   ".hvcurveto"
 };
 
 static const char* pT2EscOps[] = {
-    NULL,       NULL,       NULL,       "2and",
-    "2or",      "1not",     NULL,       NULL,
-    NULL,       "1abs",     "2add",     "2sub",
-    "2div",     NULL,       "1neg",     "2eq",
-    NULL,       NULL,       "1drop",    NULL,
+    nullptr,       nullptr,       nullptr,       "2and",
+    "2or",      "1not",     nullptr,       nullptr,
+    nullptr,       "1abs",     "2add",     "2sub",
+    "2div",     nullptr,       "1neg",     "2eq",
+    nullptr,       nullptr,       "1drop",    nullptr,
     "1put",     "1get",     "4ifelse",  "0random",
-    "2mul",     NULL,       "1sqrt",    "1dup",
-    "2exch",    "Iindex",   "Rroll",    NULL,
-    NULL,       NULL,       "7hflex",   "Fflex",
+    "2mul",     nullptr,       "1sqrt",    "1dup",
+    "2exch",    "Iindex",   "Rroll",    nullptr,
+    nullptr,       nullptr,       "7hflex",   "Fflex",
     "9hflex1",  "fflex1"
 };
 
@@ -414,15 +414,15 @@ private:
 CffSubsetterContext::CffSubsetterContext( const U8* pBasePtr, int nBaseLen)
     : mpBasePtr( pBasePtr)
     , mpBaseEnd( pBasePtr+nBaseLen)
-    , mpReadPtr(NULL)
-    , mpReadEnd(NULL)
-    , mpWritePtr(NULL)
+    , mpReadPtr(nullptr)
+    , mpReadEnd(nullptr)
+    , mpWritePtr(nullptr)
     , mbSawError(false)
     , mbNeedClose(false)
     , mbIgnoreHints(false)
     , mnCntrMask(0)
-    , mpCharStringOps(NULL)
-    , mpCharStringEscs(NULL)
+    , mpCharStringOps(nullptr)
+    , mpCharStringEscs(nullptr)
     , mnStackIdx(0)
     , mnHintSize(0)
     , mnHorzHintSize(0)
@@ -509,7 +509,7 @@ void CffSubsetterContext::readDictOp()
     const U8 c = *mpReadPtr;
     if( c <= 21 ) {
         int nOpId = *(mpReadPtr++);
-        const char* pCmdName = 0;
+        const char* pCmdName = nullptr;
         if( nOpId != 12)
             pCmdName = pDictOps[nOpId];
         else {
@@ -1748,7 +1748,7 @@ Type1Emitter::~Type1Emitter()
         return;
     if( mbCloseOutfile )
         fclose( mpFileOut);
-    mpFileOut = NULL;
+    mpFileOut = nullptr;
 }
 
 void Type1Emitter::setSubsetName( const char* pSubsetName)

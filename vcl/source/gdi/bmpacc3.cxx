@@ -83,7 +83,7 @@ void BitmapWriteAccess::Erase( const Color& rColor )
         return;
 
     // use the canonical method to clear the bitmap
-    BitmapColor* pOldFillColor = mpFillColor ? new BitmapColor(*mpFillColor) : NULL;
+    BitmapColor* pOldFillColor = mpFillColor ? new BitmapColor(*mpFillColor) : nullptr;
     const Point aPoint;
     const Rectangle aRect(aPoint, maBitmap.GetSizePixel());
 

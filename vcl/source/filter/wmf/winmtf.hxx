@@ -490,7 +490,7 @@ struct GDIObj
     GDIObjectType   eType;
 
     GDIObj()
-        : pStyle (NULL)
+        : pStyle (nullptr)
         , eType  (GDI_DUMMY)
     {}
 
@@ -508,7 +508,7 @@ struct GDIObj
 
     void Delete()
     {
-        if (pStyle == NULL)
+        if (pStyle == nullptr)
             return;
 
         switch (eType)
@@ -527,7 +527,7 @@ struct GDIObj
                 OSL_FAIL( "unsupported style deleted" );
                 break;
         }
-        pStyle = NULL;
+        pStyle = nullptr;
     }
 
     ~GDIObj()
@@ -643,8 +643,8 @@ public:
     void                SetBkColor( const Color& rColor );
     void                SetTextColor( const Color& rColor );
     void                SetTextAlign( sal_uInt32 nAlign );
-    void                CreateObject( GDIObjectType, void* pStyle = NULL );
-    void                CreateObject( sal_Int32 nIndex, GDIObjectType, void* pStyle = NULL );
+    void                CreateObject( GDIObjectType, void* pStyle = nullptr );
+    void                CreateObject( sal_Int32 nIndex, GDIObjectType, void* pStyle = nullptr );
     void                DeleteObject( sal_Int32 nIndex );
     void                SelectObject( sal_Int32 nIndex );
     rtl_TextEncoding    GetCharSet(){ return maFont.GetCharSet(); };
@@ -695,7 +695,7 @@ public:
                         );
     void                DrawText( Point& rPosition,
                                   OUString& rString,
-                                  long* pDXArry = NULL,
+                                  long* pDXArry = nullptr,
                                   bool bRecordPath = false,
                                   sal_Int32 nGraphicsMode = GM_COMPATIBLE);
 
@@ -742,7 +742,7 @@ protected:
                         WinMtf(
                             WinMtfOutput* pOut,
                             SvStream& rStreamWMF,
-                            FilterConfigItem* pConfigItem = NULL
+                            FilterConfigItem* pConfigItem = nullptr
                         );
                         ~WinMtf();
 };
@@ -758,7 +758,7 @@ class EnhWMFReader : public WinMtf
     static Rectangle ReadRectangle( sal_Int32, sal_Int32, sal_Int32, sal_Int32 );
 
 public:
-    EnhWMFReader(SvStream& rStreamWMF, GDIMetaFile& rGDIMetaFile, FilterConfigItem* pConfigItem = NULL);
+    EnhWMFReader(SvStream& rStreamWMF, GDIMetaFile& rGDIMetaFile, FilterConfigItem* pConfigItem = nullptr);
     ~EnhWMFReader();
 
     bool ReadEnhWMF();
@@ -812,8 +812,8 @@ private:
 public:
 
     WMFReader(SvStream& rStreamWMF, GDIMetaFile& rGDIMetaFile,
-              FilterConfigItem* pConfigItem = NULL,
-              WMF_EXTERNALHEADER* pExtHeader = NULL);
+              FilterConfigItem* pConfigItem = nullptr,
+              WMF_EXTERNALHEADER* pExtHeader = nullptr);
     ~WMFReader();
 
     // read WMF file from stream and fill the GDIMetaFile

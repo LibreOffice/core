@@ -35,14 +35,14 @@ using namespace ::com::sun::star::datatransfer::dnd;
 // DNDEventDispatcher::DNDEventDispatcher
 DNDEventDispatcher::DNDEventDispatcher( vcl::Window * pTopWindow ):
     m_pTopWindow( pTopWindow ),
-    m_pCurrentWindow( NULL )
+    m_pCurrentWindow( nullptr )
 {
 }
 
 // DNDEventDispatcher::~DNDEventDispatcher
 DNDEventDispatcher::~DNDEventDispatcher()
 {
-    designate_currentwindow(NULL);
+    designate_currentwindow(nullptr);
 }
 
 vcl::Window* DNDEventDispatcher::findTopLevelWindow(Point location)
@@ -55,7 +55,7 @@ vcl::Window* DNDEventDispatcher::findTopLevelWindow(Point location)
         m_pTopWindow->ImplMirrorFramePos( location );
     vcl::Window * pChildWindow = m_pTopWindow->ImplFindWindow( location );
 
-    if( NULL == pChildWindow )
+    if( nullptr == pChildWindow )
         pChildWindow = m_pTopWindow;
 
     while( pChildWindow->ImplGetClientWindow() )
@@ -74,7 +74,7 @@ IMPL_LINK_TYPED(DNDEventDispatcher, WindowEventListener, VclWindowEvent&, rEvent
 {
     if (rEvent.GetId() == VCLEVENT_OBJECT_DYING)
     {
-        designate_currentwindow(NULL);
+        designate_currentwindow(nullptr);
     }
 }
 
@@ -120,7 +120,7 @@ void SAL_CALL DNDEventDispatcher::drop( const DropTargetDropEvent& dtde )
     }
 
     // this is a drop -> no further drag overs
-    designate_currentwindow(NULL);
+    designate_currentwindow(nullptr);
     m_aDataFlavorList.realloc( 0 );
 }
 
@@ -160,7 +160,7 @@ void SAL_CALL DNDEventDispatcher::dragExit( const DropTargetEvent& /*dte*/ )
     fireDragExitEvent( m_pCurrentWindow );
 
     // reset member values
-    designate_currentwindow(NULL);
+    designate_currentwindow(nullptr);
     m_aDataFlavorList.realloc( 0 );
 }
 

@@ -459,7 +459,7 @@ void X11SalFrame::Init( SalFrameStyleFlags nSalFrameStyle, SalX11Screen nXScreen
             if( ! mpParent )
             {
                 // find the last document window (if any)
-                const X11SalFrame* pFrame = NULL;
+                const X11SalFrame* pFrame = nullptr;
                 const std::list< SalFrame* >& rFrames = GetDisplay()->getFrames();
                 std::list< SalFrame* >::const_iterator it = rFrames.begin();
                 while( it != rFrames.end() )
@@ -600,7 +600,7 @@ void X11SalFrame::Init( SalFrameStyleFlags nSalFrameStyle, SalX11Screen nXScreen
                               nAttrMask,
                               &Attributes );
     // FIXME: see above: fake shell window for now to own window
-    if( pParentData == NULL )
+    if( pParentData == nullptr )
     {
         mhShellWindow = mhWindow;
     }
@@ -725,7 +725,7 @@ void X11SalFrame::Init( SalFrameStyleFlags nSalFrameStyle, SalX11Screen nXScreen
             setFrameTypeAndDecoration( this,
                                        eType,
                                        nDecoFlags,
-                                       hPresentationWindow ? NULL : mpParent );
+                                       hPresentationWindow ? nullptr : mpParent );
 
         if( (nStyle_ & (SalFrameStyleFlags::DEFAULT |
                         SalFrameStyleFlags::OWNERDRAWDECORATION|
@@ -771,8 +771,8 @@ X11SalFrame::X11SalFrame( SalFrame *pParent, SalFrameStyleFlags nSalFrameStyle,
     mhBackgroundPixmap          = None;
     m_bSetFocusOnMap            = false;
 
-    pGraphics_                  = NULL;
-    pFreeGraphics_              = NULL;
+    pGraphics_                  = nullptr;
+    pFreeGraphics_              = nullptr;
 
     hCursor_                    = None;
     nCaptured_                  = 0;
@@ -801,7 +801,7 @@ X11SalFrame::X11SalFrame( SalFrame *pParent, SalFrameStyleFlags nSalFrameStyle,
     m_bXEmbed                   = false;
 
 
-    mpInputContext              = NULL;
+    mpInputContext              = nullptr;
     mbInputFocus                = False;
 
     maAlwaysOnTopRaiseTimer.SetTimeoutHdl( LINK( this, X11SalFrame, HandleAlwaysOnTopRaise ) );
@@ -816,7 +816,7 @@ X11SalFrame::X11SalFrame( SalFrame *pParent, SalFrameStyleFlags nSalFrameStyle,
 
     mnIconID                    = 1; // ICON_LO_DEFAULT
 
-    m_pClipRectangles           = NULL;
+    m_pClipRectangles           = nullptr;
     m_nCurClipRect              = 0;
     m_nMaxClipRect              = 0;
 
@@ -833,7 +833,7 @@ X11SalFrame::~X11SalFrame()
     if( m_pClipRectangles )
     {
         delete [] m_pClipRectangles;
-        m_pClipRectangles = NULL;
+        m_pClipRectangles = nullptr;
         m_nCurClipRect = m_nMaxClipRect = 0;
     }
 
@@ -930,26 +930,26 @@ const SystemEnvData* X11SalFrame::GetSystemData() const
     pFrame->maSystemChildData.pDisplay      = GetXDisplay();
     pFrame->maSystemChildData.aWindow       = pFrame->GetWindow();
     pFrame->maSystemChildData.pSalFrame     = pFrame;
-    pFrame->maSystemChildData.pWidget       = NULL;
+    pFrame->maSystemChildData.pWidget       = nullptr;
     pFrame->maSystemChildData.pVisual       = GetDisplay()->GetVisual( m_nXScreen ).GetVisual();
     pFrame->maSystemChildData.nScreen       = m_nXScreen.getXScreen();
     pFrame->maSystemChildData.nDepth        = GetDisplay()->GetVisual( m_nXScreen ).GetDepth();
     pFrame->maSystemChildData.aColormap     = GetDisplay()->GetColormap( m_nXScreen ).GetXColormap();
-    pFrame->maSystemChildData.pAppContext   = NULL;
+    pFrame->maSystemChildData.pAppContext   = nullptr;
     pFrame->maSystemChildData.aShellWindow  = pFrame->GetShellWindow();
-    pFrame->maSystemChildData.pShellWidget  = NULL;
+    pFrame->maSystemChildData.pShellWidget  = nullptr;
     return &maSystemChildData;
 }
 
 SalGraphics *X11SalFrame::AcquireGraphics()
 {
     if( pGraphics_ )
-        return NULL;
+        return nullptr;
 
     if( pFreeGraphics_ )
     {
         pGraphics_      = pFreeGraphics_;
-        pFreeGraphics_  = NULL;
+        pFreeGraphics_  = nullptr;
     }
     else
     {
@@ -968,7 +968,7 @@ void X11SalFrame::ReleaseGraphics( SalGraphics *pGraphics )
         return;
 
     pFreeGraphics_  = pGraphics_;
-    pGraphics_      = NULL;
+    pGraphics_      = nullptr;
 }
 
 void X11SalFrame::updateGraphics( bool bClear )
@@ -990,7 +990,7 @@ void X11SalFrame::SetIcon( sal_uInt16 nIcon )
 
         mnIconID = nIcon;
 
-        XIconSize *pIconSize = NULL;
+        XIconSize *pIconSize = nullptr;
         int nSizes = 0;
         int iconSize = 32;
         if ( XGetIconSizes( GetXDisplay(), GetDisplay()->GetRootWindow( m_nXScreen ), &pIconSize, &nSizes ) )
@@ -1281,7 +1281,7 @@ void X11SalFrame::Show( bool bVisible, bool bNoActivate )
                               );
             }
         }
-        CallCallback( SALEVENT_RESIZE, NULL );
+        CallCallback( SALEVENT_RESIZE, nullptr );
 
         /*
          *  sometimes a message box/dialogue is brought up when a frame is not mapped
@@ -1618,7 +1618,7 @@ void X11SalFrame::SetAlwaysOnTop( bool bOnTop )
 
 void X11SalFrame::SetWindowState( const SalFrameState *pState )
 {
-    if (pState == NULL)
+    if (pState == nullptr)
         return;
 
     // Request for position or size change
@@ -1870,7 +1870,7 @@ void X11SalFrame::SetSize( const Size &rSize )
         maGeometry.nHeight = rSize.Height();
 
         // allow the external status window to reposition
-        if (mbInputFocus && mpInputContext != NULL)
+        if (mbInputFocus && mpInputContext != nullptr)
             mpInputContext->SetICFocus ( this );
     }
 }
@@ -1978,14 +1978,14 @@ void X11SalFrame::SetPosSize( const Rectangle &rPosSize )
 
     updateScreenNumber();
     if( bSized && ! bMoved )
-        CallCallback( SALEVENT_RESIZE, NULL );
+        CallCallback( SALEVENT_RESIZE, nullptr );
     else if( bMoved && ! bSized )
-        CallCallback( SALEVENT_MOVE, NULL );
+        CallCallback( SALEVENT_MOVE, nullptr );
     else
-        CallCallback( SALEVENT_MOVERESIZE, NULL );
+        CallCallback( SALEVENT_MOVERESIZE, nullptr );
 
     // allow the external status window to reposition
-    if (mbInputFocus && mpInputContext != NULL)
+    if (mbInputFocus && mpInputContext != nullptr)
         mpInputContext->SetICFocus ( this );
 }
 
@@ -2293,7 +2293,7 @@ void X11SalFrame::Flush()
 
 void X11SalFrame::SetInputContext( SalInputContext* pContext )
 {
-    if (pContext == NULL)
+    if (pContext == nullptr)
         return;
 
     // 1. We should create an input context for this frame
@@ -2309,7 +2309,7 @@ void X11SalFrame::SetInputContext( SalInputContext* pContext )
     // 2. We should use on-the-spot inputstyle
     //    only when InputContextFlags::ExtTExt is set.
 
-    if (mpInputContext == NULL)
+    if (mpInputContext == nullptr)
     {
         vcl::I18NStatus& rStatus( vcl::I18NStatus::get() );
         rStatus.setParent( this );
@@ -2328,7 +2328,7 @@ void X11SalFrame::SetInputContext( SalInputContext* pContext )
 
 void X11SalFrame::EndExtTextInput( EndExtTextInputFlags nFlags )
 {
-    if (mpInputContext != NULL)
+    if (mpInputContext != nullptr)
           mpInputContext->EndExtTextInput( nFlags );
 }
 
@@ -2361,7 +2361,7 @@ void X11SalFrame::UpdateSettings( AllSettings& rSettings )
 
 void X11SalFrame::CaptureMouse( bool bCapture )
 {
-    nCaptured_ = pDisplay_->CaptureMouse( bCapture ? this : NULL );
+    nCaptured_ = pDisplay_->CaptureMouse( bCapture ? this : nullptr );
 }
 
 void X11SalFrame::SetParent( SalFrame* pNewParent )
@@ -2437,7 +2437,7 @@ void X11SalFrame::createNewWindow( ::Window aNewParent, SalX11Screen nXScreen )
     if ( aParentData.aWindow != None )
         Init( nStyle_ | SalFrameStyleFlags::PLUG, nXScreen, &aParentData );
     else
-        Init( nStyle_ & ~SalFrameStyleFlags::PLUG, nXScreen, NULL, true );
+        Init( nStyle_ & ~SalFrameStyleFlags::PLUG, nXScreen, nullptr, true );
 
     // update graphics if necessary
     updateGraphics(false);
@@ -2448,7 +2448,7 @@ void X11SalFrame::createNewWindow( ::Window aNewParent, SalX11Screen nXScreen )
     if( mpParent )
     {
         if( mpParent->m_nXScreen != m_nXScreen )
-            SetParent( NULL );
+            SetParent( nullptr );
         else
             pDisplay_->getWMAdaptor()->changeReferenceFrame( this, mpParent );
     }
@@ -2936,7 +2936,7 @@ bool X11SalFrame::endUnicodeSequence()
     bool bWasInput = !rSeq.isEmpty();
     rSeq.clear();
     if( bWasInput && ! aDeleteWatch.isDeleted() )
-        CallCallback(SALEVENT_ENDEXTTEXTINPUT, NULL);
+        CallCallback(SALEVENT_ENDEXTTEXTINPUT, nullptr);
     return bWasInput;
 }
 
@@ -3008,7 +3008,7 @@ long X11SalFrame::HandleKeyEvent( XKeyEvent *pEvent )
     unsigned char   *pPrintable = static_cast<unsigned char*>(alloca( nLen ));
 
     // singlebyte code composed by input method, the new default
-    if (mpInputContext != NULL && mpInputContext->UseContext())
+    if (mpInputContext != nullptr && mpInputContext->UseContext())
     {
         // returns a keysym as well as the pPrintable (in system encoding)
         // printable may be empty.
@@ -3229,7 +3229,7 @@ long X11SalFrame::HandleKeyEvent( XKeyEvent *pEvent )
         nSize   = 0;
     }
 
-    if (   mpInputContext != NULL
+    if (   mpInputContext != nullptr
         && mpInputContext->UseContext()
         && KeyRelease != pEvent->type
         && (   (nSize >  1)
@@ -3271,7 +3271,7 @@ long X11SalFrame::HandleKeyEvent( XKeyEvent *pEvent )
 
     if (! aDeleteWatch.isDeleted())
     {
-        if (mpInputContext != NULL && mpInputContext->UseContext())
+        if (mpInputContext != nullptr && mpInputContext->UseContext())
             mpInputContext->UpdateSpotLocation();
     }
 
@@ -3295,7 +3295,7 @@ long X11SalFrame::HandleFocusEvent( XFocusChangeEvent *pEvent )
      *  status window does not follow the application frame
      */
 
-    if ( mpInputContext != NULL  )
+    if ( mpInputContext != nullptr  )
     {
         if( FocusIn == pEvent->type )
             mpInputContext->SetICFocus( this );
@@ -3323,8 +3323,8 @@ long X11SalFrame::HandleFocusEvent( XFocusChangeEvent *pEvent )
             mbInputFocus = True;
             ImplSVData* pSVData = ImplGetSVData();
 
-            long nRet = CallCallback( SALEVENT_GETFOCUS,  0 );
-            if ((mpParent != NULL && nStyle_ == SalFrameStyleFlags::NONE)
+            long nRet = CallCallback( SALEVENT_GETFOCUS,  nullptr );
+            if ((mpParent != nullptr && nStyle_ == SalFrameStyleFlags::NONE)
                 && pSVData->maWinData.mpFirstFloat )
             {
                 FloatWinPopupFlags nMode = pSVData->maWinData.mpFirstFloat->GetPopupModeFlags();
@@ -3338,7 +3338,7 @@ long X11SalFrame::HandleFocusEvent( XFocusChangeEvent *pEvent )
             mbInputFocus = False;
             mbSendExtKeyModChange = false;
             mnExtKeyMod = 0;
-            return CallCallback( SALEVENT_LOSEFOCUS, 0 );
+            return CallCallback( SALEVENT_LOSEFOCUS, nullptr );
         }
     }
 
@@ -3435,7 +3435,7 @@ void X11SalFrame::RestackChildren()
     if( ! GetDisplay()->getWMAdaptor()->isTransientBehaviourAsExpected()
         && !maChildren.empty() )
     {
-        ::Window aRoot, aParent, *pChildren = NULL;
+        ::Window aRoot, aParent, *pChildren = nullptr;
         unsigned int nChildren;
         if( XQueryTree( GetXDisplay(),
                         GetDisplay()->GetRootWindow( m_nXScreen ),
@@ -3517,7 +3517,7 @@ long X11SalFrame::HandleSizeEvent( XConfigureEvent *pEvent )
         {
             maGeometry.nX = pEvent->x;
             maGeometry.nY = pEvent->y;
-            CallCallback( SALEVENT_MOVE, NULL );
+            CallCallback( SALEVENT_MOVE, nullptr );
         }
         return 1;
     }
@@ -3552,11 +3552,11 @@ long X11SalFrame::HandleSizeEvent( XConfigureEvent *pEvent )
     RestackChildren();
 
     if( bSized && ! bMoved )
-        CallCallback( SALEVENT_RESIZE, NULL );
+        CallCallback( SALEVENT_RESIZE, nullptr );
     else if( bMoved && ! bSized )
-        CallCallback( SALEVENT_MOVE, NULL );
+        CallCallback( SALEVENT_MOVE, nullptr );
     else if( bMoved && bSized )
-        CallCallback( SALEVENT_MOVERESIZE, NULL );
+        CallCallback( SALEVENT_MOVERESIZE, nullptr );
 
     return 1;
 }
@@ -3588,7 +3588,7 @@ long X11SalFrame::HandleReparentEvent( XReparentEvent *pEvent )
     hWM_Parent = GetShellWindow();
     do
     {
-        Children = NULL;
+        Children = nullptr;
         XQueryTree( pDisplay,
                     hWM_Parent,
                     &hRoot,
@@ -3744,7 +3744,7 @@ long X11SalFrame::HandleReparentEvent( XReparentEvent *pEvent )
         }
     }
     if( bResized )
-        CallCallback( SALEVENT_RESIZE, NULL );
+        CallCallback( SALEVENT_RESIZE, nullptr );
 
     GetGenericData()->ErrorTrapPop();
 
@@ -3756,7 +3756,7 @@ long X11SalFrame::HandleStateEvent( XPropertyEvent *pEvent )
     Atom          actual_type;
     int           actual_format;
     unsigned long nitems, bytes_after;
-    unsigned char *prop = NULL;
+    unsigned char *prop = nullptr;
 
     if( 0 != XGetWindowProperty( GetXDisplay(),
                                  GetShellWindow(),
@@ -3922,9 +3922,9 @@ long X11SalFrame::Dispatch( XEvent *pEvent )
                     bMapped_   = true;
                     bViewable_ = true;
                     nRet = 1;
-                    if ( mpInputContext != NULL )
+                    if ( mpInputContext != nullptr )
                         mpInputContext->Map( this );
-                    CallCallback( SALEVENT_RESIZE, NULL );
+                    CallCallback( SALEVENT_RESIZE, nullptr );
 
                     bool bSetFocus = m_bSetFocusOnMap;
                     /*  another workaround for sawfish: if a transient window for the same parent is shown
@@ -3981,9 +3981,9 @@ long X11SalFrame::Dispatch( XEvent *pEvent )
                     bMapped_   = false;
                     bViewable_ = false;
                     nRet = 1;
-                    if ( mpInputContext != NULL )
+                    if ( mpInputContext != nullptr )
                         mpInputContext->Unmap( this );
-                    CallCallback( SALEVENT_RESIZE, NULL );
+                    CallCallback( SALEVENT_RESIZE, nullptr );
                 }
                 break;
 
@@ -4062,7 +4062,7 @@ long X11SalFrame::Dispatch( XEvent *pEvent )
 void X11SalFrame::ResetClipRegion()
 {
     delete [] m_pClipRectangles;
-    m_pClipRectangles = NULL;
+    m_pClipRectangles = nullptr;
     m_nCurClipRect = m_nMaxClipRect = 0;
 
     const int   dest_kind   = ShapeBounding;
@@ -4099,7 +4099,7 @@ void X11SalFrame::BeginSetClipRegion( sal_uLong nRects )
     if( nRects )
         m_pClipRectangles = new XRectangle[nRects];
     else
-        m_pClipRectangles = NULL;
+        m_pClipRectangles = nullptr;
     m_nMaxClipRect = static_cast<int>(nRects);
     m_nCurClipRect = 0;
 }

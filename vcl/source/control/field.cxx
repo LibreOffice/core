@@ -370,7 +370,7 @@ static void ImplUpdateSeparators( const OUString& rOldDecSep, const OUString& rN
 FormatterBase::FormatterBase( Edit* pField )
 {
     mpField                     = pField;
-    mpLocaleDataWrapper         = NULL;
+    mpLocaleDataWrapper         = nullptr;
     mbReformat                  = false;
     mbStrictFormat              = false;
     mbEmptyFieldValue           = false;
@@ -802,7 +802,7 @@ NumericField::NumericField( vcl::Window* pParent, const ResId& rResId ) :
 
 void NumericField::dispose()
 {
-    NumericFormatter::SetField( NULL );
+    NumericFormatter::SetField( nullptr );
     SpinField::dispose();
 }
 
@@ -957,7 +957,7 @@ NumericBox::NumericBox( vcl::Window* pParent, WinBits nWinStyle ) :
 
 void NumericBox::dispose()
 {
-    NumericFormatter::SetField( NULL );
+    NumericFormatter::SetField( nullptr );
     ComboBox::dispose();
 }
 
@@ -1626,7 +1626,7 @@ MetricField::MetricField( vcl::Window* pParent, const ResId& rResId ) :
 
 void MetricField::dispose()
 {
-    MetricFormatter::SetField( NULL );
+    MetricFormatter::SetField( nullptr );
     SpinField::dispose();
 }
 
@@ -1796,7 +1796,7 @@ MetricBox::MetricBox( vcl::Window* pParent, WinBits nWinStyle ) :
 
 void MetricBox::dispose()
 {
-    MetricFormatter::SetField(NULL);
+    MetricFormatter::SetField(nullptr);
     ComboBox::dispose();
 }
 
@@ -2030,7 +2030,7 @@ CurrencyField::CurrencyField( vcl::Window* pParent, WinBits nWinStyle ) :
 
 void CurrencyField::dispose()
 {
-    CurrencyFormatter::SetField( NULL );
+    CurrencyFormatter::SetField( nullptr );
     SpinField::dispose();
 }
 
@@ -2114,7 +2114,7 @@ CurrencyBox::CurrencyBox( vcl::Window* pParent, WinBits nWinStyle ) :
 
 void CurrencyBox::dispose()
 {
-    CurrencyFormatter::SetField( NULL );
+    CurrencyFormatter::SetField( nullptr );
     ComboBox::dispose();
 }
 

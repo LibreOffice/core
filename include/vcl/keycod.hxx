@@ -63,7 +63,7 @@ public:
     sal_uInt16      GetGroup() const
                     { return (nKeyCodeAndModifiers & KEYGROUP_TYPE); }
 
-    OUString        GetName( vcl::Window* pWindow = NULL ) const;
+    OUString        GetName( vcl::Window* pWindow = nullptr ) const;
 
     bool            IsFunction() const
                     { return (eFunc != KeyFuncType::DONTKNOW); }

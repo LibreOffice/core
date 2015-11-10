@@ -48,7 +48,7 @@ public:
 
 DockingWindow::ImplData::ImplData()
 {
-    mpParent = NULL;
+    mpParent = nullptr;
     maMaxOutSize = Size( SHRT_MAX, SHRT_MAX );
 }
 
@@ -91,7 +91,7 @@ ImplDockFloatWin::ImplDockFloatWin( vcl::Window* pParent, WinBits nWinBits,
         mpDockWin( pDockingWin ),
         mnLastTicks( tools::Time::GetSystemTicks() ),
         mbInMove( false ),
-        mnLastUserEvent( 0 )
+        mnLastUserEvent( nullptr )
 {
     // copy settings of DockingWindow
     if ( pDockingWin )
@@ -157,7 +157,7 @@ IMPL_LINK_NOARG_TYPED(ImplDockFloatWin, DockingHdl, void*, void)
 {
     PointerState aState = mpDockWin->GetParent()->GetPointerState();
 
-    mnLastUserEvent = 0;
+    mnLastUserEvent = nullptr;
     if( mpDockWin->IsDockable()                             &&
         (tools::Time::GetSystemTicks() - mnLastTicks > 500)        &&
         ( aState.mnState & ( MOUSE_LEFT | MOUSE_MIDDLE | MOUSE_RIGHT ) ) &&
@@ -208,7 +208,7 @@ void ImplDockFloatWin::Move()
      *  last Move message.
      */
     if( ! mnLastUserEvent )
-        mnLastUserEvent = Application::PostUserEvent( LINK( this, ImplDockFloatWin, DockingHdl ), NULL, true );
+        mnLastUserEvent = Application::PostUserEvent( LINK( this, ImplDockFloatWin, DockingHdl ), nullptr, true );
 }
 
 void ImplDockFloatWin::Resize()
@@ -305,8 +305,8 @@ bool DockingWindow::ImplStartDocking( const Point& rPos )
 void DockingWindow::ImplInitDockingWindowData()
 {
     mpWindowImpl->mbDockWin = true;
-    mpFloatWin     = NULL;
-    mpOldBorderWin = NULL;
+    mpFloatWin     = nullptr;
+    mpOldBorderWin = nullptr;
     mpImplData     = new ImplData;
     mnTrackX       = 0;
     mnTrackY       = 0;
@@ -333,7 +333,7 @@ void DockingWindow::ImplInitDockingWindowData()
     mbIsDefferedInit = false;
     mbIsCalculatingInitialLayoutSize = false;
     mbInitialLayoutDone = false;
-    mpDialogParent = NULL;
+    mpDialogParent = nullptr;
 
     //To-Do, reuse maResizeTimer
     maLayoutIdle.SetPriority(SchedulerPriority::RESIZE);
@@ -352,7 +352,7 @@ void DockingWindow::ImplInit( vcl::Window* pParent, WinBits nStyle )
     if ( nStyle & WB_DOCKBORDER )
         nStyle |= WB_BORDER;
 
-    Window::ImplInit( pParent, nStyle, NULL );
+    Window::ImplInit( pParent, nStyle, nullptr );
 
     ImplInitSettings();
 }
@@ -444,7 +444,7 @@ DockingWindow::DockingWindow( vcl::Window* pParent, const ResId& rResId ) :
 void DockingWindow::doDeferredInit(WinBits nBits)
 {
     vcl::Window *pParent = mpDialogParent;
-    mpDialogParent = NULL;
+    mpDialogParent = nullptr;
     ImplInit(pParent, nBits);
     mbIsDefferedInit = false;
 }
@@ -479,7 +479,7 @@ void DockingWindow::dispose()
         SetFloatingMode(false);
     }
     delete mpImplData;
-    mpImplData = NULL;
+    mpImplData = nullptr;
     mpFloatWin.clear();
     mpOldBorderWin.clear();
     mpDialogParent.clear();
@@ -805,7 +805,7 @@ void DockingWindow::SetFloatingMode( bool bFloatMode )
                                          mnFloatBits & ( WB_MOVEABLE | WB_SIZEABLE | WB_CLOSEABLE ) ?  mnFloatBits | WB_SYSTEMWINDOW : mnFloatBits,
                                          this );
                 mpFloatWin      = pWin;
-                mpWindowImpl->mpBorderWindow  = NULL;
+                mpWindowImpl->mpBorderWindow  = nullptr;
                 mpWindowImpl->mnLeftBorder    = 0;
                 mpWindowImpl->mnTopBorder     = 0;
                 mpWindowImpl->mnRightBorder   = 0;
@@ -866,7 +866,7 @@ void DockingWindow::SetFloatingMode( bool bFloatMode )
                 mpImplData->maMaxOutSize = mpFloatWin->GetMaxOutputSizePixel();
 
                 vcl::Window* pRealParent = mpWindowImpl->mpRealParent;
-                mpWindowImpl->mpBorderWindow = NULL;
+                mpWindowImpl->mpBorderWindow = nullptr;
                 if ( mpOldBorderWin )
                 {
                     SetParent( mpOldBorderWin );

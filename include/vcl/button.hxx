@@ -52,7 +52,7 @@ public:
     SAL_DLLPRIVATE DrawTextFlags    ImplGetTextStyle( OUString& rText, WinBits nWinStyle, DrawFlags nDrawFlags );
     SAL_DLLPRIVATE void             ImplDrawAlignedImage(OutputDevice* pDev, Point& rPos, Size& rSize,
                                               bool bLayout, sal_uLong nImageSep, DrawFlags nDrawFlags,
-                                              DrawTextFlags nTextStyle, Rectangle *pSymbolRect=NULL, bool bAddImageSep = false );
+                                              DrawTextFlags nTextStyle, Rectangle *pSymbolRect=nullptr, bool bAddImageSep = false );
     SAL_DLLPRIVATE void             ImplSetFocusRect( const Rectangle &rFocusRect );
     SAL_DLLPRIVATE const Rectangle& ImplGetFocusRect() const;
     SAL_DLLPRIVATE void             ImplSetSymbolAlign( SymbolAlign eAlign );

@@ -36,7 +36,7 @@ void TabPage::ImplInit( vcl::Window* pParent, WinBits nStyle )
     if ( !(nStyle & WB_NODIALOGCONTROL) )
         nStyle |= WB_DIALOGCONTROL;
 
-    Window::ImplInit( pParent, nStyle, NULL );
+    Window::ImplInit( pParent, nStyle, nullptr );
 
     ImplInitSettings();
 

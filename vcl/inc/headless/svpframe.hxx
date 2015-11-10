@@ -65,7 +65,7 @@ public:
                  SalFrameStyleFlags nSalFrameStyle,
                  bool      bTopDown,
                  basebmp::Format nScanlineFormat,
-                 SystemParentData* pSystemParent = NULL );
+                 SystemParentData* pSystemParent = nullptr );
     virtual ~SvpSalFrame();
 
     void GetFocus();

@@ -549,7 +549,7 @@ ImplStyleData::ImplStyleData() :
     mbAutoMnemonic              = true;
     mnToolbarIconSize           = ToolbarIconSize::Unknown;
     meUseImagesInMenus          = TRISTATE_INDET;
-    mpFontOptions              = NULL;
+    mpFontOptions              = nullptr;
     mnEdgeBlending = 35;
     maEdgeBlendingTopLeftColor = RGB_COLORDATA(0xC0, 0xC0, 0xC0);
     maEdgeBlendingBottomRightColor = RGB_COLORDATA(0x40, 0x40, 0x40);
@@ -2422,7 +2422,7 @@ ImplMiscData::ImplMiscData()
     mnEnableATT                 = TRISTATE_INDET;
     mnDisablePrinting           = TRISTATE_INDET;
     static const char* pEnv = getenv("SAL_DECIMALSEP_ENABLED" ); // set default without UI
-    mbEnableLocalizedDecimalSep = (pEnv != NULL);
+    mbEnableLocalizedDecimalSep = (pEnv != nullptr);
     // Should we display any windows?
     mbPseudoHeadless = getenv("VCL_HIDE_WINDOWS") || comphelper::LibreOfficeKit::isActive();
 }
@@ -2707,10 +2707,10 @@ ImplAllSettingsData::ImplAllSettingsData()
 {
     mnWindowUpdate              = AllSettingsFlags::MOUSE | AllSettingsFlags::STYLE |
                                   AllSettingsFlags::MISC | AllSettingsFlags::LOCALE;
-    mpLocaleDataWrapper         = NULL;
-    mpUILocaleDataWrapper       = NULL;
-    mpI18nHelper                = NULL;
-    mpUII18nHelper              = NULL;
+    mpLocaleDataWrapper         = nullptr;
+    mpUILocaleDataWrapper       = nullptr;
+    mpI18nHelper                = nullptr;
+    mpUII18nHelper              = nullptr;
     if (!utl::ConfigManager::IsAvoidConfig())
         maMiscSettings.SetEnableLocalizedDecimalSep( maSysLocale.GetOptions().IsDecimalSeparatorAsLocale() );
 }
@@ -2727,10 +2727,10 @@ ImplAllSettingsData::ImplAllSettingsData( const ImplAllSettingsData& rData ) :
     // Pointer couldn't shared and objects haven't a copy ctor
     // So we create the cache objects new, if the GetFunction is
     // called
-    mpLocaleDataWrapper         = NULL;
-    mpUILocaleDataWrapper       = NULL;
-    mpI18nHelper                = NULL;
-    mpUII18nHelper              = NULL;
+    mpLocaleDataWrapper         = nullptr;
+    mpUILocaleDataWrapper       = nullptr;
+    mpI18nHelper                = nullptr;
+    mpUII18nHelper              = nullptr;
 }
 
 ImplAllSettingsData::~ImplAllSettingsData()
@@ -2857,12 +2857,12 @@ void AllSettings::SetLanguageTag( const LanguageTag& rLanguageTag )
         if ( mxData->mpLocaleDataWrapper )
         {
             delete mxData->mpLocaleDataWrapper;
-            mxData->mpLocaleDataWrapper = NULL;
+            mxData->mpLocaleDataWrapper = nullptr;
         }
         if ( mxData->mpI18nHelper )
         {
             delete mxData->mpI18nHelper;
-            mxData->mpI18nHelper = NULL;
+            mxData->mpI18nHelper = nullptr;
         }
     }
 }

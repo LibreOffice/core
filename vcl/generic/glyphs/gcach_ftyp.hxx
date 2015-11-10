@@ -63,7 +63,7 @@ public:
                                int nFaceNum, sal_IntPtr nFontId);
                           ~FtFontInfo();
 
-    const unsigned char*  GetTable( const char*, sal_uLong* pLength=0 ) const;
+    const unsigned char*  GetTable( const char*, sal_uLong* pLength=nullptr ) const;
 
     FT_FaceRec_*          GetFaceFT();
 #if ENABLE_GRAPHITE

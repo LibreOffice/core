@@ -316,7 +316,7 @@ ImplSVEvent * Window::PostUserEvent( const Link<void*,void>& rLink, void* pCalle
     {
         ImplRemoveDel( &(pSVEvent->maDelData) );
         delete pSVEvent;
-        pSVEvent = 0;
+        pSVEvent = nullptr;
     }
     return pSVEvent;
 }
@@ -331,7 +331,7 @@ void Window::RemoveUserEvent( ImplSVEvent * nUserEvent )
     if ( nUserEvent->mpWindow )
     {
         nUserEvent->mpWindow->ImplRemoveDel( &(nUserEvent->maDelData) );
-        nUserEvent->mpWindow = NULL;
+        nUserEvent->mpWindow = nullptr;
     }
 
     nUserEvent->mbCall = false;
@@ -507,7 +507,7 @@ void Window::ImplCallMove()
     if( mpWindowImpl->mbFrame )
     {
         // update frame position
-        SalFrame *pParentFrame = NULL;
+        SalFrame *pParentFrame = nullptr;
         vcl::Window *pParent = ImplGetParent();
         while( pParent )
         {
@@ -581,7 +581,7 @@ void Window::ImplCallFocusChangeActivate( vcl::Window* pNewOverlapWindow,
                     pLastRealWindow->Activate();
                 }
             }
-            pSVData->maWinData.mpLastDeacWin = NULL;
+            pSVData->maWinData.mpLastDeacWin = nullptr;
         }
     }
 
@@ -623,8 +623,8 @@ void Window::ImplCallFocusChangeActivate( vcl::Window* pNewOverlapWindow,
 
 NotifyEvent::NotifyEvent()
 {
-    mpWindow    = NULL;
-    mpData      = NULL;
+    mpWindow    = nullptr;
+    mpData      = nullptr;
     mnEventType = MouseNotifyEvent::NONE;
     mnRetValue  = 0;
 }

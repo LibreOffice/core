@@ -325,7 +325,7 @@ void ReleaseGSUB(struct _TrueTypeFont* pTTFile)
 int UseGSUB( struct _TrueTypeFont* pTTFile, int nGlyph )
 {
     GlyphSubstitution* pGlyphSubstitution = static_cast<GlyphSubstitution*>(pTTFile->pGSubstitution);
-    if( pGlyphSubstitution != 0 )
+    if( pGlyphSubstitution != nullptr )
     {
         GlyphSubstitution::const_iterator it( pGlyphSubstitution->find( sal::static_int_cast<sal_uInt16>(nGlyph) ) );
         if( it != pGlyphSubstitution->end() )

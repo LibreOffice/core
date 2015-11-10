@@ -85,7 +85,7 @@ public:
                     explicit ImageList( const ResId& rResId );
                     ImageList( const ::std::vector< OUString >& rNameVector,
                                const OUString& rPrefix,
-                               const Color* pMaskColor = NULL );
+                               const Color* pMaskColor = nullptr );
                     ImageList( const ImageList& rImageList );
                     ~ImageList();
 
@@ -94,8 +94,8 @@ public:
     void                    InsertFromHorizontalBitmap( const ResId& rResId,
                                     sal_uInt16       nCount,
                                     const Color *pNonAlphaMaskColor,
-                                    const Color *pSearchColors = NULL,
-                                    const Color *pReplaceColors = NULL,
+                                    const Color *pSearchColors = nullptr,
+                                    const Color *pReplaceColors = nullptr,
                                     sal_uLong        nColorCount = 0);
     BitmapEx        GetAsHorizontalStrip() const;
     sal_uInt16          GetImageCount() const;

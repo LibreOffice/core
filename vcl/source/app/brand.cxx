@@ -56,7 +56,7 @@ bool Application::LoadBrandBitmap (const char* pName, BitmapEx &rBitmap)
     OUString aBaseName( "/" + OUString::createFromAscii( pName ) );
     OUString aPng( ".png" );
 
-    rtl_Locale *pLoc = NULL;
+    rtl_Locale *pLoc = nullptr;
     osl_getProcessLocale (&pLoc);
     LanguageTag aLanguageTag( *pLoc);
 

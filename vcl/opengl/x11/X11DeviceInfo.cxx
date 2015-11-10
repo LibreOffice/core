@@ -215,7 +215,7 @@ void X11OpenGLDeviceInfo::GetData()
     }
 
     // determine the major OpenGL version. That's the first integer in the version string.
-    mnGLMajorVersion = strtol(maVersion.getStr(), 0, 10);
+    mnGLMajorVersion = strtol(maVersion.getStr(), nullptr, 10);
 
     // determine driver type (vendor) and where in the version string
     // the actual driver version numbers should be expected to be found (whereToReadVersionNumbers)
@@ -267,14 +267,14 @@ void X11OpenGLDeviceInfo::GetData()
         char *token = strtok_wrapper(".", &bufptr);
         if (token)
         {
-            mnMajorVersion = strtol(token, 0, 10);
+            mnMajorVersion = strtol(token, nullptr, 10);
             token = strtok_wrapper(".", &bufptr);
             if (token)
             {
-                mnMinorVersion = strtol(token, 0, 10);
+                mnMinorVersion = strtol(token, nullptr, 10);
                 token = strtok_wrapper(".", &bufptr);
                 if (token)
-                    mnRevisionVersion = strtol(token, 0, 10);
+                    mnRevisionVersion = strtol(token, nullptr, 10);
             }
         }
     }

@@ -142,7 +142,7 @@ public:
     virtual sal_uInt16          SetFont( FontSelectPattern*, int nFallbackLevel ) = 0;
 
     // release the fonts
-    void                        ReleaseFonts() { SetFont( NULL, 0 ); }
+    void                        ReleaseFonts() { SetFont( nullptr, 0 ); }
 
     // get the current font's metrics
     virtual void                GetFontMetric( ImplFontMetricData*, int nFallbackLevel = 0 ) = 0;
@@ -438,7 +438,7 @@ public:
                                     sal_uInt8 nTransparency,
                                     const OutputDevice *pOutDev );
 
-    virtual OpenGLContext      *BeginPaint() { return NULL; }
+    virtual OpenGLContext      *BeginPaint() { return nullptr; }
 
     virtual SystemGraphicsData  GetGraphicsData() const = 0;
 

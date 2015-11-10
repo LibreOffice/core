@@ -44,7 +44,7 @@ class JPEGWriter
 public:
     JPEGWriter( SvStream& rStream,
                 const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >* pFilterData,
-                bool* pExportWasGrey = NULL );
+                bool* pExportWasGrey = nullptr );
 
     virtual ~JPEGWriter() {};
 

@@ -208,10 +208,10 @@ int SVMain()
 
 // This variable is set when no Application object has been instantiated
 // before InitVCL is called
-static Application *        pOwnSvApp = NULL;
+static Application *        pOwnSvApp = nullptr;
 
 // Exception handler. pExceptionHandler != NULL => VCL already inited
-static oslSignalHandler pExceptionHandler = NULL;
+static oslSignalHandler pExceptionHandler = nullptr;
 
 class DesktopEnvironmentContext: public cppu::WeakImplHelper< com::sun::star::uno::XCurrentContext >
 {
@@ -245,7 +245,7 @@ uno::Any SAL_CALL DesktopEnvironmentContext::getValueByName( const OUString& Nam
 
 bool InitVCL()
 {
-    if( pExceptionHandler != NULL )
+    if( pExceptionHandler != nullptr )
         return false;
 
     EmbeddedFontsHelper::clearTemporaryFontFiles();
@@ -293,7 +293,7 @@ bool InitVCL()
     pSVData->maGDIData.mpGrfConverter       = new GraphicConverter;
 
     // Set exception handler
-    pExceptionHandler = osl_addSignalHandler(VCLExceptionSignal_impl, NULL);
+    pExceptionHandler = osl_addSignalHandler(VCLExceptionSignal_impl, nullptr);
 
     DBGGUI_INIT_SOLARMUTEXCHECK();
 
@@ -325,7 +325,7 @@ VCLUnoWrapperDeleter::disposing(lang::EventObject const& /* rSource */)
     if (pSVData && pSVData->mpUnoWrapper)
     {
         pSVData->mpUnoWrapper->Destroy();
-        pSVData->mpUnoWrapper = NULL;
+        pSVData->mpUnoWrapper = nullptr;
     }
 }
 
@@ -340,7 +340,7 @@ void DeInitVCL()
 
     // give ime status a chance to destroy its own windows
     delete pSVData->mpImeStatus;
-    pSVData->mpImeStatus = NULL;
+    pSVData->mpImeStatus = nullptr;
 
 #if OSL_DEBUG_LEVEL > 0
     OStringBuffer aBuf( 256 );
@@ -371,13 +371,13 @@ void DeInitVCL()
     ImplImageTree::get().shutDown();
 
     osl_removeSignalHandler( pExceptionHandler);
-    pExceptionHandler = NULL;
+    pExceptionHandler = nullptr;
 
     // free global data
     delete pSVData->maGDIData.mpGrfConverter;
 
     if( pSVData->mpSettingsConfigItem )
-        delete pSVData->mpSettingsConfigItem, pSVData->mpSettingsConfigItem = NULL;
+        delete pSVData->mpSettingsConfigItem, pSVData->mpSettingsConfigItem = nullptr;
 
     if ( pSVData->maAppData.mpIdleMgr )
         delete pSVData->maAppData.mpIdleMgr;
@@ -386,52 +386,52 @@ void DeInitVCL()
     if ( pSVData->maWinData.mpMsgBoxImgList )
     {
         delete pSVData->maWinData.mpMsgBoxImgList;
-        pSVData->maWinData.mpMsgBoxImgList = NULL;
+        pSVData->maWinData.mpMsgBoxImgList = nullptr;
     }
     if ( pSVData->maCtrlData.mpCheckImgList )
     {
         delete pSVData->maCtrlData.mpCheckImgList;
-        pSVData->maCtrlData.mpCheckImgList = NULL;
+        pSVData->maCtrlData.mpCheckImgList = nullptr;
     }
     if ( pSVData->maCtrlData.mpRadioImgList )
     {
         delete pSVData->maCtrlData.mpRadioImgList;
-        pSVData->maCtrlData.mpRadioImgList = NULL;
+        pSVData->maCtrlData.mpRadioImgList = nullptr;
     }
     if ( pSVData->maCtrlData.mpPinImgList )
     {
         delete pSVData->maCtrlData.mpPinImgList;
-        pSVData->maCtrlData.mpPinImgList = NULL;
+        pSVData->maCtrlData.mpPinImgList = nullptr;
     }
     if ( pSVData->maCtrlData.mpSplitHPinImgList )
     {
         delete pSVData->maCtrlData.mpSplitHPinImgList;
-        pSVData->maCtrlData.mpSplitHPinImgList = NULL;
+        pSVData->maCtrlData.mpSplitHPinImgList = nullptr;
     }
     if ( pSVData->maCtrlData.mpSplitVPinImgList )
     {
         delete pSVData->maCtrlData.mpSplitVPinImgList;
-        pSVData->maCtrlData.mpSplitVPinImgList = NULL;
+        pSVData->maCtrlData.mpSplitVPinImgList = nullptr;
     }
     if ( pSVData->maCtrlData.mpSplitHArwImgList )
     {
         delete pSVData->maCtrlData.mpSplitHArwImgList;
-        pSVData->maCtrlData.mpSplitHArwImgList = NULL;
+        pSVData->maCtrlData.mpSplitHArwImgList = nullptr;
     }
     if ( pSVData->maCtrlData.mpSplitVArwImgList )
     {
         delete pSVData->maCtrlData.mpSplitVArwImgList;
-        pSVData->maCtrlData.mpSplitVArwImgList = NULL;
+        pSVData->maCtrlData.mpSplitVArwImgList = nullptr;
     }
     if ( pSVData->maCtrlData.mpDisclosurePlus )
     {
         delete pSVData->maCtrlData.mpDisclosurePlus;
-        pSVData->maCtrlData.mpDisclosurePlus = NULL;
+        pSVData->maCtrlData.mpDisclosurePlus = nullptr;
     }
     if ( pSVData->maCtrlData.mpDisclosureMinus )
     {
         delete pSVData->maCtrlData.mpDisclosureMinus;
-        pSVData->maCtrlData.mpDisclosureMinus = NULL;
+        pSVData->maCtrlData.mpDisclosureMinus = nullptr;
     }
     pSVData->mpDefaultWin.disposeAndClear();
 
@@ -463,7 +463,7 @@ void DeInitVCL()
         }
         if( pSVData->maDeInitHook.IsSet() )
         {
-            pSVData->maDeInitHook.Call(0);
+            pSVData->maDeInitHook.Call(nullptr);
         }
     }
 
@@ -476,42 +476,42 @@ void DeInitVCL()
         }
 
         delete pSVData->maAppData.mpSettings;
-        pSVData->maAppData.mpSettings = NULL;
+        pSVData->maAppData.mpSettings = nullptr;
     }
     if ( pSVData->maAppData.mpAccelMgr )
     {
         delete pSVData->maAppData.mpAccelMgr;
-        pSVData->maAppData.mpAccelMgr = NULL;
+        pSVData->maAppData.mpAccelMgr = nullptr;
     }
     if ( pSVData->maAppData.mpAppFileName )
     {
         delete pSVData->maAppData.mpAppFileName;
-        pSVData->maAppData.mpAppFileName = NULL;
+        pSVData->maAppData.mpAppFileName = nullptr;
     }
     if ( pSVData->maAppData.mpAppName )
     {
         delete pSVData->maAppData.mpAppName;
-        pSVData->maAppData.mpAppName = NULL;
+        pSVData->maAppData.mpAppName = nullptr;
     }
     if ( pSVData->maAppData.mpDisplayName )
     {
         delete pSVData->maAppData.mpDisplayName;
-        pSVData->maAppData.mpDisplayName = NULL;
+        pSVData->maAppData.mpDisplayName = nullptr;
     }
     if ( pSVData->maAppData.mpEventListeners )
     {
         delete pSVData->maAppData.mpEventListeners;
-        pSVData->maAppData.mpEventListeners = NULL;
+        pSVData->maAppData.mpEventListeners = nullptr;
     }
     if ( pSVData->maAppData.mpKeyListeners )
     {
         delete pSVData->maAppData.mpKeyListeners;
-        pSVData->maAppData.mpKeyListeners = NULL;
+        pSVData->maAppData.mpKeyListeners = nullptr;
     }
     if ( pSVData->maAppData.mpPostYieldListeners )
     {
         delete pSVData->maAppData.mpPostYieldListeners;
-        pSVData->maAppData.mpPostYieldListeners = NULL;
+        pSVData->maAppData.mpPostYieldListeners = nullptr;
     }
 
     if ( pSVData->maAppData.mpFirstHotKey )
@@ -520,18 +520,18 @@ void DeInitVCL()
         ImplFreeEventHookData();
 
     if (pSVData->mpBlendFrameCache)
-        delete pSVData->mpBlendFrameCache, pSVData->mpBlendFrameCache = NULL;
+        delete pSVData->mpBlendFrameCache, pSVData->mpBlendFrameCache = nullptr;
 
     ImplDeletePrnQueueList();
     delete pSVData->maGDIData.mpScreenFontList;
-    pSVData->maGDIData.mpScreenFontList = NULL;
+    pSVData->maGDIData.mpScreenFontList = nullptr;
     delete pSVData->maGDIData.mpScreenFontCache;
-    pSVData->maGDIData.mpScreenFontCache = NULL;
+    pSVData->maGDIData.mpScreenFontCache = nullptr;
 
     if ( pSVData->mpResMgr )
     {
         delete pSVData->mpResMgr;
-        pSVData->mpResMgr = NULL;
+        pSVData->mpResMgr = nullptr;
     }
 
     ResMgr::DestroyAllResMgr();
@@ -539,9 +539,9 @@ void DeInitVCL()
     // destroy all Sal interfaces before destorying the instance
     // and thereby unloading the plugin
     delete pSVData->mpSalSystem;
-    pSVData->mpSalSystem = NULL;
+    pSVData->mpSalSystem = nullptr;
     delete pSVData->mpSalTimer;
-    pSVData->mpSalTimer = NULL;
+    pSVData->mpSalTimer = nullptr;
 
     // Deinit Sal
     DestroySalInstance( pSVData->mpDefInst );
@@ -549,7 +549,7 @@ void DeInitVCL()
     if( pOwnSvApp )
     {
         delete pOwnSvApp;
-        pOwnSvApp = NULL;
+        pOwnSvApp = nullptr;
     }
 
     EmbeddedFontsHelper::clearTemporaryFontFiles();
@@ -579,14 +579,14 @@ static unsigned __stdcall _threadmain( void *pArgs )
     return 0;
 }
 #else
-static oslThread hThreadID = 0;
+static oslThread hThreadID = nullptr;
 extern "C"
 {
 static void SAL_CALL MainWorkerFunction( void* pArgs )
 {
     static_cast<WorkerThreadData*>(pArgs)->pWorker( static_cast<WorkerThreadData*>(pArgs)->pThreadData );
     delete static_cast<WorkerThreadData*>(pArgs);
-    hThreadID = 0;
+    hThreadID = nullptr;
 }
 } // extern "C"
 #endif

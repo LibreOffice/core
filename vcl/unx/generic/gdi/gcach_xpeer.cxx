@@ -79,8 +79,8 @@ namespace
         {
             delete m_pX11GlyphCache;
             delete m_pX11GlyphPeer;
-            m_pX11GlyphCache = NULL;
-            m_pX11GlyphPeer = NULL;
+            m_pX11GlyphCache = nullptr;
+            m_pX11GlyphPeer = nullptr;
         }
         X11GlyphCache& getGlyphCache()
         {

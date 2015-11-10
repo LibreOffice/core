@@ -442,7 +442,7 @@ void ImplNoBorderWindowView::DrawWindow(vcl::RenderContext&, sal_uInt16, const P
 // - ImplSmallBorderWindowView -
 ImplSmallBorderWindowView::ImplSmallBorderWindowView( ImplBorderWindow* pBorderWindow )
     : mpBorderWindow(pBorderWindow)
-    , mpOutDev(NULL)
+    , mpOutDev(nullptr)
     , mnWidth(0)
     , mnHeight(0)
     , mnLeftBorder(0)
@@ -460,7 +460,7 @@ void ImplSmallBorderWindowView::Init( OutputDevice* pDev, long nWidth, long nHei
     mnHeight    = nHeight;
     mbNWFBorder = false;
 
-    vcl::Window *pWin = NULL, *pCtrl = NULL;
+    vcl::Window *pWin = nullptr, *pCtrl = nullptr;
     if (mpOutDev->GetOutDevType() == OUTDEV_WINDOW)
         pWin = static_cast<vcl::Window*>(mpOutDev.get());
 
@@ -552,7 +552,7 @@ void ImplSmallBorderWindowView::Init( OutputDevice* pDev, long nWidth, long nHei
                         mpBorderWindow->SetBackground();
                         pCtrl->SetPaintTransparent( true );
 
-                        vcl::Window* pCompoundParent = NULL;
+                        vcl::Window* pCompoundParent = nullptr;
                         if( pWin->GetParent() && pWin->GetParent()->IsCompoundControl() )
                             pCompoundParent = pWin->GetParent();
 
@@ -805,8 +805,8 @@ ImplStdBorderWindowView::ImplStdBorderWindowView( ImplBorderWindow* pBorderWindo
     maFrameData.mnHelpState     = DrawButtonFlags::NONE;
     maFrameData.mbTitleClipped  = false;
 
-    mpATitleVirDev              = NULL;
-    mpDTitleVirDev              = NULL;
+    mpATitleVirDev              = nullptr;
+    mpDTitleVirDev              = nullptr;
 }
 
 ImplStdBorderWindowView::~ImplStdBorderWindowView()
@@ -1728,7 +1728,7 @@ void ImplBorderWindow::ImplInit( vcl::Window* pParent,
                                  WinBits nStyle, sal_uInt16 nTypeStyle,
                                  const ::com::sun::star::uno::Any& )
 {
-    ImplInit( pParent, nStyle, nTypeStyle, NULL );
+    ImplInit( pParent, nStyle, nTypeStyle, nullptr );
 }
 
 void ImplBorderWindow::ImplInit( vcl::Window* pParent,
@@ -1786,7 +1786,7 @@ void ImplBorderWindow::ImplInit( vcl::Window* pParent,
     SetBackground();
     SetTextFillColor();
 
-    mpMenuBarWindow = NULL;
+    mpMenuBarWindow = nullptr;
     mnMinWidth      = 0;
     mnMinHeight     = 0;
     mnMaxWidth      = SHRT_MAX;
@@ -1832,7 +1832,7 @@ ImplBorderWindow::~ImplBorderWindow()
 void ImplBorderWindow::dispose()
 {
     delete mpBorderView;
-    mpBorderView = NULL;
+    mpBorderView = nullptr;
     mpMenuBarWindow.clear();
     mpNotebookBarWindow.disposeAndClear();
     vcl::Window::dispose();

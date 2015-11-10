@@ -32,7 +32,7 @@
 using namespace basebmp;
 using namespace basegfx;
 
-SvpSalFrame* SvpSalFrame::s_pFocusFrame = NULL;
+SvpSalFrame* SvpSalFrame::s_pFocusFrame = nullptr;
 
 #ifdef IOS
 #define SvpSalGraphics AquaSalGraphics
@@ -125,19 +125,19 @@ SvpSalFrame::~SvpSalFrame()
     if( s_pFocusFrame == this )
     {
         // SAL_DEBUG("SvpSalFrame::~SvpSalFrame: losing focus: " << this);
-        s_pFocusFrame = NULL;
+        s_pFocusFrame = nullptr;
         // call directly here, else an event for a destroyed frame would be dispatched
-        CallCallback( SALEVENT_LOSEFOCUS, NULL );
+        CallCallback( SALEVENT_LOSEFOCUS, nullptr );
         // if the handler has not set a new focus frame
         // pass focus to another frame, preferably a document style window
-        if( s_pFocusFrame == NULL )
+        if( s_pFocusFrame == nullptr )
         {
             const std::list< SalFrame* >& rFrames( m_pInstance->getFrames() );
             for( std::list< SalFrame* >::const_iterator it = rFrames.begin(); it != rFrames.end(); ++it )
             {
                 SvpSalFrame* pFrame = const_cast<SvpSalFrame*>(static_cast<const SvpSalFrame*>(*it));
                 if( pFrame->m_bVisible        &&
-                    pFrame->m_pParent == NULL &&
+                    pFrame->m_pParent == nullptr &&
                     (pFrame->m_nStyle & (SalFrameStyleFlags::MOVEABLE |
                                          SalFrameStyleFlags::SIZEABLE |
                                          SalFrameStyleFlags::CLOSEABLE) )
@@ -162,7 +162,7 @@ void SvpSalFrame::GetFocus()
             s_pFocusFrame->LoseFocus();
         // SAL_DEBUG("SvpSalFrame::GetFocus(): " << this);
         s_pFocusFrame = this;
-        m_pInstance->PostEvent( this, NULL, SALEVENT_GETFOCUS );
+        m_pInstance->PostEvent( this, nullptr, SALEVENT_GETFOCUS );
     }
 }
 
@@ -171,8 +171,8 @@ void SvpSalFrame::LoseFocus()
     if( s_pFocusFrame == this )
     {
         // SAL_DEBUG("SvpSalFrame::LoseFocus: " << this);
-        m_pInstance->PostEvent( this, NULL, SALEVENT_LOSEFOCUS );
-        s_pFocusFrame = NULL;
+        m_pInstance->PostEvent( this, nullptr, SALEVENT_LOSEFOCUS );
+        s_pFocusFrame = nullptr;
     }
 }
 
@@ -235,7 +235,7 @@ void SvpSalFrame::Show( bool bVisible, bool bNoActivate )
     {
         // SAL_DEBUG("SvpSalFrame::Show: showing: " << this);
         m_bVisible = true;
-        m_pInstance->PostEvent( this, NULL, SALEVENT_RESIZE );
+        m_pInstance->PostEvent( this, nullptr, SALEVENT_RESIZE );
         if( ! bNoActivate )
             GetFocus();
     }
@@ -243,7 +243,7 @@ void SvpSalFrame::Show( bool bVisible, bool bNoActivate )
     {
         // SAL_DEBUG("SvpSalFrame::Show: hiding: " << this);
         m_bVisible = false;
-        m_pInstance->PostEvent( this, NULL, SALEVENT_RESIZE );
+        m_pInstance->PostEvent( this, nullptr, SALEVENT_RESIZE );
         LoseFocus();
     }
     else
@@ -307,7 +307,7 @@ void SvpSalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight, sal_u
         }
     }
     if( m_bVisible )
-        m_pInstance->PostEvent( this, NULL, SALEVENT_RESIZE );
+        m_pInstance->PostEvent( this, nullptr, SALEVENT_RESIZE );
 #endif
 }
 
@@ -339,7 +339,7 @@ SalFrame* SvpSalFrame::GetParent() const
 
 void SvpSalFrame::SetWindowState( const SalFrameState *pState )
 {
-    if (pState == NULL)
+    if (pState == nullptr)
         return;
 
     // Request for position or size change

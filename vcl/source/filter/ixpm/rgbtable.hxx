@@ -686,7 +686,7 @@ static const XPMRGBTab pRGBTable[] = {
 { "DarkMagenta",                139,   0, 139 },
 { "DarkRed",                    139,   0,   0 },
 { "LightGreen",             144, 238, 144 },
-{ NULL,                   0 ,   0,   0}
+{ nullptr,                   0 ,   0,   0}
 };
 
 #endif // INCLUDED_VCL_SOURCE_FILTER_IXPM_RGBTABLE_HXX

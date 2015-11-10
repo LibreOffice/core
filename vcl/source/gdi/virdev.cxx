@@ -119,9 +119,9 @@ void VirtualDevice::ReleaseGraphics( bool bRelease )
     else
         pSVData->maGDIData.mpLastVirGraphics = mpPrevGraphics;
 
-    mpGraphics      = NULL;
-    mpPrevGraphics  = NULL;
-    mpNextGraphics  = NULL;
+    mpGraphics      = nullptr;
+    mpPrevGraphics  = nullptr;
+    mpNextGraphics  = nullptr;
 }
 
 void VirtualDevice::ImplInitVirDev( const OutputDevice* pOutDev,
@@ -151,7 +151,7 @@ void VirtualDevice::ImplInitVirDev( const OutputDevice* pOutDev,
     if ( pGraphics )
         mpVirDev = pSVData->mpDefInst->CreateVirtualDevice( pGraphics, nDX, nDY, nBitCount, pData );
     else
-        mpVirDev = NULL;
+        mpVirDev = nullptr;
     if ( !mpVirDev )
     {
         // do not abort but throw an exception, may be the current thread terminates anyway (plugin-scenario)
@@ -198,7 +198,7 @@ void VirtualDevice::ImplInitVirDev( const OutputDevice* pOutDev,
 
     // register VirDev in the list
     mpNext = pSVData->maGDIData.mpFirstVirDev;
-    mpPrev = NULL;
+    mpPrev = nullptr;
     if ( mpNext )
         mpNext->mpPrev = this;
     else
@@ -207,7 +207,7 @@ void VirtualDevice::ImplInitVirDev( const OutputDevice* pOutDev,
 }
 
 VirtualDevice::VirtualDevice( sal_uInt16 nBitCount )
-:   mpVirDev( NULL ),
+:   mpVirDev( nullptr ),
     meRefDevMode( REFDEV_NONE )
 {
     SAL_WARN_IF( nBitCount > 1 && nBitCount != 8, "vcl.gdi",
@@ -218,7 +218,7 @@ VirtualDevice::VirtualDevice( sal_uInt16 nBitCount )
 }
 
 VirtualDevice::VirtualDevice( const OutputDevice& rCompDev, sal_uInt16 nBitCount )
-    : mpVirDev( NULL ),
+    : mpVirDev( nullptr ),
     meRefDevMode( REFDEV_NONE )
 {
     SAL_WARN_IF( nBitCount > 1 && nBitCount != 8 && nBitCount != rCompDev.GetBitCount(), "vcl.gdi",
@@ -229,7 +229,7 @@ VirtualDevice::VirtualDevice( const OutputDevice& rCompDev, sal_uInt16 nBitCount
 }
 
 VirtualDevice::VirtualDevice( const OutputDevice& rCompDev, sal_uInt16 nBitCount, sal_uInt16 nAlphaBitCount )
-    : mpVirDev( NULL ),
+    : mpVirDev( nullptr ),
     meRefDevMode( REFDEV_NONE )
 {
     SAL_WARN_IF( nBitCount > 1 && nBitCount != 8, "vcl.gdi",
@@ -245,7 +245,7 @@ VirtualDevice::VirtualDevice( const OutputDevice& rCompDev, sal_uInt16 nBitCount
 
 VirtualDevice::VirtualDevice(const SystemGraphicsData *pData, const Size &rSize,
                              sal_uInt16 nBitCount)
-:   mpVirDev( NULL ),
+:   mpVirDev( nullptr ),
     meRefDevMode( REFDEV_NONE )
 {
     SAL_INFO( "vcl.gdi", "VirtualDevice::VirtualDevice( " << nBitCount << " )" );
@@ -516,17 +516,17 @@ void VirtualDevice::ImplSetReferenceDevice( RefDevMode i_eRefDevMode, sal_Int32 
     if ( mpFontEntry )
     {
         mpFontCache->Release( mpFontEntry );
-        mpFontEntry = NULL;
+        mpFontEntry = nullptr;
     }
     if ( mpGetDevFontList )
     {
         delete mpGetDevFontList;
-        mpGetDevFontList = NULL;
+        mpGetDevFontList = nullptr;
     }
     if ( mpGetDevSizeList )
     {
         delete mpGetDevSizeList;
-        mpGetDevSizeList = NULL;
+        mpGetDevSizeList = nullptr;
     }
 
     // preserve global font lists

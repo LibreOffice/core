@@ -22,31 +22,31 @@
 
 #include <boost/optional.hpp>
 
-GtkStyleContext* GtkSalGraphics::mpButtonStyle = NULL;
-GtkStyleContext* GtkSalGraphics::mpEntryStyle = NULL;
-GtkStyleContext* GtkSalGraphics::mpTextViewStyle = NULL;
-GtkStyleContext* GtkSalGraphics::mpVScrollbarStyle = NULL;
-GtkStyleContext* GtkSalGraphics::mpHScrollbarStyle = NULL;
-GtkStyleContext* GtkSalGraphics::mpToolbarStyle = NULL;
-GtkStyleContext* GtkSalGraphics::mpToolButtonStyle = NULL;
-GtkStyleContext* GtkSalGraphics::mpToolbarSeperatorStyle = NULL;
-GtkStyleContext* GtkSalGraphics::mpCheckButtonStyle = NULL;
-GtkStyleContext* GtkSalGraphics::mpMenuBarStyle = NULL;
-GtkStyleContext* GtkSalGraphics::mpMenuBarItemStyle = NULL;
-GtkStyleContext* GtkSalGraphics::mpMenuStyle = NULL;
-GtkStyleContext* GtkSalGraphics::mpCheckMenuItemStyle = NULL;
-GtkStyleContext* GtkSalGraphics::mpSpinStyle = NULL;
-GtkStyleContext* GtkSalGraphics::mpComboboxStyle = NULL;
-GtkStyleContext* GtkSalGraphics::mpComboboxButtonStyle = NULL;
-GtkStyleContext* GtkSalGraphics::mpListboxStyle = NULL;
-GtkStyleContext* GtkSalGraphics::mpListboxButtonStyle = NULL;
-GtkStyleContext* GtkSalGraphics::mpNoteBookStyle = NULL;
-GtkStyleContext* GtkSalGraphics::mpFrameInStyle = NULL;
-GtkStyleContext* GtkSalGraphics::mpFrameOutStyle = NULL;
-GtkStyleContext* GtkSalGraphics::mpFixedHoriLineStyle = NULL;
-GtkStyleContext* GtkSalGraphics::mpFixedVertLineStyle = NULL;
-GtkStyleContext* GtkSalGraphics::mpTreeHeaderButtonStyle = NULL;
-GtkStyleContext* GtkSalGraphics::mpProgressBarStyle = NULL;
+GtkStyleContext* GtkSalGraphics::mpButtonStyle = nullptr;
+GtkStyleContext* GtkSalGraphics::mpEntryStyle = nullptr;
+GtkStyleContext* GtkSalGraphics::mpTextViewStyle = nullptr;
+GtkStyleContext* GtkSalGraphics::mpVScrollbarStyle = nullptr;
+GtkStyleContext* GtkSalGraphics::mpHScrollbarStyle = nullptr;
+GtkStyleContext* GtkSalGraphics::mpToolbarStyle = nullptr;
+GtkStyleContext* GtkSalGraphics::mpToolButtonStyle = nullptr;
+GtkStyleContext* GtkSalGraphics::mpToolbarSeperatorStyle = nullptr;
+GtkStyleContext* GtkSalGraphics::mpCheckButtonStyle = nullptr;
+GtkStyleContext* GtkSalGraphics::mpMenuBarStyle = nullptr;
+GtkStyleContext* GtkSalGraphics::mpMenuBarItemStyle = nullptr;
+GtkStyleContext* GtkSalGraphics::mpMenuStyle = nullptr;
+GtkStyleContext* GtkSalGraphics::mpCheckMenuItemStyle = nullptr;
+GtkStyleContext* GtkSalGraphics::mpSpinStyle = nullptr;
+GtkStyleContext* GtkSalGraphics::mpComboboxStyle = nullptr;
+GtkStyleContext* GtkSalGraphics::mpComboboxButtonStyle = nullptr;
+GtkStyleContext* GtkSalGraphics::mpListboxStyle = nullptr;
+GtkStyleContext* GtkSalGraphics::mpListboxButtonStyle = nullptr;
+GtkStyleContext* GtkSalGraphics::mpNoteBookStyle = nullptr;
+GtkStyleContext* GtkSalGraphics::mpFrameInStyle = nullptr;
+GtkStyleContext* GtkSalGraphics::mpFrameOutStyle = nullptr;
+GtkStyleContext* GtkSalGraphics::mpFixedHoriLineStyle = nullptr;
+GtkStyleContext* GtkSalGraphics::mpFixedVertLineStyle = nullptr;
+GtkStyleContext* GtkSalGraphics::mpTreeHeaderButtonStyle = nullptr;
+GtkStyleContext* GtkSalGraphics::mpProgressBarStyle = nullptr;
 
 bool GtkSalGraphics::style_loaded = false;
 /************************************************************************
@@ -177,7 +177,7 @@ Rectangle GtkSalGraphics::NWGetSpinButtonRect( ControlPart nPart, Rectangle aAre
 
 Rectangle GtkSalGraphics::NWGetScrollButtonRect( ControlPart nPart, Rectangle aAreaRect )
 {
-    GtkStyleContext* pScrollbarStyle = NULL;
+    GtkStyleContext* pScrollbarStyle = nullptr;
     if ((nPart == PART_BUTTON_LEFT) || (nPart == PART_BUTTON_RIGHT))
         pScrollbarStyle = mpHScrollbarStyle;
     else // (nPart == PART_BUTTON_UP) || (nPart == PART_BUTTON_DOWN)
@@ -282,8 +282,8 @@ void GtkSalGraphics::PaintScrollbar(GtkStyleContext *context,
     gdouble          arrow1Angle;                                        // backward
     gdouble          arrow2Angle;                                        // forward
     Rectangle        arrowRect;
-    const gchar*     button1StyleClass = NULL;
-    const gchar*     button2StyleClass = NULL;
+    const gchar*     button1StyleClass = nullptr;
+    const gchar*     button2StyleClass = nullptr;
     gint            slider_width = 0;
     gint            stepper_size = 0;
     gint            stepper_spacing = 0;
@@ -602,8 +602,8 @@ void GtkSalGraphics::PaintOneSpinButton( GtkStyleContext *context,
     GdkPixbuf *pixbuf = gtk_icon_info_load_symbolic_for_context
                                                         (info,
                                                          context,
-                                                         NULL,
-                                                         NULL);
+                                                         nullptr,
+                                                         nullptr);
     iconWidth = gdk_pixbuf_get_width(pixbuf);
     iconHeight = gdk_pixbuf_get_height(pixbuf);
     Rectangle arrowRect;
@@ -626,7 +626,7 @@ void GtkSalGraphics::PaintSpinButton(GtkStyleContext *context,
                                      const ImplControlValue& rValue )
 {
     Rectangle            areaRect;
-    const SpinbuttonValue *pSpinVal = (rValue.getType() == CTRL_SPINBUTTONS) ? static_cast<const SpinbuttonValue *>(&rValue) : NULL;
+    const SpinbuttonValue *pSpinVal = (rValue.getType() == CTRL_SPINBUTTONS) ? static_cast<const SpinbuttonValue *>(&rValue) : nullptr;
     ControlPart upBtnPart = PART_BUTTON_UP;
     ControlState upBtnState = ControlState::NONE;
     ControlPart downBtnPart = PART_BUTTON_DOWN;
@@ -869,9 +869,9 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
     GtkStateFlags flags;
     GtkShadowType shadow;
     gint renderType = nPart == PART_FOCUS ? RENDER_FOCUS : RENDER_BACKGROUND_AND_FRAME;
-    GtkStyleContext *context = NULL;
-    const gchar *styleClass = NULL;
-    GdkPixbuf *pixbuf = NULL;
+    GtkStyleContext *context = nullptr;
+    const gchar *styleClass = nullptr;
+    GdkPixbuf *pixbuf = nullptr;
 
     NWConvertVCLStateToGTKState(nState, &flags, &shadow);
 
@@ -1059,7 +1059,7 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
             GtkIconTheme *pIconTheme = gtk_icon_theme_get_for_screen(gtk_widget_get_screen(mpWindow));
             pixbuf = gtk_icon_theme_load_icon(pIconTheme, icon,
                                               std::max(rControlRegion.GetWidth(), rControlRegion.GetHeight()),
-                                              static_cast<GtkIconLookupFlags>(0), NULL);
+                                              static_cast<GtkIconLookupFlags>(0), nullptr);
             flags = GTK_STATE_FLAG_SELECTED;
             renderType = RENDER_ICON;
             styleClass = GTK_STYLE_CLASS_ARROW;
@@ -1225,7 +1225,7 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
 Rectangle GetWidgetSize(const Rectangle& rControlRegion, GtkWidget* widget)
 {
     GtkRequisition aReq;
-    gtk_widget_get_preferred_size(widget, NULL, &aReq);
+    gtk_widget_get_preferred_size(widget, nullptr, &aReq);
     long nHeight = (rControlRegion.GetHeight() > aReq.height) ? rControlRegion.GetHeight() : aReq.height;
     return Rectangle(rControlRegion.TopLeft(), Size(rControlRegion.GetWidth(), nHeight));
 }
@@ -1593,7 +1593,7 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     aStyleSet.SetMenuHighlightTextColor( aHighlightTextColor );
 
     // hyperlink colors
-    GdkColor *link_color = NULL;
+    GdkColor *link_color = nullptr;
     gtk_style_context_get_style(pStyle,
                                  "link-color", &link_color,
                                  NULL);
@@ -1602,7 +1602,7 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
         gdk_color_free(link_color);
     }
 
-    link_color = NULL;
+    link_color = nullptr;
     gtk_style_context_get_style(pStyle,
                                 "visited-link-color", &link_color,
                                 NULL);
@@ -1793,7 +1793,7 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     aStyleSet.SetMinThumbSize( min_slider_length - magic );
 
     // preferred icon style
-    gchar* pIconThemeName = NULL;
+    gchar* pIconThemeName = nullptr;
     g_object_get( pSettings, "gtk-icon-theme-name", &pIconThemeName, nullptr );
     aStyleSet.SetPreferredIconTheme( OUString::createFromAscii( pIconThemeName ) );
     g_free( pIconThemeName );
@@ -2005,7 +2005,7 @@ GtkSalGraphics::GtkSalGraphics( GtkSalFrame *pFrame, GtkWidget *pWindow )
         return;
 
     style_loaded = true;
-    gtk_init(NULL, NULL);
+    gtk_init(nullptr, nullptr);
     /* Load the GtkStyleContexts, it might be a bit slow, but usually,
      * gtk apps create a lot of widgets at startup, so, it shouldn't be
      * too slow */
@@ -2030,13 +2030,13 @@ GtkSalGraphics::GtkSalGraphics( GtkSalFrame *pFrame, GtkWidget *pWindow )
     mpToolbarSeperatorStyle = gtk_widget_get_style_context(GTK_WIDGET(item));
 
     GtkWidget *pButton = gtk_button_new();
-    item = gtk_tool_button_new(pButton, NULL);
+    item = gtk_tool_button_new(pButton, nullptr);
     gtk_toolbar_insert(GTK_TOOLBAR(pToolbar), item, -1);
     mpToolButtonStyle = gtk_widget_get_style_context(GTK_WIDGET(pButton));
 
-    getStyleContext(&mpVScrollbarStyle, gtk_scrollbar_new(GTK_ORIENTATION_VERTICAL, NULL));
+    getStyleContext(&mpVScrollbarStyle, gtk_scrollbar_new(GTK_ORIENTATION_VERTICAL, nullptr));
     gtk_style_context_add_class(mpVScrollbarStyle, GTK_STYLE_CLASS_SCROLLBAR);
-    getStyleContext(&mpHScrollbarStyle, gtk_scrollbar_new(GTK_ORIENTATION_HORIZONTAL, NULL));
+    getStyleContext(&mpHScrollbarStyle, gtk_scrollbar_new(GTK_ORIENTATION_HORIZONTAL, nullptr));
     gtk_style_context_add_class(mpHScrollbarStyle, GTK_STYLE_CLASS_SCROLLBAR);
 
     getStyleContext(&mpCheckButtonStyle, gtk_check_button_new());
@@ -2059,7 +2059,7 @@ GtkSalGraphics::GtkSalGraphics( GtkSalFrame *pFrame, GtkWidget *pWindow )
     mpCheckMenuItemStyle = gtk_widget_get_style_context(gCheckMenuItemWidget);
 
     /* Spinbutton */
-    gSpinBox = gtk_spin_button_new(NULL, 0, 0);
+    gSpinBox = gtk_spin_button_new(nullptr, 0, 0);
     getStyleContext(&mpSpinStyle, gSpinBox);
 
     /* NoteBook */
@@ -2071,7 +2071,7 @@ GtkSalGraphics::GtkSalGraphics( GtkSalFrame *pFrame, GtkWidget *pWindow )
     /* Get ComboBox Entry and Button */
     gtk_container_forall(GTK_CONTAINER(gComboBox),
                          get_combo_box_entry_inner_widgets,
-                         NULL);
+                         nullptr);
     mpComboboxButtonStyle = gtk_widget_get_style_context(gComboBoxButtonWidget);
 
     /* Listbox */
@@ -2081,14 +2081,14 @@ GtkSalGraphics::GtkSalGraphics( GtkSalFrame *pFrame, GtkWidget *pWindow )
     /* Get ComboBox Button */
     gtk_container_forall(GTK_CONTAINER(gListBox),
                          get_combo_box_inner_button,
-                         NULL);
+                         nullptr);
     mpListboxButtonStyle = gtk_widget_get_style_context(gListBoxButtonWidget);
 
     /* Frames */
-    gFrameIn = gtk_frame_new(NULL);
+    gFrameIn = gtk_frame_new(nullptr);
     gtk_frame_set_shadow_type(GTK_FRAME(gFrameIn), GTK_SHADOW_IN);
 
-    gFrameOut = gtk_frame_new(NULL);
+    gFrameOut = gtk_frame_new(nullptr);
     gtk_frame_set_shadow_type(GTK_FRAME(gFrameOut), GTK_SHADOW_OUT);
 
     getStyleContext(&mpFrameInStyle, gFrameIn);

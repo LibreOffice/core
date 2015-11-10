@@ -61,7 +61,7 @@ struct VCL_DLLPUBLIC JobData
             m_nColorDevice( 0 ),
             m_nPDFDevice( 0 ),
             m_eOrientation( orientation::Portrait ),
-            m_pParser( NULL ) {}
+            m_pParser( nullptr ) {}
 
     JobData& operator=(const psp::JobData& rRight);
 

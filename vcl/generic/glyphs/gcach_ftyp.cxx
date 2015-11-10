@@ -86,7 +86,7 @@ static void InitGammaTable()
     }
 }
 
-static FT_Library aLibFT = 0;
+static FT_Library aLibFT = nullptr;
 
 // enable linking with old FT versions
 static int nFTVERSION = 0;
@@ -110,7 +110,7 @@ static int nDefaultPrioAntiAlias   = 1;
 
 FtFontFile::FtFontFile( const OString& rNativeFileName )
 :   maNativeFileName( rNativeFileName ),
-    mpFileMap( NULL ),
+    mpFileMap( nullptr ),
     mnFileSize( 0 ),
     mnRefCount( 0 ),
     mnLangBoost( 0 )
@@ -121,7 +121,7 @@ FtFontFile::FtFontFile( const OString& rNativeFileName )
         mnLangBoost += 0x1000;     // no langinfo => good
     else
     {
-        static const char* pLangBoost = NULL;
+        static const char* pLangBoost = nullptr;
         static bool bOnce = true;
         if( bOnce )
         {
@@ -168,22 +168,22 @@ bool FtFontFile::Map()
         }
         mnFileSize = aStat.st_size;
         mpFileMap = static_cast<unsigned char*>(
-            mmap( NULL, mnFileSize, PROT_READ, MAP_SHARED, nFile, 0 ));
+            mmap( nullptr, mnFileSize, PROT_READ, MAP_SHARED, nFile, 0 ));
         if( mpFileMap == MAP_FAILED )
-            mpFileMap = NULL;
+            mpFileMap = nullptr;
         close( nFile );
     }
 
-    return (mpFileMap != NULL);
+    return (mpFileMap != nullptr);
 }
 
 void FtFontFile::Unmap()
 {
-    if( (--mnRefCount > 0) || (mpFileMap == NULL) )
+    if( (--mnRefCount > 0) || (mpFileMap == nullptr) )
         return;
 
     munmap( mpFileMap, mnFileSize );
-    mpFileMap = NULL;
+    mpFileMap = nullptr;
 }
 
 #if ENABLE_GRAPHITE
@@ -216,19 +216,19 @@ const void * graphiteFontTable(const void* appFaceHandle, unsigned int name, siz
 FtFontInfo::FtFontInfo( const ImplDevFontAttributes& rDevFontAttributes,
     const OString& rNativeFileName, int nFaceNum, sal_IntPtr nFontId)
 :
-    maFaceFT( NULL ),
+    maFaceFT( nullptr ),
     mpFontFile( FtFontFile::FindFontFile( rNativeFileName ) ),
     mnFaceNum( nFaceNum ),
     mnRefCount( 0 ),
 #if ENABLE_GRAPHITE
     mbCheckedGraphite(false),
-    mpGraphiteFace(NULL),
+    mpGraphiteFace(nullptr),
 #endif
     mnFontId( nFontId ),
     maDevFontAttributes( rDevFontAttributes ),
-    mpFontCharMap( NULL ),
-    mpChar2Glyph( NULL ),
-    mpGlyph2Char( NULL )
+    mpFontCharMap( nullptr ),
+    mpChar2Glyph( nullptr ),
+    mpGlyph2Char( nullptr )
 {
     // prefer font with low ID
     maDevFontAttributes.mnQuality += 10000 - nFontId;
@@ -239,7 +239,7 @@ FtFontInfo::FtFontInfo( const ImplDevFontAttributes& rDevFontAttributes,
 FtFontInfo::~FtFontInfo()
 {
     if( mpFontCharMap )
-        mpFontCharMap = 0;
+        mpFontCharMap = nullptr;
     delete mpChar2Glyph;
     delete mpGlyph2Char;
 #if ENABLE_GRAPHITE
@@ -262,7 +262,7 @@ FT_FaceRec_* FtFontInfo::GetFaceFT()
             mpFontFile->GetBuffer(),
             mpFontFile->GetFileSize(), mnFaceNum, &maFaceFT );
         if( (rc != FT_Err_Ok) || (maFaceFT->num_glyphs <= 0) )
-            maFaceFT = NULL;
+            maFaceFT = nullptr;
     }
 
    ++mnRefCount;
@@ -297,7 +297,7 @@ void FtFontInfo::ReleaseFaceFT()
     if (--mnRefCount <= 0)
     {
         FT_Done_Face( maFaceFT );
-        maFaceFT = NULL;
+        maFaceFT = nullptr;
         mpFontFile->Unmap();
     }
 }
@@ -315,7 +315,7 @@ const unsigned char* FtFontInfo::GetTable( const char* pTag, sal_uLong* pLength 
     const unsigned char* pBuffer = mpFontFile->GetBuffer();
     int nFileSize = mpFontFile->GetFileSize();
     if( !pBuffer || nFileSize<1024 )
-        return NULL;
+        return nullptr;
 
     // we currently handle TTF, TTC and OTF headers
     unsigned nFormat = GetUInt( pBuffer );
@@ -324,18 +324,18 @@ const unsigned char* FtFontInfo::GetTable( const char* pTag, sal_uLong* pLength 
     if( nFormat == T_ttcf )         // TTC_MAGIC
         p += GetUInt( p + 4 * mnFaceNum );
     else if( nFormat != 0x00010000 && nFormat != T_true && nFormat != T_otto) // TTF_MAGIC and Apple TTF Magic and PS-OpenType font
-        return NULL;
+        return nullptr;
 
     // walk table directory until match
     int nTables = GetUShort( p - 8 );
     if( nTables >= 64 )  // something fishy?
-        return NULL;
+        return nullptr;
     for( int i = 0; i < nTables; ++i, p+=16 )
     {
         if( p[0]==pTag[0] && p[1]==pTag[1] && p[2]==pTag[2] && p[3]==pTag[3] )
         {
             sal_uLong nLength = GetUInt( p + 12 );
-            if( pLength != NULL )
+            if( pLength != nullptr )
                 *pLength = nLength;
             const unsigned char* pTable = pBuffer + GetUInt( p + 8 );
             if( (pTable + nLength) <= (mpFontFile->GetBuffer() + nFileSize) )
@@ -343,7 +343,7 @@ const unsigned char* FtFontInfo::GetTable( const char* pTag, sal_uLong* pLength 
         }
     }
 
-    return NULL;
+    return nullptr;
 }
 
 void FtFontInfo::AnnounceFont( PhysicalFontCollection* pFontCollection )
@@ -426,7 +426,7 @@ void FreetypeManager::ClearFontList( )
 
 ServerFont* FreetypeManager::CreateFont( const FontSelectPattern& rFSD )
 {
-    FtFontInfo* pFontInfo = NULL;
+    FtFontInfo* pFontInfo = nullptr;
 
     // find a FontInfo matching to the font id
     sal_IntPtr nFontId = reinterpret_cast<sal_IntPtr>( rFSD.mpFontData );
@@ -435,7 +435,7 @@ ServerFont* FreetypeManager::CreateFont( const FontSelectPattern& rFSD )
         pFontInfo = it->second;
 
     if( !pFontInfo )
-        return NULL;
+        return nullptr;
 
     ServerFont* pNew = new ServerFont( rFSD, pFontInfo );
 
@@ -463,8 +463,8 @@ ServerFont::ServerFont( const FontSelectPattern& rFSD, FtFontInfo* pFI )
     maFontSelData(rFSD),
     mnRefCount(1),
     mnBytesUsed( sizeof(ServerFont) ),
-    mpPrevGCFont( NULL ),
-    mpNextGCFont( NULL ),
+    mpPrevGCFont( nullptr ),
+    mpNextGCFont( nullptr ),
     mnCos( 0x10000),
     mnSin( 0 ),
     mbCollectedZW( false ),
@@ -473,13 +473,13 @@ ServerFont::ServerFont( const FontSelectPattern& rFSD, FtFontInfo* pFI )
     mnPrioAutoHint(nDefaultPrioAutoHint),
     mpFontInfo( pFI ),
     mnLoadFlags( 0 ),
-    maFaceFT( NULL ),
-    maSizeFT( NULL ),
+    maFaceFT( nullptr ),
+    maSizeFT( nullptr ),
     mbFaceOk( false ),
     mbArtItalic( false ),
     mbArtBold( false ),
     mbUseGamma( false ),
-    mpLayoutEngine( NULL )
+    mpLayoutEngine( nullptr )
 {
     // TODO: move update of mpFontEntry into FontEntry class when
     // it becomes responsible for the ServerFont instantiation
@@ -815,13 +815,13 @@ int ServerFont::ApplyGlyphTransform( int nGlyphFlags,
 
     if( pGlyphFT->format != FT_GLYPH_FORMAT_BITMAP )
     {
-        FT_Glyph_Transform( pGlyphFT, NULL, &aVector );
+        FT_Glyph_Transform( pGlyphFT, nullptr, &aVector );
 
         // orthogonal transforms are better handled by bitmap operations
         if( bStretched || (bForBitmapProcessing && (nAngle % 900) != 0) )
         {
             // apply non-orthogonal or stretch transformations
-            FT_Glyph_Transform( pGlyphFT, &aMatrix, NULL );
+            FT_Glyph_Transform( pGlyphFT, &aMatrix, nullptr );
             nAngle = 0;
         }
     }
@@ -1029,7 +1029,7 @@ bool ServerFont::GetGlyphBitmap1( sal_GlyphId aGlyphId, RawBitmap& rRawBitmap ) 
         FT_Matrix aMatrix;
         aMatrix.xx = aMatrix.yy = 0x10000L;
         aMatrix.xy = 0x6000L, aMatrix.yx = 0;
-        FT_Glyph_Transform( pGlyphFT, &aMatrix, NULL );
+        FT_Glyph_Transform( pGlyphFT, &aMatrix, nullptr );
     }
 
     // Check for zero area bounding boxes as this crashes some versions of FT.
@@ -1051,7 +1051,7 @@ bool ServerFont::GetGlyphBitmap1( sal_GlyphId aGlyphId, RawBitmap& rRawBitmap ) 
             reinterpret_cast<FT_OutlineGlyphRec*>(pGlyphFT)->outline.flags |= FT_OUTLINE_HIGH_PRECISION;
         FT_Render_Mode nRenderMode = FT_RENDER_MODE_MONO;
 
-        rc = FT_Glyph_To_Bitmap( &pGlyphFT, nRenderMode, NULL, true );
+        rc = FT_Glyph_To_Bitmap( &pGlyphFT, nRenderMode, nullptr, true );
         if( rc != FT_Err_Ok )
         {
             FT_Done_Glyph( pGlyphFT );
@@ -1162,7 +1162,7 @@ bool ServerFont::GetGlyphBitmap8( sal_GlyphId aGlyphId, RawBitmap& rRawBitmap ) 
         FT_Matrix aMatrix;
         aMatrix.xx = aMatrix.yy = 0x10000L;
         aMatrix.xy = 0x6000L, aMatrix.yx = 0;
-        FT_Glyph_Transform( pGlyphFT, &aMatrix, NULL );
+        FT_Glyph_Transform( pGlyphFT, &aMatrix, nullptr );
     }
 
     if( pGlyphFT->format == FT_GLYPH_FORMAT_OUTLINE )
@@ -1171,7 +1171,7 @@ bool ServerFont::GetGlyphBitmap8( sal_GlyphId aGlyphId, RawBitmap& rRawBitmap ) 
     bool bEmbedded = (pGlyphFT->format == FT_GLYPH_FORMAT_BITMAP);
     if( !bEmbedded )
     {
-        rc = FT_Glyph_To_Bitmap( &pGlyphFT, FT_RENDER_MODE_NORMAL, NULL, true );
+        rc = FT_Glyph_To_Bitmap( &pGlyphFT, FT_RENDER_MODE_NORMAL, nullptr, true );
         if( rc != FT_Err_Ok )
         {
             FT_Done_Glyph( pGlyphFT );
@@ -1433,7 +1433,7 @@ void PolyArgs::ClosePolygon()
     DBG_ASSERT( (mpFlagAry[0]==POLY_NORMAL), "FTGlyphOutline: PolyFinishFE failed!" );
     DBG_ASSERT( (mpFlagAry[mnPoints]==POLY_NORMAL), "FTGlyphOutline: PolyFinishFS failed!" );
 
-    tools::Polygon aPoly( mnPoints, mpPointAry, (bHasOffline ? mpFlagAry : NULL) );
+    tools::Polygon aPoly( mnPoints, mpPointAry, (bHasOffline ? mpFlagAry : nullptr) );
 
     // #i35928#
     // This may be a invalid polygons, e.g. the last point is a control point.
@@ -1556,7 +1556,7 @@ bool ServerFont::GetGlyphOutline( sal_GlyphId aGlyphId,
         FT_Matrix aMatrix;
         aMatrix.xx = aMatrix.yy = 0x10000L;
         aMatrix.xy = 0x6000L, aMatrix.yx = 0;
-        FT_Glyph_Transform( pGlyphFT, &aMatrix, NULL );
+        FT_Glyph_Transform( pGlyphFT, &aMatrix, nullptr );
     }
 
     FT_Outline& rOutline = reinterpret_cast<FT_OutlineGlyphRec*>(pGlyphFT)->outline;

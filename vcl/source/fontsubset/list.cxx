@@ -50,7 +50,7 @@ struct _list {
 static lnode *newNode(void *el)
 {
     lnode *ptr = static_cast<lnode *>(rtl_allocateMemory(sizeof(lnode)));
-    assert(ptr != 0);
+    assert(ptr != nullptr);
 
     ptr->value = el;
 
@@ -62,12 +62,12 @@ static lnode *appendPrim(list pThis, void *el)
     lnode *ptr = newNode(el);
     lnode **flink, *blink;
 
-    if (pThis->tail != 0) {
+    if (pThis->tail != nullptr) {
         flink = &(pThis->tail->next);
         blink = pThis->tail;
     } else {
         flink = &pThis->head;
-        blink = 0;
+        blink = nullptr;
         pThis->cptr = ptr;                         /*- list was empty - set current to this element */
     }
 
@@ -75,7 +75,7 @@ static lnode *appendPrim(list pThis, void *el)
     pThis->tail = ptr;
 
     ptr->prev = blink;
-    ptr->next = 0;
+    ptr->next = nullptr;
 
     pThis->aCount++;
     return ptr;
@@ -85,45 +85,45 @@ static lnode *appendPrim(list pThis, void *el)
 list listNewEmpty()                           /*- default ctor */
 {
     list pThis = static_cast<list>(rtl_allocateMemory(sizeof(struct _list)));
-    assert(pThis != 0);
+    assert(pThis != nullptr);
 
     pThis->aCount = 0;
-    pThis->eDtor = 0;
-    pThis->head = pThis->tail = pThis->cptr = 0;
+    pThis->eDtor = nullptr;
+    pThis->head = pThis->tail = pThis->cptr = nullptr;
 
     return pThis;
 }
 
 void listDispose(list pThis)                       /*- dtor */
 {
-    assert(pThis != 0);
+    assert(pThis != nullptr);
     listClear(pThis);
     rtl_freeMemory(pThis);
 }
 
 void listSetElementDtor(list pThis, list_destructor f)
 {
-    assert(pThis != 0);
+    assert(pThis != nullptr);
     pThis->eDtor = f;
 }
 
 /* calling this function on an empty list is a run-time error */
 void *listCurrent(list pThis)
 {
-    assert(pThis != 0);
-    assert(pThis->cptr != 0);
+    assert(pThis != nullptr);
+    assert(pThis->cptr != nullptr);
     return pThis->cptr->value;
 }
 
 int   listCount(list pThis)
 {
-    assert(pThis != 0);
+    assert(pThis != nullptr);
     return pThis->aCount;
 }
 
 int   listIsEmpty(list pThis)
 {
-    assert(pThis != 0);
+    assert(pThis != nullptr);
     return pThis->aCount == 0;
 }
 
@@ -135,12 +135,12 @@ int    listNext(list pThis)
 int    listSkipForward(list pThis, int n)
 {
     int m = 0;
-    assert(pThis != 0);
+    assert(pThis != nullptr);
 
-    if (pThis->cptr == 0) return 0;
+    if (pThis->cptr == nullptr) return 0;
 
     while (n != 0) {
-        if (pThis->cptr->next == 0) break;
+        if (pThis->cptr->next == nullptr) break;
         pThis->cptr = pThis->cptr->next;
         n--;
         m++;
@@ -150,7 +150,7 @@ int    listSkipForward(list pThis, int n)
 
 int    listToFirst(list pThis)
 {
-    assert(pThis != 0);
+    assert(pThis != nullptr);
 
     if (pThis->cptr != pThis->head) {
         pThis->cptr = pThis->head;
@@ -161,7 +161,7 @@ int    listToFirst(list pThis)
 
 int    listToLast(list pThis)
 {
-    assert(pThis != 0);
+    assert(pThis != nullptr);
 
     if (pThis->cptr != pThis->tail) {
         pThis->cptr = pThis->tail;
@@ -172,7 +172,7 @@ int    listToLast(list pThis)
 
 list   listAppend(list pThis, void *el)
 {
-    assert(pThis != 0);
+    assert(pThis != nullptr);
 
     appendPrim(pThis, el);
     return pThis;
@@ -180,18 +180,18 @@ list   listAppend(list pThis, void *el)
 
 list   listRemove(list pThis)
 {
-    lnode *ptr = 0;
-    if (pThis->cptr == 0) return pThis;
+    lnode *ptr = nullptr;
+    if (pThis->cptr == nullptr) return pThis;
 
-    if (pThis->cptr->next != 0) {
+    if (pThis->cptr->next != nullptr) {
         ptr  = pThis->cptr->next;
         pThis->cptr->next->prev = pThis->cptr->prev;
     } else {
         pThis->tail = pThis->cptr->prev;
     }
 
-    if (pThis->cptr->prev != 0) {
-        if (ptr == 0) ptr = pThis->cptr->prev;
+    if (pThis->cptr->prev != nullptr) {
+        if (ptr == nullptr) ptr = pThis->cptr->prev;
         pThis->cptr->prev->next = pThis->cptr->next;
     } else {
         pThis->head = pThis->cptr->next;
@@ -217,7 +217,7 @@ list   listClear(list pThis)
         node = ptr;
     }
 
-    pThis->head = pThis->tail = pThis->cptr = 0;
+    pThis->head = pThis->tail = pThis->cptr = nullptr;
     assert(pThis->aCount == 0);
     return pThis;
 }

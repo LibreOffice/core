@@ -176,7 +176,7 @@ SalFrame *X11SalInstance::CreateFrame( SalFrame *pParent, SalFrameStyleFlags nSa
 
 SalFrame* X11SalInstance::CreateChildFrame( SystemParentData* pParentData, SalFrameStyleFlags nStyle )
 {
-    SalFrame* pFrame = new X11SalFrame( NULL, nStyle, pParentData );
+    SalFrame* pFrame = new X11SalFrame( nullptr, nStyle, pParentData );
 
     return pFrame;
 }
@@ -192,7 +192,7 @@ void X11SalInstance::AddToRecentDocumentList(const OUString& rFileUrl, const OUS
 {
     typedef void (*PFUNC_ADD_TO_RECENTLY_USED_LIST)(const OUString&, const OUString&, const OUString&);
 
-    PFUNC_ADD_TO_RECENTLY_USED_LIST add_to_recently_used_file_list = 0;
+    PFUNC_ADD_TO_RECENTLY_USED_LIST add_to_recently_used_file_list = nullptr;
 
     osl::Module module;
     module.loadRelative( &thisModule, "librecentfile.so" );
@@ -208,7 +208,7 @@ void X11SalInstance::PostPrintersChanged()
     const std::list< SalFrame* >& rList = pDisp->getFrames();
     for( std::list< SalFrame* >::const_iterator it = rList.begin();
          it != rList.end(); ++it )
-        pDisp->SendInternalEvent( *it, NULL, SALEVENT_PRINTERCHANGED );
+        pDisp->SendInternalEvent( *it, nullptr, SALEVENT_PRINTERCHANGED );
 }
 
 GenPspGraphics *X11SalInstance::CreatePrintGraphics()

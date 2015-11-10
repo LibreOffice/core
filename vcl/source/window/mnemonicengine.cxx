@@ -47,7 +47,7 @@ namespace vcl
             OUString sEntryText;
             const void* pSearchEntry = _rEntryList.FirstSearchEntry( sEntryText );
 
-            const void* pFirstFoundEntry = NULL;
+            const void* pFirstFoundEntry = nullptr;
             bool bCheckingAmbiguity = false;
             const void* pStartedWith = pSearchEntry;
             while ( pSearchEntry )

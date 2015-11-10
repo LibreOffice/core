@@ -82,7 +82,7 @@ AtkObject *            atk_object_wrapper_ref(
 
 AtkObject *            atk_object_wrapper_new(
     const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& rxAccessible,
-    AtkObject* parent = NULL );
+    AtkObject* parent = nullptr );
 
 void                   atk_object_wrapper_add_child(AtkObjectWrapper* wrapper, AtkObject *child, gint index);
 void                   atk_object_wrapper_remove_child(AtkObjectWrapper* wrapper, AtkObject *child, gint index);

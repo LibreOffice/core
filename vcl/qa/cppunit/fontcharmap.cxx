@@ -40,7 +40,7 @@ void VclFontCharMapTest::testDefaultFontCharMap()
     CPPUNIT_ASSERT( nStartSupBMPPlane == 0xE000 );
     CPPUNIT_ASSERT( nEndBMPPlane == 0xFFF0-1 );
 
-    pfcmap = 0;
+    pfcmap = nullptr;
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(VclFontCharMapTest);

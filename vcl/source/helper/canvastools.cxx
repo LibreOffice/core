@@ -290,7 +290,7 @@ namespace vcl
 
                 ::Bitmap aBitmap( aPixelSize,
                                   sal::static_int_cast<sal_uInt16>(nDepth),
-                                  aLayout.Palette.is() ? &aPalette : NULL );
+                                  aLayout.Palette.is() ? &aPalette : nullptr );
                 ::Bitmap aAlpha;
                 if( nAlphaDepth )
                     aAlpha = ::Bitmap( aPixelSize,
@@ -300,10 +300,10 @@ namespace vcl
 
                 { // limit scoped access
                     Bitmap::ScopedWriteAccess pWriteAccess( aBitmap );
-                    Bitmap::ScopedWriteAccess pAlphaWriteAccess( nAlphaDepth ? aAlpha.AcquireWriteAccess() : NULL,
+                    Bitmap::ScopedWriteAccess pAlphaWriteAccess( nAlphaDepth ? aAlpha.AcquireWriteAccess() : nullptr,
                                                                aAlpha );
 
-                    ENSURE_OR_THROW(pWriteAccess.get() != NULL,
+                    ENSURE_OR_THROW(pWriteAccess.get() != nullptr,
                                     "Cannot get write access to bitmap");
 
                     const sal_Int32 nWidth(aPixelSize.Width());

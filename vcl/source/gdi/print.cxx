@@ -255,10 +255,10 @@ void Printer::EmulateDrawTransparent ( const tools::PolyPolygon& rPolyPoly,
 
     // operation explicitly further below.
     if( mpAlphaVDev )
-        mpAlphaVDev = NULL;
+        mpAlphaVDev = nullptr;
 
     GDIMetaFile* pOldMetaFile = mpMetaFile;
-    mpMetaFile = NULL;
+    mpMetaFile = nullptr;
 
     mpMetaFile = pOldMetaFile;
 
@@ -391,7 +391,7 @@ SalPrinterQueueInfo::SalPrinterQueueInfo()
 {
     mnStatus    = PrintQueueFlags::NONE;
     mnJobs      = QUEUE_JOBS_DONTKNOW;
-    mpSysData   = NULL;
+    mpSysData   = nullptr;
 }
 
 SalPrinterQueueInfo::~SalPrinterQueueInfo()
@@ -416,7 +416,7 @@ void ImplPrnQueueList::Add( SalPrinterQueueInfo* pData )
     {
         m_aNameToIndex[ pData->maPrinterName ] = m_aQueueInfos.size();
         m_aQueueInfos.push_back( ImplPrnQueueData() );
-        m_aQueueInfos.back().mpQueueInfo = NULL;
+        m_aQueueInfos.back().mpQueueInfo = nullptr;
         m_aQueueInfos.back().mpSalQueueInfo = pData;
         m_aPrinterList.push_back( pData->maPrinterName );
     }
@@ -424,7 +424,7 @@ void ImplPrnQueueList::Add( SalPrinterQueueInfo* pData )
     {
         ImplPrnQueueData& rData = m_aQueueInfos[ it->second ];
         delete rData.mpQueueInfo;
-        rData.mpQueueInfo = NULL;
+        rData.mpQueueInfo = nullptr;
         ImplGetSVData()->mpDefInst->DeletePrinterQueueInfo( rData.mpSalQueueInfo );
         rData.mpSalQueueInfo = pData;
     }
@@ -432,7 +432,7 @@ void ImplPrnQueueList::Add( SalPrinterQueueInfo* pData )
 
 ImplPrnQueueData* ImplPrnQueueList::Get( const OUString& rPrinter )
 {
-    ImplPrnQueueData* pData = NULL;
+    ImplPrnQueueData* pData = nullptr;
     std::unordered_map<OUString,sal_Int32,OUStringHash>::iterator it =
         m_aNameToIndex.find( rPrinter );
     if( it != m_aNameToIndex.end() )
@@ -459,7 +459,7 @@ void ImplDeletePrnQueueList()
     if ( pPrnList )
     {
         delete pPrnList;
-        pSVData->maGDIData.mpPrinterQueueList = NULL;
+        pSVData->maGDIData.mpPrinterQueueList = nullptr;
     }
 }
 
@@ -479,7 +479,7 @@ const QueueInfo* Printer::GetQueueInfo( const OUString& rPrinterName, bool bStat
         ImplInitPrnQueueList();
 
     if ( !pSVData->maGDIData.mpPrinterQueueList )
-        return NULL;
+        return nullptr;
 
     ImplPrnQueueData* pInfo = pSVData->maGDIData.mpPrinterQueueList->Get( rPrinterName );
     if( pInfo )
@@ -498,7 +498,7 @@ const QueueInfo* Printer::GetQueueInfo( const OUString& rPrinterName, bool bStat
         pInfo->mpQueueInfo->mnJobs          = pInfo->mpSalQueueInfo->mnJobs;
         return pInfo->mpQueueInfo;
     }
-    return NULL;
+    return nullptr;
 }
 
 OUString Printer::GetDefaultPrinterName()
@@ -529,16 +529,16 @@ void Printer::ImplInitData()
     mbPrintFile         = false;
     mbInPrintPage       = false;
     mbNewJobSetup       = false;
-    mpInfoPrinter       = NULL;
-    mpPrinter           = NULL;
-    mpDisplayDev        = NULL;
+    mpInfoPrinter       = nullptr;
+    mpPrinter           = nullptr;
+    mpDisplayDev        = nullptr;
     mbIsQueuePrinter    = false;
     mpPrinterOptions    = new PrinterOptions;
 
     // Add printer to the list
     ImplSVData* pSVData = ImplGetSVData();
     mpNext = pSVData->maGDIData.mpFirstPrinter;
-    mpPrev = NULL;
+    mpPrev = nullptr;
     if ( mpNext )
         mpNext->mpPrev = this;
     else
@@ -633,19 +633,19 @@ void Printer::ImplReleaseFonts()
     if ( mpFontEntry )
     {
         mpFontCache->Release( mpFontEntry );
-        mpFontEntry = NULL;
+        mpFontEntry = nullptr;
     }
 
     if ( mpGetDevFontList )
     {
         delete mpGetDevFontList;
-        mpGetDevFontList = NULL;
+        mpGetDevFontList = nullptr;
     }
 
     if ( mpGetDevSizeList )
     {
         delete mpGetDevSizeList;
-        mpGetDevSizeList = NULL;
+        mpGetDevSizeList = nullptr;
     }
 }
 
@@ -697,9 +697,9 @@ void Printer::ReleaseGraphics( bool bRelease )
         }
     }
 
-    mpGraphics      = NULL;
-    mpPrevGraphics  = NULL;
-    mpNextGraphics  = NULL;
+    mpGraphics      = nullptr;
+    mpPrevGraphics  = nullptr;
+    mpNextGraphics  = nullptr;
 }
 
 void Printer::ImplInit( SalPrinterQueueInfo* pInfo )
@@ -717,7 +717,7 @@ void Printer::ImplInit( SalPrinterQueueInfo* pInfo )
              (pJobSetup->maDriver != pInfo->maDriver) )
         {
             rtl_freeMemory( pJobSetup->mpDriverData );
-            pJobSetup->mpDriverData = NULL;
+            pJobSetup->mpDriverData = nullptr;
             pJobSetup->mnDriverDataLen = 0;
         }
     }
@@ -731,20 +731,20 @@ void Printer::ImplInit( SalPrinterQueueInfo* pInfo )
     pJobSetup->maDriver = maDriver;
 
     mpInfoPrinter   = pSVData->mpDefInst->CreateInfoPrinter( pInfo, pJobSetup );
-    mpPrinter       = NULL;
-    mpJobGraphics   = NULL;
+    mpPrinter       = nullptr;
+    mpJobGraphics   = nullptr;
     ImplUpdateJobSetupPaper( maJobSetup );
 
     if ( !mpInfoPrinter )
     {
-        ImplInitDisplay( NULL );
+        ImplInitDisplay( nullptr );
         return;
     }
 
     // we need a graphics
     if ( !AcquireGraphics() )
     {
-        ImplInitDisplay( NULL );
+        ImplInitDisplay( nullptr );
         return;
     }
 
@@ -759,9 +759,9 @@ void Printer::ImplInitDisplay( const vcl::Window* pWindow )
 {
     ImplSVData* pSVData = ImplGetSVData();
 
-    mpInfoPrinter       = NULL;
-    mpPrinter           = NULL;
-    mpJobGraphics       = NULL;
+    mpInfoPrinter       = nullptr;
+    mpPrinter           = nullptr;
+    mpJobGraphics       = nullptr;
 
     if ( pWindow )
         mpDisplayDev = VclPtr<VirtualDevice>::Create( *pWindow );
@@ -824,7 +824,7 @@ void Printer::DrawDeviceMask( const Bitmap& rMask, const Color& rMaskColor,
         GDIMetaFile*    pOldMetaFile = mpMetaFile;
         const bool      bOldMap = mbMap;
 
-        mpMetaFile = NULL;
+        mpMetaFile = nullptr;
         mbMap = false;
         Push( PushFlags::FILLCOLOR | PushFlags::LINECOLOR );
         SetLineColor( rMaskColor );
@@ -903,7 +903,7 @@ SalPrinterQueueInfo* Printer::ImplGetQueueInfo( const OUString& rPrinterName,
         return pPrnList->m_aQueueInfos[0].mpSalQueueInfo;
     }
 
-    return NULL;
+    return nullptr;
 }
 
 void Printer::ImplUpdatePageData()
@@ -935,7 +935,7 @@ long Printer::GetGradientStepCount( long nMinRect )
 Printer::Printer()
 {
     ImplInitData();
-    SalPrinterQueueInfo* pInfo = ImplGetQueueInfo( GetDefaultPrinterName(), NULL );
+    SalPrinterQueueInfo* pInfo = ImplGetQueueInfo( GetDefaultPrinterName(), nullptr );
     if ( pInfo )
     {
         ImplInit( pInfo );
@@ -943,7 +943,7 @@ Printer::Printer()
             mbDefPrinter = true;
     }
     else
-        ImplInitDisplay( NULL );
+        ImplInitDisplay( nullptr );
 }
 
 Printer::Printer( const JobSetup& rJobSetup ) :
@@ -959,7 +959,7 @@ Printer::Printer( const JobSetup& rJobSetup ) :
     }
     else
     {
-        ImplInitDisplay( NULL );
+        ImplInitDisplay( nullptr );
         maJobSetup = JobSetup();
     }
 }
@@ -972,17 +972,17 @@ Printer::Printer( const QueueInfo& rQueueInfo )
     if ( pInfo )
         ImplInit( pInfo );
     else
-        ImplInitDisplay( NULL );
+        ImplInitDisplay( nullptr );
 }
 
 Printer::Printer( const OUString& rPrinterName )
 {
     ImplInitData();
-    SalPrinterQueueInfo* pInfo = ImplGetQueueInfo( rPrinterName, NULL );
+    SalPrinterQueueInfo* pInfo = ImplGetQueueInfo( rPrinterName, nullptr );
     if ( pInfo )
         ImplInit( pInfo );
     else
-        ImplInitDisplay( NULL );
+        ImplInitDisplay( nullptr );
 }
 
 Printer::~Printer()
@@ -996,7 +996,7 @@ void Printer::dispose()
     DBG_ASSERT( !IsJobActive(), "Printer::~Printer() - Job is active" );
 
     delete mpPrinterOptions;
-    mpPrinterOptions = NULL;
+    mpPrinterOptions = nullptr;
 
     ReleaseGraphics();
     if ( mpInfoPrinter )
@@ -1011,20 +1011,20 @@ void Printer::dispose()
         if ( mpFontEntry )
         {
             mpFontCache->Release( mpFontEntry );
-            mpFontEntry = NULL;
+            mpFontEntry = nullptr;
         }
         if ( mpGetDevFontList )
         {
             delete mpGetDevFontList;
-            mpGetDevFontList = NULL;
+            mpGetDevFontList = nullptr;
         }
         if ( mpGetDevSizeList )
         {
             delete mpGetDevSizeList;
-            mpGetDevSizeList = NULL;
+            mpGetDevSizeList = nullptr;
         }
         delete mpFontCache;
-        mpFontCache = NULL;
+        mpFontCache = nullptr;
         // font list deleted by OutputDevice dtor
     }
 
@@ -1165,31 +1165,31 @@ bool Printer::SetPrinterProps( const Printer* pPrinter )
             if ( mpFontEntry )
             {
                 mpFontCache->Release( mpFontEntry );
-                mpFontEntry = NULL;
+                mpFontEntry = nullptr;
             }
             if ( mpGetDevFontList )
             {
                 delete mpGetDevFontList;
-                mpGetDevFontList = NULL;
+                mpGetDevFontList = nullptr;
             }
             if ( mpGetDevSizeList )
             {
                 delete mpGetDevSizeList;
-                mpGetDevSizeList = NULL;
+                mpGetDevSizeList = nullptr;
             }
             // clean up font list
             delete mpFontCache;
             delete mpFontCollection;
-            mpFontCache = NULL;
-            mpFontCollection = NULL;
+            mpFontCache = nullptr;
+            mpFontCollection = nullptr;
 
             mbInitFont = true;
             mbNewFont = true;
-            mpInfoPrinter = NULL;
+            mpInfoPrinter = nullptr;
         }
 
         // Construct new printer
-        ImplInitDisplay( NULL );
+        ImplInitDisplay( nullptr );
         return true;
     }
 
@@ -1208,25 +1208,25 @@ bool Printer::SetPrinterProps( const Printer* pPrinter )
             if ( mpFontEntry )
             {
                 mpFontCache->Release( mpFontEntry );
-                mpFontEntry = NULL;
+                mpFontEntry = nullptr;
             }
             if ( mpGetDevFontList )
             {
                 delete mpGetDevFontList;
-                mpGetDevFontList = NULL;
+                mpGetDevFontList = nullptr;
             }
             if ( mpGetDevSizeList )
             {
                 delete mpGetDevSizeList;
-                mpGetDevSizeList = NULL;
+                mpGetDevSizeList = nullptr;
             }
             delete mpFontCache;
             delete mpFontCollection;
-            mpFontCache = NULL;
-            mpFontCollection = NULL;
+            mpFontCache = nullptr;
+            mpFontCollection = nullptr;
             mbInitFont = true;
             mbNewFont = true;
-            mpInfoPrinter = NULL;
+            mpInfoPrinter = nullptr;
         }
 
         // Construct new printer
@@ -1238,7 +1238,7 @@ bool Printer::SetPrinterProps( const Printer* pPrinter )
             SetJobSetup( pPrinter->GetJobSetup() );
         }
         else
-            ImplInitDisplay( NULL );
+            ImplInitDisplay( nullptr );
     }
     else
         SetJobSetup( pPrinter->GetJobSetup() );
@@ -1698,7 +1698,7 @@ bool Printer::EndJob()
         // can't handle destroying a printer object and printing
         // at the same time
         ImplGetSVData()->mpDefInst->DestroyPrinter( mpPrinter );
-        mpPrinter = NULL;
+        mpPrinter = nullptr;
     }
 
     return bRet;
@@ -1742,7 +1742,7 @@ void Printer::ImplEndPage()
         ReleaseGraphics();
         mbDevOutput = false;
 
-        mpJobGraphics = NULL;
+        mpJobGraphics = nullptr;
         mbNewJobSetup = false;
     }
 }

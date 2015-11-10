@@ -143,7 +143,7 @@ public:
 };
 
 ImplPointArray::ImplPointArray() :
-    mpArray     ( NULL ),
+    mpArray     ( nullptr ),
     mnSize      ( 0UL ),
     mnRealSize  ( 0UL )
 
@@ -853,7 +853,7 @@ void ImplLimitPolyPoly( tools::PolyPolygon& rPolyPoly )
 
 ImplVectMap* ImplExpand( BitmapReadAccess* pRAcc, const Color& rColor )
 {
-    ImplVectMap* pMap = NULL;
+    ImplVectMap* pMap = nullptr;
 
     if( pRAcc && pRAcc->Width() && pRAcc->Height() )
     {

@@ -623,7 +623,7 @@ bool EnhWMFReader::ReadEnhWMF()
     bool    bStatus = ReadHeader();
     bool    bHaveDC = false;
 
-    static bool bEnableEMFPlus = ( getenv( "EMF_PLUS_DISABLE" ) == NULL );
+    static bool bEnableEMFPlus = ( getenv( "EMF_PLUS_DISABLE" ) == nullptr );
 
     while( bStatus && nRecordCount-- && pWMF->good())
     {

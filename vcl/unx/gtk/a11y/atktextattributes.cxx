@@ -154,7 +154,7 @@ get_value( const uno::Sequence< beans::PropertyValue >& rAttributeList,
     if( nIndex != -1 )
         return func(rAttributeList[nIndex].Value);
 
-    return NULL;
+    return nullptr;
 }
 
 #define get_bool_value( list, index ) get_value( list, index, Bool2String )
@@ -278,7 +278,7 @@ get_color_value(const uno::Sequence< beans::PropertyValue >& rAttributeList,
         return g_strdup_printf( "%u,%u,%u", red, green, blue );
     }
 
-    return NULL;
+    return nullptr;
 }
 
 static bool
@@ -299,7 +299,7 @@ String2Color( uno::Any& rAny, const gchar * value )
 static gchar*
 FontSlant2Style(const uno::Any& rAny)
 {
-    const gchar * value = NULL;
+    const gchar * value = nullptr;
 
     switch( rAny.get<awt::FontSlant>() )
     {
@@ -330,7 +330,7 @@ FontSlant2Style(const uno::Any& rAny)
     if( value )
          return g_strdup( value );
 
-    return NULL;
+    return nullptr;
 }
 
 static bool
@@ -380,7 +380,7 @@ String2Weight( uno::Any& rAny, const gchar * value )
 static gchar*
 Adjust2Justification(const uno::Any& rAny)
 {
-    const gchar * value = NULL;
+    const gchar * value = nullptr;
 
     switch( rAny.get<short>() )
     {
@@ -408,7 +408,7 @@ Adjust2Justification(const uno::Any& rAny)
     if( value )
         return g_strdup( value );
 
-    return NULL;
+    return nullptr;
 }
 
 static bool
@@ -437,7 +437,7 @@ const gchar * font_strikethrough[] = {
     "none",   // FontStrikeout::NONE
     "single", // FontStrikeout::SINGLE
     "double", // FontStrikeout::DOUBLE
-    NULL,     // FontStrikeout::DONTKNOW
+    nullptr,     // FontStrikeout::DONTKNOW
     "bold",   // FontStrikeout::BOLD
     "with /", // FontStrikeout::SLASH
     "with X"  // FontStrikeout::X
@@ -453,7 +453,7 @@ Strikeout2String(const uno::Any& rAny)
     if( n >= 0 && n < n_strikeout_constants )
         return g_strdup( font_strikethrough[n] );
 
-    return NULL;
+    return nullptr;
 }
 
 static bool
@@ -461,7 +461,7 @@ String2Strikeout( uno::Any& rAny, const gchar * value )
 {
     for( sal_Int16 n=0; n < n_strikeout_constants; ++n )
     {
-        if( ( NULL != font_strikethrough[n] ) &&
+        if( ( nullptr != font_strikethrough[n] ) &&
             0 == strncmp( value, font_strikethrough[n], strlen( font_strikethrough[n] ) ) )
         {
             rAny = uno::makeAny( n );
@@ -477,7 +477,7 @@ String2Strikeout( uno::Any& rAny, const gchar * value )
 static gchar*
 Underline2String(const uno::Any& rAny)
 {
-    const gchar * value = NULL;
+    const gchar * value = nullptr;
 
     switch( rAny.get<sal_Int16>() )
     {
@@ -500,7 +500,7 @@ Underline2String(const uno::Any& rAny)
     if( value )
         return g_strdup( value );
 
-    return NULL;
+    return nullptr;
 }
 
 static bool
@@ -531,7 +531,7 @@ GetString(const uno::Any& rAny)
     if( !aFontName.isEmpty() )
         return g_strdup( aFontName.getStr() );
 
-    return NULL;
+    return nullptr;
 }
 
 static bool
@@ -713,14 +713,14 @@ String2Locale( uno::Any& rAny, const gchar * value )
     bool ret = false;
 
     gchar ** str_array = g_strsplit_set( value, "-.@", -1 );
-    if( str_array[0] != NULL )
+    if( str_array[0] != nullptr )
     {
         ret = true;
 
         lang::Locale aLocale;
 
         aLocale.Language = OUString::createFromAscii(str_array[0]);
-        if( str_array[1] != NULL )
+        if( str_array[1] != nullptr )
         {
             gchar * country = g_ascii_strup(str_array[1], -1);
             aLocale.Country = OUString::createFromAscii(country);
@@ -757,7 +757,7 @@ get_font_effect(const uno::Sequence< beans::PropertyValue >& rAttributeList,
             return g_strdup(relief[n]);
     }
 
-    return NULL;
+    return nullptr;
 }
 
 /*****************************************************************************/
@@ -779,12 +779,12 @@ get_text_decoration(const uno::Sequence< beans::PropertyValue >& rAttributeList,
                     sal_Int32 nBlinkIndex, sal_Int32 nUnderlineIndex,
                     sal_Int16 nStrikeoutIndex)
 {
-    gchar * value_list[4] = { NULL, NULL, NULL, NULL };
+    gchar * value_list[4] = { nullptr, nullptr, nullptr, nullptr };
     gint count = 0;
 
     // no property value found
     if( ( nBlinkIndex == -1 ) && (nUnderlineIndex == -1 ) && (nStrikeoutIndex == -1))
-        return NULL;
+        return nullptr;
 
     if( nBlinkIndex != -1 )
     {
@@ -848,7 +848,7 @@ WritingMode2Direction( const uno::Any& rAny )
     if( 0 <= n && n <= text::WritingMode2::PAGE )
         return g_strdup(directions[n]);
 
-    return NULL;
+    return nullptr;
 }
 
 // @see http://www.w3.org/TR/2001/WD-css3-text-20010517/#PrimaryTextAdvanceDirection
@@ -862,7 +862,7 @@ WritingMode2String( const uno::Any& rAny )
     if( 0 <= n && n <= text::WritingMode2::PAGE )
         return g_strdup(writing_modes[n]);
 
-    return NULL;
+    return nullptr;
 }
 
 /*****************************************************************************/
@@ -874,7 +874,7 @@ static gchar *
 Escapement2VerticalAlign( const uno::Any& rAny )
 {
     sal_Int16 n = rAny.get<sal_Int16>();
-    gchar * ret = NULL;
+    gchar * ret = nullptr;
 
     // Values are in %, 101% means "automatic"
     if( n == 0 )
@@ -896,7 +896,7 @@ static gchar *
 LineSpacing2LineHeight( const uno::Any& rAny )
 {
     style::LineSpacing ls;
-    gchar * ret = NULL;
+    gchar * ret = nullptr;
 
     if( rAny >>= ls )
     {
@@ -916,7 +916,7 @@ static gchar *
 TabStopList2String( const uno::Any& rAny, bool default_tabs )
 {
     uno::Sequence< style::TabStop > theTabStops;
-    gchar * ret = NULL;
+    gchar * ret = nullptr;
 
     if( rAny >>= theTabStops)
     {
@@ -1066,7 +1066,7 @@ attribute_set_new_from_property_values(
     bool run_attributes_only,
     AtkText *text)
 {
-    AtkAttributeSet* attribute_set = NULL;
+    AtkAttributeSet* attribute_set = nullptr;
 
     sal_Int32 aIndexList[TEXT_ATTRIBUTE_LAST] = { -1 };
 
@@ -1077,10 +1077,10 @@ attribute_set_new_from_property_values(
     find_exported_attributes(aIndexList, rAttributeList);
 
     attribute_set = attribute_set_prepend(attribute_set, ATK_TEXT_ATTR_BG_COLOR,
-        get_color_value(rAttributeList, aIndexList, TEXT_ATTRIBUTE_BACKGROUND_COLOR, run_attributes_only ? NULL : text ) );
+        get_color_value(rAttributeList, aIndexList, TEXT_ATTRIBUTE_BACKGROUND_COLOR, run_attributes_only ? nullptr : text ) );
 
     attribute_set = attribute_set_prepend(attribute_set, ATK_TEXT_ATTR_FG_COLOR,
-        get_color_value(rAttributeList, aIndexList, TEXT_ATTRIBUTE_FOREGROUND_COLOR, run_attributes_only ? NULL : text) );
+        get_color_value(rAttributeList, aIndexList, TEXT_ATTRIBUTE_FOREGROUND_COLOR, run_attributes_only ? nullptr : text) );
 
     attribute_set = attribute_set_prepend(attribute_set, ATK_TEXT_ATTR_INVISIBLE,
         get_bool_value(rAttributeList, aIndexList[TEXT_ATTRIBUTE_HIDDEN]));
@@ -1214,7 +1214,7 @@ AtkAttributeSet*
 attribute_set_new_from_extended_attributes(
     const css::uno::Reference< css::accessibility::XAccessibleExtendedAttributes >& rExtendedAttributes )
 {
-    AtkAttributeSet *pSet = NULL;
+    AtkAttributeSet *pSet = nullptr;
 
     // extended attributes is a string of colon-separated pairs of property and value,
     // with pairs separated by semicolons. Example: "heading-level:2;weight:bold;"
@@ -1348,7 +1348,7 @@ attribute_set_map_to_property_values(
     uno::Sequence< beans::PropertyValue > aAttributeList (g_TextAttrMapSize);
 
     sal_Int32 nIndex = 0;
-    for( GSList * item = attribute_set; item != NULL; item = g_slist_next( item ) )
+    for( GSList * item = attribute_set; item != nullptr; item = g_slist_next( item ) )
     {
         AtkAttribute* attribute = reinterpret_cast<AtkAttribute *>(item);
 

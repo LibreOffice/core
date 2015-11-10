@@ -62,7 +62,7 @@ public:
 }
 
 StatusWindow::StatusWindow( WinBits nWinBits ) :
-        WorkWindow( NULL, nWinBits )
+        WorkWindow( nullptr, nWinBits )
 {
 }
 
@@ -112,11 +112,11 @@ public:
 XIMStatusWindow::XIMStatusWindow( bool bOn ) :
         StatusWindow( WB_BORDER | WB_SYSTEMFLOATWIN | WB_TOOLTIPWIN ),
         m_aStatusText(VclPtr<FixedText>::Create(this, 0)),
-        m_pLastParent( NULL ),
+        m_pLastParent( nullptr ),
         m_bAnchoredAtRight( false ),
         m_bDelayedShow( false ),
         m_eDelayedReason( I18NStatus::contextmap ),
-        m_nDelayedEvent( 0 ),
+        m_nDelayedEvent( nullptr ),
         m_bOn( bOn )
 {
     layout();
@@ -260,7 +260,7 @@ void XIMStatusWindow::setPosition( SalFrame* pParent )
 
 IMPL_LINK_NOARG_TYPED(XIMStatusWindow, DelayedShowHdl, void*, void)
 {
-    m_nDelayedEvent = 0;
+    m_nDelayedEvent = nullptr;
     const SystemEnvData* pData = GetSystemData();
     SalFrame* pStatusFrame = static_cast<SalFrame*>(pData->pSalFrame);
     if( m_bDelayedShow )
@@ -286,7 +286,7 @@ void XIMStatusWindow::show( bool bShow, I18NStatus::ShowReason eReason )
     m_bDelayedShow = bShow;
     m_eDelayedReason = eReason;
     if( ! m_nDelayedEvent )
-        m_nDelayedEvent = Application::PostUserEvent( LINK( this, XIMStatusWindow, DelayedShowHdl ), NULL, true );
+        m_nDelayedEvent = Application::PostUserEvent( LINK( this, XIMStatusWindow, DelayedShowHdl ), nullptr, true );
 }
 
 void XIMStatusWindow::setText( const OUString& rText )
@@ -455,7 +455,7 @@ void IIIMPStatusWindow::GetFocus()
             XSync( static_cast<Display*>(pParentEnvData->pDisplay), False );
             GetGenericData()->ErrorTrapPop();
         }
-        m_pResetFocus = NULL;
+        m_pResetFocus = nullptr;
     }
 }
 
@@ -493,7 +493,7 @@ IMPL_LINK_TYPED( IIIMPStatusWindow, SelectHdl, MenuButton*, pBtn, void )
  *  I18NStatus
  */
 
-I18NStatus* I18NStatus::pInstance = NULL;
+I18NStatus* I18NStatus::pInstance = nullptr;
 
 I18NStatus& I18NStatus::get()
 {
@@ -504,18 +504,18 @@ I18NStatus& I18NStatus::get()
 
 bool I18NStatus::exists()
 {
-    return pInstance != NULL;
+    return pInstance != nullptr;
 }
 
 void I18NStatus::free()
 {
     if( pInstance )
-        delete pInstance, pInstance = NULL;
+        delete pInstance, pInstance = nullptr;
 }
 
 I18NStatus::I18NStatus() :
-        m_pParent( NULL ),
-        m_pStatusWindow( NULL )
+        m_pParent( nullptr ),
+        m_pStatusWindow( nullptr )
 {
 }
 
@@ -523,7 +523,7 @@ I18NStatus::~I18NStatus()
 {
     m_pStatusWindow.disposeAndClear();
     if( pInstance == this )
-        pInstance = NULL;
+        pInstance = nullptr;
 }
 
 void I18NStatus::setParent( SalFrame* pParent )
@@ -588,7 +588,7 @@ void I18NStatus::setStatusText( const OUString& rText )
 
 SalFrame* I18NStatus::getStatusFrame() const
 {
-    SalFrame* pRet = NULL;
+    SalFrame* pRet = nullptr;
     if( m_pStatusWindow )
     {
         const SystemEnvData* pData = m_pStatusWindow->GetSystemData();

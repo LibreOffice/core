@@ -22,7 +22,7 @@
 using namespace ::com::sun::star::accessibility;
 using namespace ::com::sun::star::uno;
 
-static GHashTable *uno_to_gobject = NULL;
+static GHashTable *uno_to_gobject = nullptr;
 
 /*****************************************************************************/
 
@@ -38,7 +38,7 @@ ooo_wrapper_registry_get(const Reference< XAccessible >& rxAccessible)
             return ATK_OBJECT( cached );
     }
 
-    return NULL;
+    return nullptr;
 }
 
 /*****************************************************************************/
@@ -47,7 +47,7 @@ void
 ooo_wrapper_registry_add(const Reference< XAccessible >& rxAccessible, AtkObject *obj)
 {
    if( !uno_to_gobject )
-        uno_to_gobject = g_hash_table_new (NULL, NULL);
+        uno_to_gobject = g_hash_table_new (nullptr, nullptr);
 
    g_hash_table_insert( uno_to_gobject, static_cast<gpointer>(rxAccessible.get()), obj );
 }

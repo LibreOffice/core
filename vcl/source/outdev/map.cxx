@@ -349,13 +349,13 @@ void OutputDevice::ImplInvalidateViewTransform()
     if(mpOutDevData->mpViewTransform)
     {
         delete mpOutDevData->mpViewTransform;
-        mpOutDevData->mpViewTransform = NULL;
+        mpOutDevData->mpViewTransform = nullptr;
     }
 
     if(mpOutDevData->mpInverseViewTransform)
     {
         delete mpOutDevData->mpInverseViewTransform;
-        mpOutDevData->mpInverseViewTransform = NULL;
+        mpOutDevData->mpInverseViewTransform = nullptr;
     }
 }
 
@@ -821,7 +821,7 @@ void OutputDevice::SetRelativeMapMode( const MapMode& rNewMapMode )
                                      rNewMapMode.GetScaleY().GetDenominator(),
                                      maMapMode.GetScaleY().GetNumerator() );
 
-    Point aPt( LogicToLogic( Point(), NULL, &rNewMapMode ) );
+    Point aPt( LogicToLogic( Point(), nullptr, &rNewMapMode ) );
     if ( eNew != eOld )
     {
         if ( eOld > MAP_PIXEL )

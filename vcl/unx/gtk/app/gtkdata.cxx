@@ -80,14 +80,14 @@ GtkSalDisplay::GtkSalDisplay( GdkDisplay* pDisplay ) :
             m_bStartupCompleted( false )
 {
     for(GdkCursor* & rpCsr : m_aCursors)
-        rpCsr = NULL;
+        rpCsr = nullptr;
 #if !GTK_CHECK_VERSION(3,0,0)
     m_bUseRandRWrapper = false; // use gdk signal instead
     Init ();
 #endif
 
     // FIXME: unify this with SalInst's filter too ?
-    gdk_window_add_filter( NULL, call_filterGdkEvent, this );
+    gdk_window_add_filter( nullptr, call_filterGdkEvent, this );
 
     if ( getenv( "SAL_IGNOREXERRORS" ) )
         GetGenericData()->ErrorTrapPush(); // and leak the trap
@@ -114,14 +114,14 @@ GtkSalDisplay::GtkSalDisplay( GdkDisplay* pDisplay ) :
 
 GtkSalDisplay::~GtkSalDisplay()
 {
-    gdk_window_remove_filter( NULL, call_filterGdkEvent, this );
+    gdk_window_remove_filter( nullptr, call_filterGdkEvent, this );
 
     if( !m_bStartupCompleted )
         gdk_notify_startup_complete();
 
 #if !GTK_CHECK_VERSION(3,0,0)
     doDestruct();
-    pDisp_ = NULL;
+    pDisp_ = nullptr;
 #endif
 
     for(GdkCursor* & rpCsr : m_aCursors)
@@ -169,7 +169,7 @@ GdkFilterReturn GtkSalDisplay::filterGdkEvent( GdkXEvent* sys_event,
             ! m_aFrames.empty()
            )
         {
-            SendInternalEvent( m_aFrames.front(), NULL, SALEVENT_SETTINGSCHANGED );
+            SendInternalEvent( m_aFrames.front(), nullptr, SALEVENT_SETTINGSCHANGED );
         }
         // let's see if one of our frames wants to swallow these events
         // get the frame
@@ -220,7 +220,7 @@ GtkSalDisplay::initScreen( SalX11Screen nXScreen ) const
     // choose visual for screen
     ScreenData *pSD;
     if (!(pSD = SalDisplay::initScreen( nXScreen )))
-        return NULL;
+        return nullptr;
 
     // now set a gdk default colormap matching the chosen visual to the screen
     GdkScreen* pScreen = gdk_display_get_screen( m_pGdkDisplay, nXScreen.getXScreen() );
@@ -363,7 +363,7 @@ GdkCursor *GtkSalDisplay::getCursor( PointerStyle ePointerStyle )
 {
     if ( !m_aCursors[ ePointerStyle ] )
     {
-        GdkCursor *pCursor = NULL;
+        GdkCursor *pCursor = nullptr;
 
         switch( ePointerStyle )
         {
@@ -499,7 +499,7 @@ int GtkSalDisplay::CaptureMouse( SalFrame* pSFrame )
     {
         if( m_pCapture )
             static_cast<GtkSalFrame*>(m_pCapture)->grabPointer( FALSE );
-        m_pCapture = NULL;
+        m_pCapture = nullptr;
         return 0;
     }
 
@@ -527,13 +527,13 @@ GtkData::GtkData( SalInstance *pInstance )
 #endif
     , blockIdleTimeout( false )
 {
-    m_pUserEvent = NULL;
+    m_pUserEvent = nullptr;
     m_aDispatchMutex = osl_createMutex();
     m_aDispatchCondition = osl_createCondition();
 }
 
 #if defined(GDK_WINDOWING_X11)
-XIOErrorHandler aOrigXIOErrorHandler = NULL;
+XIOErrorHandler aOrigXIOErrorHandler = nullptr;
 
 extern "C" {
 
@@ -562,7 +562,7 @@ GtkData::~GtkData()
     {
         g_source_destroy (m_pUserEvent);
         g_source_unref (m_pUserEvent);
-        m_pUserEvent = NULL;
+        m_pUserEvent = nullptr;
     }
     osl_destroyCondition( m_aDispatchCondition );
     osl_releaseMutex( m_aDispatchMutex );
@@ -605,7 +605,7 @@ void GtkData::Yield( bool bWait, bool bHandleAllCurrentEvents )
             gboolean wasOneEvent = TRUE;
             while( nMaxEvents-- && wasOneEvent )
             {
-                wasOneEvent = g_main_context_iteration( NULL, bWait && !bWasEvent );
+                wasOneEvent = g_main_context_iteration( nullptr, bWait && !bWasEvent );
                 if( wasOneEvent )
                     bWasEvent = true;
             }
@@ -650,7 +650,7 @@ void GtkData::Init()
      *  o  default display
      */
 
-    GdkDisplay *pGdkDisp = NULL;
+    GdkDisplay *pGdkDisp = nullptr;
 
     // is there a -display command line parameter?
     rtl_TextEncoding aEnc = osl_getThreadTextEncoding();
@@ -881,7 +881,7 @@ extern "C" {
         sal_gtk_timeout_prepare,
         sal_gtk_timeout_check,
         sal_gtk_timeout_dispatch,
-        NULL, NULL, NULL
+        nullptr, nullptr, nullptr
     };
 }
 
@@ -898,7 +898,7 @@ create_sal_gtk_timeout( GtkSalTimer *pTimer )
   g_source_set_can_recurse( pSource, TRUE );
   g_source_set_callback( pSource,
                          /* unused dummy */ g_idle_remove_by_data,
-                         NULL, NULL );
+                         nullptr, nullptr );
   g_source_attach( pSource, g_main_context_default() );
 
   sal_gtk_timeout_defer( pTSource );
@@ -907,7 +907,7 @@ create_sal_gtk_timeout( GtkSalTimer *pTimer )
 }
 
 GtkSalTimer::GtkSalTimer()
-    : m_pTimeout(NULL)
+    : m_pTimeout(nullptr)
     , m_nTimeoutMS(0)
 {
 }
@@ -943,7 +943,7 @@ void GtkSalTimer::Stop()
     {
         g_source_destroy( &m_pTimeout->aParent );
         g_source_unref( &m_pTimeout->aParent );
-        m_pTimeout = NULL;
+        m_pTimeout = nullptr;
     }
 }
 
@@ -964,7 +964,7 @@ gboolean GtkData::userEventFn( gpointer data )
             if( pThis->m_pUserEvent )
             {
                 g_source_unref (pThis->m_pUserEvent);
-                pThis->m_pUserEvent = NULL;
+                pThis->m_pUserEvent = nullptr;
             }
             bContinue = FALSE;
         }
@@ -991,14 +991,14 @@ extern "C" {
 void GtkData::PostUserEvent()
 {
     if (m_pUserEvent)
-        g_main_context_wakeup (NULL); // really needed ?
+        g_main_context_wakeup (nullptr); // really needed ?
     else // nothing pending anyway
     {
         m_pUserEvent = g_idle_source_new();
         g_source_set_priority (m_pUserEvent, G_PRIORITY_HIGH);
         g_source_set_can_recurse (m_pUserEvent, TRUE);
         g_source_set_callback (m_pUserEvent, call_userEventFn,
-                               static_cast<gpointer>(this), NULL);
+                               static_cast<gpointer>(this), nullptr);
         g_source_attach (m_pUserEvent, g_main_context_default ());
     }
 }
@@ -1013,7 +1013,7 @@ void GtkSalDisplay::deregisterFrame( SalFrame* pFrame )
     if( m_pCapture == pFrame )
     {
         static_cast<GtkSalFrame*>(m_pCapture)->grabPointer( FALSE );
-        m_pCapture = NULL;
+        m_pCapture = nullptr;
     }
     SalGenericDisplay::deregisterFrame( pFrame );
 }

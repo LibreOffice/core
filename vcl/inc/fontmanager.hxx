@@ -271,7 +271,7 @@ class VCL_PLUGIN_PUBLIC PrintFontManager
     OString getAfmFile( PrintFont* pFont ) const;
     OString getFontFile( PrintFont* pFont ) const;
 
-    bool analyzeFontFile( int nDirID, const OString& rFileName, std::list< PrintFont* >& rNewFonts, const char *pFormat=NULL ) const;
+    bool analyzeFontFile( int nDirID, const OString& rFileName, std::list< PrintFont* >& rNewFonts, const char *pFormat=nullptr ) const;
     static OUString convertTrueTypeName( void* pNameRecord ); // actually a NameRecord* formt font subsetting code
     static void analyzeTrueTypeFamilyName( void* pTTFont, std::list< OUString >& rnames ); // actually a TrueTypeFont* from font subsetting code
     bool analyzeTrueTypeFile( PrintFont* pFont ) const;
@@ -288,7 +288,7 @@ class VCL_PLUGIN_PUBLIC PrintFontManager
     {
         std::unordered_map< fontID, PrintFont* >::const_iterator it;
         it = m_aFonts.find( nID );
-        return it == m_aFonts.end() ? NULL : it->second;
+        return it == m_aFonts.end() ? nullptr : it->second;
     }
     void fillPrintFontInfo( PrintFont* pFont, FastPrintFontInfo& rInfo ) const;
     void fillPrintFontInfo( PrintFont* pFont, PrintFontInfo& rInfo ) const;

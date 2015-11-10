@@ -64,7 +64,7 @@ static std::vector<std::unique_ptr<FixedTextureAtlasManager>> sTextureAtlases;
 }
 
 OpenGLSalBitmap::OpenGLSalBitmap()
-: mpContext(NULL)
+: mpContext(nullptr)
 , mbDirtyTexture(true)
 , mnBits(0)
 , mnBytesPerRow(0)
@@ -225,7 +225,7 @@ bool OpenGLSalBitmap::AllocateUserData()
     if (!alloc)
     {
         SAL_WARN("vcl.opengl", "bad alloc " << mnBytesPerRow << "x" << mnHeight);
-        maUserBuffer.reset( static_cast<sal_uInt8*>(NULL) );
+        maUserBuffer.reset( static_cast<sal_uInt8*>(nullptr) );
         mnBytesPerRow = 0;
     }
 #ifdef DBG_UTIL
@@ -236,7 +236,7 @@ bool OpenGLSalBitmap::AllocateUserData()
     }
 #endif
 
-    return maUserBuffer.get() != 0;
+    return maUserBuffer.get() != nullptr;
 }
 
 namespace {
@@ -335,7 +335,7 @@ ImplPixelFormat* ImplPixelFormat::GetFormat( sal_uInt16 nBits, const BitmapPalet
     case 8: return new ImplPixelFormat8( rPalette );
     }
 
-    return 0;
+    return nullptr;
 }
 
 void lclInstantiateTexture(OpenGLTexture& rTexture, const int nWidth, const int nHeight,
@@ -394,10 +394,10 @@ GLuint OpenGLSalBitmap::CreateTexture()
     VCL_GL_INFO( "vcl.opengl", "::CreateTexture bits: " << mnBits);
     GLenum nFormat = GL_RGBA;
     GLenum nType = GL_UNSIGNED_BYTE;
-    sal_uInt8* pData( NULL );
+    sal_uInt8* pData( nullptr );
     bool bAllocated( false );
 
-    if( maUserBuffer.get() != 0 )
+    if( maUserBuffer.get() != nullptr )
     {
         if( mnBits == 16 || mnBits == 24 || mnBits == 32 )
         {
@@ -481,7 +481,7 @@ bool OpenGLSalBitmap::ReadTexture()
 
     VCL_GL_INFO( "vcl.opengl", "::ReadTexture " << mnWidth << "x" << mnHeight << " bits: " << mnBits);
 
-    if( pData == NULL )
+    if( pData == nullptr )
         return false;
 
     if (mnBits == 8 || mnBits == 16 || mnBits == 24 || mnBits == 32)
@@ -578,7 +578,7 @@ bool OpenGLSalBitmap::calcChecksumGL(OpenGLTexture& rInputTexture, ChecksumType&
     int nHeight = rInputTexture.GetHeight();
 
     OpenGLProgram* pProgram = mpContext->UseProgram("textureVertexShader", FragShader);
-    if (pProgram == 0)
+    if (pProgram == nullptr)
         return false;
 
     int nNewWidth = ceil( nWidth / 4.0 );
@@ -606,7 +606,7 @@ bool OpenGLSalBitmap::calcChecksumGL(OpenGLTexture& rInputTexture, ChecksumType&
     nHeight = aFirstPassTexture.GetHeight();
 
     pProgram = mpContext->UseProgram("textureVertexShader", FragShader);
-    if (pProgram == 0)
+    if (pProgram == nullptr)
         return false;
 
     nNewWidth = ceil( nWidth / 4.0 );
@@ -694,16 +694,16 @@ BitmapBuffer* OpenGLSalBitmap::AcquireBuffer( BitmapAccessMode nMode )
         if( !maUserBuffer.get() )
         {
             if( !AllocateUserData() )
-                return NULL;
+                return nullptr;
             if( maTexture && !ReadTexture() )
-                return NULL;
+                return nullptr;
         }
 
         if( !maPendingOps.empty() )
         {
             VCL_GL_INFO( "vcl.opengl", "** Creating texture and reading it back immediately" );
             if( !CreateTexture() || !AllocateUserData() || !ReadTexture() )
-                return NULL;
+                return nullptr;
         }
     }
 

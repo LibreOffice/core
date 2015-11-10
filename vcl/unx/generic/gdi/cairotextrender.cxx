@@ -46,7 +46,7 @@ CairoTextRender::CairoTextRender()
     : mnTextColor(MAKE_SALCOLOR(0x00, 0x00, 0x00)) //black
 {
     for( int i = 0; i < MAX_FALLBACK; ++i )
-        mpServerFont[i] = NULL;
+        mpServerFont[i] = nullptr;
 
 #if ENABLE_GRAPHITE
     // check if graphite fonts have been disabled
@@ -60,11 +60,11 @@ bool CairoTextRender::setFont( const FontSelectPattern *pEntry, int nFallbackLev
     // release all no longer needed font resources
     for( int i = nFallbackLevel; i < MAX_FALLBACK; ++i )
     {
-        if( mpServerFont[i] != NULL )
+        if( mpServerFont[i] != nullptr )
         {
             // old server side font is no longer referenced
             GlyphCache::GetInstance().UncacheFont( *mpServerFont[i] );
-            mpServerFont[i] = NULL;
+            mpServerFont[i] = nullptr;
         }
     }
 
@@ -78,7 +78,7 @@ bool CairoTextRender::setFont( const FontSelectPattern *pEntry, int nFallbackLev
 
     // handle the request for a non-native X11-font => use the GlyphCache
     ServerFont* pServerFont = GlyphCache::GetInstance().CacheFont( *pEntry );
-    if( pServerFont != NULL )
+    if( pServerFont != nullptr )
     {
         // ignore fonts with e.g. corrupted font files
         if( !pServerFont->TestFont() )
@@ -152,7 +152,7 @@ void* CairoFontsCache::FindCachedFont(const CairoFontsCache::CacheId &rId)
     for (LRUFonts::iterator aI = maLRUFonts.begin(); aI != aEnd; ++aI)
         if (aI->second == rId)
             return aI->first;
-    return NULL;
+    return nullptr;
 }
 
 namespace
@@ -258,7 +258,7 @@ void CairoTextRender::DrawServerFontLayout( const ServerFontLayout& rLayout )
         if (!font_face)
         {
             const FontConfigFontOptions *pOptions = rFont.GetFontOptions().get();
-            void *pPattern = pOptions ? pOptions->GetPattern(aFace, aId.mbEmbolden) : NULL;
+            void *pPattern = pOptions ? pOptions->GetPattern(aFace, aId.mbEmbolden) : nullptr;
             if (pPattern)
                 font_face = cairo_ft_font_face_create_for_pattern(static_cast<FcPattern*>(pPattern));
             if (!font_face)
@@ -348,7 +348,7 @@ void CairoTextRender::DrawServerFontLayout( const ServerFontLayout& rLayout )
 const FontCharMapPtr CairoTextRender::GetFontCharMap() const
 {
     if( !mpServerFont[0] )
-        return NULL;
+        return nullptr;
 
     const FontCharMapPtr pFCMap = mpServerFont[0]->GetFontCharMap();
     return pFCMap;
@@ -457,7 +457,7 @@ CairoTextRender::GetFontMetric( ImplFontMetricData *pMetric, int nFallbackLevel 
     if( nFallbackLevel >= MAX_FALLBACK )
         return;
 
-    if( mpServerFont[nFallbackLevel] != NULL )
+    if( mpServerFont[nFallbackLevel] != nullptr )
     {
         long rDummyFactor;
         mpServerFont[nFallbackLevel]->FetchFontMetric( *pMetric, rDummyFactor );
@@ -514,7 +514,7 @@ bool CairoTextRender::GetGlyphOutline( sal_GlyphId aGlyphId,
 
 SalLayout* CairoTextRender::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackLevel )
 {
-    SalLayout* pLayout = NULL;
+    SalLayout* pLayout = nullptr;
 
     if( mpServerFont[ nFallbackLevel ]
     && !(rArgs.mnFlags & SalLayoutFlags::DisableGlyphProcessing) )
@@ -541,7 +541,7 @@ SystemFontData CairoTextRender::GetSysFontData( int nFallbackLevel ) const
     if (nFallbackLevel >= MAX_FALLBACK) nFallbackLevel = MAX_FALLBACK - 1;
     if (nFallbackLevel < 0 ) nFallbackLevel = 0;
 
-    if (mpServerFont[nFallbackLevel] != NULL)
+    if (mpServerFont[nFallbackLevel] != nullptr)
     {
         ServerFont* rFont = mpServerFont[nFallbackLevel];
         aSysFontData.nFontId = rFont->GetFtFace();

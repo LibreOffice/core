@@ -42,7 +42,7 @@ OpenGLWindowImpl::~OpenGLWindowImpl()
 OpenGLWindow::OpenGLWindow(vcl::Window* pParent):
     Window(pParent, 0),
     mxImpl(new OpenGLWindowImpl(this)),
-    mpRenderer(NULL)
+    mpRenderer(nullptr)
 {
 }
 
@@ -55,7 +55,7 @@ void OpenGLWindow::dispose()
 {
     if(mpRenderer)
         mpRenderer->contextDestroyed();
-    mpRenderer = NULL;
+    mpRenderer = nullptr;
     mxImpl.reset();
     Window::dispose();
 }

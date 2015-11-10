@@ -567,7 +567,7 @@ public:
     SAL_DLLPRIVATE vcl::Window*         ImplGetWindow();
     SAL_DLLPRIVATE ImplWinData*         ImplGetWinData() const;
     SAL_DLLPRIVATE vcl::Window*         ImplGetClientWindow() const;
-    SAL_DLLPRIVATE vcl::Window*         ImplGetDlgWindow( sal_uInt16 n, GetDlgWindowType nType, sal_uInt16 nStart = 0, sal_uInt16 nEnd = 0xFFFF, sal_uInt16* pIndex = NULL );
+    SAL_DLLPRIVATE vcl::Window*         ImplGetDlgWindow( sal_uInt16 n, GetDlgWindowType nType, sal_uInt16 nStart = 0, sal_uInt16 nEnd = 0xFFFF, sal_uInt16* pIndex = nullptr );
     SAL_DLLPRIVATE vcl::Window*         ImplGetParent() const;
     SAL_DLLPRIVATE vcl::Window*         ImplFindWindow( const Point& rFramePos );
 
@@ -797,7 +797,7 @@ protected:
 
             void                        SetCompoundControl( bool bCompound );
 
-            void                        CallEventListeners( sal_uLong nEvent, void* pData = NULL );
+            void                        CallEventListeners( sal_uLong nEvent, void* pData = nullptr );
     static  void                        FireVclEvent( VclSimpleEvent& rEvent );
 
     virtual bool                        AcquireGraphics() const override;
@@ -882,7 +882,7 @@ public:
     void                                AddChildEventListener( const Link<VclWindowEvent&,void>& rEventListener );
     void                                RemoveChildEventListener( const Link<VclWindowEvent&,void>& rEventListener );
 
-    ImplSVEvent *                       PostUserEvent( const Link<void*,void>& rLink, void* pCaller = NULL, bool bReferenceLink = false );
+    ImplSVEvent *                       PostUserEvent( const Link<void*,void>& rLink, void* pCaller = nullptr, bool bReferenceLink = false );
     void                                RemoveUserEvent( ImplSVEvent * nUserEvent );
 
     void                                IncrementLockCount();
@@ -949,7 +949,7 @@ public:
     void                                SetInputContext( const InputContext& rInputContext );
     const InputContext&                 GetInputContext() const;
     void                                EndExtTextInput( EndExtTextInputFlags nFlags );
-    void                                SetCursorRect( const Rectangle* pRect = NULL, long nExtTextInputWidth = 0 );
+    void                                SetCursorRect( const Rectangle* pRect = nullptr, long nExtTextInputWidth = 0 );
     const Rectangle*                    GetCursorRect() const;
     long                                GetCursorExtTextInputWidth() const;
 
@@ -1018,7 +1018,7 @@ public:
 
     void                                EnableInput( bool bEnable = true, bool bChild = true );
     void                                EnableInput( bool bEnable, bool bChild, bool bSysWin,
-                                                     const vcl::Window* pExcludeWindow = NULL );
+                                                     const vcl::Window* pExcludeWindow = nullptr );
     bool                                IsInputEnabled() const;
 
     /** Override <code>EnableInput</code>. This can be necessary due to other people
@@ -1248,8 +1248,8 @@ public:
     void                                EndAutoScroll();
 
     bool                                HandleScrollCommand( const CommandEvent& rCmd,
-                                                             ScrollBar* pHScrl = NULL,
-                                                             ScrollBar* pVScrl = NULL );
+                                                             ScrollBar* pHScrl = nullptr,
+                                                             ScrollBar* pVScrl = nullptr );
 
     void                                SaveBackground( const Point& rPos, const Size& rSize,
                                                         const Point& rDestOff, VirtualDevice& rSaveDevice );

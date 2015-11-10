@@ -45,7 +45,7 @@ public:
 
 FloatingWindow::ImplData::ImplData()
 {
-    mpBox = NULL;
+    mpBox = nullptr;
 }
 
 FloatingWindow::ImplData::~ImplData()
@@ -77,7 +77,7 @@ void FloatingWindow::ImplInit( vcl::Window* pParent, WinBits nStyle )
     {
         mpWindowImpl->mbOverlapWin = true;
         nStyle |= WB_DIALOGCONTROL;
-        SystemWindow::ImplInit(pParent, nStyle, NULL);
+        SystemWindow::ImplInit(pParent, nStyle, nullptr);
     }
     else
     {
@@ -92,7 +92,7 @@ void FloatingWindow::ImplInit( vcl::Window* pParent, WinBits nStyle )
             // nFloatWinStyle |= WB_CLOSEABLE;
             mpWindowImpl->mbFrame = true;
             mpWindowImpl->mbOverlapWin = true;
-            SystemWindow::ImplInit(pParent, nFloatWinStyle & ~WB_BORDER, NULL);
+            SystemWindow::ImplInit(pParent, nFloatWinStyle & ~WB_BORDER, nullptr);
         }
         else
         {
@@ -110,7 +110,7 @@ void FloatingWindow::ImplInit( vcl::Window* pParent, WinBits nStyle )
                 nStyle |= WB_CLOSEABLE; // make undecorated floaters closeable
             }
             pBorderWin  = VclPtr<ImplBorderWindow>::Create(pParent, nStyle, nBorderStyle);
-            SystemWindow::ImplInit(pBorderWin, nStyle & ~WB_BORDER, NULL);
+            SystemWindow::ImplInit(pBorderWin, nStyle & ~WB_BORDER, nullptr);
             pBorderWin->mpWindowImpl->mpClientWindow = this;
             pBorderWin->GetBorder(mpWindowImpl->mnLeftBorder, mpWindowImpl->mnTopBorder,
                                   mpWindowImpl->mnRightBorder, mpWindowImpl->mnBottomBorder);
@@ -121,9 +121,9 @@ void FloatingWindow::ImplInit( vcl::Window* pParent, WinBits nStyle )
     }
     SetActivateMode( ActivateModeFlags::NONE );
 
-    mpNextFloat             = NULL;
-    mpFirstPopupModeWin     = NULL;
-    mnPostId                = 0;
+    mpNextFloat             = nullptr;
+    mpFirstPopupModeWin     = nullptr;
+    mnPostId                = nullptr;
     mnTitle                 = (nStyle & (WB_MOVEABLE | WB_POPUP)) ? FloatWinTitleType::Normal : FloatWinTitleType::NONE;
     mnOldTitle              = mnTitle;
     mnPopupModeFlags        = FloatWinPopupFlags::NONE;
@@ -158,10 +158,10 @@ FloatingWindow::FloatingWindow(vcl::Window* pParent, WinBits nStyle) :
 
 FloatingWindow::FloatingWindow(vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription, const css::uno::Reference<css::frame::XFrame> &rFrame)
     : SystemWindow(WINDOW_FLOATINGWINDOW)
-    , mpNextFloat(0)
-    , mpFirstPopupModeWin(0)
-    , mpImplData(0)
-    , mnPostId(0)
+    , mpNextFloat(nullptr)
+    , mpFirstPopupModeWin(nullptr)
+    , mpImplData(nullptr)
+    , mnPostId(nullptr)
     , mnPopupModeFlags(FloatWinPopupFlags::NONE)
     , mnTitle(FloatWinTitleType::Unknown)
     , mnOldTitle(FloatWinTitleType::Unknown)
@@ -181,7 +181,7 @@ FloatingWindow::FloatingWindow(vcl::Window* pParent, const OString& rID, const O
 void FloatingWindow::doDeferredInit(WinBits nBits)
 {
     vcl::Window *pParent = mpDialogParent;
-    mpDialogParent = NULL;
+    mpDialogParent = nullptr;
     ImplInit(pParent, nBits);
     mbIsDefferedInit = false;
 }
@@ -223,11 +223,11 @@ void FloatingWindow::dispose()
 
         if ( mnPostId )
             Application::RemoveUserEvent( mnPostId );
-        mnPostId = 0;
+        mnPostId = nullptr;
     }
 
     delete mpImplData;
-    mpImplData = NULL;
+    mpImplData = nullptr;
 
     mpNextFloat.clear();
     mpFirstPopupModeWin.clear();
@@ -503,7 +503,7 @@ FloatingWindow* FloatingWindow::ImplFloatHitTest( vcl::Window* pReference, const
     while ( pWin );
 
     rHitTest = HITTEST_OUTSIDE;
-    return NULL;
+    return nullptr;
 }
 
 FloatingWindow* FloatingWindow::ImplFindLastLevelFloat()
@@ -542,7 +542,7 @@ bool FloatingWindow::ImplIsFloatPopupModeWindow( const vcl::Window* pWindow )
 IMPL_LINK_NOARG_TYPED(FloatingWindow, ImplEndPopupModeHdl, void*, void)
 {
     VclPtr<FloatingWindow> pThis(this);
-    mnPostId            = 0;
+    mnPostId            = nullptr;
     mnPopupModeFlags    = FloatWinPopupFlags::NONE;
     mbPopupMode         = false;
     PopupModeEnd();
@@ -606,7 +606,7 @@ void FloatingWindow::ImplCallPopupModeEnd()
 
     // call Handler asynchronously.
     if ( mpImplData && !mnPostId )
-        mnPostId = Application::PostUserEvent( LINK( this, FloatingWindow, ImplEndPopupModeHdl ), NULL, true );
+        mnPostId = Application::PostUserEvent( LINK( this, FloatingWindow, ImplEndPopupModeHdl ), nullptr, true );
 }
 
 void FloatingWindow::PopupModeEnd()
@@ -771,7 +771,7 @@ void FloatingWindow::ImplEndPopupMode( FloatWinPopupEndFlags nFlags, sal_uLong n
 
     // delete window from the list
     pSVData->maWinData.mpFirstFloat = mpNextFloat;
-    mpNextFloat = NULL;
+    mpNextFloat = nullptr;
 
     FloatWinPopupFlags nPopupModeFlags = mnPopupModeFlags;
 
@@ -806,7 +806,7 @@ void FloatingWindow::ImplEndPopupMode( FloatWinPopupEndFlags nFlags, sal_uLong n
     if ( mpImplData->mpBox )
     {
         mpImplData->mpBox->ImplFloatControl( false, this );
-        mpImplData->mpBox = NULL;
+        mpImplData->mpBox = nullptr;
     }
 
     // call PopupModeEnd-Handler depending on parameter

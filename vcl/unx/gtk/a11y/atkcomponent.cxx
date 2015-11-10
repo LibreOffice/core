@@ -126,7 +126,7 @@ component_wrapper_ref_accessible_at_point (AtkComponent *component,
         g_warning( "Exception in getAccessibleAtPoint()" );
     }
 
-    return NULL;
+    return nullptr;
 }
 
 /*****************************************************************************/
@@ -289,14 +289,14 @@ component_wrapper_add_focus_handler (AtkComponent    *component,
     match_type = (GSignalMatchType) (G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC);
     signal_id = g_signal_lookup( "focus-event", ATK_TYPE_OBJECT );
 
-    ret = g_signal_handler_find( component, match_type, signal_id, 0, NULL,
-                                 static_cast<gpointer>(&handler), NULL);
+    ret = g_signal_handler_find( component, match_type, signal_id, 0, nullptr,
+                                 static_cast<gpointer>(&handler), nullptr);
     if (!ret)
     {
         return g_signal_connect_closure_by_id (component,
                                                signal_id, 0,
                                                g_cclosure_new (
-                                               G_CALLBACK (handler), NULL,
+                                               G_CALLBACK (handler), nullptr,
                                                nullptr),
                                                FALSE);
     }
@@ -322,7 +322,7 @@ component_wrapper_remove_focus_handler (AtkComponent  *component,
 void
 componentIfaceInit (AtkComponentIface *iface)
 {
-  g_return_if_fail (iface != NULL);
+  g_return_if_fail (iface != nullptr);
 
   iface->add_focus_handler = component_wrapper_add_focus_handler;
   iface->contains = component_wrapper_contains;

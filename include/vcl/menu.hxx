@@ -108,7 +108,7 @@ struct ImplMenuDelData
     explicit ImplMenuDelData( const Menu* );
     ~ImplMenuDelData();
 
-    bool isDeleted() const { return mpMenu == 0; }
+    bool isDeleted() const { return mpMenu == nullptr; }
 };
 
 struct MenuLogo
@@ -176,7 +176,7 @@ protected:
     SAL_DLLPRIVATE sal_uInt16 ImplGetPrevVisible( sal_uInt16 nPos ) const;
     SAL_DLLPRIVATE sal_uInt16 ImplGetNextVisible( sal_uInt16 nPos ) const;
     SAL_DLLPRIVATE void ImplPaint(vcl::RenderContext& rRenderContext,
-                                  sal_uInt16 nBorder, long nOffY = 0, MenuItemData* pThisDataOnly = 0,
+                                  sal_uInt16 nBorder, long nOffY = 0, MenuItemData* pThisDataOnly = nullptr,
                                   bool bHighlighted = false, bool bLayout = false, bool bRollover = false ) const;
     SAL_DLLPRIVATE void ImplPaintMenuTitle(vcl::RenderContext&, const Rectangle& rRect) const;
     SAL_DLLPRIVATE void ImplSelect();
@@ -277,7 +277,7 @@ public:
     void SetItemBits( sal_uInt16 nItemId, MenuItemBits nBits );
     MenuItemBits GetItemBits( sal_uInt16 nItemId ) const;
 
-    void SetUserValue(sal_uInt16 nItemId, sal_uLong nValue, MenuUserDataReleaseFunction aFunc=0);
+    void SetUserValue(sal_uInt16 nItemId, sal_uLong nValue, MenuUserDataReleaseFunction aFunc=nullptr);
     sal_uLong GetUserValue(sal_uInt16 nItemId) const;
 
     void SetPopupMenu( sal_uInt16 nItemId, PopupMenu* pMenu );
@@ -516,7 +516,7 @@ private:
 protected:
     SAL_DLLPRIVATE sal_uInt16 ImplExecute( vcl::Window* pWindow, const Rectangle& rRect, FloatWinPopupFlags nPopupFlags, Menu* pStaredFrom, bool bPreSelectFirst );
     SAL_DLLPRIVATE long ImplCalcHeight( sal_uInt16 nEntries ) const;
-    SAL_DLLPRIVATE sal_uInt16 ImplCalcVisEntries( long nMaxHeight, sal_uInt16 nStartEntry = 0, sal_uInt16* pLastVisible = NULL ) const;
+    SAL_DLLPRIVATE sal_uInt16 ImplCalcVisEntries( long nMaxHeight, sal_uInt16 nStartEntry = 0, sal_uInt16* pLastVisible = nullptr ) const;
 
 public:
     PopupMenu();

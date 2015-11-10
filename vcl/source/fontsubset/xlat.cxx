@@ -43,8 +43,8 @@ ConverterCache::ConverterCache()
 {
     for( int i = 0; i <= MAX_CVT_SELECT; ++i)
     {
-        maConverterCache[i] = NULL;
-        maContexts[i] = NULL;
+        maConverterCache[i] = nullptr;
+        maContexts[i] = nullptr;
     }
 }
 

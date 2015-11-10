@@ -215,7 +215,7 @@ private:
     void*   pData;
 
 public:
-    VclWindowEvent( vcl::Window* pWin, sal_uLong n, void* pDat = NULL );
+    VclWindowEvent( vcl::Window* pWin, sal_uLong n, void* pDat = nullptr );
     virtual ~VclWindowEvent();
     TYPEINFO_OVERRIDE();
 

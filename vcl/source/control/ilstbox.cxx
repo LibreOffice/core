@@ -373,7 +373,7 @@ void ImplEntryList::SetEntryData( sal_Int32 nPos, void* pNewData )
 void* ImplEntryList::GetEntryData( sal_Int32 nPos ) const
 {
     ImplEntryType* pImplEntry = GetEntry( nPos );
-    return pImplEntry ? pImplEntry->mpUserData : NULL;
+    return pImplEntry ? pImplEntry->mpUserData : nullptr;
 }
 
 void ImplEntryList::SetEntryFlags( sal_Int32 nPos, ListBoxEntryFlags nFlags )
@@ -733,11 +733,11 @@ void ImplListBoxWindow::ImplCallSelect()
             ImplUpdateEntryMetrics( *pNewEntry );
             GetEntryList()->SetMRUCount( ++nMRUCount );
             SetSeparatorPos( nMRUCount ? nMRUCount-1 : 0 );
-            maMRUChangedHdl.Call( NULL );
+            maMRUChangedHdl.Call( nullptr );
         }
     }
 
-    maSelectHdl.Call( NULL );
+    maSelectHdl.Call( nullptr );
     mbSelectionChanged = false;
 }
 
@@ -801,7 +801,7 @@ sal_Int32 ImplListBoxWindow::GetEntryPosForPoint( const Point& rPoint ) const
         nY += pEntry->mnHeight;
         pEntry = mpEntryList->GetEntryPtr( ++nSelect );
     }
-    if( pEntry == NULL )
+    if( pEntry == nullptr )
         nSelect = LISTBOX_ENTRY_NOTFOUND;
 
     return nSelect;
@@ -934,7 +934,7 @@ void ImplListBoxWindow::MouseMove( const MouseEvent& rMEvt )
                         // VCLEVENT_LISTBOX_SELECT vcl event.
                         else
                         {
-                            maListItemSelectHdl.Call(NULL);
+                            maListItemSelectHdl.Call(nullptr);
                         }
                     }
                     mbTrackingSelect = false;
@@ -1188,7 +1188,7 @@ void ImplListBoxWindow::Tracking( const TrackingEvent& rTEvt )
         }
         else
         {
-            maCancelHdl.Call( NULL );
+            maCancelHdl.Call( nullptr );
             if ( !mbMulti )
             {
                 mbTrackingSelect = true;
@@ -1813,8 +1813,8 @@ void ImplListBoxWindow::DrawEntry(vcl::RenderContext& rRenderContext, sal_Int32 
 
     if (bDrawText)
     {
-        MetricVector* pVector = bLayout ? &mpControlData->mpLayoutData->m_aUnicodeBoundRects : NULL;
-        OUString* pDisplayText = bLayout ? &mpControlData->mpLayoutData->m_aDisplayText : NULL;
+        MetricVector* pVector = bLayout ? &mpControlData->mpLayoutData->m_aUnicodeBoundRects : nullptr;
+        OUString* pDisplayText = bLayout ? &mpControlData->mpLayoutData->m_aDisplayText : nullptr;
         OUString aStr(mpEntryList->GetEntryText(nPos));
         if (!aStr.isEmpty())
         {
@@ -2633,9 +2633,9 @@ void ImplWin::FillLayoutData() const
 
 bool ImplWin::PreNotify( NotifyEvent& rNEvt )
 {
-    const MouseEvent* pMouseEvt = NULL;
+    const MouseEvent* pMouseEvt = nullptr;
 
-    if( (rNEvt.GetType() == MouseNotifyEvent::MOUSEMOVE) && (pMouseEvt = rNEvt.GetMouseEvent()) != NULL )
+    if( (rNEvt.GetType() == MouseNotifyEvent::MOUSEMOVE) && (pMouseEvt = rNEvt.GetMouseEvent()) != nullptr )
     {
         if( pMouseEvt->IsEnterWindow() || pMouseEvt->IsLeaveWindow() )
         {
@@ -2850,8 +2850,8 @@ void ImplWin::DrawEntry(vcl::RenderContext& rRenderContext, bool bDrawImage, boo
             aTextRect.Left() += nMaxWidth + IMG_TXT_DISTANCE;
         }
 
-        MetricVector* pVector = bLayout ? &mpControlData->mpLayoutData->m_aUnicodeBoundRects : NULL;
-        OUString* pDisplayText = bLayout ? &mpControlData->mpLayoutData->m_aDisplayText : NULL;
+        MetricVector* pVector = bLayout ? &mpControlData->mpLayoutData->m_aUnicodeBoundRects : nullptr;
+        OUString* pDisplayText = bLayout ? &mpControlData->mpLayoutData->m_aDisplayText : nullptr;
         rRenderContext.DrawText( aTextRect, maString, nTextStyle, pVector, pDisplayText );
     }
 
@@ -2939,7 +2939,7 @@ void ImplBtn::MouseButtonDown( const MouseEvent& )
 ImplListBoxFloatingWindow::ImplListBoxFloatingWindow( vcl::Window* pParent ) :
     FloatingWindow( pParent, WB_BORDER | WB_SYSTEMWINDOW | WB_NOSHADOW )    // no drop shadow for list boxes
 {
-    mpImplLB = NULL;
+    mpImplLB = nullptr;
     mnDDLineCount = 0;
     mbAutoWidth = false;
 

@@ -25,8 +25,8 @@
 
 void TabDialog::ImplInitTabDialogData()
 {
-    mpFixedLine     = NULL;
-    mpViewWindow    = NULL;
+    mpFixedLine     = nullptr;
+    mpViewWindow    = nullptr;
     meViewAlign     = WindowAlign::Left;
     mbPosControls   = true;
 }
@@ -39,7 +39,7 @@ void TabDialog::ImplPosControls()
     Size        aCtrlSize( IMPL_MINSIZE_BUTTON_WIDTH, IMPL_MINSIZE_BUTTON_HEIGHT );
     long        nDownCtrl = 0;
     long        nOffY = 0;
-    vcl::Window*     pTabControl = NULL;
+    vcl::Window*     pTabControl = nullptr;
 
     vcl::Window* pChild = GetWindow( GetWindowType::FirstChild );
     while ( pChild )

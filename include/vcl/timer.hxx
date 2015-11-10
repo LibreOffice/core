@@ -35,7 +35,7 @@ protected:
     virtual sal_uInt64 UpdateMinPeriod( sal_uInt64 nMinPeriod, sal_uInt64 nTime ) const override;
 
 public:
-    Timer( const sal_Char *pDebugName = NULL );
+    Timer( const sal_Char *pDebugName = nullptr );
     Timer( const Timer& rTimer );
 
     /// Make it possible to associate a callback with this timer handler

@@ -68,17 +68,17 @@
 #include <vcl/opengl/OpenGLHelper.hxx>
 
 X11SalGraphics::X11SalGraphics():
-    m_pFrame(NULL),
-    m_pVDev(NULL),
-    m_pColormap(NULL),
-    m_pDeleteColormap(NULL),
+    m_pFrame(nullptr),
+    m_pVDev(nullptr),
+    m_pColormap(nullptr),
+    m_pDeleteColormap(nullptr),
     hDrawable_(None),
     m_nXScreen( 0 ),
-    m_pXRenderFormat(NULL),
+    m_pXRenderFormat(nullptr),
     m_aXRenderPicture(0),
-    pPaintRegion_(NULL),
-    mpClipRegion(NULL),
-    pFontGC_(NULL),
+    pPaintRegion_(nullptr),
+    mpClipRegion(nullptr),
+    pFontGC_(nullptr),
     nTextPixel_(0),
     hBrush_(None),
     bWindow_(false),
@@ -118,7 +118,7 @@ void X11SalGraphics::freeResources()
     if( hBrush_ )       XFreePixmap( pDisplay, hBrush_ ), hBrush_ = None;
     if( pFontGC_ ) XFreeGC( pDisplay, pFontGC_ ), pFontGC_ = None;
     if( m_pDeleteColormap )
-        delete m_pDeleteColormap, m_pColormap = m_pDeleteColormap = NULL;
+        delete m_pDeleteColormap, m_pColormap = m_pDeleteColormap = nullptr;
 
     if( m_aXRenderPicture )
         XRenderPeer::GetInstance().FreePicture( m_aXRenderPicture ), m_aXRenderPicture = 0;
@@ -146,7 +146,7 @@ void X11SalGraphics::SetDrawable( Drawable aDrawable, SalX11Screen nXScreen )
     }
 
     hDrawable_ = aDrawable;
-    SetXRenderFormat( NULL );
+    SetXRenderFormat( nullptr );
     if( m_aXRenderPicture )
     {
         XRenderPeer::GetInstance().FreePicture( m_aXRenderPicture );
@@ -163,7 +163,7 @@ void X11SalGraphics::Init( SalFrame *pFrame, Drawable aTarget,
     m_nXScreen  = nXScreen;
 
     m_pFrame    = pFrame;
-    m_pVDev     = NULL;
+    m_pVDev     = nullptr;
 
     bWindow_    = true;
     bVirDev_    = false;
@@ -272,7 +272,7 @@ bool X11SalGraphics::GetDitherPixmap( SalColor nSalColor )
                8, 8 );                      // width & height
 
     // destroy image-frame but not palette-data
-    pImage->data = NULL;
+    pImage->data = nullptr;
     XDestroyImage( pImage );
 
     return true;
@@ -442,7 +442,7 @@ bool X11SalGraphics::drawEPS( long nX, long nY, long nWidth,
 
 XRenderPictFormat* X11SalGraphics::GetXRenderFormat() const
 {
-    if( m_pXRenderFormat == NULL )
+    if( m_pXRenderFormat == nullptr )
         m_pXRenderFormat = XRenderPeer::GetInstance().FindVisualFormat( GetVisual().visual );
     return m_pXRenderFormat;
 }

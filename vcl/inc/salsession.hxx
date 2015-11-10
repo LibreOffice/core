@@ -83,8 +83,8 @@ class VCL_PLUGIN_PUBLIC SalSession
     void *              m_pProcData;
 public:
     SalSession()
-        : m_aProc(0)
-        , m_pProcData(NULL)
+        : m_aProc(nullptr)
+        , m_pProcData(nullptr)
     {
     }
     virtual ~SalSession();

@@ -54,20 +54,20 @@ GLWindow::~GLWindow()
 }
 
 OpenGLContext::OpenGLContext():
-    mpWindow(NULL),
-    m_pChildWindow(NULL),
+    mpWindow(nullptr),
+    m_pChildWindow(nullptr),
     mbInitialized(false),
     mnRefCount(0),
     mbRequestLegacyContext(false),
     mbUseDoubleBufferedRendering(true),
     mnFramebufferCount(0),
-    mpCurrentFramebuffer(NULL),
-    mpFirstFramebuffer(NULL),
-    mpLastFramebuffer(NULL),
-    mpCurrentProgram(NULL),
+    mpCurrentFramebuffer(nullptr),
+    mpFirstFramebuffer(nullptr),
+    mpLastFramebuffer(nullptr),
+    mpCurrentProgram(nullptr),
     mnPainting(0),
-    mpPrevContext(NULL),
-    mpNextContext(NULL)
+    mpPrevContext(nullptr),
+    mpNextContext(nullptr)
 {
     VCL_GL_INFO("vcl.opengl", "new context: " << this);
 
@@ -477,7 +477,7 @@ private:
 
 public:
     TempErrorHandler(Display* dpy, errorHandler newErrorHandler)
-        : oldErrorHandler(0)
+        : oldErrorHandler(nullptr)
         , mdpy(dpy)
     {
         if (mdpy)
@@ -513,8 +513,8 @@ GLXFBConfig* getFBConfig(Display* dpy, Window win, int& nBestFBC, bool bUseDoubl
 {
     OpenGLZone aZone;
 
-    if( dpy == 0 || !glXQueryExtension( dpy, NULL, NULL ) )
-        return NULL;
+    if( dpy == nullptr || !glXQueryExtension( dpy, nullptr, nullptr ) )
+        return nullptr;
 
     VCL_GL_INFO("vcl.opengl", "window: " << win);
 
@@ -522,8 +522,8 @@ GLXFBConfig* getFBConfig(Display* dpy, Window win, int& nBestFBC, bool bUseDoubl
     if( !XGetWindowAttributes( dpy, win, &xattr ) )
     {
         SAL_WARN("vcl.opengl", "Failed to get window attributes for fbconfig " << win);
-        xattr.screen = 0;
-        xattr.visual = NULL;
+        xattr.screen = nullptr;
+        xattr.visual = nullptr;
     }
 
     int screen = XScreenNumberOfScreen( xattr.screen );
@@ -553,7 +553,7 @@ GLXFBConfig* getFBConfig(Display* dpy, Window win, int& nBestFBC, bool bUseDoubl
     if(!pFBC)
     {
         SAL_WARN("vcl.opengl", "no suitable fb format found");
-        return NULL;
+        return nullptr;
     }
 
     int best_num_samp = -1;
@@ -601,7 +601,7 @@ Visual* getVisual(Display* dpy, Window win)
     if( !XGetWindowAttributes( dpy, win, &xattr ) )
     {
         SAL_WARN("vcl.opengl", "Failed to get window attributes for getVisual " << win);
-        xattr.visual = NULL;
+        xattr.visual = nullptr;
     }
     VCL_GL_INFO("vcl.opengl", "using VisualID " << xattr.visual);
     return xattr.visual;
@@ -622,7 +622,7 @@ bool OpenGLContext::init( vcl::Window* pParent )
     mpWindow = pParent ? pParent : m_xWindow.get();
     if(m_xWindow)
         m_xWindow->setPosSizePixel(0,0,0,0);
-    m_pChildWindow = 0;
+    m_pChildWindow = nullptr;
     initWindow();
     return ImplInit();
 }
@@ -676,7 +676,7 @@ bool OpenGLContext::ImplInit()
 
     OpenGLZone aZone;
 
-    GLXContext pSharedCtx( NULL );
+    GLXContext pSharedCtx( nullptr );
 #ifdef DBG_UTIL
     TempErrorHandler aErrorHandler(m_aGLWin.dpy, unxErrorHandler);
 #endif
@@ -1007,12 +1007,12 @@ void OpenGLContext::InitGLEWDebugging()
         if (glDebugMessageCallbackARB)
         {
             glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS_ARB);
-            glDebugMessageCallbackARB(&debug_callback, NULL);
+            glDebugMessageCallbackARB(&debug_callback, nullptr);
         }
         else if ( glDebugMessageCallback )
         {
             glEnable(GL_DEBUG_OUTPUT);
-            glDebugMessageCallback(&debug_callback, NULL);
+            glDebugMessageCallback(&debug_callback, nullptr);
         }
     }
 
@@ -1107,7 +1107,7 @@ bool OpenGLContext::initWindow()
 
 bool OpenGLContext::initWindow()
 {
-    const SystemEnvData* pChildSysData = 0;
+    const SystemEnvData* pChildSysData = nullptr;
     SystemWindowData winData = generateWinData(mpWindow, false);
     if( winData.pVisual )
     {
@@ -1191,8 +1191,8 @@ void OpenGLContext::reset()
             delete pFramebuffer;
             pFramebuffer = pPrevFramebuffer;
         }
-        mpFirstFramebuffer = NULL;
-        mpLastFramebuffer = NULL;
+        mpFirstFramebuffer = nullptr;
+        mpLastFramebuffer = nullptr;
     }
 
     // destroy all programs
@@ -1232,7 +1232,7 @@ void OpenGLContext::reset()
         if (itr != g_vShareList.end())
             g_vShareList.erase(itr);
 
-        glXMakeCurrent(m_aGLWin.dpy, None, NULL);
+        glXMakeCurrent(m_aGLWin.dpy, None, nullptr);
         if( glGetError() != GL_NO_ERROR )
         {
             SAL_WARN("vcl.opengl", "glError: " << glGetError());
@@ -1241,7 +1241,7 @@ void OpenGLContext::reset()
 
         if (mbPixmap && m_aGLWin.glPix != None)
             glXDestroyPixmap(m_aGLWin.dpy, m_aGLWin.glPix);
-        m_aGLWin.ctx = 0;
+        m_aGLWin.ctx = nullptr;
     }
 #endif
 }
@@ -1268,7 +1268,7 @@ SystemWindowData OpenGLContext::generateWinData(vcl::Window* pParent, bool)
 
     SystemWindowData aWinData;
     aWinData.nSize = sizeof(aWinData);
-    aWinData.pVisual = NULL;
+    aWinData.pVisual = nullptr;
 
 #if !defined(LIBO_HEADLESS)
     const SystemEnvData* sysData(pParent->GetSystemData());
@@ -1276,7 +1276,7 @@ SystemWindowData OpenGLContext::generateWinData(vcl::Window* pParent, bool)
     Display *dpy = static_cast<Display*>(sysData->pDisplay);
     Window win = sysData->aWindow;
 
-    if( dpy == 0 || !glXQueryExtension( dpy, NULL, NULL ) )
+    if( dpy == nullptr || !glXQueryExtension( dpy, nullptr, nullptr ) )
         return aWinData;
 
     initOpenGLFunctionPointers();
@@ -1287,7 +1287,7 @@ SystemWindowData OpenGLContext::generateWinData(vcl::Window* pParent, bool)
     if (!pFBC)
         return aWinData;
 
-    XVisualInfo* vi = 0;
+    XVisualInfo* vi = nullptr;
     if( best_fbc != -1 )
         vi = glXGetVisualFromFBConfig( dpy, pFBC[best_fbc] );
 
@@ -1420,7 +1420,7 @@ void OpenGLContext::registerAsCurrent()
         mpNextContext->mpPrevContext = mpPrevContext;
 
         mpPrevContext = pSVData->maGDIData.mpLastContext;
-        mpNextContext = NULL;
+        mpNextContext = nullptr;
         pSVData->maGDIData.mpLastContext->mpNextContext = this;
         pSVData->maGDIData.mpLastContext = this;
     }
@@ -1441,7 +1441,7 @@ void OpenGLContext::resetCurrent()
     // nothing
 #elif defined( UNX )
     if (m_aGLWin.dpy)
-        glXMakeCurrent(m_aGLWin.dpy, None, NULL);
+        glXMakeCurrent(m_aGLWin.dpy, None, nullptr);
 #endif
 }
 
@@ -1524,16 +1524,16 @@ bool OpenGLContext::BindFramebuffer( OpenGLFramebuffer* pFramebuffer )
 
 bool OpenGLContext::AcquireDefaultFramebuffer()
 {
-    return BindFramebuffer( NULL );
+    return BindFramebuffer( nullptr );
 }
 
 OpenGLFramebuffer* OpenGLContext::AcquireFramebuffer( const OpenGLTexture& rTexture )
 {
     OpenGLZone aZone;
 
-    OpenGLFramebuffer* pFramebuffer = NULL;
-    OpenGLFramebuffer* pFreeFbo = NULL;
-    OpenGLFramebuffer* pSameSizeFbo = NULL;
+    OpenGLFramebuffer* pFramebuffer = nullptr;
+    OpenGLFramebuffer* pFreeFbo = nullptr;
+    OpenGLFramebuffer* pSameSizeFbo = nullptr;
 
     // check if there is already a framebuffer attached to that texture
     pFramebuffer = mpLastFramebuffer;
@@ -1631,7 +1631,7 @@ void OpenGLContext::ReleaseFramebuffer( const OpenGLTexture& rTexture )
             BindFramebuffer( pFramebuffer );
             pFramebuffer->DetachTexture();
             if (mpCurrentFramebuffer == pFramebuffer)
-                BindFramebuffer( NULL );
+                BindFramebuffer( nullptr );
         }
         pFramebuffer = pFramebuffer->mpPrevFramebuffer;
     }
@@ -1651,7 +1651,7 @@ void OpenGLContext::ReleaseFramebuffers()
         }
         pFramebuffer = pFramebuffer->mpPrevFramebuffer;
     }
-    BindFramebuffer( NULL );
+    BindFramebuffer( nullptr );
 }
 
 OpenGLProgram* OpenGLContext::GetProgram( const OUString& rVertexShader, const OUString& rFragmentShader, const rtl::OString& preamble )
@@ -1677,7 +1677,7 @@ OpenGLProgram* OpenGLContext::GetProgram( const OUString& rVertexShader, const O
     rtl::OString aPersistentKey = OpenGLHelper::GetDigest( rVertexShader, rFragmentShader, preamble );
     std::shared_ptr<OpenGLProgram> pProgram = std::make_shared<OpenGLProgram>();
     if( !pProgram->Load( rVertexShader, rFragmentShader, preamble, aPersistentKey ) )
-        return NULL;
+        return nullptr;
 
     maPrograms.insert(std::make_pair(aNameBasedKey, pProgram));
     return pProgram.get();
@@ -1697,7 +1697,7 @@ OpenGLProgram* OpenGLContext::UseProgram( const OUString& rVertexShader, const O
     if (!mpCurrentProgram)
     {
         SAL_WARN("vcl.opengl", "OpenGLContext::UseProgram: mpCurrentProgram is 0");
-        return 0;
+        return nullptr;
     }
 
     mpCurrentProgram->Use();

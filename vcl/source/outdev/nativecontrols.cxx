@@ -53,7 +53,7 @@ static bool EnableNativeWidget( const OutputDevice& i_rDevice )
     {
         const vcl::ExtOutDevData* pOutDevData( i_rDevice.GetExtOutDevData() );
         const vcl::PDFExtOutDevData* pPDFData( dynamic_cast< const vcl::PDFExtOutDevData* >( pOutDevData ) );
-        if ( pPDFData != NULL )
+        if ( pPDFData != nullptr )
             return false;
         return true;
     }

@@ -55,7 +55,7 @@ bool
 AppendPS (FILE* pDst, osl::File* pSrc, unsigned char* pBuffer,
           sal_uInt32 nBlockSize = nBLOCKSIZE)
 {
-    if ((pDst == NULL) || (pSrc == NULL))
+    if ((pDst == nullptr) || (pSrc == nullptr))
         return false;
 
     if (pSrc->setPos(osl_Pos_Absolut, 0) != osl::FileBase::E_None)
@@ -63,7 +63,7 @@ AppendPS (FILE* pDst, osl::File* pSrc, unsigned char* pBuffer,
 
     if (nBlockSize == 0)
         nBlockSize = nBLOCKSIZE;
-    if (pBuffer == NULL)
+    if (pBuffer == nullptr)
         pBuffer = static_cast<unsigned char*>(alloca (nBlockSize));
 
     sal_uInt64 nIn = 0;
@@ -88,13 +88,13 @@ AppendPS (FILE* pDst, osl::File* pSrc, unsigned char* pBuffer,
 osl::File*
 PrinterJob::CreateSpoolFile (const OUString& rName, const OUString& rExtension)
 {
-    osl::File*    pFile  = NULL;
+    osl::File*    pFile  = nullptr;
 
     OUString aFile = rName + rExtension;
     OUString aFileURL;
     osl::File::RC nError = osl::File::getFileURLFromSystemPath( aFile, aFileURL );
     if (nError != osl::File::E_None)
-        return NULL;
+        return nullptr;
     aFileURL = maSpoolDirName + "/" + aFileURL;
 
     pFile = new osl::File (aFileURL);
@@ -102,7 +102,7 @@ PrinterJob::CreateSpoolFile (const OUString& rName, const OUString& rExtension)
     if (nError != osl::File::E_None)
     {
         delete pFile;
-        return NULL;
+        return nullptr;
     }
 
     osl::File::setAttributes (aFileURL,
@@ -135,7 +135,7 @@ PrinterJob::GetPostscriptLevel (const JobData *pJobData) const
 {
     sal_uInt16 nPSLevel = 2;
 
-    if( pJobData == NULL )
+    if( pJobData == nullptr )
         pJobData = &m_aLastJobData;
 
     if( pJobData->m_nPSLevel )
@@ -177,9 +177,9 @@ PrinterJob::GetCurrentPageBody ()
  */
 PrinterJob::PrinterJob()
     : mnFileMode(0)
-    , mpJobHeader(NULL)
-    , mpJobTrailer(NULL)
-    , m_pGraphics(NULL)
+    , mpJobHeader(nullptr)
+    , mpJobTrailer(nullptr)
+    , m_pGraphics(nullptr)
     , mnResolution(96)
     , mnWidthPt(0)
     , mnHeightPt(0)
@@ -407,8 +407,8 @@ PrinterJob::StartJob (
     writeProlog (mpJobHeader, rSetupData);
 
     // mark last job setup as not set
-    m_aLastJobData.m_pParser = NULL;
-    m_aLastJobData.m_aContext.setParser( NULL );
+    m_aLastJobData.m_pParser = nullptr;
+    m_aLastJobData.m_aContext.setParser( nullptr );
 
     return true;
 }
@@ -448,7 +448,7 @@ PrinterJob::EndJob()
      * spool the set of files to their final destination, this is U**X dependent
      */
 
-    FILE* pDestFILE = NULL;
+    FILE* pDestFILE = nullptr;
 
     /* create a destination either as file or as a pipe */
     bool bSpoolToFile = !maFileName.isEmpty();
@@ -462,7 +462,7 @@ PrinterJob::EndJob()
             if( nFile != -1 )
             {
                 pDestFILE = fdopen( nFile, "w" );
-                if( pDestFILE == NULL )
+                if( pDestFILE == nullptr )
                 {
                     close( nFile );
                     unlink( aFileName.getStr() );
@@ -474,17 +474,17 @@ PrinterJob::EndJob()
                 (void)chmod( aFileName.getStr(), mnFileMode );
             }
         }
-        if (pDestFILE == NULL)
+        if (pDestFILE == nullptr)
             pDestFILE = fopen (aFileName.getStr(), "w");
 
-        if (pDestFILE == NULL)
+        if (pDestFILE == nullptr)
             return false;
     }
     else
     {
         PrinterInfoManager& rPrinterInfoManager = PrinterInfoManager::get ();
         pDestFILE = rPrinterInfoManager.startSpool( m_aLastJobData.m_aPrinterName, m_bQuickJob );
-        if (pDestFILE == NULL)
+        if (pDestFILE == nullptr)
             return false;
     }
 
@@ -557,7 +557,7 @@ PrinterJob::InitPaperSize (const JobData& rJobSetup)
 
     int nLeft = 0, nRight = 0, nUpper = 0, nLower = 0;
     const PPDParser* pParser = rJobSetup.m_aContext.getParser();
-    if (pParser != NULL)
+    if (pParser != nullptr)
         pParser->getMargins (aPaper, nLeft, nRight, nUpper, nLower);
 
     mnResolution    = nRes;
@@ -719,7 +719,7 @@ bool PrinterJob::writeFeatureList( osl::File* pFile, const JobData& rJob, bool b
     // sanity check
     if( rJob.m_pParser == rJob.m_aContext.getParser() &&
         rJob.m_pParser &&
-        ( m_aLastJobData.m_pParser == rJob.m_pParser || m_aLastJobData.m_pParser == NULL )
+        ( m_aLastJobData.m_pParser == rJob.m_pParser || m_aLastJobData.m_pParser == nullptr )
         )
     {
         int i;
@@ -746,7 +746,7 @@ bool PrinterJob::writeFeatureList( osl::File* pFile, const JobData& rJob, bool b
                 const PPDValue* pValue = rJob.m_aContext.getValue( pKey );
                 if( pValue
                     && pValue->m_eType == eInvocation
-                    && ( m_aLastJobData.m_pParser == NULL
+                    && ( m_aLastJobData.m_pParser == nullptr
                          || m_aLastJobData.m_aContext.getValue( pKey ) != pValue
                          || bDocumentSetup
                          )
@@ -824,7 +824,7 @@ void PrinterJob::writeJobPatch( osl::File* pFile, const JobData& rJobData )
     if( ! PrinterInfoManager::get().getUseJobPatch() )
         return;
 
-    const PPDKey* pKey = NULL;
+    const PPDKey* pKey = nullptr;
 
     if( rJobData.m_pParser )
         pKey = rJobData.m_pParser->getKey( OUString( "JobPatchFile"  ) );

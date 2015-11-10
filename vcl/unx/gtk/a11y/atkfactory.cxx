@@ -62,11 +62,11 @@ atk_noop_object_wrapper_get_type()
             nullptr,
             reinterpret_cast<GClassInitFunc>(atk_noop_object_wrapper_class_init),
             nullptr,
-            NULL,
+            nullptr,
             sizeof (AtkObjectWrapper),
             0,
             nullptr,
-            NULL
+            nullptr
         } ;
 
         type = g_type_register_static (ATK_TYPE_OBJECT, "OOoAtkNoOpObj", &typeInfo, (GTypeFlags)0) ;
@@ -79,8 +79,8 @@ atk_noop_object_wrapper_new()
 {
   AtkObject *accessible;
 
-  accessible = static_cast<AtkObject *>(g_object_new (atk_noop_object_wrapper_get_type(), NULL));
-  g_return_val_if_fail (accessible != NULL, NULL);
+  accessible = static_cast<AtkObject *>(g_object_new (atk_noop_object_wrapper_get_type(), nullptr));
+  g_return_val_if_fail (accessible != nullptr, NULL);
 
   accessible->role = ATK_ROLE_INVALID;
   accessible->layer = ATK_LAYER_INVALID;
@@ -122,7 +122,7 @@ wrapper_factory_create_accessible( GObject *obj )
 #endif
 
     GtkSalFrame* pFrame = GtkSalFrame::getFromWindow(GTK_WINDOW(pTopLevel));
-    g_return_val_if_fail( pFrame != NULL, NULL );
+    g_return_val_if_fail( pFrame != nullptr, NULL );
 
     vcl::Window* pFrameWindow = pFrame->GetWindow();
     if( pFrameWindow )
@@ -150,7 +150,7 @@ wrapper_factory_create_accessible( GObject *obj )
         }
     }
 
-    return NULL;
+    return nullptr;
 }
 
 AtkObject* ooo_fixed_get_accessible(GtkWidget *obj)
@@ -174,8 +174,8 @@ wrapper_factory_get_type()
     static const GTypeInfo tinfo =
     {
       sizeof (AtkObjectFactoryClass),
-      NULL, NULL, reinterpret_cast<GClassInitFunc>(wrapper_factory_class_init),
-      NULL, NULL, sizeof (AtkObjectFactory), 0, NULL, NULL
+      nullptr, nullptr, reinterpret_cast<GClassInitFunc>(wrapper_factory_class_init),
+      nullptr, nullptr, sizeof (AtkObjectFactory), 0, nullptr, nullptr
     };
 
     t = g_type_register_static (

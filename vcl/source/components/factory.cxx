@@ -38,7 +38,7 @@ extern "C" {
         void* /*pXUnoKey*/
         )
     {
-        void* pRet = 0;
+        void* pRet = nullptr;
 
         if( pXUnoSMgr )
         {

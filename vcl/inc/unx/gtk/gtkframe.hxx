@@ -69,7 +69,7 @@ class GtkSalFrame : public SalFrame, public X11WindowProvider
         GtkSalGraphics*     pGraphics;
         bool                bInUse;
         GraphicsHolder()
-                : pGraphics( NULL ),
+                : pGraphics( nullptr ),
                   bInUse( false )
         {}
         ~GraphicsHolder();
@@ -96,7 +96,7 @@ class GtkSalFrame : public SalFrame, public X11WindowProvider
             guint8  group;
 
             PreviousKeyPress (GdkEventKey *event)
-            :   window (NULL),
+            :   window (nullptr),
                 send_event (0),
                 time (0),
                 state (0),
@@ -128,7 +128,7 @@ class GtkSalFrame : public SalFrame, public X11WindowProvider
 
             bool operator== (GdkEventKey *event) const
             {
-                return (event != NULL)
+                return (event != nullptr)
                     && (event->window == window)
                     && (event->send_event == send_event)
                     // ignore non-Gdk state bits, e.g., these used by IBus
@@ -317,7 +317,7 @@ class GtkSalFrame : public SalFrame, public X11WindowProvider
     void TriggerPaintEvent();
 
     void updateWMClass();
-    void SetScreen( unsigned int nNewScreen, int eType, Rectangle *pSize = NULL );
+    void SetScreen( unsigned int nNewScreen, int eType, Rectangle *pSize = nullptr );
 
 public:
 #if GTK_CHECK_VERSION(3,0,0)

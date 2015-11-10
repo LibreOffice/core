@@ -191,7 +191,7 @@ void MetaAction::Read( SvStream&, ImplMetaReadData* )
 
 MetaAction* MetaAction::ReadMetaAction( SvStream& rIStm, ImplMetaReadData* pData )
 {
-    MetaAction* pAction = NULL;
+    MetaAction* pAction = nullptr;
     sal_uInt16 nTmp = 0;
     rIStm.ReadUInt16( nTmp );
     MetaActionType nType = static_cast<MetaActionType>(nTmp);
@@ -1078,7 +1078,7 @@ void MetaTextAction::Read( SvStream& rIStm, ImplMetaReadData* pData )
 
 MetaTextArrayAction::MetaTextArrayAction() :
     MetaAction  ( MetaActionType::TEXTARRAY ),
-    mpDXAry     ( NULL ),
+    mpDXAry     ( nullptr ),
     mnIndex     ( 0 ),
     mnLen       ( 0 )
 {}
@@ -1098,7 +1098,7 @@ MetaTextArrayAction::MetaTextArrayAction( const MetaTextArrayAction& rAction ) :
         memcpy( mpDXAry, rAction.mpDXAry, nAryLen * sizeof( long ) );
     }
     else
-        mpDXAry = NULL;
+        mpDXAry = nullptr;
 }
 
 MetaTextArrayAction::MetaTextArrayAction( const Point& rStartPt,
@@ -1120,7 +1120,7 @@ MetaTextArrayAction::MetaTextArrayAction( const Point& rStartPt,
         memcpy( mpDXAry, pDXAry, nAryLen * sizeof(long) );
     }
     else
-        mpDXAry = NULL;
+        mpDXAry = nullptr;
 }
 
 MetaTextArrayAction::~MetaTextArrayAction()
@@ -1193,7 +1193,7 @@ void MetaTextArrayAction::Read( SvStream& rIStm, ImplMetaReadData* pData )
     if (mnLen > maStr.getLength() - mnIndex)
     {
         mnIndex = 0;
-        mpDXAry = 0;
+        mpDXAry = nullptr;
         return;
     }
 
@@ -1219,12 +1219,12 @@ void MetaTextArrayAction::Read( SvStream& rIStm, ImplMetaReadData* pData )
         }
         else
         {
-            mpDXAry = NULL;
+            mpDXAry = nullptr;
             return;
         }
     }
     else
-        mpDXAry = NULL;
+        mpDXAry = nullptr;
 
     if ( aCompat.GetVersion() >= 2 )                            // Version 2
     {
@@ -1233,7 +1233,7 @@ void MetaTextArrayAction::Read( SvStream& rIStm, ImplMetaReadData* pData )
         if ( mnIndex + mnLen > maStr.getLength() )
         {
             mnIndex = 0;
-            delete[] mpDXAry, mpDXAry = NULL;
+            delete[] mpDXAry, mpDXAry = nullptr;
         }
     }
 }
@@ -3167,7 +3167,7 @@ MetaCommentAction::MetaCommentAction( sal_Int32 nValue ) :
     MetaAction  ( MetaActionType::COMMENT ),
     mnValue     ( nValue )
 {
-    ImplInitDynamicData( NULL, 0UL );
+    ImplInitDynamicData( nullptr, 0UL );
 }
 
 MetaCommentAction::MetaCommentAction( const MetaCommentAction& rAct ) :
@@ -3202,7 +3202,7 @@ void MetaCommentAction::ImplInitDynamicData( const sal_uInt8* pData, sal_uInt32 
     else
     {
         mnDataSize = 0;
-        mpData = NULL;
+        mpData = nullptr;
     }
 }
 
@@ -3366,7 +3366,7 @@ void MetaCommentAction::Read( SvStream& rIStm, ImplMetaReadData* )
         rIStm.Read( mpData, mnDataSize );
     }
     else
-        mpData = NULL;
+        mpData = nullptr;
 }
 
 MetaLayoutModeAction::MetaLayoutModeAction() :

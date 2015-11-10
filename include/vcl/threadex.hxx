@@ -45,7 +45,7 @@ namespace vcl
         virtual ~SolarThreadExecutor();
 
         virtual long doIt() = 0;
-        long execute() { return impl_execute( NULL ); }
+        long execute() { return impl_execute( nullptr ); }
 
     private:
         long impl_execute( const TimeValue* _pTimeout );

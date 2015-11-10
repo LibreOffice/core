@@ -38,11 +38,11 @@
 #include <vector>
 
 OpenGLSalGraphicsImpl::OpenGLSalGraphicsImpl(SalGraphics& rParent, SalGeometryProvider *pProvider)
-    : mpContext(0)
+    : mpContext(nullptr)
     , mrParent(rParent)
     , mpProvider(pProvider)
-    , mpFramebuffer(NULL)
-    , mpProgram(NULL)
+    , mpFramebuffer(nullptr)
+    , mpProgram(nullptr)
     , mbUseScissor(false)
     , mbUseStencil(false)
     , mbOffscreen(false)
@@ -64,7 +64,7 @@ OpenGLSalGraphicsImpl::~OpenGLSalGraphicsImpl()
 rtl::Reference<OpenGLContext> OpenGLSalGraphicsImpl::GetOpenGLContext()
 {
     if( !AcquireContext() )
-        return NULL;
+        return nullptr;
     return mpContext;
 }
 
@@ -193,7 +193,7 @@ void OpenGLSalGraphicsImpl::PostDraw()
     if( mpProgram )
     {
         mpProgram->Clean();
-        mpProgram = NULL;
+        mpProgram = nullptr;
 #ifdef DBG_UTIL
         mProgramIsSolidColor = false;
 #endif
@@ -392,13 +392,13 @@ bool OpenGLSalGraphicsImpl::CheckOffscreenTexture()
 
 bool OpenGLSalGraphicsImpl::UseProgram( const OUString& rVertexShader, const OUString& rFragmentShader, const OString& preamble )
 {
-    if( mpProgram != NULL )
+    if( mpProgram != nullptr )
         mpProgram->Clean();
     mpProgram = mpContext->UseProgram( rVertexShader, rFragmentShader, preamble );
 #ifdef DBG_UTIL
     mProgramIsSolidColor = false; // UseSolid() will set to true if needed
 #endif
-    return ( mpProgram != NULL );
+    return ( mpProgram != nullptr );
 }
 
 bool OpenGLSalGraphicsImpl::UseSolid( SalColor nColor, sal_uInt8 nTransparency )
@@ -1601,7 +1601,7 @@ SalBitmap* OpenGLSalGraphicsImpl::getBitmap( long nX, long nY, long nWidth, long
     if( !pBitmap->Create( maOffscreenTex, nX, nY, nWidth, nHeight ) )
     {
         delete pBitmap;
-        pBitmap = NULL;
+        pBitmap = nullptr;
     }
     PostDraw();
     return pBitmap;
@@ -1758,7 +1758,7 @@ bool OpenGLSalGraphicsImpl::drawTransformedBitmap(
     OpenGLTexture& rTexture( rBitmap.GetTexture() );
     OpenGLTexture aMask; // no texture
 
-    if( pMaskBitmap != NULL )
+    if( pMaskBitmap != nullptr )
         aMask = pMaskBitmap->GetTexture();
 
     VCL_GL_INFO( "vcl.opengl", "::drawTransformedBitmap" );
@@ -1865,7 +1865,7 @@ bool OpenGLSalGraphicsImpl::drawGradient(const tools::PolyPolygon& rPolyPoly,
 OpenGLContext *OpenGLSalGraphicsImpl::beginPaint()
 {
     if( mbOffscreen || !AcquireContext() )
-        return NULL;
+        return nullptr;
     else
         return mpContext.get();
 }

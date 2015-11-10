@@ -111,7 +111,7 @@ try_again:
             {
                 Graphic aGraphic;
                 SvFileStream aFileStream(out, StreamMode::READ);
-                ret = (int) ImportJPEG(aFileStream, aGraphic, NULL, GraphicFilterImportFlags::NONE);
+                ret = (int) ImportJPEG(aFileStream, aGraphic, nullptr, GraphicFilterImportFlags::NONE);
             }
             else if (strcmp(argv[2], "gif") == 0)
             {
@@ -151,7 +151,7 @@ try_again:
             }
             else if (strcmp(argv[2], "pcd") == 0)
             {
-                static PFilterCall pfnImport(0);
+                static PFilterCall pfnImport(nullptr);
                 if (!pfnImport)
                 {
                     osl::Module aLibrary;
@@ -162,11 +162,11 @@ try_again:
                 }
                 Graphic aTarget;
                 SvFileStream aFileStream(out, StreamMode::READ);
-                ret = (int) (*pfnImport)(aFileStream, aTarget, NULL);
+                ret = (int) (*pfnImport)(aFileStream, aTarget, nullptr);
             }
             else if (strcmp(argv[2], "dxf") == 0)
             {
-                static PFilterCall pfnImport(0);
+                static PFilterCall pfnImport(nullptr);
                 if (!pfnImport)
                 {
                     osl::Module aLibrary;
@@ -177,11 +177,11 @@ try_again:
                 }
                 Graphic aTarget;
                 SvFileStream aFileStream(out, StreamMode::READ);
-                ret = (int) (*pfnImport)(aFileStream, aTarget, NULL);
+                ret = (int) (*pfnImport)(aFileStream, aTarget, nullptr);
             }
             else if (strcmp(argv[2], "met") == 0)
             {
-                static PFilterCall pfnImport(0);
+                static PFilterCall pfnImport(nullptr);
                 if (!pfnImport)
                 {
                     osl::Module aLibrary;
@@ -192,11 +192,11 @@ try_again:
                 }
                 Graphic aTarget;
                 SvFileStream aFileStream(out, StreamMode::READ);
-                ret = (int) (*pfnImport)(aFileStream, aTarget, NULL);
+                ret = (int) (*pfnImport)(aFileStream, aTarget, nullptr);
             }
             else if ((strcmp(argv[2], "pbm") == 0) || strcmp(argv[2], "ppm") == 0)
             {
-                static PFilterCall pfnImport(0);
+                static PFilterCall pfnImport(nullptr);
                 if (!pfnImport)
                 {
                     osl::Module aLibrary;
@@ -207,11 +207,11 @@ try_again:
                 }
                 Graphic aTarget;
                 SvFileStream aFileStream(out, StreamMode::READ);
-                ret = (int) (*pfnImport)(aFileStream, aTarget, NULL);
+                ret = (int) (*pfnImport)(aFileStream, aTarget, nullptr);
             }
             else if (strcmp(argv[2], "psd") == 0)
             {
-                static PFilterCall pfnImport(0);
+                static PFilterCall pfnImport(nullptr);
                 if (!pfnImport)
                 {
                     osl::Module aLibrary;
@@ -222,11 +222,11 @@ try_again:
                 }
                 Graphic aTarget;
                 SvFileStream aFileStream(out, StreamMode::READ);
-                ret = (int) (*pfnImport)(aFileStream, aTarget, NULL);
+                ret = (int) (*pfnImport)(aFileStream, aTarget, nullptr);
             }
             else if (strcmp(argv[2], "eps") == 0)
             {
-                static PFilterCall pfnImport(0);
+                static PFilterCall pfnImport(nullptr);
                 if (!pfnImport)
                 {
                     osl::Module aLibrary;
@@ -237,11 +237,11 @@ try_again:
                 }
                 Graphic aTarget;
                 SvFileStream aFileStream(out, StreamMode::READ);
-                ret = (int) (*pfnImport)(aFileStream, aTarget, NULL);
+                ret = (int) (*pfnImport)(aFileStream, aTarget, nullptr);
             }
             else if (strcmp(argv[2], "pct") == 0)
             {
-                static PFilterCall pfnImport(0);
+                static PFilterCall pfnImport(nullptr);
                 if (!pfnImport)
                 {
                     osl::Module aLibrary;
@@ -252,11 +252,11 @@ try_again:
                 }
                 Graphic aTarget;
                 SvFileStream aFileStream(out, StreamMode::READ);
-                ret = (int) (*pfnImport)(aFileStream, aTarget, NULL);
+                ret = (int) (*pfnImport)(aFileStream, aTarget, nullptr);
             }
             else if (strcmp(argv[2], "pcx") == 0)
             {
-                static PFilterCall pfnImport(0);
+                static PFilterCall pfnImport(nullptr);
                 if (!pfnImport)
                 {
                     osl::Module aLibrary;
@@ -267,11 +267,11 @@ try_again:
                 }
                 Graphic aTarget;
                 SvFileStream aFileStream(out, StreamMode::READ);
-                ret = (int) (*pfnImport)(aFileStream, aTarget, NULL);
+                ret = (int) (*pfnImport)(aFileStream, aTarget, nullptr);
             }
             else if (strcmp(argv[2], "ras") == 0)
             {
-                static PFilterCall pfnImport(0);
+                static PFilterCall pfnImport(nullptr);
                 if (!pfnImport)
                 {
                     osl::Module aLibrary;
@@ -282,11 +282,11 @@ try_again:
                 }
                 Graphic aTarget;
                 SvFileStream aFileStream(out, StreamMode::READ);
-                ret = (int) (*pfnImport)(aFileStream, aTarget, NULL);
+                ret = (int) (*pfnImport)(aFileStream, aTarget, nullptr);
             }
             else if (strcmp(argv[2], "tga") == 0)
             {
-                static PFilterCall pfnImport(0);
+                static PFilterCall pfnImport(nullptr);
                 if (!pfnImport)
                 {
                     osl::Module aLibrary;
@@ -297,11 +297,11 @@ try_again:
                 }
                 Graphic aTarget;
                 SvFileStream aFileStream(out, StreamMode::READ);
-                ret = (int) (*pfnImport)(aFileStream, aTarget, NULL);
+                ret = (int) (*pfnImport)(aFileStream, aTarget, nullptr);
             }
             else if (strcmp(argv[2], "tif") == 0)
             {
-                static PFilterCall pfnImport(0);
+                static PFilterCall pfnImport(nullptr);
                 if (!pfnImport)
                 {
                     osl::Module aLibrary;
@@ -312,14 +312,14 @@ try_again:
                 }
                 Graphic aTarget;
                 SvFileStream aFileStream(out, StreamMode::READ);
-                ret = (int) (*pfnImport)(aFileStream, aTarget, NULL);
+                ret = (int) (*pfnImport)(aFileStream, aTarget, nullptr);
             }
             else if ( (strcmp(argv[2], "doc") == 0) ||
                       (strcmp(argv[2], "ww8") == 0) ||
                       (strcmp(argv[2], "ww6") == 0) ||
                       (strcmp(argv[2], "ww2") == 0) )
             {
-                static WFilterCall pfnImport(0);
+                static WFilterCall pfnImport(nullptr);
                 if (!pfnImport)
                 {
                     osl::Module aLibrary;
@@ -338,7 +338,7 @@ try_again:
             else if ( (strcmp(argv[2], "xls") == 0) ||
                       (strcmp(argv[2], "wb2") == 0) )
             {
-                static WFilterCall pfnImport(0);
+                static WFilterCall pfnImport(nullptr);
                 if (!pfnImport)
                 {
                     osl::Module aLibrary;
@@ -351,7 +351,7 @@ try_again:
             }
             else if (strcmp(argv[2], "hwp") == 0)
             {
-                static HFilterCall pfnImport(0);
+                static HFilterCall pfnImport(nullptr);
                 if (!pfnImport)
                 {
                     osl::Module aLibrary;
@@ -364,7 +364,7 @@ try_again:
             }
             else if (strcmp(argv[2], "602") == 0)
             {
-                static HFilterCall pfnImport(0);
+                static HFilterCall pfnImport(nullptr);
                 if (!pfnImport)
                 {
                     osl::Module aLibrary;
@@ -377,7 +377,7 @@ try_again:
             }
             else if (strcmp(argv[2], "lwp") == 0)
             {
-                static HFilterCall pfnImport(0);
+                static HFilterCall pfnImport(nullptr);
                 if (!pfnImport)
                 {
                     osl::Module aLibrary;
@@ -390,7 +390,7 @@ try_again:
             }
             else if (strcmp(argv[2], "ppt") == 0)
             {
-                static HFilterCall pfnImport(0);
+                static HFilterCall pfnImport(nullptr);
                 if (!pfnImport)
                 {
                     osl::Module aLibrary;

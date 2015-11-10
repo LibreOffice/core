@@ -821,7 +821,7 @@ PatternField::PatternField( vcl::Window* pParent, WinBits nWinStyle ) :
 
 void PatternField::dispose()
 {
-    PatternFormatter::SetField( NULL );
+    PatternFormatter::SetField( nullptr );
     SpinField::dispose();
 }
 
@@ -873,7 +873,7 @@ PatternBox::PatternBox( vcl::Window* pParent, WinBits nWinStyle ) :
 
 void PatternBox::dispose()
 {
-    PatternFormatter::SetField( NULL );
+    PatternFormatter::SetField( nullptr );
     ComboBox::dispose();
 }
 
@@ -1407,7 +1407,7 @@ void DateFormatter::ImplInit()
 {
     mbLongFormat        = false;
     mbShowDateCentury   = true;
-    mpCalendarWrapper   = NULL;
+    mpCalendarWrapper   = nullptr;
     mnDateFormat        = 0xFFFF;
     mnExtDateFormat     = XTDATEF_SYSTEM_SHORT;
 }
@@ -1425,13 +1425,13 @@ DateFormatter::DateFormatter() :
 DateFormatter::~DateFormatter()
 {
     delete mpCalendarWrapper;
-    mpCalendarWrapper = NULL;
+    mpCalendarWrapper = nullptr;
 }
 
 void DateFormatter::SetLocale( const ::com::sun::star::lang::Locale& rLocale )
 {
     delete mpCalendarWrapper;
-    mpCalendarWrapper = NULL;
+    mpCalendarWrapper = nullptr;
     FormatterBase::SetLocale( rLocale );
 }
 
@@ -1730,7 +1730,7 @@ DateField::DateField( vcl::Window* pParent, WinBits nWinStyle ) :
 
 void DateField::dispose()
 {
-    DateFormatter::SetField( NULL );
+    DateFormatter::SetField( nullptr );
     SpinField::dispose();
 }
 
@@ -1835,7 +1835,7 @@ DateBox::DateBox( vcl::Window* pParent, WinBits nWinStyle ) :
 
 void DateBox::dispose()
 {
-    DateFormatter::SetField( NULL );
+    DateFormatter::SetField( nullptr );
     ComboBox::dispose();
 }
 
@@ -2513,7 +2513,7 @@ TimeField::TimeField( vcl::Window* pParent, WinBits nWinStyle ) :
 
 void TimeField::dispose()
 {
-    TimeFormatter::SetField( NULL );
+    TimeFormatter::SetField( nullptr );
     SpinField::dispose();
 }
 
@@ -2656,7 +2656,7 @@ TimeBox::TimeBox( vcl::Window* pParent, WinBits nWinStyle ) :
 
 void TimeBox::dispose()
 {
-    TimeFormatter::SetField( NULL );
+    TimeFormatter::SetField( nullptr );
     ComboBox::dispose();
 }
 

@@ -72,7 +72,7 @@ public:
     bool                IsTransparent() const;
     TransparentType     GetTransparentType() const { return eTransparent; }
 
-    Bitmap              GetBitmap( const Color* pTransReplaceColor = NULL ) const;
+    Bitmap              GetBitmap( const Color* pTransReplaceColor = nullptr ) const;
     Bitmap              GetMask() const;
 
     bool                IsAlpha() const;
@@ -165,7 +165,7 @@ public:
      */
     bool                Expand(
                             sal_uLong nDX, sal_uLong nDY,
-                            const Color* pInitColor = NULL,
+                            const Color* pInitColor = nullptr,
                             bool bExpandTransparent = false );
 
     /** Copy a rectangular area from another bitmap
@@ -193,7 +193,7 @@ public:
     bool                CopyPixel(
                             const Rectangle& rRectDst,
                             const Rectangle& rRectSrc,
-                            const BitmapEx* pBmpExSrc = NULL );
+                            const BitmapEx* pBmpExSrc = nullptr );
 
     /** Fill the entire bitmap with the given color
 
@@ -311,7 +311,7 @@ public:
                             const Color* pSearchColors,
                             const Color* pReplaceColors,
                             sal_uLong nColorCount,
-                            const sal_uLong* pTols = NULL );
+                            const sal_uLong* pTols = nullptr );
 
     /** Change various global color characteristics
 
@@ -365,7 +365,7 @@ public:
      */
     bool                Filter(
                             BmpFilter eFilter,
-                            const BmpFilterParam* pFilterParam = NULL );
+                            const BmpFilterParam* pFilterParam = nullptr );
 
     /** Get transparency at given position
 

@@ -73,7 +73,7 @@ public:
     virtual bool    IsModified() const override;
 
     virtual void    EnableUpdateData( sal_uLong nTimeout = EDIT_UPDATEDATA_TIMEOUT ) override;
-    virtual void    DisableUpdateData() override { delete pUpdateDataTimer; pUpdateDataTimer = NULL; }
+    virtual void    DisableUpdateData() override { delete pUpdateDataTimer; pUpdateDataTimer = nullptr; }
 
     virtual void    SetReadOnly( bool bReadOnly = true ) override;
     virtual bool    IsReadOnly() const override;

@@ -44,7 +44,7 @@ void ListBox::EnableQuickSelection( const bool& b )
 
 ListBox::ListBox(WindowType nType)
     : Control(nType)
-    , mpImplLB(NULL)
+    , mpImplLB(nullptr)
 {
     ImplInitListBoxData();
 }
@@ -87,9 +87,9 @@ void ListBox::dispose()
 
 void ListBox::ImplInitListBoxData()
 {
-    mpFloatWin      = NULL;
-    mpImplWin       = NULL;
-    mpBtn           = NULL;
+    mpFloatWin      = nullptr;
+    mpImplWin       = nullptr;
+    mpBtn           = nullptr;
     mnDDHeight      = 0;
     mnSaveValue     = LISTBOX_ENTRY_NOTFOUND;
     mnLineCount     = 0;
@@ -104,7 +104,7 @@ void ListBox::ImplInit( vcl::Window* pParent, WinBits nStyle )
     if ( !(nStyle & WB_NOBORDER) && ( nStyle & WB_DROPDOWN ) )
         nStyle |= WB_BORDER;
 
-    Control::ImplInit( pParent, nStyle, NULL );
+    Control::ImplInit( pParent, nStyle, nullptr );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDropTargetListener> xDrop = new DNDEventDispatcher(this);
 

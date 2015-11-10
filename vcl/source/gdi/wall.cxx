@@ -32,10 +32,10 @@ ImplWallpaper::ImplWallpaper() :
     maColor( COL_TRANSPARENT )
 {
     mnRefCount      = 1;
-    mpBitmap        = NULL;
-    mpCache         = NULL;
-    mpGradient      = NULL;
-    mpRect          = NULL;
+    mpBitmap        = nullptr;
+    mpCache         = nullptr;
+    mpGradient      = nullptr;
+    mpRect          = nullptr;
     meStyle         = WallpaperStyle::NONE;
 }
 
@@ -48,19 +48,19 @@ ImplWallpaper::ImplWallpaper( const ImplWallpaper& rImplWallpaper ) :
     if ( rImplWallpaper.mpBitmap )
         mpBitmap = new BitmapEx( *rImplWallpaper.mpBitmap );
     else
-        mpBitmap = NULL;
+        mpBitmap = nullptr;
     if( rImplWallpaper.mpCache )
         mpCache = new BitmapEx( *rImplWallpaper.mpCache );
     else
-        mpCache = NULL;
+        mpCache = nullptr;
     if ( rImplWallpaper.mpGradient )
         mpGradient = new Gradient( *rImplWallpaper.mpGradient );
     else
-        mpGradient = NULL;
+        mpGradient = nullptr;
     if ( rImplWallpaper.mpRect )
         mpRect = new Rectangle( *rImplWallpaper.mpRect );
     else
-        mpRect = NULL;
+        mpRect = nullptr;
 }
 
 ImplWallpaper::~ImplWallpaper()
@@ -82,7 +82,7 @@ void ImplWallpaper::ImplSetCachedBitmap( BitmapEx& rBmp )
 void ImplWallpaper::ImplReleaseCachedBitmap()
 {
     delete mpCache;
-    mpCache = NULL;
+    mpCache = nullptr;
 }
 
 SvStream& ReadImplWallpaper( SvStream& rIStm, ImplWallpaper& rImplWallpaper )
@@ -91,13 +91,13 @@ SvStream& ReadImplWallpaper( SvStream& rIStm, ImplWallpaper& rImplWallpaper )
     sal_uInt16          nTmp16;
 
     delete rImplWallpaper.mpRect;
-    rImplWallpaper.mpRect = NULL;
+    rImplWallpaper.mpRect = nullptr;
 
     delete rImplWallpaper.mpGradient;
-    rImplWallpaper.mpGradient = NULL;
+    rImplWallpaper.mpGradient = nullptr;
 
     delete rImplWallpaper.mpBitmap;
-    rImplWallpaper.mpBitmap = NULL;
+    rImplWallpaper.mpBitmap = nullptr;
 
     // version 1
     ReadColor( rIStm, rImplWallpaper.maColor );
@@ -141,9 +141,9 @@ SvStream& ReadImplWallpaper( SvStream& rIStm, ImplWallpaper& rImplWallpaper )
 SvStream& WriteImplWallpaper( SvStream& rOStm, const ImplWallpaper& rImplWallpaper )
 {
     VersionCompat   aCompat( rOStm, StreamMode::WRITE, 3 );
-    bool            bRect = ( rImplWallpaper.mpRect != NULL );
-    bool            bGrad = ( rImplWallpaper.mpGradient != NULL );
-    bool            bBmp = ( rImplWallpaper.mpBitmap != NULL );
+    bool            bRect = ( rImplWallpaper.mpRect != nullptr );
+    bool            bGrad = ( rImplWallpaper.mpGradient != nullptr );
+    bool            bBmp = ( rImplWallpaper.mpBitmap != nullptr );
     bool            bDummy = false;
 
     // version 1
@@ -283,7 +283,7 @@ void Wallpaper::SetBitmap( const BitmapEx& rBitmap )
         {
             ImplMakeUnique();
             delete mpImplWallpaper->mpBitmap;
-            mpImplWallpaper->mpBitmap = NULL;
+            mpImplWallpaper->mpBitmap = nullptr;
         }
     }
     else
@@ -314,7 +314,7 @@ BitmapEx Wallpaper::GetBitmap() const
 bool Wallpaper::IsBitmap() const
 {
 
-    return (mpImplWallpaper->mpBitmap != 0);
+    return (mpImplWallpaper->mpBitmap != nullptr);
 }
 
 void Wallpaper::SetGradient( const Gradient& rGradient )
@@ -348,7 +348,7 @@ Gradient Wallpaper::GetGradient() const
 bool Wallpaper::IsGradient() const
 {
 
-    return (mpImplWallpaper->mpGradient != 0);
+    return (mpImplWallpaper->mpGradient != nullptr);
 }
 
 Gradient Wallpaper::ImplGetApplicationGradient() const
@@ -375,7 +375,7 @@ void Wallpaper::SetRect( const Rectangle& rRect )
         if ( mpImplWallpaper->mpRect )
         {
             delete mpImplWallpaper->mpRect;
-            mpImplWallpaper->mpRect = NULL;
+            mpImplWallpaper->mpRect = nullptr;
         }
     }
     else
@@ -402,7 +402,7 @@ Rectangle Wallpaper::GetRect() const
 bool Wallpaper::IsRect() const
 {
 
-    return (mpImplWallpaper->mpRect != 0);
+    return (mpImplWallpaper->mpRect != nullptr);
 }
 
 bool Wallpaper::IsFixed() const

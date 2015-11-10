@@ -455,7 +455,7 @@ public:
     void            disposeBuilder();
 
     static OUString getUIRootDir();
-    bool            hasBuilder() const { return m_pUIBuilder != NULL; }
+    bool            hasBuilder() const { return m_pUIBuilder != nullptr; }
 
     css::uno::Reference<css::frame::XFrame> getFrame() { return m_pUIBuilder->getFrame(); }
 

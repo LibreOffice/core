@@ -27,7 +27,7 @@ struct GIFLZWTableEntry
 };
 
 GIFLZWDecompressor::GIFLZWDecompressor(sal_uInt8 cDataSize)
-    : pBlockBuf(NULL)
+    : pBlockBuf(nullptr)
     , nInputBitsBuf(0)
     , nOutBufDataLen(0)
     , nInputBitsBufSize(0)
@@ -49,7 +49,7 @@ GIFLZWDecompressor::GIFLZWDecompressor(sal_uInt8 cDataSize)
 
     for (sal_uInt16 i = 0; i < nTableSize; ++i)
     {
-        pTable[i].pPrev = NULL;
+        pTable[i].pPrev = nullptr;
         pTable[i].pFirst = pTable + i;
         pTable[i].nData = (sal_uInt8) i;
     }

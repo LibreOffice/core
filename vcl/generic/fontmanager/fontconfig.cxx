@@ -94,8 +94,8 @@ private:
 
 FontCfgWrapper::FontCfgWrapper()
     :
-        m_pOutlineSet( NULL ),
-        m_pLanguageTag( NULL )
+        m_pOutlineSet( nullptr ),
+        m_pLanguageTag( nullptr )
 {
     FcInit();
 }
@@ -130,7 +130,7 @@ namespace
 {
     int compareFontNames(const FcPattern *a, const FcPattern *b)
     {
-        FcChar8 *pNameA=NULL, *pNameB=NULL;
+        FcChar8 *pNameA=nullptr, *pNameB=nullptr;
 
         bool bHaveA = FcPatternGetString(a, FC_FAMILY, 0, &pNameA) == FcResultMatch;
         bool bHaveB = FcPatternGetString(b, FC_FAMILY, 0, &pNameB) == FcResultMatch;
@@ -231,7 +231,7 @@ FontCfgWrapper::~FontCfgWrapper()
     //FcFini();
 }
 
-static FontCfgWrapper* pOneInstance = NULL;
+static FontCfgWrapper* pOneInstance = nullptr;
 
 FontCfgWrapper& FontCfgWrapper::get()
 {
@@ -245,7 +245,7 @@ void FontCfgWrapper::release()
     if( pOneInstance )
     {
         delete pOneInstance;
-        pOneInstance = NULL;
+        pOneInstance = nullptr;
     }
 }
 
@@ -330,7 +330,7 @@ FcResult FontCfgWrapper::LocalizedElementFromPattern(FcPattern* pPattern, FcChar
 
     if( eElementRes == FcResultMatch)
     {
-        FcChar8* elementlang = NULL;
+        FcChar8* elementlang = nullptr;
         if (FcPatternGetString( pPattern, elementlangtype, 0, &elementlang ) == FcResultMatch)
         {
             std::vector< lang_and_element > lang_and_elements;
@@ -349,7 +349,7 @@ FcResult FontCfgWrapper::LocalizedElementFromPattern(FcPattern* pPattern, FcChar
             //possible to-do, sort by UILocale instead of process locale
             if (!m_pLanguageTag)
             {
-                rtl_Locale* pLoc = NULL;
+                rtl_Locale* pLoc = nullptr;
                 osl_getProcessLocale(&pLoc);
                 m_pLanguageTag = new LanguageTag(*pLoc);
             }
@@ -371,10 +371,10 @@ void FontCfgWrapper::clear()
     if( m_pOutlineSet )
     {
         FcFontSetDestroy( m_pOutlineSet );
-        m_pOutlineSet = NULL;
+        m_pOutlineSet = nullptr;
     }
     delete m_pLanguageTag;
-    m_pLanguageTag = NULL;
+    m_pLanguageTag = nullptr;
 }
 
 /*
@@ -482,10 +482,10 @@ void PrintFontManager::countFontconfigFonts( std::unordered_map<OString, int, OS
 #endif
         for( int i = 0; i < pFSet->nfont; i++ )
         {
-            FcChar8* file = NULL;
-            FcChar8* family = NULL;
-            FcChar8* style = NULL;
-            FcChar8* format = NULL;
+            FcChar8* file = nullptr;
+            FcChar8* family = nullptr;
+            FcChar8* style = nullptr;
+            FcChar8* format = nullptr;
             int slant = 0;
             int weight = 0;
             int width = 0;
@@ -555,7 +555,7 @@ void PrintFontManager::countFontconfigFonts( std::unordered_map<OString, int, OS
                 // not known, analyze font file to get attributes
                 // not described by fontconfig (e.g. alias names, PSName)
                 if (eFormatRes != FcResultMatch)
-                    format = NULL;
+                    format = nullptr;
                 analyzeFontFile( nDirID, aBase, aFonts, reinterpret_cast<char*>(format) );
 #if OSL_DEBUG_LEVEL > 1
                 if( aFonts.empty() )
@@ -607,7 +607,7 @@ void PrintFontManager::countFontconfigFonts( std::unordered_map<OString, int, OS
                     // we have found more than one font in this file
                     // but fontconfig will not tell us which index is meant
                     // -> something is in disorder, do not use this font
-                    pUpdate = NULL;
+                    pUpdate = nullptr;
                 }
             }
 
@@ -880,8 +880,8 @@ namespace
 #if defined(ENABLE_DBUS) && defined(ENABLE_PACKAGEKIT)
     guint get_xid_for_dbus()
     {
-        const vcl::Window *pTopWindow = Application::IsHeadlessModeEnabled() ? NULL : Application::GetActiveTopWindow();
-        const SystemEnvData* pEnvData = pTopWindow ? pTopWindow->GetSystemData() : NULL;
+        const vcl::Window *pTopWindow = Application::IsHeadlessModeEnabled() ? nullptr : Application::GetActiveTopWindow();
+        const SystemEnvData* pEnvData = pTopWindow ? pTopWindow->GetSystemData() : nullptr;
         return pEnvData ? pEnvData->aWindow : 0;
     }
 #endif
@@ -895,10 +895,10 @@ IMPL_LINK_NOARG_TYPED(PrintFontManager, autoInstallFontLangSupport, Timer *, voi
     if (!xid)
         return;
 
-    GError *error = NULL;
+    GError *error = nullptr;
     /* get the DBUS session connection */
     DBusGConnection *session_connection = dbus_g_bus_get(DBUS_BUS_SESSION, &error);
-    if (error != NULL)
+    if (error != nullptr)
     {
         g_debug ("DBUS cannot connect : %s", error->message);
         g_error_free (error);
@@ -910,7 +910,7 @@ IMPL_LINK_NOARG_TYPED(PrintFontManager, autoInstallFontLangSupport, Timer *, voi
                                        "org.freedesktop.PackageKit",
                                        "/org/freedesktop/PackageKit",
                                        "org.freedesktop.PackageKit.Modify");
-    if (proxy == NULL)
+    if (proxy == nullptr)
     {
         g_debug("Could not get DBUS proxy: org.freedesktop.PackageKit");
         return;
@@ -920,7 +920,7 @@ IMPL_LINK_NOARG_TYPED(PrintFontManager, autoInstallFontLangSupport, Timer *, voi
     gchar **font = fonts;
     for (std::vector<OString>::const_iterator aI = m_aCurrentRequests.begin(); aI != m_aCurrentRequests.end(); ++aI)
         *font++ = const_cast<gchar*>(aI->getStr());
-    *font = NULL;
+    *font = nullptr;
     gboolean res = dbus_g_proxy_call(proxy, "InstallFontconfigResources", &error,
                  G_TYPE_UINT, xid, /* xid */
                  G_TYPE_STRV, fonts, /* data */
@@ -932,7 +932,7 @@ IMPL_LINK_NOARG_TYPED(PrintFontManager, autoInstallFontLangSupport, Timer *, voi
        g_debug("InstallFontconfigResources method failed");
 
     /* check the error value */
-    if (error != NULL)
+    if (error != nullptr)
     {
         g_debug("InstallFontconfigResources problem : %s", error->message);
         g_error_free(error);
@@ -1003,7 +1003,7 @@ bool PrintFontManager::Substitute( FontSelectPattern &rPattern, OUString& rMissi
     FcPattern* pResult = FcFontSetMatch(FcConfigGetCurrent(), &pFontSet, 1, pPattern, &eResult);
     FcPatternDestroy( pPattern );
 
-    FcFontSet*  pSet = NULL;
+    FcFontSet*  pSet = nullptr;
     if( pResult )
     {
         pSet = FcFontSetCreate();
@@ -1017,7 +1017,7 @@ bool PrintFontManager::Substitute( FontSelectPattern &rPattern, OUString& rMissi
         if( pSet->nfont > 0 )
         {
             //extract the closest match
-            FcChar8* file = NULL;
+            FcChar8* file = nullptr;
             FcResult eFileRes = FcPatternGetString(pSet->fonts[0], FC_FILE, 0, &file);
             int nCollectionEntry = 0;
             FcResult eIndexRes = FcPatternGetInteger(pSet->fonts[0], FC_INDEX, 0, &nCollectionEntry);
@@ -1041,7 +1041,7 @@ bool PrintFontManager::Substitute( FontSelectPattern &rPattern, OUString& rMissi
 
             if (!bRet)
             {
-                FcChar8* family = NULL;
+                FcChar8* family = nullptr;
                 FcResult eFamilyRes = FcPatternGetString( pSet->fonts[0], FC_FAMILY, 0, &family );
 
                 // get the family name
@@ -1071,7 +1071,7 @@ bool PrintFontManager::Substitute( FontSelectPattern &rPattern, OUString& rMissi
                 FcBool bEmbolden;
                 if (FcResultMatch == FcPatternGetBool(pSet->fonts[0], FC_EMBOLDEN, 0, &bEmbolden))
                     rPattern.mbEmbolden = bEmbolden;
-                FcMatrix *pMatrix = 0;
+                FcMatrix *pMatrix = nullptr;
                 if (FcResultMatch == FcPatternGetMatrix(pSet->fonts[0], FC_MATRIX, 0, &pMatrix))
                 {
                     rPattern.maItalicMatrix.xx = pMatrix->xx;
@@ -1166,7 +1166,7 @@ FontConfigFontOptions* PrintFontManager::getFontOptions(
 {
     FontCfgWrapper& rWrapper = FontCfgWrapper::get();
 
-    FontConfigFontOptions* pOptions = NULL;
+    FontConfigFontOptions* pOptions = nullptr;
     FcConfig* pConfig = FcConfigGetCurrent();
     FcPattern* pPattern = FcPatternCreate();
 
@@ -1263,7 +1263,7 @@ bool PrintFontManager::matchFont( FastPrintFontInfo& rInfo, const com::sun::star
         if( pSet->nfont > 0 )
         {
             //extract the closest match
-            FcChar8* file = NULL;
+            FcChar8* file = nullptr;
             FcResult eFileRes = FcPatternGetString(pSet->fonts[0], FC_FILE, 0, &file);
             int nCollectionEntry = 0;
             FcResult eIndexRes = FcPatternGetInteger(pSet->fonts[0], FC_INDEX, 0, &nCollectionEntry);

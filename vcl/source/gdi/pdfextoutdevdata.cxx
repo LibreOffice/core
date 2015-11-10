@@ -505,7 +505,7 @@ PDFExtOutDevData::PDFExtOutDevData( const OutputDevice& rOutDev ) :
     mbExportNDests          ( false ),
     mnFormsFormat           ( 0 ),
     mnPage                  ( -1 ),
-    mpPageSyncData          ( NULL ),
+    mpPageSyncData          ( nullptr ),
     mpGlobalSyncData        ( new GlobalSyncData() )
 {
     mpPageSyncData = new PageSyncData( mpGlobalSyncData );

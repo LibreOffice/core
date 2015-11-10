@@ -44,7 +44,7 @@ void ImplSchedulerData::Invoke()
 ImplSchedulerData *ImplSchedulerData::GetMostImportantTask( bool bTimer )
 {
     ImplSVData*     pSVData = ImplGetSVData();
-    ImplSchedulerData *pMostUrgent = NULL;
+    ImplSchedulerData *pMostUrgent = nullptr;
 
     for ( ImplSchedulerData *pSchedulerData = pSVData->mpFirstSchedulerData; pSchedulerData; pSchedulerData = pSchedulerData->mpNext )
     {
@@ -89,19 +89,19 @@ void Scheduler::ImplDeInitScheduler()
             if ( pSchedulerData->mpScheduler )
             {
                 pSchedulerData->mpScheduler->mbActive = false;
-                pSchedulerData->mpScheduler->mpSchedulerData = NULL;
+                pSchedulerData->mpScheduler->mpSchedulerData = nullptr;
             }
             pSchedulerData = pSchedulerData->mpNext;
             delete pTempSchedulerData;
         }
         while ( pSchedulerData );
 
-        pSVData->mpFirstSchedulerData = NULL;
+        pSVData->mpFirstSchedulerData = nullptr;
         pSVData->mnTimerPeriod = 0;
     }
 
     delete pSVData->mpSalTimer;
-    pSVData->mpSalTimer = 0;
+    pSVData->mpSalTimer = nullptr;
 }
 
 /**
@@ -155,8 +155,8 @@ void Scheduler::ProcessTaskScheduling( bool bTimer )
 {
     // process all pending Tasks
     // if bTimer True, only handle timer
-    ImplSchedulerData* pSchedulerData = NULL;
-    ImplSchedulerData* pPrevSchedulerData = NULL;
+    ImplSchedulerData* pSchedulerData = nullptr;
+    ImplSchedulerData* pPrevSchedulerData = nullptr;
     ImplSVData*        pSVData = ImplGetSVData();
     sal_uInt64         nTime = tools::Time::GetSystemTicks();
     sal_uInt64         nMinPeriod = MaximumTimeoutMs;
@@ -185,7 +185,7 @@ void Scheduler::ProcessTaskScheduling( bool bTimer )
             else
                 pSVData->mpFirstSchedulerData = pSchedulerData->mpNext;
             if ( pSchedulerData->mpScheduler )
-                pSchedulerData->mpScheduler->mpSchedulerData = NULL;
+                pSchedulerData->mpScheduler->mpSchedulerData = nullptr;
             ImplSchedulerData* pTempSchedulerData = pSchedulerData;
             pSchedulerData = pSchedulerData->mpNext;
             delete pTempSchedulerData;
@@ -227,14 +227,14 @@ void Scheduler::Start()
         mpSchedulerData->mbInScheduler = false;
 
         // insert last due to SFX!
-        ImplSchedulerData* pPrev = NULL;
+        ImplSchedulerData* pPrev = nullptr;
         ImplSchedulerData* pData = pSVData->mpFirstSchedulerData;
         while ( pData )
         {
             pPrev = pData;
             pData = pData->mpNext;
         }
-        mpSchedulerData->mpNext = NULL;
+        mpSchedulerData->mpNext = nullptr;
         if ( pPrev )
             pPrev->mpNext = mpSchedulerData;
         else
@@ -268,7 +268,7 @@ Scheduler& Scheduler::operator=( const Scheduler& rScheduler )
 }
 
 Scheduler::Scheduler(const sal_Char *pDebugName):
-    mpSchedulerData(NULL),
+    mpSchedulerData(nullptr),
     mpDebugName(pDebugName),
     mePriority(SchedulerPriority::HIGH),
     mbActive(false)
@@ -276,7 +276,7 @@ Scheduler::Scheduler(const sal_Char *pDebugName):
 }
 
 Scheduler::Scheduler( const Scheduler& rScheduler ):
-    mpSchedulerData(NULL),
+    mpSchedulerData(nullptr),
     mpDebugName(rScheduler.mpDebugName),
     mePriority(rScheduler.mePriority),
     mbActive(false)
@@ -290,7 +290,7 @@ Scheduler::~Scheduler()
     if ( mpSchedulerData )
     {
         mpSchedulerData->mbDelete = true;
-        mpSchedulerData->mpScheduler = NULL;
+        mpSchedulerData->mpScheduler = nullptr;
     }
 }
 

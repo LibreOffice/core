@@ -63,7 +63,7 @@ void Slider::ImplInit( vcl::Window* pParent, WinBits nStyle )
 
     mpLinkedField       = nullptr;
 
-    Control::ImplInit( pParent, nStyle, NULL );
+    Control::ImplInit( pParent, nStyle, nullptr );
 
     ImplInitSettings();
     SetSizePixel( CalcWindowSizePixel() );

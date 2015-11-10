@@ -90,12 +90,12 @@ void ImplAccelManager::EndSequence()
     {
         Accelerator* pTempAccel = (*mpSequenceList)[ i ];
         pTempAccel->mbIsCancel = false;
-        pTempAccel->mpDel = NULL;
+        pTempAccel->mpDel = nullptr;
     }
 
     // delete sequence-list
     delete mpSequenceList;
-    mpSequenceList = NULL;
+    mpSequenceList = nullptr;
 }
 
 bool ImplAccelManager::IsAccelKey( const vcl::KeyCode& rKeyCode, sal_uInt16 nRepeat )
@@ -111,7 +111,7 @@ bool ImplAccelManager::IsAccelKey( const vcl::KeyCode& rKeyCode, sal_uInt16 nRep
     // are we in a sequence ?
     if ( mpSequenceList )
     {
-        pAccel = mpSequenceList->empty() ? NULL : (*mpSequenceList)[ 0 ];
+        pAccel = mpSequenceList->empty() ? nullptr : (*mpSequenceList)[ 0 ];
 
         // not found ?
         if ( !pAccel )
@@ -160,7 +160,7 @@ bool ImplAccelManager::IsAccelKey( const vcl::KeyCode& rKeyCode, sal_uInt16 nRep
                         pAccel->maCurKeyCode    = vcl::KeyCode();
                         pAccel->mnCurId         = 0;
                         pAccel->mnCurRepeat     = 0;
-                        pAccel->mpDel           = NULL;
+                        pAccel->mpDel           = nullptr;
                     }
 
                     return true;
@@ -230,7 +230,7 @@ bool ImplAccelManager::IsAccelKey( const vcl::KeyCode& rKeyCode, sal_uInt16 nRep
                         pAccel->maCurKeyCode    = vcl::KeyCode();
                         pAccel->mnCurId         = 0;
                         pAccel->mnCurRepeat     = 0;
-                        pAccel->mpDel           = NULL;
+                        pAccel->mpDel           = nullptr;
                     }
 
                     return true;

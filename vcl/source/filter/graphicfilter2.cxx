@@ -1100,7 +1100,7 @@ bool GraphicDescriptor::ImpDetectSVG( SvStream& /*rStm*/, bool /*bExtendedInfo*/
 
 OUString GraphicDescriptor::GetImportFormatShortName( GraphicFileFormat nFormat )
 {
-    const char *pKeyName = 0;
+    const char *pKeyName = nullptr;
 
     switch( nFormat )
     {

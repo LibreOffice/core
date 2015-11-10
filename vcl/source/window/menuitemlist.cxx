@@ -36,9 +36,9 @@ MenuItemData::~MenuItemData()
         aUserValueReleaseFunc(nUserValue);
     if( pAutoSubMenu )
     {
-        static_cast<PopupMenu*>(pAutoSubMenu)->pRefAutoSubMenu = NULL;
+        static_cast<PopupMenu*>(pAutoSubMenu)->pRefAutoSubMenu = nullptr;
         delete pAutoSubMenu;
-        pAutoSubMenu = NULL;
+        pAutoSubMenu = nullptr;
     }
     if( pSalMenuItem )
         ImplGetSVData()->mpDefInst->DestroyMenuItem( pSalMenuItem );
@@ -66,8 +66,8 @@ MenuItemData* MenuItemList::Insert(
     pData->sIdent           = rIdent;
     pData->eType            = eType;
     pData->nBits            = nBits;
-    pData->pSubMenu         = NULL;
-    pData->pAutoSubMenu     = NULL;
+    pData->pSubMenu         = nullptr;
+    pData->pAutoSubMenu     = nullptr;
     pData->nUserValue       = 0;
     pData->bChecked         = false;
     pData->bEnabled         = true;
@@ -102,8 +102,8 @@ void MenuItemList::InsertSeparator(const OString &rIdent, size_t nPos)
     pData->sIdent           = rIdent;
     pData->eType            = MenuItemType::SEPARATOR;
     pData->nBits            = MenuItemBits::NONE;
-    pData->pSubMenu         = NULL;
-    pData->pAutoSubMenu     = NULL;
+    pData->pSubMenu         = nullptr;
+    pData->pAutoSubMenu     = nullptr;
     pData->nUserValue       = 0;
     pData->bChecked         = false;
     pData->bEnabled         = true;
@@ -116,7 +116,7 @@ void MenuItemList::InsertSeparator(const OString &rIdent, size_t nPos)
     aSalMIData.nId = 0;
     aSalMIData.eType = MenuItemType::SEPARATOR;
     aSalMIData.nBits = MenuItemBits::NONE;
-    aSalMIData.pMenu = NULL;
+    aSalMIData.pMenu = nullptr;
     aSalMIData.aText.clear();
     aSalMIData.aImage = Image();
 
@@ -149,7 +149,7 @@ MenuItemData* MenuItemList::GetData( sal_uInt16 nSVId, size_t& rPos ) const
             return maItemList[ i ];
         }
     }
-    return NULL;
+    return nullptr;
 }
 
 MenuItemData* MenuItemList::SearchItem(
@@ -221,7 +221,7 @@ MenuItemData* MenuItemList::SearchItem(
         }
     }
 
-    return NULL;
+    return nullptr;
 }
 
 size_t MenuItemList::GetItemCount( sal_Unicode cSelectChar ) const

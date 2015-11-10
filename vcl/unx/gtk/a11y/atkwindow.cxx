@@ -33,8 +33,8 @@ using namespace ::com::sun::star::uno;
 
 extern "C" {
 
-static void (* window_real_initialize) (AtkObject *obj, gpointer data) = NULL;
-static void (* window_real_finalize) (GObject *obj) = NULL;
+static void (* window_real_initialize) (AtkObject *obj, gpointer data) = nullptr;
+static void (* window_real_finalize) (GObject *obj) = nullptr;
 
 static void
 init_from_window( AtkObject *accessible, vcl::Window *pWindow )
@@ -126,7 +126,7 @@ ooo_window_wrapper_clear_focus(gpointer)
 {
     SolarMutexGuard aGuard;
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    atk_focus_tracker_notify( NULL );
+    atk_focus_tracker_notify( nullptr );
     SAL_WNODEPRECATED_DECLARATIONS_POP
     return FALSE;
 }
@@ -136,7 +136,7 @@ ooo_window_wrapper_clear_focus(gpointer)
 static gboolean
 ooo_window_wrapper_real_focus_gtk (GtkWidget *, GdkEventFocus *)
 {
-    g_idle_add( ooo_window_wrapper_clear_focus, NULL );
+    g_idle_add( ooo_window_wrapper_clear_focus, nullptr );
     return FALSE;
 }
 
@@ -297,11 +297,11 @@ ooo_window_wrapper_get_type()
             nullptr,
             reinterpret_cast<GClassInitFunc>(ooo_window_wrapper_class_init),
             nullptr,
-            NULL,
+            nullptr,
             static_cast<guint16>(type_query.instance_size),
             0,
             nullptr,
-            NULL
+            nullptr
         } ;
 
         type = g_type_register_static (parent_type, "OOoWindowAtkObject", &typeInfo, (GTypeFlags)0) ;

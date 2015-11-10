@@ -510,7 +510,7 @@ VclGtkClipboard::VclGtkClipboard(GdkAtom nSelection)
     GtkClipboard* clipboard = gtk_clipboard_get(m_nSelection);
     m_nOwnerChangedSignalId = g_signal_connect(clipboard, "owner-change",
                                                G_CALLBACK(handle_owner_change), this);
-    m_pOwner = CLIPBOARD_OWNER(g_object_new(CLIPBOARD_OWNER_OBJECT, NULL));
+    m_pOwner = CLIPBOARD_OWNER(g_object_new(CLIPBOARD_OWNER_OBJECT, nullptr));
     m_pOwner->m_pThis = this;
 }
 

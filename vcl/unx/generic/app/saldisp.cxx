@@ -163,7 +163,7 @@ sal_GetServerVendor( Display *p_display )
     const vendor_t p_vendorlist[] = {
         { vendor_sun,         "Sun Microsystems, Inc.",          10 },
         // always the last entry: vendor_none to indicate eol
-        { vendor_none,        NULL,                               0 },
+        { vendor_none,        nullptr,                               0 },
     };
 
     // handle regular server vendors
@@ -253,10 +253,10 @@ bool SalDisplay::BestVisual( Display     *pDisplay,
 }
 
 SalDisplay::SalDisplay( Display *display ) :
-        pXLib_( NULL ),
-        mpInputMethod( NULL ),
-        mpKbdExtension( NULL ),
-        mpFactory( NULL ),
+        pXLib_( nullptr ),
+        mpInputMethod( nullptr ),
+        mpKbdExtension( nullptr ),
+        mpFactory( nullptr ),
         pDisp_( display ),
         m_nXDefaultScreen( 0 ),
         nMaxRequestSize_( 0 ),
@@ -267,7 +267,7 @@ SalDisplay::SalDisplay( Display *display ) :
         nShiftKeySym_( 0 ),
         nCtrlKeySym_( 0 ),
         nMod1KeySym_( 0 ),
-        m_pWMAdaptor( NULL ),
+        m_pWMAdaptor( nullptr ),
         m_bXinerama( false ),
         m_bUseRandRWrapper( true ),
         m_nLastUserEventTime( CurrentTime )
@@ -294,7 +294,7 @@ SalDisplay::~SalDisplay()
 #if OSL_DEBUG_LEVEL > 1
         fprintf( stderr, "display %p closed\n", pDisp_ );
 #endif
-        pDisp_ = NULL;
+        pDisp_ = nullptr;
     }
     // don't do this in doDestruct since RandR extension adds hooks into Display
     // that is XCloseDisplay still needs the RandR library if it was used
@@ -306,14 +306,14 @@ void SalDisplay::doDestruct()
     SalGenericData *pData = GetGenericData();
 
     delete m_pWMAdaptor;
-    m_pWMAdaptor = NULL;
+    m_pWMAdaptor = nullptr;
     X11SalBitmap::ImplDestroyCache();
     X11SalGraphics::releaseGlyphPeer();
 
     if( IsDisplay() )
     {
-        delete mpInputMethod, mpInputMethod = NULL;
-        delete mpKbdExtension, mpKbdExtension = NULL;
+        delete mpInputMethod, mpInputMethod = nullptr;
+        delete mpKbdExtension, mpKbdExtension = nullptr;
 
         for( size_t i = 0; i < m_aScreens.size(); i++ )
         {
@@ -346,7 +346,7 @@ void SalDisplay::doDestruct()
     }
 
     if( pData->GetDisplay() == static_cast<const SalGenericDisplay *>( this ) )
-        pData->SetDisplay( NULL );
+        pData->SetDisplay( nullptr );
 }
 
 static int DisplayHasEvent( int fd, SalX11Display *pDisplay  )
@@ -412,7 +412,7 @@ SalX11Display::~SalX11Display()
     {
         doDestruct();
         XCloseDisplay( pDisp_ );
-        pDisp_ = NULL;
+        pDisp_ = nullptr;
     }
 }
 
@@ -429,7 +429,7 @@ SalDisplay::initScreen( SalX11Screen nXScreen ) const
         nXScreen = m_nXDefaultScreen;
     ScreenData* pSD = const_cast<ScreenData *>(&m_aScreens[nXScreen.getXScreen()]);
     if( pSD->m_bInit )
-        return NULL;
+        return nullptr;
     pSD->m_bInit = true;
 
     XVisualInfo aVI;
@@ -571,7 +571,7 @@ void SalDisplay::Init()
      *  it is what modern desktops use.
      */
     const char* pValStr = XGetDefault( pDisp_, "Xft", "dpi" );
-    if( pValStr != NULL )
+    if( pValStr != nullptr )
     {
         const OString aValStr( pValStr );
         const long nDPI = (long) aValStr.toDouble();
@@ -1397,13 +1397,13 @@ KeySym SalDisplay::GetKeySym( XKeyEvent        *pEvent,
     *pStatusReturn = 0;
 
     // first get the printable of the possibly modified KeySym
-    if (   (aInputContext == 0)
+    if (   (aInputContext == nullptr)
         || (pEvent->type == KeyRelease)
-        || (mpInputMethod != NULL && mpInputMethod->PosixLocale()) )
+        || (mpInputMethod != nullptr && mpInputMethod->PosixLocale()) )
     {
         // XmbLookupString must not be called for KeyRelease events
         // Cannot enter space in c locale problem #89616# #88978# btraq #4478197
-        *pLen = XLookupString( pEvent, reinterpret_cast<char*>(pPrintable), 1, &nKeySym, NULL );
+        *pLen = XLookupString( pEvent, reinterpret_cast<char*>(pPrintable), 1, &nKeySym, nullptr );
     }
     else
     {
@@ -1840,14 +1840,14 @@ int SalDisplay::CaptureMouse( SalFrame *pCapture )
 
     if( !pCapture )
     {
-        m_pCapture = NULL;
+        m_pCapture = nullptr;
         if( !pEnv || !*pEnv )
             XUngrabPointer( GetDisplay(), CurrentTime );
         XFlush( GetDisplay() );
         return 0;
     }
 
-    m_pCapture = NULL;
+    m_pCapture = nullptr;
 
     // FIXME: get rid of X11SalFrame
     const SystemEnvData* pEnvData = pCapture->GetSystemData();
@@ -1957,7 +1957,7 @@ bool SalX11Display::Dispatch( XEvent *pEvent )
                     {
                         std::list< SalFrame* >::const_iterator it;
                         for( it = m_aFrames.begin(); it != m_aFrames.end(); ++it )
-                            (*it)->CallCallback( SALEVENT_SETTINGSCHANGED, NULL );
+                            (*it)->CallCallback( SALEVENT_SETTINGSCHANGED, nullptr );
                         return false;
                     }
                 }
@@ -2021,8 +2021,8 @@ void SalDisplay::DbgPrintDisplayEvent(const char *pComment, XEvent *pEvent) cons
 {
     static const char* const EventNames[] =
     {
-        NULL,
-        NULL,
+        nullptr,
+        nullptr,
         "KeyPress",
         "KeyRelease",
         "ButtonPress",
@@ -2564,7 +2564,7 @@ SalColormap::SalColormap()
       m_nWhitePixel( 1 ),
       m_nBlackPixel( 0 ),
       m_nUsed( 2 ),
-      m_nXScreen( m_pDisplay != NULL ? m_pDisplay->GetDefaultXScreen() : SalX11Screen( 0 ) )
+      m_nXScreen( m_pDisplay != nullptr ? m_pDisplay->GetDefaultXScreen() : SalX11Screen( 0 ) )
 {
     m_aPalette = std::vector<SalColor>(m_nUsed);
 
@@ -2639,7 +2639,7 @@ SalColormap::SalColormap( sal_uInt16 nDepth )
             aVI.colormap_size   = 0;
             aVI.bits_per_rgb    = 8;
 
-            aVI.visual->ext_data        = NULL;
+            aVI.visual->ext_data        = nullptr;
             aVI.visual->visualid        = aVI.visualid;
             aVI.visual->c_class         = aVI.c_class;
             aVI.visual->red_mask        = aVI.red_mask;
@@ -2663,7 +2663,7 @@ SalColormap::~SalColormap()
 {
 #ifdef DBG_UTIL
     m_hColormap      = None;
-    m_pDisplay       = NULL;
+    m_pDisplay       = nullptr;
 #endif
 }
 

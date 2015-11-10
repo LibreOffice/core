@@ -1141,7 +1141,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
 
                     LineInfo* pLineInfo;
                     if (aLIStack.empty())
-                        pLineInfo = NULL;
+                        pLineInfo = nullptr;
                     else
                     {
                         pLineInfo = aLIStack.top();
@@ -1332,7 +1332,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                         rIStm.Read( pData, nDataSize );
                     }
                     else
-                        pData = NULL;
+                        pData = nullptr;
 
                     rIStm.ReadInt32( nFollowingActionCount );
                     ImplSkipActions( rIStm, nFollowingActionCount );
@@ -2093,7 +2093,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
             {
                 Color* pCol;
                 if (rLineColStack.empty())
-                    pCol = NULL;
+                    pCol = nullptr;
                 else
                 {
                     pCol = rLineColStack.top();

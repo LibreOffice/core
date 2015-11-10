@@ -94,7 +94,7 @@ namespace vcl
 
         Rectangle   DrawText( const Rectangle& _rRect,
                               const OUString& _rText, DrawTextFlags _nStyle = DrawTextFlags::NONE,
-                              MetricVector* _pVector = NULL, OUString* _pDisplayText = NULL );
+                              MetricVector* _pVector = nullptr, OUString* _pDisplayText = nullptr );
 
     private:
         ControlTextRenderer( const ControlTextRenderer& ) = delete;

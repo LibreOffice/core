@@ -188,7 +188,7 @@ public:
         mbPapersizeFromSetup( false ),
         mbPrinterModified( false ),
         meJobState( view::PrintableState_JOB_STARTED ),
-        mpProgress( NULL ),
+        mpProgress( nullptr ),
         mnDefaultPaperBin( -1 ),
         mnFixedPaperBin( -1 )
     {}
@@ -589,7 +589,7 @@ bool Printer::StartJob( const OUString& i_rJobName, std::shared_ptr<vcl::Printer
         }
     }
 
-    OUString* pPrintFile = NULL;
+    OUString* pPrintFile = nullptr;
     if ( mbPrintFile )
         pPrintFile = &maPrintFile;
     mpPrinterOptions->ReadFromConfig( mbPrintFile );
@@ -622,7 +622,7 @@ bool Printer::StartJob( const OUString& i_rJobName, std::shared_ptr<vcl::Printer
             mnCurPage           = 0;
             mnCurPrintPage      = 0;
             mbPrinting          = false;
-            mpPrinter = NULL;
+            mpPrinter = nullptr;
             mbJobActive = false;
 
             GDIMetaFile aDummyFile;
@@ -737,7 +737,7 @@ bool Printer::StartJob( const OUString& i_rJobName, std::shared_ptr<vcl::Printer
                 mnCurPage           = 0;
                 mnCurPrintPage      = 0;
                 mbPrinting          = false;
-                mpPrinter = NULL;
+                mpPrinter = nullptr;
 
                 return false;
             }
@@ -1434,14 +1434,14 @@ PropertyValue* PrinterController::getValue( const OUString& i_rProperty )
 {
     std::unordered_map< OUString, size_t, OUStringHash >::const_iterator it =
         mpImplData->maPropertyToIndex.find( i_rProperty );
-    return it != mpImplData->maPropertyToIndex.end() ? &mpImplData->maUIProperties[it->second] : NULL;
+    return it != mpImplData->maPropertyToIndex.end() ? &mpImplData->maUIProperties[it->second] : nullptr;
 }
 
 const PropertyValue* PrinterController::getValue( const OUString& i_rProperty ) const
 {
     std::unordered_map< OUString, size_t, OUStringHash >::const_iterator it =
         mpImplData->maPropertyToIndex.find( i_rProperty );
-    return it != mpImplData->maPropertyToIndex.end() ? &mpImplData->maUIProperties[it->second] : NULL;
+    return it != mpImplData->maPropertyToIndex.end() ? &mpImplData->maUIProperties[it->second] : nullptr;
 }
 
 void PrinterController::setValue( const OUString& i_rName, const Any& i_rValue )
@@ -1956,7 +1956,7 @@ Any PrinterOptionsHelper::setSubgroupControlOpt(const OUString& i_rID,
     }
     Sequence< OUString > aIds(1);
     aIds[0] = i_rID;
-    return setUIControlOpt(aIds, i_rTitle, aHelpId, "Subgroup", NULL, i_rControlOptions);
+    return setUIControlOpt(aIds, i_rTitle, aHelpId, "Subgroup", nullptr, i_rControlOptions);
 }
 
 Any PrinterOptionsHelper::setBoolControlOpt(const OUString& i_rID,

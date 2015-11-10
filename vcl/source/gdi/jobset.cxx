@@ -60,7 +60,7 @@ ImplJobSetup::ImplJobSetup()
     mnPaperWidth        = 0;
     mnPaperHeight       = 0;
     mnDriverDataLen     = 0;
-    mpDriverData        = NULL;
+    mpDriverData        = nullptr;
     mbPapersizeFromSetup = false;
 }
 
@@ -83,7 +83,7 @@ ImplJobSetup::ImplJobSetup( const ImplJobSetup& rJobSetup ) :
         memcpy( mpDriverData, rJobSetup.mpDriverData, mnDriverDataLen );
     }
     else
-        mpDriverData = NULL;
+        mpDriverData = nullptr;
     mbPapersizeFromSetup = rJobSetup.mbPapersizeFromSetup;
     maValueMap          = rJobSetup.maValueMap;
 }
@@ -123,7 +123,7 @@ const ImplJobSetup* JobSetup::ImplGetConstData() const
 JobSetup::JobSetup()
 {
 
-    mpData = NULL;
+    mpData = nullptr;
 }
 
 JobSetup::JobSetup( const JobSetup& rJobSetup )

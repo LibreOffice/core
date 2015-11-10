@@ -50,7 +50,7 @@ Control::Control( vcl::Window* pParent, WinBits nStyle ) :
     Window( WINDOW_CONTROL )
 {
     ImplInitControlData();
-    ImplInit( pParent, nStyle, NULL );
+    ImplInit( pParent, nStyle, nullptr );
 }
 
 Control::Control( vcl::Window* pParent, const ResId& rResId ) :
@@ -59,7 +59,7 @@ Control::Control( vcl::Window* pParent, const ResId& rResId ) :
     ImplInitControlData();
     rResId.SetRT( RSC_CONTROL );
     WinBits nStyle = ImplInitRes( rResId );
-    ImplInit( pParent, nStyle, NULL );
+    ImplInit( pParent, nStyle, nullptr );
     ImplLoadRes( rResId );
 
     if ( !(nStyle & WB_HIDE) )
@@ -73,7 +73,7 @@ Control::~Control()
 
 void Control::dispose()
 {
-    delete mpControlData, mpControlData = NULL;
+    delete mpControlData, mpControlData = nullptr;
     Window::dispose();
 }
 
@@ -114,7 +114,7 @@ void Control::CreateLayoutData() const
 
 bool Control::HasLayoutData() const
 {
-    return mpControlData && mpControlData->mpLayoutData != NULL;
+    return mpControlData && mpControlData->mpLayoutData != nullptr;
 }
 
 void Control::SetText( const OUString& rStr )
@@ -123,7 +123,7 @@ void Control::SetText( const OUString& rStr )
     Window::SetText( rStr );
 }
 
-ControlLayoutData::ControlLayoutData() : m_pParent( NULL )
+ControlLayoutData::ControlLayoutData() : m_pParent( nullptr )
 {
 }
 
@@ -350,7 +350,7 @@ void Control::ImplClearLayoutData() const
     if (mpControlData)
     {
         delete mpControlData->mpLayoutData;
-        mpControlData->mpLayoutData = NULL;
+        mpControlData->mpLayoutData = nullptr;
     }
 }
 

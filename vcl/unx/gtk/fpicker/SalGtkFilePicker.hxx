@@ -236,7 +236,7 @@ class SalGtkFilePicker : public SalGtkPicker, public SalGtkFilePicker_Base
         sal_Int32 m_PreviewImageWidth;
         sal_Int32 m_PreviewImageHeight;
 
-        GtkWidget  *getWidget( sal_Int16 nControlId, GType *pType = NULL);
+        GtkWidget  *getWidget( sal_Int16 nControlId, GType *pType = nullptr);
 
         void SetCurFilter( const OUString& rFilter );
         void SetFilters();

@@ -110,7 +110,7 @@ struct SalMenuEvent
     sal_uInt16      mnId;           // Menu item ID
     void*           mpMenu;         // pointer to VCL menu (class Menu)
 
-    SalMenuEvent() : mnId( 0 ), mpMenu( NULL ) {}
+    SalMenuEvent() : mnId( 0 ), mpMenu( nullptr ) {}
     SalMenuEvent( sal_uInt16 i_nId, void* i_pMenu )
     : mnId( i_nId ), mpMenu( i_pMenu ) {}
 };

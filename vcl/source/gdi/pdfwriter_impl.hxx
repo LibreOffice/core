@@ -138,7 +138,7 @@ public:
         // to page (useful for transformation matrices
         // if pOutPoint is set it will be updated to the emitted point
         // (in PDF map mode, that is 10th of point)
-        void appendPoint( const Point& rPoint, OStringBuffer& rBuffer, bool bNeg = false, Point* pOutPoint = NULL ) const;
+        void appendPoint( const Point& rPoint, OStringBuffer& rBuffer, bool bNeg = false, Point* pOutPoint = nullptr ) const;
         // appends a B2DPoint without further transformation
         void appendPixelPoint( const basegfx::B2DPoint& rPoint, OStringBuffer& rBuffer ) const;
         // appends a rectangle
@@ -158,9 +158,9 @@ public:
         // symmetrical) to page length and appends it to the buffer
         // if pOutLength is set it will be updated to the emitted length
         // (in PDF map mode, that is 10th of point)
-        void appendMappedLength( sal_Int32 nLength, OStringBuffer& rBuffer, bool bVertical = true, sal_Int32* pOutLength = NULL ) const;
+        void appendMappedLength( sal_Int32 nLength, OStringBuffer& rBuffer, bool bVertical = true, sal_Int32* pOutLength = nullptr ) const;
         // the same for double values
-        void appendMappedLength( double fLength, OStringBuffer& rBuffer, bool bVertical = true, sal_Int32* pOutLength = NULL, sal_Int32 nPrecision = 5 ) const;
+        void appendMappedLength( double fLength, OStringBuffer& rBuffer, bool bVertical = true, sal_Int32* pOutLength = nullptr, sal_Int32 nPrecision = 5 ) const;
         // appends LineInfo
         // returns false if too many dash array entry were created for
         // the implementation limits of some PDF readers
@@ -214,7 +214,7 @@ public:
         bool                m_bTrueColor;
 
         JPGEmit()
-            : m_pStream(NULL)
+            : m_pStream(nullptr)
             , m_nObject(0)
             , m_bTrueColor(false)
         {
@@ -241,7 +241,7 @@ public:
 
         TilingEmit()
                 : m_nObject( 0 ),
-                  m_pTilingStream( NULL )
+                  m_pTilingStream( nullptr )
         {}
     };
 
@@ -259,8 +259,8 @@ public:
                 : m_nObject( 0 ),
                   m_nExtGStateObject( -1 ),
                   m_fAlpha( 0.0 ),
-                  m_pContentStream( NULL ),
-                  m_pSoftMaskStream( NULL )
+                  m_pContentStream( nullptr ),
+                  m_pSoftMaskStream( nullptr )
         {}
         ~TransparencyEmit()
         {
@@ -547,7 +547,7 @@ public:
         sal_Int32               m_nStreamObject;
         bool                    m_bCompress;
 
-        PDFAddStream() : m_pStream( NULL ), m_nStreamObject( 0 ), m_bCompress( true ) {}
+        PDFAddStream() : m_pStream( nullptr ), m_nStreamObject( 0 ), m_bCompress( true ) {}
     };
 
     // helper structure for drawLayout and friends
@@ -1041,7 +1041,7 @@ public:
     bool emit();
     const std::set< PDFWriter::ErrorCode > & getErrors() const { return m_aErrors;}
     void insertError( PDFWriter::ErrorCode eErr ) { m_aErrors.insert( eErr ); }
-    void playMetafile( const GDIMetaFile&, vcl::PDFExtOutDevData*, const vcl::PDFWriter::PlayMetafileContext&, VirtualDevice* pDummyDev = NULL );
+    void playMetafile( const GDIMetaFile&, vcl::PDFExtOutDevData*, const vcl::PDFWriter::PlayMetafileContext&, VirtualDevice* pDummyDev = nullptr );
 
     Size getCurPageSize() const
     {

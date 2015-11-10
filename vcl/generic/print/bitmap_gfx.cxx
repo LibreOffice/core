@@ -309,13 +309,13 @@ LZWEncoder::LZWEncoder(osl::File* pOutputFile) :
 
     for (sal_uInt32 i = 0; i < 4096; i++)
     {
-        mpTable[i].mpBrother    = NULL;
-        mpTable[i].mpFirstChild = NULL;
+        mpTable[i].mpBrother    = nullptr;
+        mpTable[i].mpFirstChild = nullptr;
         mpTable[i].mnCode       = i;
         mpTable[i].mnValue      = (sal_uInt8)mpTable[i].mnCode;
     }
 
-    mpPrefix = NULL;
+    mpPrefix = nullptr;
 
     WriteBits( mnClearCode, mnCodeSize );
 }
@@ -359,13 +359,13 @@ LZWEncoder::EncodeByte (sal_uInt8 nByte )
     else
     {
         nV = nByte;
-        for (p = mpPrefix->mpFirstChild; p != NULL; p = p->mpBrother)
+        for (p = mpPrefix->mpFirstChild; p != nullptr; p = p->mpBrother)
         {
             if (p->mnValue == nV)
                 break;
         }
 
-        if (p != NULL)
+        if (p != nullptr)
         {
             mpPrefix = p;
         }
@@ -378,7 +378,7 @@ LZWEncoder::EncodeByte (sal_uInt8 nByte )
                 WriteBits (mnClearCode, mnCodeSize);
 
                 for (i = 0; i < mnClearCode; i++)
-                    mpTable[i].mpFirstChild = NULL;
+                    mpTable[i].mpFirstChild = nullptr;
 
                 mnCodeSize = mnDataSize + 1;
                 mnTableSize = mnEOICode + 1;
@@ -392,7 +392,7 @@ LZWEncoder::EncodeByte (sal_uInt8 nByte )
                 p->mpBrother = mpPrefix->mpFirstChild;
                 mpPrefix->mpFirstChild = p;
                 p->mnValue = nV;
-                p->mpFirstChild = NULL;
+                p->mpFirstChild = nullptr;
             }
 
             mpPrefix = mpTable + nV;

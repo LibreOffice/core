@@ -514,7 +514,7 @@ void GlyphSet::DrawGlyphs(
 
         rGfx.PSSetFont  (aGlyphSetName, GetGlyphSetEncoding(*aSet));
         rGfx.PSMoveTo   (aPoint);
-        rGfx.PSShowText (pGlyphSubset, nGlyphs, nGlyphs, nGlyphs > 1 ? pDeltaSubset : NULL);
+        rGfx.PSShowText (pGlyphSubset, nGlyphs, nGlyphs, nGlyphs > 1 ? pDeltaSubset : nullptr);
     }
 }
 
@@ -523,7 +523,7 @@ GlyphSet::DrawText (PrinterGfx &rGfx, const Point& rPoint,
                     const sal_Unicode* pStr, sal_Int16 nLen, const sal_Int32* pDeltaArray)
 {
     // dispatch to the impl method
-    if (pDeltaArray == NULL)
+    if (pDeltaArray == nullptr)
         ImplDrawText (rGfx, rPoint, pStr, nLen);
     else
         ImplDrawText (rGfx, rPoint, pStr, nLen, pDeltaArray);
@@ -589,7 +589,7 @@ GlyphSet::ImplDrawText (PrinterGfx &rGfx, const Point& rPoint,
         return;
     }
 
-    DrawGlyphs( rGfx, rPoint, NULL, pStr, nLen, pDeltaArray, false);
+    DrawGlyphs( rGfx, rPoint, nullptr, pStr, nLen, pDeltaArray, false);
 }
 
 bool
@@ -745,7 +745,7 @@ GlyphSet::PSUploadFont (osl::File& rOutFile, PrinterGfx &rGfx, bool bAllowType42
     utl::TempFile aTmpFile;
     aTmpFile.EnableKillingFile();
     FILE* pTmpFile = fopen(OUStringToOString(aTmpFile.GetFileName(), osl_getThreadTextEncoding()).getStr(), "w+b");
-    if (pTmpFile == NULL)
+    if (pTmpFile == nullptr)
         return false;
 
     // array of unicode source characters

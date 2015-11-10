@@ -72,8 +72,8 @@ PrinterGfx::Init (PrinterJob &rPrinterJob)
 bool
 PrinterGfx::Init (const JobData& rData)
 {
-    mpPageHeader    = NULL;
-    mpPageBody      = NULL;
+    mpPageHeader    = nullptr;
+    mpPageBody      = nullptr;
     mnDepth         = rData.m_nColorDepth;
     mnPSLevel       = rData.m_nPSLevel ? rData.m_nPSLevel : (rData.m_pParser ? rData.m_pParser->getLanguageLevel() : 2 );
     mbColor         = rData.m_nColorDevice ? ( rData.m_nColorDevice != -1 ) : ( rData.m_pParser == nullptr || rData.m_pParser->isColorDevice() );
@@ -96,8 +96,8 @@ PrinterGfx::PrinterGfx()
     , mnPSLevel(0)
     , mbColor(false)
     , mbUploadPS42Fonts(false)
-    , mpPageHeader(NULL)
-    , mpPageBody(NULL)
+    , mpPageHeader(nullptr)
+    , mpPageBody(nullptr)
     , mnFontID(0)
     , mnFallbackID(0)
     , mnTextAngle(0)
@@ -122,8 +122,8 @@ PrinterGfx::~PrinterGfx()
 void
 PrinterGfx::Clear()
 {
-    mpPageHeader                    = NULL;
-    mpPageBody                      = NULL;
+    mpPageHeader                    = nullptr;
+    mpPageBody                      = nullptr;
     mnFontID                        = 0;
     maVirtualStatus                 = GraphicsStatus();
     maVirtualStatus.mnTextHeight    = 12;
@@ -390,7 +390,7 @@ void
 PrinterGfx::DrawPolygon (sal_uInt32 nPoints, const Point* pPath)
 {
     // premature end of operation
-    if (!(nPoints > 1) || (pPath == NULL) || !(maFillColor.Is() || maLineColor.Is()))
+    if (!(nPoints > 1) || (pPath == nullptr) || !(maFillColor.Is() || maLineColor.Is()))
         return;
 
     // setup closed path
@@ -541,7 +541,7 @@ PrinterGfx::DrawPolygonBezier (sal_uInt32 nPoints, const Point* pPath, const sal
     const sal_uInt32 nBezString = 1024;
     sal_Char pString[nBezString];
     // premature end of operation
-    if (!(nPoints > 1) || (pPath == NULL) || !(maFillColor.Is() || maLineColor.Is()))
+    if (!(nPoints > 1) || (pPath == nullptr) || !(maFillColor.Is() || maLineColor.Is()))
         return;
 
     snprintf(pString, nBezString, "%li %li moveto\n", pPath[0].X(), pPath[0].Y());
@@ -603,7 +603,7 @@ PrinterGfx::DrawPolyPolygonBezier (sal_uInt32 nPoly, const sal_uInt32 * pPoints,
     {
         sal_uInt32 nPoints = pPoints[i];
         // sanity check
-        if( nPoints == 0 || pPtAry[i] == NULL )
+        if( nPoints == 0 || pPtAry[i] == nullptr )
             continue;
 
         snprintf(pString, nBezString, "%li %li moveto\n", pPtAry[i][0].X(), pPtAry[i][0].Y()); //Move to the starting point
@@ -1075,7 +1075,7 @@ PrinterGfx::PSShowText (const unsigned char* pStr, sal_Int16 nGlyphs, sal_Int16 
         psp::getValueOfDouble( pBuffer, (double)nLW / 30.0 );
     }
     // dispatch to the drawing method
-    if (pDeltaArray == NULL)
+    if (pDeltaArray == nullptr)
     {
         PSHexString (pStr, nBytes);
 

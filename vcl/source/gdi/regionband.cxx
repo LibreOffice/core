@@ -23,21 +23,21 @@
 #include <osl/diagnose.h>
 
 RegionBand::RegionBand()
-:   mpFirstBand(0),
-    mpLastCheckedBand(0)
+:   mpFirstBand(nullptr),
+    mpLastCheckedBand(nullptr)
 {
 }
 
 RegionBand::RegionBand(const RegionBand& rRef)
-:   mpFirstBand(0),
-    mpLastCheckedBand(0)
+:   mpFirstBand(nullptr),
+    mpLastCheckedBand(nullptr)
 {
     *this = rRef;
 }
 
 RegionBand& RegionBand::operator=(const RegionBand& rRef)
 {
-    ImplRegionBand* pPrevBand = 0;
+    ImplRegionBand* pPrevBand = nullptr;
     ImplRegionBand* pBand = rRef.mpFirstBand;
 
     while(pBand)
@@ -62,8 +62,8 @@ RegionBand& RegionBand::operator=(const RegionBand& rRef)
 }
 
 RegionBand::RegionBand(const Rectangle& rRect)
-:   mpFirstBand(0),
-    mpLastCheckedBand(0)
+:   mpFirstBand(nullptr),
+    mpLastCheckedBand(nullptr)
 {
     const long nTop(std::min(rRect.Top(), rRect.Bottom()));
     const long nBottom(std::max(rRect.Top(), rRect.Bottom()));
@@ -89,8 +89,8 @@ void RegionBand::implReset()
         pBand = pTempBand;
     }
 
-    mpLastCheckedBand = 0;
-    mpFirstBand = 0;
+    mpLastCheckedBand = nullptr;
+    mpFirstBand = nullptr;
 }
 
 RegionBand::~RegionBand()
@@ -196,7 +196,7 @@ void RegionBand::load(SvStream& rIStrm)
     implReset();
 
     // get all bands
-    ImplRegionBand* pCurrBand = 0;
+    ImplRegionBand* pCurrBand = nullptr;
 
     // get header from first element
     sal_uInt16 nTmp16(STREAMENTRY_END);
@@ -317,7 +317,7 @@ bool RegionBand::isSingleRectangle() const
 
 void RegionBand::InsertBand(ImplRegionBand* pPreviousBand, ImplRegionBand* pBandToInsert)
 {
-    OSL_ASSERT(pBandToInsert!=NULL);
+    OSL_ASSERT(pBandToInsert!=nullptr);
 
     if(!pPreviousBand)
     {
@@ -361,11 +361,11 @@ void RegionBand::ImplAddMissingBands(const long nTop, const long nBottom)
 {
     // Iterate over already existing bands and add missing bands atop the
     // first and between two bands.
-    ImplRegionBand* pPreviousBand = NULL;
+    ImplRegionBand* pPreviousBand = nullptr;
     ImplRegionBand* pBand = ImplGetFirstRegionBand();
     long nCurrentTop (nTop);
 
-    while (pBand != NULL && nCurrentTop<nBottom)
+    while (pBand != nullptr && nCurrentTop<nBottom)
     {
         if (nCurrentTop < pBand->mnYTop)
         {
@@ -388,7 +388,7 @@ void RegionBand::ImplAddMissingBands(const long nTop, const long nBottom)
     // 1. The region does not yet contain any bands.
     // 2. The intervall nTop->nBottom extends past the bottom most band.
     if (nCurrentTop <= nBottom
-        && (pBand==NULL || nBottom>pBand->mnYBottom))
+        && (pBand==nullptr || nBottom>pBand->mnYBottom))
     {
         // When there is no previous band then the new one will be the
         // first.  Otherwise the new band is inserted behind the last band.
@@ -519,7 +519,7 @@ bool RegionBand::InsertLine(const Point& rStartPt, const Point& rEndPt, long nLi
 
 bool RegionBand::InsertPoint(const Point &rPoint, long nLineID, bool bEndPoint, LineType eLineType)
 {
-    DBG_ASSERT( mpFirstBand != NULL, "RegionBand::InsertPoint - no bands available!" );
+    DBG_ASSERT( mpFirstBand != nullptr, "RegionBand::InsertPoint - no bands available!" );
 
     if ( rPoint.Y() == mpLastCheckedBand->mnYTop )
     {
@@ -572,7 +572,7 @@ bool RegionBand::InsertPoint(const Point &rPoint, long nLineID, bool bEndPoint, 
 
 bool RegionBand::OptimizeBandList()
 {
-    ImplRegionBand* pPrevBand = 0;
+    ImplRegionBand* pPrevBand = nullptr;
     ImplRegionBand* pBand = mpFirstBand;
 
     while ( pBand )
@@ -634,7 +634,7 @@ bool RegionBand::OptimizeBandList()
     pBand = mpFirstBand;
     while ( pBand )
     {
-        DBG_ASSERT( pBand->mpFirstSep != NULL, "Exiting RegionBand::OptimizeBandList(): empty band in region!" );
+        DBG_ASSERT( pBand->mpFirstSep != nullptr, "Exiting RegionBand::OptimizeBandList(): empty band in region!" );
 
         if ( pBand->mnYBottom < pBand->mnYTop )
             OSL_ENSURE(false, "RegionBand::OptimizeBandList(): YBottomBoundary < YTopBoundary" );
@@ -649,7 +649,7 @@ bool RegionBand::OptimizeBandList()
     }
 #endif
 
-    return (0 != mpFirstBand);
+    return (nullptr != mpFirstBand);
 }
 
 void RegionBand::Move(long nHorzMove, long nVertMove)
@@ -902,7 +902,7 @@ void RegionBand::Union(long nLeft, long nTop, long nRight, long nBottom)
 void RegionBand::Intersect(long nLeft, long nTop, long nRight, long nBottom)
 {
     // process intersections
-    ImplRegionBand* pPrevBand = 0;
+    ImplRegionBand* pPrevBand = nullptr;
     ImplRegionBand* pBand = mpFirstBand;
 
     while(pBand)
@@ -1072,7 +1072,7 @@ void RegionBand::Intersect(const RegionBand& rSource)
             }
 
             // right boundary?
-            if ( pSep->mpNextSep == NULL )
+            if ( pSep->mpNextSep == nullptr )
             {
                 // process intersection and do not remove untouched bands
                 Exclude( pSep->mnXRight+1, pBand->mnYTop, LONG_MAX-1, pBand->mnYBottom );
@@ -1090,7 +1090,7 @@ void RegionBand::Intersect(const RegionBand& rSource)
     }
 
     // remove all untouched bands if bands already left
-    ImplRegionBand* pPrevBand = 0;
+    ImplRegionBand* pPrevBand = nullptr;
     pBand = mpFirstBand;
 
     while ( pBand )
@@ -1332,7 +1332,7 @@ const char* ImplDbgTestRegionBand(const void* pObj)
         }
     }
 
-    return 0;
+    return nullptr;
 }
 #endif
 

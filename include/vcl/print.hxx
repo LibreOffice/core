@@ -305,7 +305,7 @@ public:
     bool                        SetJobSetup( const JobSetup& rSetup );
     const JobSetup&             GetJobSetup() const { return maJobSetup; }
 
-    bool                        Setup( vcl::Window* pWindow = NULL, bool bPapersizeFromSetup = false );
+    bool                        Setup( vcl::Window* pWindow = nullptr, bool bPapersizeFromSetup = false );
     bool                        SetPrinterProps( const Printer* pPrinter );
 
     // SetPrinterOptions is used internally only now
@@ -572,7 +572,7 @@ class VCL_DLLPUBLIC PrinterOptionsHelper
      * if the optional output set is not NULL then the names of the changed properties are returned
     **/
     bool processProperties( const css::uno::Sequence< css::beans::PropertyValue >& i_rNewProp,
-                            std::set< OUString >* o_pChangeProp = NULL );
+                            std::set< OUString >* o_pChangeProp = nullptr );
     /* append  to a sequence of property values the ui property sequence passed at creation
      * as the "ExtraPrintUIOptions" property. if that sequence was empty, no "ExtraPrintUIOptions" property
      * will be appended.
@@ -634,7 +634,7 @@ class VCL_DLLPUBLIC PrinterOptionsHelper
                                                      const OUString& i_rTitle,
                                                      const css::uno::Sequence< OUString >& i_rHelpId,
                                                      const OUString& i_rType,
-                                                     const css::beans::PropertyValue* i_pValue = NULL,
+                                                     const css::beans::PropertyValue* i_pValue = nullptr,
                                                      const UIControlOptions& i_rControlOptions = UIControlOptions()
                                                      );
 

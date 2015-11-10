@@ -109,7 +109,7 @@ bool EmbeddedFontsHelper::addEmbeddedFont( uno::Reference< io::XInputStream > st
     if( eot )
     {
         unsigned uncompressedFontSize = 0;
-        unsigned char *nakedPointerToUncompressedFont = NULL;
+        unsigned char *nakedPointerToUncompressedFont = nullptr;
         libeot::EOTMetadata eotMetadata;
         libeot::EOTError uncompressError =
             libeot::EOT2ttf_buffer( reinterpret_cast<unsigned char *>(&fontData[0]), fontData.size(), &eotMetadata, &nakedPointerToUncompressedFont, &uncompressedFontSize );
@@ -231,7 +231,7 @@ OUString EmbeddedFontsHelper::fontFileUrl( const OUString& familyName, FontFamil
     PhysicalFontCollection fonts;
     graphics->GetDevFontList( &fonts );
     std::unique_ptr< ImplGetDevFontList > fontInfo( fonts.GetDevFontList());
-    PhysicalFontFace* selected = NULL;
+    PhysicalFontFace* selected = nullptr;
     for( int i = 0;
          i < fontInfo->Count();
          ++i )
@@ -261,11 +261,11 @@ OUString EmbeddedFontsHelper::fontFileUrl( const OUString& familyName, FontFamil
             }
         }
     }
-    if( selected != NULL )
+    if( selected != nullptr )
     {
         FontSubsetInfo info;
         long size;
-        if( const void* data = graphics->GetEmbedFontData( selected, NULL, NULL, 0, info, &size ))
+        if( const void* data = graphics->GetEmbedFontData( selected, nullptr, nullptr, 0, info, &size ))
         {
             if( sufficientTTFRights( data, size, rights ))
             {

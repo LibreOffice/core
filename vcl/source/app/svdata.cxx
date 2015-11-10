@@ -107,11 +107,11 @@ void ImplDeInitSVData()
         delete pSVData->mpDockingManager;
 
     if( pSVData->maCtrlData.mpFieldUnitStrings )
-        delete pSVData->maCtrlData.mpFieldUnitStrings, pSVData->maCtrlData.mpFieldUnitStrings = NULL;
+        delete pSVData->maCtrlData.mpFieldUnitStrings, pSVData->maCtrlData.mpFieldUnitStrings = nullptr;
     if( pSVData->maCtrlData.mpCleanUnitStrings )
-        delete pSVData->maCtrlData.mpCleanUnitStrings, pSVData->maCtrlData.mpCleanUnitStrings = NULL;
+        delete pSVData->maCtrlData.mpCleanUnitStrings, pSVData->maCtrlData.mpCleanUnitStrings = nullptr;
     if( pSVData->mpPaperNames )
-        delete pSVData->mpPaperNames, pSVData->mpPaperNames = NULL;
+        delete pSVData->mpPaperNames, pSVData->mpPaperNames = nullptr;
 }
 
 vcl::Window* ImplGetDefaultWindow()

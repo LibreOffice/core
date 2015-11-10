@@ -32,7 +32,7 @@ class VCL_DLLPUBLIC SalGenericData : public SalData
     // for transient storage of unicode strings eg. 'u123' by input methods
     OUString      m_aUnicodeEntry;
  public:
-    SalGenericData( SalGenericDataType t, SalInstance *pInstance ) : SalData(), m_eType( t ), m_pDisplay( NULL ) { m_pInstance = pInstance; SetSalData( this ); }
+    SalGenericData( SalGenericDataType t, SalInstance *pInstance ) : SalData(), m_eType( t ), m_pDisplay( nullptr ) { m_pInstance = pInstance; SetSalData( this ); }
     virtual ~SalGenericData() {}
     virtual void Dispose() {}
 

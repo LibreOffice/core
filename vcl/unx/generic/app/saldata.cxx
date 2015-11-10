@@ -62,9 +62,9 @@
 X11SalData* GetX11SalData()
 {
     SalData * p1 = ImplGetSVData()->mpSalData;
-    OSL_ASSERT(p1 != 0);
+    OSL_ASSERT(p1 != nullptr);
     X11SalData * p2 = dynamic_cast< X11SalData * >(p1);
-    OSL_ASSERT(p2 != 0);
+    OSL_ASSERT(p2 != nullptr);
     return p2;
 }
 
@@ -88,7 +88,7 @@ static int XIOErrorHdl( Display * )
 
         // really bad hack
         if( ! SessionManagerClient::checkDocumentsSaved() )
-            /* oslSignalAction eToDo = */ osl_raiseSignal (OSL_SIGNAL_USER_X11SUBSYSTEMERROR, NULL);
+            /* oslSignalAction eToDo = */ osl_raiseSignal (OSL_SIGNAL_USER_X11SUBSYSTEMERROR, nullptr);
     }
 
     std::fprintf( stderr, "X IO Error\n" );
@@ -110,7 +110,7 @@ static const struct timeval yield__   = { 0, 10000 };
 
 static const char* XRequest[] = {
     // see /usr/lib/X11/XErrorDB, /usr/openwin/lib/XErrorDB ...
-    NULL,
+    nullptr,
     "X_CreateWindow",
     "X_ChangeWindowAttributes",
     "X_GetWindowAttributes",
@@ -230,21 +230,21 @@ static const char* XRequest[] = {
     "X_GetPointerMapping",
     "X_SetModifierMapping",
     "X_GetModifierMapping",
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
     "X_NoOperation"
 };
 
 X11SalData::X11SalData( SalGenericDataType t, SalInstance *pInstance )
     : SalGenericData( t, pInstance )
 {
-    pXLib_          = NULL;
-    m_pPlugin       = NULL;
+    pXLib_          = nullptr;
+    m_pPlugin       = nullptr;
 
     m_aOrigXIOErrorHandler = XSetIOErrorHandler ( XIOErrorHdl );
     PushXErrorLevel( !!getenv( "SAL_IGNOREXERRORS" ) );
@@ -261,15 +261,15 @@ void X11SalData::Dispose()
 {
     deInitNWF();
     delete GetDisplay();
-    SetSalData( NULL );
+    SetSalData( nullptr );
 }
 
 void X11SalData::DeleteDisplay()
 {
     delete GetDisplay();
-    SetDisplay( NULL );
+    SetDisplay( nullptr );
     delete pXLib_;
-    pXLib_ = NULL;
+    pXLib_ = nullptr;
 }
 
 void X11SalData::Init()
@@ -490,7 +490,7 @@ void X11SalData::XError( Display *pDisplay, XErrorEvent *pEvent )
 
         PrintXError( pDisplay, pEvent );
 
-        oslSignalAction eToDo = osl_raiseSignal (OSL_SIGNAL_USER_X11SUBSYSTEMERROR, NULL);
+        oslSignalAction eToDo = osl_raiseSignal (OSL_SIGNAL_USER_X11SUBSYSTEMERROR, nullptr);
         switch (eToDo)
         {
             case osl_Signal_ActIgnore       :
@@ -572,7 +572,7 @@ bool SalXLib::CheckTimeout( bool bExecuteTimers )
     if( m_aTimeout.tv_sec ) // timer is started
     {
         timeval aTimeOfDay;
-        gettimeofday( &aTimeOfDay, 0 );
+        gettimeofday( &aTimeOfDay, nullptr );
         if( aTimeOfDay >= m_aTimeout )
         {
             bRet = true;
@@ -612,7 +612,7 @@ void SalXLib::Yield( bool bWait, bool bHandleAllCurrentEvents )
     blockIdleTimeout = !bWait;
     // check for timeouts here if you want to make screenshots
     static char* p_prioritize_timer = getenv ("SAL_HIGHPRIORITY_REPAINT");
-    if (p_prioritize_timer != NULL)
+    if (p_prioritize_timer != nullptr)
         CheckTimeout();
 
     const int nMaxEvents = bHandleAllCurrentEvents ? 100 : 1;
@@ -647,11 +647,11 @@ void SalXLib::Yield( bool bWait, bool bHandleAllCurrentEvents )
 
     if (bWait)
     {
-        pTimeout = 0;
+        pTimeout = nullptr;
         if (m_aTimeout.tv_sec) // Timer is started.
         {
             // determine remaining timeout.
-            gettimeofday (&Timeout, 0);
+            gettimeofday (&Timeout, nullptr);
             Timeout = m_aTimeout - Timeout;
             if (yield__ >= Timeout)
             {
@@ -665,7 +665,7 @@ void SalXLib::Yield( bool bWait, bool bHandleAllCurrentEvents )
     {
         // release YieldMutex (and re-acquire at block end)
         SalYieldMutexReleaser aReleaser;
-        nFound = select( nFDs, &ReadFDS, NULL, &ExceptionFDS, pTimeout );
+        nFound = select( nFDs, &ReadFDS, nullptr, &ExceptionFDS, pTimeout );
     }
     if( nFound < 0 ) // error
     {
@@ -679,7 +679,7 @@ void SalXLib::Yield( bool bWait, bool bHandleAllCurrentEvents )
     }
 
     // usually handle timeouts here (as in 5.2)
-    if (p_prioritize_timer == NULL)
+    if (p_prioritize_timer == nullptr)
         CheckTimeout();
 
     // handle wakeup events.
@@ -698,7 +698,7 @@ void SalXLib::Yield( bool bWait, bool bHandleAllCurrentEvents )
         // recall select if we have acquired fd's, ready for reading,
 
         struct timeval noTimeout = { 0, 0 };
-        nFound = select( nFDs_, &ReadFDS, NULL,
+        nFound = select( nFDs_, &ReadFDS, nullptr,
                          &ExceptionFDS, &noTimeout );
 
         // someone-else has done the job for us

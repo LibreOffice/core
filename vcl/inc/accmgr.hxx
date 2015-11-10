@@ -37,8 +37,8 @@ private:
 public:
                         ImplAccelManager()
                         {
-                            mpAccelList    = NULL;
-                            mpSequenceList = NULL;
+                            mpAccelList    = nullptr;
+                            mpSequenceList = nullptr;
                         }
                         ~ImplAccelManager();
 

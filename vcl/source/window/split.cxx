@@ -52,7 +52,7 @@ namespace
 void Splitter::ImplInitSplitterData()
 {
     ImplGetWindowImpl()->mbSplitter        = true;
-    mpRefWin          = NULL;
+    mpRefWin          = nullptr;
     mnSplitPos        = 0;
     mnLastSplitPos    = 0;
     mnStartSplitPos   = 0;
@@ -88,7 +88,7 @@ void Splitter::ImplInitHorVer(bool bNew)
 
 void Splitter::ImplInit( vcl::Window* pParent, WinBits nWinStyle )
 {
-    Window::ImplInit( pParent, nWinStyle, NULL );
+    Window::ImplInit( pParent, nWinStyle, nullptr );
 
     mpRefWin = pParent;
 
@@ -183,7 +183,7 @@ Splitter* Splitter::ImplFindSibling()
 {
     // look for another splitter with the same parent but different orientation
     vcl::Window *pWin = GetParent()->GetWindow( GetWindowType::FirstChild );
-    Splitter *pSplitter = NULL;
+    Splitter *pSplitter = nullptr;
     while( pWin )
     {
         if( pWin->ImplIsSplitter() )
@@ -194,7 +194,7 @@ Splitter* Splitter::ImplFindSibling()
         }
         pWin = pWin->GetWindow( GetWindowType::Next );
     }
-    return NULL;
+    return nullptr;
 }
 
 bool Splitter::ImplSplitterActive()

@@ -300,7 +300,7 @@ public:
                                int            *pLen,
                                KeySym         *pUnmodifiedKeySym,
                                Status         *pStatus,
-                               XIC = NULL ) const;
+                               XIC = nullptr ) const;
 
     Cursor                GetPointer( PointerStyle ePointerStyle );
     virtual int           CaptureMouse( SalFrame *pCapture );

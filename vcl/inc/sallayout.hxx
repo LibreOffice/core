@@ -178,14 +178,14 @@ public:
     // methods using string indexing
     virtual sal_Int32 GetTextBreak(DeviceCoordinate nMaxWidth, DeviceCoordinate nCharExtra=0, int nFactor=1) const = 0;
     virtual DeviceCoordinate FillDXArray( DeviceCoordinate* pDXArray ) const = 0;
-    virtual DeviceCoordinate GetTextWidth() const { return FillDXArray( NULL ); }
+    virtual DeviceCoordinate GetTextWidth() const { return FillDXArray( nullptr ); }
     virtual void    GetCaretPositions( int nArraySize, long* pCaretXArray ) const = 0;
     virtual bool    IsKashidaPosValid ( int /*nCharPos*/ ) const { return true; } // i60594
 
     // methods using glyph indexing
     virtual int     GetNextGlyphs( int nLen, sal_GlyphId* pGlyphIdAry, Point& rPos, int&,
-                                   DeviceCoordinate* pGlyphAdvAry = NULL, int* pCharPosAry = NULL,
-                                   const PhysicalFontFace** pFallbackFonts = NULL ) const = 0;
+                                   DeviceCoordinate* pGlyphAdvAry = nullptr, int* pCharPosAry = nullptr,
+                                   const PhysicalFontFace** pFallbackFonts = nullptr ) const = 0;
     virtual bool    GetOutline( SalGraphics&, ::basegfx::B2DPolyPolygonVector& ) const;
     virtual bool    GetBoundRect( SalGraphics&, Rectangle& ) const;
 
@@ -246,7 +246,7 @@ public:
 
     // used only by OutputDevice::ImplLayout, TODO: make friend
     explicit        MultiSalLayout( SalLayout& rBaseLayout,
-                                    const PhysicalFontFace* pBaseFont = NULL );
+                                    const PhysicalFontFace* pBaseFont = nullptr );
     bool            AddFallback( SalLayout& rFallbackLayout,
                                  ImplLayoutRuns&, const PhysicalFontFace* pFallbackFont );
     virtual bool    LayoutText( ImplLayoutArgs& ) override;
@@ -349,8 +349,8 @@ public:
 
     // used by display layers
     virtual int     GetNextGlyphs( int nLen, sal_GlyphId* pGlyphIdxAry, Point& rPos, int&,
-                                   DeviceCoordinate* pGlyphAdvAry = NULL, int* pCharPosAry = NULL,
-                                   const PhysicalFontFace** pFallbackFonts = NULL ) const override;
+                                   DeviceCoordinate* pGlyphAdvAry = nullptr, int* pCharPosAry = nullptr,
+                                   const PhysicalFontFace** pFallbackFonts = nullptr ) const override;
 
 protected:
                     GenericSalLayout();

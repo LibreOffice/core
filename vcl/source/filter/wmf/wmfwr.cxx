@@ -136,15 +136,15 @@
 WMFWriter::WMFWriter()
     : bStatus(false)
     , nLastPercent(0)
-    , pWMF(NULL)
-    , pVirDev(NULL)
+    , pWMF(nullptr)
+    , pVirDev(nullptr)
     , nMetafileHeaderPos(0)
     , nMaxRecordSize(0)
     , nActRecordPos(0)
     , eSrcRasterOp(ROP_OVERPAINT)
     , eSrcTextAlign(ALIGN_BASELINE)
     , bSrcIsClipping(false)
-    , pAttrStack(NULL)
+    , pAttrStack(nullptr)
     , eSrcHorTextAlign(W_TA_LEFT)
     , eDstROP2(ROP_OVERPAINT)
     , eDstTextAlign(ALIGN_BASELINE)
@@ -545,7 +545,7 @@ void WMFWriter::WMFRecord_ExtTextOut( const Point& rPoint,
 {
     sal_Int32 nOriginalTextLen = rString.getLength();
 
-    if ( (nOriginalTextLen <= 1) || (pDXAry == NULL) )
+    if ( (nOriginalTextLen <= 1) || (pDXAry == nullptr) )
     {
         WMFRecord_TextOut(rPoint, rString);
         return;
@@ -956,7 +956,7 @@ void WMFWriter::SetAllAttr()
                     aSrcFont.SetCharSet( RTL_TEXTENCODING_MS_1252 );
             }
 
-            pFontCharMap = 0;
+            pFontCharMap = nullptr;
         }
 
         aDstFont = aSrcFont;
@@ -1164,7 +1164,7 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
                     SetAllAttr();
 
                     Point aPos( pA->GetRect().TopLeft() );
-                    if ( !WMFRecord_Escape_Unicode( aPos, aTemp, NULL ) )
+                    if ( !WMFRecord_Escape_Unicode( aPos, aTemp, nullptr ) )
                         WMFRecord_TextOut( aPos, aTemp );
                 }
                 break;
@@ -1175,7 +1175,7 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
                     OUString aTemp = pA->GetText().copy( pA->GetIndex(), std::min<sal_Int32>(pA->GetText().getLength() - pA->GetIndex(), pA->GetLen()) );
                     aSrcLineInfo = LineInfo();
                     SetAllAttr();
-                    if ( !WMFRecord_Escape_Unicode( pA->GetPoint(), aTemp, NULL ) )
+                    if ( !WMFRecord_Escape_Unicode( pA->GetPoint(), aTemp, nullptr ) )
                         WMFRecord_TextOut( pA->GetPoint(), aTemp );
                 }
                 break;
@@ -1199,7 +1199,7 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
 
                     pVirDev->SetFont( aSrcFont );
                     const sal_Int32 nLen = aTemp.getLength();
-                    std::unique_ptr<long[]> pDXAry(nLen ? new long[ nLen ] : NULL);
+                    std::unique_ptr<long[]> pDXAry(nLen ? new long[ nLen ] : nullptr);
                     const sal_Int32 nNormSize = pVirDev->GetTextArray( aTemp, pDXAry.get() );
                     if (nLen && nNormSize == 0)
                     {
@@ -1748,7 +1748,7 @@ bool WMFWriter::WriteWMF( const GDIMetaFile& rMTF, SvStream& rTargetStream,
 
     pVirDev->SetMapMode( aTargetMapMode );
 
-    pAttrStack=NULL;
+    pAttrStack=nullptr;
 
     for (sal_uInt16 i=0; i<MAXOBJECTHANDLES; i++)
         bHandleAllocated[i]=false;

@@ -623,7 +623,7 @@ void ImplDrawButton( OutputDevice *const pDev, Rectangle aFillRect,
 void ImplDrawFrame( OutputDevice *const pDev, Rectangle& rRect,
                     const StyleSettings& rStyleSettings, DrawFrameStyle nStyle, DrawFrameFlags nFlags )
 {
-    vcl::Window *const pWin = (pDev->GetOutDevType()==OUTDEV_WINDOW) ? static_cast<vcl::Window*>(pDev) : NULL;
+    vcl::Window *const pWin = (pDev->GetOutDevType()==OUTDEV_WINDOW) ? static_cast<vcl::Window*>(pDev) : nullptr;
 
     const bool bMenuStyle(nFlags & DrawFrameFlags::Menu);
 
@@ -683,7 +683,7 @@ void ImplDrawFrame( OutputDevice *const pDev, Rectangle& rRect,
 
         if ( bNoDraw )
         {
-            ImplDrawDPILineRect( pDev, rRect, NULL, bRound );
+            ImplDrawDPILineRect( pDev, rRect, nullptr, bRound );
         }
         else
         {
@@ -1055,7 +1055,7 @@ void DecorationView::DrawSeparator( const Point& rStart, const Point& rStop, boo
 {
     Point aStart( rStart ), aStop( rStop );
     const StyleSettings& rStyleSettings = mpOutDev->GetSettings().GetStyleSettings();
-    vcl::Window *const pWin = (mpOutDev->GetOutDevType()==OUTDEV_WINDOW) ? static_cast<vcl::Window*>(mpOutDev.get()) : NULL;
+    vcl::Window *const pWin = (mpOutDev->GetOutDevType()==OUTDEV_WINDOW) ? static_cast<vcl::Window*>(mpOutDev.get()) : nullptr;
     if(pWin)
     {
         ControlPart nPart = ( bVertical ? PART_SEPARATOR_VERT : PART_SEPARATOR_HORZ );

@@ -18,8 +18,8 @@ OpenGLFramebuffer::OpenGLFramebuffer() :
     mnWidth( 0 ),
     mnHeight( 0 ),
     mnAttachedTexture( 0 ),
-    mpPrevFramebuffer( NULL ),
-    mpNextFramebuffer( NULL )
+    mpPrevFramebuffer( nullptr ),
+    mpNextFramebuffer( nullptr )
 {
     glGenFramebuffers( 1, &mnId );
     VCL_GL_INFO( "vcl.opengl", "Created framebuffer " << (int)mnId );

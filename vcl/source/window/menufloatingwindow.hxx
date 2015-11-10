@@ -79,7 +79,7 @@ protected:
     long ImplGetStartY() const;
     Rectangle ImplGetItemRect( sal_uInt16 nPos );
     void RenderHighlightItem( vcl::RenderContext& rRenderContext, sal_uInt16 nPos, bool bHighlight );
-    long GetInitialItemY( long *pOptStartY = NULL ) const;
+    long GetInitialItemY( long *pOptStartY = nullptr ) const;
     void InvalidateItem( sal_uInt16 nPos );
 
 public:
@@ -113,7 +113,7 @@ public:
     void EndExecute( sal_uInt16 nSelectId );
 
     PopupMenu* GetActivePopup() const  { return pActivePopup; }
-    void KillActivePopup( PopupMenu* pThisOnly = NULL );
+    void KillActivePopup( PopupMenu* pThisOnly = nullptr );
 
     void ChangeHighlightItem(sal_uInt16 n, bool bStartPopupTimer);
     sal_uInt16 GetHighlightedItem() const { return nHighlightedItem; }

@@ -50,7 +50,7 @@ namespace vcl { namespace unohelper {
         SolarMutexReleaser aReleaser;
         try
         {
-            rxClipboard->setContents( pDataObj, NULL );
+            rxClipboard->setContents( pDataObj, nullptr );
 
             uno::Reference< datatransfer::clipboard::XFlushableClipboard > xFlushableClipboard( rxClipboard, uno::UNO_QUERY );
             if( xFlushableClipboard.is() )

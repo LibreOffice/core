@@ -106,7 +106,7 @@ public:
 
     void            DrawText (PrinterGfx &rGfx, const Point& rPoint,
                               const sal_Unicode* pStr, sal_Int16 nLen,
-                              const sal_Int32* pDeltaArray = NULL);
+                              const sal_Int32* pDeltaArray = nullptr);
     void            DrawGlyphs (PrinterGfx& rGfx,
                                 const Point& rPoint,
                                 const sal_GlyphId* pGlyphIds,

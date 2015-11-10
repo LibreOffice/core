@@ -32,7 +32,7 @@ CommandExtTextInputData::CommandExtTextInputData( const OUString& rText,
         memcpy( mpTextAttr, pTextAttr, maText.getLength()*sizeof(sal_uInt16) );
     }
     else
-        mpTextAttr = NULL;
+        mpTextAttr = nullptr;
     mnCursorPos     = nCursorPos;
     mnCursorFlags   = nCursorFlags;
     mbOnlyCursor    = bOnlyCursor;
@@ -47,7 +47,7 @@ CommandExtTextInputData::CommandExtTextInputData( const CommandExtTextInputData&
         memcpy( mpTextAttr, rData.mpTextAttr, maText.getLength()*sizeof(sal_uInt16) );
     }
     else
-        mpTextAttr = NULL;
+        mpTextAttr = nullptr;
     mnCursorPos     = rData.mnCursorPos;
     mnCursorFlags   = rData.mnCursorFlags;
     mbOnlyCursor    = rData.mbOnlyCursor;

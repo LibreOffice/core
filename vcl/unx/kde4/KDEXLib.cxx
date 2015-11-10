@@ -50,7 +50,7 @@
 
 KDEXLib::KDEXLib() :
     SalXLib(),  m_bStartupDone(false),
-    m_pFreeCmdLineArgs(0), m_pAppCmdLineArgs(0), m_nFakeCmdLineArgs( 0 ),
+    m_pFreeCmdLineArgs(nullptr), m_pAppCmdLineArgs(nullptr), m_nFakeCmdLineArgs( 0 ),
     m_frameWidth( -1 ), m_isGlibEventLoopType(false),
     m_allowKdeDialogs(false), blockIdleTimeout(false)
 {
@@ -168,14 +168,14 @@ void KDEXLib::Init()
     // (QApplication::disableSessionManagement(false) wouldn't quite do,
     // since that still actually connects to the session manager, it just
     // won't save the application data on session shutdown).
-    char* session_manager = NULL;
-    if( getenv( "SESSION_MANAGER" ) != NULL )
+    char* session_manager = nullptr;
+    if( getenv( "SESSION_MANAGER" ) != nullptr )
     {
         session_manager = strdup( getenv( "SESSION_MANAGER" ));
         unsetenv( "SESSION_MANAGER" );
     }
     m_pApplication.reset( new VCLKDEApplication() );
-    if( session_manager != NULL )
+    if( session_manager != nullptr )
     {
         // coverity[tainted_string] - trusted source for setenv
         setenv( "SESSION_MANAGER", session_manager, 1 );
@@ -215,7 +215,7 @@ void KDEXLib::Init()
 #if KDE_HAVE_GLIB
 #include <glib.h>
 
-static GPollFunc old_gpoll = NULL;
+static GPollFunc old_gpoll = nullptr;
 
 static gint gpoll_wrapper( GPollFD* ufds, guint nfds, gint timeout )
 {
@@ -227,7 +227,7 @@ static gint gpoll_wrapper( GPollFD* ufds, guint nfds, gint timeout )
 static bool ( *old_qt_event_filter )( void* );
 static bool qt_event_filter( void* m )
 {
-    if( old_qt_event_filter != NULL && old_qt_event_filter( m ))
+    if( old_qt_event_filter != nullptr && old_qt_event_filter( m ))
         return true;
     if( SalKDEDisplay::self() && SalKDEDisplay::self()->checkDirectInputEvent( static_cast< XEvent* >( m )))
         return true;
@@ -240,8 +240,8 @@ void KDEXLib::setupEventLoop()
 #if KDE_HAVE_GLIB
     if( m_isGlibEventLoopType )
     {
-        old_gpoll = g_main_context_get_poll_func( NULL );
-        g_main_context_set_poll_func( NULL, gpoll_wrapper );
+        old_gpoll = g_main_context_get_poll_func( nullptr );
+        g_main_context_set_poll_func( nullptr, gpoll_wrapper );
         if( m_allowKdeDialogs )
             QApplication::clipboard()->setProperty( "useEventLoopWhenWaiting", true );
         return;
@@ -434,7 +434,7 @@ int KDEXLib::getFrameWidth()
     }
 
     // fill in a default
-    QFrame aFrame( NULL );
+    QFrame aFrame( nullptr );
     aFrame.setFrameStyle( QFrame::StyledPanel | QFrame::Sunken );
     aFrame.ensurePolished();
     m_frameWidth = aFrame.frameWidth();

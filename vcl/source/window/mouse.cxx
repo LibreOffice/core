@@ -160,12 +160,12 @@ void Window::ImplCallMouseMove( sal_uInt16 nMouseCode, bool bModChanged )
 void Window::ImplGenerateMouseMove()
 {
     if ( !mpWindowImpl->mpFrameData->mnMouseMoveId )
-        mpWindowImpl->mpFrameData->mnMouseMoveId = Application::PostUserEvent( LINK( mpWindowImpl->mpFrameWindow, Window, ImplGenerateMouseMoveHdl ), NULL, true );
+        mpWindowImpl->mpFrameData->mnMouseMoveId = Application::PostUserEvent( LINK( mpWindowImpl->mpFrameWindow, Window, ImplGenerateMouseMoveHdl ), nullptr, true );
 }
 
 IMPL_LINK_NOARG_TYPED(Window, ImplGenerateMouseMoveHdl, void*, void)
 {
-    mpWindowImpl->mpFrameData->mnMouseMoveId = 0;
+    mpWindowImpl->mpFrameData->mnMouseMoveId = nullptr;
     vcl::Window* pCaptureWin = ImplGetSVData()->maWinData.mpCaptureWin;
     if( ! pCaptureWin ||
         (pCaptureWin->mpWindowImpl && pCaptureWin->mpWindowImpl->mpFrame == mpWindowImpl->mpFrame)
@@ -384,7 +384,7 @@ void Window::ImplGrabFocus( GetFocusFlags nFlags )
                 if ( !ImplCallPreNotify( aNEvt ) && !aDogTag.IsDead() )
                     CompatGetFocus();
                 if( !aDogTag.IsDead() )
-                    ImplCallActivateListeners( (pOldFocusWindow && ! aOldFocusDel.IsDead()) ? pOldFocusWindow : NULL );
+                    ImplCallActivateListeners( (pOldFocusWindow && ! aOldFocusDel.IsDead()) ? pOldFocusWindow : nullptr );
                 if( !aDogTag.IsDead() )
                 {
                     mpWindowImpl->mnGetFocusFlags = GetFocusFlags::NONE;
@@ -473,7 +473,7 @@ void Window::ReleaseMouse()
 
     if ( pSVData->maWinData.mpCaptureWin.get() == this )
     {
-        pSVData->maWinData.mpCaptureWin = NULL;
+        pSVData->maWinData.mpCaptureWin = nullptr;
         mpWindowImpl->mpFrame->CaptureMouse( false );
         ImplGenerateMouseMove();
     }

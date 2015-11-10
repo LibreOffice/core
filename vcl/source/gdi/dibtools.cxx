@@ -770,7 +770,7 @@ bool ImplReadDIBBody( SvStream& rIStm, Bitmap& rBmp, Bitmap* pBmpAlpha, sal_uLon
             return false;
         }
         Bitmap aNewBmpAlpha;
-        BitmapWriteAccess* pAccAlpha = 0;
+        BitmapWriteAccess* pAccAlpha = nullptr;
         bool bAlphaPossible(pBmpAlpha && aHeader.nBitCount == 32);
 
         if (bAlphaPossible)
@@ -797,8 +797,8 @@ bool ImplReadDIBBody( SvStream& rIStm, Bitmap& rBmp, Bitmap* pBmpAlpha, sal_uLon
 
         sal_uInt16 nColors(0);
         SvStream* pIStm;
-        SvMemoryStream* pMemStm = NULL;
-        sal_uInt8* pData = NULL;
+        SvMemoryStream* pMemStm = nullptr;
+        sal_uInt8* pData = nullptr;
 
         if (aHeader.nBitCount <= 8)
         {
@@ -1494,12 +1494,12 @@ bool ImplReadDIB(
     {
         if(ImplReadDIBFileHeader(rIStm, nOffset))
         {
-            bRet = ImplReadDIBBody(rIStm, rTarget, nOffset >= DIBV5HEADERSIZE ? pTargetAlpha : 0, nOffset);
+            bRet = ImplReadDIBBody(rIStm, rTarget, nOffset >= DIBV5HEADERSIZE ? pTargetAlpha : nullptr, nOffset);
         }
     }
     else
     {
-        bRet = ImplReadDIBBody(rIStm, rTarget, 0, nOffset, bMSOFormat);
+        bRet = ImplReadDIBBody(rIStm, rTarget, nullptr, nOffset, bMSOFormat);
     }
 
     if(!bRet)
@@ -1530,7 +1530,7 @@ bool ImplWriteDIB(
     if(aSizePix.Width() && aSizePix.Height())
     {
         BitmapReadAccess* pAcc = const_cast< Bitmap& >(rSource).AcquireReadAccess();
-        BitmapReadAccess* pAccAlpha = 0;
+        BitmapReadAccess* pAccAlpha = nullptr;
         const SvStreamEndian nOldFormat(rOStm.GetEndian());
         const sal_uLong nOldPos(rOStm.Tell());
 
@@ -1554,7 +1554,7 @@ bool ImplWriteDIB(
         {
             if(bFileHeader)
             {
-                if(ImplWriteDIBFileHeader(rOStm, *pAcc, 0 != pSourceAlpha))
+                if(ImplWriteDIBFileHeader(rOStm, *pAcc, nullptr != pSourceAlpha))
                 {
                     bRet = ImplWriteDIBBody(rSource, rOStm, *pAcc, pAccAlpha, bCompressed);
                 }
@@ -1590,7 +1590,7 @@ bool ReadDIB(
     bool bFileHeader,
     bool bMSOFormat)
 {
-    return ImplReadDIB(rTarget, 0, rIStm, bFileHeader, bMSOFormat);
+    return ImplReadDIB(rTarget, nullptr, rIStm, bFileHeader, bMSOFormat);
 }
 
 bool ReadDIBBitmapEx(
@@ -1598,7 +1598,7 @@ bool ReadDIBBitmapEx(
     SvStream& rIStm)
 {
     Bitmap aBmp;
-    bool bRetval(ImplReadDIB(aBmp, 0, rIStm, true) && !rIStm.GetError());
+    bool bRetval(ImplReadDIB(aBmp, nullptr, rIStm, true) && !rIStm.GetError());
 
     if(bRetval)
     {
@@ -1626,7 +1626,7 @@ bool ReadDIBBitmapEx(
                     {
                         Bitmap aMask;
 
-                        bRetval = ImplReadDIB(aMask, 0, rIStm, true);
+                        bRetval = ImplReadDIB(aMask, nullptr, rIStm, true);
 
                         if(bRetval)
                         {
@@ -1692,14 +1692,14 @@ bool WriteDIB(
     bool bCompressed,
     bool bFileHeader)
 {
-    return ImplWriteDIB(rSource, 0, rOStm, bCompressed, bFileHeader);
+    return ImplWriteDIB(rSource, nullptr, rOStm, bCompressed, bFileHeader);
 }
 
 bool WriteDIBBitmapEx(
     const BitmapEx& rSource,
     SvStream& rOStm)
 {
-    if(ImplWriteDIB(rSource.GetBitmap(), 0, rOStm, true, true))
+    if(ImplWriteDIB(rSource.GetBitmap(), nullptr, rOStm, true, true))
     {
         rOStm.WriteUInt32( 0x25091962 );
         rOStm.WriteUInt32( 0xACB20201 );
@@ -1707,7 +1707,7 @@ bool WriteDIBBitmapEx(
 
         if(TRANSPARENT_BITMAP == rSource.eTransparent)
         {
-            return ImplWriteDIB(rSource.aMask, 0, rOStm, true, true);
+            return ImplWriteDIB(rSource.aMask, nullptr, rOStm, true, true);
         }
         else if(TRANSPARENT_COLOR == rSource.eTransparent)
         {

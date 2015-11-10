@@ -32,7 +32,7 @@ void RTSDialog::insertAllPPDValues( ListBox& rBox, const PPDParser* pParser, con
     if( ! pKey || ! pParser )
         return;
 
-    const PPDValue* pValue = NULL;
+    const PPDValue* pValue = nullptr;
     sal_Int32 nPos = 0;
     OUString aOptionText;
 
@@ -74,8 +74,8 @@ void RTSDialog::insertAllPPDValues( ListBox& rBox, const PPDParser* pParser, con
 RTSDialog::RTSDialog(const PrinterInfo& rJobData, vcl::Window* pParent)
     : TabDialog(pParent, "PrinterPropertiesDialog", "vcl/ui/printerpropertiesdialog.ui")
     , m_aJobData(rJobData)
-    , m_pPaperPage(NULL)
-    , m_pDevicePage(NULL)
+    , m_pPaperPage(nullptr)
+    , m_pDevicePage(nullptr)
     , m_aInvalidString(VclResId(SV_PRINT_INVALID_TXT))
     , mbDataModified(false)
 {
@@ -116,7 +116,7 @@ IMPL_LINK_TYPED( RTSDialog, ActivatePage, TabControl*, pTabCtrl, void )
     OString sPage = m_pTabControl->GetPageName(nId);
     if ( ! m_pTabControl->GetTabPage( nId ) )
     {
-        TabPage *pPage = NULL;
+        TabPage *pPage = nullptr;
         if (sPage == "paper")
             pPage = m_pPaperPage = VclPtr<RTSPaperPage>::Create( this );
         else if (sPage == "device")
@@ -180,13 +180,13 @@ RTSPaperPage::RTSPaperPage(RTSDialog* pParent)
 
     // duplex
     nPos = m_pDuplexBox->InsertEntry( m_pParent->m_aInvalidString );
-    m_pDuplexBox->SetEntryData( nPos, NULL );
+    m_pDuplexBox->SetEntryData( nPos, nullptr );
 
     // paper does not have an invalid entry
 
     // input slots
     nPos = m_pSlotBox->InsertEntry( m_pParent->m_aInvalidString );
-    m_pSlotBox->SetEntryData( nPos, NULL );
+    m_pSlotBox->SetEntryData( nPos, nullptr );
 
     update();
 }
@@ -211,7 +211,7 @@ void RTSPaperPage::dispose()
 
 void RTSPaperPage::update()
 {
-    const PPDKey* pKey      = NULL;
+    const PPDKey* pKey      = nullptr;
 
     // orientation
     m_pOrientBox->SelectEntryPos(
@@ -264,7 +264,7 @@ void RTSPaperPage::update()
 
 IMPL_LINK_TYPED( RTSPaperPage, SelectHdl, ListBox&, rBox, void )
 {
-    const PPDKey* pKey = NULL;
+    const PPDKey* pKey = nullptr;
     if( &rBox == m_pPaperBox )
     {
         if( m_pParent->m_aJobData.m_pParser )
@@ -301,7 +301,7 @@ IMPL_LINK_TYPED( RTSPaperPage, SelectHdl, ListBox&, rBox, void )
 RTSDevicePage::RTSDevicePage( RTSDialog* pParent )
     : TabPage(pParent->m_pTabControl, "PrinterDevicePage", "vcl/ui/printerdevicepage.ui")
     , m_pParent(pParent)
-    , m_pCustomValue(NULL)
+    , m_pCustomValue(nullptr)
 {
     get(m_pPPDKeyBox, "options");
     get(m_pPPDValueBox, "values");
@@ -484,7 +484,7 @@ void RTSDevicePage::FillValueBox( const PPDKey* pKey )
     if( ! pKey )
         return;
 
-    const PPDValue* pValue = NULL;
+    const PPDValue* pValue = nullptr;
     for( int i = 0; i < pKey->countValues(); i++ )
     {
         pValue = pKey->getValue( i );

@@ -777,7 +777,7 @@ bool Bitmap::ImplMosaic( const BmpFilterParam* pFilterParam )
 
         if( GetBitCount() > 8 )
         {
-            pNewBmp = NULL;
+            pNewBmp = nullptr;
             pReadAcc = pWriteAcc = AcquireWriteAccess();
         }
         else

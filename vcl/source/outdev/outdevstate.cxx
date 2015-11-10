@@ -40,17 +40,17 @@
 #include "sallayout.hxx"
 
 OutDevState::OutDevState()
-    : mpMapMode(0)
+    : mpMapMode(nullptr)
     , mbMapActive(false)
-    , mpClipRegion(0)
-    , mpLineColor(0)
-    , mpFillColor(0)
-    , mpFont(0)
-    , mpTextColor(0)
-    , mpTextFillColor(0)
-    , mpTextLineColor(0)
-    , mpOverlineColor(0)
-    , mpRefPoint(0)
+    , mpClipRegion(nullptr)
+    , mpLineColor(nullptr)
+    , mpFillColor(nullptr)
+    , mpFont(nullptr)
+    , mpTextColor(nullptr)
+    , mpTextFillColor(nullptr)
+    , mpTextLineColor(nullptr)
+    , mpOverlineColor(nullptr)
+    , mpRefPoint(nullptr)
     , meTextAlign(ALIGN_TOP)
     , meRasterOp(ROP_OVERPAINT)
     , mnTextLayoutMode(TEXT_LAYOUT_DEFAULT)
@@ -142,7 +142,7 @@ void OutputDevice::Pop()
         mpMetaFile->AddAction( new MetaPopAction() );
 
     GDIMetaFile* pOldMetaFile = mpMetaFile;
-    mpMetaFile = NULL;
+    mpMetaFile = nullptr;
 
     if ( mpOutDevStateStack->empty() )
     {
@@ -636,19 +636,19 @@ void OutputDevice::ImplReleaseFonts()
     if ( mpFontEntry )
     {
         mpFontCache->Release( mpFontEntry );
-        mpFontEntry = NULL;
+        mpFontEntry = nullptr;
     }
 
     if ( mpGetDevFontList )
     {
         delete mpGetDevFontList;
-        mpGetDevFontList = NULL;
+        mpGetDevFontList = nullptr;
     }
 
     if ( mpGetDevSizeList )
     {
         delete mpGetDevSizeList;
-        mpGetDevSizeList = NULL;
+        mpGetDevSizeList = nullptr;
     }
 }
 

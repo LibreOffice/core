@@ -130,9 +130,9 @@ public:
                         const Point& rDestPt,
                         const Size& rDestSz,
                         long nExtraData = 0,
-                        OutputDevice* pFirstFrameOutDev = NULL);
+                        OutputDevice* pFirstFrameOutDev = nullptr);
 
-    void            Stop( OutputDevice* pOutDev = NULL, long nExtraData = 0 );
+    void            Stop( OutputDevice* pOutDev = nullptr, long nExtraData = 0 );
 
     void            Draw( OutputDevice* pOutDev, const Point& rDestPt ) const;
     void            Draw( OutputDevice* pOutDev, const Point& rDestPt, const Size& rDestSz ) const;
@@ -184,7 +184,7 @@ public:
 
     bool            Filter(
                         BmpFilter eFilter,
-                        const BmpFilterParam* pFilterParam = NULL );
+                        const BmpFilterParam* pFilterParam = nullptr );
 
     friend VCL_DLLPUBLIC SvStream& ReadAnimation( SvStream& rIStream, Animation& rAnimation );
     friend VCL_DLLPUBLIC SvStream& WriteAnimation( SvStream& rOStream, const Animation& rAnimation );

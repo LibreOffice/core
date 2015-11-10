@@ -83,7 +83,7 @@ void JobData::setCollate( bool bCollate )
         const PPDKey* pKey = pParser->getKey( OUString( "Collate" ) );
         if( pKey )
         {
-            const PPDValue* pVal = NULL;
+            const PPDValue* pVal = nullptr;
             if( bCollate )
                 pVal = pKey->getValue( OUString( "True" ) );
             else
@@ -105,7 +105,7 @@ bool JobData::setPaper( int i_nWidth, int i_nHeight )
         OUString aPaper( m_pParser->matchPaper( i_nWidth, i_nHeight ) );
 
         const PPDKey*   pKey = m_pParser->getKey( OUString( "PageSize" ) );
-        const PPDValue* pValue = pKey ? pKey->getValueCaseInsensitive( aPaper ) : NULL;
+        const PPDValue* pValue = pKey ? pKey->getValueCaseInsensitive( aPaper ) : nullptr;
 
         bSuccess = pKey && pValue && m_aContext.setValue( pKey, pValue );
     }
@@ -118,7 +118,7 @@ bool JobData::setPaperBin( int i_nPaperBin )
     if( m_pParser )
     {
         const PPDKey*   pKey = m_pParser->getKey( OUString( "InputSlot" ) );
-        const PPDValue* pValue = pKey ? pKey->getValue( i_nPaperBin ) : NULL;
+        const PPDValue* pValue = pKey ? pKey->getValue( i_nPaperBin ) : nullptr;
 
         bSuccess = pKey && pValue && m_aContext.setValue( pKey, pValue );
     }

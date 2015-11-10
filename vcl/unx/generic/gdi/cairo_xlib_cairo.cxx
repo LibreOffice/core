@@ -59,13 +59,13 @@ namespace cairo
 #include <cairo-xlib-xrender.h>
 
     X11SysData::X11SysData() :
-        pDisplay(NULL),
+        pDisplay(nullptr),
         hDrawable(0),
-        pVisual(NULL),
+        pVisual(nullptr),
         nScreen(0),
         nDepth(-1),
         aColormap(-1),
-        pRenderFormat(NULL)
+        pRenderFormat(nullptr)
     {}
 
     X11SysData::X11SysData( const SystemGraphicsData& pSysDat ) :
@@ -85,7 +85,7 @@ namespace cairo
         nScreen(pSysDat.nScreen),
         nDepth(pSysDat.nDepth),
         aColormap(pSysDat.aColormap),
-        pRenderFormat(NULL)
+        pRenderFormat(nullptr)
     {}
 
     X11Pixmap::~X11Pixmap()

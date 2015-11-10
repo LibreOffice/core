@@ -36,7 +36,7 @@ DropTarget::DropTarget() :
     m_bActive( false ),
     m_nDefaultActions( 0 ),
     m_aTargetWindow( None ),
-    m_pSelectionManager( NULL )
+    m_pSelectionManager( nullptr )
 {
 }
 

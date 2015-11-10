@@ -125,8 +125,8 @@ struct GtkSalPrinter_Impl
 };
 
 GtkSalPrinter_Impl::GtkSalPrinter_Impl()
-    : m_pPrinter(0)
-    , m_pSettings(0)
+    : m_pPrinter(nullptr)
+    , m_pSettings(nullptr)
 {
 }
 
@@ -135,12 +135,12 @@ GtkSalPrinter_Impl::~GtkSalPrinter_Impl()
     if (m_pPrinter)
     {
         g_object_unref(G_OBJECT(m_pPrinter));
-        m_pPrinter = NULL;
+        m_pPrinter = nullptr;
     }
     if (m_pSettings)
     {
         g_object_unref(G_OBJECT(m_pSettings));
-        m_pSettings = NULL;
+        m_pSettings = nullptr;
     }
 }
 
@@ -290,10 +290,10 @@ GtkSalPrinter::EndJob()
         OUStringToOString(m_xImpl->m_sJobName, RTL_TEXTENCODING_UTF8).getStr(),
         m_xImpl->m_pPrinter, m_xImpl->m_pSettings, pPageSetup);
 
-    GError* error = NULL;
+    GError* error = nullptr;
     bRet = xWrapper->print_job_set_source_file(pJob, m_xImpl->m_sSpoolFile.getStr(), &error);
     if (bRet)
-        xWrapper->print_job_send(pJob, NULL, NULL, NULL);
+        xWrapper->print_job_send(pJob, nullptr, nullptr, nullptr);
     else
     {
         //To-Do, do something with this
@@ -330,7 +330,7 @@ lcl_makeFrame(
         const uno::Sequence<OUString> &i_rHelpTexts,
         sal_Int32* const io_pCurHelpText)
 {
-    GtkWidget* const pLabel = gtk_label_new(NULL);
+    GtkWidget* const pLabel = gtk_label_new(nullptr);
     lcl_setHelpText(pLabel, i_rHelpTexts, !io_pCurHelpText ? 0 : (*io_pCurHelpText)++);
     gtk_misc_set_alignment(GTK_MISC(pLabel), 0.0, 0.5);
 
@@ -404,7 +404,7 @@ void
 GtkPrintDialog::impl_initDialog()
 {
     //To-Do, like fpicker, set UI language
-    m_pDialog = m_xWrapper->print_unix_dialog_new(NULL, NULL);
+    m_pDialog = m_xWrapper->print_unix_dialog_new(nullptr, nullptr);
 
     vcl::Window* const pTopWindow(Application::GetActiveTopWindow());
     if (pTopWindow)
@@ -437,10 +437,10 @@ GtkPrintDialog::impl_initCustomTab()
     const uno::Sequence<beans::PropertyValue>& rOptions(m_rController.getUIOptions());
     DependencyMap_t aPropertyToDependencyRowMap;
     CustomTabs_t aCustomTabs;
-    GtkWidget* pCurParent = NULL;
-    GtkWidget* pCurTabPage = NULL;
-    GtkWidget* pCurSubGroup = NULL;
-    GtkWidget* pStandardPrintRangeContainer = NULL;
+    GtkWidget* pCurParent = nullptr;
+    GtkWidget* pCurTabPage = nullptr;
+    GtkWidget* pCurSubGroup = nullptr;
+    GtkWidget* pStandardPrintRangeContainer = nullptr;
     bool bIgnoreSubgroup = false;
     for (int i = 0; i != rOptions.getLength(); i++)
     {
@@ -459,7 +459,7 @@ GtkPrintDialog::impl_initCustomTab()
         sal_Int32 nDependsOnValue = 0;
         bool bUseDependencyRow = false;
         bool bIgnore = false;
-        GtkWidget* pGroup = NULL;
+        GtkWidget* pGroup = nullptr;
         bool bGtkInternal = false;
 
         //Fix fdo#69381
@@ -508,7 +508,7 @@ GtkPrintDialog::impl_initCustomTab()
                     const int nLen = aHelpIds.getLength();
                     aHelpTexts.realloc(nLen);
                     for (int j = 0; j != nLen; ++j)
-                        aHelpTexts[j] = pHelp->GetHelpText(aHelpIds[j], 0);
+                        aHelpTexts[j] = pHelp->GetHelpText(aHelpIds[j], nullptr);
                 }
                 else // fallback
                     aHelpTexts = aHelpIds;
@@ -553,7 +553,7 @@ GtkPrintDialog::impl_initCustomTab()
             pCurParent = gtk_vbox_new(FALSE, 12);
             gtk_container_set_border_width(GTK_CONTAINER(pCurParent), 0);
 
-            pCurSubGroup = lcl_makeFrame(pCurParent, aText, aHelpTexts, NULL);
+            pCurSubGroup = lcl_makeFrame(pCurParent, aText, aHelpTexts, nullptr);
             gtk_box_pack_start(GTK_BOX(pCurTabPage), pCurSubGroup, FALSE, FALSE, 0);
         }
         // special case: we need to map these to controls of the gtk print dialog
@@ -577,8 +577,8 @@ GtkPrintDialog::impl_initCustomTab()
             // 2. it may cause warning because the widget may not
             //    have been placed in m_aControlToPropertyMap yet
 
-            GtkWidget* pWidget = NULL;
-            beans::PropertyValue* pVal = NULL;
+            GtkWidget* pWidget = nullptr;
+            beans::PropertyValue* pVal = nullptr;
             if (aCtrlType == "Bool" && pCurParent)
             {
                 pWidget = gtk_check_button_new_with_mnemonic(
@@ -592,7 +592,7 @@ GtkPrintDialog::impl_initCustomTab()
                     pVal->Value >>= bVal;
                 gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pWidget), bVal);
                 gtk_widget_set_sensitive(pWidget,
-                    m_rController.isUIOptionEnabled(aPropertyName) && pVal != NULL);
+                    m_rController.isUIOptionEnabled(aPropertyName) && pVal != nullptr);
                 g_signal_connect(pWidget, "toggled", G_CALLBACK(GtkPrintDialog::UIOption_CheckHdl), this);
             }
             else if (aCtrlType == "Radio" && pCurParent)
@@ -611,7 +611,7 @@ GtkPrintDialog::impl_initCustomTab()
                 for (sal_Int32 m = 0; m != aChoices.getLength(); m++)
                 {
                     pWidget = gtk_radio_button_new_with_mnemonic_from_widget(
-                        GTK_RADIO_BUTTON(m == 0 ? NULL : pWidget),
+                        GTK_RADIO_BUTTON(m == 0 ? nullptr : pWidget),
                         OUStringToOString(aChoices[m].replace('~', '_'), RTL_TEXTENCODING_UTF8).getStr());
                     lcl_setHelpText(pWidget, aHelpTexts, nCurHelpText++);
                     m_aControlToPropertyMap[pWidget] = aPropertyName;
@@ -622,7 +622,7 @@ GtkPrintDialog::impl_initCustomTab()
                     aPropertyToDependencyRowMap[aPropertyName + OUString::number(m)] = pRow;
                     gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pWidget), m == nSelectVal);
                     gtk_widget_set_sensitive(pWidget,
-                        m_rController.isUIOptionEnabled(aPropertyName) && pVal != NULL);
+                        m_rController.isUIOptionEnabled(aPropertyName) && pVal != nullptr);
                     g_signal_connect(pWidget, "toggled",
                             G_CALLBACK(GtkPrintDialog::UIOption_RadioHdl), this);
                 }
@@ -683,7 +683,7 @@ GtkPrintDialog::impl_initCustomTab()
                 m_aControlToPropertyMap[pWidget] = aPropertyName;
 
                 gtk_widget_set_sensitive(pWidget,
-                    m_rController.isUIOptionEnabled(aPropertyName) && pVal != NULL);
+                    m_rController.isUIOptionEnabled(aPropertyName) && pVal != nullptr);
 
                 if (!aText.isEmpty())
                 {
@@ -701,7 +701,7 @@ GtkPrintDialog::impl_initCustomTab()
             else
                 SAL_INFO("vcl.gtk", "unhandled option type: " << aCtrlType);
 
-            GtkWidget* pRow = NULL;
+            GtkWidget* pRow = nullptr;
             if (pWidget)
             {
                 if (bUseDependencyRow && !aDependsOnName.isEmpty())
@@ -710,7 +710,7 @@ GtkPrintDialog::impl_initCustomTab()
                     if (!pRow)
                     {
                         gtk_widget_destroy(pWidget);
-                        pWidget = NULL;
+                        pWidget = nullptr;
                     }
                 }
             }
@@ -804,7 +804,7 @@ GtkPrintDialog::impl_checkOptionalControlDependencies()
 beans::PropertyValue*
 GtkPrintDialog::impl_queryPropertyValue(GtkWidget* const i_pWidget) const
 {
-    beans::PropertyValue* pVal(0);
+    beans::PropertyValue* pVal(nullptr);
     std::map<GtkWidget*, OUString>::const_iterator aIt(m_aControlToPropertyMap.find(i_pWidget));
     if (aIt != m_aControlToPropertyMap.end())
     {

@@ -40,12 +40,12 @@
 using namespace ::com::sun::star;
 
 Image::Image() :
-    mpImplData( NULL )
+    mpImplData( nullptr )
 {
 }
 
 Image::Image( const ResId& rResId ) :
-    mpImplData( NULL )
+    mpImplData( nullptr )
 {
 
     rResId.SetRT( RSC_IMAGE );
@@ -99,21 +99,21 @@ Image::Image( const Image& rImage ) :
 }
 
 Image::Image( const BitmapEx& rBitmapEx ) :
-    mpImplData( NULL )
+    mpImplData( nullptr )
 {
 
     ImplInit( rBitmapEx );
 }
 
 Image::Image( const Bitmap& rBitmap ) :
-    mpImplData( NULL )
+    mpImplData( nullptr )
 {
 
     ImplInit( rBitmap );
 }
 
 Image::Image( const Bitmap& rBitmap, const Bitmap& rMaskBitmap ) :
-    mpImplData( NULL )
+    mpImplData( nullptr )
 {
 
     const BitmapEx aBmpEx( rBitmap, rMaskBitmap );
@@ -122,7 +122,7 @@ Image::Image( const Bitmap& rBitmap, const Bitmap& rMaskBitmap ) :
 }
 
 Image::Image( const Bitmap& rBitmap, const Color& rColor ) :
-    mpImplData( NULL )
+    mpImplData( nullptr )
 {
 
     const BitmapEx aBmpEx( rBitmap, rColor );
@@ -131,7 +131,7 @@ Image::Image( const Bitmap& rBitmap, const Color& rColor ) :
 }
 
 Image::Image( const uno::Reference< graphic::XGraphic >& rxGraphic ) :
-    mpImplData( NULL )
+    mpImplData( nullptr )
 {
 
     const Graphic aGraphic( rxGraphic );
@@ -139,7 +139,7 @@ Image::Image( const uno::Reference< graphic::XGraphic >& rxGraphic ) :
 }
 
 Image::Image( const OUString &rFileUrl ) :
-    mpImplData( NULL )
+    mpImplData( nullptr )
 {
     OUString aTmp;
     osl::FileBase::getSystemPathFromFileURL( rFileUrl, aTmp );
@@ -275,14 +275,14 @@ bool Image::operator==( const Image& rImage ) const
 }
 
 ImageList::ImageList( sal_uInt16 nInit, sal_uInt16 nGrow ) :
-    mpImplData( NULL ),
+    mpImplData( nullptr ),
     mnInitSize( nInit ),
     mnGrowSize( nGrow )
 {
 }
 
 ImageList::ImageList( const ResId& rResId ) :
-    mpImplData( NULL ),
+    mpImplData( nullptr ),
     mnInitSize( 1 ),
     mnGrowSize( 4 )
 {
@@ -330,7 +330,7 @@ ImageList::ImageList( const ResId& rResId ) :
 ImageList::ImageList( const ::std::vector< OUString >& rNameVector,
                       const OUString& rPrefix,
                       const Color* ) :
-    mpImplData( NULL ),
+    mpImplData( nullptr ),
     mnInitSize( 1 ),
     mnGrowSize( 4 )
 {

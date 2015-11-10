@@ -106,7 +106,7 @@ OUString GetCommandLineToken( int nToken, const OUString& rLine )
     int nActualToken = 0;
     sal_Unicode* pBuffer = static_cast<sal_Unicode*>(alloca( sizeof(sal_Unicode)*( nLen + 1 ) ));
     const sal_Unicode* pRun = rLine.getStr();
-    sal_Unicode* pLeap = NULL;
+    sal_Unicode* pLeap = nullptr;
 
     while( *pRun && nActualToken <= nToken )
     {
@@ -156,7 +156,7 @@ OString GetCommandLineToken(int nToken, const OString& rLine)
     int nActualToken = 0;
     char* pBuffer = static_cast<char*>(alloca( nLen + 1 ));
     const char* pRun = rLine.getStr();
-    char* pLeap = NULL;
+    char* pLeap = nullptr;
 
     while( *pRun && nActualToken <= nToken )
     {

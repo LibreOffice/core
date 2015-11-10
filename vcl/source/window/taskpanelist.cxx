@@ -180,7 +180,7 @@ bool TaskPaneList::HandleKeyEvent(const KeyEvent& rKeyEvent)
                 }
 
                 // activate next task pane
-                vcl::Window *pNextWin = NULL;
+                vcl::Window *pNextWin = nullptr;
 
                 if( bSplitterOnly )
                     pNextWin = FindNextSplitter( *p );
@@ -213,9 +213,9 @@ bool TaskPaneList::HandleKeyEvent(const KeyEvent& rKeyEvent)
         // the focus is not in the list: activate first float if F6 was pressed
         vcl::Window *pWin;
         if( bSplitterOnly )
-            pWin = FindNextSplitter( NULL );
+            pWin = FindNextSplitter( nullptr );
         else
-            pWin = FindNextFloat( NULL, bForward );
+            pWin = FindNextFloat( nullptr, bForward );
         if( pWin )
         {
             ImplTaskPaneListGrabFocus( pWin, bForward );

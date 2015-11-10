@@ -62,7 +62,7 @@ struct ImplEntryType
         mnHeight( 0 )
     {
         mbIsSelected = false;
-        mpUserData = NULL;
+        mpUserData = nullptr;
     }
 
     ImplEntryType( const OUString& rStr ) :
@@ -71,7 +71,7 @@ struct ImplEntryType
         mnHeight( 0 )
     {
         mbIsSelected = false;
-        mpUserData = NULL;
+        mpUserData = nullptr;
     }
 
     ImplEntryType( const Image& rImage ) :
@@ -80,7 +80,7 @@ struct ImplEntryType
         mnHeight( 0 )
     {
         mbIsSelected = false;
-        mpUserData = NULL;
+        mpUserData = nullptr;
     }
 };
 
@@ -102,7 +102,7 @@ private:
     ImplEntryType*  GetEntry( sal_Int32  nPos ) const
     {
         if (nPos < 0 || static_cast<size_t>(nPos) >= maEntries.size())
-            return NULL;
+            return nullptr;
         return const_cast<ImplEntryType*>(&maEntries[nPos]);
     }
 

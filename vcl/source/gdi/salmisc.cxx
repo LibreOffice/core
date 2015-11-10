@@ -185,7 +185,7 @@ static void ImplTCToTC( const BitmapBuffer& rSrcBuffer, BitmapBuffer& rDstBuffer
     if( BMP_SCANLINE_FORMAT( rSrcBuffer.mnFormat ) == BMP_FORMAT_24BIT_TC_BGR )
     {
         BitmapColor aCol;
-        sal_uInt8* pPixel = NULL;
+        sal_uInt8* pPixel = nullptr;
 
         for (long nActY = 0; nActY < rDstBuffer.mnHeight; ++nActY)
         {
@@ -338,9 +338,9 @@ BitmapBuffer* StretchAndConvert(
     catch( const std::bad_alloc& )
     {
         // memory exception, clean up
-        pDstBuffer->mpBits = NULL;
+        pDstBuffer->mpBits = nullptr;
         delete pDstBuffer;
-        return NULL;
+        return nullptr;
     }
 
     // do we need a destination palette or color mask?
@@ -354,7 +354,7 @@ BitmapBuffer* StretchAndConvert(
         if (!pDstPal)
         {
             delete pDstBuffer;
-            return NULL;
+            return nullptr;
         }
         pDstBuffer->maPalette = *pDstPal;
     }
@@ -368,7 +368,7 @@ BitmapBuffer* StretchAndConvert(
         if (!pDstMask)
         {
             delete pDstBuffer;
-            return NULL;
+            return nullptr;
         }
         pDstBuffer->maColorMask = *pDstMask;
     }
@@ -378,10 +378,10 @@ BitmapBuffer* StretchAndConvert(
     if( bFastConvert )
         return pDstBuffer;
 
-    Scanline*       pSrcScan = NULL;
-    Scanline*       pDstScan = NULL;
-    long*           pMapX = NULL;
-    long*           pMapY = NULL;
+    Scanline*       pSrcScan = nullptr;
+    Scanline*       pDstScan = nullptr;
+    long*           pMapX = nullptr;
+    long*           pMapY = nullptr;
 
     try
     {
@@ -400,7 +400,7 @@ BitmapBuffer* StretchAndConvert(
         delete[] pMapX;
         delete[] pMapY;
         delete pDstBuffer;
-        return NULL;
+        return nullptr;
     }
 
     // horizontal mapping table

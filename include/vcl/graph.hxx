@@ -134,7 +134,7 @@ public:
     MapMode             GetPrefMapMode() const;
     void                SetPrefMapMode( const MapMode& rPrefMapMode );
 
-    Size                GetSizePixel( const OutputDevice* pRefDevice = NULL ) const;
+    Size                GetSizePixel( const OutputDevice* pRefDevice = nullptr ) const;
 
     sal_uLong               GetSizeBytes() const;
 
@@ -151,8 +151,8 @@ public:
                                         const Point& rDestPt,
                                         const Size& rDestSize,
                                         long nExtraData = 0L,
-                                        OutputDevice* pFirstFrameOutDev = NULL );
-    void                StopAnimation( OutputDevice* pOutputDevice = NULL,
+                                        OutputDevice* pFirstFrameOutDev = nullptr );
+    void                StopAnimation( OutputDevice* pOutputDevice = nullptr,
                                        long nExtraData = 0L );
 
     void                SetAnimationNotifyHdl( const Link<Animation*,void>& rLink );

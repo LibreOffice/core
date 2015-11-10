@@ -41,7 +41,7 @@ const char* ImplDbgCheckWindow( const void* pObj )
         pChild = pChild->mpWindowImpl->mpNext;
     }
 
-    return NULL;
+    return nullptr;
 }
 #endif
 

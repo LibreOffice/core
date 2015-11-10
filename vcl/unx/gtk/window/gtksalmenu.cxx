@@ -39,7 +39,7 @@ static bool bMenuVisibility = false;
  */
 static gchar* GetCommandForItem( GtkSalMenuItem* pSalMenuItem, gchar* aCurrentCommand, GActionGroup* pActionGroup )
 {
-    gchar* aCommand = NULL;
+    gchar* aCommand = nullptr;
 
     sal_uInt16 nId = pSalMenuItem->mnId;
     Menu* pMenu = pSalMenuItem->mpVCLMenu;
@@ -50,7 +50,7 @@ static gchar* GetCommandForItem( GtkSalMenuItem* pSalMenuItem, gchar* aCurrentCo
     else
     {
         if ( !pMenu )
-            return NULL;
+            return nullptr;
 
         OUString aMenuCommand = pMenu->GetItemCommand( nId );
         gchar* aCommandStr = g_strdup( OUStringToOString( aMenuCommand, RTL_TEXTENCODING_UTF8 ).getStr() );
@@ -103,7 +103,7 @@ void RemoveSpareItemsFromNativeMenu( GLOMenu* pMenu, GList** pOldCommandList, un
     {
         gchar* aCommand = g_lo_menu_get_command_from_item_in_section( pMenu, nSection, --nSectionItems );
 
-        if ( aCommand != NULL && pOldCommandList != NULL )
+        if ( aCommand != nullptr && pOldCommandList != nullptr )
             *pOldCommandList = g_list_append( *pOldCommandList, g_strdup( aCommand ) );
 
         g_free( aCommand );
@@ -114,7 +114,7 @@ void RemoveSpareItemsFromNativeMenu( GLOMenu* pMenu, GList** pOldCommandList, un
 
 void RemoveSpareSectionsFromNativeMenu( GLOMenu* pMenu, GList** pOldCommandList, unsigned nLastSection )
 {
-    if ( pMenu == NULL || pOldCommandList == NULL )
+    if ( pMenu == nullptr || pOldCommandList == nullptr )
         return;
 
     sal_Int32 n = g_menu_model_get_n_items( G_MENU_MODEL( pMenu ) ) - 1;
@@ -133,14 +133,14 @@ gint CompareStr( gpointer str1, gpointer str2 )
 
 void RemoveUnusedCommands( GLOActionGroup* pActionGroup, GList* pOldCommandList, GList* pNewCommandList )
 {
-    if ( pActionGroup == NULL || pOldCommandList == NULL )
+    if ( pActionGroup == nullptr || pOldCommandList == nullptr )
     {
         g_list_free_full( pOldCommandList, g_free );
         g_list_free_full( pNewCommandList, g_free );
         return;
     }
 
-    while ( pNewCommandList != NULL )
+    while ( pNewCommandList != nullptr )
     {
         GList* pNewCommand = g_list_first( pNewCommandList );
         pNewCommandList = g_list_remove_link( pNewCommandList, pNewCommand );
@@ -149,7 +149,7 @@ void RemoveUnusedCommands( GLOActionGroup* pActionGroup, GList* pOldCommandList,
 
         GList* pOldCommand = g_list_find_custom( pOldCommandList, aCommand, reinterpret_cast<GCompareFunc>(CompareStr) );
 
-        if ( pOldCommand != NULL )
+        if ( pOldCommand != nullptr )
         {
             pOldCommandList = g_list_remove_link( pOldCommandList, pOldCommand );
             g_list_free_full( pOldCommand, g_free );
@@ -158,7 +158,7 @@ void RemoveUnusedCommands( GLOActionGroup* pActionGroup, GList* pOldCommandList,
         g_list_free_full( pNewCommand, g_free );
     }
 
-    while ( pOldCommandList != NULL )
+    while ( pOldCommandList != nullptr )
     {
         GList* pCommand = g_list_first( pOldCommandList );
         pOldCommandList = g_list_remove_link( pOldCommandList, pCommand );
@@ -183,13 +183,13 @@ void GtkSalMenu::ImplUpdate( gboolean bRecurse )
     GLOMenu* pLOMenu = G_LO_MENU( mpMenuModel );
     GLOActionGroup* pActionGroup = G_LO_ACTION_GROUP( mpActionGroup );
     SAL_INFO("vcl.unity", "Syncing vcl menu " << pVCLMenu << " to menu model " << pLOMenu << " and action group " << pActionGroup);
-    GList *pOldCommandList = NULL;
-    GList *pNewCommandList = NULL;
+    GList *pOldCommandList = nullptr;
+    GList *pNewCommandList = nullptr;
 
     sal_uInt16 nLOMenuSize = g_menu_model_get_n_items( G_MENU_MODEL( pLOMenu ) );
 
     if ( nLOMenuSize == 0 )
-        g_lo_menu_new_section( pLOMenu, 0, NULL );
+        g_lo_menu_new_section( pLOMenu, 0, nullptr );
 
     sal_Int32 nSection = 0;
     sal_Int32 nItemPos = 0;
@@ -214,7 +214,7 @@ void GtkSalMenu::ImplUpdate( gboolean bRecurse )
 
             if ( nLOMenuSize <= nSection )
             {
-                g_lo_menu_new_section( pLOMenu, nSection, NULL );
+                g_lo_menu_new_section( pLOMenu, nSection, nullptr );
                 nLOMenuSize++;
             }
 
@@ -234,7 +234,7 @@ void GtkSalMenu::ImplUpdate( gboolean bRecurse )
         // Store current item command in command list.
         gchar *aCurrentCommand = g_lo_menu_get_command_from_item_in_section( pLOMenu, nSection, nItemPos );
 
-        if ( aCurrentCommand != NULL )
+        if ( aCurrentCommand != nullptr )
             pOldCommandList = g_list_append( pOldCommandList, aCurrentCommand );
 
         // Get the new command for the item.
@@ -244,7 +244,7 @@ void GtkSalMenu::ImplUpdate( gboolean bRecurse )
         NativeSetItemText( nSection, nItemPos, aText );
         NativeSetAccelerator( nSection, nItemPos, nAccelKey, nAccelKey.GetName( GetFrame()->GetWindow() ) );
 
-        if ( g_strcmp0( aNativeCommand, "" ) != 0 && pSalMenuItem->mpSubMenu == NULL )
+        if ( g_strcmp0( aNativeCommand, "" ) != 0 && pSalMenuItem->mpSubMenu == nullptr )
         {
             NativeSetItemCommand( nSection, nItemPos, nId, aNativeCommand, itemBits, bChecked, FALSE );
             NativeCheckItem( nSection, nItemPos, itemBits, bChecked );
@@ -262,7 +262,7 @@ void GtkSalMenu::ImplUpdate( gboolean bRecurse )
 
             GLOMenu* pSubMenuModel = g_lo_menu_get_submenu_from_item_in_section( pLOMenu, nSection, nItemPos );
 
-            if ( pSubMenuModel == NULL )
+            if ( pSubMenuModel == nullptr )
             {
                 g_lo_menu_new_submenu_in_item_in_section( pLOMenu, nSection, nItemPos );
                 pSubMenuModel = g_lo_menu_get_submenu_from_item_in_section( pLOMenu, nSection, nItemPos );
@@ -311,11 +311,11 @@ void GtkSalMenu::UpdateFull()
 
 GtkSalMenu::GtkSalMenu( bool bMenuBar ) :
     mbMenuBar( bMenuBar ),
-    mpVCLMenu( NULL ),
-    mpParentSalMenu( NULL ),
-    mpFrame( NULL ),
-    mpMenuModel( NULL ),
-    mpActionGroup( NULL )
+    mpVCLMenu( nullptr ),
+    mpParentSalMenu( nullptr ),
+    mpFrame( nullptr ),
+    mpMenuModel( nullptr ),
+    mpActionGroup( nullptr )
 {
 }
 
@@ -365,7 +365,7 @@ void GtkSalMenu::SetSubMenu( SalMenuItem* pSalMenuItem, SalMenu* pSubMenu, unsig
     GtkSalMenuItem *pItem = static_cast< GtkSalMenuItem* >( pSalMenuItem );
     GtkSalMenu *pGtkSubMenu = static_cast< GtkSalMenu* >( pSubMenu );
 
-    if ( pGtkSubMenu == NULL )
+    if ( pGtkSubMenu == nullptr )
         return;
 
     pGtkSubMenu->mpParentSalMenu = this;
@@ -399,16 +399,16 @@ static gboolean RefreshMenusUnity(gpointer)
 static void RefreshMenusUnity(void*, LinkParamNone*)
 {
     if(!bInvalidMenus) {
-        g_timeout_add(10, &RefreshMenusUnity, NULL);
+        g_timeout_add(10, &RefreshMenusUnity, nullptr);
         bInvalidMenus = true;
     }
 }
 
 static Link<LinkParamNone*,void>* getRefreshLinkInstance()
 {
-    static Link<LinkParamNone*,void>* pLink = NULL;
+    static Link<LinkParamNone*,void>* pLink = nullptr;
     if(!pLink) {
-        pLink = new Link<LinkParamNone*,void>(NULL, &RefreshMenusUnity);
+        pLink = new Link<LinkParamNone*,void>(nullptr, &RefreshMenusUnity);
     }
     return pLink;
 }
@@ -457,7 +457,7 @@ void GtkSalMenu::SetFrame( const SalFrame* pFrame )
     if (bMenuVisibility)
         UpdateFull();
 
-    g_lo_menu_insert_section( pMenuModel, 0, NULL, mpMenuModel );
+    g_lo_menu_insert_section( pMenuModel, 0, nullptr, mpMenuModel );
 }
 
 const GtkSalFrame* GtkSalMenu::GetFrame() const
@@ -466,21 +466,21 @@ const GtkSalFrame* GtkSalMenu::GetFrame() const
     const GtkSalMenu* pMenu = this;
     while( pMenu && ! pMenu->mpFrame )
         pMenu = pMenu->mpParentSalMenu;
-    return pMenu ? pMenu->mpFrame : NULL;
+    return pMenu ? pMenu->mpFrame : nullptr;
 }
 
 void GtkSalMenu::NativeCheckItem( unsigned nSection, unsigned nItemPos, MenuItemBits bits, gboolean bCheck )
 {
     SolarMutexGuard aGuard;
 
-    if ( mpActionGroup == NULL )
+    if ( mpActionGroup == nullptr )
         return;
 
     gchar* aCommand = g_lo_menu_get_command_from_item_in_section( G_LO_MENU( mpMenuModel ), nSection, nItemPos );
 
-    if ( aCommand != NULL || g_strcmp0( aCommand, "" ) != 0 )
+    if ( aCommand != nullptr || g_strcmp0( aCommand, "" ) != 0 )
     {
-        GVariant *pCheckValue = NULL;
+        GVariant *pCheckValue = nullptr;
         GVariant *pCurrentState = g_action_group_get_action_state( mpActionGroup, aCommand );
 
         if ( bits & MenuItemBits::RADIOCHECK )
@@ -488,13 +488,13 @@ void GtkSalMenu::NativeCheckItem( unsigned nSection, unsigned nItemPos, MenuItem
         else
         {
             // By default, all checked items are checkmark buttons.
-            if (bCheck || pCurrentState != NULL)
+            if (bCheck || pCurrentState != nullptr)
                 pCheckValue = g_variant_new_boolean( bCheck );
         }
 
-        if ( pCheckValue != NULL )
+        if ( pCheckValue != nullptr )
         {
-            if ( pCurrentState == NULL || g_variant_equal( pCurrentState, pCheckValue ) == FALSE )
+            if ( pCurrentState == nullptr || g_variant_equal( pCurrentState, pCheckValue ) == FALSE )
             {
                 g_action_group_change_action_state( mpActionGroup, aCommand, pCheckValue );
             }
@@ -504,7 +504,7 @@ void GtkSalMenu::NativeCheckItem( unsigned nSection, unsigned nItemPos, MenuItem
             }
         }
 
-        if ( pCurrentState != NULL )
+        if ( pCurrentState != nullptr )
             g_variant_unref( pCurrentState );
     }
 
@@ -533,7 +533,7 @@ void GtkSalMenu::NativeSetItemText( unsigned nSection, unsigned nItemPos, const 
     // Update item text only when necessary.
     gchar* aLabel = g_lo_menu_get_label_from_item_in_section( G_LO_MENU( mpMenuModel ), nSection, nItemPos );
 
-    if ( aLabel == NULL || g_strcmp0( aLabel, aConvertedText.getStr() ) != 0 )
+    if ( aLabel == nullptr || g_strcmp0( aLabel, aConvertedText.getStr() ) != 0 )
         g_lo_menu_set_label_to_item_in_section( G_LO_MENU( mpMenuModel ), nSection, nItemPos, aConvertedText.getStr() );
 
     if ( aLabel )
@@ -555,7 +555,7 @@ void GtkSalMenu::NativeSetAccelerator( unsigned nSection, unsigned nItemPos, con
 
     gchar* aCurrentAccel = g_lo_menu_get_accelerator_from_item_in_section( G_LO_MENU( mpMenuModel ), nSection, nItemPos );
 
-    if ( aCurrentAccel == NULL && g_strcmp0( aCurrentAccel, aAccelerator ) != 0 )
+    if ( aCurrentAccel == nullptr && g_strcmp0( aCurrentAccel, aAccelerator ) != 0 )
         g_lo_menu_set_accelerator_to_item_in_section ( G_LO_MENU( mpMenuModel ), nSection, nItemPos, aAccelerator );
 
     g_free( aAccelerator );
@@ -573,7 +573,7 @@ void GtkSalMenu::NativeSetItemCommand( unsigned nSection,
     SolarMutexGuard aGuard;
     GLOActionGroup* pActionGroup = G_LO_ACTION_GROUP( mpActionGroup );
 
-    GVariant *pTarget = NULL;
+    GVariant *pTarget = nullptr;
 
     if ( g_action_group_has_action( mpActionGroup, aCommand ) == FALSE ) {
         if ( ( nBits & MenuItemBits::CHECKABLE ) || bIsSubmenu )
@@ -582,7 +582,7 @@ void GtkSalMenu::NativeSetItemCommand( unsigned nSection,
             GVariantType* pStateType = g_variant_type_new( reinterpret_cast<gchar const *>(G_VARIANT_TYPE_BOOLEAN) );
             GVariant* pState = g_variant_new_boolean( bChecked );
 
-            g_lo_action_group_insert_stateful( pActionGroup, aCommand, nId, bIsSubmenu, NULL, pStateType, NULL, pState );
+            g_lo_action_group_insert_stateful( pActionGroup, aCommand, nId, bIsSubmenu, nullptr, pStateType, nullptr, pState );
         }
         else if ( nBits & MenuItemBits::RADIOCHECK )
         {
@@ -592,7 +592,7 @@ void GtkSalMenu::NativeSetItemCommand( unsigned nSection,
             GVariant* pState = g_variant_new_string( "" );
             pTarget = g_variant_new_string( aCommand );
 
-            g_lo_action_group_insert_stateful( pActionGroup, aCommand, nId, FALSE, pParameterType, pStateType, NULL, pState );
+            g_lo_action_group_insert_stateful( pActionGroup, aCommand, nId, FALSE, pParameterType, pStateType, nullptr, pState );
         }
         else
         {
@@ -606,7 +606,7 @@ void GtkSalMenu::NativeSetItemCommand( unsigned nSection,
     // Menu item is not updated unless it's necessary.
     gchar* aCurrentCommand = g_lo_menu_get_command_from_item_in_section( pMenu, nSection, nItemPos );
 
-    if ( aCurrentCommand == NULL || g_strcmp0( aCurrentCommand, aCommand ) != 0 )
+    if ( aCurrentCommand == nullptr || g_strcmp0( aCurrentCommand, aCommand ) != 0 )
     {
         g_lo_menu_set_command_to_item_in_section( pMenu, nSection, nItemPos, aCommand );
 
@@ -627,7 +627,7 @@ void GtkSalMenu::NativeSetItemCommand( unsigned nSection,
 GtkSalMenu* GtkSalMenu::GetMenuForItemCommand( gchar* aCommand, gboolean bGetSubmenu )
 {
     SolarMutexGuard aGuard;
-    GtkSalMenu* pMenu = NULL;
+    GtkSalMenu* pMenu = nullptr;
     for ( size_t nPos = 0; nPos < maItems.size(); nPos++ )
     {
         GtkSalMenuItem *pSalItem = maItems[ nPos ];
@@ -646,10 +646,10 @@ GtkSalMenu* GtkSalMenu::GetMenuForItemCommand( gchar* aCommand, gboolean bGetSub
         }
         else
         {
-            if ( pSalItem->mpSubMenu != NULL )
+            if ( pSalItem->mpSubMenu != nullptr )
                 pMenu = pSalItem->mpSubMenu->GetMenuForItemCommand( aCommand, bGetSubmenu );
 
-            if ( pMenu != NULL )
+            if ( pMenu != nullptr )
                break;
         }
     }
@@ -665,7 +665,7 @@ void GtkSalMenu::DispatchCommand( gint itemId, const gchar *aCommand )
         return;
 
     GtkSalMenu* pSalSubMenu = GetMenuForItemCommand( const_cast<gchar*>(aCommand), FALSE );
-    Menu* pSubMenu = ( pSalSubMenu != NULL ) ? pSalSubMenu->GetMenu() : NULL;
+    Menu* pSubMenu = ( pSalSubMenu != nullptr ) ? pSalSubMenu->GetMenu() : nullptr;
 
     MenuBar* pMenuBar = static_cast< MenuBar* >( mpVCLMenu );
     pMenuBar->HandleMenuCommandEvent( pSubMenu, itemId );
@@ -677,7 +677,7 @@ void GtkSalMenu::ActivateAllSubmenus(MenuBar* pMenuBar)
     for ( size_t nPos = 0; nPos < maItems.size(); nPos++ )
     {
         GtkSalMenuItem *pSalItem = maItems[ nPos ];
-        if ( pSalItem->mpSubMenu != NULL )
+        if ( pSalItem->mpSubMenu != nullptr )
         {
             pSalItem->mpSubMenu->ActivateAllSubmenus(pMenuBar);
             pSalItem->mpSubMenu->Update();
@@ -699,7 +699,7 @@ void GtkSalMenu::Deactivate( const gchar* aMenuCommand )
 
     GtkSalMenu* pSalSubMenu = GetMenuForItemCommand( const_cast<gchar*>(aMenuCommand), TRUE );
 
-    if ( pSalSubMenu != NULL ) {
+    if ( pSalSubMenu != nullptr ) {
         MenuBar* pMenuBar = static_cast< MenuBar* >( mpVCLMenu );
         pMenuBar->HandleMenuDeActivateEvent( pSalSubMenu->mpVCLMenu );
     }
@@ -707,7 +707,7 @@ void GtkSalMenu::Deactivate( const gchar* aMenuCommand )
 
 void GtkSalMenu::Display( bool bVisible )
 {
-    if ( !mbMenuBar || mpVCLMenu == NULL )
+    if ( !mbMenuBar || mpVCLMenu == nullptr )
         return;
 
     bMenuVisibility = bVisible;
@@ -769,8 +769,8 @@ GtkSalMenuItem::GtkSalMenuItem( const SalItemParams* pItemData ) :
     mnType( pItemData->eType ),
     mbVisible( true ),
     mpVCLMenu( pItemData->pMenu ),
-    mpParentMenu( NULL ),
-    mpSubMenu( NULL )
+    mpParentMenu( nullptr ),
+    mpSubMenu( nullptr )
 {
 }
 

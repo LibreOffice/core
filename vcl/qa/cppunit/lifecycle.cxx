@@ -81,12 +81,12 @@ void LifecycleTest::testVirtualDevice()
 void LifecycleTest::testMultiDispose()
 {
     VclPtrInstance<WorkWindow> xWin(nullptr, WB_APP|WB_STDWORK);
-    CPPUNIT_ASSERT(xWin.get() != NULL);
+    CPPUNIT_ASSERT(xWin.get() != nullptr);
     xWin->disposeOnce();
     xWin->disposeOnce();
     xWin->disposeOnce();
-    CPPUNIT_ASSERT(xWin->GetWindow(GetWindowType::Parent) == NULL);
-    CPPUNIT_ASSERT(xWin->GetChild(0) == NULL);
+    CPPUNIT_ASSERT(xWin->GetWindow(GetWindowType::Parent) == nullptr);
+    CPPUNIT_ASSERT(xWin->GetChild(0) == nullptr);
     CPPUNIT_ASSERT(xWin->GetChildCount() == 0);
 }
 
@@ -109,13 +109,13 @@ void LifecycleTest::testWidgets(vcl::Window *pParent)
 
 void LifecycleTest::testIsolatedWidgets()
 {
-    testWidgets(NULL);
+    testWidgets(nullptr);
 }
 
 void LifecycleTest::testParentedWidgets()
 {
     ScopedVclPtrInstance<WorkWindow> xWin(nullptr, WB_APP|WB_STDWORK);
-    CPPUNIT_ASSERT(xWin.get() != NULL);
+    CPPUNIT_ASSERT(xWin.get() != nullptr);
     xWin->Show();
     testWidgets(xWin);
 }
@@ -133,7 +133,7 @@ public:
 void LifecycleTest::testChildDispose()
 {
     VclPtrInstance<WorkWindow> xWin(nullptr, WB_APP|WB_STDWORK);
-    CPPUNIT_ASSERT(xWin.get() != NULL);
+    CPPUNIT_ASSERT(xWin.get() != nullptr);
     VclPtrInstance< DisposableChild > xChild( xWin.get() );
     xWin->Show();
     xChild->disposeOnce();
@@ -217,7 +217,7 @@ class LeakTestObject
     void               *mpRef;
     LeakTestObject()
         : mbDeleted(false)
-        , mpRef(NULL)
+        , mpRef(nullptr)
     {
     }
 public:

@@ -57,7 +57,7 @@ void ServerFontLayout::AdjustLayout( ImplLayoutArgs& rArgs )
     // apply asian kerning if the glyphs are not already formatted
     if( (rArgs.mnFlags & SalLayoutFlags::KerningAsian)
     && !(rArgs.mnFlags & SalLayoutFlags::Vertical) )
-        if( (rArgs.mpDXArray != NULL) || (rArgs.mnLayoutWidth != 0) )
+        if( (rArgs.mpDXArray != nullptr) || (rArgs.mnLayoutWidth != 0) )
             ApplyAsianKerning(rArgs.mrStr);
 
     // insert kashidas where requested by the formatting array
@@ -131,9 +131,9 @@ static hb_blob_t *getFontTable(hb_face_t* /*face*/, hb_tag_t nTableTag, void* pU
     sal_uLong nLength;
     const unsigned char* pBuffer = pFont->GetTable(pTagName, &nLength);
 
-    hb_blob_t* pBlob = NULL;
-    if (pBuffer != NULL)
-        pBlob = hb_blob_create(reinterpret_cast<const char*>(pBuffer), nLength, HB_MEMORY_MODE_READONLY, const_cast<unsigned char *>(pBuffer), NULL);
+    hb_blob_t* pBlob = nullptr;
+    if (pBuffer != nullptr)
+        pBlob = hb_blob_create(reinterpret_cast<const char*>(pBuffer), nLength, HB_MEMORY_MODE_READONLY, const_cast<unsigned char *>(pBuffer), nullptr);
 
     return pBlob;
 }
@@ -276,15 +276,15 @@ static hb_font_funcs_t* getFontFuncs()
 {
     static hb_font_funcs_t* funcs = hb_font_funcs_create();
 
-    hb_font_funcs_set_glyph_func                (funcs, getFontGlyph, NULL, NULL);
-    hb_font_funcs_set_glyph_h_advance_func      (funcs, getGlyphAdvanceH, NULL, NULL);
-    hb_font_funcs_set_glyph_v_advance_func      (funcs, getGlyphAdvanceV, NULL, NULL);
-    hb_font_funcs_set_glyph_h_origin_func       (funcs, getGlyphOriginH, NULL, NULL);
-    hb_font_funcs_set_glyph_v_origin_func       (funcs, getGlyphOriginV, NULL, NULL);
-    hb_font_funcs_set_glyph_h_kerning_func      (funcs, getGlyphKerningH, NULL, NULL);
-    hb_font_funcs_set_glyph_v_kerning_func      (funcs, getGlyphKerningV, NULL, NULL);
-    hb_font_funcs_set_glyph_extents_func        (funcs, getGlyphExtents, NULL, NULL);
-    hb_font_funcs_set_glyph_contour_point_func  (funcs, getGlyphContourPoint, NULL, NULL);
+    hb_font_funcs_set_glyph_func                (funcs, getFontGlyph, nullptr, nullptr);
+    hb_font_funcs_set_glyph_h_advance_func      (funcs, getGlyphAdvanceH, nullptr, nullptr);
+    hb_font_funcs_set_glyph_v_advance_func      (funcs, getGlyphAdvanceV, nullptr, nullptr);
+    hb_font_funcs_set_glyph_h_origin_func       (funcs, getGlyphOriginH, nullptr, nullptr);
+    hb_font_funcs_set_glyph_v_origin_func       (funcs, getGlyphOriginV, nullptr, nullptr);
+    hb_font_funcs_set_glyph_h_kerning_func      (funcs, getGlyphKerningH, nullptr, nullptr);
+    hb_font_funcs_set_glyph_v_kerning_func      (funcs, getGlyphKerningV, nullptr, nullptr);
+    hb_font_funcs_set_glyph_extents_func        (funcs, getGlyphExtents, nullptr, nullptr);
+    hb_font_funcs_set_glyph_contour_point_func  (funcs, getGlyphContourPoint, nullptr, nullptr);
 
     return funcs;
 }
@@ -301,7 +301,7 @@ static unsigned int unicodeDecomposeCompatibility(hb_unicode_funcs_t* /*ufuncs*/
 static hb_unicode_funcs_t* getUnicodeFuncs()
 {
     static hb_unicode_funcs_t* ufuncs = hb_unicode_funcs_create(hb_icu_get_unicode_funcs());
-    hb_unicode_funcs_set_decompose_compatibility_func(ufuncs, unicodeDecomposeCompatibility, NULL, NULL);
+    hb_unicode_funcs_set_decompose_compatibility_func(ufuncs, unicodeDecomposeCompatibility, nullptr, nullptr);
     return ufuncs;
 }
 
@@ -321,13 +321,13 @@ public:
 
 HbLayoutEngine::HbLayoutEngine(ServerFont& rServerFont)
 :   maHbScript(HB_SCRIPT_INVALID),
-    mpHbFace(NULL),
+    mpHbFace(nullptr),
     mnUnitsPerEM(0)
 {
     FT_Face aFtFace = rServerFont.GetFtFace();
     mnUnitsPerEM = rServerFont.GetEmUnits();
 
-    mpHbFace = hb_face_create_for_tables(getFontTable, &rServerFont, NULL);
+    mpHbFace = hb_face_create_for_tables(getFontTable, &rServerFont, nullptr);
     hb_face_set_index(mpHbFace, aFtFace->face_index);
     hb_face_set_upem(mpHbFace, mnUnitsPerEM);
 }
@@ -396,7 +396,7 @@ bool HbLayoutEngine::Layout(ServerFontLayout& rLayout, ImplLayoutArgs& rArgs)
     static hb_font_funcs_t* pHbFontFuncs = getFontFuncs();
 
     hb_font_t *pHbFont = hb_font_create(mpHbFace);
-    hb_font_set_funcs(pHbFont, pHbFontFuncs, &rFont, NULL);
+    hb_font_set_funcs(pHbFont, pHbFontFuncs, &rFont, nullptr);
     hb_font_set_scale(pHbFont,
             ((uint64_t) aFtFace->size->metrics.x_scale * (uint64_t) mnUnitsPerEM) >> 16,
             ((uint64_t) aFtFace->size->metrics.y_scale * (uint64_t) mnUnitsPerEM) >> 16);
@@ -484,11 +484,11 @@ bool HbLayoutEngine::Layout(ServerFontLayout& rLayout, ImplLayoutArgs& rArgs)
             hb_buffer_set_language(pHbBuffer, hb_language_from_string(sLanguage.getStr(), -1));
             hb_buffer_set_flags(pHbBuffer, (hb_buffer_flags_t) nHbFlags);
             hb_buffer_add_utf16(pHbBuffer, pStr, nLength, nMinRunPos, nRunLen);
-            hb_shape(pHbFont, pHbBuffer, NULL, 0);
+            hb_shape(pHbFont, pHbBuffer, nullptr, 0);
 
             int nRunGlyphCount = hb_buffer_get_length(pHbBuffer);
-            hb_glyph_info_t *pHbGlyphInfos = hb_buffer_get_glyph_infos(pHbBuffer, NULL);
-            hb_glyph_position_t *pHbPositions = hb_buffer_get_glyph_positions(pHbBuffer, NULL);
+            hb_glyph_info_t *pHbGlyphInfos = hb_buffer_get_glyph_infos(pHbBuffer, nullptr);
+            hb_glyph_position_t *pHbPositions = hb_buffer_get_glyph_positions(pHbBuffer, nullptr);
 
             for (int i = 0; i < nRunGlyphCount; ++i) {
                 int32_t nGlyphIndex = pHbGlyphInfos[i].codepoint;

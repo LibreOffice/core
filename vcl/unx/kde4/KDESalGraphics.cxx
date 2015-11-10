@@ -235,7 +235,7 @@ bool KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
     }
     m_image->fill(KApplication::palette().color(QPalette::Window).rgb());
 
-    QRegion* clipRegion = NULL;
+    QRegion* clipRegion = nullptr;
 
     if (type == CTRL_PUSHBUTTON)
     {

@@ -148,8 +148,8 @@ void Window::ImplRemoveWindow( bool bRemoveFrameData )
                 mpWindowImpl->mpParent->mpWindowImpl->mpLastChild = mpWindowImpl->mpPrev;
         }
 
-        mpWindowImpl->mpPrev = NULL;
-        mpWindowImpl->mpNext = NULL;
+        mpWindowImpl->mpPrev = nullptr;
+        mpWindowImpl->mpNext = nullptr;
     }
 
     if ( bRemoveFrameData )
@@ -205,7 +205,7 @@ void Window::ImplToBottomChild()
         mpWindowImpl->mpPrev = mpWindowImpl->mpParent->mpWindowImpl->mpLastChild;
         mpWindowImpl->mpParent->mpWindowImpl->mpLastChild = this;
         mpWindowImpl->mpPrev->mpWindowImpl->mpNext = this;
-        mpWindowImpl->mpNext = NULL;
+        mpWindowImpl->mpNext = nullptr;
     }
 }
 
@@ -228,7 +228,7 @@ void Window::ImplCalcToTop( ImplCalcToTopData* pPrevData )
             {
                 ImplCalcToTopData* pData    = new ImplCalcToTopData;
                 pPrevData->mpNext           = pData;
-                pData->mpNext               = NULL;
+                pData->mpNext               = nullptr;
                 pData->mpWindow             = this;
                 pData->mpInvalidateRegion   = new vcl::Region( aInvalidateRegion );
             }
@@ -339,7 +339,7 @@ void Window::ImplStartToTop( ToTopFlags nFlags )
 
     // first calculate paint areas
     vcl::Window* pTempOverlapWindow = pOverlapWindow;
-    aStartData.mpNext = NULL;
+    aStartData.mpNext = nullptr;
     pCurData = &aStartData;
     do
     {
@@ -577,7 +577,7 @@ void Window::SetZOrder( vcl::Window* pRefWindow, ZOrderFlags nFlags )
                 // Invalidate all windows which are next to each other
                 // Is INCOMPLETE !!!
                 Rectangle   aWinRect( Point( mnOutOffX, mnOutOffY ), Size( mnOutWidth, mnOutHeight ) );
-                vcl::Window*     pWindow = NULL;
+                vcl::Window*     pWindow = nullptr;
                 if ( ImplIsOverlapWindow() )
                 {
                     if ( mpWindowImpl->mpOverlapWindow )
@@ -676,7 +676,7 @@ vcl::Window* Window::ImplFindWindow( const Point& rFramePos )
 
     // then we check our window
     if ( !mpWindowImpl->mbVisible )
-        return NULL;
+        return nullptr;
 
     sal_uInt16 nHitTest = ImplHitTest( rFramePos );
     if ( nHitTest & WINDOW_HITTEST_INSIDE )
@@ -692,12 +692,12 @@ vcl::Window* Window::ImplFindWindow( const Point& rFramePos )
         }
 
         if ( nHitTest & WINDOW_HITTEST_TRANSPARENT )
-            return NULL;
+            return nullptr;
         else
             return this;
     }
 
-    return NULL;
+    return nullptr;
 }
 
 bool Window::ImplIsRealParentPath( const vcl::Window* pWindow ) const
@@ -844,7 +844,7 @@ SystemWindow* Window::GetSystemWindow() const
 static SystemWindow *ImplGetLastSystemWindow( vcl::Window *pWin )
 {
     // get the most top-level system window, the one that contains the taskpanelist
-    SystemWindow *pSysWin = NULL;
+    SystemWindow *pSysWin = nullptr;
     if( !pWin )
         return pSysWin;
     vcl::Window *pMyParent = pWin;
@@ -867,7 +867,7 @@ void Window::SetParent( vcl::Window* pNewParent )
 
     // check if the taskpanelist would change and move the window pointer accordingly
     SystemWindow *pSysWin = ImplGetLastSystemWindow(this);
-    SystemWindow *pNewSysWin = NULL;
+    SystemWindow *pNewSysWin = nullptr;
     bool bChangeTaskPaneList = false;
     if( pSysWin && pSysWin->ImplIsInTaskPaneList( this ) )
     {
@@ -907,16 +907,16 @@ void Window::SetParent( vcl::Window* pNewParent )
 
     // check if the overlap window changes
     vcl::Window* pOldOverlapWindow;
-    vcl::Window* pNewOverlapWindow = NULL;
+    vcl::Window* pNewOverlapWindow = nullptr;
     if ( ImplIsOverlapWindow() )
-        pOldOverlapWindow = NULL;
+        pOldOverlapWindow = nullptr;
     else
     {
         pNewOverlapWindow = pNewParent->ImplGetFirstOverlapWindow();
         if ( mpWindowImpl->mpOverlapWindow.get() != pNewOverlapWindow )
             pOldOverlapWindow = mpWindowImpl->mpOverlapWindow;
         else
-            pOldOverlapWindow = NULL;
+            pOldOverlapWindow = nullptr;
     }
 
     // convert windows in the hierarchy
@@ -928,17 +928,17 @@ void Window::SetParent( vcl::Window* pNewParent )
         if ( mpWindowImpl->mpFrameData->mpFocusWin )
         {
             if ( IsWindowOrChild( mpWindowImpl->mpFrameData->mpFocusWin ) )
-                mpWindowImpl->mpFrameData->mpFocusWin = NULL;
+                mpWindowImpl->mpFrameData->mpFocusWin = nullptr;
         }
         if ( mpWindowImpl->mpFrameData->mpMouseMoveWin )
         {
             if ( IsWindowOrChild( mpWindowImpl->mpFrameData->mpMouseMoveWin ) )
-                mpWindowImpl->mpFrameData->mpMouseMoveWin = NULL;
+                mpWindowImpl->mpFrameData->mpMouseMoveWin = nullptr;
         }
         if ( mpWindowImpl->mpFrameData->mpMouseDownWin )
         {
             if ( IsWindowOrChild( mpWindowImpl->mpFrameData->mpMouseDownWin ) )
-                mpWindowImpl->mpFrameData->mpMouseDownWin = NULL;
+                mpWindowImpl->mpFrameData->mpMouseDownWin = nullptr;
         }
     }
     ImplRemoveWindow( bNewFrame );
@@ -971,7 +971,7 @@ void Window::SetParent( vcl::Window* pNewParent )
         if ( bFocusWin ||
              (pOldOverlapWindow->mpWindowImpl->mpLastFocusWindow &&
               IsWindowOrChild( pOldOverlapWindow->mpWindowImpl->mpLastFocusWindow )) )
-            pOldOverlapWindow->mpWindowImpl->mpLastFocusWindow = NULL;
+            pOldOverlapWindow->mpWindowImpl->mpLastFocusWindow = nullptr;
 
         vcl::Window* pOverlapWindow = pOldOverlapWindow->mpWindowImpl->mpFirstOverlap;
         while ( pOverlapWindow )
@@ -1041,7 +1041,7 @@ sal_uInt16 Window::GetChildCount() const
 vcl::Window* Window::GetChild( sal_uInt16 nChild ) const
 {
     if (!mpWindowImpl)
-        return NULL;
+        return nullptr;
 
     sal_uInt16  nChildCount = 0;
     vcl::Window* pChild = mpWindowImpl->mpFirstChild;
@@ -1053,13 +1053,13 @@ vcl::Window* Window::GetChild( sal_uInt16 nChild ) const
         nChildCount++;
     }
 
-    return NULL;
+    return nullptr;
 }
 
 vcl::Window* Window::GetWindow( GetWindowType nType ) const
 {
     if (!mpWindowImpl)
-        return 0;
+        return nullptr;
 
     switch ( nType )
     {
@@ -1111,40 +1111,40 @@ vcl::Window* Window::GetWindow( GetWindowType nType ) const
             return const_cast<vcl::Window*>(this);
 
         case GetWindowType::FirstTopWindowChild:
-            return ImplGetWinData()->maTopWindowChildren.empty() ? NULL : (*ImplGetWinData()->maTopWindowChildren.begin()).get();
+            return ImplGetWinData()->maTopWindowChildren.empty() ? nullptr : (*ImplGetWinData()->maTopWindowChildren.begin()).get();
 
         case GetWindowType::LastTopWindowChild:
-            return ImplGetWinData()->maTopWindowChildren.empty() ? NULL : (*ImplGetWinData()->maTopWindowChildren.rbegin()).get();
+            return ImplGetWinData()->maTopWindowChildren.empty() ? nullptr : (*ImplGetWinData()->maTopWindowChildren.rbegin()).get();
 
         case GetWindowType::PrevTopWindowSibling:
         {
             if ( !mpWindowImpl->mpRealParent )
-                return NULL;
+                return nullptr;
             const ::std::list< VclPtr<vcl::Window> >& rTopWindows( mpWindowImpl->mpRealParent->ImplGetWinData()->maTopWindowChildren );
             ::std::list< VclPtr<vcl::Window> >::const_iterator myPos =
                 ::std::find( rTopWindows.begin(), rTopWindows.end(), this );
             if ( myPos == rTopWindows.end() )
-                return NULL;
+                return nullptr;
             if ( myPos == rTopWindows.begin() )
-                return NULL;
+                return nullptr;
             return *--myPos;
         }
 
         case GetWindowType::NextTopWindowSibling:
         {
             if ( !mpWindowImpl->mpRealParent )
-                return NULL;
+                return nullptr;
             const ::std::list< VclPtr<vcl::Window> >& rTopWindows( mpWindowImpl->mpRealParent->ImplGetWinData()->maTopWindowChildren );
             ::std::list< VclPtr<vcl::Window> >::const_iterator myPos =
                 ::std::find( rTopWindows.begin(), rTopWindows.end(), this );
             if ( ( myPos == rTopWindows.end() ) || ( ++myPos == rTopWindows.end() ) )
-                return NULL;
+                return nullptr;
             return *myPos;
         }
 
     }
 
-    return NULL;
+    return nullptr;
 }
 
 bool Window::IsChild( const vcl::Window* pWindow, bool bSystemWindow ) const
@@ -1183,7 +1183,7 @@ void Window::ImplSetFrameParent( const vcl::Window* pParent )
         {
             DBG_ASSERT( mpWindowImpl->mpFrame != pFrameWindow->mpWindowImpl->mpFrame, "SetFrameParent to own" );
             DBG_ASSERT( mpWindowImpl->mpFrame, "no frame" );
-            SalFrame* pParentFrame = pParent ? pParent->mpWindowImpl->mpFrame : NULL;
+            SalFrame* pParentFrame = pParent ? pParent->mpWindowImpl->mpFrame : nullptr;
             pFrameWindow->mpWindowImpl->mpFrame->SetParent( pParentFrame );
         }
         pFrameWindow = pFrameWindow->mpWindowImpl->mpFrameData->mpNextFrame;

@@ -53,7 +53,7 @@ class XBMReader : public GraphicReader
 
     void            InitTable();
     OString         FindTokenLine( SvStream* pInStm, const char* pTok1,
-                                       const char* pTok2 = NULL, const char* pTok3 = NULL );
+                                       const char* pTok2 = nullptr, const char* pTok3 = nullptr );
     long            ParseDefine( const sal_Char* pDefine );
     bool            ParseData( SvStream* pInStm, const OString& aLastLine, XBMFormat eFormat );
 

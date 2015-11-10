@@ -24,7 +24,7 @@
 
 XBMReader::XBMReader( SvStream& rStm ) :
             rIStm           ( rStm ),
-            pAcc1           ( NULL ),
+            pAcc1           ( nullptr ),
             nLastPos        ( rStm.Tell() ),
             nWidth          ( 0 ),
             nHeight         ( 0 ),
@@ -319,7 +319,7 @@ ReadState XBMReader::ReadXBM( Graphic& rGraphic )
         {
             Bitmap aBlackBmp( Size( pAcc1->Width(), pAcc1->Height() ), 1 );
 
-            Bitmap::ReleaseAccess( pAcc1 ), pAcc1 = NULL;
+            Bitmap::ReleaseAccess( pAcc1 ), pAcc1 = nullptr;
             aBlackBmp.Erase( Color( COL_BLACK ) );
             rGraphic = BitmapEx( aBlackBmp, aBmp1 );
             eReadState = XBMREAD_OK;
@@ -345,7 +345,7 @@ VCL_DLLPUBLIC bool ImportXBM( SvStream& rStm, Graphic& rGraphic )
     if( !pXBMReader )
         pXBMReader = new XBMReader( rStm );
 
-    rGraphic.SetContext( NULL );
+    rGraphic.SetContext( nullptr );
     eReadState = pXBMReader->ReadXBM( rGraphic );
 
     if( eReadState == XBMREAD_ERROR )

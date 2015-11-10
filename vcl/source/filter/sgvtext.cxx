@@ -466,7 +466,7 @@ sal_uInt16 SetTextContext(OutputDevice& rOut, ObjTextType& Atr, bool Kapt, sal_u
 
     pSgfFont = pSgfFonts->GetFontDesc(Atr.GetFont());
 
-    if ( pSgfFont!=NULL )
+    if ( pSgfFont!=nullptr )
     {
         FNam   =pSgfFont->SVFName;
         StdBrei=pSgfFont->SVWidth;
@@ -995,7 +995,7 @@ void ObjTextType::SetFont(sal_uInt32 FontID)
 // SGF.Ini lesen
 SgfFontOne::SgfFontOne()
 {
-    Next=NULL;
+    Next=nullptr;
     IFID=0;
     Bold=false;
     Ital=false;
@@ -1058,10 +1058,10 @@ void SgfFontOne::ReadOne( const OString& rID, OString& Dsc )
 
 SgfFontLst::SgfFontLst()
 {
-    pList=NULL;
-    Last=NULL;
+    pList=nullptr;
+    Last=nullptr;
     LastID=0;
-    LastLn=NULL;
+    LastLn=nullptr;
     Tried=false;
 }
 
@@ -1075,16 +1075,16 @@ void SgfFontLst::RausList()
     SgfFontOne* P;
     SgfFontOne* P1;
     P=pList;
-    while (P!=NULL) {
+    while (P!=nullptr) {
         P1=P->Next;
         delete P;
         P=P1;
     }
-    pList=NULL;
-    Last=NULL;
+    pList=nullptr;
+    Last=nullptr;
     Tried=false;
     LastID=0;
-    LastLn=NULL;
+    LastLn=nullptr;
 }
 
 void SgfFontLst::AssignFN(const OUString& rFName)
@@ -1096,7 +1096,7 @@ void SgfFontLst::ReadList()
     {
         Tried=true;
         LastID=0;
-        LastLn=NULL;
+        LastLn=nullptr;
         SgfFontOne* P,P1;
         Config aCfg(FNam);
         aCfg.SetGroup("SGV Fonts fuer StarView");
@@ -1112,7 +1112,7 @@ void SgfFontLst::ReadList()
             if (comphelper::string::isdigitAsciiString(FID))
             {
                 P=new SgfFontOne;                                   // new entry
-                if (Last!=NULL) Last->Next=P; else pList=P; Last=P; // link it
+                if (Last!=nullptr) Last->Next=P; else pList=P; Last=P; // link it
                 P->ReadOne(FID,Dsc);                                // interpret line
             }
         }
@@ -1124,7 +1124,7 @@ SgfFontOne* SgfFontLst::GetFontDesc(sal_uInt32 ID)
     if (ID!=LastID) {
         SgfFontOne* P;
         P=pList;
-        while (P!=NULL && P->IFID!=ID) P=P->Next;
+        while (P!=nullptr && P->IFID!=ID) P=P->Next;
         LastID=ID;
         LastLn=P;
     }

@@ -26,7 +26,7 @@ Display *OpenX11Display(OString& rDisplay)
      *  o  default display
      */
 
-    Display *pDisp = NULL;
+    Display *pDisp = nullptr;
 
     // is there a -display command line parameter?
 
@@ -41,7 +41,7 @@ Display *OpenX11Display(OString& rDisplay)
             rDisplay = OUStringToOString(
                    aParam, osl_getThreadTextEncoding());
 
-            if ((pDisp = XOpenDisplay(rDisplay.getStr()))!=NULL)
+            if ((pDisp = XOpenDisplay(rDisplay.getStr()))!=nullptr)
             {
                 /*
                  * if a -display switch was used, we need
@@ -60,7 +60,7 @@ Display *OpenX11Display(OString& rDisplay)
     {
         // Open $DISPLAY or default...
         char *pDisplay = getenv("DISPLAY");
-        if (pDisplay != NULL)
+        if (pDisplay != nullptr)
             rDisplay = OString(pDisplay);
         pDisp  = XOpenDisplay(pDisplay);
     }

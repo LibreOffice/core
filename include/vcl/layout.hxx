@@ -387,7 +387,7 @@ private:
 public:
     VclFrame(vcl::Window *pParent)
         : VclBin(pParent)
-        , m_pLabel(NULL)
+        , m_pLabel(nullptr)
     {
     }
     virtual ~VclFrame();

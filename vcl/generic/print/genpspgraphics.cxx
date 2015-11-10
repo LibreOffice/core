@@ -145,7 +145,7 @@ SalPrinterBmp::SalPrinterBmp (BitmapBuffer* pBuffer)
 
         default:
             OSL_FAIL("Error: SalPrinterBmp::SalPrinterBmp() unknown bitmap format");
-            mpFncGetPixel = NULL;
+            mpFncGetPixel = nullptr;
         break;
     }
 }
@@ -254,13 +254,13 @@ SalPrinterBmp::GetPixelIdx (sal_uInt32 nRow, sal_uInt32 nColumn) const
  *******************************************************/
 
 GenPspGraphics::GenPspGraphics()
-    : m_pJobData( NULL ),
-      m_pPrinterGfx( NULL ),
+    : m_pJobData( nullptr ),
+      m_pPrinterGfx( nullptr ),
       m_bFontVertical( false ),
-      m_pInfoPrinter( NULL )
+      m_pInfoPrinter( nullptr )
 {
     for( int i = 0; i < MAX_FALLBACK; i++ )
-        m_pServerFont[i] = NULL;
+        m_pServerFont[i] = nullptr;
 }
 
 void GenPspGraphics::Init(psp::JobData* pJob, psp::PrinterGfx* pGfx,
@@ -279,7 +279,7 @@ GenPspGraphics::~GenPspGraphics()
 
 void GenPspGraphics::GetResolution( sal_Int32 &rDPIX, sal_Int32 &rDPIY )
 {
-    if (m_pJobData != NULL)
+    if (m_pJobData != nullptr)
     {
         int x = m_pJobData->m_aContext.getRenderResolution();
 
@@ -525,7 +525,7 @@ void GenPspGraphics::drawMask( const SalTwoRect&,
 SalBitmap* GenPspGraphics::getBitmap( long, long, long, long )
 {
     SAL_INFO("vcl", "Warning: PrinterGfx::GetBitmap() not implemented");
-    return NULL;
+    return nullptr;
 }
 
 SalColor GenPspGraphics::getPixel( long, long )
@@ -703,7 +703,7 @@ static void DrawPrinterLayout( const SalLayout& rLayout, ::psp::PrinterGfx& rGfx
 
     Point aPos;
     long nUnitsPerPixel = rLayout.GetUnitsPerPixel();
-    const sal_Unicode* pText = NULL;
+    const sal_Unicode* pText = nullptr;
     int nMinCharPos = 0;
     int nMaxCharPos = 0;
     if (bIsPspServerFontLayout)
@@ -726,7 +726,7 @@ static void DrawPrinterLayout( const SalLayout& rLayout, ::psp::PrinterGfx& rGfx
     }
     for( int nStart = 0;; )
     {
-        int nGlyphCount = rLayout.GetNextGlyphs( nMaxGlyphs, aGlyphAry, aPos, nStart, aWidthAry, pText ? aCharPosAry : NULL );
+        int nGlyphCount = rLayout.GetNextGlyphs( nMaxGlyphs, aGlyphAry, aPos, nStart, aWidthAry, pText ? aCharPosAry : nullptr );
         if( !nGlyphCount )
             break;
 
@@ -767,7 +767,7 @@ void GenPspGraphics::DrawServerFontLayout( const ServerFontLayout& rLayout )
 const FontCharMapPtr GenPspGraphics::GetFontCharMap() const
 {
     if( !m_pServerFont[0] )
-        return NULL;
+        return nullptr;
 
     const FontCharMapPtr pFCMap = m_pServerFont[0]->GetFontCharMap();
     return pFCMap;
@@ -785,11 +785,11 @@ sal_uInt16 GenPspGraphics::SetFont( FontSelectPattern *pEntry, int nFallbackLeve
     // release all fonts that are to be overridden
     for( int i = nFallbackLevel; i < MAX_FALLBACK; ++i )
     {
-        if( m_pServerFont[i] != NULL )
+        if( m_pServerFont[i] != nullptr )
         {
             // old server side font is no longer referenced
             GlyphCache::GetInstance().UncacheFont( *m_pServerFont[i] );
-            m_pServerFont[i] = NULL;
+            m_pServerFont[i] = nullptr;
         }
     }
 
@@ -821,7 +821,7 @@ sal_uInt16 GenPspGraphics::SetFont( FontSelectPattern *pEntry, int nFallbackLeve
     {
         // requesting a font provided by builtin rasterizer
         ServerFont* pServerFont = GlyphCache::GetInstance().CacheFont( *pEntry );
-        if( pServerFont != NULL )
+        if( pServerFont != nullptr )
         {
             if( pServerFont->TestFont() )
                 m_pServerFont[ nFallbackLevel ] = pServerFont;
@@ -983,7 +983,7 @@ SalLayout* GenPspGraphics::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackLe
     else if( nFallbackLevel > 0 )
         rArgs.mnFlags &= ~SalLayoutFlags::DisableGlyphProcessing;
 
-    GenericSalLayout* pLayout = NULL;
+    GenericSalLayout* pLayout = nullptr;
 
     if( m_pServerFont[ nFallbackLevel ]
         && !(rArgs.mnFlags & SalLayoutFlags::DisableGlyphProcessing) )
@@ -1065,8 +1065,8 @@ const Ucs2SIntMap* GenPspGraphics::DoGetFontEncodingVector( fontID aFont, const 
     if( ! rMgr.getFontInfo( aFont, aFontInfo ) )
     {
         if( pNonEncoded )
-            *pNonEncoded = NULL;
-        return NULL;
+            *pNonEncoded = nullptr;
+        return nullptr;
     }
 
     return rMgr.getEncodingMap( aFont, pNonEncoded, ppPriority );
@@ -1151,7 +1151,7 @@ namespace vcl
         else if (MsLangId::isTraditionalChinese(eLang))
             pLangBoost = "zht";
         else
-            pLangBoost = NULL;
+            pLangBoost = nullptr;
         return pLangBoost;
     }
 }
@@ -1170,7 +1170,7 @@ void GenPspGraphics::AnnounceFonts( PhysicalFontCollection* pFontCollection, con
             nQuality += 5;
         else
         {
-            static const char* pLangBoost = NULL;
+            static const char* pLangBoost = nullptr;
             static bool bOnce = true;
             if( bOnce )
             {
@@ -1285,7 +1285,7 @@ const void* GenPspGraphics::DoGetEmbedFontData( psp::fontID aFont, const sal_Ucs
 
     psp::PrintFontInfo aFontInfo;
     if( ! rMgr.getFontInfo( aFont, aFontInfo ) )
-        return NULL;
+        return nullptr;
 
     // fill in font info
     rInfo.m_nAscent     = aFontInfo.m_nAscend;
@@ -1304,24 +1304,24 @@ const void* GenPspGraphics::DoGetEmbedFontData( psp::fontID aFont, const sal_Ucs
         pUnicodes = aUnicodes;
     }
     if (!rMgr.getMetrics(aFont, pUnicodes, nLen, aMetrics.data()))
-        return NULL;
+        return nullptr;
 
     OString aSysPath = rMgr.getFontFileSysPath( aFont );
 
 #if defined( UNX )
     int fd = open( aSysPath.getStr(), O_RDONLY );
     if( fd < 0 )
-        return NULL;
+        return nullptr;
     struct stat aStat;
     if( fstat( fd, &aStat ) )
     {
         close( fd );
-        return NULL;
+        return nullptr;
     }
-    void* pFile = mmap( NULL, aStat.st_size, PROT_READ, MAP_SHARED, fd, 0 );
+    void* pFile = mmap( nullptr, aStat.st_size, PROT_READ, MAP_SHARED, fd, 0 );
     close( fd );
     if( pFile == MAP_FAILED )
-        return NULL;
+        return nullptr;
     *pDataLen = aStat.st_size;
 #else
     // FIXME: test me ! ...
@@ -1361,7 +1361,7 @@ const void* GenPspGraphics::DoGetEmbedFontData( psp::fontID aFont, const sal_Ucs
             break;
         default:
             DoFreeEmbedFontData( pFile, *pDataLen );
-            return NULL;
+            return nullptr;
     }
 
     return pFile;

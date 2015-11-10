@@ -186,7 +186,7 @@ TextView::TextView( TextEngine* pEng, vcl::Window* pWindow ) :
 
     mpImpl->mpWindow = pWindow;
     mpImpl->mpTextEngine = pEng;
-    mpImpl->mpVirtDev = NULL;
+    mpImpl->mpVirtDev = nullptr;
 
     mpImpl->mbPaintSelection = true;
     mpImpl->mbAutoScroll = true;
@@ -217,7 +217,7 @@ TextView::TextView( TextEngine* pEng, vcl::Window* pWindow ) :
 
     pWindow->SetLineColor();
 
-    mpImpl->mpDDInfo = NULL;
+    mpImpl->mpDDInfo = nullptr;
 
     if ( pWindow->GetDragGestureRecognizer().is() )
     {
@@ -240,7 +240,7 @@ TextView::~TextView()
     mpImpl->mpVirtDev.disposeAndClear();
 
     if ( mpImpl->mpWindow->GetCursor() == mpImpl->mpCursor )
-        mpImpl->mpWindow->SetCursor( 0 );
+        mpImpl->mpWindow->SetCursor( nullptr );
     delete mpImpl->mpCursor;
     delete mpImpl->mpDDInfo;
     delete mpImpl;
@@ -299,7 +299,7 @@ void TextView::ImpPaint(vcl::RenderContext& rRenderContext, const Point& rStartP
 {
     if (!mpImpl->mbPaintSelection)
     {
-        pSelection = NULL;
+        pSelection = nullptr;
     }
     else
     {
@@ -330,7 +330,7 @@ void TextView::ImpPaint(vcl::RenderContext& rRenderContext, const Rectangle& rRe
     if ( !mpImpl->mpTextEngine->GetUpdateMode() || mpImpl->mpTextEngine->IsInUndo() )
         return;
 
-    TextSelection *pDrawSelection = NULL;
+    TextSelection *pDrawSelection = nullptr;
     if (!mpImpl->mbHighlightSelection && mpImpl->maSelection.HasRange())
         pDrawSelection = &mpImpl->maSelection;
 
@@ -375,7 +375,7 @@ void TextView::ImpPaint(vcl::RenderContext& rRenderContext, const Rectangle& rRe
 
         Point aDocPos(mpImpl->maStartDocPos.X(), mpImpl->maStartDocPos.Y() + rRect.Top());
         Point aStartPos = ImpGetOutputStartPos(aDocPos);
-        ImpPaint(*pVDev, aStartPos, &aTmpRect, NULL, pDrawSelection);
+        ImpPaint(*pVDev, aStartPos, &aTmpRect, nullptr, pDrawSelection);
         rRenderContext.DrawOutDev(rRect.TopLeft(), rRect.GetSize(), Point(0,0), rRect.GetSize(), *pVDev);
         if (mpImpl->mbHighlightSelection)
             ImpHighlight(mpImpl->maSelection);
@@ -383,7 +383,7 @@ void TextView::ImpPaint(vcl::RenderContext& rRenderContext, const Rectangle& rRe
     else
     {
         Point aStartPos = ImpGetOutputStartPos(mpImpl->maStartDocPos);
-        ImpPaint(rRenderContext, aStartPos, &rRect, NULL, pDrawSelection);
+        ImpPaint(rRenderContext, aStartPos, &rRect, nullptr, pDrawSelection);
         if (mpImpl->mbHighlightSelection)
             ImpHighlight(mpImpl->maSelection);
     }
@@ -930,7 +930,7 @@ void TextView::Command( const CommandEvent& rCEvt )
             bool bInsertMode = !mpImpl->mpTextEngine->mpIMEInfos->bWasCursorOverwrite;
 
             delete mpImpl->mpTextEngine->mpIMEInfos;
-            mpImpl->mpTextEngine->mpIMEInfos = NULL;
+            mpImpl->mpTextEngine->mpIMEInfos = nullptr;
 
             mpImpl->mpTextEngine->FormatAndUpdate( this );
 
@@ -1128,7 +1128,7 @@ void TextView::Copy( uno::Reference< datatransfer::clipboard::XClipboard >& rxCl
 
         try
         {
-            rxClipboard->setContents( pDataObj, NULL );
+            rxClipboard->setContents( pDataObj, nullptr );
 
             uno::Reference< datatransfer::clipboard::XFlushableClipboard > xFlushableClipboard( rxClipboard, uno::UNO_QUERY );
             if( xFlushableClipboard.is() )
@@ -2010,7 +2010,7 @@ void TextView::dragDropEnd( const ::com::sun::star::datatransfer::dnd::DragSourc
 {
     ImpHideDDCursor();
     delete mpImpl->mpDDInfo;
-    mpImpl->mpDDInfo = NULL;
+    mpImpl->mpDDInfo = nullptr;
 }
 
 void TextView::drop( const ::com::sun::star::datatransfer::dnd::DropTargetDropEvent& rDTDE ) throw (::com::sun::star::uno::RuntimeException, std::exception)
@@ -2111,7 +2111,7 @@ void TextView::drop( const ::com::sun::star::datatransfer::dnd::DropTargetDropEv
         mpImpl->mpTextEngine->UndoActionEnd();
 
         delete mpImpl->mpDDInfo;
-        mpImpl->mpDDInfo = 0;
+        mpImpl->mpDDInfo = nullptr;
 
         mpImpl->mpTextEngine->FormatAndUpdate( this );
 
@@ -2148,7 +2148,7 @@ void TextView::dragOver( const ::com::sun::star::datatransfer::dnd::DropTargetDr
         const TextCharAttrib* pStartAttr = mpImpl->mpTextEngine->FindCharAttrib(
                     mpImpl->mpDDInfo->maDropPos,
                     TEXTATTR_PROTECTED );
-        bProtected = pStartAttr != 0 &&
+        bProtected = pStartAttr != nullptr &&
                 pStartAttr->GetStart() != mpImpl->mpDDInfo->maDropPos.GetIndex() &&
                 pStartAttr->GetEnd() != mpImpl->mpDDInfo->maDropPos.GetIndex();
     }

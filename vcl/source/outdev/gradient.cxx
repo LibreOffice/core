@@ -139,9 +139,9 @@ void OutputDevice::DrawGradient( const tools::PolyPolygon& rPolyPoly,
                     // if the clipping polypolygon is a rectangle, then it's the same size as the bounding of the
                     // polypolygon, so pass in a NULL for the clipping parameter
                     if( aGradient.GetStyle() == GradientStyle_LINEAR || rGradient.GetStyle() == GradientStyle_AXIAL )
-                        DrawLinearGradient( aRect, aGradient, aClixPolyPoly.IsRect() ? NULL : &aClixPolyPoly );
+                        DrawLinearGradient( aRect, aGradient, aClixPolyPoly.IsRect() ? nullptr : &aClixPolyPoly );
                     else
-                        DrawComplexGradient( aRect, aGradient, aClixPolyPoly.IsRect() ? NULL : &aClixPolyPoly );
+                        DrawComplexGradient( aRect, aGradient, aClixPolyPoly.IsRect() ? nullptr : &aClixPolyPoly );
                 }
 
                 Pop();

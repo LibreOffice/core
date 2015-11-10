@@ -73,9 +73,9 @@ static ImplFontAttrs lcl_IsCJKFont( const OUString& rFontName )
 PhysicalFontCollection::PhysicalFontCollection()
     : mbMatchData( false )
     , mbMapNames( false )
-    , mpPreMatchHook( NULL )
-    , mpFallbackHook( NULL )
-    , mpFallbackList( NULL )
+    , mpPreMatchHook( nullptr )
+    , mpFallbackHook( nullptr )
+    , mpFallbackList( nullptr )
     , mnFallbackCount( -1 )
 {}
 
@@ -98,7 +98,7 @@ void PhysicalFontCollection::Clear()
 {
     // remove fallback lists
     delete[] mpFallbackList;
-    mpFallbackList = NULL;
+    mpFallbackList = nullptr;
     mnFallbackCount = -1;
 
     // clear all entries in the device font list
@@ -141,13 +141,13 @@ void PhysicalFontCollection::InitGenericGlyphFallback() const
         "phetsarathot", "",
         "padauk", "pinlonmyanmar", "",
         "iskoolapota", "lklug", "",
-        0
+        nullptr
     };
 
     bool bHasEudc = false;
     int nMaxLevel = 0;
     int nBestQuality = 0;
-    PhysicalFontFamily** pFallbackList = NULL;
+    PhysicalFontFamily** pFallbackList = nullptr;
 
     for( const char** ppNames = &aGlyphFallbackList[0];; ++ppNames )
     {
@@ -218,7 +218,7 @@ PhysicalFontFamily* PhysicalFontCollection::GetGlyphFallbackFont( FontSelectPatt
                                                                   OUString& rMissingCodes,
                                                                   int nFallbackLevel ) const
 {
-    PhysicalFontFamily* pFallbackData = NULL;
+    PhysicalFontFamily* pFallbackData = nullptr;
 
     // find a matching font candidate for platform specific glyph fallback
     if( mpFallbackHook )
@@ -335,7 +335,7 @@ PhysicalFontFamily* PhysicalFontCollection::ImplFindBySearchName( const OUString
 
     PhysicalFontFamilies::const_iterator it = maPhysicalFontFamilies.find( rSearchName );
     if( it == maPhysicalFontFamilies.end() )
-        return NULL;
+        return nullptr;
 
     PhysicalFontFamily* pFoundData = (*it).second;
     return pFoundData;
@@ -346,11 +346,11 @@ PhysicalFontFamily* PhysicalFontCollection::ImplFindByAliasName(const OUString& 
 {
     // short circuit for impossible font name alias
     if (rSearchName.isEmpty())
-        return NULL;
+        return nullptr;
 
     // short circuit if no alias names are available
     if (!mbMapNames)
-        return NULL;
+        return nullptr;
 
     // use the font's alias names to find the font
     // TODO: get rid of linear search
@@ -375,7 +375,7 @@ PhysicalFontFamily* PhysicalFontCollection::ImplFindByAliasName(const OUString& 
         while ( nIndex != -1 );
      }
 
-     return NULL;
+     return nullptr;
 }
 
 PhysicalFontFamily* PhysicalFontCollection::FindFontFamily( const OUString& rFontName ) const
@@ -386,7 +386,7 @@ PhysicalFontFamily* PhysicalFontCollection::FindFontFamily( const OUString& rFon
 PhysicalFontFamily *PhysicalFontCollection::FindOrCreateFamily( const OUString &rFamilyName )
 {
     PhysicalFontFamilies::const_iterator it = maPhysicalFontFamilies.find( rFamilyName );
-    PhysicalFontFamily* pFoundData = NULL;
+    PhysicalFontFamily* pFoundData = nullptr;
 
     if( it != maPhysicalFontFamilies.end() )
         pFoundData = (*it).second;
@@ -402,7 +402,7 @@ PhysicalFontFamily *PhysicalFontCollection::FindOrCreateFamily( const OUString &
 
 PhysicalFontFamily* PhysicalFontCollection::ImplFindByTokenNames(const OUString& rTokenStr) const
 {
-    PhysicalFontFamily* pFoundData = NULL;
+    PhysicalFontFamily* pFoundData = nullptr;
 
     // use normalized font name tokens to find the font
     for( sal_Int32 nTokenPos = 0; nTokenPos != -1; )
@@ -422,7 +422,7 @@ PhysicalFontFamily* PhysicalFontCollection::ImplFindByTokenNames(const OUString&
 
 PhysicalFontFamily* PhysicalFontCollection::ImplFindBySubstFontAttr( const utl::FontNameAttr& rFontAttr ) const
 {
-    PhysicalFontFamily* pFoundData = NULL;
+    PhysicalFontFamily* pFoundData = nullptr;
 
     // use the font substitutions suggested by the FontNameAttr to find the font
     ::std::vector< OUString >::const_iterator it = rFontAttr.Substitutions.begin();
@@ -449,7 +449,7 @@ PhysicalFontFamily* PhysicalFontCollection::ImplFindBySubstFontAttr( const utl::
             return pFoundData;
     }
 
-    return NULL;
+    return nullptr;
 }
 
 void PhysicalFontCollection::InitMatchData() const
@@ -488,10 +488,10 @@ PhysicalFontFamily* PhysicalFontCollection::ImplFindByAttributes( ImplFontAttrs 
     if( nSearchType == ImplFontAttrs::None
     && ((eSearchWeight == WEIGHT_DONTKNOW) || (eSearchWeight == WEIGHT_NORMAL))
     && ((eSearchWidth == WIDTH_DONTKNOW) || (eSearchWidth == WIDTH_NORMAL)) )
-        return NULL;
+        return nullptr;
 
     InitMatchData();
-    PhysicalFontFamily* pFoundData = NULL;
+    PhysicalFontFamily* pFoundData = nullptr;
 
     long    nBestMatch = 40000;
     ImplFontAttrs  nBestType = ImplFontAttrs::None;
@@ -993,7 +993,7 @@ ImplGetDevSizeList* PhysicalFontCollection::GetDevSizeList( const OUString& rFon
     ImplGetDevSizeList* pGetDevSizeList = new ImplGetDevSizeList;
 
     PhysicalFontFamily* pFontFamily = FindFontFamily( rFontName );
-    if( pFontFamily != NULL )
+    if( pFontFamily != nullptr )
     {
         std::set<int> rHeights;
         pFontFamily->GetFontHeights( rHeights );
@@ -1010,7 +1010,7 @@ PhysicalFontFamily* PhysicalFontCollection::ImplFindByFont( FontSelectPattern& r
 {
     // give up if no fonts are available
     if( !Count() )
-        return NULL;
+        return nullptr;
 
     bool bMultiToken = false;
     sal_Int32 nTokenPos = 0;
@@ -1181,7 +1181,7 @@ PhysicalFontFamily* PhysicalFontCollection::ImplFindByFont( FontSelectPattern& r
     }
 
     // use font fallback
-    const utl::FontNameAttr* pFontAttr = NULL;
+    const utl::FontNameAttr* pFontAttr = nullptr;
     if (!aSearchName.isEmpty() && !utl::ConfigManager::IsAvoidConfig())
     {
         // get fallback info using FontSubstConfiguration and
@@ -1240,7 +1240,7 @@ PhysicalFontFamily* PhysicalFontCollection::ImplFindByFont( FontSelectPattern& r
                 return pFoundData;
         }
 
-        const utl::FontNameAttr* pTempFontAttr = NULL;
+        const utl::FontNameAttr* pTempFontAttr = nullptr;
         if (!utl::ConfigManager::IsAvoidConfig())
         {
             // use a font name from font fallback list to determine font attributes

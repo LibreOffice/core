@@ -54,7 +54,7 @@ void DbgGUIInitSolarMutexCheck()
 
 void DbgGUIDeInitSolarMutexCheck()
 {
-    DbgSetTestSolarMutex( NULL );
+    DbgSetTestSolarMutex( nullptr );
 }
 
 #endif // DBG_UTIL

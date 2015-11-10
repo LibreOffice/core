@@ -129,7 +129,7 @@ public:
     // pData allows for using a system dependent graphics or device context
     virtual SalVirtualDevice*   CreateVirtualDevice( SalGraphics* pGraphics,
                                                      long &nDX, long &nDY,
-                                                     sal_uInt16 nBitCount, const SystemGraphicsData *pData = NULL ) override;
+                                                     sal_uInt16 nBitCount, const SystemGraphicsData *pData = nullptr ) override;
 
     // Printer
     // pSetupData->mpDriverData can be 0

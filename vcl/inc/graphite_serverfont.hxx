@@ -87,8 +87,8 @@ public:
 
         // used by display layers
         virtual int     GetNextGlyphs( int l, sal_GlyphId* gia, Point& p, int& s,
-                        long* gaa = NULL, int* cpa = NULL,
-                        const PhysicalFontFace** pFallbackFonts = NULL ) const override
+                        long* gaa = nullptr, int* cpa = nullptr,
+                        const PhysicalFontFace** pFallbackFonts = nullptr ) const override
         {
             maImpl.DrawBase() = maDrawBase;
             maImpl.DrawOffset() = maDrawOffset;

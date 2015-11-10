@@ -52,10 +52,10 @@ static void ImplInitMsgBoxImageList()
 
 void MessBox::ImplInitMessBoxData()
 {
-    mpVCLMultiLineEdit  = NULL;
-    mpFixedImage        = NULL;
+    mpVCLMultiLineEdit  = nullptr;
+    mpFixedImage        = nullptr;
     mbHelpBtn           = false;
-    mpCheckBox          = NULL;
+    mpCheckBox          = nullptr;
     mbCheck             = false;
 }
 

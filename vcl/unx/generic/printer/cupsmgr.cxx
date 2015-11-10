@@ -147,7 +147,7 @@ OString CUPSManager::threadedCupsGetPPD( const char* pPrinter )
 
 static const char* setPasswordCallback( const char* pIn )
 {
-    const char* pRet = NULL;
+    const char* pRet = nullptr;
 
     PrinterInfoManager& rMgr = PrinterInfoManager::get();
     if( rMgr.getType() == PrinterInfoManager::CUPS ) // sanity check
@@ -161,7 +161,7 @@ static const char* setPasswordCallback( const char* pIn )
 
 CUPSManager* CUPSManager::tryLoadCUPS()
 {
-    CUPSManager* pManager = NULL;
+    CUPSManager* pManager = nullptr;
     static const char* pEnv = getenv("SAL_DISABLE_CUPS");
 
     if (!pEnv || !*pEnv)
@@ -181,7 +181,7 @@ static void run_dest_thread_stub( void* pThis )
 CUPSManager::CUPSManager() :
         PrinterInfoManager( CUPS ),
         m_nDests( 0 ),
-        m_pDests( NULL ),
+        m_pDests( nullptr ),
         m_bNewDests( false ),
         m_bPPDThreadRunning( false ),
         batchMode( false )
@@ -211,14 +211,14 @@ void CUPSManager::runDestThread( void* pThis )
 void CUPSManager::runDests()
 {
     SAL_INFO("vcl.unx.print", "starting cupsGetDests");
-    cups_dest_t* pDests = NULL;
+    cups_dest_t* pDests = nullptr;
 
     // n#722902 - do a fast-failing check for cups working *at all* first
     http_t* p_http;
     if( (p_http=httpConnectEncrypt(
              cupsServer(),
              ippPort(),
-             cupsEncryption())) != NULL )
+             cupsEncryption())) != nullptr )
     {
         // neat, cups is up, clean up the canary
         httpClose(p_http);
@@ -251,7 +251,7 @@ void CUPSManager::initialize()
     {
         osl_joinWithThread( m_aDestThread );
         osl_destroyThread( m_aDestThread );
-        m_aDestThread = NULL;
+        m_aDestThread = nullptr;
     }
     m_bNewDests = false;
 
@@ -288,7 +288,7 @@ void CUPSManager::initialize()
     int nPrinter = m_nDests;
 
     // reset global default PPD options; these are queried on demand from CUPS
-    m_aGlobalDefaults.m_pParser = NULL;
+    m_aGlobalDefaults.m_pParser = nullptr;
     m_aGlobalDefaults.m_aContext = PPDContext();
 
     // add CUPS printers, should there be a printer
@@ -333,8 +333,8 @@ void CUPSManager::initialize()
         // would mean we'd have to download PPDs for each and
         // every printer - which would be really bad runtime
         // behaviour
-        aPrinter.m_aInfo.m_pParser = NULL;
-        aPrinter.m_aInfo.m_aContext.setParser( NULL );
+        aPrinter.m_aInfo.m_pParser = nullptr;
+        aPrinter.m_aInfo.m_aContext.setParser( nullptr );
         std::unordered_map< OUString, PPDContext, OUStringHash >::const_iterator c_it = m_aDefaultContexts.find( aPrinterName );
         if( c_it != m_aDefaultContexts.end() )
         {
@@ -415,7 +415,7 @@ static void updatePrinterContextInfo( ppd_group_t* pPPDGroup, PPDContext& rConte
 
 const PPDParser* CUPSManager::createCUPSParser( const OUString& rPrinter )
 {
-    const PPDParser* pNewParser = NULL;
+    const PPDParser* pNewParser = nullptr;
     OUString aPrinter;
 
     if( rPrinter.startsWith("CUPS:") )
@@ -519,13 +519,13 @@ void CUPSManager::setupJobContextData( JobData& rData )
         return;
     }
 
-    if( p_it->second.m_aInfo.m_pParser == NULL )
+    if( p_it->second.m_aInfo.m_pParser == nullptr )
     {
         // in turn calls createCUPSParser
         // which updates the printer info
         p_it->second.m_aInfo.m_pParser = PPDParser::getParser( p_it->second.m_aInfo.m_aDriverName );
     }
-    if( p_it->second.m_aInfo.m_aContext.getParser() == NULL )
+    if( p_it->second.m_aInfo.m_aContext.getParser() == nullptr )
     {
         OUString aPrinter;
         if( p_it->second.m_aInfo.m_aDriverName.startsWith("CUPS:") )
@@ -553,7 +553,7 @@ FILE* CUPSManager::startSpool( const OUString& rPrintername, bool bQuickCommand 
     }
 
     OUString aTmpURL, aTmpFile;
-    osl_createTempFile( NULL, NULL, &aTmpURL.pData );
+    osl_createTempFile( nullptr, nullptr, &aTmpURL.pData );
     osl_getSystemPathFromFileURL( aTmpURL.pData, &aTmpFile.pData );
     OString aSysFile = OUStringToOString( aTmpFile, osl_getThreadTextEncoding() );
     FILE* fp = fopen( aSysFile.getStr(), "w" );
@@ -572,7 +572,7 @@ struct less_ppd_key : public ::std::binary_function<double, double, bool>
 void CUPSManager::getOptionsFromDocumentSetup( const JobData& rJob, bool bBanner, int& rNumOptions, void** rOptions )
 {
     rNumOptions = 0;
-    *rOptions = NULL;
+    *rOptions = nullptr;
 
     // emit features ordered to OrderDependency
     // ignore features that are set to default
@@ -711,7 +711,7 @@ bool CUPSManager::printJobs( const PendingJob& job, const std::vector< OString >
 
         // setup cups options
         int nNumOptions = 0;
-        cups_option_t* pOptions = NULL;
+        cups_option_t* pOptions = nullptr;
         getOptionsFromDocumentSetup( job.jobData, job.banner, nNumOptions, reinterpret_cast<void**>(&pOptions) );
 
         OString sJobName(OUStringToOString(job.jobTitle, aEnc));
@@ -776,7 +776,7 @@ bool CUPSManager::checkPrintersChanged( bool bWait )
             SAL_INFO("vcl.unx.print", "syncing cups discovery thread");
             osl_joinWithThread( m_aDestThread );
             osl_destroyThread( m_aDestThread );
-            m_aDestThread = NULL;
+            m_aDestThread = nullptr;
             SAL_INFO("vcl.unx.print", "done: syncing cups discovery thread");
         }
         else
@@ -793,7 +793,7 @@ bool CUPSManager::checkPrintersChanged( bool bWait )
             if( m_nDests && m_pDests )
                 cupsFreeDests( m_nDests, static_cast<cups_dest_t*>(m_pDests) );
             m_nDests = 0;
-            m_pDests = NULL;
+            m_pDests = nullptr;
             runDests();
         }
     }
@@ -881,7 +881,7 @@ bool CUPSManager::writePrinterConfig()
 
             // create new option list
             int nNewOptions = 0;
-            cups_option_t* pNewOptions = NULL;
+            cups_option_t* pNewOptions = nullptr;
             int nValues = rInfo.m_aContext.countValuesModified();
             for( int i = 0; i < nValues; i++ )
             {
@@ -981,7 +981,7 @@ namespace
 
 const char* CUPSManager::authenticateUser( const char* /*pIn*/ )
 {
-    const char* pRet = NULL;
+    const char* pRet = nullptr;
 
     osl::MutexGuard aGuard( m_aCUPSMutex );
 

@@ -104,7 +104,7 @@ void OutputDevice::DrawHatch( const tools::PolyPolygon& rPolyPoly, const Hatch& 
         aPolyPoly.Optimize( PolyOptimizeFlags::NO_SAME );
         aHatch.SetDistance( ImplLogicWidthToDevicePixel( aHatch.GetDistance() ) );
 
-        mpMetaFile = NULL;
+        mpMetaFile = nullptr;
         EnableMapMode( false );
         Push( PushFlags::LINECOLOR );
         SetLineColor( aHatch.GetColor() );

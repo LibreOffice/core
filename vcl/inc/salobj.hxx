@@ -40,7 +40,7 @@ class VCL_PLUGIN_PUBLIC SalObject
     bool                m_bMouseTransparent:1,
                         m_bEraseBackground:1;
 public:
-            SalObject() : m_pInst( NULL ), m_pCallback( NULL ), m_bMouseTransparent( false ), m_bEraseBackground( true ) {}
+            SalObject() : m_pInst( nullptr ), m_pCallback( nullptr ), m_bMouseTransparent( false ), m_bEraseBackground( true ) {}
             virtual ~SalObject();
 
     virtual void                    ResetClipRegion() = 0;

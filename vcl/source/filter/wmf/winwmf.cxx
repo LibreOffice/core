@@ -1107,7 +1107,7 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
                                 // total records should be the same as in previous comments
                                 nEMFRecCount = 0xFFFFFFFF;
                                 delete pEMFStream;
-                                pEMFStream = NULL;
+                                pEMFStream = nullptr;
                             }
                             nEMFRec++;
 
@@ -1115,7 +1115,7 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
                             {
                                 nEMFRecCount = 0xFFFFFFFF;
                                 delete pEMFStream;
-                                pEMFStream = NULL;
+                                pEMFStream = nullptr;
                             }
 
                             if( pEMFStream )
@@ -1211,7 +1211,7 @@ bool WMFReader::ReadHeader()
         nUnitsPerInch = 96;
 
 
-        if (   pExternalHeader != NULL
+        if (   pExternalHeader != nullptr
             && pExternalHeader->xExt > 0
             && pExternalHeader->yExt > 0
             && (pExternalHeader->mapMode == MM_ISOTROPIC || pExternalHeader->mapMode == MM_ANISOTROPIC))
@@ -1307,7 +1307,7 @@ void WMFReader::ReadWMF()
     nCurrentAction = 0;
     nUnicodeEscapeAction = 0;
 
-    pEMFStream      = NULL;
+    pEMFStream      = nullptr;
     nEMFRecCount    = 0;
     nEMFRec         = 0;
     nEMFSize        = 0;
@@ -1393,7 +1393,7 @@ void WMFReader::ReadWMF()
                             // something went wrong
                             // continue with WMF, don't try this again
                             delete pEMFStream;
-                            pEMFStream = NULL;
+                            pEMFStream = nullptr;
                         }
                     }
                 }
@@ -1803,7 +1803,7 @@ WMFReader::WMFReader(SvStream& rStreamWMF, GDIMetaFile& rGDIMetaFile,
     : WinMtf(new WinMtfOutput(rGDIMetaFile) , rStreamWMF, pConfigItem)
     , nUnitsPerInch(96)
     , nRecSize(0)
-    , pEMFStream(NULL)
+    , pEMFStream(nullptr)
     , nEMFRecCount(0)
     , nEMFRec(0)
     , nEMFSize(0)

@@ -165,15 +165,15 @@ public:
 
 PNGReaderImpl::PNGReaderImpl( SvStream& rPNGStream )
 :   mrPNGStream( rPNGStream ),
-    mpBmp           ( NULL ),
-    mpAcc           ( NULL ),
-    mpMaskBmp       ( NULL ),
-    mpAlphaMask     ( NULL ),
-    mpMaskAcc       ( NULL ),
-    mpInflateInBuf  ( NULL ),
-    mpScanPrior     ( NULL ),
-    mpTransTab      ( NULL ),
-    mpScanCurrent   ( NULL ),
+    mpBmp           ( nullptr ),
+    mpAcc           ( nullptr ),
+    mpMaskBmp       ( nullptr ),
+    mpAlphaMask     ( nullptr ),
+    mpMaskAcc       ( nullptr ),
+    mpInflateInBuf  ( nullptr ),
+    mpScanPrior     ( nullptr ),
+    mpTransTab      ( nullptr ),
+    mpScanCurrent   ( nullptr ),
     mpColorTable    ( const_cast<sal_uInt8*>(mpDefaultColorTable) ),
     mnChunkType     ( 0 ),
     mnChunkLen      ( 0 ),
@@ -208,8 +208,8 @@ PNGReaderImpl::PNGReaderImpl( SvStream& rPNGStream )
     mnAllocSizeScanline(0),
     mnAllocSizeScanlineAlpha(0),
 #endif
-    mpScanline(0),
-    mpScanlineAlpha(0)
+    mpScanline(nullptr),
+    mpScanlineAlpha(nullptr)
 {
     // prepare the PNG data stream
     mnOrigStreamMode = mrPNGStream.GetEndian();
@@ -424,7 +424,7 @@ BitmapEx PNGReaderImpl::GetBitmapEx( const Size& rPreviewSizeHint )
 
     // release write access of the bitmaps
     if ( mpAcc )
-        Bitmap::ReleaseAccess( mpAcc ), mpAcc = NULL;
+        Bitmap::ReleaseAccess( mpAcc ), mpAcc = nullptr;
 
     if ( mpMaskAcc )
     {
@@ -433,7 +433,7 @@ BitmapEx PNGReaderImpl::GetBitmapEx( const Size& rPreviewSizeHint )
         else if ( mpMaskBmp )
             Bitmap::ReleaseAccess( mpMaskAcc );
 
-        mpMaskAcc = NULL;
+        mpMaskAcc = nullptr;
     }
 
     // return the resulting BitmapEx
@@ -729,7 +729,7 @@ bool PNGReaderImpl::ImplReadTransparent()
 {
     bool bNeedAlpha = false;
 
-    if ( mpTransTab == NULL )
+    if ( mpTransTab == nullptr )
     {
         switch ( mnColorType )
         {
@@ -793,7 +793,7 @@ bool PNGReaderImpl::ImplReadTransparent()
             mpMaskBmp = new Bitmap( maTargetSize, 1 );
             mpMaskAcc = mpMaskBmp->AcquireWriteAccess();
         }
-        mbTransparent = (mpMaskAcc != NULL);
+        mbTransparent = (mpMaskAcc != nullptr);
         if( !mbTransparent )
             return false;
         mcOpaqueColor = BitmapColor( 0x00 );

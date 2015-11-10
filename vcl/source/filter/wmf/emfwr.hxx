@@ -92,7 +92,7 @@ public:
     explicit EMFWriter(SvStream &rStream)
         : maVDev( VclPtr<VirtualDevice>::Create() )
         , m_rStm(rStream)
-        , mpHandlesUsed(NULL)
+        , mpHandlesUsed(nullptr)
         , mnHandleCount(0)
         , mnRecordCount(0)
         , mnRecordPos(0)

@@ -30,8 +30,8 @@
 #include <unx/gtk/gtkgdi.hxx>
 
 GtkSalObject::GtkSalObject( GtkSalFrame* pParent, bool bShow )
-        : m_pSocket( NULL ),
-          m_pRegion( NULL )
+        : m_pSocket( nullptr ),
+          m_pRegion( nullptr )
 {
     if( pParent )
     {
@@ -65,10 +65,10 @@ GtkSalObject::GtkSalObject( GtkSalFrame* pParent, bool bShow )
         m_aSystemData.aShellWindow  = pParent->GetSystemData()->aWindow;
         ++nWindow;
 #endif
-        m_aSystemData.pSalFrame     = NULL;
+        m_aSystemData.pSalFrame     = nullptr;
         m_aSystemData.pWidget       = m_pSocket;
         m_aSystemData.nScreen       = pParent->getXScreenNumber().getXScreen();
-        m_aSystemData.pAppContext   = NULL;
+        m_aSystemData.pAppContext   = nullptr;
         m_aSystemData.pShellWidget  = GTK_WIDGET(pParent->getWindow());
 
         g_signal_connect( G_OBJECT(m_pSocket), "button-press-event", G_CALLBACK(signalButton), this );
@@ -109,7 +109,7 @@ GtkSalObject::~GtkSalObject()
 void GtkSalObject::ResetClipRegion()
 {
     if( m_pSocket )
-        gdk_window_shape_combine_region( widget_get_window(m_pSocket), NULL, 0, 0 );
+        gdk_window_shape_combine_region( widget_get_window(m_pSocket), nullptr, 0, 0 );
 }
 
 sal_uInt16 GtkSalObject::GetClipRegionType()
@@ -184,7 +184,7 @@ gboolean GtkSalObject::signalButton( GtkWidget*, GdkEventButton* pEvent, gpointe
 
     if( pEvent->type == GDK_BUTTON_PRESS )
     {
-        pThis->CallCallback( SALOBJ_EVENT_TOTOP, NULL );
+        pThis->CallCallback( SALOBJ_EVENT_TOTOP, nullptr );
     }
 
     return FALSE;
@@ -194,7 +194,7 @@ gboolean GtkSalObject::signalFocus( GtkWidget*, GdkEventFocus* pEvent, gpointer 
 {
     GtkSalObject* pThis = static_cast<GtkSalObject*>(object);
 
-    pThis->CallCallback( pEvent->in ? SALOBJ_EVENT_GETFOCUS : SALOBJ_EVENT_LOSEFOCUS, NULL );
+    pThis->CallCallback( pEvent->in ? SALOBJ_EVENT_GETFOCUS : SALOBJ_EVENT_LOSEFOCUS, nullptr );
 
     return FALSE;
 }
@@ -204,7 +204,7 @@ void GtkSalObject::signalDestroy( GtkWidget* pObj, gpointer object )
     GtkSalObject* pThis = static_cast<GtkSalObject*>(object);
     if( pObj == pThis->m_pSocket )
     {
-        pThis->m_pSocket = NULL;
+        pThis->m_pSocket = nullptr;
     }
 }
 

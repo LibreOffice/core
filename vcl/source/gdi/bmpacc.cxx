@@ -28,14 +28,14 @@
 #include <string.h>
 
 BitmapInfoAccess::BitmapInfoAccess( Bitmap& rBitmap, BitmapAccessMode nMode ) :
-            mpBuffer        ( NULL ),
+            mpBuffer        ( nullptr ),
             mnAccessMode    ( nMode )
 {
     ImplCreate( rBitmap );
 }
 
 BitmapInfoAccess::BitmapInfoAccess( Bitmap& rBitmap ) :
-            mpBuffer        ( NULL ),
+            mpBuffer        ( nullptr ),
             mnAccessMode    ( BITMAP_INFO_ACCESS )
 {
     ImplCreate( rBitmap );
@@ -93,7 +93,7 @@ void BitmapInfoAccess::ImplDestroy()
     if( mpBuffer && pImpBmp )
     {
         pImpBmp->ImplReleaseBuffer( mpBuffer, mnAccessMode );
-        mpBuffer = NULL;
+        mpBuffer = nullptr;
     }
 }
 
@@ -104,18 +104,18 @@ sal_uInt16 BitmapInfoAccess::GetBestPaletteIndex( const BitmapColor& rBitmapColo
 
 BitmapReadAccess::BitmapReadAccess( Bitmap& rBitmap, BitmapAccessMode nMode ) :
             BitmapInfoAccess( rBitmap, nMode ),
-            mpScanBuf       ( NULL ),
-            mFncGetPixel    ( NULL ),
-            mFncSetPixel    ( NULL )
+            mpScanBuf       ( nullptr ),
+            mFncGetPixel    ( nullptr ),
+            mFncSetPixel    ( nullptr )
 {
     ImplInitScanBuffer( rBitmap );
 }
 
 BitmapReadAccess::BitmapReadAccess( Bitmap& rBitmap ) :
             BitmapInfoAccess( rBitmap, BITMAP_READ_ACCESS ),
-            mpScanBuf       ( NULL ),
-            mFncGetPixel    ( NULL ),
-            mFncSetPixel    ( NULL )
+            mpScanBuf       ( nullptr ),
+            mFncGetPixel    ( nullptr ),
+            mFncSetPixel    ( nullptr )
 {
     ImplInitScanBuffer( rBitmap );
 }
@@ -162,17 +162,17 @@ void BitmapReadAccess::ImplInitScanBuffer( Bitmap& rBitmap )
     if (!bOk)
     {
         delete[] mpScanBuf;
-        mpScanBuf = NULL;
+        mpScanBuf = nullptr;
 
         pImpBmp->ImplReleaseBuffer( mpBuffer, mnAccessMode );
-        mpBuffer = NULL;
+        mpBuffer = nullptr;
     }
 }
 
 void BitmapReadAccess::ImplClearScanBuffer()
 {
     delete[] mpScanBuf;
-    mpScanBuf = NULL;
+    mpScanBuf = nullptr;
 }
 
 bool BitmapReadAccess::ImplSetAccessPointers( sal_uLong nFormat )
@@ -467,7 +467,7 @@ void BitmapWriteAccess::CopyScanline( long nY, ConstScanline aSrcScanline,
                 case( BMP_FORMAT_32BIT_TC_MASK ):   pFncGetPixel = GetPixelFor_32BIT_TC_MASK; break;
 
                 default:
-                    pFncGetPixel = NULL;
+                    pFncGetPixel = nullptr;
                 break;
             }
 

@@ -31,7 +31,7 @@ MenuFloatingWindow::MenuFloatingWindow( Menu* pMen, vcl::Window* pParent, WinBit
 {
     mpWindowImpl->mbMenuFloatingWindow= true;
     pMenu               = pMen;
-    pActivePopup        = 0;
+    pActivePopup        = nullptr;
     nSaveFocusId        = 0;
     bInExecute          = false;
     bScrollMenu         = false;
@@ -98,7 +98,7 @@ void MenuFloatingWindow::doShutdown()
             Rectangle aInvRect( GetWindowExtentsRelative( GetParent() ) );
             GetParent()->Invalidate( aInvRect );
         }
-        pMenu = NULL;
+        pMenu = nullptr;
         RemoveEventListener( LINK( this, MenuFloatingWindow, ShowHideListener ) );
     }
 }
@@ -231,7 +231,7 @@ void MenuFloatingWindow::ImplHighlightItem( const MouseEvent& rMEvt, bool bMBDow
 
                         if ( bPopupArea && bAllowNewPopup )
                         {
-                            HighlightChanged( NULL );
+                            HighlightChanged( nullptr );
                         }
                     }
                     else
@@ -243,7 +243,7 @@ void MenuFloatingWindow::ImplHighlightItem( const MouseEvent& rMEvt, bool bMBDow
                         else if ( pItemData->nBits & MenuItemBits::POPUPSELECT )
                         {
                             if ( bPopupArea && ( pActivePopup != pItemData->pSubMenu ) )
-                                HighlightChanged( NULL );
+                                HighlightChanged( nullptr );
                         }
                     }
                     bHighlighted = true;
@@ -284,7 +284,7 @@ IMPL_LINK_NOARG_TYPED(MenuFloatingWindow, PopupEnd, FloatingWindow*, void)
     }
 
     if ( pM )
-        pM->pStartedFrom = 0;
+        pM->pStartedFrom = nullptr;
 }
 
 IMPL_LINK_NOARG_TYPED(MenuFloatingWindow, AutoScroll, Timer *, void)
@@ -311,7 +311,7 @@ IMPL_LINK_TYPED( MenuFloatingWindow, HighlightChanged, Timer*, pTimer, void )
         {
             pActivePopup = static_cast<PopupMenu*>(pItemData->pSubMenu);
             long nY = nScrollerHeight+ImplGetStartY();
-            MenuItemData* pData = 0;
+            MenuItemData* pData = nullptr;
             for ( sal_uLong n = 0; n < nHighlightedItem; n++ )
             {
                 pData = pMenu->pItemList->GetDataFromPos( n );
@@ -394,7 +394,7 @@ void MenuFloatingWindow::Execute()
     while ( bInExecute )
         Application::Yield();
 
-    pSVData->maAppData.mpActivePopupMenu = NULL;
+    pSVData->maAppData.mpActivePopupMenu = nullptr;
 }
 
 void MenuFloatingWindow::StopExecute( sal_uLong nFocusId )
@@ -437,7 +437,7 @@ void MenuFloatingWindow::KillActivePopup( PopupMenu* pThisOnly )
         // For all actions pActivePopup = 0, if e.g.
         // PopupModeEndHdl the popups to destroy were called synchronous
         PopupMenu* pPopup = pActivePopup;
-        pActivePopup = NULL;
+        pActivePopup = nullptr;
         pPopup->bInCallback = true;
         pPopup->Deactivate();
         pPopup->bInCallback = false;
@@ -446,7 +446,7 @@ void MenuFloatingWindow::KillActivePopup( PopupMenu* pThisOnly )
             pPopup->ImplGetFloatingWindow()->StopExecute();
             pPopup->ImplGetFloatingWindow()->doShutdown();
             pPopup->pWindow->doLazyDelete();
-            pPopup->pWindow = NULL;
+            pPopup->pWindow = nullptr;
 
             Update();
         }
@@ -455,7 +455,7 @@ void MenuFloatingWindow::KillActivePopup( PopupMenu* pThisOnly )
 
 void MenuFloatingWindow::EndExecute()
 {
-    Menu* pStart = pMenu ? pMenu->ImplGetStartMenu() : NULL;
+    Menu* pStart = pMenu ? pMenu->ImplGetStartMenu() : nullptr;
     sal_uLong nFocusId = 0;
     if (pStart)
         nFocusId = pStart->DeactivateMenuBar(nFocusId);
@@ -517,7 +517,7 @@ void MenuFloatingWindow::MouseButtonDown( const MouseEvent& rMEvt )
 
 void MenuFloatingWindow::MouseButtonUp( const MouseEvent& rMEvt )
 {
-    MenuItemData* pData = pMenu ? pMenu->GetItemList()->GetDataFromPos( nHighlightedItem ) : NULL;
+    MenuItemData* pData = pMenu ? pMenu->GetItemList()->GetDataFromPos( nHighlightedItem ) : nullptr;
     // nMBDownPos store in local variable and reset immediately,
     // as it will be too late after EndExecute
     sal_uInt16 _nMBDownPos = nMBDownPos;
@@ -548,7 +548,7 @@ void MenuFloatingWindow::MouseMove( const MouseEvent& rMEvt )
     if ( rMEvt.IsLeaveWindow() )
     {
         // #102461# do not remove highlight if a popup menu is open at this position
-        MenuItemData* pData = pMenu ? pMenu->pItemList->GetDataFromPos( nHighlightedItem ) : NULL;
+        MenuItemData* pData = pMenu ? pMenu->pItemList->GetDataFromPos( nHighlightedItem ) : nullptr;
         // close popup with some delayed if we leave somewhere else
         if( pActivePopup && pData && pData->pSubMenu != pActivePopup )
             pActivePopup->ImplGetFloatingWindow()->aSubmenuCloseTimer.Start();
@@ -1055,7 +1055,7 @@ void MenuFloatingWindow::KeyInput( const KeyEvent& rKEvent )
                     MenuItemData* pData = pMenu->GetItemList()->GetDataFromPos( nHighlightedItem );
                     if ( pData && pData->pSubMenu )
                     {
-                        HighlightChanged( 0 );
+                        HighlightChanged( nullptr );
                         bDone = true;
                     }
                 }
@@ -1079,7 +1079,7 @@ void MenuFloatingWindow::KeyInput( const KeyEvent& rKEvent )
                 if ( pData && pData->bEnabled )
                 {
                     if ( pData->pSubMenu )
-                        HighlightChanged( 0 );
+                        HighlightChanged( nullptr );
                     else
                         EndExecute();
                 }
@@ -1107,7 +1107,7 @@ void MenuFloatingWindow::KeyInput( const KeyEvent& rKEvent )
             sal_uInt16 nPos = 0;
             sal_uInt16 nDuplicates = 0;
             MenuItemData* pData = (nCharCode && pMenu) ?
-                pMenu->GetItemList()->SearchItem(nCharCode, rKEvent.GetKeyCode(), nPos, nDuplicates, nHighlightedItem) : NULL;
+                pMenu->GetItemList()->SearchItem(nCharCode, rKEvent.GetKeyCode(), nPos, nDuplicates, nHighlightedItem) : nullptr;
             bool bConsume = false;
             bool accel = ImplGetSVData()->maNWFData.mbEnableAccel;
             if (pData && accel)
@@ -1122,7 +1122,7 @@ void MenuFloatingWindow::KeyInput( const KeyEvent& rKEvent )
                 if ( pData->pSubMenu || nDuplicates > 1 )
                 {
                     ChangeHighlightItem( nPos, false );
-                    HighlightChanged( 0 );
+                    HighlightChanged( nullptr );
                 }
                 else
                 {
@@ -1212,7 +1212,7 @@ void MenuFloatingWindow::RequestHelp( const HelpEvent& rHEvt )
     {
         nHighlightedItem = ITEMPOS_INVALID;
         EndExecute();
-        pW = NULL;
+        pW = nullptr;
     }
 
     if( !ImplHandleHelpEvent( pW, pM, nId, rHEvt, aHighlightRect ) )

@@ -152,7 +152,7 @@ bool Exif::processJpeg(SvStream& rStream, bool bSetValue)
 
 bool Exif::processIFD(sal_uInt8* pExifData, sal_uInt16 aLength, sal_uInt16 aOffset, sal_uInt16 aNumberOfTags, bool bSetValue, bool bSwap)
 {
-    ExifIFD* ifd = NULL;
+    ExifIFD* ifd = nullptr;
 
     while (aOffset <= aLength - 12 && aNumberOfTags > 0)
     {

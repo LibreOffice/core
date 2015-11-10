@@ -854,7 +854,7 @@ public:
 
      @return the event ID used to post the event.
     */
-    static ImplSVEvent * PostUserEvent( const Link<void*,void>& rLink, void* pCaller = NULL,
+    static ImplSVEvent * PostUserEvent( const Link<void*,void>& rLink, void* pCaller = nullptr,
                                         bool bReferenceLink = false );
 
     /** Remove user event based on event ID
@@ -1185,7 +1185,7 @@ public:
 
      @see GetHelp
     */
-    static void                 SetHelp( Help* pHelp = NULL );
+    static void                 SetHelp( Help* pHelp = nullptr );
 
     /** Gets the application's help
 

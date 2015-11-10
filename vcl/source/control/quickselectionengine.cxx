@@ -88,7 +88,7 @@ namespace vcl
 
             pSearchEntry = _engineData.rEntryList.NextEntry( pSearchEntry, sEntryText );
             if ( pSearchEntry == pStartedWith )
-                pSearchEntry = NULL;
+                pSearchEntry = nullptr;
         }
 
         return pSearchEntry;

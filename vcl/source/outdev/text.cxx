@@ -275,7 +275,7 @@ bool OutputDevice::ImplDrawRotateText( SalLayout& rSalLayout )
 
     mnOutOffX   = 0L;
     mnOutOffY   = 0L;
-    mpMetaFile  = NULL;
+    mpMetaFile  = nullptr;
     EnableMapMode( false );
 
     DrawMask( aPoint, aBmp, GetTextColor() );
@@ -929,7 +929,7 @@ long OutputDevice::GetTextWidth( const OUString& rStr, sal_Int32 nIndex, sal_Int
      vcl::TextLayoutCache const*const pLayoutCache) const
 {
 
-    long nWidth = GetTextArray( rStr, NULL, nIndex, nLen, pLayoutCache );
+    long nWidth = GetTextArray( rStr, nullptr, nIndex, nLen, pLayoutCache );
 
     return nWidth;
 }
@@ -1318,12 +1318,12 @@ SalLayout* OutputDevice::ImplLayout(const OUString& rOrigStr,
     // we need a graphics
     if( !mpGraphics )
         if( !AcquireGraphics() )
-            return NULL;
+            return nullptr;
 
     // initialize font if needed
     if( mbNewFont )
         if( !ImplNewFont() )
-            return NULL;
+            return nullptr;
     if( mbInitFont )
         InitFont();
 
@@ -1332,7 +1332,7 @@ SalLayout* OutputDevice::ImplLayout(const OUString& rOrigStr,
     {
         const sal_Int32 nNewLen = rOrigStr.getLength() - nMinIndex;
         if( nNewLen <= 0 )
-            return NULL;
+            return nullptr;
         nLen = nNewLen;
     }
 
@@ -1391,11 +1391,11 @@ SalLayout* OutputDevice::ImplLayout(const OUString& rOrigStr,
     if( pSalLayout && !pSalLayout->LayoutText( aLayoutArgs ) )
     {
         pSalLayout->Release();
-        pSalLayout = NULL;
+        pSalLayout = nullptr;
     }
 
     if( !pSalLayout )
-        return NULL;
+        return nullptr;
 
     // do glyph fallback if needed
     // #105768# avoid fallback for very small font sizes
@@ -1442,7 +1442,7 @@ std::shared_ptr<vcl::TextLayoutCache> OutputDevice::CreateTextLayoutCache(
 bool OutputDevice::GetTextIsRTL( const OUString& rString, sal_Int32 nIndex, sal_Int32 nLen ) const
 {
     OUString aStr( rString );
-    ImplLayoutArgs aArgs = ImplPrepareLayoutArgs( aStr, nIndex, nLen, 0, NULL );
+    ImplLayoutArgs aArgs = ImplPrepareLayoutArgs( aStr, nIndex, nLen, 0, nullptr );
     bool bRTL = false;
     int nCharPos = -1;
     if (!aArgs.GetNextPos(&nCharPos, &bRTL))
@@ -1832,7 +1832,7 @@ void OutputDevice::AddTextRectActions( const Rectangle& rRect,
     // #i47157# Factored out to ImplDrawTextRect(), to be shared
     // between us and DrawText()
     vcl::DefaultTextLayout aLayout( *this );
-    ImplDrawText( *this, rRect, rOrigStr, nStyle, NULL, NULL, aLayout );
+    ImplDrawText( *this, rRect, rOrigStr, nStyle, nullptr, nullptr, aLayout );
 
     // and restore again
     EnableOutput( bOutputEnabled );
@@ -1851,7 +1851,7 @@ void OutputDevice::DrawText( const Rectangle& rRect, const OUString& rOrigStr, D
         pDisplayText = &mpOutDevData->mpRecordLayout->m_aDisplayText;
     }
 
-    bool bDecomposeTextRectAction = ( _pTextLayout != NULL ) && _pTextLayout->DecomposeTextRectAction();
+    bool bDecomposeTextRectAction = ( _pTextLayout != nullptr ) && _pTextLayout->DecomposeTextRectAction();
     if ( mpMetaFile && !bDecomposeTextRectAction )
         mpMetaFile->AddAction( new MetaTextRectAction( rRect, rOrigStr, nStyle ) );
 
@@ -1870,7 +1870,7 @@ void OutputDevice::DrawText( const Rectangle& rRect, const OUString& rOrigStr, D
     // create MetaActionType::TEXTs otherwise)
     GDIMetaFile* pMtf = mpMetaFile;
     if ( !bDecomposeTextRectAction )
-        mpMetaFile = NULL;
+        mpMetaFile = nullptr;
 
     // #i47157# Factored out to ImplDrawText(), to be used also
     // from AddTextRectActions()
@@ -2063,7 +2063,7 @@ OUString OutputDevice::ImplGetEllipsisString( const OutputDevice& rTargetDevice,
         {
             OUString aPath( rOrigStr );
             OUString aAbbreviatedPath;
-            osl_abbreviateSystemPath( aPath.pData, &aAbbreviatedPath.pData, nIndex, NULL );
+            osl_abbreviateSystemPath( aPath.pData, &aAbbreviatedPath.pData, nIndex, nullptr );
             aStr = aAbbreviatedPath;
         }
         else if ( nStyle & DrawTextFlags::NewsEllipsis )
@@ -2449,7 +2449,7 @@ bool OutputDevice::GetTextBoundRect( Rectangle& rRect,
     bool bRet = false;
     rRect.SetEmpty();
 
-    SalLayout* pSalLayout = NULL;
+    SalLayout* pSalLayout = nullptr;
     const Point aPoint;
     // calculate offset when nBase!=nIndex
     long nXOffset = 0;
@@ -2653,7 +2653,7 @@ bool OutputDevice::GetTextOutlines( ::basegfx::B2DPolyPolygonVector& rVector,
         const_cast<OutputDevice&>(*this).mbNewFont = true;
     }
 
-    SalLayout* pSalLayout = NULL;
+    SalLayout* pSalLayout = nullptr;
 
     // calculate offset when nBase!=nIndex
     long nXOffset = 0;
@@ -2725,7 +2725,7 @@ bool OutputDevice::GetTextOutlines( ::basegfx::B2DPolyPolygonVector& rVector,
     // fall back to bitmap method to get the bounding rectangle,
     // so we need a monochrome virtual device with matching font
     pSalLayout = ImplLayout( rStr, nIndex, nLen, Point(0,0), nLayoutWidth, pDXArray );
-    if (pSalLayout == 0)
+    if (pSalLayout == nullptr)
         return false;
     long nOrgWidth = pSalLayout->GetTextWidth();
     long nOrgHeight = mpFontEntry->mnLineHeight + mnEmphasisAscent
@@ -2750,7 +2750,7 @@ bool OutputDevice::GetTextOutlines( ::basegfx::B2DPolyPolygonVector& rVector,
     aVDev->SetTextFillColor();
 
     pSalLayout = aVDev->ImplLayout( rStr, nIndex, nLen, Point(0,0), nLayoutWidth, pDXArray );
-    if (pSalLayout == 0)
+    if (pSalLayout == nullptr)
         return false;
     long nWidth = pSalLayout->GetTextWidth();
     long nHeight = aVDev->mpFontEntry->mnLineHeight + aVDev->mnEmphasisAscent +
@@ -2784,14 +2784,14 @@ bool OutputDevice::GetTextOutlines( ::basegfx::B2DPolyPolygonVector& rVector,
     OUString aStr( rStr ); // prepare for e.g. localized digits
     sal_Int32 nIndex2 = nIndex; // only needed until nIndex is sal_Int32
     sal_Int32 nLen2 = nLen; // only needed until nLen is sal_Int32
-    ImplLayoutArgs aLayoutArgs = ImplPrepareLayoutArgs( aStr, nIndex2, nLen2, 0, NULL );
+    ImplLayoutArgs aLayoutArgs = ImplPrepareLayoutArgs( aStr, nIndex2, nLen2, 0, nullptr );
     for( int nCharPos = -1; aLayoutArgs.GetNextPos( &nCharPos, &bRTL);)
     {
         bool bSuccess = false;
 
         // draw character into virtual device
         pSalLayout = aVDev->ImplLayout( rStr, nCharPos, 1, Point(0,0), nLayoutWidth, pDXArray );
-        if (pSalLayout == 0)
+        if (pSalLayout == nullptr)
             return false;
         long nCharWidth = pSalLayout->GetTextWidth();
 

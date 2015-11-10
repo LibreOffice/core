@@ -51,11 +51,11 @@ using namespace com::sun::star;
 #define TB_SEP_SIZE             8
 
 ImplToolBoxPrivateData::ImplToolBoxPrivateData() :
-        m_pLayoutData( NULL )
+        m_pLayoutData( nullptr )
 {
     meButtonSize = TOOLBOX_BUTTONSIZE_DONTCARE;
     mpMenu = new PopupMenu();
-    mnEventId = 0;
+    mnEventId = nullptr;
 
     maMenuType = TOOLBOX_MENUTYPE_NONE;
     maMenubuttonItem.maItemSize = Size( TB_MENUBUTTON_SIZE+TB_MENUBUTTON_OFFSET, TB_MENUBUTTON_SIZE+TB_MENUBUTTON_OFFSET );
@@ -85,8 +85,8 @@ void ImplToolItem::init(sal_uInt16 nItemId, ToolBoxItemBits nItemBits,
                         bool bEmptyBtn)
 {
     mnId            = nItemId;
-    mpWindow        = NULL;
-    mpUserData      = NULL;
+    mpWindow        = nullptr;
+    mpUserData      = nullptr;
     meType          = ToolBoxItemType::BUTTON;
     mnBits          = nItemBits;
     meState         = TRISTATE_FALSE;
@@ -744,7 +744,7 @@ void ToolBox::CopyItem( const ToolBox& rToolBox, sal_uInt16 nItemId,
         // push ToolBox item onto the list
         ImplToolItem aNewItem = rToolBox.mpData->m_aItems[nPos];
         // reset state
-        aNewItem.mpWindow      = NULL;
+        aNewItem.mpWindow      = nullptr;
         aNewItem.mbShowWindow = false;
 
         mpData->m_aItems.insert( (nNewPos < mpData->m_aItems.size()) ? mpData->m_aItems.begin()+nNewPos : mpData->m_aItems.end(), aNewItem );
@@ -1110,7 +1110,7 @@ void* ToolBox::GetItemData( sal_uInt16 nItemId ) const
     if ( pItem )
         return pItem->mpUserData;
     else
-        return NULL;
+        return nullptr;
 }
 
 void ToolBox::SetItemImage( sal_uInt16 nItemId, const Image& rImage )
@@ -1315,7 +1315,7 @@ vcl::Window* ToolBox::GetItemWindow( sal_uInt16 nItemId ) const
     if ( pItem )
         return pItem->mpWindow;
     else
-        return NULL;
+        return nullptr;
 }
 
 void ToolBox::StartSelection()
@@ -1863,7 +1863,7 @@ IMPL_LINK_TYPED( ToolBox, ImplCustomMenuListener, VclMenuEvent&, rEvent, void )
 
 IMPL_LINK_NOARG_TYPED(ToolBox, ImplCallExecuteCustomMenu, void*, void)
 {
-    mpData->mnEventId = 0;
+    mpData->mnEventId = nullptr;
     ImplExecuteCustomMenu();
 }
 
@@ -1939,7 +1939,7 @@ void ToolBox::ExecuteCustomMenu()
         // handle custom menu asynchronously
         // to avoid problems if the toolbox is closed during menu execute
         UpdateCustomMenu();
-        mpData->mnEventId = Application::PostUserEvent( LINK( this, ToolBox, ImplCallExecuteCustomMenu ), NULL, true );
+        mpData->mnEventId = Application::PostUserEvent( LINK( this, ToolBox, ImplCallExecuteCustomMenu ), nullptr, true );
     }
 }
 

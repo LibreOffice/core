@@ -49,7 +49,7 @@ vcl::Window *DebugEventInjector::ChooseWindow()
         if (!(pParent = Application::GetTopWindow( nIdx )))
             pParent = static_cast<vcl::Window *>(Application::GetAppWindow());
     }
-    assert (pParent != NULL);
+    assert (pParent != nullptr);
 
     std::vector< vcl::Window *> aChildren;
     pParent->CollectChildren( aChildren );
@@ -104,7 +104,7 @@ void DebugEventInjector::InjectMenuEvent()
 
     sal_uInt16 nEvent = nEvents[ (int)(getRandom() * SAL_N_ELEMENTS( nEvents )) ];
     SalMenuEvent aEvent = aIds[ getRandom() * aIds.size() ];
-    bool bHandled = ImplWindowFrameProc( pSysWin, NULL, nEvent, &aEvent);
+    bool bHandled = ImplWindowFrameProc( pSysWin, nullptr, nEvent, &aEvent);
 
     SAL_INFO( "vcl.debugevent",
               "Injected menu event " << aEvent.mpMenu
@@ -160,14 +160,14 @@ void DebugEventInjector::InjectTextEvent()
     if( getRandom() < 0.05 ) // modifier
         aKeyEvent.mnCode |= (sal_uInt16)( getRandom() * KEY_MODIFIERS_MASK ) & KEY_MODIFIERS_MASK;
 
-    bool bHandled = ImplWindowFrameProc( pWindow, NULL, SALEVENT_KEYINPUT, &aKeyEvent);
+    bool bHandled = ImplWindowFrameProc( pWindow, nullptr, SALEVENT_KEYINPUT, &aKeyEvent);
 
     SAL_INFO( "vcl.debugevent",
               "Injected key 0x" << std::hex << (int) aKeyEvent.mnCode << std::dec
               << " -> " << bHandled
               << " win " << pWindow );
 
-    ImplWindowFrameProc( pWindow, NULL, SALEVENT_KEYUP, &aKeyEvent );
+    ImplWindowFrameProc( pWindow, nullptr, SALEVENT_KEYUP, &aKeyEvent );
 }
 
 /*
@@ -242,13 +242,13 @@ void DebugEventInjector::InjectKeyNavEdit()
 
     aKeyEvent.mnCharCode = 0x0; // hopefully unused.
 
-    bool bHandled = ImplWindowFrameProc( pWindow, NULL, SALEVENT_KEYINPUT, &aKeyEvent );
+    bool bHandled = ImplWindowFrameProc( pWindow, nullptr, SALEVENT_KEYINPUT, &aKeyEvent );
 
     SAL_INFO( "vcl.debugevent",
               "Injected edit / move key 0x" << std::hex << (int) aKeyEvent.mnCode << std::dec
               << " -> " << bHandled
               << " win " <<  pWindow );
-    ImplWindowFrameProc( pWindow, NULL, SALEVENT_KEYUP, &aKeyEvent );
+    ImplWindowFrameProc( pWindow, nullptr, SALEVENT_KEYUP, &aKeyEvent );
 }
 
 void DebugEventInjector::Invoke()
@@ -269,12 +269,12 @@ DebugEventInjector *DebugEventInjector::getCreate()
     sal_uInt32 nEvents;
     const char *pEvents = getenv("VCL_EVENT_INJECTION");
     if (!pEvents)
-        return NULL;
+        return nullptr;
     nEvents = OString( pEvents ).toUInt32();
     if (nEvents > 0)
         return new DebugEventInjector( nEvents );
     else
-        return NULL;
+        return nullptr;
 }
 
 #endif // OSL_DEBUG_LEVEL > 0

@@ -664,7 +664,7 @@ The following structure describes the permissions used in PDF security
                 DPIx( 0 ),
                 DPIy( 0 ),
                 ColorMode( PDFWriter::DrawColor ),
-                SignCertificate( 0 )
+                SignCertificate( nullptr )
         {}
     };
 
@@ -709,7 +709,7 @@ The following structure describes the permissions used in PDF security
         {}
 
     };
-    void PlayMetafile( const GDIMetaFile&, const PlayMetafileContext&, vcl::PDFExtOutDevData* pDevDat = NULL );
+    void PlayMetafile( const GDIMetaFile&, const PlayMetafileContext&, vcl::PDFExtOutDevData* pDevDat = nullptr );
 
     /* sets the document locale originally passed with the context to a new value
      * only affects the output if used before calling Emit.

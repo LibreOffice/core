@@ -60,14 +60,14 @@ bool IsHeadlessModeRequested()
 
 }
 
-static oslModule pCloseModule = NULL;
+static oslModule pCloseModule = nullptr;
 
 static SalInstance* tryInstance( const OUString& rModuleBase, bool bForce = false )
 {
     if (rModuleBase == "svp")
         return svp_create_SalInstance();
 
-    SalInstance* pInst = NULL;
+    SalInstance* pInst = nullptr;
     OUString aModule(
 #ifdef SAL_DLLPREFIX
             SAL_DLLPREFIX
@@ -101,7 +101,7 @@ static SalInstance* tryInstance( const OUString& rModuleBase, bool bForce = fals
                  */
                 if( rModuleBase == "gtk" || rModuleBase == "gtk3" || rModuleBase == "tde" || rModuleBase == "kde" || rModuleBase == "kde4" )
                 {
-                    pCloseModule = NULL;
+                    pCloseModule = nullptr;
                 }
 #endif
                 GetSalData()->m_pPlugin = aMod;
@@ -171,7 +171,7 @@ static SalInstance* autodetect_plugin()
 #if ENABLE_KDE4
         "kde4",
 #endif
-        "gtk3", "gtk", "gen", 0
+        "gtk3", "gtk", "gen", nullptr
     };
 
     static const char* const pKDEFallbackList[] =
@@ -179,17 +179,17 @@ static SalInstance* autodetect_plugin()
 #if ENABLE_KDE4
         "kde4",
 #endif
-        "gtk3", "gtk", "gen", 0
+        "gtk3", "gtk", "gen", nullptr
     };
 
     static const char* const pStandardFallbackList[] =
     {
-        "gtk3", "gtk", "gen", 0
+        "gtk3", "gtk", "gen", nullptr
     };
 
     static const char* const pHeadlessFallbackList[] =
     {
-        "svp", 0
+        "svp", nullptr
     };
 
     DesktopType desktop = get_desktop_environment();
@@ -210,8 +210,8 @@ static SalInstance* autodetect_plugin()
     else if( desktop == DESKTOP_KDE4 || desktop == DESKTOP_KDE5 )
         pList = pKDEFallbackList;
 
-    SalInstance* pInst = NULL;
-    while( pList[nListEntry] && pInst == NULL )
+    SalInstance* pInst = nullptr;
+    while( pList[nListEntry] && pInst == nullptr )
     {
         OUString aTry( OUString::createFromAscii( pList[nListEntry] ) );
         pInst = tryInstance( aTry );
@@ -226,7 +226,7 @@ static SalInstance* autodetect_plugin()
 
 SalInstance *CreateSalInstance()
 {
-    SalInstance *pInst = NULL;
+    SalInstance *pInst = nullptr;
 
     OUString aUsePlugin;
     if( IsHeadlessModeRequested() )
@@ -312,9 +312,9 @@ const OUString& SalGetDesktopEnvironment()
 }
 
 SalData::SalData() :
-    m_pInstance(NULL),
-    m_pPlugin(NULL),
-    m_pPIManager(NULL)
+    m_pInstance(nullptr),
+    m_pPlugin(nullptr),
+    m_pPIManager(nullptr)
 {
 }
 

@@ -110,7 +110,7 @@ static sal_uInt8* X11_getPaletteBmpFromImage(
 
     rOutSize = 0;
 
-    sal_uInt8* pBuffer = 0;
+    sal_uInt8* pBuffer = nullptr;
     sal_uInt32 nHeaderSize, nScanlineSize;
     sal_uInt16 nBitCount;
     // determine header and scanline size
@@ -242,11 +242,11 @@ static sal_uInt8* X11_getTCBmpFromImage(
     // get masks from visual info (guesswork)
     XVisualInfo aVInfo;
     if( ! XMatchVisualInfo( pDisplay, nScreenNo, pImage->depth, TrueColor, &aVInfo ) )
-        return NULL;
+        return nullptr;
 
     rOutSize = 0;
 
-    sal_uInt8* pBuffer = 0;
+    sal_uInt8* pBuffer = nullptr;
     sal_uInt32 nHeaderSize = 60;
     sal_uInt32 nScanlineSize = pImage->width*3;
 
@@ -329,7 +329,7 @@ sal_uInt8* x11::X11_getBmpFromPixmap(
             break;
     }
     if( nScreenNo < 0 )
-        return NULL;
+        return nullptr;
 
     if( aColormap == None )
         aColormap = DefaultColormap( pDisplay, nScreenNo );
@@ -337,7 +337,7 @@ sal_uInt8* x11::X11_getBmpFromPixmap(
     // get the image
     XImage* pImage = XGetImage( pDisplay, aDrawable, 0, 0, w, h, AllPlanes, ZPixmap );
     if( ! pImage )
-        return NULL;
+        return nullptr;
 
     sal_uInt8* pBmp = d <= 8 ?
         X11_getPaletteBmpFromImage( pDisplay, pImage, aColormap, rOutSize ) :
@@ -666,7 +666,7 @@ Pixmap PixmapHolder::setBitmapData( const sal_uInt8* pData )
         aImage.height           = (int)nHeight;
         aImage.xoffset          = 0;
         aImage.format           = ZPixmap;
-        aImage.data             = NULL;
+        aImage.data             = nullptr;
         aImage.byte_order       = ImageByteOrder( m_pDisplay );
         aImage.bitmap_unit      = BitmapUnit( m_pDisplay );
         aImage.bitmap_bit_order = BitmapBitOrder( m_pDisplay );
@@ -680,7 +680,7 @@ Pixmap PixmapHolder::setBitmapData( const sal_uInt8* pData )
             aImage.bits_per_pixel = m_aInfo.depth;
         else
             aImage.bits_per_pixel = 8*((m_aInfo.depth+7)/8);
-        aImage.obdata           = NULL;
+        aImage.obdata           = nullptr;
 
         XInitImage( &aImage );
         aImage.data = static_cast<char*>(rtl_allocateMemory( nHeight*aImage.bytes_per_line ));

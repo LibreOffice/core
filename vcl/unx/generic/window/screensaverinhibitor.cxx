@@ -78,11 +78,11 @@ void dbusInhibit( bool bInhibit,
     }
 
     gboolean         res;
-    GError          *error = NULL;
-    DBusGProxy      *proxy = NULL;
+    GError          *error = nullptr;
+    DBusGProxy      *proxy = nullptr;
 
     DBusGConnection *session_connection = dbus_g_bus_get( DBUS_BUS_SESSION, &error );
-    if (error != NULL) {
+    if (error != nullptr) {
         SAL_WARN( "vcl.screensaverinhibitor", "failed to connect to dbus session bus: " << error->message );
         g_error_free( error );
         return;
@@ -92,7 +92,7 @@ void dbusInhibit( bool bInhibit,
                                        service,
                                        path,
                                        interface );
-    if (proxy == NULL) {
+    if (proxy == nullptr) {
         SAL_INFO( "vcl.screensaverinhibitor", "could not get dbus proxy: " << service );
         return;
     }
@@ -122,7 +122,7 @@ void dbusInhibit( bool bInhibit,
         }
     }
 
-    if (error != NULL)
+    if (error != nullptr)
     {
         SAL_INFO( "vcl.screensaverinhibitor", "Error: " << error->message );
         g_error_free( error );

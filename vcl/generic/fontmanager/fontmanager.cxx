@@ -144,7 +144,7 @@ PrintFontManager::PrintFont::PrintFont( fonttype::type eType ) :
         m_ePitch( PITCH_DONTKNOW ),
         m_aEncoding( RTL_TEXTENCODING_DONTKNOW ),
         m_bFontEncodingOnly( false ),
-        m_pMetrics( NULL ),
+        m_pMetrics( nullptr ),
         m_nAscend( 0 ),
         m_nDescend( 0 ),
         m_nLeading( 0 ),
@@ -188,7 +188,7 @@ bool PrintFontManager::TrueTypeFontFile::queryMetricPage( int nPage, MultiAtomPr
 
     OString aFile( PrintFontManager::get().getFontFile( this ) );
 
-    TrueTypeFont* pTTFont = NULL;
+    TrueTypeFont* pTTFont = nullptr;
 
     if( OpenTTFontFile( aFile.getStr(), m_nCollectionEntry, &pTTFont ) == SF_OK )
     {
@@ -205,7 +205,7 @@ bool PrintFontManager::TrueTypeFontFile::queryMetricPage( int nPage, MultiAtomPr
             table[ i ] = 256*nPage + i;
 
         int nCharacters = nPage < 255 ? 256 : 254;
-        MapString( pTTFont, table, nCharacters, NULL, false );
+        MapString( pTTFont, table, nCharacters, nullptr, false );
         TTSimpleGlyphMetrics* pMetrics = GetTTSimpleCharMetrics( pTTFont, nPage*256, nCharacters, false );
         if( pMetrics )
         {
@@ -224,7 +224,7 @@ bool PrintFontManager::TrueTypeFontFile::queryMetricPage( int nPage, MultiAtomPr
 
         for( i = 0; i < 256; i++ )
             table_vert[ i ] = 256*nPage + i;
-        MapString( pTTFont, table_vert, nCharacters, NULL, true );
+        MapString( pTTFont, table_vert, nCharacters, nullptr, true );
         pMetrics = GetTTSimpleCharMetrics( pTTFont, nPage*256, nCharacters, true );
         if( pMetrics )
         {
@@ -277,7 +277,7 @@ bool PrintFontManager::PrintFont::readAfmMetrics( MultiAtomProvider* pProvider, 
     PrintFontManager& rManager( PrintFontManager::get() );
     const OString& rFileName = rManager.getAfmFile( this );
 
-    FontInfo* pInfo = NULL;
+    FontInfo* pInfo = nullptr;
     parseFile( rFileName.getStr(), &pInfo, P_ALL );
     if( ! pInfo || ! pInfo->numOfChars )
     {
@@ -642,7 +642,7 @@ bool PrintFontManager::PrintFont::readAfmMetrics( MultiAtomProvider* pProvider, 
  */
 PrintFontManager& PrintFontManager::get()
 {
-    static PrintFontManager* pManager = NULL;
+    static PrintFontManager* pManager = nullptr;
     if( ! pManager )
     {
         static PrintFontManager theManager;
@@ -660,7 +660,7 @@ PrintFontManager::PrintFontManager()
     : m_nNextFontID( 1 )
     , m_pAtoms( new MultiAtomProvider() )
     , m_nNextDirAtom( 1 )
-    , m_pFontCache( NULL )
+    , m_pFontCache( nullptr )
 {
     for( unsigned int i = 0; i < SAL_N_ELEMENTS( aAdobeCodes ); i++ )
     {
@@ -820,7 +820,7 @@ bool PrintFontManager::analyzeFontFile( int nDirID, const OString& rFontFile, ::
                 if( ! pFont->readAfmMetrics( m_pAtoms, false, true ) )
                 {
                     delete pFont;
-                    pFont = NULL;
+                    pFont = nullptr;
                 }
                 if( pFont )
                     rNewFonts.push_back( pFont );
@@ -873,7 +873,7 @@ bool PrintFontManager::analyzeFontFile( int nDirID, const OString& rFontFile, ::
                 if( ! analyzeTrueTypeFile( pFont ) )
                 {
                     delete pFont;
-                    pFont = NULL;
+                    pFont = nullptr;
                 }
                 else
                     rNewFonts.push_back( pFont );
@@ -890,7 +890,7 @@ bool PrintFontManager::analyzeFontFile( int nDirID, const OString& rFontFile, ::
             if( ! analyzeTrueTypeFile( pFont ) )
             {
                 delete pFont;
-                pFont = NULL;
+                pFont = nullptr;
             }
             else
                 rNewFonts.push_back( pFont );
@@ -1127,7 +1127,7 @@ void PrintFontManager::analyzeTrueTypeFamilyName( void* pTTFont, ::std::list< OU
     rNames.clear();
     ::std::set< OUString > aSet;
 
-    NameRecord* pNameRecords = NULL;
+    NameRecord* pNameRecords = nullptr;
     int nNameRecords = GetTTNameRecords( static_cast<TrueTypeFont*>(pTTFont), &pNameRecords );
     if( nNameRecords && pNameRecords )
     {
@@ -1136,7 +1136,7 @@ void PrintFontManager::analyzeTrueTypeFamilyName( void* pTTFont, ::std::list< OU
         int nLastMatch = -1;
         for( int i = 0; i < nNameRecords; i++ )
         {
-            if( pNameRecords[i].nameID != 1 || pNameRecords[i].sptr == NULL )
+            if( pNameRecords[i].nameID != 1 || pNameRecords[i].sptr == nullptr )
                 continue;
             int nMatch = -1;
             if( pNameRecords[i].platformID == 0 ) // Unicode
@@ -1192,7 +1192,7 @@ bool PrintFontManager::analyzeTrueTypeFile( PrintFont* pFont ) const
     bool bSuccess = false;
     rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
     OString aFile = getFontFile( pFont );
-    TrueTypeFont* pTTFont = NULL;
+    TrueTypeFont* pTTFont = nullptr;
 
     TrueTypeFontFile* pTTFontFile = static_cast< TrueTypeFontFile* >(pFont);
     if( OpenTTFontFile( aFile.getStr(), pTTFontFile->m_nCollectionEntry, &pTTFont ) == SF_OK )
@@ -1806,7 +1806,7 @@ bool PrintFontManager::isFontDownloadingAllowedForPrinting( fontID nFont ) const
             TrueTypeFontFile* pTTFontFile = static_cast<TrueTypeFontFile*>(pFont);
             if( pTTFontFile->m_nTypeFlags & TYPEFLAG_INVALID )
             {
-                TrueTypeFont* pTTFont = NULL;
+                TrueTypeFont* pTTFont = nullptr;
                 OString aFile = getFontFile( pFont );
                 if( OpenTTFontFile( aFile.getStr(), pTTFontFile->m_nCollectionEntry, &pTTFont ) == SF_OK )
                 {
@@ -1977,7 +1977,7 @@ bool PrintFontManager::createFontSubset(
     // TODO: since this file is usually already mmapped there is no need to open it again
     const OString aFromFile = getFontFile( pFont );
 
-    TrueTypeFont* pTTFont = NULL; // TODO: rename to SfntFont
+    TrueTypeFont* pTTFont = nullptr; // TODO: rename to SfntFont
     TrueTypeFontFile* pTTFontFile = static_cast< TrueTypeFontFile* >(pFont);
     if( OpenTTFontFile( aFromFile.getStr(), pTTFontFile->m_nCollectionEntry, &pTTFont ) != SF_OK )
         return false;
@@ -1991,7 +1991,7 @@ bool PrintFontManager::createFontSubset(
 
     // do CFF subsetting if possible
     int nCffLength = 0;
-    const sal_uInt8* pCffBytes = NULL;
+    const sal_uInt8* pCffBytes = nullptr;
     if( GetSfntTable( pTTFont, O_CFF, &pCffBytes, &nCffLength ) )
     {
         rInfo.LoadFont( FontSubsetInfo::CFF_FONT, pCffBytes, nCffLength );
@@ -2008,7 +2008,7 @@ bool PrintFontManager::createFontSubset(
             return false;
         }
         // create font subset
-        const char* pGlyphSetName = NULL; // TODO: better name?
+        const char* pGlyphSetName = nullptr; // TODO: better name?
         const bool bOK = rInfo.CreateFontSubset(
             FontSubsetInfo::TYPE1_PFB,
             pOutFile, pGlyphSetName,
@@ -2057,7 +2057,7 @@ bool PrintFontManager::createFontSubset(
                                                      pEnc,
                                                      nGlyphs,
                                                      0,
-                                                     NULL,
+                                                     nullptr,
                                                      0 ) );
     CloseTTFont( pTTFont );
 
@@ -2075,7 +2075,7 @@ void PrintFontManager::getGlyphWidths( fontID nFont,
         return;
     if( pFont->m_eType == fonttype::TrueType )
     {
-        TrueTypeFont* pTTFont = NULL;
+        TrueTypeFont* pTTFont = nullptr;
         TrueTypeFontFile* pTTFontFile = static_cast< TrueTypeFontFile* >(pFont);
         OString aFromFile = getFontFile( pFont );
         if( OpenTTFontFile( aFromFile.getStr(), pTTFontFile->m_nCollectionEntry, &pTTFont ) != SF_OK )
@@ -2101,7 +2101,7 @@ void PrintFontManager::getGlyphWidths( fontID nFont,
 
             // fill the unicode map
             // TODO: isn't this map already available elsewhere in the fontmanager?
-            const sal_uInt8* pCmapData = NULL;
+            const sal_uInt8* pCmapData = nullptr;
             int nCmapSize = 0;
             if( GetSfntTable( pTTFont, O_cmap, &pCmapData, &nCmapSize ) )
             {
@@ -2126,7 +2126,7 @@ void PrintFontManager::getGlyphWidths( fontID nFont,
                         rUnicodeEnc[ (sal_Unicode)c ] = aGlyphId;
                     }
 
-                    pCharMap = 0;
+                    pCharMap = nullptr;
                 }
             }
         }
@@ -2159,20 +2159,20 @@ const std::map< sal_Unicode, sal_Int32 >* PrintFontManager::getEncodingMap( font
 {
     PrintFont* pFont = getFont( nFont );
     if( !pFont || pFont->m_eType != fonttype::Type1 )
-        return NULL;
+        return nullptr;
 
     if( pFont->m_aEncodingVector.empty() )
         pFont->readAfmMetrics( m_pAtoms, true, true );
 
     if( pNonEncoded )
-        *pNonEncoded = !pFont->m_aNonEncoded.empty() ? &pFont->m_aNonEncoded : NULL;
+        *pNonEncoded = !pFont->m_aNonEncoded.empty() ? &pFont->m_aNonEncoded : nullptr;
 
     if (ppPriority)
     {
         *ppPriority = &pFont->m_aEncodingVectorPriority;
     }
 
-    return !pFont->m_aEncodingVector.empty() ? &pFont->m_aEncodingVector : NULL;
+    return !pFont->m_aEncodingVector.empty() ? &pFont->m_aEncodingVector : nullptr;
 }
 
 std::list< OString > PrintFontManager::getAdobeNameFromUnicode( sal_Unicode aChar ) const

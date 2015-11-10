@@ -101,11 +101,11 @@ void PrinterInfoManager::release()
 {
     SalData* pSalData = GetSalData();
     delete pSalData->m_pPIManager;
-    pSalData->m_pPIManager = NULL;
+    pSalData->m_pPIManager = nullptr;
 }
 
 PrinterInfoManager::PrinterInfoManager( Type eType ) :
-    m_pQueueInfo( NULL ),
+    m_pQueueInfo( nullptr ),
     m_eType( eType ),
     m_bUseIncludeFeature( false ),
     m_bUseJobPatch( true ),
@@ -206,7 +206,7 @@ void PrinterInfoManager::initialize()
     }
 
     std::list< OUString > aDirList;
-    psp::getPrinterPathList( aDirList, NULL );
+    psp::getPrinterPathList( aDirList, nullptr );
     std::list< OUString >::const_iterator print_dir_it;
     for( print_dir_it = aDirList.begin(); print_dir_it != aDirList.end(); ++print_dir_it )
     {
@@ -265,7 +265,7 @@ void PrinterInfoManager::initialize()
                     {
                         m_aGlobalDefaults.m_aContext.
                         setValue( pKey,
-                        aValue.equals("*nil") ? NULL : pKey->getValue(OStringToOUString(aValue, RTL_TEXTENCODING_ISO_8859_1)),
+                        aValue.equals("*nil") ? nullptr : pKey->getValue(OStringToOUString(aValue, RTL_TEXTENCODING_ISO_8859_1)),
                         true );
                     }
                 }
@@ -353,7 +353,7 @@ void PrinterInfoManager::initialize()
                     {
                         const PPDKey* pDefKey = m_aGlobalDefaults.m_aContext.getModifiedKey( nPPDValueModified );
                         const PPDValue* pDefValue = m_aGlobalDefaults.m_aContext.getValue( pDefKey );
-                        const PPDKey* pPrinterKey = pDefKey ? aPrinter.m_aInfo.m_pParser->getKey( pDefKey->getKey() ) : NULL;
+                        const PPDKey* pPrinterKey = pDefKey ? aPrinter.m_aInfo.m_pParser->getKey( pDefKey->getKey() ) : nullptr;
                         if( pDefKey && pPrinterKey )
                             // at least the options exist in both PPDs
                         {
@@ -365,7 +365,7 @@ void PrinterInfoManager::initialize()
                                 aPrinter.m_aInfo.m_aContext.setValue( pPrinterKey, pPrinterValue );
                             }
                             else
-                                aPrinter.m_aInfo.m_aContext.setValue( pPrinterKey, NULL );
+                                aPrinter.m_aInfo.m_aContext.setValue( pPrinterKey, nullptr );
                         }
                     }
 
@@ -449,7 +449,7 @@ void PrinterInfoManager::initialize()
                         {
                             aPrinter.m_aInfo.m_aContext.
                             setValue( pKey,
-                            aValue.equals("*nil") ? NULL : pKey->getValue(OStringToOUString(aValue, RTL_TEXTENCODING_ISO_8859_1)),
+                            aValue.equals("*nil") ? nullptr : pKey->getValue(OStringToOUString(aValue, RTL_TEXTENCODING_ISO_8859_1)),
                             true );
                         }
                     }
@@ -499,7 +499,7 @@ void PrinterInfoManager::initialize()
         const PPDKey* pDefKey           = aDefaultInfo.m_pParser->getKey( OUString( "PageSize" ) );
         const PPDKey* pMergeKey         = aMergeInfo.m_pParser->getKey( OUString( "PageSize" ) );
         const PPDValue* pDefValue       = aDefaultInfo.m_aContext.getValue( pDefKey );
-        const PPDValue* pMergeValue     = pMergeKey ? pMergeKey->getValue( pDefValue->m_aOption ) : NULL;
+        const PPDValue* pMergeValue     = pMergeKey ? pMergeKey->getValue( pDefValue->m_aOption ) : nullptr;
         if( pMergeKey && pMergeValue )
             aMergeInfo.m_aContext.setValue( pMergeKey, pMergeValue );
     }
@@ -716,7 +716,7 @@ bool PrinterInfoManager::addPrinter( const OUString& rPrinterName, const OUStrin
 {
     bool bSuccess = false;
 
-    const PPDParser* pParser = NULL;
+    const PPDParser* pParser = nullptr;
     if( m_aPrinters.find( rPrinterName ) == m_aPrinters.end() && ( pParser = PPDParser::getParser( rDriverName ) ) )
     {
         Printer aPrinter;
@@ -732,7 +732,7 @@ bool PrinterInfoManager::addPrinter( const OUString& rPrinterName, const OUStrin
         {
             const PPDKey* pDefKey = m_aGlobalDefaults.m_aContext.getModifiedKey( nPPDValueModified );
             const PPDValue* pDefValue = m_aGlobalDefaults.m_aContext.getValue( pDefKey );
-            const PPDKey* pPrinterKey = pDefKey ? aPrinter.m_aInfo.m_pParser->getKey( pDefKey->getKey() ) : NULL;
+            const PPDKey* pPrinterKey = pDefKey ? aPrinter.m_aInfo.m_pParser->getKey( pDefKey->getKey() ) : nullptr;
             if( pDefKey && pPrinterKey )
                 // at least the options exist in both PPDs
             {
@@ -744,7 +744,7 @@ bool PrinterInfoManager::addPrinter( const OUString& rPrinterName, const OUStrin
                     aPrinter.m_aInfo.m_aContext.setValue( pPrinterKey, pPrinterValue );
                 }
                 else
-                    aPrinter.m_aInfo.m_aContext.setValue( pPrinterKey, NULL );
+                    aPrinter.m_aInfo.m_aContext.setValue( pPrinterKey, nullptr );
             }
         }
 
@@ -840,7 +840,7 @@ const std::list< PrinterInfoManager::SystemPrintQueue >& PrinterInfoManager::get
     {
         m_aSystemPrintCommand = m_pQueueInfo->getCommand();
         m_pQueueInfo->getSystemQueues( m_aSystemPrintQueues );
-        delete m_pQueueInfo, m_pQueueInfo = NULL;
+        delete m_pQueueInfo, m_pQueueInfo = nullptr;
     }
 
     return m_aSystemPrintQueues;
@@ -912,7 +912,7 @@ void PrinterInfoManager::setDefaultPaper( PPDContext& rContext ) const
     }
 
     // paper not set, fill in default value
-    const PPDValue* pPaperVal = NULL;
+    const PPDValue* pPaperVal = nullptr;
     int nValues = pPageSizeKey->countValues();
     for( int i = 0; i < nValues && ! pPaperVal; i++ )
     {

@@ -255,7 +255,7 @@ void FontCache::read()
     }
 
     int nDir = 0;
-    FontDirMap* pDir = NULL;
+    FontDirMap* pDir = nullptr;
     bool bKeepOnlyUserOverridden = false;
     do
     {
@@ -278,7 +278,7 @@ void FontCache::read()
             else
             {
                 // invalid format, remove
-                pDir = NULL;
+                pDir = nullptr;
                 nDir = 0;
                 m_bDoFlush = true;
                 continue;
@@ -290,7 +290,7 @@ void FontCache::read()
                 ! S_ISDIR(aStat.st_mode) )
             {
                 // remove outdated cache data
-                pDir = NULL;
+                pDir = nullptr;
                 nDir = 0;
                 m_bDoFlush = true;
                 continue;
@@ -300,7 +300,7 @@ void FontCache::read()
                 nDir = rManager.getDirectoryAtom( aDir, true );
                 m_aCache[ nDir ].m_nTimestamp = (sal_Int64)aStat.st_mtime;
                 m_aCache[ nDir ].m_bNoFiles = bEmpty;
-                pDir = bEmpty ? NULL : &m_aCache[ nDir ].m_aEntries;
+                pDir = bEmpty ? nullptr : &m_aCache[ nDir ].m_aEntries;
                 bKeepOnlyUserOverridden = ((sal_Int64)aStat.st_mtime != nTimestamp);
                 m_aCache[ nDir ].m_bUserOverrideOnly = bKeepOnlyUserOverridden;
             }
@@ -329,7 +329,7 @@ void FontCache::read()
                 pLine = aLine.getStr();
                 int nLen = aLine.getLength();
 
-                PrintFontManager::PrintFont* pFont = NULL;
+                PrintFontManager::PrintFont* pFont = nullptr;
                 switch( eType )
                 {
                     case fonttype::TrueType:
@@ -581,7 +581,7 @@ bool FontCache::equalsPrintFont( const PrintFontManager::PrintFont* pLeft, Print
  */
 PrintFontManager::PrintFont* FontCache::clonePrintFont( const PrintFontManager::PrintFont* pOldFont )
 {
-    PrintFontManager::PrintFont* pFont = NULL;
+    PrintFontManager::PrintFont* pFont = nullptr;
     switch( pOldFont->m_eType )
     {
         case fonttype::TrueType:
@@ -646,7 +646,7 @@ void FontCache::updateFontCacheEntry( const PrintFontManager::PrintFont* pFont, 
     FontCacheData::const_iterator dir = m_aCache.find( nDirID );
     FontDirMap::const_iterator entry;
     FontCacheEntry::const_iterator font;
-    PrintFontManager::PrintFont* pCacheFont = NULL;
+    PrintFontManager::PrintFont* pCacheFont = nullptr;
 
     if( dir != m_aCache.end() )
     {

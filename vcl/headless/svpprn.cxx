@@ -89,8 +89,8 @@ static void copyJobDataToJobSetup( ImplJobSetup* pJobSetup, JobData& rData )
     }
 
     // copy input slot
-    const PPDKey* pKey = NULL;
-    const PPDValue* pValue = NULL;
+    const PPDKey* pKey = nullptr;
+    const PPDValue* pValue = nullptr;
 
     pJobSetup->mnPaperBin = 0xffff;
     if( rData.m_pParser )
@@ -109,8 +109,8 @@ static void copyJobDataToJobSetup( ImplJobSetup* pJobSetup, JobData& rData )
     }
 
     // copy duplex
-    pKey = NULL;
-    pValue = NULL;
+    pKey = nullptr;
+    pValue = nullptr;
 
     pJobSetup->meDuplexMode = DUPLEX_UNKNOWN;
     if( rData.m_pParser )
@@ -140,7 +140,7 @@ static void copyJobDataToJobSetup( ImplJobSetup* pJobSetup, JobData& rData )
         rtl_freeMemory( pJobSetup->mpDriverData );
 
     int nBytes;
-    void* pBuffer = NULL;
+    void* pBuffer = nullptr;
     if( rData.getStreamBuffer( pBuffer, nBytes ) )
     {
         pJobSetup->mnDriverDataLen = nBytes;
@@ -149,7 +149,7 @@ static void copyJobDataToJobSetup( ImplJobSetup* pJobSetup, JobData& rData )
     else
     {
         pJobSetup->mnDriverDataLen = 0;
-        pJobSetup->mpDriverData = NULL;
+        pJobSetup->mpDriverData = nullptr;
     }
 }
 
@@ -220,7 +220,7 @@ void SvpSalInstance::GetPrinterQueueInfo( ImplPrnQueueList* pList )
         pInfo->maDriver         = rInfo.m_aDriverName;
         pInfo->maLocation       = rInfo.m_aLocation;
         pInfo->maComment        = rInfo.m_aComment;
-        pInfo->mpSysData        = NULL;
+        pInfo->mpSysData        = nullptr;
 
         sal_Int32 nIndex = 0;
         while( nIndex != -1 )
@@ -257,7 +257,7 @@ void SvpSalInstance::PostPrintersChanged()
     const std::list< SalFrame* >& rList = SvpSalInstance::s_pDefaultInstance->getFrames();
     for( std::list< SalFrame* >::const_iterator it = rList.begin();
          it != rList.end(); ++it )
-        SvpSalInstance::s_pDefaultInstance->PostEvent( *it, NULL, SALEVENT_PRINTERCHANGED );
+        SvpSalInstance::s_pDefaultInstance->PostEvent( *it, nullptr, SALEVENT_PRINTERCHANGED );
 }
 
 GenPspGraphics *SvpSalInstance::CreatePrintGraphics()

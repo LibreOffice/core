@@ -82,7 +82,7 @@ rtl::Reference<OpenGLContext> SalGraphics::GetOpenGLContext() const
     if (pImpl)
         return pImpl->GetOpenGLContext();
 
-    return NULL;
+    return nullptr;
 }
 
 bool SalGraphics::drawTransformedBitmap(

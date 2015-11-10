@@ -32,7 +32,7 @@ VCL_DLLPUBLIC bool ImportJPEG( SvStream& rInputStream, Graphic& rGraphic, void* 
 bool ExportJPEG(SvStream& rOutputStream,
                     const Graphic& rGraphic,
                     const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >* pFilterData,
-                    bool* pExportWasGrey = NULL);
+                    bool* pExportWasGrey = nullptr);
 
 #endif // INCLUDED_VCL_SOURCE_FILTER_JPEG_JPEG_HXX
 

@@ -74,7 +74,7 @@ void OldStylePrintAdaptor::StartPage()
 
 void OldStylePrintAdaptor::EndPage()
 {
-    getPrinter()->SetConnectMetaFile( NULL );
+    getPrinter()->SetConnectMetaFile( nullptr );
     mpData->maPages.back().maPage.WindStart();
 }
 

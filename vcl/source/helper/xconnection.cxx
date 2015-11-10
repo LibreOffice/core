@@ -61,7 +61,7 @@ void DisplayConnection::terminate()
 
     if( pSVData )
     {
-        pSVData->mpDefInst->SetEventCallback( NULL );
+        pSVData->mpDefInst->SetEventCallback( nullptr );
     }
 
     SolarMutexReleaser aRel;

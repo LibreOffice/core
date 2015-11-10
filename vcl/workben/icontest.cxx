@@ -84,8 +84,8 @@ public:
 
 MyWorkWindow::MyWorkWindow( vcl::Window* pParent, WinBits nWinStyle )
     : WorkWindow(pParent, nWinStyle)
-    , mpBitmap(NULL)
-    , mpFixedBitmap(NULL)
+    , mpBitmap(nullptr)
+    , mpFixedBitmap(nullptr)
 {
     mnPaintCount = 0;
     mnStartTime = getTimeNow();

@@ -92,7 +92,7 @@ public:
     SvpSalGraphics();
     virtual ~SvpSalGraphics();
 
-    virtual SalGraphicsImpl* GetImpl() const override { return NULL; };
+    virtual SalGraphicsImpl* GetImpl() const override { return nullptr; };
     virtual void            GetResolution( sal_Int32& rDPIX, sal_Int32& rDPIY ) override;
     virtual sal_uInt16      GetBitCount() const override;
     virtual long            GetGraphicsWidth() const override;

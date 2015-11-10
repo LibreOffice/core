@@ -205,7 +205,7 @@ namespace vcl
 
     long ReferenceDeviceTextLayout::GetTextWidth( const OUString& _rText, sal_Int32 _nStartIndex, sal_Int32 _nLength ) const
     {
-        return GetTextArray( _rText, NULL, _nStartIndex, _nLength );
+        return GetTextArray( _rText, nullptr, _nStartIndex, _nLength );
     }
 
     void ReferenceDeviceTextLayout::DrawText( const Point& _rStartPoint, const OUString& _rText, sal_Int32 _nStartIndex, sal_Int32 _nLength, MetricVector* _pVector, OUString* _pDisplayText )
@@ -286,7 +286,7 @@ namespace vcl
             // the disadvantage of less accuracy, compared with the approach to calculate the rect from the
             // single "DrawText( Point, ... )" calls, since more intermediate arithmetic will translate
             // from ref- to target-units.
-            aTextRect = m_rTargetDevice.GetTextRect( aRect, _rText, _nStyle, NULL, this );
+            aTextRect = m_rTargetDevice.GetTextRect( aRect, _rText, _nStyle, nullptr, this );
         }
 
         // similar to above, the text rect now contains TWIPs (or whatever unit the ref device has), but the caller

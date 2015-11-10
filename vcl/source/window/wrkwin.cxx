@@ -50,7 +50,7 @@ void WorkWindow::ImplInit( vcl::Window* pParent, WinBits nStyle, SystemParentDat
         nFrameStyle |= BORDERWINDOW_STYLE_APP;
 
     VclPtrInstance<ImplBorderWindow> pBorderWin( pParent, pSystemParentData, nStyle, nFrameStyle );
-    Window::ImplInit( pBorderWin, nStyle & (WB_3DLOOK | WB_CLIPCHILDREN | WB_DIALOGCONTROL | WB_SYSTEMFLOATWIN), NULL );
+    Window::ImplInit( pBorderWin, nStyle & (WB_3DLOOK | WB_CLIPCHILDREN | WB_DIALOGCONTROL | WB_SYSTEMFLOATWIN), nullptr );
     pBorderWin->mpWindowImpl->mpClientWindow = this;
     pBorderWin->GetBorder( mpWindowImpl->mnLeftBorder, mpWindowImpl->mnTopBorder, mpWindowImpl->mnRightBorder, mpWindowImpl->mnBottomBorder );
     mpWindowImpl->mpBorderWindow  = pBorderWin;
@@ -108,7 +108,7 @@ WorkWindow::WorkWindow( SystemParentData* pParent ) :
 {
     ImplInitWorkWindowData();
     mbSysChild = true;
-    ImplInit( NULL, 0, pParent );
+    ImplInit( nullptr, 0, pParent );
 }
 
 WorkWindow::~WorkWindow()
@@ -121,7 +121,7 @@ void WorkWindow::dispose()
     ImplSVData* pSVData = ImplGetSVData();
     if ( pSVData->maWinData.mpAppWin == this )
     {
-        pSVData->maWinData.mpAppWin = NULL;
+        pSVData->maWinData.mpAppWin = nullptr;
         Application::Quit();
     }
     SystemWindow::dispose();

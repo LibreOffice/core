@@ -178,7 +178,7 @@ void BitmapTest::testCRC()
 {
     CRCHash aCRCs;
 
-    Bitmap aBitmap(Size(1023,759), 24, 0);
+    Bitmap aBitmap(Size(1023,759), 24, nullptr);
     aBitmap.Erase(COL_BLACK);
     checkAndInsert(aCRCs, aBitmap, "black bitmap");
     aBitmap.Invert();

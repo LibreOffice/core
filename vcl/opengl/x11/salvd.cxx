@@ -25,7 +25,7 @@ void X11SalGraphics::Init( X11OpenGLSalVirtualDevice *pDevice )
     m_pColormap = &pDisplay->GetColormap( m_nXScreen );
 
     m_pVDev      = pDevice;
-    m_pFrame     = NULL;
+    m_pFrame     = nullptr;
 
     bWindow_     = pDisplay->IsDisplay();
     bVirDev_     = true;
@@ -48,7 +48,7 @@ X11OpenGLSalVirtualDevice::X11OpenGLSalVirtualDevice( SalGraphics* pGraphics,
         nBitCount = pGraphics->GetBitCount();
 
     // TODO Check where a VirtualDevice is created from SystemGraphicsData
-    assert( pData == NULL ); (void)pData;
+    assert( pData == nullptr ); (void)pData;
 
     mpDisplay  = vcl_sal::getSalDisplay(GetGenericData());
     mnDepth    = nBitCount;
@@ -67,7 +67,7 @@ X11OpenGLSalVirtualDevice::~X11OpenGLSalVirtualDevice()
 SalGraphics* X11OpenGLSalVirtualDevice::AcquireGraphics()
 {
     if( mbGraphics )
-        return NULL;
+        return nullptr;
 
     if( mpGraphics )
         mbGraphics = true;

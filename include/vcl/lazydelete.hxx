@@ -106,7 +106,7 @@ namespace vcl
             bool      m_bDeleted;
 
             DeleteObjectEntry() :
-                m_pObject( NULL ),
+                m_pObject( nullptr ),
                 m_bDeleted( false )
             {}
 
@@ -133,7 +133,7 @@ namespace vcl
                      typeid(*this).name(), this );
             #endif
             if( s_pOneInstance == this ) // sanity check
-                s_pOneInstance = NULL;
+                s_pOneInstance = nullptr;
 
             // do the actual work
             unsigned int nCount = m_aObjects.size();
@@ -169,7 +169,7 @@ namespace vcl
         */
         static void Delete( vcl::Window* i_pObject )
         {
-            if( s_pOneInstance == NULL )
+            if( s_pOneInstance == nullptr )
                 s_pOneInstance = new LazyDeletor();
 
             // is this object already in the list ?

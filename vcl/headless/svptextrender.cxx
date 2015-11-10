@@ -116,7 +116,7 @@ BitmapDeviceSharedPtr SvpGlyphPeer::GetGlyphBmp( ServerFont& rServerFont,
     if( rGlyphData.ExtDataRef().meInfo != nBmpFormat )
     {
         SvpGcpHelper* pGcpHelper = rGlyphData.ExtDataRef().mpData;
-        bool bNew = pGcpHelper == 0;
+        bool bNew = pGcpHelper == nullptr;
         if( bNew )
             pGcpHelper = new SvpGcpHelper;
 
@@ -162,7 +162,7 @@ BitmapDeviceSharedPtr SvpGlyphPeer::GetGlyphBmp( ServerFont& rServerFont,
 
     SvpGcpHelper* pGcpHelper = static_cast<SvpGcpHelper*>(
         rGlyphData.ExtDataRef().mpData);
-    assert(pGcpHelper != 0);
+    assert(pGcpHelper != nullptr);
     rTargetPos += B2IPoint( pGcpHelper->maRawBitmap.mnXOffset, pGcpHelper->maRawBitmap.mnYOffset );
     return pGcpHelper->maBitmapDev;
 }
@@ -176,7 +176,7 @@ void SvpGlyphPeer::RemovingGlyph( GlyphData& rGlyphData )
 {
     SvpGcpHelper* pGcpHelper = rGlyphData.ExtDataRef().mpData;
     rGlyphData.ExtDataRef().meInfo = basebmp::Format::NONE;
-    rGlyphData.ExtDataRef().mpData = 0;
+    rGlyphData.ExtDataRef().mpData = nullptr;
     delete pGcpHelper;
 }
 
@@ -186,7 +186,7 @@ SvpTextRender::SvpTextRender(SvpSalGraphics& rParent)
     , m_eTextFmt(basebmp::Format::EightBitGrey)
 {
     for( int i = 0; i < MAX_FALLBACK; ++i )
-        m_pServerFont[i] = NULL;
+        m_pServerFont[i] = nullptr;
 }
 
 sal_uInt16 SvpTextRender::SetFont( FontSelectPattern* pIFSD, int nFallbackLevel )
@@ -194,11 +194,11 @@ sal_uInt16 SvpTextRender::SetFont( FontSelectPattern* pIFSD, int nFallbackLevel 
     // release all no longer needed font resources
     for( int i = nFallbackLevel; i < MAX_FALLBACK; ++i )
     {
-        if( m_pServerFont[i] != NULL )
+        if( m_pServerFont[i] != nullptr )
         {
             // old server side font is no longer referenced
             SvpGlyphCache::GetInstance().UncacheFont( *m_pServerFont[i] );
-            m_pServerFont[i] = NULL;
+            m_pServerFont[i] = nullptr;
         }
     }
 
@@ -228,7 +228,7 @@ void SvpTextRender::GetFontMetric( ImplFontMetricData* pMetric, int nFallbackLev
     if( nFallbackLevel >= MAX_FALLBACK )
         return;
 
-    if( m_pServerFont[nFallbackLevel] != NULL )
+    if( m_pServerFont[nFallbackLevel] != nullptr )
     {
         long rDummyFactor;
         m_pServerFont[nFallbackLevel]->FetchFontMetric( *pMetric, rDummyFactor );
@@ -238,7 +238,7 @@ void SvpTextRender::GetFontMetric( ImplFontMetricData* pMetric, int nFallbackLev
 const FontCharMapPtr SvpTextRender::GetFontCharMap() const
 {
     if( !m_pServerFont[0] )
-        return NULL;
+        return nullptr;
 
     const FontCharMapPtr pFCMap = m_pServerFont[0]->GetFontCharMap();
     return pFCMap;
@@ -409,7 +409,7 @@ bool SvpTextRender::GetGlyphOutline( sal_GlyphId aGlyphId, B2DPolyPolygon& rPoly
 
 SalLayout* SvpTextRender::GetTextLayout( ImplLayoutArgs&, int nFallbackLevel )
 {
-    GenericSalLayout* pLayout = NULL;
+    GenericSalLayout* pLayout = nullptr;
 
     if( m_pServerFont[ nFallbackLevel ] )
         pLayout = new ServerFontLayout( *m_pServerFont[ nFallbackLevel ] );
@@ -453,7 +453,7 @@ SystemFontData SvpTextRender::GetSysFontData( int nFallbackLevel ) const
     if (nFallbackLevel >= MAX_FALLBACK) nFallbackLevel = MAX_FALLBACK - 1;
     if (nFallbackLevel < 0 ) nFallbackLevel = 0;
 
-    if (m_pServerFont[nFallbackLevel] != NULL)
+    if (m_pServerFont[nFallbackLevel] != nullptr)
     {
         ServerFont* rFont = m_pServerFont[nFallbackLevel];
         aSysFontData.nFontId = rFont->GetFtFace();

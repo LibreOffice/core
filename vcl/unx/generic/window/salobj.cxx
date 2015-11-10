@@ -55,7 +55,7 @@ X11SalObject* X11SalObject::CreateObject( SalFrame* pParent, SystemWindowData* p
                                   &event_base, &error_base ) )
     {
         delete pObject;
-        return NULL;
+        return nullptr;
     }
 
     pObject->mpParent = pParent;
@@ -141,7 +141,7 @@ X11SalObject* X11SalObject::CreateObject( SalFrame* pParent, SystemWindowData* p
         {
             pObject->maSecondary = None;
             delete pObject;
-            return NULL;
+            return nullptr;
         }
         XReparentWindow( pDisp, pObject->maSecondary, pObject->maPrimary, 0, 0 );
     }
@@ -154,18 +154,18 @@ X11SalObject* X11SalObject::CreateObject( SalFrame* pParent, SystemWindowData* p
 
     pObjData->pDisplay      = pDisp;
     pObjData->aWindow       = pObject->maSecondary;
-    pObjData->pWidget       = NULL;
+    pObjData->pWidget       = nullptr;
     pObjData->pVisual       = pVisual;
     pObjData->nDepth        = nDepth;
     pObjData->aColormap     = aVisID == pSalDisp->GetVisual( nXScreen ).GetVisualId() ?
                               pSalDisp->GetColormap( nXScreen ).GetXColormap() : None;
-    pObjData->pAppContext   = NULL;
+    pObjData->pAppContext   = nullptr;
 
     XSync(pDisp, False);
     if( GetGenericData()->ErrorTrapPop( false ) )
     {
         delete pObject;
-        return NULL;
+        return nullptr;
     }
 
     return pObject;
@@ -181,7 +181,7 @@ void X11SalInstance::DestroyObject( SalObject* pObject )
 
 SalClipRegion::SalClipRegion()
 {
-    ClipRectangleList = NULL;
+    ClipRectangleList = nullptr;
     numClipRectangles = 0;
     maxClipRectangles = 0;
     nClipRegionType   = SAL_OBJECT_CLIP_INCLUDERECTS;
@@ -222,7 +222,7 @@ SalClipRegion::UnionClipRegion( long nX, long nY, long nWidth, long nHeight )
 
 // SalObject Implementation
 X11SalObject::X11SalObject()
-    : mpParent(NULL)
+    : mpParent(nullptr)
     , maPrimary(0)
     , maSecondary(0)
     , maColormap(0)
@@ -231,14 +231,14 @@ X11SalObject::X11SalObject()
     maSystemChildData.nSize     = sizeof( SystemEnvData );
     maSystemChildData.pDisplay  = vcl_sal::getSalDisplay(GetGenericData())->GetDisplay();
     maSystemChildData.aWindow       = None;
-    maSystemChildData.pSalFrame = 0;
-    maSystemChildData.pWidget       = 0;
-    maSystemChildData.pVisual       = 0;
+    maSystemChildData.pSalFrame = nullptr;
+    maSystemChildData.pWidget       = nullptr;
+    maSystemChildData.pVisual       = nullptr;
     maSystemChildData.nDepth        = 0;
     maSystemChildData.aColormap = 0;
-    maSystemChildData.pAppContext   = NULL;
+    maSystemChildData.pAppContext   = nullptr;
     maSystemChildData.aShellWindow  = 0;
-    maSystemChildData.pShellWidget  = NULL;
+    maSystemChildData.pShellWidget  = nullptr;
 
     std::list< SalObject* >& rObjects = vcl_sal::getSalDisplay(GetGenericData())->getSalObjects();
     rObjects.push_back( this );
@@ -484,13 +484,13 @@ bool X11SalObject::Dispatch( XEvent* pEvent )
                     pObject->mbVisible = true;
                     return true;
                     case ButtonPress:
-                    pObject->CallCallback( SALOBJ_EVENT_TOTOP, NULL );
+                    pObject->CallCallback( SALOBJ_EVENT_TOTOP, nullptr );
                     return true;
                     case FocusIn:
-                    pObject->CallCallback( SALOBJ_EVENT_GETFOCUS, NULL );
+                    pObject->CallCallback( SALOBJ_EVENT_GETFOCUS, nullptr );
                     return true;
                     case FocusOut:
-                    pObject->CallCallback( SALOBJ_EVENT_LOSEFOCUS, NULL );
+                    pObject->CallCallback( SALOBJ_EVENT_LOSEFOCUS, nullptr );
                     return true;
                     default: break;
                 }

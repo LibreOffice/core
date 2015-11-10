@@ -45,7 +45,7 @@ void SpinButton::ImplInit( vcl::Window* pParent, WinBits nStyle )
     else
         mbHorz = false;
 
-    Control::ImplInit( pParent, nStyle, NULL );
+    Control::ImplInit( pParent, nStyle, nullptr );
 }
 
 SpinButton::SpinButton( vcl::Window* pParent, WinBits nStyle )
@@ -433,14 +433,14 @@ Rectangle* SpinButton::ImplFindPartRect( const Point& rPt )
     else if( maLowerRect.IsInside( rPt ) )
         return &maLowerRect;
     else
-        return NULL;
+        return nullptr;
 }
 
 bool SpinButton::PreNotify( NotifyEvent& rNEvt )
 {
-    const MouseEvent* pMouseEvt = NULL;
+    const MouseEvent* pMouseEvt = nullptr;
 
-    if ((rNEvt.GetType() == MouseNotifyEvent::MOUSEMOVE) && (pMouseEvt = rNEvt.GetMouseEvent()) != NULL)
+    if ((rNEvt.GetType() == MouseNotifyEvent::MOUSEMOVE) && (pMouseEvt = rNEvt.GetMouseEvent()) != nullptr)
     {
         if (!pMouseEvt->GetButtons() && !pMouseEvt->IsSynthetic() && !pMouseEvt->IsModifierChanged())
         {

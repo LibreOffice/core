@@ -134,7 +134,7 @@ bool OpenGLSalBitmap::ImplScaleConvolution(
 {
     OpenGLFramebuffer* pFramebuffer;
     OpenGLProgram* pProgram;
-    GLfloat* pWeights( 0 );
+    GLfloat* pWeights( nullptr );
     sal_uInt32 nKernelSize;
     GLfloat aOffsets[32];
     int nNewWidth( mnWidth * rScaleX );
@@ -144,7 +144,7 @@ bool OpenGLSalBitmap::ImplScaleConvolution(
 
     pProgram = mpContext->UseProgram( "textureVertexShader",
                                       "convolutionFragmentShader" );
-    if( pProgram == 0 )
+    if( pProgram == nullptr )
         return false;
 
     // horizontal scaling in scratch texture
@@ -231,7 +231,7 @@ bool OpenGLSalBitmap::ImplScaleArea( double rScaleX, double rScaleY )
 
     OpenGLProgram* pProgram = mpContext->UseProgram( "textureVertexShader",
         fast ? OUString( "areaScaleFastFragmentShader" ) : OUString( "areaScaleFragmentShader" ));
-    if( pProgram == 0 )
+    if( pProgram == nullptr )
         return false;
 
     OpenGLTexture aScratchTex(nNewWidth, nNewHeight);
@@ -351,7 +351,7 @@ bool OpenGLSalBitmap::Scale( const double& rScaleX, const double& rScaleY, BmpSc
         nScaleFlag == BmpScaleFlag::BestQuality )
     {
         makeCurrent();
-        if( mpContext == NULL )
+        if( mpContext == nullptr )
         {
             VCL_GL_INFO( "vcl.opengl", "Add ScaleOp to pending operations" );
             maPendingOps.push_back( new ScaleOp( this, rScaleX, rScaleY, nScaleFlag ) );

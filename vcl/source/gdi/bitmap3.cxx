@@ -704,7 +704,7 @@ bool Bitmap::ImplConvertDown(sal_uInt16 nBitCount, Color* pExtColor)
             std::vector<ImpErrorQuad> pErrQuad1(nWidth);
             std::vector<ImpErrorQuad> pErrQuad2(nWidth);
             ImpErrorQuad* pQLine1 = pErrQuad1.data();
-            ImpErrorQuad* pQLine2 = NULL;
+            ImpErrorQuad* pQLine2 = nullptr;
             long nYTmp = 0L;
             sal_uInt8 cIndex;
             bool bQ1 = true;
@@ -1394,16 +1394,16 @@ namespace
 
         if(pReadAcc)
         {
-            double* pWeights = 0;
-            sal_uInt32* pPixels = 0;
-            sal_uInt32* pCount = 0;
+            double* pWeights = nullptr;
+            sal_uInt32* pPixels = nullptr;
+            sal_uInt32* pCount = nullptr;
             sal_uInt32 aNumberOfContributions(0);
 
             const sal_uInt32 nHeight(rSource.GetSizePixel().Height());
             ImplCalculateContributions(nWidth, nNewWidth, aNumberOfContributions, pWeights, pPixels, pCount, aKernel);
             rTarget = Bitmap(Size(nNewWidth, nHeight), 24);
             BitmapWriteAccess* pWriteAcc = rTarget.AcquireWriteAccess();
-            bool bResult(0 != pWriteAcc);
+            bool bResult(nullptr != pWriteAcc);
 
             if(bResult)
             {
@@ -1485,16 +1485,16 @@ namespace
 
         if(pReadAcc)
         {
-            double* pWeights = 0;
-            sal_uInt32* pPixels = 0;
-            sal_uInt32* pCount = 0;
+            double* pWeights = nullptr;
+            sal_uInt32* pPixels = nullptr;
+            sal_uInt32* pCount = nullptr;
             sal_uInt32 aNumberOfContributions(0);
 
             const sal_uInt32 nWidth(rSource.GetSizePixel().Width());
             ImplCalculateContributions(nHeight, nNewHeight, aNumberOfContributions, pWeights, pPixels, pCount, aKernel);
             rTarget = Bitmap(Size(nWidth, nNewHeight), 24);
             BitmapWriteAccess* pWriteAcc = rTarget.AcquireWriteAccess();
-            bool bResult(0 != pWriteAcc);
+            bool bResult(nullptr != pWriteAcc);
 
             if(pWriteAcc)
             {
@@ -1916,7 +1916,7 @@ bool Bitmap::ImplDitherFloyd16()
         std::unique_ptr<ImpErrorQuad[]> pErrQuad1(new ImpErrorQuad[ nWidth ]);
         std::unique_ptr<ImpErrorQuad[]> pErrQuad2(new ImpErrorQuad[ nWidth ]);
         ImpErrorQuad* pQLine1 = pErrQuad1.get();
-        ImpErrorQuad* pQLine2 = 0;
+        ImpErrorQuad* pQLine2 = nullptr;
         long nYTmp = 0L;
         bool bQ1 = true;
 

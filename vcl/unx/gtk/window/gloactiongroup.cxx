@@ -51,7 +51,7 @@ G_DEFINE_TYPE (GLOAction, g_lo_action, G_TYPE_OBJECT);
 GLOAction*
 g_lo_action_new()
 {
-    return G_LO_ACTION (g_object_new (G_TYPE_LO_ACTION, NULL));
+    return G_LO_ACTION (g_object_new (G_TYPE_LO_ACTION, nullptr));
 }
 
 static void
@@ -60,10 +60,10 @@ g_lo_action_init (GLOAction *action)
     action->item_id = -1;
     action->submenu = FALSE;
     action->enabled = TRUE;
-    action->parameter_type = NULL;
-    action->state_type = NULL;
-    action->state_hint = NULL;
-    action->state = NULL;
+    action->parameter_type = nullptr;
+    action->state_type = nullptr;
+    action->state_hint = nullptr;
+    action->state = nullptr;
 }
 
 static void
@@ -131,10 +131,10 @@ g_lo_action_group_list_actions (GActionGroup *group)
     keys = g_new (gchar *, n + 1);
 
     g_hash_table_iter_init (&iter, loGroup->priv->table);
-    while (g_hash_table_iter_next (&iter, &key, NULL))
+    while (g_hash_table_iter_next (&iter, &key, nullptr))
         keys[i++] = g_strdup (static_cast<gchar*>(key));
     g_assert_cmpint (i, ==, n);
-    keys[n] = NULL;
+    keys[n] = nullptr;
 
     return keys;
 }
@@ -154,7 +154,7 @@ g_lo_action_group_query_action (GActionGroup        *group,
 
     action = G_LO_ACTION (g_hash_table_lookup (lo_group->priv->table, action_name));
 
-    if (action == NULL)
+    if (action == nullptr)
         return FALSE;
 
     if (enabled)
@@ -173,10 +173,10 @@ g_lo_action_group_query_action (GActionGroup        *group,
         *state_type = action->state_type;
 
     if (state_hint)
-        *state_hint = (action->state_hint) ? g_variant_ref (action->state_hint) : NULL;
+        *state_hint = (action->state_hint) ? g_variant_ref (action->state_hint) : nullptr;
 
     if (state)
-        *state = (action->state) ? g_variant_ref (action->state) : NULL;
+        *state = (action->state) ? g_variant_ref (action->state) : nullptr;
 
     return TRUE;
 }
@@ -190,13 +190,13 @@ g_lo_action_group_perform_submenu_action (GLOActionGroup *group,
     GtkSalFrame* pFrame = group->priv->frame;
     SAL_INFO("vcl.unity", "g_lo_action_group_perform_submenu_action on " << group << " for frame " << pFrame);
 
-    if (pFrame == NULL)
+    if (pFrame == nullptr)
         return;
 
     GtkSalMenu* pSalMenu = static_cast<GtkSalMenu*> (pFrame->GetMenu());
     SAL_INFO("vcl.unity", "g_lo_action_group_perform_submenu_action on " << group << " for menu " << pSalMenu);
 
-    if (pSalMenu != NULL) {
+    if (pSalMenu != nullptr) {
         gboolean bState = g_variant_get_boolean (state);
         SAL_INFO("vcl.unity", "g_lo_action_group_perform_submenu_action on " << group << " to " << bState);
 
@@ -213,16 +213,16 @@ g_lo_action_group_change_state (GActionGroup *group,
                                 GVariant     *value)
 {
     SAL_INFO("vcl.unity", "g_lo_action_group_change_state on " << group );
-    g_return_if_fail (value != NULL);
+    g_return_if_fail (value != nullptr);
 
     g_variant_ref_sink (value);
 
-    if (action_name != NULL)
+    if (action_name != nullptr)
     {
         GLOActionGroup* lo_group = G_LO_ACTION_GROUP (group);
         GLOAction* action = G_LO_ACTION (g_hash_table_lookup (lo_group->priv->table, action_name));
 
-        if (action != NULL)
+        if (action != nullptr)
         {
             if (action->submenu)
                 g_lo_action_group_perform_submenu_action (lo_group, action_name, value);
@@ -231,7 +231,7 @@ g_lo_action_group_change_state (GActionGroup *group,
                 gboolean is_new = FALSE;
 
                 /* If action already exists but has no state, it should be removed and added again. */
-                if (action->state_type == NULL)
+                if (action->state_type == nullptr)
                 {
                     g_action_group_action_removed (G_ACTION_GROUP (group), action_name);
                     action->state_type = g_variant_type_copy (g_variant_get_type(value));
@@ -266,15 +266,15 @@ g_lo_action_group_activate (GActionGroup *group,
     GtkSalFrame *pFrame = lo_group->priv->frame;
     SAL_INFO("vcl.unity", "g_lo_action_group_activate on group " << group << " for frame " << pFrame << " with parameter " << parameter);
 
-    if ( parameter != NULL )
+    if ( parameter != nullptr )
         g_action_group_change_action_state( group, action_name, parameter );
 
-    if ( pFrame != NULL )
+    if ( pFrame != nullptr )
     {
         GtkSalMenu* pSalMenu = static_cast< GtkSalMenu* >( pFrame->GetMenu() );
         SAL_INFO("vcl.unity", "g_lo_action_group_activate for menu " << pSalMenu);
 
-        if ( pSalMenu != NULL )
+        if ( pSalMenu != nullptr )
         {
             GLOAction* action = G_LO_ACTION (g_hash_table_lookup (lo_group->priv->table, action_name));
             SAL_INFO("vcl.unity", "g_lo_action_group_activate dispatching action " << action << " named " << action_name << " on menu " << pSalMenu);
@@ -289,7 +289,7 @@ g_lo_action_group_insert (GLOActionGroup *group,
                           gint            item_id,
                           gboolean        submenu)
 {
-    g_lo_action_group_insert_stateful (group, action_name, item_id, submenu, NULL, NULL, NULL, NULL);
+    g_lo_action_group_insert_stateful (group, action_name, item_id, submenu, nullptr, nullptr, nullptr, nullptr);
 }
 
 void
@@ -306,9 +306,9 @@ g_lo_action_group_insert_stateful (GLOActionGroup     *group,
 
     GLOAction* old_action = G_LO_ACTION (g_hash_table_lookup (group->priv->table, action_name));
 
-    if (old_action == NULL || old_action->item_id != item_id)
+    if (old_action == nullptr || old_action->item_id != item_id)
     {
-        if (old_action != NULL)
+        if (old_action != nullptr)
             g_lo_action_group_remove (group, action_name);
 //            g_action_group_action_removed (G_ACTION_GROUP (group), action_name);
 
@@ -354,7 +354,7 @@ g_lo_action_group_init (GLOActionGroup *group)
                                                  GLOActionGroupPrivate);
     group->priv->table = g_hash_table_new_full (g_str_hash, g_str_equal,
                                                   g_free, g_object_unref);
-    group->priv->frame = NULL;
+    group->priv->frame = nullptr;
 }
 
 static void
@@ -379,7 +379,7 @@ g_lo_action_group_iface_init (GActionGroupInterface *iface)
 GLOActionGroup *
 g_lo_action_group_new (gpointer frame)
 {
-    GLOActionGroup* group = G_LO_ACTION_GROUP (g_object_new (G_TYPE_LO_ACTION_GROUP, NULL));
+    GLOActionGroup* group = G_LO_ACTION_GROUP (g_object_new (G_TYPE_LO_ACTION_GROUP, nullptr));
     group->priv->frame = static_cast< GtkSalFrame* > (frame);
 
     return group;
@@ -392,11 +392,11 @@ g_lo_action_group_set_action_enabled (GLOActionGroup *group,
 {
     SAL_INFO("vcl.unity", "g_lo_action_group_set_action_enabled on " << group);
     g_return_if_fail (G_IS_LO_ACTION_GROUP (group));
-    g_return_if_fail (action_name != NULL);
+    g_return_if_fail (action_name != nullptr);
 
     GLOAction* action = G_LO_ACTION (g_hash_table_lookup (group->priv->table, action_name));
 
-    if (action == NULL)
+    if (action == nullptr)
         return;
 
     action->enabled = enabled;
@@ -411,7 +411,7 @@ g_lo_action_group_remove (GLOActionGroup *group,
     SAL_INFO("vcl.unity", "g_lo_action_group_remove on " << group);
     g_return_if_fail (G_IS_LO_ACTION_GROUP (group));
 
-    if (action_name != NULL)
+    if (action_name != nullptr)
     {
         g_action_group_action_removed (G_ACTION_GROUP (group), action_name);
         g_hash_table_remove (group->priv->table, action_name);
@@ -426,7 +426,7 @@ g_lo_action_group_clear (GLOActionGroup  *group)
 
     GList* keys = g_hash_table_get_keys (group->priv->table);
 
-    for (GList* element = g_list_first (keys); element != NULL; element = g_list_next (element))
+    for (GList* element = g_list_first (keys); element != nullptr; element = g_list_next (element))
     {
         g_lo_action_group_remove (group, static_cast<gchar*>(element->data));
     }

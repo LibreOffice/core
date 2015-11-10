@@ -88,20 +88,20 @@ OutputDevice::OutputDevice() :
     maTextLineColor( COL_TRANSPARENT ),
     mxSettings( new AllSettings(Application::GetSettings()) )
 {
-    mpGraphics                      = NULL;
-    mpUnoGraphicsList               = NULL;
-    mpPrevGraphics                  = NULL;
-    mpNextGraphics                  = NULL;
-    mpMetaFile                      = NULL;
-    mpFontEntry                     = NULL;
-    mpFontCache                     = NULL;
-    mpFontCollection                = NULL;
-    mpGetDevFontList                = NULL;
-    mpGetDevSizeList                = NULL;
+    mpGraphics                      = nullptr;
+    mpUnoGraphicsList               = nullptr;
+    mpPrevGraphics                  = nullptr;
+    mpNextGraphics                  = nullptr;
+    mpMetaFile                      = nullptr;
+    mpFontEntry                     = nullptr;
+    mpFontCache                     = nullptr;
+    mpFontCollection                = nullptr;
+    mpGetDevFontList                = nullptr;
+    mpGetDevSizeList                = nullptr;
     mpOutDevStateStack              = new OutDevStateStack;
-    mpPDFWriter                     = NULL;
-    mpAlphaVDev                     = NULL;
-    mpExtOutDevData                 = NULL;
+    mpPDFWriter                     = nullptr;
+    mpAlphaVDev                     = nullptr;
+    mpExtOutDevData                 = nullptr;
     mnOutOffX                       = 0;
     mnOutOffY                       = 0;
     mnOutWidth                      = 0;
@@ -172,12 +172,12 @@ OutputDevice::OutputDevice() :
 
     // struct ImplOutDevData- see #i82615#
     mpOutDevData                    = new ImplOutDevData;
-    mpOutDevData->mpRotateDev       = NULL;
-    mpOutDevData->mpRecordLayout    = NULL;
+    mpOutDevData->mpRotateDev       = nullptr;
+    mpOutDevData->mpRecordLayout    = nullptr;
 
     // #i75163#
-    mpOutDevData->mpViewTransform   = NULL;
-    mpOutDevData->mpInverseViewTransform = NULL;
+    mpOutDevData->mpViewTransform   = nullptr;
+    mpOutDevData->mpInverseViewTransform = nullptr;
 
     mbDisposed = false;
 }
@@ -210,7 +210,7 @@ void OutputDevice::dispose()
         if ( pWrapper )
             pWrapper->ReleaseAllGraphics( this );
         delete mpUnoGraphicsList;
-        mpUnoGraphicsList = NULL;
+        mpUnoGraphicsList = nullptr;
     }
 
     mpOutDevData->mpRotateDev.disposeAndClear();
@@ -219,7 +219,7 @@ void OutputDevice::dispose()
     ImplInvalidateViewTransform();
 
     delete mpOutDevData;
-    mpOutDevData = NULL;
+    mpOutDevData = nullptr;
 
     // for some reason, we haven't removed state from the stack properly
     if ( !mpOutDevStateStack->empty() )
@@ -231,7 +231,7 @@ void OutputDevice::dispose()
         }
     }
     delete mpOutDevStateStack;
-    mpOutDevStateStack = NULL;
+    mpOutDevStateStack = nullptr;
 
     // release the active font instance
     if( mpFontEntry )
@@ -240,30 +240,30 @@ void OutputDevice::dispose()
     // remove cached results of GetDevFontList/GetDevSizeList
     // TODO: use smart pointers for them
     delete mpGetDevFontList;
-    mpGetDevFontList = NULL;
+    mpGetDevFontList = nullptr;
 
     delete mpGetDevSizeList;
-    mpGetDevSizeList = NULL;
+    mpGetDevSizeList = nullptr;
 
     // release ImplFontCache specific to this OutputDevice
     // TODO: refcount ImplFontCache
     if( mpFontCache
     && (mpFontCache != ImplGetSVData()->maGDIData.mpScreenFontCache)
-    && (ImplGetSVData()->maGDIData.mpScreenFontCache != NULL) )
+    && (ImplGetSVData()->maGDIData.mpScreenFontCache != nullptr) )
     {
         delete mpFontCache;
-        mpFontCache = NULL;
+        mpFontCache = nullptr;
     }
 
     // release ImplFontList specific to this OutputDevice
     // TODO: refcount ImplFontList
     if( mpFontCollection
     && (mpFontCollection != ImplGetSVData()->maGDIData.mpScreenFontList)
-    && (ImplGetSVData()->maGDIData.mpScreenFontList != NULL) )
+    && (ImplGetSVData()->maGDIData.mpScreenFontList != nullptr) )
     {
         mpFontCollection->Clear();
         delete mpFontCollection;
-        mpFontCollection = NULL;
+        mpFontCollection = nullptr;
     }
 
     mpAlphaVDev.disposeAndClear();
@@ -516,7 +516,7 @@ void OutputDevice::DrawOutDev( const Point& rDestPt, const Size& rDestSize,
         AdjustTwoRect( aPosAry, aSrcOutRect );
 
         if ( aPosAry.mnSrcWidth && aPosAry.mnSrcHeight && aPosAry.mnDestWidth && aPosAry.mnDestHeight )
-            mpGraphics->CopyBits( aPosAry, NULL, this, NULL );
+            mpGraphics->CopyBits( aPosAry, nullptr, this, nullptr );
     }
 
     if( mpAlphaVDev )
@@ -649,7 +649,7 @@ void OutputDevice::CopyDeviceArea( SalTwoRect& aPosAry, bool /*bWindowInvalidate
 
     aPosAry.mnDestWidth  = aPosAry.mnSrcWidth;
     aPosAry.mnDestHeight = aPosAry.mnSrcHeight;
-    mpGraphics->CopyBits(aPosAry, NULL, this, NULL);
+    mpGraphics->CopyBits(aPosAry, nullptr, this, nullptr);
 }
 
 // Direct OutputDevice drawing private function
@@ -659,7 +659,7 @@ void OutputDevice::drawOutDevDirect( const OutputDevice* pSrcDev, SalTwoRect& rP
     SalGraphics* pSrcGraphics;
 
     if ( this == pSrcDev )
-        pSrcGraphics = NULL;
+        pSrcGraphics = nullptr;
     else
     {
         if ( (GetOutDevType() != pSrcDev->GetOutDevType()) ||
@@ -675,7 +675,7 @@ void OutputDevice::drawOutDevDirect( const OutputDevice* pSrcDev, SalTwoRect& rP
         else
         {
             if ( static_cast<vcl::Window*>(this)->mpWindowImpl->mpFrameWindow == static_cast<const vcl::Window*>(pSrcDev)->mpWindowImpl->mpFrameWindow )
-                pSrcGraphics = NULL;
+                pSrcGraphics = nullptr;
             else
             {
                 if ( !pSrcDev->mpGraphics )
@@ -833,7 +833,7 @@ bool OutputDevice::DrawEPS( const Point& rPoint, const Size& rSize,
         {
             GDIMetaFile* pOldMetaFile = mpMetaFile;
 
-            mpMetaFile = NULL;
+            mpMetaFile = nullptr;
             Graphic( *pSubst ).Draw( this, rPoint, rSize );
             mpMetaFile = pOldMetaFile;
         }

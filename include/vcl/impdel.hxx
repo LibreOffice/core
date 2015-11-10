@@ -61,8 +61,8 @@ class DeletionListener
        if( m_pNotifier )
            m_pNotifier->removeDel( this );
    }
-   void deleted() { m_pNotifier = NULL; }
-   bool isDeleted() const { return (m_pNotifier == NULL); }
+   void deleted() { m_pNotifier = nullptr; }
+   bool isDeleted() const { return (m_pNotifier == nullptr); }
 };
 
 inline void DeletionNotifier::notifyDelete()

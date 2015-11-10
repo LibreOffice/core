@@ -222,14 +222,14 @@ TEParaPortions::~TEParaPortions()
 
 IdleFormatter::IdleFormatter()
 {
-    mpView = 0;
+    mpView = nullptr;
     mnRestarts = 0;
     SetPriority(SchedulerPriority::HIGH);
 }
 
 IdleFormatter::~IdleFormatter()
 {
-    mpView = 0;
+    mpView = nullptr;
 }
 
 void IdleFormatter::DoIdleFormat( TextView* pV, sal_uInt16 nMaxRestarts )
@@ -274,7 +274,7 @@ TEIMEInfos::TEIMEInfos( const TextPaM& rPos, const OUString& rOldTextAfterStartP
     aPos = rPos;
     nLen = 0;
     bCursor = true;
-    pAttribs = NULL;
+    pAttribs = nullptr;
     bWasCursorOverwrite = false;
 }
 
@@ -294,7 +294,7 @@ void TEIMEInfos::CopyAttribs(const sal_uInt16* pA, sal_Int32 nL)
 void TEIMEInfos::DestroyAttribs()
 {
     delete[] pAttribs;
-    pAttribs = NULL;
+    pAttribs = nullptr;
     nLen = 0;
 }
 

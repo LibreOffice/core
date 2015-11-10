@@ -90,7 +90,7 @@ static ImplFontAttrs lcl_IsCJKFont( const OUString& rFontName )
 }
 
 PhysicalFontFamily::PhysicalFontFamily( const OUString& rSearchName )
-:   mpFirst( NULL ),
+:   mpFirst( nullptr ),
     maSearchName( rSearchName ),
     mnTypeFaces( 0 ),
     mnMatchType( ImplFontAttrs::None ),
@@ -114,7 +114,7 @@ PhysicalFontFamily::~PhysicalFontFamily()
 
 bool PhysicalFontFamily::AddFontFace( PhysicalFontFace* pNewData )
 {
-    pNewData->mpNext = NULL;
+    pNewData->mpNext = nullptr;
 
     if( !mpFirst )
     {
@@ -167,7 +167,7 @@ bool PhysicalFontFamily::AddFontFace( PhysicalFontFace* pNewData )
     // TODO: get rid of linear search?
     PhysicalFontFace* pData;
     PhysicalFontFace** ppHere = &mpFirst;
-    for(; (pData=*ppHere) != NULL; ppHere=&pData->mpNext )
+    for(; (pData=*ppHere) != nullptr; ppHere=&pData->mpNext )
     {
         sal_Int32 eComp = pNewData->CompareWithSize( *pData );
         if( eComp > 0 )
@@ -219,14 +219,14 @@ void PhysicalFontFamily::InitMatchData( const utl::FontSubstConfiguration& rFont
 PhysicalFontFace* PhysicalFontFamily::FindBestFontFace( const FontSelectPattern& rFSD ) const
 {
     if( !mpFirst )
-        return NULL;
+        return nullptr;
     if( !mpFirst->GetNextFace() )
         return mpFirst;
 
     // FontName+StyleName should map to FamilyName+StyleName
     const OUString& rSearchName = rFSD.maTargetName;
     OUString aTargetStyleName;
-    const OUString* pTargetStyleName = NULL;
+    const OUString* pTargetStyleName = nullptr;
     if(    (rSearchName.getLength() > maSearchName.getLength())
         && rSearchName.startsWith( maSearchName ) )
     {
@@ -249,7 +249,7 @@ PhysicalFontFace* PhysicalFontFamily::FindBestFontFace( const FontSelectPattern&
 // meaning different font attributes, but not different fonts sizes
 void PhysicalFontFamily::UpdateDevFontList( ImplGetDevFontList& rDevFontList ) const
 {
-    PhysicalFontFace* pPrevFace = NULL;
+    PhysicalFontFace* pPrevFace = nullptr;
     for( PhysicalFontFace* pFace = mpFirst; pFace; pFace = pFace->GetNextFace() )
     {
         if( !pPrevFace || pFace->CompareIgnoreSize( *pPrevFace ) )

@@ -67,7 +67,7 @@ image_get_image_description( AtkImage *image )
         g_warning( "Exception in getAccessibleImageDescription()" );
     }
 
-    return NULL;
+    return nullptr;
 }
 
 static void
@@ -120,7 +120,7 @@ image_set_image_description( AtkImage *, const gchar * )
 void
 imageIfaceInit (AtkImageIface *iface)
 {
-  g_return_if_fail (iface != NULL);
+  g_return_if_fail (iface != nullptr);
 
   iface->set_image_description = image_set_image_description;
   iface->get_image_description = image_get_image_description;

@@ -274,7 +274,7 @@ void Window::ImplInitWinChildClipRegion()
         if ( mpWindowImpl->mpChildClipRegion )
         {
             delete mpWindowImpl->mpChildClipRegion;
-            mpWindowImpl->mpChildClipRegion = NULL;
+            mpWindowImpl->mpChildClipRegion = nullptr;
         }
     }
     else
@@ -375,7 +375,7 @@ bool Window::ImplSysObjClip( const vcl::Region* pOldRegion )
 void Window::ImplUpdateSysObjChildrenClip()
 {
     if ( mpWindowImpl->mpSysObj && mpWindowImpl->mbInitWinClipRegion )
-        ImplSysObjClip( NULL );
+        ImplSysObjClip( nullptr );
 
     vcl::Window* pWindow = mpWindowImpl->mpFirstChild;
     while ( pWindow )
@@ -423,7 +423,7 @@ bool Window::ImplSetClipFlagChildren( bool bSysObjOnlySmaller )
     bool bUpdate = true;
     if ( mpWindowImpl->mpSysObj )
     {
-        vcl::Region* pOldRegion = NULL;
+        vcl::Region* pOldRegion = nullptr;
         if ( bSysObjOnlySmaller && !mpWindowImpl->mbInitWinClipRegion )
             pOldRegion = new vcl::Region( mpWindowImpl->maWinClipRegion );
 
@@ -898,7 +898,7 @@ void Window::ImplDeleteOverlapBackground()
         if ( mpWindowImpl->mpOverlapData->mpSaveBackRgn )
         {
             delete mpWindowImpl->mpOverlapData->mpSaveBackRgn;
-            mpWindowImpl->mpOverlapData->mpSaveBackRgn = NULL;
+            mpWindowImpl->mpOverlapData->mpSaveBackRgn = nullptr;
         }
 
         // remove window from the list
@@ -911,7 +911,7 @@ void Window::ImplDeleteOverlapBackground()
                 pTemp = pTemp->mpWindowImpl->mpOverlapData->mpNextBackWin;
             pTemp->mpWindowImpl->mpOverlapData->mpNextBackWin = mpWindowImpl->mpOverlapData->mpNextBackWin;
         }
-        mpWindowImpl->mpOverlapData->mpNextBackWin = NULL;
+        mpWindowImpl->mpOverlapData->mpNextBackWin = nullptr;
     }
 }
 

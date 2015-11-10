@@ -114,7 +114,7 @@ void OutputDevice::DrawPolyPolygon( const tools::PolyPolygon& rPolyPoly )
         if( aPoly.GetSize() >= 2 )
         {
             GDIMetaFile* pOldMF = mpMetaFile;
-            mpMetaFile = NULL;
+            mpMetaFile = nullptr;
 
             DrawPolygon( aPoly );
 

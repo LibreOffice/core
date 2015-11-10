@@ -90,7 +90,7 @@ public:
     virtual SalVirtualDevice*
                             CreateVirtualDevice( SalGraphics* pGraphics,
                                                  long &rDX, long &rDY,
-                                                 sal_uInt16 nBitCount, const SystemGraphicsData *pData = NULL ) = 0;
+                                                 sal_uInt16 nBitCount, const SystemGraphicsData *pData = nullptr ) = 0;
 
     // Printer
     // pSetupData->mpDriverData can be 0

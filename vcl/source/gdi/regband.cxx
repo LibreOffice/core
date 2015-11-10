@@ -46,10 +46,10 @@ ImplRegionBand::ImplRegionBand( long nTop, long nBottom )
     mnYBottom           = nBottom;
 
     // initialize lists
-    mpNextBand          = NULL;
-    mpPrevBand          = NULL;
-    mpFirstSep          = NULL;
-    mpFirstBandPoint    = NULL;
+    mpNextBand          = nullptr;
+    mpPrevBand          = nullptr;
+    mpFirstSep          = nullptr;
+    mpFirstBandPoint    = nullptr;
     mbTouched           = false;
 }
 
@@ -63,14 +63,14 @@ ImplRegionBand::ImplRegionBand(
     mbTouched           = rRegionBand.mbTouched;
 
     // initialisation
-    mpNextBand          = NULL;
-    mpPrevBand          = NULL;
-    mpFirstSep          = NULL;
-    mpFirstBandPoint    = NULL;
+    mpNextBand          = nullptr;
+    mpPrevBand          = nullptr;
+    mpFirstSep          = nullptr;
+    mpFirstBandPoint    = nullptr;
 
     // copy all elements of the list with separations
     ImplRegionBandSep* pNewSep;
-    ImplRegionBandSep* pPrevSep = 0;
+    ImplRegionBandSep* pPrevSep = nullptr;
     ImplRegionBandSep* pSep = rRegionBand.mpFirstSep;
     while ( pSep )
     {
@@ -79,7 +79,7 @@ ImplRegionBand::ImplRegionBand(
         pNewSep->mnXLeft    = pSep->mnXLeft;
         pNewSep->mnXRight   = pSep->mnXRight;
         pNewSep->mbRemoved  = pSep->mbRemoved;
-        pNewSep->mpNextSep  = NULL;
+        pNewSep->mpNextSep  = nullptr;
         if ( pSep == rRegionBand.mpFirstSep )
             mpFirstSep = pNewSep;
         else
@@ -93,8 +93,8 @@ ImplRegionBand::ImplRegionBand(
     {
         // Copy points.
         ImplRegionBandPoint* pPoint = rRegionBand.mpFirstBandPoint;
-        ImplRegionBandPoint* pPrevPointCopy = NULL;
-        while (pPoint != NULL)
+        ImplRegionBandPoint* pPrevPointCopy = nullptr;
+        while (pPoint != nullptr)
         {
             ImplRegionBandPoint* pPointCopy = new ImplRegionBandPoint();
             pPointCopy->mnX = pPoint->mnX;
@@ -102,7 +102,7 @@ ImplRegionBand::ImplRegionBand(
             pPointCopy->mbEndPoint = pPoint->mbEndPoint;
             pPointCopy->meLineType = pPoint->meLineType;
 
-            if (pPrevPointCopy != NULL)
+            if (pPrevPointCopy != nullptr)
                 pPrevPointCopy->mpNextBandPoint = pPointCopy;
             else
                 mpFirstBandPoint = pPointCopy;
@@ -115,7 +115,7 @@ ImplRegionBand::ImplRegionBand(
 
 ImplRegionBand::~ImplRegionBand()
 {
-    DBG_ASSERT( mpFirstBandPoint == NULL, "ImplRegionBand::~ImplRegionBand -> pointlist not empty" );
+    DBG_ASSERT( mpFirstBandPoint == nullptr, "ImplRegionBand::~ImplRegionBand -> pointlist not empty" );
 
     // delete elements of the list
     ImplRegionBandSep* pSep = mpFirstSep;
@@ -184,7 +184,7 @@ void ImplRegionBand::ProcessPoints()
     delete pRegionBandPoint;
 
     // list is now empty
-    mpFirstBandPoint = NULL;
+    mpFirstBandPoint = nullptr;
 }
 
 // generate separations from lines and process union with existing
@@ -200,13 +200,13 @@ bool ImplRegionBand::InsertPoint( long nX, long nLineId,
         mpFirstBandPoint->mnLineId        = nLineId;
         mpFirstBandPoint->mbEndPoint      = bEndPoint;
         mpFirstBandPoint->meLineType      = eLineType;
-        mpFirstBandPoint->mpNextBandPoint = NULL;
+        mpFirstBandPoint->mpNextBandPoint = nullptr;
         return true;
     }
 
     // look if line already touched the band
     ImplRegionBandPoint* pRegionBandPoint = mpFirstBandPoint;
-    ImplRegionBandPoint* pLastTestedRegionBandPoint = NULL;
+    ImplRegionBandPoint* pLastTestedRegionBandPoint = nullptr;
     while( pRegionBandPoint )
     {
         if ( pRegionBandPoint->mnLineId == nLineId )
@@ -257,7 +257,7 @@ bool ImplRegionBand::InsertPoint( long nX, long nLineId,
     ImplRegionBandPoint* pNewRegionBandPoint;
 
     pRegionBandPoint = mpFirstBandPoint;
-    pLastTestedRegionBandPoint = NULL;
+    pLastTestedRegionBandPoint = nullptr;
     while ( pRegionBandPoint )
     {
         // new point completely left? -> insert as first point
@@ -290,7 +290,7 @@ bool ImplRegionBand::InsertPoint( long nX, long nLineId,
     pNewRegionBandPoint->mnLineId           = nLineId;
     pNewRegionBandPoint->mbEndPoint         = bEndPoint;
     pNewRegionBandPoint->meLineType         = eLineType;
-    pNewRegionBandPoint->mpNextBandPoint    = NULL;
+    pNewRegionBandPoint->mpNextBandPoint    = nullptr;
 
     // connections to the new point
     pLastTestedRegionBandPoint->mpNextBandPoint = pNewRegionBandPoint;
@@ -325,7 +325,7 @@ void ImplRegionBand::ScaleX( double fHorzScale )
 
 bool ImplRegionBand::OptimizeBand()
 {
-    ImplRegionBandSep* pPrevSep = 0;
+    ImplRegionBandSep* pPrevSep = nullptr;
     ImplRegionBandSep* pSep = mpFirstSep;
     while ( pSep )
     {
@@ -375,13 +375,13 @@ void ImplRegionBand::Union( long nXLeft, long nXRight )
         mpFirstSep->mnXLeft     = nXLeft;
         mpFirstSep->mnXRight    = nXRight;
         mpFirstSep->mbRemoved   = false;
-        mpFirstSep->mpNextSep   = NULL;
+        mpFirstSep->mpNextSep   = nullptr;
         return;
     }
 
     // process real union
     ImplRegionBandSep* pNewSep;
-    ImplRegionBandSep* pPrevSep = 0;
+    ImplRegionBandSep* pPrevSep = nullptr;
     ImplRegionBandSep* pSep = mpFirstSep;
     while ( pSep )
     {
@@ -425,7 +425,7 @@ void ImplRegionBand::Union( long nXLeft, long nXRight )
             pNewSep->mbRemoved  = false;
 
             pSep->mpNextSep     = pNewSep;
-            pNewSep->mpNextSep  = NULL;
+            pNewSep->mpNextSep  = nullptr;
             break;
         }
 
@@ -494,7 +494,7 @@ void ImplRegionBand::Exclude( long nXLeft, long nXRight )
 
     // process real exclusion
     ImplRegionBandSep* pNewSep;
-    ImplRegionBandSep* pPrevSep = 0;
+    ImplRegionBandSep* pPrevSep = nullptr;
     ImplRegionBandSep* pSep = mpFirstSep;
     while ( pSep  )
     {
@@ -614,13 +614,13 @@ void ImplRegionBand::XOr( long nXLeft, long nXRight )
         mpFirstSep->mnXLeft     = nXLeft;
         mpFirstSep->mnXRight    = nXRight;
         mpFirstSep->mbRemoved   = false;
-        mpFirstSep->mpNextSep   = NULL;
+        mpFirstSep->mpNextSep   = nullptr;
         return;
     }
 
     // process real xor
     ImplRegionBandSep* pNewSep;
-    ImplRegionBandSep* pPrevSep = 0;
+    ImplRegionBandSep* pPrevSep = nullptr;
     ImplRegionBandSep* pSep = mpFirstSep;
 
     while ( pSep  )
@@ -652,14 +652,14 @@ void ImplRegionBand::XOr( long nXLeft, long nXRight )
                     mpFirstSep = pNewSep;
                 else
                     pPrevSep->mpNextSep = pNewSep;
-                pPrevSep = NULL; // do not run accidentally into the "right" case when breaking the loop
+                pPrevSep = nullptr; // do not run accidentally into the "right" case when breaking the loop
                 break;
             }
             else if( nXLeft == nOldLeft && nXRight == nOldRight )
             {
                 // #3
                 pSep->mbRemoved = true;
-                pPrevSep = NULL; // do not run accidentally into the "right" case when breaking the loop
+                pPrevSep = nullptr; // do not run accidentally into the "right" case when breaking the loop
                 break;
             }
             else if( nXLeft != nOldLeft && nXRight == nOldRight )
@@ -678,7 +678,7 @@ void ImplRegionBand::XOr( long nXLeft, long nXRight )
                 pSep->mnXLeft = nXLeft;
                 pSep->mnXRight = nXRight-1;
 
-                pPrevSep = NULL; // do not run accidentally into the "right" case when breaking the loop
+                pPrevSep = nullptr; // do not run accidentally into the "right" case when breaking the loop
                 break;
             }
             else if( nXLeft == nOldLeft && nXRight != nOldRight )
@@ -697,7 +697,7 @@ void ImplRegionBand::XOr( long nXLeft, long nXRight )
                 {
                     pSep->mnXLeft = nXRight+1; // 9
 
-                    pPrevSep = NULL; // do not run accidentally into the "right" case when breaking the loop
+                    pPrevSep = nullptr; // do not run accidentally into the "right" case when breaking the loop
                     break;
                 }
             }
@@ -776,7 +776,7 @@ void ImplRegionBand::XOr( long nXLeft, long nXRight )
                     // connections from the new separation
                     pSep->mpNextSep = pNewSep;
 
-                    pPrevSep = NULL; // do not run accidentally into the "right" case when breaking the loop
+                    pPrevSep = nullptr; // do not run accidentally into the "right" case when breaking the loop
                     break;
                 }
             }
@@ -792,7 +792,7 @@ void ImplRegionBand::XOr( long nXLeft, long nXRight )
         pNewSep             = new ImplRegionBandSep;
         pNewSep->mnXLeft    = nXLeft;
         pNewSep->mnXRight   = nXRight;
-        pNewSep->mpNextSep  = NULL;
+        pNewSep->mpNextSep  = nullptr;
         pNewSep->mbRemoved  = false;
 
         // connections from the new separation
@@ -825,7 +825,7 @@ long ImplRegionBand::GetXLeftBoundary() const
 
 long ImplRegionBand::GetXRightBoundary() const
 {
-    DBG_ASSERT( mpFirstSep != NULL, "ImplRegionBand::XRightBoundary -> no separation in band!" );
+    DBG_ASSERT( mpFirstSep != nullptr, "ImplRegionBand::XRightBoundary -> no separation in band!" );
 
     // search last separation
     ImplRegionBandSep* pSep = mpFirstSep;
@@ -882,7 +882,7 @@ ImplRegionBand* ImplRegionBand::SplitBand (const sal_Int32 nY)
     pLowerBand->mpNextBand = mpNextBand;
     mpNextBand = pLowerBand;
     pLowerBand->mpPrevBand = this;
-    if (pLowerBand->mpNextBand != NULL)
+    if (pLowerBand->mpNextBand != nullptr)
         pLowerBand->mpNextBand->mpPrevBand = pLowerBand;
 
     return pLowerBand;

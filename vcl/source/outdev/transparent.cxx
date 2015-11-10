@@ -374,10 +374,10 @@ void OutputDevice::EmulateDrawTransparent ( const tools::PolyPolygon& rPolyPoly,
 
     // operation explicitly further below.
     if( mpAlphaVDev )
-        mpAlphaVDev = NULL;
+        mpAlphaVDev = nullptr;
 
     GDIMetaFile* pOldMetaFile = mpMetaFile;
-    mpMetaFile = NULL;
+    mpMetaFile = nullptr;
 
     tools::PolyPolygon aPolyPoly( LogicToPixel( rPolyPoly ) );
     Rectangle aPolyRect( aPolyPoly.GetBoundRect() );
@@ -678,7 +678,7 @@ void OutputDevice::DrawTransparent( const GDIMetaFile& rMtf, const Point& rPos,
         Point aPoint;
         Rectangle aDstRect( aPoint, GetOutputSizePixel() );
 
-        mpMetaFile = NULL;
+        mpMetaFile = nullptr;
         aDstRect.Intersection( aOutRect );
 
         ClipToPaintRegion( aDstRect );

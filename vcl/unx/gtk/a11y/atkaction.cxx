@@ -260,7 +260,7 @@ action_wrapper_set_description (AtkAction *, gint, const gchar *)
 void
 actionIfaceInit (AtkActionIface *iface)
 {
-  g_return_if_fail (iface != NULL);
+  g_return_if_fail (iface != nullptr);
 
   iface->do_action = action_wrapper_do_action;
   iface->get_n_actions = action_wrapper_get_n_actions;

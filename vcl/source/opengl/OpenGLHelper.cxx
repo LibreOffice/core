@@ -121,9 +121,9 @@ namespace {
         {
             std::vector<char> ErrorMessage(InfoLogLength+1);
             if (bShaderNotProgram)
-                glGetShaderInfoLog (nId, InfoLogLength, NULL, &ErrorMessage[0]);
+                glGetShaderInfoLog (nId, InfoLogLength, nullptr, &ErrorMessage[0]);
             else
-                glGetProgramInfoLog(nId, InfoLogLength, NULL, &ErrorMessage[0]);
+                glGetProgramInfoLog(nId, InfoLogLength, nullptr, &ErrorMessage[0]);
             CHECK_GL_ERROR();
 
             ErrorMessage.push_back('\0');
@@ -351,7 +351,7 @@ namespace
 
         std::vector<sal_uInt8> aBinary( nBinaryLength + GLenumSize );
 
-        glGetProgramBinary( nProgramID, nBinaryLength, NULL, &nBinaryFormat, aBinary.data() );
+        glGetProgramBinary( nProgramID, nBinaryLength, nullptr, &nBinaryFormat, aBinary.data() );
 
         const sal_uInt8* pBF = reinterpret_cast<const sal_uInt8*>(&nBinaryFormat);
         aBinary.insert( aBinary.end(), pBF, pBF + GLenumSize );
@@ -414,7 +414,7 @@ GLint OpenGLHelper::LoadShaders(const OUString& rVertexShaderName,
     if( !preamble.isEmpty())
         addPreamble( aVertexShaderSource, preamble );
     char const * VertexSourcePointer = aVertexShaderSource.getStr();
-    glShaderSource(VertexShaderID, 1, &VertexSourcePointer , NULL);
+    glShaderSource(VertexShaderID, 1, &VertexSourcePointer , nullptr);
     glCompileShader(VertexShaderID);
 
     // Check Vertex Shader
@@ -427,7 +427,7 @@ GLint OpenGLHelper::LoadShaders(const OUString& rVertexShaderName,
     if( !preamble.isEmpty())
         addPreamble( aFragmentShaderSource, preamble );
     char const * FragmentSourcePointer = aFragmentShaderSource.getStr();
-    glShaderSource(FragmentShaderID, 1, &FragmentSourcePointer , NULL);
+    glShaderSource(FragmentShaderID, 1, &FragmentSourcePointer , nullptr);
     glCompileShader(FragmentShaderID);
 
     // Check Fragment Shader
@@ -488,7 +488,7 @@ void OpenGLHelper::ConvertBitmapExToRGBATextureBuffer(const BitmapEx& rBitmapEx,
     size_t i = 0;
     for (long ny = (bFlip ? nBmpHeight - 1 : 0); (bFlip ? ny >= 0 : ny < nBmpHeight); (bFlip ? ny-- : ny++))
     {
-        Scanline pAScan = pAlphaReadAccess ? pAlphaReadAccess->GetScanline(ny) : 0;
+        Scanline pAScan = pAlphaReadAccess ? pAlphaReadAccess->GetScanline(ny) : nullptr;
         for(long nx = 0; nx < nBmpWidth; nx++)
         {
             BitmapColor aCol = pReadAccces->GetColor( ny, nx );
@@ -565,7 +565,7 @@ const char* OpenGLHelper::GLErrorString(GLenum errorCode)
         {GL_OUT_OF_MEMORY, "out of memory"},
         {GL_INVALID_FRAMEBUFFER_OPERATION, "invalid framebuffer operation"},
 
-        {0, NULL }
+        {0, nullptr }
     };
 
     int i;
@@ -578,7 +578,7 @@ const char* OpenGLHelper::GLErrorString(GLenum errorCode)
         }
      }
 
-    return NULL;
+    return nullptr;
 }
 
 std::ostream& operator<<(std::ostream& rStrm, const glm::vec4& rPos)
@@ -636,7 +636,7 @@ void OpenGLHelper::createFramebuffer(long nWidth, long nHeight, GLuint& nFramebu
         glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
         glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, nWidth, nHeight, 0,
-                             GL_RGBA, GL_UNSIGNED_BYTE, 0);
+                             GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
         glBindTexture(GL_TEXTURE_2D, 0);
 
         glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
@@ -750,7 +750,7 @@ void OpenGLZone::leave() { gnLeaveCount++; }
 
 namespace {
     static volatile bool gbWatchdogFiring = false;
-    static oslCondition gpWatchdogExit = NULL;
+    static oslCondition gpWatchdogExit = nullptr;
     static rtl::Reference<OpenGLWatchdogThread> gxWatchdog;
 }
 
@@ -835,7 +835,7 @@ void OpenGLWatchdogThread::execute()
 
 void OpenGLWatchdogThread::start()
 {
-    assert (gxWatchdog == NULL);
+    assert (gxWatchdog == nullptr);
     gpWatchdogExit = osl_createCondition();
     gxWatchdog.set(new OpenGLWatchdogThread());
     gxWatchdog->launch();
@@ -857,7 +857,7 @@ void OpenGLWatchdogThread::stop()
 
     if (gpWatchdogExit)
         osl_destroyCondition(gpWatchdogExit);
-    gpWatchdogExit = NULL;
+    gpWatchdogExit = nullptr;
 }
 
 /**
@@ -1072,7 +1072,7 @@ GLXFBConfig OpenGLHelper::GetPixmapFBConfig( Display* pDisplay, bool& bInverted 
     if( i == nFbConfigs )
     {
         SAL_WARN( "vcl.opengl", "Unable to find FBconfig for pixmap texturing" );
-        return 0;
+        return nullptr;
     }
 
     CHECK_GL_ERROR();
@@ -1082,7 +1082,7 @@ GLXFBConfig OpenGLHelper::GetPixmapFBConfig( Display* pDisplay, bool& bInverted 
 #endif
 
 OutputDevice::PaintScope::PaintScope(OutputDevice *pDev)
-    : pHandle( NULL )
+    : pHandle( nullptr )
 {
     if( pDev->mpGraphics || pDev->AcquireGraphics() )
     {
@@ -1105,7 +1105,7 @@ void OutputDevice::PaintScope::flush()
     if( pHandle )
     {
         OpenGLContext *pContext = static_cast<OpenGLContext *>( pHandle );
-        pHandle = NULL;
+        pHandle = nullptr;
         pContext->mnPainting--;
         assert( pContext->mnPainting >= 0 );
         if( pContext->mnPainting == 0 )

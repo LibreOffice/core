@@ -72,7 +72,7 @@ protected:
     virtual sal_uInt64 UpdateMinPeriod( sal_uInt64 nMinPeriod, sal_uInt64 nTime ) const = 0;
 
 public:
-    Scheduler( const sal_Char *pDebugName = NULL );
+    Scheduler( const sal_Char *pDebugName = nullptr );
     Scheduler( const Scheduler& rScheduler );
     virtual ~Scheduler();
 

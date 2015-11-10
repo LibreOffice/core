@@ -90,10 +90,10 @@ Size GraphicReader::GetPreviewSize() const
 }
 
 ImpGraphic::ImpGraphic() :
-        mpAnimation     ( NULL ),
-        mpContext       ( NULL ),
-        mpSwapFile      ( NULL ),
-        mpGfxLink       ( NULL ),
+        mpAnimation     ( nullptr ),
+        mpContext       ( nullptr ),
+        mpSwapFile      ( nullptr ),
+        mpGfxLink       ( nullptr ),
         meType          ( GRAPHIC_NONE ),
         mnSizeBytes     ( 0UL ),
         mnRefCount      ( 1UL ),
@@ -105,7 +105,7 @@ ImpGraphic::ImpGraphic() :
 ImpGraphic::ImpGraphic( const ImpGraphic& rImpGraphic ) :
         maMetaFile      ( rImpGraphic.maMetaFile ),
         maEx            ( rImpGraphic.maEx ),
-        mpContext       ( NULL ),
+        mpContext       ( nullptr ),
         mpSwapFile      ( rImpGraphic.mpSwapFile ),
         meType          ( rImpGraphic.meType ),
         mnSizeBytes     ( rImpGraphic.mnSizeBytes ),
@@ -119,7 +119,7 @@ ImpGraphic::ImpGraphic( const ImpGraphic& rImpGraphic ) :
     if( rImpGraphic.mpGfxLink )
         mpGfxLink = new GfxLink( *rImpGraphic.mpGfxLink );
     else
-        mpGfxLink = NULL;
+        mpGfxLink = nullptr;
 
     if( rImpGraphic.mpAnimation )
     {
@@ -127,17 +127,17 @@ ImpGraphic::ImpGraphic( const ImpGraphic& rImpGraphic ) :
         maEx = mpAnimation->GetBitmapEx();
     }
     else
-        mpAnimation = NULL;
+        mpAnimation = nullptr;
 
     maSvgData = rImpGraphic.maSvgData;
 }
 
 ImpGraphic::ImpGraphic( const Bitmap& rBitmap ) :
         maEx            ( rBitmap ),
-        mpAnimation     ( NULL ),
-        mpContext       ( NULL ),
-        mpSwapFile      ( NULL ),
-        mpGfxLink       ( NULL ),
+        mpAnimation     ( nullptr ),
+        mpContext       ( nullptr ),
+        mpSwapFile      ( nullptr ),
+        mpGfxLink       ( nullptr ),
         meType          ( !rBitmap.IsEmpty() ? GRAPHIC_BITMAP : GRAPHIC_NONE ),
         mnSizeBytes     ( 0UL ),
         mnRefCount      ( 1UL ),
@@ -148,10 +148,10 @@ ImpGraphic::ImpGraphic( const Bitmap& rBitmap ) :
 
 ImpGraphic::ImpGraphic( const BitmapEx& rBitmapEx ) :
         maEx            ( rBitmapEx ),
-        mpAnimation     ( NULL ),
-        mpContext       ( NULL ),
-        mpSwapFile      ( NULL ),
-        mpGfxLink       ( NULL ),
+        mpAnimation     ( nullptr ),
+        mpContext       ( nullptr ),
+        mpSwapFile      ( nullptr ),
+        mpGfxLink       ( nullptr ),
         meType          ( !rBitmapEx.IsEmpty() ? GRAPHIC_BITMAP : GRAPHIC_NONE ),
         mnSizeBytes     ( 0UL ),
         mnRefCount      ( 1UL ),
@@ -161,10 +161,10 @@ ImpGraphic::ImpGraphic( const BitmapEx& rBitmapEx ) :
 }
 
 ImpGraphic::ImpGraphic(const SvgDataPtr& rSvgDataPtr)
-:   mpAnimation( NULL ),
-    mpContext( NULL ),
-    mpSwapFile( NULL ),
-    mpGfxLink( NULL ),
+:   mpAnimation( nullptr ),
+    mpContext( nullptr ),
+    mpSwapFile( nullptr ),
+    mpGfxLink( nullptr ),
     meType( rSvgDataPtr.get() ? GRAPHIC_BITMAP : GRAPHIC_NONE ),
     mnSizeBytes( 0UL ),
     mnRefCount( 1UL ),
@@ -177,9 +177,9 @@ ImpGraphic::ImpGraphic(const SvgDataPtr& rSvgDataPtr)
 ImpGraphic::ImpGraphic( const Animation& rAnimation ) :
         maEx            ( rAnimation.GetBitmapEx() ),
         mpAnimation     ( new Animation( rAnimation ) ),
-        mpContext       ( NULL ),
-        mpSwapFile      ( NULL ),
-        mpGfxLink       ( NULL ),
+        mpContext       ( nullptr ),
+        mpSwapFile      ( nullptr ),
+        mpGfxLink       ( nullptr ),
         meType          ( GRAPHIC_BITMAP ),
         mnSizeBytes     ( 0UL ),
         mnRefCount      ( 1UL ),
@@ -190,10 +190,10 @@ ImpGraphic::ImpGraphic( const Animation& rAnimation ) :
 
 ImpGraphic::ImpGraphic( const GDIMetaFile& rMtf ) :
         maMetaFile      ( rMtf ),
-        mpAnimation     ( NULL ),
-        mpContext       ( NULL ),
-        mpSwapFile      ( NULL ),
-        mpGfxLink       ( NULL ),
+        mpAnimation     ( nullptr ),
+        mpContext       ( nullptr ),
+        mpSwapFile      ( nullptr ),
+        mpGfxLink       ( nullptr ),
         meType          ( GRAPHIC_GDIMETAFILE ),
         mnSizeBytes     ( 0UL ),
         mnRefCount      ( 1UL ),
@@ -230,7 +230,7 @@ ImpGraphic& ImpGraphic::operator=( const ImpGraphic& rImpGraphic )
         }
         else
         {
-            mpAnimation = NULL;
+            mpAnimation = nullptr;
             maEx = rImpGraphic.maEx;
         }
 
@@ -248,7 +248,7 @@ ImpGraphic& ImpGraphic::operator=( const ImpGraphic& rImpGraphic )
         if( rImpGraphic.mpGfxLink )
             mpGfxLink = new GfxLink( *rImpGraphic.mpGfxLink );
         else
-            mpGfxLink = NULL;
+            mpGfxLink = nullptr;
 
         maSvgData = rImpGraphic.maSvgData;
     }
@@ -334,13 +334,13 @@ void ImpGraphic::ImplClearGraphics( bool bCreateSwapInfo )
     {
         mpAnimation->Clear();
         delete mpAnimation;
-        mpAnimation = NULL;
+        mpAnimation = nullptr;
     }
 
     if( mpGfxLink )
     {
         delete mpGfxLink;
-        mpGfxLink = NULL;
+        mpGfxLink = nullptr;
     }
 
     maSvgData.reset();
@@ -379,7 +379,7 @@ void ImpGraphic::ImplClear()
             delete mpSwapFile;
         }
 
-        mpSwapFile = NULL;
+        mpSwapFile = nullptr;
     }
 
     mbSwapOut = false;
@@ -424,7 +424,7 @@ bool ImpGraphic::ImplIsAlpha() const
     }
     else if( meType == GRAPHIC_BITMAP )
     {
-        bRet = ( NULL == mpAnimation ) && maEx.IsAlpha();
+        bRet = ( nullptr == mpAnimation ) && maEx.IsAlpha();
     }
 
     return bRet;
@@ -432,7 +432,7 @@ bool ImpGraphic::ImplIsAlpha() const
 
 bool ImpGraphic::ImplIsAnimated() const
 {
-    return( mpAnimation != NULL );
+    return( mpAnimation != nullptr );
 }
 
 bool ImpGraphic::ImplIsEPS() const
@@ -1307,7 +1307,7 @@ bool ImpGraphic::ImplSwapIn()
                         delete mpSwapFile;
                     }
 
-                    mpSwapFile = NULL;
+                    mpSwapFile = nullptr;
                 }
             }
         }
@@ -1357,7 +1357,7 @@ GfxLink ImpGraphic::ImplGetLink()
 
 bool ImpGraphic::ImplIsLink() const
 {
-    return ( mpGfxLink != NULL );
+    return ( mpGfxLink != nullptr );
 }
 
 BitmapChecksum ImpGraphic::ImplGetChecksum() const
@@ -1461,7 +1461,7 @@ SvStream& ReadImpGraphic( SvStream& rIStm, ImpGraphic& rImpGraphic )
                 if( !rIStm.GetError() && aLink.LoadNative( aGraphic ) )
                 {
                     // set link only, if no other link was set
-                    const bool bSetLink = ( rImpGraphic.mpGfxLink == NULL );
+                    const bool bSetLink = ( rImpGraphic.mpGfxLink == nullptr );
 
                     // assign graphic
                     rImpGraphic = *aGraphic.ImplGetImpGraphic();

@@ -32,8 +32,8 @@
 
 GfxLink::GfxLink() :
     meType      ( GFX_LINK_TYPE_NONE ),
-    mpBuf       ( NULL ),
-    mpSwap      ( NULL ),
+    mpBuf       ( nullptr ),
+    mpSwap      ( nullptr ),
     mnBufSize   ( 0 ),
     mnUserId    ( 0UL ),
     mpImpData   ( new ImpGfxLink )
@@ -49,12 +49,12 @@ GfxLink::GfxLink( const GfxLink& rGfxLink ) :
 GfxLink::GfxLink( sal_uInt8* pBuf, sal_uInt32 nSize, GfxLinkType nType, bool bOwns ) :
     mpImpData( new ImpGfxLink )
 {
-    DBG_ASSERT( (pBuf != NULL && nSize) || (!bOwns && nSize == 0),
+    DBG_ASSERT( (pBuf != nullptr && nSize) || (!bOwns && nSize == 0),
                 "GfxLink::GfxLink(): empty/NULL buffer given" );
 
     meType = nType;
     mnBufSize = nSize;
-    mpSwap = NULL;
+    mpSwap = nullptr;
     mnUserId = 0UL;
 
     if( bOwns )
@@ -65,7 +65,7 @@ GfxLink::GfxLink( sal_uInt8* pBuf, sal_uInt32 nSize, GfxLinkType nType, bool bOw
         memcpy( mpBuf->mpBuffer, pBuf, nSize );
     }
     else
-        mpBuf = NULL;
+        mpBuf = nullptr;
 }
 
 GfxLink::~GfxLink()
@@ -109,7 +109,7 @@ bool GfxLink::IsEqual( const GfxLink& rGfxLink ) const
         {
             bIsEqual = memcmp( pSource, pDest, nSourceSize ) == 0;
         }
-        else if ( ( pSource == 0 ) && ( pDest == 0 ) )
+        else if ( ( pSource == nullptr ) && ( pDest == nullptr ) )
             bIsEqual = true;
     }
     return bIsEqual;
@@ -143,7 +143,7 @@ const sal_uInt8* GfxLink::GetData() const
     if( IsSwappedOut() )
         const_cast<GfxLink*>(this)->SwapIn();
 
-    return( mpBuf ? mpBuf->mpBuffer : NULL );
+    return( mpBuf ? mpBuf->mpBuffer : nullptr );
 }
 
 
@@ -212,14 +212,14 @@ void GfxLink::SwapOut()
         if( !mpSwap->IsSwapped() )
         {
             delete mpSwap;
-            mpSwap = NULL;
+            mpSwap = nullptr;
         }
         else
         {
             if( !( --mpBuf->mnRefCount ) )
                 delete mpBuf;
 
-            mpBuf = NULL;
+            mpBuf = nullptr;
         }
     }
 }
@@ -233,7 +233,7 @@ void GfxLink::SwapIn()
         if( !( --mpSwap->mnRefCount ) )
             delete mpSwap;
 
-        mpSwap = NULL;
+        mpSwap = nullptr;
     }
 }
 
@@ -366,13 +366,13 @@ sal_uInt8* ImpSwap::GetData() const
             xIStm.reset();
 
             if( bError )
-                delete[] pData, pData = NULL;
+                delete[] pData, pData = nullptr;
         }
         else
-            pData = NULL;
+            pData = nullptr;
     }
     else
-        pData = NULL;
+        pData = nullptr;
 
     return pData;
 }

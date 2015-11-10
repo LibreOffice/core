@@ -69,7 +69,7 @@
 
 using namespace ::com::sun::star;
 
-static GObjectClass *parent_class = NULL;
+static GObjectClass *parent_class = nullptr;
 
 static AtkRelationType mapRelationType( sal_Int16 nRelation )
 {
@@ -395,7 +395,7 @@ static AtkAttributeSet *
 wrapper_get_attributes( AtkObject *atk_obj )
 {
     AtkObjectWrapper *obj = ATK_OBJECT_WRAPPER( atk_obj );
-    AtkAttributeSet *pSet = NULL;
+    AtkAttributeSet *pSet = nullptr;
 
     try
     {
@@ -440,7 +440,7 @@ wrapper_ref_child( AtkObject *atk_obj,
                    gint       i )
 {
     AtkObjectWrapper *obj = ATK_OBJECT_WRAPPER (atk_obj);
-    AtkObject* child = NULL;
+    AtkObject* child = nullptr;
 
     // see comments above atk_object_wrapper_remove_child
     if( -1 < i && obj->index_of_child_about_to_be_removed == i )
@@ -525,7 +525,7 @@ wrapper_ref_relation_set( AtkObject *atk_obj )
         }
         catch(const uno::Exception &) {
             g_object_unref( G_OBJECT( pSet ) );
-            pSet = NULL;
+            pSet = nullptr;
         }
     }
 
@@ -621,15 +621,15 @@ static void
 atk_object_wrapper_init (AtkObjectWrapper      *wrapper,
                          AtkObjectWrapperClass*)
 {
-   wrapper->mpAction = NULL;
-   wrapper->mpComponent = NULL;
-   wrapper->mpEditableText = NULL;
-   wrapper->mpHypertext = NULL;
-   wrapper->mpImage = NULL;
-   wrapper->mpSelection = NULL;
-   wrapper->mpTable = NULL;
-   wrapper->mpText = NULL;
-   wrapper->mpValue = NULL;
+   wrapper->mpAction = nullptr;
+   wrapper->mpComponent = nullptr;
+   wrapper->mpEditableText = nullptr;
+   wrapper->mpHypertext = nullptr;
+   wrapper->mpImage = nullptr;
+   wrapper->mpSelection = nullptr;
+   wrapper->mpTable = nullptr;
+   wrapper->mpText = nullptr;
+   wrapper->mpValue = nullptr;
 }
 
 } // extern "C"
@@ -648,11 +648,11 @@ atk_object_wrapper_get_type()
         nullptr,
         reinterpret_cast<GClassInitFunc>(atk_object_wrapper_class_init),
         nullptr,
-        NULL,
+        nullptr,
         sizeof (AtkObjectWrapper),
         0,
         reinterpret_cast<GInstanceInitFunc>(atk_object_wrapper_init),
-        NULL
+        nullptr
       } ;
       type = g_type_register_static (ATK_TYPE_OBJECT,
                                      "OOoAtkObj",
@@ -664,14 +664,14 @@ atk_object_wrapper_get_type()
 static bool
 isOfType( uno::XInterface *pInterface, const uno::Type & rType )
 {
-    g_return_val_if_fail( pInterface != NULL, false );
+    g_return_val_if_fail( pInterface != nullptr, false );
 
     bool bIs = false;
     try {
         uno::Any aRet = pInterface->queryInterface( rType );
 
         bIs = ( ( typelib_TypeClass_INTERFACE == aRet.pType->eTypeClass ) &&
-                ( aRet.pReserved != NULL ) );
+                ( aRet.pReserved != nullptr ) );
     } catch( const uno::Exception &) { }
 
     return bIs;
@@ -759,9 +759,9 @@ ensureTypeFor( uno::XInterface *pAccessible )
     {
         GTypeInfo aTypeInfo = {
             sizeof( AtkObjectWrapperClass ),
-            NULL, NULL, NULL, NULL, NULL,
+            nullptr, nullptr, nullptr, nullptr, nullptr,
             sizeof( AtkObjectWrapper ),
-            0, NULL, NULL
+            0, nullptr, nullptr
         } ;
         nType = g_type_register_static( ATK_TYPE_OBJECT_WRAPPER,
                                         aTypeName.getStr(), &aTypeInfo,
@@ -770,7 +770,7 @@ ensureTypeFor( uno::XInterface *pAccessible )
         for( int j = 0; j < aTypeTableSize; j++ )
             if( bTypes[j] )
             {
-                GInterfaceInfo aIfaceInfo = { NULL, NULL, NULL };
+                GInterfaceInfo aIfaceInfo = { nullptr, nullptr, nullptr };
                 aIfaceInfo.interface_init = aTypeTable[j].aInit;
                 g_type_add_interface_static (nType, aTypeTable[j].aGetGIfaceType(),
                                              &aIfaceInfo);
@@ -782,7 +782,7 @@ ensureTypeFor( uno::XInterface *pAccessible )
 AtkObject *
 atk_object_wrapper_ref( const uno::Reference< accessibility::XAccessible > &rxAccessible, bool create )
 {
-    g_return_val_if_fail( rxAccessible.get() != NULL, NULL );
+    g_return_val_if_fail( rxAccessible.get() != nullptr, NULL );
 
     AtkObject *obj = ooo_wrapper_registry_get(rxAccessible);
     if( obj )
@@ -794,30 +794,30 @@ atk_object_wrapper_ref( const uno::Reference< accessibility::XAccessible > &rxAc
     if( create )
         return atk_object_wrapper_new( rxAccessible );
 
-    return NULL;
+    return nullptr;
 }
 
 AtkObject *
 atk_object_wrapper_new( const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& rxAccessible,
                         AtkObject* parent )
 {
-    g_return_val_if_fail( rxAccessible.get() != NULL, NULL );
+    g_return_val_if_fail( rxAccessible.get() != nullptr, NULL );
 
-    AtkObjectWrapper *pWrap = NULL;
+    AtkObjectWrapper *pWrap = nullptr;
 
     try {
         uno::Reference< accessibility::XAccessibleContext > xContext(rxAccessible->getAccessibleContext());
 
-        g_return_val_if_fail( xContext.get() != NULL, NULL );
+        g_return_val_if_fail( xContext.get() != nullptr, NULL );
 
         GType nType = ensureTypeFor( xContext.get() );
-        gpointer obj = g_object_new( nType, NULL);
+        gpointer obj = g_object_new( nType, nullptr);
 
         pWrap = ATK_OBJECT_WRAPPER( obj );
         pWrap->mpAccessible = rxAccessible;
 
         pWrap->index_of_child_about_to_be_removed = -1;
-        pWrap->child_about_to_be_removed = NULL;
+        pWrap->child_about_to_be_removed = nullptr;
 
         pWrap->mpContext = xContext;
 
@@ -860,7 +860,7 @@ atk_object_wrapper_new( const ::com::sun::star::uno::Reference< ::com::sun::star
         if( pWrap )
             g_object_unref( pWrap );
 
-        return NULL;
+        return nullptr;
     }
 }
 
@@ -888,7 +888,7 @@ void atk_object_wrapper_remove_child(AtkObjectWrapper* wrapper, AtkObject *child
     g_signal_emit_by_name( ATK_OBJECT( wrapper ), "children_changed::remove", index, child, NULL );
 
     wrapper->index_of_child_about_to_be_removed = -1;
-    wrapper->child_about_to_be_removed = NULL;
+    wrapper->child_about_to_be_removed = nullptr;
 }
 
 /*****************************************************************************/

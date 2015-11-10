@@ -253,7 +253,7 @@ public:
 
                             Bitmap();
                             Bitmap( const Bitmap& rBitmap );
-                            Bitmap( const Size& rSizePixel, sal_uInt16 nBitCount, const BitmapPalette* pPal = NULL );
+                            Bitmap( const Size& rSizePixel, sal_uInt16 nBitCount, const BitmapPalette* pPal = nullptr );
                             Bitmap( const ResId& rResId );
                             Bitmap( SalBitmap* pSalBitmap );
     virtual                 ~Bitmap();
@@ -369,7 +369,7 @@ public:
      */
     bool                    Expand(
                                 sal_uLong nDX, sal_uLong nDY,
-                                const Color* pInitColor = NULL );
+                                const Color* pInitColor = nullptr );
 
     /** Copy a rectangular area from another bitmap
 
@@ -396,12 +396,12 @@ public:
     bool                    CopyPixel(
                                 const Rectangle& rRectDst,
                                 const Rectangle& rRectSrc,
-                                const Bitmap* pBmpSrc = NULL );
+                                const Bitmap* pBmpSrc = nullptr );
 
     bool                    CopyPixel_AlphaOptimized(
                                 const Rectangle& rRectDst,
                                 const Rectangle& rRectSrc,
-                                const Bitmap* pBmpSrc = NULL );
+                                const Bitmap* pBmpSrc = nullptr );
 
     /** Perform boolean operations with another bitmap
 
@@ -610,7 +610,7 @@ public:
                                 const Color* pSearchColors,
                                 const Color* rReplaceColors,
                                 sal_uLong nColorCount,
-                                sal_uLong* pTols = NULL );
+                                sal_uLong* pTols = nullptr );
 
     /** Convert the bitmap to a PolyPolygon
 
@@ -655,7 +655,7 @@ public:
                                 GDIMetaFile& rMtf,
                                 sal_uInt8 cReduce = 0,
                                 BmpVectorizeFlags nFlags = BmpVectorizeFlags::Inner,
-                                const Link<long,void>* pProgress = NULL );
+                                const Link<long,void>* pProgress = nullptr );
 
     /** Change various global color characteristics
 
@@ -712,7 +712,7 @@ public:
      */
     bool                    Filter(
                                 BmpFilter eFilter,
-                                const BmpFilterParam* pFilterParam = NULL );
+                                const BmpFilterParam* pFilterParam = nullptr );
 
 public:
 
@@ -738,8 +738,8 @@ public:
     SAL_DLLPRIVATE bool     ImplMakeMono( sal_uInt8 cThreshold );
     SAL_DLLPRIVATE bool     ImplMakeMonoDither();
     SAL_DLLPRIVATE bool     ImplMakeGreyscales( sal_uInt16 nGreyscales );
-    SAL_DLLPRIVATE bool     ImplConvertUp( sal_uInt16 nBitCount, Color* pExtColor = NULL );
-    SAL_DLLPRIVATE bool     ImplConvertDown( sal_uInt16 nBitCount, Color* pExtColor = NULL );
+    SAL_DLLPRIVATE bool     ImplConvertUp( sal_uInt16 nBitCount, Color* pExtColor = nullptr );
+    SAL_DLLPRIVATE bool     ImplConvertDown( sal_uInt16 nBitCount, Color* pExtColor = nullptr );
     SAL_DLLPRIVATE bool     ImplConvertGhosted();
     SAL_DLLPRIVATE bool     ImplDitherMatrix();
     SAL_DLLPRIVATE bool     ImplDitherFloyd();
@@ -796,7 +796,7 @@ private:
 
 inline bool Bitmap::operator!() const
 {
-    return( mpImpBmp == NULL );
+    return( mpImpBmp == nullptr );
 }
 
 inline bool Bitmap::operator==( const Bitmap& rBitmap ) const
@@ -816,7 +816,7 @@ inline bool Bitmap::IsSameInstance( const Bitmap& rBitmap ) const
 
 inline bool Bitmap::IsEmpty() const
 {
-    return( mpImpBmp == NULL );
+    return( mpImpBmp == nullptr );
 }
 
 inline const MapMode& Bitmap::GetPrefMapMode() const

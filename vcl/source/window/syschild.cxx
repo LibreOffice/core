@@ -82,7 +82,7 @@ long ImplSysChildProc( void* pInst, SalObject* /* pObject */,
             if ( !pWindow->ImplGetFrameData()->mnFocusId )
             {
                 pWindow->ImplGetFrameData()->mbStartFocusState = true;
-                pWindow->ImplGetFrameData()->mnFocusId = Application::PostUserEvent( LINK( pWindow->ImplGetFrameWindow(), vcl::Window, ImplAsyncFocusHdl ), NULL, true );
+                pWindow->ImplGetFrameData()->mnFocusId = Application::PostUserEvent( LINK( pWindow->ImplGetFrameWindow(), vcl::Window, ImplAsyncFocusHdl ), nullptr, true );
             }
             break;
 
@@ -108,7 +108,7 @@ void SystemChildWindow::ImplInitSysChild( vcl::Window* pParent, WinBits nStyle, 
 {
     mpWindowImpl->mpSysObj = ImplGetSVData()->mpDefInst->CreateObject( pParent->ImplGetFrame(), pData, bShow );
 
-    Window::ImplInit( pParent, nStyle, NULL );
+    Window::ImplInit( pParent, nStyle, nullptr );
 
     // we do not paint if it is the right SysChild
     if ( GetSystemData() )
@@ -122,7 +122,7 @@ void SystemChildWindow::ImplInitSysChild( vcl::Window* pParent, WinBits nStyle, 
 SystemChildWindow::SystemChildWindow( vcl::Window* pParent, WinBits nStyle ) :
     Window( WINDOW_SYSTEMCHILDWINDOW )
 {
-    ImplInitSysChild( pParent, nStyle, NULL );
+    ImplInitSysChild( pParent, nStyle, nullptr );
 }
 
 SystemChildWindow::SystemChildWindow( vcl::Window* pParent, WinBits nStyle, SystemWindowData *pData, bool bShow ) :
@@ -142,7 +142,7 @@ void SystemChildWindow::dispose()
     if ( mpWindowImpl && mpWindowImpl->mpSysObj )
     {
         ImplGetSVData()->mpDefInst->DestroyObject( mpWindowImpl->mpSysObj );
-        mpWindowImpl->mpSysObj = NULL;
+        mpWindowImpl->mpSysObj = nullptr;
     }
     Window::dispose();
 }
@@ -152,7 +152,7 @@ const SystemEnvData* SystemChildWindow::GetSystemData() const
     if ( mpWindowImpl->mpSysObj )
         return mpWindowImpl->mpSysObj->GetSystemData();
     else
-        return NULL;
+        return nullptr;
 }
 
 void SystemChildWindow::EnableEraseBackground( bool bEnable )
@@ -181,7 +181,7 @@ void SystemChildWindow::ImplTestJavaException( void* pEnv )
 
         if(jsMessage)
         {
-            const jchar * jcMessage = pJavaEnv->GetStringChars(jsMessage, NULL);
+            const jchar * jcMessage = pJavaEnv->GetStringChars(jsMessage, nullptr);
             ouMessage = OUString(jcMessage);
             pJavaEnv->ReleaseStringChars(jsMessage, jcMessage);
         }
@@ -234,7 +234,7 @@ sal_IntPtr SystemChildWindow::GetParentWindowHandle( bool bUseJava )
                     rtl_getGlobalProcessId( reinterpret_cast<sal_uInt8*>(aProcessID.getArray()) );
                     aProcessID[ 16 ] = 0;
                     OSL_ENSURE(sizeof (sal_Int64) >= sizeof (jvmaccess::VirtualMachine *), "Pointer cannot be represented as sal_Int64");
-                    sal_Int64 nPointer = reinterpret_cast< sal_Int64 >( static_cast< jvmaccess::VirtualMachine * >(0));
+                    sal_Int64 nPointer = reinterpret_cast< sal_Int64 >( static_cast< jvmaccess::VirtualMachine * >(nullptr));
                     xJavaVM->getJavaVM(aProcessID) >>= nPointer;
                     xVM = reinterpret_cast< jvmaccess::VirtualMachine * >(nPointer);
 

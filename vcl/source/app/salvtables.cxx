@@ -31,8 +31,8 @@
 
 SalFrame::SalFrame()
     : m_bPaintsBlocked(false)
-    , m_pWindow(NULL)
-    , m_pProc(NULL)
+    , m_pWindow(nullptr)
+    , m_pProc(nullptr)
 {
 }
 
@@ -68,24 +68,24 @@ SalInstance::~SalInstance()
 SalMenu* SalInstance::CreateMenu( bool, Menu* )
 {
     // default: no native menus
-    return NULL;
+    return nullptr;
 }
 
 void SalInstance::DestroyMenu( SalMenu* pMenu )
 {
     (void)pMenu;
-    OSL_ENSURE( pMenu == 0, "DestroyMenu called with non-native menus" );
+    OSL_ENSURE( pMenu == nullptr, "DestroyMenu called with non-native menus" );
 }
 
 SalMenuItem* SalInstance::CreateMenuItem( const SalItemParams* )
 {
-    return NULL;
+    return nullptr;
 }
 
 void SalInstance::DestroyMenuItem( SalMenuItem* pItem )
 {
     (void)pItem;
-    OSL_ENSURE( pItem == 0, "DestroyMenu called with non-native menus" );
+    OSL_ENSURE( pItem == nullptr, "DestroyMenu called with non-native menus" );
 }
 
 SalTimer::~SalTimer()

@@ -84,17 +84,17 @@ struct SystemEnvData
 #elif defined( ANDROID )
 #elif defined( IOS )
 #elif defined( UNX )
-        , pDisplay(NULL)
+        , pDisplay(nullptr)
         , aWindow(0)
-        , pSalFrame(NULL)
-        , pWidget(NULL)
-        , pVisual(NULL)
+        , pSalFrame(nullptr)
+        , pWidget(nullptr)
+        , pVisual(nullptr)
         , nScreen(0)
         , nDepth(0)
         , aColormap(0)
-        , pAppContext(NULL)
+        , pAppContext(nullptr)
         , aShellWindow(0)
-        , pShellWidget(NULL)
+        , pShellWidget(nullptr)
 #endif
     {
     }
@@ -167,13 +167,13 @@ struct SystemGraphicsData
 #elif defined( IOS )
         , rCGContext( NULL )
 #elif defined( UNX )
-        , pDisplay( NULL )
+        , pDisplay( nullptr )
         , hDrawable( 0 )
-        , pVisual( NULL )
+        , pVisual( nullptr )
         , nScreen( 0 )
         , nDepth( 0 )
         , aColormap( 0 )
-        , pXRenderFormat( NULL )
+        , pXRenderFormat( nullptr )
 #endif
     { }
 };
@@ -219,7 +219,7 @@ struct SystemFontData
     SystemFontData()
         : nSize( sizeof( SystemFontData ) )
 #if defined( UNX )
-        , nFontId( NULL )
+        , nFontId( nullptr )
         , nFontFlags( 0 )
 #endif
         , bFakeBold( false )

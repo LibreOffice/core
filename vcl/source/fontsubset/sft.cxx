@@ -141,14 +141,14 @@ static const sal_uInt32 T_otto = 0x4f54544f;        /* 'OTTO' */
 _inline void *smalloc(size_t size)
 {
     void *res = malloc(size);
-    assert(res != 0);
+    assert(res != nullptr);
     return res;
 }
 
 _inline void *scalloc(size_t n, size_t size)
 {
     void *res = calloc(n, size);
-    assert(res != 0);
+    assert(res != nullptr);
     return res;
 }
 
@@ -156,7 +156,7 @@ _inline void *scalloc(size_t n, size_t size)
 _inline sal_Int16 GetInt16(const sal_uInt8 *ptr, size_t offset, int bigendian)
 {
     sal_Int16 t;
-    assert(ptr != 0);
+    assert(ptr != nullptr);
 
     if (bigendian) {
         t = (ptr+offset)[0] << 8 | (ptr+offset)[1];
@@ -170,7 +170,7 @@ _inline sal_Int16 GetInt16(const sal_uInt8 *ptr, size_t offset, int bigendian)
 _inline sal_uInt16 GetUInt16(const sal_uInt8 *ptr, size_t offset, int bigendian)
 {
     sal_uInt16 t;
-    assert(ptr != 0);
+    assert(ptr != nullptr);
 
     if (bigendian) {
         t = (ptr+offset)[0] << 8 | (ptr+offset)[1];
@@ -184,7 +184,7 @@ _inline sal_uInt16 GetUInt16(const sal_uInt8 *ptr, size_t offset, int bigendian)
 _inline sal_Int32  GetInt32(const sal_uInt8 *ptr, size_t offset, int bigendian)
 {
     sal_Int32 t;
-    assert(ptr != 0);
+    assert(ptr != nullptr);
 
     if (bigendian) {
         t = (ptr+offset)[0] << 24 | (ptr+offset)[1] << 16 |
@@ -200,7 +200,7 @@ _inline sal_Int32  GetInt32(const sal_uInt8 *ptr, size_t offset, int bigendian)
 _inline sal_uInt32 GetUInt32(const sal_uInt8 *ptr, size_t offset, int bigendian)
 {
     sal_uInt32 t;
-    assert(ptr != 0);
+    assert(ptr != nullptr);
 
     if (bigendian) {
         t = (ptr+offset)[0] << 24 | (ptr+offset)[1] << 16 |
@@ -406,7 +406,7 @@ static int GetSimpleTTOutline(TrueTypeFont *ttf, sal_uInt32 glyphID, ControlPoin
     sal_uInt8 flag, n;
     int i, j, z;
 
-    *pointArray = 0;
+    *pointArray = nullptr;
 
     /* printf("GetSimpleTTOutline(%d)\n", glyphID); */
 
@@ -528,7 +528,7 @@ static int GetCompoundTTOutline(TrueTypeFont *ttf, sal_uInt32 glyphID, ControlPo
     int i, np;
     F16Dot16 a = 0x10000, b = 0, c = 0, d = 0x10000, m, n, abs1, abs2, abs3;
 
-    *pointArray = 0;
+    *pointArray = nullptr;
     /* printf("GetCompoundTTOutline(%d)\n", glyphID); */
 
     if (glyphID >= ttf->nglyphs)                          /*- incorrect glyphID */
@@ -572,7 +572,7 @@ static int GetCompoundTTOutline(TrueTypeFont *ttf, sal_uInt32 glyphID, ControlPo
 
         glyphlist.push_back( index );
 
-        if ((np = GetTTGlyphOutline(ttf, index, &nextComponent, 0, &glyphlist)) == 0)
+        if ((np = GetTTGlyphOutline(ttf, index, &nextComponent, nullptr, &glyphlist)) == 0)
         {
             /* XXX that probably indicates a corrupted font */
 #if OSL_DEBUG_LEVEL > 1
@@ -665,7 +665,7 @@ static int GetCompoundTTOutline(TrueTypeFont *ttf, sal_uInt32 glyphID, ControlPo
     np = myPoints.size();
 
     pa = static_cast<ControlPoint*>(calloc(np, sizeof(ControlPoint)));
-    assert(pa != 0);
+    assert(pa != nullptr);
 
     if (np > 0)
         memcpy( pa, &myPoints[0], np*sizeof(ControlPoint) );
@@ -686,7 +686,7 @@ static int GetTTGlyphOutline(TrueTypeFont *ttf, sal_uInt32 glyphID, ControlPoint
     const sal_uInt8 *table = getTable( ttf, O_glyf );
     sal_Int16 numberOfContours;
     int res;
-    *pointArray = 0;
+    *pointArray = nullptr;
 
     if (metrics) {
         memset(metrics, 0, sizeof(TTGlyphMetrics));         /*- metrics is initialized to all zeroes */
@@ -733,7 +733,7 @@ static int BSplineToPSPath(ControlPoint *srcA, int srcCount, PSPathElement **pat
     int cp = 0;                                             /*- current point */
     int StartContour = 0, EndContour = 1;
 
-    *path = 0;
+    *path = nullptr;
 
     /* if (srcCount > 0) for(;;) */
     while (srcCount > 0) {                                  /*- srcCount does not get changed inside the loop. */
@@ -839,7 +839,7 @@ static int BSplineToPSPath(ControlPoint *srcA, int srcCount, PSPathElement **pat
     if( (nPathCount = (int)aPathList.size()) > 0)
     {
         *path = static_cast<PSPathElement*>(calloc(nPathCount, sizeof(PSPathElement)));
-        assert(*path != 0);
+        assert(*path != nullptr);
         memcpy( *path, &aPathList[0], nPathCount * sizeof(PSPathElement) );
     }
 
@@ -860,15 +860,15 @@ static char *nameExtract( const sal_uInt8* name, int nTableSize, int n, int dbFl
     if( (len <= 0) || len > available_space)
     {
         if( ucs2result )
-            *ucs2result = NULL;
-        return NULL;
+            *ucs2result = nullptr;
+        return nullptr;
     }
 
     if( ucs2result )
-        *ucs2result = NULL;
+        *ucs2result = nullptr;
     if (dbFlag) {
         res = static_cast<char*>(malloc(1 + len/2));
-        assert(res != 0);
+        assert(res != nullptr);
         for (int i = 0; i < len/2; i++)
             res[i] = *(ptr + i * 2 + 1);
         res[len/2] = 0;
@@ -881,7 +881,7 @@ static char *nameExtract( const sal_uInt8* name, int nTableSize, int n, int dbFl
         }
     } else {
         res = static_cast<char*>(malloc(1 + len));
-        assert(res != 0);
+        assert(res != nullptr);
         memcpy(res, ptr, len);
         res[len] = 0;
     }
@@ -956,20 +956,20 @@ static void GetNames(TrueTypeFont *t)
     bool bPSNameOK = true;
 
     /* PostScript name: preferred Microsoft */
-    t->psname = NULL;
+    t->psname = nullptr;
     if ((r = findname(table, n, 3, 1, 0x0409, 6)) != -1)
-        t->psname = nameExtract(table, nTableSize, r, 1, NULL);
+        t->psname = nameExtract(table, nTableSize, r, 1, nullptr);
     if ( ! t->psname && (r = findname(table, n, 1, 0, 0, 6)) != -1)
-        t->psname = nameExtract(table, nTableSize, r, 0, NULL);
+        t->psname = nameExtract(table, nTableSize, r, 0, nullptr);
     if ( ! t->psname && (r = findname(table, n, 3, 0, 0x0409, 6)) != -1)
     {
         // some symbol fonts like Marlett have a 3,0 name!
-        t->psname = nameExtract(table, nTableSize, r, 1, NULL);
+        t->psname = nameExtract(table, nTableSize, r, 1, nullptr);
     }
     // for embedded font in Ghostscript PDFs
     if ( ! t->psname && (r = findname(table, n, 2, 2, 0, 6)) != -1)
     {
-        t->psname = nameExtract(table, nTableSize, r, 0, NULL);
+        t->psname = nameExtract(table, nTableSize, r, 0, nullptr);
     }
     if ( ! t->psname )
     {
@@ -980,7 +980,7 @@ static void GetNames(TrueTypeFont *t)
             while(pReverse != t->fname && *pReverse != '/') pReverse--;
             if(*pReverse == '/') pReverse++;
             t->psname = strdup(pReverse);
-            assert(t->psname != 0);
+            assert(t->psname != nullptr);
             for (i=strlen(t->psname) - 1; i > 0; i--)
             {
                 /*- Remove the suffix  -*/
@@ -995,13 +995,13 @@ static void GetNames(TrueTypeFont *t)
     }
 
     /* Font family and subfamily names: preferred Apple */
-    t->family = NULL;
+    t->family = nullptr;
     if ((r = findname(table, n, 0, 0, 0, 1)) != -1)
         t->family = nameExtract(table, nTableSize, r, 1, &t->ufamily);
     if ( ! t->family && (r = findname(table, n, 3, 1, 0x0409, 1)) != -1)
         t->family = nameExtract(table, nTableSize, r, 1, &t->ufamily);
     if ( ! t->family && (r = findname(table, n, 1, 0, 0, 1)) != -1)
-        t->family = nameExtract(table, nTableSize, r, 0, NULL);
+        t->family = nameExtract(table, nTableSize, r, 0, nullptr);
     if ( ! t->family && (r = findname(table, n, 3, 1, 0x0411, 1)) != -1)
         t->family = nameExtract(table, nTableSize, r, 1, &t->ufamily);
     if ( ! t->family && (r = findname(table, n, 3, 0, 0x0409, 1)) != -1)
@@ -1009,11 +1009,11 @@ static void GetNames(TrueTypeFont *t)
     if ( ! t->family )
     {
         t->family = strdup(t->psname);
-        assert(t->family != 0);
+        assert(t->family != nullptr);
     }
 
-    t->subfamily = NULL;
-    t->usubfamily = NULL;
+    t->subfamily = nullptr;
+    t->usubfamily = nullptr;
     if ((r = findname(table, n, 1, 0, 0, 2)) != -1)
         t->subfamily = nameExtract(table, nTableSize, r, 0, &t->usubfamily);
     if ( ! t->subfamily && (r = findname(table, n, 3, 1, 0x0409, 2)) != -1)
@@ -1338,7 +1338,7 @@ static void FindCmap(TrueTypeFont *ttf)
         ttf->cmap = table + ThreeZero;
     } else {
         ttf->cmapType = CMAP_NOT_USABLE;
-        ttf->cmap = 0;
+        ttf->cmap = nullptr;
     }
 
     if (ttf->cmapType != CMAP_NOT_USABLE) {
@@ -1354,8 +1354,8 @@ static void FindCmap(TrueTypeFont *ttf)
                 printf("%s: %d is not a recognized cmap format.\n", ttf->fname, GetUInt16(ttf->cmap, 0, 1));
 #endif
                 ttf->cmapType = CMAP_NOT_USABLE;
-                ttf->cmap = 0;
-                ttf->mapper = 0;
+                ttf->cmap = nullptr;
+                ttf->mapper = nullptr;
         }
     }
 }
@@ -1386,7 +1386,7 @@ static void GetKern(TrueTypeFont *ttf)
         }
 
         ttf->kerntables = static_cast<const sal_uInt8**>(calloc(ttf->nkern, sizeof(sal_uInt8 *)));
-        assert(ttf->kerntables != 0);
+        assert(ttf->kerntables != nullptr);
 
         for( unsigned i = 0; i < ttf->nkern; ++i) {
             ttf->kerntables[i] = ptr;
@@ -1418,7 +1418,7 @@ static void GetKern(TrueTypeFont *ttf)
         }
 
         ttf->kerntables = static_cast<const sal_uInt8**>(calloc(ttf->nkern, sizeof(sal_uInt8 *)));
-        assert(ttf->kerntables != 0);
+        assert(ttf->kerntables != nullptr);
 
         for( unsigned i = 0; i < ttf->nkern; ++i) {
             ttf->kerntables[i] = ptr;
@@ -1435,7 +1435,7 @@ static void GetKern(TrueTypeFont *ttf)
 
   badtable:
     ttf->kerntype = KT_NONE;
-    ttf->kerntables = 0;
+    ttf->kerntables = nullptr;
 
     return;
 }
@@ -1460,14 +1460,14 @@ int CountTTCFonts(const char* fname)
 static void allocTrueTypeFont( TrueTypeFont** ttf )
 {
     *ttf = static_cast<TrueTypeFont*>(calloc(1,sizeof(TrueTypeFont)));
-    if( *ttf != NULL )
+    if( *ttf != nullptr )
     {
         (*ttf)->tag = 0;
-        (*ttf)->fname = 0;
+        (*ttf)->fname = nullptr;
         (*ttf)->fsize = -1;
-        (*ttf)->ptr = 0;
+        (*ttf)->ptr = nullptr;
         (*ttf)->nglyphs = 0xFFFFFFFF;
-        (*ttf)->pGSubstitution = 0;
+        (*ttf)->pGSubstitution = nullptr;
     }
 }
 
@@ -1516,7 +1516,7 @@ int OpenTTFontFile( const char* fname, sal_uInt32 facenum, TrueTypeFont** ttf )
         goto cleanup;
     }
 
-    if (((*ttf)->ptr = static_cast<sal_uInt8 *>(mmap(0, (*ttf)->fsize, PROT_READ, MAP_SHARED, fd, 0))) == MAP_FAILED) {
+    if (((*ttf)->ptr = static_cast<sal_uInt8 *>(mmap(nullptr, (*ttf)->fsize, PROT_READ, MAP_SHARED, fd, 0))) == MAP_FAILED) {
         ret = SF_MEMORY;
         goto cleanup;
     }
@@ -1529,7 +1529,7 @@ cleanup:
     /*- t and t->fname have been allocated! */
     free((*ttf)->fname);
     free(*ttf);
-    *ttf = NULL;
+    *ttf = nullptr;
     return ret;
 }
 #endif
@@ -1537,10 +1537,10 @@ cleanup:
 int OpenTTFontBuffer(const void* pBuffer, sal_uInt32 nLen, sal_uInt32 facenum, TrueTypeFont** ttf)
 {
     allocTrueTypeFont( ttf );
-    if( *ttf == NULL )
+    if( *ttf == nullptr )
         return SF_MEMORY;
 
-    (*ttf)->fname = NULL;
+    (*ttf)->fname = nullptr;
     (*ttf)->fsize = nLen;
     (*ttf)->ptr   = const_cast<sal_uInt8 *>(static_cast<sal_uInt8 const *>(pBuffer));
 
@@ -1584,9 +1584,9 @@ static int doOpenTTFont( sal_uInt32 facenum, TrueTypeFont* t )
         return SF_TTFORMAT;
 
     t->tables = static_cast<const sal_uInt8**>(calloc(NUM_TAGS, sizeof(sal_uInt8 *)));
-    assert(t->tables != 0);
+    assert(t->tables != nullptr);
     t->tlens = static_cast<sal_uInt32*>(calloc(NUM_TAGS, sizeof(sal_uInt32)));
-    assert(t->tlens != 0);
+    assert(t->tlens != nullptr);
 
     /* parse the tables */
     for (i=0; i<(int)t->ntables; i++) {
@@ -1630,7 +1630,7 @@ static int doOpenTTFont( sal_uInt32 facenum, TrueTypeFont* t )
         if( pHead > t->ptr + (t->fsize - 54) )
             pHead = t->ptr + (t->fsize - 54);
         /* TODO: find better method than searching head table's magic */
-        sal_uInt8* p = NULL;
+        sal_uInt8* p = nullptr;
         for( p = pHead + 12; p > t->ptr; --p ) {
             if( p[0]==0x5F && p[1]==0x0F && p[2]==0x3C && p[3]==0xF5 ) {
                 int nDelta = (pHead + 12) - p;
@@ -1660,7 +1660,7 @@ static int doOpenTTFont( sal_uInt32 facenum, TrueTypeFont* t )
                 fprintf( stderr, "font file %s has bad table offset %" SAL_PRI_PTRDIFFT "d (tagnum=%d)\n", t->fname, (sal_uInt8*)t->tables[i]-t->ptr, i );
 #endif
             t->tlens[i] = 0;
-            t->tables[i] = NULL;
+            t->tables[i] = nullptr;
         }
         else if( const_cast<sal_uInt8*>(t->tables[i]) + t->tlens[i] > t->ptr + t->fsize )
         {
@@ -1706,7 +1706,7 @@ static int doOpenTTFont( sal_uInt32 facenum, TrueTypeFont* t )
 
         table = getTable(t, O_loca);
         t->goffsets = static_cast<sal_uInt32 *>(calloc(1+t->nglyphs, sizeof(sal_uInt32)));
-        assert(t->goffsets != 0);
+        assert(t->goffsets != nullptr);
 
         for( i = 0; i <= (int)t->nglyphs; ++i )
             t->goffsets[i] = indexfmt ? GetUInt32(table, i << 2, 1) : (sal_uInt32)GetUInt16(table, i << 1, 1) << 1;
@@ -1716,17 +1716,17 @@ static int doOpenTTFont( sal_uInt32 facenum, TrueTypeFont* t )
             t->nglyphs = k;
         t->goffsets = static_cast<sal_uInt32 *>(calloc(1+t->nglyphs, sizeof(sal_uInt32)));
         /* TODO: implement to get subsetting */
-        assert(t->goffsets != 0);
+        assert(t->goffsets != nullptr);
     } else {
         CloseTTFont(t);
         return SF_TTFORMAT;
     }
 
     table = getTable(t, O_hhea);
-    t->numberOfHMetrics = (table != 0) ? GetUInt16(table, 34, 1) : 0;
+    t->numberOfHMetrics = (table != nullptr) ? GetUInt16(table, 34, 1) : 0;
 
     table = getTable(t, O_vhea);
-    t->numOfLongVerMetrics = (table != 0) ? GetUInt16(table, 34, 1) : 0;
+    t->numOfLongVerMetrics = (table != nullptr) ? GetUInt16(table, 34, 1) : 0;
 
     GetNames(t);
     FindCmap(t);
@@ -1763,7 +1763,7 @@ void CloseTTFont(TrueTypeFont *ttf)
 
 int GetTTGlyphPoints(TrueTypeFont *ttf, sal_uInt32 glyphID, ControlPoint **pointArray)
 {
-    return GetTTGlyphOutline(ttf, glyphID, pointArray, 0, 0);
+    return GetTTGlyphOutline(ttf, glyphID, pointArray, nullptr, nullptr);
 }
 
 int GetTTGlyphComponents(TrueTypeFont *ttf, sal_uInt32 glyphID, std::vector< sal_uInt32 >& glyphlist)
@@ -1905,13 +1905,13 @@ int  CreateT3FromTTGlyphs(TrueTypeFont *ttf, FILE *outf, const char *fname,
 
     for (i = 0; i < nGlyphs; i++) {
         fprintf(outf, h33, i);
-        int r = GetTTGlyphOutline(ttf, glyphArray[i] < ttf->nglyphs ? glyphArray[i] : 0, &pa, &metrics, 0);
+        int r = GetTTGlyphOutline(ttf, glyphArray[i] < ttf->nglyphs ? glyphArray[i] : 0, &pa, &metrics, nullptr);
 
         if (r > 0) {
             n =  BSplineToPSPath(pa, r, &path);
         } else {
             n = 0;                      /* glyph might have zero contours but valid metrics ??? */
-            path = 0;
+            path = nullptr;
             if (r < 0) {                /* glyph is not present in the font - pa array was not allocated, so no need to free it */
                 continue;
             }
@@ -1972,7 +1972,7 @@ int  CreateTTFromTTGlyphs(TrueTypeFont  *ttf,
                           sal_uInt32        flags)
 {
     TrueTypeCreator *ttcr;
-    TrueTypeTable *head=0, *hhea=0, *maxp=0, *cvt=0, *prep=0, *glyf=0, *fpgm=0, *cmap=0, *name=0, *post = 0, *os2 = 0;
+    TrueTypeTable *head=nullptr, *hhea=nullptr, *maxp=nullptr, *cvt=nullptr, *prep=nullptr, *glyf=nullptr, *fpgm=nullptr, *cmap=nullptr, *name=nullptr, *post = nullptr, *os2 = nullptr;
     int i;
     int res;
 
@@ -2002,9 +2002,9 @@ int  CreateTTFromTTGlyphs(TrueTypeFont  *ttf,
         */
         const sal_uInt8 ptr[] = {0,'T',0,'r',0,'u',0,'e',0,'T',0,'y',0,'p',0,'e',0,'S',0,'u',0,'b',0,'s',0,'e',0,'t'};
         NameRecord n1 = {1, 0, 0, 6, 14, const_cast<sal_uInt8 *>(reinterpret_cast<sal_uInt8 const *>("TrueTypeSubset"))};
-        NameRecord n2 = {3, 1, 1033, 6, 28, 0};
+        NameRecord n2 = {3, 1, 1033, 6, 28, nullptr};
         n2.sptr = const_cast<sal_uInt8 *>(ptr);
-        name = TrueTypeTableNew_name(0, 0);
+        name = TrueTypeTableNew_name(0, nullptr);
         nameAdd(name, &n1);
         nameAdd(name, &n2);
     } else {
@@ -2032,7 +2032,7 @@ int  CreateTTFromTTGlyphs(TrueTypeFont  *ttf,
     /**                       head                         **/
 
     p = getTable(ttf, O_head);
-    assert(p != 0);
+    assert(p != nullptr);
     head = TrueTypeTableNew_head(GetUInt32(p, 4, 1),
                                  GetUInt16(p, 16, 1),
                                  GetUInt16(p, 18, 1),
@@ -2058,22 +2058,22 @@ int  CreateTTFromTTGlyphs(TrueTypeFont  *ttf,
     }
 
     /**                       cvt                           **/
-    if ((p = getTable(ttf, O_cvt)) != 0) {
+    if ((p = getTable(ttf, O_cvt)) != nullptr) {
         cvt = TrueTypeTableNew(T_cvt, getTableSize(ttf, O_cvt), p);
     }
 
     /**                       prep                          **/
-    if ((p = getTable(ttf, O_prep)) != 0) {
+    if ((p = getTable(ttf, O_prep)) != nullptr) {
         prep = TrueTypeTableNew(T_prep, getTableSize(ttf, O_prep), p);
     }
 
     /**                       fpgm                          **/
-    if ((p = getTable(ttf, O_fpgm)) != 0) {
+    if ((p = getTable(ttf, O_fpgm)) != nullptr) {
         fpgm = TrueTypeTableNew(T_fpgm, getTableSize(ttf, O_fpgm), p);
     }
 
     /**                       post                          **/
-    if ((p = getTable(ttf, O_post)) != 0) {
+    if ((p = getTable(ttf, O_post)) != nullptr) {
         post = TrueTypeTableNew_post(0x00030000,
                                      GetUInt32(p, 4, 1),
                                      GetUInt16(p, 8, 1),
@@ -2084,7 +2084,7 @@ int  CreateTTFromTTGlyphs(TrueTypeFont  *ttf,
     }
 
     if (flags & TTCF_IncludeOS2) {
-        if ((p = getTable(ttf, O_OS2)) != 0) {
+        if ((p = getTable(ttf, O_OS2)) != nullptr) {
             os2 = TrueTypeTableNew(T_OS2, getTableSize(ttf, O_OS2), p);
         }
     }
@@ -2109,7 +2109,7 @@ int  CreateTTFromTTGlyphs(TrueTypeFont  *ttf,
 static GlyphOffsets *GlyphOffsetsNew(sal_uInt8 *sfntP, sal_uInt32 sfntLen)
 {
     GlyphOffsets* res = static_cast<GlyphOffsets*>(smalloc(sizeof(GlyphOffsets)));
-    sal_uInt8 *loca = NULL;
+    sal_uInt8 *loca = nullptr;
     sal_uInt16 i, numTables = GetUInt16(sfntP, 4, 1);
     sal_uInt32 locaLen = 0;
     sal_Int16 indexToLocFormat = 0;
@@ -2260,7 +2260,7 @@ int  CreateT42FromTTGlyphs(TrueTypeFont  *ttf,
                            int            nGlyphs)
 {
     TrueTypeCreator *ttcr;
-    TrueTypeTable *head=0, *hhea=0, *maxp=0, *cvt=0, *prep=0, *glyf=0, *fpgm=0;
+    TrueTypeTable *head=nullptr, *hhea=nullptr, *maxp=nullptr, *cvt=nullptr, *prep=nullptr, *glyf=nullptr, *fpgm=nullptr;
     int i;
     int res;
 
@@ -2272,14 +2272,14 @@ int  CreateT42FromTTGlyphs(TrueTypeFont  *ttf,
 
     if (nGlyphs >= 256) return SF_GLYPHNUM;
 
-    assert(psname != 0);
+    assert(psname != nullptr);
 
     TrueTypeCreatorNewEmpty(T_true, &ttcr);
 
     /*                        head                          */
     const sal_uInt8* p = getTable(ttf, O_head);
     const sal_uInt8* headP = p;
-    assert(p != 0);
+    assert(p != nullptr);
     head = TrueTypeTableNew_head(GetUInt32(p, 4, 1), GetUInt16(p, 16, 1), GetUInt16(p, 18, 1), p+20, GetUInt16(p, 44, 1), GetUInt16(p, 46, 1), GetInt16(p, 48, 1));
     ver = GetUInt32(p, 0, 1);
     rev = GetUInt32(p, 4, 1);
@@ -2296,17 +2296,17 @@ int  CreateT42FromTTGlyphs(TrueTypeFont  *ttf,
     maxp = TrueTypeTableNew_maxp(getTable(ttf, O_maxp), getTableSize(ttf, O_maxp));
 
     /**                       cvt                           **/
-    if ((p = getTable(ttf, O_cvt)) != 0) {
+    if ((p = getTable(ttf, O_cvt)) != nullptr) {
         cvt = TrueTypeTableNew(T_cvt, getTableSize(ttf, O_cvt), p);
     }
 
     /**                       prep                          **/
-    if ((p = getTable(ttf, O_prep)) != 0) {
+    if ((p = getTable(ttf, O_prep)) != nullptr) {
         prep = TrueTypeTableNew(T_prep, getTableSize(ttf, O_prep), p);
     }
 
     /**                       fpgm                          **/
-    if ((p = getTable(ttf, O_fpgm)) != 0) {
+    if ((p = getTable(ttf, O_fpgm)) != nullptr) {
         fpgm = TrueTypeTableNew(T_fpgm, getTableSize(ttf, O_fpgm), p);
     }
 
@@ -2372,7 +2372,7 @@ int MapString(TrueTypeFont *ttf, sal_uInt16 *str, int nchars, sal_uInt16 *glyphA
     if (ttf->cmapType == CMAP_NOT_USABLE ) return -1;
     if (!nchars) return 0;
 
-    if (glyphArray == 0) {
+    if (glyphArray == nullptr) {
         cp = str;
     } else {
         cp = glyphArray;
@@ -2394,7 +2394,7 @@ int MapString(TrueTypeFont *ttf, sal_uInt16 *str, int nchars, sal_uInt16 *glyphA
             break;
 
         case CMAP_MS_Unicode:
-            if (glyphArray != 0) {
+            if (glyphArray != nullptr) {
                 memcpy(glyphArray, str, nchars * 2);
             }
             break;
@@ -2464,7 +2464,7 @@ bool GetSfntTable( TrueTypeFont* ttf, int nSubtableIndex,
         return false;
     *pRawLength = ttf->tlens[ nSubtableIndex ];
     *ppRawBytes = ttf->tables[ nSubtableIndex ];
-    bool bOk = (*pRawLength > 0) && (*ppRawBytes != NULL);
+    bool bOk = (*pRawLength > 0) && (*ppRawBytes != nullptr);
     return bOk;
 }
 
@@ -2484,11 +2484,11 @@ TTSimpleGlyphMetrics *GetTTSimpleGlyphMetrics(TrueTypeFont *ttf, sal_uInt16 *gly
         nTableSize = getTableSize( ttf, O_vmtx );
     }
 
-    if (!nGlyphs || !glyphArray) return 0;        /* invalid parameters */
-    if (!n || !pTable) return 0;                  /* the font does not contain the requested metrics */
+    if (!nGlyphs || !glyphArray) return nullptr;        /* invalid parameters */
+    if (!n || !pTable) return nullptr;                  /* the font does not contain the requested metrics */
 
     TTSimpleGlyphMetrics* res = static_cast<TTSimpleGlyphMetrics*>(calloc(nGlyphs, sizeof(TTSimpleGlyphMetrics)));
-    assert(res != 0);
+    assert(res != nullptr);
 
     const int UPEm = ttf->unitsPerEm;
     for( int i = 0; i < nGlyphs; ++i) {
@@ -2524,14 +2524,14 @@ TTSimpleGlyphMetrics *GetTTSimpleGlyphMetrics(TrueTypeFont *ttf, sal_uInt16 *gly
 
 TTSimpleGlyphMetrics *GetTTSimpleCharMetrics(TrueTypeFont * ttf, sal_uInt16 firstChar, int nChars, bool vertical)
 {
-    TTSimpleGlyphMetrics *res = 0;
+    TTSimpleGlyphMetrics *res = nullptr;
     int i, n;
 
     sal_uInt16* str = static_cast<sal_uInt16*>(malloc(nChars * 2));
-    assert(str != 0);
+    assert(str != nullptr);
 
     for (i=0; i<nChars; i++) str[i] = (sal_uInt16)(firstChar + i);
-    if ((n = MapString(ttf, str, nChars, 0, vertical)) != -1) {
+    if ((n = MapString(ttf, str, nChars, nullptr, vertical)) != -1) {
         res = GetTTSimpleGlyphMetrics(ttf, str, n, vertical);
     }
 
@@ -2620,26 +2620,26 @@ GlyphData *GetTTRawGlyphData(TrueTypeFont *ttf, sal_uInt32 glyphID)
     int n;
 
     if( glyphID >= ttf->nglyphs )
-        return 0;
+        return nullptr;
 
     /* #127161# check the glyph offsets */
     sal_uInt32 length = getTableSize( ttf, O_glyf );
     if( length < ttf->goffsets[ glyphID+1 ] )
-        return 0;
+        return nullptr;
 
     length = ttf->goffsets[glyphID+1] - ttf->goffsets[glyphID];
 
-    GlyphData* d = static_cast<GlyphData*>(malloc(sizeof(GlyphData))); assert(d != 0);
+    GlyphData* d = static_cast<GlyphData*>(malloc(sizeof(GlyphData))); assert(d != nullptr);
 
     if (length > 0) {
         const sal_uInt8* srcptr = glyf + ttf->goffsets[glyphID];
         const size_t nChunkLen = ((length + 1) & ~1);
-        d->ptr = static_cast<sal_uInt8*>(malloc(nChunkLen)); assert(d->ptr != 0);
+        d->ptr = static_cast<sal_uInt8*>(malloc(nChunkLen)); assert(d->ptr != nullptr);
         memcpy(d->ptr, srcptr, length);
         memset(d->ptr + length, 0, nChunkLen - length);
         d->compflag = (GetInt16( srcptr, 0, 1 ) < 0);
     } else {
-        d->ptr = 0;
+        d->ptr = nullptr;
         d->compflag = false;
     }
 
@@ -2694,7 +2694,7 @@ int GetTTNameRecords(TrueTypeFont *ttf, NameRecord **nr)
     int nStrBase = GetUInt16(table, 4, 1);
     int i;
 
-    *nr = 0;
+    *nr = nullptr;
     if (n == 0) return 0;
 
     const sal_uInt32 remaining_table_size = nTableSize-6;
@@ -2729,7 +2729,7 @@ int GetTTNameRecords(TrueTypeFont *ttf, NameRecord **nr)
         int nStrOffset = GetUInt16(table, nLargestFixedOffsetPos, 1);
         if (rec[i].slen) {
             if( nStrBase+nStrOffset+rec[i].slen >= nTableSize ) {
-                rec[i].sptr = 0;
+                rec[i].sptr = nullptr;
                 rec[i].slen = 0;
                 continue;
             }
@@ -2740,16 +2740,16 @@ int GetTTNameRecords(TrueTypeFont *ttf, NameRecord **nr)
             const size_t available_space = rec_string > end_table ? 0 : (end_table - rec_string);
             if (rec[i].slen <= available_space)
             {
-                rec[i].sptr = static_cast<sal_uInt8 *>(malloc(rec[i].slen)); assert(rec[i].sptr != 0);
+                rec[i].sptr = static_cast<sal_uInt8 *>(malloc(rec[i].slen)); assert(rec[i].sptr != nullptr);
                 memcpy(rec[i].sptr, rec_string, rec[i].slen);
             }
             else
             {
-                rec[i].sptr = 0;
+                rec[i].sptr = nullptr;
                 rec[i].slen = 0;
             }
         } else {
-            rec[i].sptr = 0;
+            rec[i].sptr = nullptr;
         }
         // some fonts have 3.0 names => fix them to 3.1
         if( (rec[i].platformID == 3) && (rec[i].encodingID == 0) )

@@ -44,14 +44,14 @@ static void sendEmptyCommit( SalFrame* pFrame )
 
     SalExtTextInputEvent aEmptyEv;
     aEmptyEv.mnTime             = 0;
-    aEmptyEv.mpTextAttr         = 0;
+    aEmptyEv.mpTextAttr         = nullptr;
     aEmptyEv.maText.clear();
     aEmptyEv.mnCursorPos        = 0;
     aEmptyEv.mnCursorFlags      = 0;
     aEmptyEv.mbOnlyCursor       = False;
     pFrame->CallCallback( SALEVENT_EXTTEXTINPUT, static_cast<void*>(&aEmptyEv) );
     if( ! aDel.isDeleted() )
-        pFrame->CallCallback( SALEVENT_ENDEXTTEXTINPUT, NULL );
+        pFrame->CallCallback( SALEVENT_ENDEXTTEXTINPUT, nullptr );
 }
 
 // Constructor / Destructor, the InputContext is bound to the SalFrame, as it
@@ -59,18 +59,18 @@ static void sendEmptyCommit( SalFrame* pFrame )
 
 SalI18N_InputContext::~SalI18N_InputContext()
 {
-    if ( maContext != NULL )
+    if ( maContext != nullptr )
         XDestroyIC( maContext );
-    if ( mpAttributes != NULL )
+    if ( mpAttributes != nullptr )
         XFree( mpAttributes );
-    if ( mpStatusAttributes != NULL )
+    if ( mpStatusAttributes != nullptr )
         XFree( mpStatusAttributes );
-    if ( mpPreeditAttributes != NULL )
+    if ( mpPreeditAttributes != nullptr )
         XFree( mpPreeditAttributes );
 
-    if (maClientData.aText.pUnicodeBuffer != NULL)
+    if (maClientData.aText.pUnicodeBuffer != nullptr)
         free(maClientData.aText.pUnicodeBuffer);
-    if (maClientData.aText.pCharStyle != NULL)
+    if (maClientData.aText.pCharStyle != nullptr)
         free(maClientData.aText.pCharStyle);
 }
 
@@ -84,7 +84,7 @@ XVaAddToNestedList( XVaNestedList a_srclist, char* name, XPointer value )
     // if ( value == NULL )
     //  return a_srclist;
 
-    if ( a_srclist == NULL )
+    if ( a_srclist == nullptr )
     {
         a_dstlist = XVaCreateNestedList(
                                         0,
@@ -100,7 +100,7 @@ XVaAddToNestedList( XVaNestedList a_srclist, char* name, XPointer value )
                                         NULL );
     }
 
-    return a_dstlist != NULL ? a_dstlist : a_srclist ;
+    return a_dstlist != nullptr ? a_dstlist : a_srclist ;
 }
 
 // convenience routine to create a fontset
@@ -108,9 +108,9 @@ XVaAddToNestedList( XVaNestedList a_srclist, char* name, XPointer value )
 static XFontSet
 get_font_set( Display *p_display )
 {
-    static XFontSet p_font_set = NULL;
+    static XFontSet p_font_set = nullptr;
 
-    if (p_font_set == NULL)
+    if (p_font_set == nullptr)
     {
         char **pp_missing_list;
         int    n_missing_count;
@@ -140,9 +140,9 @@ SalI18N_InputContext::SalI18N_InputContext ( SalFrame *pFrame ) :
                                 ),
         mnStatusStyle( 0 ),
         mnPreeditStyle( 0 ),
-        mpAttributes( NULL ),
-        mpStatusAttributes( NULL ),
-        mpPreeditAttributes( NULL )
+        mpAttributes( nullptr ),
+        mpStatusAttributes( nullptr ),
+        mpPreeditAttributes( nullptr )
 {
 #ifdef SOLARIS
     static const char* pIIIMPEnable = getenv( "SAL_DISABLE_OWN_IM_STATUS" );
@@ -158,10 +158,10 @@ SalI18N_InputContext::SalI18N_InputContext ( SalFrame *pFrame ) :
     memset(&maSwitchIMCallback, 0, sizeof(maSwitchIMCallback));
     memset(&maDestroyCallback, 0, sizeof(maDestroyCallback));
 
-    maClientData.aText.pUnicodeBuffer       = NULL;
-    maClientData.aText.pCharStyle           = NULL;
+    maClientData.aText.pUnicodeBuffer       = nullptr;
+    maClientData.aText.pCharStyle           = nullptr;
     maClientData.aInputEv.mnTime            = 0;
-    maClientData.aInputEv.mpTextAttr        = NULL;
+    maClientData.aInputEv.mpTextAttr        = nullptr;
     maClientData.aInputEv.mnCursorPos       = 0;
     maClientData.aInputEv.mnCursorFlags     = 0;
     maClientData.aInputEv.mbOnlyCursor      = false;
@@ -279,7 +279,7 @@ SalI18N_InputContext::SalI18N_InputContext ( SalFrame *pFrame ) :
                 Display* pDisplay = vcl_sal::getSalDisplay(GetGenericData())->GetDisplay();
                 XFontSet pFontSet = get_font_set(pDisplay);
 
-                if (pFontSet != NULL)
+                if (pFontSet != nullptr)
                 {
                     mpPreeditAttributes = XVaAddToNestedList( mpPreeditAttributes,
                                                               const_cast<char*>(XNFontSet), reinterpret_cast<XPointer>(pFontSet));
@@ -309,7 +309,7 @@ SalI18N_InputContext::SalI18N_InputContext ( SalFrame *pFrame ) :
         if ( mnPreeditStyle != XIMPreeditNone )
         {
 #if defined LINUX || defined FREEBSD || defined NETBSD || defined OPENBSD || defined DRAGONFLY
-            if ( mpPreeditAttributes != NULL )
+            if ( mpPreeditAttributes != nullptr )
 #endif
                 mpAttributes = XVaAddToNestedList( mpAttributes,
                                                    const_cast<char*>(XNPreeditAttributes), static_cast<XPointer>(mpPreeditAttributes) );
@@ -317,7 +317,7 @@ SalI18N_InputContext::SalI18N_InputContext ( SalFrame *pFrame ) :
         if ( mnStatusStyle != XIMStatusNone )
         {
 #if defined LINUX || defined FREEBSD || defined NETBSD || defined OPENBSD || defined DRAGONFLY
-            if ( mpStatusAttributes != NULL )
+            if ( mpStatusAttributes != nullptr )
 #endif
                 mpAttributes = XVaAddToNestedList( mpAttributes,
                                                    const_cast<char*>(XNStatusAttributes), static_cast<XPointer>(mpStatusAttributes) );
@@ -327,7 +327,7 @@ SalI18N_InputContext::SalI18N_InputContext ( SalFrame *pFrame ) :
                                NULL );
     }
 
-    if ( maContext == NULL )
+    if ( maContext == nullptr )
     {
 #if OSL_DEBUG_LEVEL > 1
         fprintf(stderr, "input context creation failed\n");
@@ -335,25 +335,25 @@ SalI18N_InputContext::SalI18N_InputContext ( SalFrame *pFrame ) :
 
         mbUseable = False;
 
-        if ( mpAttributes != NULL )
+        if ( mpAttributes != nullptr )
             XFree( mpAttributes );
-        if ( mpStatusAttributes != NULL )
+        if ( mpStatusAttributes != nullptr )
             XFree( mpStatusAttributes );
-        if ( mpPreeditAttributes != NULL )
+        if ( mpPreeditAttributes != nullptr )
             XFree( mpPreeditAttributes );
-        if ( maClientData.aText.pUnicodeBuffer != NULL )
+        if ( maClientData.aText.pUnicodeBuffer != nullptr )
             free ( maClientData.aText.pUnicodeBuffer );
-        if ( maClientData.aText.pCharStyle != NULL )
+        if ( maClientData.aText.pCharStyle != nullptr )
             free ( maClientData.aText.pCharStyle );
 
-        mpAttributes                      = NULL;
-        mpStatusAttributes                = NULL;
-        mpPreeditAttributes               = NULL;
-        maClientData.aText.pUnicodeBuffer = NULL;
-        maClientData.aText.pCharStyle     = NULL;
+        mpAttributes                      = nullptr;
+        mpStatusAttributes                = nullptr;
+        mpPreeditAttributes               = nullptr;
+        maClientData.aText.pUnicodeBuffer = nullptr;
+        maClientData.aText.pCharStyle     = nullptr;
     }
 
-    if ( maContext != NULL)
+    if ( maContext != nullptr)
     {
         maDestroyCallback.callback    = static_cast<XIMProc>(IC_IMDestroyCallback);
         maDestroyCallback.client_data = reinterpret_cast<XPointer>(this);
@@ -369,7 +369,7 @@ SalI18N_InputContext::SalI18N_InputContext ( SalFrame *pFrame ) :
 void
 SalI18N_InputContext::Unmap( SalFrame* pFrame )
 {
-    if ( maContext != NULL )
+    if ( maContext != nullptr )
     {
         I18NStatus& rStatus( I18NStatus::get() );
         if( rStatus.getParent() == pFrame )
@@ -377,7 +377,7 @@ SalI18N_InputContext::Unmap( SalFrame* pFrame )
 
     }
     UnsetICFocus( pFrame );
-    maClientData.pFrame = NULL;
+    maClientData.pFrame = nullptr;
 }
 
 void
@@ -390,7 +390,7 @@ SalI18N_InputContext::Map( SalFrame *pFrame )
         if( pFrame )
         {
             rStatus.show( true, I18NStatus::contextmap );
-            if ( maContext == NULL )
+            if ( maContext == nullptr )
             {
                 SalI18N_InputMethod *pInputMethod;
                 pInputMethod = vcl_sal::getSalDisplay(GetGenericData())->GetInputMethod();
@@ -411,7 +411,7 @@ SalI18N_InputContext::Map( SalFrame *pFrame )
 void
 SalI18N_InputContext::HandleDestroyIM()
 {
-    maContext = 0;      // don't change
+    maContext = nullptr;      // don't change
     mbUseable = False;
 }
 
@@ -488,7 +488,7 @@ SalI18N_InputContext::SupportInputMethodStyle( XIMStyles *pIMStyles )
     mnPreeditStyle = 0;
     mnStatusStyle  = 0;
 
-    if ( pIMStyles != NULL )
+    if ( pIMStyles != nullptr )
     {
         int nBestScore   = 0;
         int nActualScore = 0;
@@ -534,7 +534,7 @@ SalI18N_InputContext::CommitKeyEvent(sal_Unicode* pText, sal_Size nLength)
         SalExtTextInputEvent aTextEvent;
 
         aTextEvent.mnTime        = 0;
-        aTextEvent.mpTextAttr    = 0;
+        aTextEvent.mpTextAttr    = nullptr;
         aTextEvent.mnCursorPos   = nLength;
         aTextEvent.maText        = OUString(pText, nLength);
         aTextEvent.mnCursorFlags = 0;
@@ -554,7 +554,7 @@ SalI18N_InputContext::CommitKeyEvent(sal_Unicode* pText, sal_Size nLength)
 int
 SalI18N_InputContext::UpdateSpotLocation()
 {
-    if (maContext == 0 || maClientData.pFrame == NULL)
+    if (maContext == nullptr || maClientData.pFrame == nullptr)
         return -1;
 
     SalExtTextInputPosEvent aPosEvent;
@@ -581,7 +581,7 @@ void
 SalI18N_InputContext::SetICFocus( SalFrame* pFocusFrame )
 {
     I18NStatus::get().setParent( pFocusFrame );
-    if ( mbUseable && (maContext != NULL)  )
+    if ( mbUseable && (maContext != nullptr)  )
     {
         maClientData.pFrame = pFocusFrame;
 
@@ -610,13 +610,13 @@ SalI18N_InputContext::UnsetICFocus( SalFrame* pFrame )
 {
     I18NStatus& rStatus( I18NStatus::get() );
     if( rStatus.getParent() == pFrame )
-        rStatus.setParent( NULL );
+        rStatus.setParent( nullptr );
 
-    if ( mbUseable && (maContext != NULL) )
+    if ( mbUseable && (maContext != nullptr) )
     {
         // cancel an eventual event posted to begin preedit again
         vcl_sal::getSalDisplay(GetGenericData())->CancelInternalEvent( maClientData.pFrame, &maClientData.aInputEv, SALEVENT_EXTTEXTINPUT );
-        maClientData.pFrame = NULL;
+        maClientData.pFrame = nullptr;
         XUnsetICFocus( maContext );
     }
 }
@@ -626,7 +626,7 @@ SalI18N_InputContext::UnsetICFocus( SalFrame* pFrame )
 void
 SalI18N_InputContext::EndExtTextInput( EndExtTextInputFlags /*nFlags*/ )
 {
-    if ( mbUseable && (maContext != NULL) && maClientData.pFrame )
+    if ( mbUseable && (maContext != nullptr) && maClientData.pFrame )
     {
         vcl::DeletionListener aDel( maClientData.pFrame );
         // delete preedit in sal (commit an empty string)

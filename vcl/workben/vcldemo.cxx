@@ -1384,7 +1384,7 @@ class DemoWin : public WorkWindow
 
 public:
     DemoWin(DemoRenderer &rRenderer, bool bThreads) :
-        WorkWindow(NULL, WB_APP | WB_STDWORK),
+        WorkWindow(nullptr, WB_APP | WB_STDWORK),
         mrRenderer(rRenderer),
         testThreads(bThreads)
     {
@@ -1478,7 +1478,7 @@ class DemoWidgets : public WorkWindow
 
 public:
     DemoWidgets() :
-        WorkWindow(NULL, WB_APP | WB_STDWORK),
+        WorkWindow(nullptr, WB_APP | WB_STDWORK),
         mpBox(VclPtrInstance<VclVBox>(this, false, 3)),
         mpToolbox(VclPtrInstance<ToolBox>(mpBox.get())),
         mpButton(VclPtrInstance<PushButton>(mpBox.get())),
@@ -1609,7 +1609,7 @@ IMPL_LINK_NOARG_TYPED(DemoWidgets, GLTestClick, Button*, void)
 class DemoPopup : public FloatingWindow
 {
  public:
-    DemoPopup() : FloatingWindow( NULL, WB_SYSTEMWINDOW|WB_TOOLTIPWIN)
+    DemoPopup() : FloatingWindow( nullptr, WB_SYSTEMWINDOW|WB_TOOLTIPWIN)
     {
         SetType( WINDOW_HELPTEXTWINDOW );
 
@@ -1702,7 +1702,7 @@ public:
         }
         assert (pBuffer->IsFree()); (void)pBuffer;
         mpB->makeCurrent();
-        assert (mpA->mpCurrentFramebuffer == NULL);
+        assert (mpA->mpCurrentFramebuffer == nullptr);
     }
 
     void testVirtualDevice()
@@ -1880,7 +1880,7 @@ protected:
         uno::Reference< lang::XComponent >(
             comphelper::getProcessComponentContext(),
         uno::UNO_QUERY_THROW)-> dispose();
-        ::comphelper::setProcessServiceFactory(NULL);
+        ::comphelper::setProcessServiceFactory(nullptr);
     }
 };
 

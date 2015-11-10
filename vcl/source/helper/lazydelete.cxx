@@ -33,7 +33,7 @@ LazyDeletorBase::~LazyDeletorBase()
 }
 
 // instantiate instance pointer for LazyDeletor<Window>
-LazyDeletor* LazyDeletor::s_pOneInstance = NULL;
+LazyDeletor* LazyDeletor::s_pOneInstance = nullptr;
 
 // a list for all LazyeDeletor<T> singletons
 static std::vector< LazyDeletorBase* > lcl_aDeletors;
@@ -62,7 +62,7 @@ bool LazyDeletor::is_less( vcl::Window* left, vcl::Window* right )
 DeleteOnDeinitBase::~DeleteOnDeinitBase()
 {
     ImplSVData* pSVData = ImplGetSVData();
-    if( pSVData && pSVData->mpDeinitDeleteList != NULL )
+    if( pSVData && pSVData->mpDeinitDeleteList != nullptr )
         pSVData->mpDeinitDeleteList->remove( this );
 }
 
@@ -74,7 +74,7 @@ void DeleteOnDeinitBase::addDeinitContainer( DeleteOnDeinitBase* i_pContainer )
     if( pSVData->mbDeInit )
         return;
 
-    if( pSVData->mpDeinitDeleteList == NULL )
+    if( pSVData->mpDeinitDeleteList == nullptr )
         pSVData->mpDeinitDeleteList = new std::list< DeleteOnDeinitBase* >();
     pSVData->mpDeinitDeleteList->push_back( i_pContainer );
 }
@@ -90,7 +90,7 @@ void DeleteOnDeinitBase::ImplDeleteOnDeInit()
             (*it)->doCleanup();
         }
         delete pSVData->mpDeinitDeleteList;
-        pSVData->mpDeinitDeleteList = NULL;
+        pSVData->mpDeinitDeleteList = nullptr;
     }
 }
 

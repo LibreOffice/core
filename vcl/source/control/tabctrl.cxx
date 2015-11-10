@@ -55,7 +55,7 @@ struct ImplTabItem
     Image               maTabImage;
 
     ImplTabItem()
-    : mnId( 0 ), mpTabPage( NULL ),
+    : mnId( 0 ), mpTabPage( nullptr ),
       mnLine( 0 ), mbFullVisible( false ), mbEnabled( true )
     {}
 };
@@ -84,7 +84,7 @@ void TabControl::ImplInit( vcl::Window* pParent, WinBits nStyle )
     if ( !(nStyle & WB_NODIALOGCONTROL) )
         nStyle |= WB_DIALOGCONTROL;
 
-    Control::ImplInit( pParent, nStyle, NULL );
+    Control::ImplInit( pParent, nStyle, nullptr );
 
     mnLastWidth                 = 0;
     mnLastHeight                = 0;
@@ -97,7 +97,7 @@ void TabControl::ImplInit( vcl::Window* pParent, WinBits nStyle )
     mbRestoreUnqId              = false;
     mbSmallInvalidate           = false;
     mpTabCtrlData               = new ImplTabCtrlData;
-    mpTabCtrlData->mpListBox    = NULL;
+    mpTabCtrlData->mpListBox    = nullptr;
 
     ImplInitSettings( true, true, true );
 
@@ -198,7 +198,7 @@ void TabControl::dispose()
     if (mpTabCtrlData)
         mpTabCtrlData->mpListBox.disposeAndClear();
     delete mpTabCtrlData;
-    mpTabCtrlData = NULL;
+    mpTabCtrlData = nullptr;
     Control::dispose();
 }
 
@@ -211,7 +211,7 @@ ImplTabItem* TabControl::ImplGetItem( sal_uInt16 nId ) const
             return &(*it);
     }
 
-    return NULL;
+    return nullptr;
 }
 
 Size TabControl::ImplGetItemSize( ImplTabItem* pItem, long nMaxWidth )
@@ -571,8 +571,8 @@ void TabControl::ImplChangeTabPage( sal_uInt16 nId, sal_uInt16 nOldId )
 
     ImplTabItem*    pOldItem = ImplGetItem( nOldId );
     ImplTabItem*    pItem = ImplGetItem( nId );
-    TabPage*        pOldPage = (pOldItem) ? pOldItem->mpTabPage.get() : NULL;
-    TabPage*        pPage = (pItem) ? pItem->mpTabPage.get() : NULL;
+    TabPage*        pOldPage = (pOldItem) ? pOldItem->mpTabPage.get() : nullptr;
+    TabPage*        pPage = (pItem) ? pItem->mpTabPage.get() : nullptr;
     vcl::Window*    pCtrlParent = GetParent();
 
     if ( IsReallyVisible() && IsUpdateMode() )
@@ -954,8 +954,8 @@ void TabControl::ImplDrawItem(vcl::RenderContext& rRenderContext, ImplTabItem* p
         Rectangle aOutRect(nXPos + aImageSize.Width(), nYPos,
                            nXPos + aImageSize.Width() + nTextWidth, nYPos + nTextHeight);
         DrawControlText(rRenderContext, aOutRect, pItem->maFormatText, nStyle,
-                        bLayout ? &mpControlData->mpLayoutData->m_aUnicodeBoundRects : NULL,
-                        bLayout ? &mpControlData->mpLayoutData->m_aDisplayText : NULL);
+                        bLayout ? &mpControlData->mpLayoutData->m_aUnicodeBoundRects : nullptr,
+                        bLayout ? &mpControlData->mpLayoutData->m_aDisplayText : nullptr);
 
         rRenderContext.SetTextColor(aOldColor);
     }
@@ -1022,7 +1022,7 @@ IMPL_LINK_TYPED( TabControl, ImplWindowEventListener, VclWindowEvent&, rEvent, v
 
 void TabControl::MouseButtonDown( const MouseEvent& rMEvt )
 {
-    if( mpTabCtrlData->mpListBox.get() == NULL )
+    if( mpTabCtrlData->mpListBox.get() == nullptr )
     {
         if( rMEvt.IsLeft() )
         {
@@ -1068,7 +1068,7 @@ void TabControl::ImplPaint(vcl::RenderContext& rRenderContext, const Rectangle& 
     Rectangle aRect = ImplGetTabRect(TAB_PAGERECT);
 
     // find current item
-    ImplTabItem* pCurItem = NULL;
+    ImplTabItem* pCurItem = nullptr;
     for (std::vector< ImplTabItem >::iterator it = mpTabCtrlData->maItemList.begin();
          it != mpTabCtrlData->maItemList.end(); ++it )
     {
@@ -1092,7 +1092,7 @@ void TabControl::ImplPaint(vcl::RenderContext& rRenderContext, const Rectangle& 
     // in this case we're only interested in the top border of the tabpage because the tabitems are used
     // standalone (eg impress)
     bool bNoTabPage = false;
-    TabPage* pCurPage = pCurItem ? pCurItem->mpTabPage.get() : NULL;
+    TabPage* pCurPage = pCurItem ? pCurItem->mpTabPage.get() : nullptr;
     if (!pCurPage || !pCurPage->IsVisible())
     {
         bNoTabPage = true;
@@ -1197,8 +1197,8 @@ void TabControl::ImplPaint(vcl::RenderContext& rRenderContext, const Rectangle& 
         // Some native toolkits (GTK+) draw tabs right-to-left, with an
         // overlap between adjacent tabs
         bool bDrawTabsRTL = rRenderContext.IsNativeControlSupported(CTRL_TAB_ITEM, PART_TABS_DRAW_RTL);
-        ImplTabItem* pFirstTab = NULL;
-        ImplTabItem* pLastTab = NULL;
+        ImplTabItem* pFirstTab = nullptr;
+        ImplTabItem* pLastTab = nullptr;
         size_t idx;
 
         // Event though there is a tab overlap with GTK+, the first tab is not
@@ -1542,7 +1542,7 @@ void TabControl::DataChanged( const DataChangedEvent& rDCEvt )
 
 Rectangle* TabControl::ImplFindPartRect( const Point& rPt )
 {
-    ImplTabItem* pFoundItem = NULL;
+    ImplTabItem* pFoundItem = nullptr;
     int nFound = 0;
     for( std::vector< ImplTabItem >::iterator it = mpTabCtrlData->maItemList.begin();
          it != mpTabCtrlData->maItemList.end(); ++it )
@@ -1555,14 +1555,14 @@ Rectangle* TabControl::ImplFindPartRect( const Point& rPt )
         }
     }
     // assure that only one tab is highlighted at a time
-    return nFound == 1 ? &pFoundItem->maRect : NULL;
+    return nFound == 1 ? &pFoundItem->maRect : nullptr;
 }
 
 bool TabControl::PreNotify( NotifyEvent& rNEvt )
 {
-    const MouseEvent* pMouseEvt = NULL;
+    const MouseEvent* pMouseEvt = nullptr;
 
-    if( (rNEvt.GetType() == MouseNotifyEvent::MOUSEMOVE) && (pMouseEvt = rNEvt.GetMouseEvent()) != NULL )
+    if( (rNEvt.GetType() == MouseNotifyEvent::MOUSEMOVE) && (pMouseEvt = rNEvt.GetMouseEvent()) != nullptr )
     {
         if( !pMouseEvt->GetButtons() && !pMouseEvt->IsSynthetic() && !pMouseEvt->IsModifierChanged() )
         {
@@ -1652,7 +1652,7 @@ void TabControl::InsertPage( sal_uInt16 nPageId, const OUString& rText,
                 "TabControl::InsertPage(): PageId already exists" );
 
     // insert new page item
-    ImplTabItem* pItem = NULL;
+    ImplTabItem* pItem = nullptr;
     if( nPos == TAB_APPEND || size_t(nPos) >= mpTabCtrlData->maItemList.size() )
     {
         mpTabCtrlData->maItemList.push_back( ImplTabItem() );
@@ -1681,7 +1681,7 @@ void TabControl::InsertPage( sal_uInt16 nPageId, const OUString& rText,
 
     // init new page item
     pItem->mnId             = nPageId;
-    pItem->mpTabPage        = NULL;
+    pItem->mpTabPage        = nullptr;
     pItem->maText           = rText;
     pItem->mbFullVisible    = false;
 
@@ -1926,7 +1926,7 @@ void TabControl::SetTabPage( sal_uInt16 nPageId, TabPage* pTabPage )
         }
         else
         {
-            pItem->mpTabPage = NULL;
+            pItem->mpTabPage = nullptr;
             queue_resize();
         }
     }
@@ -1939,7 +1939,7 @@ TabPage* TabControl::GetTabPage( sal_uInt16 nPageId ) const
     if ( pItem )
         return pItem->mpTabPage;
     else
-        return NULL;
+        return nullptr;
 }
 
 void TabControl::SetPageText( sal_uInt16 nPageId, const OUString& rText )

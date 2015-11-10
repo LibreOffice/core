@@ -68,7 +68,7 @@ extern "C" {
                 nMicro = aVersion.getToken( 0, '.', nIndex ).toInt32();
             SAL_INFO( "vcl.kde4", "unsuitable qt version " << nMajor << "." << nMinor << "." << nMicro );
 #endif
-            return NULL;
+            return nullptr;
         }
 #endif
 

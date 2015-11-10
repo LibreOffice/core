@@ -41,7 +41,7 @@ class DemoMtfWin : public WorkWindow
 
 public:
     explicit DemoMtfWin(const OUString& rFileName)
-        : WorkWindow(NULL, WB_APP | WB_STDWORK)
+        : WorkWindow(nullptr, WB_APP | WB_STDWORK)
     {
         SvFileStream aFileStream(rFileName, StreamMode::READ);
 
@@ -80,7 +80,7 @@ class DemoMtfApp : public Application
 public:
 
     DemoMtfApp()
-        : mpWin(NULL)
+        : mpWin(nullptr)
     {
     }
 
@@ -147,7 +147,7 @@ protected:
         uno::Reference< lang::XComponent >(
             comphelper::getProcessComponentContext(),
         uno::UNO_QUERY_THROW)-> dispose();
-        ::comphelper::setProcessServiceFactory(NULL);
+        ::comphelper::setProcessServiceFactory(nullptr);
     }
 
 };

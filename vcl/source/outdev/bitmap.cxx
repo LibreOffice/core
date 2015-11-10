@@ -937,7 +937,7 @@ void OutputDevice::DrawDeviceAlphaBitmapSlowPath(const Bitmap& rBitmap, const Al
     GDIMetaFile* pOldMetaFile = mpMetaFile;
     const bool   bOldMap = mbMap;
 
-    mpMetaFile = NULL; // fdo#55044 reset before GetBitmap!
+    mpMetaFile = nullptr; // fdo#55044 reset before GetBitmap!
     mbMap = false;
 
     Bitmap aBmp(GetBitmap(aDstRect.TopLeft(), aDstRect.GetSize()));
@@ -1013,7 +1013,7 @@ void OutputDevice::DrawDeviceAlphaBitmapSlowPath(const Bitmap& rBitmap, const Al
         // #110958# Disable alpha VDev, we're doing the necessary
         // stuff explicitly further below
         if (mpAlphaVDev)
-            mpAlphaVDev = NULL;
+            mpAlphaVDev = nullptr;
 
         DrawBitmap(aDstRect.TopLeft(), aNewBitmap);
 
@@ -1052,7 +1052,7 @@ bool OutputDevice::DrawTransformBitmapExDirect(
     const basegfx::B2DPoint aTopX(aFullTransform * basegfx::B2DPoint(1.0, 0.0));
     const basegfx::B2DPoint aTopY(aFullTransform * basegfx::B2DPoint(0.0, 1.0));
     SalBitmap* pSalSrcBmp = rBitmapEx.GetBitmap().ImplGetImpBitmap()->ImplGetSalBitmap();
-    SalBitmap* pSalAlphaBmp = 0;
+    SalBitmap* pSalAlphaBmp = nullptr;
 
     if(rBitmapEx.IsTransparent())
     {

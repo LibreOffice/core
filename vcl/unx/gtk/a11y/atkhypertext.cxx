@@ -38,7 +38,7 @@ static uno::Reference< accessibility::XAccessibleHyperlink >
     return pLink->xLink;
 }
 
-static GObjectClass *hyper_parent_class = NULL;
+static GObjectClass *hyper_parent_class = nullptr;
 
 extern "C" {
 
@@ -62,7 +62,7 @@ hyper_link_get_uri( AtkHyperlink *pLink,
     catch(const uno::Exception&) {
         g_warning( "Exception in hyper_link_get_uri" );
     }
-    return NULL;
+    return nullptr;
 }
 
 static AtkObject *
@@ -77,7 +77,7 @@ hyper_link_get_object( AtkHyperlink *pLink,
     catch(const uno::Exception&) {
         g_warning( "Exception in hyper_link_get_object" );
     }
-    return NULL;
+    return nullptr;
 }
 static gint
 hyper_link_get_end_index( AtkHyperlink *pLink )
@@ -160,21 +160,21 @@ hyper_link_get_type()
     if (!type) {
         static const GTypeInfo tinfo = {
             sizeof (AtkHyperlinkClass),
-            NULL,               /* base init */
-            NULL,               /* base finalize */
+            nullptr,               /* base init */
+            nullptr,               /* base finalize */
             reinterpret_cast<GClassInitFunc>(hyper_link_class_init),
-            NULL,               /* class finalize */
-            NULL,               /* class data */
+            nullptr,               /* class finalize */
+            nullptr,               /* class data */
             sizeof (HyperLink), /* instance size */
             0,                  /* nb preallocs */
-            NULL,               /* instance init */
-            NULL                /* value table */
+            nullptr,               /* instance init */
+            nullptr                /* value table */
         };
 
         static const GInterfaceInfo atk_action_info = {
             reinterpret_cast<GInterfaceInitFunc>(actionIfaceInit),
             nullptr,
-            NULL
+            nullptr
         };
 
         type = g_type_register_static (ATK_TYPE_HYPERLINK,
@@ -215,11 +215,11 @@ hypertext_get_link( AtkHypertext *hypertext,
             = getHypertext( hypertext );
         if( pHypertext.is() )
         {
-            HyperLink *pLink = static_cast<HyperLink *>(g_object_new( hyper_link_get_type(), NULL ));
+            HyperLink *pLink = static_cast<HyperLink *>(g_object_new( hyper_link_get_type(), nullptr ));
             pLink->xLink = pHypertext->getHyperLink( link_index );
             if( !pLink->xLink.is() ) {
                 g_object_unref( G_OBJECT( pLink ) );
-                pLink = NULL;
+                pLink = nullptr;
             }
             return ATK_HYPERLINK( pLink );
         }
@@ -228,7 +228,7 @@ hypertext_get_link( AtkHypertext *hypertext,
         g_warning( "Exception in getHyperLink()" );
     }
 
-    return NULL;
+    return nullptr;
 }
 
 static gint
@@ -269,7 +269,7 @@ hypertext_get_link_index( AtkHypertext *hypertext,
 void
 hypertextIfaceInit (AtkHypertextIface *iface)
 {
-  g_return_if_fail (iface != NULL);
+  g_return_if_fail (iface != nullptr);
 
   iface->get_link = hypertext_get_link;
   iface->get_n_links = hypertext_get_n_links;

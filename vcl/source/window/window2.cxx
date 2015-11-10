@@ -341,10 +341,10 @@ void Window::EndTracking( TrackingEventFlags nFlags )
         if ( pSVData->maWinData.mpTrackTimer )
         {
             delete pSVData->maWinData.mpTrackTimer;
-            pSVData->maWinData.mpTrackTimer = NULL;
+            pSVData->maWinData.mpTrackTimer = nullptr;
         }
 
-        pSVData->maWinData.mpTrackWin    = NULL;
+        pSVData->maWinData.mpTrackWin    = nullptr;
         pSVData->maWinData.mnTrackFlags  = StartTrackingFlags::NONE;
         ReleaseMouse();
         }
@@ -396,11 +396,11 @@ void Window::EndAutoScroll()
 
     if ( pSVData->maWinData.mpAutoScrollWin.get() == this )
     {
-        pSVData->maWinData.mpAutoScrollWin = NULL;
+        pSVData->maWinData.mpAutoScrollWin = nullptr;
         pSVData->maWinData.mnAutoScrollFlags = StartAutoScrollFlags::NONE;
         pSVData->maAppData.mpWheelWindow->ImplStop();
         pSVData->maAppData.mpWheelWindow->doLazyDelete();
-        pSVData->maAppData.mpWheelWindow = NULL;
+        pSVData->maAppData.mpWheelWindow = nullptr;
     }
 }
 
@@ -512,7 +512,7 @@ void Window::SetControlFont()
     if (mpWindowImpl && mpWindowImpl->mpControlFont)
     {
         delete mpWindowImpl->mpControlFont;
-        mpWindowImpl->mpControlFont = NULL;
+        mpWindowImpl->mpControlFont = nullptr;
         CompatStateChanged(StateChangedType::ControlFont);
     }
 }
@@ -762,7 +762,7 @@ bool Window::HandleScrollCommand( const CommandEvent& rCmd,
                             nLines = pData->GetNotchDelta() * (long)nScrollLines;
                         if ( nLines )
                         {
-                            ImplHandleScroll( NULL,
+                            ImplHandleScroll( nullptr,
                                           0L,
                                           pData->IsHorz() ? pHScrl : pVScrl,
                                           nLines );
@@ -931,27 +931,27 @@ vcl::Window* Window::ImplGetWindow()
 
 ImplFrameData* Window::ImplGetFrameData()
 {
-    return mpWindowImpl ? mpWindowImpl->mpFrameData : NULL;
+    return mpWindowImpl ? mpWindowImpl->mpFrameData : nullptr;
 }
 
 SalFrame* Window::ImplGetFrame() const
 {
-    return mpWindowImpl ? mpWindowImpl->mpFrame : NULL;
+    return mpWindowImpl ? mpWindowImpl->mpFrame : nullptr;
 }
 
 vcl::Window* Window::ImplGetParent() const
 {
-    return mpWindowImpl ? mpWindowImpl->mpParent.get() : NULL;
+    return mpWindowImpl ? mpWindowImpl->mpParent.get() : nullptr;
 }
 
 vcl::Window* Window::ImplGetClientWindow() const
 {
-    return mpWindowImpl ? mpWindowImpl->mpClientWindow.get() : NULL;
+    return mpWindowImpl ? mpWindowImpl->mpClientWindow.get() : nullptr;
 }
 
 vcl::Window* Window::ImplGetBorderWindow() const
 {
-    return mpWindowImpl ? mpWindowImpl->mpBorderWindow.get() : NULL;
+    return mpWindowImpl ? mpWindowImpl->mpBorderWindow.get() : nullptr;
 }
 
 vcl::Window* Window::ImplGetFirstOverlapWindow()
@@ -972,7 +972,7 @@ const vcl::Window* Window::ImplGetFirstOverlapWindow() const
 
 vcl::Window* Window::ImplGetFrameWindow() const
 {
-    return mpWindowImpl ? mpWindowImpl->mpFrameWindow.get() : NULL;
+    return mpWindowImpl ? mpWindowImpl->mpFrameWindow.get() : nullptr;
 }
 
 bool Window::IsDockingWindow() const
@@ -1148,7 +1148,7 @@ const InputContext& Window::GetInputContext() const
 
 bool Window::IsControlFont() const
 {
-    return (mpWindowImpl->mpControlFont != 0);
+    return (mpWindowImpl->mpControlFont != nullptr);
 }
 
 Color Window::GetControlForeground() const
@@ -1178,7 +1178,7 @@ bool Window::IsInPaint() const
 
 vcl::Window* Window::GetParent() const
 {
-    return mpWindowImpl ? mpWindowImpl->mpRealParent.get() : NULL;
+    return mpWindowImpl ? mpWindowImpl->mpRealParent.get() : nullptr;
 }
 
 bool Window::IsVisible() const
@@ -1280,7 +1280,7 @@ bool Window::IsWait() const
 vcl::Cursor* Window::GetCursor() const
 {
     if (!mpWindowImpl)
-        return NULL;
+        return nullptr;
     return mpWindowImpl->mpCursor;
 }
 
@@ -1338,7 +1338,7 @@ const Pointer& Window::GetPointer() const
 
 VCLXWindow* Window::GetWindowPeer() const
 {
-    return mpWindowImpl ? mpWindowImpl->mpVCLXWindow : NULL;
+    return mpWindowImpl ? mpWindowImpl->mpVCLXWindow : nullptr;
 }
 
 void Window::SetPosPixel( const Point& rNewPos )
@@ -2012,7 +2012,7 @@ void Window::remove_mnemonic_label(FixedText *pLabel)
     if (aFind == v.end())
         return;
     v.erase(aFind);
-    pLabel->set_mnemonic_widget(NULL);
+    pLabel->set_mnemonic_widget(nullptr);
 }
 
 std::vector<VclPtr<FixedText> > Window::list_mnemonic_labels() const

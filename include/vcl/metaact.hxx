@@ -1441,7 +1441,7 @@ protected:
 public:
     explicit            MetaCommentAction( sal_Int32 nValue = 0L );
     explicit            MetaCommentAction( const MetaCommentAction& rAct );
-    explicit            MetaCommentAction( const OString& rComment, sal_Int32 nValue = 0L, const sal_uInt8* pData = NULL, sal_uInt32 nDataSize = 0UL );
+    explicit            MetaCommentAction( const OString& rComment, sal_Int32 nValue = 0L, const sal_uInt8* pData = nullptr, sal_uInt32 nDataSize = 0UL );
 
     virtual void        Move( long nHorzMove, long nVertMove ) override;
     virtual void        Scale( double fScaleX, double fScaleY ) override;

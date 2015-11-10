@@ -64,7 +64,7 @@ class RTSDialog : public TabDialog
     // helper functions
     void insertAllPPDValues( ListBox&, const psp::PPDParser*, const psp::PPDKey* );
 public:
-    RTSDialog(const ::psp::PrinterInfo& rJobData, vcl::Window* pParent = NULL);
+    RTSDialog(const ::psp::PrinterInfo& rJobData, vcl::Window* pParent = nullptr);
     virtual ~RTSDialog();
     virtual void dispose() override;
 

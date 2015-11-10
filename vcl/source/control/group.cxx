@@ -33,7 +33,7 @@
 void GroupBox::ImplInit( vcl::Window* pParent, WinBits nStyle )
 {
     nStyle = ImplInitStyle( nStyle );
-    Control::ImplInit( pParent, nStyle, NULL );
+    Control::ImplInit( pParent, nStyle, nullptr );
     SetMouseTransparent( true );
     ImplInitSettings( true, true, true );
 }
@@ -177,8 +177,8 @@ void GroupBox::ImplDraw( OutputDevice* pDev, DrawFlags nDrawFlags,
         }
     }
 
-    MetricVector* pVector = bLayout ? &mpControlData->mpLayoutData->m_aUnicodeBoundRects : NULL;
-    OUString* pDisplayText = bLayout ? &mpControlData->mpLayoutData->m_aDisplayText : NULL;
+    MetricVector* pVector = bLayout ? &mpControlData->mpLayoutData->m_aUnicodeBoundRects : nullptr;
+    OUString* pDisplayText = bLayout ? &mpControlData->mpLayoutData->m_aDisplayText : nullptr;
     DrawControlText( *pDev, aRect, aText, nTextStyle, pVector, pDisplayText );
 }
 

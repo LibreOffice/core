@@ -289,7 +289,7 @@ BitmapAccessMode;
 // - StretchAndConvert -
 VCL_DLLPUBLIC BitmapBuffer* StretchAndConvert(
     const BitmapBuffer& rSrcBuffer, const SalTwoRect& rTwoRect,
-    sal_uLong nDstBitmapFormat, const BitmapPalette* pDstPal = NULL, const ColorMask* pDstMask = NULL );
+    sal_uLong nDstBitmapFormat, const BitmapPalette* pDstPal = nullptr, const ColorMask* pDstMask = nullptr );
 
 inline BitmapColor::BitmapColor() :
             mcBlueOrIndex   ( 0 ),
@@ -442,7 +442,7 @@ inline sal_uInt16 BitmapColor::GetColorError( const BitmapColor& rBitmapColor ) 
 }
 
 inline BitmapPalette::BitmapPalette() :
-            mpBitmapColor   ( NULL ),
+            mpBitmapColor   ( nullptr ),
             mnCount         ( 0 )
 {
 }
@@ -457,7 +457,7 @@ inline BitmapPalette::BitmapPalette( const BitmapPalette& rBitmapPalette ) :
         memcpy( mpBitmapColor, rBitmapPalette.mpBitmapColor, nSize );
     }
     else
-        mpBitmapColor = NULL;
+        mpBitmapColor = nullptr;
 }
 
 inline BitmapPalette::BitmapPalette( sal_uInt16 nCount ) :
@@ -470,7 +470,7 @@ inline BitmapPalette::BitmapPalette( sal_uInt16 nCount ) :
         memset( mpBitmapColor, 0, nSize );
     }
     else
-        mpBitmapColor = NULL;
+        mpBitmapColor = nullptr;
 }
 
 inline BitmapPalette::~BitmapPalette()
@@ -490,7 +490,7 @@ inline BitmapPalette& BitmapPalette::operator=( const BitmapPalette& rBitmapPale
         memcpy( mpBitmapColor, rBitmapPalette.mpBitmapColor, nSize );
     }
     else
-        mpBitmapColor = NULL;
+        mpBitmapColor = nullptr;
 
     return *this;
 }
@@ -536,7 +536,7 @@ inline void BitmapPalette::SetEntryCount( sal_uInt16 nCount )
     if( !nCount )
     {
         delete[] reinterpret_cast<sal_uInt8*>(mpBitmapColor);
-        mpBitmapColor = NULL;
+        mpBitmapColor = nullptr;
         mnCount = 0;
     }
     else if( nCount != mnCount )

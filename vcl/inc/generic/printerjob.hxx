@@ -83,7 +83,7 @@ public:             // for usage in PrinterGfx
     sal_uInt32      GetResolution () const { return mnResolution; }
     void            GetScale (double &rXScale, double &rYScale) const;
     sal_uInt16      GetDepth () const;
-    sal_uInt16      GetPostscriptLevel (const JobData *pJobData = NULL) const;
+    sal_uInt16      GetPostscriptLevel (const JobData *pJobData = nullptr) const;
     bool        IsColorPrinter () const;
 
     osl::File*      GetCurrentPageHeader ();

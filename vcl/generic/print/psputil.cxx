@@ -205,7 +205,7 @@ ConverterFactory::Get (rtl_TextEncoding nEncoding)
             aConverter = it->second;
         return aConverter;
     }
-    return NULL;
+    return nullptr;
 }
 
 // wrapper for rtl_convertUnicodeToText that handles the usual cases for

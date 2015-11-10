@@ -325,8 +325,8 @@ long Transform(void* pInputStream, void* pOutputStream, long nAngle)
     ErrorManagerStruct       aSourceError;
     ErrorManagerStruct       aDestinationError;
 
-    jvirt_barray_ptr* aSourceCoefArrays      = 0;
-    jvirt_barray_ptr* aDestinationCoefArrays = 0;
+    jvirt_barray_ptr* aSourceCoefArrays      = nullptr;
+    jvirt_barray_ptr* aDestinationCoefArrays = nullptr;
 
     aTransformOption.force_grayscale = FALSE;
     aTransformOption.trim            = FALSE;

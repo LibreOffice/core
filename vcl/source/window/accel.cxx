@@ -40,7 +40,7 @@ public:
 };
 
 sal_uInt16 ImplAccelEntryGetIndex( ImplAccelList* pList, sal_uInt16 nId,
-                               sal_uInt16* pIndex = NULL )
+                               sal_uInt16* pIndex = nullptr )
 {
     size_t  nLow;
     size_t  nHigh;
@@ -96,7 +96,7 @@ static void ImplAccelEntryInsert( ImplAccelList* pList, ImplAccelEntry* pEntry )
         do
         {
             nIndex++;
-            ImplAccelEntry* pTempEntry = NULL;
+            ImplAccelEntry* pTempEntry = nullptr;
             if ( nIndex < pList->size() )
                 pTempEntry = (*pList)[ nIndex ];
             if ( !pTempEntry || (pTempEntry->mnId != pEntry->mnId) )
@@ -147,7 +147,7 @@ void Accelerator::ImplInit()
     mnCurId             = 0;
     mnCurRepeat         = 0;
     mbIsCancel          = false;
-    mpDel               = NULL;
+    mpDel               = nullptr;
 }
 
 ImplAccelEntry* Accelerator::ImplGetAccelData( const vcl::KeyCode& rKeyCode ) const
@@ -156,7 +156,7 @@ ImplAccelEntry* Accelerator::ImplGetAccelData( const vcl::KeyCode& rKeyCode ) co
     if( it != mpData->maKeyMap.end() )
         return it->second;
     else
-        return NULL;
+        return nullptr;
 }
 
 void Accelerator::ImplCopyData( ImplAccelData& rAccelData )
@@ -173,7 +173,7 @@ void Accelerator::ImplCopyData( ImplAccelData& rAccelData )
             pEntry->mpAutoAccel = pEntry->mpAccel;
         }
         else
-            pEntry->mpAutoAccel = NULL;
+            pEntry->mpAutoAccel = nullptr;
 
         mpData->maKeyMap.insert( std::make_pair( pEntry->maKeyCode.GetFullCode(), pEntry ) );
         mpData->maIdList.push_back( pEntry );
@@ -310,7 +310,7 @@ void Accelerator::Select()
 
 void Accelerator::InsertItem( sal_uInt16 nItemId, const vcl::KeyCode& rKeyCode )
 {
-    ImplInsertAccel( nItemId, rKeyCode, true, NULL );
+    ImplInsertAccel( nItemId, rKeyCode, true, nullptr );
 }
 
 void Accelerator::InsertItem( const ResId& rResId )
@@ -320,7 +320,7 @@ void Accelerator::InsertItem( const ResId& rResId )
     sal_uInt16              nAccelKeyId;
     sal_uInt16              bDisable;
     vcl::KeyCode            aKeyCode;
-    Accelerator*        pAutoAccel  = NULL;
+    Accelerator*        pAutoAccel  = nullptr;
 
     GetRes( rResId.SetRT( RSC_ACCELITEM ) );
     nObjMask        = ReadLongRes();
@@ -364,7 +364,7 @@ vcl::KeyCode Accelerator::GetKeyCode( sal_uInt16 nItemId ) const
 sal_uInt16 Accelerator::GetItemId( sal_uInt16 nPos ) const
 {
 
-    ImplAccelEntry* pEntry = ( nPos < mpData->maIdList.size() ) ? mpData->maIdList[ nPos ] : NULL;
+    ImplAccelEntry* pEntry = ( nPos < mpData->maIdList.size() ) ? mpData->maIdList[ nPos ] : nullptr;
     if ( pEntry )
         return pEntry->mnId;
     else
@@ -378,7 +378,7 @@ Accelerator* Accelerator::GetAccel( sal_uInt16 nItemId ) const
     if ( nIndex != ACCELENTRY_NOTFOUND )
         return mpData->maIdList[ nIndex ]->mpAccel;
     else
-        return NULL;
+        return nullptr;
 }
 
 Accelerator& Accelerator::operator=( const Accelerator& rAccel )

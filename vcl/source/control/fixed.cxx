@@ -83,7 +83,7 @@ static Point ImplCalcPos( WinBits nStyle, const Point& rPos,
 void FixedText::ImplInit( vcl::Window* pParent, WinBits nStyle )
 {
     nStyle = ImplInitStyle( nStyle );
-    Control::ImplInit( pParent, nStyle, NULL );
+    Control::ImplInit( pParent, nStyle, nullptr );
     ApplySettings(*this);
 }
 
@@ -108,7 +108,7 @@ FixedText::FixedText( vcl::Window* pParent, WinBits nStyle )
     : Control(WINDOW_FIXEDTEXT)
     , m_nMaxWidthChars(-1)
     , m_nMinWidthChars(-1)
-    , m_pMnemonicWindow(NULL)
+    , m_pMnemonicWindow(nullptr)
 {
     ImplInit( pParent, nStyle );
 }
@@ -117,7 +117,7 @@ FixedText::FixedText( vcl::Window* pParent, const ResId& rResId )
     : Control(WINDOW_FIXEDTEXT)
     , m_nMaxWidthChars(-1)
     , m_nMinWidthChars(-1)
-    , m_pMnemonicWindow(NULL)
+    , m_pMnemonicWindow(nullptr)
 {
     rResId.SetRT( RSC_TEXT );
     WinBits nStyle = ImplInitRes( rResId );
@@ -199,8 +199,8 @@ void FixedText::ImplDraw(OutputDevice* pDev, DrawFlags nDrawFlags,
 
     Rectangle aRect( Rectangle( aPos, rSize ) );
     DrawControlText(*pDev, aRect, aText, nTextStyle,
-        bFillLayout ? &mpControlData->mpLayoutData->m_aUnicodeBoundRects : NULL,
-        bFillLayout ? &mpControlData->mpLayoutData->m_aDisplayText : NULL);
+        bFillLayout ? &mpControlData->mpLayoutData->m_aUnicodeBoundRects : nullptr,
+        bFillLayout ? &mpControlData->mpLayoutData->m_aDisplayText : nullptr);
 }
 
 void FixedText::ApplySettings(vcl::RenderContext& rRenderContext)
@@ -445,7 +445,7 @@ void FixedText::set_mnemonic_widget(vcl::Window *pWindow)
     if (m_pMnemonicWindow)
     {
         vcl::Window *pTempReEntryGuard = m_pMnemonicWindow;
-        m_pMnemonicWindow = NULL;
+        m_pMnemonicWindow = nullptr;
         pTempReEntryGuard->remove_mnemonic_label(this);
     }
     m_pMnemonicWindow = pWindow;
@@ -460,7 +460,7 @@ FixedText::~FixedText()
 
 void FixedText::dispose()
 {
-    set_mnemonic_widget(NULL);
+    set_mnemonic_widget(nullptr);
     m_pMnemonicWindow.clear();
     Control::dispose();
 }
@@ -492,7 +492,7 @@ void SelectableFixedText::LoseFocus()
 void FixedLine::ImplInit( vcl::Window* pParent, WinBits nStyle )
 {
     nStyle = ImplInitStyle( nStyle );
-    Control::ImplInit( pParent, nStyle, NULL );
+    Control::ImplInit( pParent, nStyle, nullptr );
     ApplySettings(*this);
 }
 
@@ -521,8 +521,8 @@ void FixedLine::ImplDraw(vcl::RenderContext& rRenderContext, bool bLayout)
 
     OUString aText = GetText();
     WinBits nWinStyle = GetStyle();
-    MetricVector* pVector = bLayout ? &mpControlData->mpLayoutData->m_aUnicodeBoundRects : NULL;
-    OUString* pDisplayText = bLayout ? &mpControlData->mpLayoutData->m_aDisplayText : NULL;
+    MetricVector* pVector = bLayout ? &mpControlData->mpLayoutData->m_aUnicodeBoundRects : nullptr;
+    OUString* pDisplayText = bLayout ? &mpControlData->mpLayoutData->m_aDisplayText : nullptr;
 
     DecorationView aDecoView(&rRenderContext);
     if (aText.isEmpty())
@@ -713,7 +713,7 @@ Size FixedLine::GetOptimalSize() const
 void FixedBitmap::ImplInit( vcl::Window* pParent, WinBits nStyle )
 {
     nStyle = ImplInitStyle( nStyle );
-    Control::ImplInit( pParent, nStyle, NULL );
+    Control::ImplInit( pParent, nStyle, nullptr );
     ApplySettings(*this);
 }
 
@@ -851,7 +851,7 @@ void FixedImage::ImplInit( vcl::Window* pParent, WinBits nStyle )
 {
     nStyle = ImplInitStyle( nStyle );
     mbInUserDraw = false;
-    Control::ImplInit( pParent, nStyle, NULL );
+    Control::ImplInit( pParent, nStyle, nullptr );
     ApplySettings(*this);
 }
 

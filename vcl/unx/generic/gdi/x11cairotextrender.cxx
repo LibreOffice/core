@@ -59,7 +59,7 @@ cairo_t* X11CairoTextRender::getCairoContext()
 
     Display* pDisplay = mrParent.GetXDisplay();
 
-    cairo_surface_t* surface = NULL;
+    cairo_surface_t* surface = nullptr;
     if (pVisualFormat)
     {
         surface = cairo_xlib_surface_create_with_xrender_format (
@@ -74,7 +74,7 @@ cairo_t* X11CairoTextRender::getCairoContext()
     }
 
     if (!surface)
-        return NULL;
+        return nullptr;
 
     cairo_t *cr = cairo_create(surface);
     cairo_surface_destroy(surface);

@@ -179,7 +179,7 @@ editable_text_wrapper_copy_text( AtkEditableText  *text,
 void
 editableTextIfaceInit (AtkEditableTextIface *iface)
 {
-  g_return_if_fail (iface != NULL);
+  g_return_if_fail (iface != nullptr);
 
   iface->set_text_contents = editable_text_wrapper_set_text_contents;
   iface->insert_text = editable_text_wrapper_insert_text;

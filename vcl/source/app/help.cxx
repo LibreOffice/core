@@ -196,7 +196,7 @@ bool Help::ShowQuickHelp( vcl::Window* pParent,
 void Help::HideBalloonAndQuickHelp()
 {
     HelpTextWindow const * pHelpWin = ImplGetSVData()->maHelpData.mpHelpWin;
-    bool const bIsVisible = ( pHelpWin != NULL ) && pHelpWin->IsVisible();
+    bool const bIsVisible = ( pHelpWin != nullptr ) && pHelpWin->IsVisible();
     ImplDestroyHelpWindow( bIsVisible );
 }
 
@@ -216,7 +216,7 @@ sal_uIntPtr Help::ShowTip( vcl::Window* pParent, const Rectangle& rScreenRect,
 void Help::UpdateTip( sal_uIntPtr nId, vcl::Window* pParent, const Rectangle& rScreenRect, const OUString& rText )
 {
     HelpTextWindow* pHelpWin = reinterpret_cast< HelpTextWindow* >( nId );
-    ENSURE_OR_RETURN_VOID( pHelpWin != NULL, "Help::UpdateTip: invalid ID!" );
+    ENSURE_OR_RETURN_VOID( pHelpWin != nullptr, "Help::UpdateTip: invalid ID!" );
 
     Size aSz = pHelpWin->CalcOutSize();
     pHelpWin->SetOutputSizePixel( aSz );
@@ -304,7 +304,7 @@ void HelpTextWindow::dispose()
     maHideTimer.Stop();
 
     if( this == ImplGetSVData()->maHelpData.mpHelpWin )
-        ImplGetSVData()->maHelpData.mpHelpWin = NULL;
+        ImplGetSVData()->maHelpData.mpHelpWin = nullptr;
     FloatingWindow::dispose();
 }
 
@@ -497,7 +497,7 @@ void ImplShowHelpWindow( vcl::Window* pParent, sal_uInt16 nHelpWinStyle, QuickHe
             bool bWasVisible = pHelpWin->IsVisible();
             if ( bWasVisible )
                 nDelayMode = HELPDELAY_NONE; // display it quickly if we were already in quick help mode
-            pHelpWin = NULL;
+            pHelpWin = nullptr;
             ImplDestroyHelpWindow( bWasVisible );
         }
         else
@@ -556,7 +556,7 @@ void ImplDestroyHelpWindow( bool bUpdateHideTime )
         Rectangle aInvRect( pHelpWin->GetWindowExtentsRelative( pWindow ) );
         if( pHelpWin->IsVisible() )
             pWindow->Invalidate( aInvRect );
-        pSVData->maHelpData.mpHelpWin = NULL;
+        pSVData->maHelpData.mpHelpWin = nullptr;
         pSVData->maHelpData.mbKeyboardHelp = false;
         pHelpWin->Hide();
         pHelpWin.disposeAndClear();

@@ -92,9 +92,9 @@ static int GetSShort( const unsigned char* p ){ return static_cast<sal_Int16>((p
 // TODO: move CMAP parsing directly into the ImplFontCharMap class
 bool ParseCMAP( const unsigned char* pCmap, int nLength, CmapResult& rResult )
 {
-    rResult.mpRangeCodes = NULL;
-    rResult.mpStartGlyphs= NULL;
-    rResult.mpGlyphIds   = NULL;
+    rResult.mpRangeCodes = nullptr;
+    rResult.mpStartGlyphs= nullptr;
+    rResult.mpGlyphIds   = nullptr;
     rResult.mnRangeCount = 0;
     rResult.mbRecoded    = false;
     rResult.mbSymbolic   = false;
@@ -166,8 +166,8 @@ bool ParseCMAP( const unsigned char* pCmap, int nLength, CmapResult& rResult )
 
     // parse the best CMAP subtable
     int nRangeCount = 0;
-    sal_UCS4* pCodePairs = NULL;
-    int* pStartGlyphs = NULL;
+    sal_UCS4* pCodePairs = nullptr;
+    int* pStartGlyphs = nullptr;
 
     typedef std::vector<sal_uInt16> U16Vector;
     U16Vector aGlyphIdArray;
@@ -278,8 +278,8 @@ bool ParseCMAP( const unsigned char* pCmap, int nLength, CmapResult& rResult )
     }
 
     // recode the code ranges to their unicode encoded ranges if needed
-    rtl_TextToUnicodeConverter aConverter = NULL;
-    rtl_UnicodeToTextContext aCvtContext = NULL;
+    rtl_TextToUnicodeConverter aConverter = nullptr;
+    rtl_UnicodeToTextContext aCvtContext = nullptr;
 
     rResult.mbRecoded = ( eRecodeFrom != RTL_TEXTENCODING_UNICODE );
     if( rResult.mbRecoded )
@@ -352,7 +352,7 @@ bool ParseCMAP( const unsigned char* pCmap, int nLength, CmapResult& rResult )
 
         // glyph mapping for non-unicode fonts not implemented
         delete[] pStartGlyphs;
-        pStartGlyphs = NULL;
+        pStartGlyphs = nullptr;
         aGlyphIdArray.clear();
 
         // make a pCodePairs array using the vector from above
@@ -368,7 +368,7 @@ bool ParseCMAP( const unsigned char* pCmap, int nLength, CmapResult& rResult )
 
     // prepare the glyphid-array if needed
     // TODO: merge ranges if they are close enough?
-    sal_uInt16* pGlyphIds = NULL;
+    sal_uInt16* pGlyphIds = nullptr;
     if( !aGlyphIdArray.empty())
     {
         pGlyphIds = new sal_uInt16[ aGlyphIdArray.size() ];
@@ -405,7 +405,7 @@ FontCharMap::FontCharMap( const CmapResult& rCR )
 
 FontCharMap::~FontCharMap()
 {
-    mpImplFontCharMap = 0;
+    mpImplFontCharMap = nullptr;
 }
 
 FontCharMapPtr FontCharMap::GetDefaultMap( bool bSymbol )
@@ -453,7 +453,7 @@ bool FontCharMap::HasChar( sal_UCS4 cChar ) const
 {
     bool bHasChar = false;
 
-    if( mpImplFontCharMap->mpStartGlyphs  == NULL ) { // only the char-ranges are known
+    if( mpImplFontCharMap->mpStartGlyphs  == nullptr ) { // only the char-ranges are known
         const int nRange = findRangeIndex( cChar );
         if( nRange==0 && cChar < mpImplFontCharMap->mpRangeCodes[0] )
             return false;

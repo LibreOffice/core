@@ -37,7 +37,7 @@ SalYieldMutex::SalYieldMutex()
 
 SalYieldMutex::~SalYieldMutex()
 {
-    ::comphelper::SolarMutex::setSolarMutex( NULL );
+    ::comphelper::SolarMutex::setSolarMutex( nullptr );
 }
 
 void SalYieldMutex::acquire()

@@ -64,11 +64,11 @@ using namespace ::com::sun::star::uno;
 
 TextEngine::TextEngine()
 {
-    mpDoc = 0;
-    mpTEParaPortions = 0;
+    mpDoc = nullptr;
+    mpTEParaPortions = nullptr;
 
     mpViews = new TextViews;
-    mpActiveView = NULL;
+    mpActiveView = nullptr;
 
     mbIsFormatting      = false;
     mbFormatted         = false;
@@ -87,9 +87,9 @@ TextEngine::TextEngine()
     mnCurTextWidth  = -1;
     mnCurTextHeight = 0;
 
-    mpUndoManager   = NULL;
-       mpIMEInfos       = NULL;
-    mpLocaleDataWrapper = NULL;
+    mpUndoManager   = nullptr;
+       mpIMEInfos       = nullptr;
+    mpLocaleDataWrapper = nullptr;
 
     mpIdleFormatter = new IdleFormatter;
     mpIdleFormatter->SetIdleHdl( LINK( this, TextEngine, IdleFormatHdl ) );
@@ -140,7 +140,7 @@ void TextEngine::RemoveView( TextView* pTextView )
         pTextView->HideCursor();
         mpViews->erase( it );
         if ( pTextView == GetActiveView() )
-            SetActiveView( 0 );
+            SetActiveView( nullptr );
     }
 }
 
@@ -237,7 +237,7 @@ static const sal_Unicode static_aCRLFText[] = { '\r', '\n', 0 };
 
 static inline const sal_Unicode* static_getLineEndText( LineEnd aLineEnd )
 {
-    const sal_Unicode* pRet = NULL;
+    const sal_Unicode* pRet = nullptr;
 
     switch( aLineEnd )
     {
@@ -892,7 +892,7 @@ Rectangle TextEngine::GetEditCursor( const TextPaM& rPaM, bool bSpecial, bool bP
 
     long nY = 0;
     sal_Int32 nCurIndex = 0;
-    TextLine* pLine = 0;
+    TextLine* pLine = nullptr;
     for ( size_t nLine = 0; nLine < pPortion->GetLines().size(); nLine++ )
     {
         TextLine& pTmpLine = pPortion->GetLines()[ nLine ];
@@ -1009,7 +1009,7 @@ long TextEngine::ImpGetXPos( sal_uInt32 nPara, TextLine* pLine, sal_Int32 nIndex
 
 const TextAttrib* TextEngine::FindAttrib( const TextPaM& rPaM, sal_uInt16 nWhich ) const
 {
-    const TextAttrib* pAttr = NULL;
+    const TextAttrib* pAttr = nullptr;
     const TextCharAttrib* pCharAttr = FindCharAttrib( rPaM, nWhich );
     if ( pCharAttr )
         pAttr = &pCharAttr->GetAttr();
@@ -1018,7 +1018,7 @@ const TextAttrib* TextEngine::FindAttrib( const TextPaM& rPaM, sal_uInt16 nWhich
 
 const TextCharAttrib* TextEngine::FindCharAttrib( const TextPaM& rPaM, sal_uInt16 nWhich ) const
 {
-    const TextCharAttrib* pAttr = NULL;
+    const TextCharAttrib* pAttr = nullptr;
     TextNode* pNode = mpDoc->GetNodes()[ rPaM.GetPara() ];
     if ( pNode && ( rPaM.GetIndex() < pNode->GetText().getLength() ) )
         pAttr = pNode->GetCharAttribs().FindAttrib( nWhich, rPaM.GetIndex() );
@@ -1072,7 +1072,7 @@ sal_Int32 TextEngine::ImpFindIndex( sal_uInt32 nPortion, const Point& rPosInPara
     sal_Int32 nCurIndex = 0;
 
     long nY = 0;
-    TextLine* pLine = 0;
+    TextLine* pLine = nullptr;
     sal_uInt16 nLine;
     for ( nLine = 0; nLine < pPortion->GetLines().size(); nLine++ )
     {
@@ -1123,7 +1123,7 @@ sal_Int32 TextEngine::GetCharPos( sal_uInt32 nPortion, sal_uInt16 nLine, long nX
                 nTmpX -= pTextPortion->GetWidth();  // position before Portion
                 // TODO: Optimize: no GetTextBreak if fixed-width Font
                 vcl::Font aFont;
-                SeekCursor( nPortion, nCurIndex+1, aFont, NULL );
+                SeekCursor( nPortion, nCurIndex+1, aFont, nullptr );
                 mpRefDev->SetFont( aFont);
                 long nPosInPortion = nXPos-nTmpX;
                 if ( IsRightToLeft() != pTextPortion->IsRightToLeft() )
@@ -1228,7 +1228,7 @@ long TextEngine::CalcTextWidth( sal_uInt32 nPara, sal_Int32 nPortionStart, sal_I
         else
         {
             vcl::Font aFont;
-            SeekCursor( nPara, nPortionStart+1, aFont, NULL );
+            SeekCursor( nPara, nPortionStart+1, aFont, nullptr );
             mpRefDev->SetFont( aFont );
         }
         TextNode* pNode = mpDoc->GetNodes()[ nPara ];
@@ -1660,7 +1660,7 @@ void TextEngine::ImpBreakLine( sal_uInt32 nPara, TextLine* pLine, TETextPortion*
         nMaxBreakPos = pNode->GetText().getLength() - 1;
 
     uno::Reference < i18n::XBreakIterator > xBI = GetBreakIterator();
-    i18n::LineBreakHyphenationOptions aHyphOptions( NULL, uno::Sequence< beans::PropertyValue >(), 1 );
+    i18n::LineBreakHyphenationOptions aHyphOptions( nullptr, uno::Sequence< beans::PropertyValue >(), 1 );
 
     i18n::LineBreakUserOptions aUserOptions;
     aUserOptions.forbiddenBeginCharacters = ImpGetLocaleDataWrapper()->getForbiddenCharacters().beginLine;
@@ -1706,7 +1706,7 @@ sal_uInt16 TextEngine::SplitTextPortion( sal_uInt32 nPara, sal_Int32 nPos )
 
     sal_uInt16 nSplitPortion;
     sal_Int32 nTmpPos = 0;
-    TETextPortion* pTextPortion = 0;
+    TETextPortion* pTextPortion = nullptr;
     TEParaPortion* pTEParaPortion = mpTEParaPortions->GetObject( nPara );
     const sal_uInt16 nPortions = pTEParaPortion->GetTextPortions().size();
     for ( nSplitPortion = 0; nSplitPortion < nPortions; nSplitPortion++ )
@@ -1882,7 +1882,7 @@ void TextEngine::RecalcTextPortion( sal_uInt32 nPara, sal_Int32 nStartPos, sal_I
         sal_Int32 nPos = 0;
         sal_Int32 nEnd = nStartPos-nNewChars;
         const size_t nPortions = pTEParaPortion->GetTextPortions().size();
-        TETextPortion* pTP = 0;
+        TETextPortion* pTP = nullptr;
         for ( nPortion = 0; nPortion < nPortions; nPortion++ )
         {
             pTP = pTEParaPortion->GetTextPortions()[ nPortion ];
@@ -1924,8 +1924,8 @@ void TextEngine::ImpPaint( OutputDevice* pOutDev, const Point& rStartPos, Rectan
 
     long nY = rStartPos.Y();
 
-    TextPaM const* pSelStart = 0;
-    TextPaM const* pSelEnd = 0;
+    TextPaM const* pSelStart = nullptr;
+    TextPaM const* pSelEnd = nullptr;
     if ( pSelection && pSelection->HasRange() )
     {
         bool bInvers = pSelection->GetEnd() < pSelection->GetStart();
@@ -2223,7 +2223,7 @@ bool TextEngine::CreateLines( sal_uInt32 nPara )
             nXWidth = nTmpWidth;
 
         // search for Portion that does not fit anymore into line
-        TETextPortion* pPortion = 0;
+        TETextPortion* pPortion = nullptr;
         bool bBrokenLine = false;
 
         while ( ( nTmpWidth <= nXWidth ) && !bEOL && ( nTmpPortion < pTEParaPortion->GetTextPortions().size() ) )
@@ -2382,7 +2382,7 @@ bool TextEngine::CreateLines( sal_uInt32 nPara )
         sal_uInt16 nEndPortion = pLine->GetEndPortion();
 
         // next line or new line
-        pLine = NULL;
+        pLine = nullptr;
         if ( nLine < pTEParaPortion->GetLines().size()-1 )
             pLine = &( pTEParaPortion->GetLines()[ ++nLine ] );
         if ( pLine && ( nIndex >= pNode->GetText().getLength() ) )
@@ -2587,7 +2587,7 @@ void TextEngine::RemoveAttribs( sal_uInt32 nPara, bool bIdleFormatAndUpdate )
             mbFormatted = false;
 
             if ( bIdleFormatAndUpdate )
-                IdleFormatAndUpdate( NULL, 0xFFFF );
+                IdleFormatAndUpdate( nullptr, 0xFFFF );
             else
                 FormatAndUpdate();
         }
@@ -2611,7 +2611,7 @@ void TextEngine::RemoveAttribs( sal_uInt32 nPara, sal_uInt16 nWhich, bool bIdleF
             pTEParaPortion->MarkSelectionInvalid( 0, pNode->GetText().getLength() );
             mbFormatted = false;
             if(bIdleFormatAndUpdate)
-                IdleFormatAndUpdate( NULL, 0xFFFF );
+                IdleFormatAndUpdate( nullptr, 0xFFFF );
             else
                 FormatAndUpdate();
         }
@@ -2666,7 +2666,7 @@ void TextEngine::SetAttrib( const TextAttrib& rAttr, sal_uInt32 nPara, sal_Int32
 
         mbFormatted = false;
         if ( bIdleFormatAndUpdate )
-            IdleFormatAndUpdate( NULL, 0xFFFF );
+            IdleFormatAndUpdate( nullptr, 0xFFFF );
         else
             FormatAndUpdate();
     }
@@ -2823,7 +2823,7 @@ void TextEngine::ImpTextFormatted()
 
 void TextEngine::Draw( OutputDevice* pDev, const Point& rPos )
 {
-    ImpPaint( pDev, rPos, NULL );
+    ImpPaint( pDev, rPos, nullptr );
 }
 
 void TextEngine::SetLeftMargin( sal_uInt16 n )
@@ -2843,7 +2843,7 @@ void TextEngine::SetLocale( const ::com::sun::star::lang::Locale& rLocale )
 {
     maLocale = rLocale;
     delete mpLocaleDataWrapper;
-    mpLocaleDataWrapper = NULL;
+    mpLocaleDataWrapper = nullptr;
 }
 
 ::com::sun::star::lang::Locale TextEngine::GetLocale()
@@ -2891,7 +2891,7 @@ void TextEngine::ImpInitWritingDirections( sal_uInt32 nPara )
         UBiDi* pBidi = ubidi_openSized( aText.getLength(), 0, &nError );
         nError = U_ZERO_ERROR;
 
-        ubidi_setPara( pBidi, reinterpret_cast<const UChar *>(aText.getStr()), aText.getLength(), nBidiLevel, NULL, &nError ); // UChar != sal_Unicode in MinGW
+        ubidi_setPara( pBidi, reinterpret_cast<const UChar *>(aText.getStr()), aText.getLength(), nBidiLevel, nullptr, &nError ); // UChar != sal_Unicode in MinGW
         nError = U_ZERO_ERROR;
 
         long nCount = ubidi_countRuns( pBidi, &nError );

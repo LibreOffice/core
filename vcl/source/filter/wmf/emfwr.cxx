@@ -1370,7 +1370,7 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
                 const OUString          aText = pA->GetText().copy( pA->GetIndex(), std::min(pA->GetText().getLength() - pA->GetIndex(), pA->GetLen()) );
 
                 ImplCheckTextAttr();
-                ImplWriteTextRecord( pA->GetPoint(), aText, NULL, 0 );
+                ImplWriteTextRecord( pA->GetPoint(), aText, nullptr, 0 );
             }
             break;
 
@@ -1380,7 +1380,7 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
                 const OUString              aText( pA->GetText() );
 
                 ImplCheckTextAttr();
-                ImplWriteTextRecord( pA->GetRect().TopLeft(), aText, NULL, 0 );
+                ImplWriteTextRecord( pA->GetRect().TopLeft(), aText, nullptr, 0 );
             }
             break;
 
@@ -1400,7 +1400,7 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
                 const OUString                  aText = pA->GetText().copy( pA->GetIndex(), std::min(pA->GetText().getLength() - pA->GetIndex(), pA->GetLen()) );
 
                 ImplCheckTextAttr();
-                ImplWriteTextRecord( pA->GetPoint(), aText, NULL, pA->GetWidth() );
+                ImplWriteTextRecord( pA->GetPoint(), aText, nullptr, pA->GetWidth() );
             }
             break;
 

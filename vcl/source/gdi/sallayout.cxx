@@ -464,7 +464,7 @@ ImplLayoutArgs::ImplLayoutArgs(const OUString& rStr,
     mnMinCharPos( nMinCharPos ),
     mnEndCharPos( nEndCharPos ),
     m_pTextLayoutCache(pLayoutCache),
-    mpDXArray( NULL ),
+    mpDXArray( nullptr ),
     mnLayoutWidth( 0 ),
     mnOrientation( 0 )
 {
@@ -493,7 +493,7 @@ ImplLayoutArgs::ImplLayoutArgs(const OUString& rStr,
         UBiDi* pParaBidi = ubidi_openSized(nLength, 0, &rcI18n);
         if( !pParaBidi )
             return;
-        ubidi_setPara(pParaBidi, reinterpret_cast<const UChar *>(mrStr.getStr()), nLength, nLevel, NULL, &rcI18n);    // UChar != sal_Unicode in MinGW
+        ubidi_setPara(pParaBidi, reinterpret_cast<const UChar *>(mrStr.getStr()), nLength, nLevel, nullptr, &rcI18n);    // UChar != sal_Unicode in MinGW
 
         UBiDi* pLineBidi = pParaBidi;
         int nSubLength = mnEndCharPos - mnMinCharPos;
@@ -2069,7 +2069,7 @@ bool MultiSalLayout::GetOutline( SalGraphics& rGraphics,
 std::shared_ptr<vcl::TextLayoutCache> SalLayout::CreateTextLayoutCache(
         OUString const&) const
 {
-    return 0; // by default, nothing to cache
+    return nullptr; // by default, nothing to cache
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
