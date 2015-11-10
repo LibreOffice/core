@@ -249,7 +249,7 @@ void XclImpColRowSettings::Convert( SCTAB nScTab )
                     for (SCROW i = nPrevRow; i <= nRow - 1; ++i)
                     {
                         SCROW nLast;
-                        if (!maRowHeights.search_tree(i, nHeight, NULL, &nLast).second)
+                        if (!maRowHeights.search_tree(i, nHeight, nullptr, &nLast).second)
                         {
                             // search failed for some reason
                             return;

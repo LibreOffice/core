@@ -56,7 +56,7 @@ private:
 public:
 
     ScChangeViewSettings()
-        : pCommentSearcher(NULL)
+        : pCommentSearcher(nullptr)
         , aFirstDateTime(DateTime::EMPTY)
         , aLastDateTime(DateTime::EMPTY)
         , eDateMode(SvxRedlinDateMode::BEFORE)

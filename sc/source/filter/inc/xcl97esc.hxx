@@ -69,7 +69,7 @@ public:
                             const XclExpRoot& rRoot,
                             XclExpObjectManager& rObjMgr,
                             SvStream& rStrm,
-                            const XclEscherEx* pParent = 0 );
+                            const XclEscherEx* pParent = nullptr );
     virtual             ~XclEscherEx();
 
     /** Called by MSODRAWING record constructors to initialize the DFF stream

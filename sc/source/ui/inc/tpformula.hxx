@@ -39,7 +39,7 @@ public:
 
     virtual bool FillItemSet(SfxItemSet* rCoreSet) override;
     virtual void Reset( const SfxItemSet* rCoreSet ) override;
-    virtual sfxpg DeactivatePage(SfxItemSet* pSet = NULL) override;
+    virtual sfxpg DeactivatePage(SfxItemSet* pSet = nullptr) override;
 
 private:
     explicit ScTpFormulaOptions(vcl::Window* pParent, const SfxItemSet& rCoreSet);

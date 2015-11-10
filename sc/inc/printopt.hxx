@@ -62,7 +62,7 @@ public:
                 virtual ~ScTpPrintItem();
 
     virtual bool            operator==( const SfxPoolItem& ) const override;
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const override;
+    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
 
     const ScPrintOptions&   GetPrintOptions() const { return theOptions; }
 

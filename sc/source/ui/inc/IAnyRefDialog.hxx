@@ -36,7 +36,7 @@ public:
     virtual ~IAnyRefDialog(){}
 
     virtual void SetReference( const ScRange& rRef, ScDocument* pDoc ) = 0;
-    virtual void RefInputStart( formula::RefEdit* pEdit, formula::RefButton* pButton = NULL ) = 0;
+    virtual void RefInputStart( formula::RefEdit* pEdit, formula::RefButton* pButton = nullptr ) = 0;
     virtual void RefInputDone( bool bForced = false ) = 0;
     virtual bool IsTableLocked() const = 0;
     virtual bool IsRefInputMode() const = 0;

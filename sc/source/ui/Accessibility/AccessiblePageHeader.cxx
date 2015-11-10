@@ -78,7 +78,7 @@ struct Dispose
             pArea->dispose();
             pArea->release();
         }
-        pArea = NULL;
+        pArea = nullptr;
     }
 };
 
@@ -88,7 +88,7 @@ ScAccessibleContextBase( rxParent, bHeader ? AccessibleRole::HEADER : Accessible
     mpViewShell( pViewShell ),
     mnIndex( nIndex ),
     mbHeader( bHeader ),
-    maAreas(MAX_AREAS, NULL),
+    maAreas(MAX_AREAS, nullptr),
     mnChildCount(-1)
 {
     if (mpViewShell)
@@ -111,7 +111,7 @@ void SAL_CALL ScAccessiblePageHeader::disposing()
     if (mpViewShell)
     {
         mpViewShell->RemoveAccessibilityObject(*this);
-        mpViewShell = NULL;
+        mpViewShell = nullptr;
     }
     std::for_each(maAreas.begin(), maAreas.end(), Dispose());
 
@@ -352,7 +352,7 @@ Rectangle ScAccessiblePageHeader::GetBoundingBoxOnScreen() const throw (uno::Run
         vcl::Window* pWindow = mpViewShell->GetWindow();
         if (pWindow)
         {
-            Rectangle aRect = pWindow->GetWindowExtentsRelative(NULL);
+            Rectangle aRect = pWindow->GetWindowExtentsRelative(nullptr);
             aCellRect.setX(aCellRect.getX() + aRect.getX());
             aCellRect.setY(aCellRect.getY() + aRect.getY());
         }
@@ -386,7 +386,7 @@ Rectangle ScAccessiblePageHeader::GetBoundingBox() const throw (uno::RuntimeExce
 
 bool ScAccessiblePageHeader::IsDefunc( const uno::Reference<XAccessibleStateSet>& rxParentStates )
 {
-    return ScAccessibleContextBase::IsDefunc() || (mpViewShell == NULL) || !getAccessibleParent().is() ||
+    return ScAccessibleContextBase::IsDefunc() || (mpViewShell == nullptr) || !getAccessibleParent().is() ||
         (rxParentStates.is() && rxParentStates->contains(AccessibleStateType::DEFUNC));
 }
 
@@ -415,7 +415,7 @@ void ScAccessiblePageHeader::AddChild(const EditTextObject* pArea, sal_uInt32 nI
         if (maAreas[nIndex])
         {
             maAreas[nIndex]->release();
-            maAreas[nIndex] = NULL;
+            maAreas[nIndex] = nullptr;
         }
     }
 }

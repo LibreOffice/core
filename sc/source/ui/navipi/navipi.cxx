@@ -564,8 +564,8 @@ ScNavigatorDlg::ScNavigatorDlg( SfxBindings* pB, SfxChildWindowContext* pCW, vcl
         aStrDisplay  ( ScResId( STR_DISPLAY ) ),
         aStrActiveWin( ScResId( STR_ACTIVEWIN ) ),
         pContextWin ( pCW ),
-        pMarkArea   ( NULL ),
-        pViewData   ( NULL ),
+        pMarkArea   ( nullptr ),
+        pViewData   ( nullptr ),
         nListModeHeight( 0 ),
         nInitListHeight( 0 ),
         eListMode   ( NAV_LMODE_NONE ),
@@ -662,7 +662,7 @@ ScNavigatorDlg::ScNavigatorDlg( SfxBindings* pB, SfxChildWindowContext* pCW, vcl
     aTbxCmd->SetAccessibleRelationLabeledBy(aTbxCmd.get());
     aLbDocuments->SetAccessibleName(aStrActiveWin);
 
-    if (pContextWin == NULL)
+    if (pContextWin == nullptr)
     {
         // When the context window is missing then the navigator is
         // displayed in the sidebar and has the whole deck to fill.
@@ -706,7 +706,7 @@ void ScNavigatorDlg::dispose()
 
 void ScNavigatorDlg::Resizing( Size& rNewSize )  // Size = Outputsize?
 {
-    FloatingWindow* pFloat = pContextWin!=NULL ? pContextWin->GetFloatingWindow() : NULL;
+    FloatingWindow* pFloat = pContextWin!=nullptr ? pContextWin->GetFloatingWindow() : nullptr;
     if ( pFloat )
     {
         Size aMinOut = pFloat->GetMinOutputSizePixel();
@@ -810,7 +810,7 @@ void ScNavigatorDlg::DoResize()
     aLbDocuments->SetSizePixel( aDocSize );
 
     bool bListMode = (eListMode != NAV_LMODE_NONE);
-    if (pContextWin != NULL)
+    if (pContextWin != nullptr)
     {
         FloatingWindow* pFloat = pContextWin->GetFloatingWindow();
         if ( pFloat && bListMode )
@@ -1001,15 +1001,15 @@ ScNavigatorSettings* ScNavigatorDlg::GetNavigatorSettings()
     //  be forgotten when the view is closed.
 
     ScTabViewShell* pViewSh = GetTabViewShell();
-    return pViewSh ? pViewSh->GetNavigatorSettings() : NULL;
+    return pViewSh ? pViewSh->GetNavigatorSettings() : nullptr;
 }
 
 bool ScNavigatorDlg::GetViewData()
 {
     ScTabViewShell* pViewSh = GetTabViewShell();
-    pViewData = pViewSh ? &pViewSh->GetViewData() : NULL;
+    pViewData = pViewSh ? &pViewSh->GetViewData() : nullptr;
 
-    return ( pViewData != NULL );
+    return ( pViewData != nullptr );
 }
 
 void ScNavigatorDlg::UpdateColumn( const SCCOL* pCol )
@@ -1107,7 +1107,7 @@ void ScNavigatorDlg::SetListMode( NavListMode eMode, bool bSetSize )
 
 void ScNavigatorDlg::ShowList( bool bShow, bool bSetSize )
 {
-    FloatingWindow* pFloat = pContextWin!=NULL ? pContextWin->GetFloatingWindow() : NULL;
+    FloatingWindow* pFloat = pContextWin!=nullptr ? pContextWin->GetFloatingWindow() : nullptr;
     Size aSize = GetParent()->GetOutputSizePixel();
 
     if ( bShow )
@@ -1142,7 +1142,7 @@ void ScNavigatorDlg::ShowList( bool bShow, bool bSetSize )
     else
     {
         SfxNavigator* pNav = dynamic_cast<SfxNavigator*>(GetParent());
-        if (pNav != NULL)
+        if (pNav != nullptr)
         {
             Size aFloating = pNav->GetFloatingSize();
             aFloating.Height() = aSize.Height();
@@ -1153,7 +1153,7 @@ void ScNavigatorDlg::ShowList( bool bShow, bool bSetSize )
 
 void ScNavigatorDlg::ShowScenarios( bool bShow, bool bSetSize )
 {
-    FloatingWindow* pFloat = pContextWin!=NULL ? pContextWin->GetFloatingWindow() : NULL;
+    FloatingWindow* pFloat = pContextWin!=nullptr ? pContextWin->GetFloatingWindow() : nullptr;
     Size aSize = GetParent()->GetOutputSizePixel();
 
     if ( bShow )

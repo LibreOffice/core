@@ -128,7 +128,7 @@ void ScRTFExport::WriteRow( SCTAB nTab, SCROW nRow )
             case SVX_VER_JUSTIFY_CENTER:    pChar = OOO_STRING_SVTOOLS_RTF_CLVERTALC;   break;
             case SVX_VER_JUSTIFY_BOTTOM:    pChar = OOO_STRING_SVTOOLS_RTF_CLVERTALB;   break;
             case SVX_VER_JUSTIFY_STANDARD:  pChar = OOO_STRING_SVTOOLS_RTF_CLVERTALB;   break;  //! Bottom
-            default:                        pChar = NULL;           break;
+            default:                        pChar = nullptr;           break;
         }
         if ( pChar )
             rStrm.WriteCharPtr( pChar );

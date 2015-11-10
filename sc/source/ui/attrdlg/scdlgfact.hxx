@@ -225,11 +225,11 @@ class AbstractScInsertTableDlg_Impl : public AbstractScInsertTableDlg
     DECL_ABSTDLG_BASE( AbstractScInsertTableDlg_Impl, ScInsertTableDlg)
     virtual bool            GetTablesFromFile() override;
     virtual bool            GetTablesAsLink() override;
-    virtual const OUString* GetFirstTable( sal_uInt16* pN = NULL ) override;
+    virtual const OUString* GetFirstTable( sal_uInt16* pN = nullptr ) override;
     virtual ScDocShell*     GetDocShellTables() override;
     virtual bool            IsTableBefore() override;
     virtual sal_uInt16      GetTableCount() override;
-    virtual const OUString* GetNextTable( sal_uInt16* pN = NULL ) override;
+    virtual const OUString* GetNextTable( sal_uInt16* pN = nullptr ) override;
 
 };
 
@@ -447,7 +447,7 @@ public:
 
     virtual AbstractScInsertContentsDlg * CreateScInsertContentsDlg( vcl::Window*        pParent,
                                                                     InsertDeleteFlags nCheckDefaults = InsertDeleteFlags::NONE,
-                                                                    const OUString* pStrTitle = NULL ) override;
+                                                                    const OUString* pStrTitle = nullptr ) override;
 
     virtual AbstractScInsertTableDlg * CreateScInsertTableDlg(vcl::Window* pParent, ScViewData& rViewData,
         SCTAB nTabCount, bool bFromFile) override;
@@ -523,8 +523,8 @@ public:
 
     virtual AbstractScImportOptionsDlg * CreateScImportOptionsDlg ( vcl::Window*                 pParent,
                                                                     bool                    bAscii = true,
-                                                                    const ScImportOptions*  pOptions = NULL,
-                                                                    const OUString*         pStrTitle = NULL,
+                                                                    const ScImportOptions*  pOptions = nullptr,
+                                                                    const OUString*         pStrTitle = nullptr,
                                                                     bool                    bMultiByte = false,
                                                                     bool                    bOnlyDbtoolsEncodings = false,
                                                                     bool                    bImport = true ) override;

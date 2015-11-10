@@ -40,8 +40,8 @@ ScDrawView::ScDrawView( OutputDevice* pOut, ScViewData* pData ) :
     pDev( pOut ),
     pDoc( pData->GetDocument() ),
     nTab( pData->GetTabNo() ),
-    pDropMarker( NULL ),
-    pDropMarkObj( NULL ),
+    pDropMarker( nullptr ),
+    pDropMarkObj( nullptr ),
     bInConstruct( true )
 {
     // #i73602# Use default from the configuration
@@ -202,7 +202,7 @@ void ScDrawView::UpdateIMap( SdrObject* pObj )
         Graphic     aGraphic;
         TargetList  aTargetList;
         ScIMapInfo* pIMapInfo = ScDrawLayer::GetIMapInfo( pObj );
-        const ImageMap* pImageMap = NULL;
+        const ImageMap* pImageMap = nullptr;
         if ( pIMapInfo )
             pImageMap = &pIMapInfo->GetImageMap();
 

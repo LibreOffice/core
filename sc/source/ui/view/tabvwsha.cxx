@@ -223,7 +223,7 @@ void ScTabViewShell::GetState( SfxItemSet& rSet )
             case SID_CURRENTCELL:
                 {
                     ScAddress aScAddress( GetViewData().GetCurX(), GetViewData().GetCurY(), 0 );
-                    OUString  aAddr(aScAddress.Format(SCA_ABS, NULL, pDoc->GetAddressConvention()));
+                    OUString  aAddr(aScAddress.Format(SCA_ABS, nullptr, pDoc->GetAddressConvention()));
                     SfxStringItem   aPosItem( SID_CURRENTCELL, aAddr );
 
                     rSet.Put( aPosItem );
@@ -371,7 +371,7 @@ void ScTabViewShell::GetState( SfxItemSet& rSet )
 
             case SID_AUTO_OUTLINE:
                 {
-                    if (pDoc->GetChangeTrack()!=NULL || GetViewData().IsMultiMarked())
+                    if (pDoc->GetChangeTrack()!=nullptr || GetViewData().IsMultiMarked())
                     {
                         rSet.DisableItem( nWhich );
                     }
@@ -382,7 +382,7 @@ void ScTabViewShell::GetState( SfxItemSet& rSet )
                 {
                     SCTAB nOlTab = GetViewData().GetTabNo();
                     ScOutlineTable* pOlTable = pDoc->GetOutlineTable( nOlTab );
-                    if (pOlTable == NULL)
+                    if (pOlTable == nullptr)
                         rSet.DisableItem( nWhich );
                 }
                 break;
@@ -401,7 +401,7 @@ void ScTabViewShell::GetState( SfxItemSet& rSet )
 
             case FID_CHG_SHOW:
                 {
-                    if ( pDoc->GetChangeTrack() == NULL || ( pDocShell && pDocShell->IsDocShared() ) )
+                    if ( pDoc->GetChangeTrack() == nullptr || ( pDocShell && pDocShell->IsDocShared() ) )
                         rSet.DisableItem( nWhich );
                 }
                 break;
@@ -409,7 +409,7 @@ void ScTabViewShell::GetState( SfxItemSet& rSet )
                 {
                     rSet.Put(SfxBoolItem(FID_CHG_ACCEPT,
                             pThisFrame->HasChildWindow(FID_CHG_ACCEPT)));
-                    if(pDoc->GetChangeTrack()==NULL)
+                    if(pDoc->GetChangeTrack()==nullptr)
                     {
                         if ( !pThisFrame->HasChildWindow(FID_CHG_ACCEPT) )
                         {
@@ -528,7 +528,7 @@ void ScTabViewShell::ExecuteCellFormatDlg(SfxRequest& rReq, const OString &rName
     {
         const SfxItemSet* pOutSet = pDlg->GetOutputItemSet();
 
-        const SfxPoolItem* pItem=NULL;
+        const SfxPoolItem* pItem=nullptr;
         if(pOutSet->GetItemState(SID_ATTR_NUMBERFORMAT_INFO,true,&pItem)==SfxItemState::SET)
         {
 
@@ -602,7 +602,7 @@ void ScTabViewShell::UpdateInputHandler( bool bForce /* = sal_False */, bool bSt
     if ( pHdl )
     {
         OUString                aString;
-        const EditTextObject*   pObject     = NULL;
+        const EditTextObject*   pObject     = nullptr;
         ScViewData&             rViewData   = GetViewData();
         ScDocument*             pDoc        = rViewData.GetDocument();
         CellType                eType;
@@ -675,7 +675,7 @@ void ScTabViewShell::UpdateInputHandler( bool bForce /* = sal_False */, bool bSt
 
         //  if using the view's local input handler, this view can always be set
         //  as current view inside NotifyChange.
-        ScTabViewShell* pSourceSh = pInputHandler ? this : NULL;
+        ScTabViewShell* pSourceSh = pInputHandler ? this : nullptr;
 
         pHdl->NotifyChange( &aState, bForce, pSourceSh, bStopEditing );
     }
@@ -719,7 +719,7 @@ void ScTabViewShell::GetSaveState( SfxItemSet& rSet )
         if ( nWhich != SID_SAVEDOC || !GetViewData().GetDocShell()->IsDocShared() )
         {
             // get state from DocShell
-            pDocSh->GetSlotState( nWhich, NULL, &rSet );
+            pDocSh->GetSlotState( nWhich, nullptr, &rSet );
         }
         nWhich = aIter.NextWhich();
     }

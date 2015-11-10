@@ -38,9 +38,9 @@ using namespace ::formula;
 // External reference log =====================================================
 
 XclExpRefLogEntry::XclExpRefLogEntry() :
-    mpUrl( 0 ),
-    mpFirstTab( 0 ),
-    mpLastTab( 0 ),
+    mpUrl( nullptr ),
+    mpFirstTab( nullptr ),
+    mpLastTab( nullptr ),
     mnFirstXclTab( EXC_TAB_DELETED ),
     mnLastXclTab( EXC_TAB_DELETED )
 {
@@ -57,8 +57,8 @@ struct XclExpScToken
     const FormulaToken* mpScToken;          /// Currently processed Calc token.
     sal_uInt8           mnSpaces;           /// Number of spaces before the Calc token.
 
-    inline explicit     XclExpScToken() : mpScToken( 0 ), mnSpaces( 0 ) {}
-    inline bool         Is() const { return mpScToken != 0; }
+    inline explicit     XclExpScToken() : mpScToken( nullptr ), mnSpaces( 0 ) {}
+    inline bool         Is() const { return mpScToken != nullptr; }
     inline StackVar     GetType() const { return mpScToken ? mpScToken->GetType() : static_cast< StackVar >( svUnknown ); }
     inline OpCode       GetOpCode() const { return mpScToken ? mpScToken->GetOpCode() : static_cast< OpCode >( ocNone ); }
 };
@@ -199,7 +199,7 @@ void XclExpFuncData::IncParamInfoIdx()
             ++mpParamInfo;
         // if last parameter type is 'Excel-only' or 'Calc-only', do not repeat it
         else if( IsExcelOnlyParam() || IsCalcOnlyParam() )
-            mpParamInfo = 0;
+            mpParamInfo = nullptr;
         // points to last info, but parameter pairs expected, move to previous info
         else if( mrFuncInfo.IsParamPairs() )
             --mpParamInfo;
@@ -278,12 +278,12 @@ struct XclExpCompData
 
 XclExpCompData::XclExpCompData( const XclExpCompConfig* pCfg ) :
     mrCfg( pCfg ? *pCfg : spConfigTable[ 0 ] ),
-    mpLinkMgr( 0 ),
-    mpRefLog( 0 ),
-    mpScBasePos( 0 ),
+    mpLinkMgr( nullptr ),
+    mpRefLog( nullptr ),
+    mpScBasePos( nullptr ),
     mbStopAtSep( false ),
     mbVolatile( false ),
-    mbOk( pCfg != 0 )
+    mbOk( pCfg != nullptr )
 {
     OSL_ENSURE( pCfg, "XclExpFmlaCompImpl::Init - unknown formula type" );
 }
@@ -299,7 +299,7 @@ public:
     /** Creates an Excel token array from the passed Calc token array. */
     XclTokenArrayRef    CreateFormula(
                             XclFormulaType eType, const ScTokenArray& rScTokArr,
-                            const ScAddress* pScBasePos = 0, XclExpRefLog* pRefLog = 0 );
+                            const ScAddress* pScBasePos = nullptr, XclExpRefLog* pRefLog = nullptr );
     /** Creates a single error token containing the passed error code. */
     XclTokenArrayRef    CreateErrorFormula( sal_uInt8 nErrCode );
     /** Creates a single token for a special cell reference. */
@@ -559,7 +559,7 @@ const XclExpCompConfig* XclExpFmlaCompImpl::GetConfigForType( XclFormulaType eTy
 {
     XclExpCompConfigMap::const_iterator aIt = maCfgMap.find( eType );
     OSL_ENSURE( aIt != maCfgMap.end(), "XclExpFmlaCompImpl::GetConfigForType - unknown formula type" );
-    return (aIt == maCfgMap.end()) ? 0 : &aIt->second;
+    return (aIt == maCfgMap.end()) ? nullptr : &aIt->second;
 }
 
 void XclExpFmlaCompImpl::Init( XclFormulaType eType )
@@ -583,12 +583,12 @@ void XclExpFmlaCompImpl::Init( XclFormulaType eType, const ScTokenArray& rScTokA
         case EXC_FMLATYPE_CELL:
         case EXC_FMLATYPE_MATRIX:
         case EXC_FMLATYPE_CHART:
-            mxData->mbOk = pScBasePos != 0;
+            mxData->mbOk = pScBasePos != nullptr;
             OSL_ENSURE( mxData->mbOk, "XclExpFmlaCompImpl::Init - missing cell address" );
             mxData->mpScBasePos = pScBasePos;
         break;
         case EXC_FMLATYPE_SHARED:
-            mxData->mbOk = pScBasePos != 0;
+            mxData->mbOk = pScBasePos != nullptr;
             assert(mxData->mbOk && "XclExpFmlaCompImpl::Init - missing cell address");
             if (mxData->mbOk)
             {
@@ -1346,7 +1346,7 @@ void XclExpFmlaCompImpl::ProcessFunction( const XclExpScToken& rTokData )
         }
     }
 
-    mxData->mbOk = pFuncInfo != 0;
+    mxData->mbOk = pFuncInfo != nullptr;
     if( !mxData->mbOk ) return;
 
     // internal functions equivalent to an existing add-in
@@ -1897,7 +1897,7 @@ XclExpRefLogEntry* XclExpFmlaCompImpl::GetNewRefLogEntry()
         mxData->mpRefLog->resize( mxData->mpRefLog->size() + 1 );
         return &mxData->mpRefLog->back();
     }
-    return 0;
+    return nullptr;
 }
 
 void XclExpFmlaCompImpl::ProcessCellRef( const XclExpScToken& rTokData )
@@ -1925,7 +1925,7 @@ void XclExpFmlaCompImpl::ProcessCellRef( const XclExpScToken& rTokData )
             mxData->mpLinkMgr->StoreCell(aRefData, *mxData->mpScBasePos);
 
         // create the tRef, tRefErr, tRefN, tRef3d, or tRefErr3d token
-        if (!mxData->mrCfg.mb3DRefOnly && IsRef2D(aRefData, mxData->mpLinkMgr != 0))
+        if (!mxData->mrCfg.mb3DRefOnly && IsRef2D(aRefData, mxData->mpLinkMgr != nullptr))
         {
             // 2D reference (not in defined names, but allowed in range lists)
             sal_uInt8 nBaseId = (!mxData->mpScBasePos && lclIsRefRel2D( aRefData )) ? EXC_TOKID_REFN :
@@ -1970,7 +1970,7 @@ void XclExpFmlaCompImpl::ProcessRangeRef( const XclExpScToken& rTokData )
         mxData->mpLinkMgr->StoreCellRange(aRefData, *mxData->mpScBasePos);
 
     // create the tArea, tAreaErr, tAreaN, tArea3d, or tAreaErr3d token
-    if (!mxData->mrCfg.mb3DRefOnly && IsRef2D(aRefData, mxData->mpLinkMgr != 0))
+    if (!mxData->mrCfg.mb3DRefOnly && IsRef2D(aRefData, mxData->mpLinkMgr != nullptr))
     {
         // 2D reference (not in name formulas, but allowed in range lists)
         sal_uInt8 nBaseId = (!mxData->mpScBasePos && lclIsRefRel2D( aRefData )) ? EXC_TOKID_AREAN :

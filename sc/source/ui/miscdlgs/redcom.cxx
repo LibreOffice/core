@@ -28,9 +28,9 @@
 
 ScRedComDialog::ScRedComDialog( vcl::Window* pParent, const SfxItemSet& rCoreSet,
                     ScDocShell *pShell, ScChangeAction *pAction, bool bPrevNext)
-    : pChangeAction(NULL)
-    , pDocShell(NULL)
-    , pDlg(NULL)
+    : pChangeAction(nullptr)
+    , pDocShell(nullptr)
+    , pDlg(nullptr)
 {
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     if(pFact)
@@ -55,14 +55,14 @@ ScRedComDialog::~ScRedComDialog()
 
 ScChangeAction *ScRedComDialog::FindPrev(ScChangeAction *pAction)
 {
-    if(pAction!=NULL && pDocShell !=NULL)
+    if(pAction!=nullptr && pDocShell !=nullptr)
     {
         ScDocument& rDoc = pDocShell->GetDocument();
         ScChangeViewSettings* pSettings = rDoc.GetChangeViewSettings();
 
         pAction=pAction->GetPrev();
 
-        while(pAction!=NULL)
+        while(pAction!=nullptr)
         {
             if( pAction->GetState()==SC_CAS_VIRGIN &&
                 pAction->IsDialogRoot() &&
@@ -76,14 +76,14 @@ ScChangeAction *ScRedComDialog::FindPrev(ScChangeAction *pAction)
 
 ScChangeAction *ScRedComDialog::FindNext(ScChangeAction *pAction)
 {
-    if(pAction!=NULL && pDocShell !=NULL)
+    if(pAction!=nullptr && pDocShell !=nullptr)
     {
         ScDocument& rDoc = pDocShell->GetDocument();
         ScChangeViewSettings* pSettings = rDoc.GetChangeViewSettings();
 
         pAction=pAction->GetNext();
 
-        while(pAction!=NULL)
+        while(pAction!=nullptr)
         {
             if( pAction->GetState()==SC_CAS_VIRGIN &&
                 pAction->IsDialogRoot() &&
@@ -98,15 +98,15 @@ ScChangeAction *ScRedComDialog::FindNext(ScChangeAction *pAction)
 void ScRedComDialog::ReInit(ScChangeAction *pAction)
 {
     pChangeAction=pAction;
-    if(pChangeAction!=NULL && pDocShell !=NULL)
+    if(pChangeAction!=nullptr && pDocShell !=nullptr)
     {
         OUString aTitle;
         pChangeAction->GetDescription( aTitle, &pDocShell->GetDocument());
         pDlg->SetText(aTitle);
         aComment=pChangeAction->GetComment();
 
-        bool bNext=FindNext(pChangeAction)!=NULL;
-        bool bPrev=FindPrev(pChangeAction)!=NULL;
+        bool bNext=FindNext(pChangeAction)!=nullptr;
+        bool bPrev=FindPrev(pChangeAction)!=nullptr;
         pDlg->EnableTravel(bNext,bPrev);
 
         OUString aAuthor = pChangeAction->GetUser();
@@ -127,7 +127,7 @@ short ScRedComDialog::Execute()
 
     if(nRet== RET_OK )
     {
-        if ( pDocShell!=NULL && pDlg->GetNote() != aComment )
+        if ( pDocShell!=nullptr && pDlg->GetNote() != aComment )
             pDocShell->SetChangeComment( pChangeAction, pDlg->GetNote());
     }
 
@@ -136,7 +136,7 @@ short ScRedComDialog::Execute()
 
 void ScRedComDialog::SelectCell()
 {
-    if(pChangeAction!=NULL)
+    if(pChangeAction!=nullptr)
     {
         const ScChangeAction* pAction=pChangeAction;
         const ScBigRange& rRange = pAction->GetBigRange();
@@ -153,7 +153,7 @@ void ScRedComDialog::SelectCell()
 
 IMPL_LINK_TYPED(ScRedComDialog, PrevHdl, AbstractSvxPostItDialog&, rDlgP, void )
 {
-    if (pDocShell!=NULL && rDlgP.GetNote() != aComment )
+    if (pDocShell!=nullptr && rDlgP.GetNote() != aComment )
         pDocShell->SetChangeComment( pChangeAction, rDlgP.GetNote());
 
     ReInit(FindPrev(pChangeAction));
@@ -162,7 +162,7 @@ IMPL_LINK_TYPED(ScRedComDialog, PrevHdl, AbstractSvxPostItDialog&, rDlgP, void )
 
 IMPL_LINK_TYPED(ScRedComDialog, NextHdl, AbstractSvxPostItDialog&, rDlgP, void )
 {
-    if ( pDocShell!=NULL && rDlgP.GetNote() != aComment )
+    if ( pDocShell!=nullptr && rDlgP.GetNote() != aComment )
         pDocShell->SetChangeComment( pChangeAction, rDlgP.GetNote());
 
     ReInit(FindNext(pChangeAction));

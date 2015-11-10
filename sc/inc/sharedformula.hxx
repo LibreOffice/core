@@ -34,7 +34,7 @@ public:
     {
         _Iter it = itBeg;
         ScFormulaCell* pPrev = *it;
-        ScFormulaCell* pCur = NULL;
+        ScFormulaCell* pCur = nullptr;
         for (++it; it != itEnd; ++it, pPrev = pCur)
         {
             pCur = *it;

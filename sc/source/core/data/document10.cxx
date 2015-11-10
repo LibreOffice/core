@@ -168,7 +168,7 @@ std::set<Color> ScDocument::GetDocColors()
         for (sal_uInt32 j=0; j<nCount; j++)
         {
             const SvxColorItem *pItem = static_cast<const SvxColorItem*>(pPool->GetItem2(nAttrib, j));
-            if (pItem == 0)
+            if (pItem == nullptr)
                 continue;
             Color aColor( pItem->GetValue() );
             if (COL_AUTO != aColor.GetColor())

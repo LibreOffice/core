@@ -55,9 +55,9 @@ ScTpUserLists::ScTpUserLists( vcl::Window*               pParent,
         aStrCopyFrom    ( ScGlobal::GetRscString( STR_COPYFROM ) ),
         aStrCopyErr     ( ScGlobal::GetRscString( STR_COPYERR ) ),
         nWhichUserLists ( GetWhich( SID_SCUSERLISTS ) ),
-        pUserLists      ( NULL ),
-        pDoc            ( NULL ),
-        pViewData       ( NULL ),
+        pUserLists      ( nullptr ),
+        pDoc            ( nullptr ),
+        pViewData       ( nullptr ),
         pRangeUtil      ( new ScRangeUtil ),
         bModifyMode     ( false ),
         bCancelMode     ( false ),
@@ -222,13 +222,13 @@ bool ScTpUserLists::FillItemSet( SfxItemSet* rCoreAttrs )
     ScUserList* pCoreList       = rUserListItem.GetUserList();
     bool        bDataModified   = false;
 
-    if ( (pUserLists == NULL) && (pCoreList == NULL) )
+    if ( (pUserLists == nullptr) && (pCoreList == nullptr) )
     {
         bDataModified = false;
     }
-    else if ( pUserLists != NULL )
+    else if ( pUserLists != nullptr )
     {
-        if ( pCoreList != NULL )
+        if ( pCoreList != nullptr )
             bDataModified = (*pUserLists != *pCoreList);
         else
             bDataModified = true;

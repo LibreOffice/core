@@ -44,7 +44,7 @@ using ::oox::drawingml::table::TableStyleListPtr;
 
 ExcelFilter::ExcelFilter( const Reference< XComponentContext >& rxContext ) throw( RuntimeException ) :
     XmlFilterBase( rxContext ),
-    mpBookGlob( 0 )
+    mpBookGlob( nullptr )
 {
 }
 
@@ -66,7 +66,7 @@ WorkbookGlobals& ExcelFilter::getWorkbookGlobals() const
 
 void ExcelFilter::unregisterWorkbookGlobals()
 {
-    mpBookGlob = 0;
+    mpBookGlob = nullptr;
 }
 
 bool ExcelFilter::importDocument()
@@ -123,7 +123,7 @@ const ::oox::drawingml::Theme* ExcelFilter::getCurrentTheme() const
 
 ::oox::vml::Drawing* ExcelFilter::getVmlDrawing()
 {
-    return 0;
+    return nullptr;
 }
 
 const TableStyleListPtr ExcelFilter::getTableStyles()

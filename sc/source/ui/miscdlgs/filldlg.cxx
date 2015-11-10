@@ -304,7 +304,7 @@ IMPL_LINK_NOARG_TYPED(ScFillSeriesDlg, OKHdl, Button*, void)
     else if ( m_pBtnYear->IsChecked() )        theFillDateCmd = FILL_YEAR;
 
     bool  bAllOk = true;
-    Edit* pEdWrong = NULL;
+    Edit* pEdWrong = nullptr;
     if ( !CheckStartVal() )
     {
         bAllOk = false;

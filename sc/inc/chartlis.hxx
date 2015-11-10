@@ -88,7 +88,7 @@ public:
     css::uno::Reference< css::chart::XChartDataChangeEventListener >  GetUnoListener() const;
     css::uno::Reference< css::chart::XChartData >                     GetUnoSource() const;
 
-    bool            IsUno() const   { return (pUnoData != NULL); }
+    bool            IsUno() const   { return (pUnoData != nullptr); }
 
     virtual void Notify( const SfxHint& rHint ) override;
     void            StartListeningTo();

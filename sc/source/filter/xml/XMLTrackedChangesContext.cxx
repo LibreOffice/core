@@ -254,7 +254,7 @@ public:
                                                     const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList ) override;
 
     void CreateTextPContext(bool bIsNewParagraph);
-    bool IsEditCell() { return pEditTextObj != 0; }
+    bool IsEditCell() { return pEditTextObj != nullptr; }
     void SetText(const OUString& sTempText) { sText = sTempText; }
 
     virtual void EndElement() override;
@@ -481,7 +481,7 @@ SvXMLImportContext *ScXMLTrackedChangesContext::CreateChildContext( sal_uInt16 n
                                      const OUString& rLocalName,
                                      const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList )
 {
-    SvXMLImportContext *pContext(0);
+    SvXMLImportContext *pContext(nullptr);
 
     if (nPrefix == XML_NAMESPACE_TABLE)
     {
@@ -558,7 +558,7 @@ SvXMLImportContext *ScXMLChangeInfoContext::CreateChildContext( sal_uInt16 nPref
                                      const OUString& rLocalName,
                                      const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList )
 {
-    SvXMLImportContext *pContext(0);
+    SvXMLImportContext *pContext(nullptr);
 
     if( XML_NAMESPACE_DC == nPrefix )
     {
@@ -586,7 +586,7 @@ SvXMLImportContext *ScXMLChangeInfoContext::CreateChildContext( sal_uInt16 nPref
 void ScXMLChangeInfoContext::EndElement()
 {
     aInfo.sUser = sAuthorBuffer.makeStringAndClear();
-    ::sax::Converter::parseDateTime(aInfo.aDateTime, 0,
+    ::sax::Converter::parseDateTime(aInfo.aDateTime, nullptr,
             sDateTimeBuffer.makeStringAndClear());
     aInfo.sComment = sCommentBuffer.makeStringAndClear();
     pChangeTrackingImportHelper->SetActionInfo(aInfo);
@@ -719,7 +719,7 @@ SvXMLImportContext *ScXMLCellContentDeletionContext::CreateChildContext( sal_uIn
                                      const OUString& rLocalName,
                                      const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList )
 {
-    SvXMLImportContext *pContext(0);
+    SvXMLImportContext *pContext(nullptr);
 
     if (nPrefix == XML_NAMESPACE_TABLE)
     {
@@ -814,7 +814,7 @@ SvXMLImportContext *ScXMLDependingsContext::CreateChildContext( sal_uInt16 nPref
                                      const OUString& rLocalName,
                                      const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList )
 {
-    SvXMLImportContext *pContext(0);
+    SvXMLImportContext *pContext(nullptr);
 
     if (nPrefix == XML_NAMESPACE_TABLE)
     {
@@ -894,7 +894,7 @@ SvXMLImportContext *ScXMLDeletionsContext::CreateChildContext( sal_uInt16 nPrefi
                                      const OUString& rLocalName,
                                      const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList )
 {
-    SvXMLImportContext *pContext(0);
+    SvXMLImportContext *pContext(nullptr);
 
     if (nPrefix == XML_NAMESPACE_TABLE)
     {
@@ -924,7 +924,7 @@ ScXMLChangeTextPContext::ScXMLChangeTextPContext( ScXMLImport& rImport,
     sLName(rLName),
     sText(),
     pChangeCellContext(pTempChangeCellContext),
-    pTextPContext(NULL),
+    pTextPContext(nullptr),
     nPrefix(nPrfx)
 {
     // here are no attributes
@@ -939,7 +939,7 @@ SvXMLImportContext *ScXMLChangeTextPContext::CreateChildContext( sal_uInt16 nTem
                                             const OUString& rLName,
                                             const css::uno::Reference<css::xml::sax::XAttributeList>& xTempAttrList )
 {
-    SvXMLImportContext *pContext(0);
+    SvXMLImportContext *pContext(nullptr);
 
     if ((nPrefix == XML_NAMESPACE_TEXT) && (IsXMLToken(rLName, XML_S)) && !pTextPContext)
     {
@@ -1012,7 +1012,7 @@ ScXMLChangeCellContext::ScXMLChangeCellContext( ScXMLImport& rImport,
     : SvXMLImportContext( rImport, nPrfx, rLName )
     , mrOldCell(rOldCell)
     , rInputString(rTempInputString)
-    , pEditTextObj(NULL)
+    , pEditTextObj(nullptr)
     , rDateTimeValue(fDateTimeValue)
     , fValue(0.0)
     , rType(nType)
@@ -1110,7 +1110,7 @@ SvXMLImportContext *ScXMLChangeCellContext::CreateChildContext( sal_uInt16 nPref
                                      const OUString& rLocalName,
                                      const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList )
 {
-    SvXMLImportContext *pContext(0);
+    SvXMLImportContext *pContext(nullptr);
 
     if ((nPrefix == XML_NAMESPACE_TEXT) && (IsXMLToken(rLocalName, XML_P)))
     {
@@ -1246,7 +1246,7 @@ SvXMLImportContext *ScXMLPreviousContext::CreateChildContext( sal_uInt16 nPrefix
                                      const OUString& rLocalName,
                                      const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList )
 {
-    SvXMLImportContext *pContext(0);
+    SvXMLImportContext *pContext(nullptr);
 
     if ((nPrefix == XML_NAMESPACE_TABLE) && (IsXMLToken(rLocalName, XML_CHANGE_TRACK_TABLE_CELL)))
         pContext = new ScXMLChangeCellContext(GetScImport(), nPrefix, rLocalName, xAttrList,
@@ -1319,7 +1319,7 @@ SvXMLImportContext *ScXMLContentChangeContext::CreateChildContext( sal_uInt16 nP
                                      const OUString& rLocalName,
                                      const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList )
 {
-    SvXMLImportContext *pContext(0);
+    SvXMLImportContext *pContext(nullptr);
 
     if ((nPrefix == XML_NAMESPACE_OFFICE) && (IsXMLToken(rLocalName, XML_CHANGE_INFO)))
     {
@@ -1434,7 +1434,7 @@ SvXMLImportContext *ScXMLInsertionContext::CreateChildContext( sal_uInt16 nPrefi
                                      const OUString& rLocalName,
                                      const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList )
 {
-    SvXMLImportContext *pContext(0);
+    SvXMLImportContext *pContext(nullptr);
 
     if ((nPrefix == XML_NAMESPACE_OFFICE) && (IsXMLToken(rLocalName, XML_CHANGE_INFO)))
     {
@@ -1590,7 +1590,7 @@ SvXMLImportContext *ScXMLCutOffsContext::CreateChildContext( sal_uInt16 nPrefix,
                                      const OUString& rLocalName,
                                      const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList )
 {
-    SvXMLImportContext *pContext(0);
+    SvXMLImportContext *pContext(nullptr);
 
     if (nPrefix == XML_NAMESPACE_TABLE)
     {
@@ -1694,7 +1694,7 @@ SvXMLImportContext *ScXMLDeletionContext::CreateChildContext( sal_uInt16 nPrefix
                                      const OUString& rLocalName,
                                      const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList )
 {
-    SvXMLImportContext *pContext(0);
+    SvXMLImportContext *pContext(nullptr);
 
     if ((nPrefix == XML_NAMESPACE_OFFICE) && (IsXMLToken(rLocalName, XML_CHANGE_INFO)))
     {
@@ -1780,7 +1780,7 @@ SvXMLImportContext *ScXMLMovementContext::CreateChildContext( sal_uInt16 nPrefix
                                      const OUString& rLocalName,
                                      const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList )
 {
-    SvXMLImportContext *pContext(0);
+    SvXMLImportContext *pContext(nullptr);
 
     if ((nPrefix == XML_NAMESPACE_OFFICE) && (IsXMLToken(rLocalName, XML_CHANGE_INFO)))
     {
@@ -1865,7 +1865,7 @@ SvXMLImportContext *ScXMLRejectionContext::CreateChildContext( sal_uInt16 nPrefi
                                      const OUString& rLocalName,
                                      const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList )
 {
-    SvXMLImportContext *pContext(0);
+    SvXMLImportContext *pContext(nullptr);
 
     if ((nPrefix == XML_NAMESPACE_OFFICE) && (IsXMLToken(rLocalName, XML_CHANGE_INFO)))
     {

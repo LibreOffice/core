@@ -273,12 +273,12 @@ private:
     static ScNavigatorSettings* GetNavigatorSettings();
     bool                    GetViewData();
 
-    void    UpdateColumn    ( const SCCOL* pCol = NULL );
-    void    UpdateRow       ( const SCROW* pRow = NULL );
-    void    UpdateTable     ( const SCTAB* pTab = NULL );
+    void    UpdateColumn    ( const SCCOL* pCol = nullptr );
+    void    UpdateRow       ( const SCROW* pRow = nullptr );
+    void    UpdateTable     ( const SCTAB* pTab = nullptr );
     void    UpdateAll       ();
 
-    void    GetDocNames(const OUString* pSelEntry = NULL);
+    void    GetDocNames(const OUString* pSelEntry = nullptr);
 
     void    SetListMode     ( NavListMode eMode, bool bSetSize = true );
     void    ShowList        ( bool bShow, bool bSetSize );

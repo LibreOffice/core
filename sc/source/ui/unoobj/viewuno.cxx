@@ -138,7 +138,7 @@ void ScViewPaneBase::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
     if ( pSimpleHint && pSimpleHint->GetId() == SFX_HINT_DYING )
-        pViewShell = NULL;
+        pViewShell = nullptr;
 }
 
 uno::Any SAL_CALL ScViewPaneBase::queryInterface( const uno::Type& rType )
@@ -296,7 +296,7 @@ uno::Reference<table::XCellRange> SAL_CALL ScViewPaneBase::getReferredCells()
             return new ScCellRangeObj( pDocSh, aRange );
     }
 
-    return NULL;
+    return nullptr;
 }
 
 namespace
@@ -313,7 +313,7 @@ namespace
         _rpWindow = _pViewShell->GetWindowByPos( eWhich );
         _rpSdrView = _pViewShell->GetSdrView();
         _rpFormShell = _pViewShell->GetFormShell();
-        return ( _rpFormShell != NULL ) && ( _rpSdrView != NULL )&& ( _rpWindow != NULL );
+        return ( _rpFormShell != nullptr ) && ( _rpSdrView != nullptr )&& ( _rpWindow != nullptr );
     }
 }
 
@@ -324,9 +324,9 @@ uno::Reference< form::runtime::XFormController > SAL_CALL ScViewPaneBase::getFor
 
     uno::Reference< form::runtime::XFormController > xController;
 
-    vcl::Window* pWindow( NULL );
-    SdrView* pSdrView( NULL );
-    FmFormShell* pFormShell( NULL );
+    vcl::Window* pWindow( nullptr );
+    SdrView* pSdrView( nullptr );
+    FmFormShell* pFormShell( nullptr );
     if ( lcl_prepareFormShellCall( pViewShell, nPane, pFormShell, pWindow, pSdrView ) )
         xController = FmFormShell::GetFormController( _Form, *pSdrView, *pWindow );
 
@@ -339,7 +339,7 @@ sal_Bool SAL_CALL ScViewPaneBase::isFormDesignMode(  ) throw (uno::RuntimeExcept
 
     bool bIsFormDesignMode( true );
 
-    FmFormShell* pFormShell( pViewShell ? pViewShell->GetFormShell() : NULL );
+    FmFormShell* pFormShell( pViewShell ? pViewShell->GetFormShell() : nullptr );
     if ( pFormShell )
         bIsFormDesignMode = pFormShell->IsDesignMode();
 
@@ -350,9 +350,9 @@ void SAL_CALL ScViewPaneBase::setFormDesignMode( sal_Bool _DesignMode ) throw (u
 {
     SolarMutexGuard aGuard;
 
-    vcl::Window* pWindow( NULL );
-    SdrView* pSdrView( NULL );
-    FmFormShell* pFormShell( NULL );
+    vcl::Window* pWindow( nullptr );
+    SdrView* pSdrView( nullptr );
+    FmFormShell* pFormShell( nullptr );
     if ( lcl_prepareFormShellCall( pViewShell, nPane, pFormShell, pWindow, pSdrView ) )
         pFormShell->SetDesignMode( _DesignMode );
 }
@@ -367,9 +367,9 @@ uno::Reference<awt::XControl> SAL_CALL ScViewPaneBase::getControl(
 
     uno::Reference<awt::XControl> xRet;
 
-    vcl::Window* pWindow( NULL );
-    SdrView* pSdrView( NULL );
-    FmFormShell* pFormShell( NULL );
+    vcl::Window* pWindow( nullptr );
+    SdrView* pSdrView( nullptr );
+    FmFormShell* pFormShell( nullptr );
     if ( lcl_prepareFormShellCall( pViewShell, nPane, pFormShell, pWindow, pSdrView ) )
         pFormShell->GetFormControl( xModel, *pSdrView, *pWindow, xRet );
 
@@ -807,7 +807,7 @@ sal_Bool SAL_CALL ScTabViewObj::select( const uno::Any& aSelection )
                 long nCount = xShapeColl->getCount();
                 if (nCount)
                 {
-                    SdrPageView* pPV = NULL;
+                    SdrPageView* pPV = nullptr;
                     bool bAllMarked(true);
                     for ( long i = 0; i < nCount; i++ )
                     {
@@ -865,7 +865,7 @@ uno::Any SAL_CALL ScTabViewObj::getSelection()
 {
     SolarMutexGuard aGuard;
     ScTabViewShell* pViewSh = GetViewShell();
-    ScCellRangesBase* pObj = NULL;
+    ScCellRangesBase* pObj = nullptr;
     if (pViewSh)
     {
         //  Ist auf dem Drawing-Layer etwas selektiert?
@@ -1067,7 +1067,7 @@ ScViewPaneObj* ScTabViewObj::GetObjectByIndex_Impl(sal_uInt16 nIndex) const
             return new ScViewPaneObj( pViewSh, sal::static_int_cast<sal_uInt16>(eWhich) );
     }
 
-    return NULL;
+    return nullptr;
 }
 
 uno::Reference<sheet::XSpreadsheet> SAL_CALL ScTabViewObj::getActiveSheet()
@@ -1081,7 +1081,7 @@ uno::Reference<sheet::XSpreadsheet> SAL_CALL ScTabViewObj::getActiveSheet()
         SCTAB nTab = rViewData.GetTabNo();
         return new ScTableSheetObj( rViewData.GetDocShell(), nTab );
     }
-    return NULL;
+    return nullptr;
 }
 
 // support expand (but not replace) the active sheet
@@ -1129,7 +1129,7 @@ uno::Reference< uno::XInterface > ScTabViewObj::GetClickedObject(const Point& rP
         ScDocument* pDoc = rData.GetDocument();
         if (pDoc && pDoc->GetDrawLayer())
         {
-            SdrPage* pDrawPage = NULL;
+            SdrPage* pDrawPage = nullptr;
             ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
             if (pDrawLayer->HasObjects() && (pDrawLayer->GetPageCount() > nTab))
                 pDrawPage = pDrawLayer->GetPage(static_cast<sal_uInt16>(nTab));
@@ -1149,7 +1149,7 @@ uno::Reference< uno::XInterface > ScTabViewObj::GetClickedObject(const Point& rP
                 for (size_t i = 0; i < nCount && !bFound; ++i)
                 {
                     SdrObject* pObj = pDrawPage->GetObj(i);
-                    if (pObj && SdrObjectPrimitiveHit(*pObj, aPos, nHitLog, *pDrawView->GetSdrPageView(), 0, false))
+                    if (pObj && SdrObjectPrimitiveHit(*pObj, aPos, nHitLog, *pDrawView->GetSdrPageView(), nullptr, false))
                     {
                         xTarget.set(pObj->getUnoShape(), uno::UNO_QUERY);
                         bFound = true;
@@ -1955,7 +1955,7 @@ uno::Any SAL_CALL ScTabViewObj::getPropertyValue( const OUString& aPropertyName 
             vcl::Window* pActiveWin = rViewData.GetActiveWin();
             if ( pActiveWin )
             {
-                Rectangle aRect = pActiveWin->GetWindowExtentsRelative( NULL );
+                Rectangle aRect = pActiveWin->GetWindowExtentsRelative( nullptr );
                 aRet <<= AWTRectangle( aRect );
             }
         }
@@ -2205,7 +2205,7 @@ const uno::Sequence<sal_Int8>& ScTabViewObj::getUnoTunnelId()
 
 ScTabViewObj* ScTabViewObj::getImplementation(const uno::Reference<uno::XInterface>& rObj)
 {
-    ScTabViewObj* pRet = NULL;
+    ScTabViewObj* pRet = nullptr;
     uno::Reference<lang::XUnoTunnel> xUT(rObj, uno::UNO_QUERY);
     if (xUT.is())
         pRet = reinterpret_cast<ScTabViewObj*>(sal::static_int_cast<sal_IntPtr>(xUT->getSomething(getUnoTunnelId())));
@@ -2339,7 +2339,7 @@ void ScPreviewObj::Notify(SfxBroadcaster&, const SfxHint& rHint)
 {
     const SfxSimpleHint* p = dynamic_cast<const SfxSimpleHint*>(&rHint);
     if (p && p->GetId() == SFX_HINT_DYING)
-        mpViewShell = NULL;
+        mpViewShell = nullptr;
 }
 
 uno::Sequence<sal_Int32> ScPreviewObj::getSelectedSheets()

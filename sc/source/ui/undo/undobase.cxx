@@ -44,7 +44,7 @@ TYPEINIT1(ScUndoWrapper,    SfxUndoAction);
 
 ScSimpleUndo::ScSimpleUndo( ScDocShell* pDocSh ) :
     pDocShell( pDocSh ),
-    pDetectiveUndo( NULL )
+    pDetectiveUndo( nullptr )
 {
 }
 
@@ -443,7 +443,7 @@ void ScMoveUndo::UndoRef()
 {
     ScDocument& rDoc = pDocShell->GetDocument();
     ScRange aRange(0,0,0, MAXCOL,MAXROW,pRefUndoDoc->GetTableCount()-1);
-    pRefUndoDoc->CopyToDocument( aRange, InsertDeleteFlags::FORMULA, false, &rDoc, NULL, false );
+    pRefUndoDoc->CopyToDocument( aRange, InsertDeleteFlags::FORMULA, false, &rDoc, nullptr, false );
     if (pRefUndoData)
         pRefUndoData->DoUndo( &rDoc, (eMode == SC_UNDO_REFFIRST) );
         // HACK: ScDragDropUndo is the only one with REFFIRST.
@@ -579,7 +579,7 @@ ScUndoWrapper::~ScUndoWrapper()
 
 void ScUndoWrapper::ForgetWrappedUndo()
 {
-    pWrappedUndo = NULL;    // don't delete in dtor - pointer must be stored outside
+    pWrappedUndo = nullptr;    // don't delete in dtor - pointer must be stored outside
 }
 
 OUString ScUndoWrapper::GetComment() const

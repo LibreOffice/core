@@ -61,7 +61,7 @@ void Test::testSort()
     aSortData.maKeyState[0].nField = 1;
     aSortData.maKeyState[0].bAscending = true;
 
-    m_pDoc->Sort(0, aSortData, false, true, NULL, NULL);
+    m_pDoc->Sort(0, aSortData, false, true, nullptr, nullptr);
 
     double nVal = m_pDoc->GetValue(1,0,0);
     ASSERT_DOUBLES_EQUAL(nVal, 1.0);
@@ -75,8 +75,8 @@ void Test::testSort()
         // 0 = empty cell
         const char* aData[][1] = {
             { "Title" },
-            { 0 },
-            { 0 },
+            { nullptr },
+            { nullptr },
             { "12" },
             { "b" },
             { "1" },
@@ -94,7 +94,7 @@ void Test::testSort()
     aSortData.nRow2 = aDataRange.aEnd.Row();
     aSortData.bHasHeader = true;
     aSortData.maKeyState[0].nField = 0;
-    m_pDoc->Sort(0, aSortData, false, true, NULL, NULL);
+    m_pDoc->Sort(0, aSortData, false, true, nullptr, nullptr);
 
     // Title should stay at the top, numbers should be sorted numerically,
     // numbers always come before strings, and empty cells always occur at the
@@ -411,7 +411,7 @@ void Test::testSortWithFormulaRefs()
     aSortData.maKeyState[0].bDoSort = true;
     aSortData.maKeyState[0].nField = 0;
 
-    m_pDoc->Sort(0, aSortData, false, true, NULL, NULL);
+    m_pDoc->Sort(0, aSortData, false, true, nullptr, nullptr);
 
     for (size_t i = 0; i < SAL_N_ELEMENTS(aResults); ++i)
     {
@@ -446,7 +446,7 @@ void Test::testSortWithStrings()
     aParam.maKeyState[0].bAscending = true;
     aParam.maKeyState[0].nField = 1;
 
-    m_pDoc->Sort(0, aParam, false, true, NULL, NULL);
+    m_pDoc->Sort(0, aParam, false, true, nullptr, nullptr);
 
     CPPUNIT_ASSERT_EQUAL(OUString("Header"), m_pDoc->GetString(ScAddress(1,1,0)));
     CPPUNIT_ASSERT_EQUAL(OUString("Val1"), m_pDoc->GetString(ScAddress(1,2,0)));
@@ -454,7 +454,7 @@ void Test::testSortWithStrings()
 
     aParam.maKeyState[0].bAscending = false;
 
-    m_pDoc->Sort(0, aParam, false, true, NULL, NULL);
+    m_pDoc->Sort(0, aParam, false, true, nullptr, nullptr);
 
     CPPUNIT_ASSERT_EQUAL(OUString("Header"), m_pDoc->GetString(ScAddress(1,1,0)));
     CPPUNIT_ASSERT_EQUAL(OUString("Val2"), m_pDoc->GetString(ScAddress(1,2,0)));
@@ -499,7 +499,7 @@ void Test::testSortInFormulaGroup()
     aSortData.maKeyState[0].nField = 0;
     aSortData.maKeyState[0].bAscending = true;
 
-    m_pDoc->Sort(0, aSortData, false, true, NULL, NULL);
+    m_pDoc->Sort(0, aSortData, false, true, nullptr, nullptr);
 
     static struct {
         SCCOL nCol;
@@ -543,7 +543,7 @@ void Test::testSortWithCellFormats()
                 return false;
             }
 
-            const SfxPoolItem* pItem = NULL;
+            const SfxPoolItem* pItem = nullptr;
             if (!pPat->GetItemSet().HasItem(ATTR_FONT_WEIGHT, &pItem))
             {
                 cerr << "Pattern does not have a font weight item, but it should." << endl;
@@ -569,7 +569,7 @@ void Test::testSortWithCellFormats()
                 return false;
             }
 
-            const SfxPoolItem* pItem = NULL;
+            const SfxPoolItem* pItem = nullptr;
             if (!pPat->GetItemSet().HasItem(ATTR_FONT_POSTURE, &pItem))
             {
                 cerr << "Pattern does not have a font posture item, but it should." << endl;
@@ -595,7 +595,7 @@ void Test::testSortWithCellFormats()
                 return false;
             }
 
-            const SfxPoolItem* pItem = NULL;
+            const SfxPoolItem* pItem = nullptr;
             if (pPat->GetItemSet().HasItem(ATTR_FONT_WEIGHT, &pItem))
             {
                 // Check if the font weight is applied.
@@ -864,7 +864,7 @@ void Test::testSortRefUpdate2()
         { "2", "=RC[-1]" },
         { "6", "=RC[-1]" },
         { "4", "=RC[-1]" },
-        { 0, 0 } // terminator
+        { nullptr, nullptr } // terminator
     };
 
     for (SCROW i = 0; aData[i][0]; ++i)
@@ -951,7 +951,7 @@ void Test::testSortRefUpdate3()
         "2",
         "=A4+10",
         "=A2+A4",
-        0 // terminator
+        nullptr // terminator
     };
 
     for (SCROW i = 0; pData[i]; ++i)
@@ -1491,8 +1491,8 @@ void Test::testSortBroadcaster()
 
     {
         const char* aData[][7] = {
-            { "1",   0, 0, "=B1", "=$B$1", "=SUM(A1:B1)", "=SUM($A$1:$B$1)" },
-            { "2", "8", 0, "=B2", "=$B$2", "=SUM(A2:B2)", "=SUM($A$2:$B$2)" },
+            { "1",   nullptr, nullptr, "=B1", "=$B$1", "=SUM(A1:B1)", "=SUM($A$1:$B$1)" },
+            { "2", "8", nullptr, "=B2", "=$B$2", "=SUM(A2:B2)", "=SUM($A$2:$B$2)" },
         };
 
         ScAddress aPos(0,0,0);
@@ -1502,8 +1502,8 @@ void Test::testSortBroadcaster()
         {
             // Expected output table content.  0 = empty cell
             const char* aOutputCheck[][7] = {
-                { "1",   0, 0, "0", "0",  "1",  "1" },
-                { "2", "8", 0, "8", "8", "10", "10" },
+                { "1",   nullptr, nullptr, "0", "0",  "1",  "1" },
+                { "2", "8", nullptr, "8", "8", "10", "10" },
             };
 
             bool bSuccess = checkOutput<7>(m_pDoc, aDataRange, aOutputCheck, "Initial value");
@@ -1533,8 +1533,8 @@ void Test::testSortBroadcaster()
         {
             // Expected output table content.  0 = empty cell
             const char* aOutputCheck[][7] = {
-                { "2", "8", 0, "8", "8", "10", "10" },
-                { "1",   0, 0, "0", "0",  "1",  "1" },
+                { "2", "8", nullptr, "8", "8", "10", "10" },
+                { "1",   nullptr, nullptr, "0", "0",  "1",  "1" },
             };
 
             bool bSuccess = checkOutput<7>(m_pDoc, aDataRange, aOutputCheck, "Sorted without reference update");
@@ -1587,8 +1587,8 @@ void Test::testSortBroadcaster()
     {
         const char* aData[][2] = {
             { "1", "2" },
-            {   0, "8" },
-            { 0, 0 },
+            {   nullptr, "8" },
+            { nullptr, nullptr },
             { "=A6",             "=B6" },
             { "=$A$6",           "=$B$6" },
             { "=SUM(A5:A6)",     "=SUM(B5:B6)" },
@@ -1603,8 +1603,8 @@ void Test::testSortBroadcaster()
             // Expected output table content.  0 = empty cell
             const char* aOutputCheck[][2] = {
                 { "1", "2" },
-                {   0, "8" },
-                { 0, 0 },
+                {   nullptr, "8" },
+                { nullptr, nullptr },
                 { "0",  "8" },
                 { "0",  "8" },
                 { "1", "10" },
@@ -1639,8 +1639,8 @@ void Test::testSortBroadcaster()
             // Expected output table content.  0 = empty cell
             const char* aOutputCheck[][2] = {
                 { "2", "1" },
-                { "8",   0 },
-                { 0, 0 },
+                { "8",   nullptr },
+                { nullptr, nullptr },
                 { "8",  "0" },
                 { "8",  "0" },
                 { "10", "1" },
@@ -1707,7 +1707,7 @@ void Test::testSortOutOfPlaceResult()
         "2",
         "9",
         "-2",
-        0 // terminator
+        nullptr // terminator
     };
 
     // source data in A1:A6.
@@ -1781,7 +1781,7 @@ void Test::testSortPartialFormulaGroup()
         {  "8", "=RC[-1]" },
         { "47", "=RC[-1]" },
         { "28", "=RC[-1]" },
-        { 0, 0 } // terminator
+        { nullptr, nullptr } // terminator
     };
 
     // A1:B6.

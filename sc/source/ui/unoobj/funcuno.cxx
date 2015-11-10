@@ -80,7 +80,7 @@ ScDocument* ScTempDocSource::CreateDocument()
 
 ScTempDocSource::ScTempDocSource( ScTempDocCache& rDocCache ) :
     rCache( rDocCache ),
-    pTempDoc( NULL )
+    pTempDoc( nullptr )
 {
     if ( rCache.IsInUse() )
         pTempDoc = CreateDocument();
@@ -109,7 +109,7 @@ ScDocument* ScTempDocSource::GetDocument()
 }
 
 ScTempDocCache::ScTempDocCache() :
-    pDoc( NULL ),
+    pDoc( nullptr ),
     bInUse( false )
 {
 }
@@ -130,7 +130,7 @@ void ScTempDocCache::Clear()
 {
     OSL_ENSURE( !bInUse, "ScTempDocCache::Clear: bInUse" );
     delete pDoc;
-    pDoc = NULL;
+    pDoc = nullptr;
 }
 
 //  copy results from one document into another
@@ -167,14 +167,14 @@ static bool lcl_CopyData( ScDocument* pSrcDoc, const ScRange& rSrcRange,
     ScMarkData aDestMark;
     aDestMark.SelectOneTable( nDestTab );
     aDestMark.SetMarkArea( aNewRange );
-    pDestDoc->CopyFromClip( aNewRange, aDestMark, InsertDeleteFlags::ALL & ~InsertDeleteFlags::FORMULA, NULL, pClipDoc, false );
+    pDestDoc->CopyFromClip( aNewRange, aDestMark, InsertDeleteFlags::ALL & ~InsertDeleteFlags::FORMULA, nullptr, pClipDoc, false );
 
     delete pClipDoc;
     return true;
 }
 
 ScFunctionAccess::ScFunctionAccess() :
-    pOptions( NULL ),
+    pOptions( nullptr ),
     aPropertyMap( ScDocOptionsHelper::GetPropertyMap() ),
     mbArray( true ),    // default according to behaviour of older Office versions
     mbValid( true )
@@ -620,7 +620,7 @@ uno::Any SAL_CALL ScFunctionAccess::callFunction( const OUString& aName,
         //  call GetMatrix before GetErrCode because GetMatrix always recalculates
         //  if there is no matrix result
 
-        const ScMatrix* pMat = (mbArray && pFormula) ? pFormula->GetMatrix() : 0;
+        const ScMatrix* pMat = (mbArray && pFormula) ? pFormula->GetMatrix() : nullptr;
         sal_uInt16 nErrCode = pFormula ? pFormula->GetErrCode() : errIllegalArgument;
         if ( nErrCode == 0 )
         {

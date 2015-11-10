@@ -416,7 +416,7 @@ void ScStyleFamiliesObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
     const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
     if ( pSimpleHint && pSimpleHint->GetId() == SFX_HINT_DYING )
     {
-        pDocShell = NULL;       // ungueltig geworden
+        pDocShell = nullptr;       // ungueltig geworden
     }
 }
 
@@ -432,7 +432,7 @@ ScStyleFamilyObj*ScStyleFamiliesObj::GetObjectByType_Impl(sal_uInt16 nType) cons
             return new ScStyleFamilyObj( pDocShell, SFX_STYLE_FAMILY_PAGE );
     }
     OSL_FAIL("getStyleFamilyByType: keine DocShell oder falscher Typ");
-    return NULL;
+    return nullptr;
 }
 
 ScStyleFamilyObj* ScStyleFamiliesObj::GetObjectByIndex_Impl(sal_uInt32 nIndex) const
@@ -440,7 +440,7 @@ ScStyleFamilyObj* ScStyleFamiliesObj::GetObjectByIndex_Impl(sal_uInt32 nIndex) c
     if ( nIndex < SC_STYLE_FAMILY_COUNT )
         return GetObjectByType_Impl(aStyleFamilyTypes[nIndex]);
 
-    return NULL;    // ungueltiger Index
+    return nullptr;    // ungueltiger Index
 }
 
 ScStyleFamilyObj* ScStyleFamiliesObj::GetObjectByName_Impl(const OUString& aName) const
@@ -454,7 +454,7 @@ ScStyleFamilyObj* ScStyleFamiliesObj::GetObjectByName_Impl(const OUString& aName
             return new ScStyleFamilyObj( pDocShell, SFX_STYLE_FAMILY_PAGE );
     }
     // no assertion - called directly from getByName
-    return NULL;
+    return nullptr;
 }
 
 // container::XIndexAccess
@@ -633,7 +633,7 @@ void ScStyleFamilyObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
     const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
     if ( pSimpleHint && pSimpleHint->GetId() == SFX_HINT_DYING )
     {
-        pDocShell = NULL;       // ungueltig geworden
+        pDocShell = nullptr;       // ungueltig geworden
     }
 }
 
@@ -656,7 +656,7 @@ ScStyleObj* ScStyleFamilyObj::GetObjectByIndex_Impl(sal_uInt32 nIndex)
             }
         }
     }
-    return NULL;
+    return nullptr;
 }
 
 ScStyleObj* ScStyleFamilyObj::GetObjectByName_Impl(const OUString& aName)
@@ -670,7 +670,7 @@ ScStyleObj* ScStyleFamilyObj::GetObjectByName_Impl(const OUString& aName)
         if ( pStylePool->Find( aString, eFamily ) )
             return new ScStyleObj( pDocShell, eFamily, aString );
     }
-    return NULL;
+    return nullptr;
 }
 
 void SAL_CALL ScStyleFamilyObj::insertByName( const OUString& aName, const uno::Any& aElement )
@@ -1011,7 +1011,7 @@ const uno::Sequence<sal_Int8>& ScStyleObj::getUnoTunnelId()
 
 ScStyleObj* ScStyleObj::getImplementation(const uno::Reference<uno::XInterface>& rObj)
 {
-    ScStyleObj* pRet = NULL;
+    ScStyleObj* pRet = nullptr;
     uno::Reference<lang::XUnoTunnel> xUT(rObj, uno::UNO_QUERY);
     if (xUT.is())
         pRet = reinterpret_cast<ScStyleObj*>(sal::static_int_cast<sal_IntPtr>(xUT->getSomething(getUnoTunnelId())));
@@ -1025,7 +1025,7 @@ void ScStyleObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
     const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
     if ( pSimpleHint && pSimpleHint->GetId() == SFX_HINT_DYING )
     {
-        pDocShell = NULL;       // ungueltig geworden
+        pDocShell = nullptr;       // ungueltig geworden
     }
 }
 
@@ -1037,7 +1037,7 @@ SfxStyleSheetBase* ScStyleObj::GetStyle_Impl()
         ScStyleSheetPool* pStylePool = rDoc.GetStyleSheetPool();
         return pStylePool->Find( aStyleName, eFamily );
     }
-    return NULL;
+    return nullptr;
 }
 
 // style::XStyle
@@ -1183,7 +1183,7 @@ const SfxItemSet* ScStyleObj::GetStyleItemSet_Impl( const OUString& rPropName,
     SfxStyleSheetBase* pStyle = GetStyle_Impl();
     if (pStyle)
     {
-        const SfxItemPropertySimpleEntry* pEntry = NULL;
+        const SfxItemPropertySimpleEntry* pEntry = nullptr;
         if ( eFamily == SFX_STYLE_FAMILY_PAGE )
         {
             pEntry = lcl_GetHeaderStyleMap()->getByName( rPropName );
@@ -1207,8 +1207,8 @@ const SfxItemSet* ScStyleObj::GetStyleItemSet_Impl( const OUString& rPropName,
         }
     }
 
-    rpResultEntry = NULL;
-    return NULL;
+    rpResultEntry = nullptr;
+    return nullptr;
 }
 
 beans::PropertyState SAL_CALL ScStyleObj::getPropertyState( const OUString& aPropertyName )
@@ -1217,7 +1217,7 @@ beans::PropertyState SAL_CALL ScStyleObj::getPropertyState( const OUString& aPro
     SolarMutexGuard aGuard;
     beans::PropertyState eRet = beans::PropertyState_DIRECT_VALUE;
 
-    const SfxItemPropertySimpleEntry* pResultEntry = NULL;
+    const SfxItemPropertySimpleEntry* pResultEntry = nullptr;
     const SfxItemSet* pItemSet = GetStyleItemSet_Impl( aPropertyName, pResultEntry );
 
     if ( pItemSet && pResultEntry )
@@ -1278,7 +1278,7 @@ void SAL_CALL ScStyleObj::setPropertyToDefault( const OUString& aPropertyName )
     if ( !pEntry )
         throw beans::UnknownPropertyException();
 
-    SetOnePropertyValue( aPropertyName, pEntry, NULL );
+    SetOnePropertyValue( aPropertyName, pEntry, nullptr );
 }
 
 uno::Any SAL_CALL ScStyleObj::getPropertyDefault( const OUString& aPropertyName )
@@ -1288,7 +1288,7 @@ uno::Any SAL_CALL ScStyleObj::getPropertyDefault( const OUString& aPropertyName 
     SolarMutexGuard aGuard;
     uno::Any aAny;
 
-    const SfxItemPropertySimpleEntry* pResultEntry = NULL;
+    const SfxItemPropertySimpleEntry* pResultEntry = nullptr;
     const SfxItemSet* pStyleSet = GetStyleItemSet_Impl( aPropertyName, pResultEntry );
 
     if ( pStyleSet && pResultEntry )
@@ -1506,7 +1506,7 @@ void SAL_CALL ScStyleObj::setPropertiesToDefault( const uno::Sequence<OUString>&
         for (sal_Int32 i = 0; i < nCount; i++)
         {
             const SfxItemPropertySimpleEntry*  pEntry = rPropertyMap.getByName( pNames[i] );
-            SetOnePropertyValue( pNames[i], pEntry, NULL );
+            SetOnePropertyValue( pNames[i], pEntry, nullptr );
         }
     }
 }
@@ -1883,7 +1883,7 @@ uno::Any SAL_CALL ScStyleObj::getPropertyValue( const OUString& aPropertyName )
     }
     else
     {
-        const SfxItemPropertySimpleEntry* pResultEntry = NULL;
+        const SfxItemPropertySimpleEntry* pResultEntry = nullptr;
         const SfxItemSet* pItemSet = GetStyleItemSet_Impl( aPropertyName, pResultEntry );
 
         if ( pItemSet && pResultEntry )

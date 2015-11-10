@@ -280,7 +280,7 @@ public:
     virtual FltError ScImportRTF( SvStream&, const OUString& rBaseURL, ScDocument*, ScRange& rRange ) override;
     virtual FltError ScImportHTML( SvStream&, const OUString& rBaseURL, ScDocument*, ScRange& rRange,
                                    double nOutputFactor = 1.0, bool bCalcWidthHeight = true,
-                                   SvNumberFormatter* pFormatter = NULL, bool bConvertDate = true ) override;
+                                   SvNumberFormatter* pFormatter = nullptr, bool bConvertDate = true ) override;
 
     virtual ScEEAbsImport *CreateRTFImport( ScDocument* pDoc, const ScRange& rRange ) override;
     virtual ScEEAbsImport *CreateHTMLImport( ScDocument* pDocP, const OUString& rBaseURL, const ScRange& rRange, bool bCalcWidthHeight ) override;

@@ -99,7 +99,7 @@ XclExpObjList::XclExpObjList( const XclExpRoot& rRoot, XclEscherEx& rEscherEx ) 
     XclExpRoot( rRoot ),
     mnScTab( rRoot.GetCurrScTab() ),
     mrEscherEx( rEscherEx ),
-    pSolverContainer( 0 )
+    pSolverContainer( nullptr )
 {
     pMsodrawingPerSheet = new XclExpMsoDrawing( rEscherEx );
     // open the DGCONTAINER and the patriarch group shape
@@ -342,8 +342,8 @@ void XclExpObjList::ResetCounters()
 XclObj::XclObj( XclExpObjectManager& rObjMgr, sal_uInt16 nObjType, bool bOwnEscher ) :
     XclExpRecord( EXC_ID_OBJ, 26 ),
     mrEscherEx( rObjMgr.GetEscherEx() ),
-    pClientTextbox( NULL ),
-    pTxo( NULL ),
+    pClientTextbox( nullptr ),
+    pTxo( nullptr ),
     mnObjType( nObjType ),
     nObjId(0),
     nGrbit( 0x6011 ),   // AutoLine, AutoFill, Printable, Locked
@@ -799,7 +799,7 @@ XclTxo::XclTxo( const XclExpRoot& rRoot, const EditTextObject& rEditObj, SdrObje
         if( !aParaText.isEmpty() )
         {
             SfxItemSet aSet( rEditObj.GetParaAttribs( 0));
-            const SfxPoolItem* pItem = NULL;
+            const SfxPoolItem* pItem = nullptr;
             if( aSet.GetItemState( EE_PARA_JUST, true, &pItem ) == SfxItemState::SET )
             {
                 SvxAdjust eEEAlign = static_cast< const SvxAdjustItem& >( *pItem ).GetAdjust();
@@ -1164,7 +1164,7 @@ void XclObjAny::SaveXml( XclExpXmlStream& rStrm )
 
     sax_fastparser::FSHelperPtr pDrawing = rStrm.GetCurrentStream();
 
-    ShapeExport aDML( XML_xdr, pDrawing, NULL, &rStrm, DrawingML::DOCUMENT_XLSX );
+    ShapeExport aDML( XML_xdr, pDrawing, nullptr, &rStrm, DrawingML::DOCUMENT_XLSX );
     std::shared_ptr<oox::drawingml::URLTransformer> pURLTransformer(new ScURLTransformer(*mpDoc));
     aDML.SetURLTranslator(pURLTransformer);
 
@@ -1250,7 +1250,7 @@ void ExcBundlesheet8::SaveXml( XclExpXmlStream& rStrm )
     OUString sId;
     rStrm.CreateOutputStream(
             XclXmlUtils::GetStreamName( "xl/", "worksheets/sheet", nTab+1),
-            XclXmlUtils::GetStreamName( NULL, "worksheets/sheet", nTab+1),
+            XclXmlUtils::GetStreamName( nullptr, "worksheets/sheet", nTab+1),
             rStrm.GetCurrentStream()->getOutputStream(),
             "application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml",
             "http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet",

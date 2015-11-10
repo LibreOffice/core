@@ -240,7 +240,7 @@ ScCommentData::ScCommentData( ScDocument& rDoc, SdrModel* pModel ) :
 void ScCommentData::UpdateCaptionSet( const SfxItemSet& rItemSet )
 {
     SfxWhichIter aWhichIter( rItemSet );
-    const SfxPoolItem* pPoolItem = 0;
+    const SfxPoolItem* pPoolItem = nullptr;
 
     for( sal_uInt16 nWhich = aWhichIter.FirstWhich(); nWhich > 0; nWhich = aWhichIter.NextWhich() )
     {

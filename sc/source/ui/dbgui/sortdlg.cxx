@@ -29,8 +29,8 @@ ScSortDlg::ScSortDlg(vcl::Window* pParent, const SfxItemSet* pArgSet)
     , bIsHeaders(false)
     , bIsByRows(false)
 {
-    AddTabPage("criteria", ScTabPageSortFields::Create, 0);
-    AddTabPage("options", ScTabPageSortOptions::Create, 0);
+    AddTabPage("criteria", ScTabPageSortFields::Create, nullptr);
+    AddTabPage("options", ScTabPageSortOptions::Create, nullptr);
 }
 
 ScSortWarningDlg::ScSortWarningDlg(vcl::Window* pParent,

@@ -307,7 +307,7 @@ bool ScViewFunc::PasteDataFormat( SotClipboardFormatId nFormatId,
                     // make sense to do it for other data types too.
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                     std::unique_ptr<AbstractScTextImportOptionsDlg> pDlg(
-                        pFact->CreateScTextImportOptionsDlg(NULL));
+                        pFact->CreateScTextImportOptionsDlg(nullptr));
 
                     if (pDlg->Execute() == RET_OK)
                     {
@@ -336,7 +336,7 @@ bool ScViewFunc::PasteDataFormat( SotClipboardFormatId nFormatId,
                     ScAbstractDialogFactory* pFact =
                         ScAbstractDialogFactory::Create();
                     std::unique_ptr<AbstractScImportAsciiDlg> pDlg(
-                        pFact->CreateScImportAsciiDlg( NULL, OUString(), &aStrm,
+                        pFact->CreateScImportAsciiDlg( nullptr, OUString(), &aStrm,
                                                        SC_PASTETEXT));
 
                     if (pDlg->Execute() == RET_OK)
@@ -492,7 +492,7 @@ bool ScViewFunc::PasteDataFormat( SotClipboardFormatId nFormatId,
 
             ScDocShellRef aDragShellRef( new ScDocShell );
             aDragShellRef->DoInitNew();
-            std::unique_ptr<FmFormModel> pModel(new FmFormModel( aPath, NULL, aDragShellRef ));
+            std::unique_ptr<FmFormModel> pModel(new FmFormModel( aPath, nullptr, aDragShellRef ));
 
             pModel->GetItemPool().FreezeIdRanges();
             xStm->Seek(0);
@@ -544,7 +544,7 @@ bool ScViewFunc::PasteDataFormat( SotClipboardFormatId nFormatId,
             {
                 ScRange aSource;
                 const ScExtDocOptions* pExtOpt = pInsDoc->GetExtDocOptions();
-                const ScExtTabSettings* pTabSett = pExtOpt ? pExtOpt->GetTabSettings( nSrcTab ) : 0;
+                const ScExtTabSettings* pTabSett = pExtOpt ? pExtOpt->GetTabSettings( nSrcTab ) : nullptr;
                 if( pTabSett && pTabSett->maUsedArea.IsValid() )
                 {
                     aSource = pTabSett->maUsedArea;
@@ -693,7 +693,7 @@ bool ScViewFunc::PasteLink( const uno::Reference<datatransfer::XTransferable>& r
     const OUString* pApp   = &aStrs[0];
     const OUString* pTopic = &aStrs[1];
     const OUString* pItem  = &aStrs[2];
-    const OUString* pExtra = NULL;
+    const OUString* pExtra = nullptr;
     if (aStrs.size() > 3)
         pExtra = &aStrs[3];
 

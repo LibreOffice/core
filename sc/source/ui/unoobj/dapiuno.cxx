@@ -248,7 +248,7 @@ static ScDPObject* lcl_GetDPObject( ScDocShell* pDocShell, SCTAB nTab, const OUS
             }
         }
     }
-    return NULL;    // nicht gefunden
+    return nullptr;    // nicht gefunden
 }
 
 static OUString lcl_CreatePivotName( ScDocShell* pDocShell )
@@ -302,7 +302,7 @@ void ScDataPilotTablesObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
     const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
     if ( pSimpleHint && pSimpleHint->GetId() == SFX_HINT_DYING )
     {
-        pDocShell = NULL;       // ungueltig geworden
+        pDocShell = nullptr;       // ungueltig geworden
     }
 }
 
@@ -334,14 +334,14 @@ ScDataPilotTableObj* ScDataPilotTablesObj::GetObjectByIndex_Impl( sal_Int32 nInd
             }
         }
     }
-    return NULL;
+    return nullptr;
 }
 
 ScDataPilotTableObj* ScDataPilotTablesObj::GetObjectByName_Impl(const OUString& rName)
 {
     if (hasByName(rName))
         return new ScDataPilotTableObj( pDocShell, nTab, rName );
-    return 0;
+    return nullptr;
 }
 
 Reference<XDataPilotDescriptor> SAL_CALL ScDataPilotTablesObj::createDataPilotDescriptor()
@@ -350,7 +350,7 @@ Reference<XDataPilotDescriptor> SAL_CALL ScDataPilotTablesObj::createDataPilotDe
     SolarMutexGuard aGuard;
     if (pDocShell)
         return new ScDataPilotDescriptor(pDocShell);
-    return NULL;
+    return nullptr;
 }
 
 static bool lcl_IsDuplicated(const Reference<XPropertySet>& rDimProps)
@@ -647,7 +647,7 @@ void ScDataPilotDescriptorBase::Notify( SfxBroadcaster&, const SfxHint& rHint )
     const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
     if ( pSimpleHint && pSimpleHint->GetId() == SFX_HINT_DYING )
     {
-        pDocShell = NULL;       // ungueltig geworden
+        pDocShell = nullptr;       // ungueltig geworden
     }
 }
 
@@ -1045,7 +1045,7 @@ Reference< XDataPilotField > SAL_CALL ScDataPilotDescriptorBase::getDataLayoutFi
             }
         }
     }
-    return 0;
+    return nullptr;
 }
 
 // XUnoTunnel
@@ -1074,7 +1074,7 @@ const Sequence<sal_Int8>& ScDataPilotDescriptorBase::getUnoTunnelId()
 
 ScDataPilotDescriptorBase* ScDataPilotDescriptorBase::getImplementation(const Reference<XDataPilotDescriptor>& rObj )
 {
-    ScDataPilotDescriptorBase* pRet = NULL;
+    ScDataPilotDescriptorBase* pRet = nullptr;
     Reference<lang::XUnoTunnel> xUT(rObj, UNO_QUERY);
     if (xUT.is())
         pRet = reinterpret_cast<ScDataPilotDescriptorBase*>(sal::static_int_cast<sal_IntPtr>(xUT->getSomething(getUnoTunnelId())));
@@ -1379,7 +1379,7 @@ void ScDataPilotTableObj::Refreshed_Impl()
 
 ScDataPilotDescriptor::ScDataPilotDescriptor(ScDocShell* pDocSh) :
     ScDataPilotDescriptorBase( pDocSh ),
-    mpDPObject(new ScDPObject(pDocSh ? &pDocSh->GetDocument() : NULL) )
+    mpDPObject(new ScDPObject(pDocSh ? &pDocSh->GetDocument() : nullptr) )
 {
     ScDPSaveData aSaveData;
     // set defaults like in ScPivotParam constructor
@@ -1388,7 +1388,7 @@ ScDataPilotDescriptor::ScDataPilotDescriptor(ScDocShell* pDocSh) :
     aSaveData.SetIgnoreEmptyRows( false );
     aSaveData.SetRepeatIfEmpty( false );
     mpDPObject->SetSaveData(aSaveData);
-    ScSheetSourceDesc aSheetDesc(pDocSh ? &pDocSh->GetDocument() : NULL);
+    ScSheetSourceDesc aSheetDesc(pDocSh ? &pDocSh->GetDocument() : nullptr);
     mpDPObject->SetSheetDesc(aSheetDesc);
     mpDPObject->GetSource();
 }
@@ -1501,7 +1501,7 @@ ScDPSaveDimension* ScDataPilotChildObjBase::GetDPDimension( ScDPObject** ppDPObj
             }
         }
     }
-    return 0;
+    return nullptr;
 }
 
 sal_Int32 ScDataPilotChildObjBase::GetMemberCount() const
@@ -1693,7 +1693,7 @@ ScDataPilotFieldObj* ScDataPilotFieldsObj::GetObjectByIndex_Impl( sal_Int32 nInd
         if (lcl_GetFieldDataByIndex( pObj->GetSource(), maOrient, nIndex, aFieldId ))
             return new ScDataPilotFieldObj( mrParent, aFieldId, maOrient );
     }
-    return 0;
+    return nullptr;
 }
 
 ScDataPilotFieldObj* ScDataPilotFieldsObj::GetObjectByName_Impl(const OUString& aName) const
@@ -1704,7 +1704,7 @@ ScDataPilotFieldObj* ScDataPilotFieldsObj::GetObjectByName_Impl(const OUString& 
         if (lcl_GetFieldDataByName( pDPObj, aName, aFieldId ))
             return new ScDataPilotFieldObj( mrParent, aFieldId, maOrient );
     }
-    return 0;
+    return nullptr;
 }
 
 // XEnumerationAccess
@@ -1787,7 +1787,7 @@ sal_Bool SAL_CALL ScDataPilotFieldsObj::hasByName( const OUString& aName )
 {
     SolarMutexGuard aGuard;
 
-    return GetObjectByName_Impl(aName) != NULL;
+    return GetObjectByName_Impl(aName) != nullptr;
 }
 
 ScDataPilotFieldObj::ScDataPilotFieldObj(
@@ -1835,7 +1835,7 @@ void SAL_CALL ScDataPilotFieldObj::setName(const OUString& rName)
     throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    ScDPObject* pDPObj = 0;
+    ScDPObject* pDPObj = nullptr;
     ScDPSaveDimension* pDim = GetDPDimension( &pDPObj );
     if( pDim && !pDim->IsDataLayout() )
     {
@@ -1895,7 +1895,7 @@ void SAL_CALL ScDataPilotFieldObj::setPropertyValue( const OUString& aPropertyNa
     else if ( aNameString == SC_UNONAME_HASAUTOSHOW )
     {
         if (!cppu::any2bool(aValue))
-            setAutoShowInfo(NULL);
+            setAutoShowInfo(nullptr);
     }
     else if ( aNameString == SC_UNONAME_AUTOSHOW )
     {
@@ -1906,7 +1906,7 @@ void SAL_CALL ScDataPilotFieldObj::setPropertyValue( const OUString& aPropertyNa
     else if ( aNameString == SC_UNONAME_HASLAYOUTINFO )
     {
         if (!cppu::any2bool(aValue))
-            setLayoutInfo(NULL);
+            setLayoutInfo(nullptr);
     }
     else if ( aNameString == SC_UNONAME_LAYOUTINFO )
     {
@@ -1917,7 +1917,7 @@ void SAL_CALL ScDataPilotFieldObj::setPropertyValue( const OUString& aPropertyNa
     else if ( aNameString == SC_UNONAME_HASREFERENCE )
     {
         if (!cppu::any2bool(aValue))
-            setReference(NULL);
+            setReference(nullptr);
     }
     else if ( aNameString == SC_UNONAME_REFERENCE )
     {
@@ -1928,7 +1928,7 @@ void SAL_CALL ScDataPilotFieldObj::setPropertyValue( const OUString& aPropertyNa
     else if ( aNameString == SC_UNONAME_HASSORTINFO )
     {
         if (!cppu::any2bool(aValue))
-            setSortInfo(NULL);
+            setSortInfo(nullptr);
     }
     else if ( aNameString == SC_UNONAME_SORTINFO )
     {
@@ -1939,7 +1939,7 @@ void SAL_CALL ScDataPilotFieldObj::setPropertyValue( const OUString& aPropertyNa
     else if ( aNameString == SC_UNONAME_ISGROUP )
     {
         if (!cppu::any2bool(aValue))
-            setGroupInfo(NULL);
+            setGroupInfo(nullptr);
     }
     else if ( aNameString == SC_UNONAME_GROUPINFO )
     {
@@ -1976,7 +1976,7 @@ Any SAL_CALL ScDataPilotFieldObj::getPropertyValue( const OUString& aPropertyNam
     else if ( aNameString == SC_UNONAME_USESELPAGE )
         aRet <<= false;
     else if ( aNameString == SC_UNONAME_HASAUTOSHOW )
-        aRet <<= (getAutoShowInfo() != NULL);
+        aRet <<= (getAutoShowInfo() != nullptr);
     else if ( aNameString == SC_UNONAME_AUTOSHOW )
     {
         const DataPilotFieldAutoShowInfo* pInfo = getAutoShowInfo();
@@ -1984,7 +1984,7 @@ Any SAL_CALL ScDataPilotFieldObj::getPropertyValue( const OUString& aPropertyNam
             aRet <<= DataPilotFieldAutoShowInfo(*pInfo);
     }
     else if ( aNameString == SC_UNONAME_HASLAYOUTINFO )
-        aRet <<= (getLayoutInfo() != NULL);
+        aRet <<= (getLayoutInfo() != nullptr);
     else if ( aNameString == SC_UNONAME_LAYOUTINFO )
     {
         const DataPilotFieldLayoutInfo* pInfo = getLayoutInfo();
@@ -1992,7 +1992,7 @@ Any SAL_CALL ScDataPilotFieldObj::getPropertyValue( const OUString& aPropertyNam
             aRet <<= DataPilotFieldLayoutInfo(*pInfo);
     }
     else if ( aNameString == SC_UNONAME_HASREFERENCE )
-        aRet <<= (getReference() != NULL);
+        aRet <<= (getReference() != nullptr);
     else if ( aNameString == SC_UNONAME_REFERENCE )
     {
         const DataPilotFieldReference* pRef = getReference();
@@ -2000,7 +2000,7 @@ Any SAL_CALL ScDataPilotFieldObj::getPropertyValue( const OUString& aPropertyNam
             aRet <<= DataPilotFieldReference(*pRef);
     }
     else if ( aNameString == SC_UNONAME_HASSORTINFO )
-        aRet <<= (getSortInfo() != NULL);
+        aRet <<= (getSortInfo() != nullptr);
     else if ( aNameString == SC_UNONAME_SORTINFO )
     {
         const DataPilotFieldSortInfo* pInfo = getSortInfo();
@@ -2047,7 +2047,7 @@ void ScDataPilotFieldObj::setOrientation(DataPilotFieldOrientation eNew)
     if (maOrient.hasValue() && (eNew == maOrient.get< DataPilotFieldOrientation >()))
         return;
 
-    ScDPObject* pDPObj = 0;
+    ScDPObject* pDPObj = nullptr;
     if( ScDPSaveDimension* pDim = GetDPDimension( &pDPObj ) )
     {
         ScDPSaveData* pSaveData = pDPObj->GetSaveData();
@@ -2060,7 +2060,7 @@ void ScDataPilotFieldObj::setOrientation(DataPilotFieldOrientation eNew)
              (eNew == DataPilotFieldOrientation_DATA) )
         {
 
-            ScDPSaveDimension* pNewDim = 0;
+            ScDPSaveDimension* pNewDim = nullptr;
 
             // look for existing duplicate with orientation "hidden"
 
@@ -2118,14 +2118,14 @@ GeneralFunction ScDataPilotFieldObj::getFunction() const
 void ScDataPilotFieldObj::setFunction(GeneralFunction eNewFunc)
 {
     SolarMutexGuard aGuard;
-    ScDPObject* pDPObj = 0;
+    ScDPObject* pDPObj = nullptr;
     if( ScDPSaveDimension* pDim = GetDPDimension( &pDPObj ) )
     {
         if( pDim->GetOrientation() != DataPilotFieldOrientation_DATA )
         {
             // for non-data fields, property Function is the subtotals
             if ( eNewFunc == GeneralFunction_NONE )
-                pDim->SetSubTotals( 0, NULL );
+                pDim->SetSubTotals( 0, nullptr );
             else
             {
                 sal_uInt16 nFunc = sal::static_int_cast<sal_uInt16>( eNewFunc );
@@ -2162,7 +2162,7 @@ Sequence< GeneralFunction > ScDataPilotFieldObj::getSubtotals() const
 void ScDataPilotFieldObj::setSubtotals( const Sequence< GeneralFunction >& rSubtotals )
 {
     SolarMutexGuard aGuard;
-    ScDPObject* pDPObj = 0;
+    ScDPObject* pDPObj = nullptr;
     if( ScDPSaveDimension* pDim = GetDPDimension( &pDPObj ) )
     {
         if( pDim->GetOrientation() != DataPilotFieldOrientation_DATA )
@@ -2172,7 +2172,7 @@ void ScDataPilotFieldObj::setSubtotals( const Sequence< GeneralFunction >& rSubt
             {
                 // count 1: all values are allowed (including NONE and AUTO)
                 if( rSubtotals[ 0 ] == GeneralFunction_NONE )
-                    pDim->SetSubTotals( 0, NULL );
+                    pDim->SetSubTotals( 0, nullptr );
                 else
                 {
                     sal_uInt16 nFunc = sal::static_int_cast<sal_uInt16>( rSubtotals[ 0 ] );
@@ -2196,7 +2196,7 @@ void ScDataPilotFieldObj::setSubtotals( const Sequence< GeneralFunction >& rSubt
                 }
                 // set values from vector to ScDPSaveDimension
                 if ( aSubt.empty() )
-                    pDim->SetSubTotals( 0, NULL );
+                    pDim->SetSubTotals( 0, nullptr );
                 else
                     pDim->SetSubTotals( static_cast< long >( aSubt.size() ), &aSubt.front() );
             }
@@ -2213,7 +2213,7 @@ OUString ScDataPilotFieldObj::getCurrentPage()
 void ScDataPilotFieldObj::setCurrentPage( const OUString& rPage )
 {
     SolarMutexGuard aGuard;
-    ScDPObject* pDPObj = 0;
+    ScDPObject* pDPObj = nullptr;
     if( ScDPSaveDimension* pDim = GetDPDimension( &pDPObj ) )
     {
         pDim->SetCurrentPage( &rPage );
@@ -2224,7 +2224,7 @@ void ScDataPilotFieldObj::setCurrentPage( const OUString& rPage )
 void ScDataPilotFieldObj::setUseCurrentPage( bool bUse )
 {
     SolarMutexGuard aGuard;
-    ScDPObject* pDPObj = 0;
+    ScDPObject* pDPObj = nullptr;
     if( ScDPSaveDimension* pDim = GetDPDimension( &pDPObj ) )
     {
         if( bUse )
@@ -2235,7 +2235,7 @@ void ScDataPilotFieldObj::setUseCurrentPage( bool bUse )
             pDim->SetCurrentPage( &aPage );
         }
         else
-            pDim->SetCurrentPage( 0 );
+            pDim->SetCurrentPage( nullptr );
         SetDPObject( pDPObj );
     }
 }
@@ -2244,13 +2244,13 @@ const DataPilotFieldAutoShowInfo* ScDataPilotFieldObj::getAutoShowInfo()
 {
     SolarMutexGuard aGuard;
     ScDPSaveDimension* pDim = GetDPDimension();
-    return pDim ? pDim->GetAutoShowInfo() : 0;
+    return pDim ? pDim->GetAutoShowInfo() : nullptr;
 }
 
 void ScDataPilotFieldObj::setAutoShowInfo( const DataPilotFieldAutoShowInfo* pInfo )
 {
     SolarMutexGuard aGuard;
-    ScDPObject* pDPObj = 0;
+    ScDPObject* pDPObj = nullptr;
     if( ScDPSaveDimension* pDim = GetDPDimension( &pDPObj ) )
     {
         pDim->SetAutoShowInfo( pInfo );
@@ -2262,13 +2262,13 @@ const DataPilotFieldLayoutInfo* ScDataPilotFieldObj::getLayoutInfo()
 {
     SolarMutexGuard aGuard;
     ScDPSaveDimension* pDim = GetDPDimension();
-    return pDim ? pDim->GetLayoutInfo() : 0;
+    return pDim ? pDim->GetLayoutInfo() : nullptr;
 }
 
 void ScDataPilotFieldObj::setLayoutInfo( const DataPilotFieldLayoutInfo* pInfo )
 {
     SolarMutexGuard aGuard;
-    ScDPObject* pDPObj = 0;
+    ScDPObject* pDPObj = nullptr;
     if( ScDPSaveDimension* pDim = GetDPDimension( &pDPObj ) )
     {
         pDim->SetLayoutInfo( pInfo );
@@ -2280,13 +2280,13 @@ const DataPilotFieldReference* ScDataPilotFieldObj::getReference()
 {
     SolarMutexGuard aGuard;
     ScDPSaveDimension* pDim = GetDPDimension();
-    return pDim ? pDim->GetReferenceValue() : 0;
+    return pDim ? pDim->GetReferenceValue() : nullptr;
 }
 
 void ScDataPilotFieldObj::setReference( const DataPilotFieldReference* pInfo )
 {
     SolarMutexGuard aGuard;
-    ScDPObject* pDPObj = 0;
+    ScDPObject* pDPObj = nullptr;
     if( ScDPSaveDimension* pDim = GetDPDimension( &pDPObj ) )
     {
         pDim->SetReferenceValue( pInfo );
@@ -2298,13 +2298,13 @@ const DataPilotFieldSortInfo* ScDataPilotFieldObj::getSortInfo()
 {
     SolarMutexGuard aGuard;
     ScDPSaveDimension* pDim = GetDPDimension();
-    return pDim ? pDim->GetSortInfo() : 0;
+    return pDim ? pDim->GetSortInfo() : nullptr;
 }
 
 void ScDataPilotFieldObj::setSortInfo( const DataPilotFieldSortInfo* pInfo )
 {
     SolarMutexGuard aGuard;
-    ScDPObject* pDPObj = 0;
+    ScDPObject* pDPObj = nullptr;
     if( ScDPSaveDimension* pDim = GetDPDimension( &pDPObj ) )
     {
         pDim->SetSortInfo( pInfo );
@@ -2322,7 +2322,7 @@ bool ScDataPilotFieldObj::getShowEmpty() const
 void ScDataPilotFieldObj::setShowEmpty( bool bShow )
 {
     SolarMutexGuard aGuard;
-    ScDPObject* pDPObj = 0;
+    ScDPObject* pDPObj = nullptr;
     if( ScDPSaveDimension* pDim = GetDPDimension( &pDPObj ) )
     {
         pDim->SetShowEmpty( bShow );
@@ -2340,7 +2340,7 @@ bool ScDataPilotFieldObj::getRepeatItemLabels() const
 void ScDataPilotFieldObj::setRepeatItemLabels( bool bShow )
 {
     SolarMutexGuard aGuard;
-    ScDPObject* pDPObj = 0;
+    ScDPObject* pDPObj = nullptr;
     if( ScDPSaveDimension* pDim = GetDPDimension( &pDPObj ) )
     {
         pDim->SetRepeatItemLabels( bShow );
@@ -2351,7 +2351,7 @@ void ScDataPilotFieldObj::setRepeatItemLabels( bool bShow )
 bool ScDataPilotFieldObj::hasGroupInfo()
 {
     SolarMutexGuard aGuard;
-    ScDPObject* pDPObj = 0;
+    ScDPObject* pDPObj = nullptr;
     if( ScDPSaveDimension* pDim = GetDPDimension( &pDPObj ) )
         if( const ScDPDimensionSaveData* pDimData = pDPObj->GetSaveData()->GetExistingDimensionData() )
             return pDimData->GetNamedGroupDim( pDim->GetName() ) || pDimData->GetNumGroupDim( pDim->GetName() );
@@ -2362,7 +2362,7 @@ DataPilotFieldGroupInfo ScDataPilotFieldObj::getGroupInfo()
 {
     SolarMutexGuard aGuard;
     DataPilotFieldGroupInfo aInfo;
-    ScDPObject* pDPObj = 0;
+    ScDPObject* pDPObj = nullptr;
     if( ScDPSaveDimension* pDim = GetDPDimension( &pDPObj ) )
     {
         if( const ScDPDimensionSaveData* pDimData = pDPObj->GetSaveData()->GetExistingDimensionData() )
@@ -2420,7 +2420,7 @@ DataPilotFieldGroupInfo ScDataPilotFieldObj::getGroupInfo()
 void ScDataPilotFieldObj::setGroupInfo( const DataPilotFieldGroupInfo* pInfo )
 {
     SolarMutexGuard aGuard;
-    ScDPObject* pDPObj = 0;
+    ScDPObject* pDPObj = nullptr;
     if( /*ScDPSaveDimension* pDim =*/ GetDPDimension( &pDPObj ) )
     {
         ScDPSaveData* pSaveData = pDPObj->GetSaveData();
@@ -2501,7 +2501,7 @@ void ScDataPilotFieldObj::setGroupInfo( const DataPilotFieldGroupInfo* pInfo )
         }
         else    // null passed as argument
         {
-            pSaveData->SetDimensionData( 0 );
+            pSaveData->SetDimensionData( nullptr );
         }
 
         pDPObj->SetSaveData( *pSaveData );
@@ -2537,7 +2537,7 @@ Reference< XDataPilotField > SAL_CALL ScDataPilotFieldObj::createNameGroup( cons
     if( !rItems.hasElements() )
         throw IllegalArgumentException();
 
-    ScDPObject* pDPObj = 0;
+    ScDPObject* pDPObj = nullptr;
     if( ScDPSaveDimension* pDim = GetDPDimension( &pDPObj ) )
     {
         OUString aDimName = pDim->GetName();
@@ -2582,11 +2582,11 @@ Reference< XDataPilotField > SAL_CALL ScDataPilotFieldObj::createNameGroup( cons
             }
         }
 
-        ScDPSaveGroupDimension* pNewGroupDim = 0;
+        ScDPSaveGroupDimension* pNewGroupDim = nullptr;
         if ( !pGroupDimension )
         {
             // create a new group dimension
-            sNewDim = pDimData->CreateGroupDimName( aBaseDimName, *pDPObj, false, NULL );
+            sNewDim = pDimData->CreateGroupDimName( aBaseDimName, *pDPObj, false, nullptr );
             pNewGroupDim = new ScDPSaveGroupDimension( aBaseDimName, sNewDim );
 
             pGroupDimension = pNewGroupDim;     // make changes to the new dim if none existed
@@ -2658,7 +2658,7 @@ Reference< XDataPilotField > SAL_CALL ScDataPilotFieldObj::createNameGroup( cons
             delete pNewGroupDim;        // AddGroupDimension copies the object
             // don't access pGroupDimension after here
         }
-        pGroupDimension = pNewGroupDim = NULL;
+        pGroupDimension = pNewGroupDim = nullptr;
 
         // set orientation
         ScDPSaveDimension* pSaveDimension = aSaveData.GetDimensionByName( aGroupDimName );
@@ -2714,7 +2714,7 @@ Reference < XDataPilotField > SAL_CALL ScDataPilotFieldObj::createDateGroup( con
         throw IllegalArgumentException();
 
     OUString aGroupDimName;
-    ScDPObject* pDPObj = 0;
+    ScDPObject* pDPObj = nullptr;
     if( ScDPSaveDimension* pDim = GetDPDimension( &pDPObj ) )
     {
         ScDPNumGroupInfo aInfo;
@@ -2776,7 +2776,7 @@ Reference < XDataPilotField > SAL_CALL ScDataPilotFieldObj::createDateGroup( con
             else if( (nDateParts & rInfo.GroupBy) == 0 )    // do nothing if date field exists already
             {
                 // create new named group dimension for additional date groups
-                aGroupDimName = rDimData.CreateDateGroupDimName( rInfo.GroupBy, *pDPObj, true, 0 );
+                aGroupDimName = rDimData.CreateDateGroupDimName( rInfo.GroupBy, *pDPObj, true, nullptr );
                 ScDPSaveGroupDimension aGroupDim( aSrcDimName, aGroupDimName, aInfo, rInfo.GroupBy );
                 rDimData.AddGroupDimension( aGroupDim );
 
@@ -3237,7 +3237,7 @@ ScDataPilotItemsObj::~ScDataPilotItemsObj()
 ScDataPilotItemObj* ScDataPilotItemsObj::GetObjectByIndex_Impl( sal_Int32 nIndex ) const
 {
     return ((0 <= nIndex) && (nIndex < GetMemberCount())) ?
-        new ScDataPilotItemObj( mrParent, maFieldId, nIndex ) : 0;
+        new ScDataPilotItemObj( mrParent, maFieldId, nIndex ) : nullptr;
 }
 
 // XNameAccess
@@ -3390,7 +3390,7 @@ void SAL_CALL ScDataPilotItemObj::setPropertyValue( const OUString& aPropertyNam
                RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    ScDPObject* pDPObj = 0;
+    ScDPObject* pDPObj = nullptr;
     if( ScDPSaveDimension* pDim = GetDPDimension( &pDPObj ) )
     {
         Reference<XNameAccess> xMembers = GetMembers();

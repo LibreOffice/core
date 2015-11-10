@@ -58,7 +58,7 @@ ContextHandlerRef ConnectionContext::onCreateContext( sal_Int32 nElement, const 
             mrConnection.importTable( rAttribs, nElement );
         break;
     }
-    return 0;
+    return nullptr;
 }
 
 void ConnectionContext::onStartElement( const AttributeList& rAttribs )
@@ -91,7 +91,7 @@ ContextHandlerRef ConnectionContext::onCreateRecordContext( sal_Int32 nRecId, Se
             mrConnection.importWebPrTable( rStrm, nRecId );
         break;
     }
-    return 0;
+    return nullptr;
 }
 
 void ConnectionContext::onStartRecord( SequenceInputStream& rStrm )
@@ -119,7 +119,7 @@ ContextHandlerRef ConnectionsFragment::onCreateContext( sal_Int32 nElement, cons
                 return new ConnectionContext( *this, getConnections().createConnection() );
         break;
     }
-    return 0;
+    return nullptr;
 }
 
 ContextHandlerRef ConnectionsFragment::onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& /*rStrm*/ )
@@ -136,7 +136,7 @@ ContextHandlerRef ConnectionsFragment::onCreateRecordContext( sal_Int32 nRecId, 
                 return new ConnectionContext( *this, getConnections().createConnection() );
         break;
     }
-    return 0;
+    return nullptr;
 }
 
 const RecordInfo* ConnectionsFragment::getRecordInfos() const

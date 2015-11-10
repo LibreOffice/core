@@ -182,7 +182,7 @@ bool AllStringsAreNull(const rtl_uString* const* pStringArray, size_t nLength)
 size_t VectorRef::Marshal( cl_kernel k, int argno, int, cl_program )
 {
     FormulaToken* ref = mFormulaTree->GetFormulaToken();
-    double* pHostBuffer = NULL;
+    double* pHostBuffer = nullptr;
     size_t szHostBuffer = 0;
     if (ref->GetType() == formula::svSingleVectorRef)
     {
@@ -230,21 +230,21 @@ size_t VectorRef::Marshal( cl_kernel k, int argno, int, cl_program )
                                            // Marshal as a buffer of NANs
         mpClmem = clCreateBuffer(kEnv.mpkContext,
             (cl_mem_flags)CL_MEM_READ_ONLY | CL_MEM_ALLOC_HOST_PTR,
-            szHostBuffer, NULL, &err);
+            szHostBuffer, nullptr, &err);
         if (CL_SUCCESS != err)
             throw OpenCLError("clCreateBuffer", err, __FILE__, __LINE__);
         SAL_INFO("sc.opencl", "Created buffer " << mpClmem << " size " << szHostBuffer);
 
         double* pNanBuffer = static_cast<double*>(clEnqueueMapBuffer(
             kEnv.mpkCmdQueue, mpClmem, CL_TRUE, CL_MAP_WRITE, 0,
-            szHostBuffer, 0, NULL, NULL, &err));
+            szHostBuffer, 0, nullptr, nullptr, &err));
         if (CL_SUCCESS != err)
             throw OpenCLError("clEnqueueMapBuffer", err, __FILE__, __LINE__);
 
         for (size_t i = 0; i < szHostBuffer / sizeof(double); i++)
             pNanBuffer[i] = NAN;
         err = clEnqueueUnmapMemObject(kEnv.mpkCmdQueue, mpClmem,
-            pNanBuffer, 0, NULL, NULL);
+            pNanBuffer, 0, nullptr, nullptr);
         // FIXME: Is it intentional to not throw an OpenCLError even if the clEnqueueUnmapMemObject() fails?
         if (CL_SUCCESS != err)
             SAL_WARN("sc.opencl", "clEnqueueUnmapMemObject failed: " << ::opencl::errorString(err));
@@ -818,21 +818,21 @@ size_t DynamicKernelStringArgument::Marshal( cl_kernel k, int argno, int, cl_pro
         vRef = pDVR->GetArrays()[mnIndex];
     }
     size_t szHostBuffer = nStrings * sizeof(cl_int);
-    cl_uint* pHashBuffer = NULL;
+    cl_uint* pHashBuffer = nullptr;
 
-    if (vRef.mpStringArray != NULL)
+    if (vRef.mpStringArray != nullptr)
     {
         // Marshal strings. Right now we pass hashes of these string
         mpClmem = clCreateBuffer(kEnv.mpkContext,
             (cl_mem_flags)CL_MEM_READ_ONLY | CL_MEM_ALLOC_HOST_PTR,
-            szHostBuffer, NULL, &err);
+            szHostBuffer, nullptr, &err);
         if (CL_SUCCESS != err)
             throw OpenCLError("clCreateBuffer", err, __FILE__, __LINE__);
         SAL_INFO("sc.opencl", "Created buffer " << mpClmem << " size " << szHostBuffer);
 
         pHashBuffer = static_cast<cl_uint*>(clEnqueueMapBuffer(
             kEnv.mpkCmdQueue, mpClmem, CL_TRUE, CL_MAP_WRITE, 0,
-            szHostBuffer, 0, NULL, NULL, &err));
+            szHostBuffer, 0, nullptr, nullptr, &err));
         if (CL_SUCCESS != err)
             throw OpenCLError("clEnqueueMapBuffer", err, __FILE__, __LINE__);
 
@@ -856,14 +856,14 @@ size_t DynamicKernelStringArgument::Marshal( cl_kernel k, int argno, int, cl_pro
                                            // Marshal as a buffer of NANs
         mpClmem = clCreateBuffer(kEnv.mpkContext,
             (cl_mem_flags)CL_MEM_READ_ONLY | CL_MEM_ALLOC_HOST_PTR,
-            szHostBuffer, NULL, &err);
+            szHostBuffer, nullptr, &err);
         if (CL_SUCCESS != err)
             throw OpenCLError("clCreateBuffer", err, __FILE__, __LINE__);
         SAL_INFO("sc.opencl", "Created buffer " << mpClmem << " size " << szHostBuffer);
 
         pHashBuffer = static_cast<cl_uint*>(clEnqueueMapBuffer(
             kEnv.mpkCmdQueue, mpClmem, CL_TRUE, CL_MAP_WRITE, 0,
-            szHostBuffer, 0, NULL, NULL, &err));
+            szHostBuffer, 0, nullptr, nullptr, &err));
         if (CL_SUCCESS != err)
             throw OpenCLError("clEnqueueMapBuffer", err, __FILE__, __LINE__);
 
@@ -871,7 +871,7 @@ size_t DynamicKernelStringArgument::Marshal( cl_kernel k, int argno, int, cl_pro
             pHashBuffer[i] = 0;
     }
     err = clEnqueueUnmapMemObject(kEnv.mpkCmdQueue, mpClmem,
-        pHashBuffer, 0, NULL, NULL);
+        pHashBuffer, 0, nullptr, nullptr);
     if (CL_SUCCESS != err)
         throw OpenCLError("clEnqueueUnmapMemObject", err, __FILE__, __LINE__);
 
@@ -963,7 +963,7 @@ public:
     DynamicKernelSlidingArgument( const ScCalcConfig& config, const std::string& s,
         FormulaTreeNodeRef ft, std::shared_ptr<SlidingFunctionBase>& CodeGen,
         int index = 0 ) :
-        Base(config, s, ft, index), mpCodeGen(CodeGen), mpClmem2(NULL)
+        Base(config, s, ft, index), mpCodeGen(CodeGen), mpClmem2(nullptr)
     {
         FormulaToken* t = ft->GetFormulaToken();
         if (t->GetType() != formula::svDoubleVectorRef)
@@ -1263,7 +1263,7 @@ public:
     ParallelReductionVectorRef( const ScCalcConfig& config, const std::string& s,
         FormulaTreeNodeRef ft, std::shared_ptr<SlidingFunctionBase>& CodeGen,
         int index = 0 ) :
-        Base(config, s, ft, index), mpCodeGen(CodeGen), mpClmem2(NULL)
+        Base(config, s, ft, index), mpCodeGen(CodeGen), mpClmem2(nullptr)
     {
         FormulaToken* t = ft->GetFormulaToken();
         if (t->GetType() != formula::svDoubleVectorRef)
@@ -1509,7 +1509,7 @@ public:
 
         mpClmem2 = clCreateBuffer(kEnv.mpkContext,
             CL_MEM_READ_WRITE | CL_MEM_ALLOC_HOST_PTR,
-            sizeof(double) * w, NULL, NULL);
+            sizeof(double) * w, nullptr, nullptr);
         if (CL_SUCCESS != err)
             throw OpenCLError("clCreateBuffer", err, __FILE__, __LINE__);
         SAL_INFO("sc.opencl", "Created buffer " << mpClmem2 << " size " << sizeof(double) << "*" << w << "=" << (sizeof(double)*w));
@@ -1553,8 +1553,8 @@ public:
         size_t global_work_size[] = { 256, (size_t)w };
         size_t local_work_size[] = { 256, 1 };
         SAL_INFO("sc.opencl", "Enqueing kernel " << redKernel);
-        err = clEnqueueNDRangeKernel(kEnv.mpkCmdQueue, redKernel, 2, NULL,
-            global_work_size, local_work_size, 0, NULL, NULL);
+        err = clEnqueueNDRangeKernel(kEnv.mpkCmdQueue, redKernel, 2, nullptr,
+            global_work_size, local_work_size, 0, nullptr, nullptr);
         if (CL_SUCCESS != err)
             throw OpenCLError("clEnqueueNDRangeKernel", err, __FILE__, __LINE__);
         err = clFinish(kEnv.mpkCmdQueue);
@@ -1611,8 +1611,8 @@ public:
             size_t global_work_size1[] = { 256, (size_t)w };
             size_t local_work_size1[] = { 256, 1 };
             SAL_INFO("sc.opencl", "Enqueing kernel " << redKernel);
-            err = clEnqueueNDRangeKernel(kEnv.mpkCmdQueue, redKernel, 2, NULL,
-                global_work_size1, local_work_size1, 0, NULL, NULL);
+            err = clEnqueueNDRangeKernel(kEnv.mpkCmdQueue, redKernel, 2, nullptr,
+                global_work_size1, local_work_size1, 0, nullptr, nullptr);
             if (CL_SUCCESS != err)
                 throw OpenCLError("clEnqueueNDRangeKernel", err, __FILE__, __LINE__);
             err = clFinish(kEnv.mpkCmdQueue);
@@ -1837,8 +1837,8 @@ public:
         const std::string& sSymName, SubArguments& vSubArguments ) override
     {
         size_t nCurWindowSize = 0;
-        FormulaToken* tmpCur = NULL;
-        const formula::DoubleVectorRefToken* pCurDVR = NULL;
+        FormulaToken* tmpCur = nullptr;
+        const formula::DoubleVectorRefToken* pCurDVR = nullptr;
         ss << "\ndouble " << sSymName;
         ss << "_" << BinFuncName() << "(";
         for (size_t i = 0; i < vSubArguments.size(); i++)
@@ -2250,7 +2250,7 @@ namespace {
 struct SumIfsArgs
 {
     explicit SumIfsArgs(cl_mem x) : mCLMem(x), mConst(0.0) { }
-    explicit SumIfsArgs(double x) : mCLMem(NULL), mConst(x) { }
+    explicit SumIfsArgs(double x) : mCLMem(nullptr), mConst(x) { }
     cl_mem mCLMem;
     double mConst;
 };
@@ -2292,10 +2292,10 @@ public:
                     if (VectorRef* VR = dynamic_cast<VectorRef*>(it->get()))
                         vclmem.push_back(VR->GetCLBuffer());
                     else
-                        vclmem.push_back(NULL);
+                        vclmem.push_back(nullptr);
                 }
                 pClmem2 = clCreateBuffer(kEnv.mpkContext, CL_MEM_READ_WRITE,
-                    sizeof(double) * nVectorWidth, NULL, &err);
+                    sizeof(double) * nVectorWidth, nullptr, &err);
                 if (CL_SUCCESS != err)
                     throw OpenCLError("clCreateBuffer", err, __FILE__, __LINE__);
                 SAL_INFO("sc.opencl", "Created buffer " << pClmem2 << " size " << sizeof(double) << "*" << nVectorWidth << "=" << (sizeof(double)*nVectorWidth));
@@ -2325,8 +2325,8 @@ public:
                 size_t global_work_size[] = { 256, (size_t)nVectorWidth };
                 size_t local_work_size[] = { 256, 1 };
                 SAL_INFO("sc.opencl", "Enqueing kernel " << redKernel);
-                err = clEnqueueNDRangeKernel(kEnv.mpkCmdQueue, redKernel, 2, NULL,
-                    global_work_size, local_work_size, 0, NULL, NULL);
+                err = clEnqueueNDRangeKernel(kEnv.mpkCmdQueue, redKernel, 2, nullptr,
+                    global_work_size, local_work_size, 0, nullptr, nullptr);
                 if (CL_SUCCESS != err)
                     throw OpenCLError("clEnqueueNDRangeKernel", err, __FILE__, __LINE__);
                 err = clFinish(kEnv.mpkCmdQueue);
@@ -2349,7 +2349,7 @@ public:
             DynamicKernelArgument* Arg = mvSubArguments[0].get();
             DynamicKernelSlidingArgument<VectorRef>* slidingArgPtr =
                 static_cast<DynamicKernelSlidingArgument<VectorRef>*>(Arg);
-            mpClmem2 = NULL;
+            mpClmem2 = nullptr;
 
             if (OpSumCodeGen->NeedReductionKernel())
             {
@@ -2368,7 +2368,7 @@ public:
                         vclmem.push_back(SumIfsArgs(nullptr));
                 }
                 mpClmem2 = clCreateBuffer(kEnv.mpkContext, CL_MEM_READ_WRITE,
-                    sizeof(double) * nVectorWidth, NULL, &err);
+                    sizeof(double) * nVectorWidth, nullptr, &err);
                 if (CL_SUCCESS != err)
                     throw OpenCLError("clCreateBuffer", err, __FILE__, __LINE__);
                 SAL_INFO("sc.opencl", "Created buffer " << mpClmem2 << " size " << sizeof(double) << "*" << nVectorWidth << "=" << (sizeof(double)*nVectorWidth));
@@ -2411,8 +2411,8 @@ public:
                 size_t global_work_size[] = { 256, (size_t)nVectorWidth };
                 size_t local_work_size[] = { 256, 1 };
                 SAL_INFO("sc.opencl", "Enqueing kernel " << redKernel);
-                err = clEnqueueNDRangeKernel(kEnv.mpkCmdQueue, redKernel, 2, NULL,
-                    global_work_size, local_work_size, 0, NULL, NULL);
+                err = clEnqueueNDRangeKernel(kEnv.mpkCmdQueue, redKernel, 2, nullptr,
+                    global_work_size, local_work_size, 0, nullptr, nullptr);
                 if (CL_SUCCESS != err)
                     throw OpenCLError("clEnqueueNDRangeKernel", err, __FILE__, __LINE__);
 
@@ -2540,7 +2540,7 @@ public:
             cl_int err;
             err = clReleaseMemObject(mpClmem2);
             SAL_WARN_IF(err != CL_SUCCESS, "sc.opencl", "clReleaseMemObject failed: " << ::opencl::errorString(err));
-            mpClmem2 = NULL;
+            mpClmem2 = nullptr;
         }
     }
 
@@ -2608,7 +2608,7 @@ DynamicKernelArgument* VectorRefFactory( const ScCalcConfig& config, const std::
 
 DynamicKernelSoPArguments::DynamicKernelSoPArguments(const ScCalcConfig& config,
     const std::string& s, const FormulaTreeNodeRef& ft, SlidingFunctionBase* pCodeGen, int nResultSize ) :
-    DynamicKernelArgument(config, s, ft), mpCodeGen(pCodeGen), mpClmem2(NULL)
+    DynamicKernelArgument(config, s, ft), mpCodeGen(pCodeGen), mpClmem2(nullptr)
 {
     size_t nChildren = ft->Children.size();
 
@@ -2642,8 +2642,8 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(const ScCalcConfig& config,
                                  " takeString=" << (pCodeGen->takeString()?"YES":"NO"));
 
                         if (pDVR->GetArrays()[j].mpNumericArray ||
-                            (pDVR->GetArrays()[j].mpNumericArray == NULL &&
-                                pDVR->GetArrays()[j].mpStringArray == NULL))
+                            (pDVR->GetArrays()[j].mpNumericArray == nullptr &&
+                                pDVR->GetArrays()[j].mpStringArray == nullptr))
                         {
                             if (pDVR->GetArrays()[j].mpNumericArray &&
                                 pCodeGen->takeNumeric() &&
@@ -2719,7 +2719,7 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(const ScCalcConfig& config,
                             DynamicKernelArgumentRef(new VectorRef(mCalcConfig, ts,
                                     ft->Children[i])));
                     }
-                    else if (pSVR->GetArray().mpNumericArray == NULL &&
+                    else if (pSVR->GetArray().mpNumericArray == nullptr &&
                         pCodeGen->takeNumeric() &&
                         pSVR->GetArray().mpStringArray &&
                         mCalcConfig.meStringConversion == ScCalcConfig::StringConversion::ZERO)
@@ -2741,7 +2741,7 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(const ScCalcConfig& config,
                                     ts, ft->Children[i])));
                     }
                     else if (AllStringsAreNull(pSVR->GetArray().mpStringArray, pSVR->GetArrayLength()) &&
-                        pSVR->GetArray().mpNumericArray == NULL)
+                        pSVR->GetArray().mpNumericArray == nullptr)
                     {
                         // There are only empty cells. Push as an
                         // array of NANs
@@ -3717,9 +3717,9 @@ private:
 DynamicKernel::DynamicKernel( const ScCalcConfig& config, const FormulaTreeNodeRef& r, int nResultSize ) :
     mCalcConfig(config),
     mpRoot(r),
-    mpProgram(NULL),
-    mpKernel(NULL),
-    mpResClmem(NULL),
+    mpProgram(nullptr),
+    mpKernel(nullptr),
+    mpResClmem(nullptr),
     mnResultSize(nResultSize) {}
 
 DynamicKernel::~DynamicKernel()
@@ -3823,8 +3823,8 @@ void DynamicKernel::CreateKernel()
     const char* src = mFullProgramSrc.c_str();
     static std::string lastOneKernelHash = "";
     static std::string lastSecondKernelHash = "";
-    static cl_program lastOneProgram = NULL;
-    static cl_program lastSecondProgram = NULL;
+    static cl_program lastOneProgram = nullptr;
+    static cl_program lastSecondProgram = nullptr;
     std::string KernelHash = mKernelSignature + GetMD5();
     if (lastOneKernelHash == KernelHash && lastOneProgram)
     {
@@ -3842,24 +3842,24 @@ void DynamicKernel::CreateKernel()
             SAL_INFO("sc.opencl", "Releasing program " << lastSecondProgram);
             err = clReleaseProgram(lastSecondProgram);
             SAL_WARN_IF(err != CL_SUCCESS, "sc.opencl", "clReleaseProgram failed: " << ::opencl::errorString(err));
-            lastSecondProgram = NULL;
+            lastSecondProgram = nullptr;
         }
         if (::opencl::buildProgramFromBinary("",
                 &::opencl::gpuEnv, KernelHash.c_str(), 0))
         {
             mpProgram = ::opencl::gpuEnv.mpArryPrograms[0];
-            ::opencl::gpuEnv.mpArryPrograms[0] = NULL;
+            ::opencl::gpuEnv.mpArryPrograms[0] = nullptr;
         }
         else
         {
             mpProgram = clCreateProgramWithSource(kEnv.mpkContext, 1,
-                &src, NULL, &err);
+                &src, nullptr, &err);
             if (err != CL_SUCCESS)
                 throw OpenCLError("clCreateProgramWithSource", err, __FILE__, __LINE__);
             SAL_INFO("sc.opencl", "Created program " << mpProgram);
 
             err = clBuildProgram(mpProgram, 1,
-                &::opencl::gpuEnv.mpDevID, "", NULL, NULL);
+                &::opencl::gpuEnv.mpDevID, "", nullptr, nullptr);
             if (err != CL_SUCCESS)
             {
 #if OSL_DEBUG_LEVEL > 0
@@ -3869,7 +3869,7 @@ void DynamicKernel::CreateKernel()
                     cl_int e = clGetProgramBuildInfo(
                         mpProgram, ::opencl::gpuEnv.mpDevID,
                         CL_PROGRAM_BUILD_STATUS, sizeof(cl_build_status),
-                        &stat, 0);
+                        &stat, nullptr);
                     SAL_WARN_IF(
                         e != CL_SUCCESS, "sc.opencl",
                         "after CL_BUILD_PROGRAM_FAILURE,"
@@ -3880,7 +3880,7 @@ void DynamicKernel::CreateKernel()
                         size_t n;
                         e = clGetProgramBuildInfo(
                             mpProgram, ::opencl::gpuEnv.mpDevID,
-                            CL_PROGRAM_BUILD_LOG, 0, 0, &n);
+                            CL_PROGRAM_BUILD_LOG, 0, nullptr, &n);
                         SAL_WARN_IF(
                             e != CL_SUCCESS || n == 0, "sc.opencl",
                             "after CL_BUILD_PROGRAM_FAILURE,"
@@ -3891,7 +3891,7 @@ void DynamicKernel::CreateKernel()
                             std::vector<char> log(n);
                             e = clGetProgramBuildInfo(
                                 mpProgram, ::opencl::gpuEnv.mpDevID,
-                                CL_PROGRAM_BUILD_LOG, n, &log[0], 0);
+                                CL_PROGRAM_BUILD_LOG, n, &log[0], nullptr);
                             SAL_WARN_IF(
                                 e != CL_SUCCESS || n == 0, "sc.opencl",
                                 "after CL_BUILD_PROGRAM_FAILURE,"
@@ -3934,7 +3934,7 @@ void DynamicKernel::Launch( size_t nr )
     // The results
     mpResClmem = clCreateBuffer(kEnv.mpkContext,
         (cl_mem_flags)CL_MEM_READ_WRITE | CL_MEM_ALLOC_HOST_PTR,
-        nr * sizeof(double), NULL, &err);
+        nr * sizeof(double), nullptr, &err);
     if (CL_SUCCESS != err)
         throw OpenCLError("clCreateBuffer", err, __FILE__, __LINE__);
     SAL_INFO("sc.opencl", "Created buffer " << mpResClmem << " size " << nr << "*" << sizeof(double) << "=" << (nr*sizeof(double)));
@@ -3947,8 +3947,8 @@ void DynamicKernel::Launch( size_t nr )
     mSyms.Marshal(mpKernel, nr, mpProgram);
     size_t global_work_size[] = { nr };
     SAL_INFO("sc.opencl", "Enqueing kernel " << mpKernel);
-    err = clEnqueueNDRangeKernel(kEnv.mpkCmdQueue, mpKernel, 1, NULL,
-        global_work_size, NULL, 0, NULL, NULL);
+    err = clEnqueueNDRangeKernel(kEnv.mpkCmdQueue, mpKernel, 1, nullptr,
+        global_work_size, nullptr, 0, nullptr, nullptr);
     if (CL_SUCCESS != err)
         throw OpenCLError("clEnqueueNDRangeKernel", err, __FILE__, __LINE__);
     err = clFlush(kEnv.mpkCmdQueue);
@@ -3988,7 +3988,7 @@ FormulaGroupInterpreterOpenCL::~FormulaGroupInterpreterOpenCL() {}
 
 ScMatrixRef FormulaGroupInterpreterOpenCL::inverseMatrix( const ScMatrix& )
 {
-    return NULL;
+    return nullptr;
 }
 
 DynamicKernel* DynamicKernel::create( const ScCalcConfig& rConfig, ScTokenArray& rCode, int nResultSize )
@@ -3998,7 +3998,7 @@ DynamicKernel* DynamicKernel::create( const ScCalcConfig& rConfig, ScTokenArray&
     std::list<FormulaToken*> aTokenList;
     std::map<FormulaToken*, FormulaTreeNodeRef> aHashMap;
     FormulaToken*  pCur;
-    while ((pCur = const_cast<FormulaToken*>(aCode.Next())) != NULL)
+    while ((pCur = const_cast<FormulaToken*>(aCode.Next())) != nullptr)
     {
         OpCode eOp = pCur->GetOpCode();
         if (eOp != ocPush)
@@ -4012,7 +4012,7 @@ DynamicKernel* DynamicKernel::create( const ScCalcConfig& rConfig, ScTokenArray&
                 if (pTempFormula->GetOpCode() != ocPush)
                 {
                     if (aHashMap.find(pTempFormula) == aHashMap.end())
-                        return NULL;
+                        return nullptr;
                     pCurNode->Children.push_back(aHashMap[pTempFormula]);
                 }
                 else
@@ -4029,7 +4029,7 @@ DynamicKernel* DynamicKernel::create( const ScCalcConfig& rConfig, ScTokenArray&
         aTokenList.push_back(pCur);
     }
 
-    FormulaTreeNodeRef Root = FormulaTreeNodeRef(new FormulaTreeNode(NULL));
+    FormulaTreeNodeRef Root = FormulaTreeNodeRef(new FormulaTreeNode(nullptr));
     Root->Children.push_back(aHashMap[aTokenList.back()]);
 
     DynamicKernel* pDynamicKernel = new DynamicKernel(rConfig, Root, nResultSize);
@@ -4044,12 +4044,12 @@ DynamicKernel* DynamicKernel::create( const ScCalcConfig& rConfig, ScTokenArray&
     {
         SAL_WARN("sc.opencl", "Dynamic formula compiler: unhandled token: " << ut.mMessage << " at " << ut.mFile << ":" << ut.mLineNumber);
         delete pDynamicKernel;
-        return NULL;
+        return nullptr;
     }
     catch (...)
     {
         SAL_WARN("sc.opencl", "Dynamic formula compiler: unhandled compiler error");
-        return NULL;
+        return nullptr;
     }
     return pDynamicKernel;
 }
@@ -4066,11 +4066,11 @@ class CLInterpreterResult
     double* mpResBuf;
 
 public:
-    CLInterpreterResult() : mpKernel(NULL), mnGroupLength(0), mpCLResBuf(NULL), mpResBuf(NULL) {}
+    CLInterpreterResult() : mpKernel(nullptr), mnGroupLength(0), mpCLResBuf(nullptr), mpResBuf(nullptr) {}
     CLInterpreterResult( DynamicKernel* pKernel, SCROW nGroupLength ) :
-        mpKernel(pKernel), mnGroupLength(nGroupLength), mpCLResBuf(NULL), mpResBuf(NULL) {}
+        mpKernel(pKernel), mnGroupLength(nGroupLength), mpCLResBuf(nullptr), mpResBuf(nullptr) {}
 
-    bool isValid() const { return mpKernel != NULL; }
+    bool isValid() const { return mpKernel != nullptr; }
 
     void fetchResultFromKernel()
     {
@@ -4088,13 +4088,13 @@ public:
         mpResBuf = static_cast<double*>(clEnqueueMapBuffer(kEnv.mpkCmdQueue,
             mpCLResBuf,
             CL_TRUE, CL_MAP_READ, 0,
-            mnGroupLength * sizeof(double), 0, NULL, NULL,
+            mnGroupLength * sizeof(double), 0, nullptr, nullptr,
             &err));
 
         if (err != CL_SUCCESS)
         {
             SAL_WARN("sc.opencl", "clEnqueueMapBuffer failed:: " << ::opencl::errorString(err));
-            mpResBuf = NULL;
+            mpResBuf = nullptr;
             return;
         }
     }
@@ -4111,7 +4111,7 @@ public:
         ::opencl::setKernelEnv(&kEnv);
 
         cl_int err;
-        err = clEnqueueUnmapMemObject(kEnv.mpkCmdQueue, mpCLResBuf, mpResBuf, 0, NULL, NULL);
+        err = clEnqueueUnmapMemObject(kEnv.mpkCmdQueue, mpCLResBuf, mpResBuf, 0, nullptr, nullptr);
 
         if (err != CL_SUCCESS)
         {
@@ -4132,12 +4132,12 @@ class CLInterpreterContext
 
 public:
     explicit CLInterpreterContext(SCROW nGroupLength)
-        : mpKernel(NULL)
+        : mpKernel(nullptr)
         , mnGroupLength(nGroupLength) {}
 
     bool isValid() const
     {
-        return mpKernel != NULL;
+        return mpKernel != nullptr;
     }
 
     void setManagedKernel( DynamicKernel* pKernel )

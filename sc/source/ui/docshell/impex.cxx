@@ -88,8 +88,8 @@ ScImportExport::ScImportExport( ScDocument* p )
       mbApi( true ), mbImportBroadcast(false), mbOverwriting( false ),
       mExportTextOptions()
 {
-    pUndoDoc = NULL;
-    pExtOptions = NULL;
+    pUndoDoc = nullptr;
+    pExtOptions = nullptr;
 }
 
 // Insert am current cell without range(es)
@@ -98,13 +98,13 @@ ScImportExport::ScImportExport( ScDocument* p, const ScAddress& rPt )
       aRange( rPt ),
       nSizeLimit( 0 ), cSep( '\t' ), cStr( '"' ),
       bFormulas( false ), bIncludeFiltered( true ),
-      bAll( false ), bSingle( true ), bUndo( pDocSh != NULL ),
+      bAll( false ), bSingle( true ), bUndo( pDocSh != nullptr ),
       bOverflowRow( false ), bOverflowCol( false ), bOverflowCell( false ),
       mbApi( true ), mbImportBroadcast(false), mbOverwriting( false ),
       mExportTextOptions()
 {
-    pUndoDoc = NULL;
-    pExtOptions = NULL;
+    pUndoDoc = nullptr;
+    pExtOptions = nullptr;
 }
 
 //  ctor with a range is only used for export
@@ -114,13 +114,13 @@ ScImportExport::ScImportExport( ScDocument* p, const ScRange& r )
       aRange( r ),
       nSizeLimit( 0 ), cSep( '\t' ), cStr( '"' ),
       bFormulas( false ), bIncludeFiltered( true ),
-      bAll( false ), bSingle( false ), bUndo( pDocSh != NULL ),
+      bAll( false ), bSingle( false ), bUndo( pDocSh != nullptr ),
       bOverflowRow( false ), bOverflowCol( false ), bOverflowCell( false ),
       mbApi( true ), mbImportBroadcast(false), mbOverwriting( false ),
       mExportTextOptions()
 {
-    pUndoDoc = NULL;
-    pExtOptions = NULL;
+    pUndoDoc = nullptr;
+    pExtOptions = nullptr;
     // Only one sheet (table) supported
     aRange.aEnd.SetTab( aRange.aStart.Tab() );
 }
@@ -131,13 +131,13 @@ ScImportExport::ScImportExport( ScDocument* p, const OUString& rPos )
     : pDocSh( dynamic_cast< ScDocShell* >(p->GetDocumentShell()) ), pDoc( p ),
       nSizeLimit( 0 ), cSep( '\t' ), cStr( '"' ),
       bFormulas( false ), bIncludeFiltered( true ),
-      bAll( false ), bSingle( true ), bUndo( pDocSh != NULL ),
+      bAll( false ), bSingle( true ), bUndo( pDocSh != nullptr ),
       bOverflowRow( false ), bOverflowCol( false ), bOverflowCell( false ),
       mbApi( true ), mbImportBroadcast(false), mbOverwriting( false ),
       mExportTextOptions()
 {
-    pUndoDoc = NULL;
-    pExtOptions = NULL;
+    pUndoDoc = nullptr;
+    pExtOptions = nullptr;
 
     SCTAB nTab = ScDocShell::GetCurTab();
     aRange.aStart.SetTab( nTab );
@@ -239,9 +239,9 @@ void ScImportExport::EndPaste(bool bAutoRowHeight)
         ScMarkData aDestMark;
         aDestMark.SetMarkArea(aRange);
         pDocSh->GetUndoManager()->AddUndoAction(
-            new ScUndoPaste(pDocSh, aRange, aDestMark, pUndoDoc, pRedoDoc, InsertDeleteFlags::ALL, NULL));
+            new ScUndoPaste(pDocSh, aRange, aDestMark, pUndoDoc, pRedoDoc, InsertDeleteFlags::ALL, nullptr));
     }
-    pUndoDoc = NULL;
+    pUndoDoc = nullptr;
     if( pDocSh )
     {
         if (!bHeight)
@@ -706,7 +706,7 @@ static const sal_Unicode* lcl_ScanSylkString( const sal_Unicode* p,
         OUString& rString, SylkVersion eVersion )
 {
     const sal_Unicode* pStartQuote = p;
-    const sal_Unicode* pEndQuote = 0;
+    const sal_Unicode* pEndQuote = nullptr;
     while( *(++p) )
     {
         if( *p == '"' )
@@ -719,7 +719,7 @@ static const sal_Unicode* lcl_ScanSylkString( const sal_Unicode* p,
                     if (*(p+2) == ';')
                     {
                         p += 2;     // escaped ';'
-                        pEndQuote = 0;
+                        pEndQuote = nullptr;
                     }
                     else
                         break;      // end field
@@ -730,7 +730,7 @@ static const sal_Unicode* lcl_ScanSylkString( const sal_Unicode* p,
                 if (*(p+1) == '"')
                 {
                     ++p;            // escaped '"'
-                    pEndQuote = 0;
+                    pEndQuote = nullptr;
                 }
                 else if (*(p+1) == ';')
                     break;          // end field
@@ -1793,7 +1793,7 @@ bool ScImportExport::Sylk2Doc( SvStream& rStrm )
                                 {
                                     double fVal = rtl_math_uStringToDouble( p,
                                             aLine.getStr() + aLine.getLength(),
-                                            cDecSep, cGrpSep, NULL, NULL );
+                                            cDecSep, cGrpSep, nullptr, nullptr );
                                     pDoc->SetValue( nCol, nRow, aRange.aStart.Tab(), fVal );
                                 }
                             }
@@ -2217,8 +2217,8 @@ class ScFormatFilterMissing : public ScFormatFilterPlugin {
     virtual FltError ScImportRTF( SvStream&, const OUString&, ScDocument*, ScRange& ) override { return eERR_INTERN; }
     virtual FltError ScImportHTML( SvStream&, const OUString&, ScDocument*, ScRange&, double, bool, SvNumberFormatter*, bool ) override { return eERR_INTERN; }
 
-    virtual ScEEAbsImport *CreateRTFImport( ScDocument*, const ScRange& ) override { return NULL; }
-    virtual ScEEAbsImport *CreateHTMLImport( ScDocument*, const OUString&, const ScRange&, bool ) override { return NULL; }
+    virtual ScEEAbsImport *CreateRTFImport( ScDocument*, const ScRange& ) override { return nullptr; }
+    virtual ScEEAbsImport *CreateHTMLImport( ScDocument*, const OUString&, const ScRange&, bool ) override { return nullptr; }
     virtual OUString       GetHTMLRangeNameList( ScDocument*, const OUString& ) override { return OUString(); }
 
     virtual FltError ScExportExcel5( SfxMedium&, ScDocument*, ExportFormatExcel, rtl_TextEncoding ) override { return eERR_INTERN; }
@@ -2228,7 +2228,7 @@ class ScFormatFilterMissing : public ScFormatFilterPlugin {
                   const OUString&, OUString&, const OUString& ) override { return eERR_INTERN; }
     virtual FltError ScExportRTF( SvStream&, ScDocument*, const ScRange&, const rtl_TextEncoding ) override { return eERR_INTERN; }
 
-    virtual ScOrcusFilters* GetOrcusFilters() override { return NULL; }
+    virtual ScOrcusFilters* GetOrcusFilters() override { return nullptr; }
 };
 
 extern "C" { static void SAL_CALL thisModule() {} }
@@ -2246,7 +2246,7 @@ ScFormatFilterPlugin &ScFormatFilter::Get()
 {
     static ScFormatFilterPlugin *plugin;
 
-    if (plugin != NULL)
+    if (plugin != nullptr)
         return *plugin;
 
 #ifndef DISABLE_DYNLOADING
@@ -2258,10 +2258,10 @@ ScFormatFilterPlugin &ScFormatFilter::Get()
     if (bLoaded)
     {
         oslGenericFunction fn = aModule.getFunctionSymbol( "ScFilterCreate" );
-        if (fn != NULL)
+        if (fn != nullptr)
             plugin = reinterpret_cast<FilterFn>(fn)();
     }
-    if (plugin == NULL)
+    if (plugin == nullptr)
         plugin = new ScFormatFilterMissing();
 #else
     plugin = ScFilterCreate();
@@ -2281,7 +2281,7 @@ static inline const sal_Unicode* lcl_UnicodeStrChr( const sal_Unicode* pStr,
             return pStr;
         ++pStr;
     }
-    return 0;
+    return nullptr;
 }
 
 OUString ReadCsvLine( SvStream &rStream, bool bEmbeddedLineBreak,
@@ -2334,9 +2334,9 @@ OUString ReadCsvLine( SvStream &rStream, bool bEmbeddedLineBreak,
                             // If blank is a separator it starts a field, if it
                             // is not and thus maybe leading before quote we
                             // are still at start of field regarding quotes.
-                            bFieldStart = (*p == ' ' || lcl_UnicodeStrChr( pSeps, *p) != NULL);
+                            bFieldStart = (*p == ' ' || lcl_UnicodeStrChr( pSeps, *p) != nullptr);
                         else
-                            bFieldStart = (lcl_UnicodeStrChr( pSeps, *p) != NULL);
+                            bFieldStart = (lcl_UnicodeStrChr( pSeps, *p) != nullptr);
                     }
                 }
                 else
@@ -2354,9 +2354,9 @@ OUString ReadCsvLine( SvStream &rStream, bool bEmbeddedLineBreak,
                         // actually want that or not, but congruent with what
                         // ScanNextFieldFromString() does.
                         if (bFieldStart)
-                            bFieldStart = (*p == ' ' || lcl_UnicodeStrChr( pSeps, *p) != NULL);
+                            bFieldStart = (*p == ' ' || lcl_UnicodeStrChr( pSeps, *p) != nullptr);
                         else
-                            bFieldStart = (lcl_UnicodeStrChr( pSeps, *p) != NULL);
+                            bFieldStart = (lcl_UnicodeStrChr( pSeps, *p) != nullptr);
                     }
                 }
                 // A quote character inside a field content does not start

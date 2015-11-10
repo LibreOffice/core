@@ -90,7 +90,7 @@ const ScTokenArray* SharedFormulaBuffer::Find( const ScAddress& rRefPos ) const
 {
     TokenArraysType::const_iterator it = maTokenArrays.find(rRefPos);
     if (it == maTokenArrays.end())
-        return NULL;
+        return nullptr;
 
     return it->second;
 }
@@ -225,7 +225,7 @@ const ExtName* ExtNameBuff::GetNameByIndex( sal_Int16 nRefIdx, sal_uInt16 nNameI
 {
     OSL_ENSURE( nNameIdx > 0, "ExtNameBuff::GetNameByIndex() - invalid name index" );
     ExtNameMap::const_iterator aIt = maExtNames.find( nRefIdx );
-    return ((aIt != maExtNames.end()) && (0 < nNameIdx) && (nNameIdx <= aIt->second.size())) ? &aIt->second[ nNameIdx - 1 ] : 0;
+    return ((aIt != maExtNames.end()) && (0 < nNameIdx) && (nNameIdx <= aIt->second.size())) ? &aIt->second[ nNameIdx - 1 ] : nullptr;
 }
 
 void ExtNameBuff::Reset()

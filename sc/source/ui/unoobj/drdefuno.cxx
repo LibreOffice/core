@@ -24,7 +24,7 @@
 using namespace ::com::sun::star;
 
 ScDrawDefaultsObj::ScDrawDefaultsObj(ScDocShell* pDocSh) :
-    SvxUnoDrawPool( NULL ),
+    SvxUnoDrawPool( nullptr ),
     pDocShell( pDocSh )
 {
     //  SvxUnoDrawPool is initialized without model,
@@ -46,13 +46,13 @@ void ScDrawDefaultsObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
     const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
     if ( pSimpleHint && pSimpleHint->GetId() == SFX_HINT_DYING )
     {
-        pDocShell = NULL;       // document gone
+        pDocShell = nullptr;       // document gone
     }
 }
 
 SfxItemPool* ScDrawDefaultsObj::getModelPool( bool bReadOnly ) throw()
 {
-    SfxItemPool* pRet = NULL;
+    SfxItemPool* pRet = nullptr;
 
     try
     {

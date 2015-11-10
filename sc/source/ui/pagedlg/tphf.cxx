@@ -47,7 +47,7 @@ ScHFPage::ScHFPage( vcl::Window* pParent, const SfxItemSet& rSet, sal_uInt16 nSe
                        ATTR_PAGE_HEADERLEFT, ATTR_PAGE_FOOTERRIGHT,
                        ATTR_PAGE, ATTR_PAGE, 0 ),
         nPageUsage  ( (sal_uInt16)SVX_PAGE_ALL ),
-        pStyleDlg   ( NULL )
+        pStyleDlg   ( nullptr )
 {
     get(m_pBtnEdit, "buttonEdit");
 
@@ -91,7 +91,7 @@ void ScHFPage::dispose()
 void ScHFPage::Reset( const SfxItemSet* rSet )
 {
     SvxHFPage::Reset( rSet );
-    TurnOnHdl( 0 );
+    TurnOnHdl( nullptr );
 }
 
 bool ScHFPage::FillItemSet( SfxItemSet* rOutSet )
@@ -163,7 +163,7 @@ IMPL_LINK_NOARG_TYPED(ScHFPage, BtnHdl, Button*, void)
     // the GrabFocus from the Edit-Dialog under OS/2 doesn't work.(Bug #41805#).
     // With the new StarView, this workaround should be again considered!
 
-    Application::PostUserEvent( LINK( this, ScHFPage, HFEditHdl ), NULL, true );
+    Application::PostUserEvent( LINK( this, ScHFPage, HFEditHdl ), nullptr, true );
 }
 
 IMPL_LINK_NOARG_TYPED(ScHFPage, HFEditHdl, void*, void)
@@ -207,17 +207,17 @@ IMPL_LINK_NOARG_TYPED(ScHFPage, HFEditHdl, void*, void)
         {
             aText = ScGlobal::GetRscString( STR_PAGEHEADER );
             if ( bRightPage )
-                pDlg->SetTabPage( ScRightHeaderEditPage::Create( pDlg->get_content_area(), &aDataSet ), NULL, nSettingsId );
+                pDlg->SetTabPage( ScRightHeaderEditPage::Create( pDlg->get_content_area(), &aDataSet ), nullptr, nSettingsId );
             else
-                pDlg->SetTabPage( ScLeftHeaderEditPage::Create( pDlg->get_content_area(), &aDataSet ), NULL, nSettingsId );
+                pDlg->SetTabPage( ScLeftHeaderEditPage::Create( pDlg->get_content_area(), &aDataSet ), nullptr, nSettingsId );
         }
         else
         {
             aText = ScGlobal::GetRscString( STR_PAGEFOOTER );
             if ( bRightPage )
-                pDlg->SetTabPage( ScRightFooterEditPage::Create( pDlg->get_content_area(), &aDataSet ), NULL, nSettingsId );
+                pDlg->SetTabPage( ScRightFooterEditPage::Create( pDlg->get_content_area(), &aDataSet ), nullptr, nSettingsId );
             else
-                pDlg->SetTabPage( ScLeftFooterEditPage::Create( pDlg->get_content_area(), &aDataSet ), NULL, nSettingsId );
+                pDlg->SetTabPage( ScLeftFooterEditPage::Create( pDlg->get_content_area(), &aDataSet ), nullptr, nSettingsId );
         }
 
         SvxNumType eNumType = static_cast<const SvxPageItem&>(aDataSet.Get(ATTR_PAGE)).GetNumType();

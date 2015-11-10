@@ -327,7 +327,7 @@ void ScCondFormatsObj::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& rHint)
     if ( dynamic_cast<const SfxSimpleHint*>(&rHint) &&
             static_cast<const SfxSimpleHint&>(rHint).GetId() == SFX_HINT_DYING )
     {
-        mpDocShell = NULL;       // ungueltig geworden
+        mpDocShell = nullptr;       // ungueltig geworden
     }
 }
 
@@ -477,7 +477,7 @@ void ScCondFormatObj::createEntry(const sal_Int32 nType, const sal_Int32 nPos)
     if (nPos > sal_Int32(pFormat->size()))
         throw lang::IllegalArgumentException();
 
-    ScFormatEntry* pNewEntry = NULL;
+    ScFormatEntry* pNewEntry = nullptr;
     ScDocument* pDoc = &mpDocShell->GetDocument();
     switch (nType)
     {

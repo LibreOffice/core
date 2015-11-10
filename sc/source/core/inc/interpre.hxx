@@ -307,9 +307,9 @@ void PopDoubleRef(SCCOL& rCol1, SCROW &rRow1, SCTAB& rTab1,
                           SCCOL& rCol2, SCROW &rRow2, SCTAB& rTab2,
                           bool bDontCheckForTableOp = false );
 void PopExternalSingleRef(sal_uInt16& rFileId, OUString& rTabName, ScSingleRefData& rRef);
-void PopExternalSingleRef(ScExternalRefCache::TokenRef& rToken, ScExternalRefCache::CellFormat* pFmt = NULL);
+void PopExternalSingleRef(ScExternalRefCache::TokenRef& rToken, ScExternalRefCache::CellFormat* pFmt = nullptr);
 void PopExternalSingleRef(sal_uInt16& rFileId, OUString& rTabName, ScSingleRefData& rRef,
-                          ScExternalRefCache::TokenRef& rToken, ScExternalRefCache::CellFormat* pFmt = NULL);
+                          ScExternalRefCache::TokenRef& rToken, ScExternalRefCache::CellFormat* pFmt = nullptr);
 void PopExternalDoubleRef(sal_uInt16& rFileId, OUString& rTabName, ScComplexRefData& rRef);
 void PopExternalDoubleRef(ScExternalRefCache::TokenArrayRef& rArray);
 void PopExternalDoubleRef(ScMatrixRef& rMat);
@@ -417,7 +417,7 @@ double Compare( ScQueryOp eOp );
 /** @param pOptions
         NULL means case sensitivity document option is to be used!
  */
-sc::RangeMatrix CompareMat( ScQueryOp eOp, sc::CompareOptions* pOptions = NULL );
+sc::RangeMatrix CompareMat( ScQueryOp eOp, sc::CompareOptions* pOptions = nullptr );
 ScMatrixRef QueryMat( const ScMatrixRef& pMat, sc::CompareOptions& rOptions );
 void ScEqual();
 void ScNotEqual();
@@ -830,7 +830,7 @@ double GetPercentile( ::std::vector<double> & rArray, double fPercentile );
 double GetPercentileExclusive( ::std::vector<double> & rArray, double fPercentile );
 void GetNumberSequenceArray( sal_uInt8 nParamCount, ::std::vector<double>& rArray, bool bConvertTextInArray );
 void GetSortArray( sal_uInt8 nParamCount, ::std::vector<double>& rSortArray, ::std::vector<long>* pIndexOrder, bool bConvertTextInArray, bool bAllowEmptyArray );
-static void QuickSort(::std::vector<double>& rSortArray, ::std::vector<long>* pIndexOrder = NULL);
+static void QuickSort(::std::vector<double>& rSortArray, ::std::vector<long>* pIndexOrder = nullptr);
 void ScModalValue();
 void ScModalValue_Multi();
 void ScAveDev();

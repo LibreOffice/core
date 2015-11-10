@@ -90,7 +90,7 @@ static const ScDisplayNameMap* lcl_GetStyleNameMap( sal_uInt16 nType )
         return aPageMap;
     }
     OSL_FAIL("invalid family");
-    return NULL;
+    return nullptr;
 }
 
 //  programmatic name suffix for display names that match other programmatic names

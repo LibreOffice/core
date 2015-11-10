@@ -86,11 +86,11 @@ using namespace ::com::sun::star;
 
 // STATIC DATA -----------------------------------------------------------
 
-static ScDrawObjFactory* pFac = NULL;
-static E3dObjFactory* pF3d = NULL;
+static ScDrawObjFactory* pFac = nullptr;
+static E3dObjFactory* pF3d = nullptr;
 static sal_uInt16 nInst = 0;
 
-SfxObjectShell* ScDrawLayer::pGlobalDrawPersist = NULL;
+SfxObjectShell* ScDrawLayer::pGlobalDrawPersist = nullptr;
 
 bool bDrawIsInUndo = false;         //TODO: Member
 
@@ -240,21 +240,21 @@ static void lcl_ReverseTwipsToMM( Rectangle& rRect )
 
 ScDrawLayer::ScDrawLayer( ScDocument* pDocument, const OUString& rName ) :
     FmFormModel( SvtPathOptions().GetPalettePath(),
-                 NULL,                          // SfxItemPool* Pool
+                 nullptr,                          // SfxItemPool* Pool
                  pGlobalDrawPersist ?
                      pGlobalDrawPersist :
-                     ( pDocument ? pDocument->GetDocumentShell() : NULL ),
+                     ( pDocument ? pDocument->GetDocumentShell() : nullptr ),
                  true ),        // bUseExtColorTable (is set below)
     aName( rName ),
     pDoc( pDocument ),
-    pUndoGroup( NULL ),
+    pUndoGroup( nullptr ),
     bRecording( false ),
     bAdjustEnabled( true ),
     bHyphenatorSet( false )
 {
-    pGlobalDrawPersist = NULL;          // Only use once
+    pGlobalDrawPersist = nullptr;          // Only use once
 
-    SfxObjectShell* pObjSh = pDocument ? pDocument->GetDocumentShell() : NULL;
+    SfxObjectShell* pObjSh = pDocument ? pDocument->GetDocumentShell() : nullptr;
     XColorListRef pXCol = XColorList::GetStdColorList();
     if ( pObjSh )
     {
@@ -344,8 +344,8 @@ ScDrawLayer::~ScDrawLayer()
     delete pUndoGroup;
     if( !--nInst )
     {
-        delete pFac, pFac = NULL;
-        delete pF3d, pF3d = NULL;
+        delete pFac, pFac = nullptr;
+        delete pF3d, pF3d = nullptr;
     }
 }
 
@@ -385,7 +385,7 @@ SdrModel* ScDrawLayer::AllocModel() const
     //  Allocated model (for clipboard etc) must not have a pointer
     //  to the original model's document, pass NULL as document:
 
-    return new ScDrawLayer( NULL, aName );
+    return new ScDrawLayer( nullptr, aName );
 }
 
 bool ScDrawLayer::ScAddPage( SCTAB nTab )
@@ -743,9 +743,9 @@ void ScDrawLayer::RecalcPos( SdrObject* pObj, ScDrawObjData& rData, bool bNegati
         if( bValid1 )
         {
             Point aPos( pDoc->GetColOffset( nCol1, nTab1 ), pDoc->GetRowOffset( nRow1, nTab1 ) );
-            if (!pDoc->ColHidden(nCol1, nTab1, NULL, &nLastCol))
+            if (!pDoc->ColHidden(nCol1, nTab1, nullptr, &nLastCol))
                 aPos.X() += pDoc->GetColWidth( nCol1, nTab1 ) / 4;
-            if (!pDoc->RowHidden(nRow1, nTab1, NULL, &nLastRow))
+            if (!pDoc->RowHidden(nRow1, nTab1, nullptr, &nLastRow))
                 aPos.Y() += pDoc->GetRowHeight( nRow1, nTab1 ) / 2;
             TwipsToMM( aPos.X() );
             TwipsToMM( aPos.Y() );
@@ -781,9 +781,9 @@ void ScDrawLayer::RecalcPos( SdrObject* pObj, ScDrawObjData& rData, bool bNegati
         if( bValid2 )
         {
             Point aPos( pDoc->GetColOffset( nCol2, nTab2 ), pDoc->GetRowOffset( nRow2, nTab2 ) );
-            if (!pDoc->ColHidden(nCol2, nTab2, NULL, &nLastCol))
+            if (!pDoc->ColHidden(nCol2, nTab2, nullptr, &nLastCol))
                 aPos.X() += pDoc->GetColWidth( nCol2, nTab2 ) / 4;
-            if (!pDoc->RowHidden(nRow2, nTab2, NULL, &nLastRow))
+            if (!pDoc->RowHidden(nRow2, nTab2, nullptr, &nLastRow))
                 aPos.Y() += pDoc->GetRowHeight( nRow2, nTab2 ) / 2;
             TwipsToMM( aPos.X() );
             TwipsToMM( aPos.Y() );
@@ -1124,7 +1124,7 @@ void ScDrawLayer::BeginCalcUndo(bool bDisableTextEditUsesCommonUndoManager)
 SdrUndoGroup* ScDrawLayer::GetCalcUndo()
 {
     SdrUndoGroup* pRet = pUndoGroup;
-    pUndoGroup = NULL;
+    pUndoGroup = nullptr;
     bRecording = false;
     SetDisableTextEditUsesCommonUndoManager(false);
     return pRet;
@@ -1353,8 +1353,8 @@ void ScDrawLayer::CopyToClip( ScDocument* pClipDoc, SCTAB nTab, const Rectangle&
     SdrPage* pSrcPage = GetPage(static_cast<sal_uInt16>(nTab));
     if (pSrcPage)
     {
-        ScDrawLayer* pDestModel = NULL;
-        SdrPage* pDestPage = NULL;
+        ScDrawLayer* pDestModel = nullptr;
+        SdrPage* pDestPage = nullptr;
 
         SdrObjListIter aIter( *pSrcPage, IM_FLAT );
         SdrObject* pOldObject = aIter.Next();
@@ -1782,7 +1782,7 @@ SdrObject* ScDrawLayer::GetNamedObject( const OUString& rName, sal_uInt16 nId, S
         }
     }
 
-    return NULL;
+    return nullptr;
 }
 
 OUString ScDrawLayer::GetNewGraphicName( long* pnCounter ) const
@@ -1799,7 +1799,7 @@ OUString ScDrawLayer::GetNewGraphicName( long* pnCounter ) const
         ++nId;
         aGraphicName = aBase;
         aGraphicName += OUString::number( nId );
-        bThere = ( GetNamedObject( aGraphicName, 0, nDummy ) != NULL );
+        bThere = ( GetNamedObject( aGraphicName, 0, nDummy ) != nullptr );
     }
 
     if ( pnCounter )
@@ -1849,7 +1849,7 @@ namespace
             if( pData && pData->GetInventor() == SC_DRAWLAYER && pData->GetId() == nId )
                 return pData;
         }
-        return NULL;
+        return nullptr;
     }
 
     void DeleteFirstUserDataOfType(SdrObject *pObj, sal_uInt16 nId)
@@ -1951,7 +1951,7 @@ bool ScDrawLayer::IsCellAnchored( const SdrObject& rObj )
 {
     // Cell anchored object always has a user data, to store the anchor cell
     // info. If it doesn't then it's page-anchored.
-    return GetFirstUserDataOfType(&rObj, SC_UD_OBJDATA) != NULL;
+    return GetFirstUserDataOfType(&rObj, SC_UD_OBJDATA) != nullptr;
 }
 
 void ScDrawLayer::SetPageAnchored( SdrObject &rObj )
@@ -1983,7 +1983,7 @@ ScDrawObjData* ScDrawLayer::GetNonRotatedObjData( SdrObject* pObj, bool bCreate 
         pObj->AppendUserData(pData);
         return pData;
     }
-    return 0;
+    return nullptr;
 }
 
 ScDrawObjData* ScDrawLayer::GetObjData( SdrObject* pObj, bool bCreate )
@@ -1997,7 +1997,7 @@ ScDrawObjData* ScDrawLayer::GetObjData( SdrObject* pObj, bool bCreate )
         pObj->AppendUserData(pData);
         return pData;
     }
-    return 0;
+    return nullptr;
 }
 
 ScDrawObjData* ScDrawLayer::GetObjDataTab( SdrObject* pObj, SCTAB nTab )
@@ -2015,14 +2015,14 @@ ScDrawObjData* ScDrawLayer::GetObjDataTab( SdrObject* pObj, SCTAB nTab )
 
 bool ScDrawLayer::IsNoteCaption( SdrObject* pObj )
 {
-    ScDrawObjData* pData = pObj ? GetObjData( pObj ) : 0;
+    ScDrawObjData* pData = pObj ? GetObjData( pObj ) : nullptr;
     return pData && pData->meType == ScDrawObjData::CellNote;
 }
 
 ScDrawObjData* ScDrawLayer::GetNoteCaptionData( SdrObject* pObj, SCTAB nTab )
 {
-    ScDrawObjData* pData = pObj ? GetObjDataTab( pObj, nTab ) : 0;
-    return (pData && pData->meType == ScDrawObjData::CellNote) ? pData : 0;
+    ScDrawObjData* pData = pObj ? GetObjDataTab( pObj, nTab ) : nullptr;
+    return (pData && pData->meType == ScDrawObjData::CellNote) ? pData : nullptr;
 }
 
 ScIMapInfo* ScDrawLayer::GetIMapInfo( SdrObject* pObj )
@@ -2038,7 +2038,7 @@ IMapObject* ScDrawLayer::GetHitIMapObject( SdrObject* pObj,
     Point               aRelPoint( rCmpWnd.LogicToLogic( rWinPoint, &aWndMode, &aMap100 ) );
     Rectangle           aLogRect = rCmpWnd.LogicToLogic( pObj->GetLogicRect(), &aWndMode, &aMap100 );
     ScIMapInfo*         pIMapInfo = GetIMapInfo( pObj );
-    IMapObject*         pIMapObj = NULL;
+    IMapObject*         pIMapObj = nullptr;
 
     if ( pIMapInfo )
     {
@@ -2104,7 +2104,7 @@ ScMacroInfo* ScDrawLayer::GetMacroInfo( SdrObject* pObj, bool bCreate )
         pObj->AppendUserData(pData);
         return pData;
     }
-    return 0;
+    return nullptr;
 }
 
 ImageMap* ScDrawLayer::GetImageMapForObject(SdrObject* pObj)
@@ -2114,7 +2114,7 @@ ImageMap* ScDrawLayer::GetImageMapForObject(SdrObject* pObj)
     {
         return const_cast<ImageMap*>( &(pIMapInfo->GetImageMap()) );
     }
-    return NULL;
+    return nullptr;
 }
 
 void ScDrawLayer::SetGlobalDrawPersist(SfxObjectShell* pPersist)

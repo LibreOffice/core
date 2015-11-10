@@ -234,7 +234,7 @@ ScStyleSheet& lclMakeStyleSheet( ScStyleSheetPool& rPool, const OUString& rStyle
     // find an unused name
     OUString aNewName( rStyleName );
     sal_Int32 nIndex = 0;
-    SfxStyleSheetBase* pOldStyleSheet = 0;
+    SfxStyleSheetBase* pOldStyleSheet = nullptr;
     while( SfxStyleSheetBase* pStyleSheet = rPool.Find( aNewName, eFamily ) )
     {
         if( !pOldStyleSheet )

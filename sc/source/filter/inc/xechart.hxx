@@ -496,7 +496,7 @@ public:
     virtual void        SetRotation( sal_uInt16 nRotation ) override;
 
     /** Converts all text settings of the passed title text object. */
-    void                ConvertTitle( css::uno::Reference< css::chart2::XTitle > xTitle, sal_uInt16 nTarget, const OUString* pSubTitle = NULL );
+    void                ConvertTitle( css::uno::Reference< css::chart2::XTitle > xTitle, sal_uInt16 nTarget, const OUString* pSubTitle = nullptr );
     /** Converts all text settings of the passed legend. */
     void                ConvertLegend( const ScfPropertySet& rPropSet );
     /** Converts all settings of the passed data point caption text object. */

@@ -56,7 +56,7 @@ public:
         SCROW mnRow;
         ScFormulaCell* mpCell;
 
-        Item() : mnRow(-1), mpCell(NULL) {}
+        Item() : mnRow(-1), mpCell(nullptr) {}
     };
 
     explicit CachedTokenArray( ScDocument& rDoc ) :
@@ -74,7 +74,7 @@ public:
         // Check if a token array is cached for this column.
         ColCacheType::iterator it = maCache.find(rPos.Col());
         if (it == maCache.end())
-            return NULL;
+            return nullptr;
 
         Item& rCached = *it->second;
         const ScTokenArray& rCode = *rCached.mpCell->GetCode();
@@ -82,7 +82,7 @@ public:
         if (rFormula == aPredicted)
             return &rCached;
 
-        return NULL;
+        return nullptr;
     }
 
     void store( const ScAddress& rPos, ScFormulaCell* pCell )
@@ -193,7 +193,7 @@ void applyCellFormulas(
         {
             // Use the cached version to avoid re-compilation.
 
-            ScFormulaCell* pCell = NULL;
+            ScFormulaCell* pCell = nullptr;
             if (p->mnRow + 1 == aPos.Row())
             {
                 // Put them in the same formula group.
@@ -350,11 +350,11 @@ FormulaBuffer::SharedFormulaDesc::SharedFormulaDesc(
     maAddress(rAddr), mnSharedId(nSharedId), maCellValue(rCellValue), mnValueType(nValueType) {}
 
 FormulaBuffer::SheetItem::SheetItem() :
-    mpCellFormulas(NULL),
-    mpArrayFormulas(NULL),
-    mpCellFormulaValues(NULL),
-    mpSharedFormulaEntries(NULL),
-    mpSharedFormulaIDs(NULL) {}
+    mpCellFormulas(nullptr),
+    mpArrayFormulas(nullptr),
+    mpCellFormulaValues(nullptr),
+    mpSharedFormulaEntries(nullptr),
+    mpSharedFormulaIDs(nullptr) {}
 
 FormulaBuffer::FormulaBuffer( const WorkbookHelper& rHelper ) : WorkbookHelper( rHelper )
 {
@@ -425,7 +425,7 @@ void FormulaBuffer::finalizeImport()
         }
     }
 
-    rDoc.getDoc().SetAutoNameCache(NULL);
+    rDoc.getDoc().SetAutoNameCache(nullptr);
 
     xFormulaBar->setPosition( 1.0 );
 }

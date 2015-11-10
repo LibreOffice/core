@@ -345,7 +345,7 @@ ScMatrixRef ScInterpreter::CreateMatrixFromDoubleRef( const FormulaToken* pToken
     {
         // Not a 2D matrix.
         SetError(errIllegalParameter);
-        return NULL;
+        return nullptr;
     }
 
     SCSIZE nMatCols = static_cast<SCSIZE>(nCol2 - nCol1 + 1);
@@ -354,7 +354,7 @@ ScMatrixRef ScInterpreter::CreateMatrixFromDoubleRef( const FormulaToken* pToken
     if (nMatRows * nMatCols > ScMatrix::GetElementsMax())
     {
         SetError(errStackOverflow);
-        return NULL;
+        return nullptr;
     }
 
     ScTokenMatrixMap::const_iterator aIter;
@@ -366,7 +366,7 @@ ScMatrixRef ScInterpreter::CreateMatrixFromDoubleRef( const FormulaToken* pToken
 
     ScMatrixRef pMat = GetNewMat( nMatCols, nMatRows, true);
     if (!pMat || nGlobalError)
-        return NULL;
+        return nullptr;
 
     pDok->FillMatrix(*pMat, nTab1, nCol1, nRow1, nCol2, nRow2);
 
@@ -379,7 +379,7 @@ ScMatrixRef ScInterpreter::CreateMatrixFromDoubleRef( const FormulaToken* pToken
 
 ScMatrixRef ScInterpreter::GetMatrix()
 {
-    ScMatrixRef pMat = NULL;
+    ScMatrixRef pMat = nullptr;
     switch (GetRawStackType())
     {
         case svSingleRef :
@@ -408,7 +408,7 @@ ScMatrixRef ScInterpreter::GetMatrix()
             SCCOL nCol1, nCol2;
             SCROW nRow1, nRow2;
             SCTAB nTab1, nTab2;
-            const formula::FormulaToken* p = sp ? pStack[sp-1] : NULL;
+            const formula::FormulaToken* p = sp ? pStack[sp-1] : nullptr;
             PopDoubleRef(nCol1, nRow1, nTab1, nCol2, nRow2, nTab2);
             pMat = CreateMatrixFromDoubleRef( p, nCol1, nRow1, nTab1,
                     nCol2, nRow2, nTab2);
@@ -834,7 +834,7 @@ void ScInterpreter::ScModalValue_Multi()
     if ( !MustHaveParamCountMin( nParamCount, 1 ) )
         return;
     vector<double> aSortArray;
-    GetSortArray( nParamCount, aSortArray, NULL, false, false );
+    GetSortArray( nParamCount, aSortArray, nullptr, false, false );
     SCSIZE nSize = aSortArray.size();
     if ( aSortArray.empty() || nSize == 0 || nGlobalError )
         PushNoValue();
@@ -912,7 +912,7 @@ void ScInterpreter::ScMatInv()
         if (ScCalcConfig::isOpenCLEnabled())
         {
             sc::FormulaGroupInterpreter *pInterpreter = sc::FormulaGroupInterpreter::getStatic();
-            if (pInterpreter != NULL)
+            if (pInterpreter != nullptr)
             {
                 ScMatrixRef xResMat = pInterpreter->inverseMatrix(*pMat);
                 if (xResMat)
@@ -1224,8 +1224,8 @@ namespace {
 
 void ScInterpreter::CalculateAddSub(bool _bSub)
 {
-    ScMatrixRef pMat1 = NULL;
-    ScMatrixRef pMat2 = NULL;
+    ScMatrixRef pMat1 = nullptr;
+    ScMatrixRef pMat2 = nullptr;
     double fVal1 = 0.0, fVal2 = 0.0;
     short nFmt1, nFmt2;
     nFmt1 = nFmt2 = css::util::NumberFormat::UNDEFINED;
@@ -1344,8 +1344,8 @@ void ScInterpreter::CalculateAddSub(bool _bSub)
 
 void ScInterpreter::ScAmpersand()
 {
-    ScMatrixRef pMat1 = NULL;
-    ScMatrixRef pMat2 = NULL;
+    ScMatrixRef pMat1 = nullptr;
+    ScMatrixRef pMat2 = nullptr;
     OUString sStr1, sStr2;
     if ( GetStackType() == svMatrix )
         pMat2 = GetMatrix();
@@ -1442,8 +1442,8 @@ void ScInterpreter::ScSub()
 
 void ScInterpreter::ScMul()
 {
-    ScMatrixRef pMat1 = NULL;
-    ScMatrixRef pMat2 = NULL;
+    ScMatrixRef pMat1 = nullptr;
+    ScMatrixRef pMat2 = nullptr;
     double fVal1 = 0.0, fVal2 = 0.0;
     short nFmtCurrencyType = nCurFmtType;
     sal_uLong nFmtCurrencyIndex = nCurFmtIndex;
@@ -1514,8 +1514,8 @@ void ScInterpreter::ScMul()
 
 void ScInterpreter::ScDiv()
 {
-    ScMatrixRef pMat1 = NULL;
-    ScMatrixRef pMat2 = NULL;
+    ScMatrixRef pMat1 = nullptr;
+    ScMatrixRef pMat2 = nullptr;
     double fVal1 = 0.0, fVal2 = 0.0;
     short nFmtCurrencyType = nCurFmtType;
     sal_uLong nFmtCurrencyIndex = nCurFmtIndex;
@@ -1595,8 +1595,8 @@ void ScInterpreter::ScPower()
 
 void ScInterpreter::ScPow()
 {
-    ScMatrixRef pMat1 = NULL;
-    ScMatrixRef pMat2 = NULL;
+    ScMatrixRef pMat1 = nullptr;
+    ScMatrixRef pMat2 = nullptr;
     double fVal1 = 0.0, fVal2 = 0.0;
     if ( GetStackType() == svMatrix )
         pMat2 = GetMatrix();
@@ -1741,8 +1741,8 @@ void ScInterpreter::CalculateSumX2MY2SumX2DY2(bool _bSumX2DY2)
     if ( !MustHaveParamCount( GetByte(), 2 ) )
         return;
 
-    ScMatrixRef pMat1 = NULL;
-    ScMatrixRef pMat2 = NULL;
+    ScMatrixRef pMat1 = nullptr;
+    ScMatrixRef pMat2 = nullptr;
     SCSIZE i, j;
     pMat2 = GetMatrix();
     pMat1 = GetMatrix();
@@ -1786,8 +1786,8 @@ void ScInterpreter::ScSumXMY2()
     if ( !MustHaveParamCount( GetByte(), 2 ) )
         return;
 
-    ScMatrixRef pMat1 = NULL;
-    ScMatrixRef pMat2 = NULL;
+    ScMatrixRef pMat1 = nullptr;
+    ScMatrixRef pMat2 = nullptr;
     pMat2 = GetMatrix();
     pMat1 = GetMatrix();
     if (!pMat2 || !pMat1)
@@ -1834,7 +1834,7 @@ void ScInterpreter::ScFrequency()
     }
 
     vector<double>  aDataArray;
-    GetSortArray( 1, aDataArray, NULL, false, false );
+    GetSortArray( 1, aDataArray, nullptr, false, false );
     SCSIZE nDataSize = aDataArray.size();
 
     if (aDataArray.empty() || nGlobalError)
@@ -2375,7 +2375,7 @@ void ScInterpreter::CalculateRGPRKP(bool _bRKP)
         if (IsMissing())
         { //In ODF1.2 empty second parameter (which is two ;; ) is allowed
             Pop();
-            pMatX = NULL;
+            pMatX = nullptr;
         }
         else
         {
@@ -2383,7 +2383,7 @@ void ScInterpreter::CalculateRGPRKP(bool _bRKP)
         }
     }
     else
-        pMatX = NULL;
+        pMatX = nullptr;
 
     ScMatrixRef pMatY;
     pMatY = GetMatrix();
@@ -2885,13 +2885,13 @@ void ScInterpreter::CalculateTrendGrowth(bool _bGrowth)
         if (IsMissing())
         {
             Pop();
-            pMatNewX = NULL;
+            pMatNewX = nullptr;
         }
         else
             pMatNewX = GetMatrix();
     }
     else
-        pMatNewX = NULL;
+        pMatNewX = nullptr;
 
     //In ODF1.2 empty second parameter (which is two ;; ) is allowed
     //Defaults will be set in CheckMatrix
@@ -2901,7 +2901,7 @@ void ScInterpreter::CalculateTrendGrowth(bool _bGrowth)
         if (IsMissing())
         {
             Pop();
-            pMatX = NULL;
+            pMatX = nullptr;
         }
         else
         {
@@ -2909,7 +2909,7 @@ void ScInterpreter::CalculateTrendGrowth(bool _bGrowth)
         }
     }
     else
-        pMatX = NULL;
+        pMatX = nullptr;
 
     ScMatrixRef pMatY;
     pMatY = GetMatrix();

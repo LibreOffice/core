@@ -49,16 +49,16 @@ ScSpecialFilterDlg::ScSpecialFilterDlg( SfxBindings* pB, SfxChildWindow* pCW, vc
     :   ScAnyRefDlg ( pB, pCW, pParent, "AdvancedFilterDialog", "modules/scalc/ui/advancedfilterdialog.ui" ),
 
         aStrUndefined   ( SC_RESSTR(SCSTR_UNDEFINED) ),
-        pOptionsMgr     ( NULL ),
+        pOptionsMgr     ( nullptr ),
         nWhichQuery     ( rArgSet.GetPool()->GetWhich( SID_QUERY ) ),
         theQueryData    ( static_cast<const ScQueryItem&>(
                            rArgSet.Get( nWhichQuery )).GetQueryData() ),
-        pOutItem        ( NULL ),
-        pViewData       ( NULL ),
-        pDoc            ( NULL ),
-        pRefInputEdit   ( NULL ),
+        pOutItem        ( nullptr ),
+        pViewData       ( nullptr ),
+        pDoc            ( nullptr ),
+        pRefInputEdit   ( nullptr ),
         bRefInputMode   ( false ),
-        pIdle          ( NULL )
+        pIdle          ( nullptr )
 {
         get(pLbFilterArea,"lbfilterarea");
         get(pEdFilterArea,"edfilterarea");
@@ -148,13 +148,13 @@ void ScSpecialFilterDlg::Init( const SfxItemSet& rArgSet )
     pEdFilterArea->SetModifyHdl  ( LINK( this, ScSpecialFilterDlg, FilterAreaModHdl ) );
 
     pViewData   = rQueryItem.GetViewData();
-    pDoc        = pViewData ? pViewData->GetDocument()  : NULL;
+    pDoc        = pViewData ? pViewData->GetDocument()  : nullptr;
 
     pEdFilterArea->SetText( EMPTY_OUSTRING );      // may be overwritten below
 
     if ( pViewData && pDoc )
     {
-        if(pDoc->GetChangeTrack()!=NULL) pBtnCopyResult->Disable();
+        if(pDoc->GetChangeTrack()!=nullptr) pBtnCopyResult->Disable();
 
         ScRangeName* pRangeNames = pDoc->GetRangeName();
         pLbFilterArea->Clear();
@@ -416,7 +416,7 @@ IMPL_LINK_TYPED( ScSpecialFilterDlg, TimeOutHdl, Idle*, _pIdle, void )
         }
         else if( bRefInputMode )
         {
-            pRefInputEdit = NULL;
+            pRefInputEdit = nullptr;
             bRefInputMode = false;
         }
     }

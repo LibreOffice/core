@@ -52,12 +52,12 @@ ScChangeAction::ScChangeAction( ScChangeActionType eTypeP, const ScRange& rRange
         :
         aBigRange( rRange ),
         aDateTime( DateTime::SYSTEM ),
-        pNext( NULL ),
-        pPrev( NULL ),
-        pLinkAny( NULL ),
-        pLinkDeletedIn( NULL ),
-        pLinkDeleted( NULL ),
-        pLinkDependent( NULL ),
+        pNext( nullptr ),
+        pPrev( nullptr ),
+        pLinkAny( nullptr ),
+        pLinkDeletedIn( nullptr ),
+        pLinkDeleted( nullptr ),
+        pLinkDependent( nullptr ),
         nAction( 0 ),
         nRejectAction( 0 ),
         eType( eTypeP ),
@@ -75,12 +75,12 @@ ScChangeAction::ScChangeAction(
         aDateTime( aTempDateTime ),
         aUser( aTempUser ),
         aComment( aTempComment ),
-        pNext( NULL ),
-        pPrev( NULL ),
-        pLinkAny( NULL ),
-        pLinkDeletedIn( NULL ),
-        pLinkDeleted( NULL ),
-        pLinkDependent( NULL ),
+        pNext( nullptr ),
+        pPrev( nullptr ),
+        pLinkAny( nullptr ),
+        pLinkDeletedIn( nullptr ),
+        pLinkDeleted( nullptr ),
+        pLinkDependent( nullptr ),
         nAction( nTempAction ),
         nRejectAction( nTempRejectAction ),
         eType( eTypeP ),
@@ -93,12 +93,12 @@ ScChangeAction::ScChangeAction( ScChangeActionType eTypeP, const ScBigRange& rRa
         :
         aBigRange( rRange ),
         aDateTime( DateTime::SYSTEM ),
-        pNext( NULL ),
-        pPrev( NULL ),
-        pLinkAny( NULL ),
-        pLinkDeletedIn( NULL ),
-        pLinkDeleted( NULL ),
-        pLinkDependent( NULL ),
+        pNext( nullptr ),
+        pPrev( nullptr ),
+        pLinkAny( nullptr ),
+        pLinkDeletedIn( nullptr ),
+        pLinkDeleted( nullptr ),
+        pLinkDependent( nullptr ),
         nAction( nTempAction ),
         nRejectAction( 0 ),
         eType( eTypeP ),
@@ -207,7 +207,7 @@ bool ScChangeAction::IsRejectable() const
             return false;
         ScChangeActionContent* pNextContent =
             static_cast<const ScChangeActionContent*>(this)->GetNextContent();
-        if ( pNextContent == NULL )
+        if ( pNextContent == nullptr )
             return true; // *this is TopContent
         return pNextContent->IsRejected(); // *this is next rejectable
     }
@@ -225,7 +225,7 @@ bool ScChangeAction::IsInternalRejectable() const
     {
         ScChangeActionContent* pNextContent =
             static_cast<const ScChangeActionContent*>(this)->GetNextContent();
-        if ( pNextContent == NULL )
+        if ( pNextContent == nullptr )
             return true; // *this is TopContent
         return pNextContent->IsRejected(); // *this is next rejectable
     }
@@ -314,7 +314,7 @@ bool ScChangeAction::RemoveDeletedIn( const ScChangeAction* p )
 
 bool ScChangeAction::IsDeletedIn() const
 {
-    return GetDeletedIn() != NULL;
+    return GetDeletedIn() != nullptr;
 }
 
 bool ScChangeAction::IsDeletedIn( const ScChangeAction* p ) const
@@ -360,7 +360,7 @@ bool ScChangeAction::IsDeletedInDelType( ScChangeActionType eDelType ) const
         while ( pL )
         {
             ScChangeAction* p;
-            if ( (p = pL->GetAction()) != NULL &&
+            if ( (p = pL->GetAction()) != nullptr &&
                     (p->GetType() == eDelType || p->GetType() == eInsType) )
                 return true;
             pL = pL->GetNext();
@@ -371,12 +371,12 @@ bool ScChangeAction::IsDeletedInDelType( ScChangeActionType eDelType ) const
 
 bool ScChangeAction::HasDependent() const
 {
-    return pLinkDependent != NULL;
+    return pLinkDependent != nullptr;
 }
 
 bool ScChangeAction::HasDeleted() const
 {
-    return pLinkDeleted != NULL;
+    return pLinkDeleted != nullptr;
 }
 
 void ScChangeAction::SetDeletedIn( ScChangeAction* p )
@@ -592,7 +592,7 @@ void ScChangeAction::RejectRestoreContents( ScChangeTrack* pTrack,
         SCsCOL nDx, SCsROW nDy )
 {
     // Construct list of Contents
-    ScChangeActionCellListEntry* pListContents = NULL;
+    ScChangeActionCellListEntry* pListContents = nullptr;
     for ( ScChangeActionLinkEntry* pL = pLinkDeleted; pL; pL = pL->GetNext() )
     {
         ScChangeAction* p = pL->GetAction();
@@ -772,10 +772,10 @@ ScChangeActionDel::ScChangeActionDel( const ScRange& rRange,
         :
         ScChangeAction( SC_CAT_NONE, rRange ),
         pTrack( pTrackP ),
-        pFirstCell( NULL ),
-        pCutOff( NULL ),
+        pFirstCell( nullptr ),
+        pCutOff( nullptr ),
         nCutOff( 0 ),
-        pLinkMove( NULL ),
+        pLinkMove( nullptr ),
         nDx( nDxP ),
         nDy( nDyP )
 {
@@ -811,10 +811,10 @@ ScChangeActionDel::ScChangeActionDel(
     const ScChangeActionType eTypeP, const SCsCOLROW nD, ScChangeTrack* pTrackP) : // which of nDx and nDy is set depends on the type
     ScChangeAction(eTypeP, aBigRangeP, nActionNumber, nRejectingNumber, eStateP, aDateTimeP, aUserP, sComment),
     pTrack( pTrackP ),
-    pFirstCell( NULL ),
-    pCutOff( NULL ),
+    pFirstCell( nullptr ),
+    pCutOff( nullptr ),
     nCutOff( 0 ),
-    pLinkMove( NULL ),
+    pLinkMove( nullptr ),
     nDx( 0 ),
     nDy( 0 )
 {
@@ -1131,7 +1131,7 @@ void ScChangeActionDel::UndoCutOffInsert()
                 // added to avoid warnings
             }
         }
-        SetCutOffInsert( NULL, 0 );
+        SetCutOffInsert( nullptr, 0 );
     }
 }
 
@@ -1145,7 +1145,7 @@ ScChangeActionMove::ScChangeActionMove(
     ScChangeAction(SC_CAT_MOVE, aToBigRange, nActionNumber, nRejectingNumber, eStateP, aDateTimeP, aUserP, sComment),
     aFromRange(aFromBigRange),
     pTrack( pTrackP ),
-    pFirstCell( NULL ),
+    pFirstCell( nullptr ),
     nStartLastCut(0),
     nEndLastCut(0)
 {
@@ -1294,10 +1294,10 @@ IMPL_FIXEDMEMPOOL_NEWDEL( ScChangeActionContent )
 
 ScChangeActionContent::ScChangeActionContent( const ScRange& rRange ) :
     ScChangeAction(SC_CAT_CONTENT, rRange),
-    pNextContent(NULL),
-    pPrevContent(NULL),
-    pNextInSlot(NULL),
-    ppPrevInSlot(NULL)
+    pNextContent(nullptr),
+    pPrevContent(nullptr),
+    pNextInSlot(nullptr),
+    ppPrevInSlot(nullptr)
 {}
 
 ScChangeActionContent::ScChangeActionContent( const sal_uLong nActionNumber,
@@ -1308,10 +1308,10 @@ ScChangeActionContent::ScChangeActionContent( const sal_uLong nActionNumber,
     ScChangeAction(SC_CAT_CONTENT, aBigRangeP, nActionNumber, nRejectingNumber, eStateP, aDateTimeP, aUserP, sComment),
     maOldCell(rOldCell),
     maOldValue(sOldValue),
-    pNextContent(NULL),
-    pPrevContent(NULL),
-    pNextInSlot(NULL),
-    ppPrevInSlot(NULL)
+    pNextContent(nullptr),
+    pPrevContent(nullptr),
+    pNextInSlot(nullptr),
+    ppPrevInSlot(nullptr)
 {
     if (!maOldCell.isEmpty())
         SetCell(maOldValue, maOldCell, 0, pDoc);
@@ -1326,10 +1326,10 @@ ScChangeActionContent::ScChangeActionContent( const sal_uLong nActionNumber,
     ScChangeAction(SC_CAT_CONTENT, aBigRangeP, nActionNumber),
     maNewCell(rNewCell),
     maNewValue(sNewValue),
-    pNextContent(NULL),
-    pPrevContent(NULL),
-    pNextInSlot(NULL),
-    ppPrevInSlot(NULL)
+    pNextContent(nullptr),
+    pPrevContent(nullptr),
+    pNextInSlot(nullptr),
+    ppPrevInSlot(nullptr)
 {
     if (!maNewCell.isEmpty())
         SetCell(maNewValue, maNewCell, 0, pDoc);
@@ -1552,14 +1552,14 @@ bool ScChangeActionContent::Select( ScDocument* pDoc, ScChangeTrack* pTrack,
 
     ScChangeActionContent* pContent = this;
     // accept previous contents
-    while ( ( pContent = pContent->pPrevContent ) != NULL )
+    while ( ( pContent = pContent->pPrevContent ) != nullptr )
     {
         if ( pContent->IsVirgin() )
             pContent->SetState( SC_CAS_ACCEPTED );
     }
     ScChangeActionContent* pEnd = pContent = this;
     // reject subsequent contents
-    while ( ( pContent = pContent->pNextContent ) != NULL )
+    while ( ( pContent = pContent->pNextContent ) != nullptr )
     {
         // MatrixOrigin may have dependents, no dependency recursion needed
         const ScChangeActionLinkEntry* pL = pContent->GetFirstDependentEntry();
@@ -2014,10 +2014,10 @@ void ScChangeActionContent::UpdateReference( const ScChangeTrack* pTrack,
                 formula::FormulaToken* t;
                 ScTokenArray* pArr = maOldCell.mpFormula->GetCode();
                 pArr->Reset();
-                while ( ( t = pArr->GetNextReference() ) != NULL )
+                while ( ( t = pArr->GetNextReference() ) != nullptr )
                     lcl_InvalidateReference( *t, rPos );
                 pArr->Reset();
-                while ( ( t = pArr->GetNextReferenceRPN() ) != NULL )
+                while ( ( t = pArr->GetNextReferenceRPN() ) != nullptr )
                     lcl_InvalidateReference( *t, rPos );
             }
             if ( bNewFormula )
@@ -2025,10 +2025,10 @@ void ScChangeActionContent::UpdateReference( const ScChangeTrack* pTrack,
                 formula::FormulaToken* t;
                 ScTokenArray* pArr = maNewCell.mpFormula->GetCode();
                 pArr->Reset();
-                while ( ( t = pArr->GetNextReference() ) != NULL )
+                while ( ( t = pArr->GetNextReference() ) != nullptr )
                     lcl_InvalidateReference( *t, rPos );
                 pArr->Reset();
-                while ( ( t = pArr->GetNextReferenceRPN() ) != NULL )
+                while ( ( t = pArr->GetNextReferenceRPN() ) != nullptr )
                     lcl_InvalidateReference( *t, rPos );
             }
         }
@@ -2107,15 +2107,15 @@ ScChangeTrack::~ScChangeTrack()
 
 void ScChangeTrack::Init()
 {
-    pFirst = NULL;
-    pLast = NULL;
-    pFirstGeneratedDelContent = NULL;
-    pLastCutMove = NULL;
-    pLinkInsertCol = NULL;
-    pLinkInsertRow = NULL;
-    pLinkInsertTab = NULL;
-    pLinkMove = NULL;
-    pBlockModifyMsg = NULL;
+    pFirst = nullptr;
+    pLast = nullptr;
+    pFirstGeneratedDelContent = nullptr;
+    pLastCutMove = nullptr;
+    pLinkInsertCol = nullptr;
+    pLinkInsertRow = nullptr;
+    pLinkInsertTab = nullptr;
+    pLinkMove = nullptr;
+    pBlockModifyMsg = nullptr;
     nActionMax = 0;
     nGeneratedMin = SC_CHGTRACK_GENERATED_START;
     nMarkLastSaved = 0;
@@ -2168,7 +2168,7 @@ void ScChangeTrack::ClearMsgQueue()
     if ( pBlockModifyMsg )
     {
         delete pBlockModifyMsg;
-        pBlockModifyMsg = NULL;
+        pBlockModifyMsg = nullptr;
     }
     while ( !aMsgStackTmp.empty() )
     {
@@ -2210,7 +2210,7 @@ ScChangeAction* ScChangeTrack::GetAction( sal_uLong nAction ) const
     if( it != aMap.end() )
         return it->second;
     else
-        return NULL;
+        return nullptr;
 }
 
 ScChangeAction* ScChangeTrack::GetGenerated( sal_uLong nGenerated ) const
@@ -2219,7 +2219,7 @@ ScChangeAction* ScChangeTrack::GetGenerated( sal_uLong nGenerated ) const
     if( it != aGeneratedMap.end() )
         return it->second;
     else
-        return NULL;
+        return nullptr;
 }
 
 ScChangeAction* ScChangeTrack::GetActionOrGenerated( sal_uLong nAction ) const
@@ -2244,7 +2244,7 @@ ScChangeAction* ScChangeTrack::GetLastSaved() const
     if( it != aMap.end() )
         return it->second;
     else
-        return NULL;
+        return nullptr;
 }
 
 void ScChangeTrack::ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32 )
@@ -2311,7 +2311,7 @@ void ScChangeTrack::EndBlockModify( sal_uLong nEndAction )
             else
                 delete pBlockModifyMsg;
             if (aMsgStackTmp.empty())
-                pBlockModifyMsg = NULL;
+                pBlockModifyMsg = nullptr;
             else
             {
                 pBlockModifyMsg = aMsgStackTmp.top(); // Maybe Block in Block
@@ -2378,28 +2378,28 @@ void ScChangeTrack::MasterLinks( ScChangeAction* pAppend )
         {
             ScChangeActionLinkEntry* pLink = new ScChangeActionLinkEntry(
                 &pLinkInsertCol, pAppend );
-            pAppend->AddLink( NULL, pLink );
+            pAppend->AddLink( nullptr, pLink );
         }
         break;
         case SC_CAT_INSERT_ROWS :
         {
             ScChangeActionLinkEntry* pLink = new ScChangeActionLinkEntry(
                 &pLinkInsertRow, pAppend );
-            pAppend->AddLink( NULL, pLink );
+            pAppend->AddLink( nullptr, pLink );
         }
         break;
         case SC_CAT_INSERT_TABS :
         {
             ScChangeActionLinkEntry* pLink = new ScChangeActionLinkEntry(
                 &pLinkInsertTab, pAppend );
-            pAppend->AddLink( NULL, pLink );
+            pAppend->AddLink( nullptr, pLink );
         }
         break;
         case SC_CAT_MOVE :
         {
             ScChangeActionLinkEntry* pLink = new ScChangeActionLinkEntry(
                 &pLinkMove, pAppend );
-            pAppend->AddLink( NULL, pLink );
+            pAppend->AddLink( nullptr, pLink );
         }
         break;
         default:
@@ -2461,7 +2461,7 @@ void ScChangeTrack::Append( ScChangeAction* pAppend, sal_uLong nAction )
         if ( pAppend->GetType() == SC_CAT_CONTENT )
         {
             ScChangeActionContent* pContent = static_cast<ScChangeActionContent*>(pAppend);
-            if ( ( pContent = pContent->GetPrevContent() ) != NULL )
+            if ( ( pContent = pContent->GetPrevContent() ) != nullptr )
             {
                 sal_uLong nMod = pContent->GetActionNumber();
                 NotifyModified( SC_CTM_CHANGE, nMod, nMod );
@@ -2608,7 +2608,7 @@ void ScChangeTrack::LookUpContents( const ScRange& rOrgRange,
 
         aBigPos.Set( aIter.GetPos().Col() + nDx, aIter.GetPos().Row() + nDy,
             aIter.GetPos().Tab() + nDz );
-        ScChangeActionContent* pContent = SearchContentAt( aBigPos, NULL );
+        ScChangeActionContent* pContent = SearchContentAt( aBigPos, nullptr );
         if (pContent)
             continue;
 
@@ -2778,7 +2778,7 @@ void ScChangeTrack::AppendContentRange( const ScRange& rRange,
         pLastCutMove->SetStartLastCut( nStartLastCut );
         pLastCutMove->SetEndLastCut( nEndLastCut );
         Append( pLastCutMove );
-        pLastCutMove = NULL;
+        pLastCutMove = nullptr;
         ResetLastCut();
         SetInPasteCut( false );
     }
@@ -2870,7 +2870,7 @@ void ScChangeTrack::DeleteCellEntries( ScChangeActionCellListEntry*& pCellList,
         delete pE;
         pE = pNext;
     }
-    pCellList = NULL;
+    pCellList = nullptr;
 }
 
 ScChangeActionContent* ScChangeTrack::GenerateDelContent(
@@ -2925,7 +2925,7 @@ ScChangeActionContent* ScChangeTrack::SearchContentAt(
                 return pContent;
         }
     }
-    return NULL;
+    return nullptr;
 }
 
 void ScChangeTrack::AddDependentWithNotify( ScChangeAction* pParent,
@@ -2968,7 +2968,7 @@ void ScChangeTrack::Dependencies( ScChangeAction* pAct )
         {
             ScAddress aOrg;
             bool bOrgFound = rCell.mpFormula->GetMatrixOrigin(aOrg);
-            ScChangeActionContent* pContent = (bOrgFound ? SearchContentAt( aOrg, pAct ) : NULL);
+            ScChangeActionContent* pContent = (bOrgFound ? SearchContentAt( aOrg, pAct ) : nullptr);
             if ( pContent && pContent->IsMatrixOrigin() )
             {
                 AddDependentWithNotify( pContent, pAct );
@@ -3114,7 +3114,7 @@ void ScChangeTrack::Remove( ScChangeAction* pRemove )
         if ( pRemove->GetType() == SC_CAT_CONTENT )
         {
             ScChangeActionContent* pContent = static_cast<ScChangeActionContent*>(pRemove);
-            if ( ( pContent = pContent->GetPrevContent() ) != NULL )
+            if ( ( pContent = pContent->GetPrevContent() ) != nullptr )
             {
                 sal_uLong nMod = pContent->GetActionNumber();
                 NotifyModified( SC_CTM_CHANGE, nMod, nMod );
@@ -3130,8 +3130,8 @@ void ScChangeTrack::Remove( ScChangeAction* pRemove )
         ScChangeActionContent* pContent = static_cast<ScChangeActionContent*>(pRemove);
         pContent->RemoveAllLinks();
         pContent->ClearTrack();
-        pContent->pNext = pContent->pPrev = NULL;
-        pContent->pNextContent = pContent->pPrevContent = NULL;
+        pContent->pNext = pContent->pPrev = nullptr;
+        pContent->pNextContent = pContent->pPrevContent = nullptr;
     }
 }
 
@@ -3264,7 +3264,7 @@ void ScChangeTrack::MergePrepare( ScChangeAction* pFirstMerge, bool bShared )
                 SetInDeleteTop( false );
                 pAct->DeleteCellEntries(); // Else segfault in Track Clear()
             }
-            pAct = ( pAct == pFirstMerge ? NULL : pAct->GetPrev() );
+            pAct = ( pAct == pFirstMerge ? nullptr : pAct->GetPrev() );
         }
     }
     SetMergeState( SC_CTMS_OTHER ); // Preceding by default MergeOther!
@@ -3712,18 +3712,18 @@ void ScChangeTrack::UpdateReference( ScChangeAction** ppFirstAction,
                         // Split up the ContentChain
                         ScChangeActionContent *pHere, *pTmp;
                         pHere = static_cast<ScChangeActionContent*>(p);
-                        while ( (pTmp = pHere->GetPrevContent()) != NULL &&
+                        while ( (pTmp = pHere->GetPrevContent()) != nullptr &&
                                 pTmp->GetActionNumber() > nEndLastCut )
                             pHere = pTmp;
                         if ( pTmp )
                         {   // Becomes TopContent of the Move
-                            pTmp->SetNextContent( NULL );
-                            pHere->SetPrevContent( NULL );
+                            pTmp->SetNextContent( nullptr );
+                            pHere->SetPrevContent( nullptr );
                         }
                         do
                         {   // Recover dependency from FromRange
                             AddDependentWithNotify( pActMove, pHere );
-                        } while ( ( pHere = pHere->GetNextContent() ) != NULL );
+                        } while ( ( pHere = pHere->GetNextContent() ) != nullptr );
                     }
                     // #i87003# [Collaboration] Move range and insert content in FromRange is not merged correctly
                     else if ( ( GetMergeState() != SC_CTMS_PREPARE && GetMergeState() != SC_CTMS_OWN ) || p->GetActionNumber() <= pAct->GetActionNumber() )
@@ -3897,7 +3897,7 @@ void ScChangeTrack::GetDependents( ScChangeAction* pAct,
     bool bIsDelete = pAct->IsDeleteType();
     bool bIsMasterDelete = ( bListMasterDelete && pAct->IsMasterDelete() );
 
-    const ScChangeAction* pCur = NULL;
+    const ScChangeAction* pCur = nullptr;
     ::std::stack<ScChangeAction*> cStack;
     cStack.push(pAct);
 
@@ -3946,7 +3946,7 @@ void ScChangeTrack::GetDependents( ScChangeAction* pAct,
                     // if this Delete is at the top of a Row
                     ScChangeActionType eType = pDel->GetType();
                     ScChangeAction* p = pDel;
-                    while ( (p = p->GetPrev()) != NULL && p->GetType() == eType &&
+                    while ( (p = p->GetPrev()) != nullptr && p->GetType() == eType &&
                             !static_cast<ScChangeActionDel*>(p)->IsTopDelete() )
                         rMap.insert( ::std::make_pair( p->GetActionNumber(), p ) );
                     // delete this in the map too
@@ -4034,14 +4034,14 @@ void ScChangeTrack::GetDependents( ScChangeAction* pAct,
         {   // All changes at same position
             ScChangeActionContent* pContent = const_cast<ScChangeActionContent*>(static_cast<const ScChangeActionContent*>(pCur));
             // All preceding ones
-            while ( ( pContent = pContent->GetPrevContent() ) != NULL )
+            while ( ( pContent = pContent->GetPrevContent() ) != nullptr )
             {
                 if ( !pContent->IsRejected() )
                     rMap.insert( ::std::make_pair( pContent->GetActionNumber(), pContent ) );
             }
             pContent = const_cast<ScChangeActionContent*>(static_cast<const ScChangeActionContent*>(pCur));
             // All succeeding ones
-            while ( ( pContent = pContent->GetNextContent() ) != NULL )
+            while ( ( pContent = pContent->GetNextContent() ) != nullptr )
             {
                 if ( !pContent->IsRejected() )
                     rMap.insert( ::std::make_pair( pContent->GetActionNumber(), pContent ) );
@@ -4089,7 +4089,7 @@ bool ScChangeTrack::SelectContent( ScChangeAction* pAct, bool bOldest )
     {
         pContent = pContent->GetTopContent();
         ScChangeActionContent* pPrevContent;
-        while ( (pPrevContent = pContent->GetPrevContent()) != NULL &&
+        while ( (pPrevContent = pContent->GetPrevContent()) != nullptr &&
                 pPrevContent->IsVirgin() )
             pContent = pPrevContent;
     }
@@ -4140,7 +4140,7 @@ bool ScChangeTrack::SelectContent( ScChangeAction* pAct, bool bOldest )
             pL = pL->GetNext();
         }
 
-        bOk &= pContent->Select( pDoc, this, bOldest, NULL );
+        bOk &= pContent->Select( pDoc, this, bOldest, nullptr );
         // now the matrix is inserted and new content values are ready
 
         while ( !aRejectActions.empty() )
@@ -4156,7 +4156,7 @@ bool ScChangeTrack::SelectContent( ScChangeAction* pAct, bool bOldest )
         return bOk;
     }
     else
-        return pContent->Select( pDoc, this, bOldest, NULL );
+        return pContent->Select( pDoc, this, bOldest, nullptr );
 }
 
 void ScChangeTrack::AcceptAll()
@@ -4242,13 +4242,13 @@ bool ScChangeTrack::Reject(
                 else if ( itChangeAction->second->IsDeleteType() )
                     itChangeAction->second->Accept(); // Deleted to Nirvana
                 else
-                    bOk = Reject( itChangeAction->second, NULL, true ); // Recursion!
+                    bOk = Reject( itChangeAction->second, nullptr, true ); // Recursion!
             }
         }
         if ( bOk && (bRejected = pAct->Reject( pDoc )) )
         {
             // pRefDoc NULL := Do not save deleted Cells
-            AppendDeleteRange( pAct->GetBigRange().MakeRange(), NULL, (short) 0,
+            AppendDeleteRange( pAct->GetBigRange().MakeRange(), nullptr, (short) 0,
                 pAct->GetActionNumber() );
         }
     }
@@ -4355,7 +4355,7 @@ bool ScChangeTrack::Reject(
 
             for( itChangeAction = pMap->rbegin(); itChangeAction != pMap->rend() && bOk; ++itChangeAction )
             {
-                bOk = Reject( itChangeAction->second, NULL, true ); // Recursion!
+                bOk = Reject( itChangeAction->second, nullptr, true ); // Recursion!
             }
         }
         if ( bOk && (bRejected = pAct->Reject( pDoc )) )
@@ -4373,7 +4373,7 @@ bool ScChangeTrack::Reject(
         ScRange aRange;
         ScChangeActionContent* pReject;
         if ( bRecursion )
-            pReject = NULL;
+            pReject = nullptr;
         else
         {
             aRange = pAct->GetBigRange().aStart.MakeAddress();
@@ -4436,7 +4436,7 @@ ScChangeTrack* ScChangeTrack::Clone( ScDocument* pDocument ) const
 {
     if ( !pDocument )
     {
-        return NULL;
+        return nullptr;
     }
 
     ScChangeTrack* pClonedTrack = new ScChangeTrack( pDocument );
@@ -4471,7 +4471,7 @@ ScChangeTrack* ScChangeTrack::Clone( ScDocument* pDocument ) const
     const ScChangeAction* pAction = GetFirst();
     while ( pAction )
     {
-        ScChangeAction* pClonedAction = NULL;
+        ScChangeAction* pClonedAction = nullptr;
 
         switch ( pAction->GetType() )
         {

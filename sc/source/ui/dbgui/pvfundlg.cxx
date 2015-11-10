@@ -499,7 +499,7 @@ void ScDPSubtotalDlg::Init( const ScDPLabelData& rLabelData, const ScPivotFuncDa
     mpRbAuto->SetClickHdl( LINK( this, ScDPSubtotalDlg, RadioClickHdl ) );
     mpRbUser->SetClickHdl( LINK( this, ScDPSubtotalDlg, RadioClickHdl ) );
 
-    RadioButton* pRBtn = 0;
+    RadioButton* pRBtn = nullptr;
     switch( rFuncData.mnFuncMask )
     {
         case PIVOT_FUNC_NONE:   pRBtn = mpRbNone;  break;
@@ -692,7 +692,7 @@ void ScDPSubtotalOptDlg::Init( const ScDPNameVec& rDataFields, bool bEnableLayou
     m_pRbSortDesc->SetClickHdl( LINK( this, ScDPSubtotalOptDlg, RadioClickHdl ) );
     m_pRbSortMan->SetClickHdl( LINK( this, ScDPSubtotalOptDlg, RadioClickHdl ) );
 
-    RadioButton* pRBtn = 0;
+    RadioButton* pRBtn = nullptr;
     switch( nSortMode )
     {
         case DataPilotFieldSortMode::NONE:
@@ -835,7 +835,7 @@ ScDPShowDetailDlg::ScDPShowDetailDlg( vcl::Window* pParent, ScDPObject& rDPObj, 
         OUString aName = rDPObj.GetDimName( nDim, bIsDataLayout, &nDimFlags );
         if ( !bIsDataLayout && !rDPObj.IsDuplicated( nDim ) && ScDPObject::IsOrientationAllowed( nOrient, nDimFlags ) )
         {
-            const ScDPSaveDimension* pDimension = pSaveData ? pSaveData->GetExistingDimensionByName(aName) : 0;
+            const ScDPSaveDimension* pDimension = pSaveData ? pSaveData->GetExistingDimensionByName(aName) : nullptr;
             if ( !pDimension || (pDimension->GetOrientation() != nOrient) )
             {
                 if (pDimension)

@@ -39,10 +39,10 @@ private:
         sal_Int32               nType;      // < 0 -> undefiniert
         inline              ENTRY()
                             {
-                                pTmpName = NULL;
-                                pFont = NULL;
-                                pHeight = NULL;
-                                pColor = NULL;
+                                pTmpName = nullptr;
+                                pFont = nullptr;
+                                pHeight = nullptr;
+                                pColor = nullptr;
                                 nType = -1;
                             }
         inline              ~ENTRY()

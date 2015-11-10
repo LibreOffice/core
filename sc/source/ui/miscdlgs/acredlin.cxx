@@ -58,7 +58,7 @@ ScRedlinData::ScRedlinData()
 {
     nInfo=RD_SPECIAL_NONE;
     nActionNo=0;
-    pData=NULL;
+    pData=nullptr;
     bDisabled=false;
     bIsRejectable=false;
     bIsAcceptable=false;
@@ -71,7 +71,7 @@ ScRedlinData::~ScRedlinData()
 {
     nInfo=RD_SPECIAL_NONE;
     nActionNo=0;
-    pData=NULL;
+    pData=nullptr;
     bDisabled=false;
     bIsRejectable=false;
     bIsAcceptable=false;
@@ -145,7 +145,7 @@ ScAcceptChgDlg::ScAcceptChgDlg(SfxBindings* pB, SfxChildWindow* pCW, vcl::Window
 
     UpdateView();
     SvTreeListEntry* pEntry=pTheView->First();
-    if(pEntry!=NULL)
+    if(pEntry!=nullptr)
     {
         pTheView->Select(pEntry);
     }
@@ -161,7 +161,7 @@ void ScAcceptChgDlg::dispose()
     ClearView();
     ScChangeTrack* pChanges=pDoc->GetChangeTrack();
 
-    if(pChanges!=NULL)
+    if(pChanges!=nullptr)
     {
         Link<ScChangeTrack&,void> aLink;
         pChanges->SetModifiedLink(aLink);
@@ -177,10 +177,10 @@ void ScAcceptChgDlg::dispose()
 void ScAcceptChgDlg::ReInit(ScViewData* ptrViewData)
 {
     pViewData=ptrViewData;
-    if(pViewData!=NULL)
+    if(pViewData!=nullptr)
         pDoc=ptrViewData->GetDocument();
     else
-        pDoc=NULL;
+        pDoc=nullptr;
 
     bNoSelection=false;
     bNeedsUpdate=false;
@@ -211,7 +211,7 @@ void ScAcceptChgDlg::Init()
 
     ScChangeTrack* pChanges=pDoc->GetChangeTrack();
 
-    if(pChanges!=NULL)
+    if(pChanges!=nullptr)
     {
         pChanges->SetModifiedLink( LINK( this, ScAcceptChgDlg,ChgTrackModHdl));
         aChangeViewSet.SetTheAuthorToShow(pChanges->GetUser());
@@ -223,7 +223,7 @@ void ScAcceptChgDlg::Init()
     }
 
     ScChangeViewSettings* pViewSettings=pDoc->GetChangeViewSettings();
-    if ( pViewSettings!=NULL )
+    if ( pViewSettings!=nullptr )
         aChangeViewSet = *pViewSettings;
     // adjust TimeField for filter tabpage
     aChangeViewSet.AdjustDateMode( *pDoc );
@@ -298,7 +298,7 @@ OUString* ScAcceptChgDlg::MakeTypeString(ScChangeActionType eType)
 
 bool ScAcceptChgDlg::IsValidAction(const ScChangeAction* pScChangeAction)
 {
-    if(pScChangeAction==NULL) return false;
+    if(pScChangeAction==nullptr) return false;
 
     bool bFlag = false;
 
@@ -352,9 +352,9 @@ SvTreeListEntry* ScAcceptChgDlg::InsertChangeAction(
 {
     ScChangeTrack* pChanges=pDoc->GetChangeTrack();
 
-    if(pScChangeAction==NULL || pChanges==NULL) return NULL;
+    if(pScChangeAction==nullptr || pChanges==nullptr) return nullptr;
 
-    SvTreeListEntry* pEntry=NULL;
+    SvTreeListEntry* pEntry=nullptr;
 
     bool bFlag = false;
 
@@ -470,22 +470,22 @@ SvTreeListEntry* ScAcceptChgDlg::InsertChangeAction(
         }
     }
 
-    if(!bFlag&& bUseColor&& pParent==NULL)
+    if(!bFlag&& bUseColor&& pParent==nullptr)
     {
         pEntry = pTheView->InsertEntry(
             aBuf.makeStringAndClear() ,pNewData, Color(COL_LIGHTBLUE), pParent, nPos);
     }
-    else if(bFlag&& bUseColor&& pParent!=NULL)
+    else if(bFlag&& bUseColor&& pParent!=nullptr)
     {
         pEntry = pTheView->InsertEntry(
             aBuf.makeStringAndClear(), pNewData, Color(COL_GREEN), pParent, nPos);
         SvTreeListEntry* pExpEntry=pParent;
 
-        while(pExpEntry!=NULL && !pTheView->IsExpanded(pExpEntry))
+        while(pExpEntry!=nullptr && !pTheView->IsExpanded(pExpEntry))
         {
             SvTreeListEntry* pTmpEntry=pTheView->GetParent(pExpEntry);
 
-            if(pTmpEntry!=NULL) pTheView->Expand(pExpEntry);
+            if(pTmpEntry!=nullptr) pTheView->Expand(pExpEntry);
 
             pExpEntry=pTmpEntry;
         }
@@ -505,11 +505,11 @@ SvTreeListEntry* ScAcceptChgDlg::InsertFilteredAction(
 
     ScChangeTrack* pChanges=pDoc->GetChangeTrack();
 
-    if(pScChangeAction==NULL || pChanges==NULL) return NULL;
+    if(pScChangeAction==nullptr || pChanges==nullptr) return nullptr;
 
     bool bIsGenerated = pChanges->IsGenerated(pScChangeAction->GetActionNumber());
 
-    SvTreeListEntry* pEntry=NULL;
+    SvTreeListEntry* pEntry=nullptr;
 
     bool bFlag = false;
 
@@ -628,9 +628,9 @@ SvTreeListEntry* ScAcceptChgDlg::InsertChangeActionContent(const ScChangeActionC
                                                           SvTreeListEntry* pParent, sal_uLong nSpecial)
 {
     ScChangeTrack* pChanges=pDoc->GetChangeTrack();
-    SvTreeListEntry* pEntry=NULL;
+    SvTreeListEntry* pEntry=nullptr;
 
-    if(pScChangeAction==NULL || pChanges==NULL) return NULL;
+    if(pScChangeAction==nullptr || pChanges==nullptr) return nullptr;
 
     bool bIsGenerated = pChanges->IsGenerated(pScChangeAction->GetActionNumber());
 
@@ -768,9 +768,9 @@ bool ScAcceptChgDlg::PreNotify( NotifyEvent& rNEvt )
 void ScAcceptChgDlg::UpdateView()
 {
     bNeedsUpdate=false;
-    SvTreeListEntry* pParent=NULL;
-    ScChangeTrack* pChanges=NULL;
-    const ScChangeAction* pScChangeAction=NULL;
+    SvTreeListEntry* pParent=nullptr;
+    ScChangeTrack* pChanges=nullptr;
+    const ScChangeAction* pScChangeAction=nullptr;
     bAcceptEnableFlag=true;
     bRejectEnableFlag=true;
     SetPointer(Pointer(PointerStyle::Wait));
@@ -780,15 +780,15 @@ void ScAcceptChgDlg::UpdateView()
 
     bUseColor = bFilterFlag;
 
-    if(pDoc!=NULL)
+    if(pDoc!=nullptr)
     {
         pChanges=pDoc->GetChangeTrack();
-        if(pChanges!=NULL)
+        if(pChanges!=nullptr)
             pScChangeAction=pChanges->GetFirst();
     }
     bool bTheFlag = false;
 
-    while(pScChangeAction!=NULL)
+    while(pScChangeAction!=nullptr)
     {
         bHasFilterEntry=false;
         switch(pScChangeAction->GetState())
@@ -803,23 +803,23 @@ void ScAcceptChgDlg::UpdateView()
                         pParent=InsertFilteredAction(pScChangeAction,SC_CAS_VIRGIN);
                 }
                 else
-                    pParent=NULL;
+                    pParent=nullptr;
 
                 bTheFlag=true;
                 break;
 
             case SC_CAS_ACCEPTED:
-                pParent=NULL;
+                pParent=nullptr;
                 nAcceptCount++;
                 break;
 
             case SC_CAS_REJECTED:
-                pParent=NULL;
+                pParent=nullptr;
                 nRejectCount++;
                 break;
         }
 
-        if(pParent!=NULL && pScChangeAction->IsDialogParent())
+        if(pParent!=nullptr && pScChangeAction->IsDialogParent())
         {
             if(!bFilterFlag)
                 pParent->EnableChildrenOnDemand();
@@ -846,21 +846,21 @@ void ScAcceptChgDlg::UpdateView()
     if(nAcceptCount>0)
     {
         pParent=pTheView->InsertEntry(
-            aStrAllAccepted, static_cast< RedlinData * >(NULL),
-            static_cast< SvTreeListEntry * >(NULL));
+            aStrAllAccepted, static_cast< RedlinData * >(nullptr),
+            static_cast< SvTreeListEntry * >(nullptr));
         pParent->EnableChildrenOnDemand();
     }
     if(nRejectCount>0)
     {
         pParent=pTheView->InsertEntry(
-            aStrAllRejected, static_cast< RedlinData * >(NULL),
-            static_cast< SvTreeListEntry * >(NULL));
+            aStrAllRejected, static_cast< RedlinData * >(nullptr),
+            static_cast< SvTreeListEntry * >(nullptr));
         pParent->EnableChildrenOnDemand();
     }
     pTheView->SetUpdateMode(true);
     SetPointer(Pointer(PointerStyle::Arrow));
     SvTreeListEntry* pEntry=pTheView->First();
-    if(pEntry!=NULL)
+    if(pEntry!=nullptr)
         pTheView->Select(pEntry);
 }
 
@@ -875,7 +875,7 @@ IMPL_LINK_NOARG_TYPED(ScAcceptChgDlg, RefHandle, SvxTPFilter*, void)
     SfxViewFrame* pViewFrm = pViewData->GetViewShell()->GetViewFrame();
     ScSimpleRefDlgWrapper* pWnd = static_cast<ScSimpleRefDlgWrapper*>(pViewFrm->GetChildWindow( nId ));
 
-    if(pWnd!=NULL)
+    if(pWnd!=nullptr)
     {
         sal_uInt16 nAcceptId=ScAcceptChgDlgWrapper::GetChildWindowId();
         pViewFrm->ShowChildWindow(nAcceptId,false);
@@ -897,7 +897,7 @@ IMPL_LINK_TYPED( ScAcceptChgDlg, RefInfoHandle, const OUString*, pResult, void)
     ScSimpleRefDlgWrapper::SetAutoReOpen(true);
 
     SfxViewFrame* pViewFrm = pViewData->GetViewShell()->GetViewFrame();
-    if(pResult!=NULL)
+    if(pResult!=nullptr)
     {
         pTPFilter->SetRange(*pResult);
         FilterHandle(pTPFilter);
@@ -905,7 +905,7 @@ IMPL_LINK_TYPED( ScAcceptChgDlg, RefInfoHandle, const OUString*, pResult, void)
         nId = ScSimpleRefDlgWrapper::GetChildWindowId();
         ScSimpleRefDlgWrapper* pWnd = static_cast<ScSimpleRefDlgWrapper*>(pViewFrm->GetChildWindow( nId ));
 
-        if(pWnd!=NULL)
+        if(pWnd!=nullptr)
         {
             vcl::Window* pWin=pWnd->GetWindow();
             Size aWinSize=pWin->GetSizePixel();
@@ -925,7 +925,7 @@ IMPL_LINK_TYPED( ScAcceptChgDlg, RefInfoHandle, const OUString*, pResult, void)
 
 IMPL_LINK_TYPED( ScAcceptChgDlg, FilterHandle, SvxTPFilter*, pRef, void )
 {
-    if(pRef!=NULL)
+    if(pRef!=nullptr)
     {
         ClearView();
         aRangeList.RemoveAll();
@@ -941,13 +941,13 @@ IMPL_LINK_TYPED( ScAcceptChgDlg, RejectHandle, SvxTPView*, pRef, void )
     bIgnoreMsg=true;
     ScChangeTrack* pChanges=pDoc->GetChangeTrack();
 
-    if(pRef!=NULL)
+    if(pRef!=nullptr)
     {
         SvTreeListEntry* pEntry=pTheView->FirstSelected();
-        while(pEntry!=NULL)
+        while(pEntry!=nullptr)
         {
             ScRedlinData *pEntryData=static_cast<ScRedlinData *>(pEntry->GetUserData());
-            if(pEntryData!=NULL)
+            if(pEntryData!=nullptr)
             {
                 ScChangeAction* pScChangeAction=
                         static_cast<ScChangeAction*>(pEntryData->pData);
@@ -977,13 +977,13 @@ IMPL_LINK_TYPED( ScAcceptChgDlg, AcceptHandle, SvxTPView*, pRef, void )
 
     ScChangeTrack* pChanges=pDoc->GetChangeTrack();
     bIgnoreMsg=true;
-    if(pRef!=NULL)
+    if(pRef!=nullptr)
     {
         SvTreeListEntry* pEntry=pTheView->FirstSelected();
-        while(pEntry!=NULL)
+        while(pEntry!=nullptr)
         {
             ScRedlinData *pEntryData=static_cast<ScRedlinData *>(pEntry->GetUserData());
-            if(pEntryData!=NULL)
+            if(pEntryData!=nullptr)
             {
                 ScChangeAction* pScChangeAction=
                         static_cast<ScChangeAction*>(pEntryData->pData);
@@ -1011,16 +1011,16 @@ IMPL_LINK_TYPED( ScAcceptChgDlg, AcceptHandle, SvxTPView*, pRef, void )
 
 void ScAcceptChgDlg::RejectFiltered()
 {
-    if(pDoc==NULL) return;
+    if(pDoc==nullptr) return;
     ScChangeTrack* pChanges=pDoc->GetChangeTrack();
-    const ScChangeAction* pScChangeAction=NULL;
+    const ScChangeAction* pScChangeAction=nullptr;
 
-    if(pChanges!=NULL)
+    if(pChanges!=nullptr)
     {
         pScChangeAction=pChanges->GetLast();
     }
 
-    while(pScChangeAction!=NULL)
+    while(pScChangeAction!=nullptr)
     {
         if(pScChangeAction->IsDialogRoot())
             if(IsValidAction(pScChangeAction))
@@ -1031,14 +1031,14 @@ void ScAcceptChgDlg::RejectFiltered()
 }
 void ScAcceptChgDlg::AcceptFiltered()
 {
-    if(pDoc==NULL) return;
+    if(pDoc==nullptr) return;
     ScChangeTrack* pChanges=pDoc->GetChangeTrack();
-    const ScChangeAction* pScChangeAction=NULL;
+    const ScChangeAction* pScChangeAction=nullptr;
 
-    if(pChanges!=NULL)
+    if(pChanges!=nullptr)
         pScChangeAction=pChanges->GetLast();
 
-    while(pScChangeAction!=NULL)
+    while(pScChangeAction!=nullptr)
     {
         if(pScChangeAction->IsDialogRoot())
             if(IsValidAction(pScChangeAction))
@@ -1053,7 +1053,7 @@ IMPL_LINK_NOARG_TYPED(ScAcceptChgDlg, RejectAllHandle, SvxTPView*, void)
     SetPointer(Pointer(PointerStyle::Wait));
     bIgnoreMsg=true;
     ScChangeTrack* pChanges=pDoc->GetChangeTrack();
-    if(pChanges!=NULL)
+    if(pChanges!=nullptr)
     {
         if(pTPFilter->IsDate()||pTPFilter->IsAuthor()||pTPFilter->IsRange()||pTPFilter->IsComment())
             RejectFiltered();
@@ -1081,7 +1081,7 @@ IMPL_LINK_NOARG_TYPED(ScAcceptChgDlg, AcceptAllHandle, SvxTPView*, void)
 
     bIgnoreMsg=true;
     ScChangeTrack* pChanges=pDoc->GetChangeTrack();
-    if(pChanges!=NULL)
+    if(pChanges!=nullptr)
     {
         if(pTPFilter->IsDate()||pTPFilter->IsAuthor()||pTPFilter->IsRange()||pTPFilter->IsComment())
             AcceptFiltered();
@@ -1114,7 +1114,7 @@ void ScAcceptChgDlg::GetDependents(  const ScChangeAction* pScChangeAction,
     ScChangeTrack* pChanges=pDoc->GetChangeTrack();
 
     SvTreeListEntry* pParent=pTheView->GetParent(pEntry);
-    if(pParent!=NULL)
+    if(pParent!=nullptr)
     {
         ScRedlinData *pParentData=static_cast<ScRedlinData *>(pParent->GetUserData());
         ScChangeAction* pParentAction=static_cast<ScChangeAction*>(pParentData->pData);
@@ -1149,7 +1149,7 @@ bool ScAcceptChgDlg::InsertContentChildren(ScChangeActionMap* pActionMap,SvTreeL
             const_cast<ScChangeAction*>( pScChangeAction ) ) );
         bParentInserted = true;
     }
-    SvTreeListEntry* pEntry=NULL;
+    SvTreeListEntry* pEntry=nullptr;
 
     ScChangeActionMap::iterator itChangeAction = pActionMap->begin();
     while( itChangeAction != pActionMap->end() )
@@ -1166,7 +1166,7 @@ bool ScAcceptChgDlg::InsertContentChildren(ScChangeActionMap* pActionMap,SvTreeL
         dynamic_cast<const ScChangeActionContent*>( itChangeAction->second ),
         pParent, RD_SPECIAL_CONTENT );
 
-    if(pOriginal!=NULL)
+    if(pOriginal!=nullptr)
     {
         bTheTestFlag=false;
         ScRedlinData *pParentData=static_cast<ScRedlinData *>(pOriginal->GetUserData());
@@ -1183,7 +1183,7 @@ bool ScAcceptChgDlg::InsertContentChildren(ScChangeActionMap* pActionMap,SvTreeL
             pEntry = InsertChangeActionContent( dynamic_cast<const ScChangeActionContent*>( itChangeAction->second ),
                 pParent, RD_SPECIAL_NONE );
 
-            if(pEntry!=NULL)
+            if(pEntry!=nullptr)
                 bTheTestFlag=false;
         }
         ++itChangeAction;
@@ -1194,7 +1194,7 @@ bool ScAcceptChgDlg::InsertContentChildren(ScChangeActionMap* pActionMap,SvTreeL
         pEntry=InsertChangeActionContent(static_cast<const ScChangeActionContent*>(
                                 pScChangeAction),pParent,RD_SPECIAL_NONE);
 
-        if(pEntry!=NULL)
+        if(pEntry!=nullptr)
         {
             bTheTestFlag=false;
             ScRedlinData *pParentData=static_cast<ScRedlinData *>(pEntry->GetUserData());
@@ -1228,10 +1228,10 @@ bool ScAcceptChgDlg::InsertAcceptedORejected(SvTreeListEntry* pParent)
     }
 
     ScChangeAction* pScChangeAction=pChanges->GetFirst();
-    while(pScChangeAction!=NULL)
+    while(pScChangeAction!=nullptr)
     {
         if(pScChangeAction->GetState()==eState &&
-            InsertFilteredAction(pScChangeAction,eState,pParent)!=NULL)
+            InsertFilteredAction(pScChangeAction,eState,pParent)!=nullptr)
             bTheTestFlag=false;
         pScChangeAction=pScChangeAction->GetNext();
     }
@@ -1248,7 +1248,7 @@ bool ScAcceptChgDlg::InsertChildren(ScChangeActionMap* pActionMap,SvTreeListEntr
     {
         SvTreeListEntry* pEntry=InsertChangeAction( itChangeAction->second, SC_CAS_VIRGIN, pParent, false, true );
 
-        if(pEntry!=NULL)
+        if(pEntry!=nullptr)
         {
             bTheTestFlag=false;
 
@@ -1269,7 +1269,7 @@ bool ScAcceptChgDlg::InsertDeletedChildren(const ScChangeAction* pScChangeAction
 {
     ScChangeTrack* pChanges=pDoc->GetChangeTrack();
     bool bTheTestFlag = true;
-    SvTreeListEntry* pEntry=NULL;
+    SvTreeListEntry* pEntry=nullptr;
     ScChangeActionMap::iterator itChangeAction;
 
     for( itChangeAction = pActionMap->begin(); itChangeAction != pActionMap->end(); ++itChangeAction )
@@ -1280,7 +1280,7 @@ bool ScAcceptChgDlg::InsertDeletedChildren(const ScChangeAction* pScChangeAction
         else
             pEntry = InsertChangeAction( itChangeAction->second, SC_CAS_VIRGIN, pParent, true, true );
 
-        if(pEntry!=NULL)
+        if(pEntry!=nullptr)
         {
             ScRedlinData *pEntryData=static_cast<ScRedlinData *>(pEntry->GetUserData());
             pEntryData->bIsRejectable=false;
@@ -1302,7 +1302,7 @@ bool ScAcceptChgDlg::Expand(
 {
     bool bTheTestFlag = true;
 
-    if(pChanges!=NULL &&pEntry!=NULL &&pScChangeAction!=NULL)
+    if(pChanges!=nullptr &&pEntry!=nullptr &&pScChangeAction!=nullptr)
     {
         ScChangeActionMap aActionMap;
 
@@ -1340,16 +1340,16 @@ IMPL_LINK_TYPED( ScAcceptChgDlg, ExpandingHandle, SvTreeListBox*, pTable, bool )
 {
     ScChangeTrack* pChanges=pDoc->GetChangeTrack();
     SetPointer(Pointer(PointerStyle::Wait));
-    if(pTable!=NULL && pChanges!=NULL)
+    if(pTable!=nullptr && pChanges!=nullptr)
     {
         ScChangeActionMap aActionMap;
         SvTreeListEntry* pEntry=pTheView->GetHdlEntry();
-        if(pEntry!=NULL)
+        if(pEntry!=nullptr)
         {
-            ScChangeAction* pScChangeAction=NULL;
+            ScChangeAction* pScChangeAction=nullptr;
 
             ScRedlinData *pEntryData=static_cast<ScRedlinData *>(pEntry->GetUserData());
-            if(pEntryData!=NULL)
+            if(pEntryData!=nullptr)
                 pScChangeAction=static_cast<ScChangeAction*>(pEntryData->pData);
 
             if(pEntry->HasChildrenOnDemand())
@@ -1360,7 +1360,7 @@ IMPL_LINK_TYPED( ScAcceptChgDlg, ExpandingHandle, SvTreeListBox*, pTable, bool )
                 if (pChildEntry)
                     pTheView->RemoveEntry(pChildEntry);
 
-                if(pEntryData!=NULL)
+                if(pEntryData!=nullptr)
                 {
                     pScChangeAction=static_cast<ScChangeAction*>(pEntryData->pData);
 
@@ -1393,7 +1393,7 @@ IMPL_LINK_TYPED( ScAcceptChgDlg, ExpandingHandle, SvTreeListBox*, pTable, bool )
                 {
                     bTheTestFlag=InsertAcceptedORejected(pEntry);
                 }
-                if(bTheTestFlag) pTheView->InsertEntry(aStrNoEntry,NULL,Color(COL_GRAY),pEntry);
+                if(bTheTestFlag) pTheView->InsertEntry(aStrNoEntry,nullptr,Color(COL_GRAY),pEntry);
             }
 
         }
@@ -1405,9 +1405,9 @@ IMPL_LINK_TYPED( ScAcceptChgDlg, ExpandingHandle, SvTreeListBox*, pTable, bool )
 void ScAcceptChgDlg::AppendChanges(ScChangeTrack* pChanges,sal_uLong nStartAction,
                                    sal_uLong nEndAction, sal_uLong /* nPos */)
 {
-    if(pChanges!=NULL)
+    if(pChanges!=nullptr)
     {
-        SvTreeListEntry* pParent=NULL;
+        SvTreeListEntry* pParent=nullptr;
         bAcceptEnableFlag=true;
         bRejectEnableFlag=true;
         SetPointer(Pointer(PointerStyle::Wait));
@@ -1423,7 +1423,7 @@ void ScAcceptChgDlg::AppendChanges(ScChangeTrack* pChanges,sal_uLong nStartActio
         for(sal_uLong i=nStartAction;i<=nEndAction;i++)
         {
             const ScChangeAction* pScChangeAction=pChanges->GetAction(i);
-            if(pScChangeAction==NULL) continue;
+            if(pScChangeAction==nullptr) continue;
 
             switch(pScChangeAction->GetState())
             {
@@ -1437,23 +1437,23 @@ void ScAcceptChgDlg::AppendChanges(ScChangeTrack* pChanges,sal_uLong nStartActio
                             pParent=InsertFilteredAction(pScChangeAction,SC_CAS_VIRGIN);
                     }
                     else
-                        pParent=NULL;
+                        pParent=nullptr;
 
                     bTheFlag=true;
                     break;
 
                 case SC_CAS_ACCEPTED:
-                    pParent=NULL;
+                    pParent=nullptr;
                     nAcceptCount++;
                     break;
 
                 case SC_CAS_REJECTED:
-                    pParent=NULL;
+                    pParent=nullptr;
                     nRejectCount++;
                     break;
             }
 
-            if(pParent!=NULL && pScChangeAction->IsDialogParent())
+            if(pParent!=nullptr && pScChangeAction->IsDialogParent())
             {
                 if(!bFilterFlag)
                     pParent->EnableChildrenOnDemand();
@@ -1487,13 +1487,13 @@ void ScAcceptChgDlg::RemoveEntrys(sal_uLong nStartAction,sal_uLong nEndAction)
 
     SvTreeListEntry* pEntry=pTheView->GetCurEntry();
 
-    ScRedlinData *pEntryData=NULL;
+    ScRedlinData *pEntryData=nullptr;
 
-    if(pEntry!=NULL)
+    if(pEntry!=nullptr)
         pEntryData=static_cast<ScRedlinData *>(pEntry->GetUserData());
 
     sal_uLong nAction=0;
-    if(pEntryData!=NULL)
+    if(pEntryData!=nullptr)
         nAction=pEntryData->nActionNo;
 
     if(nAction>=nStartAction && nAction<=nEndAction)
@@ -1502,11 +1502,11 @@ void ScAcceptChgDlg::RemoveEntrys(sal_uLong nStartAction,sal_uLong nEndAction)
 
     // MUST do it backwards, don't delete parents before children and GPF
     pEntry=pTheView->Last();
-    while(pEntry!=NULL)
+    while(pEntry!=nullptr)
     {
         bool bRemove = false;
         pEntryData=static_cast<ScRedlinData *>(pEntry->GetUserData());
-        if(pEntryData!=NULL)
+        if(pEntryData!=nullptr)
         {
             nAction=pEntryData->nActionNo;
 
@@ -1532,13 +1532,13 @@ void ScAcceptChgDlg::UpdateEntrys(ScChangeTrack* pChgTrack, sal_uLong nStartActi
 
 
     SvTreeListEntry* pEntry=pTheView->First();
-    SvTreeListEntry* pNextEntry = (pEntry ? SvTreeListBox::NextSibling(pEntry) : NULL);
-    SvTreeListEntry* pLastEntry=NULL;
-    while(pEntry!=NULL)
+    SvTreeListEntry* pNextEntry = (pEntry ? SvTreeListBox::NextSibling(pEntry) : nullptr);
+    SvTreeListEntry* pLastEntry=nullptr;
+    while(pEntry!=nullptr)
     {
         bool bRemove = false;
         ScRedlinData *pEntryData=static_cast<ScRedlinData *>(pEntry->GetUserData());
-        if(pEntryData!=NULL)
+        if(pEntryData!=nullptr)
         {
             ScChangeAction* pScChangeAction=
                     static_cast<ScChangeAction*>(pEntryData->pData);
@@ -1553,19 +1553,19 @@ void ScAcceptChgDlg::UpdateEntrys(ScChangeTrack* pChgTrack, sal_uLong nStartActi
             nPos=pEntry->GetChildListPos();
             pTheView->RemoveEntry(pEntry);
 
-            if(pLastEntry==NULL) pLastEntry=pTheView->First();
-            if(pLastEntry!=NULL)
+            if(pLastEntry==nullptr) pLastEntry=pTheView->First();
+            if(pLastEntry!=nullptr)
             {
                 pNextEntry=pTheView->Next(pLastEntry);
 
-                if(pNextEntry==NULL)
+                if(pNextEntry==nullptr)
                 {
                     pNextEntry=pLastEntry;
-                    pLastEntry=NULL;
+                    pLastEntry=nullptr;
                 }
             }
             else
-                pNextEntry=NULL;
+                pNextEntry=nullptr;
 
         }
         else
@@ -1627,7 +1627,7 @@ IMPL_LINK_NOARG_TYPED(ScAcceptChgDlg, ReOpenTimerHdl, Idle *, void)
 {
     ScSimpleRefDlgWrapper::SetAutoReOpen(true);
     m_pAcceptChgCtr->ShowFilterPage();
-    RefHandle(NULL);
+    RefHandle(nullptr);
 }
 
 IMPL_LINK_NOARG_TYPED(ScAcceptChgDlg, UpdateSelectionHdl, Idle *, void)
@@ -1690,7 +1690,7 @@ IMPL_LINK_NOARG_TYPED(ScAcceptChgDlg, CommandHdl, SvSimpleTable*, void)
         aPopup.SetMenuFlags(MenuFlags::HideDisabledEntries);
 
         SvTreeListEntry* pEntry=pTheView->GetCurEntry();
-        if(pEntry!=NULL)
+        if(pEntry!=nullptr)
         {
             pTheView->Select(pEntry);
         }
@@ -1715,14 +1715,14 @@ IMPL_LINK_NOARG_TYPED(ScAcceptChgDlg, CommandHdl, SvSimpleTable*, void)
 
         aPopup.EnableItem(SC_CHANGES_COMMENT,false);
 
-        if(pDoc->IsDocEditable() && pEntry!=NULL)
+        if(pDoc->IsDocEditable() && pEntry!=nullptr)
         {
             ScRedlinData *pEntryData=static_cast<ScRedlinData *>(pEntry->GetUserData());
-            if(pEntryData!=NULL)
+            if(pEntryData!=nullptr)
             {
                 ScChangeAction* pScChangeAction=
                         static_cast<ScChangeAction*>(pEntryData->pData);
-                if(pScChangeAction!=NULL && !pTheView->GetParent(pEntry))
+                if(pScChangeAction!=nullptr && !pTheView->GetParent(pEntry))
                     aPopup.EnableItem(SC_CHANGES_COMMENT);
             }
         }
@@ -1733,10 +1733,10 @@ IMPL_LINK_NOARG_TYPED(ScAcceptChgDlg, CommandHdl, SvSimpleTable*, void)
         {
             if(nCommand==SC_CHANGES_COMMENT)
             {
-                if(pEntry!=NULL)
+                if(pEntry!=nullptr)
                 {
                     ScRedlinData *pEntryData=static_cast<ScRedlinData *>(pEntry->GetUserData());
-                    if(pEntryData!=NULL)
+                    if(pEntryData!=nullptr)
                     {
                         ScChangeAction* pScChangeAction=
                                 static_cast<ScChangeAction*>(pEntryData->pData);
@@ -1767,7 +1767,7 @@ IMPL_LINK_NOARG_TYPED(ScAcceptChgDlg, CommandHdl, SvSimpleTable*, void)
 void ScAcceptChgDlg::Initialize(SfxChildWinInfo *pInfo)
 {
     OUString aStr;
-    if(pInfo!=NULL)
+    if(pInfo!=nullptr)
     {
         if ( !pInfo->aExtraString.isEmpty() )
         {
@@ -1867,7 +1867,7 @@ IMPL_LINK_TYPED( ScAcceptChgDlg, ColCompareHdl, const SvSortData*, pSortData, sa
             RedlinData *pLeftData=static_cast<RedlinData *>(pLeft->GetUserData());
             RedlinData *pRightData=static_cast<RedlinData *>(pRight->GetUserData());
 
-            if(pLeftData!=NULL && pRightData!=NULL)
+            if(pLeftData!=nullptr && pRightData!=nullptr)
             {
                 if(pLeftData->aDateTime < pRightData->aDateTime)
                     nCompare = -1;
@@ -1881,7 +1881,7 @@ IMPL_LINK_TYPED( ScAcceptChgDlg, ColCompareHdl, const SvSortData*, pSortData, sa
             ScRedlinData *pLeftData=static_cast<ScRedlinData *>(pLeft->GetUserData());
             ScRedlinData *pRightData=static_cast<ScRedlinData *>(pRight->GetUserData());
 
-            if(pLeftData!=NULL && pRightData!=NULL)
+            if(pLeftData!=nullptr && pRightData!=nullptr)
             {
                 nCompare = 1;
 
@@ -1907,7 +1907,7 @@ IMPL_LINK_TYPED( ScAcceptChgDlg, ColCompareHdl, const SvSortData*, pSortData, sa
         SvLBoxItem* pLeftItem = pTheView->GetEntryAtPos( pLeft, static_cast<sal_uInt16>(nSortCol));
         SvLBoxItem* pRightItem = pTheView->GetEntryAtPos( pRight, static_cast<sal_uInt16>(nSortCol));
 
-        if(pLeftItem != NULL && pRightItem != NULL)
+        if(pLeftItem != nullptr && pRightItem != nullptr)
         {
             sal_uInt16 nLeftKind = pLeftItem->GetType();
             sal_uInt16 nRightKind = pRightItem->GetType();

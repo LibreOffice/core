@@ -148,7 +148,7 @@ private:
     /** Creates the caption object from initial caption data if existing. */
     void                CreateCaptionFromInitData( const ScAddress& rPos ) const;
     /** Creates a new caption object at the passed cell position, clones passed existing caption. */
-    void                CreateCaption( const ScAddress& rPos, const SdrCaptionObj* pCaption = 0 );
+    void                CreateCaption( const ScAddress& rPos, const SdrCaptionObj* pCaption = nullptr );
     /** Removes the caption object from the drawing layer, if this note is its owner. */
     void                RemoveCaption();
 

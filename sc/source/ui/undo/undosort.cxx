@@ -42,7 +42,7 @@ void UndoSort::Execute( bool bUndo )
     sc::ReorderParam aParam = maParam;
     if (bUndo)
         aParam.reverse();
-    rDoc.Reorder(aParam, NULL);
+    rDoc.Reorder(aParam, nullptr);
 
     if (maParam.mbHasHeaders)
     {

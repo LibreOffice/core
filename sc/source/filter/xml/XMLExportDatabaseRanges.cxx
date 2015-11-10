@@ -58,7 +58,7 @@ using namespace xmloff::token;
 
 ScXMLExportDatabaseRanges::ScXMLExportDatabaseRanges(ScXMLExport& rTempExport)
     : rExport(rTempExport),
-    pDoc( NULL )
+    pDoc( nullptr )
 {
 }
 

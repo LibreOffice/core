@@ -134,18 +134,18 @@ void ScConditionalFormatTest::testUndoAnchor()
     CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
 
     ScDocShell* xDocSh = dynamic_cast<ScDocShell*>(pFoundShell);
-    CPPUNIT_ASSERT(xDocSh != NULL);
+    CPPUNIT_ASSERT(xDocSh != nullptr);
 
     // Check whether graphic imported well
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
-    CPPUNIT_ASSERT_MESSAGE( sFailedMessage.getStr(), pDrawLayer != NULL );
+    CPPUNIT_ASSERT_MESSAGE( sFailedMessage.getStr(), pDrawLayer != nullptr );
 
     const SdrPage *pPage = pDrawLayer->GetPage(0);
-    CPPUNIT_ASSERT_MESSAGE( sFailedMessage.getStr(), pPage != NULL );
+    CPPUNIT_ASSERT_MESSAGE( sFailedMessage.getStr(), pPage != nullptr );
 
     SdrGrafObj* pObject = dynamic_cast<SdrGrafObj*>(pPage->GetObj(0));
-    CPPUNIT_ASSERT_MESSAGE( sFailedMessage.getStr(), pObject != NULL );
+    CPPUNIT_ASSERT_MESSAGE( sFailedMessage.getStr(), pObject != nullptr );
     CPPUNIT_ASSERT_MESSAGE( sFailedMessage.getStr(), pObject->IsLinkedGraphic() );
 
     const GraphicObject& rGraphicObj = pObject->GetGraphicObject(true);
@@ -155,11 +155,11 @@ void ScConditionalFormatTest::testUndoAnchor()
 
     // Get the document controller
     ScTabViewShell* pViewShell = xDocSh->GetBestViewShell(false);
-    CPPUNIT_ASSERT_MESSAGE( sFailedMessage.getStr(), pViewShell != NULL );
+    CPPUNIT_ASSERT_MESSAGE( sFailedMessage.getStr(), pViewShell != nullptr );
 
     // Get the draw view of the document
     ScDrawView* pDrawView = pViewShell->GetViewData().GetScDrawView();
-    CPPUNIT_ASSERT_MESSAGE( sFailedMessage.getStr(), pDrawView != NULL );
+    CPPUNIT_ASSERT_MESSAGE( sFailedMessage.getStr(), pDrawView != nullptr );
 
     // Select graphic object
     pDrawView->MarkNextObj();

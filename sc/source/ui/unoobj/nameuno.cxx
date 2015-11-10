@@ -104,14 +104,14 @@ void ScNamedRangeObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
     const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
     if ( pSimpleHint && pSimpleHint->GetId() == SFX_HINT_DYING )
-        pDocShell = NULL;       // became invalid
+        pDocShell = nullptr;       // became invalid
 }
 
 // Helper functions
 
 ScRangeData* ScNamedRangeObj::GetRangeData_Impl()
 {
-    ScRangeData* pRet = NULL;
+    ScRangeData* pRet = nullptr;
     if (pDocShell)
     {
         ScRangeName* pNames;
@@ -189,7 +189,7 @@ void ScNamedRangeObj::Modify_Impl( const OUString* pNewName, const ScTokenArray*
     if (pNewType)
         nType = *pNewType;
 
-    ScRangeData* pNew = NULL;
+    ScRangeData* pNew = nullptr;
     if (pNewTokens)
         pNew = new ScRangeData( &rDoc, aInsName, *pNewTokens, aPos, nType );
     else
@@ -206,7 +206,7 @@ void ScNamedRangeObj::Modify_Impl( const OUString* pNewName, const ScTokenArray*
     }
     else
     {
-        pNew = NULL;        //! uno::Exception/Error or something
+        pNew = nullptr;        //! uno::Exception/Error or something
         delete pNewRanges;
     }
 }
@@ -225,7 +225,7 @@ void SAL_CALL ScNamedRangeObj::setName( const OUString& aNewName )
 
     OUString aNewStr(aNewName);
     // GRAM_PODF_A1 for API compatibility.
-    Modify_Impl( &aNewStr, NULL, NULL, NULL, NULL,formula::FormulaGrammar::GRAM_PODF_A1 );
+    Modify_Impl( &aNewStr, nullptr, nullptr, nullptr, nullptr,formula::FormulaGrammar::GRAM_PODF_A1 );
 
     if ( aName != aNewStr )                 // some error occurred...
         throw uno::RuntimeException();      // no other exceptions specified
@@ -248,7 +248,7 @@ void SAL_CALL ScNamedRangeObj::setContent( const OUString& aContent )
     SolarMutexGuard aGuard;
     OUString aContStr(aContent);
     // GRAM_PODF_A1 for API compatibility.
-    Modify_Impl( NULL, NULL, &aContStr, NULL, NULL,formula::FormulaGrammar::GRAM_PODF_A1 );
+    Modify_Impl( nullptr, nullptr, &aContStr, nullptr, nullptr,formula::FormulaGrammar::GRAM_PODF_A1 );
 }
 
 table::CellAddress SAL_CALL ScNamedRangeObj::getReferencePosition()
@@ -283,7 +283,7 @@ void SAL_CALL ScNamedRangeObj::setReferencePosition( const table::CellAddress& a
     SolarMutexGuard aGuard;
     ScAddress aPos( (SCCOL)aReferencePosition.Column, (SCROW)aReferencePosition.Row, aReferencePosition.Sheet );
     // GRAM_PODF_A1 for API compatibility.
-    Modify_Impl( NULL, NULL, NULL, &aPos, NULL,formula::FormulaGrammar::GRAM_PODF_A1 );
+    Modify_Impl( nullptr, nullptr, nullptr, &aPos, nullptr,formula::FormulaGrammar::GRAM_PODF_A1 );
 }
 
 sal_Int32 SAL_CALL ScNamedRangeObj::getType() throw(uno::RuntimeException, std::exception)
@@ -315,7 +315,7 @@ void SAL_CALL ScNamedRangeObj::setType( sal_Int32 nUnoType )
     if ( nUnoType & sheet::NamedRangeFlag::ROW_HEADER )         nNewType |= RT_ROWHEADER;
 
     // GRAM_PODF_A1 for API compatibility.
-    Modify_Impl( NULL, NULL, NULL, NULL, &nNewType,formula::FormulaGrammar::GRAM_PODF_A1 );
+    Modify_Impl( nullptr, nullptr, nullptr, nullptr, &nNewType,formula::FormulaGrammar::GRAM_PODF_A1 );
 }
 
 // XFormulaTokens
@@ -344,7 +344,7 @@ void SAL_CALL ScNamedRangeObj::setTokens( const uno::Sequence<sheet::FormulaToke
         ScTokenArray aTokenArray;
         (void)ScTokenConversion::ConvertToTokenArray( pDocShell->GetDocument(), aTokenArray, rTokens );
         // GRAM_PODF_A1 for API compatibility.
-        Modify_Impl( NULL, &aTokenArray, NULL, NULL, NULL, formula::FormulaGrammar::GRAM_PODF_A1 );
+        Modify_Impl( nullptr, &aTokenArray, nullptr, nullptr, nullptr, formula::FormulaGrammar::GRAM_PODF_A1 );
     }
 }
 
@@ -365,7 +365,7 @@ uno::Reference<table::XCellRange> SAL_CALL ScNamedRangeObj::getReferredCells()
         else
             return new ScCellRangeObj( pDocShell, aRange );
     }
-    return NULL;
+    return nullptr;
 }
 
 // beans::XPropertySet
@@ -489,7 +489,7 @@ void ScNamedRangesObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
     const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
     if ( pSimpleHint && pSimpleHint->GetId() == SFX_HINT_DYING )
     {
-        pDocShell = NULL;       // became invalid
+        pDocShell = nullptr;       // became invalid
     }
 }
 
@@ -527,7 +527,7 @@ void SAL_CALL ScNamedRangesObj::addNewByName( const OUString& aName,
             }
             else
             {
-                pNew = NULL;
+                pNew = nullptr;
                 delete pNewRanges;
             }
         }
@@ -832,11 +832,11 @@ ScGlobalNamedRangesObj::~ScGlobalNamedRangesObj()
 ScNamedRangeObj* ScGlobalNamedRangesObj::GetObjectByIndex_Impl(sal_uInt16 nIndex)
 {
     if (!pDocShell)
-        return NULL;
+        return nullptr;
 
     ScRangeName* pNames = pDocShell->GetDocument().GetRangeName();
     if (!pNames)
-        return NULL;
+        return nullptr;
 
     ScRangeName::const_iterator itr = pNames->begin(), itrEnd = pNames->end();
     sal_uInt16 nPos = 0;
@@ -849,14 +849,14 @@ ScNamedRangeObj* ScGlobalNamedRangesObj::GetObjectByIndex_Impl(sal_uInt16 nIndex
         }
         ++nPos;
     }
-    return NULL;
+    return nullptr;
 }
 
 ScNamedRangeObj* ScGlobalNamedRangesObj::GetObjectByName_Impl(const OUString& aName)
 {
     if ( pDocShell && hasByName(aName) )
         return new ScNamedRangeObj(this, pDocShell, aName);
-    return NULL;
+    return nullptr;
 }
 
 ScRangeName* ScGlobalNamedRangesObj::GetRangeName_Impl()
@@ -885,24 +885,24 @@ ScNamedRangeObj* ScLocalNamedRangesObj::GetObjectByName_Impl(const OUString& aNa
 {
     if ( pDocShell && hasByName( aName ) )
         return new ScNamedRangeObj( this, pDocShell, aName, mxSheet);
-    return NULL;
+    return nullptr;
 
 }
 
 ScNamedRangeObj* ScLocalNamedRangesObj::GetObjectByIndex_Impl( sal_uInt16 nIndex )
 {
     if (!pDocShell)
-        return NULL;
+        return nullptr;
 
     OUString aName = mxSheet->getName();
     ScDocument& rDoc = pDocShell->GetDocument();
     SCTAB nTab;
     if (!rDoc.GetTable(aName, nTab))
-        return NULL;
+        return nullptr;
 
     ScRangeName* pNames = rDoc.GetRangeName( nTab );
     if (!pNames)
-        return NULL;
+        return nullptr;
 
     ScRangeName::const_iterator itr = pNames->begin(), itrEnd = pNames->end();
     sal_uInt16 nPos = 0;
@@ -915,7 +915,7 @@ ScNamedRangeObj* ScLocalNamedRangesObj::GetObjectByIndex_Impl( sal_uInt16 nIndex
         }
         ++nPos;
     }
-    return NULL;
+    return nullptr;
 }
 
 ScRangeName* ScLocalNamedRangesObj::GetRangeName_Impl()
@@ -953,14 +953,14 @@ void ScLabelRangeObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
     const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
     if ( pSimpleHint && pSimpleHint->GetId() == SFX_HINT_DYING )
-        pDocShell = NULL;       // became invalid
+        pDocShell = nullptr;       // became invalid
 }
 
 // Helper functions
 
 ScRangePair* ScLabelRangeObj::GetData_Impl()
 {
-    ScRangePair* pRet = NULL;
+    ScRangePair* pRet = nullptr;
     if (pDocShell)
     {
         ScDocument& rDoc = pDocShell->GetDocument();
@@ -1030,7 +1030,7 @@ void SAL_CALL ScLabelRangeObj::setLabelArea( const table::CellRangeAddress& aLab
     SolarMutexGuard aGuard;
     ScRange aLabelRange;
     ScUnoConversion::FillScRange( aLabelRange, aLabelArea );
-    Modify_Impl( &aLabelRange, NULL );
+    Modify_Impl( &aLabelRange, nullptr );
 }
 
 table::CellRangeAddress SAL_CALL ScLabelRangeObj::getDataArea()
@@ -1050,7 +1050,7 @@ void SAL_CALL ScLabelRangeObj::setDataArea( const table::CellRangeAddress& aData
     SolarMutexGuard aGuard;
     ScRange aDataRange;
     ScUnoConversion::FillScRange( aDataRange, aDataArea );
-    Modify_Impl( NULL, &aDataRange );
+    Modify_Impl( nullptr, &aDataRange );
 }
 
 ScLabelRangesObj::ScLabelRangesObj(ScDocShell* pDocSh, bool bCol) :
@@ -1075,7 +1075,7 @@ void ScLabelRangesObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
     const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
     if ( pSimpleHint && pSimpleHint->GetId() == SFX_HINT_DYING )
     {
-        pDocShell = NULL;       // became invalid
+        pDocShell = nullptr;       // became invalid
     }
 }
 
@@ -1094,7 +1094,7 @@ ScLabelRangeObj* ScLabelRangesObj::GetObjectByIndex_Impl(size_t nIndex)
                 return new ScLabelRangeObj( pDocShell, bColumn, pData->GetRange(0) );
         }
     }
-    return NULL;
+    return nullptr;
 }
 
 void SAL_CALL ScLabelRangesObj::addNew( const table::CellRangeAddress& aLabelArea,

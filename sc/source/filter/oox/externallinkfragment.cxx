@@ -57,7 +57,7 @@ ContextHandlerRef ExternalSheetDataContext::onCreateContext( sal_Int32 nElement,
             if( nElement == XLS_TOKEN( v ) ) return this;   // collect characters in onCharacters()
         break;
     }
-    return 0;
+    return nullptr;
 }
 
 void ExternalSheetDataContext::onCharacters( const OUString& rChars )
@@ -99,7 +99,7 @@ ContextHandlerRef ExternalSheetDataContext::onCreateRecordContext( sal_Int32 nRe
             }
         break;
     }
-    return 0;
+    return nullptr;
 }
 
 // private --------------------------------------------------------------------
@@ -234,7 +234,7 @@ ContextHandlerRef ExternalLinkFragment::onCreateContext( sal_Int32 nElement, con
             if( nElement == XLS_TOKEN( oleItem ) ) mxExtName = mrExtLink.importOleItem( rAttribs );
         break;
     }
-    return 0;
+    return nullptr;
 }
 
 void ExternalLinkFragment::onCharacters( const OUString& rChars )
@@ -307,7 +307,7 @@ ContextHandlerRef ExternalLinkFragment::onCreateRecordContext( sal_Int32 nRecId,
             }
         break;
     }
-    return 0;
+    return nullptr;
 }
 
 ContextHandlerRef ExternalLinkFragment::createSheetDataContext( sal_Int32 nSheetId )

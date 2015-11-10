@@ -75,7 +75,7 @@ ContextHandlerRef ChartsheetFragment::onCreateContext( sal_Int32 nElement, const
             }
         break;
     }
-    return 0;
+    return nullptr;
 }
 
 void ChartsheetFragment::onCharacters( const OUString& rChars )
@@ -120,7 +120,7 @@ ContextHandlerRef ChartsheetFragment::onCreateRecordContext( sal_Int32 nRecId, S
             if( nRecId == BIFF12_ID_CHARTSHEETVIEW ) getSheetViewSettings().importChartSheetView( rStrm );
         break;
     }
-    return 0;
+    return nullptr;
 }
 
 const RecordInfo* ChartsheetFragment::getRecordInfos() const

@@ -61,7 +61,7 @@ public:
     explicit            Shape(
                             const WorksheetHelper& rHelper,
                             const AttributeList& rAttribs,
-                            const sal_Char* pcServiceName = 0 );
+                            const sal_Char* pcServiceName = nullptr );
 
 protected:
     virtual void        finalizeXShape(
@@ -89,7 +89,7 @@ public:
                             sal_Int32 nElement,
                             const AttributeList& rAttribs,
                             const ::oox::drawingml::ShapePtr& rxParentShape,
-                            ::oox::drawingml::ShapePtr* pxShape = 0 );
+                            ::oox::drawingml::ShapePtr* pxShape = nullptr );
 
 protected:
     virtual ::oox::core::ContextHandlerRef

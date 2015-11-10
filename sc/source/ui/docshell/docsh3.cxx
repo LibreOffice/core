@@ -229,7 +229,7 @@ void ScDocShell::UnlockPaint_Impl(bool bDoc)
             //      Paint jetzt ausfuehren
 
             ScPaintLockData* pPaint = pPaintLockData;
-            pPaintLockData = NULL;                      // nicht weitersammeln
+            pPaintLockData = nullptr;                      // nicht weitersammeln
 
             ScRangeListRef xRangeList = pPaint->GetRangeList();
             if (xRangeList)
@@ -438,7 +438,7 @@ void ScDocShell::UpdateFontList()
 {
     delete pImpl->pFontList;
     // pImpl->pFontList = new FontList( GetPrinter(), Application::GetDefaultDevice() );
-    pImpl->pFontList = new FontList( GetRefDevice(), NULL, false ); // sal_False or sal_True???
+    pImpl->pFontList = new FontList( GetRefDevice(), nullptr, false ); // sal_False or sal_True???
     SvxFontListItem aFontListItem( pImpl->pFontList, SID_ATTR_CHAR_FONTLIST );
     PutItem( aFontListItem );
 
@@ -554,11 +554,11 @@ ScChangeAction* ScDocShell::GetChangeAction( const ScAddress& rPos )
 {
     ScChangeTrack* pTrack = GetDocument().GetChangeTrack();
     if (!pTrack)
-        return NULL;
+        return nullptr;
 
     SCTAB nTab = rPos.Tab();
 
-    const ScChangeAction* pFound = NULL;
+    const ScChangeAction* pFound = nullptr;
     long nModified = 0;
     const ScChangeAction* pAction = pTrack->GetFirst();
     while (pAction)
@@ -850,7 +850,7 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
                     {   // deleted Table enthaelt deleted Cols, die nicht
                         sal_uLong nStart, nEnd;
                         pSourceTrack->AppendDeleteRange(
-                            pDel->GetOverAllRange().MakeRange(), NULL, nStart, nEnd );
+                            pDel->GetOverAllRange().MakeRange(), nullptr, nStart, nEnd );
                     }
                 }
                 break;
@@ -858,7 +858,7 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
                 {
                     const ScChangeActionMove* pMove = static_cast<const ScChangeActionMove*>(pThisAction);
                     pSourceTrack->AppendMove( pMove->GetFromRange().MakeRange(),
-                        pMove->GetBigRange().MakeRange(), NULL );
+                        pMove->GetBigRange().MakeRange(), nullptr );
                 }
                 break;
                 default:
@@ -996,7 +996,7 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
                                     aSourceRange.aEnd.SetRow( aPos.Row() + nRows - 1 );
                                     aValue = aValue.copy(1, aValue.getLength()-2); // remove the 1st and last characters.
                                     GetDocFunc().EnterMatrix( aSourceRange,
-                                        NULL, NULL, aValue, false, false,
+                                        nullptr, nullptr, aValue, false, false,
                                         EMPTY_OUSTRING, formula::FormulaGrammar::GRAM_DEFAULT );
                                 }
                                 break;
@@ -1013,10 +1013,10 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
                         }
                         break;
                         case SC_CAT_INSERT_ROWS:
-                            GetDocFunc().InsertCells( aSourceRange, NULL, INS_INSROWS_BEFORE, true, false );
+                            GetDocFunc().InsertCells( aSourceRange, nullptr, INS_INSROWS_BEFORE, true, false );
                         break;
                         case SC_CAT_INSERT_COLS:
-                            GetDocFunc().InsertCells( aSourceRange, NULL, INS_INSCOLS_BEFORE, true, false );
+                            GetDocFunc().InsertCells( aSourceRange, nullptr, INS_INSCOLS_BEFORE, true, false );
                         break;
                         case SC_CAT_DELETE_TABS :
                             GetDocFunc().DeleteTable( aSourceRange.aStart.Tab(), true, false );
@@ -1027,7 +1027,7 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
                             if ( pDel->IsTopDelete() )
                             {
                                 aSourceRange = pDel->GetOverAllRange().MakeRange();
-                                GetDocFunc().DeleteCells( aSourceRange, NULL, DEL_DELROWS, true, false );
+                                GetDocFunc().DeleteCells( aSourceRange, nullptr, DEL_DELROWS, true, false );
 
                                 // #i101099# [Collaboration] Changes are not correctly shown
                                 if ( bShared )
@@ -1047,7 +1047,7 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
                             if ( pDel->IsTopDelete() && !pDel->IsTabDeleteCol() )
                             {   // deleted Table enthaelt deleted Cols, die nicht
                                 aSourceRange = pDel->GetOverAllRange().MakeRange();
-                                GetDocFunc().DeleteCells( aSourceRange, NULL, DEL_DELCOLS, true, false );
+                                GetDocFunc().DeleteCells( aSourceRange, nullptr, DEL_DELCOLS, true, false );
                             }
                         }
                         break;
@@ -1190,7 +1190,7 @@ bool ScDocShell::MergeSharedDocument( ScDocShell* pSharedDocShell )
             ScConflictsFinder aFinder( pSharedTrack, nActStartShared, nActEndShared, nActStartOwn, nActEndOwn, aConflictsList );
             if ( aFinder.Find() )
             {
-                ScConflictsListHelper::TransformConflictsList( aConflictsList, NULL, &aOwnInverseMergeMap );
+                ScConflictsListHelper::TransformConflictsList( aConflictsList, nullptr, &aOwnInverseMergeMap );
                 bool bLoop = true;
                 while ( bLoop )
                 {
@@ -1245,7 +1245,7 @@ bool ScDocShell::MergeSharedDocument( ScDocShell* pSharedDocShell )
             // resolve conflicts for shared non-content actions
             if ( !aConflictsList.empty() )
             {
-                ScConflictsListHelper::TransformConflictsList( aConflictsList, &aSharedMergeMap, NULL );
+                ScConflictsListHelper::TransformConflictsList( aConflictsList, &aSharedMergeMap, nullptr );
                 ScConflictsResolver aResolver( pThisTrack, aConflictsList );
                 pAction = pThisTrack->GetAction( nEndShared );
                 while ( pAction && pAction->GetActionNumber() >= nStartShared )
@@ -1274,7 +1274,7 @@ bool ScDocShell::MergeSharedDocument( ScDocShell* pSharedDocShell )
             // resolve conflicts for shared content actions and own actions
             if ( !aConflictsList.empty() )
             {
-                ScConflictsListHelper::TransformConflictsList( aConflictsList, NULL, &aOwnMergeMap );
+                ScConflictsListHelper::TransformConflictsList( aConflictsList, nullptr, &aOwnMergeMap );
                 ScConflictsResolver aResolver( pThisTrack, aConflictsList );
                 pAction = pThisTrack->GetAction( nEndShared );
                 while ( pAction && pAction->GetActionNumber() >= nStartShared )
@@ -1317,7 +1317,7 @@ bool ScDocShell::MergeSharedDocument( ScDocShell* pSharedDocShell )
         aInfoBox->Execute();
     }
 
-    return ( pThisAction != NULL );
+    return ( pThisAction != nullptr );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

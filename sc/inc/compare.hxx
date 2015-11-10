@@ -67,8 +67,8 @@ private:
         Case sensitivity document option is always to be passed in
         rComp.mbIgnoreCase.
  */
-double CompareFunc( const Compare& rComp, CompareOptions* pOptions = NULL );
-double CompareFunc( const Compare::Cell& rCell1, double fCell2, CompareOptions* pOptions = NULL );
+double CompareFunc( const Compare& rComp, CompareOptions* pOptions = nullptr );
+double CompareFunc( const Compare::Cell& rCell1, double fCell2, CompareOptions* pOptions = nullptr );
 double CompareFunc( double fCell1, double fCell2 );
 
 /**

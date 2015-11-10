@@ -52,11 +52,11 @@ sal_Int32 ScImportSourceDesc::GetCommandType() const
 const ScDPCache* ScImportSourceDesc::CreateCache(const ScDPDimensionSaveData* pDimData) const
 {
     if (!mpDoc)
-        return NULL;
+        return nullptr;
 
     sal_Int32 nSdbType = GetCommandType();
     if (nSdbType < 0)
-        return NULL;
+        return nullptr;
 
     ScDPCollection::DBCaches& rCaches = mpDoc->GetDPCollection()->GetDBCaches();
     return rCaches.getCache(nSdbType, aDBName, aObject, pDimData);

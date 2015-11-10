@@ -71,7 +71,7 @@ orcus::spreadsheet::iface::import_sheet* ScOrcusFactory::append_sheet(const char
 {
     OUString aTabName(sheet_name, sheet_name_length, RTL_TEXTENCODING_UTF8);
     if (!maDoc.appendSheet(aTabName))
-        return NULL;
+        return nullptr;
 
     SCTAB nTab = maDoc.getSheetCount() - 1;
     maSheets.push_back(new ScOrcusSheet(maDoc, nTab, *this));
@@ -95,7 +95,7 @@ orcus::spreadsheet::iface::import_sheet* ScOrcusFactory::get_sheet(const char* s
     SCTAB nTab = maDoc.getSheetIndex(aTabName);
     if (nTab < 0)
         // Sheet by that name not found.
-        return NULL;
+        return nullptr;
 
     // See if we already have an orcus sheet instance by that index.
     boost::ptr_vector<ScOrcusSheet>::iterator it =
@@ -461,7 +461,7 @@ void ScOrcusSheet::cellInserted()
 
 os::iface::import_table* ScOrcusSheet::get_table()
 {
-    return NULL;
+    return nullptr;
 }
 
 os::iface::import_sheet_properties* ScOrcusSheet::get_sheet_properties()

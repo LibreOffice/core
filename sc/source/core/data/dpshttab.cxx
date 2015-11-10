@@ -273,13 +273,13 @@ bool ScSheetSourceDesc::operator== (const ScSheetSourceDesc& rOther) const
 const ScDPCache* ScSheetSourceDesc::CreateCache(const ScDPDimensionSaveData* pDimData) const
 {
     if (!mpDoc)
-        return NULL;
+        return nullptr;
 
     sal_uLong nErrId = CheckSourceRange();
     if (nErrId)
     {
         OSL_FAIL( "Error Create Cache\n" );
-        return NULL;
+        return nullptr;
     }
 
     // All cache instances are managed centrally by ScDPCollection.

@@ -45,8 +45,8 @@ class EndListeningContext : boost::noncopyable
     ScAddress maPosDelta; // Add this to get the old position prior to the move.
 
 public:
-    EndListeningContext(ScDocument& rDoc, ScTokenArray* pOldCode = NULL);
-    EndListeningContext(ScDocument& rDoc, const std::shared_ptr<ColumnBlockPositionSet>& pSet, ScTokenArray* pOldCode = NULL);
+    EndListeningContext(ScDocument& rDoc, ScTokenArray* pOldCode = nullptr);
+    EndListeningContext(ScDocument& rDoc, const std::shared_ptr<ColumnBlockPositionSet>& pSet, ScTokenArray* pOldCode = nullptr);
 
     void setPositionDelta( const ScAddress& rDelta );
 

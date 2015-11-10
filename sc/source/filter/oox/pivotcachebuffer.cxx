@@ -740,7 +740,7 @@ const PivotCacheItem* PivotCacheField::getCacheItem( sal_Int32 nItemIdx ) const
         return maGroupItems.getCacheItem( nItemIdx );
     if( hasSharedItems() )
         return maSharedItems.getCacheItem( nItemIdx );
-    return 0;
+    return nullptr;
 }
 
 void PivotCacheField::applyItemCaptions( const IdCaptionPairList& vCaptions )
@@ -1416,7 +1416,7 @@ PivotCache* PivotCacheBuffer::importPivotCacheFragment( sal_Int32 nCacheId )
             // check if a fragment path exists for the passed cache identifier
             FragmentPathMap::iterator aIt = maFragmentPaths.find( nCacheId );
             if( aIt == maFragmentPaths.end() )
-                return 0;
+                return nullptr;
 
             /*  Import the cache fragment. This may create a dummy data sheet
                 for external sheet sources. */
@@ -1441,7 +1441,7 @@ PivotCache* PivotCacheBuffer::importPivotCacheFragment( sal_Int32 nCacheId )
             nCacheId = ContainerHelper::getVectorElement( maCacheIds, nCacheId, -1 );
             PivotCache* pCache = maCaches.get( nCacheId ).get();
             if( !pCache )
-                return 0;
+                return nullptr;
 
             /*  Try to find fragment path entry (stream name). If missing, the
                 stream has been read already, and the cache can be returned. */
@@ -1460,7 +1460,7 @@ PivotCache* PivotCacheBuffer::importPivotCacheFragment( sal_Int32 nCacheId )
         case FILTER_UNKNOWN:
             OSL_FAIL( "PivotCacheBuffer::importPivotCacheFragment - unknown filter type" );
     }
-    return 0;
+    return nullptr;
 }
 
 PivotCache& PivotCacheBuffer::createPivotCache( sal_Int32 nCacheId )

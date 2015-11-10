@@ -30,7 +30,7 @@ namespace prv {
 
 BiffInputRecordBuffer::BiffInputRecordBuffer( BinaryInputStream& rInStrm ) :
     mrInStrm( rInStrm ),
-    mpCurrentData( 0 ),
+    mpCurrentData( nullptr ),
     mnHeaderPos( -1 ),
     mnBodyPos( 0 ),
     mnBufferBodyPos( 0 ),

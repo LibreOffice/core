@@ -76,7 +76,7 @@ class ScEEAbsImport {
     virtual ScRange GetRange() = 0;
     virtual void    WriteToDocument(
         bool bSizeColsRows = false, double nOutputFactor = 1.0,
-        SvNumberFormatter* pFormatter = NULL, bool bConvertDate = true ) = 0;
+        SvNumberFormatter* pFormatter = nullptr, bool bConvertDate = true ) = 0;
 };
 
 class SAL_DLLPUBLIC_RTTI ScFormatFilterPlugin {
@@ -94,7 +94,7 @@ class SAL_DLLPUBLIC_RTTI ScFormatFilterPlugin {
                  const rtl_TextEncoding eSrc = RTL_TEXTENCODING_DONTKNOW, sal_uInt32 nDifOption = SC_DIFOPT_EXCEL ) = 0;
     virtual FltError ScImportRTF( SvStream&, const OUString& rBaseURL, ScDocument*, ScRange& rRange ) = 0;
     virtual FltError ScImportHTML( SvStream&, const OUString& rBaseURL, ScDocument*, ScRange& rRange, double nOutputFactor = 1.0,
-                                   bool bCalcWidthHeight = true, SvNumberFormatter* pFormatter = NULL, bool bConvertDate = true ) = 0;
+                                   bool bCalcWidthHeight = true, SvNumberFormatter* pFormatter = nullptr, bool bConvertDate = true ) = 0;
 
     // various import helpers
     virtual ScEEAbsImport *CreateRTFImport( ScDocument* pDoc, const ScRange& rRange ) = 0;

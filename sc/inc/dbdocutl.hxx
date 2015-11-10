@@ -45,7 +45,7 @@ public:
     static void PutData( ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab,
                         const css::uno::Reference< css::sdbc::XRow>& xRow,
                         long nRowPos,
-                        long nType, bool bCurrency, StrData* pStrData = NULL );
+                        long nType, bool bCurrency, StrData* pStrData = nullptr );
 };
 
 #endif

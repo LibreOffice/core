@@ -1068,9 +1068,9 @@ sal_uLong ScDocShell::DBaseExport( const OUString& rFullFileName, rtl_TextEncodi
             const sal_Int32* pColLengths = aColLengths.getConstArray();
             ScHorizontalCellIterator aIter( &aDocument, nTab, nFirstCol,
                     nDocRow, nLastCol, nDocRow);
-            ScRefCellValue* pCell = NULL;
+            ScRefCellValue* pCell = nullptr;
             bool bTest = true;
-            while (bTest && ((pCell = aIter.GetNext( nDocCol, nDocRow)) != NULL))
+            while (bTest && ((pCell = aIter.GetNext( nDocCol, nDocRow)) != nullptr))
             {
                 SCCOL nCol = nDocCol - nFirstCol;
                 switch (pColTypes[nCol])

@@ -41,7 +41,7 @@ ScTabOpDlg::ScTabOpDlg( SfxBindings* pB, SfxChildWindow* pCW, vcl::Window* pPare
     , theFormulaCell(rCursorPos)
     , pDoc(pDocument)
     , nCurTab(theFormulaCell.Tab())
-    , pEdActive(NULL)
+    , pEdActive(nullptr)
     , bDlgLostFocus(false)
     , errMsgNoFormula(ScResId(STR_NOFORMULASPECIFIED))
     , errMsgNoColRow(ScResId(STR_NOCOLROW))
@@ -331,7 +331,7 @@ IMPL_LINK_TYPED( ScTabOpDlg, GetFocusHdl, Control&, rCtrl, void )
     else if( (&rCtrl == static_cast<Control*>(m_pEdColCell)) || (&rCtrl == static_cast<Control*>(m_pRBColCell)) )
         pEdActive = m_pEdColCell;
     else
-        pEdActive = NULL;
+        pEdActive = nullptr;
 
     if( pEdActive )
         pEdActive->SetSelection( Selection( 0, SELECTION_MAX ) );

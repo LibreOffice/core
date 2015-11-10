@@ -140,7 +140,7 @@ OUString lcl_createTableNumberList( const ::std::list< SCTAB > & rTableList )
 uno::Reference< frame::XModel > lcl_GetXModel( ScDocument * pDoc )
 {
     uno::Reference< frame::XModel > xModel;
-    SfxObjectShell * pObjSh( pDoc ? pDoc->GetDocumentShell() : 0 );
+    SfxObjectShell * pObjSh( pDoc ? pDoc->GetDocumentShell() : nullptr );
     if( pObjSh )
         xModel.set( pObjSh->GetModel());
     return xModel;
@@ -1587,7 +1587,7 @@ ScChart2DataProvider::createDataSource(
         if( nOldIndex < aSeqVector.size() )
         {
             pDS->AddLabeledSequence( aSeqVector[nOldIndex] );
-            aSeqVector[nOldIndex] = 0;
+            aSeqVector[nOldIndex] = nullptr;
         }
     }
 

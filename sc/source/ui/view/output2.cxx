@@ -184,15 +184,15 @@ private:
 
 ScDrawStringsVars::ScDrawStringsVars(ScOutputData* pData, bool bPTL) :
     pOutput     ( pData ),
-    pPattern    ( NULL ),
-    pCondSet    ( NULL ),
+    pPattern    ( nullptr ),
+    pCondSet    ( nullptr ),
     nAscentPixel(0),
     eAttrOrient ( SVX_ORIENTATION_STANDARD ),
     eAttrHorJust( SVX_HOR_JUSTIFY_STANDARD ),
     eAttrVerJust( SVX_VER_JUSTIFY_BOTTOM ),
     eAttrHorJustMethod( SVX_JUSTIFY_METHOD_AUTO ),
     eAttrVerJustMethod( SVX_JUSTIFY_METHOD_AUTO ),
-    pMargin     ( NULL ),
+    pMargin     ( nullptr ),
     nIndent     ( 0 ),
     bRotated    ( false ),
     nOriginalWidth( 0 ),
@@ -311,7 +311,7 @@ void ScDrawStringsVars::SetPattern(
         eColorMode = SC_AUTOCOL_PRINT;
 
     if ( bPixelToLogic )
-        pPattern->GetFont( aFont, eColorMode, pFmtDevice, NULL, pCondSet, nScript,
+        pPattern->GetFont( aFont, eColorMode, pFmtDevice, nullptr, pCondSet, nScript,
                             &aBackConfigColor, &aTextConfigColor );
     else
         pPattern->GetFont( aFont, eColorMode, pFmtDevice, &pOutput->aZoomY, pCondSet, nScript,
@@ -1110,7 +1110,7 @@ bool ScOutputData::IsEmptyCellText( RowInfo* pThisRowInfo, SCCOL nX, SCROW nY )
 void ScOutputData::GetVisibleCell( SCCOL nCol, SCROW nRow, SCTAB nTabP, ScRefCellValue& rCell )
 {
     rCell.assign(*mpDoc, ScAddress(nCol, nRow, nTabP));
-    if (!rCell.isEmpty() && IsEmptyCellText(NULL, nCol, nRow))
+    if (!rCell.isEmpty() && IsEmptyCellText(nullptr, nCol, nRow))
         rCell.clear();
 }
 
@@ -1121,7 +1121,7 @@ bool ScOutputData::IsAvailable( SCCOL nX, SCROW nY )
     //  where a note is empty as well as a cell that's hidden by protection settings
 
     ScRefCellValue aCell(*mpDoc, ScAddress(nX, nY, nTab));
-    if (!aCell.isEmpty() && !IsEmptyCellText(NULL, nX, nY))
+    if (!aCell.isEmpty() && !IsEmptyCellText(nullptr, nX, nY))
         return false;
 
     const ScPatternAttr* pPattern = mpDoc->GetPattern( nX, nY, nTab );
@@ -1463,10 +1463,10 @@ Rectangle ScOutputData::LayoutStrings(bool bPixelToLogic, bool bPaint, const ScA
     OutputAreaParam aAreaParam;
     bool bCellIsValue = false;
     long nNeededWidth = 0;
-    const ScPatternAttr* pPattern = NULL;
-    const SfxItemSet* pCondSet = NULL;
-    const ScPatternAttr* pOldPattern = NULL;
-    const SfxItemSet* pOldCondSet = NULL;
+    const ScPatternAttr* pPattern = nullptr;
+    const SfxItemSet* pCondSet = nullptr;
+    const ScPatternAttr* pOldPattern = nullptr;
+    const SfxItemSet* pOldCondSet = nullptr;
     SvtScriptType nOldScript = SvtScriptType::NONE;
 
     // alternative pattern instances in case we need to modify the pattern
@@ -1679,7 +1679,7 @@ Rectangle ScOutputData::LayoutStrings(bool bPixelToLogic, bool bPaint, const ScA
                     if ( bFormulaCell )
                         lcl_CreateInterpretProgress(bProgress, mpDoc, aCell.mpFormula);
                     if ( aVars.SetText(aCell) )
-                        pOldPattern = NULL;
+                        pOldPattern = nullptr;
                     bNeedEdit = aVars.HasEditCharacters() || (bFormulaCell && aCell.mpFormula->IsMultilineResult());
                 }
                 long nTotalMargin = 0;
@@ -1758,7 +1758,7 @@ Rectangle ScOutputData::LayoutStrings(bool bPixelToLogic, bool bPaint, const ScA
                                     aAreaParam.mnLeftClipLength = aAreaParam.mnRightClipLength = 0;
                                 }
 
-                                pOldPattern = NULL;
+                                pOldPattern = nullptr;
                             }
                         }
                     }
@@ -2335,15 +2335,15 @@ ScOutputData::DrawEditParam::DrawEditParam(const ScPatternAttr* pPattern, const 
     mbAsianVertical(false),
     mbPixelToLogic(false),
     mbHyphenatorSet(false),
-    mpEngine(NULL),
+    mpEngine(nullptr),
     mpPattern(pPattern),
     mpCondSet(pCondSet),
-    mpPreviewFontSet(NULL),
-    mpOldPattern(NULL),
-    mpOldCondSet(NULL),
-    mpOldPreviewFontSet(NULL),
-    mpThisRowInfo(NULL),
-    mpMisspellRanges(NULL)
+    mpPreviewFontSet(nullptr),
+    mpOldPattern(nullptr),
+    mpOldCondSet(nullptr),
+    mpOldPreviewFontSet(nullptr),
+    mpThisRowInfo(nullptr),
+    mpMisspellRanges(nullptr)
 {}
 
 bool ScOutputData::DrawEditParam::readCellContent(
@@ -3035,7 +3035,7 @@ void ScOutputData::DrawEditStandard(DrawEditParam& rParam)
              rParam.mbBreak && bMarkClipped &&
              ( rParam.mpEngine->GetParagraphCount() > 1 || rParam.mpEngine->GetLineCount(0) > 1 ) )
         {
-            CellInfo* pClipMarkCell = NULL;
+            CellInfo* pClipMarkCell = nullptr;
             if ( bMerged )
             {
                 //  anywhere in the merged area...
@@ -3087,7 +3087,7 @@ void ScOutputData::DrawEditStandard(DrawEditParam& rParam)
         //  horizontal alignment
         if (rParam.adjustHorAlignment(rParam.mpEngine))
             // reset adjustment for the next cell
-            rParam.mpOldPattern = NULL;
+            rParam.mpOldPattern = nullptr;
     }
 
     if (rParam.meVerJust==SVX_VER_JUSTIFY_BOTTOM ||
@@ -3165,7 +3165,7 @@ void ScOutputData::ShowClipMarks( DrawEditParam& rParam, long nEngineHeight, con
             rParam.mbBreak && bMarkClipped &&
             ( rParam.mpEngine->GetParagraphCount() > 1 || rParam.mpEngine->GetLineCount(0) > 1 ) )
     {
-        CellInfo* pClipMarkCell = NULL;
+        CellInfo* pClipMarkCell = nullptr;
         if ( bMerged )
         {
             //  anywhere in the merged area...
@@ -4009,7 +4009,7 @@ void ScOutputData::DrawEditStacked(DrawEditParam& rParam)
              rParam.mbBreak && bMarkClipped &&
              ( rParam.mpEngine->GetParagraphCount() > 1 || rParam.mpEngine->GetLineCount(0) > 1 ) )
         {
-            CellInfo* pClipMarkCell = NULL;
+            CellInfo* pClipMarkCell = nullptr;
             if ( bMerged )
             {
                 //  anywhere in the merged area...
@@ -4356,7 +4356,7 @@ void ScOutputData::DrawEditAsianVertical(DrawEditParam& rParam)
              !rParam.mbAsianVertical && bMarkClipped &&
              ( rParam.mpEngine->GetParagraphCount() > 1 || rParam.mpEngine->GetLineCount(0) > 1 ) )
         {
-            CellInfo* pClipMarkCell = NULL;
+            CellInfo* pClipMarkCell = nullptr;
             if ( bMerged )
             {
                 //  anywhere in the merged area...
@@ -4450,9 +4450,9 @@ void ScOutputData::DrawEdit(bool bPixelToLogic)
 {
     std::unique_ptr<ScFieldEditEngine> pEngine;
     bool bHyphenatorSet = false;
-    const ScPatternAttr* pOldPattern = NULL;
-    const SfxItemSet*    pOldCondSet = NULL;
-    const SfxItemSet*    pOldPreviewFontSet = NULL;
+    const ScPatternAttr* pOldPattern = nullptr;
+    const SfxItemSet*    pOldCondSet = nullptr;
+    const SfxItemSet*    pOldPreviewFontSet = nullptr;
     ScRefCellValue aCell;
 
     long nInitPosX = nScrX;
@@ -4530,8 +4530,8 @@ void ScOutputData::DrawEdit(bool bPixelToLogic)
                     if ( bDoCell && bEditMode && nCellX == nEditCol && nCellY == nEditRow )
                         bDoCell = false;
 
-                    const ScPatternAttr* pPattern = NULL;
-                    const SfxItemSet* pCondSet = NULL;
+                    const ScPatternAttr* pPattern = nullptr;
+                    const SfxItemSet* pCondSet = nullptr;
                     if (bDoCell)
                     {
                         if ( nCellY == nY && nCellX >= nX1 && nCellX <= nX2 &&
@@ -4654,8 +4654,8 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
     bool bHyphenatorSet = false;
     const ScPatternAttr* pPattern;
     const SfxItemSet*    pCondSet;
-    const ScPatternAttr* pOldPattern = NULL;
-    const SfxItemSet*    pOldCondSet = NULL;
+    const ScPatternAttr* pOldPattern = nullptr;
+    const SfxItemSet*    pOldCondSet = nullptr;
     ScRefCellValue aCell;
 
     long nInitPosX = nScrX;

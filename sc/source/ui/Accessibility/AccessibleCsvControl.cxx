@@ -97,7 +97,7 @@ ScAccessibleCsvControl::~ScAccessibleCsvControl()
 void SAL_CALL ScAccessibleCsvControl::disposing()
 {
     SolarMutexGuard aGuard;
-    mpControl = NULL;
+    mpControl = nullptr;
     ScAccessibleContextBase::disposing();
 }
 
@@ -107,7 +107,7 @@ Reference< XAccessible > SAL_CALL ScAccessibleCsvControl::getAccessibleAtPoint( 
         throw( RuntimeException, std::exception )
 {
     ensureAlive();
-    return NULL;
+    return nullptr;
 }
 
 bool SAL_CALL ScAccessibleCsvControl::isVisible() throw( RuntimeException, std::exception )
@@ -176,7 +176,7 @@ Rectangle ScAccessibleCsvControl::GetBoundingBoxOnScreen() const throw( RuntimeE
 {
     SolarMutexGuard aGuard;
     ensureAlive();
-    return implGetControl().GetWindowExtentsRelative( NULL );
+    return implGetControl().GetWindowExtentsRelative( nullptr );
 }
 
 Rectangle ScAccessibleCsvControl::GetBoundingBox() const throw( RuntimeException, std::exception )
@@ -257,7 +257,7 @@ void ScAccessibleCsvControl::implDispose()
 
 Point ScAccessibleCsvControl::implGetAbsPos( const Point& rPos ) const
 {
-    return rPos + implGetControl().GetWindowExtentsRelative( NULL ).TopLeft();
+    return rPos + implGetControl().GetWindowExtentsRelative( nullptr ).TopLeft();
 }
 
 // Ruler ======================================================================
@@ -1009,14 +1009,14 @@ Reference< XAccessibleTable > SAL_CALL ScAccessibleCsvGrid::getAccessibleRowHead
         throw( RuntimeException, std::exception )
 {
     ensureAlive();
-    return NULL;
+    return nullptr;
 }
 
 Reference< XAccessibleTable > SAL_CALL ScAccessibleCsvGrid::getAccessibleColumnHeaders()
         throw( RuntimeException, std::exception )
 {
     ensureAlive();
-    return NULL;
+    return nullptr;
 }
 
 Sequence< sal_Int32 > SAL_CALL ScAccessibleCsvGrid::getSelectedAccessibleRows()
@@ -1073,14 +1073,14 @@ Reference< XAccessible > SAL_CALL ScAccessibleCsvGrid::getAccessibleCaption()
         throw( RuntimeException, std::exception )
 {
     ensureAlive();
-    return NULL;
+    return nullptr;
 }
 
 Reference< XAccessible > SAL_CALL ScAccessibleCsvGrid::getAccessibleSummary()
         throw( RuntimeException, std::exception )
 {
     ensureAlive();
-    return NULL;
+    return nullptr;
 }
 
 sal_Bool SAL_CALL ScAccessibleCsvGrid::isAccessibleSelected( sal_Int32 /* nRow */, sal_Int32 nColumn )

@@ -487,11 +487,11 @@ bool ScOutlineArray::Remove( SCCOLROW nBlockStart, SCCOLROW nBlockEnd, bool& rSi
 ScOutlineEntry* ScOutlineArray::GetEntry(size_t nLevel, size_t nIndex)
 {
     if (nLevel >= nDepth)
-        return NULL;
+        return nullptr;
 
     ScOutlineCollection& rColl = aCollections[nLevel];
     if (nIndex >= rColl.size())
-        return NULL;
+        return nullptr;
 
     ScOutlineCollection::iterator it = rColl.begin();
     std::advance(it, nIndex);
@@ -501,11 +501,11 @@ ScOutlineEntry* ScOutlineArray::GetEntry(size_t nLevel, size_t nIndex)
 const ScOutlineEntry* ScOutlineArray::GetEntry(size_t nLevel, size_t nIndex) const
 {
     if (nLevel >= nDepth)
-        return NULL;
+        return nullptr;
 
     const ScOutlineCollection& rColl = aCollections[nLevel];
     if (nIndex >= rColl.size())
-        return NULL;
+        return nullptr;
 
     ScOutlineCollection::const_iterator it = rColl.begin();
     std::advance(it, nIndex);
@@ -523,7 +523,7 @@ size_t ScOutlineArray::GetCount(size_t nLevel) const
 const ScOutlineEntry* ScOutlineArray::GetEntryByPos(size_t nLevel, SCCOLROW nPos) const
 {
     if (nLevel >= nDepth)
-        return NULL;
+        return nullptr;
 
     const ScOutlineCollection& rColl = aCollections[nLevel];
     ScOutlineCollection::const_iterator it = rColl.begin(), itEnd = rColl.end();
@@ -534,7 +534,7 @@ const ScOutlineEntry* ScOutlineArray::GetEntryByPos(size_t nLevel, SCCOLROW nPos
             return pEntry;
     }
 
-    return NULL;
+    return nullptr;
 }
 
 bool ScOutlineArray::GetEntryIndex(size_t nLevel, SCCOLROW nPos, size_t& rnIndex) const
@@ -664,7 +664,7 @@ void ScOutlineArray::InsertSpace(SCCOLROW nStartPos, SCSIZE nSize)
 {
     ScSubOutlineIterator aIter( this );
     ScOutlineEntry* pEntry;
-    while ((pEntry = aIter.GetNext()) != NULL)
+    while ((pEntry = aIter.GetNext()) != nullptr)
     {
         if ( pEntry->GetStart() >= nStartPos )
             pEntry->Move(static_cast<SCsCOLROW>(nSize));
@@ -691,7 +691,7 @@ bool ScOutlineArray::DeleteSpace(SCCOLROW nStartPos, SCSIZE nSize)
 
     ScSubOutlineIterator aIter( this );
     ScOutlineEntry* pEntry;
-    while((pEntry=aIter.GetNext())!=NULL)
+    while((pEntry=aIter.GetNext())!=nullptr)
     {
         SCCOLROW nEntryStart = pEntry->GetStart();
         SCCOLROW nEntryEnd   = pEntry->GetEnd();
@@ -731,7 +731,7 @@ bool ScOutlineArray::ManualAction(
     bool bModified = false;
     ScSubOutlineIterator aIter( this );
     ScOutlineEntry* pEntry;
-    while((pEntry=aIter.GetNext())!=NULL)
+    while((pEntry=aIter.GetNext())!=nullptr)
     {
         SCCOLROW nEntryStart = pEntry->GetStart();
         SCCOLROW nEntryEnd   = pEntry->GetEnd();
@@ -834,12 +834,12 @@ ScSubOutlineIterator::ScSubOutlineIterator(
 
 ScOutlineEntry* ScSubOutlineIterator::GetNext()
 {
-    ScOutlineEntry* pEntry = NULL;
+    ScOutlineEntry* pEntry = nullptr;
     bool bFound = false;
     do
     {
         if (nSubLevel >= nDepth)
-            return NULL;
+            return nullptr;
 
         ScOutlineCollection& rColl = pArray->aCollections[nSubLevel];
         if (nSubEntry < rColl.size())

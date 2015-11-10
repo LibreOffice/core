@@ -85,7 +85,7 @@ void ScLinkTargetTypesObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
     if ( pSimpleHint && pSimpleHint->GetId() == SFX_HINT_DYING )
-        pDocShell = NULL;       // document gone
+        pDocShell = nullptr;       // document gone
 }
 
 // container::XNameAccess
@@ -154,7 +154,7 @@ void ScLinkTargetTypeObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
     if ( pSimpleHint && pSimpleHint->GetId() == SFX_HINT_DYING )
-        pDocShell = NULL;       // document gone
+        pDocShell = nullptr;       // document gone
 }
 
 // document::XLinkTargetSupplier
@@ -185,7 +185,7 @@ uno::Reference< container::XNameAccess > SAL_CALL  ScLinkTargetTypeObj::getLinks
     //  beans::XPropertySet as ElementType in container::XNameAccess.
     if ( xCollection.is() )
         return new ScLinkTargetsObj( xCollection );
-    return NULL;
+    return nullptr;
 }
 
 // beans::XPropertySet

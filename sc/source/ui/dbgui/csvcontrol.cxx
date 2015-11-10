@@ -59,7 +59,7 @@ ScCsvDiff ScCsvLayoutData::GetDiff( const ScCsvLayoutData& rData ) const
 ScCsvControl::ScCsvControl( ScCsvControl& rParent ) :
     Control( &rParent, WB_TABSTOP | WB_NODIALOGCONTROL ),
     mrData( rParent.GetLayoutData() ),
-    mxAccessible( NULL ),
+    mxAccessible( nullptr ),
     mbValidGfx( false )
 {
 }
@@ -67,7 +67,7 @@ ScCsvControl::ScCsvControl( ScCsvControl& rParent ) :
 ScCsvControl::ScCsvControl( vcl::Window* pParent, const ScCsvLayoutData& rData, WinBits nBits ) :
     Control( pParent, nBits ),
     mrData( rData ),
-    mxAccessible( NULL ),
+    mxAccessible( nullptr ),
     mbValidGfx( false )
 {
 }

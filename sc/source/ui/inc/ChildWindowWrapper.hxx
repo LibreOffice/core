@@ -50,7 +50,7 @@ public:
 
     static void RegisterChildWindow (
                     bool   bVisible = false,
-                    SfxModule* pModule  = NULL,
+                    SfxModule* pModule  = nullptr,
                     SfxChildWindowFlags nFlags = SfxChildWindowFlags::NONE)
     {
         SfxChildWinFactory* pFactory = new SfxChildWinFactory(ChildWindowWrapper::CreateImpl, WindowID, CHILDWIN_NOPOS );
@@ -75,16 +75,16 @@ private:
     static ScTabViewShell* getTabViewShell( SfxBindings *pBindings )
     {
         if( !pBindings )
-            return NULL;
+            return nullptr;
         SfxDispatcher* pDispacher = pBindings ->GetDispatcher();
         if( !pDispacher )
-            return NULL;
+            return nullptr;
         SfxViewFrame* pFrame = pDispacher->GetFrame();
         if( !pFrame )
-            return NULL;
+            return nullptr;
         SfxViewShell* pViewShell = pFrame->GetViewShell();
         if( !pViewShell )
-            return NULL;
+            return nullptr;
         return dynamic_cast<ScTabViewShell*>( pViewShell );
     }
 };

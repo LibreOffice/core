@@ -90,7 +90,7 @@ ScPageRowEntry::ScPageRowEntry(const ScPageRowEntry& r)
         memcpy( pHidden, r.pHidden, nPagesX * sizeof(bool) );
     }
     else
-        pHidden = NULL;
+        pHidden = nullptr;
 }
 
 const ScPageRowEntry& ScPageRowEntry::operator=(const ScPageRowEntry& r)
@@ -106,7 +106,7 @@ const ScPageRowEntry& ScPageRowEntry::operator=(const ScPageRowEntry& r)
         memcpy( pHidden, r.pHidden, nPagesX * sizeof(bool) );
     }
     else
-        pHidden = NULL;
+        pHidden = nullptr;
 
     return *this;
 }
@@ -117,7 +117,7 @@ void ScPageRowEntry::SetPagesX(size_t nNew)
     {
         OSL_FAIL("SetPagesX nicht nach SetHidden");
         delete[] pHidden;
-        pHidden = NULL;
+        pHidden = nullptr;
     }
     nPagesX = nNew;
 }
@@ -177,12 +177,12 @@ void ScPrintFunc::Construct( const ScPrintOptions* pOptions )
     //  else, EditEngine outputs different text heights
     pDev->SetMapMode(MAP_PIXEL);
 
-    pBorderItem = NULL;
-    pBackgroundItem = NULL;
-    pShadowItem = NULL;
+    pBorderItem = nullptr;
+    pBackgroundItem = nullptr;
+    pShadowItem = nullptr;
 
-    pEditEngine = NULL;
-    pEditDefaults = NULL;
+    pEditEngine = nullptr;
+    pEditDefaults = nullptr;
 
     ScStyleSheetPool* pStylePool    = pDoc->GetStyleSheetPool();
     SfxStyleSheetBase* pStyleSheet  = pStylePool->Find(
@@ -193,7 +193,7 @@ void ScPrintFunc::Construct( const ScPrintOptions* pOptions )
     else
     {
         OSL_FAIL("Seitenvorlage nicht gefunden" );
-        pParamSet = NULL;
+        pParamSet = nullptr;
     }
 
     if (!bState)
@@ -205,7 +205,7 @@ void ScPrintFunc::Construct( const ScPrintOptions* pOptions )
 
     InitParam(pOptions);
 
-    pPageData = NULL;       // is only needed for initialisation
+    pPageData = nullptr;       // is only needed for initialisation
 }
 
 ScPrintFunc::ScPrintFunc( ScDocShell* pShell, SfxPrinter* pNewPrinter, SCTAB nTab,
@@ -214,7 +214,7 @@ ScPrintFunc::ScPrintFunc( ScDocShell* pShell, SfxPrinter* pNewPrinter, SCTAB nTa
                             ScPageBreakData* pData )
     :   pDocShell           ( pShell ),
         pPrinter            ( pNewPrinter ),
-        pDrawView           ( NULL ),
+        pDrawView           ( nullptr ),
         nPrintTab           ( nTab ),
         nPageStart          ( nPage ),
         nDocPages           ( nDocP ),
@@ -240,8 +240,8 @@ ScPrintFunc::ScPrintFunc( OutputDevice* pOutDev, ScDocShell* pShell, SCTAB nTab,
                             long nPage, long nDocP, const ScRange* pArea,
                             const ScPrintOptions* pOptions )
     :   pDocShell           ( pShell ),
-        pPrinter            ( NULL ),
-        pDrawView           ( NULL ),
+        pPrinter            ( nullptr ),
+        pDrawView           ( nullptr ),
         nPrintTab           ( nTab ),
         nPageStart          ( nPage ),
         nDocPages           ( nDocP ),
@@ -256,7 +256,7 @@ ScPrintFunc::ScPrintFunc( OutputDevice* pOutDev, ScDocShell* pShell, SCTAB nTab,
         nPagesX(0),
         nPagesY(0),
         nTotalY(0),
-        pPageData           ( NULL )
+        pPageData           ( nullptr )
 {
     pDev = pOutDev;
     Construct( pOptions );
@@ -265,9 +265,9 @@ ScPrintFunc::ScPrintFunc( OutputDevice* pOutDev, ScDocShell* pShell, SCTAB nTab,
 ScPrintFunc::ScPrintFunc( OutputDevice* pOutDev, ScDocShell* pShell,
                              const ScPrintState& rState, const ScPrintOptions* pOptions )
     :   pDocShell           ( pShell ),
-        pPrinter            ( NULL ),
-        pDrawView           ( NULL ),
-        pUserArea           ( NULL ),
+        pPrinter            ( nullptr ),
+        pDrawView           ( nullptr ),
+        pUserArea           ( nullptr ),
         bSourceRangeValid   ( false ),
         bPrintCurrentTable  ( false ),
         bMultiArea          ( false ),
@@ -275,7 +275,7 @@ ScPrintFunc::ScPrintFunc( OutputDevice* pOutDev, ScDocShell* pShell,
         nPagesX(0),
         nPagesY(0),
         nTotalY(0),
-        pPageData           ( NULL )
+        pPageData           ( nullptr )
 {
     pDev = pOutDev;
 
@@ -596,12 +596,12 @@ static void lcl_FillHFParam( ScPrintHFParam& rParam, const SfxItemSet* pHFSet )
 {
     //  nDistance must be initialized differently before
 
-    if ( pHFSet == NULL )
+    if ( pHFSet == nullptr )
     {
         rParam.bEnable  = false;
-        rParam.pBorder  = NULL;
-        rParam.pBack    = NULL;
-        rParam.pShadow  = NULL;
+        rParam.pBorder  = nullptr;
+        rParam.pBack    = nullptr;
+        rParam.pShadow  = nullptr;
     }
     else
     {
@@ -823,7 +823,7 @@ void ScPrintFunc::InitParam( const ScPrintOptions* pOptions )
     aHdr.pRight     = static_cast<const ScPageHFItem*>( &pParamSet->Get(ATTR_PAGE_HEADERRIGHT) );
 
     const SvxSetItem* pHeaderSetItem;
-    const SfxItemSet* pHeaderSet = NULL;
+    const SfxItemSet* pHeaderSet = nullptr;
     if ( pParamSet->GetItemState( ATTR_PAGE_HEADERSET, false,
                             reinterpret_cast<const SfxPoolItem**>(&pHeaderSetItem) ) == SfxItemState::SET )
     {
@@ -839,7 +839,7 @@ void ScPrintFunc::InitParam( const ScPrintOptions* pOptions )
     aFtr.pRight     = static_cast<const ScPageHFItem*>( &pParamSet->Get(ATTR_PAGE_FOOTERRIGHT) );
 
     const SvxSetItem* pFooterSetItem;
-    const SfxItemSet* pFooterSet = NULL;
+    const SfxItemSet* pFooterSet = nullptr;
     if ( pParamSet->GetItemState( ATTR_PAGE_FOOTERSET, false,
                             reinterpret_cast<const SfxPoolItem**>(&pFooterSetItem) ) == SfxItemState::SET )
     {
@@ -853,9 +853,9 @@ void ScPrintFunc::InitParam( const ScPrintOptions* pOptions )
 
     // TabPage "Table"
 
-    const SfxUInt16Item*     pScaleItem          = NULL;
-    const ScPageScaleToItem* pScaleToItem        = NULL;
-    const SfxUInt16Item*     pScaleToPagesItem   = NULL;
+    const SfxUInt16Item*     pScaleItem          = nullptr;
+    const ScPageScaleToItem* pScaleToItem        = nullptr;
+    const SfxUInt16Item*     pScaleToPagesItem   = nullptr;
     SfxItemState             eState;
 
     eState = pParamSet->GetItemState( ATTR_PAGE_SCALE, false,
@@ -1187,7 +1187,7 @@ static void lcl_DrawGraphic( const SvxBrushItem &rBrush, vcl::RenderContext *pOu
                             const double    Abitmap( k1/k2 * aSize.Width()*aSize.Height() );
 
                             aObject.DrawTiled( pOut, rOrg, aGrfSize, Size(0,0),
-                                               NULL, GraphicManagerDrawFlags::STANDARD,
+                                               nullptr, GraphicManagerDrawFlags::STANDARD,
                                                ::std::max( 128, static_cast<int>( sqrt(sqrt( Abitmap)) + .5 ) ) );
                         }
                         else
@@ -1223,7 +1223,7 @@ void ScPrintFunc::DrawBorder( long nScrX, long nScrY, long nScrW, long nScrH,
     if (pBorderData)
         if ( !pBorderData->GetTop() && !pBorderData->GetBottom() && !pBorderData->GetLeft() &&
                                         !pBorderData->GetRight() )
-            pBorderData = NULL;
+            pBorderData = nullptr;
 
     if (!pBorderData && !pBackground && !pShadow)
         return;                                     // nothing to do
@@ -2522,7 +2522,7 @@ long ScPrintFunc::CountNotePages()
     long nNoteAdd;
     do
     {
-        nNoteAdd = PrintNotes( nPages, nNoteNr, false, NULL );
+        nNoteAdd = PrintNotes( nPages, nNoteNr, false, nullptr );
         if (nNoteAdd)
         {
             nNoteNr += nNoteAdd;
@@ -2705,7 +2705,7 @@ long ScPrintFunc::DoPrint( const MultiSelection& rPageRanges,
         {
             bool bPageSelected = rPageRanges.IsSelected( nPageNo+nStartPage+1 );
             nNoteAdd = PrintNotes( nPageNo+nStartPage, nNoteNr, bDoPrint && bPageSelected,
-                                    ( bPageSelected ? pLocationData : NULL ) );
+                                    ( bPageSelected ? pLocationData : nullptr ) );
             if ( nNoteAdd )
             {
                 nNoteNr += nNoteAdd;
@@ -2731,7 +2731,7 @@ long ScPrintFunc::DoPrint( const MultiSelection& rPageRanges,
 void ScPrintFunc::CalcZoom( sal_uInt16 nRangeNo )                       // calculate zoom
 {
     sal_uInt16 nRCount = pDoc->GetPrintRangeCount( nPrintTab );
-    const ScRange* pThisRange = NULL;
+    const ScRange* pThisRange = nullptr;
     if ( nRangeNo != RANGENO_NORANGE || nRangeNo < nRCount )
         pThisRange = pDoc->GetPrintRange( nPrintTab, nRangeNo );
     if ( pThisRange )
@@ -3069,7 +3069,7 @@ void ScPrintFunc::CalcPages()               // calculates aPageRect and pages fr
         }
 
         SCROW nLastRow = -1;
-        if (!pDoc->RowHidden(nRow, nPrintTab, NULL, &nLastRow))
+        if (!pDoc->RowHidden(nRow, nPrintTab, nullptr, &nLastRow))
         {
             bVisRow = true;
             nLastVisibleRow = nLastRow;

@@ -720,7 +720,7 @@ OString XclXmlUtils::ToOString( const OUString& s )
 
 OStringBuffer& XclXmlUtils::ToOString( OStringBuffer& s, const ScAddress& rAddress )
 {
-    rAddress.Format(s, SCA_VALID, NULL, ScAddress::Details( FormulaGrammar::CONV_XL_A1));
+    rAddress.Format(s, SCA_VALID, nullptr, ScAddress::Details( FormulaGrammar::CONV_XL_A1));
     return s;
 }
 
@@ -735,14 +735,14 @@ OString XclXmlUtils::ToOString( const ScfUInt16Vec& rBuffer )
 
 OString XclXmlUtils::ToOString( const ScRange& rRange )
 {
-    OUString sRange(rRange.Format(SCA_VALID, NULL, ScAddress::Details( FormulaGrammar::CONV_XL_A1)));
+    OUString sRange(rRange.Format(SCA_VALID, nullptr, ScAddress::Details( FormulaGrammar::CONV_XL_A1)));
     return ToOString( sRange );
 }
 
 OString XclXmlUtils::ToOString( const ScRangeList& rRangeList )
 {
     OUString s;
-    rRangeList.Format(s, SCA_VALID, NULL, FormulaGrammar::CONV_XL_A1, ' ');
+    rRangeList.Format(s, SCA_VALID, nullptr, FormulaGrammar::CONV_XL_A1, ' ');
     return ToOString( s );
 }
 
@@ -903,15 +903,15 @@ sax_fastparser::FSHelperPtr XclXmlUtils::WriteFontData( sax_fastparser::FSHelper
     const char* pUnderline = lcl_GetUnderlineStyle( rFontData.GetScUnderline(), bHaveUnderline );
     const char* pVertAlign = lcl_ToVerticalAlignmentRun( rFontData.GetScEscapement(), bHaveVertAlign );
 
-    lcl_WriteValue( pStream, XML_b,          rFontData.mnWeight > 400 ? XclXmlUtils::ToPsz( rFontData.mnWeight > 400 ) : NULL );
-    lcl_WriteValue( pStream, XML_i,          rFontData.mbItalic ? XclXmlUtils::ToPsz( rFontData.mbItalic ) : NULL );
-    lcl_WriteValue( pStream, XML_strike,     rFontData.mbStrikeout ? XclXmlUtils::ToPsz( rFontData.mbStrikeout ) : NULL );
+    lcl_WriteValue( pStream, XML_b,          rFontData.mnWeight > 400 ? XclXmlUtils::ToPsz( rFontData.mnWeight > 400 ) : nullptr );
+    lcl_WriteValue( pStream, XML_i,          rFontData.mbItalic ? XclXmlUtils::ToPsz( rFontData.mbItalic ) : nullptr );
+    lcl_WriteValue( pStream, XML_strike,     rFontData.mbStrikeout ? XclXmlUtils::ToPsz( rFontData.mbStrikeout ) : nullptr );
     // OOXTODO: lcl_WriteValue( rStream, XML_condense, );    // mac compatibility setting
     // OOXTODO: lcl_WriteValue( rStream, XML_extend, );      // compatibility setting
-    lcl_WriteValue( pStream, XML_outline,    rFontData.mbOutline ? XclXmlUtils::ToPsz( rFontData.mbOutline ) : NULL );
-    lcl_WriteValue( pStream, XML_shadow,     rFontData.mbShadow ? XclXmlUtils::ToPsz( rFontData.mbShadow ) : NULL );
-    lcl_WriteValue( pStream, XML_u,          bHaveUnderline ? pUnderline : NULL );
-    lcl_WriteValue( pStream, XML_vertAlign,  bHaveVertAlign ? pVertAlign : NULL );
+    lcl_WriteValue( pStream, XML_outline,    rFontData.mbOutline ? XclXmlUtils::ToPsz( rFontData.mbOutline ) : nullptr );
+    lcl_WriteValue( pStream, XML_shadow,     rFontData.mbShadow ? XclXmlUtils::ToPsz( rFontData.mbShadow ) : nullptr );
+    lcl_WriteValue( pStream, XML_u,          bHaveUnderline ? pUnderline : nullptr );
+    lcl_WriteValue( pStream, XML_vertAlign,  bHaveVertAlign ? pVertAlign : nullptr );
     lcl_WriteValue( pStream, XML_sz,         OString::number( (double) (rFontData.mnHeight / 20.0) ).getStr() );  // Twips->Pt
     if( rFontData.maColor != Color( 0xFF, 0xFF, 0xFF, 0xFF ) )
         pStream->singleElement( XML_color,
@@ -923,14 +923,14 @@ sax_fastparser::FSHelperPtr XclXmlUtils::WriteFontData( sax_fastparser::FSHelper
                 FSEND );
     lcl_WriteValue( pStream, nFontId,        XclXmlUtils::ToOString( rFontData.maName ).getStr() );
     lcl_WriteValue( pStream, XML_family,     OString::number(  rFontData.mnFamily ).getStr() );
-    lcl_WriteValue( pStream, XML_charset,    rFontData.mnCharSet != 0 ? OString::number(  rFontData.mnCharSet ).getStr() : NULL );
+    lcl_WriteValue( pStream, XML_charset,    rFontData.mnCharSet != 0 ? OString::number(  rFontData.mnCharSet ).getStr() : nullptr );
 
     return pStream;
 }
 
 XclExpXmlStream::XclExpXmlStream( const Reference< XComponentContext >& rCC, bool bExportVBA )
     : XmlFilterBase( rCC ),
-      mpRoot( NULL ),
+      mpRoot( nullptr ),
       mbExportVBA(bExportVBA)
 {
 }
@@ -1020,12 +1020,12 @@ bool XclExpXmlStream::importDocument() throw()
 
 oox::vml::Drawing* XclExpXmlStream::getVmlDrawing()
 {
-    return 0;
+    return nullptr;
 }
 
 const oox::drawingml::Theme* XclExpXmlStream::getCurrentTheme() const
 {
-    return 0;
+    return nullptr;
 }
 
 const oox::drawingml::table::TableStyleListPtr XclExpXmlStream::getTableStyles()
@@ -1036,7 +1036,7 @@ const oox::drawingml::table::TableStyleListPtr XclExpXmlStream::getTableStyles()
 oox::drawingml::chart::ChartConverter* XclExpXmlStream::getChartConverter()
 {
     // DO NOT CALL
-    return NULL;
+    return nullptr;
 }
 
 ScDocShell* XclExpXmlStream::getDocShell()
@@ -1048,7 +1048,7 @@ ScDocShell* XclExpXmlStream::getDocShell()
     if ( pObj )
         return static_cast < ScDocShell* >( pObj->GetEmbeddedObject() );
 
-    return 0;
+    return nullptr;
 }
 
 bool XclExpXmlStream::exportDocument()
@@ -1068,7 +1068,7 @@ bool XclExpXmlStream::exportDocument()
     // NOTE: Don't use SotStorage or SvStream any more, and never call
     // SfxMedium::GetOutStream() anywhere in the xlsx export filter code!
     // Instead, write via XOutputStream instance.
-    tools::SvRef<SotStorage> rStorage = static_cast<SotStorage*>(NULL);
+    tools::SvRef<SotStorage> rStorage = static_cast<SotStorage*>(nullptr);
     XclExpObjList::ResetCounters();
 
     XclExpRootData aData( EXC_BIFF8, *pShell->GetMedium (), rStorage, rDoc, RTL_TEXTENCODING_DONTKNOW );
@@ -1138,7 +1138,7 @@ bool XclExpXmlStream::exportDocument()
 
     if (xStatusIndicator.is())
         xStatusIndicator->end();
-    mpRoot = NULL;
+    mpRoot = nullptr;
     return true;
 }
 

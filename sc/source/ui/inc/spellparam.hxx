@@ -55,7 +55,7 @@ public:
     inline ScConversionType GetType() const     { return meConvType; }
     inline LanguageType GetSourceLang() const   { return meSourceLang; }
     inline LanguageType GetTargetLang() const   { return meTargetLang; }
-    inline const vcl::Font*  GetTargetFont() const   { return mbUseTargetFont ? &maTargetFont : 0; }
+    inline const vcl::Font*  GetTargetFont() const   { return mbUseTargetFont ? &maTargetFont : nullptr; }
     inline sal_Int32    GetOptions() const      { return mnOptions; }
     inline bool         IsInteractive() const   { return mbIsInteractive; }
 

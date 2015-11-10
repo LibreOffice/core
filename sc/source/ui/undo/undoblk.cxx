@@ -95,7 +95,7 @@ ScUndoInsertCells::ScUndoInsertCells( ScDocShell* pNewDocShell,
     pScenarios( pNewScenarios ),
     eCmd( eNewCmd ),
     bPartOfPaste( bNewPartOfPaste ),
-    pPasteUndo( NULL )
+    pPasteUndo( nullptr )
 {
     if (eCmd == INS_INSROWS_BEFORE || eCmd == INS_INSROWS_AFTER)            // whole row?
     {
@@ -836,7 +836,7 @@ void ScUndoCut::Redo()
 void ScUndoCut::Repeat(SfxRepeatTarget& rTarget)
 {
     if (dynamic_cast<const ScTabViewTarget*>( &rTarget) !=  nullptr)
-        static_cast<ScTabViewTarget&>(rTarget).GetViewShell()->CutToClip( NULL, true );
+        static_cast<ScTabViewTarget&>(rTarget).GetViewShell()->CutToClip( nullptr, true );
 }
 
 bool ScUndoCut::CanRepeat(SfxRepeatTarget& rTarget) const
@@ -856,7 +856,7 @@ ScUndoPaste::ScUndoPaste( ScDocShell* pNewDocShell, const ScRangeList& rRanges,
     pRedoDoc( pNewRedoDoc ),
     nFlags( nNewFlags ),
     pRefUndoData( pRefData ),
-    pRefRedoData( NULL ),
+    pRefRedoData( nullptr ),
     bRedoFilled( bRedoIsFilled )
 {
     if ( pRefUndoData )
@@ -1407,7 +1407,7 @@ void ScUndoDragDrop::Redo()
 
     bool bIncludeFiltered = bCut;
     // TODO: restore old note captions instead of cloning new captions...
-    rDoc.CopyFromClip( aDestRange, aDestMark, InsertDeleteFlags::ALL & ~InsertDeleteFlags::OBJECTS, NULL, pClipDoc.get(), true, false, bIncludeFiltered );
+    rDoc.CopyFromClip( aDestRange, aDestMark, InsertDeleteFlags::ALL & ~InsertDeleteFlags::OBJECTS, nullptr, pClipDoc.get(), true, false, bIncludeFiltered );
 
     if (bCut)
         for (nTab=aSrcRange.aStart.Tab(); nTab<=aSrcRange.aEnd.Tab(); nTab++)
@@ -2000,7 +2000,7 @@ ScUndoClearItems::ScUndoClearItems( ScDocShell* pNewDocShell, const ScMarkData& 
     ScBlockUndo( pNewDocShell, lcl_GetMultiMarkRange(rMark), SC_UNDO_AUTOHEIGHT ),
     aMarkData( rMark ),
     pUndoDoc( pNewUndoDoc ),
-    pWhich( NULL )
+    pWhich( nullptr )
 {
     OSL_ENSURE( pW, "ScUndoClearItems: Which-Pointer ist 0" );
 

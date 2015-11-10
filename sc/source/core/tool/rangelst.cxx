@@ -332,7 +332,7 @@ void ScRangeList::Join( const ScRange& r, bool bIsInList )
                 Remove(nOldPos);
                 i--;
                 delete pOver;
-                pOver = NULL;
+                pOver = nullptr;
                 if ( nOldPos )
                     nOldPos--;          // Seek richtig aufsetzen
             }
@@ -1005,14 +1005,14 @@ const ScRange* ScRangeList::Find( const ScAddress& rAdr ) const
 {
     const_iterator itr = find_if(
         maRanges.begin(), maRanges.end(), FindEnclosingRange<ScAddress>(rAdr));
-    return itr == maRanges.end() ? NULL : *itr;
+    return itr == maRanges.end() ? nullptr : *itr;
 }
 
 ScRange* ScRangeList::Find( const ScAddress& rAdr )
 {
     iterator itr = find_if(
         maRanges.begin(), maRanges.end(), FindEnclosingRange<ScAddress>(rAdr));
-    return itr == maRanges.end() ? NULL : *itr;
+    return itr == maRanges.end() ? nullptr : *itr;
 }
 
 ScRangeList::ScRangeList() : mnMaxRowUsed(-1) {}
@@ -1068,7 +1068,7 @@ ScRange* ScRangeList::Remove(size_t nPos)
 {
     if (maRanges.size() <= nPos)
         // Out-of-bound condition.  Bail out.
-        return NULL;
+        return nullptr;
 
     iterator itr = maRanges.begin();
     advance(itr, nPos);
@@ -1218,7 +1218,7 @@ ScRangePair* ScRangePairList::Remove(size_t nPos)
 {
     if (maPairs.size() <= nPos)
         // Out-of-bound condition.  Bail out.
-        return NULL;
+        return nullptr;
 
     vector<ScRangePair*>::iterator itr = maPairs.begin();
     advance(itr, nPos);
@@ -1229,9 +1229,9 @@ ScRangePair* ScRangePairList::Remove(size_t nPos)
 
 ScRangePair* ScRangePairList::Remove( ScRangePair* Adr)
 {
-    ScRangePair* p = NULL;
+    ScRangePair* p = nullptr;
 
-    if (Adr == NULL) return NULL;
+    if (Adr == nullptr) return nullptr;
 
     for ( vector<ScRangePair*>::iterator itr = maPairs.begin(); itr < maPairs.end(); ++itr )
     {
@@ -1344,7 +1344,7 @@ ScRangePair* ScRangePairList::Find( const ScAddress& rAdr ) const
         if ( pR->GetRange(0).In( rAdr ) )
             return pR;
     }
-    return NULL;
+    return nullptr;
 }
 
 ScRangePair* ScRangePairList::Find( const ScRange& rRange ) const
@@ -1355,7 +1355,7 @@ ScRangePair* ScRangePairList::Find( const ScRange& rRange ) const
         if ( pR->GetRange(0) == rRange )
             return pR;
     }
-    return NULL;
+    return nullptr;
 }
 
 ScRangePairList* ScRangePairList::Clone() const
@@ -1561,7 +1561,7 @@ void ScRangePairList::Join( const ScRangePair& r, bool bIsInList )
                 Remove( nOldPos );
                 i--;
                 delete pOver;
-                pOver = NULL;
+                pOver = nullptr;
                 if ( nOldPos )
                     nOldPos--;          // Seek richtig aufsetzen
             }

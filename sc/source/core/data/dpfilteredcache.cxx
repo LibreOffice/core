@@ -100,7 +100,7 @@ size_t ScDPFilteredCache::GroupFilter::getMatchItemCount() const
 
 ScDPFilteredCache::Criterion::Criterion() :
     mnFieldIndex(-1),
-    mpFilter(static_cast<FilterBase*>(NULL))
+    mpFilter(static_cast<FilterBase*>(nullptr))
 {
 }
 
@@ -173,7 +173,7 @@ void ScDPFilteredCache::fillTable(
         {
             if (nRow > nEndSegment)
             {
-                if (!maShowByFilter.search_tree(nRow, bShow, NULL, &nEndSegment).second)
+                if (!maShowByFilter.search_tree(nRow, bShow, nullptr, &nEndSegment).second)
                 {
                     OSL_FAIL("Tree search failed!");
                     continue;
@@ -245,8 +245,8 @@ bool ScDPFilteredCache::isRowActive(sal_Int32 nRow, sal_Int32* pLastRow) const
 {
     bool bFilter = false, bPage = true;
     SCROW nLastRowFilter = MAXROW, nLastRowPage = MAXROW;
-    maShowByFilter.search_tree(nRow, bFilter, NULL, &nLastRowFilter);
-    maShowByPage.search_tree(nRow, bPage, NULL, &nLastRowPage);
+    maShowByFilter.search_tree(nRow, bFilter, nullptr, &nLastRowFilter);
+    maShowByPage.search_tree(nRow, bPage, nullptr, &nLastRowPage);
     if (pLastRow)
     {
         // Return the last row of current segment.

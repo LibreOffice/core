@@ -139,7 +139,7 @@ void LotusFontBuffer::MakeFont( ENTRY* pEntry )
     pEntry->pFont = new SvxFontItem( eFamily, *pEntry->pTmpName, EMPTY_OUSTRING, ePitch, eCharSet, ATTR_FONT );
 
     delete pEntry->pTmpName;
-    pEntry->pTmpName = NULL;
+    pEntry->pTmpName = nullptr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

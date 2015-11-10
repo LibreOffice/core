@@ -525,8 +525,8 @@ void SAL_CALL ScSubTotalFieldObj::setSubTotalColumns(
         }
         else
         {
-            aParam.pSubTotals[nPos] = NULL;
-            aParam.pFunctions[nPos] = NULL;
+            aParam.pSubTotals[nPos] = nullptr;
+            aParam.pFunctions[nPos] = nullptr;
         }
     }
     //! sonst Exception oder so? (zuviele Spalten)
@@ -549,7 +549,7 @@ ScSubTotalFieldObj* ScSubTotalDescriptorBase::GetObjectByIndex_Impl(sal_uInt16 n
 {
     if ( nIndex < getCount() )
         return new ScSubTotalFieldObj( this, nIndex );
-    return NULL;
+    return nullptr;
 }
 
 void SAL_CALL ScSubTotalDescriptorBase::clear() throw(uno::RuntimeException, std::exception)
@@ -604,8 +604,8 @@ void SAL_CALL ScSubTotalDescriptorBase::addNew(
         }
         else
         {
-            aParam.pSubTotals[nPos] = NULL;
-            aParam.pFunctions[nPos] = NULL;
+            aParam.pSubTotals[nPos] = nullptr;
+            aParam.pFunctions[nPos] = nullptr;
         }
     }
     else                                    // too many fields / columns
@@ -779,7 +779,7 @@ const uno::Sequence<sal_Int8>& ScSubTotalDescriptorBase::getUnoTunnelId()
 
 ScSubTotalDescriptorBase* ScSubTotalDescriptorBase::getImplementation(const uno::Reference<sheet::XSubTotalDescriptor>& rObj)
 {
-    ScSubTotalDescriptorBase* pRet = NULL;
+    ScSubTotalDescriptorBase* pRet = nullptr;
     uno::Reference<lang::XUnoTunnel> xUT(rObj, uno::UNO_QUERY);
     if (xUT.is())
         pRet = reinterpret_cast<ScSubTotalDescriptorBase*>(sal::static_int_cast<sal_IntPtr>(xUT->getSomething(getUnoTunnelId())));
@@ -997,7 +997,7 @@ void ScFilterDescriptorBase::Notify( SfxBroadcaster&, const SfxHint& rHint )
         sal_uLong nId = pSimpleHint->GetId();
         if ( nId == SFX_HINT_DYING )
         {
-            pDocSh = NULL;          // invalid
+            pDocSh = nullptr;          // invalid
         }
     }
 }
@@ -1651,7 +1651,7 @@ void ScDatabaseRangeObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
     const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
     if ( pSimpleHint && pSimpleHint->GetId() == SFX_HINT_DYING )
-        pDocShell = NULL;       // ungueltig geworden
+        pDocShell = nullptr;       // ungueltig geworden
     else if ( dynamic_cast<const ScDBRangeRefreshedHint*>(&rHint) )
     {
         ScDBData* pDBData = GetDBData_Impl();
@@ -1667,7 +1667,7 @@ void ScDatabaseRangeObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
 ScDBData* ScDatabaseRangeObj::GetDBData_Impl() const
 {
-    ScDBData* pRet = NULL;
+    ScDBData* pRet = nullptr;
     if (pDocShell)
     {
         if (bIsUnnamed)
@@ -1919,7 +1919,7 @@ void SAL_CALL ScDatabaseRangeObj::refresh() throw(uno::RuntimeException, std::ex
             SCCOL nDummyCol;
             SCROW nDummyRow;
             pData->GetArea( nTab, nDummyCol,nDummyRow,nDummyCol,nDummyRow );
-            bContinue = aFunc.DoImport( nTab, aImportParam, NULL, true );   //! Api-Flag as parameter
+            bContinue = aFunc.DoImport( nTab, aImportParam, nullptr, true );   //! Api-Flag as parameter
         }
 
         // interne Operationen (sort, query, subtotal) nur, wenn kein Fehler
@@ -1985,7 +1985,7 @@ uno::Reference<table::XCellRange> SAL_CALL ScDatabaseRangeObj::getReferredCells(
         else
             return new ScCellRangeObj( pDocShell, aRange );
     }
-    return NULL;
+    return nullptr;
 }
 
 // XPropertySet
@@ -2048,7 +2048,7 @@ void SAL_CALL ScDatabaseRangeObj::setPropertyValue(
                 aNewData.SetAdvancedQuerySource(&aRange);
             }
             else
-                aNewData.SetAdvancedQuerySource(NULL);
+                aNewData.SetAdvancedQuerySource(nullptr);
         }
         else if (aString == SC_UNONAME_FLTCRT )
         {
@@ -2226,7 +2226,7 @@ void ScDatabaseRangesObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
     const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
     if ( pSimpleHint && pSimpleHint->GetId() == SFX_HINT_DYING )
     {
-        pDocShell = NULL;       // ungueltig geworden
+        pDocShell = nullptr;       // ungueltig geworden
     }
 }
 
@@ -2235,15 +2235,15 @@ void ScDatabaseRangesObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 ScDatabaseRangeObj* ScDatabaseRangesObj::GetObjectByIndex_Impl(size_t nIndex)
 {
     if (!pDocShell)
-        return NULL;
+        return nullptr;
 
     ScDBCollection* pNames = pDocShell->GetDocument().GetDBCollection();
     if (!pNames)
-        return NULL;
+        return nullptr;
 
     const ScDBCollection::NamedDBs& rDBs = pNames->getNamedDBs();
     if (rDBs.empty() || nIndex >= rDBs.size())
-        return NULL;
+        return nullptr;
 
     ScDBCollection::NamedDBs::const_iterator itr = rDBs.begin();
     ::std::advance(itr, nIndex); // boundary check is done above.
@@ -2257,7 +2257,7 @@ ScDatabaseRangeObj* ScDatabaseRangesObj::GetObjectByName_Impl(const OUString& aN
         OUString aString(aName);
         return new ScDatabaseRangeObj( pDocShell, aString );
     }
-    return NULL;
+    return nullptr;
 }
 
 void SAL_CALL ScDatabaseRangesObj::addNewByName( const OUString& aName,
@@ -2397,7 +2397,7 @@ sal_Bool SAL_CALL ScDatabaseRangesObj::hasByName( const OUString& aName )
     {
         ScDBCollection* pNames = pDocShell->GetDocument().GetDBCollection();
         if (pNames)
-            return pNames->getNamedDBs().findByUpperName(ScGlobal::pCharClass->uppercase(aName)) != NULL;
+            return pNames->getNamedDBs().findByUpperName(ScGlobal::pCharClass->uppercase(aName)) != nullptr;
     }
     return false;
 }
@@ -2423,7 +2423,7 @@ void ScUnnamedDatabaseRangesObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
     const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
     if ( pSimpleHint && pSimpleHint->GetId() == SFX_HINT_DYING )
     {
-        pDocShell = NULL;       // ungueltig geworden
+        pDocShell = nullptr;       // ungueltig geworden
     }
 }
 

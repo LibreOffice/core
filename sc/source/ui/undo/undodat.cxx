@@ -741,7 +741,7 @@ ScUndoQuery::ScUndoQuery( ScDocShell* pNewDocShell, SCTAB nNewTab, const ScQuery
                             const ScRange* pOld, bool bSize, const ScRange* pAdvSrc ) :
     ScDBFuncUndo( pNewDocShell, ScRange( rParam.nCol1, rParam.nRow1, nNewTab,
                                          rParam.nCol2, rParam.nRow2, nNewTab ) ),
-    pDrawUndo( NULL ),
+    pDrawUndo( nullptr ),
     nTab( nNewTab ),
     aQueryParam( rParam ),
     pUndoDoc( pNewUndoDoc ),
@@ -892,7 +892,7 @@ void ScUndoQuery::Redo()
     if ( bIsAdvanced )
         pViewShell->Query( aQueryParam, &aAdvSource, false );
     else
-        pViewShell->Query( aQueryParam, NULL, false );
+        pViewShell->Query( aQueryParam, nullptr, false );
 
     EndRedo();
 }
@@ -930,7 +930,7 @@ void ScUndoAutoFilter::DoChange( bool bUndo )
     bool bNewFilter = bUndo ? !bFilterSet : bFilterSet;
 
     ScDocument& rDoc = pDocShell->GetDocument();
-    ScDBData* pDBData=NULL;
+    ScDBData* pDBData=nullptr;
     if (aDBName == STR_DB_LOCAL_NONAME)
     {
         SCTAB nTab = aOriginalRange.aStart.Tab();
@@ -1096,7 +1096,7 @@ void ScUndoImportData::Undo()
     SCTAB nTable;
     SCCOL nCol1, nCol2;
     SCROW nRow1, nRow2;
-    ScDBData* pCurrentData = NULL;
+    ScDBData* pCurrentData = nullptr;
     if (pUndoDBData && pRedoDBData)
     {
         pRedoDBData->GetArea( nTable, nCol1, nRow1, nCol2, nRow2 );
@@ -1181,7 +1181,7 @@ void ScUndoImportData::Redo()
     SCTAB nTable;
     SCCOL nCol1, nCol2;
     SCROW nRow1, nRow2;
-    ScDBData* pCurrentData = NULL;
+    ScDBData* pCurrentData = nullptr;
     if (pUndoDBData && pRedoDBData)
     {
         pUndoDBData->GetArea( nTable, nCol1, nRow1, nCol2, nRow2 );
@@ -1431,8 +1431,8 @@ ScUndoDataPilot::ScUndoDataPilot( ScDocShell* pNewDocShell,
     ScSimpleUndo( pNewDocShell ),
     pOldUndoDoc( pOldDoc ),
     pNewUndoDoc( pNewDoc ),
-    pOldDPObject( NULL ),
-    pNewDPObject( NULL ),
+    pOldDPObject( nullptr ),
+    pNewDPObject( nullptr ),
     bAllowMove( bMove )
 {
     if (pOldObj)
@@ -1555,7 +1555,7 @@ void ScUndoDataPilot::Redo()
 
     ScDocument& rDoc = pDocShell->GetDocument();
 
-    ScDPObject* pSourceObj = NULL;
+    ScDPObject* pSourceObj = nullptr;
     if ( pOldDPObject )
     {
         //  find object to modify
@@ -1812,7 +1812,7 @@ ScUndoDataForm::ScUndoDataForm( ScDocShell* pNewDocShell,
         pRedoDoc( pNewRedoDoc ),
         nFlags( nNewFlags ),
         pRefUndoData( pRefData ),
-        pRefRedoData( NULL ),
+        pRefRedoData( nullptr ),
         bRedoFilled( bRedoIsFilled )
 {
         //      pFill1,pFill2,pFill3 are there so the ctor calls for simple paste (without cutting)

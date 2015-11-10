@@ -42,7 +42,7 @@ public:
     ///! count>=0xFFFF: Obj will be deleted, return 0
     sal_uInt16              Add( XclObj* );
 
-    XclObj* back () { return maObjs.empty() ? NULL : maObjs.back(); }
+    XclObj* back () { return maObjs.empty() ? nullptr : maObjs.back(); }
 
     /**
      *

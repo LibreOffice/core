@@ -93,8 +93,8 @@ static void printAddressFlags(sal_uInt16 nFlag)
 ScPrintAreasDlg::ScPrintAreasDlg( SfxBindings* pB, SfxChildWindow* pCW, vcl::Window* pParent )
     : ScAnyRefDlg(pB, pCW, pParent, "PrintAreasDialog", "modules/scalc/ui/printareasdialog.ui")
     , bDlgLostFocus(false)
-    , pDoc(NULL)
-    , pViewData(NULL)
+    , pDoc(nullptr)
+    , pViewData(nullptr)
     , nCurTab(0)
 {
     get(pLbPrintArea,"lbprintarea");
@@ -367,11 +367,11 @@ bool ScPrintAreasDlg::Impl_CheckRefStrings()
 
     bool bRepeatRowOk = aStrRepeatRow.isEmpty();
     if ( !bRepeatRowOk )
-        bRepeatRowOk = lcl_CheckRepeatString(aStrRepeatRow, pDoc, true, NULL);
+        bRepeatRowOk = lcl_CheckRepeatString(aStrRepeatRow, pDoc, true, nullptr);
 
     bool bRepeatColOk = aStrRepeatCol.isEmpty();
     if ( !bRepeatColOk )
-        bRepeatColOk = lcl_CheckRepeatString(aStrRepeatCol, pDoc, false, NULL);
+        bRepeatColOk = lcl_CheckRepeatString(aStrRepeatCol, pDoc, false, nullptr);
 
     // Fehlermeldungen
 
@@ -379,7 +379,7 @@ bool ScPrintAreasDlg::Impl_CheckRefStrings()
 
     if ( !bOk )
     {
-        Edit* pEd = NULL;
+        Edit* pEd = nullptr;
 
              if ( !bPrintAreaOk ) pEd = pEdPrintArea;
         else if ( !bRepeatRowOk ) pEd = pEdRepeatRow;
@@ -543,7 +543,7 @@ IMPL_LINK_TYPED( ScPrintAreasDlg, Impl_SelectHdl, ListBox&, rLb, void )
 {
     ListBox* pLb = &rLb;
     const sal_Int32 nSelPos = pLb->GetSelectEntryPos();
-    Edit* pEd = NULL;
+    Edit* pEd = nullptr;
 
     // list box positions of specific entries, default to "repeat row/column" list boxes
     sal_Int32 nAllSheetPos = SC_AREASDLG_RR_NONE;
@@ -576,7 +576,7 @@ IMPL_LINK_TYPED( ScPrintAreasDlg, Impl_SelectHdl, ListBox&, rLb, void )
 
 IMPL_LINK_TYPED( ScPrintAreasDlg, Impl_ModifyHdl, Edit&, rEd, void )
 {
-    ListBox* pLb = NULL;
+    ListBox* pLb = nullptr;
 
     // list box positions of specific entries, default to "repeat row/column" list boxes
     sal_Int32 nUserDefPos = SC_AREASDLG_RR_USER;

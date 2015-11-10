@@ -27,7 +27,7 @@ ColumnBlockPosition* ColumnBlockPositionSet::getBlockPosition(SCTAB nTab, SCCOL 
             maTables.insert(TablesType::value_type(nTab, ColumnsType()));
         if (!r.second)
             // insertion failed.
-            return NULL;
+            return nullptr;
 
         itTab = r.first;
     }
@@ -45,12 +45,12 @@ ColumnBlockPosition* ColumnBlockPositionSet::getBlockPosition(SCTAB nTab, SCCOL 
 
     if (!r.second)
         // insertion failed.
-        return NULL;
+        return nullptr;
 
     it = r.first;
 
     if (!mrDoc.InitColumnBlockPosition(it->second, nTab, nCol))
-        return NULL;
+        return nullptr;
 
     return &it->second;
 }

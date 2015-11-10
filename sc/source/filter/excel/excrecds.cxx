@@ -416,7 +416,7 @@ void XclExpXmlSheetPr::SaveXml( XclExpXmlStream& rStrm )
             // OOXTODO: XML_transitionEntry,
             // OOXTODO: XML_published,
             // OOXTODO: XML_codeName,
-            XML_filterMode, mpManager ? XclXmlUtils::ToPsz( mpManager->HasFilterMode( mnScTab ) ) : NULL,
+            XML_filterMode, mpManager ? XclXmlUtils::ToPsz( mpManager->HasFilterMode( mnScTab ) ) : nullptr,
             // OOXTODO: XML_enableFormatConditionsCalculation,
             FSEND );
 
@@ -480,22 +480,22 @@ void XclExpSheetProtection::SaveXml( XclExpXmlStream& rStrm )
         sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
         rWorksheet->singleElement( XML_sheetProtection,
             XML_sheet,  XclXmlUtils::ToPsz( true ),
-            XML_password, sHash.isEmpty()? NULL : sHash.getStr(),
-            XML_objects, pTabProtect->isOptionEnabled( ScTableProtection::OBJECTS ) ? NULL : XclXmlUtils::ToPsz( true ),
-            XML_scenarios, pTabProtect->isOptionEnabled( ScTableProtection::SCENARIOS ) ? NULL : XclXmlUtils::ToPsz( true ),
-            XML_formatCells, pTabProtect->isOptionEnabled( ScTableProtection::FORMAT_CELLS ) ? XclXmlUtils::ToPsz( false ) : NULL,
-            XML_formatColumns, pTabProtect->isOptionEnabled( ScTableProtection::FORMAT_COLUMNS ) ? XclXmlUtils::ToPsz( false ) : NULL,
-            XML_formatRows, pTabProtect->isOptionEnabled( ScTableProtection::FORMAT_ROWS ) ? XclXmlUtils::ToPsz( false ) : NULL,
-            XML_insertColumns, pTabProtect->isOptionEnabled( ScTableProtection::INSERT_COLUMNS ) ? XclXmlUtils::ToPsz( false ) : NULL,
-            XML_insertRows, pTabProtect->isOptionEnabled( ScTableProtection::INSERT_ROWS ) ? XclXmlUtils::ToPsz( false ) : NULL,
-            XML_insertHyperlinks, pTabProtect->isOptionEnabled( ScTableProtection::INSERT_HYPERLINKS ) ? XclXmlUtils::ToPsz( false ) : NULL,
-            XML_deleteColumns, pTabProtect->isOptionEnabled( ScTableProtection::DELETE_COLUMNS ) ? XclXmlUtils::ToPsz( false ) : NULL,
-            XML_deleteRows, pTabProtect->isOptionEnabled( ScTableProtection::DELETE_ROWS ) ? XclXmlUtils::ToPsz( false ) : NULL,
-            XML_selectLockedCells, pTabProtect->isOptionEnabled( ScTableProtection::SELECT_LOCKED_CELLS ) ? NULL : XclXmlUtils::ToPsz( true ),
-            XML_sort, pTabProtect->isOptionEnabled( ScTableProtection::SORT ) ? XclXmlUtils::ToPsz( false ) : NULL,
-            XML_autoFilter, pTabProtect->isOptionEnabled( ScTableProtection::AUTOFILTER ) ? XclXmlUtils::ToPsz( false ) : NULL,
-            XML_pivotTables, pTabProtect->isOptionEnabled( ScTableProtection::PIVOT_TABLES ) ? XclXmlUtils::ToPsz( false ) : NULL,
-            XML_selectUnlockedCells, pTabProtect->isOptionEnabled( ScTableProtection::SELECT_UNLOCKED_CELLS ) ? NULL : XclXmlUtils::ToPsz( true ),
+            XML_password, sHash.isEmpty()? nullptr : sHash.getStr(),
+            XML_objects, pTabProtect->isOptionEnabled( ScTableProtection::OBJECTS ) ? nullptr : XclXmlUtils::ToPsz( true ),
+            XML_scenarios, pTabProtect->isOptionEnabled( ScTableProtection::SCENARIOS ) ? nullptr : XclXmlUtils::ToPsz( true ),
+            XML_formatCells, pTabProtect->isOptionEnabled( ScTableProtection::FORMAT_CELLS ) ? XclXmlUtils::ToPsz( false ) : nullptr,
+            XML_formatColumns, pTabProtect->isOptionEnabled( ScTableProtection::FORMAT_COLUMNS ) ? XclXmlUtils::ToPsz( false ) : nullptr,
+            XML_formatRows, pTabProtect->isOptionEnabled( ScTableProtection::FORMAT_ROWS ) ? XclXmlUtils::ToPsz( false ) : nullptr,
+            XML_insertColumns, pTabProtect->isOptionEnabled( ScTableProtection::INSERT_COLUMNS ) ? XclXmlUtils::ToPsz( false ) : nullptr,
+            XML_insertRows, pTabProtect->isOptionEnabled( ScTableProtection::INSERT_ROWS ) ? XclXmlUtils::ToPsz( false ) : nullptr,
+            XML_insertHyperlinks, pTabProtect->isOptionEnabled( ScTableProtection::INSERT_HYPERLINKS ) ? XclXmlUtils::ToPsz( false ) : nullptr,
+            XML_deleteColumns, pTabProtect->isOptionEnabled( ScTableProtection::DELETE_COLUMNS ) ? XclXmlUtils::ToPsz( false ) : nullptr,
+            XML_deleteRows, pTabProtect->isOptionEnabled( ScTableProtection::DELETE_ROWS ) ? XclXmlUtils::ToPsz( false ) : nullptr,
+            XML_selectLockedCells, pTabProtect->isOptionEnabled( ScTableProtection::SELECT_LOCKED_CELLS ) ? nullptr : XclXmlUtils::ToPsz( true ),
+            XML_sort, pTabProtect->isOptionEnabled( ScTableProtection::SORT ) ? XclXmlUtils::ToPsz( false ) : nullptr,
+            XML_autoFilter, pTabProtect->isOptionEnabled( ScTableProtection::AUTOFILTER ) ? XclXmlUtils::ToPsz( false ) : nullptr,
+            XML_pivotTables, pTabProtect->isOptionEnabled( ScTableProtection::PIVOT_TABLES ) ? XclXmlUtils::ToPsz( false ) : nullptr,
+            XML_selectUnlockedCells, pTabProtect->isOptionEnabled( ScTableProtection::SELECT_UNLOCKED_CELLS ) ? nullptr : XclXmlUtils::ToPsz( true ),
             FSEND );
 
         const ::std::vector<ScEnhancedProtection>& rProts( pTabProtect->getEnhancedProtection());
@@ -508,18 +508,18 @@ void XclExpSheetProtection::SaveXml( XclExpXmlStream& rStrm )
                 SAL_WARN_IF( (*it).maSecurityDescriptorXML.isEmpty() && !(*it).maSecurityDescriptor.empty(),
                         "sc.filter", "XclExpSheetProtection::SaveXml: losing BIFF security descriptor");
                 rWorksheet->singleElement( XML_protectedRange,
-                        XML_name, (*it).maTitle.isEmpty() ? NULL : XclXmlUtils::ToOString( (*it).maTitle).getStr(),
-                        XML_securityDescriptor, (*it).maSecurityDescriptorXML.isEmpty() ? NULL : XclXmlUtils::ToOString( (*it).maSecurityDescriptorXML).getStr(),
+                        XML_name, (*it).maTitle.isEmpty() ? nullptr : XclXmlUtils::ToOString( (*it).maTitle).getStr(),
+                        XML_securityDescriptor, (*it).maSecurityDescriptorXML.isEmpty() ? nullptr : XclXmlUtils::ToOString( (*it).maSecurityDescriptorXML).getStr(),
                         /* XXX 'password' is not part of OOXML, but Excel2013
                          * writes it if loaded from BIFF, in which case
                          * 'algorithmName', 'hashValue', 'saltValue' and
                          * 'spinCount' are absent; so do we if it was present. */
-                        XML_password, (*it).mnPasswordVerifier ? OString::number( (*it).mnPasswordVerifier, 16).getStr() : NULL,
-                        XML_algorithmName, (*it).maAlgorithmName.isEmpty() ? NULL : XclXmlUtils::ToOString( (*it).maAlgorithmName).getStr(),
-                        XML_hashValue, (*it).maHashValue.isEmpty() ? NULL : XclXmlUtils::ToOString( (*it).maHashValue).getStr(),
-                        XML_saltValue, (*it).maSaltValue.isEmpty() ? NULL : XclXmlUtils::ToOString( (*it).maSaltValue).getStr(),
-                        XML_spinCount, (*it).mnSpinCount ? OString::number( (*it).mnSpinCount).getStr() : NULL,
-                        XML_sqref, (*it).maRangeList.Is() ? XclXmlUtils::ToOString( *(*it).maRangeList).getStr() : NULL,
+                        XML_password, (*it).mnPasswordVerifier ? OString::number( (*it).mnPasswordVerifier, 16).getStr() : nullptr,
+                        XML_algorithmName, (*it).maAlgorithmName.isEmpty() ? nullptr : XclXmlUtils::ToOString( (*it).maAlgorithmName).getStr(),
+                        XML_hashValue, (*it).maHashValue.isEmpty() ? nullptr : XclXmlUtils::ToOString( (*it).maHashValue).getStr(),
+                        XML_saltValue, (*it).maSaltValue.isEmpty() ? nullptr : XclXmlUtils::ToOString( (*it).maSaltValue).getStr(),
+                        XML_spinCount, (*it).mnSpinCount ? OString::number( (*it).mnSpinCount).getStr() : nullptr,
+                        XML_sqref, (*it).maRangeList.Is() ? XclXmlUtils::ToOString( *(*it).maRangeList).getStr() : nullptr,
                         FSEND);
             }
             rWorksheet->endElement( XML_protectedRanges);
@@ -562,7 +562,7 @@ ExcFilterCondition::ExcFilterCondition() :
         nType( EXC_AFTYPE_NOTUSED ),
         nOper( EXC_AFOPER_EQUAL ),
         fVal( 0.0 ),
-        pText( NULL )
+        pText( nullptr )
 {
 }
 
@@ -583,7 +583,7 @@ void ExcFilterCondition::SetCondition( sal_uInt8 nTp, sal_uInt8 nOp, double fV, 
     fVal = fV;
 
     delete pText;
-    (pT) ? pText = new XclExpString( *pT, EXC_STR_8BITLENGTH ) : pText =  NULL;
+    (pT) ? pText = new XclExpString( *pT, EXC_STR_8BITLENGTH ) : pText =  nullptr;
 }
 
 void ExcFilterCondition::Save( XclExpStream& rStrm )
@@ -729,9 +729,9 @@ bool XclExpAutofilter::AddEntry( const ScQueryEntry& rEntry )
 
     // empty/nonempty fields
     if (rEntry.IsQueryByEmpty())
-        bConflict = !AddCondition( rEntry.eConnect, EXC_AFTYPE_EMPTY, EXC_AFOPER_NONE, 0.0, NULL, true );
+        bConflict = !AddCondition( rEntry.eConnect, EXC_AFTYPE_EMPTY, EXC_AFOPER_NONE, 0.0, nullptr, true );
     else if(rEntry.IsQueryByNonEmpty())
-        bConflict = !AddCondition( rEntry.eConnect, EXC_AFTYPE_NOTEMPTY, EXC_AFOPER_NONE, 0.0, NULL, true );
+        bConflict = !AddCondition( rEntry.eConnect, EXC_AFTYPE_NOTEMPTY, EXC_AFOPER_NONE, 0.0, nullptr, true );
     // other conditions
     else
     {
@@ -739,7 +739,7 @@ bool XclExpAutofilter::AddEntry( const ScQueryEntry& rEntry )
         sal_uInt32  nIndex  = 0;
         bool bIsNum  = !bLen || GetFormatter().IsNumberFormat( sText, nIndex, fVal );
         OUString* pText;
-        (bIsNum) ? pText = NULL : pText = &sText;
+        (bIsNum) ? pText = nullptr : pText = &sText;
 
         // top10 flags
         sal_uInt16 nNewFlags = 0x0000;
@@ -877,8 +877,8 @@ void XclExpAutofilter::SaveXml( XclExpXmlStream& rStrm )
 
 ExcAutoFilterRecs::ExcAutoFilterRecs( const XclExpRoot& rRoot, SCTAB nTab ) :
     XclExpRoot( rRoot ),
-    pFilterMode( NULL ),
-    pFilterInfo( NULL )
+    pFilterMode( nullptr ),
+    pFilterInfo( nullptr )
     , mbAutoFilter (false)
 {
     XclExpNameManager& rNameMgr = GetNameManager();
@@ -1042,7 +1042,7 @@ void ExcAutoFilterRecs::SaveXml( XclExpXmlStream& rStrm )
 
 bool ExcAutoFilterRecs::HasFilterMode() const
 {
-    return pFilterMode != NULL;
+    return pFilterMode != nullptr;
 }
 
 XclExpFilterManager::XclExpFilterManager( const XclExpRoot& rRoot ) :

@@ -133,7 +133,7 @@ bool FuConstruct::MouseButtonDown(const MouseEvent& rMEvt)
 
         SdrHdl* pHdl = pView->PickHandle(aMDPos);
 
-        if ( pHdl != NULL || pView->IsMarkedHit(aMDPos) )
+        if ( pHdl != nullptr || pView->IsMarkedHit(aMDPos) )
         {
             pView->BegDragObj(aMDPos, nullptr, pHdl, 1);
             bReturn = true;
@@ -187,7 +187,7 @@ bool FuConstruct::MouseMove(const MouseEvent& rMEvt)
     {
         SdrHdl* pHdl=pView->PickHandle(aPnt);
 
-        if ( pHdl != NULL )
+        if ( pHdl != nullptr )
         {
             pViewShell->SetActivePointer(pHdl->GetPointer());
         }

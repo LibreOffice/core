@@ -36,7 +36,7 @@ TableColumnContext::TableColumnContext( WorksheetContextBase& rParent, TableColu
 ContextHandlerRef TableColumnContext::onCreateContext( sal_Int32 /*nElement*/, const AttributeList& /*rAttribs*/ )
 {
     /* no known child elements */
-    return 0;
+    return nullptr;
 }
 
 void TableColumnContext::onStartElement( const AttributeList& rAttribs )
@@ -47,7 +47,7 @@ void TableColumnContext::onStartElement( const AttributeList& rAttribs )
 ContextHandlerRef TableColumnContext::onCreateRecordContext( sal_Int32 /*nRecId*/, SequenceInputStream& /*rStrm*/ )
 {
     /* no known child elements */
-    return 0;
+    return nullptr;
 }
 
 void TableColumnContext::onStartRecord( SequenceInputStream& rStrm )
@@ -65,7 +65,7 @@ ContextHandlerRef TableColumnsContext::onCreateContext( sal_Int32 nElement, cons
 {
     if( (getCurrentElement() == XLS_TOKEN( tableColumns )) && (nElement == XLS_TOKEN( tableColumn )) )
         return new TableColumnContext( *this, mrTableColumns.createTableColumn() );
-    return 0;
+    return nullptr;
 }
 
 void TableColumnsContext::onStartElement( const AttributeList& rAttribs )
@@ -80,7 +80,7 @@ ContextHandlerRef TableColumnsContext::onCreateRecordContext( sal_Int32 /*nRecId
     if( (getCurrentElement() == BIFF12_ID_TABLECOLUMNS) && (nRecId == BIFF12_ID_TABLECOLUMN) )
         return new TableColumnContext( *this, mrTableColumns.createTableColumn() );
 #endif
-    return 0;
+    return nullptr;
 }
 
 void TableColumnsContext::onStartRecord( SequenceInputStream& rStrm )

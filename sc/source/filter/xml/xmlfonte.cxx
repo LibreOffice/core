@@ -49,7 +49,7 @@ void ScXMLFontAutoStylePool_Impl::AddFontItems(sal_uInt16* pWhichIds, sal_uInt8 
     {
         const SfxPoolItem* pItem;
         sal_uInt16 nWhichId(pWhichIds[i]);
-        if (bExportDefaults && (0 != (pItem = &pItemPool->GetDefaultItem(nWhichId))))
+        if (bExportDefaults && (nullptr != (pItem = &pItemPool->GetDefaultItem(nWhichId))))
         {
             const SvxFontItem *pFont(static_cast<const SvxFontItem *>(pItem));
             Add( pFont->GetFamilyName(), pFont->GetStyleName(),
@@ -59,7 +59,7 @@ void ScXMLFontAutoStylePool_Impl::AddFontItems(sal_uInt16* pWhichIds, sal_uInt8 
         sal_uInt32 nItems(pItemPool->GetItemCount2( nWhichId ));
         for( sal_uInt32 j = 0; j < nItems; ++j )
         {
-            if( 0 != (pItem = pItemPool->GetItem2( nWhichId, j ) ) )
+            if( nullptr != (pItem = pItemPool->GetItem2( nWhichId, j ) ) )
             {
                 const SvxFontItem *pFont(static_cast<const SvxFontItem *>(pItem));
                 Add( pFont->GetFamilyName(), pFont->GetStyleName(),
@@ -72,7 +72,7 @@ void ScXMLFontAutoStylePool_Impl::AddFontItems(sal_uInt16* pWhichIds, sal_uInt8 
 
 ScXMLFontAutoStylePool_Impl::ScXMLFontAutoStylePool_Impl(ScXMLExport& rExportP, bool bBlockFontEmbedding)
     : XMLFontAutoStylePool(rExportP, bBlockFontEmbedding)
-    , mpEditEnginePool(NULL)
+    , mpEditEnginePool(nullptr)
 {
     sal_uInt16 aWhichIds[3] = { ATTR_FONT, ATTR_CJK_FONT,
                                 ATTR_CTL_FONT };
@@ -110,7 +110,7 @@ ScXMLFontAutoStylePool_Impl::ScXMLFontAutoStylePool_Impl(ScXMLExport& rExportP, 
                     for (sal_uInt32 k = 0; k < nPageHFItems; ++k)
                     {
                         const ScPageHFItem* pPageItem;
-                        if (0 != (pPageItem = static_cast<const ScPageHFItem*>(rPagePool.GetItem2(nPageWhichId, k))))
+                        if (nullptr != (pPageItem = static_cast<const ScPageHFItem*>(rPagePool.GetItem2(nPageWhichId, k))))
                         {
                             const EditTextObject* pLeftArea(pPageItem->GetLeftArea());
                             if (pLeftArea)

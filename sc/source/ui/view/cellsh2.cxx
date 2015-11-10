@@ -549,7 +549,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                 {
                     OSL_FAIL("SID_FILTER with arguments?");
                     pTabViewShell->Query( static_cast<const ScQueryItem&>(
-                            pArgs->Get( SCITEM_QUERYDATA )).GetQueryData(), NULL, true );
+                            pArgs->Get( SCITEM_QUERYDATA )).GetQueryData(), nullptr, true );
                     rReq.Done();
                 }
                 else
@@ -570,7 +570,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                 {
                     OSL_FAIL("SID_SPECIAL_FILTER with arguments?");
                     pTabViewShell->Query( static_cast<const ScQueryItem&>(
-                            pArgs->Get( SCITEM_QUERYDATA )).GetQueryData(), NULL, true );
+                            pArgs->Get( SCITEM_QUERYDATA )).GetQueryData(), nullptr, true );
                     rReq.Done();
                 }
                 else
@@ -608,7 +608,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                     if (rQueryItem.GetAdvancedQuerySource(aAdvSource))
                         pTabViewShell->Query( rQueryItem.GetQueryData(), &aAdvSource, true );
                     else
-                        pTabViewShell->Query( rQueryItem.GetQueryData(), NULL, true );
+                        pTabViewShell->Query( rQueryItem.GetQueryData(), nullptr, true );
                     rReq.Done( *pReqArgs );
                 }
             }
@@ -624,7 +624,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                 for (SCSIZE i=0; i<nEC; i++)
                     aParam.GetEntry(i).bDoQuery = false;
                 aParam.bDuplicate = true;
-                pTabViewShell->Query( aParam, NULL, true );
+                pTabViewShell->Query( aParam, nullptr, true );
                 rReq.Done();
             }
             break;
@@ -844,7 +844,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                     }
 
                     // cell range picker
-                    SfxAbstractTabDialog* pDlg = pFact->CreateScValidationDlg(NULL, &aArgSet, pTabViewShell);
+                    SfxAbstractTabDialog* pDlg = pFact->CreateScValidationDlg(nullptr, &aArgSet, pTabViewShell);
                     assert(pDlg); //Dialog create fail!
 
                     short nResult = pDlg->Execute();
@@ -976,7 +976,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                     OSL_ENSURE( pFact, "ScCellShell::ExecuteDB: SID_TEXT_TO_COLUMNS - pFact is null!" );
                     std::unique_ptr<AbstractScImportAsciiDlg> pDlg(pFact->CreateScImportAsciiDlg(
-                        NULL, OUString(), &aStream, SC_TEXTTOCOLUMNS));
+                        nullptr, OUString(), &aStream, SC_TEXTTOCOLUMNS));
                     OSL_ENSURE( pDlg, "ScCellShell::ExecuteDB: SID_TEXT_TO_COLUMNS - pDlg is null!" );
 
                     if ( pDlg->Execute() == RET_OK )
@@ -1031,7 +1031,7 @@ void ScCellShell::GetDBState( SfxItemSet& rSet )
                     //  or filter,sort,subtotal (also without import)
                     bool bOk = false;
                     ScDBData* pDBData = pTabViewShell->GetDBData(false,SC_DB_OLD);
-                    if (pDBData && rDoc.GetChangeTrack() == NULL)
+                    if (pDBData && rDoc.GetChangeTrack() == nullptr)
                     {
                         if ( pDBData->HasImportParam() )
                             bOk = !pDBData->HasImportSelection();
@@ -1068,7 +1068,7 @@ void ScCellShell::GetDBState( SfxItemSet& rSet )
                 {
                     //! move ReadOnly check to idl flags
 
-                    if ( pDocSh->IsReadOnly() || rDoc.GetChangeTrack()!=NULL ||
+                    if ( pDocSh->IsReadOnly() || rDoc.GetChangeTrack()!=nullptr ||
                             GetViewData()->IsMultiMarked() )
                     {
                         rSet.DisableItem( nWhich );
@@ -1081,7 +1081,7 @@ void ScCellShell::GetDBState( SfxItemSet& rSet )
                     //  only imported data without selection
                     ScDBData* pDBData = pTabViewShell->GetDBData(false,SC_DB_OLD);
                     if (!pDBData || !pDBData->HasImportParam() || pDBData->HasImportSelection() ||
-                        rDoc.GetChangeTrack()!=NULL)
+                        rDoc.GetChangeTrack()!=nullptr)
                     {
                         rSet.DisableItem( nWhich );
                     }
@@ -1094,7 +1094,7 @@ void ScCellShell::GetDBState( SfxItemSet& rSet )
                         rSet.Put(SfxVisibilityItem(nWhich, false));
                     else
                         //  get state (BoolItem) from SfxViewFrame
-                        pTabViewShell->GetViewFrame()->GetSlotState( nWhich, NULL, &rSet );
+                        pTabViewShell->GetViewFrame()->GetSlotState( nWhich, nullptr, &rSet );
                 }
                 break;
             case SID_SBA_BRW_INSERT:

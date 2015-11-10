@@ -878,10 +878,10 @@ void ScFiltersTest::testBorderODS()
     CPPUNIT_ASSERT_MESSAGE("Failed to load border.*", xDocSh.Is());
     ScDocument& rDoc = xDocSh->GetDocument();
 
-    const editeng::SvxBorderLine* pLeft = NULL;
-    const editeng::SvxBorderLine* pTop = NULL;
-    const editeng::SvxBorderLine* pRight = NULL;
-    const editeng::SvxBorderLine* pBottom = NULL;
+    const editeng::SvxBorderLine* pLeft = nullptr;
+    const editeng::SvxBorderLine* pTop = nullptr;
+    const editeng::SvxBorderLine* pRight = nullptr;
+    const editeng::SvxBorderLine* pBottom = nullptr;
 
     rDoc.GetBorderLines( 0, 1, 0, &pLeft, &pTop, &pRight, &pBottom );
     CPPUNIT_ASSERT(!pLeft);
@@ -974,17 +974,17 @@ void ScFiltersTest::testBordersOoo33()
     CPPUNIT_ASSERT_MESSAGE("Failed to load borders_ooo33.*", xDocSh.Is());
     ScDocument& rDoc = xDocSh->GetDocument();
 
-    const editeng::SvxBorderLine* pLeft = NULL;
-    const editeng::SvxBorderLine* pTop = NULL;
-    const editeng::SvxBorderLine* pRight = NULL;
-    const editeng::SvxBorderLine* pBottom = NULL;
+    const editeng::SvxBorderLine* pLeft = nullptr;
+    const editeng::SvxBorderLine* pTop = nullptr;
+    const editeng::SvxBorderLine* pRight = nullptr;
+    const editeng::SvxBorderLine* pBottom = nullptr;
     sal_Int16 temp = 0;
     for(sal_Int16 i = 0; i<6; ++i)
     {
         for(sal_Int32 j = 0; j<22; ++j)
         {
             rDoc.GetBorderLines( i, j, 0, &pLeft, &pTop, &pRight, &pBottom );
-            if(pLeft!=NULL && pTop!=NULL && pRight!=NULL && pBottom!=NULL)
+            if(pLeft!=nullptr && pTop!=nullptr && pRight!=nullptr && pBottom!=nullptr)
             {
                 CPPUNIT_ASSERT_EQUAL(borders[temp].column, i);
                 CPPUNIT_ASSERT_EQUAL(borders[temp].row, j);
@@ -2119,7 +2119,7 @@ void ScFiltersTest::testRichTextContentODS()
     CPPUNIT_ASSERT_MESSAGE("Unexpected text.", aParaText.startsWith("Sheet name is "));
     CPPUNIT_ASSERT_MESSAGE("Sheet name field item not found.", pEditText->HasField(text::textfield::Type::TABLE));
     CPPUNIT_ASSERT_EQUAL(OUString("Sheet name is Test."), ScEditUtil::GetString(*pEditText, &rDoc));
-    CPPUNIT_ASSERT_EQUAL(OUString("Sheet name is ?."), ScEditUtil::GetString(*pEditText, NULL));
+    CPPUNIT_ASSERT_EQUAL(OUString("Sheet name is ?."), ScEditUtil::GetString(*pEditText, nullptr));
 
     // Cell with URL field item.
     aPos.IncRow();
@@ -2131,7 +2131,7 @@ void ScFiltersTest::testRichTextContentODS()
     CPPUNIT_ASSERT_MESSAGE("Unexpected text.", aParaText.startsWith("URL: "));
     CPPUNIT_ASSERT_MESSAGE("URL field item not found.", pEditText->HasField(text::textfield::Type::URL));
     CPPUNIT_ASSERT_EQUAL(OUString("URL: http://libreoffice.org"), ScEditUtil::GetString(*pEditText, &rDoc));
-    CPPUNIT_ASSERT_EQUAL(OUString("URL: http://libreoffice.org"), ScEditUtil::GetString(*pEditText, NULL));
+    CPPUNIT_ASSERT_EQUAL(OUString("URL: http://libreoffice.org"), ScEditUtil::GetString(*pEditText, nullptr));
 
     // Cell with Date field item.
     aPos.IncRow();
@@ -2143,7 +2143,7 @@ void ScFiltersTest::testRichTextContentODS()
     CPPUNIT_ASSERT_MESSAGE("Unexpected text.", aParaText.startsWith("Date: "));
     CPPUNIT_ASSERT_MESSAGE("Date field item not found.", pEditText->HasField(text::textfield::Type::DATE));
     CPPUNIT_ASSERT_MESSAGE("Date field not resolved with rDoc.", ScEditUtil::GetString(*pEditText, &rDoc).indexOf("/20") > 0);
-    CPPUNIT_ASSERT_MESSAGE("Date field not resolved with NULL.", ScEditUtil::GetString(*pEditText, NULL).indexOf("/20") > 0);
+    CPPUNIT_ASSERT_MESSAGE("Date field not resolved with NULL.", ScEditUtil::GetString(*pEditText, nullptr).indexOf("/20") > 0);
 
     // Cell with DocInfo title field item.
     aPos.IncRow();
@@ -2155,7 +2155,7 @@ void ScFiltersTest::testRichTextContentODS()
     CPPUNIT_ASSERT_MESSAGE("Unexpected text.", aParaText.startsWith("Title: "));
     CPPUNIT_ASSERT_MESSAGE("DocInfo title field item not found.", pEditText->HasField(text::textfield::Type::DOCINFO_TITLE));
     CPPUNIT_ASSERT_EQUAL(OUString("Title: Test Document"), ScEditUtil::GetString(*pEditText, &rDoc));
-    CPPUNIT_ASSERT_EQUAL(OUString("Title: ?"), ScEditUtil::GetString(*pEditText, NULL));
+    CPPUNIT_ASSERT_EQUAL(OUString("Title: ?"), ScEditUtil::GetString(*pEditText, nullptr));
 
     // Cell with sentence with both bold and italic sequences.
     aPos.IncRow();

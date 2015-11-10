@@ -56,9 +56,9 @@ using ::com::sun::star::i18n::XBreakIterator;
 XclExpProgressBar::XclExpProgressBar( const XclExpRoot& rRoot ) :
     XclExpRoot( rRoot ),
     mxProgress( new ScfProgressBar( rRoot.GetDocShell(), STR_SAVE_DOC ) ),
-    mpSubProgress( 0 ),
-    mpSubRowCreate( 0 ),
-    mpSubRowFinal( 0 ),
+    mpSubProgress( nullptr ),
+    mpSubRowCreate( nullptr ),
+    mpSubRowFinal( nullptr ),
     mnSegRowFinal( SCF_INV_SEGMENT ),
     mnRowCount( 0 )
 {
@@ -115,7 +115,7 @@ void XclExpProgressBar::ActivateCreateRowsSegment()
         mpSubProgress->ActivateSegment( nSeg );
     }
     else
-        mpSubProgress = 0;
+        mpSubProgress = nullptr;
 }
 
 void XclExpProgressBar::ActivateFinalRowsSegment()
@@ -599,7 +599,7 @@ XclExpStringRef XclExpStringHelper::CreateString(
         rEE.SetUpdateMode( true );
         // create the string
         rEE.SetText( pParaObj->GetTextObject() );
-        xString = lclCreateFormattedString( rRoot, rEE, 0, nFlags, nMaxLen );
+        xString = lclCreateFormattedString( rRoot, rEE, nullptr, nFlags, nMaxLen );
         rEE.SetUpdateMode( bOldUpdateMode );
         // limit formats - TODO: BIFF dependent
         if( !xString->IsEmpty() )
@@ -626,7 +626,7 @@ XclExpStringRef XclExpStringHelper::CreateString(
     bool bOldUpdateMode = rEE.GetUpdateMode();
     rEE.SetUpdateMode( true );
     rEE.SetText( rEditObj );
-    xString = lclCreateFormattedString( rRoot, rEE, 0, nFlags, nMaxLen );
+    xString = lclCreateFormattedString( rRoot, rEE, nullptr, nFlags, nMaxLen );
     rEE.SetUpdateMode( bOldUpdateMode );
     // limit formats - TODO: BIFF dependent
     if( !xString->IsEmpty() )
@@ -697,7 +697,7 @@ void XclExpHFConverter::AppendPortion( const EditTextObject* pTextObj, sal_Unico
     else
         aFontData.mnHeight = 10;
 
-    const FontList* pFontList = 0;
+    const FontList* pFontList = nullptr;
     if( SfxObjectShell* pDocShell = GetDocShell() )
     {
         if( const SvxFontListItem* pInfoItem = static_cast< const SvxFontListItem* >(

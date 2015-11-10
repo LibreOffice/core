@@ -115,7 +115,7 @@ public:
     /** Check whether a specified row is active or not.  When a row is active,
         it is used in calculation of the results data.  A row becomes inactive
         when it is filtered out by page field. */
-    bool isRowActive(sal_Int32 nRow, sal_Int32* pLastRow = NULL) const;
+    bool isRowActive(sal_Int32 nRow, sal_Int32* pLastRow = nullptr) const;
 
     /** Set filter on/off flag to each row to control visibility.  The caller
         must ensure that the table is filled before calling this function. */

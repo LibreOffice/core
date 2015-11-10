@@ -58,7 +58,7 @@ using namespace ::formula;
 #define MAP_EXT(name,prefix,token,type,context)  { name, sizeof(name)-1, prefix, token, type, context, SvtSaveOptions::ODFVER_012_EXT_COMPAT, false }
 // extensions import only
 #define MAP_EXT_I(name,prefix,token,type,context)  { name, sizeof(name)-1, prefix, token, type, context, SvtSaveOptions::ODFVER_012_EXT_COMPAT, true }
-#define MAP_END()   { NULL, 0, 0, XML_TOKEN_INVALID, 0, 0, SvtSaveOptions::ODFVER_010, false }
+#define MAP_END()   { nullptr, 0, 0, XML_TOKEN_INVALID, 0, 0, SvtSaveOptions::ODFVER_010, false }
 
 const XMLPropertyMapEntry aXMLScCellStylesProperties[] =
 {
@@ -193,47 +193,47 @@ void ScXMLCellExportPropertyMapper::ContextFilter(
     ::std::vector< XMLPropertyState >& rProperties,
     uno::Reference< beans::XPropertySet > rPropSet ) const
 {
-    XMLPropertyState* pPadding = NULL;
-    XMLPropertyState* pPadding_Bottom = NULL;
-    XMLPropertyState* pPadding_Left = NULL;
-    XMLPropertyState* pPadding_Right = NULL;
-    XMLPropertyState* pPadding_Top = NULL;
+    XMLPropertyState* pPadding = nullptr;
+    XMLPropertyState* pPadding_Bottom = nullptr;
+    XMLPropertyState* pPadding_Left = nullptr;
+    XMLPropertyState* pPadding_Right = nullptr;
+    XMLPropertyState* pPadding_Top = nullptr;
 
-    XMLPropertyState* pBorder = NULL;
-    XMLPropertyState* pBorder_Bottom = NULL;
-    XMLPropertyState* pBorder_Left = NULL;
-    XMLPropertyState* pBorder_Right = NULL;
-    XMLPropertyState* pBorder_Top = NULL;
-    XMLPropertyState* pSWBorder = NULL;
-    XMLPropertyState* pSWBorder_Bottom = NULL;
-    XMLPropertyState* pSWBorder_Left = NULL;
-    XMLPropertyState* pSWBorder_Right = NULL;
-    XMLPropertyState* pSWBorder_Top = NULL;
+    XMLPropertyState* pBorder = nullptr;
+    XMLPropertyState* pBorder_Bottom = nullptr;
+    XMLPropertyState* pBorder_Left = nullptr;
+    XMLPropertyState* pBorder_Right = nullptr;
+    XMLPropertyState* pBorder_Top = nullptr;
+    XMLPropertyState* pSWBorder = nullptr;
+    XMLPropertyState* pSWBorder_Bottom = nullptr;
+    XMLPropertyState* pSWBorder_Left = nullptr;
+    XMLPropertyState* pSWBorder_Right = nullptr;
+    XMLPropertyState* pSWBorder_Top = nullptr;
 
-    XMLPropertyState* pAllBorderWidthState = NULL;
-    XMLPropertyState* pLeftBorderWidthState = NULL;
-    XMLPropertyState* pRightBorderWidthState = NULL;
-    XMLPropertyState* pTopBorderWidthState = NULL;
-    XMLPropertyState* pBottomBorderWidthState = NULL;
-    XMLPropertyState* pSWAllBorderWidthState = NULL;
-    XMLPropertyState* pSWLeftBorderWidthState = NULL;
-    XMLPropertyState* pSWRightBorderWidthState = NULL;
-    XMLPropertyState* pSWTopBorderWidthState = NULL;
-    XMLPropertyState* pSWBottomBorderWidthState = NULL;
-    XMLPropertyState* pDiagonalTLBRWidthState = NULL;
-    XMLPropertyState* pDiagonalBLTRWidthState = NULL;
+    XMLPropertyState* pAllBorderWidthState = nullptr;
+    XMLPropertyState* pLeftBorderWidthState = nullptr;
+    XMLPropertyState* pRightBorderWidthState = nullptr;
+    XMLPropertyState* pTopBorderWidthState = nullptr;
+    XMLPropertyState* pBottomBorderWidthState = nullptr;
+    XMLPropertyState* pSWAllBorderWidthState = nullptr;
+    XMLPropertyState* pSWLeftBorderWidthState = nullptr;
+    XMLPropertyState* pSWRightBorderWidthState = nullptr;
+    XMLPropertyState* pSWTopBorderWidthState = nullptr;
+    XMLPropertyState* pSWBottomBorderWidthState = nullptr;
+    XMLPropertyState* pDiagonalTLBRWidthState = nullptr;
+    XMLPropertyState* pDiagonalBLTRWidthState = nullptr;
 
-    XMLPropertyState* pParaMarginLeft = NULL;
-    XMLPropertyState* pParaMarginLeftRel = NULL;
-    XMLPropertyState* pParaMarginRight = NULL;
-    XMLPropertyState* pParaMarginRightRel = NULL;
-    XMLPropertyState* pParaMarginTop = NULL;
-    XMLPropertyState* pParaMarginTopRel = NULL;
-    XMLPropertyState* pParaMarginBottom = NULL;
-    XMLPropertyState* pParaMarginBottomRel = NULL;
+    XMLPropertyState* pParaMarginLeft = nullptr;
+    XMLPropertyState* pParaMarginLeftRel = nullptr;
+    XMLPropertyState* pParaMarginRight = nullptr;
+    XMLPropertyState* pParaMarginRightRel = nullptr;
+    XMLPropertyState* pParaMarginTop = nullptr;
+    XMLPropertyState* pParaMarginTopRel = nullptr;
+    XMLPropertyState* pParaMarginBottom = nullptr;
+    XMLPropertyState* pParaMarginBottomRel = nullptr;
 
-    XMLPropertyState* pParaAdjust = NULL;
-    XMLPropertyState* pParaAdjustLast = NULL;
+    XMLPropertyState* pParaAdjust = nullptr;
+    XMLPropertyState* pParaAdjustLast = nullptr;
 
     ::std::vector< XMLPropertyState >::iterator aEndIter(rProperties.end());
     for( ::std::vector< XMLPropertyState >::iterator aIter = rProperties.begin();

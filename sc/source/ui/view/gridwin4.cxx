@@ -572,7 +572,7 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
         aOutputData.SetPagebreakMode( pViewData->GetView()->GetPageBreakData() );
     }
 
-    EditView*   pEditView = NULL;
+    EditView*   pEditView = nullptr;
     bool        bEditMode = pViewData->HasEditView(eWhich);
     if ( bEditMode && pViewData->GetRefTabNo() == nTab )
     {
@@ -630,7 +630,7 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
     }
 
     OutputDevice* pContentDev = &rDevice;   // device for document content, used by overlay manager
-    SdrPaintWindow* pTargetPaintWindow = 0; // #i74769# work with SdrPaintWindow directly
+    SdrPaintWindow* pTargetPaintWindow = nullptr; // #i74769# work with SdrPaintWindow directly
 
     {
         // init redraw
@@ -782,7 +782,7 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
     SCTAB nTabCount = rDoc.GetTableCount();
     const std::vector<ScHighlightEntry> &rHigh = pViewData->GetView()->GetHighlightRanges();
     bool bHasScenario = ( nTab+1<nTabCount && rDoc.IsScenario(nTab+1) && !rDoc.IsScenario(nTab) );
-    bool bHasChange = ( rDoc.GetChangeTrack() != NULL );
+    bool bHasChange = ( rDoc.GetChangeTrack() != nullptr );
 
     if ( bHasChange || bHasScenario || !rHigh.empty() )
     {
@@ -1320,7 +1320,7 @@ void ScGridWindow::DrawButtons(SCCOL nX1, SCCOL nX2, const ScTableInfo& rTabInfo
     SCSIZE nArrY;
     SCSIZE nQuery;
     SCTAB           nTab = pViewData->GetTabNo();
-    ScDBData*       pDBData = NULL;
+    ScDBData*       pDBData = nullptr;
     std::unique_ptr<ScQueryParam> pQueryParam;
 
     RowInfo*        pRowInfo = rTabInfo.mpRowInfo;

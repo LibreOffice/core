@@ -386,7 +386,7 @@ OUString XclImpDrawObjBase::GetObjName() const
 
 const XclObjAnchor* XclImpDrawObjBase::GetAnchor() const
 {
-    return mbHasAnchor ? &maAnchor : 0;
+    return mbHasAnchor ? &maAnchor : nullptr;
 }
 
 bool XclImpDrawObjBase::IsValidSize( const Rectangle& rAnchorRect ) const
@@ -451,7 +451,7 @@ SdrObjectPtr XclImpDrawObjBase::CreateSdrObject( XclImpDffConverter& rDffConv, c
             ( (mnObjType < 25 && mnObjType > 10) || mnObjType == 7 || mnObjType == 8 ) )
         {
             SdrUnoObj* pSdrUnoObj = dynamic_cast< SdrUnoObj* >( xSdrObj.get() );
-            if( pSdrUnoObj != NULL )
+            if( pSdrUnoObj != nullptr )
             {
                 Reference< XControlModel > xCtrlModel = pSdrUnoObj->GetUnoControlModel();
                 Reference< XPropertySet > xPropSet(xCtrlModel,UNO_QUERY);
@@ -479,7 +479,7 @@ SdrObjectPtr XclImpDrawObjBase::CreateSdrObject( XclImpDffConverter& rDffConv, c
                     //Need summary type for export
                     const static rtl::OUString sObjIdPropertyName("ObjIDinMSO");
                     const XclImpPictureObj* const pObj = dynamic_cast< const XclImpPictureObj* const >(this);
-                    if( pObj != NULL && pObj->IsOcxControl() )
+                    if( pObj != nullptr && pObj->IsOcxControl() )
                     {
                         const sal_Int16 nOCXControlType =  eCreateFromMSOCXControl;
                         Any aAny;
@@ -805,7 +805,7 @@ sal_Size XclImpDrawObjBase::DoGetProgressSize() const
 SdrObjectPtr XclImpDrawObjBase::DoCreateSdrObj( XclImpDffConverter& rDffConv, const Rectangle& ) const
 {
     rDffConv.Progress( GetProgressSize() );
-    return 0;
+    return nullptr;
 }
 
 void XclImpDrawObjBase::DoPreProcessSdrObj( XclImpDffConverter&, SdrObject& ) const
@@ -2307,7 +2307,7 @@ void XclImpOptionButtonObj::DoProcessControl( ScfPropertySet& rPropSet ) const
                 pTbxObj = dynamic_cast< XclImpOptionButtonObj* >( GetObjectManager().GetSheetDrawing( GetTab() ).FindDrawObj( pTbxObj->mnNextInGroup ).get() );
             }
             else
-                pTbxObj = NULL;
+                pTbxObj = nullptr;
         } while ( pTbxObj && !( pTbxObj->mnFirstInGroup == 1 ) );
     }
     else
@@ -3216,7 +3216,7 @@ void XclImpSolverContainer::UpdateConnection( sal_uInt32 nDffShapeId, SdrObject*
 }
 
 XclImpSimpleDffConverter::XclImpSimpleDffConverter( const XclImpRoot& rRoot, SvStream& rDffStrm ) :
-    SvxMSDffManager( rDffStrm, rRoot.GetBasePath(), 0, 0, rRoot.GetDoc().GetDrawLayer(), 1440, COL_DEFAULT, 0 ),
+    SvxMSDffManager( rDffStrm, rRoot.GetBasePath(), 0, nullptr, rRoot.GetDoc().GetDrawLayer(), 1440, COL_DEFAULT, nullptr ),
     XclImpRoot( rRoot )
 {
     SetSvxMSDffSettings( SVXMSDFF_SETTINGS_CROP_BITMAPS | SVXMSDFF_SETTINGS_IMPORT_EXCEL );
@@ -3454,7 +3454,7 @@ SdrObjectPtr XclImpDffConverter::CreateSdrObject( const XclImpPictureObj& rPicOb
                     sal_Int64 nAspects = rPicObj.IsSymbol() ? cssea::MSOLE_ICON : cssea::MSOLE_CONTENT;
                     xSdrObj.reset( CreateSdrOLEFromStorage(
                         aStrgName, xSrcStrg, pDocShell->GetStorage(), aGraphic,
-                        rAnchorRect, aVisArea, 0, nError, mnOleImpFlags, nAspects ) );
+                        rAnchorRect, aVisArea, nullptr, nError, mnOleImpFlags, nAspects ) );
                 }
             }
         }
@@ -3511,7 +3511,7 @@ SdrObject* XclImpDffConverter::ProcessObj( SvStream& rDffStrm, DffObjData& rDffO
     // Do not process the global page group shape (flag SP_FPATRIARCH)
     bool bGlobalPageGroup = ::get_flag< sal_uInt32 >( rDffObjData.nSpFlags, SP_FPATRIARCH );
     if( !xDrawObj || !xDrawObj->IsProcessSdrObj() || bGlobalPageGroup )
-        return 0;   // simply return, xSdrObj will be destroyed
+        return nullptr;   // simply return, xSdrObj will be destroyed
 
     /*  Pass pointer to top-level object back to caller. If the processed
         object is embedded in a group, the pointer is already set to the
@@ -3531,7 +3531,7 @@ SdrObject* XclImpDffConverter::ProcessObj( SvStream& rDffStrm, DffObjData& rDffO
         #i58780# Ignore group shapes, size is not initialized. */
     bool bEmbeddedGroup = !bIsTopLevel && dynamic_cast< SdrObjGroup* >( xSdrObj.get() );
     if( !bEmbeddedGroup && !xDrawObj->IsValidSize( rAnchorRect ) )
-        return 0;   // simply return, xSdrObj will be destroyed
+        return nullptr;   // simply return, xSdrObj will be destroyed
 
     // set shape information from DFF stream
     OUString aObjName = GetPropertyString( DFF_Prop_wzName, rDffStrm );
@@ -3740,7 +3740,7 @@ void XclImpDffConverter::ProcessShContainer( SvStream& rDffStrm, const DffRecord
 {
     rShHeader.SeekToBegOfRecord( rDffStrm );
     Rectangle aDummy;
-    const XclImpDrawObjBase* pDrawObj = 0;
+    const XclImpDrawObjBase* pDrawObj = nullptr;
     /*  The call to ImportObj() creates and returns a new SdrObject for the
         processed shape. We take ownership of the returned object here. If the
         shape is a group object, all embedded objects are created recursively,
@@ -3932,7 +3932,7 @@ const XclImpObjTextData* XclImpDrawing::FindTextData( const DffRecordHeader& rHe
     XclImpObjTextMap::const_iterator aIt = maTextMap.upper_bound( rHeader.GetRecBegFilePos() );
     if( (aIt != maTextMap.end()) && (aIt->first <= rHeader.GetRecEndFilePos()) )
         return aIt->second.get();
-    return 0;
+    return nullptr;
 }
 
 void XclImpDrawing::SetSkipObj( sal_uInt16 nObjId )
@@ -4293,7 +4293,7 @@ void XclImpDffPropSet::Read( XclImpStream& rStrm )
     mxMemStrm.reset( new SvMemoryStream );
     rStrm.CopyToStream( *mxMemStrm, 8 + nPropSetSize );
     mxMemStrm->Seek( STREAM_SEEK_TO_BEGIN );
-    maDffConv.ReadPropSet( *mxMemStrm, 0 );
+    maDffConv.ReadPropSet( *mxMemStrm, nullptr );
 }
 
 sal_uInt32 XclImpDffPropSet::GetPropertyValue( sal_uInt16 nPropId, sal_uInt32 nDefault ) const

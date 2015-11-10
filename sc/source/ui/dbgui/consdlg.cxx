@@ -72,7 +72,7 @@ ScConsolidateDlg::ScConsolidateDlg( SfxBindings* pB, SfxChildWindow* pCW, vcl::W
         pDoc            ( static_cast<ScTabViewShell*>(SfxViewShell::Current())->
                                 GetViewData().GetDocument() ),
         pRangeUtil      ( new ScRangeUtil ),
-        pAreaData       ( NULL ),
+        pAreaData       ( nullptr ),
         nAreaDataCount  ( 0 ),
         nWhichCons      ( rArgSet.GetPool()->GetWhich( SID_CONSOLIDATE ) ),
         bDlgLostFocus   ( false )
@@ -207,7 +207,7 @@ void ScConsolidateDlg::Init()
     size_t nDbCount = pDbNames ? pDbNames->getNamedDBs().size() : 0;
 
     nAreaDataCount = nRangeCount+nDbCount;
-    pAreaData      = NULL;
+    pAreaData      = nullptr;
 
     if ( nAreaDataCount > 0 )
     {
@@ -326,7 +326,7 @@ bool ScConsolidateDlg::VerifyEdit( formula::RefEdit* pEd )
     if ( pEd == pEdDataArea )
     {
         bEditOk = ScRangeUtil::IsAbsArea( pEd->GetText(), pDoc,
-                                         nTab, &theCompleteStr, NULL, NULL, eConv );
+                                         nTab, &theCompleteStr, nullptr, nullptr, eConv );
     }
     else if ( pEd == pEdDestArea )
     {
@@ -334,7 +334,7 @@ bool ScConsolidateDlg::VerifyEdit( formula::RefEdit* pEd )
 
         ScRangeUtil::CutPosString( pEd->GetText(), aPosStr );
         bEditOk = ScRangeUtil::IsAbsPos( aPosStr, pDoc,
-                                        nTab, &theCompleteStr, NULL, eConv );
+                                        nTab, &theCompleteStr, nullptr, eConv );
     }
 
     if ( bEditOk )
@@ -373,7 +373,7 @@ IMPL_LINK_NOARG_TYPED(ScConsolidateDlg, OkHdl, Button*, void)
         OUString    aDestPosStr( pEdDestArea->GetText() );
         const formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
 
-        if ( ScRangeUtil::IsAbsPos( aDestPosStr, pDoc, nTab, NULL, &aDestAddress, eConv ) )
+        if ( ScRangeUtil::IsAbsPos( aDestPosStr, pDoc, nTab, nullptr, &aDestAddress, eConv ) )
         {
             ScConsolidateParam  theOutParam( theConsData );
             ScArea**            ppDataAreas = new ScArea*[nDataAreaCount];
@@ -428,7 +428,7 @@ IMPL_LINK_TYPED( ScConsolidateDlg, ClickHdl, Button*, pBtn, void )
         if ( !pEdDataArea->GetText().isEmpty() )
         {
             OUString    aNewEntry( pEdDataArea->GetText() );
-            ScArea**    ppAreas = NULL;
+            ScArea**    ppAreas = nullptr;
             sal_uInt16      nAreaCount = 0;
             const formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
 
@@ -500,7 +500,7 @@ IMPL_LINK_TYPED( ScConsolidateDlg, SelectHdl, ListBox&, rLb, void )
         if (    pRangeUtil
             && (nSelPos > 0)
             && (nAreaDataCount > 0)
-            && (pAreaData != NULL) )
+            && (pAreaData != nullptr) )
         {
             if ( static_cast<size_t>(nSelPos) <= nAreaDataCount )
             {

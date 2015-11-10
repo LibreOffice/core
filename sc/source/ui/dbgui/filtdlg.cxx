@@ -58,15 +58,15 @@ ScFilterDlg::ScFilterDlg(SfxBindings* pB, SfxChildWindow* pCW, vcl::Window* pPar
     , aStrEmpty(SC_RESSTR(SCSTR_FILTER_EMPTY))
     , aStrNotEmpty(SC_RESSTR(SCSTR_FILTER_NOTEMPTY))
     , aStrColumn(SC_RESSTR(SCSTR_COLUMN))
-    , pOptionsMgr(NULL)
+    , pOptionsMgr(nullptr)
     , nWhichQuery(rArgSet.GetPool()->GetWhich(SID_QUERY))
     , theQueryData(static_cast<const ScQueryItem&>(rArgSet.Get(nWhichQuery)).GetQueryData())
-    , pOutItem(NULL)
-    , pViewData(NULL)
-    , pDoc(NULL)
+    , pOutItem(nullptr)
+    , pViewData(nullptr)
+    , pDoc(nullptr)
     , nSrcTab(0)
     , bRefInputMode(false)
-    , pTimer(NULL)
+    , pTimer(nullptr)
 {
     get(pLbConnect1,"connect1");
     get(pLbField1,"field1");
@@ -231,7 +231,7 @@ void ScFilterDlg::Init( const SfxItemSet& rArgSet )
     pLbCond4->SetSelectHdl( LINK( this, ScFilterDlg, LbSelectHdl ) );
 
     pViewData   = rQueryItem.GetViewData();
-    pDoc        = pViewData ? pViewData->GetDocument() : NULL;
+    pDoc        = pViewData ? pViewData->GetDocument() : nullptr;
     nSrcTab     = pViewData ? pViewData->GetTabNo() : static_cast<SCTAB>(0);
 
     // for easier access:
@@ -416,8 +416,8 @@ void ScFilterDlg::Init( const SfxItemSet& rArgSet )
         pEdVal4->Disable();
     }
 
-    if(pDoc!=NULL &&
-        pDoc->GetChangeTrack()!=NULL) pBtnCopyResult->Disable();
+    if(pDoc!=nullptr &&
+        pDoc->GetChangeTrack()!=nullptr) pBtnCopyResult->Disable();
     // Switch on modal mode
 //  SetDispatcherLock( true );
     //@BugID 54702 Enable/disable only in Basic class
@@ -516,7 +516,7 @@ void ScFilterDlg::UpdateValueList( size_t nList )
             WaitObject aWaiter( this );     // even if only the list box has content
 
             SCCOL nColumn = theQueryData.nCol1 + static_cast<SCCOL>(nFieldSelPos) - 1;
-            EntryList* pList = NULL;
+            EntryList* pList = nullptr;
             if (!maEntryLists.count(nColumn))
             {
                 size_t nOffset = GetSliderPos();

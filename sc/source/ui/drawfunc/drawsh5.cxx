@@ -487,7 +487,7 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
 
                         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                         OSL_ENSURE(pFact, "Dialog creation failed!");
-                        std::unique_ptr<AbstractSvxObjectNameDialog> pDlg(pFact->CreateSvxObjectNameDialog(NULL, aName));
+                        std::unique_ptr<AbstractSvxObjectNameDialog> pDlg(pFact->CreateSvxObjectNameDialog(nullptr, aName));
                         OSL_ENSURE(pDlg, "Dialog creation failed!");
 
                         pDlg->SetCheckNameHdl(LINK(this, ScDrawShell, NameObjectHdl));
@@ -556,7 +556,7 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
 
                         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                         OSL_ENSURE(pFact, "Dialog creation failed!");
-                        std::unique_ptr<AbstractSvxObjectTitleDescDialog> pDlg(pFact->CreateSvxObjectTitleDescDialog(NULL, aTitle, aDescription));
+                        std::unique_ptr<AbstractSvxObjectTitleDescDialog> pDlg(pFact->CreateSvxObjectTitleDescDialog(nullptr, aTitle, aDescription));
                         OSL_ENSURE(pDlg, "Dialog creation failed!");
 
                         if(RET_OK == pDlg->Execute())

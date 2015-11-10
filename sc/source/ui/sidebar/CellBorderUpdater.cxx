@@ -53,7 +53,7 @@ void CellBorderUpdater::UpdateCellBorder(bool bTop, bool bBot, bool bLeft, bool 
         else if( aBmpEx.IsTransparent() )
             pMskAcc = ( aMsk = aBmpEx.GetMask() ).AcquireWriteAccess();
         else
-            pMskAcc = NULL;
+            pMskAcc = nullptr;
 
         pBmpAcc->SetLineColor( ::Application::GetSettings().GetStyleSettings().GetFieldTextColor() ) ;
         pBmpAcc->SetFillColor( COL_BLACK);

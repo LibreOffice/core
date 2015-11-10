@@ -60,7 +60,7 @@ bool FuSelection::TestDetective( SdrPageView* pPV, const Point& rPos )
         {
             sal_uInt16 nHitLog = (sal_uInt16) pWindow->PixelToLogic(
                                 Size(pView->GetHitTolerancePixel(),0)).Width();
-            if (SdrObjectPrimitiveHit(*pObject, rPos, nHitLog, *pPV, 0, false))
+            if (SdrObjectPrimitiveHit(*pObject, rPos, nHitLog, *pPV, nullptr, false))
             {
                 ScViewData& rViewData = pViewShell->GetViewData();
                 ScSplitPos ePos = pViewShell->FindWindow( pWindow );
@@ -121,7 +121,7 @@ bool FuSelection::IsNoteCaptionMarked() const
 
 bool FuSelection::IsNoteCaptionClicked( const Point& rPos ) const
 {
-    SdrPageView* pPageView = pView ? pView->GetSdrPageView() : 0;
+    SdrPageView* pPageView = pView ? pView->GetSdrPageView() : nullptr;
     if( pPageView )
     {
         const ScViewData& rViewData = pViewShell->GetViewData();

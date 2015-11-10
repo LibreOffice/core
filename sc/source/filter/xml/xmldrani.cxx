@@ -77,7 +77,7 @@ SvXMLImportContext *ScXMLDatabaseRangesContext::CreateChildContext( sal_uInt16 n
                                             const OUString& rLName,
                                             const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList )
 {
-    SvXMLImportContext *pContext = 0;
+    SvXMLImportContext *pContext = nullptr;
 
     const SvXMLTokenMap& rTokenMap = GetScImport().GetDatabaseRangesElemTokenMap();
     switch( rTokenMap.Get( nPrefix, rLName ) )
@@ -224,7 +224,7 @@ SvXMLImportContext *ScXMLDatabaseRangeContext::CreateChildContext( sal_uInt16 nP
                                             const OUString& rLName,
                                             const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList )
 {
-    SvXMLImportContext *pContext = 0;
+    SvXMLImportContext *pContext = nullptr;
 
     const SvXMLTokenMap& rTokenMap = GetScImport().GetDatabaseRangeElemTokenMap();
     switch( rTokenMap.Get( nPrefix, rLName ) )
@@ -278,7 +278,7 @@ SvXMLImportContext *ScXMLDatabaseRangeContext::CreateChildContext( sal_uInt16 nP
 std::unique_ptr<ScDBData> ScXMLDatabaseRangeContext::ConvertToDBData(const OUString& rName)
 {
     if (!mbValidRange)
-        return NULL;
+        return nullptr;
 
     ScDocument* pDoc = GetScImport().GetDocument();
 
@@ -395,8 +395,8 @@ std::unique_ptr<ScDBData> ScXMLDatabaseRangeContext::ConvertToDBData(const OUStr
             }
             else
             {
-                aParam.pSubTotals[nPos] = NULL;
-                aParam.pFunctions[nPos] = NULL;
+                aParam.pSubTotals[nPos] = nullptr;
+                aParam.pFunctions[nPos] = nullptr;
             }
         }
 
@@ -532,7 +532,7 @@ SvXMLImportContext *ScXMLSourceSQLContext::CreateChildContext( sal_uInt16 nPrefi
                                             const OUString& rLName,
                                             const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList )
 {
-    SvXMLImportContext *pContext = 0;
+    SvXMLImportContext *pContext = nullptr;
 
     if ( nPrefix == XML_NAMESPACE_FORM )
     {
@@ -598,7 +598,7 @@ SvXMLImportContext *ScXMLSourceTableContext::CreateChildContext( sal_uInt16 nPre
                                             const OUString& rLName,
                                             const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList )
 {
-    SvXMLImportContext *pContext = 0;
+    SvXMLImportContext *pContext = nullptr;
 
     if ( nPrefix == XML_NAMESPACE_FORM )
     {
@@ -664,7 +664,7 @@ SvXMLImportContext *ScXMLSourceQueryContext::CreateChildContext( sal_uInt16 nPre
                                             const OUString& rLName,
                                             const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList )
 {
-    SvXMLImportContext *pContext = 0;
+    SvXMLImportContext *pContext = nullptr;
 
     if ( nPrefix == XML_NAMESPACE_FORM )
     {
@@ -723,7 +723,7 @@ SvXMLImportContext *ScXMLConResContext::CreateChildContext( sal_uInt16 nPrefix,
                                             const OUString& rLName,
                                             const css::uno::Reference<css::xml::sax::XAttributeList>& /* xAttrList */ )
 {
-    SvXMLImportContext *pContext = 0;
+    SvXMLImportContext *pContext = nullptr;
 
     if( !pContext )
         pContext = new SvXMLImportContext( GetImport(), nPrefix, rLName );
@@ -782,7 +782,7 @@ SvXMLImportContext *ScXMLSubTotalRulesContext::CreateChildContext( sal_uInt16 nP
                                             const OUString& rLName,
                                             const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList )
 {
-    SvXMLImportContext *pContext = 0;
+    SvXMLImportContext *pContext = nullptr;
 
     const SvXMLTokenMap& rTokenMap = GetScImport().GetDatabaseRangeSubTotalRulesElemTokenMap();
     switch( rTokenMap.Get( nPrefix, rLName ) )
@@ -881,7 +881,7 @@ SvXMLImportContext *ScXMLSortGroupsContext::CreateChildContext( sal_uInt16 nPref
                                             const OUString& rLName,
                                             const css::uno::Reference<css::xml::sax::XAttributeList>& /* xAttrList */ )
 {
-    SvXMLImportContext *pContext = 0;
+    SvXMLImportContext *pContext = nullptr;
 
     if( !pContext )
         pContext = new SvXMLImportContext( GetImport(), nPrefix, rLName );
@@ -930,7 +930,7 @@ SvXMLImportContext *ScXMLSubTotalRuleContext::CreateChildContext( sal_uInt16 nPr
                                             const OUString& rLName,
                                             const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList )
 {
-    SvXMLImportContext *pContext = 0;
+    SvXMLImportContext *pContext = nullptr;
 
     const SvXMLTokenMap& rTokenMap = GetScImport().GetSubTotalRulesSubTotalRuleElemTokenMap();
     switch( rTokenMap.Get( nPrefix, rLName ) )
@@ -997,7 +997,7 @@ SvXMLImportContext *ScXMLSubTotalFieldContext::CreateChildContext( sal_uInt16 nP
                                             const OUString& rLName,
                                             const css::uno::Reference<css::xml::sax::XAttributeList>& /* xAttrList */ )
 {
-    SvXMLImportContext *pContext = 0;
+    SvXMLImportContext *pContext = nullptr;
 
     if( !pContext )
         pContext = new SvXMLImportContext( GetImport(), nPrefix, rLName );

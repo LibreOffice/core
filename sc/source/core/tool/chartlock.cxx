@@ -151,7 +151,7 @@ ScTemporaryChartLock::ScTemporaryChartLock( ScDocument* pDocP ) :
 
 ScTemporaryChartLock::~ScTemporaryChartLock()
 {
-    mpDoc = 0;
+    mpDoc = nullptr;
     StopLocking();
 }
 

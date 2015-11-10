@@ -189,7 +189,7 @@ ConvErr QProToSc::Convert( const ScTokenArray*& pArray, sal_uInt16 /*nLen*/, con
     FUNC_TYPE eType;
     DefTokenId eOc;
     double nFloatArray[ nBufSize ] = {0};
-    const sal_Char* pExtString = 0;
+    const sal_Char* pExtString = nullptr;
 
     aCRD.InitFlags();
     aSRD.InitFlags();
@@ -255,37 +255,37 @@ ConvErr QProToSc::Convert( const ScTokenArray*& pArray, sal_uInt16 /*nLen*/, con
                 break;
 
             case FT_FuncFix0:
-                DoFunc( eOc, 0, NULL );
+                DoFunc( eOc, 0, nullptr );
                 break;
 
             case FT_FuncFix1:
-                DoFunc( eOc, 1, NULL );
+                DoFunc( eOc, 1, nullptr );
                 break;
 
             case FT_FuncFix2:
-                DoFunc( eOc, 2, NULL );
+                DoFunc( eOc, 2, nullptr );
                 break;
 
             case FT_FuncFix3:
-                DoFunc( eOc, 3, NULL );
+                DoFunc( eOc, 3, nullptr );
                 break;
 
             case FT_FuncFix4:
-                DoFunc( eOc, 4, NULL );
+                DoFunc( eOc, 4, nullptr );
                 break;
 
             case FT_FuncFix5:
-                DoFunc( eOc, 5, NULL );
+                DoFunc( eOc, 5, nullptr );
                 break;
 
             case FT_FuncFix6:
-                DoFunc( eOc, 6, NULL );
+                DoFunc( eOc, 6, nullptr );
                 break;
 
             case FT_DLL:{
                 eOc = IndexToDLLId( nDLLArray[ nDLLCount ] );
                 sal_uInt8 nPar = nArgArray[ nArgCount ];
-                DoFunc( eOc, nPar, NULL );
+                DoFunc( eOc, nPar, nullptr );
                 nDLLCount++;
                 nArgCount++;
                 }
@@ -313,7 +313,7 @@ ConvErr QProToSc::Convert( const ScTokenArray*& pArray, sal_uInt16 /*nLen*/, con
                 sal_uInt8 nArgs;
                 i++;
                 nArgs = nFmla[ i ];
-                DoFunc( eOc, nArgs, NULL );
+                DoFunc( eOc, nArgs, nullptr );
                 }
                 break;
 
@@ -633,7 +633,7 @@ DefTokenId QProToSc::IndexToDLLId( sal_uInt16 nIndex )
 
 const sal_Char* QProToSc::getString( sal_uInt8 nIndex )
 {
-    const sal_Char* pExtString = 0;
+    const sal_Char* pExtString = nullptr;
     switch( nIndex )
     {
         case 57:
@@ -717,7 +717,7 @@ const sal_Char* QProToSc::getString( sal_uInt8 nIndex )
             break;
 
         default:
-            pExtString = NULL;
+            pExtString = nullptr;
             break;
     }
     return pExtString;

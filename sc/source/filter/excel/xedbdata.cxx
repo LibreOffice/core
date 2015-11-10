@@ -155,7 +155,7 @@ void XclExpTablesManager::Initialize()
 XclExpTables* XclExpTablesManager::GetTablesBySheet( SCTAB nTab )
 {
     TablesMapType::iterator it = maTablesMap.find(nTab);
-    return it == maTablesMap.end() ? NULL : it->second;
+    return it == maTablesMap.end() ? nullptr : it->second;
 }
 
 XclExpTables::Entry::Entry( const ScDBData* pData, sal_Int32 nTableId ) :

@@ -30,7 +30,7 @@ ScChangeViewSettings::~ScChangeViewSettings()
 }
 
 ScChangeViewSettings::ScChangeViewSettings( const ScChangeViewSettings& r ):
-    pCommentSearcher(NULL),
+    pCommentSearcher(nullptr),
     aFirstDateTime( DateTime::EMPTY ),
     aLastDateTime( DateTime::EMPTY )
 {
@@ -57,7 +57,7 @@ ScChangeViewSettings::ScChangeViewSettings( const ScChangeViewSettings& r ):
 
 ScChangeViewSettings& ScChangeViewSettings::operator=( const ScChangeViewSettings& r )
 {
-    pCommentSearcher = NULL;
+    pCommentSearcher = nullptr;
     SetTheComment(r.aComment);
 
     aFirstDateTime  =r.aFirstDateTime;
@@ -99,7 +99,7 @@ void ScChangeViewSettings::SetTheComment(const OUString& rString)
     if(pCommentSearcher)
     {
         delete pCommentSearcher;
-        pCommentSearcher=NULL;
+        pCommentSearcher=nullptr;
     }
 
     if(!rString.isEmpty())
@@ -123,7 +123,7 @@ void ScChangeViewSettings::AdjustDateMode( const ScDocument& rDoc )
             break;
         case SvxRedlinDateMode::SAVE:
         {
-            const ScChangeAction* pLast = 0;
+            const ScChangeAction* pLast = nullptr;
             ScChangeTrack* pTrack = rDoc.GetChangeTrack();
             if ( pTrack )
             {

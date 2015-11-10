@@ -235,7 +235,7 @@ sal_uInt16 ScRowBar::GetEntrySize( SCCOLROW nEntryNo ) const
     ScDocument* pDoc = pViewData->GetDocument();
     SCTAB nTab = pViewData->GetTabNo();
     SCROW nLastRow = -1;
-    if (pDoc->RowHidden(nEntryNo, nTab, NULL, &nLastRow))
+    if (pDoc->RowHidden(nEntryNo, nTab, nullptr, &nLastRow))
         return 0;
     else
         return (sal_uInt16) ScViewData::ToPixel( pDoc->GetOriginalHeight( nEntryNo,

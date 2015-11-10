@@ -123,7 +123,7 @@ void ScDrawView::ImplClearCalcDropMarker()
     if(pDropMarker)
     {
         delete pDropMarker;
-        pDropMarker = 0L;
+        pDropMarker = nullptr;
     }
 }
 
@@ -378,8 +378,8 @@ void ScDrawView::MarkListHasChanged()
 
     //  Select Ole object?
 
-    SdrOle2Obj* pOle2Obj = NULL;
-    SdrGrafObj* pGrafObj = NULL;
+    SdrOle2Obj* pOle2Obj = nullptr;
+    SdrGrafObj* pGrafObj = nullptr;
 
     const SdrMarkList& rMarkList = GetMarkedObjectList();
     const size_t nMarkCount = rMarkList.GetMarkCount();
@@ -592,7 +592,7 @@ void ScDrawView::ModelHasChanged()
     {
         //  SdrObjEditView::ModelHasChanged will end text edit in this case,
         //  so make sure the EditEngine's undo manager is no longer used.
-        pViewData->GetViewShell()->SetDrawTextUndo(NULL);
+        pViewData->GetViewShell()->SetDrawTextUndo(nullptr);
         SetCreateMode();    // don't leave FuText in a funny state
     }
 
@@ -649,7 +649,7 @@ SdrObject* ScDrawView::GetObjectByName(const OUString& rName)
             }
         }
     }
-    return 0;
+    return nullptr;
 }
 
 //realize multi-selection of objects
@@ -657,7 +657,7 @@ SdrObject* ScDrawView::GetObjectByName(const OUString& rName)
 bool ScDrawView::SelectCurrentViewObject( const OUString& rName )
 {
     sal_uInt16 nObjectTab = 0;
-    SdrObject* pFound = NULL;
+    SdrObject* pFound = nullptr;
     bool bUnMark = false;
     SfxObjectShell* pShell = pDoc->GetDocumentShell();
     if (pShell)
@@ -712,7 +712,7 @@ bool ScDrawView::SelectObject( const OUString& rName )
     UnmarkAll();
 
     SCTAB nObjectTab = 0;
-    SdrObject* pFound = NULL;
+    SdrObject* pFound = nullptr;
 
     SfxObjectShell* pShell = pDoc->GetDocumentShell();
     if (pShell)
@@ -765,7 +765,7 @@ bool ScDrawView::SelectObject( const OUString& rName )
         MarkObj( pFound, pPV );
     }
 
-    return ( pFound != NULL );
+    return ( pFound != nullptr );
 }
 
 //If  object  is marked , return true , else return false .
@@ -806,7 +806,7 @@ SdrObject* ScDrawView::GetMarkedNoteCaption( ScDrawObjData** ppCaptData )
             return pObj;
         }
     }
-    return 0;
+    return nullptr;
 }
 
 void ScDrawView::LockCalcLayer( SdrLayerID nLayer, bool bLock )
@@ -828,13 +828,13 @@ void ScDrawView::MakeVisible( const Rectangle& rRect, vcl::Window& rWin )
 void ScDrawView::DeleteMarked()
 {
     // try to delete a note caption object with its cell note in the Calc document
-    ScDrawObjData* pCaptData = 0;
+    ScDrawObjData* pCaptData = nullptr;
     if( SdrObject* pCaptObj = GetMarkedNoteCaption( &pCaptData ) )
     {
         (void)pCaptObj; // prevent 'unused variable' compiler warning in pro builds
         ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
-        ScDocShell* pDocShell = pViewData ? pViewData->GetDocShell() : 0;
-        ::svl::IUndoManager* pUndoMgr = pDocShell ? pDocShell->GetUndoManager() : 0;
+        ScDocShell* pDocShell = pViewData ? pViewData->GetDocShell() : nullptr;
+        ::svl::IUndoManager* pUndoMgr = pDocShell ? pDocShell->GetUndoManager() : nullptr;
         bool bUndo = pDrawLayer && pDocShell && pUndoMgr && pDoc->IsUndoEnabled();
 
         // remove the cell note from document, we are its owner now
@@ -870,7 +870,7 @@ SdrEndTextEditKind ScDrawView::ScEndTextEdit()
     SdrEndTextEditKind eKind = SdrEndTextEdit();
 
     if ( bIsTextEdit && pViewData )
-        pViewData->GetViewShell()->SetDrawTextUndo(NULL);   // the "normal" undo manager
+        pViewData->GetViewShell()->SetDrawTextUndo(nullptr);   // the "normal" undo manager
 
     return eKind;
 }
@@ -943,7 +943,7 @@ void ScDrawView::SyncForGrid( SdrObject* pObj )
 // support enhanced text edit for draw objects
 SdrUndoManager* ScDrawView::getSdrUndoManagerForEnhancedTextEdit() const
 {
-    return pDoc ? dynamic_cast< SdrUndoManager* >(pDoc->GetUndoManager()) : 0;
+    return pDoc ? dynamic_cast< SdrUndoManager* >(pDoc->GetUndoManager()) : nullptr;
 }
 
 // #i123922# helper to apply a Graphic to an existing SdrObject
@@ -980,7 +980,7 @@ SdrObject* ScDrawView::ApplyGraphicToObject(
         return &rHitObject;
     }
 
-    return NULL;
+    return nullptr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -325,7 +325,7 @@ SdrObject* ScGridWindow::GetEditObject()
             return pDrView->GetTextEditObject();
     }
 
-    return NULL;
+    return nullptr;
 }
 
 void ScGridWindow::UpdateStatusPosSize()

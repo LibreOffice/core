@@ -33,14 +33,14 @@
 
 // STATIC DATA
 // Err527 Workaround
-const ScFormulaCell* pLastFormulaTreeTop = 0;
+const ScFormulaCell* pLastFormulaTreeTop = nullptr;
 
 void ScCellFormat::GetString( ScRefCellValue& rCell, sal_uLong nFormat, OUString& rString,
                               Color** ppColor, SvNumberFormatter& rFormatter, const ScDocument* pDoc,
                               bool bNullVals, bool bFormula, ScForceTextFmt eForceTextFmt,
                               bool bUseStarFormat )
 {
-    *ppColor = NULL;
+    *ppColor = nullptr;
 
     switch (rCell.meType)
     {
@@ -133,7 +133,7 @@ OUString ScCellFormat::GetString(
     bool bUseStarFormat )
 {
     OUString aString;
-    *ppColor = NULL;
+    *ppColor = nullptr;
 
     CellType eType = rDoc.GetCellType(rPos);
     switch (eType)

@@ -77,14 +77,14 @@ void ScTabBgColorDlg::GetSelectedColor( Color& rColor ) const
 void ScTabBgColorDlg::FillColorValueSets_Impl()
 {
     SfxObjectShell* pDocSh = SfxObjectShell::Current();
-    const SfxPoolItem* pItem = NULL;
+    const SfxPoolItem* pItem = nullptr;
     XColorListRef pColorList;
 
     sal_uInt16 nSelectedItem = 0;
 
     OSL_ENSURE( pDocSh, "DocShell not found!" );
 
-    if ( pDocSh && ( 0 != ( pItem = pDocSh->GetItem(SID_COLOR_TABLE) ) ) )
+    if ( pDocSh && ( nullptr != ( pItem = pDocSh->GetItem(SID_COLOR_TABLE) ) ) )
         pColorList = static_cast<const SvxColorListItem*>(pItem)->GetColorList();
     if ( !pColorList.is() )
         pColorList = XColorList::CreateStdColorList();
@@ -135,7 +135,7 @@ IMPL_LINK_NOARG_TYPED(ScTabBgColorDlg, TabBgColorOKHdl_Impl, Button*, void)
 
 ScTabBgColorDlg::ScTabBgColorValueSet::ScTabBgColorValueSet(vcl::Window* pParent, WinBits nStyle)
     : SvxColorValueSet(pParent, nStyle)
-    , m_pTabBgColorDlg(NULL)
+    , m_pTabBgColorDlg(nullptr)
 {
 }
 

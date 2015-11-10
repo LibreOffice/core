@@ -201,8 +201,8 @@ void ScDrawTextObjectBar::ExecFormText(SfxRequest& rReq)
 
 void ScDrawTextObjectBar::GetFormTextState(SfxItemSet& rSet)
 {
-    const SdrObject*    pObj        = NULL;
-    SvxFontWorkDialog*  pDlg        = NULL;
+    const SdrObject*    pObj        = nullptr;
+    SvxFontWorkDialog*  pDlg        = nullptr;
     ScDrawView*         pDrView     = pViewData->GetView()->GetScDrawView();
     const SdrMarkList&  rMarkList   = pDrView->GetMarkedObjectList();
     sal_uInt16              nId = SvxFontWorkChildWindow::GetChildWindowId();
@@ -211,7 +211,7 @@ void ScDrawTextObjectBar::GetFormTextState(SfxItemSet& rSet)
     if (pViewFrm->HasChildWindow(nId))
     {
         SfxChildWindow* pWnd = pViewFrm->GetChildWindow(nId);
-        pDlg = pWnd ? static_cast<SvxFontWorkDialog*>(pWnd->GetWindow()) : NULL;
+        pDlg = pWnd ? static_cast<SvxFontWorkDialog*>(pWnd->GetWindow()) : nullptr;
     }
 
     if ( rMarkList.GetMarkCount() == 1 )

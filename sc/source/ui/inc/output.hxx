@@ -262,8 +262,8 @@ public:
                                     SCTAB nNewTab, long nNewScrX, long nNewScrY,
                                     SCCOL nNewX1, SCROW nNewY1, SCCOL nNewX2, SCROW nNewY2,
                                     double nPixelPerTwipsX, double nPixelPerTwipsY,
-                                    const Fraction* pZoomX = NULL,
-                                    const Fraction* pZoomY = NULL );
+                                    const Fraction* pZoomX = nullptr,
+                                    const Fraction* pZoomY = nullptr );
 
                     ~ScOutputData();
 

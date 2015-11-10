@@ -63,7 +63,7 @@ ScAccessibleEditObject::ScAccessibleEditObject(
         const OUString& rDescription, EditObjectType eObjectType)
     :
     ScAccessibleContextBase(rxParent, AccessibleRole::TEXT_FRAME),
-    mpTextHelper(NULL),
+    mpTextHelper(nullptr),
     mpEditView(pEditView),
     mpWindow(pWin),
     meObjectType(eObjectType),
@@ -82,11 +82,11 @@ ScAccessibleEditObject::ScAccessibleEditObject(
         }
         else
         {
-            m_pScDoc=NULL;
+            m_pScDoc=nullptr;
         }
     }
     else
-        m_pScDoc=NULL;
+        m_pScDoc=nullptr;
 }
 
 ScAccessibleEditObject::~ScAccessibleEditObject()
@@ -185,7 +185,7 @@ Rectangle ScAccessibleEditObject::GetBoundingBoxOnScreen() const
                 MapMode aMapMode( mpEditView->GetEditEngine()->GetRefMapMode() );
                 aScreenBounds = mpWindow->LogicToPixel( mpEditView->GetOutputArea(), aMapMode );
                 Point aCellLoc = aScreenBounds.TopLeft();
-                Rectangle aWindowRect = mpWindow->GetWindowExtentsRelative( NULL );
+                Rectangle aWindowRect = mpWindow->GetWindowExtentsRelative( nullptr );
                 Point aWindowLoc = aWindowRect.TopLeft();
                 Point aPos( aCellLoc.getX() + aWindowLoc.getX(), aCellLoc.getY() + aWindowLoc.getY() );
                 aScreenBounds.SetPos( aPos );
@@ -193,7 +193,7 @@ Rectangle ScAccessibleEditObject::GetBoundingBoxOnScreen() const
         }
         else
         {
-            aScreenBounds = mpWindow->GetWindowExtentsRelative( NULL );
+            aScreenBounds = mpWindow->GetWindowExtentsRelative( nullptr );
         }
     }
 
@@ -366,7 +366,7 @@ void ScAccessibleEditObject::CreateTextHelper()
         else
         {
             pAccessibleTextData.reset
-                (new ScAccessibleEditLineTextData(NULL, mpWindow));
+                (new ScAccessibleEditLineTextData(nullptr, mpWindow));
         }
 
         ::std::unique_ptr< SvxEditSource > pEditSource (new ScAccessibilityEditSource(std::move(pAccessibleTextData)));

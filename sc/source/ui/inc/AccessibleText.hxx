@@ -166,7 +166,7 @@ public:
 
     virtual SvxTextForwarder* GetTextForwarder() override;
     virtual SvxViewForwarder* GetViewForwarder() override;
-    virtual SvxEditViewForwarder* GetEditViewForwarder( bool /* bCreate */ ) override { return NULL; }
+    virtual SvxEditViewForwarder* GetEditViewForwarder( bool /* bCreate */ ) override { return nullptr; }
 
 private:
     ScPreviewViewForwarder* mpViewForwarder;
@@ -189,7 +189,7 @@ public:
 
     virtual SvxTextForwarder* GetTextForwarder() override;
     virtual SvxViewForwarder* GetViewForwarder() override;
-    virtual SvxEditViewForwarder* GetEditViewForwarder( bool /* bCreate */ ) override { return NULL; }
+    virtual SvxEditViewForwarder* GetEditViewForwarder( bool /* bCreate */ ) override { return nullptr; }
 
 private:
     ScPreviewViewForwarder* mpViewForwarder;
@@ -215,7 +215,7 @@ public:
 
     virtual SvxTextForwarder* GetTextForwarder() override;
     virtual SvxViewForwarder* GetViewForwarder() override;
-    virtual SvxEditViewForwarder* GetEditViewForwarder( bool /* bCreate */ ) override { return NULL; }
+    virtual SvxEditViewForwarder* GetEditViewForwarder( bool /* bCreate */ ) override { return nullptr; }
 
     virtual void                UpdateData() override {  }
 private:
@@ -243,7 +243,7 @@ public:
 
     virtual SvxTextForwarder* GetTextForwarder() override;
     virtual SvxViewForwarder* GetViewForwarder() override;
-    virtual SvxEditViewForwarder* GetEditViewForwarder( bool /* bCreate */ ) override { return NULL; }
+    virtual SvxEditViewForwarder* GetEditViewForwarder( bool /* bCreate */ ) override { return nullptr; }
 
     virtual void                UpdateData() override {  }
 private:

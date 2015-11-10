@@ -60,7 +60,7 @@ ScAddInListener::~ScAddInListener()
 
 ScAddInListener* ScAddInListener::Get( uno::Reference<sheet::XVolatileResult> xVR )
 {
-    ScAddInListener* pLst = NULL;
+    ScAddInListener* pLst = nullptr;
     sheet::XVolatileResult* pComp = xVR.get();
 
     for(::std::list<ScAddInListener*>::iterator iter = aAllListeners.begin(); iter != aAllListeners.end(); ++iter)
@@ -135,7 +135,7 @@ void SAL_CALL ScAddInListener::disposing( const css::lang::EventObject& /* Sourc
     if ( xVolRes.is() )
     {
         xVolRes->removeResultListener( this );
-        xVolRes = NULL;
+        xVolRes = nullptr;
     }
 }
 

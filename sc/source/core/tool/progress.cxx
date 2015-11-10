@@ -34,12 +34,12 @@
 using namespace com::sun::star;
 
 static ScProgress theDummyInterpretProgress;
-SfxProgress*    ScProgress::pGlobalProgress = NULL;
+SfxProgress*    ScProgress::pGlobalProgress = nullptr;
 sal_uLong       ScProgress::nGlobalRange = 0;
 sal_uLong       ScProgress::nGlobalPercent = 0;
 bool            ScProgress::bGlobalNoUserBreak = true;
 ScProgress*     ScProgress::pInterpretProgress = &theDummyInterpretProgress;
-ScProgress*     ScProgress::pOldInterpretProgress = NULL;
+ScProgress*     ScProgress::pOldInterpretProgress = nullptr;
 sal_uLong       ScProgress::nInterpretProgress = 0;
 bool            ScProgress::bAllowInterpretProgress = true;
 ScDocument*     ScProgress::pInterpretDoc;
@@ -80,12 +80,12 @@ ScProgress::ScProgress(SfxObjectShell* pObjSh, const OUString& rText,
         if ( lcl_IsHiddenDocument(pObjSh) )
         {
             // loading a hidden document while a progress is active is possible - no error
-            pProgress = NULL;
+            pProgress = nullptr;
         }
         else
         {
             OSL_FAIL( "ScProgress: there can be only one!" );
-            pProgress = NULL;
+            pProgress = nullptr;
         }
     }
     else if ( SfxGetpApp()->IsDowning() )
@@ -94,7 +94,7 @@ ScProgress::ScProgress(SfxObjectShell* pObjSh, const OUString& rText,
         //  In this case a SfxProgress would produce dirt in memory.
         //TODO: Should that be this way ???
 
-        pProgress = NULL;
+        pProgress = nullptr;
     }
     else if ( pObjSh && ( pObjSh->GetCreateMode() == SfxObjectCreateMode::EMBEDDED ||
                           pObjSh->GetProgress() ||
@@ -103,7 +103,7 @@ ScProgress::ScProgress(SfxObjectShell* pObjSh, const OUString& rText,
         //  no own progress for embedded objects,
         //  no second progress if the document already has one
 
-        pProgress = NULL;
+        pProgress = nullptr;
     }
     else
     {
@@ -117,7 +117,7 @@ ScProgress::ScProgress(SfxObjectShell* pObjSh, const OUString& rText,
 
 ScProgress::ScProgress()
     : bEnabled(true)
-    , pProgress(NULL)
+    , pProgress(nullptr)
 {
     // DummyInterpret
 }
@@ -127,7 +127,7 @@ ScProgress::~ScProgress()
     if ( pProgress )
     {
         delete pProgress;
-        pGlobalProgress = NULL;
+        pGlobalProgress = nullptr;
         nGlobalRange = 0;
         nGlobalPercent = 0;
         bGlobalNoUserBreak = true;

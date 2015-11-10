@@ -323,7 +323,7 @@ void ScTabView::CheckSelectionTransfer()
             //  remove own selection
 
             pOld->ForgetView();
-            pScMod->SetSelectionTransfer( NULL );
+            pScMod->SetSelectionTransfer( nullptr );
             TransferableHelper::ClearSelection( GetActiveWin() );       // may delete pOld
         }
         // else: selection from outside: leave unchanged
@@ -449,7 +449,7 @@ void ScTabView::CursorPosChanged()
     //  Broadcast, so that other Views of the document also switch
 
     ScDocument* pDoc = aViewData.GetDocument();
-    bool bDP = NULL != pDoc->GetDPAtCursor(
+    bool bDP = nullptr != pDoc->GetDPAtCursor(
         aViewData.GetCurX(), aViewData.GetCurY(), aViewData.GetTabNo() );
     aViewData.GetViewShell()->SetPivotShell(bDP);
 
@@ -659,7 +659,7 @@ void ScTabView::TestHintWindow()
 
 bool ScTabView::HasHintWindow() const
 {
-    return mpInputHintWindow.get() != NULL;
+    return mpInputHintWindow.get() != nullptr;
 }
 
 void ScTabView::RemoveHintWindow()
@@ -696,7 +696,7 @@ static vcl::Window* lcl_GetCareWin(SfxViewFrame* pViewFrm)
         }
     }
 
-    return NULL;
+    return nullptr;
 }
 
     // adjust screen with respect to cursor position
@@ -1734,7 +1734,7 @@ void ScTabView::SetTabNo( SCTAB nTab, bool bNew, bool bExtendSelection, bool bSa
             sal_uInt16 nCurRefDlgId=pScMod->GetCurRefDlgId();
             SfxViewFrame* pViewFrm = aViewData.GetViewShell()->GetViewFrame();
             SfxChildWindow* pChildWnd = pViewFrm->GetChildWindow( nCurRefDlgId );
-            IAnyRefDialog* pRefDlg = pChildWnd ? dynamic_cast<IAnyRefDialog*>(pChildWnd->GetWindow()) : NULL;
+            IAnyRefDialog* pRefDlg = pChildWnd ? dynamic_cast<IAnyRefDialog*>(pChildWnd->GetWindow()) : nullptr;
             if (pRefDlg)
             {
                 pRefDlg->ViewShellChanged();

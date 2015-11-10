@@ -63,7 +63,7 @@ ScStatisticsInputOutputDialog::ScStatisticsInputOutputDialog(
     mAddressDetails ( mDocument->GetAddressConvention(), 0, 0 ),
     mOutputAddress  ( ScAddress::INITIALIZE_INVALID ),
     mGroupedBy      ( BY_COLUMN ),
-    mpActiveEdit    ( NULL ),
+    mpActiveEdit    ( nullptr ),
     mCurrentAddress ( pViewData->GetCurX(), pViewData->GetCurY(), pViewData->GetTabNo() ),
     mDialogLostFocus( false )
 {
@@ -200,7 +200,7 @@ IMPL_LINK_NOARG_TYPED( ScStatisticsInputOutputDialog, OkClicked, Button*, void )
 
 IMPL_LINK_TYPED( ScStatisticsInputOutputDialog, GetFocusHandler, Control&, rCtrl, void )
 {
-    mpActiveEdit = NULL;
+    mpActiveEdit = nullptr;
 
     if(      (&rCtrl == static_cast<Control*>(mpInputRangeEdit))  || (&rCtrl == static_cast<Control*>(mpInputRangeButton)) )
         mpActiveEdit = mpInputRangeEdit;

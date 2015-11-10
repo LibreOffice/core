@@ -125,7 +125,7 @@ void XclImpPageSettings::ReadHeaderFooter( XclImpStream& rStrm )
 
 void XclImpPageSettings::ReadPageBreaks( XclImpStream& rStrm )
 {
-    ScfUInt16Vec* pVec = 0;
+    ScfUInt16Vec* pVec = nullptr;
     switch( rStrm.GetRecId() )
     {
         case EXC_ID_HORPAGEBREAKS:  pVec = &maData.maHorPageBreaks;     break;

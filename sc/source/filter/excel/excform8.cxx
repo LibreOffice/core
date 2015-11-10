@@ -934,7 +934,7 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
     }
     else if( bArrayFormula )
     {
-        rpTokArray = NULL;
+        rpTokArray = nullptr;
         eRet = ConvOK;
     }
     else

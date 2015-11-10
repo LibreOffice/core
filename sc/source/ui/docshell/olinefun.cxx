@@ -84,7 +84,7 @@ bool ScOutlineDocFunc::MakeOutline( const ScRange& rRange, bool bColumns, bool b
 
     ScDocument& rDoc = rDocShell.GetDocument();
     ScOutlineTable* pTable = rDoc.GetOutlineTable( nTab, true );
-    ScOutlineTable* pUndoTab = NULL;
+    ScOutlineTable* pUndoTab = nullptr;
 
     if (bRecord && !rDoc.IsUndoEnabled())
         bRecord = false;
@@ -154,7 +154,7 @@ bool ScOutlineDocFunc::RemoveOutline( const ScRange& rRange, bool bColumns, bool
     ScOutlineTable* pTable = rDoc.GetOutlineTable( nTab );
     if (pTable)
     {
-        ScOutlineTable* pUndoTab = NULL;
+        ScOutlineTable* pUndoTab = nullptr;
         if (bRecord)
             pUndoTab = new ScOutlineTable( *pTable );
 
@@ -241,7 +241,7 @@ bool ScOutlineDocFunc::RemoveAllOutlines( SCTAB nTab, bool bRecord )
 
         SelectLevel( nTab, true,  pTable->GetColArray().GetDepth(), false, false );
         SelectLevel( nTab, false, pTable->GetRowArray().GetDepth(), false, false );
-        rDoc.SetOutlineTable( nTab, NULL );
+        rDoc.SetOutlineTable( nTab, nullptr );
 
         rDoc.UpdatePageBreaks( nTab );
 
@@ -272,8 +272,8 @@ bool ScOutlineDocFunc::AutoOutline( const ScRange& rRange, bool bRecord )
         bRecord = false;
     ScOutlineTable* pTable = rDoc.GetOutlineTable( nTab );
 
-    ScDocument* pUndoDoc = NULL;
-    ScOutlineTable* pUndoTab = NULL;
+    ScDocument* pUndoDoc = nullptr;
+    ScOutlineTable* pUndoTab = nullptr;
 
     if ( pTable )
     {
@@ -298,7 +298,7 @@ bool ScOutlineDocFunc::AutoOutline( const ScRange& rRange, bool bRecord )
         // einblenden
         SelectLevel( nTab, true,  pTable->GetColArray().GetDepth(), false, false );
         SelectLevel( nTab, false, pTable->GetRowArray().GetDepth(), false, false );
-        rDoc.SetOutlineTable( nTab, NULL );
+        rDoc.SetOutlineTable( nTab, nullptr );
     }
 
     rDoc.DoAutoOutline( nStartCol,nStartRow, nEndCol,nEndRow, nTab );
@@ -363,7 +363,7 @@ bool ScOutlineDocFunc::SelectLevel( SCTAB nTab, bool bColumns, sal_uInt16 nLevel
 
     ScSubOutlineIterator aIter( &rArray );                   // alle Eintraege
     ScOutlineEntry* pEntry;
-    while ((pEntry=aIter.GetNext()) != NULL)
+    while ((pEntry=aIter.GetNext()) != nullptr)
     {
         sal_uInt16 nThisLevel = aIter.LastLevel();
         bool bShow = (nThisLevel < nLevel);
@@ -392,7 +392,7 @@ bool ScOutlineDocFunc::SelectLevel( SCTAB nTab, bool bColumns, sal_uInt16 nLevel
             {
                 // show several rows together, don't show filtered rows
                 SCROW nFilterEnd = i;
-                bool bFiltered = rDoc.RowFiltered( i, nTab, NULL, &nFilterEnd );
+                bool bFiltered = rDoc.RowFiltered( i, nTab, nullptr, &nFilterEnd );
                 nFilterEnd = std::min( nThisEnd, nFilterEnd );
                 if ( !bShow || !bFiltered )
                     rDoc.ShowRows( i, nFilterEnd, nTab, bShow );
@@ -458,7 +458,7 @@ bool ScOutlineDocFunc::ShowMarkedOutlines( const ScRange& rRange, bool bRecord )
         nMax=0;
         ScOutlineArray& rColArray = pTable->GetColArray();
         ScSubOutlineIterator aColIter( &rColArray );
-        while ((pEntry=aColIter.GetNext()) != NULL)
+        while ((pEntry=aColIter.GetNext()) != nullptr)
         {
             nStart = pEntry->GetStart();
             nEnd   = pEntry->GetEnd();
@@ -479,7 +479,7 @@ bool ScOutlineDocFunc::ShowMarkedOutlines( const ScRange& rRange, bool bRecord )
         nMax=0;
         ScOutlineArray& rRowArray = pTable->GetRowArray();
         ScSubOutlineIterator aRowIter( &rRowArray );
-        while ((pEntry=aRowIter.GetNext()) != NULL)
+        while ((pEntry=aRowIter.GetNext()) != nullptr)
         {
             nStart = pEntry->GetStart();
             nEnd   = pEntry->GetEnd();
@@ -495,7 +495,7 @@ bool ScOutlineDocFunc::ShowMarkedOutlines( const ScRange& rRange, bool bRecord )
         {
             // show several rows together, don't show filtered rows
             SCROW nFilterEnd = i;
-            bool bFiltered = rDoc.RowFiltered( i, nTab, NULL, &nFilterEnd );
+            bool bFiltered = rDoc.RowFiltered( i, nTab, nullptr, &nFilterEnd );
             nFilterEnd = std::min( nMax, nFilterEnd );
             if ( !bFiltered )
                 rDoc.ShowRows( i, nFilterEnd, nTab, true );
@@ -653,7 +653,7 @@ bool ScOutlineDocFunc::ShowOutline( SCTAB nTab, bool bColumns, sal_uInt16 nLevel
         {
             // show several rows together, don't show filtered rows
             SCROW nFilterEnd = i;
-            bool bFiltered = rDoc.RowFiltered( i, nTab, NULL, &nFilterEnd );
+            bool bFiltered = rDoc.RowFiltered( i, nTab, nullptr, &nFilterEnd );
             nFilterEnd = std::min( nEnd, nFilterEnd );
             if ( !bFiltered )
                 rDoc.ShowRows( i, nFilterEnd, nTab, true );
@@ -662,7 +662,7 @@ bool ScOutlineDocFunc::ShowOutline( SCTAB nTab, bool bColumns, sal_uInt16 nLevel
     }
 
     ScSubOutlineIterator aIter( &rArray, nLevel, nEntry );
-    while ((pEntry=aIter.GetNext()) != NULL)
+    while ((pEntry=aIter.GetNext()) != nullptr)
     {
         if ( pEntry->IsHidden() )
         {

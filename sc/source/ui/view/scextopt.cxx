@@ -94,7 +94,7 @@ ScExtTabSettingsCont& ScExtTabSettingsCont::operator=( const ScExtTabSettingsCon
 const ScExtTabSettings* ScExtTabSettingsCont::GetTabSettings( SCTAB nTab ) const
 {
     ScExtTabSettingsMap::const_iterator aIt = maMap.find( nTab );
-    return (aIt == maMap.end()) ? 0 : aIt->second.get();
+    return (aIt == maMap.end()) ? nullptr : aIt->second.get();
 }
 
 ScExtTabSettings& ScExtTabSettingsCont::GetOrCreateTabSettings( SCTAB nTab )

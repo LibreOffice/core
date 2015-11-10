@@ -50,7 +50,7 @@ SvXMLImportContext *ScXMLDDELinksContext::CreateChildContext( sal_uInt16 nPrefix
                                             const OUString& rLName,
                                             const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList )
 {
-    SvXMLImportContext *pContext = 0;
+    SvXMLImportContext *pContext = nullptr;
 
     if ((nPrefix == XML_NAMESPACE_TABLE) && IsXMLToken(rLName, XML_DDE_LINK))
         pContext = new ScXMLDDELinkContext(GetScImport(), nPrefix, rLName, xAttrList);
@@ -91,7 +91,7 @@ SvXMLImportContext *ScXMLDDELinkContext::CreateChildContext( sal_uInt16 nPrefix,
                                             const OUString& rLName,
                                             const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList )
 {
-    SvXMLImportContext *pContext = 0;
+    SvXMLImportContext *pContext = nullptr;
 
     if ((nPrefix == XML_NAMESPACE_OFFICE) && IsXMLToken(rLName, XML_DDE_SOURCE))
         pContext = new ScXMLDDESourceContext(GetScImport(), nPrefix, rLName, xAttrList, this);
@@ -265,7 +265,7 @@ SvXMLImportContext *ScXMLDDETableContext::CreateChildContext( sal_uInt16 nPrefix
                                             const OUString& rLName,
                                             const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList )
 {
-    SvXMLImportContext *pContext = NULL;
+    SvXMLImportContext *pContext = nullptr;
 
     if (nPrefix == XML_NAMESPACE_TABLE)
     {
@@ -368,7 +368,7 @@ SvXMLImportContext *ScXMLDDERowContext::CreateChildContext( sal_uInt16 nPrefix,
                                             const OUString& rLName,
                                             const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList )
 {
-    SvXMLImportContext *pContext = NULL;
+    SvXMLImportContext *pContext = nullptr;
 
     if (nPrefix == XML_NAMESPACE_TABLE)
         if (IsXMLToken(rLName, XML_TABLE_CELL))

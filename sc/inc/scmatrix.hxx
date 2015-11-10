@@ -377,7 +377,7 @@ public:
     double GetMinValue( bool bTextAsZero ) const;
 
     ScMatrixRef CompareMatrix(
-        sc::Compare& rComp, size_t nMatPos, sc::CompareOptions* pOptions = NULL ) const;
+        sc::Compare& rComp, size_t nMatPos, sc::CompareOptions* pOptions = nullptr ) const;
 
     /**
      * Convert the content of matrix into a linear array of numeric values.

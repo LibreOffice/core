@@ -160,7 +160,7 @@ GroupShapeContext::GroupShapeContext( ContextHandler2Helper& rParent,
             return new GroupShapeContext( rParent, rHelper, rxParentShape, xShape );
         }
     }
-    return 0;
+    return nullptr;
 }
 
 ContextHandlerRef GroupShapeContext::onCreateContext(
@@ -226,7 +226,7 @@ ContextHandlerRef DrawingFragment::onCreateContext( sal_Int32 nElement, const At
             }
         break;
     }
-    return 0;
+    return nullptr;
 }
 
 void DrawingFragment::onCharacters( const OUString& rChars )
@@ -504,7 +504,7 @@ Reference< XShape > VmlDrawing::createAndInsertClientXShape( const ::oox::vml::S
                 /*  Move top border of groupbox up by half font height, because
                     Excel specifies Y position of the groupbox border line
                     instead the top border of the caption text. */
-                if( const ::oox::vml::TextFontModel* pFontModel = pTextBox ? pTextBox->getFirstFont() : 0 )
+                if( const ::oox::vml::TextFontModel* pFontModel = pTextBox ? pTextBox->getFirstFont() : nullptr )
                 {
                     sal_Int32 nFontHeightHmm = getUnitConverter().scaleToMm100( pFontModel->monSize.get( 160 ), UNIT_TWIP );
                     sal_Int32 nYDiff = ::std::min< sal_Int32 >( nFontHeightHmm / 2, aShapeRect.Y );

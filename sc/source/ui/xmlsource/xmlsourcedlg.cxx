@@ -70,7 +70,7 @@ ScXMLSourceDlg::ScXMLSourceDlg(
     SfxBindings* pB, SfxChildWindow* pCW, vcl::Window* pParent, ScDocument* pDoc)
     : ScAnyRefDlg(pB, pCW, pParent, "XMLSourceDialog",
         "modules/scalc/ui/xmlsourcedialog.ui")
-    , mpCurRefEntry(NULL)
+    , mpCurRefEntry(nullptr)
     , mpDoc(pDoc)
     , mbDlgLostFocus(false)
 {
@@ -82,7 +82,7 @@ ScXMLSourceDlg::ScXMLSourceDlg(
     mpLbTree->set_width_request(aTreeSize.Width());
     mpLbTree->set_height_request(aTreeSize.Height());
     get(mpRefEdit, "edit");
-    mpRefEdit->SetReferences(this, NULL);
+    mpRefEdit->SetReferences(this, nullptr);
     get(mpRefBtn, "ref");
     mpRefBtn->SetReferences(this, mpRefEdit);
     get(mpBtnCancel, "cancel");
@@ -227,7 +227,7 @@ void ScXMLSourceDlg::LoadSourceFileStructure(const OUString& rPath)
 
 void ScXMLSourceDlg::HandleGetFocus(Control* pCtrl)
 {
-    mpActiveEdit = NULL;
+    mpActiveEdit = nullptr;
     if (pCtrl == mpRefEdit || pCtrl == mpRefBtn)
         mpActiveEdit = mpRefEdit;
 
@@ -263,7 +263,7 @@ public:
 SvTreeListEntry* getReferenceEntry(SvTreeListBox& rTree, SvTreeListEntry* pCurEntry)
 {
     SvTreeListEntry* pParent = rTree.GetParent(pCurEntry);
-    SvTreeListEntry* pRefEntry = NULL;
+    SvTreeListEntry* pRefEntry = nullptr;
     while (pParent)
     {
         ScOrcusXMLTreeParam::EntryData* pUserData = ScOrcusXMLTreeParam::getUserData(*pParent);

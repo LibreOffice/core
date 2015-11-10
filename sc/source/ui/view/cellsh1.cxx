@@ -750,7 +750,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     if( ! rReq.IsAPI() )
                     {
                         OUString  aPara;
-                        Color*  pColor=0;
+                        Color*  pColor=nullptr;
 
                         switch( eFillDir )
                         {
@@ -1746,7 +1746,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                         if( xInit.is() )
                         {
                             //  initialize dialog
-                            Reference< awt::XWindow > xDialogParentWindow(0);
+                            Reference< awt::XWindow > xDialogParentWindow(nullptr);
                             Sequence<Any> aSeq(1);
                             Any* pArray = aSeq.getArray();
                             PropertyValue aParam;
@@ -2314,7 +2314,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
             {
                 OUString aChars, aFontName;
                 const SfxItemSet *pArgs = rReq.GetArgs();
-                const SfxPoolItem* pItem = 0;
+                const SfxPoolItem* pItem = nullptr;
                 if ( pArgs )
                     pArgs->GetItemState(GetPool().GetWhich(SID_CHARMAP), false, &pItem);
                 if ( pItem )

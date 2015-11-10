@@ -235,7 +235,7 @@ const uno::Sequence<sal_Int8>& ScCellSearchObj::getUnoTunnelId()
 
 ScCellSearchObj* ScCellSearchObj::getImplementation(const uno::Reference<util::XSearchDescriptor>& rObj)
 {
-    ScCellSearchObj* pRet = NULL;
+    ScCellSearchObj* pRet = nullptr;
     uno::Reference<lang::XUnoTunnel> xUT(rObj, uno::UNO_QUERY);
     if (xUT.is())
         pRet = reinterpret_cast<ScCellSearchObj*>(sal::static_int_cast<sal_IntPtr>(xUT->getSomething(getUnoTunnelId())));

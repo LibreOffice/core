@@ -80,7 +80,7 @@ const ScCellValue& ScMyCellInfo::CreateCell( ScDocument* pDoc )
 
 ScMyDeleted::ScMyDeleted()
     : nID(0)
-    , pCellInfo(NULL)
+    , pCellInfo(nullptr)
 {
 }
 
@@ -128,7 +128,7 @@ ScMyInsAction::~ScMyInsAction()
 ScMyDelAction::ScMyDelAction(const ScChangeActionType nActionTypeP)
     : ScMyBaseAction(nActionTypeP),
     aGeneratedList(),
-    pInsCutOff(NULL),
+    pInsCutOff(nullptr),
     aMoveCutOffs(),
     nD(0)
 {
@@ -142,7 +142,7 @@ ScMyDelAction::~ScMyDelAction()
 ScMyMoveAction::ScMyMoveAction()
     : ScMyBaseAction(SC_CAT_MOVE),
     aGeneratedList(),
-    pMoveRanges(NULL)
+    pMoveRanges(nullptr)
 {
 }
 
@@ -153,7 +153,7 @@ ScMyMoveAction::~ScMyMoveAction()
 
 ScMyContentAction::ScMyContentAction()
     : ScMyBaseAction(SC_CAT_CONTENT),
-    pCellInfo(NULL)
+    pCellInfo(nullptr)
 {
 }
 
@@ -173,9 +173,9 @@ ScMyRejAction::~ScMyRejAction()
 
 ScXMLChangeTrackingImportHelper::ScXMLChangeTrackingImportHelper() :
     aActions(),
-    pDoc(NULL),
-    pTrack(NULL),
-    pCurrentAction(NULL),
+    pDoc(nullptr),
+    pTrack(nullptr),
+    pCurrentAction(nullptr),
     sIDPrefix(SC_CHANGE_ID_PREFIX),
     nMultiSpanned(0),
     nMultiSpannedSlaveCount(0),
@@ -426,7 +426,7 @@ void ScXMLChangeTrackingImportHelper::EndChangeAction()
         OSL_FAIL("no current action");
     }
 
-    pCurrentAction = NULL;
+    pCurrentAction = nullptr;
 }
 
 void ScXMLChangeTrackingImportHelper::ConvertInfo(const ScMyActionInfo& aInfo, OUString& rUser, DateTime& aDateTime)
@@ -489,7 +489,7 @@ ScChangeAction* ScXMLChangeTrackingImportHelper::CreateMoveAction(ScMyMoveAction
             pAction->pMoveRanges->aTargetRange, aUser, aDateTime, sComment, pAction->pMoveRanges->aSourceRange , pTrack);
         return pNewAction;
     }
-    return NULL;
+    return nullptr;
 }
 
 ScChangeAction* ScXMLChangeTrackingImportHelper::CreateRejectionAction(ScMyRejAction* pAction)
@@ -807,7 +807,7 @@ void ScXMLChangeTrackingImportHelper::CreateChangeTrack(ScDocument* pTempDoc)
         ScMyActions::iterator aEndItr(aActions.end());
         while (aItr != aEndItr)
         {
-            ScChangeAction* pAction = NULL;
+            ScChangeAction* pAction = nullptr;
 
             switch ((*aItr)->nActionType)
             {

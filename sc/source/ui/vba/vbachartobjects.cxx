@@ -94,7 +94,7 @@ ScVbaChartObjects::getChartObjectNames() throw( css::script::BasicErrorException
         // c++ hackery
         uno::Reference< uno::XInterface > xIf( xDrawPageSupplier, uno::UNO_QUERY_THROW );
         ScCellRangesBase* pUno= dynamic_cast< ScCellRangesBase* >( xIf.get() );
-        ScDocShell* pDocShell = NULL;
+        ScDocShell* pDocShell = nullptr;
         if ( !pUno )
             throw uno::RuntimeException("Failed to obtain the impl class from the drawpage" );
         pDocShell = pUno->GetDocShell();

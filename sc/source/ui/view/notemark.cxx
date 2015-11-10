@@ -47,8 +47,8 @@ ScNoteMarker::ScNoteMarker( vcl::Window* pWin, vcl::Window* pRight, vcl::Window*
     aMapMode( rMap ),
     bLeft( bLeftEdge ),
     bByKeyboard( bKeyboard ),
-    pModel( NULL ),
-    pObject( NULL ),
+    pModel( nullptr ),
+    pObject( nullptr ),
     bVisible( false )
 {
     Size aSizePixel = pWindow->GetOutputSizePixel();
@@ -77,7 +77,7 @@ IMPL_LINK_NOARG_TYPED(ScNoteMarker, TimeHdl, Timer *, void)
     {
         SvtPathOptions aPathOpt;
         OUString aPath = aPathOpt.GetPalettePath();
-        pModel = new SdrModel(aPath, NULL, NULL, false, false);
+        pModel = new SdrModel(aPath, nullptr, nullptr, false, false);
         pModel->SetScaleUnit(MAP_100TH_MM);
         SfxItemPool& rPool = pModel->GetItemPool();
         rPool.SetDefaultMetric(SFX_MAPUNIT_100TH_MM);

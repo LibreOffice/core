@@ -220,7 +220,7 @@ SdrObject* FuConstRectangle::CreateDefaultObject(const sal_uInt16 nID, const Rec
 {
     SdrObject* pObj = SdrObjFactory::MakeNewObject(
         pView->GetCurrentObjInventor(), pView->GetCurrentObjIdentifier(),
-        0L, pDrDoc);
+        nullptr, pDrDoc);
 
     if(pObj)
     {

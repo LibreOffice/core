@@ -113,7 +113,7 @@ void ScViewFunc::PasteRTF( SCCOL nStartCol, SCROW nStartRow,
             if (nEndRow > MAXROW)
                 nEndRow = MAXROW;
 
-            ScDocument* pUndoDoc = NULL;
+            ScDocument* pUndoDoc = nullptr;
             if (bRecord)
             {
                 pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
@@ -146,7 +146,7 @@ void ScViewFunc::PasteRTF( SCCOL nStartCol, SCROW nStartRow,
                 aDestMark.SetMarkArea( aMarkRange );
                 pDocSh->GetUndoManager()->AddUndoAction(
                     new ScUndoPaste( pDocSh, aMarkRange, aDestMark,
-                                     pUndoDoc, pRedoDoc, InsertDeleteFlags::ALL, NULL));
+                                     pUndoDoc, pRedoDoc, InsertDeleteFlags::ALL, nullptr));
             }
         }
 
@@ -205,7 +205,7 @@ void ScViewFunc::DoRefConversion( bool bRecord )
     ScDocShell* pDocSh = GetViewData().GetDocShell();
     bool bOk = false;
 
-    ScDocument* pUndoDoc = NULL;
+    ScDocument* pUndoDoc = nullptr;
     if (bRecord)
     {
         pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
@@ -309,7 +309,7 @@ void ScViewFunc::DoThesaurus( bool bRecord )
     ScMarkData& rMark = GetViewData().GetMarkData();
     ScSplitPos eWhich = GetViewData().GetActivePart();
     EESpellState eState;
-    EditView* pEditView = NULL;
+    EditView* pEditView = nullptr;
     std::unique_ptr<ESelection> pEditSel;
     std::unique_ptr<ScEditEngineDefaulter> pThesaurusEngine;
     bool bIsEditMode = GetViewData().HasEditView(eWhich);
@@ -352,7 +352,7 @@ void ScViewFunc::DoThesaurus( bool bRecord )
     pThesaurusEngine->SetRefDevice(GetViewData().GetActiveWin());
     pThesaurusEngine->SetSpeller(xSpeller);
     MakeEditView(pThesaurusEngine.get(), nCol, nRow );
-    const ScPatternAttr* pPattern = NULL;
+    const ScPatternAttr* pPattern = nullptr;
     std::unique_ptr<SfxItemSet> pEditDefaults(
         new SfxItemSet(pThesaurusEngine->GetEmptyItemSet()));
     pPattern = rDoc.GetPattern(nCol, nRow, nTab);
@@ -435,7 +435,7 @@ void ScViewFunc::DoSheetConversion( const ScConversionParam& rConvParam, bool bR
     ScDocument& rDoc = pDocSh->GetDocument();
     ScMarkData& rMark = rViewData.GetMarkData();
     ScSplitPos eWhich = rViewData.GetActivePart();
-    EditView* pEditView = NULL;
+    EditView* pEditView = nullptr;
     bool bIsEditMode = rViewData.HasEditView(eWhich);
     if (bRecord && !rDoc.IsUndoEnabled())
         bRecord = false;
@@ -465,8 +465,8 @@ void ScViewFunc::DoSheetConversion( const ScConversionParam& rConvParam, bool bR
         }
     }
 
-    ScDocument* pUndoDoc = NULL;
-    ScDocument* pRedoDoc = NULL;
+    ScDocument* pUndoDoc = nullptr;
+    ScDocument* pRedoDoc = nullptr;
     if (bRecord)
     {
         pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
@@ -554,7 +554,7 @@ void ScViewFunc::DoSheetConversion( const ScConversionParam& rConvParam, bool bR
 
     // *** final cleanup *** --------------------------------------------------
 
-    rViewData.SetSpellingView( NULL );
+    rViewData.SetSpellingView( nullptr );
     KillEditView(true);
     pEngine.reset();
     pDocSh->PostPaintGridAll();
@@ -575,7 +575,7 @@ bool ScViewFunc::PasteFile( const Point& rPos, const OUString& rFile, bool bLink
     if( ::avmedia::MediaWindow::isMediaURL( aStrURL, ""/*TODO?*/ ) )
     {
         const SfxStringItem aMediaURLItem( SID_INSERT_AVMEDIA, aStrURL );
-        return ( 0 != GetViewData().GetDispatcher().Execute(
+        return ( nullptr != GetViewData().GetDispatcher().Execute(
                                 SID_INSERT_AVMEDIA, SfxCallMode::SYNCHRON,
                                 &aMediaURLItem, 0L ) );
     }
@@ -583,7 +583,7 @@ bool ScViewFunc::PasteFile( const Point& rPos, const OUString& rFile, bool bLink
     if (!bLink)     // for bLink only graphics or URL
     {
         // 1. can I open the file?
-        const SfxFilter* pFlt = NULL;
+        const SfxFilter* pFlt = nullptr;
 
         // search only for its own filters, without selection box (as in ScDocumentLoader)
         SfxFilterMatcher aMatcher( ScDocShell::Factory().GetFilterContainer()->GetName() );
@@ -604,7 +604,7 @@ bool ScViewFunc::PasteFile( const Point& rPos, const OUString& rFile, bool bLink
 
             // Open Asynchronously, because it can also happen from D&D
             // and that is not so good for the MAC...
-            return ( 0 != rDispatcher.Execute( SID_OPENDOC,
+            return ( nullptr != rDispatcher.Execute( SID_OPENDOC,
                                     SfxCallMode::ASYNCHRON, &aFileNameItem, &aFilterItem, &aTargetItem, 0L) );
         }
     }
@@ -722,7 +722,7 @@ void ScViewFunc::InsertBookmark( const OUString& rDescription, const OUString& r
     sal_Int32 nTxtLen = aEngine.GetTextLen(nPara);
     ESelection aInsSel( nPara, nTxtLen, nPara, nTxtLen );
 
-    if ( bTryReplace && HasBookmarkAtCursor( NULL ) )
+    if ( bTryReplace && HasBookmarkAtCursor( nullptr ) )
     {
         //  if called from hyperlink slot and cell contains only a URL,
         //  replace old URL with new one

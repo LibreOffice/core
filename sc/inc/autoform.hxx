@@ -75,7 +75,7 @@ struct AutoFormatSwBlob : ::boost::noncopyable
     sal_uInt8 *pData;
     sal_Size size;
 
-    AutoFormatSwBlob() : pData(0), size(0)
+    AutoFormatSwBlob() : pData(nullptr), size(0)
     {
     }
 
@@ -87,7 +87,7 @@ struct AutoFormatSwBlob : ::boost::noncopyable
     void Reset()
     {
         delete[] pData;
-        pData = 0;
+        pData = nullptr;
         size = 0;
     }
 };

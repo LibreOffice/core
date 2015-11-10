@@ -511,7 +511,7 @@ void ScVbaWorksheets::PrintPreview( const css::uno::Any& /*EnableChanges*/ ) thr
     // need test, print preview current active sheet
     // !! TODO !! get view shell from controller
     ScTabViewShell* pViewShell = excel::getBestViewShell( mxModel );
-    SfxViewFrame* pViewFrame = NULL;
+    SfxViewFrame* pViewFrame = nullptr;
     if ( pViewShell )
         pViewFrame = pViewShell->GetViewFrame();
     if ( pViewFrame )

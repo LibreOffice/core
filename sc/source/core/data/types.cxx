@@ -13,7 +13,7 @@
 namespace sc {
 
 RangeMatrix::RangeMatrix() :
-    mpMat(NULL), mnCol1(-1), mnRow1(-1), mnTab1(-1), mnCol2(-1), mnRow2(-1), mnTab2(-1) {}
+    mpMat(nullptr), mnCol1(-1), mnRow1(-1), mnTab1(-1), mnCol2(-1), mnRow2(-1), mnTab2(-1) {}
 
 bool RangeMatrix::isRangeValid() const
 {

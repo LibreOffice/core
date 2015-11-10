@@ -41,16 +41,16 @@ static SfxItemInfo const aMsgItemInfos[] =
 ScMessagePool::ScMessagePool()
     :   SfxItemPool         ( OUString("ScMessagePool"),
                               MSGPOOL_START, MSGPOOL_END,
-                              aMsgItemInfos, NULL ),
+                              aMsgItemInfos, nullptr ),
 
     aGlobalStringItem       ( SfxStringItem         ( SCITEM_STRING, OUString() ) ),
     aGlobalSearchItem       ( SvxSearchItem         ( SCITEM_SEARCHDATA ) ),
-    aGlobalSortItem         ( ScSortItem            ( SCITEM_SORTDATA, NULL ) ),
-    aGlobalQueryItem        ( ScQueryItem           ( SCITEM_QUERYDATA, NULL, NULL ) ),
-    aGlobalSubTotalItem     ( ScSubTotalItem        ( SCITEM_SUBTDATA, NULL, NULL ) ),
-    aGlobalConsolidateItem  ( ScConsolidateItem     ( SCITEM_CONSOLIDATEDATA, NULL ) ),
-    aGlobalPivotItem        ( ScPivotItem           ( SCITEM_PIVOTDATA, NULL, NULL, false ) ),
-    aGlobalSolveItem        ( ScSolveItem           ( SCITEM_SOLVEDATA, NULL ) ),
+    aGlobalSortItem         ( ScSortItem            ( SCITEM_SORTDATA, nullptr ) ),
+    aGlobalQueryItem        ( ScQueryItem           ( SCITEM_QUERYDATA, nullptr, nullptr ) ),
+    aGlobalSubTotalItem     ( ScSubTotalItem        ( SCITEM_SUBTDATA, nullptr, nullptr ) ),
+    aGlobalConsolidateItem  ( ScConsolidateItem     ( SCITEM_CONSOLIDATEDATA, nullptr ) ),
+    aGlobalPivotItem        ( ScPivotItem           ( SCITEM_PIVOTDATA, nullptr, nullptr, false ) ),
+    aGlobalSolveItem        ( ScSolveItem           ( SCITEM_SOLVEDATA, nullptr ) ),
     aGlobalUserListItem     ( ScUserListItem        ( SCITEM_USERLIST ) ),
 
     aPrintWarnItem          ( SfxBoolItem           ( SCITEM_PRINTWARN, false ) )
@@ -78,7 +78,7 @@ ScMessagePool::ScMessagePool()
 ScMessagePool::~ScMessagePool()
 {
     Delete();
-    SetSecondaryPool( NULL ); // before deleting defaults (accesses defaults)
+    SetSecondaryPool( nullptr ); // before deleting defaults (accesses defaults)
 
     for ( sal_uInt16 i=0; i <= MSGPOOL_END-MSGPOOL_START; i++ )
         SetRefCount( *ppPoolDefaults[i], 0 );

@@ -40,8 +40,8 @@ ScQueryEntry::ScQueryEntry() :
     nField(0),
     eOp(SC_EQUAL),
     eConnect(SC_AND),
-    pSearchParam(NULL),
-    pSearchText(NULL),
+    pSearchParam(nullptr),
+    pSearchText(nullptr),
     maQueryItems(1)
 {
 }
@@ -51,8 +51,8 @@ ScQueryEntry::ScQueryEntry(const ScQueryEntry& r) :
     nField(r.nField),
     eOp(r.eOp),
     eConnect(r.eConnect),
-    pSearchParam(NULL),
-    pSearchText(NULL),
+    pSearchParam(nullptr),
+    pSearchText(nullptr),
     maQueryItems(r.maQueryItems)
 {
 }
@@ -73,8 +73,8 @@ ScQueryEntry& ScQueryEntry::operator=( const ScQueryEntry& r )
 
     delete pSearchParam;
     delete pSearchText;
-    pSearchParam    = NULL;
-    pSearchText     = NULL;
+    pSearchParam    = nullptr;
+    pSearchText     = nullptr;
 
     return *this;
 }
@@ -150,8 +150,8 @@ void ScQueryEntry::Clear()
 
     delete pSearchParam;
     delete pSearchText;
-    pSearchParam    = NULL;
-    pSearchText     = NULL;
+    pSearchParam    = nullptr;
+    pSearchText     = nullptr;
 }
 
 bool ScQueryEntry::operator==( const ScQueryEntry& r ) const

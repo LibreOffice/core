@@ -38,8 +38,8 @@ class ScDocument;
 class ScDPFieldButton
 {
 public:
-    ScDPFieldButton(OutputDevice* pOutDev, const StyleSettings* pStyle, const Fraction* pZoomX = NULL, const Fraction* pZoomY = NULL,
-                    ScDocument* pDoc = NULL);
+    ScDPFieldButton(OutputDevice* pOutDev, const StyleSettings* pStyle, const Fraction* pZoomX = nullptr, const Fraction* pZoomY = nullptr,
+                    ScDocument* pDoc = nullptr);
     ~ScDPFieldButton();
 
     void setText(const OUString& rText);

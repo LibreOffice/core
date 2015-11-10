@@ -68,7 +68,7 @@ bool ScTpDefaultsOptions::FillItemSet(SfxItemSet *rCoreSet)
 void ScTpDefaultsOptions::Reset(const SfxItemSet* rCoreSet)
 {
     ScDefaultsOptions aOpt;
-    const SfxPoolItem* pItem = NULL;
+    const SfxPoolItem* pItem = nullptr;
 
     if(SfxItemState::SET == rCoreSet->GetItemState(SID_SCDEFAULTSOPTIONS, false , &pItem))
         aOpt = static_cast<const ScTpDefaultsItem*>(pItem)->GetDefaultsOptions();

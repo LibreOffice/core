@@ -42,7 +42,7 @@ public:
         const css::uno::Reference< css::uno::XComponentContext >& xContext,
         const ScVbaPalette& dPalette,
         const css::uno::Reference< css::beans::XPropertySet >& xPropertySet,
-        ScCellRangeObj* pRangeObj = 0, bool bFormControl = false ) throw ( css::uno::RuntimeException );
+        ScCellRangeObj* pRangeObj = nullptr, bool bFormControl = false ) throw ( css::uno::RuntimeException );
     virtual ~ScVbaFont();// {}
 
     // Attributes

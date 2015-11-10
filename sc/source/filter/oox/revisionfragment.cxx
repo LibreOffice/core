@@ -144,7 +144,7 @@ protected:
                 {
                     // The value is a rich text string.
                     ScDocument& rDoc = getScDocument();
-                    EditTextObject* pTextObj = mxRichString->convert(rDoc.GetEditEngine(), NULL);
+                    EditTextObject* pTextObj = mxRichString->convert(rDoc.GetEditEngine(), nullptr);
                     if (pTextObj)
                     {
                         svl::SharedStringPool& rPool = rDoc.GetSharedStringPool();
@@ -166,7 +166,7 @@ private:
         OUString aRefStr = rAttribs.getString(XML_r, OUString());
         if (!aRefStr.isEmpty())
         {
-            mrPos.Parse(aRefStr, NULL, formula::FormulaGrammar::CONV_XL_OOX);
+            mrPos.Parse(aRefStr, nullptr, formula::FormulaGrammar::CONV_XL_OOX);
             if (mnSheetIndex != -1)
                 mrPos.SetTab(mnSheetIndex-1);
         }
@@ -293,7 +293,7 @@ void RevisionHeadersFragment::importHeader( const AttributeList& rAttribs )
     if (!aDateTimeStr.isEmpty())
     {
         util::DateTime aDateTime;
-        sax::Converter::parseDateTime(aDateTime, 0, aDateTimeStr);
+        sax::Converter::parseDateTime(aDateTime, nullptr, aDateTimeStr);
         Date aDate(aDateTime);
         tools::Time aTime(aDateTime);
         aMetadata.maDateTime.SetDate(aDate.GetDate());

@@ -64,7 +64,7 @@ ScCsvGrid::ScCsvGrid( ScCsvControl& rParent ) :
     ScCsvControl( rParent ),
     mpBackgrDev( VclPtr<VirtualDevice>::Create() ),
     mpGridDev( VclPtr<VirtualDevice>::Create() ),
-    mpColorConfig( 0 ),
+    mpColorConfig( nullptr ),
     mpEditEngine( new ScEditEngineDefaulter( EditEngine::CreatePool(), true ) ),
     maHeaderFont( GetFont() ),
     maColStates( 1 ),

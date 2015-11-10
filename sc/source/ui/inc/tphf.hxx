@@ -44,7 +44,7 @@ protected:
     virtual void    ActivatePage() override;
     virtual void    DeactivatePage() override;
     virtual void    ActivatePage( const SfxItemSet& rSet ) override;
-    virtual sfxpg   DeactivatePage( SfxItemSet* pSet = 0 ) override;
+    virtual sfxpg   DeactivatePage( SfxItemSet* pSet = nullptr ) override;
 
 private:
     VclPtr<PushButton>   m_pBtnEdit;

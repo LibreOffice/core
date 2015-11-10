@@ -66,7 +66,7 @@ const std::vector<editeng::MisspellRanges>* SpellCheckContext::getMisspellRanges
 {
     CellMapType::const_iterator it = maMisspellCells.find(CellPos(nCol,nRow));
     if (it == maMisspellCells.end())
-        return NULL;
+        return nullptr;
 
     return &it->second;
 }

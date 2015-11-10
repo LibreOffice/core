@@ -87,7 +87,7 @@ void ScDPResultTree::MemberNode::dump(int nLevel) const
 }
 #endif
 
-ScDPResultTree::ScDPResultTree() : mpRoot(new MemberNode(NULL)) {}
+ScDPResultTree::ScDPResultTree() : mpRoot(new MemberNode(nullptr)) {}
 ScDPResultTree::~ScDPResultTree()
 {
     delete mpRoot;
@@ -98,8 +98,8 @@ void ScDPResultTree::add(
 {
     // TODO: I'll work on the col / row to value node mapping later.
 
-    const OUString* pDimName = NULL;
-    const OUString* pMemName = NULL;
+    const OUString* pDimName = nullptr;
+    const OUString* pMemName = nullptr;
     MemberNode* pMemNode = mpRoot;
 
     std::vector<ScDPResultFilter>::const_iterator itFilter = rFilters.begin(), itFilterEnd = rFilters.end();
@@ -192,7 +192,7 @@ void ScDPResultTree::clear()
 {
     maPrimaryDimName = EMPTY_OUSTRING;
     delete mpRoot;
-    mpRoot = new MemberNode(NULL);
+    mpRoot = new MemberNode(nullptr);
 }
 
 const ScDPResultTree::ValuesType* ScDPResultTree::getResults(
@@ -208,7 +208,7 @@ const ScDPResultTree::ValuesType* ScDPResultTree::getResults(
 
         if (itDim == pMember->maChildDimensions.end())
             // Specified dimension not found.
-            return NULL;
+            return nullptr;
 
         const DimensionNode* pDim = itDim->second;
         MembersType::const_iterator itMem = pDim->maChildMembers.find(
@@ -216,7 +216,7 @@ const ScDPResultTree::ValuesType* ScDPResultTree::getResults(
 
         if (itMem == pDim->maChildMembers.end())
             // Specified member not found.
-            return NULL;
+            return nullptr;
 
         pMember = itMem->second;
     }

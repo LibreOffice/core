@@ -875,8 +875,8 @@ void Sc10PageCollection::PutToDoc( ScDocument* pDoc )
         // Area-Parameter:
 
         {
-            ScRange* pRepeatRow = NULL;
-            ScRange* pRepeatCol = NULL;
+            ScRange* pRepeatRow = nullptr;
+            ScRange* pRepeatCol = nullptr;
 
             if ( pPage->ColRepeatStart >= 0 )
                 pRepeatCol = new ScRange( static_cast<SCCOL> (pPage->ColRepeatStart), 0, 0 );
@@ -928,14 +928,14 @@ ScDataObject* Sc10PageData::Clone() const
 Sc10Import::Sc10Import(SvStream& rStr, ScDocument* pDocument ) :
     rStream             (rStr),
     pDoc                (pDocument),
-    pFontCollection     (NULL),
-    pNameCollection     (NULL),
-    pPatternCollection  (NULL),
-    pDataBaseCollection (NULL),
+    pFontCollection     (nullptr),
+    pNameCollection     (nullptr),
+    pPatternCollection  (nullptr),
+    pDataBaseCollection (nullptr),
     nError              (0),
     nShowTab            (0)
 {
-    pPrgrsBar = NULL;
+    pPrgrsBar = nullptr;
 }
 
 Sc10Import::~Sc10Import()
@@ -948,7 +948,7 @@ Sc10Import::~Sc10Import()
     delete pPatternCollection;
     delete pDataBaseCollection;
 
-    OSL_ENSURE( pPrgrsBar == NULL,
+    OSL_ENSURE( pPrgrsBar == nullptr,
         "*Sc10Import::Sc10Import(): Progressbar lebt noch!?" );
 }
 
@@ -987,7 +987,7 @@ sal_uLong Sc10Import::Import()
 
     delete pPrgrsBar;
 #if OSL_DEBUG_LEVEL > 0
-    pPrgrsBar = NULL;
+    pPrgrsBar = nullptr;
 #endif
 
     return nError;
@@ -1110,7 +1110,7 @@ void Sc10Import::LoadPatternCollection()
         Sc10PatternData* pPattern = pPatternCollection->At( i );
         OUString aName( pPattern->Name, strlen(pPattern->Name), DEFCHARSET );
         SfxStyleSheetBase* pStyle = pStylePool->Find( aName, SFX_STYLE_FAMILY_PARA );
-        if( pStyle == NULL )
+        if( pStyle == nullptr )
             pStylePool->Make( aName, SFX_STYLE_FAMILY_PARA );
         else
         {
@@ -1120,7 +1120,7 @@ void Sc10Import::LoadPatternCollection()
             pStylePool->Make( aName, SFX_STYLE_FAMILY_PARA );
         }
         pStyle = pStylePool->Find( aName, SFX_STYLE_FAMILY_PARA );
-        if( pStyle != NULL )
+        if( pStyle != nullptr )
         {
             SfxItemSet &rItemSet = pStyle->GetItemSet();
             // Font
@@ -2111,12 +2111,12 @@ void Sc10Import::LoadColAttr(SCCOL Col, SCTAB Tab)
         {
             sal_uInt16 nPatternIndex = (aPattern.pData[i].Value & 0x00FF) - 1;
             Sc10PatternData* pPattern = pPatternCollection->At(nPatternIndex);
-            if (pPattern != NULL)
+            if (pPattern != nullptr)
             {
                 ScStyleSheet* pStyle = static_cast<ScStyleSheet*>( pStylePool->Find(
                                     SC10TOSTRING( pPattern->Name ), SFX_STYLE_FAMILY_PARA) );
 
-                if (pStyle != NULL)
+                if (pStyle != nullptr)
                     pDoc->ApplyStyleAreaTab(Col, nStart, Col, nEnd, Tab, *pStyle);
             }
         }
@@ -2137,7 +2137,7 @@ void Sc10Import::LoadAttr(Sc10ColAttr& rAttr)
         return;
 
     rAttr.pData = new (::std::nothrow) Sc10ColData[rAttr.Count];
-    if (rAttr.pData == NULL)
+    if (rAttr.pData == nullptr)
     {
         nError = errOutOfMemory;
         rAttr.Count = 0;

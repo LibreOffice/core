@@ -87,7 +87,7 @@ ScUndoDeleteContents::ScUndoDeleteContents(
         aRange      ( rRange ),
         aMarkData   ( rMark ),
         pUndoDoc    ( std::move(pNewUndoDoc) ),
-        pDrawUndo   ( NULL ),
+        pDrawUndo   ( nullptr ),
         nFlags      ( nNewFlags ),
         bMulti      ( bNewMulti )   // unnecessary
 {
@@ -373,8 +373,8 @@ ScUndoSelectionAttr::ScUndoSelectionAttr( ScDocShell* pNewDocShell,
 {
     ScDocumentPool* pPool = pDocShell->GetDocument().GetPool();
     pApplyPattern = const_cast<ScPatternAttr*>(static_cast<const ScPatternAttr*>( &pPool->Put( *pNewApply ) ));
-    pLineOuter = pNewOuter ? const_cast<SvxBoxItem*>(static_cast<const SvxBoxItem*>( &pPool->Put( *pNewOuter ) )) : NULL;
-    pLineInner = pNewInner ? const_cast<SvxBoxInfoItem*>(static_cast<const SvxBoxInfoItem*>( &pPool->Put( *pNewInner ) )) : NULL;
+    pLineOuter = pNewOuter ? const_cast<SvxBoxItem*>(static_cast<const SvxBoxItem*>( &pPool->Put( *pNewOuter ) )) : nullptr;
+    pLineInner = pNewInner ? const_cast<SvxBoxInfoItem*>(static_cast<const SvxBoxInfoItem*>( &pPool->Put( *pNewInner ) )) : nullptr;
 }
 
 ScUndoSelectionAttr::~ScUndoSelectionAttr()
@@ -452,14 +452,14 @@ void ScUndoSelectionAttr::ChangeEditData( const bool bUndo )
         if (bUndo)
         {
             if (pItem->GetOldData())
-                rDoc.SetEditText(aPos, *pItem->GetOldData(), NULL);
+                rDoc.SetEditText(aPos, *pItem->GetOldData(), nullptr);
             else
                 rDoc.SetEmptyCell(aPos);
         }
         else
         {
             if (pItem->GetNewData())
-                rDoc.SetEditText(aPos, *pItem->GetNewData(), NULL);
+                rDoc.SetEditText(aPos, *pItem->GetNewData(), nullptr);
             else
                 rDoc.SetEmptyCell(aPos);
         }
@@ -998,7 +998,7 @@ void ScUndoReplace::Undo()
         InsertDeleteFlags nUndoFlags = (pSearchItem->GetPattern()) ? InsertDeleteFlags::ATTRIB : InsertDeleteFlags::CONTENTS;
         pUndoDoc->CopyToDocument( 0,      0,      0,
                                   MAXCOL, MAXROW, MAXTAB,
-                                  nUndoFlags, false, &rDoc, NULL, false );   // without row flags
+                                  nUndoFlags, false, &rDoc, nullptr, false );   // without row flags
         pDocShell->PostPaintGridAll();
     }
     else if (pSearchItem->GetPattern() &&
@@ -1370,7 +1370,7 @@ ScUndoRefreshLink::ScUndoRefreshLink( ScDocShell* pNewDocShell,
                                     ScDocument* pNewUndoDoc )
     :   ScSimpleUndo( pNewDocShell ),
         pUndoDoc( pNewUndoDoc ),
-        pRedoDoc( NULL )
+        pRedoDoc( nullptr )
 {
 }
 
@@ -1489,7 +1489,7 @@ static ScAreaLink* lcl_FindAreaLink( sfx2::LinkManager* pLinkManager, const OUSt
     }
 
     OSL_FAIL("ScAreaLink not found");
-    return NULL;
+    return nullptr;
 }
 
 ScUndoInsertAreaLink::ScUndoInsertAreaLink( ScDocShell* pShell,

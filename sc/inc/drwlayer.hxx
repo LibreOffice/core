@@ -170,7 +170,7 @@ public:
     SdrObject*      GetNamedObject( const OUString& rName, sal_uInt16 nId, SCTAB& rFoundTab ) const;
                     // if pnCounter != NULL, the search for a name starts with this index + 1,
                     // and the index really used is returned.
-    OUString        GetNewGraphicName( long* pnCounter = NULL ) const;
+    OUString        GetNewGraphicName( long* pnCounter = nullptr ) const;
     void            EnsureGraphicNames();
 
     static bool IsCellAnchored( const SdrObject& rObj );

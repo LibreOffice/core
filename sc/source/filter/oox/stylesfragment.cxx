@@ -39,7 +39,7 @@ ContextHandlerRef IndexedColorsContext::onCreateContext( sal_Int32 nElement, con
             if( nElement == XLS_TOKEN( rgbColor ) ) getStyles().importPaletteColor( rAttribs );
         break;
     }
-    return 0;
+    return nullptr;
 }
 
 ContextHandlerRef IndexedColorsContext::onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm )
@@ -50,14 +50,14 @@ ContextHandlerRef IndexedColorsContext::onCreateRecordContext( sal_Int32 nRecId,
             if( nRecId == BIFF12_ID_RGBCOLOR ) getStyles().importPaletteColor( rStrm );
         break;
     }
-    return 0;
+    return nullptr;
 }
 
 ContextHandlerRef FontContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
     if( mxFont.get() )
         mxFont->importAttribs( nElement, rAttribs );
-    return 0;
+    return nullptr;
 }
 
 void BorderContext::onStartElement( const AttributeList& rAttribs )
@@ -78,7 +78,7 @@ ContextHandlerRef BorderContext::onCreateContext( sal_Int32 nElement, const Attr
             if( nElement == XLS_TOKEN( color ) )
                 mxBorder->importColor( getCurrentElement(), rAttribs );
     }
-    return 0;
+    return nullptr;
 }
 
 ContextHandlerRef FillContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
@@ -111,7 +111,7 @@ ContextHandlerRef FillContext::onCreateContext( sal_Int32 nElement, const Attrib
                 mxFill->importColor( rAttribs, mfGradPos );
         break;
     }
-    return 0;
+    return nullptr;
 }
 
 void XfContext::onStartElement( const AttributeList& rAttribs )
@@ -132,7 +132,7 @@ ContextHandlerRef XfContext::onCreateContext( sal_Int32 nElement, const Attribut
             }
         break;
     }
-    return 0;
+    return nullptr;
 }
 
 ContextHandlerRef DxfContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
@@ -154,7 +154,7 @@ ContextHandlerRef DxfContext::onCreateContext( sal_Int32 nElement, const Attribu
             }
         break;
     }
-    return 0;
+    return nullptr;
 }
 
 StylesFragment::StylesFragment( const WorkbookHelper& rHelper, const OUString& rFragmentPath ) :
@@ -213,7 +213,7 @@ ContextHandlerRef StylesFragment::onCreateContext( sal_Int32 nElement, const Att
             if( nElement == XLS_TOKEN( cellStyle ) ) getStyles().importCellStyle( rAttribs );
         break;
     }
-    return 0;
+    return nullptr;
 }
 
 ContextHandlerRef StylesFragment::onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm )
@@ -267,7 +267,7 @@ ContextHandlerRef StylesFragment::onCreateRecordContext( sal_Int32 nRecId, Seque
             if( nRecId == BIFF12_ID_CELLSTYLE ) getStyles().importCellStyle( rStrm );
         break;
     }
-    return 0;
+    return nullptr;
 }
 
 const RecordInfo* StylesFragment::getRecordInfos() const

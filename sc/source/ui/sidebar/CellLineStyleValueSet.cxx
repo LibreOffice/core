@@ -25,7 +25,7 @@ namespace sc { namespace sidebar {
 
 CellLineStyleValueSet::CellLineStyleValueSet( vcl::Window* pParent, const ResId& rResId)
 :   ValueSet( pParent, rResId ),
-    pVDev(NULL),
+    pVDev(nullptr),
     nSelItem(0)
 {
     SetColCount();

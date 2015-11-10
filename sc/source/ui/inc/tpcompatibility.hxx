@@ -24,7 +24,7 @@ public:
 
     virtual bool FillItemSet(SfxItemSet* rCoreAttrs) override;
     virtual void Reset(const SfxItemSet* rCoreAttrs) override;
-    virtual sfxpg DeactivatePage(SfxItemSet* pSet = NULL) override;
+    virtual sfxpg DeactivatePage(SfxItemSet* pSet = nullptr) override;
 
     virtual ~ScTpCompatOptions();
     virtual void dispose() override;

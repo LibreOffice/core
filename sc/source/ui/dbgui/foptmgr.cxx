@@ -48,7 +48,7 @@ ScFilterOptionsMgr::ScFilterOptionsMgr(
                                 const OUString&     refStrUndefined )
 
     :   pViewData       ( ptrViewData ),
-        pDoc            ( ptrViewData ? ptrViewData->GetDocument() : NULL ),
+        pDoc            ( ptrViewData ? ptrViewData->GetDocument() : nullptr ),
         pBtnCase        ( refBtnCase ),
         pBtnRegExp      ( refBtnRegExp ),
         pBtnHeader      ( refBtnHeader ),

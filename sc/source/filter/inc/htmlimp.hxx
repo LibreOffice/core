@@ -34,7 +34,7 @@ public:
     const ScHTMLParser* GetParser() const { return static_cast<ScHTMLParser*>(mpParser); }
 
     virtual void        WriteToDocument( bool bSizeColsRows = false, double nOutputFactor = 1.0,
-                                         SvNumberFormatter* pFormatter = NULL, bool bConvertDate = true ) override;
+                                         SvNumberFormatter* pFormatter = nullptr, bool bConvertDate = true ) override;
 
     static OUString     GetHTMLRangeNameList( ScDocument* pDoc, const OUString& rOrigName );
 };

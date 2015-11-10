@@ -417,21 +417,21 @@ static const FunctionData saFuncTableBiff2[] =
     { "TRUNC",                  "TRUNC",                197,    197,    1,  1,  V, { VR, C }, 0 },
     { "ISLOGICAL",              "ISLOGICAL",            198,    198,    1,  1,  V, { VR }, 0 },
     { "DCOUNTA",                "DCOUNTA",              199,    199,    3,  3,  V, { RO, RR }, 0 },
-    { 0,                        "EXTERN.CALL",          255,    255,    1,  MX, R, { RO_E, RO }, FUNCFLAG_IMPORTONLY },
+    { nullptr,                        "EXTERN.CALL",          255,    255,    1,  MX, R, { RO_E, RO }, FUNCFLAG_IMPORTONLY },
 
     // *** macro sheet commands ***
 
-    { 0,                        "A1.R1C1",              30,     30,     0,  1,  V, { VR }, FUNCFLAG_MACROCMD },
-    { 0,                        "RETURN",               55,     55,     0,  1,  R, { RO }, FUNCFLAG_MACROFUNC },
-    { 0,                        "ABSREF",               79,     79,     2,  2,  R, { VR, RO }, FUNCFLAG_MACROFUNC },
-    { 0,                        "ADD.ARROW",            81,     81,     0,  0,  V, {}, FUNCFLAG_MACROCMD },
-    { 0,                        "ACTIVE.CELL",          94,     94,     0,  0,  R, {}, FUNCFLAG_MACROFUNC },
-    { 0,                        "ACTIVATE",             103,    103,    0,  2,  V, { VR }, FUNCFLAG_MACROCMD },
-    { 0,                        "ACTIVATE.NEXT",        104,    104,    0,  0,  V, {}, FUNCFLAG_MACROCMD },
-    { 0,                        "ACTIVATE.PREV",        105,    105,    0,  0,  V, {}, FUNCFLAG_MACROCMD },
-    { 0,                        "ADD.BAR",              151,    151,    0,  0,  V, {}, FUNCFLAG_MACROFUNC | FUNCFLAG_ALWAYSVAR },
-    { 0,                        "ADD.MENU",             152,    152,    2,  2,  V, { VR, RO }, FUNCFLAG_MACROFUNC | FUNCFLAG_ALWAYSVAR },
-    { 0,                        "ADD.COMMAND",          153,    153,    3,  3,  V, { VR, RO }, FUNCFLAG_MACROFUNC | FUNCFLAG_ALWAYSVAR }
+    { nullptr,                        "A1.R1C1",              30,     30,     0,  1,  V, { VR }, FUNCFLAG_MACROCMD },
+    { nullptr,                        "RETURN",               55,     55,     0,  1,  R, { RO }, FUNCFLAG_MACROFUNC },
+    { nullptr,                        "ABSREF",               79,     79,     2,  2,  R, { VR, RO }, FUNCFLAG_MACROFUNC },
+    { nullptr,                        "ADD.ARROW",            81,     81,     0,  0,  V, {}, FUNCFLAG_MACROCMD },
+    { nullptr,                        "ACTIVE.CELL",          94,     94,     0,  0,  R, {}, FUNCFLAG_MACROFUNC },
+    { nullptr,                        "ACTIVATE",             103,    103,    0,  2,  V, { VR }, FUNCFLAG_MACROCMD },
+    { nullptr,                        "ACTIVATE.NEXT",        104,    104,    0,  0,  V, {}, FUNCFLAG_MACROCMD },
+    { nullptr,                        "ACTIVATE.PREV",        105,    105,    0,  0,  V, {}, FUNCFLAG_MACROCMD },
+    { nullptr,                        "ADD.BAR",              151,    151,    0,  0,  V, {}, FUNCFLAG_MACROFUNC | FUNCFLAG_ALWAYSVAR },
+    { nullptr,                        "ADD.MENU",             152,    152,    2,  2,  V, { VR, RO }, FUNCFLAG_MACROFUNC | FUNCFLAG_ALWAYSVAR },
+    { nullptr,                        "ADD.COMMAND",          153,    153,    3,  3,  V, { VR, RO }, FUNCFLAG_MACROFUNC | FUNCFLAG_ALWAYSVAR }
 };
 
 /** Functions new in BIFF3. */
@@ -443,9 +443,9 @@ static const FunctionData saFuncTableBiff3[] =
     { "GROWTH",                 "GROWTH",               52,     52,     1,  4,  A, { RA, RA, RA, VV }, 0 },             // BIFF2: 1-3, BIFF3: 1-4
     { "TRUNC",                  "TRUNC",                197,    197,    1,  2,  V, { VR }, 0 },                      // BIFF2: 1,   BIFF3: 1-2
     { "DOLLAR",                 "USDOLLAR",             204,    204,    1,  2,  V, { VR }, FUNCFLAG_IMPORTONLY },
-    { 0/*"FIND"*/,              "FINDB",                205,    205,    2,  3,  V, { VR }, 0 },
-    { 0/*"SEARCH"*/,            "SEARCHB",              206,    206,    2,  3,  V, { VR }, 0 },
-    { 0/*"REPLACE"*/,           "REPLACEB",             207,    207,    4,  4,  V, { VR }, 0 },
+    { nullptr/*"FIND"*/,              "FINDB",                205,    205,    2,  3,  V, { VR }, 0 },
+    { nullptr/*"SEARCH"*/,            "SEARCHB",              206,    206,    2,  3,  V, { VR }, 0 },
+    { nullptr/*"REPLACE"*/,           "REPLACEB",             207,    207,    4,  4,  V, { VR }, 0 },
     { "LEFTB",                  "LEFTB",                208,    208,    1,  2,  V, { VR }, 0 },
     { "RIGHTB",                 "RIGHTB",               209,    209,    1,  2,  V, { VR }, 0 },
     { "MIDB",                   "MIDB",                 210,    210,    3,  3,  V, { VR }, 0 },
@@ -475,9 +475,9 @@ static const FunctionData saFuncTableBiff3[] =
 
     // *** macro sheet commands ***
 
-    { 0,                        "ADD.BAR",              151,    151,    0,  1,  V, { VR }, FUNCFLAG_MACROFUNC },    // BIFF2: 0,   BIFF3: 0-1
-    { 0,                        "ADD.MENU",             152,    152,    2,  3,  V, { VR, RO }, FUNCFLAG_MACROFUNC },  // BIFF2: 2,   BIFF3: 2-3
-    { 0,                        "ADD.COMMAND",          153,    153,    3,  4,  V, { VR, RO }, FUNCFLAG_MACROFUNC }   // BIFF2: 3,   BIFF3: 3-4
+    { nullptr,                        "ADD.BAR",              151,    151,    0,  1,  V, { VR }, FUNCFLAG_MACROFUNC },    // BIFF2: 0,   BIFF3: 0-1
+    { nullptr,                        "ADD.MENU",             152,    152,    2,  3,  V, { VR, RO }, FUNCFLAG_MACROFUNC },  // BIFF2: 2,   BIFF3: 2-3
+    { nullptr,                        "ADD.COMMAND",          153,    153,    3,  4,  V, { VR, RO }, FUNCFLAG_MACROFUNC }   // BIFF2: 3,   BIFF3: 3-4
 };
 
 /** Functions new in BIFF4. */
@@ -651,8 +651,8 @@ static const FunctionData saFuncTableBiff4[] =
 
     // *** macro sheet commands ***
 
-    { 0,                        "ACTIVATE.NEXT",        104,    104,    0,  1,  V, { VR }, FUNCFLAG_MACROCMD },      // BIFF2-3: 0, BIFF4: 0-1
-    { 0,                        "ACTIVATE.PREV",        105,    105,    0,  1,  V, { VR }, FUNCFLAG_MACROCMD }       // BIFF2-3: 0, BIFF4: 0-1
+    { nullptr,                        "ACTIVATE.NEXT",        104,    104,    0,  1,  V, { VR }, FUNCFLAG_MACROCMD },      // BIFF2-3: 0, BIFF4: 0-1
+    { nullptr,                        "ACTIVATE.PREV",        105,    105,    0,  1,  V, { VR }, FUNCFLAG_MACROCMD }       // BIFF2-3: 0, BIFF4: 0-1
 };
 
 /** Functions new in BIFF5/BIFF7. */
@@ -662,7 +662,7 @@ static const FunctionData saFuncTableBiff5[] =
     { "HLOOKUP",                "HLOOKUP",              101,    101,    3,  4,  V, { VV, RO, RO, VV }, 0 },                     // BIFF2-4: 3,   BIFF5: 3-4
     { "VLOOKUP",                "VLOOKUP",              102,    102,    3,  4,  V, { VV, RO, RO, VV }, 0 },                     // BIFF2-4: 3,   BIFF5: 3-4
     { "DAYS360",                "DAYS360",              220,    220,    2,  3,  V, { VR }, 0 },                              // BIFF3-4: 2,   BIFF5: 2-3
-    { 0,                        "EXTERN.CALL",          255,    255,    1,  MX, R, { RO_E, RO }, FUNCFLAG_EXPORTONLY },        // MACRO or EXTERNAL
+    { nullptr,                        "EXTERN.CALL",          255,    255,    1,  MX, R, { RO_E, RO }, FUNCFLAG_EXPORTONLY },        // MACRO or EXTERNAL
     { "CONCATENATE",            "CONCATENATE",          336,    336,    0,  MX, V, { VR }, 0 },
     { "POWER",                  "POWER",                337,    337,    2,  2,  V, { VR }, 0 },
     { "RADIANS",                "RADIANS",              342,    342,    1,  1,  V, { VR }, 0 },
@@ -673,8 +673,8 @@ static const FunctionData saFuncTableBiff5[] =
     { "COUNTBLANK",             "COUNTBLANK",           347,    347,    1,  1,  V, { RO }, 0 },
     { "ISPMT",                  "ISPMT",                350,    350,    4,  4,  V, { VR }, 0 },
     { "DATEDIF",                "DATEDIF",              351,    351,    3,  3,  V, { VR }, 0 },
-    { 0,                        "DATESTRING",           352,    352,    1,  1,  V, { VR }, FUNCFLAG_IMPORTONLY },   // not supported in Calc, missing in OOXML spec
-    { 0,                        "NUMBERSTRING",         353,    353,    2,  2,  V, { VR }, FUNCFLAG_IMPORTONLY },   // not supported in Calc, missing in OOXML spec
+    { nullptr,                        "DATESTRING",           352,    352,    1,  1,  V, { VR }, FUNCFLAG_IMPORTONLY },   // not supported in Calc, missing in OOXML spec
+    { nullptr,                        "NUMBERSTRING",         353,    353,    2,  2,  V, { VR }, FUNCFLAG_IMPORTONLY },   // not supported in Calc, missing in OOXML spec
     { "ROMAN",                  "ROMAN",                354,    354,    1,  2,  V, { VR }, 0 },
 
     // *** EuroTool add-in ***
@@ -683,11 +683,11 @@ static const FunctionData saFuncTableBiff5[] =
 
     // *** macro sheet commands ***
 
-    { 0,                        "ADD.MENU",             152,    152,    2,  4,  V, { VR, RO, RO, VR }, FUNCFLAG_MACROFUNC },    // BIFF3-4: 2-3, BIFF5: 2-4
-    { 0,                        "ADD.COMMAND",          153,    153,    3,  5,  V, { VR, RO, RO, RO, VR }, FUNCFLAG_MACROFUNC }, // BIFF3-4: 3-4, BIFF5: 3-5
-    { 0,                        "ADD.CHART.AUTOFORMAT", 390,    390,    0,  2,  V, { VR }, FUNCFLAG_MACROCMD },
-    { 0,                        "ADD.LIST.ITEM",        451,    451,    0,  2,  V, { VR }, FUNCFLAG_MACROCMD },
-    { 0,                        "ACTIVE.CELL.FONT",     476,    476,    0,  14, V, { VR }, FUNCFLAG_MACROCMD }
+    { nullptr,                        "ADD.MENU",             152,    152,    2,  4,  V, { VR, RO, RO, VR }, FUNCFLAG_MACROFUNC },    // BIFF3-4: 2-3, BIFF5: 2-4
+    { nullptr,                        "ADD.COMMAND",          153,    153,    3,  5,  V, { VR, RO, RO, RO, VR }, FUNCFLAG_MACROFUNC }, // BIFF3-4: 3-4, BIFF5: 3-5
+    { nullptr,                        "ADD.CHART.AUTOFORMAT", 390,    390,    0,  2,  V, { VR }, FUNCFLAG_MACROCMD },
+    { nullptr,                        "ADD.LIST.ITEM",        451,    451,    0,  2,  V, { VR }, FUNCFLAG_MACROCMD },
+    { nullptr,                        "ACTIVE.CELL.FONT",     476,    476,    0,  14, V, { VR }, FUNCFLAG_MACROCMD }
 };
 
 /** Functions new in BIFF8. */
@@ -695,7 +695,7 @@ static const FunctionData saFuncTableBiff8[] =
 {
     { "GETPIVOTDATA",           "GETPIVOTDATA",         358,    358,    2,  MX, V, { RR, RR, VR, VR }, FUNCFLAG_IMPORTONLY | FUNCFLAG_PARAMPAIRS },
     { "HYPERLINK",              "HYPERLINK",            359,    359,    1,  2,  V, { VV, VO }, 0 },
-    { 0,                        "PHONETIC",             360,    360,    1,  1,  V, { RO }, FUNCFLAG_IMPORTONLY },
+    { nullptr,                        "PHONETIC",             360,    360,    1,  1,  V, { RO }, FUNCFLAG_IMPORTONLY },
     { "AVERAGEA",               "AVERAGEA",             361,    361,    1,  MX, V, { RX }, 0 },
     { "MAXA",                   "MAXA",                 362,    362,    1,  MX, V, { RX }, 0 },
     { "MINA",                   "MINA",                 363,    363,    1,  MX, V, { RX }, 0 },
@@ -704,29 +704,29 @@ static const FunctionData saFuncTableBiff8[] =
     { "STDEVA",                 "STDEVA",               366,    366,    1,  MX, V, { RX }, 0 },
     { "VARA",                   "VARA",                 367,    367,    1,  MX, V, { RX }, 0 },
     { "COM.MICROSOFT.BAHTTEXT", "BAHTTEXT",             368,    368,    1,  1,  V, { VR }, FUNCFLAG_MACROCALL },
-    { 0,                        "THAIDAYOFWEEK",        369,    369,    1,  1,  V, { VR }, FUNCFLAG_MACROCALL },
-    { 0,                        "THAIDIGIT",            370,    370,    1,  1,  V, { VR }, FUNCFLAG_MACROCALL },
-    { 0,                        "THAIMONTHOFYEAR",      371,    371,    1,  1,  V, { VR }, FUNCFLAG_MACROCALL },
-    { 0,                        "THAINUMSOUND",         372,    372,    1,  1,  V, { VR }, FUNCFLAG_MACROCALL },
-    { 0,                        "THAINUMSTRING",        373,    373,    1,  1,  V, { VR }, FUNCFLAG_MACROCALL },
-    { 0,                        "THAISTRINGLENGTH",     374,    374,    1,  1,  V, { VR }, FUNCFLAG_MACROCALL },
-    { 0,                        "ISTHAIDIGIT",          375,    375,    1,  1,  V, { VR }, FUNCFLAG_MACROCALL },
-    { 0,                        "ROUNDBAHTDOWN",        376,    376,    1,  1,  V, { VR }, FUNCFLAG_MACROCALL },
-    { 0,                        "ROUNDBAHTUP",          377,    377,    1,  1,  V, { VR }, FUNCFLAG_MACROCALL },
-    { 0,                        "THAIYEAR",             378,    378,    1,  1,  V, { VR }, FUNCFLAG_MACROCALL },
-    { 0,                        "RTD",                  379,    379,    3,  3,  A, { VR, VR, RO }, 0 }
+    { nullptr,                        "THAIDAYOFWEEK",        369,    369,    1,  1,  V, { VR }, FUNCFLAG_MACROCALL },
+    { nullptr,                        "THAIDIGIT",            370,    370,    1,  1,  V, { VR }, FUNCFLAG_MACROCALL },
+    { nullptr,                        "THAIMONTHOFYEAR",      371,    371,    1,  1,  V, { VR }, FUNCFLAG_MACROCALL },
+    { nullptr,                        "THAINUMSOUND",         372,    372,    1,  1,  V, { VR }, FUNCFLAG_MACROCALL },
+    { nullptr,                        "THAINUMSTRING",        373,    373,    1,  1,  V, { VR }, FUNCFLAG_MACROCALL },
+    { nullptr,                        "THAISTRINGLENGTH",     374,    374,    1,  1,  V, { VR }, FUNCFLAG_MACROCALL },
+    { nullptr,                        "ISTHAIDIGIT",          375,    375,    1,  1,  V, { VR }, FUNCFLAG_MACROCALL },
+    { nullptr,                        "ROUNDBAHTDOWN",        376,    376,    1,  1,  V, { VR }, FUNCFLAG_MACROCALL },
+    { nullptr,                        "ROUNDBAHTUP",          377,    377,    1,  1,  V, { VR }, FUNCFLAG_MACROCALL },
+    { nullptr,                        "THAIYEAR",             378,    378,    1,  1,  V, { VR }, FUNCFLAG_MACROCALL },
+    { nullptr,                        "RTD",                  379,    379,    3,  3,  A, { VR, VR, RO }, 0 }
 };
 
 /** Functions new in OOXML. */
 static const FunctionData saFuncTableOox[] =
 {
-    { 0,                        "CUBEVALUE",            380,    NOID,   1,  MX, V, { VR, RX }, 0 },
-    { 0,                        "CUBEMEMBER",           381,    NOID,   2,  3,  V, { VR, RX, VR }, 0 },
-    { 0,                        "CUBEMEMBERPROPERTY",   382,    NOID,   3,  3,  V, { VR }, 0 },
-    { 0,                        "CUBERANKEDMEMBER",     383,    NOID,   3,  4,  V, { VR }, 0 },
-    { 0,                        "CUBEKPIMEMBER",        477,    NOID,   3,  4,  V, { VR }, 0 },
-    { 0,                        "CUBESET",              478,    NOID,   2,  5,  V, { VR, RX, VR }, 0 },
-    { 0,                        "CUBESETCOUNT",         479,    NOID,   1,  1,  V, { VR }, 0 },
+    { nullptr,                        "CUBEVALUE",            380,    NOID,   1,  MX, V, { VR, RX }, 0 },
+    { nullptr,                        "CUBEMEMBER",           381,    NOID,   2,  3,  V, { VR, RX, VR }, 0 },
+    { nullptr,                        "CUBEMEMBERPROPERTY",   382,    NOID,   3,  3,  V, { VR }, 0 },
+    { nullptr,                        "CUBERANKEDMEMBER",     383,    NOID,   3,  4,  V, { VR }, 0 },
+    { nullptr,                        "CUBEKPIMEMBER",        477,    NOID,   3,  4,  V, { VR }, 0 },
+    { nullptr,                        "CUBESET",              478,    NOID,   2,  5,  V, { VR, RX, VR }, 0 },
+    { nullptr,                        "CUBESETCOUNT",         479,    NOID,   1,  1,  V, { VR }, 0 },
     { "IFERROR",                "IFERROR",              480,    NOID,   2,  2,  V, { VO, RO }, FUNCFLAG_MACROCALL },
     { "COUNTIFS",               "COUNTIFS",             481,    NOID,   2,  MX, V, { RO, VR }, FUNCFLAG_MACROCALL | FUNCFLAG_PARAMPAIRS },
     { "SUMIFS",                 "SUMIFS",               482,    NOID,   3,  MX, V, { RO, RO, VR }, FUNCFLAG_MACROCALL | FUNCFLAG_PARAMPAIRS },
@@ -860,9 +860,9 @@ static const FunctionData saFuncTable2013[] =
     { "COM.MICROSOFT.FLOOR.MATH", "FLOOR.MATH",         NOID,   NOID,   1,  3,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
     { "FLOOR",                  "FLOOR.MATH",           NOID,   NOID,   1,  3,  V, { VR }, FUNCFLAG_EXPORTONLY },
     // NOTE: this FDIST is not our LEGACY.FDIST
-    { 0/*"FDIST"*/,             "FDIST",                NOID,   NOID,   3,  4,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
+    { nullptr/*"FDIST"*/,             "FDIST",                NOID,   NOID,   3,  4,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
     // NOTE: this FINV is not our LEGACY.FINV
-    { 0/*"FINV"*/,              "FINV",                 NOID,   NOID,   3,  3,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
+    { nullptr/*"FINV"*/,              "FINV",                 NOID,   NOID,   3,  3,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
     { "FORMULA",                "FORMULATEXT",          NOID,   NOID,   1,  1,  V, { RO }, FUNCFLAG_MACROCALL_NEW },
     { "GAMMA",                  "GAMMA",                NOID,   NOID,   1,  1,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
     { "GAUSS",                  "GAUSS",                NOID,   NOID,   1,  1,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
@@ -898,8 +898,8 @@ static const FunctionData saFuncTable2013[] =
 /** Functions defined by OpenFormula, but not supported by Calc or by Excel. */
 static const FunctionData saFuncTableOdf[] =
 {
-    { "CHISQDIST",              0,                      NOID,   NOID,   2,  3,  V, { VR }, FUNCFLAG_MACROCALLODF },
-    { "CHISQINV",               0,                      NOID,   NOID,   2,  2,  V, { VR }, FUNCFLAG_MACROCALLODF }
+    { "CHISQDIST",              nullptr,                      NOID,   NOID,   2,  3,  V, { VR }, FUNCFLAG_MACROCALLODF },
+    { "CHISQINV",               nullptr,                      NOID,   NOID,   2,  2,  V, { VR }, FUNCFLAG_MACROCALLODF }
 };
 
 /** Functions defined by Calc, but not in OpenFormula nor supported by Excel. */
@@ -967,7 +967,7 @@ FunctionParamInfoIterator& FunctionParamInfoIterator::operator++()
             ++mpParamInfo;
         // if last parameter type is 'Excel-only' or 'Calc-only', do not repeat it
         else if( isExcelOnlyParam() || isCalcOnlyParam() )
-            mpParamInfo = 0;
+            mpParamInfo = nullptr;
         // points to last info, but parameter pairs expected, move to previous info
         else if( mbParamPairs )
             --mpParamInfo;
@@ -1260,7 +1260,7 @@ OpCodeProviderImpl::OpCodeProviderImpl( const FunctionInfoVector& rFuncInfos,
             // functions
             fillFuncTokenMaps( aTokenMap, aExtFuncTokenMap, aEntrySeq, xMapper ) &&
             initFuncOpCodes( aTokenMap, aExtFuncTokenMap, rFuncInfos ) &&
-            initOpCode( OPCODE_DDE,           aTokenMap, "DDE", 0 );
+            initOpCode( OPCODE_DDE,           aTokenMap, "DDE", nullptr );
 
         OSL_ENSURE( bIsValid, "OpCodeProviderImpl::OpCodeProviderImpl - opcodes not initialized" );
         (void)bIsValid;
@@ -1466,7 +1466,7 @@ const ApiOpCodes& OpCodeProvider::getOpCodes() const
 
 const FunctionInfo* OpCodeProvider::getFuncInfoFromApiToken( const ApiToken& rToken ) const
 {
-    const FunctionInfo* pFuncInfo = 0;
+    const FunctionInfo* pFuncInfo = nullptr;
     if( (rToken.OpCode == mxOpCodeImpl->OPCODE_EXTERNAL) && rToken.Data.has< OUString >() )
         pFuncInfo = mxOpCodeImpl->maExtProgFuncs.get( rToken.Data.get< OUString >() ).get();
     else if( (rToken.OpCode == mxOpCodeImpl->OPCODE_MACRO) && rToken.Data.has< OUString >() )

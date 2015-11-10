@@ -394,7 +394,7 @@ ScCTBWrapper::Print( FILE* fp )
 
 ScCTB* ScCTBWrapper::GetCustomizationData( const OUString& sTBName )
 {
-    ScCTB* pCTB = NULL;
+    ScCTB* pCTB = nullptr;
     for ( std::vector< ScCTB >::iterator it = rCTB.begin(); it != rCTB.end(); ++it )
     {
         if ( it->GetName().equals( sTBName ) )

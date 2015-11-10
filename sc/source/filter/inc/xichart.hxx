@@ -158,7 +158,7 @@ public:
     void                ConvertFont(
                             ScfPropertySet& rPropSet,
                             sal_uInt16 nFontIdx,
-                            const Color* pFontColor = 0 ) const;
+                            const Color* pFontColor = nullptr ) const;
 
     /** Writes the pie rotation property for the passed angle. */
     static void         ConvertPieRotation(

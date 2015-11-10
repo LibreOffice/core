@@ -1291,7 +1291,7 @@ const ScDBData* ScDBCollection::GetDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab
 
     // Do NOT check for the document global temporary anonymous db range here.
 
-    return NULL;
+    return nullptr;
 }
 
 ScDBData* ScDBCollection::GetDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, ScDBDataPortion ePortion)
@@ -1315,7 +1315,7 @@ ScDBData* ScDBCollection::GetDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, ScDB
 
     // Do NOT check for the document global temporary anonymous db range here.
 
-    return NULL;
+    return nullptr;
 }
 
 const ScDBData* ScDBCollection::GetDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2) const
@@ -1344,7 +1344,7 @@ const ScDBData* ScDBCollection::GetDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1
         if (pNoNameData->IsDBAtArea(nTab, nCol1, nRow1, nCol2, nRow2))
             return pNoNameData;
 
-    return NULL;
+    return nullptr;
 }
 
 ScDBData* ScDBCollection::GetDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2)
@@ -1373,7 +1373,7 @@ ScDBData* ScDBCollection::GetDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCO
         if (pNoNameData->IsDBAtArea(nTab, nCol1, nRow1, nCol2, nRow2))
             return pNoNameData;
 
-    return NULL;
+    return nullptr;
 }
 
 void ScDBCollection::RefreshDirtyTableColumnNames()
@@ -1446,7 +1446,7 @@ void ScDBCollection::UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos )
 
 ScDBData* ScDBCollection::GetDBNearCursor(SCCOL nCol, SCROW nRow, SCTAB nTab )
 {
-    ScDBData* pNearData = NULL;
+    ScDBData* pNearData = nullptr;
     NamedDBs::DBsType::iterator itr = maNamedDBs.begin(), itrEnd = maNamedDBs.end();
     for (; itr != itrEnd; ++itr)
     {

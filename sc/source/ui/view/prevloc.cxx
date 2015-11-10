@@ -60,8 +60,8 @@ ScPreviewTableInfo::ScPreviewTableInfo() :
     nTab(0),
     nCols(0),
     nRows(0),
-    pColInfo(NULL),
-    pRowInfo(NULL)
+    pColInfo(nullptr),
+    pRowInfo(nullptr)
 {
 }
 
@@ -115,7 +115,7 @@ void ScPreviewTableInfo::LimitToArea( const Rectangle& rPixelArea )
                 SetColInfo( nNewCount, pNewInfo );
             }
             else
-                SetColInfo( 0, NULL );      // all invisible
+                SetColInfo( 0, nullptr );      // all invisible
         }
     }
 
@@ -142,7 +142,7 @@ void ScPreviewTableInfo::LimitToArea( const Rectangle& rPixelArea )
                 SetRowInfo( nNewCount, pNewInfo );
             }
             else
-                SetRowInfo( 0, NULL );      // all invisible
+                SetRowInfo( 0, nullptr );      // all invisible
         }
     }
 }
@@ -276,7 +276,7 @@ static ScPreviewLocationEntry* lcl_GetEntryByAddress(
             return it.get();
     }
 
-    return NULL;
+    return nullptr;
 }
 
 Rectangle ScPreviewLocationData::GetOffsetPixel( const ScAddress& rCellPos, const ScRange& rRange ) const
@@ -592,7 +592,7 @@ void ScPreviewLocationData::GetTableInfo( const Rectangle& rVisiblePixel, ScPrev
         rInfo.SetColInfo( nColCount, pColInfo );
     }
     else
-        rInfo.SetColInfo( 0, NULL );
+        rInfo.SetColInfo( 0, nullptr );
 
     //  get row info
 
@@ -659,7 +659,7 @@ void ScPreviewLocationData::GetTableInfo( const Rectangle& rVisiblePixel, ScPrev
         rInfo.SetRowInfo( nRowCount, pRowInfo );
     }
     else
-        rInfo.SetRowInfo( 0, NULL );
+        rInfo.SetRowInfo( 0, nullptr );
 
     //  limit to visible area
 

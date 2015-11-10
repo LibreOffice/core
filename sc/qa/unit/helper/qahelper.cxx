@@ -184,7 +184,7 @@ void testFormats(ScBootstrapFixture* pTest, ScDocument* pDoc, sal_Int32 nFormat)
     //formatting for B5: # ??/100 gets lost during import
 
     //test Sheet2
-    const ScPatternAttr* pPattern = NULL;
+    const ScPatternAttr* pPattern = nullptr;
     pPattern = pDoc->GetPattern(0,0,1);
     vcl::Font aFont;
     pPattern->GetFont(aFont,SC_AUTOCOL_RAW);
@@ -296,40 +296,40 @@ const SdrOle2Obj* getSingleChartObject(ScDocument& rDoc, sal_uInt16 nPage)
     if (!pDrawLayer)
     {
         cout << "Failed to retrieve the drawing layer object." << endl;
-        return NULL;
+        return nullptr;
     }
 
     const SdrPage* pPage = pDrawLayer->GetPage(nPage);
     if (!pPage)
     {
         cout << "Failed to retrieve the page object." << endl;
-        return NULL;
+        return nullptr;
     }
 
     if (pPage->GetObjCount() != 1)
     {
         cout << "This page should contain one drawing object." << endl;
-        return NULL;
+        return nullptr;
     }
 
     const SdrObject* pObj = pPage->GetObj(0);
     if (!pObj)
     {
         cout << "Failed to retrieve the drawing object." << endl;
-        return NULL;
+        return nullptr;
     }
 
     if (pObj->GetObjIdentifier() != OBJ_OLE2)
     {
         cout << "This is not an OLE2 object." << endl;
-        return NULL;
+        return nullptr;
     }
 
     const SdrOle2Obj& rOleObj = static_cast<const SdrOle2Obj&>(*pObj);
     if (!rOleObj.IsChart())
     {
         cout << "This should be a chart object." << endl;
-        return NULL;
+        return nullptr;
     }
 
     return &rOleObj;
@@ -415,7 +415,7 @@ ScTokenArray* getTokens(ScDocument& rDoc, const ScAddress& rPos)
     {
         OUString aStr = rPos.Format(SCA_VALID);
         cerr << aStr << " is not a formula cell." << endl;
-        return NULL;
+        return nullptr;
     }
 
     return pCell->GetCode();

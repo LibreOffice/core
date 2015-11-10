@@ -16,8 +16,8 @@ ScSubTotalParam::ScSubTotalParam()
     for ( sal_uInt16 i=0; i<MAXSUBTOTAL; i++ )
     {
         nSubTotals[i] = 0;
-        pSubTotals[i] = NULL;
-        pFunctions[i] = NULL;
+        pSubTotals[i] = nullptr;
+        pFunctions[i] = nullptr;
     }
 
     Clear();
@@ -49,8 +49,8 @@ ScSubTotalParam::ScSubTotalParam( const ScSubTotalParam& r ) :
         else
         {
             nSubTotals[i] = 0;
-            pSubTotals[i] = NULL;
-            pFunctions[i] = NULL;
+            pSubTotals[i] = nullptr;
+            pFunctions[i] = nullptr;
         }
     }
 }
@@ -117,8 +117,8 @@ ScSubTotalParam& ScSubTotalParam::operator=( const ScSubTotalParam& r )
         else
         {
             nSubTotals[i] = 0;
-            pSubTotals[i] = NULL;
-            pFunctions[i] = NULL;
+            pSubTotals[i] = nullptr;
+            pFunctions[i] = nullptr;
         }
     }
 

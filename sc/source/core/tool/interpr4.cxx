@@ -790,7 +790,7 @@ FormulaTokenRef ScInterpreter::PopToken()
     }
     else
         SetError(errUnknownStackVariable);
-    return NULL;
+    return nullptr;
 }
 
 double ScInterpreter::PopDouble()
@@ -1006,7 +1006,7 @@ ScDBRangeBase* ScInterpreter::PopDBDoubleRef()
             SetError( errIllegalParameter);
     }
 
-    return NULL;
+    return nullptr;
 }
 
 void ScInterpreter::PopDoubleRef(SCCOL& rCol1, SCROW &rRow1, SCTAB& rTab1,
@@ -1181,7 +1181,7 @@ void ScInterpreter::PopExternalSingleRef(
     ScAddress aAddr = rRef.toAbs(aPos);
     ScExternalRefCache::CellFormat aFmt;
     ScExternalRefCache::TokenRef xNew = pRefMgr->getSingleRefToken(
-        rFileId, rTabName, aAddr, &aPos, NULL, &aFmt);
+        rFileId, rTabName, aAddr, &aPos, nullptr, &aFmt);
 
     if (!xNew)
     {
@@ -1535,7 +1535,7 @@ ScMatrixRef ScInterpreter::PopMatrix()
     }
     else
         SetError( errUnknownStackVariable);
-    return NULL;
+    return nullptr;
 }
 
 sc::RangeMatrix ScInterpreter::PopRangeMatrix()
@@ -1625,7 +1625,7 @@ void ScInterpreter::QueryMatrixType(ScMatrixRef& xMat, short& rRetTypeExpr, sal_
                 rRetTypeExpr = css::util::NumberFormat::NUMBER;
         }
         rRetIndexExpr = 0;
-        xMat->SetErrorInterpreter( NULL);
+        xMat->SetErrorInterpreter( nullptr);
     }
     else
         SetError( errUnknownStackVariable);
@@ -1739,14 +1739,14 @@ void ScInterpreter::PushMatrix( const sc::RangeMatrix& rMat )
         return;
     }
 
-    rMat.mpMat->SetErrorInterpreter(NULL);
+    rMat.mpMat->SetErrorInterpreter(nullptr);
     nGlobalError = 0;
     PushTempTokenWithoutError(new ScMatrixRangeToken(rMat));
 }
 
 void ScInterpreter::PushMatrix(const ScMatrixRef& pMat)
 {
-    pMat->SetErrorInterpreter( NULL);
+    pMat->SetErrorInterpreter( nullptr);
     // No   if (!IfErrorPushError())   because ScMatrix stores errors itself,
     // but with notifying ScInterpreter via nGlobalError, substituting it would
     // mean to inherit the error on all array elements in all following
@@ -2254,10 +2254,10 @@ void ScInterpreter::ScExternal()
             for (i = 0; i < MAXFUNCPARAM; i++)
             {
                 eParamType[i] = pLegacyFuncData->GetParamType(i);
-                ppParam[i] = NULL;
+                ppParam[i] = nullptr;
                 nVal[i] = 0.0;
-                pStr[i] = NULL;
-                pCellArr[i] = NULL;
+                pStr[i] = nullptr;
+                pCellArr[i] = nullptr;
             }
 
             for (i = nParamCount; (i > 0) && (nGlobalError == 0); i--)
@@ -2898,10 +2898,10 @@ void ScInterpreter::ScMacro()
     }
     catch (...)
     {
-        pRoot = NULL;
+        pRoot = nullptr;
     }
 
-    SbxVariable* pVar = pRoot ? pRoot->Find(aMacro, SbxCLASS_METHOD) : NULL;
+    SbxVariable* pVar = pRoot ? pRoot->Find(aMacro, SbxCLASS_METHOD) : nullptr;
     if( !pVar || pVar->GetType() == SbxVOID || dynamic_cast<const SbMethod*>( pVar) ==  nullptr )
     {
         PushError( errNoMacro );
@@ -3446,11 +3446,11 @@ ScInterpreter::ScInterpreter( ScFormulaCell* pCell, ScDocument* pDoc,
     , rArr(r)
     , pDok(pDoc)
     , mrStrPool(pDoc->GetSharedStringPool())
-    , pJumpMatrix(NULL)
-    , pTokenMatrixMap(NULL)
+    , pJumpMatrix(nullptr)
+    , pTokenMatrixMap(nullptr)
     , pMyFormulaCell(pCell)
     , pFormatter(pDoc->GetFormatTable())
-    , pCur(NULL)
+    , pCur(nullptr)
     , nGlobalError(0)
     , sp(0)
     , maxsp(0)
@@ -3564,8 +3564,8 @@ StackVar ScInterpreter::Interpret()
     nRetFmtType = css::util::NumberFormat::UNDEFINED;
     nFuncFmtType = css::util::NumberFormat::UNDEFINED;
     nFuncFmtIndex = nCurFmtIndex = nRetFmtIndex = 0;
-    xResult = NULL;
-    pJumpMatrix = NULL;
+    xResult = nullptr;
+    pJumpMatrix = nullptr;
     mnSubTotalFlags = 0x00;
     ScTokenMatrixMap::const_iterator aTokenMatrixMapIter;
 
@@ -3577,7 +3577,7 @@ StackVar ScInterpreter::Interpret()
     SAL_MATH_FPEXCEPTIONS_OFF();
 
     aCode.Reset();
-    while( ( pCur = aCode.Next() ) != NULL
+    while( ( pCur = aCode.Next() ) != nullptr
             && (!nGlobalError || nErrorFunction <= nErrorFunctionCount) )
     {
         OpCode eOp = pCur->GetOpCode();
@@ -4090,7 +4090,7 @@ StackVar ScInterpreter::Interpret()
             if ( nLevel == 1 || (nLevel == 2 && aCode.IsEndOfPath()) )
                 bGotResult = JumpMatrix( nLevel );
             else
-                pJumpMatrix = NULL;
+                pJumpMatrix = nullptr;
         } while ( bGotResult );
 
 // Functions that evaluate an error code and directly set nGlobalError to 0,

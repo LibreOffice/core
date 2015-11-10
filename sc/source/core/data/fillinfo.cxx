@@ -73,7 +73,7 @@ static void lcl_GetMergeRange( SCsCOL nX, SCsROW nY, SCSIZE nArrY,
     while (bHOver)              // nY constant
     {
         --rStartX;
-        if (rStartX >= (SCsCOL) nX1 && !pDoc->ColHidden(rStartX, nTab, NULL, &nLastCol))
+        if (rStartX >= (SCsCOL) nX1 && !pDoc->ColHidden(rStartX, nTab, nullptr, &nLastCol))
         {
             bHOver = pRowInfo[nArrY].pCellInfo[rStartX+1].bHOverlapped;
             bVOver = pRowInfo[nArrY].pCellInfo[rStartX+1].bVOverlapped;
@@ -95,8 +95,8 @@ static void lcl_GetMergeRange( SCsCOL nX, SCsROW nY, SCSIZE nArrY,
             --nArrY;                        // local copy !
 
         if (rStartX >= (SCsCOL) nX1 && rStartY >= (SCsROW) nY1 &&
-            !pDoc->ColHidden(rStartX, nTab, NULL, &nLastCol) &&
-            !pDoc->RowHidden(rStartY, nTab, NULL, &nLastRow) &&
+            !pDoc->ColHidden(rStartX, nTab, nullptr, &nLastCol) &&
+            !pDoc->RowHidden(rStartY, nTab, nullptr, &nLastRow) &&
             (SCsROW) pRowInfo[nArrY].nRowNo == rStartY)
         {
             bVOver = pRowInfo[nArrY].pCellInfo[rStartX+1].bVOverlapped;
@@ -111,8 +111,8 @@ static void lcl_GetMergeRange( SCsCOL nX, SCsROW nY, SCSIZE nArrY,
 
     const ScMergeAttr* pMerge;
     if (rStartX >= (SCsCOL) nX1 && rStartY >= (SCsROW) nY1 &&
-        !pDoc->ColHidden(rStartX, nTab, NULL, &nLastCol) &&
-        !pDoc->RowHidden(rStartY, nTab, NULL, &nLastRow) &&
+        !pDoc->ColHidden(rStartX, nTab, nullptr, &nLastCol) &&
+        !pDoc->RowHidden(rStartY, nTab, nullptr, &nLastRow) &&
         (SCsROW) pRowInfo[nArrY].nRowNo == rStartY)
     {
         pMerge = static_cast<const ScMergeAttr*>( &pRowInfo[nArrY].pCellInfo[rStartX+1].pPatternAttr->
@@ -141,7 +141,7 @@ class RowInfoFiller
     {
         SCROW nThisRow = static_cast<SCROW>(nRow);
         if (nThisRow > mnHiddenEndRow)
-            mbHiddenRow = mrDoc.RowHidden(nThisRow, mnTab, NULL, &mnHiddenEndRow);
+            mbHiddenRow = mrDoc.RowHidden(nThisRow, mnTab, nullptr, &mnHiddenEndRow);
         return mbHiddenRow;
     }
 
@@ -270,7 +270,7 @@ void ScDocument::FillInfo(
         if (nY > nDocHeightEndRow)
         {
             if (ValidRow(nY))
-                nDocHeight = GetRowHeight( nY, nTab, NULL, &nDocHeightEndRow );
+                nDocHeight = GetRowHeight( nY, nTab, nullptr, &nDocHeightEndRow );
             else
                 nDocHeight = ScGlobal::nStdRowHeight;
         }
@@ -278,7 +278,7 @@ void ScDocument::FillInfo(
         if ( nArrRow==0 || nDocHeight || nY > MAXROW )
         {
             RowInfo* pThisRowInfo = &pRowInfo[nArrRow];
-            pThisRowInfo->pCellInfo = NULL;                 // is loaded below
+            pThisRowInfo->pCellInfo = nullptr;                 // is loaded below
 
             sal_uInt16 nHeight = (sal_uInt16) ( nDocHeight * fRowScale );
             if (!nHeight)
@@ -374,17 +374,17 @@ void ScDocument::FillInfo(
             pInfo->bHideGrid    = false;                    //  view-internal
             pInfo->bEditEngine  = false;                    //  view-internal
 
-            pInfo->pBackground  = NULL;                     //TODO: omit?
-            pInfo->pPatternAttr = NULL;
-            pInfo->pConditionSet= NULL;
+            pInfo->pBackground  = nullptr;                     //TODO: omit?
+            pInfo->pPatternAttr = nullptr;
+            pInfo->pConditionSet= nullptr;
 
-            pInfo->pLinesAttr   = NULL;
-            pInfo->mpTLBRLine   = NULL;
-            pInfo->mpBLTRLine   = NULL;
+            pInfo->pLinesAttr   = nullptr;
+            pInfo->mpTLBRLine   = nullptr;
+            pInfo->mpBLTRLine   = nullptr;
 
             pInfo->pShadowAttr    = pDefShadow;
-            pInfo->pHShadowOrigin = NULL;
-            pInfo->pVShadowOrigin = NULL;
+            pInfo->pHShadowOrigin = nullptr;
+            pInfo->pVShadowOrigin = nullptr;
         }
     }
 
@@ -502,10 +502,10 @@ void ScDocument::FillInfo(
                         do
                         {
                             SCROW nLastHiddenRow = -1;
-                            bool bRowHidden = RowHidden(nCurRow, nTab, NULL, &nLastHiddenRow);
+                            bool bRowHidden = RowHidden(nCurRow, nTab, nullptr, &nLastHiddenRow);
                             if ( nArrRow==0 || !bRowHidden )
                             {
-                                if ( GetPreviewCellStyle( nX, nCurRow, nTab  ) != NULL )
+                                if ( GetPreviewCellStyle( nX, nCurRow, nTab  ) != nullptr )
                                     bAnyPreview = true;
                                 RowInfo* pThisRowInfo = &pRowInfo[nArrRow];
                                 if (pBackground != pDefBackground)          // Column background == Default ?
@@ -687,7 +687,7 @@ void ScDocument::FillInfo(
             {
                 CellInfo* pInfo = &pRowInfo[nArrRow].pCellInfo[nArrCol];
                 SCCOL nCol = (nArrCol>0) ? nArrCol-1 : MAXCOL+1;
-                ScPatternAttr* pModifiedPatt = NULL;
+                ScPatternAttr* pModifiedPatt = nullptr;
 
                 if ( ValidCol(nCol) && pRowInfo[nArrRow].nRowNo <= MAXROW )
                 {
@@ -1085,8 +1085,8 @@ void ScDocument::FillInfo(
                     }
                     else
                     {
-                        pBox = 0;
-                        pTLBR = pBLTR = 0;
+                        pBox = nullptr;
+                        pTLBR = pBLTR = nullptr;
                     }
                 }
             }

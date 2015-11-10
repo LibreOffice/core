@@ -38,7 +38,7 @@ public:
     virtual bool        FillItemSet     ( SfxItemSet* rCoreSet ) override;
     virtual void        Reset           ( const SfxItemSet* rCoreSet ) override;
     using SfxTabPage::DeactivatePage;
-    virtual sfxpg       DeactivatePage  ( SfxItemSet* pSet = NULL ) override;
+    virtual sfxpg       DeactivatePage  ( SfxItemSet* pSet = nullptr ) override;
 
 private:
                 ScTpCalcOptions( vcl::Window*            pParent,

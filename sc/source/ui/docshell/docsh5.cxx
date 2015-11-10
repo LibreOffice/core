@@ -193,7 +193,7 @@ ScDBData* ScDocShell::GetDBData( const ScRange& rMarked, ScGetDBMode eMode, ScGe
     }
     else if ( eMode == SC_DB_OLD )
     {
-        pData = NULL;                           // nichts gefunden
+        pData = nullptr;                           // nichts gefunden
         nStartCol = nEndCol = nCol;
         nStartRow = nEndRow = nRow;
         nStartTab = nEndTab = nTab;
@@ -272,7 +272,7 @@ ScDBData* ScDocShell::GetDBData( const ScRange& rMarked, ScGetDBMode eMode, ScGe
         }
         else
         {
-            ScDBCollection* pUndoColl = NULL;
+            ScDBCollection* pUndoColl = nullptr;
 
             OUString aNewName;
             if (eMode==SC_DB_IMPORT)
@@ -282,7 +282,7 @@ ScDBData* ScDocShell::GetDBData( const ScRange& rMarked, ScGetDBMode eMode, ScGe
 
                 OUString aImport = ScGlobal::GetRscString( STR_DBNAME_IMPORT );
                 long nCount = 0;
-                const ScDBData* pDummy = NULL;
+                const ScDBData* pDummy = nullptr;
                 ScDBCollection::NamedDBs& rDBs = pColl->getNamedDBs();
                 do
                 {
@@ -331,11 +331,11 @@ ScDBData* ScDocShell::GetAnonymousDBData(const ScRange& rRange)
 {
     ScDBCollection* pColl = aDocument.GetDBCollection();
     if (!pColl)
-        return NULL;
+        return nullptr;
 
     ScDBData* pData = pColl->getAnonDBs().getByRange(rRange);
     if (!pData)
-        return NULL;
+        return nullptr;
 
     if (!pData->HasHeader())
     {
@@ -350,7 +350,7 @@ ScDBData* ScDocShell::GetAnonymousDBData(const ScRange& rRange)
 ScDBData* ScDocShell::GetOldAutoDBRange()
 {
     ScDBData* pRet = pOldAutoDBRange;
-    pOldAutoDBRange = NULL;
+    pOldAutoDBRange = nullptr;
     return pRet;                    // has to be deleted by caller!
 }
 
@@ -384,7 +384,7 @@ void ScDocShell::CancelAutoDBRange()
         }
 
         delete pOldAutoDBRange;
-        pOldAutoDBRange = NULL;
+        pOldAutoDBRange = nullptr;
     }
 }
 
@@ -548,7 +548,7 @@ void ScDocShell::DoConsolidate( const ScConsolidateParam& rParam, bool bRecord )
     aData.GetSize( nColSize, nRowSize );
     if (bRecord && nColSize > 0 && nRowSize > 0)
     {
-        ScDBData* pUndoData = pDestData ? new ScDBData(*pDestData) : NULL;
+        ScDBData* pUndoData = pDestData ? new ScDBData(*pDestData) : nullptr;
 
         SCTAB nDestTab = rParam.nTab;
         ScArea aDestArea( rParam.nTab, rParam.nCol, rParam.nRow,
@@ -563,7 +563,7 @@ void ScDocShell::DoConsolidate( const ScConsolidateParam& rParam, bool bRecord )
 
             // alte Outlines
             ScOutlineTable* pTable = aDocument.GetOutlineTable( nDestTab );
-            ScOutlineTable* pUndoTab = pTable ? new ScOutlineTable( *pTable ) : NULL;
+            ScOutlineTable* pUndoTab = pTable ? new ScOutlineTable( *pTable ) : nullptr;
 
             ScDocument* pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
             pUndoDoc->InitUndo( &aDocument, 0, nTabCount-1, false, true );
@@ -604,7 +604,7 @@ void ScDocShell::DoConsolidate( const ScConsolidateParam& rParam, bool bRecord )
 
             GetUndoManager()->AddUndoAction(
                     new ScUndoConsolidate( this, aDestArea, rParam, pUndoDoc,
-                                            false, 0, NULL, pUndoData ) );
+                                            false, 0, nullptr, pUndoData ) );
         }
     }
 
@@ -781,7 +781,7 @@ SCTAB ScDocShell::MakeScenario( SCTAB nTab, const OUString& rName, const OUStrin
             ++nNewTab;
 
         bool bCopyAll = ( (nFlags & SC_SCENARIO_COPYALL) != 0 );
-        const ScMarkData* pCopyMark = NULL;
+        const ScMarkData* pCopyMark = nullptr;
         if (!bCopyAll)
             pCopyMark = &rMark;
 
@@ -1011,7 +1011,7 @@ IMPL_LINK_TYPED( ScDocShell, RefreshDBDataHdl, Timer*, pRefreshTimer, void )
     {
         ScRange aRange;
         pDBData->GetArea( aRange );
-        bool bContinue = aFunc.DoImport( aRange.aStart.Tab(), aImportParam, NULL, true ); //! Api-Flag as parameter
+        bool bContinue = aFunc.DoImport( aRange.aStart.Tab(), aImportParam, nullptr, true ); //! Api-Flag as parameter
         // internal operations (sort, query, subtotal) only if no error
         if (bContinue)
         {

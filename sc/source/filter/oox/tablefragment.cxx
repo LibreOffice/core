@@ -57,7 +57,7 @@ ContextHandlerRef TableFragment::onCreateContext( sal_Int32 nElement, const Attr
             }
         break;
     }
-    return 0;
+    return nullptr;
 }
 
 ContextHandlerRef TableFragment::onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm )
@@ -76,7 +76,7 @@ ContextHandlerRef TableFragment::onCreateRecordContext( sal_Int32 nRecId, Sequen
                 return new AutoFilterContext( *this, mrTable.createAutoFilter() );
         break;
     }
-    return 0;
+    return nullptr;
 }
 
 const RecordInfo* TableFragment::getRecordInfos() const

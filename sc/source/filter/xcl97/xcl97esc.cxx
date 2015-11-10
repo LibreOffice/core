@@ -96,13 +96,13 @@ XclEscherEx::XclEscherEx( const XclExpRoot& rRoot, XclExpObjectManager& rObjMgr,
     EscherEx( pParent ? pParent->mxGlobal : EscherExGlobalRef( new XclEscherExGlobal( rRoot ) ), &rStrm ),
     XclExpRoot( rRoot ),
     mrObjMgr( rObjMgr ),
-    pCurrXclObj( NULL ),
-    pCurrAppData( NULL ),
+    pCurrXclObj( nullptr ),
+    pCurrAppData( nullptr ),
     pTheClientData( new XclEscherClientData ),
-    pAdditionalText( NULL ),
+    pAdditionalText( nullptr ),
     nAdditionalText( 0 ),
     mnNextKey( 0 ),
-    mbIsRootDff( pParent == 0 )
+    mbIsRootDff( pParent == nullptr )
 {
     InsertPersistOffset( mnNextKey, 0 );
 }
@@ -191,7 +191,7 @@ EscherExHostAppData* XclEscherEx::StartShape( const Reference< XShape >& rxShape
 {
     if ( nAdditionalText )
         nAdditionalText++;
-    bool bInGroup = ( pCurrXclObj != NULL );
+    bool bInGroup = ( pCurrXclObj != nullptr );
     if ( bInGroup )
     {   // stacked recursive group object
         if ( !pCurrAppData->IsStackedGroup() )
@@ -209,7 +209,7 @@ EscherExHostAppData* XclEscherEx::StartShape( const Reference< XShape >& rxShape
         pCurrXclObj = new XclObjAny( mrObjMgr, rxShape, &GetDocRef() );  // just what is it?!?
     else
     {
-        pCurrXclObj = NULL;
+        pCurrXclObj = nullptr;
         sal_uInt16 nObjType = pObj->GetObjIdentifier();
 
         if( nObjType == OBJ_OLE2 )
@@ -225,7 +225,7 @@ EscherExHostAppData* XclEscherEx::StartShape( const Reference< XShape >& rxShape
                     if ( SotExchange::IsChart( aObjClsId ) )
                     {   // yes, it's a chart diagram
                         mrObjMgr.AddObj( new XclExpChartObj( mrObjMgr, rxShape, pChildAnchor ) );
-                        pCurrXclObj = NULL;     // no metafile or whatsoever
+                        pCurrXclObj = nullptr;     // no metafile or whatsoever
                     }
                     else    // metafile and OLE object
                         pCurrXclObj = new XclObjOle( mrObjMgr, *pObj );
@@ -269,7 +269,7 @@ EscherExHostAppData* XclEscherEx::StartShape( const Reference< XShape >& rxShape
     {
         if ( !mrObjMgr.AddObj( pCurrXclObj ) )
         {   // maximum count reached, object got deleted
-            pCurrXclObj = NULL;
+            pCurrXclObj = nullptr;
         }
         else
         {
@@ -358,7 +358,7 @@ void XclEscherEx::EndShape( sal_uInt16 nShapeType, sal_uInt32 nShapeID )
             XclObj* pLastObj = mrObjMgr.RemoveLastObj();
             OSL_ENSURE( pLastObj == pCurrXclObj, "XclEscherEx::EndShape - wrong object" );
             DELETEZ( pLastObj );
-            pCurrXclObj = 0;
+            pCurrXclObj = nullptr;
         }
 
         if( pCurrXclObj )
@@ -378,8 +378,8 @@ void XclEscherEx::EndShape( sal_uInt16 nShapeType, sal_uInt32 nShapeID )
     DeleteCurrAppData();
     if (aStack.empty())
     {
-        pCurrXclObj = NULL;
-        pCurrAppData = NULL;
+        pCurrXclObj = nullptr;
+        pCurrAppData = nullptr;
     }
     else
     {
@@ -395,7 +395,7 @@ EscherExHostAppData* XclEscherEx::EnterAdditionalTextGroup()
 {
     nAdditionalText = 1;
     pAdditionalText = static_cast<XclEscherClientTextbox*>( pCurrAppData->GetClientTextbox() );
-    pCurrAppData->SetClientTextbox( NULL );
+    pCurrAppData->SetClientTextbox( nullptr );
     return pCurrAppData;
 }
 
@@ -425,7 +425,7 @@ std::unique_ptr<XclExpOcxControlObj> XclEscherEx::CreateOCXCtrlObj( Reference< X
 
             // writes from xCtrlModel into mxCtlsStrm, raw class name returned in aClassName
             Reference< XOutputStream > xOut( new utl::OSeekableOutputStreamWrapper( *mxCtlsStrm ) );
-            Reference< css::frame::XModel > xModel( GetDocShell() ? GetDocShell()->GetModel() : NULL );
+            Reference< css::frame::XModel > xModel( GetDocShell() ? GetDocShell()->GetModel() : nullptr );
             if( xModel.is() && xOut.is() && oox::ole::MSConvertOCXControls::WriteOCXExcelKludgeStream( xModel, xOut, xCtrlModel, xShape->getSize(), aClassName ) )
             {
                 sal_uInt32 nStrmSize = static_cast< sal_uInt32 >( mxCtlsStrm->Tell() - nStrmStart );
@@ -552,7 +552,7 @@ ShapeInteractionHelper::PopulateShapeInteractionInfo( XclExpObjectManager& rObjM
 {
    try
    {
-      SvMemoryStream* pMemStrm = NULL;
+      SvMemoryStream* pMemStrm = nullptr;
       OUString sHyperLink;
       OUString sMacro;
       if ( ScMacroInfo* pInfo = ScDrawLayer::GetMacroInfo( ::GetSdrObjectFromXShape( xShape ) ) )

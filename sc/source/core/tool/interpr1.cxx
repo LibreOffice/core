@@ -76,8 +76,8 @@ static const sal_uInt64 n2power48 = SAL_CONST_UINT64( 281474976710656); // 2^48
 IMPL_FIXEDMEMPOOL_NEWDEL( ScTokenStack )
 IMPL_FIXEDMEMPOOL_NEWDEL( ScInterpreter )
 
-ScCalcConfig *ScInterpreter::mpGlobalConfig = NULL;
-ScTokenStack* ScInterpreter::pGlobalStack = NULL;
+ScCalcConfig *ScInterpreter::mpGlobalConfig = nullptr;
+ScTokenStack* ScInterpreter::pGlobalStack = nullptr;
 bool ScInterpreter::bGlobalStackInUse = false;
 
 using namespace formula;
@@ -100,7 +100,7 @@ void ScInterpreter::ScIfJump()
                 FormulaTokenRef xNew;
                 ScTokenMatrixMap::const_iterator aMapIter;
                 // DoubleError handled by JumpMatrix
-                pMat->SetErrorInterpreter( NULL);
+                pMat->SetErrorInterpreter( nullptr);
                 SCSIZE nCols, nRows;
                 pMat->GetDimensions( nCols, nRows );
                 if ( nCols == 0 || nRows == 0 )
@@ -423,7 +423,7 @@ void ScInterpreter::ScChooseJump()
                 FormulaTokenRef xNew;
                 ScTokenMatrixMap::const_iterator aMapIter;
                 // DoubleError handled by JumpMatrix
-                pMat->SetErrorInterpreter( NULL);
+                pMat->SetErrorInterpreter( nullptr);
                 SCSIZE nCols, nRows;
                 pMat->GetDimensions( nCols, nRows );
                 if ( nCols == 0 || nRows == 0 )
@@ -783,7 +783,7 @@ bool ScInterpreter::JumpMatrix( short nStackLevel )
     if ( !bCont )
     {   // we're done with it, throw away jump matrix, keep result
         ScMatrix* pResMat = pJumpMatrix->GetResultMatrix();
-        pJumpMatrix = NULL;
+        pJumpMatrix = nullptr;
         Pop();
         PushMatrix( pResMat );
         // Remove jump matrix from map and remember result matrix in case it
@@ -941,7 +941,7 @@ sc::RangeMatrix ScInterpreter::CompareMat( ScQueryOp eOp, sc::CompareOptions* pO
                 if (!aMat[i].mpMat)
                     SetError( errIllegalParameter);
                 else
-                    aMat[i].mpMat->SetErrorInterpreter(NULL);
+                    aMat[i].mpMat->SetErrorInterpreter(nullptr);
                     // errors are transported as DoubleError inside matrix
                 break;
             default:
@@ -2180,11 +2180,11 @@ void ScInterpreter::ScCell()
                 OUStringBuffer aFuncResult;
                 OUString aCellStr =
                 ScAddress( static_cast<SCCOL>(aCellPos.Tab()), 0, 0 ).Format(
-                    (SCA_COL_ABSOLUTE|SCA_VALID_COL), NULL, pDok->GetAddressConvention() );
+                    (SCA_COL_ABSOLUTE|SCA_VALID_COL), nullptr, pDok->GetAddressConvention() );
                 aFuncResult.append(aCellStr);
                 aFuncResult.append(':');
                 aCellStr = aCellPos.Format((SCA_COL_ABSOLUTE|SCA_VALID_COL|SCA_ROW_ABSOLUTE|SCA_VALID_ROW),
-                                 NULL, pDok->GetAddressConvention());
+                                 nullptr, pDok->GetAddressConvention());
                 aFuncResult.append(aCellStr);
                 PushString( aFuncResult.makeStringAndClear() );
             }
@@ -3251,7 +3251,7 @@ static OUString lcl_convertIntoHalfWidth( const OUString & rStr )
         bFirstASCCall = false;
     }
 
-    return aTrans.transliterate( rStr, 0, sal_uInt16( rStr.getLength() ), NULL );
+    return aTrans.transliterate( rStr, 0, sal_uInt16( rStr.getLength() ), nullptr );
 }
 
 static OUString lcl_convertIntoFullWidth( const OUString & rStr )
@@ -3265,7 +3265,7 @@ static OUString lcl_convertIntoFullWidth( const OUString & rStr )
         bFirstJISCall = false;
     }
 
-    return aTrans.transliterate( rStr, 0, sal_uInt16( rStr.getLength() ), NULL );
+    return aTrans.transliterate( rStr, 0, sal_uInt16( rStr.getLength() ), nullptr );
 }
 
 /* ODFF:
@@ -4236,7 +4236,7 @@ void ScInterpreter::ScMatch()
         SCCOL nCol2 = 0;
         SCROW nRow2 = 0;
         SCTAB nTab2 = 0;
-        ScMatrixRef pMatSrc = NULL;
+        ScMatrixRef pMatSrc = nullptr;
 
         switch (GetStackType())
         {
@@ -5652,7 +5652,7 @@ void ScInterpreter::ScLookup()
     if ( !MustHaveParamCount( nParamCount, 2, 3 ) )
         return ;
 
-    ScMatrixRef pDataMat = NULL, pResMat = NULL;
+    ScMatrixRef pDataMat = nullptr, pResMat = nullptr;
     SCCOL nCol1 = 0, nCol2 = 0, nResCol1 = 0, nResCol2 = 0;
     SCROW nRow1 = 0, nRow2 = 0, nResRow1 = 0, nResRow2 = 0;
     SCTAB nTab1 = 0, nResTab = 0;
@@ -5861,7 +5861,7 @@ void ScInterpreter::ScLookup()
                     aResAdr.Set( nResCol1, nResRow1, nResTab);
                     // fallthru
                 case svSingleRef:
-                    PushCellResultToken( true, aResAdr, NULL, NULL);
+                    PushCellResultToken( true, aResAdr, nullptr, nullptr);
                     break;
                 default:
                     OSL_FAIL( "ScInterpreter::ScLookup: unhandled eResArrayType, single value data");
@@ -5878,7 +5878,7 @@ void ScInterpreter::ScLookup()
                     PushString( aDataStr );
                     break;
                 case svSingleRef:
-                    PushCellResultToken( true, aDataAdr, NULL, NULL);
+                    PushCellResultToken( true, aDataAdr, nullptr, nullptr);
                     break;
                 default:
                     OSL_FAIL( "ScInterpreter::ScLookup: unhandled eDataArrayType, single value data");
@@ -6040,7 +6040,7 @@ void ScInterpreter::ScLookup()
                 aAdr.SetCol(nTempCol);
                 aAdr.SetRow(nResRow1);
             }
-            PushCellResultToken(true, aAdr, NULL, NULL);
+            PushCellResultToken(true, aAdr, nullptr, nullptr);
         }
         else
         {
@@ -6136,7 +6136,7 @@ void ScInterpreter::ScLookup()
                     aAdr.SetCol(nTempCol);
                     aAdr.SetRow(nResRow1);
                 }
-                PushCellResultToken( true, aAdr, NULL, NULL);
+                PushCellResultToken( true, aAdr, nullptr, nullptr);
             }
             break;
             case svDouble:
@@ -6156,7 +6156,7 @@ void ScInterpreter::ScLookup()
                             PushString( aResStr );
                             break;
                         case svSingleRef:
-                            PushCellResultToken( true, aResAdr, NULL, NULL);
+                            PushCellResultToken( true, aResAdr, nullptr, nullptr);
                             break;
                         default:
                             ;   // nothing
@@ -6197,7 +6197,7 @@ void ScInterpreter::ScLookup()
             aAdr.SetCol(nTempCol);
             aAdr.SetRow(nRow2);
         }
-        PushCellResultToken(true, aAdr, NULL, NULL);
+        PushCellResultToken(true, aAdr, nullptr, nullptr);
     }
 }
 
@@ -6220,7 +6220,7 @@ void ScInterpreter::CalculateLookup(bool bHLookup)
     // Index of column to search.
     double fIndex = ::rtl::math::approxFloor( GetDouble() ) - 1.0;
 
-    ScMatrixRef pMat = NULL;
+    ScMatrixRef pMat = nullptr;
     SCSIZE nC = 0, nR = 0;
     SCCOL nCol1 = 0;
     SCROW nRow1 = 0;
@@ -6451,7 +6451,7 @@ void ScInterpreter::CalculateLookup(bool bHLookup)
         if ( bFound )
         {
             ScAddress aAdr( nCol, nRow, nTab1 );
-            PushCellResultToken( true, aAdr, NULL, NULL);
+            PushCellResultToken( true, aAdr, nullptr, nullptr);
         }
         else
             PushNA();
@@ -6662,7 +6662,7 @@ std::unique_ptr<ScDBQueryParamBase> ScInterpreter::GetDBParams( bool& rMissingFi
         // First, get the query criteria range.
         ::std::unique_ptr<ScDBRangeBase> pQueryRef( PopDBDoubleRef() );
         if (!pQueryRef.get())
-            return NULL;
+            return nullptr;
 
         bool    bByVal = true;
         double  nVal = 0.0;
@@ -6719,12 +6719,12 @@ std::unique_ptr<ScDBQueryParamBase> ScInterpreter::GetDBParams( bool& rMissingFi
         }
 
         if (nGlobalError)
-            return NULL;
+            return nullptr;
 
         unique_ptr<ScDBRangeBase> pDBRef( PopDBDoubleRef() );
 
         if (nGlobalError || !pDBRef.get())
-            return NULL;
+            return nullptr;
 
         if ( bRangeFake )
         {
@@ -6736,7 +6736,7 @@ std::unique_ptr<ScDBQueryParamBase> ScInterpreter::GetDBParams( bool& rMissingFi
         }
 
         if (nGlobalError)
-            return NULL;
+            return nullptr;
 
         SCCOL nField = pDBRef->getFirstFieldColumn();
         if (rMissingField)
@@ -6751,7 +6751,7 @@ std::unique_ptr<ScDBQueryParamBase> ScInterpreter::GetDBParams( bool& rMissingFi
         }
 
         if (!ValidCol(nField))
-            return NULL;
+            return nullptr;
 
         unique_ptr<ScDBQueryParamBase> pParam( pDBRef->createQueryParam(pQueryRef.get()) );
 
@@ -6784,7 +6784,7 @@ std::unique_ptr<ScDBQueryParamBase> ScInterpreter::GetDBParams( bool& rMissingFi
             return pParam;
         }
     }
-    return NULL;
+    return nullptr;
 }
 
 void ScInterpreter::DBIterator( ScIterFunc eFunc )
@@ -7725,7 +7725,7 @@ void ScInterpreter::ScCurrency()
             fVal = ceil(fVal*fFac-0.5)/fFac;
         else
             fVal = floor(fVal*fFac+0.5)/fFac;
-        Color* pColor = NULL;
+        Color* pColor = nullptr;
         if ( fDec < 0.0 )
             fDec = 0.0;
         sal_uLong nIndex = pFormatter->GetStandardFormat(
@@ -7814,7 +7814,7 @@ void ScInterpreter::ScFixed()
             fVal = ceil(fVal*fFac-0.5)/fFac;
         else
             fVal = floor(fVal*fFac+0.5)/fFac;
-        Color* pColor = NULL;
+        Color* pColor = nullptr;
         if (fDec < 0.0)
             fDec = 0.0;
         sal_uLong nIndex = pFormatter->GetStandardFormat(
@@ -8210,7 +8210,7 @@ void ScInterpreter::ScText()
         else
         {
             OUString aResult;
-            Color* pColor = NULL;
+            Color* pColor = nullptr;
             LanguageType eCellLang;
             const ScPatternAttr* pPattern = pDok->GetPattern(
                     aPos.Col(), aPos.Row(), aPos.Tab() );

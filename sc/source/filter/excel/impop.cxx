@@ -109,10 +109,10 @@ ImportExcel::ImportExcel( XclImpRootData& rImpData, SvStream& rStrm ):
     maStrm( rStrm, GetRoot() ),
     aIn( maStrm ),
     maScOleSize( ScAddress::INITIALIZE_INVALID ),
-    pColOutlineBuff(NULL),
-    pRowOutlineBuff(NULL),
-    pColRowBuff(NULL),
-    mpLastFormula(NULL),
+    pColOutlineBuff(nullptr),
+    pRowOutlineBuff(nullptr),
+    pColRowBuff(nullptr),
+    mpLastFormula(nullptr),
     mnLastRefIdx( 0 ),
     mnIxfeIndex( 0 ),
     mnLastRecId(0),
@@ -216,7 +216,7 @@ sal_uInt16 ImportExcel::ReadXFIndex( const ScAddress& rScPos, bool bBiff2 )
         if( !mbBiff2HasXfsValid )
         {
             mbBiff2HasXfsValid = true;
-            mbBiff2HasXfs = GetXFBuffer().GetXF( 0 ) != 0;
+            mbBiff2HasXfs = GetXFBuffer().GetXF( 0 ) != nullptr;
         }
         // read formatting information (includes the XF identifier)
         sal_uInt8 nFlags1, nFlags2, nFlags3;
@@ -1223,7 +1223,7 @@ void ImportExcel::NewTable()
 
     pExcRoot->pShrfmlaBuff->Clear();
     maLastFormulaCells.clear();
-    mpLastFormula = NULL;
+    mpLastFormula = nullptr;
 
     InitializeTable( nTab );
 

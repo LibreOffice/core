@@ -293,17 +293,17 @@ struct TableValues::Impl
     {
         if (nTab < maRange.aStart.Tab() || maRange.aEnd.Tab() < nTab)
             // sheet index out of bound.
-            return NULL;
+            return nullptr;
         if (nCol < maRange.aStart.Col() || maRange.aEnd.Col() < nCol)
             // column index out of bound.
-            return NULL;
+            return nullptr;
         size_t nTabOffset = nTab - maRange.aStart.Tab();
         if (nTabOffset >= m_Tables.size())
-            return NULL;
+            return nullptr;
         std::unique_ptr<TableType>& rTab2 = m_Tables[nTab-maRange.aStart.Tab()];
         size_t nColOffset = nCol - maRange.aStart.Col();
         if(nColOffset >= rTab2.get()->size())
-            return NULL;
+            return nullptr;
         return &rTab2.get()[0][nColOffset].get()[0];
     }
 };

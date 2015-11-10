@@ -182,7 +182,7 @@ void ScTabViewShell::InsertURLField( const OUString& rName, const OUString& rURL
         }
 
         // single url in cell is shown in the dialog and replaced
-        bSelectFirst = HasBookmarkAtCursor( NULL );
+        bSelectFirst = HasBookmarkAtCursor( nullptr );
         pScMod->SetInputMode( SC_INPUT_TABLE );
     }
 

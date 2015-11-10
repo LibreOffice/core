@@ -34,7 +34,7 @@ ScRetypePassDlg::ScRetypePassDlg(vcl::Window* pParent) :
     maTextHashGood(ScResId(STR_HASH_GOOD)),
     maTextHashRegen(ScResId(STR_HASH_REGENERATED)),
 
-    mpDocItem(static_cast<ScDocProtection*>(NULL)),
+    mpDocItem(static_cast<ScDocProtection*>(nullptr)),
     mnCurScrollPos(0),
     meDesiredHash(PASSHASH_SHA1)
 {
@@ -270,7 +270,7 @@ IMPL_LINK_NOARG_TYPED(ScRetypePassDlg, OKHdl, Button*, void)
 
 IMPL_LINK_TYPED( ScRetypePassDlg, RetypeBtnHdl, Button*, pBtn, void )
 {
-    ScPassHashProtectable* pProtected = NULL;
+    ScPassHashProtectable* pProtected = nullptr;
     if (pBtn == mpBtnRetypeDoc)
     {
         // document protection.
@@ -283,7 +283,7 @@ IMPL_LINK_TYPED( ScRetypePassDlg, RetypeBtnHdl, Button*, pBtn, void )
         while(aPos < maSheets.size() && pBtn != maSheets[aPos]->GetChild(2))
             ++aPos;
 
-        pProtected = aPos < maSheets.size() ? maTableItems[aPos].mpProtect.get() : 0;
+        pProtected = aPos < maSheets.size() ? maTableItems[aPos].mpProtect.get() : nullptr;
     }
 
     if (!pProtected)

@@ -663,7 +663,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawV
                 uno::Reference< lang::XInitialization > xInit( xDialog, uno::UNO_QUERY );
                 if( xChartModel.is() && xInit.is() )
                 {
-                    uno::Reference< awt::XWindow > xDialogParentWindow(0);
+                    uno::Reference< awt::XWindow > xDialogParentWindow(nullptr);
                     //  initialize dialog
                     uno::Sequence<uno::Any> aSeq(2);
                     uno::Any* pArray = aSeq.getArray();

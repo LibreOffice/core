@@ -19,7 +19,7 @@ class Test : public test::BootstrapFixture
 {
 public:
     Test()
-        : m_pDoc(NULL)
+        : m_pDoc(nullptr)
     {
     }
 

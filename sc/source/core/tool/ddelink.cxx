@@ -49,7 +49,7 @@ ScDdeLink::ScDdeLink( ScDocument* pD, const OUString& rA, const OUString& rT, co
     aItem( rI ),
     nMode( nM ),
     bNeedUpdate( false ),
-    pResult( NULL )
+    pResult( nullptr )
 {
 }
 
@@ -68,7 +68,7 @@ ScDdeLink::ScDdeLink( ScDocument* pD, const ScDdeLink& rOther ) :
     aItem   ( rOther.aItem ),
     nMode   ( rOther.nMode ),
     bNeedUpdate( false ),
-    pResult ( NULL )
+    pResult ( nullptr )
 {
     if (rOther.pResult)
         pResult = rOther.pResult->Clone();
@@ -78,7 +78,7 @@ ScDdeLink::ScDdeLink( ScDocument* pD, SvStream& rStream, ScMultipleReadHeader& r
     ::sfx2::SvBaseLink(SfxLinkUpdateMode::ALWAYS,SotClipboardFormatId::STRING),
     pDoc( pD ),
     bNeedUpdate( false ),
-    pResult( NULL )
+    pResult( nullptr )
 {
     rHdr.StartEntry();
 
@@ -109,7 +109,7 @@ void ScDdeLink::Store( SvStream& rStream, ScMultipleWriteHeader& rHdr ) const
     rStream.WriteUniOrByteString( aTopic, eCharSet );
     rStream.WriteUniOrByteString( aItem, eCharSet );
 
-    bool bHasValue = ( pResult != 0 );
+    bool bHasValue = ( pResult != nullptr );
     rStream.WriteBool( bHasValue );
 
     if( rStream.GetVersion() > SOFFICE_FILEFORMAT_40 )      // nicht bei 4.0 Export

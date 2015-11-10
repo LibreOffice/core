@@ -1199,7 +1199,7 @@ bool getScRangeListForAddress( const OUString& sName, ScDocShell* pDocSh, ScRang
             ScRangeName* pRangeName = rDoc.GetRangeName(nCurTab);
             if (pRangeName)
             {
-                bool bLocalName = pRangeName->findByUpperName(ScGlobal::pCharClass->uppercase(sAddress)) != NULL;
+                bool bLocalName = pRangeName->findByUpperName(ScGlobal::pCharClass->uppercase(sAddress)) != nullptr;
                 // TODO: Handle local names correctly.
                 (void)bLocalName;
             }
@@ -2007,7 +2007,7 @@ ScVbaRange::setFormulaArray(const uno::Any& rFormula) throw (uno::RuntimeExcepti
     ScTokenArray aTokenArray;
     (void)ScTokenConversion::ConvertToTokenArray( getScDocument(), aTokenArray, aTokens );
 
-    getScDocShell()->GetDocFunc().EnterMatrix( *getScRangeList()[0], NULL, &aTokenArray, OUString(), true, true, EMPTY_OUSTRING, formula::FormulaGrammar::GRAM_PODF_A1 );
+    getScDocShell()->GetDocFunc().EnterMatrix( *getScRangeList()[0], nullptr, &aTokenArray, OUString(), true, true, EMPTY_OUSTRING, formula::FormulaGrammar::GRAM_PODF_A1 );
 }
 
 OUString
@@ -2122,7 +2122,7 @@ ScVbaRange::Font() throw ( script::BasicErrorException, uno::RuntimeException)
         xProps.set(mxRanges, ::uno::UNO_QUERY );
 
     ScVbaPalette aPalette( rDoc.GetDocumentShell() );
-    ScCellRangeObj* pRangeObj = NULL;
+    ScCellRangeObj* pRangeObj = nullptr;
     try
     {
         pRangeObj = getCellRangeObj();
@@ -2953,7 +2953,7 @@ ScVbaRange::getComment() throw (uno::RuntimeException, std::exception)
     // comment defined
     uno::Reference< excel::XComment > xComment( new ScVbaComment( this, mxContext, getUnoModel(), mxRange ) );
     if ( xComment->Text( uno::Any(), uno::Any(), uno::Any() ).isEmpty() )
-        return NULL;
+        return nullptr;
     return xComment;
 
 }
@@ -4244,7 +4244,7 @@ ScVbaRange::ApplicationRange( const uno::Reference< uno::XComponentContext >& xC
 // Helper functions for AutoFilter
 static ScDBData* lcl_GetDBData_Impl( ScDocShell* pDocShell, sal_Int16 nSheet )
 {
-    ScDBData* pRet = NULL;
+    ScDBData* pRet = nullptr;
     if (pDocShell)
     {
         pRet = pDocShell->GetDocument().GetAnonymousDBData(nSheet);
@@ -4260,7 +4260,7 @@ static void lcl_SelectAll( ScDocShell* pDocShell, ScQueryParam& aParam )
         if ( pViewData )
         {
             OSL_TRACE("Pushing out SelectAll query");
-            pViewData->GetView()->Query( aParam, NULL, true );
+            pViewData->GetView()->Query( aParam, nullptr, true );
         }
     }
 }
@@ -4412,7 +4412,7 @@ ScVbaRange::AutoFilter( const uno::Any& aField, const uno::Any& Criteria1, const
             RangeHelper multiCellRange( mxRange );
             autoFiltAddress = multiCellRange.getCellRangeAddressable()->getRangeAddress();
             // #163530# Filter box shows only entry of first row
-            ScDocument* pDocument = ( pShell ? &pShell->GetDocument() : NULL );
+            ScDocument* pDocument = ( pShell ? &pShell->GetDocument() : nullptr );
             if ( pDocument )
             {
                 SCCOL nStartCol = autoFiltAddress.StartColumn;
@@ -4444,7 +4444,7 @@ ScVbaRange::AutoFilter( const uno::Any& aField, const uno::Any& Criteria1, const
 		// set header (autofilter always need column headers)
         uno::Reference< beans::XPropertySet > xFiltProps( xDataBaseRange->getFilterDescriptor(), uno::UNO_QUERY_THROW );
         bool bHasColHeader = false;
-        ScDocument* pDoc = pShell ? &pShell->GetDocument() : NULL;
+        ScDocument* pDoc = pShell ? &pShell->GetDocument() : nullptr;
         if (pDoc)
         {
             bHasColHeader = pDoc->HasColHeader(  static_cast< SCCOL >( autoFiltAddress.StartColumn ), static_cast< SCROW >( autoFiltAddress.StartRow ), static_cast< SCCOL >( autoFiltAddress.EndColumn ), static_cast< SCROW >( autoFiltAddress.EndRow ), static_cast< SCTAB >( autoFiltAddress.Sheet ) );
@@ -4662,7 +4662,7 @@ ScVbaRange::Insert( const uno::Any& Shift, const uno::Any& /*CopyOrigin*/ ) thro
 
     // Paste from clipboard only if the clipboard content was copied via VBA, and not already pasted via VBA again.
     // "Insert" behavior should not depend on random clipboard content previously copied by the user.
-    ScTransferObj* pClipObj = ScTransferObj::GetOwnClipboard( NULL );
+    ScTransferObj* pClipObj = ScTransferObj::GetOwnClipboard( nullptr );
     if ( pClipObj && pClipObj->GetUseInApi() )
     {
         // After the insert ( this range ) actually has moved
@@ -4935,7 +4935,7 @@ ScVbaRange::MergeArea() throw (script::BasicErrorException, uno::RuntimeExceptio
 void SAL_CALL
 ScVbaRange::PrintOut( const uno::Any& From, const uno::Any& To, const uno::Any& Copies, const uno::Any& Preview, const uno::Any& ActivePrinter, const uno::Any& PrintToFile, const uno::Any& Collate, const uno::Any& PrToFileName ) throw (uno::RuntimeException, std::exception)
 {
-    ScDocShell* pShell = NULL;
+    ScDocShell* pShell = nullptr;
 
     sal_Int32 nItems = m_Areas->getCount();
     uno::Sequence<  table::CellRangeAddress > printAreas( nItems );
@@ -5078,7 +5078,7 @@ ScVbaRange::AutoFill(  const uno::Reference< excel::XRange >& Destination, const
     }
     double fEndValue =  MAXDOUBLE;
     ScDocShell* pDocSh = getDocShellFromRange( mxRange );
-    pDocSh->GetDocFunc().FillAuto( aSourceRange, NULL, eDir, eCmd, eDateCmd,
+    pDocSh->GetDocFunc().FillAuto( aSourceRange, nullptr, eDir, eCmd, eDateCmd,
                                    nCount, fStep, fEndValue, true, true );
 }
 sal_Bool SAL_CALL

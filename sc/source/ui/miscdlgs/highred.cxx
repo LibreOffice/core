@@ -92,7 +92,7 @@ void ScHighlightChgDlg::Init()
     OSL_ENSURE( pViewData && pDoc, "ViewData oder Document nicht gefunden!" );
 
     ScChangeTrack* pChanges=pDoc->GetChangeTrack();
-    if(pChanges!=NULL)
+    if(pChanges!=nullptr)
     {
         aChangeViewSet.SetTheAuthorToShow(pChanges->GetUser());
         m_pFilterCtr->ClearAuthors();
@@ -104,7 +104,7 @@ void ScHighlightChgDlg::Init()
 
     ScChangeViewSettings* pViewSettings=pDoc->GetChangeViewSettings();
 
-    if(pViewSettings!=NULL)
+    if(pViewSettings!=nullptr)
         aChangeViewSet=*pViewSettings;
     m_pHighlightBox->Check(aChangeViewSet.ShowChanges());
     m_pFilterCtr->CheckDate(aChangeViewSet.HasDate());
@@ -185,7 +185,7 @@ bool ScHighlightChgDlg::IsRefInputMode() const
 
 IMPL_LINK_TYPED( ScHighlightChgDlg, HighlightHandle, Button*, pCb, void )
 {
-    if(pCb!=NULL)
+    if(pCb!=nullptr)
     {
         if(m_pHighlightBox->IsChecked())
         {
@@ -204,7 +204,7 @@ IMPL_LINK_TYPED( ScHighlightChgDlg, HighlightHandle, Button*, pCb, void )
 
 IMPL_LINK_TYPED( ScHighlightChgDlg, RefHandle, SvxTPFilter*, pRef, void )
 {
-    if(pRef!=NULL)
+    if(pRef!=nullptr)
     {
         SetDispatcherLock( true );
         m_pEdAssign->Show();

@@ -320,9 +320,9 @@ public:
     void        UnlockTable();
 
     bool        IsBlockEditable( SCCOL nCol1, SCROW nRow1, SCCOL nCol2,
-                        SCROW nRow2, bool* pOnlyNotBecauseOfMatrix = NULL ) const;
+                        SCROW nRow2, bool* pOnlyNotBecauseOfMatrix = nullptr ) const;
     bool        IsSelectionEditable( const ScMarkData& rMark,
-                        bool* pOnlyNotBecauseOfMatrix = NULL ) const;
+                        bool* pOnlyNotBecauseOfMatrix = nullptr ) const;
 
     bool        HasBlockMatrixFragment( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 ) const;
     bool        HasSelectionMatrixFragment( const ScMarkData& rMark ) const;
@@ -330,7 +330,7 @@ public:
     bool        IsBlockEmpty( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, bool bIgnoreNotes = false ) const;
 
     bool        SetString( SCCOL nCol, SCROW nRow, SCTAB nTab, const OUString& rString,
-                           ScSetStringParam* pParam = NULL );
+                           ScSetStringParam* pParam = nullptr );
 
     bool SetEditText( SCCOL nCol, SCROW nRow, EditTextObject* pEditText );
     void SetEditText( SCCOL nCol, SCROW nRow, const EditTextObject& rEditText, const SfxItemPool* pEditPool );
@@ -401,17 +401,17 @@ public:
     void        InsertRow( SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, SCSIZE nSize );
     void DeleteRow(
         const sc::ColumnSet& rRegroupCols, SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, SCSIZE nSize,
-        bool* pUndoOutline = NULL, std::vector<ScAddress>* pGroupPos = NULL );
+        bool* pUndoOutline = nullptr, std::vector<ScAddress>* pGroupPos = nullptr );
 
     bool        TestInsertCol( SCROW nStartRow, SCROW nEndRow, SCSIZE nSize ) const;
     void InsertCol(
         const sc::ColumnSet& rRegroupCols, SCCOL nStartCol, SCROW nStartRow, SCROW nEndRow, SCSIZE nSize );
     void DeleteCol(
-        const sc::ColumnSet& rRegroupCols, SCCOL nStartCol, SCROW nStartRow, SCROW nEndRow, SCSIZE nSize, bool* pUndoOutline = NULL );
+        const sc::ColumnSet& rRegroupCols, SCCOL nStartCol, SCROW nStartRow, SCROW nEndRow, SCSIZE nSize, bool* pUndoOutline = nullptr );
 
     void DeleteArea(
         SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, InsertDeleteFlags nDelFlag,
-        bool bBroadcast = true, sc::ColumnSpanSet* pBroadcastSpans = NULL );
+        bool bBroadcast = true, sc::ColumnSpanSet* pBroadcastSpans = nullptr );
 
     void CopyToClip( sc::CopyToClipContext& rCxt, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, ScTable* pTable );
     void CopyToClip( sc::CopyToClipContext& rCxt, const ScRangeList& rRanges, ScTable* pTable );
@@ -444,11 +444,11 @@ public:
     void CopyToTable(
         sc::CopyToDocContext& rCxt, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
         InsertDeleteFlags nFlags, bool bMarked, ScTable* pDestTab,
-        const ScMarkData* pMarkData = NULL, bool bAsLink = false, bool bColRowFlags = true );
+        const ScMarkData* pMarkData = nullptr, bool bAsLink = false, bool bColRowFlags = true );
 
     void UndoToTable(
         sc::CopyToDocContext& rCxt, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
-        InsertDeleteFlags nFlags, bool bMarked, ScTable* pDestTab, const ScMarkData* pMarkData = NULL );
+        InsertDeleteFlags nFlags, bool bMarked, ScTable* pDestTab, const ScMarkData* pMarkData = nullptr );
 
     void        CopyConditionalFormat( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                             SCsCOL nDx, SCsROW nDy, ScTable* pTable);
@@ -546,7 +546,7 @@ public:
     bool CompileErrorCells( sc::CompileFormulaContext& rCxt, sal_uInt16 nErrCode );
 
     void UpdateReference(
-        sc::RefUpdateContext& rCxt, ScDocument* pUndoDoc = NULL,
+        sc::RefUpdateContext& rCxt, ScDocument* pUndoDoc = nullptr,
         bool bIncludeDraw = true, bool bUpdateNoteCaptionPos = true );
 
     void        UpdateDrawRef( UpdateRefMode eUpdateRefMode, SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
@@ -613,7 +613,7 @@ public:
     void        ApplyAttr( SCCOL nCol, SCROW nRow, const SfxPoolItem& rAttr );
     void        ApplyPattern( SCCOL nCol, SCROW nRow, const ScPatternAttr& rAttr );
     void        ApplyPatternArea( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
-                                  const ScPatternAttr& rAttr, ScEditDataArray* pDataArray = NULL );
+                                  const ScPatternAttr& rAttr, ScEditDataArray* pDataArray = nullptr );
 
     void        SetPattern( const ScAddress& rPos, const ScPatternAttr& rAttr, bool bPutToPool = false )
                     {
@@ -647,7 +647,7 @@ public:
     bool        ApplyFlags( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow, sal_Int16 nFlags );
     bool        RemoveFlags( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow, sal_Int16 nFlags );
 
-    void        ApplySelectionCache( SfxItemPoolCache* pCache, const ScMarkData& rMark, ScEditDataArray* pDataArray = NULL );
+    void        ApplySelectionCache( SfxItemPoolCache* pCache, const ScMarkData& rMark, ScEditDataArray* pDataArray = nullptr );
     void        DeleteSelection( InsertDeleteFlags nDelFlag, const ScMarkData& rMark, bool bBroadcast = true );
 
     void        ClearSelectionItems( const sal_uInt16* pWhich, const ScMarkData& rMark );
@@ -680,11 +680,11 @@ public:
                                     const ScColWidthParam* pParam );
     bool SetOptimalHeight(
         sc::RowHeightContext& rCxt, SCROW nStartRow, SCROW nEndRow,
-        ScProgress* pOuterProgress = NULL, sal_uLong nProgressStart = 0 );
+        ScProgress* pOuterProgress = nullptr, sal_uLong nProgressStart = 0 );
 
     void SetOptimalHeightOnly(
         sc::RowHeightContext& rCxt, SCROW nStartRow, SCROW nEndRow,
-        ScProgress* pOuterProgress = NULL, sal_uLong nProgressStart = 0 );
+        ScProgress* pOuterProgress = nullptr, sal_uLong nProgressStart = 0 );
 
     long        GetNeededSize( SCCOL nCol, SCROW nRow,
                                     OutputDevice* pDev,
@@ -711,7 +711,7 @@ public:
 
     sal_uInt16      GetColWidth( SCCOL nCol, bool bHiddenAsZero = true ) const;
     sal_uLong GetColWidth( SCCOL nStartCol, SCCOL nEndCol, bool bHiddenAsZero = true ) const;
-    SC_DLLPUBLIC sal_uInt16 GetRowHeight( SCROW nRow, SCROW* pStartRow = NULL, SCROW* pEndRow = NULL, bool bHiddenAsZero = true ) const;
+    SC_DLLPUBLIC sal_uInt16 GetRowHeight( SCROW nRow, SCROW* pStartRow = nullptr, SCROW* pEndRow = nullptr, bool bHiddenAsZero = true ) const;
     sal_uLong       GetRowHeight( SCROW nStartRow, SCROW nEndRow, bool bHiddenAsZero = true ) const;
     sal_uLong       GetScaledRowHeight( SCROW nStartRow, SCROW nEndRow, double fScale ) const;
     sal_uLong       GetColOffset( SCCOL nCol, bool bHiddenAsZero = true ) const;
@@ -796,10 +796,10 @@ public:
     css::uno::Sequence<
         css::sheet::TablePageBreakData> GetRowBreakData() const;
 
-    bool        RowHidden(SCROW nRow, SCROW* pFirstRow = NULL, SCROW* pLastRow = NULL) const;
-    bool        RowHiddenLeaf(SCROW nRow, SCROW* pFirstRow = NULL, SCROW* pLastRow = NULL) const;
+    bool        RowHidden(SCROW nRow, SCROW* pFirstRow = nullptr, SCROW* pLastRow = nullptr) const;
+    bool        RowHiddenLeaf(SCROW nRow, SCROW* pFirstRow = nullptr, SCROW* pLastRow = nullptr) const;
     bool        HasHiddenRows(SCROW nStartRow, SCROW nEndRow) const;
-    bool        ColHidden(SCCOL nCol, SCCOL* pFirstCol = NULL, SCCOL* pLastCol = NULL) const;
+    bool        ColHidden(SCCOL nCol, SCCOL* pFirstCol = nullptr, SCCOL* pLastCol = nullptr) const;
     bool        SetRowHidden(SCROW nStartRow, SCROW nEndRow, bool bHidden);
     bool        SetColHidden(SCCOL nStartCol, SCCOL nEndCol, bool bHidden);
     void        CopyColHidden(ScTable& rTable, SCCOL nStartCol, SCCOL nEndCol);
@@ -812,8 +812,8 @@ public:
 
     SCCOLROW    LastHiddenColRow(SCCOLROW nPos, bool bCol) const;
 
-    bool        RowFiltered(SCROW nRow, SCROW* pFirstRow = NULL, SCROW* pLastRow = NULL) const;
-    bool        ColFiltered(SCCOL nCol, SCCOL* pFirstCol = NULL, SCCOL* pLastCol = NULL) const;
+    bool        RowFiltered(SCROW nRow, SCROW* pFirstRow = nullptr, SCROW* pLastRow = nullptr) const;
+    bool        ColFiltered(SCCOL nCol, SCCOL* pFirstCol = nullptr, SCCOL* pLastCol = nullptr) const;
     bool        HasFilteredRows(SCROW nStartRow, SCROW nEndRow) const;
     void        CopyColFiltered(ScTable& rTable, SCCOL nStartCol, SCCOL nEndCol);
     void        CopyRowFiltered(ScTable& rTable, SCROW nStartRow, SCROW nEndRow);
@@ -840,8 +840,8 @@ public:
     void Reorder( const sc::ReorderParam& rParam, ScProgress* pProgress );
 
     bool ValidQuery(
-        SCROW nRow, const ScQueryParam& rQueryParam, ScRefCellValue* pCell = NULL,
-        bool* pbTestEqualCondition = NULL);
+        SCROW nRow, const ScQueryParam& rQueryParam, ScRefCellValue* pCell = nullptr,
+        bool* pbTestEqualCondition = nullptr);
     void        TopTenQuery( ScQueryParam& );
     SCSIZE      Query(ScQueryParam& rQueryParam, bool bKeepSub);
     bool        CreateQueryParam(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, ScQueryParam& rQueryParam);
@@ -1115,11 +1115,11 @@ private:
     const ScColumn* FetchColumn( SCCOL nCol ) const;
 
     void EndListeningIntersectedGroup(
-        sc::EndListeningContext& rCxt, SCCOL nCol, SCROW nRow, std::vector<ScAddress>* pGroupPos = NULL );
+        sc::EndListeningContext& rCxt, SCCOL nCol, SCROW nRow, std::vector<ScAddress>* pGroupPos = nullptr );
 
     void EndListeningIntersectedGroups(
         sc::EndListeningContext& rCxt, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
-        std::vector<ScAddress>* pGroupPos = NULL );
+        std::vector<ScAddress>* pGroupPos = nullptr );
 
     void EndListeningGroup( sc::EndListeningContext& rCxt, SCCOL nCol, SCROW nRow );
     void SetNeedsListeningGroup( SCCOL nCol, SCROW nRow );

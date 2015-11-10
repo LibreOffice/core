@@ -72,7 +72,7 @@ public:
     void    SetRefInputStartPreHdl( PINPUTSTARTDLTYPE pNewHdl   ){  m_pRefInputStartPreHdl = pNewHdl;   }
     void    SetRefInputDonePostHdl( void            (ScRefHandlerCaller::*pNewHdl)()    ){  m_pRefInputDonePostHdl = pNewHdl;   }
 
-    ScRefHandlerHelper():m_pHandler(NULL), m_pSetReferenceHdl( NULL ), m_pSetActiveHdl(NULL),  m_pRefInputStartPreHdl( NULL ), m_pRefInputStartPostHdl( NULL ), m_pRefInputDonePreHdl( NULL ),  m_pRefInputDonePostHdl( NULL ){}
+    ScRefHandlerHelper():m_pHandler(nullptr), m_pSetReferenceHdl( nullptr ), m_pSetActiveHdl(nullptr),  m_pRefInputStartPreHdl( nullptr ), m_pRefInputStartPostHdl( nullptr ), m_pRefInputDonePreHdl( nullptr ),  m_pRefInputDonePostHdl( nullptr ){}
 };
 
 class ScValidationDlg;
@@ -136,7 +136,7 @@ public:
     public:
         ScRefButtonEx(vcl::Window* pParent, WinBits nStyle)
             : ::formula::RefButton(pParent, nStyle)
-            , m_pPage(NULL)
+            , m_pPage(nullptr)
         {
         }
         virtual ~ScRefButtonEx();
@@ -181,7 +181,7 @@ class ScValidationDlg
     bool    LeaveRefStatus();
 
 public:
-    explicit ScValidationDlg( vcl::Window* pParent, const SfxItemSet* pArgSet, ScTabViewShell * pTabViewSh, SfxBindings *pB = NULL );
+    explicit ScValidationDlg( vcl::Window* pParent, const SfxItemSet* pArgSet, ScTabViewShell * pTabViewSh, SfxBindings *pB = nullptr );
     virtual                     ~ScValidationDlg() { disposeOnce(); }
     virtual void                dispose() override
     {
@@ -219,7 +219,7 @@ public:
     bool IsRefInputting(){  return m_bRefInputting; }
     vcl::Window*             get_refinput_shrink_parent() { return m_pHBox; }
 
-    virtual void        RefInputStart( formula::RefEdit* pEdit, formula::RefButton* pButton = NULL ) override
+    virtual void        RefInputStart( formula::RefEdit* pEdit, formula::RefButton* pButton = nullptr ) override
     {
         if( !CanInputStart( pEdit ) )
             return;

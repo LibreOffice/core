@@ -304,7 +304,7 @@ void XclExpName::SaveXml( XclExpXmlStream& rStrm )
             // OOXTODO: XML_functionGroupId, "",
             // OOXTODO: XML_help, "",
             XML_hidden, XclXmlUtils::ToPsz( ::get_flag( mnFlags, EXC_NAME_HIDDEN ) ),
-            XML_localSheetId, mnScTab == SCTAB_GLOBAL ? NULL : OString::number( mnScTab ).getStr(),
+            XML_localSheetId, mnScTab == SCTAB_GLOBAL ? nullptr : OString::number( mnScTab ).getStr(),
             XML_name, XclXmlUtils::ToOString( maOrigName ).getStr(),
             // OOXTODO: XML_publishToServer, "",
             // OOXTODO: XML_shortcutKey, "",
@@ -353,7 +353,7 @@ sal_uInt16 XclExpNameManagerImpl::InsertName( SCTAB nTab, sal_uInt16 nScNameIdx 
     if (nNameIdx)
         return nNameIdx;
 
-    const ScRangeData* pData = NULL;
+    const ScRangeData* pData = nullptr;
     ScRangeName* pRN = (nTab == SCTAB_GLOBAL) ? GetDoc().GetRangeName() : GetDoc().GetRangeName(nTab);
     if (pRN)
         pData = pRN->findByIndex(nScNameIdx);

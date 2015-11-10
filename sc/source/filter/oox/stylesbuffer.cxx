@@ -1680,7 +1680,7 @@ BorderLineModel* Border::getBorderLine( sal_Int32 nElement )
         case XLS_TOKEN( bottom ):   return &maModel.maBottom;
         case XLS_TOKEN( diagonal ): return &maModel.maDiagonal;
     }
-    return 0;
+    return nullptr;
 }
 
 bool Border::convertBorderLine( BorderLine2& rBorderLine, const BorderLineModel& rModel )
@@ -2082,7 +2082,7 @@ Xf::Xf( const WorkbookHelper& rHelper ) :
     maAlignment( rHelper ),
     maProtection( rHelper ),
     meRotationRef( css::table::CellVertJustify2::STANDARD ),
-    mpStyleSheet( NULL )
+    mpStyleSheet( nullptr )
 {
 }
 
@@ -2305,7 +2305,7 @@ Xf::createPattern( bool bSkipPoolDefs )
      */
     StylesBuffer& rStyles = getStyles();
 
-    const Xf* pStyleXf = isCellXf() ? rStyles.getStyleXf( maModel.mnStyleXfId ).get() : 0;
+    const Xf* pStyleXf = isCellXf() ? rStyles.getStyleXf( maModel.mnStyleXfId ).get() : nullptr;
     if( pStyleXf && !mpStyleSheet )
     {
         rStyles.createCellStyle( maModel.mnStyleXfId );
@@ -2365,7 +2365,7 @@ Xf::createPattern( bool bSkipPoolDefs )
         border line of the cell is set (either explicitly or via cell style),
         and the cell contents are rotated, set rotation reference to bottom of
         cell. This causes the borders to be painted rotated with the text. */
-    if( const Alignment* pAlignment = maModel.mbAlignUsed ? &maAlignment : (pStyleXf ? &pStyleXf->maAlignment : 0) )
+    if( const Alignment* pAlignment = maModel.mbAlignUsed ? &maAlignment : (pStyleXf ? &pStyleXf->maAlignment : nullptr) )
     {
         SvxRotateMode eRotateMode = SVX_ROTATE_MODE_STANDARD;
         sal_Int32 nBorderId = maModel.mbBorderUsed ? maModel.mnBorderId : (pStyleXf ? pStyleXf->maModel.mnBorderId : -1);
@@ -2523,9 +2523,9 @@ const sal_Char* const sppcStyleNames[] =
     "Followed Hyperlink",
     "Note",                 // new in OOX
     "Warning Text",
-    0,
-    0,
-    0,
+    nullptr,
+    nullptr,
+    nullptr,
     "Title",
     "Heading 1",
     "Heading 2",
@@ -2573,7 +2573,7 @@ OUString lclGetBuiltinStyleName( sal_Int32 nBuiltinId, const OUString& rName, sa
     OSL_ENSURE( (0 <= nBuiltinId) && (nBuiltinId < snStyleNamesCount), "lclGetBuiltinStyleName - unknown built-in style" );
     OUStringBuffer aStyleName;
     aStyleName.appendAscii( spcStyleNamePrefix );
-    if( (0 <= nBuiltinId) && (nBuiltinId < snStyleNamesCount) && (sppcStyleNames[ nBuiltinId ] != 0) )
+    if( (0 <= nBuiltinId) && (nBuiltinId < snStyleNamesCount) && (sppcStyleNames[ nBuiltinId ] != nullptr) )
         aStyleName.appendAscii( sppcStyleNames[ nBuiltinId ] );
     else if( !rName.isEmpty() )
         aStyleName.append( rName );
@@ -2614,7 +2614,7 @@ bool CellStyleModel::isDefaultStyle() const
 CellStyle::CellStyle( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper ),
     mbCreated( false ),
-    mpStyleSheet( NULL )
+    mpStyleSheet( nullptr )
 {
 }
 
@@ -2842,7 +2842,7 @@ void CellStyleBuffer::insertCellStyle( CellStyleRef xCellStyle )
 
 ::ScStyleSheet* CellStyleBuffer::getCellStyleSheet( const CellStyleRef& rxCellStyle )
 {
-    ::ScStyleSheet* pStyleSheet = NULL;
+    ::ScStyleSheet* pStyleSheet = nullptr;
     if ( rxCellStyle.get() )
         pStyleSheet = rxCellStyle->getStyleSheet();
     return pStyleSheet;

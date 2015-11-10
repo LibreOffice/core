@@ -66,7 +66,7 @@ struct XclExpHashEntry
 {
     const XclExpString* mpString;       /// Pointer to the string (no ownership).
     sal_uInt32          mnSstIndex;     /// The SST index of this string.
-    inline explicit     XclExpHashEntry( const XclExpString* pString = 0, sal_uInt32 nSstIndex = 0 ) :
+    inline explicit     XclExpHashEntry( const XclExpString* pString = nullptr, sal_uInt32 nSstIndex = 0 ) :
                             mpString( pString ), mnSstIndex( nSstIndex ) {}
 };
 
@@ -514,14 +514,14 @@ void XclExpHyperlink::SaveXml( XclExpXmlStream& rStrm )
             XML_ref,                XclXmlUtils::ToOString( maScPos ).getStr(),
             FSNS( XML_r, XML_id ),  !sId.isEmpty()
                                        ? XclXmlUtils::ToOString( sId ).getStr()
-                                       : NULL,
-            XML_location,           mxTextMark.get() != NULL
+                                       : nullptr,
+            XML_location,           mxTextMark.get() != nullptr
                                         ? XclXmlUtils::ToOString( *mxTextMark ).getStr()
-                                        : NULL,
+                                        : nullptr,
             // OOXTODO: XML_tooltip,    from record HLinkTooltip 800h wzTooltip
             XML_display,            mbSetDisplay
                                        ? XclXmlUtils::ToOString(m_Repr).getStr()
-                                       : NULL,
+                                       : nullptr,
             FSEND );
 }
 
@@ -784,7 +784,7 @@ namespace {
 
 const char* GetOperatorString(ScConditionMode eMode, bool& bFrmla2)
 {
-    const char *pRet = NULL;
+    const char *pRet = nullptr;
     switch(eMode)
     {
         case SC_COND_EQUAL:
@@ -814,10 +814,10 @@ const char* GetOperatorString(ScConditionMode eMode, bool& bFrmla2)
             pRet = "notBetween";
             break;
         case SC_COND_DUPLICATE:
-            pRet = NULL;
+            pRet = nullptr;
             break;
         case SC_COND_NOTDUPLICATE:
-            pRet = NULL;
+            pRet = nullptr;
             break;
         case SC_COND_DIRECT:
             break;
@@ -1022,7 +1022,7 @@ const char* getTimePeriodString( condformat::ScCondFormatDateType eType )
         default:
             break;
     }
-    return NULL;
+    return nullptr;
 }
 
 }
@@ -1157,7 +1157,7 @@ OString createGuidStringFromInt(sal_uInt8 nGuid[16])
 OString generateGUIDString()
 {
     sal_uInt8 nGuid[16];
-    rtl_createUuid(nGuid, NULL, true);
+    rtl_createUuid(nGuid, nullptr, true);
     return createGuidStringFromInt(nGuid);
 }
 
@@ -1226,7 +1226,7 @@ XclExpCondfmt::XclExpCondfmt( const XclExpRoot& rRoot, const ScConditionalFormat
                 else if(pFormatEntry->GetType() == condformat::DATE)
                     maCFList.AppendNewRecord( new XclExpDateFormat( GetRoot(), static_cast<const ScCondDateFormatEntry&>(*pFormatEntry), ++rIndex ) );
             }
-        aScRanges.Format( msSeqRef, SCA_VALID, NULL, formula::FormulaGrammar::CONV_XL_A1 );
+        aScRanges.Format( msSeqRef, SCA_VALID, nullptr, formula::FormulaGrammar::CONV_XL_A1 );
 
         if(!aExtEntries.empty() && xExtLst.get())
         {
@@ -1424,8 +1424,8 @@ void XclExpIconSet::SaveXml( XclExpXmlStream& rStrm )
     const char* pIconSetName = getIconSetName(mrFormat.GetIconSetData()->eIconSetType);
     rWorksheet->startElement( XML_iconSet,
             XML_iconSet, pIconSetName,
-            XML_showValue, mrFormat.GetIconSetData()->mbShowValue ? NULL : "0",
-            XML_reverse, mrFormat.GetIconSetData()->mbReverse ? "1" : NULL,
+            XML_showValue, mrFormat.GetIconSetData()->mbShowValue ? nullptr : "0",
+            XML_reverse, mrFormat.GetIconSetData()->mbReverse ? "1" : nullptr,
             FSEND );
 
     maCfvoList.SaveXml( rStrm );
@@ -1496,7 +1496,7 @@ const char* lcl_GetValidationType( sal_uInt32 nFlags )
         case EXC_DV_MODE_TEXTLEN:   return "textLength";
         case EXC_DV_MODE_CUSTOM:    return "custom";
     }
-    return NULL;
+    return nullptr;
 }
 
 const char* lcl_GetOperatorType( sal_uInt32 nFlags )
@@ -1512,7 +1512,7 @@ const char* lcl_GetOperatorType( sal_uInt32 nFlags )
         case EXC_DV_COND_EQGREATER:     return "greaterThanOrEqual";
         case EXC_DV_COND_EQLESS:        return "lessThanOrEqual";
     }
-    return NULL;
+    return nullptr;
 }
 
 } // namespace

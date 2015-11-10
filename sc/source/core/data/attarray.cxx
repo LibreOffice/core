@@ -148,7 +148,7 @@ bool ScAttrArray::Concat(SCSIZE nPos)
                 pData[nPos - 1].nRow = pData[nPos].nRow;
                 pDocument->GetPool()->Remove(*pData[nPos].pPattern);
                 memmove(&pData[nPos], &pData[nPos + 1], (nCount - nPos - 1) * sizeof(ScAttrEntry));
-                pData[nCount - 1].pPattern = NULL;
+                pData[nCount - 1].pPattern = nullptr;
                 pData[nCount - 1].nRow = 0;
                 nCount--;
                 nPos--;
@@ -162,7 +162,7 @@ bool ScAttrArray::Concat(SCSIZE nPos)
                 pData[nPos].nRow = pData[nPos + 1].nRow;
                 pDocument->GetPool()->Remove(*pData[nPos].pPattern);
                 memmove(&pData[nPos + 1], &pData[nPos + 2], (nCount - nPos - 2) * sizeof(ScAttrEntry));
-                pData[nCount - 1].pPattern = NULL;
+                pData[nCount - 1].pPattern = nullptr;
                 pData[nCount - 1].nRow = 0;
                 nCount--;
                 bRet = true;
@@ -209,7 +209,7 @@ const ScPatternAttr* ScAttrArray::GetPattern( SCROW nRow ) const
     if (Search( nRow, i ))
         return pData[i].pPattern;
     else
-        return NULL;
+        return nullptr;
 }
 
 const ScPatternAttr* ScAttrArray::GetPatternRange( SCROW& rStartRow,
@@ -225,7 +225,7 @@ const ScPatternAttr* ScAttrArray::GetPatternRange( SCROW& rStartRow,
         rEndRow = pData[nIndex].nRow;
         return pData[nIndex].pPattern;
     }
-    return NULL;
+    return nullptr;
 }
 
 void ScAttrArray::AddCondFormat( SCROW nStartRow, SCROW nEndRow, sal_uInt32 nIndex )
@@ -252,7 +252,7 @@ void ScAttrArray::AddCondFormat( SCROW nStartRow, SCROW nEndRow, sal_uInt32 nInd
             GetPatternRange( nPatternStartRow, nPatternEndRow, nTempStartRow );
 
             nTempEndRow = std::min<SCROW>( nPatternEndRow, nEndRow );
-            const SfxPoolItem* pItem = NULL;
+            const SfxPoolItem* pItem = nullptr;
             pPattern->GetItemSet().GetItemState( ATTR_CONDITIONAL, true, &pItem );
             std::vector< sal_uInt32 > aCondFormatData;
             if(pItem)
@@ -302,7 +302,7 @@ void ScAttrArray::RemoveCondFormat( SCROW nStartRow, SCROW nEndRow, sal_uInt32 n
             GetPatternRange( nPatternStartRow, nPatternEndRow, nTempStartRow );
 
             nTempEndRow = std::min<SCROW>( nPatternEndRow, nEndRow );
-            const SfxPoolItem* pItem = NULL;
+            const SfxPoolItem* pItem = nullptr;
             pPattern->GetItemSet().GetItemState( ATTR_CONDITIONAL, true, &pItem );
             if(pItem)
             {
@@ -347,7 +347,7 @@ void ScAttrArray::RemoveCellCharAttribs( SCROW nStartRow, SCROW nEndRow,
         if (aCell.meType != CELLTYPE_EDIT || !aCell.mpEditText)
             continue;
 
-        EditTextObject* pOldData = NULL;
+        EditTextObject* pOldData = nullptr;
         if (pDataArray)
             pOldData = aCell.mpEditText->Clone();
 
@@ -670,11 +670,11 @@ void ScAttrArray::ApplyLineStyleArea( SCROW nStartRow, SCROW nEndRow,
         {
             const ScPatternAttr*    pOldPattern = pData[nPos].pPattern;
             const SfxItemSet&       rOldSet = pOldPattern->GetItemSet();
-            const SfxPoolItem*      pBoxItem = 0;
+            const SfxPoolItem*      pBoxItem = nullptr;
             SfxItemState            eState = rOldSet.GetItemState( ATTR_BORDER, true, &pBoxItem );
-            const SfxPoolItem*      pTLBRItem = 0;
+            const SfxPoolItem*      pTLBRItem = nullptr;
             SfxItemState            eTLBRState = rOldSet.GetItemState( ATTR_BORDER_TLBR, true, &pTLBRItem );
-            const SfxPoolItem*      pBLTRItem = 0;
+            const SfxPoolItem*      pBLTRItem = nullptr;
             SfxItemState            eBLTRState = rOldSet.GetItemState( ATTR_BORDER_BLTR, true, &pBLTRItem );
 
             if ( (SfxItemState::SET == eState) || (SfxItemState::SET == eTLBRState) || (SfxItemState::SET == eBLTRState) )
@@ -684,9 +684,9 @@ void ScAttrArray::ApplyLineStyleArea( SCROW nStartRow, SCROW nEndRow,
                 SCROW           nY1 = nStart;
                 SCROW           nY2 = pData[nPos].nRow;
 
-                SvxBoxItem*     pNewBoxItem = pBoxItem ? static_cast<SvxBoxItem*>(pBoxItem->Clone()) : 0;
-                SvxLineItem*    pNewTLBRItem = pTLBRItem ? static_cast<SvxLineItem*>(pTLBRItem->Clone()) : 0;
-                SvxLineItem*    pNewBLTRItem = pBLTRItem ? static_cast<SvxLineItem*>(pBLTRItem->Clone()) : 0;
+                SvxBoxItem*     pNewBoxItem = pBoxItem ? static_cast<SvxBoxItem*>(pBoxItem->Clone()) : nullptr;
+                SvxLineItem*    pNewTLBRItem = pTLBRItem ? static_cast<SvxLineItem*>(pTLBRItem->Clone()) : nullptr;
+                SvxLineItem*    pNewBLTRItem = pBLTRItem ? static_cast<SvxLineItem*>(pBLTRItem->Clone()) : nullptr;
 
                 // fetch line and update attributes with parameters
 
@@ -694,15 +694,15 @@ void ScAttrArray::ApplyLineStyleArea( SCROW nStartRow, SCROW nEndRow,
                 {
                     if( pNewBoxItem )
                     {
-                        if ( pNewBoxItem->GetTop() )    pNewBoxItem->SetLine( NULL, SvxBoxItemLine::TOP );
-                        if ( pNewBoxItem->GetBottom() ) pNewBoxItem->SetLine( NULL, SvxBoxItemLine::BOTTOM );
-                        if ( pNewBoxItem->GetLeft() )   pNewBoxItem->SetLine( NULL, SvxBoxItemLine::LEFT );
-                        if ( pNewBoxItem->GetRight() )  pNewBoxItem->SetLine( NULL, SvxBoxItemLine::RIGHT );
+                        if ( pNewBoxItem->GetTop() )    pNewBoxItem->SetLine( nullptr, SvxBoxItemLine::TOP );
+                        if ( pNewBoxItem->GetBottom() ) pNewBoxItem->SetLine( nullptr, SvxBoxItemLine::BOTTOM );
+                        if ( pNewBoxItem->GetLeft() )   pNewBoxItem->SetLine( nullptr, SvxBoxItemLine::LEFT );
+                        if ( pNewBoxItem->GetRight() )  pNewBoxItem->SetLine( nullptr, SvxBoxItemLine::RIGHT );
                     }
                     if( pNewTLBRItem && pNewTLBRItem->GetLine() )
-                        pNewTLBRItem->SetLine( 0 );
+                        pNewTLBRItem->SetLine( nullptr );
                     if( pNewBLTRItem && pNewBLTRItem->GetLine() )
-                        pNewBLTRItem->SetLine( 0 );
+                        pNewBLTRItem->SetLine( nullptr );
                 }
                 else
                 {
@@ -980,7 +980,7 @@ static bool lcl_TestAttr( const SvxBorderLine* pOldLine, const SvxBorderLine* pN
         }
 
     rModified = SC_LINE_DONTCARE;
-    rpNew = NULL;
+    rpNew = nullptr;
     return true;              // another line -> don't care
 }
 

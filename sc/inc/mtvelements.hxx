@@ -71,10 +71,10 @@ MDDS_MTV_DEFINE_ELEMENT_CALLBACKS(CellTextAttr, element_type_celltextattr, CellT
 }
 
 /// These need to be in global namespace just like their respective types are.
-MDDS_MTV_DEFINE_ELEMENT_CALLBACKS_PTR(ScPostIt, sc::element_type_cellnote, NULL, sc::cellnote_block)
-MDDS_MTV_DEFINE_ELEMENT_CALLBACKS_PTR(SvtBroadcaster, sc::element_type_broadcaster, NULL, sc::broadcaster_block)
-MDDS_MTV_DEFINE_ELEMENT_CALLBACKS_PTR(ScFormulaCell, sc::element_type_formula, NULL, sc::formula_block)
-MDDS_MTV_DEFINE_ELEMENT_CALLBACKS_PTR(EditTextObject, sc::element_type_edittext, NULL, sc::edittext_block)
+MDDS_MTV_DEFINE_ELEMENT_CALLBACKS_PTR(ScPostIt, sc::element_type_cellnote, nullptr, sc::cellnote_block)
+MDDS_MTV_DEFINE_ELEMENT_CALLBACKS_PTR(SvtBroadcaster, sc::element_type_broadcaster, nullptr, sc::broadcaster_block)
+MDDS_MTV_DEFINE_ELEMENT_CALLBACKS_PTR(ScFormulaCell, sc::element_type_formula, nullptr, sc::formula_block)
+MDDS_MTV_DEFINE_ELEMENT_CALLBACKS_PTR(EditTextObject, sc::element_type_edittext, nullptr, sc::edittext_block)
 
 namespace svl {
 

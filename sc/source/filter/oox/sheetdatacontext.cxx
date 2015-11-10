@@ -118,7 +118,7 @@ ContextHandlerRef SheetDataContext::onCreateContext( sal_Int32 nElement, const A
             }
         break;
     }
-    return 0;
+    return nullptr;
 }
 
 void SheetDataContext::onCharacters( const OUString& rChars )
@@ -263,7 +263,7 @@ ContextHandlerRef SheetDataContext::onCreateRecordContext( sal_Int32 nRecId, Seq
             }
         break;
     }
-    return 0;
+    return nullptr;
 }
 
 // private --------------------------------------------------------------------

@@ -60,7 +60,7 @@ ContextHandlerRef PivotTableFieldContext::onCreateContext( sal_Int32 nElement, c
             if( nElement == XLS_TOKEN( x ) ) mrTableField.importReferenceItem( rAttribs );
         break;
     }
-    return 0;
+    return nullptr;
 }
 
 void PivotTableFieldContext::onStartElement( const AttributeList& rAttribs )
@@ -96,7 +96,7 @@ ContextHandlerRef PivotTableFieldContext::onCreateRecordContext( sal_Int32 nRecI
             if( nRecId == BIFF12_ID_PTREFERENCEITEM ) mrTableField.importPTReferenceItem( rStrm );
         break;
     }
-    return 0;
+    return nullptr;
 }
 
 void PivotTableFieldContext::onStartRecord( SequenceInputStream& rStrm )
@@ -125,7 +125,7 @@ ContextHandlerRef PivotTableFilterContext::onCreateContext( sal_Int32 nElement, 
             if( nElement == XLS_TOKEN( top10 ) ) mrTableFilter.importTop10( rAttribs );
         break;
     }
-    return 0;
+    return nullptr;
 }
 
 void PivotTableFilterContext::onStartElement( const AttributeList& rAttribs )
@@ -148,7 +148,7 @@ ContextHandlerRef PivotTableFilterContext::onCreateRecordContext( sal_Int32 nRec
             if( nRecId == BIFF12_ID_TOP10FILTER ) mrTableFilter.importTop10Filter( rStrm );
         break;
     }
-    return 0;
+    return nullptr;
 }
 
 void PivotTableFilterContext::onStartRecord( SequenceInputStream& rStrm )
@@ -203,7 +203,7 @@ ContextHandlerRef PivotTableFragment::onCreateContext( sal_Int32 nElement, const
             if( nElement == XLS_TOKEN( filter ) ) return new PivotTableFilterContext( *this, mrPivotTable.createTableFilter() );
         break;
     }
-    return 0;
+    return nullptr;
 }
 
 ContextHandlerRef PivotTableFragment::onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm )
@@ -240,7 +240,7 @@ ContextHandlerRef PivotTableFragment::onCreateRecordContext( sal_Int32 nRecId, S
             if( nRecId == BIFF12_ID_PTFILTER ) return new PivotTableFilterContext( *this, mrPivotTable.createTableFilter() );
         break;
     }
-    return 0;
+    return nullptr;
 }
 
 const RecordInfo* PivotTableFragment::getRecordInfos() const

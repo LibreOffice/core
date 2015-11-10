@@ -39,8 +39,8 @@
 
 ScLinkedAreaDlg::ScLinkedAreaDlg(vcl::Window* pParent)
     : ModalDialog(pParent, "ExternalDataDialog", "modules/scalc/ui/externaldata.ui")
-    , pSourceShell(NULL)
-    , pDocInserter(NULL)
+    , pSourceShell(nullptr)
+    , pDocInserter(nullptr)
 
 {
     get(m_pCbUrl, "url");
@@ -139,7 +139,7 @@ void ScLinkedAreaDlg::LoadDocument( const OUString& rFile, const OUString& rFilt
     {
         //  unload old document
         pSourceShell->DoClose();
-        pSourceShell = NULL;
+        pSourceShell = nullptr;
         aSourceRef.Clear();
     }
 
@@ -252,7 +252,7 @@ IMPL_LINK_TYPED( ScLinkedAreaDlg, DialogClosedHdl, sfx2::FileDialogHelper*, _pFi
         else
         {
             pSourceShell->DoClose();
-            pSourceShell = NULL;
+            pSourceShell = nullptr;
             aSourceRef.Clear();
 
             m_pCbUrl->SetText( EMPTY_OUSTRING );

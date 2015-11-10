@@ -339,7 +339,7 @@ void ScColumn::DetachFormulaCells(
     if (pDocument->IsClipOrUndo())
         return;
 
-    DetachFormulaCellsHandler aFunc(pDocument, NULL);
+    DetachFormulaCellsHandler aFunc(pDocument, nullptr);
     sc::ProcessFormula(aPos.first, maCells, nRow, nNextTopRow-1, aFunc);
 }
 
@@ -508,7 +508,7 @@ bool ScColumn::UpdateScriptType( sc::CellTextAttr& rAttr, SCROW nRow, const sc::
     ScRefCellValue aCell = GetCellValue( itr2, nOffset );
     ScAddress aPos(nCol, nRow, nTab);
 
-    const SfxItemSet* pCondSet = NULL;
+    const SfxItemSet* pCondSet = nullptr;
     ScConditionalFormatList* pCFList = pDocument->GetCondFormList(nTab);
     if (pCFList)
     {
@@ -1093,7 +1093,7 @@ void ScColumn::CopyFromClip(
     // Compare the ScDocumentPool* to determine if we are copying within the
     // same document. If not, re-intern shared strings.
     svl::SharedStringPool* pSharedStringPool = (rColumn.pDocument->GetPool() != pDocument->GetPool()) ?
-        &pDocument->GetSharedStringPool() : NULL;
+        &pDocument->GetSharedStringPool() : nullptr;
 
     // nRow1 to nRow2 is for destination (this) column. Subtract nDy to get the source range.
     // Copy all cells in the source column (rColumn) from nRow1-nDy to nRow2-nDy to this column.
@@ -2467,7 +2467,7 @@ void ScColumn::GetString( SCROW nRow, OUString& rString ) const
         aCell.mpFormula->MaybeInterpret();
 
     sal_uLong nFormat = GetNumberFormat(nRow);
-    Color* pColor = NULL;
+    Color* pColor = nullptr;
     ScCellFormat::GetString(aCell, nFormat, rString, &pColor, *(pDocument->GetFormatTable()), pDocument);
 }
 
@@ -2476,10 +2476,10 @@ double* ScColumn::GetValueCell( SCROW nRow )
     std::pair<sc::CellStoreType::iterator,size_t> aPos = maCells.position(nRow);
     sc::CellStoreType::iterator it = aPos.first;
     if (it == maCells.end())
-        return NULL;
+        return nullptr;
 
     if (it->type != sc::element_type_numeric)
-        return NULL;
+        return nullptr;
 
     return &sc::numeric_block::at(*it->data, aPos.second);
 }
@@ -2517,10 +2517,10 @@ const EditTextObject* ScColumn::GetEditText( SCROW nRow ) const
     std::pair<sc::CellStoreType::const_iterator,size_t> aPos = maCells.position(nRow);
     sc::CellStoreType::const_iterator it = aPos.first;
     if (it == maCells.end())
-        return NULL;
+        return nullptr;
 
     if (it->type != sc::element_type_edittext)
-        return NULL;
+        return nullptr;
 
     return sc::edittext_block::at(*it->data, aPos.second);
 }
@@ -2967,7 +2967,7 @@ public:
             ++nRow;
         }
 
-        ScFormulaCell* pCur = NULL;
+        ScFormulaCell* pCur = nullptr;
         ScFormulaCellGroupRef xCurGrp;
         for (; it != itEnd; pPrev = pCur, xPrevGrp = xCurGrp)
         {

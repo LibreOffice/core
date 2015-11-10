@@ -314,7 +314,7 @@ sal_uInt16 ScInterpreter::GetWeekendAndHolidayMasks(
 
     if ( nParamCount >= 3 )
     {
-        GetSortArray( 1, rSortArray, NULL, false, true );
+        GetSortArray( 1, rSortArray, nullptr, false, true );
         size_t nMax = rSortArray.size();
         for ( size_t i = 0; i < nMax; i++ )
             rSortArray.at( i ) = ::rtl::math::approxFloor( rSortArray.at( i ) ) + nNullDate;
@@ -331,7 +331,7 @@ sal_uInt16 ScInterpreter::GetWeekendAndHolidayMasks_MS(
     OUString aWeekendDays;
     if ( nParamCount == 4 )
     {
-        GetSortArray( 1, rSortArray, NULL, true, true );
+        GetSortArray( 1, rSortArray, nullptr, true, true );
         size_t nMax = rSortArray.size();
         for ( size_t i = 0; i < nMax; i++ )
             rSortArray.at( i ) = ::rtl::math::approxFloor( rSortArray.at( i ) ) + nNullDate;
@@ -2392,7 +2392,7 @@ static ScDdeLink* lcl_GetDdeLink( sfx2::LinkManager* pLinkMgr,
         }
     }
 
-    return NULL;
+    return nullptr;
 }
 
 void ScInterpreter::ScDde()

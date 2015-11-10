@@ -45,7 +45,7 @@ ScOutlineWindow::ScOutlineWindow( vcl::Window* pParent, ScOutlineMode eMode, ScV
     mbHoriz( eMode == SC_OUTLINE_HOR ),
     mbMirrorEntries( false ),           // updated in SetHeaderSize
     mbMirrorLevels( false ),            // updated in SetHeaderSize
-    mpSymbols( NULL ),
+    mpSymbols( nullptr ),
     maLineColor( COL_BLACK ),
     mnHeaderSize( 0 ),
     mnHeaderPos( 0 ),
@@ -162,14 +162,14 @@ void ScOutlineWindow::InitSettings()
 const ScOutlineArray* ScOutlineWindow::GetOutlineArray() const
 {
     const ScOutlineTable* pTable = GetDoc().GetOutlineTable( GetTab() );
-    if ( !pTable ) return NULL;
+    if ( !pTable ) return nullptr;
     return mbHoriz ? &pTable->GetColArray() : &pTable->GetRowArray();
 }
 
 const ScOutlineEntry* ScOutlineWindow::GetOutlineEntry( size_t nLevel, size_t nEntry ) const
 {
     const ScOutlineArray* pArray = GetOutlineArray();
-    return pArray ? pArray->GetEntry( sal::static_int_cast<sal_uInt16>(nLevel), sal::static_int_cast<sal_uInt16>(nEntry) ) : NULL;
+    return pArray ? pArray->GetEntry( sal::static_int_cast<sal_uInt16>(nLevel), sal::static_int_cast<sal_uInt16>(nEntry) ) : nullptr;
 }
 
 bool ScOutlineWindow::IsHidden( SCCOLROW nColRowIndex ) const
@@ -304,7 +304,7 @@ bool ScOutlineWindow::GetEntryPos(
 
     // do not cover previous collapsed image
     bool bDoNoCover = !bHidden && nEntry;
-    const ScOutlineEntry* pPrevEntry = bDoNoCover ? GetOutlineEntry(nLevel, nEntry - 1) : NULL;
+    const ScOutlineEntry* pPrevEntry = bDoNoCover ? GetOutlineEntry(nLevel, nEntry - 1) : nullptr;
     if (pPrevEntry)
     {
         SCCOLROW nPrevEnd = pPrevEntry->GetEnd();

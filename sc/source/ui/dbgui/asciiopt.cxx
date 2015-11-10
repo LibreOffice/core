@@ -38,8 +38,8 @@ ScAsciiOptions::ScAsciiOptions() :
     bCharSetSystem  ( false ),
     nStartRow       ( 1 ),
     nInfoCount      ( 0 ),
-    pColStart       ( NULL ),
-    pColFormat      ( NULL )
+    pColStart       ( nullptr ),
+    pColFormat      ( nullptr )
 {
 }
 
@@ -68,8 +68,8 @@ ScAsciiOptions::ScAsciiOptions(const ScAsciiOptions& rOpt) :
     }
     else
     {
-        pColStart = NULL;
-        pColFormat = NULL;
+        pColStart = nullptr;
+        pColFormat = nullptr;
     }
 }
 
@@ -98,17 +98,17 @@ void ScAsciiOptions::SetColInfo( sal_uInt16 nCount, const sal_Int32* pStart, con
     }
     else
     {
-        pColStart = NULL;
-        pColFormat = NULL;
+        pColStart = nullptr;
+        pColFormat = nullptr;
     }
 }
 
 void ScAsciiOptions::SetColumnInfo( const ScCsvExpDataVec& rDataVec )
 {
     delete[] pColStart;
-    pColStart = NULL;
+    pColStart = nullptr;
     delete[] pColFormat;
-    pColFormat = NULL;
+    pColFormat = nullptr;
 
     nInfoCount = static_cast< sal_uInt16 >( rDataVec.size() );
     if( nInfoCount )
@@ -246,8 +246,8 @@ void ScAsciiOptions::ReadFromString( const OUString& rString )
         }
         else
         {
-            pColStart = NULL;
-            pColFormat = NULL;
+            pColStart = nullptr;
+            pColFormat = nullptr;
         }
     }
 

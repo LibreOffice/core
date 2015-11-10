@@ -148,19 +148,19 @@ const ScRange* _ScRangeListTabs::First( SCTAB n )
     TabRangeType::iterator itr = maTabRanges.find(n);
     if (itr == maTabRanges.end())
         // No range list exists for this table.
-        return NULL;
+        return nullptr;
 
     const RangeListType& rList = *itr->second;
     maItrCur = rList.begin();
     maItrCurEnd = rList.end();
-    return rList.empty() ? NULL : &(*maItrCur);
+    return rList.empty() ? nullptr : &(*maItrCur);
 }
 
 const ScRange* _ScRangeListTabs::Next ()
 {
     ++maItrCur;
     if (maItrCur == maItrCurEnd)
-        return NULL;
+        return nullptr;
 
     return &(*maItrCur);
 }

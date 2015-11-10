@@ -117,7 +117,7 @@ protected:
 
 public:
     ScConditionFrmtEntry( vcl::Window* pParent, ScDocument* pDoc, ScCondFormatDlg* pDialogParent,
-            const ScAddress& rPos, const ScCondFormatEntry* pFormatEntry = NULL );
+            const ScAddress& rPos, const ScCondFormatEntry* pFormatEntry = nullptr );
     virtual ~ScConditionFrmtEntry();
     virtual void dispose() override;
 
@@ -145,7 +145,7 @@ class ScFormulaFrmtEntry : public ScCondFrmtEntry
     DECL_LINK_TYPED( StyleSelectHdl, ListBox&, void );
 
 public:
-    ScFormulaFrmtEntry( vcl::Window* pParent, ScDocument* PDoc, ScCondFormatDlg* pDialogParent, const ScAddress& rPos, const ScCondFormatEntry* pFormatEntry = NULL );
+    ScFormulaFrmtEntry( vcl::Window* pParent, ScDocument* PDoc, ScCondFormatDlg* pDialogParent, const ScAddress& rPos, const ScCondFormatEntry* pFormatEntry = nullptr );
     virtual ~ScFormulaFrmtEntry();
     virtual void dispose() override;
 
@@ -178,7 +178,7 @@ class ScColorScale2FrmtEntry : public ScCondFrmtEntry
 
     DECL_LINK_TYPED( EntryTypeHdl, ListBox&, void );
 public:
-    ScColorScale2FrmtEntry( vcl::Window* pParent, ScDocument* pDoc, const ScAddress& rPos, const ScColorScaleFormat* pFormat = NULL );
+    ScColorScale2FrmtEntry( vcl::Window* pParent, ScDocument* pDoc, const ScAddress& rPos, const ScColorScaleFormat* pFormat = nullptr );
     virtual ~ScColorScale2FrmtEntry();
     virtual void dispose() override;
     virtual ScFormatEntry* GetEntry() const override;
@@ -213,7 +213,7 @@ class ScColorScale3FrmtEntry : public ScCondFrmtEntry
 
     DECL_LINK_TYPED( EntryTypeHdl, ListBox&, void );
 public:
-    ScColorScale3FrmtEntry( vcl::Window* pParent, ScDocument* pDoc, const ScAddress& rPos, const ScColorScaleFormat* pFormat = NULL );
+    ScColorScale3FrmtEntry( vcl::Window* pParent, ScDocument* pDoc, const ScAddress& rPos, const ScColorScaleFormat* pFormat = nullptr );
     virtual ~ScColorScale3FrmtEntry();
     virtual void dispose() override;
     virtual ScFormatEntry* GetEntry() const override;
@@ -245,7 +245,7 @@ class ScDataBarFrmtEntry : public ScCondFrmtEntry
     DECL_LINK_TYPED( OptionBtnHdl, Button*, void );
     DECL_LINK_TYPED( DataBarTypeSelectHdl, ListBox&, void );
 public:
-    ScDataBarFrmtEntry( vcl::Window* pParemt, ScDocument* pDoc, const ScAddress& rPos, const ScDataBarFormat* pFormat = NULL );
+    ScDataBarFrmtEntry( vcl::Window* pParemt, ScDocument* pDoc, const ScAddress& rPos, const ScDataBarFormat* pFormat = nullptr );
     virtual ~ScDataBarFrmtEntry();
     virtual void dispose() override;
     virtual ScFormatEntry* GetEntry() const override;
@@ -258,7 +258,7 @@ public:
 class ScDateFrmtEntry : public ScCondFrmtEntry, public SfxListener
 {
 public:
-    ScDateFrmtEntry( vcl::Window* pParent, ScDocument* pDoc, const ScCondDateFormatEntry* pFormat = NULL );
+    ScDateFrmtEntry( vcl::Window* pParent, ScDocument* pDoc, const ScCondDateFormatEntry* pFormat = nullptr );
     virtual ~ScDateFrmtEntry();
     virtual void dispose() override;
     virtual ScFormatEntry* GetEntry() const override;
@@ -302,7 +302,7 @@ class ScIconSetFrmtEntry : public ScCondFrmtEntry
     DECL_LINK_TYPED( IconSetTypeHdl, ListBox&, void );
 
 public:
-    ScIconSetFrmtEntry( vcl::Window* pParent, ScDocument* pDoc, const ScAddress& rPos, const ScIconSetFormat* pFormat = NULL );
+    ScIconSetFrmtEntry( vcl::Window* pParent, ScDocument* pDoc, const ScAddress& rPos, const ScIconSetFormat* pFormat = nullptr );
     virtual ~ScIconSetFrmtEntry();
     virtual void dispose() override;
     virtual ScFormatEntry* GetEntry() const override;

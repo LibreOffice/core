@@ -72,10 +72,10 @@ public:
 ScShareDocumentDlg::ScShareDocumentDlg( vcl::Window* pParent, ScViewData* pViewData )
     : ModalDialog(pParent, "ShareDocumentDialog", "modules/scalc/ui/sharedocumentdlg.ui")
     , mpViewData(pViewData)
-    , mpDocShell(NULL)
+    , mpDocShell(nullptr)
 {
     OSL_ENSURE( mpViewData, "ScShareDocumentDlg CTOR: mpViewData is null!" );
-    mpDocShell = ( mpViewData ? mpViewData->GetDocShell() : NULL );
+    mpDocShell = ( mpViewData ? mpViewData->GetDocShell() : nullptr );
     OSL_ENSURE( mpDocShell, "ScShareDocumentDlg CTOR: mpDocShell is null!" );
 
     get(m_pCbShare, "share");

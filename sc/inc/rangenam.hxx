@@ -94,7 +94,7 @@ public:
                                  const OUString& rName,
                                  const ScAddress& rTarget );
                                 // rTarget is ABSPOS jump label
-                    ScRangeData(const ScRangeData& rScRangeData, ScDocument* pDocument = NULL);
+                    ScRangeData(const ScRangeData& rScRangeData, ScDocument* pDocument = nullptr);
 
     SC_DLLPUBLIC ~ScRangeData();
 

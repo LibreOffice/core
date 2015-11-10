@@ -32,7 +32,7 @@ XclImpName::TokenStrmData::TokenStrmData( XclImpStream& rStrm ) :
 
 XclImpName::XclImpName( XclImpStream& rStrm, sal_uInt16 nXclNameIdx ) :
     XclImpRoot( rStrm.GetRoot() ),
-    mpScData( 0 ),
+    mpScData( nullptr ),
     mcBuiltIn( EXC_BUILTIN_UNKNOWN ),
     mnScTab( SCTAB_MAX ),
     meNameType( RT_NAME ),
@@ -143,7 +143,7 @@ XclImpName::XclImpName( XclImpStream& rStrm, sal_uInt16 nXclNameIdx ) :
     // 3) *** convert the name definition formula *** -------------------------
 
     rFmlaConv.Reset();
-    const ScTokenArray* pTokArr = 0; // pointer to token array, owned by rFmlaConv
+    const ScTokenArray* pTokArr = nullptr; // pointer to token array, owned by rFmlaConv
 
     if( ::get_flag( nFlags, EXC_NAME_BIG ) )
     {
@@ -281,8 +281,8 @@ void XclImpNameManager::ReadName( XclImpStream& rStrm )
 
 const XclImpName* XclImpNameManager::FindName( const OUString& rXclName, SCTAB nScTab ) const
 {
-    const XclImpName* pGlobalName = 0;   // a found global name
-    const XclImpName* pLocalName = 0;    // a found local name
+    const XclImpName* pGlobalName = nullptr;   // a found global name
+    const XclImpName* pLocalName = nullptr;    // a found local name
     for( XclImpNameList::const_iterator itName = maNameList.begin(); itName != maNameList.end() && !pLocalName; ++itName )
     {
         if( itName->GetXclName() == rXclName )

@@ -249,7 +249,7 @@ public:
     void            GetStatePageStyle( SfxViewShell& rCaller, SfxItemSet& rSet, SCTAB nCurTab );
 
     void            CompareDocument( ScDocument& rOtherDoc );
-    void            MergeDocument( ScDocument& rOtherDoc, bool bShared = false, bool bCheckDuplicates = false, sal_uLong nOffset = 0, ScChangeActionMergeMap* pMergeMap = NULL, bool bInverseMap = false );
+    void            MergeDocument( ScDocument& rOtherDoc, bool bShared = false, bool bCheckDuplicates = false, sal_uLong nOffset = 0, ScChangeActionMergeMap* pMergeMap = nullptr, bool bInverseMap = false );
     bool            MergeSharedDocument( ScDocShell* pSharedDocShell );
 
     ScChangeAction* GetChangeAction( const ScAddress& rPos );
@@ -277,7 +277,7 @@ public:
     bool            IsEditable() const;
 
     bool            AdjustRowHeight( SCROW nStartRow, SCROW nEndRow, SCTAB nTab );
-    void            UpdateAllRowHeights( const ScMarkData* pTabMark = NULL );
+    void            UpdateAllRowHeights( const ScMarkData* pTabMark = nullptr );
     void            UpdatePendingRowHeights( SCTAB nUpdateTab, bool bBefore = false );
 
     void            RefreshPivotTables( const ScRange& rSource );
@@ -326,7 +326,7 @@ public:
     void            PostPaintGridAll();
     void            PostPaintExtras();
 
-    bool            IsPaintLocked() const { return pPaintLockData != NULL; }
+    bool            IsPaintLocked() const { return pPaintLockData != nullptr; }
 
     void            PostDataChanged();
 
@@ -474,7 +474,7 @@ namespace HelperNotifyChanges
         ScModelObj* pModelObj = ScModelObj::getImplementation(rDocShell.GetModel());
         if (pModelObj && pModelObj->HasChangesListeners())
             return pModelObj;
-        return NULL;
+        return nullptr;
     }
 
     inline void Notify(ScModelObj &rModelObj, const ScRangeList &rChangeRanges,

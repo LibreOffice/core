@@ -32,9 +32,9 @@ struct DocShell_Impl
 
     DocShell_Impl() :
           bIgnoreLostRedliningWarning( false )
-        , pFontList( NULL )
-        , pDocInserter( NULL )
-        , pRequest( NULL )
+        , pFontList( nullptr )
+        , pDocInserter( nullptr )
+        , pRequest( nullptr )
     {}
 
     ~DocShell_Impl()

@@ -56,18 +56,18 @@ struct LotusContext
         , eTyp(eWK_UNKNOWN)
         , bEOF(false)
         , eCharVon(RTL_TEXTENCODING_DONTKNOW)
-        , pDoc(0)
-        , pLotusRoot(NULL)
+        , pDoc(nullptr)
+        , pLotusRoot(nullptr)
 
         , nDefaultFormat(0)
-        , pAttrRight(NULL)
-        , pAttrLeft(NULL)
-        , pAttrCenter(NULL)
-        , pAttrRepeat(NULL)
-        , pAttrStandard(NULL)
-        , pAttrUnprot(NULL)
-        , pAttrValForms(NULL)
-        , pValueFormCache(NULL)
+        , pAttrRight(nullptr)
+        , pAttrLeft(nullptr)
+        , pAttrCenter(nullptr)
+        , pAttrRepeat(nullptr)
+        , pAttrStandard(nullptr)
+        , pAttrUnprot(nullptr)
+        , pAttrValForms(nullptr)
+        , pValueFormCache(nullptr)
     {
     }
 };

@@ -261,7 +261,7 @@ OUString SAL_CALL ScFilterDetect::detect( uno::Sequence<beans::PropertyValue>& l
         // No stream, no detection.
         return OUString();
 
-    const char* pSearchFilterName = NULL;
+    const char* pSearchFilterName = nullptr;
     if (aTypeName == "calc_Lotus")
     {
         if (!detectThisFormat(*pStream, pLotus) && !detectThisFormat(*pStream, pLotusNew) && !detectThisFormat(*pStream, pLotus2))

@@ -74,7 +74,7 @@ extern sal_uInt16 nScFillModeMouseModifier;     // global.cxx
 
 namespace {
 
-short lcl_DecompValueString( OUString& rValue, sal_Int32& nVal, sal_uInt16* pMinDigits = NULL )
+short lcl_DecompValueString( OUString& rValue, sal_Int32& nVal, sal_uInt16* pMinDigits = nullptr )
 {
     if ( rValue.isEmpty() )
     {
@@ -197,7 +197,7 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
 
     rInc = 0.0;
     rMinDigits = 0;
-    rListData = NULL;
+    rListData = nullptr;
     rCmd = FILL_SIMPLE;
     if ( (nScFillModeMouseModifier & KEY_MOD1) )
         return ;        // Ctrl-key: Copy
@@ -370,7 +370,7 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
             {
                 (void)GetString(nCol, nRow, aStr);
                 if (!rListData->GetSubIndex(aStr, rListIndex, bMatchCase))
-                    rListData = NULL;
+                    rListData = nullptr;
                 nCol = sal::static_int_cast<SCCOL>( nCol + nAddX );
                 nRow = sal::static_int_cast<SCROW>( nRow + nAddY );
             }
@@ -564,10 +564,10 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
 
         //  transfer attributes
 
-        const ScPatternAttr* pSrcPattern = NULL;
-        const ScStyleSheet* pStyleSheet = NULL;
+        const ScPatternAttr* pSrcPattern = nullptr;
+        const ScStyleSheet* pStyleSheet = nullptr;
         SCCOLROW nAtSrc = nISrcStart;
-        ScPatternAttr* pNewPattern = NULL;
+        ScPatternAttr* pNewPattern = nullptr;
         bool bGetPattern = true;
         rInner = nIStart;
         while (true)        // #i53728# with "for (;;)" old solaris/x86 compiler mis-optimizes
@@ -594,7 +594,7 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                         rNewSet.ClearItem(ATTR_MERGE_FLAG);
                     }
                     else
-                        pNewPattern = NULL;
+                        pNewPattern = nullptr;
                 }
 
                 const ScCondFormatItem& rCondFormatItem = static_cast<const ScCondFormatItem&>(pSrcPattern->GetItem(ATTR_CONDITIONAL));
@@ -692,7 +692,7 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
         FillDateCmd eDateCmd;
         double nInc;
         sal_uInt16 nMinDigits;
-        ScUserListData* pListData = NULL;
+        ScUserListData* pListData = nullptr;
         sal_uInt16 nListIndex;
         if (bVertical)
             FillAnalyse(static_cast<SCCOL>(nCol),nRow1,
@@ -816,7 +816,7 @@ OUString ScTable::GetAutoFillPreview( const ScRange& rSource, SCCOL nEndX, SCROW
         FillDateCmd eDateCmd;
         double nInc;
         sal_uInt16 nMinDigits;
-        ScUserListData* pListData = NULL;
+        ScUserListData* pListData = nullptr;
         sal_uInt16 nListIndex;
 
         FillAnalyse(nCol1,nRow1, nCol2,nRow2, eFillCmd,eDateCmd, nInc,nMinDigits, pListData,nListIndex);
@@ -1117,13 +1117,13 @@ bool HiddenRowColumn(ScTable* pTable, SCCOLROW nRowColumn, bool bVertical, SCCOL
     if(bVertical)
     {
         SCROW nLast;
-        bHidden = pTable->RowHidden(nRowColumn, NULL, &nLast);
+        bHidden = pTable->RowHidden(nRowColumn, nullptr, &nLast);
         rLastPos = nLast;
     }
     else
     {
         SCCOL nLast;
-        bHidden = pTable->ColHidden(static_cast<SCCOL>(nRowColumn), NULL, &nLast);
+        bHidden = pTable->ColHidden(static_cast<SCCOL>(nRowColumn), nullptr, &nLast);
         rLastPos = nLast;
     }
     return bHidden;
@@ -1177,7 +1177,7 @@ void ScTable::FillFormulaVertical(
         return;
 
     aCol[nCol].DeleteRanges(aSpans, InsertDeleteFlags::VALUE | InsertDeleteFlags::DATETIME | InsertDeleteFlags::STRING | InsertDeleteFlags::FORMULA | InsertDeleteFlags::OUTLINE, false);
-    aCol[nCol].CloneFormulaCell(rSrcCell, sc::CellTextAttr(), aSpans, NULL);
+    aCol[nCol].CloneFormulaCell(rSrcCell, sc::CellTextAttr(), aSpans, nullptr);
 
     std::shared_ptr<sc::ColumnBlockPositionSet> pSet(new sc::ColumnBlockPositionSet(*pDocument));
     sc::StartListeningContext aStartCxt(*pDocument, pSet);
@@ -1308,9 +1308,9 @@ void ScTable::FillAutoSimple(
     while (true)        // #i53728# with "for (;;)" old solaris/x86 compiler mis-optimizes
     {
         if (rCol > nColHiddenLast)
-            bColHidden = ColHidden(rCol, NULL, &nColHiddenLast);
+            bColHidden = ColHidden(rCol, nullptr, &nColHiddenLast);
         if (rRow > nRowHiddenLast)
-            bRowHidden = RowHidden(rRow, NULL, &nRowHiddenLast);
+            bRowHidden = RowHidden(rRow, nullptr, &nRowHiddenLast);
 
         if (!bColHidden && !bRowHidden)
         {

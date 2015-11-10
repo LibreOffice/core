@@ -93,7 +93,7 @@ bool DynamicKernelArgument::NeedParallelReduction() const
 }
 
 VectorRef::VectorRef( const ScCalcConfig& config, const std::string& s, FormulaTreeNodeRef ft, int idx ) :
-    DynamicKernelArgument(config, s, ft), mpClmem(NULL), mnIndex(idx)
+    DynamicKernelArgument(config, s, ft), mpClmem(nullptr), mnIndex(idx)
 {
     if (mnIndex)
     {

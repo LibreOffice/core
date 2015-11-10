@@ -65,7 +65,7 @@ public:
                                     {
                                         if ( nIndex < nCount )
                                             return ppData[ nIndex ];
-                                        return NULL;
+                                        return nullptr;
                                     }
 
                                     //! might be NULL indicating "no value"
@@ -73,19 +73,19 @@ public:
                                     {
                                         if ( IsValid( nChartCol, nChartRow ) )
                                             return ppData[ GetIndex( nChartCol, nChartRow ) ];
-                                        return NULL;
+                                        return nullptr;
                                     }
             const ScAddress*    GetColHeaderPosition( SCCOL nChartCol ) const
                                     {
                                         if ( nChartCol < nColCount )
                                             return ppColHeader[ nChartCol ];
-                                        return NULL;
+                                        return nullptr;
                                     }
             const ScAddress*    GetRowHeaderPosition( SCROW nChartRow ) const
                                     {
                                         if ( nChartRow < nRowCount )
                                             return ppRowHeader[ nChartRow ];
-                                        return NULL;
+                                        return nullptr;
                                     }
 };
 
@@ -141,7 +141,7 @@ public:
                                     if ( pPositionMap )
                                     {
                                         delete pPositionMap;
-                                        pPositionMap = NULL;
+                                        pPositionMap = nullptr;
                                     }
                                 }
     const ScChartPositionMap*   GetPositionMap();

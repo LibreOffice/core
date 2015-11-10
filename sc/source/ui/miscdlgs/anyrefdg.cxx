@@ -46,14 +46,14 @@
 
 ScFormulaReferenceHelper::ScFormulaReferenceHelper(IAnyRefDialog* _pDlg,SfxBindings* _pBindings)
  : m_pDlg(_pDlg)
- , pRefEdit (NULL)
- , pRefBtn (NULL)
- , m_pWindow(NULL)
+ , pRefEdit (nullptr)
+ , pRefBtn (nullptr)
+ , m_pWindow(nullptr)
  , m_pBindings(_pBindings)
  , m_nOldBorderWidth (0)
  , nRefTab(0)
  , mnOldEditWidthReq( -1 )
- , mpOldEditParent( NULL )
+ , mpOldEditParent( nullptr )
  , mbOldDlgLayoutEnabled( false )
  , mbOldEditParentLayoutEnabled( false )
  , bHighlightRef( false )
@@ -103,7 +103,7 @@ void ScFormulaReferenceHelper::enableInput( bool bEnable )
             {
                 SfxViewShell* p = pFrame->GetViewShell();
                 ScTabViewShell* pViewSh = dynamic_cast< ScTabViewShell *>( p );
-                if(pViewSh!=NULL)
+                if(pViewSh!=nullptr)
                 {
                     vcl::Window *pWin=pViewSh->GetWindow();
                     if(pWin)
@@ -211,7 +211,7 @@ void ScFormulaReferenceHelper::ShowFormulaReference(const OUString& rStr)
 
                 sal_uInt16 nIndex=0;
 
-                while(pToken!=NULL)
+                while(pToken!=nullptr)
                 {
                     bool bDoubleRef=(pToken->GetType()==formula::svDoubleRef);
 
@@ -248,7 +248,7 @@ void ScFormulaReferenceHelper::HideReference( bool bDoneRefMode )
     {
         ScTabViewShell* pTabViewShell=pViewData->GetViewShell();
 
-        if(pTabViewShell!=NULL)
+        if(pTabViewShell!=nullptr)
         {
             //  bDoneRefMode is sal_False when called from before SetReference.
             //  In that case, RefMode was just started and must not be ended now.
@@ -416,8 +416,8 @@ void ScFormulaReferenceHelper::RefInputDone( bool bForced )
             pResizeDialog->setOptimalLayoutSize();
         }
 
-        pRefEdit = NULL;
-        pRefBtn = NULL;
+        pRefEdit = nullptr;
+        pRefBtn = nullptr;
     }
 }
 
@@ -492,7 +492,7 @@ void ScFormulaReferenceHelper::RefInputStart( formula::RefEdit* pEdit, formula::
             }
         }
 
-        Dialog* pResizeDialog = NULL;
+        Dialog* pResizeDialog = nullptr;
 
         if (!mbOldDlgLayoutEnabled)
         {
@@ -633,7 +633,7 @@ bool ScFormulaReferenceHelper::DoClose( sal_uInt16 nId )
     }
 
     // find parent view frame to close dialog
-    SfxViewFrame* pMyViewFrm = NULL;
+    SfxViewFrame* pMyViewFrm = nullptr;
     if ( m_pBindings )
     {
         SfxDispatcher* pMyDisp = m_pBindings->GetDispatcher();
@@ -693,7 +693,7 @@ void ScFormulaReferenceHelper::EnableSpreadsheets(bool bFlag, bool bChildren)
             {
                 SfxViewShell* p = pFrame->GetViewShell();
                 ScTabViewShell* pViewSh = dynamic_cast< ScTabViewShell *>( p );
-                if(pViewSh!=NULL)
+                if(pViewSh!=nullptr)
                 {
                     vcl::Window *pWin=pViewSh->GetWindow();
                     if(pWin)
@@ -728,7 +728,7 @@ static void lcl_InvalidateWindows()
             {
                 SfxViewShell* p = pFrame->GetViewShell();
                 ScTabViewShell* pViewSh = dynamic_cast< ScTabViewShell *>( p );
-                if(pViewSh!=NULL)
+                if(pViewSh!=nullptr)
                 {
                     vcl::Window *pWin=pViewSh->GetWindow();
                     if(pWin)
@@ -764,7 +764,7 @@ ScRefHandler::ScRefHandler( vcl::Window &rWindow, SfxBindings* pB, bool bBindRef
         m_bInRefMode( false ),
         m_aHelper(this,pB),
         pMyBindings( pB ),
-        pActiveWin(NULL)
+        pActiveWin(nullptr)
 {
     m_aHelper.SetWindow(m_rWindow.get());
     reverseUniqueHelpIdHack(*m_rWindow.get());
@@ -780,12 +780,12 @@ bool ScRefHandler::EnterRefMode()
 
     SC_MOD()->InputEnterHandler();
 
-    ScTabViewShell* pScViewShell = NULL;
+    ScTabViewShell* pScViewShell = nullptr;
 
     // title has to be from the view that opened the dialog,
     // even if it's not the current view
 
-    SfxObjectShell* pParentDoc = NULL;
+    SfxObjectShell* pParentDoc = nullptr;
     if ( pMyBindings )
     {
         SfxDispatcher* pMyDisp = pMyBindings->GetDispatcher();
@@ -811,7 +811,7 @@ bool ScRefHandler::EnterRefMode()
     OSL_ENSURE( pInputHdl, "Missing input handler :-/" );
 
     if ( pInputHdl )
-        pInputHdl->NotifyChange( NULL );
+        pInputHdl->NotifyChange( nullptr );
 
     ScFormulaReferenceHelper::enableInput( false );
 

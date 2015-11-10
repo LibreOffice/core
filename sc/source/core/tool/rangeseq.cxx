@@ -380,7 +380,7 @@ ScMatrixRef ScSequenceToMatrix::CreateMixedMatrix( const css::uno::Any & rAny )
             if (nCols != static_cast<SCSIZE>(nMaxColCount) || nRows != static_cast<SCSIZE>(nRowCount))
             {
                 OSL_FAIL( "ScSequenceToMatrix::CreateMixedMatrix: matrix exceeded max size, returning NULL matrix");
-                return NULL;
+                return nullptr;
             }
             for (nRow=0; nRow<nRowCount; nRow++)
             {

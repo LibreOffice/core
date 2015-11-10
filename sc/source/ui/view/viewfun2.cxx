@@ -483,7 +483,7 @@ bool ScViewFunc::GetAutoSumArea( ScRangeList& rRangeList )
 void ScViewFunc::EnterAutoSum(const ScRangeList& rRangeList, bool bSubTotal, const ScAddress& rAddr)
 {
     OUString aFormula = GetAutoSumFormula( rRangeList, bSubTotal, rAddr );
-    EnterBlock( aFormula, NULL );
+    EnterBlock( aFormula, nullptr );
 }
 
 bool ScViewFunc::AutoSum( const ScRange& rRange, bool bSubTotal, bool bSetCursor, bool bContinue )
@@ -764,7 +764,7 @@ void ScViewFunc::EnterBlock( const OUString& rString, const EditTextObject* pDat
         if (!aTester.NeedsObject())
         {
             aNewStr = aEngine.GetText();
-            pData = NULL;
+            pData = nullptr;
         }
     }
 
@@ -956,7 +956,7 @@ void ScViewFunc::SetPrintRanges( bool bEntireSheet, const OUString* pPrint,
         if ( pRepCol )
         {
             if ( pRepCol->isEmpty() )
-                rDoc.SetRepeatColRange( nTab, NULL );
+                rDoc.SetRepeatColRange( nTab, nullptr );
             else
                 if ( aRange.ParseAny( *pRepCol, &rDoc, aDetails ) & SCA_VALID )
                     rDoc.SetRepeatColRange( nTab, &aRange );
@@ -967,7 +967,7 @@ void ScViewFunc::SetPrintRanges( bool bEntireSheet, const OUString* pPrint,
         if ( pRepRow )
         {
             if ( pRepRow->isEmpty() )
-                rDoc.SetRepeatRowRange( nTab, NULL );
+                rDoc.SetRepeatRowRange( nTab, nullptr );
             else
                 if ( aRange.ParseAny( *pRepRow, &rDoc, aDetails ) & SCA_VALID )
                     rDoc.SetRepeatRowRange( nTab, &aRange );
@@ -1445,7 +1445,7 @@ void ScViewFunc::FillTab( InsertDeleteFlags nFlags, ScPasteFunc nFunction, bool 
     else
         aMarkRange = ScRange( GetViewData().GetCurX(), GetViewData().GetCurY(), nTab );
 
-    ScDocument* pUndoDoc = NULL;
+    ScDocument* pUndoDoc = nullptr;
 
     if (bUndo)
     {
@@ -1593,7 +1593,7 @@ void ScViewFunc::TransliterateText( sal_Int32 nType )
 
 ScAutoFormatData* ScViewFunc::CreateAutoFormatData()
 {
-    ScAutoFormatData* pData = NULL;
+    ScAutoFormatData* pData = nullptr;
     SCCOL nStartCol;
     SCROW nStartRow;
     SCTAB nStartTab;
@@ -1933,7 +1933,7 @@ void ScViewFunc::Solve( const ScSolveParam& rParam )
         }
 
         OUString  aTargetValStr;
-        if ( rParam.pStrTargetVal != NULL )
+        if ( rParam.pStrTargetVal != nullptr )
             aTargetValStr = *(rParam.pStrTargetVal);
 
         OUString  aMsgStr;
@@ -2219,8 +2219,8 @@ bool ScViewFunc::DeleteTables(const vector<SCTAB> &TheTabs, bool bRecord )
         --nNewTab;
 
     bool bWasLinked = false;
-    ScDocument* pUndoDoc = NULL;
-    ScRefUndoData* pUndoData = NULL;
+    ScDocument* pUndoDoc = nullptr;
+    ScRefUndoData* pUndoData = nullptr;
     if (bRecord)
     {
         pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
@@ -2538,9 +2538,9 @@ void ScViewFunc::MoveTable(
 {
     ScDocument* pDoc       = GetViewData().GetDocument();
     ScDocShell* pDocShell  = GetViewData().GetDocShell();
-    ScDocument* pDestDoc   = NULL;
-    ScDocShell* pDestShell = NULL;
-    ScTabViewShell* pDestViewSh = NULL;
+    ScDocument* pDestDoc   = nullptr;
+    ScDocShell* pDestShell = nullptr;
+    ScTabViewShell* pDestViewSh = nullptr;
     bool bUndo (pDoc->IsUndoEnabled());
     bool bRename = pNewTabName && !pNewTabName->isEmpty();
 
@@ -3033,7 +3033,7 @@ void ScViewFunc::UpdateLineAttrs( SvxBorderLine&       rLine,
             aBoxItem.SetLine( &aLine, BOXLINE );                    \
         }                                                           \
         else                                                        \
-            aBoxItem.SetLine( NULL, BOXLINE );                      \
+            aBoxItem.SetLine( nullptr, BOXLINE );                      \
     }
 
 void ScViewFunc::SetSelectionFrameLines( const SvxBorderLine* pLine,
@@ -3054,13 +3054,13 @@ void ScViewFunc::SetSelectionFrameLines( const SvxBorderLine* pLine,
     const ScPatternAttr*    pSelAttrs = GetSelectionPattern();
     const SfxItemSet&       rSelItemSet = pSelAttrs->GetItemSet();
 
-    const SfxPoolItem*      pBorderAttr = NULL;
+    const SfxPoolItem*      pBorderAttr = nullptr;
     SfxItemState            eItemState = rSelItemSet.GetItemState( ATTR_BORDER, true, &pBorderAttr );
 
-    const SfxPoolItem*      pTLBRItem = 0;
+    const SfxPoolItem*      pTLBRItem = nullptr;
     SfxItemState            eTLBRState = rSelItemSet.GetItemState( ATTR_BORDER_TLBR, true, &pTLBRItem );
 
-    const SfxPoolItem*      pBLTRItem = 0;
+    const SfxPoolItem*      pBLTRItem = nullptr;
     SfxItemState            eBLTRState = rSelItemSet.GetItemState( ATTR_BORDER_BLTR, true, &pBLTRItem );
 
     // any of the lines visible?
@@ -3082,7 +3082,7 @@ void ScViewFunc::SetSelectionFrameLines( const SvxBorderLine* pLine,
 
             if( pBorderAttr )
             {
-                const SvxBorderLine*    pBoxLine = NULL;
+                const SvxBorderLine*    pBoxLine = nullptr;
                 SvxBoxItem      aBoxItem( *static_cast<const SvxBoxItem*>(pBorderAttr) );
                 SvxBoxInfoItem  aBoxInfoItem( ATTR_BORDER_INNER );
 

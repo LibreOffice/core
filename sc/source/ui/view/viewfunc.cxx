@@ -662,7 +662,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
 
         //      undo
 
-        EditTextObject* pUndoData = NULL;
+        EditTextObject* pUndoData = nullptr;
         ScUndoEnterData::ValuesType aOldValues;
 
         if (bRecord && !bSimple)
@@ -774,7 +774,7 @@ void ScViewFunc::EnterMatrix( const OUString& rString, ::formula::FormulaGrammar
     {
         ScDocShell* pDocSh = rData.GetDocShell();
         bool bSuccess = pDocSh->GetDocFunc().EnterMatrix(
-            aRange, &rMark, NULL, rString, false, false, EMPTY_OUSTRING, eGram );
+            aRange, &rMark, nullptr, rString, false, false, EMPTY_OUSTRING, eGram );
         if (bSuccess)
             pDocSh->UpdateOle(&GetViewData());
     }
@@ -1148,8 +1148,8 @@ void ScViewFunc::ApplySelectionPattern( const ScPatternAttr& rAttr,
         SCROW nEndRow = aMarkRange.aEnd.Row();
         SCTAB nEndTab = aMarkRange.aEnd.Tab();
 
-        ScUndoSelectionAttr* pUndoAttr = NULL;
-        ScEditDataArray* pEditDataArray = NULL;
+        ScUndoSelectionAttr* pUndoAttr = nullptr;
+        ScEditDataArray* pEditDataArray = nullptr;
         if (bRecord)
         {
             ScRange aCopyRange = aMarkRange;
@@ -1188,16 +1188,16 @@ void ScViewFunc::ApplySelectionPattern( const ScPatternAttr& rAttr,
         SCROW nRow = rViewData.GetCurY();
         SCTAB nTab = rViewData.GetTabNo();
 
-        EditTextObject* pOldEditData = NULL;
-        EditTextObject* pNewEditData = NULL;
+        EditTextObject* pOldEditData = nullptr;
+        EditTextObject* pNewEditData = nullptr;
         ScAddress aPos(nCol, nRow, nTab);
         if (rDoc.GetCellType(aPos) == CELLTYPE_EDIT)
         {
             const EditTextObject* pEditObj = rDoc.GetEditText(aPos);
-            pOldEditData = pEditObj ? pEditObj->Clone() : NULL;
+            pOldEditData = pEditObj ? pEditObj->Clone() : nullptr;
             rDoc.RemoveEditTextCharAttribs(aPos, rAttr);
             pEditObj = rDoc.GetEditText(aPos);
-            pNewEditData = pEditObj ? pEditObj->Clone() : NULL;
+            pNewEditData = pEditObj ? pEditObj->Clone() : nullptr;
         }
 
         aChangeRanges.Append(aPos);
@@ -1231,7 +1231,7 @@ void ScViewFunc::ApplySelectionPattern( const ScPatternAttr& rAttr,
         PropertyEntryVector_t aPropVector = rMap.getPropertyEntries();
         for ( sal_uInt16 nWhich = ATTR_PATTERN_START; nWhich <= ATTR_PATTERN_END; ++nWhich )
         {
-            const SfxPoolItem* pItem = 0;
+            const SfxPoolItem* pItem = nullptr;
             if ( rNewSet.GetItemState( nWhich, true, &pItem ) == SfxItemState::SET && pItem )
             {
                 PropertyEntryVector_t::const_iterator aIt = aPropVector.begin();
@@ -1280,7 +1280,7 @@ const SfxStyleSheet* ScViewFunc::GetStyleSheetFromMarked()
     // Don't use UnmarkFiltered in slot state functions, for performance reasons.
     // The displayed state is always that of the whole selection including filtered rows.
 
-    const ScStyleSheet* pSheet      = NULL;
+    const ScStyleSheet* pSheet      = nullptr;
     ScViewData&         rViewData   = GetViewData();
     ScDocument*         pDoc        = rViewData.GetDocument();
     ScMarkData&         rMark       = rViewData.GetMarkData();
@@ -1640,8 +1640,8 @@ void ScViewFunc::DeleteMulti( bool bRows, bool bRecord )
 
     WaitObject aWait( GetFrameWin() );      // important for TrackFormulas in UpdateReference
 
-    ScDocument* pUndoDoc = NULL;
-    ScRefUndoData* pUndoData = NULL;
+    ScDocument* pUndoDoc = nullptr;
+    ScRefUndoData* pUndoData = nullptr;
     if (bRecord)
     {
         pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
@@ -1877,8 +1877,8 @@ void ScViewFunc::SetWidthOrHeight(
         bFormula = rOpts.GetOption( VOPT_FORMULAS );
     }
 
-    ScDocument*     pUndoDoc = NULL;
-    ScOutlineTable* pUndoTab = NULL;
+    ScDocument*     pUndoDoc = nullptr;
+    ScOutlineTable* pUndoTab = nullptr;
     std::vector<sc::ColRowSpan> aUndoRanges;
 
     if ( bRecord )
@@ -1945,7 +1945,7 @@ void ScViewFunc::SetWidthOrHeight(
                         for (SCROW nRow = nStartNo; nRow <= nEndNo; ++nRow)
                         {
                             SCROW nLastRow = nRow;
-                            if (rDoc.RowHidden(nRow, nTab, NULL, &nLastRow))
+                            if (rDoc.RowHidden(nRow, nTab, nullptr, &nLastRow))
                             {
                                 nRow = nLastRow;
                                 continue;
@@ -2671,7 +2671,7 @@ bool ScViewFunc::InsertName( const OUString& rName, const OUString& rSymbol,
 
         if ( pList->insert( pNewEntry ) )
             bOk = true;
-        pNewEntry = NULL;   // never delete, insert took ownership
+        pNewEntry = nullptr;   // never delete, insert took ownership
 
         rDoc.CompileHybridFormula();
 

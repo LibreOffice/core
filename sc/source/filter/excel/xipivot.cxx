@@ -204,19 +204,19 @@ const OUString& XclImpPCField::GetFieldName( const ScfStringVec& rVisNames ) con
 const XclImpPCField* XclImpPCField::GetGroupBaseField() const
 {
     OSL_ENSURE( IsGroupChildField(), "XclImpPCField::GetGroupBaseField - this field type does not have a base field" );
-    return IsGroupChildField() ? mrPCache.GetField( maFieldInfo.mnGroupBase ) : 0;
+    return IsGroupChildField() ? mrPCache.GetField( maFieldInfo.mnGroupBase ) : nullptr;
 }
 
 const XclImpPCItem* XclImpPCField::GetItem( sal_uInt16 nItemIdx ) const
 {
-    return (nItemIdx < maItems.size()) ? maItems[ nItemIdx ].get() : 0;
+    return (nItemIdx < maItems.size()) ? maItems[ nItemIdx ].get() : nullptr;
 }
 
 const XclImpPCItem* XclImpPCField::GetLimitItem( sal_uInt16 nItemIdx ) const
 {
     OSL_ENSURE( nItemIdx < 3, "XclImpPCField::GetLimitItem - invalid item index" );
     OSL_ENSURE( nItemIdx < maNumGroupItems.size(), "XclImpPCField::GetLimitItem - no item found" );
-    return (nItemIdx < maNumGroupItems.size()) ? maNumGroupItems[ nItemIdx ].get() : 0;
+    return (nItemIdx < maNumGroupItems.size()) ? maNumGroupItems[ nItemIdx ].get() : nullptr;
 }
 
 void XclImpPCField::WriteFieldNameToSource( SCCOL nScCol, SCTAB nScTab )
@@ -545,7 +545,7 @@ const double* XclImpPCField::GetNumGroupLimit( sal_uInt16 nLimitIdx ) const
         OSL_ENSURE( pItem->GetDouble(), "XclImpPCField::GetNumGroupLimit - SXDOUBLE item expected" );
         return pItem->GetDouble();
     }
-    return 0;
+    return nullptr;
 }
 
 const DateTime* XclImpPCField::GetDateGroupLimit( sal_uInt16 nLimitIdx ) const
@@ -556,7 +556,7 @@ const DateTime* XclImpPCField::GetDateGroupLimit( sal_uInt16 nLimitIdx ) const
         OSL_ENSURE( pItem->GetDateTime(), "XclImpPCField::GetDateGroupLimit - SXDATETIME item expected" );
         return pItem->GetDateTime();
     }
-    return 0;
+    return nullptr;
 }
 
 const sal_Int16* XclImpPCField::GetDateGroupStep() const
@@ -574,12 +574,12 @@ const sal_Int16* XclImpPCField::GetDateGroupStep() const
                 {
                     OSL_ENSURE( *pnStep > 0, "XclImpPCField::GetDateGroupStep - invalid step count" );
                     // return nothing for step count 1 - this is also a standard date group in Excel
-                    return (*pnStep > 1) ? pnStep : 0;
+                    return (*pnStep > 1) ? pnStep : nullptr;
                 }
             }
         }
     }
-    return 0;
+    return nullptr;
 }
 
 XclImpPivotCache::XclImpPivotCache( const XclImpRoot& rRoot ) :
@@ -604,7 +604,7 @@ sal_uInt16 XclImpPivotCache::GetFieldCount() const
 
 const XclImpPCField* XclImpPivotCache::GetField( sal_uInt16 nFieldIdx ) const
 {
-    return (nFieldIdx < maFields.size()) ? maFields[ nFieldIdx ].get() : 0;
+    return (nFieldIdx < maFields.size()) ? maFields[ nFieldIdx ].get() : nullptr;
 }
 
 // records --------------------------------------------------------------------
@@ -890,8 +890,8 @@ const OUString* XclImpPTItem::GetItemName() const
     if( mpCacheField )
         if( const XclImpPCItem* pCacheItem = mpCacheField->GetItem( maItemInfo.mnCacheIdx ) )
             //TODO: use XclImpPCItem::ConvertToText(), if all conversions are available
-            return pCacheItem->IsEmpty() ? NULL : pCacheItem->GetText();
-    return 0;
+            return pCacheItem->IsEmpty() ? nullptr : pCacheItem->GetText();
+    return nullptr;
 }
 
 void XclImpPTItem::ReadSxvi( XclImpStream& rStrm )
@@ -922,7 +922,7 @@ XclImpPTField::XclImpPTField( const XclImpPivotTable& rPTable, sal_uInt16 nCache
 const XclImpPCField* XclImpPTField::GetCacheField() const
 {
     XclImpPivotCacheRef xPCache = mrPTable.GetPivotCache();
-    return xPCache ? xPCache->GetField( maFieldInfo.mnCacheIdx ) : 0;
+    return xPCache ? xPCache->GetField( maFieldInfo.mnCacheIdx ) : nullptr;
 }
 
 OUString XclImpPTField::GetFieldName() const
@@ -939,13 +939,13 @@ OUString XclImpPTField::GetVisFieldName() const
 
 const XclImpPTItem* XclImpPTField::GetItem( sal_uInt16 nItemIdx ) const
 {
-    return (nItemIdx < maItems.size()) ? maItems[ nItemIdx ].get() : 0;
+    return (nItemIdx < maItems.size()) ? maItems[ nItemIdx ].get() : nullptr;
 }
 
 const OUString* XclImpPTField::GetItemName( sal_uInt16 nItemIdx ) const
 {
     const XclImpPTItem* pItem = GetItem( nItemIdx );
-    return pItem ? pItem->GetItemName() : 0;
+    return pItem ? pItem->GetItemName() : nullptr;
 }
 
 // records --------------------------------------------------------------------
@@ -1076,15 +1076,15 @@ ScDPSaveDimension* XclImpPTField::ConvertRCPField( ScDPSaveData& rSaveData ) con
 {
     const OUString& rFieldName = GetFieldName();
     if( rFieldName.isEmpty() )
-        return 0;
+        return nullptr;
 
     const XclImpPCField* pCacheField = GetCacheField();
     if( !pCacheField || !pCacheField->IsSupportedField() )
-        return 0;
+        return nullptr;
 
     ScDPSaveDimension* pTest = rSaveData.GetNewDimensionByName(rFieldName);
     if (!pTest)
-        return NULL;
+        return nullptr;
 
     ScDPSaveDimension& rSaveDim = *pTest;
 
@@ -1194,7 +1194,7 @@ void XclImpPTField::ConvertItems( ScDPSaveDimension& rSaveDim ) const
 XclImpPivotTable::XclImpPivotTable( const XclImpRoot& rRoot ) :
     XclImpRoot( rRoot ),
     maDataOrientField( *this, EXC_SXIVD_DATA ),
-    mpDPObj(NULL)
+    mpDPObj(nullptr)
 {
 }
 
@@ -1212,20 +1212,20 @@ sal_uInt16 XclImpPivotTable::GetFieldCount() const
 const XclImpPTField* XclImpPivotTable::GetField( sal_uInt16 nFieldIdx ) const
 {
     return (nFieldIdx == EXC_SXIVD_DATA) ? &maDataOrientField :
-        ((nFieldIdx < maFields.size()) ? maFields[ nFieldIdx ].get() : 0);
+        ((nFieldIdx < maFields.size()) ? maFields[ nFieldIdx ].get() : nullptr);
 }
 
 XclImpPTField* XclImpPivotTable::GetFieldAcc( sal_uInt16 nFieldIdx )
 {
     // do not return maDataOrientField
-    return (nFieldIdx < maFields.size()) ? maFields[ nFieldIdx ].get() : 0;
+    return (nFieldIdx < maFields.size()) ? maFields[ nFieldIdx ].get() : nullptr;
 }
 
 const XclImpPTField* XclImpPivotTable::GetDataField( sal_uInt16 nDataFieldIdx ) const
 {
     if( nDataFieldIdx < maOrigDataFields.size() )
         return GetField( maOrigDataFields[ nDataFieldIdx ] );
-    return 0;
+    return nullptr;
 }
 
 OUString XclImpPivotTable::GetDataFieldName( sal_uInt16 nDataFieldIdx ) const
@@ -1283,7 +1283,7 @@ void XclImpPivotTable::ReadSxivd( XclImpStream& rStrm )
     mxCurrField.reset();
 
     // find the index vector to fill (row SXIVD doesn't exist without row fields)
-    ScfUInt16Vec* pFieldVec = 0;
+    ScfUInt16Vec* pFieldVec = nullptr;
     if( maRowFields.empty() && (maPTInfo.mnRowFields > 0) )
         pFieldVec = &maRowFields;
     else if( maColFields.empty() && (maPTInfo.mnColFields > 0) )

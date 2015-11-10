@@ -559,7 +559,7 @@ bool ScTable::HasHiddenRows(SCROW nStartRow, SCROW nEndRow) const
     while (nRow <= nEndRow)
     {
         SCROW nLastRow = -1;
-        bool bHidden = RowHidden(nRow, NULL, &nLastRow);
+        bool bHidden = RowHidden(nRow, nullptr, &nLastRow);
         if (bHidden)
             return true;
 
@@ -625,7 +625,7 @@ void ScTable::CopyColHidden(ScTable& rTable, SCCOL nStartCol, SCCOL nEndCol)
     while (nCol <= nEndCol)
     {
         SCCOL nLastCol;
-        bool bHidden = rTable.ColHidden(nCol, NULL, &nLastCol);
+        bool bHidden = rTable.ColHidden(nCol, nullptr, &nLastCol);
         if (nLastCol > nEndCol)
             nLastCol = nEndCol;
 
@@ -640,7 +640,7 @@ void ScTable::CopyRowHidden(ScTable& rTable, SCROW nStartRow, SCROW nEndRow)
     while (nRow <= nEndRow)
     {
         SCROW nLastRow = -1;
-        bool bHidden = rTable.RowHidden(nRow, NULL, &nLastRow);
+        bool bHidden = rTable.RowHidden(nRow, nullptr, &nLastRow);
         if (nLastRow > nEndRow)
             nLastRow = nEndRow;
         SetRowHidden(nRow, nLastRow, bHidden);
@@ -775,7 +775,7 @@ SCCOLROW ScTable::LastHiddenColRow(SCCOLROW nPos, bool bCol) const
     {
         SCROW nRow = static_cast<SCROW>(nPos);
         SCROW nLastRow;
-        if (RowHidden(nRow, NULL, &nLastRow))
+        if (RowHidden(nRow, nullptr, &nLastRow))
             return static_cast<SCCOLROW>(nLastRow);
     }
     return ::std::numeric_limits<SCCOLROW>::max();
@@ -823,7 +823,7 @@ bool ScTable::HasFilteredRows(SCROW nStartRow, SCROW nEndRow) const
     while (nRow <= nEndRow)
     {
         SCROW nLastRow = nRow;
-        bool bFiltered = RowFiltered(nRow, NULL, &nLastRow);
+        bool bFiltered = RowFiltered(nRow, nullptr, &nLastRow);
         if (bFiltered)
             return true;
 
@@ -838,7 +838,7 @@ void ScTable::CopyColFiltered(ScTable& rTable, SCCOL nStartCol, SCCOL nEndCol)
     while (nCol <= nEndCol)
     {
         SCCOL nLastCol = -1;
-        bool bFiltered = rTable.ColFiltered(nCol, NULL, &nLastCol);
+        bool bFiltered = rTable.ColFiltered(nCol, nullptr, &nLastCol);
         if (nLastCol > nEndCol)
             nLastCol = nEndCol;
 
@@ -853,7 +853,7 @@ void ScTable::CopyRowFiltered(ScTable& rTable, SCROW nStartRow, SCROW nEndRow)
     while (nRow <= nEndRow)
     {
         SCROW nLastRow = -1;
-        bool bFiltered = rTable.RowFiltered(nRow, NULL, &nLastRow);
+        bool bFiltered = rTable.RowFiltered(nRow, nullptr, &nLastRow);
         if (nLastRow > nEndRow)
             nLastRow = nEndRow;
         SetRowFiltered(nRow, nLastRow, bFiltered);
@@ -1147,7 +1147,7 @@ void ScTable::SetPageStyle( const OUString& rName )
                 const sal_uInt16 nNewScaleToPages = GET_SCALEVALUE(rNewSet,ATTR_PAGE_SCALETOPAGES);
 
                 if ( (nOldScale != nNewScale) || (nOldScaleToPages != nNewScaleToPages) )
-                    InvalidateTextWidth(NULL, NULL, false, false);
+                    InvalidateTextWidth(nullptr, nullptr, false, false);
             }
 
             if ( pNewStyle )            // also without the old one (for UpdateStdNames)
@@ -1162,7 +1162,7 @@ void ScTable::SetPageStyle( const OUString& rName )
 void ScTable::PageStyleModified( const OUString& rNewName )
 {
     aPageStyle = rNewName;
-    InvalidateTextWidth(NULL, NULL, false, false);      // don't know what was in the style before
+    InvalidateTextWidth(nullptr, nullptr, false, false);      // don't know what was in the style before
 }
 
 void ScTable::InvalidateTextWidth( const ScAddress* pAdrFrom, const ScAddress* pAdrTo,

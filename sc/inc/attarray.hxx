@@ -63,7 +63,7 @@ struct ScMergePatternState
     const ScPatternAttr* pOld1;     ///< existing objects, temporary
     const ScPatternAttr* pOld2;
 
-    ScMergePatternState() : pItemSet(NULL), pOld1(NULL), pOld2(NULL) {}
+    ScMergePatternState() : pItemSet(nullptr), pOld1(nullptr), pOld2(nullptr) {}
 };
 
 struct ScAttrEntry
@@ -121,10 +121,10 @@ public:
 
     void    SetPattern( SCROW nRow, const ScPatternAttr* pPattern, bool bPutToPool = false );
     void    SetPatternArea( SCROW nStartRow, SCROW nEndRow, const ScPatternAttr* pPattern,
-                            bool bPutToPool = false, ScEditDataArray* pDataArray = NULL );
+                            bool bPutToPool = false, ScEditDataArray* pDataArray = nullptr );
     void    ApplyStyleArea( SCROW nStartRow, SCROW nEndRow, ScStyleSheet* pStyle );
     void    ApplyCacheArea( SCROW nStartRow, SCROW nEndRow, SfxItemPoolCache* pCache,
-                            ScEditDataArray* pDataArray = NULL );
+                            ScEditDataArray* pDataArray = nullptr );
     bool    SetAttrEntries(ScAttrEntry* pNewData, SCSIZE nSize);
     void    ApplyLineStyleArea( SCROW nStartRow, SCROW nEndRow,
                                 const ::editeng::SvxBorderLine* pLine, bool bColorOnly );
@@ -142,11 +142,11 @@ public:
             /// May return -1 if not found
     SCsROW SearchStyle(
         SCsROW nRow, const ScStyleSheet* pSearchStyle, bool bUp,
-        const ScMarkArray* pMarkArray = NULL) const;
+        const ScMarkArray* pMarkArray = nullptr) const;
 
     bool SearchStyleRange(
         SCsROW& rRow, SCsROW& rEndRow, const ScStyleSheet* pSearchStyle, bool bUp,
-        const ScMarkArray* pMarkArray = NULL) const;
+        const ScMarkArray* pMarkArray = nullptr) const;
 
     bool    ApplyFlags( SCROW nStartRow, SCROW nEndRow, sal_Int16 nFlags );
     bool    RemoveFlags( SCROW nStartRow, SCROW nEndRow, sal_Int16 nFlags );
@@ -233,7 +233,7 @@ inline const ScPatternAttr* ScAttrIterator::Next( SCROW& rTop, SCROW& rBottom )
         ++nPos;
     }
     else
-        pRet = NULL;
+        pRet = nullptr;
     return pRet;
 }
 

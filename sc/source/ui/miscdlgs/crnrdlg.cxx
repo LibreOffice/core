@@ -46,7 +46,7 @@ ScColRowNameRangesDlg::ScColRowNameRangesDlg( SfxBindings* pB,
         pViewData       ( ptrViewData ),
         pDoc            ( ptrViewData->GetDocument() ),
 
-        pEdActive       ( NULL ),
+        pEdActive       ( nullptr ),
         bDlgLostFocus   ( false )
 {
     get(pLbRange,"range");
@@ -458,11 +458,11 @@ void ScColRowNameRangesDlg::UpdateNames()
 
 void ScColRowNameRangesDlg::UpdateRangeData( const ScRange& rRange, bool bColName )
 {
-    ScRangePair* pPair = NULL;
+    ScRangePair* pPair = nullptr;
     bool bFound = false;
-    if ( bColName && (pPair = xColNameRanges->Find( rRange )) != NULL )
+    if ( bColName && (pPair = xColNameRanges->Find( rRange )) != nullptr )
         bFound = true;
-    else if ( !bColName && (pPair = xRowNameRanges->Find( rRange )) != NULL )
+    else if ( !bColName && (pPair = xRowNameRanges->Find( rRange )) != nullptr )
         bFound = true;
 
     if ( bFound )
@@ -501,7 +501,7 @@ bool ScColRowNameRangesDlg::IsRefInputMode() const
 // passing the range lists to the document
 IMPL_LINK_NOARG_TYPED(ScColRowNameRangesDlg, OkBtnHdl, Button*, void)
 {
-    AddBtnHdl( 0 );
+    AddBtnHdl( nullptr );
 
     // assign RangeLists to the den references in the document
     pDoc->GetColNameRangesRef() = xColNameRanges;
@@ -537,12 +537,12 @@ IMPL_LINK_NOARG_TYPED(ScColRowNameRangesDlg, AddBtnHdl, Button*, void)
             theCurArea = aRange1;
             AdjustColRowData( aRange2 );
             ScRangePair* pPair;
-            if ( ( pPair = xColNameRanges->Find( theCurArea ) ) != NULL )
+            if ( ( pPair = xColNameRanges->Find( theCurArea ) ) != nullptr )
             {
                 xColNameRanges->Remove( pPair );
                 delete pPair;
             }
-            if ( ( pPair = xRowNameRanges->Find( theCurArea ) ) != NULL )
+            if ( ( pPair = xRowNameRanges->Find( theCurArea ) ) != nullptr )
             {
                 xRowNameRanges->Remove( pPair );
                 delete pPair;
@@ -587,11 +587,11 @@ IMPL_LINK_NOARG_TYPED(ScColRowNameRangesDlg, RemoveBtnHdl, Button*, void)
         return;
     const ScRange& rRange = itr->second;
 
-    ScRangePair* pPair = NULL;
+    ScRangePair* pPair = nullptr;
     bool bFound = false;
-    if ( bColName && (pPair = xColNameRanges->Find( rRange )) != NULL )
+    if ( bColName && (pPair = xColNameRanges->Find( rRange )) != nullptr )
         bFound = true;
-    else if ( !bColName && (pPair = xRowNameRanges->Find( rRange )) != NULL )
+    else if ( !bColName && (pPair = xRowNameRanges->Find( rRange )) != nullptr )
         bFound = true;
     if ( bFound )
     {
@@ -805,7 +805,7 @@ IMPL_LINK_TYPED( ScColRowNameRangesDlg, GetFocusHdl, Control&, rCtrl, void )
     else if( (&rCtrl == static_cast<Control*>(pEdAssign2)) || (&rCtrl == static_cast<Control*>(pRbAssign2)) )
         pEdActive = pEdAssign2;
     else
-        pEdActive = NULL;
+        pEdActive = nullptr;
 
     if( pEdActive )
         pEdActive->SetSelection( Selection( 0, SELECTION_MAX ) );

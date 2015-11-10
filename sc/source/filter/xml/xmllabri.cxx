@@ -45,7 +45,7 @@ SvXMLImportContext* ScXMLLabelRangesContext::CreateChildContext(
         const OUString& rLName,
         const uno::Reference< xml::sax::XAttributeList >& xAttrList )
 {
-    SvXMLImportContext*     pContext(NULL);
+    SvXMLImportContext*     pContext(nullptr);
     const SvXMLTokenMap&    rTokenMap(GetScImport().GetLabelRangesElemTokenMap());
 
     switch( rTokenMap.Get( nPrefix, rLName ) )

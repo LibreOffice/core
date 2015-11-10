@@ -51,7 +51,7 @@ ScUndoWidthOrHeight::ScUndoWidthOrHeight( ScDocShell* pNewDocShell,
     nNewSize( nNewSizeTwips ),
     bWidth( bNewWidth ),
     eMode( eNewMode ),
-    pDrawUndo( NULL )
+    pDrawUndo( nullptr )
 {
     pDrawUndo = GetSdrUndoAction( &pDocShell->GetDocument() );
 }

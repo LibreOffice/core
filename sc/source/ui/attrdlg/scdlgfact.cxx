@@ -646,7 +646,7 @@ AbstractScCondFormatManagerDlg* ScAbstractDialogFactory_Impl::CreateScCondFormat
     if(pDlg)
         return new AbstractScCondFormatManagerDlg_Impl( pDlg );
 
-    return NULL;
+    return nullptr;
 }
 
 AbstractScDataPilotDatabaseDlg *  ScAbstractDialogFactory_Impl::CreateScDataPilotDatabaseDlg(vcl::Window* pParent)
@@ -678,7 +678,7 @@ AbstractScDataPilotServiceDlg* ScAbstractDialogFactory_Impl::CreateScDataPilotSe
 
     if ( pDlg )
         return new AbstractScDataPilotServiceDlg_Impl( pDlg );
-    return 0;
+    return nullptr;
 }
 
 AbstractScDeleteCellDlg* ScAbstractDialogFactory_Impl::CreateScDeleteCellDlg(vcl::Window* pParent,
@@ -740,7 +740,7 @@ AbstractScInsertCellDlg * ScAbstractDialogFactory_Impl::CreateScInsertCellDlg( v
 
     if ( pDlg )
         return new AbstractScInsertCellDlg_Impl( pDlg );
-    return 0;
+    return nullptr;
 }
 
 AbstractScInsertContentsDlg * ScAbstractDialogFactory_Impl::CreateScInsertContentsDlg( vcl::Window*      pParent,
@@ -838,7 +838,7 @@ AbstractScDPNumGroupDlg * ScAbstractDialogFactory_Impl::CreateScDPNumGroupDlg(
 {
     if( nId == RID_SCDLG_DPNUMGROUP )
         return new AbstractScDPNumGroupDlg_Impl( VclPtr<ScDPNumGroupDlg>::Create( pParent, rInfo ) );
-    return 0;
+    return nullptr;
 }
 
 AbstractScDPDateGroupDlg * ScAbstractDialogFactory_Impl::CreateScDPDateGroupDlg(
@@ -847,7 +847,7 @@ AbstractScDPDateGroupDlg * ScAbstractDialogFactory_Impl::CreateScDPDateGroupDlg(
 {
     if( nId == RID_SCDLG_DPDATEGROUP )
         return new AbstractScDPDateGroupDlg_Impl( VclPtr<ScDPDateGroupDlg>::Create( pParent, rInfo, nDatePart, rNullDate ) );
-    return 0;
+    return nullptr;
 }
 
 AbstractScDPShowDetailDlg * ScAbstractDialogFactory_Impl::CreateScDPShowDetailDlg (
@@ -855,7 +855,7 @@ AbstractScDPShowDetailDlg * ScAbstractDialogFactory_Impl::CreateScDPShowDetailDl
 {
     if( nId == RID_SCDLG_DPSHOWDETAIL )
         return new AbstractScDPShowDetailDlg_Impl( VclPtr<ScDPShowDetailDlg>::Create( pParent, rDPObj, nOrient ) );
-    return 0;
+    return nullptr;
 }
 
 AbstractScNewScenarioDlg * ScAbstractDialogFactory_Impl::CreateScNewScenarioDlg(vcl::Window* pParent, const OUString& rName,
@@ -956,7 +956,7 @@ SfxAbstractTabDialog * ScAbstractDialogFactory_Impl::CreateScHFEditDlg( SfxViewF
             break;
     }
 
-    return pDlg ? new ScAbstractTabDialog_Impl( pDlg ) : NULL;
+    return pDlg ? new ScAbstractTabDialog_Impl( pDlg ) : nullptr;
 }
 
 SfxAbstractTabDialog * ScAbstractDialogFactory_Impl::CreateScStyleDlg( vcl::Window*              pParent,
@@ -977,7 +977,7 @@ SfxAbstractTabDialog * ScAbstractDialogFactory_Impl::CreateScStyleDlg( vcl::Wind
 
     if ( pDlg )
         return new ScAbstractTabDialog_Impl( pDlg );
-    return 0;
+    return nullptr;
 }
 
 SfxAbstractTabDialog * ScAbstractDialogFactory_Impl::CreateScSubTotalDlg(vcl::Window* pParent, const SfxItemSet* pArgSet)
@@ -1042,7 +1042,7 @@ CreateTabPage ScAbstractDialogFactory_Impl::GetTabPageCreatorFunc( sal_uInt16 nI
             break;
     }
 
-    return 0;
+    return nullptr;
 }
 
 GetTabPageRanges ScAbstractDialogFactory_Impl::GetTabPageRangesFunc()

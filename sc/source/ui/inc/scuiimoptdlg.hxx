@@ -30,8 +30,8 @@ class ScImportOptionsDlg : public ModalDialog
 public:
     ScImportOptionsDlg( vcl::Window*                 pParent,
                         bool                    bAscii = true,
-                        const ScImportOptions*  pOptions = NULL,
-                        const OUString*         pStrTitle = NULL,
+                        const ScImportOptions*  pOptions = nullptr,
+                        const OUString*         pStrTitle = nullptr,
                         bool                    bMultiByte = false,
                         bool                    bOnlyDbtoolsEncodings = false,
                         bool                    bImport = true );

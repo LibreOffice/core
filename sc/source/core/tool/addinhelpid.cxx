@@ -152,7 +152,7 @@ ScUnoAddInHelpIdGenerator::ScUnoAddInHelpIdGenerator( const OUString& rServiceNa
 
 void ScUnoAddInHelpIdGenerator::SetServiceName( const OUString& rServiceName )
 {
-    pCurrHelpIds = NULL;
+    pCurrHelpIds = nullptr;
     sal_uInt32 nSize = 0;
 
     if ( rServiceName == "com.sun.star.sheet.addin.Analysis" )

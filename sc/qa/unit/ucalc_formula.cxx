@@ -926,7 +926,7 @@ void Test::testFormulaCompiler()
     {
         std::unique_ptr<ScTokenArray> pArray;
         {
-            pArray.reset(compileFormula(m_pDoc, OUString::createFromAscii(aTests[i].pInput), NULL, aTests[i].eInputGram));
+            pArray.reset(compileFormula(m_pDoc, OUString::createFromAscii(aTests[i].pInput), nullptr, aTests[i].eInputGram));
             CPPUNIT_ASSERT_MESSAGE("Token array shouldn't be NULL!", pArray.get());
         }
 
@@ -3184,11 +3184,11 @@ void Test::testFuncCOUNTBLANK()
     m_pDoc->InsertTab(0, "Formula");
 
     const char* aData[][4] = {
-        { "1", 0, "=B1", "=\"\"" },
-        { "2", 0, "=B2", "=\"\"" },
-        { "A", 0, "=B3", "=\"\"" },
-        { "B", 0, "=B4", "=D3" },
-        {   0, 0, "=B5", "=D4" },
+        { "1", nullptr, "=B1", "=\"\"" },
+        { "2", nullptr, "=B2", "=\"\"" },
+        { "A", nullptr, "=B3", "=\"\"" },
+        { "B", nullptr, "=B4", "=D3" },
+        {   nullptr, nullptr, "=B5", "=D4" },
         { "=COUNTBLANK(A1:A5)", "=COUNTBLANK(B1:B5)", "=COUNTBLANK(C1:C5)", "=COUNTBLANK(D1:D5)" }
     };
 
@@ -3208,7 +3208,7 @@ void Test::testFuncCOUNTBLANK()
     const char* aData2[][2] = {
         { "1",     "=COUNTBLANK(A1)" },
         { "A",     "=COUNTBLANK(A2)" },
-        {   0,     "=COUNTBLANK(A3)" },
+        {   nullptr,     "=COUNTBLANK(A3)" },
         { "=\"\"", "=COUNTBLANK(A4)" },
         { "=A4"  , "=COUNTBLANK(A5)" },
     };
@@ -4010,7 +4010,7 @@ void Test::testFuncLOOKUP()
         { "=CONCATENATE(\"A\")", "1" },
         { "=CONCATENATE(\"B\")", "2" },
         { "=CONCATENATE(\"C\")", "3" },
-        { 0, 0 } // terminator
+        { nullptr, nullptr } // terminator
     };
 
     // Insert raw data into A1:B3.
@@ -4024,7 +4024,7 @@ void Test::testFuncLOOKUP()
         { "A", "=LOOKUP(RC[-1];R1C1:R3C1;R1C2:R3C2)" },
         { "B", "=LOOKUP(RC[-1];R1C1:R3C1;R1C2:R3C2)" },
         { "C", "=LOOKUP(RC[-1];R1C1:R3C1;R1C2:R3C2)" },
-        { 0, 0 } // terminator
+        { nullptr, nullptr } // terminator
     };
 
     // Insert check formulas into A5:B7.
@@ -4075,7 +4075,7 @@ void Test::testFuncVLOOKUP()
         {   "D",  "13" },
         {   "E",  "14" },
         {   "F",  "15" },
-        { 0, 0 } // terminator
+        { nullptr, nullptr } // terminator
     };
 
     // Insert raw data into A1:B14.
@@ -4091,7 +4091,7 @@ void Test::testFuncVLOOKUP()
     struct {
         const char* pLookup; const char* pFormula; const char* pRes;
     } aChecks[] = {
-        { "Lookup",  "Formula", 0 },
+        { "Lookup",  "Formula", nullptr },
         { "12",      "=VLOOKUP(D2;A2:B14;2;1)",     "3" },
         { "29",      "=VLOOKUP(D3;A2:B14;2;1)",     "4" },
         { "31",      "=VLOOKUP(D4;A2:B14;2;1)",     "5" },
@@ -4828,8 +4828,8 @@ void Test::testFormulaDepTracking3()
 
     const char* pData[][4] = {
         { "1", "2", "=SUM(A1:B1)", "=SUM(C1:C3)" },
-        { "3", "4", "=SUM(A2:B2)", 0 },
-        { "5", "6", "=SUM(A3:B3)", 0 },
+        { "3", "4", "=SUM(A2:B2)", nullptr },
+        { "5", "6", "=SUM(A3:B3)", nullptr },
     };
 
     insertRangeData(m_pDoc, ScAddress(0,0,0), pData, SAL_N_ELEMENTS(pData));
@@ -4910,7 +4910,7 @@ void Test::testFormulaDepTrackingDeleteCol()
 
     const char* aData[][3] = {
         { "2", "=A1", "=B1" }, // not grouped
-        { 0, 0, 0 },           // empty row to separate the formula groups.
+        { nullptr, nullptr, nullptr },           // empty row to separate the formula groups.
         { "3", "=A3", "=B3" }, // grouped
         { "4", "=A4", "=B4" }, // grouped
     };
@@ -4948,7 +4948,7 @@ void Test::testFormulaDepTrackingDeleteCol()
         // Expected output table content.  0 = empty cell
         const char* aOutputCheck[][2] = {
             { "#REF!", "#REF!" },
-            { 0,  0 },
+            { nullptr,  nullptr },
             { "#REF!", "#REF!" },
             { "#REF!", "#REF!" },
         };
@@ -4967,7 +4967,7 @@ void Test::testFormulaDepTrackingDeleteCol()
         // Expected output table content.  0 = empty cell
         const char* aOutputCheck[][3] = {
             { "2", "2", "2" },
-            { 0,  0, 0 },
+            { nullptr,  nullptr, nullptr },
             { "3", "3", "3" },
             { "4", "4", "4" },
         };
@@ -4983,7 +4983,7 @@ void Test::testFormulaDepTrackingDeleteCol()
         // Expected output table content.  0 = empty cell
         const char* aOutputCheck[][2] = {
             { "#REF!", "#REF!" },
-            { 0, 0 },
+            { nullptr, nullptr },
             { "#REF!", "#REF!" },
             { "#REF!", "#REF!" },
         };
@@ -5003,7 +5003,7 @@ void Test::testFormulaDepTrackingDeleteCol()
         // Expected output table content.  0 = empty cell
         const char* aOutputCheck[][3] = {
             { "22", "22", "22" },
-            { 0, 0, 0 },
+            { nullptr, nullptr, nullptr },
             { "23", "23", "23" },
             { "24", "24", "24" },
         };
@@ -5054,7 +5054,7 @@ void Test::testExternalRef()
     SfxMedium* pMed = new SfxMedium(aExtDocName, STREAM_STD_READWRITE);
     xExtDocSh->DoInitNew(pMed);
     CPPUNIT_ASSERT_MESSAGE("external document instance not loaded.",
-                           findLoadedDocShellByName(aExtDocName) != NULL);
+                           findLoadedDocShellByName(aExtDocName) != nullptr);
 
     // Populate the external source document.
     ScDocument& rExtDoc = xExtDocSh->GetDocument();
@@ -5190,7 +5190,7 @@ void Test::testExternalRef()
     // have been cached.
     ScExternalRefCache::TableTypeRef pCacheTab = pRefMgr->getCacheTable(
         nFileId, aExtSh1Name, false);
-    CPPUNIT_ASSERT_MESSAGE("Cache table for sheet 1 should exist.", pCacheTab.get() != NULL);
+    CPPUNIT_ASSERT_MESSAGE("Cache table for sheet 1 should exist.", pCacheTab.get() != nullptr);
     ScRange aCachedRange = getCachedRange(pCacheTab);
     CPPUNIT_ASSERT_MESSAGE("Unexpected cached data range.",
                            aCachedRange.aStart.Col() == 0 && aCachedRange.aEnd.Col() == 1 &&
@@ -5198,11 +5198,11 @@ void Test::testExternalRef()
 
     // Sheet2 is not referenced at all; the cache table shouldn't even exist.
     pCacheTab = pRefMgr->getCacheTable(nFileId, aExtSh2Name, false);
-    CPPUNIT_ASSERT_MESSAGE("Cache table for sheet 2 should *not* exist.", pCacheTab.get() == NULL);
+    CPPUNIT_ASSERT_MESSAGE("Cache table for sheet 2 should *not* exist.", pCacheTab.get() == nullptr);
 
     // Sheet3's row 5 is not referenced; it should not be cached.
     pCacheTab = pRefMgr->getCacheTable(nFileId, aExtSh3Name, false);
-    CPPUNIT_ASSERT_MESSAGE("Cache table for sheet 3 should exist.", pCacheTab.get() != NULL);
+    CPPUNIT_ASSERT_MESSAGE("Cache table for sheet 3 should exist.", pCacheTab.get() != nullptr);
     aCachedRange = getCachedRange(pCacheTab);
     CPPUNIT_ASSERT_MESSAGE("Unexpected cached data range.",
                            aCachedRange.aStart.Col() == 0 && aCachedRange.aEnd.Col() == 1 &&
@@ -5211,7 +5211,7 @@ void Test::testExternalRef()
     // Unload the external document shell.
     xExtDocSh->DoClose();
     CPPUNIT_ASSERT_MESSAGE("external document instance should have been unloaded.",
-                           findLoadedDocShellByName(aExtDocName) == NULL);
+                           findLoadedDocShellByName(aExtDocName) == nullptr);
 
     m_pDoc->DeleteTab(0);
 }
@@ -5224,7 +5224,7 @@ void Test::testExternalRangeName()
     SfxMedium* pMed = new SfxMedium(aExtDocName, STREAM_STD_READWRITE);
     xExtDocSh->DoInitNew(pMed);
     CPPUNIT_ASSERT_MESSAGE("external document instance not loaded.",
-                           findLoadedDocShellByName(aExtDocName) != NULL);
+                           findLoadedDocShellByName(aExtDocName) != nullptr);
 
     ScDocument& rExtDoc = xExtDocSh->GetDocument();
     rExtDoc.InsertTab(0, aExtSh1Name);
@@ -5243,7 +5243,7 @@ void Test::testExternalRangeName()
 
     xExtDocSh->DoClose();
     CPPUNIT_ASSERT_MESSAGE("external document instance should have been unloaded.",
-                           findLoadedDocShellByName(aExtDocName) == NULL);
+                           findLoadedDocShellByName(aExtDocName) == nullptr);
     m_pDoc->DeleteTab(0);
 }
 
@@ -5319,7 +5319,7 @@ void Test::testExternalRefFunctions()
     SfxMedium* pMed = new SfxMedium(aExtDocName, STREAM_STD_READWRITE);
     xExtDocSh->DoInitNew(pMed);
     CPPUNIT_ASSERT_MESSAGE("external document instance not loaded.",
-                           findLoadedDocShellByName(aExtDocName) != NULL);
+                           findLoadedDocShellByName(aExtDocName) != nullptr);
 
     ScExternalRefManager* pRefMgr = m_pDoc->GetExternalRefManager();
     CPPUNIT_ASSERT_MESSAGE("external reference manager doesn't exist.", pRefMgr);
@@ -5374,7 +5374,7 @@ void Test::testExternalRefFunctions()
     // Unload the external document shell.
     xExtDocSh->DoClose();
     CPPUNIT_ASSERT_MESSAGE("external document instance should have been unloaded.",
-                           findLoadedDocShellByName(aExtDocName) == NULL);
+                           findLoadedDocShellByName(aExtDocName) == nullptr);
 
     m_pDoc->DeleteTab(0);
 }
@@ -5519,7 +5519,7 @@ void Test::testFuncFORMULA()
     // Data in B1:D3
     const char* aData[][3] = {
         { "=A1", "=FORMULA(B1)", "=FORMULA(B1:B3)" },
-        {     0, "=FORMULA(B2)", "=FORMULA(B1:B3)" },
+        {     nullptr, "=FORMULA(B2)", "=FORMULA(B1:B3)" },
         { "=A3", "=FORMULA(B3)", "=FORMULA(B1:B3)" },
     };
 

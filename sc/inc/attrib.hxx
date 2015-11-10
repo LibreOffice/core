@@ -57,7 +57,7 @@ public:
                 virtual ~ScMergeAttr();
 
     virtual bool            operator==( const SfxPoolItem& ) const override;
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const override;
+    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
     virtual SfxPoolItem*    Create( SvStream& rStream, sal_uInt16 nVer ) const override;
 
             SCsCOL          GetColMerge() const {return nColMerge; }
@@ -116,10 +116,10 @@ public:
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     OUString& rText,
-                                    const IntlWrapper* pIntl = 0 ) const override;
+                                    const IntlWrapper* pIntl = nullptr ) const override;
 
     virtual bool            operator==( const SfxPoolItem& ) const override;
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const override;
+    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
     virtual SfxPoolItem*    Create( SvStream& rStream, sal_uInt16 nVer ) const override;
 
     virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
@@ -166,8 +166,8 @@ public:
                                                  SfxMapUnit eCoreMetric,
                                                  SfxMapUnit ePresMetric,
                                                  OUString &rText,
-                                                 const IntlWrapper* pIntl = 0 ) const override;
-    virtual SfxPoolItem*        Clone( SfxItemPool *pPool = 0 ) const override;
+                                                 const IntlWrapper* pIntl = nullptr ) const override;
+    virtual SfxPoolItem*        Clone( SfxItemPool *pPool = nullptr ) const override;
 
 private:
     ScRange aRange;
@@ -215,8 +215,8 @@ public:
                                                  SfxMapUnit eCoreMetric,
                                                  SfxMapUnit ePresMetric,
                                                  OUString &rText,
-                                                 const IntlWrapper* pIntl = 0 ) const override;
-    virtual SfxPoolItem*        Clone( SfxItemPool *pPool = 0 ) const override;
+                                                 const IntlWrapper* pIntl = nullptr ) const override;
+    virtual SfxPoolItem*        Clone( SfxItemPool *pPool = nullptr ) const override;
 
 public:
     sal_uInt16  nCount;
@@ -224,7 +224,7 @@ public:
 };
 
 inline ScTableListItem::ScTableListItem( const sal_uInt16 nWhichP )
-    : SfxPoolItem(nWhichP), nCount(0), pTabArr(NULL)
+    : SfxPoolItem(nWhichP), nCount(0), pTabArr(nullptr)
 {}
 
 // page format item: contents of header and footer
@@ -246,7 +246,7 @@ public:
                 virtual ~ScPageHFItem();
 
     virtual bool            operator==( const SfxPoolItem& ) const override;
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const override;
+    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
 
     virtual SfxPoolItem*    Create( SvStream& rStream, sal_uInt16 nVer ) const override;
 
@@ -277,14 +277,14 @@ public:
                 virtual ~ScViewObjectModeItem();
 
     virtual sal_uInt16          GetValueCount() const override;
-    virtual SfxPoolItem*        Clone( SfxItemPool *pPool = 0 ) const override;
+    virtual SfxPoolItem*        Clone( SfxItemPool *pPool = nullptr ) const override;
     virtual SfxPoolItem*        Create(SvStream &, sal_uInt16) const override;
     virtual sal_uInt16          GetVersion( sal_uInt16 nFileVersion ) const override;
     virtual bool GetPresentation( SfxItemPresentation ePres,
                                                  SfxMapUnit eCoreMetric,
                                                  SfxMapUnit ePresMetric,
                                                  OUString& rText,
-                                                 const IntlWrapper* pIntl = 0 ) const override;
+                                                 const IntlWrapper* pIntl = nullptr ) const override;
 };
 
 class ScDoubleItem : public SfxPoolItem
@@ -296,7 +296,7 @@ public:
                 virtual ~ScDoubleItem();
 
     virtual bool            operator==( const SfxPoolItem& ) const override;
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const override;
+    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
 
     virtual SfxPoolItem*    Create( SvStream& rStream, sal_uInt16 nVer ) const override;
 
@@ -321,7 +321,7 @@ public:
 
     virtual                     ~ScPageScaleToItem();
 
-    virtual ScPageScaleToItem*  Clone( SfxItemPool* = 0 ) const override;
+    virtual ScPageScaleToItem*  Clone( SfxItemPool* = nullptr ) const override;
 
     virtual bool                operator==( const SfxPoolItem& rCmp ) const override;
 
@@ -338,7 +338,7 @@ public:
                                     SfxItemPresentation ePresentation,
                                     SfxMapUnit, SfxMapUnit,
                                     OUString& rText,
-                                    const IntlWrapper* = 0 ) const override;
+                                    const IntlWrapper* = nullptr ) const override;
 
     virtual bool                QueryValue( css::uno::Any& rAny, sal_uInt8 nMemberId = 0 ) const override;
     virtual bool                PutValue( const css::uno::Any& rAny, sal_uInt8 nMemberId ) override;
@@ -359,7 +359,7 @@ public:
     virtual ~ScCondFormatItem();
 
     virtual bool operator==(const SfxPoolItem& rCmp ) const override;
-    virtual ScCondFormatItem*  Clone( SfxItemPool* = 0 ) const override;
+    virtual ScCondFormatItem*  Clone( SfxItemPool* = nullptr ) const override;
 
     const std::vector<sal_uInt32>& GetCondFormatData() const { return maIndex;}
     void AddCondFormatData( sal_uInt32 nIndex );

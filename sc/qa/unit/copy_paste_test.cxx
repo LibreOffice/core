@@ -73,7 +73,7 @@ void ScCopyPasteTest::testCopyPasteXLS()
 
     // Get the document controller
     ScTabViewShell* pViewShell = xDocSh->GetBestViewShell(false);
-    CPPUNIT_ASSERT(pViewShell != NULL);
+    CPPUNIT_ASSERT(pViewShell != nullptr);
 
     // 2. Highlight B2:C5
     ScRange aSrcRange;
@@ -109,11 +109,11 @@ void ScCopyPasteTest::testCopyPasteXLS()
     CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
 
     xDocSh = dynamic_cast<ScDocShell*>(pFoundShell);
-    CPPUNIT_ASSERT(xDocSh != NULL);
+    CPPUNIT_ASSERT(xDocSh != nullptr);
 
     // Get the document controller
     pViewShell = xDocSh->GetBestViewShell(false);
-    CPPUNIT_ASSERT(pViewShell != NULL);
+    CPPUNIT_ASSERT(pViewShell != nullptr);
 
     // 6. Paste
     pViewShell->GetViewData().GetView()->PasteFromClip(InsertDeleteFlags::ALL, &aClipDoc);

@@ -40,7 +40,7 @@ CopyFromClipContext::CopyFromClipContext(ScDocument& rDoc,
     mrDestDoc(rDoc),
     mpRefUndoDoc(pRefUndoDoc), mpClipDoc(pClipDoc),
     mnInsertFlag(nInsertFlag), mnDeleteFlag(InsertDeleteFlags::NONE),
-    mpCondFormatList(NULL),
+    mpCondFormatList(nullptr),
     mbAsLink(bAsLink), mbSkipAttrForEmptyCells(bSkipAttrForEmptyCells),
     mbCloneNotes (mnInsertFlag & (InsertDeleteFlags::NOTE|InsertDeleteFlags::ADDNOTES)),
     mbTableProtected(false)
@@ -114,8 +114,8 @@ void CopyFromClipContext::setSingleCellColumnSize( size_t nSize )
 {
     maSingleCells.resize(nSize);
     maSingleCellAttrs.resize(nSize);
-    maSinglePatterns.resize(nSize, NULL);
-    maSingleNotes.resize(nSize, NULL);
+    maSinglePatterns.resize(nSize, nullptr);
+    maSingleNotes.resize(nSize, nullptr);
 }
 
 ScCellValue& CopyFromClipContext::getSingleCell( size_t nColOffset )

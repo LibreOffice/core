@@ -83,7 +83,7 @@ ScConflictsListEntry* ScConflictsListHelper::GetSharedActionEntry( ScConflictsLi
         }
     }
 
-    return NULL;
+    return nullptr;
 }
 
 ScConflictsListEntry* ScConflictsListHelper::GetOwnActionEntry( ScConflictsList& rConflictsList, sal_uLong nOwnAction )
@@ -97,7 +97,7 @@ ScConflictsListEntry* ScConflictsListHelper::GetOwnActionEntry( ScConflictsList&
         }
     }
 
-    return NULL;
+    return nullptr;
 }
 
 void ScConflictsListHelper::Transform_Impl( ScChangeActionList& rActionList, ScChangeActionMergeMap* pMergeMap )
@@ -191,7 +191,7 @@ ScConflictsListEntry* ScConflictsFinder::GetIntersectingEntry( const ScChangeAct
         }
     }
 
-    return NULL;
+    return nullptr;
 }
 
 ScConflictsListEntry* ScConflictsFinder::GetEntry( sal_uLong nSharedAction, const ScChangeActionList& rOwnActions )
@@ -380,10 +380,10 @@ ScConflictsDlg::ScConflictsDlg( vcl::Window* pParent, ScViewData* pViewData, ScD
     ,maStrTitleDate     ( ScResId( STR_TITLE_DATE ) )
     ,maStrUnknownUser   ( ScResId( STR_UNKNOWN_USER_CONFLICT ) )
     ,mpViewData         ( pViewData )
-    ,mpOwnDoc           ( NULL )
-    ,mpOwnTrack         ( NULL )
+    ,mpOwnDoc           ( nullptr )
+    ,mpOwnTrack         ( nullptr )
     ,mpSharedDoc        ( pSharedDoc )
-    ,mpSharedTrack      ( NULL )
+    ,mpSharedTrack      ( nullptr )
     ,mrConflictsList    ( rConflictsList )
     ,maDialogSize       ( GetSizePixel() )
     ,mbInSelectHdl      ( false )
@@ -395,12 +395,12 @@ ScConflictsDlg::ScConflictsDlg( vcl::Window* pParent, ScViewData* pViewData, ScD
     get(m_pBtnKeepAllOthers, "keepallothers");
 
     OSL_ENSURE( mpViewData, "ScConflictsDlg CTOR: mpViewData is null!" );
-    mpOwnDoc = ( mpViewData ? mpViewData->GetDocument() : NULL );
+    mpOwnDoc = ( mpViewData ? mpViewData->GetDocument() : nullptr );
     OSL_ENSURE( mpOwnDoc, "ScConflictsDlg CTOR: mpOwnDoc is null!" );
-    mpOwnTrack = ( mpOwnDoc ? mpOwnDoc->GetChangeTrack() : NULL );
+    mpOwnTrack = ( mpOwnDoc ? mpOwnDoc->GetChangeTrack() : nullptr );
     OSL_ENSURE( mpOwnTrack, "ScConflictsDlg CTOR: mpOwnTrack is null!" );
     OSL_ENSURE( mpSharedDoc, "ScConflictsDlg CTOR: mpSharedDoc is null!" );
-    mpSharedTrack = ( mpSharedDoc ? mpSharedDoc->GetChangeTrack() : NULL );
+    mpSharedTrack = ( mpSharedDoc ? mpSharedDoc->GetChangeTrack() : nullptr );
     OSL_ENSURE( mpSharedTrack, "ScConflictsDlg CTOR: mpSharedTrack is null!" );
 
     SetMinOutputSizePixel( maDialogSize );
@@ -434,7 +434,7 @@ ScConflictsDlg::ScConflictsDlg( vcl::Window* pParent, ScViewData* pViewData, ScD
     UpdateView();
 
     SvTreeListEntry* pEntry = m_pLbConflicts->First();
-    if ( pEntry != NULL )
+    if ( pEntry != nullptr )
     {
         m_pLbConflicts->Select( pEntry );
     }
@@ -600,8 +600,8 @@ IMPL_LINK_NOARG_TYPED(ScConflictsDlg, UpdateSelectionHdl, Idle *, void)
 
 void ScConflictsDlg::SetConflictAction( SvTreeListEntry* pRootEntry, ScConflictAction eConflictAction )
 {
-    RedlinData* pUserData = static_cast< RedlinData* >( pRootEntry ? pRootEntry->GetUserData() : NULL );
-    ScConflictsListEntry* pConflictEntry = static_cast< ScConflictsListEntry* >( pUserData ? pUserData->pData : NULL );
+    RedlinData* pUserData = static_cast< RedlinData* >( pRootEntry ? pRootEntry->GetUserData() : nullptr );
+    ScConflictsListEntry* pConflictEntry = static_cast< ScConflictsListEntry* >( pUserData ? pUserData->pData : nullptr );
     if ( pConflictEntry )
     {
         pConflictEntry->meConflictAction = eConflictAction;
@@ -611,7 +611,7 @@ void ScConflictsDlg::SetConflictAction( SvTreeListEntry* pRootEntry, ScConflictA
 void ScConflictsDlg::KeepHandler( bool bMine )
 {
     SvTreeListEntry* pEntry = m_pLbConflicts->FirstSelected();
-    SvTreeListEntry* pRootEntry = ( pEntry ? m_pLbConflicts->GetRootLevelParent( pEntry ) : NULL );
+    SvTreeListEntry* pRootEntry = ( pEntry ? m_pLbConflicts->GetRootLevelParent( pEntry ) : nullptr );
     if ( !pRootEntry )
     {
         return;
@@ -630,7 +630,7 @@ void ScConflictsDlg::KeepHandler( bool bMine )
 void ScConflictsDlg::KeepAllHandler( bool bMine )
 {
     SvTreeListEntry* pEntry = m_pLbConflicts->First();
-    SvTreeListEntry* pRootEntry = ( pEntry ? m_pLbConflicts->GetRootLevelParent( pEntry ) : NULL );
+    SvTreeListEntry* pRootEntry = ( pEntry ? m_pLbConflicts->GetRootLevelParent( pEntry ) : nullptr );
     if ( !pRootEntry )
     {
         return;
@@ -684,7 +684,7 @@ void ScConflictsDlg::UpdateView()
             ScChangeActionList::const_iterator aEndShared = aItr->maSharedActions.end();
             for ( ScChangeActionList::const_iterator aItrShared = aItr->maSharedActions.begin(); aItrShared != aEndShared; ++aItrShared )
             {
-                ScChangeAction* pAction = mpSharedTrack ? mpSharedTrack->GetAction(*aItrShared) : NULL;
+                ScChangeAction* pAction = mpSharedTrack ? mpSharedTrack->GetAction(*aItrShared) : nullptr;
                 if ( pAction )
                 {
                     // only display shared top content entries
@@ -698,14 +698,14 @@ void ScConflictsDlg::UpdateView()
                     }
 
                     OUString aString( GetActionString( pAction, mpSharedDoc ) );
-                    m_pLbConflicts->InsertEntry( aString, static_cast< RedlinData* >( NULL ), pRootEntry );
+                    m_pLbConflicts->InsertEntry( aString, static_cast< RedlinData* >( nullptr ), pRootEntry );
                 }
             }
 
             ScChangeActionList::const_iterator aEndOwn = aItr->maOwnActions.end();
             for ( ScChangeActionList::const_iterator aItrOwn = aItr->maOwnActions.begin(); aItrOwn != aEndOwn; ++aItrOwn )
             {
-                ScChangeAction* pAction = mpOwnTrack ? mpOwnTrack->GetAction(*aItrOwn) : NULL;
+                ScChangeAction* pAction = mpOwnTrack ? mpOwnTrack->GetAction(*aItrOwn) : nullptr;
                 if ( pAction )
                 {
                     // only display own top content entries

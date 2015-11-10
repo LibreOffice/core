@@ -38,16 +38,16 @@ ContextHandlerRef ColorScaleContext::onCreateContext( sal_Int32 nElement, const 
     switch( getCurrentElement() )
     {
         case XLS_TOKEN( cfRule ):
-            return (nElement == XLS_TOKEN( colorScale )) ? this : 0;
+            return (nElement == XLS_TOKEN( colorScale )) ? this : nullptr;
         case XLS_TOKEN( colorScale ):
             if (nElement == XLS_TOKEN( cfvo ))
                 return this;
             else if (nElement == XLS_TOKEN( color ))
                 return this;
             else
-                return 0;
+                return nullptr;
     }
-    return 0;
+    return nullptr;
 }
 
 void ColorScaleContext::onStartElement( const AttributeList& rAttribs )
@@ -74,16 +74,16 @@ ContextHandlerRef DataBarContext::onCreateContext( sal_Int32 nElement, const Att
     switch( getCurrentElement() )
     {
         case XLS_TOKEN( cfRule ):
-            return (nElement == XLS_TOKEN( dataBar )) ? this : 0;
+            return (nElement == XLS_TOKEN( dataBar )) ? this : nullptr;
         case XLS_TOKEN( dataBar ):
             if (nElement == XLS_TOKEN( cfvo ))
                 return this;
             else if (nElement == XLS_TOKEN( color ))
                 return this;
             else
-                return 0;
+                return nullptr;
     }
-    return 0;
+    return nullptr;
 }
 
 void DataBarContext::onStartElement( const AttributeList& rAttribs )
@@ -114,7 +114,7 @@ ContextHandlerRef IconSetContext::onCreateContext( sal_Int32 nElement, const Att
     {
         case XLS_TOKEN( cfRule ):
         case XLS14_TOKEN( cfRule ):
-            return (nElement == XLS_TOKEN( iconSet ) || nElement == XLS14_TOKEN(iconSet)) ? this : 0;
+            return (nElement == XLS_TOKEN( iconSet ) || nElement == XLS14_TOKEN(iconSet)) ? this : nullptr;
         case XLS_TOKEN( iconSet ):
         case XLS14_TOKEN(iconSet):
             if (nElement == XLS_TOKEN( cfvo ) ||
@@ -122,12 +122,12 @@ ContextHandlerRef IconSetContext::onCreateContext( sal_Int32 nElement, const Att
                     nElement == XLS14_TOKEN(cfIcon))
                 return this;
             else
-                return 0;
+                return nullptr;
         case XLS14_TOKEN(cfvo):
             if (nElement == XM_TOKEN(f))
                 return this;
     }
-    return 0;
+    return nullptr;
 }
 
 void IconSetContext::onStartElement( const AttributeList& rAttribs )
@@ -174,7 +174,7 @@ ContextHandlerRef CondFormatContext::onCreateContext( sal_Int32 nElement, const 
     switch( getCurrentElement() )
     {
         case XLS_TOKEN( conditionalFormatting ):
-            return (nElement == XLS_TOKEN( cfRule )) ? this : 0;
+            return (nElement == XLS_TOKEN( cfRule )) ? this : nullptr;
         case XLS_TOKEN( cfRule ):
             if (nElement == XLS_TOKEN( formula ))
                 return this;
@@ -187,9 +187,9 @@ ContextHandlerRef CondFormatContext::onCreateContext( sal_Int32 nElement, const 
             else if (nElement == XLS_TOKEN( extLst ) )
                 return new ExtLstLocalContext( *this, mxRule->getDataBar()->getDataBarFormatData() );
             else
-                return 0;
+                return nullptr;
     }
-    return 0;
+    return nullptr;
 }
 
 void CondFormatContext::onEndElement()
@@ -227,9 +227,9 @@ ContextHandlerRef CondFormatContext::onCreateRecordContext( sal_Int32 nRecId, Se
     switch( getCurrentElement() )
     {
         case BIFF12_ID_CONDFORMATTING:
-            return (nRecId == BIFF12_ID_CFRULE) ? this : 0;
+            return (nRecId == BIFF12_ID_CFRULE) ? this : nullptr;
     }
-    return 0;
+    return nullptr;
 }
 
 void CondFormatContext::onStartRecord( SequenceInputStream& rStrm )

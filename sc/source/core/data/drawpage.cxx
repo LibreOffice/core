@@ -43,13 +43,13 @@ ScDrawPage::~ScDrawPage()
 
 ScDrawPage* ScDrawPage::Clone() const
 {
-    return Clone(0);
+    return Clone(nullptr);
 }
 
 ScDrawPage* ScDrawPage::Clone(SdrModel* const pNewModel) const
 {
     ScDrawPage* const pNewPage = new ScDrawPage(*this);
-    FmFormModel* pScDrawModel = 0;
+    FmFormModel* pScDrawModel = nullptr;
     if (pNewModel)
     {
         pScDrawModel = dynamic_cast<FmFormModel*>(pNewModel);

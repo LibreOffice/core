@@ -138,14 +138,14 @@ void ScPivotLayoutTreeListData::FillDataField(ScPivotFieldVector& rDataFields)
                                                        pItemValue->maFunctionData.mnDupCount);
 
         maDataItemValues.push_back(pItemValue);
-        InsertEntry(sDataItemName, NULL, false, TREELIST_APPEND, pItemValue);
+        InsertEntry(sDataItemName, nullptr, false, TREELIST_APPEND, pItemValue);
     }
 }
 
 void ScPivotLayoutTreeListData::PushDataFieldNames(vector<ScDPName>& rDataFieldNames)
 {
     SvTreeListEntry* pLoopEntry;
-    for (pLoopEntry = First(); pLoopEntry != NULL; pLoopEntry = Next(pLoopEntry))
+    for (pLoopEntry = First(); pLoopEntry != nullptr; pLoopEntry = Next(pLoopEntry))
     {
         ScItemValue* pEachItemValue = static_cast<ScItemValue*>(pLoopEntry->GetUserData());
         SCCOL nColumn = pEachItemValue->maFunctionData.mnCol;
@@ -179,12 +179,12 @@ void ScPivotLayoutTreeListData::InsertEntryForSourceTarget(SvTreeListEntry* pSou
     {
         OUString rText = GetEntryText(pSource);
         GetModel()->Remove(pSource);
-        sal_uLong nPosition = (pTarget == NULL) ? TREELIST_APPEND : GetModel()->GetAbsPos(pTarget) + 1;
-        InsertEntry(rText, NULL, false, nPosition, pItemValue);
+        sal_uLong nPosition = (pTarget == nullptr) ? TREELIST_APPEND : GetModel()->GetAbsPos(pTarget) + 1;
+        InsertEntry(rText, nullptr, false, nPosition, pItemValue);
     }
     else
     {
-        sal_uLong nPosition = (pTarget == NULL) ? TREELIST_APPEND : GetModel()->GetAbsPos(pTarget) + 1;
+        sal_uLong nPosition = (pTarget == nullptr) ? TREELIST_APPEND : GetModel()->GetAbsPos(pTarget) + 1;
         InsertEntryForItem(pItemValue->mpOriginalItemValue, nPosition);
     }
 }
@@ -210,7 +210,7 @@ void ScPivotLayoutTreeListData::InsertEntryForItem(ScItemValue* pItemValue, sal_
                             pDataItemValue->maName,
                             rFunctionData.mnDupCount);
 
-    InsertEntry(sDataName, NULL, false, nPosition, pDataItemValue);
+    InsertEntry(sDataName, nullptr, false, nPosition, pDataItemValue);
 }
 
 void ScPivotLayoutTreeListData::AdjustDuplicateCount(ScItemValue* pInputItemValue)
@@ -223,7 +223,7 @@ void ScPivotLayoutTreeListData::AdjustDuplicateCount(ScItemValue* pInputItemValu
     sal_uInt8 nMaxDuplicateCount = 0;
 
     SvTreeListEntry* pEachEntry;
-    for (pEachEntry = First(); pEachEntry != NULL; pEachEntry = Next(pEachEntry))
+    for (pEachEntry = First(); pEachEntry != nullptr; pEachEntry = Next(pEachEntry))
     {
         ScItemValue* pItemValue = static_cast<ScItemValue*>(pEachEntry->GetUserData());
         if (pItemValue == pInputItemValue)

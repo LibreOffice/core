@@ -513,9 +513,9 @@ XclListColor* XclExpPaletteImpl::SearchListEntry( const Color& rColor, sal_uInt3
     rnIndex = 0;
 
     if (mxColorList->empty())
-        return NULL;
+        return nullptr;
 
-    XclListColor* pEntry = NULL;
+    XclListColor* pEntry = nullptr;
 
     // search optimization for equal-colored objects occurring repeatedly
     if (mnLastIdx < mxColorList->size())
@@ -897,7 +897,7 @@ vcl::Font XclExpFontHelper::GetFontFromItemSet( const XclExpRoot& rRoot, const S
 
     // fill the font object
     vcl::Font aFont;
-    ScPatternAttr::GetFont( aFont, rItemSet, SC_AUTOCOL_RAW, 0, 0, 0, nScScript );
+    ScPatternAttr::GetFont( aFont, rItemSet, SC_AUTOCOL_RAW, nullptr, nullptr, nullptr, nScScript );
     return aFont;
 }
 
@@ -1454,7 +1454,7 @@ OUString GetNumberFormatCode(XclRoot& rRoot, const sal_uInt16 nScNumFmt, SvNumbe
         if( pEntry->GetType() == css::util::NumberFormat::LOGICAL )
         {
             // build Boolean number format
-            Color* pColor = 0;
+            Color* pColor = nullptr;
             OUString aTemp;
             const_cast< SvNumberformat* >( pEntry )->GetOutputString( 1.0, aTemp, &pColor );
             aFormatStr += "\"" + aTemp + "\";\"" + aTemp + "\";\"";
@@ -2129,7 +2129,7 @@ bool XclExpXF::Equals( const XclExpXF& rCmpXF ) const
 void XclExpXF::InitDefault()
 {
     SetRecHeader( EXC_ID5_XF, (GetBiff() == EXC_BIFF8) ? 20 : 16 );
-    mpItemSet = 0;
+    mpItemSet = nullptr;
     mnScNumFmt = NUMBERFORMAT_ENTRY_NOT_FOUND;
     mnXclFont = mnXclNumFmt = 0;
     SetXmlIds(0, 0);
@@ -2247,7 +2247,7 @@ void XclExpXF::SaveXml( XclExpXmlStream& rStrm )
     sax_fastparser::FSHelperPtr& rStyleSheet = rStrm.GetCurrentStream();
 
     sal_Int32 nXfId = 0;
-    const XclExpXF* pStyleXF = NULL;
+    const XclExpXF* pStyleXF = nullptr;
     if( IsCellXF() )
     {
         sal_uInt16 nXFIndex = rStrm.GetRoot().GetXFBuffer().GetXFIndex( mnParentXFId );
@@ -2260,7 +2260,7 @@ void XclExpXF::SaveXml( XclExpXmlStream& rStrm )
             XML_fontId,             OString::number(  mnXclFont ).getStr(),
             XML_fillId,             OString::number(  mnFillId ).getStr(),
             XML_borderId,           OString::number(  mnBorderId ).getStr(),
-            XML_xfId,               IsStyleXF() ? NULL : OString::number( nXfId ).getStr(),
+            XML_xfId,               IsStyleXF() ? nullptr : OString::number( nXfId ).getStr(),
             // OOXTODO: XML_quotePrefix,
             // OOXTODO: XML_pivotButton,
             // OOXTODO: XML_applyNumberFormat,  ;
@@ -2971,7 +2971,7 @@ void XclExpXFBuffer::InsertDefaultRecords()
 
     /*  Insert the real default hard cell format -> 0 is document default pattern.
         Do it here (and not already above) to really have all built-in styles. */
-    Insert( 0, GetDefApiScript() );
+    Insert( nullptr, GetDefApiScript() );
 }
 
 void XclExpXFBuffer::AppendXFIndex( sal_uInt32 nXFId )
@@ -3055,34 +3055,34 @@ XclExpDxfs::XclExpDxfs( const XclExpRoot& rRoot )
                         if (!pBorder->FillFromItemSet( rSet, GetPalette(), GetBiff()) )
                         {
                             delete pBorder;
-                            pBorder = NULL;
+                            pBorder = nullptr;
                         }
 
                         XclExpCellAlign* pAlign = new XclExpCellAlign;
                         if (!pAlign->FillFromItemSet( rSet, false, GetBiff()))
                         {
                             delete pAlign;
-                            pAlign = NULL;
+                            pAlign = nullptr;
                         }
 
                         XclExpCellProt* pCellProt = new XclExpCellProt;
                         if (!pCellProt->FillFromItemSet( rSet ))
                         {
                             delete pCellProt;
-                            pCellProt = NULL;
+                            pCellProt = nullptr;
                         }
 
                         XclExpColor* pColor = new XclExpColor();
                         if(!pColor->FillFromItemSet( rSet ))
                         {
                             delete pColor;
-                            pColor = NULL;
+                            pColor = nullptr;
                         }
 
                         XclExpDxfFont* pFont = new XclExpDxfFont(rRoot, rSet);
 
-                        XclExpNumFmt* pNumFormat = NULL;
-                        const SfxPoolItem *pPoolItem = NULL;
+                        XclExpNumFmt* pNumFormat = nullptr;
+                        const SfxPoolItem *pPoolItem = nullptr;
                         if( rSet.GetItemState( ATTR_VALUE_FORMAT, true, &pPoolItem ) == SfxItemState::SET )
                         {
                             sal_uLong nScNumFmt = static_cast< const SfxUInt32Item* >(pPoolItem)->GetValue();

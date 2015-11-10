@@ -176,9 +176,9 @@ void ScHTMLImport::WriteToDocument(
     SCsROW nRowDiff = (SCsROW)maRange.aStart.Row();
     SCsTAB nTabDiff = (SCsTAB)maRange.aStart.Tab();
 
-    ScHTMLTable* pTable = NULL;
+    ScHTMLTable* pTable = nullptr;
     ScHTMLTableId nTableId = SC_HTML_GLOBAL_TABLE;
-    while( (pTable = pGlobTable->FindNestedTable( ++nTableId )) != 0 )
+    while( (pTable = pGlobTable->FindNestedTable( ++nTableId )) != nullptr )
     {
         pTable->GetDocRange( aNewRange );
         aNewRange.Move( nColDiff, nRowDiff, nTabDiff );

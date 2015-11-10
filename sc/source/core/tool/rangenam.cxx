@@ -53,7 +53,7 @@ ScRangeData::ScRangeData( ScDocument* pDok,
                           const FormulaGrammar::Grammar eGrammar ) :
                 aName       ( rName ),
                 aUpperName  ( ScGlobal::pCharClass->uppercase( rName ) ),
-                pCode       ( NULL ),
+                pCode       ( nullptr ),
                 aPos        ( rAddress ),
                 eType       ( nType ),
                 pDoc        ( pDok ),
@@ -227,7 +227,7 @@ void ScRangeData::GuessPosition()
 
     formula::FormulaToken* t;
     pCode->Reset();
-    while ( ( t = pCode->GetNextReference() ) != NULL )
+    while ( ( t = pCode->GetNextReference() ) != nullptr )
     {
         ScSingleRefData& rRef1 = *t->GetSingleRef();
         if ( rRef1.IsColRel() && rRef1.Col() < nMinCol )
@@ -293,7 +293,7 @@ void ScRangeData::UpdateTranspose( const ScRange& rSource, const ScAddress& rDes
     formula::FormulaToken* t;
     pCode->Reset();
 
-    while ( ( t = pCode->GetNextReference() ) != NULL )
+    while ( ( t = pCode->GetNextReference() ) != nullptr )
     {
         if( t->GetType() != svIndex )
         {
@@ -325,7 +325,7 @@ void ScRangeData::UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY )
     formula::FormulaToken* t;
     pCode->Reset();
 
-    while ( ( t = pCode->GetNextReference() ) != NULL )
+    while ( ( t = pCode->GetNextReference() ) != nullptr )
     {
         if( t->GetType() != svIndex )
         {
@@ -464,7 +464,7 @@ void ScRangeData::MakeValidName( OUString& rName )
         ScAddress::Details details( static_cast<FormulaGrammar::AddressConvention>( nConv ) );
         // Don't check Parse on VALID, any partial only VALID may result in
         // #REF! during compile later!
-        while (aRange.Parse( rName, NULL, details) || aAddr.Parse( rName, NULL, details))
+        while (aRange.Parse( rName, nullptr, details) || aAddr.Parse( rName, nullptr, details))
         {
             // Range Parse is partially valid also with invalid sheet name,
             // Address Parse dito, during compile name would generate a #REF!
@@ -549,7 +549,7 @@ void ScRangeData::ValidateTabRefs()
     SCTAB nMaxTab = nMinTab;
     formula::FormulaToken* t;
     pCode->Reset();
-    while ( ( t = pCode->GetNextReference() ) != NULL )
+    while ( ( t = pCode->GetNextReference() ) != nullptr )
     {
         ScSingleRefData& rRef1 = *t->GetSingleRef();
         ScAddress aAbs = rRef1.toAbs(aPos);
@@ -585,7 +585,7 @@ void ScRangeData::ValidateTabRefs()
         aPos.SetTab( aPos.Tab() - nMove );
 
         pCode->Reset();
-        while ( ( t = pCode->GetNextReference() ) != NULL )
+        while ( ( t = pCode->GetNextReference() ) != nullptr )
         {
             switch (t->GetType())
             {
@@ -685,14 +685,14 @@ ScRangeName::ScRangeName(const ScRangeName& r)
         m_Data.insert(std::make_pair(it.first, o3tl::make_unique<ScRangeData>(*it.second)));
     }
     // std::map was cloned, so each collection needs its own index to data.
-    maIndexToData.resize( r.maIndexToData.size(), NULL);
+    maIndexToData.resize( r.maIndexToData.size(), nullptr);
     for (auto const& itr : m_Data)
     {
         size_t nPos = itr.second->GetIndex() - 1;
         if (nPos >= maIndexToData.size())
         {
             OSL_FAIL( "ScRangeName copy-ctor: maIndexToData size doesn't fit");
-            maIndexToData.resize(nPos+1, NULL);
+            maIndexToData.resize(nPos+1, nullptr);
         }
         maIndexToData[nPos] = itr.second.get();
     }
@@ -721,10 +721,10 @@ ScRangeData* ScRangeName::findByIndex(sal_uInt16 i) const
 {
     if (!i)
         // index should never be zero.
-        return NULL;
+        return nullptr;
 
     size_t nPos = i - 1;
-    return nPos < maIndexToData.size() ? maIndexToData[nPos] : NULL;
+    return nPos < maIndexToData.size() ? maIndexToData[nPos] : nullptr;
 }
 
 void ScRangeName::UpdateReference(sc::RefUpdateContext& rCxt, SCTAB nLocalTab )
@@ -822,7 +822,7 @@ bool ScRangeName::insert(ScRangeData* p)
     {
         // Assign a new index.  An index must be unique and is never 0.
         IndexDataType::iterator itr = std::find(
-            maIndexToData.begin(), maIndexToData.end(), static_cast<ScRangeData*>(NULL));
+            maIndexToData.begin(), maIndexToData.end(), static_cast<ScRangeData*>(nullptr));
         if (itr != maIndexToData.end())
         {
             // Empty slot exists.  Re-use it.
@@ -843,7 +843,7 @@ bool ScRangeName::insert(ScRangeData* p)
         // Data inserted.  Store its index for mapping.
         size_t nPos = p->GetIndex() - 1;
         if (nPos >= maIndexToData.size())
-            maIndexToData.resize(nPos+1, NULL);
+            maIndexToData.resize(nPos+1, nullptr);
         maIndexToData[nPos] = p;
     }
     return r.second;
@@ -867,7 +867,7 @@ void ScRangeName::erase(const iterator& itr)
     m_Data.erase(itr);
     OSL_ENSURE( 0 < nIndex && nIndex <= maIndexToData.size(), "ScRangeName::erase: bad index");
     if (0 < nIndex && nIndex <= maIndexToData.size())
-        maIndexToData[nIndex-1] = NULL;
+        maIndexToData[nIndex-1] = nullptr;
 }
 
 void ScRangeName::clear()

@@ -118,7 +118,7 @@ void RichStringPortion::convert( ScEditEngineDefaulter& rEE, ESelection& rSelect
     rSelection.nStartPara = rSelection.nEndPara;
     SfxItemSet aItemSet( rEE.GetEmptyItemSet() );
 
-    const Font* pFontToUse = mxFont.get() ? mxFont.get() : lclNeedsRichTextFormat( pFont ) ? pFont : NULL;
+    const Font* pFontToUse = mxFont.get() ? mxFont.get() : lclNeedsRichTextFormat( pFont ) ? pFont : nullptr;
 
     if ( pFontToUse )
         pFontToUse->fillToItemSet( aItemSet, true );
@@ -395,7 +395,7 @@ void RichString::convert( const Reference< XText >& rxText, bool bReplaceOld, co
     for( PortionVector::const_iterator aIt = maTextPortions.begin(), aEnd = maTextPortions.end(); aIt != aEnd; ++aIt )
     {
         (*aIt)->convert( rxText, pFirstPortionFont, bReplaceOld );
-        pFirstPortionFont = 0;  // use passed font for first portion only
+        pFirstPortionFont = nullptr;  // use passed font for first portion only
         bReplaceOld = false;    // do not replace first portion text with following portions
     }
 }
@@ -416,7 +416,7 @@ void RichString::convert( const Reference< XText >& rxText, bool bReplaceOld, co
     for( PortionVector::const_iterator aIt = maTextPortions.begin(), aEnd = maTextPortions.end(); aIt != aEnd; ++aIt )
     {
         (*aIt)->convert( rEE, aSelection, pFirstPortionFont );
-        pFirstPortionFont = 0;
+        pFirstPortionFont = nullptr;
     }
 
     return rEE.CreateTextObject();

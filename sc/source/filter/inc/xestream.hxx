@@ -233,7 +233,7 @@ private:
 
 // `s.GetChar(0) != 0` needed because some strings on export only contain NULL.
 #define XESTRING_TO_PSZ(s) \
-    (s.Len() && s.GetChar( 0 ) != 0 ? XclXmlUtils::ToOString( s ).getStr() : NULL)
+    (s.Len() && s.GetChar( 0 ) != 0 ? XclXmlUtils::ToOString( s ).getStr() : nullptr)
 
 class ScAddress;
 class ScDocShell;
@@ -317,7 +317,7 @@ public:
                                         const css::uno::Reference< css::io::XOutputStream >& xParentRelation,
                                         const char* sContentType,
                                         const char* sRelationshipType,
-                                        OUString* pRelationshipId = NULL );
+                                        OUString* pRelationshipId = nullptr );
 
     // ignore
     virtual bool exportDocument()

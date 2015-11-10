@@ -554,7 +554,7 @@ void XclImpChEscherFormat::Convert( const XclImpChRoot& rRoot,
         ScfPropertySet& rPropSet, XclChObjectType eObjType, bool bUsePicFmt ) const
 {
     const XclChFormatInfo& rFmtInfo = rRoot.GetFormatInfo( eObjType );
-    rRoot.ConvertEscherFormat( rPropSet, maData, bUsePicFmt ? &maPicFmt : 0, mnDffFillType, rFmtInfo.mePropMode );
+    rRoot.ConvertEscherFormat( rPropSet, maData, bUsePicFmt ? &maPicFmt : nullptr, mnDffFillType, rFmtInfo.mePropMode );
 }
 
 XclImpChFrameBase::XclImpChFrameBase( const XclChFormatInfo& rFmtInfo )
@@ -703,7 +703,7 @@ namespace {
 /** Creates a labeled data sequence object, adds link for series title if present. */
 Reference< XLabeledDataSequence > lclCreateLabeledDataSequence(
         const XclImpChSourceLinkRef& xValueLink, const OUString& rValueRole,
-        const XclImpChSourceLink* pTitleLink = 0 )
+        const XclImpChSourceLink* pTitleLink = nullptr )
 {
     // create data sequence for values and title
     Reference< XDataSequence > xValueSeq;
@@ -1512,7 +1512,7 @@ void XclImpChDataFormat::UpdateTrendLineFormat()
     mx3dDataFmt.reset();
     mxAttLabel.reset();
     // update data label
-    UpdateDataLabel( 0 );
+    UpdateDataLabel( nullptr );
 }
 
 void XclImpChDataFormat::Convert( ScfPropertySet& rPropSet, const XclChExtTypeInfo& rTypeInfo ) const
@@ -1580,7 +1580,7 @@ void XclImpChDataFormat::UpdateDataLabel( const XclImpChDataFormat* pParentFmt )
         group, the contents of the CHATTACHEDLABEL record are used. In this
         case a new CHTEXT group is created and filled with the settings from
         the CHATTACHEDLABEL record. */
-    const XclImpChText* pDefText = NULL;
+    const XclImpChText* pDefText = nullptr;
     if (pParentFmt)
         pDefText = pParentFmt->GetDataLabel();
     if (!pDefText)
@@ -1713,8 +1713,8 @@ Reference< XPropertySet > XclImpChSerErrorBar::CreateErrorBar( const XclImpChSer
         ScfPropertySet aBarProp( xErrorBar );
 
         // plus/minus bars visible?
-        aBarProp.SetBoolProperty( EXC_CHPROP_SHOWPOSITIVEERROR, pPosBar != 0 );
-        aBarProp.SetBoolProperty( EXC_CHPROP_SHOWNEGATIVEERROR, pNegBar != 0 );
+        aBarProp.SetBoolProperty( EXC_CHPROP_SHOWPOSITIVEERROR, pPosBar != nullptr );
+        aBarProp.SetBoolProperty( EXC_CHPROP_SHOWNEGATIVEERROR, pNegBar != nullptr );
 
         // type of displayed error
         switch( pPrimaryBar->maData.mnSourceType )
@@ -2576,7 +2576,7 @@ Reference< XLegend > XclImpChLegend::CreateLegend() const
         // no automatic position/size: try to find the correct position and size
         if( eApiPos == cssc2::LegendPosition_CUSTOM )
         {
-            const XclChFramePos* pFramePos = mxFramePos ? &mxFramePos->GetFramePosData() : 0;
+            const XclChFramePos* pFramePos = mxFramePos ? &mxFramePos->GetFramePosData() : nullptr;
 
             /*  Legend position. Only the settings from the CHFRAMEPOS record
                 are used by Excel, the position in the CHLEGEND record will be
@@ -3430,7 +3430,7 @@ void XclImpChAxis::ConvertAxisPosition( ScfPropertySet& rPropSet, const XclImpCh
 
 void XclImpChAxis::ReadChAxisLine( XclImpStream& rStrm )
 {
-    XclImpChLineFormatRef* pxLineFmt = 0;
+    XclImpChLineFormatRef* pxLineFmt = nullptr;
     bool bWallFrame = false;
     switch( rStrm.ReaduInt16() )
     {
@@ -3616,7 +3616,7 @@ void XclImpChAxesSet::Convert( Reference< XDiagram > xDiagram ) const
             // create the axes with grids and axis titles and insert them into the diagram
             ConvertAxis( mxXAxis, mxXAxisTitle, xCoordSystem, mxYAxis.get() );
             ConvertAxis( mxYAxis, mxYAxisTitle, xCoordSystem, mxXAxis.get() );
-            ConvertAxis( mxZAxis, mxZAxisTitle, xCoordSystem, 0 );
+            ConvertAxis( mxZAxis, mxZAxisTitle, xCoordSystem, nullptr );
         }
     }
 }
@@ -3909,7 +3909,7 @@ const XclImpChText* XclImpChChart::GetDefaultText( XclChTextType eTextType ) con
     }
 
     XclImpChTextMap::const_iterator itr = maDefTexts.find(nDefTextId);
-    return itr == maDefTexts.end() ? NULL : itr->second;
+    return itr == maDefTexts.end() ? nullptr : itr->second;
 }
 
 bool XclImpChChart::IsManualPlotArea() const
@@ -4186,8 +4186,8 @@ void XclImpChartDrawing::ConvertObjects( XclImpDffConverter& rDffConv,
 {
     maChartRect = rChartRect;   // needed in CalcAnchorRect() callback
 
-    SdrModel* pSdrModel = 0;
-    SdrPage* pSdrPage = 0;
+    SdrModel* pSdrModel = nullptr;
+    SdrPage* pSdrPage = nullptr;
     if( mbOwnTab )
     {
         // chart sheet: insert all shapes into the sheet, not into the chart object
@@ -4202,7 +4202,7 @@ void XclImpChartDrawing::ConvertObjects( XclImpDffConverter& rDffConv,
             Reference< XDrawPageSupplier > xDrawPageSupp( rxModel, UNO_QUERY_THROW );
             Reference< XDrawPage > xDrawPage( xDrawPageSupp->getDrawPage(), UNO_SET_THROW );
             pSdrPage = ::GetSdrPageFromXDrawPage( xDrawPage );
-            pSdrModel = pSdrPage ? pSdrPage->GetModel() : 0;
+            pSdrModel = pSdrPage ? pSdrPage->GetModel() : nullptr;
         }
         catch( Exception& )
         {

@@ -42,7 +42,7 @@ ContextHandlerRef QueryTableFragment::onCreateContext( sal_Int32 nElement, const
                 mrQueryTable.importQueryTable( rAttribs );
         break;
     }
-    return 0;
+    return nullptr;
 }
 
 ContextHandlerRef QueryTableFragment::onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm )
@@ -54,7 +54,7 @@ ContextHandlerRef QueryTableFragment::onCreateRecordContext( sal_Int32 nRecId, S
                 mrQueryTable.importQueryTable( rStrm );
         break;
     }
-    return 0;
+    return nullptr;
 }
 
 const RecordInfo* QueryTableFragment::getRecordInfos() const

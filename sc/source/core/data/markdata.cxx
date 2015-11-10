@@ -31,7 +31,7 @@
 
 ScMarkData::ScMarkData() :
     maTabMarked(),
-    pMultiSel( NULL )
+    pMultiSel( nullptr )
 {
     ResetMark();
 }
@@ -40,7 +40,7 @@ ScMarkData::ScMarkData(const ScMarkData& rData) :
     maTabMarked( rData.maTabMarked ),
     aMarkRange( rData.aMarkRange ),
     aMultiRange( rData.aMultiRange ),
-    pMultiSel( NULL )
+    pMultiSel( nullptr )
 {
     bMarked      = rData.bMarked;
     bMultiMarked = rData.bMultiMarked;
@@ -61,7 +61,7 @@ ScMarkData& ScMarkData::operator=(const ScMarkData& rData)
         return *this;
 
     delete[] pMultiSel;
-    pMultiSel = NULL;
+    pMultiSel = nullptr;
 
     aMarkRange   = rData.aMarkRange;
     aMultiRange  = rData.aMultiRange;
@@ -90,7 +90,7 @@ ScMarkData::~ScMarkData()
 void ScMarkData::ResetMark()
 {
     delete[] pMultiSel;
-    pMultiSel = NULL;
+    pMultiSel = nullptr;
 
     bMarked = bMultiMarked = false;
     bMarking = bMarkIsNeg = false;

@@ -29,7 +29,7 @@ SdrUndoAction* GetSdrUndoAction( ScDocument* pDoc )
     if (pLayer)
         return pLayer->GetCalcUndo();               // must exist
     else
-        return NULL;
+        return nullptr;
 }
 
 void DoSdrUndoAction( SdrUndoAction* pUndoAction, ScDocument* pDoc )

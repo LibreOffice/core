@@ -41,7 +41,7 @@ sal_Int32 ScMyStyleNumberFormats::GetStyleNumberFormat(const OUString& rStyleNam
 }
 
 ScMyStyleRanges::ScMyStyleRanges() :
-    pCurrencyList(NULL)
+    pCurrencyList(nullptr)
 {
 }
 
@@ -176,49 +176,49 @@ void ScMyStyleRanges::SetStylesToRanges(const OUString* pStyleName, ScXMLImport&
     {
         list<ScRange> aList;
         mpNumberList->getRangeList(aList);
-        SetStylesToRanges(aList, pStyleName, util::NumberFormat::NUMBER, NULL, rImport);
+        SetStylesToRanges(aList, pStyleName, util::NumberFormat::NUMBER, nullptr, rImport);
         mpNumberList->clear();
     }
     if (mpTextList)
     {
         list<ScRange> aList;
         mpTextList->getRangeList(aList);
-        SetStylesToRanges(aList, pStyleName, util::NumberFormat::TEXT, NULL, rImport);
+        SetStylesToRanges(aList, pStyleName, util::NumberFormat::TEXT, nullptr, rImport);
         mpTextList->clear();
     }
     if (mpTimeList)
     {
         list<ScRange> aList;
         mpTimeList->getRangeList(aList);
-        SetStylesToRanges(aList, pStyleName, util::NumberFormat::TIME, NULL, rImport);
+        SetStylesToRanges(aList, pStyleName, util::NumberFormat::TIME, nullptr, rImport);
         mpTimeList->clear();
     }
     if (mpDateTimeList)
     {
         list<ScRange> aList;
         mpDateTimeList->getRangeList(aList);
-        SetStylesToRanges(aList, pStyleName, util::NumberFormat::DATETIME, NULL, rImport);
+        SetStylesToRanges(aList, pStyleName, util::NumberFormat::DATETIME, nullptr, rImport);
         mpDateTimeList->clear();
     }
     if (mpPercentList)
     {
         list<ScRange> aList;
         mpPercentList->getRangeList(aList);
-        SetStylesToRanges(aList, pStyleName, util::NumberFormat::PERCENT, NULL, rImport);
+        SetStylesToRanges(aList, pStyleName, util::NumberFormat::PERCENT, nullptr, rImport);
         mpPercentList->clear();
     }
     if (mpLogicalList)
     {
         list<ScRange> aList;
         mpLogicalList->getRangeList(aList);
-        SetStylesToRanges(aList, pStyleName, util::NumberFormat::LOGICAL, NULL, rImport);
+        SetStylesToRanges(aList, pStyleName, util::NumberFormat::LOGICAL, nullptr, rImport);
         mpLogicalList->clear();
     }
     if (mpUndefinedList)
     {
         list<ScRange> aList;
         mpUndefinedList->getRangeList(aList);
-        SetStylesToRanges(aList, pStyleName, util::NumberFormat::UNDEFINED, NULL, rImport);
+        SetStylesToRanges(aList, pStyleName, util::NumberFormat::UNDEFINED, nullptr, rImport);
         mpUndefinedList->clear();
     }
     if (pCurrencyList)
@@ -239,10 +239,10 @@ ScMyStylesImportHelper::ScMyStylesImportHelper(ScXMLImport& rTempImport)
     :
     aRowDefaultStyle(aCellStyles.end()),
     rImport(rTempImport),
-    pStyleName(NULL),
-    pPrevStyleName(NULL),
-    pCurrency(NULL),
-    pPrevCurrency(NULL),
+    pStyleName(nullptr),
+    pPrevStyleName(nullptr),
+    pCurrency(nullptr),
+    pPrevCurrency(nullptr),
     nCellType(0),
     nPrevCellType(0),
     bPrevRangeAdded(true)
@@ -264,8 +264,8 @@ void ScMyStylesImportHelper::ResetAttributes()
     pPrevStyleName = pStyleName;
     pPrevCurrency = pCurrency;
     nPrevCellType = nCellType;
-    pStyleName = NULL;
-    pCurrency = NULL;
+    pStyleName = nullptr;
+    pCurrency = nullptr;
     nCellType = 0;
 }
 

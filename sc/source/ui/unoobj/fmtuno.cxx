@@ -245,7 +245,7 @@ void ScTableConditionalFormat::AddEntry_Impl(const ScCondFormatEntryItem& aEntry
 
 ScTableConditionalEntry* ScTableConditionalFormat::GetObjectByIndex_Impl(sal_uInt16 nIndex) const
 {
-    return nIndex < aEntries.size() ? aEntries[nIndex] : NULL;
+    return nIndex < aEntries.size() ? aEntries[nIndex] : nullptr;
 }
 
 void SAL_CALL ScTableConditionalFormat::addNew(
@@ -492,7 +492,7 @@ const uno::Sequence<sal_Int8>& ScTableConditionalFormat::getUnoTunnelId()
 
 ScTableConditionalFormat* ScTableConditionalFormat::getImplementation(const uno::Reference<sheet::XSheetConditionalEntries>& rObj)
 {
-    ScTableConditionalFormat* pRet = NULL;
+    ScTableConditionalFormat* pRet = nullptr;
     uno::Reference<lang::XUnoTunnel> xUT(rObj, uno::UNO_QUERY);
     if (xUT.is())
         pRet = reinterpret_cast<ScTableConditionalFormat*>(sal::static_int_cast<sal_IntPtr>(xUT->getSomething(getUnoTunnelId())));
@@ -1017,7 +1017,7 @@ const uno::Sequence<sal_Int8>& ScTableValidationObj::getUnoTunnelId()
 
 ScTableValidationObj* ScTableValidationObj::getImplementation(const uno::Reference<beans::XPropertySet>& rObj)
 {
-    ScTableValidationObj* pRet = NULL;
+    ScTableValidationObj* pRet = nullptr;
     uno::Reference<lang::XUnoTunnel> xUT(rObj, uno::UNO_QUERY);
     if (xUT.is())
         pRet = reinterpret_cast<ScTableValidationObj*>(sal::static_int_cast<sal_IntPtr>(xUT->getSomething(getUnoTunnelId())));

@@ -151,10 +151,10 @@ ScPreviewShell::ScPreviewShell( SfxViewFrame* pViewFrame,
                                 SfxViewShell* pOldSh ) :
     SfxViewShell( pViewFrame, SfxViewShellFlags::CAN_PRINT | SfxViewShellFlags::HAS_PRINTOPTIONS ),
     pDocShell( static_cast<ScDocShell*>(pViewFrame->GetObjectShell()) ),
-    mpFrameWindow(NULL),
+    mpFrameWindow(nullptr),
     nSourceDesignMode( TRISTATE_INDET ),
     nMaxVertPos(0),
-    pAccessibilityBroadcaster( NULL )
+    pAccessibilityBroadcaster( nullptr )
 {
     Construct( &pViewFrame->GetWindow() );
 
@@ -196,7 +196,7 @@ ScPreviewShell::~ScPreviewShell()
     EndListening(*SfxGetpApp());
     EndListening(*pDocShell);
 
-    SetWindow(0);
+    SetWindow(nullptr);
     pPreview.disposeAndClear();
     pHorScroll.disposeAndClear();
     pVerScroll.disposeAndClear();
@@ -550,7 +550,7 @@ void ScPreviewShell::Activate(bool bMDI)
         // InputHdl is now mostly Null, no moreasssertion!
         ScInputHandler* pInputHdl = SC_MOD()->GetInputHdl();
         if ( pInputHdl )
-            pInputHdl->NotifyChange( NULL );
+            pInputHdl->NotifyChange( nullptr );
     }
 }
 
@@ -645,7 +645,7 @@ void ScPreviewShell::Execute( SfxRequest& rReq )
                     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                     if(pFact)
                     {
-                        std::unique_ptr<AbstractSvxZoomDialog> pDlg(pFact->CreateSvxZoomDialog(NULL, aSet));
+                        std::unique_ptr<AbstractSvxZoomDialog> pDlg(pFact->CreateSvxZoomDialog(nullptr, aSet));
                         OSL_ENSURE(pDlg, "Dialog creation failed!");
                         pDlg->SetLimits( 20, 400 );
                         pDlg->HideButton( ZoomButtonId::OPTIMAL );

@@ -154,12 +154,12 @@ ScConditionEntry::ScConditionEntry( const ScConditionEntry& r ) :
     eTempGrammar2(r.eTempGrammar2),
     bIsStr1(r.bIsStr1),
     bIsStr2(r.bIsStr2),
-    pFormula1(NULL),
-    pFormula2(NULL),
+    pFormula1(nullptr),
+    pFormula2(nullptr),
     aSrcPos(r.aSrcPos),
     aSrcString(r.aSrcString),
-    pFCell1(NULL),
-    pFCell2(NULL),
+    pFCell1(nullptr),
+    pFCell2(nullptr),
     bRelRef1(r.bRelRef1),
     bRelRef2(r.bRelRef2),
     bFirstRun(true),
@@ -188,12 +188,12 @@ ScConditionEntry::ScConditionEntry( ScDocument* pDocument, const ScConditionEntr
     eTempGrammar2(r.eTempGrammar2),
     bIsStr1(r.bIsStr1),
     bIsStr2(r.bIsStr2),
-    pFormula1(NULL),
-    pFormula2(NULL),
+    pFormula1(nullptr),
+    pFormula2(nullptr),
     aSrcPos(r.aSrcPos),
     aSrcString(r.aSrcString),
-    pFCell1(NULL),
-    pFCell2(NULL),
+    pFCell1(nullptr),
+    pFCell2(nullptr),
     bRelRef1(r.bRelRef1),
     bRelRef2(r.bRelRef2),
     bFirstRun(true),
@@ -224,15 +224,15 @@ ScConditionEntry::ScConditionEntry( ScConditionMode eOper,
     eTempGrammar2(eGrammar2),
     bIsStr1(false),
     bIsStr2(false),
-    pFormula1(NULL),
-    pFormula2(NULL),
+    pFormula1(nullptr),
+    pFormula2(nullptr),
     aSrcPos(rPos),
-    pFCell1(NULL),
-    pFCell2(NULL),
+    pFCell1(nullptr),
+    pFCell2(nullptr),
     bRelRef1(false),
     bRelRef2(false),
     bFirstRun(true),
-    pCondFormat(NULL)
+    pCondFormat(nullptr)
 {
     Compile( rExpr1, rExpr2, rExprNmsp1, rExprNmsp2, eGrammar1, eGrammar2, false );
 
@@ -251,15 +251,15 @@ ScConditionEntry::ScConditionEntry( ScConditionMode eOper,
     eTempGrammar2(FormulaGrammar::GRAM_DEFAULT),
     bIsStr1(false),
     bIsStr2(false),
-    pFormula1(NULL),
-    pFormula2(NULL),
+    pFormula1(nullptr),
+    pFormula2(nullptr),
     aSrcPos(rPos),
-    pFCell1(NULL),
-    pFCell2(NULL),
+    pFCell1(nullptr),
+    pFCell2(nullptr),
     bRelRef1(false),
     bRelRef2(false),
     bFirstRun(true),
-    pCondFormat(NULL)
+    pCondFormat(nullptr)
 {
     if ( pArr1 )
     {
@@ -716,7 +716,7 @@ void ScConditionEntry::Interpret( const ScAddress& rPos )
     if (bDirty && !bFirstRun)
     {
         // Repaint everything for dependent formats
-        DataChanged( NULL );
+        DataChanged( nullptr );
     }
 
     bFirstRun = false;
@@ -1315,7 +1315,7 @@ OUString ScConditionEntry::GetExpression( const ScAddress& rCursor, sal_uInt16 n
 ScTokenArray* ScConditionEntry::CreateTokenArry( sal_uInt16 nIndex ) const
 {
     assert(nIndex <= 1);
-    ScTokenArray* pRet = NULL;
+    ScTokenArray* pRet = nullptr;
     ScAddress aAddr;
 
     if ( nIndex==0 )
@@ -1363,7 +1363,7 @@ void ScConditionEntry::SourceChanged( const ScAddress& rChanged )
         {
             pFormula->Reset();
             formula::FormulaToken* t;
-            while ( ( t = pFormula->GetNextReference() ) != NULL )
+            while ( ( t = pFormula->GetNextReference() ) != nullptr )
             {
                 SingleDoubleRefProvider aProv( *t );
                 if ( aProv.Ref1.IsColRel() || aProv.Ref1.IsRowRel() || aProv.Ref1.IsTabRel() ||
@@ -1453,7 +1453,7 @@ ScAddress ScConditionEntry::GetValidSrcPos() const
         {
             pFormula->Reset();
             formula::FormulaToken* t;
-            while ( ( t = pFormula->GetNextReference() ) != NULL )
+            while ( ( t = pFormula->GetNextReference() ) != nullptr )
             {
                 ScSingleRefData& rRef1 = *t->GetSingleRef();
                 ScAddress aAbs = rRef1.toAbs(aSrcPos);
@@ -1857,7 +1857,7 @@ void ScConditionalFormat::RemoveEntry(size_t n)
     if (n < maEntries.size())
     {
         maEntries.erase(maEntries.begin() + n);
-        DoRepaint(NULL);
+        DoRepaint(nullptr);
     }
 }
 
@@ -1880,7 +1880,7 @@ const ScFormatEntry* ScConditionalFormat::GetEntry( sal_uInt16 nPos ) const
     if ( nPos < size() )
         return maEntries[nPos].get();
     else
-        return NULL;
+        return nullptr;
 }
 
 const OUString& ScConditionalFormat::GetCellStyle( ScRefCellValue& rCell, const ScAddress& rPos ) const
@@ -2113,7 +2113,7 @@ void ScConditionalFormat::SourceChanged( const ScAddress& rAddr )
             if(rFormat.NeedsRepaint())
             {
                 // we need to repaint the whole range anyway
-                DoRepaint(NULL);
+                DoRepaint(nullptr);
                 return;
             }
         }
@@ -2187,7 +2187,7 @@ ScConditionalFormat* ScConditionalFormatList::GetFormat( sal_uInt32 nKey )
             return itr->get();
 
     SAL_WARN("sc", "ScConditionalFormatList: Entry not found");
-    return NULL;
+    return nullptr;
 }
 
 const ScConditionalFormat* ScConditionalFormatList::GetFormat( sal_uInt32 nKey ) const
@@ -2198,7 +2198,7 @@ const ScConditionalFormat* ScConditionalFormatList::GetFormat( sal_uInt32 nKey )
             return itr->get();
 
     SAL_WARN("sc", "ScConditionalFormatList: Entry not found");
-    return NULL;
+    return nullptr;
 }
 
 void ScConditionalFormatList::CompileAll()

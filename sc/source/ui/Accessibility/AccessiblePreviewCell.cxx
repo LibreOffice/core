@@ -50,9 +50,9 @@ ScAccessiblePreviewCell::ScAccessiblePreviewCell( const css::uno::Reference<css:
                             ScPreviewShell* pViewShell,
                             /* const */ ScAddress& rCellAddress,
                             sal_Int32 nIndex ) :
-    ScAccessibleCellBase( rxParent, ( pViewShell ? &pViewShell->GetDocument() : NULL ), rCellAddress, nIndex ),
+    ScAccessibleCellBase( rxParent, ( pViewShell ? &pViewShell->GetDocument() : nullptr ), rCellAddress, nIndex ),
     mpViewShell( pViewShell ),
-    mpTextHelper(NULL)
+    mpTextHelper(nullptr)
 {
     if (mpViewShell)
         mpViewShell->AddAccessibilityObject(*this);
@@ -75,7 +75,7 @@ void SAL_CALL ScAccessiblePreviewCell::disposing()
     if (mpViewShell)
     {
         mpViewShell->RemoveAccessibilityObject(*this);
-        mpViewShell = NULL;
+        mpViewShell = nullptr;
     }
 
     if (mpTextHelper)
@@ -219,7 +219,7 @@ Rectangle ScAccessiblePreviewCell::GetBoundingBoxOnScreen() const throw (uno::Ru
         vcl::Window* pWindow = mpViewShell->GetWindow();
         if (pWindow)
         {
-            Rectangle aRect = pWindow->GetWindowExtentsRelative(NULL);
+            Rectangle aRect = pWindow->GetWindowExtentsRelative(nullptr);
             aCellRect.setX(aCellRect.getX() + aRect.getX());
             aCellRect.setY(aCellRect.getY() + aRect.getY());
         }
@@ -252,7 +252,7 @@ Rectangle ScAccessiblePreviewCell::GetBoundingBox() const throw (uno::RuntimeExc
 bool ScAccessiblePreviewCell::IsDefunc(
     const uno::Reference<XAccessibleStateSet>& rxParentStates)
 {
-    return ScAccessibleContextBase::IsDefunc() || (mpDoc == NULL) || (mpViewShell == NULL) || !getAccessibleParent().is() ||
+    return ScAccessibleContextBase::IsDefunc() || (mpDoc == nullptr) || (mpViewShell == nullptr) || !getAccessibleParent().is() ||
          (rxParentStates.is() && rxParentStates->contains(AccessibleStateType::DEFUNC));
 }
 

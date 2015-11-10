@@ -48,7 +48,7 @@ ScSolverDlg::ScSolverDlg( SfxBindings* pB, SfxChildWindow* pCW, vcl::Window* pPa
     , theVariableCell(aCursorPos)
     , pDoc(pDocument)
     , nCurTab(aCursorPos.Tab())
-    , pEdActive(NULL)
+    , pEdActive(nullptr)
     , bDlgLostFocus(false)
     , errMsgInvalidVar(ScGlobal::GetRscString(STR_INVALIDVAR))
     , errMsgInvalidForm(ScGlobal::GetRscString(STR_INVALIDFORM))
@@ -109,7 +109,7 @@ void ScSolverDlg::Init()
     m_pEdVariableCell->SetLoseFocusHdl ( aLink );
     m_pRBVariableCell->SetLoseFocusHdl ( aLink );
 
-    OUString aStr(theFormulaCell.Format(SCA_ABS, NULL, pDoc->GetAddressConvention()));
+    OUString aStr(theFormulaCell.Format(SCA_ABS, nullptr, pDoc->GetAddressConvention()));
 
     m_pEdFormulaCell->SetText( aStr );
     m_pEdFormulaCell->GrabFocus();
@@ -257,8 +257,8 @@ IMPL_LINK_TYPED( ScSolverDlg, BtnHdl, Button*, pBtn, void )
 
 IMPL_LINK_TYPED( ScSolverDlg, GetFocusHdl, Control&, rCtrl, void )
 {
-    Edit* pEdit = NULL;
-    pEdActive = NULL;
+    Edit* pEdit = nullptr;
+    pEdActive = nullptr;
 
     if( (&rCtrl == static_cast<Control*>(m_pEdFormulaCell)) || (&rCtrl == static_cast<Control*>(m_pRBFormulaCell)) )
         pEdit = pEdActive = m_pEdFormulaCell;

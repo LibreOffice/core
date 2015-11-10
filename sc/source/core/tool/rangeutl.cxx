@@ -268,7 +268,7 @@ bool ScRangeUtil::MakeRangeFromName (
         }
         //then check for local range names
         ScRangeName* pRangeNames = pDoc->GetRangeName( nTable );
-        ScRangeData* pData = NULL;
+        ScRangeData* pData = nullptr;
         if ( pRangeNames )
             pData = pRangeNames->findByUpperName(ScGlobal::pCharClass->uppercase(aName));
         if (!pData)
@@ -282,7 +282,7 @@ bool ScRangeUtil::MakeRangeFromName (
             pData->GetSymbol( aStrArea );
 
             if ( IsAbsArea( aStrArea, pDoc, nTable,
-                            NULL, &aStartPos, &aEndPos, rDetails ) )
+                            nullptr, &aStartPos, &aEndPos, rDetails ) )
             {
                 nTab       = aStartPos.Tab();
                 nColStart  = aStartPos.Col();
@@ -296,7 +296,7 @@ bool ScRangeUtil::MakeRangeFromName (
                 CutPosString( aStrArea, aStrArea );
 
                 if ( IsAbsPos( aStrArea, pDoc, nTable,
-                                          NULL, &aStartPos, rDetails ) )
+                                          nullptr, &aStartPos, rDetails ) )
                 {
                     nTab       = aStartPos.Tab();
                     nColStart  = nColEnd = aStartPos.Col();
@@ -542,7 +542,7 @@ bool ScRangeStringConverter::GetRangeListFromString(
            )
         {
             rRangeList.push_back( pRange );
-            pRange = NULL;
+            pRange = nullptr;
         }
         else if (nOffset > -1)
             bRet = false;
@@ -749,7 +749,7 @@ static void lcl_appendCellAddress(
         ScRangeStringConverter::AppendTableName(rBuf, rExtInfo.maTabName);
         rBuf.append('.');
 
-        OUString aAddr(rCell.Format(SCA_ABS, NULL, pDoc->GetAddressConvention()));
+        OUString aAddr(rCell.Format(SCA_ABS, nullptr, pDoc->GetAddressConvention()));
         rBuf.append(aAddr);
     }
     else
@@ -782,7 +782,7 @@ static void lcl_appendCellRangeAddress(
         ScRangeStringConverter::AppendTableName(rBuf, rExtInfo1.maTabName);
         rBuf.append('.');
 
-        OUString aAddr(rCell1.Format(SCA_ABS, NULL, pDoc->GetAddressConvention()));
+        OUString aAddr(rCell1.Format(SCA_ABS, nullptr, pDoc->GetAddressConvention()));
         rBuf.append(aAddr);
 
         rBuf.append(":");
@@ -794,7 +794,7 @@ static void lcl_appendCellRangeAddress(
             rBuf.append('.');
         }
 
-        aAddr = rCell2.Format(SCA_ABS, NULL, pDoc->GetAddressConvention());
+        aAddr = rCell2.Format(SCA_ABS, nullptr, pDoc->GetAddressConvention());
         rBuf.append(aAddr);
     }
     else
@@ -927,7 +927,7 @@ void ScRangeStringConverter::GetStringFromXMLRangeString( OUString& rString, con
 ScRangeData* ScRangeStringConverter::GetRangeDataFromString(const OUString& rString, const SCTAB nTab, const ScDocument* pDoc)
 {
     ScRangeName* pLocalRangeName = pDoc->GetRangeName(nTab);
-    ScRangeData* pData = NULL;
+    ScRangeData* pData = nullptr;
     OUString aUpperName = ScGlobal::pCharClass->uppercase(rString);
     if(pLocalRangeName)
     {

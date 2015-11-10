@@ -1412,7 +1412,7 @@ namespace {
 
 /** Creates and returns an Excel text object from the passed title. */
 XclExpChTextRef lclCreateTitle( const XclExpChRoot& rRoot, Reference< XTitled > xTitled, sal_uInt16 nTarget,
-                                const OUString* pSubTitle = NULL )
+                                const OUString* pSubTitle = nullptr )
 {
     Reference< XTitle > xTitle;
     if( xTitled.is() )
@@ -3344,7 +3344,7 @@ XclExpChChart::XclExpChChart( const XclExpRoot& rRoot,
         OUString aSubTitle;
         lcl_getChartSubTitle(xChartDoc, aSubTitle);
         mxTitle = lclCreateTitle( GetChRoot(), xTitled, EXC_CHOBJLINK_TITLE,
-                                  !aSubTitle.isEmpty() ? &aSubTitle : NULL );
+                                  !aSubTitle.isEmpty() ? &aSubTitle : nullptr );
 
         // diagrams (axes sets)
         sal_uInt16 nFreeGroupIdx = mxPrimAxesSet->Convert( xDiagram, 0 );

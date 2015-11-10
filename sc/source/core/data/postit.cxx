@@ -169,11 +169,11 @@ public:
     inline SdrCaptionObj* GetCaption() { return mpCaption; }
 
     /** Moves the caption inside the passed rectangle. Uses page area if 0 is passed. */
-    void                FitCaptionToRect( const Rectangle* pVisRect = 0 );
+    void                FitCaptionToRect( const Rectangle* pVisRect = nullptr );
     /** Places the caption inside the passed rectangle, tries to keep the cell rectangle uncovered. Uses page area if 0 is passed. */
-    void                AutoPlaceCaption( const Rectangle* pVisRect = 0 );
+    void                AutoPlaceCaption( const Rectangle* pVisRect = nullptr );
     /** Updates caption tail and textbox according to current cell position. Uses page area if 0 is passed. */
-    void                UpdateCaptionPos( const Rectangle* pVisRect = 0 );
+    void                UpdateCaptionPos( const Rectangle* pVisRect = nullptr );
 
 protected:
     /** Helper constructor for derived classes. */
@@ -202,7 +202,7 @@ private:
 ScCaptionCreator::ScCaptionCreator( ScDocument& rDoc, const ScAddress& rPos, bool bShown, bool bTailFront ) :
     mrDoc( rDoc ),
     maPos( rPos ),
-    mpCaption( 0 )
+    mpCaption( nullptr )
 {
     Initialize();
     CreateCaption( bShown, bTailFront );
@@ -219,7 +219,7 @@ ScCaptionCreator::ScCaptionCreator( ScDocument& rDoc, const ScAddress& rPos, Sdr
 ScCaptionCreator::ScCaptionCreator( ScDocument& rDoc, const ScAddress& rPos ) :
     mrDoc( rDoc ),
     maPos( rPos ),
-    mpCaption( 0 )
+    mpCaption( nullptr )
 {
     Initialize();
 }
@@ -227,7 +227,7 @@ ScCaptionCreator::ScCaptionCreator( ScDocument& rDoc, const ScAddress& rPos ) :
 SdrPage* ScCaptionCreator::GetDrawPage()
 {
     ScDrawLayer* pDrawLayer = mrDoc.GetDrawLayer();
-    return pDrawLayer ? pDrawLayer->GetPage( static_cast< sal_uInt16 >( maPos.Tab() ) ) : 0;
+    return pDrawLayer ? pDrawLayer->GetPage( static_cast< sal_uInt16 >( maPos.Tab() ) ) : nullptr;
 }
 
 void ScCaptionCreator::FitCaptionToRect( const Rectangle* pVisRect )
@@ -466,7 +466,7 @@ ScCaptionInitData::ScCaptionInitData() :
 }
 
 ScNoteData::ScNoteData( bool bShown ) :
-    mpCaption( 0 ),
+    mpCaption( nullptr ),
     mbShown( bShown )
 {
 }
@@ -487,7 +487,7 @@ ScPostIt::ScPostIt( ScDocument& rDoc, const ScAddress& rPos, const ScPostIt& rNo
     mrDoc( rDoc ),
     maNoteData( rNote.maNoteData )
 {
-    maNoteData.mpCaption = 0;
+    maNoteData.mpCaption = nullptr;
     CreateCaption( rPos, rNote.maNoteData.mpCaption );
 }
 
@@ -532,13 +532,13 @@ const OutlinerParaObject* ScPostIt::GetOutlinerObject() const
         return maNoteData.mpCaption->GetOutlinerParaObject();
     if( maNoteData.mxInitData.get() )
         return maNoteData.mxInitData->mxOutlinerObj.get();
-    return 0;
+    return nullptr;
 }
 
 const EditTextObject* ScPostIt::GetEditTextObject() const
 {
     const OutlinerParaObject* pOPO = GetOutlinerObject();
-    return pOPO ? &pOPO->GetTextObject() : 0;
+    return pOPO ? &pOPO->GetTextObject() : nullptr;
 }
 
 OUString ScPostIt::GetText() const
@@ -579,7 +579,7 @@ void ScPostIt::ForgetCaption()
 {
     /*  This function is used in undo actions to give up the responsibility for
         the caption object which is handled by separate drawing undo actions. */
-    maNoteData.mpCaption = 0;
+    maNoteData.mpCaption = nullptr;
     maNoteData.mxInitData.reset();
 }
 
@@ -675,7 +675,7 @@ void ScPostIt::CreateCaptionFromInitData( const ScAddress& rPos ) const
 void ScPostIt::CreateCaption( const ScAddress& rPos, const SdrCaptionObj* pCaption )
 {
     OSL_ENSURE( !maNoteData.mpCaption, "ScPostIt::CreateCaption - unexpected caption object found" );
-    maNoteData.mpCaption = 0;
+    maNoteData.mpCaption = nullptr;
 
     /*  #i104915# Never try to create notes in Undo document, leads to
         crash due to missing document members (e.g. row height array). */
@@ -745,7 +745,7 @@ void ScPostIt::RemoveCaption()
                 SdrObject::Free( pObj );
         }
     }
-    maNoteData.mpCaption = 0;
+    maNoteData.mpCaption = nullptr;
 }
 
 SdrCaptionObj* ScNoteUtil::CreateTempCaption(
@@ -754,7 +754,7 @@ SdrCaptionObj* ScNoteUtil::CreateTempCaption(
 {
     OUStringBuffer aBuffer( rUserText );
     // add plain text of invisible (!) cell note (no formatting etc.)
-    SdrCaptionObj* pNoteCaption = 0;
+    SdrCaptionObj* pNoteCaption = nullptr;
     const ScPostIt* pNote = rDoc.GetNote( rPos );
     if( pNote && !pNote->IsCaptionShown() )
     {
@@ -765,7 +765,7 @@ SdrCaptionObj* ScNoteUtil::CreateTempCaption(
 
     // create a caption if any text exists
     if( !pNoteCaption && aBuffer.isEmpty() )
-        return 0;
+        return nullptr;
 
     // prepare visible rectangle (add default distance to all borders)
     Rectangle aVisRect(
@@ -863,7 +863,7 @@ ScPostIt* ScNoteUtil::CreateNoteFromString(
         ScDocument& rDoc, const ScAddress& rPos, const OUString& rNoteText,
         bool bShown, bool bAlwaysCreateCaption )
 {
-    ScPostIt* pNote = 0;
+    ScPostIt* pNote = nullptr;
     if( !rNoteText.isEmpty() )
     {
         ScNoteData aNoteData( bShown );

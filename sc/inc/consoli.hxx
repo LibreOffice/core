@@ -42,7 +42,7 @@ private:
     ScReferenceEntry*   pData;
 
 public:
-    void                    Init()                      { nCount=0; nFullSize=0; pData=NULL; }
+    void                    Init()                      { nCount=0; nFullSize=0; pData=nullptr; }
     void                    Clear()                     { delete[] pData; }
 
     SCSIZE                  GetCount()                  { return nCount; }

@@ -176,11 +176,11 @@ rtl::Reference<ScHeaderFooterContentObj> ScHeaderFooterContentObj::getImplementa
 
 ScHeaderFooterTextData::ScHeaderFooterTextData(
     rtl::Reference<ScHeaderFooterContentObj> const & rContent, sal_uInt16 nP, const EditTextObject* pTextObj) :
-    mpTextObj(pTextObj ? pTextObj->Clone() : NULL),
+    mpTextObj(pTextObj ? pTextObj->Clone() : nullptr),
     rContentObj( rContent ),
     nPart( nP ),
-    pEditEngine( NULL ),
-    pForwarder( NULL ),
+    pEditEngine( nullptr ),
+    pForwarder( nullptr ),
     bDataValid(false)
 {
 }
@@ -517,7 +517,7 @@ uno::Reference<container::XNameAccess> SAL_CALL ScHeaderFooterTextObj::getTextFi
                                                 throw(uno::RuntimeException, std::exception)
 {
     //  sowas gibts nicht im Calc (?)
-    return NULL;
+    return nullptr;
 }
 
 // XTextRangeMover
@@ -649,7 +649,7 @@ const uno::Sequence<sal_Int8>& ScCellTextCursor::getUnoTunnelId()
 
 ScCellTextCursor* ScCellTextCursor::getImplementation(const uno::Reference<uno::XInterface>& rObj)
 {
-    ScCellTextCursor* pRet = NULL;
+    ScCellTextCursor* pRet = nullptr;
     uno::Reference<lang::XUnoTunnel> xUT(rObj, uno::UNO_QUERY);
     if (xUT.is())
         pRet = reinterpret_cast<ScCellTextCursor*>(sal::static_int_cast<sal_IntPtr>(xUT->getSomething(getUnoTunnelId())));
@@ -744,7 +744,7 @@ const uno::Sequence<sal_Int8>& ScHeaderFooterTextCursor::getUnoTunnelId()
 ScHeaderFooterTextCursor* ScHeaderFooterTextCursor::getImplementation(
                                 const uno::Reference<uno::XInterface>& rObj)
 {
-    ScHeaderFooterTextCursor* pRet = NULL;
+    ScHeaderFooterTextCursor* pRet = nullptr;
     uno::Reference<lang::XUnoTunnel> xUT(rObj, uno::UNO_QUERY);
     if (xUT.is())
         pRet = reinterpret_cast<ScHeaderFooterTextCursor*>(sal::static_int_cast<sal_IntPtr>(xUT->getSomething(getUnoTunnelId())));
@@ -837,7 +837,7 @@ const uno::Sequence<sal_Int8>& ScDrawTextCursor::getUnoTunnelId()
 
 ScDrawTextCursor* ScDrawTextCursor::getImplementation(const uno::Reference<uno::XInterface>& rObj)
 {
-    ScDrawTextCursor* pRet = NULL;
+    ScDrawTextCursor* pRet = nullptr;
     uno::Reference<lang::XUnoTunnel> xUT(rObj, uno::UNO_QUERY);
     if (xUT.is())
         pRet = reinterpret_cast<ScDrawTextCursor*>(sal::static_int_cast<sal_IntPtr>(xUT->getSomething(getUnoTunnelId())));
@@ -850,7 +850,7 @@ ScSimpleEditSourceHelper::ScSimpleEditSourceHelper()
     pEnginePool->SetDefaultMetric( SFX_MAPUNIT_100TH_MM );
     pEnginePool->FreezeIdRanges();
 
-    pEditEngine = new ScFieldEditEngine(NULL, pEnginePool, NULL, true);     // TRUE: become owner of pool
+    pEditEngine = new ScFieldEditEngine(nullptr, pEnginePool, nullptr, true);     // TRUE: become owner of pool
     pForwarder = new SvxEditEngineForwarder( *pEditEngine );
     pOriginalSource = new ScSimpleEditSource( pForwarder );
 }
@@ -890,9 +890,9 @@ EditTextObject* ScEditEngineTextObj::CreateTextObject()
 ScCellTextData::ScCellTextData(ScDocShell* pDocSh, const ScAddress& rP) :
     pDocShell( pDocSh ),
     aCellPos( rP ),
-    pEditEngine( NULL ),
-    pForwarder( NULL ),
-    pOriginalSource( NULL ),
+    pEditEngine( nullptr ),
+    pForwarder( nullptr ),
+    pOriginalSource( nullptr ),
     bDataValid( false ),
     bInUpdate( false ),
     bDirty( false ),
@@ -948,7 +948,7 @@ SvxTextForwarder* ScCellTextData::GetTextForwarder()
         {
             SfxItemPool* pEnginePool = EditEngine::CreatePool();
             pEnginePool->FreezeIdRanges();
-            pEditEngine = new ScFieldEditEngine(NULL, pEnginePool, NULL, true);
+            pEditEngine = new ScFieldEditEngine(nullptr, pEnginePool, nullptr, true);
         }
         //  currently, GetPortions doesn't work if UpdateMode is sal_False,
         //  this will be fixed (in EditEngine) by src600
@@ -1002,7 +1002,7 @@ void ScCellTextData::UpdateData()
 {
     if ( bDoUpdate )
     {
-        OSL_ENSURE(pEditEngine != NULL, "no EditEngine for UpdateData()");
+        OSL_ENSURE(pEditEngine != nullptr, "no EditEngine for UpdateData()");
         if ( pDocShell && pEditEngine )
         {
             //  during the own UpdateData call, bDataValid must not be reset,
@@ -1032,7 +1032,7 @@ void ScCellTextData::Notify( SfxBroadcaster&, const SfxHint& rHint )
         sal_uLong nId = static_cast<const SfxSimpleHint&>(rHint).GetId();
         if ( nId == SFX_HINT_DYING )
         {
-            pDocShell = NULL;                       // invalid now
+            pDocShell = nullptr;                       // invalid now
 
             DELETEZ( pForwarder );
             DELETEZ( pEditEngine );     // EditEngine uses document's pool

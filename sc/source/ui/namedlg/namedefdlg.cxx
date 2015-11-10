@@ -148,7 +148,7 @@ bool ScNameDefDlg::IsNameValid()
     OUString aScope = m_pLbScope->GetSelectEntry();
     OUString aName = m_pEdName->GetText();
 
-    ScRangeName* pRangeName = NULL;
+    ScRangeName* pRangeName = nullptr;
     if(aScope == maGlobalNameStr)
     {
         pRangeName = maRangeMap.find(OUString(STR_GLOBAL_RANGE_NAME))->second;
@@ -207,7 +207,7 @@ void ScNameDefDlg::AddPushed()
         return;
     }
 
-    ScRangeName* pRangeName = NULL;
+    ScRangeName* pRangeName = nullptr;
     if(aScope == maGlobalNameStr)
     {
         pRangeName = maRangeMap.find(OUString(STR_GLOBAL_RANGE_NAME))->second;
@@ -244,7 +244,7 @@ void ScNameDefDlg::AddPushed()
             if ( 0 == pNewEntry->GetErrCode() )
             {
                 if ( !pRangeName->insert( pNewEntry ) )
-                    pNewEntry = NULL;
+                    pNewEntry = nullptr;
 
                 if (mbUndo)
                 {

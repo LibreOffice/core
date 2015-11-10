@@ -85,7 +85,7 @@ ScUnoAddInFuncData::ScUnoAddInFuncData( const OUString& rNam, const OUString& rL
             pArgDescs[i] = pAD[i];
     }
     else
-        pArgDescs = NULL;
+        pArgDescs = nullptr;
 
     aUpperName = ScGlobal::pCharClass->uppercase(aUpperName);
     aUpperLocal = ScGlobal::pCharClass->uppercase(aUpperLocal);
@@ -214,7 +214,7 @@ void ScUnoAddInFuncData::SetArguments( long nNewCount, const ScAddInArgDesc* pNe
             pArgDescs[i] = pNewDescs[i];
     }
     else
-        pArgDescs = NULL;
+        pArgDescs = nullptr;
 }
 
 void ScUnoAddInFuncData::SetCallerPos( long nNewPos )
@@ -224,10 +224,10 @@ void ScUnoAddInFuncData::SetCallerPos( long nNewPos )
 
 ScUnoAddInCollection::ScUnoAddInCollection() :
     nFuncCount( 0 ),
-    ppFuncData( NULL ),
-    pExactHashMap( NULL ),
-    pNameHashMap( NULL ),
-    pLocalHashMap( NULL ),
+    ppFuncData( nullptr ),
+    pExactHashMap( nullptr ),
+    pNameHashMap( nullptr ),
+    pLocalHashMap( nullptr ),
     bInitialized( false )
 {
 }
@@ -248,7 +248,7 @@ void ScUnoAddInCollection::Clear()
             delete ppFuncData[i];
         delete[] ppFuncData;
     }
-    ppFuncData = NULL;
+    ppFuncData = nullptr;
     nFuncCount = 0;
 
     bInitialized = false;
@@ -412,7 +412,7 @@ void ScUnoAddInCollection::ReadConfiguration()
         const OUString* pFuncNameArray = aFunctionNames.getConstArray();
         for ( sal_Int32 nFuncPos = 0; nFuncPos < nNewCount; nFuncPos++ )
         {
-            ppFuncData[nFuncPos+nOld] = NULL;
+            ppFuncData[nFuncPos+nOld] = nullptr;
 
             // stored function name: (service name).(function)
             OUStringBuffer aFuncNameBuffer( aServiceName.getLength()+1+pFuncNameArray[nFuncPos].getLength());
@@ -800,7 +800,7 @@ void ScUnoAddInCollection::ReadFromAddIn( const uno::Reference<uno::XInterface>&
                 const uno::Reference<reflection::XIdlMethod>* pArray = aMethods.getConstArray();
                 for (long nFuncPos=0; nFuncPos<nNewCount; nFuncPos++)
                 {
-                    ppFuncData[nFuncPos+nOld] = NULL;
+                    ppFuncData[nFuncPos+nOld] = nullptr;
 
                     uno::Reference<reflection::XIdlMethod> xFunc = pArray[nFuncPos];
                     if (xFunc.is())
@@ -998,7 +998,7 @@ static const ScAddInArgDesc* lcl_FindArgDesc( const ScUnoAddInFuncData& rFuncDat
         if ( pArguments[nPos].aInternalName == rArgIntName )
             return &pArguments[nPos];
     }
-    return NULL;
+    return nullptr;
 }
 
 void ScUnoAddInCollection::UpdateFromAddIn( const uno::Reference<uno::XInterface>& xInterface,
@@ -1017,7 +1017,7 @@ void ScUnoAddInCollection::UpdateFromAddIn( const uno::Reference<uno::XInterface
 
     // if function list was already initialized, it must be updated
 
-    ScFunctionList* pFunctionList = NULL;
+    ScFunctionList* pFunctionList = nullptr;
     if ( ScGlobal::HasStarCalcFunctionList() )
         pFunctionList = ScGlobal::GetStarCalcFunctionList();
 
@@ -1187,7 +1187,7 @@ const ScUnoAddInFuncData* ScUnoAddInCollection::GetFuncData( const OUString& rNa
         return pFuncData;
     }
 
-    return NULL;
+    return nullptr;
 }
 
 const ScUnoAddInFuncData* ScUnoAddInCollection::GetFuncData( long nIndex )
@@ -1197,7 +1197,7 @@ const ScUnoAddInFuncData* ScUnoAddInCollection::GetFuncData( long nIndex )
 
     if (nIndex < nFuncCount)
         return ppFuncData[nIndex];
-    return NULL;
+    return nullptr;
 }
 
 void ScUnoAddInCollection::LocalizeString( OUString& rName )
@@ -1305,7 +1305,7 @@ ScUnoAddInCall::ScUnoAddInCall( ScUnoAddInCollection& rColl, const OUString& rNa
     nErrCode( errNoCode ),      // before function was called
     bHasString( true ),
     fValue( 0.0 ),
-    xMatrix( NULL )
+    xMatrix( nullptr )
 {
     pFuncData = rColl.GetFuncData( rName, true );           // need fully initialized data
     OSL_ENSURE( pFuncData, "Function Data missing" );
@@ -1504,7 +1504,7 @@ void ScUnoAddInCall::ExecuteCallWithArgs(uno::Sequence<uno::Any>& rCallArgs)
 void ScUnoAddInCall::SetResult( const uno::Any& rNewRes )
 {
     nErrCode = 0;
-    xVarRes = NULL;
+    xVarRes = nullptr;
 
     // Reflection* pRefl = rNewRes.getReflection();
 
@@ -1556,7 +1556,7 @@ void ScUnoAddInCall::SetResult( const uno::Any& rNewRes )
         default:
             if ( aType.equals( cppu::UnoType<uno::Sequence< uno::Sequence<sal_Int32> >>::get() ) )
             {
-                const uno::Sequence< uno::Sequence<sal_Int32> >* pRowSeq = NULL;
+                const uno::Sequence< uno::Sequence<sal_Int32> >* pRowSeq = nullptr;
 
                 //TODO: use pointer from any!
                 uno::Sequence< uno::Sequence<sal_Int32> > aSequence;
@@ -1597,7 +1597,7 @@ void ScUnoAddInCall::SetResult( const uno::Any& rNewRes )
             }
             else if ( aType.equals( cppu::UnoType<uno::Sequence< uno::Sequence<double> >>::get() ) )
             {
-                const uno::Sequence< uno::Sequence<double> >* pRowSeq = NULL;
+                const uno::Sequence< uno::Sequence<double> >* pRowSeq = nullptr;
 
                 //TODO: use pointer from any!
                 uno::Sequence< uno::Sequence<double> > aSequence;
@@ -1638,7 +1638,7 @@ void ScUnoAddInCall::SetResult( const uno::Any& rNewRes )
             }
             else if ( aType.equals( cppu::UnoType<uno::Sequence< uno::Sequence<OUString> >>::get() ) )
             {
-                const uno::Sequence< uno::Sequence<OUString> >* pRowSeq = NULL;
+                const uno::Sequence< uno::Sequence<OUString> >* pRowSeq = nullptr;
 
                 //TODO: use pointer from any!
                 uno::Sequence< uno::Sequence<OUString> > aSequence;

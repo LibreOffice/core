@@ -313,13 +313,13 @@ private:
 };
 
 ScMatrixImpl::ScMatrixImpl(SCSIZE nC, SCSIZE nR) :
-    maMat(nR, nC), maMatFlag(nR, nC, SC_MATFLAG_EMPTYCELL), pErrorInterpreter(NULL), mbCloneIfConst(true) {}
+    maMat(nR, nC), maMatFlag(nR, nC, SC_MATFLAG_EMPTYCELL), pErrorInterpreter(nullptr), mbCloneIfConst(true) {}
 
 ScMatrixImpl::ScMatrixImpl(SCSIZE nC, SCSIZE nR, double fInitVal) :
-    maMat(nR, nC, fInitVal), maMatFlag(nR, nC), pErrorInterpreter(NULL), mbCloneIfConst(true) {}
+    maMat(nR, nC, fInitVal), maMatFlag(nR, nC), pErrorInterpreter(nullptr), mbCloneIfConst(true) {}
 
 ScMatrixImpl::ScMatrixImpl( size_t nC, size_t nR, const std::vector<double>& rInitVals ) :
-    maMat(nR, nC, rInitVals.begin(), rInitVals.end()), maMatFlag(nR, nC), pErrorInterpreter(NULL), mbCloneIfConst(true) {}
+    maMat(nR, nC, rInitVals.begin(), rInitVals.end()), maMatFlag(nR, nC), pErrorInterpreter(nullptr), mbCloneIfConst(true) {}
 
 ScMatrixImpl::~ScMatrixImpl()
 {
@@ -603,7 +603,7 @@ svl::SharedString ScMatrixImpl::GetString( SvNumberFormatter& rFormatter, SCSIZE
             sal_uLong nKey = rFormatter.GetStandardFormat( css::util::NumberFormat::LOGICAL,
                     ScGlobal::eLnge);
             OUString aStr;
-            Color* pColor = NULL;
+            Color* pColor = nullptr;
             rFormatter.GetOutputString( 0.0, nKey, aStr, &pColor);
             return aStr;
         }

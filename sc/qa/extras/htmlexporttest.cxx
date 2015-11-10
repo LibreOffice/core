@@ -74,7 +74,7 @@ public:
     void testHtmlSkipImage()
     {
         // need a temp dir, because there's an image exported too
-        TempFile aTempDir(0, true);
+        TempFile aTempDir(nullptr, true);
         OUString const url(aTempDir.GetURL());
         TempFile aTempFile(&url, false);
 

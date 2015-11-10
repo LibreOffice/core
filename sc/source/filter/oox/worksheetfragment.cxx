@@ -100,7 +100,7 @@ ContextHandlerRef DataValidationsContext::onCreateContext( sal_Int32 nElement, c
             }
         break;
     }
-    return 0;
+    return nullptr;
 }
 
 void DataValidationsContext::onCharacters( const OUString& rChars )
@@ -132,7 +132,7 @@ ContextHandlerRef DataValidationsContext::onCreateRecordContext( sal_Int32 nRecI
 {
     if( nRecId == BIFF12_ID_DATAVALIDATION )
         importDataValidation( rStrm );
-    return 0;
+    return nullptr;
 }
 
 void DataValidationsContext::importDataValidation( const AttributeList& rAttribs )
@@ -210,12 +210,12 @@ ContextHandlerRef WorksheetFragment::onCreateContext( sal_Int32 nElement, const 
     {
         case XML_ROOT_CONTEXT: switch( getSheetType() )
         {
-            case SHEETTYPE_WORKSHEET:   return (nElement == XLS_TOKEN( worksheet )) ? this : 0;
-            case SHEETTYPE_CHARTSHEET:  return 0;
-            case SHEETTYPE_MACROSHEET:  return (nElement == XM_TOKEN( macrosheet )) ? this : 0;
-            case SHEETTYPE_DIALOGSHEET: return (nElement == XLS_TOKEN( dialogsheet )) ? this : 0;
-            case SHEETTYPE_MODULESHEET: return 0;
-            case SHEETTYPE_EMPTYSHEET:  return 0;
+            case SHEETTYPE_WORKSHEET:   return (nElement == XLS_TOKEN( worksheet )) ? this : nullptr;
+            case SHEETTYPE_CHARTSHEET:  return nullptr;
+            case SHEETTYPE_MACROSHEET:  return (nElement == XM_TOKEN( macrosheet )) ? this : nullptr;
+            case SHEETTYPE_DIALOGSHEET: return (nElement == XLS_TOKEN( dialogsheet )) ? this : nullptr;
+            case SHEETTYPE_MODULESHEET: return nullptr;
+            case SHEETTYPE_EMPTYSHEET:  return nullptr;
         }
         break;
 
@@ -335,7 +335,7 @@ ContextHandlerRef WorksheetFragment::onCreateContext( sal_Int32 nElement, const 
             }
         break;
     }
-    return 0;
+    return nullptr;
 }
 
 void WorksheetFragment::onCharacters( const OUString& rChars )
@@ -427,7 +427,7 @@ ContextHandlerRef WorksheetFragment::onCreateRecordContext( sal_Int32 nRecId, Se
             if( nRecId == BIFF12_ID_CONTROL ) importControl( rStrm );
         break;
     }
-    return 0;
+    return nullptr;
 }
 
 const RecordInfo* WorksheetFragment::getRecordInfos() const

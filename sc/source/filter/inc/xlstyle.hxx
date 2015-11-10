@@ -421,7 +421,7 @@ public:
                             ScfPropertySet& rPropSet, XclFontPropSetType eType,
                             const XclFontData& rFontData,
                             bool bHasWstrn, bool bHasAsian, bool bHasCmplx,
-                            const Color* pFontColor = 0 );
+                            const Color* pFontColor = nullptr );
 
 private:
     /** Returns a chart property set helper according to the passed script type. */

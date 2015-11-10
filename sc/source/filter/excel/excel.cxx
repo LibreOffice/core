@@ -63,7 +63,7 @@ FltError ScFormatFilterPluginImpl::ScImportExcel( SfxMedium& rMedium, ScDocument
     OSL_ENSURE( pMedStrm, "::ScImportExcel - medium without input stream" );
     if( !pMedStrm ) return eERR_OPEN;           // should not happen
 
-    SvStream* pBookStrm = 0;            // The "Book"/"Workbook" stream containing main data.
+    SvStream* pBookStrm = nullptr;            // The "Book"/"Workbook" stream containing main data.
     XclBiff eBiff = EXC_BIFF_UNKNOWN;   // The BIFF version of the main stream.
 
     // try to open an OLE storage
@@ -73,7 +73,7 @@ FltError ScFormatFilterPluginImpl::ScImportExcel( SfxMedium& rMedium, ScDocument
     {
         xRootStrg = new SotStorage( pMedStrm, false );
         if( xRootStrg->GetError() )
-            xRootStrg = 0;
+            xRootStrg = nullptr;
     }
 
     // try to open "Book" or "Workbook" stream in OLE storage

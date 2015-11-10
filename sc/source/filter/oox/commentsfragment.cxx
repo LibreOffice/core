@@ -65,7 +65,7 @@ ContextHandlerRef CommentsFragment::onCreateContext( sal_Int32 nElement, const A
             if( nElement == XLS_TOKEN( commentPr ) ) { mxComment->importCommentPr( rAttribs ); return this; }
         break;
     }
-    return 0;
+    return nullptr;
 }
 
 void CommentsFragment::onCharacters( const OUString& rChars )
@@ -102,7 +102,7 @@ ContextHandlerRef CommentsFragment::onCreateRecordContext( sal_Int32 nRecId, Seq
                 mxComment->createText()->importString( rStrm, true );
         break;
     }
-    return 0;
+    return nullptr;
 }
 
 void CommentsFragment::onEndRecord()

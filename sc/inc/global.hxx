@@ -530,7 +530,7 @@ public:
     SC_DLLPUBLIC static const OUString&       GetRscString( sal_uInt16 nIndex );
     /// Open the specified URL.
     /// If pDrawLayer is specified, check if tiled-rendering, and leave clients to handle the openURL action if that's the case.
-    static void                 OpenURL(const OUString& rURL, const OUString& rTarget, const SdrModel* pDrawLayer = NULL);
+    static void                 OpenURL(const OUString& rURL, const OUString& rTarget, const SdrModel* pDrawLayer = nullptr);
     SC_DLLPUBLIC static OUString            GetAbsDocName( const OUString& rFileName,
                                                 SfxObjectShell* pShell );
     SC_DLLPUBLIC static OUString            GetDocTabName( const OUString& rFileName,

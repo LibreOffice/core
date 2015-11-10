@@ -54,7 +54,7 @@ ScAccessibleTableBase::~ScAccessibleTableBase()
 void SAL_CALL ScAccessibleTableBase::disposing()
 {
     SolarMutexGuard aGuard;
-    mpDoc = NULL;
+    mpDoc = nullptr;
 
     ScAccessibleContextBase::disposing();
 }

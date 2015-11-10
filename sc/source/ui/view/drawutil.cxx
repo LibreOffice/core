@@ -45,7 +45,7 @@ void ScDrawUtil::CalcScale( ScDocument* pDoc, SCTAB nTab,
     for (SCROW nRow = nStartRow; nRow <= nEndRow-1; ++nRow)
     {
         SCROW nLastRow = nRow;
-        if (pDoc->RowHidden(nRow, nTab, NULL, &nLastRow))
+        if (pDoc->RowHidden(nRow, nTab, nullptr, &nLastRow))
         {
             nRow = nLastRow;
             continue;

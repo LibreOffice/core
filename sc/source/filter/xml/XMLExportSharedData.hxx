@@ -64,7 +64,7 @@ public:
     void AddDrawPage(const ScMyDrawPage& aDrawPage, const sal_Int32 nTable);
     void SetDrawPageHasForms(const sal_Int32 nTable, bool bHasForms);
     css::uno::Reference<css::drawing::XDrawPage> GetDrawPage(const sal_Int32 nTable);
-    bool HasDrawPage() const { return pDrawPages != NULL; }
+    bool HasDrawPage() const { return pDrawPages != nullptr; }
     bool HasForm(const sal_Int32 nTable, css::uno::Reference<css::drawing::XDrawPage>& xDrawPage);
     void AddNewShape(const ScMyShape& aMyShape);
     void SortShapesContainer();

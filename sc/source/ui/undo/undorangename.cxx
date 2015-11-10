@@ -95,7 +95,7 @@ ScUndoAddRangeData::~ScUndoAddRangeData()
 void ScUndoAddRangeData::Undo()
 {
     ScDocument& rDoc = pDocShell->GetDocument();
-    ScRangeName* pRangeName = NULL;
+    ScRangeName* pRangeName = nullptr;
     if (mnTab == -1)
     {
         pRangeName = rDoc.GetRangeName();
@@ -112,7 +112,7 @@ void ScUndoAddRangeData::Undo()
 void ScUndoAddRangeData::Redo()
 {
     ScDocument& rDoc = pDocShell->GetDocument();
-    ScRangeName* pRangeName = NULL;
+    ScRangeName* pRangeName = nullptr;
     if (mnTab == -1)
     {
         pRangeName = rDoc.GetRangeName();

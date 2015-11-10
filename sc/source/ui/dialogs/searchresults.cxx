@@ -24,7 +24,7 @@ namespace sc {
 
 SearchResultsDlg::SearchResultsDlg( SfxBindings* _pBindings, vcl::Window* pParent, sal_uInt16 /* nId */ ) :
     ModelessDialog(pParent, "SearchResultsDialog", "modules/scalc/ui/searchresults.ui"),
-    mpBindings(_pBindings), mpDoc(NULL)
+    mpBindings(_pBindings), mpDoc(nullptr)
 {
     SvSimpleTableContainer *pContainer = get<SvSimpleTableContainer>("results");
     Size aControlSize(150, 120);
@@ -66,7 +66,7 @@ void SearchResultsDlg::FillResults( ScDocument* pDoc, const ScRangeList &rMatche
                 // Out-of-bound sheet index.
                 continue;
 
-            OUString aPosStr = aPos.Format(SCA_ABS, NULL, pDoc->GetAddressConvention());
+            OUString aPosStr = aPos.Format(SCA_ABS, nullptr, pDoc->GetAddressConvention());
             mpList->InsertEntry(aTabNames[aPos.Tab()] + "\t" + aPosStr + "\t" + pDoc->GetString(aPos));
         }
     }

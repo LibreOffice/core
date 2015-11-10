@@ -122,7 +122,7 @@ void ScTabViewShell::ExecImageMap( SfxRequest& rReq )
         case SID_IMAP_EXEC:
         {
             SdrView* pDrView = GetSdrView();
-            SdrMark* pMark = pDrView ? pDrView->GetMarkedObjectList().GetMark(0) : 0;
+            SdrMark* pMark = pDrView ? pDrView->GetMarkedObjectList().GetMark(0) : nullptr;
 
             if ( pMark )
             {

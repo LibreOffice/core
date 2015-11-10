@@ -123,7 +123,7 @@ bool ScStyleSheet::SetParent( const OUString& rParentName )
 
 void ScStyleSheet::ResetParent()
 {
-    GetItemSet().SetParent(NULL);
+    GetItemSet().SetParent(nullptr);
 }
 
 SfxItemSet& ScStyleSheet::GetItemSet()
@@ -270,7 +270,7 @@ void ScStyleSheet::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
     if ( pSimpleHint && pSimpleHint->GetId() == SFX_HINT_DYING )
-        GetItemSet().SetParent( NULL );
+        GetItemSet().SetParent( nullptr );
 }
 
 // Dirty tricks, to always save the default template as "standard"

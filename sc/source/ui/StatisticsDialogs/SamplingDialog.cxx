@@ -29,7 +29,7 @@ ScSamplingDialog::ScSamplingDialog(
                     vcl::Window* pParent, ScViewData* pViewData ) :
     ScAnyRefDlg     ( pSfxBindings, pChildWindow, pParent,
                       "SamplingDialog", "modules/scalc/ui/samplingdialog.ui" ),
-    mpActiveEdit    ( NULL  ),
+    mpActiveEdit    ( nullptr  ),
     mViewData       ( pViewData ),
     mDocument       ( pViewData->GetDocument() ),
     mInputRange     ( ScAddress::INITIALIZE_INVALID ),
@@ -296,7 +296,7 @@ IMPL_LINK_NOARG_TYPED( ScSamplingDialog, OkClicked, Button*, void )
 
 IMPL_LINK_TYPED( ScSamplingDialog, GetFocusHandler, Control&, rCtrl, void )
 {
-    mpActiveEdit = NULL;
+    mpActiveEdit = nullptr;
 
     if(      (&rCtrl == static_cast<Control*>(mpInputRangeEdit))  || (&rCtrl == static_cast<Control*>(mpInputRangeButton)) )
         mpActiveEdit = mpInputRangeEdit;

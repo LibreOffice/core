@@ -412,7 +412,7 @@ XclExpImgData* XclExpPageSettings::getGraphicExport()
     if( const Graphic* pGraphic = maData.mxBrushItem->GetGraphic() )
         return new XclExpImgData( *pGraphic, EXC_ID8_IMGDATA );
 
-    return NULL;
+    return nullptr;
 }
 
 XclExpChartPageSettings::XclExpChartPageSettings( const XclExpRoot& rRoot ) :

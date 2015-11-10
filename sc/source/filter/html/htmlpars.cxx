@@ -205,7 +205,7 @@ ScHTMLLayoutParser::ScHTMLLayoutParser(
         aPageSize( aPageSizeP ),
         aBaseURL( rBaseURL ),
         xLockedList( new ScRangeList ),
-        pTables( NULL ),
+        pTables( nullptr ),
         pColOffset( new ScHTMLColOffset ),
         pLocalColOffset( new ScHTMLColOffset ),
         nFirstTableCell(0),
@@ -268,7 +268,7 @@ sal_uLong ScHTMLLayoutParser::Read( SvStream& rStream, const OUString& rBaseURL 
     bool bLoading = pObjSh && pObjSh->IsLoading();
 
     SvKeyValueIteratorRef xValues;
-    SvKeyValueIterator* pAttributes = NULL;
+    SvKeyValueIterator* pAttributes = nullptr;
     if ( bLoading )
         pAttributes = pObjSh->GetHeaderAttributes();
     else
@@ -308,7 +308,7 @@ sal_uLong ScHTMLLayoutParser::Read( SvStream& rStream, const OUString& rBaseURL 
 
 const ScHTMLTable* ScHTMLLayoutParser::GetGlobalTable() const
 {
-    return 0;
+    return nullptr;
 }
 
 void ScHTMLLayoutParser::NewActEntry( ScEEParseEntry* pE )
@@ -489,13 +489,13 @@ void ScHTMLLayoutParser::Adjust()
     xLockedList->RemoveAll();
 
     std::stack< ScHTMLAdjustStackEntry* > aStack;
-    ScHTMLAdjustStackEntry* pS = NULL;
+    ScHTMLAdjustStackEntry* pS = nullptr;
     sal_uInt16 nTab = 0;
     SCCOL nLastCol = SCCOL_MAX;
     SCROW nNextRow = 0;
     SCROW nCurRow = 0;
     sal_uInt16 nPageWidth = (sal_uInt16) aPageSize.Width();
-    InnerMap* pTab = NULL;
+    InnerMap* pTab = nullptr;
     for ( size_t i = 0, nListSize = maList.size(); i < nListSize; ++i )
     {
         ScEEParseEntry* pE = maList[ i ];
@@ -511,7 +511,7 @@ void ScHTMLLayoutParser::Adjust()
                 nCurRow = pS->nCurRow;
             }
             delete pS;
-            pS = NULL;
+            pS = nullptr;
             nTab = pE->nTab;
             if (pTables)
             {
@@ -1115,7 +1115,7 @@ void ScHTMLLayoutParser::TableOn( ImportInfo* pInfo )
             nColOffsetStart = nColOffset;
         }
 
-        ScEEParseEntry* pE = NULL;
+        ScEEParseEntry* pE = nullptr;
         if (maList.size())
             pE = maList.back();
         NewActEntry( pE ); // New free flying pActEntry
@@ -1221,7 +1221,7 @@ void ScHTMLLayoutParser::TableOff( ImportInfo* pInfo )
                     nRowKGV = nRowsPerRow1 = nRows;
                     nRowsPerRow2 = 1;
                 }
-                InnerMap* pTab2 = NULL;
+                InnerMap* pTab2 = nullptr;
                 if ( nRowsPerRow2 > 1 )
                 {   // Height of the inner table
                     pTab2 = new InnerMap;
@@ -1815,7 +1815,7 @@ private:
 
 ScHTMLTableMap::ScHTMLTableMap( ScHTMLTable& rParentTable ) :
     mrParentTable(rParentTable),
-    mpCurrTable(NULL)
+    mpCurrTable(nullptr)
 {
 }
 
@@ -1825,7 +1825,7 @@ ScHTMLTableMap::~ScHTMLTableMap()
 
 ScHTMLTable* ScHTMLTableMap::FindTable( ScHTMLTableId nTableId, bool bDeep ) const
 {
-    ScHTMLTable* pResult = 0;
+    ScHTMLTable* pResult = nullptr;
     if( mpCurrTable && (nTableId == mpCurrTable->GetTableId()) )
         pResult = mpCurrTable;              // cached table
     else
@@ -1898,7 +1898,7 @@ ScHTMLTable::ScHTMLTable( ScHTMLTable& rParentTable, const ImportInfo& rInfo, bo
     maTableItemSet( rParentTable.GetCurrItemSet() ),
     mrEditEngine( rParentTable.mrEditEngine ),
     mrEEParseList( rParentTable.mrEEParseList ),
-    mpCurrEntryList( 0 ),
+    mpCurrEntryList( nullptr ),
     maSize( 1, 1 ),
     mpParser(rParentTable.mpParser),
     mbBorderOn( false ),
@@ -1940,12 +1940,12 @@ ScHTMLTable::ScHTMLTable(
     std::vector< ScEEParseEntry* >& rEEParseList,
     ScHTMLTableId& rnUnusedId, ScHTMLParser* pParser
 ) :
-    mpParentTable( 0 ),
+    mpParentTable( nullptr ),
     maTableId( rnUnusedId ),
     maTableItemSet( rPool ),
     mrEditEngine( rEditEngine ),
     mrEEParseList( rEEParseList ),
-    mpCurrEntryList( 0 ),
+    mpCurrEntryList( nullptr ),
     maSize( 1, 1 ),
     mpParser(pParser),
     mbBorderOn( false ),
@@ -1973,9 +1973,9 @@ const SfxItemSet& ScHTMLTable::GetCurrItemSet() const
 ScHTMLSize ScHTMLTable::GetSpan( const ScHTMLPos& rCellPos ) const
 {
     ScHTMLSize aSpan( 1, 1 );
-    const ScRange* pRange = NULL;
-    if(  ( (pRange = maVMergedCells.Find( rCellPos.MakeAddr() ) ) != 0)
-      || ( (pRange = maHMergedCells.Find( rCellPos.MakeAddr() ) ) != 0)
+    const ScRange* pRange = nullptr;
+    if(  ( (pRange = maVMergedCells.Find( rCellPos.MakeAddr() ) ) != nullptr)
+      || ( (pRange = maHMergedCells.Find( rCellPos.MakeAddr() ) ) != nullptr)
       )
         aSpan.Set( pRange->aEnd.Col() - pRange->aStart.Col() + 1, pRange->aEnd.Row() - pRange->aStart.Row() + 1 );
     return aSpan;
@@ -1983,7 +1983,7 @@ ScHTMLSize ScHTMLTable::GetSpan( const ScHTMLPos& rCellPos ) const
 
 ScHTMLTable* ScHTMLTable::FindNestedTable( ScHTMLTableId nTableId ) const
 {
-    return mxNestedTables.get() ? mxNestedTables->FindTable( nTableId ) : 0;
+    return mxNestedTables.get() ? mxNestedTables->FindTable( nTableId ) : nullptr;
 }
 
 void ScHTMLTable::PutItem( const SfxPoolItem& rItem )
@@ -2307,8 +2307,8 @@ void ScHTMLTable::ApplyCellBorders( ScDocument* pDoc, const ScAddress& rFirstPos
         const SCROW nLastRow = maSize.mnRows - 1;
         const long nOuterLine = DEF_LINE_WIDTH_2;
         const long nInnerLine = DEF_LINE_WIDTH_0;
-        SvxBorderLine aOuterLine(0, nOuterLine, table::BorderLineStyle::SOLID);
-        SvxBorderLine aInnerLine(0, nInnerLine, table::BorderLineStyle::SOLID);
+        SvxBorderLine aOuterLine(nullptr, nOuterLine, table::BorderLineStyle::SOLID);
+        SvxBorderLine aInnerLine(nullptr, nInnerLine, table::BorderLineStyle::SOLID);
         SvxBoxItem aBorderItem( ATTR_BORDER );
 
         for( SCCOL nCol = 0; nCol <= nLastCol; ++nCol )
@@ -2325,12 +2325,12 @@ void ScHTMLTable::ApplyCellBorders( ScDocument* pDoc, const ScAddress& rFirstPos
                 SCROW nCellRow2 = nCellRow1 + GetDocSize( tdRow, nRow ) - 1;
                 for( SCCOL nCellCol = nCellCol1; nCellCol <= nCellCol2; ++nCellCol )
                 {
-                    aBorderItem.SetLine( (nCellCol == nCellCol1) ? pLeftLine : 0, SvxBoxItemLine::LEFT );
-                    aBorderItem.SetLine( (nCellCol == nCellCol2) ? pRightLine : 0, SvxBoxItemLine::RIGHT );
+                    aBorderItem.SetLine( (nCellCol == nCellCol1) ? pLeftLine : nullptr, SvxBoxItemLine::LEFT );
+                    aBorderItem.SetLine( (nCellCol == nCellCol2) ? pRightLine : nullptr, SvxBoxItemLine::RIGHT );
                     for( SCROW nCellRow = nCellRow1; nCellRow <= nCellRow2; ++nCellRow )
                     {
-                        aBorderItem.SetLine( (nCellRow == nCellRow1) ? pTopLine : 0, SvxBoxItemLine::TOP );
-                        aBorderItem.SetLine( (nCellRow == nCellRow2) ? pBottomLine : 0, SvxBoxItemLine::BOTTOM );
+                        aBorderItem.SetLine( (nCellRow == nCellRow1) ? pTopLine : nullptr, SvxBoxItemLine::TOP );
+                        aBorderItem.SetLine( (nCellRow == nCellRow2) ? pBottomLine : nullptr, SvxBoxItemLine::BOTTOM );
                         pDoc->ApplyAttr( nCellCol, nCellRow, rFirstPos.Tab(), aBorderItem );
                     }
                 }
@@ -2444,7 +2444,7 @@ bool ScHTMLTable::PushTableEntry( ScHTMLTableId nTableId )
 ScHTMLTable* ScHTMLTable::GetExistingTable( ScHTMLTableId nTableId ) const
 {
     ScHTMLTable* pTable = ((nTableId != SC_HTML_GLOBAL_TABLE) && mxNestedTables.get()) ?
-        mxNestedTables->FindTable( nTableId, false ) : 0;
+        mxNestedTables->FindTable( nTableId, false ) : nullptr;
     OSL_ENSURE( pTable || (nTableId == SC_HTML_GLOBAL_TABLE), "ScHTMLTable::GetExistingTable - table not found" );
     return pTable;
 }
@@ -2464,7 +2464,7 @@ void ScHTMLTable::InsertNewCell( const ScHTMLSize& rSpanSize )
 
     /*  Find an unused cell by skipping all merged ranges that cover the
         current cell position stored in maCurrCell. */
-    while( ((pRange = maVMergedCells.Find( maCurrCell.MakeAddr() )) != 0) || ((pRange = maHMergedCells.Find( maCurrCell.MakeAddr() )) != 0) )
+    while( ((pRange = maVMergedCells.Find( maCurrCell.MakeAddr() )) != nullptr) || ((pRange = maHMergedCells.Find( maCurrCell.MakeAddr() )) != nullptr) )
         maCurrCell.mnCol = pRange->aEnd.Col() + 1;
     mpCurrEntryList = &maEntryMap[ maCurrCell ];
 
@@ -2473,7 +2473,7 @@ void ScHTMLTable::InsertNewCell( const ScHTMLSize& rSpanSize )
         vertically merged ranges (do not shrink the new cell). */
     SCCOL nColEnd = maCurrCell.mnCol + rSpanSize.mnCols;
     for( ScAddress aAddr( maCurrCell.MakeAddr() ); aAddr.Col() < nColEnd; aAddr.IncCol() )
-        if( (pRange = maVMergedCells.Find( aAddr )) != 0 )
+        if( (pRange = maVMergedCells.Find( aAddr )) != nullptr )
             pRange->aEnd.SetRow( maCurrCell.mnRow - 1 );
 
     // insert the new range into the cell lists
@@ -2540,7 +2540,7 @@ void ScHTMLTable::ImplDataOff()
     {
         mxDataItemSet.reset();
         ++maCurrCell.mnCol;
-        mpCurrEntryList = 0;
+        mpCurrEntryList = nullptr;
         mbDataOn = false;
     }
 }
@@ -2742,7 +2742,7 @@ void ScHTMLTable::RecalcDocPos( const ScHTMLPos& rBasePos )
         ScHTMLPos aEntryDocPos( aCellDocPos );
 
         ScHTMLEntryList& rEntryList = aMapIter->second;
-        ScHTMLEntry* pEntry = 0;
+        ScHTMLEntry* pEntry = nullptr;
         ScHTMLEntryList::iterator aListIterEnd = rEntryList.end();
         for( ScHTMLEntryList::iterator aListIter = rEntryList.begin(); aListIter != aListIterEnd; ++aListIter )
         {
@@ -2847,7 +2847,7 @@ ScHTMLQueryParser::~ScHTMLQueryParser()
 sal_uLong ScHTMLQueryParser::Read( SvStream& rStrm, const OUString& rBaseURL  )
 {
     SvKeyValueIteratorRef xValues;
-    SvKeyValueIterator* pAttributes = 0;
+    SvKeyValueIterator* pAttributes = nullptr;
 
     SfxObjectShell* pObjSh = mpDoc->GetDocumentShell();
     if( pObjSh && pObjSh->IsLoading() )
@@ -3094,7 +3094,7 @@ class CSSHandler
         const char* mp;
         size_t      mn;
 
-        MemStr() : mp(NULL), mn(0) {}
+        MemStr() : mp(nullptr), mn(0) {}
         MemStr(const char* p, size_t n) : mp(p), mn(n) {}
         MemStr& operator=(const MemStr& r)
         {

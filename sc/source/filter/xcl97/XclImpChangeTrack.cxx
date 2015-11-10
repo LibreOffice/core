@@ -35,8 +35,8 @@ XclImpChangeTrack::XclImpChangeTrack( const XclImpRoot& rRoot, const XclImpStrea
     XclImpRoot( rRoot ),
     aRecHeader(),
     sOldUsername(),
-    pChangeTrack( NULL ),
-    pStrm( NULL ),
+    pChangeTrack( nullptr ),
+    pStrm( nullptr ),
     nTabIdCount( 0 ),
     bGlobExit( false ),
     eNestedMode( nmBase )
@@ -104,7 +104,7 @@ void XclImpChangeTrack::DoInsertRange( const ScRange& rRange, bool bEndOfList )
 void XclImpChangeTrack::DoDeleteRange( const ScRange& rRange )
 {
     sal_uLong nFirst, nLast;
-    pChangeTrack->AppendDeleteRange( rRange, NULL, nFirst, nLast );
+    pChangeTrack->AppendDeleteRange( rRange, nullptr, nFirst, nLast );
     DoAcceptRejectAction( nFirst, nLast );
 }
 
@@ -199,7 +199,7 @@ void XclImpChangeTrack::ReadFormula( ScTokenArray*& rpTokenArray, const ScAddres
     // assume that this part is broken
     if(nRead != nFmlSize)
     {
-        rpTokenArray = NULL;
+        rpTokenArray = nullptr;
         pStrm->Ignore(1);
         return;
     }
@@ -209,10 +209,10 @@ void XclImpChangeTrack::ReadFormula( ScTokenArray*& rpTokenArray, const ScAddres
     XclImpChTrFmlConverter aFmlConv( GetRoot(), *this );
 
     // read the formula, 3D tab refs from extended data
-    const ScTokenArray* pArray = NULL;
+    const ScTokenArray* pArray = nullptr;
     aFmlConv.Reset( rPosition );
     bool bOK = (aFmlConv.Convert( pArray, aFmlaStrm, nFmlSize, false ) == ConvOK);   // JEG : Check This
-    rpTokenArray = (bOK && pArray) ? new ScTokenArray( *pArray ) : NULL;
+    rpTokenArray = (bOK && pArray) ? new ScTokenArray( *pArray ) : nullptr;
     pStrm->Ignore( 1 );
 }
 
@@ -268,7 +268,7 @@ void XclImpChangeTrack::ReadCell(
         break;
         case EXC_CHTR_TYPE_FORMULA:
         {
-            ScTokenArray* pTokenArray = NULL;
+            ScTokenArray* pTokenArray = nullptr;
             ReadFormula( pTokenArray, rPosition );
             if( pStrm->IsValid() && pTokenArray )
             {
@@ -416,7 +416,7 @@ void XclImpChangeTrack::ReadChTrMoveRange()
 
         if( bValid )
         {
-            pChangeTrack->AppendMove( aSourceRange, aDestRange, NULL );
+            pChangeTrack->AppendMove( aSourceRange, aDestRange, nullptr );
             DoAcceptRejectAction( pChangeTrack->GetLast() );
         }
     }
@@ -492,7 +492,7 @@ void XclImpChangeTrack::Apply()
         pChangeTrack->SetUseFixDateTime( false );
 
         GetDoc().SetChangeTrack( pChangeTrack );
-        pChangeTrack = NULL;
+        pChangeTrack = nullptr;
 
         ScChangeViewSettings aSettings;
         aSettings.SetShowChanges( true );

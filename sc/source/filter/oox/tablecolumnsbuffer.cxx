@@ -133,7 +133,7 @@ TableColumns* TableColumnsBuffer::getActiveTableColumns()
     SAL_WARN_IF( maTableColumnsVector.size() > 1, "sc.filter",
             "TableColumnsBuffer::getActiveTableColumns - too many table columns" );
     // stick to the last imported table columns
-    return maTableColumnsVector.empty() ? 0 : maTableColumnsVector.back().get();
+    return maTableColumnsVector.empty() ? nullptr : maTableColumnsVector.back().get();
 }
 
 } // namespace xls

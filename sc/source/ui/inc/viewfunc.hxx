@@ -83,7 +83,7 @@ public:
     OUString        GetAutoSumFormula( const ScRangeList& rRangeList, bool bSubTotal, const ScAddress& rAddr );
 
     void            EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab, const OUString& rString,
-                               const EditTextObject* pData = NULL );
+                               const EditTextObject* pData = nullptr );
     void            EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
                                const EditTextObject& rData, bool bTestSimple = false );
     void            EnterValue( SCCOL nCol, SCROW nRow, SCTAB nTab, const double& rValue );
@@ -98,8 +98,8 @@ public:
 
     void            EnterDataAtCursor( const OUString& rString );         //! Not used?
 
-    SC_DLLPUBLIC void           CutToClip( ScDocument* pClipDoc = NULL, bool bIncludeObjects = false );
-    SC_DLLPUBLIC bool           CopyToClip( ScDocument* pClipDoc = NULL, bool bCut = false, bool bApi = false,
+    SC_DLLPUBLIC void           CutToClip( ScDocument* pClipDoc = nullptr, bool bIncludeObjects = false );
+    SC_DLLPUBLIC bool           CopyToClip( ScDocument* pClipDoc = nullptr, bool bCut = false, bool bApi = false,
                                             bool bIncludeObjects = false, bool bStopEdit = true );
     SC_DLLPUBLIC bool           CopyToClip( ScDocument* pClipDoc, const ScRangeList& rRange, bool bCut = false,
                                             bool bApi = false, bool bIncludeObjects = false, bool bStopEdit = true, bool bUseRangeForVBA = true );
@@ -128,11 +128,11 @@ public:
 
     bool            PasteDataFormat( SotClipboardFormatId nFormatId,
                                         const css::uno::Reference< css::datatransfer::XTransferable >& rxTransferable,
-                                        SCCOL nPosX, SCROW nPosY, Point* pLogicPos = NULL,
+                                        SCCOL nPosX, SCROW nPosY, Point* pLogicPos = nullptr,
                                         bool bLink = false, bool bAllowDialogs = false );
 
     bool            PasteFile( const Point&, const OUString&, bool bLink=false );
-    bool            PasteObject( const Point&, const css::uno::Reference < css::embed::XEmbeddedObject >&, const Size* = NULL, const Graphic* = NULL, const OUString& = OUString(), sal_Int64 nAspect = css::embed::Aspects::MSOLE_CONTENT );
+    bool            PasteObject( const Point&, const css::uno::Reference < css::embed::XEmbeddedObject >&, const Size* = nullptr, const Graphic* = nullptr, const OUString& = OUString(), sal_Int64 nAspect = css::embed::Aspects::MSOLE_CONTENT );
     bool            PasteBitmapEx( const Point&, const BitmapEx& );
     bool            PasteMetaFile( const Point&, const GDIMetaFile& );
     bool            PasteGraphic( const Point& rPos, const Graphic& rGraphic,
@@ -143,7 +143,7 @@ public:
     bool            PasteLink( const css::uno::Reference< css::datatransfer::XTransferable >& rxTransferable );
 
     void            InsertBookmark( const OUString& rDescription, const OUString& rURL,
-                                    SCCOL nPosX, SCROW nPosY, const OUString* pTarget = NULL,
+                                    SCCOL nPosX, SCROW nPosY, const OUString* pTarget = nullptr,
                                     bool bTryReplace = false );
     bool            HasBookmarkAtCursor( SvxHyperlinkItem* pContent );
 
@@ -198,23 +198,23 @@ public:
 
     void SetWidthOrHeight(
         bool bWidth, const std::vector<sc::ColRowSpan>& rRanges, ScSizeMode eMode,
-        sal_uInt16 nSizeTwips, bool bRecord = true, bool bPaint = true, ScMarkData* pMarkData = NULL );
+        sal_uInt16 nSizeTwips, bool bRecord = true, bool bPaint = true, ScMarkData* pMarkData = nullptr );
 
     void            SetMarkedWidthOrHeight( bool bWidth, ScSizeMode eMode, sal_uInt16 nSizeTwips,
                                         bool bRecord = true, bool bPaint = true );
 
-    bool            AdjustBlockHeight( bool bPaint = true, ScMarkData* pMarkData = NULL );
+    bool            AdjustBlockHeight( bool bPaint = true, ScMarkData* pMarkData = nullptr );
     bool            AdjustRowHeight( SCROW nStartRow, SCROW nEndRow, bool bPaint = true );
 
     void            ModifyCellSize( ScDirection eDir, bool bOptimal );
 
     SC_DLLPUBLIC void
                     InsertPageBreak( bool bColumn, bool bRecord = true,
-                                        const ScAddress* pPos = NULL,
+                                        const ScAddress* pPos = nullptr,
                                         bool bSetModified = true );
     SC_DLLPUBLIC void
                     DeletePageBreak( bool bColumn, bool bRecord = true,
-                                        const ScAddress* pPos = NULL,
+                                        const ScAddress* pPos = nullptr,
                                         bool bSetModified = true );
 
     void            RemoveManualBreaks();
@@ -257,7 +257,7 @@ public:
     bool                DeleteTables(SCTAB nTab, SCTAB nSheets);
 
     bool            RenameTable( const OUString& rName, SCTAB nTabNr );
-    void            MoveTable( sal_uInt16 nDestDocNo, SCTAB nDestTab, bool bCopy, const OUString* pNewTabName = NULL );
+    void            MoveTable( sal_uInt16 nDestDocNo, SCTAB nDestTab, bool bCopy, const OUString* pNewTabName = nullptr );
     void            ImportTables( ScDocShell* pSrcShell,
                                     SCTAB nCount, const SCTAB* pSrcTabs,
                                     bool bLink,SCTAB nTab);
@@ -317,7 +317,7 @@ public:
     void            EditNote();
 
     void            ForgetFormatArea()      { bFormatValid = false; }
-    bool            SelectionEditable( bool* pOnlyNotBecauseOfMatrix = NULL );
+    bool            SelectionEditable( bool* pOnlyNotBecauseOfMatrix = nullptr );
 
     SC_DLLPUBLIC void
                     DataFormPutData( SCROW nCurrentRow ,
@@ -325,7 +325,7 @@ public:
                                      SCROW nEndRow , SCCOL nEndCol ,
                                      std::vector<VclPtr<Edit> >& aEdits,
                                      sal_uInt16 aColLength );
-    void            UpdateSelectionArea( const ScMarkData& rSel, ScPatternAttr* pAttr = NULL );
+    void            UpdateSelectionArea( const ScMarkData& rSel, ScPatternAttr* pAttr = nullptr );
                                                 // Internal helper functions
 protected:
     static void     UpdateLineAttrs( ::editeng::SvxBorderLine&        rLine,

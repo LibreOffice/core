@@ -58,7 +58,7 @@ SC_SIMPLE_SERVICE_INFO( ScAnnotationObj, "ScAnnotationObj", "com.sun.star.sheet.
 ScAnnotationObj::ScAnnotationObj(ScDocShell* pDocSh, const ScAddress& rPos) :
     pDocShell( pDocSh ),
     aCellPos( rPos ),
-    pUnoText( NULL )
+    pUnoText( nullptr )
 {
     pDocShell->GetDocument().AddUnoObject(*this);
 
@@ -88,7 +88,7 @@ void ScAnnotationObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
     else if ( dynamic_cast<const SfxSimpleHint*>(&rHint) &&
             static_cast<const SfxSimpleHint&>(rHint).GetId() == SFX_HINT_DYING )
     {
-        pDocShell = NULL;       // ungueltig geworden
+        pDocShell = nullptr;       // ungueltig geworden
     }
 }
 
@@ -104,7 +104,7 @@ uno::Reference<uno::XInterface> SAL_CALL ScAnnotationObj::getParent() throw(uno:
     if (pDocShell)
         return static_cast<cppu::OWeakObject*>(new ScCellObj( pDocShell, aCellPos ));
 
-    return NULL;
+    return nullptr;
 }
 
 void SAL_CALL ScAnnotationObj::setParent( const uno::Reference<uno::XInterface>& /* Parent */ )
@@ -249,6 +249,6 @@ SvxUnoText& ScAnnotationObj::GetUnoText()
 
 const ScPostIt* ScAnnotationObj::ImplGetNote() const
 {
-    return pDocShell ? pDocShell->GetDocument().GetNote(aCellPos) : 0;
+    return pDocShell ? pDocShell->GetDocument().GetNote(aCellPos) : nullptr;
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

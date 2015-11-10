@@ -34,7 +34,7 @@ SvXMLImportContext* ScXMLConditionalFormatsContext::CreateChildContext( sal_uInt
 {
     const SvXMLTokenMap& rTokenMap = GetScImport().GetCondFormatsTokenMap();
     sal_uInt16 nToken = rTokenMap.Get(nPrefix, rLocalName);
-    SvXMLImportContext* pContext = NULL;
+    SvXMLImportContext* pContext = nullptr;
     switch (nToken)
     {
         case XML_TOK_CONDFORMATS_CONDFORMAT:
@@ -95,7 +95,7 @@ SvXMLImportContext* ScXMLConditionalFormatContext::CreateChildContext( sal_uInt1
 {
     const SvXMLTokenMap& rTokenMap = GetScImport().GetCondFormatTokenMap();
     sal_uInt16 nToken = rTokenMap.Get(nPrefix, rLocalName);
-    SvXMLImportContext* pContext = NULL;
+    SvXMLImportContext* pContext = nullptr;
     switch (nToken)
     {
         case XML_TOK_CONDFORMAT_CONDITION:
@@ -139,7 +139,7 @@ ScXMLConditionalFormatContext::~ScXMLConditionalFormatContext()
 ScXMLColorScaleFormatContext::ScXMLColorScaleFormatContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
                         const OUString& rLName, ScConditionalFormat* pFormat):
     SvXMLImportContext( rImport, nPrfx, rLName ),
-    pColorScaleFormat(NULL)
+    pColorScaleFormat(nullptr)
 {
     pColorScaleFormat = new ScColorScaleFormat(GetScImport().GetDocument());
     pFormat->AddEntry(pColorScaleFormat);
@@ -151,7 +151,7 @@ SvXMLImportContext* ScXMLColorScaleFormatContext::CreateChildContext( sal_uInt16
 {
     const SvXMLTokenMap& rTokenMap = GetScImport().GetColorScaleTokenMap();
     sal_uInt16 nToken = rTokenMap.Get(nPrefix, rLocalName);
-    SvXMLImportContext* pContext = NULL;
+    SvXMLImportContext* pContext = nullptr;
     switch (nToken)
     {
         case XML_TOK_COLORSCALE_COLORSCALEENTRY:
@@ -168,8 +168,8 @@ ScXMLDataBarFormatContext::ScXMLDataBarFormatContext( ScXMLImport& rImport, sal_
                         const OUString& rLName, const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
                         ScConditionalFormat* pFormat):
     SvXMLImportContext( rImport, nPrfx, rLName ),
-    mpDataBarFormat(NULL),
-    mpFormatData(NULL)
+    mpDataBarFormat(nullptr),
+    mpFormatData(nullptr)
 {
     OUString sPositiveColor;
     OUString sNegativeColor;
@@ -293,13 +293,13 @@ SvXMLImportContext* ScXMLDataBarFormatContext::CreateChildContext( sal_uInt16 nP
 {
     const SvXMLTokenMap& rTokenMap = GetScImport().GetFormattingTokenMap();
     sal_uInt16 nToken = rTokenMap.Get(nPrefix, rLocalName);
-    SvXMLImportContext* pContext = NULL;
+    SvXMLImportContext* pContext = nullptr;
     switch (nToken)
     {
         case XML_TOK_FORMATTING_ENTRY:
         case XML_TOK_DATABAR_DATABARENTRY:
         {
-            ScColorScaleEntry* pEntry(0);
+            ScColorScaleEntry* pEntry(nullptr);
             pContext = new ScXMLFormattingEntryContext( GetScImport(), nPrefix, rLocalName, xAttrList, pEntry );
             if(mpFormatData->mpLowerLimit)
             {
@@ -383,12 +383,12 @@ SvXMLImportContext* ScXMLIconSetFormatContext::CreateChildContext( sal_uInt16 nP
 {
     const SvXMLTokenMap& rTokenMap = GetScImport().GetFormattingTokenMap();
     sal_uInt16 nToken = rTokenMap.Get(nPrefix, rLocalName);
-    SvXMLImportContext* pContext = NULL;
+    SvXMLImportContext* pContext = nullptr;
     switch (nToken)
     {
         case XML_TOK_FORMATTING_ENTRY:
             {
-                ScColorScaleEntry* pEntry(0);
+                ScColorScaleEntry* pEntry(nullptr);
                 pContext = new ScXMLFormattingEntryContext( GetScImport(), nPrefix, rLocalName, xAttrList, pEntry );
                 mpFormatData->m_Entries.push_back(std::unique_ptr<ScColorScaleEntry>(pEntry));
             }
@@ -642,7 +642,7 @@ ScXMLColorScaleFormatEntryContext::ScXMLColorScaleFormatEntryContext( ScXMLImpor
                         const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
                         ScColorScaleFormat* pFormat):
     SvXMLImportContext( rImport, nPrfx, rLName ),
-    mpFormatEntry( NULL )
+    mpFormatEntry( nullptr )
 {
     double nVal = 0;
     Color aColor;

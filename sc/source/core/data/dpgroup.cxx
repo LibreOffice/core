@@ -406,7 +406,7 @@ const ScDPGroupItem* ScDPGroupDimension::GetGroupForData( const ScDPItemData& rD
         if (aIter->HasElement(rData))
             return &*aIter;
 
-    return NULL;
+    return nullptr;
 }
 
 const ScDPGroupItem* ScDPGroupDimension::GetGroupForName( const ScDPItemData& rName ) const
@@ -415,13 +415,13 @@ const ScDPGroupItem* ScDPGroupDimension::GetGroupForName( const ScDPItemData& rN
         if ( aIter->GetName().IsCaseInsEqual( rName ) )
             return &*aIter;
 
-    return NULL;
+    return nullptr;
 }
 
 const ScDPGroupItem* ScDPGroupDimension::GetGroupByIndex( size_t nIndex ) const
 {
     if (nIndex >= aItems.size())
-        return NULL;
+        return nullptr;
 
     return &aItems[nIndex];
 }
@@ -968,8 +968,8 @@ bool ScDPGroupTableData::IsInGroup( const ScDPItemData& rGroupData, long nGroupI
 bool ScDPGroupTableData::HasCommonElement( const ScDPItemData& rFirstData, long nFirstIndex,
                                          const ScDPItemData& rSecondData, long nSecondIndex ) const
 {
-    const ScDPGroupDimension* pFirstDim = NULL;
-    const ScDPGroupDimension* pSecondDim = NULL;
+    const ScDPGroupDimension* pFirstDim = nullptr;
+    const ScDPGroupDimension* pSecondDim = nullptr;
     for ( ScDPGroupDimensionVec::const_iterator aIter(aGroups.begin()); aIter != aGroups.end(); ++aIter )
     {
         const ScDPGroupDimension* pDim = &(*aIter);

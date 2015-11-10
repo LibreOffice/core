@@ -256,7 +256,7 @@ void ScViewUtil::UnmarkFiltered( ScMarkData& rMark, ScDocument* pDoc )
         for (SCROW nRow = nStartRow; nRow <= nEndRow; ++nRow)
         {
             SCROW nLastRow = nRow;
-            if (pDoc->RowFiltered(nRow, nTab, NULL, &nLastRow))
+            if (pDoc->RowFiltered(nRow, nTab, nullptr, &nLastRow))
             {
                 // use nStartCol/nEndCol, so the multi mark area isn't extended to all columns
                 // (visible in repaint for indentation)
@@ -368,7 +368,7 @@ bool ScViewUtil::ExecuteCharMap( const SvxFontItem& rOldFont,
 bool ScViewUtil::IsFullScreen( SfxViewShell& rViewShell )
 {
     SfxBindings&    rBindings       = rViewShell.GetViewFrame()->GetBindings();
-    SfxPoolItem*    pItem           = 0;
+    SfxPoolItem*    pItem           = nullptr;
     bool            bIsFullScreen   = false;
 
     if (rBindings.QueryState( SID_WIN_FULLSCREEN, pItem ) >= SfxItemState::DEFAULT)

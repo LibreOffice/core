@@ -110,7 +110,7 @@ static void lcl_UpdateHyphenator( Outliner& rOutliner, SdrObject* pObj )
 FuText::FuText(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawView* pViewP,
                    SdrModel* pDoc, SfxRequest& rReq) :
     FuConstruct(pViewSh, pWin, pViewP, pDoc, rReq),
-    pTextObj(NULL)
+    pTextObj(nullptr)
 {
 }
 
@@ -167,7 +167,7 @@ bool FuText::MouseButtonDown(const MouseEvent& rMEvt)
 
         const size_t nHdlNum = pView->GetHdlNum(pHdl);
 
-        if (pHdl != NULL)
+        if (pHdl != nullptr)
         {
             if (pView->HasMarkablePoints() && pView->IsPointMarkable(*pHdl))
             {
@@ -199,9 +199,9 @@ bool FuText::MouseButtonDown(const MouseEvent& rMEvt)
         SdrObject* pObj;
         SdrPageView* pPV;
 
-        if ( pHdl != NULL || pView->IsMarkedHit(aMDPos) )
+        if ( pHdl != nullptr || pView->IsMarkedHit(aMDPos) )
         {
-            if (pHdl == NULL &&
+            if (pHdl == nullptr &&
 //              pView->TakeTextEditObject(aMDPos, pObj, pPV) )
                 pView->PickObj(aMDPos, pView->getHitTolLog(), pObj, pPV, SdrSearchOptions::PICKTEXTEDIT) )
             {
@@ -284,7 +284,7 @@ bool FuText::MouseButtonDown(const MouseEvent& rMEvt)
 
                     pHdl=pView->PickHandle(aMDPos);
 
-                    if (pHdl!=NULL)
+                    if (pHdl!=nullptr)
                     {
                         pView->MarkPoint(*pHdl);
                         pHdl=pView->GetHdl(nHdlNum);
@@ -643,7 +643,7 @@ void FuText::SetInEditMode(SdrObject* pObj, const Point* pMousePixel,
         }
     }
 
-    pTextObj = NULL;
+    pTextObj = nullptr;
 
     if ( pObj )
     {
@@ -725,7 +725,7 @@ SdrObject* FuText::CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rR
 
     SdrObject* pObj = SdrObjFactory::MakeNewObject(
         pView->GetCurrentObjInventor(), pView->GetCurrentObjIdentifier(),
-        0L, pDrDoc);
+        nullptr, pDrDoc);
 
     if(pObj)
     {

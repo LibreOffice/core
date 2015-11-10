@@ -1085,7 +1085,7 @@ uno::Reference< excel::XRange > lclCreateVbaRange(
         uno::Reference< sheet::XSheetCellRangeContainer > xRanges( new ScCellRangesObj( pDocShell, aCellRanges ) );
         return new ScVbaRange( excel::getUnoSheetModuleObj( xRanges ), rxContext, xRanges );
     }
-    return 0;
+    return nullptr;
 }
 
 } // namespace
@@ -1235,7 +1235,7 @@ ScVbaApplication::getDisplayFormulaBar()
         reqList.Put( sfxFormBar );
 
         pViewShell->GetState( reqList );
-        const SfxPoolItem *pItem=0;
+        const SfxPoolItem *pItem=nullptr;
         if ( reqList.GetItemState( FID_TOGGLEINPUTLINE, false, &pItem ) == SfxItemState::SET )
             bRes = static_cast<const SfxBoolItem*>(pItem)->GetValue();
     }

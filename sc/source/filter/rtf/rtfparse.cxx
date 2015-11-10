@@ -36,8 +36,8 @@ ScRTFParser::ScRTFParser( EditEngine* pEditP ) :
         ScEEParser( pEditP ),
         mnCurPos(0),
         pColTwips( new ScRTFColTwips ),
-        pActDefault( NULL ),
-        pDefMerge( NULL ),
+        pActDefault( nullptr ),
+        pDefMerge( nullptr ),
         nStartAdjust( (sal_uLong)~0 ),
         nLastWidth(0),
         bNewDef( false )
@@ -177,7 +177,7 @@ IMPL_LINK_TYPED( ScRTFParser, RTFImportHdl, ImportInfo&, rInfo, void )
         case RTFIMP_END:
             if ( rInfo.aSelection.nEndPos )
             {   // If still text: create last paragraph
-                pActDefault = NULL;
+                pActDefault = nullptr;
                 rInfo.nToken = RTF_PAR;
                 // EditEngine did not attach an empty paragraph anymore
                 // which EntryEnd could strip
@@ -230,8 +230,8 @@ void ScRTFParser::NewCellRow( ImportInfo* /*pInfo*/ )
                 pColTwips->insert( rD.nTwips );
         }
     }
-    pDefMerge = NULL;
-    pActDefault = maDefaultList.empty() ? NULL : &maDefaultList[0];
+    pDefMerge = nullptr;
+    pActDefault = maDefaultList.empty() ? nullptr : &maDefaultList[0];
     mnCurPos = 0;
     OSL_ENSURE( pActDefault, "NewCellRow: pActDefault==0" );
 }
@@ -274,7 +274,7 @@ void ScRTFParser::ProcToken( ImportInfo* pInfo )
 
             nColCnt = 0;
             maDefaultList.clear();
-            pDefMerge = NULL;
+            pDefMerge = nullptr;
             nLastToken = pInfo->nToken;
             mnCurPos = 0;
         }
@@ -357,7 +357,7 @@ void ScRTFParser::ProcToken( ImportInfo* pInfo )
                 pActEntry->aSel.nStartPara = pInfo->aSelection.nEndPara - 1;
             }
 
-            pActDefault = NULL;
+            pActDefault = nullptr;
             if (!maDefaultList.empty() && (mnCurPos+1) < maDefaultList.size())
                 pActDefault = &maDefaultList[++mnCurPos];
 

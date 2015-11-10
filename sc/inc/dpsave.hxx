@@ -353,7 +353,7 @@ public:
     const ScDPDimensionSaveData* GetExistingDimensionData() const
         { return pDimensionData; }
 
-    void RemoveAllGroupDimensions( const OUString& rSrcDimName, std::vector<OUString>* pDeletedNames = NULL );
+    void RemoveAllGroupDimensions( const OUString& rSrcDimName, std::vector<OUString>* pDeletedNames = nullptr );
 
     SC_DLLPUBLIC ScDPDimensionSaveData* GetDimensionData(); // create if not there
     void SetDimensionData( const ScDPDimensionSaveData* pNew ); // copied

@@ -76,7 +76,7 @@ void ScTabView::Init()
     aScrollTimer.SetTimeoutHdl( LINK( this, ScTabView, TimerHdl ) );
 
     for (i=0; i<4; i++)
-        pGridWin[i] = NULL;
+        pGridWin[i] = nullptr;
     pGridWin[SC_SPLIT_BOTTOMLEFT] = VclPtr<ScGridWindow>::Create( pFrameWin, &aViewData, SC_SPLIT_BOTTOMLEFT );
 
     pSelEngine = new ScViewSelectionEngine( pGridWin[SC_SPLIT_BOTTOMLEFT], this,
@@ -87,12 +87,12 @@ void ScTabView::Init()
 
     pColBar[SC_SPLIT_LEFT] = VclPtr<ScColBar>::Create( pFrameWin, &aViewData, SC_SPLIT_LEFT,
                                                 &aHdrFunc, pHdrSelEng );
-    pColBar[SC_SPLIT_RIGHT] = NULL;
+    pColBar[SC_SPLIT_RIGHT] = nullptr;
     pRowBar[SC_SPLIT_BOTTOM] = VclPtr<ScRowBar>::Create( pFrameWin, &aViewData, SC_SPLIT_BOTTOM,
                                                 &aHdrFunc, pHdrSelEng );
-    pRowBar[SC_SPLIT_TOP] = NULL;
+    pRowBar[SC_SPLIT_TOP] = nullptr;
     for (i=0; i<2; i++)
-        pColOutline[i] = pRowOutline[i] = NULL;
+        pColOutline[i] = pRowOutline[i] = nullptr;
 
     pHSplitter = VclPtr<ScTabSplitter>::Create( pFrameWin, WinBits( WB_HSCROLL ), &aViewData );
     pVSplitter = VclPtr<ScTabSplitter>::Create( pFrameWin, WinBits( WB_VSCROLL ), &aViewData );
@@ -130,8 +130,8 @@ void ScTabView::Init()
 
     //  UpdateShow kommt beim Resize, oder bei Kopie einer bestehenden View aus dem ctor
 
-    pDrawActual = NULL;
-    pDrawOld    = NULL;
+    pDrawActual = nullptr;
+    pDrawOld    = nullptr;
 
             //  DrawView darf nicht im TabView - ctor angelegt werden,
             //  wenn die ViewShell noch nicht konstruiert ist...
@@ -150,7 +150,7 @@ ScTabView::~ScTabView()
     if ( pOld && pOld->GetView() == this )
     {
         pOld->ForgetView();
-        pScMod->SetSelectionTransfer( NULL );
+        pScMod->SetSelectionTransfer( nullptr );
         TransferableHelper::ClearSelection( GetActiveWin() );       // may delete pOld
     }
 
@@ -219,7 +219,7 @@ void ScTabView::MakeDrawView( TriState nForceDesignMode )
             if (pGridWin[i])
             {
                 if ( SC_SPLIT_BOTTOMLEFT != (ScSplitPos)i )
-                    pDrawView->AddWindowToPaintView(pGridWin[i], 0);
+                    pDrawView->AddWindowToPaintView(pGridWin[i], nullptr);
             }
         pDrawView->RecalcScale();
         for (i=0; i<4; i++)
@@ -254,7 +254,7 @@ void ScTabView::DoAddWin( ScGridWindow* pWin )
 {
     if (pDrawView)
     {
-        pDrawView->AddWindowToPaintView(pWin, 0);
+        pDrawView->AddWindowToPaintView(pWin, nullptr);
 
         pWin->DrawLayerCreated();
     }
@@ -602,7 +602,7 @@ void ScTabView::SetBrushDocument( ScDocument* pNew, bool bLock )
     delete pDrawBrushSet;
 
     pBrushDocument = pNew;
-    pDrawBrushSet = NULL;
+    pDrawBrushSet = nullptr;
 
     bLockPaintBrush = bLock;
 
@@ -614,7 +614,7 @@ void ScTabView::SetDrawBrushSet( SfxItemSet* pNew, bool bLock )
     delete pBrushDocument;
     delete pDrawBrushSet;
 
-    pBrushDocument = NULL;
+    pBrushDocument = nullptr;
     pDrawBrushSet = pNew;
 
     bLockPaintBrush = bLock;
@@ -626,7 +626,7 @@ void ScTabView::ResetBrushDocument()
 {
     if ( HasPaintBrush() )
     {
-        SetBrushDocument( NULL, false );
+        SetBrushDocument( nullptr, false );
         SetActivePointer( Pointer( PointerStyle::Arrow ) );   // switch pointers also when ended with escape key
     }
 }

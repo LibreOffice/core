@@ -320,7 +320,7 @@ bool ScfPropSetHelper::ReadValue( Any& rAny )
     Any* pAny = GetNextAny();
     if( pAny )
         rAny = *pAny;
-    return pAny != 0;
+    return pAny != nullptr;
 }
 
 bool ScfPropSetHelper::ReadValue( Color& rColor )
@@ -371,7 +371,7 @@ void ScfPropSetHelper::WriteToPropertySet( ScfPropertySet& rPropSet ) const
 Any* ScfPropSetHelper::GetNextAny()
 {
     OSL_ENSURE( mnNextIdx < maNameOrder.size(), "ScfPropSetHelper::GetNextAny - sequence overflow" );
-    Any* pAny = 0;
+    Any* pAny = nullptr;
     if( mnNextIdx < maNameOrder.size() )
         pAny = &maValueSeq[ maNameOrder[ mnNextIdx++ ] ];
     return pAny;

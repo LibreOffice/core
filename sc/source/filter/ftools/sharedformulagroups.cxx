@@ -19,7 +19,7 @@ void SharedFormulaGroups::set( size_t nSharedId, ScTokenArray* pArray )
 const ScTokenArray* SharedFormulaGroups::get( size_t nSharedId ) const
 {
     StoreType::const_iterator it = maStore.find(nSharedId);
-    return it == maStore.end() ? NULL : it->second;
+    return it == maStore.end() ? nullptr : it->second;
 }
 
 }

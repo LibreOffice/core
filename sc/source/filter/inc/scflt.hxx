@@ -467,7 +467,7 @@ struct Sc10ColAttr
 
     Sc10ColAttr()
         : Count(0)
-        , pData(NULL)
+        , pData(nullptr)
     {
     }
     ~Sc10ColAttr() { delete [] pData; }

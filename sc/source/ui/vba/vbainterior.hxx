@@ -57,7 +57,7 @@ protected:
     void SetMixedColor();
 public:
         ScVbaInterior( const css::uno::Reference< ov::XHelperInterface >& xParent,  const css::uno::Reference< css::uno::XComponentContext >& xContext,
-                 const css::uno::Reference< css::beans::XPropertySet >& xProps, ScDocument* pScDoc = NULL) throw ( css::lang::IllegalArgumentException);
+                 const css::uno::Reference< css::beans::XPropertySet >& xProps, ScDocument* pScDoc = nullptr) throw ( css::lang::IllegalArgumentException);
 
         virtual ~ScVbaInterior(){}
 

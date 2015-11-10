@@ -35,7 +35,7 @@ TYPEINIT1(ScUndoApplyPageStyle, ScSimpleUndo);
 //      modify style (cell or page style)
 
 ScStyleSaveData::ScStyleSaveData() :
-    pItems( NULL )
+    pItems( nullptr )
 {
 }
 
@@ -46,7 +46,7 @@ ScStyleSaveData::ScStyleSaveData( const ScStyleSaveData& rOther ) :
     if (rOther.pItems)
         pItems = new SfxItemSet( *rOther.pItems );
     else
-        pItems = NULL;
+        pItems = nullptr;
 }
 
 ScStyleSaveData::~ScStyleSaveData()
@@ -63,7 +63,7 @@ ScStyleSaveData& ScStyleSaveData::operator=( const ScStyleSaveData& rOther )
     if (rOther.pItems)
         pItems = new SfxItemSet( *rOther.pItems );
     else
-        pItems = NULL;
+        pItems = nullptr;
 
     return *this;
 }
@@ -127,7 +127,7 @@ void ScUndoModifyStyle::DoChange( ScDocShell* pDocSh, const OUString& rName,
     bool bDelete = aNewName.isEmpty();         // no new name -> delete style
     bool bNew = ( rName.isEmpty() && !bDelete );   // creating new style
 
-    SfxStyleSheetBase* pStyle = NULL;
+    SfxStyleSheetBase* pStyle = nullptr;
     if ( !rName.isEmpty() )
     {
         // find old style to modify

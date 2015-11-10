@@ -67,7 +67,7 @@ const SvEventDescription* ScShapeObj::GetSupportedMacroItems()
 {
     static const SvEventDescription aMacroDescriptionsImpl[] =
     {
-        { 0, NULL }
+        { 0, nullptr }
     };
     return aMacroDescriptionsImpl;
 }
@@ -77,7 +77,7 @@ ScMacroInfo* ScShapeObj_getShapeHyperMacroInfo( ScShapeObj* pShape, bool bCreate
         if( pShape )
             if( SdrObject* pObj = pShape->GetSdrObject() )
                 return ScDrawLayer::GetMacroInfo( pObj, bCreate );
-        return 0;
+        return nullptr;
 }
 
 namespace
@@ -90,8 +90,8 @@ namespace
 }
 
 ScShapeObj::ScShapeObj( uno::Reference<drawing::XShape>& xShape ) :
-      pShapePropertySet(NULL),
-      pShapePropertyState(NULL),
+      pShapePropertySet(nullptr),
+      pShapePropertyState(nullptr),
       bIsTextShape(false),
       bIsNoteCaption(false),
       bInitializedNotifier(false)
@@ -105,13 +105,13 @@ ScShapeObj::ScShapeObj( uno::Reference<drawing::XShape>& xShape ) :
 
     if (mxShapeAgg.is())
     {
-        xShape = NULL;      // during setDelegator, mxShapeAgg must be the only ref
+        xShape = nullptr;      // during setDelegator, mxShapeAgg must be the only ref
 
         mxShapeAgg->setDelegator( static_cast<cppu::OWeakObject*>(this) );
 
         xShape.set(uno::Reference<drawing::XShape>( mxShapeAgg, uno::UNO_QUERY ));
 
-        bIsTextShape = ( SvxUnoTextBase::getImplementation( mxShapeAgg ) != NULL );
+        bIsTextShape = ( SvxUnoTextBase::getImplementation( mxShapeAgg ) != nullptr );
     }
 
     {
@@ -1309,7 +1309,7 @@ uno::Reference< uno::XInterface > SAL_CALL ScShapeObj::getParent() throw (uno::R
         }
     }
 
-    return 0;
+    return nullptr;
 }
 
 void SAL_CALL ScShapeObj::setParent( const uno::Reference< uno::XInterface >& ) throw (lang::NoSupportException, uno::RuntimeException, std::exception)
@@ -1354,7 +1354,7 @@ SdrObject* ScShapeObj::GetSdrObject() const throw()
             return pShape->GetSdrObject();
     }
 
-    return NULL;
+    return nullptr;
 }
 
 #define SC_EVENTACC_ONCLICK     "OnClick"

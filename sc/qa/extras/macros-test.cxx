@@ -84,7 +84,7 @@ void ScMacrosTest::testMSP()
 
     CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
     ScDocShell* xDocSh = dynamic_cast<ScDocShell*>(pFoundShell);
-    CPPUNIT_ASSERT(xDocSh != NULL);
+    CPPUNIT_ASSERT(xDocSh != nullptr);
 
     SfxObjectShell::CallXScript(
         xComponent,

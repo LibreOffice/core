@@ -110,7 +110,7 @@ ScSolverOptionsDialog::ScSolverOptionsDialog( vcl::Window* pParent,
                         const uno::Sequence<beans::PropertyValue>& rProperties )
     : ModalDialog(pParent, "SolverOptionsDialog",
         "modules/scalc/ui/solveroptionsdialog.ui")
-    , mpCheckButtonData(NULL)
+    , mpCheckButtonData(nullptr)
     , maImplNames(rImplNames)
     , maDescriptions(rDescriptions)
     , maEngine(rEngine)
@@ -251,7 +251,7 @@ void ScSolverOptionsDialog::FillListBox()
         mpCheckButtonData = new SvLBoxButtonData(m_pLbSettings);
 
     SvTreeList* pModel = m_pLbSettings->GetModel();
-    SvTreeListEntry* pEntry = NULL;
+    SvTreeListEntry* pEntry = nullptr;
 
     for (sal_Int32 nPos=0; nPos<nCount; nPos++)
     {

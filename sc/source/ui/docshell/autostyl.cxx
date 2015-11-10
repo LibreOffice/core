@@ -47,7 +47,7 @@ struct ScAutoStyleData
 
 inline sal_uLong TimeNow()          // Sekunden
 {
-    return (sal_uLong) time(0);
+    return (sal_uLong) time(nullptr);
 }
 
 namespace {

@@ -56,7 +56,7 @@ ScAccessiblePageHeaderArea::ScAccessiblePageHeaderArea(
         SvxAdjust eAdjust)
         : ScAccessibleContextBase(rxParent, AccessibleRole::TEXT),
         mpEditObj(pEditObj->Clone()),
-        mpTextHelper(NULL),
+        mpTextHelper(nullptr),
         mpViewShell(pViewShell),
         mbHeader(bHeader),
         meAdjust(eAdjust)
@@ -81,7 +81,7 @@ void SAL_CALL ScAccessiblePageHeaderArea::disposing()
     if (mpViewShell)
     {
         mpViewShell->RemoveAccessibilityObject(*this);
-        mpViewShell = NULL;
+        mpViewShell = nullptr;
     }
     if (mpTextHelper)
         DELETEZ(mpTextHelper);

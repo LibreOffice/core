@@ -66,15 +66,15 @@ struct BuiltinFormat
 
 /** Defines a built-in number format that maps to an own predefined format. */
 #define NUMFMT_PREDEF( INDEX, PREDEFINED ) \
-    { INDEX, 0, css::i18n::NumberFormatIndex::PREDEFINED, -1 }
+    { INDEX, nullptr, css::i18n::NumberFormatIndex::PREDEFINED, -1 }
 
 /** Defines a built-in number format that is the same as the specified in nReuseId. */
 #define NUMFMT_REUSE( INDEX, REUSED_INDEX ) \
-    { INDEX, 0, -1, REUSED_INDEX }
+    { INDEX, nullptr, -1, REUSED_INDEX }
 
 /** Terminates a built-in number format table. */
 #define NUMFMT_ENDTABLE() \
-    { -1, 0, -1, -1 }
+    { -1, nullptr, -1, -1 }
 
 /** Defines builtin date and time formats 14...22.
     @param SYSTEMDATE  Complete short system date (for formats 14 and 22).

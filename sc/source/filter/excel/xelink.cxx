@@ -84,7 +84,7 @@ class XclExpExtNameDde : public XclExpExtNameBase
 {
 public:
     explicit            XclExpExtNameDde( const XclExpRoot& rRoot, const OUString& rName,
-                            sal_uInt16 nFlags, const ScMatrix* pResults = 0 );
+                            sal_uInt16 nFlags, const ScMatrix* pResults = nullptr );
 
 private:
     /** Writes additional record contents. */
@@ -398,7 +398,7 @@ public:
     /** Finds SUPBOOK index and SUPBOOK sheet range from given Excel sheet range.
         @return  An XTI structure containing SUPBOOK and sheet indexes. */
     XclExpXti           GetXti( sal_uInt16 nFirstXclTab, sal_uInt16 nLastXclTab,
-                            XclExpRefLogEntry* pRefLogEntry = 0 ) const;
+                            XclExpRefLogEntry* pRefLogEntry = nullptr ) const;
 
     /** Stores all cells in the given range in a CRN record list. */
     void                StoreCellRange( const ScRange& rRange );
@@ -428,7 +428,7 @@ public:
                             const OUString& rName, const ScExternalRefCache::TokenArrayRef& rArray );
 
     XclExpXti           GetXti( sal_uInt16 nFileId, const OUString& rTabName, sal_uInt16 nXclTabSpan,
-                                XclExpRefLogEntry* pRefLogEntry = NULL );
+                                XclExpRefLogEntry* pRefLogEntry = nullptr );
 
     /** Writes all SUPBOOK records with their sub records. */
     virtual void        Save( XclExpStream& rStrm ) override;
@@ -1054,8 +1054,8 @@ void XclExpExtName::SaveXml(XclExpXmlStream& rStrm)
 
     pExternalLink->startElement(XML_definedName,
             XML_name, XclXmlUtils::ToOString(maName).getStr(),
-            XML_refersTo, NULL,
-            XML_sheetId, NULL,
+            XML_refersTo, nullptr,
+            XML_sheetId, nullptr,
             FSEND);
 
     pExternalLink->endElement(XML_definedName);
@@ -1572,7 +1572,7 @@ bool XclExpSupbook::IsDdeLink( const OUString& rApplic, const OUString& rTopic )
 void XclExpSupbook::FillRefLogEntry( XclExpRefLogEntry& rRefLogEntry,
         sal_uInt16 nFirstSBTab, sal_uInt16 nLastSBTab ) const
 {
-    rRefLogEntry.mpUrl = maUrlEncoded.IsEmpty() ? 0 : &maUrlEncoded;
+    rRefLogEntry.mpUrl = maUrlEncoded.IsEmpty() ? nullptr : &maUrlEncoded;
     rRefLogEntry.mpFirstTab = GetTabName( nFirstSBTab );
     rRefLogEntry.mpLastTab = GetTabName( nLastSBTab );
 }
@@ -1729,7 +1729,7 @@ void XclExpSupbook::SaveXml( XclExpXmlStream& rStrm )
 const XclExpString* XclExpSupbook::GetTabName( sal_uInt16 nSBTab ) const
 {
     XclExpXctRef xXct = maXctList.GetRecord( nSBTab );
-    return xXct ? &xXct->GetTabName() : 0;
+    return xXct ? &xXct->GetTabName() : nullptr;
 }
 
 void XclExpSupbook::WriteBody( XclExpStream& rStrm )
@@ -1873,7 +1873,7 @@ void XclExpSupbookBuffer::StoreCell( sal_uInt16 nFileId, const OUString& rTabNam
         nSupbookId = Append(xSupbook);
     }
 
-    ScExternalRefCache::TokenRef pToken = pRefMgr->getSingleRefToken(nFileId, rTabName, rCell, NULL, NULL);
+    ScExternalRefCache::TokenRef pToken = pRefMgr->getSingleRefToken(nFileId, rTabName, rCell, nullptr, nullptr);
     if (!pToken.get())
         return;
 
@@ -1917,7 +1917,7 @@ void XclExpSupbookBuffer::StoreCellRange( sal_uInt16 nFileId, const OUString& rT
     aMatrixList.reserve(nTabCount);
 
     // This is a new'ed instance, so we must manage its life cycle here.
-    ScExternalRefCache::TokenArrayRef pArray = pRefMgr->getDoubleRefTokens(nFileId, rTabName, rRange, NULL);
+    ScExternalRefCache::TokenArrayRef pArray = pRefMgr->getDoubleRefTokens(nFileId, rTabName, rRange, nullptr);
     if (!pArray.get())
         return;
 
@@ -2103,7 +2103,7 @@ void XclExpSupbookBuffer::SaveXml( XclExpXmlStream& rStrm )
         OUString sId;
         sax_fastparser::FSHelperPtr pExternalLink = rStrm.CreateOutputStream(
                 XclXmlUtils::GetStreamName( "xl/", "externalLinks/externalLink", nId),
-                XclXmlUtils::GetStreamName( NULL, "externalLinks/externalLink", nId),
+                XclXmlUtils::GetStreamName( nullptr, "externalLinks/externalLink", nId),
                 rStrm.GetCurrentStream()->getOutputStream(),
                 "application/vnd.openxmlformats-officedocument.spreadsheetml.externalLink+xml",
                 CREATE_OFFICEDOC_RELATION_TYPE("externalLink"),

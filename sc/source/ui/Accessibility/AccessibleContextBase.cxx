@@ -95,7 +95,7 @@ void SAL_CALL ScAccessibleContextBase::disposing()
         uno::Reference< XAccessibleEventBroadcaster > xBroadcaster (mxParent->getAccessibleContext(), uno::UNO_QUERY);
         if (xBroadcaster.is())
             xBroadcaster->removeAccessibleEventListener(this);
-        mxParent = NULL;
+        mxParent = nullptr;
     }
 
     ScAccessibleContextBaseWeakImpl::disposing();

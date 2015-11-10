@@ -63,7 +63,7 @@ sal_Int32 ScSheetEvents::GetVbaDocumentEventId(ScSheetEventId nEvent)
 }
 
 ScSheetEvents::ScSheetEvents() :
-    mpScriptNames(NULL)
+    mpScriptNames(nullptr)
 {
 }
 
@@ -79,12 +79,12 @@ void ScSheetEvents::Clear()
         for (sal_Int32 nEvent=0; nEvent<COUNT; ++nEvent)
             delete mpScriptNames[nEvent];
         delete[] mpScriptNames;
-        mpScriptNames = NULL;
+        mpScriptNames = nullptr;
     }
 }
 
 ScSheetEvents::ScSheetEvents(const ScSheetEvents& rOther) :
-    mpScriptNames(NULL)
+    mpScriptNames(nullptr)
 {
     *this = rOther;
 }
@@ -99,7 +99,7 @@ const ScSheetEvents& ScSheetEvents::operator=(const ScSheetEvents& rOther)
             if (rOther.mpScriptNames[nEvent])
                 mpScriptNames[nEvent] = new OUString(*rOther.mpScriptNames[nEvent]);
             else
-                mpScriptNames[nEvent] = NULL;
+                mpScriptNames[nEvent] = nullptr;
     }
     return *this;
 }
@@ -108,7 +108,7 @@ const OUString* ScSheetEvents::GetScript(ScSheetEventId nEvent) const
 {
     if (mpScriptNames)
         return mpScriptNames[static_cast<int>(nEvent)];
-    return NULL;
+    return nullptr;
 }
 
 void ScSheetEvents::SetScript(ScSheetEventId eEvent, const OUString* pNew)
@@ -118,13 +118,13 @@ void ScSheetEvents::SetScript(ScSheetEventId eEvent, const OUString* pNew)
     {
         mpScriptNames = new OUString*[COUNT];
         for (sal_Int32 nEventIdx=0; nEventIdx<COUNT; ++nEventIdx)
-            mpScriptNames[nEventIdx] = NULL;
+            mpScriptNames[nEventIdx] = nullptr;
     }
     delete mpScriptNames[nEvent];
     if (pNew)
         mpScriptNames[nEvent] = new OUString(*pNew);
     else
-        mpScriptNames[nEvent] = NULL;
+        mpScriptNames[nEvent] = nullptr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

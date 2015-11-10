@@ -328,8 +328,8 @@ void ScRandomNumberGeneratorDialog::GenerateNumbers(RNG& randomGenerator, const 
 
 IMPL_LINK_NOARG_TYPED( ScRandomNumberGeneratorDialog, OkClicked, Button*, void )
 {
-    ApplyClicked(NULL);
-    CloseClicked(NULL);
+    ApplyClicked(nullptr);
+    CloseClicked(nullptr);
 }
 
 IMPL_LINK_NOARG_TYPED( ScRandomNumberGeneratorDialog, ApplyClicked, Button*, void )
@@ -344,7 +344,7 @@ IMPL_LINK_NOARG_TYPED( ScRandomNumberGeneratorDialog, CloseClicked, Button*, voi
 
 IMPL_LINK_TYPED( ScRandomNumberGeneratorDialog, GetFocusHandler, Control&, rCtrl, void )
 {
-    Edit* pEdit = NULL;
+    Edit* pEdit = nullptr;
 
     if( (&rCtrl == static_cast<Control*>(mpInputRangeEdit)) || (&rCtrl == static_cast<Control*>(mpInputRangeButton)) )
         pEdit = mpInputRangeEdit;

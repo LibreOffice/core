@@ -685,7 +685,7 @@ sal_uInt16 ScColumn::GetOptimalColWidth(
     {
         ScNeededSizeOptions aOptions;
         aOptions.bFormula = bFormula;
-        const ScPatternAttr* pOldPattern = NULL;
+        const ScPatternAttr* pOldPattern = nullptr;
         SvtScriptType nOldScript = SvtScriptType::NONE;
 
         // Go though all non-empty cells within selection.
@@ -1416,7 +1416,7 @@ SCROW ScColumn::FindNextVisibleRow(SCROW nRow, bool bForward) const
     {
         nRow++;
         SCROW nEndRow = 0;
-        bool bHidden = pDocument->RowHidden(nRow, nTab, NULL, &nEndRow);
+        bool bHidden = pDocument->RowHidden(nRow, nTab, nullptr, &nEndRow);
         if(bHidden)
             return std::min<SCROW>(MAXROW, nEndRow + 1);
         else
@@ -1443,7 +1443,7 @@ SCROW ScColumn::FindNextVisibleRowWithContent(
         {
             nRow++;
             SCROW nEndRow = 0;
-            bool bHidden = pDocument->RowHidden(nRow, nTab, NULL, &nEndRow);
+            bool bHidden = pDocument->RowHidden(nRow, nTab, nullptr, &nEndRow);
             if (bHidden)
             {
                 nRow = nEndRow + 1;
@@ -1753,7 +1753,7 @@ const SvtBroadcaster* ScColumn::GetBroadcaster( sc::ColumnBlockConstPosition& rB
     rBlockPos.miBroadcasterPos = aPos.first;
 
     if (aPos.first->type != sc::element_type_broadcaster)
-        return NULL;
+        return nullptr;
 
     return sc::broadcaster_block::at(*aPos.first->data, aPos.second);
 }
@@ -1807,7 +1807,7 @@ const ScPostIt* ScColumn::GetCellNote( sc::ColumnBlockConstPosition& rBlockPos, 
     rBlockPos.miCellNotePos = aPos.first;
 
     if (aPos.first->type != sc::element_type_cellnote)
-        return NULL;
+        return nullptr;
 
     return sc::cellnote_block::at(*aPos.first->data, aPos.second);
 }
@@ -2468,8 +2468,8 @@ copyFirstFormulaBlock(
     sc::formula_block::iterator it = sc::formula_block::begin(*itBlk->data);
     sc::formula_block::iterator itEnd;
 
-    sc::FormulaGroupContext::NumArrayType* pNumArray = NULL;
-    sc::FormulaGroupContext::StrArrayType* pStrArray = NULL;
+    sc::FormulaGroupContext::NumArrayType* pNumArray = nullptr;
+    sc::FormulaGroupContext::StrArrayType* pStrArray = nullptr;
 
     itEnd = it;
     std::advance(itEnd, nLen);
@@ -2486,7 +2486,7 @@ copyFirstFormulaBlock(
                 rFC.SetErrCode(0);
                 rFC.SetDirtyVar();
             }
-            return NULL;
+            return nullptr;
         }
 
         if (aRes.meType == sc::FormulaResultValue::Value)
@@ -2515,14 +2515,14 @@ copyFirstFormulaBlock(
 
     if (!pNumArray && !pStrArray)
         // At least one of these arrays should be allocated.
-        return NULL;
+        return nullptr;
 
     return rCxt.setCachedColArray(nTab, nCol, pNumArray, pStrArray);
 }
 
 struct NonNullStringFinder : std::unary_function<const rtl_uString*, bool>
 {
-    bool operator() (const rtl_uString* p) const { return p != NULL; }
+    bool operator() (const rtl_uString* p) const { return p != nullptr; }
 };
 
 bool hasNonEmpty( const sc::FormulaGroupContext::StrArrayType& rArray, SCROW nRow1, SCROW nRow2 )
@@ -2547,11 +2547,11 @@ formula::VectorRefArray ScColumn::FetchVectorRefArray( SCROW nRow1, SCROW nRow2 
     sc::FormulaGroupContext::ColArray* pColArray = rCxt.getCachedColArray(nTab, nCol, nRow2+1);
     if (pColArray)
     {
-        const double* pNum = NULL;
+        const double* pNum = nullptr;
         if (pColArray->mpNumArray)
             pNum = &(*pColArray->mpNumArray)[nRow1];
 
-        rtl_uString** pStr = NULL;
+        rtl_uString** pStr = nullptr;
         if (pColArray->mpStrArray && hasNonEmpty(*pColArray->mpStrArray, nRow1, nRow2))
             pStr = &(*pColArray->mpStrArray)[nRow1];
 
@@ -2582,7 +2582,7 @@ formula::VectorRefArray ScColumn::FetchVectorRefArray( SCROW nRow1, SCROW nRow2 
             sc::FormulaGroupContext::NumArrayType& rArray = *rCxt.m_NumArrays.back();
             rArray.resize(nRow2+1, fNan); // allocate to the requested length.
 
-            pColArray = rCxt.setCachedColArray(nTab, nCol, &rArray, NULL);
+            pColArray = rCxt.setCachedColArray(nTab, nCol, &rArray, nullptr);
             if (!pColArray)
                 // Failed to insert a new cached column array.
                 return formula::VectorRefArray(formula::VectorRefArray::Invalid);
@@ -2605,7 +2605,7 @@ formula::VectorRefArray ScColumn::FetchVectorRefArray( SCROW nRow1, SCROW nRow2 
             rCxt.m_StrArrays.push_back(
                 o3tl::make_unique<sc::FormulaGroupContext::StrArrayType>(nRow2+1, nullptr));
             sc::FormulaGroupContext::StrArrayType& rArray = *rCxt.m_StrArrays.back();
-            pColArray = rCxt.setCachedColArray(nTab, nCol, NULL, &rArray);
+            pColArray = rCxt.setCachedColArray(nTab, nCol, nullptr, &rArray);
             if (!pColArray)
                 // Failed to insert a new cached column array.
                 return formula::VectorRefArray();
@@ -2642,8 +2642,8 @@ formula::VectorRefArray ScColumn::FetchVectorRefArray( SCROW nRow1, SCROW nRow2 
                     // Failed to insert a new cached column array.
                     return formula::VectorRefArray(formula::VectorRefArray::Invalid);
 
-                const double* pNum = NULL;
-                rtl_uString** pStr = NULL;
+                const double* pNum = nullptr;
+                rtl_uString** pStr = nullptr;
                 if (pColArray->mpNumArray)
                     pNum = &(*pColArray->mpNumArray)[nRow1];
                 if (pColArray->mpStrArray)
@@ -2662,8 +2662,8 @@ formula::VectorRefArray ScColumn::FetchVectorRefArray( SCROW nRow1, SCROW nRow2 
             if (!appendToBlock(pDocument, rCxt, *pColArray, nPos, nRow2+1, itBlk, maCells.end()))
                 return formula::VectorRefArray(formula::VectorRefArray::Invalid);
 
-            const double* pNum = NULL;
-            rtl_uString** pStr = NULL;
+            const double* pNum = nullptr;
+            rtl_uString** pStr = nullptr;
             if (pColArray->mpNumArray)
                 pNum = &(*pColArray->mpNumArray)[nRow1];
             if (pColArray->mpStrArray)
@@ -2678,7 +2678,7 @@ formula::VectorRefArray ScColumn::FetchVectorRefArray( SCROW nRow1, SCROW nRow2 
             rCxt.m_NumArrays.push_back(
                 o3tl::make_unique<sc::FormulaGroupContext::NumArrayType>(nRow2+1, fNan));
             sc::FormulaGroupContext::NumArrayType& rArray = *rCxt.m_NumArrays.back();
-            pColArray = rCxt.setCachedColArray(nTab, nCol, &rArray, NULL);
+            pColArray = rCxt.setCachedColArray(nTab, nCol, &rArray, nullptr);
             if (!pColArray)
                 // Failed to insert a new cached column array.
                 return formula::VectorRefArray(formula::VectorRefArray::Invalid);
@@ -2771,7 +2771,7 @@ ScFormulaCell * const * ScColumn::GetFormulaCellBlockAddress( SCROW nRow, size_t
     if (!ValidRow(nRow))
     {
         rBlockSize = 0;
-        return NULL;
+        return nullptr;
     }
 
     std::pair<sc::CellStoreType::const_iterator,size_t> aPos = maCells.position(nRow);
@@ -2779,14 +2779,14 @@ ScFormulaCell * const * ScColumn::GetFormulaCellBlockAddress( SCROW nRow, size_t
     if (it == maCells.end())
     {
         rBlockSize = 0;
-        return NULL;
+        return nullptr;
     }
 
     if (it->type != sc::element_type_formula)
     {
         // Not a formula cell.
         rBlockSize = 0;
-        return NULL;
+        return nullptr;
     }
 
     rBlockSize = it->size;
@@ -2797,7 +2797,7 @@ const ScFormulaCell* ScColumn::FetchFormulaCell( SCROW nRow ) const
 {
     size_t nBlockSize = 0;
     ScFormulaCell const * const * pp = GetFormulaCellBlockAddress( nRow, nBlockSize );
-    return pp ? *pp : NULL;
+    return pp ? *pp : nullptr;
 }
 
 void ScColumn::FindDataAreaPos(SCROW& rRow, bool bDown) const

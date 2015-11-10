@@ -149,7 +149,7 @@ SfxChildWinInfo ScInputWindowWrapper::GetInfo() const
 
 static VclPtr<ScTextWndBase> lcl_chooseRuntimeImpl( vcl::Window* pParent, SfxBindings* pBind )
 {
-    ScTabViewShell* pViewSh = NULL;
+    ScTabViewShell* pViewSh = nullptr;
     SfxDispatcher* pDisp = pBind->GetDispatcher();
     if ( pDisp )
     {
@@ -167,7 +167,7 @@ ScInputWindow::ScInputWindow( vcl::Window* pParent, SfxBindings* pBind ) :
         aWndPos         ( VclPtr<ScPosWnd>::Create(this) ),
         pRuntimeWindow  ( lcl_chooseRuntimeImpl( this, pBind ) ),
         aTextWindow     ( *pRuntimeWindow ),
-        pInputHdl       ( NULL ),
+        pInputHdl       ( nullptr ),
         aTextOk         ( ScResId( SCSTR_QHELP_BTNOK ) ),       // Not always new as a Resource
         aTextCancel     ( ScResId( SCSTR_QHELP_BTNCANCEL ) ),
         aTextSum        ( ScResId( SCSTR_QHELP_BTNSUM ) ),
@@ -181,7 +181,7 @@ ScInputWindow::ScInputWindow( vcl::Window* pParent, SfxBindings* pBind ) :
 
     // #i73615# don't rely on SfxViewShell::Current while constructing the input line
     // (also for GetInputHdl below)
-    ScTabViewShell* pViewSh = NULL;
+    ScTabViewShell* pViewSh = nullptr;
     SfxDispatcher* pDisp = pBind->GetDispatcher();
     if ( pDisp )
     {
@@ -254,7 +254,7 @@ ScInputWindow::~ScInputWindow()
 
 void ScInputWindow::dispose()
 {
-    bool bDown = ( ScGlobal::pSysLocale == NULL ); // after Clear?
+    bool bDown = ( ScGlobal::pSysLocale == nullptr ); // after Clear?
 
     //  if any view's input handler has a pointer to this input window, reset it
     //  (may be several ones, #74522#)
@@ -268,7 +268,7 @@ void ScInputWindow::dispose()
             ScInputHandler* pHdl = static_cast<ScTabViewShell*>(pSh)->GetInputHandler();
             if ( pHdl && pHdl->GetInputWindow() == this )
             {
-                pHdl->SetInputWindow( NULL );
+                pHdl->SetInputWindow( nullptr );
                 pHdl->StopInputWinEngine( false );  // reset pTopView pointer
             }
             pSh = SfxViewShell::GetNext( *pSh, true, checkSfxViewShell<ScTabViewShell> );
@@ -939,7 +939,7 @@ void ScInputBarGroup::Resize()
     ScInputWindow *pParent;
     pParent = dynamic_cast<ScInputWindow*>(w);
 
-    if (pParent == NULL)
+    if (pParent == nullptr)
     {
         OSL_FAIL("The parent window pointer pParent is null");
         return;
@@ -1044,7 +1044,7 @@ IMPL_LINK_NOARG_TYPED(ScInputBarGroup, ClickHdl, Button*, void)
     ScInputWindow* pParent;
     pParent = dynamic_cast<ScInputWindow*>(w);
 
-    if (pParent == NULL)
+    if (pParent == nullptr)
     {
         OSL_FAIL("The parent window pointer pParent is null");
         return;
@@ -1094,7 +1094,7 @@ void ScInputBarGroup::TriggerToolboxLayout()
             else
                 rParent.SetToolbarLayoutMode( TBX_LAYOUT_NORMAL );
             xLayoutManager->lock();
-            DataChangedEvent aFakeUpdate( DataChangedEventType::SETTINGS, NULL,  AllSettingsFlags::STYLE );
+            DataChangedEvent aFakeUpdate( DataChangedEventType::SETTINGS, nullptr,  AllSettingsFlags::STYLE );
 
             // this basically will trigger the reposititioning of the
             // items in the toolbar from ImplFormat ( which is controlled by
@@ -1320,7 +1320,7 @@ void ScMultiTextWnd::InitEditEngine()
 {
     ScFieldEditEngine* pNew;
     ScTabViewShell* pViewSh = GetViewShell();
-    ScDocShell* pDocSh = NULL;
+    ScDocShell* pDocSh = nullptr;
     if ( pViewSh )
     {
         pDocSh = pViewSh->GetViewData().GetDocShell();
@@ -1328,7 +1328,7 @@ void ScMultiTextWnd::InitEditEngine()
         pNew = new ScFieldEditEngine(pDoc, pDoc->GetEnginePool(), pDoc->GetEditPool());
     }
     else
-        pNew = new ScFieldEditEngine(NULL, EditEngine::CreatePool(), NULL, true);
+        pNew = new ScFieldEditEngine(nullptr, EditEngine::CreatePool(), nullptr, true);
     pNew->SetExecuteURL( false );
     pEditEngine = pNew;
 
@@ -1420,8 +1420,8 @@ void ScMultiTextWnd::SetTextString( const OUString& rNewString )
 ScTextWnd::ScTextWnd( vcl::Window* pParent, ScTabViewShell* pViewSh )
     :   ScTextWndBase(pParent, WinBits(WB_HIDE | WB_BORDER)),
         DragSourceHelper(this),
-        pEditEngine  (NULL),
-        pEditView    (NULL),
+        pEditEngine  (nullptr),
+        pEditView    (nullptr),
         bIsInsertMode(true),
         bFormulaMode (false),
         bInputMode   (false),
@@ -1470,9 +1470,9 @@ void ScTextWnd::dispose()
         maAccTextDatas.back()->Dispose();
     }
     delete pEditView;
-    pEditView = NULL;
+    pEditView = nullptr;
     delete pEditEngine;
-    pEditEngine = NULL;
+    pEditEngine = nullptr;
 
     ScTextWndBase::dispose();
 }
@@ -1577,7 +1577,7 @@ void ScTextWnd::Command( const CommandEvent& rCEvt )
         {
             // Is dragged onto another View?
             ScTabViewShell* pEndViewSh = ScTabViewShell::GetActiveViewShell();
-            if ( pEndViewSh != pStartViewSh && pStartViewSh != NULL )
+            if ( pEndViewSh != pStartViewSh && pStartViewSh != nullptr )
             {
                 ScViewData& rViewData = pStartViewSh->GetViewData();
                 ScInputHandler* pHdl = pScMod->GetInputHdl( pStartViewSh );
@@ -1707,7 +1707,7 @@ void ScTextWnd::StartEditEngine()
             pNew = new ScFieldEditEngine(pDoc, pDoc->GetEnginePool(), pDoc->GetEditPool());
         }
         else
-            pNew = new ScFieldEditEngine(NULL, EditEngine::CreatePool(), NULL, true);
+            pNew = new ScFieldEditEngine(nullptr, EditEngine::CreatePool(), nullptr, true);
         pNew->SetExecuteURL( false );
         pEditEngine = pNew;
 
@@ -1949,7 +1949,7 @@ void ScTextWnd::MakeDialogEditView()
         pNew = new ScFieldEditEngine(pDoc, pDoc->GetEnginePool(), pDoc->GetEditPool());
     }
     else
-        pNew = new ScFieldEditEngine(NULL, EditEngine::CreatePool(), NULL, true);
+        pNew = new ScFieldEditEngine(nullptr, EditEngine::CreatePool(), nullptr, true);
     pNew->SetExecuteURL( false );
     pEditEngine = pNew;
 
@@ -1994,7 +1994,7 @@ void ScTextWnd::ImplInitSettings()
 
 css::uno::Reference< css::accessibility::XAccessible > ScTextWnd::CreateAccessible()
 {
-    return new ScAccessibleEditObject(GetAccessibleParentWindow()->GetAccessible(), NULL, this,
+    return new ScAccessibleEditObject(GetAccessibleParentWindow()->GetAccessible(), nullptr, this,
         OUString(ScResId(STR_ACC_EDITLINE_NAME)),
         OUString(ScResId(STR_ACC_EDITLINE_DESCR)), ScAccessibleEditObject::EditLine);
 }
@@ -2036,7 +2036,7 @@ void ScTextWnd::TextGrabFocus()
 
 ScPosWnd::ScPosWnd( vcl::Window* pParent ) :
     ComboBox    ( pParent, WinBits(WB_HIDE | WB_DROPDOWN) ),
-    pAccel      ( NULL ),
+    pAccel      ( nullptr ),
     nTipVisible ( 0 ),
     bFormulaMode( false )
 {

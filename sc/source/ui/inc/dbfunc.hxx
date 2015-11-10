@@ -55,7 +55,7 @@ public:
     SC_DLLPUBLIC void           Query( const ScQueryParam& rQueryParam,
                            const ScRange* pAdvSource, bool bRecord );
     void            DoSubTotals( const ScSubTotalParam& rParam, bool bRecord = true,
-                            const ScSortParam* pForceNewSort = NULL );
+                            const ScSortParam* pForceNewSort = nullptr );
 
     void            ToggleAutoFilter();
     void            HideAutoFilter();
@@ -86,11 +86,11 @@ public:
     void            UngroupDataPilot();
     void DataPilotInput( const ScAddress& rPos, const OUString& rString );
 
-    bool            DataPilotSort( const ScAddress& rPos, bool bAscending, sal_uInt16* pUserListId = NULL );
+    bool            DataPilotSort( const ScAddress& rPos, bool bAscending, sal_uInt16* pUserListId = nullptr );
     bool            DataPilotMove( const ScRange& rSource, const ScAddress& rDest );
 
     bool HasSelectionForDrillDown( sal_uInt16& rOrientation );
-    void SetDataPilotDetails(bool bShow, const OUString* pNewDimensionName = NULL);
+    void SetDataPilotDetails(bool bShow, const OUString* pNewDimensionName = nullptr);
 
     void            ShowDataPilotSourceData( ScDPObject& rDPObj,
                         const css::uno::Sequence< css::sheet::DataPilotFieldFilter >& rFilters );

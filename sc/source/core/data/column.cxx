@@ -76,7 +76,7 @@ inline bool IsAmbiguousScriptNonZero( SvtScriptType nScript )
 }
 
 ScNeededSizeOptions::ScNeededSizeOptions() :
-    pPattern(NULL), bFormula(false), bSkipMerged(true), bGetFont(true), bTotalSize(false)
+    pPattern(nullptr), bFormula(false), bSkipMerged(true), bGetFont(true), bTotalSize(false)
 {
 }
 
@@ -87,8 +87,8 @@ ScColumn::ScColumn() :
     maCells(MAXROWCOUNT),
     nCol( 0 ),
     nTab( 0 ),
-    pAttrArray( NULL ),
-    pDocument( NULL ),
+    pAttrArray( nullptr ),
+    pDocument( nullptr ),
     mbDirtyGroups(true)
 {
 }
@@ -380,14 +380,14 @@ const SfxPoolItem& ScColumn::GetAttr( SCROW nRow, sal_uInt16 nWhich ) const
 const ScPatternAttr* ScColumn::GetMostUsedPattern( SCROW nStartRow, SCROW nEndRow ) const
 {
     ::std::map< const ScPatternAttr*, size_t > aAttrMap;
-    const ScPatternAttr* pMaxPattern = 0;
+    const ScPatternAttr* pMaxPattern = nullptr;
     size_t nMaxCount = 0;
 
     ScAttrIterator aAttrIter( pAttrArray, nStartRow, nEndRow );
     const ScPatternAttr* pPattern;
     SCROW nAttrRow1 = 0, nAttrRow2 = 0;
 
-    while( (pPattern = aAttrIter.Next( nAttrRow1, nAttrRow2 )) != 0 )
+    while( (pPattern = aAttrIter.Next( nAttrRow1, nAttrRow2 )) != nullptr )
     {
         size_t& rnCount = aAttrMap[ pPattern ];
         rnCount += (nAttrRow2 - nAttrRow1 + 1);
@@ -603,12 +603,12 @@ const ScStyleSheet* ScColumn::GetSelectionStyle( const ScMarkData& rMark, bool& 
     if (!rMark.IsMultiMarked())
     {
         OSL_FAIL("No selection in ScColumn::GetSelectionStyle");
-        return NULL;
+        return nullptr;
     }
 
     bool bEqual = true;
 
-    const ScStyleSheet* pStyle = NULL;
+    const ScStyleSheet* pStyle = nullptr;
     const ScStyleSheet* pNewStyle;
 
     ScMarkArrayIter aMarkIter( rMark.GetArray() + nCol );
@@ -620,7 +620,7 @@ const ScStyleSheet* ScColumn::GetSelectionStyle( const ScMarkData& rMark, bool& 
         SCROW nRow;
         SCROW nDummy;
         const ScPatternAttr* pPattern;
-        while (bEqual && ( pPattern = aAttrIter.Next( nRow, nDummy ) ) != NULL)
+        while (bEqual && ( pPattern = aAttrIter.Next( nRow, nDummy ) ) != nullptr)
         {
             pNewStyle = pPattern->GetStyleSheet();
             rFound = true;
@@ -630,7 +630,7 @@ const ScStyleSheet* ScColumn::GetSelectionStyle( const ScMarkData& rMark, bool& 
         }
     }
 
-    return bEqual ? pStyle : NULL;
+    return bEqual ? pStyle : nullptr;
 }
 
 const ScStyleSheet* ScColumn::GetAreaStyle( bool& rFound, SCROW nRow1, SCROW nRow2 ) const
@@ -639,14 +639,14 @@ const ScStyleSheet* ScColumn::GetAreaStyle( bool& rFound, SCROW nRow1, SCROW nRo
 
     bool bEqual = true;
 
-    const ScStyleSheet* pStyle = NULL;
+    const ScStyleSheet* pStyle = nullptr;
     const ScStyleSheet* pNewStyle;
 
     ScAttrIterator aAttrIter( pAttrArray, nRow1, nRow2 );
     SCROW nRow;
     SCROW nDummy;
     const ScPatternAttr* pPattern;
-    while (bEqual && ( pPattern = aAttrIter.Next( nRow, nDummy ) ) != NULL)
+    while (bEqual && ( pPattern = aAttrIter.Next( nRow, nDummy ) ) != nullptr)
     {
         pNewStyle = pPattern->GetStyleSheet();
         rFound = true;
@@ -655,7 +655,7 @@ const ScStyleSheet* ScColumn::GetAreaStyle( bool& rFound, SCROW nRow1, SCROW nRo
         pStyle = pNewStyle;
     }
 
-    return bEqual ? pStyle : NULL;
+    return bEqual ? pStyle : nullptr;
 }
 
 void ScColumn::FindStyleSheet( const SfxStyleSheetBase* pStyleSheet, ScFlatBoolRowSegments& rUsedRows, bool bReset )
@@ -774,12 +774,12 @@ const sc::CellTextAttr* ScColumn::GetCellTextAttr( sc::ColumnBlockConstPosition&
 {
     sc::CellTextAttrStoreType::const_position_type aPos = maCellTextAttrs.position(rBlockPos.miCellTextAttrPos, nRow);
     if (aPos.first == maCellTextAttrs.end())
-        return NULL;
+        return nullptr;
 
     rBlockPos.miCellTextAttrPos = aPos.first;
 
     if (aPos.first->type != sc::element_type_celltextattr)
-        return NULL;
+        return nullptr;
 
     return &sc::celltextattr_block::at(*aPos.first->data, aPos.second);
 }
@@ -1680,7 +1680,7 @@ void ScColumn::CopyToColumn(
             // within the same document. If not, re-intern shared strings.
             svl::SharedStringPool* pSharedStringPool =
                 (pDocument->GetPool() != rColumn.pDocument->GetPool()) ?
-                &rColumn.pDocument->GetSharedStringPool() : NULL;
+                &rColumn.pDocument->GetSharedStringPool() : nullptr;
             CopyByCloneHandler aFunc(*this, rColumn, rCxt.getBlockPosition(rColumn.nTab, rColumn.nCol), nFlags,
                     pSharedStringPool);
             aFunc.setStartListening(rCxt.isStartListening());
@@ -1719,7 +1719,7 @@ void ScColumn::CopyUpdated( const ScColumn& rPosCol, ScColumn& rDestCol ) const
     aRangeSet.getSpans(aRanges);
 
     bool bCopyNotes = true;
-    CopyToClipHandler aFunc(*this, rDestCol, NULL, bCopyNotes);
+    CopyToClipHandler aFunc(*this, rDestCol, nullptr, bCopyNotes);
     sc::CellStoreType::const_iterator itPos = maCells.begin();
     sc::SingleColumnSpanSet::SpansType::const_iterator it = aRanges.begin(), itEnd = aRanges.end();
     for (; it != itEnd; ++it)
@@ -3325,7 +3325,7 @@ void ScColumn::TransferListeners(
             rDestCol.maBroadcasters.position(itDestPos, nDestRow);
 
         itDestPos = aPos.first;
-        SvtBroadcaster* pDestBrd = NULL;
+        SvtBroadcaster* pDestBrd = nullptr;
         if (aPos.first->type == sc::element_type_broadcaster)
         {
             // Existing broadcaster.

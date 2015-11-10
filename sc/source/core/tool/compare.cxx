@@ -160,10 +160,10 @@ double CompareFunc( const Compare& rComp, CompareOptions* pOptions )
                 {
                     OUString aCell( pTransliteration->transliterate(
                                 rCell1.maStr.getString(), ScGlobal::eLnge, 0,
-                                rCell1.maStr.getLength(), NULL));
+                                rCell1.maStr.getLength(), nullptr));
                     OUString aQuer( pTransliteration->transliterate(
                                 rCell2.maStr.getString(), ScGlobal::eLnge, 0,
-                                rCell2.maStr.getLength(), NULL));
+                                rCell2.maStr.getLength(), nullptr));
                     bMatch = (aCell.indexOf( aQuer ) != -1);
                 }
                 fRes = (bMatch ? 0 : 1);

@@ -38,7 +38,7 @@ const void* ScIMapDlgGetObj( SvxIMapDlg* pDlg )
     if ( pDlg )
         return pDlg->GetEditingObject();
     else
-        return NULL;
+        return nullptr;
 }
 
 const ImageMap& ScIMapDlgGetMap( SvxIMapDlg* pDlg )

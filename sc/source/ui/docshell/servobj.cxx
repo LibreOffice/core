@@ -116,7 +116,7 @@ void ScServerObject::Clear()
     if (pDocSh)
     {
         ScDocShell* pTemp = pDocSh;
-        pDocSh = NULL;
+        pDocSh = nullptr;
 
         pTemp->GetDocument().EndListeningArea(aRange, false, &aForwarder);
         pTemp->GetDocument().GetLinkManager()->RemoveServer( this );
@@ -204,7 +204,7 @@ void ScServerObject::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>( &rHint );
         if ( pSimpleHint && pSimpleHint->GetId() == SFX_HINT_DYING )
         {
-            pDocSh = NULL;
+            pDocSh = nullptr;
             EndListening(*SfxGetpApp());
             //  don't access DocShell anymore for EndListening etc.
         }

@@ -166,12 +166,12 @@ ScMemChart* ScChartArray::CreateMemChartSingle()
     // Skip hidden columns.
     // TODO: make use of last column value once implemented.
     SCCOL nLastCol = -1;
-    while (pDocument->ColHidden(nCol1, nTab1, NULL, &nLastCol))
+    while (pDocument->ColHidden(nCol1, nTab1, nullptr, &nLastCol))
         ++nCol1;
 
     // Skip hidden rows.
     SCROW nLastRow = -1;
-    if (pDocument->RowHidden(nRow1, nTab1, NULL, &nLastRow))
+    if (pDocument->RowHidden(nRow1, nTab1, nullptr, &nLastRow))
         nRow1 = nLastRow + 1;
 
     // if everything is hidden then the label remains at the beginning
@@ -192,7 +192,7 @@ ScMemChart* ScChartArray::CreateMemChartSingle()
     for (SCSIZE i=0; i<nTotalCols; i++)
     {
         SCCOL nThisCol = sal::static_int_cast<SCCOL>(nCol1+i);
-        if (!pDocument->ColHidden(nThisCol, nTab1, NULL, &nLastCol))
+        if (!pDocument->ColHidden(nThisCol, nTab1, nullptr, &nLastCol))
             aCols.push_back(nThisCol);
     }
     SCSIZE nColCount = aCols.size();
@@ -206,7 +206,7 @@ ScMemChart* ScChartArray::CreateMemChartSingle()
         SCROW nThisRow = nRow1;
         while (nThisRow <= nRow2)
         {
-            if (pDocument->RowHidden(nThisRow, nTab1, NULL, &nLastRow))
+            if (pDocument->RowHidden(nThisRow, nTab1, nullptr, &nLastRow))
                 nThisRow = nLastRow;
             else
                 aRows.push_back(nThisRow);

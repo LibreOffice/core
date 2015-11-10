@@ -311,7 +311,7 @@ void ScMyValidationsContainer::WriteMessage(ScXMLExport& rExport,
         rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DISPLAY, XML_TRUE);
     else
         rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DISPLAY, XML_FALSE);
-    SvXMLElementExport* pMessage(NULL);
+    SvXMLElementExport* pMessage(nullptr);
     if (bIsHelpMessage)
         pMessage = new SvXMLElementExport(rExport, XML_NAMESPACE_TABLE, XML_HELP_MESSAGE, true, true);
     else
@@ -525,7 +525,7 @@ bool ScMyRowFormatRange::operator< (const ScMyRowFormatRange& rRange) const
 
 ScRowFormatRanges::ScRowFormatRanges()
     : aRowFormatRanges(),
-    pColDefaults(NULL),
+    pColDefaults(nullptr),
     nSize(0)
 {
 }
@@ -705,7 +705,7 @@ ScFormatRangeStyles::ScFormatRangeStyles()
     : aTables(),
     aStyleNames(),
     aAutoStyleNames(),
-    pColDefaults(0)
+    pColDefaults(nullptr)
 {
 }
 

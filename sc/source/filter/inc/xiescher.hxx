@@ -466,7 +466,7 @@ public:
     virtual             ~XclImpControlHelper();
 
     /** Returns true, if a linked cell address is present. */
-    inline bool         HasCellLink() const { return mxCellLink != 0; }
+    inline bool         HasCellLink() const { return mxCellLink != nullptr; }
 
     /** Returns the SdrObject from the passed control shape and sets the bounding rectangle. */
     SdrObjectPtr        CreateSdrObjectFromShape(
@@ -891,7 +891,7 @@ public:
 
 private:
     /** Updates the data of a connected shape in a connector rule. */
-    void                UpdateConnection( sal_uInt32 nDffShapeId, SdrObject*& rpSdrObj, sal_uInt32* pnDffFlags = 0 );
+    void                UpdateConnection( sal_uInt32 nDffShapeId, SdrObject*& rpSdrObj, sal_uInt32* pnDffFlags = nullptr );
 
 private:
     /** Stores data about an SdrObject processed during import. */
@@ -899,7 +899,7 @@ private:
     {
         SdrObject*          mpSdrObj;       /// Pointer to an SdrObject.
         sal_uInt32          mnDffFlags;     /// Shape flags from DFF stream.
-        inline explicit     XclImpSdrInfo() : mpSdrObj( 0 ), mnDffFlags( 0 ) {}
+        inline explicit     XclImpSdrInfo() : mpSdrObj( nullptr ), mnDffFlags( 0 ) {}
         inline void         Set( SdrObject* pSdrObj, sal_uInt32 nDffFlags )
                                 { mpSdrObj = pSdrObj; mnDffFlags = nDffFlags; }
     };
@@ -978,7 +978,7 @@ private:
                             DffObjData& rDffObjData,
                             void* pClientData,
                             Rectangle& rTextRect,
-                            SdrObject* pOldSdrObj = 0 ) override;
+                            SdrObject* pOldSdrObj = nullptr ) override;
 
     // virtual functions of SvxMSConvertOCXControls
 

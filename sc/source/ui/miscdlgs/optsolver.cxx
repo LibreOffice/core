@@ -186,7 +186,7 @@ ScOptSolverDlg::ScOptSolverDlg( SfxBindings* pB, SfxChildWindow* pCW, vcl::Windo
     , mpDocShell(pDocSh)
     , mrDoc(pDocSh->GetDocument())
     , mnCurTab(aCursorPos.Tab())
-    , mpEdActive(NULL)
+    , mpEdActive(nullptr)
     , mbDlgLostFocus(false)
     , nScrollPos(0)
 {
@@ -453,7 +453,7 @@ void ScOptSolverDlg::Init(const ScAddress& rCursorPos)
         m_pRbMax->Check();
         OUString aCursorStr;
         if ( !mrDoc.GetRangeAtBlock( ScRange(rCursorPos), &aCursorStr ) )
-            aCursorStr = rCursorPos.Format(SCA_ABS, NULL, mrDoc.GetAddressConvention());
+            aCursorStr = rCursorPos.Format(SCA_ABS, nullptr, mrDoc.GetAddressConvention());
         m_pEdObjectiveCell->SetRefString( aCursorStr );
         if ( nImplCount > 0 )
             maEngine = maImplNames[0];  // use first implementation
@@ -643,8 +643,8 @@ IMPL_LINK_TYPED( ScOptSolverDlg, BtnHdl, Button*, pBtn, void )
 
 IMPL_LINK_TYPED( ScOptSolverDlg, GetFocusHdl, Control&, rCtrl, void )
 {
-    Edit* pEdit = NULL;
-    mpEdActive = NULL;
+    Edit* pEdit = nullptr;
+    mpEdActive = nullptr;
 
     if( &rCtrl == m_pEdObjectiveCell || &rCtrl == m_pRBObjectiveCell )
         pEdit = mpEdActive = m_pEdObjectiveCell;
@@ -745,7 +745,7 @@ IMPL_LINK_TYPED( ScOptSolverDlg, CursorUpHdl, ScCursorRefEdit&, rEdit, void )
     }
     else
     {
-        formula::RefEdit* pFocus = NULL;
+        formula::RefEdit* pFocus = nullptr;
         for ( sal_uInt16 nRow = 1; nRow < EDIT_ROW_COUNT; ++nRow )      // second row or below: move focus
         {
             if ( &rEdit == mpLeftEdit[nRow] )
@@ -774,7 +774,7 @@ IMPL_LINK_TYPED( ScOptSolverDlg, CursorDownHdl, ScCursorRefEdit&, rEdit, void )
     }
     else
     {
-        formula::RefEdit* pFocus = NULL;
+        formula::RefEdit* pFocus = nullptr;
         for ( sal_uInt16 nRow = 0; nRow+1 < EDIT_ROW_COUNT; ++nRow )      // before last row: move focus
         {
             if ( &rEdit == mpLeftEdit[nRow] )
@@ -908,7 +908,7 @@ bool ScOptSolverDlg::CallSolver()       // return true -> close dialog after cal
             ScRange aLeftRange;
             if ( !ParseRef( aLeftRange, aConstrIter->aLeftStr, true ) )
             {
-                ShowError( true, NULL );
+                ShowError( true, nullptr );
                 return false;
             }
 
@@ -924,7 +924,7 @@ bool ScOptSolverDlg::CallSolver()       // return true -> close dialog after cal
                     bIsRange = true;    // same size as "left" range, resolve into single cells
                 else
                 {
-                    ShowError( true, NULL );
+                    ShowError( true, nullptr );
                     return false;
                 }
             }
@@ -937,7 +937,7 @@ bool ScOptSolverDlg::CallSolver()       // return true -> close dialog after cal
                 else if ( aConstraint.Operator != sheet::SolverConstraintOperator_INTEGER &&
                           aConstraint.Operator != sheet::SolverConstraintOperator_BINARY )
                 {
-                    ShowError( true, NULL );
+                    ShowError( true, nullptr );
                     return false;
                 }
             }

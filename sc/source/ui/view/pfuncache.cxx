@@ -40,7 +40,7 @@ ScPrintFuncCache::ScPrintFuncCache( ScDocShell* pD, const ScMarkData& rMark,
     SfxPrinter* pPrinter = pDocSh->GetPrinter();
 
     ScRange aRange;
-    const ScRange* pSelRange = NULL;
+    const ScRange* pSelRange = nullptr;
     if ( rMark.IsMarked() )
     {
         rMark.GetMarkArea( aRange );
@@ -84,7 +84,7 @@ void ScPrintFuncCache::InitLocations( const ScMarkData& rMark, OutputDevice* pDe
         return;                 // initialize only once
 
     ScRange aRange;
-    const ScRange* pSelRange = NULL;
+    const ScRange* pSelRange = nullptr;
     if ( rMark.IsMarked() )
     {
         rMark.GetMarkArea( aRange );

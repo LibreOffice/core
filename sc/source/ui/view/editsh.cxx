@@ -94,7 +94,7 @@ void ScEditShell::InitInterface_Impl()
 ScEditShell::ScEditShell(EditView* pView, ScViewData* pData) :
     pEditView       (pView),
     pViewData       (pData),
-    pClipEvtLstnr   (NULL),
+    pClipEvtLstnr   (nullptr),
     bPastePossible  (false),
     bIsInsertMode   (true)
 {
@@ -386,14 +386,14 @@ void ScEditShell::Execute( SfxRequest& rReq )
                 SvxFontItem aNewItem( EE_CHAR_FONTINFO );
 
                 const SfxItemSet *pArgs = rReq.GetArgs();
-                const SfxPoolItem* pItem = 0;
+                const SfxPoolItem* pItem = nullptr;
                 if( pArgs )
                     pArgs->GetItemState(GetPool().GetWhich(SID_CHARMAP), false, &pItem);
 
                 if ( pItem )
                 {
                     aString = static_cast<const SfxStringItem*>(pItem)->GetValue();
-                    const SfxPoolItem* pFtItem = NULL;
+                    const SfxPoolItem* pFtItem = nullptr;
                     pArgs->GetItemState( GetPool().GetWhich(SID_ATTR_SPECIALCHAR), false, &pFtItem);
                     const SfxStringItem* pFontItem = dynamic_cast<const SfxStringItem*>( pFtItem  );
                     if ( pFontItem )
@@ -796,7 +796,7 @@ const SvxURLField* ScEditShell::GetURLField()
         }
     }
 
-    return NULL;
+    return nullptr;
 }
 
 IMPL_LINK_TYPED( ScEditShell, ClipboardChanged, TransferableDataHelper*, pDataHelper, void )
@@ -1265,7 +1265,7 @@ void ScEditShell::GetUndoState(SfxItemSet &rSet)
         sal_uInt16 nWhich = aIter.FirstWhich();
         while( nWhich )
         {
-            pViewFrm->GetSlotState( nWhich, NULL, &rSet );
+            pViewFrm->GetSlotState( nWhich, nullptr, &rSet );
             nWhich = aIter.NextWhich();
         }
     }

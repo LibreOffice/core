@@ -516,7 +516,7 @@ const SfxPoolItem* ScAutoFormatData::GetItem( sal_uInt16 nIndex, sal_uInt16 nWhi
         case ATTR_ROTATE_VALUE:     return &rField.GetRotateAngle();
         case ATTR_ROTATE_MODE:      return &rField.GetRotateMode();
     }
-    return NULL;
+    return nullptr;
 }
 
 void ScAutoFormatData::PutItem( sal_uInt16 nIndex, const SfxPoolItem& rItem )
@@ -927,7 +927,7 @@ void ScAutoFormat::SetSaveLater( bool bSet )
 const ScAutoFormatData* ScAutoFormat::findByIndex(size_t nIndex) const
 {
     if (nIndex >= maData.size())
-        return NULL;
+        return nullptr;
 
     MapType::const_iterator it = maData.begin();
     std::advance(it, nIndex);
@@ -937,7 +937,7 @@ const ScAutoFormatData* ScAutoFormat::findByIndex(size_t nIndex) const
 ScAutoFormatData* ScAutoFormat::findByIndex(size_t nIndex)
 {
     if (nIndex >= maData.size())
-        return NULL;
+        return nullptr;
 
     MapType::iterator it = maData.begin();
     std::advance(it, nIndex);

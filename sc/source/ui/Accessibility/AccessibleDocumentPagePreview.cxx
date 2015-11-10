@@ -74,7 +74,7 @@ struct ScAccNote
     bool    mbMarkNote;
 
     ScAccNote()
-        : mpTextHelper(NULL)
+        : mpTextHelper(nullptr)
         , mnParaCount(0)
         , mbMarkNote(false)
     {
@@ -474,7 +474,7 @@ void ScNotesChildren::DataChanged(const Rectangle& rVisRect)
 
 inline ScDocument* ScNotesChildren::GetDocument() const
 {
-    ScDocument* pDoc = NULL;
+    ScDocument* pDoc = nullptr;
     if (mpViewShell)
         pDoc = &mpViewShell->GetDocument();
     return pDoc;
@@ -503,7 +503,7 @@ private:
 };
 
 ScIAccessibleViewForwarder::ScIAccessibleViewForwarder()
-    : mpViewShell(NULL), mpAccDoc(NULL), mbValid(false)
+    : mpViewShell(nullptr), mpAccDoc(nullptr), mbValid(false)
 {
 }
 
@@ -1019,7 +1019,7 @@ uno::Reference<XAccessible> ScShapeChildren::GetBackgroundShapeAt(const awt::Poi
         {
             ::accessibility::AccessibleShapeTreeInfo aShapeTreeInfo;
             aShapeTreeInfo.SetSdrView(mpViewShell->GetPreview()->GetDrawView());
-            aShapeTreeInfo.SetController(NULL);
+            aShapeTreeInfo.SetController(nullptr);
             aShapeTreeInfo.SetWindow(mpViewShell->GetWindow());
             aShapeTreeInfo.SetViewForwarder(&(maShapeRanges[rShape.mnRangeId].maViewForwarder));
             rShape.mpAccShape = rShapeHandler.CreateAccessibleObject(aShapeInfo, aShapeTreeInfo);
@@ -1115,7 +1115,7 @@ void ScShapeChildren::FillShapes(const Rectangle& aPixelPaintRect, const MapMode
 SdrPage* ScShapeChildren::GetDrawPage() const
 {
     SCTAB nTab( mpViewShell->GetLocationData().GetPrintTab() );
-    SdrPage* pDrawPage = NULL;
+    SdrPage* pDrawPage = nullptr;
     ScDocument& rDoc = mpViewShell->GetDocument();
     if (rDoc.GetDrawLayer())
     {
@@ -1192,10 +1192,10 @@ ScAccessibleDocumentPagePreview::ScAccessibleDocumentPagePreview(
         const uno::Reference<XAccessible>& rxParent, ScPreviewShell* pViewShell ) :
     ScAccessibleDocumentBase(rxParent),
     mpViewShell(pViewShell),
-    mpNotesChildren(NULL),
-    mpShapeChildren(NULL),
-    mpHeader(NULL),
-    mpFooter(NULL)
+    mpNotesChildren(nullptr),
+    mpShapeChildren(nullptr),
+    mpHeader(nullptr),
+    mpFooter(nullptr)
 {
     if (pViewShell)
         pViewShell->AddAccessibilityObject(*this);
@@ -1220,18 +1220,18 @@ void SAL_CALL ScAccessibleDocumentPagePreview::disposing()
     if (mpHeader)
     {
         mpHeader->release();
-        mpHeader = NULL;
+        mpHeader = nullptr;
     }
     if (mpFooter)
     {
         mpFooter->release();
-        mpFooter = NULL;
+        mpFooter = nullptr;
     }
 
     if (mpViewShell)
     {
         mpViewShell->RemoveAccessibilityObject(*this);
-        mpViewShell = NULL;
+        mpViewShell = nullptr;
     }
 
     // no need to Dispose the AccessibleTextHelper,
@@ -1576,7 +1576,7 @@ Rectangle ScAccessibleDocumentPagePreview::GetBoundingBoxOnScreen() const throw 
     {
         vcl::Window* pWindow = mpViewShell->GetWindow();
         if (pWindow)
-            aRect = pWindow->GetWindowExtentsRelative(NULL);
+            aRect = pWindow->GetWindowExtentsRelative(nullptr);
     }
     return aRect;
 }

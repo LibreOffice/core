@@ -80,7 +80,7 @@ ImportLotus::~ImportLotus()
 {
     LotusContext &rContext = aConv.getContext();
     delete rContext.pLotusRoot;
-    rContext.pLotusRoot = NULL;
+    rContext.pLotusRoot = nullptr;
 
     // no need 4 pLotusRoot anymore
     aLotImpSemaphore.release();
@@ -286,7 +286,7 @@ ScFormulaCell *ImportLotus::Formulacell( sal_uInt16 n )
     pD->EnsureTable(aAddr.Tab());
     pD->SetFormulaCell(aAddr, pCell);
 
-    return NULL;
+    return nullptr;
 }
 
 void ImportLotus::Read( OUString &r )

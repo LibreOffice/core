@@ -40,7 +40,7 @@ ContextHandlerRef ScenarioContext::onCreateContext( sal_Int32 nElement, const At
             if( nElement == XLS_TOKEN( inputCells ) ) mrScenario.importInputCells( rAttribs );
         break;
     }
-    return 0;
+    return nullptr;
 }
 
 void ScenarioContext::onStartElement( const AttributeList& rAttribs )
@@ -57,7 +57,7 @@ ContextHandlerRef ScenarioContext::onCreateRecordContext( sal_Int32 nRecId, Sequ
             if( nRecId == BIFF12_ID_INPUTCELLS ) mrScenario.importInputCells( rStrm );
         break;
     }
-    return 0;
+    return nullptr;
 }
 
 void ScenarioContext::onStartRecord( SequenceInputStream& rStrm )
@@ -80,7 +80,7 @@ ContextHandlerRef ScenariosContext::onCreateContext( sal_Int32 nElement, const A
             if( nElement == XLS_TOKEN( scenario ) ) return new ScenarioContext( *this, mrSheetScenarios );
         break;
     }
-    return 0;
+    return nullptr;
 }
 
 void ScenariosContext::onStartElement( const AttributeList& rAttribs )
@@ -97,7 +97,7 @@ ContextHandlerRef ScenariosContext::onCreateRecordContext( sal_Int32 nRecId, Seq
             if( nRecId == BIFF12_ID_SCENARIO ) return new ScenarioContext( *this, mrSheetScenarios );
         break;
     }
-    return 0;
+    return nullptr;
 }
 
 void ScenariosContext::onStartRecord( SequenceInputStream& rStrm )

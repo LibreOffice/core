@@ -157,8 +157,8 @@ public:
                         ScDocShell* pNewDocShell,
                         ::std::vector<SCTAB>* pOldTabs,
                         ::std::vector<SCTAB>* pNewTabs,
-                        ::std::vector< OUString>* pOldNames = NULL,
-                        ::std::vector< OUString>* pNewNames = NULL );
+                        ::std::vector< OUString>* pOldNames = nullptr,
+                        ::std::vector< OUString>* pNewNames = nullptr );
 
     virtual         ~ScUndoMoveTab();
 
@@ -186,7 +186,7 @@ public:
                         ScDocShell* pNewDocShell,
                         ::std::vector<SCTAB>* pOldTabs,
                         ::std::vector<SCTAB>* pNewTabs,
-                        ::std::vector< OUString>* pNewNames = NULL );
+                        ::std::vector< OUString>* pNewNames = nullptr );
 
     virtual         ~ScUndoCopyTab();
 

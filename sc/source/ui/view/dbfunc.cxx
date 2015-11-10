@@ -78,7 +78,7 @@ void ScDBFunc::GotoDBArea( const OUString& rDBName )
 ScDBData* ScDBFunc::GetDBData( bool bMark, ScGetDBMode eMode, ScGetDBSelection eSel )
 {
     ScDocShell* pDocSh = GetViewData().GetDocShell();
-    ScDBData* pData = NULL;
+    ScDBData* pData = nullptr;
     ScRange aRange;
     ScMarkType eMarkType = GetViewData().GetSimpleArea(aRange);
     if ( eMarkType == SC_MARK_SIMPLE || eMarkType == SC_MARK_SIMPLE_FILTERED )
@@ -154,7 +154,7 @@ ScDBData* ScDBFunc::GetDBData( bool bMark, ScGetDBMode eMode, ScGetDBSelection e
                     eMode, SC_DBSEL_KEEP );
 
     if (!pData)
-        return NULL;
+        return nullptr;
 
     if (bMark)
     {
@@ -171,7 +171,7 @@ ScDBData* ScDBFunc::GetAnonymousDBData()
     ScRange aRange;
     ScMarkType eMarkType = GetViewData().GetSimpleArea(aRange);
     if (eMarkType != SC_MARK_SIMPLE && eMarkType != SC_MARK_SIMPLE_FILTERED)
-        return NULL;
+        return nullptr;
 
     // Expand to used data area if not explicitly marked.
     const ScMarkData& rMarkData = GetViewData().GetMarkData();
@@ -340,7 +340,7 @@ void ScDBFunc::ToggleAutoFilter()
         for (SCSIZE i=0; i<nEC; i++)
             aParam.GetEntry(i).bDoQuery = false;
         aParam.bDuplicate = true;
-        Query( aParam, NULL, true );
+        Query( aParam, nullptr, true );
 
         pDocSh->GetUndoManager()->LeaveListAction();
 
@@ -451,7 +451,7 @@ bool ScDBFunc::ImportData( const ScImportParam& rParam, bool bRecord )
     }
 
     ScDBDocFunc aDBDocFunc( *GetViewData().GetDocShell() );
-    return aDBDocFunc.DoImport( GetViewData().GetTabNo(), rParam, NULL, bRecord );
+    return aDBDocFunc.DoImport( GetViewData().GetTabNo(), rParam, nullptr, bRecord );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -292,22 +292,22 @@ public:
     }
 
     SC_DLLPUBLIC sal_uInt16 Parse(
-                    const OUString&, ScDocument* = NULL,
+                    const OUString&, ScDocument* = nullptr,
                     const Details& rDetails = detailsOOOa1,
-                    ExternalInfo* pExtInfo = NULL,
-                    const css::uno::Sequence<css::sheet::ExternalLinkInfo>* pExternalLinks = NULL );
+                    ExternalInfo* pExtInfo = nullptr,
+                    const css::uno::Sequence<css::sheet::ExternalLinkInfo>* pExternalLinks = nullptr );
 
     SC_DLLPUBLIC void Format( OStringBuffer& r, sal_uInt16 nFlags = 0,
-                                  const ScDocument* pDocument = NULL,
+                                  const ScDocument* pDocument = nullptr,
                                   const Details& rDetails = detailsOOOa1) const;
 
     SC_DLLPUBLIC OUString Format( sal_uInt16 nFlags = 0,
-                                  const ScDocument* pDocument = NULL,
+                                  const ScDocument* pDocument = nullptr,
                                   const Details& rDetails = detailsOOOa1) const;
 
     // The document for the maximum defined sheet number
     SC_DLLPUBLIC bool Move( SCsCOL nDeltaX, SCsROW nDeltaY, SCsTAB nDeltaZ,
-                            ScDocument* pDocument = NULL );
+                            ScDocument* pDocument = nullptr );
 
     inline bool operator==( const ScAddress& rAddress ) const;
     inline bool operator!=( const ScAddress& rAddress ) const;
@@ -491,16 +491,16 @@ public:
     inline bool In( const ScAddress& ) const;   ///< is Address& in Range?
     inline bool In( const ScRange& ) const;     ///< is Range& in Range?
 
-    SC_DLLPUBLIC sal_uInt16 Parse( const OUString&, ScDocument* = NULL,
+    SC_DLLPUBLIC sal_uInt16 Parse( const OUString&, ScDocument* = nullptr,
                                    const ScAddress::Details& rDetails = ScAddress::detailsOOOa1,
-                                   ScAddress::ExternalInfo* pExtInfo = NULL,
-                                   const css::uno::Sequence<css::sheet::ExternalLinkInfo>* pExternalLinks = NULL );
+                                   ScAddress::ExternalInfo* pExtInfo = nullptr,
+                                   const css::uno::Sequence<css::sheet::ExternalLinkInfo>* pExternalLinks = nullptr );
 
-    SC_DLLPUBLIC sal_uInt16 ParseAny( const OUString&, ScDocument* = NULL,
+    SC_DLLPUBLIC sal_uInt16 ParseAny( const OUString&, ScDocument* = nullptr,
                                       const ScAddress::Details& rDetails = ScAddress::detailsOOOa1 );
-    SC_DLLPUBLIC sal_uInt16 ParseCols( const OUString&, ScDocument* = NULL,
+    SC_DLLPUBLIC sal_uInt16 ParseCols( const OUString&, ScDocument* = nullptr,
                                        const ScAddress::Details& rDetails = ScAddress::detailsOOOa1 );
-    SC_DLLPUBLIC sal_uInt16 ParseRows( const OUString&, ScDocument* = NULL,
+    SC_DLLPUBLIC sal_uInt16 ParseRows( const OUString&, ScDocument* = nullptr,
                                        const ScAddress::Details& rDetails = ScAddress::detailsOOOa1 );
 
     /** Parse an Excel style reference up to and including the sheet name
@@ -527,16 +527,16 @@ public:
                                         OUString& rExternDocName, OUString& rStartTabName,
                                         OUString& rEndTabName, sal_uInt16& nFlags,
                                         bool bOnlyAcceptSingle,
-                                        const css::uno::Sequence<css::sheet::ExternalLinkInfo>* pExternalLinks = NULL );
+                                        const css::uno::Sequence<css::sheet::ExternalLinkInfo>* pExternalLinks = nullptr );
 
-    SC_DLLPUBLIC OUString Format(sal_uInt16 nFlags= 0, const ScDocument* pDocument = NULL,
+    SC_DLLPUBLIC OUString Format(sal_uInt16 nFlags= 0, const ScDocument* pDocument = nullptr,
                                  const ScAddress::Details& rDetails = ScAddress::detailsOOOa1) const;
 
     inline void GetVars( SCCOL& nCol1, SCROW& nRow1, SCTAB& nTab1,
                          SCCOL& nCol2, SCROW& nRow2, SCTAB& nTab2 ) const;
     SC_DLLPUBLIC void PutInOrder();
     // The document for the maximum defined sheet number
-    SC_DLLPUBLIC bool Move( SCsCOL aDeltaX, SCsROW aDeltaY, SCsTAB aDeltaZ, ScDocument* pDocument = NULL );
+    SC_DLLPUBLIC bool Move( SCsCOL aDeltaX, SCsROW aDeltaY, SCsTAB aDeltaZ, ScDocument* pDocument = nullptr );
     SC_DLLPUBLIC void ExtendTo( const ScRange& rRange );
     SC_DLLPUBLIC bool Intersects( const ScRange& rRange ) const;    // do two ranges intersect?
 
@@ -852,13 +852,13 @@ template< typename T > void PutInOrder( T& nStart, T& nEnd )
 bool ConvertSingleRef( ScDocument* pDocument, const OUString& rRefString,
                        SCTAB nDefTab, ScRefAddress& rRefAddress,
                        const ScAddress::Details& rDetails = ScAddress::detailsOOOa1,
-                       ScAddress::ExternalInfo* pExtInfo = NULL );
+                       ScAddress::ExternalInfo* pExtInfo = nullptr );
 
 bool ConvertDoubleRef( ScDocument* pDocument, const OUString& rRefString,
                        SCTAB nDefTab, ScRefAddress& rStartRefAddress,
                        ScRefAddress& rEndRefAddress,
                        const ScAddress::Details& rDetails = ScAddress::detailsOOOa1,
-                       ScAddress::ExternalInfo* pExtInfo = NULL );
+                       ScAddress::ExternalInfo* pExtInfo = nullptr );
 
 /// append alpha representation of column to buffer
 SC_DLLPUBLIC void ScColToAlpha( OUStringBuffer& rBuffer, SCCOL nCol);

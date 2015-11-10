@@ -58,7 +58,7 @@
 using namespace formula;
 using namespace com::sun::star;
 
-ScDocument* ScFormulaDlg::pDoc = NULL;
+ScDocument* ScFormulaDlg::pDoc = nullptr;
 ScAddress ScFormulaDlg::aCursorPos;
 
 //      init/ shared functions for dialog
@@ -71,7 +71,7 @@ ScFormulaDlg::ScFormulaDlg( SfxBindings* pB, SfxChildWindow* pCW,
     m_aHelper.SetWindow(this);
     ScModule* pScMod = SC_MOD();
     pScMod->InputEnterHandler();
-    ScTabViewShell* pScViewShell = NULL;
+    ScTabViewShell* pScViewShell = nullptr;
 
     // title has to be from the view that opened the dialog,
     // even if it's not the current view
@@ -91,7 +91,7 @@ ScFormulaDlg::ScFormulaDlg( SfxBindings* pB, SfxChildWindow* pCW,
         }
     }
 
-    if ( pDoc == NULL )
+    if ( pDoc == nullptr )
         pDoc = pViewData->GetDocument();
     m_xParser.set(ScServiceProvider::MakeInstance(SC_SERVICE_FORMULAPARS, static_cast<ScDocShell*>(pDoc->GetDocumentShell())),uno::UNO_QUERY);
     uno::Reference< beans::XPropertySet> xSet(m_xParser,uno::UNO_QUERY);
@@ -104,7 +104,7 @@ ScFormulaDlg::ScFormulaDlg( SfxBindings* pB, SfxChildWindow* pCW,
     OSL_ENSURE( pInputHdl, "Missing input handler :-/" );
 
     if ( pInputHdl )
-        pInputHdl->NotifyChange( NULL );
+        pInputHdl->NotifyChange( nullptr );
 
     ScFormulaReferenceHelper::enableInput( false );
     ScFormulaReferenceHelper::EnableSpreadsheets();
@@ -189,7 +189,7 @@ void ScFormulaDlg::notifyChange()
 
     ScInputHandler* pInputHdl = pScMod->GetInputHdl();
     if ( pInputHdl )
-        pInputHdl->NotifyChange( NULL );
+        pInputHdl->NotifyChange( nullptr );
 }
 
 void ScFormulaDlg::fill()
@@ -212,7 +212,7 @@ void ScFormulaDlg::fill()
             ScTabViewShell* pTabViewShell;
             ScInputHandler* pInputHdl = GetNextInputHandler(pData->GetDocShell(),&pTabViewShell);
 
-            if ( pInputHdl == NULL ) //no more InputHandler for DocShell
+            if ( pInputHdl == nullptr ) //no more InputHandler for DocShell
             {
                 disableOk();
                 pInputHdl = pScMod->GetInputHdl();
@@ -235,7 +235,7 @@ void ScFormulaDlg::fill()
 
         Update();
         // switch back, maybe new Doc has been opened
-        pScMod->SetRefInputHdl(NULL);
+        pScMod->SetRefInputHdl(nullptr);
     }
 }
 
@@ -253,7 +253,7 @@ void ScFormulaDlg::dispose()
     if (pData) // close dosen't destroy;
     {
         //set back reference input handler
-        pScMod->SetRefInputHdl(NULL);
+        pScMod->SetRefInputHdl(nullptr);
         StoreFormEditData(pData);
     }
     formula::FormulaDlg::dispose();
@@ -279,17 +279,17 @@ bool ScFormulaDlg::IsInputHdl(ScInputHandler* pHdl)
 
 ScInputHandler* ScFormulaDlg::GetNextInputHandler(ScDocShell* pDocShell, ScTabViewShell** ppViewSh)
 {
-    ScInputHandler* pHdl=NULL;
+    ScInputHandler* pHdl=nullptr;
 
     SfxViewFrame* pFrame = SfxViewFrame::GetFirst( pDocShell );
-    while( pFrame && pHdl==NULL)
+    while( pFrame && pHdl==nullptr)
     {
         SfxViewShell* p = pFrame->GetViewShell();
         ScTabViewShell* pViewSh = dynamic_cast< ScTabViewShell *>( p );
-        if(pViewSh!=NULL)
+        if(pViewSh!=nullptr)
         {
             pHdl=pViewSh->GetInputHandler();
-            if(ppViewSh!=NULL) *ppViewSh=pViewSh;
+            if(ppViewSh!=nullptr) *ppViewSh=pViewSh;
         }
         pFrame = SfxViewFrame::GetNext( *pFrame, pDocShell );
     }
@@ -441,7 +441,7 @@ void ScFormulaDlg::SetReference( const ScRange& rRef, ScDocument* pRefDoc )
 bool ScFormulaDlg::IsRefInputMode() const
 {
     const IFunctionDescription* pDesc = getCurrentFunctionDescription();
-    bool bRef = (pDesc && (pDesc->getSuppressedArgumentCount() > 0)) && (pDoc!=NULL);
+    bool bRef = (pDesc && (pDesc->getSuppressedArgumentCount() > 0)) && (pDoc!=nullptr);
     return bRef;
 }
 
@@ -552,11 +552,11 @@ void ScFormulaDlg::deleteFormData()
 }
 void ScFormulaDlg::clear()
 {
-    pDoc = NULL;
+    pDoc = nullptr;
 
     //restore reference inputhandler
     ScModule* pScMod = SC_MOD();
-    pScMod->SetRefInputHdl(NULL);
+    pScMod->SetRefInputHdl(nullptr);
 
     // force Enable() of edit line
     ScTabViewShell* pScViewShell = dynamic_cast<ScTabViewShell*>( SfxViewShell::Current() );
@@ -571,7 +571,7 @@ void ScFormulaDlg::switchBack()
     ScInputHandler* pHdl = pScMod->GetInputHdl();
     if ( pHdl )
     {
-        pHdl->ViewShellGone(NULL);  // -> get active view
+        pHdl->ViewShellGone(nullptr);  // -> get active view
         pHdl->ShowRefFrame();
     }
 

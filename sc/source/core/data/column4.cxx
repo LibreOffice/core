@@ -184,7 +184,7 @@ void ScColumn::CopyOneCellFromClip( sc::CopyFromClipContext& rCxt, SCROW nRow1, 
             {
                 // Compare the ScDocumentPool* to determine if we are copying within the
                 // same document. If not, re-intern shared strings.
-                svl::SharedStringPool* pSharedStringPool = (bSameDocPool ? NULL : &pDocument->GetSharedStringPool());
+                svl::SharedStringPool* pSharedStringPool = (bSameDocPool ? nullptr : &pDocument->GetSharedStringPool());
                 svl::SharedString aStr = (pSharedStringPool ?
                         pSharedStringPool->intern( rSrcCell.mpString->getString()) :
                         *rSrcCell.mpString);
@@ -216,7 +216,7 @@ void ScColumn::CopyOneCellFromClip( sc::CopyFromClipContext& rCxt, SCROW nRow1, 
                 std::vector<sc::RowSpan> aRanges;
                 aRanges.reserve(1);
                 aRanges.push_back(sc::RowSpan(nRow1, nRow2));
-                CloneFormulaCell(*rSrcCell.mpFormula, rSrcAttr, aRanges, NULL);
+                CloneFormulaCell(*rSrcCell.mpFormula, rSrcAttr, aRanges, nullptr);
             }
             break;
             default:
@@ -553,9 +553,9 @@ void ScColumn::CloneFormulaCell(
 ScPostIt* ScColumn::ReleaseNote( SCROW nRow )
 {
     if (!ValidRow(nRow))
-        return NULL;
+        return nullptr;
 
-    ScPostIt* p = NULL;
+    ScPostIt* p = nullptr;
     maCellNotes.release(nRow, p);
     return p;
 }
@@ -727,7 +727,7 @@ public:
         // Perform end listening, remove from formula tree, and set them up
         // for re-compilation.
 
-        ScFormulaCell* pTop = NULL;
+        ScFormulaCell* pTop = nullptr;
 
         if (rEntry.mbShared)
         {
@@ -911,7 +911,7 @@ private:
             // In theory this should never return NULL. But let's be safe.
             return;
 
-        const SfxItemSet* pCondSet = NULL;
+        const SfxItemSet* pCondSet = nullptr;
         if (mpCFList)
         {
             maPos.SetRow(nRow);

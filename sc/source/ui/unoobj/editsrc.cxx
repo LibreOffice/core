@@ -110,8 +110,8 @@ ScEditEngineDefaulter* ScCellEditSource::GetEditEngine()
 ScAnnotationEditSource::ScAnnotationEditSource(ScDocShell* pDocSh, const ScAddress& rP) :
     pDocShell( pDocSh ),
     aCellPos( rP ),
-    pEditEngine( NULL ),
-    pForwarder( NULL ),
+    pEditEngine( nullptr ),
+    pForwarder( nullptr ),
     bDataValid( false )
 {
     if (pDocShell)
@@ -137,7 +137,7 @@ SvxEditSource* ScAnnotationEditSource::Clone() const
 SdrObject* ScAnnotationEditSource::GetCaptionObj()
 {
     ScPostIt* pNote = pDocShell->GetDocument().GetNote(aCellPos);
-    return pNote ? pNote->GetOrCreateCaption( aCellPos ) : 0;
+    return pNote ? pNote->GetOrCreateCaption( aCellPos ) : nullptr;
 }
 
 SvxTextForwarder* ScAnnotationEditSource::GetTextForwarder()
@@ -205,7 +205,7 @@ void ScAnnotationEditSource::Notify( SfxBroadcaster&, const SfxHint& rHint )
         sal_uLong nId = static_cast<const SfxSimpleHint&>(rHint).GetId();
         if ( nId == SFX_HINT_DYING )
         {
-            pDocShell = NULL;                       // ungueltig geworden
+            pDocShell = nullptr;                       // ungueltig geworden
 
             DELETEZ( pForwarder );
             DELETEZ( pEditEngine );     // EditEngine uses document's pool

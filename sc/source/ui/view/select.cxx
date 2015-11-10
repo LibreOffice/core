@@ -48,7 +48,7 @@ static bool bDidSwitch = false;
 // View (Gridwin / keyboard)
 ScViewFunctionSet::ScViewFunctionSet( ScViewData* pNewViewData ) :
         pViewData( pNewViewData ),
-        pEngine( NULL ),
+        pEngine( nullptr ),
         bAnchor( false ),
         bStarted( false )
 {
@@ -206,7 +206,7 @@ void ScViewFunctionSet::BeginDrag()
                 if ( pWindow->IsTracking() )
                     pWindow->EndTracking( TrackingEventFlags::Cancel );    // abort selecting
 
-                SC_MOD()->SetDragObject( pTransferObj, NULL );      // for internal D&D
+                SC_MOD()->SetDragObject( pTransferObj, nullptr );      // for internal D&D
                 pTransferObj->StartDrag( pWindow, nDragActions );
 
                 return;         // dragging started

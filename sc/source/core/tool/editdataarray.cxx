@@ -37,14 +37,14 @@ const ScEditDataArray::Item* ScEditDataArray::First()
 {
     maIter = maArray.begin();
     if (maIter == maArray.end())
-        return NULL;
+        return nullptr;
     return &(*maIter++);
 }
 
 const ScEditDataArray::Item* ScEditDataArray::Next()
 {
     if (maIter == maArray.end())
-        return NULL;
+        return nullptr;
     return &(*maIter++);
 }
 

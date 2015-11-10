@@ -65,7 +65,7 @@ TokenPool::TokenPool( svl::SharedStringPool& rSPool ) :
     nP_Str = 4;
     ppP_Str = new OUString *[ nP_Str ];
     for( nLauf = 0 ; nLauf < nP_Str ; nLauf++ )
-        ppP_Str[ nLauf ] = NULL;
+        ppP_Str[ nLauf ] = nullptr;
 
     // pool for double
     nP_Dbl = 8;
@@ -79,7 +79,7 @@ TokenPool::TokenPool( svl::SharedStringPool& rSPool ) :
     nP_RefTr = 32;
     ppP_RefTr = new ScSingleRefData *[ nP_RefTr ];
     for( nLauf = 0 ; nLauf < nP_RefTr ; nLauf++ )
-        ppP_RefTr[ nLauf ] = NULL;
+        ppP_RefTr[ nLauf ] = nullptr;
 
     nP_Ext = 32;
     ppP_Ext = new EXTCONT*[ nP_Ext ];
@@ -166,7 +166,7 @@ bool TokenPool::GrowString()
     for( nL = 0 ; nL < nP_Str ; nL++ )
         ppP_StrNew[ nL ] = ppP_Str[ nL ];
     for( nL = nP_Str ; nL < nP_StrNew ; nL++ )
-        ppP_StrNew[ nL ] = NULL;
+        ppP_StrNew[ nL ] = nullptr;
 
     nP_Str = nP_StrNew;
 
@@ -233,7 +233,7 @@ bool TokenPool::GrowTripel( sal_uInt16 nByMin )
     for( nL = 0 ; nL < nP_RefTr ; nL++ )
         ppP_RefTrNew[ nL ] = ppP_RefTr[ nL ];
     for( nL = nP_RefTr ; nL < nP_RefTrNew ; nL++ )
-        ppP_RefTrNew[ nL ] = NULL;
+        ppP_RefTrNew[ nL ] = nullptr;
 
     nP_RefTr = nP_RefTrNew;
 
@@ -370,7 +370,7 @@ bool TokenPool::GetElement( const sal_uInt16 nId )
             case T_Str:
                 {
                     sal_uInt16 n = pElement[ nId ];
-                    OUString* p = ( n < nP_Str )? ppP_Str[ n ] : NULL;
+                    OUString* p = ( n < nP_Str )? ppP_Str[ n ] : nullptr;
                     if (p)
                         pScToken->AddString(mrStringPool.intern(*p));
                     else
@@ -401,7 +401,7 @@ bool TokenPool::GetElement( const sal_uInt16 nId )
             case T_RefC:
                 {
                     sal_uInt16 n = pElement[ nId ];
-                    ScSingleRefData* p = ( n < nP_RefTr )? ppP_RefTr[ n ] : NULL;
+                    ScSingleRefData* p = ( n < nP_RefTr )? ppP_RefTr[ n ] : nullptr;
                     if (p)
                         pScToken->AddSingleReference( *p );
                     else
@@ -435,7 +435,7 @@ bool TokenPool::GetElement( const sal_uInt16 nId )
             case T_Ext:
                 {
                     sal_uInt16      n = pElement[ nId ];
-                    EXTCONT*        p = ( n < nP_Ext )? ppP_Ext[ n ] : NULL;
+                    EXTCONT*        p = ( n < nP_Ext )? ppP_Ext[ n ] : nullptr;
 
                     if( p )
                     {
@@ -451,7 +451,7 @@ bool TokenPool::GetElement( const sal_uInt16 nId )
             case T_Nlf:
                 {
                     sal_uInt16      n = pElement[ nId ];
-                    NLFCONT*        p = ( n < nP_Nlf )? ppP_Nlf[ n ] : NULL;
+                    NLFCONT*        p = ( n < nP_Nlf )? ppP_Nlf[ n ] : nullptr;
 
                     if( p )
                         pScToken->AddColRowName( p->aRef );
@@ -462,7 +462,7 @@ bool TokenPool::GetElement( const sal_uInt16 nId )
             case T_Matrix:
                 {
                     sal_uInt16      n = pElement[ nId ];
-                    ScMatrix*       p = ( n < nP_Matrix )? ppP_Matrix[ n ] : NULL;
+                    ScMatrix*       p = ( n < nP_Matrix )? ppP_Matrix[ n ] : nullptr;
 
                     if( p )
                         pScToken->AddMatrix( p );
@@ -550,7 +550,7 @@ bool TokenPool::GetElementRek( const sal_uInt16 nId )
         nAnz = 0;
         bRet = false;
     }
-    sal_uInt16* pAkt = nAnz ? &pP_Id[ nFirstId ] : NULL;
+    sal_uInt16* pAkt = nAnz ? &pP_Id[ nFirstId ] : nullptr;
     if (nAnz > nP_Id - nFirstId)
     {
         SAL_WARN("sc.filter", "TokenPool::GetElementRek: nAnz > nP_Id - nFirstId");
@@ -910,7 +910,7 @@ bool TokenPool::IsSingleOp( const TokenId& rId, const DefTokenId eId ) const
 
 const OUString* TokenPool::GetExternal( const TokenId& rId ) const
 {
-    const OUString*   p = NULL;
+    const OUString*   p = nullptr;
     sal_uInt16 n = (sal_uInt16) rId;
     if( n && n <= nElementAkt )
     {
@@ -932,7 +932,7 @@ ScMatrix* TokenPool::GetMatrix( unsigned int n ) const
         return ppP_Matrix[ n ];
     else
         SAL_WARN("sc.filter", "GetMatrix: " << n << " >= " << nP_MatrixAkt << "\n");
-    return NULL;
+    return nullptr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -163,9 +163,9 @@ ScOutputData::ScOutputData( OutputDevice* pNewDev, ScOutputType eNewType,
     eType( eNewType ),
     mnPPTX( nPixelPerTwipsX ),
     mnPPTY( nPixelPerTwipsY ),
-    pEditObj( NULL ),
-    pViewShell( NULL ),
-    pDrawView( NULL ),
+    pEditObj( nullptr ),
+    pViewShell( nullptr ),
+    pDrawView( nullptr ),
     bEditMode( false ),
     nEditCol( 0 ),
     nEditRow( 0 ),
@@ -176,9 +176,9 @@ ScOutputData::ScOutputData( OutputDevice* pNewDev, ScOutputType eNewType,
     mbUseStyleColor( false ),
     mbForceAutoColor( SC_MOD()->GetAccessOptions().GetIsAutomaticFontColor() ),
     mbSyntaxMode( false ),
-    pValueColor( NULL ),
-    pTextColor( NULL ),
-    pFormulaColor( NULL ),
+    pValueColor( nullptr ),
+    pTextColor( nullptr ),
+    pFormulaColor( nullptr ),
     aGridColor( COL_BLACK ),
     mbShowNullValues( true ),
     mbShowFormulas( false ),
@@ -187,8 +187,8 @@ ScOutputData::ScOutputData( OutputDevice* pNewDev, ScOutputType eNewType,
     bSnapPixel( false ),
     bAnyRotated( false ),
     bAnyClipped( false ),
-    mpTargetPaintWindow(NULL), // #i74769# use SdrPaintWindow direct
-    mpSpellCheckCxt(NULL)
+    mpTargetPaintWindow(nullptr), // #i74769# use SdrPaintWindow direct
+    mpSpellCheckCxt(nullptr)
 {
     if (pZoomX)
         aZoomX = *pZoomX;
@@ -494,7 +494,7 @@ void ScOutputData::DrawGrid(vcl::RenderContext& rRenderContext, bool bGrid, bool
                 for (SCROW i = nYplus1; i <= MAXROW; ++i)
                 {
                     if (i > nHiddenEndRow)
-                        bHiddenRow = mpDoc->RowHidden(i, nTab, NULL, &nHiddenEndRow);
+                        bHiddenRow = mpDoc->RowHidden(i, nTab, nullptr, &nHiddenEndRow);
                     /* TODO: optimize the row break thing for large hidden
                      * segments where HasRowBreak() has to be called
                      * nevertheless for each row, as a row break is drawn also
@@ -944,23 +944,23 @@ void drawCells(vcl::RenderContext& rRenderContext, const Color* pColor, const Sv
         if (!pOldColor || *pOldColor != *pColor)
             pOldColor = pColor;
 
-        pOldBackground = NULL;
+        pOldBackground = nullptr;
     }
     else if(pBackground)
     {
         pOldBackground = pBackground;
-        pOldColor = NULL;
+        pOldColor = nullptr;
     }
 
     if(pDataBarInfo)
         pOldDataBarInfo = pDataBarInfo;
     else
-        pOldDataBarInfo = NULL;
+        pOldDataBarInfo = nullptr;
 
     if(pIconSetInfo)
         pOldIconSetInfo = pIconSetInfo;
     else
-        pOldIconSetInfo = NULL;
+        pOldIconSetInfo = nullptr;
 }
 
 }
@@ -1031,11 +1031,11 @@ void ScOutputData::DrawBackground(vcl::RenderContext& rRenderContext)
                 if (bWorksInPixels)
                     aRect = rRenderContext.PixelToLogic(aRect); // internal data in pixels, but we'll be drawing in logic units
 
-                const SvxBrushItem* pOldBackground = NULL;
+                const SvxBrushItem* pOldBackground = nullptr;
                 const SvxBrushItem* pBackground;
-                const Color* pOldColor = NULL;
-                const ScDataBarInfo* pOldDataBarInfo = NULL;
-                const ScIconSetInfo* pOldIconSetInfo = NULL;
+                const Color* pOldColor = nullptr;
+                const ScDataBarInfo* pOldDataBarInfo = nullptr;
+                const ScIconSetInfo* pOldIconSetInfo = nullptr;
                 SCCOL nMergedCells = 1;
                 SCCOL nOldMerged = 0;
 
@@ -1063,7 +1063,7 @@ void ScOutputData::DrawBackground(vcl::RenderContext& rRenderContext)
                                 pBackground = ScGlobal::GetEmptyBrushItem();
                         }
                         else
-                            pBackground = NULL;
+                            pBackground = nullptr;
                     }
                     else
                         pBackground = pInfo->pBackground;
@@ -1111,7 +1111,7 @@ void ScOutputData::DrawBackground(vcl::RenderContext& rRenderContext)
                 if (bWorksInPixels)
                     nPosXLogic = rRenderContext.PixelToLogic(Point(nPosX, 0)).X();
 
-                drawCells(rRenderContext, NULL, NULL, pOldColor, pOldBackground, aRect, nPosXLogic, nLayoutSign, nOneXLogic, nOneYLogic, NULL, pOldDataBarInfo, NULL, pOldIconSetInfo);
+                drawCells(rRenderContext, nullptr, nullptr, pOldColor, pOldBackground, aRect, nPosXLogic, nLayoutSign, nOneXLogic, nOneYLogic, nullptr, pOldDataBarInfo, nullptr, pOldIconSetInfo);
 
                 nArrY += nSkip;
             }
@@ -1358,7 +1358,7 @@ void ScOutputData::DrawFrame(vcl::RenderContext& rRenderContext)
         bUseSingleColor = true;
     }
 
-    const Color* pForceColor = bUseSingleColor ? &aSingleColor : 0;
+    const Color* pForceColor = bUseSingleColor ? &aSingleColor : nullptr;
 
     if (bAnyRotated)
         DrawRotatedFrame(rRenderContext, pForceColor);        // removes the lines that must not be painted here
@@ -1454,7 +1454,7 @@ static const ::editeng::SvxBorderLine* lcl_FindHorLine( ScDocument* pDoc,
                         bool bTopLine )
 {
     if ( nRotDir != SC_ROTDIR_LEFT && nRotDir != SC_ROTDIR_RIGHT )
-        return NULL;
+        return nullptr;
 
     bool bFound = false;
     while (!bFound)
@@ -1465,7 +1465,7 @@ static const ::editeng::SvxBorderLine* lcl_FindHorLine( ScDocument* pDoc,
             if ( nCol < MAXCOL )
                 ++nCol;
             else
-                return NULL; // couldn't find it
+                return nullptr; // couldn't find it
         }
         else
         {
@@ -1473,7 +1473,7 @@ static const ::editeng::SvxBorderLine* lcl_FindHorLine( ScDocument* pDoc,
             if ( nCol > 0 )
                 --nCol;
             else
-                return NULL; // couldn't find it
+                return nullptr; // couldn't find it
         }
         const ScPatternAttr* pPattern = pDoc->GetPattern( nCol, nRow, nTab );
         const SfxItemSet* pCondSet = pDoc->GetCondResult( nCol, nRow, nTab );
@@ -1489,12 +1489,12 @@ static const ::editeng::SvxBorderLine* lcl_FindHorLine( ScDocument* pDoc,
     if ( ValidRow(nRow) )
         pThisBottom = static_cast<const SvxBoxItem*>(pDoc->GetAttr( nCol, nRow, nTab, ATTR_BORDER ))->GetBottom();
     else
-        pThisBottom = NULL;
+        pThisBottom = nullptr;
     const ::editeng::SvxBorderLine* pNextTop;
     if ( nRow < MAXROW )
         pNextTop = static_cast<const SvxBoxItem*>(pDoc->GetAttr( nCol, nRow+1, nTab, ATTR_BORDER ))->GetTop();
     else
-        pNextTop = NULL;
+        pNextTop = nullptr;
 
     if ( ScHasPriority( pThisBottom, pNextTop ) )
         return pThisBottom;
@@ -1863,7 +1863,7 @@ drawinglayer::processor2d::BaseProcessor2D* ScOutputData::CreateProcessor2D( )
     mpDoc->InitDrawLayer(mpDoc->GetDocumentShell());
     ScDrawLayer* pDrawLayer = mpDoc->GetDrawLayer();
     if (!pDrawLayer)
-        return NULL;
+        return nullptr;
 
     basegfx::B2DRange aViewRange;
     SdrPage *pDrawPage = pDrawLayer->GetPage( static_cast< sal_uInt16 >( nTab ) );

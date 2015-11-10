@@ -194,11 +194,11 @@ bool lcl_HasRowOutline( const ScViewData& rViewData )
 ScTabView::ScTabView( vcl::Window* pParent, ScDocShell& rDocSh, ScTabViewShell* pViewShell ) :
     pFrameWin( pParent ),
     aViewData( &rDocSh, pViewShell ),
-    pSelEngine( NULL ),
+    pSelEngine( nullptr ),
     aFunctionSet( &aViewData ),
-    pHdrSelEng( NULL ),
+    pHdrSelEng( nullptr ),
     aHdrFunc( &aViewData ),
-    pDrawView( NULL ),
+    pDrawView( nullptr ),
     aVScrollTop( VclPtr<ScrollBar>::Create( pFrameWin, WinBits( WB_VSCROLL | WB_DRAG ) ) ),
     aVScrollBottom( VclPtr<ScrollBar>::Create( pFrameWin, WinBits( WB_VSCROLL | WB_DRAG ) ) ),
     aHScrollLeft( VclPtr<ScrollBar>::Create( pFrameWin, WinBits( WB_HSCROLL | WB_DRAG ) ) ),
@@ -206,11 +206,11 @@ ScTabView::ScTabView( vcl::Window* pParent, ScDocShell& rDocSh, ScTabViewShell* 
     aCornerButton( VclPtr<ScCornerButton>::Create( pFrameWin, &aViewData, false ) ),
     aTopButton( VclPtr<ScCornerButton>::Create( pFrameWin, &aViewData, true ) ),
     aScrollBarBox( VclPtr<ScrollBarBox>::Create( pFrameWin, WB_SIZEABLE ) ),
-    mpInputHintWindow( NULL ),
-    pPageBreakData( NULL ),
-    pBrushDocument( NULL ),
-    pDrawBrushSet( NULL ),
-    pTimerWindow( NULL ),
+    mpInputHintWindow( nullptr ),
+    pPageBreakData( nullptr ),
+    pBrushDocument( nullptr ),
+    pDrawBrushSet( nullptr ),
+    pTimerWindow( nullptr ),
     nTipVisible( 0 ),
     nPrevDragPos( 0 ),
     meBlockMode(None),
@@ -266,7 +266,7 @@ void ScTabView::SetTimer( ScGridWindow* pWin, const MouseEvent& rMEvt )
 void ScTabView::ResetTimer()
 {
     aScrollTimer.Stop();
-    pTimerWindow = NULL;
+    pTimerWindow = nullptr;
 }
 
 IMPL_LINK_NOARG_TYPED(ScTabView, TimerHdl, Timer *, void)

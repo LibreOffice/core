@@ -1378,8 +1378,8 @@ void ScExportTest::testExcelCellBorders( sal_uLong nFormatType )
 
         for (size_t i = 0; i < SAL_N_ELEMENTS(aChecks); ++i)
         {
-            const editeng::SvxBorderLine* pLine = NULL;
-            rDoc.GetBorderLines(2, aChecks[i].mnRow, 0, NULL, &pLine, NULL, NULL);
+            const editeng::SvxBorderLine* pLine = nullptr;
+            rDoc.GetBorderLines(2, aChecks[i].mnRow, 0, nullptr, &pLine, nullptr, nullptr);
             CPPUNIT_ASSERT(pLine);
             CPPUNIT_ASSERT_EQUAL(toBorderName(aChecks[i].mnStyle), toBorderName(pLine->GetBorderLineStyle()));
             if (aChecks[i].mnWidth >= 0)
@@ -1392,8 +1392,8 @@ void ScExportTest::testExcelCellBorders( sal_uLong nFormatType )
     ScDocument& rDoc = xNewDocSh->GetDocument();
     for (size_t i = 0; i < SAL_N_ELEMENTS(aChecks); ++i)
     {
-        const editeng::SvxBorderLine* pLine = NULL;
-        rDoc.GetBorderLines(2, aChecks[i].mnRow, 0, NULL, &pLine, NULL, NULL);
+        const editeng::SvxBorderLine* pLine = nullptr;
+        rDoc.GetBorderLines(2, aChecks[i].mnRow, 0, nullptr, &pLine, nullptr, nullptr);
         CPPUNIT_ASSERT(pLine);
         CPPUNIT_ASSERT_EQUAL(toBorderName(aChecks[i].mnStyle), toBorderName(pLine->GetBorderLineStyle()));
         if (aChecks[i].mnWidth >= 0)
@@ -2479,11 +2479,11 @@ void ScExportTest::testLinkedGraphicRT()
         // Check whether graphic imported well after export
         ScDocument& rDoc = xDocSh->GetDocument();
         ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
-        CPPUNIT_ASSERT_MESSAGE( sFailedMessage.getStr(), pDrawLayer != NULL );
+        CPPUNIT_ASSERT_MESSAGE( sFailedMessage.getStr(), pDrawLayer != nullptr );
         const SdrPage *pPage = pDrawLayer->GetPage(0);
-        CPPUNIT_ASSERT_MESSAGE( sFailedMessage.getStr(), pPage != NULL );
+        CPPUNIT_ASSERT_MESSAGE( sFailedMessage.getStr(), pPage != nullptr );
         SdrGrafObj* pObject = dynamic_cast<SdrGrafObj*>(pPage->GetObj(0));
-        CPPUNIT_ASSERT_MESSAGE( sFailedMessage.getStr(), pObject != NULL );
+        CPPUNIT_ASSERT_MESSAGE( sFailedMessage.getStr(), pObject != nullptr );
         CPPUNIT_ASSERT_MESSAGE( sFailedMessage.getStr(), pObject->IsLinkedGraphic() );
 
         const GraphicObject& rGraphicObj = pObject->GetGraphicObject(true);

@@ -74,8 +74,8 @@ using namespace formula;
 using namespace ::com::sun::star;
 using ::std::vector;
 
-CharClass*                          ScCompiler::pCharClassEnglish = NULL;
-const ScCompiler::Convention*       ScCompiler::pConventions[ ]   = { NULL, NULL, NULL, NULL, NULL, NULL };
+CharClass*                          ScCompiler::pCharClassEnglish = nullptr;
+const ScCompiler::Convention*       ScCompiler::pConventions[ ]   = { nullptr, nullptr, nullptr, nullptr, nullptr, nullptr };
 
 enum ScanState
 {
@@ -162,7 +162,7 @@ void ScCompiler::DeInit()
     if (pCharClassEnglish)
     {
         delete pCharClassEnglish;
-        pCharClassEnglish = NULL;
+        pCharClassEnglish = nullptr;
     }
 }
 
@@ -297,7 +297,7 @@ OUString ScCompiler::FindAddInFunction( const OUString& rUpperName, bool bLocalF
 ScCompiler::Convention::~Convention()
 {
     delete [] mpCharTable;
-    mpCharTable = NULL;
+    mpCharTable = nullptr;
 }
 
 ScCompiler::Convention::Convention( FormulaGrammar::AddressConvention eConv )
@@ -479,8 +479,8 @@ static bool lcl_parseExternalName(
         OUString& rFile,
         OUString& rName,
         const sal_Unicode cSep,
-        const ScDocument* pDoc = NULL,
-        const uno::Sequence<sheet::ExternalLinkInfo>* pExternalLinks = NULL )
+        const ScDocument* pDoc = nullptr,
+        const uno::Sequence<sheet::ExternalLinkInfo>* pExternalLinks = nullptr )
 {
     /* TODO: future versions will have to support sheet-local names too, thus
      * return a possible sheet name as well. */
@@ -1731,7 +1731,7 @@ ScCompiler::ScCompiler( ScDocument* pDocument, const ScAddress& rPos,ScTokenArra
 ScCompiler::ScCompiler( sc::CompileFormulaContext& rCxt, const ScAddress& rPos ) :
     pDoc(rCxt.getDoc()),
     aPos(rPos),
-    mpFormatter(pDoc ? pDoc->GetFormatTable() : NULL),
+    mpFormatter(pDoc ? pDoc->GetFormatTable() : nullptr),
     pCharClass(ScGlobal::pCharClass),
     mnPredetectedReference(0),
     mnRangeOpPosInSymbol(-1),
@@ -1749,7 +1749,7 @@ ScCompiler::ScCompiler( ScDocument* pDocument, const ScAddress& rPos)
         :
         pDoc( pDocument ),
         aPos( rPos ),
-        mpFormatter(pDoc ? pDoc->GetFormatTable() : NULL),
+        mpFormatter(pDoc ? pDoc->GetFormatTable() : nullptr),
         nSrcPos(0),
         pCharClass( ScGlobal::pCharClass ),
         mnPredetectedReference(0),
@@ -1861,7 +1861,7 @@ const ScCompiler::Convention* ScCompiler::GetRefConvention( FormulaGrammar::Addr
             ;
     }
 
-    return NULL;
+    return nullptr;
 }
 
 void ScCompiler::SetRefConvention( const ScCompiler::Convention *pConvP )
@@ -3034,7 +3034,7 @@ bool ScCompiler::IsMacro( const OUString& rName )
     }
 
     OUString aName( rName);
-    StarBASIC* pObj = 0;
+    StarBASIC* pObj = nullptr;
     SfxObjectShell* pDocSh = pDoc->GetDocumentShell();
 
     try
@@ -3081,7 +3081,7 @@ bool ScCompiler::IsNamedRange( const OUString& rUpperName )
     // try local names first
     bool bGlobal = false;
     ScRangeName* pRangeName = pDoc->GetRangeName(aPos.Tab());
-    const ScRangeData* pData = NULL;
+    const ScRangeData* pData = nullptr;
     if (pRangeName)
         pData = pRangeName->findByUpperName(rUpperName);
     if (!pData)
@@ -4369,7 +4369,7 @@ ScTokenArray* ScCompiler::CompileString( const OUString& rFormula, const OUStrin
 
 ScRangeData* ScCompiler::GetRangeData( const FormulaToken& rToken ) const
 {
-    ScRangeData* pRangeData = NULL;
+    ScRangeData* pRangeData = nullptr;
     bool bGlobal = rToken.IsGlobal();
     if (bGlobal)
         // global named range.
@@ -4469,7 +4469,7 @@ bool ScCompiler::HandleExternalReference(const FormulaToken& _aToken)
 
             ScTokenArray* pNew = xNew->Clone();
             PushTokenArray( pNew, true);
-            if (pNew->GetNextReference() != NULL)
+            if (pNew->GetNextReference() != nullptr)
             {
                 SetRelNameReference();
                 MoveRelWrap(MAXCOL, MAXROW);

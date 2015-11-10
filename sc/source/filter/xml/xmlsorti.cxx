@@ -107,7 +107,7 @@ SvXMLImportContext *ScXMLSortContext::CreateChildContext( sal_uInt16 nPrefix,
                                             const OUString& rLName,
                                             const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList )
 {
-    SvXMLImportContext *pContext(0);
+    SvXMLImportContext *pContext(nullptr);
 
     const SvXMLTokenMap& rTokenMap(GetScImport().GetSortElemTokenMap());
     switch( rTokenMap.Get( nPrefix, rLName ) )

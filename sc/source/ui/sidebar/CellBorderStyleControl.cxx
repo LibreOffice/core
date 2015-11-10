@@ -50,7 +50,7 @@ CellBorderStyleControl::CellBorderStyleControl(vcl::Window* pParent, CellAppeara
     maTBBorder3(VclPtr<ToolBox>::Create(this, ScResId(TB_BORDER3))),
     maFL1(VclPtr<FixedLine>::Create(this, ScResId(FL_1))),
     maFL2(VclPtr<FixedLine>::Create(this, ScResId(FL_2))),
-    mpImageList(0)
+    mpImageList(nullptr)
 {
     Initialize();
     FreeResource();
@@ -150,8 +150,8 @@ IMPL_LINK_TYPED(CellBorderStyleControl, TB1SelectHdl, ToolBox*, pToolBox, void)
     sal_uInt16 nId = pToolBox->GetCurItemId();
     SvxBoxItem          aBorderOuter( SID_ATTR_BORDER_OUTER );
     SvxBoxInfoItem      aBorderInner( SID_ATTR_BORDER_INNER );
-    editeng::SvxBorderLine theDefLine(NULL, 1);
-    editeng::SvxBorderLine *pLeft = 0, *pRight = 0, *pTop = 0, *pBottom = 0;
+    editeng::SvxBorderLine theDefLine(nullptr, 1);
+    editeng::SvxBorderLine *pLeft = nullptr, *pRight = nullptr, *pTop = nullptr, *pBottom = nullptr;
     sal_uInt8 nValidFlags = 0;
     switch ( nId )
     {
@@ -160,8 +160,8 @@ IMPL_LINK_TYPED(CellBorderStyleControl, TB1SelectHdl, ToolBox*, pToolBox, void)
          nValidFlags |= FRM_VALID_ALL;
         SvxLineItem     aLineItem1( SID_ATTR_BORDER_DIAG_BLTR );
         SvxLineItem     aLineItem2( SID_ATTR_BORDER_DIAG_TLBR );
-        aLineItem1.SetLine( NULL );     //modify
-        aLineItem2.SetLine( NULL );     //modify
+        aLineItem1.SetLine( nullptr );     //modify
+        aLineItem2.SetLine( nullptr );     //modify
         mrCellAppearancePropertyPanel.GetBindings()->GetDispatcher()->Execute(SID_ATTR_BORDER_DIAG_BLTR, SfxCallMode::RECORD, &aLineItem1, 0L);
         mrCellAppearancePropertyPanel.GetBindings()->GetDispatcher()->Execute(SID_ATTR_BORDER_DIAG_TLBR, SfxCallMode::RECORD, &aLineItem2, 0L);
         }
@@ -209,11 +209,11 @@ IMPL_LINK_TYPED(CellBorderStyleControl, TB2SelectHdl, ToolBox *, pToolBox, void)
     {
         SvxBoxItem          aBorderOuter( SID_ATTR_BORDER_OUTER );
         SvxBoxInfoItem      aBorderInner( SID_ATTR_BORDER_INNER );
-        editeng::SvxBorderLine theDefLine(NULL, 1);
-        editeng::SvxBorderLine       *pLeft = 0,
-                            *pRight = 0,
-                            *pTop = 0,
-                            *pBottom = 0;
+        editeng::SvxBorderLine theDefLine(nullptr, 1);
+        editeng::SvxBorderLine       *pLeft = nullptr,
+                            *pRight = nullptr,
+                            *pTop = nullptr,
+                            *pBottom = nullptr;
         sal_uInt8               nValidFlags = 0;
         switch ( nId )
         {
@@ -269,14 +269,14 @@ IMPL_LINK_TYPED(CellBorderStyleControl, TB2SelectHdl, ToolBox *, pToolBox, void)
     }
     else if(nId == TBI_BORDER2_BLTR)
     {
-        editeng::SvxBorderLine aTmp( NULL, 1 );
+        editeng::SvxBorderLine aTmp( nullptr, 1 );
         SvxLineItem     aLineItem( SID_ATTR_BORDER_DIAG_BLTR );
         aLineItem.SetLine( &aTmp );
         mrCellAppearancePropertyPanel.GetBindings()->GetDispatcher()->Execute(SID_ATTR_BORDER_DIAG_BLTR, SfxCallMode::RECORD, &aLineItem, 0L);
     }
     else if(nId == TBI_BORDER2_TLBR)
     {
-        editeng::SvxBorderLine aTmp( NULL, 1 );
+        editeng::SvxBorderLine aTmp( nullptr, 1 );
         SvxLineItem     aLineItem( SID_ATTR_BORDER_DIAG_TLBR );
         aLineItem.SetLine( &aTmp );
         mrCellAppearancePropertyPanel.GetBindings()->GetDispatcher()->Execute(SID_ATTR_BORDER_DIAG_TLBR, SfxCallMode::RECORD, &aLineItem, 0L);
@@ -301,31 +301,31 @@ IMPL_LINK_TYPED(CellBorderStyleControl, TB3SelectHdl, ToolBox *, pToolBox, void)
     switch ( nId )
     {
     case TBI_BORDER3_S1:
-        pBottom.reset(new editeng::SvxBorderLine(NULL, DEF_LINE_WIDTH_2 ));
+        pBottom.reset(new editeng::SvxBorderLine(nullptr, DEF_LINE_WIDTH_2 ));
         nValidFlags |= FRM_VALID_BOTTOM;
         break;
     case TBI_BORDER3_S2:
-        pBottom.reset(new editeng::SvxBorderLine(NULL));
+        pBottom.reset(new editeng::SvxBorderLine(nullptr));
         pBottom->GuessLinesWidths(DOUBLE, DEF_LINE_WIDTH_0, DEF_LINE_WIDTH_0, DEF_LINE_WIDTH_1);
         nValidFlags |= FRM_VALID_BOTTOM;
         break;
     case TBI_BORDER3_S3:
-        pBottom.reset(new editeng::SvxBorderLine(NULL, DEF_LINE_WIDTH_2 ));
-        pTop.reset(new editeng::SvxBorderLine(NULL, 1));
+        pBottom.reset(new editeng::SvxBorderLine(nullptr, DEF_LINE_WIDTH_2 ));
+        pTop.reset(new editeng::SvxBorderLine(nullptr, 1));
         nValidFlags |= FRM_VALID_BOTTOM|FRM_VALID_TOP;
         break;
     case TBI_BORDER3_S4:
-        pBottom.reset(new editeng::SvxBorderLine(NULL));
+        pBottom.reset(new editeng::SvxBorderLine(nullptr));
         pBottom->GuessLinesWidths(DOUBLE, DEF_LINE_WIDTH_0, DEF_LINE_WIDTH_0, DEF_LINE_WIDTH_1);
-        pTop.reset(new editeng::SvxBorderLine(NULL, 1));
+        pTop.reset(new editeng::SvxBorderLine(nullptr, 1));
         nValidFlags |= FRM_VALID_BOTTOM|FRM_VALID_TOP;
         break;
     }
 
     aBorderOuter.SetLine( pTop.get(), SvxBoxItemLine::TOP );
     aBorderOuter.SetLine( pBottom.get(), SvxBoxItemLine::BOTTOM );
-    aBorderOuter.SetLine( NULL, SvxBoxItemLine::LEFT );
-    aBorderOuter.SetLine( NULL, SvxBoxItemLine::RIGHT );
+    aBorderOuter.SetLine( nullptr, SvxBoxItemLine::LEFT );
+    aBorderOuter.SetLine( nullptr, SvxBoxItemLine::RIGHT );
 
     aBorderInner.SetValid( SvxBoxInfoItemValidFlags::TOP,       0 != (nValidFlags&FRM_VALID_TOP ));
     aBorderInner.SetValid( SvxBoxInfoItemValidFlags::BOTTOM,    0 != (nValidFlags&FRM_VALID_BOTTOM ));

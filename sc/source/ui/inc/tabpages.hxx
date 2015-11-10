@@ -40,7 +40,7 @@ public:
 
 protected:
     using SfxTabPage::DeactivatePage;
-    virtual sfxpg       DeactivatePage  ( SfxItemSet* pSet = NULL ) override;
+    virtual sfxpg       DeactivatePage  ( SfxItemSet* pSet = nullptr ) override;
 
 private:
                 ScTabPageProtection( vcl::Window*            pParent,

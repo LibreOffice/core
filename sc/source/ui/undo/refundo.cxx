@@ -35,14 +35,14 @@
 #include <refupdatecontext.hxx>
 
 ScRefUndoData::ScRefUndoData( const ScDocument* pDoc ) :
-    pDBCollection(NULL),
-    pRangeName(NULL),
+    pDBCollection(nullptr),
+    pRangeName(nullptr),
     pPrintRanges(pDoc->CreatePrintRangeSaver()),
-    pDPCollection(NULL),
-    pDetOpList(NULL),
-    pChartListenerCollection(NULL),
-    pAreaLinks(NULL),
-    pUnoRefs(NULL)
+    pDPCollection(nullptr),
+    pDetOpList(nullptr),
+    pChartListenerCollection(nullptr),
+    pAreaLinks(nullptr),
+    pUnoRefs(nullptr)
 {
     const ScDBCollection* pOldDBColl = pDoc->GetDBCollection();
     if (pOldDBColl && !pOldDBColl->empty())

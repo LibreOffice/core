@@ -188,7 +188,7 @@ SdrObject* FuConstCustomShape::CreateDefaultObject(const sal_uInt16 /* nID */, c
 {
     SdrObject* pObj = SdrObjFactory::MakeNewObject(
         pView->GetCurrentObjInventor(), pView->GetCurrentObjIdentifier(),
-        0L, pDrDoc);
+        nullptr, pDrDoc);
     if( pObj )
     {
         Rectangle aRectangle( rRectangle );

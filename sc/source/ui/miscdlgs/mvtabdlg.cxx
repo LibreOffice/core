@@ -217,7 +217,7 @@ void ScMoveTableDlg::Init()
 void ScMoveTableDlg::InitDocListBox()
 {
     SfxObjectShell* pSh     = SfxObjectShell::GetFirst();
-    ScDocShell*     pScSh   = NULL;
+    ScDocShell*     pScSh   = nullptr;
     sal_uInt16          nSelPos = 0;
     sal_uInt16          i       = 0;
     OUString          aEntryName;

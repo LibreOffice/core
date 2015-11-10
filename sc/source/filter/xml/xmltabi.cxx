@@ -249,7 +249,7 @@ SvXMLImportContext *ScXMLTableContext::CreateChildContext( sal_uInt16 nPrefix,
         return new SvXMLImportContext(GetImport(), nPrefix, rLName);
     }
 
-    SvXMLImportContext *pContext(0);
+    SvXMLImportContext *pContext(nullptr);
 
     switch (nToken)
     {
@@ -472,7 +472,7 @@ ScXMLTableProtectionContext::~ScXMLTableProtectionContext()
 SvXMLImportContext* ScXMLTableProtectionContext::CreateChildContext(
     sal_uInt16 /*nPrefix*/, const OUString& /*rLocalName*/, const Reference<XAttributeList>& /*xAttrList*/ )
 {
-    return NULL;
+    return nullptr;
 }
 
 void ScXMLTableProtectionContext::EndElement()

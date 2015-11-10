@@ -82,11 +82,11 @@ public:
     void                Init();
 
     void                ShowReference(const OUString& rStr);
-    void                ReleaseFocus( formula::RefEdit* pEdit, formula::RefButton* pButton = NULL );
+    void                ReleaseFocus( formula::RefEdit* pEdit, formula::RefButton* pButton = nullptr );
     void                HideReference( bool bDoneRefMode = true );
-    void                RefInputStart( formula::RefEdit* pEdit, formula::RefButton* pButton = NULL );
+    void                RefInputStart( formula::RefEdit* pEdit, formula::RefButton* pButton = nullptr );
     void                RefInputDone( bool bForced = false );
-    void                ToggleCollapsed( formula::RefEdit* pEdit, formula::RefButton* pButton = NULL );
+    void                ToggleCollapsed( formula::RefEdit* pEdit, formula::RefButton* pButton = nullptr );
 
     inline void         SetWindow(vcl::Window* _pWindow) { m_pWindow = _pWindow; }
     bool                DoClose( sal_uInt16 nId );
@@ -130,7 +130,7 @@ protected:
 
     static void         SetDispatcherLock( bool bLock );
 
-    virtual void        RefInputStart( formula::RefEdit* pEdit, formula::RefButton* pButton = NULL ) override;
+    virtual void        RefInputStart( formula::RefEdit* pEdit, formula::RefButton* pButton = nullptr ) override;
     virtual void        RefInputDone( bool bForced = false ) override;
 
     bool                ParseWithNames( ScRangeList& rRanges, const OUString& rStr, ScDocument* pDoc );
@@ -149,8 +149,8 @@ public:
     virtual void        ShowReference(const OUString& rStr) override;
     virtual void        HideReference( bool bDoneRefMode = true ) override;
 
-    virtual void        ToggleCollapsed( formula::RefEdit* pEdit, formula::RefButton* pButton = NULL ) override;
-    virtual void        ReleaseFocus( formula::RefEdit* pEdit, formula::RefButton* pButton = NULL ) override;
+    virtual void        ToggleCollapsed( formula::RefEdit* pEdit, formula::RefButton* pButton = nullptr ) override;
+    virtual void        ReleaseFocus( formula::RefEdit* pEdit, formula::RefButton* pButton = nullptr ) override;
 
     virtual void        ViewShellChanged() override;
     void                SwitchToDocument();
@@ -177,10 +177,10 @@ private:
         TParentWindow* pParent, const OUString& rID, const OUString& rUIXMLDescription );
 
     template<class TParentWindow, class TResId, class TArg>
-    ScRefHdlrImplBase( TParentWindow* pParent, TResId nResId, const TArg &rArg, SfxBindings *pB = NULL );
+    ScRefHdlrImplBase( TParentWindow* pParent, TResId nResId, const TArg &rArg, SfxBindings *pB = nullptr );
 
     template<class TParentWindow, class TArg>
-    ScRefHdlrImplBase( TParentWindow* pParent, const OUString& rID, const OUString& rUIXMLDescription, const TArg &rArg, SfxBindings *pB = NULL );
+    ScRefHdlrImplBase( TParentWindow* pParent, const OUString& rID, const OUString& rUIXMLDescription, const TArg &rArg, SfxBindings *pB = nullptr );
 
     virtual ~ScRefHdlrImplBase();
 

@@ -85,7 +85,7 @@ static const ColorData spnDefColorTable8[] =
 #undef EXC_PALETTE_EGA_COLORS_DARK
 
 XclDefaultPalette::XclDefaultPalette( const XclRoot& rRoot ) :
-    mpnColorTable( 0 ),
+    mpnColorTable( nullptr ),
     mnTableSize( 0 )
 {
     const StyleSettings& rSett = Application::GetSettings().GetStyleSettings();
@@ -533,27 +533,27 @@ namespace {
 /** Property names for common font settings. */
 const sal_Char *const sppcPropNamesChCommon[] =
 {
-    "CharUnderline", "CharStrikeout", "CharColor", "CharContoured", "CharShadowed", 0
+    "CharUnderline", "CharStrikeout", "CharColor", "CharContoured", "CharShadowed", nullptr
 };
 /** Property names for Western font settings. */
 const sal_Char *const sppcPropNamesChWstrn[] =
 {
-    "CharFontName", "CharHeight", "CharPosture", "CharWeight", 0
+    "CharFontName", "CharHeight", "CharPosture", "CharWeight", nullptr
 };
 /** Property names for Asian font settings. */
 const sal_Char *const sppcPropNamesChAsian[] =
 {
-    "CharFontNameAsian", "CharHeightAsian", "CharPostureAsian", "CharWeightAsian", 0
+    "CharFontNameAsian", "CharHeightAsian", "CharPostureAsian", "CharWeightAsian", nullptr
 };
 /** Property names for Complex font settings. */
 const sal_Char *const sppcPropNamesChCmplx[] =
 {
-    "CharFontNameComplex", "CharHeightComplex", "CharPostureComplex", "CharWeightComplex", 0
+    "CharFontNameComplex", "CharHeightComplex", "CharPostureComplex", "CharWeightComplex", nullptr
 };
 /** Property names for escapement. */
 const sal_Char *const sppcPropNamesChEscapement[] =
 {
-    "CharEscapement", "CharEscapementHeight", 0
+    "CharEscapement", "CharEscapementHeight", nullptr
 };
 const sal_Int8 EXC_API_ESC_HEIGHT           = 58;   /// Default escapement font height.
 
@@ -568,7 +568,7 @@ const sal_Char *const *const sppcPropNamesChCmplxNoName = sppcPropNamesChCmplx +
 const sal_Char *const sppcPropNamesControl[] =
 {
     "FontName", "FontFamily", "FontCharset", "FontHeight", "FontSlant",
-    "FontWeight", "FontUnderline", "FontStrikeout", "TextColor", 0
+    "FontWeight", "FontUnderline", "FontStrikeout", "TextColor", nullptr
 };
 
 /** Inserts all passed API font settings into the font data object. */
@@ -779,15 +779,15 @@ struct XclBuiltInFormat
 
 /** Defines an Excel built-in number format that maps to an own built-in format. */
 #define EXC_NUMFMT_OFFSET( nXclNumFmt, eOffset ) \
-    { nXclNumFmt, 0, eOffset, 0 }
+    { nXclNumFmt, nullptr, eOffset, 0 }
 
 /** Defines an Excel built-in number format that is the same as the specified. */
 #define EXC_NUMFMT_REUSE( nXclNumFmt, nXclReuse ) \
-    { nXclNumFmt, 0, PRV_NF_INDEX_REUSE, nXclReuse }
+    { nXclNumFmt, nullptr, PRV_NF_INDEX_REUSE, nXclReuse }
 
 /** Terminates an Excel built-in number format table. */
 #define EXC_NUMFMT_ENDTABLE() \
-    { EXC_FORMAT_NOTFOUND, 0, NF_NUMBER_STANDARD, 0 }
+    { EXC_FORMAT_NOTFOUND, nullptr, NF_NUMBER_STANDARD, 0 }
 
 // Currency unit characters
 #define UTF8_BAHT       "\340\270\277"
@@ -1412,15 +1412,15 @@ static const XclBuiltInFormatTable spBuiltInFormatTables[] =
     {   LANGUAGE_ENGLISH_CAN,           LANGUAGE_ENGLISH,           spBuiltInFormats_ENGLISH_CAN            },
     {   LANGUAGE_ENGLISH_AUS,           LANGUAGE_ENGLISH,           spBuiltInFormats_ENGLISH_AUS            },
     {   LANGUAGE_ENGLISH_SAFRICA,       LANGUAGE_ENGLISH,           spBuiltInFormats_ENGLISH_SAFRICA        },
-    {   LANGUAGE_ENGLISH_NZ,            LANGUAGE_ENGLISH_AUS,       0                                       },
+    {   LANGUAGE_ENGLISH_NZ,            LANGUAGE_ENGLISH_AUS,       nullptr                                       },
 
     {   PRV_LANGUAGE_FRENCH_PRIM,       LANGUAGE_DONTKNOW,          spBuiltInFormats_FRENCH                 },
     {   LANGUAGE_FRENCH,                PRV_LANGUAGE_FRENCH_PRIM,   spBuiltInFormats_FRENCH_FRANCE          },
     {   LANGUAGE_FRENCH_CANADIAN,       PRV_LANGUAGE_FRENCH_PRIM,   spBuiltInFormats_FRENCH_CANADIAN        },
     {   LANGUAGE_FRENCH_SWISS,          PRV_LANGUAGE_FRENCH_PRIM,   spBuiltInFormats_FRENCH_SWISS           },
     {   LANGUAGE_FRENCH_BELGIAN,        LANGUAGE_FRENCH,            spBuiltInFormats_FRENCH_BELGIAN         },
-    {   LANGUAGE_FRENCH_LUXEMBOURG,     LANGUAGE_FRENCH,            0                                       },
-    {   LANGUAGE_FRENCH_MONACO,         LANGUAGE_FRENCH,            0                                       },
+    {   LANGUAGE_FRENCH_LUXEMBOURG,     LANGUAGE_FRENCH,            nullptr                                       },
+    {   LANGUAGE_FRENCH_MONACO,         LANGUAGE_FRENCH,            nullptr                                       },
 
     {   PRV_LANGUAGE_GERMAN_PRIM,       LANGUAGE_DONTKNOW,          spBuiltInFormats_GERMAN                 },
     {   LANGUAGE_GERMAN,                PRV_LANGUAGE_GERMAN_PRIM,   spBuiltInFormats_GERMAN_GERMANY         },

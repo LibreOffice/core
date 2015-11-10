@@ -235,7 +235,7 @@ public:
         const ScPostIt* mpNote;
         const ScPatternAttr* mpPattern;
 
-        Cell() : mpAttr(NULL), mpBroadcaster(NULL), mpNote(NULL), mpPattern(NULL) {}
+        Cell() : mpAttr(nullptr), mpBroadcaster(nullptr), mpNote(nullptr), mpPattern(nullptr) {}
     };
 
     struct Row
@@ -265,7 +265,7 @@ private:
 
 public:
     ScSortInfoArray( sal_uInt16 nSorts, SCCOLROW nInd1, SCCOLROW nInd2 ) :
-        pppInfo(NULL),
+        pppInfo(nullptr),
         nCount( nInd2 - nInd1 + 1 ), nStart( nInd1 ),
         mnLastIndex(nInd2),
         nUsedSorts(nSorts),
@@ -464,7 +464,7 @@ void initDataRows(
 
 ScSortInfoArray* ScTable::CreateSortInfoArray( const sc::ReorderParam& rParam )
 {
-    ScSortInfoArray* pArray = NULL;
+    ScSortInfoArray* pArray = nullptr;
 
     if (rParam.mbByRow)
     {
@@ -562,7 +562,7 @@ struct SortedColumn : boost::noncopyable
         maCellTextAttrs(nTopEmptyRows),
         maBroadcasters(nTopEmptyRows),
         maCellNotes(nTopEmptyRows),
-        maPatterns(0, MAXROWCOUNT, NULL),
+        maPatterns(0, MAXROWCOUNT, nullptr),
         miPatternPos(maPatterns.begin()) {}
 
     void setPattern( SCROW nRow, const ScPatternAttr* pPat )
@@ -648,7 +648,7 @@ void ScTable::DestroySortCollator()
     {
         if ( !IsSortCollatorGlobal() )
             delete pSortCollator;
-        pSortCollator = NULL;
+        pSortCollator = nullptr;
     }
 }
 
@@ -846,7 +846,7 @@ class FormulaCellCollectAction : public sc::ColumnSpanSet::ColumnAction
 
 public:
     explicit FormulaCellCollectAction( std::vector<ScFormulaCell*>& rCells ) :
-        mrCells(rCells), mpCol(NULL) {}
+        mrCells(rCells), mpCol(nullptr) {}
 
     virtual void startColumn( ScColumn* pCol ) override
     {
@@ -874,7 +874,7 @@ class ListenerStartAction : public sc::ColumnSpanSet::ColumnAction
 
 public:
     explicit ListenerStartAction( ScDocument& rDoc ) :
-        mpCol(0),
+        mpCol(nullptr),
         mpPosSet(new sc::ColumnBlockPositionSet(rDoc)),
         maStartCxt(rDoc, mpPosSet),
         maEndCxt(rDoc, mpPosSet) {}
@@ -1523,7 +1523,7 @@ short ScTable::CompareCell(
                 if (!bUserDef)
                 {
                     if ( bNaturalSort )
-                        nRes = naturalsort::Compare( aStr1, aStr2, bCaseSens, NULL, pSortCollator );
+                        nRes = naturalsort::Compare( aStr1, aStr2, bCaseSens, nullptr, pSortCollator );
                     else
                         nRes = static_cast<short>( pSortCollator->compareString( aStr1, aStr2 ) );
                 }
@@ -2497,10 +2497,10 @@ public:
                     OUString aQueryStr = rItem.maString.getString();
                     OUString aCell( mpTransliteration->transliterate(
                         aCellStr.getString(), ScGlobal::eLnge, 0, aCellStr.getLength(),
-                        NULL ) );
+                        nullptr ) );
                     OUString aQuer( mpTransliteration->transliterate(
                         aQueryStr, ScGlobal::eLnge, 0, aQueryStr.getLength(),
-                        NULL ) );
+                        nullptr ) );
                     sal_Int32 nIndex = (rEntry.eOp == SC_ENDS_WITH || rEntry.eOp == SC_DOES_NOT_END_WITH) ?
                         (aCell.getLength() - aQuer.getLength()) : 0;
                     sal_Int32 nStrPos = ((nIndex < 0) ? -1 : aCell.indexOf( aQuer, nIndex ));
@@ -3077,7 +3077,7 @@ bool ScTable::CreateExcelQuery(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow
                     if (nIndex < nNewEntries)
                     {
                         rQueryParam.GetEntry(nIndex).nField = pFields[nCol - nCol1];
-                        rQueryParam.FillInExcelSyntax(rPool, aCellStr, nIndex, NULL);
+                        rQueryParam.FillInExcelSyntax(rPool, aCellStr, nIndex, nullptr);
                         nIndex++;
                         if (nIndex < nNewEntries)
                             rQueryParam.GetEntry(nIndex).eConnect = SC_AND;

@@ -82,7 +82,7 @@ public:
         @return  The encryption data or an empty sequence on 'Cancel' or any error. */
     static css::uno::Sequence< css::beans::NamedValue > QueryEncryptionDataForMedium( SfxMedium& rMedium,
                             ::comphelper::IDocPasswordVerifier& rVerifier,
-                            const ::std::vector< OUString >* pDefaultPasswords = 0 );
+                            const ::std::vector< OUString >* pDefaultPasswords = nullptr );
 };
 
 template< typename Type >

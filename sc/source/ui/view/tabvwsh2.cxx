@@ -241,7 +241,7 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
 
         pTabView->GetDrawFuncPtr()->Deactivate();
         pTabView->SetDrawFuncOldPtr(pTabView->GetDrawFuncPtr());
-        pTabView->SetDrawFuncPtr(NULL);
+        pTabView->SetDrawFuncPtr(nullptr);
     }
 
     SfxRequest aNewReq(rReq);

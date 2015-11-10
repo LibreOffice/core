@@ -194,7 +194,7 @@ public:
     /** Reads a CRN record and appends it to the current SUPBOOK. */
     void                ReadCrn( XclImpStream& rStrm );
     /** Reads an EXTERNNAME record and appends it to the current SUPBOOK. */
-    void                ReadExternname( XclImpStream& rStrm, ExcelToSc* pFormulaConv = NULL );
+    void                ReadExternname( XclImpStream& rStrm, ExcelToSc* pFormulaConv = nullptr );
 
     /** Returns true, if the specified XTI entry contains an internal reference. */
     bool                IsSelfRef( sal_uInt16 nXtiIndex ) const;

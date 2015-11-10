@@ -3451,7 +3451,7 @@ void ScInterpreter::ScModalValue()
     if ( !MustHaveParamCountMin( nParamCount, 1 ) )
         return;
     vector<double> aSortArray;
-    GetSortArray( nParamCount, aSortArray, NULL, false, false );
+    GetSortArray( nParamCount, aSortArray, nullptr, false, false );
     SCSIZE nSize = aSortArray.size();
     if (aSortArray.empty() || nSize == 0 || nGlobalError)
         PushNoValue();
@@ -3537,7 +3537,7 @@ void ScInterpreter::ScPercentrank( bool bInclusive )
     double fSignificance = ( nParamCount == 3 ? ::rtl::math::approxFloor( GetDouble() ) : 3.0 );
     double fNum = GetDouble();
     vector<double> aSortArray;
-    GetSortArray( 1, aSortArray, NULL, false, false );
+    GetSortArray( 1, aSortArray, nullptr, false, false );
     SCSIZE nSize = aSortArray.size();
     if ( aSortArray.empty() || nSize == 0 || nGlobalError )
         PushNoValue();
@@ -3630,7 +3630,7 @@ void ScInterpreter::ScTrimMean()
         return;
     }
     vector<double> aSortArray;
-    GetSortArray( 1, aSortArray, NULL, false, false );
+    GetSortArray( 1, aSortArray, nullptr, false, false );
     SCSIZE nSize = aSortArray.size();
     if (aSortArray.empty() || nSize == 0 || nGlobalError)
         PushNoValue();
@@ -3874,7 +3874,7 @@ void ScInterpreter::ScRank( bool bAverage )
         bAscending = false;
 
     vector<double> aSortArray;
-    GetSortArray( 1, aSortArray, NULL, false, false );
+    GetSortArray( 1, aSortArray, nullptr, false, false );
     double fVal = GetDouble();
     SCSIZE nSize = aSortArray.size();
     if ( aSortArray.empty() || nSize == 0 || nGlobalError )

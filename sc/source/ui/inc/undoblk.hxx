@@ -188,7 +188,7 @@ public:
                 InsertDeleteFlags nNewFlags,
                 ScRefUndoData* pRefData,
                 bool bRedoIsFilled = true,
-                const ScUndoPasteOptions* pOptions = NULL);
+                const ScUndoPasteOptions* pOptions = nullptr);
     virtual ~ScUndoPaste();
 
     virtual void Undo() override;
@@ -330,8 +330,8 @@ public:
                                          SCCOL nEndX, SCROW nEndY, SCTAB nEndZ,
                                          ScDocument* pNewUndoDoc, bool bNewMulti,
                                          const ScPatternAttr* pNewApply,
-                                         const SvxBoxItem* pNewOuter = NULL,
-                                         const SvxBoxInfoItem* pNewInner = NULL );
+                                         const SvxBoxItem* pNewOuter = nullptr,
+                                         const SvxBoxInfoItem* pNewInner = nullptr );
     virtual         ~ScUndoSelectionAttr();
 
     virtual void    Undo() override;

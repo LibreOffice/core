@@ -248,7 +248,7 @@ DifParser::DifParser( SvStream& rNewIn, const sal_uInt32 nOption, ScDocument& rD
     bPlain = ( nOption == SC_DIFOPT_PLAIN );
 
     if( bPlain )
-        pNumFormatter = NULL;
+        pNumFormatter = nullptr;
     else
         pNumFormatter = rDoc.GetFormatTable();
 }
@@ -612,7 +612,7 @@ const sal_Unicode* DifParser::ScanIntVal( const sal_Unicode* pStart, sal_uInt32&
     if( IsNumber( cAkt ) )
         rRet = ( sal_uInt32 ) ( cAkt - '0' );
     else
-        return NULL;
+        return nullptr;
 
     pStart++;
     cAkt = *pStart;
@@ -807,7 +807,7 @@ bool DifParser::ScanFloatVal( const sal_Unicode* pStart )
 }
 
 DifColumn::DifColumn ()
-    : pAkt(NULL)
+    : pAkt(nullptr)
 {
 }
 
@@ -824,7 +824,7 @@ void DifColumn::SetLogical( SCROW nRow )
         if( pAkt->nEnd == nRow )
             pAkt->nEnd++;
         else
-            pAkt = NULL;
+            pAkt = nullptr;
     }
     else
     {
@@ -857,7 +857,7 @@ void DifColumn::SetNumFormat( SCROW nRow, const sal_uInt32 nNumFormat )
             NewEntry(nRow,nNumFormat );
     }
     else
-        pAkt = NULL;
+        pAkt = nullptr;
 }
 
 void DifColumn::NewEntry( const SCROW nPos, const sal_uInt32 nNumFormat )
@@ -898,7 +898,7 @@ DifAttrCache::DifAttrCache( const bool bNewPlain )
     bPlain = bNewPlain;
     ppCols = new DifColumn *[ MAXCOL + 1 ];
     for( SCCOL nCnt = 0 ; nCnt <= MAXCOL ; nCnt++ )
-        ppCols[ nCnt ] = NULL;
+        ppCols[ nCnt ] = nullptr;
 }
 
 DifAttrCache::~DifAttrCache()

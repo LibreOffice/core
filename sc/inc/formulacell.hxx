@@ -244,7 +244,7 @@ public:
     bool            HasRelNameReference() const;
 
     bool UpdateReference(
-        const sc::RefUpdateContext& rCxt, ScDocument* pUndoDoc = NULL, const ScAddress* pUndoCellPos = NULL );
+        const sc::RefUpdateContext& rCxt, ScDocument* pUndoDoc = nullptr, const ScAddress* pUndoCellPos = nullptr );
 
     /**
      * Shift the position of formula cell as part of reference update.
@@ -394,7 +394,7 @@ public:
     void StartListeningTo( ScDocument* pDoc );
     void StartListeningTo( sc::StartListeningContext& rCxt );
     void EndListeningTo(
-        ScDocument* pDoc, ScTokenArray* pArr = NULL, ScAddress aPos = ScAddress() );
+        ScDocument* pDoc, ScTokenArray* pArr = nullptr, ScAddress aPos = ScAddress() );
     void EndListeningTo( sc::EndListeningContext& rCxt );
 
     bool IsShared() const;

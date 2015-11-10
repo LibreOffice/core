@@ -55,24 +55,24 @@ public:
 
     static bool IsAbsTabArea    ( const OUString&   rAreaStr,
                                   ScDocument*       pDoc,
-                                  ScArea***         pppAreas    = 0,
-                                  sal_uInt16*       pAreaCount  = 0,
+                                  ScArea***         pppAreas    = nullptr,
+                                  sal_uInt16*       pAreaCount  = nullptr,
                                   bool              bAcceptCellRef = false,
                                   ScAddress::Details const & rDetails = ScAddress::detailsOOOa1 );
 
     static bool IsAbsArea       ( const OUString& rAreaStr,
                                   ScDocument*   pDoc,
                                   SCTAB     nTab,
-                                  OUString*     pCompleteStr = 0,
-                                  ScRefAddress* pStartPos    = 0,
-                                  ScRefAddress* pEndPos      = 0,
+                                  OUString*     pCompleteStr = nullptr,
+                                  ScRefAddress* pStartPos    = nullptr,
+                                  ScRefAddress* pEndPos      = nullptr,
                                   ScAddress::Details const & rDetails = ScAddress::detailsOOOa1 );
 
     static bool IsAbsPos        ( const OUString& rPosStr,
                                   ScDocument*   pDoc,
                                   SCTAB     nTab,
-                                  OUString*       pCompleteStr = 0,
-                                  ScRefAddress* pPosTripel   = 0,
+                                  OUString*       pCompleteStr = nullptr,
+                                  ScRefAddress* pPosTripel   = nullptr,
                                   ScAddress::Details const & rDetails = ScAddress::detailsOOOa1 );
 
     static bool MakeRangeFromName( const OUString& rName,

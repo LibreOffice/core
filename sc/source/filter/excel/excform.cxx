@@ -105,7 +105,7 @@ void ImportExcel::Formula(
         return;
 
     // Formula will be read next, length in nFormLen
-    const ScTokenArray* pResult = NULL;
+    const ScTokenArray* pResult = nullptr;
 
     pFormConv->Reset( aScPos );
     ScDocumentImport& rDoc = GetDocImport();
@@ -143,7 +143,7 @@ void ImportExcel::Formula(
                 // Shared formula not found even though it's clearly a shared formula.
                 // The cell will be created in the following shared formula
                 // record.
-                SetLastFormula(aScPos.Col(), aScPos.Row(), fCurVal, nXF, NULL);
+                SetLastFormula(aScPos.Col(), aScPos.Row(), fCurVal, nXF, nullptr);
             }
             return;
         }
@@ -151,7 +151,7 @@ void ImportExcel::Formula(
 
     ConvErr eErr = pFormConv->Convert( pResult, maStrm, nFormLen, true );
 
-    ScFormulaCell* pCell = NULL;
+    ScFormulaCell* pCell = nullptr;
 
     if (pResult)
     {
@@ -905,7 +905,7 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, XclImpStream& aIn, s
     }
     else if( bArrayFormula )
     {
-        pErgebnis = NULL;
+        pErgebnis = nullptr;
         eRet = ConvOK;
     }
     else
@@ -1833,14 +1833,14 @@ void ExcelToSc::ReadExtensionArray( unsigned int n, XclImpStream& aIn )
 
     pMatrix = aPool.GetMatrix( n );
 
-    if( NULL != pMatrix )
+    if( nullptr != pMatrix )
     {
         pMatrix->Resize(nCols, nRows);
         pMatrix->GetDimensions( nC, nR);
         if( nC != nCols || nR != nRows )
         {
             OSL_FAIL( "ExcelToSc::ReadExtensionArray - matrix size mismatch" );
-            pMatrix = NULL;
+            pMatrix = nullptr;
         }
     }
     else
@@ -1868,7 +1868,7 @@ void ExcelToSc::ReadExtensionArray( unsigned int n, XclImpStream& aIn )
             {
                 case EXC_CACHEDVAL_EMPTY:
                     aIn.Ignore( 8 );
-                    if( NULL != pMatrix )
+                    if( nullptr != pMatrix )
                     {
                         pMatrix->PutEmpty( nC, nR );
                     }
@@ -1877,7 +1877,7 @@ void ExcelToSc::ReadExtensionArray( unsigned int n, XclImpStream& aIn )
                 case EXC_CACHEDVAL_DOUBLE:
                 {
                     double fDouble = aIn.ReadDouble();
-                    if( NULL != pMatrix )
+                    if( nullptr != pMatrix )
                     {
                         pMatrix->PutDouble( fDouble, nC, nR );
                     }
@@ -1896,7 +1896,7 @@ void ExcelToSc::ReadExtensionArray( unsigned int n, XclImpStream& aIn )
                         nByte = aIn.ReaduInt8();
                         aString = aIn.ReadRawByteString( nByte );
                     }
-                    if( NULL != pMatrix )
+                    if( nullptr != pMatrix )
                     {
                         pMatrix->PutString(rPool.intern(aString), nC, nR);
                     }
@@ -1905,7 +1905,7 @@ void ExcelToSc::ReadExtensionArray( unsigned int n, XclImpStream& aIn )
                 case EXC_CACHEDVAL_BOOL:
                     nByte = aIn.ReaduInt8();
                     aIn.Ignore( 7 );
-                    if( NULL != pMatrix )
+                    if( nullptr != pMatrix )
                     {
                         pMatrix->PutBoolean( nByte != 0, nC, nR );
                     }
@@ -1914,7 +1914,7 @@ void ExcelToSc::ReadExtensionArray( unsigned int n, XclImpStream& aIn )
                 case EXC_CACHEDVAL_ERROR:
                     nByte = aIn.ReaduInt8();
                     aIn.Ignore( 7 );
-                    if( NULL != pMatrix )
+                    if( nullptr != pMatrix )
                     {
                         pMatrix->PutError( XclTools::GetScErrorCode( nByte ), nC, nR );
                     }

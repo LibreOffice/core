@@ -113,7 +113,7 @@ bool ScDrawView::BeginDrag( vcl::Window* pWindow, const Point& rStartPos )
         }
         ScDrawLayer::SetGlobalDrawPersist(aDragShellRef);
         SdrModel* pModel = GetMarkedObjModel();
-        ScDrawLayer::SetGlobalDrawPersist(NULL);
+        ScDrawLayer::SetGlobalDrawPersist(nullptr);
 
         //  Charts now always copy their data in addition to the source reference, so
         //  there's no need to call SchDLL::Update for the charts in the clipboard doc.
@@ -133,7 +133,7 @@ bool ScDrawView::BeginDrag( vcl::Window* pWindow, const Point& rStartPos )
         pTransferObj->SetDrawPersist( &aDragShellRef );    // keep persist for ole objects alive
         pTransferObj->SetDragSource( this );               // copies selection
 
-        SC_MOD()->SetDragObject( NULL, pTransferObj );     // for internal D&D
+        SC_MOD()->SetDragObject( nullptr, pTransferObj );     // for internal D&D
         pTransferObj->StartDrag( pWindow, DND_ACTION_COPYMOVE | DND_ACTION_LINK );
     }
 
@@ -371,7 +371,7 @@ void ScDrawView::DoCopy()
         copyChartRefDataToClipDoc(pDoc, &rClipDoc, aRanges);
     }
     SdrModel* pModel = GetMarkedObjModel();
-    ScDrawLayer::SetGlobalDrawPersist(NULL);
+    ScDrawLayer::SetGlobalDrawPersist(nullptr);
 
     //  Charts now always copy their data in addition to the source reference, so
     //  there's no need to call SchDLL::Update for the charts in the clipboard doc.
@@ -394,7 +394,7 @@ void ScDrawView::DoCopy()
     }
 
     pTransferObj->CopyToClipboard( pViewData->GetActiveWin() );     // system clipboard
-    SC_MOD()->SetClipObject( NULL, pTransferObj );                  // internal clipboard
+    SC_MOD()->SetClipObject( nullptr, pTransferObj );                  // internal clipboard
 }
 
 uno::Reference<datatransfer::XTransferable> ScDrawView::CopyToTransferable()
@@ -406,7 +406,7 @@ uno::Reference<datatransfer::XTransferable> ScDrawView::CopyToTransferable()
     // update ScGlobal::xDrawClipDocShellRef
     ScDrawLayer::SetGlobalDrawPersist( ScTransferObj::SetDrawClipDoc( bAnyOle ) );
     SdrModel* pModel = GetMarkedObjModel();
-    ScDrawLayer::SetGlobalDrawPersist(NULL);
+    ScDrawLayer::SetGlobalDrawPersist(nullptr);
 
     //  Charts now always copy their data in addition to the source reference, so
     //  there's no need to call SchDLL::Update for the charts in the clipboard doc.

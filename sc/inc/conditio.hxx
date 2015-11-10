@@ -104,9 +104,9 @@ enum ScFormatEntryType
 struct ScCondFormatData
 {
     ScCondFormatData():
-        pColorScale(NULL),
-        pDataBar(NULL),
-        pIconSet(NULL) {}
+        pColorScale(nullptr),
+        pDataBar(nullptr),
+        pIconSet(nullptr) {}
 
     Color* pColorScale;
     ScDataBarInfo* pDataBar;
@@ -126,7 +126,7 @@ public:
     virtual void UpdateDeleteTab( sc::RefUpdateDeleteTabContext& rCxt ) = 0;
     virtual void UpdateMoveTab( sc::RefUpdateMoveTabContext& rCxt ) = 0;
 
-    virtual ScFormatEntry* Clone( ScDocument* pDoc = NULL ) const = 0;
+    virtual ScFormatEntry* Clone( ScDocument* pDoc = nullptr ) const = 0;
 
     virtual void SetParent( ScConditionalFormat* pNew ) = 0;
 
@@ -240,7 +240,7 @@ public:
 
     virtual condformat::ScFormatEntryType GetType() const override { return condformat::CONDITION; }
 
-    virtual ScFormatEntry* Clone(ScDocument* pDoc = NULL) const override;
+    virtual ScFormatEntry* Clone(ScDocument* pDoc = nullptr) const override;
 
     static ScConditionMode GetModeFromApi(sal_Int32 nOperator);
 
@@ -358,7 +358,7 @@ public:
     virtual void UpdateDeleteTab( sc::RefUpdateDeleteTabContext& ) override {}
     virtual void UpdateMoveTab( sc::RefUpdateMoveTabContext& ) override {}
 
-    virtual ScFormatEntry* Clone( ScDocument* pDoc = NULL ) const override;
+    virtual ScFormatEntry* Clone( ScDocument* pDoc = nullptr ) const override;
 
     virtual void SetParent( ScConditionalFormat* ) override {}
 
@@ -390,7 +390,7 @@ public:
             ~ScConditionalFormat();
 
     // true copy of formulas (for Ref-Undo / between documents)
-    ScConditionalFormat* Clone(ScDocument* pNewDoc = NULL) const;
+    ScConditionalFormat* Clone(ScDocument* pNewDoc = nullptr) const;
 
     void            AddEntry( ScFormatEntry* pNew );
     void RemoveEntry(size_t nIndex);

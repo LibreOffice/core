@@ -48,8 +48,8 @@ public:
 
     virtual void ForcePointer(const MouseEvent* pMEvt) override;
 
-    void    SetInEditMode( SdrObject* pObj = NULL, const Point* pMousePixel = NULL,
-                            bool bCursorToEnd = false, const KeyEvent* pInitialKey = NULL );
+    void    SetInEditMode( SdrObject* pObj = nullptr, const Point* pMousePixel = nullptr,
+                            bool bCursorToEnd = false, const KeyEvent* pInitialKey = nullptr );
     void    StopEditMode(bool bTextDirection = false);
 
     // Create default drawing objects via keyboard

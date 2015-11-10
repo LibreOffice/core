@@ -107,7 +107,7 @@ void SAL_CALL ScVbaButtonCharacters::setText( const OUString& rText ) throw (uno
 
 uno::Reference< excel::XFont > SAL_CALL ScVbaButtonCharacters::getFont() throw (uno::RuntimeException, std::exception)
 {
-    return new ScVbaFont( this, mxContext, maPalette, mxPropSet, 0, true );
+    return new ScVbaFont( this, mxContext, maPalette, mxPropSet, nullptr, true );
 }
 
 void SAL_CALL ScVbaButtonCharacters::setFont( const uno::Reference< excel::XFont >& /*rxFont*/ ) throw (uno::RuntimeException, std::exception)
@@ -437,7 +437,7 @@ void SAL_CALL ScVbaButton::setCaption( const OUString& rCaption ) throw (uno::Ru
 
 uno::Reference< excel::XFont > SAL_CALL ScVbaButton::getFont() throw (uno::RuntimeException, std::exception)
 {
-    return new ScVbaFont( this, mxContext, maPalette, mxControlProps, 0, true );
+    return new ScVbaFont( this, mxContext, maPalette, mxControlProps, nullptr, true );
 }
 
 void SAL_CALL ScVbaButton::setFont( const uno::Reference< excel::XFont >& /*rxFont*/ ) throw (uno::RuntimeException, std::exception)

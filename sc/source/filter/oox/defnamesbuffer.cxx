@@ -229,7 +229,7 @@ Any DefinedNameBase::getReference( const CellAddress& rBaseAddr ) const
 
 DefinedName::DefinedName( const WorkbookHelper& rHelper ) :
     DefinedNameBase( rHelper ),
-    mpScRangeData(NULL),
+    mpScRangeData(nullptr),
     mnTokenIndex( -1 ),
     mnCalcSheet( 0 ),
     mcBuiltinId( BIFF_DEFNAME_UNKNOWN )

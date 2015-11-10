@@ -78,7 +78,7 @@ SvXMLImportContext *ScXMLDetectiveContext::CreateChildContext(
         const OUString& rLName,
         const uno::Reference< xml::sax::XAttributeList>& xAttrList )
 {
-    SvXMLImportContext*     pContext    = NULL;
+    SvXMLImportContext*     pContext    = nullptr;
     const SvXMLTokenMap&    rTokenMap   = GetScImport().GetDetectiveElemTokenMap();
 
     switch( rTokenMap.Get( nPrefix, rLName ) )

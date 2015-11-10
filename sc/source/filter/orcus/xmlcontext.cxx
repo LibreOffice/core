@@ -203,7 +203,7 @@ bool ScOrcusXMLContextImpl::loadXMLStructure(SvTreeListBox& rTreeCtrl, ScOrcusXM
 
         // Root element.
         orcus::xml_structure_tree::element aElem = aWalker.root();
-        populateTree(rTreeCtrl, aWalker, aElem.name, aElem.repeat, NULL, rParam);
+        populateTree(rTreeCtrl, aWalker, aElem.name, aElem.repeat, nullptr, rParam);
     }
     catch (const std::exception&)
     {
@@ -244,7 +244,7 @@ bool ScOrcusXMLContextImpl::importXML(const ScOrcusImportXMLParam& rParam)
     const char* path = aSysPath.getStr();
     try
     {
-        orcus::orcus_xml filter(maNsRepo, &aFactory, NULL);
+        orcus::orcus_xml filter(maNsRepo, &aFactory, nullptr);
 
         // Define all used namespaces.
         std::for_each(rParam.maNamespaces.begin(), rParam.maNamespaces.end(), SetNamespaceAlias(filter, maNsRepo));

@@ -51,7 +51,7 @@ struct TableLink_Impl
     VclPtr<vcl::Window>    m_pOldParent;
     Link<sfx2::SvBaseLink&,void> m_aEndEditLink;
 
-    TableLink_Impl() : m_pDocSh( NULL ), m_pOldParent( NULL ) {}
+    TableLink_Impl() : m_pDocSh( nullptr ), m_pOldParent( nullptr ) {}
 };
 
 TYPEINIT1(ScTableLink, ::sfx2::SvBaseLink);
@@ -123,17 +123,17 @@ void ScTableLink::Edit( vcl::Window* pParent, const Link<SvBaseLink&,void>& rEnd
     const OUString&, const css::uno::Any& )
 {
     sfx2::LinkManager* pLinkManager=pImpl->m_pDocSh->GetDocument().GetLinkManager();
-    if (pLinkManager!=NULL)
+    if (pLinkManager!=nullptr)
     {
         OUString aFile, aFilter;
-        sfx2::LinkManager::GetDisplayNames(this, 0, &aFile, NULL, &aFilter);
+        sfx2::LinkManager::GetDisplayNames(this, nullptr, &aFile, nullptr, &aFilter);
 
         //  the file dialog returns the filter name with the application prefix
         //  -> remove prefix
         ScDocumentLoader::RemoveAppPrefix( aFilter );
 
         if (!bInCreate)
-            Refresh( aFile, aFilter, NULL, GetRefreshDelay() ); // don't load twice
+            Refresh( aFile, aFilter, nullptr, GetRefreshDelay() ); // don't load twice
     }
     return SUCCESS;
 }
@@ -210,7 +210,7 @@ bool ScTableLink::Refresh(const OUString& rNewFile, const OUString& rNewFilter,
 
     //  Undo...
 
-    ScDocument* pUndoDoc = NULL;
+    ScDocument* pUndoDoc = nullptr;
     bool bFirst = true;
     if (bAddUndo && bUndo)
         pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
@@ -415,7 +415,7 @@ bool ScTableLink::Refresh(const OUString& rNewFile, const OUString& rNewFilter,
 
 IMPL_LINK_NOARG_TYPED(ScTableLink, RefreshHdl, Timer *, void)
 {
-    Refresh( aFileName, aFilterName, NULL, GetRefreshDelay() );
+    Refresh( aFileName, aFilterName, nullptr, GetRefreshDelay() );
 }
 
 IMPL_LINK_TYPED( ScTableLink, TableEndEditHdl, ::sfx2::SvBaseLink&, rLink, void )
@@ -464,7 +464,7 @@ bool ScDocumentLoader::GetFilterName( const OUString& rFileName,
 
     //  Filter-Detection
 
-    const SfxFilter* pSfxFilter = NULL;
+    const SfxFilter* pSfxFilter = nullptr;
     SfxMedium* pMedium = new SfxMedium( rFileName, STREAM_STD_READ );
     if ( pMedium->GetError() == ERRCODE_NONE )
     {
@@ -513,8 +513,8 @@ SfxMedium* ScDocumentLoader::CreateMedium( const OUString& rFileName, const SfxF
 ScDocumentLoader::ScDocumentLoader( const OUString& rFileName,
                                     OUString& rFilterName, OUString& rOptions,
                                     sal_uInt32 nRekCnt, bool bWithInteraction ) :
-        pDocShell(0),
-        pMedium(0)
+        pDocShell(nullptr),
+        pMedium(nullptr)
 {
     if ( rFilterName.isEmpty() )
         GetFilterName( rFileName, rFilterName, rOptions, true, bWithInteraction );
@@ -562,15 +562,15 @@ void ScDocumentLoader::ReleaseDocRef()
         //  release reference without calling DoClose - caller must
         //  have another reference to the doc and call DoClose later
 
-        pDocShell = NULL;
-        pMedium = NULL;
+        pDocShell = nullptr;
+        pMedium = nullptr;
         aRef.Clear();
     }
 }
 
 ScDocument* ScDocumentLoader::GetDocument()
 {
-    return pDocShell ? &pDocShell->GetDocument() : 0;
+    return pDocShell ? &pDocShell->GetDocument() : nullptr;
 }
 
 bool ScDocumentLoader::IsError() const

@@ -57,7 +57,7 @@ using namespace xmloff::token;
 
 ScXMLExportDataPilot::ScXMLExportDataPilot(ScXMLExport& rTempExport)
     : rExport(rTempExport),
-    pDoc( NULL )
+    pDoc( nullptr )
 {
 }
 
@@ -433,7 +433,7 @@ void ScXMLExportDataPilot::WriteSubTotals(ScDPSaveDimension* pDim)
     using sheet::GeneralFunction;
 
     sal_Int32 nSubTotalCount = pDim->GetSubTotalsCount();
-    const OUString* pLayoutName = NULL;
+    const OUString* pLayoutName = nullptr;
     if (rExport.getDefaultVersion() > SvtSaveOptions::ODFVER_012)
         // Export display names only for 1.2 extended or later.
         pLayoutName = pDim->GetSubtotalName();
@@ -632,8 +632,8 @@ void ScXMLExportDataPilot::WriteNumGroupDim(const ScDPSaveNumGroupDimension* pNu
 
 void ScXMLExportDataPilot::WriteGroupDimElements(ScDPSaveDimension* pDim, const ScDPDimensionSaveData* pDimData)
 {
-    const ScDPSaveGroupDimension* pGroupDim = NULL;
-    const ScDPSaveNumGroupDimension* pNumGroupDim = NULL;
+    const ScDPSaveGroupDimension* pGroupDim = nullptr;
+    const ScDPSaveNumGroupDimension* pNumGroupDim = nullptr;
     if (pDimData)
     {
         pGroupDim = pDimData->GetNamedGroupDim(pDim->GetName());

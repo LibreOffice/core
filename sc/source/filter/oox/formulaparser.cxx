@@ -66,7 +66,7 @@ ApiTokenSequence FormulaFinalizer::finalizeTokenArray( const ApiTokenSequence& r
 
 const FunctionInfo* FormulaFinalizer::resolveBadFuncName( const OUString& ) const
 {
-    return 0;
+    return nullptr;
 }
 
 OUString FormulaFinalizer::resolveDefinedName( sal_Int32 ) const
@@ -98,7 +98,7 @@ const FunctionInfo* FormulaFinalizer::getFunctionInfo( ApiToken& orFuncToken )
     }
 
     // no success - return null
-    return 0;
+    return nullptr;
 }
 
 const FunctionInfo* FormulaFinalizer::getExternCallInfo( ApiToken& orFuncToken, const ApiToken& rECToken )
@@ -131,7 +131,7 @@ const FunctionInfo* FormulaFinalizer::getExternCallInfo( ApiToken& orFuncToken, 
         }
     }
 
-    return 0;
+    return nullptr;
 }
 
 void FormulaFinalizer::processTokens( const ApiToken* pToken, const ApiToken* pTokenEnd )
@@ -141,7 +141,7 @@ void FormulaFinalizer::processTokens( const ApiToken* pToken, const ApiToken* pT
         // push the current token into the vector
         bool bValid = appendFinalToken( *pToken );
         // try to process a function
-        if( const FunctionInfo* pFuncInfo = bValid ? getFunctionInfo( maTokens.back() ) : 0 )
+        if( const FunctionInfo* pFuncInfo = bValid ? getFunctionInfo( maTokens.back() ) : nullptr )
             pToken = processParameters( *pFuncInfo, pToken + 1, pTokenEnd );
         // otherwise, go to next token
         else
@@ -297,7 +297,7 @@ bool FormulaFinalizer::isEmptyParameter( const ApiToken* pToken, const ApiToken*
 
 const ApiToken* FormulaFinalizer::getSingleToken( const ApiToken* pToken, const ApiToken* pTokenEnd ) const
 {
-    const ApiToken* pSingleToken = 0;
+    const ApiToken* pSingleToken = nullptr;
     // skip leading whitespace tokens
     while( (pToken < pTokenEnd) && (pToken->OpCode == OPCODE_SPACES) ) ++pToken;
     // remember first non-whitespace token
@@ -305,7 +305,7 @@ const ApiToken* FormulaFinalizer::getSingleToken( const ApiToken* pToken, const 
     // skip trailing whitespace tokens
     while( (pToken < pTokenEnd) && (pToken->OpCode == OPCODE_SPACES) ) ++pToken;
     // return null, if other non-whitespace tokens follow
-    return (pToken == pTokenEnd) ? pSingleToken : 0;
+    return (pToken == pTokenEnd) ? pSingleToken : nullptr;
 }
 
 const ApiToken* FormulaFinalizer::skipParentheses( const ApiToken* pToken, const ApiToken* pTokenEnd ) const
@@ -464,20 +464,20 @@ protected:
 
     ApiToken&           getOperandToken( size_t nOpCountFromEnd, size_t nOpIndex, size_t nTokenIndex );
 
-    bool                pushOperandToken( sal_Int32 nOpCode, const WhiteSpaceVec* pSpaces = 0 );
-    bool                pushAnyOperandToken( const Any& rAny, sal_Int32 nOpCode, const WhiteSpaceVec* pSpaces = 0 );
+    bool                pushOperandToken( sal_Int32 nOpCode, const WhiteSpaceVec* pSpaces = nullptr );
+    bool                pushAnyOperandToken( const Any& rAny, sal_Int32 nOpCode, const WhiteSpaceVec* pSpaces = nullptr );
     template< typename Type >
-    bool                pushValueOperandToken( const Type& rValue, sal_Int32 nOpCode, const WhiteSpaceVec* pSpaces = 0 );
+    bool                pushValueOperandToken( const Type& rValue, sal_Int32 nOpCode, const WhiteSpaceVec* pSpaces = nullptr );
     template< typename Type >
-    inline bool         pushValueOperandToken( const Type& rValue, const WhiteSpaceVec* pSpaces = 0 )
+    inline bool         pushValueOperandToken( const Type& rValue, const WhiteSpaceVec* pSpaces = nullptr )
                             { return pushValueOperandToken( rValue, OPCODE_PUSH, pSpaces ); }
-    bool                pushParenthesesOperandToken( const WhiteSpaceVec* pOpeningSpaces = 0, const WhiteSpaceVec* pClosingSpaces = 0 );
-    bool                pushUnaryPreOperatorToken( sal_Int32 nOpCode, const WhiteSpaceVec* pSpaces = 0 );
-    bool                pushUnaryPostOperatorToken( sal_Int32 nOpCode, const WhiteSpaceVec* pSpaces = 0 );
-    bool                pushBinaryOperatorToken( sal_Int32 nOpCode, const WhiteSpaceVec* pSpaces = 0 );
-    bool                pushParenthesesOperatorToken( const WhiteSpaceVec* pOpeningSpaces = 0, const WhiteSpaceVec* pClosingSpaces = 0 );
-    bool                pushFunctionOperatorToken( sal_Int32 nOpCode, size_t nParamCount, const WhiteSpaceVec* pLeadingSpaces = 0, const WhiteSpaceVec* pClosingSpaces = 0 );
-    bool                pushFunctionOperatorToken( const FunctionInfo& rFuncInfo, size_t nParamCount, const WhiteSpaceVec* pLeadingSpaces = 0, const WhiteSpaceVec* pClosingSpaces = 0 );
+    bool                pushParenthesesOperandToken( const WhiteSpaceVec* pOpeningSpaces = nullptr, const WhiteSpaceVec* pClosingSpaces = nullptr );
+    bool                pushUnaryPreOperatorToken( sal_Int32 nOpCode, const WhiteSpaceVec* pSpaces = nullptr );
+    bool                pushUnaryPostOperatorToken( sal_Int32 nOpCode, const WhiteSpaceVec* pSpaces = nullptr );
+    bool                pushBinaryOperatorToken( sal_Int32 nOpCode, const WhiteSpaceVec* pSpaces = nullptr );
+    bool                pushParenthesesOperatorToken( const WhiteSpaceVec* pOpeningSpaces = nullptr, const WhiteSpaceVec* pClosingSpaces = nullptr );
+    bool                pushFunctionOperatorToken( sal_Int32 nOpCode, size_t nParamCount, const WhiteSpaceVec* pLeadingSpaces = nullptr, const WhiteSpaceVec* pClosingSpaces = nullptr );
+    bool                pushFunctionOperatorToken( const FunctionInfo& rFuncInfo, size_t nParamCount, const WhiteSpaceVec* pLeadingSpaces = nullptr, const WhiteSpaceVec* pClosingSpaces = nullptr );
 
     bool                pushOperand( sal_Int32 nOpCode );
     bool                pushAnyOperand( const Any& rAny, sal_Int32 nOpCode );
@@ -839,7 +839,7 @@ bool FormulaParserImpl::pushFunctionOperatorToken( sal_Int32 nOpCode, size_t nPa
 
     // add function parentheses and function name
     return bOk &&
-        ((nParamCount > 0) ? pushParenthesesOperatorToken( 0, pClosingSpaces ) : pushParenthesesOperandToken( 0, pClosingSpaces )) &&
+        ((nParamCount > 0) ? pushParenthesesOperatorToken( nullptr, pClosingSpaces ) : pushParenthesesOperandToken( nullptr, pClosingSpaces )) &&
         pushUnaryPreOperatorToken( nOpCode, pLeadingSpaces );
 }
 
@@ -1199,7 +1199,7 @@ const FunctionInfo* FormulaParserImpl::resolveBadFuncName( const OUString& rToke
                     return pFuncInfo;
         }
     }
-    return 0;
+    return nullptr;
 }
 
 OUString FormulaParserImpl::resolveDefinedName( sal_Int32 nTokenIndex ) const
@@ -2018,19 +2018,19 @@ BiffFormulaParserImpl::BiffFormulaParserImpl( const FormulaParser& rParent ) :
             mnRefIdSize = 0;
         break;
         case BIFF_UNKNOWN:
-            mpImportStrToken = NULL;
-            mpImportSpaceToken = NULL;
-            mpImportSheetToken = NULL;
-            mpImportEndSheetToken = NULL;
-            mpImportNlrToken = NULL;
-            mpImportRefToken = NULL;
-            mpImportAreaToken = NULL;
-            mpImportRef3dToken = NULL;
-            mpImportArea3dToken = NULL;
-            mpImportNameXToken = NULL;
-            mpImportFuncToken = NULL;
-            mpImportFuncVarToken = NULL;
-            mpImportFuncCEToken = NULL;
+            mpImportStrToken = nullptr;
+            mpImportSpaceToken = nullptr;
+            mpImportSheetToken = nullptr;
+            mpImportEndSheetToken = nullptr;
+            mpImportNlrToken = nullptr;
+            mpImportRefToken = nullptr;
+            mpImportAreaToken = nullptr;
+            mpImportRef3dToken = nullptr;
+            mpImportArea3dToken = nullptr;
+            mpImportNameXToken = nullptr;
+            mpImportFuncToken = nullptr;
+            mpImportFuncVarToken = nullptr;
+            mpImportFuncCEToken = nullptr;
             mnAttrDataSize = 0;
             mnArraySize = 0;
             mnNameSize = 0;

@@ -137,7 +137,7 @@ ContextHandlerRef WorkbookFragment::onCreateContext( sal_Int32 nElement, const A
             if( nElement == XLS_TOKEN( pivotCache ) ) importPivotCache( rAttribs );
         break;
     }
-    return 0;
+    return nullptr;
 }
 
 void WorkbookFragment::onCharacters( const OUString& rChars )
@@ -191,7 +191,7 @@ ContextHandlerRef WorkbookFragment::onCreateRecordContext( sal_Int32 nRecId, Seq
         case BIFF12_ID_PIVOTCACHES:
             if( nRecId == BIFF12_ID_PIVOTCACHE ) importPivotCache( rStrm );
     }
-    return 0;
+    return nullptr;
 }
 
 const RecordInfo* WorkbookFragment::getRecordInfos() const

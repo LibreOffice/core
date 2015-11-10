@@ -66,7 +66,7 @@ ScXMLBodyContext::ScXMLBodyContext( ScXMLImport& rImport,
     meHash2(PASSHASH_UNSPECIFIED),
     bProtected(false),
     bHadCalculationSettings(false),
-    pChangeTrackingImportHelper(NULL)
+    pChangeTrackingImportHelper(nullptr)
 {
     ScDocument* pDoc = GetScImport().GetDocument();
     if (pDoc)
@@ -138,7 +138,7 @@ SvXMLImportContext *ScXMLBodyContext::CreateChildContext( sal_uInt16 nPrefix,
         pSheetData->EndStreamPos( nEndOffset );
     }
 
-    SvXMLImportContext *pContext = 0;
+    SvXMLImportContext *pContext = nullptr;
 
     const SvXMLTokenMap& rTokenMap = GetScImport().GetBodyElemTokenMap();
     switch( rTokenMap.Get( nPrefix, rLocalName ) )
@@ -239,7 +239,7 @@ void ScXMLBodyContext::EndElement()
     if (!bHadCalculationSettings)
     {
         // #111055#; set calculation settings defaults if there is no calculation settings element
-        ScXMLCalculationSettingsContext aContext( GetScImport(), XML_NAMESPACE_TABLE, GetXMLToken(XML_CALCULATION_SETTINGS), NULL );
+        ScXMLCalculationSettingsContext aContext( GetScImport(), XML_NAMESPACE_TABLE, GetXMLToken(XML_CALCULATION_SETTINGS), nullptr );
         aContext.EndElement();
     }
 

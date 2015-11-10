@@ -123,7 +123,7 @@ private:
 
 private:
     void            UpdateActiveView();
-    void            SyncViews( EditView* pSourceView = NULL );
+    void            SyncViews( EditView* pSourceView = nullptr );
     /**
      * @param cTyped typed character. If 0, look at existing document content
      *               for text or number.
@@ -166,7 +166,7 @@ public:
                     ScInputHandler();
     virtual         ~ScInputHandler();
 
-    void SetMode( ScInputMode eNewMode, const OUString* pInitText = NULL );
+    void SetMode( ScInputMode eNewMode, const OUString* pInitText = nullptr );
     bool            IsInputMode() const { return (eMode != SC_INPUT_NONE); }
     bool            IsEditMode() const  { return (eMode != SC_INPUT_NONE &&
                                                   eMode != SC_INPUT_TYPE); }
@@ -197,7 +197,7 @@ public:
     void            SetRefViewShell(ScTabViewShell* pRefVsh) {pRefViewSh=pRefVsh;}
 
     void            NotifyChange( const ScInputHdlState* pState, bool bForce = false,
-                                  ScTabViewShell* pSourceSh = NULL,
+                                  ScTabViewShell* pSourceSh = nullptr,
                                   bool bStopEditing = true);
     void            UpdateCellAdjust( SvxCellHorJustify eJust );
 

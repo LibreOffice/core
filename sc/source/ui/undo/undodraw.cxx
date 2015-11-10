@@ -38,7 +38,7 @@ ScUndoDraw::~ScUndoDraw()
 
 void ScUndoDraw::ForgetDrawUndo()
 {
-    pDrawUndo = NULL;   // do not delete (DrawUndo has to be remembered from outside)
+    pDrawUndo = nullptr;   // do not delete (DrawUndo has to be remembered from outside)
 }
 
 OUString ScUndoDraw::GetComment() const

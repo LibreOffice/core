@@ -824,25 +824,25 @@ public:
 
     /** Creates a new empty font object.
         @param opnFontId  (out-param) The identifier of the new font object. */
-    FontRef             createFont( sal_Int32* opnFontId = 0 );
+    FontRef             createFont( sal_Int32* opnFontId = nullptr );
     /** Creates a number format. */
     NumberFormatRef     createNumFmt( sal_Int32 nNumFmtId, const OUString& rFmtCode );
     sal_Int32           nextFreeNumFmtId();
     /** Creates a new empty border object.
         @param opnBorderId  (out-param) The identifier of the new border object. */
-    BorderRef           createBorder( sal_Int32* opnBorderId = 0 );
+    BorderRef           createBorder( sal_Int32* opnBorderId = nullptr );
     /** Creates a new empty fill object.
         @param opnFillId  (out-param) The identifier of the new fill object. */
-    FillRef             createFill( sal_Int32* opnFillId = 0 );
+    FillRef             createFill( sal_Int32* opnFillId = nullptr );
     /** Creates a new empty cell formatting object.
         @param opnXfId  (out-param) The identifier of the new XF object. */
-    XfRef               createCellXf( sal_Int32* opnXfId = 0 );
+    XfRef               createCellXf( sal_Int32* opnXfId = nullptr );
     /** Creates a new empty style formatting object.
         @param opnXfId  (out-param) The identifier of the new XF object. */
-    XfRef               createStyleXf( sal_Int32* opnXfId = 0 );
+    XfRef               createStyleXf( sal_Int32* opnXfId = nullptr );
     /** Creates a new empty differential formatting object.
         @param opnDxfId  (out-param) The identifier of the new DXF object. */
-    DxfRef              createDxf( sal_Int32* opnDxfId = 0 );
+    DxfRef              createDxf( sal_Int32* opnDxfId = nullptr );
 
     /** Appends a new color to the color palette. */
     void                importPaletteColor( const AttributeList& rAttribs );

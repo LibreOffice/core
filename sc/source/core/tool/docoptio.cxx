@@ -206,7 +206,7 @@ ScDocCfg::ScDocCfg() :
 
     Sequence<OUString> aNames;
     Sequence<Any> aValues;
-    const Any* pValues = NULL;
+    const Any* pValues = nullptr;
 
     sal_uInt16 nDateDay, nDateMonth, nDateYear;
     GetDate( nDateDay, nDateMonth, nDateYear );

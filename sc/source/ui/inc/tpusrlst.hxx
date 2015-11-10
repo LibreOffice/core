@@ -39,7 +39,7 @@ public:
     virtual bool        FillItemSet     ( SfxItemSet* rCoreAttrs ) override;
     virtual void        Reset           ( const SfxItemSet* rCoreAttrs ) override;
     using SfxTabPage::DeactivatePage;
-    virtual sfxpg       DeactivatePage  ( SfxItemSet* pSet = NULL ) override;
+    virtual sfxpg       DeactivatePage  ( SfxItemSet* pSet = nullptr ) override;
 
 private:
             ScTpUserLists( vcl::Window*              pParent,

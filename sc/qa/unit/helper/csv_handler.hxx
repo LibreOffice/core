@@ -131,7 +131,7 @@ public:
         }
         else
         {
-            char* pRemainingChars = NULL;
+            char* pRemainingChars = nullptr;
             std::string aStr(p, n);
             double nValue = strtod(&aStr[0], &pRemainingChars);
             if (*pRemainingChars)

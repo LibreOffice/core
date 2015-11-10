@@ -97,7 +97,7 @@ public:
 
     ScUndoEnterData(
         ScDocShell* pNewDocShell, const ScAddress& rPos,
-        ValuesType& rOldValues, const OUString& rNewStr, EditTextObject* pObj = NULL );
+        ValuesType& rOldValues, const OUString& rNewStr, EditTextObject* pObj = nullptr );
 
     virtual ~ScUndoEnterData();
 
@@ -319,7 +319,7 @@ public:
                     TYPEINFO_OVERRIDE();
                     ScUndoDetective( ScDocShell* pNewDocShell,
                                     SdrUndoAction* pDraw, const ScDetOpData* pOperation,
-                                    ScDetOpList* pUndoList = NULL );
+                                    ScDetOpList* pUndoList = nullptr );
     virtual         ~ScUndoDetective();
 
     virtual void    Undo() override;

@@ -97,7 +97,7 @@ void ScSheetLinkObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
     if ( pSimpleHint )
     {
         if ( pSimpleHint->GetId() == SFX_HINT_DYING )
-            pDocShell = NULL;       // pointer is invalid
+            pDocShell = nullptr;       // pointer is invalid
     }
     else if ( dynamic_cast<const ScLinkRefreshedHint*>(&rHint) )
     {
@@ -124,7 +124,7 @@ ScTableLink* ScSheetLinkObj::GetLink_Impl() const
             }
         }
     }
-    return NULL;    // nicht gefunden
+    return nullptr;    // nicht gefunden
 }
 
 // XNamed
@@ -149,7 +149,7 @@ void SAL_CALL ScSheetLinkObj::refresh()
     SolarMutexGuard aGuard;
     ScTableLink* pLink = GetLink_Impl();
     if (pLink)
-        pLink->Refresh( pLink->GetFileName(), pLink->GetFilterName(), NULL, pLink->GetRefreshDelay() );
+        pLink->Refresh( pLink->GetFileName(), pLink->GetFilterName(), nullptr, pLink->GetRefreshDelay() );
 }
 
 void SAL_CALL ScSheetLinkObj::addRefreshListener(
@@ -330,7 +330,7 @@ void ScSheetLinkObj::setFilter(const OUString& Filter)
     if (pLink)
     {
         OUString aFilterStr(Filter);
-        pLink->Refresh( aFileName, aFilterStr, NULL, pLink->GetRefreshDelay() );
+        pLink->Refresh( aFileName, aFilterStr, nullptr, pLink->GetRefreshDelay() );
     }
 }
 
@@ -392,7 +392,7 @@ void ScSheetLinksObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
     const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
     if ( pSimpleHint && pSimpleHint->GetId() == SFX_HINT_DYING )
     {
-        pDocShell = NULL;       // ungueltig geworden
+        pDocShell = nullptr;       // ungueltig geworden
     }
 }
 
@@ -401,7 +401,7 @@ void ScSheetLinksObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 ScSheetLinkObj* ScSheetLinksObj::GetObjectByIndex_Impl(sal_Int32 nIndex)
 {
     if (!pDocShell)
-        return NULL;
+        return nullptr;
 
     typedef std::unordered_set<OUString, OUStringHash> StrSetType;
     StrSetType aNames;
@@ -423,7 +423,7 @@ ScSheetLinkObj* ScSheetLinksObj::GetObjectByIndex_Impl(sal_Int32 nIndex)
         }
     }
 
-    return NULL;    // kein Dokument oder Index zu gross
+    return nullptr;    // kein Dokument oder Index zu gross
 }
 
 ScSheetLinkObj* ScSheetLinksObj::GetObjectByName_Impl(const OUString& aName)
@@ -446,7 +446,7 @@ ScSheetLinkObj* ScSheetLinksObj::GetObjectByName_Impl(const OUString& aName)
             }
     }
 
-    return NULL;
+    return nullptr;
 }
 
 // XEnumerationAccess
@@ -593,7 +593,7 @@ static ScAreaLink* lcl_GetAreaLink( ScDocShell* pDocShell, size_t nPos )
             }
         }
     }
-    return NULL;    // nicht gefunden
+    return nullptr;    // nicht gefunden
 }
 
 ScAreaLinkObj::ScAreaLinkObj(ScDocShell* pDocSh, size_t nP) :
@@ -621,7 +621,7 @@ void ScAreaLinkObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
     if ( pSimpleHint )
     {
         if ( pSimpleHint->GetId() == SFX_HINT_DYING )
-            pDocShell = NULL;       // pointer is invalid
+            pDocShell = nullptr;       // pointer is invalid
     }
     else if ( dynamic_cast<const ScLinkRefreshedHint*>(&rHint) )
     {
@@ -657,7 +657,7 @@ void ScAreaLinkObj::Modify_Impl( const OUString* pNewFile, const OUString* pNewF
 
         sfx2::LinkManager* pLinkManager = pDocShell->GetDocument().GetLinkManager();
         pLinkManager->Remove( pLink );
-        pLink = NULL;   // bei Remove geloescht
+        pLink = nullptr;   // bei Remove geloescht
 
         bool bFitBlock = true;          // verschieben, wenn durch Update Groesse geaendert
         if (pNewFile)
@@ -827,7 +827,7 @@ OUString ScAreaLinkObj::getFileName() const
 void ScAreaLinkObj::setFileName(const OUString& rNewName)
 {
     SolarMutexGuard aGuard;
-    Modify_Impl( &rNewName, NULL, NULL, NULL, NULL );
+    Modify_Impl( &rNewName, nullptr, nullptr, nullptr, nullptr );
 }
 
 OUString ScAreaLinkObj::getFilter() const
@@ -843,7 +843,7 @@ OUString ScAreaLinkObj::getFilter() const
 void ScAreaLinkObj::setFilter(const OUString& Filter)
 {
     SolarMutexGuard aGuard;
-    Modify_Impl( NULL, &Filter, NULL, NULL, NULL );
+    Modify_Impl( nullptr, &Filter, nullptr, nullptr, nullptr );
 }
 
 OUString ScAreaLinkObj::getFilterOptions() const
@@ -859,7 +859,7 @@ OUString ScAreaLinkObj::getFilterOptions() const
 void ScAreaLinkObj::setFilterOptions(const OUString& FilterOptions)
 {
     SolarMutexGuard aGuard;
-    Modify_Impl( NULL, NULL, &FilterOptions, NULL, NULL );
+    Modify_Impl( nullptr, nullptr, &FilterOptions, nullptr, nullptr );
 }
 
 sal_Int32 ScAreaLinkObj::getRefreshDelay() const
@@ -894,7 +894,7 @@ void SAL_CALL ScAreaLinkObj::setSourceArea( const OUString& aSourceArea )
                                             throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    Modify_Impl( NULL, NULL, NULL, &aSourceArea, NULL );
+    Modify_Impl( nullptr, nullptr, nullptr, &aSourceArea, nullptr );
 }
 
 table::CellRangeAddress SAL_CALL ScAreaLinkObj::getDestArea() throw(uno::RuntimeException, std::exception)
@@ -911,7 +911,7 @@ void SAL_CALL ScAreaLinkObj::setDestArea( const table::CellRangeAddress& aDestAr
                                             throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    Modify_Impl( NULL, NULL, NULL, NULL, &aDestArea );
+    Modify_Impl( nullptr, nullptr, nullptr, nullptr, &aDestArea );
 }
 
 ScAreaLinksObj::ScAreaLinksObj(ScDocShell* pDocSh) :
@@ -935,7 +935,7 @@ void ScAreaLinksObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
     const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
     if ( pSimpleHint && pSimpleHint->GetId() == SFX_HINT_DYING )
     {
-        pDocShell = NULL;       // ungueltig geworden
+        pDocShell = nullptr;       // ungueltig geworden
     }
 }
 
@@ -946,7 +946,7 @@ ScAreaLinkObj* ScAreaLinksObj::GetObjectByIndex_Impl(sal_Int32 nIndex)
     if ( pDocShell && nIndex >= 0 && nIndex < getCount() )
         return new ScAreaLinkObj( pDocShell, (size_t)nIndex );
 
-    return NULL;    // nicht gefunden
+    return nullptr;    // nicht gefunden
 }
 
 void SAL_CALL ScAreaLinksObj::insertAtPosition( const table::CellAddress& aDestPos,
@@ -1065,7 +1065,7 @@ void ScDDELinkObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
     if ( pSimpleHint )
     {
         if ( pSimpleHint->GetId() == SFX_HINT_DYING )
-            pDocShell = NULL;       // pointer is invalid
+            pDocShell = nullptr;       // pointer is invalid
     }
     else if ( dynamic_cast<const ScLinkRefreshedHint*>(&rHint) )
     {
@@ -1260,7 +1260,7 @@ void ScDDELinksObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
     const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
     if ( pSimpleHint && pSimpleHint->GetId() == SFX_HINT_DYING )
     {
-        pDocShell = NULL;       // ungueltig geworden
+        pDocShell = nullptr;       // ungueltig geworden
     }
 }
 
@@ -1274,7 +1274,7 @@ ScDDELinkObj* ScDDELinksObj::GetObjectByIndex_Impl(sal_Int32 nIndex)
         if ( pDocShell->GetDocument().GetDdeLinkData( (size_t)nIndex, aAppl, aTopic, aItem ) )
             return new ScDDELinkObj( pDocShell, aAppl, aTopic, aItem );
     }
-    return NULL;
+    return nullptr;
 }
 
 ScDDELinkObj* ScDDELinksObj::GetObjectByName_Impl(const OUString& aName)
@@ -1293,7 +1293,7 @@ ScDDELinkObj* ScDDELinksObj::GetObjectByName_Impl(const OUString& aName)
                 return new ScDDELinkObj( pDocShell, aAppl, aTopic, aItem );
         }
     }
-    return NULL;
+    return nullptr;
 }
 
 // XEnumerationAccess
@@ -1620,7 +1620,7 @@ sal_Bool SAL_CALL ScExternalDocLinkObj::hasByName(const OUString &aName)
 
     // #i116940# be consistent with getByName: allow only table names which have a cache already
     ScExternalRefCache::TableTypeRef pTable = mpRefMgr->getCacheTable(mnFileId, aName, false);
-    return (pTable.get() != NULL);
+    return (pTable.get() != nullptr);
 }
 
 sal_Int32 SAL_CALL ScExternalDocLinkObj::getCount()

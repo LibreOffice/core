@@ -100,7 +100,7 @@ void ScTransferObj::PaintToDev( OutputDevice* pDev, ScDocument* pDoc, double nPr
     Point aPoint;
     Rectangle aBound( aPoint, pDev->GetOutputSize() );      //! use size from clip area?
 
-    ScViewData aViewData(NULL,NULL);
+    ScViewData aViewData(nullptr,nullptr);
     aViewData.InitData( pDoc );
 
     aViewData.SetTabNo( rBlock.aEnd.Tab() );
@@ -181,7 +181,7 @@ ScTransferObj::~ScTransferObj()
     if ( pScMod->GetClipData().pCellClipboard == this )
     {
         OSL_FAIL("ScTransferObj wasn't released");
-        pScMod->SetClipObject( NULL, NULL );
+        pScMod->SetClipObject( nullptr, nullptr );
     }
     if ( pScMod->GetDragData().pCellTransfer == this )
     {
@@ -212,7 +212,7 @@ ScTransferObj* ScTransferObj::GetOwnClipboard( vcl::Window* pUIWin )
         if ( !aDataHelper.HasFormat( SotClipboardFormatId::DIF ) )
         {
 //          OSL_FAIL("ScTransferObj wasn't released");
-            pObj = NULL;
+            pObj = nullptr;
         }
     }
     return pObj;
@@ -482,7 +482,7 @@ void ScTransferObj::ObjectReleased()
 {
     ScModule* pScMod = SC_MOD();
     if ( pScMod->GetClipData().pCellClipboard == this )
-        pScMod->SetClipObject( NULL, NULL );
+        pScMod->SetClipObject( nullptr, nullptr );
 
     TransferableHelper::ObjectReleased();
 }
@@ -506,7 +506,7 @@ void ScTransferObj::DragFinished( sal_Int8 nDropAction )
     if ( pScMod->GetDragData().pCellTransfer == this )
         pScMod->ResetDragObject();
 
-    xDragSourceRanges = NULL;       // don't keep source after dropping
+    xDragSourceRanges = nullptr;       // don't keep source after dropping
 
     TransferableHelper::DragFinished( nDropAction );
 }
@@ -554,7 +554,7 @@ ScDocument* ScTransferObj::GetSourceDocument()
     ScDocShell* pSourceDocSh = GetSourceDocShell();
     if (pSourceDocSh)
         return &pSourceDocSh->GetDocument();
-    return NULL;
+    return nullptr;
 }
 
 ScDocShell* ScTransferObj::GetSourceDocShell()
@@ -563,7 +563,7 @@ ScDocShell* ScTransferObj::GetSourceDocShell()
     if (pRangesObj)
         return pRangesObj->GetDocShell();
 
-    return NULL;    // none set
+    return nullptr;    // none set
 }
 
 ScMarkData ScTransferObj::GetSourceMarkData()
@@ -646,7 +646,7 @@ void ScTransferObj::InitDocShell(bool bLimitToPageSize)
         bool bWasCut = pDoc->IsCutMode();
         if (!bWasCut)
             pDoc->SetClipArea( aDestRange, true );          // Cut
-        rDestDoc.CopyFromClip( aDestRange, aDestMark, InsertDeleteFlags::ALL, NULL, pDoc, false );
+        rDestDoc.CopyFromClip( aDestRange, aDestMark, InsertDeleteFlags::ALL, nullptr, pDoc, false );
         pDoc->SetClipArea( aDestRange, bWasCut );
 
         StripRefs( pDoc, nStartX,nStartY, nEndX,nEndY, &rDestDoc );
@@ -672,7 +672,7 @@ void ScTransferObj::InitDocShell(bool bLimitToPageSize)
             pDestPool->CopyStyleFrom( pStylePool, aStyleName, SFX_STYLE_FAMILY_PAGE );
         }
 
-        ScViewData aViewData( pDocSh, NULL );
+        ScViewData aViewData( pDocSh, nullptr );
         aViewData.SetScreen( nStartX,nStartY, nEndX,nEndY );
         aViewData.SetCurX( nStartX );
         aViewData.SetCurY( nStartY );
@@ -742,7 +742,7 @@ SfxObjectShell* ScTransferObj::SetDrawClipDoc( bool bAnyOle )
     else
     {
         ScGlobal::xDrawClipDocShellRef.Clear();
-        return NULL;
+        return nullptr;
     }
 }
 

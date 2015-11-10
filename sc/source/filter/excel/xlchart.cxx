@@ -619,28 +619,28 @@ namespace {
 
 /** Property names for line style in common objects. */
 const sal_Char* const sppcLineNamesCommon[] =
-    { "LineStyle", "LineWidth", "LineColor", "LineTransparence", "LineDashName", 0 };
+    { "LineStyle", "LineWidth", "LineColor", "LineTransparence", "LineDashName", nullptr };
 /** Property names for line style in linear series objects. */
 const sal_Char* const sppcLineNamesLinear[] =
-    { "LineStyle", "LineWidth", "Color", "Transparency", "LineDashName", 0 };
+    { "LineStyle", "LineWidth", "Color", "Transparency", "LineDashName", nullptr };
 /** Property names for line style in filled series objects. */
 const sal_Char* const sppcLineNamesFilled[] =
-    { "BorderStyle", "BorderWidth", "BorderColor", "BorderTransparency", "BorderDashName", 0 };
+    { "BorderStyle", "BorderWidth", "BorderColor", "BorderTransparency", "BorderDashName", nullptr };
 
 /** Property names for solid area style in common objects. */
-const sal_Char* const sppcAreaNamesCommon[] = { "FillStyle", "FillColor", "FillTransparence", 0 };
+const sal_Char* const sppcAreaNamesCommon[] = { "FillStyle", "FillColor", "FillTransparence", nullptr };
 /** Property names for solid area style in filled series objects. */
-const sal_Char* const sppcAreaNamesFilled[] = { "FillStyle", "Color", "Transparency", 0 };
+const sal_Char* const sppcAreaNamesFilled[] = { "FillStyle", "Color", "Transparency", nullptr };
 /** Property names for gradient area style in common objects. */
-const sal_Char* const sppcGradNamesCommon[] = {  "FillStyle", "FillGradientName", 0 };
+const sal_Char* const sppcGradNamesCommon[] = {  "FillStyle", "FillGradientName", nullptr };
 /** Property names for gradient area style in filled series objects. */
-const sal_Char* const sppcGradNamesFilled[] = {  "FillStyle", "GradientName", 0 };
+const sal_Char* const sppcGradNamesFilled[] = {  "FillStyle", "GradientName", nullptr };
 /** Property names for hatch area style in common objects. */
-const sal_Char* const sppcHatchNamesCommon[] = { "FillStyle", "FillHatchName", "FillColor", "FillBackground", 0 };
+const sal_Char* const sppcHatchNamesCommon[] = { "FillStyle", "FillHatchName", "FillColor", "FillBackground", nullptr };
 /** Property names for hatch area style in filled series objects. */
-const sal_Char* const sppcHatchNamesFilled[] = { "FillStyle", "HatchName", "Color", "FillBackground", 0 };
+const sal_Char* const sppcHatchNamesFilled[] = { "FillStyle", "HatchName", "Color", "FillBackground", nullptr };
 /** Property names for bitmap area style. */
-const sal_Char* const sppcBitmapNames[] = { "FillStyle", "FillBitmapName", "FillBitmapMode", 0 };
+const sal_Char* const sppcBitmapNames[] = { "FillStyle", "FillBitmapName", "FillBitmapMode", nullptr };
 
 } // namespace
 

@@ -228,7 +228,7 @@ void ScGraphicShell::GetCropGraphicState( SfxItemSet& rSet )
     {
         SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
 
-        if( pObj && 0 != dynamic_cast<const SdrGrafObj*>( pObj) && ( static_cast<SdrGrafObj*>(pObj)->GetGraphicType() == GRAPHIC_BITMAP ) )
+        if( pObj && nullptr != dynamic_cast<const SdrGrafObj*>( pObj) && ( static_cast<SdrGrafObj*>(pObj)->GetGraphicType() == GRAPHIC_BITMAP ) )
             bEnable = true;
     }
 
@@ -300,7 +300,7 @@ void ScGraphicShell::ExecuteChangePicture(SfxRequest& /*rReq*/)
     {
         SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
 
-        if( pObj && 0 != dynamic_cast<const SdrGrafObj*>( pObj) && static_cast<SdrGrafObj*>(pObj)->GetGraphicType() == GRAPHIC_BITMAP )
+        if( pObj && nullptr != dynamic_cast<const SdrGrafObj*>( pObj) && static_cast<SdrGrafObj*>(pObj)->GetGraphicType() == GRAPHIC_BITMAP )
         {
             SdrGrafObj* pGraphicObj = static_cast<SdrGrafObj*>(pObj);
             SvxOpenGraphicDialog aDlg(ScResId(STR_INSERTGRAPHIC));

@@ -162,10 +162,10 @@ implnCopy( const uno::Reference< frame::XModel>& xModel )
     ScTabViewShell* pViewShell = getBestViewShell( xModel );
     if ( pViewShell )
     {
-        pViewShell->CopyToClip(NULL,false,false,true);
+        pViewShell->CopyToClip(nullptr,false,false,true);
 
         // mark the copied transfer object so it is used in ScVbaRange::Insert
-        ScTransferObj* pClipObj = ScTransferObj::GetOwnClipboard( NULL );
+        ScTransferObj* pClipObj = ScTransferObj::GetOwnClipboard( nullptr );
         if (pClipObj)
             pClipObj->SetUseInApi( true );
     }
@@ -177,10 +177,10 @@ implnCut( const uno::Reference< frame::XModel>& xModel )
     ScTabViewShell* pViewShell =  getBestViewShell( xModel );
     if ( pViewShell )
     {
-        pViewShell->CutToClip( NULL, true );
+        pViewShell->CutToClip( nullptr, true );
 
         // mark the copied transfer object so it is used in ScVbaRange::Insert
-        ScTransferObj* pClipObj = ScTransferObj::GetOwnClipboard( NULL );
+        ScTransferObj* pClipObj = ScTransferObj::GetOwnClipboard( nullptr );
         if (pClipObj)
             pClipObj->SetUseInApi( true );
     }
@@ -199,7 +199,7 @@ void implnPasteSpecial( const uno::Reference< frame::XModel>& xModel, InsertDele
         if (pWin)
         {
             ScTransferObj* pOwnClip = ScTransferObj::GetOwnClipboard( pWin );
-            ScDocument* pDoc = NULL;
+            ScDocument* pDoc = nullptr;
             if ( pOwnClip )
                 pDoc = pOwnClip->GetDocument();
             pTabViewShell->PasteFromClip( nFlags, pDoc,
@@ -216,7 +216,7 @@ getDocShell( const css::uno::Reference< css::frame::XModel>& xModel )
 {
     uno::Reference< uno::XInterface > xIf( xModel, uno::UNO_QUERY_THROW );
     ScModelObj* pModel = dynamic_cast< ScModelObj* >( xIf.get() );
-    ScDocShell* pDocShell = NULL;
+    ScDocShell* pDocShell = nullptr;
     if ( pModel )
         pDocShell = static_cast<ScDocShell*>(pModel->GetEmbeddedObject());
     return pDocShell;
@@ -229,7 +229,7 @@ getBestViewShell( const css::uno::Reference< css::frame::XModel>& xModel )
     ScDocShell* pDocShell = getDocShell( xModel );
     if ( pDocShell )
         return pDocShell->GetBestViewShell();
-    return NULL;
+    return nullptr;
 }
 
 ScTabViewShell*
@@ -245,7 +245,7 @@ getViewFrame( const uno::Reference< frame::XModel >& xModel )
     ScTabViewShell* pViewShell = getBestViewShell( xModel );
     if ( pViewShell )
         return pViewShell->GetViewFrame();
-    return NULL;
+    return nullptr;
 }
 
 uno::Reference< XHelperInterface >
@@ -371,7 +371,7 @@ void setUpDocumentModules( const uno::Reference< sheet::XSpreadsheetDocument >& 
 SfxItemSet*
 ScVbaCellRangeAccess::GetDataSet( ScCellRangesBase* pRangeObj )
 {
-    return pRangeObj ? pRangeObj->GetCurrentDataSet( true ) : 0;
+    return pRangeObj ? pRangeObj->GetCurrentDataSet( true ) : nullptr;
 }
 
 } // namespace excel

@@ -61,9 +61,9 @@ public:
 // class ScFuncDesc:
 
 ScFuncDesc::ScFuncDesc() :
-        pFuncName       (NULL),
-        pFuncDesc       (NULL),
-        pDefArgFlags    (NULL),
+        pFuncName       (nullptr),
+        pFuncDesc       (nullptr),
+        pDefArgFlags    (nullptr),
         nFIndex         (0),
         nCategory       (0),
         nArgCount       (0),
@@ -90,13 +90,13 @@ void ScFuncDesc::Clear()
     nArgCount = 0;
     maDefArgNames.clear();
     maDefArgDescs.clear();
-    pDefArgFlags = NULL;
+    pDefArgFlags = nullptr;
 
     delete pFuncName;
-    pFuncName = NULL;
+    pFuncName = nullptr;
 
     delete pFuncDesc;
-    pFuncDesc = NULL;
+    pFuncDesc = nullptr;
 
     nFIndex = 0;
     nCategory = 0;
@@ -384,7 +384,7 @@ bool ScFuncDesc::compareByName(const ScFuncDesc* a, const ScFuncDesc* b)
 ScFunctionList::ScFunctionList() :
         nMaxFuncNameLen ( 0 )
 {
-    ScFuncDesc* pDesc = NULL;
+    ScFuncDesc* pDesc = nullptr;
     sal_Int32 nStrLen = 0;
     ::std::list<ScFuncDesc*> tmpFuncList;
     sal_uInt16 nDescBlock[] =
@@ -581,7 +581,7 @@ ScFunctionList::~ScFunctionList()
 
 const ScFuncDesc* ScFunctionList::First()
 {
-    const ScFuncDesc* pDesc = NULL;
+    const ScFuncDesc* pDesc = nullptr;
     aFunctionListIter = aFunctionList.begin();
     if(aFunctionListIter != aFunctionList.end())
         pDesc = *aFunctionListIter;
@@ -591,7 +591,7 @@ const ScFuncDesc* ScFunctionList::First()
 
 const ScFuncDesc* ScFunctionList::Next()
 {
-    const ScFuncDesc* pDesc = NULL;
+    const ScFuncDesc* pDesc = nullptr;
     if(aFunctionListIter != aFunctionList.end())
     {
         if((++aFunctionListIter) != aFunctionList.end())
@@ -602,7 +602,7 @@ const ScFuncDesc* ScFunctionList::Next()
 
 const ScFuncDesc* ScFunctionList::GetFunction( sal_uInt32 nIndex ) const
 {
-    const ScFuncDesc* pDesc = NULL;
+    const ScFuncDesc* pDesc = nullptr;
     if(nIndex < aFunctionList.size())
         pDesc = aFunctionList.at(nIndex);
 
@@ -625,7 +625,7 @@ OUString ScFunctionCategory::getName() const
 
 const formula::IFunctionDescription* ScFunctionCategory::getFunction(sal_uInt32 _nPos) const
 {
-    const ScFuncDesc* pDesc = NULL;
+    const ScFuncDesc* pDesc = nullptr;
     if(_nPos < m_pCategory->size())
         pDesc = m_pCategory->at(_nPos);
     return pDesc;
@@ -699,7 +699,7 @@ const ScFuncDesc* ScFunctionMgr::Get( sal_uInt16 nFIndex ) const
 const ScFuncDesc* ScFunctionMgr::First( sal_uInt16 nCategory ) const
 {
     OSL_ENSURE( nCategory < MAX_FUNCCAT, "Unknown category" );
-    const ScFuncDesc* pDesc = NULL;
+    const ScFuncDesc* pDesc = nullptr;
     if ( nCategory < MAX_FUNCCAT )
     {
         pCurCatListIter = aCatLists[nCategory]->begin();
@@ -716,7 +716,7 @@ const ScFuncDesc* ScFunctionMgr::First( sal_uInt16 nCategory ) const
 
 const ScFuncDesc* ScFunctionMgr::Next() const
 {
-    const ScFuncDesc* pDesc = NULL;
+    const ScFuncDesc* pDesc = nullptr;
     if ( pCurCatListIter != pCurCatListEnd )
     {
         if ( (++pCurCatListIter) != pCurCatListEnd )
@@ -740,7 +740,7 @@ const formula::IFunctionCategory* ScFunctionMgr::getCategory(sal_uInt32 nCategor
             m_aCategories[nCategory].reset(new ScFunctionCategory(aCatLists[nCategory+1],nCategory)); // aCatLists[0] is "all"
         return m_aCategories[nCategory].get();
     }
-    return NULL;
+    return nullptr;
 }
 
 void ScFunctionMgr::fillLastRecentlyUsedFunctions(::std::vector< const formula::IFunctionDescription*>& _rLastRUFunctions) const

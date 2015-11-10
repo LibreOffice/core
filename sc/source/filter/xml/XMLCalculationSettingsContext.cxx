@@ -104,7 +104,7 @@ SvXMLImportContext *ScXMLCalculationSettingsContext::CreateChildContext( sal_uIn
                                             const OUString& rLName,
                                             const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList )
 {
-    SvXMLImportContext *pContext = 0;
+    SvXMLImportContext *pContext = nullptr;
 
     if (nPrefix == XML_NAMESPACE_TABLE)
     {
@@ -166,7 +166,7 @@ ScXMLNullDateContext::ScXMLNullDateContext( ScXMLImport& rImport,
         if (nPrefix == XML_NAMESPACE_TABLE && IsXMLToken(aLocalName, XML_DATE_VALUE))
         {
             util::DateTime aDateTime;
-            ::sax::Converter::parseDateTime(aDateTime, 0, sValue);
+            ::sax::Converter::parseDateTime(aDateTime, nullptr, sValue);
             util::Date aDate;
             aDate.Day = aDateTime.Day;
             aDate.Month = aDateTime.Month;

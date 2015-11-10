@@ -56,7 +56,7 @@ public:
     /** Creates and returns the token array of a formula. */
     XclTokenArrayRef    CreateFormula(
                             XclFormulaType eType, const ScTokenArray& rScTokArr,
-                            const ScAddress* pScBasePos = 0, XclExpRefLog* pRefLog = 0 );
+                            const ScAddress* pScBasePos = nullptr, XclExpRefLog* pRefLog = nullptr );
 
     /** Creates and returns a token array containing a single cell address. */
     XclTokenArrayRef    CreateFormula( XclFormulaType eType, const ScAddress& rScPos );

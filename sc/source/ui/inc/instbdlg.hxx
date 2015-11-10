@@ -51,8 +51,8 @@ public:
     bool        GetTablesFromFile() const { return m_pBtnFromFile->IsChecked(); }
     bool        GetTablesAsLink() const { return m_pBtnLink->IsChecked(); }
 
-    const OUString* GetFirstTable( sal_uInt16* pN = NULL );
-    const OUString* GetNextTable( sal_uInt16* pN = NULL );
+    const OUString* GetFirstTable( sal_uInt16* pN = nullptr );
+    const OUString* GetNextTable( sal_uInt16* pN = nullptr );
     ScDocShell*     GetDocShellTables() { return pDocShTables; }
     bool        IsTableBefore() const { return m_pBtnBefore->IsChecked(); }
     SCTAB           GetTableCount() const { return nTableCount;}

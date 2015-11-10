@@ -97,7 +97,7 @@ ScFunctionDockWin::ScFunctionDockWin( SfxBindings* pBindingsP,
     aInsertButton   ( VclPtr<ImageButton>::Create( this, ResId( IMB_INSERT, *rResId.GetResMgr() ) ) ),
     aFiFuncDesc     ( VclPtr<FixedText>::Create( this, ResId( FI_FUNCDESC, *rResId.GetResMgr() ) ) ),
     aOldSize        (0,0),
-    pFuncDesc       (NULL)
+    pFuncDesc       (nullptr)
 {
     FreeResource();
     InitLRUList();
@@ -106,7 +106,7 @@ ScFunctionDockWin::ScFunctionDockWin( SfxBindings* pBindingsP,
     aIdle.SetPriority(SchedulerPriority::LOWER);
     aIdle.SetIdleHdl(LINK( this, ScFunctionDockWin, TimerHdl));
 
-    if (pCW != NULL)
+    if (pCW != nullptr)
         eSfxNewAlignment=GetAlignment();
     else
         eSfxNewAlignment=SfxChildAlignment::RIGHT;
@@ -876,7 +876,7 @@ void ScFunctionDockWin::DoEnter()
                 aString += pAllFuncList->GetSelectEntry();
             }
             EditView *pEdView=pHdl->GetActiveView();
-            if(pEdView!=NULL) // @ Wegen Absturz bei Namen festlegen
+            if(pEdView!=nullptr) // @ Wegen Absturz bei Namen festlegen
             {
                 if(nArgs>0)
                 {
@@ -1015,7 +1015,7 @@ IMPL_LINK_NOARG_TYPED(ScFunctionDockWin, TimerHdl, Idle *, void)
 void ScFunctionDockWin::Initialize(SfxChildWinInfo *pInfo)
 {
     OUString aStr;
-    if(pInfo!=NULL)
+    if(pInfo!=nullptr)
     {
         if ( !pInfo->aExtraString.isEmpty() )
         {

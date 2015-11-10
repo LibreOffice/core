@@ -122,7 +122,7 @@ void ShapeAnchor::importClientData( const AttributeList& rAttribs )
 
 void ShapeAnchor::setCellPos( sal_Int32 nElement, sal_Int32 nParentContext, const OUString& rValue )
 {
-    CellAnchorModel* pCellAnchor = 0;
+    CellAnchorModel* pCellAnchor = nullptr;
     switch( nParentContext )
     {
         case XDR_TOKEN( from ):

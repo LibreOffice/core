@@ -119,7 +119,7 @@ namespace
         FormulaToken**  mpStart;
         FormulaToken**  mpStop;
 
-        TokenPointerRange() : mpStart(NULL), mpStop(NULL) {}
+        TokenPointerRange() : mpStart(nullptr), mpStop(nullptr) {}
         TokenPointerRange( FormulaToken** p, sal_uInt16 n ) :
             mpStart(p), mpStop( p + static_cast<size_t>(n)) {}
     };
@@ -431,7 +431,7 @@ FormulaToken* ScRawToken::CreateToken() const
         case svExternal :
             return new FormulaExternalToken( eOp, sbyte.cByte, OUString( cStr+1 ) );
         case svFAP :
-            return new FormulaFAPToken( eOp, sbyte.cByte, NULL );
+            return new FormulaFAPToken( eOp, sbyte.cByte, nullptr );
         case svMissing :
             IF_NOT_OPCODE_ERROR( ocMissing, FormulaMissingToken);
             return new FormulaMissingToken;
@@ -533,7 +533,7 @@ FormulaTokenRef extendRangeReference( FormulaToken & rTok1, FormulaToken & rTok2
     if (((sv1 = rTok1.GetType()) != svSingleRef && sv1 != svDoubleRef && sv1 != svRefList &&
             sv1 != svExternalSingleRef && sv1 != svExternalDoubleRef ) ||
         ((sv2 = rTok2.GetType()) != svSingleRef && sv2 != svDoubleRef && sv2 != svRefList))
-        return NULL;
+        return nullptr;
 
     ScTokenRef xRes;
     bool bExternal = (sv1 == svExternalSingleRef);
@@ -562,7 +562,7 @@ FormulaTokenRef extendRangeReference( FormulaToken & rTok1, FormulaToken & rTok2
 
         const ScSingleRefData& rRef2 = *rTok2.GetSingleRef();
         if (bExternal && rRef2.IsFlag3D())
-            return NULL;
+            return nullptr;
 
         ScComplexRefData aRef;
         aRef.Ref1 = aRef.Ref2 = *rTok1.GetSingleRef();
@@ -576,7 +576,7 @@ FormulaTokenRef extendRangeReference( FormulaToken & rTok1, FormulaToken & rTok2
     else
     {
         bExternal |= (sv1 == svExternalDoubleRef);
-        const ScRefList* pRefList = NULL;
+        const ScRefList* pRefList = nullptr;
         if (sv1 == svDoubleRef)
         {
             xRes = (bReuseDoubleRef && rTok1.GetRef() == 1 ? &rTok1 : rTok1.Clone());
@@ -594,13 +594,13 @@ FormulaTokenRef extendRangeReference( FormulaToken & rTok1, FormulaToken & rTok2
         if (pRefList)
         {
             if (pRefList->empty())
-                return NULL;
+                return nullptr;
             if (bExternal)
-                return NULL;    // external reference list not possible
+                return nullptr;    // external reference list not possible
             xRes = new ScDoubleRefToken( (*pRefList)[0] );
         }
         if (!xRes)
-            return NULL;    // shouldn't happen..
+            return nullptr;    // shouldn't happen..
         StackVar sv[2] = { sv1, sv2 };
         formula::FormulaToken* pt[2] = { &rTok1, &rTok2 };
         ScComplexRefData& rRef = *xRes->GetDoubleRef();
@@ -618,7 +618,7 @@ FormulaTokenRef extendRangeReference( FormulaToken & rTok1, FormulaToken & rTok2
                     {
                         const ScRefList* p = pt[i]->GetRefList();
                         if (p->empty())
-                            return NULL;
+                            return nullptr;
                         ScRefList::const_iterator it( p->begin());
                         ScRefList::const_iterator end( p->end());
                         for ( ; it != end; ++it)
@@ -629,13 +629,13 @@ FormulaTokenRef extendRangeReference( FormulaToken & rTok1, FormulaToken & rTok2
                     break;
                 case svExternalSingleRef:
                     if (rRef.Ref1.IsFlag3D() || rRef.Ref2.IsFlag3D())
-                        return NULL;    // no other sheets with external refs
+                        return nullptr;    // no other sheets with external refs
                     else
                         rRef.Extend( *pt[i]->GetSingleRef(), rPos);
                     break;
                 case svExternalDoubleRef:
                     if (rRef.Ref1.IsFlag3D() || rRef.Ref2.IsFlag3D())
-                        return NULL;    // no other sheets with external refs
+                        return nullptr;    // no other sheets with external refs
                     else
                         rRef.Extend( *pt[i]->GetDoubleRef(), rPos);
                     break;
@@ -1061,7 +1061,7 @@ ScMatrixFormulaCellToken::ScMatrixFormulaCellToken(
 }
 
 ScMatrixFormulaCellToken::ScMatrixFormulaCellToken( SCCOL nC, SCROW nR ) :
-    ScMatrixCellResultToken(NULL, NULL), nRows(nR), nCols(nC) {}
+    ScMatrixCellResultToken(nullptr, nullptr), nRows(nR), nCols(nC) {}
 
 ScMatrixFormulaCellToken::ScMatrixFormulaCellToken( const ScMatrixFormulaCellToken& r ) :
     ScMatrixCellResultToken(r), nRows(r.nRows), nCols(r.nCols)
@@ -1103,13 +1103,13 @@ void ScMatrixFormulaCellToken::Assign( const formula::FormulaToken& r )
         OSL_ENSURE( r.GetType() != svMatrix, "ScMatrixFormulaCellToken::operator=: assigning ScMatrixToken to ScMatrixFormulaCellToken is not proper, use ScMatrixCellResultToken instead");
         if (r.GetType() == svMatrix)
         {
-            xUpperLeft = NULL;
+            xUpperLeft = nullptr;
             xMatrix = r.GetMatrix();
         }
         else
         {
             xUpperLeft = &r;
-            xMatrix = NULL;
+            xMatrix = nullptr;
             CloneUpperLeftIfNecessary();
         }
     }
@@ -1141,8 +1141,8 @@ void ScMatrixFormulaCellToken::SetUpperLeftDouble( double f )
 
 void ScMatrixFormulaCellToken::ResetResult()
 {
-    xMatrix = NULL;
-    xUpperLeft = NULL;
+    xMatrix = nullptr;
+    xUpperLeft = nullptr;
 }
 
 ScHybridCellToken::ScHybridCellToken(
@@ -1840,13 +1840,13 @@ FormulaToken* ScTokenArray::MergeArray( )
             case ocPush :
                 if( checkArraySep( bPrevWasSep, false ) )
                 {
-                    return NULL;
+                    return nullptr;
                 }
 
                 // no references or nested arrays
                 if ( t->GetType() != svDouble  && t->GetType() != svString )
                 {
-                    return NULL;
+                    return nullptr;
                 }
                 bNumeric = (t->GetType() == svDouble);
             break;
@@ -1856,7 +1856,7 @@ FormulaToken* ScTokenArray::MergeArray( )
             case ocFalse :
                 if( checkArraySep( bPrevWasSep, false ) )
                 {
-                    return NULL;
+                    return nullptr;
                 }
                 bNumeric = false;
             break;
@@ -1865,7 +1865,7 @@ FormulaToken* ScTokenArray::MergeArray( )
             case ocSep :
                 if( checkArraySep( bPrevWasSep, true ) )
                 {
-                    return NULL;
+                    return nullptr;
                 }
                 bNumeric = false;
             break;
@@ -1875,12 +1875,12 @@ FormulaToken* ScTokenArray::MergeArray( )
                 // something changes in the future
                 if( i != (nLen-1))
                 {
-                    return NULL;
+                    return nullptr;
                 }
 
                 if( checkArraySep( bPrevWasSep, true ) )
                 {
-                    return NULL;
+                    return nullptr;
                 }
 
                 nPrevRowSep = i;
@@ -1894,13 +1894,13 @@ FormulaToken* ScTokenArray::MergeArray( )
             case ocArrayRowSep :
                 if( checkArraySep( bPrevWasSep, true ) )
                 {
-                    return NULL;
+                    return nullptr;
                 }
 
                 if( nPrevRowSep < 0 ||              // missing ocArrayClose
                     ((nPrevRowSep - i) % 2) == 1)   // no complex elements
                 {
-                    return NULL;
+                    return nullptr;
                 }
 
                 if( nCol < 0 )
@@ -1909,7 +1909,7 @@ FormulaToken* ScTokenArray::MergeArray( )
                 }
                 else if( (nPrevRowSep - i)/2 != nCol)   // irregular array
                 {
-                    return NULL;
+                    return nullptr;
                 }
 
                 nPrevRowSep = i;
@@ -1922,7 +1922,7 @@ FormulaToken* ScTokenArray::MergeArray( )
                 // negation or unary plus must precede numeric value
                 if( !bNumeric )
                 {
-                    return NULL;
+                    return nullptr;
                 }
                 --nPrevRowSep;      // shorten this row by 1
                 bNumeric = false;   // one level only, no --42
@@ -1935,11 +1935,11 @@ FormulaToken* ScTokenArray::MergeArray( )
 
             default :
                 // no functions or operators
-                return NULL;
+                return nullptr;
         }
     }
     if( nCol <= 0 || nRow <= 0 )
-        return NULL;
+        return nullptr;
 
     int nSign = 1;
     ScMatrix* pArray = new ScMatrix(nCol, nRow, 0.0);
@@ -1989,7 +1989,7 @@ FormulaToken* ScTokenArray::MergeArray( )
             default :
                 break;
         }
-        pCode[i] = NULL;
+        pCode[i] = nullptr;
         t->DecRef();
     }
     nLen = sal_uInt16( nStart );
@@ -1999,13 +1999,13 @@ FormulaToken* ScTokenArray::MergeArray( )
 FormulaToken* ScTokenArray::MergeRangeReference( const ScAddress & rPos )
 {
     if (!pCode || !nLen)
-        return NULL;
+        return nullptr;
     sal_uInt16 nIdx = nLen;
     FormulaToken *p1, *p2, *p3;      // ref, ocRange, ref
     // The actual types are checked in extendRangeReference().
-    if (((p3 = PeekPrev(nIdx)) != 0) &&
-            (((p2 = PeekPrev(nIdx)) != 0) && p2->GetOpCode() == ocRange) &&
-            ((p1 = PeekPrev(nIdx)) != 0))
+    if (((p3 = PeekPrev(nIdx)) != nullptr) &&
+            (((p2 = PeekPrev(nIdx)) != nullptr) && p2->GetOpCode() == ocRange) &&
+            ((p1 = PeekPrev(nIdx)) != nullptr))
     {
         FormulaTokenRef p = extendRangeReference( *p1, *p3, rPos, true);
         if (p)

@@ -217,7 +217,7 @@ private:
     {
         while (!isTerminateRequested())
         {
-            DataStream::LinesType* pLines = NULL;
+            DataStream::LinesType* pLines = nullptr;
             osl::ResettableMutexGuard aGuard(maMtxLines);
 
             if (!maUsedLines.empty())
@@ -322,7 +322,7 @@ DataStream::DataStream(ScDocShell *pShell, const OUString& rURL, const ScRange& 
     mbRunning(false),
     mbValuesInLine(false),
     mbRefreshOnEmptyLine(false),
-    mpLines(0),
+    mpLines(nullptr),
     mnLinesCount(0),
     mnLinesSinceRefresh(0),
     mfLastRefreshTime(0.0),
@@ -424,7 +424,7 @@ void DataStream::StartImport()
 
     if (!mxReaderThread.is())
     {
-        SvStream *pStream = 0;
+        SvStream *pStream = nullptr;
         if (mnSettings & SCRIPT_STREAM)
             pStream = new SvScriptStream(msURL);
         else

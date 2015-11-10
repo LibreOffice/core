@@ -435,7 +435,7 @@ uno::Reference<uno::XInterface> ScServiceProvider::MakeInstance(
     {
         case SC_SERVICE_SHEET:
             //  noch nicht eingefuegt - DocShell=Null
-            xRet.set(static_cast<sheet::XSpreadsheet*>(new ScTableSheetObj(NULL,0)));
+            xRet.set(static_cast<sheet::XSpreadsheet*>(new ScTableSheetObj(nullptr,0)));
             break;
         case SC_SERVICE_URLFIELD:
         case SC_SERVICE_PAGEFIELD:
@@ -449,14 +449,14 @@ uno::Reference<uno::XInterface> ScServiceProvider::MakeInstance(
         {
             uno::Reference<text::XTextRange> xNullContent;
             xRet.set(static_cast<text::XTextField*>(
-                new ScEditFieldObj(xNullContent, NULL, getFieldType(nType), ESelection())));
+                new ScEditFieldObj(xNullContent, nullptr, getFieldType(nType), ESelection())));
         }
         break;
         case SC_SERVICE_CELLSTYLE:
-            xRet.set(static_cast<style::XStyle*>(new ScStyleObj( NULL, SFX_STYLE_FAMILY_PARA, OUString() )));
+            xRet.set(static_cast<style::XStyle*>(new ScStyleObj( nullptr, SFX_STYLE_FAMILY_PARA, OUString() )));
             break;
         case SC_SERVICE_PAGESTYLE:
-            xRet.set(static_cast<style::XStyle*>(new ScStyleObj( NULL, SFX_STYLE_FAMILY_PAGE, OUString() )));
+            xRet.set(static_cast<style::XStyle*>(new ScStyleObj( nullptr, SFX_STYLE_FAMILY_PAGE, OUString() )));
             break;
         case SC_SERVICE_AUTOFORMAT:
             xRet.set(static_cast<container::XIndexAccess*>(new ScAutoFormatObj( SC_AFMTOBJ_INVALID )));

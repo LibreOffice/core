@@ -180,7 +180,7 @@ sal_Int16 SAL_CALL ScFilterOptionsObj::execute() throw(uno::RuntimeException, st
         if ( xInputStream.is() )
             pInStream.reset(utl::UcbStreamHelper::CreateStream( xInputStream ));
 
-        std::unique_ptr<AbstractScImportAsciiDlg> pDlg(pFact->CreateScImportAsciiDlg( NULL, aPrivDatName, pInStream.get(), SC_IMPORTFILE));
+        std::unique_ptr<AbstractScImportAsciiDlg> pDlg(pFact->CreateScImportAsciiDlg( nullptr, aPrivDatName, pInStream.get(), SC_IMPORTFILE));
         OSL_ENSURE(pDlg, "Dialog create fail!");
         if ( pDlg->Execute() == RET_OK )
         {
@@ -199,7 +199,7 @@ sal_Int16 SAL_CALL ScFilterOptionsObj::execute() throw(uno::RuntimeException, st
         {
             // HTML import.
             std::unique_ptr<AbstractScTextImportOptionsDlg> pDlg(
-                pFact->CreateScTextImportOptionsDlg(NULL));
+                pFact->CreateScTextImportOptionsDlg(nullptr));
 
             if (pDlg->Execute() == RET_OK)
             {
@@ -281,7 +281,7 @@ sal_Int16 SAL_CALL ScFilterOptionsObj::execute() throw(uno::RuntimeException, st
 
         ScImportOptions aOptions( cAsciiDel, cStrDel, eEncoding);
 
-        std::unique_ptr<AbstractScImportOptionsDlg> pDlg(pFact->CreateScImportOptionsDlg(NULL,
+        std::unique_ptr<AbstractScImportOptionsDlg> pDlg(pFact->CreateScImportOptionsDlg(nullptr,
                                                                             bAscii, &aOptions, &aTitle, bMultiByte, bDBEnc,
                                                                             !bExport));
         OSL_ENSURE(pDlg, "Dialog create fail!");

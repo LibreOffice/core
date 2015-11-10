@@ -61,7 +61,7 @@ struct ScDocumentImportImpl
     ColAttr* getColAttr( size_t nTab, size_t nCol )
     {
         if (nTab > static_cast<size_t>(MAXTAB) || nCol > static_cast<size_t>(MAXCOL))
-            return NULL;
+            return nullptr;
 
         if (nTab >= maTabAttrs.size())
             maTabAttrs.resize(nTab+1);
@@ -74,7 +74,7 @@ struct ScDocumentImportImpl
     }
 };
 
-ScDocumentImport::Attrs::Attrs() : mpData(NULL), mnSize(0), mbLatinNumFmtOnly(false) {}
+ScDocumentImport::Attrs::Attrs() : mpData(nullptr), mnSize(0), mbLatinNumFmtOnly(false) {}
 
 ScDocumentImport::ScDocumentImport(ScDocument& rDoc) : mpImpl(new ScDocumentImportImpl(rDoc)) {}
 ScDocumentImport::~ScDocumentImport()
@@ -164,7 +164,7 @@ void ScDocumentImport::setAutoInput(const ScAddress& rPos, const OUString& rStr,
         case CELLTYPE_EDIT:
             // Cell takes the ownership of the text object.
             pBlockPos->miCellPos = rCells.set(pBlockPos->miCellPos, rPos.Row(), aCell.mpEditText);
-            aCell.mpEditText = NULL;
+            aCell.mpEditText = nullptr;
         break;
         case CELLTYPE_VALUE:
             pBlockPos->miCellPos = rCells.set(pBlockPos->miCellPos, rPos.Row(), aCell.mfValue);
@@ -172,7 +172,7 @@ void ScDocumentImport::setAutoInput(const ScAddress& rPos, const OUString& rStr,
         case CELLTYPE_FORMULA:
             // This formula cell instance is directly placed in the document without copying.
             pBlockPos->miCellPos = rCells.set(pBlockPos->miCellPos, rPos.Row(), aCell.mpFormula);
-            aCell.mpFormula = NULL;
+            aCell.mpFormula = nullptr;
         break;
         default:
             pBlockPos->miCellPos = rCells.set_empty(pBlockPos->miCellPos, rPos.Row(), rPos.Row());

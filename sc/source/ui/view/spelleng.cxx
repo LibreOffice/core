@@ -79,8 +79,8 @@ bool ScConversionEngineBase::FindNextConversionCell()
 {
     ScMarkData& rMark = mrViewData.GetMarkData();
     ScTabViewShell* pViewShell = mrViewData.GetViewShell();
-    const ScPatternAttr* pPattern = NULL;
-    const ScPatternAttr* pLastPattern = NULL;
+    const ScPatternAttr* pPattern = nullptr;
+    const ScPatternAttr* pLastPattern = nullptr;
 
     std::unique_ptr<SfxItemSet> pEditDefaults(new SfxItemSet(GetEmptyItemSet()));
 

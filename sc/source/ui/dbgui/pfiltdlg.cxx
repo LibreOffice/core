@@ -53,9 +53,9 @@ ScPivotFilterDlg::ScPivotFilterDlg(vcl::Window* pParent, const SfxItemSet& rArgS
         nWhichQuery     ( rArgSet.GetPool()->GetWhich( SID_QUERY ) ),
         theQueryData    ( static_cast<const ScQueryItem&>(
                            rArgSet.Get( nWhichQuery )).GetQueryData() ),
-        pOutItem        ( NULL ),
-        pViewData       ( NULL ),
-        pDoc            ( NULL ),
+        pOutItem        ( nullptr ),
+        pViewData       ( nullptr ),
+        pDoc            ( nullptr ),
         nSrcTab         ( nSourceTab ),     // is not in QueryParam
         nFieldCount     ( 0 )
 {
@@ -76,7 +76,7 @@ ScPivotFilterDlg::ScPivotFilterDlg(vcl::Window* pParent, const SfxItemSet& rArgS
     get(m_pFtDbArea, "dbarea");
 
     for (sal_uInt16 i=0; i<=MAXCOL; i++)
-        pEntryLists[i] = NULL;
+        pEntryLists[i] = nullptr;
 
     Init( rArgSet );
 }
@@ -131,7 +131,7 @@ void ScPivotFilterDlg::Init( const SfxItemSet& rArgSet )
     m_pBtnUnique->Check( !theQueryData.bDuplicate );
 
     pViewData   = rQueryItem.GetViewData();
-    pDoc        = pViewData ? pViewData->GetDocument() : NULL;
+    pDoc        = pViewData ? pViewData->GetDocument() : nullptr;
 
     // for easier access:
     aFieldLbArr  [0] = m_pLbField1;

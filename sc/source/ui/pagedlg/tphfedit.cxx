@@ -48,7 +48,7 @@
 #include <memory>
 
 // STATIC DATA -----------------------------------------------------------
-static VclPtr<ScEditWindow> pActiveEdWnd = NULL;
+static VclPtr<ScEditWindow> pActiveEdWnd = nullptr;
 
 ScEditWindow* GetScEditWindow ()
 {
@@ -72,7 +72,7 @@ static void lcl_GetFieldData( ScHeaderFieldData& rData )
 ScEditWindow::ScEditWindow( vcl::Window* pParent, WinBits nBits, ScEditWindowLocation eLoc )
     :   Control( pParent, nBits ),
     eLocation(eLoc),
-    pAcc(NULL)
+    pAcc(nullptr)
 {
     EnableRTL(false);
 
@@ -198,7 +198,7 @@ void ScEditWindow::SetCharAttributes()
 
     if ( pDocSh && pViewSh )
     {
-        if(pTabViewSh!=NULL) pTabViewSh->SetInFormatDialog(true);
+        if(pTabViewSh!=nullptr) pTabViewSh->SetInFormatDialog(true);
 
         SfxItemSet aSet( pEdView->GetAttribs() );
 
@@ -216,7 +216,7 @@ void ScEditWindow::SetCharAttributes()
             pEdView->SetAttribs( aSet );
         }
 
-        if(pTabViewSh!=NULL) pTabViewSh->SetInFormatDialog(false);
+        if(pTabViewSh!=nullptr) pTabViewSh->SetInFormatDialog(false);
     }
 }
 
@@ -291,7 +291,7 @@ void ScEditWindow::GetFocus()
         pAcc->GotFocus();
     }
     else
-        pAcc = NULL;
+        pAcc = nullptr;
 
     Control::GetFocus();
 }
@@ -304,7 +304,7 @@ void ScEditWindow::LoseFocus()
         pAcc->LostFocus();
     }
     else
-        pAcc = NULL;
+        pAcc = nullptr;
     Control::LoseFocus();
 }
 
@@ -338,7 +338,7 @@ css::uno::Reference< css::accessibility::XAccessible > ScEditWindow::CreateAcces
 }
 
 ScExtIButton::ScExtIButton(vcl::Window* pParent, WinBits nBits )
-    : ImageButton(pParent,nBits), pPopupMenu(NULL)
+    : ImageButton(pParent,nBits), pPopupMenu(nullptr)
 {
     nSelected=0;
     aIdle.SetPriority(SchedulerPriority::LOWEST);
@@ -382,7 +382,7 @@ void ScExtIButton::StartPopup()
     nSelected=0;
     aSelectedIdent.clear();
 
-    if(pPopupMenu!=NULL)
+    if(pPopupMenu!=nullptr)
     {
         SetPressed( true );
         EndSelection();

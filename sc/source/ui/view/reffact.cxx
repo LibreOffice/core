@@ -140,7 +140,7 @@ ScSimpleRefDlgWrapper::ScSimpleRefDlgWrapper( vcl::Window* pParentP,
         : SfxChildWindow(pParentP, nId)
 {
 
-    ScTabViewShell* pViewShell = NULL;
+    ScTabViewShell* pViewShell = nullptr;
     SfxDispatcher* pDisp = p->GetDispatcher();
     if ( pDisp )
     {
@@ -151,14 +151,14 @@ ScSimpleRefDlgWrapper::ScSimpleRefDlgWrapper( vcl::Window* pParentP,
 
     OSL_ENSURE( pViewShell, "missing view shell :-(" );
 
-    if(pInfo!=NULL && bScSimpleRefFlag)
+    if(pInfo!=nullptr && bScSimpleRefFlag)
     {
         pInfo->aPos.X()=nScSimpleRefX;
         pInfo->aPos.Y()=nScSimpleRefY;
         pInfo->aSize.Height()=nScSimpleRefHeight;
         pInfo->aSize.Width()=nScSimpleRefWidth;
     }
-    SetWindow(NULL);
+    SetWindow(nullptr);
 
     if(bAutoReOpen && pViewShell)
         SetWindow( pViewShell->CreateRefDialog( p, this, pInfo, pParentP, WID_SIMPLE_REF) );
@@ -244,7 +244,7 @@ ScAcceptChgDlgWrapper::ScAcceptChgDlgWrapper(   vcl::Window* pParentP,
             static_cast<ScAcceptChgDlg*>(GetWindow())->Initialize( pInfo );
         }
         else
-            SetWindow( NULL );
+            SetWindow( nullptr );
         if (pViewShell && !GetWindow())
             pViewShell->GetViewFrame()->SetChildWindow( nId, false );
 }
@@ -275,7 +275,7 @@ namespace
                     if( SfxViewShell* pViewSh = pFrm->GetViewShell() )
                         return dynamic_cast<ScTabViewShell*>( pViewSh );
 
-        return NULL;
+        return nullptr;
     }
 }
 
@@ -286,7 +286,7 @@ ScValidityRefChildWin::ScValidityRefChildWin( vcl::Window*               pParent
                                              : SfxChildWindow(pParentP, nId),
                                              m_bVisibleLock( false ),
                                              m_bFreeWindowLock( false ),
-                                             m_pSavedWndParent( NULL )
+                                             m_pSavedWndParent( nullptr )
 {
     SetWantsFocus( false );
     VclPtr<ScValidationDlg> pDlg = ScValidationDlg::Find1AliveObject( pParentP );

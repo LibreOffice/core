@@ -20,7 +20,7 @@ FormulaResultValue::FormulaResultValue( sal_uInt16 nErr ) : meType(Error), mfVal
 }
 
 ScFormulaResult::ScFormulaResult() :
-    mpToken(NULL), mnError(0), mbToken(true),
+    mpToken(nullptr), mnError(0), mbToken(true),
     mbEmpty(false), mbEmptyDisplayedAsString(false),
     meMultiline(MULTILINE_UNKNOWN) {}
 
@@ -162,7 +162,7 @@ void ScFormulaResult::SetToken( const formula::FormulaToken* p )
     {
         const ScMatrixCellResultToken* pMatResult =
             (p && p->GetType() == formula::svMatrixCell ?
-             dynamic_cast<const ScMatrixCellResultToken*>(p) : NULL);
+             dynamic_cast<const ScMatrixCellResultToken*>(p) : nullptr);
         if (pMatResult)
         {
             const ScMatrixFormulaCellToken* pNewMatFormula =
@@ -408,7 +408,7 @@ formula::FormulaConstTokenRef ScFormulaResult::GetToken() const
 {
     if (mbToken)
         return mpToken;
-    return NULL;
+    return nullptr;
 }
 
 formula::FormulaConstTokenRef ScFormulaResult::GetCellResultToken() const
@@ -479,7 +479,7 @@ ScConstMatrixRef ScFormulaResult::GetMatrix() const
 {
     if (GetType() == formula::svMatrixCell)
         return mpToken->GetMatrix();
-    return NULL;
+    return nullptr;
 }
 
 const OUString& ScFormulaResult::GetHybridFormula() const
@@ -556,7 +556,7 @@ void ScFormulaResult::SetMatrix( SCCOL nCols, SCROW nRows, const ScConstMatrixRe
 const ScMatrixFormulaCellToken* ScFormulaResult::GetMatrixFormulaCellToken() const
 {
     return (GetType() == formula::svMatrixCell ?
-            dynamic_cast<const ScMatrixFormulaCellToken*>(mpToken) : NULL);
+            dynamic_cast<const ScMatrixFormulaCellToken*>(mpToken) : nullptr);
 }
 
 ScMatrixFormulaCellToken* ScFormulaResult::GetMatrixFormulaCellTokenNonConst()

@@ -21,8 +21,8 @@
 
 ScFormEditData::ScFormEditData()
     : formula::FormEditData()
-    , pInputHandler(NULL)
-    , pScDocShell(NULL)
+    , pInputHandler(nullptr)
+    , pScDocShell(nullptr)
 {
     Reset();
 }

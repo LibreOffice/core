@@ -179,7 +179,7 @@ uno::Any ScDocOptionsHelper::getPropertyValue(
 }
 
 ScDocOptionsObj::ScDocOptionsObj( const ScDocOptions& rOpt ) :
-    ScModelObj( NULL ),
+    ScModelObj( nullptr ),
     aOptions( rOpt )
 {
 }

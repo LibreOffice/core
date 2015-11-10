@@ -37,12 +37,12 @@ using namespace com::sun::star::uno;
 
 //      ScAppOptions - Applikations-Optionen
 
-ScAppOptions::ScAppOptions() : pLRUList( NULL )
+ScAppOptions::ScAppOptions() : pLRUList( nullptr )
 {
     SetDefaults();
 }
 
-ScAppOptions::ScAppOptions( const ScAppOptions& rCpy ) : pLRUList( NULL )
+ScAppOptions::ScAppOptions( const ScAppOptions& rCpy ) : pLRUList( nullptr )
 {
     *this = rCpy;
 }
@@ -125,7 +125,7 @@ void ScAppOptions::SetLRUFuncList( const sal_uInt16* pList, const sal_uInt16 nCo
             pLRUList[i] = pList[i];
     }
     else
-        pLRUList = NULL;
+        pLRUList = nullptr;
 }
 
 //  Config Item containing app options
@@ -380,7 +380,7 @@ ScAppCfg::ScAppCfg() :
 
     Sequence<OUString> aNames;
     Sequence<Any> aValues;
-    const Any* pValues = NULL;
+    const Any* pValues = nullptr;
 
     aNames = GetLayoutPropertyNames();
     aValues = aLayoutItem.GetProperties(aNames);

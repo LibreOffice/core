@@ -425,7 +425,7 @@ void XclExpString::WriteXml( XclExpXmlStream& rStrm ) const
         XclFormatRunVec::const_iterator aIt = maFormats.begin(), aEnd = maFormats.end();
 
         sal_uInt16  nStart = 0;
-        const XclExpFont* pFont = NULL;
+        const XclExpFont* pFont = nullptr;
         for ( ; aIt != aEnd; ++aIt )
         {
             nStart = lcl_WriteRun( rStrm, GetUnicodeBuffer(),

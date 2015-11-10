@@ -40,8 +40,8 @@ ScCondFormatList::ScCondFormatList(vcl::Window* pParent, WinBits nStyle)
     : Control(pParent, nStyle | WB_DIALOGCONTROL)
     , mbHasScrollBar(false)
     , mpScrollBar(VclPtr<ScrollBar>::Create(this, WB_VERT ))
-    , mpDoc(NULL)
-    , mpDialogParent(NULL)
+    , mpDoc(nullptr)
+    , mpDialogParent(nullptr)
 {
     mpScrollBar->SetScrollHdl( LINK( this, ScCondFormatList, ScrollHdl ) );
     mpScrollBar->EnableDrag();
@@ -169,7 +169,7 @@ void ScCondFormatList::Resize()
 ScConditionalFormat* ScCondFormatList::GetConditionalFormat() const
 {
     if(maEntries.empty())
-        return NULL;
+        return nullptr;
 
     ScConditionalFormat* pFormat = new ScConditionalFormat(0, mpDoc);
     for(EntryContainer::const_iterator itr = maEntries.begin(); itr != maEntries.end(); ++itr)
@@ -425,7 +425,7 @@ ScCondFormatDlg::ScCondFormatDlg(SfxBindings* pB, SfxChildWindow* pCW,
     , mbManaged(bManaged)
     , maPos(rPos)
     , mpViewData(pViewData)
-    , mpLastEdit(NULL)
+    , mpLastEdit(nullptr)
 {
     get(mpBtnOk, "ok");
     get(mpBtnAdd, "add");
@@ -560,7 +560,7 @@ ScConditionalFormat* ScCondFormatDlg::GetConditionalFormat() const
 {
     OUString aRangeStr = mpEdRange->GetText();
     if(aRangeStr.isEmpty())
-        return NULL;
+        return nullptr;
 
     ScRangeList aRange;
     sal_uInt16 nFlags = aRange.Parse(aRangeStr, mpViewData->GetDocument(),
@@ -572,7 +572,7 @@ ScConditionalFormat* ScCondFormatDlg::GetConditionalFormat() const
     else
     {
         delete pFormat;
-        pFormat = NULL;
+        pFormat = nullptr;
     }
 
     return pFormat;
@@ -580,7 +580,7 @@ ScConditionalFormat* ScCondFormatDlg::GetConditionalFormat() const
 
 void ScCondFormatDlg::InvalidateRefData()
 {
-    mpLastEdit = NULL;
+    mpLastEdit = nullptr;
 }
 
 // -------------------------------------------------------------
@@ -603,7 +603,7 @@ void ScCondFormatDlg::OkPressed()
             pFormat, maPos.Tab(), pFormat->GetRange());
     else
         mpViewData->GetDocShell()->GetDocFunc().ReplaceConditionalFormat(maKey,
-            NULL, maPos.Tab(), ScRangeList());
+            nullptr, maPos.Tab(), ScRangeList());
 
     if ( mbManaged )
     {
@@ -643,8 +643,8 @@ bool ScCondFormatDlg::ParseXmlString(const OUString&    sXMLString,
     OString sTagName;
     OUString sTagValue;
 
-    xmlNodePtr      pXmlRoot  = NULL;
-    xmlNodePtr      pXmlNode  = NULL;
+    xmlNodePtr      pXmlRoot  = nullptr;
+    xmlNodePtr      pXmlNode  = nullptr;
 
     OString sOString = OUStringToOString( sXMLString, RTL_TEXTENCODING_UTF8 );
     xmlDocPtr pXmlDoc = xmlParseMemory(sOString.getStr(), sOString.getLength());
@@ -655,12 +655,12 @@ bool ScCondFormatDlg::ParseXmlString(const OUString&    sXMLString,
         pXmlRoot = xmlDocGetRootElement( pXmlDoc );
         pXmlNode = pXmlRoot->children;
 
-        while (pXmlNode != NULL && bRetVal)
+        while (pXmlNode != nullptr && bRetVal)
         {
             sTagName  = OUStringToOString("Index", RTL_TEXTENCODING_UTF8);
             if (xmlStrcmp(pXmlNode->name, reinterpret_cast<xmlChar const *>(sTagName.getStr())) == 0)
             {
-                if (pXmlNode->children != NULL && pXmlNode->children->type == XML_TEXT_NODE)
+                if (pXmlNode->children != nullptr && pXmlNode->children->type == XML_TEXT_NODE)
                 {
                     sTagValue = OUString(reinterpret_cast<char*>(pXmlNode->children->content),
                                      strlen(reinterpret_cast<char*>(pXmlNode->children->content)),
@@ -674,7 +674,7 @@ bool ScCondFormatDlg::ParseXmlString(const OUString&    sXMLString,
             sTagName  = OUStringToOString("Type", RTL_TEXTENCODING_UTF8);
             if (xmlStrcmp(pXmlNode->name, reinterpret_cast<xmlChar const *>(sTagName.getStr())) == 0)
             {
-                if (pXmlNode->children != NULL && pXmlNode->children->type == XML_TEXT_NODE)
+                if (pXmlNode->children != nullptr && pXmlNode->children->type == XML_TEXT_NODE)
                 {
                     sTagValue = OUString(reinterpret_cast<char*>(pXmlNode->children->content),
                                      strlen(reinterpret_cast<char*>(pXmlNode->children->content)),
@@ -688,7 +688,7 @@ bool ScCondFormatDlg::ParseXmlString(const OUString&    sXMLString,
             sTagName  = OUStringToOString("Managed", RTL_TEXTENCODING_UTF8);
             if (xmlStrcmp(pXmlNode->name, reinterpret_cast<xmlChar const *>(sTagName.getStr())) == 0)
             {
-                if (pXmlNode->children != NULL && pXmlNode->children->type == XML_TEXT_NODE)
+                if (pXmlNode->children != nullptr && pXmlNode->children->type == XML_TEXT_NODE)
                 {
                     sTagValue = OUString(reinterpret_cast<char*>(pXmlNode->children->content),
                                      strlen(reinterpret_cast<char*>(pXmlNode->children->content)),
@@ -717,18 +717,18 @@ OUString ScCondFormatDlg::GenerateXmlString(sal_uInt32 nIndex, sal_uInt8 nType, 
     OString sTagName;
     OString sTagValue;
 
-    xmlNodePtr      pXmlRoot  = NULL;
-    xmlNodePtr      pXmlNode  = NULL;
+    xmlNodePtr      pXmlRoot  = nullptr;
+    xmlNodePtr      pXmlNode  = nullptr;
 
-    xmlChar*        pBuffer   = NULL;
-    const xmlChar*  pTagName  = NULL;
-    const xmlChar*  pTagValue = NULL;
+    xmlChar*        pBuffer   = nullptr;
+    const xmlChar*  pTagName  = nullptr;
+    const xmlChar*  pTagValue = nullptr;
 
     xmlDocPtr pXmlDoc = xmlNewDoc(reinterpret_cast<const xmlChar*>("1.0"));
 
     sTagName = OUStringToOString("ScCondFormatDlg", RTL_TEXTENCODING_UTF8);
     pTagName = reinterpret_cast<const xmlChar*>(sTagName.getStr());
-    pXmlRoot = xmlNewDocNode(pXmlDoc, NULL, pTagName, NULL);
+    pXmlRoot = xmlNewDocNode(pXmlDoc, nullptr, pTagName, nullptr);
 
     xmlDocSetRootElement(pXmlDoc, pXmlRoot);
 
@@ -736,7 +736,7 @@ OUString ScCondFormatDlg::GenerateXmlString(sal_uInt32 nIndex, sal_uInt8 nType, 
     sTagValue = OUStringToOString(OUString::number(nIndex), RTL_TEXTENCODING_UTF8);
     pTagName  = reinterpret_cast<const xmlChar*>(sTagName.getStr());
     pTagValue = reinterpret_cast<const xmlChar*>(sTagValue.getStr());
-    pXmlNode  = xmlNewDocNode(pXmlDoc, NULL, pTagName, pTagValue);
+    pXmlNode  = xmlNewDocNode(pXmlDoc, nullptr, pTagName, pTagValue);
 
     xmlAddChild(pXmlRoot, pXmlNode);
 
@@ -744,7 +744,7 @@ OUString ScCondFormatDlg::GenerateXmlString(sal_uInt32 nIndex, sal_uInt8 nType, 
     sTagValue = OUStringToOString(OUString::number(nType), RTL_TEXTENCODING_UTF8);
     pTagName  = reinterpret_cast<const xmlChar*>(sTagName.getStr());
     pTagValue = reinterpret_cast<const xmlChar*>(sTagValue.getStr());
-    pXmlNode  = xmlNewDocNode(pXmlDoc, NULL, pTagName, pTagValue);
+    pXmlNode  = xmlNewDocNode(pXmlDoc, nullptr, pTagName, pTagValue);
 
     xmlAddChild(pXmlRoot, pXmlNode);
 
@@ -752,7 +752,7 @@ OUString ScCondFormatDlg::GenerateXmlString(sal_uInt32 nIndex, sal_uInt8 nType, 
     sTagValue = OUStringToOString(OUString::boolean(bManaged), RTL_TEXTENCODING_UTF8);
     pTagName  = reinterpret_cast<const xmlChar*>(sTagName.getStr());
     pTagValue = reinterpret_cast<const xmlChar*>(sTagValue.getStr());
-    pXmlNode  = xmlNewDocNode(pXmlDoc, NULL, pTagName, pTagValue);
+    pXmlNode  = xmlNewDocNode(pXmlDoc, nullptr, pTagName, pTagValue);
 
     xmlAddChild(pXmlRoot, pXmlNode);
 

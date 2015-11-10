@@ -35,7 +35,7 @@ void ScTabViewShell::SetDefaultFrameLine( const ::editeng::SvxBorderLine* pLine 
     else if ( pCurFrameLine )
     {
         delete pCurFrameLine;
-        pCurFrameLine = NULL;
+        pCurFrameLine = nullptr;
     }
 }
 

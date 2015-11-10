@@ -204,8 +204,8 @@ private:
     void            PaintRangeFinderEntry (ScRangeFindData* pData, SCTAB nTab);
 
 protected:
-    void            UpdateHeaderWidth( const ScVSplitPos* pWhich = NULL,
-                                        const SCROW* pPosY = NULL );
+    void            UpdateHeaderWidth( const ScVSplitPos* pWhich = nullptr,
+                                        const SCROW* pPosY = nullptr );
 
     void            HideTip();
     void            ShowRefTip();
@@ -350,7 +350,7 @@ public:
     void            ShowAllCursors();
 
     void            AlignToCursor( SCsCOL nCurX, SCsROW nCurY, ScFollowMode eMode,
-                                    const ScSplitPos* pWhich = NULL );
+                                    const ScSplitPos* pWhich = nullptr );
 
     SvxZoomType     GetZoomType() const;
     void            SetZoomType( SvxZoomType eNew, bool bAll );

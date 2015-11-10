@@ -58,9 +58,9 @@
 ScStyleSheetPool::ScStyleSheetPool( SfxItemPool&    rPoolP,
                                     ScDocument*     pDocument )
     :   SfxStyleSheetPool( rPoolP ),
-        pActualStyleSheet( NULL ),
+        pActualStyleSheet( nullptr ),
         pDoc( pDocument ),
-        pForceStdName( NULL )
+        pForceStdName( nullptr )
 {
 }
 
@@ -82,7 +82,7 @@ SfxStyleSheetBase& ScStyleSheetPool::Make( const OUString& rName,
 
     //TODO: only when loading?
 
-    if ( rName == STRING_STANDARD && Find( rName, eFam ) != NULL )
+    if ( rName == STRING_STANDARD && Find( rName, eFam ) != nullptr )
     {
         OSL_FAIL("renaming additional default style");
         sal_uInt32 nCount = GetIndexedStyleSheets().GetNumberOfStyleSheets();
@@ -90,7 +90,7 @@ SfxStyleSheetBase& ScStyleSheetPool::Make( const OUString& rName,
         {
             OUString aNewName = ScGlobal::GetRscString(STR_STYLENAME_STANDARD);
             aNewName += OUString::number( nAdd );
-            if ( Find( aNewName, eFam ) == NULL )
+            if ( Find( aNewName, eFam ) == nullptr )
                 return SfxStyleSheetPool::Make(aNewName, eFam, mask);
         }
     }
@@ -221,16 +221,16 @@ void ScStyleSheetPool::CreateStandardStyles()
     OUString        aStr;
     sal_Int32       nStrLen;
     OUString        aHelpFile;//which text???
-    SfxItemSet*     pSet            = NULL;
-    SfxItemSet*     pHFSet          = NULL;
-    SvxSetItem*     pHFSetItem      = NULL;
+    SfxItemSet*     pSet            = nullptr;
+    SfxItemSet*     pHFSet          = nullptr;
+    SvxSetItem*     pHFSetItem      = nullptr;
     ScEditEngineDefaulter*  pEdEngine   = new ScEditEngineDefaulter( EditEngine::CreatePool(), true );
     pEdEngine->SetUpdateMode( false );
     EditTextObject* pEmptyTxtObj    = pEdEngine->CreateTextObject();
-    EditTextObject* pTxtObj         = NULL;
+    EditTextObject* pTxtObj         = nullptr;
     ScPageHFItem*   pHeaderItem     = new ScPageHFItem( ATTR_PAGE_HEADERRIGHT );
     ScPageHFItem*   pFooterItem     = new ScPageHFItem( ATTR_PAGE_FOOTERRIGHT );
-    ScStyleSheet*   pSheet          = NULL;
+    ScStyleSheet*   pSheet          = nullptr;
     ::editeng::SvxBorderLine    aBorderLine     ( &aColBlack, DEF_LINE_WIDTH_2 );
     SvxBoxItem      aBoxItem        ( ATTR_BORDER );
     SvxBoxInfoItem  aBoxInfoItem    ( ATTR_BORDER_INNER );
@@ -475,15 +475,15 @@ ScStyleSheet* ScStyleSheetPool::FindCaseIns( const OUString& rName, SfxStyleFami
     for (/**/;it != aFoundPositions.end(); ++it)
     {
         SfxStyleSheetBase *pFound = GetStyleSheetByPositionInIndex(*it).get();
-        ScStyleSheet* pSheet = NULL;
+        ScStyleSheet* pSheet = nullptr;
         // we do not know what kind of sheets we have.
         pSheet = dynamic_cast<ScStyleSheet*>(pFound);
-        if (pSheet != NULL)
+        if (pSheet != nullptr)
         {
             return pSheet;
         }
     }
-    return NULL;
+    return nullptr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

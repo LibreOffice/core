@@ -510,7 +510,7 @@ void XclExpPCField::InsertNumDateGroupItems( const ScDPObject& rDPObj, const ScD
     {
         // get the string collection with original source elements
         const ScDPSaveData* pSaveData = rDPObj.GetSaveData();
-        const ScDPDimensionSaveData* pDimData = NULL;
+        const ScDPDimensionSaveData* pDimData = nullptr;
         if (pSaveData)
             pDimData = pSaveData->GetExistingDimensionData();
 
@@ -900,12 +900,12 @@ XclExpPTItem::XclExpPTItem( const XclExpPCField& rCacheField, sal_uInt16 nCacheI
 {
     maItemInfo.mnType = EXC_SXVI_TYPE_DATA;
     maItemInfo.mnCacheIdx = nCacheIdx;
-    maItemInfo.maVisName.mbUseCache = mpCacheItem != 0;
+    maItemInfo.maVisName.mbUseCache = mpCacheItem != nullptr;
 }
 
 XclExpPTItem::XclExpPTItem( sal_uInt16 nItemType, sal_uInt16 nCacheIdx, bool bUseCache ) :
     XclExpRecord( EXC_ID_SXVI, 8 ),
-    mpCacheItem( 0 )
+    mpCacheItem( nullptr )
 {
     maItemInfo.mnType = nItemType;
     maItemInfo.mnCacheIdx = nCacheIdx;
@@ -1147,7 +1147,7 @@ void XclExpPTField::Save( XclExpStream& rStrm )
 
 XclExpPTItem* XclExpPTField::GetItemAcc( const OUString& rName )
 {
-    XclExpPTItem* pItem = 0;
+    XclExpPTItem* pItem = nullptr;
     for( size_t nPos = 0, nSize = maItemList.GetSize(); !pItem && (nPos < nSize); ++nPos )
         if( maItemList.GetRecord( nPos )->GetItemName() == rName )
             pItem = maItemList.GetRecord( nPos ).get();
@@ -1283,7 +1283,7 @@ void XclExpPivotTable::Save( XclExpStream& rStrm )
 
 XclExpPTField* XclExpPivotTable::GetFieldAcc( const OUString& rName )
 {
-    XclExpPTField* pField = 0;
+    XclExpPTField* pField = nullptr;
     for( size_t nPos = 0, nSize = maFieldList.GetSize(); !pField && (nPos < nSize); ++nPos )
         if( maFieldList.GetRecord( nPos )->GetFieldName() == rName )
             pField = maFieldList.GetRecord( nPos ).get();
@@ -1298,7 +1298,7 @@ XclExpPTField* XclExpPivotTable::GetFieldAcc( const ScDPSaveDimension& rSaveDim 
 
     // a real dimension
     OUString aFieldName = ScDPUtil::getSourceDimensionName(rSaveDim.GetName());
-    return aFieldName.isEmpty() ? NULL : GetFieldAcc(aFieldName);
+    return aFieldName.isEmpty() ? nullptr : GetFieldAcc(aFieldName);
 }
 
 // fill data --------------------------------------------------------------
@@ -1386,7 +1386,7 @@ void XclExpPivotTable::Finalize()
 
     // find data field orientation field
     maPTInfo.mnDataPos = EXC_SXVIEW_DATALAST;
-    const ScfUInt16Vec* pFieldVec = 0;
+    const ScfUInt16Vec* pFieldVec = nullptr;
     switch( maPTInfo.mnDataAxis )
     {
         case EXC_SXVD_AXIS_ROW: pFieldVec = &maRowFields;   break;
@@ -1701,7 +1701,7 @@ const XclExpPivotCache* XclExpPivotTableManager::CreatePivotCache( const ScDPObj
         return xNewPCache.get();
     }
 
-    return 0;
+    return nullptr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

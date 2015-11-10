@@ -92,7 +92,7 @@ public:
     ScVObjMode              GetObjMode( ScVObjType eObj ) const             { return aModeArr[eObj]; }
 
     void                    SetGridColor( const Color& rCol, const OUString& rName ) { aGridCol = rCol; aGridColName = rName;}
-    Color                   GetGridColor( OUString* pStrName = NULL ) const;
+    Color                   GetGridColor( OUString* pStrName = nullptr ) const;
 
     const ScGridOptions&    GetGridOptions() const                      { return aGridOpt; }
     void                    SetGridOptions( const ScGridOptions& rNew ) { aGridOpt = rNew; }
@@ -121,7 +121,7 @@ public:
                 virtual ~ScTpViewItem();
 
     virtual bool            operator==( const SfxPoolItem& ) const override;
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const override;
+    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
 
     const ScViewOptions&    GetViewOptions() const { return theOptions; }
 

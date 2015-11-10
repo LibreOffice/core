@@ -79,7 +79,7 @@ ScTabPageSortFields::ScTabPageSortFields(vcl::Window* pParent,
 
         nWhichSort      ( rArgSet.GetPool()->GetWhich( SID_SORT ) ),
         pDlg            ( static_cast<ScSortDlg*>(GetParentDialog()) ),
-        pViewData       ( NULL ),
+        pViewData       ( nullptr ),
         aSortData       ( static_cast<const ScSortItem&>(
                            rArgSet.Get( nWhichSort )).
                                 GetSortData() ),
@@ -290,7 +290,7 @@ bool ScTabPageSortFields::FillItemSet( SfxItemSet* rArgSet )
             aNewSortData.maKeyState[i].bDoSort = false;
     }
 
-    rArgSet->Put( ScSortItem( SCITEM_SORTDATA, NULL, &aNewSortData ) );
+    rArgSet->Put( ScSortItem( SCITEM_SORTDATA, nullptr, &aNewSortData ) );
 
     return true;
 }
@@ -494,11 +494,11 @@ ScTabPageSortOptions::ScTabPageSortOptions( vcl::Window*             pParent,
     , aStrUndefined(SC_RESSTR(SCSTR_UNDEFINED))
     , nWhichSort(rArgSet.GetPool()->GetWhich(SID_SORT))
     , aSortData(static_cast<const ScSortItem&>(rArgSet.Get(nWhichSort)).GetSortData())
-    , pViewData(NULL)
-    , pDoc(NULL)
+    , pViewData(nullptr)
+    , pDoc(nullptr)
     , pDlg(static_cast<ScSortDlg*>(GetParentDialog()))
-    , pColRes( NULL )
-    , pColWrap( NULL )
+    , pColRes( nullptr )
+    , pColWrap( nullptr )
 {
     get(m_pBtnCase, "case");
     get(m_pBtnHeader, "header");
@@ -573,7 +573,7 @@ void ScTabPageSortOptions::Init()
     m_pLbLanguage->SetSelectHdl  ( LINK( this, ScTabPageSortOptions, FillAlgorHdl ) );
 
     pViewData = rSortItem.GetViewData();
-    pDoc      = pViewData ? pViewData->GetDocument() : NULL;
+    pDoc      = pViewData ? pViewData->GetDocument() : nullptr;
 
     OSL_ENSURE( pViewData, "ViewData not found! :-/" );
 

@@ -241,7 +241,7 @@ void XclExpExtIconSet::SaveXml(XclExpXmlStream& rStrm)
 
     rWorksheet->startElementNS(XML_x14, XML_iconSet,
             XML_iconSet, mpIconSetName,
-            XML_custom, mbCustom ? XclXmlUtils::ToPsz10(mbCustom) : NULL,
+            XML_custom, mbCustom ? XclXmlUtils::ToPsz10(mbCustom) : nullptr,
             XML_reverse, XclXmlUtils::ToPsz10(mbReverse),
             XML_showValue, XclXmlUtils::ToPsz10(mbShowValue),
             FSEND);
@@ -259,7 +259,7 @@ void XclExpExtIconSet::SaveXml(XclExpXmlStream& rStrm)
 XclExpExtCfRule::XclExpExtCfRule( const XclExpRoot& rRoot, const ScFormatEntry& rFormat, const ScAddress& rPos, const OString& rId, sal_Int32 nPriority ):
     XclExpRoot(rRoot),
     maId(rId),
-    pType(NULL),
+    pType(nullptr),
     mnPriority(nPriority)
 {
     switch (rFormat.GetType())
@@ -290,7 +290,7 @@ void XclExpExtCfRule::SaveXml( XclExpXmlStream& rStrm )
     sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
     rWorksheet->startElementNS( XML_x14, XML_cfRule,
                                 XML_type, pType,
-                                XML_priority, mnPriority == -1 ? NULL : OString::number(mnPriority).getStr(),
+                                XML_priority, mnPriority == -1 ? nullptr : OString::number(mnPriority).getStr(),
                                 XML_id, maId.getStr(),
                                 FSEND );
 

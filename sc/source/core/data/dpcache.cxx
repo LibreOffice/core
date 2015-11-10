@@ -666,7 +666,7 @@ bool ScDPCache::IsRowEmpty(SCROW nRow) const
 const ScDPCache::GroupItems* ScDPCache::GetGroupItems(long nDim) const
 {
     if (nDim < 0)
-        return NULL;
+        return nullptr;
 
     long nSourceCount = static_cast<long>(maFields.size());
     if (nDim < nSourceCount)
@@ -676,7 +676,7 @@ const ScDPCache::GroupItems* ScDPCache::GetGroupItems(long nDim) const
     if (nDim < static_cast<long>(maGroupFields.size()))
         return &maGroupFields[nDim];
 
-    return NULL;
+    return nullptr;
 }
 
 OUString ScDPCache::GetDimensionName(LabelsType::size_type nDim) const
@@ -794,7 +794,7 @@ SCROW ScDPCache::GetItemDataId(sal_uInt16 nDim, SCROW nRow, bool bRepeatIfEmpty)
 const ScDPItemData* ScDPCache::GetItemDataById(long nDim, SCROW nId) const
 {
     if (nDim < 0 || nId < 0)
-        return NULL;
+        return nullptr;
 
     size_t nSourceCount = maFields.size();
     size_t nDimPos = static_cast<size_t>(nDim);
@@ -807,12 +807,12 @@ const ScDPItemData* ScDPCache::GetItemDataById(long nDim, SCROW nId) const
             return &rField.maItems[nItemId];
 
         if (!rField.mpGroup)
-            return NULL;
+            return nullptr;
 
         nItemId -= rField.maItems.size();
         const ItemsType& rGI = rField.mpGroup->maItems;
         if (nItemId >= rGI.size())
-            return NULL;
+            return nullptr;
 
         return &rGI[nItemId];
     }
@@ -820,11 +820,11 @@ const ScDPItemData* ScDPCache::GetItemDataById(long nDim, SCROW nId) const
     // Try group fields.
     nDimPos -= nSourceCount;
     if (nDimPos >= maGroupFields.size())
-        return NULL;
+        return nullptr;
 
     const ItemsType& rGI = maGroupFields[nDimPos].maItems;
     if (nItemId >= rGI.size())
-        return NULL;
+        return nullptr;
 
     return &rGI[nItemId];
 }
@@ -853,7 +853,7 @@ SCROW ScDPCache::GetDataSize() const
 const ScDPCache::IndexArrayType* ScDPCache::GetFieldIndexArray( size_t nDim ) const
 {
     if (nDim >= maFields.size())
-        return NULL;
+        return nullptr;
 
     return &maFields[nDim].maData;
 }
@@ -911,7 +911,7 @@ const OUString* ScDPCache::InternString(const OUString& rStr) const
         return &(*it);
 
     std::pair<StringSetType::iterator, bool> r = maStringPool.insert(rStr);
-    return r.second ? &(*r.first) : NULL;
+    return r.second ? &(*r.first) : nullptr;
 }
 
 void ScDPCache::AddReference(ScDPObject* pObj) const
@@ -991,7 +991,7 @@ OUString ScDPCache::GetFormattedString(long nDim, const ScDPItemData& rItem) con
         SvNumberFormatter* pFormatter = mpDoc->GetFormatTable();
         if (pFormatter)
         {
-            Color* pColor = NULL;
+            Color* pColor = nullptr;
             OUString aStr;
             pFormatter->GetOutputString(rItem.GetValue(), nNumFormat, aStr, &pColor);
             return aStr;
@@ -1128,13 +1128,13 @@ void ScDPCache::ClearGroupFields()
 const ScDPNumGroupInfo* ScDPCache::GetNumGroupInfo(long nDim) const
 {
     if (nDim < 0)
-        return NULL;
+        return nullptr;
 
     long nSourceCount = static_cast<long>(maFields.size());
     if (nDim < nSourceCount)
     {
         if (!maFields.at(nDim).mpGroup)
-            return NULL;
+            return nullptr;
 
         return &maFields[nDim].mpGroup->maInfo;
     }
@@ -1143,7 +1143,7 @@ const ScDPNumGroupInfo* ScDPCache::GetNumGroupInfo(long nDim) const
     if (nDim < static_cast<long>(maGroupFields.size()))
         return &maGroupFields.at(nDim).maInfo;
 
-    return NULL;
+    return nullptr;
 }
 
 sal_Int32 ScDPCache::GetGroupType(long nDim) const

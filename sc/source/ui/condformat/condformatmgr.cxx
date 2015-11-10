@@ -73,7 +73,7 @@ void ScCondFormatManagerWindow::DeleteSelection()
 {
     if(GetSelectionCount())
     {
-        for(SvTreeListEntry* pEntry = FirstSelected(); pEntry != NULL; pEntry = NextSelected(pEntry))
+        for(SvTreeListEntry* pEntry = FirstSelected(); pEntry != nullptr; pEntry = NextSelected(pEntry))
         {
             sal_Int32 nIndex = maMapLBoxEntryToCondIndex.find(pEntry)->second;
             mpFormatList->erase(nIndex);
@@ -86,7 +86,7 @@ ScConditionalFormat* ScCondFormatManagerWindow::GetSelection()
 {
     SvTreeListEntry* pEntry = FirstSelected();
     if(!pEntry)
-        return NULL;
+        return nullptr;
 
     sal_Int32 nIndex = maMapLBoxEntryToCondIndex.find(pEntry)->second;
     return mpFormatList->GetFormat(nIndex);
@@ -104,7 +104,7 @@ void ScCondFormatManagerWindow::setColSizes()
 
 ScCondFormatManagerDlg::ScCondFormatManagerDlg(vcl::Window* pParent, ScDocument* pDoc, const ScConditionalFormatList* pFormatList, const ScAddress& rPos):
     ModalDialog(pParent, "CondFormatManager", "modules/scalc/ui/condformatmanager.ui"),
-    mpFormatList( pFormatList ? new ScConditionalFormatList(*pFormatList) : NULL),
+    mpFormatList( pFormatList ? new ScConditionalFormatList(*pFormatList) : nullptr),
     mpDoc(pDoc),
     maPos(rPos),
     mbModified(false)
@@ -143,7 +143,7 @@ void ScCondFormatManagerDlg::dispose()
 ScConditionalFormatList* ScCondFormatManagerDlg::GetConditionalFormatList()
 {
     ScConditionalFormatList* pList = mpFormatList;
-    mpFormatList = NULL;
+    mpFormatList = nullptr;
     return pList;
 }
 

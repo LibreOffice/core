@@ -71,7 +71,7 @@ void ExtCfRuleContext::onStartElement( const AttributeList& rAttribs )
 
 ExtConditionalFormattingContext::ExtConditionalFormattingContext(WorksheetContextBase& rFragment):
     WorksheetContextBase(rFragment),
-    mpCurrentRule(NULL)
+    mpCurrentRule(nullptr)
 {
 }
 
@@ -87,7 +87,7 @@ ContextHandlerRef ExtConditionalFormattingContext::onCreateContext(sal_Int32 nEl
         ScAddress aPos(0, 0, nTab);
         mpCurrentRule->SetData(&rIconSet, pDoc, aPos);
         delete mpCurrentRule;
-        mpCurrentRule = NULL;
+        mpCurrentRule = nullptr;
     }
     if (nElement == XLS14_TOKEN(cfRule))
     {
@@ -98,12 +98,12 @@ ContextHandlerRef ExtConditionalFormattingContext::onCreateContext(sal_Int32 nEl
             // an ext entry does not need to have an existing corresponding entry
             ExtLst::const_iterator aExt = getExtLst().find( aId );
             if(aExt == getExtLst().end())
-                return NULL;
+                return nullptr;
 
             ScDataBarFormatData* pInfo = aExt->second;
             if (!pInfo)
             {
-                return NULL;
+                return nullptr;
             }
             return new ExtCfRuleContext( *this, pInfo );
         }
@@ -125,7 +125,7 @@ ContextHandlerRef ExtConditionalFormattingContext::onCreateContext(sal_Int32 nEl
         return this;
     }
 
-    return NULL;
+    return nullptr;
 }
 
 void ExtConditionalFormattingContext::onStartElement(const AttributeList& /*rAttribs*/)
@@ -191,15 +191,15 @@ ContextHandlerRef ExtLstLocalContext::onCreateContext( sal_Int32 nElement, const
             if(nElement == XLS_TOKEN( ext ))
                 return this;
             else
-                return 0;
+                return nullptr;
             break;
         case XLS_TOKEN( ext ):
             if (nElement == XLS14_TOKEN( id ))
                 return this;
             else
-                return 0;
+                return nullptr;
     }
-    return 0;
+    return nullptr;
 }
 
 void ExtLstLocalContext::onStartElement( const AttributeList& )

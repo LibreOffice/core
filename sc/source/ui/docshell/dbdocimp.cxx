@@ -119,13 +119,13 @@ bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
         const svx::ODataAccessDescriptor* pDescriptor, bool bRecord, bool bAddrInsert )
 {
     ScDocument& rDoc = rDocShell.GetDocument();
-    ScChangeTrack *pChangeTrack = NULL;
+    ScChangeTrack *pChangeTrack = nullptr;
     ScRange aChangedRange;
 
     if (bRecord && !rDoc.IsUndoEnabled())
         bRecord = false;
 
-    ScDBData* pDBData = NULL;
+    ScDBData* pDBData = nullptr;
     if ( !bAddrInsert )
     {
         pDBData = rDoc.GetDBAtArea( nTab, rParam.nCol1, rParam.nRow1,
@@ -228,7 +228,7 @@ bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
                 if ( xExecute.is() )
                 {
                     uno::Reference<task::XInteractionHandler> xHandler(
-                        task::InteractionHandler::createWithParent(comphelper::getProcessComponentContext(), 0),
+                        task::InteractionHandler::createWithParent(comphelper::getProcessComponentContext(), nullptr),
                         uno::UNO_QUERY_THROW);
                     xExecute->executeWithCompletion( xHandler );
                 }
@@ -415,7 +415,7 @@ bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
             nErrStringId = aTester.GetMessageId();
             bSuccess = false;
         }
-        else if ( (pChangeTrack = rDoc.GetChangeTrack()) != NULL )
+        else if ( (pChangeTrack = rDoc.GetChangeTrack()) != nullptr )
             aChangedRange = ScRange(rParam.nCol1, rParam.nRow1, nTab,
                         nEndCol+nFormulaCols, nEndRow, nTab );
     }
@@ -476,8 +476,8 @@ bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
         SCCOL nUndoEndCol = std::max( nEndCol, rParam.nCol2 );       // rParam = old end
         SCROW nUndoEndRow = std::max( nEndRow, rParam.nRow2 );
 
-        ScDocument* pUndoDoc = NULL;
-        ScDBData* pUndoDBData = NULL;
+        ScDocument* pUndoDoc = nullptr;
+        ScDBData* pUndoDBData = nullptr;
         if ( bRecord )
         {
             pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
@@ -588,14 +588,14 @@ bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
         if (bRecord)
         {
             ScDocument* pRedoDoc = pImportDoc;
-            pImportDoc = NULL;
+            pImportDoc = nullptr;
 
             if (nFormulaCols > 0)                   // include filled formulas for redo
                 rDoc.CopyToDocument( rParam.nCol1, rParam.nRow1, nTab,
                                         nEndCol+nFormulaCols, nEndRow, nTab,
                                         InsertDeleteFlags::ALL & ~InsertDeleteFlags::NOTE, false, pRedoDoc );
 
-            ScDBData* pRedoDBData = pDBData ? new ScDBData( *pDBData ) : NULL;
+            ScDBData* pRedoDBData = pDBData ? new ScDBData( *pDBData ) : nullptr;
 
             rDocShell.GetUndoManager()->AddUndoAction(
                 new ScUndoImportData( &rDocShell, nTab,

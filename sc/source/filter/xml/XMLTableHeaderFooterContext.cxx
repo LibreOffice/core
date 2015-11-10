@@ -107,7 +107,7 @@ SvXMLImportContext *XMLTableHeaderFooterContext::CreateChildContext(
     const OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList > & xAttrList )
 {
-    SvXMLImportContext *pContext(0);
+    SvXMLImportContext *pContext(nullptr);
 
     if ((nPrefix == XML_NAMESPACE_TEXT) &&
         IsXMLToken(rLocalName, XML_P))
@@ -219,7 +219,7 @@ SvXMLImportContext *XMLHeaderFooterRegionContext::CreateChildContext(
     const OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList > & xAttrList )
 {
-    SvXMLImportContext *pContext(0);
+    SvXMLImportContext *pContext(nullptr);
 
     if ((nPrefix == XML_NAMESPACE_TEXT) &&
         IsXMLToken(rLocalName, XML_P))

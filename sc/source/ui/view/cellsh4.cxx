@@ -40,7 +40,7 @@ void ScCellShell::ExecuteCursor( SfxRequest& rReq )
     bool                bSel = false;
     bool                bKeep = false;
 
-    if ( pReqArgs != NULL )
+    if ( pReqArgs != nullptr )
     {
         const   SfxPoolItem* pItem;
         if (pReqArgs->HasItem(FN_PARAM_1, &pItem))
@@ -208,7 +208,7 @@ void ScCellShell::ExecuteCursorSel( SfxRequest& rReq )
     SCsCOLROW nRepeat = 1;
     const SfxItemSet* pReqArgs = rReq.GetArgs();
     // get repetition
-    if ( pReqArgs != NULL )
+    if ( pReqArgs != nullptr )
     {
         const SfxPoolItem* pItem;
         if (pReqArgs->HasItem(FN_PARAM_1, &pItem))
@@ -396,7 +396,7 @@ void ScCellShell::ExecutePage( SfxRequest& rReq )
     bool                bSel = false;
     bool                bKeep = false;
 
-    if ( pReqArgs != NULL )
+    if ( pReqArgs != nullptr )
     {
         const   SfxPoolItem* pItem;
         if (pReqArgs->HasItem(FN_PARAM_2, &pItem))

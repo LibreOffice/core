@@ -267,15 +267,15 @@ class ScGridWindow : public vcl::Window, public DropTargetHelper, public DragSou
     void            DrawPagePreview( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, vcl::RenderContext& rRenderContext);
 
     bool            GetEditUrl( const Point& rPos,
-                                OUString* pName=0, OUString* pUrl=0, OUString* pTarget=0 );
+                                OUString* pName=nullptr, OUString* pUrl=nullptr, OUString* pTarget=nullptr );
 
     bool IsSpellErrorAtPos( const Point& rPos, SCCOL nCol1, SCROW nRow );
 
-    bool            HitRangeFinder( const Point& rMouse, RfCorner& rCorner, sal_uInt16* pIndex = NULL,
-                                    SCsCOL* pAddX = NULL, SCsROW* pAddY = NULL );
+    bool            HitRangeFinder( const Point& rMouse, RfCorner& rCorner, sal_uInt16* pIndex = nullptr,
+                                    SCsCOL* pAddX = nullptr, SCsROW* pAddY = nullptr );
 
-    sal_uInt16          HitPageBreak( const Point& rMouse, ScRange* pSource = NULL,
-                                    SCCOLROW* pBreak = NULL, SCCOLROW* pPrev = NULL );
+    sal_uInt16          HitPageBreak( const Point& rMouse, ScRange* pSource = nullptr,
+                                    SCCOLROW* pBreak = nullptr, SCCOLROW* pPrev = nullptr );
 
     /** The cell may be covered by text that overflows from a previous cell.
 

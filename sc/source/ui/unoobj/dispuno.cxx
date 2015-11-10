@@ -84,7 +84,7 @@ void ScDispatchProviderInterceptor::Notify( SfxBroadcaster&, const SfxHint& rHin
 {
     const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
     if ( pSimpleHint && pSimpleHint->GetId() == SFX_HINT_DYING )
-        pViewShell = NULL;
+        pViewShell = nullptr;
 }
 
 // XDispatchProvider
@@ -181,9 +181,9 @@ void SAL_CALL ScDispatchProviderInterceptor::disposing( const lang::EventObject&
         if (xInterceptedComponent.is())
             xInterceptedComponent->removeEventListener(static_cast<lang::XEventListener*>(this));
 
-        m_xMyDispatch = NULL;
+        m_xMyDispatch = nullptr;
     }
-    m_xIntercepted = NULL;
+    m_xIntercepted = nullptr;
 }
 
 ScDispatch::ScDispatch(ScTabViewShell* pViewSh) :
@@ -211,7 +211,7 @@ void ScDispatch::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
     if ( pSimpleHint && pSimpleHint->GetId() == SFX_HINT_DYING )
-        pViewShell = NULL;
+        pViewShell = nullptr;
 }
 
 // XDispatch
@@ -380,7 +380,7 @@ void SAL_CALL ScDispatch::disposing( const css::lang::EventObject& rSource )
     for ( size_t n=0; n<aDataSourceListeners.size(); n++ )
         aDataSourceListeners[n]->disposing( aEvent );
 
-    pViewShell = NULL;
+    pViewShell = nullptr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

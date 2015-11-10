@@ -81,7 +81,7 @@ static void lcl_WriteFixedString( XclExpStream& rStrm, const XclExpString& rStri
 
 static inline void lcl_GenerateGUID( sal_uInt8* pGUID, bool& rValidGUID )
 {
-    rtl_createUuid( pGUID, rValidGUID ? pGUID : NULL, false );
+    rtl_createUuid( pGUID, rValidGUID ? pGUID : nullptr, false );
     rValidGUID = true;
 }
 
@@ -350,17 +350,17 @@ void XclExpChTrHeader::SaveXml( XclExpXmlStream& rRevisionHeadersStrm )
     sax_fastparser::FSHelperPtr pHeaders = rRevisionHeadersStrm.GetCurrentStream();
     rRevisionHeadersStrm.WriteAttributes(
             XML_guid,               lcl_GuidToOString( aGUID ).getStr(),
-            XML_lastGuid,           NULL,   // OOXTODO
-            XML_shared,             NULL,   // OOXTODO
-            XML_diskRevisions,      NULL,   // OOXTODO
-            XML_history,            NULL,   // OOXTODO
-            XML_trackRevisions,     NULL,   // OOXTODO
-            XML_exclusive,          NULL,   // OOXTODO
-            XML_revisionId,         NULL,   // OOXTODO
-            XML_version,            NULL,   // OOXTODO
-            XML_keepChangeHistory,  NULL,   // OOXTODO
-            XML_protected,          NULL,   // OOXTODO
-            XML_preserveHistory,    NULL,   // OOXTODO
+            XML_lastGuid,           nullptr,   // OOXTODO
+            XML_shared,             nullptr,   // OOXTODO
+            XML_diskRevisions,      nullptr,   // OOXTODO
+            XML_history,            nullptr,   // OOXTODO
+            XML_trackRevisions,     nullptr,   // OOXTODO
+            XML_exclusive,          nullptr,   // OOXTODO
+            XML_revisionId,         nullptr,   // OOXTODO
+            XML_version,            nullptr,   // OOXTODO
+            XML_keepChangeHistory,  nullptr,   // OOXTODO
+            XML_protected,          nullptr,   // OOXTODO
+            XML_preserveHistory,    nullptr,   // OOXTODO
             FSEND );
     pHeaders->write( ">" );
 }
@@ -380,17 +380,17 @@ void XclExpXmlChTrHeaders::SaveXml( XclExpXmlStream& rStrm )
         XML_xmlns,              "http://schemas.openxmlformats.org/spreadsheetml/2006/main",
         FSNS(XML_xmlns, XML_r), "http://schemas.openxmlformats.org/officeDocument/2006/relationships",
         XML_guid,               lcl_GuidToOString(maGUID).getStr(),
-        XML_lastGuid,           NULL,   // OOXTODO
-        XML_shared,             NULL,   // OOXTODO
-        XML_diskRevisions,      NULL,   // OOXTODO
-        XML_history,            NULL,   // OOXTODO
-        XML_trackRevisions,     NULL,   // OOXTODO
-        XML_exclusive,          NULL,   // OOXTODO
-        XML_revisionId,         NULL,   // OOXTODO
-        XML_version,            NULL,   // OOXTODO
-        XML_keepChangeHistory,  NULL,   // OOXTODO
-        XML_protected,          NULL,   // OOXTODO
-        XML_preserveHistory,    NULL,   // OOXTODO
+        XML_lastGuid,           nullptr,   // OOXTODO
+        XML_shared,             nullptr,   // OOXTODO
+        XML_diskRevisions,      nullptr,   // OOXTODO
+        XML_history,            nullptr,   // OOXTODO
+        XML_trackRevisions,     nullptr,   // OOXTODO
+        XML_exclusive,          nullptr,   // OOXTODO
+        XML_revisionId,         nullptr,   // OOXTODO
+        XML_version,            nullptr,   // OOXTODO
+        XML_keepChangeHistory,  nullptr,   // OOXTODO
+        XML_protected,          nullptr,   // OOXTODO
+        XML_preserveHistory,    nullptr,   // OOXTODO
         FSEND);
 
     pHeaders->write(">");
@@ -419,7 +419,7 @@ void XclExpXmlChTrHeader::SaveXml( XclExpXmlStream& rStrm )
     OUString aRelId;
     sax_fastparser::FSHelperPtr pRevLogStrm = rStrm.CreateOutputStream(
             XclXmlUtils::GetStreamName("xl/revisions/", "revisionLog", mnLogNumber),
-            XclXmlUtils::GetStreamName(NULL, "revisionLog", mnLogNumber),
+            XclXmlUtils::GetStreamName(nullptr, "revisionLog", mnLogNumber),
             rStrm.GetCurrentStream()->getOutputStream(),
             "application/vnd.openxmlformats-officedocument.spreadsheetml.revisionLog+xml",
             CREATE_OFFICEDOC_RELATION_TYPE("revisionLog"),
@@ -654,7 +654,7 @@ XclExpChTrAction::XclExpChTrAction( const XclExpChTrAction& rCopy ) :
     sUsername( rCopy.sUsername ),
     aDateTime( rCopy.aDateTime ),
     nIndex( 0 ),
-    pAddAction( 0 ),
+    pAddAction( nullptr ),
     bAccepted( rCopy.bAccepted ),
     rTabInfo( rCopy.rTabInfo ),
     rIdBuffer( rCopy.rIdBuffer ),
@@ -672,7 +672,7 @@ XclExpChTrAction::XclExpChTrAction(
     sUsername( rAction.GetUser() ),
     aDateTime( rAction.GetDateTime() ),
     nIndex( 0 ),
-    pAddAction( NULL ),
+    pAddAction( nullptr ),
     bAccepted( rAction.IsAccepted() ),
     rTabInfo( rRoot.GetTabInfo() ),
     rIdBuffer( rTabIdBuffer ),
@@ -750,8 +750,8 @@ sal_Size XclExpChTrAction::GetLen() const
 }
 
 XclExpChTrData::XclExpChTrData() :
-    pString( NULL ),
-    mpFormulaCell( NULL ),
+    pString( nullptr ),
+    mpFormulaCell( nullptr ),
     fValue( 0.0 ),
     nRKValue( 0 ),
     nType( EXC_CHTR_TYPE_EMPTY ),
@@ -767,7 +767,7 @@ XclExpChTrData::~XclExpChTrData()
 void XclExpChTrData::Clear()
 {
     DELETEZ( pString );
-    mpFormulaCell = NULL;
+    mpFormulaCell = nullptr;
     mxTokArr.reset();
     maRefLog.clear();
     fValue = 0.0;
@@ -829,8 +829,8 @@ XclExpChTrCellContent::XclExpChTrCellContent(
         const XclExpChTrTabIdBuffer& rTabIdBuffer ) :
     XclExpChTrAction( rAction, rRoot, rTabIdBuffer, EXC_CHTR_OP_CELL ),
     XclExpRoot( rRoot ),
-    pOldData( 0 ),
-    pNewData( 0 ),
+    pOldData( nullptr ),
+    pNewData( nullptr ),
     aPosition( rAction.GetBigRange().MakeRange().aStart )
 {
     sal_uInt32 nDummy32;
@@ -864,7 +864,7 @@ void XclExpChTrCellContent::GetCellData(
     if (rScCell.isEmpty())
     {
         delete rpData;
-        rpData = NULL;
+        rpData = nullptr;
         return;
     }
 
@@ -897,7 +897,7 @@ void XclExpChTrCellContent::GetCellData(
             {
                 sCellStr = rScCell.mpString->getString();
                 rpData->mpFormattedString = XclExpStringHelper::CreateCellString(
-                    rRoot, sCellStr, NULL);
+                    rRoot, sCellStr, nullptr);
             }
             else
             {
@@ -906,12 +906,12 @@ void XclExpChTrCellContent::GetCellData(
                 {
                     sCellStr = ScEditUtil::GetString(*rScCell.mpEditText, &GetDoc());
                     rpData->mpFormattedString = XclExpStringHelper::CreateCellString(
-                        rRoot, *rScCell.mpEditText, NULL, aLinkHelper);
+                        rRoot, *rScCell.mpEditText, nullptr, aLinkHelper);
                 }
                 else
                 {
                     rpData->mpFormattedString = XclExpStringHelper::CreateCellString(
-                        rRoot, EMPTY_OUSTRING, NULL);
+                        rRoot, EMPTY_OUSTRING, nullptr);
                 }
             }
             rpData->pString = new XclExpString( sCellStr, EXC_STR_DEFAULT, 32766 );
@@ -1013,11 +1013,11 @@ static void lcl_WriteCell( XclExpXmlStream& rStrm, sal_Int32 nElement, const ScA
 
     pStream->startElement( nElement,
             XML_r,  XclXmlUtils::ToOString( rPosition ).getStr(),
-            XML_s,  NULL,   // OOXTODO: not supported
+            XML_s,  nullptr,   // OOXTODO: not supported
             XML_t,  lcl_GetType( pData ),
-            XML_cm, NULL,   // OOXTODO: not supported
-            XML_vm, NULL,   // OOXTODO: not supported
-            XML_ph, NULL,   // OOXTODO: not supported
+            XML_cm, nullptr,   // OOXTODO: not supported
+            XML_vm, nullptr,   // OOXTODO: not supported
+            XML_ph, nullptr,   // OOXTODO: not supported
             FSEND );
     switch( pData->nType )
     {
@@ -1057,18 +1057,18 @@ void XclExpChTrCellContent::SaveXml( XclExpXmlStream& rRevisionLogStrm )
     pStream->startElement( XML_rcc,
             XML_rId,                    OString::number(  GetActionNumber() ).getStr(),
             XML_ua,                     XclXmlUtils::ToPsz( GetAccepted () ),   // OOXTODO? bAccepted == ua or ra; not sure.
-            XML_ra,                     NULL,       // OOXTODO: RRD.fUndoAction?  Or RRD.fAccepted?
+            XML_ra,                     nullptr,       // OOXTODO: RRD.fUndoAction?  Or RRD.fAccepted?
             XML_sId,                    OString::number(  GetTabId( aPosition.Tab() ) ).getStr(),
-            XML_odxf,                   NULL,       // OOXTODO: not supported
-            XML_xfDxf,                  NULL,       // OOXTODO: not supported
-            XML_s,                      NULL,       // OOXTODO: not supported
-            XML_dxf,                    NULL,       // OOXTODO: not supported
-            XML_numFmtId,               NULL,       // OOXTODO: not supported
-            XML_quotePrefix,            NULL,       // OOXTODO: not supported
-            XML_oldQuotePrefix,         NULL,       // OOXTODO: not supported
-            XML_ph,                     NULL,       // OOXTODO: not supported
-            XML_oldPh,                  NULL,       // OOXTODO: not supported
-            XML_endOfListFormulaUpdate, NULL,       // OOXTODO: not supported
+            XML_odxf,                   nullptr,       // OOXTODO: not supported
+            XML_xfDxf,                  nullptr,       // OOXTODO: not supported
+            XML_s,                      nullptr,       // OOXTODO: not supported
+            XML_dxf,                    nullptr,       // OOXTODO: not supported
+            XML_numFmtId,               nullptr,       // OOXTODO: not supported
+            XML_quotePrefix,            nullptr,       // OOXTODO: not supported
+            XML_oldQuotePrefix,         nullptr,       // OOXTODO: not supported
+            XML_ph,                     nullptr,       // OOXTODO: not supported
+            XML_oldPh,                  nullptr,       // OOXTODO: not supported
+            XML_endOfListFormulaUpdate, nullptr,       // OOXTODO: not supported
             FSEND );
     if( pOldData )
     {
@@ -1190,17 +1190,17 @@ void XclExpChTrInsert::SaveXml( XclExpXmlStream& rRevisionLogStrm )
     pStream->startElement( XML_rrc,
             XML_rId,    OString::number(  GetActionNumber() ).getStr(),
             XML_ua,     XclXmlUtils::ToPsz( GetAccepted () ),   // OOXTODO? bAccepted == ua or ra; not sure.
-            XML_ra,     NULL,       // OOXTODO: RRD.fUndoAction?  Or RRD.fAccepted?
+            XML_ra,     nullptr,       // OOXTODO: RRD.fUndoAction?  Or RRD.fAccepted?
             XML_sId,    OString::number(  GetTabId( aRange.aStart.Tab() ) ).getStr(),
             XML_eol,    XclXmlUtils::ToPsz10(mbEndOfList),
             XML_ref,    XclXmlUtils::ToOString( aRange ).getStr(),
             XML_action, lcl_GetAction( nOpCode ),
-            XML_edge,   NULL,       // OOXTODO: ???
+            XML_edge,   nullptr,       // OOXTODO: ???
             FSEND );
 
     // OOXTODO: does this handle XML_rfmt, XML_undo?
     XclExpChTrAction* pAction = GetAddAction();
-    while( pAction != NULL )
+    while( pAction != nullptr )
     {
         pAction->SaveXml( rRevisionLogStrm );
         pAction = pAction->GetAddAction();
@@ -1249,7 +1249,7 @@ void XclExpChTrInsertTab::SaveXml( XclExpXmlStream& rStrm )
     pStream->singleElement( XML_ris,
             XML_rId,            OString::number(  GetActionNumber() ).getStr(),
             XML_ua,             XclXmlUtils::ToPsz( GetAccepted () ),   // OOXTODO? bAccepted == ua or ra; not sure.
-            XML_ra,             NULL,       // OOXTODO: RRD.fUndoAction?  Or RRD.fAccepted?
+            XML_ra,             nullptr,       // OOXTODO: RRD.fUndoAction?  Or RRD.fAccepted?
             XML_sheetId,        OString::number(  GetTabId( nTab ) ).getStr(),
             XML_name,           XclXmlUtils::ToOString( GetTabInfo().GetScTabName( nTab ) ).getStr(),
             XML_sheetPosition,  OString::number(  nTab ).getStr(),
@@ -1317,7 +1317,7 @@ void XclExpChTrMoveRange::SaveXml( XclExpXmlStream& rRevisionLogStrm )
     pStream->startElement( XML_rm,
             XML_rId,            OString::number(  GetActionNumber() ).getStr(),
             XML_ua,             XclXmlUtils::ToPsz( GetAccepted () ),   // OOXTODO? bAccepted == ua or ra; not sure.
-            XML_ra,             NULL,       // OOXTODO: RRD.fUndoAction?  Or RRD.fAccepted?
+            XML_ra,             nullptr,       // OOXTODO: RRD.fUndoAction?  Or RRD.fAccepted?
             XML_sheetId,        OString::number(  GetTabId( aDestRange.aStart.Tab() ) ).getStr(),
             XML_source,         XclXmlUtils::ToOString( aSourceRange ).getStr(),
             XML_destination,    XclXmlUtils::ToOString( aDestRange ).getStr(),
@@ -1325,7 +1325,7 @@ void XclExpChTrMoveRange::SaveXml( XclExpXmlStream& rRevisionLogStrm )
             FSEND );
     // OOXTODO: does this handle XML_rfmt, XML_undo?
     XclExpChTrAction* pAction = GetAddAction();
-    while( pAction != NULL )
+    while( pAction != nullptr )
     {
         pAction->SaveXml( rRevisionLogStrm );
         pAction = pAction->GetAddAction();
@@ -1368,11 +1368,11 @@ void XclExpChTr0x014A::SaveXml( XclExpXmlStream& rStrm )
 
     pStream->startElement( XML_rfmt,
             XML_sheetId,    OString::number(  GetTabId( aRange.aStart.Tab() ) ).getStr(),
-            XML_xfDxf,      NULL,   // OOXTODO: not supported
-            XML_s,          NULL,   // OOXTODO: style
+            XML_xfDxf,      nullptr,   // OOXTODO: not supported
+            XML_s,          nullptr,   // OOXTODO: style
             XML_sqref,      XclXmlUtils::ToOString( aRange ).getStr(),
-            XML_start,      NULL,   // OOXTODO: for string changes
-            XML_length,     NULL,   // OOXTODO: for string changes
+            XML_start,      nullptr,   // OOXTODO: for string changes
+            XML_length,     nullptr,   // OOXTODO: for string changes
             FSEND );
     // OOXTODO: XML_dxf, XML_extLst
 
@@ -1411,9 +1411,9 @@ void EndXmlElement::SaveXml( XclExpXmlStream& rStrm )
 XclExpChangeTrack::XclExpChangeTrack( const XclExpRoot& rRoot ) :
     XclExpRoot( rRoot ),
     aActionStack(),
-    pTabIdBuffer( NULL ),
-    pTempDoc( NULL ),
-    pHeader( NULL ),
+    pTabIdBuffer( nullptr ),
+    pTempDoc( nullptr ),
+    pHeader( nullptr ),
     bValidGUID( false )
 {
     OSL_ENSURE( GetOldRoot().pTabId, "XclExpChangeTrack::XclExpChangeTrack - root data incomplete" );
@@ -1496,7 +1496,7 @@ XclExpChangeTrack::XclExpChangeTrack( const XclExpRoot& rRoot ) :
         DateTime aLastDateTime(DateTime::EMPTY);
         sal_uInt32 nIndex = 1;
         sal_Int32 nLogNumber = 1;
-        XclExpXmlChTrHeader* pCurHeader = NULL;
+        XclExpXmlChTrHeader* pCurHeader = nullptr;
 
         while (!aActionStack.empty())
         {
@@ -1542,7 +1542,7 @@ ScChangeTrack* XclExpChangeTrack::CreateTempChangeTrack()
     ScChangeTrack* pOrigChangeTrack = GetDoc().GetChangeTrack();
     OSL_ENSURE( pOrigChangeTrack, "XclExpChangeTrack::CreateTempChangeTrack - no change track data" );
     if( !pOrigChangeTrack )
-        return NULL;
+        return nullptr;
 
     // create empty document
     pTempDoc = new ScDocument;
@@ -1558,14 +1558,14 @@ ScChangeTrack* XclExpChangeTrack::CreateTempChangeTrack()
     OSL_ENSURE( nOrigCount == pTempDoc->GetTableCount(),
         "XclExpChangeTrack::CreateTempChangeTrack - table count mismatch" );
     if( nOrigCount != pTempDoc->GetTableCount() )
-        return NULL;
+        return nullptr;
 
     return pOrigChangeTrack->Clone(pTempDoc);
 }
 
 void XclExpChangeTrack::PushActionRecord( const ScChangeAction& rAction )
 {
-    XclExpChTrAction* pXclAction = NULL;
+    XclExpChTrAction* pXclAction = nullptr;
     ScChangeTrack* pTempChangeTrack = pTempDoc->GetChangeTrack();
     switch( rAction.GetType() )
     {

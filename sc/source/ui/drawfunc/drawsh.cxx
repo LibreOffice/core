@@ -107,7 +107,7 @@ void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
 
     const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
     const size_t nMarkCount = rMarkList.GetMarkCount();
-    SdrObject* pSingleSelectedObj = NULL;
+    SdrObject* pSingleSelectedObj = nullptr;
     if ( nMarkCount > 0 )
         pSingleSelectedObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
 
@@ -228,8 +228,8 @@ void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
                 SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
                 if ( pObj->IsGroupObject() )
                 {
-                    SdrPageView* pPV = 0;
-                    SdrObject* pHit = 0;
+                    SdrPageView* pPV = nullptr;
+                    SdrObject* pHit = nullptr;
                     if ( pView->PickObj( pWin->PixelToLogic( pViewData->GetMousePosPixel() ), pView->getHitTolLog(), pHit, pPV, SdrSearchOptions::DEEP ) )
                         pObj = pHit;
                 }
@@ -249,7 +249,7 @@ void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
 
                     if( !pArgs )
                     {
-                        if( rMarkList.GetMark(0) != 0 )
+                        if( rMarkList.GetMark(0) != nullptr )
                         {
                             SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
                             if( pObj->GetObjIdentifier() == OBJ_CAPTION )
@@ -379,7 +379,7 @@ void ScDrawShell::ExecuteLineDlg( SfxRequest& rReq, sal_uInt16 nTabPage )
 {
     ScDrawView*         pView       = pViewData->GetScDrawView();
     bool                bHasMarked  = pView->AreObjectsMarked();
-    const SdrObject*    pObj        = NULL;
+    const SdrObject*    pObj        = nullptr;
     const SdrMarkList&  rMarkList   = pView->GetMarkedObjectList();
 
     if( rMarkList.GetMarkCount() == 1 )

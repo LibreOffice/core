@@ -85,13 +85,13 @@ ScConsData::ScConsData() :
     bRowByName(false),
     nColCount(0),
     nRowCount(0),
-    ppUsed(NULL),
-    ppSum(NULL),
-    ppCount(NULL),
-    ppSumSqr(NULL),
-    ppRefs(NULL),
+    ppUsed(nullptr),
+    ppSum(nullptr),
+    ppCount(nullptr),
+    ppSumSqr(nullptr),
+    ppRefs(nullptr),
     nDataCount(0),
-    ppTitlePos(NULL),
+    ppTitlePos(nullptr),
     bCornerUsed(false)
 {
 }
@@ -108,7 +108,7 @@ ScConsData::~ScConsData()
         for(i=0; i<nCount; i++)     \
             delete[] ppArray[i];    \
     delete[] ppArray;               \
-    ppArray = NULL;                 \
+    ppArray = nullptr;                 \
 }
 
 void ScConsData::DeleteData()
@@ -123,7 +123,7 @@ void ScConsData::DeleteData()
             delete[] ppRefs[i];
         }
         delete[] ppRefs;
-        ppRefs = NULL;
+        ppRefs = nullptr;
     }
 
     DELETEARR( ppCount, nColCount );

@@ -244,7 +244,7 @@ ScImportAsciiDlg::ScImportAsciiDlg( vcl::Window* pParent, const OUString& aDatNa
         mpDatStream  ( pInStream ),
         mnStreamPos( pInStream ? pInStream->Tell() : 0 ),
 
-        mpRowPosArray( NULL ),
+        mpRowPosArray( nullptr ),
         mnRowPosCount(0),
 
         aCharSetUser( ScResId( SCSTR_CHARSET_USER ) ),

@@ -49,21 +49,21 @@
 RootData::RootData()
 {
     eDateiTyp = BiffX;
-    pExtSheetBuff = NULL;
-    pShrfmlaBuff = NULL;
-    pExtNameBuff = NULL;
-    pFmlaConverter = NULL;
+    pExtSheetBuff = nullptr;
+    pShrfmlaBuff = nullptr;
+    pExtNameBuff = nullptr;
+    pFmlaConverter = nullptr;
 
-    pAutoFilterBuffer = NULL;
+    pAutoFilterBuffer = nullptr;
     pPrintRanges = new _ScRangeListTabs;
     pPrintTitles = new _ScRangeListTabs;
 
-    pTabId = NULL;
-    pUserBViewList = NULL;
+    pTabId = nullptr;
+    pUserBViewList = nullptr;
 
-    pIR = NULL;
-    pER = NULL;
-    pColRowBuff = NULL;
+    pIR = nullptr;
+    pER = nullptr;
+    pColRowBuff = nullptr;
 }
 
 RootData::~RootData()
@@ -78,7 +78,7 @@ RootData::~RootData()
 
 XclImpOutlineBuffer::XclImpOutlineBuffer( SCSIZE nNewSize ) :
     maLevels(0, nNewSize, 0),
-    mpOutlineArray(NULL),
+    mpOutlineArray(nullptr),
     mnEndPos(nNewSize),
     mnMaxLevel(0),
     mbButtonAfter(true)

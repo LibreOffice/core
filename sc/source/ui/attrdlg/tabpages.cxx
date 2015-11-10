@@ -83,7 +83,7 @@ void ScTabPageProtection::Reset( const SfxItemSet* rCoreAttrs )
     //  Initialize variables
 
     sal_uInt16 nWhich = GetWhich( SID_SCATTR_PROTECTION );
-    const ScProtectionAttr* pProtAttr = NULL;
+    const ScProtectionAttr* pProtAttr = nullptr;
     SfxItemState eItemState = rCoreAttrs->GetItemState( nWhich, false,
                                           reinterpret_cast<const SfxPoolItem**>(&pProtAttr) );
 
@@ -92,7 +92,7 @@ void ScTabPageProtection::Reset( const SfxItemSet* rCoreAttrs )
         pProtAttr = static_cast<const ScProtectionAttr*>(&(rCoreAttrs->Get(nWhich)));
     // At SfxItemState::DONTCARE let to 0
 
-    bTriEnabled = ( pProtAttr == NULL );                // TriState, when DontCare
+    bTriEnabled = ( pProtAttr == nullptr );                // TriState, when DontCare
     bDontCare = bTriEnabled;
     if (bTriEnabled)
     {

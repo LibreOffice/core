@@ -132,7 +132,7 @@ ScQueryEntry* ScQueryParamBase::FindEntryByField(SCCOLROW nField, bool bNew)
 
     if (!bNew)
         // no existing entry found, and we are not creating a new one.
-        return NULL;
+        return nullptr;
 
     return &AppendEntry();
 }

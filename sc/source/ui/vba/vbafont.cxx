@@ -51,7 +51,7 @@ ScVbaFont::ScVbaFont(
 SfxItemSet*
 ScVbaFont::GetDataSet()
 {
-    return mpRangeObj ? excel::ScVbaCellRangeAccess::GetDataSet( mpRangeObj ) : 0;
+    return mpRangeObj ? excel::ScVbaCellRangeAccess::GetDataSet( mpRangeObj ) : nullptr;
 }
 
 ScVbaFont::~ScVbaFont()

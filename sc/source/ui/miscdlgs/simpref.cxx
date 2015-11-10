@@ -205,7 +205,7 @@ IMPL_LINK_NOARG_TYPED(ScSimpleRefDlg, CancelBtnHdl, Button*, void)
 {
     bAutoReOpen=false;
     OUString aResult=m_pEdAssign->GetText();
-    aCloseHdl.Call(NULL);
+    aCloseHdl.Call(nullptr);
     Link<const OUString&,void> aUnoLink = aAbortedHdl;  // stack var because this is deleted in DoClose
     DoClose( ScSimpleRefDlgWrapper::GetChildWindowId() );
     aUnoLink.Call( aResult );

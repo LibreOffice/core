@@ -197,7 +197,7 @@ bool ScAccessibleSpreadsheet::CalcScRangeDifferenceMax(ScRange *pSrc, ScRange *p
 //In Src , Not in Dest
 bool ScAccessibleSpreadsheet::CalcScRangeListDifferenceMax(ScRangeList *pSrc,ScRangeList *pDest,int nMax,VEC_MYADDR &vecRet)
 {
-    if (pSrc == NULL || pDest == NULL)
+    if (pSrc == nullptr || pDest == nullptr)
     {
         return false;
     }
@@ -285,8 +285,8 @@ void ScAccessibleSpreadsheet::ConstructScAccessibleSpreadsheet(
     ScSplitPos eSplitPos)
 {
     mpViewShell = pViewShell;
-    mpMarkedRanges = 0;
-    mpSortedMarkedCells = 0;
+    mpMarkedRanges = nullptr;
+    mpSortedMarkedCells = nullptr;
     mpAccDoc = pAccDoc;
     mpAccCell.clear();
     meSplitPos = eSplitPos;
@@ -319,7 +319,7 @@ void SAL_CALL ScAccessibleSpreadsheet::disposing()
     if (mpViewShell)
     {
         mpViewShell->RemoveAccessibilityObject(*this);
-        mpViewShell = NULL;
+        mpViewShell = nullptr;
     }
     mpAccCell.clear();
 
@@ -1004,7 +1004,7 @@ uno::Reference< XAccessible > SAL_CALL ScAccessibleSpreadsheet::getAccessibleAtP
             }
             catch(const css::lang::IndexOutOfBoundsException &)
             {
-                return NULL;
+                return nullptr;
             }
         }
     }
@@ -1041,9 +1041,9 @@ sal_Int32 SAL_CALL ScAccessibleSpreadsheet::getBackground(  )
 uno::Reference<XAccessibleRelationSet> SAL_CALL ScAccessibleSpreadsheet::getAccessibleRelationSet()
         throw (css::uno::RuntimeException, std::exception)
 {
-    utl::AccessibleRelationSetHelper* pRelationSet = NULL;
+    utl::AccessibleRelationSetHelper* pRelationSet = nullptr;
     if(mpAccDoc)
-        pRelationSet = mpAccDoc->GetRelationSet(NULL);
+        pRelationSet = mpAccDoc->GetRelationSet(nullptr);
     if (!pRelationSet)
         pRelationSet = new utl::AccessibleRelationSetHelper();
     return pRelationSet;
@@ -1356,7 +1356,7 @@ Rectangle ScAccessibleSpreadsheet::GetBoundingBoxOnScreen() const
     {
         vcl::Window* pWindow = mpViewShell->GetWindowByPos(meSplitPos);
         if (pWindow)
-            aRect = pWindow->GetWindowExtentsRelative(NULL);
+            aRect = pWindow->GetWindowExtentsRelative(nullptr);
     }
     return aRect;
 }
@@ -1378,7 +1378,7 @@ Rectangle ScAccessibleSpreadsheet::GetBoundingBox() const
 bool ScAccessibleSpreadsheet::IsDefunc(
     const uno::Reference<XAccessibleStateSet>& rxParentStates)
 {
-    return ScAccessibleContextBase::IsDefunc() || (mpViewShell == NULL) || !getAccessibleParent().is() ||
+    return ScAccessibleContextBase::IsDefunc() || (mpViewShell == nullptr) || !getAccessibleParent().is() ||
         (rxParentStates.is() && rxParentStates->contains(AccessibleStateType::DEFUNC));
 }
 
@@ -1427,7 +1427,7 @@ bool ScAccessibleSpreadsheet::IsCompleteSheetSelected()
 
 ScDocument* ScAccessibleSpreadsheet::GetDocument(ScTabViewShell* pViewShell)
 {
-    ScDocument* pDoc = NULL;
+    ScDocument* pDoc = nullptr;
     if (pViewShell)
         pDoc = pViewShell->GetViewData().GetDocument();
     return pDoc;

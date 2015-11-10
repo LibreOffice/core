@@ -64,7 +64,7 @@ bool ScDBDocFunc::AddDBRange( const OUString& rName, const ScRange& rRange, bool
     ScDBCollection* pDocColl = rDoc.GetDBCollection();
     bool bUndo (rDoc.IsUndoEnabled());
 
-    ScDBCollection* pUndoColl = NULL;
+    ScDBCollection* pUndoColl = nullptr;
     if (bUndo)
         pUndoColl = new ScDBCollection( *pDocColl );
 
@@ -123,7 +123,7 @@ bool ScDBDocFunc::DeleteDBRange(const OUString& rName)
     {
         ScDocShellModificator aModificator( rDocShell );
 
-        ScDBCollection* pUndoColl = NULL;
+        ScDBCollection* pUndoColl = nullptr;
         if (bUndo)
             pUndoColl = new ScDBCollection( *pDocColl );
 
@@ -201,7 +201,7 @@ bool ScDBDocFunc::ModifyDBData( const ScDBData& rNewData )
     ScDBCollection* pDocColl = rDoc.GetDBCollection();
     bool bUndo = rDoc.IsUndoEnabled();
 
-    ScDBData* pData = NULL;
+    ScDBData* pData = nullptr;
     if (rNewData.GetName() == STR_DB_LOCAL_NONAME)
     {
         ScRange aRange;
@@ -220,7 +220,7 @@ bool ScDBDocFunc::ModifyDBData( const ScDBData& rNewData )
         rNewData.GetArea(aNewRange);
         bool bAreaChanged = ( aOldRange != aNewRange );     // dann muss neu compiliert werden
 
-        ScDBCollection* pUndoColl = NULL;
+        ScDBCollection* pUndoColl = nullptr;
         if (bUndo)
             pUndoColl = new ScDBCollection( *pDocColl );
 
@@ -247,7 +247,7 @@ void ScDBDocFunc::ModifyAllDBData( const ScDBCollection& rNewColl, const std::ve
     ScDocShellModificator aModificator(rDocShell);
     ScDocument& rDoc = rDocShell.GetDocument();
     ScDBCollection* pOldColl = rDoc.GetDBCollection();
-    ScDBCollection* pUndoColl = NULL;
+    ScDBCollection* pUndoColl = nullptr;
     bool bRecord = rDoc.IsUndoEnabled();
 
     std::vector<ScRange>::const_iterator iter;
@@ -268,7 +268,7 @@ void ScDBDocFunc::ModifyAllDBData( const ScDBCollection& rNewColl, const std::ve
     rDoc.PreprocessDBDataUpdate();
     rDoc.SetDBCollection( new ScDBCollection( rNewColl ) );
     rDoc.CompileHybridFormula();
-    pOldColl = NULL;
+    pOldColl = nullptr;
     rDocShell.PostPaint(ScRange(0, 0, 0, MAXCOL, MAXROW, MAXTAB), PAINT_GRID);
     aModificator.SetDocumentModified();
     SfxGetpApp()->Broadcast( SfxSimpleHint( SC_HINT_DBAREAS_CHANGED ) );
@@ -289,7 +289,7 @@ bool ScDBDocFunc::RepeatDB( const OUString& rDBName, bool bRecord, bool bApi, bo
     ScDocument& rDoc = rDocShell.GetDocument();
     if (bRecord && !rDoc.IsUndoEnabled())
         bRecord = false;
-    ScDBData* pDBData = NULL;
+    ScDBData* pDBData = nullptr;
     if (bIsUnnamed)
     {
         pDBData = rDoc.GetAnonymousDBData( aTab );
@@ -340,10 +340,10 @@ bool ScDBDocFunc::RepeatDB( const OUString& rDBName, bool bRecord, bool bApi, bo
 
             //!     Undo nur benoetigte Daten ?
 
-            ScDocument* pUndoDoc = NULL;
-            ScOutlineTable* pUndoTab = NULL;
-            ScRangeName* pUndoRange = NULL;
-            ScDBCollection* pUndoDB = NULL;
+            ScDocument* pUndoDoc = nullptr;
+            ScOutlineTable* pUndoTab = nullptr;
+            ScRangeName* pUndoRange = nullptr;
+            ScDBCollection* pUndoDB = nullptr;
 
             if (bRecord)
             {
@@ -391,7 +391,7 @@ bool ScDBDocFunc::RepeatDB( const OUString& rDBName, bool bRecord, bool bApi, bo
                 //  Sortieren ohne SubTotals
 
                 aSubTotalParam.bRemoveOnly = true;      // wird unten wieder zurueckgesetzt
-                DoSubTotals( nTab, aSubTotalParam, NULL, false, bApi );
+                DoSubTotals( nTab, aSubTotalParam, nullptr, false, bApi );
             }
 
             if (bSort)
@@ -406,7 +406,7 @@ bool ScDBDocFunc::RepeatDB( const OUString& rDBName, bool bRecord, bool bApi, bo
                 if (pDBData->GetAdvancedQuerySource(aAdvSource))
                     Query( nTab, aQueryParam, &aAdvSource, false, bApi );
                 else
-                    Query( nTab, aQueryParam, NULL, false, bApi );
+                    Query( nTab, aQueryParam, nullptr, false, bApi );
 
                 //  bei nicht-inplace kann die Tabelle umgestellt worden sein
 //              if ( !aQueryParam.bInplace && aQueryParam.nDestTab != nTab )
@@ -416,7 +416,7 @@ bool ScDBDocFunc::RepeatDB( const OUString& rDBName, bool bRecord, bool bApi, bo
             {
                 pDBData->GetSubTotalParam( aSubTotalParam );    // Bereich kann sich geaendert haben
                 aSubTotalParam.bRemoveOnly = false;
-                DoSubTotals( nTab, aSubTotalParam, NULL, false, bApi );
+                DoSubTotals( nTab, aSubTotalParam, nullptr, false, bApi );
             }
 
             if (bRecord)
@@ -427,8 +427,8 @@ bool ScDBDocFunc::RepeatDB( const OUString& rDBName, bool bRecord, bool bApi, bo
                 SCROW nNewEndRow;
                 pDBData->GetArea( nDummyTab, nDummyCol,nDummyRow, nDummyCol,nNewEndRow );
 
-                const ScRange* pOld = NULL;
-                const ScRange* pNew = NULL;
+                const ScRange* pOld = nullptr;
+                const ScRange* pNew = nullptr;
                 if (bQuerySize)
                 {
                     ScDBData* pDest = rDoc.GetDBAtCursor( aQueryParam.nDestCol, aQueryParam.nDestRow,
@@ -641,13 +641,13 @@ bool ScDBDocFunc::Query( SCTAB nTab, const ScQueryParam& rQueryParam,
             for (SCSIZE i=0; i<nEC; i++)
                 aOldQuery.GetEntry(i).bDoQuery = false;
             aOldQuery.bDuplicate = true;
-            Query( nTab, aOldQuery, NULL, bRecord, bApi );
+            Query( nTab, aOldQuery, nullptr, bRecord, bApi );
         }
     }
 
     ScQueryParam aLocalParam( rQueryParam );        // fuer Paint / Zielbereich
     bool bCopy = !rQueryParam.bInplace;             // kopiert wird in Table::Query
-    ScDBData* pDestData = NULL;                     // Bereich, in den kopiert wird
+    ScDBData* pDestData = nullptr;                     // Bereich, in den kopiert wird
     bool bDoSize = false;                           // Zielgroesse anpassen (einf./loeschen)
     SCCOL nFormulaCols = 0;                     // nur bei bDoSize
     bool bKeepFmt = false;
@@ -725,9 +725,9 @@ bool ScDBDocFunc::Query( SCTAB nTab, const ScQueryParam& rQueryParam,
             bKeepSub = true;
     }
 
-    ScDocument* pUndoDoc = NULL;
-    ScDBCollection* pUndoDB = NULL;
-    const ScRange* pOld = NULL;
+    ScDocument* pUndoDoc = nullptr;
+    ScDBCollection* pUndoDB = nullptr;
+    const ScRange* pOld = nullptr;
 
     if ( bRecord )
     {
@@ -760,7 +760,7 @@ bool ScDBDocFunc::Query( SCTAB nTab, const ScQueryParam& rQueryParam,
         rDoc.BeginDrawUndo();
     }
 
-    ScDocument* pAttribDoc = NULL;
+    ScDocument* pAttribDoc = nullptr;
     ScRange aAttribRange;
     if (pDestData)                                      // Zielbereich loeschen
     {
@@ -1003,10 +1003,10 @@ bool ScDBDocFunc::DoSubTotals( SCTAB nTab, const ScSubTotalParam& rParam,
         ScDocShellModificator aModificator( rDocShell );
 
         ScSubTotalParam aNewParam( rParam );        // Bereichsende wird veraendert
-        ScDocument*     pUndoDoc = NULL;
-        ScOutlineTable* pUndoTab = NULL;
-        ScRangeName*    pUndoRange = NULL;
-        ScDBCollection* pUndoDB = NULL;
+        ScDocument*     pUndoDoc = nullptr;
+        ScOutlineTable* pUndoTab = nullptr;
+        ScRangeName*    pUndoRange = nullptr;
+        ScDBCollection* pUndoDB = nullptr;
 
         if (bRecord)                                        // alte Daten sichern
         {
@@ -1354,7 +1354,7 @@ bool ScDBDocFunc::RemovePivotTable(ScDPObject& rDPObj, bool bRecord, bool bApi)
     {
         rDocShell.GetUndoManager()->AddUndoAction(
             new ScUndoDataPilot(
-                &rDocShell, pOldUndoDoc.release(), NULL, pUndoDPObj.get(), NULL, false));
+                &rDocShell, pOldUndoDoc.release(), nullptr, pUndoDPObj.get(), nullptr, false));
 
         // pUndoDPObj is copied
     }
@@ -1454,7 +1454,7 @@ bool ScDBDocFunc::CreatePivotTable(const ScDPObject& rDPObj, bool bRecord, bool 
     if (bRecord)
     {
         rDocShell.GetUndoManager()->AddUndoAction(
-            new ScUndoDataPilot(&rDocShell, NULL, pNewUndoDoc.release(), NULL, &rDestObj, false));
+            new ScUndoDataPilot(&rDocShell, nullptr, pNewUndoDoc.release(), nullptr, &rDestObj, false));
     }
 
     // notify API objects

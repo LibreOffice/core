@@ -100,7 +100,7 @@ void ScXMLConsolidationContext::EndElement()
         aConsParam.eFunction = eFunction;
 
         sal_uInt16 nCount = (sal_uInt16) std::min( ScRangeStringConverter::GetTokenCount( sSourceList ), (sal_Int32)0xFFFF );
-        ScArea** ppAreas = nCount ? new ScArea*[ nCount ] : NULL;
+        ScArea** ppAreas = nCount ? new ScArea*[ nCount ] : nullptr;
         if( ppAreas )
         {
             sal_Int32 nOffset = 0;

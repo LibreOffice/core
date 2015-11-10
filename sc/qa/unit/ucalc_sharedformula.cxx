@@ -613,7 +613,7 @@ void Test::testSharedFormulasRefUpdateRangeDeleteRow()
     const char* aData[][3] = {
         { "1", "2", "=SUM(A1:B1)" },
         { "3", "4", "=SUM(A2:B2)" },
-        { 0, 0, 0 },
+        { nullptr, nullptr, nullptr },
         { "5", "6", "=SUM(A4:B4)" },
         { "7", "8", "=SUM(A5:B5)" }
     };
@@ -1712,7 +1712,7 @@ void Test::testSharedFormulaUnshareAreaListeners()
         { "=SUM(B1:B2)", "1" },
         { "=SUM(B2:B3)", "2" },
         { "=SUM(B3:B4)", "4" },
-        {             0, "8" }
+        {             nullptr, "8" }
     };
 
     insertRangeData(m_pDoc, ScAddress(0,0,0), pData, SAL_N_ELEMENTS(pData));

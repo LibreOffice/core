@@ -186,7 +186,7 @@ ScAutoFormatObj* ScAutoFormatsObj::GetObjectByIndex_Impl(sal_uInt16 nIndex)
     if (nIndex < ScGlobal::GetOrCreateAutoFormat()->size())
         return new ScAutoFormatObj(nIndex);
 
-    return NULL;    // falscher Index
+    return nullptr;    // falscher Index
 }
 
 ScAutoFormatObj* ScAutoFormatsObj::GetObjectByName_Impl(const OUString& aName)
@@ -196,7 +196,7 @@ ScAutoFormatObj* ScAutoFormatsObj::GetObjectByName_Impl(const OUString& aName)
     if (lcl_FindAutoFormatIndex(
             *ScGlobal::GetOrCreateAutoFormat(), aString, nIndex ))
         return GetObjectByIndex_Impl(nIndex);
-    return NULL;
+    return nullptr;
 }
 
 // container::XNameContainer
@@ -420,7 +420,7 @@ const uno::Sequence<sal_Int8>& ScAutoFormatObj::getUnoTunnelId()
 
 ScAutoFormatObj* ScAutoFormatObj::getImplementation(const uno::Reference<uno::XInterface>& rObj)
 {
-    ScAutoFormatObj* pRet = NULL;
+    ScAutoFormatObj* pRet = nullptr;
     uno::Reference<lang::XUnoTunnel> xUT(rObj, uno::UNO_QUERY);
     if (xUT.is())
         pRet = reinterpret_cast<ScAutoFormatObj*>(sal::static_int_cast<sal_IntPtr>(xUT->getSomething(getUnoTunnelId())));
@@ -439,7 +439,7 @@ ScAutoFormatFieldObj* ScAutoFormatObj::GetObjectByIndex_Impl(sal_uInt16 nIndex)
     if ( IsInserted() && nIndex < SC_AF_FIELD_COUNT )
         return new ScAutoFormatFieldObj( nFormatIndex, nIndex );
 
-    return NULL;
+    return nullptr;
 }
 
 // container::XEnumerationAccess

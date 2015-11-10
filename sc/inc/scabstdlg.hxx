@@ -175,11 +175,11 @@ class AbstractScInsertTableDlg : public VclAbstractDialog
 public:
     virtual bool            GetTablesFromFile() = 0;
     virtual bool            GetTablesAsLink()   = 0;
-    virtual const OUString* GetFirstTable( sal_uInt16* pN = NULL ) = 0;
+    virtual const OUString* GetFirstTable( sal_uInt16* pN = nullptr ) = 0;
     virtual ScDocShell*     GetDocShellTables() = 0;
     virtual bool            IsTableBefore() = 0;
     virtual sal_uInt16      GetTableCount() = 0;
-    virtual const OUString* GetNextTable( sal_uInt16* pN = NULL ) = 0;
+    virtual const OUString* GetNextTable( sal_uInt16* pN = nullptr ) = 0;
 
 };
 
@@ -382,7 +382,7 @@ public:
 
     virtual AbstractScInsertContentsDlg * CreateScInsertContentsDlg( vcl::Window*        pParent,
                                                                     InsertDeleteFlags nCheckDefaults = InsertDeleteFlags::NONE,
-                                                                    const OUString* pStrTitle = NULL ) = 0;
+                                                                    const OUString* pStrTitle = nullptr ) = 0;
 
     virtual AbstractScInsertTableDlg * CreateScInsertTableDlg(vcl::Window* pParent, ScViewData& rViewData,
         SCTAB nTabCount, bool bFromFile) = 0;
@@ -457,8 +457,8 @@ public:
 
     virtual AbstractScImportOptionsDlg * CreateScImportOptionsDlg ( vcl::Window*                 pParent,
                                                                     bool                    bAscii = true,
-                                                                    const ScImportOptions*  pOptions = NULL,
-                                                                    const OUString*         pStrTitle = NULL,
+                                                                    const ScImportOptions*  pOptions = nullptr,
+                                                                    const OUString*         pStrTitle = nullptr,
                                                                     bool                    bMultiByte = false,
                                                                     bool                    bOnlyDbtoolsEncodings = false,
                                                                     bool                    bImport = true ) = 0;

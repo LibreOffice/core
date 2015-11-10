@@ -86,8 +86,8 @@ ScUndoCursorAttr::ScUndoCursorAttr( ScDocShell* pNewDocShell,
     nCol( nNewCol ),
     nRow( nNewRow ),
     nTab( nNewTab ),
-    pOldEditData( static_cast<EditTextObject*>(NULL) ),
-    pNewEditData( static_cast<EditTextObject*>(NULL) ),
+    pOldEditData( static_cast<EditTextObject*>(nullptr) ),
+    pNewEditData( static_cast<EditTextObject*>(nullptr) ),
     bIsAutomatic( bAutomatic )
 {
     ScDocumentPool* pPool = pDocShell->GetDocument().GetPool();
@@ -125,7 +125,7 @@ void ScUndoCursorAttr::DoChange( const ScPatternAttr* pWhichPattern, const share
     rDoc.SetPattern( nCol, nRow, nTab, *pWhichPattern, true );
 
     if (rDoc.GetCellType(aPos) == CELLTYPE_EDIT && pEditData)
-        rDoc.SetEditText(aPos, *pEditData, NULL);
+        rDoc.SetEditText(aPos, *pEditData, nullptr);
 
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     if (pViewShell)
@@ -295,7 +295,7 @@ void ScUndoEnterData::Redo()
             ScAddress aPos = maPos;
             aPos.SetTab(nTab);
             // edit text wil be cloned.
-            rDoc.SetEditText(aPos, *mpNewEditData, NULL);
+            rDoc.SetEditText(aPos, *mpNewEditData, nullptr);
         }
         else
             rDoc.SetString(maPos.Col(), maPos.Row(), nTab, maNewString);
@@ -871,7 +871,7 @@ ScUndoDetective::ScUndoDetective( ScDocShell* pNewDocShell,
     nAction     ( 0 ),
     pDrawUndo   ( pDraw )
 {
-    bIsDelete = ( pOperation == NULL );
+    bIsDelete = ( pOperation == nullptr );
     if (!bIsDelete)
     {
         nAction = (sal_uInt16) pOperation->GetOperation();

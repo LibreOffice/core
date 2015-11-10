@@ -37,9 +37,9 @@ ScDocument* ScXMLConverter::GetScDocument( uno::Reference< frame::XModel > xMode
     if (xModel.is())
     {
         ScModelObj* pDocObj = ScModelObj::getImplementation( xModel );
-        return pDocObj ? pDocObj->GetDocument() : NULL;
+        return pDocObj ? pDocObj->GetDocument() : nullptr;
     }
-    return NULL;
+    return nullptr;
 }
 
 sheet::GeneralFunction ScXMLConverter::GetFunctionFromString( const OUString& sFunction )
@@ -313,7 +313,7 @@ void ScXMLConverter::ParseFormula(OUString& sFormula, const bool bIsFormula)
 void ScXMLConverter::ConvertDateTimeToString(const DateTime& aDateTime, OUStringBuffer& sDate)
 {
     css::util::DateTime aAPIDateTime = aDateTime.GetUNODateTime();
-    ::sax::Converter::convertDateTime(sDate, aAPIDateTime, 0);
+    ::sax::Converter::convertDateTime(sDate, aAPIDateTime, nullptr);
 }
 
 namespace {
@@ -375,7 +375,7 @@ const ScXMLConditionInfo* lclGetConditionInfo( const sal_Unicode*& rpcString, co
             if( (nLength == pInfo->mnIdentLength) && (::rtl_ustr_ascii_shortenedCompare_WithLength( pcIdStart, nLength, pInfo->mpcIdentifier, nLength ) == 0) )
                 return pInfo;
 
-    return 0;
+    return nullptr;
 }
 
 sheet::ConditionOperator lclGetConditionOperator( const sal_Unicode*& rpcString, const sal_Unicode* pcEnd )

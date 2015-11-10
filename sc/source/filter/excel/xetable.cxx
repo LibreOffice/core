@@ -926,7 +926,7 @@ void XclExpFormulaCell::Save( XclExpStream& rStrm )
 
 void XclExpFormulaCell::SaveXml( XclExpXmlStream& rStrm )
 {
-    const char* sType = NULL;
+    const char* sType = nullptr;
     OUString    sValue;
     XclXmlUtils::GetFormulaTypeAndValue( mrScFmlaCell, sType, sValue );
     sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
@@ -980,8 +980,8 @@ void XclExpFormulaCell::SaveXml( XclExpXmlStream& rStrm )
                     rWorksheet->startElement( XML_f,
                             XML_aca, XclXmlUtils::ToPsz( (mxTokArr && mxTokArr->IsVolatile()) ||
                                 (mxAddRec && mxAddRec->IsVolatile())),
-                            XML_t, mxAddRec ? "array" : NULL,
-                            XML_ref, !sFmlaCellRange.isEmpty()? sFmlaCellRange.getStr() : NULL,
+                            XML_t, mxAddRec ? "array" : nullptr,
+                            XML_ref, !sFmlaCellRange.isEmpty()? sFmlaCellRange.getStr() : nullptr,
                             // OOXTODO: XML_dt2D,   bool
                             // OOXTODO: XML_dtr,    bool
                             // OOXTODO: XML_del1,   bool
@@ -1391,7 +1391,7 @@ void XclExpRkCell::WriteContents( XclExpStream& rStrm, sal_uInt16 nRelCol )
 // Rows and Columns
 
 XclExpOutlineBuffer::XclExpOutlineBuffer( const XclExpRoot& rRoot, bool bRows ) :
-        mpScOLArray( 0 ),
+        mpScOLArray( nullptr ),
         maLevelInfos( SC_OL_MAXDEPTH ),
         mnCurrLevel( 0 ),
         mbCurrCollapse( false )
@@ -2066,7 +2066,7 @@ void XclExpRow::SaveXml( XclExpXmlStream& rStrm )
         rWorksheet->startElement( XML_row,
                 XML_r,              OString::number(  (mnCurrentRow++) ).getStr(),
                 // OOXTODO: XML_spans,          optional
-                XML_s,              haveFormat ? lcl_GetStyleId( rStrm, mnXFIndex ).getStr() : NULL,
+                XML_s,              haveFormat ? lcl_GetStyleId( rStrm, mnXFIndex ).getStr() : nullptr,
                 XML_customFormat,   XclXmlUtils::ToPsz( haveFormat ),
                 XML_ht,             OString::number( (double) mnHeight / 20.0 ).getStr(),
                 XML_hidden,         XclXmlUtils::ToPsz( ::get_flag( mnFlags, EXC_ROW_HIDDEN ) ),
@@ -2144,7 +2144,7 @@ void XclExpRowBuffer::Finalize( XclExpDefaultRowData& rDefRowData, const ScfUInt
     else
     {
         comphelper::ThreadPool &rPool = comphelper::ThreadPool::getSharedOptimalPool();
-        std::vector<RowFinalizeTask*> pTasks(nThreads, NULL);
+        std::vector<RowFinalizeTask*> pTasks(nThreads, nullptr);
         for ( size_t i = 0; i < nThreads; i++ )
             pTasks[ i ] = new RowFinalizeTask( rColXFIndexes, i == 0 );
 
@@ -2170,7 +2170,7 @@ void XclExpRowBuffer::Finalize( XclExpDefaultRowData& rDefRowData, const ScfUInt
     XclExpDefaultRowData aMaxDefData;
     size_t nMaxDefCount = 0;
     // only look for default format in existing rows, if there are more than unused
-    XclExpRow* pPrev = NULL;
+    XclExpRow* pPrev = nullptr;
     typedef std::vector< XclExpRow* > XclRepeatedRows;
     XclRepeatedRows aRepeated;
     RowMap::iterator itr, itrBeg = maRowMap.begin(), itrEnd = maRowMap.end();
@@ -2516,7 +2516,7 @@ XclExpCellTable::XclExpCellTable( const XclExpRoot& rRoot ) :
             maRowBfr.AppendCell( xCell, bIsMergedBase );
 
         if ( !aAddNoteText.isEmpty()  )
-            mxNoteList->AppendNewRecord( new XclExpNote( GetRoot(), aScPos, NULL, aAddNoteText ) );
+            mxNoteList->AppendNewRecord( new XclExpNote( GetRoot(), aScPos, nullptr, aAddNoteText ) );
 
         // other sheet contents
         if( pPattern )

@@ -260,7 +260,7 @@ public:
     ScColorScaleFormat(ScDocument* pDoc);
     ScColorScaleFormat(ScDocument* pDoc, const ScColorScaleFormat& rFormat);
     virtual ~ScColorScaleFormat();
-    virtual ScColorFormat* Clone(ScDocument* pDoc = NULL) const override;
+    virtual ScColorFormat* Clone(ScDocument* pDoc = nullptr) const override;
 
     Color* GetColor(const ScAddress& rAddr) const;
     void AddEntry(ScColorScaleEntry* pEntry);
@@ -295,7 +295,7 @@ class SC_DLLPUBLIC ScDataBarFormat : public ScColorFormat
 public:
     ScDataBarFormat(ScDocument* pDoc);
     ScDataBarFormat(ScDocument* pDoc, const ScDataBarFormat& rFormat);
-    virtual ScColorFormat* Clone(ScDocument* pDoc = NULL) const override;
+    virtual ScColorFormat* Clone(ScDocument* pDoc = nullptr) const override;
 
     ScDataBarInfo* GetDataBarInfo(const ScAddress& rAddr) const;
 
@@ -357,7 +357,7 @@ public:
     ScIconSetFormat(ScDocument* pDoc);
     ScIconSetFormat(ScDocument* pDoc, const ScIconSetFormat& rFormat);
 
-    virtual ScColorFormat* Clone(ScDocument* pDoc = NULL) const override;
+    virtual ScColorFormat* Clone(ScDocument* pDoc = nullptr) const override;
 
     ScIconSetInfo* GetIconSetInfo(const ScAddress& rAddr) const;
 

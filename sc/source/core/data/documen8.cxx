@@ -163,7 +163,7 @@ void ScDocument::SetPrinter( SfxPrinter* pNewPrinter )
         UpdateDrawPrinter();
         pPrinter->SetDigitLanguage( SC_MOD()->GetOptDigitLanguage() );
     }
-    InvalidateTextWidth(NULL, NULL, false);     // in both cases
+    InvalidateTextWidth(nullptr, nullptr, false);     // in both cases
 }
 
 void ScDocument::SetPrintOptions()
@@ -208,7 +208,7 @@ VirtualDevice* ScDocument::GetVirtualDevice_100th_mm()
 OutputDevice* ScDocument::GetRefDevice()
 {
     // Create printer like ref device, see Writer...
-    OutputDevice* pRefDevice = NULL;
+    OutputDevice* pRefDevice = nullptr;
     if ( SC_MOD()->GetInputOptions().GetTextWysiwyg() )
         pRefDevice = GetPrinter();
     else
@@ -236,7 +236,7 @@ void ScDocument::ModifyStyleSheet( SfxStyleSheetBase& rStyleSheet,
 
                 if( SvtLanguageOptions().IsCTLFontEnabled() )
                 {
-                    const SfxPoolItem *pItem = NULL;
+                    const SfxPoolItem *pItem = nullptr;
                     if( rChanges.GetItemState(ATTR_WRITINGDIR, true, &pItem ) == SfxItemState::SET )
                         ScChartHelper::DoUpdateAllCharts( this );
                 }
@@ -248,7 +248,7 @@ void ScDocument::ModifyStyleSheet( SfxStyleSheetBase& rStyleSheet,
                 bool bNumFormatChanged;
                 if ( ScGlobal::CheckWidthInvalidate( bNumFormatChanged,
                         rSet, rChanges ) )
-                    InvalidateTextWidth( NULL, NULL, bNumFormatChanged );
+                    InvalidateTextWidth( nullptr, nullptr, bNumFormatChanged );
 
                 for (SCTAB nTab=0; nTab<=MAXTAB; ++nTab)
                     if (maTabs[nTab] && maTabs[nTab]->IsStreamValid())
@@ -439,7 +439,7 @@ void ScDocument::InvalidateTextWidth( const ScAddress* pAdrFrom, const ScAddress
         const SCTAB nTab = pAdrFrom->Tab();
 
         if (nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
-            maTabs[nTab]->InvalidateTextWidth( pAdrFrom, NULL, bNumFormatChanged, bBroadcast );
+            maTabs[nTab]->InvalidateTextWidth( pAdrFrom, nullptr, bNumFormatChanged, bBroadcast );
     }
     else
     {
@@ -534,7 +534,7 @@ public:
 bool ScDocument::IdleCalcTextWidth()            // true = try next again
 {
     // #i75610# if a printer hasn't been set or created yet, don't create one for this
-    if (!mbIdleEnabled || IsInLinkUpdate() || GetPrinter(false) == NULL)
+    if (!mbIdleEnabled || IsInLinkUpdate() || GetPrinter(false) == nullptr)
         return false;
 
     IdleCalcTextWidthScope aScope(*this, aCurTextWidthCalcPos);
@@ -573,7 +573,7 @@ bool ScDocument::IdleCalcTextWidth()            // true = try next again
     ScColumn* pCol  = &pTab->aCol[aScope.Col()];
     std::unique_ptr<ScColumnTextWidthIterator> pColIter(new ScColumnTextWidthIterator(*pCol, aScope.Row(), MAXROW));
 
-    OutputDevice* pDev = NULL;
+    OutputDevice* pDev = nullptr;
     sal_uInt16 nRestart = 0;
     sal_uInt16 nCount = 0;
     while ( (nZoom > 0) && (nCount < CALCMAX) && (nRestart < 2) )
@@ -833,7 +833,7 @@ void ScDocument::UpdateExternalRefLinks(vcl::Window* pWin)
         // Update failed.  Notify the user.
 
         OUString aFile;
-        sfx2::LinkManager::GetDisplayNames(pRefLink, NULL, &aFile);
+        sfx2::LinkManager::GetDisplayNames(pRefLink, nullptr, &aFile);
         // Decode encoded URL for display friendliness.
         INetURLObject aUrl(aFile,INetURLObject::WAS_ENCODED);
         aFile = aUrl.GetMainURL(INetURLObject::DECODE_UNAMBIGUOUS);
@@ -910,7 +910,7 @@ namespace {
 ScDdeLink* lclGetDdeLink(
         const sfx2::LinkManager* pLinkManager,
         const OUString& rAppl, const OUString& rTopic, const OUString& rItem, sal_uInt8 nMode,
-        size_t* pnDdePos = NULL )
+        size_t* pnDdePos = nullptr )
 {
     if( pLinkManager )
     {
@@ -931,7 +931,7 @@ ScDdeLink* lclGetDdeLink(
             }
         }
     }
-    return NULL;
+    return nullptr;
 }
 
 /** Returns a pointer to the specified DDE link.
@@ -955,7 +955,7 @@ ScDdeLink* lclGetDdeLink( const sfx2::LinkManager* pLinkManager, size_t nDdePos 
             }
         }
     }
-    return NULL;
+    return nullptr;
 }
 
 } // namespace
@@ -963,7 +963,7 @@ ScDdeLink* lclGetDdeLink( const sfx2::LinkManager* pLinkManager, size_t nDdePos 
 bool ScDocument::FindDdeLink( const OUString& rAppl, const OUString& rTopic, const OUString& rItem,
         sal_uInt8 nMode, size_t& rnDdePos )
 {
-    return lclGetDdeLink( GetLinkManager(), rAppl, rTopic, rItem, nMode, &rnDdePos ) != NULL;
+    return lclGetDdeLink( GetLinkManager(), rAppl, rTopic, rItem, nMode, &rnDdePos ) != nullptr;
 }
 
 bool ScDocument::GetDdeLinkData( size_t nDdePos, OUString& rAppl, OUString& rTopic, OUString& rItem ) const
@@ -991,7 +991,7 @@ bool ScDocument::GetDdeLinkMode( size_t nDdePos, sal_uInt8& rnMode ) const
 const ScMatrix* ScDocument::GetDdeLinkResultMatrix( size_t nDdePos ) const
 {
     const ScDdeLink* pDdeLink = lclGetDdeLink( GetLinkManager(), nDdePos );
-    return pDdeLink ? pDdeLink->GetResult() : NULL;
+    return pDdeLink ? pDdeLink->GetResult() : nullptr;
 }
 
 bool ScDocument::CreateDdeLink( const OUString& rAppl, const OUString& rTopic, const OUString& rItem, sal_uInt8 nMode, ScMatrixRef pResults )
@@ -1044,7 +1044,7 @@ bool ScDocument::HasAreaLinks() const
     const ::sfx2::SvBaseLinks& rLinks = pMgr->GetLinks();
     sal_uInt16 nCount = rLinks.size();
     for (sal_uInt16 i=0; i<nCount; i++)
-        if (0 != dynamic_cast<const ScAreaLink* >(rLinks[i].get()))
+        if (nullptr != dynamic_cast<const ScAreaLink* >(rLinks[i].get()))
             return true;
 
     return false;
@@ -1177,12 +1177,12 @@ SfxBindings* ScDocument::GetViewBindings()
     //  used to invalidate slots after changes to this document
 
     if ( !pShell )
-        return NULL;        // no ObjShell -> no view
+        return nullptr;        // no ObjShell -> no view
 
     //  first check current view
     SfxViewFrame* pViewFrame = SfxViewFrame::Current();
     if ( pViewFrame && pViewFrame->GetObjectShell() != pShell )     // wrong document?
-        pViewFrame = NULL;
+        pViewFrame = nullptr;
 
     //  otherwise use first view for this doc
     if ( !pViewFrame )
@@ -1191,7 +1191,7 @@ SfxBindings* ScDocument::GetViewBindings()
     if (pViewFrame)
         return &pViewFrame->GetBindings();
     else
-        return NULL;
+        return nullptr;
 }
 
 void ScDocument::TransliterateText( const ScMarkData& rMultiMark, sal_Int32 nType )

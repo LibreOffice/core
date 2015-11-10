@@ -71,11 +71,11 @@ public:
 
     virtual bool    SdrBeginTextEdit(
                       SdrObject* pObj,
-                      SdrPageView* pPV = 0L,
-                      vcl::Window* pWin = 0L,
+                      SdrPageView* pPV = nullptr,
+                      vcl::Window* pWin = nullptr,
                       bool bIsNewObj = false,
-                      SdrOutliner* pGivenOutliner = 0L,
-                      OutlinerView* pGivenOutlinerView = 0L,
+                      SdrOutliner* pGivenOutliner = nullptr,
+                      OutlinerView* pGivenOutlinerView = nullptr,
                       bool bDontDeleteOutliner = false,
                       bool bOnlyOneView = false,
                       bool bGrabFocus = true) override;
@@ -118,7 +118,7 @@ public:
 
     /** Returns the selected object, if it is the caption object of a cell note.
         @param ppCaptData  (out-param) If not null, returns the pointer to the caption object data. */
-    SdrObject*      GetMarkedNoteCaption( ScDrawObjData** ppCaptData = 0 );
+    SdrObject*      GetMarkedNoteCaption( ScDrawObjData** ppCaptData = nullptr );
 
     /** Locks/unlocks the specified layer in the draw page.
         Unlocked layer is required to be able to edit the contained objects. */

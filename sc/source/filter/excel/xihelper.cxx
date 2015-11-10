@@ -140,7 +140,7 @@ namespace {
 EditTextObject* lclCreateTextObject( const XclImpRoot& rRoot,
         const XclImpString& rString, XclFontItemType eType, sal_uInt16 nXFIndex )
 {
-    EditTextObject* pTextObj = 0;
+    EditTextObject* pTextObj = nullptr;
 
     const XclImpXFBuffer& rXFBuffer = rRoot.GetXFBuffer();
     const XclImpFont* pFirstFont = rXFBuffer.GetFont( nXFIndex );

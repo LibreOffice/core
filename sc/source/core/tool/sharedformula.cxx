@@ -68,7 +68,7 @@ void SharedFormulaUtil::splitFormulaCellGroup(const CellStoreType::position_type
         if (pCxt)
             rPrevTop.EndListeningTo(*pCxt);
         else
-            rPrevTop.EndListeningTo( rPrevTop.GetDocument(), NULL, ScAddress( ScAddress::UNINITIALIZED));
+            rPrevTop.EndListeningTo( rPrevTop.GetDocument(), nullptr, ScAddress( ScAddress::UNINITIALIZED));
         rPrevTop.SetNeedsListening(true);
     }
 #endif

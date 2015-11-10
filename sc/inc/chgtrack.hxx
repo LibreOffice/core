@@ -116,7 +116,7 @@ public:
         :   pNext( *ppPrevP ),
             ppPrev( ppPrevP ),
             pAction( pActionP ),
-            pLink( NULL )
+            pLink( nullptr )
         {
             if ( pNext )
                 pNext->ppPrev = &pNext;
@@ -146,8 +146,8 @@ public:
     {
         if ( pLink )
         {
-            pLink->pLink = NULL;
-            pLink = NULL;
+            pLink->pLink = nullptr;
+            pLink = nullptr;
         }
     }
 
@@ -155,9 +155,9 @@ public:
     {
         if ( ppPrev )
         {
-            if ( ( *ppPrev = pNext ) != NULL )
+            if ( ( *ppPrev = pNext ) != nullptr )
                 pNext->ppPrev = ppPrev;
-            ppPrev = NULL;  // not inserted
+            ppPrev = nullptr;  // not inserted
         }
     }
 
@@ -413,7 +413,7 @@ class ScChangeActionIns : public ScChangeAction
 
     virtual bool Reject(ScDocument* pDoc) override;
 
-    virtual const ScChangeTrack*    GetChangeTrack() const override { return 0; }
+    virtual const ScChangeTrack*    GetChangeTrack() const override { return nullptr; }
 
 public:
     ScChangeActionIns(
@@ -552,7 +552,7 @@ class ScChangeActionMove : public ScChangeAction
         : ScChangeAction( SC_CAT_MOVE, rToRange ),
             aFromRange( rFromRange ),
             pTrack( pTrackP ),
-            pFirstCell( NULL ),
+            pFirstCell( nullptr ),
             nStartLastCut(0),
             nEndLastCut(0)
         {}
@@ -652,7 +652,7 @@ class ScChangeActionContent : public ScChangeAction
         if ( !ppPrevInSlot )
         {
             ppPrevInSlot = pp;
-            if ( ( pNextInSlot = *pp ) != NULL )
+            if ( ( pNextInSlot = *pp ) != nullptr )
                 pNextInSlot->ppPrevInSlot = &pNextInSlot;
             *pp = this;
         }
@@ -662,9 +662,9 @@ class ScChangeActionContent : public ScChangeAction
     {
         if ( ppPrevInSlot )
         {
-            if ( ( *ppPrevInSlot = pNextInSlot ) != NULL )
+            if ( ( *ppPrevInSlot = pNextInSlot ) != nullptr )
                 pNextInSlot->ppPrevInSlot = ppPrevInSlot;
-            ppPrevInSlot = NULL;    // not inserted
+            ppPrevInSlot = nullptr;    // not inserted
         }
     }
 
@@ -706,7 +706,7 @@ class ScChangeActionContent : public ScChangeAction
 
     virtual bool Reject(ScDocument* pDoc) override;
 
-    virtual const ScChangeTrack*    GetChangeTrack() const override { return 0; }
+    virtual const ScChangeTrack*    GetChangeTrack() const override { return nullptr; }
 
     // pRejectActions!=NULL: reject actions get
     // stacked, no SetNewValue, no Append
@@ -742,7 +742,7 @@ public:
     ScChangeActionContent*  GetNextContent() const { return pNextContent; }
     ScChangeActionContent*  GetPrevContent() const { return pPrevContent; }
     ScChangeActionContent*  GetTopContent() const;
-    bool IsTopContent() const { return pNextContent == NULL; }
+    bool IsTopContent() const { return pNextContent == nullptr; }
 
     virtual ScChangeActionLinkEntry*    GetDeletedIn() const override;
     virtual ScChangeActionLinkEntry**   GetDeletedInAddress() override;
@@ -816,7 +816,7 @@ class ScChangeActionReject : public ScChangeAction
 
     virtual bool Reject(ScDocument* pDoc) override;
 
-    virtual const ScChangeTrack* GetChangeTrack() const override { return 0; }
+    virtual const ScChangeTrack* GetChangeTrack() const override { return nullptr; }
 
 public:
     ScChangeActionReject(const sal_uLong nActionNumber,
@@ -1072,7 +1072,7 @@ public:
                         // old value from pOldCell, nOldFormat,
                         // RefDoc==NULL => Doc
     void AppendContent( const ScAddress& rPos, const ScCellValue& rOldCell,
-                        sal_uLong nOldFormat, ScDocument* pRefDoc = NULL );
+                        sal_uLong nOldFormat, ScDocument* pRefDoc = nullptr );
                         // after new value was set in the document,
                         // old value from pOldCell, format from Doc
     SC_DLLPUBLIC void AppendContent( const ScAddress& rPos, const ScCellValue& rOldCell );
@@ -1111,7 +1111,7 @@ public:
         if ( pLastCutMove )
         {
             delete pLastCutMove;
-            pLastCutMove = NULL;
+            pLastCutMove = nullptr;
         }
     }
     bool HasLastCut() const

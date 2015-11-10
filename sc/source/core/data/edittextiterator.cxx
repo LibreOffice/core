@@ -35,7 +35,7 @@ const EditTextObject* EditTextIterator::seek()
             ++mpCol;
             if (mpCol == mpColEnd)
                 // No more columns.
-                return NULL;
+                return nullptr;
 
             mpCells = &mpCol->maCells;
             maPos = mpCells->position(0);
@@ -75,7 +75,7 @@ const EditTextObject* EditTextIterator::first()
 const EditTextObject* EditTextIterator::next()
 {
     if (maPos.first == miEnd)
-        return NULL;
+        return nullptr;
 
     incPos();
     return seek();

@@ -51,7 +51,7 @@
 
 // STATIC DATA -----------------------------------------------------------
 
-static VclPtr<ScEditWindow> pActiveEdWnd = NULL;
+static VclPtr<ScEditWindow> pActiveEdWnd = nullptr;
 
 // class ScHFEditPage
 
@@ -193,7 +193,7 @@ void ScHFEditPage::SetNumType(SvxNumType eNumType)
 
 void ScHFEditPage::Reset( const SfxItemSet* rCoreSet )
 {
-    const SfxPoolItem* pItem = NULL;
+    const SfxPoolItem* pItem = nullptr;
     if ( rCoreSet->HasItem(nWhich, &pItem) )
     {
         const ScPageHFItem& rItem = static_cast<const ScPageHFItem&>(*pItem);
@@ -253,8 +253,8 @@ void ScHFEditPage::InitPreDefinedList()
 {
     SvtUserOptions aUserOpt;
 
-    Color* pTxtColour = NULL;
-    Color* pFldColour = NULL;
+    Color* pTxtColour = nullptr;
+    Color* pFldColour = nullptr;
 
     // Get the all field values at the outset.
     OUString aPageFieldValue(m_pWndLeft->GetEditEngine()->CalcFieldValue(SvxFieldItem(SvxPageField(), EE_FEATURE_FIELD), 0,0, pTxtColour, pFldColour));

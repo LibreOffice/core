@@ -54,13 +54,13 @@ class SC_DLLPUBLIC ScPatternAttr: public SfxSetItem
     ScStyleSheet*   pStyle;
 public:
                             ScPatternAttr(SfxItemSet* pItemSet, const OUString& rStyleName);
-                            ScPatternAttr(SfxItemSet* pItemSet, ScStyleSheet* pStyleSheet = NULL);
+                            ScPatternAttr(SfxItemSet* pItemSet, ScStyleSheet* pStyleSheet = nullptr);
                             ScPatternAttr(SfxItemPool* pItemPool);
                             ScPatternAttr(const ScPatternAttr& rPatternAttr);
 
                             virtual ~ScPatternAttr();
 
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const override;
+    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
     virtual SfxPoolItem*    Create(SvStream& rStream, sal_uInt16 nVersion) const override;
     virtual SvStream&       Store(SvStream& rStream, sal_uInt16 nItemVersion) const override;
 
@@ -78,31 +78,31 @@ public:
 
     void                    DeleteUnchanged( const ScPatternAttr* pOldAttrs );
 
-    static SvxCellOrientation GetCellOrientation( const SfxItemSet& rItemSet, const SfxItemSet* pCondSet = 0 );
-    SvxCellOrientation      GetCellOrientation( const SfxItemSet* pCondSet = 0 ) const;
+    static SvxCellOrientation GetCellOrientation( const SfxItemSet& rItemSet, const SfxItemSet* pCondSet = nullptr );
+    SvxCellOrientation      GetCellOrientation( const SfxItemSet* pCondSet = nullptr ) const;
 
     /** Static helper function to fill a font object from the passed item set. */
     static void             GetFont( vcl::Font& rFont, const SfxItemSet& rItemSet,
                                         ScAutoFontColorMode eAutoMode,
-                                        OutputDevice* pOutDev = NULL,
-                                        const Fraction* pScale = NULL,
-                                        const SfxItemSet* pCondSet = NULL,
-                                        SvtScriptType nScript = SvtScriptType::NONE, const Color* pBackConfigColor = NULL,
-                                        const Color* pTextConfigColor = NULL );
+                                        OutputDevice* pOutDev = nullptr,
+                                        const Fraction* pScale = nullptr,
+                                        const SfxItemSet* pCondSet = nullptr,
+                                        SvtScriptType nScript = SvtScriptType::NONE, const Color* pBackConfigColor = nullptr,
+                                        const Color* pTextConfigColor = nullptr );
 
     static ScDxfFont        GetDxfFont(const SfxItemSet& rSet, SvtScriptType nScript);
     /** Fills a font object from the own item set. */
     void                    GetFont( vcl::Font& rFont, ScAutoFontColorMode eAutoMode,
-                                        OutputDevice* pOutDev = NULL,
-                                        const Fraction* pScale = NULL,
-                                        const SfxItemSet* pCondSet = NULL,
-                                        SvtScriptType nScript = SvtScriptType::NONE, const Color* pBackConfigColor = NULL,
-                                        const Color* pTextConfigColor = NULL ) const;
+                                        OutputDevice* pOutDev = nullptr,
+                                        const Fraction* pScale = nullptr,
+                                        const SfxItemSet* pCondSet = nullptr,
+                                        SvtScriptType nScript = SvtScriptType::NONE, const Color* pBackConfigColor = nullptr,
+                                        const Color* pTextConfigColor = nullptr ) const;
 
     /** Converts all Calc items contained in rSrcSet to edit engine items and puts them into rEditSet. */
-    static void             FillToEditItemSet( SfxItemSet& rEditSet, const SfxItemSet& rSrcSet, const SfxItemSet* pCondSet = NULL );
+    static void             FillToEditItemSet( SfxItemSet& rEditSet, const SfxItemSet& rSrcSet, const SfxItemSet* pCondSet = nullptr );
     /** Converts all Calc items contained in the own item set to edit engine items and puts them into pEditSet. */
-    void                    FillEditItemSet( SfxItemSet* pEditSet, const SfxItemSet* pCondSet = NULL ) const;
+    void                    FillEditItemSet( SfxItemSet* pEditSet, const SfxItemSet* pCondSet = nullptr ) const;
 
     /** Converts all edit engine items contained in rEditSet to Calc items and puts them into rDestSet. */
     static void             GetFromEditItemSet( SfxItemSet& rDestSet, const SfxItemSet& rEditSet );
@@ -149,7 +149,7 @@ class ScFontToSubsFontConverter_AutoPtr
 
 public:
                                 ScFontToSubsFontConverter_AutoPtr()
-                                    : h(0)
+                                    : h(nullptr)
                                     {}
                                 ~ScFontToSubsFontConverter_AutoPtr()
                                     {

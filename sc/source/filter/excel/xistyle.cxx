@@ -494,7 +494,7 @@ void XclImpFont::GuessScriptType()
             mbHasWstrn = (!mbHasAsian && !mbHasCmplx) || pCharMap->HasChar( 'A' );
         }
 
-        pCharMap = 0;
+        pCharMap = nullptr;
     }
 }
 
@@ -552,11 +552,11 @@ const XclImpFont* XclImpFontBuffer::GetFont( sal_uInt16 nFontIndex ) const
     if (nFontIndex < 4)
     {
         // Font ID is zero-based when it's less than 4.
-        return nFontIndex >= maFontList.size() ? NULL : &maFontList[nFontIndex];
+        return nFontIndex >= maFontList.size() ? nullptr : &maFontList[nFontIndex];
     }
 
     // Font ID is greater than 4.  It is now 1-based.
-    return nFontIndex > maFontList.size() ? NULL : &maFontList[nFontIndex-1];
+    return nFontIndex > maFontList.size() ? nullptr : &maFontList[nFontIndex-1];
 }
 
 void XclImpFontBuffer::ReadFont( XclImpStream& rStrm )
@@ -1087,7 +1087,7 @@ void XclImpCellArea::FillToItemSet( SfxItemSet& rItemSet, const XclImpPalette& r
 XclImpXF::XclImpXF( const XclImpRoot& rRoot ) :
     XclXFBase( true ),      // default is cell XF
     XclImpRoot( rRoot ),
-    mpStyleSheet( 0 ),
+    mpStyleSheet( nullptr ),
     mnXclNumFmt( 0 ),
     mnXclFont( 0 )
 {
@@ -1238,7 +1238,7 @@ const ScPatternAttr& XclImpXF::CreatePattern( bool bSkipPoolDefs )
     // create new pattern attribute set
     mpPattern.reset( new ScPatternAttr( GetDoc().GetPool() ) );
     SfxItemSet& rItemSet = mpPattern->GetItemSet();
-    XclImpXF* pParentXF = IsCellXF() ? GetXFBuffer().GetXF( mnParent ) : 0;
+    XclImpXF* pParentXF = IsCellXF() ? GetXFBuffer().GetXF( mnParent ) : nullptr;
 
     // parent cell style
     if( IsCellXF() && !mpStyleSheet )
@@ -1310,8 +1310,8 @@ const ScPatternAttr& XclImpXF::CreatePattern( bool bSkipPoolDefs )
     if( mbAlignUsed || mbBorderUsed )
     {
         SvxRotateMode eRotateMode = SVX_ROTATE_MODE_STANDARD;
-        const XclImpCellAlign* pAlign = mbAlignUsed ? &maAlignment : (pParentXF ? &pParentXF->maAlignment : 0);
-        const XclImpCellBorder* pBorder = mbBorderUsed ? &maBorder : (pParentXF ? &pParentXF->maBorder : 0);
+        const XclImpCellAlign* pAlign = mbAlignUsed ? &maAlignment : (pParentXF ? &pParentXF->maAlignment : nullptr);
+        const XclImpCellBorder* pBorder = mbBorderUsed ? &maBorder : (pParentXF ? &pParentXF->maBorder : nullptr);
         if( pAlign && pBorder && (0 < pAlign->mnRotation) && (pAlign->mnRotation <= 180) && pBorder->HasAnyOuterBorder() )
             eRotateMode = SVX_ROTATE_MODE_BOTTOM;
         ScfTools::PutItem( rItemSet, SvxRotateModeItem( eRotateMode, ATTR_ROTATE_MODE ), bSkipPoolDefs );
@@ -1466,7 +1466,7 @@ XclImpStyle::XclImpStyle( const XclImpRoot& rRoot ) :
     mbBuiltin( false ),
     mbCustom( false ),
     mbHidden( false ),
-    mpStyleSheet( 0 )
+    mpStyleSheet( nullptr )
 {
 }
 
@@ -1626,7 +1626,7 @@ void XclImpXFBuffer::CreateUserStyles()
     for( SfxStyleSheetBase* pStyleSheet = aStyleIter.First(); pStyleSheet; pStyleSheet = aStyleIter.Next() )
         if( (pStyleSheet->GetName() != aStandardName) && (bReserveAll || !pStyleSheet->IsUserDefined()) )
             if( aCellStyles.count( pStyleSheet->GetName() ) == 0 )
-                aCellStyles[ pStyleSheet->GetName() ] = 0;
+                aCellStyles[ pStyleSheet->GetName() ] = nullptr;
 
     /*  Calculate names of built-in styles. Store styles with reserved names
         in the aConflictNameStyles list. */
@@ -1678,7 +1678,7 @@ void XclImpXFBuffer::CreateUserStyles()
 ScStyleSheet* XclImpXFBuffer::CreateStyleSheet( sal_uInt16 nXFIndex )
 {
     XclImpStyleMap::iterator aIt = maStylesByXf.find( nXFIndex );
-    return (aIt == maStylesByXf.end()) ? 0 : aIt->second->CreateStyleSheet();
+    return (aIt == maStylesByXf.end()) ? nullptr : aIt->second->CreateStyleSheet();
 }
 
 // Buffer for XF indexes in cells =============================================
@@ -1746,7 +1746,7 @@ void XclImpXFRangeColumn::SetXF( SCROW nScRow, const XclImpXFIndex& rXFIndex )
             SCROW nLastScRow = pPrevRange->mnScRow2;
             sal_uLong nIndex = nNextIndex - 1;
             XclImpXFRange* pThisRange = pPrevRange;
-            pPrevRange = (nIndex > 0 && nIndex <= maIndexList.size()) ? &(maIndexList[ nIndex - 1 ]) : 0;
+            pPrevRange = (nIndex > 0 && nIndex <= maIndexList.size()) ? &(maIndexList[ nIndex - 1 ]) : nullptr;
 
             if( nFirstScRow == nLastScRow )         // replace solely XF
             {
@@ -1804,7 +1804,7 @@ void XclImpXFRangeColumn::Find(
     // test whether list is empty
     if( maIndexList.empty() )
     {
-        rpPrevRange = rpNextRange = 0;
+        rpPrevRange = rpNextRange = nullptr;
         rnNextIndex = 0;
         return;
     }
@@ -1817,7 +1817,7 @@ void XclImpXFRangeColumn::Find(
     if( rpNextRange->mnScRow1 <= nScRow )
     {
         rpPrevRange = rpNextRange;
-        rpNextRange = 0;
+        rpNextRange = nullptr;
         rnNextIndex = maIndexList.size();
         return;
     }
@@ -1826,7 +1826,7 @@ void XclImpXFRangeColumn::Find(
     if( nScRow < rpPrevRange->mnScRow1 )
     {
         rpNextRange = rpPrevRange;
-        rpPrevRange = 0;
+        rpPrevRange = nullptr;
         rnNextIndex = 0;
         return;
     }
@@ -1913,7 +1913,7 @@ void XclImpXFRangeBuffer::SetXF( const ScAddress& rScPos, sal_uInt16 nXFIndex, X
         if( pXF && ((pXF->GetHorAlign() == EXC_XF_HOR_CENTER_AS) || (pXF->GetHorAlign() == EXC_XF_HOR_FILL)) )
         {
             // expand last merged range if this attribute is set repeatedly
-            ScRange* pRange = maMergeList.empty() ? NULL : maMergeList.back();
+            ScRange* pRange = maMergeList.empty() ? nullptr : maMergeList.back();
             if (pRange && (pRange->aEnd.Row() == nScRow) && (pRange->aEnd.Col() + 1 == nScCol) && (eMode == xlXFModeBlank))
                 pRange->aEnd.IncCol();
             else if( eMode != xlXFModeBlank )   // do not merge empty cells

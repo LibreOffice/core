@@ -490,7 +490,7 @@ Reference< XExternalSheetCache > ExternalLink::getSheetCache( sal_Int32 nTabId )
     catch( Exception& )
     {
     }
-    return 0;
+    return nullptr;
 }
 
 void ExternalLink::getSheetRange( LinkSheetRange& orSheetRange, sal_Int32 nTabId1, sal_Int32 nTabId2 ) const
@@ -782,7 +782,7 @@ ExternalLinkRef ExternalLinkBuffer::createExternalLink()
 const RefSheetsModel* ExternalLinkBuffer::getRefSheets( sal_Int32 nRefId ) const
 {
     return ((0 <= nRefId) && (static_cast< size_t >( nRefId ) < maRefSheets.size())) ?
-        &maRefSheets[ static_cast< size_t >( nRefId ) ] : 0;
+        &maRefSheets[ static_cast< size_t >( nRefId ) ] : nullptr;
 }
 
 } // namespace xls

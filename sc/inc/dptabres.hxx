@@ -162,7 +162,7 @@ private:
     ScDPAggData*    pChild;
 
 public:
-            ScDPAggData() : fVal(0.0), fAux(0.0), nCount(SC_DPAGG_EMPTY), pChild(NULL) {}
+            ScDPAggData() : fVal(0.0), fAux(0.0), nCount(SC_DPAGG_EMPTY), pChild(nullptr) {}
             ~ScDPAggData() { delete pChild; }
 
     void    Update( const ScDPValue& rNext, ScSubTotalFunc eFunc, const ScDPSubTotalState& rSubState );
@@ -377,7 +377,7 @@ public:
     bool HasHiddenDetails() const { return bHasHiddenDetails; }
     bool IsSubTotalInTitle(long nMeasure) const;
 
-    long                GetSubTotalCount( long* pUserSubStart = NULL ) const;
+    long                GetSubTotalCount( long* pUserSubStart = nullptr ) const;
 
     bool IsNamedItem( SCROW nIndex ) const;
     bool IsValidEntry( const ::std::vector< SCROW >& aMembers ) const;
@@ -424,7 +424,7 @@ public:
     const ScDPLevel*         GetParentLevel() const         { return aParentDimData.mpParentLevel; }   //! Ref
     const ScDPMember*     GetDPMember()const              { return aParentDimData.mpMemberDesc; }    //! Ref
     SCROW GetOrder() const { return aParentDimData.mnOrder; }         //! Ref
-    bool IsRoot() const { return GetParentLevel() == NULL; }
+    bool IsRoot() const { return GetParentLevel() == nullptr; }
     SCROW                       GetDataId( ) const ;
     ScDPAggData*        GetColTotal( long nMeasure ) const;
 

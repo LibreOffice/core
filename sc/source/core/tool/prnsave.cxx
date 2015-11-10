@@ -28,8 +28,8 @@
 //      Daten pro Tabelle
 
 ScPrintSaverTab::ScPrintSaverTab() :
-    mpRepeatCol(NULL),
-    mpRepeatRow(NULL),
+    mpRepeatCol(nullptr),
+    mpRepeatRow(nullptr),
     mbEntireSheet(false)
 {
 }
@@ -49,9 +49,9 @@ void ScPrintSaverTab::SetAreas( const ScRangeVec& rRanges, bool bEntireSheet )
 void ScPrintSaverTab::SetRepeat( const ScRange* pCol, const ScRange* pRow )
 {
     delete mpRepeatCol;
-    mpRepeatCol = pCol ? new ScRange(*pCol) : NULL;
+    mpRepeatCol = pCol ? new ScRange(*pCol) : nullptr;
     delete mpRepeatRow;
-    mpRepeatRow = pRow ? new ScRange(*pRow) : NULL;
+    mpRepeatRow = pRow ? new ScRange(*pRow) : nullptr;
 }
 
 inline bool PtrEqual( const ScRange* p1, const ScRange* p2 )
@@ -76,7 +76,7 @@ ScPrintRangeSaver::ScPrintRangeSaver( SCTAB nCount ) :
     if (nCount > 0)
         pData = new ScPrintSaverTab[nCount];
     else
-        pData = NULL;
+        pData = nullptr;
 }
 
 ScPrintRangeSaver::~ScPrintRangeSaver()

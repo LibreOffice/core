@@ -288,7 +288,7 @@ ScFormatEntry* ScConditionFrmtEntry::createConditionEntry() const
         aExpr2 = maEdVal2->GetText();
         if (aExpr2.isEmpty())
         {
-            return NULL;
+            return nullptr;
         }
     }
 
@@ -609,7 +609,7 @@ ScFormatEntry* ScFormulaFrmtEntry::createFormulaEntry() const
     ScConditionMode eMode = SC_COND_DIRECT;
     OUString aFormula = maEdFormula->GetText();
     if(aFormula.isEmpty())
-        return NULL;
+        return nullptr;
 
     OUString aExpr2;
     ScFormatEntry* pEntry = new ScCondFormatEntry(eMode, aFormula, aExpr2, mpDoc, maPos, maLbStyle->GetSelectEntry());
@@ -800,7 +800,7 @@ void ScColorScale2FrmtEntry::Init()
     if ( pDocSh )
     {
         const SfxPoolItem*  pItem = pDocSh->GetItem( SID_COLOR_TABLE );
-        if ( pItem != NULL )
+        if ( pItem != nullptr )
             pColorTable = static_cast<const SvxColorListItem*>(pItem) ->GetColorList();
     }
     if ( pColorTable.is() )
@@ -877,7 +877,7 @@ void ScColorScale2FrmtEntry::SetInactive()
 
 IMPL_LINK_TYPED( ScColorScale2FrmtEntry, EntryTypeHdl, ListBox&, rBox, void )
 {
-    Edit* pEd = NULL;
+    Edit* pEd = nullptr;
     if (&rBox == maLbEntryTypeMin.get())
         pEd = maEdMin;
     else if (&rBox == maLbEntryTypeMax.get())
@@ -980,7 +980,7 @@ void ScColorScale3FrmtEntry::Init()
     if ( pDocSh )
     {
         const SfxPoolItem* pItem = pDocSh->GetItem( SID_COLOR_TABLE );
-        if ( pItem != NULL )
+        if ( pItem != nullptr )
             pColorTable = static_cast<const SvxColorListItem*>(pItem)->GetColorList();
     }
     if ( pColorTable.is() )
@@ -1069,7 +1069,7 @@ void ScColorScale3FrmtEntry::SetInactive()
 
 IMPL_LINK_TYPED( ScColorScale3FrmtEntry, EntryTypeHdl, ListBox&, rBox, void )
 {
-    Edit* pEd = NULL;
+    Edit* pEd = nullptr;
     if(&rBox == maLbEntryTypeMin.get())
         pEd = maEdMin.get();
     else if(&rBox == maLbEntryTypeMiddle.get())
@@ -1402,7 +1402,7 @@ class ScIconSetFrmtDataEntry : public Control
 
     public:
         ScIconSetFrmtDataEntry( vcl::Window* pParent, ScIconSetType eType, ScDocument* pDoc,
-                sal_Int32 i, const ScColorScaleEntry* pEntry = NULL );
+                sal_Int32 i, const ScColorScaleEntry* pEntry = nullptr );
         virtual ~ScIconSetFrmtDataEntry();
         virtual void dispose() override;
 

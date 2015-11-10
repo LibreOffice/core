@@ -36,7 +36,7 @@ ScStatisticsTwoVariableDialog::ScStatisticsTwoVariableDialog(
     mAddressDetails ( mDocument->GetAddressConvention(), 0, 0 ),
     mOutputAddress  ( ScAddress::INITIALIZE_INVALID ),
     mGroupedBy      ( BY_COLUMN ),
-    mpActiveEdit    ( NULL ),
+    mpActiveEdit    ( nullptr ),
     mCurrentAddress ( pViewData->GetCurX(), pViewData->GetCurY(), pViewData->GetTabNo() ),
     mDialogLostFocus( false )
 {
@@ -213,7 +213,7 @@ IMPL_LINK_NOARG_TYPED( ScStatisticsTwoVariableDialog, OkClicked, Button*, void )
 
 IMPL_LINK_TYPED( ScStatisticsTwoVariableDialog, GetFocusHandler, Control&, rCtrl, void )
 {
-    mpActiveEdit = NULL;
+    mpActiveEdit = nullptr;
     if(      &rCtrl == mpVariable1RangeEdit
           || &rCtrl == mpVariable1RangeButton )
     {

@@ -134,7 +134,7 @@ static SCSIZE nBcaSlots = initSlotDistribution( aSlotDistribution, nBcaSlotsRow)
 #endif
 
 ScBroadcastArea::ScBroadcastArea( const ScRange& rRange ) :
-    pUpdateChainNext(NULL),
+    pUpdateChainNext(nullptr),
     aRange(rRange),
     nRefCount(0),
     mbInUpdateChain(false),
@@ -216,7 +216,7 @@ bool ScBroadcastAreaSlot::StartListeningArea(
             {
                 OSL_FAIL("StartListeningArea: area not found and not inserted in slot?!?");
                 delete rpArea;
-                rpArea = 0;
+                rpArea = nullptr;
             }
         }
         if (rpArea)
@@ -255,7 +255,7 @@ void ScBroadcastAreaSlot::EndListeningArea(
         if ( !rpArea->GetBroadcaster().HasListeners() )
         {   // if nobody is listening we can dispose it
             if (rpArea->GetRef() == 1)
-                rpArea = NULL;      // will be deleted by erase
+                rpArea = nullptr;      // will be deleted by erase
             EraseArea( aIter);
         }
     }
@@ -268,7 +268,7 @@ void ScBroadcastAreaSlot::EndListeningArea(
                 return;
             OSL_ENSURE( (*aIter).mpArea == rpArea, "EndListeningArea: area pointer mismatch");
             if (rpArea->GetRef() == 1)
-                rpArea = NULL;      // will be deleted by erase
+                rpArea = nullptr;      // will be deleted by erase
             EraseArea( aIter);
         }
     }
@@ -673,10 +673,10 @@ ScBroadcastAreaSlotMachine::TableSlots::~TableSlots()
 
 ScBroadcastAreaSlotMachine::ScBroadcastAreaSlotMachine(
         ScDocument* pDocument ) :
-    pBCAlways( NULL ),
+    pBCAlways( nullptr ),
     pDoc( pDocument ),
-    pUpdateChain( NULL ),
-    pEOUpdateChain( NULL ),
+    pUpdateChain( nullptr ),
+    pEOUpdateChain( nullptr ),
     nInBulkBroadcast( 0 )
 {
 }
@@ -770,7 +770,7 @@ void ScBroadcastAreaSlotMachine::StartListeningArea(
             SCSIZE nOff = nStart;
             SCSIZE nBreak = nOff + nRowBreak;
             ScBroadcastAreaSlot** pp = ppSlots + nOff;
-            ScBroadcastArea* pArea = NULL;
+            ScBroadcastArea* pArea = nullptr;
             while ( !bDone && nOff <= nEnd )
             {
                 if ( !*pp )
@@ -803,7 +803,7 @@ void ScBroadcastAreaSlotMachine::EndListeningArea(
             if (!pBCAlways->HasListeners())
             {
                 delete pBCAlways;
-                pBCAlways = NULL;
+                pBCAlways = nullptr;
             }
         }
     }
@@ -819,7 +819,7 @@ void ScBroadcastAreaSlotMachine::EndListeningArea(
             SCSIZE nOff = nStart;
             SCSIZE nBreak = nOff + nRowBreak;
             ScBroadcastAreaSlot** pp = ppSlots + nOff;
-            ScBroadcastArea* pArea = NULL;
+            ScBroadcastArea* pArea = nullptr;
             if (nOff == 0 && nEnd == nBcaSlots-1)
             {
                 // Slightly optimized for 0,0,MAXCOL,MAXROW calls as they
@@ -1095,7 +1095,7 @@ void ScBroadcastAreaSlotMachine::UpdateBroadcastAreas(
         }
 
         // unchain
-        pArea->SetUpdateChainNext( NULL );
+        pArea->SetUpdateChainNext( nullptr );
         pArea->SetInUpdateChain( false );
 
         // Delete if not inserted to any slot. RemoveBulkArea(pArea) was
@@ -1103,7 +1103,7 @@ void ScBroadcastAreaSlotMachine::UpdateBroadcastAreas(
         if (!pArea->GetRef())
             delete pArea;
     }
-    pEOUpdateChain = NULL;
+    pEOUpdateChain = nullptr;
 }
 
 void ScBroadcastAreaSlotMachine::EnterBulkBroadcast()
@@ -1147,7 +1147,7 @@ void ScBroadcastAreaSlotMachine::BulkBroadcastGroupAreas()
     if (maBulkGroupAreas.empty())
         return;
 
-    sc::BulkDataHint aHint(*pDoc, NULL);
+    sc::BulkDataHint aHint(*pDoc, nullptr);
 
     bool bBroadcasted = false;
     BulkGroupAreasType::iterator it = maBulkGroupAreas.begin(), itEnd = maBulkGroupAreas.end();

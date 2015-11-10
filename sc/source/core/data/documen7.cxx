@@ -345,7 +345,7 @@ void ScDocument::PutInFormulaTree( ScFormulaCell* pCell )
     else
         pFormulaTree = pCell;               // No end, no beginning..
     pCell->SetPrevious( pEOFormulaTree );
-    pCell->SetNext( 0 );
+    pCell->SetNext( nullptr );
     pEOFormulaTree = pCell;
     nFormulaCodeInTree += pCell->GetCode()->GetCodeLen();
 }
@@ -378,8 +378,8 @@ void ScDocument::RemoveFromFormulaTree( ScFormulaCell* pCell )
         {
             pEOFormulaTree = pPrev;         // this cell was last cell
         }
-        pCell->SetPrevious( 0 );
-        pCell->SetNext( 0 );
+        pCell->SetPrevious( nullptr );
+        pCell->SetNext( nullptr );
         sal_uInt16 nRPN = pCell->GetCode()->GetCodeLen();
         if ( nFormulaCodeInTree >= nRPN )
             nFormulaCodeInTree -= nRPN;
@@ -455,7 +455,7 @@ void ScDocument::CalcFormulaTree( bool bOnlyForced, bool bProgressBar, bool bSet
             ScProgress::CreateInterpretProgress( this );
 
         pCell = pFormulaTree;
-        ScFormulaCell* pLastNoGood = 0;
+        ScFormulaCell* pLastNoGood = nullptr;
         while ( pCell )
         {
             // Interpret resets bDirty and calls Remove, also the referenced!
@@ -481,7 +481,7 @@ void ScDocument::CalcFormulaTree( bool bOnlyForced, bool bProgressBar, bool bSet
                     if ( pFormulaTree->GetDirty() && !bOnlyForced )
                     {
                         pCell = pFormulaTree;
-                        pLastNoGood = 0;
+                        pLastNoGood = nullptr;
                     }
                     else
                     {
@@ -500,10 +500,10 @@ void ScDocument::CalcFormulaTree( bool bOnlyForced, bool bProgressBar, bool bSet
                     }
                 }
                 else
-                    pCell = 0;
+                    pCell = nullptr;
             }
             if ( ScProgress::IsUserBreak() )
-                pCell = 0;
+                pCell = nullptr;
         }
         if ( bProgress )
             ScProgress::DeleteInterpretProgress();
@@ -539,7 +539,7 @@ void ScDocument::AppendToFormulaTrack( ScFormulaCell* pCell )
     else
         pFormulaTrack = pCell;              // No end, no beginning..
     pCell->SetPreviousTrack( pEOFormulaTrack );
-    pCell->SetNextTrack( 0 );
+    pCell->SetNextTrack( nullptr );
     pEOFormulaTrack = pCell;
     ++nFormulaTrackCount;
 }
@@ -572,8 +572,8 @@ void ScDocument::RemoveFromFormulaTrack( ScFormulaCell* pCell )
         {
             pEOFormulaTrack = pPrev;            // this cell was last cell
         }
-        pCell->SetPreviousTrack( 0 );
-        pCell->SetNextTrack( 0 );
+        pCell->SetPreviousTrack( nullptr );
+        pCell->SetNextTrack( nullptr );
         --nFormulaTrackCount;
     }
 }

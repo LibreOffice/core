@@ -84,41 +84,41 @@
 #include "docsh.hxx"
 
 tools::SvRef<ScDocShell>  ScGlobal::xDrawClipDocShellRef;
-SvxSearchItem*  ScGlobal::pSearchItem = NULL;
-ScAutoFormat*   ScGlobal::pAutoFormat = NULL;
-LegacyFuncCollection* ScGlobal::pLegacyFuncCollection = NULL;
-ScUnoAddInCollection* ScGlobal::pAddInCollection = NULL;
-ScUserList*     ScGlobal::pUserList = NULL;
-OUString**      ScGlobal::ppRscString = NULL;
+SvxSearchItem*  ScGlobal::pSearchItem = nullptr;
+ScAutoFormat*   ScGlobal::pAutoFormat = nullptr;
+LegacyFuncCollection* ScGlobal::pLegacyFuncCollection = nullptr;
+ScUnoAddInCollection* ScGlobal::pAddInCollection = nullptr;
+ScUserList*     ScGlobal::pUserList = nullptr;
+OUString**      ScGlobal::ppRscString = nullptr;
 LanguageType    ScGlobal::eLnge = LANGUAGE_SYSTEM;
-css::lang::Locale*     ScGlobal::pLocale = NULL;
-SvtSysLocale*   ScGlobal::pSysLocale = NULL;
-const CharClass*  ScGlobal::pCharClass = NULL;
-const LocaleDataWrapper*  ScGlobal::pLocaleData = NULL;
-CalendarWrapper* ScGlobal::pCalendar = NULL;
-CollatorWrapper* ScGlobal::pCollator = NULL;
-CollatorWrapper* ScGlobal::pCaseCollator = NULL;
-::utl::TransliterationWrapper* ScGlobal::pTransliteration = NULL;
-::utl::TransliterationWrapper* ScGlobal::pCaseTransliteration = NULL;
-css::uno::Reference< css::i18n::XOrdinalSuffix> ScGlobal::xOrdinalSuffix = NULL;
-IntlWrapper*    ScGlobal::pScIntlWrapper = NULL;
+css::lang::Locale*     ScGlobal::pLocale = nullptr;
+SvtSysLocale*   ScGlobal::pSysLocale = nullptr;
+const CharClass*  ScGlobal::pCharClass = nullptr;
+const LocaleDataWrapper*  ScGlobal::pLocaleData = nullptr;
+CalendarWrapper* ScGlobal::pCalendar = nullptr;
+CollatorWrapper* ScGlobal::pCollator = nullptr;
+CollatorWrapper* ScGlobal::pCaseCollator = nullptr;
+::utl::TransliterationWrapper* ScGlobal::pTransliteration = nullptr;
+::utl::TransliterationWrapper* ScGlobal::pCaseTransliteration = nullptr;
+css::uno::Reference< css::i18n::XOrdinalSuffix> ScGlobal::xOrdinalSuffix = nullptr;
+IntlWrapper*    ScGlobal::pScIntlWrapper = nullptr;
 sal_Unicode     ScGlobal::cListDelimiter = ',';
-OUString*       ScGlobal::pEmptyOUString = NULL;
-OUString*       ScGlobal::pStrClipDocName = NULL;
+OUString*       ScGlobal::pEmptyOUString = nullptr;
+OUString*       ScGlobal::pStrClipDocName = nullptr;
 
-SvxBrushItem*   ScGlobal::pEmptyBrushItem = NULL;
-SvxBrushItem*   ScGlobal::pButtonBrushItem = NULL;
-SvxBrushItem*   ScGlobal::pEmbeddedBrushItem = NULL;
-SvxBrushItem*   ScGlobal::pProtectedBrushItem = NULL;
+SvxBrushItem*   ScGlobal::pEmptyBrushItem = nullptr;
+SvxBrushItem*   ScGlobal::pButtonBrushItem = nullptr;
+SvxBrushItem*   ScGlobal::pEmbeddedBrushItem = nullptr;
+SvxBrushItem*   ScGlobal::pProtectedBrushItem = nullptr;
 
-ImageList*      ScGlobal::pOutlineBitmaps = NULL;
+ImageList*      ScGlobal::pOutlineBitmaps = nullptr;
 
-ScFunctionList* ScGlobal::pStarCalcFunctionList = NULL;
-ScFunctionMgr*  ScGlobal::pStarCalcFunctionMgr  = NULL;
+ScFunctionList* ScGlobal::pStarCalcFunctionList = nullptr;
+ScFunctionMgr*  ScGlobal::pStarCalcFunctionMgr  = nullptr;
 
-ScUnitConverter* ScGlobal::pUnitConverter = NULL;
-SvNumberFormatter* ScGlobal::pEnglishFormatter = NULL;
-ScFieldEditEngine* ScGlobal::pFieldEditEngine = NULL;
+ScUnitConverter* ScGlobal::pUnitConverter = nullptr;
+SvNumberFormatter* ScGlobal::pEnglishFormatter = nullptr;
+ScFieldEditEngine* ScGlobal::pFieldEditEngine = nullptr;
 
 double          ScGlobal::nScreenPPTX           = 96.0;
 double          ScGlobal::nScreenPPTY           = 96.0;
@@ -131,7 +131,7 @@ long            ScGlobal::nLastColWidthExtra    = STD_EXTRA_WIDTH;
 
 static sal_uInt16 nPPTZoom = 0; // ScreenZoom used to determine nScreenPPTX/Y
 
-SfxViewShell* pScActiveViewShell = NULL; //FIXME: Make this a member
+SfxViewShell* pScActiveViewShell = nullptr; //FIXME: Make this a member
 sal_uInt16 nScClickMouseModifier = 0;    //FIXME: This too
 sal_uInt16 nScFillModeMouseModifier = 0; //FIXME: And this
 
@@ -252,10 +252,10 @@ void ScGlobal::SetSearchItem( const SvxSearchItem& rNew )
 
 void ScGlobal::ClearAutoFormat()
 {
-    if (pAutoFormat!=NULL)
+    if (pAutoFormat!=nullptr)
     {
         delete pAutoFormat;
-        pAutoFormat=NULL;
+        pAutoFormat=nullptr;
     }
 }
 
@@ -311,7 +311,7 @@ void ScGlobal::SetUserList( const ScUserList* pNewList )
     else
     {
         delete pUserList;
-        pUserList = NULL;
+        pUserList = nullptr;
     }
 }
 
@@ -511,14 +511,14 @@ void ScGlobal::Init()
     pLocaleData = pSysLocale->GetLocaleDataPtr();
 
     ppRscString = new OUString *[ SC_GLOBSTR_STR_COUNT ];
-    for( sal_uInt16 nC = 0 ; nC < SC_GLOBSTR_STR_COUNT ; nC++ ) ppRscString[ nC ] = NULL;
+    for( sal_uInt16 nC = 0 ; nC < SC_GLOBSTR_STR_COUNT ; nC++ ) ppRscString[ nC ] = nullptr;
 
     pEmptyBrushItem = new SvxBrushItem( Color( COL_TRANSPARENT ), ATTR_BACKGROUND );
     pButtonBrushItem = new SvxBrushItem( Color(), ATTR_BACKGROUND );
     pEmbeddedBrushItem = new SvxBrushItem( Color( COL_LIGHTCYAN ), ATTR_BACKGROUND );
     pProtectedBrushItem = new SvxBrushItem( Color( COL_LIGHTGRAY ), ATTR_BACKGROUND );
 
-    UpdatePPT(NULL);
+    UpdatePPT(nullptr);
     //ScCompiler::InitSymbolsNative();
     // ScParameterClassification _after_ Compiler, needs function resources if
     // arguments are to be merged in, which in turn need strings of function
@@ -616,7 +616,7 @@ void ScGlobal::Clear()
     for( sal_uInt16 nC = 0 ; nC < SC_GLOBSTR_STR_COUNT ; nC++ )
         if( ppRscString ) delete ppRscString[ nC ];
     delete[] ppRscString;
-    ppRscString = NULL;
+    ppRscString = nullptr;
 
     DELETEZ(pStarCalcFunctionList); // Destroy before ResMgr!
     DELETEZ(pStarCalcFunctionMgr);
@@ -636,9 +636,9 @@ void ScGlobal::Clear()
     DELETEZ(pCollator);
     DELETEZ(pCalendar);
     // Do NOT delete pCharClass since it is a pointer to the single SvtSysLocale instance !
-    pCharClass = NULL;
+    pCharClass = nullptr;
     // Do NOT delete pLocaleData since it is a pointer to the single SvtSysLocale instance !
-    pLocaleData = NULL;
+    pLocaleData = nullptr;
     DELETEZ(pSysLocale);
     DELETEZ(pLocale);
     DELETEZ(pScIntlWrapper);
@@ -700,7 +700,7 @@ OUString ScGlobal::GetCharsetString( rtl_TextEncoding eVal )
 
 bool ScGlobal::HasStarCalcFunctionList()
 {
-    return ( pStarCalcFunctionList != NULL );
+    return ( pStarCalcFunctionList != nullptr );
 }
 
 ScFunctionList* ScGlobal::GetStarCalcFunctionList()
@@ -738,14 +738,14 @@ const sal_Unicode* ScGlobal::UnicodeStrChr( const sal_Unicode* pStr,
             sal_Unicode c )
 {
     if ( !pStr )
-        return NULL;
+        return nullptr;
     while ( *pStr )
     {
         if ( *pStr == c )
             return pStr;
         pStr++;
     }
-    return NULL;
+    return nullptr;
 }
 
 OUString ScGlobal::addToken(const OUString& rTokenList, const OUString& rToken,
@@ -836,7 +836,7 @@ const sal_Unicode* ScGlobal::FindUnquoted( const sal_Unicode* pString, sal_Unico
         }
         ++p;
     }
-    return NULL;
+    return nullptr;
 }
 
 bool ScGlobal::EETextObjEqual( const EditTextObject* pObj1,
@@ -897,7 +897,7 @@ void ScGlobal::OpenURL(const OUString& rURL, const OUString& rTarget, const SdrM
     SfxStringItem aUrl( SID_FILE_NAME, rURL );
     SfxStringItem aTarget( SID_TARGETNAME, rTarget );
     aTarget.SetValue("_blank");
-    SfxViewFrame* pFrame = NULL;
+    SfxViewFrame* pFrame = nullptr;
     OUString aReferName;
     if ( pScActiveViewShell )
     {
@@ -1139,7 +1139,7 @@ ScFieldEditEngine& ScGlobal::GetStaticFieldEditEngine()
         // specific fields not being resolvable! See
         // ScFieldEditEngine::CalcFieldValue(). pEnginePool=NULL lets
         // EditEngine internally create and delete a default pool.
-        pFieldEditEngine = new ScFieldEditEngine( NULL, NULL);
+        pFieldEditEngine = new ScFieldEditEngine( nullptr, nullptr);
     }
     return *pFieldEditEngine;
 }

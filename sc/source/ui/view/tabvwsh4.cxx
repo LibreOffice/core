@@ -137,7 +137,7 @@ void ScTabViewShell::Activate(bool bMDI)
                     ScInputHandler* pOldHdl=pWin->GetInputHandler();
 
                     SfxViewShell* pSh = SfxViewShell::GetFirst( true, checkSfxViewShell<ScTabViewShell> );
-                    while ( pSh!=NULL && pOldHdl!=NULL)
+                    while ( pSh!=nullptr && pOldHdl!=nullptr)
                     {
                         if (static_cast<ScTabViewShell*>(pSh)->GetInputHandler() == pOldHdl)
                         {
@@ -225,7 +225,7 @@ void ScTabViewShell::Deactivate(bool bMDI)
 
     ScChangeTrack* pChanges=pDoc->GetChangeTrack();
 
-    if(pChanges!=NULL)
+    if(pChanges!=nullptr)
     {
         Link<ScChangeTrack&,void> aLink;
         pChanges->SetModifiedLink(aLink);
@@ -248,10 +248,10 @@ void ScTabViewShell::Deactivate(bool bMDI)
             GetViewData().GetDocShell()->UpdateOle(&GetViewData(), true);
 
         if ( pHdl )
-            pHdl->NotifyChange( NULL, true ); // timer-delayed due to document switching
+            pHdl->NotifyChange( nullptr, true ); // timer-delayed due to document switching
 
         if (pScActiveViewShell == this)
-            pScActiveViewShell = NULL;
+            pScActiveViewShell = nullptr;
 
         bDontSwitch = bOldDontSwitch;
     }
@@ -824,14 +824,14 @@ void ScTabViewShell::SetCurSubShell(ObjectSelectionType eOST, bool bForce)
             {
                 if (svx::checkForSelectedCustomShapes(
                             GetScDrawView(), true /* bOnlyExtruded */ )) {
-                    if (pExtrusionBarShell == 0)
+                    if (pExtrusionBarShell == nullptr)
                         pExtrusionBarShell = new svx::ExtrusionBar(this);
                     AddSubShell( *pExtrusionBarShell );
                 }
                 sal_uInt32 nCheckStatus = 0;
                 if (svx::checkForSelectedFontWork(
                             GetScDrawView(), nCheckStatus )) {
-                    if (pFontworkBarShell == 0)
+                    if (pFontworkBarShell == nullptr)
                         pFontworkBarShell = new svx::FontworkBar(this);
                     AddSubShell( *pFontworkBarShell );
                 }
@@ -994,7 +994,7 @@ SfxShell* ScTabViewShell::GetMySubShell() const
 
         pSub = const_cast<ScTabViewShell*>(this)->GetSubShell(++nPos);
     }
-    return NULL;        // none from mine present
+    return nullptr;        // none from mine present
 }
 
 bool ScTabViewShell::IsDrawTextShell() const
@@ -1062,8 +1062,8 @@ VclPtr<SfxTabPage> ScTabViewShell::CreatePrintOptionsPage( vcl::Window *pParent,
 
 void ScTabViewShell::StopEditShell()
 {
-    if ( pEditShell != NULL && !bDontSwitch )
-        SetEditShell(NULL, false );
+    if ( pEditShell != nullptr && !bDontSwitch )
+        SetEditShell(nullptr, false );
 }
 
 // close handler to ensure function of dialog:
@@ -1086,7 +1086,7 @@ IMPL_LINK_NOARG_TYPED(ScTabViewShell, SimpleRefClose, const OUString*, void)
 
 static ScTabViewObj* lcl_GetViewObj( ScTabViewShell& rShell )
 {
-    ScTabViewObj* pRet = NULL;
+    ScTabViewObj* pRet = nullptr;
     SfxViewFrame* pViewFrame = rShell.GetViewFrame();
     if (pViewFrame)
     {
@@ -1634,26 +1634,26 @@ ScTabViewShell::ScTabViewShell( SfxViewFrame* pViewFrame,
     nDrawSfxId(0),
     nCtrlSfxId(USHRT_MAX),
     nFormSfxId(USHRT_MAX),
-    pDrawShell(NULL),
-    pDrawTextShell(NULL),
-    pEditShell(NULL),
-    pPivotShell(NULL),
-    pAuditingShell(NULL),
-    pDrawFormShell(NULL),
-    pCellShell(NULL),
-    pOleObjectShell(NULL),
-    pChartShell(NULL),
-    pGraphicShell(NULL),
-    pMediaShell(NULL),
-    pPageBreakShell(NULL),
-    pExtrusionBarShell(NULL),
-    pFontworkBarShell(NULL),
-    pFormShell(NULL),
-    pInputHandler(NULL),
-    pCurFrameLine(NULL),
+    pDrawShell(nullptr),
+    pDrawTextShell(nullptr),
+    pEditShell(nullptr),
+    pPivotShell(nullptr),
+    pAuditingShell(nullptr),
+    pDrawFormShell(nullptr),
+    pCellShell(nullptr),
+    pOleObjectShell(nullptr),
+    pChartShell(nullptr),
+    pGraphicShell(nullptr),
+    pMediaShell(nullptr),
+    pPageBreakShell(nullptr),
+    pExtrusionBarShell(nullptr),
+    pFontworkBarShell(nullptr),
+    pFormShell(nullptr),
+    pInputHandler(nullptr),
+    pCurFrameLine(nullptr),
     aTarget(this),
-    pDialogDPObject(NULL),
-    pNavSettings(NULL),
+    pDialogDPObject(nullptr),
+    pNavSettings(nullptr),
     bActiveDrawSh(false),
     bActiveDrawTextSh(false),
     bActivePivotSh(false),
@@ -1669,11 +1669,11 @@ ScTabViewShell::ScTabViewShell( SfxViewFrame* pViewFrame,
     bInFormatDialog(false),
     bPrintSelected(false),
     bReadOnly(false),
-    pScSbxObject(NULL),
+    pScSbxObject(nullptr),
     bChartAreaValid(false),
     bForceFocusOnCurCell(false),
     nCurRefDlgId(0),
-    pAccessibilityBroadcaster(NULL),
+    pAccessibilityBroadcaster(nullptr),
     mbInSwitch(false)
 {
     const ScAppOptions& rAppOpt = SC_MOD()->GetAppOptions();
@@ -1729,7 +1729,7 @@ ScTabViewShell::~ScTabViewShell()
     SC_MOD()->ViewShellGone(this);
 
     RemoveSubShell();           // all
-    SetWindow(0);
+    SetWindow(nullptr);
 
     // all to NULL, in case the TabView-dtor tries to access them
     //! (should not really! ??!?!)
@@ -1766,7 +1766,7 @@ void ScTabViewShell::SetDialogDPObject( const ScDPObject* pObj )
     if (pObj)
         pDialogDPObject = new ScDPObject( *pObj );
     else
-        pDialogDPObject = NULL;
+        pDialogDPObject = nullptr;
 }
 
 void ScTabViewShell::FillFieldData( ScHeaderFieldData& rData )

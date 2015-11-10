@@ -32,7 +32,7 @@ class ScInsertContentsDlg : public ModalDialog
 public:
             ScInsertContentsDlg( vcl::Window*          pParent,
                                  InsertDeleteFlags nCheckDefaults = InsertDeleteFlags::NONE,
-                                 const OUString*  pStrTitle = NULL );
+                                 const OUString*  pStrTitle = nullptr );
             virtual ~ScInsertContentsDlg();
     virtual void dispose() override;
 

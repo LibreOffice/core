@@ -341,7 +341,7 @@ void ScHTMLExport::WriteHeader()
 
     if ( pDoc->IsClipOrUndo() )
     {   // no real DocInfo available, but some META information like charset needed
-        SfxFrameHTMLWriter::Out_DocInfo( rStrm, aBaseURL, NULL, sIndent, eDestEnc, &aNonConvertibleChars );
+        SfxFrameHTMLWriter::Out_DocInfo( rStrm, aBaseURL, nullptr, sIndent, eDestEnc, &aNonConvertibleChars );
     }
     else
     {
@@ -471,7 +471,7 @@ void ScHTMLExport::WriteOverview()
 const SfxItemSet& ScHTMLExport::PageDefaults( SCTAB nTab )
 {
     SfxStyleSheetBasePool*  pStylePool  = pDoc->GetStyleSheetPool();
-    SfxStyleSheetBase*      pStyleSheet = NULL;
+    SfxStyleSheetBase*      pStyleSheet = nullptr;
     OSL_ENSURE( pStylePool, "StylePool not found! :-(" );
 
     // remember defaults for compare in WriteCell
@@ -879,7 +879,7 @@ void ScHTMLExport::WriteCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
         return ;
 
     ScAddress aPos( nCol, nRow, nTab );
-    ScHTMLGraphEntry* pGraphEntry = NULL;
+    ScHTMLGraphEntry* pGraphEntry = nullptr;
     if ( bTabHasGraphics && !mbSkipImages )
     {
         size_t ListSize = aGraphList.size();
@@ -1060,7 +1060,7 @@ void ScHTMLExport::WriteCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
         case SVX_VER_JUSTIFY_CENTER:    pChar = OOO_STRING_SVTOOLS_HTML_VA_middle;  break;
         case SVX_VER_JUSTIFY_BOTTOM:    pChar = OOO_STRING_SVTOOLS_HTML_VA_bottom;  break;
         case SVX_VER_JUSTIFY_STANDARD:
-        default:                        pChar = NULL;
+        default:                        pChar = nullptr;
     }
     if ( pChar )
     {

@@ -45,7 +45,7 @@ class SC_DLLPUBLIC ScDocumentPool: public SfxItemPool
     static sal_uInt16*  pVersionMap12;
 
 public:
-            ScDocumentPool( SfxItemPool* pSecPool = NULL );
+            ScDocumentPool( SfxItemPool* pSecPool = nullptr );
 protected:
             virtual ~ScDocumentPool();
 public:
@@ -63,7 +63,7 @@ public:
                                         const SfxPoolItem&  rItem,
                                         SfxMapUnit          ePresentationMetric,
                                         OUString&           rText,
-                                        const IntlWrapper* pIntl = 0 ) const override;
+                                        const IntlWrapper* pIntl = nullptr ) const override;
 
     static void InitVersionMaps();
     static void DeleteVersionMaps();

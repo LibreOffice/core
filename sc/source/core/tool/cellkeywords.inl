@@ -68,7 +68,7 @@ static const TransItem pFr[] = {
     {info_system_fr, "SYSTEM", ocInfo},
     {info_release_fr, "RELEASE", ocInfo},
     {info_osversion_fr, "OSVERSION", ocInfo},
-    {NULL, NULL, ocNone}
+    {nullptr, nullptr, ocNone}
 };
 
 addToMap(pFr, aFr);
@@ -138,7 +138,7 @@ static const TransItem pHu[] = {
     {info_system_hu, "SYSTEM", ocInfo},
     {info_release_hu, "RELEASE", ocInfo},
     {info_osversion_hu, "OSVERSION", ocInfo},
-    {NULL, NULL, ocNone}
+    {nullptr, nullptr, ocNone}
 };
 
 addToMap(pHu, aHu);
@@ -193,7 +193,7 @@ static const TransItem pDe[] = {
     {cell_prefix_de, "PREFIX", ocCell},
     {cell_sheet_de, "SHEET", ocCell},
     {cell_coord_de, "COORD", ocCell},
-    {NULL, NULL, ocNone}
+    {nullptr, nullptr, ocNone}
 };
 
 addToMap(pDe, aDe);

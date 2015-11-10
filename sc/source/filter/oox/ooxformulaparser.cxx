@@ -96,7 +96,7 @@ const FunctionInfo* OOXMLFormulaParserImpl::resolveBadFuncName( const OUString& 
             }
         }
     }
-    return 0;
+    return nullptr;
 }
 
 OOXMLFormulaParser::OOXMLFormulaParser()

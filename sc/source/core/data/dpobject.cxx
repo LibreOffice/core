@@ -307,12 +307,12 @@ bool ScDPServiceDesc::operator== ( const ScDPServiceDesc& rOther ) const
 
 ScDPObject::ScDPObject( ScDocument* pD ) :
     pDoc( pD ),
-    pSaveData( NULL ),
-    pSheetDesc( NULL ),
-    pImpDesc( NULL ),
-    pServDesc( NULL ),
-    mpTableData(static_cast<ScDPTableData*>(NULL)),
-    pOutput( NULL ),
+    pSaveData( nullptr ),
+    pSheetDesc( nullptr ),
+    pImpDesc( nullptr ),
+    pServDesc( nullptr ),
+    mpTableData(static_cast<ScDPTableData*>(nullptr)),
+    pOutput( nullptr ),
     mnAutoFormatIndex( 65535 ),
     nHeaderRows( 0 ),
     mbHeaderLayout(false),
@@ -324,15 +324,15 @@ ScDPObject::ScDPObject( ScDocument* pD ) :
 
 ScDPObject::ScDPObject(const ScDPObject& r) :
     pDoc( r.pDoc ),
-    pSaveData( NULL ),
+    pSaveData( nullptr ),
     aTableName( r.aTableName ),
     aTableTag( r.aTableTag ),
     aOutRange( r.aOutRange ),
-    pSheetDesc( NULL ),
-    pImpDesc( NULL ),
-    pServDesc( NULL ),
-    mpTableData(static_cast<ScDPTableData*>(NULL)),
-    pOutput( NULL ),
+    pSheetDesc( nullptr ),
+    pImpDesc( nullptr ),
+    pServDesc( nullptr ),
+    mpTableData(static_cast<ScDPTableData*>(nullptr)),
+    pOutput( nullptr ),
     mnAutoFormatIndex( r.mnAutoFormatIndex ),
     nHeaderRows( r.nHeaderRows ),
     mbHeaderLayout( r.mbHeaderLayout ),
@@ -497,7 +497,7 @@ void ScDPObject::WriteTempDataTo( ScDPObject& rDest ) const
 
 bool ScDPObject::IsSheetData() const
 {
-    return ( pSheetDesc != NULL );
+    return ( pSheetDesc != nullptr );
 }
 
 void ScDPObject::SetName(const OUString& rNew)
@@ -693,7 +693,7 @@ ScDPTableData* ScDPObject::GetTableData()
     if (!mpTableData)
     {
         shared_ptr<ScDPTableData> pData;
-        const ScDPDimensionSaveData* pDimData = pSaveData ? pSaveData->GetExistingDimensionData() : NULL;
+        const ScDPDimensionSaveData* pDimData = pSaveData ? pSaveData->GetExistingDimensionData() : nullptr;
 
         if ( pImpDesc )
         {
@@ -808,11 +808,11 @@ void ScDPObject::Clear()
     delete pSheetDesc;
     delete pImpDesc;
     delete pServDesc;
-    pOutput = NULL;
-    pSaveData = NULL;
-    pSheetDesc = NULL;
-    pImpDesc = NULL;
-    pServDesc = NULL;
+    pOutput = nullptr;
+    pSaveData = nullptr;
+    pSheetDesc = nullptr;
+    pImpDesc = nullptr;
+    pServDesc = nullptr;
     ClearTableData();
 }
 
@@ -887,7 +887,7 @@ void ScDPObject::ClearSource()
             DBG_UNHANDLED_EXCEPTION();
         }
     }
-    xSource = NULL;
+    xSource = nullptr;
 }
 
 ScRange ScDPObject::GetNewOutputRange( bool& rOverflow )
@@ -1773,9 +1773,9 @@ bool ScDPObject::ParseFilters(
         {
             OUString aFound;
             sal_Int32 nMatched = 0;
-            if (isAtStart(aRemaining, aDataNames[nDataPos], nMatched, false, NULL))
+            if (isAtStart(aRemaining, aDataNames[nDataPos], nMatched, false, nullptr))
                 aFound = aDataNames[nDataPos];
-            else if (isAtStart(aRemaining, aGivenNames[nDataPos], nMatched, false, NULL))
+            else if (isAtStart(aRemaining, aGivenNames[nDataPos], nMatched, false, nullptr))
                 aFound = aGivenNames[nDataPos];
 
             if (!aFound.isEmpty())
@@ -1796,7 +1796,7 @@ bool ScDPObject::ParseFilters(
             sal_Int32 nMatched = 0;
             for ( SCSIZE nField=0; nField<nFieldCount && !bHasFieldName; nField++ )
             {
-                if (isAtStart(aRemaining, aFieldNames[nField], nMatched, true, NULL))
+                if (isAtStart(aRemaining, aFieldNames[nField], nMatched, true, nullptr))
                 {
                     aSpecField = aFieldNames[nField];
                     aRemaining = aRemaining.copy(nMatched);
@@ -2550,7 +2550,7 @@ void ScDPObject::ConvertOrientation(
         sal_uInt16 nFuncs = rField.nFuncMask;
         const sheet::DataPilotFieldReference& rFieldRef = rField.maFieldRef;
 
-        ScDPSaveDimension* pDim = NULL;
+        ScDPSaveDimension* pDim = nullptr;
         if ( nCol == PIVOT_DATA_FIELD )
             pDim = rSaveData.GetDataLayoutDimension();
         else
@@ -2559,7 +2559,7 @@ void ScDPObject::ConvertOrientation(
             if (!aDocStr.isEmpty())
                 pDim = rSaveData.GetDimensionByName(aDocStr);
             else
-                pDim = NULL;
+                pDim = nullptr;
         }
 
         if (!pDim)
@@ -2595,7 +2595,7 @@ void ScDPObject::ConvertOrientation(
             pDim->SetFunction(sal::static_int_cast<sal_uInt16>(eFunc));
 
             if( rFieldRef.ReferenceType == sheet::DataPilotFieldReferenceType::NONE )
-                pDim->SetReferenceValue(0);
+                pDim->SetReferenceValue(nullptr);
             else
                 pDim->SetReferenceValue(&rFieldRef);
         }
@@ -2721,7 +2721,7 @@ uno::Sequence<OUString> ScDPObject::GetRegisteredSources()
 uno::Reference<sheet::XDimensionsSupplier> ScDPObject::CreateSource( const ScDPServiceDesc& rDesc )
 {
     OUString aImplName = rDesc.aServiceName;
-    uno::Reference<sheet::XDimensionsSupplier> xRet = NULL;
+    uno::Reference<sheet::XDimensionsSupplier> xRet = nullptr;
 
     uno::Reference<lang::XMultiServiceFactory> xManager = comphelper::getProcessServiceFactory();
     uno::Reference<container::XContentEnumerationAccess> xEnAc(xManager, uno::UNO_QUERY);
@@ -2856,7 +2856,7 @@ const ScDPCache* ScDPCollection::SheetCaches::getCache(const ScRange& rRange, co
         if (itCache == maCaches.end())
         {
             OSL_FAIL("Cache pool and index pool out-of-sync !!!");
-            return NULL;
+            return nullptr;
         }
 
         if (pDimData)
@@ -2897,7 +2897,7 @@ ScDPCache* ScDPCollection::SheetCaches::getExistingCache(const ScRange& rRange)
     RangeIndexType::iterator it = std::find(maRanges.begin(), maRanges.end(), rRange);
     if (it == maRanges.end())
         // Not cached.
-        return NULL;
+        return nullptr;
 
     // Already cached.
     size_t nIndex = std::distance(maRanges.begin(), it);
@@ -2905,7 +2905,7 @@ ScDPCache* ScDPCollection::SheetCaches::getExistingCache(const ScRange& rRange)
     if (itCache == maCaches.end())
     {
         OSL_FAIL("Cache pool and index pool out-of-sync !!!");
-        return NULL;
+        return nullptr;
     }
 
     return itCache->second;
@@ -2916,7 +2916,7 @@ const ScDPCache* ScDPCollection::SheetCaches::getExistingCache(const ScRange& rR
     RangeIndexType::const_iterator it = std::find(maRanges.begin(), maRanges.end(), rRange);
     if (it == maRanges.end())
         // Not cached.
-        return NULL;
+        return nullptr;
 
     // Already cached.
     size_t nIndex = std::distance(maRanges.begin(), it);
@@ -2924,7 +2924,7 @@ const ScDPCache* ScDPCollection::SheetCaches::getExistingCache(const ScRange& rR
     if (itCache == maCaches.end())
     {
         OSL_FAIL("Cache pool and index pool out-of-sync !!!");
-        return NULL;
+        return nullptr;
     }
 
     return itCache->second;
@@ -3048,7 +3048,7 @@ const ScDPCache* ScDPCollection::NameCaches::getCache(
 ScDPCache* ScDPCollection::NameCaches::getExistingCache(const OUString& rName)
 {
     CachesType::iterator itr = maCaches.find(rName);
-    return itr != maCaches.end() ? itr->second : NULL;
+    return itr != maCaches.end() ? itr->second : nullptr;
 }
 
 size_t ScDPCollection::NameCaches::size() const
@@ -3120,19 +3120,19 @@ const ScDPCache* ScDPCollection::DBCaches::getCache(
 
     uno::Reference<sdbc::XRowSet> xRowSet = createRowSet(nSdbType, rDBName, rCommand);
     if (!xRowSet.is())
-        return NULL;
+        return nullptr;
 
     ::std::unique_ptr<ScDPCache> pCache(new ScDPCache(mpDoc));
     SvNumberFormatter aFormat( comphelper::getProcessComponentContext(), ScGlobal::eLnge);
     DBConnector aDB(*pCache, xRowSet, *aFormat.GetNullDate());
     if (!aDB.isValid())
-        return NULL;
+        return nullptr;
 
     if (!pCache->InitFromDataBase(aDB))
     {
         // initialization failed.
         comphelper::disposeComponent(xRowSet);
-        return NULL;
+        return nullptr;
     }
 
     if (pDimData)
@@ -3149,7 +3149,7 @@ ScDPCache* ScDPCollection::DBCaches::getExistingCache(
 {
     DBType aType(nSdbType, rDBName, rCommand);
     CachesType::iterator itr = maCaches.find(aType);
-    return itr != maCaches.end() ? itr->second : NULL;
+    return itr != maCaches.end() ? itr->second : nullptr;
 }
 
 uno::Reference<sdbc::XRowSet> ScDPCollection::DBCaches::createRowSet(
@@ -3166,7 +3166,7 @@ uno::Reference<sdbc::XRowSet> ScDPCollection::DBCaches::createRowSet(
         OSL_ENSURE( xRowProp.is(), "can't get RowSet" );
         if (!xRowProp.is())
         {
-            xRowSet.set(NULL);
+            xRowSet.set(nullptr);
             return xRowSet;
         }
 
@@ -3186,7 +3186,7 @@ uno::Reference<sdbc::XRowSet> ScDPCollection::DBCaches::createRowSet(
         if ( xExecute.is() )
         {
             uno::Reference<task::XInteractionHandler> xHandler(
-                task::InteractionHandler::createWithParent(comphelper::getProcessComponentContext(), 0),
+                task::InteractionHandler::createWithParent(comphelper::getProcessComponentContext(), nullptr),
                 uno::UNO_QUERY_THROW);
             xExecute->executeWithCompletion( xHandler );
         }
@@ -3206,7 +3206,7 @@ uno::Reference<sdbc::XRowSet> ScDPCollection::DBCaches::createRowSet(
         OSL_FAIL("Unexpected exception in database");
     }
 
-    xRowSet.set(NULL);
+    xRowSet.set(nullptr);
     return xRowSet;
 }
 
@@ -3386,7 +3386,7 @@ bool ScDPCollection::ReloadGroupsInCache(ScDPObject* pDPObj, std::set<ScDPObject
     // references even when the cache exists.  This may become a non-issue
     // if/when we implement loading and saving of pivot caches.
 
-    ScDPCache* pCache = NULL;
+    ScDPCache* pCache = nullptr;
 
     if (pDPObj->IsSheetData())
     {
@@ -3406,7 +3406,7 @@ bool ScDPCollection::ReloadGroupsInCache(ScDPObject* pDPObj, std::set<ScDPObject
                 // Not cached yet.  Cache the source dimensions.  Groups will
                 // be added below.
                 pCache = const_cast<ScDPCache*>(
-                    rCaches.getCache(pDesc->GetRangeName(), pDesc->GetSourceRange(), NULL));
+                    rCaches.getCache(pDesc->GetRangeName(), pDesc->GetSourceRange(), nullptr));
             }
             GetAllTables(pDesc->GetRangeName(), rRefs);
         }
@@ -3421,7 +3421,7 @@ bool ScDPCollection::ReloadGroupsInCache(ScDPObject* pDPObj, std::set<ScDPObject
                 // Not cached yet.  Cache the source dimensions.  Groups will
                 // be added below.
                 pCache = const_cast<ScDPCache*>(
-                    rCaches.getCache(pDesc->GetSourceRange(), NULL));
+                    rCaches.getCache(pDesc->GetSourceRange(), nullptr));
             }
             GetAllTables(pDesc->GetSourceRange(), rRefs);
         }
@@ -3442,7 +3442,7 @@ bool ScDPCollection::ReloadGroupsInCache(ScDPObject* pDPObj, std::set<ScDPObject
             // Not cached yet.  Cache the source dimensions.  Groups will
             // be added below.
             pCache = const_cast<ScDPCache*>(
-                rCaches.getCache(pDesc->GetCommandType(), pDesc->aDBName, pDesc->aObject, NULL));
+                rCaches.getCache(pDesc->GetCommandType(), pDesc->aDBName, pDesc->aObject, nullptr));
         }
         GetAllTables(pDesc->GetCommandType(), pDesc->aDBName, pDesc->aObject, rRefs);
     }
@@ -3579,7 +3579,7 @@ const ScDPObject* ScDPCollection::GetByName(const OUString& rName) const
         if (itr->GetName() == rName)
             return &(*itr);
 
-    return NULL;
+    return nullptr;
 }
 
 OUString ScDPCollection::CreateNewName( sal_uInt16 nMin ) const

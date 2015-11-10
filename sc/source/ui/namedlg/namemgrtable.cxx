@@ -62,7 +62,7 @@ ScRangeManagerTable::ScRangeManagerTable(SvSimpleTableContainer& rParent,
     ShowTable();
     SetSelectionMode(MULTIPLE_SELECTION);
     SetScrolledHdl( LINK( this, ScRangeManagerTable, ScrollHdl ) );
-    HeaderEndDragHdl(NULL);
+    HeaderEndDragHdl(nullptr);
 }
 
 void ScRangeManagerTable::Resize()
@@ -100,7 +100,7 @@ void ScRangeManagerTable::setColWidths()
     rHeaderBar.SetItemSize( ITEMID_SCOPE, nTabSize);
     static long aStaticTabs[] = {3, 0, nTabSize, 2*nTabSize };
     SetTabs( &aStaticTabs[0], MAP_PIXEL );
-    HeaderEndDragHdl(NULL);
+    HeaderEndDragHdl(nullptr);
 }
 
 ScRangeManagerTable::~ScRangeManagerTable()

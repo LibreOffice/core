@@ -352,7 +352,7 @@ public:
     void    InsertURL( const OUString& rName, const OUString& rURL, const OUString& rTarget,
                             sal_uInt16 nMode );
     void    InsertURLButton( const OUString& rName, const OUString& rURL, const OUString& rTarget,
-                            const Point* pInsPos = NULL );
+                            const Point* pInsPos = nullptr );
     void    InsertURLField( const OUString& rName, const OUString& rURL, const OUString& rTarget );
 
     bool    SelectObject( const OUString& rName );

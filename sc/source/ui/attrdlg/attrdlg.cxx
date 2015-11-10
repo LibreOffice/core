@@ -42,26 +42,26 @@ ScAttrDlg::ScAttrDlg(SfxViewFrame* pFrameP, vcl::Window* pParent, const SfxItemS
     OSL_ENSURE(pFact, "Dialog creation failed!");
 
     OSL_ENSURE(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_NUMBERFORMAT ), "GetTabPageCreatorFunc fail!");
-    m_nNumberPageId = AddTabPage( "numbers", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_NUMBERFORMAT ), 0 );
+    m_nNumberPageId = AddTabPage( "numbers", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_NUMBERFORMAT ), nullptr );
     OSL_ENSURE(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_NAME ), "GetTabPageCreatorFunc fail!");
-    m_nFontPageId = AddTabPage( "font", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_NAME ), 0 );
+    m_nFontPageId = AddTabPage( "font", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_NAME ), nullptr );
     OSL_ENSURE(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_EFFECTS ), "GetTabPageCreatorFunc fail!");
-    AddTabPage( "fonteffects", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_EFFECTS ), 0 );
+    AddTabPage( "fonteffects", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_EFFECTS ), nullptr );
     OSL_ENSURE(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_ALIGNMENT ), "GetTabPageCreatorFunc fail!");
-    AddTabPage( "alignment", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_ALIGNMENT ),    0 );
+    AddTabPage( "alignment", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_ALIGNMENT ),    nullptr );
 
     if ( aCJKOptions.IsAsianTypographyEnabled() )
     {
         OSL_ENSURE(pFact->GetTabPageCreatorFunc(RID_SVXPAGE_PARA_ASIAN), "GetTabPageCreatorFunc fail!");
-        AddTabPage( "asiantypography",   pFact->GetTabPageCreatorFunc(RID_SVXPAGE_PARA_ASIAN),       0 );
+        AddTabPage( "asiantypography",   pFact->GetTabPageCreatorFunc(RID_SVXPAGE_PARA_ASIAN),       nullptr );
     }
     else
         RemoveTabPage( "asiantypography" );
     OSL_ENSURE(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BORDER ), "GetTabPageCreatorFunc fail!");
-    AddTabPage( "borders",      pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BORDER ),     0 );
+    AddTabPage( "borders",      pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BORDER ),     nullptr );
     OSL_ENSURE(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), "GetTabPageCreatorFunc fail!");
-    AddTabPage( "background",  pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), 0 );
-    AddTabPage( "cellprotection" ,  ScTabPageProtection::Create,    0 );
+    AddTabPage( "background",  pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), nullptr );
+    AddTabPage( "cellprotection" ,  ScTabPageProtection::Create,    nullptr );
 }
 
 ScAttrDlg::~ScAttrDlg()
@@ -90,7 +90,7 @@ void ScAttrDlg::PageCreated( sal_uInt16 nPageId, SfxTabPage& rTabPage )
 
 IMPL_LINK_NOARG_TYPED(ScAttrDlg, OkHandler, SfxPoolItem*, void)
 {
-    GetOKButton().GetClickHdl().Call( NULL );
+    GetOKButton().GetClickHdl().Call( nullptr );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -139,8 +139,8 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
     ScXMLImportContext(rImport, nPrfx, rLName),
     mpEditEngine(GetScImport().GetEditEngine()),
     mnCurParagraph(0),
-    pDetectiveObjVec(NULL),
-    pCellRangeSource(NULL),
+    pDetectiveObjVec(nullptr),
+    pCellRangeSource(nullptr),
     fValue(0.0),
     nMergedRows(1),
     nMatrixRows(0),
@@ -171,8 +171,8 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
     rXMLImport.GetTables().AddColumn(bTempIsCovered);
     const sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     OUString aLocalName;
-    OUString* pStyleName = NULL;
-    OUString* pCurrencySymbol = NULL;
+    OUString* pStyleName = nullptr;
+    OUString* pCurrencySymbol = nullptr;
     const SvXMLTokenMap& rTokenMap = rImport.GetTableRowCellAttrTokenMap();
     for (sal_Int16 i = 0; i < nAttrCount; ++i)
     {
@@ -668,7 +668,7 @@ SvXMLImportContext *ScXMLTableRowCellContext::CreateChildContext( sal_uInt16 nPr
                                             const OUString& rLName,
                                             const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList )
 {
-    SvXMLImportContext *pContext = 0;
+    SvXMLImportContext *pContext = nullptr;
 
     const SvXMLTokenMap& rTokenMap = rXMLImport.GetTableRowCellElemTokenMap();
     bool bTextP(false);
@@ -865,7 +865,7 @@ void ScXMLTableRowCellContext::SetAnnotation(const ScAddress& rPos)
 
     LockSolarMutex();
 
-    ScPostIt* pNote = 0;
+    ScPostIt* pNote = nullptr;
 
     uno::Reference< drawing::XShapes > xShapes = rXMLImport.GetTables().GetCurrentXShapes();
     uno::Reference< container::XIndexAccess > xShapesIA( xShapes, uno::UNO_QUERY );
@@ -889,7 +889,7 @@ void ScXMLTableRowCellContext::SetAnnotation(const ScAddress& rPos)
                 // create the cell note with the caption object
                 pNote = ScNoteUtil::CreateNoteFromCaption( *pDoc, rPos, *pCaption, true );
                 // forget pointer to object (do not create note again below)
-                pObject = 0;
+                pObject = nullptr;
             }
         }
 
@@ -906,7 +906,7 @@ void ScXMLTableRowCellContext::SetAnnotation(const ScAddress& rPos)
                 aCaptionRect = pObject->GetLogicRect();
             // remove the shape from the drawing page, this invalidates pObject
             mxAnnotationData->mxShapes->remove( mxAnnotationData->mxShape );
-            pObject = 0;
+            pObject = nullptr;
             // update current number of existing objects
             if( xShapesIA.is() )
                 nOldShapeCount = xShapesIA->getCount();
@@ -937,7 +937,7 @@ void ScXMLTableRowCellContext::SetAnnotation(const ScAddress& rPos)
             SvNumberFormatter* pNumForm = pDoc->GetFormatTable();
             sal_uInt32 nfIndex = pNumForm->GetFormatIndex( NF_DATE_SYS_DDMMYYYY, LANGUAGE_SYSTEM );
             OUString aDate;
-            Color* pColor = 0;
+            Color* pColor = nullptr;
             Color** ppColor = &pColor;
             pNumForm->GetOutputString( fDate, nfIndex, aDate, ppColor );
             pNote->SetDate( aDate );

@@ -44,7 +44,7 @@ void ScSimpleFormulaCalculator::Calculate()
         return;
 
     mbCalculated = true;
-    ScInterpreter aInt(NULL, mpDoc, maAddr, *mpCode.get());
+    ScInterpreter aInt(nullptr, mpDoc, maAddr, *mpCode.get());
     aInt.AssertFormulaMatrix();
 
     formula::StackVar aIntType = aInt.Interpret();
@@ -131,7 +131,7 @@ svl::SharedString ScSimpleFormulaCalculator::GetString()
 bool ScSimpleFormulaCalculator::HasColRowName()
 {
     mpCode->Reset();
-    return mpCode->GetNextColRowName() != NULL;
+    return mpCode->GetNextColRowName() != nullptr;
 }
 
 ScTokenArray* ScSimpleFormulaCalculator::GetCode()

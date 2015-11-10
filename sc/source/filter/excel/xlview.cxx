@@ -90,7 +90,7 @@ bool XclTabViewData::HasPane( sal_uInt8 nPaneId ) const
 const XclSelectionData* XclTabViewData::GetSelectionData( sal_uInt8 nPane ) const
 {
     XclSelectionMap::const_iterator aIt = maSelMap.find( nPane );
-    return (aIt == maSelMap.end()) ? 0 : aIt->second.get();
+    return (aIt == maSelMap.end()) ? nullptr : aIt->second.get();
 }
 
 XclSelectionData& XclTabViewData::CreateSelectionData( sal_uInt8 nPane )

@@ -69,7 +69,7 @@ static bool lcl_IsURLButton( SdrObject* pObject )
 
 ScSelectionTransferObj* ScSelectionTransferObj::CreateFromView( ScTabView* pView )
 {
-    ScSelectionTransferObj* pRet = NULL;
+    ScSelectionTransferObj* pRet = nullptr;
 
     try
     {
@@ -142,8 +142,8 @@ ScSelectionTransferObj* ScSelectionTransferObj::CreateFromView( ScTabView* pView
 ScSelectionTransferObj::ScSelectionTransferObj( ScTabView* pSource, ScSelectionTransferMode eNewMode ) :
     pView( pSource ),
     eMode( eNewMode ),
-    pCellData( NULL ),
-    pDrawData( NULL )
+    pCellData( nullptr ),
+    pDrawData( nullptr )
 {
     //! store range for StillValid
 }
@@ -157,7 +157,7 @@ ScSelectionTransferObj::~ScSelectionTransferObj()
         //  (CopyToSelection has no effect under Windows)
 
         ForgetView();
-        pScMod->SetSelectionTransfer( NULL );
+        pScMod->SetSelectionTransfer( nullptr );
     }
 
     OSL_ENSURE( !pView, "ScSelectionTransferObj dtor: ForgetView not called" );
@@ -165,18 +165,18 @@ ScSelectionTransferObj::~ScSelectionTransferObj()
 
 void ScSelectionTransferObj::ForgetView()
 {
-    pView = NULL;
+    pView = nullptr;
     eMode = SC_SELTRANS_INVALID;
 
     if (pCellData)
     {
         pCellData->release();
-        pCellData = NULL;
+        pCellData = nullptr;
     }
     if (pDrawData)
     {
         pDrawData->release();
-        pDrawData = NULL;
+        pDrawData = nullptr;
     }
 }
 
@@ -285,7 +285,7 @@ void ScSelectionTransferObj::CreateCellData()
             // (this may be called from pasting into the edit line)
             bool bCopied = rViewData.GetView()->CopyToClip( pClipDoc, false, true, true, false );
 
-            ScDrawLayer::SetGlobalDrawPersist(NULL);
+            ScDrawLayer::SetGlobalDrawPersist(nullptr);
 
             if ( bCopied )
             {
@@ -338,7 +338,7 @@ void ScSelectionTransferObj::CreateDrawData()
 
             ScDrawLayer::SetGlobalDrawPersist(aDragShellRef);
             SdrModel* pModel = pDrawView->GetMarkedObjModel();
-            ScDrawLayer::SetGlobalDrawPersist(NULL);
+            ScDrawLayer::SetGlobalDrawPersist(nullptr);
 
             ScViewData& rViewData = pView->GetViewData();
             ScDocShell* pDocSh = rViewData.GetDocShell();
@@ -421,7 +421,7 @@ void ScSelectionTransferObj::ObjectReleased()
 
     ScModule* pScMod = SC_MOD();
     if ( pScMod->GetSelectionTransfer() == this )
-        pScMod->SetSelectionTransfer( NULL );
+        pScMod->SetSelectionTransfer( nullptr );
 
     TransferableHelper::ObjectReleased();
 }

@@ -393,7 +393,7 @@ protected:
     void                SetDPObject( ScDPObject* pDPObject );
 
     /** Returns the DataPilot dimension object related to the field described by maFieldId. */
-    ScDPSaveDimension*  GetDPDimension( ScDPObject** ppDPObject = 0 ) const;
+    ScDPSaveDimension*  GetDPDimension( ScDPObject** ppDPObject = nullptr ) const;
 
     /** Returns the number of members for the field described by maFieldId. */
     sal_Int32           GetMemberCount() const;

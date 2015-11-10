@@ -133,7 +133,7 @@ SCQAHELPER_DLLPUBLIC bool checkFormulaPositions(
     ScDocument& rDoc, SCTAB nTab, SCCOL nCol, const SCROW* pRows, size_t nRowCount);
 
 SCQAHELPER_DLLPUBLIC ScTokenArray* compileFormula(
-    ScDocument* pDoc, const OUString& rFormula, const ScAddress* pPos = NULL,
+    ScDocument* pDoc, const OUString& rFormula, const ScAddress* pPos = nullptr,
     formula::FormulaGrammar::Grammar eGram = formula::FormulaGrammar::GRAM_NATIVE );
 
 template<size_t _Size>
@@ -206,12 +206,12 @@ protected:
     ScDocShellRef load(
         bool bReadWrite, const OUString& rURL, const OUString& rFilter, const OUString &rUserData,
         const OUString& rTypeName, SfxFilterFlags nFilterFlags, SotClipboardFormatId nClipboardID,
-        sal_uIntPtr nFilterVersion = SOFFICE_FILEFORMAT_CURRENT, const OUString* pPassword = NULL );
+        sal_uIntPtr nFilterVersion = SOFFICE_FILEFORMAT_CURRENT, const OUString* pPassword = nullptr );
 
     ScDocShellRef load(
         const OUString& rURL, const OUString& rFilter, const OUString &rUserData,
         const OUString& rTypeName, SfxFilterFlags nFilterFlags, SotClipboardFormatId nClipboardID,
-        sal_uIntPtr nFilterVersion = SOFFICE_FILEFORMAT_CURRENT, const OUString* pPassword = NULL );
+        sal_uIntPtr nFilterVersion = SOFFICE_FILEFORMAT_CURRENT, const OUString* pPassword = nullptr );
 
     ScDocShellRef loadDoc(const OUString& rFileName, sal_Int32 nFormat, bool bReadWrite = false );
 

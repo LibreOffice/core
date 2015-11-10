@@ -69,7 +69,7 @@ void SAL_CALL ScChartRangeSelectionListener::disposing( const lang::EventObject&
 // ____ WeakComponentImplHelperBase ____
 void SAL_CALL ScChartRangeSelectionListener::disposing()
 {
-    m_pViewShell = 0;
+    m_pViewShell = nullptr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

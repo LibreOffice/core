@@ -61,7 +61,7 @@
 ScEEImport::ScEEImport( ScDocument* pDocP, const ScRange& rRange ) :
     maRange( rRange ),
     mpDoc( pDocP ),
-    mpParser( NULL )
+    mpParser( nullptr )
 {
     const ScPatternAttr* pPattern = mpDoc->GetPattern(
         maRange.aStart.Col(), maRange.aStart.Row(), maRange.aStart.Tab() );
@@ -174,7 +174,7 @@ void ScEEImport::WriteToDocument( bool bSizeColsRows, double nOutputFactor, SvNu
             bool bSimple = ( pE->aSel.nStartPara == pE->aSel.nEndPara );
             for (sal_uInt16 nId = EE_CHAR_START; nId <= EE_CHAR_END && bSimple; nId++)
             {
-                const SfxPoolItem* pItem = 0;
+                const SfxPoolItem* pItem = nullptr;
                 SfxItemState eState = aSet.GetItemState( nId, true, &pItem );
                 if (eState == SfxItemState::DONTCARE)
                     bSimple = false;
@@ -242,18 +242,18 @@ void ScEEImport::WriteToDocument( bool bSizeColsRows, double nOutputFactor, SvNu
                 // HTML LATIN/CJK/CTL script type dependent
                 const SfxPoolItem* pFont;
                 if ( rESet.GetItemState( ATTR_FONT, false, &pFont) != SfxItemState::SET )
-                    pFont = 0;
+                    pFont = nullptr;
                 const SfxPoolItem* pHeight;
                 if ( rESet.GetItemState( ATTR_FONT_HEIGHT, false, &pHeight) != SfxItemState::SET )
-                    pHeight = 0;
+                    pHeight = nullptr;
                 const SfxPoolItem* pWeight;
                 if ( rESet.GetItemState( ATTR_FONT_WEIGHT, false, &pWeight) != SfxItemState::SET )
-                    pWeight = 0;
+                    pWeight = nullptr;
                 const SfxPoolItem* pPosture;
                 if ( rESet.GetItemState( ATTR_FONT_POSTURE, false, &pPosture) != SfxItemState::SET )
-                    pPosture = 0;
+                    pPosture = nullptr;
                 // Number format
-                const SfxPoolItem* pNumFmt = NULL;
+                const SfxPoolItem* pNumFmt = nullptr;
                 if ( rESet.GetItemState(ATTR_VALUE_FORMAT, false, &pNumFmt) == SfxItemState::SET )
                     rSet.Put(*pNumFmt);
                 if ( pFont || pHeight || pWeight || pPosture )
@@ -342,7 +342,7 @@ void ScEEImport::WriteToDocument( bool bSizeColsRows, double nOutputFactor, SvNu
 
                     bool bTextFormat = false;
 
-                    const SfxPoolItem* pNumFmt = NULL;
+                    const SfxPoolItem* pNumFmt = nullptr;
                     if (rSet.GetItemState(ATTR_VALUE_FORMAT, false, &pNumFmt) == SfxItemState::SET)
                     {
                         sal_uInt32 nNumFmt = static_cast<const SfxUInt32Item*>(pNumFmt)->GetValue();
@@ -610,7 +610,7 @@ ScEEParser::ScEEParser( EditEngine* pEditP ) :
     // pPool is foisted on SvxRTFParser at RTFIMP_START later on
     pPool->SetSecondaryPool( pDocPool );
     pPool->FreezeIdRanges();
-    NewActEntry( NULL );
+    NewActEntry( nullptr );
 }
 
 ScEEParser::~ScEEParser()
@@ -623,7 +623,7 @@ ScEEParser::~ScEEParser()
     }
 
     // Don't delete Pool until the lists have been deleted
-    pPool->SetSecondaryPool( NULL );
+    pPool->SetSecondaryPool( nullptr );
     SfxItemPool::Free(pDocPool);
     SfxItemPool::Free(pPool);
 }

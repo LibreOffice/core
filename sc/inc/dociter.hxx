@@ -595,7 +595,7 @@ public:
      */
     explicit ScDocRowHeightUpdater(
         ScDocument& rDoc, OutputDevice* pOutDev, double fPPTX, double fPPTY,
-        const ::std::vector<TabRanges>* pTabRangesArray = NULL);
+        const ::std::vector<TabRanges>* pTabRangesArray = nullptr);
 
     void update();
 

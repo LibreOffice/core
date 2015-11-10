@@ -106,7 +106,7 @@ private:
     //!     Cache Number of really visible?
 
 public:
-            ScPageRowEntry()    { nStartRow = nEndRow = 0; nPagesX = 0; pHidden = NULL; }
+            ScPageRowEntry()    { nStartRow = nEndRow = 0; nPagesX = 0; pHidden = nullptr; }
             ~ScPageRowEntry()   { delete[] pHidden; }
 
             ScPageRowEntry(const ScPageRowEntry& r);
@@ -220,16 +220,16 @@ private:
 public:
                     ScPrintFunc( ScDocShell* pShell, SfxPrinter* pNewPrinter, SCTAB nTab,
                                  long nPage = 0, long nDocP = 0,
-                                 const ScRange* pArea = NULL,
-                                 const ScPrintOptions* pOptions = NULL,
-                                 ScPageBreakData* pData = NULL );
+                                 const ScRange* pArea = nullptr,
+                                 const ScPrintOptions* pOptions = nullptr,
+                                 ScPageBreakData* pData = nullptr );
 
                     // ctors for device other than printer - for preview and pdf:
 
                     ScPrintFunc( OutputDevice* pOutDev, ScDocShell* pShell, SCTAB nTab,
                                  long nPage = 0, long nDocP = 0,
-                                 const ScRange* pArea = NULL,
-                                 const ScPrintOptions* pOptions = NULL );
+                                 const ScRange* pArea = nullptr,
+                                 const ScPrintOptions* pOptions = nullptr );
 
                     ScPrintFunc( OutputDevice* pOutDev, ScDocShell* pShell,
                                  const ScPrintState& rState,

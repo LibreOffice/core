@@ -431,7 +431,7 @@ public:
                         }
                         else
                         {
-                            pS = 0;
+                            pS = nullptr;
                             pD = rT.GetDoubleRef();
                             // aDub intentionally not initialized, unnecessary
                             // because unused.

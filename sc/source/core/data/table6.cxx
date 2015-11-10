@@ -256,7 +256,7 @@ void ScTable::SkipFilteredRows(SCROW& rRow, SCROW& rLastNonFilteredRow, bool bFo
             return;
 
         SCROW nLastRow = rRow;
-        if (RowFiltered(rRow, NULL, &nLastRow))
+        if (RowFiltered(rRow, nullptr, &nLastRow))
             // move to the first non-filtered row.
             rRow = nLastRow + 1;
         else
@@ -756,7 +756,7 @@ bool ScTable::SearchAndReplace(
                 bFound = ReplaceAll(rSearchItem, rMark, rMatchedRanges, rUndoStr, pUndoDoc);
 
             delete pSearchText;
-            pSearchText = NULL;
+            pSearchText = nullptr;
         }
     }
     return bFound;
@@ -993,7 +993,7 @@ bool ScTable::SearchRangeForAllEmptyCells(
             for (SCROW nRow = rRange.aStart.Row(); nRow <= rRange.aEnd.Row(); ++nRow)
             {
                 SCROW nLastRow;
-                if (!RowFiltered(nRow, NULL, &nLastRow))
+                if (!RowFiltered(nRow, nullptr, &nLastRow))
                 {
                     rMatchedRanges.Join(ScRange(nCol, nRow, nTab, nCol, nLastRow, nTab));
                     if (bReplace)

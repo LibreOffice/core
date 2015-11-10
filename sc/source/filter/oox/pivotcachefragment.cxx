@@ -61,7 +61,7 @@ ContextHandlerRef PivotCacheFieldContext::onCreateContext( sal_Int32 nElement, c
         case XLS_TOKEN( discretePr ):   mrCacheField.importDiscretePrItem( nElement, rAttribs );    break;
         case XLS_TOKEN( groupItems ):   mrCacheField.importGroupItem( nElement, rAttribs );         break;
     }
-    return 0;
+    return nullptr;
 }
 
 void PivotCacheFieldContext::onStartElement( const AttributeList& rAttribs )
@@ -95,7 +95,7 @@ ContextHandlerRef PivotCacheFieldContext::onCreateRecordContext( sal_Int32 nRecI
         case BIFF12_ID_PCDFDISCRETEPR:  mrCacheField.importPCDFDiscretePrItem( nRecId, rStrm ); break;
         case BIFF12_ID_PCDFGROUPITEMS:  mrCacheField.importPCDFGroupItem( nRecId, rStrm );      break;
     }
-    return 0;
+    return nullptr;
 }
 
 void PivotCacheFieldContext::onStartRecord( SequenceInputStream& rStrm )
@@ -135,7 +135,7 @@ ContextHandlerRef PivotCacheDefinitionFragment::onCreateContext( sal_Int32 nElem
             if( nElement == XLS_TOKEN( cacheField ) ) return new PivotCacheFieldContext( *this, mrPivotCache.createCacheField() );
         break;
     }
-    return 0;
+    return nullptr;
 }
 
 ContextHandlerRef PivotCacheDefinitionFragment::onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm )
@@ -162,7 +162,7 @@ ContextHandlerRef PivotCacheDefinitionFragment::onCreateRecordContext( sal_Int32
             if( nRecId == BIFF12_ID_PCDFIELD ) return new PivotCacheFieldContext( *this, mrPivotCache.createCacheField() );
         break;
     }
-    return 0;
+    return nullptr;
 }
 
 const RecordInfo* PivotCacheDefinitionFragment::getRecordInfos() const
@@ -251,7 +251,7 @@ ContextHandlerRef PivotCacheRecordsFragment::onCreateContext( sal_Int32 nElement
         }
         break;
     }
-    return 0;
+    return nullptr;
 }
 
 ContextHandlerRef PivotCacheRecordsFragment::onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm )
@@ -271,7 +271,7 @@ ContextHandlerRef PivotCacheRecordsFragment::onCreateRecordContext( sal_Int32 nR
             }
         break;
     }
-    return 0;
+    return nullptr;
 }
 
 const RecordInfo* PivotCacheRecordsFragment::getRecordInfos() const

@@ -26,9 +26,9 @@
 #include "stlpool.hxx"
 
 ScPoolHelper::ScPoolHelper( ScDocument* pSourceDoc )
-:pFormTable(NULL)
-,pEditPool(NULL)
-,pEnginePool(NULL)
+:pFormTable(nullptr)
+,pEditPool(nullptr)
+,pEnginePool(nullptr)
 ,m_pSourceDoc(pSourceDoc)
 {
     OSL_ENSURE( pSourceDoc, "ScPoolHelper: no document" );
@@ -94,7 +94,7 @@ void ScPoolHelper::SetFormTableOpt(const ScDocOptions& rOpt)
 
 SvNumberFormatter* ScPoolHelper::CreateNumberFormatter() const
 {
-    SvNumberFormatter* p = NULL;
+    SvNumberFormatter* p = nullptr;
     {
         osl::MutexGuard aGuard(&maMtxCreateNumFormatter);
         p = new SvNumberFormatter(comphelper::getProcessComponentContext(), ScGlobal::eLnge);
@@ -113,7 +113,7 @@ SvNumberFormatter* ScPoolHelper::CreateNumberFormatter() const
 void ScPoolHelper::SourceDocumentGone()
 {
     //  reset all pointers to the source document
-    mxStylePool->SetDocument( NULL );
+    mxStylePool->SetDocument( nullptr );
     if ( pFormTable )
         pFormTable->SetColorLink( Link<sal_uInt16,Color*>() );
 }

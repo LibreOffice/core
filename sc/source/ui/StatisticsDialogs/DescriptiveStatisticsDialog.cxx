@@ -51,7 +51,7 @@ static const StatisticCalculation lclCalcDefinitions[] =
     { STRID_CALC_MAX,            "=MAX(%RANGE%)"},
     { STRID_CALC_SUM,            "=SUM(%RANGE%)"},
     { STRID_CALC_COUNT,          "=COUNT(%RANGE%)" },
-    { 0,                         NULL }
+    { 0,                         nullptr }
 };
 
 static const char strWildcardRange[] = "%RANGE%";
@@ -114,7 +114,7 @@ ScRange ScDescriptiveStatisticsDialog::ApplyOutput(ScDocShell* pDocShell)
     aOutput.push();
 
     // Write calculation labels
-    for(sal_Int32 i = 0; lclCalcDefinitions[i].aFormula != NULL; i++)
+    for(sal_Int32 i = 0; lclCalcDefinitions[i].aFormula != nullptr; i++)
     {
         OUString aLabel(SC_STRLOAD(RID_STATISTICS_DLGS, lclCalcDefinitions[i].aCalculationNameId));
         aOutput.writeString(aLabel);
@@ -128,7 +128,7 @@ ScRange ScDescriptiveStatisticsDialog::ApplyOutput(ScDocShell* pDocShell)
     {
         aOutput.resetRow();
 
-        for(sal_Int32 i = 0; lclCalcDefinitions[i].aFormula != NULL; i++)
+        for(sal_Int32 i = 0; lclCalcDefinitions[i].aFormula != nullptr; i++)
         {
             aTemplate.setTemplate(lclCalcDefinitions[i].aFormula);
             aTemplate.applyRange(strWildcardRange, pIterator->get(), b3DAddress);

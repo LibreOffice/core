@@ -343,7 +343,7 @@ SvXMLImportContext *ScXMLDocContext_Impl::CreateChildContext( sal_uInt16 nPrefix
                                                              const OUString& rLocalName,
                                                              const uno::Reference<xml::sax::XAttributeList>& xAttrList )
 {
-    SvXMLImportContext *pContext(0);
+    SvXMLImportContext *pContext(nullptr);
 
     const SvXMLTokenMap& rTokenMap(GetScImport().GetDocElemTokenMap());
     switch( rTokenMap.Get( nPrefix, rLocalName ) )
@@ -1950,7 +1950,7 @@ SvXMLImportContext *ScXMLImport::CreateContext( sal_uInt16 nPrefix,
                                                const OUString& rLocalName,
                                                const uno::Reference<xml::sax::XAttributeList>& xAttrList )
 {
-    SvXMLImportContext *pContext = 0;
+    SvXMLImportContext *pContext = nullptr;
 
     if( (XML_NAMESPACE_OFFICE == nPrefix) &&
         ( IsXMLToken(rLocalName, XML_DOCUMENT_STYLES) ||
@@ -1979,107 +1979,107 @@ ScXMLImport::ScXMLImport(
     const css::uno::Reference< css::uno::XComponentContext >& rContext,
     OUString const & implementationName, SvXMLImportFlags nImportFlag)
 :   SvXMLImport( rContext, implementationName, nImportFlag ),
-    pDoc( NULL ),
-    pChangeTrackingImportHelper(NULL),
-    pStylesImportHelper(NULL),
+    pDoc( nullptr ),
+    pChangeTrackingImportHelper(nullptr),
+    pStylesImportHelper(nullptr),
     sNumberFormat(SC_UNONAME_NUMFMT),
     sLocale(SC_LOCALE),
     sCellStyle(SC_UNONAME_CELLSTYL),
-    pDocElemTokenMap( 0 ),
-    pStylesElemTokenMap( 0 ),
-    pStylesAttrTokenMap( 0 ),
-    pStyleElemTokenMap( 0 ),
-    pBodyElemTokenMap( 0 ),
-    pContentValidationsElemTokenMap( 0 ),
-    pContentValidationElemTokenMap( 0 ),
-    pContentValidationAttrTokenMap( 0 ),
-    pContentValidationMessageElemTokenMap( 0 ),
-    pContentValidationHelpMessageAttrTokenMap( 0 ),
-    pContentValidationErrorMessageAttrTokenMap( 0 ),
-    pContentValidationErrorMacroAttrTokenMap( 0 ),
-    pCondFormatsTokenMap( 0 ),
-    pCondFormatTokenMap( 0 ),
-    pCondFormatAttrMap( 0 ),
-    pCondDateAttrMap( 0 ),
-    pConditionAttrMap( 0 ),
-    pColorScaleTokenMap( 0 ),
-    pColorScaleEntryAttrTokenMap( 0 ),
-    pDataBarTokenMap( 0 ),
-    pDataBarAttrMap( 0 ),
-    pFormattingEntryAttrMap( 0 ),
-    pIconSetAttrMap( 0 ),
-    pLabelRangesElemTokenMap( 0 ),
-    pLabelRangeAttrTokenMap( 0 ),
-    pTableElemTokenMap( 0 ),
-    pTableProtectionElemTokenMap(NULL),
-    pTableRowsElemTokenMap( 0 ),
-    pTableColsElemTokenMap( 0 ),
-    pTableScenarioAttrTokenMap( 0 ),
-    pTableAttrTokenMap( 0 ),
-    pTableColAttrTokenMap( 0 ),
-    pTableRowElemTokenMap( 0 ),
-    pTableRowAttrTokenMap( 0 ),
-    pTableRowCellElemTokenMap( 0 ),
-    pTableRowCellAttrTokenMap( 0 ),
-    pTableAnnotationAttrTokenMap( 0 ),
-    pDetectiveElemTokenMap( 0 ),
-    pDetectiveHighlightedAttrTokenMap( 0 ),
-    pDetectiveOperationAttrTokenMap( 0 ),
-    pTableCellRangeSourceAttrTokenMap( 0 ),
-    pNamedExpressionsElemTokenMap( 0 ),
-    pNamedRangeAttrTokenMap( 0 ),
-    pNamedExpressionAttrTokenMap( 0 ),
-    pDatabaseRangesElemTokenMap( 0 ),
-    pDatabaseRangeElemTokenMap( 0 ),
-    pDatabaseRangeAttrTokenMap( 0 ),
-    pDatabaseRangeSourceSQLAttrTokenMap( 0 ),
-    pDatabaseRangeSourceTableAttrTokenMap( 0 ),
-    pDatabaseRangeSourceQueryAttrTokenMap( 0 ),
-    pFilterElemTokenMap( 0 ),
-    pFilterAttrTokenMap( 0 ),
-    pFilterConditionElemTokenMap( 0 ),
-    pFilterConditionAttrTokenMap( 0 ),
-    pFilterSetItemAttrTokenMap( 0 ),
-    pSortElemTokenMap( 0 ),
-    pSortAttrTokenMap( 0 ),
-    pSortSortByAttrTokenMap( 0 ),
-    pDatabaseRangeSubTotalRulesElemTokenMap( 0 ),
-    pDatabaseRangeSubTotalRulesAttrTokenMap( 0 ),
-    pSubTotalRulesSortGroupsAttrTokenMap( 0 ),
-    pSubTotalRulesSubTotalRuleElemTokenMap( 0 ),
-    pSubTotalRulesSubTotalRuleAttrTokenMap( 0 ),
-    pSubTotalRuleSubTotalFieldAttrTokenMap( 0 ),
-    pDataPilotTablesElemTokenMap( 0 ),
-    pDataPilotTableAttrTokenMap( 0 ),
-    pDataPilotTableElemTokenMap( 0 ),
-    pDataPilotTableSourceServiceAttrTokenMap( 0 ),
-    pDataPilotGrandTotalAttrTokenMap(NULL),
-    pDataPilotTableSourceCellRangeElemTokenMap( 0 ),
-    pDataPilotTableSourceCellRangeAttrTokenMap( 0 ),
-    pDataPilotFieldAttrTokenMap( 0 ),
-    pDataPilotFieldElemTokenMap( 0 ),
-    pDataPilotLevelAttrTokenMap( 0 ),
-    pDataPilotLevelElemTokenMap( 0 ),
-    pDataPilotSubTotalsElemTokenMap( 0 ),
-    pDataPilotSubTotalAttrTokenMap( 0 ),
-    pDataPilotMembersElemTokenMap( 0 ),
-    pDataPilotMemberAttrTokenMap( 0 ),
-    pConsolidationAttrTokenMap( 0 ),
-    pCellTextParaElemTokenMap(NULL),
-    pCellTextSpanElemTokenMap(NULL),
-    pCellTextSpanAttrTokenMap(NULL),
-    pCellTextURLAttrTokenMap(NULL),
-    pCellTextSAttrTokenMap(NULL),
-    pDataStreamAttrTokenMap(NULL),
-    mpPostProcessData(NULL),
+    pDocElemTokenMap( nullptr ),
+    pStylesElemTokenMap( nullptr ),
+    pStylesAttrTokenMap( nullptr ),
+    pStyleElemTokenMap( nullptr ),
+    pBodyElemTokenMap( nullptr ),
+    pContentValidationsElemTokenMap( nullptr ),
+    pContentValidationElemTokenMap( nullptr ),
+    pContentValidationAttrTokenMap( nullptr ),
+    pContentValidationMessageElemTokenMap( nullptr ),
+    pContentValidationHelpMessageAttrTokenMap( nullptr ),
+    pContentValidationErrorMessageAttrTokenMap( nullptr ),
+    pContentValidationErrorMacroAttrTokenMap( nullptr ),
+    pCondFormatsTokenMap( nullptr ),
+    pCondFormatTokenMap( nullptr ),
+    pCondFormatAttrMap( nullptr ),
+    pCondDateAttrMap( nullptr ),
+    pConditionAttrMap( nullptr ),
+    pColorScaleTokenMap( nullptr ),
+    pColorScaleEntryAttrTokenMap( nullptr ),
+    pDataBarTokenMap( nullptr ),
+    pDataBarAttrMap( nullptr ),
+    pFormattingEntryAttrMap( nullptr ),
+    pIconSetAttrMap( nullptr ),
+    pLabelRangesElemTokenMap( nullptr ),
+    pLabelRangeAttrTokenMap( nullptr ),
+    pTableElemTokenMap( nullptr ),
+    pTableProtectionElemTokenMap(nullptr),
+    pTableRowsElemTokenMap( nullptr ),
+    pTableColsElemTokenMap( nullptr ),
+    pTableScenarioAttrTokenMap( nullptr ),
+    pTableAttrTokenMap( nullptr ),
+    pTableColAttrTokenMap( nullptr ),
+    pTableRowElemTokenMap( nullptr ),
+    pTableRowAttrTokenMap( nullptr ),
+    pTableRowCellElemTokenMap( nullptr ),
+    pTableRowCellAttrTokenMap( nullptr ),
+    pTableAnnotationAttrTokenMap( nullptr ),
+    pDetectiveElemTokenMap( nullptr ),
+    pDetectiveHighlightedAttrTokenMap( nullptr ),
+    pDetectiveOperationAttrTokenMap( nullptr ),
+    pTableCellRangeSourceAttrTokenMap( nullptr ),
+    pNamedExpressionsElemTokenMap( nullptr ),
+    pNamedRangeAttrTokenMap( nullptr ),
+    pNamedExpressionAttrTokenMap( nullptr ),
+    pDatabaseRangesElemTokenMap( nullptr ),
+    pDatabaseRangeElemTokenMap( nullptr ),
+    pDatabaseRangeAttrTokenMap( nullptr ),
+    pDatabaseRangeSourceSQLAttrTokenMap( nullptr ),
+    pDatabaseRangeSourceTableAttrTokenMap( nullptr ),
+    pDatabaseRangeSourceQueryAttrTokenMap( nullptr ),
+    pFilterElemTokenMap( nullptr ),
+    pFilterAttrTokenMap( nullptr ),
+    pFilterConditionElemTokenMap( nullptr ),
+    pFilterConditionAttrTokenMap( nullptr ),
+    pFilterSetItemAttrTokenMap( nullptr ),
+    pSortElemTokenMap( nullptr ),
+    pSortAttrTokenMap( nullptr ),
+    pSortSortByAttrTokenMap( nullptr ),
+    pDatabaseRangeSubTotalRulesElemTokenMap( nullptr ),
+    pDatabaseRangeSubTotalRulesAttrTokenMap( nullptr ),
+    pSubTotalRulesSortGroupsAttrTokenMap( nullptr ),
+    pSubTotalRulesSubTotalRuleElemTokenMap( nullptr ),
+    pSubTotalRulesSubTotalRuleAttrTokenMap( nullptr ),
+    pSubTotalRuleSubTotalFieldAttrTokenMap( nullptr ),
+    pDataPilotTablesElemTokenMap( nullptr ),
+    pDataPilotTableAttrTokenMap( nullptr ),
+    pDataPilotTableElemTokenMap( nullptr ),
+    pDataPilotTableSourceServiceAttrTokenMap( nullptr ),
+    pDataPilotGrandTotalAttrTokenMap(nullptr),
+    pDataPilotTableSourceCellRangeElemTokenMap( nullptr ),
+    pDataPilotTableSourceCellRangeAttrTokenMap( nullptr ),
+    pDataPilotFieldAttrTokenMap( nullptr ),
+    pDataPilotFieldElemTokenMap( nullptr ),
+    pDataPilotLevelAttrTokenMap( nullptr ),
+    pDataPilotLevelElemTokenMap( nullptr ),
+    pDataPilotSubTotalsElemTokenMap( nullptr ),
+    pDataPilotSubTotalAttrTokenMap( nullptr ),
+    pDataPilotMembersElemTokenMap( nullptr ),
+    pDataPilotMemberAttrTokenMap( nullptr ),
+    pConsolidationAttrTokenMap( nullptr ),
+    pCellTextParaElemTokenMap(nullptr),
+    pCellTextSpanElemTokenMap(nullptr),
+    pCellTextSpanAttrTokenMap(nullptr),
+    pCellTextURLAttrTokenMap(nullptr),
+    pCellTextSAttrTokenMap(nullptr),
+    pDataStreamAttrTokenMap(nullptr),
+    mpPostProcessData(nullptr),
     aTables(*this),
     m_pMyNamedExpressions(nullptr),
-    pMyLabelRanges(NULL),
-    pValidations(NULL),
-    pDetectiveOpArray(NULL),
-    pSolarMutexGuard(NULL),
-    pNumberFormatAttributesExportHelper(NULL),
-    pStyleNumberFormats(NULL),
+    pMyLabelRanges(nullptr),
+    pValidations(nullptr),
+    pDetectiveOpArray(nullptr),
+    pSolarMutexGuard(nullptr),
+    pNumberFormatAttributesExportHelper(nullptr),
+    pStyleNumberFormats(nullptr),
     sPrevStyleName(),
     sPrevCurrency(),
     nSolarMutexLocked(0),
@@ -2281,14 +2281,14 @@ SvXMLImportContext *ScXMLImport::CreateBodyContext(const OUString& rLocalName,
 SvXMLImportContext *ScXMLImport::CreateMetaContext(
     const OUString& rLocalName )
 {
-    SvXMLImportContext* pContext = NULL;
+    SvXMLImportContext* pContext = nullptr;
 
     if (getImportFlags() & SvXMLImportFlags::META)
     {
         uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
             GetModel(), uno::UNO_QUERY_THROW);
         uno::Reference<document::XDocumentProperties> const xDocProps(
-            (IsStylesOnlyMode()) ? 0 : xDPS->getDocumentProperties());
+            (IsStylesOnlyMode()) ? nullptr : xDPS->getDocumentProperties());
         pContext = new SvXMLMetaDocumentContext(*this,
             XML_NAMESPACE_OFFICE, rLocalName,
             xDocProps);
@@ -2304,7 +2304,7 @@ SvXMLImportContext *ScXMLImport::CreateMetaContext(
 SvXMLImportContext *ScXMLImport::CreateScriptContext(
     const OUString& rLocalName )
 {
-    SvXMLImportContext* pContext = NULL;
+    SvXMLImportContext* pContext = nullptr;
 
     if( !(IsStylesOnlyMode()) )
     {
@@ -2324,13 +2324,13 @@ void ScXMLImport::SetStatistics(
                                 const uno::Sequence<beans::NamedValue> & i_rStats)
 {
     static const char* s_stats[] =
-    { "TableCount", "CellCount", "ObjectCount", 0 };
+    { "TableCount", "CellCount", "ObjectCount", nullptr };
 
     SvXMLImport::SetStatistics(i_rStats);
 
     sal_uInt32 nCount(0);
     for (sal_Int32 i = 0; i < i_rStats.getLength(); ++i) {
-        for (const char** pStat = s_stats; *pStat != 0; ++pStat) {
+        for (const char** pStat = s_stats; *pStat != nullptr; ++pStat) {
             if (i_rStats[i].Name.equalsAscii(*pStat)) {
                 sal_Int32 val = 0;
                 if (i_rStats[i].Value >>= val) {
@@ -2707,7 +2707,7 @@ bool ScXMLImport::IsCurrencySymbol(const sal_Int32 nNumberFormat, const OUString
                         if (sCurrentCurrency.equals(sTemp))
                             return true;
                         // #i61657# This may be a legacy currency symbol that changed in the meantime.
-                        if (SvNumberFormatter::GetLegacyOnlyCurrencyEntry( sCurrentCurrency, sBankSymbol) != NULL)
+                        if (SvNumberFormatter::GetLegacyOnlyCurrencyEntry( sCurrentCurrency, sBankSymbol) != nullptr)
                             return true;
                         // In the rare case that sCurrentCurrency is not the
                         // currency symbol, but a matching ISO code
@@ -2718,7 +2718,7 @@ bool ScXMLImport::IsCurrencySymbol(const sal_Int32 nNumberFormat, const OUString
                         // B$,BOB matched B$->BOP, which leads to
                         // sCurrentCurrency being BOP, and the previous call
                         // with BOP,BOB didn't find an entry, but B$,BOB will.
-                        return SvNumberFormatter::GetLegacyOnlyCurrencyEntry( sTemp, sBankSymbol) != NULL;
+                        return SvNumberFormatter::GetLegacyOnlyCurrencyEntry( sTemp, sBankSymbol) != nullptr;
                     }
                 }
             }
@@ -2831,7 +2831,7 @@ void ScXMLImport::SetStyleToRanges()
         if (xProperties.is())
         {
             XMLTableStylesContext *pStyles(static_cast<XMLTableStylesContext *>(GetAutoStyles()));
-            XMLTableStyleContext* pStyle = NULL;
+            XMLTableStyleContext* pStyle = nullptr;
             if ( pStyles )
                 pStyle = const_cast<XMLTableStyleContext*>(static_cast<const XMLTableStyleContext *>(pStyles->FindStyleChildContext(
                         XML_STYLE_FAMILY_TABLE_CELL, sPrevStyleName, true)));
@@ -3002,7 +3002,7 @@ throw( css::xml::sax::SAXException, css::uno::RuntimeException, std::exception )
 
     uno::Reference< beans::XPropertySet > const xImportInfo( getImportInfo() );
     uno::Reference< beans::XPropertySetInfo > const xPropertySetInfo(
-            xImportInfo.is() ? xImportInfo->getPropertySetInfo() : 0);
+            xImportInfo.is() ? xImportInfo->getPropertySetInfo() : nullptr);
     if (xPropertySetInfo.is())
     {
         OUString const sOrganizerMode(
@@ -3282,7 +3282,7 @@ void SAL_CALL ScXMLImport::endDocument()
 void ScXMLImport::DisposingModel()
 {
     SvXMLImport::DisposingModel();
-    pDoc = NULL;
+    pDoc = nullptr;
 }
 
 ScXMLImport::MutexGuard::MutexGuard(ScXMLImport& rImport) :
@@ -3323,7 +3323,7 @@ void ScXMLImport::UnlockSolarMutex()
         {
             OSL_ENSURE(pSolarMutexGuard, "Solar Mutex is always unlocked");
             delete pSolarMutexGuard;
-            pSolarMutexGuard = NULL;
+            pSolarMutexGuard = nullptr;
         }
     }
 }
@@ -3364,7 +3364,7 @@ void ScXMLImport::ExtractFormulaNamespaceGrammar(
 {
     // parse the attribute value, extract namespace ID, literal namespace, and formula string
     rFormulaNmsp.clear();
-    sal_uInt16 nNsId = GetNamespaceMap()._GetKeyByAttrName( rAttrValue, 0, &rFormula, &rFormulaNmsp, false );
+    sal_uInt16 nNsId = GetNamespaceMap()._GetKeyByAttrName( rAttrValue, nullptr, &rFormula, &rFormulaNmsp, false );
 
     // check if we have an ODF formula namespace
     if( !bRestrictToExternalNmsp ) switch( nNsId )

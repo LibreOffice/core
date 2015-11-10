@@ -135,7 +135,7 @@ public:
 const ModuleData* ModuleCollection::findByName(const OUString& rName) const
 {
     MapType::const_iterator it = maData.find(rName);
-    return it == maData.end() ? NULL : it->second;
+    return it == maData.end() ? nullptr : it->second;
 }
 
 void ModuleCollection::insert(ModuleData* pNew)
@@ -176,7 +176,7 @@ bool InitExternalFunc(const OUString& rModuleName)
     {
         oslGenericFunction fpGetCount = pLib->getFunctionSymbol(GETFUNCTIONCOUNT);
         oslGenericFunction fpGetData = pLib->getFunctionSymbol(GETFUNCTIONDATA);
-        if ((fpGetCount != NULL) && (fpGetData != NULL))
+        if ((fpGetCount != nullptr) && (fpGetData != nullptr))
         {
             oslGenericFunction fpIsAsync = pLib->getFunctionSymbol(ISASYNC);
             oslGenericFunction fpAdvice = pLib->getFunctionSymbol(ADVICE);
@@ -256,7 +256,7 @@ bool LegacyFuncData::Call(void** ppParam) const
     bool bRet = false;
     osl::Module* pLib = pModuleData->GetInstance();
     oslGenericFunction fProc = pLib->getFunctionSymbol(aFuncName);
-    if (fProc != NULL)
+    if (fProc != nullptr)
     {
         switch (nParamCount)
         {
@@ -354,7 +354,7 @@ bool LegacyFuncData::Unadvice( double nHandle )
     bool bRet = false;
     osl::Module* pLib = pModuleData->GetInstance();
     oslGenericFunction fProc = pLib->getFunctionSymbol(UNADVICE);
-    if (fProc != NULL)
+    if (fProc != nullptr)
     {
         reinterpret_cast< ::Unadvice>(fProc)(nHandle);
         bRet = true;
@@ -381,7 +381,7 @@ bool LegacyFuncData::getParamDesc( OUString& aName, OUString& aDesc, sal_uInt16 
     {
         osl::Module* pLib = pModuleData->GetInstance();
         oslGenericFunction fProc = pLib->getFunctionSymbol(GETPARAMDESC);
-        if ( fProc != NULL )
+        if ( fProc != nullptr )
         {
             sal_Char pcName[256];
             sal_Char pcDesc[256];
@@ -408,13 +408,13 @@ LegacyFuncCollection::LegacyFuncCollection(const LegacyFuncCollection& r) : maDa
 const LegacyFuncData* LegacyFuncCollection::findByName(const OUString& rName) const
 {
     MapType::const_iterator it = maData.find(rName);
-    return it == maData.end() ? NULL : it->second;
+    return it == maData.end() ? nullptr : it->second;
 }
 
 LegacyFuncData* LegacyFuncCollection::findByName(const OUString& rName)
 {
     MapType::iterator it = maData.find(rName);
-    return it == maData.end() ? NULL : it->second;
+    return it == maData.end() ? nullptr : it->second;
 }
 
 void LegacyFuncCollection::insert(LegacyFuncData* pNew)

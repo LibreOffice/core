@@ -134,7 +134,7 @@ static ScAreaLink* lcl_FindLink( const ::sfx2::SvBaseLinks& rLinks, const ScArea
             return static_cast<ScAreaLink*>(pBase);     // found
         }
     }
-    return NULL;    // not found
+    return nullptr;    // not found
 }
 
 void ScAreaLinkSaveCollection::Restore( ScDocument* pDoc )
@@ -163,7 +163,7 @@ void ScAreaLinkSaveCollection::Restore( ScDocument* pDoc )
 
 ScAreaLinkSaveCollection* ScAreaLinkSaveCollection::CreateFromDoc( const ScDocument* pDoc )
 {
-    ScAreaLinkSaveCollection* pColl = NULL;
+    ScAreaLinkSaveCollection* pColl = nullptr;
 
     sfx2::LinkManager* pLinkManager = const_cast<ScDocument*>(pDoc)->GetLinkManager();
     if (pLinkManager)

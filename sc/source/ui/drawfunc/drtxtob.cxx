@@ -114,7 +114,7 @@ void ScDrawTextObjectBar::StateDisableItems( SfxItemSet &rSet )
 ScDrawTextObjectBar::ScDrawTextObjectBar(ScViewData* pData) :
     SfxShell(pData->GetViewShell()),
     pViewData(pData),
-    pClipEvtLstnr(NULL),
+    pClipEvtLstnr(nullptr),
     bPastePossible(false)
 {
     SetPool( pViewData->GetScDrawView()->GetDefaultAttr().GetPool() );
@@ -218,14 +218,14 @@ void ScDrawTextObjectBar::Execute( SfxRequest &rReq )
                 SvxFontItem aNewItem( EE_CHAR_FONTINFO );
 
                 const SfxItemSet *pArgs = rReq.GetArgs();
-                const SfxPoolItem* pItem = 0;
+                const SfxPoolItem* pItem = nullptr;
                 if( pArgs )
                     pArgs->GetItemState(GetPool().GetWhich(SID_CHARMAP), false, &pItem);
 
                 if ( pItem )
                 {
                     aString = static_cast<const SfxStringItem*>(pItem)->GetValue();
-                    const SfxPoolItem* pFtItem = NULL;
+                    const SfxPoolItem* pFtItem = nullptr;
                     pArgs->GetItemState( GetPool().GetWhich(SID_ATTR_SPECIALCHAR), false, &pFtItem);
                     const SfxStringItem* pFontItem = dynamic_cast<const SfxStringItem*>( pFtItem  );
                     if ( pFontItem )
@@ -787,7 +787,7 @@ void ScDrawTextObjectBar::ExecuteAttr( SfxRequest &rReq )
     }
 
     bool bDone = true;
-    bool bArgsInReq = ( pArgs != NULL );
+    bool bArgsInReq = ( pArgs != nullptr );
 
     if ( !bArgsInReq )
     {
@@ -796,7 +796,7 @@ void ScDrawTextObjectBar::ExecuteAttr( SfxRequest &rReq )
             case SID_TEXT_STANDARD: // Harte Textattributierung loeschen
             {
                 OutlinerView* pOutView = pView->IsTextEdit() ?
-                                pView->GetTextEditOutlinerView() : NULL;
+                                pView->GetTextEditOutlinerView() : nullptr;
                 if ( pOutView )
                     pOutView->Paint( Rectangle() );
 

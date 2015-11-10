@@ -572,7 +572,7 @@ void ScMyDetectiveOpContainer::Sort()
 ScMyCell::ScMyCell() :
     aShapeList(),
     aDetectiveObjVec(),
-    pNote(NULL),
+    pNote(nullptr),
     nValidationIndex(-1),
     nStyleIndex(-1),
     nNumberFormat(-1),
@@ -596,13 +596,13 @@ ScMyCell::~ScMyCell()
 }
 
 ScMyNotEmptyCellsIterator::ScMyNotEmptyCellsIterator(ScXMLExport& rTempXMLExport)
-    : pShapes(NULL),
-    pNoteShapes(NULL),
-    pEmptyDatabaseRanges(NULL),
-    pMergedRanges(NULL),
-    pAreaLinks(NULL),
-    pDetectiveObj(NULL),
-    pDetectiveOp(NULL),
+    : pShapes(nullptr),
+    pNoteShapes(nullptr),
+    pEmptyDatabaseRanges(nullptr),
+    pMergedRanges(nullptr),
+    pAreaLinks(nullptr),
+    pDetectiveObj(nullptr),
+    pDetectiveOp(nullptr),
     rExport(rTempXMLExport),
     nCellCol(0),
     nCellRow(0),
@@ -618,13 +618,13 @@ ScMyNotEmptyCellsIterator::~ScMyNotEmptyCellsIterator()
 void ScMyNotEmptyCellsIterator::Clear()
 {
     mpCellItr.reset();
-    pShapes = NULL;
-    pNoteShapes = NULL;
-    pMergedRanges = NULL;
-    pAreaLinks = NULL;
-    pEmptyDatabaseRanges = NULL;
-    pDetectiveObj = NULL;
-    pDetectiveOp = NULL;
+    pShapes = nullptr;
+    pNoteShapes = nullptr;
+    pMergedRanges = nullptr;
+    pAreaLinks = nullptr;
+    pEmptyDatabaseRanges = nullptr;
+    pDetectiveObj = nullptr;
+    pDetectiveOp = nullptr;
     nCurrentTable = SCTAB_MAX;
 }
 

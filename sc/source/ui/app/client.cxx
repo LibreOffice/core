@@ -42,7 +42,7 @@ using namespace com::sun::star;
 ScClient::ScClient( ScTabViewShell* pViewShell, vcl::Window* pDraw, SdrModel* pSdrModel, SdrOle2Obj* pObj ) :
     SfxInPlaceClient( pViewShell, pDraw, pObj->GetAspect() ),
     pModel( pSdrModel ),
-    pGrafEdit( 0 )
+    pGrafEdit( nullptr )
 {
     SetObject( pObj->GetObjRef() );
 }
@@ -54,7 +54,7 @@ ScClient::~ScClient()
 SdrOle2Obj* ScClient::GetDrawObj()
 {
     uno::Reference < embed::XEmbeddedObject > xObj = GetObject();
-    SdrOle2Obj* pOle2Obj = NULL;
+    SdrOle2Obj* pOle2Obj = nullptr;
     OUString aName = GetViewShell()->GetObjectShell()->GetEmbeddedObjectContainer().GetEmbeddedObjectName( xObj );
 
     sal_uInt16 nPages = pModel->GetPageCount();

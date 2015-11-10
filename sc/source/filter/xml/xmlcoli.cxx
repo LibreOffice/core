@@ -94,7 +94,7 @@ SvXMLImportContext *ScXMLTableColContext::CreateChildContext( sal_uInt16 nPrefix
                                             const OUString& rLName,
                                             const css::uno::Reference<css::xml::sax::XAttributeList>& /* xAttrList */ )
 {
-    SvXMLImportContext *pContext = 0;
+    SvXMLImportContext *pContext = nullptr;
 
     if( !pContext )
         pContext = new SvXMLImportContext( GetImport(), nPrefix, rLName );
@@ -204,7 +204,7 @@ SvXMLImportContext *ScXMLTableColsContext::CreateChildContext( sal_uInt16 nPrefi
                                             const OUString& rLName,
                                             const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList )
 {
-    SvXMLImportContext *pContext = 0;
+    SvXMLImportContext *pContext = nullptr;
 
     const SvXMLTokenMap& rTokenMap = GetScImport().GetTableColsElemTokenMap();
     switch( rTokenMap.Get( nPrefix, rLName ) )

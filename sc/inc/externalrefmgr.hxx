@@ -154,7 +154,7 @@ public:
          *                       values, for performance reasons.
          */
         SC_DLLPUBLIC void setCell(SCCOL nCol, SCROW nRow, TokenRef pToken, sal_uLong nFmtIndex = 0, bool bSetCacheRange = true);
-        SC_DLLPUBLIC TokenRef getCell(SCCOL nCol, SCROW nRow, sal_uInt32* pnFmtIndex = NULL) const;
+        SC_DLLPUBLIC TokenRef getCell(SCCOL nCol, SCROW nRow, sal_uInt32* pnFmtIndex = nullptr) const;
         bool hasRow( SCROW nRow ) const;
         /** Set/clear referenced status flag only if current status is not
             REFERENCED_PERMANENT. */
@@ -473,7 +473,7 @@ public:
      *
      * @return shared_ptr to the cache table instance
      */
-    ScExternalRefCache::TableTypeRef getCacheTable(sal_uInt16 nFileId, const OUString& rTabName, bool bCreateNew, size_t* pnIndex = 0);
+    ScExternalRefCache::TableTypeRef getCacheTable(sal_uInt16 nFileId, const OUString& rTabName, bool bCreateNew, size_t* pnIndex = nullptr);
 
     /** Returns a vector containing all (real) table names and cache tables of
         the specified file.
@@ -537,7 +537,7 @@ public:
 
     ScExternalRefCache::TokenRef getSingleRefToken(
         sal_uInt16 nFileId, const OUString& rTabName, const ScAddress& rCell,
-        const ScAddress* pCurPos, SCTAB* pTab, ScExternalRefCache::CellFormat* pFmt = NULL);
+        const ScAddress* pCurPos, SCTAB* pTab, ScExternalRefCache::CellFormat* pFmt = nullptr);
 
     /**
      * Get an array of tokens that consist of the specified external cell
@@ -567,7 +567,7 @@ public:
      * @return shared_ptr to array of tokens composing the name
      */
     ScExternalRefCache::TokenArrayRef getRangeNameTokens(
-        sal_uInt16 nFileId, const OUString& rName, const ScAddress* pCurPos = NULL);
+        sal_uInt16 nFileId, const OUString& rName, const ScAddress* pCurPos = nullptr);
 
     bool isValidRangeName(sal_uInt16 nFileId, const OUString& rName);
 

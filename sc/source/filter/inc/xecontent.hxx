@@ -104,7 +104,7 @@ public:
     virtual             ~XclExpHyperlink();
 
     /** Returns the cell representation text or 0, if not available. */
-    inline const OUString* GetRepr() const { return m_Repr.isEmpty() ? 0 : &m_Repr; }
+    inline const OUString* GetRepr() const { return m_Repr.isEmpty() ? nullptr : &m_Repr; }
 
     virtual void        SaveXml( XclExpXmlStream& rStrm ) override;
 

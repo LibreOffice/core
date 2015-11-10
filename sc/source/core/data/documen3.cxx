@@ -130,7 +130,7 @@ void ScDocument::SetAllRangeNames(const std::map<OUString, std::unique_ptr<ScRan
             delete pRangeName;
             const ScRangeName *const pName = itr->second.get();
             if (pName->empty())
-                pRangeName = NULL;
+                pRangeName = nullptr;
             else
                 pRangeName = new ScRangeName( *pName );
         }
@@ -141,7 +141,7 @@ void ScDocument::SetAllRangeNames(const std::map<OUString, std::unique_ptr<ScRan
             bool bFound = GetTable(itr->first, nTab);
             assert(bFound); (void)bFound;   // fouled up?
             if (pName->empty())
-                SetRangeName( nTab, NULL );
+                SetRangeName( nTab, nullptr );
             else
                 SetRangeName( nTab, new ScRangeName( *pName ) );
         }
@@ -180,7 +180,7 @@ void ScDocument::GetRangeNameMap(std::map<OUString, ScRangeName*>& aRangeNameMap
 ScRangeName* ScDocument::GetRangeName(SCTAB nTab) const
 {
     if (!ValidTab(nTab) || nTab >= static_cast<SCTAB>(maTabs.size()) || !maTabs[nTab])
-        return NULL;
+        return nullptr;
 
     return maTabs[nTab]->GetRangeName();
 }
@@ -221,7 +221,7 @@ bool ScDocument::InsertNewRangeName( const OUString& rName, const ScAddress& rPo
 
 const ScRangeData* ScDocument::GetRangeAtBlock( const ScRange& rBlock, OUString* pName ) const
 {
-    const ScRangeData* pData = NULL;
+    const ScRangeData* pData = nullptr;
     if ( pRangeName )
     {
         pData = pRangeName->findByRange( rBlock );
@@ -286,7 +286,7 @@ const ScDBData* ScDocument::GetDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, Sc
     if (pDBCollection)
         return pDBCollection->GetDBAtCursor(nCol, nRow, nTab, ePortion);
     else
-        return NULL;
+        return nullptr;
 }
 
 ScDBData* ScDocument::GetDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, ScDBDataPortion ePortion)
@@ -294,7 +294,7 @@ ScDBData* ScDocument::GetDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, ScDBData
     if (pDBCollection)
         return pDBCollection->GetDBAtCursor(nCol, nRow, nTab, ePortion);
     else
-        return NULL;
+        return nullptr;
 }
 
 const ScDBData* ScDocument::GetDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2) const
@@ -302,7 +302,7 @@ const ScDBData* ScDocument::GetDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SC
     if (pDBCollection)
         return pDBCollection->GetDBAtArea(nTab, nCol1, nRow1, nCol2, nRow2);
     else
-        return NULL;
+        return nullptr;
 }
 
 ScDBData* ScDocument::GetDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2)
@@ -310,7 +310,7 @@ ScDBData* ScDocument::GetDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nC
     if (pDBCollection)
         return pDBCollection->GetDBAtArea(nTab, nCol1, nRow1, nCol2, nRow2);
     else
-        return NULL;
+        return nullptr;
 }
 
 void ScDocument::RefreshDirtyTableColumnNames()
@@ -339,7 +339,7 @@ const ScDPCollection* ScDocument::GetDPCollection() const
 ScDPObject* ScDocument::GetDPAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab) const
 {
     if (!pDPCollection)
-        return NULL;
+        return nullptr;
 
     sal_uInt16 nCount = pDPCollection->GetCount();
     ScAddress aPos( nCol, nRow, nTab );
@@ -347,13 +347,13 @@ ScDPObject* ScDocument::GetDPAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab) const
         if ( (*pDPCollection)[i].GetOutRange().In( aPos ) )
             return &(*pDPCollection)[i];
 
-    return NULL;
+    return nullptr;
 }
 
 ScDPObject* ScDocument::GetDPAtBlock( const ScRange & rBlock ) const
 {
     if (!pDPCollection)
-        return NULL;
+        return nullptr;
 
     /* Walk the collection in reverse order to get something of an
      * approximation of MS Excels 'most recent' effect. */
@@ -362,7 +362,7 @@ ScDPObject* ScDocument::GetDPAtBlock( const ScRange & rBlock ) const
         if ( (*pDPCollection)[i].GetOutRange().In( rBlock ) )
             return &(*pDPCollection)[i];
 
-    return NULL;
+    return nullptr;
 }
 
 void ScDocument::StopTemporaryChartLock()
@@ -621,7 +621,7 @@ const ScSheetEvents* ScDocument::GetSheetEvents( SCTAB nTab ) const
 {
     if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
         return maTabs[nTab]->GetSheetEvents();
-    return NULL;
+    return nullptr;
 }
 
 void ScDocument::SetSheetEvents( SCTAB nTab, const ScSheetEvents* pNew )
@@ -696,7 +696,7 @@ void ScDocument::ResetCalcNotifications()
 
 ScOutlineTable* ScDocument::GetOutlineTable( SCTAB nTab, bool bCreate )
 {
-    ScOutlineTable* pVal = NULL;
+    ScOutlineTable* pVal = nullptr;
 
     if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()))
         if (maTabs[nTab])
@@ -833,7 +833,7 @@ const ScRangeList* ScDocument::GetScenarioRanges( SCTAB nTab ) const
     if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
         return maTabs[nTab]->GetScenarioRanges();
 
-    return NULL;
+    return nullptr;
 }
 
 bool ScDocument::IsActiveScenario( SCTAB nTab ) const
@@ -958,7 +958,7 @@ void ScDocument::BeginUnoRefUndo()
 ScUnoRefList* ScDocument::EndUnoRefUndo()
 {
     ScUnoRefList* pRet = pUnoRefUndoList;
-    pUnoRefUndoList = NULL;
+    pUnoRefUndoList = nullptr;
     return pRet; // Must be deleted by caller!
 }
 
@@ -1420,7 +1420,7 @@ bool ScDocument::CreateQueryParam(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW n
 bool ScDocument::HasAutoFilter( SCCOL nCurCol, SCROW nCurRow, SCTAB nCurTab )
 {
     const ScDBData* pDBData = GetDBAtCursor( nCurCol, nCurRow, nCurTab, ScDBDataPortion::AREA );
-    bool bHasAutoFilter = (pDBData != NULL);
+    bool bHasAutoFilter = (pDBData != nullptr);
 
     if ( pDBData )
     {
@@ -1637,7 +1637,7 @@ void ScDocument::GetEmbedded( ScRange& rRange ) const
 Rectangle ScDocument::GetEmbeddedRect() const // 1/100 mm
 {
     Rectangle aRect;
-    ScTable* pTable = NULL;
+    ScTable* pTable = nullptr;
     if ( aEmbedRange.aStart.Tab() < static_cast<SCTAB>(maTabs.size()) )
         pTable = maTabs[aEmbedRange.aStart.Tab()];
     else
@@ -1691,7 +1691,7 @@ static bool lcl_AddTwipsWhile( long & rTwips, long nStopTwips, SCROW & rPosY, SC
     while (rTwips < nStopTwips && nRow <= nEndRow && !bStop)
     {
         SCROW nHeightEndRow;
-        sal_uInt16 nHeight = pTable->GetRowHeight( nRow, NULL, &nHeightEndRow, bHiddenAsZero );
+        sal_uInt16 nHeight = pTable->GetRowHeight( nRow, nullptr, &nHeightEndRow, bHiddenAsZero );
         if (nHeightEndRow > nEndRow)
             nHeightEndRow = nEndRow;
         if (!nHeight)
@@ -1728,7 +1728,7 @@ static bool lcl_AddTwipsWhile( long & rTwips, long nStopTwips, SCROW & rPosY, SC
 
 ScRange ScDocument::GetRange( SCTAB nTab, const Rectangle& rMMRect, bool bHiddenAsZero ) const
 {
-    ScTable* pTable = NULL;
+    ScTable* pTable = nullptr;
     if (nTab < static_cast<SCTAB>(maTabs.size()))
         pTable = maTabs[nTab];
     else
@@ -1843,7 +1843,7 @@ ScTableProtection* ScDocument::GetTabProtection( SCTAB nTab ) const
     if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
         return maTabs[nTab]->GetProtection();
 
-    return NULL;
+    return nullptr;
 }
 
 void ScDocument::SetTabProtection(SCTAB nTab, const ScTableProtection* pProtect)

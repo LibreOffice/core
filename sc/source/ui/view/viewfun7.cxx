@@ -93,7 +93,7 @@ void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel,
 
     bool bNegativePage = GetViewData().GetDocument()->IsNegativePage( GetViewData().GetTabNo() );
 
-    SdrView* pDragEditView = NULL;
+    SdrView* pDragEditView = nullptr;
     ScModule* pScMod = SC_MOD();
     const ScDragData& rData = pScMod->GetDragData();
     ScDrawTransferObj* pDrawTrans = rData.pDrawTransfer;
@@ -157,7 +157,7 @@ void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel,
 
                 SdrObject* pNeuObj=pObj->Clone();
 
-                if (pNeuObj!=NULL)
+                if (pNeuObj!=nullptr)
                 {
                     pNeuObj->SetModel(pDrawModel);
                     pNeuObj->SetPage(pDestPage);
@@ -182,7 +182,7 @@ void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel,
 
             ScDocument* pDocument = GetViewData().GetDocument();
             ScDocShell* pDocShell = GetViewData().GetDocShell();
-            ScModelObj* pModelObj = ( pDocShell ? ScModelObj::getImplementation( pDocShell->GetModel() ) : NULL );
+            ScModelObj* pModelObj = ( pDocShell ? ScModelObj::getImplementation( pDocShell->GetModel() ) : nullptr );
             if ( pDocument && pDestPage && pModelObj && pDrawTrans )
             {
                 const ScRangeListVector& rProtectedChartRangesVector( pDrawTrans->GetProtectedChartRangesVector() );
@@ -223,7 +223,7 @@ void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel,
         if ( !bSameDocClipboard )
             GetViewData().GetDocument()->SetPastingDrawFromOtherDoc( true );
 
-        pScDrawView->Paste(*pModel, aPos, NULL, nOptions, rSrcShellID, rDestShellID);
+        pScDrawView->Paste(*pModel, aPos, nullptr, nOptions, rSrcShellID, rDestShellID);
 
         if ( !bSameDocClipboard )
             GetViewData().GetDocument()->SetPastingDrawFromOtherDoc( false );
@@ -251,8 +251,8 @@ void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel,
 
         ScDocument* pDocument = GetViewData().GetDocument();
         ScDocShell* pDocShell = GetViewData().GetDocShell();
-        ScModelObj* pModelObj = ( pDocShell ? ScModelObj::getImplementation( pDocShell->GetModel() ) : NULL );
-        ScDrawTransferObj* pTransferObj = ScDrawTransferObj::GetOwnClipboard( NULL );
+        ScModelObj* pModelObj = ( pDocShell ? ScModelObj::getImplementation( pDocShell->GetModel() ) : nullptr );
+        ScDrawTransferObj* pTransferObj = ScDrawTransferObj::GetOwnClipboard( nullptr );
         if ( pDocument && pPage && pModelObj && ( pTransferObj || pDrawTrans ) )
         {
             const ScRangeListVector& rProtectedChartRangesVector(
@@ -390,7 +390,7 @@ bool ScViewFunc::PasteGraphic( const Point& rPos, const Graphic& rGraphic,
     SdrPageView* pPageView = pScDrawView->GetSdrPageView();
     if (pPageView)
     {
-        SdrObject* pPickObj = 0;
+        SdrObject* pPickObj = nullptr;
         if (pScDrawView->PickObj(rPos, pScDrawView->getHitTolLog(), pPickObj, pPageView))
         {
             const OUString aBeginUndo(ScGlobal::GetRscString(STR_UNDO_DRAGDROP));

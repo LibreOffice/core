@@ -41,7 +41,7 @@
 
 class DBSaveData;
 
-static DBSaveData* pSaveObj = NULL;
+static DBSaveData* pSaveObj = nullptr;
 
 #define ERRORBOX(s) ScopedVclPtrInstance<MessageDialog>::Create(this, s)->Execute()
 
@@ -217,7 +217,7 @@ void ScDbNameDlg::Init()
         SCTAB   nEndTab     = 0;
 
         ScDBCollection* pDBColl = pDoc->GetDBCollection();
-        ScDBData*       pDBData = NULL;
+        ScDBData*       pDBData = nullptr;
 
         pViewData->GetSimpleArea( nStartCol, nStartRow, nStartTab,
                                   nEndCol,   nEndRow,  nEndTab );
@@ -396,7 +396,7 @@ bool ScDbNameDlg::IsRefInputMode() const
 
 IMPL_LINK_NOARG_TYPED(ScDbNameDlg, OkBtnHdl, Button*, void)
 {
-    AddBtnHdl( 0 );
+    AddBtnHdl( nullptr );
 
     // Der View die Aenderungen und die Remove-Liste uebergeben:
     // beide werden nur als Referenz uebergeben, so dass an dieser
@@ -477,7 +477,7 @@ IMPL_LINK_NOARG_TYPED(ScDbNameDlg, AddBtnHdl, Button*, void)
                 m_pBtnDoSize->Check( false );
                 m_pBtnKeepFmt->Check( false );
                 m_pBtnStripData->Check( false );
-                SetInfoStrings( NULL );     // leer
+                SetInfoStrings( nullptr );     // leer
                 theCurArea = ScRange();
                 bSaved = true;
                 pSaveObj->Save();
@@ -557,7 +557,7 @@ IMPL_LINK_NOARG_TYPED(ScDbNameDlg, RemoveBtnHdl, Button*, void)
             m_pBtnDoSize->Check( false );
             m_pBtnKeepFmt->Check( false );
             m_pBtnStripData->Check( false );
-            SetInfoStrings( NULL );     // leer
+            SetInfoStrings( nullptr );     // leer
             bSaved=false;
             pSaveObj->Restore();
             NameModifyHdl( *m_pEdName );

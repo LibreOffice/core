@@ -131,7 +131,7 @@ protected:
 
 public:
                     TYPEINFO_OVERRIDE();
-                    ScDBFuncUndo( ScDocShell* pDocSh, const ScRange& rOriginal, SdrUndoAction* pDrawUndo = 0 );
+                    ScDBFuncUndo( ScDocShell* pDocSh, const ScRange& rOriginal, SdrUndoAction* pDrawUndo = nullptr );
     virtual         ~ScDBFuncUndo();
 
     void            BeginUndo();

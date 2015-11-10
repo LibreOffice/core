@@ -308,7 +308,7 @@ bool ScTpFormulaOptions::FillItemSet(SfxItemSet* rCoreSet)
 void ScTpFormulaOptions::Reset(const SfxItemSet* rCoreSet)
 {
     ScFormulaOptions aOpt;
-    const SfxPoolItem* pItem = NULL;
+    const SfxPoolItem* pItem = nullptr;
 
     if(SfxItemState::SET == rCoreSet->GetItemState(SID_SCFORMULAOPTIONS, false , &pItem))
         aOpt = static_cast<const ScTpFormulaItem*>(pItem)->GetFormulaOptions();

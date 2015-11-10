@@ -90,9 +90,9 @@ ScValidationDlg::ScValidationDlg(vcl::Window* pParent, const SfxItemSet* pArgSet
     , m_bOwnRefHdlr(false)
     , m_bRefInputting(false)
 {
-    m_nValuePageId = AddTabPage("criteria", ScTPValidationValue::Create, 0);
-    AddTabPage("inputhelp", ScTPValidationHelp::Create, 0);
-    AddTabPage("erroralert", ScTPValidationError::Create, 0);
+    m_nValuePageId = AddTabPage("criteria", ScTPValidationValue::Create, nullptr);
+    AddTabPage("inputhelp", ScTPValidationHelp::Create, nullptr);
+    AddTabPage("erroralert", ScTPValidationError::Create, nullptr);
     get(m_pHBox, "refinputbox");
 }
 
@@ -320,7 +320,7 @@ ScTPValidationValue::ScTPValidationValue( vcl::Window* pParent, const SfxItemSet
     , maStrValue(ScResId(SCSTR_VALID_VALUE))
     , maStrRange(ScResId(SCSTR_VALID_RANGE))
     , maStrList(ScResId(SCSTR_VALID_LIST))
-    , m_pRefEdit(NULL)
+    , m_pRefEdit(nullptr)
 {
     get(m_pLbAllow, "allow");
     get(m_pCbAllow, "allowempty");
@@ -331,14 +331,14 @@ ScTPValidationValue::ScTPValidationValue( vcl::Window* pParent, const SfxItemSet
     get(m_pFtMin, "minft");
     get(m_pMinGrid, "mingrid");
     get(m_pEdMin, "min");
-    m_pEdMin->SetReferences(NULL, m_pFtMin);
+    m_pEdMin->SetReferences(nullptr, m_pFtMin);
     get(m_pEdList, "minlist");
     Size aSize(LogicToPixel(Size(174, 105), MAP_APPFONT));
     m_pEdList->set_width_request(aSize.Width());
     m_pEdList->set_height_request(aSize.Height());
     get(m_pFtMax, "maxft");
     get(m_pEdMax, "max");
-    m_pEdMax->SetReferences(NULL, m_pFtMax);
+    m_pEdMax->SetReferences(nullptr, m_pFtMax);
     get(m_pFtHint, "hintft");
     get(m_pBtnRef, "validref");
     m_pBtnRef->SetParentPage(this);
@@ -402,7 +402,7 @@ void ScTPValidationValue::Init()
     m_pLbValue->SelectEntryPos( SC_VALIDDLG_DATA_EQUAL );
 
     SelectHdl( *m_pLbAllow.get() );
-    CheckHdl( NULL );
+    CheckHdl( nullptr );
 }
 
 VclPtr<SfxTabPage> ScTPValidationValue::Create( vcl::Window* pParent, const SfxItemSet* rArgSet )
@@ -450,7 +450,7 @@ void ScTPValidationValue::Reset( const SfxItemSet* rArgSet )
     SetSecondFormula( aFmlaStr );
 
     SelectHdl( *m_pLbAllow.get() );
-    CheckHdl( NULL );
+    CheckHdl( nullptr );
 }
 
 bool ScTPValidationValue::FillItemSet( SfxItemSet* rArgSet )
@@ -515,8 +515,8 @@ ScValidationDlg * ScTPValidationValue::GetValidationDlg()
         do{
             if ( dynamic_cast<ScValidationDlg*>( pParent ) )
                 return static_cast< ScValidationDlg * >( pParent );
-        }while ( NULL != ( pParent = pParent->GetParent() ) );
-    return NULL;
+        }while ( nullptr != ( pParent = pParent->GetParent() ) );
+    return nullptr;
 }
 
 void ScTPValidationValue::SetupRefDlg()
@@ -531,7 +531,7 @@ void ScTPValidationValue::SetupRefDlg()
             pValidationDlg->SetRefInputStartPreHdl( static_cast<ScRefHandlerHelper::PINPUTSTARTDLTYPE>( &ScTPValidationValue::RefInputStartPreHdl ) );
             pValidationDlg->SetRefInputDonePostHdl( static_cast<ScRefHandlerHelper::PCOMMONHDLTYPE>( &ScTPValidationValue::RefInputDonePostHdl ) );
 
-            vcl::Window *pLabel = NULL;
+            vcl::Window *pLabel = nullptr;
 
             if ( m_pEdMax->IsVisible() )
             {
@@ -561,17 +561,17 @@ void ScTPValidationValue::RemoveRefDlg()
     {
         if( pValidationDlg->RemoveRefDlg() )
         {
-            pValidationDlg->SetHandler( NULL );
-            pValidationDlg->SetSetRefHdl( NULL );
-            pValidationDlg->SetSetActHdl( NULL );
-            pValidationDlg->SetRefInputStartPreHdl( NULL );
-            pValidationDlg->SetRefInputDonePostHdl( NULL );
+            pValidationDlg->SetHandler( nullptr );
+            pValidationDlg->SetSetRefHdl( nullptr );
+            pValidationDlg->SetSetActHdl( nullptr );
+            pValidationDlg->SetRefInputStartPreHdl( nullptr );
+            pValidationDlg->SetRefInputDonePostHdl( nullptr );
 
             if( m_pRefEdit )
-                m_pRefEdit->SetReferences( NULL, NULL );
-            m_pRefEdit = NULL;
+                m_pRefEdit->SetReferences( nullptr, nullptr );
+            m_pRefEdit = nullptr;
 
-            m_pBtnRef->SetReferences( NULL, NULL );
+            m_pBtnRef->SetReferences( nullptr, nullptr );
         }
     }
 }
@@ -845,7 +845,7 @@ IMPL_LINK_NOARG_TYPED(ScTPValidationError, ClickSearchHdl, Button*, void)
 
     Application::SetDefDialogParent( pOld );
 
-    if ( aScriptURL != NULL && !aScriptURL.isEmpty() )
+    if ( aScriptURL != nullptr && !aScriptURL.isEmpty() )
     {
         m_pEdtTitle->SetText( aScriptURL );
     }
@@ -861,7 +861,7 @@ bool ScValidationDlg::EnterRefStatus()
     SfxViewFrame* pViewFrm = pTabViewShell->GetViewFrame();
     SfxChildWindow* pWnd = pViewFrm->GetChildWindow( nId );
 
-    if ( pWnd && pWnd->GetWindow()!= this ) pWnd = NULL;
+    if ( pWnd && pWnd->GetWindow()!= this ) pWnd = nullptr;
 
     SC_MOD()->SetRefDialog( nId, pWnd == nullptr );
 
@@ -951,7 +951,7 @@ void ScTPValidationValue::OnClick( Button *pBtn )
 bool ScValidationDlg::IsChildFocus()
 {
     if ( const vcl::Window *pWin = Application::GetFocusWindow() )
-        while( NULL != ( pWin = pWin->GetParent() ) )
+        while( nullptr != ( pWin = pWin->GetParent() ) )
             if( pWin == this )
                 return true;
 

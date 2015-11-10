@@ -124,12 +124,12 @@ protected:
 
     SvTreeListEntry* InsertChangeAction(
         const ScChangeAction* pScChangeAction,ScChangeActionState eState,
-        SvTreeListEntry* pParent=NULL,bool bDelMaster = false,
+        SvTreeListEntry* pParent=nullptr,bool bDelMaster = false,
         bool bDisabled = false,sal_uLong nPos = TREELIST_APPEND);
 
     SvTreeListEntry* InsertFilteredAction(
         const ScChangeAction* pScChangeAction,ScChangeActionState eState,
-        SvTreeListEntry* pParent = NULL,bool bDelMaster = false,
+        SvTreeListEntry* pParent = nullptr,bool bDelMaster = false,
         bool bDisabled = false, sal_uLong nPos = TREELIST_APPEND);
 
     SvTreeListEntry*    InsertChangeActionContent(const ScChangeActionContent* pScChangeAction,

@@ -69,7 +69,7 @@ ContextHandlerRef RichStringContext::onCreateContext( sal_Int32 nElement, const 
             }
         break;
     }
-    return 0;
+    return nullptr;
 }
 
 void RichStringContext::onCharacters( const OUString& rChars )

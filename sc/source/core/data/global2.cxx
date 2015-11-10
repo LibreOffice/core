@@ -108,7 +108,7 @@ bool ScImportParam::operator==( const ScImportParam& rOther ) const
 // struct ScConsolidateParam:
 
 ScConsolidateParam::ScConsolidateParam() :
-    ppDataAreas( NULL )
+    ppDataAreas( nullptr )
 {
     Clear();
 }
@@ -116,7 +116,7 @@ ScConsolidateParam::ScConsolidateParam() :
 ScConsolidateParam::ScConsolidateParam( const ScConsolidateParam& r ) :
         nCol(r.nCol),nRow(r.nRow),nTab(r.nTab),
         eFunction(r.eFunction),nDataAreaCount(0),
-        ppDataAreas( NULL ),
+        ppDataAreas( nullptr ),
         bByCol(r.bByCol),bByRow(r.bByRow),bReferenceData(r.bReferenceData)
 {
     if ( r.nDataAreaCount > 0 )
@@ -140,7 +140,7 @@ void ScConsolidateParam::ClearDataAreas()
         for ( sal_uInt16 i=0; i<nDataAreaCount; i++ )
             delete ppDataAreas[i];
         delete [] ppDataAreas;
-        ppDataAreas = NULL;
+        ppDataAreas = nullptr;
     }
     nDataAreaCount = 0;
 }
@@ -182,9 +182,9 @@ bool ScConsolidateParam::operator==( const ScConsolidateParam& r ) const
                  && (eFunction      == r.eFunction);
 
     if ( nDataAreaCount == 0 )
-        bEqual = bEqual && (ppDataAreas == NULL) && (r.ppDataAreas == NULL);
+        bEqual = bEqual && (ppDataAreas == nullptr) && (r.ppDataAreas == nullptr);
     else
-        bEqual = bEqual && (ppDataAreas != NULL) && (r.ppDataAreas != NULL);
+        bEqual = bEqual && (ppDataAreas != nullptr) && (r.ppDataAreas != nullptr);
 
     if ( bEqual && (nDataAreaCount > 0) )
         for ( sal_uInt16 i=0; i<nDataAreaCount && bEqual; i++ )
@@ -208,7 +208,7 @@ void ScConsolidateParam::SetAreas( ScArea* const* ppAreas, sal_uInt16 nCount )
 // struct ScSolveParam
 
 ScSolveParam::ScSolveParam()
-    :   pStrTargetVal( NULL )
+    :   pStrTargetVal( nullptr )
 {
 }
 
@@ -217,7 +217,7 @@ ScSolveParam::ScSolveParam( const ScSolveParam& r )
         aRefVariableCell( r.aRefVariableCell ),
         pStrTargetVal   ( r.pStrTargetVal
                             ? new OUString(*r.pStrTargetVal)
-                            : NULL )
+                            : nullptr )
 {
 }
 
@@ -243,7 +243,7 @@ ScSolveParam& ScSolveParam::operator=( const ScSolveParam& r )
     aRefVariableCell = r.aRefVariableCell;
     pStrTargetVal    = r.pStrTargetVal
                             ? new OUString(*r.pStrTargetVal)
-                            : NULL;
+                            : nullptr;
     return *this;
 }
 

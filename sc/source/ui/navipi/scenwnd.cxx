@@ -161,7 +161,7 @@ bool ScScenarioListBox::Notify( NotifyEvent& rNEvt )
 const ScScenarioListBox::ScenarioEntry* ScScenarioListBox::GetSelectedEntry() const
 {
     size_t nPos = GetSelectEntryPos();
-    return (nPos < maEntries.size()) ? &maEntries[ nPos ] : 0;
+    return (nPos < maEntries.size()) ? &maEntries[ nPos ] : nullptr;
 }
 
 void ScScenarioListBox::ExecuteScenarioSlot( sal_uInt16 nSlotId )

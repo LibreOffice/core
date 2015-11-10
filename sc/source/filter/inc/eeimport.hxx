@@ -55,7 +55,7 @@ public:
     virtual ScRange  GetRange() override { return maRange; }
     virtual void     WriteToDocument( bool bSizeColsRows = false,
                                       double nOutputFactor = 1.0,
-                                      SvNumberFormatter* pFormatter = NULL,
+                                      SvNumberFormatter* pFormatter = nullptr,
                                       bool bConvertDate = true ) override;
 };
 

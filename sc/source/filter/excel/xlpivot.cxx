@@ -137,27 +137,27 @@ const OUString* XclPCItem::GetText() const
 
 const double* XclPCItem::GetDouble() const
 {
-    return (meType == EXC_PCITEM_DOUBLE) ? &mfValue : 0;
+    return (meType == EXC_PCITEM_DOUBLE) ? &mfValue : nullptr;
 }
 
 const DateTime* XclPCItem::GetDateTime() const
 {
-    return (meType == EXC_PCITEM_DATETIME) ? &maDateTime : 0;
+    return (meType == EXC_PCITEM_DATETIME) ? &maDateTime : nullptr;
 }
 
 const sal_Int16* XclPCItem::GetInteger() const
 {
-    return (meType == EXC_PCITEM_INTEGER) ? &mnValue : 0;
+    return (meType == EXC_PCITEM_INTEGER) ? &mnValue : nullptr;
 }
 
 const sal_uInt16* XclPCItem::GetError() const
 {
-    return (meType == EXC_PCITEM_ERROR) ? &mnError : 0;
+    return (meType == EXC_PCITEM_ERROR) ? &mnError : nullptr;
 }
 
 const bool* XclPCItem::GetBool() const
 {
-    return (meType == EXC_PCITEM_BOOL) ? &mbValue : 0;
+    return (meType == EXC_PCITEM_BOOL) ? &mbValue : nullptr;
 }
 
 // Field settings =============================================================
@@ -412,7 +412,7 @@ XclExpStream& operator<<( XclExpStream& rStrm, const XclPTCachedName& rCachedNam
 
 const OUString* XclPTVisNameInfo::GetVisName() const
 {
-    return HasVisName() ? &maVisName.maName : 0;
+    return HasVisName() ? &maVisName.maName : nullptr;
 }
 
 void XclPTVisNameInfo::SetVisName( const OUString& rName )

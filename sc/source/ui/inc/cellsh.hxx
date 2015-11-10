@@ -41,9 +41,9 @@ struct CellShell_Impl
     SfxRequest*                     m_pRequest;
 
     CellShell_Impl() :
-        m_pClipEvtLstnr( NULL ),
-        m_pLinkedDlg( NULL ),
-        m_pRequest( NULL ) {}
+        m_pClipEvtLstnr( nullptr ),
+        m_pLinkedDlg( nullptr ),
+        m_pRequest( nullptr ) {}
 };
 
 class ScCellShell: public ScFormatShell

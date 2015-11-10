@@ -51,7 +51,7 @@ struct AreaLink_Impl
     ScDocShell* m_pDocSh;
     AbstractScLinkedAreaDlg* m_pDialog;
 
-    AreaLink_Impl() : m_pDocSh( NULL ), m_pDialog( NULL ) {}
+    AreaLink_Impl() : m_pDocSh( nullptr ), m_pDialog( nullptr ) {}
 };
 
 TYPEINIT1(ScAreaLink,::sfx2::SvBaseLink);
@@ -110,10 +110,10 @@ void ScAreaLink::Edit(vcl::Window* pParent, const Link<SvBaseLink&,void>& /* rEn
         return SUCCESS;
 
     sfx2::LinkManager* pLinkManager=pImpl->m_pDocSh->GetDocument().GetLinkManager();
-    if (pLinkManager!=NULL)
+    if (pLinkManager!=nullptr)
     {
         OUString aFile, aArea, aFilter;
-        sfx2::LinkManager::GetDisplayNames(this, NULL, &aFile, &aArea, &aFilter);
+        sfx2::LinkManager::GetDisplayNames(this, nullptr, &aFile, &aArea, &aFilter);
 
         //  the file dialog returns the filter name with the application prefix
         //  -> remove prefix
@@ -127,7 +127,7 @@ void ScAreaLink::Edit(vcl::Window* pParent, const Link<SvBaseLink&,void>& /* rEn
             // adjust in dialog:
             OUString aNewLinkName;
             OUString aTmp = aFilter;
-            sfx2::MakeLnkName(aNewLinkName, NULL, aFile, aArea, &aTmp);
+            sfx2::MakeLnkName(aNewLinkName, nullptr, aFile, aArea, &aTmp);
             aFilter = aTmp;
             SetName( aNewLinkName );
         }
@@ -176,7 +176,7 @@ void ScAreaLink::SetSource(const OUString& rDoc, const OUString& rFlt, const OUS
 
     //  also update link name for dialog
     OUString aNewLinkName;
-    sfx2::MakeLnkName( aNewLinkName, NULL, aFileName, aSourceArea, &aFilterName );
+    sfx2::MakeLnkName( aNewLinkName, nullptr, aFileName, aSourceArea, &aFilterName );
     SetName( aNewLinkName );
 }
 
@@ -324,7 +324,7 @@ bool ScAreaLink::Refresh( const OUString& rNewFile, const OUString& rNewFilter,
 
         //  Undo initialisieren
 
-        ScDocument* pUndoDoc = NULL;
+        ScDocument* pUndoDoc = nullptr;
         if ( bAddUndo && bUndo )
         {
             pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
@@ -392,7 +392,7 @@ bool ScAreaLink::Refresh( const OUString& rNewFile, const OUString& rNewFilter,
                     ScMarkData aDestMark;
                     aDestMark.SelectOneTable( nDestTab );
                     aDestMark.SetMarkArea( aNewTokenRange );
-                    rDoc.CopyFromClip( aNewTokenRange, aDestMark, InsertDeleteFlags::ALL, NULL, &aClipDoc, false );
+                    rDoc.CopyFromClip( aNewTokenRange, aDestMark, InsertDeleteFlags::ALL, nullptr, &aClipDoc, false );
                     aNewTokenRange.aStart.SetRow( aNewTokenRange.aEnd.Row() + 2 );
                 }
             }
@@ -500,10 +500,10 @@ IMPL_LINK_NOARG_TYPED(ScAreaLink, AreaEndEditHdl, Dialog&, void)
 
         //  copy source data from members (set in Refresh) into link name for dialog
         OUString aNewLinkName;
-        sfx2::MakeLnkName( aNewLinkName, NULL, aFileName, aSourceArea, &aFilterName );
+        sfx2::MakeLnkName( aNewLinkName, nullptr, aFileName, aSourceArea, &aFilterName );
         SetName( aNewLinkName );
     }
-    pImpl->m_pDialog = NULL;    // dialog is deleted with parent
+    pImpl->m_pDialog = nullptr;    // dialog is deleted with parent
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

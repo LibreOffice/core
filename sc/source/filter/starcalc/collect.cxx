@@ -43,7 +43,7 @@ ScCollection::ScCollection(sal_uInt16 nLim, sal_uInt16 nDel) :
     nCount ( 0 ),
     nLimit ( nLim ),
     nDelta ( nDel ),
-    pItems ( NULL )
+    pItems ( nullptr )
 {
     if (nDelta > MAXDELTA)
         nDelta = MAXDELTA;
@@ -61,7 +61,7 @@ ScCollection::ScCollection(const ScCollection& rCollection)
         nCount ( 0 ),
         nLimit ( 0 ),
         nDelta ( 0 ),
-        pItems ( NULL )
+        pItems ( nullptr )
 {
     *this = rCollection;
 }
@@ -104,7 +104,7 @@ ScDataObject* ScCollection::At(sal_uInt16 nIndex) const
     if (nIndex < nCount)
         return pItems[nIndex];
     else
-        return NULL;
+        return nullptr;
 }
 
 ScCollection& ScCollection::operator=( const ScCollection& r )

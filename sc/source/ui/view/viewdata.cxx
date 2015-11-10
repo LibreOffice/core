@@ -295,11 +295,11 @@ void ScViewDataTable::ReadUserDataSequence(const uno::Sequence <beans::PropertyV
 ScViewData::ScViewData( ScDocShell* pDocSh, ScTabViewShell* pViewSh ) :
         mpMarkData(new ScMarkData),
         pDocShell   ( pDocSh ),
-        pDoc        ( NULL ),
+        pDoc        ( nullptr ),
         pView       ( pViewSh ),
         pViewShell  ( pViewSh ),
         pOptions    ( new ScViewOptions ),
-        pSpellingView ( NULL ),
+        pSpellingView ( nullptr ),
         aLogicMode  ( MAP_100TH_MM ),
         eDefZoomType( SvxZoomType::PERCENT ),
         aDefZoomX   ( 1,1 ),
@@ -344,7 +344,7 @@ ScViewData::ScViewData( ScDocShell* pDocSh, ScTabViewShell* pViewSh ) :
     pThisTab = maTabData[nTabNo];
     for (sal_uInt16 j=0; j<4; j++)
     {
-        pEditView[j] = NULL;
+        pEditView[j] = nullptr;
         bEditActive[j] = false;
     }
 
@@ -364,7 +364,7 @@ ScViewData::ScViewData( ScDocShell* pDocSh, ScTabViewShell* pViewSh ) :
         while ( !pDoc->IsVisible(nTabNo) && pDoc->HasTable(nTabNo+1) )
         {
             ++nTabNo;
-            maTabData.push_back(NULL);
+            maTabData.push_back(nullptr);
         }
         maTabData[nTabNo] = new ScViewDataTable() ;
         pThisTab = maTabData[nTabNo];
@@ -430,7 +430,7 @@ ScViewData::ScViewData( const ScViewData& rViewData ) :
     pThisTab = maTabData[nTabNo];
     for (sal_uInt16 j=0; j<4; j++)
     {
-        pEditView[j] = NULL;
+        pEditView[j] = nullptr;
         bEditActive[j] = false;
     }
 
@@ -454,7 +454,7 @@ ScDocument* ScViewData::GetDocument() const
         return &pDocShell->GetDocument();
 
     OSL_FAIL("no document on ViewData");
-    return NULL;
+    return nullptr;
 }
 
 ScViewData::~ScViewData()
@@ -480,7 +480,7 @@ void ScViewData::UpdateCurrentTab()
 void ScViewData::InsertTab( SCTAB nTab )
 {
     if( nTab >= static_cast<SCTAB>(maTabData.size()))
-        maTabData.resize(nTab+1, NULL);
+        maTabData.resize(nTab+1, nullptr);
     else
         maTabData.insert( maTabData.begin() + nTab, nullptr );
     CreateTabData( nTab );
@@ -492,10 +492,10 @@ void ScViewData::InsertTab( SCTAB nTab )
 void ScViewData::InsertTabs( SCTAB nTab, SCTAB nNewSheets )
 {
     if( nTab+nNewSheets >= static_cast<SCTAB>(maTabData.size()))
-        maTabData.resize(nTab+nNewSheets, NULL);
+        maTabData.resize(nTab+nNewSheets, nullptr);
     else
     {
-        maTabData.insert( maTabData.begin() + nTab, nNewSheets, NULL );
+        maTabData.insert( maTabData.begin() + nTab, nNewSheets, nullptr );
     }
     for (SCTAB i = nTab; i < nTab + nNewSheets; ++i)
     {
@@ -555,7 +555,7 @@ void ScViewData::MoveTab( SCTAB nSrcTab, SCTAB nDestTab )
 {
     if (nDestTab==SC_TAB_APPEND)
         nDestTab = pDoc->GetTableCount() - 1;
-    ScViewDataTable* pTab = NULL;
+    ScViewDataTable* pTab = nullptr;
     if (nSrcTab < static_cast<SCTAB>(maTabData.size()))
     {
         pTab = maTabData[nSrcTab];
@@ -1383,7 +1383,7 @@ void ScViewData::EditGrowY( bool bInitial )
 
 void ScViewData::ResetEditView()
 {
-    EditEngine* pEngine = NULL;
+    EditEngine* pEngine = nullptr;
     for (sal_uInt16 i=0; i<4; i++)
         if (pEditView[i])
         {
@@ -1408,7 +1408,7 @@ void ScViewData::KillEditView()
             if (bEditActive[i])
                 pEditView[i]->GetEditEngine()->RemoveView(pEditView[i]);
             delete pEditView[i];
-            pEditView[i] = NULL;
+            pEditView[i] = nullptr;
         }
 }
 
@@ -1447,7 +1447,7 @@ void ScViewData::EnsureTabDataSize(size_t nSize)
     if (nSize >= maTabData.size())
     {
         size_t n = nSize - maTabData.size() + 1;
-        maTabData.insert(maTabData.end(), n, NULL);
+        maTabData.insert(maTabData.end(), n, nullptr);
     }
 }
 
@@ -1725,7 +1725,7 @@ bool ScViewData::GetMergeSizePixel( SCCOL nX, SCROW nY, long& rSizeXPix, long& r
         for (SCROW nRow = nY; nRow <= nY+nCountY-1; ++nRow)
         {
             SCROW nLastRow = nRow;
-            if (pDoc->RowHidden(nRow, nTabNo, NULL, &nLastRow))
+            if (pDoc->RowHidden(nRow, nTabNo, nullptr, &nLastRow))
             {
                 nRow = nLastRow;
                 continue;
@@ -1923,7 +1923,7 @@ void ScViewData::SetPosY( ScVSplitPos eWhich, SCROW nNewPosY )
         if ( nNewPosY > nOldPosY )
             for ( i=nOldPosY; i<nNewPosY; i++ )
             {
-                long nThis = pDoc->GetRowHeight( i, nTabNo, NULL, &nHeightEndRow );
+                long nThis = pDoc->GetRowHeight( i, nTabNo, nullptr, &nHeightEndRow );
                 SCROW nRows = std::min( nNewPosY, nHeightEndRow + 1) - i;
                 i = nHeightEndRow;
                 nTPosY -= nThis * nRows;
@@ -1932,7 +1932,7 @@ void ScViewData::SetPosY( ScVSplitPos eWhich, SCROW nNewPosY )
         else
             for ( i=nNewPosY; i<nOldPosY; i++ )
             {
-                long nThis = pDoc->GetRowHeight( i, nTabNo, NULL, &nHeightEndRow );
+                long nThis = pDoc->GetRowHeight( i, nTabNo, nullptr, &nHeightEndRow );
                 SCROW nRows = std::min( nOldPosY, nHeightEndRow + 1) - i;
                 i = nHeightEndRow;
                 nTPosY += nThis * nRows;
@@ -3073,7 +3073,7 @@ void ScViewData::AddPixelsWhile( long & rScrY, long nEndPixels, SCROW & rPosY,
     while (rScrY <= nEndPixels && nRow <= nEndRow)
     {
         SCROW nHeightEndRow;
-        sal_uInt16 nHeight = pDoc->GetRowHeight( nRow, nTabNo, NULL, &nHeightEndRow);
+        sal_uInt16 nHeight = pDoc->GetRowHeight( nRow, nTabNo, nullptr, &nHeightEndRow);
         if (nHeightEndRow > nEndRow)
             nHeightEndRow = nEndRow;
         if (!nHeight)
@@ -3112,7 +3112,7 @@ void ScViewData::AddPixelsWhileBackward( long & rScrY, long nEndPixels,
     while (rScrY <= nEndPixels && nRow >= nStartRow)
     {
         SCROW nHeightStartRow;
-        sal_uInt16 nHeight = pDoc->GetRowHeight( nRow, nTabNo, &nHeightStartRow, NULL);
+        sal_uInt16 nHeight = pDoc->GetRowHeight( nRow, nTabNo, &nHeightStartRow, nullptr);
         if (nHeightStartRow < nStartRow)
             nHeightStartRow = nStartRow;
         if (!nHeight)

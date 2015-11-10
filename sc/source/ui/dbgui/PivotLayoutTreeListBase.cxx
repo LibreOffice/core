@@ -21,7 +21,7 @@ using namespace std;
 ScPivotLayoutTreeListBase::ScPivotLayoutTreeListBase(vcl::Window* pParent, WinBits nBits, SvPivotTreeListType eType)
     : SvTreeListBox(pParent, nBits)
     , meType(eType)
-    , mpParent(NULL)
+    , mpParent(nullptr)
 {
     SetHighlightRange();
     SetDragDropMode(DragDropMode::CTRL_MOVE | DragDropMode::APP_MOVE  | DragDropMode::APP_DROP);
@@ -78,7 +78,7 @@ TriState ScPivotLayoutTreeListBase::NotifyCopying(SvTreeListEntry* /*pTarget*/, 
 bool ScPivotLayoutTreeListBase::HasEntry(SvTreeListEntry* pEntry)
 {
     SvTreeListEntry* pEachEntry;
-    for (pEachEntry = First(); pEachEntry != NULL; pEachEntry = Next(pEachEntry))
+    for (pEachEntry = First(); pEachEntry != nullptr; pEachEntry = Next(pEachEntry))
     {
         if(pEachEntry == pEntry)
             return true;
@@ -89,7 +89,7 @@ bool ScPivotLayoutTreeListBase::HasEntry(SvTreeListEntry* pEntry)
 void ScPivotLayoutTreeListBase::PushEntriesToPivotFieldVector(ScPivotFieldVector& rVector)
 {
     SvTreeListEntry* pEachEntry;
-    for (pEachEntry = First(); pEachEntry != NULL; pEachEntry = Next(pEachEntry))
+    for (pEachEntry = First(); pEachEntry != nullptr; pEachEntry = Next(pEachEntry))
     {
         ScItemValue* pItemValue = static_cast<ScItemValue*>(pEachEntry->GetUserData());
         ScPivotFuncData& rFunctionData = pItemValue->maFunctionData;
@@ -113,7 +113,7 @@ void ScPivotLayoutTreeListBase::InsertEntryForItem(ScItemValue* /*pItemValue*/, 
 void ScPivotLayoutTreeListBase::RemoveEntryForItem(ScItemValue* pItemValue)
 {
     SvTreeListEntry* pEachEntry;
-    for (pEachEntry = First(); pEachEntry != NULL; pEachEntry = Next(pEachEntry))
+    for (pEachEntry = First(); pEachEntry != nullptr; pEachEntry = Next(pEachEntry))
     {
         ScItemValue* pEachItemValue = static_cast<ScItemValue*>(pEachEntry->GetUserData());
         if (pEachItemValue == pItemValue)
@@ -132,7 +132,7 @@ void ScPivotLayoutTreeListBase::GetFocus()
     {
         SvTreeListEntry* pEntry = mpParent->mpPreviouslyFocusedListBox->GetCurEntry();
         if (pEntry)
-            InsertEntryForSourceTarget(pEntry, NULL);
+            InsertEntryForSourceTarget(pEntry, nullptr);
 
         if (mpParent->mpPreviouslyFocusedListBox != nullptr)
             mpParent->mpPreviouslyFocusedListBox->GrabFocus();

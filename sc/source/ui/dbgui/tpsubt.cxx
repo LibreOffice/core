@@ -41,8 +41,8 @@ ScTpSubTotalGroup::ScTpSubTotalGroup( vcl::Window* pParent,
                               &rArgSet ),
             aStrNone        ( SC_RESSTR( SCSTR_NONE ) ),
             aStrColumn      ( SC_RESSTR( SCSTR_COLUMN ) ),
-            pViewData       ( NULL ),
-            pDoc            ( NULL ),
+            pViewData       ( nullptr ),
+            pDoc            ( nullptr ),
             nWhichSubTotals ( rArgSet.GetPool()->GetWhich( SID_SUBTOTALS ) ),
             rSubTotalData   ( static_cast<const ScSubTotalItem&>(
                               rArgSet.Get( nWhichSubTotals )).
@@ -96,7 +96,7 @@ void ScTpSubTotalGroup::Init()
                                           GetItemSet().Get( nWhichSubTotals ));
 
     pViewData   = rSubTotalItem.GetViewData();
-    pDoc        = ( pViewData ) ? pViewData->GetDocument() : NULL;
+    pDoc        = ( pViewData ) ? pViewData->GetDocument() : nullptr;
 
     OSL_ENSURE( pViewData && pDoc, "ViewData or Document not found :-(" );
 
@@ -441,8 +441,8 @@ ScTpSubTotalOptions::ScTpSubTotalOptions( vcl::Window*               pParent,
         :   SfxTabPage      ( pParent,
                               "SubTotalOptionsPage", "modules/scalc/ui/subtotaloptionspage.ui" ,
                               &rArgSet ),
-            pViewData       ( NULL ),
-            pDoc            ( NULL ),
+            pViewData       ( nullptr ),
+            pDoc            ( nullptr ),
             nWhichSubTotals ( rArgSet.GetPool()->GetWhich( SID_SUBTOTALS ) ),
             rSubTotalData   ( static_cast<const ScSubTotalItem&>(
                               rArgSet.Get( nWhichSubTotals )).
@@ -486,7 +486,7 @@ void ScTpSubTotalOptions::Init()
                                           GetItemSet().Get( nWhichSubTotals ));
 
     pViewData   = rSubTotalItem.GetViewData();
-    pDoc        = ( pViewData ) ? pViewData->GetDocument() : NULL;
+    pDoc        = ( pViewData ) ? pViewData->GetDocument() : nullptr;
 
     OSL_ENSURE( pViewData && pDoc, "ViewData or Document not found!" );
 

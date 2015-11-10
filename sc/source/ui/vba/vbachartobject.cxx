@@ -74,7 +74,7 @@ ScVbaChartObject::setShape() throw ( script::BasicErrorException )
     {
         throw script::BasicErrorException( OUString(), uno::Reference< uno::XInterface >(), ERRCODE_BASIC_METHOD_FAILED, OUString() );
     }
-    return NULL;
+    return nullptr;
 }
 
 void SAL_CALL

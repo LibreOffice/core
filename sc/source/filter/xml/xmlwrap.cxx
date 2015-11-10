@@ -303,7 +303,7 @@ sal_uInt32 ScXMLImportWrapper::ImportFromComponent(const uno::Reference<uno::XCo
         nReturn = rDoc.GetRangeOverflowType();
 
     // free the component
-    xParser->setDocumentHandler( NULL );
+    xParser->setDocumentHandler( nullptr );
 
     // success!
     return nReturn;
@@ -460,11 +460,11 @@ bool ScXMLImportWrapper::Import( sal_uInt8 nMode, ErrCode& rError )
         SAL_INFO( "sc.filter", "meta import end" );
     }
 
-    SvXMLGraphicHelper* pGraphicHelper = NULL;
+    SvXMLGraphicHelper* pGraphicHelper = nullptr;
     uno::Reference< document::XGraphicObjectResolver > xGrfContainer;
 
     uno::Reference< document::XEmbeddedObjectResolver > xObjectResolver;
-    SvXMLEmbeddedObjectHelper *pObjectHelper = NULL;
+    SvXMLEmbeddedObjectHelper *pObjectHelper = nullptr;
 
     if( xStorage.is() )
     {
@@ -828,7 +828,7 @@ bool ScXMLImportWrapper::Export(bool bStylesOnly)
         bool bStylesRet (false);
         bool bDocRet(false);
         bool bSettingsRet(false);
-        ScMySharedData* pSharedData = NULL;
+        ScMySharedData* pSharedData = nullptr;
 
         bool bOasis = ( SotStorage::GetVersion( xStorage ) > SOFFICE_FILEFORMAT_60 );
 
@@ -878,10 +878,10 @@ bool ScXMLImportWrapper::Export(bool bStylesOnly)
         }
 
         uno::Reference< document::XEmbeddedObjectResolver > xObjectResolver;
-        SvXMLEmbeddedObjectHelper *pObjectHelper = 0;
+        SvXMLEmbeddedObjectHelper *pObjectHelper = nullptr;
 
         uno::Reference< document::XGraphicObjectResolver > xGrfContainer;
-        SvXMLGraphicHelper* pGraphicHelper = 0;
+        SvXMLGraphicHelper* pGraphicHelper = nullptr;
 
         if( xStorage.is() )
         {

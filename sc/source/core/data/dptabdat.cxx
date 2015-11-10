@@ -39,9 +39,9 @@ using ::com::sun::star::uno::Any;
 using ::std::vector;
 
 ScDPTableData::CalcInfo::CalcInfo() :
-    pInitState( NULL ),
-    pColRoot( NULL ),
-    pRowRoot( NULL ),
+    pInitState( nullptr ),
+    pColRoot( nullptr ),
+    pRowRoot( nullptr ),
     bRepeatIfEmpty(false)
 {
 }
@@ -198,7 +198,7 @@ void ScDPTableData::ProcessRowData(CalcInfo& rInfo, const CalcRowData& rData, bo
         if (rInfo.pColRoot->GetChildDimension())
         {
             vector<SCROW> aEmptyData;
-            rInfo.pColRoot->GetChildDimension()->ProcessData(rData.aColData, NULL, aEmptyData, rData.aValues);
+            rInfo.pColRoot->GetChildDimension()->ProcessData(rData.aColData, nullptr, aEmptyData, rData.aValues);
         }
 
         rInfo.pRowRoot->ProcessData(rData.aRowData, rInfo.pColRoot->GetChildDimension(),
@@ -257,7 +257,7 @@ long ScDPTableData::GetMembersCount( long nDim )
 const ScDPItemData* ScDPTableData::GetMemberByIndex( long nDim, long nIndex )
 {
     if ( nIndex >= GetMembersCount( nDim ) )
-        return NULL;
+        return nullptr;
 
     const ::std::vector<SCROW>& nMembers = GetCacheTable().getFieldEntries( nDim );
 

@@ -95,7 +95,7 @@ void XclImpSst::ReadSst( XclImpStream& rStrm )
 
 const XclImpString* XclImpSst::GetString( sal_uInt32 nSstIndex ) const
 {
-    return (nSstIndex < maStrings.size()) ? &maStrings[ nSstIndex ] : 0;
+    return (nSstIndex < maStrings.size()) ? &maStrings[ nSstIndex ] : nullptr;
 }
 
 // Hyperlinks =================================================================
@@ -441,7 +441,7 @@ void XclImpLabelranges::ReadLabelranges( XclImpStream& rStrm )
     SCTAB nScTab = rRoot.GetCurrScTab();
     XclImpAddressConverter& rAddrConv = rRoot.GetAddressConverter();
     ScRangePairListRef xLabelRangesRef;
-    const ScRange* pScRange = 0;
+    const ScRange* pScRange = nullptr;
 
     XclRangeList aRowXclRanges, aColXclRanges;
     rStrm >> aRowXclRanges >> aColXclRanges;
@@ -601,7 +601,7 @@ void XclImpCondFormat::ReadCF( XclImpStream& rStrm )
         nAlign = rStrm.ReaduInt16();
         nAlignMisc = rStrm.ReaduInt16();
         aAlign.FillFromCF( nAlign, nAlignMisc );
-        aAlign.FillToItemSet( rStyleItemSet, NULL );
+        aAlign.FillToItemSet( rStyleItemSet, nullptr );
         rStrm.Ignore(4);
     }
 
@@ -650,7 +650,7 @@ void XclImpCondFormat::ReadCF( XclImpStream& rStrm )
     ::std::unique_ptr< ScTokenArray > xTokArr1;
     if( nFmlaSize1 > 0 )
     {
-        const ScTokenArray* pTokArr = 0;
+        const ScTokenArray* pTokArr = nullptr;
         rFmlaConv.Reset( rPos );
         rFmlaConv.Convert( pTokArr, rStrm, nFmlaSize1, false, FT_CondFormat );
         // formula converter owns pTokArr -> create a copy of the token array
@@ -661,7 +661,7 @@ void XclImpCondFormat::ReadCF( XclImpStream& rStrm )
     ::std::unique_ptr< ScTokenArray > pTokArr2;
     if( nFmlaSize2 > 0 )
     {
-        const ScTokenArray* pTokArr = 0;
+        const ScTokenArray* pTokArr = nullptr;
         rFmlaConv.Reset( rPos );
         rFmlaConv.Convert( pTokArr, rStrm, nFmlaSize2, false, FT_CondFormat );
         // formula converter owns pTokArr -> create a copy of the token array
@@ -787,7 +787,7 @@ void XclImpValidationManager::ReadDV( XclImpStream& rStrm )
     rStrm.Ignore( 2 );
     if( nLen > 0 )
     {
-        const ScTokenArray* pTokArr = 0;
+        const ScTokenArray* pTokArr = nullptr;
         rFmlaConv.Reset();
             rFmlaConv.Convert( pTokArr, rStrm, nLen, false, FT_CondFormat );
         // formula converter owns pTokArr -> create a copy of the token array
@@ -803,7 +803,7 @@ void XclImpValidationManager::ReadDV( XclImpStream& rStrm )
     rStrm.Ignore( 2 );
     if( nLen > 0 )
     {
-        const ScTokenArray* pTokArr = 0;
+        const ScTokenArray* pTokArr = nullptr;
         rFmlaConv.Reset();
             rFmlaConv.Convert( pTokArr, rStrm, nLen, false, FT_CondFormat );
         // formula converter owns pTokArr -> create a copy of the token array
@@ -1348,7 +1348,7 @@ XclImpSheetProtectBuffer::Sheet* XclImpSheetProtectBuffer::GetSheetItem( SCTAB n
     {
         // new sheet
         if ( !maProtectedSheets.insert( ProtectedSheetMap::value_type(nTab, Sheet()) ).second )
-            return NULL;
+            return nullptr;
 
         itr = maProtectedSheets.find(nTab);
     }

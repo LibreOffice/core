@@ -382,7 +382,7 @@ void ScDrawShell::GetDrawAttrStateForIFBX( SfxItemSet& rSet )
     ScDrawView* pView = pViewData->GetScDrawView();
     const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
 
-    if( rMarkList.GetMark(0) != 0 )
+    if( rMarkList.GetMark(0) != nullptr )
     {
         SfxItemSet aNewAttr(pView->GetGeoAttrFromMarked());
         rSet.Put(aNewAttr, false);

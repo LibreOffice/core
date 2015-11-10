@@ -500,7 +500,7 @@ void ImportExcel8::AutoFilterInfo()
     XclImpAutoFilterData* pData = pExcRoot->pAutoFilterBuffer->GetByTab( GetCurrScTab() );
     if( pData )
     {
-        pData->SetAdvancedRange( NULL );
+        pData->SetAdvancedRange( nullptr );
         pData->Activate();
     }
 }
@@ -516,7 +516,7 @@ void ImportExcel8::AutoFilter()
 
 XclImpAutoFilterData::XclImpAutoFilterData( RootData* pRoot, const ScRange& rRange ) :
         ExcRoot( pRoot ),
-        pCurrDBData(NULL),
+        pCurrDBData(nullptr),
         bActive( false ),
         bCriteria( false ),
         bAutoOrAdvanced(false)
@@ -822,7 +822,7 @@ void XclImpAutoFilterData::CreateScDBData()
             pCurrDBData->SetAdvancedQuerySource(&aCriteriaRange);
         }
         else
-            pCurrDBData->SetAdvancedQuerySource(NULL);
+            pCurrDBData->SetAdvancedQuerySource(nullptr);
         rDoc.SetAnonymousDBData(Tab(), pCurrDBData);
     }
 
@@ -875,7 +875,7 @@ XclImpAutoFilterData* XclImpAutoFilterBuffer::GetByTab( SCTAB nTab )
         if( rFilterPtr->Tab() == nTab )
             return rFilterPtr.get();
     }
-    return NULL;
+    return nullptr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

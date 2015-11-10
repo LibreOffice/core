@@ -133,24 +133,24 @@ ScModule::ScModule( SfxObjectFactory* pFact ) :
     SfxModule( ResMgr::CreateResMgr( "sc" ), false, pFact, NULL ),
     mpDragData(new ScDragData),
     mpClipData(new ScClipData),
-    pSelTransfer( NULL ),
-    pMessagePool( NULL ),
-    pRefInputHandler( NULL ),
-    pViewCfg( NULL ),
-    pDocCfg( NULL ),
-    pAppCfg( NULL ),
-    pDefaultsCfg( NULL ),
-    pFormulaCfg( NULL ),
-    pInputCfg( NULL ),
-    pPrintCfg( NULL ),
-    pNavipiCfg( NULL ),
-    pAddInCfg( NULL ),
-    pColorConfig( NULL ),
-    pAccessOptions( NULL ),
-    pCTLOptions( NULL ),
-    pUserOptions( NULL ),
-    pErrorHdl( NULL ),
-    pFormEditData( NULL ),
+    pSelTransfer( nullptr ),
+    pMessagePool( nullptr ),
+    pRefInputHandler( nullptr ),
+    pViewCfg( nullptr ),
+    pDocCfg( nullptr ),
+    pAppCfg( nullptr ),
+    pDefaultsCfg( nullptr ),
+    pFormulaCfg( nullptr ),
+    pInputCfg( nullptr ),
+    pPrintCfg( nullptr ),
+    pNavipiCfg( nullptr ),
+    pAddInCfg( nullptr ),
+    pColorConfig( nullptr ),
+    pAccessOptions( nullptr ),
+    pCTLOptions( nullptr ),
+    pUserOptions( nullptr ),
+    pErrorHdl( nullptr ),
+    pFormEditData( nullptr ),
     nCurRefDlgId( 0 ),
     bIsWaterCan( false ),
     bIsInEditCommand( false ),
@@ -162,7 +162,7 @@ ScModule::ScModule( SfxObjectFactory* pFact ) :
     SetName("StarCalc"); // for Basic
 
     ResetDragObject();
-    SetClipObject( NULL, NULL );
+    SetClipObject( nullptr, nullptr );
 
     // InputHandler does not need to be created
 
@@ -367,7 +367,7 @@ void ScModule::DeleteCfg()
 void ScModule::Execute( SfxRequest& rReq )
 {
     SfxViewFrame* pViewFrm = SfxViewFrame::Current();
-    SfxBindings* pBindings = pViewFrm ? &pViewFrm->GetBindings() : NULL;
+    SfxBindings* pBindings = pViewFrm ? &pViewFrm->GetBindings() : nullptr;
 
     const SfxItemSet*   pReqArgs    = rReq.GetArgs();
     sal_uInt16              nSlot       = rReq.GetSlot();
@@ -567,7 +567,7 @@ void ScModule::Execute( SfxRequest& rReq )
 void ScModule::GetState( SfxItemSet& rSet )
 {
     ScDocShell* pDocSh = dynamic_cast<ScDocShell*>( SfxObjectShell::Current() );
-    bool bTabView = pDocSh && (pDocSh->GetBestViewShell() != NULL);
+    bool bTabView = pDocSh && (pDocSh->GetBestViewShell() != nullptr);
 
     SfxWhichIter aIter(rSet);
     for (sal_uInt16 nWhich = aIter.FirstWhich(); nWhich; nWhich = aIter.NextWhich())
@@ -628,9 +628,9 @@ void ScModule::HideDisabledSlots( SfxItemSet& rSet )
 
 void ScModule::ResetDragObject()
 {
-    mpDragData->pCellTransfer = NULL;
-    mpDragData->pDrawTransfer = NULL;
-    mpDragData->pJumpLocalDoc = NULL;
+    mpDragData->pCellTransfer = nullptr;
+    mpDragData->pDrawTransfer = nullptr;
+    mpDragData->pJumpLocalDoc = nullptr;
     (mpDragData->aLinkDoc).clear();
     (mpDragData->aLinkTable).clear();
     (mpDragData->aLinkArea).clear();
@@ -675,11 +675,11 @@ void ScModule::SetClipObject( ScTransferObj* pCellObj, ScDrawTransferObj* pDrawO
 ScDocument* ScModule::GetClipDoc()
 {
     // called from document
-    ScTransferObj* pObj = ScTransferObj::GetOwnClipboard( NULL );
+    ScTransferObj* pObj = ScTransferObj::GetOwnClipboard( nullptr );
     if (pObj)
         return pObj->GetDocument();
 
-    return NULL;
+    return nullptr;
 }
 
 void ScModule::SetSelectionTransfer( ScSelectionTransferObj* pNew )
@@ -955,12 +955,12 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
     OSL_ENSURE( pInputCfg, "InputOptions not initialised :-(" );
 
     SfxViewFrame* pViewFrm = SfxViewFrame::Current();
-    SfxBindings* pBindings = pViewFrm ? &pViewFrm->GetBindings() : NULL;
+    SfxBindings* pBindings = pViewFrm ? &pViewFrm->GetBindings() : nullptr;
 
     ScTabViewShell*         pViewSh = dynamic_cast<ScTabViewShell*>( SfxViewShell::Current() );
     ScDocShell*             pDocSh  = dynamic_cast<ScDocShell*>( SfxObjectShell::Current() );
-    ScDocument*             pDoc    = pDocSh ? &pDocSh->GetDocument() : NULL;
-    const SfxPoolItem*      pItem   = NULL;
+    ScDocument*             pDoc    = pDocSh ? &pDocSh->GetDocument() : nullptr;
+    const SfxPoolItem*      pItem   = nullptr;
     bool bRepaint = false;
     bool bUpdateMarks = false;
     bool bUpdateRefDev = false;
@@ -1371,7 +1371,7 @@ ScInputHandler* ScModule::GetInputHdl( ScTabViewShell* pViewSh, bool bUseRef )
     if ( pRefInputHandler && bUseRef )
         return pRefInputHandler;
 
-    ScInputHandler* pHdl = NULL;
+    ScInputHandler* pHdl = nullptr;
     if ( !pViewSh )
     {
         // in case a UIActive embedded object has no ViewShell (UNO component)
@@ -1582,7 +1582,7 @@ static SfxChildWindow* lcl_GetChildWinFromAnyView( sal_uInt16 nId )
     SfxViewFrame* pViewFrm = SfxViewFrame::Current();
 
     // #i46999# current view frame can be null (for example, when closing help)
-    SfxChildWindow* pChildWnd = pViewFrm ? pViewFrm->GetChildWindow( nId ) : NULL;
+    SfxChildWindow* pChildWnd = pViewFrm ? pViewFrm->GetChildWindow( nId ) : nullptr;
     if ( pChildWnd )
         return pChildWnd;           // found in the current view
 
@@ -1599,7 +1599,7 @@ static SfxChildWindow* lcl_GetChildWinFromAnyView( sal_uInt16 nId )
         pViewFrm = SfxViewFrame::GetNext( *pViewFrm );
     }
 
-    return NULL;                    // none found
+    return nullptr;                    // none found
 }
 
 bool ScModule::IsModalMode(SfxObjectShell* pDocSh)
@@ -1940,7 +1940,7 @@ IMPL_LINK_NOARG_TYPED(ScModule, SpellTimerHdl, Idle *, void)
  */
 SfxItemSet*  ScModule::CreateItemSet( sal_uInt16 nId )
 {
-    SfxItemSet*  pRet = 0;
+    SfxItemSet*  pRet = nullptr;
     if(SID_SC_EDITOPTIONS == nId)
     {
         pRet = new SfxItemSet( GetPool(),
@@ -2224,12 +2224,12 @@ bool  ScModule::UnregisterRefWindow( sal_uInt16 nSlotId, vcl::Window *pWnd )
 vcl::Window *  ScModule::Find1RefWindow( sal_uInt16 nSlotId, vcl::Window *pWndAncestor )
 {
     if (!pWndAncestor)
-        return NULL;
+        return nullptr;
 
     auto iSlot = m_mapRefWindow.find( nSlotId );
 
     if( iSlot == m_mapRefWindow.end() )
-        return NULL;
+        return nullptr;
 
     std::list<VclPtr<vcl::Window> > & rlRefWindow = iSlot->second;
 
@@ -2239,7 +2239,7 @@ vcl::Window *  ScModule::Find1RefWindow( sal_uInt16 nSlotId, vcl::Window *pWndAn
         if ( pWndAncestor->IsWindowOrChild( *i, (*i)->IsSystemWindow() ) )
             return *i;
 
-    return NULL;
+    return nullptr;
 }
 
 using namespace com::sun::star;

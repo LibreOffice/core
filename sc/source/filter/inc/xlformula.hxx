@@ -330,9 +330,9 @@ struct XclFunctionInfo
     /** Returns true, if the function parameter count is fixed. */
     inline bool         IsFixedParamCount() const { return (mnXclFunc != EXC_FUNCID_EXTERNCALL) && (mnMinParamCount == mnMaxParamCount); }
     /** Returns true, if the function is simulated by a macro call. */
-    inline bool         IsMacroFunc() const { return mpcMacroName != 0 && !(mnFlags & EXC_FUNCFLAG_ADDINEQUIV); }
+    inline bool         IsMacroFunc() const { return mpcMacroName != nullptr && !(mnFlags & EXC_FUNCFLAG_ADDINEQUIV); }
     /** Returns true, if the function is stored as an add-in call. */
-    inline bool         IsAddInEquivalent() const { return mpcMacroName != 0 && (mnFlags & EXC_FUNCFLAG_ADDINEQUIV); }
+    inline bool         IsAddInEquivalent() const { return mpcMacroName != nullptr && (mnFlags & EXC_FUNCFLAG_ADDINEQUIV); }
     /** Returns the name of the external function as string. */
     OUString            GetMacroFuncName() const;
     /** Returns the programmatical name of the Add-In function as string. */
@@ -387,7 +387,7 @@ public:
     /** Returns the size of the token array in bytes. */
     sal_uInt16          GetSize() const;
     /** Returns read-only access to the byte vector storing token data. */
-    inline const sal_uInt8* GetData() const { return maTokVec.empty() ? 0 : &maTokVec.front(); }
+    inline const sal_uInt8* GetData() const { return maTokVec.empty() ? nullptr : &maTokVec.front(); }
     /** Returns true, if the formula contains a volatile function. */
     inline bool         IsVolatile() const { return mbVolatile; }
 
@@ -446,9 +446,9 @@ public:
 
     void                Init( const ScTokenArray& rScTokArr, bool bSkipSpaces );
 
-    inline bool         Is() const { return mppScToken != 0; }
+    inline bool         Is() const { return mppScToken != nullptr; }
     inline bool         operator!() const { return !Is(); }
-    inline const ::formula::FormulaToken* Get() const { return mppScToken ? *mppScToken : 0; }
+    inline const ::formula::FormulaToken* Get() const { return mppScToken ? *mppScToken : nullptr; }
     inline const ::formula::FormulaToken* operator->() const { return Get(); }
     inline const ::formula::FormulaToken& operator*() const { return *Get(); }
 

@@ -44,7 +44,7 @@ ContextHandlerRef FilterSettingsContext::onCreateContext( sal_Int32 nElement, co
             if( nElement == XLS_TOKEN( customFilter ) ) return this;
         break;
     }
-    return 0;
+    return nullptr;
 }
 
 void FilterSettingsContext::onStartElement( const AttributeList& rAttribs )
@@ -63,7 +63,7 @@ ContextHandlerRef FilterSettingsContext::onCreateRecordContext( sal_Int32 nRecId
             if( nRecId == BIFF12_ID_CUSTOMFILTER ) return this;
         break;
     }
-    return 0;
+    return nullptr;
 }
 
 void FilterSettingsContext::onStartRecord( SequenceInputStream& rStrm )
@@ -88,7 +88,7 @@ ContextHandlerRef FilterColumnContext::onCreateContext( sal_Int32 nElement, cons
         case XLS_TOKEN( customFilters ):
             return new FilterSettingsContext( *this, mrFilterColumn.createFilterSettings< CustomFilter >() );
     }
-    return 0;
+    return nullptr;
 }
 
 void FilterColumnContext::onStartElement( const AttributeList& rAttribs )
@@ -107,7 +107,7 @@ ContextHandlerRef FilterColumnContext::onCreateRecordContext( sal_Int32 nRecId, 
         case BIFF12_ID_CUSTOMFILTERS:
             return new FilterSettingsContext( *this, mrFilterColumn.createFilterSettings< CustomFilter >() );
     }
-    return 0;
+    return nullptr;
 }
 
 void FilterColumnContext::onStartRecord( SequenceInputStream& rStrm )
@@ -125,7 +125,7 @@ ContextHandlerRef AutoFilterContext::onCreateContext( sal_Int32 nElement, const 
 {
     if( (getCurrentElement() == XLS_TOKEN( autoFilter )) && (nElement == XLS_TOKEN( filterColumn )) )
         return new FilterColumnContext( *this, mrAutoFilter.createFilterColumn() );
-    return 0;
+    return nullptr;
 }
 
 void AutoFilterContext::onStartElement( const AttributeList& rAttribs )
@@ -137,7 +137,7 @@ ContextHandlerRef AutoFilterContext::onCreateRecordContext( sal_Int32 nRecId, Se
 {
     if( (getCurrentElement() == BIFF12_ID_AUTOFILTER) && (nRecId == BIFF12_ID_FILTERCOLUMN) )
         return new FilterColumnContext( *this, mrAutoFilter.createFilterColumn() );
-    return 0;
+    return nullptr;
 }
 
 void AutoFilterContext::onStartRecord( SequenceInputStream& rStrm )

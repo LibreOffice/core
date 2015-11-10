@@ -571,14 +571,14 @@ void ScDocShell::Execute( SfxRequest& rReq )
 
                 // xmlsec05/06:
                 // getting real parent window when called from Security-Options TP
-                vcl::Window* pParent = NULL;
+                vcl::Window* pParent = nullptr;
                 const SfxPoolItem* pParentItem;
                 if( pReqArgs && SfxItemState::SET == pReqArgs->GetItemState( SID_ATTR_XWINDOW, false, &pParentItem ) )
                     pParent = static_cast<const XWindowItem*>( pParentItem )->GetWindowPtr();
 
                 // desired state
                 ScChangeTrack* pChangeTrack = rDoc.GetChangeTrack();
-                bool bActivateTracking = (pChangeTrack == 0);   // toggle
+                bool bActivateTracking = (pChangeTrack == nullptr);   // toggle
                 if ( pItem )
                     bActivateTracking = pItem->GetValue();      // from argument
 
@@ -598,7 +598,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                         if (pChangeTrack)
                         {
                             if ( pChangeTrack->IsProtected() )
-                                bDo = ExecuteChangeProtectionDialog( NULL );
+                                bDo = ExecuteChangeProtectionDialog( nullptr );
                         }
                         if ( bDo )
                         {
@@ -633,7 +633,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
 
         case SID_CHG_PROTECT :
             {
-                vcl::Window* pParent = NULL;
+                vcl::Window* pParent = nullptr;
                 const SfxPoolItem* pParentItem;
                 if( pReqArgs && SfxItemState::SET == pReqArgs->GetItemState( SID_ATTR_XWINDOW, false, &pParentItem ) )
                     pParent = static_cast<const XWindowItem*>( pParentItem )->GetWindowPtr();
@@ -660,12 +660,12 @@ void ScDocShell::Execute( SfxRequest& rReq )
                             WinBits(WB_YES_NO | WB_DEF_NO),
                             ScGlobal::GetRscString( STR_END_REDLINING ) );
                         if( aBox->Execute() == RET_YES )
-                            bDo = ExecuteChangeProtectionDialog( NULL, true );
+                            bDo = ExecuteChangeProtectionDialog( nullptr, true );
                         else
                             bDo = false;
                     }
                     else    // merge might reject some actions
-                        bDo = ExecuteChangeProtectionDialog( NULL, true );
+                        bDo = ExecuteChangeProtectionDialog( nullptr, true );
                 }
                 if ( !bDo )
                 {
@@ -675,7 +675,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                 SfxApplication* pApp = SfxGetpApp();
                 const SfxPoolItem* pItem;
                 const SfxStringItem* pStringItem(nullptr);
-                SfxMedium* pMed = NULL;
+                SfxMedium* pMed = nullptr;
                 if (pReqArgs && pReqArgs->GetItemState(SID_FILE_NAME, true, &pItem) == SfxItemState::SET)
                 {
                     pStringItem = dynamic_cast<const SfxStringItem*>(pItem);
@@ -752,7 +752,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
 
                     if ( !pOtherDocSh->GetError() )                 // nur Errors
                     {
-                        bool bHadTrack = ( aDocument.GetChangeTrack() != NULL );
+                        bool bHadTrack = ( aDocument.GetChangeTrack() != nullptr );
 #if HAVE_FEATURE_MULTIUSER_ENVIRONMENT
                         sal_uLong nStart = 0;
                         if ( nSlot == SID_DOCUMENT_MERGE && pChangeTrack )
@@ -1535,10 +1535,10 @@ void ScDocShell::ExecutePageStyle( SfxViewShell& rCaller,
         case SID_STATUS_PAGESTYLE:  // Click auf StatusBar-Control
         case SID_FORMATPAGE:
             {
-                if ( pReqArgs != NULL )
+                if ( pReqArgs != nullptr )
                 {
                 }
-                else if ( pReqArgs == NULL )
+                else if ( pReqArgs == nullptr )
                 {
                     OUString aOldName = aDocument.GetPageStyle( nCurTab );
                     ScStyleSheetPool* pStylePool = aDocument.GetStyleSheetPool();
@@ -1609,10 +1609,10 @@ void ScDocShell::ExecutePageStyle( SfxViewShell& rCaller,
 
         case SID_HFEDIT:
             {
-                if ( pReqArgs != NULL )
+                if ( pReqArgs != nullptr )
                 {
                 }
-                else if ( pReqArgs == NULL )
+                else if ( pReqArgs == nullptr )
                 {
                     OUString aStr( aDocument.GetPageStyle( nCurTab ) );
 
@@ -1780,7 +1780,7 @@ void ScDocShell::GetStatePageStyle( SfxViewShell&   /* rCaller */,
 
 void ScDocShell::GetState( SfxItemSet &rSet )
 {
-    bool bTabView = GetBestViewShell() != NULL;
+    bool bTabView = GetBestViewShell() != nullptr;
 
     SfxWhichIter aIter(rSet);
     for (sal_uInt16 nWhich = aIter.FirstWhich(); nWhich; nWhich = aIter.NextWhich())
@@ -1805,7 +1805,7 @@ void ScDocShell::GetState( SfxItemSet &rSet )
                     rSet.DisableItem( nWhich );
                 else
                     rSet.Put( SfxBoolItem( nWhich,
-                        aDocument.GetChangeTrack() != NULL ) );
+                        aDocument.GetChangeTrack() != nullptr ) );
                 break;
 
             case SID_CHG_PROTECT:
@@ -1887,7 +1887,7 @@ void ScDocShell::Draw( OutputDevice* pDev, const JobSetup & /* rSetup */, sal_uI
     if ( nAspect == ASPECT_THUMBNAIL )
     {
         Rectangle aBoundRect = GetVisArea( ASPECT_THUMBNAIL );
-        ScViewData aTmpData( this, NULL );
+        ScViewData aTmpData( this, nullptr );
         aTmpData.SetTabNo(nVisTab);
         SnapVisArea( aBoundRect );
         aTmpData.SetScreen( aBoundRect );
@@ -1896,7 +1896,7 @@ void ScDocShell::Draw( OutputDevice* pDev, const JobSetup & /* rSetup */, sal_uI
     else
     {
         Rectangle aBoundRect = SfxObjectShell::GetVisArea();
-        ScViewData aTmpData( this, NULL );
+        ScViewData aTmpData( this, nullptr );
         aTmpData.SetTabNo(nVisTab);
         SnapVisArea( aBoundRect );
         aTmpData.SetScreen( aBoundRect );
@@ -2002,7 +2002,7 @@ void SnapVer( const ScDocument& rDoc, SCTAB nTab, long& rVal, SCROW& rStartRow )
     for (SCROW i = nRow; i <= MAXROW; ++i)
     {
         SCROW nLastRow;
-        if (rDoc.RowHidden(i, nTab, NULL, &nLastRow))
+        if (rDoc.RowHidden(i, nTab, nullptr, &nLastRow))
         {
             i = nLastRow;
             continue;
@@ -2075,8 +2075,8 @@ void ScDocShell::GetPageOnFromPageStyleSet( const SfxItemSet* pStyleSet,
     if (!pStyleSet)
         return;
 
-    const SvxSetItem*   pSetItem = NULL;
-    const SfxItemSet*   pSet     = NULL;
+    const SvxSetItem*   pSetItem = nullptr;
+    const SfxItemSet*   pSet     = nullptr;
 
     pSetItem = static_cast<const SvxSetItem*>( &pStyleSet->Get( ATTR_PAGE_HEADERSET ) );
     pSet     = &pSetItem->GetItemSet();
@@ -2201,7 +2201,7 @@ bool ScDocShell::DdeSetData( const OUString& rItem,
     bool bValid = ( (aRange.Parse(aPos, &aDocument, formula::FormulaGrammar::CONV_OOO ) & SCA_VALID) ||
                     (aRange.aStart.Parse(aPos, &aDocument, formula::FormulaGrammar::CONV_OOO) & SCA_VALID) );
 
-    ScServerObject* pObj = NULL;            // NULL = error
+    ScServerObject* pObj = nullptr;            // NULL = error
     if ( bValid )
         pObj = new ScServerObject( this, rItem );
 
@@ -2214,7 +2214,7 @@ ScViewData* ScDocShell::GetViewData()
 {
     SfxViewShell* pCur = SfxViewShell::Current();
     ScTabViewShell* pViewSh = dynamic_cast< ScTabViewShell *>( pCur );
-    return pViewSh ? &pViewSh->GetViewData() : NULL;
+    return pViewSh ? &pViewSh->GetViewData() : nullptr;
 }
 
 SCTAB ScDocShell::GetCurTab()
@@ -2231,7 +2231,7 @@ ScTabViewShell* ScDocShell::GetBestViewShell( bool bOnlyVisible )
     ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell();
     // falsches Doc?
     if( pViewSh && pViewSh->GetViewData().GetDocShell() != this )
-        pViewSh = NULL;
+        pViewSh = nullptr;
     if( !pViewSh )
     {
         // 1. ViewShell suchen
@@ -2253,12 +2253,12 @@ SfxBindings* ScDocShell::GetViewBindings()
     if (pViewSh)
         return &pViewSh->GetViewFrame()->GetBindings();
     else
-        return NULL;
+        return nullptr;
 }
 
 ScDocShell* ScDocShell::GetShellByNum( sal_uInt16 nDocNo )      // static
 {
-    ScDocShell* pFound = NULL;
+    ScDocShell* pFound = nullptr;
     SfxObjectShell* pShell = SfxObjectShell::GetFirst();
     sal_uInt16 nShellCnt = 0;
 
@@ -2299,7 +2299,7 @@ IMPL_LINK_TYPED( ScDocShell, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg
                 if ( !sOptions.isEmpty() )
                     pImpl->pRequest->AppendItem( SfxStringItem( SID_FILE_FILTEROPTIONS, sOptions ) );
             }
-            const SfxPoolItem* pItem = NULL;
+            const SfxPoolItem* pItem = nullptr;
             const SfxInt16Item* pInt16Item(nullptr);
             SfxItemSet* pSet = pMed->GetItemSet();
             if (pSet && pSet->GetItemState(SID_VERSION, true, &pItem) == SfxItemState::SET)

@@ -199,11 +199,11 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                     const SfxPoolItem* pItem;
                     if ( pReqArgs->GetItemState( SID_DEFINE_PRINTAREA, true, &pItem ) == SfxItemState::SET )
                         aPrintStr = static_cast<const SfxStringItem*>(pItem)->GetValue();
-                    SetPrintRanges( false, &aPrintStr, NULL, NULL, bAdd );
+                    SetPrintRanges( false, &aPrintStr, nullptr, nullptr, bAdd );
                 }
                 else
                 {
-                    SetPrintRanges( false, NULL, NULL, NULL, bAdd );      // from selection
+                    SetPrintRanges( false, nullptr, nullptr, nullptr, bAdd );      // from selection
                     rReq.Done();
                 }
             }
@@ -214,7 +214,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 // Clear currently defined print range if any, and reset it to
                 // print entire sheet which is the default.
                 OUString aEmpty;
-                SetPrintRanges(true, &aEmpty, NULL, NULL, false);
+                SetPrintRanges(true, &aEmpty, nullptr, nullptr, false);
                 rReq.Done();
             }
             break;
@@ -472,7 +472,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 OUString aStrDocName( static_cast<const SfxStringItem&>(pReqArgs->
                                         Get(nSlot)).GetValue() );
 
-                SfxViewFrame*   pViewFrame = NULL;
+                SfxViewFrame*   pViewFrame = nullptr;
                 ScDocShell*     pDocSh = static_cast<ScDocShell*>(SfxObjectShell::GetFirst());
                 bool            bFound = false;
 
@@ -483,7 +483,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                     if ( pDocSh->GetTitle() == aStrDocName )
                     {
                         pViewFrame = SfxViewFrame::GetFirst( pDocSh );
-                        bFound = ( NULL != pViewFrame );
+                        bFound = ( nullptr != pViewFrame );
                     }
 
                     pDocSh = static_cast<ScDocShell*>(SfxObjectShell::GetNext( *pDocSh ));
@@ -623,7 +623,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
             {
                 sal_uInt16          nId  = ScInputWindowWrapper::GetChildWindowId();
                 SfxChildWindow* pWnd = pThisFrame->GetChildWindow( nId );
-                bool bSet = ( pWnd == NULL );
+                bool bSet = ( pWnd == nullptr );
                 const SfxPoolItem* pItem;
                 if ( pReqArgs && pReqArgs->GetItemState(nSlot, true, &pItem) == SfxItemState::SET )
                     bSet = static_cast<const SfxBoolItem*>(pItem)->GetValue();
@@ -748,7 +748,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
 
         case SID_ATTR_ZOOMSLIDER:
             {
-                const SfxPoolItem* pItem = NULL;
+                const SfxPoolItem* pItem = nullptr;
                 bool bSyncZoom = SC_MOD()->GetAppOptions().GetSynchronizeZoom();
                 if ( pReqArgs && pReqArgs->GetItemState(SID_ATTR_ZOOMSLIDER, true, &pItem) == SfxItemState::SET )
                 {

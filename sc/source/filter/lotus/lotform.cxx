@@ -380,7 +380,7 @@ ConvErr LotusToSc::Convert( const ScTokenArray*& rpErg, sal_Int32& rRest,
     FUNC_TYPE           eType = FT_NOP;
     TokenId             nMerk0;
     DefTokenId          eOc;
-    const sal_Char*     pExtName = 0;
+    const sal_Char*     pExtName = nullptr;
     RangeNameBufferWK3& rRangeNameBufferWK3 = *m_rContext.pLotusRoot->pRngNmBffWK3;
 
     ScComplexRefData        aCRD;
@@ -609,10 +609,10 @@ ConvErr LotusToSc::Convert( const ScTokenArray*& rpErg, sal_Int32& rRest,
                         DoFunc( ocNoName, nAnz, p.get() );
                     }
                     else
-                        DoFunc( ocNoName, nAnz, NULL );
+                        DoFunc( ocNoName, nAnz, nullptr );
                 }
                 else
-                    DoFunc( ocNoName, nAnz, NULL );
+                    DoFunc( ocNoName, nAnz, nullptr );
             }
                 break;
             case FT_Const10Float:
@@ -1720,159 +1720,159 @@ const sal_Char* GetAddInName( const sal_uInt8 n )
 {
     static const sal_Char*  pNames[ 256 ] =
     {
-        NULL,                       //    0 8-Byte-IEEE-Float
-        NULL,                       //    1 Variable
-        NULL,                       //    2 Bereich
-        NULL,                       //    3 return
-        NULL,                       //    4 Bracket
-        NULL,                       //    5 2-Byte-Integer
-        NULL,                       //    6 ASCII-String
-        NULL,                       //    7 Named range reference
-        NULL,                       //    8 Absolut named range
-        NULL,                       //    9 Err range reference
-        NULL,                       //   10 Err cell reference
-        NULL,                       //   11 Err constant
-        NULL,                       //   12
-        NULL,                       //   13
-        NULL,                       //   14 Negation
-        NULL,                       //   15 Addition
-        NULL,                       //   16 Subtraktion
-        NULL,                       //   17 Multiplikation
-        NULL,                       //   18 Division
-        NULL,                       //   19 Potenzierung
-        NULL,                       //   20 equal
-        NULL,                       //   21 unequal
-        NULL,                       //   22 <=
-        NULL,                       //   23 >=
-        NULL,                       //   24 <
-        NULL,                       //   25 >
-        NULL,                       //   26 And (logic)
-        NULL,                       //   27 Or (logic)
-        NULL,                       //   28 Not (logic)
-        NULL,                       //   29 unary Plus
-        NULL,                       //   30 Concatenation
-        NULL,                       //   31 Not applicable
-        NULL,                       //   32 Error
-        NULL,                       //   33 Absolute Value ABS()
-        NULL,                       //   34 Integer INT()
-        NULL,                       //   35 Square Root
-        NULL,                       //   36 Zehnerlogarithmus
-        NULL,                       //   37 Natuerlicher Logarithmus
-        NULL,                       //   38 PI
-        NULL,                       //   39 Sinus
-        NULL,                       //   40 Cosinus
-        NULL,                       //   41 Tangens
-        NULL,                       //   42 Arcus-Tangens 2 (4.Quadrant)
-        NULL,                       //   43 Arcus-Tangens (2.Quadrant)
-        NULL,                       //   44 Arcus-Sinus
-        NULL,                       //   45 Arcus-Cosinus
-        NULL,                       //   46 Exponentialfunction
-        NULL,                       //   47 Modulo
-        NULL,                       //   48 Auswahl
-        NULL,                       //   49 Is not applicable?
-        NULL,                       //   50 Is Error?
-        NULL,                       //   51 FALSE
-        NULL,                       //   52 TRUE
-        NULL,                       //   53 Random number
-        NULL,                       //   54 Date
-        NULL,                       //   55 Today
-        NULL,                       //   56 Payment
-        NULL,                       //   57 Present Value
-        NULL,                       //   58 Future Value
-        NULL,                       //   59 If ... then ... else ...
-        NULL,                       //   60 Day of Month
-        NULL,                       //   61 Monat
-        NULL,                       //   62 Year
-        NULL,                       //   63 Round
-        NULL,                       //   64 Time
-        NULL,                       //   65 Hour
-        NULL,                       //   66 Minute
-        NULL,                       //   67 Second
-        NULL,                       //   68 Is Number?
-        NULL,                       //   69 Is Text?
-        NULL,                       //   70 Len()
-        NULL,                       //   71 Val()
-        NULL,                       //   72 String()    ocFixed as substitute + special case
-        NULL,                       //   73 Mid()
-        NULL,                       //   74 Char()
-        NULL,                       //   75 Ascii()
-        NULL,                       //   76 Find()
-        NULL,                       //   77 Datevalue
-        NULL,                       //   78 Timevalue
+        nullptr,                       //    0 8-Byte-IEEE-Float
+        nullptr,                       //    1 Variable
+        nullptr,                       //    2 Bereich
+        nullptr,                       //    3 return
+        nullptr,                       //    4 Bracket
+        nullptr,                       //    5 2-Byte-Integer
+        nullptr,                       //    6 ASCII-String
+        nullptr,                       //    7 Named range reference
+        nullptr,                       //    8 Absolut named range
+        nullptr,                       //    9 Err range reference
+        nullptr,                       //   10 Err cell reference
+        nullptr,                       //   11 Err constant
+        nullptr,                       //   12
+        nullptr,                       //   13
+        nullptr,                       //   14 Negation
+        nullptr,                       //   15 Addition
+        nullptr,                       //   16 Subtraktion
+        nullptr,                       //   17 Multiplikation
+        nullptr,                       //   18 Division
+        nullptr,                       //   19 Potenzierung
+        nullptr,                       //   20 equal
+        nullptr,                       //   21 unequal
+        nullptr,                       //   22 <=
+        nullptr,                       //   23 >=
+        nullptr,                       //   24 <
+        nullptr,                       //   25 >
+        nullptr,                       //   26 And (logic)
+        nullptr,                       //   27 Or (logic)
+        nullptr,                       //   28 Not (logic)
+        nullptr,                       //   29 unary Plus
+        nullptr,                       //   30 Concatenation
+        nullptr,                       //   31 Not applicable
+        nullptr,                       //   32 Error
+        nullptr,                       //   33 Absolute Value ABS()
+        nullptr,                       //   34 Integer INT()
+        nullptr,                       //   35 Square Root
+        nullptr,                       //   36 Zehnerlogarithmus
+        nullptr,                       //   37 Natuerlicher Logarithmus
+        nullptr,                       //   38 PI
+        nullptr,                       //   39 Sinus
+        nullptr,                       //   40 Cosinus
+        nullptr,                       //   41 Tangens
+        nullptr,                       //   42 Arcus-Tangens 2 (4.Quadrant)
+        nullptr,                       //   43 Arcus-Tangens (2.Quadrant)
+        nullptr,                       //   44 Arcus-Sinus
+        nullptr,                       //   45 Arcus-Cosinus
+        nullptr,                       //   46 Exponentialfunction
+        nullptr,                       //   47 Modulo
+        nullptr,                       //   48 Auswahl
+        nullptr,                       //   49 Is not applicable?
+        nullptr,                       //   50 Is Error?
+        nullptr,                       //   51 FALSE
+        nullptr,                       //   52 TRUE
+        nullptr,                       //   53 Random number
+        nullptr,                       //   54 Date
+        nullptr,                       //   55 Today
+        nullptr,                       //   56 Payment
+        nullptr,                       //   57 Present Value
+        nullptr,                       //   58 Future Value
+        nullptr,                       //   59 If ... then ... else ...
+        nullptr,                       //   60 Day of Month
+        nullptr,                       //   61 Monat
+        nullptr,                       //   62 Year
+        nullptr,                       //   63 Round
+        nullptr,                       //   64 Time
+        nullptr,                       //   65 Hour
+        nullptr,                       //   66 Minute
+        nullptr,                       //   67 Second
+        nullptr,                       //   68 Is Number?
+        nullptr,                       //   69 Is Text?
+        nullptr,                       //   70 Len()
+        nullptr,                       //   71 Val()
+        nullptr,                       //   72 String()    ocFixed as substitute + special case
+        nullptr,                       //   73 Mid()
+        nullptr,                       //   74 Char()
+        nullptr,                       //   75 Ascii()
+        nullptr,                       //   76 Find()
+        nullptr,                       //   77 Datevalue
+        nullptr,                       //   78 Timevalue
         "ZELLZEIGER",               //   79 Cellpointer
-        NULL,                       //   80 Sum()
-        NULL,                       //   81 Avg()
-        NULL,                       //   82 Cnt()
-        NULL,                       //   83 Min()
-        NULL,                       //   84 Max()
-        NULL,                       //   85 Vlookup()
-        NULL,                       //   86 Npv()
-        NULL,                       //   87 Var()
-        NULL,                       //   88 Std()
-        NULL,                       //   89 Irr()
-        NULL,                       //   90 Hlookup()
-        NULL,                       //   91 XlfDsum
-        NULL,                       //   92 XlfDaverage
-        NULL,                       //   93 XlfDcount
-        NULL,                       //   94 XlfDmin
-        NULL,                       //   95 XlfDmax
-        NULL,                       //   96 XlfDvar
-        NULL,                       //   97 XlfDstdev
-        NULL,                       //   98 Index()
-        NULL,                       //   99 Cols()
-        NULL,                       //  100 Rows()
-        NULL,                       //  101 Repeat()
-        NULL,                       //  102 Upper()
-        NULL,                       //  103 Lower()
-        NULL,                       //  104 Left()
-        NULL,                       //  105 Right()
-        NULL,                       //  106 Replace()
-        NULL,                       //  107 Proper()
+        nullptr,                       //   80 Sum()
+        nullptr,                       //   81 Avg()
+        nullptr,                       //   82 Cnt()
+        nullptr,                       //   83 Min()
+        nullptr,                       //   84 Max()
+        nullptr,                       //   85 Vlookup()
+        nullptr,                       //   86 Npv()
+        nullptr,                       //   87 Var()
+        nullptr,                       //   88 Std()
+        nullptr,                       //   89 Irr()
+        nullptr,                       //   90 Hlookup()
+        nullptr,                       //   91 XlfDsum
+        nullptr,                       //   92 XlfDaverage
+        nullptr,                       //   93 XlfDcount
+        nullptr,                       //   94 XlfDmin
+        nullptr,                       //   95 XlfDmax
+        nullptr,                       //   96 XlfDvar
+        nullptr,                       //   97 XlfDstdev
+        nullptr,                       //   98 Index()
+        nullptr,                       //   99 Cols()
+        nullptr,                       //  100 Rows()
+        nullptr,                       //  101 Repeat()
+        nullptr,                       //  102 Upper()
+        nullptr,                       //  103 Lower()
+        nullptr,                       //  104 Left()
+        nullptr,                       //  105 Right()
+        nullptr,                       //  106 Replace()
+        nullptr,                       //  107 Proper()
         "ZELLE",                    //  108 Cell()
-        NULL,                       //  109 Trim()
-        NULL,                       //  110 Clean()
+        nullptr,                       //  109 Trim()
+        nullptr,                       //  110 Clean()
         "F",                        //  111 F()     (Excel: T()?)
         "W",                        //  112 W()
-        NULL,                       //  113 Exact()
-        NULL,                       //  114 Call()
-        NULL,                       //  115 @@()
-        NULL,                       //  116 Rate()
+        nullptr,                       //  113 Exact()
+        nullptr,                       //  114 Call()
+        nullptr,                       //  115 @@()
+        nullptr,                       //  116 Rate()
         "TERM",                     //  117 Term()
         "CTERM",                    //  118 Cterm()
-        NULL,                       //  119 Sln()
-        NULL,                       //  120 Syd(), Soy()
-        NULL,                       //  121 Ddb()
+        nullptr,                       //  119 Sln()
+        nullptr,                       //  120 Syd(), Soy()
+        nullptr,                       //  121 Ddb()
         "SplFunc",                  //  122 Splfunc
         "BLAETTER",                 //  123 Sheets
         "INFO",                     //  124 Info
-        NULL,                       //  125 Sumproduct
+        nullptr,                       //  125 Sumproduct
         "ISTBEREICH",               //  126 Isrange
-        NULL,                       //  127 Dget
+        nullptr,                       //  127 Dget
         "DABFRAGE",                 //  128 Dquery
         "KOORD",                    //  129 Coord
-        NULL,                       //  130 Reserved (internal)
-        NULL,                       //  131 Today
-        NULL,                       //  132 Vdb
-        NULL,                       //  133 Dvars
-        NULL,                       //  134 Dstds
-        NULL,                       //  135 Vars
-        NULL,                       //  136 Stds
-        NULL,                       //  137 D360
-        NULL,                       //  138 Reserved (internal)
-        NULL,                       //  139 Isapp
+        nullptr,                       //  130 Reserved (internal)
+        nullptr,                       //  131 Today
+        nullptr,                       //  132 Vdb
+        nullptr,                       //  133 Dvars
+        nullptr,                       //  134 Dstds
+        nullptr,                       //  135 Vars
+        nullptr,                       //  136 Stds
+        nullptr,                       //  137 D360
+        nullptr,                       //  138 Reserved (internal)
+        nullptr,                       //  139 Isapp
         "ISTDEFZUS",                //  140 Isaaf
-        NULL,                       //  141 Weekday
-        NULL,                       //  142 Datedif
-        NULL,                       //  143 Rank
-        NULL,                       //  144 Numberstring
+        nullptr,                       //  141 Weekday
+        nullptr,                       //  142 Datedif
+        nullptr,                       //  143 Rank
+        nullptr,                       //  144 Numberstring
         "DATUMFOLGE",               //  145 Datestring
         "DEZIMAL",                  //  146 Decimal
         "HEX",                      //  147 Hex
-        NULL,                       //  148 Db
-        NULL,                       //  149 Pmti
-        NULL,                       //  150 Spi
-        NULL,                       //  151 Fullp
-        NULL,                       //  152 Halfp
+        nullptr,                       //  148 Db
+        nullptr,                       //  149 Pmti
+        nullptr,                       //  150 Spi
+        nullptr,                       //  151 Fullp
+        nullptr,                       //  152 Halfp
         "PURMITTELWERT",            //  153 Pureavg
         "PURquantity",                //  154 Purecount
         "PURMAX",                   //  155 Puremax
@@ -1881,101 +1881,101 @@ const sal_Char* GetAddInName( const sal_uInt8 n )
         "PURVAR",                   //  158 Purevar
         "PURSTDABWP",               //  159 Purestds
         "PURVARP",                  //  160 Purevars
-        NULL,                       //  161 Pmt2
-        NULL,                       //  162 Pv2
-        NULL,                       //  163 Fv2
-        NULL,                       //  164 Term2
-        NULL,                       //  165--                  <- new quantity ?
-        NULL,                       //  166 D360 (US-Version, alternatively as in D360-function)
-        NULL,                       //  167
-        NULL,                       //  168
-        NULL,                       //  169
-        NULL,                       //  170
-        NULL,                       //  171
-        NULL,                       //  172
-        NULL,                       //  173
-        NULL,                       //  174
-        NULL,                       //  175
-        NULL,                       //  176
-        NULL,                       //  177
-        NULL,                       //  178
-        NULL,                       //  179
-        NULL,                       //  180
-        NULL,                       //  181
-        NULL,                       //  182
-        NULL,                       //  183
-        NULL,                       //  184
-        NULL,                       //  185
-        NULL,                       //  186
-        NULL,                       //  187
-        NULL,                       //  188
-        NULL,                       //  189
-        NULL,                       //  190
-        NULL,                       //  191
-        NULL,                       //  192
-        NULL,                       //  193
-        NULL,                       //  194
-        NULL,                       //  195
-        NULL,                       //  196
-        NULL,                       //  197
-        NULL,                       //  198
-        NULL,                       //  199
-        NULL,                       //  200
-        NULL,                       //  201
-        NULL,                       //  202
-        NULL,                       //  203
-        NULL,                       //  204
-        NULL,                       //  205
-        NULL,                       //  206 TODO: ?
-        NULL,                       //  207
-        NULL,                       //  208
-        NULL,                       //  209
-        NULL,                       //  210
-        NULL,                       //  211
-        NULL,                       //  212
-        NULL,                       //  213
-        NULL,                       //  214
-        NULL,                       //  215
-        NULL,                       //  216
-        NULL,                       //  217
-        NULL,                       //  218
-        NULL,                       //  219
-        NULL,                       //  220
-        NULL,                       //  221
-        NULL,                       //  222
-        NULL,                       //  223
-        NULL,                       //  224
-        NULL,                       //  225
-        NULL,                       //  226
-        NULL,                       //  227
-        NULL,                       //  228
-        NULL,                       //  229
-        NULL,                       //  230
-        NULL,                       //  231
-        NULL,                       //  232
-        NULL,                       //  233
-        NULL,                       //  234
-        NULL,                       //  235
-        NULL,                       //  236
-        NULL,                       //  237
-        NULL,                       //  238
-        NULL,                       //  239
-        NULL,                       //  240
-        NULL,                       //  241
-        NULL,                       //  242
-        NULL,                       //  243
-        NULL,                       //  244
-        NULL,                       //  245
-        NULL,                       //  246
-        NULL,                       //  247
-        NULL,                       //  248
-        NULL,                       //  249
-        NULL,                       //  250
-        NULL,                       //  251
-        NULL,                       //  252
-        NULL,                       //  253
-        NULL,                       //  254
-        NULL                        //  255 TODO: ?
+        nullptr,                       //  161 Pmt2
+        nullptr,                       //  162 Pv2
+        nullptr,                       //  163 Fv2
+        nullptr,                       //  164 Term2
+        nullptr,                       //  165--                  <- new quantity ?
+        nullptr,                       //  166 D360 (US-Version, alternatively as in D360-function)
+        nullptr,                       //  167
+        nullptr,                       //  168
+        nullptr,                       //  169
+        nullptr,                       //  170
+        nullptr,                       //  171
+        nullptr,                       //  172
+        nullptr,                       //  173
+        nullptr,                       //  174
+        nullptr,                       //  175
+        nullptr,                       //  176
+        nullptr,                       //  177
+        nullptr,                       //  178
+        nullptr,                       //  179
+        nullptr,                       //  180
+        nullptr,                       //  181
+        nullptr,                       //  182
+        nullptr,                       //  183
+        nullptr,                       //  184
+        nullptr,                       //  185
+        nullptr,                       //  186
+        nullptr,                       //  187
+        nullptr,                       //  188
+        nullptr,                       //  189
+        nullptr,                       //  190
+        nullptr,                       //  191
+        nullptr,                       //  192
+        nullptr,                       //  193
+        nullptr,                       //  194
+        nullptr,                       //  195
+        nullptr,                       //  196
+        nullptr,                       //  197
+        nullptr,                       //  198
+        nullptr,                       //  199
+        nullptr,                       //  200
+        nullptr,                       //  201
+        nullptr,                       //  202
+        nullptr,                       //  203
+        nullptr,                       //  204
+        nullptr,                       //  205
+        nullptr,                       //  206 TODO: ?
+        nullptr,                       //  207
+        nullptr,                       //  208
+        nullptr,                       //  209
+        nullptr,                       //  210
+        nullptr,                       //  211
+        nullptr,                       //  212
+        nullptr,                       //  213
+        nullptr,                       //  214
+        nullptr,                       //  215
+        nullptr,                       //  216
+        nullptr,                       //  217
+        nullptr,                       //  218
+        nullptr,                       //  219
+        nullptr,                       //  220
+        nullptr,                       //  221
+        nullptr,                       //  222
+        nullptr,                       //  223
+        nullptr,                       //  224
+        nullptr,                       //  225
+        nullptr,                       //  226
+        nullptr,                       //  227
+        nullptr,                       //  228
+        nullptr,                       //  229
+        nullptr,                       //  230
+        nullptr,                       //  231
+        nullptr,                       //  232
+        nullptr,                       //  233
+        nullptr,                       //  234
+        nullptr,                       //  235
+        nullptr,                       //  236
+        nullptr,                       //  237
+        nullptr,                       //  238
+        nullptr,                       //  239
+        nullptr,                       //  240
+        nullptr,                       //  241
+        nullptr,                       //  242
+        nullptr,                       //  243
+        nullptr,                       //  244
+        nullptr,                       //  245
+        nullptr,                       //  246
+        nullptr,                       //  247
+        nullptr,                       //  248
+        nullptr,                       //  249
+        nullptr,                       //  250
+        nullptr,                       //  251
+        nullptr,                       //  252
+        nullptr,                       //  253
+        nullptr,                       //  254
+        nullptr                        //  255 TODO: ?
     };
 
     return pNames[ n ];

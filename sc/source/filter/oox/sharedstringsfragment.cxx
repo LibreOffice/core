@@ -47,7 +47,7 @@ ContextHandlerRef SharedStringsFragment::onCreateContext( sal_Int32 nElement, co
                 return new RichStringContext( *this, getSharedStrings().createRichString() );
         break;
     }
-    return 0;
+    return nullptr;
 }
 
 ContextHandlerRef SharedStringsFragment::onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm )
@@ -64,7 +64,7 @@ ContextHandlerRef SharedStringsFragment::onCreateRecordContext( sal_Int32 nRecId
                 getSharedStrings().createRichString()->importString( rStrm, true );
         break;
     }
-    return 0;
+    return nullptr;
 }
 
 const RecordInfo* SharedStringsFragment::getRecordInfos() const

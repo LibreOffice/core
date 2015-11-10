@@ -50,7 +50,7 @@ void ScFormulaListener::startListening(ScTokenArray* pArr, const ScAddress& rPos
 {
     pArr->Reset();
     formula::FormulaToken* t;
-    while ( ( t = pArr->GetNextReferenceRPN() ) != NULL )
+    while ( ( t = pArr->GetNextReferenceRPN() ) != nullptr )
     {
         switch (t->GetType())
         {
@@ -202,7 +202,7 @@ const ScTokenArray* ScColorScaleEntry::GetFormula() const
         return mpCell->GetCode();
     }
 
-    return NULL;
+    return nullptr;
 }
 
 OUString ScColorScaleEntry::GetFormula( formula::FormulaGrammar::Grammar eGrammar ) const
@@ -288,7 +288,7 @@ void ScColorScaleEntry::SetColor(const Color& rColor)
 
 ScColorFormat::ScColorFormat(ScDocument* pDoc)
     : ScFormatEntry(pDoc)
-    , mpParent(NULL)
+    , mpParent(nullptr)
 {
 }
 
@@ -533,20 +533,20 @@ Color* ScColorScaleFormat::GetColor( const ScAddress& rAddr ) const
 {
     CellType eCellType = mpDoc->GetCellType(rAddr);
     if(eCellType != CELLTYPE_VALUE && eCellType != CELLTYPE_FORMULA)
-        return NULL;
+        return nullptr;
 
     if (eCellType == CELLTYPE_FORMULA)
     {
         ScFormulaCell *pCell = mpDoc->GetFormulaCell(rAddr);
         if (!pCell || !pCell->IsValue())
-            return NULL;
+            return nullptr;
     }
 
     // now we have for sure a value
     double nVal = mpDoc->GetValue(rAddr);
 
     if (maColorScales.size() < 2)
-        return NULL;
+        return nullptr;
 
     double nMin = std::numeric_limits<double>::max();
     double nMax = std::numeric_limits<double>::min();
@@ -554,7 +554,7 @@ Color* ScColorScaleFormat::GetColor( const ScAddress& rAddr ) const
 
     // this check is for safety
     if(nMin >= nMax)
-        return NULL;
+        return nullptr;
 
     ScColorScaleEntries::const_iterator itr = begin();
     double nValMin = CalcValue(nMin, nMax, itr);
@@ -643,7 +643,7 @@ ScColorScaleEntries::const_iterator ScColorScaleFormat::end() const
 ScColorScaleEntry* ScColorScaleFormat::GetEntry(size_t nPos)
 {
     if (maColorScales.size() <= nPos)
-        return NULL;
+        return nullptr;
 
     return maColorScales[nPos].get();
 }
@@ -651,7 +651,7 @@ ScColorScaleEntry* ScColorScaleFormat::GetEntry(size_t nPos)
 const ScColorScaleEntry* ScColorScaleFormat::GetEntry(size_t nPos) const
 {
     if (maColorScales.size() <= nPos)
-        return NULL;
+        return nullptr;
 
     return maColorScales[nPos].get();
 }
@@ -790,13 +790,13 @@ ScDataBarInfo* ScDataBarFormat::GetDataBarInfo(const ScAddress& rAddr) const
 {
     CellType eCellType = mpDoc->GetCellType(rAddr);
     if(eCellType != CELLTYPE_VALUE && eCellType != CELLTYPE_FORMULA)
-        return NULL;
+        return nullptr;
 
     if (eCellType == CELLTYPE_FORMULA)
     {
         ScFormulaCell *pCell = mpDoc->GetFormulaCell(rAddr);
         if (!pCell || !pCell->IsValue())
-            return NULL;
+            return nullptr;
     }
 
     // now we have for sure a value
@@ -976,27 +976,27 @@ ScIconSetInfo* ScIconSetFormat::GetIconSetInfo(const ScAddress& rAddr) const
 {
     CellType eCellType = mpDoc->GetCellType(rAddr);
     if(eCellType != CELLTYPE_VALUE && eCellType != CELLTYPE_FORMULA)
-        return NULL;
+        return nullptr;
 
     if (eCellType == CELLTYPE_FORMULA)
     {
         ScFormulaCell *pCell = mpDoc->GetFormulaCell(rAddr);
         if (!pCell || !pCell->IsValue())
-            return NULL;
+            return nullptr;
     }
 
     // now we have for sure a value
     double nVal = mpDoc->GetValue(rAddr);
 
     if (mpFormatData->m_Entries.size() < 2)
-        return NULL;
+        return nullptr;
 
     double nMin = GetMinValue();
     double nMax = GetMaxValue();
 
     // this check is for safety
     if(nMin > nMax)
-        return NULL;
+        return nullptr;
 
     sal_Int32 nIndex = 0;
     const_iterator itr = begin();
@@ -1028,7 +1028,7 @@ ScIconSetInfo* ScIconSetFormat::GetIconSetInfo(const ScAddress& rAddr) const
         if (nCustomIndex == -1)
         {
             delete pInfo;
-            return NULL;
+            return nullptr;
         }
 
         pInfo->eIconSetType = eCustomType;
@@ -1190,7 +1190,7 @@ ScIconSetMap aIconSetMap[] = {
     { "5Rating", IconSet_5Ratings, 5 },
     { "5Quarters", IconSet_5Quarters, 5 },
     { "5Boxes", IconSet_5Boxes, 5 },
-    { NULL, IconSet_3Arrows, 0 }
+    { nullptr, IconSet_3Arrows, 0 }
 };
 
 }

@@ -262,7 +262,7 @@ void ScDocShell::BeforeXMLLoading()
     aDocument.EnableIdle(false);
 
     // prevent unnecessary broadcasts and updates
-    OSL_ENSURE(pModificator == NULL, "The Modificator should not exist");
+    OSL_ENSURE(pModificator == nullptr, "The Modificator should not exist");
     pModificator = new ScDocShellModificator( *this );
 
     aDocument.SetImportingXML( true );
@@ -369,7 +369,7 @@ void ScDocShell::AfterXMLLoading(bool bRet)
         if (eRecalcState == ScDocument::HARDRECALCSTATE_OFF)
             aDocument.SetHardRecalcState(ScDocument::HARDRECALCSTATE_TEMPORARY);
         delete pModificator;
-        pModificator = NULL;
+        pModificator = nullptr;
         aDocument.SetHardRecalcState(eRecalcState);
     }
     else
@@ -579,7 +579,7 @@ bool ScDocShell::Load( SfxMedium& rMedium )
             aDocument.GetStyleSheetPool()->CreateStandardStyles();
             aDocument.UpdStlShtPtrsFrmNms();
 
-            bRet = LoadXML( &rMedium, NULL );
+            bRet = LoadXML( &rMedium, nullptr );
         }
     }
 
@@ -667,7 +667,7 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                         if ( SwitchToShared( true, false ) )
                         {
                             ScViewData* pViewData = GetViewData();
-                            ScTabView* pTabView = ( pViewData ? dynamic_cast< ScTabView* >( pViewData->GetView() ) : NULL );
+                            ScTabView* pTabView = ( pViewData ? dynamic_cast< ScTabView* >( pViewData->GetView() ) : nullptr );
                             if ( pTabView )
                             {
                                 pTabView->UpdateLayerLocks();
@@ -725,10 +725,10 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                                 {
                                     uno::Reference< task::XJob > xJob( xFactory->createInstanceWithContext( xContext ), uno::UNO_QUERY_THROW );
                                     ScViewData* pViewData = GetViewData();
-                                    SfxViewShell* pViewShell = ( pViewData ? pViewData->GetViewShell() : NULL );
-                                    SfxViewFrame* pViewFrame = ( pViewShell ? pViewShell->GetViewFrame() : NULL );
-                                    SfxFrame* pFrame = ( pViewFrame ? &pViewFrame->GetFrame() : NULL );
-                                    uno::Reference< frame::XController > xController = ( pFrame ? pFrame->GetController() : 0 );
+                                    SfxViewShell* pViewShell = ( pViewData ? pViewData->GetViewShell() : nullptr );
+                                    SfxViewFrame* pViewFrame = ( pViewShell ? pViewShell->GetViewFrame() : nullptr );
+                                    SfxFrame* pFrame = ( pViewFrame ? &pViewFrame->GetFrame() : nullptr );
+                                    uno::Reference< frame::XController > xController = ( pFrame ? pFrame->GetController() : nullptr );
                                     uno::Reference< sheet::XSpreadsheetView > xSpreadsheetView( xController, uno::UNO_QUERY_THROW );
                                     uno::Sequence< beans::NamedValue > aArgsForJob { { "SpreadsheetView", uno::makeAny( xSpreadsheetView ) } };
                                     xJob->execute( aArgsForJob );
@@ -761,7 +761,7 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                                 // check if shared flag is set in shared file
                                 bool bShared = false;
                                 ScModelObj* pDocObj = ScModelObj::getImplementation( xModel );
-                                ScDocShell* pSharedDocShell = ( pDocObj ? dynamic_cast< ScDocShell* >( pDocObj->GetObjectShell() ) : NULL );
+                                ScDocShell* pSharedDocShell = ( pDocObj ? dynamic_cast< ScDocShell* >( pDocObj->GetObjectShell() ) : nullptr );
                                 if ( pSharedDocShell )
                                 {
                                     bShared = pSharedDocShell->HasSharedXMLFlagSet();
@@ -987,7 +987,7 @@ bool ScDocShell::LoadFrom( SfxMedium& rMedium )
 
     //  until loading/saving only the styles in XML is implemented,
     //  load the whole file
-    bRet = LoadXML( &rMedium, NULL );
+    bRet = LoadXML( &rMedium, nullptr );
     InitItems();
 
     SfxObjectShell::LoadFrom( rMedium );
@@ -1064,7 +1064,7 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
             aDocument.SetInsertingFromOtherDoc( true );
 
         if (aFltName == pFilterXML)
-            bRet = LoadXML( &rMedium, NULL );
+            bRet = LoadXML( &rMedium, nullptr );
         else if (aFltName == "StarCalc 1.0")
         {
             SvStream* pStream = rMedium.GetInStream();
@@ -1497,7 +1497,7 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
         {
             // Update all rows in all tables.
             ScSizeDeviceProvider aProv(this);
-            ScDocRowHeightUpdater aUpdater(aDocument, aProv.GetDevice(), aProv.GetPPTX(), aProv.GetPPTY(), NULL);
+            ScDocRowHeightUpdater aUpdater(aDocument, aProv.GetDevice(), aProv.GetPPTX(), aProv.GetPPTY(), nullptr);
             aUpdater.update();
         }
         else if (!aRecalcRowRangesArray.empty())
@@ -1619,7 +1619,7 @@ bool ScDocShell::Save()
     //  wait cursor is handled with progress bar
     bool bRet = SfxObjectShell::Save();
     if( bRet )
-        bRet = SaveXML( GetMedium(), NULL );
+        bRet = SaveXML( GetMedium(), nullptr );
     return bRet;
 }
 
@@ -1689,7 +1689,7 @@ bool ScDocShell::SaveAs( SfxMedium& rMedium )
     {
         bRet = SfxObjectShell::SaveAs( rMedium );
         if (bRet)
-            bRet = SaveXML( &rMedium, NULL );
+            bRet = SaveXML( &rMedium, nullptr );
     }
     else
     {
@@ -1875,7 +1875,7 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt 
     ScHorizontalCellIterator aIter( &aDocument, nTab, nStartCol, nStartRow,
         nEndCol, nEndRow );
     ScRefCellValue* pCell;
-    while ( ( pCell = aIter.GetNext( nCol, nRow ) ) != NULL )
+    while ( ( pCell = aIter.GetNext( nCol, nRow ) ) != nullptr )
     {
         bool bProgress = false;     // only upon line change
         if ( nNextRow < nRow )
@@ -2209,7 +2209,7 @@ bool ScDocShell::ConvertTo( SfxMedium &rMed )
     {
         //TODO/LATER: this shouldn't happen!
         OSL_FAIL("XML filter in ConvertFrom?!");
-        bRet = SaveXML( &rMed, NULL );
+        bRet = SaveXML( &rMed, nullptr );
     }
     else if (aFltName == pFilterExcel5 || aFltName == pFilterExcel95 ||
              aFltName == pFilterExcel97 || aFltName == pFilterEx5Temp ||
@@ -2231,7 +2231,7 @@ bool ScDocShell::ConvertTo( SfxMedium &rMed )
             if( (rMed.GetFilter()->GetFilterFlags() & SfxFilterFlags::ENCRYPTION) == SfxFilterFlags::NONE )
             {
                 SfxItemSet* pItemSet = rMed.GetItemSet();
-                const SfxPoolItem* pItem = 0;
+                const SfxPoolItem* pItem = nullptr;
                 if( pItemSet && pItemSet->GetItemState( SID_PASSWORD, true, &pItem ) == SfxItemState::SET )
                 {
                     bDoSave = ScWarnPassword::WarningOnPassword( rMed );
@@ -2508,10 +2508,10 @@ bool ScDocShell::PrepareClose( bool bUI )
         {
             SfxViewShell* p = pFrame->GetViewShell();
             ScTabViewShell* pViewSh = dynamic_cast< ScTabViewShell *>( p );
-            if(pViewSh!=NULL)
+            if(pViewSh!=nullptr)
             {
                 vcl::Window *pWin=pViewSh->GetWindow();
-                if(pWin!=NULL) pWin->GrabFocus();
+                if(pWin!=nullptr) pWin->GrabFocus();
             }
         }
 
@@ -2645,13 +2645,13 @@ ScDocShell::ScDocShell( const ScDocShell& rShell ) :
     bUpdateEnabled  ( true ),
     nDocumentLock   ( 0 ),
     nCanUpdate (css::document::UpdateDocMode::ACCORDING_TO_CONFIG),
-    pOldAutoDBRange ( NULL ),
-    pDocHelper      ( NULL ),
-    pAutoStyleList  ( NULL ),
-    pPaintLockData  ( NULL ),
-    pSolverSaveData ( NULL ),
-    pSheetSaveData  ( NULL ),
-    pModificator    ( NULL )
+    pOldAutoDBRange ( nullptr ),
+    pDocHelper      ( nullptr ),
+    pAutoStyleList  ( nullptr ),
+    pPaintLockData  ( nullptr ),
+    pSolverSaveData ( nullptr ),
+    pSheetSaveData  ( nullptr ),
+    pModificator    ( nullptr )
 #if ENABLE_TELEPATHY
     , mpCollaboration( new ScCollaboration( this ) )
 #endif
@@ -2670,7 +2670,7 @@ ScDocShell::ScDocShell( const ScDocShell& rShell ) :
     if (pStlPool)
         StartListening(*pStlPool);
 
-    GetPageOnFromPageStyleSet( NULL, 0, bHeaderOn, bFooterOn );
+    GetPageOnFromPageStyleSet( nullptr, 0, bHeaderOn, bFooterOn );
     SetHelpId( HID_SCSHELL_DOCSH );
 
     // InitItems and CalcOutputFactor are called now in Load/ConvertFrom/InitNew
@@ -2690,13 +2690,13 @@ ScDocShell::ScDocShell( const SfxModelFlags i_nSfxCreationFlags ) :
     bUpdateEnabled  ( true ),
     nDocumentLock   ( 0 ),
     nCanUpdate (css::document::UpdateDocMode::ACCORDING_TO_CONFIG),
-    pOldAutoDBRange ( NULL ),
-    pDocHelper      ( NULL ),
-    pAutoStyleList  ( NULL ),
-    pPaintLockData  ( NULL ),
-    pSolverSaveData ( NULL ),
-    pSheetSaveData  ( NULL ),
-    pModificator    ( NULL )
+    pOldAutoDBRange ( nullptr ),
+    pDocHelper      ( nullptr ),
+    pAutoStyleList  ( nullptr ),
+    pPaintLockData  ( nullptr ),
+    pSolverSaveData ( nullptr ),
+    pSheetSaveData  ( nullptr ),
+    pModificator    ( nullptr )
 #if ENABLE_TELEPATHY
     , mpCollaboration( new ScCollaboration( this ) )
 #endif
@@ -2740,7 +2740,7 @@ ScDocShell::~ScDocShell()
 
     delete pDocFunc;
     delete aDocument.mpUndoManager;
-    aDocument.mpUndoManager = 0;
+    aDocument.mpUndoManager = nullptr;
     delete pImpl;
 
     delete pPaintLockData;
@@ -2906,7 +2906,7 @@ VclPtr<SfxDocumentInfoDialog> ScDocShell::CreateDocumentInfoDialog(
         pDlg->AddTabPage( 42,
             ScGlobal::GetRscString( STR_DOC_STAT ),
             ScDocStatPageCreate,
-            NULL);
+            nullptr);
     }
     return pDlg;
 }
@@ -3103,7 +3103,7 @@ void ScDocShellModificator::SetDocumentModified()
 bool ScDocShell::IsChangeRecording() const
 {
     ScChangeTrack* pChangeTrack = aDocument.GetChangeTrack();
-    return pChangeTrack != NULL;
+    return pChangeTrack != nullptr;
 }
 
 bool ScDocShell::HasChangeRecordProtection() const

@@ -155,8 +155,8 @@ public:
     css::uno::Reference<css::sheet::XDimensionsSupplier> GetSource();
 
     bool                IsSheetData() const;
-    bool                IsImportData() const { return(pImpDesc != NULL); }
-    bool                IsServiceData() const { return(pServDesc != NULL); }
+    bool                IsImportData() const { return(pImpDesc != nullptr); }
+    bool                IsServiceData() const { return(pServDesc != nullptr); }
 
     void SetName(const OUString& rNew);
     const OUString& GetName() const { return aTableName; }
@@ -171,7 +171,7 @@ public:
     bool                IsDataDescriptionCell(const ScAddress& rPos);
 
     bool                IsDimNameInUse(const OUString& rName) const;
-    OUString GetDimName( long nDim, bool& rIsDataLayout, sal_Int32* pFlags = NULL );
+    OUString GetDimName( long nDim, bool& rIsDataLayout, sal_Int32* pFlags = nullptr );
     bool                IsDuplicated( long nDim );
     long                GetDimCount();
     void                GetHeaderPositionData(const ScAddress& rPos, css::sheet::DataPilotTableHeaderData& rData);
@@ -246,9 +246,9 @@ public:
         const ScPivotFieldVector& rFields, sal_uInt16 nOrient,
         const css::uno::Reference< css::sheet::XDimensionsSupplier>& xSource,
         const ScDPLabelDataVector& rLabels,
-        const ScPivotFieldVector* pRefColFields = NULL,
-        const ScPivotFieldVector* pRefRowFields = NULL,
-        const ScPivotFieldVector* pRefPageFields = NULL );
+        const ScPivotFieldVector* pRefColFields = nullptr,
+        const ScPivotFieldVector* pRefRowFields = nullptr,
+        const ScPivotFieldVector* pRefPageFields = nullptr );
 
     static bool         IsOrientationAllowed( sal_uInt16 nOrient, sal_Int32 nDimFlags );
 

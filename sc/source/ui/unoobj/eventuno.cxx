@@ -49,7 +49,7 @@ void ScSheetEventsObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
     const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
     if ( pSimpleHint && pSimpleHint->GetId() == SFX_HINT_DYING )
     {
-        mpDocShell = NULL;
+        mpDocShell = nullptr;
     }
 }
 
@@ -109,7 +109,7 @@ void SAL_CALL ScSheetEventsObj::replaceByName( const OUString& aName, const uno:
     if (!aScript.isEmpty())
         aNewEvents.SetScript( nEvent, &aScript );
     else
-        aNewEvents.SetScript( nEvent, NULL );       // reset
+        aNewEvents.SetScript( nEvent, nullptr );       // reset
 
     mpDocShell->GetDocument().SetSheetEvents( mnTab, &aNewEvents );
     mpDocShell->SetDocumentModified();
@@ -125,7 +125,7 @@ uno::Any SAL_CALL ScSheetEventsObj::getByName( const OUString& aName )
     if (nEvent == ScSheetEventId::NOTFOUND)
         throw container::NoSuchElementException();
 
-    const OUString* pScript = NULL;
+    const OUString* pScript = nullptr;
     if (mpDocShell)
     {
         const ScSheetEvents* pEvents = mpDocShell->GetDocument().GetSheetEvents(mnTab);

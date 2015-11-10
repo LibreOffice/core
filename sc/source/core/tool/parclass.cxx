@@ -225,7 +225,7 @@ const ScParameterClassification::RawData ScParameterClassification::pRawData[] =
     { ocNone, {{ Bounds }, 0 } }
 };
 
-ScParameterClassification::RunData * ScParameterClassification::pData = NULL;
+ScParameterClassification::RunData * ScParameterClassification::pData = nullptr;
 
 void ScParameterClassification::Init()
 {
@@ -306,7 +306,7 @@ void ScParameterClassification::Init()
 void ScParameterClassification::Exit()
 {
     delete [] pData;
-    pData = NULL;
+    pData = nullptr;
 }
 
 ScParameterClassification::Type ScParameterClassification::GetParameterType(

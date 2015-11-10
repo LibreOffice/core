@@ -309,7 +309,7 @@ void lcl_SetFrame( ScDocument* pDoc, SCTAB nTab,
                     SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                     sal_uInt16 nWidth )
 {
-    ::editeng::SvxBorderLine aLine(0, nWidth, table::BorderLineStyle::SOLID);
+    ::editeng::SvxBorderLine aLine(nullptr, nWidth, table::BorderLineStyle::SOLID);
     SvxBoxItem aBox( ATTR_BORDER );
     aBox.SetLine(&aLine, SvxBoxItemLine::LEFT);
     aBox.SetLine(&aLine, SvxBoxItemLine::TOP);
@@ -511,8 +511,8 @@ ScDPOutput::ScDPOutput( ScDocument* pD, const uno::Reference<sheet::XDimensionsS
     pDoc( pD ),
     xSource( xSrc ),
     aStartPos( rPos ),
-    pColNumFmt( NULL ),
-    pRowNumFmt( NULL ),
+    pColNumFmt( nullptr ),
+    pRowNumFmt( nullptr ),
     nColFmtCount( 0 ),
     nRowFmtCount( 0 ),
     nSingleNumFmt( 0 ),

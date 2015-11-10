@@ -97,7 +97,7 @@ public:
     /** Reads a CRN record (external referenced cell). */
     void                ReadCrn( XclImpStream& rStrm );
     /** Reads an EXTERNNAME record. */
-    void                ReadExternname( XclImpStream& rStrm, ExcelToSc* pFormulaConv = NULL );
+    void                ReadExternname( XclImpStream& rStrm, ExcelToSc* pFormulaConv = nullptr );
 
     /** Returns the SUPBOOK record type. */
     inline XclSupbookType GetType() const { return meType; }
@@ -170,7 +170,7 @@ public:
     /** Reads a CRN record and appends it to the current SUPBOOK. */
     void                ReadCrn( XclImpStream& rStrm );
     /** Reads an EXTERNNAME record and appends it to the current SUPBOOK. */
-    void                ReadExternname( XclImpStream& rStrm, ExcelToSc* pFormulaConv = NULL );
+    void                ReadExternname( XclImpStream& rStrm, ExcelToSc* pFormulaConv = nullptr );
 
     /** Returns true, if the specified XTI entry contains an internal reference. */
     bool                IsSelfRef( sal_uInt16 nXtiIndex ) const;
@@ -335,7 +335,7 @@ const ScMatrix& XclImpExtName::MOper::GetCache() const
 }
 
 XclImpExtName::XclImpExtName( XclImpSupbook& rSupbook, XclImpStream& rStrm, XclSupbookType eSubType, ExcelToSc* pFormulaConv )
-    : mpMOper(NULL)
+    : mpMOper(nullptr)
     , mnStorageId(0)
 {
     sal_uInt16 nFlags(0);
@@ -379,7 +379,7 @@ XclImpExtName::XclImpExtName( XclImpSupbook& rSupbook, XclImpStream& rStrm, XclS
             {
                 if (pFormulaConv)
                 {
-                    const ScTokenArray* pArray = NULL;
+                    const ScTokenArray* pArray = nullptr;
                     sal_uInt16 nFmlaLen;
                     nFmlaLen = rStrm.ReaduInt16();
                     vector<OUString> aTabNames;
@@ -544,7 +544,7 @@ bool XclImpExtName::CreateOleData(ScDocument& rDoc, const OUString& rUrl,
 
 bool XclImpExtName::HasFormulaTokens() const
 {
-    return (mxArray.get() != NULL);
+    return (mxArray.get() != nullptr);
 }
 
 // Cached external cells ======================================================
@@ -706,10 +706,10 @@ const XclImpExtName* XclImpSupbook::GetExternName( sal_uInt16 nXclIndex ) const
     if (nXclIndex == 0)
     {
         SAL_WARN("sc", "XclImpSupbook::GetExternName - index must be >0");
-        return NULL;
+        return nullptr;
     }
     if (meType == EXC_SBTYPE_SELF || nXclIndex > maExtNameList.size())
-        return NULL;
+        return nullptr;
     return &maExtNameList[nXclIndex-1];
 }
 
@@ -721,7 +721,7 @@ bool XclImpSupbook::GetLinkData( OUString& rApplic, OUString& rTopic ) const
 const OUString& XclImpSupbook::GetMacroName( sal_uInt16 nXclNameIdx ) const
 {
     OSL_ENSURE( nXclNameIdx > 0, "XclImpSupbook::GetMacroName - index must be >0" );
-    const XclImpName* pName = (meType == EXC_SBTYPE_SELF) ? GetNameManager().GetName( nXclNameIdx ) : 0;
+    const XclImpName* pName = (meType == EXC_SBTYPE_SELF) ? GetNameManager().GetName( nXclNameIdx ) : nullptr;
     return (pName && pName->IsVBName()) ? pName->GetScName() : EMPTY_OUSTRING;
 }
 
@@ -834,14 +834,14 @@ bool XclImpLinkManagerImpl::GetScTabRange(
 const XclImpExtName* XclImpLinkManagerImpl::GetExternName( sal_uInt16 nXtiIndex, sal_uInt16 nExtName ) const
 {
     const XclImpSupbook* pSupbook = GetSupbook( nXtiIndex );
-    return pSupbook ? pSupbook->GetExternName( nExtName ) : 0;
+    return pSupbook ? pSupbook->GetExternName( nExtName ) : nullptr;
 }
 
 const OUString* XclImpLinkManagerImpl::GetSupbookUrl( sal_uInt16 nXtiIndex ) const
 {
     const XclImpSupbook* p = GetSupbook( nXtiIndex );
     if (!p)
-        return NULL;
+        return nullptr;
     return &p->GetXclUrl();
 }
 
@@ -865,16 +865,16 @@ const OUString& XclImpLinkManagerImpl::GetMacroName( sal_uInt16 nExtSheet, sal_u
 
 const XclImpXti* XclImpLinkManagerImpl::GetXti( sal_uInt16 nXtiIndex ) const
 {
-    return (nXtiIndex < maXtiList.size()) ? &maXtiList[ nXtiIndex ] : 0;
+    return (nXtiIndex < maXtiList.size()) ? &maXtiList[ nXtiIndex ] : nullptr;
 }
 
 const XclImpSupbook* XclImpLinkManagerImpl::GetSupbook( sal_uInt16 nXtiIndex ) const
 {
     if ( maSupbookList.empty() )
-        return NULL;
+        return nullptr;
     const XclImpXti* pXti = GetXti( nXtiIndex );
     if (!pXti || pXti->mnSupbook >= maSupbookList.size())
-        return NULL;
+        return nullptr;
     return &(maSupbookList.at( pXti->mnSupbook ));
 }
 

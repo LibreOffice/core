@@ -39,8 +39,8 @@ void CALLTYPE ScAddInAsyncCallBack( double& nHandle, void* pData )
 
 ScAddInAsync::ScAddInAsync() :
     SvtBroadcaster(),
-    pDocs( NULL ),
-    mpFuncData( NULL ),
+    pDocs( nullptr ),
+    mpFuncData( nullptr ),
     nHandle( 0 ),
     meType( ParamType::NONE ),
     bValid( false )
@@ -49,7 +49,7 @@ ScAddInAsync::ScAddInAsync() :
 
 ScAddInAsync::ScAddInAsync(sal_uLong nHandleP, LegacyFuncData* pFuncData, ScDocument* pDoc) :
     SvtBroadcaster(),
-    pStr( NULL ),
+    pStr( nullptr ),
     mpFuncData(pFuncData),
     nHandle( nHandleP ),
     meType(pFuncData->GetAsyncType()),
@@ -75,7 +75,7 @@ ScAddInAsync::~ScAddInAsync()
 
 ScAddInAsync* ScAddInAsync::Get( sal_uLong nHandleP )
 {
-    ScAddInAsync* pRet = 0;
+    ScAddInAsync* pRet = nullptr;
     aSeekObj.nHandle = nHandleP;
     ScAddInAsyncs::iterator it = theAddInAsyncTbl.find( &aSeekObj );
     if ( it != theAddInAsyncTbl.end() )
@@ -87,7 +87,7 @@ ScAddInAsync* ScAddInAsync::Get( sal_uLong nHandleP )
 void ScAddInAsync::CallBack( sal_uLong nHandleP, void* pData )
 {
     ScAddInAsync* p;
-    if ( (p = Get( nHandleP )) == NULL )
+    if ( (p = Get( nHandleP )) == nullptr )
         return;
 
     if ( !p->HasListeners() )

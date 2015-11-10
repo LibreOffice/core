@@ -96,7 +96,7 @@ void ScTabViewShell::ConnectObject( SdrOle2Obj* pObj )
         aRect.SetSize( aOleSize );
         pClient->SetObjArea( aRect );
 
-        static_cast<ScClient*>(pClient)->SetGrafEdit( NULL );
+        static_cast<ScClient*>(pClient)->SetGrafEdit( nullptr );
     }
 }
 
@@ -164,7 +164,7 @@ bool ScTabViewShell::ActivateObject( SdrOle2Obj* pObj, long nVerb )
             aRect.SetSize( aOleSize );
             pClient->SetObjArea( aRect );
 
-            static_cast<ScClient*>(pClient)->SetGrafEdit( NULL );
+            static_cast<ScClient*>(pClient)->SetGrafEdit( nullptr );
 
             nErr = pClient->DoVerb( nVerb );
             bErrorShown = true;
@@ -221,7 +221,7 @@ ErrCode ScTabViewShell::DoVerb(long nVerb)
     if (!pView)
         return ERRCODE_SO_NOTIMPL;          // should not be
 
-    SdrOle2Obj* pOle2Obj = NULL;
+    SdrOle2Obj* pOle2Obj = nullptr;
     ErrCode nErr = ERRCODE_NONE;
 
     const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
@@ -383,7 +383,7 @@ void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
                     //! merge with ScViewFunc::PasteDataFormat (SotClipboardFormatId::SBA_FIELDDATAEXCHANGE)?
 
                     ScDrawView* pDrView = GetScDrawView();
-                    SdrPageView* pPageView = pDrView ? pDrView->GetSdrPageView() : NULL;
+                    SdrPageView* pPageView = pDrView ? pDrView->GetSdrPageView() : nullptr;
                     if(pPageView)
                     {
                         svx::ODataAccessDescriptor aDescriptor(pDescriptorItem->GetValue());
@@ -576,7 +576,7 @@ void ScTabViewShell::GetUndoState(SfxItemSet &rSet)
                 break;
             default:
                 // get state from sfx view frame
-                GetViewFrame()->GetSlotState( nWhich, NULL, &rSet );
+                GetViewFrame()->GetSlotState( nWhich, nullptr, &rSet );
         }
 
         nWhich = aIter.NextWhich();

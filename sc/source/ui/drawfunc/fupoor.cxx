@@ -37,7 +37,7 @@ FuPoor::FuPoor(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawView* pViewP,
     pWindow(pWin),
     pDrDoc(pDoc),
     aSfxRequest(rReq),
-    pDialog(NULL),
+    pDialog(nullptr),
     bIsInDragMode(false),
     // remember MouseButton state
     mnCode(0)
@@ -215,7 +215,7 @@ IMPL_LINK_NOARG_TYPED(FuPoor, DragHdl, void*, void)
 {
     SdrHdl* pHdl = pView->PickHandle(aMDPos);
 
-    if ( pHdl==NULL && pView->IsMarkedHit(aMDPos) )
+    if ( pHdl==nullptr && pView->IsMarkedHit(aMDPos) )
     {
         pWindow->ReleaseMouse();
         bIsInDragMode = true;
@@ -240,7 +240,7 @@ bool FuPoor::IsDetectiveHit( const Point& rLogicPos )
         {
             sal_uInt16 nHitLog = (sal_uInt16) pWindow->PixelToLogic(
                                 Size(pView->GetHitTolerancePixel(),0)).Width();
-            if(SdrObjectPrimitiveHit(*pObject, rLogicPos, nHitLog, *pPV, 0, false))
+            if(SdrObjectPrimitiveHit(*pObject, rLogicPos, nHitLog, *pPV, nullptr, false))
             {
                 bFound = true;
             }
@@ -266,7 +266,7 @@ void FuPoor::StopDragTimer()
 SdrObject* FuPoor::CreateDefaultObject(const sal_uInt16 /* nID */, const Rectangle& /* rRectangle */)
 {
     // empty base implementation
-    return 0L;
+    return nullptr;
 }
 
 void FuPoor::ImpForceQuadratic(Rectangle& rRect)

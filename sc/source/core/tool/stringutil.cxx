@@ -26,7 +26,7 @@
 #include <rtl/math.hxx>
 
 ScSetStringParam::ScSetStringParam() :
-    mpNumFormatter(NULL),
+    mpNumFormatter(nullptr),
     mbDetectNumberFormat(true),
     meSetTextNumFormat(Never),
     mbHandleApostrophe(true),

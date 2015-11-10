@@ -58,8 +58,8 @@ ScfProgressBar::~ScfProgressBar()
 void ScfProgressBar::Init( SfxObjectShell* pDocShell )
 {
     mpDocShell = pDocShell;
-    mpParentProgress = 0;
-    mpParentSegment = mpCurrSegment = 0;
+    mpParentProgress = nullptr;
+    mpParentSegment = mpCurrSegment = nullptr;
     mnTotalSize = mnTotalPos = mnUnitSize = mnNextUnitPos = 0;
     mnSysProgressScale = 1;     // used to workaround the ULONG_MAX/100 limit
     mbInProgress = false;
@@ -68,7 +68,7 @@ void ScfProgressBar::Init( SfxObjectShell* pDocShell )
 ScfProgressBar::ScfProgressSegment* ScfProgressBar::GetSegment( sal_Int32 nSegment )
 {
     if( nSegment < 0 )
-        return 0;
+        return nullptr;
     return &(maSegments.at( nSegment ));
 }
 

@@ -175,7 +175,7 @@ void AddressWalkerWriter::writeMatrixFormula(const OUString& aFormula)
     ScRange aRange;
     aRange.aStart = mCurrentAddress;
     aRange.aEnd = mCurrentAddress;
-    mpDocShell->GetDocFunc().EnterMatrix(aRange, NULL, NULL, aFormula, false, false, OUString(), meGrammar );
+    mpDocShell->GetDocFunc().EnterMatrix(aRange, nullptr, nullptr, aFormula, false, false, OUString(), meGrammar );
 }
 
 void AddressWalkerWriter::writeString(const OUString& aString)

@@ -244,11 +244,11 @@ void ScDocument::DeleteDrawLayer()
 
         if(pLocalPool && pLocalPool->GetSecondaryPool())
         {
-            pLocalPool->SetSecondaryPool(0);
+            pLocalPool->SetSecondaryPool(nullptr);
         }
     }
     delete pDrawLayer;
-    pDrawLayer = 0;
+    pDrawLayer = nullptr;
 }
 
 bool ScDocument::DrawGetPrintArea( ScRange& rRange, bool bSetHor, bool bSetVer ) const
@@ -415,7 +415,7 @@ void ScDocument::EnsureGraphicNames()
 SdrObject* ScDocument::GetObjectAtPoint( SCTAB nTab, const Point& rPos )
 {
     //  for Drag&Drop on draw object
-    SdrObject* pFound = NULL;
+    SdrObject* pFound = nullptr;
     if (pDrawLayer && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
     {
         SdrPage* pPage = pDrawLayer->GetPage(static_cast<sal_uInt16>(nTab));
@@ -520,7 +520,7 @@ void ScDocument::Clear( bool bFromDestructor )
         delete *it;
     maTabs.clear();
     delete pSelectionAttr;
-    pSelectionAttr = NULL;
+    pSelectionAttr = nullptr;
 
     if (pDrawLayer)
     {

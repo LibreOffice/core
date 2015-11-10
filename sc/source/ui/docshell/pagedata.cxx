@@ -26,8 +26,8 @@
 ScPrintRangeData::ScPrintRangeData()
 {
     nPagesX = nPagesY = 0;
-    pPageEndX = NULL;
-    pPageEndY = NULL;
+    pPageEndX = nullptr;
+    pPageEndY = nullptr;
     bTopDown = bAutomatic = true;
     nFirstPage = 1;
 }
@@ -47,7 +47,7 @@ void ScPrintRangeData::SetPagesX( size_t nCount, const SCCOL* pData )
         memcpy( pPageEndX, pData, nCount * sizeof(SCCOL) );
     }
     else
-        pPageEndX = NULL;
+        pPageEndX = nullptr;
     nPagesX = nCount;
 }
 
@@ -60,7 +60,7 @@ void ScPrintRangeData::SetPagesY( size_t nCount, const SCROW* pData )
         memcpy( pPageEndY, pData, nCount * sizeof(SCROW) );
     }
     else
-        pPageEndY = NULL;
+        pPageEndY = nullptr;
     nPagesY = nCount;
 }
 
@@ -70,7 +70,7 @@ ScPageBreakData::ScPageBreakData(size_t nMax)
     if (nMax)
         pData = new ScPrintRangeData[nMax];
     else
-        pData = NULL;
+        pData = nullptr;
     nAlloc = nMax;
 }
 

@@ -79,13 +79,13 @@ ScXMLEditAttributeMap::ScXMLEditAttributeMap()
 const ScXMLEditAttributeMap::Entry* ScXMLEditAttributeMap::getEntryByAPIName(const OUString& rAPIName) const
 {
     StrToEntriesType::const_iterator it = maAPIEntries.find(rAPIName);
-    return it == maAPIEntries.end() ? NULL : it->second;
+    return it == maAPIEntries.end() ? nullptr : it->second;
 }
 
 const ScXMLEditAttributeMap::Entry* ScXMLEditAttributeMap::getEntryByItemID(sal_uInt16 nItemID) const
 {
     IndexToEntriesType::const_iterator it = maItemIDEntries.find(nItemID);
-    return it == maItemIDEntries.end() ? NULL : it->second;
+    return it == maItemIDEntries.end() ? nullptr : it->second;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

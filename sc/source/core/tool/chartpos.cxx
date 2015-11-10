@@ -44,7 +44,7 @@ namespace
 ScChartPositioner::ScChartPositioner( ScDocument* pDoc, SCTAB nTab,
                     SCCOL nStartColP, SCROW nStartRowP, SCCOL nEndColP, SCROW nEndRowP) :
         pDocument( pDoc ),
-        pPositionMap( NULL ),
+        pPositionMap( nullptr ),
         eGlue( SC_CHARTGLUE_NA ),
         nStartCol(0),
         nStartRow(0),
@@ -59,7 +59,7 @@ ScChartPositioner::ScChartPositioner( ScDocument* pDoc, SCTAB nTab,
 ScChartPositioner::ScChartPositioner( ScDocument* pDoc, const ScRangeListRef& rRangeList ) :
         aRangeListRef( rRangeList ),
         pDocument( pDoc ),
-        pPositionMap( NULL ),
+        pPositionMap( nullptr ),
         eGlue( SC_CHARTGLUE_NA ),
         nStartCol(0),
         nStartRow(0),
@@ -74,7 +74,7 @@ ScChartPositioner::ScChartPositioner( ScDocument* pDoc, const ScRangeListRef& rR
 ScChartPositioner::ScChartPositioner( const ScChartPositioner& rPositioner ) :
         aRangeListRef( rPositioner.aRangeListRef ),
         pDocument(rPositioner.pDocument),
-        pPositionMap( NULL ),
+        pPositionMap( nullptr ),
         eGlue(rPositioner.eGlue),
         nStartCol(rPositioner.nStartCol),
         nStartRow(rPositioner.nStartRow),
@@ -349,7 +349,7 @@ void ScChartPositioner::CreatePositionMap()
     if ( eGlue == SC_CHARTGLUE_NA && pPositionMap )
     {
         delete pPositionMap;
-        pPositionMap = NULL;
+        pPositionMap = nullptr;
     }
 
     if ( pPositionMap )
@@ -383,7 +383,7 @@ void ScChartPositioner::CreatePositionMap()
                     static_cast<sal_uLong>(nCol1));
             for ( nCol = nCol1; nCol <= nCol2; ++nCol, ++nInsCol )
             {
-                RowMap* pCol = NULL;
+                RowMap* pCol = nullptr;
                 ColumnMap::const_iterator it = pCols->find( nInsCol );
                 if ( it == pCols->end() )
                 {
@@ -415,7 +415,7 @@ void ScChartPositioner::CreatePositionMap()
     {
         RowMap* pCol = pCols->begin()->second;
         if ( bDummyUpperLeft )
-            (*pCol)[ 0 ] = NULL; // Dummy for labeling
+            (*pCol)[ 0 ] = nullptr; // Dummy for labeling
         nRowCount = static_cast< SCSIZE >( pCol->size());
     }
     else
@@ -443,11 +443,11 @@ void ScChartPositioner::CreatePositionMap()
             {
                 sal_uLong nCurrentKey = pCol->begin()->first;
                 delete pPos;
-                (*pCol)[ nCurrentKey ] = NULL;
+                (*pCol)[ nCurrentKey ] = nullptr;
             }
         }
         else
-            (*pCol)[ 0 ] = NULL;
+            (*pCol)[ 0 ] = nullptr;
         nRowCount = 1;
         nColAdd = 0;
         nRowAdd = 0;
@@ -507,7 +507,7 @@ ScChartPositionMap::ScChartPositionMap( SCCOL nChartCols, SCROW nChartRows,
             ++pPos1Iter;
         }
         for ( ; nRow < nRowCount; nRow++ )
-            ppRowHeader[ nRow ] = NULL;
+            ppRowHeader[ nRow ] = nullptr;
     }
     else
     {   // copy
@@ -515,11 +515,11 @@ ScChartPositionMap::ScChartPositionMap( SCCOL nChartCols, SCROW nChartRows,
         for ( ; nRow < nRowCount && pPos1Iter != pCol1->end(); nRow++ )
         {
             ppRowHeader[ nRow ] = pPos1Iter->second ?
-                new ScAddress( *pPos1Iter->second ) : NULL;
+                new ScAddress( *pPos1Iter->second ) : nullptr;
             ++pPos1Iter;
         }
         for ( ; nRow < nRowCount; nRow++ )
-            ppRowHeader[ nRow ] = NULL;
+            ppRowHeader[ nRow ] = nullptr;
     }
     if ( nColAdd )
     {
@@ -543,7 +543,7 @@ ScChartPositionMap::ScChartPositionMap( SCCOL nChartCols, SCROW nChartRows,
                 }
                 else
                     ppColHeader[ nCol ] = pPosIter->second ?
-                        new ScAddress( *pPosIter->second ) : NULL;
+                        new ScAddress( *pPosIter->second ) : nullptr;
             }
 
             SCROW nRow = 0;
@@ -553,16 +553,16 @@ ScChartPositionMap::ScChartPositionMap( SCCOL nChartCols, SCROW nChartRows,
                 ++pPosIter;
             }
             for ( ; nRow < nRowCount; nRow++, nIndex++ )
-                ppData[ nIndex ] = NULL;
+                ppData[ nIndex ] = nullptr;
 
             ++pColIter;
         }
         else
         {
-            ppColHeader[ nCol ] = NULL;
+            ppColHeader[ nCol ] = nullptr;
             for ( SCROW nRow = 0; nRow < nRowCount; nRow++, nIndex++ )
             {
-                ppData[ nIndex ] = NULL;
+                ppData[ nIndex ] = nullptr;
             }
         }
     }

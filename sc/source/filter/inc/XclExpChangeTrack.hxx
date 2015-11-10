@@ -319,13 +319,13 @@ private:
     sal_uInt16*                 pBuffer;
     sal_uInt16                  nTabCount;
 
-    inline void                 Clear() { if( pBuffer ) delete[] pBuffer; pBuffer = NULL; }
+    inline void                 Clear() { if( pBuffer ) delete[] pBuffer; pBuffer = nullptr; }
 
     virtual void                SaveCont( XclExpStream& rStrm ) override;
 
 public:
     inline                      XclExpChTrTabId( sal_uInt16 nCount ) :
-                                    pBuffer( NULL ), nTabCount( nCount ) {}
+                                    pBuffer( nullptr ), nTabCount( nCount ) {}
                                 XclExpChTrTabId( const XclExpChTrTabIdBuffer& rBuffer );
     virtual                     ~XclExpChTrTabId();
 

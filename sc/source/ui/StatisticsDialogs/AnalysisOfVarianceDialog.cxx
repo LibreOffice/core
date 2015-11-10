@@ -37,12 +37,12 @@ struct StatisticCalculation {
 
 static StatisticCalculation lclBasicStatistics[] =
 {
-    { STR_ANOVA_LABEL_GROUPS, NULL,                NULL          },
+    { STR_ANOVA_LABEL_GROUPS, nullptr,                nullptr          },
     { STRID_CALC_COUNT,       "=COUNT(%RANGE%)",   "COUNT_RANGE" },
     { STRID_CALC_SUM,         "=SUM(%RANGE%)",     "SUM_RANGE"   },
     { STRID_CALC_MEAN,        "=AVERAGE(%RANGE%)", "MEAN_RANGE"  },
     { STRID_CALC_VARIANCE,    "=VAR(%RANGE%)",     "VAR_RANGE"   },
-    { 0,                      NULL,                NULL          }
+    { 0,                      nullptr,                nullptr          }
 };
 
 static sal_Int16 lclAnovaLabels[] =
@@ -166,7 +166,7 @@ void ScAnalysisOfVarianceDialog::FactorChanged()
 void ScAnalysisOfVarianceDialog::RowColumn(ScRangeList& rRangeList, AddressWalkerWriter& aOutput, FormulaTemplate& aTemplate,
                                            OUString& sFormula, GroupedBy aGroupedBy, ScRange* pResultRange)
 {
-    if (pResultRange != NULL)
+    if (pResultRange != nullptr)
         pResultRange->aStart = aOutput.current();
     if (!sFormula.isEmpty())
     {
@@ -176,7 +176,7 @@ void ScAnalysisOfVarianceDialog::RowColumn(ScRangeList& rRangeList, AddressWalke
             aTemplate.setTemplate(sFormula);
             aTemplate.applyRange(strWildcardRange, *pRange);
             aOutput.writeFormula(aTemplate.getTemplate());
-            if (pResultRange != NULL)
+            if (pResultRange != nullptr)
                 pResultRange->aEnd = aOutput.current();
             aOutput.nextRow();
         }
@@ -191,7 +191,7 @@ void ScAnalysisOfVarianceDialog::RowColumn(ScRangeList& rRangeList, AddressWalke
             aTemplate.setTemplate(aLabelTemplate);
             aTemplate.applyNumber(strWildcardNumber, i + 1);
             aOutput.writeString(aTemplate.getTemplate());
-            if (pResultRange != NULL)
+            if (pResultRange != nullptr)
                 pResultRange->aEnd = aOutput.current();
             aOutput.nextRow();
         }
@@ -233,7 +233,7 @@ void ScAnalysisOfVarianceDialog::AnovaSingleFactor(AddressWalkerWriter& output, 
         OUString sFormula = OUString::createFromAscii(lclBasicStatistics[i].aFormula);
         RowColumn(aRangeList, output, aTemplate, sFormula, mGroupedBy, &aResultRange);
         output.nextColumn();
-        if (lclBasicStatistics[i].aResultRangeName != NULL)
+        if (lclBasicStatistics[i].aResultRangeName != nullptr)
         {
             OUString sResultRangeName = OUString::createFromAscii(lclBasicStatistics[i].aResultRangeName);
             aTemplate.autoReplaceRange("%" + sResultRangeName + "%", aResultRange);
@@ -381,7 +381,7 @@ void ScAnalysisOfVarianceDialog::AnovaTwoFactor(AddressWalkerWriter& output, For
         ScRange aResultRange;
         OUString sFormula = OUString::createFromAscii(lclBasicStatistics[i].aFormula);
         RowColumn(aColumnRangeList, output, aTemplate, sFormula, BY_COLUMN, &aResultRange);
-        if (lclBasicStatistics[i].aResultRangeName != NULL)
+        if (lclBasicStatistics[i].aResultRangeName != nullptr)
         {
             OUString sResultRangeName = OUString::createFromAscii(lclBasicStatistics[i].aResultRangeName);
             aTemplate.autoReplaceRange("%" + sResultRangeName + "_COLUMN%", aResultRange);
@@ -399,7 +399,7 @@ void ScAnalysisOfVarianceDialog::AnovaTwoFactor(AddressWalkerWriter& output, For
         OUString sFormula = OUString::createFromAscii(lclBasicStatistics[i].aFormula);
         RowColumn(aRowRangeList, output, aTemplate, sFormula, BY_ROW, &aResultRange);
 
-        if (lclBasicStatistics[i].aResultRangeName != NULL)
+        if (lclBasicStatistics[i].aResultRangeName != nullptr)
         {
             OUString sResultRangeName = OUString::createFromAscii(lclBasicStatistics[i].aResultRangeName);
             aTemplate.autoReplaceRange("%" + sResultRangeName + "_ROW%", aResultRange);

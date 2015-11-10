@@ -501,16 +501,16 @@ static sal_Int32 lcl_MatchParenthesis( const OUString& rStr, sal_Int32 nPos )
 }
 
 ScInputHandler::ScInputHandler()
-    :   pInputWin( NULL ),
-        pEngine( NULL ),
-        pTableView( NULL ),
-        pTopView( NULL ),
-        pColumnData( NULL ),
-        pFormulaData( NULL ),
-        pFormulaDataPara( NULL ),
-        pTipVisibleParent( NULL ),
+    :   pInputWin( nullptr ),
+        pEngine( nullptr ),
+        pTableView( nullptr ),
+        pTopView( nullptr ),
+        pColumnData( nullptr ),
+        pFormulaData( nullptr ),
+        pFormulaDataPara( nullptr ),
+        pTipVisibleParent( nullptr ),
         nTipVisible( 0 ),
-        pTipVisibleSecParent( NULL ),
+        pTipVisibleSecParent( nullptr ),
         nTipVisibleSec( 0 ),
         nFormSelStart( 0 ),
         nFormSelEnd( 0 ),
@@ -535,17 +535,17 @@ ScInputHandler::ScInputHandler()
         eAttrAdjust( SVX_HOR_JUSTIFY_STANDARD ),
         aScaleX( 1,1 ),
         aScaleY( 1,1 ),
-        pRefViewSh( NULL ),
-        pLastPattern( NULL ),
-        pEditDefaults( NULL ),
-        pLastState( NULL ),
-        pDelayTimer( NULL ),
-        pRangeFindList( NULL ),
+        pRefViewSh( nullptr ),
+        pLastPattern( nullptr ),
+        pEditDefaults( nullptr ),
+        pLastState( nullptr ),
+        pDelayTimer( nullptr ),
+        pRangeFindList( nullptr ),
         maFormulaChar()
 {
     //  The InputHandler is constructed with the view, so SfxViewShell::Current
     //  doesn't have the right view yet. pActiveViewSh is updated in NotifyChange.
-    pActiveViewSh = NULL;
+    pActiveViewSh = nullptr;
 
     //  Bindings (only still used for Invalidate) are retrieved if needed on demand
 }
@@ -558,10 +558,10 @@ ScInputHandler::~ScInputHandler()
         EnterHandler(); // Finish input
 
     if (SC_MOD()->GetRefInputHdl() == this)
-        SC_MOD()->SetRefInputHdl(NULL);
+        SC_MOD()->SetRefInputHdl(nullptr);
 
     if ( pInputWin && pInputWin->GetInputHandler() == this )
-        pInputWin->SetInputHandler( NULL );
+        pInputWin->SetInputHandler( nullptr );
 
     delete pRangeFindList;
     delete pEditDefaults;
@@ -603,7 +603,7 @@ void ScInputHandler::UpdateRefDevice()
     if ( bTextWysiwyg && pActiveViewSh )
         pEngine->SetRefDevice( pActiveViewSh->GetViewData().GetDocument()->GetPrinter() );
     else
-        pEngine->SetRefDevice( NULL );
+        pEngine->SetRefDevice( nullptr );
 
     MapMode aMode( MAP_100TH_MM, Point(), aScaleX, aScaleY );
     pEngine->SetRefMapMode( aMode );
@@ -626,7 +626,7 @@ void ScInputHandler::ImplCreateEditEngine()
             pEngine = new ScFieldEditEngine(&rDoc, rDoc.GetEnginePool(), rDoc.GetEditPool());
         }
         else
-            pEngine = new ScFieldEditEngine(NULL, EditEngine::CreatePool(), NULL, true);
+            pEngine = new ScFieldEditEngine(nullptr, EditEngine::CreatePool(), nullptr, true);
         pEngine->SetWordDelimiters( ScEditUtil::ModifyDelimiters( pEngine->GetWordDelimiters() ) );
         UpdateRefDevice();      // also sets MapMode
         pEngine->SetPaperSize( Size( 1000000, 1000000 ) );
@@ -785,7 +785,7 @@ void ScInputHandler::HideTip()
             pTipVisibleParent->RemoveEventListener( LINK( this, ScInputHandler, ShowHideTipVisibleParentListener ) );
         Help::HideTip( nTipVisible );
         nTipVisible = 0;
-        pTipVisibleParent = NULL;
+        pTipVisibleParent = nullptr;
     }
     aManualTip.clear();
 }
@@ -797,7 +797,7 @@ void ScInputHandler::HideTipBelow()
             pTipVisibleSecParent->RemoveEventListener( LINK( this, ScInputHandler, ShowHideTipVisibleSecParentListener ) );
         Help::HideTip( nTipVisibleSec );
         nTipVisibleSec = 0;
-        pTipVisibleSecParent = NULL;
+        pTipVisibleSecParent = nullptr;
     }
     aManualTip.clear();
 }
@@ -818,7 +818,7 @@ void ScInputHandler::ShowArgumentsTip( OUString& rSelText )
             sal_Int32 nNextFStart = aHelper.GetFunctionStart( rSelText, nLeftParentPos, true);
             const IFunctionDescription* ppFDesc;
             ::std::vector< OUString> aArgs;
-            if( aHelper.GetNextFunc( rSelText, false, nNextFStart, NULL, &ppFDesc, &aArgs ) )
+            if( aHelper.GetNextFunc( rSelText, false, nNextFStart, nullptr, &ppFDesc, &aArgs ) )
             {
                 if( !ppFDesc->getFunctionName().isEmpty() )
                 {
@@ -1658,8 +1658,8 @@ void ScInputHandler::ViewShellGone(ScTabViewShell* pViewSh) // Executed synchron
     if ( pViewSh == pActiveViewSh )
     {
         delete pLastState;
-        pLastState = NULL;
-        pLastPattern = NULL;
+        pLastState = nullptr;
+        pLastPattern = nullptr;
     }
 
     if ( pViewSh == pRefViewSh )
@@ -1668,9 +1668,9 @@ void ScInputHandler::ViewShellGone(ScTabViewShell* pViewSh) // Executed synchron
         // We end the EditMode anyways
         EnterHandler();
         bFormulaMode = false;
-        pRefViewSh = NULL;
+        pRefViewSh = nullptr;
         SfxGetpApp()->Broadcast( SfxSimpleHint( FID_REFMODECHANGED ) );
-        SC_MOD()->SetRefInputHdl(NULL);
+        SC_MOD()->SetRefInputHdl(nullptr);
         if (pInputWin)
             pInputWin->SetFormulaMode(false);
         UpdateAutoCorrFlag();
@@ -1681,7 +1681,7 @@ void ScInputHandler::ViewShellGone(ScTabViewShell* pViewSh) // Executed synchron
     if ( pActiveViewSh && pActiveViewSh == pViewSh )
     {
         OSL_FAIL("pActiveViewSh is gone");
-        pActiveViewSh = NULL;
+        pActiveViewSh = nullptr;
     }
 
     if ( SC_MOD()->GetInputOptions().GetTextWysiwyg() )
@@ -1699,7 +1699,7 @@ void ScInputHandler::UpdateActiveView()
 
     vcl::Window* pShellWin = pActiveViewSh ?
                 pActiveViewSh->GetWindowByPos( pActiveViewSh->GetViewData().GetEditActivePart() ) :
-                NULL;
+                nullptr;
 
     sal_uInt16 nCount = pEngine->GetViewCount();
     if (nCount > 0)
@@ -1714,7 +1714,7 @@ void ScInputHandler::UpdateActiveView()
         }
     }
     else
-        pTableView = NULL;
+        pTableView = nullptr;
 
     // setup the pTableView editeng for tiled rendering to get cursor and selections
     if (pActiveViewSh && pTableView)
@@ -1732,7 +1732,7 @@ void ScInputHandler::UpdateActiveView()
     if (pInputWin && eMode == SC_INPUT_TOP )
         pTopView = pInputWin->GetEditView();
     else
-        pTopView = NULL;
+        pTopView = nullptr;
 }
 
 void ScInputHandler::SetInputWindow(  ScInputWindow* pNew )
@@ -1745,7 +1745,7 @@ void ScInputHandler::StopInputWinEngine( bool bAll )
     if (pInputWin)
         pInputWin->StopEditEngine( bAll );
 
-    pTopView = NULL; // invalid now
+    pTopView = nullptr; // invalid now
 }
 
 EditView* ScInputHandler::GetActiveView()
@@ -1756,7 +1756,7 @@ EditView* ScInputHandler::GetActiveView()
 
 void ScInputHandler::ForgetLastPattern()
 {
-    pLastPattern = NULL;
+    pLastPattern = nullptr;
     if ( !pLastState && pActiveViewSh )
         pActiveViewSh->UpdateInputHandler( true ); // Get status again
     else
@@ -2207,9 +2207,9 @@ void ScInputHandler::UpdateFormulaMode()
         {
             ShowRefFrame();
             bFormulaMode = false;
-            pRefViewSh = NULL;
+            pRefViewSh = nullptr;
             pSfxApp->Broadcast( SfxSimpleHint( FID_REFMODECHANGED ) );
-            SC_MOD()->SetRefInputHdl(NULL);
+            SC_MOD()->SetRefInputHdl(nullptr);
             if (pInputWin)
                 pInputWin->SetFormulaMode(false);
             UpdateAutoCorrFlag();
@@ -2418,8 +2418,8 @@ void ScInputHandler::EnterHandler( ScEnterMode nBlockMode )
     bool bMatrix = ( nBlockMode == ScEnterMode::MATRIX );
 
     SfxApplication* pSfxApp     = SfxGetpApp();
-    EditTextObject* pObject     = NULL;
-    ScPatternAttr*  pCellAttrs  = NULL;
+    EditTextObject* pObject     = nullptr;
+    ScPatternAttr*  pCellAttrs  = nullptr;
     bool            bForget     = false; // Remove due to validity?
 
     OUString aString = GetEditText(pEngine);
@@ -2434,7 +2434,7 @@ void ScInputHandler::EnterHandler( ScEnterMode nBlockMode )
             lcl_SelectionToEnd(pTableView);
         }
 
-        vcl::Window* pFrameWin = pActiveViewSh ? pActiveViewSh->GetFrameWin() : NULL;
+        vcl::Window* pFrameWin = pActiveViewSh ? pActiveViewSh->GetFrameWin() : nullptr;
 
         if (pTopView)
             pTopView->CompleteAutoCorrect(); // CompleteAutoCorrect for both Views
@@ -2534,12 +2534,12 @@ void ScInputHandler::EnterHandler( ScEnterMode nBlockMode )
 
         ESelection aSel( 0, 0, nParCnt-1, pEngine->GetTextLen(nParCnt-1) );
         SfxItemSet aOldAttribs = pEngine->GetAttribs( aSel );
-        const SfxPoolItem* pItem = NULL;
+        const SfxPoolItem* pItem = nullptr;
 
         // Find common (cell) attributes before RemoveAdjust
         if ( pActiveViewSh && bUniformAttribs )
         {
-            SfxItemSet* pCommonAttrs = NULL;
+            SfxItemSet* pCommonAttrs = nullptr;
             for (sal_uInt16 nId = EE_CHAR_START; nId <= EE_CHAR_END; nId++)
             {
                 SfxItemState eState = aOldAttribs.GetItemState( nId, false, &pItem );
@@ -2640,12 +2640,12 @@ void ScInputHandler::EnterHandler( ScEnterMode nBlockMode )
 
         bFormulaMode = false;
         pSfxApp->Broadcast( SfxSimpleHint( FID_REFMODECHANGED ) );
-        SC_MOD()->SetRefInputHdl(NULL);
+        SC_MOD()->SetRefInputHdl(nullptr);
         if (pInputWin)
             pInputWin->SetFormulaMode(false);
         UpdateAutoCorrFlag();
     }
-    pRefViewSh = NULL; // Also without FormulaMode due to FunctionsAutoPilot
+    pRefViewSh = nullptr; // Also without FormulaMode due to FunctionsAutoPilot
     DeleteRangeFinder();
     ResetAutoPar();
 
@@ -2658,7 +2658,7 @@ void ScInputHandler::EnterHandler( ScEnterMode nBlockMode )
 
     // Text input (through number formats) or ApplySelectionPattern modify
     // the cell's attributes, so pLastPattern is no longer valid
-    pLastPattern = NULL;
+    pLastPattern = nullptr;
 
     if (bOldMod && !bProtected && !bForget)
     {
@@ -2715,12 +2715,12 @@ void ScInputHandler::EnterHandler( ScEnterMode nBlockMode )
 
             const SfxPoolItem* aArgs[2];
             aArgs[0] = &aItem;
-            aArgs[1] = NULL;
+            aArgs[1] = nullptr;
             rBindings.Execute( nId, aArgs );
         }
 
         delete pLastState; // pLastState still contains the old text
-        pLastState = NULL;
+        pLastState = nullptr;
     }
     else
         pSfxApp->Broadcast( SfxSimpleHint( FID_KILLEDITVIEW ) );
@@ -2768,12 +2768,12 @@ void ScInputHandler::CancelHandler()
         }
         bFormulaMode = false;
         SfxGetpApp()->Broadcast( SfxSimpleHint( FID_REFMODECHANGED ) );
-        SC_MOD()->SetRefInputHdl(NULL);
+        SC_MOD()->SetRefInputHdl(nullptr);
         if (pInputWin)
             pInputWin->SetFormulaMode(false);
         UpdateAutoCorrFlag();
     }
-    pRefViewSh = NULL; // Also without FormulaMode due to FunctionsAutoPilot
+    pRefViewSh = nullptr; // Also without FormulaMode due to FunctionsAutoPilot
     DeleteRangeFinder();
     ResetAutoPar();
 
@@ -3184,7 +3184,7 @@ bool ScInputHandler::KeyInput( const KeyEvent& rKEvt, bool bStartEdit /* = false
                 {
                     if (pTableView)
                     {
-                        vcl::Window* pFrameWin = pActiveViewSh ? pActiveViewSh->GetFrameWin() : NULL;
+                        vcl::Window* pFrameWin = pActiveViewSh ? pActiveViewSh->GetFrameWin() : nullptr;
                         if ( pTableView->PostKeyEvent( rKEvt, pFrameWin ) )
                             bUsed = true;
                     }
@@ -3398,7 +3398,7 @@ void ScInputHandler::NotifyChange( const ScInputHdlState* pState,
     if ( pState != pLastState )
     {
         delete pLastState;
-        pLastState = pState ? new ScInputHdlState( *pState ) : NULL;
+        pLastState = pState ? new ScInputHdlState( *pState ) : nullptr;
     }
 
     if ( pState && pActiveViewSh )
@@ -3573,7 +3573,7 @@ void ScInputHandler::UpdateCellAdjust( SvxCellHorJustify eJust )
 
 void ScInputHandler::ResetDelayTimer()
 {
-    if(pDelayTimer!=NULL)
+    if(pDelayTimer!=nullptr)
     {
         DELETEZ( pDelayTimer );
 
@@ -3590,7 +3590,7 @@ IMPL_LINK_TYPED( ScInputHandler, DelayTimer, Timer*, pTimer, void )
     {
         DELETEZ( pDelayTimer );
 
-        if ( NULL == pLastState || SC_MOD()->IsFormulaMode() || SC_MOD()->IsRefDialogOpen())
+        if ( nullptr == pLastState || SC_MOD()->IsFormulaMode() || SC_MOD()->IsRefDialogOpen())
         {
             //! New method at ScModule to query if function autopilot is open
             SfxViewFrame* pViewFrm = SfxViewFrame::Current();
@@ -3606,7 +3606,7 @@ IMPL_LINK_TYPED( ScInputHandler, DelayTimer, Timer*, pTimer, void )
             {
                 bInOwnChange = true; // disable ModifyHdl (reset below)
 
-                pActiveViewSh = NULL;
+                pActiveViewSh = nullptr;
                 pEngine->SetText( EMPTY_OUSTRING );
                 if ( pInputWin )
                 {
@@ -3726,7 +3726,7 @@ EditView* ScInputHandler::GetFuncEditView()
 {
     UpdateActiveView(); // Due to pTableView
 
-    EditView* pView = NULL;
+    EditView* pView = nullptr;
     if ( pInputWin )
     {
         pInputWin->MakeDialogEditView();
@@ -3825,12 +3825,12 @@ ScInputHdlState::ScInputHdlState( const ScAddress& rCurPos,
         aStartPos   ( rStartPos ),
         aEndPos     ( rEndPos ),
         aString     ( rString ),
-        pEditData   ( pData ? pData->Clone() : NULL )
+        pEditData   ( pData ? pData->Clone() : nullptr )
 {
 }
 
 ScInputHdlState::ScInputHdlState( const ScInputHdlState& rCpy )
-    :   pEditData   ( NULL )
+    :   pEditData   ( nullptr )
 {
     *this = rCpy;
 }
@@ -3857,7 +3857,7 @@ ScInputHdlState& ScInputHdlState::operator=( const ScInputHdlState& r )
     aStartPos   = r.aStartPos;
     aEndPos     = r.aEndPos;
     aString     = r.aString;
-    pEditData   = r.pEditData ? r.pEditData->Clone() : NULL;
+    pEditData   = r.pEditData ? r.pEditData->Clone() : nullptr;
 
     return *this;
 }

@@ -107,7 +107,7 @@ void ScMediaShell::ExecuteMedia( SfxRequest& rReq )
         const SfxPoolItem*  pItem;
 
         if( !pArgs || ( SfxItemState::SET != pArgs->GetItemState( SID_AVMEDIA_TOOLBOX, false, &pItem ) ) )
-            pItem = NULL;
+            pItem = nullptr;
 
         if( pItem )
         {

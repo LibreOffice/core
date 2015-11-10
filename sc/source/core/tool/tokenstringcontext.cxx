@@ -35,7 +35,7 @@ TokenStringContext::TokenStringContext( const ScDocument* pDoc, formula::Formula
     meGram(eGram),
     mpRefConv(ScCompiler::GetRefConvention(formula::FormulaGrammar::extractRefConvention(eGram)))
 {
-    ScCompiler aComp(NULL, ScAddress());
+    ScCompiler aComp(nullptr, ScAddress());
     mxOpCodeMap = aComp.GetOpCodeMap(formula::FormulaGrammar::extractFormulaLanguage(eGram));
     if (mxOpCodeMap)
         maErrRef = mxOpCodeMap->getSymbol(ocErrRef);

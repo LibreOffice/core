@@ -428,11 +428,11 @@ public:
                             css::script::ScriptEventDescriptor& rDescriptor,
                             XclTbxEventType eEventType,
                             const OUString& rXclMacroName,
-                            SfxObjectShell* pDocShell = 0 );
+                            SfxObjectShell* pDocShell = nullptr );
     /** Tries to extract an Excel macro name from the passed macro descriptor. */
     static OUString     ExtractFromMacroDescriptor(
                             const css::script::ScriptEventDescriptor& rDescriptor,
-                            XclTbxEventType eEventType, SfxObjectShell* pShell = NULL );
+                            XclTbxEventType eEventType, SfxObjectShell* pShell = nullptr );
 };
 
 #endif

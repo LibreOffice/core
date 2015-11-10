@@ -70,7 +70,7 @@ const ScTokenArray* XclImpFmlaCompImpl::CreateFormula(
         XclFormulaType /*eType*/, const XclTokenArray& rXclTokArr )
 {
     if (rXclTokArr.Empty())
-        return NULL;
+        return nullptr;
 
     // evil hack!  are we trying to phase out the old style formula converter ?
     SvMemoryStream aMemStrm;
@@ -78,7 +78,7 @@ const ScTokenArray* XclImpFmlaCompImpl::CreateFormula(
     aMemStrm.Write( rXclTokArr.GetData(), rXclTokArr.GetSize() );
     XclImpStream aFmlaStrm( aMemStrm, GetRoot() );
     aFmlaStrm.StartNextRecord();
-    const ScTokenArray* pArray = NULL;
+    const ScTokenArray* pArray = nullptr;
     GetOldFmlaConverter().Reset();
     GetOldFmlaConverter().Convert(pArray, aFmlaStrm, aFmlaStrm.GetRecSize(), true);
     return pArray;

@@ -117,7 +117,7 @@ public:
     /** Writes all font properties to the passed property set.
         @param pFontColor  If set, overrides internal stored font color. */
     void                WriteFontProperties( ScfPropertySet& rPropSet,
-                            XclFontPropSetType eType, const Color* pFontColor = 0 ) const;
+                            XclFontPropSetType eType, const Color* pFontColor = nullptr ) const;
 
 private:
     /** Reads and sets height and flags. */
@@ -185,7 +185,7 @@ public:
         @param pFontColor  If set, overrides internal stored font color. */
     void                WriteFontProperties(
                             ScfPropertySet& rPropSet, XclFontPropSetType eType,
-                            sal_uInt16 nFontIdx, const Color* pFontColor = 0 ) const;
+                            sal_uInt16 nFontIdx, const Color* pFontColor = nullptr ) const;
     /** Writes default font properties for form controls to the passed property set. */
     void                WriteDefaultCtrlFontProperties( ScfPropertySet& rPropSet ) const;
 
@@ -488,10 +488,10 @@ public:
 
     /** Returns the object that stores all contents of an XF record. */
     inline XclImpXF*    GetXF( sal_uInt16 nXFIndex )
-                            { return (nXFIndex >= maXFList.size()) ? NULL : &maXFList.at(nXFIndex); }
+                            { return (nXFIndex >= maXFList.size()) ? nullptr : &maXFList.at(nXFIndex); }
 
     inline const XclImpXF*    GetXF( sal_uInt16 nXFIndex ) const
-                            { return (nXFIndex >= maXFList.size()) ? NULL : &maXFList.at(nXFIndex); }
+                            { return (nXFIndex >= maXFList.size()) ? nullptr : &maXFList.at(nXFIndex); }
 
     /** Returns the index to the Excel font used in the specified XF record. */
     sal_uInt16          GetFontIndex( sal_uInt16 nXFIndex ) const;

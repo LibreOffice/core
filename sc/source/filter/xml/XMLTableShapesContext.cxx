@@ -42,7 +42,7 @@ SvXMLImportContext *ScXMLTableShapesContext::CreateChildContext( sal_uInt16 nPre
                                             const OUString& rLName,
                                             const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList )
 {
-    SvXMLImportContext *pContext(0);
+    SvXMLImportContext *pContext(nullptr);
 
     if (!pContext)
     {

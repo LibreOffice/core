@@ -81,7 +81,7 @@ ScUndoInsertTab::ScUndoInsertTab( ScDocShell* pNewDocShell,
                                   const OUString& rNewName) :
     ScSimpleUndo( pNewDocShell ),
     sNewName( rNewName ),
-    pDrawUndo( NULL ),
+    pDrawUndo( nullptr ),
     nTab( nTabNum ),
     bAppend( bApp )
 {
@@ -173,7 +173,7 @@ ScUndoInsertTables::ScUndoInsertTables( ScDocShell* pNewDocShell,
                                         SCTAB nTabNum,
                                         std::vector<OUString>& newNameList) :
     ScSimpleUndo( pNewDocShell ),
-    pDrawUndo( NULL ),
+    pDrawUndo( nullptr ),
     aNameList( newNameList ),
     nTab( nTabNum )
 {
@@ -592,7 +592,7 @@ ScUndoCopyTab::ScUndoCopyTab(
     mpOldTabs(pOldTabs),
     mpNewTabs(pNewTabs),
     mpNewNames(pNewNames),
-    pDrawUndo( NULL )
+    pDrawUndo( nullptr )
 {
     pDrawUndo = GetSdrUndoAction( &pDocShell->GetDocument() );
 
@@ -803,7 +803,7 @@ ScUndoMakeScenario::ScUndoMakeScenario( ScDocShell* pNewDocShell,
     aComment( rC ),
     aColor( rCol ),
     nFlags( nF ),
-    pDrawUndo( NULL )
+    pDrawUndo( nullptr )
 {
     pDrawUndo = GetSdrUndoAction( &pDocShell->GetDocument() );
 }
@@ -882,8 +882,8 @@ ScUndoImportTab::ScUndoImportTab( ScDocShell* pShell,
     ScSimpleUndo( pShell ),
     nTab( nNewTab ),
     nCount( nNewCount ),
-    pRedoDoc( NULL ),
-    pDrawUndo( NULL )
+    pRedoDoc( nullptr ),
+    pDrawUndo( nullptr )
 {
     pDrawUndo = GetSdrUndoAction( &pDocShell->GetDocument() );
 }
@@ -1206,7 +1206,7 @@ void ScUndoDocProtect::DoProtect(bool bProtect)
     else
     {
         // remove protection.
-        rDoc.SetDocProtection(NULL);
+        rDoc.SetDocProtection(nullptr);
     }
 
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
@@ -1274,7 +1274,7 @@ void ScUndoTabProtect::DoProtect(bool bProtect)
     else
     {
         // remove protection.
-        rDoc.SetTabProtection(mnTab, NULL);
+        rDoc.SetTabProtection(mnTab, nullptr);
     }
 
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
@@ -1494,7 +1494,7 @@ SdrObject* ScUndoRenameObject::GetObject()
         }
     }
     OSL_FAIL("Object not found");
-    return NULL;
+    return nullptr;
 }
 
 void ScUndoRenameObject::Undo()

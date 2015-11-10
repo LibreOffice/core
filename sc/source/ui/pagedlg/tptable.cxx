@@ -176,7 +176,7 @@ void ScTablePage::Reset( const SfxItemSet* rCoreSet )
     sal_uInt16 nPage = GET_USHORT(SID_SCATTR_PAGE_FIRSTPAGENO,*rCoreSet);
     m_pBtnPageNo->Check( nPage != 0 );
     m_pEdPageNo->SetValue( (nPage != 0) ? nPage : 1 );
-    PageNoHdl( NULL );
+    PageNoHdl( nullptr );
 
     // object representation:
     m_pBtnCharts->Check( GET_SHOW( SID_SCATTR_PAGE_CHARTS, *rCoreSet ) );
@@ -226,7 +226,7 @@ void ScTablePage::Reset( const SfxItemSet* rCoreSet )
         m_pEdScaleAll->SetValue( 100 );
     }
 
-    PageDirHdl( NULL );
+    PageDirHdl( nullptr );
     ScaleHdl( *m_pLbScaleMode.get() );
 
     // remember for FillItemSet

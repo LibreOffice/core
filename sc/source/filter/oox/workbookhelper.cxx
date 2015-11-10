@@ -317,8 +317,8 @@ WorkbookGlobals::WorkbookGlobals( ExcelFilter& rFilter ) :
     meFilterType( FILTER_OOXML ),
     mpOoxFilter( &rFilter ),
     meBiff( BIFF_UNKNOWN ),
-    mpDoc(NULL),
-    mpDocShell(NULL)
+    mpDoc(nullptr),
+    mpDocShell(nullptr)
 {
     // register at the filter, needed for virtual callbacks (even during construction)
     mrExcelFilter.registerWorkbookGlobals( *this );
@@ -406,7 +406,7 @@ ScRangeData* WorkbookGlobals::createNamedRangeObject(
     OUString& orName, const Sequence< FormulaToken>& rTokens, sal_Int32 nIndex, sal_Int32 nNameFlags )
 {
     // create the name and insert it into the Calc document
-    ScRangeData* pScRangeData = NULL;
+    ScRangeData* pScRangeData = nullptr;
     if( !orName.isEmpty() )
     {
         ScDocument& rDoc =  getScDocument();
@@ -423,7 +423,7 @@ ScRangeData* WorkbookGlobals::createLocalNamedRangeObject(
     OUString& orName, const Sequence< FormulaToken >&  rTokens, sal_Int32 nIndex, sal_Int32 nNameFlags, sal_Int32 nTab )
 {
     // create the name and insert it into the Calc document
-    ScRangeData* pScRangeData = NULL;
+    ScRangeData* pScRangeData = nullptr;
     if( !orName.isEmpty() )
     {
         ScDocument& rDoc =  getScDocument();

@@ -78,11 +78,11 @@ ScDrawTransferObj::ScDrawTransferObj( SdrModel* pClipModel, ScDocShell* pContain
                                         const TransferableObjectDescriptor& rDesc ) :
     pModel( pClipModel ),
     aObjDesc( rDesc ),
-    pBookmark( NULL ),
+    pBookmark( nullptr ),
     bGraphic( false ),
     bGrIsBit( false ),
     bOleObj( false ),
-    pDragSourceView( NULL ),
+    pDragSourceView( nullptr ),
     nDragSourceFlags( 0 ),
     bDragWasInternal( false ),
     nSourceDocID( 0 ),
@@ -157,7 +157,7 @@ ScDrawTransferObj::ScDrawTransferObj( SdrModel* pClipModel, ScDocShell* pContain
                                     OUString aUrl = sTmp;
                                     OUString aAbs;
                                     const SfxMedium* pMedium;
-                                    if (pContainerShell && (pMedium = pContainerShell->GetMedium()) != NULL)
+                                    if (pContainerShell && (pMedium = pContainerShell->GetMedium()) != nullptr)
                                     {
                                         bool bWasAbs = true;
                                         aAbs = pMedium->GetURLObject().smartRel2Abs( aUrl, bWasAbs ).
@@ -227,7 +227,7 @@ ScDrawTransferObj::~ScDrawTransferObj()
     if ( pScMod->GetClipData().pDrawClipboard == this )
     {
         OSL_FAIL("ScDrawTransferObj wasn't released");
-        pScMod->SetClipObject( NULL, NULL );
+        pScMod->SetClipObject( nullptr, nullptr );
     }
     if ( pScMod->GetDragData().pDrawTransfer == this )
     {
@@ -594,7 +594,7 @@ void ScDrawTransferObj::ObjectReleased()
 {
     ScModule* pScMod = SC_MOD();
     if ( pScMod->GetClipData().pDrawClipboard == this )
-        pScMod->SetClipObject( NULL, NULL );
+        pScMod->SetClipObject( nullptr, nullptr );
 
     TransferableHelper::ObjectReleased();
 }
@@ -690,7 +690,7 @@ SdrOle2Obj* ScDrawTransferObj::GetSingleObject()
         }
     }
 
-    return NULL;
+    return nullptr;
 }
 
 void ScDrawTransferObj::CreateOLEData()
@@ -735,7 +735,7 @@ void ScDrawTransferObj::InitDocShell()
         aDestView.Paste(
             *pModel,
             Point(aSrcSize.Width()/2, aSrcSize.Height()/2),
-            NULL, SdrInsertFlags::NONE, OUString(), OUString());
+            nullptr, SdrInsertFlags::NONE, OUString(), OUString());
 
         // put objects to right layer (see ScViewFunc::PasteDataFormat for SotClipboardFormatId::DRAWING)
 
@@ -762,7 +762,7 @@ void ScDrawTransferObj::InitDocShell()
         aViewOpt.SetOption( VOPT_GRID, false );
         rDestDoc.SetViewOptions( aViewOpt );
 
-        ScViewData aViewData( pDocSh, NULL );
+        ScViewData aViewData( pDocSh, nullptr );
         aViewData.SetTabNo( 0 );
         aViewData.SetScreen( aDestArea );
         aViewData.SetCurX( 0 );

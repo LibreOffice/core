@@ -61,7 +61,7 @@ private:
     void        InitDocShell(bool bLimitToPageSize);
     static void StripRefs( ScDocument* pDoc, SCCOL nStartX, SCROW nStartY,
                             SCCOL nEndX, SCROW nEndY,
-                            ScDocument* pDestDoc=0,
+                            ScDocument* pDestDoc=nullptr,
                             SCCOL nSubX=0, SCROW nSubY=0 );
     static void PaintToDev( OutputDevice* pDev, ScDocument* pDoc, double nPrintFactor,
                             const ScRange& rBlock, bool bMetaFile );

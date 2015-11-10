@@ -71,9 +71,9 @@ bool ScGridWindow::ShowNoteMarker( SCsCOL nPosX, SCsROW nPosY, bool bKeyboard )
     ScChangeViewSettings* pSettings = pDoc->GetChangeViewSettings();
     if ( pTrack && pTrack->GetFirst() && pSettings && pSettings->ShowChanges())
     {
-        const ScChangeAction* pFound = NULL;
-        const ScChangeAction* pFoundContent = NULL;
-        const ScChangeAction* pFoundMove = NULL;
+        const ScChangeAction* pFound = nullptr;
+        const ScChangeAction* pFoundContent = nullptr;
+        const ScChangeAction* pFoundMove = nullptr;
         long nModified = 0;
         const ScChangeAction* pAction = pTrack->GetFirst();
         while (pAction)
@@ -190,9 +190,9 @@ bool ScGridWindow::ShowNoteMarker( SCsCOL nPosX, SCsROW nPosY, bool bKeyboard )
             bool bVSplit = pViewData->GetVSplitMode() != SC_SPLIT_NONE;
 
             vcl::Window* pLeft = pViewData->GetView()->GetWindowByPos( bVSplit ? SC_SPLIT_TOPLEFT : SC_SPLIT_BOTTOMLEFT );
-            vcl::Window* pRight = bHSplit ? pViewData->GetView()->GetWindowByPos( bVSplit ? SC_SPLIT_TOPRIGHT : SC_SPLIT_BOTTOMRIGHT ) : 0;
-            vcl::Window* pBottom = bVSplit ? pViewData->GetView()->GetWindowByPos( SC_SPLIT_BOTTOMLEFT ) : 0;
-            vcl::Window* pDiagonal = (bHSplit && bVSplit) ? pViewData->GetView()->GetWindowByPos( SC_SPLIT_BOTTOMRIGHT ) : 0;
+            vcl::Window* pRight = bHSplit ? pViewData->GetView()->GetWindowByPos( bVSplit ? SC_SPLIT_TOPRIGHT : SC_SPLIT_BOTTOMRIGHT ) : nullptr;
+            vcl::Window* pBottom = bVSplit ? pViewData->GetView()->GetWindowByPos( SC_SPLIT_BOTTOMLEFT ) : nullptr;
+            vcl::Window* pDiagonal = (bHSplit && bVSplit) ? pViewData->GetView()->GetWindowByPos( SC_SPLIT_BOTTOMRIGHT ) : nullptr;
             OSL_ENSURE( pLeft, "ScGridWindow::ShowNoteMarker - missing top-left grid window" );
 
             /*  If caption is shown from right or bottom windows, adjust
@@ -302,7 +302,7 @@ void ScGridWindow::RequestHelp(const HelpEvent& rHEvt)
             MouseEvent aMEvt( aPosPixel, 1, MouseEventModifiers::NONE, MOUSE_LEFT );
             SdrHitKind eHit = pDrView->PickAnything( aMEvt, SdrMouseEventKind::BUTTONDOWN, aVEvt );
 
-            if ( eHit != SDRHIT_NONE && aVEvt.pObj != NULL )
+            if ( eHit != SDRHIT_NONE && aVEvt.pObj != nullptr )
             {
                 // URL for IMapObject below Pointer is help text
                 if ( ScDrawLayer::GetIMapInfo( aVEvt.pObj ) )
@@ -340,14 +340,14 @@ void ScGridWindow::RequestHelp(const HelpEvent& rHEvt)
                     }
                     else
                     {
-                        SdrObject* pObj = 0;
-                        SdrPageView* pPV = 0;
+                        SdrObject* pObj = nullptr;
+                        SdrPageView* pPV = nullptr;
                         Point aMDPos = PixelToLogic( aPosPixel );
                         if ( pDrView->PickObj(aMDPos, pDrView->getHitTolLog(), pObj, pPV, SdrSearchOptions::ALSOONMASTER) )
                         {
                             if ( pObj->IsGroupObject() )
                             {
-                                    SdrObject* pHit = 0;
+                                    SdrObject* pHit = nullptr;
                                     if ( pDrView->PickObj(aMDPos, pDrView->getHitTolLog(), pHit, pPV, SdrSearchOptions::DEEP ) )
                                         pObj = pHit;
                             }
@@ -377,7 +377,7 @@ void ScGridWindow::RequestHelp(const HelpEvent& rHEvt)
         if ( aHelpText.isEmpty() )                                 // Text-URL
         {
             OUString aUrl;
-            if ( GetEditUrl( aPosPixel, NULL, &aUrl ) )
+            if ( GetEditUrl( aPosPixel, nullptr, &aUrl ) )
             {
                 aHelpText = INetURLObject::decode( aUrl,
                     INetURLObject::DECODE_UNAMBIGUOUS );
