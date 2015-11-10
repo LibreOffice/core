@@ -441,7 +441,7 @@ ORegistry::ORegistry()
 ORegistry::~ORegistry()
 {
     ORegKey* pRootKey = m_openKeyTable[ROOT];
-    if (pRootKey != 0)
+    if (pRootKey != nullptr)
         (void) releaseKey(pRootKey);
 
     if (m_file.isValid())
@@ -639,7 +639,7 @@ RegError ORegistry::createKey(RegKeyHandle hKey, const OUString& keyName,
 {
     ORegKey*    pKey;
 
-    *phNewKey = NULL;
+    *phNewKey = nullptr;
 
     if ( keyName.isEmpty() )
         return RegError::INVALID_KEYNAME;
@@ -700,7 +700,7 @@ RegError ORegistry::openKey(RegKeyHandle hKey, const OUString& keyName,
 {
     ORegKey*        pKey;
 
-    *phOpenKey = NULL;
+    *phOpenKey = nullptr;
 
     if ( keyName.isEmpty() )
     {
@@ -829,7 +829,7 @@ RegError ORegistry::eraseKey(ORegKey* pKey, const OUString& keyName)
             sFullPath += ROOT;
     }
 
-    ORegKey* pOldKey = 0;
+    ORegKey* pOldKey = nullptr;
     _ret = pKey->openKey(keyName, reinterpret_cast<RegKeyHandle*>(&pOldKey));
     if (_ret != RegError::NO_ERROR)
         return _ret;
@@ -1360,7 +1360,7 @@ RegError ORegistry::loadAndSaveKeys(ORegKey* pTargetKey,
         m_openKeyTable[sFullKeyName]->setDeleted(false);
     }
 
-    ORegKey* pTmpKey = 0;
+    ORegKey* pTmpKey = nullptr;
     _ret = pSourceKey->openKey(keyName, reinterpret_cast<RegKeyHandle*>(&pTmpKey));
     if (_ret != RegError::NO_ERROR)
         return _ret;

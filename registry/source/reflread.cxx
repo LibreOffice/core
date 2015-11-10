@@ -157,7 +157,7 @@ BlopObject::BlopObject(const sal_uInt8* buffer, sal_uInt32 len, bool copyBuffer)
 {
     if (m_isCopied)
     {
-        m_pBuffer = 0;
+        m_pBuffer = nullptr;
         sal_uInt8* newBuffer = new sal_uInt8[len];
         memcpy(newBuffer, buffer, len);
         m_pBuffer = newBuffer;
@@ -197,7 +197,7 @@ public:
 };
 
 StringCache::StringCache(sal_uInt16 size)
-    : m_stringTable(NULL)
+    : m_stringTable(nullptr)
     , m_numOfStrings(size)
     , m_stringsCopied(0)
 {
@@ -205,7 +205,7 @@ StringCache::StringCache(sal_uInt16 size)
 
     for (sal_uInt16 i = 0; i < m_numOfStrings; i++)
     {
-        m_stringTable[i] = NULL;
+        m_stringTable[i] = nullptr;
     }
 }
 
@@ -227,7 +227,7 @@ const sal_Unicode* StringCache::getString(sal_uInt16 index)
     if ((index > 0) && (index <= m_stringsCopied))
         return m_stringTable[index - 1];
     else
-        return NULL;
+        return nullptr;
 }
 
 sal_uInt16 StringCache::createString(const sal_uInt8* buffer)
@@ -613,7 +613,7 @@ public:
 
 const sal_Char* FieldList::getFieldName(sal_uInt16 index)
 {
-    const sal_Char* aName = NULL;
+    const sal_Char* aName = nullptr;
 
     if ((m_numOfEntries > 0) && (index <= m_numOfEntries))
     {
@@ -629,7 +629,7 @@ const sal_Char* FieldList::getFieldName(sal_uInt16 index)
 
 const sal_Char* FieldList::getFieldType(sal_uInt16 index)
 {
-    const sal_Char* aName = NULL;
+    const sal_Char* aName = nullptr;
 
     if ((m_numOfEntries > 0) && (index <= m_numOfEntries))
     {
@@ -724,7 +724,7 @@ RTValueType FieldList::getFieldConstValue(sal_uInt16 index, RTConstValueUnion* v
 
 const sal_Char* FieldList::getFieldDoku(sal_uInt16 index)
 {
-    const sal_Char* aDoku = NULL;
+    const sal_Char* aDoku = nullptr;
 
     if ((m_numOfEntries > 0) && (index <= m_numOfEntries))
     {
@@ -740,7 +740,7 @@ const sal_Char* FieldList::getFieldDoku(sal_uInt16 index)
 
 const sal_Char* FieldList::getFieldFileName(sal_uInt16 index)
 {
-    const sal_Char* aFileName = NULL;
+    const sal_Char* aFileName = nullptr;
 
     if ((m_numOfEntries > 0) && (index <= m_numOfEntries))
     {
@@ -794,7 +794,7 @@ public:
 
 const sal_Char* ReferenceList::getReferenceName(sal_uInt16 index)
 {
-    const sal_Char* aName = NULL;
+    const sal_Char* aName = nullptr;
 
     if ((m_numOfEntries > 0) && (index <= m_numOfEntries))
     {
@@ -826,7 +826,7 @@ RTReferenceType ReferenceList::getReferenceType(sal_uInt16 index)
 
 const sal_Char* ReferenceList::getReferenceDoku(sal_uInt16 index)
 {
-    const sal_Char* aDoku = NULL;
+    const sal_Char* aDoku = nullptr;
 
     if ((m_numOfEntries > 0) && (index <= m_numOfEntries))
     {
@@ -943,7 +943,7 @@ sal_uInt32 MethodList::parseIndex()
 
 const sal_Char* MethodList::getMethodName(sal_uInt16 index)
 {
-    const sal_Char* aName = NULL;
+    const sal_Char* aName = nullptr;
 
     if ((m_numOfEntries > 0) && (index <= m_numOfEntries))
     {
@@ -975,7 +975,7 @@ sal_uInt16 MethodList::getMethodParamCount(sal_uInt16 index)
 
 const sal_Char* MethodList::getMethodParamType(sal_uInt16 index, sal_uInt16 paramIndex)
 {
-    const sal_Char* aName = NULL;
+    const sal_Char* aName = nullptr;
     try {
         if ((m_numOfEntries > 0) &&
             (index <= m_numOfEntries) &&
@@ -995,7 +995,7 @@ const sal_Char* MethodList::getMethodParamType(sal_uInt16 index, sal_uInt16 para
 
 const sal_Char* MethodList::getMethodParamName(sal_uInt16 index, sal_uInt16 paramIndex)
 {
-    const sal_Char* aName = NULL;
+    const sal_Char* aName = nullptr;
     try {
         if ((m_numOfEntries > 0) &&
             (index <= m_numOfEntries) &&
@@ -1050,7 +1050,7 @@ sal_uInt16 MethodList::getMethodExcCount(sal_uInt16 index)
 
 const sal_Char* MethodList::getMethodExcType(sal_uInt16 index, sal_uInt16 excIndex)
 {
-    const sal_Char* aName = NULL;
+    const sal_Char* aName = nullptr;
 
     if ((m_numOfEntries > 0) && (index <= m_numOfEntries))
     {
@@ -1074,7 +1074,7 @@ const sal_Char* MethodList::getMethodExcType(sal_uInt16 index, sal_uInt16 excInd
 
 const sal_Char* MethodList::getMethodReturnType(sal_uInt16 index)
 {
-    const sal_Char* aName = NULL;
+    const sal_Char* aName = nullptr;
 
     if ((m_numOfEntries > 0) && (index <= m_numOfEntries))
     {
@@ -1106,7 +1106,7 @@ RTMethodMode MethodList::getMethodMode(sal_uInt16 index)
 
 const sal_Char* MethodList::getMethodDoku(sal_uInt16 index)
 {
-    const sal_Char* aDoku = NULL;
+    const sal_Char* aDoku = nullptr;
 
     if ((m_numOfEntries > 0) && (index <= m_numOfEntries))
     {
@@ -1215,7 +1215,7 @@ bool TYPEREG_CALLTYPE typereg_reader_create(
     typereg_Version maxVersion, void ** result)
 {
     if (length < OFFSET_CP || length > SAL_MAX_UINT32) {
-        *result = 0;
+        *result = nullptr;
         return true;
     }
     std::unique_ptr< TypeRegistryEntry > entry;
@@ -1229,12 +1229,12 @@ bool TYPEREG_CALLTYPE typereg_reader_create(
             return false;
         }
         if (entry->readUINT32(OFFSET_SIZE) != length) {
-            *result = 0;
+            *result = nullptr;
             return true;
         }
         typereg_Version version = entry->getVersion();;
         if (version < TYPEREG_VERSION_0 || version > maxVersion) {
-            *result = 0;
+            *result = nullptr;
             return true;
         }
         *result = entry.release();
@@ -1256,7 +1256,7 @@ void TYPEREG_CALLTYPE typereg_reader_acquire(void * hEntry)
 {
     TypeRegistryEntry* pEntry = static_cast<TypeRegistryEntry*>(hEntry);
 
-    if (pEntry != NULL)
+    if (pEntry != nullptr)
         pEntry->m_refCount++;
 }
 
@@ -1264,7 +1264,7 @@ void TYPEREG_CALLTYPE typereg_reader_release(void * hEntry)
 {
     TypeRegistryEntry* pEntry = static_cast<TypeRegistryEntry*>(hEntry);
 
-    if (pEntry != NULL)
+    if (pEntry != nullptr)
     {
         if (--pEntry->m_refCount == 0)
             delete pEntry;
@@ -1316,7 +1316,7 @@ void TYPEREG_CALLTYPE typereg_reader_getTypeName(void * hEntry, rtl_uString** pT
         try {
             const sal_Char* pTmp = pEntry->m_pCP->readUTF8NameConstant(pEntry->readUINT16(OFFSET_THIS_TYPE));
             rtl_string2UString(
-                pTypeName, pTmp, pTmp == 0 ? 0 : rtl_str_getLength(pTmp),
+                pTypeName, pTmp, pTmp == nullptr ? 0 : rtl_str_getLength(pTmp),
                 RTL_TEXTENCODING_UTF8, OSTRING_TO_OUSTRING_CVTFLAGS);
             return;
         } catch (BlopObject::BoundsError &) {
@@ -1334,7 +1334,7 @@ static void TYPEREG_CALLTYPE getSuperTypeName(TypeReaderImpl hEntry, rtl_uString
         try {
             const sal_Char* pTmp = pEntry->m_pCP->readUTF8NameConstant(pEntry->readUINT16(pEntry->m_offset_SUPERTYPES )); //+ (index * sizeof(sal_uInt16))));
             rtl_string2UString(
-                pSuperTypeName, pTmp, pTmp == 0 ? 0 : rtl_str_getLength(pTmp),
+                pSuperTypeName, pTmp, pTmp == nullptr ? 0 : rtl_str_getLength(pTmp),
                 RTL_TEXTENCODING_UTF8, OSTRING_TO_OUSTRING_CVTFLAGS);
             return;
         } catch (BlopObject::BoundsError &) {
@@ -1351,7 +1351,7 @@ void TYPEREG_CALLTYPE typereg_reader_getDocumentation(void * hEntry, rtl_uString
         try {
             const sal_Char* pTmp = pEntry->m_pCP->readUTF8NameConstant(pEntry->readUINT16(OFFSET_DOKU));
             rtl_string2UString(
-                pDoku, pTmp, pTmp == 0 ? 0 : rtl_str_getLength(pTmp),
+                pDoku, pTmp, pTmp == nullptr ? 0 : rtl_str_getLength(pTmp),
                 RTL_TEXTENCODING_UTF8, OSTRING_TO_OUSTRING_CVTFLAGS);
             return;
         } catch (BlopObject::BoundsError &) {
@@ -1368,7 +1368,7 @@ void TYPEREG_CALLTYPE typereg_reader_getFileName(void * hEntry, rtl_uString** pF
         try {
             const sal_Char* pTmp = pEntry->m_pCP->readUTF8NameConstant(pEntry->readUINT16(OFFSET_FILENAME));
             rtl_string2UString(
-                pFileName, pTmp, pTmp == 0 ? 0 : rtl_str_getLength(pTmp),
+                pFileName, pTmp, pTmp == nullptr ? 0 : rtl_str_getLength(pTmp),
                 RTL_TEXTENCODING_UTF8, OSTRING_TO_OUSTRING_CVTFLAGS);
             return;
         } catch (BlopObject::BoundsError &) {
@@ -1383,7 +1383,7 @@ sal_uInt16 TYPEREG_CALLTYPE typereg_reader_getFieldCount(void * hEntry)
 {
     TypeRegistryEntry* pEntry = static_cast<TypeRegistryEntry*>(hEntry);
 
-    if (pEntry == NULL) return 0;
+    if (pEntry == nullptr) return 0;
 
     return pEntry->m_pFields->m_numOfEntries;
 }
@@ -1397,14 +1397,14 @@ void TYPEREG_CALLTYPE typereg_reader_getFieldName(void * hEntry, rtl_uString** p
 {
     TypeRegistryEntry* pEntry = static_cast<TypeRegistryEntry*>(hEntry);
 
-    if (pEntry == NULL)
+    if (pEntry == nullptr)
     {
         rtl_uString_new(pFieldName);
         return;
     }
     const sal_Char* pTmp = pEntry->m_pFields->getFieldName(index);
     rtl_string2UString(
-        pFieldName, pTmp, pTmp == 0 ? 0 : rtl_str_getLength(pTmp),
+        pFieldName, pTmp, pTmp == nullptr ? 0 : rtl_str_getLength(pTmp),
         RTL_TEXTENCODING_UTF8, OSTRING_TO_OUSTRING_CVTFLAGS);
 }
 
@@ -1412,7 +1412,7 @@ void TYPEREG_CALLTYPE typereg_reader_getFieldTypeName(void * hEntry, rtl_uString
 {
     TypeRegistryEntry* pEntry = static_cast<TypeRegistryEntry*>(hEntry);
 
-    if (pEntry == NULL)
+    if (pEntry == nullptr)
     {
         rtl_uString_new(pFieldType);
         return;
@@ -1420,7 +1420,7 @@ void TYPEREG_CALLTYPE typereg_reader_getFieldTypeName(void * hEntry, rtl_uString
 
     const sal_Char* pTmp = pEntry->m_pFields->getFieldType(index);
     rtl_string2UString(
-        pFieldType, pTmp, pTmp == 0 ? 0 : rtl_str_getLength(pTmp),
+        pFieldType, pTmp, pTmp == nullptr ? 0 : rtl_str_getLength(pTmp),
         RTL_TEXTENCODING_UTF8, OSTRING_TO_OUSTRING_CVTFLAGS);
 }
 
@@ -1428,7 +1428,7 @@ RTFieldAccess TYPEREG_CALLTYPE typereg_reader_getFieldFlags(void * hEntry, sal_u
 {
     TypeRegistryEntry* pEntry = static_cast<TypeRegistryEntry*>(hEntry);
 
-    if (pEntry == NULL) return RTFieldAccess::INVALID;
+    if (pEntry == nullptr) return RTFieldAccess::INVALID;
 
     return pEntry->m_pFields->getFieldAccess(index);
 }
@@ -1439,7 +1439,7 @@ bool TYPEREG_CALLTYPE typereg_reader_getFieldValue(
 {
     TypeRegistryEntry* pEntry = static_cast<TypeRegistryEntry*>(hEntry);
 
-    if (pEntry == NULL) {
+    if (pEntry == nullptr) {
         *type = RT_TYPE_NONE;
         return true;
     }
@@ -1463,7 +1463,7 @@ void TYPEREG_CALLTYPE typereg_reader_getFieldDocumentation(void * hEntry, rtl_uS
 {
     TypeRegistryEntry* pEntry = static_cast<TypeRegistryEntry*>(hEntry);
 
-    if (pEntry == NULL)
+    if (pEntry == nullptr)
     {
         rtl_uString_new(pDoku);
         return;
@@ -1471,7 +1471,7 @@ void TYPEREG_CALLTYPE typereg_reader_getFieldDocumentation(void * hEntry, rtl_uS
 
     const sal_Char* pTmp = pEntry->m_pFields->getFieldDoku(index);
     rtl_string2UString(
-        pDoku, pTmp, pTmp == 0 ? 0 : rtl_str_getLength(pTmp),
+        pDoku, pTmp, pTmp == nullptr ? 0 : rtl_str_getLength(pTmp),
         RTL_TEXTENCODING_UTF8, OSTRING_TO_OUSTRING_CVTFLAGS);
 }
 
@@ -1479,7 +1479,7 @@ void TYPEREG_CALLTYPE typereg_reader_getFieldFileName(void * hEntry, rtl_uString
 {
     TypeRegistryEntry* pEntry = static_cast<TypeRegistryEntry*>(hEntry);
 
-    if (pEntry == NULL)
+    if (pEntry == nullptr)
     {
         rtl_uString_new(pFieldFileName);
         return;
@@ -1487,7 +1487,7 @@ void TYPEREG_CALLTYPE typereg_reader_getFieldFileName(void * hEntry, rtl_uString
 
     const sal_Char* pTmp = pEntry->m_pFields->getFieldFileName(index);
     rtl_string2UString(
-        pFieldFileName, pTmp, pTmp == 0 ? 0 : rtl_str_getLength(pTmp),
+        pFieldFileName, pTmp, pTmp == nullptr ? 0 : rtl_str_getLength(pTmp),
         RTL_TEXTENCODING_UTF8, OSTRING_TO_OUSTRING_CVTFLAGS);
 }
 
@@ -1496,7 +1496,7 @@ sal_uInt16 TYPEREG_CALLTYPE typereg_reader_getMethodCount(void * hEntry)
 {
     TypeRegistryEntry* pEntry = static_cast<TypeRegistryEntry*>(hEntry);
 
-    if (pEntry == NULL) return 0;
+    if (pEntry == nullptr) return 0;
 
     return pEntry->m_pMethods->m_numOfEntries;
 }
@@ -1505,7 +1505,7 @@ void TYPEREG_CALLTYPE typereg_reader_getMethodName(void * hEntry, rtl_uString** 
 {
     TypeRegistryEntry* pEntry = static_cast<TypeRegistryEntry*>(hEntry);
 
-    if (pEntry == NULL)
+    if (pEntry == nullptr)
     {
         rtl_uString_new(pMethodName);
         return;
@@ -1513,7 +1513,7 @@ void TYPEREG_CALLTYPE typereg_reader_getMethodName(void * hEntry, rtl_uString** 
 
     const sal_Char* pTmp = pEntry->m_pMethods->getMethodName(index);
     rtl_string2UString(
-        pMethodName, pTmp, pTmp == 0 ? 0 : rtl_str_getLength(pTmp),
+        pMethodName, pTmp, pTmp == nullptr ? 0 : rtl_str_getLength(pTmp),
         RTL_TEXTENCODING_UTF8, OSTRING_TO_OUSTRING_CVTFLAGS);
 }
 
@@ -1522,7 +1522,7 @@ sal_uInt16 TYPEREG_CALLTYPE typereg_reader_getMethodParameterCount(
 {
     TypeRegistryEntry* pEntry = static_cast<TypeRegistryEntry*>(hEntry);
 
-    if (pEntry == NULL) return 0;
+    if (pEntry == nullptr) return 0;
 
     return pEntry->m_pMethods->getMethodParamCount(index);
 }
@@ -1531,7 +1531,7 @@ void TYPEREG_CALLTYPE typereg_reader_getMethodParameterTypeName(void * hEntry, r
 {
     TypeRegistryEntry* pEntry = static_cast<TypeRegistryEntry*>(hEntry);
 
-    if (pEntry == NULL)
+    if (pEntry == nullptr)
     {
         rtl_uString_new(pMethodParamType);
         return;
@@ -1539,7 +1539,7 @@ void TYPEREG_CALLTYPE typereg_reader_getMethodParameterTypeName(void * hEntry, r
 
     const sal_Char* pTmp = pEntry->m_pMethods->getMethodParamType(index, paramIndex);
     rtl_string2UString(
-        pMethodParamType, pTmp, pTmp == 0 ? 0 : rtl_str_getLength(pTmp),
+        pMethodParamType, pTmp, pTmp == nullptr ? 0 : rtl_str_getLength(pTmp),
         RTL_TEXTENCODING_UTF8, OSTRING_TO_OUSTRING_CVTFLAGS);
 }
 
@@ -1547,7 +1547,7 @@ void TYPEREG_CALLTYPE typereg_reader_getMethodParameterName(void * hEntry, rtl_u
 {
     TypeRegistryEntry* pEntry = static_cast<TypeRegistryEntry*>(hEntry);
 
-    if (pEntry == NULL)
+    if (pEntry == nullptr)
     {
         rtl_uString_new(pMethodParamName);
         return;
@@ -1555,7 +1555,7 @@ void TYPEREG_CALLTYPE typereg_reader_getMethodParameterName(void * hEntry, rtl_u
 
     const sal_Char* pTmp = pEntry->m_pMethods->getMethodParamName(index, paramIndex);
     rtl_string2UString(
-        pMethodParamName, pTmp, pTmp == 0 ? 0 : rtl_str_getLength(pTmp),
+        pMethodParamName, pTmp, pTmp == nullptr ? 0 : rtl_str_getLength(pTmp),
         RTL_TEXTENCODING_UTF8, OSTRING_TO_OUSTRING_CVTFLAGS);
 }
 
@@ -1563,7 +1563,7 @@ RTParamMode TYPEREG_CALLTYPE typereg_reader_getMethodParameterFlags(void * hEntr
 {
     TypeRegistryEntry* pEntry = static_cast<TypeRegistryEntry*>(hEntry);
 
-    if (pEntry == NULL) return RT_PARAM_INVALID;
+    if (pEntry == nullptr) return RT_PARAM_INVALID;
 
     return pEntry->m_pMethods->getMethodParamMode(index, paramIndex);
 }
@@ -1573,7 +1573,7 @@ sal_uInt16 TYPEREG_CALLTYPE typereg_reader_getMethodExceptionCount(
 {
     TypeRegistryEntry* pEntry = static_cast<TypeRegistryEntry*>(hEntry);
 
-    if (pEntry == NULL) return 0;
+    if (pEntry == nullptr) return 0;
 
     return pEntry->m_pMethods->getMethodExcCount(index);
 }
@@ -1582,7 +1582,7 @@ void TYPEREG_CALLTYPE typereg_reader_getMethodExceptionTypeName(void * hEntry, r
 {
     TypeRegistryEntry* pEntry = static_cast<TypeRegistryEntry*>(hEntry);
 
-    if (pEntry == NULL)
+    if (pEntry == nullptr)
     {
         rtl_uString_new(pMethodExcpType);
         return;
@@ -1590,7 +1590,7 @@ void TYPEREG_CALLTYPE typereg_reader_getMethodExceptionTypeName(void * hEntry, r
 
     const sal_Char* pTmp = pEntry->m_pMethods->getMethodExcType(index, excIndex);
     rtl_string2UString(
-        pMethodExcpType, pTmp, pTmp == 0 ? 0 : rtl_str_getLength(pTmp),
+        pMethodExcpType, pTmp, pTmp == nullptr ? 0 : rtl_str_getLength(pTmp),
         RTL_TEXTENCODING_UTF8, OSTRING_TO_OUSTRING_CVTFLAGS);
 }
 
@@ -1598,7 +1598,7 @@ void TYPEREG_CALLTYPE typereg_reader_getMethodReturnTypeName(void * hEntry, rtl_
 {
     TypeRegistryEntry* pEntry = static_cast<TypeRegistryEntry*>(hEntry);
 
-    if (pEntry == NULL)
+    if (pEntry == nullptr)
     {
         rtl_uString_new(pMethodReturnType);
         return;
@@ -1606,7 +1606,7 @@ void TYPEREG_CALLTYPE typereg_reader_getMethodReturnTypeName(void * hEntry, rtl_
 
     const sal_Char* pTmp = pEntry->m_pMethods->getMethodReturnType(index);
     rtl_string2UString(
-        pMethodReturnType, pTmp, pTmp == 0 ? 0 : rtl_str_getLength(pTmp),
+        pMethodReturnType, pTmp, pTmp == nullptr ? 0 : rtl_str_getLength(pTmp),
         RTL_TEXTENCODING_UTF8, OSTRING_TO_OUSTRING_CVTFLAGS);
 }
 
@@ -1614,7 +1614,7 @@ RTMethodMode TYPEREG_CALLTYPE typereg_reader_getMethodFlags(void * hEntry, sal_u
 {
     TypeRegistryEntry* pEntry = static_cast<TypeRegistryEntry*>(hEntry);
 
-    if (pEntry == NULL) return RTMethodMode::INVALID;
+    if (pEntry == nullptr) return RTMethodMode::INVALID;
 
     return pEntry->m_pMethods->getMethodMode(index);
 }
@@ -1623,7 +1623,7 @@ void TYPEREG_CALLTYPE typereg_reader_getMethodDocumentation(void * hEntry, rtl_u
 {
     TypeRegistryEntry* pEntry = static_cast<TypeRegistryEntry*>(hEntry);
 
-    if (pEntry == NULL)
+    if (pEntry == nullptr)
     {
         rtl_uString_new(pMethodDoku);
         return;
@@ -1631,7 +1631,7 @@ void TYPEREG_CALLTYPE typereg_reader_getMethodDocumentation(void * hEntry, rtl_u
 
     const sal_Char* pTmp = pEntry->m_pMethods->getMethodDoku(index);
     rtl_string2UString(
-        pMethodDoku, pTmp, pTmp == 0 ? 0 : rtl_str_getLength(pTmp),
+        pMethodDoku, pTmp, pTmp == nullptr ? 0 : rtl_str_getLength(pTmp),
         RTL_TEXTENCODING_UTF8, OSTRING_TO_OUSTRING_CVTFLAGS);
 }
 
@@ -1639,7 +1639,7 @@ sal_uInt16 TYPEREG_CALLTYPE typereg_reader_getReferenceCount(void * hEntry)
 {
     TypeRegistryEntry* pEntry = static_cast<TypeRegistryEntry*>(hEntry);
 
-    if (pEntry == NULL) return 0;
+    if (pEntry == nullptr) return 0;
 
     return pEntry->m_pReferences->m_numOfEntries;
 }
@@ -1648,7 +1648,7 @@ void TYPEREG_CALLTYPE typereg_reader_getReferenceTypeName(void * hEntry, rtl_uSt
 {
     TypeRegistryEntry* pEntry = static_cast<TypeRegistryEntry*>(hEntry);
 
-    if (pEntry == NULL)
+    if (pEntry == nullptr)
     {
         rtl_uString_new(pReferenceName);
         return;
@@ -1656,7 +1656,7 @@ void TYPEREG_CALLTYPE typereg_reader_getReferenceTypeName(void * hEntry, rtl_uSt
 
     const sal_Char* pTmp = pEntry->m_pReferences->getReferenceName(index);
     rtl_string2UString(
-        pReferenceName, pTmp, pTmp == 0 ? 0 : rtl_str_getLength(pTmp),
+        pReferenceName, pTmp, pTmp == nullptr ? 0 : rtl_str_getLength(pTmp),
         RTL_TEXTENCODING_UTF8, OSTRING_TO_OUSTRING_CVTFLAGS);
 }
 
@@ -1664,7 +1664,7 @@ RTReferenceType TYPEREG_CALLTYPE typereg_reader_getReferenceSort(void * hEntry, 
 {
     TypeRegistryEntry* pEntry = static_cast<TypeRegistryEntry*>(hEntry);
 
-    if (pEntry == NULL) return RTReferenceType::INVALID;
+    if (pEntry == nullptr) return RTReferenceType::INVALID;
 
     return pEntry->m_pReferences->getReferenceType(index);
 }
@@ -1673,7 +1673,7 @@ void TYPEREG_CALLTYPE typereg_reader_getReferenceDocumentation(void * hEntry, rt
 {
     TypeRegistryEntry* pEntry = static_cast<TypeRegistryEntry*>(hEntry);
 
-    if (pEntry == NULL)
+    if (pEntry == nullptr)
     {
         rtl_uString_new(pReferenceDoku);
         return;
@@ -1681,7 +1681,7 @@ void TYPEREG_CALLTYPE typereg_reader_getReferenceDocumentation(void * hEntry, rt
 
     const sal_Char* pTmp = pEntry->m_pReferences->getReferenceDoku(index);
     rtl_string2UString(
-        pReferenceDoku, pTmp, pTmp == 0 ? 0 : rtl_str_getLength(pTmp),
+        pReferenceDoku, pTmp, pTmp == nullptr ? 0 : rtl_str_getLength(pTmp),
         RTL_TEXTENCODING_UTF8, OSTRING_TO_OUSTRING_CVTFLAGS);
 }
 
@@ -1689,7 +1689,7 @@ RTFieldAccess TYPEREG_CALLTYPE typereg_reader_getReferenceFlags(void * hEntry, s
 {
     TypeRegistryEntry* pEntry = static_cast<TypeRegistryEntry*>(hEntry);
 
-    if (pEntry == NULL) return RTFieldAccess::INVALID;
+    if (pEntry == nullptr) return RTFieldAccess::INVALID;
 
     return pEntry->m_pReferences->getReferenceAccess(index);
 }
@@ -1698,7 +1698,7 @@ sal_uInt16 TYPEREG_CALLTYPE typereg_reader_getSuperTypeCount(void * hEntry)
 {
     TypeRegistryEntry* pEntry = static_cast<TypeRegistryEntry*>(hEntry);
 
-    if (pEntry == NULL) return 0;
+    if (pEntry == nullptr) return 0;
 
     return pEntry->m_nSuperTypes;
 }
@@ -1712,7 +1712,7 @@ void TYPEREG_CALLTYPE typereg_reader_getSuperTypeName(
             OSL_ASSERT(index < pEntry->m_nSuperTypes);
             const sal_Char* pTmp = pEntry->m_pCP->readUTF8NameConstant(pEntry->readUINT16(pEntry->m_offset_SUPERTYPES + (index * sizeof(sal_uInt16))));
             rtl_string2UString(
-                pSuperTypeName, pTmp, pTmp == 0 ? 0 : rtl_str_getLength(pTmp),
+                pSuperTypeName, pTmp, pTmp == nullptr ? 0 : rtl_str_getLength(pTmp),
                 RTL_TEXTENCODING_UTF8, OSTRING_TO_OUSTRING_CVTFLAGS);
             return;
         } catch (BlopObject::BoundsError &) {
@@ -1725,7 +1725,7 @@ void TYPEREG_CALLTYPE typereg_reader_getSuperTypeName(
 RegistryTypeReader::RegistryTypeReader(const sal_uInt8* buffer,
                                               sal_uInt32 bufferLen,
                                               bool copyData)
-    : m_hImpl(NULL)
+    : m_hImpl(nullptr)
 {
     m_hImpl = createEntry(buffer, bufferLen, copyData);
 }

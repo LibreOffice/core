@@ -606,7 +606,7 @@ protected:
 
 inline RegistryKeyArray::RegistryKeyArray()
     : m_length(0)
-    , m_phKeys(NULL)
+    , m_phKeys(nullptr)
 {
 }
 
@@ -640,7 +640,7 @@ inline void RegistryKeyArray::setKeyHandles(Registry& registry,
 
 inline RegistryKeyNames::RegistryKeyNames()
     : m_length(0)
-    , m_pKeyNames(NULL)
+    , m_pKeyNames(nullptr)
 {
 }
 
@@ -674,7 +674,7 @@ inline void RegistryKeyNames::setKeyNames(Registry& registry,
 }
 
 inline RegistryKey::RegistryKey()
-    : m_hImpl(NULL)
+    : m_hImpl(nullptr)
     { }
 
 /// @cond INTERNAL
@@ -722,7 +722,7 @@ inline RegistryKey& RegistryKey::operator = (const RegistryKey& toAssign)
 }
 
 inline bool RegistryKey::isValid() const
-    {  return (m_hImpl != NULL); }
+    {  return (m_hImpl != nullptr); }
 
 inline bool RegistryKey::isReadOnly() const
     {
@@ -826,7 +826,7 @@ inline RegError RegistryKey::closeKey()
             RegError ret = m_registry.m_pApi->closeKey(m_hImpl);
             if (ret == RegError::NO_ERROR)
             {
-                m_hImpl = NULL;
+                m_hImpl = nullptr;
                 m_registry = Registry();
             }
             return ret;
@@ -836,9 +836,9 @@ inline RegError RegistryKey::closeKey()
 
 inline void RegistryKey::releaseKey()
 {
-    if (m_registry.isValid() && (m_hImpl != 0))
+    if (m_registry.isValid() && (m_hImpl != nullptr))
     {
-        m_registry.m_pApi->releaseKey(m_hImpl), m_hImpl = 0;
+        m_registry.m_pApi->releaseKey(m_hImpl), m_hImpl = nullptr;
     }
 }
 
@@ -1028,7 +1028,7 @@ inline rtl::OUString RegistryKey::getRegistryName()
 
 inline Registry::Registry()
     : m_pApi(initRegistry_Api())
-    , m_hImpl(NULL)
+    , m_hImpl(nullptr)
     { }
 
 inline Registry::Registry(const Registry& toCopy)
@@ -1060,7 +1060,7 @@ inline Registry& Registry::operator = (const Registry& toAssign)
 }
 
 inline bool Registry::isValid() const
-    {  return ( m_hImpl != NULL ); }
+    {  return ( m_hImpl != nullptr ); }
 
 inline bool Registry::isReadOnly() const
     {  return m_pApi->isReadOnly(m_hImpl); }
@@ -1097,7 +1097,7 @@ inline RegError Registry::close()
     {
         RegError ret = m_pApi->closeRegistry(m_hImpl);
         if (ret == RegError::NO_ERROR)
-            m_hImpl = NULL;
+            m_hImpl = nullptr;
         return ret;
     }
 
@@ -1105,7 +1105,7 @@ inline RegError Registry::destroy(const rtl::OUString& registryName)
     {
         RegError ret = m_pApi->destroyRegistry(m_hImpl, registryName.pData);
         if ( ret == RegError::NO_ERROR && registryName.isEmpty() )
-            m_hImpl = NULL;
+            m_hImpl = nullptr;
         return ret;
     }
 
