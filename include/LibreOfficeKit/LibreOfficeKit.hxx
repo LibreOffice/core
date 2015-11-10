@@ -10,6 +10,8 @@
 #ifndef INCLUDED_LIBREOFFICEKIT_LIBREOFFICEKIT_HXX
 #define INCLUDED_LIBREOFFICEKIT_LIBREOFFICEKIT_HXX
 
+#include <cstddef>
+
 #include "LibreOfficeKit.h"
 #include "LibreOfficeKitInit.h"
 
