@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "faac7902_ececa791",
+        "filename": "i18npool/source/search/textsearch.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 304,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2015-11-10T12:12:42Z",
+      "side": 1,
+      "message": "And if it\u0027s not so, and will happen in real life, then doing\n\noffset[nStart]\n\nwhere nStart\u003c0 will crash, so the problem will anyway make it to bugzilla-\u003edev build-\u003eassertion, so the reason will be readily evident",
+      "parentUuid": "faac7902_6c4b97b1",
+      "revId": "5a5db9da9e967f42107042c44c4515cbc0293115",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "faac7902_4c3fb325",
         "filename": "i18npool/source/search/textsearch.cxx",
         "patchSetId": 1
