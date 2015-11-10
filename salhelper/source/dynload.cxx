@@ -55,7 +55,7 @@ ORealDynamicLoader* ORealDynamicLoader::newInstance(ORealDynamicLoader ** ppSetT
 
     if ( !pModule )
     {
-        return NULL;
+        return nullptr;
     }
 
     initFunc = reinterpret_cast<ApiInitFunction>(osl_getFunctionSymbol(
@@ -64,7 +64,7 @@ ORealDynamicLoader* ORealDynamicLoader::newInstance(ORealDynamicLoader ** ppSetT
     if ( !initFunc )
     {
         osl_unloadModule(pModule);
-        return NULL;
+        return nullptr;
     }
 
     return(new ORealDynamicLoader(ppSetToZeroInDestructor, moduleName,
@@ -78,14 +78,14 @@ ORealDynamicLoader::~ORealDynamicLoader()
 {
     // set the address to zero
     if( ppSetToZeroInDestructor )
-        *ppSetToZeroInDestructor = 0;
+        *ppSetToZeroInDestructor = nullptr;
 
     if (m_pModule)
     {
 #ifndef DISABLE_DYNLOADING
         osl_unloadModule(m_pModule);
 #endif
-        m_pModule = NULL;
+        m_pModule = nullptr;
     }
 }
 

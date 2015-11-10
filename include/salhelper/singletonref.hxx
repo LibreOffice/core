@@ -185,7 +185,7 @@ class SingletonRef
 };
 
 template< class SingletonClass >
-SingletonClass* SingletonRef< SingletonClass >::m_pInstance = 0;
+SingletonClass* SingletonRef< SingletonClass >::m_pInstance = NULL;
 
 template< class SingletonClass >
 sal_Int32 SingletonRef< SingletonClass >::m_nRef = 0;

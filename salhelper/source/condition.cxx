@@ -86,7 +86,7 @@ ConditionWaiter::ConditionWaiter(Condition& aCond)
     : m_aCond(aCond)
 {
     while(true) {
-        osl_waitCondition(m_aCond.m_aCondition,0);
+        osl_waitCondition(m_aCond.m_aCondition,nullptr);
         m_aCond.m_aMutex.acquire();
 
         if(m_aCond.applies())

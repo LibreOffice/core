@@ -128,7 +128,7 @@ void Test::testCondition() {
 
 
 void Test::testConditionModifier() {
-    salhelper::ConditionModifier * p = 0;
+    salhelper::ConditionModifier * p = nullptr;
     CPPUNIT_ASSERT(typeid (*p) == typeid (salhelper::ConditionModifier));
     CPPUNIT_ASSERT(typeid (p) == typeid (salhelper::ConditionModifier *));
     CPPUNIT_ASSERT(
@@ -143,7 +143,7 @@ void Test::testConditionModifier() {
 }
 
 void Test::testConditionWaiter() {
-    salhelper::ConditionWaiter * p = 0;
+    salhelper::ConditionWaiter * p = nullptr;
     CPPUNIT_ASSERT(typeid (*p) == typeid (salhelper::ConditionWaiter));
     CPPUNIT_ASSERT(typeid (p) == typeid (salhelper::ConditionWaiter *));
     CPPUNIT_ASSERT(
@@ -177,7 +177,7 @@ void Test::testConditionWaiterTimedout() {
 }
 
 void Test::testORealDynamicLoader() {
-    salhelper::ORealDynamicLoader * p = 0;
+    salhelper::ORealDynamicLoader * p = nullptr;
     CPPUNIT_ASSERT(typeid (p) != typeid (salhelper::ORealDynamicLoader));
     CPPUNIT_ASSERT(typeid (p) == typeid (salhelper::ORealDynamicLoader *));
     CPPUNIT_ASSERT(
@@ -222,14 +222,14 @@ void Test::testSimpleReferenceObject() {
 void Test::testDerivedCondition() {
     osl::Mutex mutex;
     std::unique_ptr< salhelper::Condition > p(new DerivedCondition(mutex));
-    CPPUNIT_ASSERT(dynamic_cast< DerivedCondition * >(p.get()) != 0);
+    CPPUNIT_ASSERT(dynamic_cast< DerivedCondition * >(p.get()) != nullptr);
 }
 
 void Test::testDerivedConditionWaiterTimedout() {
     std::unique_ptr< salhelper::ConditionWaiter::timedout > p(
         new DerivedConditionWaiterTimedout);
     CPPUNIT_ASSERT(
-        dynamic_cast< DerivedConditionWaiterTimedout * >(p.get()) != 0);
+        dynamic_cast< DerivedConditionWaiterTimedout * >(p.get()) != nullptr);
     try {
         throw DerivedConditionWaiterTimedout();
     } catch (salhelper::ConditionWaiter::timedout &) {
@@ -241,7 +241,7 @@ void Test::testDerivedConditionWaiterTimedout() {
 void Test::testDerivedSimpleReferenceObject() {
     salhelper::SimpleReferenceObject * p = new DerivedSimpleReferenceObject;
     try {
-        CPPUNIT_ASSERT(dynamic_cast< DerivedSimpleReferenceObject * >(p) != 0);
+        CPPUNIT_ASSERT(dynamic_cast< DerivedSimpleReferenceObject * >(p) != nullptr);
     } catch (...) {
         delete static_cast< DerivedSimpleReferenceObject * >(p);
         throw;
