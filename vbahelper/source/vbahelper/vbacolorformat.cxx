@@ -50,7 +50,7 @@ ScVbaColorFormat::ScVbaColorFormat( const uno::Reference< XHelperInterface >& xP
         m_pFillFormat = static_cast<ScVbaFillFormat*>( xFillFormat.get() );
     }catch ( uno::RuntimeException& )
     {
-        m_pFillFormat = NULL;
+        m_pFillFormat = nullptr;
     }
 }
 

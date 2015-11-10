@@ -63,7 +63,7 @@ public:
     virtual ~MSO2OOCommandbarHelper() {};
     static MSO2OOCommandbarHelper* getMSO2OOCommandbarHelper()
     {
-        if( pMSO2OOCommandbarHelper == NULL )
+        if( pMSO2OOCommandbarHelper == nullptr )
         {
             pMSO2OOCommandbarHelper = new MSO2OOCommandbarHelper();
         }
@@ -83,7 +83,7 @@ public:
     }
 };
 
-MSO2OOCommandbarHelper* MSO2OOCommandbarHelper::pMSO2OOCommandbarHelper = NULL;
+MSO2OOCommandbarHelper* MSO2OOCommandbarHelper::pMSO2OOCommandbarHelper = nullptr;
 
 
 VbaCommandBarHelper::VbaCommandBarHelper( const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::frame::XModel >& xModel ) throw (css::uno::RuntimeException) : mxContext( xContext ), mxModel( xModel )

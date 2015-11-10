@@ -129,7 +129,7 @@ ScVbaCommandBarControls::createCollectionObject( const uno::Any& aSource )
     m_xIndexAccess->getByIndex( nPosition ) >>= aProps;
     uno::Reference< container::XIndexAccess > xSubMenu;
     getPropertyValue( aProps, ITEM_DESCRIPTOR_CONTAINER ) >>= xSubMenu;
-    ScVbaCommandBarControl* pNewCommandBarControl = NULL;
+    ScVbaCommandBarControl* pNewCommandBarControl = nullptr;
     if( xSubMenu.is() )
         pNewCommandBarControl = new ScVbaCommandBarPopup( this, mxContext, m_xIndexAccess, pCBarHelper, m_xBarSettings, m_sResourceUrl, nPosition, true );
     else
@@ -224,7 +224,7 @@ ScVbaCommandBarControls::Add( const uno::Any& Type, const uno::Any& Id, const un
 
     pCBarHelper->ApplyChange( m_sResourceUrl, m_xBarSettings );
 
-    ScVbaCommandBarControl* pNewCommandBarControl = NULL;
+    ScVbaCommandBarControl* pNewCommandBarControl = nullptr;
     if( nType == office::MsoControlType::msoControlPopup )
         pNewCommandBarControl = new ScVbaCommandBarPopup( this, mxContext, m_xIndexAccess, pCBarHelper, m_xBarSettings, m_sResourceUrl, nPosition, bTemporary );
     else

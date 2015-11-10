@@ -122,7 +122,7 @@ aNULL()
 
 void dispatchExecute(SfxViewShell* pViewShell, sal_uInt16 nSlot, SfxCallMode nCall)
 {
-    SfxViewFrame* pViewFrame = NULL;
+    SfxViewFrame* pViewFrame = nullptr;
     if ( pViewShell )
         pViewFrame = pViewShell->GetViewFrame();
     if ( pViewFrame )
@@ -189,14 +189,14 @@ getCurrentDoc( const OUString& sKey ) throw (uno::RuntimeException)
     uno::Reference< frame::XModel > xModel;
     SbxObject* pBasic = dynamic_cast< SbxObject* > ( SfxApplication::GetBasic() );
     SbxObject* basicChosen =  pBasic ;
-    if ( basicChosen == NULL)
+    if ( basicChosen == nullptr)
     {
         SAL_INFO("vbahelper", "getModelFromBasic() StarBASIC* is NULL" );
         return xModel;
     }
     SbxObject* p = pBasic;
     SbxObject* pParent = p->GetParent();
-    SbxObject* pParentParent = pParent ? pParent->GetParent() : NULL;
+    SbxObject* pParentParent = pParent ? pParent->GetParent() : nullptr;
 
     if( pParentParent )
     {
@@ -366,7 +366,7 @@ void PrintOutHelper( SfxViewShell* pViewShell, const uno::Any& From, const uno::
     {
         PrToFileName >>= sFileName;
     }
-    SfxViewFrame* pViewFrame = NULL;
+    SfxViewFrame* pViewFrame = nullptr;
     if ( pViewShell )
         pViewFrame = pViewShell->GetViewFrame();
     if ( pViewFrame )
@@ -425,7 +425,7 @@ void PrintOutHelper( SfxViewShell* pViewShell, const uno::Any& From, const uno::
 
  void PrintPreviewHelper( const css::uno::Any& /*EnableChanges*/, SfxViewShell* pViewShell )
 {
-    SfxViewFrame* pViewFrame = NULL;
+    SfxViewFrame* pViewFrame = nullptr;
     if ( pViewShell )
         pViewFrame = pViewShell->GetViewFrame();
     if ( pViewFrame )
@@ -462,7 +462,7 @@ bool extractBoolFromAny( const uno::Any& rAny ) throw (uno::RuntimeException)
             return rAny.get< sal_Int64 >() != 0;
         default:;
     }
-    throw uno::RuntimeException( "Invalid type, cannot convert to boolean." , 0 );
+    throw uno::RuntimeException( "Invalid type, cannot convert to boolean." , nullptr );
 }
 
 OUString extractStringFromAny( const uno::Any& rAny, bool bUppercaseBool ) throw (uno::RuntimeException)
@@ -487,7 +487,7 @@ OUString extractStringFromAny( const uno::Any& rAny, bool bUppercaseBool ) throw
             return OUString::number( rAny.get< sal_Int64 >() );
         default:;
     }
-    throw uno::RuntimeException( "Invalid type, cannot convert to string." , 0 );
+    throw uno::RuntimeException( "Invalid type, cannot convert to string." , nullptr );
 }
 
 OUString extractStringFromAny( const uno::Any& rAny, const OUString& rDefault, bool bUppercaseBool ) throw (uno::RuntimeException)
@@ -924,7 +924,7 @@ double UserFormGeometryHelper::implGetSize( bool bHeight, bool bOuter ) const
     {
         if( const vcl::Window* pWindow = VCLUnoHelper::GetWindow( mxWindow ) )
         {
-            Rectangle aOuterRect = pWindow->GetWindowExtentsRelative( NULL );
+            Rectangle aOuterRect = pWindow->GetWindowExtentsRelative( nullptr );
             aSizePixel = awt::Size( aOuterRect.getWidth(), aOuterRect.getHeight() );
         }
     }
@@ -948,7 +948,7 @@ void UserFormGeometryHelper::implSetSize( double fSize, bool bHeight, bool bOute
     {
         if( const vcl::Window* pWindow = VCLUnoHelper::GetWindow( mxWindow ) )
         {
-            Rectangle aOuterRect = pWindow->GetWindowExtentsRelative( NULL );
+            Rectangle aOuterRect = pWindow->GetWindowExtentsRelative( nullptr );
             if( !aOuterRect.IsEmpty() )
             {
                 awt::Rectangle aInnerRect = mxWindow->getPosSize();
@@ -1144,7 +1144,7 @@ uno::Reference< XHelperInterface > getUnoDocModule( const OUString& aModName, Sf
 
 SfxObjectShell* getSfxObjShell( const uno::Reference< frame::XModel >& xModel ) throw (uno::RuntimeException)
 {
-    SfxObjectShell* pFoundShell = NULL;
+    SfxObjectShell* pFoundShell = nullptr;
     if ( xModel.is() )
     {
         uno::Reference< lang::XUnoTunnel >  xObjShellTunnel( xModel, uno::UNO_QUERY_THROW );

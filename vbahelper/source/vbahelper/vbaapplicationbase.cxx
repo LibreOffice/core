@@ -161,7 +161,7 @@ struct VbaApplicationBase_Impl
               ++aIter )
         {
             delete aIter->second;
-            aIter->second = NULL;
+            aIter->second = nullptr;
         }
     }
 };
@@ -372,7 +372,7 @@ void SAL_CALL VbaApplicationBase::OnTime( const uno::Any& aEarliestTime, const O
     if ( aIter != m_pImpl->m_aTimerHash.end() )
     {
         delete aIter->second;
-        aIter->second = NULL;
+        aIter->second = nullptr;
         m_pImpl->m_aTimerHash.erase( aIter );
     }
 

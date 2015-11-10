@@ -43,7 +43,7 @@ using namespace ::com::sun::star;
 //     the models in ControlModels can be accessed by name
 // also the XDialog is a XControl ( to access the model above
 
-ScVbaUserForm::ScVbaUserForm( uno::Sequence< uno::Any > const& aArgs, uno::Reference< uno::XComponentContext >const& xContext ) throw ( lang::IllegalArgumentException, uno::RuntimeException ) :  ScVbaUserForm_BASE( getXSomethingFromArgs< XHelperInterface >( aArgs, 0 ), xContext, getXSomethingFromArgs< uno::XInterface >( aArgs, 1 ), getXSomethingFromArgs< frame::XModel >( aArgs, 2 ), static_cast< ooo::vba::AbstractGeometryAttributes* >(0) ),  mbDispose( true )
+ScVbaUserForm::ScVbaUserForm( uno::Sequence< uno::Any > const& aArgs, uno::Reference< uno::XComponentContext >const& xContext ) throw ( lang::IllegalArgumentException, uno::RuntimeException ) :  ScVbaUserForm_BASE( getXSomethingFromArgs< XHelperInterface >( aArgs, 0 ), xContext, getXSomethingFromArgs< uno::XInterface >( aArgs, 1 ), getXSomethingFromArgs< frame::XModel >( aArgs, 2 ), static_cast< ooo::vba::AbstractGeometryAttributes* >(nullptr) ),  mbDispose( true )
 {
     m_xDialog.set( m_xControl, uno::UNO_QUERY_THROW );
     uno::Reference< awt::XControl > xControl( m_xDialog, uno::UNO_QUERY_THROW );
@@ -90,7 +90,7 @@ ScVbaUserForm::Show(  ) throw (uno::RuntimeException, std::exception)
         try
         {
             uno::Reference< lang::XComponent > xComp( m_xDialog, uno::UNO_QUERY_THROW );
-            m_xDialog = NULL;
+            m_xDialog = nullptr;
             xComp->dispose();
             mbDispose = false;
         }

@@ -31,7 +31,7 @@ using namespace ::ooo::vba;
 
 
 VbaEventsHelperBase::VbaEventsHelperBase( const uno::Sequence< uno::Any >& rArgs, const uno::Reference< uno::XComponentContext >& /*xContext*/ ) :
-    mpShell( 0 ),
+    mpShell( nullptr ),
     mbDisposed( true )
 {
     try
@@ -42,7 +42,7 @@ VbaEventsHelperBase::VbaEventsHelperBase( const uno::Sequence< uno::Any >& rArgs
     catch( uno::Exception& )
     {
     }
-    mbDisposed = mpShell == 0;
+    mbDisposed = mpShell == nullptr;
     startListening();
 }
 
@@ -233,7 +233,7 @@ void VbaEventsHelperBase::stopListening()
         try { xEventBroadcaster->removeEventListener( this ); } catch( uno::Exception& ) {}
 
     mxModel.clear();
-    mpShell = 0;
+    mpShell = nullptr;
     maEventInfos.clear();
     mbDisposed = true;
 }

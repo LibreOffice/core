@@ -119,7 +119,7 @@ ScVbaControlListener::disposing( const lang::EventObject& ) throw( uno::RuntimeE
     if( pControl )
     {
         pControl->removeResource();
-        pControl = NULL;
+        pControl = nullptr;
     }
 }
 
@@ -170,8 +170,8 @@ void ScVbaControl::removeResource() throw( uno::RuntimeException )
 {
     uno::Reference< lang::XComponent > xComponent( m_xControl, uno::UNO_QUERY_THROW );
     xComponent->removeEventListener( m_xEventListener );
-    m_xControl= NULL;
-    m_xProps = NULL;
+    m_xControl= nullptr;
+    m_xProps = nullptr;
 }
 
 //In design model has different behavior

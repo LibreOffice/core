@@ -56,7 +56,7 @@ const uno::Reference< uno::XComponentContext >& xContext, const OUString& sDocCt
     // some strange behavior
     mxContext = ::cppu::createComponentContext(
                         aHandlerContextInfo,
-                        ( sizeof ( aHandlerContextInfo ) / sizeof ( aHandlerContextInfo[0] ) ), NULL );
+                        ( sizeof ( aHandlerContextInfo ) / sizeof ( aHandlerContextInfo[0] ) ), nullptr );
     if ( aSrvMgr.is() )
     {
         try

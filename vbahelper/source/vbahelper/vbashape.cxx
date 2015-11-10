@@ -97,8 +97,8 @@ ScVbaShape::removeShapeListener() throw( uno::RuntimeException )
         uno::Reference< lang::XComponent > xComponent( m_xShape, uno::UNO_QUERY_THROW );
         xComponent->removeEventListener( this );
     }
-    m_xShape = NULL;
-    m_xPropertySet = NULL;
+    m_xShape = nullptr;
+    m_xPropertySet = nullptr;
 }
 
 void
@@ -109,7 +109,7 @@ ScVbaShape::removeShapesListener() throw( uno::RuntimeException )
         uno::Reference< lang::XComponent > xComponent( m_xShapes, uno::UNO_QUERY_THROW );
         xComponent->removeEventListener( this );
     }
-    m_xShapes = NULL;
+    m_xShapes = nullptr;
 }
 
 sal_Int32
