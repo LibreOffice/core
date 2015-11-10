@@ -164,7 +164,7 @@ void SfxFrameHTMLWriter::Out_DocInfo( SvStream& rStrm, const OUString& rBaseURL,
         // created
         ::util::DateTime uDT = i_xDocProps->getCreationDate();
         OUStringBuffer aBuffer;
-        ::sax::Converter::convertTimeOrDateTime(aBuffer, uDT, 0);
+        ::sax::Converter::convertTimeOrDateTime(aBuffer, uDT, nullptr);
 
         OutMeta( rStrm, pIndent, OOO_STRING_SVTOOLS_HTML_META_created, aBuffer.makeStringAndClear(), false,
                  eDestEnc, pNonConvertableChars );
@@ -177,7 +177,7 @@ void SfxFrameHTMLWriter::Out_DocInfo( SvStream& rStrm, const OUString& rBaseURL,
 
         // changed
         uDT = i_xDocProps->getModificationDate();
-        ::sax::Converter::convertTimeOrDateTime(aBuffer, uDT, 0);
+        ::sax::Converter::convertTimeOrDateTime(aBuffer, uDT, nullptr);
 
         OutMeta( rStrm, pIndent, OOO_STRING_SVTOOLS_HTML_META_changed, aBuffer.makeStringAndClear(), false,
                  eDestEnc, pNonConvertableChars );

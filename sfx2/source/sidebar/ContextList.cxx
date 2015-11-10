@@ -38,7 +38,7 @@ const ContextList::Entry* ContextList::GetMatch (const Context& rContext) const
     if (iEntry != maEntries.end())
         return &*iEntry;
     else
-        return NULL;
+        return nullptr;
 }
 
 ContextList::Entry* ContextList::GetMatch (const Context& rContext)
@@ -47,7 +47,7 @@ ContextList::Entry* ContextList::GetMatch (const Context& rContext)
     if (iEntry != maEntries.end())
         return const_cast<Entry*>(&*iEntry);
     else
-        return NULL;
+        return nullptr;
 }
 
 ::std::vector<ContextList::Entry>::const_iterator ContextList::FindBestMatch (const Context& rContext) const

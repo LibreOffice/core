@@ -147,7 +147,7 @@ void TemplateLocalView::showRootRegion()
 
     updateItems(items);
 
-    maOpenRegionHdl.Call(NULL);
+    maOpenRegionHdl.Call(nullptr);
 }
 
 void TemplateLocalView::showRegion(ThumbnailViewItem *pItem)
@@ -161,7 +161,7 @@ void TemplateLocalView::showRegion(ThumbnailViewItem *pItem)
 
     insertItems(reinterpret_cast<TemplateContainerItem*>(pItem)->maTemplates);
 
-    maOpenRegionHdl.Call(NULL);
+    maOpenRegionHdl.Call(nullptr);
 }
 
 void TemplateLocalView::showRegion(const OUString &rName)
@@ -382,8 +382,8 @@ bool TemplateLocalView::removeTemplate (const sal_uInt16 nItemId, const sal_uInt
 bool TemplateLocalView::moveTemplate (const ThumbnailViewItem *pItem, const sal_uInt16 nSrcItem,
                                        const sal_uInt16 nTargetItem)
 {
-    TemplateContainerItem *pTarget = NULL;
-    TemplateContainerItem *pSrc = NULL;
+    TemplateContainerItem *pTarget = nullptr;
+    TemplateContainerItem *pSrc = nullptr;
 
     for (size_t i = 0, n = maRegions.size(); i < n; ++i)
     {
@@ -471,8 +471,8 @@ bool TemplateLocalView::moveTemplates(const std::set<const ThumbnailViewItem*, s
 
     sal_uInt16 nSrcRegionId = mnCurRegionId-1;
 
-    TemplateContainerItem *pTarget = NULL;
-    TemplateContainerItem *pSrc = NULL;
+    TemplateContainerItem *pTarget = nullptr;
+    TemplateContainerItem *pSrc = nullptr;
 
     for (size_t i = 0, n = maRegions.size(); i < n; ++i)
     {

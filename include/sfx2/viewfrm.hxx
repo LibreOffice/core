@@ -73,7 +73,7 @@ class SFX2_DLLPUBLIC SfxViewFrame: public SfxShell, public SfxListener
     sal_uInt16                      nAdjustPosPixelLock;
 
 private:
-    SAL_DLLPRIVATE void Construct_Impl( SfxObjectShell *pObjSh=NULL );
+    SAL_DLLPRIVATE void Construct_Impl( SfxObjectShell *pObjSh=nullptr );
 
 protected:
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
@@ -84,7 +84,7 @@ protected:
     virtual                 ~SfxViewFrame();
 
 public:
-                            SfxViewFrame( SfxFrame& rFrame, SfxObjectShell *pDoc = NULL );
+                            SfxViewFrame( SfxFrame& rFrame, SfxObjectShell *pDoc = nullptr );
 
                             TYPEINFO_OVERRIDE();
                             SFX_DECL_INTERFACE(SFX_INTERFACE_SFXVIEWFRM)
@@ -104,13 +104,13 @@ public:
     static SfxViewFrame*    DisplayNewDocument( SfxObjectShell& i_rDoc, const SfxRequest& i_rCreateDocRequest, const sal_uInt16 i_nViewId = 0 );
 
     static SfxViewFrame*    Current();
-    static SfxViewFrame*    GetFirst( const SfxObjectShell* pDoc = 0, bool bOnlyVisible = true );
-    static SfxViewFrame*    GetNext( const SfxViewFrame& rPrev, const SfxObjectShell* pDoc = 0, bool bOnlyVisible = true );
+    static SfxViewFrame*    GetFirst( const SfxObjectShell* pDoc = nullptr, bool bOnlyVisible = true );
+    static SfxViewFrame*    GetNext( const SfxViewFrame& rPrev, const SfxObjectShell* pDoc = nullptr, bool bOnlyVisible = true );
 
-    static SfxViewFrame*    Get( const css::uno::Reference< css::frame::XController>& i_rController, const SfxObjectShell* i_pDoc = NULL );
+    static SfxViewFrame*    Get( const css::uno::Reference< css::frame::XController>& i_rController, const SfxObjectShell* i_pDoc = nullptr );
 
-            void            DoActivate(bool bMDI, SfxViewFrame *pOld=NULL);
-            void            DoDeactivate(bool bMDI, SfxViewFrame *pOld=NULL);
+            void            DoActivate(bool bMDI, SfxViewFrame *pOld=nullptr);
+            void            DoDeactivate(bool bMDI, SfxViewFrame *pOld=nullptr);
 
     SfxViewFrame*           GetParentViewFrame() const;
 
@@ -291,7 +291,7 @@ public:
                             {}
 
     virtual bool            operator==( const SfxPoolItem& ) const override;
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const override;
+    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
 
     SfxViewFrame*           GetFrame() const
                             { return pFrame; }
@@ -310,7 +310,7 @@ public:
                             SfxVerbListItem( sal_uInt16 nWhichId, const css::uno::Sequence < css::embed::VerbDescriptor >& );
 
     virtual bool            operator==( const SfxPoolItem& ) const override;
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const override;
+    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
 
     virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
 };

@@ -323,7 +323,7 @@ public:
      * @return true if the initialization is successful, false otherwise.
      */
     bool                        DoInitUnitTest();
-    bool                        DoInitNew( SfxMedium* pMedium=0 );
+    bool                        DoInitNew( SfxMedium* pMedium=nullptr );
     bool                        DoLoad( SfxMedium* pMedium );
     bool                        DoLoadExternal( SfxMedium* pMed );
     bool                        DoSave();
@@ -331,7 +331,7 @@ public:
     bool                        DoSaveObjectAs( SfxMedium &rNewStor, bool bCommit );
 
     // TODO/LATER: currently only overridden in Calc, should be made non-virtual
-    virtual bool                DoSaveCompleted( SfxMedium* pNewStor=0 );
+    virtual bool                DoSaveCompleted( SfxMedium* pNewStor=nullptr );
 
     bool                        LoadOwnFormat( SfxMedium& pMedium );
     virtual bool                SaveAsOwnFormat( SfxMedium& pMedium );
@@ -383,7 +383,7 @@ public:
                                         vcl::Window *pParent, const SfxItemSet& );
 
     ErrCode                     CallBasic( const OUString& rMacro, const OUString& rBasicName,
-                                    SbxArray* pArgs = 0, SbxValue* pRet = 0 );
+                                    SbxArray* pArgs = nullptr, SbxValue* pRet = nullptr );
 
     ErrCode     CallXScript(
         const OUString& rScriptURL,
@@ -392,7 +392,7 @@ public:
         css::uno::Sequence< sal_Int16 >& aOutParamIndex,
         css::uno::Sequence< css::uno::Any >& aOutParam,
         bool bRaiseError = true,
-        const css::uno::Any* aCaller = 0 );
+        const css::uno::Any* aCaller = nullptr );
 
     static ErrCode  CallXScript(
         const css::uno::Reference< css::uno::XInterface >& _rxScriptContext,
@@ -402,7 +402,7 @@ public:
         css::uno::Sequence< sal_Int16 >& aOutParamIndex,
         css::uno::Sequence< css::uno::Any >& aOutParam,
         bool bRaiseError = true,
-        const css::uno::Any* aCaller = 0
+        const css::uno::Any* aCaller = nullptr
     );
 
     /** adjusts the internal macro mode, according to the current security settings
@@ -539,11 +539,11 @@ public:
 
     virtual css::uno::Sequence< OUString > GetEventNames();
 
-    vcl::Window*                GetDialogParent( SfxMedium* pMedium=0 );
+    vcl::Window*                GetDialogParent( SfxMedium* pMedium=nullptr );
     static SfxObjectShell*      CreateObject( const OUString& rServiceName, SfxObjectCreateMode = SfxObjectCreateMode::STANDARD );
     static SfxObjectShell*      CreateObjectByFactoryName( const OUString& rURL, SfxObjectCreateMode = SfxObjectCreateMode::STANDARD );
     static css::uno::Reference< css::lang::XComponent >
-                                CreateAndLoadComponent( const SfxItemSet& rSet, SfxFrame* pFrame = NULL );
+                                CreateAndLoadComponent( const SfxItemSet& rSet, SfxFrame* pFrame = nullptr );
     static SfxObjectShell*      GetShellFromComponent( const css::uno::Reference< css::lang::XComponent >& xComp );
     static OUString             GetServiceNameFromFactory( const OUString& rFact );
     bool                        IsInPlaceActive();
@@ -689,8 +689,8 @@ public:
     SAL_DLLPRIVATE void UpdateFromTemplate_Impl();
     SAL_DLLPRIVATE bool CanReload_Impl();
     SAL_DLLPRIVATE void SetNamedVisibility_Impl();
-    SAL_DLLPRIVATE bool DoSave_Impl( const SfxItemSet* pSet=0 );
-    SAL_DLLPRIVATE bool Save_Impl( const SfxItemSet* pSet=0 );
+    SAL_DLLPRIVATE bool DoSave_Impl( const SfxItemSet* pSet=nullptr );
+    SAL_DLLPRIVATE bool Save_Impl( const SfxItemSet* pSet=nullptr );
     SAL_DLLPRIVATE bool PreDoSaveAs_Impl(const OUString& rFileName, const OUString& rFiltName, SfxItemSet& rItemSet);
     SAL_DLLPRIVATE bool APISaveAs_Impl(const OUString& aFileName, SfxItemSet& rItemSet);
     SAL_DLLPRIVATE bool CommonSaveAs_Impl(const INetURLObject& aURL, const OUString& aFilterName, SfxItemSet& rItemSet);
@@ -765,14 +765,14 @@ class SfxObjectShellLock
 protected:
     SfxObjectShell * pObj;
 public:
-    inline               SfxObjectShellLock() { pObj = 0; }
+    inline               SfxObjectShellLock() { pObj = nullptr; }
     inline               SfxObjectShellLock( const SfxObjectShellLock & rObj );
     inline               SfxObjectShellLock( SfxObjectShell * pObjP );
     inline void          Clear();
     inline               ~SfxObjectShellLock();
     inline SfxObjectShellLock & operator = ( const SfxObjectShellLock & rObj );
     inline SfxObjectShellLock & operator = ( SfxObjectShell * pObj );
-    inline bool        Is() const { return pObj != NULL; }
+    inline bool        Is() const { return pObj != nullptr; }
     inline SfxObjectShell *     operator &  () const { return pObj; }
     inline SfxObjectShell *     operator -> () const { return pObj; }
     inline SfxObjectShell &     operator *  () const { return *pObj; }
@@ -787,7 +787,7 @@ inline void SfxObjectShellLock::Clear()
     if( pObj )
     {
         SfxObjectShell* const pRefObj = pObj;
-        pObj = 0;
+        pObj = nullptr;
         pRefObj->OwnerLock( false );
     }
 }
@@ -824,7 +824,7 @@ public:
                             TYPEINFO_OVERRIDE();
                             SfxObjectShellItem() :
                                 SfxPoolItem( 0 ),
-                                pObjSh( 0 )
+                                pObjSh( nullptr )
                             {}
                             SfxObjectShellItem( SfxObjectShell *pObjShell ):
                                 SfxPoolItem( 0 ),
@@ -837,7 +837,7 @@ public:
                             {}
 
     virtual bool            operator==( const SfxPoolItem& ) const override;
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const override;
+    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
     virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
     virtual bool            PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 };

@@ -44,7 +44,7 @@ using namespace ::com::sun::star;
 // TODO/LATER: this workaround must be replaced by API in future if possible
 SfxObjectShell* SfxObjectShell::GetParentShellByModel_Impl()
 {
-    SfxObjectShell* pResult = NULL;
+    SfxObjectShell* pResult = nullptr;
 
     try {
         uno::Reference< container::XChild > xChildModel( GetModel(), uno::UNO_QUERY );
@@ -73,7 +73,7 @@ Printer* SfxObjectShell::GetDocumentPrinter()
     SfxObjectShell* pParent = GetParentShellByModel_Impl();
     if ( pParent )
         return pParent->GetDocumentPrinter();
-    return NULL;
+    return nullptr;
 }
 
 
@@ -82,7 +82,7 @@ OutputDevice* SfxObjectShell::GetDocumentRefDev()
     SfxObjectShell* pParent = GetParentShellByModel_Impl();
     if ( pParent )
         return pParent->GetDocumentRefDev();
-    return NULL;
+    return nullptr;
 }
 
 
@@ -203,7 +203,7 @@ void SfxObjectShell::DoDraw_Impl( OutputDevice* pDev,
     aMapMode.SetScaleY( rScaleY );
 
     // Target in Pixels
-    Point aOrg   = pDev->LogicToLogic( rViewPos, NULL, &aMapMode );
+    Point aOrg   = pDev->LogicToLogic( rViewPos, nullptr, &aMapMode );
     Point aDelta = aOrg - aVisArea.TopLeft();
 
     // Origin moved according to the viewable area
@@ -227,7 +227,7 @@ void SfxObjectShell::DoDraw_Impl( OutputDevice* pDev,
         if( pMtf->IsRecord() && pDev->GetOutDevType() != OUTDEV_PRINTER )
             pMtf->Stop();
         else
-            pMtf = NULL;
+            pMtf = nullptr;
     }
     if( pDev->IsClipRegion() && pDev->GetOutDevType() != OUTDEV_PRINTER )
     {

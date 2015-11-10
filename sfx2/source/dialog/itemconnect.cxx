@@ -52,7 +52,7 @@ bool ItemWrapperHelper::IsKnownItem( const SfxItemSet& rItemSet, sal_uInt16 nSlo
 const SfxPoolItem* ItemWrapperHelper::GetUniqueItem( const SfxItemSet& rItemSet, sal_uInt16 nSlot )
 {
     sal_uInt16 nWhich = GetWhichId( rItemSet, nSlot );
-    return (rItemSet.GetItemState( nWhich ) >= SfxItemState::DEFAULT) ? rItemSet.GetItem( nWhich ) : 0;
+    return (rItemSet.GetItemState( nWhich ) >= SfxItemState::DEFAULT) ? rItemSet.GetItem( nWhich ) : nullptr;
 }
 
 const SfxPoolItem& ItemWrapperHelper::GetDefaultItem( const SfxItemSet& rItemSet, sal_uInt16 nSlot )
@@ -95,7 +95,7 @@ void DummyWindowWrapper::SetControlDontKnow( bool )
 
 void* DummyWindowWrapper::GetControlValue() const
 {
-    return 0;
+    return nullptr;
 }
 
 void DummyWindowWrapper::SetControlValue( void* )

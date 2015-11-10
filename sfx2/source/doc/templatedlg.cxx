@@ -633,7 +633,7 @@ IMPL_LINK_TYPED(SfxTemplateManagerDlg, RepositoryMenuSelectHdl, Menu*, pMenu, bo
     {
         sal_uInt16 nRepoId = nMenuId - MNI_REPOSITORY_BASE;
 
-        TemplateRepository *pRepository = NULL;
+        TemplateRepository *pRepository = nullptr;
 
         for (size_t i = 0, n = maRepositories.size(); i < n; ++i)
         {
@@ -690,7 +690,7 @@ IMPL_LINK_TYPED(SfxTemplateManagerDlg, OpenTemplateHdl, ThumbnailViewItem*, pIte
         aArgs[2].Name = "UpdateDocMode";
         aArgs[2].Value <<= UpdateDocMode::ACCORDING_TO_CONFIG;
         aArgs[3].Name = "InteractionHandler";
-        aArgs[3].Value <<= task::InteractionHandler::createWithParent( ::comphelper::getProcessComponentContext(), 0 );
+        aArgs[3].Value <<= task::InteractionHandler::createWithParent( ::comphelper::getProcessComponentContext(), nullptr );
 
         TemplateViewItem *pTemplateItem = static_cast<TemplateViewItem*>(pItem);
 

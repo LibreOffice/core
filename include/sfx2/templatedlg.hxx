@@ -48,7 +48,7 @@ class SFX2_DLLPUBLIC SfxTemplateManagerDlg : public ModalDialog
 
 public:
 
-    SfxTemplateManagerDlg(vcl::Window *parent = NULL);
+    SfxTemplateManagerDlg(vcl::Window *parent = nullptr);
 
     virtual ~SfxTemplateManagerDlg();
     virtual void dispose() override;

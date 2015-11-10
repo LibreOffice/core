@@ -121,7 +121,7 @@ css::uno::Sequence<OUString> SAL_CALL ShutdownIcon::getSupportedServiceNames()
 }
 
 bool ShutdownIcon::bModalMode = false;
-ShutdownIcon* ShutdownIcon::pShutdownIcon = NULL;
+ShutdownIcon* ShutdownIcon::pShutdownIcon = nullptr;
 
 #if !defined( ENABLE_QUICKSTART_APPLET )
 // To remove conditionals
@@ -152,8 +152,8 @@ bool LoadModule()
         loaded = true;
 #  else // UNX
         osl::Module plugin;
-        oslGenericFunction pTmpInit = NULL;
-        oslGenericFunction pTmpDeInit = NULL;
+        oslGenericFunction pTmpInit = nullptr;
+        oslGenericFunction pTmpDeInit = nullptr;
         if ( plugin.loadRelative( &thisModule, "libqstart_gtklo.so" ) )
         {
             pTmpInit = plugin.getFunctionSymbol( "plugin_init_sys_tray" );
@@ -203,11 +203,11 @@ void ShutdownIcon::deInitSystray()
         pDeInitSystray();
 
     m_bVeto = false;
-    pInitSystray = 0;
-    pDeInitSystray = 0;
+    pInitSystray = nullptr;
+    pDeInitSystray = nullptr;
 
     delete m_pFileDlg;
-    m_pFileDlg = NULL;
+    m_pFileDlg = nullptr;
     m_bInitialized = false;
 }
 
@@ -217,8 +217,8 @@ ShutdownIcon::ShutdownIcon( const css::uno::Reference< XComponentContext > & rxC
     m_bVeto ( false ),
     m_bListenForTermination ( false ),
     m_bSystemDialogs( false ),
-    m_pResMgr( NULL ),
-    m_pFileDlg( NULL ),
+    m_pResMgr( nullptr ),
+    m_pFileDlg( nullptr ),
     m_xContext( rxContext ),
     m_bInitialized( false )
 {
@@ -353,7 +353,7 @@ void ShutdownIcon::StartFileDialog()
         // Destroy instance as changing the system file dialog setting
         // forces us to create a new FileDialogHelper instance!
         delete m_pFileDlg;
-        m_pFileDlg = NULL;
+        m_pFileDlg = nullptr;
     }
 
     if ( !m_pFileDlg )
@@ -390,7 +390,7 @@ IMPL_LINK_TYPED( ShutdownIcon, DialogClosedHdl_Impl, FileDialogHelper*, /*unused
                 Sequence< PropertyValue >   aArgs(3);
 
                 css::uno::Reference < css::task::XInteractionHandler2 > xInteraction(
-                    task::InteractionHandler::createWithParent(::comphelper::getProcessComponentContext(), 0) );
+                    task::InteractionHandler::createWithParent(::comphelper::getProcessComponentContext(), nullptr) );
 
                 aArgs[0].Name = "InteractionHandler";
                 aArgs[0].Value <<= xInteraction;
@@ -547,7 +547,7 @@ void ShutdownIcon::terminateDesktop()
         Application::Quit();
 
     // remove the instance pointer
-    ShutdownIcon::pShutdownIcon = 0;
+    ShutdownIcon::pShutdownIcon = nullptr;
 }
 
 
@@ -565,7 +565,7 @@ ShutdownIcon* ShutdownIcon::createInstance()
     if (pShutdownIcon)
         return pShutdownIcon;
 
-    ShutdownIcon *pIcon = NULL;
+    ShutdownIcon *pIcon = nullptr;
     try {
         pIcon = new ShutdownIcon( comphelper::getProcessComponentContext() );
         pIcon->init ();

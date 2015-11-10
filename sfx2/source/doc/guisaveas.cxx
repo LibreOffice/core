@@ -334,8 +334,8 @@ ModelData_Impl::ModelData_Impl( SfxStoringHelper& aOwner,
                                 const uno::Sequence< beans::PropertyValue >& aMediaDescr )
 : m_pOwner( &aOwner )
 , m_xModel( xModel )
-, m_pDocumentPropsHM( NULL )
-, m_pModulePropsHM( NULL )
+, m_pDocumentPropsHM( nullptr )
+, m_pModulePropsHM( nullptr )
 , m_aMediaDescrHM( aMediaDescr )
 , m_bRecommendReadOnly( false )
 {
@@ -379,7 +379,7 @@ void ModelData_Impl::FreeDocumentProps()
     if ( m_pDocumentPropsHM )
     {
         delete m_pDocumentPropsHM;
-        m_pDocumentPropsHM = NULL;
+        m_pDocumentPropsHM = nullptr;
     }
 }
 
@@ -484,7 +484,7 @@ void ModelData_Impl::CheckInteractionHandler()
     {
         try {
             m_aMediaDescrHM[ OUString("InteractionHandler") ]
-                <<= task::InteractionHandler::createWithParent( comphelper::getProcessComponentContext(), 0);
+                <<= task::InteractionHandler::createWithParent( comphelper::getProcessComponentContext(), nullptr);
         }
         catch( const uno::Exception& )
         {
@@ -1016,7 +1016,7 @@ bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
                          GetMediaDescr().getAsConstPropertyValueList(),
                          aDialogParams );
 
-    const SfxPoolItem* pItem = NULL;
+    const SfxPoolItem* pItem = nullptr;
     if ( bPreselectPassword && aDialogParams.GetItemState( SID_ENCRYPTIONDATA, true, &pItem ) != SfxItemState::SET )
     {
         // the file dialog preselects the password checkbox if the provided mediadescriptor has encryption data entry
@@ -1858,7 +1858,7 @@ bool SfxStoringHelper::WarnUnacceptableFormat( const uno::Reference< frame::XMod
 
 vcl::Window* SfxStoringHelper::GetModelWindow( const uno::Reference< frame::XModel >& xModel )
 {
-    vcl::Window* pWin = 0;
+    vcl::Window* pWin = nullptr;
     try {
         if ( xModel.is() )
         {

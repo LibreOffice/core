@@ -132,7 +132,7 @@ public:
     explicit SvLinkSource_EntryIter_Impl( const SvLinkSource_Array_Impl& rArr );
     ~SvLinkSource_EntryIter_Impl();
     SvLinkSource_Entry_Impl* Curr()
-                            { return nPos < aArr.size() ? aArr[ nPos ] : 0; }
+                            { return nPos < aArr.size() ? aArr[ nPos ] : nullptr; }
     SvLinkSource_Entry_Impl* Next();
     bool IsValidCurrValue( SvLinkSource_Entry_Impl* pEntry );
 };
@@ -155,7 +155,7 @@ bool SvLinkSource_EntryIter_Impl::IsValidCurrValue( SvLinkSource_Entry_Impl* pEn
 
 SvLinkSource_Entry_Impl* SvLinkSource_EntryIter_Impl::Next()
 {
-    SvLinkSource_Entry_Impl* pRet = 0;
+    SvLinkSource_Entry_Impl* pRet = nullptr;
     if( nPos + 1 < (sal_uInt16)aArr.size() )
     {
         ++nPos;
@@ -169,12 +169,12 @@ SvLinkSource_Entry_Impl* SvLinkSource_EntryIter_Impl::Next()
                 pRet = aArr[ nPos ];
                 if( std::find(rOrigArr.cbegin(), rOrigArr.cend(), pRet ) != rOrigArr.cend() )
                     break;
-                pRet = 0;
+                pRet = nullptr;
                 ++nPos;
             } while( nPos < aArr.size() );
 
             if( nPos >= aArr.size() )
-                pRet = 0;
+                pRet = nullptr;
         }
     }
     return pRet;
@@ -191,7 +191,7 @@ struct SvLinkSource_Impl
     bool               m_bIsReadOnly;
 
     SvLinkSource_Impl()
-        : pTimer(0)
+        : pTimer(nullptr)
         , nTimeout(3000)
         , m_bIsReadOnly(false)
     {
@@ -285,7 +285,7 @@ void SvLinkSource::SendDataChanged()
     if( pImpl->pTimer )
     {
         delete pImpl->pTimer;
-        pImpl->pTimer = NULL;
+        pImpl->pTimer = nullptr;
     }
     pImpl->aDataMimeType.clear();
 }
@@ -319,7 +319,7 @@ void SvLinkSource::NotifyDataChanged()
         if( pImpl->pTimer )
         {
             delete pImpl->pTimer;
-            pImpl->pTimer = NULL;
+            pImpl->pTimer = nullptr;
         }
     }
 }
@@ -357,7 +357,7 @@ void SvLinkSource::DataChanged( const OUString & rMimeType,
         if( pImpl->pTimer )
         {
             delete pImpl->pTimer;
-            pImpl->pTimer = NULL;
+            pImpl->pTimer = nullptr;
         }
     }
 }

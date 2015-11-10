@@ -98,7 +98,7 @@ public:
     SfxLinkItem( sal_uInt16 nWhichId, const Link<SfxPoolItem*, void>& rValue ) : SfxPoolItem( nWhichId )
     {   aLink = rValue; }
 
-    virtual SfxPoolItem*     Clone( SfxItemPool* = 0 ) const override
+    virtual SfxPoolItem*     Clone( SfxItemPool* = nullptr ) const override
     {   return new SfxLinkItem( *this ); }
     virtual bool             operator==( const SfxPoolItem& rL) const override
     {   return static_cast<const SfxLinkItem&>(rL).aLink == aLink; }
@@ -157,7 +157,7 @@ public:
     /**
     * @param pArgs Takes ownership
     */
-    sal_uIntPtr                       LoadTemplate( SfxObjectShellLock& xDoc, const OUString& rFileName, bool bCopy=true, SfxItemSet* pArgs = 0 );
+    sal_uIntPtr                       LoadTemplate( SfxObjectShellLock& xDoc, const OUString& rFileName, bool bCopy=true, SfxItemSet* pArgs = nullptr );
     vcl::Window*                     GetTopWindow() const;
 
     // members
@@ -172,7 +172,7 @@ public:
     static OUString             ChooseScript();
     static void                 MacroOrganizer( sal_Int16 nTabId );
     static ErrCode              CallBasic( const OUString&, BasicManager*, SbxArray *pArgs, SbxValue *pRet );
-    static ErrCode              CallAppBasic( const OUString& i_macroName, SbxArray* i_args = NULL, SbxValue* i_ret = NULL )
+    static ErrCode              CallAppBasic( const OUString& i_macroName, SbxArray* i_args = nullptr, SbxValue* i_ret = nullptr )
                                 { return CallBasic( i_macroName, SfxApplication::GetBasicManager(), i_args, i_ret ); }
     static BasicManager*        GetBasicManager();
     css::script::XLibraryContainer * GetDialogContainer();
@@ -229,7 +229,7 @@ public:
     SAL_DLLPRIVATE void         SetLastDir_Impl( const OUString & );
 
     SAL_DLLPRIVATE void         Registrations_Impl();
-    SAL_DLLPRIVATE SfxWorkWindow* GetWorkWindow_Impl(const SfxViewFrame *pFrame=0) const;
+    SAL_DLLPRIVATE SfxWorkWindow* GetWorkWindow_Impl(const SfxViewFrame *pFrame=nullptr) const;
 
     // TODO/CLEANUP: still needed? -- unclear whether this comment
     // refers to the GetDisabledSlotList_Impl() method which was

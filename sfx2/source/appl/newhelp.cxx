@@ -332,7 +332,7 @@ void ContentListBox_Impl::InitRoot()
         OUString aURL = aRow.getToken( 0, '\t', nIdx );
         sal_Unicode cFolder = aRow.getToken( 0, '\t', nIdx )[0];
         bool bIsFolder = ( '1' == cFolder );
-        SvTreeListEntry* pEntry = InsertEntry( aTitle, aOpenBookImage, aClosedBookImage, NULL, true );
+        SvTreeListEntry* pEntry = InsertEntry( aTitle, aOpenBookImage, aClosedBookImage, nullptr, true );
         if ( bIsFolder )
             pEntry->SetUserData( new ContentEntry_Impl( aURL, true ) );
     }
@@ -373,7 +373,7 @@ void ContentListBox_Impl::RequestingChildren( SvTreeListEntry* pParent )
                     OUString aURL = aRow.getToken( 0, '\t', nIdx );
                     sal_Unicode cFolder = aRow.getToken( 0, '\t', nIdx )[0];
                     bool bIsFolder = ( '1' == cFolder );
-                    SvTreeListEntry* pEntry = NULL;
+                    SvTreeListEntry* pEntry = nullptr;
                     if ( bIsFolder )
                     {
                         pEntry = InsertEntry( aTitle, aOpenBookImage, aClosedBookImage, pParent, true );
@@ -405,7 +405,7 @@ bool ContentListBox_Impl::Notify( NotifyEvent& rNEvt )
     if ( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT &&
          KEY_RETURN == rNEvt.GetKeyEvent()->GetKeyCode().GetCode() )
     {
-        GetDoubleClickHdl().Call( NULL );
+        GetDoubleClickHdl().Call( nullptr );
         bHandled = true;
     }
 
@@ -887,7 +887,7 @@ bool SearchBox_Impl::PreNotify( NotifyEvent& rNEvt )
          rNEvt.GetType() == MouseNotifyEvent::KEYINPUT &&
          KEY_RETURN == rNEvt.GetKeyEvent()->GetKeyCode().GetCode() )
     {
-        aSearchLink.Call( NULL );
+        aSearchLink.Call( nullptr );
         bHandled = true;
     }
     return bHandled || ComboBox::PreNotify( rNEvt );
@@ -898,7 +898,7 @@ bool SearchBox_Impl::PreNotify( NotifyEvent& rNEvt )
 void SearchBox_Impl::Select()
 {
     if ( !IsTravelSelect() )
-        aSearchLink.Call( NULL );
+        aSearchLink.Call( nullptr );
 }
 
 // class SearchResultsBox_Impl -------------------------------------------
@@ -1042,7 +1042,7 @@ void SearchTabPage_Impl::RememberSearchText( const OUString& rSearchText )
 
 IMPL_LINK_NOARG_TYPED(SearchTabPage_Impl, ClickHdl, Button*, void)
 {
-    SearchHdl(NULL);
+    SearchHdl(nullptr);
 }
 
 IMPL_LINK_NOARG_TYPED(SearchTabPage_Impl, SearchHdl, LinkParamNone*, void)
@@ -1135,12 +1135,12 @@ bool SearchTabPage_Impl::OpenKeyword( const OUString& rKeyword )
 {
     bool bRet = false;
     m_pSearchED->SetText( rKeyword );
-    SearchHdl( NULL );
+    SearchHdl( nullptr );
     if ( m_pResultsLB->GetEntryCount() > 0 )
     {
         // found keyword -> open it
         m_pResultsLB->SelectEntryPos(0);
-        OpenHdl( NULL );
+        OpenHdl( nullptr );
         bRet = true;
     }
 
@@ -1439,10 +1439,10 @@ SfxHelpIndexWindow_Impl::SfxHelpIndexWindow_Impl(SfxHelpWindow_Impl* _pParent)
     : Window(_pParent, 0)
     , aIndexKeywordLink(LINK(this, SfxHelpIndexWindow_Impl, KeywordHdl))
     , pParentWin(_pParent)
-    , pCPage(NULL)
-    , pIPage(NULL)
-    , pSPage(NULL)
-    , pBPage(NULL)
+    , pCPage(nullptr)
+    , pIPage(nullptr)
+    , pSPage(nullptr)
+    , pBPage(nullptr)
     , bWasCursorLeftOrRight(false)
     , bIsInitDone(false)
 {
@@ -1531,7 +1531,7 @@ void SfxHelpIndexWindow_Impl::SetActiveFactory()
     if ( !bIsInitDone && !m_pActiveLB->GetEntryCount() )
     {
         aIdle.Stop();
-        InitHdl( NULL );
+        InitHdl( nullptr );
     }
 
     for ( sal_Int32 i = 0; i < m_pActiveLB->GetEntryCount(); ++i )
@@ -1543,7 +1543,7 @@ void SfxHelpIndexWindow_Impl::SetActiveFactory()
             if ( m_pActiveLB->GetSelectEntryPos() != i )
             {
                 m_pActiveLB->SelectEntryPos(i);
-                aSelectFactoryLink.Call( NULL );
+                aSelectFactoryLink.Call( nullptr );
             }
             break;
         }
@@ -1555,7 +1555,7 @@ void SfxHelpIndexWindow_Impl::SetActiveFactory()
 HelpTabPage_Impl* SfxHelpIndexWindow_Impl::GetCurrentPage( sal_uInt16& rCurId )
 {
     rCurId = m_pTabCtrl->GetCurPageId();
-    HelpTabPage_Impl* pPage = NULL;
+    HelpTabPage_Impl* pPage = nullptr;
 
     OString sName(m_pTabCtrl->GetPageName(rCurId));
 
@@ -1901,7 +1901,7 @@ SfxHelpTextWindow_Impl::SfxHelpTextWindow_Impl( SfxHelpWindow_Impl* pParent ) :
     aOnStartupText      ( SfxResId( RID_HELP_ONSTARTUP_TEXT ).toString() ),
     pHelpWin            ( pParent ),
     pTextWin            ( VclPtr<TextWin_Impl>::Create( this ) ),
-    pSrchDlg            ( NULL ),
+    pSrchDlg            ( nullptr ),
     nMinPos             ( 0 ),
     bIsDebug            ( false ),
     bIsIndexOn          ( false ),
@@ -2261,7 +2261,7 @@ IMPL_LINK_TYPED( SfxHelpTextWindow_Impl, FindHdl, sfx2::SearchDialog&, rDlg, voi
 }
 void SfxHelpTextWindow_Impl::FindHdl(sfx2::SearchDialog* pDlg)
 {
-    bool bWrapAround = ( NULL == pDlg );
+    bool bWrapAround = ( nullptr == pDlg );
     if ( bWrapAround )
         pDlg = pSrchDlg;
     DBG_ASSERT( pDlg, "invalid search dialog" );
@@ -2319,7 +2319,7 @@ void SfxHelpTextWindow_Impl::FindHdl(sfx2::SearchDialog* pDlg)
                                 xTVCrsr->gotoRange( xText->getEnd(), sal_False );
                             else
                                 xTVCrsr->gotoRange( xText->getStart(), sal_False );
-                            FindHdl( NULL );
+                            FindHdl( nullptr );
                         }
                     }
                 }
@@ -2745,7 +2745,7 @@ void SfxHelpWindow_Impl::MakeLayout()
 
         if ( aRect.Width > 0 && aRect.Height > 0 )
         {
-            Rectangle aScreenRect = pScreenWin->GetClientWindowExtentsRelative( NULL );
+            Rectangle aScreenRect = pScreenWin->GetClientWindowExtentsRelative( nullptr );
             Point aNewPos = aScreenRect.TopLeft();
             sal_Int32 nDiffWidth = nOldWidth - nWidth;
             aNewPos.X() += nDiffWidth;
@@ -2856,7 +2856,7 @@ void SfxHelpWindow_Impl::SaveConfig()
     aUserData += OUString::number( nH );
 
     vcl::Window* pScreenWin = VCLUnoHelper::GetWindow( xWindow );
-    aWinPos = pScreenWin->GetWindowExtentsRelative( NULL ).TopLeft();
+    aWinPos = pScreenWin->GetWindowExtentsRelative( nullptr ).TopLeft();
     aUserData += ";";
     aUserData += OUString::number( aWinPos.X() );
     aUserData += ";";
@@ -3016,8 +3016,8 @@ SfxHelpWindow_Impl::SfxHelpWindow_Impl(
     SplitWindow( pParent, WB_3DLOOK | WB_NOSPLITDRAW ),
 
     xFrame              ( rFrame ),
-    pIndexWin           ( NULL ),
-    pTextWin            ( NULL ),
+    pIndexWin           ( nullptr ),
+    pTextWin            ( nullptr ),
     pHelpInterceptor    ( new HelpInterceptor_Impl() ),
     pHelpListener       ( new HelpListener_Impl( pHelpInterceptor ) ),
     nExpandWidth        ( 0 ),

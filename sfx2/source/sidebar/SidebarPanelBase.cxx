@@ -91,7 +91,7 @@ void SAL_CALL SidebarPanelBase::disposing()
                 ::comphelper::getProcessComponentContext()));
         if (xMultiplexer.is())
             xMultiplexer->removeAllContextChangeEventListeners(this);
-        mxFrame = NULL;
+        mxFrame = nullptr;
     }
 }
 
@@ -102,7 +102,7 @@ void SAL_CALL SidebarPanelBase::notifyContextChangeEvent (
 {
     IContextChangeReceiver* pContextChangeReceiver
         = dynamic_cast<IContextChangeReceiver*>(mpControl.get());
-    if (pContextChangeReceiver != NULL)
+    if (pContextChangeReceiver != nullptr)
     {
         const EnumContext aContext(
             EnumContext::GetApplicationEnum(rEvent.ApplicationName),
@@ -117,8 +117,8 @@ void SAL_CALL SidebarPanelBase::disposing (
 {
     (void)rEvent;
 
-    mxFrame = NULL;
-    mpControl = NULL;
+    mxFrame = nullptr;
+    mpControl = nullptr;
 }
 
 css::uno::Reference<css::frame::XFrame> SAL_CALL SidebarPanelBase::getFrame()
@@ -152,7 +152,7 @@ Reference<accessibility::XAccessible> SAL_CALL SidebarPanelBase::createAccessibl
     (void)rxParentAccessible;
 
     // Not yet implemented.
-    return NULL;
+    return nullptr;
 }
 
 Reference<awt::XWindow> SAL_CALL SidebarPanelBase::getWindow()
@@ -163,7 +163,7 @@ Reference<awt::XWindow> SAL_CALL SidebarPanelBase::getWindow()
             mpControl->GetComponentInterface(),
             UNO_QUERY);
     else
-        return NULL;
+        return nullptr;
 }
 
 ui::LayoutSize SAL_CALL SidebarPanelBase::getHeightForWidth (const sal_Int32 nWidth)
@@ -181,7 +181,7 @@ ui::LayoutSize SAL_CALL SidebarPanelBase::getHeightForWidth (const sal_Int32 nWi
             Size aSize(mpControl->get_preferred_size());
             return ui::LayoutSize(aSize.Height(), aSize.Height(), aSize.Height());
         }
-        else if (pLayoutableWindow != NULL)
+        else if (pLayoutableWindow != nullptr)
             return pLayoutableWindow->GetHeightForWidth(nWidth);
         else if (mpControl != nullptr)
         {

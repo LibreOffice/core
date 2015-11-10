@@ -162,7 +162,7 @@ SfxGlobalEvents_Impl::SfxGlobalEvents_Impl( const uno::Reference < uno::XCompone
     , m_xJobExecutorListener( task::theJobExecutor::get( rxContext ), uno::UNO_QUERY_THROW )
     , m_aLegacyListeners      (m_aLock)
     , m_aDocumentListeners    (m_aLock)
-    , pImp                    (0      )
+    , pImp                    (nullptr      )
 {
     m_refCount++;
     SfxGetpApp();
@@ -229,7 +229,7 @@ void SAL_CALL SfxGlobalEvents_Impl::notifyDocumentEvent( const OUString& /*_Even
 void SAL_CALL SfxGlobalEvents_Impl::notifyEvent(const document::EventObject& aEvent)
     throw(uno::RuntimeException, std::exception)
 {
-    document::DocumentEvent aDocEvent(aEvent.Source, aEvent.EventName, NULL, uno::Any());
+    document::DocumentEvent aDocEvent(aEvent.Source, aEvent.EventName, nullptr, uno::Any());
     implts_notifyJobExecution(aEvent);
     implts_checkAndExecuteEventBindings(aDocEvent);
     implts_notifyListener(aDocEvent);
@@ -417,7 +417,7 @@ void SfxGlobalEvents_Impl::implts_checkAndExecuteEventBindings(const document::D
         uno::Any aAny;
         if ( xEvents.is() && xEvents->hasByName( aEvent.EventName ) )
             aAny = xEvents->getByName(aEvent.EventName);
-        SfxEvents_Impl::Execute(aAny, aEvent, 0);
+        SfxEvents_Impl::Execute(aAny, aEvent, nullptr);
     }
     catch ( uno::RuntimeException const & )
     {

@@ -105,7 +105,7 @@ Reference<frame::XToolbarController> ControllerFactory::CreateToolBoxController(
         {
             Reference<awt::XWindow> xItemWindow (xController->createItemWindow(rxParentWindow));
             vcl::Window* pItemWindow = VCLUnoHelper::GetWindow(xItemWindow);
-            if (pItemWindow != NULL)
+            if (pItemWindow != nullptr)
             {
                 WindowType nType = pItemWindow->GetType();
                 if (nType == WINDOW_LISTBOX || nType == WINDOW_MULTILISTBOX || nType == WINDOW_COMBOBOX)
@@ -188,7 +188,7 @@ Reference<frame::XToolbarController> ControllerFactory::CreateToolBarController(
     {
         // Ignore exception.
     }
-    return NULL;
+    return nullptr;
 }
 
 } } // end of namespace sfx2::sidebar

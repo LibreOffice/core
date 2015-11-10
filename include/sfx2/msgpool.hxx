@@ -46,14 +46,14 @@ private:
     const SfxSlot* SeekSlot( sal_uInt16 nObject );
 
 public:
-    SfxSlotPool(SfxSlotPool* pParent=0);
+    SfxSlotPool(SfxSlotPool* pParent=nullptr);
     ~SfxSlotPool();
 
     void                RegisterInterface( SfxInterface& rFace );
     void                ReleaseInterface( SfxInterface& rFace );
     SfxInterface*       FirstInterface();
 
-    static SfxSlotPool& GetSlotPool( SfxViewFrame *pFrame=NULL );
+    static SfxSlotPool& GetSlotPool( SfxViewFrame *pFrame=nullptr );
 
     sal_uInt16              GetGroupCount();
     OUString            SeekGroup( sal_uInt16 nNo );

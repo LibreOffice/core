@@ -123,7 +123,7 @@ public:
 
 #define SFX_DECL_STATUSBAR_CONTROL() \
         static SfxStatusBarControl* CreateImpl( sal_uInt16 nSlotId, sal_uInt16 nId, StatusBar &rStb ); \
-        static void RegisterControl(sal_uInt16 nSlotId = 0, SfxModule *pMod=NULL)
+        static void RegisterControl(sal_uInt16 nSlotId = 0, SfxModule *pMod=nullptr)
 
 #define SFX_IMPL_STATUSBAR_CONTROL(Class, nItemClass) \
         SfxStatusBarControl* Class::CreateImpl( sal_uInt16 nSlotId, sal_uInt16 nId, StatusBar &rStb ) \

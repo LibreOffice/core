@@ -165,7 +165,7 @@ public:
                         GetCmisProperties() const { return m_aCmisProperties;}
 
     void        SetCmisProperties(const css::uno::Sequence< css::document::CmisProperty >& cmisProps );
-    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = NULL ) const override;
+    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = nullptr ) const override;
     virtual bool            operator==( const SfxPoolItem& ) const override;
     virtual bool        QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
     virtual bool        PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
@@ -507,7 +507,7 @@ protected:
 
     virtual bool        FillItemSet( SfxItemSet* ) override;
     virtual void        Reset( const SfxItemSet* ) override;
-    virtual sfxpg       DeactivatePage( SfxItemSet* pSet = NULL ) override;
+    virtual sfxpg       DeactivatePage( SfxItemSet* pSet = nullptr ) override;
 
 public:
     SfxCustomPropertiesPage( vcl::Window* pParent, const SfxItemSet& );
@@ -627,7 +627,7 @@ private:
 protected:
     virtual bool        FillItemSet( SfxItemSet* ) override;
     virtual void        Reset( const SfxItemSet* ) override;
-    virtual sfxpg       DeactivatePage( SfxItemSet* pSet = NULL ) override;
+    virtual sfxpg       DeactivatePage( SfxItemSet* pSet = nullptr ) override;
 
 public:
     SfxCmisPropertiesPage( vcl::Window* pParent, const SfxItemSet& );

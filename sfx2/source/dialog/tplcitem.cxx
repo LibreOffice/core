@@ -41,7 +41,7 @@ SfxTemplateControllerItem::SfxTemplateControllerItem(
     SfxControllerItem(nSlotId, rBindings),
     rTemplateDlg(rDlg),
     nWaterCanState(0xff),
-    nUserEventId(0)
+    nUserEventId(nullptr)
 {
 }
 
@@ -68,10 +68,10 @@ void SfxTemplateControllerItem::StateChanged( sal_uInt16 nSID, SfxItemState eSta
         {
             bool bAvailable = SfxItemState::DEFAULT == eState;
             if ( !bAvailable )
-                rTemplateDlg.SetFamilyState(GetId(), 0);
+                rTemplateDlg.SetFamilyState(GetId(), nullptr);
             else {
                 const SfxTemplateItem *pStateItem = dynamic_cast< const SfxTemplateItem* >(pItem);
-                DBG_ASSERT(pStateItem != 0, "SfxTemplateItem expected");
+                DBG_ASSERT(pStateItem != nullptr, "SfxTemplateItem expected");
                 rTemplateDlg.SetFamilyState( GetId(), pStateItem );
             }
             bool bDisable = eState == SfxItemState::DISABLED;
@@ -155,8 +155,8 @@ void SfxTemplateControllerItem::StateChanged( sal_uInt16 nSID, SfxItemState eSta
 
 IMPL_LINK_NOARG_TYPED(SfxTemplateControllerItem, SetWaterCanStateHdl_Impl, void*, void)
 {
-    nUserEventId = 0;
-    SfxBoolItem* pState = 0;
+    nUserEventId = nullptr;
+    SfxBoolItem* pState = nullptr;
     switch(nWaterCanState)
     {
         case 0 :

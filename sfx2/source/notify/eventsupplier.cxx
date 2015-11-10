@@ -233,7 +233,7 @@ void SfxEvents_Impl::Execute( uno::Any& aEventData, const document::DocumentEven
                 uno::Reference
                     < frame::XDispatchProvider > xProv;
 
-                if ( pView != NULL )
+                if ( pView != nullptr )
                 {
                     xProv = uno::Reference
                         < frame::XDispatchProvider > (
@@ -297,7 +297,7 @@ void SAL_CALL SfxEvents_Impl::notifyEvent( const document::EventObject& aEvent )
 
     uno::Any aEventData = maEventData[ nIndex ];
     aGuard.clear();
-    Execute( aEventData, document::DocumentEvent(aEvent.Source, aEvent.EventName, NULL, uno::Any()), mpObjShell );
+    Execute( aEventData, document::DocumentEvent(aEvent.Source, aEvent.EventName, nullptr, uno::Any()), mpObjShell );
 }
 
 
@@ -310,7 +310,7 @@ void SAL_CALL SfxEvents_Impl::disposing( const lang::EventObject& /*Source*/ ) t
     if ( mxBroadcaster.is() )
     {
         mxBroadcaster->removeEventListener( this );
-        mxBroadcaster = NULL;
+        mxBroadcaster = nullptr;
     }
 }
 
@@ -342,7 +342,7 @@ SfxEvents_Impl::~SfxEvents_Impl()
 
 SvxMacro* SfxEvents_Impl::ConvertToMacro( const uno::Any& rElement, SfxObjectShell* pObjShell, bool bNormalizeMacro )
 {
-    SvxMacro* pMacro = NULL;
+    SvxMacro* pMacro = nullptr;
     uno::Sequence < beans::PropertyValue > aProperties;
     uno::Any aAny;
     if ( bNormalizeMacro )

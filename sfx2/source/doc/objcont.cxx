@@ -306,7 +306,7 @@ std::set<Color> SfxObjectShell::GetDocColors()
 
 SfxStyleSheetBasePool* SfxObjectShell::GetStyleSheetPool()
 {
-    return 0;
+    return nullptr;
 }
 
 struct Styles_Impl

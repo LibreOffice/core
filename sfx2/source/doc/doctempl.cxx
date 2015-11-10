@@ -181,7 +181,7 @@ public:
 
     void                AddEntry( const OUString& rTitle,
                                   const OUString& rTargetURL,
-                                  size_t *pPos = NULL );
+                                  size_t *pPos = nullptr );
     void                DeleteEntry( size_t nIndex );
 
     int                 Compare( RegionData_Impl* pCompareWith ) const;
@@ -265,7 +265,7 @@ public:
 typedef tools::SvRef<SfxDocTemplate_Impl> SfxDocTemplate_ImplRef;
 #endif
 
-SfxDocTemplate_Impl *gpTemplateData = 0;
+SfxDocTemplate_Impl *gpTemplateData = nullptr;
 
 
 
@@ -423,7 +423,7 @@ const OUString& SfxDocumentTemplates::GetName
 
     if ( pImp->Construct() )
     {
-        DocTempl_EntryData_Impl  *pEntry = NULL;
+        DocTempl_EntryData_Impl  *pEntry = nullptr;
         RegionData_Impl *pRegion = pImp->GetRegion( nRegion );
 
         if ( pRegion )
@@ -462,7 +462,7 @@ OUString SfxDocumentTemplates::GetPath
     if ( !pImp->Construct() )
         return OUString();
 
-    DocTempl_EntryData_Impl  *pEntry = NULL;
+    DocTempl_EntryData_Impl  *pEntry = nullptr;
     RegionData_Impl *pRegion = pImp->GetRegion( nRegion );
 
     if ( pRegion )
@@ -1130,7 +1130,7 @@ bool SfxDocumentTemplates::GetFull
     if ( ! pImp->Construct() )
         return false;
 
-    DocTempl_EntryData_Impl* pEntry = NULL;
+    DocTempl_EntryData_Impl* pEntry = nullptr;
     const sal_uInt16 nCount = GetRegionCount();
 
     for ( sal_uInt16 i = 0; i < nCount; ++i )
@@ -1150,7 +1150,7 @@ bool SfxDocumentTemplates::GetFull
         }
     }
 
-    return ( pEntry != NULL );
+    return ( pEntry != nullptr );
 }
 
 
@@ -1188,8 +1188,8 @@ bool SfxDocumentTemplates::GetLogicNames
     aFullPath.SetURL( rPath );
     OUString aPath( aFullPath.GetMainURL( INetURLObject::NO_DECODE ) );
 
-    RegionData_Impl *pData = NULL;
-    DocTempl_EntryData_Impl  *pEntry = NULL;
+    RegionData_Impl *pData = nullptr;
+    DocTempl_EntryData_Impl  *pEntry = nullptr;
     bool         bFound = false;
 
     sal_uIntPtr nCount = GetRegionCount();
@@ -1247,7 +1247,7 @@ SfxDocumentTemplates::~SfxDocumentTemplates()
 */
 
 {
-    pImp = NULL;
+    pImp = nullptr;
 }
 
 void SfxDocumentTemplates::Update( bool _bSmart )
@@ -1467,7 +1467,7 @@ DocTempl_EntryData_Impl* RegionData_Impl::GetEntry( const OUString& rName ) cons
     if ( bFound )
         return maEntries[ nPos ];
     else
-        return NULL;
+        return nullptr;
 }
 
 
@@ -1475,7 +1475,7 @@ DocTempl_EntryData_Impl* RegionData_Impl::GetEntry( size_t nIndex ) const
 {
     if ( nIndex < maEntries.size() )
         return maEntries[ nIndex ];
-    return NULL;
+    return nullptr;
 }
 
 
@@ -1511,7 +1511,7 @@ SfxDocTemplate_Impl::~SfxDocTemplate_Impl()
 {
     Clear();
 
-    gpTemplateData = NULL;
+    gpTemplateData = nullptr;
 }
 
 
@@ -1534,7 +1534,7 @@ RegionData_Impl* SfxDocTemplate_Impl::GetRegion( size_t nIndex ) const
 {
     if ( nIndex < maRegions.size() )
         return maRegions[ nIndex ];
-    return NULL;
+    return nullptr;
 }
 
 
@@ -1547,7 +1547,7 @@ RegionData_Impl* SfxDocTemplate_Impl::GetRegion( const OUString& rName )
         if( pData->GetTitle() == rName )
             return pData;
     }
-    return NULL;
+    return nullptr;
 }
 
 

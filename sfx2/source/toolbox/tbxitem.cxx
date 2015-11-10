@@ -116,7 +116,7 @@ static vcl::Window* GetTopMostParentSystemWindow( vcl::Window* pWindow )
         // ->manually search topmost system window
         // required because their might be another system window between this and the top window
         pWindow = pWindow->GetParent();
-        SystemWindow* pTopMostSysWin = NULL;
+        SystemWindow* pTopMostSysWin = nullptr;
         while ( pWindow )
         {
             if ( pWindow->IsSystemWindow() )
@@ -128,7 +128,7 @@ static vcl::Window* GetTopMostParentSystemWindow( vcl::Window* pWindow )
         return pWindow;
     }
 
-    return NULL;
+    return nullptr;
 }
 
 svt::ToolboxController* SAL_CALL SfxToolBoxControllerFactory( const Reference< XFrame >& rFrame, ToolBox* pToolbox, unsigned short nID, const OUString& aCommandURL )
@@ -140,9 +140,9 @@ svt::ToolboxController* SAL_CALL SfxToolBoxControllerFactory( const Reference< X
     Reference < XURLTransformer > xTrans( URLTransformer::create( ::comphelper::getProcessComponentContext() ) );
     xTrans->parseStrict( aTargetURL );
     if ( !aTargetURL.Arguments.isEmpty() )
-        return NULL;
+        return nullptr;
 
-    SfxObjectShell* pObjShell = NULL;
+    SfxObjectShell* pObjShell = nullptr;
     Reference < XController > xController;
     Reference < XModel > xModel;
     if ( rFrame.is() )
@@ -165,8 +165,8 @@ svt::ToolboxController* SAL_CALL SfxToolBoxControllerFactory( const Reference< X
         }
     }
 
-    SfxModule*     pModule   = pObjShell ? pObjShell->GetModule() : NULL;
-    SfxSlotPool*   pSlotPool = 0;
+    SfxModule*     pModule   = pObjShell ? pObjShell->GetModule() : nullptr;
+    SfxSlotPool*   pSlotPool = nullptr;
 
     if ( pModule )
         pSlotPool = pModule->GetSlotPool();
@@ -181,7 +181,7 @@ svt::ToolboxController* SAL_CALL SfxToolBoxControllerFactory( const Reference< X
             return SfxToolBoxControl::CreateControl( nSlotId, nID, pToolbox, pModule );
     }
 
-    return NULL;
+    return nullptr;
 }
 
 struct SfxToolBoxControl_Impl
@@ -222,11 +222,11 @@ SfxToolBoxControl::SfxToolBoxControl(
 
     pImpl->pBox = &rBox;
     pImpl->bShowString = bShowStringItems;
-    pImpl->pFact = 0;
+    pImpl->pFact = nullptr;
     pImpl->nTbxId = nID;
     pImpl->nSlotId = nSlotID;
-    pImpl->mpFloatingWindow = 0;
-    pImpl->mpPopupWindow = 0;
+    pImpl->mpFloatingWindow = nullptr;
+    pImpl->mpPopupWindow = nullptr;
 }
 
 
@@ -263,7 +263,7 @@ void SAL_CALL SfxToolBoxControl::dispose() throw (css::uno::RuntimeException, st
     // Remove and destroy our item window at our toolbox
     SolarMutexGuard aGuard;
     VclPtr< vcl::Window > pWindow = pImpl->pBox->GetItemWindow( pImpl->nTbxId );
-    pImpl->pBox->SetItemWindow( pImpl->nTbxId, 0 );
+    pImpl->pBox->SetItemWindow( pImpl->nTbxId, nullptr );
     pWindow.disposeAndClear();
 
     // Delete my popup windows
@@ -349,7 +349,7 @@ SfxToolBoxControl* SfxToolBoxControl::CreateControl( sal_uInt16 nSlotId, sal_uIn
         }
     }
 
-    return NULL;
+    return nullptr;
 }
 
 SfxItemState SfxToolBoxControl::GetItemState(
@@ -440,7 +440,7 @@ throw( css::uno::RuntimeException, std::exception )
 void SAL_CALL SfxToolBoxControl::statusChanged( const FeatureStateEvent& rEvent )
 throw ( css::uno::RuntimeException, std::exception )
 {
-    SfxViewFrame* pViewFrame = NULL;
+    SfxViewFrame* pViewFrame = nullptr;
     Reference < XController > xController;
 
     SolarMutexGuard aGuard;
@@ -454,7 +454,7 @@ throw ( css::uno::RuntimeException, std::exception )
         if ( xDisp.is() )
         {
             Reference< XUnoTunnel > xTunnel( xDisp, UNO_QUERY );
-            SfxOfficeDispatch* pDisp = NULL;
+            SfxOfficeDispatch* pDisp = nullptr;
             if ( xTunnel.is() )
             {
                 sal_Int64 nImplementation = xTunnel->getSomething(SfxOfficeDispatch::impl_getStaticIdentifier());
@@ -481,7 +481,7 @@ throw ( css::uno::RuntimeException, std::exception )
         else
         {
             SfxItemState eState = SfxItemState::DISABLED;
-            SfxPoolItem* pItem = NULL;
+            SfxPoolItem* pItem = nullptr;
             if ( rEvent.IsEnabled )
             {
                 eState = SfxItemState::DEFAULT;
@@ -650,9 +650,9 @@ IMPL_LINK_NOARG_TYPED(SfxToolBoxControl, PopupModeEndHdl, FloatingWindow*, void)
 IMPL_LINK_TYPED( SfxToolBoxControl, ClosePopupWindow, SfxPopupWindow *, pWindow, void )
 {
     if ( pWindow == pImpl->mpFloatingWindow )
-        pImpl->mpFloatingWindow = 0;
+        pImpl->mpFloatingWindow = nullptr;
     else
-        pImpl->mpPopupWindow = 0;
+        pImpl->mpPopupWindow = nullptr;
 }
 
 
@@ -737,7 +737,7 @@ void SfxToolBoxControl::Click()
 
 VclPtr<SfxPopupWindow> SfxToolBoxControl::CreatePopupWindow()
 {
-    return 0;
+    return nullptr;
 }
 
 VclPtr<vcl::Window> SfxToolBoxControl::CreateItemWindow( vcl::Window * )
@@ -781,7 +781,7 @@ SfxFrameStatusListener::~SfxFrameStatusListener()
 void SAL_CALL SfxFrameStatusListener::statusChanged( const css::frame::FeatureStateEvent& rEvent )
 throw ( css::uno::RuntimeException, std::exception )
 {
-    SfxViewFrame* pViewFrame = NULL;
+    SfxViewFrame* pViewFrame = nullptr;
     Reference < XController > xController;
 
     SolarMutexGuard aGuard;
@@ -795,7 +795,7 @@ throw ( css::uno::RuntimeException, std::exception )
         if ( xDisp.is() )
         {
             Reference< XUnoTunnel > xTunnel( xDisp, UNO_QUERY );
-            SfxOfficeDispatch* pDisp = NULL;
+            SfxOfficeDispatch* pDisp = nullptr;
             if ( xTunnel.is() )
             {
                 sal_Int64 nImplementation = xTunnel->getSomething(SfxOfficeDispatch::impl_getStaticIdentifier());
@@ -823,7 +823,7 @@ throw ( css::uno::RuntimeException, std::exception )
         else
         {
             SfxItemState eState = SfxItemState::DISABLED;
-            SfxPoolItem* pItem = NULL;
+            SfxPoolItem* pItem = nullptr;
             if ( rEvent.IsEnabled )
             {
                 eState = SfxItemState::DEFAULT;
@@ -907,7 +907,7 @@ SfxPopupWindow::SfxPopupWindow(
     , m_bCascading( false )
     , m_nId( nId )
     , m_xFrame( rFrame )
-    , m_pStatusListener( 0 )
+    , m_pStatusListener( nullptr )
 {
     vcl::Window* pWindow = GetTopMostParentSystemWindow( this );
     if ( pWindow )
@@ -921,7 +921,7 @@ SfxPopupWindow::SfxPopupWindow(sal_uInt16 nId, const OString& rID, const OUStrin
     , m_bCascading( false )
     , m_nId( nId )
     , m_xFrame( rFrame )
-    , m_pStatusListener( 0 )
+    , m_pStatusListener( nullptr )
 {
     vcl::Window* pWindow = GetTopMostParentSystemWindow( this );
     if ( pWindow )
@@ -938,7 +938,7 @@ SfxPopupWindow::SfxPopupWindow(
     , m_bCascading( false )
     , m_nId( nId )
     , m_xFrame( rFrame )
-    , m_pStatusListener( 0 )
+    , m_pStatusListener( nullptr )
 {
     vcl::Window* pWindow = GetTopMostParentSystemWindow( this );
     if ( pWindow )
@@ -955,7 +955,7 @@ SfxPopupWindow::SfxPopupWindow(
     , m_bCascading( false )
     , m_nId( nId )
     , m_xFrame( rFrame )
-    , m_pStatusListener( 0 )
+    , m_pStatusListener( nullptr )
 {
     vcl::Window* pWindow = GetTopMostParentSystemWindow( this );
     if ( pWindow )
@@ -1184,7 +1184,7 @@ VclPtr<SfxPopupWindow> SfxRecentFilesToolBoxControl::CreatePopupWindow()
         rBox.SetItemDown( nItemId, false );
     }
 
-    return 0;
+    return nullptr;
 }
 
 SfxSaveAsToolBoxControl::SfxSaveAsToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rBox )
@@ -1233,7 +1233,7 @@ VclPtr<SfxPopupWindow> SfxSaveAsToolBoxControl::CreatePopupWindow()
         rBox.SetItemDown( nItemId, false );
     }
 
-    return 0;
+    return nullptr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

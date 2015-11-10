@@ -74,30 +74,30 @@ public:
                          */
                         SfxMedium( const OUString &rName,
                                    StreamMode nOpenMode,
-                                   const SfxFilter *pFilter = 0,
-                                   SfxItemSet *pSet = 0 );
+                                   const SfxFilter *pFilter = nullptr,
+                                   SfxItemSet *pSet = nullptr );
                         /**
                          * @param pSet Takes ownership
                          */
                         SfxMedium( const OUString &rName,
                                    const OUString &rReferer,
                                    StreamMode nOpenMode,
-                                   const SfxFilter *pFilter = 0,
-                                   SfxItemSet *pSet = 0 );
+                                   const SfxFilter *pFilter = nullptr,
+                                   SfxItemSet *pSet = nullptr );
 
                         /**
                          * @param pSet does NOT take ownership
                          */
                         SfxMedium( const css::uno::Reference< css::embed::XStorage >& xStorage,
                                     const OUString& rBaseURL,
-                                    const SfxItemSet* pSet=0 );
+                                    const SfxItemSet* pSet=nullptr );
                         /**
                          * @param pSet does NOT take ownership
                          */
                         SfxMedium( const css::uno::Reference< css::embed::XStorage >& xStorage,
                                     const OUString& rBaseURL,
                                     const OUString& rTypeName,
-                                    const SfxItemSet* pSet=0 );
+                                    const SfxItemSet* pSet=nullptr );
                         SfxMedium( const css::uno::Sequence< css::beans::PropertyValue >& aArgs );
 
                         virtual ~SfxMedium();

@@ -83,7 +83,7 @@ private:
     void            SetPasswdText();
 
 public:
-    SfxPasswordDialog(vcl::Window* pParent, const OUString* pGroupText = NULL);
+    SfxPasswordDialog(vcl::Window* pParent, const OUString* pGroupText = nullptr);
     virtual ~SfxPasswordDialog();
     virtual void dispose() override;
 

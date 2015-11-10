@@ -51,7 +51,7 @@ public:
     /** returns <TRUE/> if and only if the instance is currently bound to a non-<NULL/>
         BasicManager.
     */
-    bool    isValid() const { return mpBasicManager != NULL; }
+    bool    isValid() const { return mpBasicManager != nullptr; }
 
     /** returns the BasicManager which this instance is currently bound to
     */

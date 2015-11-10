@@ -96,7 +96,7 @@ BackingWindow::BackingWindow( vcl::Window* i_pParent ) :
     mbIsSaveMode( false ),
     mbInitControls( false ),
     mnHideExternalLinks( 0 ),
-    mpAccExec( NULL ),
+    mpAccExec( nullptr ),
     maSelTemplates(cmpSelectionItems),
     maSelFolders(cmpSelectionItems)
 
@@ -658,7 +658,7 @@ IMPL_LINK_TYPED(BackingWindow, OpenTemplateHdl, ThumbnailViewItem*, pItem, void)
         aArgs[2].Name = "UpdateDocMode";
         aArgs[2].Value <<= UpdateDocMode::ACCORDING_TO_CONFIG;
         aArgs[3].Name = "InteractionHandler";
-        aArgs[3].Value <<= task::InteractionHandler::createWithParent( ::comphelper::getProcessComponentContext(), 0 );
+        aArgs[3].Value <<= task::InteractionHandler::createWithParent( ::comphelper::getProcessComponentContext(), nullptr );
 
         TemplateViewItem *pTemplateItem = static_cast<TemplateViewItem*>(pItem);
 
@@ -736,7 +736,7 @@ void BackingWindow::dispatchURL( const OUString& i_rURL,
         if ( xDispatch.is() )
         {
             ImplDelayedDispatch* pDisp = new ImplDelayedDispatch( xDispatch, aDispatchURL, i_rArgs );
-            if( Application::PostUserEvent( Link<void*,void>( NULL, implDispatchDelayed ), pDisp ) == 0 )
+            if( Application::PostUserEvent( Link<void*,void>( nullptr, implDispatchDelayed ), pDisp ) == nullptr )
                 delete pDisp; // event could not be posted for unknown reason, at least don't leak
         }
     }

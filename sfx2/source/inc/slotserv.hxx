@@ -46,7 +46,7 @@ inline SfxSlotServer::SfxSlotServer( const SfxSlot &rSlot, sal_uInt16 nShell ):
 }
 
 inline SfxSlotServer::SfxSlotServer():
-    _pSlot(0),
+    _pSlot(nullptr),
     _nShellLevel(0)
 {
 }

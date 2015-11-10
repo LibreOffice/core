@@ -44,7 +44,7 @@ SidebarChildWindow::SidebarChildWindow (vcl::Window* pParentWindow, sal_uInt16 n
     GetWindow()->SetOutputSizePixel(Size(GetDefaultWidth(GetWindow()), 450));
 
     SfxDockingWindow* pDockingParent = dynamic_cast<SfxDockingWindow*>(GetWindow());
-    if (pDockingParent != NULL)
+    if (pDockingParent != nullptr)
     {
         if (pInfo && pInfo->aExtraString.isEmpty() && pInfo->aModule != "sdraw" && pInfo->aModule != "simpress")
         {
@@ -66,7 +66,7 @@ SidebarChildWindow::SidebarChildWindow (vcl::Window* pParentWindow, sal_uInt16 n
 
 sal_Int32 SidebarChildWindow::GetDefaultWidth (vcl::Window* pWindow)
 {
-    if (pWindow != NULL)
+    if (pWindow != nullptr)
     {
         // Width of the paragraph panel.
         const static sal_Int32 nMaxPropertyPageWidth (115);

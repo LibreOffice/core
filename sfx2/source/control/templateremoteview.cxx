@@ -49,7 +49,7 @@ TemplateRemoteView::TemplateRemoteView (vcl::Window *pParent, WinBits nWinStyle,
 {
     Reference< XComponentContext > xContext = comphelper::getProcessComponentContext();
     Reference< XInteractionHandler > xGlobalInteractionHandler(
-        InteractionHandler::createWithParent(xContext, 0), UNO_QUERY_THROW );
+        InteractionHandler::createWithParent(xContext, nullptr), UNO_QUERY_THROW );
 
     m_xCmdEnv = new ucbhelper::CommandEnvironment( xGlobalInteractionHandler, Reference< XProgressHandler >() );
 }

@@ -739,7 +739,7 @@ bool SfxObjectShell::DoLoad( SfxMedium *pMed )
         else
             SetError( pMed->GetLastStorageCreationState(), OSL_LOG_PREFIX );
     }
-    else if ( GetError() == ERRCODE_NONE && InitNew(0) )
+    else if ( GetError() == ERRCODE_NONE && InitNew(nullptr) )
     {
         // Name vor ConvertFrom setzen, damit GetSbxObject() schon funktioniert
         bHasName = true;
@@ -767,7 +767,7 @@ bool SfxObjectShell::DoLoad( SfxMedium *pMed )
                 {
                     bSetProperty = false;
                 }
-                bOk = ImportFrom(*pMedium, 0);
+                bOk = ImportFrom(*pMedium, nullptr);
                 if(bSetProperty)
                 {
                     try
@@ -1680,7 +1680,7 @@ bool SfxObjectShell::SaveTo_Impl
                     // if the old medium already disconnected from document storage, the storage still must
                     // be switched if backup file is used
                     if ( bNeedsDisconnectionOnFail )
-                        ConnectTmpStorage_Impl( pImp->m_xDocStorage, NULL );
+                        ConnectTmpStorage_Impl( pImp->m_xDocStorage, nullptr );
                 }
                 else if (!pMedium->GetName().isEmpty()
                   || ( pMedium->HasStorage_Impl() && pMedium->WillDisposeStorageOnClose_Impl() ) )
@@ -1701,7 +1701,7 @@ bool SfxObjectShell::SaveTo_Impl
 
             // in case the document storage was connected to backup temporarely it must be disconnected now
             if ( bNeedsDisconnectionOnFail )
-                ConnectTmpStorage_Impl( pImp->m_xDocStorage, NULL );
+                ConnectTmpStorage_Impl( pImp->m_xDocStorage, nullptr );
         }
     }
 
@@ -1944,7 +1944,7 @@ bool SfxObjectShell::DoSaveAs( SfxMedium& rMedium )
     if ( pImp->bPreserveVersions )
         rMedium.TransferVersionList_Impl( *pMedium );
 
-    bool bRet = SaveTo_Impl( rMedium, NULL );
+    bool bRet = SaveTo_Impl( rMedium, nullptr );
     if ( !bRet )
         SetError(rMedium.GetErrorCode(), OSL_LOG_PREFIX );
     return bRet;
@@ -1967,7 +1967,7 @@ bool SfxObjectShell::DoSaveCompleted( SfxMedium* pNewMed )
         pMedium->CanDisposeStorage_Impl( true );
     }
 
-    const SfxFilter *pFilter = pMedium ? pMedium->GetFilter() : 0;
+    const SfxFilter *pFilter = pMedium ? pMedium->GetFilter() : nullptr;
     if ( pNewMed )
     {
         if( bMedChanged )
@@ -2042,11 +2042,11 @@ bool SfxObjectShell::DoSaveCompleted( SfxMedium* pNewMed )
                 bOk = SaveCompletedChildren( false );
             }
             else
-                bOk = SaveCompleted( NULL );
+                bOk = SaveCompleted( nullptr );
         }
         // either Save or ConvertTo
         else
-            bOk = SaveCompleted( NULL );
+            bOk = SaveCompleted( nullptr );
     }
 
     if ( bOk && pNewMed )
@@ -2587,7 +2587,7 @@ bool SfxObjectShell::Save_Impl( const SfxItemSet* pSet )
     {
         const SfxStringItem* pFilterItem = SfxItemSet::GetItem<SfxStringItem>(GetMedium()->GetItemSet(), SID_FILTER_NAME, false);
         OUString aFilterName;
-        const SfxFilter *pFilter = NULL;
+        const SfxFilter *pFilter = nullptr;
         if ( pFilterItem )
             pFilter = SfxFilterMatcher( OUString::createFromAscii( GetFactory().GetShortName()) ).GetFilter4FilterName( aFilterName );
 
@@ -2620,7 +2620,7 @@ bool SfxObjectShell::CommonSaveAs_Impl(const INetURLObject& aURL, const OUString
     if ( aURL != INetURLObject( OUString( "private:stream"  ) ) )
     {
         // Is there already a Document with this name?
-        SfxObjectShell* pDoc = 0;
+        SfxObjectShell* pDoc = nullptr;
         for ( SfxObjectShell* pTmp = SfxObjectShell::GetFirst();
                 pTmp && !pDoc;
                 pTmp = SfxObjectShell::GetNext(*pTmp) )
@@ -2785,7 +2785,7 @@ bool SfxObjectShell::PreDoSaveAs_Impl(const OUString& rFileName, const OUString&
     pMergedParams->ClearItem( SID_DOC_SALVAGE );
 
     // create a medium for the target URL
-    SfxMedium *pNewFile = new SfxMedium( rFileName, STREAM_READWRITE | StreamMode::SHARE_DENYWRITE | StreamMode::TRUNC, 0, pMergedParams );
+    SfxMedium *pNewFile = new SfxMedium( rFileName, STREAM_READWRITE | StreamMode::SHARE_DENYWRITE | StreamMode::TRUNC, nullptr, pMergedParams );
 
     // set filter; if no filter is given, take the default filter of the factory
     if ( !aFilterName.isEmpty() )
@@ -2814,7 +2814,7 @@ bool SfxObjectShell::PreDoSaveAs_Impl(const OUString& rFileName, const OUString&
 
     // Save the document ( first as temporary file, then transfer to the target URL by committing the medium )
     bool bOk = false;
-    if ( !pNewFile->GetErrorCode() && SaveTo_Impl( *pNewFile, NULL ) )
+    if ( !pNewFile->GetErrorCode() && SaveTo_Impl( *pNewFile, nullptr ) )
     {
         // transfer a possible error from the medium to the document
         SetError( pNewFile->GetErrorCode(), OSL_LOG_PREFIX );
@@ -3207,7 +3207,7 @@ bool SfxObjectShell::SaveCompleted( const uno::Reference< embed::XStorage >& xSt
     uno::Reference< embed::XStorage > xOldStorageHolder;
 
     // check for wrong creation of object container
-    bool bHasContainer = ( pImp->mpObjectContainer != 0 );
+    bool bHasContainer = ( pImp->mpObjectContainer != nullptr );
 
     if ( !xStorage.is() || xStorage == GetStorage() )
     {
@@ -3228,7 +3228,7 @@ bool SfxObjectShell::SaveCompleted( const uno::Reference< embed::XStorage >& xSt
         {
             // make sure that until the storage is assigned the object
             // container is not created by accident!
-            DBG_ASSERT( bHasContainer == (pImp->mpObjectContainer != 0), "Wrong storage in object container!" );
+            DBG_ASSERT( bHasContainer == (pImp->mpObjectContainer != nullptr), "Wrong storage in object container!" );
             xOldStorageHolder = pImp->m_xDocStorage;
             pImp->m_xDocStorage = xStorage;
             bSendNotification = true;
@@ -3350,7 +3350,7 @@ bool SfxObjectShell::SwitchPersistance( const uno::Reference< embed::XStorage >&
 {
     bool bResult = false;
     // check for wrong creation of object container
-    bool bHasContainer = ( pImp->mpObjectContainer != 0 );
+    bool bHasContainer = ( pImp->mpObjectContainer != nullptr );
     if ( xStorage.is() )
     {
         if ( pImp->mpObjectContainer )
@@ -3365,7 +3365,7 @@ bool SfxObjectShell::SwitchPersistance( const uno::Reference< embed::XStorage >&
     if ( bResult )
     {
         // make sure that until the storage is assigned the object container is not created by accident!
-        DBG_ASSERT( bHasContainer == (pImp->mpObjectContainer != 0), "Wrong storage in object container!" );
+        DBG_ASSERT( bHasContainer == (pImp->mpObjectContainer != nullptr), "Wrong storage in object container!" );
         if ( pImp->m_xDocStorage != xStorage )
             DoSaveCompleted( new SfxMedium( xStorage, GetMedium()->GetBaseURL() ) );
 

@@ -35,7 +35,7 @@ class SFX2_DLLPUBLIC MSE40HTMLClipFormatObj
     OUString  sBaseURL;
 
 public:
-    MSE40HTMLClipFormatObj() : pStrm(0)         {}
+    MSE40HTMLClipFormatObj() : pStrm(nullptr)         {}
     ~MSE40HTMLClipFormatObj();
 
     SvStream* IsValid( SvStream& );

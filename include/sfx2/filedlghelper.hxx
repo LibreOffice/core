@@ -100,7 +100,7 @@ private:
 public:
                             FileDialogHelper( sal_Int16 nDialogType,
                                               sal_Int64 nFlags,
-                                              vcl::Window* _pPreferredParent = NULL );
+                                              vcl::Window* _pPreferredParent = nullptr );
 
                             FileDialogHelper( sal_Int16 nDialogType,
                                               sal_Int64 nFlags,
@@ -123,7 +123,7 @@ public:
                                               const OUString& aExtName,
                                               const OUString& rStandardDir,
                                               const css::uno::Sequence< OUString >& rBlackList,
-                                              vcl::Window* _pPreferredParent = NULL );
+                                              vcl::Window* _pPreferredParent = nullptr );
 
 
     virtual                 ~FileDialogHelper();
@@ -242,7 +242,7 @@ ErrCode FileOpenDialog_Impl( sal_Int16 nDialogType,
                              std::vector<OUString>& rpURLList,
                              OUString& rFilter,
                              SfxItemSet *& rpSet,
-                             const OUString* pPath = NULL,
+                             const OUString* pPath = nullptr,
                              sal_Int16 nDialog = SFX2_IMPL_DIALOG_CONFIG,
                              const OUString& rStandardDir = OUString(),
                              const css::uno::Sequence< OUString >& rBlackList = css::uno::Sequence< OUString >());

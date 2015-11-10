@@ -24,13 +24,13 @@ namespace sfx2 { namespace sidebar {
 
 AsynchronousCall::AsynchronousCall()
     : maAction(),
-      mnCallId(0)
+      mnCallId(nullptr)
 {
 }
 
 AsynchronousCall::AsynchronousCall (const Action& rAction)
     : maAction(rAction),
-      mnCallId(0)
+      mnCallId(nullptr)
 {
 }
 
@@ -41,7 +41,7 @@ AsynchronousCall::~AsynchronousCall()
 
 void AsynchronousCall::RequestCall()
 {
-    if (mnCallId == 0)
+    if (mnCallId == nullptr)
     {
         Link<void*,void> aLink (LINK(this, AsynchronousCall, HandleUserCall));
         mnCallId = Application::PostUserEvent(aLink);
@@ -50,16 +50,16 @@ void AsynchronousCall::RequestCall()
 
 void AsynchronousCall::CancelRequest()
 {
-    if (mnCallId != 0)
+    if (mnCallId != nullptr)
     {
         Application::RemoveUserEvent(mnCallId);
-        mnCallId = 0;
+        mnCallId = nullptr;
     }
 }
 
 IMPL_LINK_NOARG_TYPED(AsynchronousCall, HandleUserCall, void*, void )
 {
-    mnCallId = 0;
+    mnCallId = nullptr;
     if (maAction)
         maAction();
 }

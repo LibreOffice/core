@@ -59,7 +59,7 @@ using namespace css;
 
 SvMemoryStream* GraphicHelper::getFormatStrFromGDI_Impl( const GDIMetaFile* pGDIMeta, ConvertDataFormat nFormat )
 {
-    SvMemoryStream* pResult = NULL;
+    SvMemoryStream* pResult = nullptr;
     if ( pGDIMeta )
     {
         SvMemoryStream* pStream = new SvMemoryStream( 65535, 65535 );
@@ -78,7 +78,7 @@ SvMemoryStream* GraphicHelper::getFormatStrFromGDI_Impl( const GDIMetaFile* pGDI
 void* GraphicHelper::getEnhMetaFileFromGDI_Impl( const GDIMetaFile* pGDIMeta )
 {
     (void)pGDIMeta;  // unused
-    void* pResult = NULL;
+    void* pResult = nullptr;
 
 #ifdef WNT
     if ( pGDIMeta )
@@ -113,7 +113,7 @@ void* GraphicHelper::getWinMetaFileFromGDI_Impl( const GDIMetaFile* pGDIMeta, co
 {
     (void)pGDIMeta;  // unused
     (void)aMetaSize; // unused
-    void* pResult = NULL;
+    void* pResult = nullptr;
 
 #ifdef WNT
     if ( pGDIMeta )

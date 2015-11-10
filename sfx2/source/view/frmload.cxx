@@ -211,7 +211,7 @@ const SfxFilter* SfxFrameLoader_Impl::impl_detectFilterForURL( const OUString& s
     try
     {
         if ( sURL.isEmpty() )
-            return 0;
+            return nullptr;
 
         Reference< XTypeDetection > xDetect(
             m_aContext->getServiceManager()->createInstanceWithContext("com.sun.star.document.TypeDetection", m_aContext),
@@ -244,7 +244,7 @@ const SfxFilter* SfxFrameLoader_Impl::impl_detectFilterForURL( const OUString& s
         sFilter.clear();
     }
 
-    const SfxFilter* pFilter = 0;
+    const SfxFilter* pFilter = nullptr;
     if (!sFilter.isEmpty())
         pFilter = rMatcher.GetFilter4FilterName(sFilter);
     return pFilter;
@@ -292,7 +292,7 @@ const SfxFilter* SfxFrameLoader_Impl::impl_getFilterFromServiceName_nothrow( con
     {
         DBG_UNHANDLED_EXCEPTION();
     }
-    return NULL;
+    return nullptr;
 }
 
 
@@ -361,7 +361,7 @@ void SfxFrameLoader_Impl::impl_determineFilter( ::comphelper::NamedValueCollecti
                               xInteraction = io_rDescriptor.getOrDefault( "InteractionHandler", Reference< XInteractionHandler >() );
 
     const SfxFilterMatcher& rMatcher = SfxGetpApp()->GetFilterMatcher();
-    const SfxFilter* pFilter = NULL;
+    const SfxFilter* pFilter = nullptr;
 
     // get filter by its name directly ...
     if ( !sFilterName.isEmpty() )
@@ -412,7 +412,7 @@ SfxObjectShellRef SfxFrameLoader_Impl::impl_findObjectShell( const Reference< XM
     }
 
     SAL_WARN( "sfx.view", "SfxFrameLoader_Impl::impl_findObjectShell: model is not based on SfxObjectShell - wrong frame loader usage!" );
-    return NULL;
+    return nullptr;
 }
 
 

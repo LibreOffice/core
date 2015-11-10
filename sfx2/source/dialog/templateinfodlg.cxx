@@ -76,7 +76,7 @@ void SfxTemplateInfoDlg::loadDocument(const OUString &rURL)
     try
     {
         uno::Reference<task::XInteractionHandler2> xInteractionHandler(
-            task::InteractionHandler::createWithParent(xContext, 0) );
+            task::InteractionHandler::createWithParent(xContext, nullptr) );
 
         uno::Sequence<beans::PropertyValue> aProps(1);
         aProps[0].Name = "InteractionHandler";

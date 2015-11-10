@@ -171,7 +171,7 @@ void SAL_CALL ImeStatusWindow::disposing(css::lang::EventObject const & )
     throw (css::uno::RuntimeException, std::exception)
 {
     osl::MutexGuard aGuard(m_aMutex);
-    m_xConfig = 0;
+    m_xConfig = nullptr;
     m_bDisposed = true;
 }
 
@@ -198,7 +198,7 @@ css::uno::Reference< css::beans::XPropertySet > ImeStatusWindow::getConfig()
             if (!m_xContext.is())
                 throw css::uno::RuntimeException(
                     OUString("null comphelper::getProcessServiceFactory"),
-                    0);
+                    nullptr);
             css::uno::Reference< css::lang::XMultiServiceFactory > xProvider =
                 css::configuration::theDefaultProvider::get( m_xContext );
             css::beans::PropertyValue aArg(
@@ -219,7 +219,7 @@ css::uno::Reference< css::beans::XPropertySet > ImeStatusWindow::getConfig()
                     OUString(
                                       "null com.sun.star.configuration."
                                       "ConfigurationUpdateAccess"),
-                    0);
+                    nullptr);
             bAdd = true;
         }
         xConfig = m_xConfig;

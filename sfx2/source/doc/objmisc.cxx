@@ -403,7 +403,7 @@ bool SfxObjectShell::IsReadOnlyMedium() const
 
 bool SfxObjectShell::IsOriginallyReadOnlyMedium() const
 {
-    return pMedium == 0 || pMedium->IsOriginallyReadOnly();
+    return pMedium == nullptr || pMedium->IsOriginallyReadOnly();
 }
 
 
@@ -454,7 +454,7 @@ void SfxObjectShell::SetReadOnly()
 
 bool SfxObjectShell::IsReadOnly() const
 {
-    return pImp->bReadOnlyUI || pMedium == 0;
+    return pImp->bReadOnlyUI || pMedium == nullptr;
 }
 
 
@@ -1337,9 +1337,9 @@ void SfxObjectShell::TemplateDisconnectionAfterLoad()
             // setting the new storage the medium will be based on
             pTmpMedium->SetStorage_Impl( xTmpStor );
 
-            pMedium = 0;
+            pMedium = nullptr;
             bool ok = DoSaveCompleted( pTmpMedium );
-            assert(pMedium != 0);
+            assert(pMedium != nullptr);
             if( ok )
             {
                 const SfxStringItem* pSalvageItem = SfxItemSet::GetItem<SfxStringItem>(pMedium->GetItemSet(), SID_DOC_SALVAGE, false);
@@ -1456,13 +1456,13 @@ void AutoReloadTimer_Impl::Invoke()
                 SfxStringItem(SID_REFERER, pObjSh->GetMedium()->GetName()));
         }
         SfxRequest aReq( SID_RELOAD, SfxCallMode::SLOT, aSet );
-        pObjSh->Get_Impl()->pReloadTimer = 0;
+        pObjSh->Get_Impl()->pReloadTimer = nullptr;
         delete this;
         pFrame->ExecReload_Impl( aReq );
         return;
     }
 
-    pObjSh->Get_Impl()->pReloadTimer = 0;
+    pObjSh->Get_Impl()->pReloadTimer = nullptr;
     delete this;
 }
 
@@ -1570,7 +1570,7 @@ ErrCode SfxObjectShell::CallXScript( const Reference< XInterface >& _rxScriptCon
         std::unique_ptr< VclAbstractDialog > pScriptErrDlg;
         SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
         if ( pFact )
-            pScriptErrDlg.reset( pFact->CreateScriptErrorDialog( NULL, aException ) );
+            pScriptErrDlg.reset( pFact->CreateScriptErrorDialog( nullptr, aException ) );
         OSL_ENSURE( pScriptErrDlg.get(), "SfxObjectShell::CallXScript: no script error dialog!" );
 
         if ( pScriptErrDlg.get() )
@@ -1748,7 +1748,7 @@ bool SfxObjectShell::AdjustMacroMode( const OUString& /*rScriptType*/, bool bSup
 
 vcl::Window* SfxObjectShell::GetDialogParent( SfxMedium* pLoadingMedium )
 {
-    vcl::Window* pWindow = 0;
+    vcl::Window* pWindow = nullptr;
     SfxItemSet* pSet = pLoadingMedium ? pLoadingMedium->GetItemSet() : GetMedium()->GetItemSet();
     const SfxUnoFrameItem* pUnoItem = SfxItemSet::GetItem<SfxUnoFrameItem>(pSet, SID_FILLFRAME, false);
     if ( pUnoItem )
@@ -1759,7 +1759,7 @@ vcl::Window* SfxObjectShell::GetDialogParent( SfxMedium* pLoadingMedium )
 
     if ( !pWindow )
     {
-        SfxFrame* pFrame = 0;
+        SfxFrame* pFrame = nullptr;
         const SfxFrameItem* pFrameItem = SfxItemSet::GetItem<SfxFrameItem>(pSet, SID_DOCFRAME, false);
         if( pFrameItem && pFrameItem->GetFrame() )
             // get target frame from ItemSet

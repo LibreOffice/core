@@ -172,7 +172,7 @@ public:
     //  constructor/destructor
 
 
-    SfxBaseModel( SfxObjectShell *pObjectShell = NULL ) ;
+    SfxBaseModel( SfxObjectShell *pObjectShell = nullptr ) ;
 
     virtual ~SfxBaseModel() ;
 

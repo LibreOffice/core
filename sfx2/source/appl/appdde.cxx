@@ -402,7 +402,7 @@ bool SfxObjectShell::DdeSetData( const OUString&,                    // the Item
 */
 ::sfx2::SvLinkSource* SfxObjectShell::DdeCreateLinkSource( const OUString& ) // the Item to be addressed
 {
-    return 0;
+    return nullptr;
 }
 
 void SfxObjectShell::ReconnectDdeLink(SfxObjectShell& /*rServer*/)

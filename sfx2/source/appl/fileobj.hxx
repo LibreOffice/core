@@ -50,7 +50,7 @@ class SvFileObject : public sfx2::SvLinkSource
     bool bStateChangeCalled : 1;
     bool bInCallDownload : 1;
 
-    bool GetGraphic_Impl( Graphic&, SvStream* pStream = 0 );
+    bool GetGraphic_Impl( Graphic&, SvStream* pStream = nullptr );
     bool LoadFile_Impl();
     void SendStateChg_Impl( sfx2::LinkManager::LinkState nState );
 

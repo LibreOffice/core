@@ -104,7 +104,7 @@ inline sal_uInt16 SfxInterface::Count() const
 
 inline SfxSlot* SfxInterface::operator[]( sal_uInt16 nPos ) const
 {
-    return nPos < nCount? pSlots+nPos: 0;
+    return nPos < nCount? pSlots+nPos: nullptr;
 }
 
 #endif

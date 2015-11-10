@@ -218,7 +218,7 @@ sal_uInt32 CheckPasswd_Impl
 
                 if ( bIsEncrypted )
                 {
-                    vcl::Window* pWin = pDoc ? pDoc->GetDialogParent( pFile ) : NULL;
+                    vcl::Window* pWin = pDoc ? pDoc->GetDialogParent( pFile ) : nullptr;
                     if ( pWin )
                         pWin->Show();
 
@@ -286,7 +286,7 @@ sal_uInt32 CheckPasswd_Impl
 
 sal_uIntPtr SfxApplication::LoadTemplate( SfxObjectShellLock& xDoc, const OUString &rFileName, bool bCopy, SfxItemSet* pSet )
 {
-    const SfxFilter* pFilter = NULL;
+    const SfxFilter* pFilter = nullptr;
     SfxMedium aMedium( rFileName,  ( StreamMode::READ | StreamMode::SHARE_DENYNONE ) );
 
     if ( !aMedium.GetStorage( false ).is() )
@@ -523,7 +523,7 @@ void SfxApplication::NewDocExec_Impl( SfxRequest& rReq )
     {
         SfxCallMode eMode = SfxCallMode::SYNCHRON;
 
-        const SfxPoolItem *pRet=0;
+        const SfxPoolItem *pRet=nullptr;
         SfxStringItem aReferer( SID_REFERER, "private:user" );
         SfxStringItem aTarget( SID_TARGETNAME, "_default" );
         if ( !aTemplateFileName.isEmpty() )
@@ -586,7 +586,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
         const SfxSlot* pSlot = GetInterface()->GetSlot( aCommand );
         if ( pSlot )
         {
-            pFileNameItem = NULL;
+            pFileNameItem = nullptr;
         }
         else
         {
@@ -594,7 +594,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
             {
                 sal_uInt16 nSlotId = (sal_uInt16) aCommand.copy(5).toInt32();
                 if ( nSlotId == SID_OPENDOC )
-                    pFileNameItem = NULL;
+                    pFileNameItem = nullptr;
             }
         }
     }
@@ -604,7 +604,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
         // get FileName from dialog
         std::vector<OUString> pURLList;
         OUString aFilter;
-        SfxItemSet* pSet = NULL;
+        SfxItemSet* pSet = nullptr;
         OUString aPath;
         const SfxStringItem* pFolderNameItem = rReq.GetArg<SfxStringItem>(SID_PATH);
         if ( pFolderNameItem )
@@ -901,7 +901,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
                         try
                         {
                             sfx2::openUriExternally(
-                                aURL.Complete, pFilter == 0);
+                                aURL.Complete, pFilter == nullptr);
                         }
                         catch ( css::system::SystemShellExecuteException& )
                         {
@@ -930,7 +930,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
         return;
     }
 
-    SfxFrame* pTargetFrame = NULL;
+    SfxFrame* pTargetFrame = nullptr;
     Reference< XFrame > xTargetFrame;
 
     const SfxFrameItem* pFrameItem = rReq.GetArg<SfxFrameItem>(SID_DOCFRAME);
@@ -974,7 +974,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
 
         if (!pInteractionItem)
         {
-            Reference < task::XInteractionHandler2 > xHdl = task::InteractionHandler::createWithParent( ::comphelper::getProcessComponentContext(), 0 );
+            Reference < task::XInteractionHandler2 > xHdl = task::InteractionHandler::createWithParent( ::comphelper::getProcessComponentContext(), nullptr );
             rReq.AppendItem( SfxUnoAnyItem(SID_INTERACTIONHANDLER,css::uno::makeAny(xHdl)) );
         }
         if (!pMacroExecItem)
@@ -1021,7 +1021,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
         aFileName = pURLItem->GetValue();
         if( aFileName.startsWith("#") ) // Mark without URL
         {
-            SfxViewFrame *pView = pTargetFrame ? pTargetFrame->GetCurrentViewFrame() : 0;
+            SfxViewFrame *pView = pTargetFrame ? pTargetFrame->GetCurrentViewFrame() : nullptr;
             if ( !pView )
                 pView = SfxViewFrame::Current();
             pView->GetViewShell()->JumpToMark( aFileName.copy(1) );
@@ -1088,7 +1088,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
     if ( xController.is() )
     {
         // try to find the SfxFrame for the controller
-        SfxFrame* pCntrFrame = NULL;
+        SfxFrame* pCntrFrame = nullptr;
         for ( SfxViewShell* pShell = SfxViewShell::GetFirst( false ); pShell; pShell = SfxViewShell::GetNext( *pShell, false ) )
         {
             if ( pShell->GetController() == xController )

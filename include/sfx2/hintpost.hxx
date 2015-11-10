@@ -49,7 +49,7 @@ protected:
 public:
                     SfxHintPoster(const Link<SfxRequest*,void>& rLink);
 
-    void            Post( SfxRequest* pHint = 0 );
+    void            Post( SfxRequest* pHint = nullptr );
     void            SetEventHdl(const Link<SfxRequest*,void>& rLink);
 };
 

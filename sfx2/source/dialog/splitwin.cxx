@@ -205,8 +205,8 @@ SfxSplitWindow::SfxSplitWindow( vcl::Window* pParent, SfxChildAlignment eAl,
     pDockArr( new SfxDockArr_Impl ),
     bLocked(false),
     bPinned(true),
-    pEmptyWin(NULL),
-    pActive(NULL)
+    pEmptyWin(nullptr),
+    pActive(nullptr)
 {
     if ( bWithButtons )
     {
@@ -267,7 +267,7 @@ SfxSplitWindow::SfxSplitWindow( vcl::Window* pParent, SfxChildAlignment eAl,
             for ( sal_uInt16 n=0; n<nCount; n++ )
             {
                 SfxDock_Impl *pDock = new SfxDock_Impl;
-                pDock->pWin = 0;
+                pDock->pWin = nullptr;
                 pDock->bNewLine = false;
                 pDock->bHide = true;
                 pDock->nType = (sal_uInt16) aWinData.getToken(i++, ',').toInt32();
@@ -316,7 +316,7 @@ void SfxSplitWindow::dispose()
     {
         // Set pOwner to NULL, otherwise try to delete pEmptyWin once more. The
         // window that is just being docked is always deleted from the outside.
-        pEmptyWin->pOwner = NULL;
+        pEmptyWin->pOwner = nullptr;
     }
     pEmptyWin.disposeAndClear();
 
@@ -472,7 +472,7 @@ void SfxSplitWindow::InsertWindow( SfxDockingWindow* pDockWin, const Size& rSize
     sal_uInt16 nPos = 0;
     bool bNewLine = true;
     bool bSaveConfig = false;
-    SfxDock_Impl *pFoundDock=0;
+    SfxDock_Impl *pFoundDock=nullptr;
     sal_uInt16 nCount = pDockArr->size();
     for ( sal_uInt16 n=0; n<nCount; n++ )
     {
@@ -842,7 +842,7 @@ void SfxSplitWindow::RemoveWindow( SfxDockingWindow* pDockWin, bool bHide )
         SfxDock_Impl& rDock = (*pDockArr)[n];
         if ( rDock.nType == pDockWin->GetType() )
         {
-            rDock.pWin = 0;
+            rDock.pWin = nullptr;
             rDock.bHide = bHide;
             break;
         }

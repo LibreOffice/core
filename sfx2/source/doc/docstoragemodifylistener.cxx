@@ -55,7 +55,7 @@ namespace sfx2
     void DocumentStorageModifyListener::dispose()
     {
         ::osl::Guard< comphelper::SolarMutex > aGuard( m_rMutex );
-        m_pDocument = NULL;
+        m_pDocument = nullptr;
     }
 
 

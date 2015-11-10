@@ -1373,7 +1373,7 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, uno::Sequence<b
          nSlotId == SID_SAVETO || nSlotId == SID_EXPORTDOCASPDF || nSlotId == SID_DIRECTEXPORTDOCASPDF ||
          nSlotId == SID_SAVEACOPY )
     {
-        const SfxPoolItem *pItem=0;
+        const SfxPoolItem *pItem=nullptr;
         if ( rSet.GetItemState( SID_COMPONENTDATA, false, &pItem ) == SfxItemState::SET )
         {
             pValue[nActProp].Name = sComponentData;

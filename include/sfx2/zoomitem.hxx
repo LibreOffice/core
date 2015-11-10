@@ -71,7 +71,7 @@ public:
     SvxZoomType             GetType() const { return eType; }
     void                    SetType( SvxZoomType eNewType ) { eType = eNewType; }
 
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const override;
+    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
     virtual SfxPoolItem*    Create( SvStream& rStrm, sal_uInt16 nVersion ) const override;
     virtual SvStream&       Store( SvStream& rStrm , sal_uInt16 nItemVersion ) const override;
     virtual bool            operator==( const SfxPoolItem& ) const override;

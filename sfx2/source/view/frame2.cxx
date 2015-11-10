@@ -140,7 +140,7 @@ bool SfxFrameWindow_Impl::PreNotify( NotifyEvent& rNEvt )
     if ( nType == MouseNotifyEvent::KEYINPUT || nType == MouseNotifyEvent::KEYUP )
     {
         SfxViewFrame* pView = pFrame->GetCurrentViewFrame();
-        SfxViewShell* pShell = pView ? pView->GetViewShell() : NULL;
+        SfxViewShell* pShell = pView ? pView->GetViewShell() : nullptr;
         if ( pShell && pShell->HasKeyListeners_Impl() && pShell->HandleNotifyEvent_Impl( rNEvt ) )
             return true;
     }
@@ -148,7 +148,7 @@ bool SfxFrameWindow_Impl::PreNotify( NotifyEvent& rNEvt )
     {
         vcl::Window* pWindow = rNEvt.GetWindow();
         SfxViewFrame* pView = pFrame->GetCurrentViewFrame();
-        SfxViewShell* pShell = pView ? pView->GetViewShell() : NULL;
+        SfxViewShell* pShell = pView ? pView->GetViewShell() : nullptr;
         if ( pShell )
             if ( pWindow == pShell->GetWindow() || pShell->GetWindow()->IsChild( pWindow ) )
                 if ( pShell->HasMouseClickListeners_Impl() && pShell->HandleNotifyEvent_Impl( rNEvt ) )
@@ -223,7 +223,7 @@ Reference < XFrame > SfxFrame::CreateBlankFrame()
 
 SfxFrame* SfxFrame::Create( SfxObjectShell& rDoc, vcl::Window& rWindow, sal_uInt16 nViewId, bool bHidden )
 {
-    SfxFrame* pFrame = NULL;
+    SfxFrame* pFrame = nullptr;
     try
     {
         // create and initialize new top level frame for this window
@@ -293,10 +293,10 @@ SfxFrame* SfxFrame::Create( const Reference < XFrame >& i_rFrame )
 
 SfxFrame::SfxFrame( vcl::Window& i_rContainerWindow, bool i_bHidden )
     :SvCompatWeakBase<SfxFrame>( this )
-    ,pParentFrame( NULL )
-    ,pChildArr( NULL )
-    ,pImp( NULL )
-    ,pWindow( NULL )
+    ,pParentFrame( nullptr )
+    ,pChildArr( nullptr )
+    ,pImp( nullptr )
+    ,pWindow( nullptr )
 {
     Construct_Impl();
 
@@ -347,7 +347,7 @@ SystemWindow* SfxFrame::GetTopWindow_Impl() const
     if ( pImp->pExternalContainerWindow->IsSystemWindow() )
         return static_cast<SystemWindow*>( pImp->pExternalContainerWindow.get() );
     else
-        return NULL;
+        return nullptr;
 }
 
 

@@ -251,7 +251,7 @@ protected:
 
     bool Execute_Impl(sal_uInt16 nId, const OUString& rStr, const OUString& rRefStr,
                       sal_uInt16 nFamily, sal_uInt16 nMask = 0,
-                      sal_uInt16* pIdx = NULL, const sal_uInt16* pModifier = NULL );
+                      sal_uInt16* pIdx = nullptr, const sal_uInt16* pModifier = nullptr );
 
     void UpdateStyles_Impl(sal_uInt16 nFlags);
     const SfxStyleFamilyItem* GetFamilyItem_Impl() const;

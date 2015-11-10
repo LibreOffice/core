@@ -495,7 +495,7 @@ namespace sfx2
 
     Reference< XAccessible > CustomToolPanel::CreatePanelAccessible( const Reference< XAccessible >& i_rParentAccessible )
     {
-        ENSURE_OR_RETURN( m_aCustomPanel.is(), "no panel to ask!", NULL );
+        ENSURE_OR_RETURN( m_aCustomPanel.is(), "no panel to ask!", nullptr );
 
         Reference< XAccessible > xPanelAccessible;
         try
@@ -671,7 +671,7 @@ namespace sfx2
     {
         const ::svt::PDeckLayouter pLayouter( m_aPanelDeck->GetLayouter() );
         const ::svt::DrawerDeckLayouter* pDrawerLayouter = dynamic_cast< const ::svt::DrawerDeckLayouter* >( pLayouter.get() );
-        if ( pDrawerLayouter != NULL )
+        if ( pDrawerLayouter != nullptr )
             // already have the proper layout
             return;
         m_aPanelDeck->SetLayouter( new ::svt::DrawerDeckLayouter( *m_aPanelDeck.get(), *m_aPanelDeck.get() ) );
@@ -682,7 +682,7 @@ namespace sfx2
     {
         ::svt::PDeckLayouter pLayouter( m_aPanelDeck->GetLayouter() );
         ::svt::TabDeckLayouter* pTabLayouter = dynamic_cast< ::svt::TabDeckLayouter* >( pLayouter.get() );
-        if  (   ( pTabLayouter != NULL )
+        if  (   ( pTabLayouter != nullptr )
             &&  ( pTabLayouter->GetTabAlignment() == i_eTabAlignment )
             &&  ( pTabLayouter->GetTabItemContent() == i_eTabContent )
             )
@@ -1171,7 +1171,7 @@ namespace sfx2
     {
         ::std::unique_ptr<PopupMenu> pMenu( new PopupMenu );
         FloatingWindow* pMenuWindow = static_cast< FloatingWindow* >( pMenu->GetWindow() );
-        if ( pMenuWindow != NULL )
+        if ( pMenuWindow != nullptr )
         {
             pMenuWindow->SetPopupModeFlags ( pMenuWindow->GetPopupModeFlags() | FloatWinPopupFlags::NoMouseUpClose );
         }

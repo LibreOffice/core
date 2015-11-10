@@ -74,14 +74,14 @@ struct SfxShell_Impl: public SfxBroadcaster
     ::sfx2::sidebar::ContextChangeBroadcaster maContextChangeBroadcaster;
 
     SfxShell_Impl()
-        : pViewSh(0)
-        , pFrame(0)
-        , pRepeatTarget(0)
+        : pViewSh(nullptr)
+        , pFrame(nullptr)
+        , pRepeatTarget(nullptr)
         , bActive(false)
         , nDisableFlags(0)
         , nHelpId(0)
-        , pExecuter(0)
-        , pUpdater(0)
+        , pExecuter(nullptr)
+        , pUpdater(nullptr)
     {
     }
 
@@ -98,17 +98,17 @@ void SfxShell::EmptyStateStub(SfxShell *, SfxItemSet &)
 }
 
 SfxShell::SfxShell()
-:   pImp(0),
-    pPool(0),
-    pUndoMgr(0)
+:   pImp(nullptr),
+    pPool(nullptr),
+    pUndoMgr(nullptr)
 {
     pImp = new SfxShell_Impl;
 }
 
 SfxShell::SfxShell( SfxViewShell *pViewSh )
-:   pImp(0),
-    pPool(0),
-    pUndoMgr(0)
+:   pImp(nullptr),
+    pPool(nullptr),
+    pUndoMgr(nullptr)
 {
     pImp = new SfxShell_Impl;
     pImp->pViewSh = pViewSh;
@@ -131,7 +131,7 @@ const OUString& SfxShell::GetName() const
 
 SfxDispatcher* SfxShell::GetDispatcher() const
 {
-    return pImp->pFrame ? pImp->pFrame->GetDispatcher() : 0;
+    return pImp->pFrame ? pImp->pFrame->GetDispatcher() : nullptr;
 }
 
 SfxViewShell* SfxShell::GetViewShell() const
@@ -145,7 +145,7 @@ SfxViewFrame* SfxShell::GetFrame() const
         return pImp->pFrame;
     if ( pImp->pViewSh )
         return pImp->pViewSh->GetViewFrame();
-    return 0;
+    return nullptr;
 }
 
 const SfxPoolItem* SfxShell::GetItem
@@ -156,7 +156,7 @@ const SfxPoolItem* SfxShell::GetItem
     SfxItemPtrMap::const_iterator it = pImp->aItems.find( nSlotId );
     if( it != pImp->aItems.end() )
         return it->second;
-    return 0;
+    return nullptr;
 }
 
 void SfxShell::PutItem
@@ -216,7 +216,7 @@ SfxInterface* SfxShell::GetInterface() const
 
 void SfxShell::SetUndoManager( ::svl::IUndoManager *pNewUndoMgr )
 {
-    OSL_ENSURE( ( pUndoMgr == NULL ) || ( pNewUndoMgr == NULL ) || ( pUndoMgr == pNewUndoMgr ),
+    OSL_ENSURE( ( pUndoMgr == nullptr ) || ( pNewUndoMgr == nullptr ) || ( pUndoMgr == pNewUndoMgr ),
         "SfxShell::SetUndoManager: exchanging one non-NULL manager with another non-NULL manager? Suspicious!" );
     // there's at least one client of our UndoManager - the DocumentUndoManager at the SfxBaseModel - which
     // caches the UndoManager, and registers itself as listener. If exchanging non-NULL UndoManagers is really
@@ -348,7 +348,7 @@ void SfxShell::DoDeactivate_Impl( SfxViewFrame *pFrame, bool bMDI )
     if ( bMDI && pImp->pFrame == pFrame )
     {
         // deliver
-        pImp->pFrame = 0;
+        pImp->pFrame = nullptr;
         pImp->bActive = false;
     }
 
@@ -421,7 +421,7 @@ const SfxPoolItem* SfxShell::ExecuteSlot( SfxRequest& rReq, bool bAsync )
             pImp->pExecuter = new svtools::AsynchronLink(
                 Link<void*,void>( this, ShellCall_Impl ) );
         pImp->pExecuter->Call( new SfxRequest( rReq ) );
-        return 0;
+        return nullptr;
     }
 }
 
@@ -435,7 +435,7 @@ const SfxPoolItem* SfxShell::ExecuteSlot
         pIF = GetInterface();
 
     sal_uInt16 nSlot = rReq.GetSlot();
-    const SfxSlot* pSlot = NULL;
+    const SfxSlot* pSlot = nullptr;
     if ( nSlot >= SID_VERB_START && nSlot <= SID_VERB_END )
         pSlot = GetVerbSlot_Impl(nSlot);
     if ( !pSlot )
@@ -462,7 +462,7 @@ const SfxPoolItem* SfxShell::GetSlotState
     SfxItemState eState = SfxItemState::UNKNOWN;
     SfxItemPool &rPool = GetPool();
 
-    const SfxSlot* pSlot = NULL;
+    const SfxSlot* pSlot = nullptr;
     if ( nSlotId >= SID_VERB_START && nSlotId <= SID_VERB_END )
         pSlot = GetVerbSlot_Impl(nSlotId);
     if ( !pSlot )
@@ -472,7 +472,7 @@ const SfxPoolItem* SfxShell::GetSlotState
         nSlotId = pSlot->GetWhich( rPool );
 
     // Get Item and Item status
-    const SfxPoolItem *pItem = NULL;
+    const SfxPoolItem *pItem = nullptr;
     SfxItemSet aSet( rPool, nSlotId, nSlotId ); // else pItem dies too soon
     if ( pSlot )
     {
@@ -495,12 +495,12 @@ const SfxPoolItem* SfxShell::GetSlotState
         eState = SfxItemState::UNKNOWN;
 
     // Evaluate Item and item status and possibly maintain them in pStateSet
-    SfxPoolItem *pRetItem = 0;
+    SfxPoolItem *pRetItem = nullptr;
     if ( eState <= SfxItemState::DISABLED )
     {
         if ( pStateSet )
             pStateSet->DisableItem(nSlotId);
-        return 0;
+        return nullptr;
     }
     else if ( eState == SfxItemState::DONTCARE )
     {
@@ -565,11 +565,11 @@ void SfxShell::SetVerbs(const css::uno::Sequence < css::embed::VerbDescriptor >&
         pNewSlot->nValue = 0;
         pNewSlot->fnExec = SFX_STUB_PTR(SfxShell,VerbExec);
         pNewSlot->fnState = SFX_STUB_PTR(SfxShell,VerbState);
-        pNewSlot->pType = 0; // HACK(SFX_TYPE(SfxVoidItem)) ???
-        pNewSlot->pLinkedSlot = 0;
+        pNewSlot->pType = nullptr; // HACK(SFX_TYPE(SfxVoidItem)) ???
+        pNewSlot->pLinkedSlot = nullptr;
         pNewSlot->nArgDefCount = 0;
-        pNewSlot->pFirstArgDef = 0;
-        pNewSlot->pUnoName = 0;
+        pNewSlot->pFirstArgDef = nullptr;
+        pNewSlot->pUnoName = nullptr;
 
         if (!pImp->aSlotArr.empty())
         {
@@ -643,7 +643,7 @@ const SfxSlot* SfxShell::GetVerbSlot_Impl(sal_uInt16 nId) const
     if (nIndex < rList.getLength())
         return &pImp->aSlotArr[nIndex];
     else
-        return 0;
+        return nullptr;
 }
 
 void SfxShell::SetHelpId(sal_uIntPtr nId)
@@ -661,7 +661,7 @@ SfxObjectShell* SfxShell::GetObjectShell()
     if ( GetViewShell() )
         return GetViewShell()->GetViewFrame()->GetObjectShell();
     else
-        return NULL;
+        return nullptr;
 }
 
 bool SfxShell::HasUIFeature( sal_uInt32 )
@@ -703,7 +703,7 @@ sal_uIntPtr SfxShell::GetDisableFlags() const
 
 SfxItemSet* SfxShell::CreateItemSet( sal_uInt16 )
 {
-    return NULL;
+    return nullptr;
 }
 
 void SfxShell::ApplyItemSet( sal_uInt16, const SfxItemSet& )
@@ -723,7 +723,7 @@ void SfxShell::SetViewShell_Impl( SfxViewShell* pView )
 void SfxShell::BroadcastContextForActivation (const bool bIsActivated)
 {
     SfxViewFrame* pViewFrame = GetFrame();
-    if (pViewFrame != NULL)
+    if (pViewFrame != nullptr)
     {
         if (bIsActivated)
             pImp->maContextChangeBroadcaster.Activate(pViewFrame->GetFrame().GetFrameInterface());

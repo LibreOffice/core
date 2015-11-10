@@ -136,7 +136,7 @@ const OUString* GetLastFilterConfigId( FileDialogHelper::Context _eContext )
     static const OUString aSI_EXPORT_IDENTIFIER("SiExportLastFilter");
     static const OUString aSW_EXPORT_IDENTIFIER("SwExportLastFilter");
 
-    const OUString* pRet = NULL;
+    const OUString* pRet = nullptr;
 
     switch( _eContext )
     {
@@ -206,7 +206,7 @@ void FileDialogHelper_Impl::handleFileSelectionChanged( const FilePickerEvent& )
 void FileDialogHelper_Impl::handleDirectoryChanged( const FilePickerEvent& )
 {
     if ( mbShowPreview )
-        TimeOutHdl_Impl( NULL );
+        TimeOutHdl_Impl( nullptr );
 }
 
 OUString FileDialogHelper_Impl::handleHelpRequested( const FilePickerEvent& aEvent )
@@ -271,7 +271,7 @@ OUString FileDialogHelper_Impl::handleHelpRequested( const FilePickerEvent& aEve
     OUString aHelpText;
     Help* pHelp = Application::GetHelp();
     if ( pHelp )
-        aHelpText = pHelp->GetHelpText( OStringToOUString(sHelpId, RTL_TEXTENCODING_UTF8), NULL );
+        aHelpText = pHelp->GetHelpText( OStringToOUString(sHelpId, RTL_TEXTENCODING_UTF8), nullptr );
     return aHelpText;
 }
 
@@ -297,7 +297,7 @@ void FileDialogHelper_Impl::handleControlStateChanged( const FilePickerEvent& aE
 void FileDialogHelper_Impl::handleDialogSizeChanged()
 {
     if ( mbShowPreview )
-        TimeOutHdl_Impl( NULL );
+        TimeOutHdl_Impl( nullptr );
 }
 
 // XEventListener Methods
@@ -366,7 +366,7 @@ const SfxFilter* FileDialogHelper_Impl::getCurentSfxFilter()
 {
     OUString aFilterName = getCurrentFilterUIName();
 
-    const SfxFilter* pFilter = NULL;
+    const SfxFilter* pFilter = nullptr;
     if ( mpMatcher && !aFilterName.isEmpty() )
         pFilter = mpMatcher->GetFilter4UIName( aFilterName, m_nMustFlags, m_nDontFlags );
 
@@ -586,7 +586,7 @@ void FileDialogHelper_Impl::updatePreviewState( bool _bUpdatePreviewWindow )
                         xFilePreview->setShowState( mbShowPreview );
 
                     if ( _bUpdatePreviewWindow )
-                        TimeOutHdl_Impl( NULL );
+                        TimeOutHdl_Impl( nullptr );
                 }
             }
             catch( const Exception& )
@@ -769,14 +769,14 @@ ErrCode FileDialogHelper_Impl::getGraphic( const OUString& rURL,
         SvStream* pStream = ::utl::UcbStreamHelper::CreateStream( rURL, StreamMode::READ );
 
         if( pStream )
-            nRet = mpGraphicFilter->ImportGraphic( rGraphic, rURL, *pStream, nFilter, NULL, nFilterImportFlags );
+            nRet = mpGraphicFilter->ImportGraphic( rGraphic, rURL, *pStream, nFilter, nullptr, nFilterImportFlags );
         else
-            nRet = mpGraphicFilter->ImportGraphic( rGraphic, aURLObj, nFilter, NULL, nFilterImportFlags );
+            nRet = mpGraphicFilter->ImportGraphic( rGraphic, aURLObj, nFilter, nullptr, nFilterImportFlags );
         delete pStream;
     }
     else
     {
-        nRet = mpGraphicFilter->ImportGraphic( rGraphic, aURLObj, nFilter, NULL, nFilterImportFlags );
+        nRet = mpGraphicFilter->ImportGraphic( rGraphic, aURLObj, nFilter, nullptr, nFilterImportFlags );
     }
 
     return nRet;
@@ -857,7 +857,7 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
     :m_nDialogType          ( nDialogType )
     ,meContext              ( FileDialogHelper::UNKNOWN_CONTEXT )
 {
-    const char* pServiceName=0;
+    const char* pServiceName=nullptr;
     switch (nDialog)
     {
         case SFX2_IMPL_DIALOG_SYSTEM:
@@ -909,9 +909,9 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
         m_nMustFlags = SfxFilterFlags::EXPORT;
 
 
-    mpMatcher = NULL;
-    mpGraphicFilter = NULL;
-    mnPostUserEventId = 0;
+    mpMatcher = nullptr;
+    mpGraphicFilter = nullptr;
+    mnPostUserEventId = nullptr;
 
     // create the picker component
     mxFileDlg.set(xFactory->createInstance( aService ), css::uno::UNO_QUERY);
@@ -1121,7 +1121,7 @@ FileDialogHelper_Impl::~FileDialogHelper_Impl()
     // Remove user event if we haven't received it yet
     if ( mnPostUserEventId )
         Application::RemoveUserEvent( mnPostUserEventId );
-    mnPostUserEventId = 0;
+    mnPostUserEventId = nullptr;
 
     delete mpGraphicFilter;
 
@@ -1166,7 +1166,7 @@ void FileDialogHelper_Impl::setControlHelpIds( const sal_Int16* _pControlId, con
 
 IMPL_LINK_NOARG_TYPED( FileDialogHelper_Impl, InitControls, void*, void )
 {
-    mnPostUserEventId = 0;
+    mnPostUserEventId = nullptr;
     enablePasswordBox( true );
     updateFilterOptionsBox( );
     updateSelectionBox( );
@@ -1375,7 +1375,7 @@ ErrCode FileDialogHelper_Impl::execute( std::vector<OUString>& rpURLList,
         if( mbHasPassword )
         {
             const SfxBoolItem* pPassItem = SfxItemSet::GetItem<SfxBoolItem>(rpSet, SID_PASSWORDINTERACTION, false);
-            mbPwdCheckBoxState = ( pPassItem != NULL && pPassItem->GetValue() );
+            mbPwdCheckBoxState = ( pPassItem != nullptr && pPassItem->GetValue() );
 
             // in case the document has password to modify, the dialog should be shown
             const SfxUnoAnyItem* pPassToModifyItem = SfxItemSet::GetItem<SfxUnoAnyItem>(rpSet, SID_MODIFYPASSWORDINFO, false);
@@ -2236,7 +2236,7 @@ FileDialogHelper::FileDialogHelper(
     const css::uno::Sequence< OUString >& rBlackList)
     : m_nError(0)
 {
-    mpImp = new FileDialogHelper_Impl( this, nDialogType, nFlags, nDialog, NULL, rStandardDir, rBlackList );
+    mpImp = new FileDialogHelper_Impl( this, nDialogType, nFlags, nDialog, nullptr, rStandardDir, rBlackList );
     mxImp = mpImp;
 
     // create the list of filters
@@ -2602,7 +2602,7 @@ ErrCode FileOpenDialog_Impl( sal_Int16 nDialogType,
 
 ErrCode RequestPassword(const SfxFilter* pCurrentFilter, OUString& aURL, SfxItemSet* pSet)
 {
-    uno::Reference < task::XInteractionHandler2 > xInteractionHandler = task::InteractionHandler::createWithParent( ::comphelper::getProcessComponentContext(), 0 );
+    uno::Reference < task::XInteractionHandler2 > xInteractionHandler = task::InteractionHandler::createWithParent( ::comphelper::getProcessComponentContext(), nullptr );
     // TODO: need a save way to distinguish MS filters from other filters
     // for now MS-filters are the only alien filters that support encryption
     bool bMSType = !pCurrentFilter->IsOwnFormat();

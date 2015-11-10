@@ -25,7 +25,7 @@ class SfxTemplateInfoDlg : public ModalDialog
 {
 public:
 
-    SfxTemplateInfoDlg (vcl::Window *pParent = NULL);
+    SfxTemplateInfoDlg (vcl::Window *pParent = nullptr);
 
     virtual ~SfxTemplateInfoDlg();
     virtual void dispose() override;

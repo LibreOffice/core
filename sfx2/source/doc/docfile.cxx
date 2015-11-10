@@ -243,7 +243,7 @@ public:
     ~SfxMedium_Impl();
 
     OUString getFilterMimeType()
-    { return m_pFilter == 0 ? OUString() : m_pFilter->GetMimeType(); }
+    { return m_pFilter == nullptr ? OUString() : m_pFilter->GetMimeType(); }
 };
 
 
@@ -269,15 +269,15 @@ SfxMedium_Impl::SfxMedium_Impl( SfxMedium* pAntiImplP ) :
     m_bRemote(false),
     m_bInputStreamIsReadOnly(false),
     m_bInCheckIn(false),
-    m_pSet(NULL),
-    m_pURLObj(NULL),
-    m_pFilter(NULL),
+    m_pSet(nullptr),
+    m_pURLObj(nullptr),
+    m_pFilter(nullptr),
     pAntiImpl( pAntiImplP ),
-    m_pInStream(NULL),
-    m_pOutStream(NULL),
-    pOrigFilter( 0 ),
+    m_pInStream(nullptr),
+    m_pOutStream(nullptr),
+    pOrigFilter( nullptr ),
     aExpireTime( Date( Date::SYSTEM ) + 10, tools::Time( tools::Time::SYSTEM ) ),
-    pTempFile( NULL ),
+    pTempFile( nullptr ),
     nLastStorageError( 0 ),
     m_nSignatureState( SignatureState::NOSIGNATURES )
 {
@@ -502,7 +502,7 @@ SvStream* SfxMedium::GetInStream()
         {
             pImp->m_eError = ERRCODE_IO_ACCESSDENIED;
             delete pImp->m_pInStream;
-            pImp->m_pInStream = NULL;
+            pImp->m_pInStream = nullptr;
         }
         else
             return pImp->m_pInStream;
@@ -511,7 +511,7 @@ SvStream* SfxMedium::GetInStream()
     GetMedium_Impl();
 
     if ( GetError() )
-        return NULL;
+        return nullptr;
 
     return pImp->m_pInStream;
 }
@@ -613,7 +613,7 @@ bool SfxMedium::CloseOutStream_Impl()
         }
 
         delete pImp->m_pOutStream;
-        pImp->m_pOutStream = NULL;
+        pImp->m_pOutStream = nullptr;
     }
 
     if ( !pImp->m_pInStream )
@@ -1367,7 +1367,7 @@ uno::Reference < embed::XStorage > SfxMedium::GetStorage( bool bCreateTempIfNo )
 
     if( ( pImp->nLastStorageError = GetError() ) != SVSTREAM_OK )
     {
-        pImp->xStorage = 0;
+        pImp->xStorage = nullptr;
         if ( pImp->m_pInStream )
             pImp->m_pInStream->Seek(0);
         return uno::Reference< embed::XStorage >();
@@ -1749,7 +1749,7 @@ bool SfxMedium::TransactedTransferForFS_Impl( const INetURLObject& aSource,
                 {
                     pImp->pTempFile->EnableKillingFile();
                        delete pImp->pTempFile;
-                       pImp->pTempFile = NULL;
+                       pImp->pTempFile = nullptr;
                 }
                }
             else if ( bTransactStarted )
@@ -1896,7 +1896,7 @@ void SfxMedium::Transfer_Impl()
                         {
                             pImp->pTempFile->EnableKillingFile();
                             delete pImp->pTempFile;
-                            pImp->pTempFile = NULL;
+                            pImp->pTempFile = nullptr;
                         }
                     }
                     catch( const Exception& )
@@ -2374,7 +2374,7 @@ void SfxMedium::GetMedium_Impl()
 
             // in case the temporary file exists the streams should be initialized from it,
             // but the original MediaDescriptor should not be changed
-            bool bFromTempFile = ( pImp->pTempFile != NULL );
+            bool bFromTempFile = ( pImp->pTempFile != nullptr );
 
             if ( !bFromTempFile )
             {
@@ -2524,7 +2524,7 @@ void SfxMedium::Init_Impl()
     const SfxStringItem* pSalvageItem = SfxItemSet::GetItem<SfxStringItem>(pImp->m_pSet, SID_DOC_SALVAGE, false);
     if ( pSalvageItem && pSalvageItem->GetValue().isEmpty() )
     {
-        pSalvageItem = NULL;
+        pSalvageItem = nullptr;
         pImp->m_pSet->ClearItem( SID_DOC_SALVAGE );
     }
 
@@ -2643,7 +2643,7 @@ SfxMedium::GetInteractionHandler( bool bGetAlways )
     // create default handler and cache it!
     Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
     pImp->xInteraction.set(
-        task::InteractionHandler::createWithParent(xContext, 0), UNO_QUERY_THROW );
+        task::InteractionHandler::createWithParent(xContext, nullptr), UNO_QUERY_THROW );
     return pImp->xInteraction;
 }
 
@@ -2881,7 +2881,7 @@ void SfxMedium::SetPhysicalName_Impl( const OUString& rNameP )
         if( pImp->pTempFile )
         {
             delete pImp->pTempFile;
-            pImp->pTempFile = NULL;
+            pImp->pTempFile = nullptr;
         }
 
         if ( !pImp->m_aName.isEmpty() || !rNameP.isEmpty() )
@@ -2911,11 +2911,11 @@ void SfxMedium::CompleteReOpen()
     bool bUseInteractionHandler = pImp->bUseInteractionHandler;
     pImp->bUseInteractionHandler = false;
 
-    ::utl::TempFile* pTmpFile = NULL;
+    ::utl::TempFile* pTmpFile = nullptr;
     if ( pImp->pTempFile )
     {
         pTmpFile = pImp->pTempFile;
-        pImp->pTempFile = NULL;
+        pImp->pTempFile = nullptr;
         pImp->m_aName.clear();
     }
 
@@ -2957,7 +2957,7 @@ SfxMedium::SfxMedium(const OUString &rName, const OUString &rReferer, StreamMode
 {
     pImp->m_pSet = pInSet;
     SfxItemSet * s = GetItemSet();
-    if (s->GetItem(SID_REFERER) == 0) {
+    if (s->GetItem(SID_REFERER) == nullptr) {
         s->Put(SfxStringItem(SID_REFERER, rReferer));
     }
     pImp->m_pFilter = pFlt;
@@ -2975,7 +2975,7 @@ SfxMedium::SfxMedium( const uno::Sequence<beans::PropertyValue>& aArgs ) :
 
     OUString aFilterProvider, aFilterName;
     {
-        const SfxPoolItem* pItem = NULL;
+        const SfxPoolItem* pItem = nullptr;
         if (pImp->m_pSet->HasItem(SID_FILTER_PROVIDER, &pItem))
             aFilterProvider = static_cast<const SfxStringItem*>(pItem)->GetValue();
 

@@ -267,7 +267,7 @@ sal_Int32 PlacePanels (
 
         // Place the title bar.
         PanelTitleBar* pTitleBar = rPanel.GetTitleBar();
-        if (pTitleBar != NULL)
+        if (pTitleBar != nullptr)
         {
             const sal_Int32 nPanelTitleBarHeight (Theme::GetInteger(Theme::Int_PanelTitleBarHeight) * rPanel.GetDPIScaleFactor());
 
@@ -329,7 +329,7 @@ sal_Int32 PlacePanels (
 
     Deck::ScrollContainerWindow* pScrollContainerWindow
         = dynamic_cast<Deck::ScrollContainerWindow*>(&rScrollContainer);
-    if (pScrollContainerWindow != NULL)
+    if (pScrollContainerWindow != nullptr)
         pScrollContainerWindow->SetSeparators(aSeparators);
 
     return nY;

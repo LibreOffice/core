@@ -83,7 +83,7 @@ void SAL_CALL  BindDispatch_Impl::statusChanged( const css::frame::FeatureStateE
         pCache->Invalidate( true );
     else
     {
-        SfxPoolItem *pItem=NULL;
+        SfxPoolItem *pItem=nullptr;
         sal_uInt16 nId = pCache->GetId();
         SfxItemState eState = SfxItemState::DISABLED;
         if ( !aStatus.IsEnabled )
@@ -157,7 +157,7 @@ void BindDispatch_Impl::Release()
         xDisp.clear();
     }
 
-    pCache = NULL;
+    pCache = nullptr;
     release();
 }
 
@@ -179,11 +179,11 @@ void BindDispatch_Impl::Dispatch( const uno::Sequence < beans::PropertyValue >& 
 // This constructor for an invalid cache that is updated in the first request.
 
 SfxStateCache::SfxStateCache( sal_uInt16 nFuncId ):
-    pDispatch( 0 ),
+    pDispatch( nullptr ),
     nId(nFuncId),
-    pInternalController(0),
-    pController(0),
-    pLastItem( 0 ),
+    pInternalController(nullptr),
+    pController(nullptr),
+    pLastItem( nullptr ),
     eLastState( SfxItemState::UNKNOWN ),
     bItemVisible( true )
 {
@@ -197,13 +197,13 @@ SfxStateCache::SfxStateCache( sal_uInt16 nFuncId ):
 
 SfxStateCache::~SfxStateCache()
 {
-    DBG_ASSERT( pController == 0 && pInternalController == 0, "there are still Controllers registered" );
+    DBG_ASSERT( pController == nullptr && pInternalController == nullptr, "there are still Controllers registered" );
     if ( !IsInvalidItem(pLastItem) )
         delete pLastItem;
     if ( pDispatch )
     {
         pDispatch->Release();
-        pDispatch = NULL;
+        pDispatch = nullptr;
     }
 }
 
@@ -215,11 +215,11 @@ void SfxStateCache::Invalidate( bool bWithMsg )
     if ( bWithMsg )
     {
         bSlotDirty = true;
-        aSlotServ.SetSlot( 0 );
+        aSlotServ.SetSlot( nullptr );
         if ( pDispatch )
         {
             pDispatch->Release();
-            pDispatch = NULL;
+            pDispatch = nullptr;
         }
     }
 }
@@ -249,7 +249,7 @@ const SfxSlotServer* SfxStateCache::GetSlotServer( SfxDispatcher &rDispat , cons
             {
                 bSlotDirty = false;
                 bCtrlDirty = true;
-                return aSlotServ.GetSlot()? &aSlotServ: 0;
+                return aSlotServ.GetSlot()? &aSlotServ: nullptr;
             }
 
             // create the dispatch URL from the slot data
@@ -267,7 +267,7 @@ const SfxSlotServer* SfxStateCache::GetSlotServer( SfxDispatcher &rDispat , cons
             {
                 // test the dispatch object if it is just a wrapper for a SfxDispatcher
                 css::uno::Reference< css::lang::XUnoTunnel > xTunnel( xDisp, css::uno::UNO_QUERY );
-                SfxOfficeDispatch* pDisp = NULL;
+                SfxOfficeDispatch* pDisp = nullptr;
                 if ( xTunnel.is() )
                 {
                     sal_Int64 nImplementation = xTunnel->getSomething(SfxOfficeDispatch::impl_getStaticIdentifier());
@@ -285,7 +285,7 @@ const SfxSlotServer* SfxStateCache::GetSlotServer( SfxDispatcher &rDispat , cons
                         // so we can use it directly
                         bSlotDirty = false;
                         bCtrlDirty = true;
-                        return aSlotServ.GetSlot()? &aSlotServ: 0;
+                        return aSlotServ.GetSlot()? &aSlotServ: nullptr;
                     }
                 }
 
@@ -313,7 +313,7 @@ const SfxSlotServer* SfxStateCache::GetSlotServer( SfxDispatcher &rDispat , cons
 
     // we *always* return a SlotServer (if there is one); but in case of an external dispatch we might not use it
     // for the "real" (non internal) controllers
-    return aSlotServ.GetSlot()? &aSlotServ: 0;
+    return aSlotServ.GetSlot()? &aSlotServ: nullptr;
 }
 
 
@@ -346,13 +346,13 @@ void SfxStateCache::SetVisibleState( bool bShow )
     if ( bShow != bItemVisible )
     {
         SfxItemState eState( SfxItemState::DEFAULT );
-        const SfxPoolItem*  pState( NULL );
+        const SfxPoolItem*  pState( nullptr );
         bool bDeleteItem( false );
 
         bItemVisible = bShow;
         if ( bShow )
         {
-            if ( IsInvalidItem(pLastItem) || ( pLastItem == NULL ))
+            if ( IsInvalidItem(pLastItem) || ( pLastItem == nullptr ))
             {
                 pState = new SfxVoidItem( nId );
                 bDeleteItem = true;
@@ -438,7 +438,7 @@ void SfxStateCache::SetState_Impl
         if ( pState && !IsInvalidItem(pState) )
             pLastItem = pState->Clone();
         else
-            pLastItem = 0;
+            pLastItem = nullptr;
         eLastState = eState;
         bItemDirty = false;
     }
@@ -452,7 +452,7 @@ void SfxStateCache::SetState_Impl
 
 void SfxStateCache::SetCachedState( bool bAlways )
 {
-    DBG_ASSERT(pController==NULL||pController->GetId()==nId, "Cache with wrong ControllerItem" );
+    DBG_ASSERT(pController==nullptr||pController->GetId()==nId, "Cache with wrong ControllerItem" );
 
     // Only update if cached item exists and also able to process.
     // (If the State is sent, it must be ensured that a SlotServer is present,

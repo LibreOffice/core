@@ -115,7 +115,7 @@ void ThumbnailView::AppendItem(ThumbnailViewItem *pItem)
     {
         // Save current start,end range, iterator might get invalidated
         size_t nSelStartPos = 0;
-        ThumbnailViewItem *pSelStartItem = NULL;
+        ThumbnailViewItem *pSelStartItem = nullptr;
 
         if (mpStartSelRange != mFilteredItemList.end())
         {
@@ -124,7 +124,7 @@ void ThumbnailView::AppendItem(ThumbnailViewItem *pItem)
         }
 
         mFilteredItemList.push_back(pItem);
-        mpStartSelRange = pSelStartItem != NULL ? mFilteredItemList.begin() + nSelStartPos : mFilteredItemList.end();
+        mpStartSelRange = pSelStartItem != nullptr ? mFilteredItemList.begin() + nSelStartPos : mFilteredItemList.end();
     }
 
     mItemList.push_back(pItem);
@@ -132,7 +132,7 @@ void ThumbnailView::AppendItem(ThumbnailViewItem *pItem)
 
 void ThumbnailView::ImplInit()
 {
-    mpScrBar = NULL;
+    mpScrBar = nullptr;
     mnHeaderHeight = 0;
     mnItemWidth = 0;
     mnItemHeight = 0;
@@ -268,7 +268,7 @@ void ThumbnailView::CalculateItemPositions (bool bScrollBarUsed)
         {
             // delete ScrollBar not until later, to prevent recursive calls
             pDelScrBar = mpScrBar;
-            mpScrBar = NULL;
+            mpScrBar = nullptr;
         }
     }
 
@@ -443,7 +443,7 @@ size_t ThumbnailView::ImplGetItem( const Point& rPos ) const
 
 ThumbnailViewItem* ThumbnailView::ImplGetItem( size_t nPos )
 {
-    return ( nPos < mFilteredItemList.size() ) ? mFilteredItemList[nPos] : NULL;
+    return ( nPos < mFilteredItemList.size() ) ? mFilteredItemList[nPos] : nullptr;
 }
 
 sal_uInt16 ThumbnailView::ImplGetVisibleItemCount() const
@@ -472,7 +472,7 @@ ThumbnailViewItem* ThumbnailView::ImplGetVisibleItem( sal_uInt16 nVisiblePos )
             return pItem;
     }
 
-    return NULL;
+    return nullptr;
 }
 
 void ThumbnailView::ImplFireAccessibleEvent( short nEventId, const css::uno::Any& rOldValue, const css::uno::Any& rNewValue )
@@ -519,7 +519,7 @@ void ThumbnailView::KeyInput( const KeyEvent& rKEvt )
     bool bHasSelRange = mpStartSelRange != mFilteredItemList.end();
     size_t nNextPos = nLastPos;
     vcl::KeyCode aKeyCode = rKEvt.GetKeyCode();
-    ThumbnailViewItem* pNext = NULL;
+    ThumbnailViewItem* pNext = nullptr;
 
     if (aKeyCode.IsShift() && bHasSelRange)
     {
@@ -825,7 +825,7 @@ void ThumbnailView::Command( const CommandEvent& rCEvt )
          (rCEvt.GetCommand() == CommandEventId::StartAutoScroll) ||
          (rCEvt.GetCommand() == CommandEventId::AutoScroll) )
     {
-        if ( HandleScrollCommand( rCEvt, NULL, mpScrBar ) )
+        if ( HandleScrollCommand( rCEvt, nullptr, mpScrBar ) )
             return;
     }
 
@@ -1169,7 +1169,7 @@ void ThumbnailView::filterItems(const std::function<bool (const ThumbnailViewIte
 
     size_t nSelPos = 0;
     bool bHasSelRange = false;
-    ThumbnailViewItem *curSel = mpStartSelRange != mFilteredItemList.end() ? *mpStartSelRange : NULL;
+    ThumbnailViewItem *curSel = mpStartSelRange != mFilteredItemList.end() ? *mpStartSelRange : nullptr;
 
     mFilteredItemList.clear();
 

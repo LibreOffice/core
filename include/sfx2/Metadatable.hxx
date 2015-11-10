@@ -66,7 +66,7 @@ createXmlIdRegistry(const bool i_DocIsClipboard);
 class SFX2_DLLPUBLIC Metadatable
 {
 public:
-    Metadatable() : m_pReg(0) {}
+    Metadatable() : m_pReg(nullptr) {}
 
     // destructor calls RemoveMetadataReference
     virtual ~Metadatable();

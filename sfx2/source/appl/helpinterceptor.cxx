@@ -38,8 +38,8 @@ using namespace ::com::sun::star::lang;
 
 HelpInterceptor_Impl::HelpInterceptor_Impl() :
 
-    m_pHistory  ( NULL ),
-    m_pWindow  ( NULL ),
+    m_pHistory  ( nullptr ),
+    m_pWindow  ( nullptr ),
     m_nCurPos   ( 0 )
 
 {
@@ -278,7 +278,7 @@ void SAL_CALL HelpInterceptor_Impl::addStatusListener(
 void SAL_CALL HelpInterceptor_Impl::removeStatusListener(
     const Reference< XStatusListener >&, const URL&) throw( RuntimeException, std::exception )
 {
-    m_xListener = 0;
+    m_xListener = nullptr;
 }
 
 // HelpListener_Impl -----------------------------------------------------
@@ -305,7 +305,7 @@ void SAL_CALL HelpListener_Impl::disposing( const css::lang::EventObject& )
     throw( css::uno::RuntimeException, std::exception )
 {
     pInterceptor->removeStatusListener( this, css::util::URL() );
-    pInterceptor = NULL;
+    pInterceptor = nullptr;
 }
 
 HelpStatusListener_Impl::HelpStatusListener_Impl(
@@ -329,7 +329,7 @@ void HelpStatusListener_Impl::statusChanged(
 void HelpStatusListener_Impl::disposing( const EventObject& ) throw( RuntimeException, std::exception )
 {
     xDispatch->removeStatusListener(this, css::util::URL());
-    xDispatch = 0;
+    xDispatch = nullptr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

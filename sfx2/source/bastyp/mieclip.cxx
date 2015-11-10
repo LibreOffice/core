@@ -34,7 +34,7 @@ SvStream* MSE40HTMLClipFormatObj::IsValid( SvStream& rStream )
 {
     bool bRet = false;
     if( pStrm )
-        delete pStrm, pStrm = 0;
+        delete pStrm, pStrm = nullptr;
 
     OString sLine, sVersion;
     sal_Int32 nStt = -1, nEnd = -1, nFragStart = -1, nFragEnd = -1;
@@ -98,7 +98,7 @@ SvStream* MSE40HTMLClipFormatObj::IsValid( SvStream& rStream )
         }
     }
 
-    return NULL;
+    return nullptr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

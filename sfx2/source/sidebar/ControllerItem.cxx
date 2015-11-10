@@ -72,7 +72,7 @@ namespace
 
             SolarMutexGuard g;
             mrControllerItem.ResetFrame();
-            mxFrame = NULL;
+            mxFrame = nullptr;
         }
         virtual void SAL_CALL frameAction (const css::frame::FrameActionEvent& rEvent)
             throw (css::uno::RuntimeException, std::exception) override
@@ -164,7 +164,7 @@ bool ControllerItem::IsEnabled (SfxItemState eState) const
 
 void ControllerItem::RequestUpdate()
 {
-    SfxPoolItem* pState = NULL;
+    SfxPoolItem* pState = nullptr;
     const SfxItemState eState (GetBindings().QueryState(GetId(), pState));
     mrItemUpdateReceiver.NotifyItemUpdate(GetId(), eState, pState, IsEnabled(eState));
 }
@@ -176,7 +176,7 @@ void ControllerItem::NotifyFrameContextChange()
 
 void ControllerItem::ResetFrame()
 {
-    mxFrame = NULL;
+    mxFrame = nullptr;
 }
 
 ::rtl::OUString ControllerItem::GetLabel() const
@@ -189,11 +189,11 @@ void ControllerItem::ResetFrame()
 ::rtl::OUString ControllerItem::GetHelpText() const
 {
     Help* pHelp = Application::GetHelp();
-    if (pHelp != NULL)
+    if (pHelp != nullptr)
     {
         if (msCommandName.getLength() > 0)
         {
-            const ::rtl::OUString sHelp (pHelp->GetHelpText(".uno:" + msCommandName, NULL));
+            const ::rtl::OUString sHelp (pHelp->GetHelpText(".uno:" + msCommandName, nullptr));
             return sHelp;
         }
     }

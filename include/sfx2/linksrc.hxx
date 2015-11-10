@@ -61,7 +61,7 @@ public:
                         SvLinkSource();
     virtual             ~SvLinkSource();
 
-    bool                HasDataLinks( const SvBaseLink* = 0 ) const;
+    bool                HasDataLinks( const SvBaseLink* = nullptr ) const;
 
     void                Closed();
 

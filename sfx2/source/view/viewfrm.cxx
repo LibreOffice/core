@@ -624,7 +624,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
 
                 DELETEZ( xOldObj->Get_Impl()->pReloadTimer );
 
-                SfxItemSet* pNewSet = 0;
+                SfxItemSet* pNewSet = nullptr;
                 const SfxFilter *pFilter = pMedium->GetFilter();
                 if( pURLItem )
                 {
@@ -634,7 +634,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                     // Filter Detection
                     OUString referer;
                     const SfxStringItem* refererItem = rReq.GetArg<SfxStringItem>(SID_REFERER);
-                    if (refererItem != 0) {
+                    if (refererItem != nullptr) {
                         referer = refererItem->GetValue();
                     }
                     SfxMedium aMedium( pURLItem->GetValue(), referer, SFX_STREAM_READWRITE );
@@ -695,7 +695,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
 
                 if (!pInteractionItem)
                 {
-                    Reference < task::XInteractionHandler2 > xHdl = task::InteractionHandler::createWithParent( ::comphelper::getProcessComponentContext(), 0 );
+                    Reference < task::XInteractionHandler2 > xHdl = task::InteractionHandler::createWithParent( ::comphelper::getProcessComponentContext(), nullptr );
                     if (xHdl.is())
                         pNewSet->Put( SfxUnoAnyItem(SID_INTERACTIONHANDLER,css::uno::makeAny(xHdl)) );
                 }
@@ -740,7 +740,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                 catch ( uno::Exception& )
                 {
                     xNewObj->DoClose();
-                    xNewObj = 0;
+                    xNewObj = nullptr;
                 }
 
                 DELETEZ( pNewSet );
@@ -898,7 +898,7 @@ void SfxViewFrame::StateReload_Impl( SfxItemSet& rSet )
                     for( SfxFrame* pNextFrame = aFrameIter.FirstFrame();
                             pFrame;
                             pNextFrame = pNextFrame ?
-                                aFrameIter.NextFrame( *pNextFrame ) : 0 )
+                                aFrameIter.NextFrame( *pNextFrame ) : nullptr )
                     {
                         SfxObjectShell *pShell = pFrame->GetCurrentDocument();
                         if( pShell && pShell->Get_Impl()->bReloadAvailable )
@@ -980,7 +980,7 @@ void SfxViewFrame::StateHistory_Impl( SfxItemSet &rSet )
         SfxViewShell *pViewSh = GetViewShell();
         if( !pViewSh ) return;
         for ( sal_uInt16 nSID = aIter.FirstWhich(); nSID; nSID = aIter.NextWhich() )
-            pViewSh->GetSlotState( nSID, 0, &rSet );
+            pViewSh->GetSlotState( nSID, nullptr, &rSet );
         return;
     }
 
@@ -1072,7 +1072,7 @@ void SfxViewFrame::ReleaseObjectShell_Impl()
     {
         PopShellAndSubShells_Impl( *pDyingViewSh );
         pDyingViewSh->DisconnectAllClients();
-        SetViewShell_Impl(0);
+        SetViewShell_Impl(nullptr);
         delete pDyingViewSh;
     }
 #ifdef DBG_UTIL
@@ -1120,7 +1120,7 @@ bool SfxViewFrame::Close()
     Broadcast( SfxSimpleHint( SFX_HINT_DYING ) );
 
     if (SfxViewFrame::Current() == this)
-        SfxViewFrame::SetViewFrame( NULL );
+        SfxViewFrame::SetViewFrame( nullptr );
 
     // Since the Dispatcher is emptied, it can not be used in any reasnable
     // manner, thus it is better to let the dispatcher be.
@@ -1391,8 +1391,8 @@ void SfxViewFrame::Construct_Impl( SfxObjectShell *pObjSh )
     pImp->bResizeInToOut = true;
     pImp->bDontOverwriteResizeInToOut = false;
     pImp->bObjLocked = false;
-    pImp->pFocusWin = 0;
-    pImp->pActiveChild = NULL;
+    pImp->pFocusWin = nullptr;
+    pImp->pActiveChild = nullptr;
     pImp->nCurViewId = 0;
     pImp->bReloading = false;
     pImp->bIsDowning = false;
@@ -1400,7 +1400,7 @@ void SfxViewFrame::Construct_Impl( SfxObjectShell *pObjSh )
     pImp->bEnabled = true;
     pImp->nDocViewNo = 0;
     pImp->aMargin = Size( -1, -1 );
-    pImp->pWindow = 0;
+    pImp->pWindow = nullptr;
 
     SetPool( &SfxGetpApp()->GetPool() );
     pDispatcher = new SfxDispatcher(this);
@@ -1448,7 +1448,7 @@ SfxViewFrame::SfxViewFrame
     SfxObjectShell*     pObjShell
 )
     : pImp( new SfxViewFrame_Impl( rFrame ) )
-    , pDispatcher(0)
+    , pDispatcher(nullptr)
     , pBindings( new SfxBindings )
     , nAdjustPosPixelLock( 0 )
 {
@@ -1468,7 +1468,7 @@ SfxViewFrame::~SfxViewFrame()
     SetDowning_Impl();
 
     if ( SfxViewFrame::Current() == this )
-        SfxViewFrame::SetViewFrame( NULL );
+        SfxViewFrame::SetViewFrame( nullptr );
 
     ReleaseObjectShell_Impl();
 
@@ -1480,7 +1480,7 @@ SfxViewFrame::~SfxViewFrame()
     pImp->pFocusWin.clear();
 
     if ( GetFrame().GetCurrentViewFrame() == this )
-        GetFrame().SetCurrentViewFrame_Impl( NULL );
+        GetFrame().SetCurrentViewFrame_Impl( nullptr );
 
     // Unregister from the Frame List.
     SfxApplication *pSfxApp = SfxGetpApp();
@@ -1498,7 +1498,7 @@ SfxViewFrame::~SfxViewFrame()
 void SfxViewFrame::KillDispatcher_Impl()
 {
 
-    SfxModule* pModule = xObjSh.Is() ? xObjSh->GetModule() : 0;
+    SfxModule* pModule = xObjSh.Is() ? xObjSh->GetModule() : nullptr;
     if ( xObjSh.Is() )
         ReleaseObjectShell_Impl();
     if ( pDispatcher )
@@ -1513,7 +1513,7 @@ void SfxViewFrame::KillDispatcher_Impl()
 
 SfxViewFrame* SfxViewFrame::Current()
 {
-    return SfxApplication::Get() ? SfxGetpApp()->Get_Impl()->pViewFrame : NULL;
+    return SfxApplication::Get() ? SfxGetpApp()->Get_Impl()->pViewFrame : nullptr;
 }
 
 // returns the first window of spec. type viewing the specified doc.
@@ -1536,7 +1536,7 @@ SfxViewFrame* SfxViewFrame::GetFirst
             return pFrame;
     }
 
-    return 0;
+    return nullptr;
 }
 
 // returns the next window of spec. type viewing the specified doc.
@@ -1565,13 +1565,13 @@ SfxViewFrame* SfxViewFrame::GetNext
             )
             return pFrame;
     }
-    return 0;
+    return nullptr;
 }
 
 SfxProgress* SfxViewFrame::GetProgress() const
 {
     SfxObjectShell *pObjSh = GetObjectShell();
-    return pObjSh ? pObjSh->GetProgress() : 0;
+    return pObjSh ? pObjSh->GetProgress() : nullptr;
 }
 
 void SfxViewFrame::DoAdjustPosSizePixel //! divide on Inner.../Outer...
@@ -1625,7 +1625,7 @@ void SfxViewFrame::SetViewShell_Impl( SfxViewShell *pVSh )
 //TODO/LATER: is it still necessary? is there a replacement for GetParentViewFrame_Impl?
 SfxViewFrame* SfxViewFrame::GetParentViewFrame_Impl() const
 {
-    return NULL;
+    return nullptr;
 }
 
 void SfxViewFrame::ForceOuterResize_Impl(bool bOn)
@@ -1826,7 +1826,7 @@ SfxViewFrame* SfxViewFrame::LoadViewIntoFrame_Impl_NoThrow( const SfxObjectShell
 {
     Reference< XFrame > xFrame( i_rFrame );
     bool bOwnFrame = false;
-    SfxViewShell* pSuccessView = NULL;
+    SfxViewShell* pSuccessView = nullptr;
     try
     {
         if ( !xFrame.is() )
@@ -1888,7 +1888,7 @@ SfxViewFrame* SfxViewFrame::LoadViewIntoFrame_Impl_NoThrow( const SfxObjectShell
         }
     }
 
-    return NULL;
+    return nullptr;
 }
 
 SfxViewShell* SfxViewFrame::LoadViewIntoFrame_Impl( const SfxObjectShell& i_rDoc, const Reference< XFrame >& i_rFrame,
@@ -1937,7 +1937,7 @@ SfxViewFrame* SfxViewFrame::LoadDocumentIntoFrame( SfxObjectShell& i_rDoc, const
 
 SfxViewFrame* SfxViewFrame::LoadDocumentIntoFrame( SfxObjectShell& i_rDoc, const SfxFrameItem* i_pFrameItem, const sal_uInt16 i_nViewId )
 {
-    return LoadViewIntoFrame_Impl_NoThrow( i_rDoc, i_pFrameItem && i_pFrameItem->GetFrame() ? i_pFrameItem->GetFrame()->GetFrameInterface() : NULL, i_nViewId, false );
+    return LoadViewIntoFrame_Impl_NoThrow( i_rDoc, i_pFrameItem && i_pFrameItem->GetFrame() ? i_pFrameItem->GetFrame()->GetFrameInterface() : nullptr, i_nViewId, false );
 }
 
 SfxViewFrame* SfxViewFrame::DisplayNewDocument( SfxObjectShell& i_rDoc, const SfxRequest& i_rCreateDocRequest, const sal_uInt16 i_nViewId )
@@ -1947,7 +1947,7 @@ SfxViewFrame* SfxViewFrame::DisplayNewDocument( SfxObjectShell& i_rDoc, const Sf
 
     return LoadViewIntoFrame_Impl_NoThrow(
         i_rDoc,
-        pFrameItem ? pFrameItem->GetFrame() : NULL,
+        pFrameItem ? pFrameItem->GetFrame() : nullptr,
         i_nViewId,
         pHiddenItem && pHiddenItem->GetValue()
     );
@@ -1956,7 +1956,7 @@ SfxViewFrame* SfxViewFrame::DisplayNewDocument( SfxObjectShell& i_rDoc, const Sf
 SfxViewFrame* SfxViewFrame::Get( const Reference< XController>& i_rController, const SfxObjectShell* i_pDoc )
 {
     if ( !i_rController.is() )
-        return NULL;
+        return nullptr;
 
     const SfxObjectShell* pDoc = i_pDoc;
     if ( !pDoc )
@@ -1972,7 +1972,7 @@ SfxViewFrame* SfxViewFrame::Get( const Reference< XController>& i_rController, c
         }
     }
 
-    SfxViewFrame* pViewFrame = NULL;
+    SfxViewFrame* pViewFrame = nullptr;
     for (   pViewFrame = SfxViewFrame::GetFirst( pDoc, false );
             pViewFrame;
             pViewFrame = SfxViewFrame::GetNext( *pViewFrame, pDoc, false )
@@ -1988,7 +1988,7 @@ SfxViewFrame* SfxViewFrame::Get( const Reference< XController>& i_rController, c
 void SfxViewFrame::SaveCurrentViewData_Impl( const sal_uInt16 i_nNewViewId )
 {
     SfxViewShell* pCurrentShell = GetViewShell();
-    ENSURE_OR_RETURN_VOID( pCurrentShell != NULL, "SfxViewFrame::SaveCurrentViewData_Impl: no current view shell -> no current view data!" );
+    ENSURE_OR_RETURN_VOID( pCurrentShell != nullptr, "SfxViewFrame::SaveCurrentViewData_Impl: no current view shell -> no current view data!" );
 
     // determine the logical (API) view name
     const SfxObjectFactory& rDocFactory( pCurrentShell->GetObjectShell()->GetFactory() );
@@ -2030,7 +2030,7 @@ void SfxViewFrame::SaveCurrentViewData_Impl( const sal_uInt16 i_nNewViewId )
                 continue;
 
             const SfxViewFactory* pViewFactory = rDocFactory.GetViewFactoryByViewName( sViewId );
-            if ( pViewFactory == NULL )
+            if ( pViewFactory == nullptr )
                 continue;
 
             if ( pViewFactory->GetOrdinal() == GetCurViewId() )
@@ -2084,7 +2084,7 @@ bool SfxViewFrame::SwitchToViewShell_Impl
 {
     try
     {
-        ENSURE_OR_THROW( GetObjectShell() != NULL, "not possible without a document" );
+        ENSURE_OR_THROW( GetObjectShell() != nullptr, "not possible without a document" );
 
         // if we already have a view shell, remove it
         SfxViewShell* pOldSh = GetViewShell();
@@ -2176,7 +2176,7 @@ void SfxViewFrame::ExecView_Impl
 
         case SID_VIEWSHELL:
         {
-            const SfxPoolItem *pItem = 0;
+            const SfxPoolItem *pItem = nullptr;
             if  (   rReq.GetArgs()
                 &&  SfxItemState::SET == rReq.GetArgs()->GetItemState( SID_VIEWSHELL, false, &pItem )
                 )
@@ -2381,7 +2381,7 @@ void SfxViewFrame::ToTop()
 SfxViewFrame* SfxViewFrame::GetParentViewFrame() const
 {
     SfxFrame *pFrame = GetFrame().GetParentFrame();
-    return pFrame ? pFrame->GetCurrentViewFrame() : NULL;
+    return pFrame ? pFrame->GetCurrentViewFrame() : nullptr;
 }
 
 /*  [Description]
@@ -2551,7 +2551,7 @@ void SfxViewFrame::AddDispatchMacroToBasic_Impl( const OUString& sMacro )
                 aLocation = xUrl->getParameter( aLocKey );
         }
 
-        BasicManager* pBasMgr = 0;
+        BasicManager* pBasMgr = nullptr;
         if ( aLocation.equalsIgnoreAsciiCase( "application" ) )
         {
             // application basic
@@ -2673,7 +2673,7 @@ void SfxViewFrame::AddDispatchMacroToBasic_Impl( const OUString& sMacro )
             if ( pViewShell->GetName() == "BasicIDE" )
             {
                 SfxViewFrame* pViewFrame = pViewShell->GetViewFrame();
-                SfxDispatcher* pDispat = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
+                SfxDispatcher* pDispat = pViewFrame ? pViewFrame->GetDispatcher() : nullptr;
                 if ( pDispat )
                 {
                     SfxMacroInfoItem aInfoItem( SID_BASICIDE_ARG_MACROINFO, pBasMgr, aLibName, aModuleName, OUString(), OUString() );
@@ -2727,7 +2727,7 @@ void SfxViewFrame::MiscExec_Impl( SfxRequest& rReq )
                     AddDispatchMacroToBasic_Impl(xRecorder->getRecordedMacro());
 
                 xRecorder->endRecording();
-                xRecorder = NULL;
+                xRecorder = nullptr;
                 GetBindings().SetRecorder_Impl( xRecorder );
 
                 SetChildWindow( SID_RECORDING_FLOATWINDOW, false );
@@ -3097,7 +3097,7 @@ void SfxViewFrame::ChildWindowState( SfxItemSet& rState )
         }
         else if ( nSID == SID_HYPERLINK_DIALOG )
         {
-            const SfxPoolItem* pDummy = NULL;
+            const SfxPoolItem* pDummy = nullptr;
             SfxItemState eState = GetDispatcher()->QueryState( SID_HYPERLINK_SETLINK, pDummy );
             if ( SfxItemState::DISABLED == eState )
                 rState.DisableItem(nSID);
@@ -3198,7 +3198,7 @@ void SfxViewFrame::ShowChildWindow( sal_uInt16 nId, bool bVisible )
 SfxChildWindow* SfxViewFrame::GetChildWindow(sal_uInt16 nId)
 {
     SfxWorkWindow* pWork = GetWorkWindow_Impl( nId );
-    return pWork ? pWork->GetChildWindow_Impl(nId) : NULL;
+    return pWork ? pWork->GetChildWindow_Impl(nId) : nullptr;
 }
 
 void SfxViewFrame::UpdateDocument_Impl()
@@ -3221,14 +3221,14 @@ void SfxViewFrame::ActivateToolPanel( const css::uno::Reference< css::frame::XFr
     SolarMutexGuard aGuard;
 
     // look up the SfxFrame for the given XFrame
-    SfxFrame* pFrame = NULL;
+    SfxFrame* pFrame = nullptr;
     for ( pFrame = SfxFrame::GetFirst(); pFrame; pFrame = SfxFrame::GetNext( *pFrame ) )
     {
         if ( pFrame->GetFrameInterface() == i_rFrame )
             break;
     }
-    SfxViewFrame* pViewFrame = pFrame ? pFrame->GetCurrentViewFrame() : NULL;
-    ENSURE_OR_RETURN_VOID( pViewFrame != NULL, "SfxViewFrame::ActivateToolPanel: did not find an SfxFrame for the given XFrame!" );
+    SfxViewFrame* pViewFrame = pFrame ? pFrame->GetCurrentViewFrame() : nullptr;
+    ENSURE_OR_RETURN_VOID( pViewFrame != nullptr, "SfxViewFrame::ActivateToolPanel: did not find an SfxFrame for the given XFrame!" );
 
     pViewFrame->ActivateToolPanel_Impl( i_rPanelURL );
 }
@@ -3264,7 +3264,7 @@ SfxInfoBarWindow* SfxViewFrame::AppendInfoBar( const OUString& sId, const OUStri
         ShowChildWindow(nId);
         return pInfoBar;
     }
-    return NULL;
+    return nullptr;
 }
 
 void SfxViewFrame::RemoveInfoBar( const OUString& sId )

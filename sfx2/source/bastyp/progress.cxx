@@ -75,7 +75,7 @@ struct SfxProgress_Impl
 
 void SfxProgress_Impl::Enable_Impl( bool bEnable )
 {
-    SfxObjectShell* pDoc = bAllDocs ? NULL : static_cast<SfxObjectShell*>(xObjSh);
+    SfxObjectShell* pDoc = bAllDocs ? nullptr : static_cast<SfxObjectShell*>(xObjSh);
     SfxViewFrame *pFrame= SfxViewFrame::GetFirst(pDoc);
     while ( pFrame )
     {
@@ -105,9 +105,9 @@ SfxProgress_Impl::SfxProgress_Impl( const OUString &/*rTitle*/ )
     , bWaitMode(false)
     , bAllowRescheduling(false)
     , bRunning(false)
-    , pActiveProgress(0)
-    , pWorkWin(0)
-    , pView(0)
+    , pActiveProgress(nullptr)
+    , pWorkWin(nullptr)
+    , pView(nullptr)
 {
 }
 
@@ -157,8 +157,8 @@ SfxProgress::SfxProgress
         "SfxProgress: created for '" << rText << "' at " << pImp->nCreate
             << "ds");
     pImp->bAllDocs = bAll;
-    pImp->pWorkWin = 0;
-    pImp->pView = 0;
+    pImp->pWorkWin = nullptr;
+    pImp->pView = nullptr;
 
     pImp->pActiveProgress = GetActiveProgress( pObjSh );
     if ( pObjSh )
@@ -198,7 +198,7 @@ void SfxProgress::Stop()
     if( pImp->pActiveProgress )
     {
         if ( pImp->xObjSh.Is() && pImp->xObjSh->GetProgress() == this )
-            pImp->xObjSh->SetProgress_Impl(0);
+            pImp->xObjSh->SetProgress_Impl(nullptr);
         return;
     }
 
@@ -210,9 +210,9 @@ void SfxProgress::Stop()
 
     Suspend();
     if ( pImp->xObjSh.Is() )
-        pImp->xObjSh->SetProgress_Impl(0);
+        pImp->xObjSh->SetProgress_Impl(nullptr);
     else
-        SfxGetpApp()->SetProgress_Impl(0);
+        SfxGetpApp()->SetProgress_Impl(nullptr);
     if ( pImp->bLocked )
         pImp->Enable_Impl(true);
 }
@@ -302,7 +302,7 @@ bool SfxProgress::SetState
         if ( pImp->xStatusInd.is() )
         {
             pImp->xStatusInd->start( pImp->aText, pImp->nMax );
-            pImp->pView = NULL;
+            pImp->pView = nullptr;
         }
     }
 
@@ -477,9 +477,9 @@ SfxProgress* SfxProgress::GetActiveProgress
 
 {
     if ( !SfxApplication::Get() )
-        return 0;
+        return nullptr;
 
-    SfxProgress *pProgress = 0;
+    SfxProgress *pProgress = nullptr;
     if ( pDocSh )
         pProgress = pDocSh->GetProgress();
     if ( !pProgress )

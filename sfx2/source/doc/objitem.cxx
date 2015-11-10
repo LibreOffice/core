@@ -73,7 +73,7 @@ bool SfxObjectShellItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /*nMembe
             }
         }
 
-        pObjSh = 0;
+        pObjSh = nullptr;
         return true;
     }
 

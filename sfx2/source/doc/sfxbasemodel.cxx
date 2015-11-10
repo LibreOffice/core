@@ -230,7 +230,7 @@ struct IMPL_SfxBaseModel_DataContainer : public ::sfx2::IModifiableDocument
             ,   m_bInitialized          ( false     )
             ,   m_bExternalTitle        ( false     )
             ,   m_bModifiedSinceLastSave( false     )
-            ,   m_pStorageModifyListen  ( NULL          )
+            ,   m_pStorageModifyListen  ( nullptr          )
             ,   m_xTitleHelper          ()
             ,   m_xNumberedControllers  ()
             ,   m_xDocumentMetadata     () // lazy
@@ -264,7 +264,7 @@ struct IMPL_SfxBaseModel_DataContainer : public ::sfx2::IModifiableDocument
             OSL_ENSURE(m_pObjectShell, "GetDMA: no object shell?");
             if (!m_pObjectShell)
             {
-                return 0;
+                return nullptr;
             }
 
             const Reference<XComponentContext> xContext(
@@ -285,7 +285,7 @@ struct IMPL_SfxBaseModel_DataContainer : public ::sfx2::IModifiableDocument
             OSL_ENSURE(xContent.is(), "GetDMA: cannot create DocumentContent");
             if (!xContent.is())
             {
-                return 0;
+                return nullptr;
             }
             uri = xContent->getIdentifier()->getContentIdentifier();
             OSL_ENSURE(!uri.isEmpty(), "GetDMA: empty uri?");
@@ -305,7 +305,7 @@ struct IMPL_SfxBaseModel_DataContainer : public ::sfx2::IModifiableDocument
         return (m_pObjectShell)
             ? new ::sfx2::DocumentMetadataAccess(
                 ::comphelper::getProcessComponentContext(), *m_pObjectShell)
-            : 0;
+            : nullptr;
     }
 };
 
@@ -329,13 +329,13 @@ public:
 
 void SAL_CALL SfxPrintHelperListener_Impl::disposing( const lang::EventObject& ) throw ( RuntimeException, std::exception )
 {
-    m_pData->m_xPrintable = 0;
+    m_pData->m_xPrintable = nullptr;
 }
 
 void SAL_CALL SfxPrintHelperListener_Impl::printJobEvent( const view::PrintJobEvent& rEvent ) throw (RuntimeException, std::exception)
 {
     ::cppu::OInterfaceContainerHelper* pContainer = m_pData->m_aInterfaceContainer.getContainer( cppu::UnoType<view::XPrintJobListener>::get());
-    if ( pContainer!=NULL )
+    if ( pContainer!=nullptr )
     {
         ::cppu::OInterfaceIteratorHelper pIterator(*pContainer);
         while (pIterator.hasMoreElements())
@@ -406,7 +406,7 @@ SfxOwnFramesLocker::~SfxOwnFramesLocker()
 
 vcl::Window* SfxOwnFramesLocker::GetVCLWindow( const Reference< frame::XFrame >& xFrame )
 {
-    vcl::Window* pWindow = NULL;
+    vcl::Window* pWindow = nullptr;
 
     if ( xFrame.is() )
     {
@@ -463,7 +463,7 @@ SfxSaveGuard::SfxSaveGuard(const Reference< frame::XModel >&             xModel 
                                  bool                             bRejectConcurrentSaveRequest)
     : m_xModel     (xModel)
     , m_pData      (pData )
-    , m_pFramesLock(0     )
+    , m_pFramesLock(nullptr     )
 {
     if ( m_pData->m_bClosed )
         throw lang::DisposedException("Object already disposed.");
@@ -482,7 +482,7 @@ SfxSaveGuard::SfxSaveGuard(const Reference< frame::XModel >&             xModel 
 SfxSaveGuard::~SfxSaveGuard()
 {
     SfxOwnFramesLocker* pFramesLock = m_pFramesLock;
-    m_pFramesLock = 0;
+    m_pFramesLock = nullptr;
     delete pFramesLock;
 
     m_pData->m_bSaving = false;
@@ -515,7 +515,7 @@ SfxBaseModel::SfxBaseModel( SfxObjectShell *pObjectShell )
 , m_bSupportEmbeddedScripts( pObjectShell && pObjectShell->Get_Impl() && !pObjectShell->Get_Impl()->m_bNoBasicCapabilities )
 , m_bSupportDocRecovery( pObjectShell && pObjectShell->Get_Impl() && pObjectShell->Get_Impl()->m_bDocRecoverySupport )
 {
-    if ( pObjectShell != NULL )
+    if ( pObjectShell != nullptr )
     {
         StartListening( *pObjectShell ) ;
     }
@@ -526,7 +526,7 @@ SfxBaseModel::~SfxBaseModel()
 {
     //In SvxDrawingLayerImport when !xTargetDocument the fallback SvxUnoDrawingModel created there
     //never gets disposed called on it, so m_pData leaks.
-    delete m_pData, m_pData = 0;
+    delete m_pData, m_pData = nullptr;
 }
 
 //  XInterface
@@ -763,13 +763,13 @@ void SAL_CALL SfxBaseModel::dispose() throw(RuntimeException, std::exception)
     if ( m_pData->m_pStorageModifyListen.is() )
     {
         m_pData->m_pStorageModifyListen->dispose();
-        m_pData->m_pStorageModifyListen = NULL;
+        m_pData->m_pStorageModifyListen = nullptr;
     }
 
     if ( m_pData->m_pDocumentUndoManager.is() )
     {
         m_pData->m_pDocumentUndoManager->disposing();
-        m_pData->m_pDocumentUndoManager = NULL;
+        m_pData->m_pDocumentUndoManager = nullptr;
     }
 
     lang::EventObject aEvent( static_cast<frame::XModel *>(this) );
@@ -791,7 +791,7 @@ void SAL_CALL SfxBaseModel::dispose() throw(RuntimeException, std::exception)
     // force disposed exception whenever someone tries to access our
     // instance while in the dtor.
     IMPL_SfxBaseModel_DataContainer* pData = m_pData;
-    m_pData = 0;
+    m_pData = nullptr;
     delete pData;
 }
 
@@ -1368,7 +1368,7 @@ void SAL_CALL SfxBaseModel::close( sal_Bool bDeliverOwnership ) throw (util::Clo
     Reference< XInterface > xSelfHold( static_cast< ::cppu::OWeakObject* >(this) );
     lang::EventObject       aSource  ( static_cast< ::cppu::OWeakObject* >(this) );
     ::cppu::OInterfaceContainerHelper* pContainer = m_pData->m_aInterfaceContainer.getContainer( cppu::UnoType<util::XCloseListener>::get());
-    if (pContainer!=NULL)
+    if (pContainer!=nullptr)
     {
         ::cppu::OInterfaceIteratorHelper pIterator(*pContainer);
         while (pIterator.hasMoreElements())
@@ -1396,7 +1396,7 @@ void SAL_CALL SfxBaseModel::close( sal_Bool bDeliverOwnership ) throw (util::Clo
     // no own objections against closing!
     m_pData->m_bClosing = true;
     pContainer = m_pData->m_aInterfaceContainer.getContainer( cppu::UnoType<util::XCloseListener>::get());
-    if (pContainer!=NULL)
+    if (pContainer!=nullptr)
     {
         ::cppu::OInterfaceIteratorHelper pCloseIterator(*pContainer);
         while (pCloseIterator.hasMoreElements())
@@ -2373,7 +2373,7 @@ Reference< document::XEmbeddedScripts > SAL_CALL SfxBaseModel::getScriptContaine
             Reference< container::XChild > xDocAsChild( xDocument, UNO_QUERY );
             if ( !xDocAsChild.is() )
             {
-                xDocument = NULL;
+                xDocument = nullptr;
                 break;
             }
 
@@ -2384,7 +2384,7 @@ Reference< document::XEmbeddedScripts > SAL_CALL SfxBaseModel::getScriptContaine
     catch( const Exception& )
     {
         DBG_UNHANDLED_EXCEPTION();
-        xDocumentScripts = NULL;
+        xDocumentScripts = nullptr;
     }
 
     return xDocumentScripts;
@@ -2699,7 +2699,7 @@ SfxMedium* SfxBaseModel::handleLoadError( sal_uInt32 nError, SfxMedium* pMedium 
         // for whatever reason document now has another medium
         OSL_FAIL("Document has rejected the medium?!");
         delete pMedium;
-        pMedium = NULL;
+        pMedium = nullptr;
     }
 
     if ( !bWarning )    // #i30711# don't abort loading if it's only a warning
@@ -2876,7 +2876,7 @@ void SfxBaseModel::changing()
 
 SfxObjectShell* SfxBaseModel::GetObjectShell() const
 {
-    return m_pData ? static_cast<SfxObjectShell*>(m_pData->m_pObjectShell) : 0;
+    return m_pData ? static_cast<SfxObjectShell*>(m_pData->m_pObjectShell) : nullptr;
 }
 
 
@@ -2891,7 +2891,7 @@ bool SfxBaseModel::IsInitialized() const
         return false;
     }
 
-    return m_pData->m_pObjectShell->GetMedium() != NULL;
+    return m_pData->m_pObjectShell->GetMedium() != nullptr;
 }
 
 void SfxBaseModel::MethodEntryCheck( const bool i_mustBeInitialized ) const
@@ -2904,7 +2904,7 @@ void SfxBaseModel::MethodEntryCheck( const bool i_mustBeInitialized ) const
 
 bool SfxBaseModel::impl_isDisposed() const
 {
-    return ( m_pData == NULL ) ;
+    return ( m_pData == nullptr ) ;
 }
 
 
@@ -2913,7 +2913,7 @@ bool SfxBaseModel::impl_isDisposed() const
 
 OUString SfxBaseModel::GetMediumFilterName_Impl()
 {
-    const SfxFilter* pFilter = NULL;
+    const SfxFilter* pFilter = nullptr;
     SfxMedium* pMedium = m_pData->m_pObjectShell->GetMedium();
     if ( pMedium )
         pFilter = pMedium->GetFilter();
@@ -3282,7 +3282,7 @@ void SfxBaseModel::notifyEvent( const document::EventObject& aEvent ) const
 /** returns true if someone added a XEventListener to this XEventBroadcaster */
 bool SfxBaseModel::hasEventListeners() const
 {
-    return !impl_isDisposed() && (NULL != m_pData->m_aInterfaceContainer.getContainer( cppu::UnoType<document::XEventListener>::get()) );
+    return !impl_isDisposed() && (nullptr != m_pData->m_aInterfaceContainer.getContainer( cppu::UnoType<document::XEventListener>::get()) );
 }
 
 void SAL_CALL SfxBaseModel::addPrintJobListener( const Reference< view::XPrintJobListener >& xListener ) throw (RuntimeException, std::exception)
@@ -4162,7 +4162,7 @@ namespace sfx { namespace intern {
         void takeFrameOwnership( SfxFrame* i_pFrame )
         {
             OSL_PRECOND( !m_aWeakFrame, "ViewCreationGuard::takeFrameOwnership: already have a frame!" );
-            OSL_PRECOND( i_pFrame != NULL, "ViewCreationGuard::takeFrameOwnership: invalid frame!" );
+            OSL_PRECOND( i_pFrame != nullptr, "ViewCreationGuard::takeFrameOwnership: invalid frame!" );
             m_aWeakFrame = i_pFrame;
         }
 
@@ -4176,7 +4176,7 @@ namespace sfx { namespace intern {
         {
             if ( m_aWeakFrame && !m_aWeakFrame->GetCurrentDocument() )
             {
-                m_aWeakFrame->SetFrameInterface_Impl( NULL );
+                m_aWeakFrame->SetFrameInterface_Impl( nullptr );
                 m_aWeakFrame->DoClose();
             }
         }
@@ -4190,7 +4190,7 @@ namespace sfx { namespace intern {
 
 SfxViewFrame* SfxBaseModel::FindOrCreateViewFrame_Impl( const Reference< XFrame >& i_rFrame, ::sfx::intern::ViewCreationGuard& i_rGuard ) const
 {
-    SfxViewFrame* pViewFrame = NULL;
+    SfxViewFrame* pViewFrame = nullptr;
     for (   pViewFrame = SfxViewFrame::GetFirst( GetObjectShell(), false );
             pViewFrame;
             pViewFrame= SfxViewFrame::GetNext( *pViewFrame, GetObjectShell(), false )
@@ -4209,8 +4209,8 @@ SfxViewFrame* SfxBaseModel::FindOrCreateViewFrame_Impl( const Reference< XFrame 
         {
             if ( pCheckFrame->GetFrameInterface() == i_rFrame )
             {
-                if  (   ( pCheckFrame->GetCurrentViewFrame() != NULL )
-                    ||  ( pCheckFrame->GetCurrentDocument() != NULL )
+                if  (   ( pCheckFrame->GetCurrentViewFrame() != nullptr )
+                    ||  ( pCheckFrame->GetCurrentDocument() != nullptr )
                     )
                     // Note that it is perfectly letgitimate that during loading into an XFrame which already contains
                     // a document, there exist two SfxFrame instances bound to this XFrame - the old one, which will be
@@ -4265,7 +4265,7 @@ Reference< frame::XController2 > SAL_CALL SfxBaseModel::createViewController(
         xPreviousController.clear();
     }
     SfxViewShell* pOldViewShell = SfxViewShell::Get( xPreviousController );
-    OSL_ENSURE( !xPreviousController.is() || ( pOldViewShell != NULL ),
+    OSL_ENSURE( !xPreviousController.is() || ( pOldViewShell != nullptr ),
         "SfxBaseModel::createViewController: invalid old controller!" );
 
     // a guard which will clean up in case of failure

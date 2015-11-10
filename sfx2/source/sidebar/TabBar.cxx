@@ -120,9 +120,9 @@ void TabBar::SetDecks(const ResourceManager::DeckContextDescriptorContainer& rDe
              iDeck(rDecks.begin()); iDeck != rDecks.end(); ++iDeck)
     {
         const DeckDescriptor* pDescriptor = pParentSidebarController->GetResourceManager()->GetDeckDescriptor(iDeck->msId);
-        if (pDescriptor == NULL)
+        if (pDescriptor == nullptr)
         {
-            OSL_ASSERT(pDescriptor!=NULL);
+            OSL_ASSERT(pDescriptor!=nullptr);
             continue;
         }
 
@@ -160,7 +160,7 @@ void TabBar::UpdateButtonIcons()
     {
         const DeckDescriptor* pDeckDescriptor = pParentSidebarController->GetResourceManager()->GetDeckDescriptor(iItem->msDeckId);
 
-        if (pDeckDescriptor != NULL)
+        if (pDeckDescriptor != nullptr)
         {
             aImage = GetItemImage(*pDeckDescriptor);
             if ( mpMenuButton->GetDPIScaleFactor() > 1 )
@@ -381,7 +381,7 @@ IMPL_LINK_NOARG_TYPED(TabBar, OnToolboxClicked, Button*, void)
     {
         const DeckDescriptor* pDeckDescriptor = pParentSidebarController->GetResourceManager()->GetDeckDescriptor(iItem->msDeckId);
 
-        if (pDeckDescriptor != NULL)
+        if (pDeckDescriptor != nullptr)
         {
             DeckMenuData aData;
             aData.msDisplayName = pDeckDescriptor->msTitle;

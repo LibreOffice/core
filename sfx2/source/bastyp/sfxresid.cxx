@@ -23,7 +23,7 @@
 
 
 
-static ResMgr* pMgr=NULL;
+static ResMgr* pMgr=nullptr;
 
 SfxResId::SfxResId( sal_uInt16 nId ) :
 

@@ -177,7 +177,7 @@ class SfxInstanceCloseGuard_Impl
 
 public:
     SfxInstanceCloseGuard_Impl()
-    : m_pPreventer( NULL )
+    : m_pPreventer( nullptr )
     {}
 
     ~SfxInstanceCloseGuard_Impl();
@@ -398,7 +398,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
 
     if( SID_SIGNATURE == nId || SID_MACRO_SIGNATURE == nId )
     {
-        if ( QueryHiddenInformation( HiddenWarningFact::WhenSigning, NULL ) == RET_YES )
+        if ( QueryHiddenInformation( HiddenWarningFact::WhenSigning, nullptr ) == RET_YES )
             ( SID_SIGNATURE == nId ) ? SignDocumentContent() : SignScriptingContent();
         return;
     }
@@ -492,7 +492,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
 
                 // creating dialog is done via virtual method; application will
                 // add its own statistics page
-                ScopedVclPtr<SfxDocumentInfoDialog> pDlg(CreateDocumentInfoDialog(0, aSet));
+                ScopedVclPtr<SfxDocumentInfoDialog> pDlg(CreateDocumentInfoDialog(nullptr, aSet));
                 if ( RET_OK == pDlg->Execute() )
                 {
                     const SfxDocumentInfoItem* pDocInfoItem = SfxItemSet::GetItem<SfxDocumentInfoItem>(pDlg->GetOutputItemSet(), SID_DOCINFO, false);
@@ -607,7 +607,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                 {
                     uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
                     uno::Reference< task::XInteractionHandler2 > xInteract(
-                        task::InteractionHandler::createWithParent(xContext, 0) );
+                        task::InteractionHandler::createWithParent(xContext, nullptr) );
 
                     SfxUnoAnyItem aInteractionItem( SID_INTERACTIONHANDLER, uno::makeAny( xInteract ) );
                     if ( nId == SID_SAVEDOC )
@@ -645,7 +645,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
 
                 SfxStoringHelper aHelper;
 
-                if ( QueryHiddenInformation( bIsPDFExport ? HiddenWarningFact::WhenCreatingPDF : HiddenWarningFact::WhenSaving, NULL ) == RET_YES )
+                if ( QueryHiddenInformation( bIsPDFExport ? HiddenWarningFact::WhenCreatingPDF : HiddenWarningFact::WhenSaving, nullptr ) == RET_YES )
                 {
                     aHelper.GUIStoreModel( GetModel(),
                                                          OUString::createFromAscii( pSlot->GetUnoName() ),

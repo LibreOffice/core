@@ -60,7 +60,7 @@ class SFX2_DLLPUBLIC LinkManager
     SfxObjectShell *pPersist; // LinkMgr must be release before SfxObjectShell
 protected:
     bool        InsertLink( SvBaseLink* pLink, sal_uInt16 nObjType, SfxLinkUpdateMode nUpdateType,
-                            const OUString* pName = 0 );
+                            const OUString* pName = nullptr );
 public:
 
     enum LinkState
@@ -103,8 +103,8 @@ public:
     bool InsertFileLink( sfx2::SvBaseLink&,
                         sal_uInt16 nFileType,
                         const OUString& rFileNm,
-                        const OUString* pFilterNm = NULL,
-                        const OUString* pRange = NULL );
+                        const OUString* pFilterNm = nullptr,
+                        const OUString* pRange = nullptr );
 
     void ReconnectDdeLink(SfxObjectShell& rServer);
 
@@ -120,16 +120,16 @@ public:
     // Obtain the string for the dialog
     static bool GetDisplayNames( const SvBaseLink *,
                                     OUString* pType,
-                                    OUString* pFile = NULL,
-                                    OUString* pLink = NULL,
-                                    OUString* pFilter = NULL );
+                                    OUString* pFile = nullptr,
+                                    OUString* pLink = nullptr,
+                                    OUString* pFilter = nullptr );
 
     static SvLinkSourceRef CreateObj( SvBaseLink* );
 
     void        UpdateAllLinks( bool bAskUpdate = true,
                                 bool bCallErrHdl = true,
                                 bool bUpdateGrfLinks = false,
-                                vcl::Window* pParentWin = 0 );
+                                vcl::Window* pParentWin = nullptr );
 
     // Call for list of links (eg for link-dialog)
     const       SvBaseLinks& GetLinks() const { return aLinkTbl; }
@@ -175,7 +175,7 @@ SFX2_DLLPUBLIC void MakeLnkName( OUString& rName,
                  const OUString* pType,       // Can also be null!!
                  const OUString& rFile,
                  const OUString& rLink,
-                 const OUString* pFilter = 0 );
+                 const OUString* pFilter = nullptr );
 
 }
 

@@ -182,7 +182,7 @@ IMPL_LINK_NOARG_TYPED(SfxNewFileDialog_Impl, Update, Idle*, void)
     if (!nEntry)
     {
         m_pPreviewWin->Invalidate();
-        m_pPreviewWin->SetObjectShell( 0);
+        m_pPreviewWin->SetObjectShell( nullptr);
         return;
     }
 
@@ -229,7 +229,7 @@ IMPL_LINK_NOARG_TYPED(SfxNewFileDialog_Impl, Update, Idle*, void)
             Application::SetDefDialogParent(pParent);
             if (!xDocShell.Is())
             {
-                m_pPreviewWin->SetObjectShell(0);
+                m_pPreviewWin->SetObjectShell(nullptr);
                 return;
             }
         }

@@ -361,7 +361,7 @@ void SfxViewFrame::INetExecute_Impl( SfxRequest &rRequest )
                 SfxControllerItem* pCtrl = pCache->GetItemLink();
                 while( pCtrl )
                 {
-                    pCtrl->StateChanged( SID_FOCUSURLBOX, SfxItemState::UNKNOWN, 0 );
+                    pCtrl->StateChanged( SID_FOCUSURLBOX, SfxItemState::UNKNOWN, nullptr );
                     pCtrl = pCtrl->GetItemLink();
                 }
             }

@@ -497,7 +497,7 @@ bool SfxApplication::GetOptions( SfxItemSet& rSet )
 // TODO/CLEANUP: Why two SetOptions Methods?
 void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
 {
-    const SfxPoolItem *pItem = 0;
+    const SfxPoolItem *pItem = nullptr;
     SfxItemPool &rPool = GetPool();
 
     SvtSaveOptions aSaveOptions;
@@ -776,7 +776,7 @@ void SfxApplication::SetOptions(const SfxItemSet &rSet)
     SvtPathOptions aPathOptions;
 
     // Data is saved in DocInfo and IniManager
-    const SfxPoolItem *pItem = 0;
+    const SfxPoolItem *pItem = nullptr;
     SfxItemPool &rPool = GetPool();
 
     SfxAllItemSet aSendSet( rSet );

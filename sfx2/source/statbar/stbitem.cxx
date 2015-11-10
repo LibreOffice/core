@@ -81,7 +81,7 @@ svt::StatusbarController* SAL_CALL SfxStatusBarControllerFactory(
     uno::Reference < util::XURLTransformer > xTrans( util::URLTransformer::create( ::comphelper::getProcessComponentContext() ) );
     xTrans->parseStrict( aTargetURL );
 
-    SfxObjectShell* pObjShell = NULL;
+    SfxObjectShell* pObjShell = nullptr;
     uno::Reference < frame::XController > xController;
     uno::Reference < frame::XModel > xModel;
     if ( rFrame.is() )
@@ -104,8 +104,8 @@ svt::StatusbarController* SAL_CALL SfxStatusBarControllerFactory(
         }
     }
 
-    SfxModule*     pModule   = pObjShell ? pObjShell->GetModule() : NULL;
-    SfxSlotPool*   pSlotPool = 0;
+    SfxModule*     pModule   = pObjShell ? pObjShell->GetModule() : nullptr;
+    SfxSlotPool*   pSlotPool = nullptr;
 
     if ( pModule )
         pSlotPool = pModule->GetSlotPool();
@@ -125,7 +125,7 @@ svt::StatusbarController* SAL_CALL SfxStatusBarControllerFactory(
         }
     }
 
-    return NULL;
+    return nullptr;
 }
 
 
@@ -212,7 +212,7 @@ throw (uno::RuntimeException, std::exception)
 void SAL_CALL SfxStatusBarControl::statusChanged( const frame::FeatureStateEvent& rEvent )
 throw ( css::uno::RuntimeException, std::exception )
 {
-    SfxViewFrame* pViewFrame = NULL;
+    SfxViewFrame* pViewFrame = nullptr;
     uno::Reference < frame::XController > xController;
 
     SolarMutexGuard aGuard;
@@ -226,7 +226,7 @@ throw ( css::uno::RuntimeException, std::exception )
         if ( xDisp.is() )
         {
             uno::Reference< lang::XUnoTunnel > xTunnel( xDisp, uno::UNO_QUERY );
-            SfxOfficeDispatch* pDisp = NULL;
+            SfxOfficeDispatch* pDisp = nullptr;
             if ( xTunnel.is() )
             {
                 sal_Int64 nImplementation = xTunnel->getSomething(SfxOfficeDispatch::impl_getStaticIdentifier());
@@ -251,7 +251,7 @@ throw ( css::uno::RuntimeException, std::exception )
         else
         {
             SfxItemState eState = SfxItemState::DISABLED;
-            SfxPoolItem* pItem = NULL;
+            SfxPoolItem* pItem = nullptr;
             if ( rEvent.IsEnabled )
             {
                 eState = SfxItemState::DEFAULT;
@@ -377,7 +377,7 @@ throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     ::Point aPos( rPos.X, rPos.Y );
-    CommandEvent aCmdEvent( aPos, static_cast<CommandEventId>(nCommand), true, NULL );
+    CommandEvent aCmdEvent( aPos, static_cast<CommandEventId>(nCommand), true, nullptr );
 
     Command( aCmdEvent );
 }
@@ -629,7 +629,7 @@ SfxStatusBarControl* SfxStatusBarControl::CreateControl
             return rFactories[nFactory].pCtor( nSlotID, nStbId, *pBar );
     }
 
-    return NULL;
+    return nullptr;
 }
 
 

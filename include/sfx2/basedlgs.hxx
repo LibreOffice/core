@@ -179,14 +179,14 @@ public:
         const OUString& rID = OUString("SingleTabDialog"),
         const OUString& rUIXMLDescription = OUString("sfx/ui/singletabdialog.ui"));
 
-    SfxSingleTabDialog(vcl::Window *pParent, const SfxItemSet* pInSet = 0,
+    SfxSingleTabDialog(vcl::Window *pParent, const SfxItemSet* pInSet = nullptr,
         const OUString& rID = OUString("SingleTabDialog"),
         const OUString& rUIXMLDescription = OUString("sfx/ui/singletabdialog.ui"));
 
     virtual             ~SfxSingleTabDialog();
     virtual void        dispose() override;
 
-    void                SetTabPage(SfxTabPage* pTabPage, GetTabPageRanges pRangesFunc = 0, sal_uInt32 nSettingsId = 0);
+    void                SetTabPage(SfxTabPage* pTabPage, GetTabPageRanges pRangesFunc = nullptr, sal_uInt32 nSettingsId = 0);
     SfxTabPage*         GetTabPage() const { return pImpl->m_pSfxPage; }
 
     OKButton*           GetOKButton() const { return pOKBtn; }

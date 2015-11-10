@@ -173,7 +173,7 @@ extern "C" bool GetSpecialCharsForEdit( vcl::Window* i_pParent, const vcl::Font&
 OUString GetSpecialCharsForEdit(vcl::Window* pParent, const vcl::Font& rFont)
 {
     static bool bDetermineFunction = false;
-    static PFunc_getSpecialCharsForEdit pfunc_getSpecialCharsForEdit = 0;
+    static PFunc_getSpecialCharsForEdit pfunc_getSpecialCharsForEdit = nullptr;
 
     SolarMutexGuard aGuard;
     if ( !bDetermineFunction )
@@ -276,7 +276,7 @@ bool SfxApplication::Initialize_Impl()
     // App-Dispatcher aufbauen
     pAppData_Impl->pAppDispat->Push(*this);
     pAppData_Impl->pAppDispat->Flush();
-    pAppData_Impl->pAppDispat->DoActivate_Impl( true, NULL );
+    pAppData_Impl->pAppDispat->DoActivate_Impl( true, nullptr );
 
     {
         SolarMutexGuard aGuard;

@@ -183,7 +183,7 @@ public:
         NULL-pointer is returned.
         */
     virtual SfxInterface*       GetInterface() const;
-    static SfxInterface*        GetStaticInterface() { return 0; }
+    static SfxInterface*        GetStaticInterface() { return nullptr; }
 
     /**
         Sets the name of the Shell object. With this name, the SfxShell instance
@@ -246,7 +246,7 @@ public:
 
         <SfxShell::ExecuteSlot(SfxRequest&)>
         */
-    const SfxPoolItem*          GetSlotState( sal_uInt16 nSlotId, const SfxInterface *pIF = 0, SfxItemSet *pStateSet = 0 );
+    const SfxPoolItem*          GetSlotState( sal_uInt16 nSlotId, const SfxInterface *pIF = nullptr, SfxItemSet *pStateSet = nullptr );
 
     /**
         This method allows you to forward a <SfxRequest> to the specified
@@ -278,7 +278,7 @@ public:
 
         <SfxShell::GetSlotState(sal_uInt16,const SfxInterface*,SfxItemSet*)>
         */
-    const SfxPoolItem*          ExecuteSlot( SfxRequest &rReq, const SfxInterface *pIF = 0 );
+    const SfxPoolItem*          ExecuteSlot( SfxRequest &rReq, const SfxInterface *pIF = nullptr );
 
     /**
         Asynchronous ExecuteSlot for the RELOAD
@@ -538,12 +538,12 @@ inline void SfxShell::SetPool
             static SfxInterface*                pInterface;                 \
             static SfxInterface*                GetStaticInterface();       \
             static SfxInterfaceId               GetInterfaceId() {return SfxInterfaceId(nId);} \
-            static void                         RegisterInterface(SfxModule* pMod=NULL); \
+            static void                         RegisterInterface(SfxModule* pMod=nullptr); \
             virtual SfxInterface*       GetInterface() const override;
 
 #define SFX_TMPL_INTERFACE(Class,SuperClass,Abstract)                       \
                                                                             \
-    SfxInterface* Class::pInterface = 0;                                    \
+    SfxInterface* Class::pInterface = nullptr;                                    \
     SfxInterface* Class::GetStaticInterface()                               \
     {                                                                       \
         if ( !pInterface )                                                  \

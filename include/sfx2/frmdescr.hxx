@@ -178,7 +178,7 @@ public:
                                               bIsRootSet( false ),
                                               bIsInColSet( false ),
                                               bHasBorderInherited( true ),
-                                              pFrame( 0 ) {}
+                                              pFrame( nullptr ) {}
 
                                         ~SfxFrameProperties() { delete pFrame; }
 
@@ -210,9 +210,9 @@ public:
     virtual bool GetPresentation( SfxItemPresentation ePres,
                                             SfxMapUnit eCoreMetric,
                                             SfxMapUnit ePresMetric,
-                                            OUString &rText, const IntlWrapper * = 0 ) const override;
+                                            OUString &rText, const IntlWrapper * = nullptr ) const override;
 
-    virtual SfxPoolItem*                Clone( SfxItemPool *pPool = 0 ) const override;
+    virtual SfxPoolItem*                Clone( SfxItemPool *pPool = nullptr ) const override;
 };
 
 #endif // INCLUDED_SFX2_FRMDESCR_HXX

@@ -76,7 +76,7 @@ class SfxQueryStatus_Impl:
 SfxQueryStatus_Impl::SfxQueryStatus_Impl( const Reference< XDispatchProvider >& rDispatchProvider, sal_uInt16 nSlotId, const OUString& rCommand ) :
     m_bQueryInProgress( false ),
     m_eState( SfxItemState::DISABLED ),
-    m_pItem( 0 ),
+    m_pItem( nullptr ),
     m_nSlotID( nSlotId )
 {
     m_aCommand.Complete = rCommand;
@@ -103,7 +103,7 @@ throw( RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
 
-    m_pItem  = NULL;
+    m_pItem  = nullptr;
     m_eState = SfxItemState::DISABLED;
 
     if ( rEvent.IsEnabled )
@@ -175,7 +175,7 @@ SfxItemState SfxQueryStatus_Impl::QueryState( SfxPoolItem*& rpPoolItem )
     SolarMutexGuard aGuard;
     if ( !m_bQueryInProgress )
     {
-        m_pItem  = NULL;
+        m_pItem  = nullptr;
         m_eState = SfxItemState::DISABLED;
 
         if ( m_xDispatch.is() )

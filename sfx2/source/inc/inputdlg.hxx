@@ -20,7 +20,7 @@ class Button;
 class InputDialog : public ModalDialog
 {
 public:
-    InputDialog (const OUString &labelText, vcl::Window *pParent = NULL);
+    InputDialog (const OUString &labelText, vcl::Window *pParent = nullptr);
     OUString getEntryText () const;
     virtual ~InputDialog();
     virtual void dispose() override;

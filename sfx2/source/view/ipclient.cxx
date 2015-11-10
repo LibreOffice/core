@@ -113,7 +113,7 @@ public:
 
 
     SfxInPlaceClient_Impl()
-    : m_pClient( NULL )
+    : m_pClient( nullptr )
     , m_nAspect( 0 )
     , m_bStoreObject( true )
     , m_bUIActive( false )
@@ -625,9 +625,9 @@ SfxInPlaceClient::~SfxInPlaceClient()
 
     // deleting the client before storing the object means discarding all changes
     m_pImp->m_bStoreObject = false;
-    SetObject(0);
+    SetObject(nullptr);
 
-    m_pImp->m_pClient = NULL;
+    m_pImp->m_pClient = nullptr;
 
     // the next call will destroy m_pImp if no other reference to it exists
     m_pImp->m_xClient.clear();
@@ -688,7 +688,7 @@ void SfxInPlaceClient::SetObject( const uno::Reference < embed::XEmbeddedObject 
             m_pImp->m_xObject->removeStateChangeListener( uno::Reference < embed::XStateChangeListener >( m_pImp->m_xClient, uno::UNO_QUERY ) );
             try
             {
-                m_pImp->m_xObject->setClientSite( 0 );
+                m_pImp->m_xObject->setClientSite( nullptr );
             }
             catch( uno::Exception& )
             {
@@ -854,13 +854,13 @@ SfxInPlaceClient* SfxInPlaceClient::GetClient( SfxObjectShell* pDoc, const css::
     {
         if( pFrame->GetViewShell() )
         {
-            SfxInPlaceClient* pClient = pFrame->GetViewShell()->FindIPClient( xObject, NULL );
+            SfxInPlaceClient* pClient = pFrame->GetViewShell()->FindIPClient( xObject, nullptr );
             if ( pClient )
                 return pClient;
         }
     }
 
-    return NULL;
+    return nullptr;
 }
 
 sal_Int64 SfxInPlaceClient::GetAspect() const

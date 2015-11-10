@@ -50,7 +50,7 @@ void SfxControllerItem::CheckConfigure_Impl( SfxSlotMode nType )
 
 SfxControllerItem* SfxControllerItem::GetItemLink()
 {
-    return pNext == this ? 0 : pNext;
+    return pNext == this ? nullptr : pNext;
 }
 
 
@@ -74,7 +74,7 @@ void SfxControllerItem::Bind( sal_uInt16 nNewId, SfxBindings *pBindinx )
     }
 
     nId = nNewId;
-    pNext = 0;
+    pNext = nullptr;
 
     if (pBindinx)
         pBindings = pBindinx;
@@ -91,7 +91,7 @@ void SfxControllerItem::BindInternal_Impl( sal_uInt16 nNewId, SfxBindings *pBind
     }
 
     nId = nNewId;
-    pNext = 0;
+    pNext = nullptr;
 
     if (pBindinx)
         pBindings = pBindinx;
@@ -183,7 +183,7 @@ SfxControllerItem* SfxControllerItem::ChangeItemLink( SfxControllerItem* pNewLin
 {
     SfxControllerItem* pOldLink = pNext;
     pNext = pNewLink;
-    return pOldLink == this ? 0 : pOldLink;
+    return pOldLink == this ? nullptr : pOldLink;
 }
 
 
@@ -202,7 +202,7 @@ void SfxControllerItem::SetId( sal_uInt16 nItemId )
 SfxControllerItem::SfxControllerItem():
     nId(0),
     pNext(this),
-    pBindings(0)
+    pBindings(nullptr)
 {
 }
 

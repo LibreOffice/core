@@ -33,7 +33,7 @@ void Sidebar::ShowPanel (
 
     const PanelDescriptor* pPanelDescriptor = pController->GetResourceManager()->GetPanelDescriptor(rsPanelId);
 
-    if (pController!=NULL && pPanelDescriptor != NULL)
+    if (pController!=nullptr && pPanelDescriptor != nullptr)
     {
         // This should be a lot more sophisticated:
         // - Make the deck switching asynchronous

@@ -297,7 +297,7 @@ public:
     virtual bool IsInContent() const override { return m_isInContent; }
     virtual css::uno::Reference< css::rdf::XMetadatable > MakeUnoObject() override
     { OSL_FAIL("MetadatableClipboard::MakeUnoObject"); throw; }
-    void OriginNoLongerInBusinessAnymore() { m_pReg = 0; }
+    void OriginNoLongerInBusinessAnymore() { m_pReg = nullptr; }
 };
 
 // XmlIdRegistryClipboard --------------------------------------------
@@ -366,7 +366,7 @@ XmlIdRegistry::GetElementByMetadataReference(
 {
     Metadatable* pObject( LookupElement(i_rReference.First,
         i_rReference.Second) );
-    return pObject ? pObject->MakeUnoObject() : 0;
+    return pObject ? pObject->MakeUnoObject() : nullptr;
 }
 
 beans::StringPair
@@ -390,7 +390,7 @@ template< typename T >
 /*static*/ OUString create_id(const
     std::unordered_map< OUString, T, OUStringHash > & i_rXmlIdMap)
 {
-    static bool bHack = (getenv("LIBO_ONEWAY_STABLE_ODF_EXPORT") != NULL);
+    static bool bHack = (getenv("LIBO_ONEWAY_STABLE_ODF_EXPORT") != nullptr);
     const OUString prefix(s_prefix);
     typename std::unordered_map< OUString, T, OUStringHash >
         ::const_iterator iter;
@@ -512,7 +512,7 @@ XmlIdRegistryDocument::XmlIdRegistry_Impl::LookupElementList(
     }
     else
     {
-        return 0;
+        return nullptr;
     }
 }
 
@@ -524,7 +524,7 @@ XmlIdRegistryDocument::XmlIdRegistry_Impl::LookupElement(
     if (!isValidXmlId(i_rStreamName, i_rIdref))
     {
         throw lang::IllegalArgumentException(OUString(
-            "illegal XmlId"), 0, 0);
+            "illegal XmlId"), nullptr, 0);
     }
 
     const XmlIdList_t * pList( LookupElementList(i_rStreamName, i_rIdref) );
@@ -540,7 +540,7 @@ XmlIdRegistryDocument::XmlIdRegistry_Impl::LookupElement(
             return *iter;
         }
     }
-    return 0;
+    return nullptr;
 }
 
 bool
@@ -680,14 +680,14 @@ XmlIdRegistryDocument::TryRegisterMetadatable(Metadatable & i_rObject,
     if (!isValidXmlId(i_rStreamName, i_rIdref))
     {
         throw lang::IllegalArgumentException(OUString(
-            "illegal XmlId"), 0, 0);
+            "illegal XmlId"), nullptr, 0);
     }
     if (i_rObject.IsInContent()
         ?   !isContentFile(i_rStreamName)
         :   !isStylesFile(i_rStreamName))
     {
         throw lang::IllegalArgumentException(OUString(
-            "illegal XmlId: wrong stream"), 0, 0);
+            "illegal XmlId: wrong stream"), nullptr, 0);
     }
 
     OUString old_path;
@@ -964,7 +964,7 @@ rmIter(ClipboardXmlIdMap_t & i_rXmlIdMap,
             ? i_rIter->second.first : i_rIter->second.second;
         if (rMeta == &i_rObject)
         {
-            rMeta = 0;
+            rMeta = nullptr;
         }
         if (!i_rIter->second.first && !i_rIter->second.second)
         {
@@ -983,7 +983,7 @@ XmlIdRegistryClipboard::XmlIdRegistry_Impl::LookupEntry(
     if (!isValidXmlId(i_rStreamName, i_rIdref))
     {
         throw lang::IllegalArgumentException(OUString(
-            "illegal XmlId"), 0, 0);
+            "illegal XmlId"), nullptr, 0);
     }
 
     const ClipboardXmlIdMap_t::const_iterator iter( m_XmlIdMap.find(i_rIdref) );
@@ -997,7 +997,7 @@ XmlIdRegistryClipboard::XmlIdRegistry_Impl::LookupEntry(
     }
     else
     {
-        return 0;
+        return nullptr;
     }
 }
 
@@ -1007,7 +1007,7 @@ XmlIdRegistryClipboard::XmlIdRegistry_Impl::LookupElement(
     const OUString & i_rIdref) const
 {
     Metadatable * const * ppEntry = LookupEntry(i_rStreamName, i_rIdref);
-    return ppEntry ? *ppEntry : 0;
+    return ppEntry ? *ppEntry : nullptr;
 }
 
 bool
@@ -1060,8 +1060,8 @@ XmlIdRegistryClipboard::XmlIdRegistry_Impl::TryInsertMetadatable(
     else
     {
         m_XmlIdMap.insert(::std::make_pair(i_rIdref, bContent
-            ? ::std::make_pair( &i_rObject, static_cast<Metadatable*>(0) )
-            : ::std::make_pair( static_cast<Metadatable*>(0), &i_rObject )));
+            ? ::std::make_pair( &i_rObject, static_cast<Metadatable*>(nullptr) )
+            : ::std::make_pair( static_cast<Metadatable*>(nullptr), &i_rObject )));
         return true;
     }
 }
@@ -1112,14 +1112,14 @@ XmlIdRegistryClipboard::TryRegisterMetadatable(Metadatable & i_rObject,
     if (!isValidXmlId(i_rStreamName, i_rIdref))
     {
         throw lang::IllegalArgumentException(OUString(
-            "illegal XmlId"), 0, 0);
+            "illegal XmlId"), nullptr, 0);
     }
     if (i_rObject.IsInContent()
         ?   !isContentFile(i_rStreamName)
         :   !isStylesFile(i_rStreamName))
     {
         throw lang::IllegalArgumentException(OUString(
-            "illegal XmlId: wrong stream"), 0, 0);
+            "illegal XmlId: wrong stream"), nullptr, 0);
     }
 
     OUString old_path;
@@ -1177,8 +1177,8 @@ XmlIdRegistryClipboard::RegisterMetadatableAndCreateID(Metadatable & i_rObject)
     OSL_ENSURE(m_pImpl->m_XmlIdMap.find(id) == m_pImpl->m_XmlIdMap.end(),
         "created id is in use");
     m_pImpl->m_XmlIdMap.insert(::std::make_pair(id, isInContent
-        ? ::std::make_pair( &i_rObject, static_cast<Metadatable*>(0) )
-        : ::std::make_pair( static_cast<Metadatable*>(0), &i_rObject )));
+        ? ::std::make_pair( &i_rObject, static_cast<Metadatable*>(nullptr) )
+        : ::std::make_pair( static_cast<Metadatable*>(nullptr), &i_rObject )));
     // N.B.: if i_rObject had a latent XmlId, then we implicitly delete the
     // MetadatableClipboard and thus the latent XmlId here
     m_pImpl->m_XmlIdReverseMap[&i_rObject] = RMapEntry(stream, id);
@@ -1249,7 +1249,7 @@ XmlIdRegistryClipboard::RegisterCopyClipboard(Metadatable & i_rCopy,
     if (!isValidXmlId(i_rReference.First, i_rReference.Second))
     {
         throw lang::IllegalArgumentException(OUString(
-            "illegal XmlId"), 0, 0);
+            "illegal XmlId"), nullptr, 0);
     }
 
     if (!i_isLatent)
@@ -1272,7 +1272,7 @@ XmlIdRegistryClipboard::SourceLink(Metadatable const& i_rObject)
 {
     OUString path;
     OUString idref;
-    const MetadatableClipboard * pLink( 0 );
+    const MetadatableClipboard * pLink( nullptr );
     m_pImpl->LookupXmlId(i_rObject, path, idref, pLink);
     return pLink;
 }
@@ -1295,7 +1295,7 @@ void Metadatable::RemoveMetadataReference()
         {
             m_pReg->UnregisterMetadatable( *this );
             m_pReg->RemoveXmlIdForElement( *this );
-            m_pReg = 0;
+            m_pReg = nullptr;
         }
     }
     catch (const uno::Exception &)
@@ -1340,7 +1340,7 @@ void Metadatable::SetMetadataReference( const css::beans::StringPair & i_rRefere
         {
             throw lang::IllegalArgumentException(
                 OUString("Metadatable::"
-                    "SetMetadataReference: argument is invalid"), /*this*/0, 0);
+                    "SetMetadataReference: argument is invalid"), /*this*/nullptr, 0);
         }
     }
 }

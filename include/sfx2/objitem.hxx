@@ -33,10 +33,10 @@ class SFX2_DLLPUBLIC SfxObjectItem: public SfxPoolItem
 
 public:
                              TYPEINFO_OVERRIDE();
-                             SfxObjectItem( sal_uInt16 nWhich=0, SfxShell *pSh=0 );
+                             SfxObjectItem( sal_uInt16 nWhich=0, SfxShell *pSh=nullptr );
 
     virtual bool             operator==( const SfxPoolItem& ) const override;
-    virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const override;
+    virtual SfxPoolItem*     Clone( SfxItemPool *pPool = nullptr ) const override;
 
     SfxShell*                GetShell() const
                              { return _pSh; }

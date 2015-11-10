@@ -324,7 +324,7 @@ protected:
     void SAL_CALL init(css::uno::Reference<css::xml::dom::XDocument> i_xDom);
     /// update element in DOM tree
     void SAL_CALL updateElement(const char *i_name,
-        std::vector<std::pair<const char *, OUString> >* i_pAttrs = 0);
+        std::vector<std::pair<const char *, OUString> >* i_pAttrs = nullptr);
     /// update user-defined meta data and attributes in DOM tree
     void SAL_CALL updateUserDefinedAndAttributes();
     /// create empty DOM tree (XDocument)
@@ -349,7 +349,7 @@ protected:
     /// set text of a list of standard meta data elements (multiple occ.)
     bool SAL_CALL setMetaList(const char* i_name,
         const css::uno::Sequence< OUString > & i_rValue,
-        AttrVector const* = 0);
+        AttrVector const* = nullptr);
     void createUserDefined();
 };
 
@@ -422,7 +422,7 @@ const char* s_stdStatAttrs[] = {
     "meta:syllable-count",
     "meta:non-whitespace-character-count",
     "meta:cell-count",
-    0
+    nullptr
 };
 
 // NB: keep these two arrays in sync!
@@ -442,7 +442,7 @@ const char* s_stdStats[] = {
     "SyllableCount",
     "NonWhitespaceCharacterCount",
     "CellCount",
-    0
+    nullptr
 };
 
 const char* s_stdMeta[] = {
@@ -463,13 +463,13 @@ const char* s_stdMeta[] = {
     "meta:editing-cycles",      // nonNegativeInteger
     "meta:editing-duration",    // duration
     "meta:document-statistic",  // ... // note: statistic is singular, no s!
-    0
+    nullptr
 };
 
 const char* s_stdMetaList[] = {
     "meta:keyword",             // string*
     "meta:user-defined",        // ...*
-    0
+    nullptr
 };
 
 const char* s_nsXLink   = "http://www.w3.org/1999/xlink";
@@ -534,7 +534,7 @@ textToDateOrDateTime(css::util::Date & io_rd, css::util::DateTime & io_rdt,
 bool SAL_CALL
 textToDateTime(css::util::DateTime & io_rdt, const OUString& i_text) throw ()
 {
-    if (::sax::Converter::parseDateTime(io_rdt, 0, i_text)) {
+    if (::sax::Converter::parseDateTime(io_rdt, nullptr, i_text)) {
         return true;
     } else {
         SAL_WARN_IF(!i_text.isEmpty(), "sfx.doc", "Invalid date: " << i_text);
@@ -555,7 +555,7 @@ textToDateTimeDefault(const OUString& i_text) throw ()
 // convert date to string
 OUString SAL_CALL
 dateToText(css::util::Date const& i_rd,
-           sal_Int16 const*const pTimeZone = 0) throw ()
+           sal_Int16 const*const pTimeZone = nullptr) throw ()
 {
     if (isValidDate(i_rd)) {
         OUStringBuffer buf;
@@ -570,7 +570,7 @@ dateToText(css::util::Date const& i_rd,
 // convert date/time to string
 OUString SAL_CALL
 dateTimeToText(css::util::DateTime const& i_rdt,
-               sal_Int16 const*const pTimeZone = 0) throw ()
+               sal_Int16 const*const pTimeZone = nullptr) throw ()
 {
     if (isValidDateTime(i_rdt)) {
         OUStringBuffer buf;
@@ -809,7 +809,7 @@ SfxDocumentMetaData::setMetaList(const char* i_name,
     // throw (css::uno::RuntimeException)
 {
     checkInit();
-    DBG_ASSERT((i_pAttrs == 0) ||
+    DBG_ASSERT((i_pAttrs == nullptr) ||
                (static_cast<size_t>(i_rValue.getLength()) == i_pAttrs->size()),
         "SfxDocumentMetaData::setMetaList: invalid args");
 
@@ -822,7 +822,7 @@ SfxDocumentMetaData::setMetaList(const char* i_name,
 
         // if nothing changed, do nothing
         // alas, this does not check for permutations, or attributes...
-        if ((0 == i_pAttrs)) {
+        if ((nullptr == i_pAttrs)) {
             if (static_cast<size_t>(i_rValue.getLength()) == vec.size()) {
                 bool isEqual(true);
                 for (sal_Int32 i = 0; i < i_rValue.getLength(); ++i) {
@@ -868,7 +868,7 @@ SfxDocumentMetaData::setMetaList(const char* i_name,
             css::uno::Reference<css::xml::dom::XNode> xTextNode(
                 m_xDoc->createTextNode(i_rValue[i]), css::uno::UNO_QUERY_THROW);
             // set attributes
-            if (i_pAttrs != 0) {
+            if (i_pAttrs != nullptr) {
                 for (std::vector<std::pair<const char*, OUString> >
                                 ::const_iterator it = (*i_pAttrs)[i].begin();
                         it != (*i_pAttrs)[i].end(); ++it) {
@@ -1018,7 +1018,7 @@ SfxDocumentMetaData::updateElement(const char *i_name,
             xNode.clear();
         }
         // add new element
-        if (0 != i_pAttrs) {
+        if (nullptr != i_pAttrs) {
             css::uno::Reference<css::xml::dom::XElement> xElem(
                 m_xDoc->createElementNS(getNameSpace(i_name), name),
                     css::uno::UNO_QUERY_THROW);
@@ -1217,7 +1217,7 @@ void SAL_CALL SfxDocumentMetaData::init(
 
 
     // select nodes for elements of which we only handle one occurrence
-    for (const char **pName = s_stdMeta; *pName != 0; ++pName) {
+    for (const char **pName = s_stdMeta; *pName != nullptr; ++pName) {
         OUString name = OUString::createFromAscii(*pName);
         // NB: If a document contains more than one occurrence of a
         // meta-data element, we arbitrarily pick one of them here.
@@ -1233,7 +1233,7 @@ void SAL_CALL SfxDocumentMetaData::init(
     }
 
     // select nodes for elements of which we handle all occurrences
-    for (const char **pName = s_stdMetaList; *pName != 0; ++pName) {
+    for (const char **pName = s_stdMetaList; *pName != nullptr; ++pName) {
         OUString name = OUString::createFromAscii(*pName);
         css::uno::Reference<css::xml::dom::XNodeList> nodes =
             xPath->selectNodeList(m_xParent, "child::" + name);
@@ -1718,7 +1718,7 @@ SfxDocumentMetaData::getDocumentStatistics() throw (css::uno::RuntimeException, 
     ::osl::MutexGuard g(m_aMutex);
     checkInit();
     ::std::vector<css::beans::NamedValue> stats;
-    for (size_t i = 0; s_stdStats[i] != 0; ++i) {
+    for (size_t i = 0; s_stdStats[i] != nullptr; ++i) {
         const char * aName = s_stdStatAttrs[i];
         OUString text = getMetaAttr("meta:document-statistic", aName);
         if (text.isEmpty()) continue;
@@ -1749,7 +1749,7 @@ SfxDocumentMetaData::setDocumentStatistics(
     for (sal_Int32 i = 0; i < the_value.getLength(); ++i) {
         const OUString name = the_value[i].Name;
         // inefficently search for matching attribute
-        for (size_t j = 0; s_stdStats[j] != 0; ++j) {
+        for (size_t j = 0; s_stdStats[j] != nullptr; ++j) {
             if (name.equalsAscii(s_stdStats[j])) {
                 const css::uno::Any any = the_value[i].Value;
                 sal_Int32 val = 0;

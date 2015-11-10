@@ -51,7 +51,7 @@ SfxStyleDialog::SfxStyleDialog
     if (!rStyle.HasParentSupport())
         RemoveStandardButton();
 
-    m_nOrganizerId = AddTabPage("organizer", SfxManageStyleSheetPage::Create, 0);
+    m_nOrganizerId = AddTabPage("organizer", SfxManageStyleSheetPage::Create, nullptr);
 
     // With new template always set the management page as the current page
 
@@ -83,8 +83,8 @@ SfxStyleDialog::~SfxStyleDialog()
 
 void SfxStyleDialog::dispose()
 {
-    pExampleSet = 0;
-    pStyle = 0;
+    pExampleSet = nullptr;
+    pStyle = nullptr;
     SfxTabDialog::dispose();
 }
 

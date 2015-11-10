@@ -68,7 +68,7 @@ void SAL_CALL OPackageStructureCreator::convertToPackage( const OUString& aFolde
     ::ucbhelper::Content aContent;
     if( ::ucbhelper::Content::create( aFolderUrl, xComEnv, comphelper::getProcessComponentContext(), aContent ) )
     {
-        SvStream* pTempStream = NULL;
+        SvStream* pTempStream = nullptr;
 
         OUString aTempURL = ::utl::TempFile().GetURL();
         try {
@@ -91,8 +91,8 @@ void SAL_CALL OPackageStructureCreator::convertToPackage( const OUString& aFolde
                     if ( aStorage->GetError() || aTargetStorage->GetError() || pTempStream->GetError() )
                         throw io::IOException();
 
-                    aTargetStorage = NULL;
-                    aStorage = NULL;
+                    aTargetStorage = nullptr;
+                    aStorage = nullptr;
 
                     pTempStream->Seek( 0 );
 

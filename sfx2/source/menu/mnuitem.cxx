@@ -77,7 +77,7 @@ void SfxMenuControl::Bind(
 {
     aTitle = rTitle;
     pOwnMenu = pOwn;
-    pSubMenu = 0;
+    pSubMenu = nullptr;
     if ( pOwn )
         SfxControllerItem::Bind(nSlotId, &rBindings);
     else
@@ -112,8 +112,8 @@ void SfxMenuControl::Bind(
 // Constructor for explicit registration
 
 SfxMenuControl::SfxMenuControl( bool bShowStrings )
-:   pOwnMenu(0),
-    pSubMenu(0),
+:   pOwnMenu(nullptr),
+    pSubMenu(nullptr),
     b_ShowStrings(bShowStrings)
 {
 }
@@ -122,8 +122,8 @@ SfxMenuControl::SfxMenuControl( bool bShowStrings )
 
 // Constructor for array
 SfxMenuControl::SfxMenuControl():
-    pOwnMenu(0),
-    pSubMenu(0),
+    pOwnMenu(nullptr),
+    pSubMenu(nullptr),
     b_ShowStrings(false)
 {
 }
@@ -132,8 +132,8 @@ SfxMenuControl::SfxMenuControl():
 
 SfxMenuControl::SfxMenuControl(sal_uInt16 nSlotId, SfxBindings& rBindings):
     SfxControllerItem(nSlotId, rBindings),
-    pOwnMenu(0),
-    pSubMenu(0),
+    pOwnMenu(nullptr),
+    pSubMenu(nullptr),
     b_ShowStrings(false)
 {
     // This constructor should make it possible already during the design
@@ -164,7 +164,7 @@ void SfxMenuControl::StateChanged
 {
     (void)nSID;
     DBG_ASSERT( nSID == GetId(), "strange SID" );
-    DBG_ASSERT( pOwnMenu != 0, "setting state to dangling SfxMenuControl" );
+    DBG_ASSERT( pOwnMenu != nullptr, "setting state to dangling SfxMenuControl" );
 
     bool bIsObjMenu =
                 GetId() >= SID_OBJECTMENU0 && GetId() < SID_OBJECTMENU_LAST;
@@ -177,7 +177,7 @@ void SfxMenuControl::StateChanged
     else
 #endif
         pOwnMenu->EnableItem( GetId(), bIsObjMenu
-                ? 0 != pOwnMenu->GetSVMenu()->GetPopupMenu( GetId() )
+                ? nullptr != pOwnMenu->GetSVMenu()->GetPopupMenu( GetId() )
                 : eState != SfxItemState::DISABLED );
 
     if ( eState != SfxItemState::DEFAULT )
@@ -263,7 +263,7 @@ SfxMenuControl* SfxMenuControl::CreateControl( sal_uInt16 nId, Menu &rMenu, SfxB
     {
         SfxApplication *pApp = SfxGetpApp();
         SfxDispatcher *pDisp = rBindings.GetDispatcher_Impl();
-        SfxModule *pMod = pDisp ? SfxModule::GetActiveModule( pDisp->GetFrame() ) :0;
+        SfxModule *pMod = pDisp ? SfxModule::GetActiveModule( pDisp->GetFrame() ) :nullptr;
         if ( pMod )
         {
             SfxMenuCtrlFactArr_Impl *pFactories = pMod->GetMenuCtrlFactories_Impl();
@@ -286,7 +286,7 @@ SfxMenuControl* SfxMenuControl::CreateControl( sal_uInt16 nId, Menu &rMenu, SfxB
                    ( rFactories[nFactory].nSlotId == nId) ) )
                 return rFactories[nFactory].pCtor( nId, rMenu, rBindings );
     }
-    return 0;
+    return nullptr;
 }
 
 

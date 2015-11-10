@@ -91,14 +91,14 @@ sal_uInt16 NoChaos::ReleaseItemPool()
 //  CntItemPool implementation
 
 
-static CntStaticPoolDefaults_Impl* pPoolDefs_Impl = NULL;
+static CntStaticPoolDefaults_Impl* pPoolDefs_Impl = nullptr;
 
 // static member!
-CntItemPool* CntItemPool::_pThePool = NULL;
+CntItemPool* CntItemPool::_pThePool = nullptr;
 
 
 CntItemPool::CntItemPool()
-: SfxItemPool( "chaos", WID_CHAOS_START, WID_CHAOS_START, NULL ),
+: SfxItemPool( "chaos", WID_CHAOS_START, WID_CHAOS_START, nullptr ),
   _nRefs( 0 )
 {
     SetFileFormatVersion( SOFFICE_FILEFORMAT_50 );

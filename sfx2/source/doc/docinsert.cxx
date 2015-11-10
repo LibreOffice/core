@@ -55,8 +55,8 @@ DocumentInserter::DocumentInserter(
                                     ? (SFXWB_INSERT|SFXWB_MULTISELECTION)
                                     : SFXWB_INSERT )
     , m_nError                  ( ERRCODE_NONE )
-    , m_pFileDlg                ( NULL )
-    , m_pItemSet                ( NULL )
+    , m_pFileDlg                ( nullptr )
+    , m_pItemSet                ( nullptr )
 {
 }
 
@@ -80,7 +80,7 @@ void DocumentInserter::StartExecuteModal( const Link<sfx2::FileDialogHelper*,voi
 
 SfxMedium* DocumentInserter::CreateMedium()
 {
-    SfxMedium* pMedium = NULL;
+    SfxMedium* pMedium = nullptr;
     if (!m_nError && m_pItemSet && !m_pURLList.empty())
     {
         DBG_ASSERT( m_pURLList.size() == 1, "DocumentInserter::CreateMedium(): invalid URL list count" );
@@ -89,21 +89,21 @@ SfxMedium* DocumentInserter::CreateMedium()
                 sURL, SFX_STREAM_READONLY,
                 SfxGetpApp()->GetFilterMatcher().GetFilter4FilterName( m_sFilter ), m_pItemSet );
         pMedium->UseInteractionHandler( true );
-        SfxFilterMatcher* pMatcher = NULL;
+        SfxFilterMatcher* pMatcher = nullptr;
         if ( !m_sDocFactory.isEmpty() )
             pMatcher = new SfxFilterMatcher( m_sDocFactory );
         else
             pMatcher = new SfxFilterMatcher();
 
-        const SfxFilter* pFilter = NULL;
+        const SfxFilter* pFilter = nullptr;
         sal_uInt32 nError = pMatcher->DetectFilter( *pMedium, &pFilter, false );
         if ( nError == ERRCODE_NONE && pFilter )
             pMedium->SetFilter( pFilter );
         else
             DELETEZ( pMedium );
 
-        if ( pMedium && CheckPasswd_Impl( 0, SfxGetpApp()->GetPool(), pMedium ) == ERRCODE_ABORT )
-            pMedium = NULL;
+        if ( pMedium && CheckPasswd_Impl( nullptr, SfxGetpApp()->GetPool(), pMedium ) == ERRCODE_ABORT )
+            pMedium = nullptr;
 
         DELETEZ( pMatcher );
     }
@@ -125,14 +125,14 @@ SfxMediumList* DocumentInserter::CreateMediumList()
             pMedium->UseInteractionHandler( true );
 
             SfxFilterMatcher aMatcher( m_sDocFactory );
-            const SfxFilter* pFilter = NULL;
+            const SfxFilter* pFilter = nullptr;
             sal_uInt32 nError = aMatcher.DetectFilter( *pMedium, &pFilter, false );
             if ( nError == ERRCODE_NONE && pFilter )
                 pMedium->SetFilter( pFilter );
             else
                 DELETEZ( pMedium );
 
-            if( pMedium && CheckPasswd_Impl( 0, SfxGetpApp()->GetPool(), pMedium ) != ERRCODE_ABORT )
+            if( pMedium && CheckPasswd_Impl( nullptr, SfxGetpApp()->GetPool(), pMedium ) != ERRCODE_ABORT )
                 pMediumList->push_back( pMedium );
             else
                 delete pMedium;

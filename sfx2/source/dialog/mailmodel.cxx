@@ -477,7 +477,7 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
             // This makes it possible to store the file for "send document as e-mail"
             // with the original file name. We cannot use the original file as
             // some mail programs need exclusive access.
-            ::utl::TempFile aTempDir( NULL, true );
+            ::utl::TempFile aTempDir( nullptr, true );
 
             INetURLObject aFilePathObj( aTempDir.GetURL() );
             aFilePathObj.insertName( aFileName );
@@ -649,9 +649,9 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
 }
 
 SfxMailModel::SfxMailModel() :
-    mpToList    ( NULL ),
-    mpCcList    ( NULL ),
-    mpBccList   ( NULL )
+    mpToList    ( nullptr ),
+    mpCcList    ( nullptr ),
+    mpBccList   ( nullptr )
 {
 }
 
@@ -667,7 +667,7 @@ void SfxMailModel::AddAddress( const OUString& rAddress, AddressRole eRole )
     // don't add a empty address
     if ( !rAddress.isEmpty() )
     {
-        AddressList_Impl* pList = NULL;
+        AddressList_Impl* pList = nullptr;
         if ( ROLE_TO == eRole )
         {
             if ( !mpToList )

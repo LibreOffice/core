@@ -899,10 +899,10 @@ namespace sfx2
     const SfxFilter* TSortedFilterList::impl_getFilter(sal_Int32 nIndex)
     {
         if (nIndex<0 || nIndex>=(sal_Int32)m_lFilters.size())
-            return 0;
+            return nullptr;
         const OUString& sFilterName = m_lFilters[nIndex];
         if (sFilterName.isEmpty())
-            return 0;
+            return nullptr;
         return SfxFilter::GetFilterByName(sFilterName);
     }
 

@@ -72,18 +72,18 @@ struct SfxRequest_Impl: public SfxListener
 
     explicit SfxRequest_Impl( SfxRequest *pOwner )
         : pAnti( pOwner)
-        , pPool(0)
-        , pRetVal(0)
-        , pShell(0)
-        , pSlot(0)
+        , pPool(nullptr)
+        , pRetVal(nullptr)
+        , pShell(nullptr)
+        , pSlot(nullptr)
         , nModifier(0)
         , bDone(false)
         , bIgnored(false)
         , bCancelled(false)
         , nCallMode( SfxCallMode::SYNCHRON )
         , bAllowRecording( false )
-        , pInternalArgs( 0 )
-        , pViewFrame(0)
+        , pInternalArgs( nullptr )
+        , pViewFrame(nullptr)
         {}
     virtual ~SfxRequest_Impl() { delete pInternalArgs; }
 
@@ -141,21 +141,21 @@ SfxRequest::SfxRequest
 )
 :   SfxHint( rOrig ),
     nSlot(rOrig.nSlot),
-    pArgs(rOrig.pArgs? new SfxAllItemSet(*rOrig.pArgs): 0),
+    pArgs(rOrig.pArgs? new SfxAllItemSet(*rOrig.pArgs): nullptr),
     pImp( new SfxRequest_Impl(this) )
 {
     pImp->bAllowRecording = rOrig.pImp->bAllowRecording;
     pImp->bDone = false;
     pImp->bIgnored = false;
-    pImp->pRetVal = 0;
-    pImp->pShell = 0;
-    pImp->pSlot = 0;
+    pImp->pRetVal = nullptr;
+    pImp->pShell = nullptr;
+    pImp->pSlot = nullptr;
     pImp->nCallMode = rOrig.pImp->nCallMode;
     pImp->aTarget = rOrig.pImp->aTarget;
     pImp->nModifier = rOrig.pImp->nModifier;
 
     // deep copy needed !
-    pImp->pInternalArgs = (rOrig.pImp->pInternalArgs ? new SfxAllItemSet(*rOrig.pImp->pInternalArgs) : 0);
+    pImp->pInternalArgs = (rOrig.pImp->pInternalArgs ? new SfxAllItemSet(*rOrig.pImp->pInternalArgs) : nullptr);
 
     if ( pArgs )
         pImp->SetPool( pArgs->GetPool() );
@@ -182,15 +182,15 @@ SfxRequest::SfxRequest
 */
 
 :   nSlot(nSlotId),
-    pArgs(0),
+    pArgs(nullptr),
     pImp( new SfxRequest_Impl(this) )
 {
     pImp->bDone = false;
     pImp->bIgnored = false;
     pImp->SetPool( &pViewFrame->GetPool() );
-    pImp->pRetVal = 0;
-    pImp->pShell = 0;
-    pImp->pSlot = 0;
+    pImp->pRetVal = nullptr;
+    pImp->pShell = nullptr;
+    pImp->pSlot = nullptr;
     pImp->nCallMode = SfxCallMode::SYNCHRON;
     pImp->pViewFrame = pViewFrame;
     if( pImp->pViewFrame->GetDispatcher()->GetShellAndSlot_Impl( nSlotId, &pImp->pShell, &pImp->pSlot, true, true ) )
@@ -222,15 +222,15 @@ SfxRequest::SfxRequest
 // creates a SfxRequest without arguments
 
 :   nSlot(nSlotId),
-    pArgs(0),
+    pArgs(nullptr),
     pImp( new SfxRequest_Impl(this) )
 {
     pImp->bDone = false;
     pImp->bIgnored = false;
     pImp->SetPool( &rPool );
-    pImp->pRetVal = 0;
-    pImp->pShell = 0;
-    pImp->pSlot = 0;
+    pImp->pRetVal = nullptr;
+    pImp->pShell = nullptr;
+    pImp->pSlot = nullptr;
     pImp->nCallMode = nMode;
 }
 
@@ -248,9 +248,9 @@ SfxRequest::SfxRequest
     pImp->bDone = false;
     pImp->bIgnored = false;
     pImp->SetPool( &rPool );
-    pImp->pRetVal = 0;
-    pImp->pShell = 0;
-    pImp->pSlot = 0;
+    pImp->pRetVal = nullptr;
+    pImp->pShell = nullptr;
+    pImp->pSlot = nullptr;
     pImp->nCallMode = nMode;
     TransformParameters( nSlot, rArgs, *pArgs, pSlot );
 }
@@ -273,9 +273,9 @@ SfxRequest::SfxRequest
     pImp->bDone = false;
     pImp->bIgnored = false;
     pImp->SetPool( rSfxArgs.GetPool() );
-    pImp->pRetVal = 0;
-    pImp->pShell = 0;
-    pImp->pSlot = 0;
+    pImp->pRetVal = nullptr;
+    pImp->pShell = nullptr;
+    pImp->pSlot = nullptr;
     pImp->nCallMode = nMode;
 }
 
@@ -540,7 +540,7 @@ void SfxRequest::Cancel()
 
 {
     pImp->bCancelled = true;
-    pImp->SetPool( 0 );
+    pImp->SetPool( nullptr );
     DELETEZ( pArgs );
 }
 

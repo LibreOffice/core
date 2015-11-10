@@ -305,7 +305,7 @@ public:
 
     void                        update( bool bUpdateNow );
     void                        doUpdate();
-    void                        finished() { mpUpdater = NULL; }
+    void                        finished() { mpUpdater = nullptr; }
 };
 
 
@@ -401,7 +401,7 @@ void SfxDocTplService_Impl::init_Impl()
 {
     uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
     uno::Reference < task::XInteractionHandler > xInteractionHandler(
-        task::InteractionHandler::createWithParent(xContext, 0), uno::UNO_QUERY_THROW );
+        task::InteractionHandler::createWithParent(xContext, nullptr), uno::UNO_QUERY_THROW );
     maCmdEnv = new TplTaskEnvironment( xInteractionHandler );
 
     ::osl::ClearableMutexGuard aGuard( maMutex );
@@ -1101,7 +1101,7 @@ SfxDocTplService_Impl::SfxDocTplService_Impl( const uno::Reference< XComponentCo
     : maRelocator(xContext)
 {
     mxContext       = xContext;
-    mpUpdater       = NULL;
+    mpUpdater       = nullptr;
     mbIsInitialized = false;
     mbLocaleSet     = false;
 }
@@ -2298,7 +2298,7 @@ uno::Reference< ucb::XContent > SAL_CALL SfxDocTplService::getContent()
     if ( pImp->init() )
         return pImp->getContent().get();
     else
-        return NULL;
+        return nullptr;
 }
 
 
@@ -2421,7 +2421,7 @@ void SAL_CALL Updater_Impl::onTerminated()
 }
 
 
-WaitWindow_Impl::WaitWindow_Impl() : WorkWindow(NULL, WB_BORDER | WB_3DLOOK)
+WaitWindow_Impl::WaitWindow_Impl() : WorkWindow(nullptr, WB_BORDER | WB_3DLOOK)
 {
     Rectangle aRect = Rectangle(0, 0, 300, 30000);
     mnTextStyle = DrawTextFlags::Center | DrawTextFlags::VCenter | DrawTextFlags::WordBreak | DrawTextFlags::MultiLine;
@@ -2551,7 +2551,7 @@ void SfxDocTplService_Impl::addFsysGroup( GroupList_Impl& rList,
     if ( aTitle.isEmpty() )
         return;
 
-    GroupData_Impl* pGroup = NULL;
+    GroupData_Impl* pGroup = nullptr;
     for ( size_t i = 0, n = rList.size(); i < n; ++i )
     {
         if ( rList[ i ]->getTitle() == aTitle )
@@ -2805,7 +2805,7 @@ DocTemplates_EntryData_Impl* GroupData_Impl::addEntry( const OUString& rTitle,
                                           const OUString& rType,
                                           const OUString& rHierURL )
 {
-    DocTemplates_EntryData_Impl* pData = NULL;
+    DocTemplates_EntryData_Impl* pData = nullptr;
     bool EntryFound = false;
 
     for ( size_t i = 0, n = maEntries.size(); i < n; ++i )

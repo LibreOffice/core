@@ -218,7 +218,7 @@ void SAL_CALL PluginObject::cancel() throw( css::uno::RuntimeException, std::exc
     uno::Reference< lang::XComponent > xComp( mxPlugin, uno::UNO_QUERY );
     if (xComp.is())
         xComp->dispose();
-    mxPlugin = 0;
+    mxPlugin = nullptr;
 }
 
 void SAL_CALL PluginObject::close( sal_Bool /*bDeliverOwnership*/ ) throw( css::util::CloseVetoException, css::uno::RuntimeException, std::exception )

@@ -71,9 +71,9 @@ struct SfxObjectFactory_Impl
     SvGlobalName                aClassName;
 
     SfxObjectFactory_Impl() :
-        pNameResId          ( NULL ),
-        pFilterContainer    ( NULL ),
-        pModule             ( NULL ),
+        pNameResId          ( nullptr ),
+        pFilterContainer    ( nullptr ),
+        pModule             ( nullptr ),
         nImageId            ( 0 ),
         bTemplateInitialized( false )
         {}
@@ -327,7 +327,7 @@ const SfxFilter* SfxObjectFactory::GetTemplateFilter() const
     sal_uInt16 nVersion=0;
     SfxFilterMatcher aMatcher ( OUString::createFromAscii( pShortName ) );
     SfxFilterMatcherIter aIter( aMatcher );
-    const SfxFilter *pFilter = 0;
+    const SfxFilter *pFilter = nullptr;
     const SfxFilter *pTemp = aIter.First();
     while ( pTemp )
     {
@@ -416,7 +416,7 @@ SfxViewFactory* SfxObjectFactory::GetViewFactoryByViewName( const OUString& i_rV
             )
             return &rViewFac;
     }
-    return NULL;
+    return nullptr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -86,7 +86,7 @@ const DeckDescriptor* ResourceManager::GetDeckDescriptor(const OUString& rsDeckI
         if (iDeck->msId.equals(rsDeckId))
             return &*iDeck;
     }
-    return NULL;
+    return nullptr;
 }
 
 const PanelDescriptor* ResourceManager::GetPanelDescriptor(const OUString& rsPanelId) const
@@ -97,7 +97,7 @@ const PanelDescriptor* ResourceManager::GetPanelDescriptor(const OUString& rsPan
         if (iPanel->msId.equals(rsPanelId))
             return &*iPanel;
     }
-    return NULL;
+    return nullptr;
 }
 
 void ResourceManager::SetIsDeckEnabled(const OUString& rsDeckId, const bool bIsEnabled)
@@ -191,7 +191,7 @@ const ResourceManager::DeckContextDescriptorContainer& ResourceManager::GetMatch
         if (iDeck->mbExperimental && !maMiscOptions.IsExperimentalMode())
             continue;
         const DeckDescriptor& rDeckDescriptor (*iDeck);
-        if (rDeckDescriptor.maContextList.GetMatch(rContext) == NULL)
+        if (rDeckDescriptor.maContextList.GetMatch(rContext) == nullptr)
             continue;
         DeckContextDescriptor aDeckContextDescriptor;
         aDeckContextDescriptor.msId = rDeckDescriptor.msId;
@@ -231,7 +231,7 @@ const ResourceManager::PanelContextDescriptorContainer& ResourceManager::GetMatc
             continue;
 
         const ContextList::Entry* pEntry = rPanelDescriptor.maContextList.GetMatch(rContext);
-        if (pEntry == NULL)
+        if (pEntry == nullptr)
             continue;
 
         PanelContextDescriptor aPanelContextDescriptor;
@@ -580,7 +580,7 @@ void ResourceManager::StorePanelExpansionState (
         if (iPanel->msId.equals(rsPanelId))
         {
             ContextList::Entry* pEntry(iPanel->maContextList.GetMatch(rContext));
-            if (pEntry != NULL)
+            if (pEntry != nullptr)
                 pEntry->mbIsInitiallyVisible = bExpansionState;
         }
     }

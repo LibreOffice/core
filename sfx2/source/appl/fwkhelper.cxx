@@ -35,7 +35,7 @@ void SAL_CALL RefreshToolbars( css::uno::Reference< css::frame::XFrame >& xFrame
     SolarMutexGuard aGuard;
     if ( xFrame.is() )
     {
-        SfxFrame* pFrame=0;
+        SfxFrame* pFrame=nullptr;
         for ( pFrame = SfxFrame::GetFirst(); pFrame; pFrame = SfxFrame::GetNext( *pFrame ) )
         {
             if ( pFrame->GetFrameInterface() == xFrame )

@@ -256,7 +256,7 @@ void SfxEventConfiguration::ConfigureEvent( const OUString& aName, const SvxMacr
     std::unique_ptr<SvxMacro> pMacro;
     if ( rMacro.HasMacro() )
         pMacro.reset( new SvxMacro( rMacro.GetMacName(), rMacro.GetLibName(), rMacro.GetScriptType() ) );
-    PropagateEvent_Impl( pDoc ? pDoc : 0, aName, pMacro.get() );
+    PropagateEvent_Impl( pDoc ? pDoc : nullptr, aName, pMacro.get() );
 }
 
 

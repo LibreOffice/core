@@ -34,10 +34,10 @@ Reference<accessibility::XAccessible> AccessibleTitleBar::Create (TitleBar& rTit
 {
     rTitleBar.GetComponentInterface();
     VCLXWindow* pWindow = rTitleBar.GetWindowPeer();
-    if (pWindow != NULL)
+    if (pWindow != nullptr)
         return new Accessible(new AccessibleTitleBar(pWindow));
     else
-        return NULL;
+        return nullptr;
 }
 
 AccessibleTitleBar::AccessibleTitleBar (VCLXWindow* pWindow)

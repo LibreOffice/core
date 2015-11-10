@@ -252,7 +252,7 @@ void SAL_CALL BackingComp::release()
 css::uno::Sequence< css::uno::Type > SAL_CALL BackingComp::getTypes()
     throw(css::uno::RuntimeException, std::exception)
 {
-    static ::cppu::OTypeCollection* pTypeCollection = NULL;
+    static ::cppu::OTypeCollection* pTypeCollection = nullptr;
     if (!pTypeCollection)
     {
         /* GLOBAL SAFE { */

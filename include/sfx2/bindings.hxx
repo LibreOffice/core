@@ -166,21 +166,21 @@ public:
     SfxItemState     QueryState( sal_uInt16 nSID, SfxPoolItem* &rpState );
 
     const SfxPoolItem*  ExecuteSynchron( sal_uInt16 nSlot,
-                                 const SfxPoolItem **pArgs = 0,
+                                 const SfxPoolItem **pArgs = nullptr,
                                  sal_uInt16 nModi = 0,
-                                 const SfxPoolItem **pInternalArgs = 0);
+                                 const SfxPoolItem **pInternalArgs = nullptr);
     bool             Execute( sal_uInt16 nSlot,
-                                 const SfxPoolItem **pArgs = 0,
+                                 const SfxPoolItem **pArgs = nullptr,
                                  sal_uInt16 nModi = 0,
                                  SfxCallMode nCall = SfxCallMode::SLOT,
-                                 const SfxPoolItem **pInternalArgs = 0);
+                                 const SfxPoolItem **pInternalArgs = nullptr);
 
     SAL_DLLPRIVATE void SetDispatchProvider_Impl( const css::uno::Reference< css::frame::XDispatchProvider > & rFrame );
     void             SetActiveFrame( const css::uno::Reference< css::frame::XFrame > & rFrame );
     const css::uno::Reference< css::frame::XFrame > GetActiveFrame() const;
                      // Reconfig
-    sal_uInt16           EnterRegistrations(const char *pFile = 0, int nLine = 0);
-    void             LeaveRegistrations( sal_uInt16 nLevel = USHRT_MAX, const char *pFile = 0, int nLine = 0 );
+    sal_uInt16           EnterRegistrations(const char *pFile = nullptr, int nLine = 0);
+    void             LeaveRegistrations( sal_uInt16 nLevel = USHRT_MAX, const char *pFile = nullptr, int nLine = 0 );
     void             Register( SfxControllerItem& rBinding );
     void             Release( SfxControllerItem& rBinding );
     SfxDispatcher*   GetDispatcher() const

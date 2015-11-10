@@ -511,7 +511,7 @@ void SAL_CALL Theme::addPropertyChangeListener(
         eItem = iId->second;
     }
     ChangeListenerContainer* pListeners = GetChangeListeners(eItem, true);
-    if (pListeners != NULL)
+    if (pListeners != nullptr)
         pListeners->push_back(rxListener);
 }
 
@@ -536,7 +536,7 @@ void SAL_CALL Theme::removePropertyChangeListener(
         eItem = iId->second;
     }
     ChangeListenerContainer* pContainer = GetChangeListeners(eItem, false);
-    if (pContainer != NULL)
+    if (pContainer != nullptr)
     {
         ChangeListenerContainer::iterator iListener (::std::find(pContainer->begin(), pContainer->end(), rxListener));
         if (iListener != pContainer->end())
@@ -571,7 +571,7 @@ void SAL_CALL Theme::addVetoableChangeListener(
         eItem = iId->second;
     }
     VetoableListenerContainer* pListeners = GetVetoableListeners(eItem, true);
-    if (pListeners != NULL)
+    if (pListeners != nullptr)
         pListeners->push_back(rxListener);
 }
 
@@ -596,7 +596,7 @@ void SAL_CALL Theme::removeVetoableChangeListener(
         eItem = iId->second;
     }
     VetoableListenerContainer* pContainer = GetVetoableListeners(eItem, false);
-    if (pContainer != NULL)
+    if (pContainer != nullptr)
     {
         VetoableListenerContainer::iterator iListener (::std::find(pContainer->begin(), pContainer->end(), rxListener));
         if (iListener != pContainer->end())
@@ -879,7 +879,7 @@ Theme::VetoableListenerContainer* Theme::GetVetoableListeners (
         return &maVetoableListeners[eItem];
     }
     else
-        return NULL;
+        return nullptr;
 }
 
 Theme::ChangeListenerContainer* Theme::GetChangeListeners (
@@ -895,14 +895,14 @@ Theme::ChangeListenerContainer* Theme::GetChangeListeners (
         return &maChangeListeners[eItem];
     }
     else
-        return NULL;
+        return nullptr;
 }
 
 bool Theme::DoVetoableListenersVeto (
     const VetoableListenerContainer* pListeners,
     const beans::PropertyChangeEvent& rEvent)
 {
-    if (pListeners == NULL)
+    if (pListeners == nullptr)
         return false;
 
     VetoableListenerContainer aListeners (*pListeners);
@@ -932,7 +932,7 @@ void Theme::BroadcastPropertyChange (
     const ChangeListenerContainer* pListeners,
     const beans::PropertyChangeEvent& rEvent)
 {
-    if (pListeners == NULL)
+    if (pListeners == nullptr)
         return;
 
     const ChangeListenerContainer aListeners (*pListeners);
@@ -966,7 +966,7 @@ void Theme::ProcessNewValue (
             ::rtl::OUString sURL;
             if (rValue >>= sURL)
             {
-                maImages[nIndex] = Tools::GetImage(sURL, NULL);
+                maImages[nIndex] = Tools::GetImage(sURL, nullptr);
             }
             break;
         }

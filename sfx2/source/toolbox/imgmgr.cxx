@@ -83,7 +83,7 @@ static SfxImageManager_Impl* GetImageManager(SfxModule& rModule)
 
     SfxImageManagerImplMap &rImageManager_ImplMap =
         theImageManagerImplMap::get();
-    SfxImageManager_Impl* pImpl( 0 );
+    SfxImageManager_Impl* pImpl( nullptr );
     SfxModule* pModule(&rModule);
     SfxImageManagerImplMap::const_iterator pIter = rImageManager_ImplMap.find(pModule);
     if ( pIter != rImageManager_ImplMap.end() )
@@ -111,7 +111,7 @@ SfxImageManager_Impl::SfxImageManager_Impl(SfxModule& rModule)
     m_nSymbolsSize = m_aOpt.GetCurrentSymbolsSize();
 
     for ( sal_uInt32 i = 0; i < IMAGELIST_COUNT; i++ )
-        m_pImageList[i] = 0;
+        m_pImageList[i] = nullptr;
 
     m_aOpt.AddListenerLink( LINK( this, SfxImageManager_Impl, OptionsChanged_Impl ) );
     Application::AddEventListener( LINK( this, SfxImageManager_Impl, SettingsChanged_Impl ) );
@@ -251,7 +251,7 @@ namespace
 SfxImageManager* SfxImageManager::GetImageManager(SfxModule& rModule)
 {
     SolarMutexGuard aGuard;
-    SfxImageManager* pSfxImageManager(0);
+    SfxImageManager* pSfxImageManager(nullptr);
 
     SfxImageManagerMap &rImageManagerMap = theImageManagerMap::get();
     SfxModule* pModule = &rModule;

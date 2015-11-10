@@ -67,7 +67,7 @@ struct IMPL_PrintListener_DataContainer : public SfxListener
     css::uno::Sequence< css::beans::PropertyValue > m_aPrintOptions;
 
     explicit IMPL_PrintListener_DataContainer( ::osl::Mutex& aMutex)
-            :   m_pObjectShell          ( 0 )
+            :   m_pObjectShell          ( nullptr )
             ,   m_aInterfaceContainer   ( aMutex )
     {
     }
@@ -131,7 +131,7 @@ Sequence< css::beans::PropertyValue > SAL_CALL SfxPrintJob_Impl::getPrinter() th
 
 Reference< css::view::XPrintable > SAL_CALL SfxPrintJob_Impl::getPrintable() throw (RuntimeException, std::exception)
 {
-    Reference < view::XPrintable > xPrintable( m_pData->m_pObjectShell.Is() ? m_pData->m_pObjectShell->GetModel() : NULL, UNO_QUERY );
+    Reference < view::XPrintable > xPrintable( m_pData->m_pObjectShell.Is() ? m_pData->m_pObjectShell->GetModel() : nullptr, UNO_QUERY );
     return xPrintable;
 }
 
@@ -258,8 +258,8 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SfxPrintHelper::getPrinter() thro
     SolarMutexGuard aGuard;
 
     // search for any view of this document that is currently printing
-    const Printer *pPrinter = NULL;
-    SfxViewFrame *pViewFrm = m_pData->m_pObjectShell.Is() ? SfxViewFrame::GetFirst( m_pData->m_pObjectShell, false ) : 0;
+    const Printer *pPrinter = nullptr;
+    SfxViewFrame *pViewFrm = m_pData->m_pObjectShell.Is() ? SfxViewFrame::GetFirst( m_pData->m_pObjectShell, false ) : nullptr;
     SfxViewFrame* pFirst = pViewFrm;
     while ( pViewFrm && !pPrinter )
     {
@@ -319,7 +319,7 @@ void SfxPrintHelper::impl_setPrinter(const uno::Sequence< beans::PropertyValue >
 {
     // Get old Printer
     SfxViewFrame *pViewFrm = m_pData->m_pObjectShell.Is() ?
-                                SfxViewFrame::GetFirst( m_pData->m_pObjectShell, false ) : 0;
+                                SfxViewFrame::GetFirst( m_pData->m_pObjectShell, false ) : nullptr;
     if ( !pViewFrm )
         return;
 
@@ -455,8 +455,8 @@ void SAL_CALL SfxPrintHelper::setPrinter(const uno::Sequence< beans::PropertyVal
     // object already disposed?
     SolarMutexGuard aGuard;
 
-    SfxViewShell* pViewSh = NULL;
-    SfxPrinter* pPrinter = NULL;
+    SfxViewShell* pViewSh = nullptr;
+    SfxPrinter* pPrinter = nullptr;
     SfxPrinterChangeFlags nChangeFlags = SfxPrinterChangeFlags::NONE;
     impl_setPrinter(rPrinter,pPrinter,nChangeFlags,pViewSh);
     // set new printer
@@ -575,7 +575,7 @@ class ImplUCBPrintWatcher : public ::osl::Thread
 
             // kill the temp file!
             delete *ppTempFile;
-            *ppTempFile = NULL;
+            *ppTempFile = nullptr;
         }
 };
 
@@ -596,7 +596,7 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
 
     // get view for sfx printing capabilities
     SfxViewFrame *pViewFrm = m_pData->m_pObjectShell.Is() ?
-                                SfxViewFrame::GetFirst( m_pData->m_pObjectShell, false ) : 0;
+                                SfxViewFrame::GetFirst( m_pData->m_pObjectShell, false ) : nullptr;
     if ( !pViewFrm )
         return;
     SfxViewShell* pView = pViewFrm->GetViewShell();
@@ -610,7 +610,7 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
     // a local one we can suppress this special handling. Because then vcl makes all
     // right for us.
     OUString sUcbUrl;
-    ::utl::TempFile* pUCBPrintTempFile = NULL;
+    ::utl::TempFile* pUCBPrintTempFile = nullptr;
 
     uno::Sequence < beans::PropertyValue > aCheckedArgs( rOptions.getLength() );
     sal_Int32 nProps = 0;

@@ -72,7 +72,7 @@ public:
     virtual ~IXmlIdRegistrySupplier() { }
 
     /** override this if you have a XmlIdRegistry. */
-    virtual const IXmlIdRegistry* GetXmlIdRegistry() const { return 0; }
+    virtual const IXmlIdRegistry* GetXmlIdRegistry() const { return nullptr; }
 
 };
 

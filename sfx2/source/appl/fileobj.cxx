@@ -47,9 +47,9 @@
 #define FILETYPE_OBJECT     3
 
 SvFileObject::SvFileObject()
-    : nPostUserEventId(0)
+    : nPostUserEventId(nullptr)
     , mxDelMed()
-    , pOldParent(NULL)
+    , pOldParent(nullptr)
     , nType(FILETYPE_TEXT)
     , bLoadAgain(true)
     , bSynchron(false)
@@ -134,7 +134,7 @@ bool SvFileObject::GetData( css::uno::Any & rData,
                     bLoadError = !GetGraphic_Impl( aGrf, xMed->GetInStream() );
                 }
                 else if( !LoadFile_Impl() ||
-                        !GetGraphic_Impl( aGrf, xMed.Is() ? xMed->GetInStream() : 0 ))
+                        !GetGraphic_Impl( aGrf, xMed.Is() ? xMed->GetInStream() : nullptr ))
                 {
                     if( !xMed.Is() )
                         break;
@@ -204,7 +204,7 @@ bool SvFileObject::Connect( sfx2::SvBaseLink* pLink )
         return false;
 
     // Test if not another link of the same connection already exists
-    sfx2::LinkManager::GetDisplayNames( pLink, 0, &sFileNm, 0, &sFilter );
+    sfx2::LinkManager::GetDisplayNames( pLink, nullptr, &sFileNm, nullptr, &sFilter );
 
     if( OBJECT_CLIENT_GRF == pLink->GetObjType() )
     {
@@ -396,7 +396,7 @@ void SvFileObject::Edit( vcl::Window* pParent, sfx2::SvBaseLink* pLink, const Li
     OUString sFile, sRange, sTmpFilter;
     if( pLink && pLink->GetLinkManager() )
     {
-        sfx2::LinkManager::GetDisplayNames( pLink, 0, &sFile, &sRange, &sTmpFilter );
+        sfx2::LinkManager::GetDisplayNames( pLink, nullptr, &sFile, &sRange, &sTmpFilter );
 
         switch( pLink->GetObjType() )
         {
@@ -493,7 +493,7 @@ IMPL_LINK_NOARG_TYPED( SvFileObject, LoadGrfReady_Impl, void*, void )
 
 IMPL_LINK_NOARG_TYPED( SvFileObject, DelMedium_Impl, void*, void )
 {
-    nPostUserEventId = 0;
+    nPostUserEventId = nullptr;
     mxDelMed.Clear();
 }
 

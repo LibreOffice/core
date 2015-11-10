@@ -103,7 +103,7 @@ public:
     SfxControllerItem*      GetItemLink() const;
     void                    SetInternalController( SfxControllerItem* pCtrl )
                             { DBG_ASSERT( !pInternalController, "Only one internal controller allowed!" ); pInternalController = pCtrl; }
-    void                    ReleaseInternalController() { pInternalController = 0; }
+    void                    ReleaseInternalController() { pInternalController = nullptr; }
     SfxControllerItem*      GetInternalController() const { return pInternalController; }
     css::uno::Reference < css::frame::XDispatch >
                             GetInternalDispatch() const

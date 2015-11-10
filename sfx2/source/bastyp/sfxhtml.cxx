@@ -59,14 +59,14 @@ static HTMLOptionEnum const aAreaShapeOptEnums[] =
     { OOO_STRING_SVTOOLS_HTML_SH_circle,    IMAP_OBJ_CIRCLE     },
     { OOO_STRING_SVTOOLS_HTML_SH_poly,          IMAP_OBJ_POLYGON    },
     { OOO_STRING_SVTOOLS_HTML_SH_polygon,       IMAP_OBJ_POLYGON    },
-    { 0,                    0                   }
+    { nullptr,                    0                   }
 };
 
 SfxHTMLParser::SfxHTMLParser( SvStream& rStream, bool bIsNewDoc,
                               SfxMedium *pMed )
     : HTMLParser(rStream, bIsNewDoc)
     , pMedium(pMed)
-    , pDLMedium(0)
+    , pDLMedium(nullptr)
     , eScriptType(STARBASIC)
 {
     DBG_ASSERT( RTL_TEXTENCODING_UTF8 == GetSrcEncoding( ),
@@ -258,7 +258,7 @@ bool SfxHTMLParser::FinishFileDownload( OUString& rStr )
     }
 
     delete pDLMedium;
-    pDLMedium = 0;
+    pDLMedium = nullptr;
 
     return bOK;
 }

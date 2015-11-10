@@ -88,20 +88,20 @@ void SfxApplication::Deinitialize()
     pAppData_Impl->pAppDispat->Pop( *this, SfxDispatcherPopFlags::POP_UNTIL );
     pAppData_Impl->pAppDispat->Flush();
     pAppData_Impl->bDowning = true;
-    pAppData_Impl->pAppDispat->DoDeactivate_Impl( true, NULL );
+    pAppData_Impl->pAppDispat->DoDeactivate_Impl( true, nullptr );
 
     // Release Controller and others
     // then the remaining components should also disappear ( Beamer! )
 
 #if HAVE_FEATURE_SCRIPTING
     BasicManagerRepository::resetApplicationBasicManager();
-    pAppData_Impl->pBasicManager->reset( NULL );
+    pAppData_Impl->pBasicManager->reset( nullptr );
         // this will also delete pBasMgr
 #endif
 
-    DBG_ASSERT( pAppData_Impl->pViewFrame == 0, "active foreign ViewFrame" );
+    DBG_ASSERT( pAppData_Impl->pViewFrame == nullptr, "active foreign ViewFrame" );
 
-    delete[] pAppData_Impl->pInterfaces, pAppData_Impl->pInterfaces = 0;
+    delete[] pAppData_Impl->pInterfaces, pAppData_Impl->pInterfaces = nullptr;
 
     // free administration managers
     DELETEZ(pAppData_Impl->pAppDispat);
@@ -123,7 +123,7 @@ void SfxApplication::Deinitialize()
 
     //TODO/CLEANUP
     //ReleaseArgs could be used instead!
-    pAppData_Impl->pPool = NULL;
+    pAppData_Impl->pPool = nullptr;
     NoChaos::ReleaseItemPool();
 
 #if HAVE_FEATURE_SCRIPTING

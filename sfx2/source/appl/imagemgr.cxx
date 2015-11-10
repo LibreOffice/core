@@ -79,7 +79,7 @@ Image SAL_CALL GetImage(
     if ( nProtocol == INetProtocol::Slot )
     {
         sal_uInt16 nId = ( sal_uInt16 ) aURL.copy(5).toInt32();
-        const SfxSlot* pSlot = 0;
+        const SfxSlot* pSlot = nullptr;
         if ( xModel.is() )
         {
             Reference < XUnoTunnel > xObj( xModel, UNO_QUERY );

@@ -65,8 +65,8 @@ namespace
             throw (css::uno::RuntimeException, std::exception) override
         {
             (void)rEvent;
-            mrInfoProvider.SetFrame(NULL);
-            mxFrame = NULL;
+            mrInfoProvider.SetFrame(nullptr);
+            mxFrame = nullptr;
         }
 
     private:
@@ -99,7 +99,7 @@ CommandInfoProvider::~CommandInfoProvider()
     if (mxFrameListener.is())
     {
         mxFrameListener->dispose();
-        mxFrameListener = NULL;
+        mxFrameListener = nullptr;
     }
 }
 
@@ -126,12 +126,12 @@ void CommandInfoProvider::SetFrame (const Reference<frame::XFrame>& rxFrame)
         if (mxFrameListener.is())
         {
             mxFrameListener->dispose();
-            mxFrameListener = NULL;
+            mxFrameListener = nullptr;
         }
 
         // Release objects that are tied to the old frame.
-        mxCachedDocumentAcceleratorConfiguration = NULL;
-        mxCachedModuleAcceleratorConfiguration = NULL;
+        mxCachedDocumentAcceleratorConfiguration = nullptr;
+        mxCachedModuleAcceleratorConfiguration = nullptr;
         msCachedModuleIdentifier.clear();
         mxCachedDataFrame = rxFrame;
 

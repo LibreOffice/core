@@ -63,7 +63,7 @@ public:
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
         throw (css::uno::RuntimeException, std::exception) override;
 
-    static ErrCode loadMacro( const OUString& aURL, css::uno::Any& rRetval, SfxObjectShell* pDoc=NULL ) throw( css::uno::RuntimeException, css::ucb::ContentCreationException, std::exception );
+    static ErrCode loadMacro( const OUString& aURL, css::uno::Any& rRetval, SfxObjectShell* pDoc=nullptr ) throw( css::uno::RuntimeException, css::ucb::ContentCreationException, std::exception );
 
     virtual css::uno::Reference < css::frame::XDispatch > SAL_CALL queryDispatch(
             const css::util::URL& aURL, const OUString& sTargetFrameName,

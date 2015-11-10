@@ -78,7 +78,7 @@ LinkManager::~LinkManager()
         if( rTmp.Is() )
         {
             rTmp->Disconnect();
-            rTmp->SetLinkManager( NULL );
+            rTmp->SetLinkManager( nullptr );
         }
     }
 }
@@ -114,7 +114,7 @@ void LinkManager::Remove( SvBaseLink *pLink )
         if( pLink == rTmp.get() )
         {
             rTmp->Disconnect();
-            rTmp->SetLinkManager( NULL );
+            rTmp->SetLinkManager( nullptr );
             rTmp.Clear();
             bFound = true;
         }
@@ -145,7 +145,7 @@ void LinkManager::Remove( size_t nPos, size_t nCnt )
             if( rTmp.Is() )
             {
                 rTmp->Disconnect();
-                rTmp->SetLinkManager( NULL );
+                rTmp->SetLinkManager( nullptr );
             }
         }
         aLinkTbl.erase( aLinkTbl.begin() + nPos, aLinkTbl.begin() + nPos + nCnt );
@@ -487,9 +487,9 @@ void LinkManager::CancelTransfers()
 
     const sfx2::SvBaseLinks& rLnks = GetLinks();
     for( size_t n = rLnks.size(); n; )
-        if( 0 != ( pLnk = &(*rLnks[ --n ])) &&
+        if( nullptr != ( pLnk = &(*rLnks[ --n ])) &&
             OBJECT_CLIENT_FILE == (OBJECT_CLIENT_FILE & pLnk->GetObjType()) &&
-            0 != ( pFileObj = static_cast<SvFileObject*>(pLnk->GetObj()) ) )
+            nullptr != ( pFileObj = static_cast<SvFileObject*>(pLnk->GetObj()) ) )
             pFileObj->CancelTransfers();
 }
     // For the purpose of sending Status information from the file object to
@@ -568,11 +568,11 @@ OUString lcl_DDE_RelToAbs( const OUString& rTopic, const OUString& rBaseURL )
 
 bool SvxInternalLink::Connect( sfx2::SvBaseLink* pLink )
 {
-    SfxObjectShell* pFndShell = 0;
+    SfxObjectShell* pFndShell = nullptr;
     sal_uInt16 nUpdateMode = css::document::UpdateDocMode::NO_UPDATE;
     OUString sTopic, sItem, sReferer;
     LinkManager* pLinkMgr = pLink->GetLinkManager();
-    if (pLinkMgr && sfx2::LinkManager::GetDisplayNames(pLink, 0, &sTopic, &sItem) && !sTopic.isEmpty())
+    if (pLinkMgr && sfx2::LinkManager::GetDisplayNames(pLink, nullptr, &sTopic, &sItem) && !sTopic.isEmpty())
     {
         // first only loop over the DocumentShells the shells and find those
         // with the name:

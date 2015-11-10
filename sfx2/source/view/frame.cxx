@@ -68,7 +68,7 @@
 
 using namespace com::sun::star;
 
-static SfxFrameArr_Impl* pFramesArr_Impl=0;
+static SfxFrameArr_Impl* pFramesArr_Impl=nullptr;
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
@@ -101,7 +101,7 @@ SfxFrame::~SfxFrame()
     if ( pParentFrame )
     {
         pParentFrame->RemoveChildFrame_Impl( this );
-        pParentFrame = 0;
+        pParentFrame = nullptr;
     }
 
     delete pImp->pDescr;
@@ -155,7 +155,7 @@ bool SfxFrame::DoClose()
 
 bool SfxFrame::DoClose_Impl()
 {
-    SfxBindings* pBindings = NULL;
+    SfxBindings* pBindings = nullptr;
     if ( pImp->pCurrentViewFrame )
         pBindings = &pImp->pCurrentViewFrame->GetBindings();
 
@@ -243,7 +243,7 @@ SfxFrame* SfxFrame::GetChildFrame( sal_uInt16 nPos ) const
         return (*pChildArr)[nPos];
     }
 
-    return 0L;
+    return nullptr;
 }
 
 void SfxFrame::RemoveChildFrame_Impl( SfxFrame* pFrame )
@@ -341,7 +341,7 @@ SfxObjectShell* SfxFrame::GetCurrentDocument() const
 {
     return pImp->pCurrentViewFrame ?
             pImp->pCurrentViewFrame->GetObjectShell() :
-            NULL;
+            nullptr;
 }
 
 void SfxFrame::SetCurrentViewFrame_Impl( SfxViewFrame *pFrame )
@@ -525,7 +525,7 @@ void SfxFrame::RemoveTopFrame_Impl( SfxFrame* pFrame )
 }
 
 SfxFrameItem::SfxFrameItem( sal_uInt16 nWhichId, SfxViewFrame *p )
-    : SfxPoolItem( nWhichId ), pFrame( p ? &p->GetFrame() : NULL )
+    : SfxPoolItem( nWhichId ), pFrame( p ? &p->GetFrame() : nullptr )
 {
     wFrame = pFrame;
 }
@@ -664,7 +664,7 @@ SfxFrame* SfxFrameIterator::FirstFrame()
 SfxFrame* SfxFrameIterator::NextFrame( SfxFrame& rPrev )
 {
     // If recursion is requested testing is done first on Children.
-    SfxFrame *pRet = NULL;
+    SfxFrame *pRet = nullptr;
     if ( bRecursive )
         pRet = rPrev.GetChildFrame( 0 );
     if ( !pRet )
@@ -679,7 +679,7 @@ SfxFrame* SfxFrameIterator::NextFrame( SfxFrame& rPrev )
 
 SfxFrame* SfxFrameIterator::NextSibling_Impl( SfxFrame& rPrev )
 {
-    SfxFrame *pRet = NULL;
+    SfxFrame *pRet = nullptr;
     if ( &rPrev != pFrame )
     {
         SfxFrameArr_Impl& rArr = *rPrev.pParentFrame->pChildArr;
@@ -791,7 +791,7 @@ SfxWorkWindow* SfxFrame::GetWorkWindow_Impl() const
     else if ( pParentFrame )
         return pParentFrame->GetWorkWindow_Impl();
     else
-        return NULL;
+        return nullptr;
 }
 
 void SfxFrame::CreateWorkWindow_Impl()
@@ -883,7 +883,7 @@ void SfxFrame::Resize()
         {
             // check for IPClient that contains UIactive object or object that is currently UI activating
             SfxWorkWindow *pWork = GetWorkWindow_Impl();
-            SfxInPlaceClient* pClient = GetCurrentViewFrame()->GetViewShell() ? GetCurrentViewFrame()->GetViewShell()->GetUIActiveIPClient_Impl() : 0;
+            SfxInPlaceClient* pClient = GetCurrentViewFrame()->GetViewShell() ? GetCurrentViewFrame()->GetViewShell()->GetUIActiveIPClient_Impl() : nullptr;
             if ( pClient )
             {
                 uno::Reference < lang::XUnoTunnel > xObj( pClient->GetObject()->getComponent(), uno::UNO_QUERY );
@@ -893,7 +893,7 @@ void SfxFrame::Resize()
                 {
                     SfxObjectShell* pDoc = reinterpret_cast< SfxObjectShell* >( sal::static_int_cast< sal_IntPtr >( nHandle ));
                     SfxViewFrame *pFrame = SfxViewFrame::GetFirst( pDoc );
-                    pWork = pFrame ? pFrame->GetFrame().GetWorkWindow_Impl() : NULL;
+                    pWork = pFrame ? pFrame->GetFrame().GetWorkWindow_Impl() : nullptr;
                 }
             }
 
@@ -920,8 +920,8 @@ void SfxFrame::Resize()
 SfxFrame* SfxFrame::GetFirst()
 {
     if ( !pFramesArr_Impl )
-        return 0;
-    return pFramesArr_Impl->empty() ? 0 : pFramesArr_Impl->front();
+        return nullptr;
+    return pFramesArr_Impl->empty() ? nullptr : pFramesArr_Impl->front();
 }
 
 SfxFrame* SfxFrame::GetNext( SfxFrame& rFrame )
@@ -930,7 +930,7 @@ SfxFrame* SfxFrame::GetNext( SfxFrame& rFrame )
     if ( it != pFramesArr_Impl->end() && (++it) != pFramesArr_Impl->end() )
         return *it;
     else
-        return NULL;
+        return nullptr;
 }
 
 const SfxPoolItem* SfxFrame::OpenDocumentSynchron( SfxItemSet& i_rSet, const Reference< XFrame >& i_rTargetFrame )

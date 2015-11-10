@@ -34,9 +34,9 @@
 #include <sfx2/sfx.hrc>
 
 SfxSlotPool::SfxSlotPool(SfxSlotPool *pParent)
- : _pGroups(0)
+ : _pGroups(nullptr)
  , _pParentPool( pParent )
- , _pInterfaces(0)
+ , _pInterfaces(nullptr)
  , _nCurGroup(0)
  , _nCurInterface(0)
  , _nCurMsg(0)
@@ -45,7 +45,7 @@ SfxSlotPool::SfxSlotPool(SfxSlotPool *pParent)
 
 SfxSlotPool::~SfxSlotPool()
 {
-    _pParentPool = 0;
+    _pParentPool = nullptr;
     for ( SfxInterface *pIF = FirstInterface(); pIF; pIF = FirstInterface() )
         delete pIF;
     delete _pInterfaces;
@@ -58,7 +58,7 @@ SfxSlotPool::~SfxSlotPool()
 void SfxSlotPool::RegisterInterface( SfxInterface& rInterface )
 {
     // add to the list of SfxObjectInterface instances
-    if ( _pInterfaces == NULL )
+    if ( _pInterfaces == nullptr )
         _pInterfaces = new SfxInterfaceArr_Impl;
     _pInterfaces->push_back(&rInterface);
 
@@ -98,7 +98,7 @@ void SfxSlotPool::RegisterInterface( SfxInterface& rInterface )
 TypeId SfxSlotPool::GetSlotType( sal_uInt16 nId ) const
 {
     const SfxSlot* pSlot = (const_cast <SfxSlotPool*> (this))->GetSlot( nId );
-    return pSlot ? pSlot->GetType()->Type() : 0;
+    return pSlot ? pSlot->GetType()->Type() : nullptr;
 }
 
 
@@ -122,7 +122,7 @@ const SfxSlot* SfxSlotPool::GetSlot( sal_uInt16 nId )
 {
     SAL_WARN_IF(!_pInterfaces, "sfx.control", "no Interfaces registered");
     if (!_pInterfaces)
-        return 0;
+        return nullptr;
 
     // First, search their own interfaces
     for ( size_t nInterf = 0; nInterf < _pInterfaces->size(); ++nInterf )
@@ -133,7 +133,7 @@ const SfxSlot* SfxSlotPool::GetSlot( sal_uInt16 nId )
     }
 
     // Then try any of the possible existing parent
-    return _pParentPool ? _pParentPool->GetSlot( nId ) : 0;
+    return _pParentPool ? _pParentPool->GetSlot( nId ) : nullptr;
 }
 
 
@@ -197,7 +197,7 @@ const SfxSlot* SfxSlotPool::SeekSlot( sal_uInt16 nStartInterface )
 {
     SAL_WARN_IF(!_pInterfaces, "sfx.control", "no Interfaces registered");
     if (!_pInterfaces)
-        return 0;
+        return nullptr;
 
     // The numbering starts at the interfaces of the parent pool
     sal_uInt16 nFirstInterface = _pParentPool ? _pParentPool->_pInterfaces->size() : 0;
@@ -232,7 +232,7 @@ const SfxSlot* SfxSlotPool::SeekSlot( sal_uInt16 nStartInterface )
         }
     }
 
-    return 0;
+    return nullptr;
 }
 
 
@@ -242,7 +242,7 @@ const SfxSlot* SfxSlotPool::NextSlot()
 {
     SAL_WARN_IF(!_pInterfaces, "sfx.control", "no Interfaces registered");
     if (!_pInterfaces)
-        return 0;
+        return nullptr;
 
     // The numbering starts at the interfaces of the parent pool
     sal_uInt16 nFirstInterface = _pParentPool ? _pParentPool->_pInterfaces->size() : 0;
@@ -265,7 +265,7 @@ const SfxSlot* SfxSlotPool::NextSlot()
     sal_uInt16 nInterface = _nCurInterface - nFirstInterface;
     // possibly we are already at the end
     if ( nInterface >= _pInterfaces->size() )
-        return 0;
+        return nullptr;
 
     // look for further matching func-defs within the same Interface
     SfxInterface* pInterface = (*_pInterfaces)[nInterface];
@@ -288,7 +288,7 @@ SfxInterface* SfxSlotPool::FirstInterface()
 {
     _nCurInterface = 0;
     if ( !_pInterfaces || !_pInterfaces->size() )
-        return 0;
+        return nullptr;
     return _pParentPool ? _pParentPool->FirstInterface() : (*_pInterfaces)[0];
 }
 
@@ -297,7 +297,7 @@ SfxInterface* SfxSlotPool::FirstInterface()
 
 const SfxSlot* SfxSlotPool::GetUnoSlot( const OUString& rName )
 {
-    const SfxSlot *pSlot = NULL;
+    const SfxSlot *pSlot = nullptr;
     for (sal_uInt16 nInterface = 0; _pInterfaces && nInterface < _pInterfaces->size(); ++nInterface)
     {
         pSlot = (*_pInterfaces)[nInterface]->GetSlot( rName );

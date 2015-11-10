@@ -220,11 +220,11 @@ public:
 
     SfxShell*                   GetSubShell() const { return pSubShell; }
     void                        AddSubShell( SfxShell& rShell );
-    void                        RemoveSubShell( SfxShell *pShell=NULL );
+    void                        RemoveSubShell( SfxShell *pShell=nullptr );
     SfxShell*                   GetSubShell( sal_uInt16 );
 
-    virtual       SfxShell*     GetFormShell()       { return 0; };
-    virtual const SfxShell*     GetFormShell() const { return 0; };
+    virtual       SfxShell*     GetFormShell()       { return nullptr; };
+    virtual const SfxShell*     GetFormShell() const { return nullptr; };
 
     // Focus, KeyInput, Cursor
     virtual void                ShowCursor( bool bOn = true );

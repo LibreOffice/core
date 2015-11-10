@@ -83,7 +83,7 @@ public:
     virtual bool IsInUndo() const override { return m_bInUndo; }
     virtual bool IsInContent() const override { return m_bInContent; }
     virtual ::sfx2::IXmlIdRegistry& GetRegistry() override { return m_rRegistry; }
-    virtual css::uno::Reference< css::rdf::XMetadatable > MakeUnoObject() override { return 0; }
+    virtual css::uno::Reference< css::rdf::XMetadatable > MakeUnoObject() override { return nullptr; }
 };
 
 static bool operator==(beans::StringPair p1, beans::StringPair p2)

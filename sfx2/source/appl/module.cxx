@@ -78,7 +78,7 @@ public:
     }
 };
 
-static SfxModuleArr_Impl* pModules=0;
+static SfxModuleArr_Impl* pModules=nullptr;
 
 class SfxModule_Impl
 {
@@ -98,7 +98,7 @@ public:
 };
 
 SfxModule_Impl::SfxModule_Impl()
- : pSlotPool(0), pTbxCtrlFac(0), pStbCtrlFac(0), pMenuCtrlFac(0), pFactArr(0), pImgListSmall(0), pImgListBig(0)
+ : pSlotPool(nullptr), pTbxCtrlFac(nullptr), pStbCtrlFac(nullptr), pMenuCtrlFac(nullptr), pFactArr(nullptr), pImgListSmall(nullptr), pImgListBig(nullptr)
 {
 }
 
@@ -143,7 +143,7 @@ ResMgr* SfxModule::GetResMgr()
 
 SfxModule::SfxModule( ResMgr* pMgrP, bool bDummyP,
                       SfxObjectFactory* pFactoryP, ... )
-    : pResMgr( pMgrP ), bDummy( bDummyP ), pImpl(0L)
+    : pResMgr( pMgrP ), bDummy( bDummyP ), pImpl(nullptr)
 {
     Construct_Impl();
     va_list pVarArgs;
@@ -165,12 +165,12 @@ void SfxModule::Construct_Impl()
         pImpl = new SfxModule_Impl;
         pImpl->pSlotPool = new SfxSlotPool(&pApp->GetAppSlotPool_Impl());
 
-        pImpl->pTbxCtrlFac=0;
-        pImpl->pStbCtrlFac=0;
-        pImpl->pMenuCtrlFac=0;
-        pImpl->pFactArr=0;
-        pImpl->pImgListSmall=0;
-        pImpl->pImgListBig=0;
+        pImpl->pTbxCtrlFac=nullptr;
+        pImpl->pStbCtrlFac=nullptr;
+        pImpl->pMenuCtrlFac=nullptr;
+        pImpl->pFactArr=nullptr;
+        pImpl->pImgListSmall=nullptr;
+        pImpl->pImgListBig=nullptr;
 
         SetPool( &pApp->GetPool() );
     }
@@ -353,7 +353,7 @@ void SfxModule::DestroyModules_Impl()
             SfxModule* pMod = rModules[nPos];
             delete pMod;
         }
-        delete pModules, pModules = 0;
+        delete pModules, pModules = nullptr;
     }
 }
 
@@ -379,10 +379,10 @@ SfxModule* SfxModule::GetActiveModule( SfxViewFrame* pFrame )
 {
     if ( !pFrame )
         pFrame = SfxViewFrame::Current();
-    SfxObjectShell* pSh = 0;
+    SfxObjectShell* pSh = nullptr;
     if( pFrame )
         pSh = pFrame->GetObjectShell();
-    return pSh ? pSh->GetModule() : 0;
+    return pSh ? pSh->GetModule() : nullptr;
 }
 
 FieldUnit SfxModule::GetModuleFieldUnit( css::uno::Reference< css::frame::XFrame > const & i_frame )
@@ -391,17 +391,17 @@ FieldUnit SfxModule::GetModuleFieldUnit( css::uno::Reference< css::frame::XFrame
 
     // find SfxViewFrame for the given XFrame
     SfxViewFrame* pViewFrame = SfxViewFrame::GetFirst();
-    while ( pViewFrame != NULL )
+    while ( pViewFrame != nullptr )
     {
         if ( pViewFrame->GetFrame().GetFrameInterface() == i_frame )
             break;
         pViewFrame = SfxViewFrame::GetNext( *pViewFrame );
     }
-    ENSURE_OR_RETURN( pViewFrame != NULL, "SfxModule::GetModuleFieldUnit: unable to find an SfxViewFrame for the given XFrame", FUNIT_100TH_MM );
+    ENSURE_OR_RETURN( pViewFrame != nullptr, "SfxModule::GetModuleFieldUnit: unable to find an SfxViewFrame for the given XFrame", FUNIT_100TH_MM );
 
     // find the module
     SfxModule const * pModule = GetActiveModule( pViewFrame );
-    ENSURE_OR_RETURN( pModule != NULL, "SfxModule::GetModuleFieldUnit: no SfxModule for the given frame!", FUNIT_100TH_MM );
+    ENSURE_OR_RETURN( pModule != nullptr, "SfxModule::GetModuleFieldUnit: no SfxModule for the given frame!", FUNIT_100TH_MM );
     return pModule->GetFieldUnit();
 }
 

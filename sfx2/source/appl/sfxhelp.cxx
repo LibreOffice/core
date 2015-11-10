@@ -217,7 +217,7 @@ OUString SfxHelp_Impl::GetHelpText( const OUString& aCommandURL, const OUString&
 
 SfxHelp::SfxHelp() :
     bIsDebug( false ),
-    pImp    ( NULL )
+    pImp    ( nullptr )
 {
     // read the environment variable "HELP_DEBUG"
     // if it's set, you will see debug output on active help
@@ -398,7 +398,7 @@ SfxHelpWindow_Impl* impl_createHelp(Reference< XFrame2 >& rHelpTask   ,
         xDesktop->findFrame(  "OFFICE_HELP_TASK", FrameSearchFlag::TASKS | FrameSearchFlag::CREATE),
         UNO_QUERY);
     if (!xHelpTask.is())
-        return 0;
+        return nullptr;
 
     // create all internal windows and sub frames ...
     Reference< css::awt::XWindow >      xParentWindow = xHelpTask->getContainerWindow();
@@ -430,7 +430,7 @@ SfxHelpWindow_Impl* impl_createHelp(Reference< XFrame2 >& rHelpTask   ,
     if (!xHelpContent.is())
     {
         pHelpWindow.disposeAndClear();
-        return NULL;
+        return nullptr;
     }
 
     xHelpContent->setName("OFFICE_HELP");
@@ -456,7 +456,7 @@ OUString SfxHelp::GetHelpText( const OUString& aCommandURL, const vcl::Window* p
             aNewHelpId = pParent->GetHelpId();
             sHelpText = SfxHelp_Impl::GetHelpText( OStringToOUString(aNewHelpId, RTL_TEXTENCODING_UTF8), sModuleName );
             if (!sHelpText.isEmpty())
-                pParent = NULL;
+                pParent = nullptr;
             else
                 pParent = pParent->GetParent();
         }
@@ -494,7 +494,7 @@ static bool impl_hasHelpInstalled( const OUString &rLang = OUString() )
 
 bool SfxHelp::SearchKeyword( const OUString& rKeyword )
 {
-    return Start_Impl( OUString(), NULL, rKeyword );
+    return Start_Impl( OUString(), nullptr, rKeyword );
 }
 
 bool SfxHelp::Start( const OUString& rURL, const vcl::Window* pWindow )
@@ -587,9 +587,9 @@ bool SfxHelp::Start_Impl(const OUString& rURL, const vcl::Window* pWindow, const
                             //that for help
                             bTriedTabPage = true;
                             Dialog *pDialog = static_cast<Dialog*>(pParent);
-                            TabControl *pCtrl = pDialog->hasBuilder() ? pDialog->get<TabControl>("tabcontrol") : NULL;
-                            TabPage* pTabPage = pCtrl ? pCtrl->GetTabPage(pCtrl->GetCurPageId()) : NULL;
-                            vcl::Window *pTabChild = pTabPage ? pTabPage->GetWindow(GetWindowType::FirstChild) : NULL;
+                            TabControl *pCtrl = pDialog->hasBuilder() ? pDialog->get<TabControl>("tabcontrol") : nullptr;
+                            TabPage* pTabPage = pCtrl ? pCtrl->GetTabPage(pCtrl->GetCurPageId()) : nullptr;
+                            vcl::Window *pTabChild = pTabPage ? pTabPage->GetWindow(GetWindowType::FirstChild) : nullptr;
                             if (pTabChild)
                                 pParent = pTabChild;
                         }
@@ -622,7 +622,7 @@ bool SfxHelp::Start_Impl(const OUString& rURL, const vcl::Window* pWindow, const
         "OFFICE_HELP",
         FrameSearchFlag::CHILDREN);
 
-    SfxHelpWindow_Impl* pHelpWindow = 0;
+    SfxHelpWindow_Impl* pHelpWindow = nullptr;
     if (!xHelp.is())
         pHelpWindow = impl_createHelp(xHelp, xHelpContent);
     else

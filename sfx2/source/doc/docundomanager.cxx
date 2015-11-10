@@ -102,7 +102,7 @@ namespace sfx2
         {
             aUndoHelper.disposing();
             ENSURE_OR_RETURN_VOID( pUndoManager, "DocumentUndoManager_Impl::disposing: already disposed!" );
-            pUndoManager = NULL;
+            pUndoManager = nullptr;
         }
 
         void invalidateXDo_nolck();
@@ -110,9 +110,9 @@ namespace sfx2
     private:
         static IUndoManager* impl_retrieveUndoManager( SfxBaseModel& i_baseModel )
         {
-            IUndoManager* pUndoManager( NULL );
+            IUndoManager* pUndoManager( nullptr );
             SfxObjectShell* pObjectShell = i_baseModel.GetObjectShell();
-            if ( pObjectShell != NULL )
+            if ( pObjectShell != nullptr )
                 pUndoManager = pObjectShell->GetUndoManager();
             if ( !pUndoManager )
                 throw NotInitializedException( OUString(), *&i_baseModel );
@@ -123,13 +123,13 @@ namespace sfx2
 
     ::svl::IUndoManager& DocumentUndoManager_Impl::getImplUndoManager()
     {
-        ENSURE_OR_THROW( pUndoManager != NULL, "DocumentUndoManager_Impl::getImplUndoManager: no access to the doc's UndoManager implementation!" );
+        ENSURE_OR_THROW( pUndoManager != nullptr, "DocumentUndoManager_Impl::getImplUndoManager: no access to the doc's UndoManager implementation!" );
 
 #if OSL_DEBUG_LEVEL > 0
         // in a non-product build, assert if the current UndoManager at the shell is not the same we obtained
         // (and cached) at construction time
         SfxObjectShell* pObjectShell = rAntiImpl.getBaseModel().GetObjectShell();
-        OSL_ENSURE( ( pObjectShell != NULL ) && ( pUndoManager == pObjectShell->GetUndoManager() ),
+        OSL_ENSURE( ( pObjectShell != nullptr ) && ( pUndoManager == pObjectShell->GetUndoManager() ),
             "DocumentUndoManager_Impl::getImplUndoManager: the UndoManager changed meanwhile - what about our listener?" );
 #endif
 
@@ -148,7 +148,7 @@ namespace sfx2
         SfxModelGuard aGuard( rAntiImpl );
 
         const SfxObjectShell* pDocShell = getObjectShell();
-        ENSURE_OR_THROW( pDocShell != NULL, "lcl_invalidateUndo: no access to the doc shell!" );
+        ENSURE_OR_THROW( pDocShell != nullptr, "lcl_invalidateUndo: no access to the doc shell!" );
         SfxViewFrame* pViewFrame = SfxViewFrame::GetFirst( pDocShell );
         while ( pViewFrame )
         {

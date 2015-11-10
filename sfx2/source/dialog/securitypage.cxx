@@ -434,7 +434,7 @@ bool SfxSecurityPage::FillItemSet( SfxItemSet * rItemSet )
 {
     bool bModified = false;
     DBG_ASSERT( m_pImpl.get(), "implementation pointer is 0. Still in c-tor?" );
-    if (m_pImpl.get() != 0)
+    if (m_pImpl.get() != nullptr)
         bModified =  m_pImpl->FillItemSet_Impl( *rItemSet );
     return bModified;
 }
@@ -443,7 +443,7 @@ bool SfxSecurityPage::FillItemSet( SfxItemSet * rItemSet )
 void SfxSecurityPage::Reset( const SfxItemSet * rItemSet )
 {
     DBG_ASSERT( m_pImpl.get(), "implementation pointer is 0. Still in c-tor?" );
-    if (m_pImpl.get() != 0)
+    if (m_pImpl.get() != nullptr)
         m_pImpl->Reset_Impl( *rItemSet );
 }
 

@@ -106,7 +106,7 @@ public:
 StyleLBoxString::StyleLBoxString(SvTreeListEntry* pEntry, sal_uInt16 nFlags, const OUString& sText, const SfxStyleFamily& eStyleFamily)
     : SvLBoxString(pEntry, nFlags, sText)
     , meStyleFamily(eStyleFamily)
-    , mpViewData(NULL)
+    , mpViewData(nullptr)
 {}
 
 StyleLBoxString::~StyleLBoxString()
@@ -204,7 +204,7 @@ public:
     // Signal that the dialog was deleted
     void signal()
     {
-        m_pDialog = 0;
+        m_pDialog = nullptr;
         if (m_pPrevious)
             m_pPrevious->signal();
     }
@@ -212,7 +212,7 @@ public:
     // Return true if the dialog was deleted
     operator bool_type() const
     {
-        return m_pDialog ? 0 : &DeletionWatcher::signal;
+        return m_pDialog ? nullptr : &DeletionWatcher::signal;
     }
 
 private:
@@ -224,7 +224,7 @@ void DropListBox_Impl::MouseButtonDown( const MouseEvent& rMEvt )
 {
     nModifier = rMEvt.GetModifier();
 
-    bool bHitEmptySpace = ( NULL == GetEntry( rMEvt.GetPosPixel(), true ) );
+    bool bHitEmptySpace = ( nullptr == GetEntry( rMEvt.GetPosPixel(), true ) );
     if( bHitEmptySpace && ( rMEvt.GetClicks() == 2 ) && rMEvt.IsMod1() )
         Control::MouseButtonDown( rMEvt );
     else
@@ -268,7 +268,7 @@ sal_Int8 DropListBox_Impl::ExecuteDrop( const ExecuteDropEvent& rEvt )
             {
                 if ( aDesc.maClassName == pDocShell->GetFactory().GetClassId() )
                 {
-                    PostUserEvent( LINK( this, DropListBox_Impl, OnAsyncExecuteDrop ), 0, true );
+                    PostUserEvent( LINK( this, DropListBox_Impl, OnAsyncExecuteDrop ), nullptr, true );
 
                     bFormatFound = true;
                     nRet =  rEvt.mnAction;
@@ -299,7 +299,7 @@ bool DropListBox_Impl::Notify( NotifyEvent& rNEvt )
         {
             if( pDialog->bCanDel && KEY_DELETE == rKeyCode.GetCode())
             {
-                pDialog->DeleteHdl( NULL );
+                pDialog->DeleteHdl( nullptr );
                 bRet =  true;
             }
             else if( KEY_RETURN == rKeyCode.GetCode())
@@ -348,7 +348,7 @@ SfxTemplatePanelControl::SfxTemplatePanelControl(SfxBindings* pBindings, vcl::Wi
     , pImpl(new SfxTemplateDialog_Impl(pBindings, this))
     , mpBindings(pBindings)
 {
-    OSL_ASSERT(mpBindings!=NULL);
+    OSL_ASSERT(mpBindings!=nullptr);
 
     pImpl->updateNonFamilyImages();
 
@@ -512,13 +512,13 @@ void  StyleTreeListBox_Impl::ExpandedHdl()
     SvTreeListEntry *pEntry = GetHdlEntry();
     if(!IsExpanded(pEntry) && pCurEntry != GetCurEntry())
         SelectAll( false );
-    pCurEntry = 0;
+    pCurEntry = nullptr;
 }
 
 /** Constructor StyleTreeListBox_Impl */
 StyleTreeListBox_Impl::StyleTreeListBox_Impl(SfxCommonTemplateDialog_Impl* pParent, WinBits nWinStyle)
     : DropListBox_Impl(pParent->GetWindow(), nWinStyle, pParent)
-    , pCurEntry(0)
+    , pCurEntry(nullptr)
 {
     EnableContextMenuHandling();
 }
@@ -662,15 +662,15 @@ SfxCommonTemplateDialog_Impl::SfxCommonTemplateDialog_Impl( SfxBindings* pB, vcl
     : mbIgnoreSelect(false)
     , pBindings(pB)
     , pWindow(pW)
-    , pModule(NULL)
-    , pIdle(NULL)
-    , m_pStyleFamiliesId(NULL)
-    , pStyleFamilies(NULL)
-    , pStyleSheetPool(NULL)
-    , pTreeBox(NULL)
-    , pCurObjShell(NULL)
+    , pModule(nullptr)
+    , pIdle(nullptr)
+    , m_pStyleFamiliesId(nullptr)
+    , pStyleFamilies(nullptr)
+    , pStyleSheetPool(nullptr)
+    , pTreeBox(nullptr)
+    , pCurObjShell(nullptr)
     , xModuleManager(frame::ModuleManager::create(::comphelper::getProcessComponentContext()))
-    , m_pDeletionWatcher(NULL)
+    , m_pDeletionWatcher(nullptr)
 
     , aFmtLb( VclPtr<SfxActionListBox>::Create(this, WB_BORDER | WB_TABSTOP | WB_SORT | WB_QUICK_SEARCH) )
     , aFilterLb( VclPtr<ListBox>::Create(pW, WB_BORDER | WB_DROPDOWN | WB_TABSTOP) )
@@ -726,12 +726,12 @@ void SfxCommonTemplateDialog_Impl::ReadResource()
 {
     // Read global user resource
     for(sal_uInt16 i = 0; i < MAX_FAMILIES; ++i)
-        pFamilyState[i] = 0;
+        pFamilyState[i] = nullptr;
 
     SfxViewFrame* pViewFrame = pBindings->GetDispatcher_Impl()->GetFrame();
     pCurObjShell = pViewFrame->GetObjectShell();
-    pModule = pCurObjShell ? pCurObjShell->GetModule() : NULL;
-    ResMgr* pMgr = pModule ? pModule->GetResMgr() : NULL;
+    pModule = pCurObjShell ? pCurObjShell->GetModule() : nullptr;
+    ResMgr* pMgr = pModule ? pModule->GetResMgr() : nullptr;
     if (pMgr)
     {
         ResId aFamId( DLG_STYLE_DESIGNER, *pMgr );
@@ -794,7 +794,7 @@ void SfxCommonTemplateDialog_Impl::ReadResource()
     pBindings->LEAVEREGISTRATIONS();
 
     for(; i < COUNT_BOUND_FUNC; ++i)
-        pBoundItems[i] = 0;
+        pBoundItems[i] = nullptr;
 
     StartListening(*pBindings);
 
@@ -836,13 +836,13 @@ void SfxCommonTemplateDialog_Impl::ClearResource()
 void SfxCommonTemplateDialog_Impl::impl_clear()
 {
     delete pStyleFamilies;
-    pStyleFamilies = NULL;
+    pStyleFamilies = nullptr;
     sal_uInt16 i;
     for ( i = 0; i < MAX_FAMILIES; ++i )
         DELETEX(SfxTemplateItem, pFamilyState[i]);
     for ( i = 0; i < COUNT_BOUND_FUNC; ++i )
         delete pBoundItems[i];
-    pCurObjShell = NULL;
+    pCurObjShell = nullptr;
 
     DELETEZ( m_pStyleFamiliesId );
 }
@@ -889,7 +889,7 @@ SfxCommonTemplateDialog_Impl::~SfxCommonTemplateDialog_Impl()
     impl_clear();
     if ( pStyleSheetPool )
         EndListening(*pStyleSheetPool);
-    pStyleSheetPool = NULL;
+    pStyleSheetPool = nullptr;
     pTreeBox.disposeAndClear();
     delete pIdle;
     if ( m_pDeletionWatcher )
@@ -938,13 +938,13 @@ const SfxStyleFamilyItem *SfxCommonTemplateDialog_Impl::GetFamilyItem_Impl() con
         if(nId == nActFamily)
             return pItem;
     }
-    return 0;
+    return nullptr;
 }
 
 SfxStyleSheetBase *SfxCommonTemplateDialog_Impl::GetSelectedStyle() const
 {
     if (!IsInitialized() || !pStyleSheetPool || !HasSelectedStyle())
-        return NULL;
+        return nullptr;
     const OUString aTemplName( GetSelectedEntry() );
     const SfxStyleFamilyItem* pItem = GetFamilyItem_Impl();
     return pStyleSheetPool->Find( aTemplName, pItem->GetFamily() );
@@ -958,8 +958,8 @@ SfxStyleSheetBase *SfxCommonTemplateDialog_Impl::GetSelectedStyle() const
  */
 bool SfxCommonTemplateDialog_Impl::IsSafeForWaterCan() const
 {
-    if ( pTreeBox.get() != NULL )
-        return pTreeBox->FirstSelected() != 0;
+    if ( pTreeBox.get() != nullptr )
+        return pTreeBox->FirstSelected() != nullptr;
     else
         return aFmtLb->GetSelectionCount() == 1;
 }
@@ -1022,7 +1022,7 @@ void SfxCommonTemplateDialog_Impl::SelectStyle(const OUString &rStr)
                     aFmtLb->SelectAll(false);
                     aFmtLb->Select( pEntry );
                     bWaterDisabled = !IsSafeForWaterCan();
-                    FmtSelectHdl( NULL );
+                    FmtSelectHdl( nullptr );
                 }
             }
         }
@@ -1133,7 +1133,7 @@ void SfxCommonTemplateDialog_Impl::FillTreeBox()
 
 bool SfxCommonTemplateDialog_Impl::HasSelectedStyle() const
 {
-    return pTreeBox? pTreeBox->FirstSelected() != 0:
+    return pTreeBox? pTreeBox->FirstSelected() != nullptr:
             aFmtLb->GetSelectionCount() != 0;
 }
 
@@ -1162,7 +1162,7 @@ void SfxCommonTemplateDialog_Impl::UpdateStyles_Impl(sal_uInt16 nFlags)
 
     const SfxStyleFamily eFam = pItem->GetFamily();
 
-    SfxFilterTupel* pT = ( nActFilter < pItem->GetFilterList().size() ? pItem->GetFilterList()[nActFilter] : NULL );
+    SfxFilterTupel* pT = ( nActFilter < pItem->GetFilterList().size() ? pItem->GetFilterList()[nActFilter] : nullptr );
     sal_uInt16 nFilter     = pT ? pT->nFlags : 0;
     if(!nFilter)   // automatic
         nFilter = nAppFilter;
@@ -1193,7 +1193,7 @@ void SfxCommonTemplateDialog_Impl::UpdateStyles_Impl(sal_uInt16 nFlags)
             {
                 nActFilter = 0;
                 aFilterLb->SelectEntryPos(1);
-                SfxFilterTupel* pActT = ( nActFilter < rFilter.size() ) ? rFilter[ nActFilter ] : NULL;
+                SfxFilterTupel* pActT = ( nActFilter < rFilter.size() ) ? rFilter[ nActFilter ] : nullptr;
                 sal_uInt16 nFilterFlags = pActT ? pActT->nFlags : 0;
                 pStyleSheetPool->SetSearchMask(eFam, nFilterFlags);
             }
@@ -1259,7 +1259,7 @@ void SfxCommonTemplateDialog_Impl::UpdateStyles_Impl(sal_uInt16 nFlags)
 
                 for(nPos = 0; nPos < nCount; ++nPos)
                 {
-                    SvTreeListEntry* pTreeListEntry = aFmtLb->InsertEntry(aStrings[nPos], 0, false, nPos);
+                    SvTreeListEntry* pTreeListEntry = aFmtLb->InsertEntry(aStrings[nPos], nullptr, false, nPos);
                     if (officecfg::Office::Common::StylesAndFormatting::Preview::get())
                     {
                         std::unique_ptr<StyleLBoxString> pStyleLBoxString(
@@ -1292,7 +1292,7 @@ void SfxCommonTemplateDialog_Impl::UpdateStyles_Impl(sal_uInt16 nFlags)
 // Updated display: Watering the house
 void SfxCommonTemplateDialog_Impl::SetWaterCanState(const SfxBoolItem *pItem)
 {
-    bWaterDisabled = (pItem == 0);
+    bWaterDisabled = (pItem == nullptr);
 
     if(!bWaterDisabled)
         //make sure the watercan is only activated when there is (only) one selection
@@ -1350,7 +1350,7 @@ void SfxCommonTemplateDialog_Impl::SetFamilyState( sal_uInt16 nSlotId, const Sfx
 void SfxCommonTemplateDialog_Impl::Update_Impl()
 {
     bool bDocChanged=false;
-    SfxStyleSheetBasePool* pNewPool = NULL;
+    SfxStyleSheetBasePool* pNewPool = nullptr;
     SfxViewFrame* pViewFrame = pBindings->GetDispatcher_Impl()->GetFrame();
     SfxObjectShell* pDocShell = pViewFrame->GetObjectShell();
     if( pDocShell )
@@ -1367,7 +1367,7 @@ void SfxCommonTemplateDialog_Impl::Update_Impl()
         if ( pStyleSheetPool )
         {
             EndListening(*pStyleSheetPool);
-            pStyleSheetPool = 0;
+            pStyleSheetPool = nullptr;
         }
 
         if ( pNewPool )
@@ -1389,9 +1389,9 @@ void SfxCommonTemplateDialog_Impl::Update_Impl()
         // nothing is allowed
         return;
 
-     SfxTemplateItem *pItem = 0;
+     SfxTemplateItem *pItem = nullptr;
      // current region not within the allowed region or default
-     if(nActFamily == 0xffff || 0 == (pItem = pFamilyState[nActFamily-1] ) )
+     if(nActFamily == 0xffff || nullptr == (pItem = pFamilyState[nActFamily-1] ) )
      {
          CheckItem(nActFamily, false);
          SfxTemplateItem **ppItem = pFamilyState;
@@ -1534,7 +1534,7 @@ void SfxCommonTemplateDialog_Impl::Notify(SfxBroadcaster& /*rBC*/, const SfxHint
           case SFX_HINT_DYING:
           {
             EndListening(*pStyleSheetPool);
-            pStyleSheetPool=0;
+            pStyleSheetPool=nullptr;
             break;
           }
         }
@@ -1574,7 +1574,7 @@ void SfxCommonTemplateDialog_Impl::FilterSelect(
         nActFilter = nEntry;
         SfxObjectShell *const pDocShell = SaveSelection();
         SfxStyleSheetBasePool *pOldStyleSheetPool = pStyleSheetPool;
-        pStyleSheetPool = pDocShell? pDocShell->GetStyleSheetPool(): 0;
+        pStyleSheetPool = pDocShell? pDocShell->GetStyleSheetPool(): nullptr;
         if ( pOldStyleSheetPool != pStyleSheetPool )
         {
             if ( pOldStyleSheetPool )
@@ -1616,7 +1616,7 @@ bool SfxCommonTemplateDialog_Impl::Execute_Impl(
     if ( !rRefStr.isEmpty() )
         pItems[ nCount++ ] = &aRefName;
 
-    pItems[ nCount++ ] = 0;
+    pItems[ nCount++ ] = nullptr;
 
     DeletionWatcher aDeleted(*this);
     sal_uInt16 nModi = pModifier ? *pModifier : 0;
@@ -2078,7 +2078,7 @@ void SfxCommonTemplateDialog_Impl::ResetFocus()
     {
         SfxViewFrame *pViewFrame = pBindings->GetDispatcher_Impl()->GetFrame();
         SfxViewShell *pVu = pViewFrame->GetViewShell();
-        vcl::Window *pAppWin = pVu ? pVu->GetWindow(): 0;
+        vcl::Window *pAppWin = pVu ? pVu->GetWindow(): nullptr;
         if(pAppWin)
             pAppWin->GrabFocus();
     }
@@ -2094,14 +2094,14 @@ IMPL_LINK_NOARG_TYPED( SfxCommonTemplateDialog_Impl, TreeListApplyHdl, SvTreeLis
 IMPL_LINK_NOARG_TYPED( SfxCommonTemplateDialog_Impl, ApplyHdl, LinkParamNone*, void )
 {
     // only if that region is allowed
-    if ( IsInitialized() && 0 != pFamilyState[nActFamily-1] &&
+    if ( IsInitialized() && nullptr != pFamilyState[nActFamily-1] &&
          !GetSelectedEntry().isEmpty() )
     {
         sal_uInt16 nModifier = aFmtLb->GetModifier();
         Execute_Impl(SID_STYLE_APPLY,
                      GetSelectedEntry(), OUString(),
                      ( sal_uInt16 )GetFamilyItem_Impl()->GetFamily(),
-                     0, 0, &nModifier );
+                     0, nullptr, &nModifier );
     }
     ResetFocus();
 }
@@ -2116,7 +2116,7 @@ IMPL_LINK_TYPED( SfxCommonTemplateDialog_Impl, FmtSelectHdl, SvTreeListBox *, pL
         if ( IsInitialized() &&
              IsCheckedItem(SID_STYLE_WATERCAN) &&
              // only if that region is allowed
-             0 != pFamilyState[nActFamily-1] && (pTreeBox || aFmtLb->GetSelectionCount() <= 1) )
+             nullptr != pFamilyState[nActFamily-1] && (pTreeBox || aFmtLb->GetSelectionCount() <= 1) )
         {
             Execute_Impl(SID_STYLE_WATERCAN,
                          "", "", 0);
@@ -2161,11 +2161,11 @@ IMPL_LINK_TYPED( SfxCommonTemplateDialog_Impl, MenuSelectHdl, Menu*, pMenu, bool
 IMPL_LINK_NOARG_TYPED( SfxCommonTemplateDialog_Impl, MenuSelectAsyncHdl, void*, void )
 {
     switch(nLastItemId) {
-    case ID_NEW: NewHdl(0); break;
-    case ID_EDIT: EditHdl(0); break;
-    case ID_DELETE: DeleteHdl(0); break;
-    case ID_HIDE: HideHdl(0); break;
-    case ID_SHOW: ShowHdl(0); break;
+    case ID_NEW: NewHdl(nullptr); break;
+    case ID_EDIT: EditHdl(nullptr); break;
+    case ID_DELETE: DeleteHdl(nullptr); break;
+    case ID_HIDE: HideHdl(nullptr); break;
+    case ID_SHOW: ShowHdl(nullptr); break;
     }
 }
 
@@ -2324,7 +2324,7 @@ void SfxTemplateDialog_Impl::LoadedFamilies()
 void SfxTemplateDialog_Impl::Resize()
 {
     SfxDockingWindow* pDockingWindow = dynamic_cast<SfxDockingWindow*>(m_pFloat.get());
-    FloatingWindow *pF = pDockingWindow!=NULL ? pDockingWindow->GetFloatingWindow() : NULL;
+    FloatingWindow *pF = pDockingWindow!=nullptr ? pDockingWindow->GetFloatingWindow() : nullptr;
     if (pF)
     {
         m_bZoomIn = pF->IsRollUp();
@@ -2556,7 +2556,7 @@ void SfxCommonTemplateDialog_Impl::UpdateFamily_Impl()
     SfxObjectShell *pDocShell = pViewFrame->GetObjectShell();
 
     SfxStyleSheetBasePool *pOldStyleSheetPool = pStyleSheetPool;
-    pStyleSheetPool = pDocShell? pDocShell->GetStyleSheetPool(): 0;
+    pStyleSheetPool = pDocShell? pDocShell->GetStyleSheetPool(): nullptr;
     if ( pOldStyleSheetPool != pStyleSheetPool )
     {
         if ( pOldStyleSheetPool )
@@ -2585,7 +2585,7 @@ void SfxCommonTemplateDialog_Impl::UpdateFamily_Impl()
 
     if (IsCheckedItem(SID_STYLE_WATERCAN) &&
          // only if that area is allowed
-         0 != pFamilyState[nActFamily - 1])
+         nullptr != pFamilyState[nActFamily - 1])
     {
         Execute_Impl(SID_STYLE_APPLY,
                      GetSelectedEntry(),

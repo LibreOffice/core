@@ -112,7 +112,7 @@ SidebarController::SidebarController (
       maFocusManager([this](const Panel& rPanel){ return this->ShowPanel(rPanel); }),
       mxReadOnlyModeDispatch(),
       mbIsDocumentReadOnly(false),
-      mpSplitWindow(NULL),
+      mpSplitWindow(nullptr),
       mnWidthOnSplitterButtonDown(0),
       mpResourceManager()
 {
@@ -209,13 +209,13 @@ void SAL_CALL SidebarController::disposing()
     if (mpSplitWindow != nullptr)
     {
         mpSplitWindow->RemoveEventListener(LINK(this, SidebarController, WindowEventHandler));
-        mpSplitWindow = NULL;
+        mpSplitWindow = nullptr;
     }
 
     if (mpParentWindow != nullptr)
     {
         mpParentWindow->RemoveEventListener(LINK(this, SidebarController, WindowEventHandler));
-        mpParentWindow = NULL;
+        mpParentWindow = nullptr;
     }
 
     Theme::GetPropertySet()->removePropertyChangeListener(
@@ -367,7 +367,7 @@ void SidebarController::NotifyResize()
     if (mpCurrentDeck)
     {
         DeckTitleBar* pTitleBar = mpCurrentDeck->GetTitleBar();
-        if (pTitleBar != NULL && pTitleBar->IsVisible())
+        if (pTitleBar != nullptr && pTitleBar->IsVisible())
             pTitleBar->SetCloserVisible(CanModifyChildWindowWidth());
         nMinimalWidth = mpCurrentDeck->GetMinimalWidth();
     }
@@ -501,7 +501,7 @@ void SidebarController::SwitchToDeck (
     {
         const DeckDescriptor* pDeckDescriptor = mpResourceManager->GetDeckDescriptor(rsDeckId);
 
-        if (pDeckDescriptor != NULL)
+        if (pDeckDescriptor != nullptr)
             SwitchToDeck(*pDeckDescriptor, maCurrentContext);
     }
 }
@@ -649,7 +649,7 @@ void SidebarController::SwitchToDeck (
             // Depending on the context we have to change the command
             // for the "more options" dialog.
             PanelTitleBar* pTitleBar = aNewPanels[nWriteIndex]->GetTitleBar();
-            if (pTitleBar != NULL)
+            if (pTitleBar != nullptr)
             {
                 pTitleBar->SetMoreOptionsCommand(
                     rPanelContexDescriptor.msMenuCommand,
@@ -720,8 +720,8 @@ VclPtr<Panel> SidebarController::CreatePanel (
 {
     const PanelDescriptor* pPanelDescriptor = mpResourceManager->GetPanelDescriptor(rsPanelId);
 
-    if (pPanelDescriptor == NULL)
-        return NULL;
+    if (pPanelDescriptor == nullptr)
+        return nullptr;
 
     // Create the panel which is the parent window of the UIElement.
     VclPtr<Panel> pPanel = VclPtr<Panel>::Create(
@@ -768,7 +768,7 @@ Reference<ui::XUIElement> SidebarController::CreateUIElement (
         aCreationArguments.put("Frame", makeAny(mxFrame));
         aCreationArguments.put("ParentWindow", makeAny(rxWindow));
         SfxDockingWindow* pSfxDockingWindow = dynamic_cast<SfxDockingWindow*>(mpParentWindow.get());
-        if (pSfxDockingWindow != NULL)
+        if (pSfxDockingWindow != nullptr)
             aCreationArguments.put("SfxBindings", makeAny(sal_uInt64(&pSfxDockingWindow->GetBindings())));
         aCreationArguments.put("Theme", Theme::GetPropertySet());
         aCreationArguments.put("Sidebar", makeAny(Reference<ui::XSidebar>(static_cast<ui::XSidebar*>(this))));
@@ -802,7 +802,7 @@ Reference<ui::XUIElement> SidebarController::CreateUIElement (
     catch(const Exception& rException)
     {
         SAL_WARN("sfx.sidebar", "Cannot create panel " << rsImplementationURL << ": " << rException.Message);
-        return NULL;
+        return nullptr;
     }
 }
 
@@ -881,7 +881,7 @@ std::shared_ptr<PopupMenu> SidebarController::CreatePopupMenu (
     // Create the top level popup menu.
     std::shared_ptr<PopupMenu> pMenu (new PopupMenu());
     FloatingWindow* pMenuWindow = dynamic_cast<FloatingWindow*>(pMenu->GetWindow());
-    if (pMenuWindow != NULL)
+    if (pMenuWindow != nullptr)
     {
         pMenuWindow->SetPopupModeFlags(pMenuWindow->GetPopupModeFlags() | FloatWinPopupFlags::NoMouseUpClose);
     }
@@ -941,9 +941,9 @@ std::shared_ptr<PopupMenu> SidebarController::CreatePopupMenu (
 
 IMPL_LINK_TYPED(SidebarController, OnMenuItemSelected, Menu*, pMenu, bool)
 {
-    if (pMenu == NULL)
+    if (pMenu == nullptr)
     {
-        OSL_ENSURE(pMenu!=NULL, "sfx2::sidebar::SidebarController::OnMenuItemSelected: illegal menu!");
+        OSL_ENSURE(pMenu!=nullptr, "sfx2::sidebar::SidebarController::OnMenuItemSelected: illegal menu!");
         return false;
     }
 
@@ -1053,7 +1053,7 @@ void SidebarController::UpdateDeckOpenState()
 bool SidebarController::CanModifyChildWindowWidth()
 {
     SfxSplitWindow* pSplitWindow = GetSplitWindow();
-    if (pSplitWindow == NULL)
+    if (pSplitWindow == nullptr)
         return false;
 
     sal_uInt16 nRow (0xffff);
@@ -1070,7 +1070,7 @@ bool SidebarController::CanModifyChildWindowWidth()
 sal_Int32 SidebarController::SetChildWindowWidth (const sal_Int32 nNewWidth)
 {
     SfxSplitWindow* pSplitWindow = GetSplitWindow();
-    if (pSplitWindow == NULL)
+    if (pSplitWindow == nullptr)
         return 0;
 
     sal_uInt16 nRow (0xffff);
@@ -1094,7 +1094,7 @@ sal_Int32 SidebarController::SetChildWindowWidth (const sal_Int32 nNewWidth)
 void SidebarController::RestrictWidth (sal_Int32 nWidth)
 {
     SfxSplitWindow* pSplitWindow = GetSplitWindow();
-    if (pSplitWindow != NULL)
+    if (pSplitWindow != nullptr)
     {
         const sal_uInt16 nId (pSplitWindow->GetItemId(mpParentWindow.get()));
         const sal_uInt16 nSetId (pSplitWindow->GetSet(nId));
@@ -1123,7 +1123,7 @@ SfxSplitWindow* SidebarController::GetSplitWindow()
         return mpSplitWindow;
     }
     else
-        return NULL;
+        return nullptr;
 }
 
 void SidebarController::UpdateCloseIndicator (const bool bCloseAfterDrag)
@@ -1172,7 +1172,7 @@ void SidebarController::UpdateTitleBarIcons()
 
     // Update the deck icon.
     const DeckDescriptor* pDeckDescriptor = rResourceManager.GetDeckDescriptor(mpCurrentDeck->GetId());
-    if (pDeckDescriptor != NULL && mpCurrentDeck->GetTitleBar())
+    if (pDeckDescriptor != nullptr && mpCurrentDeck->GetTitleBar())
     {
         const OUString sIconURL(
             bIsHighContrastModeActive
@@ -1190,10 +1190,10 @@ void SidebarController::UpdateTitleBarIcons()
     {
         if ( ! *iPanel)
             continue;
-        if ((*iPanel)->GetTitleBar() == NULL)
+        if ((*iPanel)->GetTitleBar() == nullptr)
             continue;
         const PanelDescriptor* pPanelDescriptor = rResourceManager.GetPanelDescriptor((*iPanel)->GetId());
-        if (pPanelDescriptor == NULL)
+        if (pPanelDescriptor == nullptr)
             continue;
         const OUString sIconURL (
             bIsHighContrastModeActive

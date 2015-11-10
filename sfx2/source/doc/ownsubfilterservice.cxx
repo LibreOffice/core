@@ -58,7 +58,7 @@ public:
 
 OwnSubFilterService::OwnSubFilterService(const css::uno::Sequence< css::uno::Any >& aArguments)
     throw (uno::Exception, uno::RuntimeException)
-    : m_pObjectShell( NULL )
+    : m_pObjectShell( nullptr )
 {
     if ( aArguments.getLength() != 2 )
         throw lang::IllegalArgumentException();

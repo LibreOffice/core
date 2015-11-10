@@ -63,7 +63,7 @@ void SfxApplication::RegisterChildWindowContext_Impl( SfxModule *pMod, sal_uInt1
         SfxChildWinContextFactory *pFact)
 {
     SfxChildWinFactArr_Impl *pFactories;
-    SfxChildWinFactory *pF = NULL;
+    SfxChildWinFactory *pF = nullptr;
     if ( pMod )
     {
         // Abandon Module, search there for ChildwindowFactory
@@ -140,7 +140,7 @@ SfxWorkWindow* SfxApplication::GetWorkWindow_Impl(const SfxViewFrame *pFrame) co
     else if ( pAppData_Impl->pViewFrame )
         return pAppData_Impl->pViewFrame->GetFrame().GetWorkWindow_Impl();
     else
-        return NULL;
+        return nullptr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

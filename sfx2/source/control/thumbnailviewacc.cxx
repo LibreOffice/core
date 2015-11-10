@@ -86,11 +86,11 @@ ThumbnailViewAcc* ThumbnailViewAcc::getImplementation( const uno::Reference< uno
     try
     {
         uno::Reference< lang::XUnoTunnel > xUnoTunnel( rxData, uno::UNO_QUERY );
-        return( xUnoTunnel.is() ? reinterpret_cast<ThumbnailViewAcc*>(sal::static_int_cast<sal_IntPtr>(xUnoTunnel->getSomething( ThumbnailViewAcc::getUnoTunnelId() ))) : NULL );
+        return( xUnoTunnel.is() ? reinterpret_cast<ThumbnailViewAcc*>(sal::static_int_cast<sal_IntPtr>(xUnoTunnel->getSomething( ThumbnailViewAcc::getUnoTunnelId() ))) : nullptr );
     }
     catch(const css::uno::Exception&)
     {
-        return NULL;
+        return nullptr;
     }
 }
 
@@ -437,7 +437,7 @@ void SAL_CALL ThumbnailViewAcc::selectAccessibleChild( sal_Int32 nChildIndex )
     const SolarMutexGuard aSolarGuard;
     ThumbnailViewItem* pItem = getItem (sal::static_int_cast< sal_uInt16 >(nChildIndex));
 
-    if(pItem != NULL)
+    if(pItem != nullptr)
     {
         mpParent->SelectItem( pItem->mnId );
     }
@@ -453,7 +453,7 @@ sal_Bool SAL_CALL ThumbnailViewAcc::isAccessibleChildSelected( sal_Int32 nChildI
     ThumbnailViewItem* pItem = getItem (sal::static_int_cast< sal_uInt16 >(nChildIndex));
     bool            bRet = false;
 
-    if (pItem != NULL)
+    if (pItem != nullptr)
         bRet = mpParent->IsItemSelected( pItem->mnId );
     else
         throw lang::IndexOutOfBoundsException();
@@ -548,7 +548,7 @@ void SAL_CALL ThumbnailViewAcc::disposing()
 
         // Reset the pointer to the parent.  It has to be the one who has
         // disposed us because he is dying.
-        mpParent = NULL;
+        mpParent = nullptr;
     }
 
     // Inform all listeners that this objects is disposing.
@@ -635,7 +635,7 @@ void ThumbnailViewItemAcc::FireAccessibleEvent( short nEventId, const uno::Any& 
 void ThumbnailViewItemAcc::ParentDestroyed()
 {
     const ::osl::MutexGuard aGuard( maMutex );
-    mpParent = NULL;
+    mpParent = nullptr;
 }
 
 namespace
@@ -657,11 +657,11 @@ ThumbnailViewItemAcc* ThumbnailViewItemAcc::getImplementation( const uno::Refere
         return( xUnoTunnel.is() ?
                 reinterpret_cast<ThumbnailViewItemAcc*>(sal::static_int_cast<sal_IntPtr>(
                         xUnoTunnel->getSomething( ThumbnailViewItemAcc::getUnoTunnelId() ))) :
-                NULL );
+                nullptr );
     }
     catch(const css::uno::Exception&)
     {
-        return NULL;
+        return nullptr;
     }
 }
 
@@ -719,11 +719,11 @@ sal_Int32 SAL_CALL ThumbnailViewItemAcc::getAccessibleIndexInParent()
             }
             catch (const lang::IndexOutOfBoundsException&)
             {
-                pItem = NULL;
+                pItem = nullptr;
             }
 
             // Do not create an accessible object for the test.
-            if (pItem != NULL && pItem->mxAcc.is())
+            if (pItem != nullptr && pItem->mxAcc.is())
                 if (pItem->GetAccessible( mbIsTransientChildrenDisabled ).get() == this )
                 {
                     nIndexInParent = i;

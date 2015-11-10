@@ -121,7 +121,7 @@ IMPL_LINK_NOARG_TYPED( SvDDELinkEditDialog, EditHdl_Impl, Edit&, void)
 }
 
 SvDDEObject::SvDDEObject()
-    : pConnection( 0 ), pLink( 0 ), pRequest( 0 ), pGetData( 0 ), nError( 0 )
+    : pConnection( nullptr ), pLink( nullptr ), pRequest( nullptr ), pGetData( nullptr ), nError( 0 )
 {
     SetUpdateTimeout( 100 );
     bWaitForData = sal_False;
@@ -344,7 +344,7 @@ IMPL_LINK_TYPED( SvDDEObject, ImplGetDDEData, const DdeData*, pData, void )
             if( pGetData )
             {
                 *pGetData <<= aSeq;  // Copy Data
-                pGetData = 0;        // reset the pointer here
+                pGetData = nullptr;        // reset the pointer here
             }
             else
             {
@@ -362,7 +362,7 @@ IMPL_LINK_TYPED( SvDDEObject, ImplDoneDDEData, bool, bValid, void )
 {
     if( !bValid && ( pRequest || pLink ))
     {
-        DdeTransaction* pReq = 0;
+        DdeTransaction* pReq = nullptr;
         if( !pLink || ( pLink && pLink->IsBusy() ))
             pReq = pRequest;  // only the one that is ready
         else if( pRequest && pRequest->IsBusy() )

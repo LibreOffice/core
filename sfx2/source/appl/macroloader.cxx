@@ -80,11 +80,11 @@ css::uno::Sequence<OUString> SAL_CALL SfxMacroLoader::getSupportedServiceNames()
 
 SfxObjectShell* SfxMacroLoader::GetObjectShell_Impl()
 {
-    SfxObjectShell* pDocShell = NULL;
+    SfxObjectShell* pDocShell = nullptr;
     Reference < XFrame > xFrame( m_xFrame.get(), UNO_QUERY );
     if ( xFrame.is() )
     {
-        SfxFrame* pFrame=0;
+        SfxFrame* pFrame=nullptr;
         for ( pFrame = SfxFrame::GetFirst(); pFrame; pFrame = SfxFrame::GetNext( *pFrame ) )
         {
             if ( pFrame->GetFrameInterface() == xFrame )
@@ -209,14 +209,14 @@ ErrCode SfxMacroLoader::loadMacro( const OUString& rURL, css::uno::Any& rRetval,
     sal_Int32 nHashPos = aMacro.indexOf( '/', 8 );
     sal_Int32 nArgsPos = aMacro.indexOf( '(' );
     BasicManager *pAppMgr = SfxApplication::GetBasicManager();
-    BasicManager *pBasMgr = 0;
+    BasicManager *pBasMgr = nullptr;
     ErrCode nErr = ERRCODE_NONE;
 
     // should a macro function be executed ( no direct API call)?
     if ( -1 != nHashPos && ( -1 == nArgsPos || nHashPos < nArgsPos ) )
     {
         // find BasicManager
-        SfxObjectShell* pDoc = NULL;
+        SfxObjectShell* pDoc = nullptr;
         OUString aBasMgrName( INetURLObject::decode(aMacro.copy( 8, nHashPos-8 ), INetURLObject::DECODE_WITH_CHARSET) );
         if ( aBasMgrName.isEmpty() )
             pBasMgr = pAppMgr;
@@ -266,8 +266,8 @@ ErrCode SfxMacroLoader::loadMacro( const OUString& rURL, css::uno::Any& rRetval,
             if ( pBasMgr->HasMacro( aQualifiedMethod ) )
             {
                 Any aOldThisComponent;
-                const bool bSetDocMacroMode = ( pDoc != NULL ) && bIsDocBasic;
-                const bool bSetGlobalThisComponent = ( pDoc != NULL ) && bIsAppBasic;
+                const bool bSetDocMacroMode = ( pDoc != nullptr ) && bIsDocBasic;
+                const bool bSetGlobalThisComponent = ( pDoc != nullptr ) && bIsAppBasic;
                 if ( bSetDocMacroMode )
                 {
                     // mark document: it executes an own macro, so it's in a modal mode

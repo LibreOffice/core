@@ -59,7 +59,7 @@ struct SfxObjectBar_Impl
         nPos(0),
         nIndex(0),
         bDestroy(false),
-        pIFace(0)
+        pIFace(nullptr)
     {}
 };
 
@@ -130,9 +130,9 @@ struct SfxChildWin_Impl
         nSaveId((sal_uInt16) (nID & 0xFFFF) ),
         nInterfaceId((sal_uInt16) (nID >> 16)),
         nId(nSaveId),
-        pWin(0),
+        pWin(nullptr),
         bCreate(false),
-        pCli(0),
+        pCli(nullptr),
         nVisibility( SFX_VISIBILITY_UNVISIBLE ),
         bEnable( true ),
         bDisabled( false )
@@ -254,7 +254,7 @@ protected:
     static bool             IsPluginMode( SfxObjectShell* pObjShell );
 
 public:
-                            SfxWorkWindow( vcl::Window *pWin, SfxBindings& rBindings, SfxWorkWindow* pParent = NULL);
+                            SfxWorkWindow( vcl::Window *pWin, SfxBindings& rBindings, SfxWorkWindow* pParent = nullptr);
     virtual                 ~SfxWorkWindow();
     SfxBindings&            GetBindings()
                             { return *pBindings; }

@@ -45,7 +45,7 @@ class SFX2_DLLPUBLIC SfxHTMLParser : public HTMLParser
 
 protected:
 
-    SfxHTMLParser( SvStream& rStream, bool bNewDoc=true, SfxMedium *pMedium=0 );
+    SfxHTMLParser( SvStream& rStream, bool bNewDoc=true, SfxMedium *pMedium=nullptr );
 
     virtual ~SfxHTMLParser();
 
@@ -88,7 +88,7 @@ protected:
 
     // Returns TRUE if a file was downloaded and if FileDownloadFinished
     // has not yet been called
-    bool ShouldFinishFileDownload() const { return pDLMedium != 0; }
+    bool ShouldFinishFileDownload() const { return pDLMedium != nullptr; }
 
     SfxMedium *GetMedium() { return pMedium; }
     const SfxMedium *GetMedium() const { return pMedium; }

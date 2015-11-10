@@ -122,13 +122,13 @@
 using namespace ::com::sun::star;
 
 // Static member
-SfxApplication* SfxApplication::pApp = NULL;
+SfxApplication* SfxApplication::pApp = nullptr;
 #if HAVE_FEATURE_SCRIPTING
-static BasicDLL*       pBasic   = NULL;
+static BasicDLL*       pBasic   = nullptr;
 #endif
 
 #if HAVE_FEATURE_DESKTOP
-static SfxHelp*        pSfxHelp = NULL;
+static SfxHelp*        pSfxHelp = nullptr;
 #endif
 
 namespace
@@ -180,7 +180,7 @@ SfxApplication* SfxApplication::GetOrCreate()
 }
 
 SfxApplication::SfxApplication()
-    : pAppData_Impl( 0 )
+    : pAppData_Impl( nullptr )
 {
     SetName( "StarOffice" );
     if (!utl::ConfigManager::IsAvoidConfig())
@@ -243,7 +243,7 @@ SfxApplication::~SfxApplication()
 #endif
 
     delete pAppData_Impl;
-    pApp = 0;
+    pApp = nullptr;
 }
 
 
@@ -426,7 +426,7 @@ void SfxApplication::ReleaseIndex(sal_uInt16 i)
 vcl::Window* SfxApplication::GetTopWindow() const
 {
     SfxWorkWindow* pWork = GetWorkWindow_Impl( SfxViewFrame::Current() );
-    return pWork ? pWork->GetWindow() : NULL;
+    return pWork ? pWork->GetWindow() : nullptr;
 }
 
 SfxTbxCtrlFactArr_Impl&     SfxApplication::GetTbxCtrlFactories_Impl() const
@@ -557,11 +557,11 @@ SfxApplication::ChooseScript()
         SAL_INFO( "sfx.appl", "create selector dialog");
 
         const SfxViewFrame* pViewFrame = SfxViewFrame::Current();
-        const SfxFrame* pFrame = pViewFrame ? &pViewFrame->GetFrame() : NULL;
+        const SfxFrame* pFrame = pViewFrame ? &pViewFrame->GetFrame() : nullptr;
         uno::Reference< frame::XFrame > xFrame( pFrame ? pFrame->GetFrameInterface() : uno::Reference< frame::XFrame >() );
 
         std::unique_ptr<AbstractScriptSelectorDialog> pDlg(
-            pFact->CreateScriptSelectorDialog( NULL, false, xFrame ));
+            pFact->CreateScriptSelectorDialog( nullptr, false, xFrame ));
 
         SAL_INFO( "sfx.appl", "done, now exec it");
 

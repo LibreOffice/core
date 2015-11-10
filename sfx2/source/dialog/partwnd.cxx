@@ -85,7 +85,7 @@ SfxPartChildWnd_Impl::~SfxPartChildWnd_Impl()
     SfxPartDockWnd_Impl* pWin = static_cast<SfxPartDockWnd_Impl*>(GetWindow());
 
     if ( pWin && xFrame == pWin->GetBindings().GetActiveFrame() )
-        pWin->GetBindings().SetActiveFrame( NULL );
+        pWin->GetBindings().SetActiveFrame( nullptr );
 }
 
 bool SfxPartChildWnd_Impl::QueryClose()

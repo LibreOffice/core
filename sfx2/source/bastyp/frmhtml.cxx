@@ -43,7 +43,7 @@ static HTMLOptionEnum const aScollingTable[] =
     { sHTML_SC_yes,     ScrollingYes    },
     { sHTML_SC_no,      ScrollingNo     },
     { sHTML_SC_auto,    ScrollingAuto   },
-    { 0,                0               }
+    { nullptr,                0               }
 };
 
 void SfxFrameHTMLParser::ParseFrameOptions(

@@ -219,7 +219,7 @@ void RecentDocsViewItem::OpenDocument()
         pLoadRecentFile->aTargetURL = aTargetURL;
         pLoadRecentFile->aArgSeq = aArgsList;
 
-        Application::PostUserEvent(LINK(0, RecentDocsView, ExecuteHdl_Impl), pLoadRecentFile, true);
+        Application::PostUserEvent(LINK(nullptr, RecentDocsView, ExecuteHdl_Impl), pLoadRecentFile, true);
     }
 }
 

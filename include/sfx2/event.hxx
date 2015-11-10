@@ -42,7 +42,7 @@ class SFX2_DLLPUBLIC SfxEventHint : public SfxHint
     sal_uInt16              nEventId;
 
 public:
-    SfxEventHint( sal_uInt16 nId, const OUString& aName, SfxObjectShell *pObj = 0 )
+    SfxEventHint( sal_uInt16 nId, const OUString& aName, SfxObjectShell *pObj = nullptr )
                         :   pObjShell(pObj),
                             aEventName(aName),
                             nEventId(nId)
@@ -101,7 +101,7 @@ public:
         {}
 
         SfxPrintingHint( sal_Int32 nEvent )
-        : SfxViewEventHint( SFX_EVENT_PRINTDOC, rtl::OUString(), 0, css::uno::Reference< css::frame::XController >() )
+        : SfxViewEventHint( SFX_EVENT_PRINTDOC, rtl::OUString(), nullptr, css::uno::Reference< css::frame::XController >() )
         , mnPrintableState( nEvent )
         {}
 

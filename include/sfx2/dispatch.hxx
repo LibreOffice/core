@@ -111,7 +111,7 @@ protected:
 
 public:
                         SfxDispatcher( SfxDispatcher* pParent );
-                        SfxDispatcher( SfxViewFrame *pFrame = 0 );
+                        SfxDispatcher( SfxViewFrame *pFrame = nullptr );
 
     SAL_DLLPRIVATE void Construct_Impl( SfxDispatcher* pParent );
 
@@ -119,9 +119,9 @@ public:
 
     const SfxPoolItem*  Execute( sal_uInt16 nSlot,
                                  SfxCallMode nCall = SfxCallMode::SLOT,
-                                 const SfxPoolItem **pArgs = 0,
+                                 const SfxPoolItem **pArgs = nullptr,
                                  sal_uInt16 nModi = 0,
-                                 const SfxPoolItem **pInternalArgs = 0);
+                                 const SfxPoolItem **pInternalArgs = nullptr);
 
     const SfxPoolItem*  Execute( sal_uInt16 nSlot,
                                  SfxCallMode nCall,
@@ -158,9 +158,9 @@ public:
     static SfxPopupMenuManager* Popup( sal_uInt16 nConfigId, vcl::Window *pWin, const Point *pPos );
 
     void                ExecutePopup( const ResId &rId,
-                              vcl::Window *pWin = 0, const Point *pPosPixel = 0 );
+                              vcl::Window *pWin = nullptr, const Point *pPosPixel = nullptr );
     static void         ExecutePopup( sal_uInt16 nConfigId = 0,
-                              vcl::Window *pWin = 0, const Point *pPosPixel = 0 );
+                              vcl::Window *pWin = nullptr, const Point *pPosPixel = nullptr );
 
     bool                IsAppDispatcher() const;
     bool                IsFlushed() const;
@@ -168,7 +168,7 @@ public:
     void                Lock( bool bLock );
     bool                IsLocked( sal_uInt16 nSID = 0 ) const;
     void                SetSlotFilter( SfxSlotFilterState nEnable = SfxSlotFilterState::DISABLED,
-                                       sal_uInt16 nCount = 0, const sal_uInt16 *pSIDs = 0 );
+                                       sal_uInt16 nCount = 0, const sal_uInt16 *pSIDs = nullptr );
 
     void                HideUI( bool bHide = true );
     sal_uInt32          GetObjectBarId( sal_uInt16 nPos ) const;

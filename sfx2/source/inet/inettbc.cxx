@@ -126,7 +126,7 @@ void SfxURLToolBoxControl_Impl::OpenURL( const OUString& rName, bool /*bNew*/ ) 
             pExecuteInfo->xDispatch     = xDispatch;
             pExecuteInfo->aTargetURL    = aTargetURL;
             pExecuteInfo->aArgs         = aArgs;
-            Application::PostUserEvent( LINK( 0, SfxURLToolBoxControl_Impl, ExecuteHdl_Impl), pExecuteInfo );
+            Application::PostUserEvent( LINK( nullptr, SfxURLToolBoxControl_Impl, ExecuteHdl_Impl), pExecuteInfo );
         }
     }
 }

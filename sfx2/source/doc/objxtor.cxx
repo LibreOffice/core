@@ -206,10 +206,10 @@ TYPEINIT1(SfxObjectShell, SfxShell);
 
 
 SfxObjectShell_Impl::SfxObjectShell_Impl( SfxObjectShell& _rDocShell )
-    :mpObjectContainer(0)
+    :mpObjectContainer(nullptr)
     ,rDocShell( _rDocShell )
     ,aMacroMode( *this )
-    ,pProgress( 0)
+    ,pProgress( nullptr)
     ,nTime( DateTime::SYSTEM )
     ,nVisualDocumentNumber( USHRT_MAX)
     ,nDocumentSignatureState( SignatureState::UNKNOWN )
@@ -245,15 +245,15 @@ SfxObjectShell_Impl::SfxObjectShell_Impl( SfxObjectShell& _rDocShell )
     ,m_bConfigOptionsChecked( false )
     ,lErr(ERRCODE_NONE)
     ,nEventId ( 0)
-    ,pReloadTimer ( 0)
-    ,pMarkData( 0 )
+    ,pReloadTimer ( nullptr)
+    ,pMarkData( nullptr )
     ,nLoadedFlags ( SfxLoadedFlags::ALL )
     ,nFlagsInProgress( SfxLoadedFlags::NONE )
     ,bModalMode( false )
     ,bRunningMacro( false )
     ,bReloadAvailable( false )
     ,nAutoLoadLocks( 0 )
-    ,pModule( 0 )
+    ,pModule( nullptr )
     ,eFlags( SfxObjectShellFlags::UNDEFINED )
     ,bReadOnlyUI( false )
     ,nStyleFilter( 0 )
@@ -283,8 +283,8 @@ SfxObjectShell_Impl::~SfxObjectShell_Impl()
 
 SfxObjectShell::SfxObjectShell( const SfxModelFlags i_nCreationFlags )
     : pImp(new SfxObjectShell_Impl(*this))
-    , pMedium(0)
-    , pStyleSheetPool(0)
+    , pMedium(nullptr)
+    , pStyleSheetPool(nullptr)
     , eCreateMode(SfxObjectCreateMode::STANDARD)
     , bHasName(false)
     , bIsInGenerateThumbnail (false)
@@ -314,8 +314,8 @@ SfxObjectShell::SfxObjectShell( const SfxModelFlags i_nCreationFlags )
 */
 SfxObjectShell::SfxObjectShell(SfxObjectCreateMode eMode)
     : pImp(new SfxObjectShell_Impl(*this))
-    , pMedium(0)
-    , pStyleSheetPool(0)
+    , pMedium(nullptr)
+    , pStyleSheetPool(nullptr)
     , eCreateMode(eMode)
     , bHasName(false)
     , bIsInGenerateThumbnail(false)
@@ -332,7 +332,7 @@ SfxObjectShell::~SfxObjectShell()
     // Never call GetInPlaceObject(), the access to the derivative branch
     // SfxInternObject is not allowed because of a compiler bug
     SfxObjectShell::CloseInternal();
-    pImp->pBaseModel.set( NULL );
+    pImp->pBaseModel.set( nullptr );
 
     DELETEX(AutoReloadTimer_Impl, pImp->pReloadTimer );
 
@@ -341,12 +341,12 @@ SfxObjectShell::~SfxObjectShell()
         pSfxApp->ReleaseIndex(pImp->nVisualDocumentNumber);
 
     // Destroy Basic-Manager
-    pImp->aBasicManager.reset( NULL );
+    pImp->aBasicManager.reset( nullptr );
 
     if ( pSfxApp->GetDdeService() )
         pSfxApp->RemoveDdeTopic( this );
 
-    pImp->pBaseModel.set( NULL );
+    pImp->pBaseModel.set( nullptr );
 
     // don't call GetStorage() here, in case of Load Failure it's possible that a storage was never assigned!
     if ( pMedium && pMedium->HasStorage_Impl() && pMedium->GetStorage( false ) == pImp->m_xDocStorage )
@@ -492,7 +492,7 @@ SfxObjectShell* SfxObjectShell::GetFirst
             return pSh;
     }
 
-    return 0;
+    return nullptr;
 }
 
 
@@ -524,7 +524,7 @@ SfxObjectShell* SfxObjectShell::GetNext
              ( !bOnlyVisible || SfxViewFrame::GetFirst( pSh )))
             return pSh;
     }
-    return 0;
+    return nullptr;
 }
 
 
@@ -532,7 +532,7 @@ SfxObjectShell* SfxObjectShell::GetNext
 SfxObjectShell* SfxObjectShell::Current()
 {
     SfxViewFrame *pFrame = SfxViewFrame::Current();
-    return pFrame ? pFrame->GetObjectShell() : 0;
+    return pFrame ? pFrame->GetObjectShell() : nullptr;
 }
 
 
@@ -622,13 +622,13 @@ bool SfxObjectShell::PrepareClose
             {
                 SfxStringItem aItem( SID_DOCINFO_COMMENTS, SfxResId(STR_AUTOMATICVERSION).toString() );
                 SfxBoolItem aWarnItem( SID_FAIL_ON_WARNING, bUI );
-                const SfxPoolItem* ppArgs[] = { &aItem, &aWarnItem, 0 };
+                const SfxPoolItem* ppArgs[] = { &aItem, &aWarnItem, nullptr };
                 pPoolItem = pFrame->GetBindings().ExecuteSynchron( SID_SAVEDOC, ppArgs );
             }
             else
             {
                 SfxBoolItem aWarnItem( SID_FAIL_ON_WARNING, bUI );
-                const SfxPoolItem* ppArgs[] = { &aWarnItem, 0 };
+                const SfxPoolItem* ppArgs[] = { &aWarnItem, nullptr };
                 pPoolItem = pFrame->GetBindings().ExecuteSynchron( IsReadOnlyMedium() ? SID_SAVEASDOC : SID_SAVEDOC, ppArgs );
             }
 
@@ -672,7 +672,7 @@ namespace
                 "lcl_getBasicManagerForDocument: no Basic, but providing ourself as script container?" );
         }
 
-        BasicManager* pBasMgr = NULL;
+        BasicManager* pBasMgr = nullptr;
         if ( xForeignDocument.is() )
             pBasMgr = ::basic::BasicManagerRepository::getDocumentBasicManager( xForeignDocument );
 
@@ -683,7 +683,7 @@ namespace
 
 BasicManager* SfxObjectShell::GetBasicManager() const
 {
-    BasicManager* pBasMgr = NULL;
+    BasicManager* pBasMgr = nullptr;
 #if HAVE_FEATURE_SCRIPTING
     try
     {
@@ -803,7 +803,7 @@ StarBASIC* SfxObjectShell::GetBasic() const
     return NULL;
 #else
     BasicManager * pMan = GetBasicManager();
-    return pMan ? pMan->GetLib(0) : NULL;
+    return pMan ? pMan->GetLib(0) : nullptr;
 #endif
 }
 
@@ -877,7 +877,7 @@ SfxObjectShell* SfxObjectShell::GetObjectShell()
 
 uno::Sequence< OUString > SfxObjectShell::GetEventNames()
 {
-    static uno::Sequence< OUString >* pEventNameContainer = NULL;
+    static uno::Sequence< OUString >* pEventNameContainer = nullptr;
 
     if ( !pEventNameContainer )
     {
@@ -901,7 +901,7 @@ css::uno::Reference< css::frame::XModel > SfxObjectShell::GetModel() const
 
 void SfxObjectShell::SetBaseModel( SfxBaseModel* pModel )
 {
-    OSL_ENSURE( !pImp->pBaseModel.is() || pModel == NULL, "Model already set!" );
+    OSL_ENSURE( !pImp->pBaseModel.is() || pModel == nullptr, "Model already set!" );
     pImp->pBaseModel.set( pModel );
     if ( pImp->pBaseModel.is() )
     {
@@ -1075,7 +1075,7 @@ SfxObjectShell* SfxObjectShell::CreateObject( const OUString& rServiceName, SfxO
         }
     }
 
-    return 0;
+    return nullptr;
 }
 
 Reference<lang::XComponent> SfxObjectShell::CreateAndLoadComponent( const SfxItemSet& rSet, SfxFrame* pFrame )
@@ -1119,7 +1119,7 @@ SfxObjectShell* SfxObjectShell::GetShellFromComponent( const Reference<lang::XCo
         Sequence <sal_Int8> aSeq( SvGlobalName( SFX_GLOBAL_CLASSID ).GetByteSequence() );
         sal_Int64 nHandle = xTunnel->getSomething( aSeq );
         if (!nHandle)
-            return NULL;
+            return nullptr;
 
         return reinterpret_cast< SfxObjectShell* >(sal::static_int_cast< sal_IntPtr >(  nHandle ));
     }
@@ -1127,7 +1127,7 @@ SfxObjectShell* SfxObjectShell::GetShellFromComponent( const Reference<lang::XCo
     {
     }
 
-    return NULL;
+    return nullptr;
 }
 
 void SfxObjectShell::SetInitialized_Impl( const bool i_fromInitNew )

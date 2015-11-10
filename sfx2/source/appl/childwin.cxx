@@ -46,7 +46,7 @@ SfxChildWinFactory::SfxChildWinFactory( SfxChildWinCtor pTheCtor, sal_uInt16 nID
     : pCtor(pTheCtor)
     , nId( nID )
     , nPos(n)
-    , pArr( NULL )
+    , pArr( nullptr )
 {}
 
 SfxChildWinFactory::~SfxChildWinFactory()
@@ -101,8 +101,8 @@ class DisposeListener : public ::cppu::WeakImplHelper< css::lang::XEventListener
                     delete m_pOwner;
                 }
 
-                m_pOwner = NULL;
-                m_pData  = NULL;
+                m_pOwner = nullptr;
+                m_pData  = nullptr;
             }
         }
 
@@ -162,15 +162,15 @@ SfxChildWindow::SfxChildWindow(vcl::Window *pParentWindow, sal_uInt16 nId)
     , eChildAlignment(SfxChildAlignment::NOALIGNMENT)
 {
     pImp = new SfxChildWindow_Impl;
-    pImp->pFact = 0L;
+    pImp->pFact = nullptr;
     pImp->bHideNotDelete = false;
     pImp->bHideAtToggle = false;
     pImp->bWantsFocus = true;
     pImp->bVisible = true;
-    pImp->pContextModule = NULL;
-    pImp->pWorkWin = NULL;
+    pImp->pContextModule = nullptr;
+    pImp->pWorkWin = nullptr;
 
-    pContext = 0L;
+    pContext = nullptr;
 }
 
 void SfxChildWindow::Destroy()
@@ -199,27 +199,27 @@ void SfxChildWindow::ClearWorkwin()
     if (pImp->pWorkWin)
     {
         if (pImp->pWorkWin->GetActiveChild_Impl() == pWindow)
-            pImp->pWorkWin->SetActiveChild_Impl(NULL);
-        pImp->pWorkWin = NULL;
+            pImp->pWorkWin->SetActiveChild_Impl(nullptr);
+        pImp->pWorkWin = nullptr;
     }
 }
 
 SfxChildWindow::~SfxChildWindow()
 {
     delete pContext;
-    pContext = NULL;
+    pContext = nullptr;
     ClearWorkwin();
     pWindow.disposeAndClear();
     delete pImp;
-    pImp = NULL;
+    pImp = nullptr;
 }
 
 
 SfxChildWindow* SfxChildWindow::CreateChildWindow( sal_uInt16 nId,
         vcl::Window *pParent, SfxBindings* pBindings, SfxChildWinInfo& rInfo)
 {
-    SfxChildWindow *pChild=0;
-    SfxChildWinFactory* pFact=0;
+    SfxChildWindow *pChild=nullptr;
+    SfxChildWinFactory* pFact=nullptr;
     SystemWindowFlags nOldMode = Application::GetSystemWindowMode();
 
     // First search for ChildWindow in SDT; Overlay windows are realized
@@ -250,8 +250,8 @@ SfxChildWindow* SfxChildWindow::CreateChildWindow( sal_uInt16 nId,
         }
     }
 
-    SfxDispatcher *pDisp = pBindings ? pBindings->GetDispatcher_Impl() : NULL;
-    SfxModule *pMod = pDisp ? SfxModule::GetActiveModule( pDisp->GetFrame() ) : NULL;
+    SfxDispatcher *pDisp = pBindings ? pBindings->GetDispatcher_Impl() : nullptr;
+    SfxModule *pMod = pDisp ? SfxModule::GetActiveModule( pDisp->GetFrame() ) : nullptr;
     if (!pChild && pMod)
     {
         SfxChildWinFactArr_Impl *pFactories = pMod->GetChildWinFactories_Impl();
@@ -438,11 +438,11 @@ void SfxChildWindow::InitializeChildWinFactory_Impl(sal_uInt16 nId, SfxChildWinI
 
 void SfxChildWindow::CreateContext( sal_uInt16 nContextId, SfxBindings& rBindings )
 {
-    SfxChildWindowContext *pCon = NULL;
-    SfxChildWinFactory* pFact=0;
+    SfxChildWindowContext *pCon = nullptr;
+    SfxChildWinFactory* pFact=nullptr;
     SfxApplication *pApp = SfxGetpApp();
     SfxDispatcher *pDisp = rBindings.GetDispatcher_Impl();
-    SfxModule *pMod = pDisp ? SfxModule::GetActiveModule( pDisp->GetFrame() ) :0;
+    SfxModule *pMod = pDisp ? SfxModule::GetActiveModule( pDisp->GetFrame() ) :nullptr;
     if ( pMod )
     {
         SfxChildWinFactArr_Impl *pFactories = pMod->GetChildWinFactories_Impl();
@@ -498,7 +498,7 @@ void SfxChildWindow::CreateContext( sal_uInt16 nContextId, SfxBindings& rBinding
                         SfxChildWinInfo aInfo = pFact->aInfo;
                         pCon = pConFact->pCtor( GetWindow(), &rBindings, &aInfo );
                         pCon->nContextId = pConFact->nContextId;
-                        pImp->pContextModule = NULL;
+                        pImp->pContextModule = nullptr;
                     }
                     rBindings.LEAVEREGISTRATIONS();
                 }
@@ -544,7 +544,7 @@ FloatingWindow* SfxChildWindowContext::GetFloatingWindow() const
     else
     {
         OSL_FAIL("No FloatingWindow-Context!");
-        return NULL;
+        return nullptr;
     }
 }
 
@@ -692,7 +692,7 @@ void SfxChildWindow::Show( ShowFlags nFlags )
 
 vcl::Window* SfxChildWindow::GetContextWindow( SfxModule *pModule ) const
 {
-    return pModule == pImp->pContextModule && pContext ? pContext->GetWindow(): 0;
+    return pModule == pImp->pContextModule && pContext ? pContext->GetWindow(): nullptr;
 }
 
 void SfxChildWindow::SetWorkWindow_Impl( SfxWorkWindow* pWin )
@@ -704,7 +704,7 @@ void SfxChildWindow::SetWorkWindow_Impl( SfxWorkWindow* pWin )
 
 void SfxChildWindow::Activate_Impl()
 {
-    if(pImp->pWorkWin!=NULL)
+    if(pImp->pWorkWin!=nullptr)
         pImp->pWorkWin->SetActiveChild_Impl( pWindow );
 }
 

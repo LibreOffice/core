@@ -97,7 +97,7 @@ void TemplateContainerItem::Paint (drawinglayer::processor2d::BaseProcessor2D *p
     {
         long nPosX = 0;
         long nPosY = 0;
-        BitmapEx* pImage = NULL;
+        BitmapEx* pImage = nullptr;
 
         switch (i)
         {

@@ -108,7 +108,7 @@ void SfxPickList::CreatePicklistMenuTitle( Menu* pMenu, sal_uInt16 nItemId, cons
 
         aTipHelpText = aSystemPath;
         aAccessibleName += aSystemPath;
-        oslFileError nError = osl_abbreviateSystemPath( aSystemPath.pData, &aCompactedSystemPath.pData, 46, NULL );
+        oslFileError nError = osl_abbreviateSystemPath( aSystemPath.pData, &aCompactedSystemPath.pData, 46, nullptr );
         if ( !nError )
             aPickEntry.append( aCompactedSystemPath );
         else
@@ -157,7 +157,7 @@ SfxPickList::PickListEntry* SfxPickList::GetPickListEntry( sal_uInt32 nIndex )
     if ( nIndex < m_aPicklistVector.size() )
         return m_aPicklistVector[ nIndex ];
     else
-        return 0;
+        return nullptr;
 }
 
 void SfxPickList::AddDocumentToPickList( SfxObjectShell* pDocSh )

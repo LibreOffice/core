@@ -51,9 +51,9 @@ struct BaseLink_Impl
     bool                m_bIsConnect;
 
     BaseLink_Impl() :
-          m_pLinkMgr( NULL )
-        , m_pParentWin( NULL )
-        , m_pFileDlg( NULL )
+          m_pLinkMgr( nullptr )
+        , m_pParentWin( nullptr )
+        , m_pFileDlg( nullptr )
         , m_bIsConnect( false )
         {}
 
@@ -87,7 +87,7 @@ struct ImplBaseLinkData
         ClientType.nCntntType = SotClipboardFormatId::NONE;
         ClientType.bIntrnlLnk = false;
         ClientType.nUpdateMode = SfxLinkUpdateMode::NONE;
-        DDEType.pItem = NULL;
+        DDEType.pItem = nullptr;
     }
 };
 
@@ -596,7 +596,7 @@ DdeData* ImplDdeItem::Get( SotClipboardFormatId nFormat )
     }
     aSeq.realloc( 0 );
     bIsValidData = false;
-    return 0;
+    return nullptr;
 }
 
 

@@ -58,7 +58,7 @@ public:
     virtual             ~SfxControllerItem();
     virtual void        dispose();
 
-    void                Bind( sal_uInt16 nNewId, SfxBindings * = 0);    // Register in SfxBindings
+    void                Bind( sal_uInt16 nNewId, SfxBindings * = nullptr);    // Register in SfxBindings
     void                UnBind();
     void                ReBind();
     bool                IsBound() const;
@@ -79,7 +79,7 @@ public:
     static SfxItemState GetItemState( const SfxPoolItem* pState );
 
     SAL_DLLPRIVATE bool IsBindable_Impl() const
-                        { return pBindings != NULL; }
+                        { return pBindings != nullptr; }
     SAL_DLLPRIVATE void BindInternal_Impl( sal_uInt16 nNewId, SfxBindings* );
 };
 

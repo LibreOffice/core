@@ -287,7 +287,7 @@ static void
 addFile(struct DocumentMetadataAccess_Impl & i_rImpl,
     uno::Reference<rdf::XURI> const& i_xType,
     OUString const & i_rPath,
-    const uno::Sequence < uno::Reference< rdf::XURI > > * i_pTypes = 0)
+    const uno::Sequence < uno::Reference< rdf::XURI > > * i_pTypes = nullptr)
 {
     try {
         const uno::Reference<rdf::XURI> xURI( getURIForStream(
@@ -310,7 +310,7 @@ addFile(struct DocumentMetadataAccess_Impl & i_rImpl,
         throw;
     } catch (const uno::Exception & e) {
         throw lang::WrappedTargetRuntimeException(
-            "addFile: exception", /*this*/0, uno::makeAny(e));
+            "addFile: exception", /*this*/nullptr, uno::makeAny(e));
     }
 }
 
@@ -353,13 +353,13 @@ removeFile(struct DocumentMetadataAccess_Impl & i_rImpl,
             getURI<rdf::URIs::PKG_HASPART>(i_rImpl.m_xContext),
             i_xPart.get());
         i_rImpl.m_xManifest->removeStatements(i_xPart.get(),
-            getURI<rdf::URIs::RDF_TYPE>(i_rImpl.m_xContext), 0);
+            getURI<rdf::URIs::RDF_TYPE>(i_rImpl.m_xContext), nullptr);
     } catch (const uno::RuntimeException &) {
         throw;
     } catch (const uno::Exception & e) {
         throw lang::WrappedTargetRuntimeException(
             "removeFile: exception",
-            0, uno::makeAny(e));
+            nullptr, uno::makeAny(e));
     }
 }
 
@@ -370,7 +370,7 @@ getAllParts(struct DocumentMetadataAccess_Impl & i_rImpl)
     try {
         const uno::Reference<container::XEnumeration> xEnum(
             i_rImpl.m_xManifest->getStatements( i_rImpl.m_xBaseURI.get(),
-                getURI<rdf::URIs::PKG_HASPART>(i_rImpl.m_xContext), 0),
+                getURI<rdf::URIs::PKG_HASPART>(i_rImpl.m_xContext), nullptr),
             uno::UNO_SET_THROW);
         while (xEnum->hasMoreElements()) {
             rdf::Statement stmt;
@@ -388,7 +388,7 @@ getAllParts(struct DocumentMetadataAccess_Impl & i_rImpl)
     } catch (const uno::Exception & e) {
         throw lang::WrappedTargetRuntimeException(
             "getAllParts: exception",
-            0, uno::makeAny(e));
+            nullptr, uno::makeAny(e));
     }
 }
 
@@ -410,7 +410,7 @@ isPartOfType(struct DocumentMetadataAccess_Impl & i_rImpl,
     } catch (const uno::Exception & e) {
         throw lang::WrappedTargetRuntimeException(
             "isPartOfType: exception",
-            0, uno::makeAny(e));
+            nullptr, uno::makeAny(e));
     }
 }
 
@@ -449,7 +449,7 @@ handleError( ucb::InteractiveAugmentedIOException const & i_rException,
     if (!i_xHandler.is()) {
         throw lang::WrappedTargetException(
             "DocumentMetadataAccess::loadMetadataFromStorage: exception",
-            /* *this*/ 0, uno::makeAny(i_rException));
+            /* *this*/ nullptr, uno::makeAny(i_rException));
     }
 
     ::rtl::Reference< ::comphelper::OInteractionRequest > pRequest(
@@ -473,7 +473,7 @@ handleError( ucb::InteractiveAugmentedIOException const & i_rException,
         OSL_ENSURE(pAbort->wasSelected(), "no continuation selected?");
         throw lang::WrappedTargetException(
             "DocumentMetadataAccess::loadMetadataFromStorage: exception",
-            /* *this*/ 0, uno::makeAny(i_rException));
+            /* *this*/ nullptr, uno::makeAny(i_rException));
     }
 }
 
@@ -589,7 +589,7 @@ retry:
     } catch (const uno::Exception & e) {
         throw lang::WrappedTargetRuntimeException(
             "importFile: exception",
-            0, uno::makeAny(e));
+            nullptr, uno::makeAny(e));
     }
 }
 
@@ -712,7 +712,7 @@ retry:
     i_rImpl.m_xManifest.set(xManifestGraph.is() ? xManifestGraph :
         i_rImpl.m_xRepository->createGraph(xManifest), uno::UNO_SET_THROW);
     const uno::Reference<container::XEnumeration> xEnum(
-        i_rImpl.m_xManifest->getStatements(0,
+        i_rImpl.m_xManifest->getStatements(nullptr,
             getURI<rdf::URIs::RDF_TYPE>(i_rImpl.m_xContext),
             getURI<rdf::URIs::PKG_DOCUMENT>(i_rImpl.m_xContext).get()));
 
@@ -729,7 +729,7 @@ retry:
         throw lang::WrappedTargetRuntimeException(
             OUString(
                 "DocumentMetadataAccess::loadMetadataFromStorage: "
-                "exception"), 0, rterr);
+                "exception"), nullptr, rterr);
     }
 
     if (err) {
@@ -752,7 +752,7 @@ static void init(struct DocumentMetadataAccess_Impl & i_rImpl)
             getURI<rdf::URIs::PKG_DOCUMENT>(i_rImpl.m_xContext).get());
     } catch (const uno::Exception & e) {
         throw lang::WrappedTargetRuntimeException(
-            "init: unexpected exception", 0,
+            "init: unexpected exception", nullptr,
             uno::makeAny(e));
     }
 
@@ -856,13 +856,13 @@ throw (uno::RuntimeException, lang::IllegalArgumentException, std::exception)
     const OUString baseURI( m_pImpl->m_xBaseURI->getStringValue() );
     const OUString name( i_xURI->getStringValue() );
     if (!name.match(baseURI)) {
-        return 0;
+        return nullptr;
     }
     const OUString relName( name.copy(baseURI.getLength()) );
     OUString path;
     OUString idref;
     if (!splitXmlId(relName, path, idref)) {
-        return 0;
+        return nullptr;
     }
 
     return getElementByMetadataReference( beans::StringPair(path, idref) );

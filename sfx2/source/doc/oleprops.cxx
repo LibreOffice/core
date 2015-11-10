@@ -783,7 +783,7 @@ bool SfxOleSection::GetInt32Value( sal_Int32& rnValue, sal_Int32 nPropId ) const
         dynamic_cast< const SfxOleInt32Property* >( xProp.get() );
     if( pProp )
         rnValue = pProp->GetValue();
-    return pProp != 0;
+    return pProp != nullptr;
 }
 
 bool SfxOleSection::GetDoubleValue( double& rfValue, sal_Int32 nPropId ) const
@@ -793,7 +793,7 @@ bool SfxOleSection::GetDoubleValue( double& rfValue, sal_Int32 nPropId ) const
         dynamic_cast< const SfxOleDoubleProperty* >( xProp.get() );
     if( pProp )
         rfValue = pProp->GetValue();
-    return pProp != 0;
+    return pProp != nullptr;
 }
 
 bool SfxOleSection::GetBoolValue( bool& rbValue, sal_Int32 nPropId ) const
@@ -803,7 +803,7 @@ bool SfxOleSection::GetBoolValue( bool& rbValue, sal_Int32 nPropId ) const
         dynamic_cast< const SfxOleBoolProperty* >( xProp.get() );
     if( pProp )
         rbValue = pProp->GetValue();
-    return pProp != 0;
+    return pProp != nullptr;
 }
 
 bool SfxOleSection::GetStringValue( OUString& rValue, sal_Int32 nPropId ) const
@@ -813,7 +813,7 @@ bool SfxOleSection::GetStringValue( OUString& rValue, sal_Int32 nPropId ) const
         dynamic_cast< const SfxOleStringPropertyBase* >( xProp.get() );
     if( pProp )
         rValue = pProp->GetValue();
-    return pProp != 0;
+    return pProp != nullptr;
 }
 
 bool SfxOleSection::GetFileTimeValue( util::DateTime& rValue, sal_Int32 nPropId ) const
@@ -828,7 +828,7 @@ bool SfxOleSection::GetFileTimeValue( util::DateTime& rValue, sal_Int32 nPropId 
         else
             rValue = pProp->GetValue();
     }
-    return pProp != 0;
+    return pProp != nullptr;
 }
 
 bool SfxOleSection::GetDateValue( util::Date& rValue, sal_Int32 nPropId ) const
@@ -843,7 +843,7 @@ bool SfxOleSection::GetDateValue( util::Date& rValue, sal_Int32 nPropId ) const
         else
             rValue = pProp->GetValue();
     }
-    return pProp != 0;
+    return pProp != nullptr;
 }
 
 void SfxOleSection::SetProperty( SfxOlePropertyRef xProp )

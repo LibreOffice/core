@@ -183,7 +183,7 @@ Reference<frame::XToolbarController> SidebarToolBox::GetControllerForItemId (con
     if (iController != maControllers.end())
         return iController->second.mxController;
     else
-        return NULL;
+        return nullptr;
 }
 
 void SidebarToolBox::SetController(const sal_uInt16 nItemId,
@@ -253,7 +253,7 @@ void SidebarToolBox::RegisterHandlers()
 
 IMPL_LINK_TYPED(SidebarToolBox, DropDownClickHandler, ToolBox*, pToolBox, void)
 {
-    if (pToolBox != NULL)
+    if (pToolBox != nullptr)
     {
         Reference<frame::XToolbarController> xController (GetControllerForItemId(pToolBox->GetCurItemId()));
         if (xController.is())
@@ -267,7 +267,7 @@ IMPL_LINK_TYPED(SidebarToolBox, DropDownClickHandler, ToolBox*, pToolBox, void)
 
 IMPL_LINK_TYPED(SidebarToolBox, ClickHandler, ToolBox*, pToolBox, void)
 {
-    if (pToolBox == NULL)
+    if (pToolBox == nullptr)
         return;
 
     Reference<frame::XToolbarController> xController (GetControllerForItemId(pToolBox->GetCurItemId()));
@@ -277,7 +277,7 @@ IMPL_LINK_TYPED(SidebarToolBox, ClickHandler, ToolBox*, pToolBox, void)
 
 IMPL_LINK_TYPED(SidebarToolBox, DoubleClickHandler, ToolBox*, pToolBox, void)
 {
-    if (pToolBox == NULL)
+    if (pToolBox == nullptr)
         return;
 
     Reference<frame::XToolbarController> xController (GetControllerForItemId(pToolBox->GetCurItemId()));
@@ -287,7 +287,7 @@ IMPL_LINK_TYPED(SidebarToolBox, DoubleClickHandler, ToolBox*, pToolBox, void)
 
 IMPL_LINK_TYPED(SidebarToolBox, SelectHandler, ToolBox*, pToolBox, void)
 {
-    if (pToolBox == NULL)
+    if (pToolBox == nullptr)
         return;
 
     Reference<frame::XToolbarController> xController (GetControllerForItemId(pToolBox->GetCurItemId()));

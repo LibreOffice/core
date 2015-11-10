@@ -145,11 +145,11 @@ throw( RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
 
-    SfxViewFrame* pViewFrame = NULL;
+    SfxViewFrame* pViewFrame = nullptr;
     if ( m_xDispatch.is() )
     {
         Reference< XUnoTunnel > xTunnel( m_xDispatch, UNO_QUERY );
-        SfxOfficeDispatch* pDisp = NULL;
+        SfxOfficeDispatch* pDisp = nullptr;
         if ( xTunnel.is() )
         {
             sal_Int64 nImplementation = xTunnel->getSomething(SfxOfficeDispatch::impl_getStaticIdentifier());
@@ -164,7 +164,7 @@ throw( RuntimeException, std::exception )
     const SfxSlot* pSlot = rPool.GetSlot( m_nSlotID );
 
     SfxItemState eState = SfxItemState::DISABLED;
-    SfxPoolItem* pItem = NULL;
+    SfxPoolItem* pItem = nullptr;
     if ( rEvent.IsEnabled )
     {
         eState = SfxItemState::DEFAULT;

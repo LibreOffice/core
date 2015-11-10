@@ -309,7 +309,7 @@ void SAL_CALL SfxStatusIndicator::reset() throw(RuntimeException, std::exception
 void SAL_CALL SfxStatusIndicator::disposing( const lang::EventObject& /*Source*/ ) throw(RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    xOwner = 0;
+    xOwner = nullptr;
     xProgress.clear();
 }
 
@@ -447,9 +447,9 @@ void SAL_CALL IMPL_SfxBaseController_ListenerHelper::frameAction( const frame::F
 {
     SolarMutexGuard aGuard;
     if  (
-            ( m_pController !=  NULL ) &&
+            ( m_pController !=  nullptr ) &&
             ( aEvent.Frame  ==  m_pController->getFrame() ) &&
-            ( m_pController->GetViewShell_Impl() && m_pController->GetViewShell_Impl()->GetWindow() !=  NULL                                                    )
+            ( m_pController->GetViewShell_Impl() && m_pController->GetViewShell_Impl()->GetWindow() !=  nullptr                                                    )
         )
     {
         if ( aEvent.Action == frame::FrameAction_FRAME_UI_ACTIVATED )
@@ -761,7 +761,7 @@ Reference< frame::XDispatch > SAL_CALL SfxBaseController::queryDispatch(   const
                 pAct = m_pData->m_pViewShell->GetViewFrame() ;
                 SfxSlotPool& rSlotPool = SfxSlotPool::GetSlotPool( pAct );
 
-                const SfxSlot* pSlot( 0 );
+                const SfxSlot* pSlot( nullptr );
                 if ( bMasterCommand )
                     pSlot = rSlotPool.GetUnoSlot( aMasterCommand );
                 else
@@ -782,7 +782,7 @@ Reference< frame::XDispatch > SAL_CALL SfxBaseController::queryDispatch(   const
                         // SfxViewFrame* pParentFrame = pAct->GetParentViewFrame();
 
                         // search the related SfxViewFrame
-                        SfxViewFrame* pParentFrame = NULL;
+                        SfxViewFrame* pParentFrame = nullptr;
                         for ( SfxViewFrame* pFrame = SfxViewFrame::GetFirst();
                                 pFrame;
                                 pFrame = SfxViewFrame::GetNext( *pFrame ) )
@@ -797,7 +797,7 @@ Reference< frame::XDispatch > SAL_CALL SfxBaseController::queryDispatch(   const
                         if ( pParentFrame )
                         {
                             SfxSlotPool& rFrameSlotPool = SfxSlotPool::GetSlotPool( pParentFrame );
-                            const SfxSlot* pSlot2( 0 );
+                            const SfxSlot* pSlot2( nullptr );
                             if ( bMasterCommand )
                                 pSlot2 = rFrameSlotPool.GetUnoSlot( aMasterCommand );
                             else
@@ -839,7 +839,7 @@ Reference< frame::XDispatch > SAL_CALL SfxBaseController::queryDispatch(   const
                         // SfxViewFrame* pParentFrame = pAct->GetParentViewFrame();
 
                         // search the related SfxViewFrame
-                        SfxViewFrame* pParentFrame = NULL;
+                        SfxViewFrame* pParentFrame = nullptr;
                         for ( SfxViewFrame* pFrame = SfxViewFrame::GetFirst();
                                 pFrame;
                                 pFrame = SfxViewFrame::GetNext( *pFrame ) )
@@ -1032,7 +1032,7 @@ void SAL_CALL SfxBaseController::dispose() throw( RuntimeException, std::excepti
 
             m_pData->m_xListener->disposing( aObject );
             SfxViewShell *pShell = m_pData->m_pViewShell;
-            m_pData->m_pViewShell = NULL;
+            m_pData->m_pViewShell = nullptr;
             if ( pFrame->GetViewShell() == pShell )
             {
                 // Enter registrations only allowed if we are the owner!
@@ -1077,7 +1077,7 @@ void SfxBaseController::ReleaseShell_Impl()
             if ( xCloseable.is() )
                 xCloseable->removeCloseListener( m_pData->m_xCloseListener );
         }
-        m_pData->m_pViewShell = 0;
+        m_pData->m_pViewShell = nullptr;
 
         Reference < frame::XFrame > aXFrame;
         attachFrame( aXFrame );
@@ -1254,7 +1254,7 @@ void SfxBaseController::ConnectSfxFrame_Impl( const ConnectSfxFrame i_eConnect )
     {
         if ( i_eConnect == E_CONNECT )
         {
-            if  (   ( m_pData->m_pViewShell->GetObjectShell() != NULL )
+            if  (   ( m_pData->m_pViewShell->GetObjectShell() != nullptr )
                 &&  ( m_pData->m_pViewShell->GetObjectShell()->GetCreateMode() == SfxObjectCreateMode::EMBEDDED )
                 )
             {
@@ -1402,7 +1402,7 @@ void SfxBaseController::ConnectSfxFrame_Impl( const ConnectSfxFrame i_eConnect )
                             continue;
 
                         const SfxViewFactory* pViewFactory = rDocFactory.GetViewFactoryByViewName( sViewId );
-                        if ( pViewFactory == NULL )
+                        if ( pViewFactory == nullptr )
                             continue;
 
                         if ( pViewFactory->GetOrdinal() == pViewFrame->GetCurViewId() )

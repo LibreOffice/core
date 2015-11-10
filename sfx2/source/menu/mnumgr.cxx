@@ -65,7 +65,7 @@
 #include "thessubmenu.hxx"
 
 // static member initialization
-PopupMenu * SfxPopupMenuManager::pStaticThesSubMenu = NULL;
+PopupMenu * SfxPopupMenuManager::pStaticThesSubMenu = nullptr;
 
 using namespace com::sun::star;
 
@@ -133,8 +133,8 @@ PopupMenu* InsertThesaurusSubmenu_Impl( SfxBindings* pBindings, Menu* pSVMenu )
 
     // build thesaurus sub menu if look-up string is available
 
-    PopupMenu* pThesSubMenu = 0;
-    SfxPoolItem *pItem = 0;
+    PopupMenu* pThesSubMenu = nullptr;
+    SfxPoolItem *pItem = nullptr;
     pBindings->QueryState( SID_THES, pItem );
     OUString aThesLookUpStr;
     SfxStringItem *pStrItem = dynamic_cast< SfxStringItem * >(pItem);
@@ -255,14 +255,14 @@ void SfxPopupMenuManager::RemoveDisabledEntries()
 sal_uInt16 SfxPopupMenuManager::Execute( const Point& rPos, vcl::Window* pWindow )
 {
     sal_uInt16 nVal = static_cast<PopupMenu*>( GetMenu()->GetSVMenu() )->Execute( pWindow, rPos );
-    delete pStaticThesSubMenu;  pStaticThesSubMenu = NULL;
+    delete pStaticThesSubMenu;  pStaticThesSubMenu = nullptr;
     return nVal;
 }
 
 
 
 SfxMenuManager::SfxMenuManager( Menu* pMenuArg, SfxBindings &rBindings )
-:   pMenu(0),
+:   pMenu(nullptr),
     pBindings(&rBindings)
 {
     bAddClipboardFuncs = false;
@@ -305,7 +305,7 @@ SfxPopupMenuManager* SfxPopupMenuManager::Popup( const ResId& rResId, SfxViewFra
     }
 
     InsertVerbs_Impl( &pFrame->GetBindings(), pFrame->GetViewShell()->GetVerbs(), pSVMenu );
-    Menu* pMenu = NULL;
+    Menu* pMenu = nullptr;
     css::ui::ContextMenuExecuteEvent aEvent;
     aEvent.SourceWindow = VCLUnoHelper::GetInterface( pWindow );
     aEvent.ExecutePosition.X = rPoint.X();
@@ -324,7 +324,7 @@ SfxPopupMenuManager* SfxPopupMenuManager::Popup( const ResId& rResId, SfxViewFra
         return aMgr;
     }
 
-    return 0;
+    return nullptr;
 }
 
 
@@ -355,7 +355,7 @@ void SfxPopupMenuManager::ExecutePopup( const ResId& rResId, SfxViewFrame* pFram
     }
 
     InsertVerbs_Impl( &pFrame->GetBindings(), pFrame->GetViewShell()->GetVerbs(), pSVMenu );
-    Menu* pMenu = NULL;
+    Menu* pMenu = nullptr;
     css::ui::ContextMenuExecuteEvent aEvent;
     aEvent.SourceWindow = VCLUnoHelper::GetInterface( pWindow );
     aEvent.ExecutePosition.X = rPoint.X();
@@ -377,7 +377,7 @@ void SfxPopupMenuManager::ExecutePopup( const ResId& rResId, SfxViewFrame* pFram
         // the (manually inserted) sub-menu needs to be destroyed before
         // aPop gets destroyed.
         delete pThesSubMenu;
-        pThesSubMenu = 0;
+        pThesSubMenu = nullptr;
     }
 
     delete pThesSubMenu;

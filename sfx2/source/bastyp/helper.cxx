@@ -131,7 +131,7 @@ std::vector< OUString > SfxContentHelper::GetHelpTreeViewContents( const OUStrin
     {
         uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
         uno::Reference< task::XInteractionHandler > xInteractionHandler(
-            task::InteractionHandler::createWithParent(xContext, 0), uno::UNO_QUERY_THROW );
+            task::InteractionHandler::createWithParent(xContext, nullptr), uno::UNO_QUERY_THROW );
 
         ::ucbhelper::Content aCnt( rURL, new ::ucbhelper::CommandEnvironment( xInteractionHandler, uno::Reference< ucb::XProgressHandler >() ), comphelper::getProcessComponentContext() );
         uno::Reference< sdbc::XResultSet > xResultSet;
@@ -197,7 +197,7 @@ OUString SfxContentHelper::GetActiveHelpString( const OUString& rURL )
     {
         uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
         uno::Reference< task::XInteractionHandler > xInteractionHandler(
-            task::InteractionHandler::createWithParent(xContext, 0), uno::UNO_QUERY_THROW );
+            task::InteractionHandler::createWithParent(xContext, nullptr), uno::UNO_QUERY_THROW );
         ::ucbhelper::Content aCnt( rURL, new ::ucbhelper::CommandEnvironment( xInteractionHandler, uno::Reference< ucb::XProgressHandler >() ), comphelper::getProcessComponentContext() );
         // open the "active help" stream
         uno::Reference< io::XInputStream > xStream = aCnt.openStream();

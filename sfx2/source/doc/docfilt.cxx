@@ -140,7 +140,7 @@ const SfxFilter* SfxFilter::GetFilterByName( const OUString& rName )
 
 OUString SfxFilter::GetTypeFromStorage( const SotStorage& rStg )
 {
-    const char* pType=0;
+    const char* pType=nullptr;
     if ( rStg.IsStream( "WordDocument" ) )
     {
         if ( rStg.IsStream( "0Table" ) || rStg.IsStream( "1Table" ) )
@@ -211,7 +211,7 @@ OUString SfxFilter::GetTypeFromStorage(
                     // template filters shouldn't be detected if not explicitly asked for
                     nDont |= SfxFilterFlags::TEMPLATEPATH;
 
-                const SfxFilter* pFilter = 0;
+                const SfxFilter* pFilter = nullptr;
                 if (!aName.isEmpty())
                     // get preselected Filter if it matches the desired filter flags
                     pFilter = aMatcher.GetFilter4FilterName( aName, nMust, nDont );

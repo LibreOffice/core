@@ -62,7 +62,7 @@ public:
     size_t size() const { return aEventNamesList.size(); };
 
     SfxEventName* at( size_t Index ) const
-        { return Index < aEventNamesList.size() ? aEventNamesList[ Index ] : NULL; }
+        { return Index < aEventNamesList.size() ? aEventNamesList[ Index ] : nullptr; }
 
     void push_back( SfxEventName* Item ) { aEventNamesList.push_back( Item ); }
 };
@@ -81,8 +81,8 @@ public:
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     OUString &rText,
-                                    const IntlWrapper * = 0 ) const override;
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const override;
+                                    const IntlWrapper * = nullptr ) const override;
+    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
     virtual SfxPoolItem*    Create(SvStream &, sal_uInt16) const override;
     virtual SvStream&       Store(SvStream &, sal_uInt16 nItemVersion ) const override;
     virtual sal_uInt16      GetVersion( sal_uInt16 nFileFormatVersion ) const override;

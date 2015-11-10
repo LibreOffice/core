@@ -75,7 +75,7 @@ sal_Bool SAL_CALL SfxUnoSidebar::isVisible()
 
     SidebarController* pSidebarController = getSidebarController();
 
-    return pSidebarController != NULL;
+    return pSidebarController != nullptr;
 }
 
 uno::Reference<frame::XFrame> SAL_CALL SfxUnoSidebar::getFrame()

@@ -41,8 +41,8 @@ FocusManager::FocusManager(const std::function<void(const Panel&)>& rShowPanelFu
       maButtons(),
       maShowPanelFunctor(rShowPanelFunctor),
       mbObservingContentControlFocus(false),
-      mpFirstFocusedContentControl(NULL),
-      mpLastFocusedWindow(NULL)
+      mpFirstFocusedContentControl(nullptr),
+      mpLastFocusedWindow(nullptr)
 {
 }
 
@@ -58,7 +58,7 @@ void FocusManager::GrabFocus()
 
 void FocusManager::Clear()
 {
-    SetDeckTitle(NULL);
+    SetDeckTitle(nullptr);
     ClearPanels();
     ClearButtons();
 }
@@ -70,7 +70,7 @@ void FocusManager::ClearPanels()
     for (auto iPanel(aPanels.begin()),iEnd(aPanels.end()); iPanel != iEnd; ++iPanel)
     {
         UnregisterWindow(**iPanel);
-        if ((*iPanel)->GetTitleBar() != NULL)
+        if ((*iPanel)->GetTitleBar() != nullptr)
         {
             UnregisterWindow(*(*iPanel)->GetTitleBar());
             UnregisterWindow((*iPanel)->GetTitleBar()->GetToolBox());
@@ -112,7 +112,7 @@ void FocusManager::SetPanels (const SharedPanelContainer& rPanels)
     for (auto iPanel = rPanels.begin(); iPanel != rPanels.end(); ++iPanel)
     {
         RegisterWindow(**iPanel);
-        if ((*iPanel)->GetTitleBar() != NULL)
+        if ((*iPanel)->GetTitleBar() != nullptr)
         {
             RegisterWindow(*(*iPanel)->GetTitleBar());
             RegisterWindow((*iPanel)->GetTitleBar()->GetToolBox());
@@ -164,7 +164,7 @@ FocusManager::FocusLocation FocusManager::GetFocusLocation (const vcl::Window& r
         TitleBar* pTitleBar = maPanels[nIndex]->GetTitleBar();
         if (pTitleBar == &rWindow)
             return FocusLocation(PC_PanelTitle, nIndex);
-        if (pTitleBar!=NULL && &pTitleBar->GetToolBox()==&rWindow)
+        if (pTitleBar!=nullptr && &pTitleBar->GetToolBox()==&rWindow)
             return FocusLocation(PC_PanelToolBox, nIndex);
     }
 
@@ -209,7 +209,7 @@ bool FocusManager::IsPanelTitleVisible (const sal_Int32 nPanelIndex) const
         return false;
 
     TitleBar* pTitleBar = maPanels[nPanelIndex]->GetTitleBar();
-    if (pTitleBar==NULL)
+    if (pTitleBar==nullptr)
         return false;
     return pTitleBar->IsVisible();
 }
@@ -227,7 +227,7 @@ void FocusManager::FocusPanel (
 
     Panel& rPanel (*maPanels[nPanelIndex]);
     TitleBar* pTitleBar = rPanel.GetTitleBar();
-    if (pTitleBar!=NULL && pTitleBar->IsVisible())
+    if (pTitleBar!=nullptr && pTitleBar->IsVisible())
     {
         rPanel.SetExpanded(true);
         pTitleBar->GrabFocus();
@@ -254,7 +254,7 @@ void FocusManager::FocusPanel (
 void FocusManager::FocusPanelContent (const sal_Int32 nPanelIndex)
 {
     vcl::Window* pWindow = VCLUnoHelper::GetWindow(maPanels[nPanelIndex]->GetElementWindow());
-    if (pWindow != NULL)
+    if (pWindow != nullptr)
     {
         mbObservingContentControlFocus = true;
         pWindow->GrabFocus();
@@ -283,7 +283,7 @@ void FocusManager::RemoveWindow (vcl::Window& rWindow)
     if (iPanel != maPanels.end())
     {
         UnregisterWindow(rWindow);
-        if ((*iPanel)->GetTitleBar() != NULL)
+        if ((*iPanel)->GetTitleBar() != nullptr)
         {
             UnregisterWindow(*(*iPanel)->GetTitleBar());
             UnregisterWindow((*iPanel)->GetTitleBar()->GetToolBox());
@@ -364,7 +364,7 @@ void FocusManager::HandleKeyEvent (
     const vcl::Window& rWindow)
 {
     const FocusLocation aLocation (GetFocusLocation(rWindow));
-    mpLastFocusedWindow = NULL;
+    mpLastFocusedWindow = nullptr;
 
     switch (rKeyCode.GetCode())
     {
@@ -511,7 +511,7 @@ void FocusManager::HandleKeyEvent (
 IMPL_LINK_TYPED(FocusManager, WindowEventListener, VclWindowEvent&, rWindowEvent, void)
 {
     vcl::Window* pSource = rWindowEvent.GetWindow();
-    if (pSource == NULL)
+    if (pSource == nullptr)
         return;
 
     switch (rWindowEvent.GetId())
@@ -540,7 +540,7 @@ IMPL_LINK_TYPED(FocusManager, WindowEventListener, VclWindowEvent&, rWindowEvent
 IMPL_LINK_TYPED(FocusManager, ChildEventListener, VclWindowEvent&, rEvent, void)
 {
     vcl::Window* pSource = rEvent.GetWindow();
-    if (pSource == NULL)
+    if (pSource == nullptr)
         return;
 
     switch (rEvent.GetId())
@@ -555,7 +555,7 @@ IMPL_LINK_TYPED(FocusManager, ChildEventListener, VclWindowEvent&, rEvent, void)
             FocusLocation aLocation (PC_None, -1);
             while (true)
             {
-                if (pWindow == NULL)
+                if (pWindow == nullptr)
                     break;
                 aLocation = GetFocusLocation(*pWindow);
                 if (aLocation.meComponent != PC_None)

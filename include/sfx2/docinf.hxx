@@ -57,9 +57,9 @@ sal_uInt32 SFX2_DLLPUBLIC LoadOlePropertySet(
 bool SFX2_DLLPUBLIC SaveOlePropertySet(
     css::uno::Reference< css::document::XDocumentProperties> i_xDocProps,
     SotStorage* i_pStorage,
-    const css::uno::Sequence<sal_uInt8> * i_pThumb = 0,
-    const css::uno::Sequence<sal_uInt8> * i_pGuid = 0,
-    const css::uno::Sequence<sal_uInt8> * i_pHyperlinks = 0);
+    const css::uno::Sequence<sal_uInt8> * i_pThumb = nullptr,
+    const css::uno::Sequence<sal_uInt8> * i_pGuid = nullptr,
+    const css::uno::Sequence<sal_uInt8> * i_pHyperlinks = nullptr);
 
 
 css::uno::Sequence<sal_uInt8> SFX2_DLLPUBLIC convertMetaFile(

@@ -46,8 +46,8 @@ using namespace ::com::sun::star::uno;
 #define USERITEM_NAME "UserItem"
 
 SingleTabDlgImpl::SingleTabDlgImpl()
-        : m_pSfxPage(NULL)
-        , m_pLine(NULL)
+        : m_pSfxPage(nullptr)
+        , m_pLine(nullptr)
 {
 }
 
@@ -162,8 +162,8 @@ void SfxModalDialog::init()
 SfxModalDialog::SfxModalDialog(vcl::Window *pParent, const OUString& rID, const OUString& rUIXMLDescription )
 :   ModalDialog(pParent, rID, rUIXMLDescription),
     nUniqId(0), //todo: remove this member when the ResId using ctor is removed
-    pInputSet(0),
-    pOutputSet(0)
+    pInputSet(nullptr),
+    pOutputSet(nullptr)
 {
     init();
 }
@@ -368,9 +368,9 @@ SfxModelessDialog::~SfxModelessDialog()
 void SfxModelessDialog::dispose()
 {
     if ( pImp->pMgr->GetFrame().is() && pImp->pMgr->GetFrame() == pBindings->GetActiveFrame() )
-        pBindings->SetActiveFrame( NULL );
+        pBindings->SetActiveFrame( nullptr );
     delete pImp;
-    pImp = NULL;
+    pImp = nullptr;
     ModelessDialog::dispose();
 }
 
@@ -436,7 +436,7 @@ bool SfxFloatingWindow::Notify( NotifyEvent& rEvt )
         {
             if ( !HasChildPathFocus() )
             {
-                pBindings->SetActiveFrame( NULL );
+                pBindings->SetActiveFrame( nullptr );
                 pImp->pMgr->Deactivate_Impl();
             }
         }
@@ -520,9 +520,9 @@ SfxFloatingWindow::~SfxFloatingWindow()
 void SfxFloatingWindow::dispose()
 {
     if ( pImp && pImp->pMgr->GetFrame() == pBindings->GetActiveFrame() )
-        pBindings->SetActiveFrame( NULL );
+        pBindings->SetActiveFrame( nullptr );
     delete pImp;
-    pImp = NULL;
+    pImp = nullptr;
     FloatingWindow::dispose();
 }
 
@@ -683,7 +683,7 @@ IMPL_LINK_NOARG_TYPED(SfxSingleTabDialog, OKHdl_Impl, Button*, void)
 SfxSingleTabDialog::SfxSingleTabDialog(vcl::Window *pParent, const SfxItemSet& rSet,
     const OUString& rID, const OUString& rUIXMLDescription)
     : SfxModalDialog(pParent, rID, rUIXMLDescription)
-    , fnGetRanges(NULL)
+    , fnGetRanges(nullptr)
     , pImpl(new SingleTabDlgImpl)
 {
     get(pOKBtn, "ok");
@@ -696,7 +696,7 @@ SfxSingleTabDialog::SfxSingleTabDialog(vcl::Window *pParent, const SfxItemSet& r
 SfxSingleTabDialog::SfxSingleTabDialog(vcl::Window* pParent, const SfxItemSet* pInSet,
     const OUString& rID, const OUString& rUIXMLDescription)
     : SfxModalDialog(pParent, rID, rUIXMLDescription)
-    , fnGetRanges(NULL)
+    , fnGetRanges(nullptr)
     , pImpl(new SingleTabDlgImpl)
 {
     get(pOKBtn, "ok");

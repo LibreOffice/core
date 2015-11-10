@@ -124,13 +124,13 @@ SfxModule* SfxApplication::GetModule_Impl()
 {
     SfxModule* pModule = SfxModule::GetActiveModule();
     if ( !pModule )
-        pModule = SfxModule::GetActiveModule( SfxViewFrame::GetFirst( 0, false ) );
+        pModule = SfxModule::GetActiveModule( SfxViewFrame::GetFirst( nullptr, false ) );
     if( pModule )
         return pModule;
     else
     {
         OSL_FAIL( "No module!" );
-        return NULL;
+        return nullptr;
     }
 }
 
@@ -144,7 +144,7 @@ bool SfxApplication::loadBrandSvg(const char *pName, BitmapEx &rBitmap, int nWid
 
     OUString aBaseName = "/" + OUString::createFromAscii( pName );
 
-    rtl_Locale *pLoc = NULL;
+    rtl_Locale *pLoc = nullptr;
     osl_getProcessLocale (&pLoc);
     LanguageTag aLanguageTag( *pLoc);
 

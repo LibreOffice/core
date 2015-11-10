@@ -152,7 +152,7 @@ bool Deck::Notify (NotifyEvent& rEvent)
     if (rEvent.GetType() == MouseNotifyEvent::COMMAND)
     {
         CommandEvent* pCommandEvent = static_cast<CommandEvent*>(rEvent.GetData());
-        if (pCommandEvent != NULL)
+        if (pCommandEvent != nullptr)
             switch (pCommandEvent->GetCommand())
             {
                 case CommandEventId::Wheel:
@@ -176,7 +176,7 @@ bool Deck::ProcessWheelEvent(CommandEvent* pCommandEvent)
     // Get the wheel data and check that it describes a valid vertical
     // scroll.
     const CommandWheelData* pData = pCommandEvent->GetWheelData();
-    if (pData==NULL
+    if (pData==nullptr
         || pData->GetModifier()
         || pData->GetMode() != CommandWheelMode::SCROLL
         || pData->IsHorz())
@@ -232,7 +232,7 @@ Panel* Deck::GetPanel(const OUString & panelId)
             return maPanels[i].get();
         }
     }
-    return NULL;
+    return nullptr;
 
 }
 
@@ -244,7 +244,7 @@ void Deck::ShowPanel(const Panel& rPanel)
         sal_Int32 nPanelTop (rPanel.GetPosPixel().Y());
         const sal_Int32 nPanelBottom (nPanelTop + rPanel.GetSizePixel().Height() - 1);
         // Add the title bar into the extent.
-        if (rPanel.GetTitleBar() != NULL && rPanel.GetTitleBar()->IsVisible())
+        if (rPanel.GetTitleBar() != nullptr && rPanel.GetTitleBar()->IsVisible())
             nPanelTop = rPanel.GetTitleBar()->GetPosPixel().Y();
 
         // Determine what the new thumb position should be like.

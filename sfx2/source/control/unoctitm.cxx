@@ -124,7 +124,7 @@ SfxUnoControllerItem::~SfxUnoControllerItem()
 void SfxUnoControllerItem::UnBind()
 {
     // connection to SfxControllerItem is lost
-    pCtrlItem = NULL;
+    pCtrlItem = nullptr;
     css::uno::Reference< css::frame::XStatusListener >  aRef( static_cast<cppu::OWeakObject*>(this), css::uno::UNO_QUERY );
     ReleaseDispatch();
 }
@@ -147,7 +147,7 @@ void SAL_CALL SfxUnoControllerItem::statusChanged(const css::frame::FeatureState
     else if ( pCtrlItem )
     {
         SfxItemState eState = SfxItemState::DISABLED;
-        SfxPoolItem* pItem = NULL;
+        SfxPoolItem* pItem = nullptr;
         if ( rEvent.IsEnabled )
         {
             eState = SfxItemState::DEFAULT;
@@ -235,7 +235,7 @@ void SfxUnoControllerItem::GetNewDispatch()
     if ( xDispatch.is() )
         xDispatch->addStatusListener( static_cast<css::frame::XStatusListener*>(this), aCommand );
     else if ( pCtrlItem )
-        pCtrlItem->StateChanged( pCtrlItem->GetId(), SfxItemState::DISABLED, NULL );
+        pCtrlItem->StateChanged( pCtrlItem->GetId(), SfxItemState::DISABLED, nullptr );
 }
 
 css::uno::Reference< css::frame::XDispatch >  SfxUnoControllerItem::TryGetDispatch( SfxFrame *pFrame )
@@ -256,7 +256,7 @@ void SfxUnoControllerItem::ReleaseBindings()
     ReleaseDispatch();
     if ( pBindings )
         pBindings->ReleaseUnoController_Impl( this );
-    pBindings = NULL;
+    pBindings = nullptr;
 }
 
 void SfxStatusDispatcher::ReleaseAll()
@@ -320,7 +320,7 @@ SfxOfficeDispatch::SfxOfficeDispatch( SfxBindings& rBindings, SfxDispatcher* pDi
 SfxOfficeDispatch::SfxOfficeDispatch( SfxDispatcher* pDispat, const SfxSlot* pSlot, const css::util::URL& rURL )
 {
     // this object is an adapter that shows a css::frame::XDispatch-Interface to the outside and uses a SfxControllerItem to monitor a state
-    pControllerItem = new SfxDispatchController_Impl( this, NULL, pDispat, pSlot, rURL );
+    pControllerItem = new SfxDispatchController_Impl( this, nullptr, pDispat, pSlot, rURL );
 }
 
 SfxOfficeDispatch::~SfxOfficeDispatch()
@@ -432,7 +432,7 @@ SfxDispatchController_Impl::SfxDispatchController_Impl(
     : aDispatchURL( rURL )
     , pDispatcher( pDispat )
     , pBindings( pBind )
-    , pLastState( 0 )
+    , pLastState( nullptr )
     , nSlot( pSlot->GetSlotId() )
     , pDispatch( pDisp )
     , bMasterSlave( false )
@@ -467,7 +467,7 @@ SfxDispatchController_Impl::~SfxDispatchController_Impl()
     if ( pDispatch )
     {
         // disconnect
-        pDispatch->pControllerItem = NULL;
+        pDispatch->pControllerItem = nullptr;
 
         // force all listeners to release the dispatch object
         css::lang::EventObject aObject;
@@ -488,7 +488,7 @@ void SfxDispatchController_Impl::setMasterSlaveCommand( bool bSet )
 
 void SfxDispatchController_Impl::UnBindController()
 {
-    pDispatch = NULL;
+    pDispatch = nullptr;
     if ( IsBound() )
     {
         GetBindings().ENTERREGISTRATIONS();
@@ -789,7 +789,7 @@ void SAL_CALL SfxDispatchController_Impl::dispatch( const css::util::URL& aURL,
         }
 
         bool bSuccess = false;
-        const SfxPoolItem* pItem = NULL;
+        const SfxPoolItem* pItem = nullptr;
         SfxMapUnit eMapUnit( SFX_MAPUNIT_100TH_MM );
 
         // Extra scope so that aInternalSet is destroyed before
@@ -802,13 +802,13 @@ void SAL_CALL SfxDispatchController_Impl::dispatch( const css::util::URL& aURL,
             if (xFrameRef.is()) // an empty set is no problem ... but an empty frame reference can be a problem !
                 aInternalSet.Put( SfxUnoFrameItem( SID_FILLFRAME, xFrameRef ) );
 
-            SfxShell* pShell( 0 );
+            SfxShell* pShell( nullptr );
             // #i102619# Retrieve metric from shell before execution - the shell could be destroyed after execution
             if ( pDispatcher->GetBindings() )
             {
                 if ( !pDispatcher->IsLocked( GetId() ) )
                 {
-                    const SfxSlot *pSlot = 0;
+                    const SfxSlot *pSlot = nullptr;
                     if ( pDispatcher->GetShellAndSlot_Impl( GetId(), &pShell, &pSlot, false,
                                                             SfxCallMode::MODAL==(nCall&SfxCallMode::MODAL), false ) )
                     {
@@ -829,7 +829,7 @@ void SAL_CALL SfxDispatchController_Impl::dispatch( const css::util::URL& aURL,
                         {
                             // execute with arguments - call directly
                             pItem = pDispatcher->Execute(GetId(), nCall, xSet.get(), &aInternalSet, nModifier);
-                            bSuccess = (pItem != NULL);
+                            bSuccess = (pItem != nullptr);
                         }
                         else
                         {
@@ -843,7 +843,7 @@ void SAL_CALL SfxDispatchController_Impl::dispatch( const css::util::URL& aURL,
                             aReq.SetInternalArgs_Impl(aInternalSet);
                             pDispatcher->GetBindings()->Execute_Impl( aReq, pSlot, pShell );
                             pItem = aReq.GetReturnValue();
-                            bSuccess = aReq.IsDone() || pItem != NULL;
+                            bSuccess = aReq.IsDone() || pItem != nullptr;
                         }
                     }
 #ifdef DBG_UTIL
@@ -863,7 +863,7 @@ void SAL_CALL SfxDispatchController_Impl::dispatch( const css::util::URL& aURL,
                     pItem = pDispatcher->Execute( GetId(), nCall, &aSet, &aInternalSet, nModifier );
                 else
                     // SfxRequests take empty sets as argument sets, GetArgs() returning non-zero!
-                    pItem = pDispatcher->Execute( GetId(), nCall, 0, &aInternalSet, nModifier );
+                    pItem = pDispatcher->Execute( GetId(), nCall, nullptr, &aInternalSet, nModifier );
 
                 // no bindings, no invalidate ( usually done in SfxDispatcher::Call_Impl()! )
                 if ( SfxApplication::Get() )
@@ -871,13 +871,13 @@ void SAL_CALL SfxDispatchController_Impl::dispatch( const css::util::URL& aURL,
                     SfxDispatcher* pAppDispat = SfxGetpApp()->GetAppDispatcher_Impl();
                     if ( pAppDispat )
                     {
-                        const SfxPoolItem* pState=0;
+                        const SfxPoolItem* pState=nullptr;
                         SfxItemState eState = pDispatcher->QueryState( GetId(), pState );
                         StateChanged( GetId(), eState, pState );
                     }
                 }
 
-                bSuccess = (pItem != NULL);
+                bSuccess = (pItem != nullptr);
             }
         }
 
@@ -1051,7 +1051,7 @@ void SfxDispatchController_Impl::StateChanged( sal_uInt16 nSID, SfxItemState eSt
 
 void SfxDispatchController_Impl::StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState )
 {
-    StateChanged( nSID, eState, pState, 0 );
+    StateChanged( nSID, eState, pState, nullptr );
 }
 
 void SfxDispatchController_Impl::InterceptLOKStateChangeEvent(const SfxObjectShell* objSh, const css::frame::FeatureStateEvent& aEvent)

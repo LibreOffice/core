@@ -275,7 +275,7 @@ SfxInfoBarWindow* SfxInfoBarContainerWindow::getInfoBar(const OUString& sId)
         if ((*it)->getId() == sId)
             return it->get();
     }
-    return NULL;
+    return nullptr;
 }
 
 void SfxInfoBarContainerWindow::removeInfoBar(SfxInfoBarWindow* pInfoBar)

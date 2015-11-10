@@ -89,7 +89,7 @@ private:
 protected:
 
     using TabPage::DeactivatePage;
-    virtual sfxpg       DeactivatePage( SfxItemSet* pSet = NULL ) override;
+    virtual sfxpg       DeactivatePage( SfxItemSet* pSet = nullptr ) override;
 
 public:
 

@@ -172,7 +172,7 @@ void SfxPasswordDialog::SetMinLen( sal_uInt16 nLen )
 {
     mnMinLen = nLen;
     SetPasswdText();
-    ModifyHdl( NULL );
+    ModifyHdl( nullptr );
 }
 
 void SfxPasswordDialog::ShowMinLengthText(bool bShow)

@@ -221,7 +221,7 @@ void SAL_CALL IFrameObject::cancel() throw( css::uno::RuntimeException, std::exc
         uno::Reference < util::XCloseable > xClose( mxFrame, uno::UNO_QUERY );
         if ( xClose.is() )
             xClose->close( sal_True );
-        mxFrame = 0;
+        mxFrame = nullptr;
     }
     catch (const uno::Exception&)
     {
@@ -408,7 +408,7 @@ void SAL_CALL IFrameObject::removeVetoableChangeListener(const OUString&, const 
 ::sal_Int16 SAL_CALL IFrameObject::execute() throw (css::uno::RuntimeException, std::exception)
 {
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-    VclAbstractDialog* pDlg = pFact->CreateEditObjectDialog( NULL, ".uno:InsertObjectFloatingFrame", mxObj );
+    VclAbstractDialog* pDlg = pFact->CreateEditObjectDialog( nullptr, ".uno:InsertObjectFloatingFrame", mxObj );
     if ( pDlg )
         pDlg->Execute();
     return 0;

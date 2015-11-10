@@ -39,7 +39,7 @@ using ::osl::Mutex;
 
 
 SfxBasicManagerHolder::SfxBasicManagerHolder()
-    :mpBasicManager( NULL )
+    :mpBasicManager( nullptr )
 {
 }
 
@@ -147,7 +147,7 @@ XLibraryContainer * SfxBasicManagerHolder::getLibraryContainer( ContainerType _e
     case DIALOGS:   return mxDialogContainer.get();
     }
     OSL_FAIL( "SfxBasicManagerHolder::getLibraryContainer: illegal container type!" );
-    return NULL;
+    return nullptr;
 }
 
 void SfxBasicManagerHolder::impl_releaseContainers()

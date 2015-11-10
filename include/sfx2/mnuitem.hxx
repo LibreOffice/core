@@ -49,7 +49,7 @@ public:
                             SfxMenuControl( sal_uInt16, SfxBindings&);
 
     static SfxMenuControl*  CreateImpl( sal_uInt16 nId, Menu &rMenu, SfxBindings &rBindings );
-    static void             RegisterControl( sal_uInt16 nSlotId = 0, SfxModule *pMod=NULL );
+    static void             RegisterControl( sal_uInt16 nSlotId = 0, SfxModule *pMod=nullptr );
 
                     virtual ~SfxMenuControl();
 
@@ -110,7 +110,7 @@ inline SfxVirtualMenu* SfxMenuControl::GetPopupMenu() const
 
 #define SFX_DECL_MENU_CONTROL() \
         static SfxMenuControl* CreateImpl( sal_uInt16 nId, Menu &rMenu, SfxBindings &rBindings ); \
-        static void RegisterControl(sal_uInt16 nSlotId = 0, SfxModule *pMod=NULL)
+        static void RegisterControl(sal_uInt16 nSlotId = 0, SfxModule *pMod=nullptr)
 
 #define SFX_IMPL_MENU_CONTROL(Class, nItemClass) \
         SfxMenuControl* Class::CreateImpl( sal_uInt16 nId, Menu &rMenu, SfxBindings &rBindings ) \

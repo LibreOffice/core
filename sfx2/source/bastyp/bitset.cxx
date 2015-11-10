@@ -97,7 +97,7 @@ void BitSet::CopyFrom( const BitSet& rSet )
         memcpy( pBitmap, rSet.pBitmap, 4 * nBlocks );
     }
     else
-        pBitmap = 0;
+        pBitmap = nullptr;
 }
 
 
@@ -108,7 +108,7 @@ BitSet::BitSet()
 {
     nCount = 0;
     nBlocks = 0;
-    pBitmap = 0;
+    pBitmap = nullptr;
 }
 
 
