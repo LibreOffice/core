@@ -176,7 +176,7 @@ private:
     bool mbScrollFlg;
     Idle maIdle;
     bool mbScreenTextNewRender;
-    boost::ptr_vector<opengl3D::Renderable3DObject> maScreenTextShapes;
+    std::vector<std::unique_ptr<opengl3D::Renderable3DObject>> maScreenTextShapes;
     OUString maFPS;
     OUString maDataUpdateFPS;
     sal_uInt32 miFrameCount;

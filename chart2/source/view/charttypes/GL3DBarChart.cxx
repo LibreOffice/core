@@ -467,10 +467,9 @@ void RenderBenchMarkThread::UpdateScreenText()
     {
         mpChart->mpWindow->getContext().makeCurrent();
         mpChart->mpRenderer->ReleaseScreenTextTexture();
-        for(boost::ptr_vector<opengl3D::Renderable3DObject>::iterator itr = mpChart->maScreenTextShapes.begin(),
-                itrEnd = mpChart->maScreenTextShapes.end(); itr != itrEnd; ++itr)
+        for(std::unique_ptr<opengl3D::Renderable3DObject>& aObj : mpChart->maScreenTextShapes)
         {
-            itr->render();
+            aObj->render();
         }
         mpChart->mbScreenTextNewRender = false;
         mpChart->mpWindow->getContext().resetCurrent();
@@ -1135,10 +1134,10 @@ void GL3DBarChart::contextDestroyed()
 float GL3DBarChart::addScreenTextShape(OUString &nStr, const glm::vec2& rLeftOrRightTop, float nTextHeight, bool bLeftTopFlag,
                                             const glm::vec4& rColor, const glm::vec3& rPos, sal_uInt32 nEvent)
 {
-    maScreenTextShapes.push_back(new opengl3D::ScreenText(mpRenderer.get(), *mpTextCache, nStr, rColor, nEvent));
+    maScreenTextShapes.push_back(std::make_unique<opengl3D::ScreenText>(mpRenderer.get(), *mpTextCache, nStr, rColor, nEvent));
     const opengl3D::TextCacheItem& rTextCache = mpTextCache->getText(nStr);
     float nRectWidth = (float)rTextCache.maSize.Width() / (float)rTextCache.maSize.Height() * nTextHeight / 2.0f;
-    opengl3D::ScreenText* pScreenText = static_cast<opengl3D::ScreenText*>(&maScreenTextShapes.back());
+    opengl3D::ScreenText* pScreenText = static_cast<opengl3D::ScreenText*>(maScreenTextShapes.back().get());
     if (bLeftTopFlag)
         pScreenText->setPosition(rLeftOrRightTop, glm::vec2(rLeftOrRightTop.x + nRectWidth, rLeftOrRightTop.y - nTextHeight), rPos);
     else
@@ -1245,10 +1244,10 @@ void GL3DBarChart::addMovementScreenText(sal_uInt32 nBarId)
                                   rBarInfo.maPos.y + BAR_SIZE_Y / 2.0f,
                                   rBarInfo.maPos.z);
     OUString aBarValue = "Value: " + OUString::number(rBarInfo.mnVal);
-    maScreenTextShapes.push_back(new opengl3D::ScreenText(mpRenderer.get(), *mpTextCache, aBarValue, glm::vec4(0.0f, 0.0f, 1.0f, 0.0f), CALC_POS_EVENT_ID, true));
+    maScreenTextShapes.push_back(std::make_unique<opengl3D::ScreenText>(mpRenderer.get(), *mpTextCache, aBarValue, glm::vec4(0.0f, 0.0f, 1.0f, 0.0f), CALC_POS_EVENT_ID, true));
     const opengl3D::TextCacheItem& rTextCache = mpTextCache->getText(aBarValue);
     float nRectWidth = (float)rTextCache.maSize.Width() / (float)rTextCache.maSize.Height() * 0.024;
-    opengl3D::ScreenText* pScreenText = static_cast<opengl3D::ScreenText*>(&maScreenTextShapes.back());
+    opengl3D::ScreenText* pScreenText = static_cast<opengl3D::ScreenText*>(maScreenTextShapes.back().get());
     pScreenText->setPosition(glm::vec2(-nRectWidth / 2, 0.03f), glm::vec2(nRectWidth / 2, -0.03f), aTextPos);
 }
 
@@ -1316,8 +1315,8 @@ void GL3DBarChart::updateClickEvent()
         }
         //add translucent back ground
         aTitle = " ";
-        maScreenTextShapes.push_back(new opengl3D::ScreenText(mpRenderer.get(), *mpTextCache, aTitle, glm::vec4(0.0f, 0.0f, 0.0f, 0.5f), 0));
-        opengl3D::ScreenText* pScreenText = static_cast<opengl3D::ScreenText*>(&maScreenTextShapes.back());
+        maScreenTextShapes.push_back(std::make_unique<opengl3D::ScreenText>(mpRenderer.get(), *mpTextCache, aTitle, glm::vec4(0.0f, 0.0f, 0.0f, 0.5f), 0));
+        opengl3D::ScreenText* pScreenText = static_cast<opengl3D::ScreenText*>(maScreenTextShapes.back().get());
         pScreenText->setPosition(glm::vec2(nMinXCoord, 0.99f), glm::vec2(nMaxXCoord, 0.99f - nMaxHight));
     }
 }
@@ -1442,13 +1441,13 @@ void GL3DBarChart::updateScroll()
             for(size_t i = 0; i < aBarInfoList.size(); i++)
             {
                 OUString aBarValue = "Value: " + OUString::number(aBarInfoList[i].mnVal);
-                maScreenTextShapes.push_back(new opengl3D::ScreenText(mpRenderer.get(), *mpTextCache, aBarValue, glm::vec4(0.0f, 0.0f, 1.0f, 0.0f), CALC_POS_EVENT_ID, true));
+                maScreenTextShapes.push_back(std::make_unique<opengl3D::ScreenText>(mpRenderer.get(), *mpTextCache, aBarValue, glm::vec4(0.0f, 0.0f, 1.0f, 0.0f), CALC_POS_EVENT_ID, true));
                 const opengl3D::TextCacheItem& rTextCache = mpTextCache->getText(aBarValue);
                 float nRectWidth = (float)rTextCache.maSize.Width() / (float)rTextCache.maSize.Height() * 0.024;
                 glm::vec3 aTextPos = glm::vec3(aBarInfoList[i].maPos.x + BAR_SIZE_X / 2.0f,
                                       aBarInfoList[i].maPos.y + BAR_SIZE_Y / 2.0f,
                                       aBarInfoList[i].maPos.z);
-                opengl3D::ScreenText* pScreenText = static_cast<opengl3D::ScreenText*>(&maScreenTextShapes.back());
+                opengl3D::ScreenText* pScreenText = static_cast<opengl3D::ScreenText*>(maScreenTextShapes.back().get());
                 pScreenText->setPosition(glm::vec2(-nRectWidth / 2, 0.03f), glm::vec2(nRectWidth / 2, -0.03f), aTextPos);
             }
         }
