@@ -84,7 +84,7 @@ namespace ftp {
 
         FTPURL(
             const OUString& aIdent,
-            FTPContentProvider* pFCP = 0
+            FTPContentProvider* pFCP = nullptr
         )
             throw(
                 malformed_exception

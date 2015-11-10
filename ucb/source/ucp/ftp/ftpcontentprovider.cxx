@@ -42,8 +42,8 @@ using namespace com::sun::star::beans;
 
 FTPContentProvider::FTPContentProvider( const Reference< XComponentContext >& rxContext)
     : ::ucbhelper::ContentProviderImplHelper(rxContext)
-    , m_ftpLoaderThread(0)
-    , m_pProxyDecider(0)
+    , m_ftpLoaderThread(nullptr)
+    , m_pProxyDecider(nullptr)
 {
 }
 
@@ -91,7 +91,7 @@ css::uno::Sequence< css::uno::Type > SAL_CALL FTPContentProvider::getTypes()
     throw( css::uno::RuntimeException,
            std::exception )
 {
-    static cppu::OTypeCollection* pCollection = NULL;
+    static cppu::OTypeCollection* pCollection = nullptr;
     if ( !pCollection )
     {
         osl::Guard< osl::Mutex > aGuard( osl::Mutex::getGlobalMutex() );

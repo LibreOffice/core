@@ -117,9 +117,9 @@ template<typename T> T CachedContentResultSet::rowOriginGet(
 
 CachedContentResultSet::CCRS_Cache::CCRS_Cache(
     const Reference< XContentIdentifierMapping > & xMapping )
-    : m_pResult( NULL )
+    : m_pResult( nullptr )
     , m_xContentIdentifierMapping( xMapping )
-    , m_pMappedReminder( NULL )
+    , m_pMappedReminder( nullptr )
 {
 }
 
@@ -134,7 +134,7 @@ void SAL_CALL CachedContentResultSet::CCRS_Cache
     if( m_pResult )
     {
         delete m_pResult;
-        m_pResult = NULL;
+        m_pResult = nullptr;
     }
     clearMappedReminder();
 }
@@ -252,7 +252,7 @@ void SAL_CALL CachedContentResultSet::CCRS_Cache
     ::clearMappedReminder()
 {
     delete m_pMappedReminder;
-    m_pMappedReminder = NULL;
+    m_pMappedReminder = nullptr;
 }
 
 Sequence< sal_Bool >* SAL_CALL CachedContentResultSet::CCRS_Cache
@@ -447,7 +447,7 @@ OUString    CCRS_PropertySetInfo::m_aPropertyNameForFetchDirection( "FetchDirect
 
 CCRS_PropertySetInfo::CCRS_PropertySetInfo(
         Reference< XPropertySetInfo > xInfo )
-        : m_pProperties( NULL )
+        : m_pProperties( nullptr )
         , m_nFetchSizePropertyHandle( -1 )
         , m_nFetchDirectionPropertyHandle( -1 )
 {
@@ -673,11 +673,11 @@ CachedContentResultSet::CachedContentResultSet(
                 : ContentResultSetWrapper( xOrigin )
 
                 , m_xContext( rxContext )
-                , m_xFetchProvider( NULL )
-                , m_xFetchProviderForContentAccess( NULL )
+                , m_xFetchProvider( nullptr )
+                , m_xFetchProviderForContentAccess( nullptr )
 
-                , m_xMyPropertySetInfo( NULL )
-                , m_pMyPropSetInfo( NULL )
+                , m_xMyPropertySetInfo( nullptr )
+                , m_pMyPropSetInfo( nullptr )
 
                 , m_xContentIdentifierMapping( xContentIdentifierMapping )
                 , m_nRow( 0 ) // Position is one-based. Zero means: before first element.
@@ -698,7 +698,7 @@ CachedContentResultSet::CachedContentResultSet(
                 , m_aCacheContentIdentifier( m_xContentIdentifierMapping )
                 , m_aCacheContent( m_xContentIdentifierMapping )
                 , m_bTriedToGetTypeConverter( false )
-                , m_xTypeConverter( NULL )
+                , m_xTypeConverter( nullptr )
 {
     m_xFetchProvider.set( m_xResultSetOrigin, UNO_QUERY );
     OSL_ENSURE( m_xFetchProvider.is(), "interface XFetchProvider is required" );

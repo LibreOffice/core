@@ -141,7 +141,7 @@ Sequence< Type > SAL_CALL CachedContentResultSetStub
     ::getTypes()
     throw( RuntimeException, std::exception )
 {
-    static Sequence< Type >* pTypes = NULL;
+    static Sequence< Type >* pTypes = nullptr;
     if( !pTypes )
     {
         osl::Guard< osl::Mutex > aGuard( osl::Mutex::getGlobalMutex() );
@@ -340,7 +340,7 @@ void SAL_CALL CachedContentResultSetStub
     Sequence< Any > aContent( nCount );
     for( sal_Int32 nN = 1; nN <= nCount; nN++ )
     {
-        aContent[nN-1] = xRow->getObject( nN, NULL );
+        aContent[nN-1] = xRow->getObject( nN, nullptr );
     }
 
     rRowContent <<= aContent;
@@ -568,7 +568,7 @@ Reference< XResultSet > SAL_CALL CachedContentResultSetStubFactory
         xRet = new CachedContentResultSetStub( xSource );
         return xRet;
     }
-    return NULL;
+    return nullptr;
 }
 
 

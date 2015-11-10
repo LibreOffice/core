@@ -51,13 +51,13 @@ bool DataSupplier::getData()
     GFile *pFile = mxContent->getGFile();
 
     GFileEnumerator* pEnumerator = g_file_enumerate_children(pFile, "*",
-        G_FILE_QUERY_INFO_NONE, NULL, NULL);
+        G_FILE_QUERY_INFO_NONE, nullptr, nullptr);
 
     if (!pEnumerator)
         return false;
 
-    GFileInfo *pInfo = NULL;
-    while ((pInfo = g_file_enumerator_next_file (pEnumerator, NULL, NULL)))
+    GFileInfo *pInfo = nullptr;
+    while ((pInfo = g_file_enumerator_next_file (pEnumerator, nullptr, nullptr)))
     {
         switch ( mnOpenMode )
         {
@@ -80,7 +80,7 @@ bool DataSupplier::getData()
 
     mbCountFinal = true;
 
-    g_file_enumerator_close(pEnumerator, NULL, NULL);
+    g_file_enumerator_close(pEnumerator, nullptr, nullptr);
     return true;
 }
 
@@ -116,7 +116,7 @@ OUString DataSupplier::queryContentIdentifierString( sal_uInt32 nIndex )
         g_free(parent);
 
         char *escaped_name =
-            g_uri_escape_string( g_file_info_get_name(maResults[ nIndex ]->pInfo) , NULL, false);
+            g_uri_escape_string( g_file_info_get_name(maResults[ nIndex ]->pInfo) , nullptr, false);
 
         if ( ( aId.lastIndexOf( '/' ) + 1 ) != aId.getLength() )
                 aId += "/";

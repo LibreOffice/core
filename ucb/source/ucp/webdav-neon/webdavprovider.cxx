@@ -54,7 +54,7 @@ ContentProvider::ContentProvider(
                 const uno::Reference< uno::XComponentContext >& rxContext )
 : ::ucbhelper::ContentProviderImplHelper( rxContext ),
   m_xDAVSessionFactory( new DAVSessionFactory() ),
-  m_pProps( 0 )
+  m_pProps( nullptr )
 {
 }
 

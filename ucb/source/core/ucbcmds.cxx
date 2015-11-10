@@ -1001,7 +1001,7 @@ uno::Reference< sdbc::XResultSet > getResultSet(
     ucb::OpenCommandArgument2 aArg;
     aArg.Mode       = ucb::OpenMode::ALL;
     aArg.Priority   = 0; // unused
-    aArg.Sink       = 0;
+    aArg.Sink       = nullptr;
     aArg.Properties = aProps;
 
     ucb::Command aOpenCommand( OUString("open"),

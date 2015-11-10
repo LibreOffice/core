@@ -93,7 +93,7 @@ FileContentIdentifier::getTypes(
     void )
     throw( uno::RuntimeException, std::exception )
 {
-    static cppu::OTypeCollection* pCollection = NULL;
+    static cppu::OTypeCollection* pCollection = nullptr;
     if ( !pCollection ) {
         osl::Guard< osl::Mutex > aGuard( osl::Mutex::getGlobalMutex() );
         if ( !pCollection )

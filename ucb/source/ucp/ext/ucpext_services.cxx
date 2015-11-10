@@ -48,9 +48,9 @@ namespace ucb { namespace ucp { namespace ext
             ContentProvider::Create,
             ContentProvider::getImplementationName_static,
             ContentProvider::getSupportedServiceNames_static,
-            ::cppu::createOneInstanceComponentFactory, NULL, 0
+            ::cppu::createOneInstanceComponentFactory, nullptr, 0
         },
-        { 0, 0, 0, 0, 0, 0 }
+        { nullptr, nullptr, nullptr, nullptr, nullptr, 0 }
     };
 
 

@@ -105,7 +105,7 @@ namespace tdoc_ucp {
                     const css::lang::EventObject & Source )
                 throw ( css::uno::RuntimeException, std::exception ) override;
 
-            void Dispose() { m_pManager = 0; }
+            void Dispose() { m_pManager = nullptr; }
 
         private:
             OfficeDocumentsManager * m_pManager;

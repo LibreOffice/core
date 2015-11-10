@@ -80,7 +80,7 @@ protected:
             if(pT)
             {
                 pT->release();
-                pT = NULL;
+                pT = nullptr;
             }
         }
 

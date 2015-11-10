@@ -63,13 +63,13 @@ namespace fileaccess
 
             explicit TaskHandling(
                 const css::uno::Reference< css::ucb::XCommandEnvironment >&  xCommandEnv
-                = css::uno::Reference< css::ucb::XCommandEnvironment >( 0 ) )
+                = css::uno::Reference< css::ucb::XCommandEnvironment >( nullptr ) )
                 : m_bAbort( false ),
                   m_bHandled( false ),
                   m_nErrorCode( TASKHANDLER_NO_ERROR ),
                   m_nMinorCode( TASKHANDLER_NO_ERROR ),
-                  m_xInteractionHandler( 0 ),
-                  m_xProgressHandler( 0 ),
+                  m_xInteractionHandler( nullptr ),
+                  m_xProgressHandler( nullptr ),
                   m_xCommandEnvironment( xCommandEnv )
             {
             }

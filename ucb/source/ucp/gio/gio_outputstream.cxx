@@ -47,8 +47,8 @@ void SAL_CALL OutputStream::writeBytes( const css::uno::Sequence< sal_Int8 >& rD
     if (!mpStream)
         throw io::NotConnectedException();
 
-    GError *pError=NULL;
-    if (!g_output_stream_write_all(G_OUTPUT_STREAM(mpStream), rData.getConstArray(), rData.getLength(), NULL, NULL, &pError))
+    GError *pError=nullptr;
+    if (!g_output_stream_write_all(G_OUTPUT_STREAM(mpStream), rData.getConstArray(), rData.getLength(), nullptr, nullptr, &pError))
         convertToIOException(pError, static_cast< cppu::OWeakObject * >(this));
 }
 
@@ -59,8 +59,8 @@ void SAL_CALL OutputStream::flush()
     if (!mpStream)
         throw io::NotConnectedException();
 
-    GError *pError=NULL;
-    if (!g_output_stream_flush(G_OUTPUT_STREAM(mpStream), NULL, &pError))
+    GError *pError=nullptr;
+    if (!g_output_stream_flush(G_OUTPUT_STREAM(mpStream), nullptr, &pError))
         convertToIOException(pError, static_cast< cppu::OWeakObject * >(this));
 }
 
@@ -69,7 +69,7 @@ void SAL_CALL OutputStream::closeOutput()
            uno::RuntimeException, std::exception )
 {
     if (mpStream)
-        g_output_stream_close(G_OUTPUT_STREAM(mpStream), NULL, NULL);
+        g_output_stream_close(G_OUTPUT_STREAM(mpStream), nullptr, nullptr);
 }
 
 uno::Any OutputStream::queryInterface( const uno::Type &type ) throw( uno::RuntimeException, std::exception )

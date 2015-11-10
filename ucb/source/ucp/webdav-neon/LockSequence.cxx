@@ -49,7 +49,7 @@ struct LockSequenceParseContext
     bool hasTimeout;
 
     LockSequenceParseContext()
-    : pLock( 0 ), hasLockScope( false ), hasLockType( false ),
+    : pLock( nullptr ), hasLockScope( false ), hasLockType( false ),
       hasDepth( false ), hasHREF( false ), hasTimeout( false ) {}
 
     ~LockSequenceParseContext() { delete pLock; }
@@ -77,7 +77,7 @@ extern "C" int LockSequence_startelement_callback(
     const char *name,
     const char ** )
 {
-    if ( name != 0 )
+    if ( name != nullptr )
     {
         switch ( parent )
         {

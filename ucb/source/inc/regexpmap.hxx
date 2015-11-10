@@ -433,9 +433,9 @@ public:
     RegexpMap & operator =(RegexpMap const & rOther);
 
     bool add(OUString const & rKey, Val const & rValue, bool bOverwrite,
-             OUString * pReverse = 0);
+             OUString * pReverse = nullptr);
 
-    iterator find(OUString const & rKey, OUString * pReverse = 0);
+    iterator find(OUString const & rKey, OUString * pReverse = nullptr);
 
     void erase(iterator const & rPos);
 
@@ -450,7 +450,7 @@ public:
     size_type size() const;
 
     Val const * map(OUString const & rString,
-                    OUString * pTranslation = 0, bool * pTranslated = 0)
+                    OUString * pTranslation = nullptr, bool * pTranslated = nullptr)
         const;
 
 private:

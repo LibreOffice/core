@@ -129,7 +129,7 @@ public:
         throw( RuntimeException, std::exception ) override;
 
     // Non-interface methods.
-    void reset() { delete m_pProps; m_pProps = 0; }
+    void reset() { delete m_pProps; m_pProps = nullptr; }
 };
 
 
@@ -1109,9 +1109,9 @@ struct PersistentPropertySet_Impl
 
     PersistentPropertySet_Impl( PropertySetRegistry& rCreator,
                                 const OUString& rKey )
-    : m_pCreator( &rCreator ), m_pInfo( NULL ), m_aKey( rKey ),
-      m_pDisposeEventListeners( NULL ), m_pPropSetChangeListeners( NULL ),
-      m_pPropertyChangeListeners( NULL )
+    : m_pCreator( &rCreator ), m_pInfo( nullptr ), m_aKey( rKey ),
+      m_pDisposeEventListeners( nullptr ), m_pPropSetChangeListeners( nullptr ),
+      m_pPropertyChangeListeners( nullptr )
     {
         m_pCreator->acquire();
     }
@@ -2204,7 +2204,7 @@ PropertySetInfo_Impl::PropertySetInfo_Impl(
                         const Reference< XComponentContext >& xContext,
                         PersistentPropertySet* pOwner )
 : m_xContext( xContext ),
-  m_pProps( NULL ),
+  m_pProps( nullptr ),
   m_pOwner( pOwner )
 {
 }

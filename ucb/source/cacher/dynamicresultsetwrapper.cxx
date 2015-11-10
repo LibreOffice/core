@@ -45,18 +45,18 @@ DynamicResultSetWrapper::DynamicResultSetWrapper(
 
                 : m_bDisposed( false )
                 , m_bInDispose( false )
-                , m_pDisposeEventListeners( NULL )
+                , m_pDisposeEventListeners( nullptr )
                 , m_xContext( rxContext )
                 , m_bStatic( false )
                 , m_bGotWelcome( false )
                 , m_xSource( xOrigin )
-                , m_xSourceResultOne( NULL )
-                , m_xSourceResultTwo( NULL )
+                , m_xSourceResultOne( nullptr )
+                , m_xSourceResultTwo( nullptr )
             //  , m_xSourceResultCurrent( NULL )
             //  , m_bUseOne( NULL )
-                , m_xMyResultOne( NULL )
-                , m_xMyResultTwo( NULL )
-                , m_xListener( NULL )
+                , m_xMyResultOne( nullptr )
+                , m_xMyResultTwo( nullptr )
+                , m_xListener( nullptr )
 {
     m_pMyListenerImpl = new DynamicResultSetWrapperListener( this );
     m_xMyListenerImpl.set( m_pMyListenerImpl );
@@ -68,11 +68,11 @@ void SAL_CALL DynamicResultSetWrapper::impl_init()
     //call this at the end of constructor of derived class
 
 
-    Reference< XDynamicResultSet > xSource = NULL;
+    Reference< XDynamicResultSet > xSource = nullptr;
     {
         osl::Guard< osl::Mutex > aGuard( m_aMutex );
         xSource = m_xSource;
-        m_xSource = NULL;
+        m_xSource = nullptr;
     }
     if( xSource.is() )
         setSource( xSource );
@@ -302,8 +302,8 @@ void SAL_CALL DynamicResultSetWrapper::setSource( const Reference< XInterface > 
     OSL_ENSURE( xSourceDynamic.is(),
         "the given source is not of required type XDynamicResultSet" );
 
-    Reference< XDynamicResultSetListener > xListener = NULL;
-    Reference< XDynamicResultSetListener > xMyListenerImpl = NULL;
+    Reference< XDynamicResultSetListener > xListener = nullptr;
+    Reference< XDynamicResultSetListener > xMyListenerImpl = nullptr;
 
     bool bStatic = false;
     {
@@ -332,8 +332,8 @@ Reference< XResultSet > SAL_CALL DynamicResultSetWrapper::getStaticResultSet()
 {
     impl_EnsureNotDisposed();
 
-    Reference< XDynamicResultSet > xSource = NULL;
-    Reference< XEventListener > xMyListenerImpl = NULL;
+    Reference< XDynamicResultSet > xSource = nullptr;
+    Reference< XEventListener > xMyListenerImpl = nullptr;
     {
         osl::Guard< osl::Mutex > aGuard( m_aMutex );
         if( m_xListener.is() )
@@ -363,8 +363,8 @@ void SAL_CALL DynamicResultSetWrapper::setListener( const Reference< XDynamicRes
 {
     impl_EnsureNotDisposed();
 
-    Reference< XDynamicResultSet > xSource = NULL;
-    Reference< XDynamicResultSetListener > xMyListenerImpl = NULL;
+    Reference< XDynamicResultSet > xSource = nullptr;
+    Reference< XDynamicResultSetListener > xMyListenerImpl = nullptr;
     {
         osl::Guard< osl::Mutex > aGuard( m_aMutex );
         if( m_xListener.is() )
@@ -413,7 +413,7 @@ void SAL_CALL DynamicResultSetWrapper::connectToCache( const Reference< XDynamic
         if( xStubFactory.is() )
         {
             xStubFactory->connectToCache(
-                  this, xCache, Sequence< NumberedSortingInfo > (), NULL );
+                  this, xCache, Sequence< NumberedSortingInfo > (), nullptr );
             return;
         }
     }
@@ -428,7 +428,7 @@ sal_Int16 SAL_CALL DynamicResultSetWrapper::getCapabilities()
     impl_EnsureNotDisposed();
 
     m_aSourceSet.wait();
-    Reference< XDynamicResultSet > xSource = NULL;
+    Reference< XDynamicResultSet > xSource = nullptr;
     {
         osl::Guard< osl::Mutex > aGuard( m_aMutex );
         xSource = m_xSource;
@@ -509,7 +509,7 @@ void SAL_CALL DynamicResultSetWrapperListener::impl_OwnerDies()
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
-    m_pOwner = NULL;
+    m_pOwner = nullptr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

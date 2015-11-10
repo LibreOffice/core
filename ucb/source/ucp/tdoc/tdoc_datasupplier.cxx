@@ -84,7 +84,7 @@ struct DataSupplier_Impl
             const rtl::Reference< Content >& rContent,
             sal_Int32 nOpenMode )
     : m_xContent( rContent ), m_xContext( rxContext ),
-      m_pNamesOfChildren( 0 ), m_nOpenMode( nOpenMode ),
+      m_pNamesOfChildren( nullptr ), m_nOpenMode( nOpenMode ),
       m_bCountFinal( false ), m_bThrowException( false )
     {}
     ~DataSupplier_Impl();
@@ -398,7 +398,7 @@ bool ResultSetDataSupplier::queryNamesOfChildren()
 {
     osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
 
-    if ( m_pImpl->m_pNamesOfChildren == 0 )
+    if ( m_pImpl->m_pNamesOfChildren == nullptr )
     {
         uno::Sequence< OUString > * pNamesOfChildren
             = new uno::Sequence< OUString >();

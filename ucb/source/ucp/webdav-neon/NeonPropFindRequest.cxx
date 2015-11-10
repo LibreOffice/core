@@ -259,8 +259,8 @@ NeonPropFindRequest::NeonPropFindRequest( HttpSession* inSession,
             DAVProperties::createNeonPropName(
                 inPropNames[ theIndex ], thePropNames[ theIndex ] );
         }
-        thePropNames[ theIndex ].nspace = NULL;
-        thePropNames[ theIndex ].name   = NULL;
+        thePropNames[ theIndex ].nspace = nullptr;
+        thePropNames[ theIndex ].name   = nullptr;
 
         {
             osl::Guard< osl::Mutex > theGlobalGuard( aGlobalNeonMutex );
@@ -282,7 +282,7 @@ NeonPropFindRequest::NeonPropFindRequest( HttpSession* inSession,
         nError = ne_simple_propfind( inSession,
                                      inPath,
                                      inDepth,
-                                     NULL, // 0 == allprop
+                                     nullptr, // 0 == allprop
                                      NPFR_propfind_results,
                                      &ioResources );
     }

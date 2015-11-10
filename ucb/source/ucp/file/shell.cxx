@@ -70,11 +70,11 @@ using namespace com::sun::star::ucb;
 #endif
 
 shell::UnqPathData::UnqPathData()
-    : properties( 0 ),
-      notifier( 0 ),
-      xS( 0 ),
-      xC( 0 ),
-      xA( 0 )
+    : properties( nullptr ),
+      notifier( nullptr ),
+      xS( nullptr ),
+      xC( nullptr ),
+      xA( nullptr )
 {
     // empty
 }
@@ -97,11 +97,11 @@ shell::UnqPathData& shell::UnqPathData::operator=( UnqPathData& a )
     xS = a.xS;
     xC = a.xC;
     xA = a.xA;
-    a.properties = 0;
-    a.notifier = 0;
-    a.xS = 0;
-    a.xC = 0;
-    a.xA = 0;
+    a.properties = nullptr;
+    a.notifier = nullptr;
+    a.xS = nullptr;
+    a.xC = nullptr;
+    a.xA = nullptr;
     return *this;
 }
 
@@ -543,9 +543,9 @@ shell::deassociate( const OUString& aUnqPath,
 
         if( properties.find( ContentTProperty )->getState() == beans::PropertyState_DEFAULT_VALUE )
         {
-            it->second.xS = 0;
-            it->second.xC = 0;
-            it->second.xA = 0;
+            it->second.xS = nullptr;
+            it->second.xC = nullptr;
+            it->second.xA = nullptr;
             if(m_xFileRegistry.is())
                 m_xFileRegistry->removePropertySet( aUnqPath );
         }
@@ -672,7 +672,7 @@ shell::open( sal_Int32 CommandId,
                       xInputStream->getMinorError() );
 
         delete xInputStream;
-        xInputStream = 0;
+        xInputStream = nullptr;
     }
 
     return uno::Reference< io::XInputStream >( xInputStream );
@@ -708,7 +708,7 @@ shell::open_rw( sal_Int32 CommandId,
                       xStream->getMinorError() );
 
         delete xStream;
-        xStream = 0;
+        xStream = nullptr;
     }
     return uno::Reference< io::XStream >( xStream );
 }
@@ -744,7 +744,7 @@ shell::ls( sal_Int32 CommandId,
                       p->getMinorError() );
 
         delete p;
-        p = 0;
+        p = nullptr;
     }
 
     return uno::Reference< XDynamicResultSet > ( p );
@@ -893,7 +893,7 @@ shell::setv( const OUString& aUnqPath,
                         IOErrorCode ioError(IOErrorCode_GENERAL);
                         ret[i] <<= InteractiveAugmentedIOException(
                             OUString(),
-                            0,
+                            nullptr,
                             task::InteractionClassification_ERROR,
                             ioError,
                             names );
@@ -1001,7 +1001,7 @@ shell::setv( const OUString& aUnqPath,
                         }
                         ret[i] <<= InteractiveAugmentedIOException(
                             OUString(),
-                            0,
+                            nullptr,
                             task::InteractionClassification_ERROR,
                             ioError,
                             names );
@@ -1290,7 +1290,7 @@ bool getType(
     TaskManager & task, sal_Int32 id, OUString const & fileUrl,
     osl::DirectoryItem * item, osl::FileStatus::Type * type)
 {
-    OSL_ASSERT(item != 0 && type != 0);
+    OSL_ASSERT(item != nullptr && type != nullptr);
     osl::FileBase::RC err = osl::DirectoryItem::get(fileUrl, *item);
     if (err != osl::FileBase::E_None) {
         task.installError(id, TASKHANDLING_TRANSFER_BY_COPY_SOURCE, err);
@@ -2243,7 +2243,7 @@ shell::commit( const shell::ContentMap::iterator& it,
     uno::Any aAny;
     shell::PropertySet::iterator it1;
 
-    if( it->second.properties == 0 )
+    if( it->second.properties == nullptr )
     {
         OUString aPath = it->first;
         insertDefaultProperties( aPath );
@@ -2755,12 +2755,12 @@ shell::getContentExchangedEventListeners( const OUString& aOldPrefix,
                 // copy Ownership also
                 delete itnew->second.properties;
                 itnew->second.properties = itold->second.properties;
-                itold->second.properties = 0;
+                itold->second.properties = nullptr;
 
                 // copy existing list
                 std::list< Notifier* >* copyList = itnew->second.notifier;
                 itnew->second.notifier = itold->second.notifier;
-                itold->second.notifier = 0;
+                itold->second.notifier = nullptr;
 
                 m_aContent.erase( itold );
 
@@ -2780,7 +2780,7 @@ shell::getContentExchangedEventListeners( const OUString& aOldPrefix,
 
                 // Merge with preexisting notifiers
                 // However, these may be in status BaseContent::Deleted
-                if( copyList != 0 )
+                if( copyList != nullptr )
                 {
                     std::list< Notifier* >::iterator copyIt = copyList->begin();
                     while( copyIt != copyList->end() )
@@ -2906,12 +2906,12 @@ shell::erasePersistentSet( const OUString& aUnqPath,
             ContentMap::iterator it = m_aContent.find( old_Name );
             if( it != m_aContent.end() )
             {
-                it->second.xS = 0;
-                it->second.xC = 0;
-                it->second.xA = 0;
+                it->second.xS = nullptr;
+                it->second.xC = nullptr;
+                it->second.xA = nullptr;
 
                 delete it->second.properties;
-                it->second.properties = 0;
+                it->second.properties = nullptr;
             }
         }
 

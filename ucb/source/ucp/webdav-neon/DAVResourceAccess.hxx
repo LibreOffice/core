@@ -64,7 +64,7 @@ class DAVResourceAccess
     std::vector< NeonUri > m_aRedirectURIs;
 
 public:
-    DAVResourceAccess() : m_xSessionFactory( 0 ) {}
+    DAVResourceAccess() : m_xSessionFactory( nullptr ) {}
     DAVResourceAccess( const css::uno::Reference< css::uno::XComponentContext > & rxContext,
                        rtl::Reference< DAVSessionFactory > const & rSessionFactory,
                        const OUString & rURL );

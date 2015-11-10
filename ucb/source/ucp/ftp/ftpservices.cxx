@@ -29,7 +29,7 @@ using namespace ftp;
 extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL ucpftp1_component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * /*pRegistryKey*/ )
 {
-    void * pRet = 0;
+    void * pRet = nullptr;
 
     uno::Reference< lang::XMultiServiceFactory > xSMgr(
         static_cast< lang::XMultiServiceFactory * >(

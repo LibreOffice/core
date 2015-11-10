@@ -231,7 +231,7 @@ namespace cmis
         if ( !m_sRepositoryId.isEmpty() )
         {
             for ( vector< libcmis::RepositoryPtr >::iterator it = m_aRepositories.begin( );
-                    it != m_aRepositories.end( ) && NULL == repo.get( ); ++it )
+                    it != m_aRepositories.end( ) && nullptr == repo.get( ); ++it )
             {
                 if ( STD_TO_OUSTR( ( *it )->getId( ) ) == m_sRepositoryId )
                     repo = *it;

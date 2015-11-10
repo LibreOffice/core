@@ -39,7 +39,7 @@ using namespace cppu;
 //  The mutex to synchronize access to containers.
 static osl::Mutex& getContainerMutex()
 {
-    static osl::Mutex* pMutex = NULL;
+    static osl::Mutex* pMutex = nullptr;
     if( !pMutex )
     {
         osl::Guard< osl::Mutex > aGuard( osl::Mutex::getGlobalMutex() );
@@ -62,7 +62,7 @@ SortedDynamicResultSet::SortedDynamicResultSet(
                         const Reference < XAnyCompareFactory > &xCompFac,
                         const Reference < XComponentContext > &rxContext )
 {
-    mpDisposeEventListeners = NULL;
+    mpDisposeEventListeners = nullptr;
     mpOwnListener           = new SortedDynamicResultSetListener( this );
 
     mxOwnListener.set( mpOwnListener );
@@ -72,8 +72,8 @@ SortedDynamicResultSet::SortedDynamicResultSet(
     mxCompFac   = xCompFac;
     m_xContext  = rxContext;
 
-    mpOne = NULL;
-    mpTwo = NULL;
+    mpOne = nullptr;
+    mpTwo = nullptr;
 
     mbGotWelcome    = false;
     mbUseOne        = true;
@@ -92,8 +92,8 @@ SortedDynamicResultSet::~SortedDynamicResultSet()
     mxTwo.clear();
     mxOriginal.clear();
 
-    mpOne = NULL;
-    mpTwo = NULL;
+    mpOne = nullptr;
+    mpTwo = nullptr;
 }
 
 // XServiceInfo methods.
@@ -146,8 +146,8 @@ void SAL_CALL SortedDynamicResultSet::dispose()
     mxTwo.clear();
     mxOriginal.clear();
 
-    mpOne = NULL;
-    mpTwo = NULL;
+    mpOne = nullptr;
+    mpTwo = nullptr;
     mbUseOne = true;
 }
 
@@ -245,7 +245,7 @@ SortedDynamicResultSet::connectToCache( const Reference< XDynamicResultSet > & x
         if( xStubFactory.is() )
         {
             xStubFactory->connectToCache(
-                  this, xCache, Sequence< NumberedSortingInfo > (), NULL );
+                  this, xCache, Sequence< NumberedSortingInfo > (), nullptr );
             return;
         }
     }
@@ -295,7 +295,7 @@ void SortedDynamicResultSet::impl_notify( const ListEvent& Changes )
     bool bHasNew = false;
     bool bHasModified = false;
 
-    SortedResultSet *pCurSet = NULL;
+    SortedResultSet *pCurSet = nullptr;
 
     // exchange mxNew and mxOld and immediately afterwards copy the tables
     // from Old to New
@@ -600,7 +600,7 @@ void SAL_CALL
 SortedDynamicResultSetListener::impl_OwnerDies()
 {
     osl::Guard< osl::Mutex > aGuard( maMutex );
-    mpOwner = NULL;
+    mpOwner = nullptr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

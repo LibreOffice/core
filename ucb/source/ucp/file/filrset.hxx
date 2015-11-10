@@ -63,27 +63,27 @@ class XResultSet_impl : public Notifier,
 
         virtual ContentEventNotifier*        cDEL() override
         {
-            return 0;
+            return nullptr;
         }
 
         virtual ContentEventNotifier*        cEXC( const OUString& ) override
         {
-            return 0;
+            return nullptr;
         }
 
         virtual ContentEventNotifier*          cCEL() override
         {
-            return 0;
+            return nullptr;
         }
 
         virtual PropertySetInfoChangeNotifier* cPSL() override
         {
-            return 0;
+            return nullptr;
         }
 
         virtual PropertyChangeNotifier*        cPCL() override
         {
-            return 0;
+            return nullptr;
         }
 
         sal_Int32 SAL_CALL CtorSuccess() { return m_nErrorCode;}

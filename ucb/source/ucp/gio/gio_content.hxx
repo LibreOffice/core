@@ -69,7 +69,7 @@ private:
     bool mbTransient;
 
     GFileInfo *getGFileInfo(const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv,
-        GError **ppError=NULL);
+        GError **ppError=nullptr);
     bool isFolder(const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv);
 
     css::uno::Any mapGIOError( GError *error );

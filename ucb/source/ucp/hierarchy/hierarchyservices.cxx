@@ -29,7 +29,7 @@ using namespace hierarchy_ucp;
 extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL ucphier1_component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * /*pRegistryKey*/ )
 {
-    void * pRet = 0;
+    void * pRet = nullptr;
 
     uno::Reference< lang::XMultiServiceFactory > xSMgr(
             static_cast< lang::XMultiServiceFactory * >(

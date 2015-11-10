@@ -82,12 +82,12 @@ CURL* FTPLoaderThread::handle() {
     CURL* ret = osl_getThreadKeyData(m_threadKey);
     if(!ret) {
         ret = curl_easy_init();
-        if (ret != 0) {
+        if (ret != nullptr) {
             // Make sure curl is not internally using environment variables like
             // "ftp_proxy":
             if (curl_easy_setopt(ret, CURLOPT_PROXY, "") != CURLE_OK) {
                 curl_easy_cleanup(ret);
-                ret = 0;
+                ret = nullptr;
             }
         }
         osl_setThreadKeyData(m_threadKey,static_cast<void*>(ret));

@@ -882,8 +882,8 @@ bool FTPDirectoryParser::parseUNIX (
         FOUND_NONE, FOUND_SIZE, FOUND_MONTH, FOUND_DAY, FOUND_YEAR_TIME
     };
 
-    const sal_Char *pDayStart = 0;
-    const sal_Char *pDayEnd = 0;
+    const sal_Char *pDayStart = nullptr;
+    const sal_Char *pDayEnd = nullptr;
     Mode eMode;
     for (eMode = FOUND_NONE; *p1 && eMode != FOUND_YEAR_TIME; p1 = p2 + 1)
     {

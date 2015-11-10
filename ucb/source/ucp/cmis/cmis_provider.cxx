@@ -60,7 +60,7 @@ ContentProvider::queryContent(
 
 libcmis::Session* ContentProvider::getSession( const OUString& sBindingUrl, const OUString& sUsername )
 {
-    libcmis::Session* pSession = NULL;
+    libcmis::Session* pSession = nullptr;
     std::map< std::pair< OUString, OUString >, libcmis::Session* >::iterator it
             = m_aSessionCache.find( std::pair< OUString, OUString >( sBindingUrl, sUsername ) );
     if ( it != m_aSessionCache.end( ) )
@@ -129,7 +129,7 @@ ONE_INSTANCE_SERVICE_FACTORY_IMPL( ContentProvider );
 extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL ucpcmis1_component_getFactory( const sal_Char *pImplName,
     void *pServiceManager, void * )
 {
-    void * pRet = 0;
+    void * pRet = nullptr;
 
     uno::Reference< lang::XMultiServiceFactory > xSMgr
         (static_cast< lang::XMultiServiceFactory * >( pServiceManager ) );

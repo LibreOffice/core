@@ -95,7 +95,7 @@ class OFileAccess : public FileAccessHelper
 
 public:
     explicit OFileAccess( const Reference< XComponentContext > & xContext )
-        : m_xContext( xContext), mpEnvironment( NULL ) {}
+        : m_xContext( xContext), mpEnvironment( nullptr ) {}
     // Methods
     virtual void SAL_CALL copy( const OUString& SourceURL, const OUString& DestURL ) throw(css::ucb::CommandAbortedException, css::uno::Exception, css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL move( const OUString& SourceURL, const OUString& DestURL ) throw(css::ucb::CommandAbortedException, css::uno::Exception, css::uno::RuntimeException, std::exception) override;
@@ -463,7 +463,7 @@ Sequence< OUString > OFileAccess::getFolderContents( const OUString& FolderURL, 
 {
     // SfxContentHelper::GetFolderContents
 
-    StringList_Impl* pFiles = NULL;
+    StringList_Impl* pFiles = nullptr;
     INetURLObject aFolderObj( FolderURL, INetProtocol::File );
 
     ucbhelper::Content aCnt( aFolderObj.GetMainURL( INetURLObject::NO_DECODE ), mxEnvironment, comphelper::getProcessComponentContext() );
@@ -589,7 +589,7 @@ Reference< XStream > OFileAccess::openFileReadWrite( const OUString& FileURL )
     if ( mpEnvironment )
     {
         xIH = mpEnvironment->getInteractionHandler();
-        mpEnvironment->setHandler( 0 );
+        mpEnvironment->setHandler( nullptr );
     }
 
     try

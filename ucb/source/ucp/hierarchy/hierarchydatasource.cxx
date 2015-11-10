@@ -227,7 +227,7 @@ using namespace hcp_impl;
 HierarchyDataSource::HierarchyDataSource(
         const uno::Reference< uno::XComponentContext > & rxContext )
 : m_xContext( rxContext ),
-  m_pDisposeEventListeners( 0 )
+  m_pDisposeEventListeners( nullptr )
 {
 }
 
@@ -680,11 +680,11 @@ XTYPEPROVIDER_COMMON_IMPL( HierarchyDataAccess );
 uno::Sequence< uno::Type > SAL_CALL HierarchyDataAccess::getTypes()
     throw( uno::RuntimeException, std::exception )
 {
-    cppu::OTypeCollection * pCollection = 0;
+    cppu::OTypeCollection * pCollection = nullptr;
 
     if ( m_bReadOnly )
     {
-        static cppu::OTypeCollection* pReadOnlyTypes = 0;
+        static cppu::OTypeCollection* pReadOnlyTypes = nullptr;
 
         pCollection = pReadOnlyTypes;
         if ( !pCollection )
@@ -712,7 +712,7 @@ uno::Sequence< uno::Type > SAL_CALL HierarchyDataAccess::getTypes()
     }
     else
     {
-        static cppu::OTypeCollection* pReadWriteTypes = 0;
+        static cppu::OTypeCollection* pReadWriteTypes = nullptr;
 
         pCollection = pReadWriteTypes;
         if ( !pCollection )

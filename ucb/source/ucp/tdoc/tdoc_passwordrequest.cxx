@@ -136,7 +136,7 @@ InteractionSupplyPassword::getImplementationId()
 uno::Sequence< uno::Type > SAL_CALL InteractionSupplyPassword::getTypes()
     throw( uno::RuntimeException, std::exception )
 {
-    static cppu::OTypeCollection * pCollection = 0;
+    static cppu::OTypeCollection * pCollection = nullptr;
     if ( !pCollection )
     {
         osl::Guard< osl::Mutex > aGuard( osl::Mutex::getGlobalMutex() );

@@ -106,7 +106,7 @@ using namespace package_ucp;
 ContentProvider::ContentProvider(
             const uno::Reference< uno::XComponentContext >& rxContext )
 : ::ucbhelper::ContentProviderImplHelper( rxContext ),
-  m_pPackages( 0 )
+  m_pPackages( nullptr )
 {
 }
 

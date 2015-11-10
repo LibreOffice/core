@@ -233,9 +233,9 @@ static const ::cppu::ImplementationEntry s_entries [] =
         implName,
         supportedServices,
         ::cppu::createSingleComponentFactory,
-        0, 0
+        nullptr, 0
     },
-    { 0, 0, 0, 0, 0, 0 }
+    { nullptr, nullptr, nullptr, nullptr, nullptr, 0 }
 };
 
 }

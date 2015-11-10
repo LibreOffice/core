@@ -99,8 +99,8 @@ bool Regexp::matches(OUString const & rString,
         sal_Unicode const * pBlock1Begin = p;
         sal_Unicode const * pBlock1End = pEnd;
 
-        sal_Unicode const * pBlock2Begin = 0;
-        sal_Unicode const * pBlock2End = 0;
+        sal_Unicode const * pBlock2Begin = nullptr;
+        sal_Unicode const * pBlock2End = nullptr;
 
         switch (m_eKind)
         {

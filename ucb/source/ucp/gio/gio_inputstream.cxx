@@ -50,7 +50,7 @@ void SAL_CALL InputStream::closeInput()
     throw( io::NotConnectedException, io::IOException, uno::RuntimeException, std::exception )
 {
     if (mpStream)
-        g_input_stream_close(G_INPUT_STREAM(mpStream), NULL, NULL);
+        g_input_stream_close(G_INPUT_STREAM(mpStream), nullptr, nullptr);
 }
 
 void SAL_CALL InputStream::skipBytes( sal_Int32 nBytesToSkip )
@@ -81,8 +81,8 @@ sal_Int32 SAL_CALL InputStream::readBytes( uno::Sequence< sal_Int8 >& aData, sal
     }
 
     gsize nBytesRead = 0;
-    GError *pError=NULL;
-    if (!g_input_stream_read_all(G_INPUT_STREAM(mpStream), aData.getArray(), nBytesToRead, &nBytesRead, NULL, &pError))
+    GError *pError=nullptr;
+    if (!g_input_stream_read_all(G_INPUT_STREAM(mpStream), aData.getArray(), nBytesToRead, &nBytesRead, nullptr, &pError))
         convertToIOException(pError, static_cast< cppu::OWeakObject * >(this));
     aData.realloc(nBytesRead);
     return nBytesRead;

@@ -515,7 +515,7 @@ namespace ucb { namespace ucp { namespace ext
         }
 
         OSL_FAIL( "Content::getPropertyValues: unreachable!" );
-        return NULL;
+        return nullptr;
     }
 
 
@@ -628,7 +628,7 @@ namespace ucb { namespace ucp { namespace ext
         {
             Sequence< Property > aProps(1);
             aProps[0].Name = "IsFolder";
-            Reference< XRow > xRow( getPropertyValues( aProps, NULL ), UNO_SET_THROW );
+            Reference< XRow > xRow( getPropertyValues( aProps, nullptr ), UNO_SET_THROW );
             bIsFolder = xRow->getBoolean(1);
         }
         catch( const Exception& )
@@ -652,7 +652,7 @@ namespace ucb { namespace ucp { namespace ext
             {
                 Sequence< Property > aProps(1);
                 aProps[0].Name = "ContentType";
-                Reference< XRow > xRow( getPropertyValues( aProps, NULL ), UNO_SET_THROW );
+                Reference< XRow > xRow( getPropertyValues( aProps, nullptr ), UNO_SET_THROW );
                 m_aContentType.reset( xRow->getString(1) );
             }
             catch( const Exception& )

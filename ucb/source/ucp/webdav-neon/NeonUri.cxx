@@ -50,37 +50,37 @@ using namespace webdav_ucp;
 namespace {
 
 const ne_uri g_sUriDefaultsHTTP  = { const_cast<char *>("http"),
-                                     NULL,
-                                     NULL,
+                                     nullptr,
+                                     nullptr,
                                      DEFAULT_HTTP_PORT,
-                                     NULL,
-                                     NULL,
-                                     NULL };
+                                     nullptr,
+                                     nullptr,
+                                     nullptr };
 const ne_uri g_sUriDefaultsHTTPS = { const_cast<char *>("https"),
-                                     NULL,
-                                     NULL,
+                                     nullptr,
+                                     nullptr,
                                      DEFAULT_HTTPS_PORT,
-                                     NULL,
-                                     NULL,
-                                     NULL };
+                                     nullptr,
+                                     nullptr,
+                                     nullptr };
 const ne_uri g_sUriDefaultsFTP   = { const_cast<char *>("ftp"),
-                                     NULL,
-                                     NULL,
+                                     nullptr,
+                                     nullptr,
                                      DEFAULT_FTP_PORT,
-                                     NULL,
-                                     NULL,
-                                     NULL };
+                                     nullptr,
+                                     nullptr,
+                                     nullptr };
 } // namespace
 
 NeonUri::NeonUri( const ne_uri * inUri )
     throw ( DAVException )
 {
-    if ( inUri == 0 )
+    if ( inUri == nullptr )
         throw DAVException( DAVException::DAV_INVALID_ARG );
 
     char * uri = ne_uri_unparse( inUri );
 
-    if ( uri == 0 )
+    if ( uri == nullptr )
         throw DAVException( DAVException::DAV_INVALID_ARG );
 
     init( OString( uri ), inUri );

@@ -41,11 +41,11 @@ void process_headers( ne_request * req,
                       DAVResource & rResource,
                       const std::vector< OUString > & rHeaderNames )
 {
-    void * cursor = NULL;
+    void * cursor = nullptr;
     const char * name, *value;
 
     while ( ( cursor = ne_response_header_iterate( req, cursor,
-                                                   &name, &value ) ) != NULL ) {
+                                                   &name, &value ) ) != nullptr ) {
         OUString aHeaderName( OUString::createFromAscii( name ) );
         OUString aHeaderValue( OUString::createFromAscii( value ) );
 

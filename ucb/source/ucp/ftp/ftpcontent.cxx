@@ -152,7 +152,7 @@ css::uno::Sequence< css::uno::Type > SAL_CALL FTPContent::getTypes()
     throw( css::uno::RuntimeException,
            std::exception )
 {
-    static cppu::OTypeCollection* pCollection = NULL;
+    static cppu::OTypeCollection* pCollection = nullptr;
     if ( !pCollection )
     {
         osl::Guard< osl::Mutex > aGuard( osl::Mutex::getGlobalMutex() );
@@ -373,7 +373,7 @@ Any SAL_CALL FTPContent::execute( const Command& aCommand,
             case THROWAUTHENTICATIONREQUEST:
                 ucbhelper::cancelCommandExecution(
                     aRet,
-                    Reference<XCommandEnvironment>(0));
+                    Reference<XCommandEnvironment>(nullptr));
                 break;
 
             case THROWACCESSDENIED:
@@ -683,7 +683,7 @@ FTPContent::createNewContent( const ContentInfo& Info )
                               m_pFCP,
                               m_xIdentifier,Info);
     else
-        return Reference<XContent>(0);
+        return Reference<XContent>(nullptr);
 }
 
 
@@ -918,7 +918,7 @@ Sequence<Any> FTPContent::setPropertyValues(
                 }
         } else {
             Sequence<Property> props =
-                getProperties(Reference<XCommandEnvironment>(0));
+                getProperties(Reference<XCommandEnvironment>(nullptr));
 
             // either unknown or read-only
             ret[i] <<= UnknownPropertyException();

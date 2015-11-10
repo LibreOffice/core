@@ -50,7 +50,7 @@ using namespace com::sun::star::container;
 extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL ucpfile_component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * )
 {
-    void * pRet = 0;
+    void * pRet = nullptr;
 
     Reference< XMultiServiceFactory > xSMgr(
             static_cast< XMultiServiceFactory * >( pServiceManager ) );
@@ -87,7 +87,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL ucpfile_component_getFactory(
 FileProvider::FileProvider( const Reference< XComponentContext >& rxContext )
     : m_xContext(rxContext)
     , m_FileSystemNotation(FileSystemNotation::UNKNOWN_NOTATION)
-    , m_pMyShell(NULL)
+    , m_pMyShell(nullptr)
 {
 }
 

@@ -49,8 +49,8 @@ void SAL_CALL Seekable::truncate()
         throw io::IOException("Truncate unsupported",
             static_cast< cppu::OWeakObject * >(this));
 
-    GError *pError=NULL;
-    if (!g_seekable_truncate(mpStream, 0, NULL, &pError))
+    GError *pError=nullptr;
+    if (!g_seekable_truncate(mpStream, 0, nullptr, &pError))
         convertToIOException(pError, static_cast< cppu::OWeakObject * >(this));
 }
 
@@ -64,8 +64,8 @@ void SAL_CALL Seekable::seek( sal_Int64 location )
         throw io::IOException("Seek unsupported",
             static_cast< cppu::OWeakObject * >(this));
 
-    GError *pError=NULL;
-    if (!g_seekable_seek(mpStream, location, G_SEEK_SET, NULL, &pError))
+    GError *pError=nullptr;
+    if (!g_seekable_seek(mpStream, location, G_SEEK_SET, nullptr, &pError))
         convertToIOException(pError, static_cast< cppu::OWeakObject * >(this));
 }
 
@@ -86,8 +86,8 @@ sal_Int64 SAL_CALL Seekable::getLength() throw( io::IOException, uno::RuntimeExc
     sal_uInt64 nSize = 0;
 
     GFileInfo* pInfo = G_IS_FILE_INPUT_STREAM(mpStream)
-        ? g_file_input_stream_query_info(G_FILE_INPUT_STREAM(mpStream), G_FILE_ATTRIBUTE_STANDARD_SIZE, NULL, NULL)
-        : g_file_output_stream_query_info(G_FILE_OUTPUT_STREAM(mpStream), G_FILE_ATTRIBUTE_STANDARD_SIZE, NULL, NULL);
+        ? g_file_input_stream_query_info(G_FILE_INPUT_STREAM(mpStream), G_FILE_ATTRIBUTE_STANDARD_SIZE, nullptr, nullptr)
+        : g_file_output_stream_query_info(G_FILE_OUTPUT_STREAM(mpStream), G_FILE_ATTRIBUTE_STANDARD_SIZE, nullptr, nullptr);
 
     if (pInfo)
     {
@@ -101,9 +101,9 @@ sal_Int64 SAL_CALL Seekable::getLength() throw( io::IOException, uno::RuntimeExc
 
     if (!bOk)
     {
-        GError *pError=NULL;
+        GError *pError=nullptr;
         sal_Int64 nCurr = getPosition();
-        if (!g_seekable_seek(mpStream, 0, G_SEEK_END, NULL, &pError))
+        if (!g_seekable_seek(mpStream, 0, G_SEEK_END, nullptr, &pError))
             convertToIOException(pError, static_cast< cppu::OWeakObject * >(this));
         nSize = getPosition();
         seek(nCurr);

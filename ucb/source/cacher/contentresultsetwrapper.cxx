@@ -45,17 +45,17 @@ using namespace cppu;
 ContentResultSetWrapper::ContentResultSetWrapper(
                                 Reference< XResultSet > xOrigin )
                 : m_xResultSetOrigin( xOrigin )
-                , m_xRowOrigin( NULL )
-                , m_xContentAccessOrigin( NULL )
-                , m_xPropertySetOrigin( NULL )
-                , m_xPropertySetInfo( NULL )
+                , m_xRowOrigin( nullptr )
+                , m_xContentAccessOrigin( nullptr )
+                , m_xPropertySetOrigin( nullptr )
+                , m_xPropertySetInfo( nullptr )
                 , m_nForwardOnly( 2 )
-                , m_xMetaDataFromOrigin( NULL )
+                , m_xMetaDataFromOrigin( nullptr )
                 , m_bDisposed( false )
                 , m_bInDispose( false )
-                , m_pDisposeEventListeners( NULL )
-                , m_pPropertyChangeListeners( NULL )
-                , m_pVetoableChangeListeners( NULL )
+                , m_pDisposeEventListeners( nullptr )
+                , m_pPropertyChangeListeners( nullptr )
+                , m_pVetoableChangeListeners( nullptr )
 {
     m_pMyListenerImpl = new ContentResultSetWrapperListener( this );
     m_xMyListenerImpl.set( m_pMyListenerImpl );
@@ -1394,7 +1394,7 @@ void SAL_CALL ContentResultSetWrapperListener::vetoableChange( const PropertyCha
 
 void SAL_CALL ContentResultSetWrapperListener::impl_OwnerDies()
 {
-    m_pOwner = NULL;
+    m_pOwner = nullptr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

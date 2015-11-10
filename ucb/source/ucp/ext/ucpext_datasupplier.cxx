@@ -243,7 +243,7 @@ namespace ucb { namespace ucp { namespace ext
     Reference< XContent > DataSupplier::queryContent( sal_uInt32 i_nIndex )
     {
         ::osl::Guard< ::osl::Mutex > aGuard( m_pImpl->m_aMutex );
-        ENSURE_OR_RETURN( i_nIndex < m_pImpl->m_aResults.size(), "illegal index!", NULL );
+        ENSURE_OR_RETURN( i_nIndex < m_pImpl->m_aResults.size(), "illegal index!", nullptr );
 
 
         ::rtl::Reference< Content > pContent( m_pImpl->m_aResults[ i_nIndex ].pContent );
@@ -306,13 +306,13 @@ namespace ucb { namespace ucp { namespace ext
     Reference< XRow > DataSupplier::queryPropertyValues( sal_uInt32 i_nIndex  )
     {
         ::osl::MutexGuard aGuard( m_pImpl->m_aMutex );
-        ENSURE_OR_RETURN( i_nIndex < m_pImpl->m_aResults.size(), "DataSupplier::queryPropertyValues: illegal index!", NULL );
+        ENSURE_OR_RETURN( i_nIndex < m_pImpl->m_aResults.size(), "DataSupplier::queryPropertyValues: illegal index!", nullptr );
 
         Reference< XRow > xRow = m_pImpl->m_aResults[ i_nIndex ].xRow;
         if ( xRow.is() )
             return xRow;
 
-        ENSURE_OR_RETURN( queryContent( i_nIndex ).is(), "could not retrieve the content", NULL );
+        ENSURE_OR_RETURN( queryContent( i_nIndex ).is(), "could not retrieve the content", nullptr );
 
         switch ( m_pImpl->m_xContent->getExtensionContentType() )
         {

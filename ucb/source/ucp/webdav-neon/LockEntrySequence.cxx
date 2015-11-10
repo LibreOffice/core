@@ -43,7 +43,7 @@ struct LockEntrySequenceParseContext
     bool hasType;
 
     LockEntrySequenceParseContext()
-    : pEntry( 0 ), hasScope( false ), hasType( false ) {}
+    : pEntry( nullptr ), hasScope( false ), hasType( false ) {}
     ~LockEntrySequenceParseContext() { delete pEntry; }
 };
 
@@ -64,7 +64,7 @@ extern "C" int LockEntrySequence_startelement_callback(
     const char *name,
     const char ** )
 {
-    if ( name != 0 )
+    if ( name != nullptr )
     {
         switch ( parent )
         {

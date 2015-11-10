@@ -107,7 +107,7 @@ Content* Content::create(
     if ( !Content::loadData( pProvider,
                              Uri( Identifier->getContentIdentifier() ),
                              aProps ) )
-        return 0;
+        return nullptr;
 
     return new Content( rxContext, pProvider, Identifier, aProps );
 }
@@ -121,12 +121,12 @@ Content* Content::create(
             const ucb::ContentInfo& Info )
 {
     if ( Info.Type.isEmpty() )
-        return 0;
+        return nullptr;
 
     if ( Info.Type != TDOC_FOLDER_CONTENT_TYPE && Info.Type != TDOC_STREAM_CONTENT_TYPE )
     {
         OSL_FAIL( "Content::create - unsupported content type!" );
-        return 0;
+        return nullptr;
     }
 
     return new Content( rxContext, pProvider, Identifier, Info );
@@ -220,11 +220,11 @@ XTYPEPROVIDER_COMMON_IMPL( Content );
 uno::Sequence< uno::Type > SAL_CALL Content::getTypes()
     throw( uno::RuntimeException, std::exception )
 {
-    cppu::OTypeCollection * pCollection = 0;
+    cppu::OTypeCollection * pCollection = nullptr;
 
     if ( m_aProps.isContentCreator() )
     {
-        static cppu::OTypeCollection* pFolderTypes = 0;
+        static cppu::OTypeCollection* pFolderTypes = nullptr;
 
         pCollection = pFolderTypes;
         if ( !pCollection )
@@ -257,7 +257,7 @@ uno::Sequence< uno::Type > SAL_CALL Content::getTypes()
     }
     else
     {
-        static cppu::OTypeCollection* pDocumentTypes = 0;
+        static cppu::OTypeCollection* pDocumentTypes = nullptr;
 
         pCollection = pDocumentTypes;
         if ( !pCollection )

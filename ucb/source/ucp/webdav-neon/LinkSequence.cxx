@@ -44,7 +44,7 @@ struct LinkSequenceParseContext
     bool hasDestination;
 
     LinkSequenceParseContext()
-    : pLink( 0 ), hasSource( false ), hasDestination( false ) {}
+    : pLink( nullptr ), hasSource( false ), hasDestination( false ) {}
     ~LinkSequenceParseContext() { delete pLink; }
 };
 
@@ -62,7 +62,7 @@ extern "C" int LinkSequence_startelement_callback(
     const char *name,
     const char ** )
 {
-    if ( name != 0 )
+    if ( name != nullptr )
     {
         switch ( parent )
         {

@@ -273,7 +273,7 @@ UcbContentProviderProxy::deregisterInstance( const OUString& Template,
     if ( m_bRegister && m_xTargetProvider.is() )
     {
         m_bRegister       = false;
-        m_xTargetProvider = 0;
+        m_xTargetProvider = nullptr;
 
         Reference< XParameterizedContentProvider >
                                 xParamProvider( m_xProvider, UNO_QUERY );

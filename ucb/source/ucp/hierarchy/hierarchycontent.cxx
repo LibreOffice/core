@@ -90,7 +90,7 @@ HierarchyContent* HierarchyContent::create(
     // Fail, if content does not exist.
     HierarchyContentProperties aProps;
     if ( !loadData( rxContext, pProvider, Identifier, aProps ) )
-        return 0;
+        return nullptr;
 
     return new HierarchyContent( rxContext, pProvider, Identifier, aProps );
 }
@@ -104,10 +104,10 @@ HierarchyContent* HierarchyContent::create(
             const ucb::ContentInfo& Info )
 {
     if ( Info.Type.isEmpty() )
-        return 0;
+        return nullptr;
 
     if ( Info.Type != HIERARCHY_FOLDER_CONTENT_TYPE && Info.Type != HIERARCHY_LINK_CONTENT_TYPE )
-        return 0;
+        return nullptr;
 
     return new HierarchyContent( rxContext, pProvider, Identifier, Info );
 }
@@ -207,11 +207,11 @@ XTYPEPROVIDER_COMMON_IMPL( HierarchyContent );
 uno::Sequence< uno::Type > SAL_CALL HierarchyContent::getTypes()
     throw( uno::RuntimeException, std::exception )
 {
-    cppu::OTypeCollection * pCollection = 0;
+    cppu::OTypeCollection * pCollection = nullptr;
 
     if ( isFolder() && !isReadOnly() )
     {
-        static cppu::OTypeCollection* pFolderTypes = 0;
+        static cppu::OTypeCollection* pFolderTypes = nullptr;
 
         pCollection = pFolderTypes;
         if ( !pCollection )
@@ -244,7 +244,7 @@ uno::Sequence< uno::Type > SAL_CALL HierarchyContent::getTypes()
     }
     else
     {
-        static cppu::OTypeCollection* pDocumentTypes = 0;
+        static cppu::OTypeCollection* pDocumentTypes = nullptr;
 
         pCollection = pDocumentTypes;
         if ( !pCollection )

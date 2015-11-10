@@ -235,7 +235,7 @@ namespace
             for ( sal_Int32 i = 0; i < m_nNumValue; ++i )
             {
                 OUStringBuffer aBuffer;
-                ::sax::Converter::convertDateTime( aBuffer, seqValue[i], 0 );
+                ::sax::Converter::convertDateTime( aBuffer, seqValue[i], nullptr );
                 values.push_back( OUSTR_TO_STDSTR( aBuffer.makeStringAndClear( )  ) );
             }
             type = libcmis::PropertyType::DateTime;
@@ -289,7 +289,7 @@ namespace cmis
             throw ( ucb::ContentCreationException )
         : ContentImplHelper( rxContext, pProvider, Identifier ),
         m_pProvider( pProvider ),
-        m_pSession( NULL ),
+        m_pSession( nullptr ),
         m_pObject( pObject ),
         m_sURL( Identifier->getContentIdentifier( ) ),
         m_aURL( Identifier->getContentIdentifier( ) ),
@@ -308,7 +308,7 @@ namespace cmis
             throw ( ucb::ContentCreationException )
         : ContentImplHelper( rxContext, pProvider, Identifier ),
         m_pProvider( pProvider ),
-        m_pSession( NULL ),
+        m_pSession( nullptr ),
         m_sURL( Identifier->getContentIdentifier( ) ),
         m_aURL( Identifier->getContentIdentifier( ) ),
         m_bTransient( true ),
@@ -338,10 +338,10 @@ namespace cmis
 
         // Look for a cached session, key is binding url + repo id
         OUString sSessionId = m_aURL.getBindingUrl( ) + m_aURL.getRepositoryId( );
-        if ( NULL == m_pSession )
+        if ( nullptr == m_pSession )
             m_pSession = m_pProvider->getSession( sSessionId, m_aURL.getUsername( ) );
 
-        if ( NULL == m_pSession )
+        if ( nullptr == m_pSession )
         {
 #ifndef SYSTEM_CURL
             // Initialize NSS library to make sure libcmis (and curl) can access CACERTs using NSS
@@ -430,14 +430,14 @@ namespace cmis
 
     libcmis::ObjectTypePtr Content::getObjectType( const uno::Reference< ucb::XCommandEnvironment >& xEnv )
     {
-        if ( NULL == m_pObjectType.get( ) && m_bTransient )
+        if ( nullptr == m_pObjectType.get( ) && m_bTransient )
         {
             string typeId = m_bIsFolder ? "cmis:folder" : "cmis:document";
             // The type to create needs to be fetched from the possible children types
             // defined in the parent folder. Then, we'll pick up the first one we find matching
             // cmis:folder or cmis:document (depending what we need to create).
             // The easy case will work in most cases, but not on some servers (like Lotus Live)
-            libcmis::Folder* pParent = NULL;
+            libcmis::Folder* pParent = nullptr;
             bool bTypeRestricted = false;
             try
             {
@@ -754,7 +754,7 @@ namespace cmis
                     try
                     {
                         libcmis::Document* document = dynamic_cast< libcmis::Document* >( getObject( xEnv ).get( ) );
-                        if ( NULL != document )
+                        if ( nullptr != document )
                             xRow->appendLong( rProp, document->getContentLength() );
                         else
                             xRow->appendVoid( rProp );
@@ -773,7 +773,7 @@ namespace cmis
                     try
                     {
                         libcmis::Document* document = dynamic_cast< libcmis::Document* >( getObject( xEnv ).get( ) );
-                        if ( NULL != document )
+                        if ( nullptr != document )
                             xRow->appendString( rProp, STD_TO_OUSTR( document->getContentType() ) );
                         else
                             xRow->appendVoid( rProp );
@@ -1076,7 +1076,7 @@ namespace cmis
         {
             // Checkout the document if possible
             libcmis::DocumentPtr pDoc = boost::dynamic_pointer_cast< libcmis::Document >( getObject( xEnv ) );
-            if ( pDoc.get( ) == NULL )
+            if ( pDoc.get( ) == nullptr )
             {
                 ucbhelper::cancelCommandExecution(
                                     ucb::IOErrorCode_GENERAL,
@@ -1122,7 +1122,7 @@ namespace cmis
         try
         {
             libcmis::DocumentPtr pPwc = boost::dynamic_pointer_cast< libcmis::Document >( getObject( xEnv ) );
-            if ( pPwc.get( ) == NULL )
+            if ( pPwc.get( ) == nullptr )
             {
                 ucbhelper::cancelCommandExecution(
                                     ucb::IOErrorCode_GENERAL,
@@ -1188,7 +1188,7 @@ namespace cmis
         {
             // get the document
             libcmis::DocumentPtr pDoc = boost::dynamic_pointer_cast< libcmis::Document >( getObject( xEnv ) );
-            if ( pDoc.get( ) == NULL )
+            if ( pDoc.get( ) == nullptr )
             {
                 ucbhelper::cancelCommandExecution(
                                     ucb::IOErrorCode_GENERAL,
@@ -1273,7 +1273,7 @@ namespace cmis
             {
             }
 
-            if ( pFolder != 0 )
+            if ( pFolder != nullptr )
             {
                 libcmis::ObjectPtr object;
                 map< string, libcmis::PropertyPtr >::iterator it = m_pObjectProps.find( "cmis:name" );
@@ -1302,7 +1302,7 @@ namespace cmis
                     // Nothing matched the path
                 }
 
-                if ( NULL != object.get( ) )
+                if ( nullptr != object.get( ) )
                 {
                     // Are the base type matching?
                     if ( object->getBaseType( ) != m_pObjectType->getBaseType( )->getId() )
@@ -1315,7 +1315,7 @@ namespace cmis
 
                     // Update the existing object if it's a document
                     libcmis::Document* document = dynamic_cast< libcmis::Document* >( object.get( ) );
-                    if ( NULL != document )
+                    if ( nullptr != document )
                     {
                         boost::shared_ptr< ostream > pOut( new ostringstream ( ios_base::binary | ios_base::in | ios_base::out ) );
                         uno::Reference < io::XOutputStream > xOutput = new ucbhelper::StdOutputStream( pOut );
@@ -2006,7 +2006,7 @@ namespace cmis
         SAL_INFO( "ucb.ucp.cmis", "Content::getChildren() " << m_sURL );
 
         libcmis::FolderPtr pFolder = boost::dynamic_pointer_cast< libcmis::Folder >( getObject( uno::Reference< ucb::XCommandEnvironment >() ) );
-        if ( 0 != pFolder )
+        if ( nullptr != pFolder )
         {
             // Get the children from pObject
             try

@@ -229,7 +229,7 @@ bool createContentProviderData(
 UniversalContentBroker::UniversalContentBroker(
     const Reference< css::uno::XComponentContext >& xContext )
 : m_xContext( xContext ),
-  m_pDisposeEventListeners( NULL ),
+  m_pDisposeEventListeners( nullptr ),
   m_nInitCount( 0 ), //@@@ see initialize() method
   m_nCommandId( 0 )
 {
@@ -418,7 +418,7 @@ UniversalContentBroker::registerContentProvider(
     }
     catch (const IllegalArgumentException&)
     {
-        return 0; //@@@
+        return nullptr; //@@@
     }
 
     Reference< XContentProvider > xPrevious;
@@ -432,7 +432,7 @@ UniversalContentBroker::registerContentProvider(
         }
         catch (const IllegalArgumentException&)
         {
-            return 0; //@@@
+            return nullptr; //@@@
         }
     }
     else

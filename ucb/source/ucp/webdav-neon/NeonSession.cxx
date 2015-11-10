@@ -165,23 +165,23 @@ struct NeonRequestContext
     DAVResource *                          pResource;
 
     explicit NeonRequestContext( uno::Reference< io::XOutputStream > & xOutStrm )
-    : xOutputStream( xOutStrm ), xInputStream( 0 ),
-      pHeaderNames( 0 ), pResource( 0 ) {}
+    : xOutputStream( xOutStrm ), xInputStream( nullptr ),
+      pHeaderNames( nullptr ), pResource( nullptr ) {}
 
     explicit NeonRequestContext( const rtl::Reference< NeonInputStream > & xInStrm )
-    : xOutputStream( 0 ), xInputStream( xInStrm ),
-      pHeaderNames( 0 ), pResource( 0 ) {}
+    : xOutputStream( nullptr ), xInputStream( xInStrm ),
+      pHeaderNames( nullptr ), pResource( nullptr ) {}
 
     NeonRequestContext( uno::Reference< io::XOutputStream > & xOutStrm,
                         const std::vector< OUString > & inHeaderNames,
                         DAVResource & ioResource )
-    : xOutputStream( xOutStrm ), xInputStream( 0 ),
+    : xOutputStream( xOutStrm ), xInputStream( nullptr ),
       pHeaderNames( &inHeaderNames ), pResource( &ioResource ) {}
 
     NeonRequestContext( const rtl::Reference< NeonInputStream > & xInStrm,
                         const std::vector< OUString > & inHeaderNames,
                         DAVResource & ioResource )
-    : xOutputStream( 0 ), xInputStream( xInStrm ),
+    : xOutputStream( nullptr ), xInputStream( xInStrm ),
       pHeaderNames( &inHeaderNames ), pResource( &ioResource ) {}
 };
 
@@ -419,7 +419,7 @@ extern "C" int NeonSession_CertificationNotify( void *userdata,
             OStringToOUString( sEECertB64, RTL_TEXTENCODING_ASCII_US ) ) );
 
     ne_free( eeCertB64 );
-    eeCertB64 = 0;
+    eeCertB64 = nullptr;
 
     std::vector< uno::Reference< security::XCertificate > > vecCerts;
     const ne_ssl_certificate * issuerCert = cert;
@@ -429,7 +429,7 @@ extern "C" int NeonSession_CertificationNotify( void *userdata,
         //the returned value is const ! Therefore it does not need to be freed
         //with ne_ssl_cert_free, which takes a non-const argument
         issuerCert = ne_ssl_cert_signedby( issuerCert );
-        if ( NULL == issuerCert )
+        if ( nullptr == issuerCert )
             break;
 
         char * imCertB64 = ne_ssl_cert_export( issuerCert );
@@ -527,7 +527,7 @@ extern "C" void NeonSession_PreSendRequest( ne_request * req,
             if ( !(*it).second.aContentType.isEmpty() )
             {
                 char * pData = headers->data;
-                if ( strstr( pData, "Content-Type:" ) == NULL )
+                if ( strstr( pData, "Content-Type:" ) == nullptr )
                 {
                     OString aType
                         = OUStringToOString( (*it).second.aContentType,
@@ -540,7 +540,7 @@ extern "C" void NeonSession_PreSendRequest( ne_request * req,
             if ( !(*it).second.aReferer.isEmpty() )
             {
                 char * pData = headers->data;
-                if ( strstr( pData, "Referer:" ) == NULL )
+                if ( strstr( pData, "Referer:" ) == nullptr )
                 {
                     OString aReferer
                         = OUStringToOString( (*it).second.aReferer,
@@ -591,7 +591,7 @@ NeonSession::NeonSession( const rtl::Reference< DAVSessionFactory > & rSessionFa
     : DAVSession( rSessionFactory )
     , m_nProxyPort( 0 )
     , m_aFlags( rFlags )
-    , m_pHttpSession( 0 )
+    , m_pHttpSession( nullptr )
     , m_pRequestData( new RequestDataMap )
     , m_rProxyDecider( rProxyDecider )
 {
@@ -609,7 +609,7 @@ NeonSession::~NeonSession( )
             osl::Guard< osl::Mutex > theGlobalGuard( aGlobalNeonMutex );
             ne_session_destroy( m_pHttpSession );
         }
-        m_pHttpSession = 0;
+        m_pHttpSession = nullptr;
     }
     delete static_cast< RequestDataMap * >( m_pRequestData );
 }
@@ -629,7 +629,7 @@ void NeonSession::Init()
 
     bool bCreateNewSession = false;
 
-    if ( m_pHttpSession == 0 )
+    if ( m_pHttpSession == nullptr )
     {
         // Ensure that Neon sockets are initialized
         osl::Guard< osl::Mutex > theGlobalGuard( aGlobalNeonMutex );
@@ -686,7 +686,7 @@ void NeonSession::Init()
                 osl::Guard< osl::Mutex > theGlobalGuard( aGlobalNeonMutex );
                 ne_session_destroy( m_pHttpSession );
             }
-            m_pHttpSession = 0;
+            m_pHttpSession = nullptr;
             bCreateNewSession = true;
         }
     }
@@ -708,7 +708,7 @@ void NeonSession::Init()
                 m_nPort );
         }
 
-        if ( m_pHttpSession == 0 )
+        if ( m_pHttpSession == nullptr )
             throw DAVException( DAVException::DAV_SESSION_CREATE,
                                 NeonUri::makeConnectionEndPointString(
                                     m_aHostName, m_nPort ) );
@@ -953,7 +953,7 @@ void NeonSession::PROPPATCH( const OUString & inPath,
                                                    aStringValue ) )
                 {
                     // Error!
-                    pItems[ n ].value = 0;
+                    pItems[ n ].value = nullptr;
                     theRetVal = NE_ERROR;
                     nPropCount = n + 1;
                     break;
@@ -972,7 +972,7 @@ void NeonSession::PROPPATCH( const OUString & inPath,
                     else
                     {
                         // Error!
-                        pItems[ n ].value = 0;
+                        pItems[ n ].value = nullptr;
                         theRetVal = NE_ERROR;
                         nPropCount = n + 1;
                         break;
@@ -982,7 +982,7 @@ void NeonSession::PROPPATCH( const OUString & inPath,
                 {
                     OSL_FAIL( "NeonSession::PROPPATCH - unsupported type!" );
                     // Error!
-                    pItems[ n ].value = 0;
+                    pItems[ n ].value = nullptr;
                     theRetVal = NE_ERROR;
                     nPropCount = n + 1;
                     break;
@@ -995,7 +995,7 @@ void NeonSession::PROPPATCH( const OUString & inPath,
         else
         {
             pItems[ n ].type  = ne_propremove;
-            pItems[ n ].value = 0;
+            pItems[ n ].value = nullptr;
         }
     }
 
@@ -1005,7 +1005,7 @@ void NeonSession::PROPPATCH( const OUString & inPath,
 
         Init( rEnv );
 
-        pItems[ n ].name = 0;
+        pItems[ n ].name = nullptr;
 
         theRetVal = ne_proppatch( m_pHttpSession,
                                   OUStringToOString(
@@ -1347,7 +1347,7 @@ void NeonSession::LOCK( const OUString & inPath,
     // before issuing the lock command,
     // better check first if we already have one on this href
     if ( m_aNeonLockStore.findByUri(
-                         makeAbsoluteURL( inPath ) ) != 0 )
+                         makeAbsoluteURL( inPath ) ) != nullptr )
     {
         // we already own a lock for this href
         // no need to ask for another
@@ -1657,7 +1657,7 @@ void NeonSession::HandleError( int nError,
             if ( code == SC_LOCKED )
             {
                 if ( m_aNeonLockStore.findByUri(
-                         makeAbsoluteURL( inPath ) ) == 0 )
+                         makeAbsoluteURL( inPath ) ) == nullptr )
                 {
                     // locked by 3rd party
                     throw DAVException( DAVException::DAV_LOCKED );
@@ -1813,10 +1813,10 @@ int NeonSession::GET( ne_session * sess,
 
     if ( getheaders )
     {
-        void *cursor = NULL;
+        void *cursor = nullptr;
         const char *name, *value;
         while ( ( cursor = ne_response_header_iterate(
-                               req, cursor, &name, &value ) ) != NULL )
+                               req, cursor, &name, &value ) ) != nullptr )
         {
             char buffer[8192];
 
@@ -1828,7 +1828,7 @@ int NeonSession::GET( ne_session * sess,
     if ( ret == NE_OK && ne_get_status( req )->klass != 2 )
         ret = NE_ERROR;
 
-    if ( dc != 0 )
+    if ( dc != nullptr )
         ne_decompress_destroy(dc);
 
     ne_request_destroy( req );
@@ -1872,7 +1872,7 @@ int NeonSession::POST( ne_session * sess,
     //struct get_context ctx;
     int ret;
 
-    RequestDataMap * pData = 0;
+    RequestDataMap * pData = nullptr;
 
     if ( !rContentType.isEmpty() || !rReferer.isEmpty() )
     {

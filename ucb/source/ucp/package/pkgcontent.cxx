@@ -165,7 +165,7 @@ Content* Content::create(
         {
             // Client explicitly requested a folder!
             if ( !aProps.bIsFolder )
-                return 0;
+                return nullptr;
         }
 
         uno::Reference< ucb::XContentIdentifier > xId
@@ -205,7 +205,7 @@ Content* Content::create(
             const ucb::ContentInfo& Info )
 {
     if ( Info.Type.isEmpty() )
-        return 0;
+        return nullptr;
 
     PackageUri aURI( Identifier->getContentIdentifier() );
 
@@ -213,7 +213,7 @@ Content* Content::create(
                 getContentType( aURI.getScheme(), true ) ) &&
          !Info.Type.equalsIgnoreAsciiCase(
                 getContentType( aURI.getScheme(), false ) ) )
-        return 0;
+        return nullptr;
 
     uno::Reference< container::XHierarchicalNameAccess > xPackage;
 
@@ -326,11 +326,11 @@ XTYPEPROVIDER_COMMON_IMPL( Content );
 uno::Sequence< uno::Type > SAL_CALL Content::getTypes()
     throw( uno::RuntimeException, std::exception )
 {
-    cppu::OTypeCollection * pCollection = 0;
+    cppu::OTypeCollection * pCollection = nullptr;
 
     if ( isFolder() )
     {
-        static cppu::OTypeCollection* pFolderTypes = 0;
+        static cppu::OTypeCollection* pFolderTypes = nullptr;
 
         pCollection = pFolderTypes;
         if ( !pCollection )
@@ -363,7 +363,7 @@ uno::Sequence< uno::Type > SAL_CALL Content::getTypes()
     }
     else
     {
-        static cppu::OTypeCollection* pDocumentTypes = 0;
+        static cppu::OTypeCollection* pDocumentTypes = nullptr;
 
         pCollection = pDocumentTypes;
         if ( !pCollection )

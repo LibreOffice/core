@@ -48,7 +48,7 @@ using namespace cppu;
 //  The mutex to synchronize access to containers.
 static osl::Mutex& getContainerMutex()
 {
-    static osl::Mutex* pMutex = NULL;
+    static osl::Mutex* pMutex = nullptr;
     if( !pMutex )
     {
         osl::Guard< osl::Mutex > aGuard( osl::Mutex::getGlobalMutex() );
@@ -125,13 +125,13 @@ public:
 
 SortedResultSet::SortedResultSet( Reference< XResultSet > aResult )
 {
-    mpDisposeEventListeners = NULL;
-    mpPropChangeListeners   = NULL;
-    mpVetoChangeListeners   = NULL;
-    mpPropSetInfo           = NULL;
+    mpDisposeEventListeners = nullptr;
+    mpPropChangeListeners   = nullptr;
+    mpVetoChangeListeners   = nullptr;
+    mpPropSetInfo           = nullptr;
 
     mxOriginal  = aResult;
-    mpSortInfo  = NULL;
+    mpSortInfo  = nullptr;
     mnLastSort  = 0;
     mnCurEntry  = 0;
     mnCount     = 0;
@@ -155,7 +155,7 @@ SortedResultSet::~SortedResultSet()
         }
     }
 
-    mpSortInfo = NULL;
+    mpSortInfo = nullptr;
 
     if ( mpPropSetInfo )
         mpPropSetInfo->release();
@@ -1211,9 +1211,9 @@ sal_IntPtr SortedResultSet::CompareImpl( Reference < XResultSet > xResultOne,
                             Reference< XRow >::query( xResultTwo );
 
             if ( xResultOne->absolute( nIndexOne ) )
-                aOne = xRowOne->getObject( pInfo->mnColumn, NULL );
+                aOne = xRowOne->getObject( pInfo->mnColumn, nullptr );
             if ( xResultTwo->absolute( nIndexTwo ) )
-                aTwo = xRowTwo->getObject( pInfo->mnColumn, NULL );
+                aTwo = xRowTwo->getObject( pInfo->mnColumn, nullptr );
 
             nCompare = pInfo->mxCompareFunction->compare( aOne, aTwo );
         }
@@ -1355,8 +1355,8 @@ void SortedResultSet::CopyData( SortedResultSet *pSource )
     maO2S.Clear();
     maModList.Clear();
 
-    maS2O.Insert( NULL, 0 );
-    maO2S.Insert( 0, (sal_uInt32) 0 );  // value, pos
+    maS2O.Insert( nullptr, 0 );
+    maO2S.Insert( nullptr, (sal_uInt32) 0 );  // value, pos
 
     nCount = rSrcS2O.Count();
 
@@ -1410,7 +1410,7 @@ void SortedResultSet::Initialize(
     // when we have fetched all the elements, we can create the
     // original to sorted mapping list from the s2o list
     maO2S.Clear();
-    maO2S.Insert( NULL, (sal_uInt32) 0 );
+    maO2S.Insert( nullptr, (sal_uInt32) 0 );
 
     // insert some dummy entries first and replace then
     // the entries with the right ones
@@ -1843,7 +1843,7 @@ SortListData* SortedEntryList::Remove( sal_IntPtr nPos )
         maData.erase( maData.begin() + nPos );
     }
     else
-        pData = NULL;
+        pData = nullptr;
 
     return pData;
 }
@@ -1856,7 +1856,7 @@ SortListData* SortedEntryList::GetData( sal_IntPtr nPos )
     if ( nPos < (sal_IntPtr) maData.size() )
         pData = maData[ nPos ];
     else
-        pData = NULL;
+        pData = nullptr;
 
     return pData;
 }
@@ -1869,7 +1869,7 @@ sal_IntPtr SortedEntryList::operator [] ( sal_IntPtr nPos ) const
     if ( nPos < (sal_IntPtr) maData.size() )
         pData = maData[ nPos ];
     else
-        pData = NULL;
+        pData = nullptr;
 
     if ( pData )
         if ( ! pData->mbModified )
@@ -1931,7 +1931,7 @@ void* SimpleList::GetObject( sal_uInt32 nPos ) const
     if ( nPos < (sal_uInt32) maData.size() )
         return maData[ nPos ];
     else
-        return NULL;
+        return nullptr;
 }
 
 

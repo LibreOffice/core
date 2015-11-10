@@ -87,7 +87,7 @@ Content::Content(
     const uno::Reference< ucb::XContentIdentifier >& Identifier)
         throw ( ucb::ContentCreationException )
     : ContentImplHelper( rxContext, pProvider, Identifier ),
-      m_pProvider( pProvider ), mpFile (NULL), mpInfo( NULL ), mbTransient(false)
+      m_pProvider( pProvider ), mpFile (nullptr), mpInfo( nullptr ), mbTransient(false)
 {
     SAL_INFO("ucb.ucp.gio", "New Content ('" << m_xIdentifier->getContentIdentifier() << "')\n");
 }
@@ -99,7 +99,7 @@ Content::Content(
     bool bIsFolder)
         throw ( ucb::ContentCreationException )
     : ContentImplHelper( rxContext, pProvider, Identifier ),
-      m_pProvider( pProvider ), mpFile (NULL), mpInfo( NULL ), mbTransient(true)
+      m_pProvider( pProvider ), mpFile (nullptr), mpInfo( nullptr ), mbTransient(true)
 {
     SAL_INFO("ucb.ucp.gio", "Create Content ('" << m_xIdentifier->getContentIdentifier() << "')\n");
     mpInfo = g_file_info_new();
@@ -331,9 +331,9 @@ public:
     GError *Mount(GFile *pFile);
 };
 
-MountOperation::MountOperation(const uno::Reference< ucb::XCommandEnvironment >& xEnv) : mpError(NULL)
+MountOperation::MountOperation(const uno::Reference< ucb::XCommandEnvironment >& xEnv) : mpError(nullptr)
 {
-    mpLoop = g_main_loop_new(NULL, FALSE);
+    mpLoop = g_main_loop_new(nullptr, FALSE);
     mpAuthentication = ooo_mount_operation_new(xEnv);
 }
 
@@ -346,7 +346,7 @@ void MountOperation::Completed(GObject *source, GAsyncResult *res, gpointer user
 
 GError *MountOperation::Mount(GFile *pFile)
 {
-    g_file_mount_enclosing_volume(pFile, G_MOUNT_MOUNT_NONE, mpAuthentication, NULL, MountOperation::Completed, this);
+    g_file_mount_enclosing_volume(pFile, G_MOUNT_MOUNT_NONE, mpAuthentication, nullptr, MountOperation::Completed, this);
     {
         //HACK: At least the gdk_threads_set_lock_functions(GdkThreadsEnter,
         // GdkThreadsLeave) call in vcl/unx/gtk/app/gtkinst.cxx will lead to
@@ -367,15 +367,15 @@ MountOperation::~MountOperation()
 
 GFileInfo* Content::getGFileInfo(const uno::Reference< ucb::XCommandEnvironment >& xEnv, GError **ppError)
 {
-    GError * err = 0;
-    if (mpInfo == 0 && !mbTransient) {
+    GError * err = nullptr;
+    if (mpInfo == nullptr && !mbTransient) {
         for (bool retried = false;; retried = true) {
             mpInfo = g_file_query_info(
-                getGFile(), "*", G_FILE_QUERY_INFO_NONE, 0, &err);
-            if (mpInfo != 0) {
+                getGFile(), "*", G_FILE_QUERY_INFO_NONE, nullptr, &err);
+            if (mpInfo != nullptr) {
                 break;
             }
-            assert(err != 0);
+            assert(err != nullptr);
             if (err->code != G_IO_ERROR_NOT_MOUNTED || retried) {
                 break;
             }
@@ -385,14 +385,14 @@ GFileInfo* Content::getGFileInfo(const uno::Reference< ucb::XCommandEnvironment 
                     << "\", trying to mount");
             g_error_free(err);
             err = MountOperation(xEnv).Mount(getGFile());
-            if (err != 0) {
+            if (err != nullptr) {
                 break;
             }
         }
     }
-    if (ppError != 0) {
+    if (ppError != nullptr) {
         *ppError = err;
-    } else if (err != 0) {
+    } else if (err != nullptr) {
         SAL_WARN(
             "ucb.ucp.gio",
             "ignoring GError \"" << err->message << "\" for <"
@@ -448,7 +448,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValuesFromGFileInfo(GFileInfo *
 
         if ( rProp.Name == "IsDocument" )
         {
-            if (pInfo != 0 && g_file_info_has_attribute(pInfo, G_FILE_ATTRIBUTE_STANDARD_TYPE))
+            if (pInfo != nullptr && g_file_info_has_attribute(pInfo, G_FILE_ATTRIBUTE_STANDARD_TYPE))
                 xRow->appendBoolean( rProp, ( g_file_info_get_file_type( pInfo ) == G_FILE_TYPE_REGULAR ||
                                                g_file_info_get_file_type( pInfo ) == G_FILE_TYPE_UNKNOWN ) );
             else
@@ -456,14 +456,14 @@ uno::Reference< sdbc::XRow > Content::getPropertyValuesFromGFileInfo(GFileInfo *
         }
         else if ( rProp.Name == "IsFolder" )
         {
-            if (pInfo != 0 && g_file_info_has_attribute( pInfo, G_FILE_ATTRIBUTE_STANDARD_TYPE) )
+            if (pInfo != nullptr && g_file_info_has_attribute( pInfo, G_FILE_ATTRIBUTE_STANDARD_TYPE) )
                 xRow->appendBoolean( rProp, ( g_file_info_get_file_type( pInfo ) == G_FILE_TYPE_DIRECTORY ));
             else
                 xRow->appendVoid( rProp );
         }
         else if ( rProp.Name == "Title" )
         {
-            if (pInfo != 0 && g_file_info_has_attribute(pInfo, G_FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME))
+            if (pInfo != nullptr && g_file_info_has_attribute(pInfo, G_FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME))
             {
                 const char *pName = g_file_info_get_display_name(pInfo);
                 xRow->appendString( rProp, OUString(pName, strlen(pName), RTL_TEXTENCODING_UTF8) );
@@ -473,28 +473,28 @@ uno::Reference< sdbc::XRow > Content::getPropertyValuesFromGFileInfo(GFileInfo *
         }
         else if ( rProp.Name == "IsReadOnly" )
         {
-            if (pInfo != 0 && g_file_info_has_attribute( pInfo, G_FILE_ATTRIBUTE_ACCESS_CAN_WRITE ) )
+            if (pInfo != nullptr && g_file_info_has_attribute( pInfo, G_FILE_ATTRIBUTE_ACCESS_CAN_WRITE ) )
                 xRow->appendBoolean( rProp, !g_file_info_get_attribute_boolean( pInfo, G_FILE_ATTRIBUTE_ACCESS_CAN_WRITE) );
             else
                 xRow->appendVoid( rProp );
         }
         else if ( rProp.Name == "DateCreated" )
         {
-            if (pInfo != 0 && g_file_info_has_attribute( pInfo, G_FILE_ATTRIBUTE_TIME_CREATED ) )
+            if (pInfo != nullptr && g_file_info_has_attribute( pInfo, G_FILE_ATTRIBUTE_TIME_CREATED ) )
                 xRow->appendTimestamp( rProp, getDateFromUnix(g_file_info_get_attribute_uint64(pInfo, G_FILE_ATTRIBUTE_TIME_CREATED)) );
             else
                 xRow->appendVoid( rProp );
         }
         else if ( rProp.Name == "DateModified" )
         {
-            if (pInfo != 0 && g_file_info_has_attribute( pInfo,  G_FILE_ATTRIBUTE_TIME_CHANGED ) )
+            if (pInfo != nullptr && g_file_info_has_attribute( pInfo,  G_FILE_ATTRIBUTE_TIME_CHANGED ) )
                 xRow->appendTimestamp( rProp, getDateFromUnix(g_file_info_get_attribute_uint64(pInfo, G_FILE_ATTRIBUTE_TIME_CHANGED)) );
             else
                 xRow->appendVoid( rProp );
         }
         else if ( rProp.Name == "Size" )
         {
-            if (pInfo != 0 && g_file_info_has_attribute( pInfo, G_FILE_ATTRIBUTE_STANDARD_SIZE) )
+            if (pInfo != nullptr && g_file_info_has_attribute( pInfo, G_FILE_ATTRIBUTE_STANDARD_SIZE) )
                 xRow->appendLong( rProp, ( g_file_info_get_size( pInfo ) ));
             else
                 xRow->appendVoid( rProp );
@@ -506,14 +506,14 @@ uno::Reference< sdbc::XRow > Content::getPropertyValuesFromGFileInfo(GFileInfo *
         }
         else if ( rProp.Name == "IsCompactDisc" )
         {
-            if (pInfo != 0 && g_file_info_has_attribute( pInfo, G_FILE_ATTRIBUTE_MOUNTABLE_CAN_EJECT ) )
+            if (pInfo != nullptr && g_file_info_has_attribute( pInfo, G_FILE_ATTRIBUTE_MOUNTABLE_CAN_EJECT ) )
                 xRow->appendBoolean( rProp, g_file_info_get_attribute_boolean(pInfo, G_FILE_ATTRIBUTE_MOUNTABLE_CAN_EJECT) );
             else
                 xRow->appendVoid( rProp );
         }
         else if ( rProp.Name == "IsRemoveable" )
         {
-            if (pInfo != 0 && g_file_info_has_attribute( pInfo, G_FILE_ATTRIBUTE_MOUNTABLE_CAN_UNMOUNT ) )
+            if (pInfo != nullptr && g_file_info_has_attribute( pInfo, G_FILE_ATTRIBUTE_MOUNTABLE_CAN_UNMOUNT ) )
                 xRow->appendBoolean( rProp, g_file_info_get_attribute_boolean(pInfo, G_FILE_ATTRIBUTE_MOUNTABLE_CAN_UNMOUNT ) );
             else
                 xRow->appendVoid( rProp );
@@ -524,7 +524,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValuesFromGFileInfo(GFileInfo *
         }
         else if ( rProp.Name == "IsHidden" )
         {
-            if (pInfo != 0 && g_file_info_has_attribute( pInfo, G_FILE_ATTRIBUTE_STANDARD_IS_HIDDEN) )
+            if (pInfo != nullptr && g_file_info_has_attribute( pInfo, G_FILE_ATTRIBUTE_STANDARD_IS_HIDDEN) )
                 xRow->appendBoolean( rProp, ( g_file_info_get_is_hidden ( pInfo ) ) );
             else
                 xRow->appendVoid( rProp );
@@ -652,8 +652,8 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
     const uno::Sequence< beans::PropertyValue >& rValues,
     const uno::Reference< ucb::XCommandEnvironment >& xEnv )
 {
-    GError *pError=NULL;
-    GFileInfo *pNewInfo=NULL;
+    GError *pError=nullptr;
+    GFileInfo *pNewInfo=nullptr;
     GFileInfo *pInfo = getGFileInfo(xEnv, &pError);
     if (pInfo)
         pNewInfo = g_file_info_dup(pInfo);
@@ -677,7 +677,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
     aEvent.PropertyHandle = -1;
 
     sal_Int32 nChanged = 0, nTitlePos = -1;
-    const char *newName = NULL;
+    const char *newName = nullptr;
     uno::Sequence< beans::PropertyChangeEvent > aChanges(nCount);
 
     uno::Sequence< uno::Any > aRet( nCount );
@@ -777,7 +777,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
             if (!mbTransient) //Discard and refetch
             {
                 g_object_unref(mpInfo);
-                mpInfo = NULL;
+                mpInfo = nullptr;
             }
 
             if (mpInfo)
@@ -791,7 +791,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
             if (mpFile) //Discard and refetch
             {
                 g_object_unref(mpFile);
-                mpFile = NULL;
+                mpFile = nullptr;
             }
         }
 
@@ -808,7 +808,7 @@ bool Content::doSetFileInfo(GFileInfo *pNewInfo)
 
     bool bOk = true;
     GFile *pFile = getGFile();
-    if(!g_file_set_attributes_from_info(pFile, pNewInfo, G_FILE_QUERY_INFO_NONE, NULL, NULL))
+    if(!g_file_set_attributes_from_info(pFile, pNewInfo, G_FILE_QUERY_INFO_NONE, nullptr, nullptr))
         bOk = false;
     return bOk;
 }
@@ -840,8 +840,8 @@ bool Content::feedSink( uno::Reference< uno::XInterface > xSink,
     if ( !xOut.is() && !xDataSink.is() )
         return false;
 
-    GError *pError=NULL;
-    GFileInputStream *pStream = g_file_read(getGFile(), NULL, &pError);
+    GError *pError=nullptr;
+    GFileInputStream *pStream = g_file_read(getGFile(), nullptr, &pError);
     if (!pStream)
        convertToException(pError, static_cast< cppu::OWeakObject * >(this));
 
@@ -864,7 +864,7 @@ uno::Any Content::open(const ucb::OpenCommandArgument2 & rOpenCommand,
 {
     bool bIsFolder = isFolder(xEnv);
 
-    if (!g_file_query_exists(getGFile(), NULL))
+    if (!g_file_query_exists(getGFile(), nullptr))
     {
         uno::Sequence< uno::Any > aArgs( 1 );
         aArgs[ 0 ] <<= m_xIdentifier->getContentIdentifier();
@@ -992,13 +992,13 @@ uno::Any SAL_CALL Content::execute(
 
         //If no delete physical, try and trashcan it, if that doesn't work go
         //ahead and try and delete it anyway
-        if (!bDeletePhysical && !g_file_trash(getGFile(), NULL, NULL))
+        if (!bDeletePhysical && !g_file_trash(getGFile(), nullptr, nullptr))
                 bDeletePhysical = true;
 
         if (bDeletePhysical)
         {
-            GError *pError = NULL;
-            if (!g_file_delete( getGFile(), NULL, &pError))
+            GError *pError = nullptr;
+            if (!g_file_delete( getGFile(), nullptr, &pError))
                 ucbhelper::cancelCommandExecution(mapGIOError(pError), xEnv);
         }
 
@@ -1042,7 +1042,7 @@ void Content::insert(const uno::Reference< io::XInputStream > &xInputStream,
     bool bReplaceExisting, const uno::Reference< ucb::XCommandEnvironment > &xEnv )
         throw( uno::Exception )
 {
-    GError *pError = NULL;
+    GError *pError = nullptr;
     GFileInfo *pInfo = getGFileInfo(xEnv);
 
     if ( pInfo &&
@@ -1052,7 +1052,7 @@ void Content::insert(const uno::Reference< io::XInputStream > &xInputStream,
 #if OSL_DEBUG_LEVEL > 1
         g_warning ("Make directory");
 #endif
-        if( !g_file_make_directory( getGFile(), NULL, &pError))
+        if( !g_file_make_directory( getGFile(), nullptr, &pError))
             ucbhelper::cancelCommandExecution(mapGIOError(pError), xEnv);
         return;
     }
@@ -1065,15 +1065,15 @@ void Content::insert(const uno::Reference< io::XInputStream > &xInputStream,
             xEnv );
     }
 
-    GFileOutputStream* pOutStream = NULL;
+    GFileOutputStream* pOutStream = nullptr;
     if ( bReplaceExisting )
     {
-        if (!(pOutStream = g_file_replace(getGFile(), NULL, false, G_FILE_CREATE_PRIVATE, NULL, &pError)))
+        if (!(pOutStream = g_file_replace(getGFile(), nullptr, false, G_FILE_CREATE_PRIVATE, nullptr, &pError)))
             ucbhelper::cancelCommandExecution(mapGIOError(pError), xEnv);
     }
     else
     {
-        if (!(pOutStream = g_file_create (getGFile(), G_FILE_CREATE_PRIVATE, NULL, &pError)))
+        if (!(pOutStream = g_file_create (getGFile(), G_FILE_CREATE_PRIVATE, nullptr, &pError)))
             ucbhelper::cancelCommandExecution(mapGIOError(pError), xEnv);
     }
 
@@ -1106,11 +1106,11 @@ void Content::transfer( const ucb::TransferInfo& aTransferInfo, const uno::Refer
     GFile *pSource = g_file_new_for_uri(OUStringToOString(aTransferInfo.SourceURL, RTL_TEXTENCODING_UTF8).getStr());
 
     gboolean bSuccess = false;
-    GError *pError = NULL;
+    GError *pError = nullptr;
     if (aTransferInfo.MoveData)
-        bSuccess = g_file_move(pSource, pDest, G_FILE_COPY_OVERWRITE, NULL, NULL, 0, &pError);
+        bSuccess = g_file_move(pSource, pDest, G_FILE_COPY_OVERWRITE, nullptr, nullptr, nullptr, &pError);
     else
-        bSuccess = g_file_copy(pSource, pDest, DEFAULT_COPYDATA_FLAGS, NULL, NULL, 0, &pError);
+        bSuccess = g_file_copy(pSource, pDest, DEFAULT_COPYDATA_FLAGS, nullptr, nullptr, nullptr, &pError);
     g_object_unref(pSource);
     g_object_unref(pDest);
     if (!bSuccess)

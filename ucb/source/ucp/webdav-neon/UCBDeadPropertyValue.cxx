@@ -43,7 +43,7 @@ struct UCBDeadPropertyValueParseContext
     OUString * pType;
     OUString * pValue;
 
-    UCBDeadPropertyValueParseContext() : pType( 0 ), pValue( 0 ) {}
+    UCBDeadPropertyValueParseContext() : pType( nullptr ), pValue( nullptr ) {}
     ~UCBDeadPropertyValueParseContext() { delete pType; delete pValue; }
 };
 
@@ -77,7 +77,7 @@ extern "C" int UCBDeadPropertyValue_startelement_callback(
     const char *name,
     const char ** )
 {
-    if ( name != 0 )
+    if ( name != nullptr )
     {
         switch ( parent )
         {
