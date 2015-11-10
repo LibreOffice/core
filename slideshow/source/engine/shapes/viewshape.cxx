@@ -495,7 +495,7 @@ namespace slideshow
                          rMtf,
                          pAttr,
                          aShapeTransformation,
-                         NULL, // clipping is done via Sprite::clip()
+                         nullptr, // clipping is done via Sprite::clip()
                          rSubsets );
         }
 
@@ -663,7 +663,7 @@ namespace slideshow
                                    rMtf,
                                    pAttr,
                                    aTransform,
-                                   !aClip ? NULL : &(*aClip),
+                                   !aClip ? nullptr : &(*aClip),
                                    rSubsets ) )
                         {
                             return false;
@@ -707,7 +707,7 @@ namespace slideshow
                          rMtf,
                          pAttr,
                          aTransform,
-                         !aClip ? NULL : &(*aClip),
+                         !aClip ? nullptr : &(*aClip),
                          rSubsets );
         }
 

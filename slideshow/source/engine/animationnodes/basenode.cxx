@@ -318,7 +318,7 @@ BaseNode::BaseNode( const uno::Reference< animations::XAnimationNode >& xNode,
     mxAnimationNode( xNode ),
     mpParent( rParent ),
     mpSelf(),
-    mpStateTransitionTable( NULL ),
+    mpStateTransitionTable( nullptr ),
     mnStartDelay( rContext.mnStartDelay ),
     meCurrState( UNRESOLVED ),
     meCurrentStateTransition( 0 ),
@@ -386,7 +386,7 @@ sal_Int16 BaseNode::getFillDefaultMode() const
 {
     sal_Int16 nFillDefault = mxAnimationNode->getFillDefault();
     if (nFillDefault  == animations::AnimationFill::DEFAULT) {
-        nFillDefault = (mpParent != 0
+        nFillDefault = (mpParent != nullptr
                         ? mpParent->getFillDefaultMode()
                         : animations::AnimationFill::AUTO);
     }
@@ -397,7 +397,7 @@ sal_Int16 BaseNode::getRestartDefaultMode() const
 {
     sal_Int16 nRestartDefaultMode = mxAnimationNode->getRestartDefault();
     if (nRestartDefaultMode == animations::AnimationRestart::DEFAULT) {
-        nRestartDefaultMode = (mpParent != 0
+        nRestartDefaultMode = (mpParent != nullptr
                                ? mpParent->getRestartDefaultMode()
                                : animations::AnimationRestart::ALWAYS);
     }

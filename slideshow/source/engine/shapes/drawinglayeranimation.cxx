@@ -542,7 +542,7 @@ void ActivityImpl::ImpForceScrollTextAnimNodes()
 ScrollTextAnimNode* ActivityImpl::ImpGetScrollTextAnimNode(
     sal_uInt32 nTime, sal_uInt32& rRelativeTime )
 {
-    ScrollTextAnimNode* pRetval = 0L;
+    ScrollTextAnimNode* pRetval = nullptr;
     ImpForceScrollTextAnimNodes();
 
     if(!maVector.empty())

@@ -1689,7 +1689,7 @@ void VortexTransition::prepare( double, double, double, double, double )
     CHECK_GL_ERROR();
     glEnableVertexAttribArray(mnTileInfoLocation);
     CHECK_GL_ERROR();
-    glVertexAttribPointer(mnTileInfoLocation, 1, GL_FLOAT, GL_FALSE, 0, 0);
+    glVertexAttribPointer(mnTileInfoLocation, 1, GL_FLOAT, GL_FALSE, 0, nullptr);
     CHECK_GL_ERROR();
 
     glBindBuffer(GL_ARRAY_BUFFER, 0);

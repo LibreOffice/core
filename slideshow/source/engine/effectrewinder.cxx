@@ -221,7 +221,7 @@ bool EffectRewinder::rewind (
     if (mpAsynchronousRewindEvent)
         mrEventQueue.addEvent(mpAsynchronousRewindEvent);
 
-    return mpAsynchronousRewindEvent.get()!=NULL;
+    return mpAsynchronousRewindEvent.get()!=nullptr;
 }
 
 

@@ -318,8 +318,8 @@ struct EventMultiplexerImpl
 void SAL_CALL EventMultiplexerListener::disposing()
 {
     osl::MutexGuard const guard( m_aMutex );
-    mpEventQueue = NULL;
-    mpEventMultiplexer = NULL;
+    mpEventQueue = nullptr;
+    mpEventMultiplexer = nullptr;
 }
 
 void SAL_CALL EventMultiplexerListener::disposing(
@@ -902,7 +902,7 @@ void EventMultiplexer::addClickHandler(
         rHandler,
         nPriority,
         mpImpl->isMouseListenerRegistered()
-        ? NULL
+        ? nullptr
         : &presentation::XSlideShowView::addMouseListener );
 }
 
@@ -927,7 +927,7 @@ void EventMultiplexer::addDoubleClickHandler(
         rHandler,
         nPriority,
         mpImpl->isMouseListenerRegistered()
-        ? NULL
+        ? nullptr
         : &presentation::XSlideShowView::addMouseListener );
 }
 
@@ -953,7 +953,7 @@ void EventMultiplexer::addMouseMoveHandler(
         nPriority,
         mpImpl->maMouseMoveHandlers.isEmpty()
         ? &presentation::XSlideShowView::addMouseMotionListener
-        : NULL );
+        : nullptr );
 }
 
 void EventMultiplexer::removeMouseMoveHandler(

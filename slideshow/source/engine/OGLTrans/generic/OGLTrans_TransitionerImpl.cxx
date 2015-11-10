@@ -580,7 +580,7 @@ void OGLTransitionerImpl::createTexture( GLuint* texID,
     if( usePixmap ) {
         if( mbGenerateMipmap )
             glTexParameteri( GL_TEXTURE_2D, GL_GENERATE_MIPMAP_SGIS, True);
-        glXBindTexImageEXT (mpContext->getOpenGLWindow().dpy, pixmap, GLX_FRONT_LEFT_EXT, NULL);
+        glXBindTexImageEXT (mpContext->getOpenGLWindow().dpy, pixmap, GLX_FRONT_LEFT_EXT, nullptr);
         if( mbGenerateMipmap && useMipmap ) {
             SAL_INFO("slideshow.opengl", "use mipmaps");
             glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
@@ -1050,7 +1050,7 @@ void OGLTransitionerImpl::prepareEnvironment()
 
 const OGLFormat* OGLTransitionerImpl::chooseFormats()
 {
-    const OGLFormat* pDetectedFormat=NULL;
+    const OGLFormat* pDetectedFormat=nullptr;
     uno::Reference<rendering::XIntegerBitmapColorSpace> xIntColorSpace(
         maSlideBitmapLayout.ColorSpace);
 
@@ -1184,7 +1184,7 @@ void OGLTransitionerImpl::GLInitSlides()
     mpContext->makeCurrent();
     prepareEnvironment();
 
-    const OGLFormat* pFormat = NULL;
+    const OGLFormat* pFormat = nullptr;
     if( !mbUseLeavingPixmap || !mbUseEnteringPixmap )
         pFormat = chooseFormats();
 

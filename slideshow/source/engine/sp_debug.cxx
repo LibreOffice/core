@@ -88,7 +88,7 @@ static void scan_and_count(void const * area, size_t size, map_type const & m, m
     {
         shared_ptr_layout const * q = reinterpret_cast<shared_ptr_layout const *>(p);
 
-        if(q->pn.id == boost::detail::shared_count_id && q->pn.pi != 0 && m.count(q->pn.pi) != 0)
+        if(q->pn.id == boost::detail::shared_count_id && q->pn.pi != nullptr && m.count(q->pn.pi) != 0)
         {
             ++m2[q->pn.pi];
         }
@@ -105,7 +105,7 @@ static void scan_and_mark(void const * area, size_t size, map2_type & m2, open_t
     {
         shared_ptr_layout const * q = reinterpret_cast<shared_ptr_layout const *>(p);
 
-        if(q->pn.id == boost::detail::shared_count_id && q->pn.pi != 0 && m2.count(q->pn.pi) != 0)
+        if(q->pn.id == boost::detail::shared_count_id && q->pn.pi != nullptr && m2.count(q->pn.pi) != 0)
         {
             open.push_back(q->pn.pi);
             m2.erase(q->pn.pi);

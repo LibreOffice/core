@@ -120,7 +120,7 @@ namespace slideshow
                 << " with delay " << rEvent->getActivationTime(0.0)
                 );
 
-            ENSURE_OR_RETURN_FALSE( rEvent.get() != NULL,
+            ENSURE_OR_RETURN_FALSE( rEvent.get() != nullptr,
                                "EventQueue::addEvent: event ptr NULL" );
             maNextEvents.push_back(
                 EventEntry( rEvent, rEvent->getActivationTime(
@@ -139,7 +139,7 @@ namespace slideshow
                 );
 
             ENSURE_OR_RETURN_FALSE(
-                rpEvent.get() != NULL,
+                rpEvent.get() != nullptr,
                     "EventQueue::addEvent: event ptr NULL");
 
             maNextNextEvents.push(

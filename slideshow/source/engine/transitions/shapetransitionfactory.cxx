@@ -208,7 +208,7 @@ AnimationActivitySharedPtr createShapeTransitionByType(
         getTransitionInfo( nType, nSubType ) );
 
     AnimationActivitySharedPtr pGeneratedActivity;
-    if( pTransitionInfo != NULL )
+    if( pTransitionInfo != nullptr )
     {
         switch( pTransitionInfo->meTransitionClass )
         {
@@ -251,7 +251,7 @@ AnimationActivitySharedPtr createShapeTransitionByType(
 
                         const TransitionInfo* pRandomTransitionInfo( getRandomTransitionInfo() );
 
-                        ENSURE_OR_THROW( pRandomTransitionInfo != NULL,
+                        ENSURE_OR_THROW( pRandomTransitionInfo != nullptr,
                                           "createShapeTransitionByType(): Got invalid random transition info" );
 
                         ENSURE_OR_THROW( pRandomTransitionInfo->mnTransitionType != animations::TransitionType::RANDOM,

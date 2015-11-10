@@ -2122,7 +2122,7 @@ const TransitionInfo* getTransitionInfo(
     if (pRes != pTableEnd)
         return pRes;
     else
-        return NULL;
+        return nullptr;
 }
 
 const TransitionInfo* getRandomTransitionInfo()

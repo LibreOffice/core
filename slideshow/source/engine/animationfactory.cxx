@@ -225,7 +225,7 @@ namespace slideshow
 
                     ::basegfx::B2DPolyPolygon aPolyPoly;
 
-                    ENSURE_OR_THROW( ::basegfx::tools::importFromSvgD( aPolyPoly, rSVGDPath, false, 0 ),
+                    ENSURE_OR_THROW( ::basegfx::tools::importFromSvgD( aPolyPoly, rSVGDPath, false, nullptr ),
                                       "PathAnimation::PathAnimation(): failed to parse SVG:d path" );
                     ENSURE_OR_THROW( aPolyPoly.count() == 1,
                                       "PathAnimation::PathAnimation(): motion path consists of multiple/zero polygon(s)" );

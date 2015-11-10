@@ -439,7 +439,7 @@ bool getRectanglesFromScrollMtf( ::basegfx::B2DRectangle&       o_rScrollRect,
     bool bPaintRectSet(false);
 
     for ( MetaAction * pCurrAct = rMtf->FirstAction();
-          pCurrAct != 0; pCurrAct = rMtf->NextAction() )
+          pCurrAct != nullptr; pCurrAct = rMtf->NextAction() )
     {
         if (pCurrAct->GetType() == MetaActionType::COMMENT)
         {
