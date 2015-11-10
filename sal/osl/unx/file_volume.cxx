@@ -297,7 +297,7 @@ static oslFileError osl_psz_getVolumeInformation (
                 rtl_str_getLength(__OSL_STATFS_TYPENAME(sfs)),
                 osl_getThreadTextEncoding(),
                 OUSTRING_TO_OSTRING_CVTFLAGS);
-            OSL_ASSERT(pInfo->ustrFileSystemName != 0);
+            OSL_ASSERT(pInfo->ustrFileSystemName != nullptr);
 
             pInfo->uValidFields |= osl_VolumeInfo_Mask_FileSystemName;
         }

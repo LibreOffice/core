@@ -312,7 +312,7 @@ oslFileError SAL_CALL osl_getNextDirectoryItem(oslDirectory Directory, oslDirect
 
     // convert decomposed filename to precomposed unicode
     char composed_name[BUFSIZ];
-    CFMutableStringRef strRef = CFStringCreateMutable (NULL, 0 );
+    CFMutableStringRef strRef = CFStringCreateMutable (nullptr, 0 );
     CFStringAppendCString( strRef, pEntry->d_name, kCFStringEncodingUTF8 );  //UTF8 is default on Mac OSX
     CFStringNormalize( strRef, kCFStringNormalizationFormC );
     CFStringGetCString( strRef, composed_name, BUFSIZ, kCFStringEncodingUTF8 );

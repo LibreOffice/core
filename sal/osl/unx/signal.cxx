@@ -96,7 +96,7 @@ static struct SignalAction
 #endif
     { SIGABRT,   ACT_ABORT,  nullptr },    /* used by abort, replace SIGIOT in the future */
 #ifdef SIGEMT
-    { SIGEMT,    ACT_SYSTEM,  NULL },    /* EMT instruction */
+    { SIGEMT,    ACT_SYSTEM,  nullptr },    /* EMT instruction */
 /* changed from ACT_ABORT to ACT_SYSTEM to remove handler*/
 /* SIGEMT may also be used by the profiler - so it is probably not a good
 plan to have the new handler use this signal*/

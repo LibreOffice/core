@@ -57,10 +57,10 @@ oslProcessError SAL_CALL bootstrap_getExecutableFile(rtl_uString ** ppFileURL)
     {
         /* Determine absolute path. */
         char abspath[PATH_MAX];
-        if (realpath (buffer, abspath) != 0)
+        if (realpath (buffer, abspath) != nullptr)
         {
             /* Convert from utf8 to unicode. */
-            rtl_uString * pAbsPath = 0;
+            rtl_uString * pAbsPath = nullptr;
             rtl_string2UString (
                 &(pAbsPath),
                 abspath, rtl_str_getLength (abspath),

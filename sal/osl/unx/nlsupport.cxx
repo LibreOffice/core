@@ -787,11 +787,11 @@ const _pair _iso_language_list[] = {
 
 rtl_TextEncoding osl_getTextEncodingFromLocale( rtl_Locale * pLocale )
 {
-    const _pair *language = 0;
+    const _pair *language = nullptr;
     char locale_buf[64] = "";
 
     /* default to process locale if pLocale == NULL */
-    if( NULL == pLocale )
+    if( nullptr == pLocale )
         osl_getProcessLocale( &pLocale );
 
     /* convert rtl_Locale to locale string */
@@ -800,7 +800,7 @@ rtl_TextEncoding osl_getTextEncodingFromLocale( rtl_Locale * pLocale )
         /* check special handling list (EUC) first */
         language = _pair_search( locale_buf, _full_locale_list, SAL_N_ELEMENTS( _full_locale_list ) );
 
-        if( NULL == language )
+        if( nullptr == language )
         {
             /*
              *  check if there is a charset qualifier at the end of the given locale string
@@ -809,14 +809,14 @@ rtl_TextEncoding osl_getTextEncodingFromLocale( rtl_Locale * pLocale )
              */
             char* cp = strrchr( locale_buf, '.' );
 
-            if( NULL != cp )
+            if( nullptr != cp )
             {
                 language = _pair_search( cp + 1, _locale_extension_list, SAL_N_ELEMENTS( _locale_extension_list ) );
             }
         }
 
         /* use iso language code to determine the charset */
-        if( NULL == language )
+        if( nullptr == language )
         {
             /* iso lang codes have 2 charaters */
             locale_buf[2] = '\0';
@@ -827,7 +827,7 @@ rtl_TextEncoding osl_getTextEncodingFromLocale( rtl_Locale * pLocale )
 
     /* a matching item in our list provides a mapping from codeset to
      * rtl-codeset */
-    if ( language != NULL )
+    if ( language != nullptr )
         return language->value;
 
     return RTL_TEXTENCODING_DONTKNOW;
@@ -920,7 +920,7 @@ int _imp_setProcessLocale( rtl_Locale * pLocale )
     char locale_buf[64];
 
     /* convert rtl_Locale to locale string */
-    if( NULL != _compose_locale( pLocale, locale_buf, 64 ) )
+    if( nullptr != _compose_locale( pLocale, locale_buf, 64 ) )
     {
         /* only change env vars that exist already */
         if( getenv( "LC_ALL" ) )

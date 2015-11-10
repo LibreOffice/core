@@ -78,12 +78,12 @@ struct hostent *gethostbyname_r(const char *name, struct hostent *result,
 
         naliases = naddr_list = naliasesdata = 0;
 
-        for ( p = res->h_aliases; *p != NULL; p++) {
+        for ( p = res->h_aliases; *p != nullptr; p++) {
             naliases++;
             naliasesdata += strlen(*p)+1;
         }
 
-        for ( p = res->h_addr_list; *p != NULL; p++)
+        for ( p = res->h_addr_list; *p != nullptr; p++)
             naddr_list++;
 
         if ( nname
@@ -100,30 +100,30 @@ struct hostent *gethostbyname_r(const char *name, struct hostent *result,
             parray = reinterpret_cast<char**>(buffer);
             result->h_aliases = parray;
             data = buffer + (naliases+1)*sizeof(char*);
-            for ( p = res->h_aliases; *p != NULL; p++) {
+            for ( p = res->h_aliases; *p != nullptr; p++) {
                 int n = strlen(*p)+1;
                 *parray++ = data;
                 memcpy(data, *p, n);
                 data += n;
             }
-            *parray = NULL;
+            *parray = nullptr;
             buffer = data;
             parray = reinterpret_cast<char**>(buffer);
             result->h_addr_list = parray;
             data = buffer + (naddr_list+1)*sizeof(char*);
-            for ( p = res->h_addr_list; *p != NULL; p++) {
+            for ( p = res->h_addr_list; *p != nullptr; p++) {
                 *parray++ = data;
                 memcpy(data, *p, res->h_length);
                 data += res->h_length;
             }
-            *parray = NULL;
+            *parray = nullptr;
 
                res = result;
         }
         else
         {
             errno = ERANGE;
-            res = NULL;
+            res = nullptr;
         }
     }
     else
@@ -174,14 +174,14 @@ int macxp_resolveAlias(char *path, int buflen)
       if ( unprocessedPath )
           *unprocessedPath = '\0';
 
-      cfpath = CFStringCreateWithCString( NULL, path, kCFStringEncodingUTF8 );
-      cfurl = CFURLCreateWithFileSystemPath( NULL, cfpath, kCFURLPOSIXPathStyle, false );
+      cfpath = CFStringCreateWithCString( nullptr, path, kCFStringEncodingUTF8 );
+      cfurl = CFURLCreateWithFileSystemPath( nullptr, cfpath, kCFURLPOSIXPathStyle, false );
       CFRelease( cfpath );
-      cferror = NULL;
-      cfbookmark = CFURLCreateBookmarkDataFromFile( NULL, cfurl, &cferror );
+      cferror = nullptr;
+      cfbookmark = CFURLCreateBookmarkDataFromFile( nullptr, cfurl, &cferror );
       CFRelease( cfurl );
 
-      if ( cfbookmark == NULL )
+      if ( cfbookmark == nullptr )
       {
           if(cferror)
           {
@@ -191,10 +191,10 @@ int macxp_resolveAlias(char *path, int buflen)
       else
       {
           Boolean isStale;
-          cfurl = CFURLCreateByResolvingBookmarkData( NULL, cfbookmark, kCFBookmarkResolutionWithoutUIMask,
-                                                      NULL, NULL, &isStale, &cferror );
+          cfurl = CFURLCreateByResolvingBookmarkData( nullptr, cfbookmark, kCFBookmarkResolutionWithoutUIMask,
+                                                      nullptr, nullptr, &isStale, &cferror );
           CFRelease( cfbookmark );
-          if ( cfurl == NULL )
+          if ( cfurl == nullptr )
           {
               CFRelease( cferror );
           }
@@ -202,7 +202,7 @@ int macxp_resolveAlias(char *path, int buflen)
           {
               cfpath = CFURLCopyFileSystemPath( cfurl, kCFURLPOSIXPathStyle );
               CFRelease( cfurl );
-              if ( cfpath != NULL )
+              if ( cfpath != nullptr )
               {
                   char tmpPath[ PATH_MAX ];
                   if ( CFStringGetCString( cfpath, tmpPath, PATH_MAX, kCFStringEncodingUTF8 ) )
