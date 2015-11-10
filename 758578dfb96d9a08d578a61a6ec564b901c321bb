@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "faac7902_2cceaf5a",
+        "filename": "oox/source/export/drawingml.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2015-11-10T11:29:08Z",
+      "side": 1,
+      "message": "Duh, please don\u0027t add yet another macro, there\u0027s enough of them already and they make the code readability worse. See below how to do what you want to do differently",
+      "revId": "758578dfb96d9a08d578a61a6ec564b901c321bb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "faac7902_ec02e76e",
+        "filename": "oox/source/export/drawingml.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1204,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2015-11-10T11:29:08Z",
+      "side": 1,
+      "message": "bCheckDirect is not really needed ...",
+      "revId": "758578dfb96d9a08d578a61a6ec564b901c321bb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "faac7902_6cef17b1",
+        "filename": "oox/source/export/drawingml.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1251,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2015-11-10T11:29:08Z",
+      "side": 1,
+      "message": "... because presumably this whole block of code is not called if bCheckDirect \u003d\u003d false. And that is if and only if (as far as I can see) nElement is endParaRPr\n\nSo you can as well do \n\nif ( nElement !\u003d XML_endParaRPr)\n{ \n  GETAD( CharUnderline) \n  ...\n}",
+      "revId": "758578dfb96d9a08d578a61a6ec564b901c321bb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "faac7902_ac2f3ff5",
+        "filename": "oox/source/export/drawingml.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1306,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2015-11-10T11:29:08Z",
+      "side": 1,
+      "message": "... and the same story with this block",
+      "revId": "758578dfb96d9a08d578a61a6ec564b901c321bb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "faac7902_4cf8537d",
+        "filename": "oox/source/export/drawingml.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1387,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2015-11-10T11:29:08Z",
+      "side": 1,
+      "message": "Please use constants here (COL_BLACK, COL_WHITE, or whatever appropriate), see include/tools/color.hxx for the actual constant definitions",
+      "revId": "758578dfb96d9a08d578a61a6ec564b901c321bb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "faac7902_2cf50f83",
+        "filename": "oox/source/export/drawingml.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1774,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2015-11-10T11:29:08Z",
+      "side": 1,
+      "message": "Same here",
+      "revId": "758578dfb96d9a08d578a61a6ec564b901c321bb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
