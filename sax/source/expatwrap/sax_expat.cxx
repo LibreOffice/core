@@ -435,7 +435,7 @@ void SaxExpatParser::parseStream(   const InputSource& structSource)
     }
 
     // create parser with proper encoding
-    entity.pParser = XML_ParserCreate( 0 );
+    entity.pParser = XML_ParserCreate( nullptr );
     if( ! entity.pParser )
     {
         throw SAXException("Couldn't create parser",
@@ -457,7 +457,7 @@ void SaxExpatParser::parseStream(   const InputSource& structSource)
     XML_SetNotationDeclHandler( entity.pParser, call_callbackNotationDecl );
     XML_SetExternalEntityRefHandler(    entity.pParser,
                                         call_callbackExternalEntityRef);
-    XML_SetUnknownEncodingHandler( entity.pParser,  call_callbackUnknownEncoding ,0);
+    XML_SetUnknownEncodingHandler( entity.pParser,  call_callbackUnknownEncoding ,nullptr);
 
     if( m_pImpl->rExtendedDocumentHandler.is() ) {
 
@@ -802,7 +802,7 @@ void SaxExpatParser_Impl::callbackEntityDecl(
         XML_StopParser(pImpl->getEntity().pParser, XML_FALSE);
         pImpl->exception = SAXParseException(
             "SaxExpatParser: internal entity declaration, stopping",
-            0, css::uno::Any(),
+            nullptr, css::uno::Any(),
             pImpl->rDocumentLocator->getPublicId(),
             pImpl->rDocumentLocator->getSystemId(),
             pImpl->rDocumentLocator->getLineNumber(),
@@ -874,7 +874,7 @@ bool SaxExpatParser_Impl::callbackExternalEntityRef(
     }
 
     if( entity.structSource.aInputStream.is() ) {
-        entity.pParser = XML_ExternalEntityParserCreate( parser , context, 0 );
+        entity.pParser = XML_ExternalEntityParserCreate( parser , context, nullptr );
         if( ! entity.pParser )
         {
             return false;

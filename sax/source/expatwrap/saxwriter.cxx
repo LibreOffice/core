@@ -109,7 +109,7 @@ public:
     explicit SaxWriterHelper(Reference< XOutputStream > m_TempOut)
         : m_out(m_TempOut)
         , m_Sequence(SEQUENCESIZE)
-        , mp_Sequence(NULL)
+        , mp_Sequence(nullptr)
         , nLastLineFeedPos(0)
         , nCurrentPos(0)
         , m_bStartElementFinished(true)
@@ -875,7 +875,7 @@ class SAXWriter :
 {
 public:
     SAXWriter()
-        : m_pSaxWriterHelper(NULL)
+        : m_pSaxWriterHelper(nullptr)
         , m_bDocStarted(false)
         , m_bIsCDATA(false)
         , m_bForceLineBreak(false)

@@ -34,7 +34,7 @@ public:
 
 void AttributesTest::test()
 {
-    uno::Reference<sax_fastparser::FastAttributeList> xAttributeList( new sax_fastparser::FastAttributeList(NULL) );
+    uno::Reference<sax_fastparser::FastAttributeList> xAttributeList( new sax_fastparser::FastAttributeList(nullptr) );
     xAttributeList->add(1, "1");
     xAttributeList->add(2, OString("2"));
 

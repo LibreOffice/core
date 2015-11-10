@@ -59,7 +59,7 @@ namespace sax_fastparser {
         : maCachedOutputStream()
         , maMarkStack()
         , mbMarkStackEmpty(true)
-        , mpDoubleStr(NULL)
+        , mpDoubleStr(nullptr)
         , mnDoubleStrCapacity(RTL_STR_MAX_VALUEOFDOUBLE)
     {
         rtl_string_new_WithLength(&mpDoubleStr, mnDoubleStrCapacity);
@@ -83,7 +83,7 @@ namespace sax_fastparser {
     {
         rtl_math_doubleToString(
             &mpDoubleStr, &mnDoubleStrCapacity, 0, value, rtl_math_StringFormat_G,
-            RTL_STR_MAX_VALUEOFDOUBLE - RTL_CONSTASCII_LENGTH("-x.E-xxx"), '.', 0,
+            RTL_STR_MAX_VALUEOFDOUBLE - RTL_CONSTASCII_LENGTH("-x.E-xxx"), '.', nullptr,
             0, sal_True);
 
         write(mpDoubleStr->buffer, mpDoubleStr->length);

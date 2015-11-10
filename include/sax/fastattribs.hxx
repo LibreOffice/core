@@ -75,7 +75,7 @@ class SAX_DLLPUBLIC FastAttributeList : public ::cppu::WeakImplHelper1< css::xml
 {
 public:
     FastAttributeList( const css::uno::Reference< css::xml::sax::XFastTokenHandler >& xTokenHandler,
-                       FastTokenHandlerBase *pOptHandlerBase = NULL );
+                       FastTokenHandlerBase *pOptHandlerBase = nullptr );
     virtual ~FastAttributeList();
 
     void clear();

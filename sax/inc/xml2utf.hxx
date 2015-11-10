@@ -82,8 +82,8 @@ class XMLFile2UTFConverter
 public:
     XMLFile2UTFConverter( ):
         m_bStarted( false ),
-        m_pText2Unicode( 0 ),
-        m_pUnicode2Text( 0 )
+        m_pText2Unicode( nullptr ),
+        m_pUnicode2Text( nullptr )
         {}
 
     ~XMLFile2UTFConverter();

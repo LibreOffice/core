@@ -347,8 +347,8 @@ void XMLFile2UTFConverter::initializeDecoding()
 
 
 Text2UnicodeConverter::Text2UnicodeConverter( const OString &sEncoding )
-    : m_convText2Unicode(NULL)
-    , m_contextText2Unicode(NULL)
+    : m_convText2Unicode(nullptr)
+    , m_contextText2Unicode(nullptr)
     , m_rtlEncoding(RTL_TEXTENCODING_DONTKNOW)
 {
     rtl_TextEncoding encoding = rtl_getTextEncodingFromMimeCharset( sEncoding.getStr() );

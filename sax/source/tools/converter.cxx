@@ -126,8 +126,8 @@ bool Converter::convertMeasure( sal_Int32& rValue,
         {
             OSL_ENSURE( MeasureUnit::TWIP == nTargetUnit || MeasureUnit::POINT == nTargetUnit ||
                         MeasureUnit::MM_100TH == nTargetUnit || MeasureUnit::MM_10TH == nTargetUnit, "unit is not supported");
-            const sal_Char *aCmpsL[2] = { 0, 0 };
-            const sal_Char *aCmpsU[2] = { 0, 0 };
+            const sal_Char *aCmpsL[2] = { nullptr, nullptr };
+            const sal_Char *aCmpsU[2] = { nullptr, nullptr };
             double aScales[2] = { 1., 1. };
 
             if( MeasureUnit::TWIP == nTargetUnit )
@@ -209,7 +209,7 @@ bool Converter::convertMeasure( sal_Int32& rValue,
                 }
             }
 
-            if( aCmpsL[0] == NULL )
+            if( aCmpsL[0] == nullptr )
                 return false;
 
             double nScale = 0.;
@@ -286,7 +286,7 @@ void Converter::convertMeasure( OUStringBuffer& rBuffer,
     long nMul = 1000;
     long nDiv = 1;
     long nFac = 100;
-    const sal_Char* psUnit = 0;
+    const sal_Char* psUnit = nullptr;
     switch( nSourceUnit )
     {
     case MeasureUnit::TWIP:
@@ -1409,7 +1409,7 @@ bool Converter::parseDateTime(   util::DateTime& rDateTime,
                                  const OUString& rString )
 {
     bool isDateTime;
-    return parseDateOrDateTime(0, rDateTime, isDateTime, pTimeZoneOffset,
+    return parseDateOrDateTime(nullptr, rDateTime, isDateTime, pTimeZoneOffset,
             rString);
 }
 
@@ -1864,7 +1864,7 @@ bool Converter::parseTimeOrDateTime(
 {
     bool dummy;
     return lcl_parseDateTime(
-                0, rDateTime, dummy, pTimeZoneOffset, rString, true);
+                nullptr, rDateTime, dummy, pTimeZoneOffset, rString, true);
 }
 
 /** convert ISO "date" or "dateTime" string to util::DateTime or util::Date */
@@ -2094,7 +2094,7 @@ double Converter::GetConversionFactor(OUStringBuffer& rUnit, sal_Int16 nSourceUn
 
     if(nSourceUnit != nTargetUnit)
     {
-        const sal_Char* psUnit = 0;
+        const sal_Char* psUnit = nullptr;
 
         switch(nSourceUnit)
         {
@@ -2610,7 +2610,7 @@ bool Converter::convertAny(OUStringBuffer&    rsValue,
                     aTempValue.Seconds          = 0;
                     aTempValue.Minutes          = 0;
                     aTempValue.Hours            = 0;
-                    ::sax::Converter::convertDateTime(rsValue, aTempValue, 0);
+                    ::sax::Converter::convertDateTime(rsValue, aTempValue, nullptr);
                 }
                 else
                 if (rValue >>= aTime)
@@ -2632,7 +2632,7 @@ bool Converter::convertAny(OUStringBuffer&    rsValue,
                 {
                     rsType.append("date");
                     bConverted = true;
-                    ::sax::Converter::convertDateTime(rsValue, aDateTime, 0);
+                    ::sax::Converter::convertDateTime(rsValue, aDateTime, nullptr);
                 }
             }
             break;

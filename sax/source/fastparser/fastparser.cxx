@@ -333,7 +333,7 @@ class FastLocatorImpl : public WeakImplHelper< XLocator >
 public:
     explicit FastLocatorImpl(FastSaxParserImpl *p) : mpParser(p) {}
 
-    void dispose() { mpParser = 0; }
+    void dispose() { mpParser = nullptr; }
     void checkDispose() throw (RuntimeException) { if( !mpParser ) throw DisposedException(); }
 
     //XLocator
@@ -371,7 +371,7 @@ OUString SAL_CALL FastLocatorImpl::getSystemId() throw (RuntimeException, std::e
 }
 
 ParserData::ParserData()
-    : mpTokenHandler( NULL )
+    : mpTokenHandler( nullptr )
 {}
 
 ParserData::~ParserData()
@@ -380,16 +380,16 @@ ParserData::~ParserData()
 Entity::Entity(const ParserData& rData)
     : ParserData(rData)
     , mnProducedEventsSize(0)
-    , mpProducedEvents(NULL)
+    , mpProducedEvents(nullptr)
     , mbEnableThreads(false)
-    , mpParser(NULL)
+    , mpParser(nullptr)
 {
 }
 
 Entity::Entity(const Entity& e)
     : ParserData(e)
     , mnProducedEventsSize(0)
-    , mpProducedEvents(NULL)
+    , mpProducedEvents(nullptr)
     , mbEnableThreads(e.mbEnableThreads)
     , maStructSource(e.maStructSource)
     , mpParser(e.mpParser)
@@ -413,7 +413,7 @@ void Entity::startElement( Event *pEvent )
     const OUString& aElementName = pEvent->msElementName;
 
     // Use un-wrapped pointers to avoid significant acquire/release overhead
-    XFastContextHandler *pParentContext = NULL;
+    XFastContextHandler *pParentContext = nullptr;
     if( !maContextStack.empty() )
     {
         pParentContext = maContextStack.top().mxContext.get();
@@ -454,7 +454,7 @@ void Entity::startElement( Event *pEvent )
         }
         // swap the reference we own in to avoid referencing thrash.
         maContextStack.top().mxContext.set( static_cast<XFastContextHandler *>( xContext.get() ) );
-        xContext.set( NULL, UNO_REF_NO_ACQUIRE );
+        xContext.set( nullptr, UNO_REF_NO_ACQUIRE );
     }
     catch (const Exception&)
     {
@@ -610,7 +610,7 @@ FastSaxParserImpl::FastSaxParserImpl( FastSaxParser* ) :
 #if 0
     mpFront(pFront),
 #endif
-    mpTop(NULL)
+    mpTop(nullptr)
 {
     mxDocumentLocator.set( new FastLocatorImpl( this ) );
 }
@@ -902,7 +902,7 @@ void FastSaxParserImpl::produce( bool bForceFlush )
         }
 
         rEntity.maPendingEvents.push(rEntity.mpProducedEvents);
-        rEntity.mpProducedEvents = 0;
+        rEntity.mpProducedEvents = nullptr;
 
         aGuard.clear(); // unlock
 
@@ -970,7 +970,7 @@ void FastSaxParserImpl::pushEntity( const Entity& rEntity )
 void FastSaxParserImpl::popEntity()
 {
     maEntities.pop();
-    mpTop = !maEntities.empty() ? &maEntities.top() : NULL;
+    mpTop = !maEntities.empty() ? &maEntities.top() : nullptr;
 }
 
 // starts parsing with actual parser !
@@ -997,7 +997,7 @@ void FastSaxParserImpl::parse()
         nRead = rEntity.maConverter.readAndConvert( seqOut, BUFFER_SIZE );
         if( nRead <= 0 )
         {
-            if( rEntity.mpParser != NULL )
+            if( rEntity.mpParser != nullptr )
             {
                 if( xmlParseChunk( rEntity.mpParser, reinterpret_cast<const char*>(seqOut.getConstArray()), 0, 1 ) != XML_ERR_OK )
                     rEntity.throwException( mxDocumentLocator, true );
@@ -1006,11 +1006,11 @@ void FastSaxParserImpl::parse()
         }
 
         bool bContinue = true;
-        if( rEntity.mpParser == NULL )
+        if( rEntity.mpParser == nullptr )
         {
             // create parser with proper encoding (needs the first chunk of data)
             rEntity.mpParser = xmlCreatePushParserCtxt( &callbacks, this,
-                reinterpret_cast<const char*>(seqOut.getConstArray()), nRead, NULL );
+                reinterpret_cast<const char*>(seqOut.getConstArray()), nRead, nullptr );
             if( !rEntity.mpParser )
                 throw SAXException("Couldn't create parser", Reference< XInterface >(), Any() );
 
@@ -1075,7 +1075,7 @@ void FastSaxParserImpl::callbackStartElement(const xmlChar *localName , const xm
         for (int i = 0; i < numNamespaces * 2; i += 2)
         {
             // namespaces[] is (prefix/URI)
-            if( namespaces[ i ] != NULL )
+            if( namespaces[ i ] != nullptr )
             {
                     DefineNamespace( OString( XML_CAST( namespaces[ i ] )),
                         OUString( XML_CAST( namespaces[ i + 1 ] ), strlen( XML_CAST( namespaces[ i + 1 ] )), RTL_TEXTENCODING_UTF8 ));
@@ -1091,7 +1091,7 @@ void FastSaxParserImpl::callbackStartElement(const xmlChar *localName , const xm
         // #158414# second: fill attribute list with other attributes
         for (int i = 0; i < numAttributes * 5; i += 5)
         {
-            if( attributes[ i + 1 ] != NULL )
+            if( attributes[ i + 1 ] != nullptr )
             {
                 sal_Int32 nAttributeToken = GetTokenWithPrefix( attributes[ i + 1 ], strlen( XML_CAST( attributes[ i + 1 ] )), attributes[ i ], strlen( XML_CAST( attributes[ i ] )));
                 if( nAttributeToken != FastToken::DONTKNOW )
@@ -1111,7 +1111,7 @@ void FastSaxParserImpl::callbackStartElement(const xmlChar *localName , const xm
             }
         }
 
-        if( prefix != NULL )
+        if( prefix != nullptr )
             rEvent.mnElementToken = GetTokenWithPrefix( prefix, strlen( XML_CAST( prefix )), localName, strlen( XML_CAST( localName )));
         else if( !rEvent.msNamespace.isEmpty() )
             rEvent.mnElementToken = GetTokenWithContextNamespace( nNamespaceToken, localName, strlen( XML_CAST( localName )));
@@ -1120,7 +1120,7 @@ void FastSaxParserImpl::callbackStartElement(const xmlChar *localName , const xm
 
         if( rEvent.mnElementToken == FastToken::DONTKNOW )
         {
-            if( prefix != NULL )
+            if( prefix != nullptr )
             {
                 rEvent.msNamespace = OUString( XML_CAST( URI ), strlen( XML_CAST( URI )), RTL_TEXTENCODING_UTF8 );
                 nNamespaceToken = GetNamespaceToken( rEvent.msNamespace );
