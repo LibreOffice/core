@@ -153,6 +153,7 @@ public:
     void testTdf83798();
     void testPropertyDefaults();
     void testTableBackgroundColor();
+    void testDocModState();
     void testTdf88899();
     void testTdf90362();
     void testUndoCharAttribute();
@@ -230,6 +231,7 @@ public:
     CPPUNIT_TEST(testTdf83798);
     CPPUNIT_TEST(testPropertyDefaults);
     CPPUNIT_TEST(testTableBackgroundColor);
+    CPPUNIT_TEST(testDocModState);
     CPPUNIT_TEST(testTdf88899);
     CPPUNIT_TEST(testTdf90362);
     CPPUNIT_TEST(testUndoCharAttribute);
@@ -2361,6 +2363,25 @@ void SwUiWriterTest::testTableBackgroundColor()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), getProperty<sal_Int32>(xCell, "BackColor"));
     xCell = xTable->getCellByName("C3");
     CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), getProperty<sal_Int32>(xCell, "BackColor"));
+}
+
+void SwUiWriterTest::testDocModState()
+{
+    //creating a new writer document via the XDesktop(to have more shells etc.)
+    SwDoc* pDoc = createDoc();
+    //checking the state of the document via IDocumentState
+    IDocumentState& rState(pDoc->getIDocumentState());
+    //the state should not be modified
+    CPPUNIT_ASSERT(!(rState.IsModified()));
+    //checking the state of the document via SfxObjectShell
+    SwDocShell* pShell(pDoc->GetDocShell());
+    CPPUNIT_ASSERT(!(pShell->IsModified()));
+    //dispatching all the events via VCL main-loop
+    Application::Yield();
+    //again checking for the state via IDocumentState
+    CPPUNIT_ASSERT(!(rState.IsModified()));
+    //again checking for the state via SfxObjectShell
+    CPPUNIT_ASSERT(!(pShell->IsModified()));
 }
 
 void SwUiWriterTest::testTdf88899()
