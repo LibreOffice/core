@@ -98,7 +98,7 @@ public:
 
         @param pMapping another mapping
     */
-    inline Mapping( uno_Mapping * pMapping = 0 );
+    inline Mapping( uno_Mapping * pMapping = NULL );
 
     /** Copy constructor.
 
@@ -136,7 +136,7 @@ public:
         @return true if a mapping is set
     */
     inline bool SAL_CALL is() const
-        { return (_pMapping != 0); }
+        { return (_pMapping != NULL); }
 
     /** Releases a set mapping.
     */
@@ -195,21 +195,21 @@ public:
 
 inline Mapping::Mapping(
     const ::rtl::OUString & rFrom, const ::rtl::OUString & rTo, const ::rtl::OUString & rAddPurpose )
-    : _pMapping( 0 )
+    : _pMapping( NULL )
 {
     uno_getMappingByName( &_pMapping, rFrom.pData, rTo.pData, rAddPurpose.pData );
 }
 
 inline Mapping::Mapping(
     uno_Environment * pFrom, uno_Environment * pTo, const ::rtl::OUString & rAddPurpose )
-    : _pMapping( 0 )
+    : _pMapping( NULL )
 {
     uno_getMapping( &_pMapping, pFrom, pTo, rAddPurpose.pData );
 }
 
 inline Mapping::Mapping(
     const Environment & rFrom, const Environment & rTo, const ::rtl::OUString & rAddPurpose )
-        : _pMapping(0)
+        : _pMapping(NULL)
 {
     uno_getMapping( &_pMapping, rFrom.get(), rTo.get(), rAddPurpose.pData );
 }
@@ -239,7 +239,7 @@ inline void Mapping::clear()
     if (_pMapping)
     {
         (*_pMapping->release)( _pMapping );
-        _pMapping = 0;
+        _pMapping = NULL;
     }
 }
 
@@ -256,7 +256,7 @@ inline Mapping & Mapping::operator = ( uno_Mapping * pMapping )
 inline void Mapping::mapInterface(
     void ** ppOut, void * pInterface, const css::uno::Type & rType ) const
 {
-    typelib_TypeDescription * pTD = 0;
+    typelib_TypeDescription * pTD = NULL;
     TYPELIB_DANGER_GET( &pTD, rType.getTypeLibType() );
     if (pTD)
     {
@@ -268,7 +268,7 @@ inline void Mapping::mapInterface(
 inline void * Mapping::mapInterface(
     void * pInterface, typelib_InterfaceTypeDescription * pTypeDescr ) const
 {
-    void * pOut = 0;
+    void * pOut = NULL;
     (*_pMapping->mapInterface)( _pMapping, &pOut, pInterface, pTypeDescr );
     return pOut;
 }
@@ -276,7 +276,7 @@ inline void * Mapping::mapInterface(
 inline void * Mapping::mapInterface(
     void * pInterface, const css::uno::Type & rType ) const
 {
-    void * pOut = 0;
+    void * pOut = NULL;
     mapInterface( &pOut, pInterface, rType );
     return pOut;
 }
@@ -325,7 +325,7 @@ inline bool mapToUno( uno_Interface ** ppRet, const Reference< C > & x )
     OSL_ASSERT( aMapping.is() );
     aMapping.mapInterface(
             reinterpret_cast<void **>(ppRet), x.get(), ::cppu::getTypeFavourUnsigned( &x ) );
-    return (0 != *ppRet);
+    return (NULL != *ppRet);
 }
 
 }

@@ -73,7 +73,7 @@ public:
 
         @param pEnv environment
     */
-    inline Environment( uno_Environment * pEnv = 0 );
+    inline Environment( uno_Environment * pEnv = NULL );
 
     /** Gets a specific environment. If the specified environment does not exist, then a default one
         is created and registered.
@@ -134,7 +134,7 @@ public:
         @return true, if a environment is set, false otherwise
     */
     inline bool SAL_CALL is() const
-        { return (_pEnv != 0); }
+        { return (_pEnv != NULL); }
 
     /** Releases a set environment.
     */
@@ -201,7 +201,7 @@ inline void Environment::clear()
     if (_pEnv)
     {
         (*_pEnv->release)( _pEnv );
-        _pEnv = 0;
+        _pEnv = NULL;
     }
 }
 

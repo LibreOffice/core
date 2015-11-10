@@ -46,7 +46,7 @@ public:
     uno_Interface * m_pUnoI;
 
     inline bool is() const
-        { return m_pUnoI != 0; }
+        { return m_pUnoI != NULL; }
 
     inline ~UnoInterfaceReference();
     inline UnoInterfaceReference();
@@ -84,13 +84,13 @@ private:
 
 inline UnoInterfaceReference::~UnoInterfaceReference()
 {
-    if (m_pUnoI != 0)
+    if (m_pUnoI != NULL)
         (*m_pUnoI->release)( m_pUnoI );
 }
 
 
 inline UnoInterfaceReference::UnoInterfaceReference()
-    : m_pUnoI( 0 )
+    : m_pUnoI( NULL )
 {
 }
 
@@ -105,7 +105,7 @@ inline UnoInterfaceReference::UnoInterfaceReference(
 inline UnoInterfaceReference::UnoInterfaceReference( uno_Interface * pUnoI )
     : m_pUnoI( pUnoI )
 {
-    if (m_pUnoI != 0)
+    if (m_pUnoI != NULL)
         (*m_pUnoI->acquire)( m_pUnoI );
 }
 
@@ -114,7 +114,7 @@ inline UnoInterfaceReference::UnoInterfaceReference(
     UnoInterfaceReference const & ref )
     : m_pUnoI( ref.m_pUnoI )
 {
-    if (m_pUnoI != 0)
+    if (m_pUnoI != NULL)
         (*m_pUnoI->acquire)( m_pUnoI );
 }
 
@@ -122,9 +122,9 @@ inline UnoInterfaceReference::UnoInterfaceReference(
 inline UnoInterfaceReference & UnoInterfaceReference::set(
     uno_Interface * pUnoI )
 {
-    if (pUnoI != 0)
+    if (pUnoI != NULL)
         (*pUnoI->acquire)( pUnoI );
-    if (m_pUnoI != 0)
+    if (m_pUnoI != NULL)
         (*m_pUnoI->release)( m_pUnoI );
     m_pUnoI = pUnoI;
     return *this;
@@ -134,7 +134,7 @@ inline UnoInterfaceReference & UnoInterfaceReference::set(
 inline UnoInterfaceReference & UnoInterfaceReference::set(
     uno_Interface * pUnoI, __sal_NoAcquire )
 {
-    if (m_pUnoI != 0)
+    if (m_pUnoI != NULL)
         (*m_pUnoI->release)( m_pUnoI );
     m_pUnoI = pUnoI;
     return *this;
@@ -143,10 +143,10 @@ inline UnoInterfaceReference & UnoInterfaceReference::set(
 
 inline void UnoInterfaceReference::clear()
 {
-    if (m_pUnoI != 0)
+    if (m_pUnoI != NULL)
     {
         (*m_pUnoI->release)( m_pUnoI );
-        m_pUnoI = 0;
+        m_pUnoI = NULL;
     }
 }
 
