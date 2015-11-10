@@ -95,7 +95,7 @@ struct StringPool: private boost::noncopyable
 
 const StringPool &spool()
 {
-    static StringPool *pPool = 0;
+    static StringPool *pPool = nullptr;
     if( ! pPool )
     {
         MutexGuard guard( Mutex::getGlobalMutex() );
@@ -129,8 +129,8 @@ static void deleteAllLinkReferences(const Reference < XSimpleRegistry >& xReg,
             OUString            aLinkName;
             OUString            aLinkParent;
             Reference < XRegistryKey >  xLinkParent;
-            const sal_Unicode*  pTmpName = NULL;
-            const sal_Unicode*  pShortName = NULL;
+            const sal_Unicode*  pTmpName = nullptr;
+            const sal_Unicode*  pShortName = nullptr;
             sal_Int32           sEnd = 0;
 
             for (sal_Int32 i = 0; i < linkNames.getLength(); i++)
@@ -144,7 +144,7 @@ static void deleteAllLinkReferences(const Reference < XSimpleRegistry >& xReg,
 
                 sal_Int32 nIndex = rtl_ustr_indexOfChar( pTmpName, '%' );
                 if ( nIndex == -1 )
-                    pShortName = 0;
+                    pShortName = nullptr;
                 else
                     pShortName = pTmpName+nIndex;
 
@@ -152,7 +152,7 @@ static void deleteAllLinkReferences(const Reference < XSimpleRegistry >& xReg,
                 {
                     nIndex = rtl_ustr_indexOfChar( pShortName+2, '%' );
                     if ( nIndex == -1 )
-                        pShortName = 0;
+                        pShortName = nullptr;
                     else
                         pShortName += nIndex+2;
                 }
@@ -207,7 +207,7 @@ static void prepareLink( const Reference < XSimpleRegistry > & xDest,
     const sal_Unicode*  pShortName;
     sal_Int32           nIndex = rtl_ustr_indexOfChar( pTmpName, '%' );
     if ( nIndex == -1 )
-        pShortName = 0;
+        pShortName = nullptr;
     else
         pShortName = pTmpName+nIndex;
 
@@ -218,7 +218,7 @@ static void prepareLink( const Reference < XSimpleRegistry > & xDest,
     {
         nIndex = rtl_ustr_indexOfChar( pShortName+2, '%' );
         if ( nIndex == -1 )
-            pShortName = 0;
+            pShortName = nullptr;
         else
             pShortName += nIndex+2;
     }

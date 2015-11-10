@@ -286,7 +286,7 @@ IntrospectionAccessStatic_Impl::IntrospectionAccessStatic_Impl( Reference< XIdlR
     mbIdlArray = false;
     mbUnoTunnel = false;
 
-    mpOrgPropertyHandleArray = NULL;
+    mpOrgPropertyHandleArray = nullptr;
 
     mnPropCount = 0;
     //mnDangerousPropCount = 0;
@@ -2535,7 +2535,7 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
                 }
                 else
                 {
-                    xImplClass2 = NULL;
+                    xImplClass2 = nullptr;
                 }
             }
         }

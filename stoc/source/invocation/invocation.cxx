@@ -823,14 +823,14 @@ void Invocation_Impl::getInfoSequenceImpl
     }
 
     // Setting up result sequences
-    OUString* pRetStrings = NULL;
+    OUString* pRetStrings = nullptr;
     if( pStringSeq )
     {
         pStringSeq->realloc( nTotalCount );
         pRetStrings = pStringSeq->getArray();
     }
 
-    InvocationInfo* pRetInfos = NULL;
+    InvocationInfo* pRetInfos = nullptr;
     if( pInfoSeq )
     {
         pInfoSeq->realloc( nTotalCount );
@@ -873,7 +873,7 @@ Sequence< OUString > SAL_CALL Invocation_Impl::getMemberNames(  )
         return _xDirect2->getMemberNames();
     }
     Sequence< OUString > aRetSeq;
-    getInfoSequenceImpl( &aRetSeq, NULL );
+    getInfoSequenceImpl( &aRetSeq, nullptr );
     return aRetSeq;
 }
 
@@ -885,7 +885,7 @@ Sequence< InvocationInfo > SAL_CALL Invocation_Impl::getInfo(  )
         return _xDirect2->getInfo();
     }
     Sequence< InvocationInfo > aRetSeq;
-    getInfoSequenceImpl( NULL, &aRetSeq );
+    getInfoSequenceImpl( nullptr, &aRetSeq );
     return aRetSeq;
 }
 
@@ -1004,7 +1004,7 @@ void Invocation_Impl::fillInfoForMethod
 // XTypeProvider
 Sequence< Type > SAL_CALL Invocation_Impl::getTypes() throw( RuntimeException, std::exception )
 {
-    static Sequence< Type > const * s_pTypes = 0;
+    static Sequence< Type > const * s_pTypes = nullptr;
     if (! s_pTypes)
     {
         Sequence< Type > types( 4 +8 );
@@ -1180,9 +1180,9 @@ static const struct ImplementationEntry g_entries[] =
     {
         InvocationService_CreateInstance, inv_getImplementationName,
         inv_getSupportedServiceNames, createSingleComponentFactory,
-        0, 0
+        nullptr, 0
     },
-    { 0, 0, 0, 0, 0, 0 }
+    { nullptr, nullptr, nullptr, nullptr, nullptr, 0 }
 };
 
 extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL invocation_component_getFactory(

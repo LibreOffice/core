@@ -127,7 +127,7 @@ public:
     virtual OUString toString() const override;
 };
 
-char const * SocketPermission::s_actions [] = { "accept", "connect", "listen", "resolve", 0 };
+char const * SocketPermission::s_actions [] = { "accept", "connect", "listen", "resolve", nullptr };
 
 SocketPermission::SocketPermission(
     connection::SocketPermission const & perm,
@@ -289,11 +289,11 @@ public:
     virtual OUString toString() const override;
 };
 
-char const * FilePermission::s_actions [] = { "read", "write", "execute", "delete", 0 };
+char const * FilePermission::s_actions [] = { "read", "write", "execute", "delete", nullptr };
 
 static OUString const & getWorkingDir()
 {
-    static OUString * s_workingDir = 0;
+    static OUString * s_workingDir = nullptr;
     if (! s_workingDir)
     {
         OUString workingDir;

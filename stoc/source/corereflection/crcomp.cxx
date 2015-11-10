@@ -96,7 +96,7 @@ void IdlCompFieldImpl::release() throw()
 Sequence< Type > IdlCompFieldImpl::getTypes()
     throw (css::uno::RuntimeException, std::exception)
 {
-    static ::cppu::OTypeCollection * s_pTypes = 0;
+    static ::cppu::OTypeCollection * s_pTypes = nullptr;
     if (! s_pTypes)
     {
         ::osl::MutexGuard aGuard( getMutexAccess() );
@@ -174,7 +174,7 @@ Any IdlCompFieldImpl::get( const Any & rObj )
     if (rObj.getValueTypeClass() == css::uno::TypeClass_STRUCT ||
         rObj.getValueTypeClass() == css::uno::TypeClass_EXCEPTION)
     {
-        typelib_TypeDescription * pObjTD = 0;
+        typelib_TypeDescription * pObjTD = nullptr;
         TYPELIB_DANGER_GET( &pObjTD, rObj.getValueTypeRef() );
 
         typelib_TypeDescription * pTD = pObjTD;
@@ -207,7 +207,7 @@ void IdlCompFieldImpl::set( const Any & rObj, const Any & rValue )
     if (rObj.getValueTypeClass() == css::uno::TypeClass_STRUCT ||
         rObj.getValueTypeClass() == css::uno::TypeClass_EXCEPTION)
     {
-        typelib_TypeDescription * pObjTD = 0;
+        typelib_TypeDescription * pObjTD = nullptr;
         TYPELIB_DANGER_GET( &pObjTD, rObj.getValueTypeRef() );
 
         typelib_TypeDescription * pTD = pObjTD;
@@ -244,7 +244,7 @@ void IdlCompFieldImpl::set( Any & rObj, const Any & rValue )
     if (rObj.getValueTypeClass() == css::uno::TypeClass_STRUCT ||
         rObj.getValueTypeClass() == css::uno::TypeClass_EXCEPTION)
     {
-        typelib_TypeDescription * pObjTD = 0;
+        typelib_TypeDescription * pObjTD = nullptr;
         TYPELIB_DANGER_GET( &pObjTD, rObj.getValueTypeRef() );
 
         typelib_TypeDescription * pTD = pObjTD;
@@ -366,7 +366,7 @@ Sequence< Reference< XIdlField > > CompoundIdlClassImpl::getFields()
 
             for ( sal_Int32 nPos = pCompTypeDescr->nMembers; nPos--; )
             {
-                typelib_TypeDescription * pTD = 0;
+                typelib_TypeDescription * pTD = nullptr;
                 TYPELIB_DANGER_GET( &pTD, ppTypeRefs[nPos] );
                 OSL_ENSURE( pTD, "### cannot get field in struct!" );
                 if (pTD)

@@ -293,7 +293,7 @@ public:
     explicit cc_reset( void * cc )
         : m_cc( cc ) {}
     inline ~cc_reset()
-        { ::uno_setCurrentContext( m_cc, s_envType.pData, 0 ); }
+        { ::uno_setCurrentContext( m_cc, s_envType.pData, nullptr ); }
 };
 
 struct MutexHolder
@@ -377,7 +377,7 @@ AccessController::AccessController( Reference< XComponentContext > const & xComp
     , m_mode( ON ) // default
     , m_defaultPerm_init( false )
     , m_singleUser_init( false )
-    , m_rec( 0 )
+    , m_rec( nullptr )
 {
     // The .../mode value had originally been set in
     // cppu::add_access_control_entries (cppuhelper/source/servicefactory.cxx)
@@ -527,14 +527,14 @@ static void dumpPermissions(
 inline void AccessController::clearPostPoned()
 {
     delete static_cast< t_rec_vec * >( m_rec.getData() );
-    m_rec.setData( 0 );
+    m_rec.setData( nullptr );
 }
 
 void AccessController::checkAndClearPostPoned()
 {
     // check postponed permissions
     std::unique_ptr< t_rec_vec > rec( static_cast< t_rec_vec * >( m_rec.getData() ) );
-    m_rec.setData( 0 ); // takeover ownership
+    m_rec.setData( nullptr ); // takeover ownership
     OSL_ASSERT( rec.get() );
     if (rec.get())
     {
@@ -753,7 +753,7 @@ PermissionCollection AccessController::getEffectivePermissions(
         // don't check postponed, just cleanup
         clearPostPoned();
         delete static_cast< t_rec_vec * >( m_rec.getData() );
-        m_rec.setData( 0 );
+        m_rec.setData( nullptr );
         throw;
     }
     catch (Exception &)
@@ -788,7 +788,7 @@ void AccessController::checkPermission(
 
     // first dynamic check of ac contexts
     Reference< XCurrentContext > xContext;
-    ::uno_getCurrentContext( reinterpret_cast<void **>(&xContext), s_envType.pData, 0 );
+    ::uno_getCurrentContext( reinterpret_cast<void **>(&xContext), s_envType.pData, nullptr );
     Reference< security::XAccessControlContext > xACC( getDynamicRestriction( xContext ) );
     if (xACC.is())
     {
@@ -819,13 +819,13 @@ Any AccessController::doRestricted(
     if (xRestriction.is())
     {
         Reference< XCurrentContext > xContext;
-        ::uno_getCurrentContext( reinterpret_cast<void **>(&xContext), s_envType.pData, 0 );
+        ::uno_getCurrentContext( reinterpret_cast<void **>(&xContext), s_envType.pData, nullptr );
 
         // override restriction
         Reference< XCurrentContext > xNewContext(
             new acc_CurrentContext( xContext, acc_Intersection::create(
                                         xRestriction, getDynamicRestriction( xContext ) ) ) );
-        ::uno_setCurrentContext( xNewContext.get(), s_envType.pData, 0 );
+        ::uno_setCurrentContext( xNewContext.get(), s_envType.pData, nullptr );
         cc_reset reset( xContext.get() );
         return xAction->run();
     }
@@ -852,7 +852,7 @@ Any AccessController::doPrivileged(
     }
 
     Reference< XCurrentContext > xContext;
-    ::uno_getCurrentContext( reinterpret_cast<void **>(&xContext), s_envType.pData, 0 );
+    ::uno_getCurrentContext( reinterpret_cast<void **>(&xContext), s_envType.pData, nullptr );
 
     Reference< security::XAccessControlContext > xOldRestr(
         getDynamicRestriction( xContext ) );
@@ -862,7 +862,7 @@ Any AccessController::doPrivileged(
         // override restriction
         Reference< XCurrentContext > xNewContext(
             new acc_CurrentContext( xContext, acc_Union::create( xRestriction, xOldRestr ) ) );
-        ::uno_setCurrentContext( xNewContext.get(), s_envType.pData, 0 );
+        ::uno_setCurrentContext( xNewContext.get(), s_envType.pData, nullptr );
         cc_reset reset( xContext.get() );
         return xAction->run();
     }
@@ -887,7 +887,7 @@ Reference< security::XAccessControlContext > AccessController::getContext()
     }
 
     Reference< XCurrentContext > xContext;
-    ::uno_getCurrentContext( reinterpret_cast<void **>(&xContext), s_envType.pData, 0 );
+    ::uno_getCurrentContext( reinterpret_cast<void **>(&xContext), s_envType.pData, nullptr );
 
     return acc_Intersection::create(
         getDynamicRestriction( xContext ),

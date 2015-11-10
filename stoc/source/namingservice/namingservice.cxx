@@ -159,9 +159,9 @@ static const struct ImplementationEntry g_entries[] =
     {
         NamingService_Impl_create, ns_getImplementationName,
         ns_getSupportedServiceNames, createSingleComponentFactory,
-        0, 0
+        nullptr, 0
     },
-    { 0, 0, 0, 0, 0, 0 }
+    { nullptr, nullptr, nullptr, nullptr, nullptr, 0 }
 };
 
 extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL namingservice_component_getFactory(

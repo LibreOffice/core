@@ -54,7 +54,7 @@ void ArrayIdlClassImpl::release() throw()
 Sequence< Type > ArrayIdlClassImpl::getTypes()
     throw (css::uno::RuntimeException, std::exception)
 {
-    static ::cppu::OTypeCollection * s_pTypes = 0;
+    static ::cppu::OTypeCollection * s_pTypes = nullptr;
     if (! s_pTypes)
     {
         ::osl::MutexGuard aGuard( getMutexAccess() );
@@ -136,7 +136,7 @@ Any ArrayIdlClassImpl::get( const Any & rArray, sal_Int32 nIndex )
     }
 
     Any aRet;
-    typelib_TypeDescription * pElemTypeDescr = 0;
+    typelib_TypeDescription * pElemTypeDescr = nullptr;
     TYPELIB_DANGER_GET( &pElemTypeDescr, getTypeDescr()->pType );
     uno_any_destruct( &aRet, reinterpret_cast< uno_ReleaseFunc >(cpp_release) );
     uno_any_construct( &aRet, &pSeq->elements[nIndex * pElemTypeDescr->nSize],
@@ -174,7 +174,7 @@ void ArrayIdlClassImpl::set( Any & rArray, sal_Int32 nIndex, const Any & rNewVal
     rArray.pData = ppSeq;
     pSeq = *ppSeq;
 
-    typelib_TypeDescription * pElemTypeDescr = 0;
+    typelib_TypeDescription * pElemTypeDescr = nullptr;
     TYPELIB_DANGER_GET( &pElemTypeDescr, getTypeDescr()->pType );
 
     if (! coerce_assign( &pSeq->elements[nIndex * pElemTypeDescr->nSize],

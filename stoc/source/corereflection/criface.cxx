@@ -108,7 +108,7 @@ void IdlAttributeFieldImpl::release() throw()
 Sequence< Type > IdlAttributeFieldImpl::getTypes()
     throw (css::uno::RuntimeException, std::exception)
 {
-    static ::cppu::OTypeCollection * s_pTypes = 0;
+    static ::cppu::OTypeCollection * s_pTypes = nullptr;
     if (! s_pTypes)
     {
         ::osl::MutexGuard aGuard( getMutexAccess() );
@@ -186,7 +186,7 @@ Any IdlAttributeFieldImpl::get( const Any & rObj )
         uno_Any * pExc = &aExc;
         void * pReturn = alloca( pTD->nSize );
 
-        (*pUnoI->pDispatcher)( pUnoI, getTypeDescr(), pReturn, 0, &pExc );
+        (*pUnoI->pDispatcher)( pUnoI, getTypeDescr(), pReturn, nullptr, &pExc );
         (*pUnoI->release)( pUnoI );
 
         checkException(
@@ -196,7 +196,7 @@ Any IdlAttributeFieldImpl::get( const Any & rObj )
         uno_any_destruct(
             &aRet, reinterpret_cast< uno_ReleaseFunc >(cpp_release) );
         uno_any_constructAndConvert( &aRet, pReturn, pTD, getReflection()->getUno2Cpp().get() );
-        uno_destructData( pReturn, pTD, 0 );
+        uno_destructData( pReturn, pTD, nullptr );
         return aRet;
     }
     throw IllegalArgumentException(
@@ -253,7 +253,7 @@ void IdlAttributeFieldImpl::set( Any & rObj, const Any & rValue )
         }
         else
         {
-            typelib_TypeDescription * pValueTD = 0;
+            typelib_TypeDescription * pValueTD = nullptr;
             TYPELIB_DANGER_GET( &pValueTD, rValue.getValueTypeRef() );
             // construct temp uno val to do proper assignment: todo opt
             void * pTemp = alloca( pValueTD->nSize );
@@ -263,9 +263,9 @@ void IdlAttributeFieldImpl::set( Any & rObj, const Any & rValue )
                 pArg, pTD );
             // assignment does simple conversion
             bAssign = uno_assignData(
-                pArg, pTD, pTemp, pValueTD, 0, 0, 0 );
+                pArg, pTD, pTemp, pValueTD, nullptr, nullptr, nullptr );
             uno_destructData(
-                pTemp, pValueTD, 0 );
+                pTemp, pValueTD, nullptr );
             TYPELIB_DANGER_RELEASE( pValueTD );
         }
 
@@ -273,10 +273,10 @@ void IdlAttributeFieldImpl::set( Any & rObj, const Any & rValue )
         {
             uno_Any aExc;
             uno_Any * pExc = &aExc;
-            (*pUnoI->pDispatcher)( pUnoI, getTypeDescr(), 0, pArgs, &pExc );
+            (*pUnoI->pDispatcher)( pUnoI, getTypeDescr(), nullptr, pArgs, &pExc );
             (*pUnoI->release)( pUnoI );
 
-            uno_destructData( pArg, pTD, 0 );
+            uno_destructData( pArg, pTD, nullptr );
             checkException(
                 pExc,
                 *static_cast< Reference< XInterface > const * >(
@@ -303,13 +303,13 @@ void IdlAttributeFieldImpl::set( const Any & rObj, const Any & rValue )
 void IdlAttributeFieldImpl::checkException(
     uno_Any * exception, Reference< XInterface > const & context)
 {
-    if (exception != 0) {
+    if (exception != nullptr) {
         Any e;
         uno_any_destruct(&e, reinterpret_cast< uno_ReleaseFunc >(cpp_release));
         uno_type_any_constructAndConvert(
             &e, exception->pData, exception->pType,
             getReflection()->getUno2Cpp().get());
-        uno_any_destruct(exception, 0);
+        uno_any_destruct(exception, nullptr);
         if (e.isExtractableTo(
                 cppu::UnoType<RuntimeException>::get()))
         {
@@ -344,9 +344,9 @@ public:
     IdlInterfaceMethodImpl( IdlReflectionServiceImpl * pReflection, const OUString & rName,
                             typelib_TypeDescription * pTypeDescr, typelib_TypeDescription * pDeclTypeDescr )
         : IdlMemberImpl( pReflection, rName, pTypeDescr, pDeclTypeDescr )
-        , _pExceptionTypes( 0 )
-        , _pParamTypes( 0 )
-        , _pParamInfos( 0 )
+        , _pExceptionTypes( nullptr )
+        , _pParamTypes( nullptr )
+        , _pParamInfos( nullptr )
         {}
     virtual ~IdlInterfaceMethodImpl();
 
@@ -402,7 +402,7 @@ void IdlInterfaceMethodImpl::release() throw()
 Sequence< Type > IdlInterfaceMethodImpl::getTypes()
     throw (css::uno::RuntimeException, std::exception)
 {
-    static ::cppu::OTypeCollection * s_pTypes = 0;
+    static ::cppu::OTypeCollection * s_pTypes = nullptr;
     if (! s_pTypes)
     {
         ::osl::MutexGuard aGuard( getMutexAccess() );
@@ -613,7 +613,7 @@ Any SAL_CALL IdlInterfaceMethodImpl::invoke( const Any & rObj, Sequence< Any > &
 
         Any * pCppArgs = rArgs.getArray();
         typelib_MethodParameter * pParams = getMethodTypeDescr()->pParams;
-        typelib_TypeDescription * pReturnType = 0;
+        typelib_TypeDescription * pReturnType = nullptr;
         TYPELIB_DANGER_GET(
             &pReturnType, getMethodTypeDescr()->pReturnTypeRef );
 
@@ -624,7 +624,7 @@ Any SAL_CALL IdlInterfaceMethodImpl::invoke( const Any & rObj, Sequence< Any > &
         // convert arguments
         for ( sal_Int32 nPos = 0; nPos < nParams; ++nPos )
         {
-            ppParamTypes[nPos] = 0;
+            ppParamTypes[nPos] = nullptr;
             TYPELIB_DANGER_GET( ppParamTypes + nPos, pParams[nPos].pTypeRef );
             typelib_TypeDescription * pTD = ppParamTypes[nPos];
 
@@ -661,7 +661,7 @@ Any SAL_CALL IdlInterfaceMethodImpl::invoke( const Any & rObj, Sequence< Any > &
                 }
                 else
                 {
-                    typelib_TypeDescription * pValueTD = 0;
+                    typelib_TypeDescription * pValueTD = nullptr;
                     TYPELIB_DANGER_GET( &pValueTD, pCppArgs[nPos].getValueTypeRef() );
                     // construct temp uno val to do proper assignment: todo opt
                     void * pTemp = alloca( pValueTD->nSize );
@@ -672,9 +672,9 @@ Any SAL_CALL IdlInterfaceMethodImpl::invoke( const Any & rObj, Sequence< Any > &
                         ppUnoArgs[nPos], pTD );
                     // assignment does simple conversion
                     bAssign = uno_assignData(
-                        ppUnoArgs[nPos], pTD, pTemp, pValueTD, 0, 0, 0 );
+                        ppUnoArgs[nPos], pTD, pTemp, pValueTD, nullptr, nullptr, nullptr );
                     uno_destructData(
-                        pTemp, pValueTD, 0 );
+                        pTemp, pValueTD, nullptr );
                     TYPELIB_DANGER_RELEASE( pValueTD );
                 }
 
@@ -688,7 +688,7 @@ Any SAL_CALL IdlInterfaceMethodImpl::invoke( const Any & rObj, Sequence< Any > &
                     while (nPos--)
                     {
                         if (pParams[nPos].bIn)
-                            uno_destructData( ppUnoArgs[nPos], ppParamTypes[nPos], 0 );
+                            uno_destructData( ppUnoArgs[nPos], ppParamTypes[nPos], nullptr );
                         TYPELIB_DANGER_RELEASE( ppParamTypes[nPos] );
                     }
                     TYPELIB_DANGER_RELEASE( pReturnType );
@@ -713,7 +713,7 @@ Any SAL_CALL IdlInterfaceMethodImpl::invoke( const Any & rObj, Sequence< Any > &
             while (nParams--)
             {
                 if (pParams[nParams].bIn)
-                    uno_destructData( ppUnoArgs[nParams], ppParamTypes[nParams], 0 );
+                    uno_destructData( ppUnoArgs[nParams], ppParamTypes[nParams], nullptr );
                 TYPELIB_DANGER_RELEASE( ppParamTypes[nParams] );
             }
             TYPELIB_DANGER_RELEASE( pReturnType );
@@ -727,7 +727,7 @@ Any SAL_CALL IdlInterfaceMethodImpl::invoke( const Any & rObj, Sequence< Any > &
             uno_type_copyAndConvertData(
                 &aExc.TargetException, pUnoExc, cppu::UnoType<Any>::get().getTypeLibType(),
                 getReflection()->getUno2Cpp().get() );
-            uno_any_destruct( pUnoExc, 0 );
+            uno_any_destruct( pUnoExc, nullptr );
             throw aExc;
         }
         else
@@ -744,7 +744,7 @@ Any SAL_CALL IdlInterfaceMethodImpl::invoke( const Any & rObj, Sequence< Any > &
                         &pCppArgs[nParams], ppUnoArgs[nParams], ppParamTypes[nParams],
                         getReflection()->getUno2Cpp().get() );
                 }
-                uno_destructData( ppUnoArgs[nParams], ppParamTypes[nParams], 0 );
+                uno_destructData( ppUnoArgs[nParams], ppParamTypes[nParams], nullptr );
                 TYPELIB_DANGER_RELEASE( ppParamTypes[nParams] );
             }
             uno_any_destruct(
@@ -752,7 +752,7 @@ Any SAL_CALL IdlInterfaceMethodImpl::invoke( const Any & rObj, Sequence< Any > &
             uno_any_constructAndConvert(
                 &aRet, pUnoReturn, pReturnType,
                 getReflection()->getUno2Cpp().get() );
-            uno_destructData( pUnoReturn, pReturnType, 0 );
+            uno_destructData( pUnoReturn, pReturnType, nullptr );
             TYPELIB_DANGER_RELEASE( pReturnType );
         }
         return aRet;
@@ -816,7 +816,7 @@ void InterfaceIdlClassImpl::initMembers()
             // attributes at the back
         }
 
-        typelib_TypeDescription * pTD = 0;
+        typelib_TypeDescription * pTD = nullptr;
         typelib_typedescriptionreference_getDescription( &pTD, ppAllMembers[nPos] );
         assert(pTD && "### cannot get type description!");
         pSortedMemberInit[nIndex].first = reinterpret_cast<typelib_InterfaceMemberTypeDescription *>(pTD)->pMemberName;

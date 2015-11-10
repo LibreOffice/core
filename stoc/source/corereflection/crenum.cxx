@@ -95,7 +95,7 @@ void IdlEnumFieldImpl::release() throw()
 Sequence< Type > IdlEnumFieldImpl::getTypes()
     throw (css::uno::RuntimeException, std::exception)
 {
-    static ::cppu::OTypeCollection * s_pTypes = 0;
+    static ::cppu::OTypeCollection * s_pTypes = nullptr;
     if (! s_pTypes)
     {
         ::osl::MutexGuard aGuard( getMutexAccess() );

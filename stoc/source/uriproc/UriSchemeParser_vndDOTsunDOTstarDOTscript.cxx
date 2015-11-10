@@ -424,7 +424,7 @@ Parser::parse(
     throw (css::uno::RuntimeException, std::exception)
 {
     if (!parseSchemeSpecificPart(schemeSpecificPart)) {
-        return 0;
+        return nullptr;
     }
     return new UrlReference(scheme, schemeSpecificPart);
 }

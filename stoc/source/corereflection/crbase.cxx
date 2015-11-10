@@ -35,7 +35,7 @@ ClassNameList g_aClassNames;
 
 ::osl::Mutex & getMutexAccess()
 {
-    static ::osl::Mutex * s_pMutex = 0;
+    static ::osl::Mutex * s_pMutex = nullptr;
     if (! s_pMutex)
     {
         ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
@@ -149,7 +149,7 @@ void IdlClassImpl::createObject( Any & rObj )
 {
     rObj.clear();
     uno_any_destruct( &rObj, reinterpret_cast< uno_ReleaseFunc >(cpp_release) );
-    uno_any_construct( &rObj, 0, getTypeDescr(), 0 );
+    uno_any_construct( &rObj, nullptr, getTypeDescr(), nullptr );
 }
 
 // what TODO ????

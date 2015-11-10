@@ -97,17 +97,17 @@ UnoInterfaceReference FactoryImpl::binuno_queryInterface(
     typelib_InterfaceTypeDescription * pTypeDescr )
 {
     // init queryInterface() td
-    static typelib_TypeDescription * s_pQITD = 0;
-    if (s_pQITD == 0)
+    static typelib_TypeDescription * s_pQITD = nullptr;
+    if (s_pQITD == nullptr)
     {
         ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-        if (s_pQITD == 0)
+        if (s_pQITD == nullptr)
         {
-            typelib_TypeDescription * pTXInterfaceDescr = 0;
+            typelib_TypeDescription * pTXInterfaceDescr = nullptr;
             TYPELIB_DANGER_GET(
                 &pTXInterfaceDescr,
                 cppu::UnoType<XInterface>::get().getTypeLibType() );
-            typelib_TypeDescription * pQITD = 0;
+            typelib_TypeDescription * pQITD = nullptr;
             typelib_typedescriptionreference_getDescription(
                 &pQITD, reinterpret_cast< typelib_InterfaceTypeDescription * >(
                     pTXInterfaceDescr )->ppAllMembers[ 0 ] );
@@ -129,7 +129,7 @@ UnoInterfaceReference FactoryImpl::binuno_queryInterface(
 
     unoI.dispatch( s_pQITD, &ret_val, args, &exc );
 
-    if (exc == 0)
+    if (exc == nullptr)
     {
         UnoInterfaceReference ret;
         if (ret_val.pType->eTypeClass == typelib_TypeClass_INTERFACE)
@@ -140,7 +140,7 @@ UnoInterfaceReference FactoryImpl::binuno_queryInterface(
         }
         else
         {
-            uno_any_destruct( &ret_val, 0 );
+            uno_any_destruct( &ret_val, nullptr );
         }
         return ret;
     }
@@ -155,7 +155,7 @@ UnoInterfaceReference FactoryImpl::binuno_queryInterface(
         uno_type_copyAndConvertData(
             &cpp_exc, exc, cppu::UnoType<decltype(cpp_exc)>::get().getTypeLibType(),
             m_uno2cpp.get() );
-        uno_any_destruct( exc, 0 );
+        uno_any_destruct( exc, nullptr );
         ::cppu::throwException( cpp_exc );
         OSL_ASSERT( false ); // way of no return
         return UnoInterfaceReference(); // for dummy
@@ -217,7 +217,7 @@ static void SAL_CALL binuno_proxy_acquire( uno_Interface * pUnoI )
         // rebirth of zombie
         uno_ExtEnvironment * uno_env =
             that->m_root->m_factory->m_uno_env.get()->pExtEnv;
-        OSL_ASSERT( uno_env != 0 );
+        OSL_ASSERT( uno_env != nullptr );
         (*uno_env->registerProxyInterface)(
             uno_env, reinterpret_cast< void ** >( &pUnoI ), binuno_proxy_free,
             that->m_oid.pData,
@@ -235,7 +235,7 @@ static void SAL_CALL binuno_proxy_release( uno_Interface * pUnoI )
     {
         uno_ExtEnvironment * uno_env =
             that->m_root->m_factory->m_uno_env.get()->pExtEnv;
-        OSL_ASSERT( uno_env != 0 );
+        OSL_ASSERT( uno_env != nullptr );
         (*uno_env->revokeInterface)( uno_env, pUnoI );
     }
 }
@@ -259,7 +259,7 @@ static void SAL_CALL binuno_proxy_dispatch(
             uno_type_copyAndConvertData(
                 pReturn, &ret, cppu::UnoType<decltype(ret)>::get().getTypeLibType(),
                 that->m_root->m_factory->m_cpp2uno.get() );
-            *ppException = 0; // no exc
+            *ppException = nullptr; // no exc
         }
         catch (RuntimeException &)
         {
@@ -273,11 +273,11 @@ static void SAL_CALL binuno_proxy_dispatch(
     }
     case 1: // acquire()
         binuno_proxy_acquire( pUnoI );
-        *ppException = 0; // no exc
+        *ppException = nullptr; // no exc
         break;
     case 2: // release()
         binuno_proxy_release( pUnoI );
-        *ppException = 0; // no exc
+        *ppException = nullptr; // no exc
         break;
     default:
         that->m_target.dispatch( pMemberType, pReturn, pArgs, ppException );
@@ -327,13 +327,13 @@ Any ProxyRoot::queryAggregation( Type const & rType )
     Any ret( OWeakAggObject::queryAggregation( rType ) );
     if (! ret.hasValue())
     {
-        typelib_TypeDescription * pTypeDescr = 0;
+        typelib_TypeDescription * pTypeDescr = nullptr;
         TYPELIB_DANGER_GET( &pTypeDescr, rType.getTypeLibType() );
         try
         {
             Reference< XInterface > xProxy;
             uno_ExtEnvironment * cpp_env = m_factory->m_cpp_env.get()->pExtEnv;
-            OSL_ASSERT( cpp_env != 0 );
+            OSL_ASSERT( cpp_env != nullptr );
 
             // mind a new delegator, calculate current root:
             Reference< XInterface > xRoot(
@@ -367,7 +367,7 @@ Any ProxyRoot::queryAggregation( Type const & rType )
                         SAL_NO_ACQUIRE );
                     uno_ExtEnvironment * uno_env =
                         m_factory->m_uno_env.get()->pExtEnv;
-                    OSL_ASSERT( uno_env != 0 );
+                    OSL_ASSERT( uno_env != nullptr );
                     (*uno_env->registerProxyInterface)(
                         uno_env, reinterpret_cast< void ** >( &proxy.m_pUnoI ),
                         binuno_proxy_free, oid.pData,
@@ -401,21 +401,21 @@ FactoryImpl::FactoryImpl()
     OUString cpp = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 
     uno_getEnvironment(
-        reinterpret_cast< uno_Environment ** >( &m_uno_env ), uno.pData, 0 );
+        reinterpret_cast< uno_Environment ** >( &m_uno_env ), uno.pData, nullptr );
     OSL_ENSURE( m_uno_env.is(), "### cannot get binary uno env!" );
 
     uno_getEnvironment(
-        reinterpret_cast< uno_Environment ** >( &m_cpp_env ), cpp.pData, 0 );
+        reinterpret_cast< uno_Environment ** >( &m_cpp_env ), cpp.pData, nullptr );
     OSL_ENSURE( m_cpp_env.is(), "### cannot get C++ uno env!" );
 
     uno_getMapping(
         reinterpret_cast< uno_Mapping ** >( &m_uno2cpp ),
-        m_uno_env.get(), m_cpp_env.get(), 0 );
+        m_uno_env.get(), m_cpp_env.get(), nullptr );
     OSL_ENSURE( m_uno2cpp.is(), "### cannot get bridge uno <-> C++!" );
 
     uno_getMapping(
         reinterpret_cast< uno_Mapping ** >( &m_cpp2uno ),
-        m_cpp_env.get(), m_uno_env.get(), 0 );
+        m_cpp_env.get(), m_uno_env.get(), nullptr );
     OSL_ENSURE( m_cpp2uno.is(), "### cannot get bridge C++ <-> uno!" );
 }
 
@@ -476,9 +476,9 @@ static const ::cppu::ImplementationEntry g_entries [] =
     {
         proxyfac_create, proxyfac_getImplementationName,
         proxyfac_getSupportedServiceNames, ::cppu::createSingleComponentFactory,
-        0, 0
+        nullptr, 0
     },
-    { 0, 0, 0, 0, 0, 0 }
+    { nullptr, nullptr, nullptr, nullptr, nullptr, 0 }
 };
 
 }

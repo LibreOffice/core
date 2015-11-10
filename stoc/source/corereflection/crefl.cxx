@@ -100,7 +100,7 @@ void IdlReflectionServiceImpl::release() throw()
 Sequence< Type > IdlReflectionServiceImpl::getTypes()
     throw (css::uno::RuntimeException, std::exception)
 {
-    static OTypeCollection * s_pTypes = 0;
+    static OTypeCollection * s_pTypes = nullptr;
     if (! s_pTypes)
     {
         MutexGuard aGuard( _aComponentMutex );
@@ -236,7 +236,7 @@ Reference< XIdlClass > IdlReflectionServiceImpl::forName( const OUString & rType
     else
     {
         // try to get _type_ by name
-        typelib_TypeDescription * pTD = 0;
+        typelib_TypeDescription * pTD = nullptr;
         typelib_typedescription_getByName( &pTD, rTypeName.pData );
         if (pTD)
         {
@@ -279,7 +279,7 @@ Any IdlReflectionServiceImpl::getByHierarchicalName( const OUString & rName )
                 // so the second retrieving via c typelib callback chain should succeed...
 
                 // try to get _type_ by name
-                typelib_TypeDescription * pTD = 0;
+                typelib_TypeDescription * pTD = nullptr;
                 typelib_typedescription_getByName( &pTD, rName.pData );
 
                 aRet.clear(); // kick XTypeDescription interface
@@ -343,7 +343,7 @@ Reference< XIdlClass > IdlReflectionServiceImpl::forType( typelib_TypeDescriptio
 Reference< XIdlClass > IdlReflectionServiceImpl::forType( typelib_TypeDescriptionReference * pRef )
     throw(css::uno::RuntimeException)
 {
-    typelib_TypeDescription * pTD = 0;
+    typelib_TypeDescription * pTD = nullptr;
     TYPELIB_DANGER_GET( &pTD, pRef );
     if (pTD)
     {
@@ -434,9 +434,9 @@ static const struct ImplementationEntry g_entries[] =
     {
         IdlReflectionServiceImpl_create, core_getImplementationName,
         core_getSupportedServiceNames, createSingleComponentFactory,
-        0, 0
+        nullptr, 0
     },
-    { 0, 0, 0, 0, 0, 0 }
+    { nullptr, nullptr, nullptr, nullptr, nullptr, 0 }
 };
 
 extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL reflection_component_getFactory(

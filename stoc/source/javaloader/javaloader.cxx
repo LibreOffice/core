@@ -130,9 +130,9 @@ const css::uno::Reference<XImplementationLoader> & JavaComponentLoader::getJavaL
     if (m_javaLoader.is())
         return m_javaLoader;
 
-    uno_Environment * pJava_environment = NULL;
-    uno_Environment * pUno_environment = NULL;
-    typelib_InterfaceTypeDescription * pType_XImplementationLoader = 0;
+    uno_Environment * pJava_environment = nullptr;
+    uno_Environment * pUno_environment = nullptr;
+    typelib_InterfaceTypeDescription * pType_XImplementationLoader = nullptr;
 
     try {
         // get a java vm, where we can create a loader
@@ -158,7 +158,7 @@ const css::uno::Reference<XImplementationLoader> & JavaComponentLoader::getJavaL
         static_assert(sizeof (sal_Int64)
                         >= sizeof (jvmaccess::UnoVirtualMachine *), "must be at least the same size");
         sal_Int64 nPointer = reinterpret_cast< sal_Int64 >(
-            static_cast< jvmaccess::UnoVirtualMachine * >(0));
+            static_cast< jvmaccess::UnoVirtualMachine * >(nullptr));
         javaVM_xJavaVM->getJavaVM(processID) >>= nPointer;
         rtl::Reference< jvmaccess::UnoVirtualMachine > xVirtualMachine(
             reinterpret_cast< jvmaccess::UnoVirtualMachine * >(nPointer));
@@ -223,7 +223,7 @@ const css::uno::Reference<XImplementationLoader> & JavaComponentLoader::getJavaL
 
             // why is there no convenient constructor?
             OUString sCppu_current_lb_name(CPPU_CURRENT_LANGUAGE_BINDING_NAME);
-            uno_getEnvironment(&pUno_environment, sCppu_current_lb_name.pData, NULL);
+            uno_getEnvironment(&pUno_environment, sCppu_current_lb_name.pData, nullptr);
             if(!pUno_environment)
                 throw RuntimeException(
                     "javaloader error - no C++ environment available");
@@ -235,11 +235,11 @@ const css::uno::Reference<XImplementationLoader> & JavaComponentLoader::getJavaL
 
             // release java environment
             pJava_environment->release(pJava_environment);
-            pJava_environment = NULL;
+            pJava_environment = nullptr;
 
             // release uno environment
             pUno_environment->release(pUno_environment);
-            pUno_environment = NULL;
+            pUno_environment = nullptr;
 
             cppu::UnoType<XImplementationLoader>::get().
                 getDescription(reinterpret_cast<typelib_TypeDescription **>(&pType_XImplementationLoader));
@@ -254,7 +254,7 @@ const css::uno::Reference<XImplementationLoader> & JavaComponentLoader::getJavaL
                     "javaloader error - mapping of java XImplementationLoader to c++ failed");
 
             typelib_typedescription_release(reinterpret_cast<typelib_TypeDescription *>(pType_XImplementationLoader));
-            pType_XImplementationLoader = NULL;
+            pType_XImplementationLoader = nullptr;
         }
         catch (jvmaccess::VirtualMachine::AttachGuard::CreationException &)
         {
@@ -349,7 +349,7 @@ css::uno::Reference<XInterface> SAL_CALL JavaComponentLoader::activate(
 
 static Mutex & getInitMutex()
 {
-    static Mutex * pMutex = 0;
+    static Mutex * pMutex = nullptr;
     if( ! pMutex )
     {
         MutexGuard guard( Mutex::getGlobalMutex() );
@@ -401,9 +401,9 @@ static const struct ImplementationEntry g_entries[] =
     {
         JavaComponentLoader_CreateInstance, loader_getImplementationName,
         loader_getSupportedServiceNames, createSingleComponentFactory,
-        0 , 0
+        nullptr , 0
     },
-    { 0, 0, 0, 0, 0, 0 }
+    { nullptr, nullptr, nullptr, nullptr, nullptr, 0 }
 };
 
 extern "C"

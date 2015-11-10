@@ -206,7 +206,7 @@ public:
                            const OUString & rName, typelib_TypeClass eTypeClass,
                            typelib_TypeDescription * pTypeDescr )
         : IdlClassImpl( pReflection, rName, eTypeClass, pTypeDescr )
-        , _pSortedMemberInit( 0 )
+        , _pSortedMemberInit( nullptr )
         , _nMethods( 0 )
         , _nAttributes( 0 )
         {}
@@ -241,7 +241,7 @@ public:
                           const OUString & rName, typelib_TypeClass eTypeClass,
                           typelib_TypeDescription * pTypeDescr )
         : IdlClassImpl( pReflection, rName, eTypeClass, pTypeDescr )
-        , _pFields( 0 )
+        , _pFields( nullptr )
         {}
     virtual ~CompoundIdlClassImpl();
 
@@ -304,7 +304,7 @@ public:
                       const OUString & rName, typelib_TypeClass eTypeClass,
                       typelib_TypeDescription * pTypeDescr )
         : IdlClassImpl( pReflection, rName, eTypeClass, pTypeDescr )
-        , _pFields( 0 )
+        , _pFields( nullptr )
         {}
     virtual ~EnumIdlClassImpl();
 
@@ -354,7 +354,7 @@ inline bool extract(
     IdlReflectionServiceImpl * pRefl )
 {
     rDest.clear();
-    if (0 != pTo)
+    if (nullptr != pTo)
     {
         if (! rObj.hasValue())
             return true;

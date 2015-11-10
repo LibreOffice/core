@@ -218,7 +218,7 @@ css::uno::Reference< css::uri::XUriReference > parseGeneric(
     } else {
         if (schemeSpecificPart.isEmpty()) {
             // The scheme-specific part of an opaque URI must not be empty:
-            return 0;
+            return nullptr;
         }
         path = schemeSpecificPart;
     }
@@ -404,7 +404,7 @@ css::uno::Reference< css::uri::XUriReference > Factory::makeAbsolute(
 {
     if (!baseUriReference.is() || !baseUriReference->isAbsolute()
         || !baseUriReference->isHierarchical() || !uriReference.is()) {
-        return 0;
+        return nullptr;
     } else if (uriReference->isAbsolute()) {
         return clone(uriReference);
     } else if (!uriReference->hasAuthority()
@@ -473,7 +473,7 @@ css::uno::Reference< css::uri::XUriReference > Factory::makeAbsolute(
                 } else {
                     switch (excessParentSegments) {
                     case css::uri::RelativeUriExcessParentSegments_ERROR:
-                        return 0;
+                        return nullptr;
 
                     case css::uri::RelativeUriExcessParentSegments_RETAIN:
                         if (!slash) {
@@ -520,7 +520,7 @@ css::uno::Reference< css::uri::XUriReference > Factory::makeRelative(
 {
     if (!baseUriReference.is() || !baseUriReference->isAbsolute()
         || !baseUriReference->isHierarchical() || !uriReference.is()) {
-        return 0;
+        return nullptr;
     } else if (!uriReference->isAbsolute() || !uriReference->isHierarchical()
                || !baseUriReference->getScheme().equalsIgnoreAsciiCase(
                    uriReference->getScheme())) {
