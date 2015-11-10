@@ -140,7 +140,7 @@ Reference< provider::XScriptProvider >
         OUStringBuffer buf;
         buf.append( "Failed to create MasterScriptProvider for ScriptInvocationContext: " );
         buf.append( "Component supporting XEmbeddScripts interface not found." );
-        throw lang::IllegalArgumentException( buf.makeStringAndClear(), NULL, 1 );
+        throw lang::IllegalArgumentException( buf.makeStringAndClear(), nullptr, 1 );
     }
 
     ::osl::MutexGuard guard( m_mutex );
@@ -179,7 +179,7 @@ Reference< provider::XScriptProvider >
                 buf.append( "Failed to create MasterScriptProvider for '" );
                 buf.append     ( context );
                 buf.append( "': Either XEmbeddScripts or XScriptInvocationContext need to be supported by the document." );
-                throw lang::IllegalArgumentException( buf.makeStringAndClear(), NULL, 1 );
+                throw lang::IllegalArgumentException( buf.makeStringAndClear(), nullptr, 1 );
             }
 
             ::osl::MutexGuard guard( m_mutex );

@@ -185,7 +185,7 @@ public:
     explicit LocationBrowseNode( const Reference< browse::XBrowseNode >& node )
     {
         m_sNodeName = node->getName();
-        m_hBNA = NULL;
+        m_hBNA = nullptr;
         m_origNode.set( node );
     }
 
@@ -211,7 +211,7 @@ public:
     getChildNodes()
         throw ( RuntimeException, std::exception ) override
     {
-        if ( m_hBNA == NULL )
+        if ( m_hBNA == nullptr )
         {
             loadChildNodes();
         }

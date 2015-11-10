@@ -76,7 +76,7 @@ namespace basprov
 
     static Sequence< OUString > getSupportedServiceNames_BasicProviderImpl()
     {
-        static Sequence< OUString >* pNames = 0;
+        static Sequence< OUString >* pNames = nullptr;
         if ( !pNames )
         {
             ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
@@ -98,10 +98,10 @@ namespace basprov
 
 
     BasicProviderImpl::BasicProviderImpl( const Reference< XComponentContext >& xContext )
-        :m_pAppBasicManager( 0 )
-        ,m_pDocBasicManager( 0 )
-        ,m_xLibContainerApp( 0 )
-        ,m_xLibContainerDoc( 0 )
+        :m_pAppBasicManager( nullptr )
+        ,m_pDocBasicManager( nullptr )
+        ,m_xLibContainerApp( nullptr )
+        ,m_xLibContainerDoc( nullptr )
         ,m_xContext( xContext )
         ,m_bIsAppScriptCtx( true )
         ,m_bIsUserCtx(true)
@@ -315,7 +315,7 @@ namespace basprov
         // In some strange circumstances the Library name can have an
         // apparently illegal '.' in it ( in imported VBA )
 
-        BasicManager* pBasicMgr =  NULL;
+        BasicManager* pBasicMgr =  nullptr;
         if ( aLocation == "document" )
         {
             pBasicMgr = m_pDocBasicManager;
@@ -417,7 +417,7 @@ namespace basprov
         SolarMutexGuard aGuard;
 
         Reference< script::XLibraryContainer > xLibContainer;
-        BasicManager* pBasicManager = NULL;
+        BasicManager* pBasicManager = nullptr;
 
         if ( m_bIsAppScriptCtx )
         {
@@ -516,9 +516,9 @@ namespace basprov
         {
             create_BasicProviderImpl, getImplementationName_BasicProviderImpl,
             getSupportedServiceNames_BasicProviderImpl, ::cppu::createSingleComponentFactory,
-            0, 0
+            nullptr, 0
         },
-        { 0, 0, 0, 0, 0, 0 }
+        { nullptr, nullptr, nullptr, nullptr, nullptr, 0 }
     };
 
 

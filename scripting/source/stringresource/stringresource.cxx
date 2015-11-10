@@ -59,7 +59,7 @@ namespace stringresource
 
 ::osl::Mutex& getMutex()
 {
-    static ::osl::Mutex* s_pMutex = 0;
+    static ::osl::Mutex* s_pMutex = nullptr;
     if ( !s_pMutex )
     {
         ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
@@ -101,8 +101,8 @@ static Reference< XInterface > SAL_CALL create_StringResourceImpl(
 
 StringResourceImpl::StringResourceImpl( const Reference< XComponentContext >& rxContext )
     : m_xContext( rxContext )
-    , m_pCurrentLocaleItem( NULL )
-    , m_pDefaultLocaleItem( NULL )
+    , m_pCurrentLocaleItem( nullptr )
+    , m_pDefaultLocaleItem( nullptr )
     , m_bDefaultModified( false )
     , m_aListenerContainer( getMutex() )
     , m_bModified( false )
@@ -181,7 +181,7 @@ OUString StringResourceImpl::implResolveString
 {
     OUString aRetStr;
     bool bSuccess = false;
-    if( pLocaleItem != NULL && loadLocale( pLocaleItem ) )
+    if( pLocaleItem != nullptr && loadLocale( pLocaleItem ) )
     {
         IdToStringMap::iterator it = pLocaleItem->m_aIdToStringMap.find( ResourceID );
         if( !( it == pLocaleItem->m_aIdToStringMap.end() ) )
@@ -217,7 +217,7 @@ OUString StringResourceImpl::resolveStringForLocale( const OUString& ResourceID,
 bool StringResourceImpl::implHasEntryForId( const OUString& ResourceID, LocaleItem* pLocaleItem )
 {
     bool bSuccess = false;
-    if( pLocaleItem != NULL && loadLocale( pLocaleItem ) )
+    if( pLocaleItem != nullptr && loadLocale( pLocaleItem ) )
     {
         IdToStringMap::iterator it = pLocaleItem->m_aIdToStringMap.find( ResourceID );
         if( !( it == pLocaleItem->m_aIdToStringMap.end() ) )
@@ -285,7 +285,7 @@ Locale StringResourceImpl::getCurrentLocale()
     ::osl::MutexGuard aGuard( getMutex() );
 
     Locale aRetLocale;
-    if( m_pCurrentLocaleItem != NULL )
+    if( m_pCurrentLocaleItem != nullptr )
         aRetLocale = m_pCurrentLocaleItem->m_locale;
     return aRetLocale;
 }
@@ -296,7 +296,7 @@ Locale StringResourceImpl::getDefaultLocale(  )
     ::osl::MutexGuard aGuard( getMutex() );
 
     Locale aRetLocale;
-    if( m_pDefaultLocaleItem != NULL )
+    if( m_pDefaultLocaleItem != nullptr )
         aRetLocale = m_pDefaultLocaleItem->m_locale;
     return aRetLocale;
 }
@@ -345,16 +345,16 @@ void StringResourceImpl::implSetCurrentLocale( const Locale& locale,
 {
     ::osl::MutexGuard aGuard( getMutex() );
 
-    LocaleItem* pLocaleItem = NULL;
+    LocaleItem* pLocaleItem = nullptr;
     if( FindClosestMatch )
         pLocaleItem = getClosestMatchItemForLocale( locale );
     else
         pLocaleItem = getItemForLocale( locale, true );
 
-    if( pLocaleItem == NULL && bUseDefaultIfNoMatch )
+    if( pLocaleItem == nullptr && bUseDefaultIfNoMatch )
         pLocaleItem = m_pDefaultLocaleItem;
 
-    if( pLocaleItem != NULL )
+    if( pLocaleItem != nullptr )
     {
         (void)loadLocale( pLocaleItem );
         m_pCurrentLocaleItem = pLocaleItem;
@@ -395,7 +395,7 @@ void StringResourceImpl::setDefaultLocale( const Locale& locale )
 void StringResourceImpl::implSetString( const OUString& ResourceID,
     const OUString& Str, LocaleItem* pLocaleItem )
 {
-    if( pLocaleItem != NULL && loadLocale( pLocaleItem ) )
+    if( pLocaleItem != nullptr && loadLocale( pLocaleItem ) )
     {
         IdToStringMap& rHashMap = pLocaleItem->m_aIdToStringMap;
 
@@ -434,7 +434,7 @@ void StringResourceImpl::setStringForLocale
 void StringResourceImpl::implRemoveId( const OUString& ResourceID, LocaleItem* pLocaleItem )
     throw (css::resource::MissingResourceException)
 {
-    if( pLocaleItem != NULL && loadLocale( pLocaleItem ) )
+    if( pLocaleItem != nullptr && loadLocale( pLocaleItem ) )
     {
         IdToStringMap& rHashMap = pLocaleItem->m_aIdToStringMap;
         IdToStringMap::iterator it = rHashMap.find( ResourceID );
@@ -473,7 +473,7 @@ void StringResourceImpl::newLocale( const Locale& locale )
     ::osl::MutexGuard aGuard( getMutex() );
     implCheckReadOnly( "StringResourceImpl::newLocale(): Read only" );
 
-    if( getItemForLocale( locale, false ) != NULL )
+    if( getItemForLocale( locale, false ) != nullptr )
     {
         OUString errorMsg("StringResourceImpl: locale already exists");
         throw ElementExistException( errorMsg );
@@ -492,9 +492,9 @@ void StringResourceImpl::newLocale( const Locale& locale )
 
     // Copy strings from default locale
     LocaleItem* pCopyFromItem = m_pDefaultLocaleItem;
-    if( pCopyFromItem == NULL )
+    if( pCopyFromItem == nullptr )
         pCopyFromItem = m_pCurrentLocaleItem;
-    if( pCopyFromItem != NULL && loadLocale( pCopyFromItem ) )
+    if( pCopyFromItem != nullptr && loadLocale( pCopyFromItem ) )
     {
         const IdToStringMap& rSourceMap = pCopyFromItem->m_aIdToStringMap;
         IdToStringMap& rTargetMap = pLocaleItem->m_aIdToStringMap;
@@ -518,10 +518,10 @@ void StringResourceImpl::newLocale( const Locale& locale )
         pLocaleItem->m_nNextIndex = pCopyFromItem->m_nNextIndex;
     }
 
-    if( m_pCurrentLocaleItem == NULL )
+    if( m_pCurrentLocaleItem == nullptr )
         m_pCurrentLocaleItem = pLocaleItem;
 
-    if( m_pDefaultLocaleItem == NULL )
+    if( m_pDefaultLocaleItem == nullptr )
     {
         m_pDefaultLocaleItem = pLocaleItem;
         m_bDefaultModified = true;
@@ -546,7 +546,7 @@ void StringResourceImpl::removeLocale( const Locale& locale )
             if( m_pCurrentLocaleItem == pRemoveItem ||
                 m_pDefaultLocaleItem  == pRemoveItem )
             {
-                LocaleItem* pFallbackItem = NULL;
+                LocaleItem* pFallbackItem = nullptr;
                 for( LocaleItemVectorIt it = m_aLocaleItemVector.begin(); it != m_aLocaleItemVector.end(); ++it )
                 {
                     LocaleItem* pLocaleItem = *it;
@@ -584,8 +584,8 @@ void StringResourceImpl::removeLocale( const Locale& locale )
                         LocaleItem* pChangedDefaultLocaleItem = new LocaleItem( m_pDefaultLocaleItem->m_locale );
                         m_aChangedDefaultLocaleVector.push_back( pChangedDefaultLocaleItem );
                     }
-                    m_pCurrentLocaleItem = NULL;
-                    m_pDefaultLocaleItem = NULL;
+                    m_pCurrentLocaleItem = nullptr;
+                    m_pDefaultLocaleItem = nullptr;
                 }
 
                 m_aLocaleItemVector.erase( it );
@@ -644,7 +644,7 @@ LocaleItem* StringResourceImpl::getItemForLocale
     ( const Locale& locale, bool bException )
         throw (css::lang::IllegalArgumentException)
 {
-    LocaleItem* pRetItem = NULL;
+    LocaleItem* pRetItem = nullptr;
 
     // Search for locale
     for( LocaleItemVectorConstIt it = m_aLocaleItemVector.begin(); it != m_aLocaleItemVector.end(); ++it )
@@ -663,7 +663,7 @@ LocaleItem* StringResourceImpl::getItemForLocale
         }
     }
 
-    if( pRetItem == NULL && bException )
+    if( pRetItem == nullptr && bException )
     {
         OUString errorMsg("StringResourceImpl: Invalid locale");
         throw IllegalArgumentException( errorMsg, Reference< XInterface >(), 0 );
@@ -675,7 +675,7 @@ LocaleItem* StringResourceImpl::getItemForLocale
 // This method performs a closest match search, at least the language must match.
 LocaleItem* StringResourceImpl::getClosestMatchItemForLocale( const Locale& locale )
 {
-    LocaleItem* pRetItem = NULL;
+    LocaleItem* pRetItem = nullptr;
 
     ::std::vector< Locale > aLocales( m_aLocaleItemVector.size());
     size_t i = 0;
@@ -1008,7 +1008,7 @@ void StringResourcePersistenceImpl::implStoreAtStorage
         {
             LocaleItemVectorIt it = m_aDeletedLocaleItemVector.begin();
             LocaleItem* pLocaleItem = *it;
-            if( pLocaleItem != NULL )
+            if( pLocaleItem != nullptr )
             {
                 OUString aStreamName = implGetFileNameForLocaleItem( pLocaleItem, m_aNameBase );
                 aStreamName += ".properties";
@@ -1029,7 +1029,7 @@ void StringResourcePersistenceImpl::implStoreAtStorage
     for( LocaleItemVectorConstIt it = m_aLocaleItemVector.begin(); it != m_aLocaleItemVector.end(); ++it )
     {
         LocaleItem* pLocaleItem = *it;
-        if( pLocaleItem != NULL && (bStoreAll || pLocaleItem->m_bModified) &&
+        if( pLocaleItem != nullptr && (bStoreAll || pLocaleItem->m_bModified) &&
             loadLocale( pLocaleItem ) )
         {
             OUString aStreamName = implGetFileNameForLocaleItem( pLocaleItem, aNameBase );
@@ -1068,7 +1068,7 @@ void StringResourcePersistenceImpl::implStoreAtStorage
              it != m_aChangedDefaultLocaleVector.end(); ++it )
         {
             LocaleItem* pLocaleItem = *it;
-            if( pLocaleItem != NULL )
+            if( pLocaleItem != nullptr )
             {
                 OUString aStreamName = implGetFileNameForLocaleItem( pLocaleItem, m_aNameBase );
                 aStreamName += ".default";
@@ -1087,7 +1087,7 @@ void StringResourcePersistenceImpl::implStoreAtStorage
     }
 
     // Default locale
-    if( m_pDefaultLocaleItem != NULL && (bStoreAll || m_bDefaultModified) )
+    if( m_pDefaultLocaleItem != nullptr && (bStoreAll || m_bDefaultModified) )
     {
         OUString aStreamName = implGetFileNameForLocaleItem( m_pDefaultLocaleItem, aNameBase );
         aStreamName += ".default";
@@ -1134,7 +1134,7 @@ void StringResourcePersistenceImpl::implKillRemovedLocaleFiles
     {
         LocaleItemVectorIt it = m_aDeletedLocaleItemVector.begin();
         LocaleItem* pLocaleItem = *it;
-        if( pLocaleItem != NULL )
+        if( pLocaleItem != nullptr )
         {
             OUString aCompleteFileName =
                 implGetPathForLocaleItem( pLocaleItem, aNameBase, Location );
@@ -1160,7 +1160,7 @@ void StringResourcePersistenceImpl::implKillChangedDefaultFiles
          it != m_aChangedDefaultLocaleVector.end(); ++it )
     {
         LocaleItem* pLocaleItem = *it;
-        if( pLocaleItem != NULL )
+        if( pLocaleItem != nullptr )
         {
             OUString aCompleteFileName =
                 implGetPathForLocaleItem( pLocaleItem, aNameBase, Location, true );
@@ -1192,7 +1192,7 @@ void StringResourcePersistenceImpl::implStoreAtLocation
     for( LocaleItemVectorConstIt it = m_aLocaleItemVector.begin(); it != m_aLocaleItemVector.end(); ++it )
     {
         LocaleItem* pLocaleItem = *it;
-        if( pLocaleItem != NULL && (bStoreAll || bKillAll || pLocaleItem->m_bModified) &&
+        if( pLocaleItem != nullptr && (bStoreAll || bKillAll || pLocaleItem->m_bModified) &&
             loadLocale( pLocaleItem ) )
         {
             OUString aCompleteFileName =
@@ -1220,7 +1220,7 @@ void StringResourcePersistenceImpl::implStoreAtLocation
         implKillChangedDefaultFiles( Location, aNameBase, xFileAccess );
 
     // Default locale
-    if( m_pDefaultLocaleItem != NULL && (bStoreAll || bKillAll || m_bDefaultModified) )
+    if( m_pDefaultLocaleItem != nullptr && (bStoreAll || bKillAll || m_bDefaultModified) )
     {
         OUString aCompleteFileName =
             implGetPathForLocaleItem( m_pDefaultLocaleItem, aNameBase, Location, true );
@@ -1393,7 +1393,7 @@ Sequence< sal_Int8 > StringResourcePersistenceImpl::exportBinary(  )
          it != m_aLocaleItemVector.end(); ++it,++iLocale )
     {
         LocaleItem* pLocaleItem = *it;
-        if( pLocaleItem != NULL && loadLocale( pLocaleItem ) )
+        if( pLocaleItem != nullptr && loadLocale( pLocaleItem ) )
         {
             if( m_pDefaultLocaleItem == pLocaleItem )
                 iDefault = iLocale;
@@ -1622,7 +1622,7 @@ void StringResourcePersistenceImpl::importBinary( const Sequence< ::sal_Int8 >& 
         pPositions[i] = aIn.readInt32();
 
     // Import locales
-    LocaleItem* pUseAsDefaultItem = NULL;
+    LocaleItem* pUseAsDefaultItem = nullptr;
     for( sal_Int32 i = 0; i < nLocaleCount; i++ )
     {
         sal_Int32 nPos = pPositions[i];
@@ -1646,7 +1646,7 @@ void StringResourcePersistenceImpl::importBinary( const Sequence< ::sal_Int8 >& 
         }
     }
 
-    if( pUseAsDefaultItem != NULL )
+    if( pUseAsDefaultItem != nullptr )
         setDefaultLocale( pUseAsDefaultItem->m_locale );
 
     delete[] pPositions;
@@ -1702,7 +1702,7 @@ void StringResourcePersistenceImpl::implLoadAllLocales()
     for( LocaleItemVectorIt it = m_aLocaleItemVector.begin(); it != m_aLocaleItemVector.end(); ++it )
     {
         LocaleItem* pLocaleItem = *it;
-        if( pLocaleItem != NULL )
+        if( pLocaleItem != nullptr )
             loadLocale( pLocaleItem );
     }
 }
@@ -1739,10 +1739,10 @@ void StringResourcePersistenceImpl::implScanLocaleNames( const Sequence< OUStrin
                 LocaleItem* pLocaleItem = new LocaleItem( aLocale, false );
                 m_aLocaleItemVector.push_back( pLocaleItem );
 
-                if( m_pCurrentLocaleItem == NULL )
+                if( m_pCurrentLocaleItem == nullptr )
                     m_pCurrentLocaleItem = pLocaleItem;
 
-                if( m_pDefaultLocaleItem == NULL )
+                if( m_pDefaultLocaleItem == nullptr )
                 {
                     m_pDefaultLocaleItem = pLocaleItem;
                     m_bDefaultModified = true;
@@ -1974,7 +1974,7 @@ void CheckContinueInNextLine( Reference< io::XTextInputStream2 > xTextInputStrea
 bool StringResourcePersistenceImpl::implReadPropertiesFile
     ( LocaleItem* pLocaleItem, const Reference< io::XInputStream >& xInputStream )
 {
-    if( !xInputStream.is() || pLocaleItem == NULL )
+    if( !xInputStream.is() || pLocaleItem == nullptr )
         return false;
 
     Reference< io::XTextInputStream2 > xTextInputStream = io::TextInputStream::create( m_xContext );
@@ -2183,7 +2183,7 @@ bool StringResourcePersistenceImpl::implWritePropertiesFile( LocaleItem* pLocale
     static const char aAssignmentStr[] = "=";
     static const char aLineFeedStr[] = "\n";
 
-    if( !xOutputStream.is() || pLocaleItem == NULL )
+    if( !xOutputStream.is() || pLocaleItem == nullptr )
         return false;
 
     bool bSuccess = false;
@@ -2221,7 +2221,7 @@ bool StringResourcePersistenceImpl::implWritePropertiesFile( LocaleItem* pLocale
         // Create sorted array of pointers to the id strings
         const OUString** pIdPtrs = new const OUString*[nTabSize];
         for(sal_Int32 i = 0 ; i < nTabSize ; i++ )
-            pIdPtrs[i] = NULL;
+            pIdPtrs[i] = nullptr;
         for( it_index = rIndexMap.begin(); it_index != rIndexMap.end(); ++it_index )
         {
             sal_Int32 nIndex = (*it_index).second;
@@ -2232,7 +2232,7 @@ bool StringResourcePersistenceImpl::implWritePropertiesFile( LocaleItem* pLocale
         for(sal_Int32 i = 0 ; i < nTabSize ; i++ )
         {
             const OUString* pStr = pIdPtrs[i];
-            if( pStr != NULL )
+            if( pStr != nullptr )
             {
                 OUString aResourceID = *pStr;
                 IdToStringMap::const_iterator it = rHashMap.find( aResourceID );
@@ -2957,21 +2957,21 @@ static const struct ::cppu::ImplementationEntry s_component_entries [] =
         create_StringResourceImpl, getImplementationName_StringResourceImpl,
         getSupportedServiceNames_StringResourceImpl,
         ::cppu::createSingleComponentFactory,
-        0, 0
+        nullptr, 0
     },
     {
         create_StringResourceWithLocationImpl, getImplementationName_StringResourceWithLocationImpl,
         getSupportedServiceNames_StringResourceWithLocationImpl,
         ::cppu::createSingleComponentFactory,
-        0, 0
+        nullptr, 0
     },
     {
         create_StringResourceWithStorageImpl, getImplementationName_StringResourceWithStorageImpl,
         getSupportedServiceNames_StringResourceWithStorageImpl,
         ::cppu::createSingleComponentFactory,
-        0, 0
+        nullptr, 0
     },
-    { 0, 0, 0, 0, 0, 0 }
+    { nullptr, nullptr, nullptr, nullptr, nullptr, 0 }
 };
 
 

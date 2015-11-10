@@ -271,10 +271,10 @@ void SAL_CALL ScriptProtocolHandler::dispatchWithNotification(
     {
         SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
 
-        if ( pFact != NULL )
+        if ( pFact != nullptr )
         {
             std::unique_ptr<VclAbstractDialog> pDlg(
-                pFact->CreateScriptErrorDialog( NULL, aException ));
+                pFact->CreateScriptErrorDialog( nullptr, aException ));
 
             if ( pDlg )
                 pDlg->Execute();
@@ -356,7 +356,7 @@ ScriptProtocolHandler::getScriptInvocation()
             Reference< XFrame > xFrame( m_xFrame.get(), UNO_QUERY );
             if ( xFrame.is() )
             {
-                SfxFrame* pFrame = NULL;
+                SfxFrame* pFrame = nullptr;
                 for ( pFrame = SfxFrame::GetFirst(); pFrame; pFrame = SfxFrame::GetNext( *pFrame ) )
                 {
                     if ( pFrame->GetFrameInterface() == xFrame )
@@ -513,11 +513,11 @@ extern "C"
         (void)pRegistryKey;
 
         // Set default return value for this operation - if it failed.
-        void * pReturn = NULL ;
+        void * pReturn = nullptr ;
 
         if (
-            ( pImplementationName != NULL ) &&
-            ( pServiceManager != NULL )
+            ( pImplementationName != nullptr ) &&
+            ( pServiceManager != nullptr )
         )
         {
             // Define variables which are used in following macros.

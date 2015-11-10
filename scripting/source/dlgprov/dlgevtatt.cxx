@@ -427,7 +427,7 @@ namespace dlgprov
     {
         //::osl::MutexGuard aGuard( getMutex() );
 
-        firing_impl( Event, NULL );
+        firing_impl( Event, nullptr );
     }
 
 
@@ -667,7 +667,7 @@ namespace dlgprov
     {
         //::osl::MutexGuard aGuard( getMutex() );
 
-        firing_impl( aScriptEvent, NULL );
+        firing_impl( aScriptEvent, nullptr );
     }
 
 

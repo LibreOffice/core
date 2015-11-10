@@ -227,49 +227,49 @@ TypeList listBoxList = {&typeXListBox, 1};
 //this array stores the OO event to VBA event translation info
 static TranslatePropMap aTranslatePropMap_Impl[] =
 {
-    { OUString("actionPerformed"), { OUString("_Change"), NULL, DenyType, static_cast<void*>(&radioButtonList) } },
+    { OUString("actionPerformed"), { OUString("_Change"), nullptr, DenyType, static_cast<void*>(&radioButtonList) } },
     // actionPerformed ooo event
-    { OUString("actionPerformed"), { OUString("_Click"), NULL, ApproveAll, NULL } },
-    { OUString("itemStateChanged"), { OUString("_Change"), NULL, ApproveType, static_cast<void*>(&radioButtonList) } },
+    { OUString("actionPerformed"), { OUString("_Click"), nullptr, ApproveAll, nullptr } },
+    { OUString("itemStateChanged"), { OUString("_Change"), nullptr, ApproveType, static_cast<void*>(&radioButtonList) } },
     // itemStateChanged ooo event
-    { OUString("itemStateChanged"), { OUString("_Click"), NULL, ApproveType, static_cast<void*>(&comboBoxList) } },
+    { OUString("itemStateChanged"), { OUString("_Click"), nullptr, ApproveType, static_cast<void*>(&comboBoxList) } },
 
-    { OUString("itemStateChanged"), { OUString("_Click"), NULL, ApproveType, static_cast<void*>(&listBoxList) } },
+    { OUString("itemStateChanged"), { OUString("_Click"), nullptr, ApproveType, static_cast<void*>(&listBoxList) } },
     // changed ooo event
-    { OUString("changed"), { OUString("_Change"), NULL, ApproveAll, NULL } },
+    { OUString("changed"), { OUString("_Change"), nullptr, ApproveAll, nullptr } },
 
     // focusGained ooo event
-    { OUString("focusGained"), { OUString("_GotFocus"), NULL, ApproveAll, NULL } },
+    { OUString("focusGained"), { OUString("_GotFocus"), nullptr, ApproveAll, nullptr } },
 
     // focusLost ooo event
-    { OUString("focusLost"), { OUString("_LostFocus"), NULL, ApproveAll, NULL } },
-    { OUString("focusLost"), { OUString("_Exit"), NULL, ApproveType, static_cast<void*>(&textCompList) } }, // support VBA TextBox_Exit event
+    { OUString("focusLost"), { OUString("_LostFocus"), nullptr, ApproveAll, nullptr } },
+    { OUString("focusLost"), { OUString("_Exit"), nullptr, ApproveType, static_cast<void*>(&textCompList) } }, // support VBA TextBox_Exit event
 
     // adjustmentValueChanged ooo event
-    { OUString("adjustmentValueChanged"), { OUString("_Scroll"), NULL, ApproveAll, NULL } },
-    { OUString("adjustmentValueChanged"), { OUString("_Change"), NULL, ApproveAll, NULL } },
+    { OUString("adjustmentValueChanged"), { OUString("_Scroll"), nullptr, ApproveAll, nullptr } },
+    { OUString("adjustmentValueChanged"), { OUString("_Change"), nullptr, ApproveAll, nullptr } },
 
     // textChanged ooo event
-    { OUString("textChanged"), { OUString("_Change"), NULL, ApproveAll, NULL } },
+    { OUString("textChanged"), { OUString("_Change"), nullptr, ApproveAll, nullptr } },
 
     // keyReleased ooo event
-    { OUString("keyReleased"), { OUString("_KeyUp"), ooKeyPressedToVBAKeyUpDown, ApproveAll, NULL } },
+    { OUString("keyReleased"), { OUString("_KeyUp"), ooKeyPressedToVBAKeyUpDown, ApproveAll, nullptr } },
 
     // mouseReleased ooo event
     { OUString("mouseReleased"), { OUString("_Click"), ooMouseEvtToVBAMouseEvt, ApproveType, static_cast<void*>(&fixedTextList) } },
-    { OUString("mouseReleased"), { OUString("_MouseUp"), ooMouseEvtToVBAMouseEvt, ApproveAll, NULL } },
+    { OUString("mouseReleased"), { OUString("_MouseUp"), ooMouseEvtToVBAMouseEvt, ApproveAll, nullptr } },
 
     // mousePressed ooo event
-    { OUString("mousePressed"), { OUString("_MouseDown"), ooMouseEvtToVBAMouseEvt, ApproveAll, NULL } },
-    { OUString("mousePressed"), { OUString("_DblClick"), ooMouseEvtToVBADblClick, ApproveAll, NULL } },
+    { OUString("mousePressed"), { OUString("_MouseDown"), ooMouseEvtToVBAMouseEvt, ApproveAll, nullptr } },
+    { OUString("mousePressed"), { OUString("_DblClick"), ooMouseEvtToVBADblClick, ApproveAll, nullptr } },
 
     // mouseMoved ooo event
-    { OUString("mouseMoved"), { OUString("_MouseMove"), ooMouseEvtToVBAMouseEvt, ApproveAll, NULL } },
-    { OUString("mouseDragged"), { OUString("_MouseMove"), ooMouseEvtToVBAMouseEvt, DenyMouseDrag, NULL } },
+    { OUString("mouseMoved"), { OUString("_MouseMove"), ooMouseEvtToVBAMouseEvt, ApproveAll, nullptr } },
+    { OUString("mouseDragged"), { OUString("_MouseMove"), ooMouseEvtToVBAMouseEvt, DenyMouseDrag, nullptr } },
 
     // keyPressed ooo event
-    { OUString("keyPressed"), { OUString("_KeyDown"), ooKeyPressedToVBAKeyUpDown, ApproveAll, NULL } },
-    { OUString("keyPressed"), { OUString("_KeyPress"), ooKeyPressedToVBAKeyPressed, ApproveAll, NULL } }
+    { OUString("keyPressed"), { OUString("_KeyDown"), ooKeyPressedToVBAKeyUpDown, ApproveAll, nullptr } },
+    { OUString("keyPressed"), { OUString("_KeyPress"), ooKeyPressedToVBAKeyPressed, ApproveAll, nullptr } }
 };
 
 EventInfoHash& getEventTransInfo()
@@ -647,7 +647,7 @@ private:
     DECL_LINK( OnAsyncScriptEvent, ScriptEvent* );
 #endif
     void setShellFromModel();
-    void firing_Impl( const  ScriptEvent& evt, Any *pSyncRet=NULL ) throw( RuntimeException, std::exception );
+    void firing_Impl( const  ScriptEvent& evt, Any *pSyncRet=nullptr ) throw( RuntimeException, std::exception );
 
     Reference< XComponentContext > m_xContext;
     Reference< frame::XModel > m_xModel;
@@ -657,7 +657,7 @@ private:
 };
 
 EventListener::EventListener( const Reference< XComponentContext >& rxContext ) :
-OPropertyContainer(GetBroadcastHelper()), m_xContext( rxContext ), m_bDocClosed(false), mpShell( 0 )
+OPropertyContainer(GetBroadcastHelper()), m_xContext( rxContext ), m_bDocClosed(false), mpShell( nullptr )
 {
     registerProperty( EVENTLSTNR_PROPERTY_MODEL, EVENTLSTNR_PROPERTY_ID_MODEL,
         beans::PropertyAttribute::TRANSIENT, &m_xModel, cppu::UnoType<decltype(m_xModel)>::get() );
@@ -668,7 +668,7 @@ void
 EventListener::setShellFromModel()
 {
     // reset mpShell
-    mpShell = 0;
+    mpShell = nullptr;
     SfxObjectShell* pShell = SfxObjectShell::GetFirst();
     while ( m_xModel.is() && pShell )
     {

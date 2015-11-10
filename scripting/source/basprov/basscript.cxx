@@ -64,7 +64,7 @@ namespace basprov
         ,OPropertyContainer( GetBroadcastHelper() )
         ,m_xMethod( xMethod )
         ,m_funcName( funcName )
-        ,m_documentBasicManager( NULL )
+        ,m_documentBasicManager( nullptr )
         ,m_xDocumentScriptContext()
     {
         registerProperty( BASSCRIPT_PROPERTY_CALLER, BASSCRIPT_PROPERTY_ID_CALLER, BASSCRIPT_DEFAULT_ATTRIBS(), &m_caller, cppu::UnoType<decltype(m_caller)>::get() );
@@ -107,7 +107,7 @@ namespace basprov
         const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>( &rHint );
         if ( pSimpleHint && ( pSimpleHint->GetId() == SFX_HINT_DYING ) )
         {
-            m_documentBasicManager = NULL;
+            m_documentBasicManager = nullptr;
             EndListening( rBC );    // prevent multiple notifications
         }
     }
@@ -285,7 +285,7 @@ namespace basprov
             aReturn = sbxToUnoValue( xReturn );
 
             // reset parameters
-            m_xMethod->SetParameters( NULL );
+            m_xMethod->SetParameters( nullptr );
         }
 
         return aReturn;

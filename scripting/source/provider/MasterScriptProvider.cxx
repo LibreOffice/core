@@ -74,7 +74,7 @@ bool endsWith( const OUString& target,
 
 MasterScriptProvider::MasterScriptProvider( const Reference< XComponentContext > & xContext ) throw ( RuntimeException ):
         m_xContext( xContext ), m_bIsValid( false ), m_bInitialised( false ),
-        m_bIsPkgMSP( false ), m_pPCache( 0 )
+        m_bIsPkgMSP( false ), m_pPCache( nullptr )
 {
     ENSURE_OR_THROW( m_xContext.is(), "MasterScriptProvider::MasterScriptProvider: No context available\n" );
     m_xMgr = m_xContext->getServiceManager();
@@ -89,7 +89,7 @@ MasterScriptProvider::~MasterScriptProvider()
     {
         delete m_pPCache;
     }
-    m_pPCache = 0;
+    m_pPCache = nullptr;
 }
 
 
@@ -861,26 +861,26 @@ static const struct cppu::ImplementationEntry s_entries [] =
         {
             sp_create, sp_getImplementationName,
             sp_getSupportedServiceNames, cppu::createSingleComponentFactory,
-            0, 0
+            nullptr, 0
         },
         {
             urihelper_create,
             urihelper_getImplementationName,
             urihelper_getSupportedServiceNames,
             cppu::createSingleComponentFactory,
-            0, 0
+            nullptr, 0
         },
         {
             func_provider::mspf_create, func_provider::mspf_getImplementationName,
             func_provider::mspf_getSupportedServiceNames, cppu::createSingleComponentFactory,
-            0, 0
+            nullptr, 0
         },
         {
             browsenodefactory::bnf_create, browsenodefactory::bnf_getImplementationName,
             browsenodefactory::bnf_getSupportedServiceNames, cppu::createSingleComponentFactory,
-            0, 0
+            nullptr, 0
         },
-        { 0, 0, 0, 0, 0, 0 }
+        { nullptr, nullptr, nullptr, nullptr, nullptr, 0 }
     };
 }
 

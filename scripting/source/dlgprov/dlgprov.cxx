@@ -186,7 +186,7 @@ static const char aResourceResolverPropName[] = "ResourceResolver";
 
     ::osl::Mutex& getMutex()
     {
-        static ::osl::Mutex* s_pMutex = 0;
+        static ::osl::Mutex* s_pMutex = nullptr;
         if ( !s_pMutex )
         {
             ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
@@ -206,7 +206,7 @@ static const char aResourceResolverPropName[] = "ResourceResolver";
 
     DialogProviderImpl::DialogProviderImpl( const Reference< XComponentContext >& rxContext )
         :m_xContext( rxContext )
-        ,m_xModel( 0 )
+        ,m_xModel( nullptr )
     {
     }
 
@@ -526,7 +526,7 @@ static const char aResourceResolverPropName[] = "ResourceResolver";
 
                 Reference< XScriptEventsAttacher > xScriptEventsAttacher = new DialogEventsAttacherImpl
                     ( m_xContext, m_xModel, rxControl, rxHandler, rxIntrospectionAccess,
-                      bDialogProviderMode, ( m_BasicInfo.get() ? m_BasicInfo->mxBasicRTLListener : NULL ), msDialogLibName );
+                      bDialogProviderMode, ( m_BasicInfo.get() ? m_BasicInfo->mxBasicRTLListener : nullptr ), msDialogLibName );
 
                 Any aHelper;
                 xScriptEventsAttacher->attachEvents( aObjects, Reference< XScriptListener >(), aHelper );
@@ -777,9 +777,9 @@ static const char aResourceResolverPropName[] = "ResourceResolver";
 
     static struct ::cppu::ImplementationEntry s_component_entries [] =
     {
-        {create_DialogProviderImpl, getImplementationName_DialogProviderImpl,getSupportedServiceNames_DialogProviderImpl, ::cppu::createSingleComponentFactory,0, 0},
-        { &comp_DialogModelProvider::_create,&comp_DialogModelProvider::_getImplementationName,&comp_DialogModelProvider::_getSupportedServiceNames,&::cppu::createSingleComponentFactory, 0, 0 },
-        { 0, 0, 0, 0, 0, 0 }
+        {create_DialogProviderImpl, getImplementationName_DialogProviderImpl,getSupportedServiceNames_DialogProviderImpl, ::cppu::createSingleComponentFactory,nullptr, 0},
+        { &comp_DialogModelProvider::_create,&comp_DialogModelProvider::_getImplementationName,&comp_DialogModelProvider::_getSupportedServiceNames,&::cppu::createSingleComponentFactory, nullptr, 0 },
+        { nullptr, nullptr, nullptr, nullptr, nullptr, 0 }
     };
 
 
