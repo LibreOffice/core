@@ -93,8 +93,8 @@ StgCache::StgCache()
    , m_nReplaceIdx( 0 )
    , maLRUPages( 8 ) // entries in the LRU lookup
    , m_nPageSize( 512 )
-   , m_pStorageStream( NULL )
-   , m_pStrm( NULL )
+   , m_pStorageStream( nullptr )
+   , m_pStrm( nullptr )
    , m_bMyStream( false )
    , m_bFile( false )
 {
@@ -103,7 +103,7 @@ StgCache::StgCache()
 StgCache::~StgCache()
 {
     Clear();
-    SetStrm( NULL, false );
+    SetStrm( nullptr, false );
 }
 
 void StgCache::SetPhysPageSize( short n )
@@ -243,7 +243,7 @@ void StgCache::SetStrm( SvStream* p, bool bMy )
     if( m_pStorageStream )
     {
         m_pStorageStream->ReleaseRef();
-        m_pStorageStream = NULL;
+        m_pStorageStream = nullptr;
     }
 
     if( m_bMyStream )
@@ -261,7 +261,7 @@ void StgCache::SetStrm( UCBStorageStream* pStgStream )
     if( m_bMyStream )
         delete m_pStrm;
 
-    m_pStrm = NULL;
+    m_pStrm = nullptr;
 
     if ( m_pStorageStream )
     {

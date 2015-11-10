@@ -42,8 +42,8 @@ class SOT_DLLPUBLIC SotFactory : public SvGlobalName
 protected:
     virtual             ~SotFactory();
 public:
-    static  void        IncSvObjectCount( SotObject * = NULL );
-    static  void        DecSvObjectCount( SotObject * = NULL );
+    static  void        IncSvObjectCount( SotObject * = nullptr );
+    static  void        DecSvObjectCount( SotObject * = nullptr );
 
 #ifdef DBG_UTIL
     static  const SotFactory *      Find( const SvGlobalName & );

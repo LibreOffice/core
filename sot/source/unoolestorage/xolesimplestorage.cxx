@@ -46,9 +46,9 @@ const sal_Int32 nBytesCount = 32000;
 
 OLESimpleStorage::OLESimpleStorage( uno::Reference< lang::XMultiServiceFactory > xFactory )
 : m_bDisposed( false )
-, m_pStream( NULL )
-, m_pStorage( NULL )
-, m_pListenersContainer( NULL )
+, m_pStream( nullptr )
+, m_pStorage( nullptr )
+, m_pListenersContainer( nullptr )
 , m_xFactory( xFactory )
 , m_bNoTemporaryCopy( false )
 {
@@ -69,7 +69,7 @@ OLESimpleStorage::~OLESimpleStorage()
     if ( m_pListenersContainer )
     {
         delete m_pListenersContainer;
-        m_pListenersContainer = NULL;
+        m_pListenersContainer = nullptr;
     }
 }
 

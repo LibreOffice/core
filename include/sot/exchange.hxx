@@ -150,7 +150,7 @@ public:
         // In:- optional - check only for this specific format
         SotClipboardFormatId nOnlyTestFormat = SotClipboardFormatId::NONE,
         // In:- optional - check the contents of Xtransferable
-        const css::uno::Reference< css::datatransfer::XTransferable >* pxTransferable = NULL );
+        const css::uno::Reference< css::datatransfer::XTransferable >* pxTransferable = nullptr );
 
     static sal_uInt16 IsChart( const SvGlobalName& rName );
     static sal_uInt16 IsMath( const SvGlobalName& rName );

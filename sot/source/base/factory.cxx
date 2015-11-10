@@ -34,11 +34,11 @@
 *************************************************************************/
 SotData_Impl::SotData_Impl()
     : nSvObjCount( 0 )
-    , pFactoryList( NULL )
-    , pSotObjectFactory( NULL )
-    , pSotStorageStreamFactory( NULL )
-    , pSotStorageFactory( NULL )
-    , pDataFlavorList( NULL )
+    , pFactoryList( nullptr )
+    , pSotObjectFactory( nullptr )
+    , pSotStorageStreamFactory( nullptr )
+    , pSotStorageFactory( nullptr )
+    , pDataFlavorList( nullptr )
 {
 }
 
@@ -77,7 +77,7 @@ SotData_Impl * SOTDATA()
 SotFactory::SotFactory( const SvGlobalName & rName )
     : SvGlobalName  ( rName )
     , nSuperCount   ( 0 )
-    , pSuperClasses ( NULL )
+    , pSuperClasses ( nullptr )
 {
 #ifdef DBG_UTIL
     SvGlobalName aEmptyName;
@@ -123,7 +123,7 @@ const SotFactory* SotFactory::Find( const SvGlobalName & rFactName )
         }
     }
 
-    return 0;
+    return nullptr;
 }
 #endif
 

@@ -307,10 +307,10 @@ bool StgFAT::FreePages( sal_Int32 nStart, bool bAll )
 
 StgStrm::StgStrm( StgIo& r ) : m_rIo( r )
 {
-    m_pFat    = NULL;
+    m_pFat    = nullptr;
     m_nStart  = m_nPage = STG_EOF;
     m_nOffset = 0;
-    m_pEntry  = NULL;
+    m_pEntry  = nullptr;
     m_nPos = m_nSize = 0;
     m_nPageSize = m_rIo.GetPhysPageSize();
 }
@@ -663,7 +663,7 @@ bool StgFATStrm::SetPage( short nOff, sal_Int32 nNewPage )
         {
             if( nFAT == STG_EOF || nFAT == STG_FREE )
             {
-                pMaster = 0;
+                pMaster = nullptr;
                 break;
             }
             pMaster = m_rIo.Get( nFAT, true );
@@ -870,7 +870,7 @@ void* StgDataStrm::GetPtr( sal_Int32 Pos, bool bForce, bool bDirty )
             return static_cast<sal_uInt8 *>(pPg->GetData()) + m_nOffset;
         }
     }
-    return NULL;
+    return nullptr;
 }
 
 // This could easily be adapted to a better algorithm by determining
@@ -1116,7 +1116,7 @@ StgTmpStrm::StgTmpStrm( sal_uInt64 nInitSize )
                               ? 16
                             : ( nInitSize ? nInitSize : 16 ), 4096 )
 {
-    m_pStrm = NULL;
+    m_pStrm = nullptr;
     // this calls FlushData, so all members should be set by this time
     SetBufferSize( 0 );
     if( nInitSize > THRESHOLD )
@@ -1183,7 +1183,7 @@ void StgTmpStrm::SetSize(sal_uInt64 n)
     {
         if( n > THRESHOLD )
         {
-            m_aName = utl::TempFile(0, false).GetURL();
+            m_aName = utl::TempFile(nullptr, false).GetURL();
             SvFileStream* s = new SvFileStream( m_aName, STREAM_READWRITE );
             const sal_uInt64 nCur = Tell();
             sal_uInt64 i = nEndOfData;

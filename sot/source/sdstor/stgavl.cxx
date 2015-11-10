@@ -23,7 +23,7 @@
 
 StgAvlNode::StgAvlNode()
 {
-    m_pLeft = m_pRight = NULL;
+    m_pLeft = m_pRight = nullptr;
     m_nBalance = m_nId = 0;
 }
 
@@ -46,7 +46,7 @@ StgAvlNode* StgAvlNode::Find( StgAvlNode* pFind )
             else p = ( nRes < 0 ) ? p->m_pLeft : p->m_pRight;
         }
     }
-    return NULL;
+    return nullptr;
 }
 
 // find point to add node to AVL tree and returns
@@ -60,13 +60,13 @@ short StgAvlNode::Locate
     StgAvlNode* pCur = this;
 
     OSL_ENSURE( pPivot && pParent && pPrev, "The pointers may not be NULL!" );
-    *pParent = *pPrev = NULL;
+    *pParent = *pPrev = nullptr;
     *pPivot = this;
 
     // search tree for insertion point
     if ( pFind )
     {
-        while( pCur != NULL )
+        while( pCur != nullptr )
         {
             // check for pPivot
             if( pCur->m_nBalance != 0 )
@@ -224,11 +224,11 @@ StgAvlNode* StgAvlNode::Rem( StgAvlNode** p, StgAvlNode* pDel, bool bPtrs )
             // Element found: remove
             if( !pCur->m_pRight )
             {
-                *p = pCur->m_pLeft; pCur->m_pLeft = NULL;
+                *p = pCur->m_pLeft; pCur->m_pLeft = nullptr;
             }
             else if( !pCur->m_pLeft )
             {
-                *p = pCur->m_pRight; pCur->m_pRight = NULL;
+                *p = pCur->m_pRight; pCur->m_pRight = nullptr;
             }
             else
             {
@@ -250,7 +250,7 @@ StgAvlNode* StgAvlNode::Rem( StgAvlNode** p, StgAvlNode* pDel, bool bPtrs )
                 l->m_pRight = pCur->m_pRight;
                 *p = l;
                 // delete the element
-                pCur->m_pLeft = pCur->m_pRight = NULL;
+                pCur->m_pLeft = pCur->m_pRight = nullptr;
             }
             return pCur;
         }
@@ -262,7 +262,7 @@ StgAvlNode* StgAvlNode::Rem( StgAvlNode** p, StgAvlNode* pDel, bool bPtrs )
                 return Rem( &pCur->m_pRight, pDel, bPtrs );
         }
     }
-    return NULL;
+    return nullptr;
 }
 
 // Enumerate the tree for later iteration
@@ -286,7 +286,7 @@ bool StgAvlNode::Insert( StgAvlNode** pRoot, StgAvlNode* pIns )
         return false;
 
     // special case - empty tree
-    if( *pRoot == NULL )
+    if( *pRoot == nullptr )
     {
         *pRoot = pIns;
         return true;
@@ -320,7 +320,7 @@ bool StgAvlNode::Insert( StgAvlNode** pRoot, StgAvlNode* pIns )
         else
             pNewRoot = pPivot->RotRL();
         // relink balanced subtree
-        if( pParent == NULL )
+        if( pParent == nullptr )
             *pRoot = pNewRoot;
         else if( pPivot == pParent->m_pLeft )
             pParent->m_pLeft = pNewRoot;
@@ -339,7 +339,7 @@ bool StgAvlNode::Remove( StgAvlNode** pRoot, StgAvlNode* pDel, bool bDel )
         return false;
 
     // special case - empty tree
-    if( *pRoot == NULL )
+    if( *pRoot == nullptr )
         return false;
     // delete the element
     pDel = Rem( pRoot, pDel, false );

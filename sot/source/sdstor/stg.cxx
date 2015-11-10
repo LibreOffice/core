@@ -102,14 +102,14 @@ OLEStorageBase::~OLEStorageBase()
                 pEntry->Close();
         }
 
-        pEntry = NULL;
+        pEntry = nullptr;
     }
 
 
     if( pIo && !pIo->DecRef() )
     {
         delete pIo;
-        pIo = NULL;
+        pIo = nullptr;
     }
 }
 
@@ -339,7 +339,7 @@ bool Storage::IsStorageFile( SvStream* pStream )
 TYPEINIT1( Storage, BaseStorage );
 
 Storage::Storage( const OUString& rFile, StreamMode m, bool bDirect )
-    : OLEStorageBase( new StgIo, NULL, m_nMode )
+    : OLEStorageBase( new StgIo, nullptr, m_nMode )
     , aName( rFile ), bIsRoot( false )
 {
     bool bTemp = false;
@@ -364,14 +364,14 @@ Storage::Storage( const OUString& rFile, StreamMode m, bool bDirect )
     else
     {
         pIo->MoveError( *this );
-        pEntry = NULL;
+        pEntry = nullptr;
     }
 }
 
 // Create a storage on a given stream.
 
 Storage::Storage( SvStream& r, bool bDirect )
-    : OLEStorageBase( new StgIo, NULL, m_nMode )
+    : OLEStorageBase( new StgIo, nullptr, m_nMode )
     , bIsRoot( false )
 {
     m_nMode = StreamMode::READ;
@@ -394,20 +394,20 @@ Storage::Storage( SvStream& r, bool bDirect )
     else
     {
         SetError( r.GetError() );
-        pEntry = NULL;
+        pEntry = nullptr;
     }
 }
 
 
 Storage::Storage( UCBStorageStream& rStrm, bool bDirect )
-       : OLEStorageBase( new StgIo, NULL, m_nMode ), bIsRoot( false )
+       : OLEStorageBase( new StgIo, nullptr, m_nMode ), bIsRoot( false )
 {
     m_nMode = StreamMode::READ;
 
     if ( rStrm.GetError() != SVSTREAM_OK )
     {
         SetError( rStrm.GetError() );
-        pEntry = NULL;
+        pEntry = nullptr;
         return;
     }
 
@@ -416,7 +416,7 @@ Storage::Storage( UCBStorageStream& rStrm, bool bDirect )
     {
         OSL_FAIL( "UCBStorageStream can not provide SvStream implementation!\n" );
         SetError( SVSTREAM_GENERALERROR );
-        pEntry = NULL;
+        pEntry = nullptr;
         return;
     }
 
@@ -443,7 +443,7 @@ Storage::Storage( UCBStorageStream& rStrm, bool bDirect )
 
 void Storage::Init( bool bCreate )
 {
-    pEntry = NULL;
+    pEntry = nullptr;
     bool bHdrLoaded = false;
     bIsRoot = true;
 
@@ -556,7 +556,7 @@ BaseStorage* Storage::OpenOLEStorage( const OUString& rName, StreamMode m, bool 
 BaseStorage* Storage::OpenStorage( const OUString& rName, StreamMode m, bool bDirect )
 {
     if( !Validate() || !ValidateMode( m ) )
-        return new Storage( pIo, NULL, m );
+        return new Storage( pIo, nullptr, m );
     if( bDirect && !pEntry->m_bDirect )
         bDirect = false;
 
@@ -582,11 +582,11 @@ BaseStorage* Storage::OpenStorage( const OUString& rName, StreamMode m, bool bDi
                              ? SVSTREAM_CANNOT_MAKE : SVSTREAM_FILE_NOT_FOUND );
     }
     else if( !ValidateMode( m, p ) )
-        p = NULL;
+        p = nullptr;
     if( p && p->m_aEntry.GetType() != STG_STORAGE )
     {
         pIo->SetError( SVSTREAM_FILE_NOT_FOUND );
-        p = NULL;
+        p = nullptr;
     }
 
     // Either direct or transacted mode is supported
@@ -613,7 +613,7 @@ BaseStorageStream* Storage::OpenStream( const OUString& rName, StreamMode m, boo
     DBG_ASSERT(!pB, "Encryption not supported");
 
     if( !Validate() || !ValidateMode( m ) )
-        return new StorageStream( pIo, NULL, m );
+        return new StorageStream( pIo, nullptr, m );
     StgDirEntry* p = pIo->m_pTOC->Find( *pEntry, rName );
     bool bTemp = false;
     if( !p )
@@ -635,11 +635,11 @@ BaseStorageStream* Storage::OpenStream( const OUString& rName, StreamMode m, boo
                            ? SVSTREAM_CANNOT_MAKE : SVSTREAM_FILE_NOT_FOUND );
     }
     else if( !ValidateMode( m, p ) )
-        p = NULL;
+        p = nullptr;
     if( p && p->m_aEntry.GetType() != STG_STREAM )
     {
         pIo->SetError( SVSTREAM_FILE_NOT_FOUND );
-        p = NULL;
+        p = nullptr;
     }
     if( p )
     {
@@ -791,7 +791,7 @@ bool Storage::IsStream( const OUString& rName ) const
 bool Storage::IsContained( const OUString& rName ) const
 {
     if( Validate() )
-        return pIo->m_pTOC->Find( *pEntry, rName ) != NULL;
+        return pIo->m_pTOC->Find( *pEntry, rName ) != nullptr;
     else
         return false;
 }

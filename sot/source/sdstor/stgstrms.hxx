@@ -71,7 +71,7 @@ protected:
     short m_nOffset;                      // offset into current page
     short m_nPageSize;                    // logical page size
     std::vector<sal_Int32> m_aPagesCache;
-    void scanBuildPageChainCache(sal_Int32 *pOptionalCalcSize = NULL);
+    void scanBuildPageChainCache(sal_Int32 *pOptionalCalcSize = nullptr);
     bool  Copy( sal_Int32 nFrom, sal_Int32 nBytes );
     explicit StgStrm( StgIo& );
 public:
@@ -102,7 +102,7 @@ public:
     explicit StgFATStrm( StgIo& );
     virtual ~StgFATStrm() {}
     using StgStrm::GetPage;
-    sal_Int32 GetPage( short, bool, sal_uInt16 *pnMasterAlloc = 0);
+    sal_Int32 GetPage( short, bool, sal_uInt16 *pnMasterAlloc = nullptr);
     virtual bool SetSize( sal_Int32 ) override;
 };
 

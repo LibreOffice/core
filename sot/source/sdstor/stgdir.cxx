@@ -66,11 +66,11 @@ void StgDirEntry::InitMembers()
 {
     m_aSave       = m_aEntry;
     m_pUp         =
-    m_pDown       = NULL;
-    m_ppRoot      = NULL;
-    m_pStgStrm    = NULL;
+    m_pDown       = nullptr;
+    m_ppRoot      = nullptr;
+    m_pStgStrm    = nullptr;
     m_pCurStrm    =
-    m_pTmpStrm    = NULL;
+    m_pTmpStrm    = nullptr;
     m_nPos        =
     m_nEntry      =
     m_nRefCnt     = 0;
@@ -162,7 +162,7 @@ void StgDirEntry::DelTemp( bool bForce )
             StgAvlNode::Remove( reinterpret_cast<StgAvlNode**>(&m_pUp->m_pDown), this, bDel );
             if( !bDel )
             {
-                m_pLeft = m_pRight = m_pDown = 0;
+                m_pLeft = m_pRight = m_pDown = nullptr;
                 m_bInvalid = m_bZombie = true;
             }
         }
@@ -200,7 +200,7 @@ bool StgDirEntry::StoreStream( StgIo& rIo )
             if( !m_pStgStrm )
             {
                 OpenStream( rIo );
-                delete m_pStgStrm, m_pStgStrm = NULL;
+                delete m_pStgStrm, m_pStgStrm = nullptr;
             }
             else
                 m_pStgStrm->SetSize( 0 );
@@ -285,7 +285,7 @@ void StgDirEntry::OpenStream( StgIo& rIo, bool bForceBig )
 void StgDirEntry::Close()
 {
     delete m_pTmpStrm;
-    m_pTmpStrm = NULL;
+    m_pTmpStrm = nullptr;
 //  nRefCnt  = 0;
     m_bInvalid = m_bTemp;
 }
@@ -333,7 +333,7 @@ bool StgDirEntry::SetSize( sal_Int32 nNewSize )
         StgIo& rIo = m_pStgStrm->GetIo();
         sal_Int32 nThreshold = rIo.m_aHdr.GetThreshold();
         // ensure the correct storage stream!
-        StgStrm* pOld = NULL;
+        StgStrm* pOld = nullptr;
         sal_uInt16 nOldSize = 0;
         if( nNewSize >= nThreshold && m_pStgStrm->IsSmallStrm() )
         {
@@ -532,7 +532,7 @@ bool StgDirEntry::Commit()
     if( m_aEntry.GetType() == STG_STREAM )
     {
         if( m_pTmpStrm )
-            delete m_pCurStrm, m_pCurStrm = m_pTmpStrm, m_pTmpStrm = NULL;
+            delete m_pCurStrm, m_pCurStrm = m_pTmpStrm, m_pTmpStrm = nullptr;
         if( m_bRemoved )
             // Delete the stream if needed
             if( m_pStgStrm )
@@ -603,7 +603,7 @@ bool StgDirEntry::Strm2Tmp()
                 m_pStgStrm->GetIo().SetError( m_pTmpStrm->GetError() );
 
             delete m_pTmpStrm;
-            m_pTmpStrm = NULL;
+            m_pTmpStrm = nullptr;
             return false;
         }
     }
@@ -616,7 +616,7 @@ bool StgDirEntry::Tmp2Strm()
 {
     // We did commit once, but have not written since then
     if( !m_pTmpStrm )
-        m_pTmpStrm = m_pCurStrm, m_pCurStrm = NULL;
+        m_pTmpStrm = m_pCurStrm, m_pCurStrm = nullptr;
     if( m_pTmpStrm )
     {
         OSL_ENSURE( m_pStgStrm, "The pointer may not be NULL!" );
@@ -661,7 +661,7 @@ bool StgDirEntry::Tmp2Strm()
                 pNewStrm->Pos2Page( m_nPos );
                 delete m_pTmpStrm;
                 delete m_pCurStrm;
-                m_pTmpStrm = m_pCurStrm = NULL;
+                m_pTmpStrm = m_pCurStrm = nullptr;
                 m_aSave = m_aEntry;
             }
         }
@@ -720,7 +720,7 @@ void StgDirEntry::Invalidate( bool bDel )
 
 StgDirStrm::StgDirStrm( StgIo& r )
           : StgDataStrm( r, r.m_aHdr.GetTOCStart(), -1 )
-          , m_pRoot( NULL )
+          , m_pRoot( nullptr )
           , m_nEntries( 0 )
 {
     if( r.GetError() )
@@ -741,7 +741,7 @@ StgDirStrm::StgDirStrm( StgIo& r )
         // the TOC pages can be removed.
         m_pEntry = reinterpret_cast<StgDirEntry*>(this); // just for a bit pattern
         SetupEntry( 0, m_pRoot );
-        m_pEntry = NULL;
+        m_pEntry = nullptr;
     }
 }
 
@@ -754,7 +754,7 @@ StgDirStrm::~StgDirStrm()
 
 void StgDirStrm::SetupEntry( sal_Int32 n, StgDirEntry* pUpper )
 {
-    void* p = ( n == STG_FREE ) ? NULL : GetEntry( n );
+    void* p = ( n == STG_FREE ) ? nullptr : GetEntry( n );
     if( p )
     {
         SvStream *pUnderlyingStream = m_rIo.GetStrm();
@@ -916,7 +916,7 @@ bool StgDirStrm::Store()
 void* StgDirStrm::GetEntry( sal_Int32 n, bool bDirty )
 {
     return n < 0 || n >= m_nSize / STGENTRY_SIZE
-        ? NULL : GetPtr( n * STGENTRY_SIZE, true, bDirty );
+        ? nullptr : GetPtr( n * STGENTRY_SIZE, true, bDirty );
 }
 
 // Find a dir entry.
@@ -930,14 +930,14 @@ StgDirEntry* StgDirStrm::Find( StgDirEntry& rStg, const OUString& rName )
         if( !aEntry.SetName( rName ) )
         {
             m_rIo.SetError( SVSTREAM_GENERALERROR );
-            return NULL;
+            return nullptr;
         }
         // Look in the directory attached to the entry
         StgDirEntry aTest( aEntry );
         return static_cast<StgDirEntry*>( rStg.m_pDown->Find( &aTest ) );
     }
     else
-        return NULL;
+        return nullptr;
 }
 
 // Create a new entry.
@@ -950,7 +950,7 @@ StgDirEntry* StgDirStrm::Create( StgDirEntry& rStg, const OUString& rName, StgEn
     if( !aEntry.SetName( rName ) )
     {
         m_rIo.SetError( SVSTREAM_GENERALERROR );
-        return NULL;
+        return nullptr;
     }
     StgDirEntry* pRes = Find( rStg, rName );
     if( pRes )
@@ -958,7 +958,7 @@ StgDirEntry* StgDirStrm::Create( StgDirEntry& rStg, const OUString& rName, StgEn
         if( !pRes->m_bInvalid )
         {
             m_rIo.SetError( SVSTREAM_CANNOT_MAKE );
-            return NULL;
+            return nullptr;
         }
         pRes->m_bInvalid =
         pRes->m_bRemoved =
@@ -979,7 +979,7 @@ StgDirEntry* StgDirStrm::Create( StgDirEntry& rStg, const OUString& rName, StgEn
         else
         {
             m_rIo.SetError( SVSTREAM_CANNOT_MAKE );
-            delete pRes; pRes = NULL;
+            delete pRes; pRes = nullptr;
         }
     }
     return pRes;

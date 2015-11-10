@@ -105,7 +105,7 @@ public:
     virtual bool                Revert() = 0;
     virtual BaseStorageStream*  OpenStream( const OUString & rEleName,
                                             StreamMode = STREAM_STD_READWRITE,
-                                            bool bDirect = true, const OString* pKey=0 ) = 0;
+                                            bool bDirect = true, const OString* pKey=nullptr ) = 0;
     virtual BaseStorage*        OpenStorage( const OUString & rEleName,
                                              StreamMode = STREAM_STD_READWRITE,
                                              bool bDirect = false ) = 0;
@@ -133,7 +133,7 @@ protected:
                     OLEStorageBase( StgIo*, StgDirEntry*, StreamMode& );
                     ~OLEStorageBase();
     bool            Validate_Impl( bool=false ) const;
-    static bool     ValidateMode_Impl( StreamMode, StgDirEntry* p = NULL );
+    static bool     ValidateMode_Impl( StreamMode, StgDirEntry* p = nullptr );
 };
 
 class StorageStream : public BaseStorageStream, public OLEStorageBase
@@ -195,7 +195,7 @@ public:
     virtual bool                Revert() override;
     virtual BaseStorageStream*  OpenStream( const OUString & rEleName,
                                             StreamMode = STREAM_STD_READWRITE,
-                                            bool bDirect = true, const OString* pKey=0 ) override;
+                                            bool bDirect = true, const OString* pKey=nullptr ) override;
     virtual BaseStorage*        OpenStorage( const OUString & rEleName,
                                              StreamMode = STREAM_STD_READWRITE,
                                              bool bDirect = false ) override;
@@ -300,7 +300,7 @@ public:
     virtual bool                Revert() override;
     virtual BaseStorageStream*  OpenStream( const OUString & rEleName,
                                             StreamMode = STREAM_STD_READWRITE,
-                                            bool bDirect = true, const OString* pKey=0 ) override;
+                                            bool bDirect = true, const OString* pKey=nullptr ) override;
     virtual BaseStorage*        OpenStorage( const OUString & rEleName,
                                              StreamMode = STREAM_STD_READWRITE,
                                              bool bDirect = false ) override;

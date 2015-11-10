@@ -64,7 +64,7 @@ SotFactory * SotStorageStream::ClassFactory()
 
 void * SotStorageStream::Cast( const SotFactory * pFact )
 {
-    void * pRet = NULL;
+    void * pRet = nullptr;
     if( !pFact || pFact == ClassFactory() )
         pRet = this;
     if( !pRet )
@@ -90,7 +90,7 @@ SvLockBytesRef MakeLockBytes_Impl( const OUString & rName, StreamMode nMode )
 
 SotStorageStream::SotStorageStream( const OUString & rName, StreamMode nMode )
     : SvStream( MakeLockBytes_Impl( rName, nMode ) )
-    , pOwnStm( NULL )
+    , pOwnStm( nullptr )
 {
     if( nMode & StreamMode::WRITE )
         m_isWritable = true;
@@ -113,14 +113,14 @@ SotStorageStream::SotStorageStream( BaseStorageStream * pStm )
     }
     else
     {
-        pOwnStm = NULL;
+        pOwnStm = nullptr;
         m_isWritable = true;
         SetError( SVSTREAM_INVALID_PARAMETER );
     }
 }
 
 SotStorageStream::SotStorageStream()
-    : pOwnStm( NULL )
+    : pOwnStm( nullptr )
 {
     // ??? wenn Init virtuell ist, entsprechen setzen
     m_isWritable = true;
@@ -313,7 +313,7 @@ SotFactory * SotStorage::ClassFactory()
 
 void * SotStorage::Cast( const SotFactory * pFact )
 {
-    void * pRet = NULL;
+    void * pRet = nullptr;
     if( !pFact || pFact == ClassFactory() )
         pRet = this;
     if( !pRet )
@@ -343,8 +343,8 @@ void * SotStorage::Cast( const SotFactory * pFact )
 |*
 *************************************************************************/
 #define INIT_SotStorage()                     \
-    : m_pOwnStg( NULL )                       \
-    , m_pStorStm( NULL )                      \
+    : m_pOwnStg( nullptr )                       \
+    , m_pStorStm( nullptr )                      \
     , m_nError( SVSTREAM_OK )                 \
     , m_bIsRoot( false )                      \
     , m_bDelStm( false )                      \
@@ -543,7 +543,7 @@ SotStorage::~SotStorage()
 
 SvMemoryStream * SotStorage::CreateMemoryStream()
 {
-    SvMemoryStream * pStm = NULL;
+    SvMemoryStream * pStm = nullptr;
     pStm = new SvMemoryStream( 0x8000, 0x8000 );
     tools::SvRef<SotStorage> aStg = new SotStorage( *pStm );
     if( CopyTo( aStg ) )
@@ -554,7 +554,7 @@ SvMemoryStream * SotStorage::CreateMemoryStream()
     {
         aStg.Clear(); // Storage vorher freigeben
         delete pStm;
-        pStm = NULL;
+        pStm = nullptr;
     }
     return pStm;
 }
@@ -688,7 +688,7 @@ bool SotStorage::Commit()
 SotStorageStream * SotStorage::OpenSotStream( const OUString & rEleName,
                                               StreamMode nMode )
 {
-    SotStorageStream * pStm = NULL;
+    SotStorageStream * pStm = nullptr;
     DBG_ASSERT( Owner(), "must be owner" );
     if( m_pOwnStg )
     {
@@ -732,7 +732,7 @@ SotStorage * SotStorage::OpenSotStorage( const OUString & rEleName,
 
     SetError( SVSTREAM_GENERALERROR );
 
-    return NULL;
+    return nullptr;
 }
 
 bool SotStorage::IsStorage( const OUString & rEleName ) const
@@ -832,7 +832,7 @@ SotStorage* SotStorage::OpenOLEStorage( const css::uno::Reference < css::embed::
     if ( nMode & StreamMode::NOCREATE )
         nEleMode |= embed::ElementModes::NOCREATE;
 
-    SvStream* pStream = NULL;
+    SvStream* pStream = nullptr;
     try
     {
         uno::Reference < io::XStream > xStream = xStorage->openStreamElement( rEleName, nEleMode );

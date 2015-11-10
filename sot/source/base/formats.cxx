@@ -1287,7 +1287,7 @@ static SotDestinationEntry_Impl const aDestinationArray[] =     \
         aEXCHG_DEST_SWDOC_FREE_AREA_WEB_Link                              \
     },                                                                    \
     {                                                                     \
-        static_cast<SotExchangeDest>(0xffff), 0, 0, 0, 0                        \
+        static_cast<SotExchangeDest>(0xffff), nullptr, nullptr, nullptr, nullptr                        \
     }                                                                     \
 };
 

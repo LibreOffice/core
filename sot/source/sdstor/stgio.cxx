@@ -32,10 +32,10 @@
 
 StgIo::StgIo() : StgCache()
 {
-    m_pTOC      = NULL;
-    m_pDataFAT  = NULL;
-    m_pDataStrm = NULL;
-    m_pFAT      = NULL;
+    m_pTOC      = nullptr;
+    m_pDataFAT  = nullptr;
+    m_pDataStrm = nullptr;
+    m_pFAT      = nullptr;
     m_bCopied   = false;
 }
 
@@ -81,10 +81,10 @@ void StgIo::SetupStreams()
     delete m_pDataFAT;
     delete m_pDataStrm;
     delete m_pFAT;
-    m_pTOC      = NULL;
-    m_pDataFAT  = NULL;
-    m_pDataStrm = NULL;
-    m_pFAT      = NULL;
+    m_pTOC      = nullptr;
+    m_pDataFAT  = nullptr;
+    m_pDataStrm = nullptr;
+    m_pFAT      = nullptr;
     ResetError();
     SetPhysPageSize( 1 << m_aHdr.GetPageSize() );
     m_pFAT = new StgFATStrm( *this );
