@@ -58,7 +58,7 @@ class i_xml_parser_event_handler;
 class xml_parser
 {
 public:
-    xml_parser(const XML_Char* EncodingName = 0);
+    xml_parser(const XML_Char* EncodingName = nullptr);
 
     ~xml_parser();
 

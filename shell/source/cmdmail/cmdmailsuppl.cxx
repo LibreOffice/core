@@ -296,7 +296,7 @@ void SAL_CALL CmdMailSuppl::sendSimpleMailMessage( const Reference< XSimpleMailM
 
     OString cmd = aBuffer.makeStringAndClear();
     FILE * f = popen(cmd.getStr(), "w");
-    if (f == 0 || pclose(f) != 0)
+    if (f == nullptr || pclose(f) != 0)
     {
         throw css::uno::Exception("No mail client configured",
             static_cast < XSimpleMailClient * > (this) );

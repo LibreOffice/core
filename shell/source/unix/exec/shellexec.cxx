@@ -231,13 +231,13 @@ void SAL_CALL ShellExec::execute( const OUString& aCommand, const OUString& aPar
     if ( !aLaunchBuffer.isEmpty() )
     {
         FILE *pLaunch = popen( aLaunchBuffer.makeStringAndClear().getStr(), "w" );
-        if ( pLaunch != NULL )
+        if ( pLaunch != nullptr )
         {
             if ( 0 == pclose( pLaunch ) )
                 return;
         }
         // Failed, do not try DESKTOP_LAUNCH any more
-        pDesktopLaunch = NULL;
+        pDesktopLaunch = nullptr;
     }
 
     OString cmd =
@@ -248,7 +248,7 @@ void SAL_CALL ShellExec::execute( const OUString& aCommand, const OUString& aPar
         aBuffer.makeStringAndClear();
 #endif
     FILE *pLaunch = popen(cmd.getStr(), "w");
-    if ( pLaunch != NULL )
+    if ( pLaunch != nullptr )
     {
         if ( 0 == pclose( pLaunch ) )
             return;

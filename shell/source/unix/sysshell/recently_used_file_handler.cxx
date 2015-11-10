@@ -80,7 +80,7 @@ namespace /* private */ {
             is_private_(is_private),
             groups_(groups)
         {
-            timestamp_ = time(NULL);
+            timestamp_ = time(nullptr);
         }
 
         void set_uri(const string_t& character)
@@ -216,7 +216,7 @@ namespace /* private */ {
     {
     public:
         explicit recently_used_file_filter(recently_used_item_list_t& item_list) :
-            item_(NULL),
+            item_(nullptr),
             item_list_(item_list)
         {
             named_command_map_[TAG_RECENT_FILES] = &recently_used_item::set_nothing;
@@ -234,14 +234,14 @@ namespace /* private */ {
             const string_t& local_name,
             const xml_tag_attribute_container_t& /*attributes*/) override
         {
-            if ((local_name == TAG_RECENT_ITEM) && (NULL == item_))
+            if ((local_name == TAG_RECENT_ITEM) && (nullptr == item_))
                 item_ = new recently_used_item;
         }
 
         virtual void end_element(const string_t& /*raw_name*/, const string_t& local_name) override
         {
             // check for end tags w/o start tag
-            if( local_name != TAG_RECENT_FILES && NULL == item_ )
+            if( local_name != TAG_RECENT_FILES && nullptr == item_ )
                 return; // will result in an XML parser error anyway
 
             if (named_command_map_.find(local_name) != named_command_map_.end())
@@ -255,7 +255,7 @@ namespace /* private */ {
             if (local_name == TAG_RECENT_ITEM)
             {
                 item_list_.push_back(item_);
-                item_ = NULL;
+                item_ = nullptr;
             }
             current_element_.clear();
         }
@@ -406,7 +406,7 @@ namespace /* private */ {
 
         if (iter != item_list.end())
         {
-            (*iter)->timestamp_ = time(NULL);
+            (*iter)->timestamp_ = time(nullptr);
 
             if (!(*iter)->has_group(GROUP_OOO))
                 (*iter)->groups_.push_back(GROUP_OOO);

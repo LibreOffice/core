@@ -168,12 +168,12 @@ static OUString ImplGetLocale(int category)
     const char *locale = setlocale(category, "");
 
     // Return "en-US" for C locales
-    if( (locale == NULL) || ( locale[0] == 'C' && locale[1] == '\0' ) )
+    if( (locale == nullptr) || ( locale[0] == 'C' && locale[1] == '\0' ) )
         return OUString( "en-US"  );
 
 
     const char *cp;
-    const char *uscore = NULL;
+    const char *uscore = nullptr;
 
     // locale string have the format lang[_ctry][.encoding][@modifier]
     // we are only interested in the first two items, so we handle
@@ -187,7 +187,7 @@ static OUString ImplGetLocale(int category)
     }
 
     OUStringBuffer aLocaleBuffer;
-    if( uscore != NULL )
+    if( uscore != nullptr )
     {
         aLocaleBuffer.appendAscii(locale, uscore++ - locale);
         aLocaleBuffer.append("-");

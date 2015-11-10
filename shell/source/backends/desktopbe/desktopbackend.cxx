@@ -228,9 +228,9 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance(
 
 static cppu::ImplementationEntry const services[] = {
     { &createInstance, &getDefaultImplementationName,
-      &getDefaultSupportedServiceNames, &cppu::createSingleComponentFactory, 0,
+      &getDefaultSupportedServiceNames, &cppu::createSingleComponentFactory, nullptr,
       0 },
-    { 0, 0, 0, 0, 0, 0 }
+    { nullptr, nullptr, nullptr, nullptr, nullptr, 0 }
 };
 
 }

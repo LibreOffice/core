@@ -146,7 +146,7 @@ Service::Service(): enabled_(false) {
     if (context.is()) {
         OUString desktop;
         context->getValueByName("system.desktop-environment") >>= desktop;
-        enabled_ = desktop == "KDE4" && KApplication::kApplication() != 0;
+        enabled_ = desktop == "KDE4" && KApplication::kApplication() != nullptr;
     }
 }
 
@@ -192,9 +192,9 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance(
 
 static cppu::ImplementationEntry const services[] = {
     { &createInstance, &getServiceImplementationName,
-      &getServiceSupportedServiceNames, &cppu::createSingleComponentFactory, 0,
+      &getServiceSupportedServiceNames, &cppu::createSingleComponentFactory, nullptr,
       0 },
-    { 0, 0, 0, 0, 0, 0 }
+    { nullptr, nullptr, nullptr, nullptr, nullptr, 0 }
 };
 
 }

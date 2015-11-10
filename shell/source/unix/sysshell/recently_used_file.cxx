@@ -46,7 +46,7 @@ inline void ensure_final_slash(/*inout*/ OUString& path)
 
 
 recently_used_file::recently_used_file() :
-    file_(NULL)
+    file_(nullptr)
 {
     osl::Security sec;
     OUString homedir_url;
@@ -66,12 +66,12 @@ recently_used_file::recently_used_file() :
         int fd = open(tmp.getStr(), O_RDWR | O_CREAT, S_IRUSR | S_IWUSR);
         if (fd != -1) {
             file_ = fdopen(fd, "w+");
-            if (file_ == 0) {
+            if (file_ == nullptr) {
                 close(fd);
             }
         }
 
-        if (NULL == file_)
+        if (nullptr == file_)
             throw "I/O error opening ~/.recently-used";
 
         if (lockf(fileno(file_), F_LOCK, 0) != 0)

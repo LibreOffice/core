@@ -262,7 +262,7 @@ private:
         iso_lang_replacement_table_t::iterator iter =
             iso_lang_replacement_table_.find(iso_lang);
 
-        replacement_table_t* prt = NULL;
+        replacement_table_t* prt = nullptr;
 
         if (iso_lang_replacement_table_.end() == iter)
         {
@@ -330,7 +330,7 @@ void read_ulf_file(const std::string& FileName, Substitutor& Substitutor)
     // UTF8 files starting with a byte-order-mark we create a copy of the
     // original file without the byte-order-mark
     OUString tmpfile_url;
-    osl_createTempFile(NULL, NULL, &tmpfile_url.pData);
+    osl_createTempFile(nullptr, nullptr, &tmpfile_url.pData);
 
     OUString tmpfile_sys;
     osl::FileBase::getSystemPathFromFileURL(tmpfile_url, tmpfile_sys);

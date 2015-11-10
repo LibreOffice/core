@@ -39,14 +39,14 @@ namespace
     static inline GDBusProxy* lcl_GetPackageKitProxy(const OUString& sInterface)
     {
         const OString sFullInterface = OUStringToOString("org.freedesktop.PackageKit." + sInterface, RTL_TEXTENCODING_ASCII_US);
-        GErrorWrapper error(NULL);
-        GDBusProxy* proxy = NULL;
+        GErrorWrapper error(nullptr);
+        GDBusProxy* proxy = nullptr;
         proxy = g_dbus_proxy_new_for_bus_sync (G_BUS_TYPE_SESSION,
-                               G_DBUS_PROXY_FLAGS_NONE, NULL,
+                               G_DBUS_PROXY_FLAGS_NONE, nullptr,
                                "org.freedesktop.PackageKit",
                                "/org/freedesktop/PackageKit",
                                reinterpret_cast<const gchar*>(sFullInterface.getStr()),
-                               NULL,
+                               nullptr,
                                &error.getRef());
         if(!proxy)
             throw RuntimeException("couldnt get a proxy!");
@@ -166,7 +166,7 @@ void SyncDbusSessionHelper::InstallPrinterDrivers(
         const OString sPackagenameAscii = OUStringToOString(sPackagename, RTL_TEXTENCODING_ASCII_US);
         const OString sInteractionAscii = OUStringToOString(sInteraction, RTL_TEXTENCODING_ASCII_US);
         std::shared_ptr<GDBusProxy> proxy(lcl_GetPackageKitProxy("Query"), GObjectDeleter<GDBusProxy>());
-        GErrorWrapper error(NULL);
+        GErrorWrapper error(nullptr);
         std::shared_ptr<GVariant> result(g_dbus_proxy_call_sync (proxy.get(),
                          "IsInstalled",
                          g_variant_new ("(ss)",
@@ -174,7 +174,7 @@ void SyncDbusSessionHelper::InstallPrinterDrivers(
                                 sInteractionAscii.getStr()),
                          G_DBUS_CALL_FLAGS_NONE,
                          -1, /* timeout */
-                         NULL, /* cancellable */
+                         nullptr, /* cancellable */
                          &error.getRef()),GVariantDeleter());
         if(result.get())
             o_isInstalled = bool(g_variant_get_boolean(g_variant_get_child_value(result.get(),0)));
