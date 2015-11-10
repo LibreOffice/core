@@ -156,7 +156,7 @@ _lookup_variable (const char *var, size_t len)
     char tmpbuf[MAXNAMELEN + 1];
 
     if (len > MAXNAMELEN)
-        return 0;
+        return NULL;
 
     strncpy (tmpbuf, var, len);
     tmpbuf[len] = '\0';

@@ -26,7 +26,7 @@
 void
 mvl_init(MacroValidatorList * out_pValidators)
 {
-    out_pValidators->pFirst = 0;
+    out_pValidators->pFirst = NULL;
     out_pValidators->nextFreeIdentifier = 1;
 }
 
@@ -36,7 +36,7 @@ mvl_destruct(MacroValidatorList * out_pValidators)
     MacroValidator * pV = out_pValidators->pFirst;
     MacroValidator * pDel;
     for ( pDel = out_pValidators->pFirst;
-          pDel != 0;
+          pDel != NULL;
           pDel = pV )
     {
         pV = pV->pNext;
@@ -62,7 +62,7 @@ mvl_add( MacroValidatorList *   inout_pValidators,
     MacroValidator * pNew = new(MacroValidator);
     pNew->pMacro = in_pMacro;
 
-    if (in_pTokenWhereMacroBecomesValid == 0)
+    if (in_pTokenWhereMacroBecomesValid == NULL)
     {
         pNew->nTokenWhereMacroBecomesValid = INVALID_TILL_ENDOFROW;
     }
@@ -87,10 +87,10 @@ mvl_check(  MacroValidatorList * inout_pValidators,
 {
     MacroValidator * pV;            /* Running pointer */
     MacroValidator * pCheckedOnes;  /* Here new list is built.  */
-    pCheckedOnes = 0;
+    pCheckedOnes = NULL;
 
     for ( pV = inout_pValidators->pFirst;
-          pV != 0;
+          pV != NULL;
           pV = inout_pValidators->pFirst )
     {
         inout_pValidators->pFirst = pV->pNext;

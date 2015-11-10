@@ -376,7 +376,7 @@ void
     }
     else
     {   /* tp is == lp, therefore does not point to valid memory: */
-        mvl_add(pValidators,np,0);
+        mvl_add(pValidators,np,NULL);
     }
         /* reset trp->tp to original position:
         */

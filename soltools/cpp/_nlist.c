@@ -94,7 +94,7 @@ void
             kwdefined = np;
             np->val = NAME;
             np->vp = &deftr;
-            np->ap = 0;
+            np->ap = NULL;
         }
     }
 }
