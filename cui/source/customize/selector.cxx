@@ -378,7 +378,7 @@ void SvxConfigGroupListBox::fillScriptList( const Reference< browse::XBrowseNode
                 SvxGroupInfo_Impl* pInfo =
                     new SvxGroupInfo_Impl( SVX_CFGGROUP_SCRIPTCONTAINER, 0, theChild );
                 pNewEntry->SetUserData( pInfo );
-                aArr.push_back( pInfo );
+                aArr.push_back( std::unique_ptr<SvxGroupInfo_Impl>(pInfo) );
 
                 if ( _bCheapChildrenOnDemand )
                 {
@@ -500,7 +500,7 @@ void SvxConfigGroupListBox::Init(bool bShowSlots, const Reference< frame::XFrame
 
                 SvxGroupInfo_Impl *pInfo =
                     new SvxGroupInfo_Impl( SVX_CFGGROUP_FUNCTION, gids[i] );
-                aArr.push_back( pInfo );
+                aArr.push_back( std::unique_ptr<SvxGroupInfo_Impl>(pInfo) );
 
                 pEntry->SetUserData( pInfo );
             }
@@ -532,7 +532,7 @@ void SvxConfigGroupListBox::Init(bool bShowSlots, const Reference< frame::XFrame
             SvTreeListEntry *pNewEntry = InsertEntry( aTitle );
             pNewEntry->SetUserData( pInfo );
             pNewEntry->EnableChildrenOnDemand();
-            aArr.push_back( pInfo );
+            aArr.push_back( std::unique_ptr<SvxGroupInfo_Impl>(pInfo) );
         }
         else
         {
@@ -726,7 +726,7 @@ void SvxConfigGroupListBox::GroupSelected()
                     SvxGroupInfo_Impl *_pGroupInfo = new SvxGroupInfo_Impl(
                         SVX_CFGFUNCTION_SLOT, 123, aCmdURL, OUString() );
 
-                    pFunctionListBox->aArr.push_back( _pGroupInfo );
+                    pFunctionListBox->aArr.push_back( std::unique_ptr<SvxGroupInfo_Impl>(_pGroupInfo) );
 
                     pFuncEntry->SetUserData( _pGroupInfo );
                 }
@@ -783,7 +783,7 @@ void SvxConfigGroupListBox::GroupSelected()
 
                             pNewEntry->SetUserData( _pGroupInfo );
 
-                            pFunctionListBox->aArr.push_back( _pGroupInfo );
+                            pFunctionListBox->aArr.push_back( std::unique_ptr<SvxGroupInfo_Impl>(_pGroupInfo) );
 
                         }
                     }

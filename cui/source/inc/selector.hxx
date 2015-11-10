@@ -30,7 +30,7 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/script/browse/XBrowseNode.hpp>
 
-#include <boost/ptr_container/ptr_vector.hpp>
+#include <memory>
 
 class SaveInData;
 
@@ -80,7 +80,7 @@ struct SvxGroupInfo_Impl
     }
 };
 
-typedef boost::ptr_vector<SvxGroupInfo_Impl> SvxGroupInfoArr_Impl;
+typedef std::vector<std::unique_ptr<SvxGroupInfo_Impl> > SvxGroupInfoArr_Impl;
 
 class SvxConfigFunctionListBox : public SvTreeListBox
 {
