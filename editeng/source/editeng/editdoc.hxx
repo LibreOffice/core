@@ -35,7 +35,6 @@
 #include <memory>
 #include <vector>
 
-#include <boost/ptr_container/ptr_vector.hpp>
 #include <boost/noncopyable.hpp>
 
 class ImpEditEngine;
@@ -655,7 +654,7 @@ public:
 class ParaPortionList
 {
     mutable sal_Int32 nLastCache;
-    boost::ptr_vector<ParaPortion> maPortions;
+    std::vector<std::unique_ptr<ParaPortion>> maPortions;
 public:
                     ParaPortionList();
                     ~ParaPortionList();
@@ -743,7 +742,7 @@ class EditDoc
 {
 private:
     mutable sal_Int32 nLastCache;
-    boost::ptr_vector<ContentNode> maContents;
+    std::vector<std::unique_ptr<ContentNode> > maContents;
 
     SfxItemPool*    pItemPool;
     Link<LinkParamNone*,void>      aModifyHdl;

@@ -23,6 +23,7 @@
 #include <editdoc.hxx>
 #include <editeng/editund2.hxx>
 #include <editeng/editdata.hxx>
+#include <boost/ptr_container/ptr_vector.hpp>
 
 class EditEngine;
 class EditView;

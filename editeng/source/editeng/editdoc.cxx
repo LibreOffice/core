@@ -708,7 +708,7 @@ sal_Int32 FastGetPos(const _Array& rArray, const _Val* p, sal_Int32& rLastPos)
 
         for (sal_Int32 nIdx = rLastPos - 2; nIdx < nEnd; ++nIdx)
         {
-            if (&rArray.at(nIdx) == p)
+            if (rArray.at(nIdx).get() == p)
             {
                 rLastPos = nIdx;
                 return nIdx;
@@ -717,7 +717,7 @@ sal_Int32 FastGetPos(const _Array& rArray, const _Val* p, sal_Int32& rLastPos)
     }
     // The world's lamest linear search from svarray...
     for (sal_Int32 nIdx = 0; nIdx < nArrayLen; ++nIdx)
-        if (&rArray.at(nIdx) == p)
+        if (rArray.at(nIdx).get() == p)
             return rLastPos = nIdx;
 
     // XXX "not found" condition for sal_Int32 indexes
@@ -741,12 +741,12 @@ sal_Int32 ParaPortionList::GetPos(const ParaPortion* p) const
 
 ParaPortion* ParaPortionList::operator [](sal_Int32 nPos)
 {
-    return 0 <= nPos && nPos < (sal_Int32)maPortions.size() ? &maPortions[nPos] : nullptr;
+    return 0 <= nPos && nPos < (sal_Int32)maPortions.size() ? maPortions[nPos].get() : nullptr;
 }
 
 const ParaPortion* ParaPortionList::operator [](sal_Int32 nPos) const
 {
-    return 0 <= nPos && nPos < (sal_Int32)maPortions.size() ? &maPortions[nPos] : nullptr;
+    return 0 <= nPos && nPos < (sal_Int32)maPortions.size() ? maPortions[nPos].get() : nullptr;
 }
 
 ParaPortion* ParaPortionList::Release(sal_Int32 nPos)
@@ -756,7 +756,9 @@ ParaPortion* ParaPortionList::Release(sal_Int32 nPos)
         SAL_WARN( "editeng", "ParaPortionList::Release - out of bounds pos " << nPos);
         return nullptr;
     }
-    return maPortions.release(maPortions.begin()+nPos).release();
+    ParaPortion* p = maPortions[nPos].release();
+    maPortions.erase(maPortions.begin()+nPos);
+    return p;
 }
 
 void ParaPortionList::Remove(sal_Int32 nPos)
@@ -776,12 +778,12 @@ void ParaPortionList::Insert(sal_Int32 nPos, ParaPortion* p)
         SAL_WARN( "editeng", "ParaPortionList::Insert - out of bounds pos " << nPos);
         return;
     }
-    maPortions.insert(maPortions.begin()+nPos, p);
+    maPortions.insert(maPortions.begin()+nPos, std::unique_ptr<ParaPortion>(p));
 }
 
 void ParaPortionList::Append(ParaPortion* p)
 {
-    maPortions.push_back(p);
+    maPortions.push_back(std::unique_ptr<ParaPortion>(p));
 }
 
 sal_Int32 ParaPortionList::Count() const
@@ -805,7 +807,7 @@ long ParaPortionList::GetYOffset(const ParaPortion* pPPortion) const
     long nHeight = 0;
     for (sal_Int32 i = 0, n = maPortions.size(); i < n; ++i)
     {
-        const ParaPortion* pTmpPortion = &maPortions[i];
+        const ParaPortion* pTmpPortion = maPortions[i].get();
         if ( pTmpPortion == pPPortion )
             return nHeight;
         nHeight += pTmpPortion->GetHeight();
@@ -819,7 +821,7 @@ sal_Int32 ParaPortionList::FindParagraph(long nYOffset) const
     long nY = 0;
     for (size_t i = 0, n = maPortions.size(); i < n; ++i)
     {
-        nY += maPortions[i].GetHeight(); // should also be correct even in bVisible!
+        nY += maPortions[i]->GetHeight(); // should also be correct even in bVisible!
         if ( nY > nYOffset )
             return i <= SAL_MAX_INT32 ? static_cast<sal_Int32>(i) : SAL_MAX_INT32;
     }
@@ -828,12 +830,12 @@ sal_Int32 ParaPortionList::FindParagraph(long nYOffset) const
 
 const ParaPortion* ParaPortionList::SafeGetObject(sal_Int32 nPos) const
 {
-    return 0 <= nPos && nPos < (sal_Int32)maPortions.size() ? &maPortions[nPos] : nullptr;
+    return 0 <= nPos && nPos < (sal_Int32)maPortions.size() ? maPortions[nPos].get() : nullptr;
 }
 
 ParaPortion* ParaPortionList::SafeGetObject(sal_Int32 nPos)
 {
-    return 0 <= nPos && nPos < (sal_Int32)maPortions.size() ? &maPortions[nPos] : nullptr;
+    return 0 <= nPos && nPos < (sal_Int32)maPortions.size() ? maPortions[nPos].get() : nullptr;
 }
 
 #if OSL_DEBUG_LEVEL > 0
@@ -1982,22 +1984,22 @@ EditDoc::~EditDoc()
 
 namespace {
 
-class RemoveEachItemFromPool : std::unary_function<ContentNode, void>
+class RemoveEachItemFromPool : std::unary_function<std::unique_ptr<ContentNode>, void>
 {
     EditDoc& mrDoc;
 public:
     explicit RemoveEachItemFromPool(EditDoc& rDoc) : mrDoc(rDoc) {}
-    void operator() (const ContentNode& rNode)
+    void operator() (const std::unique_ptr<ContentNode>& rNode)
     {
-        mrDoc.RemoveItemsFromPool(rNode);
+        mrDoc.RemoveItemsFromPool(*rNode.get());
     }
 };
 
-struct ClearSpellErrorsHandler : std::unary_function<ContentNode, void>
+struct ClearSpellErrorsHandler : std::unary_function<std::unique_ptr<ContentNode>, void>
 {
-    void operator() (ContentNode& rNode)
+    void operator() (std::unique_ptr<ContentNode>& rNode)
     {
-        rNode.DestroyWrongList();
+        rNode->DestroyWrongList();
     }
 };
 
@@ -2118,12 +2120,12 @@ sal_Int32 EditDoc::GetPos(const ContentNode* p) const
 
 const ContentNode* EditDoc::GetObject(sal_Int32 nPos) const
 {
-    return 0 <= nPos && nPos < (sal_Int32)maContents.size() ? &maContents[nPos] : nullptr;
+    return 0 <= nPos && nPos < (sal_Int32)maContents.size() ? maContents[nPos].get() : nullptr;
 }
 
 ContentNode* EditDoc::GetObject(sal_Int32 nPos)
 {
-    return 0 <= nPos && nPos < (sal_Int32)maContents.size() ? &maContents[nPos] : nullptr;
+    return 0 <= nPos && nPos < (sal_Int32)maContents.size() ? maContents[nPos].get() : nullptr;
 }
 
 const ContentNode* EditDoc::operator[](sal_Int32 nPos) const
@@ -2143,7 +2145,7 @@ void EditDoc::Insert(sal_Int32 nPos, ContentNode* p)
         SAL_WARN( "editeng", "EditDoc::Insert - overflow pos " << nPos);
         return;
     }
-    maContents.insert(maContents.begin()+nPos, p);
+    maContents.insert(maContents.begin()+nPos, std::unique_ptr<ContentNode>(p));
 }
 
 void EditDoc::Remove(sal_Int32 nPos)
@@ -2163,7 +2165,8 @@ void EditDoc::Release(sal_Int32 nPos)
         SAL_WARN( "editeng", "EditDoc::Release - out of bounds pos " << nPos);
         return;
     }
-    maContents.release(maContents.begin() + nPos).release();
+    maContents[nPos].release();
+    maContents.erase(maContents.begin() + nPos);
 }
 
 sal_Int32 EditDoc::Count() const
