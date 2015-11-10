@@ -203,10 +203,10 @@ namespace
     {
         const size_t nOrigLen(sal::static_int_cast<size_t>(i_rStr.getLength()));
         const sal_Char* const pOrig(i_rStr.getStr());
-        sal_Char* const pBuffer(new sal_Char[nOrigLen + 1]);
+        std::unique_ptr<sal_Char[]> pBuffer(new sal_Char[nOrigLen + 1]);
 
         const sal_Char* pRead(pOrig);
-        sal_Char* pWrite(pBuffer);
+        sal_Char* pWrite(pBuffer.get());
         const sal_Char* pCur(pOrig);
         while ((pCur = strchr(pCur, '\\')) != nullptr)
         {
@@ -237,8 +237,7 @@ namespace
         }
         *pWrite = '\0';
 
-        OString aResult(pBuffer);
-        delete[] pBuffer;
+        OString aResult(pBuffer.get());
         return aResult;
     }
 

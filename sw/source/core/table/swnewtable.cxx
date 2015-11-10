@@ -1328,7 +1328,7 @@ static sal_uInt16 lcl_CalculateSplitLineHeights( SwSplitLines &rCurr, SwSplitLin
     }
 
     SwTwips nHeight = 0;
-    SwTwips* pLines = new SwTwips[ nLast + 1 - nFirst ];
+    std::unique_ptr<SwTwips[]> pLines(new SwTwips[ nLast + 1 - nFirst ]);
     for( sal_uInt16 i = nFirst; i <= nLast; ++i )
     {
         bool bLayoutAvailable = false;
@@ -1349,7 +1349,6 @@ static sal_uInt16 lcl_CalculateSplitLineHeights( SwSplitLines &rCurr, SwSplitLin
         }
         ++pSplit;
     }
-    delete[] pLines;
     return nFirst;
 }
 
