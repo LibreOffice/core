@@ -1,1 +1,10 @@
 From [http://tagoh.bitbucket.org/liblangtag/]. An interface for BCP47 language tags.
+
+Updated IANA Language Subtag Registry files are available as
+[https://www.iana.org/assignments/language-subtag-registry/language-subtag-registry]
+and per convention are stored as a data/language-subtag-registry file in a
+language-subtag-registry-YYYY-MM-DD.tar.bz2 archive, with YYYY-MM-DD being the
+File-Date entry of the file, for example
+language-subtag-registry-2015-08-04.tar.bz2, and uploaded to the external
+sources repository to be included in the build of liblangtag. See download.lst
+LANGTAGREG_TARBALL and LANGTAGREG_MD5SUM.
