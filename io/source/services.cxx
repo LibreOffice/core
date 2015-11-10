@@ -35,64 +35,64 @@ static const struct ImplementationEntry g_entries[] =
     {
         io_acceptor::acceptor_CreateInstance, io_acceptor::acceptor_getImplementationName ,
         io_acceptor::acceptor_getSupportedServiceNames, createSingleComponentFactory ,
-        0, 0
+        nullptr, 0
     },
     {
         stoc_connector::connector_CreateInstance, stoc_connector::connector_getImplementationName ,
         stoc_connector::connector_getSupportedServiceNames, createSingleComponentFactory ,
-        0, 0
+        nullptr, 0
     },
     {
         io_stm::OPipeImpl_CreateInstance, io_stm::OPipeImpl_getImplementationName ,
         io_stm::OPipeImpl_getSupportedServiceNames, createSingleComponentFactory ,
-        0, 0
+        nullptr, 0
     },
     {
         io_stm::OPumpImpl_CreateInstance, io_stm::OPumpImpl_getImplementationName ,
         io_stm::OPumpImpl_getSupportedServiceNames, createSingleComponentFactory ,
-        0, 0
+        nullptr, 0
     },
     {
         io_stm::ODataInputStream_CreateInstance, io_stm::ODataInputStream_getImplementationName,
         io_stm::ODataInputStream_getSupportedServiceNames, createSingleComponentFactory,
-        0, 0
+        nullptr, 0
     },
     {
         io_stm::ODataOutputStream_CreateInstance, io_stm::ODataOutputStream_getImplementationName,
         io_stm::ODataOutputStream_getSupportedServiceNames, createSingleComponentFactory,
-        0, 0
+        nullptr, 0
     },
     {
         io_stm::OObjectInputStream_CreateInstance, io_stm::OObjectInputStream_getImplementationName,
         io_stm::OObjectInputStream_getSupportedServiceNames, createSingleComponentFactory,
-        0, 0
+        nullptr, 0
     },
     {
         io_stm::OObjectOutputStream_CreateInstance, io_stm::OObjectOutputStream_getImplementationName,
         io_stm::OObjectOutputStream_getSupportedServiceNames, createSingleComponentFactory,
-        0, 0
+        nullptr, 0
     },
     {
         io_stm::OMarkableInputStream_CreateInstance, io_stm::OMarkableInputStream_getImplementationName,
         io_stm::OMarkableInputStream_getSupportedServiceNames, createSingleComponentFactory,
-        0, 0
+        nullptr, 0
     },
     {
         io_stm::OMarkableOutputStream_CreateInstance, io_stm::OMarkableOutputStream_getImplementationName,
         io_stm::OMarkableOutputStream_getSupportedServiceNames, createSingleComponentFactory,
-        0, 0
+        nullptr, 0
     },
     {
         io_TextInputStream::TextInputStream_CreateInstance, io_TextInputStream::TextInputStream_getImplementationName ,
         io_TextInputStream::TextInputStream_getSupportedServiceNames, createSingleComponentFactory ,
-        0, 0
+        nullptr, 0
     },
     {
         io_TextOutputStream::TextOutputStream_CreateInstance, io_TextOutputStream::TextOutputStream_getImplementationName ,
         io_TextOutputStream::TextOutputStream_getSupportedServiceNames, createSingleComponentFactory ,
-        0, 0
+        nullptr, 0
     },
-    {0, 0, 0, 0, 0, 0}
+    {nullptr, nullptr, nullptr, nullptr, nullptr, 0}
 };
 
 extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL io_component_getFactory(

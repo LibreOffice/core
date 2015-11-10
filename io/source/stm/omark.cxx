@@ -717,7 +717,7 @@ void OMarkableInputStream::closeInput() throw (NotConnectedException, RuntimeExc
         setSuccessor( Reference< XConnectable >() );
 
         delete m_pBuffer;
-        m_pBuffer = 0;
+        m_pBuffer = nullptr;
         m_nCurrentPos = 0;
         m_nCurrentMark = 0;
     }

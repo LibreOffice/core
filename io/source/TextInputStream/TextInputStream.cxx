@@ -115,10 +115,10 @@ public:
 
 OTextInputStream::OTextInputStream()
     : mbEncodingInitialized(false)
-    , mConvText2Unicode(NULL)
-    , mContextText2Unicode(NULL)
+    , mConvText2Unicode(nullptr)
+    , mContextText2Unicode(nullptr)
     , mSeqSource(READ_BYTE_COUNT)
-    , mpBuffer(NULL)
+    , mpBuffer(nullptr)
     , mnBufferSize(0)
     , mnCharsInBuffer(0)
     , mbReachedEOF(false)

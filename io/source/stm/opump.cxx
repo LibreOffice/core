@@ -105,7 +105,7 @@ namespace io_stm {
         virtual sal_Bool     SAL_CALL supportsService(const OUString& ServiceName) throw(std::exception  ) override;
     };
 
-Pump::Pump() : m_aThread( 0 ),
+Pump::Pump() : m_aThread( nullptr ),
                m_cnt( m_aMutex ),
                m_closeFired( false )
 {

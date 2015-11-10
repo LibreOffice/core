@@ -79,8 +79,8 @@ namespace io_acceptor
 
 
     OAcceptor::OAcceptor( const Reference< XComponentContext > & xCtx )
-        : m_pPipe( 0 )
-        , m_pSocket( 0 )
+        : m_pPipe( nullptr )
+        , m_pSocket( nullptr )
         , m_bInAccept( false )
         , _xSMgr( xCtx->getServiceManager() )
         , _xCtx( xCtx )
@@ -163,7 +163,7 @@ namespace io_acceptor
                         {
                             MutexGuard g( m_mutex );
                             delete m_pPipe;
-                            m_pPipe = 0;
+                            m_pPipe = nullptr;
                         }
                         throw;
                     }
@@ -197,7 +197,7 @@ namespace io_acceptor
                         {
                             MutexGuard g( m_mutex );
                             delete m_pSocket;
-                            m_pSocket = 0;
+                            m_pSocket = nullptr;
                         }
                         throw;
                     }

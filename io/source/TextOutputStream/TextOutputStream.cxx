@@ -95,8 +95,8 @@ public:
 
 OTextOutputStream::OTextOutputStream()
     : mbEncodingInitialized(false)
-    , mConvUnicode2Text(NULL)
-    , mContextUnicode2Text(NULL)
+    , mConvUnicode2Text(nullptr)
+    , mContextUnicode2Text(nullptr)
 {
 }
 

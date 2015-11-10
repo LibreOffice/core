@@ -263,7 +263,7 @@ void OPipeImpl::closeInput()
     m_bInputStreamClosed = true;
 
     delete m_pFIFO;
-    m_pFIFO = 0;
+    m_pFIFO = nullptr;
 
     // readBytes may throw an exception
     m_conditionBytesAvail.set();

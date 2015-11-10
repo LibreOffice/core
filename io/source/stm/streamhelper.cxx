@@ -52,7 +52,7 @@ void MemFIFO::skip( sal_Int32 nBytesToSkip ) throw ( css::io::BufferSizeExceeded
 MemRingBuffer::MemRingBuffer()
 {
     m_nBufferLen            = 0;
-    m_p                     = 0;
+    m_p                     = nullptr;
     m_nStart                = 0;
     m_nOccupiedBuffer       = 0;
 }
@@ -187,7 +187,7 @@ void MemRingBuffer::shrink() throw ()
         if( m_p ) {
             free( m_p );
         }
-        m_p = 0;
+        m_p = nullptr;
         m_nBufferLen = 0;
         m_nStart = 0;
     }
