@@ -101,7 +101,7 @@ XTYPEPROVIDER_COMMON_IMPL( Content );
 uno::Sequence< uno::Type > SAL_CALL Content::getTypes()
     throw( uno::RuntimeException, std::exception )
 {
-    static cppu::OTypeCollection* pCollection = NULL;
+    static cppu::OTypeCollection* pCollection = nullptr;
 
     if ( !pCollection )
     {

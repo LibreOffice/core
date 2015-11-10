@@ -47,7 +47,7 @@ namespace treeview {
 
     public:
 
-        explicit TVDom( TVDom* arent = 0 )
+        explicit TVDom( TVDom* arent = nullptr )
             : kind( other ),
               parent( arent ),
               children( 0 )
@@ -425,7 +425,7 @@ TVChildTarget::TVChildTarget( const Reference< XComponentContext >& xContext )
         aFile.read( s,len,ret );
         aFile.close();
 
-        XML_Parser parser = XML_ParserCreate( 0 );
+        XML_Parser parser = XML_ParserCreate( nullptr );
         XML_SetElementHandler( parser,
                                start_handler,
                                end_handler );

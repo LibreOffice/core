@@ -44,9 +44,9 @@ ResultSetBase::ResultSetBase( const uno::Reference< uno::XComponentContext >&  r
       m_bRowCountFinal( true ),
       m_sProperty( seq ),
       m_sSortingInfo( seqSort ),
-      m_pDisposeEventListeners( 0 ),
-      m_pRowCountListeners( 0 ),
-      m_pIsFinalListeners( 0 )
+      m_pDisposeEventListeners( nullptr ),
+      m_pRowCountListeners( nullptr ),
+      m_pIsFinalListeners( nullptr )
 {
 }
 
@@ -366,7 +366,7 @@ ResultSetBase::getStatement(
     throw( sdbc::SQLException,
            uno::RuntimeException, std::exception )
 {
-    uno::Reference< uno::XInterface > test( 0 );
+    uno::Reference< uno::XInterface > test( nullptr );
     return test;
 }
 

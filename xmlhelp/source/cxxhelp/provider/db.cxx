@@ -67,13 +67,13 @@ void Hdf::createHashMap( bool bOptimizeForPerformance )
     releaseHashMap();
     if( bOptimizeForPerformance )
     {
-        if( m_pStringToDataMap != NULL )
+        if( m_pStringToDataMap != nullptr )
             return;
         m_pStringToDataMap = new StringToDataMap();
     }
     else
     {
-        if( m_pStringToValPosMap != NULL )
+        if( m_pStringToValPosMap != nullptr )
             return;
         m_pStringToValPosMap = new StringToValPosMap();
     }
@@ -124,15 +124,15 @@ void Hdf::createHashMap( bool bOptimizeForPerformance )
 
 void Hdf::releaseHashMap()
 {
-    if( m_pStringToDataMap != NULL )
+    if( m_pStringToDataMap != nullptr )
     {
         delete m_pStringToDataMap;
-        m_pStringToDataMap = NULL;
+        m_pStringToDataMap = nullptr;
     }
-    if( m_pStringToValPosMap != NULL )
+    if( m_pStringToValPosMap != nullptr )
     {
         delete m_pStringToValPosMap;
-        m_pStringToValPosMap = NULL;
+        m_pStringToValPosMap = nullptr;
     }
 }
 
@@ -146,13 +146,13 @@ bool Hdf::getValueForKey( const OString& rKey, HDFData& rValue )
     try
     {
 
-    if( m_pStringToDataMap == NULL && m_pStringToValPosMap == NULL )
+    if( m_pStringToDataMap == nullptr && m_pStringToValPosMap == nullptr )
     {
         bool bOptimizeForPerformance = false;
         createHashMap( bOptimizeForPerformance );
     }
 
-    if( m_pStringToValPosMap != NULL )
+    if( m_pStringToValPosMap != nullptr )
     {
         StringToValPosMap::const_iterator it = m_pStringToValPosMap->find( rKey );
         if( it != m_pStringToValPosMap->end() )
@@ -183,7 +183,7 @@ bool Hdf::getValueForKey( const OString& rKey, HDFData& rValue )
         }
     }
 
-    else if( m_pStringToDataMap != NULL )
+    else if( m_pStringToDataMap != nullptr )
     {
         StringToDataMap::const_iterator it = m_pStringToDataMap->find( rKey );
         if( it != m_pStringToDataMap->end() )
@@ -249,7 +249,7 @@ bool Hdf::getNextKeyAndValue( HDFData& rKey, HDFData& rValue )
 void Hdf::stopIteration()
 {
     m_aItData = Sequence<sal_Int8>();
-    m_pItData = NULL;
+    m_pItData = nullptr;
     m_nItRead = -1;
     m_iItPos = -1;
 }

@@ -31,7 +31,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL ucpchelp_component_getFactory(
     void * pServiceManager,
     SAL_UNUSED_PARAMETER void * /*pRegistryKey*/ )
 {
-    void * pRet = 0;
+    void * pRet = nullptr;
 
     uno::Reference< lang::XMultiServiceFactory > xSMgr(
         static_cast< lang::XMultiServiceFactory * >( pServiceManager ) );

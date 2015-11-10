@@ -49,7 +49,7 @@ ContentProvider::ContentProvider( const uno::Reference< uno::XComponentContext >
     : ::ucbhelper::ContentProviderImplHelper( rxContext )
     , isInitialized( false )
     , m_aScheme(MYUCP_URL_SCHEME)
-    , m_pDatabases( 0 )
+    , m_pDatabases( nullptr )
 {
 }
 
@@ -97,7 +97,7 @@ css::uno::Sequence< sal_Int8 > SAL_CALL ContentProvider::getImplementationId()
 css::uno::Sequence< css::uno::Type > SAL_CALL ContentProvider::getTypes()
     throw( css::uno::RuntimeException, std::exception )
 {
-    static cppu::OTypeCollection* pCollection = NULL;
+    static cppu::OTypeCollection* pCollection = nullptr;
       if ( !pCollection )
       {
         osl::Guard< osl::Mutex > aGuard( osl::Mutex::getGlobalMutex() );

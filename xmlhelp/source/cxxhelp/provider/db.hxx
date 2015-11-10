@@ -39,7 +39,7 @@ namespace helpdatafileproxy {
     public:
         HDFData()
             : m_nSize( 0 )
-            , m_pBuffer( NULL )
+            , m_pBuffer( nullptr )
         {}
         ~HDFData()
             { delete [] m_pBuffer; }
@@ -76,10 +76,10 @@ namespace helpdatafileproxy {
         Hdf( const OUString& rFileURL,
             com::sun::star::uno::Reference< com::sun::star::ucb::XSimpleFileAccess3 > xSFA )
                 : m_aFileURL( rFileURL )
-                , m_pStringToDataMap( NULL )
-                , m_pStringToValPosMap( NULL )
+                , m_pStringToDataMap( nullptr )
+                , m_pStringToValPosMap( nullptr )
                 , m_xSFA( xSFA )
-                , m_pItData( NULL )
+                , m_pItData( nullptr )
                 , m_nItRead( -1 )
                 , m_iItPos( -1 )
         {

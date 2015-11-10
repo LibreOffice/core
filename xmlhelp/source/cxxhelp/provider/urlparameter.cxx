@@ -277,7 +277,7 @@ void URLParameter::readHelpDataFile()
     DataBaseIterator aDbIt( *m_pDatabases, aModule, aLanguage, false );
     bool bSuccess = false;
 
-    const sal_Char* pData = NULL;
+    const sal_Char* pData = nullptr;
 
     helpdatafileproxy::HDFData aHDFData;
     OUString aExtensionPath;
@@ -607,27 +607,27 @@ struct UserData {
     URLParameter*                       m_pInitial;
 };
 
-UserData *ugblData = 0;
+UserData *ugblData = nullptr;
 
 extern "C" {
 
 static int
 fileMatch(const char * URI) {
-    if ((URI != NULL) && !strncmp(URI, "file:/", 6))
+    if ((URI != nullptr) && !strncmp(URI, "file:/", 6))
         return 1;
     return 0;
 }
 
 static int
 zipMatch(const char * URI) {
-    if ((URI != NULL) && !strncmp(URI, "vnd.sun.star.zip:/", 18))
+    if ((URI != nullptr) && !strncmp(URI, "vnd.sun.star.zip:/", 18))
         return 1;
     return 0;
 }
 
 static int
 helpMatch(const char * URI) {
-    if ((URI != NULL) && !strncmp(URI, "vnd.sun.star.help:/", 19))
+    if ((URI != nullptr) && !strncmp(URI, "vnd.sun.star.help:/", 19))
         return 1;
     return 0;
 }
@@ -675,7 +675,7 @@ zipOpen(SAL_UNUSED_PARAMETER const char *) {
     {
         return new Reference<XInputStream>(xInputStream);
     }
-    return 0;
+    return nullptr;
 }
 
 static void *
@@ -710,7 +710,7 @@ helpOpen(const char * URI) {
 
     if( xInputStream.is() )
         return new Reference<XInputStream>(xInputStream);
-    return 0;
+    return nullptr;
 }
 
 static int
@@ -900,7 +900,7 @@ InputStreamTransformer::InputStreamTransformer( URLParameter* urlParam,
 
         for( int i = 0; i < last; ++i )
             parameter[i] = parString[i].getStr();
-        parameter[last] = 0;
+        parameter[last] = nullptr;
 
         OUString xslURL = pDatabases->getInstallPathAsURL();
 
@@ -925,7 +925,7 @@ InputStreamTransformer::InputStreamTransformer( URLParameter* urlParam,
         xmlDocPtr res = xsltApplyStylesheet(cur, doc, parameter);
         if (res)
         {
-            xmlChar *doc_txt_ptr=0;
+            xmlChar *doc_txt_ptr=nullptr;
             int doc_txt_len;
             xsltSaveResultToString(&doc_txt_ptr, &doc_txt_len, res, cur);
             addToBuffer(reinterpret_cast<char*>(doc_txt_ptr), doc_txt_len);

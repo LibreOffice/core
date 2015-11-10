@@ -162,7 +162,7 @@ namespace chelp {
 
         helpdatafileproxy::Hdf* getHelpDataFile( const OUString& Module,
                          const OUString& Language, bool helpText = false,
-                         const OUString* pExtensionPath = NULL );
+                         const OUString* pExtensionPath = nullptr );
 
         /**
          *  The following method returns the Collator for the given language-country combination
@@ -208,8 +208,8 @@ namespace chelp {
 
         com::sun::star::uno::Reference< com::sun::star::container::XHierarchicalNameAccess >
         findJarFileForPath( const OUString& jar, const OUString& Language,
-            const OUString& path, OUString* o_pExtensionPath = NULL,
-            OUString* o_pExtensionRegistryPath = NULL );
+            const OUString& path, OUString* o_pExtensionPath = nullptr,
+            OUString* o_pExtensionRegistryPath = nullptr );
 
         /**
          *  Maps a given language-locale combination to language.
@@ -395,7 +395,7 @@ namespace chelp {
                 , m_bHelpText( bHelpText )
         {}
 
-        helpdatafileproxy::Hdf* nextHdf( OUString* o_pExtensionPath = NULL, OUString* o_pExtensionRegistryPath = NULL );
+        helpdatafileproxy::Hdf* nextHdf( OUString* o_pExtensionPath = nullptr, OUString* o_pExtensionRegistryPath = nullptr );
 
     private:
         helpdatafileproxy::Hdf* implGetHdfFromPackage(
@@ -432,12 +432,12 @@ namespace chelp {
 
         com::sun::star::uno::Reference< com::sun::star::container::XHierarchicalNameAccess >
             nextJarFile( com::sun::star::uno::Reference< com::sun::star::deployment::XPackage >& o_xParentPackageBundle,
-                            OUString* o_pExtensionPath = NULL, OUString* o_pExtensionRegistryPath = NULL );
+                            OUString* o_pExtensionPath = nullptr, OUString* o_pExtensionRegistryPath = nullptr );
 
     private:
         com::sun::star::uno::Reference< com::sun::star::container::XHierarchicalNameAccess >
             implGetJarFromPackage(com::sun::star::uno::Reference< com::sun::star::deployment::XPackage > xPackage,
-                OUString* o_pExtensionPath = NULL, OUString* o_pExtensionRegistryPath = NULL );
+                OUString* o_pExtensionPath = nullptr, OUString* o_pExtensionRegistryPath = nullptr );
 
     }; // end class JarFileIterator
 

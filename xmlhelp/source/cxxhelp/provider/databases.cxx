@@ -126,9 +126,9 @@ Databases::Databases( bool showBasic,
                       Reference< uno::XComponentContext > xContext )
     : m_xContext( xContext ),
       m_bShowBasic(showBasic),
-      m_pErrorDoc( 0 ),
+      m_pErrorDoc( nullptr ),
       m_nCustomCSSDocLength( 0 ),
-      m_pCustomCSSDoc( 0 ),
+      m_pCustomCSSDoc( nullptr ),
       m_aCSS(styleSheet.toAsciiLowerCase()),
       newProdName( "$[officename]" ),
       newProdVersion( "$[officeversion]" ),
@@ -368,7 +368,7 @@ StaticModuleInformation* Databases::getStaticInformationForModule( const OUStrin
         osl::File cfgFile( getInstallPathAsURL() + key + ".cfg" );
 
         if( osl::FileBase::E_None != cfgFile.open( osl_File_OpenFlag_Read ) )
-            it->second = 0;
+            it->second = nullptr;
         else
         {
             sal_uInt32 pos = 0;
@@ -479,14 +479,14 @@ helpdatafileproxy::Hdf* Databases::getHelpDataFile( const OUString& Database,
                             const OUString* pExtensionPath )
 {
     if( Database.isEmpty() || Language.isEmpty() )
-        return 0;
+        return nullptr;
 
     osl::MutexGuard aGuard( m_aMutex );
 
     OUString aFileExt( helpText ? OUString(".ht") : OUString(".db") );
     OUString dbFileName = "/" + Database + aFileExt;
     OUString key;
-    if( pExtensionPath == NULL )
+    if( pExtensionPath == nullptr )
         key = processLang( Language ) + dbFileName;
     else
         key = *pExtensionPath + Language + dbFileName;      // make unique, don't change language
@@ -498,7 +498,7 @@ helpdatafileproxy::Hdf* Databases::getHelpDataFile( const OUString& Database,
 
     if( aPair.second && ! it->second )
     {
-        helpdatafileproxy::Hdf* pHdf = 0;
+        helpdatafileproxy::Hdf* pHdf = nullptr;
 
         OUString fileURL;
         if( pExtensionPath )
@@ -508,7 +508,7 @@ helpdatafileproxy::Hdf* Databases::getHelpDataFile( const OUString& Database,
 
         OUString fileNameHDFHelp( fileURL );
         //Extensions always use the new format
-        if( pExtensionPath != NULL )
+        if( pExtensionPath != nullptr )
             fileNameHDFHelp += "_";
         //SimpleFileAccess takes file URLs as arguments!!! Using filenames works accidentally but
         //fails for example when using long path names on Windows (starting with \\?\)
@@ -660,7 +660,7 @@ void KeywordInfo::KeywordElement::init( Databases *pDatabases,helpdatafileproxy:
         listAnchor[i] = anchor[i];
 
         helpdatafileproxy::HDFData aHDFData;
-        const sal_Char* pData = NULL;
+        const sal_Char* pData = nullptr;
 
         if( pHdf )
         {
@@ -773,7 +773,7 @@ KeywordInfo* Databases::getKeyword( const OUString& Database,
                 if( aHdf.startIteration() )
                 {
                     helpdatafileproxy::Hdf* pHdf = getHelpDataFile( Database,Language );
-                    if( pHdf != NULL )
+                    if( pHdf != nullptr )
                     {
                         bool bOptimizeForPerformance = true;
                         pHdf->releaseHashMap();
@@ -801,7 +801,7 @@ KeywordInfo* Databases::getKeyword( const OUString& Database,
                     }
                     aHdf.stopIteration();
 
-                    if( pHdf != NULL )
+                    if( pHdf != nullptr )
                         pHdf->releaseHashMap();
                 }
             }
@@ -824,14 +824,14 @@ Reference< XHierarchicalNameAccess > Databases::jarFile( const OUString& jar,
 {
     if( jar.isEmpty() || Language.isEmpty() )
     {
-        return Reference< XHierarchicalNameAccess >( 0 );
+        return Reference< XHierarchicalNameAccess >( nullptr );
     }
     OUString key = processLang(Language) + "/" + jar;
 
     osl::MutexGuard aGuard( m_aMutex );
 
     ZipFileTable::iterator it =
-        m_aZipFileTable.insert( ZipFileTable::value_type( key,Reference< XHierarchicalNameAccess >(0) ) ).first;
+        m_aZipFileTable.insert( ZipFileTable::value_type( key,Reference< XHierarchicalNameAccess >(nullptr) ) ).first;
 
     if( ! it->second.is() )
     {
@@ -959,7 +959,7 @@ Reference< XHierarchicalNameAccess > Databases::findJarFileForPath
 void Databases::changeCSS(const OUString& newStyleSheet)
 {
     m_aCSS = newStyleSheet.toAsciiLowerCase();
-    delete[] m_pCustomCSSDoc, m_pCustomCSSDoc = 0,m_nCustomCSSDocLength = 0;
+    delete[] m_pCustomCSSDoc, m_pCustomCSSDoc = nullptr,m_nCustomCSSDocLength = 0;
 }
 
 void Databases::cascadingStylesheet( const OUString& Language,
@@ -1089,13 +1089,13 @@ void Databases::setActiveText( const OUString& Module,
     helpdatafileproxy::HDFData aHDFData;
 
     int nSize = 0;
-    const sal_Char* pData = NULL;
+    const sal_Char* pData = nullptr;
 
     bool bSuccess = false;
     if( !bFoundAsEmpty )
     {
-        helpdatafileproxy::Hdf* pHdf = 0;
-        while( !bSuccess && (pHdf = aDbIt.nextHdf()) != NULL )
+        helpdatafileproxy::Hdf* pHdf = nullptr;
+        while( !bSuccess && (pHdf = aDbIt.nextHdf()) != nullptr )
         {
             bSuccess = pHdf->getValueForKey( id, aHDFData );
             nSize = aHDFData.getSize();
@@ -1407,7 +1407,7 @@ void ExtensionIteratorBase::implGetLanguageVectorFromPackage( ::std::vector< OUS
 
 helpdatafileproxy::Hdf* DataBaseIterator::nextHdf( OUString* o_pExtensionPath, OUString* o_pExtensionRegistryPath )
 {
-    helpdatafileproxy::Hdf* pRetHdf = NULL;
+    helpdatafileproxy::Hdf* pRetHdf = nullptr;
 
     while( !pRetHdf && m_eState != END_REACHED )
     {
@@ -1474,10 +1474,10 @@ helpdatafileproxy::Hdf* DataBaseIterator::implGetHdfFromPackage( Reference< depl
     }
     catch ( deployment::ExtensionRemovedException&)
     {
-        return NULL;
+        return nullptr;
     }
 
-    helpdatafileproxy::Hdf* pRetHdf = NULL;
+    helpdatafileproxy::Hdf* pRetHdf = nullptr;
     if (optRegData.IsPresent && !optRegData.Value.isEmpty())
     {
         OUString aRegDataUrl = optRegData.Value + "/";
@@ -1691,14 +1691,14 @@ Reference< XHierarchicalNameAccess > JarFileIterator::implGetJarFromPackage
     catch ( Exception & )
     {}
 
-    if( xNA.is() && o_pExtensionPath != NULL )
+    if( xNA.is() && o_pExtensionPath != nullptr )
     {
         // Extract path including language from file name
         sal_Int32 nLastSlash = zipFile.lastIndexOf( '/' );
         if( nLastSlash != -1 )
             *o_pExtensionPath = zipFile.copy( 0, nLastSlash );
 
-        if( o_pExtensionRegistryPath != NULL )
+        if( o_pExtensionRegistryPath != nullptr )
         {
             OUString& rPath = *o_pExtensionPath;
             sal_Int32 nLastSlashInPath = rPath.lastIndexOf( '/', rPath.getLength() - 1 );
@@ -1826,7 +1826,7 @@ OUString IndexFolderIterator::implGetIndexFolderFromPackage( bool& o_rbTemporary
                 if( !bIsWriteAccess )
                 {
                     OUString aTempFileURL;
-                    ::osl::FileBase::RC eErr = ::osl::File::createTempFile( 0, 0, &aTempFileURL );
+                    ::osl::FileBase::RC eErr = ::osl::File::createTempFile( nullptr, nullptr, &aTempFileURL );
                     if( eErr == ::osl::FileBase::E_None )
                     {
                         OUString aTempDirURL = aTempFileURL;
