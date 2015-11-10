@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "faac7902_07b464f0",
+        "filename": "offapi/com/sun/star/rdf/FileFormat.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-11-10T21:39:17Z",
+      "side": 1,
+      "message": "hmm... let\u0027s be consistent",
+      "parentUuid": "9a061dce_9751c411",
+      "revId": "24b5404f51abec8539ed407f47bbaca33e8ac32a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a061dce_173e54b8",
         "filename": "offapi/com/sun/star/rdf/FileFormat.idl",
         "patchSetId": 1
@@ -30,6 +48,30 @@
       "writtenOn": "2015-09-29T19:18:22Z",
       "side": 1,
       "message": "Why the 20060104 archive.org version?\n\nAccording to Wikipedia https://en.wikipedia.org/wiki/TriG_%28syntax%29 the 2007 version is kept at http://wifo5-03.informatik.uni-mannheim.de/bizer/trig/\n\nBut actually it became a W3C recommendation, http://www.w3.org/TR/trig/",
+      "range": {
+        "startLine": 57,
+        "startChar": 45,
+        "endLine": 57,
+        "endChar": 53
+      },
+      "revId": "24b5404f51abec8539ed407f47bbaca33e8ac32a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "faac7902_c7b9bcee",
+        "filename": "offapi/com/sun/star/rdf/FileFormat.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-11-10T21:39:17Z",
+      "side": 1,
+      "message": "there are some differences between the old draft and the W3C spec (Appendix A), but it turns out our raptor implementation (which we would use if we would support the format) supports neither the old nor the W3C spec completely so what the heck.",
+      "parentUuid": "9a061dce_173e54b8",
       "range": {
         "startLine": 57,
         "startChar": 45,
@@ -59,6 +101,47 @@
         "endLine": 60,
         "endChar": 53
       },
+      "revId": "24b5404f51abec8539ed407f47bbaca33e8ac32a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "faac7902_a7be38d2",
+        "filename": "offapi/com/sun/star/rdf/FileFormat.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-11-10T21:39:17Z",
+      "side": 1,
+      "message": "i prefer the sw.nokia.com as that has links to dtd and xml-schema",
+      "parentUuid": "9a061dce_3741d83a",
+      "range": {
+        "startLine": 60,
+        "startChar": 45,
+        "endLine": 60,
+        "endChar": 53
+      },
+      "revId": "24b5404f51abec8539ed407f47bbaca33e8ac32a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "faac7902_27e4080c",
+        "filename": "offapi/com/sun/star/rdf/FileFormat.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-11-10T21:39:17Z",
+      "side": 1,
+      "message": "hmm.... the mime-type here indicates that un-available server is not a new problem...",
       "revId": "24b5404f51abec8539ed407f47bbaca33e8ac32a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
