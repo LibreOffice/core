@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "faac7902_ec394743",
+        "filename": "i18npool/source/search/textsearch.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 304,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-11-10T11:35:36Z",
+      "side": 1,
+      "message": "I wonder if nStart\u003c0 could actually happen, but I\u0027m not sure what the comment \"e.g. searching for $ with ICU regex engine\" really refers to. If nStart can be \u003c0 then surely we need to take care of that and not just assert, which has no effect in a non-debug build. Could you please clarify?",
+      "revId": "5a5db9da9e967f42107042c44c4515cbc0293115",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "faac7902_4c3fb325",
+        "filename": "i18npool/source/search/textsearch.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 311,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-11-10T11:35:36Z",
+      "side": 1,
+      "message": "Same here, can nStop be \u003c0?",
+      "revId": "5a5db9da9e967f42107042c44c4515cbc0293115",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
