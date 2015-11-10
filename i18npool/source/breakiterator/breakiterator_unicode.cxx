@@ -43,7 +43,7 @@ namespace com { namespace sun { namespace star { namespace i18n {
 BreakIterator_Unicode::BreakIterator_Unicode()
     : cBreakIterator( "com.sun.star.i18n.BreakIterator_Unicode" )    // implementation name
     , lineRule( "line" )
-    , icuBI( NULL )
+    , icuBI( nullptr )
     , aBreakType(0)
 {
 }
@@ -107,7 +107,7 @@ void SAL_CALL BreakIterator_Unicode::loadICUBreakIterator(const css::lang::Local
         rLocale.Variant  != icuBI->maLocale.Variant) {
         if (icuBI->aBreakIterator) {
             delete icuBI->aBreakIterator;
-            icuBI->aBreakIterator=NULL;
+            icuBI->aBreakIterator=nullptr;
         }
         if (rule) {
             uno::Sequence< OUString > breakRules = LocaleDataImpl().getBreakIteratorRules(rLocale);
@@ -116,7 +116,7 @@ void SAL_CALL BreakIterator_Unicode::loadICUBreakIterator(const css::lang::Local
             udata_setAppData("OpenOffice", OpenOffice_dat, &status);
             if ( !U_SUCCESS(status) ) throw uno::RuntimeException();
 
-            OOoRuleBasedBreakIterator *rbi = NULL;
+            OOoRuleBasedBreakIterator *rbi = nullptr;
 
             if (breakRules.getLength() > breakType && !breakRules[breakType].isEmpty())
             {
@@ -139,7 +139,7 @@ void SAL_CALL BreakIterator_Unicode::loadICUBreakIterator(const css::lang::Local
                     pUData = udata_open("OpenOffice", "brk", rule, &status);
                     if( U_SUCCESS(status) )
                         rbi = new OOoRuleBasedBreakIterator( pUData, status);
-                    if (!U_SUCCESS(status) ) icuBI->aBreakIterator=NULL;
+                    if (!U_SUCCESS(status) ) icuBI->aBreakIterator=nullptr;
                 }
             }
             if (rbi) {
@@ -172,7 +172,7 @@ void SAL_CALL BreakIterator_Unicode::loadICUBreakIterator(const css::lang::Local
                     break;
             }
             if ( !U_SUCCESS(status) ) {
-                icuBI->aBreakIterator=NULL;
+                icuBI->aBreakIterator=nullptr;
                 throw uno::RuntimeException();
             }
         }
@@ -245,7 +245,7 @@ sal_Int32 SAL_CALL BreakIterator_Unicode::previousCharacters( const OUString& Te
 Boundary SAL_CALL BreakIterator_Unicode::nextWord( const OUString& Text, sal_Int32 nStartPos,
     const lang::Locale& rLocale, sal_Int16 rWordType ) throw(uno::RuntimeException, std::exception)
 {
-    loadICUBreakIterator(rLocale, LOAD_WORD_BREAKITERATOR, rWordType, NULL, Text);
+    loadICUBreakIterator(rLocale, LOAD_WORD_BREAKITERATOR, rWordType, nullptr, Text);
 
     result.startPos = icuBI->aBreakIterator->following(nStartPos);
     if( result.startPos >= Text.getLength() || result.startPos == BreakIterator::DONE )
@@ -267,7 +267,7 @@ Boundary SAL_CALL BreakIterator_Unicode::nextWord( const OUString& Text, sal_Int
 Boundary SAL_CALL BreakIterator_Unicode::previousWord(const OUString& Text, sal_Int32 nStartPos,
         const lang::Locale& rLocale, sal_Int16 rWordType) throw(uno::RuntimeException, std::exception)
 {
-    loadICUBreakIterator(rLocale, LOAD_WORD_BREAKITERATOR, rWordType, NULL, Text);
+    loadICUBreakIterator(rLocale, LOAD_WORD_BREAKITERATOR, rWordType, nullptr, Text);
 
     result.startPos = icuBI->aBreakIterator->preceding(nStartPos);
     if( result.startPos < 0 || result.startPos == BreakIterator::DONE)
@@ -289,7 +289,7 @@ Boundary SAL_CALL BreakIterator_Unicode::previousWord(const OUString& Text, sal_
 Boundary SAL_CALL BreakIterator_Unicode::getWordBoundary( const OUString& Text, sal_Int32 nPos, const lang::Locale& rLocale,
         sal_Int16 rWordType, sal_Bool bDirection ) throw(uno::RuntimeException, std::exception)
 {
-    loadICUBreakIterator(rLocale, LOAD_WORD_BREAKITERATOR, rWordType, NULL, Text);
+    loadICUBreakIterator(rLocale, LOAD_WORD_BREAKITERATOR, rWordType, nullptr, Text);
     sal_Int32 len = Text.getLength();
 
     if(icuBI->aBreakIterator->isBoundary(nPos)) {

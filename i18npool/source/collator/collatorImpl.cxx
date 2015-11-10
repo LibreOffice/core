@@ -34,7 +34,7 @@ namespace com { namespace sun { namespace star { namespace i18n {
 CollatorImpl::CollatorImpl( const Reference < XComponentContext >& rxContext ) : m_xContext(rxContext)
 {
     mxLocaleData.set( LocaleData::create(rxContext) );
-    cachedItem = NULL;
+    cachedItem = nullptr;
 }
 
 CollatorImpl::~CollatorImpl()
@@ -206,7 +206,7 @@ CollatorImpl::loadCachedCollator(const lang::Locale& rLocale, const OUString& rS
         bLoaded = createCollator( rLocale, "Unicode", rSortAlgorithm);
         if (!bLoaded)
         {
-            cachedItem = NULL;
+            cachedItem = nullptr;
             throw RuntimeException();   // could not load any service
         }
     }

@@ -34,7 +34,7 @@ namespace com { namespace sun { namespace star { namespace i18n {
 BreakIterator_th::BreakIterator_th()
 {
     cBreakIterator = "com.sun.star.i18n.BreakIterator_th";
-    lineRule=NULL;
+    lineRule=nullptr;
 }
 
 BreakIterator_th::~BreakIterator_th()

@@ -82,7 +82,7 @@ IndexEntrySupplier_asian::getIndexCharacter( const OUString& rIndexEntry,
     sal_Int32 i=0;
     sal_uInt32 ch = rIndexEntry.iterateCodePoints(&i, 0);
 
-    sal_uInt16** (*func)(sal_Int16*)=NULL;
+    sal_uInt16** (*func)(sal_Int16*)=nullptr;
 #ifndef DISABLE_DYNLOADING
     if (hModule) {
         OUString get("get_indexdata_");
@@ -159,10 +159,10 @@ OUString SAL_CALL
 IndexEntrySupplier_asian::getPhoneticCandidate( const OUString& rIndexEntry,
         const Locale& rLocale ) throw (RuntimeException, std::exception)
 {
-    sal_uInt16 **(*func)(sal_Int16*)=NULL;
+    sal_uInt16 **(*func)(sal_Int16*)=nullptr;
 #ifndef DISABLE_DYNLOADING
     if (hModule) {
-        const sal_Char *func_name=NULL;
+        const sal_Char *func_name=nullptr;
         if ( rLocale.Language == "zh" )
             func_name=(OUString("TW HK MO").indexOf(rLocale.Country) >= 0) ?  "get_zh_zhuyin" : "get_zh_pinyin";
         else if ( rLocale.Language == "ko" )

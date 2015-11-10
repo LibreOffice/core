@@ -274,7 +274,7 @@ TextConversion_ko::getConversions( const OUString& aText, sal_Int32 nStartPos, s
                             // clear reference (when there is no user dictionary) in order
                             // to not always have to catch this exception again
                             // in further calls. (save time)
-                            xCDL = 0;
+                            xCDL = nullptr;
                         }
                         catch (...) {
                             // catch all other exceptions to allow

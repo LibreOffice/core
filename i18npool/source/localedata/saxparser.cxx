@@ -156,7 +156,7 @@ class TestDocumentHandler :
 {
 public:
     TestDocumentHandler(const char* locale, const char* outFile )
-        : rootNode(0)
+        : rootNode(nullptr)
         , nError(0)
         , of(outFile, locale)
     {

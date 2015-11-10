@@ -555,7 +555,7 @@ static const struct InstancesArray {
         &halfwidthToFullwidthLikeJIS_CreateInstance },
 #endif
 // add here new services !!
-    { 0, 0, 0 }
+    { nullptr, nullptr, nullptr }
 };
 
 
@@ -564,7 +564,7 @@ extern "C"
 
 SAL_DLLPUBLIC_EXPORT void* SAL_CALL i18npool_component_getFactory( const sal_Char* sImplementationName, void* _pServiceManager, SAL_UNUSED_PARAMETER void* /*_pRegistryKey*/ )
 {
-    void* pRet = NULL;
+    void* pRet = nullptr;
 
     lang::XMultiServiceFactory* pServiceManager =
         static_cast< lang::XMultiServiceFactory* >( _pServiceManager );

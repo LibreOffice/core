@@ -102,7 +102,7 @@ ignoreSeparator_ja_JP::ignoreSeparator_ja_JP()
     static oneToOneMapping _table(ignoreSeparatorTable, sizeof(ignoreSeparatorTable));
     func = nullptr;
     table = &_table;
-    map = 0;
+    map = nullptr;
     transliterationName = "ignoreSeparator_ja_JP";
     implementationName = "com.sun.star.i18n.Transliteration.ignoreSeparator_ja_JP";
 }

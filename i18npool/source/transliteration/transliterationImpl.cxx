@@ -134,7 +134,7 @@ static struct TMlist {
 //  TmItem2 (NumToCharEstern_Arabic_Indic),// () (68)
 //  TmItem2 (NumToCharIndic),           // () (69)
 //  TmItem2 (NumToCharThai),            // () (70)
-  {(TransliterationModules)0, (TransliterationModulesNew)0,  NULL}
+  {(TransliterationModules)0, (TransliterationModulesNew)0,  nullptr}
 };
 
 // Constructor/Destructor

@@ -118,7 +118,7 @@ class WLevDisDistanceMem
     int*    p;
 public:
     explicit WLevDisDistanceMem( size_t s )
-        : p(0)
+        : p(nullptr)
     {
         NewMem(s);
     }

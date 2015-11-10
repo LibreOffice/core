@@ -44,8 +44,8 @@ ignoreTraditionalKana_ja_JP_translator (const sal_Unicode c)
 ignoreTraditionalKana_ja_JP::ignoreTraditionalKana_ja_JP()
 {
     func = ignoreTraditionalKana_ja_JP_translator;
-    table = 0;
-    map = 0;
+    table = nullptr;
+    map = nullptr;
     transliterationName = "ignoreTraditionalKana_ja_JP";
     implementationName = "com.sun.star.i18n.Transliteration.ignoreTraditionalKana_ja_JP";
 }

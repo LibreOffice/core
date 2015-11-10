@@ -31,7 +31,7 @@ namespace com { namespace sun { namespace star { namespace i18n {
 //      ----------------------------------------------------;
 
 BreakIterator_CJK::BreakIterator_CJK() :
-    dict( NULL ),
+    dict( nullptr ),
     hangingCharacters()
 {
     cBreakIterator = "com.sun.star.i18n.BreakIterator_CJK";

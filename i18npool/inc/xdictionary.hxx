@@ -48,11 +48,11 @@ struct xdictionarydata
     const sal_Int32  * lenArray;
     const sal_Unicode* dataArea;
     xdictionarydata() :
-        existMark( NULL ),
-        index1( NULL ),
-        index2( NULL ),
-        lenArray( NULL ),
-        dataArea( NULL )
+        existMark( nullptr ),
+        index1( nullptr ),
+        index2( nullptr ),
+        lenArray( nullptr ),
+        dataArea( nullptr )
     {
     }
 };

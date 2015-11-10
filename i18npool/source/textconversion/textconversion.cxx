@@ -56,7 +56,7 @@ TextConversionService::~TextConversionService()
 
 static void* nullFunc()
 {
-    return NULL;
+    return nullptr;
 }
 
 oslGenericFunction SAL_CALL

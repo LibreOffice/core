@@ -35,7 +35,7 @@ static sal_Unicode toHiragana (const sal_Unicode c)
 katakanaToHiragana::katakanaToHiragana()
 {
     func = toHiragana;
-    table = 0;
+    table = nullptr;
     transliterationName = "katakanaToHiragana";
     implementationName = "com.sun.star.i18n.Transliteration.KATAKANA_HIRAGANA";
 }

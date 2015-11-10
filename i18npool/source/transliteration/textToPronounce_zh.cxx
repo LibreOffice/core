@@ -161,7 +161,7 @@ TextToPronounce_zh::TextToPronounce_zh(const sal_Char* func_name)
 #endif
     hModule = osl_loadModuleRelative(
         &thisModule, lib.pData, SAL_LOADMODULE_DEFAULT );
-    idx=NULL;
+    idx=nullptr;
     if (hModule) {
         sal_uInt16** (*function)() = reinterpret_cast<sal_uInt16** (*)()>(osl_getFunctionSymbol(hModule, OUString::createFromAscii(func_name).pData));
         if (function)

@@ -24,8 +24,8 @@ ignoreDiacritics_CTL_translator (const sal_Unicode c)
 ignoreDiacritics_CTL::ignoreDiacritics_CTL()
 {
     func = ignoreDiacritics_CTL_translator;
-    table = 0;
-    map = 0;
+    table = nullptr;
+    map = nullptr;
     transliterationName = "ignoreDiacritics_CTL";
     implementationName = "com.sun.star.i18n.Transliteration.ignoreDiacritics_CTL";
 }

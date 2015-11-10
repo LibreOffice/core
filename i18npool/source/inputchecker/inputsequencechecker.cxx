@@ -31,12 +31,12 @@ namespace com { namespace sun { namespace star { namespace i18n {
 InputSequenceCheckerImpl::InputSequenceCheckerImpl( const Reference < XComponentContext >& rxContext ) : m_xContext( rxContext )
 {
     serviceName = "com.sun.star.i18n.InputSequenceChecker";
-    cachedItem = NULL;
+    cachedItem = nullptr;
 }
 
 InputSequenceCheckerImpl::InputSequenceCheckerImpl(const char *pServiceName)
     : serviceName(pServiceName)
-    , cachedItem(NULL)
+    , cachedItem(nullptr)
 {
 }
 
@@ -101,7 +101,7 @@ InputSequenceCheckerImpl::getLanguageByScripType(sal_Unicode cChar, sal_Unicode 
             case UnicodeScript_kDevanagari:   return const_cast<sal_Char*>("hi");
         }
     }
-    return NULL;
+    return nullptr;
 }
 
 Reference< XExtendedInputSequenceChecker >& SAL_CALL

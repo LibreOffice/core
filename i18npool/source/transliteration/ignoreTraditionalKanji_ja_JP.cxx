@@ -724,7 +724,7 @@ ignoreTraditionalKanji_ja_JP::ignoreTraditionalKanji_ja_JP()
     static oneToOneMapping _table(traditionalKanji2updateKanji, sizeof(traditionalKanji2updateKanji));
     func = nullptr;
     table = &_table;
-    map = 0;
+    map = nullptr;
     transliterationName = "ignoreTraditionalKanji_ja_JP";
     implementationName = "com.sun.star.i18n.Transliteration.ignoreTraditionalKanji_ja_JP";
 }

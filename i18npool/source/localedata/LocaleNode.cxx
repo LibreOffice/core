@@ -42,8 +42,8 @@ namespace cssi = ::com::sun::star::i18n;
 LocaleNode::LocaleNode (const OUString& name, const Reference< XAttributeList > & attr)
     : aName(name)
     , aAttribs(attr)
-    , parent(0)
-    , children(0)
+    , parent(nullptr)
+    , children(nullptr)
     , nChildren(0)
     , childArrSize(0)
     , nError(0)
@@ -93,9 +93,9 @@ void LocaleNode::setParent ( LocaleNode * node) {
 
 const LocaleNode* LocaleNode::getRoot() const
 {
-    const LocaleNode* pRoot = 0;
+    const LocaleNode* pRoot = nullptr;
     const LocaleNode* pParent = this;
-    while ( (pParent = pParent->getParent()) != 0 )
+    while ( (pParent = pParent->getParent()) != nullptr )
         pRoot = pParent;
     return pRoot;
 }
@@ -108,7 +108,7 @@ const LocaleNode * LocaleNode::findNode ( const sal_Char *name) const {
         if (n)
             return n;
         }
-    return 0;
+    return nullptr;
 }
 
 LocaleNode::~LocaleNode()
@@ -377,7 +377,7 @@ static OUString aDecSep;
 
 void LCCTYPENode::generateCode (const OFileWriter &of) const
 {
-    const LocaleNode * sepNode = 0;
+    const LocaleNode * sepNode = nullptr;
     OUString useLocale =   getAttr().getValueByName("ref");
     if (!useLocale.isEmpty()) {
         useLocale = useLocale.replace( '-', '_');
@@ -729,7 +729,7 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
         {
             of.writeParameter("FormatCode", n->getValue(), formatCount);
             // Check separator usage for some FormatCode elements.
-            const LocaleNode* pCtype = 0;
+            const LocaleNode* pCtype = nullptr;
             switch (formatindex)
             {
                 case cssi::NumberFormatIndex::DATE_SYS_DDMMYYYY :
@@ -759,7 +759,7 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
                                                 "If these two locales use identical format codes, you should consider to use the ref= mechanism also for the LC_FORMAT element, together with replaceFrom= and replaceTo= for the currency.\n",
                                                 OSTR( aRef));
                                     bCtypeIsRef = true;
-                                    pCtype = 0;
+                                    pCtype = nullptr;
                                 }
                             }
                         }
@@ -1536,7 +1536,7 @@ static void lcl_writeAbbrFullNarrNames( const OFileWriter & of, const LocaleNode
     OUString aAbbrName = currNode->getChildAt(1)->getValue();
     OUString aFullName = currNode->getChildAt(2)->getValue();
     OUString aNarrName;
-    LocaleNode* p = (currNode->getNumberOfChildren() > 3 ? currNode->getChildAt(3) : 0);
+    LocaleNode* p = (currNode->getNumberOfChildren() > 3 ? currNode->getChildAt(3) : nullptr);
     if ( p && p->getName() == "DefaultNarrowName" )
         aNarrName = p->getValue();
     else
@@ -1621,7 +1621,7 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
 
         // Generate Days of Week
         const sal_Char *elementTag;
-        LocaleNode * daysNode = NULL;
+        LocaleNode * daysNode = nullptr;
         OUString ref_name = calNode->getChildAt(nChild)->getAttr().getValueByName("ref");
         ref_name = ref_name.replace( '-', '_');
         if (!ref_name.isEmpty() && i > 0) {
@@ -1631,12 +1631,12 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
                     daysNode = getChildAt(j)->getChildAt(0);
             }
         }
-        if (!ref_name.isEmpty() && daysNode == NULL) {
+        if (!ref_name.isEmpty() && daysNode == nullptr) {
             of.writeParameter("dayRef", "ref", i);
             of.writeParameter("dayRefName", ref_name, i);
             nbOfDays[i] = 0;
         } else {
-            if (daysNode == NULL)
+            if (daysNode == nullptr)
                 daysNode = calNode -> getChildAt(nChild);
             nbOfDays[i] = sal::static_int_cast<sal_Int16>( daysNode->getNumberOfChildren() );
             if (bGregorian && nbOfDays[i] != 7)
@@ -1654,7 +1654,7 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
         ++nChild;
 
         // Generate Months of Year
-        LocaleNode * monthsNode = NULL;
+        LocaleNode * monthsNode = nullptr;
         ref_name = calNode->getChildAt(nChild)->getAttr().getValueByName("ref");
         ref_name = ref_name.replace( '-', '_');
         if (!ref_name.isEmpty() && i > 0) {
@@ -1664,12 +1664,12 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
                     monthsNode = getChildAt(j)->getChildAt(1);
             }
         }
-        if (!ref_name.isEmpty() && monthsNode == NULL) {
+        if (!ref_name.isEmpty() && monthsNode == nullptr) {
             of.writeParameter("monthRef", "ref", i);
             of.writeParameter("monthRefName", ref_name, i);
             nbOfMonths[i] = 0;
         } else {
-            if (monthsNode == NULL)
+            if (monthsNode == nullptr)
                 monthsNode = calNode -> getChildAt(nChild);
             nbOfMonths[i] = sal::static_int_cast<sal_Int16>( monthsNode->getNumberOfChildren() );
             if (bGregorian && nbOfMonths[i] != 12)
@@ -1690,7 +1690,7 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
         // Optional, if not present fall back to month nouns.
         if ( calNode->getChildAt(nChild)->getName() != "GenitiveMonths" )
             --nChild;
-        LocaleNode * genitiveMonthsNode = NULL;
+        LocaleNode * genitiveMonthsNode = nullptr;
         ref_name = calNode->getChildAt(nChild)->getAttr().getValueByName("ref");
         ref_name = ref_name.replace( '-', '_');
         if (!ref_name.isEmpty() && i > 0) {
@@ -1700,12 +1700,12 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
                     genitiveMonthsNode = getChildAt(j)->getChildAt(1);
             }
         }
-        if (!ref_name.isEmpty() && genitiveMonthsNode == NULL) {
+        if (!ref_name.isEmpty() && genitiveMonthsNode == nullptr) {
             of.writeParameter("genitiveMonthRef", "ref", i);
             of.writeParameter("genitiveMonthRefName", ref_name, i);
             nbOfGenitiveMonths[i] = 0;
         } else {
-            if (genitiveMonthsNode == NULL)
+            if (genitiveMonthsNode == nullptr)
                 genitiveMonthsNode = calNode -> getChildAt(nChild);
             nbOfGenitiveMonths[i] = sal::static_int_cast<sal_Int16>( genitiveMonthsNode->getNumberOfChildren() );
             if (bGregorian && nbOfGenitiveMonths[i] != 12)
@@ -1727,7 +1727,7 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
         // months (nouns) if that isn't present either.
         if ( calNode->getChildAt(nChild)->getName() != "PartitiveMonths" )
             --nChild;
-        LocaleNode * partitiveMonthsNode = NULL;
+        LocaleNode * partitiveMonthsNode = nullptr;
         ref_name = calNode->getChildAt(nChild)->getAttr().getValueByName("ref");
         ref_name = ref_name.replace( '-', '_');
         if (!ref_name.isEmpty() && i > 0) {
@@ -1737,12 +1737,12 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
                     partitiveMonthsNode = getChildAt(j)->getChildAt(1);
             }
         }
-        if (!ref_name.isEmpty() && partitiveMonthsNode == NULL) {
+        if (!ref_name.isEmpty() && partitiveMonthsNode == nullptr) {
             of.writeParameter("partitiveMonthRef", "ref", i);
             of.writeParameter("partitiveMonthRefName", ref_name, i);
             nbOfPartitiveMonths[i] = 0;
         } else {
-            if (partitiveMonthsNode == NULL)
+            if (partitiveMonthsNode == nullptr)
                 partitiveMonthsNode = calNode -> getChildAt(nChild);
             nbOfPartitiveMonths[i] = sal::static_int_cast<sal_Int16>( partitiveMonthsNode->getNumberOfChildren() );
             if (bGregorian && nbOfPartitiveMonths[i] != 12)
@@ -1760,7 +1760,7 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
         ++nChild;
 
         // Generate Era name
-        LocaleNode * erasNode = NULL;
+        LocaleNode * erasNode = nullptr;
         ref_name =   calNode -> getChildAt(nChild) ->getAttr().getValueByName("ref");
         ref_name = ref_name.replace( '-', '_');
         if (!ref_name.isEmpty() && i > 0) {
@@ -1770,12 +1770,12 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
                     erasNode = getChildAt(j)->getChildAt(2);
             }
         }
-        if (!ref_name.isEmpty() && erasNode == NULL) {
+        if (!ref_name.isEmpty() && erasNode == nullptr) {
             of.writeParameter("eraRef", "ref", i);
             of.writeParameter("eraRefName", ref_name, i);
             nbOfEras[i] = 0;
         } else {
-            if (erasNode == NULL)
+            if (erasNode == nullptr)
                 erasNode = calNode -> getChildAt(nChild);
             nbOfEras[i] = sal::static_int_cast<sal_Int16>( erasNode->getNumberOfChildren() );
             if (bGregorian && nbOfEras[i] != 2)
@@ -2084,7 +2084,7 @@ void LCMiscNode::generateCode (const OFileWriter &of) const
 
     for ( i = 0; i < sal_Int16(SAL_N_ELEMENTS(ReserveWord)); i++,nbOfWords++) {
         const LocaleNode * curNode = (reserveNode ? reserveNode->findNode(
-                    ReserveWord[i].name) : 0);
+                    ReserveWord[i].name) : nullptr);
         if (!curNode)
             fprintf( stderr,
                     "Warning: No %s in ReservedWords, using en_US default: \"%s\".\n",

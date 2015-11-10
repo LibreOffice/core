@@ -525,7 +525,7 @@ OUString SAL_CALL NativeNumberSupplierService::getNativeNumberString(const OUStr
     if (langnum == -1)
         return aNumberString;
 
-    const Number *number = 0;
+    const Number *number = nullptr;
     sal_Int16 num = -1;
 
     switch (nNativeNumberMode)

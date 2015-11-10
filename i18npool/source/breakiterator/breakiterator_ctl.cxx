@@ -31,8 +31,8 @@ namespace com { namespace sun { namespace star { namespace i18n {
  */
 BreakIterator_CTL::BreakIterator_CTL() :
     cachedText(),
-    nextCellIndex( NULL ),
-    previousCellIndex( NULL ),
+    nextCellIndex( nullptr ),
+    previousCellIndex( nullptr ),
     cellIndexSize( 512 )
 {
     cBreakIterator = "com.sun.star.i18n.BreakIterator_CTL";

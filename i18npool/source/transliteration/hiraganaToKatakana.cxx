@@ -37,7 +37,7 @@ static sal_Unicode toKatakana (const sal_Unicode c) {
 hiraganaToKatakana::hiraganaToKatakana()
 {
     func = toKatakana;
-    table = 0;
+    table = nullptr;
     transliterationName = "hiraganaToKatakana";
     implementationName = "com.sun.star.i18n.Transliteration.HIRAGANA_KATAKANA";
 }

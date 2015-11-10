@@ -107,10 +107,10 @@ bool isSimpleRegexTrans( sal_Int32 n )
 
 TextSearch::TextSearch(const Reference < XComponentContext > & rxContext)
         : m_xContext( rxContext )
-        , pJumpTable( 0 )
-        , pJumpTable2( 0 )
-        , pRegexMatcher( NULL )
-        , pWLD( 0 )
+        , pJumpTable( nullptr )
+        , pJumpTable2( nullptr )
+        , pRegexMatcher( nullptr )
+        , pWLD( nullptr )
 {
     SearchOptions aOpt;
     aOpt.algorithmType = SearchAlgorithms_ABSOLUTE;
@@ -131,10 +131,10 @@ void TextSearch::setOptions( const SearchOptions& rOptions ) throw( RuntimeExcep
 {
     aSrchPara = rOptions;
 
-    delete pRegexMatcher, pRegexMatcher = NULL;
-    delete pWLD, pWLD = 0;
-    delete pJumpTable, pJumpTable = 0;
-    delete pJumpTable2, pJumpTable2 = 0;
+    delete pRegexMatcher, pRegexMatcher = nullptr;
+    delete pWLD, pWLD = nullptr;
+    delete pJumpTable, pJumpTable = nullptr;
+    delete pJumpTable2, pJumpTable2 = nullptr;
 
     // Create Transliteration class
     if( isSimpleTrans( aSrchPara.transliterateFlags) )
@@ -146,7 +146,7 @@ void TextSearch::setOptions( const SearchOptions& rOptions ) throw( RuntimeExcep
              aSrchPara.Locale);
     }
     else if( xTranslit.is() )
-        xTranslit = 0;
+        xTranslit = nullptr;
 
     // Create Transliteration for 2<->1, 2<->2 transliteration
     if ( isComplexTrans( aSrchPara.transliterateFlags) )
@@ -806,7 +806,7 @@ void TextSearch::RESrchPrepare( const css::util::SearchOptions& rOptions)
     {
         SAL_INFO( "i18npool", "TextSearch::RESrchPrepare UErrorCode " << nIcuErr);
         delete pRegexMatcher;
-        pRegexMatcher = NULL;
+        pRegexMatcher = nullptr;
     }
     else
     {
@@ -1115,7 +1115,7 @@ i18nsearch_component_getFactory( const sal_Char* sImplementationName,
                                  void* _pServiceManager,
                                  SAL_UNUSED_PARAMETER void* )
 {
-    void* pRet = NULL;
+    void* pRet = nullptr;
 
     css::lang::XMultiServiceFactory* pServiceManager =
         static_cast< css::lang::XMultiServiceFactory* >

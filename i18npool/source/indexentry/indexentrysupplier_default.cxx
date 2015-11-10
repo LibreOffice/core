@@ -80,7 +80,7 @@ OUString SAL_CALL IndexEntrySupplier_Unicode::getIndexCharacter( const OUString&
 IndexTable::IndexTable()
     : start(0)
     , end(0)
-    , table(0)
+    , table(nullptr)
 {
 }
 

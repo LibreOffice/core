@@ -509,7 +509,7 @@ oslGenericFunction SAL_CALL lcl_LookupTableHelper::getFunctionSymbolByName(
                                     appendAscii( (*pOutCachedItem)->localeName).makeStringAndClear());
                         }
                         else
-                            return NULL;
+                            return nullptr;
                     }
                 }
             }
@@ -536,7 +536,7 @@ oslGenericFunction SAL_CALL lcl_LookupTableHelper::getFunctionSymbolByName(
                             appendAscii((*pOutCachedItem)->localeName).makeStringAndClear());
                 }
                 else
-                    return NULL;
+                    return nullptr;
             }
             else
                 delete module;
@@ -584,7 +584,7 @@ oslGenericFunction SAL_CALL lcl_LookupTableHelper::getFunctionSymbolByName(
 #endif
         }
     }
-    return NULL;
+    return nullptr;
 }
 
 } // anonymous namespace
@@ -710,7 +710,7 @@ Sequence< Calendar2 > SAL_CALL
 LocaleDataImpl::getAllCalendars2( const Locale& rLocale ) throw(RuntimeException, std::exception)
 {
 
-    sal_Unicode const * const * allCalendars = NULL;
+    sal_Unicode const * const * allCalendars = nullptr;
 
     MyFunc_Type func = reinterpret_cast<MyFunc_Type>(getFunctionSymbol( rLocale, "getAllCalendars" ));
 
@@ -862,7 +862,7 @@ LocaleDataImpl::getAllFormats( const Locale& rLocale ) throw(RuntimeException, s
         sal_Unicode const *const *formatArray;
         sal_Int16                 formatCount;
 
-        FormatSection() : func(0), from(0), to(0), formatArray(0), formatCount(0) {}
+        FormatSection() : func(nullptr), from(nullptr), to(nullptr), formatArray(nullptr), formatCount(0) {}
         sal_Int16 getFunc( LocaleDataImpl& rLocaleData, const Locale& rL, const char* pName )
         {
             func = reinterpret_cast<MyFunc_FormatCode>( rLocaleData.getFunctionSymbol( rL, pName));
@@ -1014,7 +1014,7 @@ LocaleDataImpl::getIndexArray(const Locale& rLocale, sal_Int16& indexCount)
 
     if (func)
         return func(indexCount);
-    return NULL;
+    return nullptr;
 }
 
 Sequence< OUString > SAL_CALL
@@ -1077,7 +1077,7 @@ LocaleDataImpl::getIndexArrayForAlgorithm(const Locale& rLocale, const OUString&
                 return indexArray+i*5;
         }
     }
-    return NULL;
+    return nullptr;
 }
 
 bool SAL_CALL
@@ -1461,8 +1461,8 @@ oslGenericFunction SAL_CALL LocaleDataImpl::getFunctionSymbol( const Locale& rLo
                 appendAscii(cachedItem->localeName).makeStringAndClear());
     }
 
-    oslGenericFunction pSymbol = 0;
-    LocaleDataLookupTableItem *pCachedItem = 0;
+    oslGenericFunction pSymbol = nullptr;
+    LocaleDataLookupTableItem *pCachedItem = nullptr;
 
     // Load function with name <func>_<lang>_<country> or <func>_<bcp47> and
     // fallbacks.
@@ -1507,7 +1507,7 @@ LocaleDataImpl::getAllInstalledLocaleNames() throw(RuntimeException, std::except
 
         // Check if the locale is really available and not just in the table,
         // don't allow fall backs.
-        LocaleDataLookupTableItem *pCachedItem = 0;
+        LocaleDataLookupTableItem *pCachedItem = nullptr;
         if (lcl_LookupTableStatic::get().getFunctionSymbolByName( name, "getLocaleItem", &pCachedItem )) {
             if( pCachedItem )
                 cachedItem.reset( pCachedItem );

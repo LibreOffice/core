@@ -176,7 +176,7 @@ void OFileWriter::closeOutput() const
     if(m_f)
     {
         fclose( m_f );
-        const_cast< OFileWriter * > ( this )->m_f = 0;
+        const_cast< OFileWriter * > ( this )->m_f = nullptr;
     }
 }
 

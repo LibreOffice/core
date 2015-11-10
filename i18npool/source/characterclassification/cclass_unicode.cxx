@@ -37,9 +37,9 @@ namespace com { namespace sun { namespace star { namespace i18n {
 //  ----------------------------------------------------;
 
 cclass_Unicode::cclass_Unicode( const uno::Reference < XComponentContext >& rxContext ) : m_xContext( rxContext ),
-        pTable( NULL ),
-        pStart( NULL ),
-        pCont( NULL ),
+        pTable( nullptr ),
+        pStart( nullptr ),
+        pCont( nullptr ),
         nStartTypes( 0 ),
         nContTypes( 0 ),
         eState( ssGetChar ),

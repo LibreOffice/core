@@ -82,7 +82,7 @@ protected:
         icu::BreakIterator* aBreakIterator;
         css::lang::Locale   maLocale;
 
-        BI_Data() : ut(NULL), aBreakIterator(NULL)
+        BI_Data() : ut(nullptr), aBreakIterator(nullptr)
         {
         }
         ~BI_Data()

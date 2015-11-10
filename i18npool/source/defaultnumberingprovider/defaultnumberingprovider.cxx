@@ -260,7 +260,7 @@ static const sal_Unicode table_PersianWord_decadeX[][8]={
 };
 
 
-DefaultNumberingProvider::DefaultNumberingProvider( const Reference < XComponentContext >& rxContext ) : m_xContext(rxContext),translit(NULL)
+DefaultNumberingProvider::DefaultNumberingProvider( const Reference < XComponentContext >& rxContext ) : m_xContext(rxContext),translit(nullptr)
 {
 
 }
@@ -565,7 +565,7 @@ DefaultNumberingProvider::makeNumberingString( const Sequence<beans::PropertyVal
 
      sal_Int16 natNum = 0;
      sal_Int16 tableSize = 0;
-     const sal_Unicode *table = NULL;     // initialize to avoid compiler warning
+     const sal_Unicode *table = nullptr;     // initialize to avoid compiler warning
      bool bRecycleSymbol = false;
      Locale locale;
 
@@ -897,33 +897,33 @@ static const Supported_NumberingType aSupportedTypes[] =
         {style::NumberingType::CHARS_UPPER_LETTER_N,    "AAA", LANG_ALL},
         {style::NumberingType::CHARS_LOWER_LETTER_N,    "aaa", LANG_ALL},
         {style::NumberingType::NATIVE_NUMBERING,        "Native Numbering", LANG_CJK|LANG_CTL},
-        {style::NumberingType::FULLWIDTH_ARABIC,        NULL, LANG_CJK},
-        {style::NumberingType::CIRCLE_NUMBER,           NULL, LANG_CJK},
-        {style::NumberingType::NUMBER_LOWER_ZH,         NULL, LANG_CJK},
-        {style::NumberingType::NUMBER_UPPER_ZH,         NULL, LANG_CJK},
-        {style::NumberingType::NUMBER_UPPER_ZH_TW,      NULL, LANG_CJK},
-        {style::NumberingType::TIAN_GAN_ZH,             NULL, LANG_CJK},
-        {style::NumberingType::DI_ZI_ZH,                NULL, LANG_CJK},
-        {style::NumberingType::NUMBER_TRADITIONAL_JA,   NULL, LANG_CJK},
-        {style::NumberingType::AIU_FULLWIDTH_JA,        NULL, LANG_CJK},
-        {style::NumberingType::AIU_HALFWIDTH_JA,        NULL, LANG_CJK},
-        {style::NumberingType::IROHA_FULLWIDTH_JA,      NULL, LANG_CJK},
-        {style::NumberingType::IROHA_HALFWIDTH_JA,      NULL, LANG_CJK},
-        {style::NumberingType::NUMBER_UPPER_KO,         NULL, LANG_CJK},
-        {style::NumberingType::NUMBER_HANGUL_KO,        NULL, LANG_CJK},
-        {style::NumberingType::HANGUL_JAMO_KO,          NULL, LANG_CJK},
-        {style::NumberingType::HANGUL_SYLLABLE_KO,      NULL, LANG_CJK},
-        {style::NumberingType::HANGUL_CIRCLED_JAMO_KO,  NULL, LANG_CJK},
-        {style::NumberingType::HANGUL_CIRCLED_SYLLABLE_KO,      NULL, LANG_CJK},
-        {style::NumberingType::CHARS_ARABIC,    NULL, LANG_CTL},
-        {style::NumberingType::CHARS_ARABIC_ABJAD,   NULL, LANG_CTL},
-        {style::NumberingType::CHARS_THAI,      NULL, LANG_CTL},
-        {style::NumberingType::CHARS_HEBREW,    NULL, LANG_CTL},
-        {style::NumberingType::CHARS_NEPALI,    NULL, LANG_CTL},
-        {style::NumberingType::CHARS_KHMER,     NULL, LANG_CTL},
-        {style::NumberingType::CHARS_LAO,       NULL, LANG_CTL},
-        {style::NumberingType::CHARS_MYANMAR,   NULL, LANG_CTL},
-        {style::NumberingType::CHARS_TIBETAN,   NULL, LANG_CTL},
+        {style::NumberingType::FULLWIDTH_ARABIC,        nullptr, LANG_CJK},
+        {style::NumberingType::CIRCLE_NUMBER,           nullptr, LANG_CJK},
+        {style::NumberingType::NUMBER_LOWER_ZH,         nullptr, LANG_CJK},
+        {style::NumberingType::NUMBER_UPPER_ZH,         nullptr, LANG_CJK},
+        {style::NumberingType::NUMBER_UPPER_ZH_TW,      nullptr, LANG_CJK},
+        {style::NumberingType::TIAN_GAN_ZH,             nullptr, LANG_CJK},
+        {style::NumberingType::DI_ZI_ZH,                nullptr, LANG_CJK},
+        {style::NumberingType::NUMBER_TRADITIONAL_JA,   nullptr, LANG_CJK},
+        {style::NumberingType::AIU_FULLWIDTH_JA,        nullptr, LANG_CJK},
+        {style::NumberingType::AIU_HALFWIDTH_JA,        nullptr, LANG_CJK},
+        {style::NumberingType::IROHA_FULLWIDTH_JA,      nullptr, LANG_CJK},
+        {style::NumberingType::IROHA_HALFWIDTH_JA,      nullptr, LANG_CJK},
+        {style::NumberingType::NUMBER_UPPER_KO,         nullptr, LANG_CJK},
+        {style::NumberingType::NUMBER_HANGUL_KO,        nullptr, LANG_CJK},
+        {style::NumberingType::HANGUL_JAMO_KO,          nullptr, LANG_CJK},
+        {style::NumberingType::HANGUL_SYLLABLE_KO,      nullptr, LANG_CJK},
+        {style::NumberingType::HANGUL_CIRCLED_JAMO_KO,  nullptr, LANG_CJK},
+        {style::NumberingType::HANGUL_CIRCLED_SYLLABLE_KO,      nullptr, LANG_CJK},
+        {style::NumberingType::CHARS_ARABIC,    nullptr, LANG_CTL},
+        {style::NumberingType::CHARS_ARABIC_ABJAD,   nullptr, LANG_CTL},
+        {style::NumberingType::CHARS_THAI,      nullptr, LANG_CTL},
+        {style::NumberingType::CHARS_HEBREW,    nullptr, LANG_CTL},
+        {style::NumberingType::CHARS_NEPALI,    nullptr, LANG_CTL},
+        {style::NumberingType::CHARS_KHMER,     nullptr, LANG_CTL},
+        {style::NumberingType::CHARS_LAO,       nullptr, LANG_CTL},
+        {style::NumberingType::CHARS_MYANMAR,   nullptr, LANG_CTL},
+        {style::NumberingType::CHARS_TIBETAN,   nullptr, LANG_CTL},
         {style::NumberingType::CHARS_CYRILLIC_UPPER_LETTER_BG,   C_CYR_A ", " C_CYR_B ", .., " C_CYR_A S_CYR_A ", " C_CYR_A S_CYR_B ", ... (bg)", LANG_ALL},
         {style::NumberingType::CHARS_CYRILLIC_LOWER_LETTER_BG,   S_CYR_A ", " S_CYR_B ", .., " S_CYR_A S_CYR_A ", " S_CYR_A S_CYR_B ", ... (bg)", LANG_ALL},
         {style::NumberingType::CHARS_CYRILLIC_UPPER_LETTER_N_BG, C_CYR_A ", " C_CYR_B ", .., " C_CYR_A S_CYR_A ", " C_CYR_B S_CYR_B ", ... (bg)", LANG_ALL},
@@ -936,8 +936,8 @@ static const Supported_NumberingType aSupportedTypes[] =
         {style::NumberingType::CHARS_CYRILLIC_LOWER_LETTER_SR,   S_CYR_A ", " S_CYR_B ", .., " S_CYR_A S_CYR_A ", " S_CYR_A S_CYR_B ", ... (sr)", LANG_ALL},
         {style::NumberingType::CHARS_CYRILLIC_UPPER_LETTER_N_SR, C_CYR_A ", " C_CYR_B ", .., " C_CYR_A S_CYR_A ", " C_CYR_B S_CYR_B ", ... (sr)", LANG_ALL},
         {style::NumberingType::CHARS_CYRILLIC_LOWER_LETTER_N_SR, S_CYR_A ", " S_CYR_B ", .., " S_CYR_A S_CYR_A ", " S_CYR_B S_CYR_B ", ... (sr)", LANG_ALL},
-        {style::NumberingType::CHARS_PERSIAN,   NULL, LANG_CTL},
-        {style::NumberingType::CHARS_PERSIAN_WORD,   NULL, LANG_CTL},
+        {style::NumberingType::CHARS_PERSIAN,   nullptr, LANG_CTL},
+        {style::NumberingType::CHARS_PERSIAN_WORD,   nullptr, LANG_CTL},
         {style::NumberingType::CHARS_GREEK_UPPER_LETTER,   C_GR_A ", " C_GR_B ", ... (gr)", LANG_ALL},
         {style::NumberingType::CHARS_GREEK_LOWER_LETTER,   S_GR_A ", " S_GR_B ", ... (gr)", LANG_ALL},
 };

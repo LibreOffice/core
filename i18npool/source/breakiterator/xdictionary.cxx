@@ -240,8 +240,8 @@ sal_Int32 xdictionary::getLongestMatch(const sal_Unicode* str, sal_Int32 sLen)
 
 WordBreakCache::WordBreakCache() :
     length( 0 ),
-    contents( NULL ),
-    wordboundary( NULL ),
+    contents( nullptr ),
+    wordboundary( nullptr ),
     size( 0 )
 {
 }

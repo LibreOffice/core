@@ -340,14 +340,14 @@ const sal_Int32 cclass_Unicode::pParseTokensType[ nDefCnt ] =
 const sal_Unicode* cclass_Unicode::StrChr( const sal_Unicode* pStr, sal_Unicode c )
 {
     if ( !pStr )
-        return NULL;
+        return nullptr;
     while ( *pStr )
     {
         if ( *pStr == c )
             return pStr;
         pStr++;
     }
-    return NULL;
+    return nullptr;
 }
 
 
@@ -438,12 +438,12 @@ void cclass_Unicode::initParserTable( const Locale& rLocale, sal_Int32 startChar
     if ( pStart && userDefinedCharactersStart.getLength() != aStartChars.getLength() )
     {
         delete [] pStart;
-        pStart = NULL;
+        pStart = nullptr;
     }
     if ( pCont && userDefinedCharactersCont.getLength() != aContChars.getLength() )
     {
         delete [] pCont;
-        pCont = NULL;
+        pCont = nullptr;
     }
     nStartTypes = startCharTokenType;
     nContTypes = contCharTokenType;
@@ -1011,7 +1011,7 @@ void cclass_Unicode::parseText( ParseResult& r, const OUString& rText, sal_Int32
     if ( r.TokenType & KParseType::ASC_NUMBER )
     {
         r.Value = rtl_math_uStringToDouble( pTextStart + r.LeadingWhiteSpace,
-                pTextStart + r.EndPos, cDecimalSep, cGroupSep, NULL, NULL );
+                pTextStart + r.EndPos, cDecimalSep, cGroupSep, nullptr, nullptr );
         if ( bMightBeWord )
             r.TokenType |= KParseType::IDENTNAME;
     }

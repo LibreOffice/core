@@ -43,8 +43,8 @@ ignoreMinusSign_ja_JP_translator (const sal_Unicode c)
 ignoreMinusSign_ja_JP::ignoreMinusSign_ja_JP()
 {
     func = ignoreMinusSign_ja_JP_translator;
-    table = 0;
-    map = 0;
+    table = nullptr;
+    map = nullptr;
     transliterationName = "ignoreMinusSign_ja_JP";
     implementationName = "com.sun.star.i18n.Transliteration.ignoreMinusSign_ja_JP";
 }

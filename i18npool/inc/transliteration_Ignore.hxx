@@ -101,8 +101,8 @@ class ignore##name : public transliteration_Ignore {\
 public:\
         ignore##name () {\
             func = nullptr;\
-            table = 0;\
-            map = 0;\
+            table = nullptr;\
+            map = nullptr;\
             transliterationName = "ignore"#name;\
             implementationName = "com.sun.star.i18n.Transliteration.ignore"#name;\
         };\
@@ -122,8 +122,8 @@ class ignore##name : public transliteration_Ignore {\
 public:\
         ignore##name () {\
             func = nullptr;\
-            table = 0;\
-            map = 0;\
+            table = nullptr;\
+            map = nullptr;\
             transliterationName = "ignore"#name;\
             implementationName = "com.sun.star.i18n.Transliteration.ignore"#name;\
         };\

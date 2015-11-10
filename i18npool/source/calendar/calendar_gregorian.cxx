@@ -132,7 +132,7 @@ namespace com { namespace sun { namespace star { namespace i18n {
 Calendar_gregorian::Calendar_gregorian()
     : mxNatNum(new NativeNumberSupplierService)
 {
-    init(NULL);
+    init(nullptr);
 }
 Calendar_gregorian::Calendar_gregorian(const Era *_earArray)
     : mxNatNum(new NativeNumberSupplierService)
@@ -165,7 +165,7 @@ Calendar_gregorian::init(const Era *_eraArray)
      * not all, language and country and variant), otherwise the current
      * default locale would be used again and the calendar keyword ignored.
      * */
-    icu::Locale aIcuLocale( "", NULL, NULL, "calendar=gregorian");
+    icu::Locale aIcuLocale( "", nullptr, nullptr, "calendar=gregorian");
 
     UErrorCode status;
     body = icu::Calendar::createInstance( aIcuLocale, status = U_ZERO_ERROR);

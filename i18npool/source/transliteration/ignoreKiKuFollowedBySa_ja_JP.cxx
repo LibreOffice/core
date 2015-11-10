@@ -34,7 +34,7 @@ ignoreKiKuFollowedBySa_ja_JP::folding( const OUString& inStr, sal_Int32 startPos
     sal_Unicode * dst = newStr->buffer;
     const sal_Unicode * src = inStr.getStr() + startPos;
 
-    sal_Int32 *p = 0;
+    sal_Int32 *p = nullptr;
     sal_Int32 position = 0;
     if (useOffset) {
         // Allocate nCount length to offset argument.

@@ -35,7 +35,7 @@
 void data_write(char* file, char* name, sal_uInt8 *data, sal_Int32 len)
 {
     FILE *fp = fopen(file, "wb");
-    if (fp == NULL) {
+    if (fp == nullptr) {
         fprintf(stderr, "Opening %s for writing failed: %s\n", file, strerror(errno));
         exit(1);
     }
@@ -82,7 +82,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     if (argc < 4) exit(-1);
 
     fp = fopen(argv[1], "rb");  // open the source file for read;
-    if (fp == NULL){
+    if (fp == nullptr){
         fprintf(stderr, "Opening the rule source file %s for reading failed: %s\n", argv[1], strerror(errno));
         exit(1);
     }
@@ -116,7 +116,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 
     if (U_SUCCESS(status)) {
         std::vector<uint8_t> data;
-        int32_t len = coll->cloneBinary(0, 0, status);
+        int32_t len = coll->cloneBinary(nullptr, 0, status);
         if (status == U_BUFFER_OVERFLOW_ERROR) {
             data.resize(len);
             status = U_ZERO_ERROR;

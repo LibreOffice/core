@@ -23,8 +23,8 @@ ignoreKashida_CTL_translator (const sal_Unicode c)
 ignoreKashida_CTL::ignoreKashida_CTL()
 {
     func = ignoreKashida_CTL_translator;
-    table = 0;
-    map = 0;
+    table = nullptr;
+    map = nullptr;
     transliterationName = "ignoreKashida_CTL";
     implementationName = "com.sun.star.i18n.Transliteration.ignoreKashida_CTL";
 }

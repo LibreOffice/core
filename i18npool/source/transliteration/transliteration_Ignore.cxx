@@ -127,7 +127,7 @@ transliteration_Ignore::folding( const OUString& inStr, sal_Int32 startPos,
     const sal_Unicode * src = inStr.getStr() + startPos;
 
     // Allocate nCount length to offset argument.
-    sal_Int32 *p = 0;
+    sal_Int32 *p = nullptr;
     sal_Int32 position = 0;
     if (useOffset) {
         offset.realloc( nCount );
