@@ -69,28 +69,28 @@
         ShutdownIcon::FileOpen();
         break;
     case MI_WRITER:
-        ShutdownIcon::OpenURL( OUString(  WRITER_URL ), OUString( "_default" ) );
+        ShutdownIcon::OpenURL( WRITER_URL, "_default" );
         break;
     case MI_CALC:
-        ShutdownIcon::OpenURL( OUString( CALC_URL ), OUString( "_default" ) );
+        ShutdownIcon::OpenURL( CALC_URL, "_default" );
         break;
     case MI_IMPRESS:
-        ShutdownIcon::OpenURL( OUString( IMPRESS_URL ), OUString( "_default" ) );
+        ShutdownIcon::OpenURL( IMPRESS_URL, "_default" );
         break;
     case MI_DRAW:
-        ShutdownIcon::OpenURL( OUString( DRAW_URL ), OUString( "_default" ) );
+        ShutdownIcon::OpenURL( DRAW_URL, "_default" );
         break;
     case MI_BASE:
-        ShutdownIcon::OpenURL( OUString( BASE_URL ), OUString( "_default" ) );
+        ShutdownIcon::OpenURL( BASE_URL, "_default" );
         break;
     case MI_MATH:
-        ShutdownIcon::OpenURL( OUString( MATH_URL ), OUString( "_default" ) );
+        ShutdownIcon::OpenURL( MATH_URL, "_default" );
         break;
     case MI_TEMPLATE:
         ShutdownIcon::FromTemplate();
         break;
     case MI_STARTMODULE:
-        ShutdownIcon::OpenURL( OUString( STARTMODULE_URL ), OUString( "_default" ) );
+        ShutdownIcon::OpenURL( STARTMODULE_URL, "_default" );
         break;
     default:
         break;
@@ -101,7 +101,7 @@
 {
     (void)pSender;
     // start start module
-    ShutdownIcon::OpenURL( OUString( STARTMODULE_URL ), OUString( "_default" ) );
+    ShutdownIcon::OpenURL( STARTMODULE_URL, "_default" );
 }
 
 @end
@@ -279,7 +279,7 @@ class RecentFilesStringLength : public ::cppu::WeakImplHelper< css::util::XStrin
         aArgsList[NUM_OF_PICKLIST_ARGS-1].Name = "FilterName";
         aArgsList[NUM_OF_PICKLIST_ARGS-1].Value = css::uno::makeAny( aFilter );
 
-        ShutdownIcon::OpenURL( rRecentFile.aURL, OUString( "_default" ), aArgsList );
+        ShutdownIcon::OpenURL( rRecentFile.aURL, "_default", aArgsList );
     }
 }
 @end
@@ -441,7 +441,7 @@ void aqua_init_systray()
             // insert entry for startcenter
             if( aModuleOptions.IsModuleInstalled( SvtModuleOptions::EModule::STARTMODULE ) )
             {
-                appendMenuItem( pMenu, nil, pShutdownIcon->GetResString( STR_QUICKSTART_STARTCENTER ), MI_STARTMODULE, OUString( "n" ) );
+                appendMenuItem( pMenu, nil, pShutdownIcon->GetResString( STR_QUICKSTART_STARTCENTER ), MI_STARTMODULE, "n" );
                 if( [NSApp respondsToSelector: @selector(setDockIconClickHandler:)] )
                     [NSApp performSelector:@selector(setDockIconClickHandler:) withObject: pExecute];
                 else
