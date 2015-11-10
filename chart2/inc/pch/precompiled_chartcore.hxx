@@ -33,7 +33,6 @@
 #include <boost/bind.hpp>
 #include <boost/checked_delete.hpp>
 #include <boost/ptr_container/ptr_map.hpp>
-#include <boost/ptr_container/ptr_vector.hpp>
 #include <memory>
 #include <cmath>
 #include <com/sun/star/awt/CharSet.hpp>
