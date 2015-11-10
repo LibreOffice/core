@@ -888,7 +888,7 @@ void generateSkeleton(ProgramOptions const & options,
 
     OString compFileName;
     OString tmpFileName;
-    std::ostream* pofs = NULL;
+    std::ostream* pofs = nullptr;
     bool standardout = getOutputStream(options, ".java",
                                        &pofs, compFileName, tmpFileName);
 

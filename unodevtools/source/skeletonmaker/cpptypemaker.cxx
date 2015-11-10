@@ -747,7 +747,7 @@ void printMapsToCppType(
     rtl::Reference< unoidl::Entity > const & entity, const char * cppTypeSort)
 {
     o << "maps to C++ ";
-    if (cppTypeSort != 0)
+    if (cppTypeSort != nullptr)
         o << cppTypeSort << ' ';
 
     o << "type \"";
@@ -768,7 +768,7 @@ void generateDocumentation(std::ostream & o,
     OUString nucleus;
     sal_Int32 rank;
     codemaker::UnoType::Sort sort = manager->decompose(
-        b2u(type), false, &nucleus, &rank, 0, 0);
+        b2u(type), false, &nucleus, &rank, nullptr, nullptr);
 
     bool comment = true;
     if (!delegate.isEmpty()) {
@@ -862,7 +862,7 @@ void generateDocumentation(std::ostream & o,
     } else if (sort <= codemaker::UnoType::SORT_ANY) {
         if (comment) {
             printMapsToCppType(
-                o, options, manager, sort, nucleus, rank, arguments, entity, 0);
+                o, options, manager, sort, nucleus, rank, arguments, entity, nullptr);
             o << '\n';
         }
     } else {

@@ -459,7 +459,7 @@ bool checkAddinType(rtl::Reference< TypeManager > const & manager,
     assert(manager.is());
     sal_Int32 rank;
     codemaker::UnoType::Sort sort = manager->decompose(
-        type, true, 0, &rank, 0, 0);
+        type, true, nullptr, &rank, nullptr, nullptr);
 
     if ( sort == codemaker::UnoType::SORT_LONG ||
          sort == codemaker::UnoType::SORT_DOUBLE ||

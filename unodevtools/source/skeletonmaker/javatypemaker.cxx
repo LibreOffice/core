@@ -117,7 +117,7 @@ void printType(
     sal_Int32 rank;
     std::vector< OUString > arguments;
     codemaker::UnoType::Sort sort = manager->decompose(
-        name, true, &nucleus, &rank, &arguments, 0);
+        name, true, &nucleus, &rank, &arguments, nullptr);
     printType(
         o, options, manager, sort, nucleus, rank, arguments, referenceType,
         defaultvalue);
@@ -662,7 +662,7 @@ void printMapsToJavaType(
     std::vector< OUString > const & arguments, const char * javaTypeSort)
 {
     o << "maps to Java 1.5 ";
-    if (javaTypeSort != 0) {
+    if (javaTypeSort != nullptr) {
         o << javaTypeSort << ' ';
     }
     o << "type \"";
@@ -682,7 +682,7 @@ void generateDocumentation(std::ostream & o,
     OUString nucleus;
     sal_Int32 rank;
     codemaker::UnoType::Sort sort = manager->decompose(
-        b2u(type), false, &nucleus, &rank, 0, 0);
+        b2u(type), false, &nucleus, &rank, nullptr, nullptr);
 
     bool comment = true;
     if (!delegate.isEmpty()) {
@@ -772,7 +772,7 @@ void generateDocumentation(std::ostream & o,
         o << '\n';
     } else if (sort <= codemaker::UnoType::SORT_ANY) {
         printMapsToJavaType(
-            o, options, manager, sort, nucleus, rank, arguments, 0);
+            o, options, manager, sort, nucleus, rank, arguments, nullptr);
         o << '\n';
     } else {
         switch (sort) {
