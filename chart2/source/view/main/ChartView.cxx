@@ -114,6 +114,7 @@
 
 #include <osl/conditn.hxx>
 #include <osl/time.h>
+#include <o3tl/make_unique.hxx>
 
 #include <memory>
 
@@ -3396,7 +3397,7 @@ void ChartView::createShapes3D()
         if(!xDataSeries.is())
             continue;
 
-        aDataSeries.push_back(std::make_unique<VDataSeries>(xDataSeries));
+        aDataSeries.push_back(o3tl::make_unique<VDataSeries>(xDataSeries));
     }
 
     std::unique_ptr<ExplicitCategoriesProvider> pCatProvider(new ExplicitCategoriesProvider(xCooSys, mrChartModel));
