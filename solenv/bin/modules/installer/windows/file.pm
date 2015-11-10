@@ -551,6 +551,11 @@ sub get_fileversion
             $fileversion = $version . "." . $subversion . "." . $microversion . "." . $vervariant;
         }
     }
+    # fake file version for font files (tdf#76239)
+    if ( $onefile->{'Name'} =~ /\.ttf$|\.TTF$/ )
+    {
+        $fileversion = "1.0.0.0";
+    }
 
     return $fileversion;
 }
