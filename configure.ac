@@ -5340,7 +5340,7 @@ find_msms()
     dnl something like $(perl -e 'print $ENV{"CommonProgramFiles(x86)"}') to
     dnl obtain its value from cygwin:
     if test -z "$msmdir"; then
-        my_msm_dir="${COMMONPROGRAMFILES}/Merge Modules"
+        my_msm_dir="${COMMONPROGRAMFILES}/Merge Modules/"
         if test -e "$my_msm_dir/$my_msm_file"; then
             msmdir=$my_msm_dir
         fi
