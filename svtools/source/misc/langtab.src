@@ -283,7 +283,7 @@ StringArray STR_ARR_SVT_LANGUAGE_TABLE
         < "Sami, Southern (Norway)" ; LANGUAGE_SAMI_SOUTHERN_NORWAY ; > ;
         < "Sami, Southern (Sweden)" ; LANGUAGE_SAMI_SOUTHERN_SWEDEN ; > ;
         < "Sami, Kildin (Russia)" ; LANGUAGE_USER_SAMI_KILDIN_RUSSIA ; > ;
-        < "Guaraní, Paraguayan" ; LANGUAGE_GUARANI_PARAGUAY ; > ;
+        < "Guarani (Paraguay)" ; LANGUAGE_GUARANI_PARAGUAY ; > ;
         < "Bodo" ; LANGUAGE_USER_BODO_INDIA ; > ;
         < "Dogri" ; LANGUAGE_USER_DOGRI_INDIA ; > ;
         < "Maithili" ; LANGUAGE_USER_MAITHILI_INDIA ; > ;
