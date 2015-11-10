@@ -1273,7 +1273,7 @@ namespace
         TargetHolder& rTarget,
         PropertyHolder& rProperty)
     {
-        drawinglayer::primitive2d::BasePrimitive2D* pResult = 0;
+        drawinglayer::primitive2d::BasePrimitive2D* pResult = nullptr;
         const vcl::Font& rFont = rProperty.getFont();
         basegfx::B2DVector aAlignmentOffset(0.0, 0.0);
 
@@ -3100,7 +3100,7 @@ namespace
                         // pure recorded paint of the gradients uses the XOR paint functionality
                         // ('trick'). This is (and will be) broblematic with AntAliasing, so it's
                         // better to use this info
-                        const MetaGradientExAction* pMetaGradientExAction = 0;
+                        const MetaGradientExAction* pMetaGradientExAction = nullptr;
                         bool bDone(false);
                         sal_uInt32 b(nAction + 1);
 

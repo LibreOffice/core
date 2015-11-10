@@ -83,7 +83,7 @@ namespace
     VirtualDevice* VDevBuffer::alloc(OutputDevice& rOutDev, const Size& rSizePixel, bool bClear, sal_Int32 nBits)
     {
         ::osl::MutexGuard aGuard(m_aMutex);
-        VirtualDevice* pRetval = 0;
+        VirtualDevice* pRetval = nullptr;
 
         if (nBits == 0)
             nBits = rOutDev.GetBitCount();
@@ -223,9 +223,9 @@ namespace drawinglayer
         const basegfx::B2DRange& rRange,
         bool bAddOffsetToMapping)
     :   mrOutDev(rOutDev),
-        mpContent(0),
-        mpMask(0),
-        mpAlpha(0)
+        mpContent(nullptr),
+        mpMask(nullptr),
+        mpAlpha(nullptr)
     {
         basegfx::B2DRange aRangePixel(rRange);
         aRangePixel.transform(mrOutDev.GetViewTransformation());

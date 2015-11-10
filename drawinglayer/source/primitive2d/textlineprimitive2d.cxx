@@ -40,7 +40,7 @@ namespace drawinglayer
                 bool bDoubleLine(false);
                 bool bWaveLine(false);
                 bool bBoldLine(false);
-                const int* pDotDashArray(0);
+                const int* pDotDashArray(nullptr);
                 basegfx::B2DLineJoin eLineJoin(basegfx::B2DLineJoin::NONE);
                 double fOffset(getOffset());
                 double fHeight(getHeight());

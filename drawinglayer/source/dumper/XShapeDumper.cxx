@@ -676,14 +676,14 @@ void dumpPointSequenceSequence(const drawing::PointSequenceSequence& aPointSeque
 void dumpPolyPolygonAsElement(const drawing::PointSequenceSequence& rPolyPolygon, xmlTextWriterPtr xmlWriter)
 {
     xmlTextWriterStartElement(xmlWriter, BAD_CAST( "PolyPolygon" ));
-    dumpPointSequenceSequence(rPolyPolygon, NULL, xmlWriter);
+    dumpPointSequenceSequence(rPolyPolygon, nullptr, xmlWriter);
     xmlTextWriterEndElement( xmlWriter );
 }
 
 void dumpGeometryAsElement(const drawing::PointSequenceSequence& aGeometry, xmlTextWriterPtr xmlWriter)
 {
     xmlTextWriterStartElement(xmlWriter, BAD_CAST( "Geometry" ));
-    dumpPointSequenceSequence(aGeometry, NULL, xmlWriter);
+    dumpPointSequenceSequence(aGeometry, nullptr, xmlWriter);
     xmlTextWriterEndElement( xmlWriter );
 }
 
@@ -1939,11 +1939,11 @@ void dumpXShapes( uno::Reference< drawing::XShapes > xShapes, xmlTextWriterPtr x
 OUString XShapeDumper::dump(uno::Reference<drawing::XShapes> xPageShapes, bool bDumpInteropProperties)
 {
     OStringBuffer aString;
-    xmlOutputBufferPtr xmlOutBuffer = xmlOutputBufferCreateIO( writeCallback, closeCallback, &aString, NULL );
+    xmlOutputBufferPtr xmlOutBuffer = xmlOutputBufferCreateIO( writeCallback, closeCallback, &aString, nullptr );
     xmlTextWriterPtr xmlWriter = xmlNewTextWriter( xmlOutBuffer );
     xmlTextWriterSetIndent( xmlWriter, 1 );
 
-    xmlTextWriterStartDocument( xmlWriter, NULL, NULL, NULL );
+    xmlTextWriterStartDocument( xmlWriter, nullptr, nullptr, nullptr );
 
     try
     {
@@ -1963,11 +1963,11 @@ OUString XShapeDumper::dump(uno::Reference<drawing::XShapes> xPageShapes, bool b
 OUString XShapeDumper::dump(uno::Reference<drawing::XShape> xPageShapes, bool bDumpInteropProperties)
 {
     OStringBuffer aString;
-    xmlOutputBufferPtr xmlOutBuffer = xmlOutputBufferCreateIO( writeCallback, closeCallback, &aString, NULL );
+    xmlOutputBufferPtr xmlOutBuffer = xmlOutputBufferCreateIO( writeCallback, closeCallback, &aString, nullptr );
     xmlTextWriterPtr xmlWriter = xmlNewTextWriter( xmlOutBuffer );
     xmlTextWriterSetIndent( xmlWriter, 1 );
 
-    xmlTextWriterStartDocument( xmlWriter, NULL, NULL, NULL );
+    xmlTextWriterStartDocument( xmlWriter, nullptr, nullptr, nullptr );
 
     try
     {

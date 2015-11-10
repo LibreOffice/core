@@ -74,7 +74,7 @@ namespace
 
     ImpTimedRefDev::ImpTimedRefDev(scoped_timed_RefDev& rOwnerOfMe)
     :   mrOwnerOfMe(rOwnerOfMe),
-        mpVirDev(0L),
+        mpVirDev(nullptr),
         mnUseCount(0L)
     {
         SetTimeout(3L * 60L * 1000L); // three minutes

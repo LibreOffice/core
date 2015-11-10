@@ -66,9 +66,9 @@ namespace drawinglayer
             const BitmapEx& rBitmapEx,
             const basegfx::B2DRange& rRange)
         :   maBitmapEx(rBitmapEx),
-            mpReadBitmap(0),
+            mpReadBitmap(nullptr),
             maTransparence(),
-            mpReadTransparence(0),
+            mpReadTransparence(nullptr),
             maTopLeft(rRange.getMinimum()),
             maSize(rRange.getRange()),
             mfMulX(0.0),
@@ -325,9 +325,9 @@ namespace drawinglayer
             const primitive3d::HatchTexturePrimitive3D& rPrimitive,
             double fLogicPixelSize)
         :   mfLogicPixelSize(fLogicPixelSize),
-            mp0(0L),
-            mp1(0L),
-            mp2(0L)
+            mp0(nullptr),
+            mp1(nullptr),
+            mp2(nullptr)
         {
             const attribute::FillHatchAttribute& rHatch(rPrimitive.getHatch());
             const basegfx::B2DRange aOutlineRange(0.0, 0.0, rPrimitive.getTextureSize().getX(), rPrimitive.getTextureSize().getY());

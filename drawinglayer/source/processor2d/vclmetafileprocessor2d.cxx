@@ -386,7 +386,7 @@ namespace drawinglayer
             const attribute::LineStartEndAttribute* pStart,
             const attribute::LineStartEndAttribute* pEnd)
         {
-            SvtGraphicStroke* pRetval = 0;
+            SvtGraphicStroke* pRetval = nullptr;
 
             if(rB2DPolygon.count() && !mnSvtGraphicStrokeCount)
             {
@@ -1176,7 +1176,7 @@ namespace drawinglayer
                         // direct draw of hairline; use default processing
                         // support SvtGraphicStroke MetaCommentAction
                         const basegfx::BColor aLineColor(maBColorModifierStack.getModifiedColor(rHairlinePrimitive.getBColor()));
-                        SvtGraphicStroke* pSvtGraphicStroke = 0;
+                        SvtGraphicStroke* pSvtGraphicStroke = nullptr;
 
                         // #i121267# Not needed, does not give better quality compared with
                         // the MetaActionType::POLYPOLYGON written by RenderPolygonHairlinePrimitive2D
@@ -1188,7 +1188,7 @@ namespace drawinglayer
                             pSvtGraphicStroke = impTryToCreateSvtGraphicStroke(
                                 rHairlinePrimitive.getB2DPolygon(),
                                 &aLineColor,
-                                0, 0, 0, 0);
+                                nullptr, nullptr, nullptr, nullptr);
 
                             impStartSvtGraphicStroke(pSvtGraphicStroke);
                         }
@@ -1225,10 +1225,10 @@ namespace drawinglayer
                     {
                         // support SvtGraphicStroke MetaCommentAction
                         SvtGraphicStroke* pSvtGraphicStroke = impTryToCreateSvtGraphicStroke(
-                            rBasePolygon, 0,
+                            rBasePolygon, nullptr,
                             &rStrokePrimitive.getLineAttribute(),
                             &rStrokePrimitive.getStrokeAttribute(),
-                            0, 0);
+                            nullptr, nullptr);
 
                         impStartSvtGraphicStroke(pSvtGraphicStroke);
                         const attribute::LineAttribute& rLine = rStrokePrimitive.getLineAttribute();
@@ -1247,7 +1247,7 @@ namespace drawinglayer
                             {
                                 basegfx::tools::applyLineDashing(
                                     rBasePolygon, rStroke.getDotDashArray(),
-                                    &aHairLinePolyPolygon, 0, rStroke.getFullDotDashLen());
+                                    &aHairLinePolyPolygon, nullptr, rStroke.getFullDotDashLen());
                             }
 
                             const basegfx::BColor aHairlineColor(maBColorModifierStack.getModifiedColor(rLine.getColor()));
@@ -1314,7 +1314,7 @@ namespace drawinglayer
                     {
                         // support SvtGraphicStroke MetaCommentAction
                         SvtGraphicStroke* pSvtGraphicStroke = impTryToCreateSvtGraphicStroke(
-                            rBasePolygon, 0,
+                            rBasePolygon, nullptr,
                             &rStrokeArrowPrimitive.getLineAttribute(),
                             &rStrokeArrowPrimitive.getStrokeAttribute(),
                             &rStrokeArrowPrimitive.getStart(),
@@ -1380,7 +1380,7 @@ namespace drawinglayer
                     }
                     else
                     {
-                        SvtGraphicFill* pSvtGraphicFill = 0;
+                        SvtGraphicFill* pSvtGraphicFill = nullptr;
 
                         if(!mnSvtGraphicFillCount && aLocalPolyPolygon.count())
                         {
@@ -1479,7 +1479,7 @@ namespace drawinglayer
                         process(primitive2d::Primitive2DSequence(&xBackground, 1));
                     }
 
-                    SvtGraphicFill* pSvtGraphicFill = 0;
+                    SvtGraphicFill* pSvtGraphicFill = nullptr;
                     aLocalPolyPolygon.transform(maCurrentTransformation);
 
                     if(!mnSvtGraphicFillCount && aLocalPolyPolygon.count())
@@ -1621,7 +1621,7 @@ namespace drawinglayer
 
 
                         // XPATHFILL_SEQ_BEGIN/XPATHFILL_SEQ_END support
-                        SvtGraphicFill* pSvtGraphicFill = 0;
+                        SvtGraphicFill* pSvtGraphicFill = nullptr;
 
                         if(!mnSvtGraphicFillCount && aLocalPolyPolygon.count())
                         {
@@ -1682,7 +1682,7 @@ namespace drawinglayer
                     aLocalPolyPolygon.transform(maCurrentTransformation);
 
                     // XPATHFILL_SEQ_BEGIN/XPATHFILL_SEQ_END support
-                    SvtGraphicFill* pSvtGraphicFill = 0;
+                    SvtGraphicFill* pSvtGraphicFill = nullptr;
 
                     // #i121267# Not needed, does not give better quality compared with
                     // the MetaActionType::POLYPOLYGON written by the DrawPolyPolygon command
@@ -1833,7 +1833,7 @@ namespace drawinglayer
                         {
                             // try to identify a single PolyPolygonColorPrimitive2D in the
                             // content part of the transparence primitive
-                            const primitive2d::PolyPolygonColorPrimitive2D* pPoPoColor = 0;
+                            const primitive2d::PolyPolygonColorPrimitive2D* pPoPoColor = nullptr;
                             static bool bForceToMetafile(false);
 
                             if(!bForceToMetafile && 1 == rContent.getLength())
@@ -1860,7 +1860,7 @@ namespace drawinglayer
                                 aLocalPolyPolygon.transform(maCurrentTransformation);
 
                                 // XPATHFILL_SEQ_BEGIN/XPATHFILL_SEQ_END support
-                                SvtGraphicFill* pSvtGraphicFill = 0;
+                                SvtGraphicFill* pSvtGraphicFill = nullptr;
 
                                 // #i121267# Not needed, does not give better quality compared with
                                 // the MetaActionType::POLYPOLYGON written by the DrawPolyPolygon command
@@ -1967,7 +1967,7 @@ namespace drawinglayer
                     {
                         // try to identify a single FillGradientPrimitive2D in the
                         // transparence part of the primitive
-                        const primitive2d::FillGradientPrimitive2D* pFiGradient = 0;
+                        const primitive2d::FillGradientPrimitive2D* pFiGradient = nullptr;
                         static bool bForceToBigTransparentVDev(false);
 
                         if(!bForceToBigTransparentVDev && 1 == rTransparence.getLength())

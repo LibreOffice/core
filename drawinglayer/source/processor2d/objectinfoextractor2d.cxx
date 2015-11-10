@@ -50,7 +50,7 @@ namespace drawinglayer
 
         ObjectInfoPrimitiveExtractor2D::ObjectInfoPrimitiveExtractor2D(const geometry::ViewInformation2D& rViewInformation)
         :   BaseProcessor2D(rViewInformation),
-            mpFound(0)
+            mpFound(nullptr)
         {
         }
 

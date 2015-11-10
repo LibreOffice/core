@@ -405,7 +405,7 @@ namespace drawinglayer
             mfDepth(fDepth),
             mfDiagonal(fDiagonal),
             mfBackScale(fBackScale),
-            mpLastRLGViewInformation(0),
+            mpLastRLGViewInformation(nullptr),
             mbSmoothNormals(bSmoothNormals),
             mbSmoothHorizontalNormals(bSmoothHorizontalNormals),
             mbSmoothLids(bSmoothLids),

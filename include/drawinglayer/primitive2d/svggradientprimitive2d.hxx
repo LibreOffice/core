@@ -278,7 +278,7 @@ namespace drawinglayer
                 double fRadius,
                 bool bUseUnitCoordinates,
                 SpreadMethod aSpreadMethod = Spread_pad,
-                const basegfx::B2DPoint* pFocal = 0);
+                const basegfx::B2DPoint* pFocal = nullptr);
             virtual ~SvgRadialGradientPrimitive2D();
 
             /// data read access
@@ -400,7 +400,7 @@ namespace drawinglayer
             const basegfx::BColor& getColorB() const { return maColorB; }
             double getScaleA() const { return mfScaleA; }
             double getScaleB() const { return mfScaleB; }
-            bool isTranslateSet() const { return (0 != mpTranslate); }
+            bool isTranslateSet() const { return (nullptr != mpTranslate); }
             basegfx::B2DVector getTranslateA() const { if(mpTranslate) return mpTranslate->maTranslateA; return basegfx::B2DVector(); }
             basegfx::B2DVector getTranslateB() const { if(mpTranslate) return mpTranslate->maTranslateB; return basegfx::B2DVector(); }
 

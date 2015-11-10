@@ -1077,7 +1077,7 @@ namespace drawinglayer
             maColorB(aColorB),
             mfScaleA(fScaleA),
             mfScaleB(fScaleB),
-            mpTranslate(0)
+            mpTranslate(nullptr)
         {
             // check and evtl. set translations
             if(!rTranslateA.equal(rTranslateB))
@@ -1110,7 +1110,7 @@ namespace drawinglayer
             maColorB(aColorB),
             mfScaleA(fScaleA),
             mfScaleB(fScaleB),
-            mpTranslate(0)
+            mpTranslate(nullptr)
         {
             // scale A and B have to be positive
             mfScaleA = ::std::max(mfScaleA, 0.0);
@@ -1129,7 +1129,7 @@ namespace drawinglayer
             if(mpTranslate)
             {
                 delete mpTranslate;
-                mpTranslate = 0;
+                mpTranslate = nullptr;
             }
         }
 

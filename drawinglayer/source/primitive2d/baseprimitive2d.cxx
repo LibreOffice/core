@@ -190,9 +190,9 @@ namespace drawinglayer
 
             const BasePrimitive2D* pA(dynamic_cast< const BasePrimitive2D* >(rxA.get()));
             const BasePrimitive2D* pB(dynamic_cast< const BasePrimitive2D* >(rxB.get()));
-            const bool bAEqualZero(pA == 0L);
+            const bool bAEqualZero(pA == nullptr);
 
-            if(bAEqualZero != (pB == 0L))
+            if(bAEqualZero != (pB == nullptr))
             {
                 return false;
             }

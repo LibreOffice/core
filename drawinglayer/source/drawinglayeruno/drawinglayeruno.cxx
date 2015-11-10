@@ -35,7 +35,7 @@ extern "C"
     SAL_DLLPUBLIC_EXPORT void* SAL_CALL drawinglayer_component_getFactory( const sal_Char* pImplName, void* pServiceManager, void* /* pRegistryKey */ )
     {
         uno::Reference< lang::XSingleServiceFactory > xFactory;
-        void* pRet = 0;
+        void* pRet = nullptr;
 
         if(drawinglayer::unorenderer::XPrimitive2DRenderer_getImplementationName().equalsAscii(pImplName))
         {

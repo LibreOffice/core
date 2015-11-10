@@ -38,7 +38,7 @@ namespace drawinglayer
             const Primitive2DSequence& rChildren,
             bool bIsTextAnimation)
         :   GroupPrimitive2D(rChildren),
-            mpAnimationEntry(0),
+            mpAnimationEntry(nullptr),
             mbIsTextAnimation(bIsTextAnimation)
         {
             // clone given animation description

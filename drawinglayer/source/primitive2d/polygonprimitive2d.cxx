@@ -241,7 +241,7 @@ namespace drawinglayer
                     // apply LineStyle
                     basegfx::tools::applyLineDashing(
                         aB2DPolygon, getStrokeAttribute().getDotDashArray(),
-                        &aHairLinePolyPolygon, 0, getStrokeAttribute().getFullDotDashLen());
+                        &aHairLinePolyPolygon, nullptr, getStrokeAttribute().getFullDotDashLen());
                 }
 
                 const sal_uInt32 nCount(aHairLinePolyPolygon.count());

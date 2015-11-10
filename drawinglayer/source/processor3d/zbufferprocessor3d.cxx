@@ -200,7 +200,7 @@ private:
     double decideColorAndOpacity(basegfx::BColor& rColor)
     {
         // init values with full opacity and material color
-        OSL_ENSURE(0 != mpCurrentMaterial, "CurrentMaterial not set (!)");
+        OSL_ENSURE(nullptr != mpCurrentMaterial, "CurrentMaterial not set (!)");
         double fOpacity(1.0);
         rColor = mpCurrentMaterial->getColor();
 
@@ -354,7 +354,7 @@ public:
         maIntNormal(),
         maIntTexture(),
         maIntInvTexture(),
-        mpCurrentMaterial(0),
+        mpCurrentMaterial(nullptr),
         mbModifyColor(false),
         mbUseTex(false),
         mbHasTexCoor(false),
@@ -642,11 +642,11 @@ namespace drawinglayer
             const basegfx::B2DRange& rVisiblePart,
             sal_uInt16 nAntiAlialize)
         :   DefaultProcessor3D(rViewInformation3D, rSdrSceneAttribute, rSdrLightingAttribute),
-            mpBZPixelRaster(0),
+            mpBZPixelRaster(nullptr),
             maInvEyeToView(),
-            mpZBufferRasterConverter3D(0),
+            mpZBufferRasterConverter3D(nullptr),
             mnAntiAlialize(nAntiAlialize),
-            mpRasterPrimitive3Ds(0)
+            mpRasterPrimitive3Ds(nullptr)
         {
             // generate ViewSizes
             const double fFullViewSizeX((rViewInformation2D.getObjectToViewTransformation() * basegfx::B2DVector(fSizeX, 0.0)).getLength());
@@ -792,7 +792,7 @@ namespace drawinglayer
                 // delete them to signal the destructor that all is done and
                 // to allow asserting there
                 delete mpRasterPrimitive3Ds;
-                mpRasterPrimitive3Ds = 0;
+                mpRasterPrimitive3Ds = nullptr;
             }
         }
 

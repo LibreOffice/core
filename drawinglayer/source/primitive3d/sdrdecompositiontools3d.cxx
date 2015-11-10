@@ -205,7 +205,7 @@ namespace drawinglayer
                 {
                     bool bModulate(css::drawing::TextureMode_MODULATE == aSdr3DObjectAttribute.getTextureMode());
                     bool bFilter(aSdr3DObjectAttribute.getTextureFilter());
-                    BasePrimitive3D* pNewTexturePrimitive3D = 0;
+                    BasePrimitive3D* pNewTexturePrimitive3D = nullptr;
 
                     if(!rFill.getGradient().isDefault())
                     {

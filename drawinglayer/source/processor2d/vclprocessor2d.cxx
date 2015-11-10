@@ -160,7 +160,7 @@ namespace drawinglayer
                     const primitive2d::TextDecoratedPortionPrimitive2D* pTCPP =
                         dynamic_cast<const primitive2d::TextDecoratedPortionPrimitive2D*>( &rTextCandidate );
 
-                    if( pTCPP != NULL )
+                    if( pTCPP != nullptr )
                     {
 
                         // set the color of text decorations
@@ -275,7 +275,7 @@ namespace drawinglayer
                     sal_Int32 nPos = rTextCandidate.getTextPosition();
                     sal_Int32 nLen = rTextCandidate.getTextLength();
 
-                    long* pDXArray = aTransformedDXArray.size() ? &(aTransformedDXArray[0]) : NULL ;
+                    long* pDXArray = aTransformedDXArray.size() ? &(aTransformedDXArray[0]) : nullptr ;
 
                     if ( rTextCandidate.isFilled() )
                     {
@@ -1156,7 +1156,7 @@ namespace drawinglayer
                     // else apply LineStyle
                     basegfx::tools::applyLineDashing(rPolygonStrokeCandidate.getB2DPolygon(),
                         rStrokeAttribute.getDotDashArray(),
-                        &aHairlinePolyPolygon, 0, rStrokeAttribute.getFullDotDashLen());
+                        &aHairlinePolyPolygon, nullptr, rStrokeAttribute.getFullDotDashLen());
                 }
 
                 const sal_uInt32 nCount(aHairlinePolyPolygon.count());

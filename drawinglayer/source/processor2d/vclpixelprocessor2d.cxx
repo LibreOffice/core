@@ -206,7 +206,7 @@ namespace drawinglayer
                     aLocalPolygon,
                     rSource.getStrokeAttribute().getDotDashArray(),
                     &aHairLinePolyPolygon,
-                    0,
+                    nullptr,
                     rSource.getStrokeAttribute().getFullDotDashLen());
             }
 
