@@ -192,7 +192,7 @@ public:
     void UnlockModify()                 { m_bModifyLocked = false; }
     void SetInCache( bool bNew )        { m_bInCache = bNew;       }
     void SetInSwFntCache( bool bNew )   { m_bInSwFntCache = bNew;  }
-    void SetInDocDTOR()                 { m_bInDocDTOR = true; }
+    void SetInDocDTOR();
     bool IsModifyLocked() const     { return m_bModifyLocked;  }
     bool IsInCache()      const     { return m_bInCache;       }
     bool IsInSwFntCache() const     { return m_bInSwFntCache;  }

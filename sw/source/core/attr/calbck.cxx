@@ -75,6 +75,17 @@ void SwClient::Modify(SfxPoolItem const*const pOldValue, SfxPoolItem const*const
     CheckRegistration( pOldValue, pNewValue );
 }
 
+void SwModify::SetInDocDTOR()
+{
+    m_bInDocDTOR = true;
+    // If the document gets destroyed anyway, just tell clients to
+    // forget me so that they don't try to get removed from my list
+    // later when they also get destroyed
+    SwIterator<SwClient,SwModify> aIter(*this);
+    for(SwClient* pClient = aIter.First(); pClient; pClient = aIter.Next())
+        pClient->pRegisteredIn = nullptr;
+}
+
 SwModify::~SwModify()
 {
     DBG_TESTSOLARMUTEX();
@@ -86,30 +97,16 @@ SwModify::~SwModify()
     if ( IsInSwFntCache() )
         pSwFontCache->Delete( this );
 
-    if( m_pWriterListeners )
-    {
-        // there are depending objects
-        if( m_bInDocDTOR )
-        {
-            // If the document gets destroyed anyway, just tell clients to
-            // forget me so that they don't try to get removed from my list
-            // later when they also get destroyed
-            SwIterator<SwClient,SwModify> aIter(*this);
-            for(SwClient* pClient = aIter.First(); pClient; pClient = aIter.Next())
-                pClient->pRegisteredIn = nullptr;
-        }
-        else
-        {
-            // notify all clients that they shall remove themselves
-            SwPtrMsgPoolItem aDyObject( RES_OBJECTDYING, this );
-            NotifyClients( &aDyObject, &aDyObject );
+    if(m_bInDocDTOR)
+        return;
+    // notify all clients that they shall remove themselves
+    SwPtrMsgPoolItem aDyObject( RES_OBJECTDYING, this );
+    NotifyClients( &aDyObject, &aDyObject );
 
-            // remove all clients that have not done themselves
-            // mba: possibly a hotfix for forgotten base class calls?!
-            while( m_pWriterListeners )
-                static_cast<SwClient*>(m_pWriterListeners)->CheckRegistration( &aDyObject, &aDyObject );
-        }
-    }
+    // remove all clients that have not done themselves
+    // mba: possibly a hotfix for forgotten base class calls?!
+    while( m_pWriterListeners )
+        static_cast<SwClient*>(m_pWriterListeners)->CheckRegistration( &aDyObject, &aDyObject );
 }
 
 void SwModify::NotifyClients( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewValue )
