@@ -96,7 +96,7 @@ UUIInteractionRequestStringResolver::createInstance(
     }
     catch (std::bad_alloc const &)
     {
-        throw uno::RuntimeException("out of memory", 0);
+        throw uno::RuntimeException("out of memory", nullptr);
     }
 }
 

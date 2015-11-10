@@ -47,7 +47,7 @@ namespace uui
 *//*-*************************************************************************************************************/
 FilterDialog::FilterDialog( vcl::Window* pParentWindow )
     :   ModalDialog  (pParentWindow, "FilterSelectDialog", "uui/ui/filterselect.ui" )
-    ,   m_pFilterNames(NULL)
+    ,   m_pFilterNames(nullptr)
 {
     get(m_pFtURL, "url");
     get(m_pLbFilters, "filters");
@@ -102,7 +102,7 @@ void FilterDialog::ChangeFilters( const FilterNameList* pFilterNames )
 {
     m_pFilterNames = pFilterNames;
     m_pLbFilters->Clear();
-    if( m_pFilterNames != NULL )
+    if( m_pFilterNames != nullptr )
     {
         for( FilterNameListPtr pItem  = m_pFilterNames->begin();
                                pItem != m_pFilterNames->end()  ;
@@ -135,7 +135,7 @@ bool FilterDialog::AskForFilter( FilterNameListPtr& pSelectedItem )
 {
     bool bSelected = false;
 
-    if( m_pFilterNames != NULL )
+    if( m_pFilterNames != nullptr )
     {
         if( ModalDialog::Execute() == RET_OK )
         {

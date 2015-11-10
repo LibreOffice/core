@@ -57,7 +57,7 @@ OUString
 getContentPart( const OUString& _rRawString )
 {
     // search over some parts to find a string
-    static char const * aIDs[] = { "CN=", "OU=", "O=", "E=", NULL };
+    static char const * aIDs[] = { "CN=", "OU=", "O=", "E=", nullptr };
     OUString sPart;
     int i = 0;
     while ( aIDs[i] )
@@ -119,7 +119,7 @@ getLocalizedDatTimeStr(
     LanguageType eUILang = Application::GetSettings().GetUILanguageTag().getLanguageType();
     SvNumberFormatter *pNumberFormatter = new SvNumberFormatter( xContext, eUILang );
     OUString      aTmpStr;
-    Color*      pColor = NULL;
+    Color*      pColor = nullptr;
     Date*       pNullDate = pNumberFormatter->GetNullDate();
     sal_uInt32  nFormat
         = pNumberFormatter->GetStandardFormat( css::util::NumberFormat::DATE, eUILang );

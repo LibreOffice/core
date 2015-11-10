@@ -971,7 +971,7 @@ UUIInteractionHelper::getParentProperty()
     if ( xWindow.is() )
         return VCLUnoHelper::GetWindow(xWindow);
 
-    return 0;
+    return nullptr;
 }
 
 uno::Reference< awt::XWindow>
