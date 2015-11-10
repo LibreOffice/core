@@ -98,9 +98,7 @@ template<typename Func> void visitElements(Func& rFunc,
             //tdf#65864
             //TODO: support clipPath
             if( !(eCaller == SHAPE_WRITER &&
-                xChildren->item(i)->getNodeName() == "path" &&
-                rElem->getTagName() == "clipPath" &&
-                rElem->getParentNode()->getNodeName() == "defs") ){
+                rElem->getTagName() == "clipPath")){
                     visitElements( rFunc,
                                    uno::Reference<xml::dom::XElement>(
                                        xChildren->item(i),
