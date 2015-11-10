@@ -158,7 +158,7 @@ SvxBorderTabPage::SvxBorderTabPage(vcl::Window* pParent, const SfxItemSet& rCore
             is needed across various functions... */
     mbUseMarginItem = rCoreAttrs.GetItemState(GetWhich(SID_ATTR_ALIGN_MARGIN)) != SfxItemState::UNKNOWN;
 
-    const SfxPoolItem* pItem = NULL;
+    const SfxPoolItem* pItem = nullptr;
     if (rCoreAttrs.HasItem(SID_ATTR_BORDER_STYLES, &pItem))
     {
         const SfxIntegerListItem* p = static_cast<const SfxIntegerListItem*>(pItem);
@@ -289,7 +289,7 @@ SvxBorderTabPage::SvxBorderTabPage(vcl::Window* pParent, const SfxItemSet& rCore
     if ( pDocSh )
     {
         pItem = pDocSh->GetItem( SID_COLOR_TABLE );
-        if ( pItem != NULL )
+        if ( pItem != nullptr )
             pColorTable = static_cast<const SvxColorListItem*>(pItem)->GetColorList();
     }
 
@@ -571,8 +571,8 @@ void SvxBorderTabPage::Reset( const SfxItemSet* rSet )
     const SfxPoolItem* pItem;
     SfxObjectShell* pShell;
     if(SfxItemState::SET == rSet->GetItemState(SID_HTML_MODE, false, &pItem) ||
-        ( 0 != (pShell = SfxObjectShell::Current()) &&
-                    0 != (pItem = pShell->GetItem(SID_HTML_MODE))))
+        ( nullptr != (pShell = SfxObjectShell::Current()) &&
+                    nullptr != (pItem = pShell->GetItem(SID_HTML_MODE))))
     {
         sal_uInt16 nHtmlMode = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
         if(nHtmlMode & HTMLMODE_ON)
@@ -591,7 +591,7 @@ void SvxBorderTabPage::Reset( const SfxItemSet* rSet )
         }
     }
 
-    LinesChanged_Impl( 0 );
+    LinesChanged_Impl( nullptr );
     if(m_pLeftMF->GetValue() == m_pRightMF->GetValue() && m_pTopMF->GetValue() == m_pBottomMF->GetValue() && m_pTopMF->GetValue() == m_pLeftMF->GetValue())
         mbSync = true;
     else
@@ -843,7 +843,7 @@ IMPL_LINK_NOARG_TYPED(SvxBorderTabPage, SelPreHdl_Impl, ValueSet*, void)
     // Presets ValueSet does not show a selection (used as push buttons).
     m_pWndPresets->SetNoSelection();
 
-    LinesChanged_Impl( 0 );
+    LinesChanged_Impl( nullptr );
 }
 
 

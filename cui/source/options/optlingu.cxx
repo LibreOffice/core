@@ -336,7 +336,7 @@ public:
     OptionsBreakSet(vcl::Window* pParent, sal_uInt16 nRID)
         : ModalDialog(pParent, "BreakNumberOption",
             "cui/ui/breaknumberoption.ui")
-        , m_pBreakNF(NULL)
+        , m_pBreakNF(nullptr)
     {
         get(m_pBeforeFrame, "beforeframe");
         get(m_pAfterFrame, "afterframe");
@@ -565,7 +565,7 @@ static sal_Int32 lcl_SeqGetIndex( const Sequence< OUString > &rSeq, const OUStri
 
 Sequence< OUString > SvxLinguData_Impl::GetSortedImplNames( sal_Int16 nLang, sal_uInt8 nType )
 {
-    LangImplNameTable *pTable = 0;
+    LangImplNameTable *pTable = nullptr;
     switch (nType)
     {
         case TYPE_SPELL     : pTable = &aCfgSpellTable; break;
@@ -627,7 +627,7 @@ ServiceInfo_Impl * SvxLinguData_Impl::GetInfoByImplName( const OUString &rSvcImp
             return &rTmp;
         }
     }
-    return 0;
+    return nullptr;
 }
 
 
@@ -936,8 +936,8 @@ void SvxLinguData_Impl::Reconfigure( const OUString &rDisplayName, bool bEnable 
 {
     DBG_ASSERT( !rDisplayName.isEmpty(), "empty DisplayName" );
 
-    ServiceInfo_Impl *pInfo = 0;
-    ServiceInfo_Impl *pTmp  = 0;
+    ServiceInfo_Impl *pInfo = nullptr;
+    ServiceInfo_Impl *pTmp  = nullptr;
     for (sal_uLong i = 0;  i < nDisplayServices;  ++i)
     {
         pTmp = &aDisplayServiceArr[i];
@@ -953,7 +953,7 @@ void SvxLinguData_Impl::Reconfigure( const OUString &rDisplayName, bool bEnable 
         pInfo->bConfigured = bEnable;
 
         Sequence< Locale > aLocales;
-        const Locale *pLocale = 0;
+        const Locale *pLocale = nullptr;
         sal_Int32 nLocales = 0;
         sal_Int32 i;
 
@@ -1040,7 +1040,7 @@ SvxLinguTabPage::SvxLinguTabPage( vcl::Window* pParent, const SfxItemSet& rSet )
     sHyphAuto       (CUI_RES(RID_SVXSTR_HYPH_AUTO)),
     sHyphSpecial    (CUI_RES(RID_SVXSTR_HYPH_SPECIAL)),
 
-    pLinguData(NULL)
+    pLinguData(nullptr)
 {
     get(m_pLinguModulesFT, "lingumodulesft");
     get(m_pLinguModulesCLB, "lingumodules");
@@ -1058,7 +1058,7 @@ SvxLinguTabPage::SvxLinguTabPage( vcl::Window* pParent, const SfxItemSet& rSet )
     m_pLinguDicsCLB->set_height_request(m_pLinguDicsCLB->GetTextHeight() * 5);
     m_pLinguOptionsCLB->set_height_request(m_pLinguOptionsCLB->GetTextHeight() * 5);
 
-    pCheckButtonData = NULL;
+    pCheckButtonData = nullptr;
 
     m_pLinguModulesCLB->SetStyle( m_pLinguModulesCLB->GetStyle()|WB_CLIPCHILDREN|WB_HSCROLL|WB_FORCE_MAKEVISIBLE );
     m_pLinguModulesCLB->SetHighlightRange();
@@ -1133,7 +1133,7 @@ SvxLinguTabPage::~SvxLinguTabPage()
 void SvxLinguTabPage::dispose()
 {
     delete pLinguData;
-    pLinguData = NULL;
+    pLinguData = nullptr;
     m_pLinguModulesFT.clear();
     m_pLinguModulesCLB.clear();
     m_pLinguModulesEditPB.clear();
@@ -1423,7 +1423,7 @@ void SvxLinguTabPage::Reset( const SfxItemSet* rSet )
     m_pLinguOptionsCLB->Clear();
 
     SvTreeList *pModel = m_pLinguOptionsCLB->GetModel();
-    SvTreeListEntry* pEntry = NULL;
+    SvTreeListEntry* pEntry = nullptr;
 
     sal_Int16 nVal = 0;
     bool  bVal  = false;
@@ -1473,7 +1473,7 @@ void SvxLinguTabPage::Reset( const SfxItemSet* rSet )
     pEntry->SetUserData( reinterpret_cast<void *>(nUserData) );
     pModel->Insert( pEntry );
 
-    const SfxHyphenRegionItem *pHyp = NULL;
+    const SfxHyphenRegionItem *pHyp = nullptr;
     sal_uInt16 nWhich = GetWhich( SID_ATTR_HYPHENREGION );
     if ( rSet->GetItemState( nWhich, false ) == SfxItemState::SET )
         pHyp = &static_cast<const SfxHyphenRegionItem &>( rSet->Get( nWhich ) );
@@ -1521,7 +1521,7 @@ IMPL_LINK_TYPED( SvxLinguTabPage, BoxDoubleClickHdl_Impl, SvTreeListBox *, pBox,
         //! on a module entry and exiting the "Edit Modules" dialog
         //! after that.
         Application::PostUserEvent( LINK(
-                    this, SvxLinguTabPage, PostDblClickHdl_Impl ), NULL, true);
+                    this, SvxLinguTabPage, PostDblClickHdl_Impl ), nullptr, true);
     }
     else if (pBox == m_pLinguOptionsCLB)
     {
@@ -1699,7 +1699,7 @@ IMPL_LINK_TYPED( SvxLinguTabPage, ClickHdl_Impl, Button *, pBtn, void )
                             }
                         }
 
-                        aDics.getArray()[ nDicPos ] = 0;
+                        aDics.getArray()[ nDicPos ] = nullptr;
 
                         // remove entry from checklistbox
                         sal_uLong nCnt = m_pLinguDicsCLB->GetEntryCount();
@@ -1851,7 +1851,7 @@ SvxEditModulesDlg::SvxEditModulesDlg(vcl::Window* pParent, SvxLinguData_Impl& rD
     get(m_pLanguageLB, "language");
     m_pLanguageLB->SetStyle(m_pLanguageLB->GetStyle() | WB_SORT);
 
-    pCheckButtonData = NULL;
+    pCheckButtonData = nullptr;
 
     pDefaultLinguData = new SvxLinguData_Impl( rLinguData );
 
@@ -1912,7 +1912,7 @@ SvxEditModulesDlg::~SvxEditModulesDlg()
 void SvxEditModulesDlg::dispose()
 {
     delete pDefaultLinguData;
-    pDefaultLinguData = NULL;
+    pDefaultLinguData = nullptr;
     m_pLanguageLB.clear();
     m_pModulesCLB.clear();
     m_pPrioUpPB.clear();
@@ -1978,7 +1978,7 @@ IMPL_LINK_TYPED( SvxEditModulesDlg, SelectHdl_Impl, SvTreeListBox*, pBox, void )
 
 IMPL_LINK_NOARG_TYPED( SvxEditModulesDlg, BoxCheckButtonHdl_Impl2, SvLBoxButtonData*, void )
 {
-    BoxCheckButtonHdl_Impl(NULL);
+    BoxCheckButtonHdl_Impl(nullptr);
 }
 IMPL_LINK_NOARG_TYPED( SvxEditModulesDlg, BoxCheckButtonHdl_Impl, SvTreeListBox *, void )
 {
@@ -2038,7 +2038,7 @@ void SvxEditModulesDlg::LangSelectHdl_Impl(ListBox* pBox)
             {
                 if(bChanged)
                 {
-                    LangImplNameTable *pTable = 0;
+                    LangImplNameTable *pTable = nullptr;
                     sal_uInt8 nType = pData->GetType();
                     switch (nType - 1)
                     {
@@ -2273,7 +2273,7 @@ IMPL_LINK_TYPED( SvxEditModulesDlg, UpDownHdl_Impl, Button *, pBtn, void )
     sal_uLong  nCurPos = m_pModulesCLB->GetSelectEntryPos();
     SvTreeListEntry* pEntry;
     if (nCurPos != TREELIST_ENTRY_NOTFOUND  &&
-        0 != (pEntry = m_pModulesCLB->GetEntry(nCurPos)))
+        nullptr != (pEntry = m_pModulesCLB->GetEntry(nCurPos)))
     {
         m_pModulesCLB->SetUpdateMode(false);
         SvTreeList *pModel = m_pModulesCLB->GetModel();
@@ -2305,7 +2305,7 @@ IMPL_LINK_NOARG_TYPED(SvxEditModulesDlg, ClickHdl_Impl, Button*, void)
 IMPL_LINK_NOARG_TYPED(SvxEditModulesDlg, BackHdl_Impl, Button*, void)
 {
     rLinguData = *pDefaultLinguData;
-    LangSelectHdl_Impl(0);
+    LangSelectHdl_Impl(nullptr);
 }
 
 

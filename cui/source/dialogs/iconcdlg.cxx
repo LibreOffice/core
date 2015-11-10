@@ -47,7 +47,7 @@ IconChoicePage::IconChoicePage( vcl::Window *pParent, const OString& rID,
 :   TabPage                   ( pParent, rID, rUIXMLDescription ),
     pSet                      ( &rAttrSet ),
     bHasExchangeSupport       ( false ),
-    pDialog                   ( NULL )
+    pDialog                   ( nullptr )
 {
     SetStyle ( GetStyle()  | WB_DIALOGCONTROL | WB_HIDE );
 }
@@ -166,9 +166,9 @@ IconChoiceDialog::IconChoiceDialog ( vcl::Window* pParent, const OUString& rID,
     mnCurrentPageId ( USHRT_MAX ),
 
     pSet            ( pItemSet ),
-    pOutSet         ( NULL ),
-    pExampleSet     ( NULL ),
-    pRanges         ( NULL ),
+    pOutSet         ( nullptr ),
+    pExampleSet     ( nullptr ),
+    pRanges         ( nullptr ),
 
     bHideResetBtn   ( false ),
     bModal          ( false ),
@@ -258,9 +258,9 @@ void IconChoiceDialog::dispose()
     }
 
     delete pRanges;
-    pRanges = NULL;
+    pRanges = nullptr;
     delete pOutSet;
-    pOutSet = NULL;
+    pOutSet = nullptr;
 
     m_pIconCtrl.clear();
     m_pOKBtn.clear();
@@ -449,7 +449,7 @@ void IconChoiceDialog::ActivatePageImpl ()
     {
         if ( !pData->pPage )
         {
-            const SfxItemSet* pTmpSet = 0;
+            const SfxItemSet* pTmpSet = nullptr;
 
             if ( pSet )
             {
@@ -534,7 +534,7 @@ bool IconChoiceDialog::DeActivatePageImpl ()
                 nRet = pPage->DeactivatePage( pExampleSet );
             }
             else
-                nRet = pPage->DeactivatePage( NULL );
+                nRet = pPage->DeactivatePage( nullptr );
         }
 
         if ( nRet & IconChoicePage::REFRESH_SET )
@@ -633,7 +633,7 @@ const sal_uInt16* IconChoiceDialog::GetInputRanges( const SfxItemPool& rPool )
 
 void IconChoiceDialog::SetInputSet( const SfxItemSet* pInSet )
 {
-    bool bSet = ( pSet != NULL );
+    bool bSet = ( pSet != nullptr );
 
     pSet = pInSet;
 
@@ -657,7 +657,7 @@ SfxItemSet* IconChoiceDialog::CreateInputItemSet( sal_uInt16 )
 {
     SAL_INFO( "cui.dialogs", "CreateInputItemSet not implemented" );
 
-    return 0;
+    return nullptr;
 }
 
 /**********************************************************************
@@ -727,7 +727,7 @@ void IconChoiceDialog::RefreshInputSet()
 
 IconChoicePageData* IconChoiceDialog::GetPageData ( sal_uInt16 nId )
 {
-    IconChoicePageData *pRet = NULL;
+    IconChoicePageData *pRet = nullptr;
     for ( size_t i=0; i < maPageList.size(); i++ )
     {
         IconChoicePageData* pData = maPageList[ i ];
@@ -769,7 +769,7 @@ bool IconChoiceDialog::OK_Impl()
             }
         }
         else
-            nRet = pPage->DeactivatePage( NULL );
+            nRet = pPage->DeactivatePage( nullptr );
         bEnd = nRet;
     }
 

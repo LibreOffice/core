@@ -63,7 +63,7 @@ protected:
 
 public:
     SvxLineTabDialog( vcl::Window* pParent, const SfxItemSet* pAttr,
-                      SdrModel* pModel, const SdrObject* pObj = NULL,
+                      SdrModel* pModel, const SdrObject* pObj = nullptr,
                       bool bHasObj = true );
 
     void                SetNewDashList( XDashListRef pInLst)

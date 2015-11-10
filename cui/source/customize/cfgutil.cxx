@@ -251,7 +251,7 @@ void SfxStylesInfo_Impl::getLabel4Style(SfxStyleInfo_Impl& aStyle)
 
 SfxConfigFunctionListBox::SfxConfigFunctionListBox(vcl::Window* pParent, WinBits nStyle)
     : SvTreeListBox( pParent, nStyle )
-    , pStylesInfo( 0 )
+    , pStylesInfo( nullptr )
 {
     SetStyle( GetStyle() | WB_CLIPCHILDREN | WB_HSCROLL | WB_SORT );
     GetModel()->SetSortMode( SortAscending );
@@ -303,7 +303,7 @@ void SfxConfigFunctionListBox::ClearAll()
         if ( pData->nKind == SfxCfgKind::GROUP_SCRIPTCONTAINER )
         {
             XInterface* xi = static_cast<XInterface *>(pData->pObject);
-            if (xi != NULL)
+            if (xi != nullptr)
             {
                 xi->release();
             }
@@ -393,7 +393,7 @@ SvxConfigGroupBoxResource_Impl::SvxConfigGroupBoxResource_Impl() :
 
 SfxConfigGroupListBox::SfxConfigGroupListBox(vcl::Window* pParent, WinBits nStyle)
     : SvTreeListBox(pParent, nStyle)
-    , pImp(new SvxConfigGroupBoxResource_Impl()), pFunctionListBox(0), pStylesInfo(0)
+    , pImp(new SvxConfigGroupBoxResource_Impl()), pFunctionListBox(nullptr), pStylesInfo(nullptr)
 {
     SetStyle( GetStyle() | WB_CLIPCHILDREN | WB_HSCROLL | WB_HASBUTTONS | WB_HASLINES | WB_HASLINESATROOT | WB_HASBUTTONSATROOT );
     SetNodeBitmaps( pImp->m_collapsedImage, pImp->m_expandedImage );
@@ -431,7 +431,7 @@ void SfxConfigGroupListBox::ClearAll()
         if (pData->nKind == SfxCfgKind::GROUP_SCRIPTCONTAINER)
         {
             XInterface* xi = static_cast<XInterface *>(pData->pObject);
-            if (xi != NULL)
+            if (xi != nullptr)
             {
                 xi->release();
             }
@@ -696,13 +696,13 @@ void SfxConfigGroupListBox::Init(const css::uno::Reference< css::uno::XComponent
     {
         OUString sStyle( pImp->m_aStrGroupStyles );
         SvTreeListEntry *pEntry = InsertEntry( sStyle );
-        SfxGroupInfo_Impl *pInfo = new SfxGroupInfo_Impl( SfxCfgKind::GROUP_STYLES, 0, 0 ); // TODO last parameter should contain user data
+        SfxGroupInfo_Impl *pInfo = new SfxGroupInfo_Impl( SfxCfgKind::GROUP_STYLES, 0, nullptr ); // TODO last parameter should contain user data
         aArr.push_back( pInfo );
         pEntry->SetUserData( pInfo );
         pEntry->EnableChildrenOnDemand();
     }
 
-    MakeVisible( GetEntry( 0,0 ) );
+    MakeVisible( GetEntry( nullptr,0 ) );
     SetUpdateMode( true );
 }
 
@@ -952,7 +952,7 @@ void SfxConfigGroupListBox::GroupSelected()
     }
 
     if ( pFunctionListBox->GetEntryCount() )
-        pFunctionListBox->Select( pFunctionListBox->GetEntry( 0, 0 ) );
+        pFunctionListBox->Select( pFunctionListBox->GetEntry( nullptr, 0 ) );
 
     pFunctionListBox->SetUpdateMode(true);
 }
@@ -1136,7 +1136,7 @@ void SfxConfigGroupListBox::SelectMacro( const OUString& rBasic,
         aModule = rMacro.getToken( nCount-2, '.' );
     }
 
-    SvTreeListEntry *pEntry = FirstChild(0);
+    SvTreeListEntry *pEntry = FirstChild(nullptr);
     while ( pEntry )
     {
         OUString aEntryBas = GetEntryText( pEntry );

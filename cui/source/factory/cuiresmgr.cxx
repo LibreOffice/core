@@ -25,7 +25,7 @@
 // struct DialogsResMgr --------------------------------------------------
 ResMgr* CuiResMgr::GetResMgr()
 {
-    static ResMgr* pResMgr=0;
+    static ResMgr* pResMgr=nullptr;
 
     if ( !pResMgr )
     {

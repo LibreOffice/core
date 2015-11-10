@@ -201,7 +201,7 @@ OUString SvxHyphenWordDialog::EraseUnusableHyphens_Impl()
 
 void SvxHyphenWordDialog::InitControls_Impl()
 {
-    m_xPossHyph = NULL;
+    m_xPossHyph = nullptr;
     if (m_xHyphenator.is())
     {
         lang::Locale aLocale( LanguageTag::convertToLocale(m_nActLanguage) );
@@ -443,8 +443,8 @@ SvxHyphenWordDialog::SvxHyphenWordDialog(
     SvxSpellWrapper* pWrapper)
     : SfxModalDialog(pParent, "HyphenateDialog", "cui/ui/hyphenate.ui")
     , m_pHyphWrapper(pWrapper)
-    , m_xHyphenator(NULL)
-    , m_xPossHyph(NULL)
+    , m_xHyphenator(nullptr)
+    , m_xPossHyph(nullptr)
     , m_aActWord(rWord)
     , m_nActLanguage(nLang)
     , m_nMaxHyphenationPos(0)
@@ -466,7 +466,7 @@ SvxHyphenWordDialog::SvxHyphenWordDialog(
     m_xHyphenator = xHyphen;
 
     uno::Reference< linguistic2::XHyphenatedWord >  xHyphWord( m_pHyphWrapper ?
-            m_pHyphWrapper->GetLast() : NULL, uno::UNO_QUERY );
+            m_pHyphWrapper->GetLast() : nullptr, uno::UNO_QUERY );
     DBG_ASSERT( xHyphWord.is(), "hyphenation result missing" );
     if (xHyphWord.is())
     {

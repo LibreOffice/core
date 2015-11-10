@@ -118,7 +118,7 @@ static Handle2CfgNameMapping_Impl const Hdl2CfgMap_Impl[] =
 #if OSL_DEBUG_LEVEL > 1
     { SvtPathOptions::PATH_LINGUISTIC,        "Linguistic" },
 #endif
-    { USHRT_MAX, NULL }
+    { USHRT_MAX, nullptr }
 };
 
 static OUString getCfgName_Impl( sal_uInt16 _nHandle )
@@ -249,7 +249,7 @@ void SvxPathTabPage::dispose()
         pPathBox.disposeAndClear();
     }
     delete pImpl;
-    pImpl = NULL;
+    pImpl = nullptr;
     m_pPathCtrl.clear();
     m_pStandardBtn.clear();
     m_pPathBtn.clear();
@@ -364,7 +364,7 @@ void SvxPathTabPage::Reset( const SfxItemSet* )
         HeaderSelect_Impl( &rBar );
     }
 #endif
-    PathSelect_Impl( NULL );
+    PathSelect_Impl( nullptr );
 }
 
 
@@ -537,14 +537,14 @@ void SvxPathTabPage::ChangeCurrentEntry( const OUString& _rFolder )
 
 IMPL_LINK_NOARG_TYPED(SvxPathTabPage, DoubleClickPathHdl_Impl, SvTreeListBox*, bool)
 {
-    PathHdl_Impl(NULL);
+    PathHdl_Impl(nullptr);
     return false;
 }
 
 IMPL_LINK_NOARG_TYPED(SvxPathTabPage, PathHdl_Impl, Button*, void)
 {
     SvTreeListEntry* pEntry = pPathBox->GetCurEntry();
-    sal_uInt16 nPos = ( pEntry != NULL ) ? static_cast<PathUserData_Impl*>(pEntry->GetUserData())->nRealId : 0;
+    sal_uInt16 nPos = ( pEntry != nullptr ) ? static_cast<PathUserData_Impl*>(pEntry->GetUserData())->nRealId : 0;
     OUString sInternal, sUser, sWritable;
     if ( pEntry )
     {

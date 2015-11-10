@@ -67,10 +67,10 @@ SvxLineDefTabPage::SvxLineDefTabPage
     aXColor             ( OUString(), COL_BLACK ),
     aXLineAttr          ( rInAttrs.GetPool() ),
     rXLSet              ( aXLineAttr.GetItemSet() ),
-    pnDashListState(0),
-    pPageType(0),
+    pnDashListState(nullptr),
+    pPageType(nullptr),
     nDlgType(0),
-    pPosDashLb(0)
+    pPosDashLb(nullptr)
 {
 
    get(m_pLbLineStyles   ,"LB_LINESTYLES");
@@ -149,7 +149,7 @@ SvxLineDefTabPage::SvxLineDefTabPage
     m_pMtrLength2->SetModifyHdl( aLink2 );
     m_pMtrDistance->SetModifyHdl( aLink2 );
 
-    pDashList = NULL;
+    pDashList = nullptr;
 }
 
 SvxLineDefTabPage::~SvxLineDefTabPage()
@@ -258,13 +258,13 @@ void SvxLineDefTabPage::CheckChanges_Impl()
         {
             case RET_BTN_1:
             {
-                ClickModifyHdl_Impl( NULL );
+                ClickModifyHdl_Impl( nullptr );
             }
             break;
 
             case RET_BTN_2:
             {
-                ClickAddHdl_Impl( NULL );
+                ClickAddHdl_Impl( nullptr );
             }
             break;
 
@@ -329,7 +329,7 @@ void SvxLineDefTabPage::Reset( const SfxItemSet* rAttrs )
                 break;
         }
     }
-    SelectLinestyleHdl_Impl( NULL );
+    SelectLinestyleHdl_Impl( nullptr );
 
     // determine button state
     if( pDashList->Count() )
@@ -499,7 +499,7 @@ IMPL_LINK_TYPED( SvxLineDefTabPage, ChangeMetricHdl_Impl, Button*, p, void )
         SetMetricValue( *m_pMtrDistance, nTmp3, ePoolUnit );
 
     }
-    SelectTypeHdl_Impl( NULL );
+    SelectTypeHdl_Impl( nullptr );
 }
 
 
@@ -912,7 +912,7 @@ void SvxLineDefTabPage::FillDialog_Impl()
     m_pLbType2->SelectEntryPos( aDash.GetDashLen() == 0 ? 0 : 1 );
     SetMetricValue( *m_pMtrDistance, aDash.GetDistance(), ePoolUnit );
 
-    ChangeMetricHdl_Impl( NULL );
+    ChangeMetricHdl_Impl( nullptr );
 
     // save values for changes recognition (-> method)
     m_pNumFldNumber1->SaveValue();

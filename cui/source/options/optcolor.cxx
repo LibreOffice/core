@@ -875,8 +875,8 @@ public:
 
 ColorConfigCtrl_Impl::ColorConfigCtrl_Impl(vcl::Window* pParent)
     : VclVBox(pParent)
-    , pColorConfig(0)
-    , pExtColorConfig(0)
+    , pColorConfig(nullptr)
+    , pExtColorConfig(nullptr)
 {
     m_pHeaderHB = VclPtr<HeaderBar>::Create(this, WB_BUTTONSTYLE | WB_BOTTOMBORDER);
 
@@ -979,7 +979,7 @@ void ColorConfigCtrl_Impl::Command( const CommandEvent& rCEvt )
             const CommandWheelData* pWheelData = rCEvt.GetWheelData();
             if(pWheelData && !pWheelData->IsHorz() && CommandWheelMode::ZOOM != pWheelData->GetMode())
             {
-                HandleScrollCommand(rCEvt, 0, m_pVScroll);
+                HandleScrollCommand(rCEvt, nullptr, m_pVScroll);
             }
         }
         break;
@@ -1048,8 +1048,8 @@ SvxColorOptionsTabPage::SvxColorOptionsTabPage(
     vcl::Window* pParent, const SfxItemSet& rCoreSet)
     : SfxTabPage(pParent, "OptAppearancePage", "cui/ui/optappearancepage.ui", &rCoreSet)
     , bFillItemSetCalled(false)
-    , pColorConfig(0)
-    , pExtColorConfig(0)
+    , pColorConfig(nullptr)
+    , pExtColorConfig(nullptr)
 {
     get(m_pColorSchemeLB, "colorschemelb");
     m_pColorSchemeLB->SetStyle(m_pColorSchemeLB->GetStyle() | WB_SORT);
@@ -1092,12 +1092,12 @@ void SvxColorOptionsTabPage::dispose()
         pColorConfig->ClearModified();
         pColorConfig->EnableBroadcast();
         delete pColorConfig;
-        pColorConfig = NULL;
+        pColorConfig = nullptr;
 
         pExtColorConfig->ClearModified();
         pExtColorConfig->EnableBroadcast();
         delete pExtColorConfig;
-        pExtColorConfig = NULL;
+        pExtColorConfig = nullptr;
     }
     m_pColorSchemeLB.clear();
     m_pSaveSchemePB.clear();

@@ -143,7 +143,7 @@ public:
     using SfxTabPage::DeactivatePage;
 
     virtual void        ActivatePage( const SfxItemSet& rSet ) override;
-    virtual sfxpg       DeactivatePage( SfxItemSet* pSet = 0 ) override;
+    virtual sfxpg       DeactivatePage( SfxItemSet* pSet = nullptr ) override;
 
 public:
                         virtual ~SvxCharNamePage();
@@ -230,7 +230,7 @@ public:
     virtual void dispose() override;
 
     using SfxTabPage::DeactivatePage;
-    virtual sfxpg       DeactivatePage( SfxItemSet* pSet = 0 ) override;
+    virtual sfxpg       DeactivatePage( SfxItemSet* pSet = nullptr ) override;
 
 public:
     static VclPtr<SfxTabPage>  Create( vcl::Window* pParent, const SfxItemSet* rSet );
@@ -313,7 +313,7 @@ public:
     using SfxTabPage::ActivatePage;
     using SfxTabPage::DeactivatePage;
 
-    virtual sfxpg       DeactivatePage( SfxItemSet* pSet = 0 ) override;
+    virtual sfxpg       DeactivatePage( SfxItemSet* pSet = nullptr ) override;
     virtual void        ActivatePage( const SfxItemSet& rSet ) override;
 
 public:
@@ -362,7 +362,7 @@ public:
     using SfxTabPage::DeactivatePage;
 
     virtual void        ActivatePage( const SfxItemSet& rSet ) override;
-    virtual sfxpg       DeactivatePage( SfxItemSet* pSet = 0 ) override;
+    virtual sfxpg       DeactivatePage( SfxItemSet* pSet = nullptr ) override;
 
     static VclPtr<SfxTabPage>  Create( vcl::Window* pParent, const SfxItemSet* rSet );
     static const sal_uInt16*  GetRanges() { return pTwoLinesRanges; }

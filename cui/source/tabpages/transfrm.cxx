@@ -179,7 +179,7 @@ void SvxTransformTabDialog::SetValidateFramePosLink(const Link<SvxSwFrameValidat
 SvxAngleTabPage::SvxAngleTabPage(vcl::Window* pParent, const SfxItemSet& rInAttrs)
     : SvxTabPage( pParent,"Rotation","cui/ui/rotationtabpage.ui", rInAttrs)
     , rOutAttrs(rInAttrs)
-    , pView(NULL)
+    , pView(nullptr)
     , eDlgUnit(FUNIT_NONE)
 {
     get(m_pFlPosition, "FL_POSITION");
@@ -424,7 +424,7 @@ SvxSlantTabPage::SvxSlantTabPage(vcl::Window* pParent, const SfxItemSet& rInAttr
     : SvxTabPage( pParent,"SlantAndCornerRadius","cui/ui/slantcornertabpage.ui",
         rInAttrs)
     , rOutAttrs(rInAttrs)
-    , pView(NULL)
+    , pView(nullptr)
     , eDlgUnit(FUNIT_NONE)
 {
     get(m_pFlRadius, "FL_RADIUS");
@@ -701,7 +701,7 @@ VclPtr<SfxTabPage> SvxSlantTabPage::Create( vcl::Window* pWindow, const SfxItemS
 
 void SvxSlantTabPage::ActivatePage( const SfxItemSet& rSet )
 {
-    SfxRectangleItem const * pRectItem = NULL;
+    SfxRectangleItem const * pRectItem = nullptr;
 
     if( SfxItemState::SET == rSet.GetItemState( GetWhich( SID_ATTR_TRANSFORM_INTERN ) , false, reinterpret_cast<SfxPoolItem const **>(&pRectItem) ) )
     {
@@ -736,7 +736,7 @@ void SvxSlantTabPage::PointChanged( vcl::Window* , RECT_POINT  )
 SvxPositionSizeTabPage::SvxPositionSizeTabPage(vcl::Window* pParent, const SfxItemSet& rInAttrs)
     : SvxTabPage(pParent,"PositionAndSize","cui/ui/possizetabpage.ui", rInAttrs)
     , mrOutAttrs(rInAttrs)
-    , mpView(NULL)
+    , mpView(nullptr)
     , meDlgUnit(FUNIT_NONE)
     , mnProtectSizeState(TRISTATE_FALSE)
     , mbPageDisabled(false)
@@ -1079,7 +1079,7 @@ void SvxPositionSizeTabPage::Reset( const SfxItemSet*  )
         m_pCtlPos->Reset();
 
         // #i2379# Disable controls for protected objects
-        ChangePosProtectHdl( NULL );
+        ChangePosProtectHdl( nullptr );
     }
 
     { // #i75273# set width
@@ -1141,10 +1141,10 @@ void SvxPositionSizeTabPage::Reset( const SfxItemSet*  )
     m_pTsbSizeProtect->SaveValue();
     m_pTsbAutoGrowWidth->SaveValue();
     m_pTsbAutoGrowHeight->SaveValue();
-    ClickSizeProtectHdl( NULL );
+    ClickSizeProtectHdl( nullptr );
 
     // #i2379# Disable controls for protected objects
-    ChangeSizeProtectHdl( NULL );
+    ChangeSizeProtectHdl( nullptr );
 }
 
 
@@ -1158,7 +1158,7 @@ VclPtr<SfxTabPage> SvxPositionSizeTabPage::Create( vcl::Window* pWindow, const S
 
 void SvxPositionSizeTabPage::ActivatePage( const SfxItemSet& rSet )
 {
-    SfxRectangleItem const * pRectItem = NULL;
+    SfxRectangleItem const * pRectItem = nullptr;
 
     if( SfxItemState::SET == rSet.GetItemState( GetWhich( SID_ATTR_TRANSFORM_INTERN ) , false, reinterpret_cast<SfxPoolItem const **>(&pRectItem) ) )
     {

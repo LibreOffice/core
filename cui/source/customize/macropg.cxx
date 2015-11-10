@@ -52,10 +52,10 @@ static const char aVndSunStarUNO[] = "vnd.sun.star.UNO:";
 static const char aVndSunStarScript[] = "vnd.sun.star.script:";
 
 _SvxMacroTabPage_Impl::_SvxMacroTabPage_Impl( const SfxItemSet& rAttrSet )
-    : pAssignPB(NULL)
-    , pAssignComponentPB(NULL)
-    , pDeletePB(NULL)
-    , pEventLB(NULL)
+    : pAssignPB(nullptr)
+    , pAssignComponentPB(nullptr)
+    , pDeletePB(nullptr)
+    , pEventLB(nullptr)
     , bReadOnly(false)
     , bIDEDialogMode(false)
 {
@@ -225,8 +225,8 @@ void _SvxMacroTabPage::EnableButtons()
 _SvxMacroTabPage::_SvxMacroTabPage(vcl::Window* pParent, const OString& rID,
     const OUString& rUIXMLDescription, const SfxItemSet& rAttrSet)
     : SfxTabPage( pParent, rID, rUIXMLDescription, &rAttrSet ),
-    m_xAppEvents(0),
-    m_xDocEvents(0),
+    m_xAppEvents(nullptr),
+    m_xDocEvents(nullptr),
     bReadOnly(false),
     bDocModified(false),
     bAppEvents(false),
@@ -594,7 +594,7 @@ IMPL_LINK_TYPED( _SvxMacroTabPage, AssignDeleteHdl_Impl, Button*, pBtn, void )
 
 IMPL_LINK_NOARG_TYPED( _SvxMacroTabPage, DoubleClickHdl_Impl, SvTreeListBox*, bool)
 {
-    return GenericHandler_Impl( this, NULL );
+    return GenericHandler_Impl( this, nullptr );
 }
 
 // handler for double click on the listbox, and for the assign/delete buttons
@@ -636,7 +636,7 @@ long _SvxMacroTabPage::GenericHandler_Impl( _SvxMacroTabPage* pThis, PushButton*
         }
     }
 
-    bool bDoubleClick = (pBtn == NULL);
+    bool bDoubleClick = (pBtn == nullptr);
     bool bUNOAssigned = sEventURL.startsWith( aVndSunStarUNO );
     if( pBtn == pImpl->pDeletePB )
     {
@@ -646,7 +646,7 @@ long _SvxMacroTabPage::GenericHandler_Impl( _SvxMacroTabPage* pThis, PushButton*
         if(!pThis->bAppEvents)
             pThis->bDocModified = true;
     }
-    else if (   (   ( pBtn != NULL )
+    else if (   (   ( pBtn != nullptr )
                 &&  ( pBtn == pImpl->pAssignComponentPB )
                 )
             ||  (   bDoubleClick
@@ -839,7 +839,7 @@ SvxMacroTabPage::SvxMacroTabPage(vcl::Window* pParent,
 
     InitResources();
 
-    InitAndSetHandler( xNameReplace, Reference< container::XNameReplace>(0), Reference< util::XModifiable >(0));
+    InitAndSetHandler( xNameReplace, Reference< container::XNameReplace>(nullptr), Reference< util::XModifiable >(nullptr));
     DisplayAppEvents(true);
     SvHeaderTabListBox& rListBox = mpImpl->pEventLB->GetListBox();
     SvTreeListEntry* pE = rListBox.GetEntry( (sal_uLong)nSelectedIndex );
@@ -898,7 +898,7 @@ void AssignComponentDialog::dispose()
 
 IMPL_LINK_NOARG_TYPED( SvxMacroAssignSingleTabDialog, OKHdl_Impl, Button *, void )
 {
-    GetTabPage()->FillItemSet( 0 );
+    GetTabPage()->FillItemSet( nullptr );
     EndDialog( RET_OK );
 }
 

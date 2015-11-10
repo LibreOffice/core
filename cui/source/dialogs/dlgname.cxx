@@ -149,7 +149,7 @@ void SvxObjectTitleDescDialog::dispose()
 
 SvxMessDialog::SvxMessDialog( vcl::Window* pWindow, const OUString& rText, const OUString& rDesc, Image* pImg )
     : ModalDialog(pWindow, "MessBox", "cui/ui/messbox.ui")
-    , pImage(NULL)
+    , pImage(nullptr)
 {
     get(pBtn1, "mess_box_btn1");
     get(pBtn2, "mess_box_btn2");
@@ -178,7 +178,7 @@ SvxMessDialog::~SvxMessDialog()
 void SvxMessDialog::dispose()
 {
     delete pImage;
-    pImage = NULL;
+    pImage = nullptr;
     pFtDescription.clear();
     pBtn1.clear();
     pBtn2.clear();

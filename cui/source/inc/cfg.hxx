@@ -167,12 +167,12 @@ private:
         SvxConfigEntry* pRootEntry,
         css::uno::Reference< css::container::XIndexContainer >& rNewMenuBar,
         css::uno::Reference< css::lang::XSingleComponentFactory >& rFactory,
-        SvTreeListEntry *pParent = NULL );
+        SvTreeListEntry *pParent = nullptr );
 
     void        ApplyMenu(
         css::uno::Reference< css::container::XIndexContainer >& rNewMenuBar,
         css::uno::Reference< css::lang::XSingleComponentFactory >& rFactory,
-        SvxConfigEntry *pMenuData = NULL );
+        SvxConfigEntry *pMenuData = nullptr );
 
     bool        LoadSubMenus(
         const css::uno::Reference< css::container::XIndexAccess >& xMenuBarSettings,
@@ -239,7 +239,7 @@ public:
             bIsParentData( false ),
             bIsVisible( true ),
             nStyle( 0 ),
-            mpEntries( 0 )
+            mpEntries( nullptr )
     {}
 
     ~SvxConfigEntry();
@@ -378,7 +378,7 @@ protected:
     virtual short           QueryReset() = 0;
 
     SvTreeListEntry*    InsertEntry(        SvxConfigEntry* pNewEntryData,
-                                        SvTreeListEntry* pTarget = NULL,
+                                        SvTreeListEntry* pTarget = nullptr,
                                         bool bFront = false );
 
     void                AddSubMenusToUI(    const OUString& rBaseTitle,
@@ -390,7 +390,7 @@ protected:
     SvxEntries*     FindParentForChild( SvxEntries* pParentEntries,
                                         SvxConfigEntry* pChildData );
 
-    void            ReloadTopLevelListBox( SvxConfigEntry* pSelection = NULL );
+    void            ReloadTopLevelListBox( SvxConfigEntry* pSelection = nullptr );
 
 public:
 
@@ -401,7 +401,7 @@ public:
 
     SaveInData*     GetSaveInData() { return pCurrentSaveInData; }
 
-    SvTreeListEntry*    AddFunction( SvTreeListEntry* pTarget = NULL,
+    SvTreeListEntry*    AddFunction( SvTreeListEntry* pTarget = nullptr,
                                  bool bFront = false,
                                  bool bAllowDuplicates = false );
 
@@ -552,7 +552,7 @@ public:
     virtual ~SvxToolbarConfigPage();
     virtual void dispose() override;
 
-    SvTreeListEntry*    AddFunction( SvTreeListEntry* pTarget = NULL,
+    SvTreeListEntry*    AddFunction( SvTreeListEntry* pTarget = nullptr,
                                              bool bFront = false,
                                              bool bAllowDuplicates = true );
 
@@ -584,7 +584,7 @@ private:
     void        ApplyToolbar(
         css::uno::Reference< css::container::XIndexContainer >& rNewToolbarBar,
         css::uno::Reference< css::lang::XSingleComponentFactory >& rFactory,
-        SvxConfigEntry *pToolbar = NULL );
+        SvxConfigEntry *pToolbar = nullptr );
 
 public:
 

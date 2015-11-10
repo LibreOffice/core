@@ -74,7 +74,7 @@ SvxConnectionPage::SvxConnectionPage( vcl::Window* pWindow, const SfxItemSet& rI
         ,&rInAttrs)
     , rOutAttrs(rInAttrs)
     , aAttrSet(*rInAttrs.GetPool())
-    , pView(NULL)
+    , pView(nullptr)
 {
     get(m_pLbType,"LB_TYPE");
 

@@ -35,7 +35,7 @@ SvxDistributeDialog::SvxDistributeDialog(vcl::Window* pParent,
     SvxDistributeVertical eVer)
     : SfxSingleTabDialog(pParent, rInAttrs, "DistributionDialog",
         "cui/ui/distributiondialog.ui")
-    , mpPage(NULL)
+    , mpPage(nullptr)
 {
     mpPage = VclPtr<SvxDistributePage>::Create(get_content_area(), rInAttrs, eHor, eVer);
     SetTabPage(mpPage);

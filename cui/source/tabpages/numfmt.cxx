@@ -236,13 +236,13 @@ SvxNumberFormatTabPage::SvxNumberFormatTabPage(vcl::Window* pParent,
     const SfxItemSet& rCoreAttrs)
     : SfxTabPage(pParent, "NumberingFormatPage",
         "cui/ui/numberingformatpage.ui", &rCoreAttrs)
-    , pNumItem(NULL)
-    , pNumFmtShell(NULL)
+    , pNumItem(nullptr)
+    , pNumFmtShell(nullptr)
     , nInitFormat(ULONG_MAX)
     , sAutomaticEntry(CUI_RES(RID_SVXSTR_AUTO_ENTRY))
     , sThousandSeparator(CUI_RES(RID_SVXSTR_THOUSAND_SEP))
     , sEngineeringNotation(CUI_RES(RID_SVXSTR_ENGINEERING))
-    , pLastActivWindow(NULL)
+    , pLastActivWindow(nullptr)
 {
     get(m_pFtCategory, "categoryft");
     get(m_pLbCategory, "categorylb");
@@ -288,9 +288,9 @@ SvxNumberFormatTabPage::~SvxNumberFormatTabPage()
 void SvxNumberFormatTabPage::dispose()
 {
     delete pNumFmtShell;
-    pNumFmtShell = NULL;
+    pNumFmtShell = nullptr;
     delete pNumItem;
-    pNumItem = NULL;
+    pNumItem = nullptr;
     m_pFtCategory.clear();
     m_pLbCategory.clear();
     m_pFtFormat.clear();
@@ -398,9 +398,9 @@ VclPtr<SfxTabPage> SvxNumberFormatTabPage::Create( vcl::Window* pParent,
 
 void SvxNumberFormatTabPage::Reset( const SfxItemSet* rSet )
 {
-    const SfxUInt32Item*        pValFmtAttr     = NULL;
-    const SfxPoolItem*          pItem           = NULL;
-    const SfxBoolItem*          pAutoEntryAttr = NULL;
+    const SfxUInt32Item*        pValFmtAttr     = nullptr;
+    const SfxPoolItem*          pItem           = nullptr;
+    const SfxBoolItem*          pAutoEntryAttr = nullptr;
 
     sal_uInt16                  nCatLbSelPos    = 0;
     sal_uInt16                  nFmtLbSelPos    = 0;
@@ -417,7 +417,7 @@ void SvxNumberFormatTabPage::Reset( const SfxItemSet* rSet )
         const SfxBoolItem* pBoolLangItem = static_cast<const SfxBoolItem*>(
                       GetItem( *rSet, SID_ATTR_NUMBERFORMAT_NOLANGUAGE));
 
-        if(pBoolLangItem!=NULL && pBoolLangItem->GetValue())
+        if(pBoolLangItem!=nullptr && pBoolLangItem->GetValue())
         {
             HideLanguage();
         }
@@ -432,7 +432,7 @@ void SvxNumberFormatTabPage::Reset( const SfxItemSet* rSet )
 
     if(eState==SfxItemState::SET)
     {
-        if(pNumItem==NULL)
+        if(pNumItem==nullptr)
         {
             bNumItemFlag=true;
             pNumItem= static_cast<SvxNumberInfoItem *>(pItem->Clone());
@@ -455,7 +455,7 @@ void SvxNumberFormatTabPage::Reset( const SfxItemSet* rSet )
         const SfxBoolItem* pBoolItem = static_cast<const SfxBoolItem*>(
                       GetItem( *rSet, SID_ATTR_NUMBERFORMAT_ONE_AREA));
 
-        if(pBoolItem!=NULL)
+        if(pBoolItem!=nullptr)
         {
             bOneAreaFlag= pBoolItem->GetValue();
         }
@@ -544,7 +544,7 @@ void SvxNumberFormatTabPage::Reset( const SfxItemSet* rSet )
     FillCurrencyBox();
 
     OUString aPrevString;
-    Color* pDummy = NULL;
+    Color* pDummy = nullptr;
     pNumFmtShell->GetInitSettings( nCatLbSelPos, eLangType, nFmtLbSelPos,
                                    aFmtEntryList, aPrevString, pDummy );
 
@@ -821,7 +821,7 @@ SfxTabPage::sfxpg SvxNumberFormatTabPage::DeactivatePage( SfxItemSet* _pSet )
 
 void SvxNumberFormatTabPage::SetInfoItem( const SvxNumberInfoItem& rItem )
 {
-    if(pNumItem==NULL)
+    if(pNumItem==nullptr)
     {
         pNumItem = static_cast<SvxNumberInfoItem*>(rItem.Clone());
     }
@@ -866,7 +866,7 @@ void SvxNumberFormatTabPage::FillFormatListBox_Impl( std::vector<OUString>& rEnt
         default:                break;
     }
 
-    if(pNumFmtShell!=NULL)
+    if(pNumFmtShell!=nullptr)
     {
         for ( ; i < rEntries.size(); ++i )
         {
@@ -874,7 +874,7 @@ void SvxNumberFormatTabPage::FillFormatListBox_Impl( std::vector<OUString>& rEnt
             short aPrivCat = pNumFmtShell->GetCategory4Entry( static_cast<short>(i) );
             if(aPrivCat!=CAT_TEXT)
             {
-                Color* pPreviewColor = NULL;
+                Color* pPreviewColor = nullptr;
                 OUString aPreviewString( GetExpColorString( pPreviewColor, aEntry, aPrivCat ) );
                 vcl::Font aEntryFont( m_pLbFormat->GetFont() );
                 m_pLbFormat->InsertFontEntry( aPreviewString, aEntryFont, pPreviewColor );
@@ -1162,12 +1162,12 @@ IMPL_LINK_TYPED( SvxNumberFormatTabPage, DoubleClickHdl_Impl, SvTreeListBox*, pL
 
         if ( fnOkHdl.IsSet() )
         {   // temporary solution, should be offered by SfxTabPage
-            fnOkHdl.Call( NULL );
+            fnOkHdl.Call( nullptr );
         }
         else
         {
             SfxSingleTabDialog* pParent = dynamic_cast< SfxSingleTabDialog* >( GetParentDialog() );
-            OKButton* pOKButton = pParent ? pParent->GetOKButton() : NULL;
+            OKButton* pOKButton = pParent ? pParent->GetOKButton() : nullptr;
             if ( pOKButton )
                 pOKButton->Click();
         }
@@ -1290,7 +1290,7 @@ void SvxNumberFormatTabPage::SelFormatHdl_Impl(void * pLb )
     if (pLb == m_pLbCategory || pLb == m_pLbCurrency)
     {
         UpdateFormatListBox_Impl( true, true );
-        EditHdl_Impl( NULL );
+        EditHdl_Impl( nullptr );
         UpdateOptions_Impl( false );
 
         return;
@@ -1342,7 +1342,7 @@ bool SvxNumberFormatTabPage::Click_Impl(PushButton* pIB)
         short                nFmtLbSelPos = SELPOS_NONE;
         sal_Int32            nErrPos=0;
 
-        pNumFmtShell->SetCurCurrencyEntry(NULL);
+        pNumFmtShell->SetCurCurrencyEntry(nullptr);
         bool bAdded = pNumFmtShell->AddFormat( aFormat, nErrPos,
                                           nCatLbSelPos, nFmtLbSelPos,
                                           aEntryList);
@@ -1619,7 +1619,7 @@ void SvxNumberFormatTabPage::OptHdl_Impl( void* pOptCtrl )
         }
         else
         {
-            EditHdl_Impl( NULL );
+            EditHdl_Impl( nullptr );
             m_pLbFormat->SetNoSelection();
         }
     }
@@ -1627,7 +1627,7 @@ void SvxNumberFormatTabPage::OptHdl_Impl( void* pOptCtrl )
 
 IMPL_LINK_NOARG_TYPED(SvxNumberFormatTabPage, TimeHdl_Impl, Timer *, void)
 {
-    pLastActivWindow=NULL;
+    pLastActivWindow=nullptr;
 }
 
 
@@ -1706,7 +1706,7 @@ OUString SvxNumberFormatTabPage::GetExpColorString(
 void SvxNumberFormatTabPage::MakePreviewText( const OUString& rFormat )
 {
     OUString aPreviewString;
-    Color* pPreviewColor = NULL;
+    Color* pPreviewColor = nullptr;
     pNumFmtShell->MakePreviewString( rFormat, aPreviewString, pPreviewColor );
     m_pWndPreview->NotifyChange( aPreviewString, pPreviewColor );
 }
@@ -1714,7 +1714,7 @@ void SvxNumberFormatTabPage::MakePreviewText( const OUString& rFormat )
 void SvxNumberFormatTabPage::ChangePreviewText( sal_uInt16 nPos )
 {
     OUString aPreviewString;
-    Color* pPreviewColor = NULL;
+    Color* pPreviewColor = nullptr;
     pNumFmtShell->FormatChanged( nPos, aPreviewString, pPreviewColor );
     m_pWndPreview->NotifyChange( aPreviewString, pPreviewColor );
 }
@@ -1725,7 +1725,7 @@ bool SvxNumberFormatTabPage::PreNotify( NotifyEvent& rNEvt )
     {
         if ( rNEvt.GetWindow() == dynamic_cast<const  vcl::Window* >( m_pEdComment.get() ) && !m_pEdComment->IsVisible() )
         {
-            pLastActivWindow = NULL;
+            pLastActivWindow = nullptr;
         }
         else
         {

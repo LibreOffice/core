@@ -58,7 +58,7 @@ protected:
 public:
     SvxNumberPreview(vcl::Window* pParent, WinBits nStyle = WB_BORDER);
 
-    void            NotifyChange( const OUString& rPrevStr, const Color* pColor = NULL );
+    void            NotifyChange( const OUString& rPrevStr, const Color* pColor = nullptr );
 };
 
 
@@ -80,7 +80,7 @@ public:
 
     virtual bool            FillItemSet( SfxItemSet* rSet ) override;
     virtual void            Reset( const SfxItemSet* rSet ) override;
-    virtual sfxpg           DeactivatePage  ( SfxItemSet* pSet = NULL ) override;
+    virtual sfxpg           DeactivatePage  ( SfxItemSet* pSet = nullptr ) override;
 
     void                    SetInfoItem( const SvxNumberInfoItem& rItem );
     void                    SetNumberFormatList( const SvxNumberInfoItem& rItem )

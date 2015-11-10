@@ -58,7 +58,7 @@ SvxLineEndDefTabPage::SvxLineEndDefTabPage
               , "cui/ui/lineendstabpage.ui"
               , &rInAttrs ),
     rOutAttrs           ( rInAttrs ),
-    pPolyObj            ( NULL ),
+    pPolyObj            ( nullptr ),
     bObjSelected        ( false ),
 
     aXLStyle            ( css::drawing::LineStyle_SOLID ),
@@ -66,11 +66,11 @@ SvxLineEndDefTabPage::SvxLineEndDefTabPage
     aXColor             ( OUString(), COL_BLACK ),
     aXLineAttr          ( rInAttrs.GetPool() ),
     rXLSet              ( aXLineAttr.GetItemSet() ),
-    pLineEndList        ( NULL ),
-    pnLineEndListState  ( NULL ),
-    pPageType           ( NULL ),
+    pLineEndList        ( nullptr ),
+    pnLineEndListState  ( nullptr ),
+    pPageType           ( nullptr ),
     nDlgType            ( 0 ),
-    pPosLineEndLb       ( NULL )
+    pPosLineEndLb       ( nullptr )
 {
     get(m_pEdtName,"EDT_NAME");
     get(m_pLbLineEnds,"LB_LINEENDS");
@@ -140,15 +140,15 @@ void SvxLineEndDefTabPage::Construct()
     {
         bCreateArrowPossible = false;
     }
-    else if( 0 == dynamic_cast<const SdrPathObj*>( pPolyObj) )
+    else if( nullptr == dynamic_cast<const SdrPathObj*>( pPolyObj) )
     {
         SdrObjTransformInfoRec aInfoRec;
         pPolyObj->TakeObjInfo( aInfoRec );
-        SdrObject* pNewObj = 0;
+        SdrObject* pNewObj = nullptr;
         if( aInfoRec.bCanConvToPath )
             pNewObj = pPolyObj->ConvertToPolyObj( true, false );
 
-        bCreateArrowPossible = pNewObj && 0 != dynamic_cast<const SdrPathObj*>( pNewObj);
+        bCreateArrowPossible = pNewObj && nullptr != dynamic_cast<const SdrPathObj*>( pNewObj);
         SdrObject::Free( pNewObj );
     }
 
@@ -208,7 +208,7 @@ void SvxLineEndDefTabPage::CheckChanges_Impl()
                                                            ,"AskChangeLineEndDialog"
                                                            ,"cui/ui/querychangelineenddialog.ui" );
             if ( aQueryBox->Execute() == RET_YES )
-                ClickModifyHdl_Impl( NULL );
+                ClickModifyHdl_Impl( nullptr );
         }
     }
     nPos = m_pLbLineEnds->GetSelectEntryPos();
@@ -404,9 +404,9 @@ IMPL_LINK_NOARG_TYPED(SvxLineEndDefTabPage, ClickAddHdl_Impl, Button*, void)
     if( pPolyObj )
     {
         const SdrObject* pNewObj;
-        SdrObject* pConvPolyObj = NULL;
+        SdrObject* pConvPolyObj = nullptr;
 
-        if( 0 != dynamic_cast<const SdrPathObj*>( pPolyObj) )
+        if( nullptr != dynamic_cast<const SdrPathObj*>( pPolyObj) )
         {
             pNewObj = pPolyObj;
         }
@@ -419,7 +419,7 @@ IMPL_LINK_NOARG_TYPED(SvxLineEndDefTabPage, ClickAddHdl_Impl, Button*, void)
             {
                 pNewObj = pConvPolyObj = pPolyObj->ConvertToPolyObj( true, false );
 
-                if( !pNewObj || 0 == dynamic_cast<const SdrPathObj*>( pNewObj) )
+                if( !pNewObj || nullptr == dynamic_cast<const SdrPathObj*>( pNewObj) )
                     return; // cancel, additional safety, which
                             // has no use for group objects though.
             }

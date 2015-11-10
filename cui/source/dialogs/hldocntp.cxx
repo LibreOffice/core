@@ -138,7 +138,7 @@ void SvxHyperlinkNewDocTp::dispose()
     {
         for ( sal_Int32 n=0; n<m_pLbDocTypes->GetEntryCount(); n++ )
             delete static_cast<DocumentTypeData*>(m_pLbDocTypes->GetEntryData ( n ));
-        m_pLbDocTypes = NULL;
+        m_pLbDocTypes = nullptr;
     }
     m_pRbtEditNow.clear();
     m_pRbtEditLater.clear();
@@ -304,7 +304,7 @@ void SvxHyperlinkNewDocTp::DoApply ()
         // create Document
 
         aStrNewName = aURL.GetURLPath( INetURLObject::NO_DECODE );
-        SfxViewFrame *pViewFrame = NULL;
+        SfxViewFrame *pViewFrame = nullptr;
         try
         {
             bool bCreate = true;

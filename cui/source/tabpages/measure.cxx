@@ -86,7 +86,7 @@ SvxMeasurePage::SvxMeasurePage( vcl::Window* pWindow, const SfxItemSet& rInAttrs
                                  ,rInAttrs ),
         rOutAttrs               ( rInAttrs ),
         aAttrSet                ( *rInAttrs.GetPool() ),
-        pView( 0 ),
+        pView( nullptr ),
         eUnit( SFX_MAPUNIT_100TH_MM ),
         bPositionModified       ( false )
 {
@@ -188,7 +188,7 @@ void SvxMeasurePage::Reset( const SfxItemSet* rAttrs )
     const SfxPoolItem* pItem = GetItem( *rAttrs, SDRATTR_MEASURELINEDIST );
 
     // SdrMeasureLineDistItem
-    if( pItem == NULL )
+    if( pItem == nullptr )
         pItem = &pPool->GetDefaultItem( SDRATTR_MEASURELINEDIST );
     if( pItem )
     {
@@ -203,7 +203,7 @@ void SvxMeasurePage::Reset( const SfxItemSet* rAttrs )
 
     // SdrMeasureHelplineOverhangItem
     pItem = GetItem( *rAttrs, SDRATTR_MEASUREHELPLINEOVERHANG );
-    if( pItem == NULL )
+    if( pItem == nullptr )
         pItem = &pPool->GetDefaultItem( SDRATTR_MEASUREHELPLINEOVERHANG );
     if( pItem )
     {
@@ -218,7 +218,7 @@ void SvxMeasurePage::Reset( const SfxItemSet* rAttrs )
 
     // SdrMeasureHelplineDistItem
     pItem = GetItem( *rAttrs, SDRATTR_MEASUREHELPLINEDIST );
-    if( pItem == NULL )
+    if( pItem == nullptr )
         pItem = &pPool->GetDefaultItem( SDRATTR_MEASUREHELPLINEDIST );
     if( pItem )
     {
@@ -233,7 +233,7 @@ void SvxMeasurePage::Reset( const SfxItemSet* rAttrs )
 
     // SdrMeasureHelpline1LenItem
     pItem = GetItem( *rAttrs, SDRATTR_MEASUREHELPLINE1LEN );
-    if( pItem == NULL )
+    if( pItem == nullptr )
         pItem = &pPool->GetDefaultItem( SDRATTR_MEASUREHELPLINE1LEN );
     if( pItem )
     {
@@ -248,7 +248,7 @@ void SvxMeasurePage::Reset( const SfxItemSet* rAttrs )
 
     // SdrMeasureHelpline2LenItem
     pItem = GetItem( *rAttrs, SDRATTR_MEASUREHELPLINE2LEN );
-    if( pItem == NULL )
+    if( pItem == nullptr )
         pItem = &pPool->GetDefaultItem( SDRATTR_MEASUREHELPLINE2LEN );
     if( pItem )
     {
@@ -276,7 +276,7 @@ void SvxMeasurePage::Reset( const SfxItemSet* rAttrs )
 
     // SdrMeasureDecimalPlacesItem
     pItem = GetItem( *rAttrs, SDRATTR_MEASUREDECIMALPLACES );
-    if( pItem == NULL )
+    if( pItem == nullptr )
         pItem = &pPool->GetDefaultItem( SDRATTR_MEASUREDECIMALPLACES );
     if( pItem )
     {

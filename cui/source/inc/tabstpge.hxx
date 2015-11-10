@@ -61,7 +61,7 @@ public:
     void                DisableControls( const sal_uInt16 nFlag );
 
 protected:
-    virtual sfxpg       DeactivatePage( SfxItemSet* pSet = 0 ) override;
+    virtual sfxpg       DeactivatePage( SfxItemSet* pSet = nullptr ) override;
 
 private:
     SvxTabulatorTabPage( vcl::Window* pParent, const SfxItemSet& rSet );

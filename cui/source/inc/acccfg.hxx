@@ -64,7 +64,7 @@ protected:
 public:
     SfxAccCfgTabListBox_Impl(vcl::Window *pParent, WinBits nStyle)
         : SvTabListBox(pParent, nStyle)
-        , m_pAccelConfigPage(NULL)
+        , m_pAccelConfigPage(nullptr)
     {
     }
     virtual ~SfxAccCfgTabListBox_Impl();

@@ -396,7 +396,7 @@ void OfaMiscTabPage::Reset( const SfxItemSet* rSet )
     m_pDocStatusCB->Check(aPrintOptions.IsModifyDocumentOnPrintingAllowed());
     m_pDocStatusCB->SaveValue();
 
-    const SfxPoolItem* pItem = NULL;
+    const SfxPoolItem* pItem = nullptr;
     if ( SfxItemState::SET == rSet->GetItemState( SID_ATTR_YEAR2000, false, &pItem ) )
     {
         m_pYearValueField->SetValue( static_cast<const SfxUInt16Item*>(pItem)->GetValue() );
@@ -690,11 +690,11 @@ OfaViewTabPage::~OfaViewTabPage()
 void OfaViewTabPage::dispose()
 {
     delete mpDrawinglayerOpt;
-    mpDrawinglayerOpt = NULL;
+    mpDrawinglayerOpt = nullptr;
     delete pCanvasSettings;
-    pCanvasSettings = NULL;
+    pCanvasSettings = nullptr;
     delete pAppearanceCfg;
-    pAppearanceCfg = NULL;
+    pAppearanceCfg = nullptr;
     m_pWindowSizeMF.clear();
     m_pIconSizeLB.clear();
     m_pIconStyleLB.clear();
@@ -1056,7 +1056,7 @@ OfaLanguagesTabPage::OfaLanguagesTabPage(vcl::Window* pParent, const SfxItemSet&
                        SvtLanguageTable::GetLanguageString( Application::GetSettings().GetUILanguageTag().getLanguageType(), true );
 
     m_pUserInterfaceLB->InsertEntry(aUILang);
-    m_pUserInterfaceLB->SetEntryData(0, 0);
+    m_pUserInterfaceLB->SetEntryData(0, nullptr);
     m_pUserInterfaceLB->SelectEntryPos(0);
     try
     {
@@ -1175,7 +1175,7 @@ OfaLanguagesTabPage::~OfaLanguagesTabPage()
 void OfaLanguagesTabPage::dispose()
 {
     delete pLangConfig;
-    pLangConfig = NULL;
+    pLangConfig = nullptr;
     m_pUserInterfaceLB.clear();
     m_pLocaleSettingFT.clear();
     m_pLocaleSettingLB.clear();
@@ -1487,7 +1487,7 @@ void OfaLanguagesTabPage::Reset( const SfxItemSet* rSet )
     // configured currency, for example, USD-en-US or EUR-de-DE, or empty for locale default
     OUString aAbbrev;
     LanguageType eLang;
-    const NfCurrencyEntry* pCurr = NULL;
+    const NfCurrencyEntry* pCurr = nullptr;
     sLang = pLangConfig->aSysLocaleOptions.GetCurrencyConfigString();
     if ( !sLang.isEmpty() )
     {
@@ -1612,7 +1612,7 @@ void OfaLanguagesTabPage::Reset( const SfxItemSet* rSet )
 #endif
     // check the box "For the current document only"
     // set the focus to the Western Language box
-    const SfxPoolItem* pLang = 0;
+    const SfxPoolItem* pLang = nullptr;
     if ( SfxItemState::SET == rSet->GetItemState(SID_SET_DOCUMENT_LANGUAGE, false, &pLang ) && static_cast<const SfxBoolItem*>(pLang)->GetValue() )
     {
         m_pWesternLanguageLB->GrabFocus();

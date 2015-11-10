@@ -193,9 +193,9 @@ class SvxScriptSelectorDialog : public ModelessDialog
 public:
 
     SvxScriptSelectorDialog (
-        vcl::Window* pParent = NULL,
+        vcl::Window* pParent = nullptr,
         bool bShowSlots = false,
-        const css::uno::Reference< css::frame::XFrame >& xFrame = 0
+        const css::uno::Reference< css::frame::XFrame >& xFrame = nullptr
     );
     virtual ~SvxScriptSelectorDialog();
     virtual void dispose() override;

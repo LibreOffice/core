@@ -52,7 +52,7 @@ void SvxRadioButtonListBox::KeyInput( const KeyEvent& rKEvt )
         if ( GetCheckButtonState( pEntry ) == SV_BUTTON_UNCHECKED )
         {
             SetCheckButtonState( pEntry, SV_BUTTON_CHECKED );
-            GetCheckButtonHdl().Call( NULL );
+            GetCheckButtonHdl().Call( nullptr );
             return ;
         }
     }

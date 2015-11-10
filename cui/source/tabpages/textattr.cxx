@@ -56,7 +56,7 @@ const sal_uInt16 SvxTextAttrPage::pRanges[] =
 SvxTextAttrPage::SvxTextAttrPage(vcl::Window* pWindow, const SfxItemSet& rInAttrs)
     : SvxTabPage(pWindow,"TextAttributesPage","cui/ui/textattrtabpage.ui", rInAttrs)
     , rOutAttrs(rInAttrs)
-    , pView(NULL)
+    , pView(nullptr)
     , bAutoGrowSizeEnabled(false)
     , bContourEnabled(false)
     , bAutoGrowWidthEnabled(false)
@@ -287,7 +287,7 @@ void SvxTextAttrPage::Reset( const SfxItemSet* rAttrs )
         if((bLeftToRight && (SDRTEXTHORZADJUST_BLOCK == eTHA)) || (!bLeftToRight && (SDRTEXTVERTADJUST_BLOCK == eTVA)))
         {
             // Move anchor to valid position.
-            ClickFullWidthHdl_Impl(NULL);
+            ClickFullWidthHdl_Impl(nullptr);
             m_pTsbFullWidth->SetState(TRISTATE_TRUE);
         }
 
@@ -327,7 +327,7 @@ void SvxTextAttrPage::Reset( const SfxItemSet* rAttrs )
         m_pTsbContour->SetState( TRISTATE_INDET );
     m_pTsbContour->SaveValue();
 
-    ClickHdl_Impl( NULL );
+    ClickHdl_Impl( nullptr );
 }
 
 /*************************************************************************

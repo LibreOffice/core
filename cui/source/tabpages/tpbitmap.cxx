@@ -57,12 +57,12 @@ SvxBitmapTabPage::SvxBitmapTabPage(  vcl::Window* pParent, const SfxItemSet& rIn
                           rInAttrs ),
     m_rOutAttrs           ( rInAttrs ),
 
-    m_pnBitmapListState   ( 0 ),
-    m_pnColorListState    ( 0 ),
-    m_pPageType           ( 0 ),
+    m_pnBitmapListState   ( nullptr ),
+    m_pnColorListState    ( nullptr ),
+    m_pPageType           ( nullptr ),
     m_nDlgType            ( 0 ),
-    m_pPos                ( 0 ),
-    m_pbAreaTP            ( 0 ),
+    m_pPos                ( nullptr ),
+    m_pbAreaTP            ( nullptr ),
 
     m_bBmpChanged         ( false ),
 
@@ -126,7 +126,7 @@ SvxBitmapTabPage::~SvxBitmapTabPage()
 void SvxBitmapTabPage::dispose()
 {
     delete m_pBitmapCtl;
-    m_pBitmapCtl = NULL;
+    m_pBitmapCtl = nullptr;
     m_pBxPixelEditor.clear();
     m_pCtlPixel.clear();
     m_pLbColor.clear();
@@ -327,7 +327,7 @@ IMPL_LINK_NOARG_TYPED(SvxBitmapTabPage, ChangeBitmapHdl_Impl, ListBox&, void)
     }
     else
     {
-        const SfxPoolItem* pPoolItem = 0;
+        const SfxPoolItem* pPoolItem = nullptr;
 
         if(SfxItemState::SET == m_rOutAttrs.GetItemState(GetWhich(XATTR_FILLSTYLE), true, &pPoolItem))
         {
@@ -456,13 +456,13 @@ long SvxBitmapTabPage::CheckChanges_Impl()
             {
                 case RET_BTN_1:
                 {
-                    ClickModifyHdl_Impl( NULL );
+                    ClickModifyHdl_Impl( nullptr );
                 }
                 break;
 
                 case RET_BTN_2:
                 {
-                    ClickAddHdl_Impl( NULL );
+                    ClickAddHdl_Impl( nullptr );
                 }
                 break;
 
@@ -540,7 +540,7 @@ IMPL_LINK_NOARG_TYPED(SvxBitmapTabPage, ClickAddHdl_Impl, Button*, void)
 
     if( !nError )
     {
-        XBitmapEntry* pEntry = 0;
+        XBitmapEntry* pEntry = nullptr;
         if( m_pCtlPixel->IsEnabled() )
         {
             const BitmapEx aBitmapEx(m_pBitmapCtl->GetBitmapEx());
@@ -549,7 +549,7 @@ IMPL_LINK_NOARG_TYPED(SvxBitmapTabPage, ClickAddHdl_Impl, Button*, void)
         }
         else // it must be a not existing imported bitmap
         {
-            const SfxPoolItem* pPoolItem = 0;
+            const SfxPoolItem* pPoolItem = nullptr;
 
             if(SfxItemState::SET == m_rOutAttrs.GetItemState(XATTR_FILLBITMAP, true, &pPoolItem))
             {

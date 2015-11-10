@@ -83,7 +83,7 @@ SvxCaptionTabPage::SvxCaptionTabPage(vcl::Window* pParent, const SfxItemSet& rIn
     , nAnsatzRelPos(0)
     , nAnsatzTypePos(0)
     , rOutAttrs(rInAttrs)
-    , pView(NULL)
+    , pView(nullptr)
 {
     get(m_pCT_CAPTTYPE, "valueset");
 

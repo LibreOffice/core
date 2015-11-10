@@ -204,7 +204,7 @@ SvxSaveTabPage::~SvxSaveTabPage()
 void SvxSaveTabPage::dispose()
 {
     delete pImpl;
-    pImpl = NULL;
+    pImpl = nullptr;
     aLoadUserSettingsCB.clear();
     aLoadDocPrinterCB.clear();
     aDocInfoCB.clear();
@@ -379,12 +379,12 @@ bool isODFFormat( const OUString& sFilter )
         "impress8_draw",
         "chart8",
         "math8",
-        NULL
+        nullptr
     };
 
     bool bRet = false;
     int i = 0;
-    while ( aODFFormats[i] != NULL )
+    while ( aODFFormats[i] != nullptr )
     {
         if ( sFilter.equalsAscii( aODFFormats[i++] ) )
         {
@@ -630,7 +630,7 @@ IMPL_LINK_NOARG_TYPED(SvxSaveTabPage, ODFVersionHdl_Impl, ListBox&, void)
         const sal_Int32 nCount = aSaveAsLB->GetEntryCount();
         for ( sal_Int32 i = 0; i < nCount; ++i )
         {
-            if ( aSaveAsLB->GetEntryData(i) != NULL )
+            if ( aSaveAsLB->GetEntryData(i) != nullptr )
             {
                 bHasODFFormat = true;
                 break;
@@ -638,7 +638,7 @@ IMPL_LINK_NOARG_TYPED(SvxSaveTabPage, ODFVersionHdl_Impl, ListBox&, void)
         }
 
         bShown = !bHasODFFormat
-                || ( aSaveAsLB->GetSelectEntryData() != NULL );
+                || ( aSaveAsLB->GetSelectEntryData() != nullptr );
     }
 
     aODFWarningFI->Show( bShown );

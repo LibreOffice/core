@@ -85,7 +85,7 @@ class SvInsertOleDlg : public InsertObjectDialog_Impl
 public:
     SvInsertOleDlg( vcl::Window* pParent,
         const css::uno::Reference < css::embed::XStorage >& xStorage,
-        const SvObjectServerList* pServers = NULL );
+        const SvObjectServerList* pServers = nullptr );
     virtual ~SvInsertOleDlg();
     virtual void dispose() override;
     virtual short Execute() override;

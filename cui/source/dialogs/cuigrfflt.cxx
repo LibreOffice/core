@@ -31,7 +31,7 @@
 GraphicPreviewWindow::GraphicPreviewWindow(vcl::Window* pParent,
     const WinBits nStyle)
     : Control(pParent, nStyle)
-    , mpOrigGraphic(NULL)
+    , mpOrigGraphic(nullptr)
     , mfScaleX(0.0)
     , mfScaleY(0.0)
 {

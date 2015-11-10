@@ -55,12 +55,12 @@ SvxHatchTabPage::SvxHatchTabPage
 
     m_rOutAttrs           ( rInAttrs ),
 
-    m_pnHatchingListState ( 0 ),
-    m_pnColorListState    ( 0 ),
-    m_pPageType           ( 0 ),
+    m_pnHatchingListState ( nullptr ),
+    m_pnColorListState    ( nullptr ),
+    m_pPageType           ( nullptr ),
     m_nDlgType            ( 0 ),
-    m_pPos                ( 0 ),
-    m_pbAreaTP            ( 0 ),
+    m_pPos                ( nullptr ),
+    m_pbAreaTP            ( nullptr ),
 
     m_aXFStyleItem        ( drawing::FillStyle_HATCH ),
     m_aXHatchItem         ( OUString(), XHatch() ),
@@ -276,13 +276,13 @@ long SvxHatchTabPage::CheckChanges_Impl()
         {
             case RET_BTN_1:
             {
-                ClickModifyHdl_Impl( NULL );
+                ClickModifyHdl_Impl( nullptr );
             }
             break;
 
             case RET_BTN_2:
             {
-                ClickAddHdl_Impl( NULL );
+                ClickAddHdl_Impl( nullptr );
             }
             break;
 
@@ -415,7 +415,7 @@ IMPL_LINK_NOARG_TYPED(SvxHatchTabPage, ChangeHatchHdl_Impl, ListBox&, void)
         pHatch.reset(new XHatch( m_pHatchingList->GetHatch( nPos )->GetHatch() ));
     else
     {
-        const SfxPoolItem* pPoolItem = NULL;
+        const SfxPoolItem* pPoolItem = nullptr;
         if( SfxItemState::SET == m_rOutAttrs.GetItemState( GetWhich( XATTR_FILLSTYLE ), true, &pPoolItem ) )
         {
             if( ( drawing::FillStyle_HATCH == (drawing::FillStyle) static_cast<const XFillStyleItem*>( pPoolItem )->GetValue() ) &&

@@ -71,7 +71,7 @@ using namespace css::document;
 
 void ShowErrorDialog( const Any& aException )
 {
-    std::unique_ptr<SvxScriptErrorDialog> pDlg(new SvxScriptErrorDialog( NULL, aException ));
+    std::unique_ptr<SvxScriptErrorDialog> pDlg(new SvxScriptErrorDialog( nullptr, aException ));
     pDlg->Execute();
 }
 
@@ -119,7 +119,7 @@ void SFTreeListBox::delUserData( SvTreeListEntry* pEntry )
             // so need to be able to detect that this node is not to be
             // processed in order to do this, setting userData to NULL ( must
             // be a better way to do this )
-            pUserData = 0;
+            pUserData = nullptr;
             pEntry->SetUserData( pUserData );
         }
     }
@@ -243,7 +243,7 @@ void SFTreeListBox::Init( const OUString& language  )
             getLangNodeFromRootNode( children[ n ], lang );
 
         insertEntry( uiName, app ? RID_CUIIMG_HARDDISK : RID_CUIIMG_DOC,
-            0, true, std::unique_ptr< SFEntry >(new SFEntry( OBJTYPE_SFROOT, langEntries, xDocumentModel )), factoryURL );
+            nullptr, true, std::unique_ptr< SFEntry >(new SFEntry( OBJTYPE_SFROOT, langEntries, xDocumentModel )), factoryURL );
     }
 
     SetUpdateMode( true );
@@ -390,7 +390,7 @@ SvTreeListEntry * SFTreeListBox::insertEntry(
 
 void SFTreeListBox::RequestingChildren( SvTreeListEntry* pEntry )
 {
-    SFEntry* userData = 0;
+    SFEntry* userData = nullptr;
     if ( !pEntry )
     {
         return;
@@ -632,7 +632,7 @@ IMPL_LINK_TYPED( SvxScriptOrgDialog, ScriptSelectHdl, SvTreeListBox *, pBox, voi
 
     SvTreeListEntry* pEntry = pBox->GetHdlEntry();
 
-    SFEntry* userData = 0;
+    SFEntry* userData = nullptr;
     if ( !pEntry )
     {
         return;
@@ -664,7 +664,7 @@ IMPL_LINK_TYPED( SvxScriptOrgDialog, ButtonHdl, Button *, pButton, void )
         if ( m_pScriptsBox->IsSelected( m_pScriptsBox->GetHdlEntry() ) )
         {
             SvTreeListEntry* pEntry = m_pScriptsBox->GetHdlEntry();
-            SFEntry* userData = 0;
+            SFEntry* userData = nullptr;
             if ( !pEntry )
             {
                 return;
@@ -960,7 +960,7 @@ void SvxScriptOrgDialog::createEntry( SvTreeListEntry* pEntry )
     if ( aChildNode.is() )
     {
         OUString aChildName = aChildNode->getName();
-        SvTreeListEntry* pNewEntry = NULL;
+        SvTreeListEntry* pNewEntry = nullptr;
 
         Reference<XModel> xDocumentModel = getModel( pEntry );
 
@@ -1194,7 +1194,7 @@ void SvxScriptOrgDialog::RestorePreviousSelection()
     OUString aStoredEntry = m_lastSelection[ m_sLanguage ];
     if( aStoredEntry.isEmpty() )
         return;
-    SvTreeListEntry* pEntry = 0;
+    SvTreeListEntry* pEntry = nullptr;
     sal_Int32 nIndex = 0;
     while ( nIndex != -1 )
     {

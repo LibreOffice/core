@@ -182,7 +182,7 @@ SvxPageDescPage::SvxPageDescPage( vcl::Window* pParent, const SfxItemSet& rAttr 
 
     //UUUU
     m_nPos( 0 ),
-    mpDefPrinter( 0 ),
+    mpDefPrinter( nullptr ),
     mbDelPrinter( false ),
 
     //UUUU
@@ -242,8 +242,8 @@ SvxPageDescPage::SvxPageDescPage( vcl::Window* pParent, const SfxItemSet& rAttr 
 
     SfxObjectShell* pShell;
     if(SfxItemState::SET == rAttr.GetItemState(SID_HTML_MODE, false, &pItem) ||
-        ( 0 != (pShell = SfxObjectShell::Current()) &&
-                    0 != (pItem = pShell->GetItem(SID_HTML_MODE))))
+        ( nullptr != (pShell = SfxObjectShell::Current()) &&
+                    nullptr != (pItem = pShell->GetItem(SID_HTML_MODE))))
         bWeb = 0 != (static_cast<const SfxUInt16Item*>(pItem)->GetValue() & HTMLMODE_ON);
 
     //  fill text flow listbox with valid entries
@@ -711,7 +711,7 @@ bool SvxPageDescPage::FillItemSet( SfxItemSet* rSet )
     DBG_ASSERT( pPool, "Wo ist der Pool" );
     sal_uInt16 nWhich = GetWhich( SID_ATTR_LRSPACE );
     SfxMapUnit eUnit = pPool->GetMetric( nWhich );
-    const SfxPoolItem* pOld = 0;
+    const SfxPoolItem* pOld = nullptr;
 
     // copy old left and right margins
     SvxLRSpaceItem aMargin( static_cast<const SvxLRSpaceItem&>(rOldSet.Get( nWhich )) );
@@ -1297,7 +1297,7 @@ void SvxPageDescPage::ResetBackground_Impl(const SfxItemSet& rSet)
     }
 
     drawinglayer::attribute::SdrAllFillAttributesHelperPtr aPageFillAttributes;
-    const SfxPoolItem* pItem = 0;
+    const SfxPoolItem* pItem = nullptr;
 
     if(mbEnableDrawingLayerFillStyles)
     {
@@ -1336,7 +1336,7 @@ void SvxPageDescPage::InitHeadFoot_Impl( const SfxItemSet& rSet )
     if ( pItem )
         m_pBspWin->SetSize( static_cast<const SvxSizeItem*>(pItem)->GetSize() );
 
-    const SvxSetItem* pSetItem = 0;
+    const SvxSetItem* pSetItem = nullptr;
 
     // evaluate header attributes
 
@@ -1487,7 +1487,7 @@ SfxTabPage::sfxpg SvxPageDescPage::DeactivatePage( SfxItemSet* _pSet )
     {
         if ( ScopedVclPtr<QueryBox>::Create( this, WB_YES_NO | WB_DEF_NO, m_pPrintRangeQueryText->GetText() )->Execute() == RET_NO )
         {
-            MetricField* pField = NULL;
+            MetricField* pField = nullptr;
             if ( IsPrinterRangeOverflow( *m_pLeftMarginEdit, nFirstLeftMargin, nLastLeftMargin, MARGIN_LEFT ) )
                 pField = m_pLeftMarginEdit;
             if (    IsPrinterRangeOverflow( *m_pRightMarginEdit, nFirstRightMargin, nLastRightMargin, MARGIN_RIGHT )

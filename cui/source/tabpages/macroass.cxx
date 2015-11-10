@@ -62,13 +62,13 @@ public:
 };
 
 _SfxMacroTabPage_Impl::_SfxMacroTabPage_Impl()
-    : pAssignPB(NULL)
-    , pDeletePB(NULL)
-    , pEventLB(NULL)
-    , pGroupFrame(NULL)
-    , pGroupLB(NULL)
-    , pMacroFrame(NULL)
-    , pMacroLB(NULL)
+    : pAssignPB(nullptr)
+    , pDeletePB(nullptr)
+    , pEventLB(nullptr)
+    , pGroupFrame(nullptr)
+    , pGroupLB(nullptr)
+    , pMacroFrame(nullptr)
+    , pMacroLB(nullptr)
     , bReadOnly(false)
     , bGotEvents(false)
     , m_bDummyActivated(false)
@@ -124,7 +124,7 @@ void _SfxMacroTabPage::EnableButtons()
     {
         // get bound macro
         const SvxMacro* pM = aTbl.Get( (sal_uInt16)reinterpret_cast<sal_uLong>(pE->GetUserData()) );
-        mpImpl->pDeletePB->Enable( 0 != pM && !mpImpl->bReadOnly );
+        mpImpl->pDeletePB->Enable( nullptr != pM && !mpImpl->bReadOnly );
 
         OUString sEventMacro = static_cast<const SvLBoxString&>(pE->GetItem( LB_MACROS_ITEMPOS )).GetText();
 

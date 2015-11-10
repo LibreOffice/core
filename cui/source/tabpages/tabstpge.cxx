@@ -47,7 +47,7 @@ public:
 
     TabWin_Impl(vcl::Window* pParent, WinBits nBits)
         : Window(pParent, nBits)
-        , mpPage(0)
+        , mpPage(nullptr)
         , nTabStyle(0)
     {
     }
@@ -213,7 +213,7 @@ bool SvxTabulatorTabPage::FillItemSet(SfxItemSet* rSet)
 
     // Put the controls' values in here
     if (m_pNewBtn->IsEnabled())
-        NewHdl_Impl( 0 );
+        NewHdl_Impl( nullptr );
 
     // Call the LoseFocus-Handler first
     GetDezCharHdl_Impl(*m_pDezChar);
@@ -368,7 +368,7 @@ void SvxTabulatorTabPage::InitTabPos_Impl( sal_uInt16 nTabPos )
     m_pTabBox->Clear();
 
     long nOffset = 0;
-    const SfxPoolItem* pItem = 0;
+    const SfxPoolItem* pItem = nullptr;
     if (GetItemSet().GetItemState(SID_ATTR_TABSTOP_OFFSET, true, &pItem) == SfxItemState::SET)
     {
         nOffset = static_cast<const SfxInt32Item*>(pItem)->GetValue();
@@ -418,8 +418,8 @@ void SvxTabulatorTabPage::InitTabPos_Impl( sal_uInt16 nTabPos )
 
 void SvxTabulatorTabPage::SetFillAndTabType_Impl()
 {
-    RadioButton* pTypeBtn = 0;
-    RadioButton* pFillBtn = 0;
+    RadioButton* pTypeBtn = nullptr;
+    RadioButton* pFillBtn = nullptr;
 
     m_pDezChar->Disable();
     m_pDezCharLabel->Disable();
@@ -468,11 +468,11 @@ IMPL_LINK_TYPED( SvxTabulatorTabPage, NewHdl_Impl, Button *, pBtn, void )
     long nVal = static_cast<long>(m_pTabBox->Denormalize( m_pTabBox->GetValue( eDefUnit ) ));
 
     // If the pBtn == 0 && the value == 0 then do not create a tab, because we create via OK
-    if ( nVal == 0 && pBtn == 0 )
+    if ( nVal == 0 && pBtn == nullptr )
         return;
 
     long nOffset = 0;
-    const SfxPoolItem* pItem = 0;
+    const SfxPoolItem* pItem = nullptr;
 
     if ( GetItemSet().GetItemState( SID_ATTR_TABSTOP_OFFSET, true, &pItem ) ==
          SfxItemState::SET )
@@ -525,7 +525,7 @@ IMPL_LINK_NOARG_TYPED(SvxTabulatorTabPage, DelHdl_Impl, Button*, void)
 
     if ( m_pTabBox->GetEntryCount() == 1 )
     {
-        DelAllHdl_Impl( 0 );
+        DelAllHdl_Impl( nullptr );
         return;
     }
 

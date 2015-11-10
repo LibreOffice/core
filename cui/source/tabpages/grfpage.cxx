@@ -50,7 +50,7 @@ static inline long lcl_GetValue( MetricField& rMetric, FieldUnit eUnit )
 
 SvxGrfCropPage::SvxGrfCropPage ( vcl::Window *pParent, const SfxItemSet &rSet )
     : SfxTabPage(pParent, "CropPage", "cui/ui/croppage.ui", &rSet)
-    , pLastCropField(0)
+    , pLastCropField(nullptr)
     , nOldWidth(0)
     , nOldHeight(0)
     , bReset(false)
@@ -227,7 +227,7 @@ void SvxGrfCropPage::Reset( const SfxItemSet *rSet )
         OUString referer;
         SfxStringItem const * it = static_cast<SfxStringItem const *>(
             rSet->GetItem(SID_REFERER));
-        if (it != 0) {
+        if (it != nullptr) {
             referer = it->GetValue();
         }
         const Graphic* pGrf = static_cast<const SvxBrushItem*>(pItem)->GetGraphic(referer);
@@ -272,8 +272,8 @@ bool SvxGrfCropPage::FillItemSet(SfxItemSet *rSet)
         SvxSizeItem aSz( nW );
 
         // size could already have been set from another page
-        const SfxItemSet* pExSet = GetTabDialog() ? GetTabDialog()->GetExampleSet() : NULL;
-        const SfxPoolItem* pItem = 0;
+        const SfxItemSet* pExSet = GetTabDialog() ? GetTabDialog()->GetExampleSet() : nullptr;
+        const SfxPoolItem* pItem = nullptr;
         if( pExSet && SfxItemState::SET ==
                 pExSet->GetItemState( nW, false, &pItem ) )
             aSz = *static_cast<const SvxSizeItem*>(pItem);
@@ -289,11 +289,11 @@ bool SvxGrfCropPage::FillItemSet(SfxItemSet *rSet)
         m_pWidthMF->SaveValue();
         m_pHeightMF->SaveValue();
 
-        bModified |= 0 != rSet->Put( aSz );
+        bModified |= nullptr != rSet->Put( aSz );
 
         if( bSetOrigSize )
         {
-            bModified |= 0 != rSet->Put( SvxSizeItem( rPool.GetWhich(
+            bModified |= nullptr != rSet->Put( SvxSizeItem( rPool.GetWhich(
                         SID_ATTR_GRAF_FRMSIZE_PERCENT ), Size( 0, 0 )) );
         }
     }
@@ -308,12 +308,12 @@ bool SvxGrfCropPage::FillItemSet(SfxItemSet *rSet)
         pNew->SetRight( lcl_GetValue( *m_pRightMF, eUnit ) );
         pNew->SetTop( lcl_GetValue( *m_pTopMF, eUnit ) );
         pNew->SetBottom( lcl_GetValue( *m_pBottomMF, eUnit ) );
-        bModified |= 0 != rSet->Put( *pNew );
+        bModified |= nullptr != rSet->Put( *pNew );
     }
 
     if( m_pZoomConstRB->IsValueChangedFromSaved() )
     {
-        bModified |= 0 != rSet->Put( SfxBoolItem( rPool.GetWhich(
+        bModified |= nullptr != rSet->Put( SfxBoolItem( rPool.GetWhich(
                     SID_ATTR_GRAF_KEEP_ZOOM), m_pZoomConstRB->IsChecked() ) );
     }
 
@@ -380,7 +380,7 @@ void SvxGrfCropPage::ActivatePage(const SfxItemSet& rSet)
         OUString referer;
         SfxStringItem const * it = static_cast<SfxStringItem const *>(
             rSet.GetItem(SID_REFERER));
-        if (it != 0) {
+        if (it != nullptr) {
             referer = it->GetValue();
         }
         const Graphic* pGrf = rBrush.GetGraphic(referer);
@@ -730,7 +730,7 @@ IMPL_LINK_NOARG_TYPED(SvxGrfCropPage, Timeout, Timer *, void)
 {
     DBG_ASSERT(pLastCropField,"Timeout ohne Feld?");
     CropHdl(*pLastCropField);
-    pLastCropField = 0;
+    pLastCropField = nullptr;
 }
 
 
@@ -739,7 +739,7 @@ IMPL_LINK_TYPED( SvxGrfCropPage, CropLoseFocusHdl, Control&, rControl, void )
     MetricField* pField = static_cast<MetricField*>(&rControl);
     aTimer.Stop();
     CropHdl(*pField);
-    pLastCropField = 0;
+    pLastCropField = nullptr;
 }
 
 

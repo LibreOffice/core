@@ -313,11 +313,11 @@ SvxColorTabPage::SvxColorTabPage(vcl::Window* pParent, const SfxItemSet& rInAttr
     , pShadow             ( new SvxColorTabPageShadow() )
     , rOutAttrs           ( rInAttrs )
     // All the horrific pointers we store and should not
-    , pnColorListState( 0 )
-    , pPageType( NULL )
+    , pnColorListState( nullptr )
+    , pPageType( nullptr )
     , nDlgType( 0 )
-    , pPos( NULL )
-    , pbAreaTP( NULL )
+    , pPos( nullptr )
+    , pbAreaTP( nullptr )
     , aXFStyleItem( drawing::FillStyle_SOLID )
     , aXFillColorItem( OUString(), Color( COL_BLACK ) )
     , aXFillAttr( static_cast<XOutdevItemPool*>( rInAttrs.GetPool() ))
@@ -409,7 +409,7 @@ SvxColorTabPage::~SvxColorTabPage()
 void SvxColorTabPage::dispose()
 {
     delete pShadow;
-    pShadow = NULL;
+    pShadow = nullptr;
     mpTopDlg.clear();
     m_pBoxEmbed.clear();
     m_pBtnLoad.clear();
@@ -475,7 +475,7 @@ void SvxColorTabPage::ActivatePage( const SfxItemSet& )
             }
             else if( *pPageType == PT_COLOR && *pPos == LISTBOX_ENTRY_NOTFOUND )
             {
-                const SfxPoolItem* pPoolItem = NULL;
+                const SfxPoolItem* pPoolItem = nullptr;
                 if( SfxItemState::SET == rOutAttrs.GetItemState( GetWhich( XATTR_FILLCOLOR ), true, &pPoolItem ) )
                 {
                     m_pLbColorModel->SelectEntryPos( CM_RGB );
@@ -556,14 +556,14 @@ long SvxColorTabPage::CheckChanges_Impl()
             {
                 case RET_BTN_1:
                 {
-                    ClickModifyHdl_Impl( NULL );
+                    ClickModifyHdl_Impl( nullptr );
                     aColor = pColorList->GetColor( nPos )->GetColor();
                 }
                 break;
 
                 case RET_BTN_2:
                 {
-                    ClickAddHdl_Impl( NULL );
+                    ClickAddHdl_Impl( nullptr );
                     nPos = m_pLbColor->GetSelectEntryPos();
                     aColor = pColorList->GetColor( nPos )->GetColor();
                 }
@@ -1152,8 +1152,8 @@ void SvxColorTabPage::FillUserData()
 
 void SvxColorTabPage::SetupForViewFrame( SfxViewFrame *pViewFrame )
 {
-    const OfaRefItem<XColorList> *pPtr = NULL;
-    if ( pViewFrame != NULL && pViewFrame->GetDispatcher() )
+    const OfaRefItem<XColorList> *pPtr = nullptr;
+    if ( pViewFrame != nullptr && pViewFrame->GetDispatcher() )
         pPtr = static_cast<const OfaRefItem<XColorList> *>(pViewFrame->
             GetDispatcher()->Execute( SID_GET_COLORLIST,
                                       SfxCallMode::SYNCHRON ));

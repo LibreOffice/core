@@ -77,9 +77,9 @@ FmSearchDialog::FmSearchDialog(vcl::Window* pParent, const OUString& sInitialTex
     const Link<FmSearchContext&,sal_uInt32>& lnkContextSupplier)
     :ModalDialog(pParent, "RecordSearchDialog", "cui/ui/fmsearchdialog.ui")
     ,m_sCancel( Button::GetStandardText( StandardButtonType::Cancel ) )
-    ,m_pPreSearchFocus( NULL )
+    ,m_pPreSearchFocus( nullptr )
     ,m_lnkContextSupplier(lnkContextSupplier)
-    ,m_pConfig( NULL )
+    ,m_pConfig( nullptr )
 {
     get(m_prbSearchForText,"rbSearchForText");
     get(m_prbSearchForNull,"rbSearchForNull");
@@ -170,10 +170,10 @@ void FmSearchDialog::dispose()
     SaveParams();
 
     delete m_pConfig;
-    m_pConfig = NULL;
+    m_pConfig = nullptr;
 
     delete m_pSearchEngine;
-    m_pSearchEngine = NULL;
+    m_pSearchEngine = nullptr;
 
     m_prbSearchForText.clear();
     m_prbSearchForNull.clear();
@@ -578,7 +578,7 @@ void FmSearchDialog::EnableSearchUI(bool bEnable)
         if ( pFocusWindow && IsChild( pFocusWindow ) )
             m_pPreSearchFocus = pFocusWindow;
         else
-            m_pPreSearchFocus = NULL;
+            m_pPreSearchFocus = nullptr;
     }
 
     // the search button has two functions -> adjust its text accordingly
@@ -623,7 +623,7 @@ void FmSearchDialog::EnableSearchUI(bool bEnable)
                 pEdit->SetSelection( Selection( 0, pEdit->GetText().getLength() ) );
             }
         }
-        m_pPreSearchFocus = NULL;
+        m_pPreSearchFocus = nullptr;
     }
 
 }
@@ -809,7 +809,7 @@ void FmSearchDialog::LoadParams()
     LINK(this, FmSearchDialog, OnCheckBoxToggled).Call(*m_pcbRegular);
     LINK(this, FmSearchDialog, OnCheckBoxToggled).Call(*m_pcbApprox);
 
-    CheckBox* pToCheck = NULL;
+    CheckBox* pToCheck = nullptr;
     if (aParams.bWildcard)
         pToCheck = m_pcbWildCard;
     if (aParams.bRegular)

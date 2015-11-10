@@ -258,7 +258,7 @@ IMPL_LINK_NOARG_TYPED(SvxHyperlinkInternetTp, ModifiedLoginHdl_Impl, Edit&, void
     if ( aStrLogin.equalsIgnoreAsciiCase( sAnonymous ) )
     {
         m_pCbAnonymous->Check();
-        ClickAnonymousHdl_Impl(NULL);
+        ClickAnonymousHdl_Impl(nullptr);
     }
 }
 
@@ -403,7 +403,7 @@ IMPL_LINK_NOARG_TYPED(SvxHyperlinkInternetTp, ClickBrowseHdl_Impl, Button*, void
 
     SfxBoolItem aBrowse( SID_BROWSE, true );
 
-    const SfxPoolItem *ppItems[] = { &aName, &aNewView, &aSilent, &aReadOnly, &aRefererItem, &aBrowse, NULL };
+    const SfxPoolItem *ppItems[] = { &aName, &aNewView, &aSilent, &aReadOnly, &aRefererItem, &aBrowse, nullptr };
     static_cast<SvxHpLinkDlg*>(mpDialog.get())->GetBindings()->Execute( SID_OPENDOC, ppItems, 0, SfxCallMode::ASYNCHRON | SfxCallMode::RECORD );
 }
 

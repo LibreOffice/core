@@ -58,7 +58,7 @@ struct IconChoicePageData
         : nId           ( Id ),
           fnCreatePage  ( fnPage ),
           fnGetRanges   ( fnRanges ),
-          pPage         ( NULL ),
+          pPage         ( nullptr ),
           bOnDemand     ( bDemand ),
           bRefresh      ( false )
     {}
@@ -160,7 +160,7 @@ protected:
     virtual void            PageCreated( sal_uInt16 nId, IconChoicePage& rPage );
     static SfxItemSet*      CreateInputItemSet( sal_uInt16 nId );
     inline IconChoicePage*  GetTabPage( sal_uInt16 nPageId )
-                                { return ( GetPageData (nPageId)->pPage ? GetPageData (nPageId)->pPage.get() : NULL); }
+                                { return ( GetPageData (nPageId)->pPage ? GetPageData (nPageId)->pPage.get() : nullptr); }
     static void             RefreshInputSet();
 
     void                    ActivatePageImpl ();
@@ -173,14 +173,14 @@ public:
 
     // the IconChoiceCtrl's could also be set in the Ctor
     IconChoiceDialog ( vcl::Window* pParent, const OUString& rID, const OUString& rUIXMLDescription,
-                       const SfxItemSet * pItemSet = 0 );
+                       const SfxItemSet * pItemSet = nullptr );
     virtual ~IconChoiceDialog ();
     virtual void dispose() override;
 
     // interface
     SvxIconChoiceCtrlEntry* AddTabPage(
         sal_uInt16 nId, const OUString& rIconText, const Image& rChoiceIcon,
-        CreatePage pCreateFunc /* != NULL */, GetPageRanges pRangesFunc = NULL /* NULL allowed*/,
+        CreatePage pCreateFunc /* != NULL */, GetPageRanges pRangesFunc = nullptr /* NULL allowed*/,
         bool bItemsOnDemand = false, sal_uLong nPos = TREELIST_APPEND );
 
     void                SetCurPageId( sal_uInt16 nId ) { mnCurrentPageId = nId; FocusOnIcon( nId ); }

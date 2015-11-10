@@ -130,7 +130,7 @@ public:
     virtual void Reset( const SfxItemSet& ) override;
     virtual bool FillItemSet( SfxItemSet* ) override;
     virtual void ActivatePage( const SfxItemSet& rItemSet ) override;
-    virtual int  DeactivatePage( SfxItemSet* pSet = 0 ) override;
+    virtual int  DeactivatePage( SfxItemSet* pSet = nullptr ) override;
 
     bool IsMarkWndVisible ()      { return static_cast<vcl::Window*>(mpMarkWnd)->IsVisible(); }
     Size GetSizeExtraWnd ()       { return ( mpMarkWnd->GetSizePixel() ); }

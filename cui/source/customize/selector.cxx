@@ -77,8 +77,8 @@ using namespace ::com::sun::star::container;
  */
 SvxConfigFunctionListBox::SvxConfigFunctionListBox(vcl::Window* pParent, WinBits nStyle)
     : SvTreeListBox(pParent, nStyle | WB_CLIPCHILDREN | WB_HSCROLL | WB_SORT | WB_TABSTOP)
-    , pCurEntry(0)
-    , m_pDraggingEntry(0)
+    , pCurEntry(nullptr)
+    , m_pDraggingEntry(nullptr)
 {
     GetModel()->SetSortMode( SortAscending );
 
@@ -112,7 +112,7 @@ void SvxConfigFunctionListBox::dispose()
 
 SvTreeListEntry* SvxConfigFunctionListBox::GetLastSelectedEntry()
 {
-    if ( m_pDraggingEntry != NULL )
+    if ( m_pDraggingEntry != nullptr )
     {
         return m_pDraggingEntry;
     }
@@ -155,7 +155,7 @@ void SvxConfigFunctionListBox::ClearAll()
 OUString SvxConfigFunctionListBox::GetHelpText( SvTreeListEntry *pEntry )
 {
     SvxGroupInfo_Impl *pInfo =
-        pEntry ? static_cast<SvxGroupInfo_Impl*>(pEntry->GetUserData()): 0;
+        pEntry ? static_cast<SvxGroupInfo_Impl*>(pEntry->GetUserData()): nullptr;
 
     if ( pInfo )
     {
@@ -191,7 +191,7 @@ DragDropMode SvxConfigFunctionListBox::NotifyStartDrag(
 
 void SvxConfigFunctionListBox::DragFinished( sal_Int8 /*nDropAction*/ )
 {
-    m_pDraggingEntry = NULL;
+    m_pDraggingEntry = nullptr;
 }
 
 sal_Int8
@@ -204,8 +204,8 @@ SvxConfigGroupListBox::SvxConfigGroupListBox(vcl::Window* pParent, WinBits nStyl
     : SvTreeListBox(pParent, nStyle |
             WB_CLIPCHILDREN | WB_HSCROLL | WB_HASBUTTONS | WB_HASLINES | WB_HASLINESATROOT | WB_HASBUTTONSATROOT | WB_TABSTOP)
     , m_bShowSlots(false)
-    , pFunctionListBox(NULL)
-    , m_pImageProvider(NULL)
+    , pFunctionListBox(nullptr)
+    , m_pImageProvider(nullptr)
     , m_hdImage(CUI_RES(RID_CUIIMG_HARDDISK))
     , m_libImage(CUI_RES(RID_CUIIMG_LIB))
     , m_macImage(CUI_RES(RID_CUIIMG_MACRO))
@@ -536,10 +536,10 @@ void SvxConfigGroupListBox::Init(bool bShowSlots, const Reference< frame::XFrame
         }
         else
         {
-            fillScriptList( rootNode, NULL, false );
+            fillScriptList( rootNode, nullptr, false );
         }
     }
-    MakeVisible( GetEntry( 0,0 ) );
+    MakeVisible( GetEntry( nullptr,0 ) );
     SetUpdateMode( true );
 }
 
@@ -650,7 +650,7 @@ void SvxConfigGroupListBox::GroupSelected()
         case SVX_CFGGROUP_FUNCTION :
         {
             SvTreeListEntry *_pEntry = FirstSelected();
-            if ( _pEntry != NULL )
+            if ( _pEntry != nullptr )
             {
                 SvxGroupInfo_Impl *_pInfo =
                     static_cast<SvxGroupInfo_Impl*>(_pEntry->GetUserData());
@@ -711,7 +711,7 @@ void SvxConfigGroupListBox::GroupSelected()
                         aLabel = commands[i].Command;
                     }
 
-                    SvTreeListEntry* pFuncEntry = NULL;
+                    SvTreeListEntry* pFuncEntry = nullptr;
                     if ( !!aImage )
                     {
                         pFuncEntry = pFunctionListBox->InsertEntry(
@@ -803,7 +803,7 @@ void SvxConfigGroupListBox::GroupSelected()
     }
 
     if ( pFunctionListBox->GetEntryCount() )
-        pFunctionListBox->Select( pFunctionListBox->GetEntry( 0, 0 ) );
+        pFunctionListBox->Select( pFunctionListBox->GetEntry( nullptr, 0 ) );
 
     pFunctionListBox->SetUpdateMode(true);
 }
@@ -959,7 +959,7 @@ void
 SvxScriptSelectorDialog::UpdateUI()
 {
     OUString url = GetScriptURL();
-    if ( url != NULL && !url.isEmpty() )
+    if ( url != nullptr && !url.isEmpty() )
     {
         OUString sMessage =
             m_pCommands->GetHelpText(m_pCommands->FirstSelected());
@@ -1005,7 +1005,7 @@ IMPL_LINK_TYPED( SvxScriptSelectorDialog, ClickHdl, Button *, pButton, void )
             SvTreeListEntry* current = m_pCommands->FirstSelected();
             SvTreeListEntry* next = SvTreeListBox::NextSibling( current );
 
-            if ( next != NULL )
+            if ( next != nullptr )
             {
                 m_pCommands->Select( next );
             }

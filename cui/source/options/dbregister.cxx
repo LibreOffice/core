@@ -103,8 +103,8 @@ DbRegistrationOptionsPage::DbRegistrationOptionsPage( vcl::Window* pParent, cons
 
     m_aTypeText       ( CUI_RES( RID_SVXSTR_TYPE ) ),
     m_aPathText       ( CUI_RES( RID_SVXSTR_PATH ) ),
-    m_pPathBox        ( NULL ),
-    m_pCurEntry     ( NULL ),
+    m_pPathBox        ( nullptr ),
+    m_pCurEntry     ( nullptr ),
     m_nOldCount     ( 0 ),
     m_bModified     ( false )
 {
@@ -292,7 +292,7 @@ IMPL_LINK_NOARG_TYPED(DbRegistrationOptionsPage, NewHdl, Button*, void)
 
 IMPL_LINK_NOARG_TYPED(DbRegistrationOptionsPage, PathBoxDoubleClickHdl, SvTreeListBox*, bool)
 {
-    EditHdl(NULL);
+    EditHdl(nullptr);
     return false;
 }
 
@@ -310,7 +310,7 @@ IMPL_LINK_NOARG_TYPED(DbRegistrationOptionsPage, EditHdl, Button*, void)
     OUString sOldName = SvTabListBox::GetEntryText(pEntry,0);
     m_pCurEntry = pEntry;
     openLinkDialog( sOldName, pOldRegistration->sLocation, pEntry );
-    m_pCurEntry = NULL;
+    m_pCurEntry = nullptr;
 }
 
 
@@ -397,7 +397,7 @@ void DbRegistrationOptionsPage::insertNewEntry( const OUString& _sName,const OUS
     aStr += "\t";
     aStr += _sLocation;
 
-    SvTreeListEntry* pEntry = NULL;
+    SvTreeListEntry* pEntry = nullptr;
     if ( _bReadOnly )
     {
         Image aLocked( CUI_RES( RID_SVXBMP_LOCK ) );
@@ -423,7 +423,7 @@ void DbRegistrationOptionsPage::openLinkDialog(const OUString& _sOldName,const O
     {
         OUString sNewName,sNewLocation;
         aDlg->getLink(sNewName,sNewLocation);
-        if ( _pEntry == NULL || sNewName != _sOldName || sNewLocation != _sOldLocation )
+        if ( _pEntry == nullptr || sNewName != _sOldName || sNewLocation != _sOldLocation )
         {
             if ( _pEntry )
             {

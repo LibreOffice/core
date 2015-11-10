@@ -84,11 +84,11 @@ SvxLineTabPage::SvxLineTabPage
                  ,"cui/ui/linetabpage.ui"
                  , rInAttrs ),
 
-    m_pSymbolList(NULL),
+    m_pSymbolList(nullptr),
     m_bNewSize(false),
     m_nNumMenuGalleryItems(0),
     m_nSymbolType(SVX_SYMBOLTYPE_UNKNOWN), // unknown respectively unchanged
-    m_pSymbolAttr(NULL),
+    m_pSymbolAttr(nullptr),
 
     m_bLastWidthModified(false),
     m_aSymbolLastSize(Size(0,0)),
@@ -104,14 +104,14 @@ SvxLineTabPage::SvxLineTabPage
     m_aXColor             ( OUString(), COL_LIGHTRED ),
     m_aXLineAttr          ( rInAttrs.GetPool() ),
     m_rXLSet              ( m_aXLineAttr.GetItemSet() ),
-     m_pnLineEndListState( 0 ),
-    m_pnDashListState( 0 ),
-    m_pnColorListState( 0 ),
+     m_pnLineEndListState( nullptr ),
+    m_pnDashListState( nullptr ),
+    m_pnColorListState( nullptr ),
     m_nPageType           ( 0 ),
 
     m_nDlgType(0),
-    m_pPosDashLb(NULL),
-    m_pPosLineEndLb(NULL)
+    m_pPosDashLb(nullptr),
+    m_pPosLineEndLb(nullptr)
 {
     get(m_pLbLineStyle,"LB_LINE_STYLE");
     get(m_pBoxColor,"boxCOLOR");
@@ -237,7 +237,7 @@ void SvxLineTabPage::dispose()
 
         if(m_pSymbolList)
             delete m_pSymbolMB->GetPopupMenu()->GetPopupMenu( MN_SYMBOLS );
-        m_pSymbolMB = NULL;
+        m_pSymbolMB = nullptr;
     }
 
     for ( size_t i = 0, n = m_aGrfBrushItems.size(); i < n; ++i )
@@ -381,7 +381,7 @@ void SvxLineTabPage::InitSymbols(MenuButton* pButton)
         for(size_t i=0;; ++i)
         {
             SdrObject *pObj=m_pSymbolList->GetObj(i);
-            if(pObj==NULL)
+            if(pObj==nullptr)
                 break;
             pObj=pObj->Clone();
             m_aGrfNames.push_back("");
@@ -439,7 +439,7 @@ void SvxLineTabPage::InitSymbols(MenuButton* pButton)
 void SvxLineTabPage::SymbolSelected(MenuButton* pButton)
 {
     sal_uInt16 nItemId = pButton->GetCurItemId();
-    const Graphic* pGraphic = 0;
+    const Graphic* pGraphic = nullptr;
     Graphic aGraphic;
     bool bResetSize = false;
     bool bEnable = true;
@@ -472,7 +472,7 @@ void SvxLineTabPage::SymbolSelected(MenuButton* pButton)
         case MN_SYMBOLS_NONE:
         {
             m_nSymbolType=SVX_SYMBOLTYPE_NONE;
-            pGraphic=NULL;
+            pGraphic=nullptr;
             bEnable = false;
         }
         break;
@@ -520,7 +520,7 @@ void SvxLineTabPage::SymbolSelected(MenuButton* pButton)
     else
     {
         m_aSymbolGraphic=Graphic();
-        m_pCtlPreview->SetSymbol(NULL,m_aSymbolSize);
+        m_pCtlPreview->SetSymbol(nullptr,m_aSymbolSize);
         bEnable = false;
     }
     m_aSymbolLastSize=m_aSymbolSize;
@@ -707,7 +707,7 @@ SfxTabPage::sfxpg SvxLineTabPage::DeactivatePage( SfxItemSet* _pSet )
 
 bool SvxLineTabPage::FillItemSet( SfxItemSet* rAttrs )
 {
-    const SfxPoolItem* pOld = NULL;
+    const SfxPoolItem* pOld = nullptr;
     sal_Int32  nPos;
     bool    bModified = false;
 
@@ -962,7 +962,7 @@ bool SvxLineTabPage::FillItemSet( SfxItemSet* rAttrs )
 
         SfxInt32Item aTItem(rAttrs->GetPool()->GetWhich(SID_ATTR_SYMBOLTYPE),m_nSymbolType);
         const SfxPoolItem* pTOld = GetOldItem( *rAttrs, rAttrs->GetPool()->GetWhich(SID_ATTR_SYMBOLTYPE) );
-        bool bNewType = pTOld == NULL || *static_cast<const SfxInt32Item*>(pTOld) != aTItem;
+        bool bNewType = pTOld == nullptr || *static_cast<const SfxInt32Item*>(pTOld) != aTItem;
         if(bNewType && m_nSymbolType==SVX_SYMBOLTYPE_UNKNOWN)
             bNewType=false; // a small fix, type wasn't set -> don't create a type item after all!
         if(bNewType)
@@ -976,7 +976,7 @@ bool SvxLineTabPage::FillItemSet( SfxItemSet* rAttrs )
             SvxBrushItem aBItem(m_aSymbolGraphic,GPOS_MM,rAttrs->GetPool()->GetWhich(SID_ATTR_BRUSH));
             const SfxPoolItem* pBOld = GetOldItem( *rAttrs, rAttrs->GetPool()->GetWhich(SID_ATTR_BRUSH) );
             bool bNewBrush =
-                pBOld == NULL || *static_cast<const SvxBrushItem*>(pBOld) != aBItem;
+                pBOld == nullptr || *static_cast<const SvxBrushItem*>(pBOld) != aBItem;
             if(bNewBrush)
             {
                 rAttrs->Put(aBItem);
@@ -1155,7 +1155,7 @@ void SvxLineTabPage::Reset( const SfxItemSet* rAttrs )
         std::unique_ptr<SdrView> pView(new SdrView( pModel.get(), pVDev ));
         pView->hideMarkHandles();
         pView->ShowSdrPage(pPage);
-        SdrObject *pObj=NULL;
+        SdrObject *pObj=nullptr;
         size_t nSymTmp = static_cast<size_t>(nSymType);
         if(m_pSymbolList)
         {
@@ -1510,7 +1510,7 @@ void SvxLineTabPage::Reset( const SfxItemSet* rAttrs )
 
     ClickInvisibleHdl_Impl( *m_pLbLineStyle );
 
-    ChangePreviewHdl_Impl( NULL );
+    ChangePreviewHdl_Impl( nullptr );
 }
 
 

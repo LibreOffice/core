@@ -73,22 +73,22 @@ SvxAreaTabDialog::SvxAreaTabDialog
     mnPos( 0 ),
     mbAreaTP( false )
 {
-    m_nAreaTabPage = AddTabPage( "RID_SVXPAGE_AREA", SvxAreaTabPage::Create, 0 );
+    m_nAreaTabPage = AddTabPage( "RID_SVXPAGE_AREA", SvxAreaTabPage::Create, nullptr );
 
     if(bShadow)
     {
-        m_nShadowTabPage = AddTabPage( "RID_SVXPAGE_SHADOW", SvxShadowTabPage::Create, 0 );
+        m_nShadowTabPage = AddTabPage( "RID_SVXPAGE_SHADOW", SvxShadowTabPage::Create, nullptr );
     }
     else
     {
         RemoveTabPage( "RID_SVXPAGE_SHADOW" );
     }
 
-    m_nTransparenceTabPage = AddTabPage( "RID_SVXPAGE_TRANSPARENCE", SvxTransparenceTabPage::Create,  0);
-    m_nColorTabPage = AddTabPage( "RID_SVXPAGE_COLOR", SvxColorTabPage::Create, 0 );
-    m_nGradientTabPage = AddTabPage( "RID_SVXPAGE_GRADIENT", SvxGradientTabPage::Create, 0 );
-    m_nHatchTabPage = AddTabPage( "RID_SVXPAGE_HATCH", SvxHatchTabPage::Create, 0 );
-    m_nBitmapTabPage = AddTabPage( "RID_SVXPAGE_BITMAP", SvxBitmapTabPage::Create,  0);
+    m_nTransparenceTabPage = AddTabPage( "RID_SVXPAGE_TRANSPARENCE", SvxTransparenceTabPage::Create,  nullptr);
+    m_nColorTabPage = AddTabPage( "RID_SVXPAGE_COLOR", SvxColorTabPage::Create, nullptr );
+    m_nGradientTabPage = AddTabPage( "RID_SVXPAGE_GRADIENT", SvxGradientTabPage::Create, nullptr );
+    m_nHatchTabPage = AddTabPage( "RID_SVXPAGE_HATCH", SvxHatchTabPage::Create, nullptr );
+    m_nBitmapTabPage = AddTabPage( "RID_SVXPAGE_BITMAP", SvxBitmapTabPage::Create,  nullptr);
 
     SetCurPageId( "RID_SVXPAGE_AREA" );
 

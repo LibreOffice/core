@@ -92,7 +92,7 @@ private:
     static void fillAllSubsets(ListBox &rListBox);
 
 public:
-                    SvxCharacterMap( vcl::Window* pParent, bool bOne=true, const SfxItemSet* pSet=0 );
+                    SvxCharacterMap( vcl::Window* pParent, bool bOne=true, const SfxItemSet* pSet=nullptr );
     virtual         ~SvxCharacterMap();
     virtual void    dispose() override;
 

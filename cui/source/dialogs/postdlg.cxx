@@ -42,7 +42,7 @@ SvxPostItDialog::SvxPostItDialog(vcl::Window* pParent, const SfxItemSet& rCoreSe
     bool bPrevNext)
     : SfxModalDialog(pParent, "CommentDialog", "cui/ui/comment.ui")
     , rSet(rCoreSet)
-    , pOutSet(0)
+    , pOutSet(nullptr)
 {
     get(m_pLastEditFT, "lastedit");
     get(m_pInsertAuthor, "insertauthor");
@@ -130,7 +130,7 @@ SvxPostItDialog::~SvxPostItDialog()
 void SvxPostItDialog::dispose()
 {
     delete pOutSet;
-    pOutSet = 0;
+    pOutSet = nullptr;
     m_pLastEditFT.clear();
     m_pEditED.clear();
     m_pInsertAuthor.clear();

@@ -38,21 +38,21 @@
 
 SvxSearchFormatDialog::SvxSearchFormatDialog(vcl::Window* pParent, const SfxItemSet& rSet)
     : SfxTabDialog(pParent, "SearchFormatDialog", "cui/ui/searchformatdialog.ui", &rSet)
-    , m_pFontList(NULL)
+    , m_pFontList(nullptr)
     , m_nNamePageId(0)
     , m_nParaStdPageId(0)
     , m_nParaAlignPageId(0)
     , m_nBackPageId(0)
 {
-    m_nNamePageId = AddTabPage("font", SvxCharNamePage::Create, 0);
-    AddTabPage("fonteffects", SvxCharEffectsPage::Create, 0);
-    AddTabPage("position", SvxCharPositionPage::Create, 0);
-    AddTabPage("asianlayout", SvxCharTwoLinesPage::Create, 0);
-    m_nParaStdPageId = AddTabPage("labelTP_PARA_STD", SvxStdParagraphTabPage::Create, 0);
-    m_nParaAlignPageId = AddTabPage("labelTP_PARA_ALIGN", SvxParaAlignTabPage::Create, 0);
-    AddTabPage("labelTP_PARA_EXT", SvxExtParagraphTabPage::Create, 0);
-    AddTabPage("labelTP_PARA_ASIAN", SvxAsianTabPage::Create, 0 );
-    m_nBackPageId = AddTabPage("background", SvxBackgroundTabPage::Create, 0);
+    m_nNamePageId = AddTabPage("font", SvxCharNamePage::Create, nullptr);
+    AddTabPage("fonteffects", SvxCharEffectsPage::Create, nullptr);
+    AddTabPage("position", SvxCharPositionPage::Create, nullptr);
+    AddTabPage("asianlayout", SvxCharTwoLinesPage::Create, nullptr);
+    m_nParaStdPageId = AddTabPage("labelTP_PARA_STD", SvxStdParagraphTabPage::Create, nullptr);
+    m_nParaAlignPageId = AddTabPage("labelTP_PARA_ALIGN", SvxParaAlignTabPage::Create, nullptr);
+    AddTabPage("labelTP_PARA_EXT", SvxExtParagraphTabPage::Create, nullptr);
+    AddTabPage("labelTP_PARA_ASIAN", SvxAsianTabPage::Create, nullptr );
+    m_nBackPageId = AddTabPage("background", SvxBackgroundTabPage::Create, nullptr);
 
     // remove asian tabpages if necessary
     SvtCJKOptions aCJKOptions;
@@ -70,7 +70,7 @@ SvxSearchFormatDialog::~SvxSearchFormatDialog()
 void SvxSearchFormatDialog::dispose()
 {
     delete m_pFontList;
-    m_pFontList = NULL;
+    m_pFontList = nullptr;
     SfxTabDialog::dispose();
 }
 
@@ -78,7 +78,7 @@ void SvxSearchFormatDialog::PageCreated( sal_uInt16 nId, SfxTabPage& rPage )
 {
     if (nId == m_nNamePageId)
     {
-        const FontList* pApm_pFontList = 0;
+        const FontList* pApm_pFontList = nullptr;
         SfxObjectShell* pSh = SfxObjectShell::Current();
 
         if ( pSh )
@@ -161,7 +161,7 @@ SvxSearchAttributeDialog::SvxSearchAttributeDialog(vcl::Window* pParent,
 
             // item resources are in svx
             sal_uInt32 nId  = aAttrNames.FindIndex( nSlot );
-            SvTreeListEntry* pEntry = NULL;
+            SvTreeListEntry* pEntry = nullptr;
             if ( RESARRAY_INDEX_NOTFOUND != nId )
                 pEntry = m_pAttrLB->SvTreeListBox::InsertEntry( aAttrNames.GetString(nId) );
             else
@@ -216,7 +216,7 @@ IMPL_LINK_NOARG_TYPED(SvxSearchAttributeDialog, OKHdl, Button*, void)
                     rItem.pItem = reinterpret_cast<SfxPoolItem*>(-1);
                 }
                 else if( IsInvalidItem( rItem.pItem ) )
-                    rItem.pItem = 0;
+                    rItem.pItem = nullptr;
                 j = 1;
                 break;
             }

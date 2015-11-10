@@ -40,7 +40,7 @@ SvxFontSubstTabPage::SvxFontSubstTabPage( vcl::Window* pParent,
                                 const SfxItemSet& rSet )
     : SfxTabPage(pParent, "OptFontsPage", "cui/ui/optfontspage.ui", &rSet)
     , pConfig(new SvtFontSubstConfig)
-    , pCheckButtonData(0)
+    , pCheckButtonData(nullptr)
 {
     get(m_pUseTableCB, "usetable");
     get(m_pReplacements, "replacements");
@@ -147,9 +147,9 @@ SvxFontSubstTabPage::~SvxFontSubstTabPage()
 void SvxFontSubstTabPage::dispose()
 {
     delete pCheckButtonData;
-    pCheckButtonData = NULL;
+    pCheckButtonData = nullptr;
     delete pConfig;
-    pConfig = NULL;
+    pConfig = nullptr;
     m_pCheckLB.disposeAndClear();
     m_pUseTableCB.clear();
     m_pReplacements.clear();
@@ -322,7 +322,7 @@ void SvxFontSubstTabPage::SelectHdl(vcl::Window* pWin)
     {
         SvTreeListEntry* pEntry = m_pCheckLB->FirstSelected();
 
-        if (m_pCheckLB->NextSelected(pEntry) == 0)
+        if (m_pCheckLB->NextSelected(pEntry) == nullptr)
         {
             m_pFont1CB->SetText(SvTabListBox::GetEntryText(pEntry, 0));
             m_pFont2CB->SetText(SvTabListBox::GetEntryText(pEntry, 1));
@@ -387,12 +387,12 @@ void SvxFontSubstTabPage::CheckEnable()
             bApply = false;
         else if(m_pCheckLB->GetEntryPos(sEntry) != 0xffffffff)
             bApply = false;
-        else if(pEntry != 0 && m_pCheckLB->NextSelected(pEntry) != 0)
+        else if(pEntry != nullptr && m_pCheckLB->NextSelected(pEntry) != nullptr)
             bApply = false;
         else
             bApply = true;
 
-        bDelete = pEntry != 0;
+        bDelete = pEntry != nullptr;
 
         m_pApply->Enable(bApply);
         m_pDelete->Enable(bDelete);

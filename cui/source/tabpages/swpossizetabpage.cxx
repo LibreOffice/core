@@ -503,9 +503,9 @@ static sal_uLong lcl_GetLBRelationsForStrID( const FrmMap* _pMap,
 
 SvxSwPosSizeTabPage::SvxSwPosSizeTabPage(vcl::Window* pParent, const SfxItemSet& rInAttrs)
     : SfxTabPage(pParent, "SwPosSizePage", "cui/ui/swpossizepage.ui", &rInAttrs)
-    , m_pVMap(0)
-    , m_pHMap(0)
-    , m_pSdrView(0)
+    , m_pVMap(nullptr)
+    , m_pHMap(nullptr)
+    , m_pSdrView(nullptr)
     , m_nOldH(HoriOrientation::CENTER)
     , m_nOldHRel(RelOrientation::FRAME)
     , m_nOldV(VertOrientation::TOP)
@@ -848,7 +848,7 @@ bool SvxSwPosSizeTabPage::FillItemSet( SfxItemSet* rSet)
                 }
             }
             if(m_pHoriMirrorCB->IsEnabled() && m_pHoriMirrorCB->IsValueChangedFromSaved())
-                bModified |= 0 != rSet->Put(SfxBoolItem(SID_ATTR_TRANSFORM_HORI_MIRROR, m_pHoriMirrorCB->IsChecked()));
+                bModified |= nullptr != rSet->Put(SfxBoolItem(SID_ATTR_TRANSFORM_HORI_MIRROR, m_pHoriMirrorCB->IsChecked()));
 
             if ( m_pVMap )
             {
@@ -892,7 +892,7 @@ bool SvxSwPosSizeTabPage::FillItemSet( SfxItemSet* rSet)
                 {
                     std::unique_ptr<SfxBoolItem> pFollow(static_cast<SfxBoolItem*>(pItem->Clone()));
                     pFollow->SetValue(m_pFollowCB->IsChecked());
-                    bModified |= 0 != rSet->Put(*pFollow);
+                    bModified |= nullptr != rSet->Put(*pFollow);
                 }
             }
         }
@@ -1097,7 +1097,7 @@ void SvxSwPosSizeTabPage::EnableAnchorTypes(sal_uInt16 nAnchorEnable)
 short SvxSwPosSizeTabPage::GetAnchorType(bool* pbHasChanged)
 {
     short nRet = -1;
-    RadioButton* pCheckedButton = 0;
+    RadioButton* pCheckedButton = nullptr;
     if(m_pToParaRB->IsEnabled())
     {
         if(m_pToPageRB->IsChecked())
@@ -1559,7 +1559,7 @@ void SvxSwPosSizeTabPage::InitPos(short nAnchor,
     else if ( nAnchor == TextContentAnchorType_AS_CHARACTER )
     {
         m_pVMap = m_bHtmlMode ? aVAsCharHtmlMap     : aVAsCharMap;
-        m_pHMap = 0;
+        m_pHMap = nullptr;
         bEnable = false;
     }
     m_pHoriLB->Enable( bEnable );

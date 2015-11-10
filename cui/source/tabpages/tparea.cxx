@@ -108,7 +108,7 @@ IMPL_LINK_NOARG_TYPED(SvxTransparenceTabPage, ClickTransGradientHdl_Impl, Button
 
     // preview
     rXFSet.ClearItem (XATTR_FILLTRANSPARENCE);
-    ModifiedTrgrHdl_Impl (NULL);
+    ModifiedTrgrHdl_Impl (nullptr);
 }
 
 SvxTransparenceTabPage::~SvxTransparenceTabPage()
@@ -311,8 +311,8 @@ VclPtr<SfxTabPage> SvxTransparenceTabPage::Create(vcl::Window* pWindow, const Sf
 
 bool SvxTransparenceTabPage::FillItemSet(SfxItemSet* rAttrs)
 {
-    const SfxPoolItem* pGradientItem = NULL;
-    const SfxPoolItem* pLinearItem = NULL;
+    const SfxPoolItem* pGradientItem = nullptr;
+    const SfxPoolItem* pLinearItem = nullptr;
     SfxItemState eStateGradient(rOutAttrs.GetItemState(XATTR_FILLFLOATTRANSPARENCE, true, &pGradientItem));
     SfxItemState eStateLinear(rOutAttrs.GetItemState(XATTR_FILLTRANSPARENCE, true, &pLinearItem));
     bool bGradActive = (eStateGradient == SfxItemState::SET && static_cast<const XFillFloatTransparenceItem*>(pGradientItem)->IsEnabled());
@@ -413,13 +413,13 @@ bool SvxTransparenceTabPage::FillItemSet(SfxItemSet* rAttrs)
 
 void SvxTransparenceTabPage::Reset(const SfxItemSet* rAttrs)
 {
-    const SfxPoolItem* pGradientItem = NULL;
+    const SfxPoolItem* pGradientItem = nullptr;
     SfxItemState eStateGradient(rAttrs->GetItemState(XATTR_FILLFLOATTRANSPARENCE, true, &pGradientItem));
     if(!pGradientItem)
         pGradientItem = &rAttrs->Get(XATTR_FILLFLOATTRANSPARENCE);
     bool bGradActive = (eStateGradient == SfxItemState::SET && static_cast<const XFillFloatTransparenceItem*>(pGradientItem)->IsEnabled());
 
-    const SfxPoolItem* pLinearItem = NULL;
+    const SfxPoolItem* pLinearItem = nullptr;
     SfxItemState eStateLinear(rAttrs->GetItemState(XATTR_FILLTRANSPARENCE, true, &pLinearItem));
     if(!pLinearItem)
         pLinearItem = &rAttrs->Get(XATTR_FILLTRANSPARENCE);
@@ -446,20 +446,20 @@ void SvxTransparenceTabPage::Reset(const SfxItemSet* rAttrs)
     {
         // transparence gradient, set controls appropriate to item
         m_pRbtTransGradient->Check();
-        ClickTransGradientHdl_Impl(NULL);
+        ClickTransGradientHdl_Impl(nullptr);
     }
     else if(bLinearActive)
     {
         // linear transparence
         m_pRbtTransLinear->Check();
-        ClickTransLinearHdl_Impl(NULL);
+        ClickTransLinearHdl_Impl(nullptr);
     }
     else
     {
         // no transparence
         m_pRbtTransOff->Check();
-        ClickTransOffHdl_Impl(NULL);
-        ModifiedTrgrHdl_Impl(NULL);
+        ClickTransOffHdl_Impl(nullptr);
+        ModifiedTrgrHdl_Impl(nullptr);
     }
 
     // save values
@@ -512,13 +512,13 @@ bool SvxTransparenceTabPage::InitPreview ( const SfxItemSet& rSet )
     // set transparencetyp for preview
     if ( m_pRbtTransOff->IsChecked() )
     {
-        ClickTransOffHdl_Impl(NULL);
+        ClickTransOffHdl_Impl(nullptr);
     } else if ( m_pRbtTransLinear->IsChecked() )
     {
-        ClickTransLinearHdl_Impl(NULL);
+        ClickTransLinearHdl_Impl(nullptr);
     } else if ( m_pRbtTransGradient->IsChecked() )
     {
-        ClickTransGradientHdl_Impl(NULL);
+        ClickTransGradientHdl_Impl(nullptr);
     }
 
     // Get fillstyle for preview
@@ -601,10 +601,10 @@ SvxAreaTabPage::SvxAreaTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs
     m_rOutAttrs (rInAttrs ),
     m_eRP( RP_LT ),
 
-    m_pColorList( NULL ),
-    m_pGradientList( NULL ),
-    m_pHatchingList( NULL ),
-    m_pBitmapList( NULL ),
+    m_pColorList( nullptr ),
+    m_pGradientList( nullptr ),
+    m_pHatchingList( nullptr ),
+    m_pBitmapList( nullptr ),
 
     // local fixed not o be changed values for local pointers
     maFixed_ChangeType(ChangeType::NONE),
@@ -1056,7 +1056,7 @@ bool SvxAreaTabPage::FillItemSet( SfxItemSet* rAttrs )
 
     if( m_nDlgType != 0 || *m_pbAreaTP )
     {
-        const SfxPoolItem* pOld = NULL;
+        const SfxPoolItem* pOld = nullptr;
         drawing::FillStyle eStyle = (drawing::FillStyle) m_pTypeLB->GetSelectEntryPos();
         drawing::FillStyle eSavedStyle = (drawing::FillStyle) m_pTypeLB->GetSavedValue();
         switch( eStyle )
@@ -1673,7 +1673,7 @@ void SvxAreaTabPage::Reset( const SfxItemSet* rAttrs )
         else
             m_pTsbScale->SetState( TRISTATE_TRUE );
 
-        ClickScaleHdl_Impl( NULL );
+        ClickScaleHdl_Impl( nullptr );
     }
     else
         m_pTsbScale->SetState( TRISTATE_INDET );
@@ -1915,7 +1915,7 @@ void SvxAreaTabPage::ClickColorHdl_Impl()
 
 IMPL_LINK_NOARG_TYPED(SvxAreaTabPage, ModifyColorHdl_Impl, ListBox&, void)
 {
-    const SfxPoolItem* pPoolItem = NULL;
+    const SfxPoolItem* pPoolItem = nullptr;
     sal_Int32 _nPos = m_pLbColor->GetSelectEntryPos();
     m_pLbHatchBckgrdColor->SelectEntryPos( _nPos );
     if( _nPos != LISTBOX_ENTRY_NOTFOUND )
@@ -1969,7 +1969,7 @@ void SvxAreaTabPage::ClickGradientHdl_Impl()
 
 IMPL_LINK_NOARG_TYPED(SvxAreaTabPage, ModifyGradientHdl_Impl, ListBox&, void)
 {
-    const SfxPoolItem* pPoolItem = NULL;
+    const SfxPoolItem* pPoolItem = nullptr;
     sal_Int32 _nPos = m_pLbGradient->GetSelectEntryPos();
     if( _nPos != LISTBOX_ENTRY_NOTFOUND )
     {
@@ -2023,7 +2023,7 @@ void SvxAreaTabPage::ClickHatchingHdl_Impl()
 
 IMPL_LINK_NOARG_TYPED(SvxAreaTabPage, ModifyHatchingHdl_Impl, ListBox&, void)
 {
-    const SfxPoolItem* pPoolItem = NULL;
+    const SfxPoolItem* pPoolItem = nullptr;
     sal_Int32 _nPos = m_pLbHatching->GetSelectEntryPos();
     if( _nPos != LISTBOX_ENTRY_NOTFOUND )
     {
@@ -2049,7 +2049,7 @@ IMPL_LINK_NOARG_TYPED(SvxAreaTabPage, ModifyHatchingHdl_Impl, ListBox&, void)
 
 IMPL_LINK_NOARG_TYPED(SvxAreaTabPage, ModifyHatchBckgrdColorHdl_Impl, ListBox&, void)
 {
-    const SfxPoolItem* pPoolItem = NULL;
+    const SfxPoolItem* pPoolItem = nullptr;
     sal_Int32 _nPos = m_pLbHatchBckgrdColor->GetSelectEntryPos();
     m_pLbColor->SelectEntryPos( _nPos );
     if( _nPos != LISTBOX_ENTRY_NOTFOUND )
@@ -2147,7 +2147,7 @@ IMPL_LINK_NOARG_TYPED(SvxAreaTabPage, ModifyBitmapHdl_Impl, ListBox&, void)
     maDirectGraphic.Clear();
     maDirectName.clear();
 
-    const SfxPoolItem* pPoolItem = NULL;
+    const SfxPoolItem* pPoolItem = nullptr;
     sal_Int32 _nPos = m_pLbBitmap->GetSelectEntryPos();
     if( _nPos != LISTBOX_ENTRY_NOTFOUND )
     {

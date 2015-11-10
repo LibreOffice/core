@@ -351,7 +351,7 @@ ColorFieldControl::ColorFieldControl( vcl::Window* pParent, const WinBits& nStyl
 , meMode( DefaultMode )
 , mdX( -1.0 )
 , mdY( -1.0 )
-, mpBitmap( 0 )
+, mpBitmap( nullptr )
 {
     SetControlBackground();
 }
@@ -364,7 +364,7 @@ ColorFieldControl::~ColorFieldControl()
 void ColorFieldControl::dispose()
 {
     delete mpBitmap;
-    mpBitmap = NULL;
+    mpBitmap = nullptr;
     Control::dispose();
 }
 
@@ -389,7 +389,7 @@ void ColorFieldControl::UpdateBitmap()
     const Size aSize(GetOutputSizePixel());
 
     if (mpBitmap && mpBitmap->GetSizePixel() != aSize)
-        delete mpBitmap, mpBitmap = NULL;
+        delete mpBitmap, mpBitmap = nullptr;
 
     const sal_Int32 nWidth = aSize.Width();
     const sal_Int32 nHeight = aSize.Height();
@@ -565,12 +565,12 @@ void ColorFieldControl::ShowPosition( const Point& rPos, bool bUpdate )
         mdY = double(aSize.Height() - 1.0 - nY) / double(aSize.Height() - 1.0);
 
         BitmapReadAccess* pReadAccess = mpBitmap->AcquireReadAccess();
-        if (pReadAccess != NULL)
+        if (pReadAccess != nullptr)
         {
             // mpBitmap always has a bit count of 24 => use of GetPixel(...) is safe
             maColor = pReadAccess->GetPixel(nY, nX);
             Bitmap::ReleaseAccess(pReadAccess);
-            pReadAccess = NULL;
+            pReadAccess = nullptr;
         }
     }
 }
@@ -748,7 +748,7 @@ private:
 ColorSliderControl::ColorSliderControl( vcl::Window* pParent, const WinBits& nStyle )
     : Control( pParent, nStyle )
     , meMode( DefaultMode )
-    , mpBitmap( 0 )
+    , mpBitmap( nullptr )
     , mnLevel( 0 )
     , mdValue( -1.0 )
 {
@@ -763,7 +763,7 @@ ColorSliderControl::~ColorSliderControl()
 void ColorSliderControl::dispose()
 {
     delete mpBitmap;
-    mpBitmap = NULL;
+    mpBitmap = nullptr;
     Control::dispose();
 }
 
@@ -783,7 +783,7 @@ void ColorSliderControl::UpdateBitmap()
     Size aSize(1, GetOutputSizePixel().Height());
 
     if (mpBitmap && mpBitmap->GetSizePixel() != aSize)
-        delete mpBitmap, mpBitmap = NULL;
+        delete mpBitmap, mpBitmap = nullptr;
 
     if (!mpBitmap)
         mpBitmap = new Bitmap(aSize, 24);

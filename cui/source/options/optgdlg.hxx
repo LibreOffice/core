@@ -62,7 +62,7 @@ private:
     DECL_LINK_TYPED( TwoFigureConfigHdl, SpinField&, void );
     DECL_LINK_TYPED( TwoFigureConfigFocusHdl, Control&, void );
 protected:
-    virtual sfxpg       DeactivatePage( SfxItemSet* pSet = NULL ) override;
+    virtual sfxpg       DeactivatePage( SfxItemSet* pSet = nullptr ) override;
 
 public:
     OfaMiscTabPage( vcl::Window* pParent, const SfxItemSet& rSet );

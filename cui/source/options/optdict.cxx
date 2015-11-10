@@ -179,7 +179,7 @@ IMPL_LINK_NOARG_TYPED(SvxNewDictionaryDialog, OKHdl_Impl, Button*, void)
     }
     catch(...)
     {
-        xNewDic = NULL;
+        xNewDic = nullptr;
 
         // error: couldn't create new dictionary
         SfxErrorContext aContext( ERRCTX_SVX_LINGU_DICTIONARY, OUString(),
@@ -417,7 +417,7 @@ void SvxEditDictionaryDialog::RemoveDictEntry(SvTreeListEntry* pEntry)
 {
     sal_Int32 nLBPos = pAllDictsLB->GetSelectEntryPos();
 
-    if ( pEntry != NULL && nLBPos != LISTBOX_ENTRY_NOTFOUND )
+    if ( pEntry != nullptr && nLBPos != LISTBOX_ENTRY_NOTFOUND )
     {
         OUString sTmpShort(SvTabListBox::GetEntryText(pEntry, 0));
 
@@ -547,7 +547,7 @@ void SvxEditDictionaryDialog::ShowWords_Impl( sal_uInt16 nId )
             aStr += "\t";
             aStr += pEntry[i]->getReplacementText();
         }
-        pWordsLB->InsertEntry(aStr, 0, false, nPos == TREELIST_ENTRY_NOTFOUND ?  TREELIST_APPEND : nPos);
+        pWordsLB->InsertEntry(aStr, nullptr, false, nPos == TREELIST_ENTRY_NOTFOUND ?  TREELIST_APPEND : nPos);
     }
 
     if (pWordsLB->GetEntryCount())
@@ -661,7 +661,7 @@ bool SvxEditDictionaryDialog::NewDelHdl(void* pBtn)
                 sEntry += aReplaceStr;
             }
 
-            SvTreeListEntry* pNewEntry = NULL;
+            SvTreeListEntry* pNewEntry = nullptr;
             if(_pEntry) // entry selected in pWordsLB ie action = modify entry
             {
                 pWordsLB->SetEntryText( sEntry, _pEntry );
@@ -670,7 +670,7 @@ bool SvxEditDictionaryDialog::NewDelHdl(void* pBtn)
             else
             {
                 _nPos = GetLBInsertPos( aNewWord );
-                SvTreeListEntry* pInsEntry = pWordsLB->InsertEntry(sEntry, 0, false,
+                SvTreeListEntry* pInsEntry = pWordsLB->InsertEntry(sEntry, nullptr, false,
                             _nPos == TREELIST_ENTRY_NOTFOUND ? TREELIST_APPEND : _nPos);
                 pNewEntry = pInsEntry;
             }

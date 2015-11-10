@@ -52,12 +52,12 @@ SvxGradientTabPage::SvxGradientTabPage
 
     m_rOutAttrs           ( rInAttrs ),
 
-    m_pnGradientListState ( 0 ),
-    m_pnColorListState    ( 0 ),
-    m_pPageType           ( 0 ),
+    m_pnGradientListState ( nullptr ),
+    m_pnColorListState    ( nullptr ),
+    m_pPageType           ( nullptr ),
     m_nDlgType            ( 0 ),
-    m_pPos                ( 0 ),
-    m_pbAreaTP            ( 0 ),
+    m_pPos                ( nullptr ),
+    m_pbAreaTP            ( nullptr ),
 
     m_aXFStyleItem        ( drawing::FillStyle_GRADIENT ),
     m_aXGradientItem      ( OUString(), XGradient( COL_BLACK, COL_WHITE ) ),
@@ -306,14 +306,14 @@ long SvxGradientTabPage::CheckChanges_Impl()
             {
                 case RET_BTN_1:
                 {
-                    ClickModifyHdl_Impl( NULL );
+                    ClickModifyHdl_Impl( nullptr );
                     aGradient = m_pGradientList->GetGradient( nPos )->GetGradient();
                 }
                 break;
 
                 case RET_BTN_2:
                 {
-                    ClickAddHdl_Impl( NULL );
+                    ClickAddHdl_Impl( nullptr );
                     nPos = m_pLbGradients->GetSelectEntryPos();
                     aGradient = m_pGradientList->GetGradient( nPos )->GetGradient();
                 }
@@ -819,7 +819,7 @@ IMPL_LINK_NOARG_TYPED(SvxGradientTabPage, ChangeGradientHdl_Impl, ListBox&, void
         pGradient.reset(new XGradient( m_pGradientList->GetGradient( nPos )->GetGradient() ));
     else
     {
-        const SfxPoolItem* pPoolItem = NULL;
+        const SfxPoolItem* pPoolItem = nullptr;
         if( SfxItemState::SET == m_rOutAttrs.GetItemState( GetWhich( XATTR_FILLSTYLE ), true, &pPoolItem ) )
         {
             if( ( drawing::FillStyle_GRADIENT == (drawing::FillStyle) static_cast<const XFillStyleItem*>( pPoolItem )->GetValue() ) &&

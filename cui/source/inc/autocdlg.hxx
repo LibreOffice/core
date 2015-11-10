@@ -290,7 +290,7 @@ public:
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;
     virtual void        Reset( const SfxItemSet* rSet ) override;
     virtual void        ActivatePage( const SfxItemSet& ) override;
-    virtual sfxpg       DeactivatePage( SfxItemSet* pSet = 0 ) override;
+    virtual sfxpg       DeactivatePage( SfxItemSet* pSet = nullptr ) override;
 
     void    SetLanguage(LanguageType eSet);
     void    DeleteEntry(const OUString& sShort, const OUString& sLong);
@@ -350,7 +350,7 @@ public:
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;
     virtual void        Reset( const SfxItemSet* rSet ) override;
     virtual void        ActivatePage( const SfxItemSet& ) override;
-    virtual sfxpg       DeactivatePage( SfxItemSet* pSet = 0 ) override;
+    virtual sfxpg       DeactivatePage( SfxItemSet* pSet = nullptr ) override;
     void                SetLanguage(LanguageType eSet);
 
 };
@@ -432,7 +432,7 @@ public:
     public:
         AutoCompleteMultiListBox(vcl::Window *pParent, WinBits nBits)
             : MultiListBox(pParent, nBits)
-            , m_pPage(NULL)
+            , m_pPage(nullptr)
         {
         }
         virtual ~AutoCompleteMultiListBox();

@@ -81,10 +81,10 @@ OfaAutoCorrDlg::OfaAutoCorrDlg(vcl::Window* pParent, const SfxItemSet* _pSet )
             bOpenSmartTagOptions = true;
     }
 
-    AddTabPage("options", OfaAutocorrOptionsPage::Create, 0);
-    AddTabPage("apply", OfaSwAutoFmtOptionsPage::Create, 0);
-    AddTabPage("wordcompletion", OfaAutoCompleteTabPage::Create, 0);
-    AddTabPage("smarttags", OfaSmartTagOptionsTabPage::Create, 0);
+    AddTabPage("options", OfaAutocorrOptionsPage::Create, nullptr);
+    AddTabPage("apply", OfaSwAutoFmtOptionsPage::Create, nullptr);
+    AddTabPage("wordcompletion", OfaAutoCompleteTabPage::Create, nullptr);
+    AddTabPage("smarttags", OfaSmartTagOptionsTabPage::Create, nullptr);
 
     if (!bShowSWOptions)
     {
@@ -103,9 +103,9 @@ OfaAutoCorrDlg::OfaAutoCorrDlg(vcl::Window* pParent, const SfxItemSet* _pSet )
         RemoveTabPage("options");
     }
 
-    m_nReplacePageId = AddTabPage("replace", OfaAutocorrReplacePage::Create, 0);
-    m_nExceptionsPageId = AddTabPage("exceptions",  OfaAutocorrExceptPage::Create, 0);
-    AddTabPage("localized", OfaQuoteTabPage::Create, 0);
+    m_nReplacePageId = AddTabPage("replace", OfaAutocorrReplacePage::Create, nullptr);
+    m_nExceptionsPageId = AddTabPage("exceptions",  OfaAutocorrExceptPage::Create, nullptr);
+    AddTabPage("localized", OfaQuoteTabPage::Create, nullptr);
 
     // initialize languages
     //! LANGUAGE_NONE is displayed as '[All]' and the LanguageType
@@ -430,7 +430,7 @@ OfaSwAutoFmtOptionsPage::OfaSwAutoFmtOptionsPage( vcl::Window* pParent,
     , sDelSpaceAtSttEnd(CUI_RESSTR(RID_SVXSTR_DEL_SPACES_AT_STT_END))
     , sDelSpaceBetweenLines(CUI_RESSTR(RID_SVXSTR_DEL_SPACES_BETWEEN_LINES))
     , nPercent(50)
-    , pCheckButtonData(NULL)
+    , pCheckButtonData(nullptr)
 {
     get(m_pEditPB, "edit");
 
@@ -502,7 +502,7 @@ void OfaSwAutoFmtOptionsPage::dispose()
         delete static_cast<ImpUserData*>(m_pCheckLB->GetUserData( APPLY_NUMBERING ));
         delete static_cast<ImpUserData*>(m_pCheckLB->GetUserData( MERGE_SINGLE_LINE_PARA ));
         delete pCheckButtonData;
-        pCheckButtonData = NULL;
+        pCheckButtonData = nullptr;
     }
     m_pCheckLB.disposeAndClear();
     m_pEditPB.clear();
@@ -697,7 +697,7 @@ void OfaSwAutoFmtOptionsPage::Reset( const SfxItemSet* )
     nPercent = pOpt->nRightMargin;
     sMargin = " " +
         unicode::formatPercent(nPercent, Application::GetSettings().GetUILanguageTag());
-    pUserData = new ImpUserData(&sMargin, 0);
+    pUserData = new ImpUserData(&sMargin, nullptr);
     m_pCheckLB->SetUserData( MERGE_SINGLE_LINE_PARA, pUserData );
 
     m_pCheckLB->CheckEntryPos( APPLY_NUMBERING,    CBCOL_SECOND,   pOpt->bSetNumRule );
@@ -717,12 +717,12 @@ void OfaSwAutoFmtOptionsPage::Reset( const SfxItemSet* )
 
 IMPL_LINK_TYPED(OfaSwAutoFmtOptionsPage, SelectHdl, SvTreeListBox*, pBox, void)
 {
-    m_pEditPB->Enable(0 != pBox->FirstSelected()->GetUserData());
+    m_pEditPB->Enable(nullptr != pBox->FirstSelected()->GetUserData());
 }
 
 IMPL_LINK_NOARG_TYPED(OfaSwAutoFmtOptionsPage, DoubleClickEditHdl, SvTreeListBox*, bool)
 {
-    EditHdl(NULL);
+    EditHdl(nullptr);
     return false;
 }
 
@@ -922,9 +922,9 @@ void OfaAutocorrReplacePage::dispose()
     aChangesTable.clear();
 
     delete pCompareClass;
-    pCompareClass = NULL;
+    pCompareClass = nullptr;
     delete pCharClass;
-    pCharClass = NULL;
+    pCharClass = nullptr;
 
     m_pTextOnlyCB.clear();
     m_pShortED.clear();
@@ -1039,7 +1039,7 @@ void OfaAutocorrReplacePage::RefillReplaceBox(bool bFromReset,
         for( size_t i = 0; i < rArray.size(); i++ )
         {
             DoubleString& rDouble = rArray[i];
-            bool bTextOnly = 0 == rDouble.pUserData;
+            bool bTextOnly = nullptr == rDouble.pUserData;
             // formatted text is only in Writer
             if(bSWriter || bTextOnly)
             {
@@ -1149,7 +1149,7 @@ IMPL_LINK_TYPED(OfaAutocorrReplacePage, SelectHdl, SvTreeListBox*, pBox, void)
         }
         m_pReplaceED->SetText( SvTabListBox::GetEntryText(pEntry, 1) );
         // with UserData there is a Formatinfo
-        m_pTextOnlyCB->Check( pEntry->GetUserData() == 0);
+        m_pTextOnlyCB->Check( pEntry->GetUserData() == nullptr);
     }
     else
     {
@@ -1272,7 +1272,7 @@ bool OfaAutocorrReplacePage::NewDelHdl(void* pBtn)
                 nPos = j;
             }
             SvTreeListEntry* pInsEntry = m_pReplaceTLB->InsertEntry(
-                                        sEntry, static_cast< SvTreeListEntry * >(NULL), false,
+                                        sEntry, static_cast< SvTreeListEntry * >(nullptr), false,
                                         nPos == TREELIST_ENTRY_NOTFOUND ? TREELIST_APPEND : nPos);
             if (bKeepSourceFormatting)
             {
@@ -1342,7 +1342,7 @@ IMPL_LINK_TYPED(OfaAutocorrReplacePage, ModifyHdl, Edit&, rEdt, void)
             if( !bFound )
             {
                 m_pReplaceTLB->SelectAll( false );
-                pFirstSel = 0;
+                pFirstSel = nullptr;
                 m_pNewReplacePB->SetText( sNew );
                 if( bReplaceEditChanged )
                     m_pTextOnlyCB->Enable(false);
@@ -1825,7 +1825,7 @@ OfaQuoteTabPage::OfaQuoteTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
     : SfxTabPage(pParent, "ApplyLocalizedPage", "cui/ui/applylocalizedpage.ui", &rSet)
     , sNonBrkSpace(CUI_RESSTR(RID_SVXSTR_NON_BREAK_SPACE))
     , sOrdinal(CUI_RESSTR(RID_SVXSTR_ORDINAL))
-    , pCheckButtonData(NULL)
+    , pCheckButtonData(nullptr)
     , cSglStartQuote(0)
     , cSglEndQuote(0)
     , cStartQuote(0)
@@ -1905,7 +1905,7 @@ OfaQuoteTabPage::~OfaQuoteTabPage()
 void OfaQuoteTabPage::dispose()
 {
     delete pCheckButtonData;
-    pCheckButtonData = NULL;
+    pCheckButtonData = nullptr;
     m_pSwCheckLB.disposeAndClear();
     m_pCheckLB.disposeAndClear();
     m_pSingleTypoCB.clear();
@@ -2187,7 +2187,7 @@ OfaAutoCompleteTabPage::OfaAutoCompleteTabPage(vcl::Window* pParent,
     const SfxItemSet& rSet)
     : SfxTabPage(pParent, "WordCompletionPage",
         "cui/ui/wordcompletionpage.ui", &rSet)
-    , m_pAutoCompleteList(0)
+    , m_pAutoCompleteList(nullptr)
     , m_nAutoCmpltListCnt(0)
 {
     get(m_pCBActiv, "enablewordcomplete");
@@ -2348,7 +2348,7 @@ void OfaAutoCompleteTabPage::Reset( const SfxItemSet*  )
     {
         m_pAutoCompleteList = const_cast<editeng::SortedAutoCompleteStrings*>(
                 pOpt->m_pAutoCompleteList);
-        pOpt->m_pAutoCompleteList = 0;
+        pOpt->m_pAutoCompleteList = nullptr;
         m_nAutoCmpltListCnt = m_pAutoCompleteList->size();
         for (size_t n = 0; n < m_nAutoCmpltListCnt; ++n)
         {
@@ -2453,7 +2453,7 @@ bool OfaAutoCompleteTabPage::AutoCompleteMultiListBox::PreNotify(
         switch( rKeyCode.GetModifier() | rKeyCode.GetCode() )
         {
         case KEY_DELETE:
-            m_pPage->DeleteHdl( 0 );
+            m_pPage->DeleteHdl( nullptr );
             bHandled = true;
             break;
 
@@ -2679,8 +2679,8 @@ bool OfaSmartTagOptionsTabPage::FillItemSet( SfxItemSet* )
     if ( bModifiedSmartTagTypes || bModifiedRecognize )
     {
         bool bLabelTextWithSmartTags = m_pMainCB->IsChecked();
-        pSmartTagMgr->WriteConfiguration( bModifiedRecognize     ? &bLabelTextWithSmartTags : 0,
-                                          bModifiedSmartTagTypes ? &aDisabledSmartTagTypes : 0 );
+        pSmartTagMgr->WriteConfiguration( bModifiedRecognize     ? &bLabelTextWithSmartTags : nullptr,
+                                          bModifiedSmartTagTypes ? &aDisabledSmartTagTypes : nullptr );
     }
 
     return true;

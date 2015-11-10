@@ -110,7 +110,7 @@ void SearchThread::execute()
         ImplSearch( maStartURL, aFormats, mpBrowser->bSearchRecursive );
     }
 
-    Application::PostUserEvent( LINK( mpProgress, SearchProgress, CleanUpHdl ), NULL, true );
+    Application::PostUserEvent( LINK( mpProgress, SearchProgress, CleanUpHdl ), nullptr, true );
 }
 
 
@@ -337,7 +337,7 @@ void TakeThread::execute()
         delete pStatusProgress;
     }
 
-    Application::PostUserEvent( LINK( mpProgress, TakeProgress, CleanUpHdl ), NULL, true );
+    Application::PostUserEvent( LINK( mpProgress, TakeProgress, CleanUpHdl ), nullptr, true );
 }
 
 // - TakeProgress -
@@ -453,7 +453,7 @@ void TakeProgress::StartExecuteModal( const Link<Dialog&,void>& rEndDialogHdl )
 ActualizeProgress::ActualizeProgress(vcl::Window* pWindow, GalleryTheme* pThm)
     : ModalDialog(pWindow, "GalleryUpdateProgress",
         "cui/ui/galleryupdateprogress.ui")
-    , pIdle(NULL)
+    , pIdle(nullptr)
     , pTheme(pThm)
 {
     get(m_pFtActualizeFile, "file");
@@ -506,7 +506,7 @@ IMPL_LINK_TYPED( ActualizeProgress, TimeoutHdl, Idle*, _pTimer, void)
     }
 
     pTheme->Actualize( LINK( this, ActualizeProgress, ActualizeHdl ), &aStatusProgress );
-    ClickCancelBtn( NULL );
+    ClickCancelBtn( nullptr );
 }
 
 
@@ -616,8 +616,8 @@ GalleryThemeProperties::GalleryThemeProperties(vcl::Window* pParent,
     , m_nGeneralPageId(0)
     , m_nFilesPageId(0)
 {
-    m_nGeneralPageId = AddTabPage("general", TPGalleryThemeGeneral::Create, 0);
-    m_nFilesPageId = AddTabPage("files", TPGalleryThemeProperties::Create, 0);
+    m_nGeneralPageId = AddTabPage("general", TPGalleryThemeGeneral::Create, nullptr);
+    m_nFilesPageId = AddTabPage("files", TPGalleryThemeProperties::Create, nullptr);
 
     if( pData->pTheme->IsReadOnly() )
         RemoveTabPage(m_nFilesPageId);
@@ -644,7 +644,7 @@ void GalleryThemeProperties::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
 TPGalleryThemeGeneral::TPGalleryThemeGeneral(vcl::Window* pParent, const SfxItemSet& rSet)
     : SfxTabPage(pParent, "GalleryGeneralPage",
         "cui/ui/gallerygeneralpage.ui", &rSet)
-    , pData(NULL)
+    , pData(nullptr)
 {
     get(m_pFiMSImage, "image");
     get(m_pEdtMSName, "name");
@@ -744,7 +744,7 @@ VclPtr<SfxTabPage> TPGalleryThemeGeneral::Create( vcl::Window* pParent, const Sf
 // - TPGalleryThemeProperties -
 TPGalleryThemeProperties::TPGalleryThemeProperties( vcl::Window* pWindow, const SfxItemSet& rSet )
     : SfxTabPage(pWindow, "GalleryFilesPage", "cui/ui/galleryfilespage.ui", &rSet)
-    , pData(NULL)
+    , pData(nullptr)
     , nCurFilterPos(0)
     , nFirstExtFilterPos(0)
     , bEntriesFound(false)
@@ -871,7 +871,7 @@ void TPGalleryThemeProperties::FillFilterList()
         aExt = rFilter.GetImportFormatShortName( i );
         aName = rFilter.GetImportFormatName( i );
         size_t entryIndex = 0;
-        FilterEntry* pTestEntry = aFilterEntryList.empty() ? NULL : aFilterEntryList[ entryIndex ];
+        FilterEntry* pTestEntry = aFilterEntryList.empty() ? nullptr : aFilterEntryList[ entryIndex ];
         bool bInList = false;
 
         OUString aExtensions;
@@ -899,7 +899,7 @@ void TPGalleryThemeProperties::FillFilterList()
                 break;
             }
             pTestEntry = ( ++entryIndex < aFilterEntryList.size() )
-                       ? aFilterEntryList[ entryIndex ] : NULL;
+                       ? aFilterEntryList[ entryIndex ] : nullptr;
         }
         if ( !bInList )
         {
@@ -1206,7 +1206,7 @@ IMPL_LINK_NOARG_TYPED(TPGalleryThemeProperties, DClickFoundHdl, ListBox&, void)
         aPreviewTimer.Stop();
 
         if (m_pLbxFound->GetSelectEntryCount() == 1 && bEntriesFound)
-            ClickTakeHdl(NULL);
+            ClickTakeHdl(nullptr);
     }
 }
 

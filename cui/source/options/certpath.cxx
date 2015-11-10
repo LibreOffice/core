@@ -136,7 +136,7 @@ IMPL_LINK_NOARG_TYPED(CertPathDialog, OKHdl_Impl, Button*, void)
 OUString CertPathDialog::getDirectory() const
 {
     SvTreeListEntry* pEntry = m_pCertPathList->FirstSelected();
-    void* pCertPath = pEntry ? pEntry->GetUserData() : NULL;
+    void* pCertPath = pEntry ? pEntry->GetUserData() : nullptr;
     return pCertPath ? *static_cast<OUString*>(pCertPath) : OUString();
 }
 

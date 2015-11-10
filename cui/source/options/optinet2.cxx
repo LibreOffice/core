@@ -595,8 +595,8 @@ void SvxScriptExecListBox::RequestHelp( const HelpEvent& rHEvt )
 SvxSecurityTabPage::SvxSecurityTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
     : SfxTabPage(pParent, "OptSecurityPage", "cui/ui/optsecuritypage.ui", &rSet)
     , mpSecOptions(new SvtSecurityOptions)
-    , mpSecOptDlg(NULL)
-    , mpCertPathDlg(NULL)
+    , mpSecOptDlg(nullptr)
+    , mpCertPathDlg(nullptr)
 {
     get(m_pSecurityOptionsPB, "options");
     get(m_pSavePasswordsCB, "savepassword");
@@ -645,7 +645,7 @@ SvxSecurityTabPage::~SvxSecurityTabPage()
 void SvxSecurityTabPage::dispose()
 {
     delete mpSecOptions;
-    mpSecOptions = NULL;
+    mpSecOptions = nullptr;
     mpCertPathDlg.disposeAndClear();
     mpSecOptDlg.clear();
     m_pSecurityOptionsPB.clear();
@@ -995,7 +995,7 @@ SvxEMailTabPage::~SvxEMailTabPage()
 void SvxEMailTabPage::dispose()
 {
     delete pImpl;
-    pImpl = NULL;
+    pImpl = nullptr;
     m_pMailContainer.clear();
     m_pMailerURLFI.clear();
     m_pMailerURLED.clear();

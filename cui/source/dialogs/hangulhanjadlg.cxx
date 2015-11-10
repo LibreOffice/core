@@ -100,8 +100,8 @@ namespace svx
 
     public:
         void Paint( OutputDevice& _rDevice, const Rectangle& _rRect, DrawTextFlags _nTextStyle,
-            Rectangle* _pPrimaryLocation = NULL, Rectangle* _pSecondaryLocation = NULL,
-            vcl::ControlLayoutData* _pLayoutData = NULL );
+            Rectangle* _pPrimaryLocation = nullptr, Rectangle* _pSecondaryLocation = nullptr,
+            vcl::ControlLayoutData* _pLayoutData = nullptr );
     };
 
     PseudoRubyText::PseudoRubyText()
@@ -121,9 +121,9 @@ namespace svx
                                Rectangle* _pPrimaryLocation, Rectangle* _pSecondaryLocation,
                                vcl::ControlLayoutData* _pLayoutData )
     {
-        bool bLayoutOnly  = (NULL != _pLayoutData);
-        MetricVector* pTextMetrics = bLayoutOnly ? &_pLayoutData->m_aUnicodeBoundRects : NULL;
-        OUString* pDisplayText = bLayoutOnly ? &_pLayoutData->m_aDisplayText       : NULL;
+        bool bLayoutOnly  = (nullptr != _pLayoutData);
+        MetricVector* pTextMetrics = bLayoutOnly ? &_pLayoutData->m_aUnicodeBoundRects : nullptr;
+        OUString* pDisplayText = bLayoutOnly ? &_pLayoutData->m_aDisplayText       : nullptr;
 
         Size aPlaygroundSize(_rRect.GetSize());
 
@@ -551,7 +551,7 @@ namespace svx
 
     HangulHanjaConversionDialog::HangulHanjaConversionDialog( vcl::Window* _pParent, HHC::ConversionDirection _ePrimaryDirection )
         :ModalDialog( _pParent, "HangulHanjaConversionDialog", "cui/ui/hangulhanjaconversiondialog.ui" )
-        ,m_pIgnoreNonPrimary( NULL )
+        ,m_pIgnoreNonPrimary( nullptr )
         ,m_bDocumentMode( true )
     {
         get( m_pFind, "find" );
@@ -743,7 +743,7 @@ namespace svx
 
     IMPL_LINK_TYPED( HangulHanjaConversionDialog, OnConversionDirectionClicked, Button *, pBox, void )
     {
-        CheckBox *pOtherBox = 0;
+        CheckBox *pOtherBox = nullptr;
         if ( pBox == m_pHangulOnly )
             pOtherBox = m_pHanjaOnly;
         else if ( pBox == m_pHanjaOnly )
@@ -802,8 +802,8 @@ namespace svx
         // switch the def button depending if we're working for document text
         if ( bOldDocumentMode != m_bDocumentMode )
         {
-            vcl::Window* pOldDefButton = NULL;
-            vcl::Window* pNewDefButton = NULL;
+            vcl::Window* pOldDefButton = nullptr;
+            vcl::Window* pNewDefButton = nullptr;
             if ( m_bDocumentMode )
             {
                 pOldDefButton = m_pFind;
@@ -1021,7 +1021,7 @@ namespace svx
 
     IMPL_LINK_NOARG_TYPED(HangulHanjaOptionsDialog, DictsLB_SelectHdl, SvTreeListBox*, void)
     {
-        bool bSel = m_pDictsLB->FirstSelected() != NULL;
+        bool bSel = m_pDictsLB->FirstSelected() != nullptr;
 
         m_pEditPB->Enable(bSel);
         m_pDeletePB->Enable(bSel);
@@ -1102,8 +1102,8 @@ namespace svx
     HangulHanjaOptionsDialog::HangulHanjaOptionsDialog(vcl::Window* _pParent)
         : ModalDialog( _pParent, "HangulHanjaOptDialog",
             "cui/ui/hangulhanjaoptdialog.ui" )
-        , m_pCheckButtonData(NULL)
-        , m_xConversionDictionaryList(NULL)
+        , m_pCheckButtonData(nullptr)
+        , m_xConversionDictionaryList(nullptr)
     {
         get(m_pDictsLB, "dicts");
         get(m_pIgnorepostCB, "ignorepost");
@@ -1158,13 +1158,13 @@ namespace svx
             while( pEntry )
             {
                 delete static_cast<OUString const *>(pEntry->GetUserData());
-                pEntry->SetUserData( NULL );
+                pEntry->SetUserData( nullptr );
                 pEntry = m_pDictsLB->Next( pEntry );
             }
         }
 
         delete m_pCheckButtonData;
-        m_pCheckButtonData = NULL;
+        m_pCheckButtonData = nullptr;
 
         m_pDictsLB.clear();
         m_pIgnorepostCB.clear();
@@ -1259,7 +1259,7 @@ namespace svx
     };
 
     SuggestionList::SuggestionList() :
-        m_vElements(MAXNUM_SUGGESTIONS, static_cast<OUString*>(NULL))
+        m_vElements(MAXNUM_SUGGESTIONS, static_cast<OUString*>(nullptr))
     {
         m_nAct = m_nNumOfEntries = 0;
     }
@@ -1274,7 +1274,7 @@ namespace svx
         bool    bRet = _nNumOfElement < m_vElements.size();
         if( bRet )
         {
-            if( m_vElements[_nNumOfElement] != NULL )
+            if( m_vElements[_nNumOfElement] != nullptr )
                 *(m_vElements[_nNumOfElement]) = _rElement;
             else
             {
@@ -1291,10 +1291,10 @@ namespace svx
         bool    bRet = _nNumOfElement < m_vElements.size();
         if( bRet )
         {
-            if( m_vElements[_nNumOfElement] != NULL )
+            if( m_vElements[_nNumOfElement] != nullptr )
             {
                 delete m_vElements[_nNumOfElement];
-                m_vElements[_nNumOfElement] = NULL;
+                m_vElements[_nNumOfElement] = nullptr;
                 --m_nNumOfEntries;
             }
         }
@@ -1306,7 +1306,7 @@ namespace svx
     {
         if( _nNumOfElement < m_vElements.size())
             return m_vElements[_nNumOfElement];
-        return NULL;
+        return nullptr;
     }
 
     void SuggestionList::Clear()
@@ -1314,10 +1314,10 @@ namespace svx
         if( m_nNumOfEntries )
         {
             for( std::vector<OUString*>::iterator it = m_vElements.begin(); it != m_vElements.end(); ++it )
-                if( *it != NULL )
+                if( *it != nullptr )
                 {
                     delete *it;
-                    *it = NULL;
+                    *it = nullptr;
                  }
 
             m_nNumOfEntries = m_nAct = 0;
@@ -1326,7 +1326,7 @@ namespace svx
 
     const OUString* SuggestionList::_Next()
     {
-        const OUString*   pRet = NULL;
+        const OUString*   pRet = nullptr;
         while( m_nAct < m_vElements.size() && !pRet )
         {
             pRet = m_vElements[ m_nAct ];
@@ -1353,7 +1353,7 @@ namespace svx
             pRet = _Next();
         }
         else
-            pRet = NULL;
+            pRet = nullptr;
 
         return pRet;
     }
@@ -1388,9 +1388,9 @@ namespace svx
 
     SuggestionEdit::SuggestionEdit( vcl::Window* pParent, WinBits nBits )
         : Edit(pParent, nBits)
-        , m_pPrev(NULL)
-        , m_pNext(NULL)
-        , m_pScrollBar(NULL)
+        , m_pPrev(nullptr)
+        , m_pNext(nullptr)
+        , m_pScrollBar(nullptr)
     {
     }
 
@@ -1739,7 +1739,7 @@ namespace svx
         ,m_aEditHintText        ( CUI_RESSTR(RID_SVXSTR_EDITHINT) )
         ,m_rDictList            ( _rDictList )
         ,m_nCurrentDict         ( 0xFFFFFFFF )
-        ,m_pSuggestions         ( NULL )
+        ,m_pSuggestions         ( nullptr )
         ,m_nTopPos              ( 0 )
         ,m_bModifiedSuggestions ( false )
         ,m_bModifiedOriginal    ( false )
@@ -1754,10 +1754,10 @@ namespace svx
         get( m_aEdit3, "edit3" );
         get( m_aEdit4, "edit4" );
 
-        m_aEdit1->init( m_aScrollSB, NULL, m_aEdit2 );
+        m_aEdit1->init( m_aScrollSB, nullptr, m_aEdit2 );
         m_aEdit2->init( m_aScrollSB, m_aEdit1, m_aEdit3 );
         m_aEdit3->init( m_aScrollSB, m_aEdit2, m_aEdit4 );
-        m_aEdit4->init( m_aScrollSB, m_aEdit3, NULL );
+        m_aEdit4->init( m_aScrollSB, m_aEdit3, nullptr );
 
         m_aOriginalLB->SetModifyHdl( LINK( this, HangulHanjaEditDictDialog, OriginalModifyHdl ) );
 
@@ -1807,7 +1807,7 @@ namespace svx
     void HangulHanjaEditDictDialog::dispose()
     {
         delete m_pSuggestions;
-        m_pSuggestions = NULL;
+        m_pSuggestions = nullptr;
         m_aBookLB.clear();
         m_aOriginalLB.clear();
         m_aEdit1.clear();

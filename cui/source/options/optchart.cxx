@@ -65,7 +65,7 @@ SvxDefaultColorOptPage::SvxDefaultColorOptPage(vcl::Window* pParent, const SfxIt
     pChartOptions = new SvxChartOptions;
     pColorList = XColorList::CreateStdColorList();
 
-    const SfxPoolItem* pItem = NULL;
+    const SfxPoolItem* pItem = nullptr;
     if ( rInAttrs.GetItemState( SID_SCH_EDITOPTIONS, false, &pItem ) == SfxItemState::SET )
     {
         pColorConfig = (static_cast< SvxChartColorTableItem* >(pItem->Clone()) );
@@ -95,9 +95,9 @@ void SvxDefaultColorOptPage::dispose()
         pChartOptions->Commit();
 
         delete pColorConfig;
-        pColorConfig = NULL;
+        pColorConfig = nullptr;
         delete pChartOptions;
-        pChartOptions = NULL;
+        pChartOptions = nullptr;
     }
     m_pLbChartColors.clear();
     m_pValSetColorBox.clear();

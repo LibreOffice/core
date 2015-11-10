@@ -163,7 +163,7 @@ namespace offapp
         if ( ( GetCurRow() >= 0 ) && ( GetCurRow() < m_aSettings.size() ) )
             return &(*(m_aSettings.begin() + GetCurRow()));
 
-        return NULL;
+        return nullptr;
     }
 
 
@@ -247,7 +247,7 @@ namespace offapp
 
     ::svt::CellController* DriverListControl::GetController( long /*nRow*/, sal_uInt16 /*nCol*/ )
     {
-        return NULL;
+        return nullptr;
     }
 
 
@@ -415,7 +415,7 @@ namespace offapp
 
     IMPL_LINK_TYPED( ConnectionPoolOptionsPage, OnDriverRowChanged, const DriverPooling*, pDriverPos, void )
     {
-        bool bValidRow = (NULL != pDriverPos);
+        bool bValidRow = (nullptr != pDriverPos);
         m_pDriverPoolingEnabled->Enable(bValidRow && m_pEnablePooling->IsChecked());
         m_pTimeoutLabel->Enable(bValidRow);
         m_pTimeout->Enable(bValidRow);

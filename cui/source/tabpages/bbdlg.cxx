@@ -42,16 +42,16 @@ SvxBorderBackgroundDlg::SvxBorderBackgroundDlg(vcl::Window *pParent,
     , m_nAreaPageId(0)
     , m_nTransparencePageId(0)
 {
-    AddTabPage("borders", SvxBorderTabPage::Create, 0 );
+    AddTabPage("borders", SvxBorderTabPage::Create, nullptr );
     if (mbEnableDrawingLayerFillStyles)
     {
         //UUUU Here we want full DrawingLayer FillStyle access, so add Area and Transparency TabPages
-        m_nAreaPageId = AddTabPage("area", SvxAreaTabPage::Create, 0);
-        m_nTransparencePageId = AddTabPage("transparence", SvxTransparenceTabPage::Create, 0);
+        m_nAreaPageId = AddTabPage("area", SvxAreaTabPage::Create, nullptr);
+        m_nTransparencePageId = AddTabPage("transparence", SvxTransparenceTabPage::Create, nullptr);
     }
     else
     {
-        m_nBackgroundPageId = AddTabPage("background", SvxBackgroundTabPage::Create, 0 );
+        m_nBackgroundPageId = AddTabPage("background", SvxBackgroundTabPage::Create, nullptr );
     }
 }
 

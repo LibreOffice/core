@@ -54,10 +54,10 @@ struct SpellErrorDescription
                       const css::uno::Sequence< OUString >& rSuggestions,
                       css::uno::Reference< css::linguistic2::XProofreader > rxGrammarChecker,
                       const OUString& rServiceName,
-                      const OUString* pDialogTitle = 0,
-                      const OUString* pExplanation = 0,
-                      const OUString* pRuleId = 0,
-                      const OUString* pExplanationURL = 0 ) :
+                      const OUString* pDialogTitle = nullptr,
+                      const OUString* pExplanation = nullptr,
+                      const OUString* pRuleId = nullptr,
+                      const OUString* pExplanationURL = nullptr ) :
         bIsGrammarError( bGrammar ),
         sErrorText( rText ),
         sDialogTitle( ),

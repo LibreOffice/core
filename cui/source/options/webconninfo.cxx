@@ -137,7 +137,7 @@ WebConnectionInfoDialog::WebConnectionInfoDialog(vcl::Window* pParent)
     m_pRemoveBtn->Enable( false );
     m_pChangeBtn->Enable( false );
 
-    HeaderBarClickedHdl( NULL );
+    HeaderBarClickedHdl( nullptr );
 }
 
 WebConnectionInfoDialog::~WebConnectionInfoDialog()
@@ -156,7 +156,7 @@ void WebConnectionInfoDialog::dispose()
 
 IMPL_LINK_TYPED( WebConnectionInfoDialog, HeaderBarClickedHdl, SvSimpleTable*, pTable, void )
 {
-    m_pPasswordsLB->Resort( NULL == pTable );
+    m_pPasswordsLB->Resort( nullptr == pTable );
 }
 
 
@@ -170,7 +170,7 @@ void WebConnectionInfoDialog::FillPasswordList()
         if ( xMasterPasswd->isPersistentStoringAllowed() )
         {
             uno::Reference< task::XInteractionHandler > xInteractionHandler(
-                task::InteractionHandler::createWithParent(comphelper::getProcessComponentContext(), 0),
+                task::InteractionHandler::createWithParent(comphelper::getProcessComponentContext(), nullptr),
                 uno::UNO_QUERY);
 
             uno::Sequence< task::UrlRecord > aURLEntries = xMasterPasswd->getAllPersistent( xInteractionHandler );
@@ -272,7 +272,7 @@ IMPL_LINK_NOARG_TYPED(WebConnectionInfoDialog, ChangePasswordHdl, Button*, void)
             uno::Reference< task::XInteractionRequest > rRequest( pPasswordRequest );
 
             uno::Reference< task::XInteractionHandler > xInteractionHandler(
-                task::InteractionHandler::createWithParent(comphelper::getProcessComponentContext(), 0),
+                task::InteractionHandler::createWithParent(comphelper::getProcessComponentContext(), nullptr),
                 uno::UNO_QUERY );
             xInteractionHandler->handle( rRequest );
 

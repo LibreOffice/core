@@ -128,7 +128,7 @@ SotClipboardFormatId SvPasteObjectDialog::GetFormat( const TransferableDataHelpe
         // from an accompanied "Object Descriptor" format on the clipboard
         // Remember: these formats mostly appear together on the clipboard
         OUString aName;
-        const OUString* pName = NULL;
+        const OUString* pName = nullptr;
         if ( itName == aSupplementMap.end() )
         {
             SvPasteObjectHelper::GetEmbeddedName(rHelper,aName,aSourceName,nFormat);

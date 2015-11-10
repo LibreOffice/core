@@ -150,7 +150,7 @@ OfaMSFilterTabPage2::OfaMSFilterTabPage2( vcl::Window* pParent, const SfxItemSet
     sChgToFromCalc(CUI_RES(RID_SVXSTR_CHG_CALC)),
     sChgToFromImpress(CUI_RES(RID_SVXSTR_CHG_IMPRESS)),
     sChgToFromSmartArt(CUI_RES(RID_SVXSTR_CHG_SMARTART)),
-    pCheckButtonData(0)
+    pCheckButtonData(nullptr)
 {
     get(m_pCheckLBContainer, "checklbcontainer");
 
@@ -182,7 +182,7 @@ OfaMSFilterTabPage2::~OfaMSFilterTabPage2()
 void OfaMSFilterTabPage2::dispose()
 {
     delete pCheckButtonData;
-    pCheckButtonData = NULL;
+    pCheckButtonData = nullptr;
     m_pCheckLB.disposeAndClear();
     m_pCheckLBContainer.clear();
     aHighlightingRB.clear();
@@ -224,7 +224,7 @@ bool OfaMSFilterTabPage2::FillItemSet( SfxItemSet* )
                         &SvtFilterOptions::SetImpress2PowerPoint },
         { SmartArt,  &SvtFilterOptions::IsSmartArt2Shape,
                         &SvtFilterOptions::SetSmartArt2Shape },
-        { InvalidCBEntry, 0, 0 }
+        { InvalidCBEntry, nullptr, nullptr }
     };
 
     bool bCheck, bFirst = true;
@@ -292,7 +292,7 @@ void OfaMSFilterTabPage2::Reset( const SfxItemSet* )
         { Impress,  &SvtFilterOptions::IsPowerPoint2Impress },
         { Impress,  &SvtFilterOptions::IsImpress2PowerPoint },
         { SmartArt, &SvtFilterOptions::IsSmartArt2Shape },
-        { InvalidCBEntry, NULL }
+        { InvalidCBEntry, nullptr }
     };
 
     bool bFirst = true;
@@ -362,7 +362,7 @@ SvTreeListEntry* OfaMSFilterTabPage2::GetEntry4Type( sal_IntPtr _nType ) const
             return pEntry;
         pEntry = m_pCheckLB->Next( pEntry );
     }
-    return NULL;
+    return nullptr;
 }
 
 void OfaMSFilterTabPage2::MSFltrSimpleTable::SetTabs()

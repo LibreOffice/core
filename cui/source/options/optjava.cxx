@@ -132,12 +132,12 @@ public:
 
 SvxJavaOptionsPage::SvxJavaOptionsPage( vcl::Window* pParent, const SfxItemSet& rSet )
     : SfxTabPage(pParent, "OptAdvancedPage", "cui/ui/optadvancedpage.ui", &rSet)
-    , m_pParamDlg(NULL)
-    , m_pPathDlg(NULL)
+    , m_pParamDlg(nullptr)
+    , m_pPathDlg(nullptr)
 #if HAVE_FEATURE_JAVA
-    , m_parJavaInfo(NULL)
-    , m_parParameters(NULL)
-    , m_pClassPath(NULL)
+    , m_parJavaInfo(nullptr)
+    , m_parParameters(nullptr)
+    , m_pClassPath(nullptr)
     , m_nInfoSize(0)
     , m_nParamSize(0)
 #endif
@@ -456,7 +456,7 @@ void SvxJavaOptionsPage::ClearJavaInfo()
         }
 
         rtl_freeMemory( m_parJavaInfo );
-        m_parJavaInfo = NULL;
+        m_parJavaInfo = nullptr;
         m_nInfoSize = 0;
     }
 #else
@@ -502,7 +502,7 @@ void SvxJavaOptionsPage::LoadJREs()
         AddJRE( pInfo );
     }
 
-    JavaInfo* pSelectedJava = NULL;
+    JavaInfo* pSelectedJava = nullptr;
     eErr = jfw_getSelectedJRE( &pSelectedJava );
     if ( JFW_E_NONE == eErr && pSelectedJava )
     {
@@ -577,7 +577,7 @@ void SvxJavaOptionsPage::AddFolder( const OUString& _rFolder )
 {
 #if HAVE_FEATURE_JAVA
     bool bStartAgain = true;
-    JavaInfo* pInfo = NULL;
+    JavaInfo* pInfo = nullptr;
     javaFrameworkError eErr = jfw_getJavaInfoByPath( _rFolder.pData, &pInfo );
     if ( JFW_E_NONE == eErr && pInfo )
     {
@@ -708,17 +708,17 @@ bool SvxJavaOptionsPage::FillItemSet( SfxItemSet* /*rCoreSet*/ )
     {
         if ( m_pJavaList->GetCheckButtonState( m_pJavaList->GetEntry(i) ) == SV_BUTTON_CHECKED )
         {
-            JavaInfo* pInfo = NULL;
+            JavaInfo* pInfo = nullptr;
             if ( i < static_cast< sal_uLong >( m_nInfoSize ) )
                 pInfo = m_parJavaInfo[i];
             else
                 pInfo = m_aAddedInfos[ i - m_nInfoSize ];
 
-            JavaInfo* pSelectedJava = NULL;
+            JavaInfo* pSelectedJava = nullptr;
             eErr = jfw_getSelectedJRE( &pSelectedJava );
             if ( JFW_E_NONE == eErr || JFW_E_INVALID_SETTINGS == eErr )
             {
-                if (pSelectedJava == NULL || !jfw_areEqualJavaInfo( pInfo, pSelectedJava ) )
+                if (pSelectedJava == nullptr || !jfw_areEqualJavaInfo( pInfo, pSelectedJava ) )
                 {
                     sal_Bool bRunning = sal_False;
                     eErr = jfw_isVMRunning( &bRunning );
@@ -962,7 +962,7 @@ void SvxJavaClassPathDlg::dispose()
         sal_Int32 i, nCount = m_pPathList->GetEntryCount();
         for ( i = 0; i < nCount; ++i )
             delete static_cast< OUString* >( m_pPathList->GetEntryData(i) );
-        m_pPathList = NULL;
+        m_pPathList = nullptr;
     }
     m_pPathList.clear();
     m_pAddArchiveBtn.clear();

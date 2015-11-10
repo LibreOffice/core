@@ -68,7 +68,7 @@ struct TargetData
 //#                                                                      #
 SvxHlmarkTreeLBox::SvxHlmarkTreeLBox(vcl::Window* pParent, WinBits nStyle)
     : SvTreeListBox(pParent, nStyle)
-    , mpParentWnd(NULL)
+    , mpParentWnd(nullptr)
 {
     SetNodeDefaultImages();
 }
@@ -563,7 +563,7 @@ bool SvxHlinkDlgMarkWnd::SelectEntry(const OUString& aStrMark)
 
 IMPL_LINK_NOARG_TYPED(SvxHlinkDlgMarkWnd, DoubleClickApplyHdl_Impl, SvTreeListBox*, bool)
 {
-    ClickApplyHdl_Impl(NULL);
+    ClickApplyHdl_Impl(nullptr);
     return false;
 }
 

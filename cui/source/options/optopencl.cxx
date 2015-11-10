@@ -183,7 +183,7 @@ void fillListBox(SvSimpleTable* pListBox, const OpenCLConfig::ImplMatcherSet& rS
     for (auto i = rSet.cbegin(); i != rSet.cend(); ++i)
     {
         OpenCLConfig::ImplMatcher* pImpl = new OpenCLConfig::ImplMatcher(*i);
-        pListBox->InsertEntry(format(*i), NULL, false, TREELIST_APPEND, pImpl);
+        pListBox->InsertEntry(format(*i), nullptr, false, TREELIST_APPEND, pImpl);
     }
 
     pListBox->SetUpdateMode(true);

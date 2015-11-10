@@ -55,10 +55,10 @@ SvxShadowTabPage::SvxShadowTabPage( vcl::Window* pParent, const SfxItemSet& rInA
                           rInAttrs ),
     m_rOutAttrs           ( rInAttrs ),
     m_eRP                 ( RP_LT ),
-    m_pnColorListState    ( 0 ),
+    m_pnColorListState    ( nullptr ),
     m_nPageType           ( 0 ),
     m_nDlgType            ( 0 ),
-    m_pbAreaTP            ( 0 ),
+    m_pbAreaTP            ( nullptr ),
     m_bDisable            ( false ),
     m_aXFillAttr          ( rInAttrs.GetPool() ),
     m_rXFSet              ( m_aXFillAttr.GetItemSet() )
@@ -273,7 +273,7 @@ bool SvxShadowTabPage::FillItemSet( SfxItemSet* rAttrs )
 
     if( !m_bDisable )
     {
-        const SfxPoolItem*  pOld = NULL;
+        const SfxPoolItem*  pOld = nullptr;
 
         if( m_pTsbShowShadow->IsValueChangedFromSaved() )
         {
@@ -477,7 +477,7 @@ void SvxShadowTabPage::Reset( const SfxItemSet* rAttrs )
         // It IS the error.
         m_pMtrTransparent->SaveValue();
 
-        ClickShadowHdl_Impl( NULL );
+        ClickShadowHdl_Impl( nullptr );
         ModifyShadowHdl_Impl( *m_pMtrTransparent );
     }
 }

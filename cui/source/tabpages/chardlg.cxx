@@ -177,7 +177,7 @@ inline SvxFont& SvxCharBasePage::GetPreviewCTLFont()
 
 SvxCharBasePage::SvxCharBasePage(vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription, const SfxItemSet& rItemset)
     : SfxTabPage( pParent, rID, rUIXMLDescription, &rItemset )
-    , m_pPreviewWin(NULL)
+    , m_pPreviewWin(nullptr)
     , m_bPreviewBackgroundToCharacter( false )
 {
 }
@@ -248,7 +248,7 @@ struct SvxCharNamePage_Impl
 
     SvxCharNamePage_Impl() :
 
-        m_pFontList     ( NULL ),
+        m_pFontList     ( nullptr ),
         m_nExtraEntryPos( COMBOBOX_ENTRY_NOTFOUND ),
         m_bMustDelete   ( false ),
         m_bInSearchMode ( false )
@@ -384,7 +384,7 @@ SvxCharNamePage::~SvxCharNamePage()
 void SvxCharNamePage::dispose()
 {
     delete m_pImpl;
-    m_pImpl = NULL;
+    m_pImpl = nullptr;
     m_pWestFrame.clear();
     m_pWestFontNameFT.clear();
     m_pWestFontNameLB.clear();
@@ -452,9 +452,9 @@ const FontList* SvxCharNamePage::GetFontList() const
         if ( pDocSh )
         {
             const SfxPoolItem* pItem = pDocSh->GetItem( SID_ATTR_CHAR_FONTLIST );
-            if ( pItem != NULL )
+            if ( pItem != nullptr )
             {
-                DBG_ASSERT(NULL != static_cast<const SvxFontListItem*>(pItem)->GetFontList(),
+                DBG_ASSERT(nullptr != static_cast<const SvxFontListItem*>(pItem)->GetFontList(),
                            "Where is the font list?");
                     m_pImpl->m_pFontList =  static_cast<const SvxFontListItem*>(pItem )->GetFontList()->Clone();
                 m_pImpl->m_bMustDelete = true;
@@ -587,7 +587,7 @@ void SvxCharNamePage::FillStyleBox_Impl( const FontNameBox* pNameBox )
     const FontList* pFontList = GetFontList();
     DBG_ASSERT( pFontList, "no fontlist" );
 
-    FontStyleBox* pStyleBox = NULL;
+    FontStyleBox* pStyleBox = nullptr;
 
     if ( m_pWestFontNameLB == pNameBox )
         pStyleBox = m_pWestFontStyleLB;
@@ -624,8 +624,8 @@ void SvxCharNamePage::FillSizeBox_Impl( const FontNameBox* pNameBox )
     const FontList* pFontList = GetFontList();
     DBG_ASSERT( pFontList, "no fontlist" );
 
-    FontStyleBox* pStyleBox = NULL;
-    FontSizeBox* pSizeBox = NULL;
+    FontStyleBox* pStyleBox = nullptr;
+    FontSizeBox* pSizeBox = nullptr;
 
     if ( m_pWestFontNameLB == pNameBox )
     {
@@ -656,13 +656,13 @@ void SvxCharNamePage::FillSizeBox_Impl( const FontNameBox* pNameBox )
 
 void SvxCharNamePage::Reset_Impl( const SfxItemSet& rSet, LanguageGroup eLangGrp )
 {
-    FontNameBox* pNameBox = NULL;
-    FixedText* pStyleLabel = NULL;
-    FontStyleBox* pStyleBox = NULL;
-    FixedText* pSizeLabel = NULL;
-    FontSizeBox* pSizeBox = NULL;
-    FixedText* pLangFT = NULL;
-    SvxLanguageBoxBase* pLangBox = NULL;
+    FontNameBox* pNameBox = nullptr;
+    FixedText* pStyleLabel = nullptr;
+    FontStyleBox* pStyleBox = nullptr;
+    FixedText* pSizeLabel = nullptr;
+    FontSizeBox* pSizeBox = nullptr;
+    FixedText* pLangFT = nullptr;
+    SvxLanguageBoxBase* pLangBox = nullptr;
     sal_uInt16 nWhich = 0;
 
     switch ( eLangGrp )
@@ -704,7 +704,7 @@ void SvxCharNamePage::Reset_Impl( const SfxItemSet& rSet, LanguageGroup eLangGrp
     const FontList* pFontList = GetFontList();
     pNameBox->Fill( pFontList );
 
-    const SvxFontItem* pFontItem = NULL;
+    const SvxFontItem* pFontItem = nullptr;
     SfxItemState eState = rSet.GetItemState( nWhich );
 
     if ( eState >= SfxItemState::DEFAULT )
@@ -882,10 +882,10 @@ bool SvxCharNamePage::FillItemSet_Impl( SfxItemSet& rSet, LanguageGroup eLangGrp
 {
     bool bModified = false;
 
-    FontNameBox* pNameBox = NULL;
-    FontStyleBox* pStyleBox = NULL;
-    FontSizeBox* pSizeBox = NULL;
-    SvxLanguageBoxBase* pLangBox = NULL;
+    FontNameBox* pNameBox = nullptr;
+    FontStyleBox* pStyleBox = nullptr;
+    FontSizeBox* pSizeBox = nullptr;
+    SvxLanguageBoxBase* pLangBox = nullptr;
     sal_uInt16 nWhich = 0;
     sal_uInt16 nSlot = 0;
 
@@ -917,11 +917,11 @@ bool SvxCharNamePage::FillItemSet_Impl( SfxItemSet& rSet, LanguageGroup eLangGrp
     }
 
     nWhich = GetWhich( nSlot );
-    const SfxPoolItem* pItem = NULL;
+    const SfxPoolItem* pItem = nullptr;
     const SfxItemSet& rOldSet = GetItemSet();
-    const SfxPoolItem* pOld = NULL;
+    const SfxPoolItem* pOld = nullptr;
 
-    const SfxItemSet* pExampleSet = GetTabDialog() ? GetTabDialog()->GetExampleSet() : NULL;
+    const SfxItemSet* pExampleSet = GetTabDialog() ? GetTabDialog()->GetExampleSet() : nullptr;
 
     bool bChanged = true;
     const OUString& rFontName  = pNameBox->GetText();
@@ -1438,8 +1438,8 @@ void SvxCharEffectsPage::Initialize()
     const SfxPoolItem* pItem;
     SfxObjectShell* pShell;
     if ( SfxItemState::SET == GetItemSet().GetItemState( SID_HTML_MODE, false, &pItem ) ||
-         ( NULL != ( pShell = SfxObjectShell::Current() ) &&
-           NULL != ( pItem = pShell->GetItem( SID_HTML_MODE ) ) ) )
+         ( nullptr != ( pShell = SfxObjectShell::Current() ) &&
+           nullptr != ( pItem = pShell->GetItem( SID_HTML_MODE ) ) ) )
     {
         m_nHtmlMode = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
         if ( ( m_nHtmlMode & HTMLMODE_ON ) == HTMLMODE_ON )
@@ -1456,7 +1456,7 @@ void SvxCharEffectsPage::Initialize()
     if ( pDocSh )
     {
         pItem = pDocSh->GetItem( SID_COLOR_TABLE );
-        if ( pItem != NULL )
+        if ( pItem != nullptr )
             pColorTable = static_cast<const SvxColorListItem*>(pItem)->GetColorList();
     }
 
@@ -1468,7 +1468,7 @@ void SvxCharEffectsPage::Initialize()
     m_pFontColorLB->SetUpdateMode( false );
 
     {
-        SfxPoolItem* pDummy = NULL;
+        SfxPoolItem* pDummy = nullptr;
         SfxViewFrame* pFrame = SfxViewFrame::GetFirst( pDocSh );
         if ( !pFrame ||
              SfxItemState::DEFAULT > pFrame->GetBindings().QueryState( SID_ATTR_AUTO_COLOR_INVALID, pDummy ) )
@@ -1511,7 +1511,7 @@ void SvxCharEffectsPage::Initialize()
     m_pStrikeoutLB->SelectEntryPos( 0 );
     m_pEmphasisLB->SelectEntryPos( 0 );
     m_pPositionLB->SelectEntryPos( 0 );
-    SelectHdl_Impl( NULL );
+    SelectHdl_Impl( nullptr );
     SelectHdl_Impl( m_pEmphasisLB );
 
     m_pEffectsLB->SelectEntryPos( 0 );
@@ -1675,9 +1675,9 @@ bool SvxCharEffectsPage::FillItemSetColor_Impl( SfxItemSet& rSet )
 {
     sal_uInt16 nWhich = GetWhich( SID_ATTR_CHAR_COLOR );
     const SvxColorItem* pOld = static_cast<const SvxColorItem*>(GetOldItem( rSet, SID_ATTR_CHAR_COLOR ));
-    const SvxColorItem* pItem = NULL;
+    const SvxColorItem* pItem = nullptr;
     bool bChanged = true;
-    const SfxItemSet* pExampleSet = GetTabDialog() ? GetTabDialog()->GetExampleSet() : NULL;
+    const SfxItemSet* pExampleSet = GetTabDialog() ? GetTabDialog()->GetExampleSet() : nullptr;
     const SfxItemSet& rOldSet = GetItemSet();
 
     Color aSelectedColor;
@@ -2263,7 +2263,7 @@ void  SvxCharEffectsPage::ChangesApplied()
 
 bool SvxCharEffectsPage::FillItemSet( SfxItemSet* rSet )
 {
-    const SfxPoolItem* pOld = 0;
+    const SfxPoolItem* pOld = nullptr;
     const SfxItemSet& rOldSet = GetItemSet();
     bool bModified = false;
     bool bChanged = true;
@@ -2474,7 +2474,7 @@ bool SvxCharEffectsPage::FillItemSet( SfxItemSet* rSet )
     }
 
     // Outline
-    const SfxItemSet* pExampleSet = GetTabDialog() ? GetTabDialog()->GetExampleSet() : NULL;
+    const SfxItemSet* pExampleSet = GetTabDialog() ? GetTabDialog()->GetExampleSet() : nullptr;
     nWhich = GetWhich( SID_ATTR_CHAR_CONTOUR );
     pOld = GetOldItem( *rSet, SID_ATTR_CHAR_CONTOUR );
     TriState eState = m_pOutlineBtn->GetState();
@@ -3083,7 +3083,7 @@ void SvxCharPositionPage::Reset( const SfxItemSet* rSet )
         {
             m_pNormalPosBtn->Check();
             m_pHighLowRB->Check();
-            PositionHdl_Impl( NULL );
+            PositionHdl_Impl( nullptr );
         }
         //the height has to be set after the handler is called to keep the value also if the escapement is zero
         m_pFontSizeMF->SetValue( m_pFontSizeMF->Normalize( nEscProp ) );
@@ -3432,7 +3432,7 @@ void SvxCharTwoLinesPage::dispose()
 void SvxCharTwoLinesPage::Initialize()
 {
     m_pTwoLinesBtn->Check( false );
-    TwoLinesHdl_Impl( NULL );
+    TwoLinesHdl_Impl( nullptr );
 
     m_pTwoLinesBtn->SetClickHdl( LINK( this, SvxCharTwoLinesPage, TwoLinesHdl_Impl ) );
 
@@ -3573,7 +3573,7 @@ void SvxCharTwoLinesPage::Reset( const SfxItemSet* rSet )
             SetBracket( rItem.GetEndBracket(), false );
         }
     }
-    TwoLinesHdl_Impl( NULL );
+    TwoLinesHdl_Impl( nullptr );
 
     SetPrevFontWidthScale( *rSet );
 }

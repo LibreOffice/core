@@ -47,7 +47,7 @@
 SvxCharacterMap::SvxCharacterMap( vcl::Window* pParent, bool bOne_, const SfxItemSet* pSet )
     : SfxModalDialog(pParent, "SpecialCharactersDialog", "cui/ui/specialcharacters.ui")
     , bOne( bOne_ )
-    , pSubsetMap( NULL )
+    , pSubsetMap( nullptr )
 {
     get(m_pShowSet, "showcharset");
     get(m_pShowChar, "showchar");
@@ -412,7 +412,7 @@ IMPL_LINK_NOARG_TYPED(SvxCharacterMap, OKHdl, Button*, void)
 
 void SvxCharacterMap::fillAllSubsets(ListBox &rListBox)
 {
-    SubsetMap aAll(NULL);
+    SubsetMap aAll(nullptr);
     rListBox.Clear();
     bool bFirst = true;
     while (const Subset *s = aAll.GetNextSubset(bFirst))
@@ -444,7 +444,7 @@ IMPL_LINK_NOARG_TYPED(SvxCharacterMap, FontSelectHdl, ListBox&, void)
     // hide unicode subset listbar for symbol fonts
     // TODO: get info from the Font once it provides it
     delete pSubsetMap;
-    pSubsetMap = NULL;
+    pSubsetMap = nullptr;
     m_pSubsetLB->Clear();
 
     bool bNeedSubset = (aFont.GetCharSet() != RTL_TEXTENCODING_SYMBOL);
@@ -458,7 +458,7 @@ IMPL_LINK_NOARG_TYPED(SvxCharacterMap, FontSelectHdl, ListBox&, void)
         // TODO: is it worth to improve the stupid linear search?
         bool bFirst = true;
         const Subset* s;
-        while( NULL != (s = pSubsetMap->GetNextSubset( bFirst ))  )
+        while( nullptr != (s = pSubsetMap->GetNextSubset( bFirst ))  )
         {
             const sal_Int32 nPos_ = m_pSubsetLB->InsertEntry( s->GetName() );
             m_pSubsetLB->SetEntryData( nPos_, const_cast<Subset *>(s) );
@@ -547,7 +547,7 @@ IMPL_LINK_NOARG_TYPED(SvxCharacterMap, CharHighlightHdl, SvxShowCharSet*, void)
         // using the new UCS4 constructor
         aText = OUString( &cChar, 1 );
 
-        const Subset* pSubset = NULL;
+        const Subset* pSubset = nullptr;
         if( pSubsetMap )
             pSubset = pSubsetMap->GetSubsetByUnicode( cChar );
         if( pSubset )

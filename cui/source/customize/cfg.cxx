@@ -789,10 +789,10 @@ SvxConfigDialog::SvxConfigDialog(vcl::Window * pParent, const SfxItemSet* pInSet
 {
     InitImageType();
 
-    m_nMenusPageId = AddTabPage("menus", CreateSvxMenuConfigPage, NULL);
-    m_nKeyboardPageId = AddTabPage("keyboard", CreateKeyboardConfigPage, NULL);
-    m_nToolbarsPageId = AddTabPage("toolbars", CreateSvxToolbarConfigPage, NULL);
-    m_nEventsPageId = AddTabPage("events", CreateSvxEventConfigPage, NULL);
+    m_nMenusPageId = AddTabPage("menus", CreateSvxMenuConfigPage, nullptr);
+    m_nKeyboardPageId = AddTabPage("keyboard", CreateKeyboardConfigPage, nullptr);
+    m_nToolbarsPageId = AddTabPage("toolbars", CreateSvxToolbarConfigPage, nullptr);
+    m_nEventsPageId = AddTabPage("events", CreateSvxEventConfigPage, nullptr);
 
     const SfxPoolItem* pItem =
         pInSet->GetItem( pInSet->GetPool()->GetWhich( SID_CONFIG ) );
@@ -837,7 +837,7 @@ void SvxConfigDialog::PageCreated( sal_uInt16 nId, SfxTabPage& rPage )
  ******************************************************************************/
 
 // Initialize static variable which holds default XImageManager
-uno::Reference< css::ui::XImageManager>* SaveInData::xDefaultImgMgr = NULL;
+uno::Reference< css::ui::XImageManager>* SaveInData::xDefaultImgMgr = nullptr;
 
 SaveInData::SaveInData(
     const uno::Reference< css::ui::XUIConfigurationManager >& xCfgMgr,
@@ -938,7 +938,7 @@ Image SaveInData::GetImage( const OUString& rCommandURL )
     {
         aImage = Image( xGraphic );
     }
-    else if ( xDefaultImgMgr != NULL && (*xDefaultImgMgr).is() )
+    else if ( xDefaultImgMgr != nullptr && (*xDefaultImgMgr).is() )
     {
         xGraphic = GetGraphic( (*xDefaultImgMgr), rCommandURL );
 
@@ -985,7 +985,7 @@ bool SaveInData::PersistChanges(
  ******************************************************************************/
 
 // Initialize static variable which holds default Menu data
-MenuSaveInData* MenuSaveInData::pDefaultData = NULL;
+MenuSaveInData* MenuSaveInData::pDefaultData = nullptr;
 
 MenuSaveInData::MenuSaveInData(
     const uno::Reference< css::ui::XUIConfigurationManager >& cfgmgr,
@@ -998,7 +998,7 @@ MenuSaveInData::MenuSaveInData(
             ITEM_MENUBAR_URL  ),
         m_aDescriptorContainer(
             ITEM_DESCRIPTOR_CONTAINER  ),
-        pRootEntry( 0 )
+        pRootEntry( nullptr )
 {
     try
     {
@@ -1022,7 +1022,7 @@ MenuSaveInData::MenuSaveInData(
 
 MenuSaveInData::~MenuSaveInData()
 {
-    if ( pRootEntry != NULL )
+    if ( pRootEntry != nullptr )
     {
         delete pRootEntry;
     }
@@ -1031,7 +1031,7 @@ MenuSaveInData::~MenuSaveInData()
 SvxEntries*
 MenuSaveInData::GetEntries()
 {
-    if ( pRootEntry == NULL )
+    if ( pRootEntry == nullptr )
     {
         pRootEntry = new SvxConfigEntry(
             OUString("MainMenus"),
@@ -1041,7 +1041,7 @@ MenuSaveInData::GetEntries()
         {
             LoadSubMenus( m_xMenuSettings, OUString(), pRootEntry );
         }
-        else if ( GetDefaultData() != NULL )
+        else if ( GetDefaultData() != nullptr )
         {
             // If the doc has no config settings use module config settings
             LoadSubMenus( GetDefaultData()->m_xMenuSettings, OUString(), pRootEntry );
@@ -1301,7 +1301,7 @@ MenuSaveInData::Reset()
     GetConfigManager()->reset();
 
     delete pRootEntry;
-    pRootEntry = NULL;
+    pRootEntry = nullptr;
 
     try
     {
@@ -1476,7 +1476,7 @@ TriState SvxMenuEntriesListBox::NotifyCopying(
     if ( !m_bIsInternalDrag )
     {
         // if the target is NULL then add function to the start of the list
-        pPage->AddFunction( pTarget, pTarget == NULL );
+        pPage->AddFunction( pTarget, pTarget == nullptr );
 
         // AddFunction already adds the listbox entry so return TRISTATE_FALSE
         // to stop another listbox entry being added
@@ -1522,9 +1522,9 @@ void SvxMenuEntriesListBox::KeyInput( const KeyEvent& rKeyEvent )
 SvxConfigPage::SvxConfigPage(vcl::Window *pParent, const SfxItemSet& rSet)
     : SfxTabPage(pParent, "MenuAssignPage", "cui/ui/menuassignpage.ui", &rSet)
     , bInitialised(false)
-    , pCurrentSaveInData(0)
-    , m_pContentsListBox(0)
-    , m_pSelectorDlg(0)
+    , pCurrentSaveInData(nullptr)
+    , m_pContentsListBox(nullptr)
+    , m_pSelectorDlg(nullptr)
 {
     get(m_pTopLevel, "toplevel");
     get(m_pTopLevelLabel, "toplevelft");
@@ -1616,7 +1616,7 @@ void SvxConfigPage::Reset( const SfxItemSet* )
             xModuleCfgSupplier( css::ui::theModuleUIConfigurationManagerSupplier::get(xContext) );
 
         // Set up data for module specific menus
-        SaveInData* pModuleData = NULL;
+        SaveInData* pModuleData = nullptr;
 
         try
         {
@@ -1632,7 +1632,7 @@ void SvxConfigPage::Reset( const SfxItemSet* )
         {
         }
 
-        if ( pModuleData != NULL )
+        if ( pModuleData != nullptr )
         {
             nPos = m_pSaveInListBox->InsertEntry(
                 utl::ConfigManager::getProductName() + " " + aModuleName );
@@ -1659,7 +1659,7 @@ void SvxConfigPage::Reset( const SfxItemSet* )
             }
         }
 
-        SaveInData* pDocData = NULL;
+        SaveInData* pDocData = nullptr;
         if ( xDocCfgMgr.is() )
         {
             pDocData = CreateSaveInData( xDocCfgMgr, xCfgMgr, aModuleId, true );
@@ -1694,7 +1694,7 @@ void SvxConfigPage::Reset( const SfxItemSet* )
         {
             // if the document has menu configuration settings select it
             // it the SaveIn listbox, otherwise select the module data
-            if ( pDocData != NULL && pDocData->HasSettings() )
+            if ( pDocData != nullptr && pDocData->HasSettings() )
             {
                 m_pSaveInListBox->SelectEntryPos( nPos );
                 pCurrentSaveInData = pDocData;
@@ -1956,13 +1956,13 @@ SvxEntries* SvxConfigPage::FindParentForChild(
             SvxEntries* result =
                 FindParentForChild( pEntryData->GetEntries(), pChildData );
 
-            if ( result != NULL )
+            if ( result != nullptr )
             {
                 return result;
             }
         }
     }
-    return NULL;
+    return nullptr;
 }
 
 SvTreeListEntry* SvxConfigPage::AddFunction(
@@ -1973,7 +1973,7 @@ SvTreeListEntry* SvxConfigPage::AddFunction(
 
     if ( aURL.isEmpty() )
     {
-        return NULL;
+        return nullptr;
     }
 
     SvxConfigEntry* pNewEntryData =
@@ -1994,9 +1994,9 @@ SvTreeListEntry* SvxConfigPage::AddFunction(
             {
                 // asynchronous error message, because of MsgBoxes
                 PostUserEvent(
-                    LINK( this, SvxConfigPage, AsyncInfoMsg ), NULL, true );
+                    LINK( this, SvxConfigPage, AsyncInfoMsg ), nullptr, true );
                 delete pNewEntryData;
-                return NULL;
+                return nullptr;
             }
         }
     }
@@ -2012,16 +2012,16 @@ SvTreeListEntry* SvxConfigPage::InsertEntry(
     // Grab the entries list for the currently selected menu
     SvxEntries* pEntries = GetTopLevelSelection()->GetEntries();
 
-    SvTreeListEntry* pNewEntry = NULL;
+    SvTreeListEntry* pNewEntry = nullptr;
     SvTreeListEntry* pCurEntry =
-        pTarget != NULL ? pTarget : m_pContentsListBox->GetCurEntry();
+        pTarget != nullptr ? pTarget : m_pContentsListBox->GetCurEntry();
 
     if ( bFront )
     {
         pEntries->insert( pEntries->begin(), pNewEntryData );
         pNewEntry = InsertEntryIntoUI( pNewEntryData, 0 );
     }
-    else if ( pCurEntry == NULL || pCurEntry == m_pContentsListBox->Last() )
+    else if ( pCurEntry == nullptr || pCurEntry == m_pContentsListBox->Last() )
     {
         pEntries->push_back( pNewEntryData );
         pNewEntry = InsertEntryIntoUI( pNewEntryData );
@@ -2053,7 +2053,7 @@ SvTreeListEntry* SvxConfigPage::InsertEntry(
         }
     }
 
-    if ( pNewEntry != NULL )
+    if ( pNewEntry != nullptr )
     {
         m_pContentsListBox->Select( pNewEntry );
         m_pContentsListBox->MakeVisible( pNewEntry );
@@ -2067,13 +2067,13 @@ SvTreeListEntry* SvxConfigPage::InsertEntry(
 SvTreeListEntry* SvxConfigPage::InsertEntryIntoUI(
     SvxConfigEntry* pNewEntryData, sal_uLong nPos )
 {
-    SvTreeListEntry* pNewEntry = NULL;
+    SvTreeListEntry* pNewEntry = nullptr;
 
     if (pNewEntryData->IsSeparator())
     {
         pNewEntry = m_pContentsListBox->InsertEntry(
             OUString(aSeparatorStr),
-            0, false, nPos, pNewEntryData);
+            nullptr, false, nPos, pNewEntryData);
     }
     else
     {
@@ -2085,12 +2085,12 @@ SvTreeListEntry* SvxConfigPage::InsertEntryIntoUI(
         if ( !!aImage )
         {
             pNewEntry = m_pContentsListBox->InsertEntry(
-                aName, aImage, aImage, 0, false, nPos, pNewEntryData );
+                aName, aImage, aImage, nullptr, false, nPos, pNewEntryData );
         }
         else
         {
             pNewEntry = m_pContentsListBox->InsertEntry(
-                aName, 0, false, nPos, pNewEntryData );
+                aName, nullptr, false, nPos, pNewEntryData );
         }
 
         if ( pNewEntryData->IsPopup() ||
@@ -2122,8 +2122,8 @@ IMPL_LINK_TYPED( SvxConfigPage, MoveHdl, Button *, pButton, void )
 void SvxConfigPage::MoveEntry( bool bMoveUp )
 {
     SvTreeListEntry *pSourceEntry = m_pContentsListBox->FirstSelected();
-    SvTreeListEntry *pTargetEntry = NULL;
-    SvTreeListEntry *pToSelect = NULL;
+    SvTreeListEntry *pTargetEntry = nullptr;
+    SvTreeListEntry *pToSelect = nullptr;
 
     if ( !pSourceEntry )
     {
@@ -2157,7 +2157,7 @@ bool SvxConfigPage::MoveEntryData(
     SvTreeListEntry* pSourceEntry, SvTreeListEntry* pTargetEntry )
 {
     //#i53677#
-    if (NULL == pSourceEntry || NULL == pTargetEntry)
+    if (nullptr == pSourceEntry || nullptr == pTargetEntry)
     {
         return false;
     }
@@ -2171,7 +2171,7 @@ bool SvxConfigPage::MoveEntryData(
     SvxConfigEntry* pTargetData =
         static_cast<SvxConfigEntry*>(pTargetEntry->GetUserData());
 
-    if ( pSourceData != NULL && pTargetData != NULL )
+    if ( pSourceData != nullptr && pTargetData != nullptr )
     {
         // remove the source entry from our list
         RemoveEntry( pEntries, pSourceData );
@@ -2277,7 +2277,7 @@ void SvxMenuConfigPage::UpdateButtonStates()
     // Disable Up and Down buttons depending on current selection
     SvTreeListEntry* selection = m_pContentsListBox->GetCurEntry();
 
-    if ( m_pContentsListBox->GetEntryCount() == 0 || selection == NULL )
+    if ( m_pContentsListBox->GetEntryCount() == 0 || selection == nullptr )
     {
         m_pMoveUpButton->Enable( false );
         m_pMoveDownButton->Enable( false );
@@ -2337,7 +2337,7 @@ bool SvxMenuConfigPage::DeleteSelectedContent()
 {
     SvTreeListEntry *pActEntry = m_pContentsListBox->FirstSelected();
 
-    if ( pActEntry != NULL )
+    if ( pActEntry != nullptr )
     {
         // get currently selected menu entry
         SvxConfigEntry* pMenuEntry =
@@ -2578,7 +2578,7 @@ SvxMainMenuOrganizerDialog::SvxMainMenuOrganizerDialog(
     vcl::Window* pParent, SvxEntries* entries,
     SvxConfigEntry* selection, bool bCreateMenu )
     : ModalDialog(pParent, "MoveMenuDialog", "cui/ui/movemenu.ui")
-    , mpEntries(0)
+    , mpEntries(nullptr)
     , bModified(false)
 {
     get(m_pMenuBox, "namebox");
@@ -2589,7 +2589,7 @@ SvxMainMenuOrganizerDialog::SvxMainMenuOrganizerDialog(
     m_pMenuListBox->set_height_request(m_pMenuListBox->GetTextHeight() * 12);
 
     // Copy the entries list passed in
-    if ( entries != NULL )
+    if ( entries != nullptr )
     {
         mpEntries = new SvxEntries();
         SvxEntries::const_iterator iter = entries->begin();
@@ -2638,7 +2638,7 @@ SvxMainMenuOrganizerDialog::SvxMainMenuOrganizerDialog(
     }
     else
     {
-        pNewMenuEntry = NULL;
+        pNewMenuEntry = nullptr;
 
         // hide name label and textfield
         m_pMenuBox->Hide();
@@ -2705,7 +2705,7 @@ void SvxMainMenuOrganizerDialog::UpdateButtonStates()
 IMPL_LINK_TYPED( SvxMainMenuOrganizerDialog, MoveHdl, Button *, pButton, void )
 {
     SvTreeListEntry *pSourceEntry = m_pMenuListBox->FirstSelected();
-    SvTreeListEntry *pTargetEntry = NULL;
+    SvTreeListEntry *pTargetEntry = nullptr;
 
     if ( !pSourceEntry )
     {
@@ -2723,7 +2723,7 @@ IMPL_LINK_TYPED( SvxMainMenuOrganizerDialog, MoveHdl, Button *, pButton, void )
         pSourceEntry = SvTreeListBox::PrevSibling( pTargetEntry );
     }
 
-    if ( pSourceEntry != NULL && pTargetEntry != NULL )
+    if ( pSourceEntry != nullptr && pTargetEntry != nullptr )
     {
         SvxConfigEntry* pSourceData =
             static_cast<SvxConfigEntry*>(pSourceEntry->GetUserData());
@@ -2768,7 +2768,7 @@ SvxConfigEntry::GetHelpText()
     {
         if ( !aCommand.isEmpty() )
         {
-            aHelpText = Application::GetHelp()->GetHelpText( aCommand, NULL );
+            aHelpText = Application::GetHelp()->GetHelpText( aCommand, nullptr );
         }
     }
 
@@ -2787,7 +2787,7 @@ SvxConfigEntry::SvxConfigEntry( const OUString& rDisplayName,
     , bIsParentData( bParentData )
     , bIsVisible( true )
     , nStyle( 0 )
-    , mpEntries( 0 )
+    , mpEntries( nullptr )
 {
     if (bPopUp)
     {
@@ -2797,7 +2797,7 @@ SvxConfigEntry::SvxConfigEntry( const OUString& rDisplayName,
 
 SvxConfigEntry::~SvxConfigEntry()
 {
-    if ( mpEntries != NULL )
+    if ( mpEntries != nullptr )
     {
         SvxEntries::const_iterator iter = mpEntries->begin();
 
@@ -2970,7 +2970,7 @@ bool SvxToolbarConfigPage::DeleteSelectedContent()
 {
     SvTreeListEntry *pActEntry = m_pContentsListBox->FirstSelected();
 
-    if ( pActEntry != NULL )
+    if ( pActEntry != nullptr )
     {
         // get currently selected entry
         SvxConfigEntry* pEntry =
@@ -3163,7 +3163,7 @@ IMPL_LINK_TYPED( SvxToolbarConfigPage, EntrySelectHdl, MenuButton *, pButton, vo
             // find position of entry within the list
             for ( sal_uLong i = 0; i < m_pContentsListBox->GetEntryCount(); ++i )
             {
-                if ( m_pContentsListBox->GetEntry( 0, i ) == pActEntry )
+                if ( m_pContentsListBox->GetEntry( nullptr, i ) == pActEntry )
                 {
                     nSelectionPos = i;
                     break;
@@ -3261,7 +3261,7 @@ IMPL_LINK_TYPED( SvxToolbarConfigPage, EntrySelectHdl, MenuButton *, pButton, vo
             // find position of entry within the list
             for ( sal_uLong i = 0; i < m_pContentsListBox->GetEntryCount(); ++i )
             {
-                if ( m_pContentsListBox->GetEntry( 0, i ) == pActEntry )
+                if ( m_pContentsListBox->GetEntry( nullptr, i ) == pActEntry )
                 {
                     nSelectionPos = i;
                     break;
@@ -3339,7 +3339,7 @@ IMPL_LINK_TYPED( SvxToolbarConfigPage, EntrySelectHdl, MenuButton *, pButton, vo
             // find position of entry within the list
             for ( sal_uLong i = 0; i < m_pContentsListBox->GetEntryCount(); ++i )
             {
-                if ( m_pContentsListBox->GetEntry( 0, i ) == pActEntry )
+                if ( m_pContentsListBox->GetEntry( nullptr, i ) == pActEntry )
                 {
                     nSelectionPos = i;
                     break;
@@ -3445,7 +3445,7 @@ ToolbarSaveInData::ToolbarSaveInData(
     bool docConfig ) :
 
     SaveInData              ( xCfgMgr, xParentCfgMgr, aModuleId, docConfig ),
-    pRootEntry              ( NULL ),
+    pRootEntry              ( nullptr ),
     m_aDescriptorContainer  ( ITEM_DESCRIPTOR_CONTAINER  )
 
 {
@@ -3473,7 +3473,7 @@ void ToolbarSaveInData::SetSystemStyle(
     // this code is a temporary hack as the UI is not updating after
     // changing the toolbar style via the API
     uno::Reference< css::frame::XLayoutManager > xLayoutManager;
-    vcl::Window *window = NULL;
+    vcl::Window *window = nullptr;
 
     uno::Reference< beans::XPropertySet > xPropSet( xFrame, uno::UNO_QUERY );
     if ( xPropSet.is() )
@@ -3497,7 +3497,7 @@ void ToolbarSaveInData::SetSystemStyle(
         window = VCLUnoHelper::GetWindow( xWindow );
     }
 
-    if ( window != NULL && window->GetType() == WINDOW_TOOLBOX )
+    if ( window != nullptr && window->GetType() == WINDOW_TOOLBOX )
     {
         ToolBox* toolbox = static_cast<ToolBox*>(window);
 
@@ -3661,7 +3661,7 @@ SvxEntries* ToolbarSaveInData::GetEntries()
 
     ToolbarInfo aToolbarInfo;
 
-    if ( pRootEntry == NULL )
+    if ( pRootEntry == nullptr )
     {
 
         pRootEntry = new SvxConfigEntry(
@@ -3901,7 +3901,7 @@ void ToolbarSaveInData::Reset()
     // now delete the root SvxConfigEntry the next call to GetEntries()
     // causes it to be reinitialised
     delete pRootEntry;
-    pRootEntry = NULL;
+    pRootEntry = nullptr;
 
     // reset all icons to default
     try
@@ -4262,7 +4262,7 @@ void SvxToolbarConfigPage::UpdateButtonStates()
     m_pDescriptionField->SetText("");
 
     SvTreeListEntry* selection = m_pContentsListBox->GetCurEntry();
-    if ( m_pContentsListBox->GetEntryCount() == 0 || selection == NULL )
+    if ( m_pContentsListBox->GetEntryCount() == 0 || selection == nullptr )
     {
         return;
     }
@@ -4309,7 +4309,7 @@ IMPL_LINK_NOARG_TYPED( SvxToolbarConfigPage, SelectToolbar, ListBox&, void )
     m_pContentsListBox->Clear();
 
     SvxConfigEntry* pToolbar = GetTopLevelSelection();
-    if ( pToolbar == NULL )
+    if ( pToolbar == nullptr )
     {
         m_pModifyTopLevelButton->Enable( false );
         m_pModifyCommandButton->Enable( false );
@@ -4480,7 +4480,7 @@ SvTreeListEntry* SvxToolbarConfigPage::AddFunction(
     // get currently selected toolbar and apply change
     SvxConfigEntry* pToolbar = GetTopLevelSelection();
 
-    if ( pToolbar != NULL )
+    if ( pToolbar != nullptr )
     {
         static_cast<ToolbarSaveInData*>( GetSaveInData() )->ApplyToolbar( pToolbar );
     }
@@ -4505,7 +4505,7 @@ SvxToolbarEntriesListBox::~SvxToolbarEntriesListBox()
 void SvxToolbarEntriesListBox::dispose()
 {
     delete m_pButtonData;
-    m_pButtonData = NULL;
+    m_pButtonData = nullptr;
 
     pPage.clear();
     SvxMenuEntriesListBox::dispose();
@@ -4583,7 +4583,7 @@ void SvxToolbarEntriesListBox::DataChanged( const DataChangedEvent& rDCEvt )
 
 void SvxToolbarEntriesListBox::ChangeVisibility( SvTreeListEntry* pEntry )
 {
-    if ( pEntry != NULL )
+    if ( pEntry != nullptr )
     {
         SvxConfigEntry* pEntryData =
             static_cast<SvxConfigEntry*>(pEntry->GetUserData());
@@ -4635,7 +4635,7 @@ TriState SvxToolbarEntriesListBox::NotifyMoving(
     {
         // Instant Apply changes to UI
         SvxConfigEntry* pToolbar = pPage->GetTopLevelSelection();
-        if ( pToolbar != NULL )
+        if ( pToolbar != nullptr )
         {
             ToolbarSaveInData* pSaveInData =
                 static_cast<ToolbarSaveInData*>( pPage->GetSaveInData() );
@@ -4659,11 +4659,11 @@ TriState SvxToolbarEntriesListBox::NotifyCopying(
     if ( !m_bIsInternalDrag )
     {
         // if the target is NULL then add function to the start of the list
-        static_cast<SvxToolbarConfigPage*>(pPage.get())->AddFunction( pTarget, pTarget == NULL );
+        static_cast<SvxToolbarConfigPage*>(pPage.get())->AddFunction( pTarget, pTarget == nullptr );
 
         // Instant Apply changes to UI
         SvxConfigEntry* pToolbar = pPage->GetTopLevelSelection();
-        if ( pToolbar != NULL )
+        if ( pToolbar != nullptr )
         {
             ToolbarSaveInData* pSaveInData =
                 static_cast<ToolbarSaveInData*>( pPage->GetSaveInData() );
@@ -4909,7 +4909,7 @@ void SvxIconSelectorDialog::dispose()
             uno::XInterface* xi = static_cast< uno::XInterface* >(
                 pTbSymbol->GetItemData( nId ) );
 
-            if ( xi != NULL )
+            if ( xi != nullptr )
             xi->release();
         }
     }

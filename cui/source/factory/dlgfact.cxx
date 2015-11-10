@@ -850,7 +850,7 @@ VclAbstractDialog* AbstractDialogFactory_Impl::CreateVclDialog( vcl::Window* pPa
 
     if ( pDlg )
         return new CuiVclAbstractDialog_Impl( pDlg );
-    return 0;
+    return nullptr;
 }
 
 VclAbstractDialog* AbstractDialogFactory_Impl::CreateFrameDialog(
@@ -873,7 +873,7 @@ VclAbstractDialog* AbstractDialogFactory_Impl::CreateFrameDialog(
     if ( pDlg )
         return new CuiVclAbstractDialog_Impl( pDlg );
     else
-        return NULL;
+        return nullptr;
 }
 
 // TabDialog outside the drawing layer
@@ -884,7 +884,7 @@ SfxAbstractTabDialog* AbstractDialogFactory_Impl::CreateTabDialog( sal_uInt32 nR
                                                 bool /*bEditFmt*/,
                                                 const OUString * )
 {
-    SfxTabDialog* pDlg=NULL;
+    SfxTabDialog* pDlg=nullptr;
     switch ( nResId )
     {
         case RID_OFA_AUTOCORR_DLG :
@@ -899,7 +899,7 @@ SfxAbstractTabDialog* AbstractDialogFactory_Impl::CreateTabDialog( sal_uInt32 nR
 
     if ( pDlg )
         return new CuiAbstractTabDialog_Impl( pDlg );
-    return 0;
+    return nullptr;
 }
 
 SfxAbstractTabDialog* AbstractDialogFactory_Impl::CreateTabDialog( sal_uInt32 nResId,
@@ -928,7 +928,7 @@ SfxAbstractTabDialog* AbstractDialogFactory_Impl::CreateTabDialog( sal_uInt32 nR
 
     if ( pDlg )
         return new CuiAbstractTabDialog_Impl( pDlg );
-    return 0;
+    return nullptr;
 }
 
 // TabDialog that use functionality of the drawing layer
@@ -1157,7 +1157,7 @@ SfxAbstractTabDialog* AbstractDialogFactory_Impl::CreateSchTransformTabDialog( v
 
     if ( pDlg )
         return new CuiAbstractTabDialog_Impl( pDlg );
-    return 0;
+    return nullptr;
 }
 
 AbstractSvxJSearchOptionsDialog * AbstractDialogFactory_Impl::CreateSvxJSearchOptionsDialog( vcl::Window* pParent,
@@ -1186,7 +1186,7 @@ VclAbstractDialog*      AbstractDialogFactory_Impl::CreateSvxEditDictionaryDialo
                                             ::Reference< css::linguistic2::XSpellChecker1> &xSpl,
                                             sal_uInt32 nResId )
 {
-    Dialog* pDlg=NULL;
+    Dialog* pDlg=nullptr;
     switch ( nResId )
     {
         case RID_SFXDLG_EDITDICT :
@@ -1198,7 +1198,7 @@ VclAbstractDialog*      AbstractDialogFactory_Impl::CreateSvxEditDictionaryDialo
 
     if ( pDlg )
         return new CuiVclAbstractDialog_Impl( pDlg );
-    return 0;
+    return nullptr;
 }
 
 AbstractSvxNameDialog * AbstractDialogFactory_Impl::CreateSvxNameDialog( vcl::Window* pParent,
@@ -1234,7 +1234,7 @@ AbstractSvxHpLinkDlg * AbstractDialogFactory_Impl::CreateSvxHpLinkDlg (vcl::Wind
                                             SfxBindings* pBindings,
                                             sal_uInt32 nResId)
 {
-    SvxHpLinkDlg* pDlg=NULL;
+    SvxHpLinkDlg* pDlg=nullptr;
     switch ( nResId )
     {
         case SID_HYPERLINK_DIALOG :
@@ -1246,7 +1246,7 @@ AbstractSvxHpLinkDlg * AbstractDialogFactory_Impl::CreateSvxHpLinkDlg (vcl::Wind
 
     if ( pDlg )
         return new AbstractSvxHpLinkDlg_Impl( pDlg );
-    return 0;
+    return nullptr;
 }
 
 AbstractFmSearchDialog*  AbstractDialogFactory_Impl::CreateFmSearchDialog(vcl::Window* pParent,
@@ -1330,7 +1330,7 @@ SfxAbstractDialog* AbstractDialogFactory_Impl::CreateSfxDialog( vcl::Window* pPa
                                                                         sal_uInt32 nResId
                                                                         )
 {
-    SfxModalDialog* pDlg=NULL;
+    SfxModalDialog* pDlg=nullptr;
     switch ( nResId )
     {
         case SID_EVENTCONFIG :
@@ -1345,7 +1345,7 @@ SfxAbstractDialog* AbstractDialogFactory_Impl::CreateSfxDialog( vcl::Window* pPa
 
     if ( pDlg )
         return new CuiAbstractSfxDialog_Impl( pDlg );
-    return 0;
+    return nullptr;
 }
 
 SfxAbstractDialog* AbstractDialogFactory_Impl::CreateSfxDialog( vcl::Window* pParent,
@@ -1355,7 +1355,7 @@ SfxAbstractDialog* AbstractDialogFactory_Impl::CreateSfxDialog( vcl::Window* pPa
                                                                         )
 {
 
-    SfxSingleTabDialog* pDlg=NULL;
+    SfxSingleTabDialog* pDlg=nullptr;
     switch ( nResId )
     {
         case RID_SVXPAGE_MEASURE :
@@ -1374,7 +1374,7 @@ SfxAbstractDialog* AbstractDialogFactory_Impl::CreateSfxDialog( vcl::Window* pPa
     if ( pDlg )
         return new CuiAbstractSfxDialog_Impl( pDlg );
 
-    return 0;
+    return nullptr;
 }
 
 AbstractSvxPostItDialog* AbstractDialogFactory_Impl::CreateSvxPostItDialog( vcl::Window* pParent,
@@ -1492,7 +1492,7 @@ CreateTabPage AbstractDialogFactory_Impl::GetTabPageCreatorFunc( sal_uInt16 nId 
             break;
     }
 
-    return 0;
+    return nullptr;
 }
 
 DialogGetRanges AbstractDialogFactory_Impl::GetDialogGetRangesFunc()
@@ -1555,14 +1555,14 @@ GetTabPageRanges AbstractDialogFactory_Impl::GetTabPageRangesFunc( sal_uInt16 nI
             break;
     }
 
-    return 0;
+    return nullptr;
 }
 
 SfxAbstractInsertObjectDialog* AbstractDialogFactory_Impl::CreateInsertObjectDialog( vcl::Window* pParent, const OUString& rCommand,
             const Reference < css::embed::XStorage >& xStor,
             const SvObjectServerList* pList )
 {
-    InsertObjectDialog_Impl* pDlg=0;
+    InsertObjectDialog_Impl* pDlg=nullptr;
     if ( rCommand == ".uno:InsertObject" )
         pDlg = VclPtr<SvInsertOleDlg>::Create( pParent, xStor, pList );
     else if ( rCommand == ".uno:InsertPlugin" )
@@ -1575,7 +1575,7 @@ SfxAbstractInsertObjectDialog* AbstractDialogFactory_Impl::CreateInsertObjectDia
         pDlg->SetHelpId( OUStringToOString( rCommand, RTL_TEXTENCODING_UTF8 ) );
         return new AbstractInsertObjectDialog_Impl( pDlg );
     }
-    return 0;
+    return nullptr;
 }
 
 VclAbstractDialog* AbstractDialogFactory_Impl::CreateEditObjectDialog( vcl::Window* pParent,  const OUString& rCommand,
@@ -1587,7 +1587,7 @@ VclAbstractDialog* AbstractDialogFactory_Impl::CreateEditObjectDialog( vcl::Wind
         pDlg->SetHelpId( OUStringToOString( rCommand, RTL_TEXTENCODING_UTF8 ) );
         return new CuiVclAbstractDialog_Impl( pDlg );
     }
-    return 0;
+    return nullptr;
 }
 
 

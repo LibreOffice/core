@@ -157,7 +157,7 @@ static bool lcl_IsNumFmtSet(SvxNumRule* pNum, sal_uInt16 nLevelMask)
     for( sal_uInt16 i = 0; i < SVX_MAX_NUM && !bRet; i++ )
     {
         if(nLevelMask & nMask)
-            bRet |= 0 != pNum->Get( i );
+            bRet |= nullptr != pNum->Get( i );
         nMask <<= 1 ;
     }
     return bRet;
@@ -183,8 +183,8 @@ static vcl::Font& lcl_GetDefaultBulletFont()
 SvxSingleNumPickTabPage::SvxSingleNumPickTabPage(vcl::Window* pParent,
                                const SfxItemSet& rSet)
     : SfxTabPage(pParent, "PickNumberingPage", "cui/ui/picknumberingpage.ui", &rSet)
-    , pActNum(0)
-    , pSaveNum(0)
+    , pActNum(nullptr)
+    , pSaveNum(nullptr)
     , nActNumLvl(SAL_MAX_UINT16)
     , bModified(false)
     , bPreset(false)
@@ -232,9 +232,9 @@ SvxSingleNumPickTabPage::~SvxSingleNumPickTabPage()
 void SvxSingleNumPickTabPage::dispose()
 {
     delete pActNum;
-    pActNum = NULL;
+    pActNum = nullptr;
     delete pSaveNum;
-    pSaveNum = NULL;
+    pSaveNum = nullptr;
     m_pExamplesVS.clear();
     SfxTabPage::dispose();
 }
@@ -376,8 +376,8 @@ IMPL_LINK_NOARG_TYPED(SvxSingleNumPickTabPage, DoubleClickHdl_Impl, ValueSet*, v
 SvxBulletPickTabPage::SvxBulletPickTabPage(vcl::Window* pParent,
                                const SfxItemSet& rSet)
     : SfxTabPage(pParent, "PickBulletPage", "cui/ui/pickbulletpage.ui", &rSet)
-    , pActNum(0)
-    , pSaveNum(0)
+    , pActNum(nullptr)
+    , pSaveNum(nullptr)
     , nActNumLvl(SAL_MAX_UINT16)
     , bModified(false)
     , bPreset(false)
@@ -398,9 +398,9 @@ SvxBulletPickTabPage::~SvxBulletPickTabPage()
 void SvxBulletPickTabPage::dispose()
 {
     delete pActNum;
-    pActNum = NULL;
+    pActNum = nullptr;
     delete pSaveNum;
-    pSaveNum = NULL;
+    pSaveNum = nullptr;
     m_pExamplesVS.clear();
     SfxTabPage::dispose();
 }
@@ -544,8 +544,8 @@ void SvxBulletPickTabPage::PageCreated(const SfxAllItemSet& aSet)
 SvxNumPickTabPage::SvxNumPickTabPage(vcl::Window* pParent,
                                const SfxItemSet& rSet)
     : SfxTabPage(pParent, "PickOutlinePage", "cui/ui/pickoutlinepage.ui", &rSet)
-    , pActNum(0)
-    , pSaveNum(0)
+    , pActNum(nullptr)
+    , pSaveNum(nullptr)
     , nActNumLvl(SAL_MAX_UINT16)
     , nNumItemId(SID_ATTR_NUMBERING_RULE)
     , bModified(false)
@@ -600,9 +600,9 @@ SvxNumPickTabPage::~SvxNumPickTabPage()
 void SvxNumPickTabPage::dispose()
 {
     delete pActNum;
-    pActNum = NULL;
+    pActNum = nullptr;
     delete pSaveNum;
-    pSaveNum = NULL;
+    pSaveNum = nullptr;
     m_pExamplesVS.clear();
     SfxTabPage::dispose();
 }
@@ -701,12 +701,12 @@ IMPL_LINK_NOARG_TYPED(SvxNumPickTabPage, NumSelectHdl_Impl, ValueSet*, void)
         bPreset = false;
         bModified = true;
 
-        const FontList*  pList = 0;
+        const FontList*  pList = nullptr;
 
         SvxNumSettingsArr_Impl& rItemArr = aNumSettingsArrays[m_pExamplesVS->GetSelectItemId() - 1];
 
         vcl::Font& rActBulletFont = lcl_GetDefaultBulletFont();
-        SvxNumSettings_Impl* pLevelSettings = 0;
+        SvxNumSettings_Impl* pLevelSettings = nullptr;
         for(sal_uInt16 i = 0; i < pActNum->GetLevelCount(); i++)
         {
             if(rItemArr.size() > i)
@@ -732,7 +732,7 @@ IMPL_LINK_NOARG_TYPED(SvxNumPickTabPage, NumSelectHdl_Impl, ValueSet*, void)
                         const SvxFontListItem* pFontListItem =
                                 static_cast<const SvxFontListItem*>( pCurDocShell
                                                     ->GetItem( SID_ATTR_CHAR_FONTLIST ));
-                        pList = pFontListItem ? pFontListItem->GetFontList() : 0;
+                        pList = pFontListItem ? pFontListItem->GetFontList() : nullptr;
                     }
                     if(pList && pList->IsAvailable( pLevelSettings->sBulletFont ) )
                     {
@@ -797,8 +797,8 @@ void SvxNumPickTabPage::PageCreated(const SfxAllItemSet& aSet)
 SvxBitmapPickTabPage::SvxBitmapPickTabPage(vcl::Window* pParent,
                                const SfxItemSet& rSet)
     : SfxTabPage(pParent, "PickGraphicPage", "cui/ui/pickgraphicpage.ui", &rSet)
-    , pActNum(0)
-    , pSaveNum(0)
+    , pActNum(nullptr)
+    , pSaveNum(nullptr)
     , nActNumLvl(SAL_MAX_UINT16)
     , nNumItemId(SID_ATTR_NUMBERING_RULE)
     , bModified(false)
@@ -850,9 +850,9 @@ SvxBitmapPickTabPage::~SvxBitmapPickTabPage()
 void SvxBitmapPickTabPage::dispose()
 {
     delete pActNum;
-    pActNum = NULL;
+    pActNum = nullptr;
     delete pSaveNum;
-    pSaveNum = NULL;
+    pSaveNum = nullptr;
     m_pBtBrowseFile.clear();
     m_pErrorText.clear();
     m_pExamplesVS.clear();
@@ -1150,8 +1150,8 @@ void SvxNumOptionsTabPage::GetI18nNumbering( ListBox& rFmtLB, sal_uInt16 nDoNotR
 SvxNumOptionsTabPage::SvxNumOptionsTabPage(vcl::Window* pParent,
                                const SfxItemSet& rSet)
     : SfxTabPage(pParent, "NumberingOptionsPage", "cui/ui/numberingoptionspage.ui", &rSet)
-    , pActNum(0)
-    , pSaveNum(0)
+    , pActNum(nullptr)
+    , pSaveNum(nullptr)
     , bLastWidthModified(false)
     , bModified(false)
     , bPreset(false)
@@ -1261,9 +1261,9 @@ void SvxNumOptionsTabPage::dispose()
         delete m_pBitmapMB->GetPopupMenu()->GetPopupMenu(m_nGalleryId);
     }
     delete pActNum;
-    pActNum = NULL;
+    pActNum = nullptr;
     delete pSaveNum;
-    pSaveNum = NULL;
+    pSaveNum = nullptr;
     m_pLevelLB.clear();
     m_pFmtLB.clear();
     m_pSeparatorFT.clear();
@@ -1474,8 +1474,8 @@ void    SvxNumOptionsTabPage::Reset( const SfxItemSet* rSet )
 
     SfxObjectShell* pShell;
     if ( SfxItemState::SET == rSet->GetItemState( SID_HTML_MODE, false, &pItem )
-         || ( 0 != ( pShell = SfxObjectShell::Current()) &&
-              0 != ( pItem = pShell->GetItem( SID_HTML_MODE ) ) ) )
+         || ( nullptr != ( pShell = SfxObjectShell::Current()) &&
+              nullptr != ( pItem = pShell->GetItem( SID_HTML_MODE ) ) ) )
     {
         sal_uInt16 nHtmlMode = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
         bHTMLMode = 0 != (nHtmlMode&HTMLMODE_ON);
@@ -1612,7 +1612,7 @@ void SvxNumOptionsTabPage::InitControls()
             nHighestLevel = i;
         }
         else
-            aNumFmtArr[i] = 0;
+            aNumFmtArr[i] = nullptr;
 
         nMask <<= 1 ;
     }
@@ -1883,7 +1883,7 @@ IMPL_LINK_TYPED( SvxNumOptionsTabPage, NumberTypeSelectHdl_Impl, ListBox&, rBox,
             sal_uInt16 nNumberingType = aNumFmt.GetNumberingType();
             if(SVX_NUM_BITMAP == (nNumberingType&(~LINK_TOKEN)))
             {
-                bBmp |= 0 != aNumFmt.GetBrush();
+                bBmp |= nullptr != aNumFmt.GetBrush();
                 aNumFmt.SetIncludeUpperLevels( sal_False );
                 aNumFmt.SetSuffix( "" );
                 aNumFmt.SetPrefix( "" );
@@ -2176,7 +2176,7 @@ IMPL_LINK_NOARG_TYPED(SvxNumOptionsTabPage, BulletHdl_Impl, Button*, void)
     VclPtrInstance< SvxCharacterMap > pMap( this, true );
 
     sal_uInt16 nMask = 1;
-    const vcl::Font* pFmtFont = 0;
+    const vcl::Font* pFmtFont = nullptr;
     bool bSameBullet = true;
     sal_Unicode cBullet = 0;
     bool bFirst = true;
@@ -2434,9 +2434,9 @@ static sal_uInt16 lcl_DrawBullet(VirtualDevice* pVDev,
 
 SvxNumberingPreview::SvxNumberingPreview(vcl::Window* pParent, WinBits nWinBits)
     : Window(pParent, nWinBits)
-    , pActNum(0)
+    , pActNum(nullptr)
     , nPageWidth(0)
-    , pOutlineNames(0)
+    , pOutlineNames(nullptr)
     , bPosition(false)
     , nActLevel(SAL_MAX_UINT16)
 {
@@ -2737,8 +2737,8 @@ void SvxNumberingPreview::Paint(vcl::RenderContext& rRenderContext, const Rectan
 SvxNumPositionTabPage::SvxNumPositionTabPage(vcl::Window* pParent,
                                const SfxItemSet& rSet)
     : SfxTabPage(pParent, "NumberingPositionPage", "cui/ui/numberingpositionpage.ui", &rSet)
-    , pActNum(0)
-    , pSaveNum(0)
+    , pActNum(nullptr)
+    , pSaveNum(nullptr)
     , nActNumLvl(SAL_MAX_UINT16)
     , nNumItemId(SID_ATTR_NUMBERING_RULE)
     , bModified(false)
@@ -2836,9 +2836,9 @@ SvxNumPositionTabPage::~SvxNumPositionTabPage()
 void SvxNumPositionTabPage::dispose()
 {
     delete pActNum;
-    pActNum = NULL;
+    pActNum = nullptr;
     delete pSaveNum;
-    pSaveNum = NULL;
+    pSaveNum = nullptr;
     m_pLevelLB.clear();
     m_pDistBorderFT.clear();
     m_pDistBorderMF.clear();
@@ -3231,7 +3231,7 @@ void SvxNumPositionTabPage::Reset( const SfxItemSet* rSet )
 
 void SvxNumPositionTabPage::InitPosAndSpaceMode()
 {
-    if ( pActNum == 0 )
+    if ( pActNum == nullptr )
     {
         DBG_ASSERT( false,
                 "<SvxNumPositionTabPage::InitPosAndSpaceMode()> - misusage of method -> <pAktNum> has to be already set!" );

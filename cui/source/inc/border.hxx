@@ -60,7 +60,7 @@ public:
     virtual void        PageCreated(const SfxAllItemSet& aSet) override;
     void                SetTableMode();
 protected:
-    virtual sfxpg        DeactivatePage( SfxItemSet* pSet = 0 ) override;
+    virtual sfxpg        DeactivatePage( SfxItemSet* pSet = nullptr ) override;
     virtual void        DataChanged( const DataChangedEvent& rDCEvt ) override;
 
 private:

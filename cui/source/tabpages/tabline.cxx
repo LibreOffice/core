@@ -87,14 +87,14 @@ SvxLineTabDialog::SvxLineTabDialog
 
     }
 
-    m_nLineTabPage = AddTabPage( "RID_SVXPAGE_LINE", SvxLineTabPage::Create, 0);
+    m_nLineTabPage = AddTabPage( "RID_SVXPAGE_LINE", SvxLineTabPage::Create, nullptr);
     if( bLineOnly )
-        m_nShadowTabPage = AddTabPage( "RID_SVXPAGE_SHADOW", SvxShadowTabPage::Create, 0 );
+        m_nShadowTabPage = AddTabPage( "RID_SVXPAGE_SHADOW", SvxShadowTabPage::Create, nullptr );
     else
         RemoveTabPage( "RID_SVXPAGE_SHADOW" );
 
-    m_nStyleTabPage = AddTabPage( "RID_SVXPAGE_LINE_DEF", SvxLineDefTabPage::Create, 0);
-    m_nEndTabPage = AddTabPage( "RID_SVXPAGE_LINEEND_DEF", SvxLineEndDefTabPage::Create, 0);
+    m_nStyleTabPage = AddTabPage( "RID_SVXPAGE_LINE_DEF", SvxLineDefTabPage::Create, nullptr);
+    m_nEndTabPage = AddTabPage( "RID_SVXPAGE_LINEEND_DEF", SvxLineEndDefTabPage::Create, nullptr);
 
     SetCurPageId( "RID_SVXPAGE_LINE" );
 

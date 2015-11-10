@@ -92,7 +92,7 @@ struct SfxGroupInfo_Impl
     OUString    sCommand;
     OUString    sLabel;
 
-                SfxGroupInfo_Impl( SfxCfgKind n, sal_uInt16 nr, void* pObj = 0 ) :
+                SfxGroupInfo_Impl( SfxCfgKind n, sal_uInt16 nr, void* pObj = nullptr ) :
                     nKind( n ), nUniqueID( nr ), pObject( pObj ), bWasOpened(false) {}
 };
 

@@ -173,7 +173,7 @@ void SvxHpLinkDlg::dispose()
     aViewOpt.Delete();
 
     delete mpItemSet;
-    mpItemSet = NULL;
+    mpItemSet = nullptr;
 
     maCtrl.dispose();
 

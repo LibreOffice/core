@@ -50,8 +50,8 @@ SvxTextTabDialog::SvxTextTabDialog( vcl::Window* pParent,
                               , pAttr ),
         pView               ( pSdrView )
 {
-    m_nTextId = AddTabPage( "RID_SVXPAGE_TEXTATTR", SvxTextAttrPage::Create, 0);
-    m_nTextAnimId = AddTabPage( "RID_SVXPAGE_TEXTANIMATION", SvxTextAnimationPage::Create, 0);
+    m_nTextId = AddTabPage( "RID_SVXPAGE_TEXTATTR", SvxTextAttrPage::Create, nullptr);
+    m_nTextAnimId = AddTabPage( "RID_SVXPAGE_TEXTANIMATION", SvxTextAnimationPage::Create, nullptr);
 }
 
 /*************************************************************************
@@ -336,8 +336,8 @@ void SvxTextAnimationPage::Reset( const SfxItemSet* rAttrs )
 
 
     SelectEffectHdl_Impl( *m_pLbEffect );
-    ClickEndlessHdl_Impl( NULL );
-    ClickAutoHdl_Impl( NULL );
+    ClickEndlessHdl_Impl( nullptr );
+    ClickAutoHdl_Impl( nullptr );
     //ClickPixelHdl_Impl( NULL );
 }
 
@@ -501,11 +501,11 @@ IMPL_LINK_NOARG_TYPED(SvxTextAnimationPage, SelectEffectHdl_Impl, ListBox&, void
                     m_pTsbStartInside->Enable();
                     m_pTsbStopInside->Enable();
                     m_pTsbEndless->Enable();
-                    ClickEndlessHdl_Impl( NULL );
+                    ClickEndlessHdl_Impl( nullptr );
                 }
 
                 m_pTsbAuto->Enable();
-                ClickAutoHdl_Impl( NULL );
+                ClickAutoHdl_Impl( nullptr );
 
                 if( eAniKind == SDRTEXTANI_BLINK )
                 {

@@ -256,7 +256,7 @@ AlignmentTabPage::~AlignmentTabPage()
 void AlignmentTabPage::dispose()
 {
     delete m_pOrientHlp;
-    m_pOrientHlp = NULL;
+    m_pOrientHlp = nullptr;
     m_pLbHorAlign.clear();
     m_pFtIndent.clear();
     m_pEdIndent.clear();

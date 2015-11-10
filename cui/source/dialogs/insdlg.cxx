@@ -180,7 +180,7 @@ SvInsertOleDlg::SvInsertOleDlg
     m_pRbNewObject->SetClickHdl( aLink );
     m_pRbObjectFromfile->SetClickHdl( aLink );
     m_pRbNewObject->Check();
-    RadioHdl( NULL );
+    RadioHdl( nullptr );
 }
 
 SvInsertOleDlg::~SvInsertOleDlg()
@@ -319,7 +319,7 @@ short SvInsertOleDlg::Execute()
 
                 uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
                 uno::Reference< task::XInteractionHandler2 > xInteraction(
-                    task::InteractionHandler::createWithParent(xContext, 0) );
+                    task::InteractionHandler::createWithParent(xContext, nullptr) );
 
                aMedium[1].Name = "InteractionHandler";
                aMedium[1].Value <<= xInteraction;
@@ -342,7 +342,7 @@ short SvInsertOleDlg::Execute()
         }
     }
 
-    m_pServers = 0;
+    m_pServers = nullptr;
     return nRet;
 }
 
@@ -393,7 +393,7 @@ IMPL_LINK_NOARG_TYPED(SvInsertPlugInDialog, BrowseHdl, Button*, void)
 SvInsertPlugInDialog::SvInsertPlugInDialog(vcl::Window* pParent,
     const uno::Reference < embed::XStorage >& xStorage)
     : InsertObjectDialog_Impl(pParent, "InsertPluginDialog", "cui/ui/insertplugin.ui", xStorage)
-    , m_pURL(0)
+    , m_pURL(nullptr)
 {
     get(m_pEdFileurl, "urled");
     get(m_pBtnFileurl, "urlbtn");
@@ -409,7 +409,7 @@ SvInsertPlugInDialog::~SvInsertPlugInDialog()
 void SvInsertPlugInDialog::dispose()
 {
     delete m_pURL;
-    m_pURL = NULL;
+    m_pURL = nullptr;
     m_pEdFileurl.clear();
     m_pBtnFileurl.clear();
     m_pEdPluginsOptions.clear();

@@ -60,7 +60,7 @@ SvxAccessibilityOptionsTabPage::~SvxAccessibilityOptionsTabPage()
 void SvxAccessibilityOptionsTabPage::dispose()
 {
     delete m_pImpl;
-    m_pImpl = NULL;
+    m_pImpl = nullptr;
     m_pAccessibilityTool.clear();
     m_pTextSelectionInReadonly.clear();
     m_pAnimatedGraphics.clear();

@@ -576,7 +576,7 @@ IMPL_LINK_NOARG_TYPED( CuiAboutConfigTabPage, ResetBtnHdl_Impl, Button*, void )
 
 IMPL_LINK_NOARG_TYPED( CuiAboutConfigTabPage, DoubleClickHdl_Impl, SvTreeListBox*, bool )
 {
-    StandardHdl_Impl(NULL);
+    StandardHdl_Impl(nullptr);
     return false;
 }
 

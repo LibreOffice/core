@@ -143,7 +143,7 @@ private:
     DECL_LINK_TYPED(Button2Hdl, Button*, void);
 
 public:
-    SvxMessDialog( vcl::Window* pWindow, const OUString& rText, const OUString& rDesc, Image* pImg = NULL );
+    SvxMessDialog( vcl::Window* pWindow, const OUString& rText, const OUString& rDesc, Image* pImg = nullptr );
     virtual ~SvxMessDialog();
     virtual void dispose() override;
 

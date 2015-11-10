@@ -143,11 +143,11 @@ void SetLineSpace_Impl( SvxLineSpacingItem& rLineSpace,
 sal_uInt16 GetHtmlMode_Impl(const SfxItemSet& rSet)
 {
     sal_uInt16 nHtmlMode = 0;
-    const SfxPoolItem* pItem = 0;
+    const SfxPoolItem* pItem = nullptr;
     SfxObjectShell* pShell;
     if(SfxItemState::SET == rSet.GetItemState(SID_HTML_MODE, false, &pItem) ||
-        ( 0 != (pShell = SfxObjectShell::Current()) &&
-                    0 != (pItem = pShell->GetItem(SID_HTML_MODE))))
+        ( nullptr != (pShell = SfxObjectShell::Current()) &&
+                    nullptr != (pItem = pShell->GetItem(SID_HTML_MODE))))
     {
         nHtmlMode = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
     }
@@ -200,7 +200,7 @@ VclPtr<SfxTabPage> SvxStdParagraphTabPage::Create( vcl::Window* pParent, const S
 bool SvxStdParagraphTabPage::FillItemSet( SfxItemSet* rOutSet )
 {
     SfxItemState eState = SfxItemState::UNKNOWN;
-    const SfxPoolItem* pOld = 0;
+    const SfxPoolItem* pOld = nullptr;
     SfxItemPool* pPool = rOutSet->GetPool();
     DBG_ASSERT( pPool, "Wo ist der Pool" );
 
@@ -1824,9 +1824,9 @@ void SvxExtParagraphTabPage::Reset( const SfxItemSet* rSet )
         m_pKeepTogetherBox->Enable(false);
 
     // so that everything is enabled correctly
-    KeepTogetherHdl_Impl( 0 );
-    WidowHdl_Impl( 0 );
-    OrphanHdl_Impl( 0 );
+    KeepTogetherHdl_Impl( nullptr );
+    WidowHdl_Impl( nullptr );
+    OrphanHdl_Impl( nullptr );
     ChangesApplied();
 }
 void SvxExtParagraphTabPage::ChangesApplied()

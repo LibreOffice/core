@@ -43,7 +43,7 @@ using namespace ::com::sun::star::uno;
 IMPL_LINK_NOARG_TYPED(SvxMultiPathDialog, SelectHdl_Impl, SvTreeListBox*, void)
 {
     sal_uLong nCount = m_pRadioLB->GetEntryCount();
-    bool bIsSelected = m_pRadioLB->FirstSelected() != NULL;
+    bool bIsSelected = m_pRadioLB->FirstSelected() != nullptr;
     bool bEnable = nCount > 1;
     m_pDelBtn->Enable(bEnable && bIsSelected);
 }
@@ -95,7 +95,7 @@ IMPL_LINK_NOARG_TYPED(SvxMultiPathDialog, AddHdl_Impl, Button*, void)
             ScopedVclPtr<InfoBox>::Create( this, sMsg )->Execute();
         }
 
-        SelectHdl_Impl( NULL );
+        SelectHdl_Impl( nullptr );
     }
 }
 
@@ -151,7 +151,7 @@ IMPL_LINK_NOARG_TYPED(SvxMultiPathDialog, DelHdl_Impl, Button*, void)
             m_pRadioLB->Select( pEntry );
     }
 
-    SelectHdl_Impl( NULL );
+    SelectHdl_Impl( nullptr );
 }
 
 IMPL_LINK_NOARG_TYPED(SvxPathSelectDialog, DelHdl_Impl, Button*, void)
@@ -196,7 +196,7 @@ SvxMultiPathDialog::SvxMultiPathDialog(vcl::Window* pParent)
     m_pAddBtn->SetClickHdl( LINK( this, SvxMultiPathDialog, AddHdl_Impl ) );
     m_pDelBtn->SetClickHdl( LINK( this, SvxMultiPathDialog, DelHdl_Impl ) );
 
-    SelectHdl_Impl( NULL );
+    SelectHdl_Impl( nullptr );
 
     m_pRadioLB->ShowTable();
 }
@@ -330,7 +330,7 @@ void SvxMultiPathDialog::SetPath( const OUString& rPath )
         }
     }
 
-    SelectHdl_Impl( NULL );
+    SelectHdl_Impl( nullptr );
 }
 
 void SvxPathSelectDialog::SetPath(const OUString& rPath)

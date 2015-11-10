@@ -42,7 +42,7 @@ struct EventDisplayName
 {
     const sal_Char* pAsciiEventName;
     sal_uInt16          nEventResourceID;
-    EventDisplayName() : pAsciiEventName( NULL ), nEventResourceID(0) { }
+    EventDisplayName() : pAsciiEventName( nullptr ), nEventResourceID(0) { }
     EventDisplayName( const sal_Char* _pAsciiName, const sal_uInt16 _nResId )
         : pAsciiEventName( _pAsciiName )
         , nEventResourceID( _nResId )

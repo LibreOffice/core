@@ -360,7 +360,7 @@ bool SvxPersonalizationTabPage::FillItemSet( SfxItemSet * )
     if ( bModified )
     {
         // broadcast the change
-        DataChangedEvent aDataChanged( DataChangedEventType::SETTINGS, NULL, AllSettingsFlags::STYLE );
+        DataChangedEvent aDataChanged( DataChangedEventType::SETTINGS, nullptr, AllSettingsFlags::STYLE );
         Application::NotifyAllWindows( aDataChanged );
     }
 
