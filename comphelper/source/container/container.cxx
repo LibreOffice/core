@@ -31,7 +31,7 @@ namespace comphelper
 
 IndexAccessIterator::IndexAccessIterator(css::uno::Reference< css::uno::XInterface> xStartingPoint)
     :m_xStartingPoint(xStartingPoint)
-    ,m_xCurrentObject(NULL)
+    ,m_xCurrentObject(nullptr)
 {
     OSL_ENSURE(m_xStartingPoint.is(), "IndexAccessIterator::IndexAccessIterator : no starting point !");
 }

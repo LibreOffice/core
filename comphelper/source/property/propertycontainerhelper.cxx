@@ -210,7 +210,7 @@ namespace
         aErrorMessage.append( "\", required property type \"" );
         aErrorMessage.append( _rProperty.aProperty.Type.getTypeName() );
         aErrorMessage.append( "\")" );
-        throw IllegalArgumentException( aErrorMessage.makeStringAndClear(), NULL, 4 );
+        throw IllegalArgumentException( aErrorMessage.makeStringAndClear(), nullptr, 4 );
     }
 }
 
@@ -246,7 +246,7 @@ bool OPropertyContainerHelper::convertFastPropertyValue(
             // #i29490#
             if ( !aNewRequestedValue.getValueType().equals( aPos->aProperty.Type ) )
             {   // the actually given value is not of the same type as the one required
-                Any aProperlyTyped( NULL, aPos->aProperty.Type.getTypeLibType() );
+                Any aProperlyTyped( nullptr, aPos->aProperty.Type.getTypeLibType() );
 
                 if (    uno_type_assignData(
                             const_cast< void* >( aProperlyTyped.getValue() ), aProperlyTyped.getValueType().getTypeLibType(),
@@ -272,7 +272,7 @@ bool OPropertyContainerHelper::convertFastPropertyValue(
                 lcl_throwIllegalPropertyValueTypeException( *aPos, _rValue );
             }
 
-            Any* pPropContainer = NULL;
+            Any* pPropContainer = nullptr;
                 // the pointer to the any which holds the property value, no matter if located in the derived class
                 // or in out vector
 
@@ -318,7 +318,7 @@ bool OPropertyContainerHelper::convertFastPropertyValue(
                 bool bConverted = false;
 
                 // a temporary any of the correct (required) type
-                aProperlyTyped = Any( NULL, aPos->aProperty.Type.getTypeLibType() );
+                aProperlyTyped = Any( nullptr, aPos->aProperty.Type.getTypeLibType() );
                     // (need this as we do not want to overwrite the derived class member here)
 
                 if (    uno_type_assignData(

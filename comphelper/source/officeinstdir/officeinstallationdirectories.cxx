@@ -95,8 +95,8 @@ OfficeInstallationDirectories::OfficeInstallationDirectories(
 : m_aOfficeBrandDirMacro( "$(brandbaseurl)" ),
   m_aUserDirMacro( "$(userdataurl)" ),
   m_xCtx( xCtx ),
-  m_pOfficeBrandDir( 0 ),
-  m_pUserDir( 0 )
+  m_pOfficeBrandDir( nullptr ),
+  m_pUserDir( nullptr )
 {
 }
 
@@ -271,10 +271,10 @@ OfficeInstallationDirectories::Create(
 
 void OfficeInstallationDirectories::initDirs()
 {
-    if ( m_pOfficeBrandDir == 0 )
+    if ( m_pOfficeBrandDir == nullptr )
     {
         osl::MutexGuard aGuard( m_aMutex );
-        if ( m_pOfficeBrandDir == 0 )
+        if ( m_pOfficeBrandDir == nullptr )
         {
             m_pOfficeBrandDir = new OUString;
             m_pUserDir        = new OUString;

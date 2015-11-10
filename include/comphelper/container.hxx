@@ -57,7 +57,7 @@ public:
 
     css::uno::Reference< css::uno::XInterface>    Next();
 
-    virtual void Invalidate() { m_xCurrentObject = NULL; }
+    virtual void Invalidate() { m_xCurrentObject = nullptr; }
 
 protected:
     virtual bool ShouldHandleElement(const css::uno::Reference< css::uno::XInterface>& /*rElement*/) { return true; }

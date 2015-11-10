@@ -28,7 +28,7 @@ namespace comphelper
 
     Sequence< OUString> getEventMethodsForType(const Type& type)
     {
-        typelib_InterfaceTypeDescription *pType=0;
+        typelib_InterfaceTypeDescription *pType=nullptr;
         type.getDescription(reinterpret_cast<typelib_TypeDescription**>(&pType));
 
         if(!pType)
@@ -41,7 +41,7 @@ namespace comphelper
             // the description reference
             typelib_TypeDescriptionReference* pMemberDescriptionReference = pType->ppMembers[i];
             // the description for the reference
-            typelib_TypeDescription* pMemberDescription = NULL;
+            typelib_TypeDescription* pMemberDescription = nullptr;
             typelib_typedescriptionreference_getDescription(&pMemberDescription, pMemberDescriptionReference);
             if (pMemberDescription)
             {

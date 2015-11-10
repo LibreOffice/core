@@ -114,7 +114,7 @@ void * ServiceDecl::getFactory( sal_Char const* pImplName ) const
         pFac->acquire();
         return pFac;
     }
-    return 0;
+    return nullptr;
 }
 
 uno::Sequence<OUString> ServiceDecl::getSupportedServiceNames() const

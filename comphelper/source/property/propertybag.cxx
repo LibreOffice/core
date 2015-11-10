@@ -78,7 +78,7 @@ namespace comphelper
                 throw IllegalArgumentException(
                         "The property name must not be empty.",
                         // TODO: resource
-                        NULL,
+                        nullptr,
                         1
                       );
         }
@@ -88,7 +88,7 @@ namespace comphelper
             if ( _container.hasPropertyByName( _name ) || _container.hasPropertyByHandle( _handle ) )
                 throw PropertyExistException(
                     "Property name or handle already used.",
-                    NULL );
+                    nullptr );
 
         }
 
@@ -97,7 +97,7 @@ namespace comphelper
             if ( _container.hasPropertyByName( _name ) || _container.hasPropertyByHandle( _handle ) )
                 throw ElementExistException(
                     "Property name or handle already used.",
-                    NULL );
+                    nullptr );
 
         }
 
@@ -110,7 +110,7 @@ namespace comphelper
             throw IllegalArgumentException(
                     "Illegal property type: VOID",
                         // TODO: resource
-                    NULL,
+                    nullptr,
                     1
                   );
 
@@ -120,7 +120,7 @@ namespace comphelper
 
         // register the property
         OSL_ENSURE( _nAttributes & PropertyAttribute::MAYBEVOID, "PropertyBag::addVoidProperty: this is for default-void properties only!" );
-        registerPropertyNoMember( _rName, _nHandle, _nAttributes | PropertyAttribute::MAYBEVOID, _rType, NULL );
+        registerPropertyNoMember( _rName, _nHandle, _nAttributes | PropertyAttribute::MAYBEVOID, _rType, nullptr );
 
         // remember the default
         m_pImpl->aDefaults.insert( MapInt2Any::value_type( _nHandle, Any() ) );
@@ -135,7 +135,7 @@ namespace comphelper
             throw IllegalTypeException(
                 "The initial value must be non-NULL to determine the property type.",
                 // TODO: resource
-                NULL );
+                nullptr );
 
         // check name/handle sanity
         lcl_checkForEmptyName( m_pImpl->m_bAllowEmptyPropertyName, _rName );
@@ -143,7 +143,7 @@ namespace comphelper
 
         // register the property
         registerPropertyNoMember( _rName, _nHandle, _nAttributes, aPropertyType,
-            _rInitialValue.hasValue() ? _rInitialValue.getValue() : NULL );
+            _rInitialValue.hasValue() ? _rInitialValue.getValue() : nullptr );
 
         // remember the default
         m_pImpl->aDefaults.insert( MapInt2Any::value_type( _nHandle, _rInitialValue ) );
@@ -155,7 +155,7 @@ namespace comphelper
         const Property& rProp = getProperty( _rName );
             // will throw an UnknownPropertyException if necessary
         if ( ( rProp.Attributes & PropertyAttribute::REMOVABLE ) == 0 )
-            throw NotRemoveableException( OUString(), NULL );
+            throw NotRemoveableException( OUString(), nullptr );
         const sal_Int32 nHandle = rProp.Handle;
 
         revokeProperty( nHandle );

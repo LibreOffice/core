@@ -109,7 +109,7 @@ namespace comphelper
             throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException );
 
     public:
-        ChainablePropertySet( comphelper::ChainablePropertySetInfo* pInfo, SolarMutex* pMutex = NULL )
+        ChainablePropertySet( comphelper::ChainablePropertySetInfo* pInfo, SolarMutex* pMutex = nullptr )
             throw();
         virtual ~ChainablePropertySet()
             throw();

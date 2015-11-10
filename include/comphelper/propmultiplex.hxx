@@ -48,7 +48,7 @@ namespace comphelper
 
     public:
         OPropertyChangeListener(::osl::Mutex& _rMutex)
-            : m_pAdapter(NULL), m_rMutex(_rMutex) { }
+            : m_pAdapter(nullptr), m_rMutex(_rMutex) { }
         virtual ~OPropertyChangeListener();
 
         virtual void _propertyChanged(const css::beans::PropertyChangeEvent& _rEvent)

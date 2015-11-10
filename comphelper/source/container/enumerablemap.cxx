@@ -277,7 +277,7 @@ namespace comphelper
                         const EnumerationType _type, const bool _isolated )
             :ComponentBase( _rBHelper, ComponentBase::NoInitializationNeeded() )
             ,m_xKeepMapAlive( _parentMap )
-            ,m_pMapDataCopy( _isolated ? new MapData( _mapData ) : NULL )
+            ,m_pMapDataCopy( _isolated ? new MapData( _mapData ) : nullptr )
             ,m_aEnumerator( *this, _isolated ? *m_pMapDataCopy : _mapData, _type )
         {
         }
@@ -352,7 +352,7 @@ namespace comphelper
             throw IllegalTypeException("Unsupported value type.", *this );
 
         // create the comparator for the KeyType, and throw if the type is not supported
-        ::std::unique_ptr< IKeyPredicateLess > pComparator( getStandardLessPredicate( aKeyType, NULL ) );
+        ::std::unique_ptr< IKeyPredicateLess > pComparator( getStandardLessPredicate( aKeyType, nullptr ) );
         if ( !pComparator.get() )
             throw IllegalTypeException("Unsupported key type.", *this );
 
@@ -442,7 +442,7 @@ namespace comphelper
                         break;
                     pValueCompoundTypeDesc = pValueCompoundTypeDesc->pBaseTypeDescription;
                 }
-                bValid = ( pValueCompoundTypeDesc != NULL );
+                bValid = ( pValueCompoundTypeDesc != nullptr );
             }
         }
         break;

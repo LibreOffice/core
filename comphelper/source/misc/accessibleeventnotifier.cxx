@@ -187,7 +187,7 @@ namespace comphelper
     void AccessibleEventNotifier::revokeClientNotifyDisposing( const TClientId _nClient,
             const Reference< XInterface >& _rxEventSource )
     {
-        ::cppu::OInterfaceContainerHelper* pListeners(0);
+        ::cppu::OInterfaceContainerHelper* pListeners(nullptr);
 
         {
             // rhbz#1001768 drop the mutex before calling disposeAndClear

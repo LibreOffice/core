@@ -31,7 +31,7 @@ private:
 public:
     UnoTunnelIdInit() : m_aSeq(16)
     {
-        rtl_createUuid( reinterpret_cast<sal_uInt8*>(m_aSeq.getArray()), 0, sal_True );
+        rtl_createUuid( reinterpret_cast<sal_uInt8*>(m_aSeq.getArray()), nullptr, sal_True );
     }
     const css::uno::Sequence< sal_Int8 >& getSeq() const { return m_aSeq; }
 };
@@ -71,7 +71,7 @@ classname* classname::getImplementation( const uno::Reference< uno::XInterface >
     if( xUT.is() ) \
         return reinterpret_cast<classname*>(sal::static_int_cast<sal_IntPtr>(xUT->getSomething( classname::getUnoTunnelId() ))); \
     else \
-        return NULL; \
+        return nullptr; \
 }
 
 #define UNO3_GETIMPLEMENTATION_IMPL( classname )\

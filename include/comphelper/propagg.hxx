@@ -120,7 +120,7 @@ public:
     */
     OPropertyArrayAggregationHelper(const css::uno::Sequence< css::beans::Property>& _rProperties,
                                     const css::uno::Sequence< css::beans::Property>& _rAggProperties,
-                                    IPropertyInfoService* _pInfoService = NULL,
+                                    IPropertyInfoService* _pInfoService = nullptr,
                                     sal_Int32 _nFirstAggregateId = DEFAULT_AGGREGATE_PROPERTY_ID);
 
 

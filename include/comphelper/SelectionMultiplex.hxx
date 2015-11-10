@@ -49,7 +49,7 @@ namespace comphelper
 
     public:
         OSelectionChangeListener(::osl::Mutex& _rMutex)
-            : m_pAdapter(NULL), m_rMutex(_rMutex) { }
+            : m_pAdapter(nullptr), m_rMutex(_rMutex) { }
         virtual ~OSelectionChangeListener();
 
         virtual void _selectionChanged( const css::lang::EventObject& aEvent ) throw (css::uno::RuntimeException) = 0;

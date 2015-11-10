@@ -290,8 +290,8 @@ public:
                             const css::uno::Reference< css::task::XInteractionHandler >& rxInteractHandler,
                             const OUString& rDocumentUrl,
                             DocPasswordRequestType eRequestType,
-                            const ::std::vector< OUString >* pDefaultPasswords = 0,
-                            bool* pbIsDefaultPassword = 0 );
+                            const ::std::vector< OUString >* pDefaultPasswords = nullptr,
+                            bool* pbIsDefaultPassword = nullptr );
 
 private:
                         ~DocPasswordHelper();

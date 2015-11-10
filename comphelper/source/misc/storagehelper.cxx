@@ -589,7 +589,7 @@ uno::Reference< io::XStream > OStorageHelper::GetStreamAtPackageURL(
     {
         return GetStreamAtPath(xParentStorage, path, nOpenMode, rNastiness);
     }
-    return 0;
+    return nullptr;
 }
 
 }

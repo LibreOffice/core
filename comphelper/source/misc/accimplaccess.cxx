@@ -55,7 +55,7 @@ namespace comphelper
     OAccessibleImplementationAccess::~OAccessibleImplementationAccess( )
     {
         delete m_pImpl;
-        m_pImpl = NULL;
+        m_pImpl = nullptr;
     }
 
 
@@ -101,7 +101,7 @@ namespace comphelper
 
     OAccessibleImplementationAccess* OAccessibleImplementationAccess::getImplementation( const Reference< XAccessibleContext >& _rxComponent )
     {
-        OAccessibleImplementationAccess* pImplementation = NULL;
+        OAccessibleImplementationAccess* pImplementation = nullptr;
         try
         {
             Reference< XUnoTunnel > xTunnel( _rxComponent, UNO_QUERY );
@@ -127,7 +127,7 @@ namespace comphelper
         if ( pImplementation )
             pImplementation->setAccessibleParent( _rxNewParent );
 
-        return ( NULL != pImplementation );
+        return ( nullptr != pImplementation );
     }
 
 

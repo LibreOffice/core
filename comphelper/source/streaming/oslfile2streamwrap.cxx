@@ -130,7 +130,7 @@ void SAL_CALL OSLInputStreamWrapper::closeInput() throw( css::io::NotConnectedEx
 
     m_pFile->close();
 
-    m_pFile = NULL;
+    m_pFile = nullptr;
 }
 
 /*************************************************************************/

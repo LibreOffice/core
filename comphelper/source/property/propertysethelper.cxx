@@ -50,7 +50,7 @@ PropertyMapEntry const * PropertySetHelperImpl::find( const OUString& aName ) co
     }
     else
     {
-        return NULL;
+        return nullptr;
     }
 }
 
@@ -86,10 +86,10 @@ void SAL_CALL PropertySetHelper::setPropertyValue( const OUString& aPropertyName
     PropertyMapEntry const * aEntries[2];
     aEntries[0] = mp->find( aPropertyName );
 
-    if( NULL == aEntries[0] )
+    if( nullptr == aEntries[0] )
         throw UnknownPropertyException( aPropertyName, static_cast< XPropertySet* >( this ) );
 
-    aEntries[1] = NULL;
+    aEntries[1] = nullptr;
 
     _setPropertyValues( aEntries, &aValue );
 }
@@ -99,10 +99,10 @@ Any SAL_CALL PropertySetHelper::getPropertyValue( const OUString& PropertyName )
     PropertyMapEntry const * aEntries[2];
     aEntries[0] = mp->find( PropertyName );
 
-    if( NULL == aEntries[0] )
+    if( nullptr == aEntries[0] )
         throw UnknownPropertyException( PropertyName, static_cast< XPropertySet* >( this ) );
 
-    aEntries[1] = NULL;
+    aEntries[1] = nullptr;
 
     Any aAny;
     _getPropertyValues( aEntries, &aAny );
@@ -142,7 +142,7 @@ void SAL_CALL PropertySetHelper::setPropertyValues( const Sequence< OUString >& 
     if( nCount )
     {
         std::unique_ptr<PropertyMapEntry const *[]> pEntries(new PropertyMapEntry const *[nCount+1]);
-        pEntries[nCount] = NULL;
+        pEntries[nCount] = nullptr;
         const OUString* pNames = rPropertyNames.getConstArray();
 
         bool bUnknown = false;
@@ -150,7 +150,7 @@ void SAL_CALL PropertySetHelper::setPropertyValues( const Sequence< OUString >& 
         for( n = 0; !bUnknown && ( n < nCount ); n++, pNames++ )
         {
             pEntries[n] = mp->find( *pNames );
-            bUnknown = NULL == pEntries[n];
+            bUnknown = nullptr == pEntries[n];
         }
 
         if( !bUnknown )
@@ -170,7 +170,7 @@ Sequence< Any > SAL_CALL PropertySetHelper::getPropertyValues(const Sequence< OU
     if( nCount )
     {
         std::unique_ptr<PropertyMapEntry const *[]> pEntries(new PropertyMapEntry const *[nCount+1]);
-        pEntries[nCount] = NULL;
+        pEntries[nCount] = nullptr;
         const OUString* pNames = rPropertyNames.getConstArray();
 
         bool bUnknown = false;
@@ -178,7 +178,7 @@ Sequence< Any > SAL_CALL PropertySetHelper::getPropertyValues(const Sequence< OU
         for( n = 0; !bUnknown && ( n < nCount ); n++, pNames++ )
         {
             pEntries[n] = mp->find( *pNames );
-            bUnknown = NULL == pEntries[n];
+            bUnknown = nullptr == pEntries[n];
         }
 
         if( !bUnknown )
@@ -215,10 +215,10 @@ PropertyState SAL_CALL PropertySetHelper::getPropertyState( const OUString& Prop
     PropertyMapEntry const * aEntries[2];
 
     aEntries[0] = mp->find( PropertyName );
-    if( aEntries[0] == NULL )
+    if( aEntries[0] == nullptr )
         throw UnknownPropertyException( PropertyName, static_cast< XPropertySet* >( this ) );
 
-    aEntries[1] = NULL;
+    aEntries[1] = nullptr;
 
     PropertyState aState(PropertyState_AMBIGUOUS_VALUE);
     _getPropertyStates( aEntries, &aState );
@@ -244,10 +244,10 @@ Sequence< PropertyState > SAL_CALL PropertySetHelper::getPropertyStates( const S
         for( n = 0; !bUnknown && (n < nCount); n++, pNames++ )
         {
             pEntries[n] = mp->find( *pNames );
-            bUnknown = NULL == pEntries[n];
+            bUnknown = nullptr == pEntries[n];
         }
 
-        pEntries[nCount] = NULL;
+        pEntries[nCount] = nullptr;
 
         if( !bUnknown )
             _getPropertyStates( pEntries.get(), aStates.getArray() );
@@ -262,7 +262,7 @@ Sequence< PropertyState > SAL_CALL PropertySetHelper::getPropertyStates( const S
 void SAL_CALL PropertySetHelper::setPropertyToDefault( const OUString& PropertyName ) throw(UnknownPropertyException, RuntimeException, std::exception)
 {
     PropertyMapEntry const *pEntry  = mp->find( PropertyName );
-    if( NULL == pEntry )
+    if( nullptr == pEntry )
         throw UnknownPropertyException( PropertyName, static_cast< XPropertySet* >( this ) );
 
     _setPropertyToDefault( pEntry );
@@ -271,7 +271,7 @@ void SAL_CALL PropertySetHelper::setPropertyToDefault( const OUString& PropertyN
 Any SAL_CALL PropertySetHelper::getPropertyDefault( const OUString& aPropertyName ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception)
 {
     PropertyMapEntry const * pEntry = mp->find( aPropertyName );
-    if( NULL == pEntry )
+    if( nullptr == pEntry )
         throw UnknownPropertyException( aPropertyName, static_cast< XPropertySet* >( this ) );
 
     return _getPropertyDefault( pEntry );

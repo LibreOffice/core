@@ -101,7 +101,7 @@ EmbeddedObjectContainer::EmbeddedObjectContainer()
     pImpl->mxStorage = ::comphelper::OStorageHelper::GetTemporaryStorage();
     pImpl->mbOwnsStorage = true;
     pImpl->mbUserAllowsLinkUpdate = true;
-    pImpl->mpTempObjectContainer = 0;
+    pImpl->mpTempObjectContainer = nullptr;
 }
 
 EmbeddedObjectContainer::EmbeddedObjectContainer( const uno::Reference < embed::XStorage >& rStor )
@@ -110,7 +110,7 @@ EmbeddedObjectContainer::EmbeddedObjectContainer( const uno::Reference < embed::
     pImpl->mxStorage = rStor;
     pImpl->mbOwnsStorage = false;
     pImpl->mbUserAllowsLinkUpdate = true;
-    pImpl->mpTempObjectContainer = 0;
+    pImpl->mpTempObjectContainer = nullptr;
 }
 
 EmbeddedObjectContainer::EmbeddedObjectContainer( const uno::Reference < embed::XStorage >& rStor, const uno::Reference < uno::XInterface >& xModel )
@@ -119,7 +119,7 @@ EmbeddedObjectContainer::EmbeddedObjectContainer( const uno::Reference < embed::
     pImpl->mxStorage = rStor;
     pImpl->mbOwnsStorage = false;
     pImpl->mbUserAllowsLinkUpdate = true;
-    pImpl->mpTempObjectContainer = 0;
+    pImpl->mpTempObjectContainer = nullptr;
     pImpl->m_xModel = xModel;
 }
 
@@ -438,7 +438,7 @@ void EmbeddedObjectContainer::AddEmbeddedObject( const css::uno::Reference < css
                 if ( xStream.is() )
                 {
                     InsertGraphicStream( xStream, rName, aMediaType );
-                    xStream = 0;
+                    xStream = nullptr;
                     pImpl->mpTempObjectContainer->RemoveGraphicStream( aTempName );
                 }
 

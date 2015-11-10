@@ -145,7 +145,7 @@ void comphelper::detail::ConfigurationWrapper::setPropertyValue(
     std::shared_ptr< ConfigurationChanges > const & batch,
     OUString const & path, css::uno::Any const & value)
 {
-    assert(batch.get() != 0);
+    assert(batch.get() != nullptr);
     batch->setPropertyValue(path, value);
 }
 
@@ -161,7 +161,7 @@ void comphelper::detail::ConfigurationWrapper::setLocalizedPropertyValue(
     std::shared_ptr< ConfigurationChanges > const & batch,
     OUString const & path, css::uno::Any const & value)
 {
-    assert(batch.get() != 0);
+    assert(batch.get() != nullptr);
     batch->setPropertyValue(path, value);
 }
 
@@ -181,7 +181,7 @@ comphelper::detail::ConfigurationWrapper::getGroupReadWrite(
     std::shared_ptr< ConfigurationChanges > const & batch,
     OUString const & path)
 {
-    assert(batch.get() != 0);
+    assert(batch.get() != nullptr);
     return batch->getGroup(path);
 }
 
@@ -201,7 +201,7 @@ comphelper::detail::ConfigurationWrapper::getSetReadWrite(
     std::shared_ptr< ConfigurationChanges > const & batch,
     OUString const & path)
 {
-    assert(batch.get() != 0);
+    assert(batch.get() != nullptr);
     return batch->getSet(path);
 }
 

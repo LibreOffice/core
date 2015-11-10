@@ -140,14 +140,14 @@ public:
     bool            MoveEmbeddedObject( const OUString& rName, EmbeddedObjectContainer& );
 
     // get the stored representation for the object
-    css::uno::Reference < css::io::XInputStream > GetObjectStream( const css::uno::Reference < css::embed::XEmbeddedObject >&, OUString* pMediaType=0 );
+    css::uno::Reference < css::io::XInputStream > GetObjectStream( const css::uno::Reference < css::embed::XEmbeddedObject >&, OUString* pMediaType=nullptr );
     css::uno::Reference < css::io::XInputStream > GetObjectStream( const OUString& aName, OUString* pMediaType );
 
     // get the stored graphical representation for the object
-    css::uno::Reference < css::io::XInputStream > GetGraphicStream( const css::uno::Reference < css::embed::XEmbeddedObject >&, OUString* pMediaType=0 );
+    css::uno::Reference < css::io::XInputStream > GetGraphicStream( const css::uno::Reference < css::embed::XEmbeddedObject >&, OUString* pMediaType=nullptr );
 
     // get the stored graphical representation by the object name
-    css::uno::Reference < css::io::XInputStream > GetGraphicStream( const OUString& aName, OUString* pMediaType=0 );
+    css::uno::Reference < css::io::XInputStream > GetGraphicStream( const OUString& aName, OUString* pMediaType=nullptr );
 
     // add a graphical representation for an object
     bool            InsertGraphicStream( const css::uno::Reference < css::io::XInputStream >& rStream, const OUString& rObjectName, const OUString& rMediaType );

@@ -29,7 +29,7 @@ namespace comphelper
     using namespace ::com::sun::star::container;
 
     OContainerListener::OContainerListener(::osl::Mutex& _rMutex)
-        :m_pAdapter(NULL)
+        :m_pAdapter(nullptr)
         ,m_rMutex(_rMutex)
     {
     }
@@ -40,7 +40,7 @@ namespace comphelper
         if (m_pAdapter)
         {
             m_pAdapter->dispose();
-            m_pAdapter = NULL;
+            m_pAdapter = nullptr;
         }
     }
 
@@ -75,7 +75,7 @@ namespace comphelper
         {
             ::osl::MutexGuard aGuard(m_rMutex);
             m_pAdapter->release();
-            m_pAdapter = NULL;
+            m_pAdapter = nullptr;
         }
 
         if (pAdapter)
@@ -121,14 +121,14 @@ namespace comphelper
             {
                 Reference< XContainerListener > xPreventDelete(this);
                 m_xContainer->removeContainerListener(xPreventDelete);
-                m_pListener->setAdapter(NULL);
+                m_pListener->setAdapter(nullptr);
             }
             catch(const Exception&)
             {
                 OSL_FAIL("Exception caught!");
             }
-            m_xContainer = NULL;
-            m_pListener = NULL;
+            m_xContainer = nullptr;
+            m_pListener = nullptr;
         }
     }
 
@@ -142,11 +142,11 @@ namespace comphelper
                 m_pListener->_disposing(_rSource);
             // disconnect the listener
             if ( m_pListener )
-                m_pListener->setAdapter(NULL);
+                m_pListener->setAdapter(nullptr);
         }
 
-        m_xContainer = NULL;
-        m_pListener = NULL;
+        m_xContainer = nullptr;
+        m_pListener = nullptr;
     }
 
 

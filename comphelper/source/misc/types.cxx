@@ -122,10 +122,10 @@ FontDescriptor  getDefaultFont()
 bool isAssignableFrom(const Type& _rAssignable, const Type& _rFrom)
 {
     // get the type lib descriptions
-    typelib_TypeDescription* pAssignable = NULL;
+    typelib_TypeDescription* pAssignable = nullptr;
     _rAssignable.getDescription(&pAssignable);
 
-    typelib_TypeDescription* pFrom = NULL;
+    typelib_TypeDescription* pFrom = nullptr;
     _rFrom.getDescription(&pFrom);
 
     // and ask the type lib

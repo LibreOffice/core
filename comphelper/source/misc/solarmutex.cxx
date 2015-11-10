@@ -28,7 +28,7 @@ SolarMutex::SolarMutex() {}
 SolarMutex::~SolarMutex() {}
 
 namespace {
-    static SolarMutex* pSolarMutex = 0;
+    static SolarMutex* pSolarMutex = nullptr;
 }
 
 void SolarMutex::setSolarMutex( SolarMutex *pMutex )

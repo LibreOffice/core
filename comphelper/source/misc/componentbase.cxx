@@ -49,7 +49,7 @@ namespace comphelper
 
     Reference< XInterface > ComponentBase::getComponent()
     {
-        return NULL;
+        return nullptr;
     }
 
 

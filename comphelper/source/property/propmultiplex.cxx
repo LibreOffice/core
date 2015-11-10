@@ -59,7 +59,7 @@ void OPropertyChangeListener::setAdapter(OPropertyChangeMultiplexer* pAdapter)
     {
         ::osl::MutexGuard aGuard(m_rMutex);
         m_pAdapter->release();
-        m_pAdapter = NULL;
+        m_pAdapter = nullptr;
     }
 
     if (pAdapter)
@@ -108,13 +108,13 @@ void OPropertyChangeMultiplexer::dispose()
         for (sal_Int32 i = 0; i < m_aProperties.getLength(); ++i, ++pProperties)
             m_xSet->removePropertyChangeListener(*pProperties, static_cast< XPropertyChangeListener*>(this));
 
-        m_pListener->setAdapter(NULL);
+        m_pListener->setAdapter(nullptr);
 
-        m_pListener = NULL;
+        m_pListener = nullptr;
         m_bListening = false;
 
         if (m_bAutoSetRelease)
-            m_xSet = NULL;
+            m_xSet = nullptr;
     }
 }
 
@@ -129,14 +129,14 @@ void SAL_CALL OPropertyChangeMultiplexer::disposing( const  EventObject& _rSourc
             m_pListener->_disposing(_rSource);
         // disconnect the listener
         if (m_pListener)    // may have been reset whilest calling into _disposing
-            m_pListener->setAdapter(NULL);
+            m_pListener->setAdapter(nullptr);
     }
 
-    m_pListener = NULL;
+    m_pListener = nullptr;
     m_bListening = false;
 
     if (m_bAutoSetRelease)
-        m_xSet = NULL;
+        m_xSet = nullptr;
 }
 
 // XPropertyChangeListener

@@ -40,7 +40,7 @@ namespace comphelper
         public ChainablePropertySet
     {
     public:
-        ChainableHelperNoState ( ChainablePropertySetInfo *pInfo, SolarMutex* pMutex = NULL)
+        ChainableHelperNoState ( ChainablePropertySetInfo *pInfo, SolarMutex* pMutex = nullptr)
         : ChainablePropertySet ( pInfo, pMutex )
         {}
         virtual ~ChainableHelperNoState () throw( ) {}

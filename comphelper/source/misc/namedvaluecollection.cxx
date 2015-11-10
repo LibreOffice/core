@@ -258,7 +258,7 @@ namespace comphelper
             aBuffer.append     ( _rExpectedValueType.getTypeName() );
             aBuffer.append( "\nFound: " );
             aBuffer.append     ( pos->second.getValueType().getTypeName() );
-            throw IllegalArgumentException( aBuffer.makeStringAndClear(), NULL, 0 );
+            throw IllegalArgumentException( aBuffer.makeStringAndClear(), nullptr, 0 );
         }
 
         // argument does not exist

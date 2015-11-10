@@ -140,7 +140,7 @@ namespace comphelper
                     component->pComponentCreationFunc,
                     component->sImplementationName,
                     component->aSupportedServices,
-                    NULL
+                    nullptr
                 );
                 if ( xReturn.is() )
                 {
@@ -150,7 +150,7 @@ namespace comphelper
             }
         }
 
-        return NULL;
+        return nullptr;
     }
 
 

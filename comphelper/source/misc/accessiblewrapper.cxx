@@ -347,7 +347,7 @@ namespace comphelper
         ,m_xInnerContext( _rxInnerAccessibleContext )
         ,m_xOwningAccessible( _rxOwningAccessible )
         ,m_xParentAccessible( _rxParentAccessible )
-        ,m_pChildMapper( NULL )
+        ,m_pChildMapper( nullptr )
     {
         // initialize the mapper for our children
         m_pChildMapper = new OWrappedAccessibleChildrenManager( getComponentContext() );
@@ -385,7 +385,7 @@ namespace comphelper
         OSL_ENSURE( m_rBHelper.bDisposed, "OAccessibleContextWrapperHelper::~OAccessibleContextWrapperHelper: you should ensure (in your dtor) that the object is disposed!" );
 
         m_pChildMapper->release();
-        m_pChildMapper = NULL;
+        m_pChildMapper = nullptr;
     }
 
 

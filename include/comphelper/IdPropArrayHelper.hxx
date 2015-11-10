@@ -60,7 +60,7 @@ namespace comphelper
                 for (OIdPropertyArrayMap::iterator i = s_pMap->begin(); i != s_pMap->end(); ++i)
                     delete (*i).second;
                 delete s_pMap;
-                s_pMap = NULL;
+                s_pMap = nullptr;
             }
         }
 
@@ -87,7 +87,7 @@ namespace comphelper
     sal_Int32                       OIdPropertyArrayUsageHelper< TYPE >::s_nRefCount    = 0;
 
     template<class TYPE>
-    OIdPropertyArrayMap*            OIdPropertyArrayUsageHelper< TYPE >::s_pMap = NULL;
+    OIdPropertyArrayMap*            OIdPropertyArrayUsageHelper< TYPE >::s_pMap = nullptr;
 
 
     template <class TYPE>
@@ -95,7 +95,7 @@ namespace comphelper
     {
         ::osl::MutexGuard aGuard(OIdPropertyArrayUsageHelperMutex<TYPE>::get());
         // create the map if necessary
-        if (s_pMap == NULL)
+        if (s_pMap == nullptr)
             s_pMap = new OIdPropertyArrayMap();
         ++s_nRefCount;
     }

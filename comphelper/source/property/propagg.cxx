@@ -53,7 +53,7 @@ namespace comphelper
             Property aNameProp(_rName, 0, Type(), 0);
             const Property* pResult = ::std::lower_bound(pProperties, pProperties + nLen, aNameProp, PropertyCompareByName());
             if ( pResult && ( pResult == pProperties + nLen || pResult->Name != _rName) )
-                pResult = NULL;
+                pResult = nullptr;
 
             return pResult;
         }
@@ -177,7 +177,7 @@ Property OPropertyArrayAggregationHelper::getPropertyByName( const OUString& _rP
 
 sal_Bool OPropertyArrayAggregationHelper::hasPropertyByName(const OUString& _rPropertyName)
 {
-    return NULL != findPropertyByName( _rPropertyName );
+    return nullptr != findPropertyByName( _rPropertyName );
 }
 
 
@@ -614,7 +614,7 @@ sal_Int32 OPropertySetAggregationHelper::getOriginalHandle(sal_Int32 nHandle) co
 {
     OPropertyArrayAggregationHelper& rPH = static_cast<OPropertyArrayAggregationHelper&>( const_cast<OPropertySetAggregationHelper*>(this)->getInfoHelper() );
     sal_Int32 nOriginalHandle = -1;
-    (void)rPH.fillAggregatePropertyInfoByHandle(NULL, &nOriginalHandle, nHandle);
+    (void)rPH.fillAggregatePropertyInfoByHandle(nullptr, &nOriginalHandle, nHandle);
     return nOriginalHandle;
 }
 
@@ -819,7 +819,7 @@ void SAL_CALL OPropertySetAggregationHelper::setPropertyValues(
                             if( pHandles[i] != -1 )
                             {
                                 sal_Int16 nAttributes;
-                                rPH2.fillPropertyMembersByHandle( NULL, &nAttributes, pHandles[i] );
+                                rPH2.fillPropertyMembersByHandle( nullptr, &nAttributes, pHandles[i] );
                                 if( nAttributes & css::beans::PropertyAttribute::READONLY )
                                     throw css::beans::PropertyVetoException();
                                 // Will the property change?

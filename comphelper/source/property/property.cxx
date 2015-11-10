@@ -183,7 +183,7 @@ bool tryPropertyValue(Any& _rConvertedValue, Any& _rOldValue, const Any& _rValue
     {
         if ( _rValueToSet.hasValue() && ( !_rExpectedType.equals( _rValueToSet.getValueType() ) ) )
         {
-            _rConvertedValue = Any( NULL, _rExpectedType.getTypeLibType() );
+            _rConvertedValue = Any( nullptr, _rExpectedType.getTypeLibType() );
 
             if  ( !uno_type_assignData(
                     const_cast< void* >( _rConvertedValue.getValue() ), _rConvertedValue.getValueType().getTypeLibType(),

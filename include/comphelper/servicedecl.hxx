@@ -338,7 +338,7 @@ template< typename T >
 inline void* component_getFactoryHelper( const sal_Char* pImplName, void* pRet,
                                          const T& s )
 {
-    if( pRet == 0 )
+    if( pRet == nullptr )
         return s.getFactory( pImplName );
     return pRet;
 }
@@ -347,7 +347,7 @@ template< typename T, typename... Args >
 inline void* component_getFactoryHelper( const sal_Char* pImplName, void* pRet,
                                          const T& s, const Args&... args )
 {
-    if( pRet == 0 )
+    if( pRet == nullptr )
         return component_getFactoryHelper( pImplName, s.getFactory( pImplName ), args... );
     return pRet;
 }
@@ -356,7 +356,7 @@ template< typename... Args >
 inline void* component_getFactoryHelper( const sal_Char* pImplName,
                                          const Args&... args )
 {
-    void* pRet = 0;
+    void* pRet = nullptr;
     return component_getFactoryHelper( pImplName, pRet, args... );
 }
 

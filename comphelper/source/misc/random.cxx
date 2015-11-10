@@ -39,7 +39,7 @@ struct RandomNumberGenerator
     STD_RNG_ALGO global_rng;
     RandomNumberGenerator()
     {
-        bool bRepeatable = (getenv("SAL_RAND_REPEATABLE") != 0);
+        bool bRepeatable = (getenv("SAL_RAND_REPEATABLE") != nullptr);
         if (bRepeatable)
         {
             global_rng.seed(42);

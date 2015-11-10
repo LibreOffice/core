@@ -42,8 +42,8 @@ using namespace ::com::sun::star;
 
 OInstanceLocker::OInstanceLocker( const uno::Reference< uno::XComponentContext >& xContext )
 : m_xContext( xContext )
-, m_pLockListener( NULL )
-, m_pListenersContainer( NULL )
+, m_pLockListener( nullptr )
+, m_pListenersContainer( nullptr )
 , m_bDisposed( false )
 , m_bInitialized( false )
 {
@@ -65,7 +65,7 @@ OInstanceLocker::~OInstanceLocker()
     if ( m_pListenersContainer )
     {
         delete m_pListenersContainer;
-        m_pListenersContainer = NULL;
+        m_pListenersContainer = nullptr;
     }
 }
 
@@ -88,7 +88,7 @@ void SAL_CALL OInstanceLocker::dispose()
         if ( m_pLockListener )
         {
             m_pLockListener->Dispose();
-            m_pLockListener = NULL;
+            m_pLockListener = nullptr;
         }
         m_xLockListener.clear();
     }

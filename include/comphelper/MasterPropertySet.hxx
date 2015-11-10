@@ -98,7 +98,7 @@ namespace comphelper
             throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException );
 
     public:
-        MasterPropertySet( comphelper::MasterPropertySetInfo* pInfo, SolarMutex* pMutex = NULL )
+        MasterPropertySet( comphelper::MasterPropertySetInfo* pInfo, SolarMutex* pMutex = nullptr )
             throw();
         virtual ~MasterPropertySet()
             throw();

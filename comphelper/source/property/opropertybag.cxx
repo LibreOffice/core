@@ -269,7 +269,7 @@ namespace comphelper
     {
         // XSet is only a workaround for addProperty not being able to add default-void properties.
         // So, everything of XSet except insert is implemented empty
-        return NULL;
+        return nullptr;
     }
 
 
@@ -558,7 +558,7 @@ namespace comphelper
 
         ::cppu::IPropertyArrayHelper& rPropInfo = getInfoHelper();
         sal_Int16 nAttributes(0);
-        OSL_VERIFY( rPropInfo.fillPropertyMembersByHandle( NULL, &nAttributes, _nHandle ) );
+        OSL_VERIFY( rPropInfo.fillPropertyMembersByHandle( nullptr, &nAttributes, _nHandle ) );
         if ( ( nAttributes & PropertyAttribute::MAYBEDEFAULT ) == 0 )
             return PropertyState_DIRECT_VALUE;
 

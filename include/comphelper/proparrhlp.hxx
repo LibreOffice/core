@@ -54,7 +54,7 @@ public:
         if (!--s_nRefCount)
         {
             delete s_pProps;
-            s_pProps = NULL;
+            s_pProps = nullptr;
         }
     }
 
@@ -104,7 +104,7 @@ protected:
         Beware of the lifetime of the returned object, as it has to exist 'til the last instance
         of this class dies.
     */
-    virtual IPropertyInfoService* getInfoService() const { return NULL; }
+    virtual IPropertyInfoService* getInfoService() const { return nullptr; }
 
     /** the return value is used for the construction of the OPropertyArrayAggregationHelper.
     */
@@ -115,7 +115,7 @@ template<class TYPE>
 sal_Int32                       OPropertyArrayUsageHelper< TYPE >::s_nRefCount  = 0;
 
 template<class TYPE>
-::cppu::IPropertyArrayHelper*   OPropertyArrayUsageHelper< TYPE >::s_pProps = NULL;
+::cppu::IPropertyArrayHelper*   OPropertyArrayUsageHelper< TYPE >::s_pProps = nullptr;
 
 template <class TYPE>
 OPropertyArrayUsageHelper<TYPE>::OPropertyArrayUsageHelper()

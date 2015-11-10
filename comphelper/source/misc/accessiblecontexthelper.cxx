@@ -60,7 +60,7 @@ namespace comphelper
 
     public:
         OContextHelper_Impl()
-            :m_pExternalLock( NULL )
+            :m_pExternalLock( nullptr )
             ,m_nClientId( 0 )
         {
         }
@@ -74,7 +74,7 @@ namespace comphelper
 
     OAccessibleContextHelper::OAccessibleContextHelper( IMutex* _pExternalLock )
         :OAccessibleContextHelper_Base( GetMutex() )
-        ,m_pImpl( NULL )
+        ,m_pImpl( nullptr )
     {
         assert(_pExternalLock);
         m_pImpl = new OContextHelper_Impl();
@@ -84,7 +84,7 @@ namespace comphelper
 
     void OAccessibleContextHelper::forgetExternalLock()
     {
-        m_pImpl->setExternalLock( NULL );
+        m_pImpl->setExternalLock( nullptr );
     }
 
 
@@ -97,7 +97,7 @@ namespace comphelper
         ensureDisposed();
 
         delete m_pImpl;
-        m_pImpl = NULL;
+        m_pImpl = nullptr;
     }
 
 

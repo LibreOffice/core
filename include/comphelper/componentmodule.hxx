@@ -68,8 +68,8 @@ namespace comphelper
             :sImplementationName()
             ,aSupportedServices()
             ,sSingletonName()
-            ,pComponentCreationFunc( NULL )
-            ,pFactoryCreationFunc( NULL )
+            ,pComponentCreationFunc( nullptr )
+            ,pFactoryCreationFunc( nullptr )
         {
         }
 

@@ -61,7 +61,7 @@ void appendValue( OUStringBuffer & buf,
         buf.append( "void" );
         return;
     }
-    assert(val != 0);
+    assert(val != nullptr);
 
     if (prependType &&
         typeRef->eTypeClass != typelib_TypeClass_STRING &&
@@ -91,9 +91,9 @@ void appendValue( OUStringBuffer & buf,
     case typelib_TypeClass_STRUCT:
     case typelib_TypeClass_EXCEPTION: {
         buf.append( "{ " );
-        typelib_TypeDescription * typeDescr = 0;
+        typelib_TypeDescription * typeDescr = nullptr;
         typelib_typedescriptionreference_getDescription( &typeDescr, typeRef );
-        if (typeDescr == 0 || !typelib_typedescription_complete( &typeDescr )) {
+        if (typeDescr == nullptr || !typelib_typedescription_complete( &typeDescr )) {
             appendTypeError( buf, typeRef );
         }
         else {
@@ -120,9 +120,9 @@ void appendValue( OUStringBuffer & buf,
             {
                 buf.append( ppMemberNames[ nPos ] );
                 buf.append( " = " );
-                typelib_TypeDescription * memberType = 0;
+                typelib_TypeDescription * memberType = nullptr;
                 TYPELIB_DANGER_GET( &memberType, ppTypeRefs[ nPos ] );
-                if (memberType == 0) {
+                if (memberType == nullptr) {
                     appendTypeError( buf, ppTypeRefs[ nPos ] );
                 }
                 else {
@@ -137,23 +137,23 @@ void appendValue( OUStringBuffer & buf,
             }
         }
         buf.append( " }" );
-        if (typeDescr != 0)
+        if (typeDescr != nullptr)
             typelib_typedescription_release( typeDescr );
         break;
     }
     case typelib_TypeClass_SEQUENCE: {
-        typelib_TypeDescription * typeDescr = 0;
+        typelib_TypeDescription * typeDescr = nullptr;
         TYPELIB_DANGER_GET( &typeDescr, typeRef );
-        if (typeDescr == 0) {
+        if (typeDescr == nullptr) {
             appendTypeError( buf,typeRef );
         }
         else {
             typelib_TypeDescriptionReference * elementTypeRef =
                 reinterpret_cast<
                 typelib_IndirectTypeDescription * >(typeDescr)->pType;
-            typelib_TypeDescription * elementTypeDescr = 0;
+            typelib_TypeDescription * elementTypeDescr = nullptr;
             TYPELIB_DANGER_GET( &elementTypeDescr, elementTypeRef );
-            if (elementTypeDescr == 0)
+            if (elementTypeDescr == nullptr)
             {
                 appendTypeError( buf, elementTypeRef );
             }
@@ -219,9 +219,9 @@ void appendValue( OUStringBuffer & buf,
         break;
     }
     case typelib_TypeClass_ENUM: {
-        typelib_TypeDescription * typeDescr = 0;
+        typelib_TypeDescription * typeDescr = nullptr;
         typelib_typedescriptionreference_getDescription( &typeDescr, typeRef );
-        if (typeDescr == 0 || !typelib_typedescription_complete( &typeDescr )) {
+        if (typeDescr == nullptr || !typelib_typedescription_complete( &typeDescr )) {
             appendTypeError( buf, typeRef );
         }
         else
@@ -246,7 +246,7 @@ void appendValue( OUStringBuffer & buf,
                 buf.append( "?unknown enum value?" );
             }
         }
-        if (typeDescr != 0)
+        if (typeDescr != nullptr)
             typelib_typedescription_release( typeDescr );
         break;
     }

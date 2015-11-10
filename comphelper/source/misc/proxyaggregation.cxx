@@ -86,7 +86,7 @@ namespace comphelper
     OProxyAggregation::~OProxyAggregation()
     {
         if ( m_xProxyAggregate.is() )
-            m_xProxyAggregate->setDelegator( NULL );
+            m_xProxyAggregate->setDelegator( nullptr );
         m_xProxyAggregate.clear();
         m_xProxyTypeAccess.clear();
             // this should remove the _two_only_ "real" references (means not delegated to
