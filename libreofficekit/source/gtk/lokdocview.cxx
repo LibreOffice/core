@@ -920,6 +920,8 @@ const char* LOKDocView_Impl::callbackTypeToString(int nType)
         return "LOK_CALLBACK_CURSOR_VISIBLE";
     case LOK_CALLBACK_GRAPHIC_SELECTION:
         return "LOK_CALLBACK_GRAPHIC_SELECTION";
+    case LOK_CALLBACK_MOUSE_POINTER:
+        return "LOK_CALLBACK_MOUSE_POINTER";
     case LOK_CALLBACK_HYPERLINK_CLICKED:
         return "LOK_CALLBACK_HYPERLINK_CLICKED";
     case LOK_CALLBACK_STATE_CHANGED:
@@ -1006,6 +1008,15 @@ gboolean LOKDocView_Impl::callbackImpl(CallbackData* pCallback)
     case LOK_CALLBACK_CURSOR_VISIBLE:
     {
         m_bCursorVisible = pCallback->m_aPayload == "true";
+    }
+    break;
+    case LOK_CALLBACK_MOUSE_POINTER:
+    {
+        // The gtk docs claim that most css cursors should be supported, however
+        // on my system at least this is not true and many cursors are unsupported.
+        // In this case pCursor = null, which results in the default cursor being set.
+        GdkCursor* pCursor = gdk_cursor_new_from_name(gtk_widget_get_display(GTK_WIDGET(pCallback->m_pDocView)), pCallback->m_aPayload.c_str());
+        gdk_window_set_cursor(gtk_widget_get_window(GTK_WIDGET(pCallback->m_pDocView)), pCursor);
     }
     break;
     case LOK_CALLBACK_GRAPHIC_SELECTION:
