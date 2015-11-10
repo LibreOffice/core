@@ -20,7 +20,7 @@
 #define INCLUDED_CUI_SOURCE_INC_NUMPAGES_HXX
 
 #include <vector>
-#include <boost/ptr_container/ptr_vector.hpp>
+#include <memory>
 
 #include <sfx2/tabdlg.hxx>
 #include <vcl/group.hxx>
@@ -76,7 +76,7 @@ struct SvxNumSettings_Impl
         {}
 };
 
-typedef boost::ptr_vector<SvxNumSettings_Impl> SvxNumSettingsArr_Impl;
+typedef std::vector<std::unique_ptr<SvxNumSettings_Impl> > SvxNumSettingsArr_Impl;
 
 
 

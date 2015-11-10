@@ -213,7 +213,7 @@ SvxSingleNumPickTabPage::SvxSingleNumPickTabPage(vcl::Window* pParent,
             for(sal_Int32 i = 0; i < nLength; i++)
             {
                 SvxNumSettings_Impl* pNew = lcl_CreateNumSettingsPtr(pValuesArr[i]);
-                aNumSettingsArr.push_back(pNew);
+                aNumSettingsArr.push_back(std::unique_ptr<SvxNumSettings_Impl>(pNew));
             }
         }
         catch(const Exception&)
@@ -336,7 +336,7 @@ IMPL_LINK_NOARG_TYPED(SvxSingleNumPickTabPage, NumSelectHdl_Impl, ValueSet*, voi
         DBG_ASSERT(aNumSettingsArr.size() > nIdx, "wrong index");
         if(aNumSettingsArr.size() <= nIdx)
             return;
-        SvxNumSettings_Impl* _pSet = &aNumSettingsArr[nIdx];
+        SvxNumSettings_Impl* _pSet = aNumSettingsArr[nIdx].get();
         sal_Int16 eNewType = _pSet->nNumberType;
         const sal_Unicode cLocalPrefix = !_pSet->sPrefix.isEmpty() ? _pSet->sPrefix[0] : 0;
         const sal_Unicode cLocalSuffix = !_pSet->sSuffix.isEmpty() ? _pSet->sSuffix[0] : 0;
@@ -580,7 +580,7 @@ SvxNumPickTabPage::SvxNumPickTabPage(vcl::Window* pParent,
                     Sequence<PropertyValue> aLevelProps;
                     aValueAny >>= aLevelProps;
                     SvxNumSettings_Impl* pNew = lcl_CreateNumSettingsPtr(aLevelProps);
-                    rItemArr.push_back( pNew );
+                    rItemArr.push_back( std::unique_ptr<SvxNumSettings_Impl>(pNew) );
                 }
             }
         }
@@ -710,7 +710,7 @@ IMPL_LINK_NOARG_TYPED(SvxNumPickTabPage, NumSelectHdl_Impl, ValueSet*, void)
         for(sal_uInt16 i = 0; i < pActNum->GetLevelCount(); i++)
         {
             if(rItemArr.size() > i)
-                pLevelSettings = &rItemArr[i];
+                pLevelSettings = rItemArr[i].get();
             if(!pLevelSettings)
                 break;
             SvxNumberFormat aFmt(pActNum->GetLevel(i));
