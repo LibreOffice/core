@@ -72,9 +72,9 @@ namespace
         { "Mozilla/Firefox/", NULL, NULL, NULL },
         { "Thunderbird/", "Mozilla/Thunderbird/", NULL, NULL }
     #elif defined(MACOSX)
-        { "../Mozilla/SeaMonkey/", NULL, NULL, NULL },
-        { "Firefox/", NULL, NULL, NULL },
-        { "../Thunderbird/", NULL, NULL, NULL }
+        { "../Mozilla/SeaMonkey/", nullptr, nullptr, nullptr },
+        { "Firefox/", nullptr, nullptr, nullptr },
+        { "../Thunderbird/", nullptr, nullptr, nullptr }
     #else
         { ".mozilla/seamonkey/", nullptr, nullptr, nullptr },
         { ".mozilla/firefox/", nullptr, nullptr, nullptr },

@@ -56,7 +56,7 @@ namespace connectivity
     {
         ::connectivity::SharedResources aResources;
         const OUString sError( aResources.getResourceString(_nErrorId) );
-        ::dbtools::throwGenericSQLException(sError,NULL);
+        ::dbtools::throwGenericSQLException(sError,nullptr);
     }
     }
 }
@@ -67,8 +67,8 @@ MacabCommonStatement::MacabCommonStatement(MacabConnection* _pConnection )
     : MacabCommonStatement_BASE(m_aMutex),
     OPropertySetHelper(MacabCommonStatement_BASE::rBHelper),
     m_aParser(_pConnection->getDriver()->getComponentContext()),
-    m_aSQLIterator(_pConnection, _pConnection->createCatalog()->getTables(), m_aParser, NULL ),
-    m_pParseTree(NULL),
+    m_aSQLIterator(_pConnection, _pConnection->createCatalog()->getTables(), m_aParser, nullptr ),
+    m_pParseTree(nullptr),
     m_pConnection(_pConnection),
     rBHelper(MacabCommonStatement_BASE::rBHelper)
 {
@@ -235,7 +235,7 @@ MacabCondition *MacabCommonStatement::analyseWhereClause(const OSQLParseNode *pP
     impl_throwError(STR_QUERY_TOO_COMPLEX);
     // Unreachable:
     OSL_ASSERT(false);
-    return 0;
+    return nullptr;
 }
 
 MacabOrder *MacabCommonStatement::analyseOrderByClause(const OSQLParseNode *pParseNode) const throw(SQLException)
@@ -281,7 +281,7 @@ MacabOrder *MacabCommonStatement::analyseOrderByClause(const OSQLParseNode *pPar
     impl_throwError(STR_QUERY_TOO_COMPLEX);
     // Unreachable:
     OSL_ASSERT(false);
-    return 0;
+    return nullptr;
 }
 
 OUString MacabCommonStatement::getTableName() const
@@ -310,7 +310,7 @@ void MacabCommonStatement::setMacabFields(MacabResultSet *pResult) const throw(S
         const OUString sError( aResources.getResourceString(
                 STR_INVALID_COLUMN_SELECTION
              ) );
-        ::dbtools::throwGenericSQLException(sError,NULL);
+        ::dbtools::throwGenericSQLException(sError,nullptr);
     }
     pMeta = static_cast<MacabResultSetMetaData *>(pResult->getMetaData().get());
     pMeta->setMacabFields(xColumns);
@@ -321,7 +321,7 @@ void MacabCommonStatement::selectRecords(MacabResultSet *pResult) const throw(SQ
     const OSQLParseNode *pParseNode;
 
     pParseNode = m_aSQLIterator.getWhereTree();
-    if (pParseNode != NULL)
+    if (pParseNode != nullptr)
     {
         if (SQL_ISRULE(pParseNode, where_clause))
         {
@@ -346,7 +346,7 @@ void MacabCommonStatement::sortRecords(MacabResultSet *pResult) const throw(SQLE
     const OSQLParseNode *pParseNode;
 
     pParseNode = m_aSQLIterator.getOrderTree();
-    if (pParseNode != NULL)
+    if (pParseNode != nullptr)
     {
         if (SQL_ISRULE(pParseNode, opt_order_by_clause))
         {
@@ -417,7 +417,7 @@ OSL_TRACE("Mac OS Address book - SQL Request: %s", OUtoCStr(sql));
     OUString aErr;
 
     m_pParseTree = m_aParser.parseTree(aErr, sql);
-    if (m_pParseTree == NULL)
+    if (m_pParseTree == nullptr)
         throw SQLException(aErr, *this, aErr, 0, Any());
 
     m_aSQLIterator.setParseTree(m_pParseTree);
@@ -433,7 +433,7 @@ OSL_TRACE("Mac OS Address book - SQL Request: %s", OUtoCStr(sql));
                 aRecords = m_pConnection->getAddressBook()->getMacabRecords(sTableName);
 
                 // In case, somehow, we don't have anything with the name m_sTableName
-                if(aRecords == NULL)
+                if(aRecords == nullptr)
                 {
                     impl_throwError(STR_NO_TABLE);
                 }

@@ -51,7 +51,7 @@ void MacabResultSetMetaData::setMacabFields(const ::rtl::Reference<connectivity:
     aRecords = m_pConnection->getAddressBook()->getMacabRecords(m_sTableName);
 
     // In case, somehow, we don't have anything with the name m_sTableName
-    if(aRecords == NULL)
+    if(aRecords == nullptr)
     {
         impl_throwError(STR_NO_TABLE);
     }
@@ -85,7 +85,7 @@ sal_Int32 SAL_CALL MacabResultSetMetaData::getColumnType(sal_Int32 column) throw
     aRecords = m_pConnection->getAddressBook()->getMacabRecords(m_sTableName);
 
     // In case, somehow, we don't have anything with the name m_sTableName
-    if(aRecords == NULL)
+    if(aRecords == nullptr)
     {
         impl_throwError(STR_NO_TABLE);
     }
@@ -93,7 +93,7 @@ sal_Int32 SAL_CALL MacabResultSetMetaData::getColumnType(sal_Int32 column) throw
     aHeader = aRecords->getHeader();
     aField = aHeader->get(column-1);
 
-    if(aField == NULL)
+    if(aField == nullptr)
     {
         ::dbtools::throwInvalidIndexException(*this,Any());
         return -1;
@@ -126,7 +126,7 @@ OUString SAL_CALL MacabResultSetMetaData::getColumnName(sal_Int32 column) throw(
     aRecords = m_pConnection->getAddressBook()->getMacabRecords(m_sTableName);
 
     // In case, somehow, we don't have anything with the name m_sTableName
-    if(aRecords == NULL)
+    if(aRecords == nullptr)
     {
         impl_throwError(STR_NO_TABLE);
     }

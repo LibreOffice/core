@@ -878,7 +878,7 @@ Reference< XResultSet > SAL_CALL MacabDatabaseMetaData::getColumns(
     aRecords = m_xConnection->getAddressBook()->getMacabRecordsMatch(tableNamePattern);
 
     ODatabaseMetaDataResultSet::ORows aRows;
-    if(aRecords != NULL)
+    if(aRecords != nullptr)
     {
         MacabHeader *aHeader = aRecords->getHeader();
         sTableName = aRecords->getName();
@@ -1035,7 +1035,7 @@ Reference< XResultSet > SAL_CALL MacabDatabaseMetaData::getVersionColumns(
 
     ODatabaseMetaDataResultSet::ORows aRows;
 
-    if (m_xConnection->getAddressBook()->getMacabRecords(table) != NULL)
+    if (m_xConnection->getAddressBook()->getMacabRecords(table) != nullptr)
     {
         ODatabaseMetaDataResultSet::ORow aRow( 9 );
 

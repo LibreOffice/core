@@ -49,7 +49,7 @@ MacabResultSet::MacabResultSet(MacabCommonStatement* pStmt)
     : MacabResultSet_BASE(m_aMutex),
       OPropertySetHelper(MacabResultSet_BASE::rBHelper),
       m_xStatement(pStmt),
-      m_xMetaData(NULL),
+      m_xMetaData(nullptr),
       m_aMacabRecords(),
       m_nRowPos(-1),
       m_bWasNull(true)
@@ -76,10 +76,10 @@ void MacabResultSet::someMacabRecords(const MacabCondition *pCondition)
     allRecords = pConnection->getAddressBook()->getMacabRecords(m_sTableName);
 
     // Bad table!! Throw exception?
-    if(allRecords == NULL)
+    if(allRecords == nullptr)
         return;
 
-    if(m_aMacabRecords != NULL && m_aMacabRecords != allRecords)
+    if(m_aMacabRecords != nullptr && m_aMacabRecords != allRecords)
         delete m_aMacabRecords;
 
     // The copy constructor copies everything but records (including the
@@ -215,7 +215,7 @@ OUString SAL_CALL MacabResultSet::getString(sal_Int32 columnIndex) throw(SQLExce
     {
         sal_Int32 nFieldNumber = m_xMetaData->fieldAtColumn(columnIndex);
         macabfield *aField = m_aMacabRecords->getField(m_nRowPos,nFieldNumber);
-        if(aField != NULL)
+        if(aField != nullptr)
         {
             if(aField->type == kABStringProperty)
             {
@@ -234,7 +234,7 @@ sal_Bool SAL_CALL MacabResultSet::getBoolean(sal_Int32) throw(SQLException, Runt
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
 
-::dbtools::throwFunctionNotSupportedSQLException("getBoolean", NULL);
+::dbtools::throwFunctionNotSupportedSQLException("getBoolean", nullptr);
 
     return sal_False;
 }
@@ -244,7 +244,7 @@ sal_Int8 SAL_CALL MacabResultSet::getByte(sal_Int32) throw(SQLException, Runtime
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
 
-::dbtools::throwFunctionNotSupportedSQLException("getByte", NULL);
+::dbtools::throwFunctionNotSupportedSQLException("getByte", nullptr);
 
     sal_Int8 nRet = 0;
     return nRet;
@@ -255,7 +255,7 @@ sal_Int16 SAL_CALL MacabResultSet::getShort(sal_Int32) throw(SQLException, Runti
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
 
-::dbtools::throwFunctionNotSupportedSQLException("getShort", NULL);
+::dbtools::throwFunctionNotSupportedSQLException("getShort", nullptr);
 
     sal_Int16 nRet = 0;
     return nRet;
@@ -274,7 +274,7 @@ sal_Int32 SAL_CALL MacabResultSet::getInt(sal_Int32 columnIndex) throw(SQLExcept
     {
         sal_Int32 nFieldNumber = m_xMetaData->fieldAtColumn(columnIndex);
         macabfield *aField = m_aMacabRecords->getField(m_nRowPos,nFieldNumber);
-        if(aField != NULL)
+        if(aField != nullptr)
         {
             if(aField->type == kABIntegerProperty)
             {
@@ -303,7 +303,7 @@ sal_Int64 SAL_CALL MacabResultSet::getLong(sal_Int32 columnIndex) throw(SQLExcep
     {
         sal_Int32 nFieldNumber = m_xMetaData->fieldAtColumn(columnIndex);
         macabfield *aField = m_aMacabRecords->getField(m_nRowPos,nFieldNumber);
-        if(aField != NULL)
+        if(aField != nullptr)
         {
             if(aField->type == kABIntegerProperty)
             {
@@ -332,7 +332,7 @@ float SAL_CALL MacabResultSet::getFloat(sal_Int32 columnIndex) throw(SQLExceptio
     {
         sal_Int32 nFieldNumber = m_xMetaData->fieldAtColumn(columnIndex);
         macabfield *aField = m_aMacabRecords->getField(m_nRowPos,nFieldNumber);
-        if(aField != NULL)
+        if(aField != nullptr)
         {
             if(aField->type == kABRealProperty)
             {
@@ -361,7 +361,7 @@ double SAL_CALL MacabResultSet::getDouble(sal_Int32 columnIndex) throw(SQLExcept
     {
         sal_Int32 nFieldNumber = m_xMetaData->fieldAtColumn(columnIndex);
         macabfield *aField = m_aMacabRecords->getField(m_nRowPos,nFieldNumber);
-        if(aField != NULL)
+        if(aField != nullptr)
         {
             if(aField->type == kABRealProperty)
             {
@@ -382,7 +382,7 @@ Sequence< sal_Int8 > SAL_CALL MacabResultSet::getBytes(sal_Int32) throw(SQLExcep
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
 
-    ::dbtools::throwFunctionNotSupportedSQLException("getBytes", NULL);
+    ::dbtools::throwFunctionNotSupportedSQLException("getBytes", nullptr);
 
     return Sequence< sal_Int8 >();
 }
@@ -392,7 +392,7 @@ Date SAL_CALL MacabResultSet::getDate(sal_Int32) throw(SQLException, RuntimeExce
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
 
-    ::dbtools::throwFunctionNotSupportedSQLException("getDate", NULL);
+    ::dbtools::throwFunctionNotSupportedSQLException("getDate", nullptr);
 
     Date aRet;
     return aRet;
@@ -403,7 +403,7 @@ Time SAL_CALL MacabResultSet::getTime(sal_Int32) throw(SQLException, RuntimeExce
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
 
-    ::dbtools::throwFunctionNotSupportedSQLException("getTime", NULL);
+    ::dbtools::throwFunctionNotSupportedSQLException("getTime", nullptr);
 
     css::util::Time nRet;
     return nRet;
@@ -422,7 +422,7 @@ DateTime SAL_CALL MacabResultSet::getTimestamp(sal_Int32 columnIndex) throw(SQLE
     {
         sal_Int32 nFieldNumber = m_xMetaData->fieldAtColumn(columnIndex);
         macabfield *aField = m_aMacabRecords->getField(m_nRowPos,nFieldNumber);
-        if(aField != NULL)
+        if(aField != nullptr)
         {
             if(aField->type == kABDateProperty)
             {
@@ -441,9 +441,9 @@ Reference< XInputStream > SAL_CALL MacabResultSet::getBinaryStream(sal_Int32) th
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
 
-    ::dbtools::throwFunctionNotSupportedSQLException("getBinaryStream", NULL);
+    ::dbtools::throwFunctionNotSupportedSQLException("getBinaryStream", nullptr);
 
-    return NULL;
+    return nullptr;
 }
 
 Reference< XInputStream > SAL_CALL MacabResultSet::getCharacterStream(sal_Int32) throw(SQLException, RuntimeException)
@@ -451,9 +451,9 @@ Reference< XInputStream > SAL_CALL MacabResultSet::getCharacterStream(sal_Int32)
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
 
-    ::dbtools::throwFunctionNotSupportedSQLException("getCharacterStream", NULL);
+    ::dbtools::throwFunctionNotSupportedSQLException("getCharacterStream", nullptr);
 
-    return NULL;
+    return nullptr;
 }
 
 Any SAL_CALL MacabResultSet::getObject(sal_Int32, const Reference< ::com::sun::star::container::XNameAccess >&) throw(SQLException, RuntimeException)
@@ -461,7 +461,7 @@ Any SAL_CALL MacabResultSet::getObject(sal_Int32, const Reference< ::com::sun::s
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
 
-    ::dbtools::throwFunctionNotSupportedSQLException("getObject", NULL);
+    ::dbtools::throwFunctionNotSupportedSQLException("getObject", nullptr);
 
     return Any();
 }
@@ -471,9 +471,9 @@ Reference< XRef > SAL_CALL MacabResultSet::getRef(sal_Int32) throw(SQLException,
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
 
-    ::dbtools::throwFunctionNotSupportedSQLException("getRef", NULL);
+    ::dbtools::throwFunctionNotSupportedSQLException("getRef", nullptr);
 
-    return NULL;
+    return nullptr;
 }
 
 Reference< XBlob > SAL_CALL MacabResultSet::getBlob(sal_Int32) throw(SQLException, RuntimeException)
@@ -481,9 +481,9 @@ Reference< XBlob > SAL_CALL MacabResultSet::getBlob(sal_Int32) throw(SQLExceptio
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
 
-    ::dbtools::throwFunctionNotSupportedSQLException("getBlob", NULL);
+    ::dbtools::throwFunctionNotSupportedSQLException("getBlob", nullptr);
 
-    return NULL;
+    return nullptr;
 }
 
 Reference< XClob > SAL_CALL MacabResultSet::getClob(sal_Int32) throw(SQLException, RuntimeException)
@@ -491,9 +491,9 @@ Reference< XClob > SAL_CALL MacabResultSet::getClob(sal_Int32) throw(SQLExceptio
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
 
-::dbtools::throwFunctionNotSupportedSQLException("getClob", NULL);
+::dbtools::throwFunctionNotSupportedSQLException("getClob", nullptr);
 
-    return NULL;
+    return nullptr;
 }
 
 Reference< XArray > SAL_CALL MacabResultSet::getArray(sal_Int32) throw(SQLException, RuntimeException)
@@ -501,9 +501,9 @@ Reference< XArray > SAL_CALL MacabResultSet::getArray(sal_Int32) throw(SQLExcept
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
 
-::dbtools::throwFunctionNotSupportedSQLException("getArray", NULL);
+::dbtools::throwFunctionNotSupportedSQLException("getArray", nullptr);
 
-    return NULL;
+    return nullptr;
 }
 
 Reference< XResultSetMetaData > SAL_CALL MacabResultSet::getMetaData() throw(SQLException, RuntimeException)
@@ -881,7 +881,7 @@ Any SAL_CALL MacabResultSet::getBookmark() throw( SQLException,  RuntimeExceptio
     if (m_nRowPos != -1 && m_nRowPos != nRecords)
     {
         macabfield *uidField = m_aMacabRecords->getField(m_nRowPos,OUString("UID"));
-        if(uidField != NULL)
+        if(uidField != nullptr)
         {
             if(uidField->type == kABStringProperty)
             {
@@ -903,7 +903,7 @@ sal_Bool SAL_CALL MacabResultSet::moveToBookmark(const  Any& bookmark) throw( SQ
     for (sal_Int32 nRow = 0; nRow < nRecords; nRow++)
     {
         macabfield *uidField = m_aMacabRecords->getField(m_nRowPos,OUString("UID"));
-        if(uidField != NULL)
+        if(uidField != nullptr)
         {
             if(uidField->type == kABStringProperty)
             {

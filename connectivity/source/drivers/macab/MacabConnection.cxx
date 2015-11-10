@@ -39,7 +39,7 @@ IMPLEMENT_SERVICE_INFO(MacabConnection, "com.sun.star.sdbc.drivers.MacabConnecti
 
 MacabConnection::MacabConnection(MacabDriver*   _pDriver)
          : OSubComponent<MacabConnection, MacabConnection_BASE>(static_cast<cppu::OWeakObject*>(_pDriver), this),
-         m_pAddressBook(NULL),
+         m_pAddressBook(nullptr),
          m_pDriver(_pDriver)
 {
     m_pDriver->acquire();
@@ -51,7 +51,7 @@ MacabConnection::~MacabConnection()
         close();
 
     m_pDriver->release();
-    m_pDriver = NULL;
+    m_pDriver = nullptr;
 }
 
 void SAL_CALL MacabConnection::release() throw()
@@ -100,7 +100,7 @@ Reference< XPreparedStatement > SAL_CALL MacabConnection::prepareCall( const OUS
     checkDisposed(MacabConnection_BASE::rBHelper.bDisposed);
 
     // not implemented yet :-) a task to do
-    return NULL;
+    return nullptr;
 }
 
 OUString SAL_CALL MacabConnection::nativeSQL( const OUString& _sSql ) throw(SQLException, RuntimeException)
@@ -230,7 +230,7 @@ Reference< ::com::sun::star::container::XNameAccess > SAL_CALL MacabConnection::
 
     // if your driver has special database types you can return it here
 
-    return NULL;
+    return nullptr;
 }
 
 void SAL_CALL MacabConnection::setTypeMap( const Reference< ::com::sun::star::container::XNameAccess >& ) throw(SQLException, RuntimeException)
@@ -273,10 +273,10 @@ void MacabConnection::disposing()
     }
     m_aStatements.clear();
 
-    if (m_pAddressBook != NULL)
+    if (m_pAddressBook != nullptr)
     {
         delete m_pAddressBook;
-        m_pAddressBook = NULL;
+        m_pAddressBook = nullptr;
     }
 
     m_xMetaData = ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbc::XDatabaseMetaData>();

@@ -44,7 +44,7 @@ sdbcx::ObjectType MacabColumns::createObject(const OUString& _rName)
     Reference< XResultSet > xResult = m_pTable->getConnection()->getMetaData()->getColumns(
         aCatalog, sSchemaName, sTableName, _rName);
 
-    sdbcx::ObjectType xRet = NULL;
+    sdbcx::ObjectType xRet = nullptr;
     if (xResult.is())
     {
         Reference< XRow > xRow(xResult,UNO_QUERY);

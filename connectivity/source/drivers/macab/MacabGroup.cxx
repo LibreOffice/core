@@ -61,16 +61,16 @@ MacabGroup::MacabGroup(const ABAddressBookRef _addressBook, const MacabRecords *
     for(i = 0; i < recordsSize; i++)
     {
         xPerson = static_cast<ABPersonRef>(const_cast<void *>(CFArrayGetValueAtIndex(xGroupMembers,i)));
-        if(xPerson != NULL)
+        if(xPerson != nullptr)
         {
             sGroupMemberUID = static_cast<CFStringRef>(ABRecordCopyValue(xPerson, kABUIDProperty));
-            if(sGroupMemberUID != NULL)
+            if(sGroupMemberUID != nullptr)
             {
                 bFound = false;
                 for(j = 0; j < nAllRecordsSize; j++)
                 {
                     xRecordField = _allRecords->getField(j,CFStringToOUString(kABUIDProperty));
-                    if(xRecordField != NULL && xRecordField->value != NULL)
+                    if(xRecordField != nullptr && xRecordField->value != nullptr)
                     {
                         if(CFEqual(xRecordField->value, sGroupMemberUID))
                         {

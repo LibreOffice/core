@@ -133,7 +133,7 @@ SQLRETURN OConnection::OpenConnection(const OUString& aConnectStr, sal_Int32 nTi
 
     SQLUSMALLINT nSilent =  bSilent ? SQL_DRIVER_NOPROMPT : SQL_DRIVER_COMPLETE;
     nSQLRETURN = N3SQLDriverConnect(m_aConnectionHandle,
-                      NULL,
+                      nullptr,
                       szConnStrIn,
                       (SQLSMALLINT) ::std::min<sal_Int32>((sal_Int32)2048,aConStr.getLength()),
                       szConnStrOut,

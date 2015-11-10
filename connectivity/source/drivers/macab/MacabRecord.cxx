@@ -36,7 +36,7 @@ using namespace ::dbtools;
 MacabRecord::MacabRecord()
 {
     size = 0;
-    fields = NULL;
+    fields = nullptr;
 }
 
 
@@ -46,7 +46,7 @@ MacabRecord::MacabRecord(const sal_Int32 _size)
     fields = new macabfield *[size];
     sal_Int32 i;
     for(i = 0; i < size; i++)
-        fields[i] = NULL;
+        fields[i] = nullptr;
 }
 
 
@@ -58,11 +58,11 @@ MacabRecord::~MacabRecord()
         for(i = 0; i < size; i++)
         {
             delete fields[i];
-            fields[i] = NULL;
+            fields[i] = nullptr;
         }
     }
     delete [] fields;
-    fields = NULL;
+    fields = nullptr;
 }
 
 
@@ -70,7 +70,7 @@ void MacabRecord::insertAtColumn (CFTypeRef _value, ABPropertyType _type, const 
 {
     if(_column < size)
     {
-        if(fields[_column] == NULL)
+        if(fields[_column] == nullptr)
             fields[_column] = new macabfield;
 
         fields[_column]->value = _value;
@@ -83,7 +83,7 @@ void MacabRecord::insertAtColumn (CFTypeRef _value, ABPropertyType _type, const 
 
 bool MacabRecord::contains (const macabfield *_field) const
 {
-    if(_field == NULL)
+    if(_field == nullptr)
         return false;
     else
         return contains(_field->value);
@@ -95,7 +95,7 @@ bool MacabRecord::contains (const CFTypeRef _value) const
     sal_Int32 i;
     for(i = 0; i < size; i++)
     {
-        if(fields[i] != NULL)
+        if(fields[i] != nullptr)
         {
             if(CFEqual(fields[i]->value, _value))
             {
@@ -130,7 +130,7 @@ macabfield *MacabRecord::copy(const sal_Int32 i) const
         return _copy;
     }
 
-    return NULL;
+    return nullptr;
 }
 
 
@@ -145,7 +145,7 @@ macabfield *MacabRecord::get(const sal_Int32 i) const
         return fields[i];
     }
 
-    return NULL;
+    return nullptr;
 }
 
 
@@ -171,9 +171,9 @@ sal_Int32 MacabRecord::compareFields(const macabfield *_field1, const macabfield
      */
     if(_field1 == _field2)
         return 0;
-    if(_field1 == NULL)
+    if(_field1 == nullptr)
         return 1;
-    if(_field2 == NULL)
+    if(_field2 == nullptr)
         return -1;
 
     /* If they aren't the same type, for now, return the one with
@@ -199,7 +199,7 @@ sal_Int32 MacabRecord::compareFields(const macabfield *_field1, const macabfield
             result = CFDateCompare(
                 static_cast<CFDateRef>(_field1->value),
                 static_cast<CFDateRef>(_field2->value),
-                NULL); // NULL = unused variable
+                nullptr); // NULL = unused variable
             break;
 
         case kABIntegerProperty:
@@ -207,7 +207,7 @@ sal_Int32 MacabRecord::compareFields(const macabfield *_field1, const macabfield
             result = CFNumberCompare(
                 static_cast<CFNumberRef>(_field1->value),
                 static_cast<CFNumberRef>(_field2->value),
-                NULL); // NULL = unused variable
+                nullptr); // NULL = unused variable
         break;
 
         default:
@@ -225,7 +225,7 @@ sal_Int32 MacabRecord::compareFields(const macabfield *_field1, const macabfield
  */
 macabfield *MacabRecord::createMacabField(const OUString& _newFieldString, const ABPropertyType _abType)
 {
-    macabfield *newField = NULL;
+    macabfield *newField = nullptr;
     switch(_abType)
     {
         case kABStringProperty:
@@ -246,7 +246,7 @@ macabfield *MacabRecord::createMacabField(const OUString& _newFieldString, const
                     double nTime = DBTypeConversion::toDouble(aDateTime, DBTypeConversion::getStandardDate());
                     nTime -= kCFAbsoluteTimeIntervalSince1970;
                     newField = new macabfield;
-                    newField->value = CFDateCreate(NULL, (CFAbsoluteTime) nTime);
+                    newField->value = CFDateCreate(nullptr, (CFAbsoluteTime) nTime);
                     newField->type = _abType;
                 }
             }
@@ -257,7 +257,7 @@ macabfield *MacabRecord::createMacabField(const OUString& _newFieldString, const
                 sal_Int64 nVal = _newFieldString.toInt64();
 
                 newField = new macabfield;
-                newField->value = CFNumberCreate(NULL,kCFNumberLongType, &nVal);
+                newField->value = CFNumberCreate(nullptr,kCFNumberLongType, &nVal);
                 newField->type = _abType;
             }
             // bad format...
@@ -271,7 +271,7 @@ macabfield *MacabRecord::createMacabField(const OUString& _newFieldString, const
                 double nVal = _newFieldString.toDouble();
 
                 newField = new macabfield;
-                newField->value = CFNumberCreate(NULL,kCFNumberDoubleType, &nVal);
+                newField->value = CFNumberCreate(nullptr,kCFNumberDoubleType, &nVal);
                 newField->type = _abType;
             }
             // bad format...
@@ -293,7 +293,7 @@ macabfield *MacabRecord::createMacabField(const OUString& _newFieldString, const
  */
 OUString MacabRecord::fieldToString(const macabfield *_aField)
 {
-    if(_aField == NULL)
+    if(_aField == nullptr)
         return OUString();
 
     OUString fieldString;

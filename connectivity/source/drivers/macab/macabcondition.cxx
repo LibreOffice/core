@@ -78,9 +78,9 @@ bool MacabConditionNull::eval(const MacabRecord *aRecord) const
 {
     macabfield *aValue = aRecord->get(m_nFieldNumber);
 
-    if(aValue == NULL)
+    if(aValue == nullptr)
         return true;
-    else if(aValue->value == NULL)
+    else if(aValue->value == nullptr)
         return true;
     else
         return false;
@@ -95,9 +95,9 @@ bool MacabConditionNotNull::eval(const MacabRecord *aRecord) const
 {
     macabfield *aValue = aRecord->get(m_nFieldNumber);
 
-    if(aValue == NULL)
+    if(aValue == nullptr)
         return false;
-    else if(aValue->value == NULL)
+    else if(aValue->value == nullptr)
         return false;
     else
         return true;
@@ -118,12 +118,12 @@ bool MacabConditionEqual::eval(const MacabRecord *aRecord) const
 {
     macabfield *aValue = aRecord->get(m_nFieldNumber);
 
-    if(aValue == NULL)
+    if(aValue == nullptr)
         return false;
 
     macabfield *aValue2 = MacabRecord::createMacabField(m_sMatchString,aValue->type);
 
-    if(aValue2 == NULL)
+    if(aValue2 == nullptr)
         return false;
 
     sal_Int32 nReturn = MacabRecord::compareFields(aValue, aValue2);
@@ -141,12 +141,12 @@ bool MacabConditionDifferent::eval(const MacabRecord *aRecord) const
 {
     macabfield *aValue = aRecord->get(m_nFieldNumber);
 
-    if(aValue == NULL)
+    if(aValue == nullptr)
         return false;
 
     macabfield *aValue2 = MacabRecord::createMacabField(m_sMatchString,aValue->type);
 
-    if(aValue2 == NULL)
+    if(aValue2 == nullptr)
         return false;
 
     sal_Int32 nReturn = MacabRecord::compareFields(aValue, aValue2);
@@ -164,7 +164,7 @@ bool MacabConditionSimilar::eval(const MacabRecord *aRecord) const
 {
     macabfield *aValue = aRecord->get(m_nFieldNumber);
 
-    if(aValue == NULL)
+    if(aValue == nullptr)
         return false;
 
     OUString sName = MacabRecord::fieldToString(aValue);

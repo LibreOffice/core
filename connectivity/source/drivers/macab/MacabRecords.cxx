@@ -102,7 +102,7 @@ MacabRecords::MacabRecords(const MacabRecords *_copy)
 
     /* Default variables... */
     currentRecord = 0;
-    header = NULL;
+    header = nullptr;
     records = new MacabRecord *[recordsSize];
     recordType = kABPersonRecordType;
 
@@ -120,8 +120,8 @@ MacabRecords::MacabRecords(const ABAddressBookRef _addressBook)
     /* Default variables... */
     recordsSize = 0;
     currentRecord = 0;
-    records = NULL;
-    header = NULL;
+    records = nullptr;
+    header = nullptr;
     recordType = kABPersonRecordType;
 
     /* Variables constructed... */
@@ -138,7 +138,7 @@ void MacabRecords::initialize()
      * MacabAddressBook, so these variables will most likely already be
      * NULL.
      */
-    if(records != NULL)
+    if(records != nullptr)
     {
         sal_Int32 i;
 
@@ -148,7 +148,7 @@ void MacabRecords::initialize()
         delete [] records;
     }
 
-    if(header != NULL)
+    if(header != nullptr)
         delete header;
 
     /* We can handle both default record Address Book record types in
@@ -187,7 +187,7 @@ MacabRecords::~MacabRecords()
 
 void MacabRecords::setHeader(MacabHeader *_header)
 {
-    if(header != NULL)
+    if(header != nullptr)
         delete header;
     header = _header;
 }
@@ -244,7 +244,7 @@ void MacabRecords::insertRecord(MacabRecord *_newRecord)
 MacabRecord *MacabRecords::getRecord(const sal_Int32 _location) const
 {
     if(_location >= recordsSize)
-        return NULL;
+        return nullptr;
     return records[_location];
 }
 
@@ -252,12 +252,12 @@ MacabRecord *MacabRecords::getRecord(const sal_Int32 _location) const
 macabfield *MacabRecords::getField(const sal_Int32 _recordNumber, const sal_Int32 _columnNumber) const
 {
     if(_recordNumber >= recordsSize)
-        return NULL;
+        return nullptr;
 
     MacabRecord *record = records[_recordNumber];
 
     if(_columnNumber < 0 || _columnNumber >= record->getSize())
-        return NULL;
+        return nullptr;
 
     return record->get(_columnNumber);
 }
@@ -265,25 +265,25 @@ macabfield *MacabRecords::getField(const sal_Int32 _recordNumber, const sal_Int3
 
 macabfield *MacabRecords::getField(const sal_Int32 _recordNumber, const OUString& _columnName) const
 {
-    if(header != NULL)
+    if(header != nullptr)
     {
         sal_Int32 columnNumber = header->getColumnNumber(_columnName);
         if(columnNumber == -1)
-            return NULL;
+            return nullptr;
 
         return getField(_recordNumber, columnNumber);
     }
     else
     {
         // error: shouldn't access field with null header!
-        return NULL;
+        return nullptr;
     }
 }
 
 
 sal_Int32 MacabRecords::getFieldNumber(const OUString& _columnName) const
 {
-    if(header != NULL)
+    if(header != nullptr)
         return header->getColumnNumber(_columnName);
     else
         // error: shouldn't access field with null header!
@@ -460,7 +460,7 @@ MacabHeader *MacabRecords::createHeaderForRecordType(const CFArrayRef _records, 
             {
                 record = const_cast<ABRecordRef>(CFArrayGetValueAtIndex(_records, j));
                 headerDataForProperty = createHeaderForProperty(record,requiredProperties[i],_recordType,true);
-                if(headerDataForProperty != NULL)
+                if(headerDataForProperty != nullptr)
                 {
                     (*lcl_header) += headerDataForProperty;
                     delete headerDataForProperty;
@@ -484,7 +484,7 @@ MacabHeader *MacabRecords::createHeaderForRecordType(const CFArrayRef _records, 
         {
             property = nonRequiredProperties[j];
             headerDataForProperty = createHeaderForProperty(record,property,_recordType,false);
-            if(headerDataForProperty != NULL)
+            if(headerDataForProperty != nullptr)
             {
                 (*nonRequiredHeader) += headerDataForProperty;
                 delete headerDataForProperty;
@@ -518,15 +518,15 @@ MacabHeader *MacabRecords::createHeaderForProperty(const ABRecordRef _record, co
 
     /* Get the property's value */
     propertyValue = ABRecordCopyValue(_record,_propertyName);
-    if(propertyValue == NULL && !_isPropertyRequired)
-        return NULL;
+    if(propertyValue == nullptr && !_isPropertyRequired)
+        return nullptr;
 
     propertyType = ABTypeOfProperty(addressBook, _recordType, _propertyName);
     localizedPropertyName = ABCopyLocalizedPropertyOrLabel(_propertyName);
 
     result = createHeaderForProperty(propertyType, propertyValue, localizedPropertyName);
 
-    if(propertyValue != NULL)
+    if(propertyValue != nullptr)
         CFRelease(propertyValue);
 
     return result;
@@ -539,7 +539,7 @@ MacabHeader *MacabRecords::createHeaderForProperty(const ABRecordRef _record, co
  */
 MacabHeader *MacabRecords::createHeaderForProperty(const ABPropertyType _propertyType, const CFTypeRef _propertyValue, const CFStringRef _propertyName) const
 {
-    macabfield **headerNames = NULL;
+    macabfield **headerNames = nullptr;
     sal_Int32 length = 0;
 
     switch(_propertyType)
@@ -565,7 +565,7 @@ MacabHeader *MacabRecords::createHeaderForProperty(const ABPropertyType _propert
             /* For non-scalars, we can only get more information if the property
              * actually exists.
              */
-            if(_propertyValue != NULL)
+            if(_propertyValue != nullptr)
             {
             sal_Int32 i;
 
@@ -604,7 +604,7 @@ MacabHeader *MacabRecords::createHeaderForProperty(const ABPropertyType _propert
             /* For non-scalars, we can only get more information if the property
              * actually exists.
              */
-            if(_propertyValue != NULL)
+            if(_propertyValue != nullptr)
             {
                 sal_Int32 i,j,k;
 
@@ -688,7 +688,7 @@ MacabHeader *MacabRecords::createHeaderForProperty(const ABPropertyType _propert
             /* For non-scalars, we can only get more information if the property
              * actually exists.
              */
-            if(_propertyValue != NULL)
+            if(_propertyValue != nullptr)
             {
             /* Assume all keys are strings */
             sal_Int32 numRecords = (sal_Int32) CFDictionaryGetCount(static_cast<CFDictionaryRef>(_propertyValue));
@@ -769,7 +769,7 @@ MacabHeader *MacabRecords::createHeaderForProperty(const ABPropertyType _propert
             /* For non-scalars, we can only get more information if the property
              * actually exists.
              */
-            if(_propertyValue != NULL)
+            if(_propertyValue != nullptr)
             {
                 sal_Int32 arrLength = (sal_Int32) CFArrayGetCount(static_cast<CFArrayRef>(_propertyValue));
                 sal_Int32 i,j,k;
@@ -840,7 +840,7 @@ MacabHeader *MacabRecords::createHeaderForProperty(const ABPropertyType _propert
         return headerResult;
     }
     else
-        return NULL;
+        return nullptr;
 }
 
 
@@ -877,7 +877,7 @@ MacabRecord *MacabRecords::createMacabRecord(const ABRecordRef _abrecord, const 
 
         /* Get the property's value */
         propertyValue = ABRecordCopyValue(_abrecord,propertyName);
-        if(propertyValue != NULL)
+        if(propertyValue != nullptr)
         {
             propertyType = ABTypeOfProperty(addressBook, _recordType, propertyName);
             if(propertyType != kABErrorInProperty)
@@ -912,7 +912,7 @@ void MacabRecords::insertPropertyIntoMacabRecord(MacabRecord *_abrecord, const M
 void MacabRecords::insertPropertyIntoMacabRecord(const ABPropertyType _propertyType, MacabRecord *_abrecord, const MacabHeader *_header, const OUString& _propertyName, const CFTypeRef _propertyValue) const
 {
     /* If there is no value, return */
-    if(_propertyValue == NULL)
+    if(_propertyValue == nullptr)
         return;
 
     /* The main switch statement */
@@ -954,7 +954,7 @@ void MacabRecords::insertPropertyIntoMacabRecord(const ABPropertyType _propertyT
                 if(columnNumber != -1)
                 {
                     // collision! A property already exists here!
-                    if(_abrecord->get(columnNumber) != NULL)
+                    if(_abrecord->get(columnNumber) != nullptr)
                     {
                         bPlaced = false;
                         i++;

@@ -80,17 +80,17 @@ void manageDuplicateGroups(::std::vector<MacabGroup *> _xGroups)
 MacabAddressBook::MacabAddressBook( )
 {
     m_aAddressBook = ABGetSharedAddressBook();
-    m_xMacabRecords = NULL;
+    m_xMacabRecords = nullptr;
     m_bRetrievedGroups = false;
 }
 
 
 MacabAddressBook::~MacabAddressBook()
 {
-    if(m_xMacabRecords != NULL)
+    if(m_xMacabRecords != nullptr)
     {
         delete m_xMacabRecords;
-        m_xMacabRecords = NULL;
+        m_xMacabRecords = nullptr;
     }
 
     if(!m_xMacabGroups.empty())
@@ -122,7 +122,7 @@ const OUString & MacabAddressBook::getDefaultTableName()
 MacabRecords *MacabAddressBook::getMacabRecords()
 {
     /* If the MacabRecords don't exist, create them. */
-    if(m_xMacabRecords == NULL)
+    if(m_xMacabRecords == nullptr)
     {
         m_xMacabRecords = new MacabRecords(m_aAddressBook);
         m_xMacabRecords->setName(getDefaultTableName());
@@ -166,7 +166,7 @@ MacabRecords *MacabAddressBook::getMacabRecordsMatch(const OUString& _tableName)
     if(!m_bRetrievedGroups)
     {
         /* If the MacabRecords haven't been created yet, create them. */
-        if(m_xMacabRecords == NULL)
+        if(m_xMacabRecords == nullptr)
         {
             m_xMacabRecords = new MacabRecords(m_aAddressBook);
             m_xMacabRecords->setName(getDefaultTableName());
@@ -209,7 +209,7 @@ MacabGroup *MacabAddressBook::getMacabGroup(OUString const & _groupName)
 
     for(i = 0; i < nGroups; i++)
     {
-        if(m_xMacabGroups[i] != NULL)
+        if(m_xMacabGroups[i] != nullptr)
         {
             if(m_xMacabGroups[i]->getName() == _groupName)
             {
@@ -218,7 +218,7 @@ MacabGroup *MacabAddressBook::getMacabGroup(OUString const & _groupName)
         }
     }
 
-    return NULL;
+    return nullptr;
 }
 
 
@@ -233,7 +233,7 @@ MacabGroup *MacabAddressBook::getMacabGroupMatch(OUString const & _groupName)
 
     for(i = 0; i < nGroups; i++)
     {
-        if(m_xMacabGroups[i] != NULL)
+        if(m_xMacabGroups[i] != nullptr)
         {
             if(match(m_xMacabGroups[i]->getName(), _groupName, '\0'))
             {
@@ -242,7 +242,7 @@ MacabGroup *MacabAddressBook::getMacabGroupMatch(OUString const & _groupName)
         }
     }
 
-    return NULL;
+    return nullptr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -42,7 +42,7 @@ namespace connectivity
              * I only removed commented debugging lines and changed variable
              * names.
              */
-            if (NULL == sOrig) {
+            if (nullptr == sOrig) {
                     return OUString();
             }
 

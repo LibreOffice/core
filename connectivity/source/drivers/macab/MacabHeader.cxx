@@ -39,9 +39,9 @@ MacabHeader::MacabHeader(const sal_Int32 _size, macabfield **_fields)
     fields = new macabfield *[size];
     for(i = 0; i < size; i++)
     {
-        if(_fields[i] == NULL)
+        if(_fields[i] == nullptr)
         {
-            fields[i] = NULL;
+            fields[i] = nullptr;
         }
         else
         {
@@ -62,7 +62,7 @@ MacabHeader::MacabHeader(const sal_Int32 _size, macabfield **_fields)
 MacabHeader::MacabHeader()
 {
     size = 0;
-    fields = NULL;
+    fields = nullptr;
 }
 
 
@@ -146,7 +146,7 @@ OUString MacabHeader::getString(const sal_Int32 i) const
 
     if(i < size)
     {
-        if(fields[i] == NULL || fields[i]->value == NULL || CFGetTypeID(fields[i]->value) != CFStringGetTypeID())
+        if(fields[i] == nullptr || fields[i]->value == nullptr || CFGetTypeID(fields[i]->value) != CFStringGetTypeID())
             return OUString();
         try
         {
@@ -250,9 +250,9 @@ sal_Int32 MacabHeader::compareFields(const macabfield *_field1, const macabfield
      */
     if(_field1 == _field2)
         return 0;
-    if(_field1 == NULL)
+    if(_field1 == nullptr)
         return 1;
-    if(_field2 == NULL)
+    if(_field2 == nullptr)
         return -1;
 
     CFComparisonResult result = CFStringCompare(
