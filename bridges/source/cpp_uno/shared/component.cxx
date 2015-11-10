@@ -42,7 +42,7 @@ namespace bridges { namespace cpp_uno { namespace shared {
 namespace {
 
 #if (defined(__GNUC__) && defined(__APPLE__))
-static OUString * s_pStaticOidPart = 0;
+static OUString * s_pStaticOidPart = nullptr;
 #endif
 
 const OUString & SAL_CALL cppu_cppenv_getStaticOIdPart()

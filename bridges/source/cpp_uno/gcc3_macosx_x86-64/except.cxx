@@ -159,7 +159,7 @@ public:
 };
 
 RTTI::RTTI()
-    : m_hApp( dlopen( 0, RTLD_LAZY ) )
+    : m_hApp( dlopen( nullptr, RTLD_LAZY ) )
 {
 }
 
@@ -214,7 +214,7 @@ std::type_info * RTTI::getRTTI( typelib_CompoundTypeDescription *pTypeDescr )
                 // symbol and rtti-name is nearly identical,
                 // the symbol is prefixed with _ZTI
                 char * rttiName = strdup(symName.getStr() + 4);
-                if (rttiName == 0) {
+                if (rttiName == nullptr) {
                     throw std::bad_alloc();
                 }
 #if OSL_DEBUG_LEVEL > 1
@@ -256,7 +256,7 @@ std::type_info * RTTI::getRTTI( typelib_CompoundTypeDescription *pTypeDescr )
 static void deleteException( void * pExc )
 {
     __cxa_exception const * header = static_cast<__cxa_exception const *>(pExc) - 1;
-    typelib_TypeDescription * pTD = 0;
+    typelib_TypeDescription * pTD = nullptr;
     OUString unoName( toUNOname( header->exceptionType->name() ) );
     ::typelib_typedescription_getByName( &pTD, unoName.pData );
     assert(pTD && "### unknown exception type! leaving out destruction => leaking!!!");
@@ -281,7 +281,7 @@ void raiseException( uno_Any * pUnoExc, uno_Mapping * pUno2Cpp )
 
     {
     // construct cpp exception object
-    typelib_TypeDescription * pTypeDescr = 0;
+    typelib_TypeDescription * pTypeDescr = nullptr;
     TYPELIB_DANGER_GET( &pTypeDescr, pUnoExc->pType );
     assert(pTypeDescr);
     if (! pTypeDescr)
@@ -295,9 +295,9 @@ void raiseException( uno_Any * pUnoExc, uno_Mapping * pUno2Cpp )
     ::uno_copyAndConvertData( pCppExc, pUnoExc->pData, pTypeDescr, pUno2Cpp );
 
     // destruct uno exception
-    ::uno_any_destruct( pUnoExc, 0 );
+    ::uno_any_destruct( pUnoExc, nullptr );
     // avoiding locked counts
-    static RTTI * s_rtti = 0;
+    static RTTI * s_rtti = nullptr;
     if (! s_rtti)
     {
         MutexGuard guard( Mutex::getGlobalMutex() );
@@ -336,14 +336,14 @@ void fillUnoException( __cxa_exception * header, uno_Any * pUnoExc, uno_Mapping 
         return;
     }
 
-    typelib_TypeDescription * pExcTypeDescr = 0;
+    typelib_TypeDescription * pExcTypeDescr = nullptr;
     OUString unoName( toUNOname( header->exceptionType->name() ) );
 #if OSL_DEBUG_LEVEL > 1
     OString cstr_unoName( OUStringToOString( unoName, RTL_TEXTENCODING_ASCII_US ) );
     fprintf( stderr, "> c++ exception occurred: %s\n", cstr_unoName.getStr() );
 #endif
     typelib_typedescription_getByName( &pExcTypeDescr, unoName.pData );
-    if (0 == pExcTypeDescr)
+    if (nullptr == pExcTypeDescr)
     {
         RuntimeException aRE( "exception type not found: " + unoName );
         Type const & rType = cppu::UnoType<decltype(aRE)>::get();

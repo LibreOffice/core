@@ -314,7 +314,7 @@ bool VtableFactory::createBlock(Block &block, sal_Int32 slotCount) const
 {
     block.size = getBlockSize(slotCount);
     block.start = rtl_arena_alloc(m_arena, &block.size);
-    return block.start != 0;
+    return block.start != nullptr;
 }
 
 void VtableFactory::freeBlock(Block const & block) const {
