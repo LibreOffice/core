@@ -46,7 +46,7 @@ void pagein_execute(char const * path, char const * file)
 {
     char fullpath[4096];
     char *p = NULL;
-    FILE   * fp = 0;
+    FILE   * fp = NULL;
     memset(fullpath, 0, sizeof(fullpath));
     strncpy (fullpath, path, 3000);
     if (!(p = strrchr (fullpath, '/')))
@@ -55,13 +55,13 @@ void pagein_execute(char const * path, char const * file)
         p++;
     strncpy(p, file, 1024);
     p[strlen(p)] = '\0';
-    if ((fp = fopen (fullpath, "r")) == 0)
+    if ((fp = fopen (fullpath, "r")) == NULL)
     {
 
         fprintf (stderr, "fopen %s: %s\n", fullpath, strerror(errno));
         return;
     }
-    while (fgets (p, 1024, fp) != 0)
+    while (fgets (p, 1024, fp) != NULL)
     {
         p[strlen(p) - 1] = '\0';
 

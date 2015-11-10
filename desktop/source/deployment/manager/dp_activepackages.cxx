@@ -130,7 +130,7 @@ ActivePackages::~ActivePackages() {}
 bool ActivePackages::has(
     OUString const & id, OUString const & fileName) const
 {
-    return get(NULL, id, fileName);
+    return get(nullptr, id, fileName);
 }
 
 bool ActivePackages::get(
@@ -140,12 +140,12 @@ bool ActivePackages::get(
 #if HAVE_FEATURE_EXTENSIONS
     OString v;
     if (m_map.get(&v, newKey(id))) {
-        if (data != NULL) {
+        if (data != nullptr) {
             *data = decodeNewData(v);
         }
         return true;
     } else if (m_map.get(&v, oldKey(fileName))) {
-        if (data != NULL) {
+        if (data != nullptr) {
             *data = decodeOldData(fileName, v);
         }
         return true;

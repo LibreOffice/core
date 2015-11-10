@@ -116,9 +116,9 @@ bool interactContinuation( Any const & request,
             xInteractionHandler->handle(
                 new ::comphelper::OInteractionRequest( request, conts ) );
             if (cont || abort) {
-                if (pcont != 0)
+                if (pcont != nullptr)
                     *pcont = cont;
-                if (pabort != 0)
+                if (pabort != nullptr)
                     *pabort = abort;
                 return true;
             }

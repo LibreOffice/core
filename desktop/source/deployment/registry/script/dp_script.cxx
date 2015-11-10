@@ -226,12 +226,12 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
         {
             // probe for script.xlb:
             if (create_ucb_content(
-                    0, makeURL( url, "script.xlb" ),
+                    nullptr, makeURL( url, "script.xlb" ),
                     xCmdEnv, false /* no throw */ ))
                 mediaType = "application/vnd.sun.star.basic-library";
             // probe for dialog.xlb:
             else if (create_ucb_content(
-                         0, makeURL( url, "dialog.xlb" ),
+                         nullptr, makeURL( url, "dialog.xlb" ),
                          xCmdEnv, false /* no throw */ ))
                 mediaType = "application/vnd.sun.star.dialog-library";
         }
@@ -249,7 +249,7 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
         {
             OUString dialogURL( makeURL( url, "dialog.xlb" ) );
             if (! create_ucb_content(
-                    0, dialogURL, xCmdEnv, false /* no throw */ )) {
+                    nullptr, dialogURL, xCmdEnv, false /* no throw */ )) {
                 dialogURL.clear();
             }
 
@@ -257,7 +257,7 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
             {
                 OUString scriptURL( makeURL( url, "script.xlb"));
                 if (! create_ucb_content(
-                        0, scriptURL, xCmdEnv, false /* no throw */ )) {
+                        nullptr, scriptURL, xCmdEnv, false /* no throw */ )) {
                     scriptURL.clear();
                 }
 
@@ -286,7 +286,7 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
 BackendImpl * BackendImpl::PackageImpl::getMyBackend() const
 {
     BackendImpl * pBackend = static_cast<BackendImpl *>(m_myBackend.get());
-    if (NULL == pBackend)
+    if (nullptr == pBackend)
     {
         //May throw a DisposedException
         check();

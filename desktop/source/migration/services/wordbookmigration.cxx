@@ -43,7 +43,7 @@ namespace migration
 
     OUString WordbookMigration_getImplementationName()
     {
-        static OUString* pImplName = 0;
+        static OUString* pImplName = nullptr;
         if ( !pImplName )
         {
             ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
@@ -60,7 +60,7 @@ namespace migration
 
     Sequence< OUString > WordbookMigration_getSupportedServiceNames()
     {
-        static Sequence< OUString >* pNames = 0;
+        static Sequence< OUString >* pNames = nullptr;
         if ( !pNames )
         {
             ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );

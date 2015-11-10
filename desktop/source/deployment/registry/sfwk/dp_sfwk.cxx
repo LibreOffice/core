@@ -109,7 +109,7 @@ public:
 BackendImpl * BackendImpl::PackageImpl::getMyBackend() const
 {
     BackendImpl * pBackend = static_cast<BackendImpl *>(m_myBackend.get());
-    if (NULL == pBackend)
+    if (nullptr == pBackend)
     {
         //May throw a DisposedException
         check();
@@ -210,7 +210,7 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
         {
             // probe for parcel-descriptor.xml:
             if (create_ucb_content(
-                    0, makeURL( url, "parcel-descriptor.xml" ),
+                    nullptr, makeURL( url, "parcel-descriptor.xml" ),
                     xCmdEnv, false /* no throw */ ))
             {
                 mediaType = "application/vnd.sun.star.framework-script";

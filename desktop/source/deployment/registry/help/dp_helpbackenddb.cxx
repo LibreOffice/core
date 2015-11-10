@@ -88,7 +88,7 @@ void HelpBackendDb::addEntry(OUString const & url, Data const & data)
     {
         Any exc( ::cppu::getCaughtException() );
         throw css::deployment::DeploymentException(
-            "Extension Manager: failed to write data entry in help backend db: " + m_urlDb, 0, exc);
+            "Extension Manager: failed to write data entry in help backend db: " + m_urlDb, nullptr, exc);
     }
 }
 
@@ -118,7 +118,7 @@ HelpBackendDb::getEntry(OUString const & url)
     {
         Any exc( ::cppu::getCaughtException() );
         throw css::deployment::DeploymentException(
-            "Extension Manager: failed to read data entry in help backend db: " + m_urlDb, 0, exc);
+            "Extension Manager: failed to read data entry in help backend db: " + m_urlDb, nullptr, exc);
     }
 }
 

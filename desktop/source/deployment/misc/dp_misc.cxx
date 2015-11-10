@@ -80,7 +80,7 @@ struct UnoRc : public rtl::StaticWithInit<
         ::rtl::Bootstrap::expandMacros( unorc );
         std::shared_ptr< ::rtl::Bootstrap > ret(
             new ::rtl::Bootstrap( unorc ) );
-        OSL_ASSERT( ret->getHandle() != 0 );
+        OSL_ASSERT( ret->getHandle() != nullptr );
         return ret;
     }
 };
@@ -97,12 +97,12 @@ const OUString OfficePipeId::operator () ()
     if (!(aLocateResult == ::utl::Bootstrap::PATH_EXISTS ||
         aLocateResult == ::utl::Bootstrap::PATH_VALID))
     {
-        throw Exception("Extension Manager: Could not obtain path for UserInstallation.", 0);
+        throw Exception("Extension Manager: Could not obtain path for UserInstallation.", nullptr);
     }
 
     rtlDigest digest = rtl_digest_create( rtl_Digest_AlgorithmMD5 );
     if (!digest) {
-        throw RuntimeException("cannot get digest rtl_Digest_AlgorithmMD5!", 0 );
+        throw RuntimeException("cannot get digest rtl_Digest_AlgorithmMD5!", nullptr );
     }
 
     sal_uInt8 const * data =
@@ -391,7 +391,7 @@ oslProcess raiseProcess(
     OUString const & appURL, Sequence<OUString> const & args )
 {
     ::osl::Security sec;
-    oslProcess hProcess = 0;
+    oslProcess hProcess = nullptr;
     oslProcessError rc = osl_executeProcess(
         appURL.pData,
         reinterpret_cast<rtl_uString **>(
@@ -399,24 +399,24 @@ oslProcess raiseProcess(
         args.getLength(),
         osl_Process_DETACHED,
         sec.getHandle(),
-        0, // => current working dir
-        0, 0, // => no env vars
+        nullptr, // => current working dir
+        nullptr, 0, // => no env vars
         &hProcess );
 
     switch (rc) {
     case osl_Process_E_None:
         break;
     case osl_Process_E_NotFound:
-        throw RuntimeException( "image not found!", 0 );
+        throw RuntimeException( "image not found!", nullptr );
     case osl_Process_E_TimedOut:
-        throw RuntimeException( "timeout occurred!", 0 );
+        throw RuntimeException( "timeout occurred!", nullptr );
     case osl_Process_E_NoPermission:
-        throw RuntimeException( "permission denied!", 0 );
+        throw RuntimeException( "permission denied!", nullptr );
     case osl_Process_E_Unknown:
-        throw RuntimeException( "unknown error!", 0 );
+        throw RuntimeException( "unknown error!", nullptr );
     case osl_Process_E_InvalidError:
     default:
-        throw RuntimeException( "unmapped error!", 0 );
+        throw RuntimeException( "unmapped error!", nullptr );
     }
 
     return hProcess;
@@ -427,12 +427,12 @@ OUString generateRandomPipeId()
 {
     // compute some good pipe id:
     static rtlRandomPool s_hPool = rtl_random_createPool();
-    if (s_hPool == 0)
-        throw RuntimeException( "cannot create random pool!?", 0 );
+    if (s_hPool == nullptr)
+        throw RuntimeException( "cannot create random pool!?", nullptr );
     sal_uInt8 bytes[ 32 ];
     if (rtl_random_getBytes(
             s_hPool, bytes, ARLEN(bytes) ) != rtl_Random_E_None) {
-        throw RuntimeException( "random pool error!?", 0 );
+        throw RuntimeException( "random pool error!?", nullptr );
     }
     OUStringBuffer buf;
     for ( sal_uInt32 i = 0; i < ARLEN(bytes); ++i ) {
@@ -452,7 +452,7 @@ Reference<XInterface> resolveUnoURL(
 
     for (int i = 0; i <= 20; ++i) // 10 seconds
     {
-        if (abortChannel != 0 && abortChannel->isAborted()) {
+        if (abortChannel != nullptr && abortChannel->isAborted()) {
             throw ucb::CommandAbortedException( "abort!" );
         }
         try {
@@ -467,7 +467,7 @@ Reference<XInterface> resolveUnoURL(
             else throw;
         }
     }
-    return 0; // warning C4715
+    return nullptr; // warning C4715
 }
 
 #ifdef WNT
@@ -520,7 +520,7 @@ OUString readConsole()
     char buf[1024];
     memset(buf, 0, 1024);
     // read one char less so that the last char in buf is always zero
-    if (fgets(buf, 1024, stdin) != NULL)
+    if (fgets(buf, 1024, stdin) != nullptr)
     {
         OUString value = OStringToOUString(OString(buf), osl_getThreadTextEncoding());
         return value.trim();

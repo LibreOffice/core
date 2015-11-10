@@ -336,13 +336,13 @@ void UpdateInstallDialog::Thread::downloadExtensions()
         //create the download directory in the temp folder
         OUString sTempDir;
         if (::osl::FileBase::getTempDirURL(sTempDir) != ::osl::FileBase::E_None)
-            throw cssu::Exception("Could not get URL for the temp directory. No extensions will be installed.", 0);
+            throw cssu::Exception("Could not get URL for the temp directory. No extensions will be installed.", nullptr);
 
         //create a unique name for the directory
         OUString tempEntry, destFolder;
-        if (::osl::File::createTempFile(&sTempDir, 0, &tempEntry ) != ::osl::File::E_None)
+        if (::osl::File::createTempFile(&sTempDir, nullptr, &tempEntry ) != ::osl::File::E_None)
             throw cssu::Exception("Could not create a temporary file in " + sTempDir +
-             ". No extensions will be installed", 0 );
+             ". No extensions will be installed", nullptr );
 
         tempEntry = tempEntry.copy( tempEntry.lastIndexOf( '/' ) + 1 );
 
@@ -351,10 +351,10 @@ void UpdateInstallDialog::Thread::downloadExtensions()
         m_sDownloadFolder = destFolder;
         try
         {
-            dp_misc::create_folder(0, destFolder, m_updateCmdEnv.get() );
+            dp_misc::create_folder(nullptr, destFolder, m_updateCmdEnv.get() );
         } catch (const cssu::Exception & e)
         {
-            throw cssu::Exception(e.Message + " No extensions will be installed.", 0);
+            throw cssu::Exception(e.Message + " No extensions will be installed.", nullptr);
         }
 
 
@@ -591,10 +591,10 @@ void UpdateInstallDialog::Thread::download(OUString const & sDownloadURL, Update
     OUString destFolder, tempEntry;
     if (::osl::File::createTempFile(
         &m_sDownloadFolder,
-        0, &tempEntry ) != ::osl::File::E_None)
+        nullptr, &tempEntry ) != ::osl::File::E_None)
     {
         //ToDo feedback in window that download of this component failed
-        throw cssu::Exception("Could not create temporary file in folder " + destFolder + ".", 0);
+        throw cssu::Exception("Could not create temporary file in folder " + destFolder + ".", nullptr);
     }
     tempEntry = tempEntry.copy( tempEntry.lastIndexOf( '/' ) + 1 );
 

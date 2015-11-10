@@ -160,7 +160,7 @@ void PackageManagerImpl::initActivationLayer(
         m_activePackages_expanded = expandUnoRcUrl( m_activePackages );
         m_registrationData_expanded = expandUnoRcUrl(m_registrationData);
         if (!m_readOnly)
-            create_folder( 0, m_activePackages_expanded, xCmdEnv);
+            create_folder( nullptr, m_activePackages_expanded, xCmdEnv);
 
         OUString dbName;
         if (m_context == "user")
@@ -168,7 +168,7 @@ void PackageManagerImpl::initActivationLayer(
         else
         {
             // Create the extension data base in the user installation
-            create_folder( 0, m_registrationData_expanded, xCmdEnv);
+            create_folder( nullptr, m_registrationData_expanded, xCmdEnv);
             dbName = m_registrationData_expanded + "/extensions.pmap";
         }
         // The data base can always be written because it is always in the user installation
@@ -273,7 +273,7 @@ void PackageManagerImpl::initActivationLayer(
 void PackageManagerImpl::initRegistryBackends()
 {
     if (!m_registryCache.isEmpty())
-        create_folder( 0, m_registryCache,
+        create_folder( nullptr, m_registryCache,
                        Reference<XCommandEnvironment>(), false);
     m_xRegistry.set( ::dp_registry::create(
                          m_context, m_registryCache, false,
@@ -429,7 +429,7 @@ void PackageManagerImpl::fireModified()
 {
     ::cppu::OInterfaceContainerHelper * pContainer = rBHelper.getContainer(
         cppu::UnoType<util::XModifyListener>::get() );
-    if (pContainer != 0) {
+    if (pContainer != nullptr) {
         pContainer->forEach<util::XModifyListener>(
             boost::bind(&util::XModifyListener::modified, _1,
                         lang::EventObject(static_cast<OWeakObject *>(this))) );
@@ -446,7 +446,7 @@ void PackageManagerImpl::disposing()
         m_xLogFile.clear();
         try_dispose( m_xRegistry );
         m_xRegistry.clear();
-        m_activePackagesDB.reset(0);
+        m_activePackagesDB.reset(nullptr);
         m_xComponentContext.clear();
 
         t_pm_helper::disposing();
@@ -620,7 +620,7 @@ OUString PackageManagerImpl::insertToActivationLayer(
     if (! destFolderContent.transferContent(
             sourceContent, ::ucbhelper::InsertOperation_COPY,
             title, NameClash::OVERWRITE ))
-        throw RuntimeException( "UCB transferContent() failed!", 0 );
+        throw RuntimeException( "UCB transferContent() failed!", nullptr );
 
 
     // write to DB:
@@ -738,7 +738,7 @@ Reference<deployment::XPackage> PackageManagerImpl::addPackage(
                     sourceContent, ::ucbhelper::InsertOperation_COPY,
                     OUString(),
                     NameClash::ASK /* xxx todo: ASK not needed? */))
-                throw RuntimeException("UCB transferContent() failed!", 0 );
+                throw RuntimeException("UCB transferContent() failed!", nullptr );
             // set media-type:
             ::ucbhelper::Content docContent(
                 makeURL( m_context, title_enc ), xCmdEnv, m_xComponentContext );
@@ -1294,7 +1294,7 @@ bool PackageManagerImpl::synchronizeAddedExtensions(
     try
     {
         bOk = create_ucb_content(
-                NULL, m_activePackages_expanded, Reference<css::ucb::XCommandEnvironment>(), false);
+                nullptr, m_activePackages_expanded, Reference<css::ucb::XCommandEnvironment>(), false);
     }
     catch (const css::ucb::ContentCreationException&)
     {
@@ -1514,7 +1514,7 @@ sal_Int32 PackageManagerImpl::checkPrerequisites(
         if (!m_context.equals(extension->getRepositoryName()))
             throw lang::IllegalArgumentException(
                 "PackageManagerImpl::checkPrerequisites: extension is not from this repository.",
-                0, 0);
+                nullptr, 0);
 
         ActivePackages::Data dbData;
         OUString id = dp_misc::getIdentifier(extension);
@@ -1535,7 +1535,7 @@ sal_Int32 PackageManagerImpl::checkPrerequisites(
         {
             throw lang::IllegalArgumentException(
                 "PackageManagerImpl::checkPrerequisites: unknown extension",
-                0, 0);
+                nullptr, 0);
 
         }
         return 0;

@@ -93,7 +93,7 @@ struct StrAllFiles : public rtl::StaticWithInit< OUString, StrAllFiles >
     const OUString operator () () {
         const SolarMutexGuard guard;
         ::std::unique_ptr< ResMgr > const resmgr( ResMgr::CreateResMgr( "fps_office" ) );
-        OSL_ASSERT( resmgr.get() != 0 );
+        OSL_ASSERT( resmgr.get() != nullptr );
         return ResId(STR_FILTERNAME_ALL, *resmgr.get()).toString();
     }
 };
@@ -153,10 +153,10 @@ public:
 ExtBoxWithBtns_Impl::ExtBoxWithBtns_Impl(vcl::Window* pParent)
     : ExtensionBox_Impl(pParent)
     , m_bInterfaceLocked(false)
-    , m_pOptionsBtn(NULL)
-    , m_pEnableBtn(NULL)
-    , m_pRemoveBtn(NULL)
-    , m_pParent(NULL)
+    , m_pOptionsBtn(nullptr)
+    , m_pEnableBtn(nullptr)
+    , m_pRemoveBtn(nullptr)
+    , m_pParent(nullptr)
 {
 }
 
@@ -316,7 +316,7 @@ bool ExtBoxWithBtns_Impl::HandleTabKey( bool bReverse )
     if ( nIndex == svt::IExtensionListBox::ENTRY_NOTFOUND )
         return false;
 
-    PushButton *pNext = NULL;
+    PushButton *pNext = nullptr;
 
     if ( m_pOptionsBtn->HasFocus() ) {
         if ( !bReverse && !GetEntryData( nIndex )->m_bLocked )
@@ -538,7 +538,7 @@ IMPL_LINK_NOARG_TYPED(ExtBoxWithBtns_Impl, HandleRemoveBtn, Button*, void)
 DialogHelper::DialogHelper( const uno::Reference< uno::XComponentContext > &xContext,
                             Dialog *pWindow ) :
     m_pVCLWindow( pWindow ),
-    m_nEventID(   0 ),
+    m_nEventID(   nullptr ),
     m_bIsBusy(    false )
 {
     m_xContext = xContext;

@@ -45,7 +45,7 @@ extern "C" void offacc_workerfunc (void * acc)
 }
 
 Acceptor::Acceptor( const Reference< XComponentContext >& rxContext )
-    : m_thread(NULL)
+    : m_thread(nullptr)
     , m_rContext(rxContext)
     , m_bInit(false)
     , m_bDying(false)
@@ -267,7 +267,7 @@ using namespace desktop;
 
 SAL_DLLPUBLIC_EXPORT void * SAL_CALL offacc_component_getFactory(char const *pImplementationName, void *pServiceManager, void *)
 {
-    void* pReturn = NULL ;
+    void* pReturn = nullptr ;
     if  ( pImplementationName && pServiceManager )
     {
         // Define variables which are used in following macros.

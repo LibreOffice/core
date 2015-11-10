@@ -46,7 +46,7 @@ oslSignalAction SAL_CALL SalMainPipeExchangeSignal_impl(void* /*pData*/, oslSign
 struct ProcessDocumentsRequest
 {
     explicit ProcessDocumentsRequest(boost::optional< OUString > const & cwdUrl):
-        aCwdUrl(cwdUrl), pcProcessed( NULL ), bTextCat( false ) {}
+        aCwdUrl(cwdUrl), pcProcessed( nullptr ), bTextCat( false ) {}
 
     boost::optional< OUString > aCwdUrl;
     OUString aModule;

@@ -256,7 +256,7 @@ get_md5hash( rtl_uString *pText )
         return NULL;
 
     digest = rtl_digest_create( rtl_Digest_AlgorithmMD5 );
-    if ( digest == 0 )
+    if ( digest == NULL )
         return NULL;
 
     md5_key_len = rtl_digest_queryLength( digest );
@@ -654,7 +654,7 @@ exec_javaldx (Args *args)
     rtl_uString *pTmp, *pTmp2;
 
     oslProcess javaldx = NULL;
-    oslFileHandle fileOut= 0;
+    oslFileHandle fileOut= NULL;
     oslProcessError err;
 
     ppArgs = (rtl_uString **)calloc( args->nArgsEnv + 2, sizeof( rtl_uString* ) );
@@ -739,7 +739,7 @@ exec_javaldx (Args *args)
 #endif
 
 // has to be a global :(
-oslProcess * volatile g_pProcess = 0;
+oslProcess * volatile g_pProcess = NULL;
 
 void sigterm_handler(int ignored)
 {
@@ -768,11 +768,11 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS( argc, argv )
     memset(&sigpipe_action, 0, sizeof(struct sigaction));
     sigpipe_action.sa_handler = SIG_IGN;
     sigemptyset(&sigpipe_action.sa_mask);
-    sigaction(SIGPIPE, &sigpipe_action, 0);
+    sigaction(SIGPIPE, &sigpipe_action, NULL);
     memset(&sigterm_action, 0, sizeof(struct sigaction));
     sigterm_action.sa_handler = &sigterm_handler;
     sigemptyset(&sigterm_action.sa_mask);
-    sigaction(SIGTERM, &sigterm_action, 0);
+    sigaction(SIGTERM, &sigterm_action, NULL);
 
     args = args_parse ();
     args->pAppPath = get_app_path( argv[0] );
@@ -884,7 +884,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS( argc, argv )
 #endif
 
             status = child_get_exit_code(info);
-            g_pProcess = 0; // reset
+            g_pProcess = NULL; // reset
             switch (status) {
             case EXITHELPER_CRASH_WITH_RESTART: // re-start with just -env: parameters
 #if OSL_DEBUG_LEVEL > 1

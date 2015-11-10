@@ -158,12 +158,12 @@ using namespace ::com::sun::star::ui;
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::container;
 
-ResMgr* desktop::Desktop::pResMgr = 0;
+ResMgr* desktop::Desktop::pResMgr = nullptr;
 
 namespace desktop
 {
 
-static oslSignalHandler pSignalHandler = 0;
+static oslSignalHandler pSignalHandler = nullptr;
 
 namespace {
 
@@ -284,7 +284,7 @@ bool shouldLaunchQuickstart()
     bool bQuickstart = Desktop::GetCommandLineArgs().IsQuickstart();
     if (!bQuickstart)
     {
-        const SfxPoolItem* pItem=0;
+        const SfxPoolItem* pItem=nullptr;
         SfxItemSet aQLSet(SfxGetpApp()->GetPool(), SID_ATTR_QUICKLAUNCHER, SID_ATTR_QUICKLAUNCHER);
         SfxGetpApp()->GetOptions(aQLSet);
         SfxItemState eState = aQLSet.GetItemState(SID_ATTR_QUICKLAUNCHER, false, &pItem);
@@ -610,7 +610,7 @@ void Desktop::Init()
             // disable IPC thread in an instance that is just showing a help message
             OfficeIPCThread::DisableOfficeIPCThread();
         }
-        pSignalHandler = osl_addSignalHandler(SalMainPipeExchangeSignal_impl, NULL);
+        pSignalHandler = osl_addSignalHandler(SalMainPipeExchangeSignal_impl, nullptr);
     }
 }
 
@@ -632,7 +632,7 @@ void Desktop::DeInit()
             comphelper::getProcessComponentContext(), UNO_QUERY_THROW )->
             dispose();
         // nobody should get a destroyed service factory...
-        ::comphelper::setProcessServiceFactory( NULL );
+        ::comphelper::setProcessServiceFactory( nullptr );
 
         // clear lockfile
         m_xLockfile.reset();
@@ -1191,7 +1191,7 @@ sal_uInt16 Desktop::Exception(sal_uInt16 nError)
 
     SystemWindowFlags nOldMode = Application::GetSystemWindowMode();
     Application::SetSystemWindowMode( nOldMode & ~SystemWindowFlags::NOAUTOMODE );
-    Application::SetDefDialogParent( NULL );
+    Application::SetDefDialogParent( nullptr );
 
     if ( bInException )
     {
@@ -1272,7 +1272,7 @@ struct ExecuteGlobals
     {}
 };
 
-static ExecuteGlobals* pExecGlobals = NULL;
+static ExecuteGlobals* pExecGlobals = nullptr;
 
 
 //This just calls Execute() for all normal uses of LibreOffice, but for
@@ -1663,7 +1663,7 @@ int Desktop::doShutdown()
         pExecGlobals->xGlobalBroadcaster->documentEventOccured(aEvent);
     }
 
-    delete pResMgr, pResMgr = NULL;
+    delete pResMgr, pResMgr = nullptr;
     // Restore old value
     const CommandLineArgs& rCmdLineArgs = GetCommandLineArgs();
     if ( rCmdLineArgs.IsHeadless() || rCmdLineArgs.IsEventTesting() )
@@ -1701,11 +1701,11 @@ int Desktop::doShutdown()
     }
     // be sure that path/language options gets destroyed before
     // UCB is deinitialized
-    pExecGlobals->pLanguageOptions.reset( 0 );
-    pExecGlobals->pPathOptions.reset( 0 );
+    pExecGlobals->pLanguageOptions.reset( nullptr );
+    pExecGlobals->pPathOptions.reset( nullptr );
 
     bool bRR = pExecGlobals->bRestartRequested;
-    delete pExecGlobals, pExecGlobals = NULL;
+    delete pExecGlobals, pExecGlobals = nullptr;
 
     if ( bRR )
     {
@@ -2169,7 +2169,7 @@ void Desktop::OpenClients()
             aHelpURLBuffer.appendAscii("&System=WIN");
 #endif
             Application::GetHelp()->Start(
-                aHelpURLBuffer.makeStringAndClear(), NULL);
+                aHelpURLBuffer.makeStringAndClear(), nullptr);
             return;
         }
     }
@@ -2297,7 +2297,7 @@ void Desktop::OpenClients()
     OfficeIPCThread::EnableRequests();
 
     ProcessDocumentsRequest aRequest(rArgs.getCwdUrl());
-    aRequest.pcProcessed = NULL;
+    aRequest.pcProcessed = nullptr;
 
     aRequest.aOpenList = rArgs.GetOpenList();
     aRequest.aViewList = rArgs.GetViewList();
@@ -2371,7 +2371,7 @@ void Desktop::OpenClients()
 
     if ( bRecovery )
     {
-        ShowBackingComponent(0);
+        ShowBackingComponent(nullptr);
     }
     else
     {
@@ -2425,7 +2425,7 @@ void Desktop::OpenDefault()
     }
 
     ProcessDocumentsRequest aRequest(rArgs.getCwdUrl());
-    aRequest.pcProcessed = NULL;
+    aRequest.pcProcessed = nullptr;
     aRequest.aOpenList.push_back(aName);
     OfficeIPCThread::ExecuteCmdLineRequests( aRequest );
 }
@@ -2551,7 +2551,7 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
                 std::vector<OUString> const & data(rAppEvent.GetStringsData());
                 pDocsRequest->aOpenList.insert(
                     pDocsRequest->aOpenList.end(), data.begin(), data.end());
-                pDocsRequest->pcProcessed = NULL;
+                pDocsRequest->pcProcessed = nullptr;
 
                 OfficeIPCThread::ExecuteCmdLineRequests( *pDocsRequest );
                 delete pDocsRequest;
@@ -2560,7 +2560,7 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
         break;
     case ApplicationEvent::TYPE_OPENHELPURL:
         // start help for a specific URL
-        Application::GetHelp()->Start(rAppEvent.GetStringData(), NULL);
+        Application::GetHelp()->Start(rAppEvent.GetStringData(), nullptr);
         break;
     case ApplicationEvent::TYPE_PRINT:
         {
@@ -2572,7 +2572,7 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
                 std::vector<OUString> const & data(rAppEvent.GetStringsData());
                 pDocsRequest->aPrintList.insert(
                     pDocsRequest->aPrintList.end(), data.begin(), data.end());
-                pDocsRequest->pcProcessed = NULL;
+                pDocsRequest->pcProcessed = nullptr;
 
                 OfficeIPCThread::ExecuteCmdLineRequests( *pDocsRequest );
                 delete pDocsRequest;
@@ -2710,7 +2710,7 @@ void Desktop::CloseSplashScreen()
     if(m_rSplashScreen.is())
     {
         m_rSplashScreen->end();
-        m_rSplashScreen = NULL;
+        m_rSplashScreen = nullptr;
     }
 }
 
@@ -2736,7 +2736,7 @@ void Desktop::ShowBackingComponent(Desktop * progress)
     }
     Reference< XComponentContext > xContext = comphelper::getProcessComponentContext();
     Reference< XDesktop2 > xDesktop = css::frame::Desktop::create(xContext);
-    if (progress != 0)
+    if (progress != nullptr)
     {
         progress->SetSplashScreenProgress(60);
     }
@@ -2753,7 +2753,7 @@ void Desktop::ShowBackingComponent(Desktop * progress)
         vcl::Window* pContainerWindow = VCLUnoHelper::GetWindow( xContainerWindow );
         SAL_WARN_IF( !pContainerWindow, "desktop.app", "Desktop::Main: no implementation access to the frame's container window!" );
         pContainerWindow->SetExtendedStyle( pContainerWindow->GetExtendedStyle() | WB_EXT_DOCUMENT );
-        if (progress != 0)
+        if (progress != nullptr)
         {
             progress->SetSplashScreenProgress(75);
         }
@@ -2763,12 +2763,12 @@ void Desktop::ShowBackingComponent(Desktop * progress)
         // Because the backing component set the property "IsBackingMode" of the frame
         // to true inside attachFrame(). But setComponent() reset this state everytimes ...
         xBackingFrame->setComponent(Reference< XWindow >(xStartModule, UNO_QUERY), xStartModule);
-        if (progress != 0)
+        if (progress != nullptr)
         {
             progress->SetSplashScreenProgress(100);
         }
         xStartModule->attachFrame(xBackingFrame);
-        if (progress != 0)
+        if (progress != nullptr)
         {
             progress->CloseSplashScreen();
         }

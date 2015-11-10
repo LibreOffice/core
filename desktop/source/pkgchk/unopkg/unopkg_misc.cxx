@@ -49,7 +49,7 @@ namespace unopkg {
 
 OUString toString( OptionInfo const * info )
 {
-    assert(info != 0);
+    assert(info != nullptr);
     OUStringBuffer buf;
     buf.append("--");
     buf.appendAscii(info->m_name);
@@ -69,7 +69,7 @@ OptionInfo const * getOptionInfo(
     OptionInfo const * list,
     OUString const & opt, sal_Unicode copt )
 {
-    for ( ; list->m_name != 0; ++list )
+    for ( ; list->m_name != nullptr; ++list )
     {
         OptionInfo const & option_info = *list;
         if (!opt.isEmpty())
@@ -92,13 +92,13 @@ OptionInfo const * getOptionInfo(
     }
     OSL_FAIL( OUStringToOString(
                     opt, osl_getThreadTextEncoding() ).getStr() );
-    return 0;
+    return nullptr;
 }
 
 
 bool isOption( OptionInfo const * option_info, sal_uInt32 * pIndex )
 {
-    assert(option_info != 0);
+    assert(option_info != nullptr);
     if (osl_getCommandArgCount() <= *pIndex)
         return false;
 
@@ -150,7 +150,7 @@ bool readArgument(
     {
         if (*pIndex < osl_getCommandArgCount())
         {
-            OSL_ASSERT( pValue != 0 );
+            OSL_ASSERT( pValue != nullptr );
             osl_getCommandArg( *pIndex, &pValue->pData );
             dp_misc::TRACE(__FILE__ ": argument value: "
                 + *pValue + "\n");
@@ -169,7 +169,7 @@ struct ExecutableDir : public rtl::StaticWithInit<
     const OUString operator () () {
         OUString path;
         if (osl_getExecutableFile( &path.pData ) != osl_Process_E_None) {
-            throw RuntimeException("cannot locate executable directory!",0);
+            throw RuntimeException("cannot locate executable directory!",nullptr);
         }
         return path.copy( 0, path.lastIndexOf( '/' ) );
     }
@@ -454,7 +454,7 @@ Reference<XComponentContext> getUNO(
     }
     else
     {
-        if (! s_lockfile.check( 0 ))
+        if (! s_lockfile.check( nullptr ))
         {
             OUString sMsg(ResId(RID_STR_CONCURRENTINSTANCE, *DeploymentResMgr::get()));
             //Create this string before we call DeInitVCL, because this will kill

@@ -118,7 +118,7 @@ void writeLastModified(OUString & url, Reference<ucb::XCommandEnvironment> const
     catch(...)
     {
         uno::Any exc(::cppu::getCaughtException());
-        throw css::deployment::DeploymentException("Failed to update" + url, 0, exc);
+        throw css::deployment::DeploymentException("Failed to update" + url, nullptr, exc);
     }
 }
 
@@ -1493,7 +1493,7 @@ void ExtensionManager::fireModified()
 {
     ::cppu::OInterfaceContainerHelper * pContainer = rBHelper.getContainer(
         cppu::UnoType<util::XModifyListener>::get() );
-    if (pContainer != 0) {
+    if (pContainer != nullptr) {
         pContainer->forEach<util::XModifyListener>(
             boost::bind(&util::XModifyListener::modified, _1,
                         lang::EventObject(static_cast<OWeakObject *>(this))) );

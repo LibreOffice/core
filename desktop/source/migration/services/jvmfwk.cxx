@@ -67,7 +67,7 @@ public:
     operator JavaInfo* () const { return pData;}
 };
 
-CJavaInfo::CJavaInfo(): pData(NULL)
+CJavaInfo::CJavaInfo(): pData(nullptr)
 {
 }
 
@@ -416,11 +416,11 @@ void SAL_CALL  JavaMigration::setPropertyValue(
             if (!(aValue >>= val))
                 throw MalformedDataException(
                        "[Service implementation " IMPL_NAME
-                       "] XLayerHandler::setPropertyValue received wrong type for Enable property", 0, Any());
+                       "] XLayerHandler::setPropertyValue received wrong type for Enable property", nullptr, Any());
             if (jfw_setEnabled(val) != JFW_E_NONE)
                 throw WrappedTargetException(
                        "[Service implementation " IMPL_NAME
-                       "] XLayerHandler::setPropertyValue: jfw_setEnabled failed.", 0, Any());
+                       "] XLayerHandler::setPropertyValue: jfw_setEnabled failed.", nullptr, Any());
 
             break;
         }
@@ -430,12 +430,12 @@ void SAL_CALL  JavaMigration::setPropertyValue(
              if (!(aValue >>= cp))
                  throw MalformedDataException(
                            "[Service implementation " IMPL_NAME
-                           "] XLayerHandler::setPropertyValue received wrong type for UserClassPath property", 0, Any());
+                           "] XLayerHandler::setPropertyValue received wrong type for UserClassPath property", nullptr, Any());
 
              if (jfw_setUserClassPath(cp.pData) != JFW_E_NONE)
                  throw WrappedTargetException(
                        "[Service implementation " IMPL_NAME
-                       "] XLayerHandler::setPropertyValue: jfw_setUserClassPath failed.", 0, Any());
+                       "] XLayerHandler::setPropertyValue: jfw_setUserClassPath failed.", nullptr, Any());
              break;
          }
         default:

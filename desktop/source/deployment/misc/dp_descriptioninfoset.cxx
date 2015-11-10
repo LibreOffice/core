@@ -194,7 +194,7 @@ ExtensionDescription::ExtensionDescription(
         {
             throw css::uno::Exception(
                 "Could not get XInputStream for description.xml of extension " +
-                sDescriptionUri, 0);
+                sDescriptionUri, nullptr);
         }
 
         //get root node of description.xml
@@ -204,13 +204,13 @@ ExtensionDescription::ExtensionDescription(
         if (!xDocBuilder->isNamespaceAware())
         {
             throw css::uno::Exception(
-                "Service com.sun.star.xml.dom.DocumentBuilder is not namespace aware.", 0);
+                "Service com.sun.star.xml.dom.DocumentBuilder is not namespace aware.", nullptr);
         }
 
         Reference<css::xml::dom::XDocument> xDoc = xDocBuilder->parse(xIn);
         if (!xDoc.is())
         {
-            throw css::uno::Exception(sDescriptionUri + " contains data which cannot be parsed. ", 0);
+            throw css::uno::Exception(sDescriptionUri + " contains data which cannot be parsed. ", nullptr);
         }
 
         //check for proper root element and namespace
@@ -218,13 +218,13 @@ ExtensionDescription::ExtensionDescription(
         if (!xRoot.is())
         {
             throw css::uno::Exception(
-                sDescriptionUri + " contains no root element.", 0);
+                sDescriptionUri + " contains no root element.", nullptr);
         }
 
         if ( ! (xRoot->getTagName() == "description"))
         {
             throw css::uno::Exception(
-                sDescriptionUri + " does not contain the root element <description>.", 0);
+                sDescriptionUri + " does not contain the root element <description>.", nullptr);
         }
 
         m_xRoot.set(xRoot, css::uno::UNO_QUERY_THROW);
@@ -233,7 +233,7 @@ ExtensionDescription::ExtensionDescription(
         //check if this namespace is supported
         if ( ! (nsDescription == "http://openoffice.org/extensions/description/2006"))
         {
-            throw css::uno::Exception(sDescriptionUri + " contains a root element with an unsupported namespace. ", 0);
+            throw css::uno::Exception(sDescriptionUri + " contains a root element with an unsupported namespace. ", nullptr);
         }
     } catch (const css::uno::RuntimeException &) {
         throw;
@@ -319,7 +319,7 @@ DescriptionInfoset getDescriptionInfoset(OUString const & sExtensionFolderURL)
     } catch (const NoDescriptionException &) {
     } catch (const css::deployment::DeploymentException & e) {
         throw css::uno::RuntimeException(
-             "com.sun.star.deployment.DeploymentException: " + e.Message, 0);
+             "com.sun.star.deployment.DeploymentException: " + e.Message, nullptr);
     }
     return DescriptionInfoset(context, root);
 }
@@ -619,7 +619,7 @@ css::uno::Sequence< OUString > DescriptionInfoset::getUrls(
 
 OUString DescriptionInfoset::getLocalizedReleaseNotesURL() const
 {
-    return getLocalizedHREFAttrFromChild("/desc:description/desc:release-notes", NULL);
+    return getLocalizedHREFAttrFromChild("/desc:description/desc:release-notes", nullptr);
 }
 
 OUString DescriptionInfoset::getLocalizedDisplayName() const
@@ -643,7 +643,7 @@ OUString DescriptionInfoset::getLocalizedDisplayName() const
 
 OUString DescriptionInfoset::getLocalizedLicenseURL() const
 {
-    return getLocalizedHREFAttrFromChild("/desc:description/desc:registration/desc:simple-license", NULL);
+    return getLocalizedHREFAttrFromChild("/desc:description/desc:registration/desc:simple-license", nullptr);
 
 }
 
@@ -684,7 +684,7 @@ DescriptionInfoset::getSimpleLicenseAttributes() const
 
 OUString DescriptionInfoset::getLocalizedDescriptionURL() const
 {
-    return getLocalizedHREFAttrFromChild("/desc:description/desc:extension-description", NULL);
+    return getLocalizedHREFAttrFromChild("/desc:description/desc:extension-description", nullptr);
 }
 
 css::uno::Reference< css::xml::dom::XNode >
@@ -785,7 +785,7 @@ DescriptionInfoset::getChildWithDefaultLocale(css::uno::Reference< css::xml::dom
         return m_xpath->selectSingleNode(xParent, exp2);
     } catch (const css::xml::xpath::XPathException &) {
         // ignore
-        return 0;
+        return nullptr;
     }
 }
 

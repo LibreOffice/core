@@ -152,12 +152,12 @@ public:
         , m_nCurrentProgress(0)
         {}
 
-    Dialog * activeDialog() { return m_pDialogHelper ? m_pDialogHelper->getWindow() : NULL; }
+    Dialog * activeDialog() { return m_pDialogHelper ? m_pDialogHelper->getWindow() : nullptr; }
 
     void startProgress();
     void stopProgress();
     void progressSection( const OUString &rText,
-                          const uno::Reference< task::XAbortChannel > &xAbortChannel = 0 );
+                          const uno::Reference< task::XAbortChannel > &xAbortChannel = nullptr );
     inline bool isAborted() const { return m_bAborted; }
     inline void setWarnUser( bool bNewVal ) { m_bWarnUser = bNewVal; }
 
@@ -406,7 +406,7 @@ void ProgressCmdEnv::handle( uno::Reference< task::XInteractionRequest > const &
         }
         {
             SolarMutexGuard guard;
-            short n = ScopedVclPtrInstance<DependencyDialog>::Create( m_pDialogHelper? m_pDialogHelper->getWindow() : NULL, deps )->Execute();
+            short n = ScopedVclPtrInstance<DependencyDialog>::Create( m_pDialogHelper? m_pDialogHelper->getWindow() : nullptr, deps )->Execute();
             // Distinguish between closing the dialog and programatically
             // canceling the dialog (headless VCL):
             approve = n == RET_OK
@@ -417,7 +417,7 @@ void ProgressCmdEnv::handle( uno::Reference< task::XInteractionRequest > const &
     {
         uno::Reference< ui::dialogs::XExecutableDialog > xDialog(
             deployment::ui::LicenseDialog::create(
-            m_xContext, VCLUnoHelper::GetInterface( m_pDialogHelper? m_pDialogHelper->getWindow() : NULL ),
+            m_xContext, VCLUnoHelper::GetInterface( m_pDialogHelper? m_pDialogHelper->getWindow() : nullptr ),
             licExc.ExtensionName, licExc.Text ) );
         sal_Int16 res = xDialog->execute();
         if ( res == ui::dialogs::ExecutableDialogResults::CANCEL )
@@ -450,7 +450,7 @@ void ProgressCmdEnv::handle( uno::Reference< task::XInteractionRequest > const &
             verExc.Deployed->getDisplayName());
         {
             SolarMutexGuard guard;
-            ScopedVclPtrInstance<MessageDialog> box(m_pDialogHelper? m_pDialogHelper->getWindow() : NULL,
+            ScopedVclPtrInstance<MessageDialog> box(m_pDialogHelper? m_pDialogHelper->getWindow() : nullptr,
                                                     ResId(id, *DeploymentGuiResMgr::get()), VCL_MESSAGE_WARNING, VCL_BUTTONS_OK_CANCEL);
             OUString s;
             if (bEqualNames)
@@ -515,7 +515,7 @@ void ProgressCmdEnv::handle( uno::Reference< task::XInteractionRequest > const &
         // forward to UUI handler:
         if (! m_xHandler.is()) {
             // late init:
-            m_xHandler = task::InteractionHandler::createWithParentAndContext(m_xContext, NULL, m_sTitle);
+            m_xHandler = task::InteractionHandler::createWithParentAndContext(m_xContext, nullptr, m_sTitle);
         }
         m_xHandler->handle( xRequest );
     }
@@ -948,7 +948,7 @@ void ExtensionCmdQueue::Thread::_checkForUpdates(
         short nDialogResult = RET_OK;
         if ( !dataDownload.empty() )
         {
-            nDialogResult = ScopedVclPtrInstance<UpdateInstallDialog>::Create( m_pDialogHelper? m_pDialogHelper->getWindow() : NULL, dataDownload, m_xContext )->Execute();
+            nDialogResult = ScopedVclPtrInstance<UpdateInstallDialog>::Create( m_pDialogHelper? m_pDialogHelper->getWindow() : nullptr, dataDownload, m_xContext )->Execute();
             pUpdateDialog->notifyMenubar( false, true ); // Check, if there are still pending updates to be notified via menu bar icon
         }
         else
@@ -1098,7 +1098,7 @@ void ExtensionCmdQueue::acceptLicense( const uno::Reference< deployment::XPackag
 
 void ExtensionCmdQueue::syncRepositories( const uno::Reference< uno::XComponentContext > &xContext )
 {
-    dp_misc::syncRepositories( false, new ProgressCmdEnv( xContext, NULL, "Extension Manager" ) );
+    dp_misc::syncRepositories( false, new ProgressCmdEnv( xContext, nullptr, "Extension Manager" ) );
 }
 
 void ExtensionCmdQueue::stop()
@@ -1114,7 +1114,7 @@ bool ExtensionCmdQueue::isBusy()
 void handleInteractionRequest( const uno::Reference< uno::XComponentContext > & xContext,
                                const uno::Reference< task::XInteractionRequest > & xRequest )
 {
-    ::rtl::Reference< ProgressCmdEnv > xCmdEnv( new ProgressCmdEnv( xContext, NULL, "Extension Manager" ) );
+    ::rtl::Reference< ProgressCmdEnv > xCmdEnv( new ProgressCmdEnv( xContext, nullptr, "Extension Manager" ) );
     xCmdEnv->handle( xRequest );
 }
 

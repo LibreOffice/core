@@ -146,7 +146,7 @@ void SilentCommandEnv::handle( Reference< task::XInteractionRequest> const & xRe
     {
         uno::Reference< ui::dialogs::XExecutableDialog > xDialog(
             deployment::ui::LicenseDialog::create(
-            mxContext, VCLUnoHelper::GetInterface( NULL ),
+            mxContext, VCLUnoHelper::GetInterface( nullptr ),
             licExc.ExtensionName, licExc.Text ) );
         sal_Int16 res = xDialog->execute();
         if ( res == ui::dialogs::ExecutableDialogResults::CANCEL )

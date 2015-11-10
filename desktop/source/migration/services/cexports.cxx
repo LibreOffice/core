@@ -31,12 +31,12 @@ extern "C"
     {
         migration::BasicMigration_create, migration::BasicMigration_getImplementationName,
         migration::BasicMigration_getSupportedServiceNames, ::cppu::createSingleComponentFactory,
-        0, 0
+        nullptr, 0
     },
     {
         migration::WordbookMigration_create, migration::WordbookMigration_getImplementationName,
         migration::WordbookMigration_getSupportedServiceNames, ::cppu::createSingleComponentFactory,
-        0, 0
+        nullptr, 0
     },
     // Extension migration was disabled by Oracle / OpenOffice.org
 #if 0
@@ -46,7 +46,7 @@ extern "C"
          0, 0
     },
 #endif
-    { 0, 0, 0, 0, 0, 0 }
+    { nullptr, nullptr, nullptr, nullptr, nullptr, 0 }
 };
 
 

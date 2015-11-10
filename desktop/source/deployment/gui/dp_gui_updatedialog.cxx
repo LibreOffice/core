@@ -256,7 +256,7 @@ UpdateDialog::Thread::Thread(
     if( m_context.is() )
     {
         m_xInteractionHdl.set(
-            task::InteractionHandler::createWithParent(m_context, 0),
+            task::InteractionHandler::createWithParent(m_context, nullptr),
             uno::UNO_QUERY );
         m_updateInformation->setInteractionHandler( m_xInteractionHdl );
     }
@@ -535,7 +535,7 @@ UpdateDialog::UpdateDialog(
     get(m_pOk, "INSTALL");
     get(m_pClose, "gtk-close");
     get(m_pHelp, "gtk-help");
-    OSL_ASSERT(updateData != NULL);
+    OSL_ASSERT(updateData != nullptr);
 
     m_xExtensionManager = deployment::ExtensionManager::get( context );
 
@@ -1155,7 +1155,7 @@ IMPL_LINK_NOARG_TYPED(UpdateDialog, selectionHandler, SvTreeListBox*, void)
         m_pUpdates->GetSelectEntryData());
     clearDescription();
 
-    if ( p != NULL )
+    if ( p != nullptr )
     {
         sal_uInt16 pos = p->m_nIndex;
 

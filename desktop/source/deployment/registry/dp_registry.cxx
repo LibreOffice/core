@@ -324,7 +324,7 @@ Reference<deployment::XPackageRegistry> PackageRegistryImpl::create(
                 registryArgs[ 1 ] <<= registryCachePath;
                 registryArgs[ 2 ] <<= readOnly;
                 if (! readOnly)
-                    create_folder( 0, registryCachePath,
+                    create_folder( nullptr, registryCachePath,
                                    Reference<XCommandEnvironment>() );
             }
 
@@ -374,7 +374,7 @@ Reference<deployment::XPackageRegistry> PackageRegistryImpl::create(
                      rtl_UriCharClassPchar,
                      rtl_UriEncodeIgnoreEscapes,
                      RTL_TEXTENCODING_UTF8 ) ) );
-    create_folder( 0, registryCachePath, Reference<XCommandEnvironment>());
+    create_folder( nullptr, registryCachePath, Reference<XCommandEnvironment>());
 
 
 #if OSL_DEBUG_LEVEL > 1

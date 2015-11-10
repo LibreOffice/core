@@ -29,9 +29,9 @@ extern "C"
     {
         migration::OO3ExtensionMigration_create, migration::OO3ExtensionMigration_getImplementationName,
         migration::OO3ExtensionMigration_getSupportedServiceNames, ::cppu::createSingleComponentFactory,
-        0, 0
+        nullptr, 0
     },
-    { 0, 0, 0, 0, 0, 0 }
+    { nullptr, nullptr, nullptr, nullptr, nullptr, 0 }
 };
 
 

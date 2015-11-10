@@ -377,7 +377,7 @@ BackendImpl::ComponentPackageImpl::getRDB() const
 BackendImpl * BackendImpl::ComponentPackageImpl::getMyBackend() const
 {
     BackendImpl * pBackend = static_cast<BackendImpl *>(m_myBackend.get());
-    if (NULL == pBackend)
+    if (nullptr == pBackend)
     {
         //Throws a DisposedException
         check();
@@ -452,7 +452,7 @@ void BackendImpl::initServiceRdbFiles()
                 m_commonRDB, NameClash::OVERWRITE ))
         {
 
-            throw RuntimeException( "UCB transferContent() failed!", 0 );
+            throw RuntimeException( "UCB transferContent() failed!", nullptr );
         }
         oldRDB = ::ucbhelper::Content();
     }
@@ -471,7 +471,7 @@ void BackendImpl::initServiceRdbFiles()
         if (! cacheDir.transferContent(
                 oldRDB, ::ucbhelper::InsertOperation_COPY,
                 m_nativeRDB, NameClash::OVERWRITE ))
-            throw RuntimeException( "UCB transferContent() failed!", 0 );
+            throw RuntimeException( "UCB transferContent() failed!", nullptr );
     }
 
     // UNO is bootstrapped, flush for next process start:
@@ -773,7 +773,7 @@ void BackendImpl::unorc_verify_init(
                     if (!token.isEmpty())
                     {
                         if (create_ucb_content(
-                                0, expandUnoRcTerm(token), xCmdEnv,
+                                nullptr, expandUnoRcTerm(token), xCmdEnv,
                                 false /* no throw */ ))
                         {
                             //The jar file may not exist anymore if a shared or bundled
@@ -796,7 +796,7 @@ void BackendImpl::unorc_verify_init(
                         if (token[ 0 ] == '?')
                             token = token.copy( 1 );
                          if (create_ucb_content(
-                                0, expandUnoRcTerm(token), xCmdEnv,
+                                nullptr, expandUnoRcTerm(token), xCmdEnv,
                                 false /* no throw */ ))
                          {
                              //The RDB file may not exist anymore if a shared or bundled
@@ -1141,7 +1141,7 @@ void extractComponentData(
     OUString const & componentUrl)
 {
     OSL_ASSERT(
-        context.is() && registry.is() && data != 0 && componentLoader.is());
+        context.is() && registry.is() && data != nullptr && componentLoader.is());
     OUString registryName(registry->getKeyName());
     sal_Int32 prefix = registryName.getLength();
     if (!registryName.endsWith("/")) {
@@ -1168,7 +1168,7 @@ void extractComponentData(
                         singletonKeys[j]->getKeyName().copy(prefix2), name));
             }
         }
-        if (factories != 0) {
+        if (factories != nullptr) {
             factories->push_back(
                 componentLoader->activate(
                     name, OUString(), componentUrl, keys[i]));
@@ -1421,7 +1421,7 @@ void BackendImpl::ComponentPackageImpl::processPackage_(
             data.javaTypeLibrary = true;
         }
         std::vector< css::uno::Reference< css::uno::XInterface > > factories;
-        getComponentInfo(&data, startup ? 0 : &factories, context);
+        getComponentInfo(&data, startup ? nullptr : &factories, context);
         if (!startup) {
             try {
                 componentLiveInsertion(data, factories);
@@ -1483,7 +1483,7 @@ BackendImpl::TypelibraryPackageImpl::TypelibraryPackageImpl(
 BackendImpl * BackendImpl::TypelibraryPackageImpl::getMyBackend() const
 {
     BackendImpl * pBackend = static_cast<BackendImpl *>(m_myBackend.get());
-    if (NULL == pBackend)
+    if (nullptr == pBackend)
     {
         //May throw a DisposedException
         check();
@@ -1577,7 +1577,7 @@ BackendImpl *
 BackendImpl::OtherPlatformPackageImpl::getMyBackend() const
 {
     BackendImpl * pBackend = static_cast<BackendImpl *>(m_myBackend.get());
-    if (NULL == pBackend)
+    if (nullptr == pBackend)
     {
         //Throws a DisposedException
         check();
@@ -1608,7 +1608,7 @@ BackendImpl::OtherPlatformPackageImpl::impl_openRDB() const
     catch (registry::InvalidRegistryException const&)
     {
         // If the registry does not exist, we do not need to bother at all
-        xRegistry.set(0);
+        xRegistry.set(nullptr);
     }
 
     SAL_WARN_IF( !xRegistry.is(), "desktop.deployment", "could not create registry for the package's platform");
@@ -1666,7 +1666,7 @@ BackendImpl::OtherPlatformPackageImpl::processPackage_(
 BackendImpl * BackendImpl::ComponentsPackageImpl::getMyBackend() const
 {
     BackendImpl * pBackend = static_cast<BackendImpl *>(m_myBackend.get());
-    if (NULL == pBackend)
+    if (nullptr == pBackend)
     {
         //Throws a DisposedException
         check();

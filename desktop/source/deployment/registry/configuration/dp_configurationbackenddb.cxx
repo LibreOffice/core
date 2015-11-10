@@ -90,7 +90,7 @@ void ConfigurationBackendDb::addEntry(OUString const & url, Data const & data)
         Any exc( ::cppu::getCaughtException() );
         throw css::deployment::DeploymentException(
             "Extension Manager: failed to write data entry in configuration backend db: " +
-            m_urlDb, 0, exc);
+            m_urlDb, nullptr, exc);
     }
 }
 
@@ -122,7 +122,7 @@ ConfigurationBackendDb::getEntry(OUString const & url)
         Any exc( ::cppu::getCaughtException() );
         throw css::deployment::DeploymentException(
             "Extension Manager: failed to read data entry in configuration backend db: " +
-            m_urlDb, 0, exc);
+            m_urlDb, nullptr, exc);
     }
 }
 
@@ -157,7 +157,7 @@ ConfigurationBackendDb::getEntry(OUString const & url)
         Any exc( ::cppu::getCaughtException() );
         throw css::deployment::DeploymentException(
             "Extension Manager: failed to read data entry in configuration backend db: " +
-            m_urlDb, 0, exc);
+            m_urlDb, nullptr, exc);
     }
 }
 

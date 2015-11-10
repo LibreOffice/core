@@ -259,7 +259,7 @@ void PersistentMap::flush()
 
 bool PersistentMap::has( OString const & key ) const
 {
-    return get( NULL, key );
+    return get( nullptr, key );
 }
 
 bool PersistentMap::get( OString * value, OString const & key ) const

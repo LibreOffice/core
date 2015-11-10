@@ -106,7 +106,7 @@ const SfxFilter* impl_lookupExportFilterForUrl( const rtl::OUString& rUrl, const
             xContext->getServiceManager()->createInstanceWithContext( "com.sun.star.document.FilterFactory", xContext ),
             UNO_QUERY_THROW );
 
-    const SfxFilter* pBestMatch = 0;
+    const SfxFilter* pBestMatch = nullptr;
 
     const Reference< XEnumeration > xFilterEnum(
             xFilterFactory->createSubSetEnumerationByQuery( sQuery.makeStringAndClear() ), UNO_QUERY_THROW );
@@ -156,7 +156,7 @@ try
 }
 catch ( const Exception& )
 {
-    return 0;
+    return nullptr;
 }
 }
 
@@ -187,7 +187,7 @@ Mutex& DispatchWatcher::GetMutex()
 DispatchWatcher* DispatchWatcher::GetDispatchWatcher()
 {
     static Reference< XInterface > xDispatchWatcher;
-    static DispatchWatcher*        pDispatchWatcher = NULL;
+    static DispatchWatcher*        pDispatchWatcher = nullptr;
 
     if ( !xDispatchWatcher.is() )
     {
@@ -271,7 +271,7 @@ bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatchRequ
         else
         {
             Reference < XInteractionHandler2 > xInteraction(
-                InteractionHandler::createWithParent(::comphelper::getProcessComponentContext(), 0) );
+                InteractionHandler::createWithParent(::comphelper::getProcessComponentContext(), nullptr) );
 
             aArgs[1].Name = "InteractionHandler";
             aArgs[1].Value <<= xInteraction;
@@ -522,7 +522,7 @@ bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatchRequ
                             OUString fileForCat;
                             if( aDispatchRequest.aRequestType == REQUEST_CAT )
                             {
-                                if( ::osl::FileBase::createTempFile(0, 0, &fileForCat) != ::osl::FileBase::E_None )
+                                if( ::osl::FileBase::createTempFile(nullptr, nullptr, &fileForCat) != ::osl::FileBase::E_None )
                                     std::cerr << "Error: Cannot create temporary file..." << std::endl ;
                                 aOutFile = fileForCat;
                             }

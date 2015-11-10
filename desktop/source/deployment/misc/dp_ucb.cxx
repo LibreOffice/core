@@ -58,7 +58,7 @@ bool create_ucb_content(
 
         ucbContent.isFolder();
 
-        if (ret_ucbContent != 0)
+        if (ret_ucbContent != nullptr)
         {
             ucbContent.setCommandEnvironment( xCmdEnv );
             *ret_ucbContent = ucbContent;
@@ -85,7 +85,7 @@ bool create_folder(
             &ucb_content, url_, xCmdEnv, false /* no throw */ ))
     {
         if (ucb_content.isFolder()) {
-            if (ret_ucb_content != 0)
+            if (ret_ucb_content != nullptr)
                 *ret_ucb_content = ucb_content;
             return true;
         }
@@ -133,7 +133,7 @@ bool create_folder(
                         StrTitle::getTitleSequence(),
                         Sequence<Any>( &title, 1 ),
                         ucb_content )) {
-                    if (ret_ucb_content != 0)
+                    if (ret_ucb_content != nullptr)
                         *ret_ucb_content = ucb_content;
                     return true;
                 }
@@ -192,7 +192,7 @@ bool erase_path( OUString const & url,
     if (! ucb_content.openStream( xStream ))
         throw RuntimeException(
             "::ucbhelper::Content::openStream( XOutputStream ) failed!",
-            0 );
+            nullptr );
     return bytes;
 }
 

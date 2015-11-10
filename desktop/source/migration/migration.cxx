@@ -750,7 +750,7 @@ struct componentParts {
 typedef std::map< OUString, componentParts > Components;
 
 bool getComponent(OUString const & path, OUString * component) {
-    OSL_ASSERT(component != 0);
+    OSL_ASSERT(component != nullptr);
     if (path.isEmpty() || path[0] != '/') {
         OSL_TRACE(
             ("configuration migration in/exclude path %s ignored (does not"

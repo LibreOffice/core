@@ -331,7 +331,7 @@ void DesktopLOKTest::testSaveAs()
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
     utl::TempFile aTempFile;
     aTempFile.EnableKillingFile();
-    CPPUNIT_ASSERT(pDocument->pClass->saveAs(pDocument, aTempFile.GetURL().toUtf8().getStr(), "png", 0));
+    CPPUNIT_ASSERT(pDocument->pClass->saveAs(pDocument, aTempFile.GetURL().toUtf8().getStr(), "png", nullptr));
 }
 
 void DesktopLOKTest::testSaveAsCalc()
@@ -339,7 +339,7 @@ void DesktopLOKTest::testSaveAsCalc()
     LibLODocument_Impl* pDocument = loadDoc("search.ods");
     utl::TempFile aTempFile;
     aTempFile.EnableKillingFile();
-    CPPUNIT_ASSERT(pDocument->pClass->saveAs(pDocument, aTempFile.GetURL().toUtf8().getStr(), "png", 0));
+    CPPUNIT_ASSERT(pDocument->pClass->saveAs(pDocument, aTempFile.GetURL().toUtf8().getStr(), "png", nullptr));
 }
 
 void DesktopLOKTest::testPasteWriter()
@@ -350,8 +350,8 @@ void DesktopLOKTest::testPasteWriter()
 
     CPPUNIT_ASSERT(pDocument->pClass->paste(pDocument, "text/plain;charset=utf-8", aText.getStr(), aText.getLength()));
 
-    pDocument->pClass->postUnoCommand(pDocument, ".uno:SelectAll", 0, false);
-    char* pText = pDocument->pClass->getTextSelection(pDocument, "text/plain;charset=utf-8", 0);
+    pDocument->pClass->postUnoCommand(pDocument, ".uno:SelectAll", nullptr, false);
+    char* pText = pDocument->pClass->getTextSelection(pDocument, "text/plain;charset=utf-8", nullptr);
     CPPUNIT_ASSERT_EQUAL(OString("hello"), OString(pText));
     free(pText);
 
@@ -467,7 +467,7 @@ void DesktopLOKTest::testCommandResult()
     // nothing is triggered when we have no callback yet, we just time out on
     // the condition var.
     m_aCommandResultCondition.reset();
-    pDocument->pClass->postUnoCommand(pDocument, ".uno:Bold", 0, true);
+    pDocument->pClass->postUnoCommand(pDocument, ".uno:Bold", nullptr, true);
     m_aCommandResultCondition.wait(aTimeValue);
 
     CPPUNIT_ASSERT(m_aCommandResult.isEmpty());
@@ -476,7 +476,7 @@ void DesktopLOKTest::testCommandResult()
     pDocument->pClass->registerCallback(pDocument, &DesktopLOKTest::callback, this);
 
     m_aCommandResultCondition.reset();
-    pDocument->pClass->postUnoCommand(pDocument, ".uno:Bold", 0, true);
+    pDocument->pClass->postUnoCommand(pDocument, ".uno:Bold", nullptr, true);
     m_aCommandResultCondition.wait(aTimeValue);
 
     boost::property_tree::ptree aTree;

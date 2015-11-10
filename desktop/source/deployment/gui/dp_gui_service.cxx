@@ -83,7 +83,7 @@ void MyApp::DeInit()
     dp_misc::disposeBridges(context);
     css::uno::Reference< css::lang::XComponent >(
         context, css::uno::UNO_QUERY_THROW)->dispose();
-    comphelper::setProcessServiceFactory(0);
+    comphelper::setProcessServiceFactory(nullptr);
 }
 
 namespace
@@ -215,7 +215,7 @@ void ServiceImpl::startExecuteModal(
     //ToDo: synchronize access to s_dialog !!!
     if (! dp_gui::TheExtensionManager::s_ExtMgr.is())
     {
-        const bool bAppUp = (GetpApp() != 0);
+        const bool bAppUp = (GetpApp() != nullptr);
         bool bOfficePipePresent;
         try {
             bOfficePipePresent = dp_misc::office_is_running();
@@ -279,7 +279,7 @@ void ServiceImpl::startExecuteModal(
         }
     }
 
-    if (app.get() != 0) {
+    if (app.get() != nullptr) {
         Application::Execute();
         DeInitVCL();
     }

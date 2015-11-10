@@ -84,7 +84,7 @@ namespace desktop {
         // generate ID
         const int nIdBytes = 16;
         char tmpId[nIdBytes*2+1];
-        time_t t = time(NULL);
+        time_t t = time(nullptr);
         for (int i = 0; i<nIdBytes; i++) {
             int tmpByte = comphelper::rng::uniform_int_distribution(0, 0xFF);
             sprintf( tmpId+i*2, "%02X", tmpByte );
@@ -94,7 +94,7 @@ namespace desktop {
 
         // generate date string
         char *tmpTime = ctime( &t );
-        if (tmpTime != NULL) {
+        if (tmpTime != nullptr) {
             m_aDate = OUString::createFromAscii( tmpTime );
             sal_Int32 i = m_aDate.indexOf('\n');
             if (i > 0)
@@ -120,7 +120,7 @@ namespace desktop {
         if (m_bIsLocked) {
             // lock existed, ask user what to do
             if (isStale() ||
-                (execWarning != 0 && (*execWarning)( this ))) {
+                (execWarning != nullptr && (*execWarning)( this ))) {
                 // remove file and create new
                 File::remove( m_aLockname );
                 File aFile(m_aLockname);

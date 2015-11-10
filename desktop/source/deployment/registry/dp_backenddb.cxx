@@ -59,7 +59,7 @@ void BackendDb::save()
 
     const Reference<css::io::XInputStream> xData(
         ::xmlscript::createInputStream(bytes));
-    ::ucbhelper::Content ucbDb(m_urlDb, 0, m_xContext);
+    ::ucbhelper::Content ucbDb(m_urlDb, nullptr, m_xContext);
     ucbDb.writeStream(xData, true /*replace existing*/);
 }
 
@@ -95,12 +95,12 @@ css::uno::Reference<css::xml::dom::XDocument> BackendDb::getDocument()
         else
             throw css::uno::RuntimeException(
                 "Extension manager could not access database file:"
-                + m_urlDb, 0);
+                + m_urlDb, nullptr);
 
         if (!m_doc.is())
             throw css::uno::RuntimeException(
                 "Extension manager could not get root node of data base file: "
-                      + m_urlDb, 0);
+                      + m_urlDb, nullptr);
     }
 
     return m_doc;
@@ -147,7 +147,7 @@ void BackendDb::removeElement(OUString const & sXPathExpression)
         Any exc( ::cppu::getCaughtException() );
         throw css::deployment::DeploymentException(
             "Extension Manager: failed to write data entry in backend db: " +
-            m_urlDb, 0, exc);
+            m_urlDb, nullptr, exc);
     }
 }
 
@@ -182,7 +182,7 @@ void BackendDb::revokeEntry(OUString const & url)
         Any exc( ::cppu::getCaughtException() );
         throw css::deployment::DeploymentException(
             "Extension Manager: failed to revoke data entry in backend db: " +
-            m_urlDb, 0, exc);
+            m_urlDb, nullptr, exc);
     }
 }
 
@@ -206,7 +206,7 @@ bool BackendDb::activateEntry(OUString const & url)
         Any exc( ::cppu::getCaughtException() );
         throw css::deployment::DeploymentException(
             "Extension Manager: failed to revoke data entry in backend db: " +
-            m_urlDb, 0, exc);
+            m_urlDb, nullptr, exc);
     }
 }
 
@@ -230,7 +230,7 @@ bool BackendDb::hasActiveEntry(OUString const & url)
         Any exc( ::cppu::getCaughtException() );
         throw css::deployment::DeploymentException(
             "Extension Manager: failed to determine an active entry in backend db: " +
-            m_urlDb, 0, exc);
+            m_urlDb, nullptr, exc);
     }
 }
 
@@ -259,7 +259,7 @@ Reference<css::xml::dom::XNode> BackendDb::getKeyElement(
         Any exc( ::cppu::getCaughtException() );
         throw css::deployment::DeploymentException(
             "Extension Manager: failed to read key element in backend db: " +
-            m_urlDb, 0, exc);
+            m_urlDb, nullptr, exc);
     }
 }
 
@@ -331,7 +331,7 @@ void BackendDb::writeVectorOfPair(
         Any exc( ::cppu::getCaughtException() );
         throw css::deployment::DeploymentException(
             "Extension Manager: failed to write data entry in backend db: " +
-            m_urlDb, 0, exc);
+            m_urlDb, nullptr, exc);
     }
 }
 
@@ -377,7 +377,7 @@ BackendDb::readVectorOfPair(
         Any exc( ::cppu::getCaughtException() );
         throw css::deployment::DeploymentException(
             "Extension Manager: failed to read data entry in backend db: " +
-            m_urlDb, 0, exc);
+            m_urlDb, nullptr, exc);
     }
 }
 
@@ -422,7 +422,7 @@ void BackendDb::writeSimpleList(
         Any exc( ::cppu::getCaughtException() );
         throw css::deployment::DeploymentException(
             "Extension Manager: failed to write data entry in backend db: " +
-            m_urlDb, 0, exc);
+            m_urlDb, nullptr, exc);
     }
 }
 
@@ -453,7 +453,7 @@ void BackendDb::writeSimpleElement(
         Any exc( ::cppu::getCaughtException() );
         throw css::deployment::DeploymentException(
             "Extension Manager: failed to write data entry(writeSimpleElement) in backend db: " +
-            m_urlDb, 0, exc);
+            m_urlDb, nullptr, exc);
     }
 
 }
@@ -505,7 +505,7 @@ Reference<css::xml::dom::XNode> BackendDb::writeKeyElement(
         Any exc( ::cppu::getCaughtException() );
         throw css::deployment::DeploymentException(
             "Extension Manager: failed to write key element in backend db: " +
-            m_urlDb, 0, exc);
+            m_urlDb, nullptr, exc);
     }
 }
 
@@ -528,7 +528,7 @@ OUString BackendDb::readSimpleElement(
         Any exc( ::cppu::getCaughtException() );
         throw css::deployment::DeploymentException(
             "Extension Manager: failed to read data (readSimpleElement) in backend db: " +
-            m_urlDb, 0, exc);
+            m_urlDb, nullptr, exc);
     }
 }
 
@@ -562,7 +562,7 @@ OUString BackendDb::readSimpleElement(
         Any exc( ::cppu::getCaughtException() );
         throw css::deployment::DeploymentException(
             "Extension Manager: failed to read data entry in backend db: " +
-            m_urlDb, 0, exc);
+            m_urlDb, nullptr, exc);
     }
 }
 
@@ -607,7 +607,7 @@ OUString BackendDb::readSimpleElement(
         Any exc( ::cppu::getCaughtException() );
         throw css::deployment::DeploymentException(
             "Extension Manager: failed to read data entry in backend db: " +
-            m_urlDb, 0, exc);
+            m_urlDb, nullptr, exc);
     }
 }
 
@@ -655,7 +655,7 @@ void RegisteredDb::addEntry(OUString const & url)
         Any exc( ::cppu::getCaughtException() );
         throw css::deployment::DeploymentException(
             "Extension Manager: failed to write data entry in backend db: " +
-            m_urlDb, 0, exc);
+            m_urlDb, nullptr, exc);
     }
 }
 

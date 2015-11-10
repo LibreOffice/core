@@ -31,7 +31,7 @@ namespace desktop
 {
     UnxSplashScreen::UnxSplashScreen( const uno::Reference< uno::XComponentContext >& xCtx )
     : m_xCtx( xCtx ),
-      m_pOutFd( NULL )
+      m_pOutFd( nullptr )
 {
 }
 
@@ -44,7 +44,7 @@ UnxSplashScreen::~UnxSplashScreen()
     if ( m_pOutFd )
     {
         fclose( m_pOutFd );
-        m_pOutFd = NULL;
+        m_pOutFd = nullptr;
     }
 }
 

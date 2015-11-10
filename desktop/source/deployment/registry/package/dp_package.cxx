@@ -483,7 +483,7 @@ BackendImpl::PackageImpl::PackageImpl(
                xPackageType, bRemoved, identifier),
       m_url_expanded( expandUnoRcUrl( url ) ),
       m_legacyBundle( legacyBundle ),
-      m_pBundle( 0 )
+      m_pBundle( nullptr )
 {
     if (bRemoved)
         m_dbData = getMyBackend()->readDataFromDb(url);
@@ -492,7 +492,7 @@ BackendImpl::PackageImpl::PackageImpl(
 BackendImpl * BackendImpl::PackageImpl::getMyBackend() const
 {
     BackendImpl * pBackend = static_cast<BackendImpl *>(m_myBackend.get());
-    if (NULL == pBackend)
+    if (nullptr == pBackend)
     {
         //May throw a DisposedException
         check();
@@ -588,7 +588,7 @@ OUString BackendImpl::PackageImpl::getTextFromURL(
     {
         Any exc( ::cppu::getCaughtException() );
             throw css::deployment::DeploymentException(
-                "Could not read file " + licenseUrl, 0, exc);
+                "Could not read file " + licenseUrl, nullptr, exc);
     }
 
 }
@@ -618,7 +618,7 @@ bool BackendImpl::PackageImpl::checkPlatform(
                 msg, static_cast<OWeakObject *>(this), this));
         if (!interactContinuation(
                 e, cppu::UnoType< css::task::XInteractionApprove >::get(),
-                environment, NULL, NULL))
+                environment, nullptr, nullptr))
         {
             throw css::deployment::DeploymentException(
                 msg, static_cast<OWeakObject *>(this), e);
@@ -645,7 +645,7 @@ bool BackendImpl::PackageImpl::checkDependencies(
                 msg, static_cast<OWeakObject *>(this), unsatisfied));
         if (!interactContinuation(
                 e, cppu::UnoType< css::task::XInteractionApprove >::get(),
-                environment, NULL, NULL))
+                environment, nullptr, nullptr))
         {
             throw css::deployment::DeploymentException(
                 msg, static_cast<OWeakObject *>(this), e);
@@ -674,14 +674,14 @@ bool BackendImpl::PackageImpl::checkLicense(
         //license is available.
         if (sLic.isEmpty())
             throw css::deployment::DeploymentException(
-                "Could not obtain path to license. Possible error in description.xml", 0, Any());
+                "Could not obtain path to license. Possible error in description.xml", nullptr, Any());
         OUString sHref = m_url_expanded + "/" + sLic;
            OUString sLicense = getTextFromURL(xCmdEnv, sHref);
         ////determine who has to agree to the license
         //check correct value for attribute
         if ( ! (simplLicAttr->acceptBy == "user" || simplLicAttr->acceptBy == "admin"))
             throw css::deployment::DeploymentException(
-                "Could not obtain attribute simple-lincense@accept-by or it has no valid value", 0, Any());
+                "Could not obtain attribute simple-lincense@accept-by or it has no valid value", nullptr, Any());
 
 
         //Only use interaction if there is no version of this extension already installed
@@ -696,14 +696,14 @@ bool BackendImpl::PackageImpl::checkLicense(
         if ( !(alreadyInstalled && simplLicAttr->suppressOnUpdate))
         {
             css::deployment::LicenseException licExc(
-                OUString(), 0, getDisplayName(), sLicense,
+                OUString(), nullptr, getDisplayName(), sLicense,
                 simplLicAttr->acceptBy);
             bool approve = false;
             bool abort = false;
             if (! interactContinuation(
                 Any(licExc), cppu::UnoType<task::XInteractionApprove>::get(), xCmdEnv, &approve, &abort ))
                 throw css::deployment::DeploymentException(
-                    "Could not interact with user.", 0, Any());
+                    "Could not interact with user.", nullptr, Any());
 
             if (approve)
                 return true;
@@ -721,7 +721,7 @@ bool BackendImpl::PackageImpl::checkLicense(
         throw;
     } catch (const css::uno::Exception&) {
         Any anyExc = cppu::getCaughtException();
-        throw css::deployment::DeploymentException("Unexpected exception", 0, anyExc);
+        throw css::deployment::DeploymentException("Unexpected exception", nullptr, anyExc);
     }
 }
 
@@ -1051,7 +1051,7 @@ void BackendImpl::PackageImpl::exportTo(
     if (nameClashAction == ucb::NameClash::ASK)
     {
         if (create_ucb_content(
-                0, destURL, xCmdEnv, false /* no throw */ )) {
+                nullptr, destURL, xCmdEnv, false /* no throw */ )) {
             bool replace = false, abort = false;
             if (! interactContinuation(
                     Any( ucb::NameClashResolveRequest(
@@ -1242,7 +1242,7 @@ Sequence< Reference<deployment::XPackage> > BackendImpl::PackageImpl::getBundle(
            lang::IllegalArgumentException, RuntimeException, std::exception)
 {
     Sequence< Reference<deployment::XPackage> > * pBundle = m_pBundle;
-    if (pBundle == 0)
+    if (pBundle == nullptr)
     {
         t_packagevec bundle;
         if (m_bRemoved)
@@ -1259,13 +1259,13 @@ Sequence< Reference<deployment::XPackage> > BackendImpl::PackageImpl::getBundle(
                     OUString mediaType;
                     // probe for script.xlb:
                     if (create_ucb_content(
-                            0, makeURL( m_url_expanded, "script.xlb" ),
+                            nullptr, makeURL( m_url_expanded, "script.xlb" ),
                             xCmdEnv, false /* no throw */ )) {
                         mediaType = "application/vnd.sun.star.basic-library";
                     }
                     // probe for dialog.xlb:
                     else if (create_ucb_content(
-                                 0, makeURL( m_url_expanded, "dialog.xlb" ),
+                                 nullptr, makeURL( m_url_expanded, "dialog.xlb" ),
                                  xCmdEnv, false /* no throw */ ))
                         mediaType = "application/vnd.sun.star.dialog-library";
 
@@ -1341,7 +1341,7 @@ Sequence< Reference<deployment::XPackage> > BackendImpl::PackageImpl::getBundle(
 
         const ::osl::MutexGuard guard( getMutex() );
         pBundle = m_pBundle;
-        if (pBundle == 0) {
+        if (pBundle == nullptr) {
             m_bundle = ret;
             pBundle = &m_bundle;
             OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
@@ -1399,7 +1399,7 @@ Reference<deployment::XPackage> BackendImpl::PackageImpl::bindBundleItem(
             (void)interactContinuation(
                 Any( lang::WrappedTargetException("bundle item error!",
                          static_cast<OWeakObject *>(this), exc ) ),
-                cppu::UnoType<task::XInteractionApprove>::get(), xCmdEnv, 0, 0 );
+                cppu::UnoType<task::XInteractionApprove>::get(), xCmdEnv, nullptr, nullptr );
         }
     }
 

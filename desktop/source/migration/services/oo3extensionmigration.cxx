@@ -61,7 +61,7 @@ static const char sExtensionRootSubDirName[] = "/uno_packages";
 
 OUString OO3ExtensionMigration_getImplementationName()
 {
-    static OUString* pImplName = 0;
+    static OUString* pImplName = nullptr;
     if ( !pImplName )
     {
         ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
@@ -78,7 +78,7 @@ OUString OO3ExtensionMigration_getImplementationName()
 
 Sequence< OUString > OO3ExtensionMigration_getSupportedServiceNames()
 {
-    static Sequence< OUString >* pNames = 0;
+    static Sequence< OUString >* pNames = nullptr;
     if ( !pNames )
     {
         ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );

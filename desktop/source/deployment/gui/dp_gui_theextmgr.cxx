@@ -53,9 +53,9 @@ TheExtensionManager::TheExtensionManager( const uno::Reference< awt::XWindow > &
                                           const uno::Reference< uno::XComponentContext > &xContext ) :
     m_xContext( xContext ),
     m_xParent( xParent ),
-    m_pExtMgrDialog( NULL ),
-    m_pUpdReqDialog( NULL ),
-    m_pExecuteCmdQueue( NULL )
+    m_pExtMgrDialog( nullptr ),
+    m_pUpdReqDialog( nullptr ),
+    m_pExecuteCmdQueue( nullptr )
 {
     m_xExtensionManager = deployment::ExtensionManager::get( xContext );
     m_xExtensionManager->addModifyListener( this );

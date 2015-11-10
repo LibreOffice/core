@@ -526,7 +526,7 @@ bool BackendImpl::removeFromConfigmgrIni(
 BackendImpl * BackendImpl::PackageImpl::getMyBackend() const
 {
     BackendImpl * pBackend = static_cast<BackendImpl *>(m_myBackend.get());
-    if (NULL == pBackend)
+    if (nullptr == pBackend)
     {
         //May throw a DisposedException
         check();

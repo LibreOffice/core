@@ -90,7 +90,7 @@ using namespace vcl;
 using namespace desktop;
 using namespace utl;
 
-static LibLibreOffice_Impl *gImpl = NULL;
+static LibLibreOffice_Impl *gImpl = nullptr;
 static std::weak_ptr< LibreOfficeKitClass > gOfficeClass;
 static std::weak_ptr< LibreOfficeKitDocumentClass > gDocumentClass;
 
@@ -123,7 +123,7 @@ static const ExtensionMap aWriterExtensionMap[] =
     { "txt",   "Text" },
     { "xhtml", "XHTML Writer File" },
     { "png",   "writer_png_Export" },
-    { NULL, NULL }
+    { nullptr, nullptr }
 };
 
 static const ExtensionMap aCalcExtensionMap[] =
@@ -138,7 +138,7 @@ static const ExtensionMap aCalcExtensionMap[] =
     { "xls",   "MS Excel 97" },
     { "xlsx",  "Calc MS Excel 2007 XML" },
     { "png",   "calc_png_Export" },
-    { NULL, NULL }
+    { nullptr, nullptr }
 };
 
 static const ExtensionMap aImpressExtensionMap[] =
@@ -158,7 +158,7 @@ static const ExtensionMap aImpressExtensionMap[] =
     { "swf",   "impress_flash_Export" },
     { "xhtml", "XHTML Impress File" },
     { "png",   "impress_png_Export"},
-    { NULL, NULL }
+    { nullptr, nullptr }
 };
 
 static const ExtensionMap aDrawExtensionMap[] =
@@ -171,12 +171,12 @@ static const ExtensionMap aDrawExtensionMap[] =
     { "swf",   "draw_flash_Export" },
     { "xhtml", "XHTML Draw File" },
     { "png",   "draw_png_Export"},
-    { NULL, NULL }
+    { nullptr, nullptr }
 };
 
 static OUString getUString(const char* pString)
 {
-    if (pString == NULL)
+    if (pString == nullptr)
         return OUString();
 
     OString sString(pString, strlen(pString));
@@ -339,7 +339,7 @@ static void                    lo_registerCallback (LibreOfficeKit* pThis,
 static char* lo_getFilterTypes(LibreOfficeKit* pThis);
 
 LibLibreOffice_Impl::LibLibreOffice_Impl()
-    : maThread(0)
+    : maThread(nullptr)
     , mpCallback(nullptr)
     , mpCallbackData(nullptr)
 {
@@ -378,7 +378,7 @@ static uno::Reference<css::lang::XMultiComponentFactory> xFactory;
 
 static LibreOfficeKitDocument* lo_documentLoad(LibreOfficeKit* pThis, const char* pURL)
 {
-    return lo_documentLoadWithOptions(pThis, pURL, NULL);
+    return lo_documentLoadWithOptions(pThis, pURL, nullptr);
 }
 
 static LibreOfficeKitDocument* lo_documentLoadWithOptions(LibreOfficeKit* pThis, const char* pURL, const char* pOptions)
@@ -392,7 +392,7 @@ static LibreOfficeKitDocument* lo_documentLoadWithOptions(LibreOfficeKit* pThis,
     {
         pLib->maLastExceptionMsg = "Filename to load was not provided.";
         SAL_INFO("lok", "URL for load is empty");
-        return NULL;
+        return nullptr;
     }
 
     pLib->maLastExceptionMsg.clear();
@@ -401,7 +401,7 @@ static LibreOfficeKitDocument* lo_documentLoadWithOptions(LibreOfficeKit* pThis,
     {
         pLib->maLastExceptionMsg = "ComponentContext is not available";
         SAL_INFO("lok", "ComponentContext is not available");
-        return NULL;
+        return nullptr;
     }
 
     uno::Reference<frame::XDesktop2> xComponentLoader = frame::Desktop::create(xContext);
@@ -410,7 +410,7 @@ static LibreOfficeKitDocument* lo_documentLoadWithOptions(LibreOfficeKit* pThis,
     {
         pLib->maLastExceptionMsg = "ComponentLoader is not available";
         SAL_INFO("lok", "ComponentLoader is not available");
-        return NULL;
+        return nullptr;
     }
 
     try
@@ -444,7 +444,7 @@ static LibreOfficeKitDocument* lo_documentLoadWithOptions(LibreOfficeKit* pThis,
         {
             pLib->maLastExceptionMsg = "loadComponentFromURL returned an empty reference";
             SAL_INFO("lok", "Document can't be loaded - " << pLib->maLastExceptionMsg);
-            return NULL;
+            return nullptr;
         }
 
         return new LibLODocument_Impl(xComponent);
@@ -456,7 +456,7 @@ static LibreOfficeKitDocument* lo_documentLoadWithOptions(LibreOfficeKit* pThis,
         SAL_INFO("lok", "Document can't be loaded - exception: " << exception.Message);
     }
 
-    return NULL;
+    return nullptr;
 }
 
 static void lo_registerCallback (LibreOfficeKit* pThis,
@@ -505,7 +505,7 @@ static int doc_saveAs(LibreOfficeKitDocument* pThis, const char* sUrl, const cha
             return false;
         }
 
-        if (pFormat == NULL)
+        if (pFormat == nullptr)
         {
             // sniff from the extension
             sal_Int32 idx = aURL.lastIndexOf(".");
@@ -579,7 +579,7 @@ static void doc_iniUnoCommands ()
 
     util::URL aCommandURL;
     SfxViewShell* pViewShell = SfxViewShell::Current();
-    SfxViewFrame* pViewFrame = pViewShell? pViewShell->GetViewFrame(): NULL;
+    SfxViewFrame* pViewFrame = pViewShell? pViewShell->GetViewFrame(): nullptr;
 
     // check if Frame-Controller were created.
     if (!pViewShell && !pViewFrame)
@@ -601,7 +601,7 @@ static void doc_iniUnoCommands ()
 
     for (sal_uInt32 nIterator = 0; nIterator < SAL_N_ELEMENTS(sUnoCommands); nIterator++)
     {
-        const SfxSlot* pSlot = NULL;
+        const SfxSlot* pSlot = nullptr;
 
         aCommandURL.Complete = sUnoCommands[nIterator];
         xParser->parseStrict(aCommandURL);
@@ -696,7 +696,7 @@ static char* doc_getPartPageRectangles(LibreOfficeKitDocument* pThis)
     if (!pDoc)
     {
         gImpl->maLastExceptionMsg = "Document doesn't support tiled rendering";
-        return 0;
+        return nullptr;
     }
 
     OUString sRectangles = pDoc->getPartPageRectangles();
@@ -713,7 +713,7 @@ static char* doc_getPartName(LibreOfficeKitDocument* pThis, int nPart)
     if (!pDoc)
     {
         gImpl->maLastExceptionMsg = "Document doesn't support tiled rendering";
-        return 0;
+        return nullptr;
     }
 
     OUString sName = pDoc->getPartName( nPart );
@@ -838,7 +838,7 @@ void doc_paintTile (LibreOfficeKitDocument* pThis,
     }
 #endif
 
-    static bool bDebug = getenv("LOK_DEBUG") != 0;
+    static bool bDebug = getenv("LOK_DEBUG") != nullptr;
     if (bDebug)
     {
         // Draw a small red rectangle in the top left corner so that it's easy to see where a new tile begins.
@@ -1060,7 +1060,7 @@ static char* doc_getTextSelection(LibreOfficeKitDocument* pThis, const char* pMi
     if (!pDoc)
     {
         gImpl->maLastExceptionMsg = "Document doesn't support tiled rendering";
-        return 0;
+        return nullptr;
     }
 
     OString aUsedMimeType;
@@ -1138,7 +1138,7 @@ static char* getFonts (const char* pCommand)
     SfxObjectShell* pDocSh = SfxObjectShell::Current();
     const SvxFontListItem* pFonts = static_cast<const SvxFontListItem*>(
         pDocSh->GetItem(SID_ATTR_CHAR_FONTLIST));
-    const FontList* pList = pFonts ? pFonts->GetFontList() : 0;
+    const FontList* pList = pFonts ? pFonts->GetFontList() : nullptr;
 
     boost::property_tree::ptree aTree;
     aTree.put("commandName", pCommand);
@@ -1225,7 +1225,7 @@ static char* doc_getCommandValues(LibreOfficeKitDocument* pThis, const char* pCo
         if (!pDoc)
         {
             gImpl->maLastExceptionMsg = "Document doesn't support tiled rendering";
-            return 0;
+            return nullptr;
         }
 
         Rectangle aRectangle;
@@ -1279,7 +1279,7 @@ static char* doc_getCommandValues(LibreOfficeKitDocument* pThis, const char* pCo
         if (!pDoc)
         {
             gImpl->maLastExceptionMsg = "Document doesn't support tiled rendering";
-            return 0;
+            return nullptr;
         }
 
         // Command has parameters.
@@ -1327,7 +1327,7 @@ static char* doc_getCommandValues(LibreOfficeKitDocument* pThis, const char* pCo
     else
     {
         gImpl->maLastExceptionMsg = "Unknown command, no values returned";
-        return NULL;
+        return nullptr;
     }
 }
 
@@ -1385,7 +1385,7 @@ static char* lo_getFilterTypes(LibreOfficeKit* pThis)
     if (!xSFactory.is())
     {
         pImpl->maLastExceptionMsg = "Service factory is not available";
-        return 0;
+        return nullptr;
     }
 
     uno::Reference<container::XNameAccess> xTypeDetection(xSFactory->createInstance("com.sun.star.document.TypeDetection"), uno::UNO_QUERY);
@@ -1491,13 +1491,13 @@ static void lo_status_indicator_callback(void *data, comphelper::LibreOfficeKit:
     switch (type)
     {
     case comphelper::LibreOfficeKit::statusIndicatorCallbackType::Start:
-        pLib->mpCallback(LOK_CALLBACK_STATUS_INDICATOR_START, 0, pLib->mpCallbackData);
+        pLib->mpCallback(LOK_CALLBACK_STATUS_INDICATOR_START, nullptr, pLib->mpCallbackData);
         break;
     case comphelper::LibreOfficeKit::statusIndicatorCallbackType::SetValue:
         pLib->mpCallback(LOK_CALLBACK_STATUS_INDICATOR_SET_VALUE, OUString::number(percent).toUtf8().getStr(), pLib->mpCallbackData);
         break;
     case comphelper::LibreOfficeKit::statusIndicatorCallbackType::Finish:
-        pLib->mpCallback(LOK_CALLBACK_STATUS_INDICATOR_FINISH, 0, pLib->mpCallbackData);
+        pLib->mpCallback(LOK_CALLBACK_STATUS_INDICATOR_FINISH, nullptr, pLib->mpCallbackData);
         break;
     }
 }
@@ -1578,7 +1578,7 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
         SAL_INFO("lok", "Enabling OfficeIPCThread");
         OfficeIPCThread::EnableOfficeIPCThread();
         SAL_INFO("lok", "Starting soffice_main");
-        pLib->maThread = osl_createThread(lo_startmain, NULL);
+        pLib->maThread = osl_createThread(lo_startmain, nullptr);
         SAL_INFO("lok", "Waiting for OfficeIPCThread");
         OfficeIPCThread::WaitForReady();
         SAL_INFO("lok", "OfficeIPCThread ready -- continuing");
@@ -1640,17 +1640,17 @@ SAL_DLLPUBLIC_EXPORT
 #endif
 LibreOfficeKit *libreofficekit_hook(const char* install_path)
 {
-    return libreofficekit_hook_2(install_path, NULL);
+    return libreofficekit_hook_2(install_path, nullptr);
 }
 
 static void lo_destroy(LibreOfficeKit* pThis)
 {
     LibLibreOffice_Impl* pLib = static_cast<LibLibreOffice_Impl*>(pThis);
-    gImpl = NULL;
+    gImpl = nullptr;
 
     SAL_INFO("lok", "LO Destroy");
 
-    comphelper::LibreOfficeKit::setStatusIndicatorCallback(0, 0);
+    comphelper::LibreOfficeKit::setStatusIndicatorCallback(nullptr, nullptr);
 
     Application::Quit();
     osl_joinWithThread(pLib->maThread);

@@ -39,7 +39,7 @@ struct file_image_st
 
 typedef struct file_image_st file_image;
 
-#define FILE_IMAGE_INITIALIZER { 0, 0 }
+#define FILE_IMAGE_INITIALIZER { NULL, 0 }
 
 
 /** file_image_open.

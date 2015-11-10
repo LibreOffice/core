@@ -141,7 +141,7 @@ SplashScreenWindow::SplashScreenWindow(SplashScreen *pSplash)
 
 void SplashScreenWindow::dispose()
 {
-    pSpl = NULL;
+    pSpl = nullptr;
     IntroWindow::dispose();
 }
 

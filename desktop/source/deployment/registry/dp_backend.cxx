@@ -588,14 +588,14 @@ void Package::exportTo(
     }
 
     if (!bOk)
-        throw RuntimeException( "UCB transferContent() failed!", 0 );
+        throw RuntimeException( "UCB transferContent() failed!", nullptr );
 }
 
 void Package::fireModified()
 {
     ::cppu::OInterfaceContainerHelper * container = rBHelper.getContainer(
         cppu::UnoType<util::XModifyListener>::get() );
-    if (container != 0) {
+    if (container != nullptr) {
         Sequence< Reference<XInterface> > elements(
             container->getElements() );
         lang::EventObject evt( static_cast<OWeakObject *>(this) );
@@ -752,7 +752,7 @@ void Package::revokePackage(
 PackageRegistryBackend * Package::getMyBackend() const
 {
     PackageRegistryBackend * pBackend = m_myBackend.get();
-    if (NULL == pBackend)
+    if (nullptr == pBackend)
     {
         //May throw a DisposedException
         check();

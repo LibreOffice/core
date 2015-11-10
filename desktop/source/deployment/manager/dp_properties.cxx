@@ -50,7 +50,7 @@ ExtensionProperties::ExtensionProperties(
     m_propFileUrl = urlExtension + "properties";
 
     ::std::list< ::std::pair< OUString, OUString> > props;
-    if (! dp_misc::create_ucb_content(NULL, m_propFileUrl, 0, false))
+    if (! dp_misc::create_ucb_content(nullptr, m_propFileUrl, nullptr, false))
         return;
 
     ::ucbhelper::Content contentProps(m_propFileUrl, m_xCmdEnv, m_xContext);
@@ -88,7 +88,7 @@ ExtensionProperties::ExtensionProperties(
         else
         {
             throw lang::IllegalArgumentException(
-                "Extension Manager: unknown property", 0, -1);
+                "Extension Manager: unknown property", nullptr, -1);
         }
     }
 }
@@ -99,7 +99,7 @@ OUString ExtensionProperties::getPropertyValue(css::beans::NamedValue const & v)
     if (! (v.Value >>= value) )
     {
         throw lang::IllegalArgumentException(
-            "Extension Manager: wrong property value", 0, -1);
+            "Extension Manager: wrong property value", nullptr, -1);
     }
     return value;
 }

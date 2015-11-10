@@ -76,7 +76,7 @@ Entry_Impl::Entry_Impl( const uno::Reference< deployment::XPackage > &xPackage,
     m_bHasButtons( false ),
     m_bMissingLic( false ),
     m_eState( eState ),
-    m_pPublisher( NULL ),
+    m_pPublisher( nullptr ),
     m_xPackage( xPackage )
 {
     try
@@ -193,8 +193,8 @@ ExtensionBox_Impl::ExtensionBox_Impl(vcl::Window* pParent) :
     m_aLockedImage( DialogHelper::getResId( RID_IMG_LOCKED ) ),
     m_aWarningImage( DialogHelper::getResId( RID_IMG_WARNING ) ),
     m_aDefaultImage( DialogHelper::getResId( RID_IMG_EXTENSION ) ),
-    m_pScrollBar( NULL ),
-    m_pManager( NULL )
+    m_pScrollBar( nullptr ),
+    m_pManager( nullptr )
 {
     Init();
 }

@@ -118,7 +118,7 @@ const OptionInfo s_option_infos [] = {
     { RTL_CONSTASCII_STRINGPARAM("bundled"), '\0', false},
     { RTL_CONSTASCII_STRINGPARAM("suppress-license"), 's', false},
 
-    { 0, 0, '\0', false }
+    { nullptr, 0, '\0', false }
 };
 
 class DialogClosedListenerImpl :
@@ -341,7 +341,7 @@ extern "C" int unopkg_main()
             ::rtl::Bootstrap::expandMacros(extensionUnorc);
             oslFileError e = osl_removeFile(extensionUnorc.pData);
             if (e != osl_File_E_None && e != osl_File_E_NOENT)
-                throw Exception("Could not delete " + extensionUnorc, 0);
+                throw Exception("Could not delete " + extensionUnorc, nullptr);
         }
 
         xComponentContext = getUNO(
@@ -487,7 +487,7 @@ extern "C" int unopkg_main()
                     else
                         throw lang::IllegalArgumentException(
                             "There is no such extension deployed: " +
-                            cmdPackages[pos],0,-1);
+                            cmdPackages[pos],nullptr,-1);
                 }
 
             }

@@ -153,7 +153,7 @@ PackageInformationProvider::getPackageLocation( const OUString& _sExtensionId )
     {
         try
         {
-            ::ucbhelper::Content aContent( aLocationURL, NULL, mxContext );
+            ::ucbhelper::Content aContent( aLocationURL, nullptr, mxContext );
             aLocationURL = aContent.getURL();
         }
         catch (const css::ucb::ContentCreationException& e)
@@ -203,7 +203,7 @@ PackageInformationProvider::isUpdateAvailable( const OUString& _sExtensionId )
     else
     {
         updateInfoMap = dp_misc::getOnlineUpdateInfos(
-            mxContext, extMgr, mxUpdateInformation, NULL, errors);
+            mxContext, extMgr, mxUpdateInformation, nullptr, errors);
     }
 
     int nCount = 0;

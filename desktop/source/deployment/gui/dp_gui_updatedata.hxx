@@ -36,7 +36,7 @@ namespace dp_gui {
 struct UpdateData
 {
     explicit UpdateData( css::uno::Reference< css::deployment::XPackage > const & aExt):
-        bIsShared(false), aInstalledPackage(aExt), aUpdateSource(NULL), m_nID(0), m_bIgnored(false){};
+        bIsShared(false), aInstalledPackage(aExt), aUpdateSource(nullptr), m_nID(0), m_bIgnored(false){};
 
     //When entries added to the listbox then there can be one for the user update and one
     //for the shared update. However, both list entries will contain the same UpdateData.

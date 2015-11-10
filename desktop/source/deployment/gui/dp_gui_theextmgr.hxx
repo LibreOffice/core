@@ -107,7 +107,7 @@ public:
 
     static ::rtl::Reference<TheExtensionManager> get(
         css::uno::Reference< css::uno::XComponentContext> const & xContext,
-        css::uno::Reference< css::awt::XWindow> const & xParent = 0,
+        css::uno::Reference< css::awt::XWindow> const & xParent = nullptr,
         OUString const & view = OUString() );
 
     // XEventListener
