@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "faac7902_6c4b97b1",
+        "filename": "i18npool/source/search/textsearch.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 304,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2015-11-10T11:55:51Z",
+      "side": 1,
+      "message": "Actually, I referred to your commit:\nhttp://cgit.freedesktop.org/libreoffice/core/commit/?id\u003dc00601dab0f5533b152cd63cec0a89bfec1ba95f\n\nThere you mentioned that it\u0027s possible that in abovementioned conditions, it\u0027s possible that position before start be returned.\n\nNow that only sub-string is searched, this seem improbable; but Michael\u0027 commit http://cgit.freedesktop.org/libreoffice/core/commit/?id\u003d9aae521b451269007f03527c83645b8b935eb419\nprepends the substring with single character \"X\", so there\u0027s one character where that could in theory happen.\n\nYou didn\u0027t clarify on specifics regarding that ICU behaviour, an I\u0027m not an expert here, so I cannot decide if it\u0027s possible; if so, then the code is not prepared for this, and the \"X\" hack may turn out to be inappropriate.\n\nFor now, I suppose, assert is a sane thing to catch if it\u0027s so, assuming it\u0027s impossible now.",
+      "parentUuid": "faac7902_ec394743",
+      "revId": "5a5db9da9e967f42107042c44c4515cbc0293115",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "faac7902_4c3fb325",
         "filename": "i18npool/source/search/textsearch.cxx",
         "patchSetId": 1
