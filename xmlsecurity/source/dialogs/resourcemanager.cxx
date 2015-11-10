@@ -33,8 +33,8 @@ using namespace std;
 
 namespace XmlSec
 {
-    static ResMgr*          pResMgr = 0;
-    static SvtSysLocale*    pSysLocale = 0;
+    static ResMgr*          pResMgr = nullptr;
+    static SvtSysLocale*    pSysLocale = nullptr;
 
     ResMgr* GetResMgr()
     {
@@ -289,7 +289,7 @@ vector< pair< OUString, OUString> > parseDN(const OUString& rRawString)
 
     OUString GetContentPart( const OUString& _rRawString )
     {
-        char const * aIDs[] = { "CN", "OU", "O", "E", NULL };
+        char const * aIDs[] = { "CN", "OU", "O", "E", nullptr };
         OUString retVal;
         int i = 0;
         vector< pair< OUString, OUString > > vecAttrValueOfDN = parseDN(_rRawString);

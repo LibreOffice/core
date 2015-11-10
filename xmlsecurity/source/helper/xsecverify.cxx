@@ -45,7 +45,7 @@ cssu::Reference< cssxc::sax::XReferenceResolvedListener > XSecController::prepar
 {
     if ( m_nStatusOfSecurityComponents != INITIALIZED )
     {
-        return NULL;
+        return nullptr;
     }
 
     sal_Int32 nIdOfSignatureElementCollector;
@@ -95,7 +95,7 @@ cssu::Reference< cssxc::sax::XReferenceResolvedListener > XSecController::prepar
 
 void XSecController::addSignature()
 {
-    cssu::Reference< cssxc::sax::XReferenceResolvedListener > xReferenceResolvedListener = NULL;
+    cssu::Reference< cssxc::sax::XReferenceResolvedListener > xReferenceResolvedListener = nullptr;
     sal_Int32 nSignatureId = 0;
 
 
@@ -295,7 +295,7 @@ void XSecController::collectToVerify( const OUString& referenceId )
      */
     {
         bool bJustChainingOn = false;
-        cssu::Reference< cssxs::XDocumentHandler > xHandler = NULL;
+        cssu::Reference< cssxs::XDocumentHandler > xHandler = nullptr;
 
         int i,j;
         int sigNum = m_vInternalSignatureInformations.size();
@@ -315,7 +315,7 @@ void XSecController::collectToVerify( const OUString& referenceId )
                     if (chainOn(false))
                     {
                         bJustChainingOn = true;
-                        xHandler = m_xSAXEventKeeper->setNextHandler(NULL);
+                        xHandler = m_xSAXEventKeeper->setNextHandler(nullptr);
                     }
 
                     sal_Int32 nKeeperId = m_xSAXEventKeeper->addSecurityElementCollector(
@@ -352,7 +352,7 @@ void XSecController::collectToVerify( const OUString& referenceId )
 
 void XSecController::addSignature( sal_Int32 nSignatureId )
 {
-    DBG_ASSERT( m_pXSecParser != NULL, "No XSecParser initialized" );
+    DBG_ASSERT( m_pXSecParser != nullptr, "No XSecParser initialized" );
 
     m_nReservedSignatureId = nSignatureId;
     m_bVerifyCurrentSignature = true;
@@ -360,10 +360,10 @@ void XSecController::addSignature( sal_Int32 nSignatureId )
 
 cssu::Reference< cssxs::XDocumentHandler > XSecController::createSignatureReader()
 {
-    m_pXSecParser = new XSecParser( this, NULL );
+    m_pXSecParser = new XSecParser( this, nullptr );
     cssu::Reference< cssl::XInitialization > xInitialization = m_pXSecParser;
 
-    setSAXChainConnector(xInitialization, NULL, NULL);
+    setSAXChainConnector(xInitialization, nullptr, nullptr);
 
     return m_pXSecParser;
 }
@@ -371,7 +371,7 @@ cssu::Reference< cssxs::XDocumentHandler > XSecController::createSignatureReader
 void XSecController::releaseSignatureReader()
 {
     clearSAXChainConnector( );
-    m_pXSecParser = NULL;
+    m_pXSecParser = nullptr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

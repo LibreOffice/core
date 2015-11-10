@@ -30,7 +30,7 @@ using ::com::sun::star::xml::wrapper::XXMLElementWrapper ;
 using ::com::sun::star::xml::crypto::XXMLSignatureTemplate ;
 
 XMLSignatureTemplateImpl::XMLSignatureTemplateImpl( const Reference< XMultiServiceFactory >& aFactory )
-    :m_xTemplate( NULL ),
+    :m_xTemplate( nullptr ),
      m_xServiceManager( aFactory ),
      m_nStatus ( ::com::sun::star::xml::crypto::SecurityOperationStatus_UNKNOWN )
 {

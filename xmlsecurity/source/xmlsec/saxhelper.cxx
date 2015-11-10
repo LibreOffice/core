@@ -59,9 +59,9 @@ xmlChar* ous_to_nxmlstr( const OUString& oustr, int& length )
  */
 const xmlChar** attrlist_to_nxmlstr( const cssu::Sequence< cssxcsax::XMLAttribute >& aAttributes )
 {
-    xmlChar* attname = NULL ;
-    xmlChar* attvalue = NULL ;
-    const xmlChar** attrs = NULL ;
+    xmlChar* attname = nullptr ;
+    xmlChar* attvalue = nullptr ;
+    const xmlChar** attrs = nullptr ;
 
     sal_Int32 nLength = aAttributes.getLength();
 
@@ -71,7 +71,7 @@ const xmlChar** attrlist_to_nxmlstr( const cssu::Sequence< cssxcsax::XMLAttribut
     }
     else
     {
-        return NULL ;
+        return nullptr ;
     }
 
     for( int i = 0 , j = 0 ; j < nLength ; ++j )
@@ -79,18 +79,18 @@ const xmlChar** attrlist_to_nxmlstr( const cssu::Sequence< cssxcsax::XMLAttribut
         attname = ous_to_xmlstr( aAttributes[j].sName ) ;
         attvalue = ous_to_xmlstr( aAttributes[j].sValue ) ;
 
-        if( attname != NULL && attvalue != NULL )
+        if( attname != nullptr && attvalue != nullptr )
         {
             attrs[i++] = attname ;
             attrs[i++] = attvalue ;
-            attrs[i] = NULL ;
-            attrs[i+1] = NULL ;
+            attrs[i] = nullptr ;
+            attrs[i+1] = nullptr ;
         }
         else
         {
-            if( attname != NULL )
+            if( attname != nullptr )
                 xmlFree( attname ) ;
-            if( attvalue != NULL )
+            if( attvalue != nullptr )
                 xmlFree( attvalue ) ;
         }
     }
@@ -105,8 +105,8 @@ const xmlChar** attrlist_to_nxmlstr( const cssu::Sequence< cssxcsax::XMLAttribut
  * default sax handler is initialized with the context.
  */
 SAXHelper::SAXHelper( )
-    : m_pParserCtxt( NULL ),
-      m_pSaxHandler( NULL )
+    : m_pParserCtxt( nullptr ),
+      m_pSaxHandler( nullptr )
 {
     xmlInitParser() ;
     LIBXML_TEST_VERSION ;
@@ -123,7 +123,7 @@ SAXHelper::SAXHelper( )
 
     m_pParserCtxt = xmlNewParserCtxt() ;
 
-    if( m_pParserCtxt == NULL )
+    if( m_pParserCtxt == nullptr )
     {
 #ifndef XMLSEC_NO_XSLT
         xsltCleanupGlobals() ;
@@ -137,12 +137,12 @@ SAXHelper::SAXHelper( )
     {
         xmlSAXVersion(m_pParserCtxt->sax, 1);
 
-        if( m_pParserCtxt->inputTab[0] != NULL )
+        if( m_pParserCtxt->inputTab[0] != nullptr )
         {
-            m_pParserCtxt->inputTab[0] = NULL ;
+            m_pParserCtxt->inputTab[0] = nullptr ;
         }
 
-        if( m_pParserCtxt->sax == NULL )
+        if( m_pParserCtxt->sax == nullptr )
         {
             xmlFreeParserCtxt( m_pParserCtxt ) ;
 
@@ -152,7 +152,7 @@ SAXHelper::SAXHelper( )
 //      see issue i74334, we cannot call xmlCleanupParser when libxml is still used
 //      in other parts of the office.
 //      xmlCleanupParser() ;
-            m_pParserCtxt = NULL ;
+            m_pParserCtxt = nullptr ;
             throw cssu::RuntimeException() ;
         }
         else
@@ -174,7 +174,7 @@ SAXHelper::SAXHelper( )
  * destruct the xml tree.
  */
 SAXHelper::~SAXHelper() {
-    if( m_pParserCtxt != NULL )
+    if( m_pParserCtxt != nullptr )
     {
         /*
          * In the situation that no object refer the Document, this destructor
@@ -182,17 +182,17 @@ SAXHelper::~SAXHelper() {
          */
         if( m_pSaxHandler == m_pParserCtxt->sax )
         {
-            m_pSaxHandler = NULL ;
+            m_pSaxHandler = nullptr ;
         }
 
         xmlFreeParserCtxt( m_pParserCtxt ) ;
-        m_pParserCtxt = NULL ;
+        m_pParserCtxt = nullptr ;
     }
 
-    if( m_pSaxHandler != NULL )
+    if( m_pSaxHandler != nullptr )
     {
         xmlFree( m_pSaxHandler ) ;
-        m_pSaxHandler = NULL ;
+        m_pSaxHandler = nullptr ;
     }
 //      see issue i74334, we cannot call xmlCleanupParser when libxml is still used
 //      in other parts of the office.
@@ -220,7 +220,7 @@ void SAXHelper::setCurrentNode(const xmlNodePtr pNode)
 void SAXHelper::startDocument()
     throw( cssxs::SAXException , cssu::RuntimeException )
 {
-    if( m_pParserCtxt == NULL)
+    if( m_pParserCtxt == nullptr)
     {
         throw cssu::RuntimeException() ;
     }
@@ -229,7 +229,7 @@ void SAXHelper::startDocument()
      */
     xmlParserInputPtr pInput = xmlNewInputStream( m_pParserCtxt ) ;
 
-    if( m_pParserCtxt->inputTab != NULL && m_pParserCtxt->inputMax != 0 )
+    if( m_pParserCtxt->inputTab != nullptr && m_pParserCtxt->inputMax != 0 )
     {
         m_pParserCtxt->inputTab[0] = pInput ;
         m_pParserCtxt->input = pInput ;
@@ -237,7 +237,7 @@ void SAXHelper::startDocument()
 
     m_pSaxHandler->startDocument( m_pParserCtxt ) ;
 
-    if( m_pParserCtxt->myDoc == NULL )
+    if( m_pParserCtxt->myDoc == nullptr )
     {
         throw cssu::RuntimeException() ;
     }
@@ -260,33 +260,33 @@ void SAXHelper::startElement(
     const cssu::Sequence< cssxcsax::XMLAttribute >& aAttributes )
     throw( cssxs::SAXException , cssu::RuntimeException )
 {
-    const xmlChar* fullName = NULL ;
-    const xmlChar** attrs = NULL ;
+    const xmlChar* fullName = nullptr ;
+    const xmlChar** attrs = nullptr ;
 
     fullName = ous_to_xmlstr( aName ) ;
     attrs = attrlist_to_nxmlstr( aAttributes ) ;
 
-    if( fullName != NULL || attrs != NULL )
+    if( fullName != nullptr || attrs != nullptr )
     {
         m_pSaxHandler->startElement( m_pParserCtxt , fullName , attrs ) ;
     }
 
-    if( fullName != NULL )
+    if( fullName != nullptr )
     {
         xmlFree( const_cast<xmlChar*>(fullName) ) ;
-        fullName = NULL ;
+        fullName = nullptr ;
     }
 
-    if( attrs != NULL )
+    if( attrs != nullptr )
     {
-        for( int i = 0 ; attrs[i] != NULL ; ++i )
+        for( int i = 0 ; attrs[i] != nullptr ; ++i )
         {
             xmlFree( const_cast<xmlChar*>(attrs[i]) ) ;
-            attrs[i] = NULL ;
+            attrs[i] = nullptr ;
         }
 
         xmlFree( static_cast<void*>(attrs) ) ;
-        attrs = NULL ;
+        attrs = nullptr ;
     }
 }
 
@@ -296,15 +296,15 @@ void SAXHelper::startElement(
 void SAXHelper::endElement( const OUString& aName )
     throw( cssxs::SAXException , cssu::RuntimeException )
 {
-    xmlChar* fullname = NULL ;
+    xmlChar* fullname = nullptr ;
 
     fullname = ous_to_xmlstr( aName ) ;
     m_pSaxHandler->endElement( m_pParserCtxt , fullname ) ;
 
-    if( fullname != NULL )
+    if( fullname != nullptr )
     {
         xmlFree( fullname ) ;
-        fullname = NULL ;
+        fullname = nullptr ;
     }
 }
 
@@ -314,13 +314,13 @@ void SAXHelper::endElement( const OUString& aName )
 void SAXHelper::characters( const OUString& aChars )
     throw( cssxs::SAXException , cssu::RuntimeException )
 {
-    const xmlChar* chars = NULL ;
+    const xmlChar* chars = nullptr ;
     int length = 0 ;
 
     chars = ous_to_nxmlstr( aChars, length ) ;
     m_pSaxHandler->characters( m_pParserCtxt , chars , length ) ;
 
-    if( chars != NULL )
+    if( chars != nullptr )
     {
         xmlFree( const_cast<xmlChar*>(chars) ) ;
     }
@@ -332,13 +332,13 @@ void SAXHelper::characters( const OUString& aChars )
 void SAXHelper::ignorableWhitespace( const OUString& aWhitespaces )
     throw( cssxs::SAXException , cssu::RuntimeException )
 {
-    const xmlChar* chars = NULL ;
+    const xmlChar* chars = nullptr ;
     int length = 0 ;
 
     chars = ous_to_nxmlstr( aWhitespaces, length ) ;
     m_pSaxHandler->ignorableWhitespace( m_pParserCtxt , chars , length ) ;
 
-    if( chars != NULL )
+    if( chars != nullptr )
     {
         xmlFree( const_cast<xmlChar*>(chars) ) ;
     }
@@ -352,24 +352,24 @@ void SAXHelper::processingInstruction(
     const OUString& aData )
     throw( cssxs::SAXException , cssu::RuntimeException )
 {
-    xmlChar* target = NULL ;
-    xmlChar* data = NULL ;
+    xmlChar* target = nullptr ;
+    xmlChar* data = nullptr ;
 
     target = ous_to_xmlstr( aTarget ) ;
     data = ous_to_xmlstr( aData ) ;
 
     m_pSaxHandler->processingInstruction( m_pParserCtxt , target , data ) ;
 
-    if( target != NULL )
+    if( target != nullptr )
     {
         xmlFree( target ) ;
-        target = NULL ;
+        target = nullptr ;
     }
 
-    if( data != NULL )
+    if( data != nullptr )
     {
         xmlFree( data ) ;
-        data = NULL ;
+        data = nullptr ;
     }
 }
 

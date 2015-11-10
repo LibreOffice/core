@@ -59,8 +59,8 @@ namespace cssxw = com::sun::star::xml::wrapper;
 
 XMLDocumentWrapper_XmlSecImpl::XMLDocumentWrapper_XmlSecImpl()
     : m_nCurrentPosition(0)
-    , m_pStopAtNode(0)
-    , m_pCurrentReservedNode(0)
+    , m_pStopAtNode(nullptr)
+    , m_pCurrentReservedNode(nullptr)
     , m_nReservedNodeIndex(0)
 {
     saxHelper.startDocument();
@@ -118,7 +118,7 @@ void XMLDocumentWrapper_XmlSecImpl::getNextSAXEvent()
  *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
-    OSL_ASSERT( m_pCurrentElement != NULL );
+    OSL_ASSERT( m_pCurrentElement != nullptr );
 
         /*
          * Get the next event through tree order.
@@ -136,7 +136,7 @@ void XMLDocumentWrapper_XmlSecImpl::getNextSAXEvent()
              * type. Otherwise, the endElement of current node is the
              * next event.
              */
-        if (m_pCurrentElement->children != NULL)
+        if (m_pCurrentElement->children != nullptr)
         {
             m_pCurrentElement = m_pCurrentElement->children;
             m_nCurrentPosition
@@ -164,7 +164,7 @@ void XMLDocumentWrapper_XmlSecImpl::getNextSAXEvent()
              * type. Otherwise, the endElement of current node's parent
              * becomes the next event.
              */
-        if (pNextSibling != NULL)
+        if (pNextSibling != nullptr)
         {
             m_pCurrentElement = pNextSibling;
             m_nCurrentPosition
@@ -218,12 +218,12 @@ void XMLDocumentWrapper_XmlSecImpl::sendStartElement(
 
     xmlNsPtr pNsDef = pNode->nsDef;
 
-    while (pNsDef != NULL)
+    while (pNsDef != nullptr)
     {
         const xmlChar* pNsPrefix = pNsDef->prefix;
         const xmlChar* pNsHref = pNsDef->href;
 
-        if (pNsDef->prefix == NULL)
+        if (pNsDef->prefix == nullptr)
         {
             pAttributeList->AddAttribute(
                 OUString(C2U( STRXMLNS )),
@@ -243,13 +243,13 @@ void XMLDocumentWrapper_XmlSecImpl::sendStartElement(
 
     xmlAttrPtr pAttr = pNode->properties;
 
-    while (pAttr != NULL)
+    while (pAttr != nullptr)
     {
         const xmlChar* pAttrName = pAttr->name;
         xmlNsPtr pAttrNs = pAttr->ns;
 
         OUString ouAttrName;
-        if (pAttrNs == NULL)
+        if (pAttrNs == nullptr)
         {
             ouAttrName = OUString(C2U( reinterpret_cast<char const *>(pAttrName) ));
         }
@@ -411,11 +411,11 @@ OString XMLDocumentWrapper_XmlSecImpl::getNodeQName(const xmlNodePtr pNode)
  ******************************************************************************/
 {
     OString sNodeName(reinterpret_cast<const char*>(pNode->name));
-    if (pNode->ns != NULL)
+    if (pNode->ns != nullptr)
     {
         xmlNsPtr pNs = pNode->ns;
 
-        if (pNs->prefix != NULL)
+        if (pNs->prefix != nullptr)
         {
             OString sPrefix(reinterpret_cast<const char*>(pNs->prefix));
             sNodeName = sPrefix+OString(":")+sNodeName;
@@ -449,7 +449,7 @@ xmlNodePtr XMLDocumentWrapper_XmlSecImpl::checkElement( const cssu::Reference< c
  *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
-    xmlNodePtr rc = NULL;
+    xmlNodePtr rc = nullptr;
 
     if (xXMLElement.is())
     {
@@ -465,7 +465,7 @@ xmlNodePtr XMLDocumentWrapper_XmlSecImpl::checkElement( const cssu::Reference< c
                     xNodTunnel->getSomething(
                         XMLElementWrapper_XmlSecImpl::getUnoTunnelImplementationId() ))) ;
 
-        if( pElement == NULL ) {
+        if( pElement == nullptr ) {
             throw cssu::RuntimeException() ;
         }
 
@@ -530,7 +530,7 @@ sal_Int32 XMLDocumentWrapper_XmlSecImpl::recursiveDelete(
         bool bIsRemoved = true;
         sal_Int32 nResult;
 
-        while( pChild != NULL )
+        while( pChild != nullptr )
         {
             pNextSibling = pChild->next;
             nResult = recursiveDelete(pChild);
@@ -601,7 +601,7 @@ void XMLDocumentWrapper_XmlSecImpl::getNextReservedNode()
     }
     else
     {
-        m_pCurrentReservedNode = NULL;
+        m_pCurrentReservedNode = nullptr;
     }
 }
 
@@ -633,7 +633,7 @@ void XMLDocumentWrapper_XmlSecImpl::removeNode(const xmlNodePtr pNode) const
 
     xmlAttrPtr pAttr = pNode->properties;
 
-    while (pAttr != NULL)
+    while (pAttr != nullptr)
     {
         if (!stricmp(reinterpret_cast<char const *>(pAttr->name), "id"))
         {
@@ -671,15 +671,15 @@ void XMLDocumentWrapper_XmlSecImpl::buildIDAttr(xmlNodePtr pNode) const
  ******************************************************************************/
 {
     xmlAttrPtr idAttr = xmlHasProp( pNode, reinterpret_cast<const unsigned char *>("id") );
-    if (idAttr == NULL)
+    if (idAttr == nullptr)
     {
         idAttr = xmlHasProp( pNode, reinterpret_cast<const unsigned char *>("Id") );
     }
 
-    if (idAttr != NULL)
+    if (idAttr != nullptr)
     {
         xmlChar* idValue = xmlNodeListGetString( m_pDocument, idAttr->children, 1 ) ;
-        xmlAddID( NULL, m_pDocument, idValue, idAttr );
+        xmlAddID( nullptr, m_pDocument, idValue, idAttr );
     }
 }
 
@@ -706,12 +706,12 @@ void XMLDocumentWrapper_XmlSecImpl::rebuildIDLink(xmlNodePtr pNode) const
  *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
-    if (pNode != NULL && pNode->type == XML_ELEMENT_NODE)
+    if (pNode != nullptr && pNode->type == XML_ELEMENT_NODE)
     {
         buildIDAttr( pNode );
 
         xmlNodePtr child = pNode->children;
-        while (child != NULL)
+        while (child != nullptr)
         {
             rebuildIDLink(child);
             child = child->next;
@@ -737,7 +737,7 @@ void SAL_CALL XMLDocumentWrapper_XmlSecImpl::setCurrentElement( const cssu::Refe
 void SAL_CALL XMLDocumentWrapper_XmlSecImpl::removeCurrentElement(  )
     throw (cssu::RuntimeException, std::exception)
 {
-    OSL_ASSERT( m_pCurrentElement != NULL );
+    OSL_ASSERT( m_pCurrentElement != nullptr );
 
     xmlNodePtr pOldCurrentElement = m_pCurrentElement;
 
@@ -772,7 +772,7 @@ sal_Bool SAL_CALL XMLDocumentWrapper_XmlSecImpl::isCurrentElementEmpty(  )
 {
     bool rc = false;
 
-    if (m_pCurrentElement->children == NULL)
+    if (m_pCurrentElement->children == nullptr)
     {
         rc = true;
     }
@@ -810,9 +810,9 @@ void SAL_CALL XMLDocumentWrapper_XmlSecImpl::collapse( const cssu::Reference< cs
     xmlNodePtr pTargetNode = checkElement(node);
     xmlNodePtr pParent;
 
-    while (pTargetNode != NULL)
+    while (pTargetNode != nullptr)
     {
-        if (pTargetNode->children != NULL || pTargetNode == m_pCurrentElement)
+        if (pTargetNode->children != nullptr || pTargetNode == m_pCurrentElement)
         {
             break;
         }
@@ -826,7 +826,7 @@ void SAL_CALL XMLDocumentWrapper_XmlSecImpl::collapse( const cssu::Reference< cs
 void SAL_CALL XMLDocumentWrapper_XmlSecImpl::getTree( const cssu::Reference< cssxs::XDocumentHandler >& handler )
     throw (cssxs::SAXException, cssu::RuntimeException, std::exception)
 {
-    if (m_pRootElement != NULL)
+    if (m_pRootElement != nullptr)
     {
         xmlNodePtr pTempCurrentElement = m_pCurrentElement;
         sal_Int32 nTempCurrentPosition = m_nCurrentPosition;
@@ -841,13 +841,13 @@ void SAL_CALL XMLDocumentWrapper_XmlSecImpl::getTree( const cssu::Reference< css
             switch (m_nCurrentPosition)
             {
             case NODEPOSITION_STARTELEMENT:
-                sendStartElement(NULL, xHandler, m_pCurrentElement);
+                sendStartElement(nullptr, xHandler, m_pCurrentElement);
                 break;
             case NODEPOSITION_ENDELEMENT:
-                sendEndElement(NULL, xHandler, m_pCurrentElement);
+                sendEndElement(nullptr, xHandler, m_pCurrentElement);
                 break;
             case NODEPOSITION_NORMAL:
-                sendNode(NULL, xHandler, m_pCurrentElement);
+                sendNode(nullptr, xHandler, m_pCurrentElement);
                 break;
             }
 
@@ -875,7 +875,7 @@ void SAL_CALL XMLDocumentWrapper_XmlSecImpl::generateSAXEvents(
          * The first SAX event is the startElement of the startNode
          * element.
          */
-    bool bHasCurrentElementChild = (m_pCurrentElement->children != NULL);
+    bool bHasCurrentElementChild = (m_pCurrentElement->children != nullptr);
 
     xmlNodePtr pTempCurrentElement = m_pCurrentElement;
 
@@ -915,10 +915,10 @@ void SAL_CALL XMLDocumentWrapper_XmlSecImpl::generateSAXEvents(
 
         if (xSAXEventKeeper->isBlocking())
         {
-            xHandler = NULL;
+            xHandler = nullptr;
         }
 
-        if (pEndNode == NULL &&
+        if (pEndNode == nullptr &&
             ((bHasCurrentElementChild && m_pCurrentElement == xmlGetLastChild(pTempCurrentElement) && m_nCurrentPosition != NODEPOSITION_STARTELEMENT) ||
              (!bHasCurrentElementChild && m_pCurrentElement == pTempCurrentElement && m_nCurrentPosition == NODEPOSITION_STARTELEMENT)))
         {
@@ -932,7 +932,7 @@ void SAL_CALL XMLDocumentWrapper_XmlSecImpl::generateSAXEvents(
              * the current node equals to the end point. If so, stop
              * generating.
              */
-        if (pEndNode != NULL && m_pCurrentElement == pEndNode)
+        if (pEndNode != nullptr && m_pCurrentElement == pEndNode)
         {
             break;
         }

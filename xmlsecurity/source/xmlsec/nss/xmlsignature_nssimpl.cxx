@@ -62,9 +62,9 @@ SAL_CALL XMLSignature_NssImpl::generate(
          com::sun::star::uno::SecurityException,
          com::sun::star::uno::RuntimeException, std::exception )
 {
-    xmlSecKeysMngrPtr pMngr = NULL ;
-    xmlSecDSigCtxPtr pDsigCtx = NULL ;
-    xmlNodePtr pNode = NULL ;
+    xmlSecKeysMngrPtr pMngr = nullptr ;
+    xmlSecDSigCtxPtr pDsigCtx = nullptr ;
+    xmlNodePtr pNode = nullptr ;
 
     if( !aTemplate.is() )
         throw RuntimeException() ;
@@ -87,7 +87,7 @@ SAL_CALL XMLSignature_NssImpl::generate(
         reinterpret_cast<XMLElementWrapper_XmlSecImpl*>(
             sal::static_int_cast<sal_uIntPtr>(
                 xNodTunnel->getSomething( XMLElementWrapper_XmlSecImpl::getUnoTunnelImplementationId() )));
-    if( pElement == NULL ) {
+    if( pElement == nullptr ) {
         throw RuntimeException() ;
     }
 
@@ -113,7 +113,7 @@ SAL_CALL XMLSignature_NssImpl::generate(
         reinterpret_cast<SecurityEnvironment_NssImpl*>(
             sal::static_int_cast<sal_uIntPtr>(
                 xSecTunnel->getSomething( SecurityEnvironment_NssImpl::getUnoTunnelId() )));
-    if( pSecEnv == NULL )
+    if( pSecEnv == nullptr )
         throw RuntimeException() ;
 
      setErrorRecorder();
@@ -125,7 +125,7 @@ SAL_CALL XMLSignature_NssImpl::generate(
 
     //Create Signature context
     pDsigCtx = xmlSecDSigCtxCreate( pMngr ) ;
-    if( pDsigCtx == NULL )
+    if( pDsigCtx == nullptr )
     {
         SecurityEnvironment_NssImpl::destroyKeysManager( pMngr );
         //throw XMLSignatureException() ;
@@ -166,9 +166,9 @@ SAL_CALL XMLSignature_NssImpl::validate(
 ) throw( com::sun::star::uno::RuntimeException,
          com::sun::star::uno::SecurityException,
          com::sun::star::xml::crypto::XMLSignatureException, std::exception ) {
-    xmlSecKeysMngrPtr pMngr = NULL ;
-    xmlSecDSigCtxPtr pDsigCtx = NULL ;
-    xmlNodePtr pNode = NULL ;
+    xmlSecKeysMngrPtr pMngr = nullptr ;
+    xmlSecDSigCtxPtr pDsigCtx = nullptr ;
+    xmlNodePtr pNode = nullptr ;
     //sal_Bool valid ;
 
     if( !aTemplate.is() )
@@ -191,7 +191,7 @@ SAL_CALL XMLSignature_NssImpl::validate(
         reinterpret_cast<XMLElementWrapper_XmlSecImpl*>(
             sal::static_int_cast<sal_uIntPtr>(
                 xNodTunnel->getSomething( XMLElementWrapper_XmlSecImpl::getUnoTunnelImplementationId() )));
-    if( pElement == NULL )
+    if( pElement == nullptr )
         throw RuntimeException() ;
 
     pNode = pElement->getNativeElement() ;
@@ -223,7 +223,7 @@ SAL_CALL XMLSignature_NssImpl::validate(
             reinterpret_cast<SecurityEnvironment_NssImpl*>(
                 sal::static_int_cast<sal_uIntPtr>(
                     xSecTunnel->getSomething( SecurityEnvironment_NssImpl::getUnoTunnelId() )));
-        if( pSecEnv == NULL )
+        if( pSecEnv == nullptr )
             throw RuntimeException() ;
 
         pMngr = pSecEnv->createKeysManager();
@@ -233,7 +233,7 @@ SAL_CALL XMLSignature_NssImpl::validate(
 
         //Create Signature context
         pDsigCtx = xmlSecDSigCtxCreate( pMngr ) ;
-        if( pDsigCtx == NULL )
+        if( pDsigCtx == nullptr )
         {
             SecurityEnvironment_NssImpl::destroyKeysManager( pMngr );
             //throw XMLSignatureException() ;

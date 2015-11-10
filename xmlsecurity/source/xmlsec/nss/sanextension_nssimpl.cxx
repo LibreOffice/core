@@ -70,7 +70,7 @@ namespace {
         CERTGeneralName  *first;
 
         first = names;
-        if (names != NULL) {
+        if (names != nullptr) {
             do {
                 length++;
                 names = CERT_GetNextGeneralName(names);

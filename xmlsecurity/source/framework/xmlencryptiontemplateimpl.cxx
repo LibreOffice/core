@@ -29,8 +29,8 @@ using ::com::sun::star::xml::wrapper::XXMLElementWrapper ;
 using ::com::sun::star::xml::crypto::XXMLEncryptionTemplate ;
 
 XMLEncryptionTemplateImpl::XMLEncryptionTemplateImpl( const Reference< XMultiServiceFactory >& aFactory )
-    : m_xTemplate( NULL ),
-      m_xTarget( NULL ),
+    : m_xTemplate( nullptr ),
+      m_xTarget( nullptr ),
       m_xServiceManager( aFactory ),
       m_nStatus ( ::com::sun::star::xml::crypto::SecurityOperationStatus_UNKNOWN ) {
 }

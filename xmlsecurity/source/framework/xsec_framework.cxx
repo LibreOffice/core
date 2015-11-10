@@ -40,7 +40,7 @@ extern "C"
 SAL_DLLPUBLIC_EXPORT void * SAL_CALL xsec_fw_component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * /*pRegistryKey*/ )
 {
-    void * pRet = 0;
+    void * pRet = nullptr;
 
     //Decryptor
     OUString implName = OUString::createFromAscii( pImplName );

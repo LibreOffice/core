@@ -442,12 +442,12 @@ Reference< css::security::XCertificate > DocumentDigitalSignatures::chooseCertif
     ScopedVclPtrInstance< CertificateChooser > aChooser( nullptr, mxCtx, xSecEnv, aSignatureHelper.GetSignatureInformations());
 
     if (aChooser->Execute() != RET_OK)
-        return Reference< css::security::XCertificate >(0);
+        return Reference< css::security::XCertificate >(nullptr);
 
     Reference< css::security::XCertificate > xCert = aChooser->GetSelectedCertificate();
 
     if ( !xCert.is() )
-        return Reference< css::security::XCertificate >(0);
+        return Reference< css::security::XCertificate >(nullptr);
 
     return xCert;
 }

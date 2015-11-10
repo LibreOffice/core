@@ -37,11 +37,11 @@ namespace cssxs = com::sun::star::xml::sax;
 #define _USECOMPRESSEDDOCUMENTHANDLER
 
 SAXEventKeeperImpl::SAXEventKeeperImpl( )
-    :m_pRootBufferNode(NULL),
-     m_pCurrentBufferNode(NULL),
+    :m_pRootBufferNode(nullptr),
+     m_pCurrentBufferNode(nullptr),
      m_nNextElementMarkId(1),
-     m_pNewBlocker(NULL),
-     m_pCurrentBlockingBufferNode(NULL),
+     m_pNewBlocker(nullptr),
+     m_pCurrentBlockingBufferNode(nullptr),
      m_bIsReleasing(false),
      m_bIsForwarding(false)
 {
@@ -55,19 +55,19 @@ SAXEventKeeperImpl::~SAXEventKeeperImpl()
     /*
      * delete the BufferNode tree
      */
-    if (m_pRootBufferNode != NULL)
+    if (m_pRootBufferNode != nullptr)
     {
         m_pRootBufferNode->freeAllChildren();
         delete m_pRootBufferNode;
     }
 
-    m_pRootBufferNode = m_pCurrentBufferNode = m_pCurrentBlockingBufferNode = NULL;
+    m_pRootBufferNode = m_pCurrentBufferNode = m_pCurrentBlockingBufferNode = nullptr;
 
     /*
      * delete all unfreed ElementMarks
      */
     m_vNewElementCollectors.clear();
-    m_pNewBlocker = NULL;
+    m_pNewBlocker = nullptr;
 
     std::vector< const ElementMark* >::const_iterator ii = m_vElementMarkBuffers.begin();
     for( ; ii != m_vElementMarkBuffers.end(); ++ii )
@@ -114,7 +114,7 @@ void SAXEventKeeperImpl::setCurrentBufferNode(BufferNode* pBufferNode)
             m_xSAXEventKeeperStatusChangeListener->collectionStatusChanged(sal_True);
         }
 
-        if (pBufferNode->getParent() == NULL)
+        if (pBufferNode->getParent() == nullptr)
         {
             m_pCurrentBufferNode->addChild(pBufferNode);
             pBufferNode->setParent(m_pCurrentBufferNode);
@@ -151,7 +151,7 @@ BufferNode* SAXEventKeeperImpl::addNewElementMarkBuffers()
  *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
-    BufferNode* pBufferNode = NULL;
+    BufferNode* pBufferNode = nullptr;
 
     if (m_pNewBlocker || !m_vNewElementCollectors.empty() )
     {
@@ -161,7 +161,7 @@ BufferNode* SAXEventKeeperImpl::addNewElementMarkBuffers()
          * no new BufferNode is needed to create.
          * This situation can only happen in the "Forwarding" mode.
          */
-        if ( (m_pCurrentBufferNode != NULL) &&
+        if ( (m_pCurrentBufferNode != nullptr) &&
              (m_xXMLDocument->isCurrent(m_pCurrentBufferNode->getXMLElement())))
         {
             pBufferNode = m_pCurrentBufferNode;
@@ -171,7 +171,7 @@ BufferNode* SAXEventKeeperImpl::addNewElementMarkBuffers()
             pBufferNode = new BufferNode(m_xXMLDocument->getCurrentElement());
         }
 
-        if (m_pNewBlocker != NULL)
+        if (m_pNewBlocker != nullptr)
         {
             pBufferNode->setBlocker(m_pNewBlocker);
 
@@ -180,7 +180,7 @@ BufferNode* SAXEventKeeperImpl::addNewElementMarkBuffers()
              * the SAXEventKeeper has entered "blocking" status, during which, no
              * SAX events will be forwarded to the next document handler.
              */
-            if (m_pCurrentBlockingBufferNode == NULL)
+            if (m_pCurrentBlockingBufferNode == nullptr)
             {
                 m_pCurrentBlockingBufferNode = pBufferNode;
 
@@ -190,7 +190,7 @@ BufferNode* SAXEventKeeperImpl::addNewElementMarkBuffers()
                 }
             }
 
-            m_pNewBlocker = NULL;
+            m_pNewBlocker = nullptr;
         }
 
         if (!m_vNewElementCollectors.empty())
@@ -234,7 +234,7 @@ ElementMark* SAXEventKeeperImpl::findElementMarkBuffer(sal_Int32 nId) const
  *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
-    ElementMark* pElementMark = NULL;
+    ElementMark* pElementMark = nullptr;
 
     std::vector< const ElementMark* >::const_iterator ii = m_vElementMarkBuffers.begin();
 
@@ -297,7 +297,7 @@ void SAXEventKeeperImpl::removeElementMarkBuffer(sal_Int32 nId)
              */
             if ((*ii) == m_pNewBlocker)
             {
-                m_pNewBlocker = NULL;
+                m_pNewBlocker = nullptr;
             }
 
             /*
@@ -365,7 +365,7 @@ OUString SAXEventKeeperImpl::printBufferNode(
     rc += " " + m_xXMLDocument->getNodeName(pBufferNode->getXMLElement());
 
     BufferNode* pParent = const_cast<BufferNode*>(pBufferNode->getParent());
-    if (pParent != NULL)
+    if (pParent != nullptr)
     {
         rc += "[" + m_xXMLDocument->getNodeName(pParent->getXMLElement()) + "]";
     }
@@ -373,7 +373,7 @@ OUString SAXEventKeeperImpl::printBufferNode(
     rc += ":EC=" + pBufferNode->printChildren() + " BR=";
 
     ElementMark * pBlocker = pBufferNode->getBlocker();
-    if (pBlocker != NULL)
+    if (pBlocker != nullptr)
     {
         rc += OUString::number( pBlocker->getBufferId() ) + "(SecId="
             + OUString::number( pBlocker->getSecurityId() ) + ") ";
@@ -484,7 +484,7 @@ void SAXEventKeeperImpl::smashBufferNode(
              */
         if (pParent == m_pRootBufferNode)
         {
-            bool bIsNotBlocking = (m_pCurrentBlockingBufferNode == NULL);
+            bool bIsNotBlocking = (m_pCurrentBlockingBufferNode == nullptr);
             bool bIsBlockInside = false;
             bool bIsBlockingAfterward = false;
 
@@ -504,7 +504,7 @@ void SAXEventKeeperImpl::smashBufferNode(
                      */
                 m_xXMLDocument->clearUselessData(m_pRootBufferNode->getXMLElement(),
                     aChildElements,
-                    bIsNotBlocking?(NULL):
+                    bIsNotBlocking?(nullptr):
                                    (m_pCurrentBlockingBufferNode->getXMLElement()));
 
                     /*
@@ -524,7 +524,7 @@ void SAXEventKeeperImpl::smashBufferNode(
                 /*
                  * the current blocking BufferNode is a descendant of this BufferNode.
                  */
-                bIsBlockInside = (NULL != pBufferNode->isAncestor(m_pCurrentBlockingBufferNode));
+                bIsBlockInside = (nullptr != pBufferNode->isAncestor(m_pCurrentBlockingBufferNode));
 
                 /*
                  * the current blocking BufferNode locates behind this BufferNode in tree
@@ -556,7 +556,7 @@ void SAXEventKeeperImpl::smashBufferNode(
                 m_xXMLDocument->clearUselessData(pBufferNode->getXMLElement(),
                     aChildElements,
                     bIsBlockInside?(m_pCurrentBlockingBufferNode->getXMLElement()):
-                               (NULL));
+                               (nullptr));
 
                     /*
                      * remove the node if it is empty, then if its parent is also
@@ -571,7 +571,7 @@ void SAXEventKeeperImpl::smashBufferNode(
 
         std::vector< const BufferNode* >* vChildren = pBufferNode->getChildren();
         pParent->removeChild(pBufferNode);
-        pBufferNode->setParent(NULL);
+        pBufferNode->setParent(nullptr);
 
         std::vector< const BufferNode * >::const_iterator ii = vChildren->begin();
         for( ; ii != vChildren->end(); ++ii )
@@ -617,15 +617,15 @@ BufferNode* SAXEventKeeperImpl::findNextBlockingBufferNode(
  *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
-    BufferNode* pNext = NULL;
+    BufferNode* pNext = nullptr;
 
-    if (pStartBufferNode != NULL)
+    if (pStartBufferNode != nullptr)
     {
         pNext = pStartBufferNode;
 
-        while (NULL != (pNext = const_cast<BufferNode*>(pNext->getNextNodeByTreeOrder())))
+        while (nullptr != (pNext = const_cast<BufferNode*>(pNext->getNextNodeByTreeOrder())))
         {
-            if (pNext->getBlocker() != NULL)
+            if (pNext->getBlocker() != nullptr)
             {
                 break;
             }
@@ -704,7 +704,7 @@ void SAXEventKeeperImpl::releaseElementMarkBuffer()
 
         ElementMark* pElementMark = findElementMarkBuffer(nId);
 
-        if (pElementMark != NULL)
+        if (pElementMark != nullptr)
         {
             if (cssxc::sax::ElementMarkType_ELEMENTCOLLECTOR
                 == pElementMark->getType())
@@ -729,8 +729,8 @@ void SAXEventKeeperImpl::releaseElementMarkBuffer()
                 /*
                  * delete the ElementMark
                  */
-                pElementCollector = NULL;
-                pElementMark = NULL;
+                pElementCollector = nullptr;
+                pElementMark = nullptr;
                 removeElementMarkBuffer(nId);
 
                 /*
@@ -748,7 +748,7 @@ void SAXEventKeeperImpl::releaseElementMarkBuffer()
                      * Delete the TH from the buffer node.
                      */
                 BufferNode *pBufferNode = pElementMark->getBufferNode();
-                pBufferNode->setBlocker(NULL);
+                pBufferNode->setBlocker(nullptr);
 
                     /*
                      * If there is a following handler and no blocking now, then
@@ -771,7 +771,7 @@ void SAXEventKeeperImpl::releaseElementMarkBuffer()
                                BufferNode* pTempCurrentBlockingBufferNode = m_pCurrentBlockingBufferNode;
 
                                m_pCurrentBufferNode = pBufferNode;
-                               m_pCurrentBlockingBufferNode = NULL;
+                               m_pCurrentBlockingBufferNode = nullptr;
 
                         m_bIsForwarding = true;
 
@@ -779,18 +779,18 @@ void SAXEventKeeperImpl::releaseElementMarkBuffer()
                             m_xNextHandler,
                             this,
                             pBufferNode->getXMLElement(),
-                            (pTempCurrentBlockingBufferNode == NULL)?NULL:(pTempCurrentBlockingBufferNode->getXMLElement()));
+                            (pTempCurrentBlockingBufferNode == nullptr)?nullptr:(pTempCurrentBlockingBufferNode->getXMLElement()));
 
                         m_bIsForwarding = false;
 
                         m_pCurrentBufferNode = pTempCurrentBufferNode;
-                        if (m_pCurrentBlockingBufferNode == NULL)
+                        if (m_pCurrentBlockingBufferNode == nullptr)
                         {
                             m_pCurrentBlockingBufferNode = pTempCurrentBlockingBufferNode;
                         }
                     }
 
-                    if (m_pCurrentBlockingBufferNode == NULL &&
+                    if (m_pCurrentBlockingBufferNode == nullptr &&
                         m_xSAXEventKeeperStatusChangeListener.is())
                     {
                         m_xSAXEventKeeperStatusChangeListener->blockingStatusChanged(sal_False);
@@ -800,7 +800,7 @@ void SAXEventKeeperImpl::releaseElementMarkBuffer()
                 /*
                  * delete the ElementMark
                  */
-                pElementMark = NULL;
+                pElementMark = nullptr;
                 removeElementMarkBuffer(nId);
 
                 /*
@@ -937,7 +937,7 @@ sal_Int32 SAXEventKeeperImpl::createBlocker(sal_Int32 nSecurityId)
     sal_Int32 nId = m_nNextElementMarkId;
     m_nNextElementMarkId ++;
 
-    OSL_ASSERT(m_pNewBlocker == NULL);
+    OSL_ASSERT(m_pNewBlocker == nullptr);
 
     m_pNewBlocker = new ElementMark(nSecurityId, nId);
     m_vElementMarkBuffers.push_back( m_pNewBlocker );
@@ -953,7 +953,7 @@ sal_Int32 SAL_CALL SAXEventKeeperImpl::addElementCollector(  )
         cssxc::sax::ConstOfSecurityId::UNDEFINEDSECURITYID,
         cssxc::sax::ElementMarkPriority_AFTERMODIFY,
         false,
-        NULL);
+        nullptr);
 }
 
 void SAL_CALL SAXEventKeeperImpl::removeElementCollector( sal_Int32 id )
@@ -977,7 +977,7 @@ void SAL_CALL SAXEventKeeperImpl::removeBlocker( sal_Int32 id )
 sal_Bool SAL_CALL SAXEventKeeperImpl::isBlocking(  )
     throw (cssu::RuntimeException, std::exception)
 {
-    return (m_pCurrentBlockingBufferNode != NULL);
+    return (m_pCurrentBlockingBufferNode != nullptr);
 }
 
 cssu::Reference< cssxw::XXMLElementWrapper > SAL_CALL
@@ -987,7 +987,7 @@ cssu::Reference< cssxw::XXMLElementWrapper > SAL_CALL
     cssu::Reference< cssxw::XXMLElementWrapper > rc;
 
     ElementMark* pElementMark = findElementMarkBuffer(id);
-    if (pElementMark != NULL)
+    if (pElementMark != nullptr)
     {
         rc = pElementMark->getBufferNode()->getXMLElement();
     }
@@ -1006,10 +1006,10 @@ void SAL_CALL SAXEventKeeperImpl::setElement(
 
         ElementMark* pElementMark = findElementMarkBuffer(id);
 
-        if (pElementMark != NULL)
+        if (pElementMark != nullptr)
         {
             BufferNode* pBufferNode = pElementMark->getBufferNode();
-            if (pBufferNode != NULL)
+            if (pBufferNode != nullptr)
             {
                     bool bIsCurrent = m_xXMLDocument->isCurrent(pBufferNode->getXMLElement());
                 pBufferNode->setXMLElement(aElement);
@@ -1056,7 +1056,7 @@ cssu::Reference< cssxw::XXMLElementWrapper > SAL_CALL SAXEventKeeperImpl::getCur
 {
     cssu::Reference< cssxw::XXMLElementWrapper > rc;
 
-    if (m_pCurrentBlockingBufferNode != NULL)
+    if (m_pCurrentBlockingBufferNode != nullptr)
     {
         rc = m_pCurrentBlockingBufferNode->getXMLElement();
     }
@@ -1074,7 +1074,7 @@ sal_Int32 SAL_CALL SAXEventKeeperImpl::addSecurityElementCollector(
         cssxc::sax::ConstOfSecurityId::UNDEFINEDSECURITYID,
         priority,
         modifyElement,
-        NULL);
+        nullptr);
 }
 
 sal_Int32 SAL_CALL SAXEventKeeperImpl::cloneElementCollector(
@@ -1085,7 +1085,7 @@ sal_Int32 SAL_CALL SAXEventKeeperImpl::cloneElementCollector(
     sal_Int32 nId = -1;
 
     ElementCollector* pElementCollector = static_cast<ElementCollector*>(findElementMarkBuffer(referenceId));
-    if (pElementCollector != NULL)
+    if (pElementCollector != nullptr)
     {
         nId = m_nNextElementMarkId;
         m_nNextElementMarkId ++;
@@ -1102,7 +1102,7 @@ sal_Int32 SAL_CALL SAXEventKeeperImpl::cloneElementCollector(
              * If the reference EC is still in initial EC array, add
              * this cloned one into the initial EC array too.
              */
-            if (pElementCollector->getBufferNode() == NULL)
+            if (pElementCollector->getBufferNode() == nullptr)
         {
             m_vNewElementCollectors.push_back(pClonedOne);
         }
@@ -1115,7 +1115,7 @@ void SAL_CALL SAXEventKeeperImpl::setSecurityId( sal_Int32 id, sal_Int32 securit
     throw (cssu::RuntimeException, std::exception)
 {
     ElementMark* pElementMark = findElementMarkBuffer(id);
-    if (pElementMark != NULL)
+    if (pElementMark != nullptr)
     {
         pElementMark->setSecurityId(securityId);
     }
@@ -1129,7 +1129,7 @@ void SAL_CALL SAXEventKeeperImpl::addReferenceResolvedListener(
     throw (cssu::RuntimeException, std::exception)
 {
     ElementCollector* pElementCollector = static_cast<ElementCollector*>(findElementMarkBuffer(referenceId));
-    if (pElementCollector != NULL)
+    if (pElementCollector != nullptr)
     {
         pElementCollector->setReferenceResolvedListener(listener);
     }
@@ -1184,10 +1184,10 @@ void SAL_CALL SAXEventKeeperImpl::startElement(
          * If there is a following handler and no blocking now, then
          * forward this event
          */
-    if ((m_pCurrentBlockingBufferNode == NULL) &&
+    if ((m_pCurrentBlockingBufferNode == nullptr) &&
         (m_xNextHandler.is()) &&
         (!m_bIsForwarding) &&
-        (m_pNewBlocker == NULL))
+        (m_pNewBlocker == nullptr))
     {
         m_xNextHandler->startElement(aName, xAttribs);
     }
@@ -1215,7 +1215,7 @@ void SAL_CALL SAXEventKeeperImpl::startElement(
     }
 
     BufferNode* pBufferNode = addNewElementMarkBuffers();
-        if (pBufferNode != NULL)
+        if (pBufferNode != nullptr)
         {
         setCurrentBufferNode(pBufferNode);
     }
@@ -1230,14 +1230,14 @@ void SAL_CALL SAXEventKeeperImpl::endElement( const OUString& aName )
          * If there is a following handler and no blocking now, then
          * forward this event
          */
-    if ((m_pCurrentBlockingBufferNode == NULL) &&
+    if ((m_pCurrentBlockingBufferNode == nullptr) &&
         (m_xNextHandler.is()) &&
         (!m_bIsForwarding))
     {
         m_xNextHandler->endElement(aName);
     }
 
-    if ((m_pCurrentBlockingBufferNode != NULL) ||
+    if ((m_pCurrentBlockingBufferNode != nullptr) ||
         (m_pCurrentBufferNode != m_pRootBufferNode) ||
         (!m_xXMLDocument->isCurrentElementEmpty()))
     {
@@ -1283,12 +1283,12 @@ void SAL_CALL SAXEventKeeperImpl::characters( const OUString& aChars )
 {
     if (!m_bIsForwarding)
     {
-        if ((m_pCurrentBlockingBufferNode == NULL) && m_xNextHandler.is())
+        if ((m_pCurrentBlockingBufferNode == nullptr) && m_xNextHandler.is())
         {
             m_xNextHandler->characters(aChars);
         }
 
-        if ((m_pCurrentBlockingBufferNode != NULL) ||
+        if ((m_pCurrentBlockingBufferNode != nullptr) ||
             (m_pCurrentBufferNode != m_pRootBufferNode))
         {
         #ifndef _USECOMPRESSEDDOCUMENTHANDLER
@@ -1312,12 +1312,12 @@ void SAL_CALL SAXEventKeeperImpl::processingInstruction(
 {
     if (!m_bIsForwarding)
     {
-        if ((m_pCurrentBlockingBufferNode == NULL) && m_xNextHandler.is())
+        if ((m_pCurrentBlockingBufferNode == nullptr) && m_xNextHandler.is())
         {
             m_xNextHandler->processingInstruction(aTarget, aData);
         }
 
-        if ((m_pCurrentBlockingBufferNode != NULL) ||
+        if ((m_pCurrentBlockingBufferNode != nullptr) ||
             (m_pCurrentBufferNode != m_pRootBufferNode))
         {
         #ifndef _USECOMPRESSEDDOCUMENTHANDLER

@@ -282,7 +282,7 @@ bool XMLSignatureHelper::ReadAndVerifySignature( const com::sun::star::uno::Refe
     /*
      * clear up the connection
      */
-    pSignatureListener->setNextHandler( NULL );
+    pSignatureListener->setNextHandler( nullptr );
 
     /*
      * clear up the signature verify listener

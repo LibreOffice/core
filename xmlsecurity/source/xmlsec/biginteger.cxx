@@ -27,7 +27,7 @@ using namespace ::com::sun::star::uno ;
 
 Sequence< sal_Int8 > numericStringToBigInteger ( const OUString& numeral )
 {
-    if( numeral.getStr() != NULL )
+    if( numeral.getStr() != nullptr )
     {
         xmlChar* chNumeral ;
         const xmlSecByte* bnInteger ;
@@ -58,7 +58,7 @@ Sequence< sal_Int8 > numericStringToBigInteger ( const OUString& numeral )
         }
 
         bnInteger = xmlSecBnGetData( &bn ) ;
-        if( bnInteger == NULL ) {
+        if( bnInteger == nullptr ) {
             xmlSecBnFinalize( &bn ) ;
             return Sequence< sal_Int8 >();
         }
@@ -93,7 +93,7 @@ OUString bigIntegerToNumericString ( const Sequence< sal_Int8 >& integer )
         }
 
         chNumeral = xmlSecBnToDecString( &bn ) ;
-        if( chNumeral == NULL ) {
+        if( chNumeral == nullptr ) {
             xmlSecBnFinalize( &bn ) ;
             return aRet ;
         }

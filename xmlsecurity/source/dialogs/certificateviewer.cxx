@@ -393,7 +393,7 @@ void CertificateViewerCertPathTP::ActivatePage()
         const Reference< security::XCertificate >* pCertPath = aCertPath.getConstArray();
 
         sal_Int32 i, nCnt = aCertPath.getLength();
-        SvTreeListEntry* pParent = NULL;
+        SvTreeListEntry* pParent = nullptr;
         for( i = nCnt; i; )
         {
             const Reference< security::XCertificate > rCert = pCertPath[ --i ];
@@ -414,7 +414,7 @@ void CertificateViewerCertPathTP::ActivatePage()
             pParent = mpCertPathLB->GetParent( pParent );
         }
 
-        CertSelectHdl( NULL );
+        CertSelectHdl( nullptr );
     }
 }
 

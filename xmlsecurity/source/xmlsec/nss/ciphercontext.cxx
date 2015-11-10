@@ -31,11 +31,11 @@ uno::Reference< xml::crypto::XCipherContext > OCipherContext::Create( CK_MECHANI
 {
     ::rtl::Reference< OCipherContext > xResult = new OCipherContext;
 
-    xResult->m_pSlot = PK11_GetBestSlot( nNSSCipherID, NULL );
+    xResult->m_pSlot = PK11_GetBestSlot( nNSSCipherID, nullptr );
     if ( xResult->m_pSlot )
     {
         SECItem aKeyItem = { siBuffer, const_cast< unsigned char* >( reinterpret_cast< const unsigned char* >( aKey.getConstArray() ) ), sal::static_int_cast<unsigned>( aKey.getLength() ) };
-        xResult->m_pSymKey = PK11_ImportSymKey( xResult->m_pSlot, nNSSCipherID, PK11_OriginDerive, bEncryption ? CKA_ENCRYPT : CKA_DECRYPT, &aKeyItem, NULL );
+        xResult->m_pSymKey = PK11_ImportSymKey( xResult->m_pSlot, nNSSCipherID, PK11_OriginDerive, bEncryption ? CKA_ENCRYPT : CKA_DECRYPT, &aKeyItem, nullptr );
         if ( xResult->m_pSymKey )
         {
             SECItem aIVItem = { siBuffer, const_cast< unsigned char* >( reinterpret_cast< const unsigned char* >( aInitializationVector.getConstArray() ) ), sal::static_int_cast<unsigned>( aInitializationVector.getLength() ) };
@@ -66,25 +66,25 @@ void OCipherContext::Dispose()
     if ( m_pContext )
     {
         PK11_DestroyContext( m_pContext, PR_TRUE );
-        m_pContext = NULL;
+        m_pContext = nullptr;
     }
 
     if ( m_pSecParam )
     {
         SECITEM_FreeItem( m_pSecParam, PR_TRUE );
-        m_pSecParam = NULL;
+        m_pSecParam = nullptr;
     }
 
     if ( m_pSymKey )
     {
         PK11_FreeSymKey( m_pSymKey );
-        m_pSymKey = NULL;
+        m_pSymKey = nullptr;
     }
 
     if ( m_pSlot )
     {
         PK11_FreeSlot( m_pSlot );
-        m_pSlot = NULL;
+        m_pSlot = nullptr;
     }
 
     m_bDisposed = true;

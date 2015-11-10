@@ -67,10 +67,10 @@ uno::Reference< cssxc::XXMLSecurityContext > SAL_CALL
     SEInitializer_NssImpl::createSecurityContext( const OUString& )
     throw (uno::RuntimeException, std::exception)
 {
-    CERTCertDBHandle    *pCertHandle = NULL ;
+    CERTCertDBHandle    *pCertHandle = nullptr ;
 
     if( !initNSS( m_xContext ) )
-        return NULL;
+        return nullptr;
 
     pCertHandle = CERT_GetDefaultCertDB() ;
 
@@ -95,7 +95,7 @@ uno::Reference< cssxc::XXMLSecurityContext > SAL_CALL
     {
         //PK11_LogoutAll();
         //NSS_Shutdown();
-        return NULL;
+        return nullptr;
     }
 }
 

@@ -45,7 +45,7 @@ OUString XSecParser::getIdAttr(const cssu::Reference< cssxs::XAttributeList >& x
 {
     OUString ouIdAttr = xAttribs->getValueByName("id");
 
-    if (ouIdAttr == NULL)
+    if (ouIdAttr == nullptr)
     {
         ouIdAttr = xAttribs->getValueByName("Id");
     }
@@ -89,7 +89,7 @@ void SAL_CALL XSecParser::startElement(
     try
     {
         OUString ouIdAttr = getIdAttr(xAttribs);
-        if (ouIdAttr != NULL)
+        if (ouIdAttr != nullptr)
         {
             m_pXSecController->collectToVerify( ouIdAttr );
         }
@@ -97,7 +97,7 @@ void SAL_CALL XSecParser::startElement(
         if ( aName == TAG_SIGNATURE )
         {
             m_pXSecController->addSignature();
-            if (ouIdAttr != NULL)
+            if (ouIdAttr != nullptr)
             {
                 m_pXSecController->setId( ouIdAttr );
             }
@@ -105,7 +105,7 @@ void SAL_CALL XSecParser::startElement(
         else if ( aName == TAG_REFERENCE )
         {
             OUString ouUri = xAttribs->getValueByName(ATTR_URI);
-            DBG_ASSERT( ouUri != NULL, "URI == NULL" );
+            DBG_ASSERT( ouUri != nullptr, "URI == NULL" );
 
             if (ouUri.startsWith(CHAR_FRAGMENT))
             {
@@ -129,7 +129,7 @@ void SAL_CALL XSecParser::startElement(
             {
                 OUString ouAlgorithm = xAttribs->getValueByName(ATTR_ALGORITHM);
 
-                if (ouAlgorithm != NULL && ouAlgorithm == ALGO_C14N)
+                if (ouAlgorithm != nullptr && ouAlgorithm == ALGO_C14N)
                 /*
                 * a xml stream
                 */
@@ -166,7 +166,7 @@ void SAL_CALL XSecParser::startElement(
             }
             else if ( aName == TAG_SIGNATUREPROPERTY )
         {
-            if (ouIdAttr != NULL)
+            if (ouIdAttr != nullptr)
             {
                 m_pXSecController->setPropertyId( ouIdAttr );
             }
@@ -187,12 +187,12 @@ void SAL_CALL XSecParser::startElement(
         cssu::Any exc =  cppu::getCaughtException();
         throw cssxs::SAXException(
             "xmlsecurity: Exception in XSecParser::startElement",
-            0, exc);
+            nullptr, exc);
     }
     catch (...)
     {
         throw cssxs::SAXException(
-            "xmlsecurity: unexpected exception in XSecParser::startElement", 0,
+            "xmlsecurity: unexpected exception in XSecParser::startElement", nullptr,
             cssu::Any());
     }
 }
@@ -259,12 +259,12 @@ void SAL_CALL XSecParser::endElement( const OUString& aName )
         cssu::Any exc =  cppu::getCaughtException();
         throw cssxs::SAXException(
             "xmlsecurity: Exception in XSecParser::endElement",
-            0, exc);
+            nullptr, exc);
     }
     catch (...)
     {
         throw cssxs::SAXException(
-            "xmlsecurity: unexpected exception in XSecParser::endElement", 0,
+            "xmlsecurity: unexpected exception in XSecParser::endElement", nullptr,
             cssu::Any());
     }
 }

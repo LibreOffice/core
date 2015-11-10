@@ -52,7 +52,7 @@ sal_Bool SAL_CALL CertificateExtension_XmlSecImpl::isCritical() throw( ::com::su
 
 void CertificateExtension_XmlSecImpl::setCertExtn( unsigned char* value, unsigned int vlen, unsigned char* id, unsigned int idlen, bool critical ) {
     unsigned int i ;
-    if( value != NULL && vlen != 0 ) {
+    if( value != nullptr && vlen != 0 ) {
         Sequence< sal_Int8 > extnv( vlen ) ;
         for( i = 0; i < vlen ; i ++ )
             extnv[i] = *( value + i ) ;
@@ -62,7 +62,7 @@ void CertificateExtension_XmlSecImpl::setCertExtn( unsigned char* value, unsigne
         m_xExtnValue = Sequence<sal_Int8>();
     }
 
-    if( id != NULL && idlen != 0 ) {
+    if( id != nullptr && idlen != 0 ) {
         Sequence< sal_Int8 > extnId( idlen ) ;
         for( i = 0; i < idlen ; i ++ )
             extnId[i] = *( id + i ) ;

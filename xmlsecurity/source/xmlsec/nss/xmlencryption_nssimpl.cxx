@@ -58,10 +58,10 @@ SAL_CALL XMLEncryption_NssImpl::encrypt(
          com::sun::star::uno::SecurityException,
          com::sun::star::uno::RuntimeException, std::exception)
 {
-    xmlSecKeysMngrPtr pMngr = NULL ;
-    xmlSecEncCtxPtr pEncCtx = NULL ;
-    xmlNodePtr pEncryptedData = NULL ;
-    xmlNodePtr pContent = NULL ;
+    xmlSecKeysMngrPtr pMngr = nullptr ;
+    xmlSecEncCtxPtr pEncCtx = nullptr ;
+    xmlNodePtr pEncryptedData = nullptr ;
+    xmlNodePtr pContent = nullptr ;
 
     if( !aTemplate.is() )
         throw RuntimeException() ;
@@ -78,7 +78,7 @@ SAL_CALL XMLEncryption_NssImpl::encrypt(
     SecurityEnvironment_NssImpl* pSecEnv =
         reinterpret_cast<SecurityEnvironment_NssImpl*>(
             sal::static_int_cast<sal_uIntPtr>(xSecTunnel->getSomething( SecurityEnvironment_NssImpl::getUnoTunnelId() ))) ;
-    if( pSecEnv == NULL )
+    if( pSecEnv == nullptr )
         throw RuntimeException() ;
 
     //Get the encryption template
@@ -96,7 +96,7 @@ SAL_CALL XMLEncryption_NssImpl::encrypt(
         reinterpret_cast<XMLElementWrapper_XmlSecImpl*>(
             sal::static_int_cast<sal_uIntPtr>(
                 xTplTunnel->getSomething( XMLElementWrapper_XmlSecImpl::getUnoTunnelImplementationId() )));
-    if( pTemplate == NULL ) {
+    if( pTemplate == nullptr ) {
         throw RuntimeException() ;
     }
 
@@ -115,13 +115,13 @@ SAL_CALL XMLEncryption_NssImpl::encrypt(
         reinterpret_cast<XMLElementWrapper_XmlSecImpl*>(
             sal::static_int_cast<sal_uIntPtr>(
                 xTgtTunnel->getSomething( XMLElementWrapper_XmlSecImpl::getUnoTunnelImplementationId() )));
-    if( pTarget == NULL ) {
+    if( pTarget == nullptr ) {
         throw RuntimeException() ;
     }
 
     pContent = pTarget->getNativeElement() ;
 
-    if( pContent == NULL ) {
+    if( pContent == nullptr ) {
         throw XMLEncryptionException() ;
     }
 
@@ -151,7 +151,7 @@ SAL_CALL XMLEncryption_NssImpl::encrypt(
 
     //Create Encryption context
     pEncCtx = xmlSecEncCtxCreate( pMngr ) ;
-    if( pEncCtx == NULL )
+    if( pEncCtx == nullptr )
     {
         SecurityEnvironment_NssImpl::destroyKeysManager( pMngr );
         //throw XMLEncryptionException() ;
@@ -197,9 +197,9 @@ SAL_CALL XMLEncryption_NssImpl::decrypt(
          com::sun::star::uno::SecurityException,
          com::sun::star::uno::RuntimeException, std::exception)
 {
-    xmlSecKeysMngrPtr pMngr = NULL ;
-    xmlSecEncCtxPtr pEncCtx = NULL ;
-    xmlNodePtr pEncryptedData = NULL ;
+    xmlSecKeysMngrPtr pMngr = nullptr ;
+    xmlSecEncCtxPtr pEncCtx = nullptr ;
+    xmlNodePtr pEncryptedData = nullptr ;
 
     if( !aTemplate.is() )
         throw RuntimeException() ;
@@ -222,7 +222,7 @@ SAL_CALL XMLEncryption_NssImpl::decrypt(
         reinterpret_cast<XMLElementWrapper_XmlSecImpl*>(
             sal::static_int_cast<sal_uIntPtr>(
                 xTplTunnel->getSomething( XMLElementWrapper_XmlSecImpl::getUnoTunnelImplementationId() )));
-    if( pTemplate == NULL ) {
+    if( pTemplate == nullptr ) {
         throw RuntimeException() ;
     }
 
@@ -262,7 +262,7 @@ SAL_CALL XMLEncryption_NssImpl::decrypt(
             reinterpret_cast<SecurityEnvironment_NssImpl*>(
                 sal::static_int_cast<sal_uIntPtr>(
                     xSecTunnel->getSomething( SecurityEnvironment_NssImpl::getUnoTunnelId() )));
-        if( pSecEnv == NULL )
+        if( pSecEnv == nullptr )
             throw RuntimeException() ;
 
         pMngr = pSecEnv->createKeysManager();
@@ -272,7 +272,7 @@ SAL_CALL XMLEncryption_NssImpl::decrypt(
 
         //Create Encryption context
         pEncCtx = xmlSecEncCtxCreate( pMngr ) ;
-        if( pEncCtx == NULL )
+        if( pEncCtx == nullptr )
         {
             SecurityEnvironment_NssImpl::destroyKeysManager( pMngr );
             //throw XMLEncryptionException() ;
@@ -281,7 +281,7 @@ SAL_CALL XMLEncryption_NssImpl::decrypt(
         }
 
         //Decrypt the template
-        if(!( xmlSecEncCtxDecrypt( pEncCtx , pEncryptedData ) < 0 || pEncCtx->result == NULL ))
+        if(!( xmlSecEncCtxDecrypt( pEncCtx , pEncryptedData ) < 0 || pEncCtx->result == nullptr ))
         {
             //The decryption succeeds
 

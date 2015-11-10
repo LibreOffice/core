@@ -50,10 +50,10 @@ private:
     void Dispose();
 
     OCipherContext()
-    : m_pSlot( NULL )
-    , m_pSymKey( NULL )
-    , m_pSecParam( NULL )
-    , m_pContext( NULL )
+    : m_pSlot( nullptr )
+    , m_pSymKey( nullptr )
+    , m_pSecParam( nullptr )
+    , m_pContext( nullptr )
     , m_nBlockSize( 0 )
     , m_bEncryption( false )
     , m_bPadding( false )

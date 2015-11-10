@@ -42,10 +42,10 @@ extern "C"
 
 void* SAL_CALL nss_component_getFactory( const sal_Char* pImplName , void* pServiceManager , void* /*pRegistryKey*/ )
 {
-    void* pRet = 0;
+    void* pRet = nullptr;
     Reference< XSingleServiceFactory > xFactory ;
 
-    if( pImplName != NULL && pServiceManager != NULL )
+    if( pImplName != nullptr && pServiceManager != nullptr )
     {
 #ifdef XMLSEC_CRYPTO_NSS
         if( SEInitializer_NssImpl_getImplementationName().equals( OUString::createFromAscii( pImplName ) ) )

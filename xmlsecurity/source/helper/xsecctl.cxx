@@ -54,8 +54,8 @@ XSecController::XSecController( const cssu::Reference<cssu::XComponentContext>& 
     , m_bIsBlocking(false)
     , m_nStatusOfSecurityComponents(UNINITIALIZED)
     , m_bIsSAXEventKeeperSticky(false)
-    , m_pErrorMessage(NULL)
-    , m_pXSecParser(NULL)
+    , m_pErrorMessage(nullptr)
+    , m_pXSecParser(nullptr)
     , m_nReservedSignatureId(0)
     , m_bVerifyCurrentSignature(false)
 {
@@ -142,9 +142,9 @@ void XSecController::createXSecComponent( )
      * marks all security components are not available.
      */
     m_nStatusOfSecurityComponents = FAILTOINITIALIZED;
-    m_xXMLSignature = NULL;
-    m_xXMLDocumentWrapper = NULL;
-    m_xSAXEventKeeper = NULL;
+    m_xXMLSignature = nullptr;
+    m_xXMLDocumentWrapper = nullptr;
+    m_xSAXEventKeeper = nullptr;
 
     cssu::Reference< cssl::XMultiComponentFactory > xMCF( mxCtx->getServiceManager() );
 
@@ -259,7 +259,7 @@ bool XSecController::chainOn( bool bRetrievingLastEvent )
              * to make sure no SAX event is forwarded during the connecting
              * phase.
              */
-            m_xSAXEventKeeper->setNextHandler( NULL );
+            m_xSAXEventKeeper->setNextHandler( nullptr );
 
             cssu::Reference< cssxs::XDocumentHandler > xSEKHandler(m_xSAXEventKeeper, cssu::UNO_QUERY);
 
@@ -341,7 +341,7 @@ void XSecController::chainOff()
     {
         if (m_bIsSAXEventKeeperConnected)
         {
-            m_xSAXEventKeeper->setNextHandler( NULL );
+            m_xSAXEventKeeper->setNextHandler( nullptr );
 
             if ( m_xPreviousNodeOnSAXChain.is() )
             {
@@ -529,7 +529,7 @@ void XSecController::startMission(
 
     m_nStatusOfSecurityComponents = UNINITIALIZED;
     m_xSecurityContext = xSecurityContext;
-    m_pErrorMessage = NULL;
+    m_pErrorMessage = nullptr;
 
     m_vInternalSignatureInformations.clear();
 
@@ -613,9 +613,9 @@ void XSecController::clearSAXChainConnector()
 
     chainOff();
 
-    m_xPreviousNodeOnSAXChain = NULL;
-    m_xNextNodeOnSAXChain = NULL;
-    m_xElementStackKeeper = NULL;
+    m_xPreviousNodeOnSAXChain = nullptr;
+    m_xNextNodeOnSAXChain = nullptr;
+    m_xElementStackKeeper = nullptr;
 }
 
 void XSecController::endMission()
@@ -661,8 +661,8 @@ void XSecController::endMission()
         }
     }
 
-    m_xUriBinding = NULL;
-    m_xSecurityContext = NULL;
+    m_xUriBinding = nullptr;
+    m_xSecurityContext = nullptr;
 
     /*
      * free the status change listener reference to this object
@@ -672,7 +672,7 @@ void XSecController::endMission()
         cssu::Reference<cssxc::sax::XSAXEventKeeperStatusChangeBroadcaster>
             xSAXEventKeeperStatusChangeBroadcaster(m_xSAXEventKeeper, cssu::UNO_QUERY);
         xSAXEventKeeperStatusChangeBroadcaster
-            ->addSAXEventKeeperStatusChangeListener( NULL );
+            ->addSAXEventKeeperStatusChangeListener( nullptr );
     }
 }
 

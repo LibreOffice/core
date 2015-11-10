@@ -160,7 +160,7 @@ void EncryptorImpl::startEngine( const Reference<
         Reference < cssxw::XXMLElementWrapper > xResultEncryption
             = xResultTemplate->getTemplate();
         m_xSAXEventKeeper->setElement(m_nIdOfTemplateEC, xResultEncryption);
-        m_xSAXEventKeeper->setElement(m_nReferenceId, NULL);
+        m_xSAXEventKeeper->setElement(m_nReferenceId, nullptr);
     }
 }
 

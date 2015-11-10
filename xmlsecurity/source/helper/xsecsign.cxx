@@ -44,7 +44,7 @@ namespace cssxs = com::sun::star::xml::sax;
 OUString XSecController::createId()
 {
     sal_uInt8 aSeq[16];
-    rtl_createUuid( aSeq, 0, true );
+    rtl_createUuid( aSeq, nullptr, true );
 
     char str[68]="ID_";
     int length = 3;
@@ -190,7 +190,7 @@ void XSecController::signAStream( sal_Int32 securityId, const OUString& uri, con
 
     if (index == -1)
     {
-        InternalSignatureInformation isi(securityId, NULL);
+        InternalSignatureInformation isi(securityId, nullptr);
         isi.addReference(type, uri, -1);
         m_vInternalSignatureInformations.push_back( isi );
     }
@@ -220,7 +220,7 @@ void XSecController::setX509Certificate(
 
     if ( index == -1 )
     {
-        InternalSignatureInformation isi(nSecurityId, NULL);
+        InternalSignatureInformation isi(nSecurityId, nullptr);
         isi.signatureInfor.nSecurityEnvironmentIndex = nSecurityEnvironmentIndex;
         isi.signatureInfor.ouX509IssuerName = ouX509IssuerName;
         isi.signatureInfor.ouX509SerialNumber = ouX509SerialNumber;
@@ -246,7 +246,7 @@ void XSecController::setDate(
 
     if ( index == -1 )
     {
-        InternalSignatureInformation isi(nSecurityId, NULL);
+        InternalSignatureInformation isi(nSecurityId, nullptr);
         isi.signatureInfor.stDateTime = rDateTime;
         m_vInternalSignatureInformations.push_back( isi );
     }
@@ -320,7 +320,7 @@ bool XSecController::WriteSignature(
             m_pErrorMessage = ERROR_EXCEPTIONDURINGCREATION;
         }
 
-        m_xSAXEventKeeper->setNextHandler( NULL );
+        m_xSAXEventKeeper->setNextHandler( nullptr );
         m_bIsSAXEventKeeperSticky = false;
     }
     else

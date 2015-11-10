@@ -28,7 +28,7 @@ ODigestContext::~ODigestContext()
     if ( m_pContext )
     {
         PK11_DestroyContext( m_pContext, PR_TRUE );
-        m_pContext = NULL;
+        m_pContext = nullptr;
     }
 }
 
@@ -52,7 +52,7 @@ void SAL_CALL ODigestContext::updateDigest( const uno::Sequence< ::sal_Int8 >& a
         if ( PK11_DigestOp( m_pContext, reinterpret_cast< const unsigned char* >( aToDigest.getConstArray() ), aToDigest.getLength() ) != SECSuccess )
         {
             PK11_DestroyContext( m_pContext, PR_TRUE );
-            m_pContext = NULL;
+            m_pContext = nullptr;
             m_bBroken = true;
             throw uno::RuntimeException();
         }
@@ -77,13 +77,13 @@ uno::Sequence< ::sal_Int8 > SAL_CALL ODigestContext::finalizeDigestAndDispose()
     if ( PK11_DigestFinal( m_pContext, reinterpret_cast< unsigned char* >( aResult.getArray() ), &nResultLen, aResult.getLength() ) != SECSuccess )
     {
         PK11_DestroyContext( m_pContext, PR_TRUE );
-        m_pContext = NULL;
+        m_pContext = nullptr;
         m_bBroken = true;
         throw uno::RuntimeException();
     }
 
     PK11_DestroyContext( m_pContext, PR_TRUE );
-    m_pContext = NULL;
+    m_pContext = nullptr;
     m_bDisposed = true;
 
     aResult.realloc( nResultLen );

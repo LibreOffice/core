@@ -96,13 +96,13 @@ void SaveODFItem::Notify( const ::com::sun::star::uno::Sequence< OUString >& ) {
             else
                 throw uno::RuntimeException(
                     OUString("[xmlsecurity]SaveODFItem::SaveODFItem(): Wrong Type!"),
-                    0 );
+                    nullptr );
 
         }
         else
             throw uno::RuntimeException(
                 OUString("[xmlsecurity] Could not open property Office.Common/Save/ODF/DefaultVersion"),
-                0);
+                nullptr);
     }
 }
 
@@ -713,7 +713,7 @@ void DigitalSignaturesDialog::ImplFillSignaturesBox()
     m_pSigsOldSignatureImg->Show(bShowOldSignature);
     m_pSigsOldSignatureFI->Show(bShowOldSignature);
 
-    SignatureHighlightHdl( NULL );
+    SignatureHighlightHdl( nullptr );
 }
 
 //If bUseTempStream is true then the temporary signature stream is used.

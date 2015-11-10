@@ -40,7 +40,7 @@ XMLElementWrapper_XmlSecImpl::XMLElementWrapper_XmlSecImpl(const xmlNodePtr pNod
 cssu::Sequence< sal_Int8 > XMLElementWrapper_XmlSecImpl::getUnoTunnelImplementationId()
     throw (cssu::RuntimeException)
 {
-    static ::cppu::OImplementationId* pId = 0;
+    static ::cppu::OImplementationId* pId = nullptr;
     if (! pId)
     {
         ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
@@ -91,7 +91,7 @@ cssu::Reference< cssu::XInterface > SAL_CALL
         const cssu::Reference< cssu::XComponentContext > &)
     throw( cssu::Exception )
 {
-    return static_cast<cppu::OWeakObject*>(new XMLElementWrapper_XmlSecImpl(NULL));
+    return static_cast<cppu::OWeakObject*>(new XMLElementWrapper_XmlSecImpl(nullptr));
 }
 
 /* XServiceInfo */

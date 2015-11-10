@@ -36,10 +36,10 @@ extern "C"
 
 SAL_DLLPUBLIC_EXPORT void* SAL_CALL xsec_xmlsec_component_getFactory( const sal_Char* pImplName , void* pServiceManager , void* pRegistryKey )
 {
-    void* pRet = 0;
+    void* pRet = nullptr;
     Reference< XInterface > xFactory ;
 
-    if( pImplName != NULL ) {
+    if( pImplName != nullptr ) {
         if( XMLElementWrapper_XmlSecImpl_getImplementationName().equals( OUString::createFromAscii( pImplName ) ) )
         {
             xFactory = cppu::createSingleComponentFactory(
@@ -68,7 +68,7 @@ SAL_DLLPUBLIC_EXPORT void* SAL_CALL xsec_xmlsec_component_getFactory( const sal_
         pRet = xFactory.get() ;
     } else {
         pRet = nss_component_getFactory( pImplName, pServiceManager, pRegistryKey ) ;
-        if( pRet != NULL )
+        if( pRet != nullptr )
             return pRet ;
 
 #if defined( XMLSEC_CRYPTO_MSCRYPTO )

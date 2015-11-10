@@ -29,8 +29,8 @@ namespace cssxw = com::sun::star::xml::wrapper;
 namespace cssxc = com::sun::star::xml::crypto;
 
 BufferNode::BufferNode( const cssu::Reference< cssxw::XXMLElementWrapper >& xXMLElement )
-    :m_pParent(NULL),
-     m_pBlocker(NULL),
+    :m_pParent(nullptr),
+     m_pBlocker(nullptr),
      m_bAllReceived(false),
      m_xXMLElement(xXMLElement)
 {
@@ -173,7 +173,7 @@ void BufferNode::removeElementCollector(const ElementCollector* pElementCollecto
         if( *ii == pElementCollector )
         {
             m_vElementCollectors.erase( ii );
-            const_cast<ElementCollector*>(pElementCollector)->setBufferNode(NULL);
+            const_cast<ElementCollector*>(pElementCollector)->setBufferNode(nullptr);
             break;
         }
     }
@@ -207,10 +207,10 @@ void BufferNode::setBlocker(const ElementMark* pBlocker)
  *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
-    OSL_ASSERT(!(m_pBlocker != NULL && pBlocker != NULL));
+    OSL_ASSERT(!(m_pBlocker != nullptr && pBlocker != nullptr));
 
     m_pBlocker = const_cast<ElementMark*>(pBlocker);
-    if (m_pBlocker != NULL)
+    if (m_pBlocker != nullptr)
     {
         m_pBlocker->setBufferNode(this);
     }
@@ -355,7 +355,7 @@ const BufferNode* BufferNode::getFirstChild() const
  *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
-    BufferNode* rc = NULL;
+    BufferNode* rc = nullptr;
 
     if (!m_vChildren.empty())
     {
@@ -545,9 +545,9 @@ const BufferNode* BufferNode::getNextSibling() const
  *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
-    BufferNode* rc = NULL;
+    BufferNode* rc = nullptr;
 
-    if (m_pParent != NULL)
+    if (m_pParent != nullptr)
     {
         rc = const_cast<BufferNode*>(m_pParent->getNextChild(this));
     }
@@ -580,9 +580,9 @@ const BufferNode* BufferNode::isAncestor(const BufferNode* pDescendant) const
  *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
-    BufferNode* rc = NULL;
+    BufferNode* rc = nullptr;
 
-    if (pDescendant != NULL)
+    if (pDescendant != nullptr)
     {
         std::vector< const BufferNode* >::const_iterator ii = m_vChildren.begin();
 
@@ -596,7 +596,7 @@ const BufferNode* BufferNode::isAncestor(const BufferNode* pDescendant) const
                 break;
             }
 
-            if (pChild->isAncestor(pDescendant) != NULL)
+            if (pChild->isAncestor(pDescendant) != nullptr)
             {
                 rc = pChild;
                 break;
@@ -635,7 +635,7 @@ bool BufferNode::isPrevious(const BufferNode* pFollowing) const
     bool rc = false;
 
     BufferNode* pNextBufferNode = const_cast<BufferNode*>(getNextNodeByTreeOrder());
-    while (pNextBufferNode != NULL)
+    while (pNextBufferNode != nullptr)
     {
         if (pNextBufferNode == pFollowing)
         {
@@ -696,7 +696,7 @@ const BufferNode* BufferNode::getNextNodeByTreeOrder() const
          * then return that sibling.
          */
     BufferNode* pNextSibling = const_cast<BufferNode*>(getNextSibling());
-    if (pNextSibling != NULL)
+    if (pNextSibling != nullptr)
     {
         return pNextSibling;
     }
@@ -707,23 +707,23 @@ const BufferNode* BufferNode::getNextNodeByTreeOrder() const
          */
         BufferNode* pNode = const_cast<BufferNode*>(this);
     BufferNode* pParent;
-    BufferNode* pNextSiblingParent = NULL;
+    BufferNode* pNextSiblingParent = nullptr;
 
     do
     {
-        if (pNode == NULL)
+        if (pNode == nullptr)
         {
             break;
         }
 
         pParent = const_cast<BufferNode*>(pNode->getParent());
-        if (pParent != NULL)
+        if (pParent != nullptr)
         {
             pNextSiblingParent = const_cast<BufferNode*>(pParent->getNextSibling());
         }
         pNode = pParent;
 
-    }while (pNextSiblingParent == NULL);
+    }while (pNextSiblingParent == nullptr);
 
     return pNextSiblingParent;
 }
@@ -949,7 +949,7 @@ bool BufferNode::isECOfBeforeModifyInAncestorIncluded(sal_Int32 nIgnoredSecurity
     bool rc = false;
 
     BufferNode* pParentNode = m_pParent;
-    while (pParentNode != NULL)
+    while (pParentNode != nullptr)
     {
         if (pParentNode->isECOfBeforeModifyIncluded(nIgnoredSecurityId))
         {
@@ -1000,7 +1000,7 @@ bool BufferNode::isBlockerInSubTreeIncluded(sal_Int32 nIgnoredSecurityId) const
         BufferNode* pBufferNode = const_cast<BufferNode*>(*ii);
         ElementMark* pBlocker = pBufferNode->getBlocker();
 
-        if (pBlocker != NULL &&
+        if (pBlocker != nullptr &&
             (nIgnoredSecurityId == cssxc::sax::ConstOfSecurityId::UNDEFINEDSECURITYID ||
             pBlocker->getSecurityId() != nIgnoredSecurityId ))
         {
@@ -1042,7 +1042,7 @@ const BufferNode* BufferNode::getNextChild(const BufferNode* pChild) const
  *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
-    BufferNode* rc = NULL;
+    BufferNode* rc = nullptr;
     bool bChildFound = false;
 
     std::vector< const BufferNode* >::const_iterator ii = m_vChildren.begin();

@@ -24,7 +24,7 @@
 namespace cssxc = com::sun::star::xml::crypto;
 
 ElementMark::ElementMark(sal_Int32 nSecurityId, sal_Int32 nBufferId)
-    :m_pBufferNode(NULL),
+    :m_pBufferNode(nullptr),
      m_nSecurityId(nSecurityId),
      m_nBufferId(nBufferId),
      m_type(cssxc::sax::ElementMarkType_ELEMENTMARK)

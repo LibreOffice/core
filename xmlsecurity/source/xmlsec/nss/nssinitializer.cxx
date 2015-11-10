@@ -106,7 +106,7 @@ struct GetNSSInitStaticMutex
 
 void deleteRootsModule()
 {
-    SECMODModule *RootsModule = 0;
+    SECMODModule *RootsModule = nullptr;
     SECMODModuleList *list = SECMOD_GetDefaultModuleList();
     SECMODListLock *lock = SECMOD_GetDefaultModuleListLock();
     SECMOD_GetReadLock(lock);
@@ -145,7 +145,7 @@ void deleteRootsModule()
             SAL_INFO("xmlsecurity.xmlsec", "Failed to delete \"" << RootsModule->commonName << "\": " << RootsModule->dllName);
         }
         SECMOD_DestroyModule(RootsModule);
-        RootsModule = 0;
+        RootsModule = nullptr;
     }
 }
 
@@ -275,7 +275,7 @@ bool nsscrypto_initialize( const css::uno::Reference< css::uno::XComponentContex
     if( sCertDir.isEmpty() || !bSuccess )
     {
         SAL_INFO("xmlsecurity.xmlsec", "Initializing NSS without profile.");
-        if ( NSS_NoDB_Init(NULL) != SECSuccess )
+        if ( NSS_NoDB_Init(nullptr) != SECSuccess )
         {
             SAL_INFO("xmlsecurity.xmlsec", "Initializing NSS without profile failed.");
             int errlen = PR_GetErrorTextLength();
@@ -313,7 +313,7 @@ bool nsscrypto_initialize( const css::uno::Reference< css::uno::XComponentContex
             SECMODModule * RootsModule =
                 SECMOD_LoadUserModule(
                     const_cast<char*>(aStr.getStr()),
-                    0, // no parent
+                    nullptr, // no parent
                     PR_FALSE); // do not recurse
 
             if (RootsModule)
@@ -322,7 +322,7 @@ bool nsscrypto_initialize( const css::uno::Reference< css::uno::XComponentContex
                 bool found = RootsModule->loaded;
 
                 SECMOD_DestroyModule(RootsModule);
-                RootsModule = 0;
+                RootsModule = nullptr;
                 if (found)
                     SAL_INFO("xmlsecurity.xmlsec", "Added new root certificate module " ROOT_CERTS " contained in " << ospath);
                 else

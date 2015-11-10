@@ -211,7 +211,7 @@ ElementCollector* ElementCollector::clone(
         pClonedOne->notifyListener();
     }
 
-    if (m_pBufferNode != NULL)
+    if (m_pBufferNode != nullptr)
     {
         m_pBufferNode->addElementCollector(pClonedOne);
     }

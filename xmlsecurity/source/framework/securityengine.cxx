@@ -64,8 +64,8 @@ sal_Bool SAL_CALL SecurityEngine::endMission(  )
         m_bMissionDone = true;
     }
 
-    m_xResultListener = NULL;
-    m_xSAXEventKeeper = NULL;
+    m_xResultListener = nullptr;
+    m_xSAXEventKeeper = nullptr;
 
     return rc;
 }

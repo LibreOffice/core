@@ -76,7 +76,7 @@ CertificateChooser::CertificateChooser( vcl::Window* _pParent, uno::Reference< u
     mbInitialized = false;
 
     // disable buttons
-    CertificateHighlightHdl( NULL );
+    CertificateHighlightHdl( nullptr );
 }
 
 CertificateChooser::~CertificateChooser()
@@ -184,7 +184,7 @@ void CertificateChooser::ImplInitialize()
         }
 
         // enable/disable buttons
-        CertificateHighlightHdl( NULL );
+        CertificateHighlightHdl( nullptr );
         mbInitialized = true;
     }
 }

@@ -46,7 +46,7 @@ int xmlStreamMatch( const char* uri )
 
     if( ( enableXmlStreamIO & XMLSTREAMIO_INITIALIZED ) &&
         ( enableXmlStreamIO & XMLSTREAMIO_REGISTERED ) ) {
-        if( uri == NULL || !m_xUriBinding.is() )
+        if( uri == nullptr || !m_xUriBinding.is() )
             return 0 ;
         //XMLSec first unescapes the uri and  calls this function. For example, we pass the Uri
         //ObjectReplacements/Object%201 then XMLSec passes ObjectReplacements/Object 1
@@ -78,8 +78,8 @@ void* xmlStreamOpen( const char* uri )
 
     if( ( enableXmlStreamIO & XMLSTREAMIO_INITIALIZED ) &&
         ( enableXmlStreamIO & XMLSTREAMIO_REGISTERED ) ) {
-        if( uri == NULL || !m_xUriBinding.is() )
-            return NULL ;
+        if( uri == nullptr || !m_xUriBinding.is() )
+            return nullptr ;
 
         //see xmlStreamMatch
         OUString sUri =
@@ -102,7 +102,7 @@ void* xmlStreamOpen( const char* uri )
         }
     }
 
-    return NULL ;
+    return nullptr ;
 }
 
 extern "C"
@@ -115,7 +115,7 @@ int xmlStreamRead( void* context, char* buffer, int len )
     numbers = 0 ;
     if( ( enableXmlStreamIO & XMLSTREAMIO_INITIALIZED ) &&
         ( enableXmlStreamIO & XMLSTREAMIO_REGISTERED ) ) {
-        if( context != NULL ) {
+        if( context != nullptr ) {
             xInputStream = static_cast<com::sun::star::io::XInputStream*>(context);
             if( !xInputStream.is() )
                 return 0 ;
@@ -135,7 +135,7 @@ int xmlStreamClose( void * context )
 {
     if( ( enableXmlStreamIO & XMLSTREAMIO_INITIALIZED ) &&
         ( enableXmlStreamIO & XMLSTREAMIO_REGISTERED ) ) {
-        if( context != NULL ) {
+        if( context != nullptr ) {
             ::com::sun::star::io::XInputStream* pInputStream ;
             pInputStream = static_cast<css::io::XInputStream*>(context);
             pInputStream->release() ;

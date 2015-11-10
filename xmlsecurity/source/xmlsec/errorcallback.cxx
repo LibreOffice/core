@@ -53,7 +53,7 @@ void setErrorRecorder()
 
 void clearErrorRecorder()
 {
-    xmlSecErrorsSetCallback(NULL);
+    xmlSecErrorsSetCallback(nullptr);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
