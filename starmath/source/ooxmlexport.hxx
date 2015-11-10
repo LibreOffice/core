@@ -26,7 +26,7 @@ public:
 private:
     virtual void HandleVerticalStack( const SmNode* pNode, int nLevel ) override;
     virtual void HandleText( const SmNode* pNode, int nLevel ) override;
-    virtual void HandleFractions( const SmNode* pNode, int nLevel, const char* type = NULL ) override;
+    virtual void HandleFractions( const SmNode* pNode, int nLevel, const char* type = nullptr ) override;
     virtual void HandleRoot( const SmRootNode* pNode, int nLevel ) override;
     virtual void HandleAttribute( const SmAttributNode* pNode, int nLevel ) override;
     virtual void HandleOperator( const SmOperNode* pNode, int nLevel ) override;

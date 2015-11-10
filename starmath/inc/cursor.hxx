@@ -215,7 +215,7 @@ public:
     /** Draw the caret */
     void Draw(OutputDevice& pDev, Point Offset, bool isCaretVisible);
 
-    bool IsAtTailOfBracket(SmBracketType eBracketType, SmBraceNode** ppBraceNode = NULL) const;
+    bool IsAtTailOfBracket(SmBracketType eBracketType, SmBraceNode** ppBraceNode = nullptr) const;
     void MoveAfterBracket(SmBraceNode* pBraceNode, bool bMoveAnchor = true);
 
 private:
@@ -269,9 +269,9 @@ private:
         if(rpNode && rpNode->GetParent()){    //Don't remove this, correctness relies on it
             int index = rpNode->GetParent()->IndexOfSubNode(rpNode);
             if(index != -1)
-                rpNode->GetParent()->SetSubNode(index, NULL);
+                rpNode->GetParent()->SetSubNode(index, nullptr);
         }
-        rpNode = NULL;
+        rpNode = nullptr;
         //Create line from node
         if(pNode && IsLineCompositionNode(pNode))
             return LineToList(static_cast<SmStructureNode*>(pNode), pList);
@@ -308,7 +308,7 @@ private:
      * Call this method with NULL to reset the clipboard
      * @remarks: This method takes ownership of pList.
      */
-    void SetClipboard(SmNodeList* pList = NULL);
+    void SetClipboard(SmNodeList* pList = nullptr);
 
     /** Clone list of nodes (creates a deep clone) */
     static SmNodeList* CloneList(SmNodeList* pList);
@@ -350,7 +350,7 @@ private:
      * @returns An iterator pointing to the element following the selection taken.
      */
     static SmNodeList::iterator TakeSelectedNodesFromList(SmNodeList *pLineList,
-                                                         SmNodeList *pSelectedNodes = NULL);
+                                                         SmNodeList *pSelectedNodes = nullptr);
 
     /** Create an instance of SmMathSymbolNode usable for brackets */
     static SmNode *CreateBracket(SmBracketType eBracketType, bool bIsLeft);
@@ -384,7 +384,7 @@ private:
                     SmStructureNode* pParent,
                     int nParentIndex,
                     SmCaretPos PosAfterEdit,
-                    SmNode* pStartLine = NULL);
+                    SmNode* pStartLine = nullptr);
     /** Request the formula is repainted */
     void RequestRepaint();
 };
@@ -411,7 +411,7 @@ class SmNodeListParser{
 public:
     /** Create an instance of SmNodeListParser */
     SmNodeListParser(){
-        pList = NULL;
+        pList = nullptr;
     }
     /** Parse a list of nodes to an expression
      *
@@ -436,7 +436,7 @@ private:
     SmNode* Terminal(){
         if(pList->size() > 0)
             return pList->front();
-        return NULL;
+        return nullptr;
     }
     /** Move to next terminal */
     SmNode* Next(){

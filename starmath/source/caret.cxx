@@ -17,7 +17,7 @@ SmCaretPosGraphEntry* SmCaretPosGraphIterator::Next(){
             nOffset = 0;
             pEntry = Next();
         }else
-            pEntry = NULL;
+            pEntry = nullptr;
     }else
         pEntry = pGraph->Graph + nOffset++;
     return pEntry;
@@ -40,7 +40,7 @@ SmCaretPosGraphEntry* SmCaretPosGraph::Add(SmCaretPosGraphEntry entry){
 
 SmCaretPosGraph::~SmCaretPosGraph(){
     delete pNext;
-    pNext = NULL;
+    pNext = nullptr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

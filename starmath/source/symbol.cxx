@@ -140,7 +140,7 @@ SmSymbolManager& SmSymbolManager::operator = (const SmSymbolManager& rSymbolSetM
 
 SmSym *SmSymbolManager::GetSymbolByName(const OUString& rSymbolName)
 {
-    SmSym *pRes = NULL;
+    SmSym *pRes = nullptr;
     SymbolMap_t::iterator aIt( m_aSymbols.find( rSymbolName ) );
     if (aIt != m_aSymbols.end())
         pRes = &aIt->second;

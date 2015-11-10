@@ -297,7 +297,7 @@ static const SmTokenTableEntry aTokenTable[] =
 
 const SmTokenTableEntry * SmParser::GetTokenTableEntry( const OUString &rName )
 {
-    const SmTokenTableEntry * pRes = 0;
+    const SmTokenTableEntry * pRes = nullptr;
     if (!rName.isEmpty())
     {
         for (size_t i = 0; i < SAL_N_ELEMENTS(aTokenTable); ++i)
@@ -992,7 +992,7 @@ void SmParser::DoTable()
 void SmParser::DoAlign()
     // parse alignment info (if any), then go on with rest of expression
 {
-    SmStructureNode *pSNode = 0;
+    SmStructureNode *pSNode = nullptr;
 
     if (TokenInGroup(TGALIGN))
     {
@@ -1228,7 +1228,7 @@ void SmParser::DoSubSup(sal_uLong nActiveGroup)
     aSubNodes.resize(1 + SUBSUP_NUM_ENTRIES);
     aSubNodes[0] = popOrZero(m_aNodeStack);
     for (size_t i = 1;  i < aSubNodes.size();  i++)
-        aSubNodes[i] = NULL;
+        aSubNodes[i] = nullptr;
 
     // process all sub-/supscripts
     int  nIndex = 0;
@@ -1265,7 +1265,7 @@ void SmParser::DoSubSup(sal_uLong nActiveGroup)
                    "SmParser::Power() : sub-/supscript index falsch");
 
         // set sub-/supscript if not already done
-        if (aSubNodes[nIndex] != NULL)
+        if (aSubNodes[nIndex] != nullptr)
             Error(PE_DOUBLE_SUBSUPSCRIPT);
         aSubNodes[nIndex] = popOrZero(m_aNodeStack);
     }
@@ -1346,7 +1346,7 @@ void SmParser::DoTerm(bool bGroupNumberIdent)
                     if (bNoSpace)   // get rid of the 'no space' node pushed above
                         m_aNodeStack.pop_front();
                     std::unique_ptr<SmStructureNode> pSNode(new SmExpressionNode(m_aCurToken));
-                    pSNode->SetSubNodes(NULL, NULL);
+                    pSNode->SetSubNodes(nullptr, nullptr);
                     m_aNodeStack.push_front(std::move(pSNode));
 
                     NextToken();
@@ -1550,7 +1550,7 @@ void SmParser::DoTerm(bool bGroupNumberIdent)
                 {
                     SmStructureNode *pNode = aStack.top();
                     aStack.pop();
-                    pNode->SetSubNodes(0, pFirstNode);
+                    pNode->SetSubNodes(nullptr, pFirstNode);
                     pFirstNode = pNode;
                 }
                 m_aNodeStack.push_front(std::unique_ptr<SmNode>(pFirstNode));
@@ -1645,7 +1645,7 @@ void SmParser::DoOper()
         case TLIMSUP :
         case TLIMINF :
             {
-                const sal_Char* pLim = 0;
+                const sal_Char* pLim = nullptr;
                 switch (eType)
                 {
                     case TLIM :     pLim = "lim";       break;
@@ -1684,8 +1684,8 @@ void SmParser::DoUnOper()
     bool         bIsPostfix = eType == TFACT;
 
     std::unique_ptr<SmStructureNode> pSNode;
-    SmNode *pOper   = 0,
-           *pExtra  = 0,
+    SmNode *pOper   = nullptr,
+           *pExtra  = nullptr,
            *pArg;
 
     switch (eType)
@@ -1805,7 +1805,7 @@ void SmParser::DoAttribut()
 
     NextToken();
 
-    pSNode->SetSubNodes(pAttr, 0);
+    pSNode->SetSubNodes(pAttr, nullptr);
     pSNode->SetScaleMode(eScaleMode);
     m_aNodeStack.push_front(std::move(pSNode));
 }
@@ -1978,9 +1978,9 @@ void SmParser::DoBrace()
         "Sm: kein Klammer Ausdruck");
 
     std::unique_ptr<SmStructureNode> pSNode(new SmBraceNode(m_aCurToken));
-    SmNode *pBody   = 0,
-           *pLeft   = 0,
-           *pRight  = 0;
+    SmNode *pBody   = nullptr,
+           *pLeft   = nullptr,
+           *pRight  = nullptr;
     SmScaleMode   eScaleMode = SCALE_NONE;
     SmParseError  eError     = PE_NONE;
 
@@ -2341,7 +2341,7 @@ void SmParser::Error(SmParseError eError)
 {
     SmStructureNode *pSNode = new SmExpressionNode(m_aCurToken);
     SmErrorNode     *pErr   = new SmErrorNode(eError, m_aCurToken);
-    pSNode->SetSubNodes(pErr, 0);
+    pSNode->SetSubNodes(pErr, nullptr);
 
     //! put a structure node on the stack (instead of the error node itself)
     //! because sometimes such a node is expected in order to attach some
@@ -2460,7 +2460,7 @@ const SmErrorDesc *SmParser::NextError()
             m_nCurError = 0;
             return m_aErrDescList[ m_nCurError ].get();
         }
-    else return NULL;
+    else return nullptr;
 }
 
 
@@ -2473,7 +2473,7 @@ const SmErrorDesc *SmParser::PrevError()
             m_nCurError = (int) (m_aErrDescList.size() - 1);
             return m_aErrDescList[ m_nCurError ].get();
         }
-    else return NULL;
+    else return nullptr;
 }
 
 
@@ -2485,7 +2485,7 @@ const SmErrorDesc *SmParser::GetError(size_t i)
     if ( (size_t)m_nCurError < m_aErrDescList.size() )
         return m_aErrDescList[ m_nCurError ].get();
 
-    return NULL;
+    return nullptr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

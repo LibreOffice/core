@@ -24,7 +24,7 @@ SmOoxmlExport::SmOoxmlExport( const SmNode* pIn, OoxmlVersion v )
 
 bool SmOoxmlExport::ConvertFromStarMath( ::sax_fastparser::FSHelperPtr serializer )
 {
-    if( m_pTree == NULL )
+    if( m_pTree == nullptr )
         return false;
     m_pSerializer = serializer;
     m_pSerializer->startElementNS( XML_m, XML_oMath,
@@ -132,7 +132,7 @@ void SmOoxmlExport::HandleText( const SmNode* pNode, int /*nLevel*/)
 void SmOoxmlExport::HandleFractions( const SmNode* pNode, int nLevel, const char* type )
 {
     m_pSerializer->startElementNS( XML_m, XML_f, FSEND );
-    if( type != NULL )
+    if( type != nullptr )
     {
         m_pSerializer->startElementNS( XML_m, XML_fPr, FSEND );
         m_pSerializer->singleElementNS( XML_m, XML_type, FSNS( XML_m, XML_val ), type, FSEND );
@@ -260,18 +260,18 @@ void SmOoxmlExport::HandleOperator( const SmOperNode* pNode, int nLevel )
         case TSUM:
         {
             const SmSubSupNode* subsup = pNode->GetSubNode( 0 )->GetType() == NSUBSUP
-                ? static_cast< const SmSubSupNode* >( pNode->GetSubNode( 0 )) : NULL;
-            const SmNode* operation = subsup != NULL ? subsup->GetBody() : pNode->GetSubNode( 0 );
+                ? static_cast< const SmSubSupNode* >( pNode->GetSubNode( 0 )) : nullptr;
+            const SmNode* operation = subsup != nullptr ? subsup->GetBody() : pNode->GetSubNode( 0 );
             m_pSerializer->startElementNS( XML_m, XML_nary, FSEND );
             m_pSerializer->startElementNS( XML_m, XML_naryPr, FSEND );
             m_pSerializer->singleElementNS( XML_m, XML_chr,
                 FSNS( XML_m, XML_val ), mathSymbolToString( operation ).getStr(), FSEND );
-            if( subsup == NULL || subsup->GetSubSup( CSUB ) == NULL )
+            if( subsup == nullptr || subsup->GetSubSup( CSUB ) == nullptr )
                 m_pSerializer->singleElementNS( XML_m, XML_subHide, FSNS( XML_m, XML_val ), "1", FSEND );
-            if( subsup == NULL || subsup->GetSubSup( CSUP ) == NULL )
+            if( subsup == nullptr || subsup->GetSubSup( CSUP ) == nullptr )
                 m_pSerializer->singleElementNS( XML_m, XML_supHide, FSNS( XML_m, XML_val ), "1", FSEND );
             m_pSerializer->endElementNS( XML_m, XML_naryPr );
-            if( subsup == NULL || subsup->GetSubSup( CSUB ) == NULL )
+            if( subsup == nullptr || subsup->GetSubSup( CSUB ) == nullptr )
                 m_pSerializer->singleElementNS( XML_m, XML_sub, FSEND );
             else
             {
@@ -279,7 +279,7 @@ void SmOoxmlExport::HandleOperator( const SmOperNode* pNode, int nLevel )
                 HandleNode( subsup->GetSubSup( CSUB ), nLevel + 1 );
                 m_pSerializer->endElementNS( XML_m, XML_sub );
             }
-            if( subsup == NULL || subsup->GetSubSup( CSUP ) == NULL )
+            if( subsup == nullptr || subsup->GetSubSup( CSUP ) == nullptr )
                 m_pSerializer->singleElementNS( XML_m, XML_sup, FSEND );
             else
             {
@@ -302,9 +302,9 @@ void SmOoxmlExport::HandleOperator( const SmOperNode* pNode, int nLevel )
             m_pSerializer->endElementNS( XML_m, XML_e );
             m_pSerializer->startElementNS( XML_m, XML_lim, FSEND );
             if( const SmSubSupNode* subsup = pNode->GetSubNode( 0 )->GetType() == NSUBSUP
-                ? static_cast< const SmSubSupNode* >( pNode->GetSubNode( 0 )) : NULL )
+                ? static_cast< const SmSubSupNode* >( pNode->GetSubNode( 0 )) : nullptr )
             {
-                if( subsup->GetSubSup( CSUB ) != NULL )
+                if( subsup->GetSubSup( CSUB ) != nullptr )
                     HandleNode( subsup->GetSubSup( CSUB ), nLevel + 1 );
             }
             m_pSerializer->endElementNS( XML_m, XML_lim );

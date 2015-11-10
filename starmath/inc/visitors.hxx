@@ -340,7 +340,7 @@ private:
 class SmCloningVisitor : public SmVisitor
 {
 public:
-    SmCloningVisitor( ){ pResult = NULL; }
+    SmCloningVisitor( ){ pResult = nullptr; }
     virtual ~SmCloningVisitor() {}
     void Visit( SmTableNode* pNode ) override;
     void Visit( SmBraceNode* pNode ) override;

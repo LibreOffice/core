@@ -221,7 +221,7 @@ SmElementsControl::SmElementsControl(vcl::Window *pParent)
     : Control(pParent, WB_TABSTOP)
     , mpDocShell(new SmDocShell(SfxModelFlags::EMBEDDED_OBJECT))
     , maCurrentSetId(0)
-    , mpCurrentElement(NULL)
+    , mpCurrentElement(nullptr)
     , mbVerticalMode(true)
     , mxScroll(VclPtr<ScrollBar>::Create(this, WB_VERT))
 {
@@ -390,7 +390,7 @@ void SmElementsControl::Paint(vcl::RenderContext& rRenderContext, const Rectangl
 
 void SmElementsControl::MouseMove( const MouseEvent& rMouseEvent )
 {
-    mpCurrentElement = NULL;
+    mpCurrentElement = nullptr;
     OUString tooltip;
     if (Rectangle(Point(0, 0), GetOutputSizePixel()).IsInside(rMouseEvent.GetPosPixel()))
     {

@@ -249,7 +249,7 @@ void SmFontFormatList::RemoveFontFormat( const OUString &rFntFmtId )
 
 const SmFontFormat * SmFontFormatList::GetFontFormat( const OUString &rFntFmtId ) const
 {
-    const SmFontFormat *pRes = 0;
+    const SmFontFormat *pRes = nullptr;
 
     for (size_t i = 0;  i < aEntries.size();  ++i)
     {
@@ -267,7 +267,7 @@ const SmFontFormat * SmFontFormatList::GetFontFormat( const OUString &rFntFmtId 
 
 const SmFontFormat * SmFontFormatList::GetFontFormat( size_t nPos ) const
 {
-    const SmFontFormat *pRes = 0;
+    const SmFontFormat *pRes = nullptr;
     if (nPos < aEntries.size())
         pRes = &aEntries[nPos].aFntFmt;
     return pRes;
@@ -586,7 +586,7 @@ void SmMathConfig::LoadFontFormatList()
         ReadFontFormat( aFntFmt, pNode[i], FONT_FORMAT_LIST );
         if (!pFontFormatList->GetFontFormat( pNode[i] ))
         {
-            OSL_ENSURE( 0 == pFontFormatList->GetFontFormat( pNode[i] ),
+            OSL_ENSURE( nullptr == pFontFormatList->GetFontFormat( pNode[i] ),
                     "FontFormat ID already exists" );
             pFontFormatList->AddFontFormat( pNode[i], aFntFmt );
         }
@@ -1144,7 +1144,7 @@ void SmMathConfig::Notify( const css::uno::Sequence< OUString >& )
 
 void SmMathConfig::ItemSetToConfig(const SfxItemSet &rSet)
 {
-    const SfxPoolItem *pItem     = NULL;
+    const SfxPoolItem *pItem     = nullptr;
 
     sal_uInt16 nU16;
     bool bVal;

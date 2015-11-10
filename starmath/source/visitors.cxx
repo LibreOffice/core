@@ -992,7 +992,7 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmOperNode* pNode )
     bodyRight->SetRight( right );
 
     //Get subsup pNode if any
-    SmSubSupNode* pSubSup = pOper->GetType( ) == NSUBSUP ? static_cast<SmSubSupNode*>(pOper) : NULL;
+    SmSubSupNode* pSubSup = pOper->GetType( ) == NSUBSUP ? static_cast<SmSubSupNode*>(pOper) : nullptr;
 
     SmNode* pChild;
     SmCaretPosGraphEntry *childLeft;
@@ -1638,10 +1638,10 @@ void SmCloningVisitor::CloneKids( SmStructureNode* pSource, SmStructureNode* pTa
     //Clone children
     for( sal_uInt16 i = 0; i < nSize; i++ ){
         SmNode* pKid;
-        if( NULL != ( pKid = pSource->GetSubNode( i ) ) )
+        if( nullptr != ( pKid = pSource->GetSubNode( i ) ) )
             pKid->Accept( this );
         else
-            pResult = NULL;
+            pResult = nullptr;
         aNodes[i] = pResult;
     }
 

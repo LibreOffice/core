@@ -220,7 +220,7 @@ public:
     /** True, if cursor have previously been requested and thus
      * has some sort of position.
      */
-    bool        HasCursor() { return pCursor != NULL; }
+    bool        HasCursor() { return pCursor != nullptr; }
 };
 
 #endif

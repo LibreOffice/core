@@ -106,7 +106,7 @@ bool SmXMLExportWrapper::Export(SfxMedium &rMedium)
         (xTunnel->getSomething(SmModel::getUnoTunnelId()));
 
     SmDocShell *pDocShell = pModel ?
-            static_cast<SmDocShell*>(pModel->GetObjectShell()) : 0;
+            static_cast<SmDocShell*>(pModel->GetObjectShell()) : nullptr;
     if ( pDocShell &&
         SfxObjectCreateMode::EMBEDDED == pDocShell->GetCreateMode() )
         bEmbedded = true;
@@ -260,7 +260,7 @@ bool SmXMLExportWrapper::WriteThroughComponent(
 {
     OSL_ENSURE(xOutputStream.is(), "I really need an output stream!");
     OSL_ENSURE(xComponent.is(), "Need component!");
-    OSL_ENSURE(NULL != pComponentName, "Need component name!");
+    OSL_ENSURE(nullptr != pComponentName, "Need component name!");
 
     // get component
     Reference< xml::sax::XWriter > xSaxWriter = xml::sax::Writer::create(rxContext );
@@ -312,7 +312,7 @@ bool SmXMLExportWrapper::WriteThroughComponent(
     )
 {
     OSL_ENSURE(xStorage.is(), "Need storage!");
-    OSL_ENSURE(NULL != pStreamName, "Need stream name!");
+    OSL_ENSURE(nullptr != pStreamName, "Need stream name!");
 
     // open stream
     Reference < io::XStream > xStream;
@@ -361,7 +361,7 @@ SmXMLExport::SmXMLExport(
     OUString const & implementationName, SvXMLExportFlags nExportFlags)
     : SvXMLExport(util::MeasureUnit::INCH, rContext, implementationName, XML_MATH,
                   nExportFlags)
-    , pTree(0)
+    , pTree(nullptr)
     , bSuccess(false)
 {
 }
@@ -475,7 +475,7 @@ void SmXMLExport::_ExportContent()
     SmModel *pModel = reinterpret_cast<SmModel *>
         (xTunnel->getSomething(SmModel::getUnoTunnelId()));
     SmDocShell *pDocShell = pModel ?
-        static_cast<SmDocShell*>(pModel->GetObjectShell()) : 0;
+        static_cast<SmDocShell*>(pModel->GetObjectShell()) : nullptr;
     OSL_ENSURE( pDocShell, "doc shell missing" );
 
     if (pDocShell && !pDocShell->GetFormat().IsTextmode())
@@ -486,7 +486,7 @@ void SmXMLExport::_ExportContent()
         AddAttribute(XML_NAMESPACE_MATH, XML_DISPLAY, XML_BLOCK);
     }
     SvXMLElementExport aEquation(*this, XML_NAMESPACE_MATH, XML_MATH, true, true);
-    SvXMLElementExport *pSemantics=0;
+    SvXMLElementExport *pSemantics=nullptr;
 
     if (!aText.isEmpty())
     {
@@ -652,7 +652,7 @@ void SmXMLExport::ExportUnaryHorizontal(const SmNode *pNode, int nLevel)
 void SmXMLExport::ExportExpression(const SmNode *pNode, int nLevel,
                                    bool bNoMrowContainer /*=false*/)
 {
-    SvXMLElementExport *pRow=0;
+    SvXMLElementExport *pRow=nullptr;
     auto nSize = pNode->GetNumSubNodes();
 
     // #i115443: nodes of type expression always need to be grouped with mrow statement
@@ -729,7 +729,7 @@ void SmXMLExport::ExportBinaryDiagonal(const SmNode *pNode, int nLevel)
 
 void SmXMLExport::ExportTable(const SmNode *pNode, int nLevel)
 {
-    SvXMLElementExport *pTable=0;
+    SvXMLElementExport *pTable=nullptr;
 
     sal_uInt16 nSize = pNode->GetNumSubNodes();
 
@@ -741,7 +741,7 @@ void SmXMLExport::ExportTable(const SmNode *pNode, int nLevel)
     {
         const SmNode *pLine = pNode->GetSubNode(nSize-1);
         if (pLine->GetType() == NLINE && pLine->GetNumSubNodes() == 1 &&
-            pLine->GetSubNode(0) != NULL &&
+            pLine->GetSubNode(0) != nullptr &&
             pLine->GetSubNode(0)->GetToken().eType == TNEWLINE)
             --nSize;
     }
@@ -754,8 +754,8 @@ void SmXMLExport::ExportTable(const SmNode *pNode, int nLevel)
     for (sal_uInt16 i = 0; i < nSize; i++)
         if (const SmNode *pTemp = pNode->GetSubNode(i))
         {
-            SvXMLElementExport *pRow=0;
-            SvXMLElementExport *pCell=0;
+            SvXMLElementExport *pRow=nullptr;
+            SvXMLElementExport *pCell=nullptr;
             if (pTable)
             {
                 pRow  = new SvXMLElementExport(*this, XML_NAMESPACE_MATH, XML_MTR, true, true);
@@ -798,7 +798,7 @@ void SmXMLExport::ExportTable(const SmNode *pNode, int nLevel)
 void SmXMLExport::ExportMath(const SmNode *pNode, int /*nLevel*/)
 {
     const SmMathSymbolNode *pTemp = static_cast<const SmMathSymbolNode *>(pNode);
-    SvXMLElementExport *pMath = 0;
+    SvXMLElementExport *pMath = nullptr;
 
     if (pNode->GetType() == NMATH || pNode->GetType() == NGLYPH_SPECIAL)
     {
@@ -889,12 +889,12 @@ void SmXMLExport::ExportBlank(const SmNode *pNode, int /*nLevel*/)
 
 void SmXMLExport::ExportSubSupScript(const SmNode *pNode, int nLevel)
 {
-    const SmNode *pSub  = 0;
-    const SmNode *pSup  = 0;
-    const SmNode *pCSub = 0;
-    const SmNode *pCSup = 0;
-    const SmNode *pLSub = 0;
-    const SmNode *pLSup = 0;
+    const SmNode *pSub  = nullptr;
+    const SmNode *pSup  = nullptr;
+    const SmNode *pCSub = nullptr;
+    const SmNode *pCSup = nullptr;
+    const SmNode *pLSub = nullptr;
+    const SmNode *pLSup = nullptr;
     SvXMLElementExport *pThing2 = nullptr;
 
     //if we have prescripts at all then we must use the tensor notation
@@ -910,18 +910,18 @@ void SmXMLExport::ExportSubSupScript(const SmNode *pNode, int nLevel)
             XML_MMULTISCRIPTS, true, true);
 
 
-        if (NULL != (pCSub = pNode->GetSubNode(CSUB+1))
-            && NULL != (pCSup = pNode->GetSubNode(CSUP+1)))
+        if (nullptr != (pCSub = pNode->GetSubNode(CSUB+1))
+            && nullptr != (pCSup = pNode->GetSubNode(CSUP+1)))
         {
             pThing2 = new SvXMLElementExport(*this, XML_NAMESPACE_MATH,
                 XML_MUNDEROVER, true, true);
         }
-        else if (NULL != (pCSub = pNode->GetSubNode(CSUB+1)))
+        else if (nullptr != (pCSub = pNode->GetSubNode(CSUB+1)))
         {
             pThing2 = new SvXMLElementExport(*this, XML_NAMESPACE_MATH,
                 XML_MUNDER, true, true);
         }
-        else if (NULL != (pCSup = pNode->GetSubNode(CSUP+1)))
+        else if (nullptr != (pCSup = pNode->GetSubNode(CSUP+1)))
         {
             pThing2 = new SvXMLElementExport(*this, XML_NAMESPACE_MATH,
                 XML_MOVER, true, true);
@@ -979,35 +979,35 @@ void SmXMLExport::ExportSubSupScript(const SmNode *pNode, int nLevel)
     else
     {
         SvXMLElementExport *pThing = nullptr;
-        if (NULL != (pSub = pNode->GetSubNode(RSUB+1)) &&
-            NULL != (pSup = pNode->GetSubNode(RSUP+1)))
+        if (nullptr != (pSub = pNode->GetSubNode(RSUB+1)) &&
+            nullptr != (pSup = pNode->GetSubNode(RSUP+1)))
         {
             pThing = new SvXMLElementExport(*this, XML_NAMESPACE_MATH,
                 XML_MSUBSUP, true, true);
         }
-        else if (NULL != (pSub = pNode->GetSubNode(RSUB+1)))
+        else if (nullptr != (pSub = pNode->GetSubNode(RSUB+1)))
         {
             pThing = new SvXMLElementExport(*this, XML_NAMESPACE_MATH, XML_MSUB,
                 true, true);
         }
-        else if (NULL != (pSup = pNode->GetSubNode(RSUP+1)))
+        else if (nullptr != (pSup = pNode->GetSubNode(RSUP+1)))
         {
             pThing = new SvXMLElementExport(*this, XML_NAMESPACE_MATH, XML_MSUP,
                 true, true);
         }
 
-        if (NULL != (pCSub = pNode->GetSubNode(CSUB+1))
-            && NULL != (pCSup=pNode->GetSubNode(CSUP+1)))
+        if (nullptr != (pCSub = pNode->GetSubNode(CSUB+1))
+            && nullptr != (pCSup=pNode->GetSubNode(CSUP+1)))
         {
             pThing2 = new SvXMLElementExport(*this, XML_NAMESPACE_MATH,
                 XML_MUNDEROVER, true, true);
         }
-        else if (NULL != (pCSub = pNode->GetSubNode(CSUB+1)))
+        else if (nullptr != (pCSub = pNode->GetSubNode(CSUB+1)))
         {
             pThing2 = new SvXMLElementExport(*this, XML_NAMESPACE_MATH,
                 XML_MUNDER, true, true);
         }
-        else if (NULL != (pCSup = pNode->GetSubNode(CSUP+1)))
+        else if (nullptr != (pCSup = pNode->GetSubNode(CSUP+1)))
         {
             pThing2 = new SvXMLElementExport(*this, XML_NAMESPACE_MATH,
                 XML_MOVER, true, true);
@@ -1033,7 +1033,7 @@ void SmXMLExport::ExportBrace(const SmNode *pNode, int nLevel)
     const SmNode *pTemp;
     const SmNode *pLeft=pNode->GetSubNode(0);
     const SmNode *pRight=pNode->GetSubNode(2);
-    SvXMLElementExport *pRow=0;
+    SvXMLElementExport *pRow=nullptr;
 
     // This used to generate <mfenced> or <mrow>+<mo> elements according to
     // the stretchiness of fences. The MathML recommendation defines an
@@ -1058,7 +1058,7 @@ void SmXMLExport::ExportBrace(const SmNode *pNode, int nLevel)
         ExportNodes(pLeft, nLevel+1);
     }
 
-    if (NULL != (pTemp = pNode->GetSubNode(1)))
+    if (nullptr != (pTemp = pNode->GetSubNode(1)))
     {
         // <mrow>
         SvXMLElementExport aRow(*this, XML_NAMESPACE_MATH, XML_MROW,
@@ -1111,7 +1111,7 @@ void SmXMLExport::ExportOperator(const SmNode *pNode, int nLevel)
 
 void SmXMLExport::ExportAttributes(const SmNode *pNode, int nLevel)
 {
-    SvXMLElementExport *pElement=0;
+    SvXMLElementExport *pElement=nullptr;
 
     if (pNode->GetToken().eType == TUNDERLINE)
     {

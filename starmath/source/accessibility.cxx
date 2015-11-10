@@ -77,7 +77,7 @@ static awt::Rectangle lcl_GetBounds( vcl::Window *pWin )
     awt::Rectangle aBounds;
     if (pWin)
     {
-        Rectangle aRect = pWin->GetWindowExtentsRelative( NULL );
+        Rectangle aRect = pWin->GetWindowExtentsRelative( nullptr );
         aBounds.X       = aRect.Left();
         aBounds.Y       = aRect.Top();
         aBounds.Width   = aRect.GetWidth();
@@ -85,7 +85,7 @@ static awt::Rectangle lcl_GetBounds( vcl::Window *pWin )
         vcl::Window* pParent = pWin->GetAccessibleParentWindow();
         if (pParent)
         {
-            Rectangle aParentRect = pParent->GetWindowExtentsRelative( NULL );
+            Rectangle aParentRect = pParent->GetWindowExtentsRelative( nullptr );
             awt::Point aParentScreenLoc( aParentRect.Left(), aParentRect.Top() );
             aBounds.X -= aParentScreenLoc.X;
             aBounds.Y -= aParentScreenLoc.Y;
@@ -101,7 +101,7 @@ static awt::Point lcl_GetLocationOnScreen( vcl::Window *pWin )
     awt::Point aPos;
     if (pWin)
     {
-        Rectangle aRect = pWin->GetWindowExtentsRelative( NULL );
+        Rectangle aRect = pWin->GetWindowExtentsRelative( nullptr );
         aPos.X = aRect.Left();
         aPos.Y = aRect.Top();
     }
@@ -125,8 +125,8 @@ SmGraphicAccessible::~SmGraphicAccessible()
 
 SmDocShell * SmGraphicAccessible::GetDoc_Impl()
 {
-    SmViewShell *pView = pWin ? pWin->GetView() : 0;
-    return pView ? pView->GetDoc() : 0;
+    SmViewShell *pView = pWin ? pWin->GetView() : nullptr;
+    return pView ? pView->GetDoc() : nullptr;
 }
 
 OUString SmGraphicAccessible::GetAccessibleText_Impl()
@@ -140,7 +140,7 @@ OUString SmGraphicAccessible::GetAccessibleText_Impl()
 
 void SmGraphicAccessible::ClearWin()
 {
-    pWin = 0;   // implicitly results in AccessibleStateType::DEFUNC set
+    pWin = nullptr;   // implicitly results in AccessibleStateType::DEFUNC set
 
     if ( nClientId )
     {
@@ -192,7 +192,7 @@ uno::Reference< XAccessible > SAL_CALL SmGraphicAccessible::getAccessibleAtPoint
     throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    XAccessible *pRes = 0;
+    XAccessible *pRes = nullptr;
     if (containsPoint( aPoint ))
         pRes = this;
     return pRes;
@@ -318,7 +318,7 @@ sal_Int32 SAL_CALL SmGraphicAccessible::getAccessibleIndexInParent()
 {
     SolarMutexGuard aGuard;
     sal_Int32 nIdx = -1;
-    vcl::Window *pAccParent = pWin ? pWin->GetAccessibleParentWindow() : 0;
+    vcl::Window *pAccParent = pWin ? pWin->GetAccessibleParentWindow() : nullptr;
     if (pAccParent)
     {
         sal_uInt16 nCnt = pAccParent->GetAccessibleChildWindowCount();
@@ -487,7 +487,7 @@ awt::Rectangle SAL_CALL SmGraphicAccessible::getCharacterBounds( sal_Int32 nInde
     {
         // get accessible text
         SmViewShell *pView = pWin->GetView();
-        SmDocShell  *pDoc  = pView ? pView->GetDoc() : 0;
+        SmDocShell  *pDoc  = pView ? pView->GetDoc() : nullptr;
         if (!pDoc)
             throw RuntimeException();
         OUString aTxt( GetAccessibleText_Impl() );
@@ -572,7 +572,7 @@ sal_Int32 SAL_CALL SmGraphicAccessible::getIndexAtPoint( const awt::Point& aPoin
         aPos -= pWin->GetFormulaDrawPos();
 
         // if it was inside the formula then get the appropriate node
-        const SmNode *pNode = 0;
+        const SmNode *pNode = nullptr;
         if (pTree->OrientedDist(aPos) <= 0)
             pNode = pTree->FindRectClosestTo(aPos);
 
@@ -757,7 +757,7 @@ sal_Bool SAL_CALL SmGraphicAccessible::copyText(
 
             vcl::unohelper::TextDataObject* pDataObj = new vcl::unohelper::TextDataObject( sText );
             SolarMutexReleaser aReleaser;
-            xClipboard->setContents( pDataObj, NULL );
+            xClipboard->setContents( pDataObj, nullptr );
 
             Reference< datatransfer::clipboard::XFlushableClipboard > xFlushableClipboard( xClipboard, uno::UNO_QUERY );
             if( xFlushableClipboard.is() )
@@ -861,13 +861,13 @@ SmViewForwarder::~SmViewForwarder()
 
 bool SmViewForwarder::IsValid() const
 {
-    return rEditAcc.GetEditView() != 0;
+    return rEditAcc.GetEditView() != nullptr;
 }
 
 Rectangle SmViewForwarder::GetVisArea() const
 {
     EditView *pEditView = rEditAcc.GetEditView();
-    OutputDevice* pOutDev = pEditView ? pEditView->GetWindow() : 0;
+    OutputDevice* pOutDev = pEditView ? pEditView->GetWindow() : nullptr;
 
     if( pOutDev && pEditView)
     {
@@ -893,7 +893,7 @@ Rectangle SmViewForwarder::GetVisArea() const
 Point SmViewForwarder::LogicToPixel( const Point& rPoint, const MapMode& rMapMode ) const
 {
     EditView *pEditView = rEditAcc.GetEditView();
-    OutputDevice* pOutDev = pEditView ? pEditView->GetWindow() : 0;
+    OutputDevice* pOutDev = pEditView ? pEditView->GetWindow() : nullptr;
 
     if( pOutDev )
     {
@@ -910,7 +910,7 @@ Point SmViewForwarder::LogicToPixel( const Point& rPoint, const MapMode& rMapMod
 Point SmViewForwarder::PixelToLogic( const Point& rPoint, const MapMode& rMapMode ) const
 {
     EditView *pEditView = rEditAcc.GetEditView();
-    OutputDevice* pOutDev = pEditView ? pEditView->GetWindow() : 0;
+    OutputDevice* pOutDev = pEditView ? pEditView->GetWindow() : nullptr;
 
     if( pOutDev )
     {
@@ -1033,7 +1033,7 @@ void SmTextForwarder::SetParaAttribs( sal_Int32 nPara, const SfxItemSet& rSet )
 SfxItemPool* SmTextForwarder::GetPool() const
 {
     EditEngine *pEditEngine = rEditAcc.GetEditEngine();
-    return pEditEngine ? pEditEngine->GetEmptyItemSet().GetPool() : 0;
+    return pEditEngine ? pEditEngine->GetEmptyItemSet().GetPool() : nullptr;
 }
 
 void SmTextForwarder::RemoveAttribs( const ESelection& rSelection, bool bRemoveParaAttribs, sal_uInt16 nWhich )
@@ -1100,7 +1100,7 @@ static SfxItemState GetSvxEditEngineItemState( EditEngine& rEditEngine, const ES
 {
     std::vector<EECharAttrib> aAttribs;
 
-    const SfxPoolItem*  pLastItem = NULL;
+    const SfxPoolItem*  pLastItem = nullptr;
 
     SfxItemState eState = SfxItemState::DEFAULT;
 
@@ -1126,7 +1126,7 @@ static SfxItemState GetSvxEditEngineItemState( EditEngine& rEditEngine, const ES
         bool bGaps  = false;    // we found items but theire gaps between them
         sal_Int32 nLastEnd = nPos;
 
-        const SfxPoolItem* pParaItem = NULL;
+        const SfxPoolItem* pParaItem = nullptr;
 
         for(std::vector<EECharAttrib>::const_iterator i = aAttribs.begin(); i < aAttribs.end(); ++i)
         {
@@ -1175,7 +1175,7 @@ static SfxItemState GetSvxEditEngineItemState( EditEngine& rEditEngine, const ES
         // if we already found an item check if we found the same
         if( pLastItem )
         {
-            if( (pParaItem == NULL) || (*pLastItem != *pParaItem) )
+            if( (pParaItem == nullptr) || (*pLastItem != *pParaItem) )
                 return SfxItemState::DONTCARE;
         }
         else
@@ -1281,7 +1281,7 @@ MapMode SmTextForwarder::GetMapMode() const
 OutputDevice* SmTextForwarder::GetRefDevice() const
 {
     EditEngine *pEditEngine = rEditAcc.GetEditEngine();
-    return pEditEngine ? pEditEngine->GetRefDevice() : 0;
+    return pEditEngine ? pEditEngine->GetRefDevice() : nullptr;
 }
 
 bool SmTextForwarder::GetIndexAtPoint( const Point& rPos, sal_Int32& nPara, sal_Int32& nIndex ) const
@@ -1405,7 +1405,7 @@ bool SmTextForwarder::InsertText( const OUString& rStr, const ESelection& rSelec
 
 const SfxItemSet*   SmTextForwarder::GetEmptyItemSetPtr()
 {
-    const SfxItemSet *pItemSet = 0;
+    const SfxItemSet *pItemSet = nullptr;
     EditEngine *pEditEngine = rEditAcc.GetEditEngine();
     if (pEditEngine)
     {
@@ -1471,7 +1471,7 @@ SmEditViewForwarder::~SmEditViewForwarder()
 
 bool SmEditViewForwarder::IsValid() const
 {
-    return rEditAcc.GetEditView() != 0;
+    return rEditAcc.GetEditView() != nullptr;
 }
 
 Rectangle SmEditViewForwarder::GetVisArea() const
@@ -1479,7 +1479,7 @@ Rectangle SmEditViewForwarder::GetVisArea() const
     Rectangle aRect(0,0,0,0);
 
     EditView *pEditView = rEditAcc.GetEditView();
-    OutputDevice* pOutDev = pEditView ? pEditView->GetWindow() : 0;
+    OutputDevice* pOutDev = pEditView ? pEditView->GetWindow() : nullptr;
 
     if( pOutDev && pEditView)
     {
@@ -1505,7 +1505,7 @@ Rectangle SmEditViewForwarder::GetVisArea() const
 Point SmEditViewForwarder::LogicToPixel( const Point& rPoint, const MapMode& rMapMode ) const
 {
     EditView *pEditView = rEditAcc.GetEditView();
-    OutputDevice* pOutDev = pEditView ? pEditView->GetWindow() : 0;
+    OutputDevice* pOutDev = pEditView ? pEditView->GetWindow() : nullptr;
 
     if( pOutDev )
     {
@@ -1522,7 +1522,7 @@ Point SmEditViewForwarder::LogicToPixel( const Point& rPoint, const MapMode& rMa
 Point SmEditViewForwarder::PixelToLogic( const Point& rPoint, const MapMode& rMapMode ) const
 {
     EditView *pEditView = rEditAcc.GetEditView();
-    OutputDevice* pOutDev = pEditView ? pEditView->GetWindow() : 0;
+    OutputDevice* pOutDev = pEditView ? pEditView->GetWindow() : nullptr;
 
     if( pOutDev )
     {
@@ -1601,7 +1601,7 @@ bool SmEditViewForwarder::Paste()
 
 SmEditAccessible::SmEditAccessible( SmEditWindow *pEditWin ) :
     aAccName            (SM_RESSTR(STR_CMDBOXWINDOW)),
-    pTextHelper         (0),
+    pTextHelper         (nullptr),
     pWin                (pEditWin)
 {
     OSL_ENSURE( pWin, "SmEditAccessible: window missing" );
@@ -1637,14 +1637,14 @@ void SmEditAccessible::ClearWin()
     if (pEditEngine)
         pEditEngine->SetNotifyHdl( Link<EENotify&,void>() );
 
-    pWin = 0;   // implicitly results in AccessibleStateType::DEFUNC set
+    pWin = nullptr;   // implicitly results in AccessibleStateType::DEFUNC set
 
     //! make TextHelper implicitly release C++ references to some core objects
     pTextHelper->SetEditSource( ::std::unique_ptr<SvxEditSource>() );
     //! make TextHelper release references
     //! (e.g. the one set by the 'SetEventSource' call)
     pTextHelper->Dispose();
-    delete pTextHelper;     pTextHelper = 0;
+    delete pTextHelper;     pTextHelper = nullptr;
 }
 
 // XAccessible
@@ -1804,7 +1804,7 @@ sal_Int32 SAL_CALL SmEditAccessible::getAccessibleIndexInParent(  )
 {
     SolarMutexGuard aGuard;
     sal_Int32 nIdx = -1;
-    vcl::Window *pAccParent = pWin ? pWin->GetAccessibleParentWindow() : 0;
+    vcl::Window *pAccParent = pWin ? pWin->GetAccessibleParentWindow() : nullptr;
     if (pAccParent)
     {
         sal_uInt16 nCnt = pAccParent->GetAccessibleChildWindowCount();

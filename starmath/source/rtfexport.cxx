@@ -15,7 +15,7 @@
 
 SmRtfExport::SmRtfExport(const SmNode* pIn)
     : SmWordExportBase(pIn)
-    , m_pBuffer(0)
+    , m_pBuffer(nullptr)
     , m_nEncoding(RTL_TEXTENCODING_DONTKNOW)
 {
 }
@@ -207,7 +207,7 @@ void SmRtfExport::HandleOperator(const SmOperNode* pNode, int nLevel)
     case TCOPROD:
     case TSUM:
     {
-        const SmSubSupNode* subsup = pNode->GetSubNode(0)->GetType() == NSUBSUP ? static_cast<const SmSubSupNode*>(pNode->GetSubNode(0)) : 0;
+        const SmSubSupNode* subsup = pNode->GetSubNode(0)->GetType() == NSUBSUP ? static_cast<const SmSubSupNode*>(pNode->GetSubNode(0)) : nullptr;
         const SmNode* operation = subsup ? subsup->GetBody() : pNode->GetSubNode(0);
         m_pBuffer->append("{" LO_STRING_SVTOOLS_RTF_MNARY " ");
         m_pBuffer->append("{" LO_STRING_SVTOOLS_RTF_MNARYPR " ");
@@ -249,7 +249,7 @@ void SmRtfExport::HandleOperator(const SmOperNode* pNode, int nLevel)
         HandleNode(pNode->GetSymbol(), nLevel + 1);
         m_pBuffer->append("}"); // me
         m_pBuffer->append("{" LO_STRING_SVTOOLS_RTF_MLIM " ");
-        if (const SmSubSupNode* subsup = pNode->GetSubNode(0)->GetType() == NSUBSUP ? static_cast<const SmSubSupNode*>(pNode->GetSubNode(0)) : 0)
+        if (const SmSubSupNode* subsup = pNode->GetSubNode(0)->GetType() == NSUBSUP ? static_cast<const SmSubSupNode*>(pNode->GetSubNode(0)) : nullptr)
             if (subsup->GetSubSup(CSUB))
                 HandleNode(subsup->GetSubSup(CSUB), nLevel + 1);
         m_pBuffer->append("}"); // mlim

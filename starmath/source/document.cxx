@@ -183,7 +183,7 @@ void SmDocShell::SetText(const OUString& rBuffer)
         SetModified(true);
 
         // launch accessible event if necessary
-        SmGraphicAccessible *pAcc = pViewSh ? pViewSh->GetGraphicWindow().GetAccessible_Impl() : 0;
+        SmGraphicAccessible *pAcc = pViewSh ? pViewSh->GetGraphicWindow().GetAccessible_Impl() : nullptr;
         if (pAcc)
         {
             Any aOldValue, aNewValue;
@@ -195,7 +195,7 @@ void SmDocShell::SetText(const OUString& rBuffer)
         }
 
         if ( GetCreateMode() == SfxObjectCreateMode::EMBEDDED )
-            OnDocumentPrinterChanged(0);
+            OnDocumentPrinterChanged(nullptr);
     }
 }
 
@@ -491,7 +491,7 @@ Size SmDocShell::GetSize()
 
 void SmDocShell::InvalidateCursor(){
     delete pCursor;
-    pCursor = NULL;
+    pCursor = nullptr;
 }
 
 SmCursor& SmDocShell::GetCursor(){
@@ -625,7 +625,7 @@ void SmDocShell::OnDocumentPrinterChanged( Printer *pPrt )
     Repaint();
     if( aOldSize != GetVisArea().GetSize() && !aText.isEmpty() )
         SetModified( true );
-    pTmpPrinter = 0;
+    pTmpPrinter = nullptr;
 }
 
 void SmDocShell::Repaint()
@@ -648,15 +648,15 @@ void SmDocShell::Repaint()
 
 SmDocShell::SmDocShell( SfxModelFlags i_nSfxCreationFlags )
     : SfxObjectShell(i_nSfxCreationFlags)
-    , pTree(0)
-    , pEditEngineItemPool(0)
-    , pEditEngine(0)
-    , pPrinter(0)
-    , pTmpPrinter(0)
+    , pTree(nullptr)
+    , pEditEngineItemPool(nullptr)
+    , pEditEngine(nullptr)
+    , pPrinter(nullptr)
+    , pTmpPrinter(nullptr)
     , nModifyCount(0)
     , bIsFormulaArranged(false)
 {
-    pCursor = NULL;
+    pCursor = nullptr;
 
     SetPool(&SfxGetpApp()->GetPool());
 
@@ -678,7 +678,7 @@ SmDocShell::~SmDocShell()
 
 
     delete pCursor;
-    pCursor = NULL;
+    pCursor = nullptr;
 
     delete pEditEngine;
     SfxItemPool::Free(pEditEngineItemPool);
@@ -698,7 +698,7 @@ bool SmDocShell::ConvertFrom(SfxMedium &rMedium)
         if (pTree)
         {
             delete pTree;
-            pTree = 0;
+            pTree = nullptr;
             InvalidateCursor();
         }
         Reference<css::frame::XModel> xModel(GetModel());
@@ -1188,7 +1188,7 @@ void SmDocShell::GetState(SfxItemSet &rSet)
             {
                 SfxViewFrame* pFrm = SfxViewFrame::GetFirst( this );
                 if( pFrm )
-                    pFrm->GetSlotState( nWh, NULL, &rSet );
+                    pFrm->GetSlotState( nWh, nullptr, &rSet );
                 else
                     rSet.DisableItem( nWh );
             }

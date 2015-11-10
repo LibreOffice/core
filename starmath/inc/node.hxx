@@ -250,21 +250,21 @@ public:
         pNode = node;
         nSize = pNode->GetNumSubNodes();
         nIndex = 0;
-        pChildNode = NULL;
+        pChildNode = nullptr;
         bIsReverse = bReverse;
     }
     /** Get the subnode or NULL if none */
     SmNode* Next(){
         while(!bIsReverse && nIndex < nSize){
-            if(NULL != (pChildNode = pNode->GetSubNode(nIndex++)))
+            if(nullptr != (pChildNode = pNode->GetSubNode(nIndex++)))
                 return pChildNode;
         }
         while(bIsReverse && nSize > 0){
-            if(NULL != (pChildNode = pNode->GetSubNode((nSize--)-1)))
+            if(nullptr != (pChildNode = pNode->GetSubNode((nSize--)-1)))
                 return pChildNode;
         }
-        pChildNode = NULL;
-        return NULL;
+        pChildNode = nullptr;
+        return nullptr;
     }
     /** Get the current child node, NULL if none */
     SmNode* Current(){
@@ -314,7 +314,7 @@ public:
 
     using   SmNode::GetSubNode;
     virtual SmNode *    GetSubNode(sal_uInt16 nIndex) override;
-            void SetSubNodes(SmNode *pFirst, SmNode *pSecond, SmNode *pThird = NULL);
+            void SetSubNodes(SmNode *pFirst, SmNode *pSecond, SmNode *pThird = nullptr);
             void SetSubNodes(const SmNodeArray &rNodeArray);
 
     SmStructureNode & operator = ( const SmStructureNode &rNode );
@@ -330,7 +330,7 @@ public:
             aSubNodes.resize(nIndex + 1);
             //Set new slots to NULL
             for (size_t i = size; i < nIndex+1; i++)
-                aSubNodes[i] = NULL;
+                aSubNodes[i] = nullptr;
         }
         aSubNodes[nIndex] = pNode;
         ClaimPaternity();

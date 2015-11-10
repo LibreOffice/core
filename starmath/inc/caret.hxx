@@ -17,7 +17,7 @@
 
 /** Representation of caret position with an equation */
 struct SmCaretPos{
-    SmCaretPos(SmNode* selectedNode = NULL, int iIndex = 0) {
+    SmCaretPos(SmNode* selectedNode = nullptr, int iIndex = 0) {
         pSelectedNode = selectedNode;
         Index = iIndex;
     }
@@ -35,7 +35,7 @@ struct SmCaretPos{
     //TODO: Consider forgetting about the todo above... As it's really unpleasant.
     int Index;
     /** True, if this is a valid caret position */
-    bool IsValid() const { return pSelectedNode != NULL; }
+    bool IsValid() const { return pSelectedNode != nullptr; }
     bool operator!=(SmCaretPos pos) const {
         return pos.pSelectedNode != pSelectedNode || Index != pos.Index;
     }
@@ -100,8 +100,8 @@ private:
 /** An entry in SmCaretPosGraph */
 struct SmCaretPosGraphEntry{
     SmCaretPosGraphEntry(SmCaretPos pos = SmCaretPos(),
-                       SmCaretPosGraphEntry* left = NULL,
-                       SmCaretPosGraphEntry* right = NULL){
+                       SmCaretPosGraphEntry* left = nullptr,
+                       SmCaretPosGraphEntry* right = nullptr){
         CaretPos = pos;
         Left = left;
         Right = right;
@@ -128,7 +128,7 @@ public:
     SmCaretPosGraphIterator(SmCaretPosGraph* graph){
         pGraph = graph;
         nOffset = 0;
-        pEntry = NULL;
+        pEntry = nullptr;
     }
     /** Get the next entry, NULL if none */
     SmCaretPosGraphEntry* Next();
@@ -156,7 +156,7 @@ private:
 class SmCaretPosGraph{
 public:
     SmCaretPosGraph(){
-        pNext = NULL;
+        pNext = nullptr;
         nOffset = 0;
     }
     ~SmCaretPosGraph();
@@ -168,8 +168,8 @@ public:
      *  @remarks If left and/or right are set NULL, they will point back to the entry.
      */
     SmCaretPosGraphEntry* Add(SmCaretPos pos,
-                            SmCaretPosGraphEntry* left = NULL,
-                            SmCaretPosGraphEntry* right = NULL){
+                            SmCaretPosGraphEntry* left = nullptr,
+                            SmCaretPosGraphEntry* right = nullptr){
         SAL_WARN_IF( pos.Index < 0, "starmath", "Index shouldn't be -1!" );
         return Add(SmCaretPosGraphEntry(pos, left, right));
     }

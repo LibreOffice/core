@@ -177,7 +177,7 @@ SmViewShell * SmEditWindow::GetView()
 SmDocShell * SmEditWindow::GetDoc()
 {
     SmViewShell *pView = rCmdBox.GetView();
-    return pView ? pView->GetDoc() : 0;
+    return pView ? pView->GetDoc() : nullptr;
 }
 
 EditView * SmEditWindow::GetEditView()
@@ -187,7 +187,7 @@ EditView * SmEditWindow::GetEditView()
 
 EditEngine * SmEditWindow::GetEditEngine()
 {
-    EditEngine *pEditEng = 0;
+    EditEngine *pEditEng = nullptr;
     if (pEditView)
         pEditEng = pEditView->GetEditEngine();
     else
@@ -203,7 +203,7 @@ EditEngine * SmEditWindow::GetEditEngine()
 SfxItemPool * SmEditWindow::GetEditEngineItemPool()
 {
     SmDocShell *pDoc = GetDoc();
-    return pDoc ? &pDoc->GetEditEngineItemPool() : 0;
+    return pDoc ? &pDoc->GetEditEngineItemPool() : nullptr;
 }
 
 void SmEditWindow::ApplyColorConfigValues( const svtools::ColorConfig &rColorCfg )
@@ -347,7 +347,7 @@ void SmEditWindow::Command(const CommandEvent& rCEvt)
         std::unique_ptr<PopupMenu> xPopupMenu(new PopupMenu(SmResId(RID_COMMANDMENU)));
 
         // added for replaceability of context menus
-        Menu* pMenu = NULL;
+        Menu* pMenu = nullptr;
         css::ui::ContextMenuExecuteEvent aEvent;
         aEvent.SourceWindow = VCLUnoHelper::GetInterface( this );
         aEvent.ExecutePosition.X = aPoint.X();

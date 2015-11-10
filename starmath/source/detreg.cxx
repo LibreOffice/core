@@ -35,11 +35,11 @@ SAL_DLLPUBLIC_EXPORT void* SAL_CALL smd_component_getFactory( const sal_Char* pI
                                      void* /*pRegistryKey*/ )
 {
     // Set default return value for this operation - if it failed.
-    void* pReturn = NULL ;
+    void* pReturn = nullptr ;
 
     if  (
-            ( pImplementationName   !=  NULL ) &&
-            ( pServiceManager       !=  NULL )
+            ( pImplementationName   !=  nullptr ) &&
+            ( pServiceManager       !=  nullptr )
         )
     {
         // Define variables which are used in following macros.

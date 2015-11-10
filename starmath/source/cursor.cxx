@@ -14,7 +14,7 @@
 #include <comphelper/string.hxx>
 
 void SmCursor::Move(OutputDevice* pDev, SmMovementDirection direction, bool bMoveAnchor){
-    SmCaretPosGraphEntry* NewPos = NULL;
+    SmCaretPosGraphEntry* NewPos = nullptr;
     switch(direction){
         case MoveLeft:
         {
@@ -76,7 +76,7 @@ void SmCursor::Move(OutputDevice* pDev, SmMovementDirection direction, bool bMov
 void SmCursor::MoveTo(OutputDevice* pDev, Point pos, bool bMoveAnchor){
     SmCaretLine best_line,  //Best line found so far, when iterating
                 curr_line;  //Current line, when iterating
-    SmCaretPosGraphEntry* NewPos = NULL;
+    SmCaretPosGraphEntry* NewPos = nullptr;
     long dp_sq = 0,     //Distance to current line squared
          dbp_sq = 1;    //Distance to best line squared
     SmCaretPosGraphIterator it = mpGraph->GetIterator();
@@ -252,7 +252,7 @@ void SmCursor::Delete(){
 
     //Find an arbitrary selected node
     SmNode* pSNode = FindSelectedNode(mpTree);
-    OSL_ENSURE(pSNode != NULL, "There must be a selection when HasSelection is true!");
+    OSL_ENSURE(pSNode != nullptr, "There must be a selection when HasSelection is true!");
 
     //Find the topmost node of the line that holds the selection
     SmNode* pLine = FindTopMostNodeInLine(pSNode, true);
@@ -335,7 +335,7 @@ void SmCursor::InsertNodes(SmNodeList* pNewNodes){
     PosAfterInsert =    PatchLineList(pLineList, it);
     //Release list, we've taken the nodes
     delete pNewNodes;
-    pNewNodes = NULL;
+    pNewNodes = nullptr;
 
     //Finish editing
     FinishEdit(pLineList, pLineParent, nParentIndex, PosAfterInsert);
@@ -374,8 +374,8 @@ SmNodeList::iterator SmCursor::FindPositionInLineList(SmNodeList* pLineList, SmC
 
 SmCaretPos SmCursor::PatchLineList(SmNodeList* pLineList, SmNodeList::iterator aIter) {
     //The nodes we should consider merging
-    SmNode *prev = NULL,
-           *next = NULL;
+    SmNode *prev = nullptr,
+           *next = nullptr;
     if(aIter != pLineList->end())
         next = *aIter;
     if(aIter != pLineList->begin()) {
@@ -498,7 +498,7 @@ void SmCursor::InsertSubSup(SmSubSup eSubSup) {
     SmNode *pLine;
     if(HasSelection()) {
         SmNode *pSNode = FindSelectedNode(mpTree);
-        OSL_ENSURE(pSNode != NULL, "There must be a selected node when HasSelection is true!");
+        OSL_ENSURE(pSNode != nullptr, "There must be a selected node when HasSelection is true!");
         pLine = FindTopMostNodeInLine(pSNode, true);
     } else
         pLine = FindTopMostNodeInLine(mpPosition->CaretPos.pSelectedNode);
@@ -554,7 +554,7 @@ void SmCursor::InsertSubSup(SmSubSup eSubSup) {
         pSubSup = static_cast<SmSubSupNode*>(pSubject);
     //pSubject shouldn't be referenced anymore, pSubSup is the SmSubSupNode in pLineList we wish to edit.
     //and it pointer to the element following pSubSup in pLineList.
-    pSubject = NULL;
+    pSubject = nullptr;
 
     //Patch the line if we noted that was needed previously
     if(bPatchLine)
@@ -568,7 +568,7 @@ void SmCursor::InsertSubSup(SmSubSup eSubSup) {
     unsigned int nOldSize = pScriptLineList->size();
     pScriptLineList->insert(pScriptLineList->end(), pSelectedNodesList->begin(), pSelectedNodesList->end());
     delete pSelectedNodesList;
-    pSelectedNodesList = NULL;
+    pSelectedNodesList = nullptr;
 
     //Patch pScriptLineList if needed
     if(0 < nOldSize && nOldSize < pScriptLineList->size()) {
@@ -585,7 +585,7 @@ void SmCursor::InsertSubSup(SmSubSup eSubSup) {
     //Parse pScriptLineList
     pScriptLine = SmNodeListParser().Parse(pScriptLineList);
     delete pScriptLineList;
-    pScriptLineList = NULL;
+    pScriptLineList = nullptr;
 
     //Insert pScriptLine back into the tree
     pSubSup->SetSubSup(eSubSup, pScriptLine);
@@ -596,7 +596,7 @@ void SmCursor::InsertSubSup(SmSubSup eSubSup) {
 
 bool SmCursor::InsertLimit(SmSubSup eSubSup, bool bMoveCaret) {
     //Find a subject to set limits on
-    SmOperNode *pSubject = NULL;
+    SmOperNode *pSubject = nullptr;
     //Check if pSelectedNode might be a subject
     if(mpPosition->CaretPos.pSelectedNode->GetType() == NOPER)
         pSubject = static_cast<SmOperNode*>(mpPosition->CaretPos.pSelectedNode);
@@ -614,7 +614,7 @@ bool SmCursor::InsertLimit(SmSubSup eSubSup, bool bMoveCaret) {
     BeginEdit();
 
     //Find the sub sup node
-    SmSubSupNode *pSubSup = NULL;
+    SmSubSupNode *pSubSup = nullptr;
     //Check if there's already one there...
     if(pSubject->GetSubNode(0)->GetType() == NSUBSUP)
         pSubSup = static_cast<SmSubSupNode*>(pSubject->GetSubNode(0));
@@ -630,7 +630,7 @@ bool SmCursor::InsertLimit(SmSubSup eSubSup, bool bMoveCaret) {
 
     //Create the limit, if needed
     SmCaretPos PosAfterLimit;
-    SmNode *pLine = NULL;
+    SmNode *pLine = nullptr;
     if(!pSubSup->GetSubSup(eSubSup)){
         pLine = new SmPlaceNode();
         pSubSup->SetSubSup(eSubSup, pLine);
@@ -669,7 +669,7 @@ void SmCursor::InsertBrackets(SmBracketType eBracketType) {
     SmNode *pLine;
     if(HasSelection()) {
         SmNode *pSNode = FindSelectedNode(mpTree);
-        OSL_ENSURE(pSNode != NULL, "There must be a selected node if HasSelection()");
+        OSL_ENSURE(pSNode != nullptr, "There must be a selected node if HasSelection()");
         pLine = FindTopMostNodeInLine(pSNode, true);
     } else
         pLine = FindTopMostNodeInLine(mpPosition->CaretPos.pSelectedNode);
@@ -710,7 +710,7 @@ void SmCursor::InsertBrackets(SmBracketType eBracketType) {
     SmNode *pLeft = CreateBracket(eBracketType, true),
            *pRight = CreateBracket(eBracketType, false);
     SmBracebodyNode *pBody = new SmBracebodyNode(SmToken());
-    pBody->SetSubNodes(pBodyNode, NULL);
+    pBody->SetSubNodes(pBodyNode, nullptr);
     pBrace->SetSubNodes(pLeft, pBody, pRight);
     pBrace->Prepare(mpDocShell->GetFormat(), *mpDocShell);
 
@@ -806,7 +806,7 @@ bool SmCursor::InsertRow() {
     SmNode *pLine;
     if(HasSelection()) {
         SmNode *pSNode = FindSelectedNode(mpTree);
-        OSL_ENSURE(pSNode != NULL, "There must be a selected node if HasSelection()");
+        OSL_ENSURE(pSNode != nullptr, "There must be a selected node if HasSelection()");
         pLine = FindTopMostNodeInLine(pSNode, true);
     } else
         pLine = FindTopMostNodeInLine(mpPosition->CaretPos.pSelectedNode);
@@ -822,8 +822,8 @@ bool SmCursor::InsertRow() {
     }
 
     //Discover the context of this command
-    SmTableNode  *pTable  = NULL;
-    SmMatrixNode *pMatrix = NULL;
+    SmTableNode  *pTable  = nullptr;
+    SmMatrixNode *pMatrix = nullptr;
     int nTableIndex = nParentIndex;
     if(pLineParent->GetType() == NTABLE)
         pTable = static_cast<SmTableNode*>(pLineParent);
@@ -877,7 +877,7 @@ bool SmCursor::InsertRow() {
         //Wrap pNewLine in SmLineNode if needed
         if(pLineParent->GetType() == NLINE) {
             SmLineNode *pNewLineNode = new SmLineNode(SmToken(TNEWLINE, '\0', "newline"));
-            pNewLineNode->SetSubNodes(pNewLine, NULL);
+            pNewLineNode->SetSubNodes(pNewLine, nullptr);
             pNewLine = pNewLineNode;
         }
         //Get position
@@ -930,7 +930,7 @@ void SmCursor::InsertFraction() {
     SmNode *pLine;
     if(HasSelection()) {
         SmNode *pSNode = FindSelectedNode(mpTree);
-        OSL_ENSURE(pSNode != NULL, "There must be a selected node when HasSelection is true!");
+        OSL_ENSURE(pSNode != nullptr, "There must be a selected node when HasSelection is true!");
         pLine = FindTopMostNodeInLine(pSNode, true);
     } else
         pLine = FindTopMostNodeInLine(mpPosition->CaretPos.pSelectedNode);
@@ -965,7 +965,7 @@ void SmCursor::InsertFraction() {
         : SmNodeListParser().Parse(pSelectedNodesList);
     SmNode *pDenom = new SmPlaceNode();
     delete pSelectedNodesList;
-    pSelectedNodesList = NULL;
+    pSelectedNodesList = nullptr;
 
     //Create new fraction
     SmBinVerNode *pFrac = new SmBinVerNode(SmToken(TOVER, '\0', "over", TGPRODUCT, 0));
@@ -1014,7 +1014,7 @@ void SmCursor::InsertElement(SmFormulaElement element){
     Delete();
 
     //Create new node
-    SmNode* pNewNode = NULL;
+    SmNode* pNewNode = nullptr;
     switch(element){
         case BlankElement:
         {
@@ -1096,7 +1096,7 @@ void SmCursor::InsertElement(SmFormulaElement element){
         default:
             SAL_WARN("starmath", "Element unknown!");
     }
-    OSL_ENSURE(pNewNode != NULL, "No new node was created!");
+    OSL_ENSURE(pNewNode != nullptr, "No new node was created!");
     if(!pNewNode)
         return;
 
@@ -1254,7 +1254,7 @@ void SmCursor::SetClipboard(SmNodeList* pList){
 SmNode* SmCursor::FindTopMostNodeInLine(SmNode* pSNode, bool MoveUpIfSelected){
     //If we haven't got a subnode
     if(!pSNode)
-        return NULL;
+        return nullptr;
 
     //Move up parent until we find a node who's
     //parent is NULL or isn't selected and not a type of:
@@ -1282,7 +1282,7 @@ SmNode* SmCursor::FindSelectedNode(SmNode* pNode){
         if(pRetVal)
             return pRetVal;
     }
-    return NULL;
+    return nullptr;
 }
 
 SmNodeList* SmCursor::LineToList(SmStructureNode* pLine, SmNodeList* list){
@@ -1390,7 +1390,7 @@ void SmCursor::FinishEdit(SmNodeList* pLineList,
         SmNode *pLeft  = CreateBracket(RoundBrackets, true),
                *pRight = CreateBracket(RoundBrackets, false);
         SmBracebodyNode *pBody = new SmBracebodyNode(SmToken());
-        pBody->SetSubNodes(pLine, NULL);
+        pBody->SetSubNodes(pLine, nullptr);
         pBrace->SetSubNodes(pLeft, pBody, pRight);
         pBrace->Prepare(mpDocShell->GetFormat(), *mpDocShell);
         pLine = pBrace;
@@ -1456,7 +1456,7 @@ void SmCursor::EndEdit(){
     //TODO: Consider copying the update accessibility code from SmDocShell::SetText in here...
     //This somehow updates the size of SmGraphicView if it is running in embedded mode
     if( mpDocShell->GetCreateMode() == SfxObjectCreateMode::EMBEDDED )
-        mpDocShell->OnDocumentPrinterChanged(0);
+        mpDocShell->OnDocumentPrinterChanged(nullptr);
 
     //Request a repaint...
     RequestRepaint();
@@ -1586,7 +1586,7 @@ SmNode* SmNodeListParser::Parse(SmNodeList* list, bool bDeleteErrorNodes){
         }
     }
     SmNode* retval = Expression();
-    pList = NULL;
+    pList = nullptr;
     return retval;
 }
 
@@ -1678,7 +1678,7 @@ SmNode* SmNodeListParser::Factor(){
 SmNode* SmNodeListParser::Postfix(){
     if(!Terminal())
         return Error();
-    SmNode *pArg = NULL;
+    SmNode *pArg = nullptr;
     if(IsPostfixOperator(Terminal()->GetToken()))
         pArg = Error();
     else if(IsOperator(Terminal()->GetToken()))

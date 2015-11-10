@@ -77,7 +77,7 @@ bool MathType::LookupChar(sal_Unicode nChar,OUString &rRet,sal_uInt8 nVersion,
     sal_uInt8 nTypeFace)
 {
     bool bRet=false;
-    const char *pC = NULL;
+    const char *pC = nullptr;
     switch(nChar)
     {
         case 0x0000:
@@ -523,7 +523,7 @@ bool MathType::LookupChar(sal_Unicode nChar,OUString &rRet,sal_uInt8 nVersion,
 
 void MathTypeFont::AppendStyleToText(OUString &rRet)
 {
-    const char *pC = NULL;
+    const char *pC = nullptr;
     switch (nStyle)
     {
         default:
@@ -2141,14 +2141,14 @@ void MathType::HandleRoot(SmNode *pNode,int nLevel)
         pS->WriteUChar( 0x00 ); //variation
     pS->WriteUChar( 0x00 ); //options
 
-    if (NULL != (pTemp = pNode->GetSubNode(2)))
+    if (nullptr != (pTemp = pNode->GetSubNode(2)))
     {
         pS->WriteUChar( LINE ); //line
         HandleNodes(pTemp,nLevel+1);
         pS->WriteUChar( END );
     }
 
-    if (NULL != (pTemp = pNode->GetSubNode(0)))
+    if (nullptr != (pTemp = pNode->GetSubNode(0)))
     {
         pS->WriteUChar( LINE ); //line
         HandleNodes(pTemp,nLevel+1);
@@ -2197,7 +2197,7 @@ sal_uInt8 MathType::HandleCScript(SmNode *pNode,SmNode *pContent,int nLevel,
         pS->WriteUChar( 0x0B );
 
         SmNode *pTemp;
-        if (NULL != (pTemp = pNode->GetSubNode(CSUB+1)))
+        if (nullptr != (pTemp = pNode->GetSubNode(CSUB+1)))
         {
             pS->WriteUChar( LINE ); //line
             HandleNodes(pTemp,nLevel+1);
@@ -2205,7 +2205,7 @@ sal_uInt8 MathType::HandleCScript(SmNode *pNode,SmNode *pContent,int nLevel,
         }
         else
             pS->WriteUChar( LINE|0x10 );
-        if (bTest && NULL != (pTemp = pNode->GetSubNode(CSUP+1)))
+        if (bTest && nullptr != (pTemp = pNode->GetSubNode(CSUP+1)))
         {
             pS->WriteUChar( LINE ); //line
             HandleNodes(pTemp,nLevel+1);
@@ -2234,7 +2234,7 @@ void MathType::HandleSubSupScript(SmNode *pNode,int nLevel)
         if (pNode->GetSubNode(LSUB+1))
             nVariation=2;
     }
-    else if ( NULL != pNode->GetSubNode(LSUB+1) )
+    else if ( nullptr != pNode->GetSubNode(LSUB+1) )
         nVariation=1;
 
     SmNode *pTemp;
@@ -2246,7 +2246,7 @@ void MathType::HandleSubSupScript(SmNode *pNode,int nLevel)
         pS->WriteUChar( 0x00 ); //options
         pS->WriteUChar( 0x0B );
 
-        if (NULL != (pTemp = pNode->GetSubNode(LSUB+1)))
+        if (nullptr != (pTemp = pNode->GetSubNode(LSUB+1)))
         {
             pS->WriteUChar( LINE ); //line
             HandleNodes(pTemp,nLevel+1);
@@ -2254,7 +2254,7 @@ void MathType::HandleSubSupScript(SmNode *pNode,int nLevel)
         }
         else
             pS->WriteUChar( LINE|0x10 );
-        if (NULL != (pTemp = pNode->GetSubNode(LSUP+1)))
+        if (nullptr != (pTemp = pNode->GetSubNode(LSUP+1)))
         {
             pS->WriteUChar( LINE ); //line
             HandleNodes(pTemp,nLevel+1);
@@ -2267,9 +2267,9 @@ void MathType::HandleSubSupScript(SmNode *pNode,int nLevel)
     }
 
 
-    sal_uInt8 nVariation2=HandleCScript(pNode,NULL,nLevel);
+    sal_uInt8 nVariation2=HandleCScript(pNode,nullptr,nLevel);
 
-    if (NULL != (pTemp = pNode->GetSubNode(0)))
+    if (nullptr != (pTemp = pNode->GetSubNode(0)))
     {
         HandleNodes(pTemp,nLevel+1);
     }
@@ -2277,13 +2277,13 @@ void MathType::HandleSubSupScript(SmNode *pNode,int nLevel)
     if (nVariation2 != 0xff)
         pS->WriteUChar( END );
 
-    if (NULL != (pNode->GetSubNode(RSUP+1)))
+    if (nullptr != (pNode->GetSubNode(RSUP+1)))
     {
         nVariation=0;
         if (pNode->GetSubNode(RSUB+1))
             nVariation=2;
     }
-    else if (NULL != pNode->GetSubNode(RSUB+1))
+    else if (nullptr != pNode->GetSubNode(RSUB+1))
         nVariation=1;
 
     if (nVariation!=0xff)
@@ -2294,7 +2294,7 @@ void MathType::HandleSubSupScript(SmNode *pNode,int nLevel)
         pS->WriteUChar( 0x00 ); //options
         pS->WriteUChar( 0x0B );
 
-        if (NULL != (pTemp = pNode->GetSubNode(RSUB+1)))
+        if (nullptr != (pTemp = pNode->GetSubNode(RSUB+1)))
         {
             pS->WriteUChar( LINE ); //line
             HandleNodes(pTemp,nLevel+1);
@@ -2302,7 +2302,7 @@ void MathType::HandleSubSupScript(SmNode *pNode,int nLevel)
         }
         else
             pS->WriteUChar( LINE|0x10 );
-        if (NULL != (pTemp = pNode->GetSubNode(RSUP+1)))
+        if (nullptr != (pTemp = pNode->GetSubNode(RSUP+1)))
         {
             pS->WriteUChar( LINE ); //line
             HandleNodes(pTemp,nLevel+1);
@@ -2329,13 +2329,13 @@ void MathType::HandleFractions(SmNode *pNode,int nLevel)
 
     pS->WriteUChar( 0x0A );
     pS->WriteUChar( LINE ); //line
-    if (NULL != (pTemp = pNode->GetSubNode(0)))
+    if (nullptr != (pTemp = pNode->GetSubNode(0)))
         HandleNodes(pTemp,nLevel+1);
     pS->WriteUChar( END );
 
     pS->WriteUChar( 0x0A );
     pS->WriteUChar( LINE ); //line
-    if (NULL != (pTemp = pNode->GetSubNode(2)))
+    if (nullptr != (pTemp = pNode->GetSubNode(2)))
         HandleNodes(pTemp,nLevel+1);
     pS->WriteUChar( END );
 
@@ -2399,7 +2399,7 @@ void MathType::HandleBrace(SmNode *pNode,int nLevel)
         }
     }
 
-    if (NULL != (pTemp = pNode->GetSubNode(1)))
+    if (nullptr != (pTemp = pNode->GetSubNode(1)))
     {
         pS->WriteUChar( LINE ); //line
         HandleNodes(pTemp,nLevel+1);
@@ -2437,14 +2437,14 @@ void MathType::HandleVerticalBrace(SmNode *pNode,int nLevel)
     pS->WriteUChar( 0 ); //variation
     pS->WriteUChar( 0 ); //options
 
-    if (NULL != (pTemp = pNode->GetSubNode(0)))
+    if (nullptr != (pTemp = pNode->GetSubNode(0)))
     {
         pS->WriteUChar( LINE ); //line
         HandleNodes(pTemp,nLevel+1);
         pS->WriteUChar( END ); //options
     }
 
-    if (NULL != (pTemp = pNode->GetSubNode(2)))
+    if (nullptr != (pTemp = pNode->GetSubNode(2)))
     {
         pS->WriteUChar( LINE ); //line
         HandleNodes(pTemp,nLevel+1);
@@ -2965,7 +2965,7 @@ bool MathType::HandleLim(SmNode *pNode,int nLevel)
     {
         if (pNode->GetSubNode(1))
         {
-            sal_uInt8 nVariation2=HandleCScript(pNode->GetSubNode(0),NULL,
+            sal_uInt8 nVariation2=HandleCScript(pNode->GetSubNode(0),nullptr,
                 nLevel);
 
             pS->WriteUChar( 0x0A );
@@ -3163,10 +3163,10 @@ void MathType::HandleMath(SmNode *pNode, int /*nLevel*/)
 void MathType::HandleAttributes(SmNode *pNode,int nLevel)
 {
     int nOldPending = 0;
-    SmNode *pTemp       = 0;
-    SmTextNode *pIsText = 0;
+    SmNode *pTemp       = nullptr;
+    SmTextNode *pIsText = nullptr;
 
-    if (NULL != (pTemp = pNode->GetSubNode(0)))
+    if (nullptr != (pTemp = pNode->GetSubNode(0)))
     {
         pIsText = static_cast<SmTextNode *>(pNode->GetSubNode(1));
 
@@ -3226,7 +3226,7 @@ void MathType::HandleAttributes(SmNode *pNode,int nLevel)
         nPendingAttributes--;
     else
     {
-        if ((nInsertion != 0) && NULL != (pTemp = pNode->GetSubNode(0)))
+        if ((nInsertion != 0) && nullptr != (pTemp = pNode->GetSubNode(0)))
         {
             sal_uLong nPos = pS->Tell();
             nInsertion--;

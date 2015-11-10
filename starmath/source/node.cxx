@@ -88,7 +88,7 @@ sal_uInt16 SmNode::GetNumSubNodes() const
 
 SmNode * SmNode::GetSubNode(sal_uInt16 /*nIndex*/)
 {
-    return NULL;
+    return nullptr;
 }
 
 
@@ -98,7 +98,7 @@ SmNode * SmNode::GetLeftMost()
     //! for the current node).
 {
     SmNode *pNode = GetNumSubNodes() > 0 ?
-                        GetSubNode(0) : NULL;
+                        GetSubNode(0) : nullptr;
 
     return pNode ? pNode->GetLeftMost() : this;
 }
@@ -337,14 +337,14 @@ const SmNode * SmNode::FindTokenAt(sal_uInt16 nRow, sal_uInt16 nCol) const
         }
     }
 
-    return 0;
+    return nullptr;
 }
 
 
 const SmNode * SmNode::FindRectClosestTo(const Point &rPoint) const
 {
     long          nDist   = LONG_MAX;
-    const SmNode *pResult = 0;
+    const SmNode *pResult = nullptr;
 
     if (IsVisible())
         pResult = this;
@@ -385,7 +385,7 @@ void SmNode::GetAccessibleText( OUStringBuffer &/*rText*/ ) const
 
 const SmNode * SmNode::FindNodeWithAccessibleIndex(sal_Int32 nAccIdx) const
 {
-    const SmNode *pResult = 0;
+    const SmNode *pResult = nullptr;
 
     sal_Int32 nIdx = GetAccessibleIndex();
     OUStringBuffer aTxt;
@@ -533,7 +533,7 @@ SmStructureNode::SmStructureNode( const SmStructureNode &rNode ) :
     for (i = 0;  i < nSize;  ++i)
     {
         SmNode *pNode = rNode.aSubNodes[i];
-        aSubNodes[i] = pNode ? new SmNode( *pNode ) : 0;
+        aSubNodes[i] = pNode ? new SmNode( *pNode ) : nullptr;
     }
     ClaimPaternity();
 }
@@ -559,7 +559,7 @@ SmStructureNode & SmStructureNode::operator = ( const SmStructureNode &rNode )
     for (i = 0;  i < nSize;  ++i)
     {
         SmNode *pNode = rNode.aSubNodes[i];
-        aSubNodes[i] = pNode ? new SmNode( *pNode ) : 0;
+        aSubNodes[i] = pNode ? new SmNode( *pNode ) : nullptr;
     }
 
     ClaimPaternity();
@@ -644,7 +644,7 @@ sal_uInt16 SmVisibleNode::GetNumSubNodes() const
 
 SmNode * SmVisibleNode::GetSubNode(sal_uInt16 /*nIndex*/)
 {
-    return NULL;
+    return nullptr;
 }
 
 void SmGraphicNode::GetAccessibleText( OUStringBuffer &rText ) const
@@ -696,7 +696,7 @@ void SmTableNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
           nTmp;
     sal_uInt16 i;
     for (i = 0; i < nSize;  i++)
-        if (NULL != (pNode = GetSubNode(i)))
+        if (nullptr != (pNode = GetSubNode(i)))
         {   pNode->Arrange(rDev, rFormat);
             if ((nTmp = pNode->GetItalicWidth()) > nMaxWidth)
                 nMaxWidth = nTmp;
@@ -705,7 +705,7 @@ void SmTableNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
     Point  aPos;
     SmRect::operator = (SmRect(nMaxWidth, 1));
     for (i = 0;  i < nSize;  i++)
-    {   if (NULL != (pNode = GetSubNode(i)))
+    {   if (nullptr != (pNode = GetSubNode(i)))
         {   const SmRect &rNodeRect = pNode->GetRect();
             const SmNode *pCoNode   = pNode->GetLeftMost();
             RectHorAlign  eHorAlign = pCoNode->GetRectHorAlign();
@@ -771,7 +771,7 @@ void SmLineNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
     sal_uInt16  nSize = GetNumSubNodes();
     sal_uInt16 i;
     for (i = 0; i < nSize;  i++)
-        if (NULL != (pNode = GetSubNode(i)))
+        if (nullptr != (pNode = GetSubNode(i)))
             pNode->Arrange(rDev, rFormat);
 
     SmTmpDevice aTmpDev ((OutputDevice &) rDev, true);
@@ -800,11 +800,11 @@ void SmLineNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
 
     Point   aPos;
     // copy the first node into LineNode and extend by the others
-    if (NULL != (pNode = GetSubNode(0)))
+    if (nullptr != (pNode = GetSubNode(0)))
         SmRect::operator = (pNode->GetRect());
 
     for (i = 1;  i < nSize;  i++)
-        if (NULL != (pNode = GetSubNode(i)))
+        if (nullptr != (pNode = GetSubNode(i)))
         {
             aPos = pNode->AlignTo(*this, RP_RIGHT, RHA_CENTER, RVA_BASELINE);
 
@@ -1031,9 +1031,9 @@ void SmBinHorNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
     SmNode *pLeft  = GetSubNode(0),
            *pOper  = GetSubNode(1),
            *pRight = GetSubNode(2);
-    OSL_ENSURE(pLeft  != NULL, "Sm: NULL pointer");
-    OSL_ENSURE(pOper  != NULL, "Sm: NULL pointer");
-    OSL_ENSURE(pRight != NULL, "Sm: NULL pointer");
+    OSL_ENSURE(pLeft  != nullptr, "Sm: NULL pointer");
+    OSL_ENSURE(pOper  != nullptr, "Sm: NULL pointer");
+    OSL_ENSURE(pRight != nullptr, "Sm: NULL pointer");
 
     pOper->SetSize(Fraction (rFormat.GetRelSize(SIZ_OPERATOR), 100));
 
@@ -1510,33 +1510,33 @@ void SmSubSupNode::CreateTextFromNode(OUString &rText)
     SmNode *pNode;
     GetSubNode(0)->CreateTextFromNode(rText);
 
-    if (NULL != (pNode = GetSubNode(LSUB+1)))
+    if (nullptr != (pNode = GetSubNode(LSUB+1)))
     {
         rText += "lsub ";
         pNode->CreateTextFromNode(rText);
     }
-    if (NULL != (pNode = GetSubNode(LSUP+1)))
+    if (nullptr != (pNode = GetSubNode(LSUP+1)))
     {
         rText += "lsup ";
         pNode->CreateTextFromNode(rText);
     }
-    if (NULL != (pNode = GetSubNode(CSUB+1)))
+    if (nullptr != (pNode = GetSubNode(CSUB+1)))
     {
         rText += "csub ";
         pNode->CreateTextFromNode(rText);
     }
-    if (NULL != (pNode = GetSubNode(CSUP+1)))
+    if (nullptr != (pNode = GetSubNode(CSUP+1)))
     {
         rText += "csup ";
         pNode->CreateTextFromNode(rText);
     }
-    if (NULL != (pNode = GetSubNode(RSUB+1)))
+    if (nullptr != (pNode = GetSubNode(RSUB+1)))
     {
         rText = comphelper::string::stripEnd(rText, ' ');
         rText += "_";
         pNode->CreateTextFromNode(rText);
     }
-    if (NULL != (pNode = GetSubNode(RSUP+1)))
+    if (nullptr != (pNode = GetSubNode(RSUP+1)))
     {
         rText = comphelper::string::stripEnd(rText, ' ');
         rText += "^";
@@ -2498,7 +2498,7 @@ void SmMatrixNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
     for (i = 0;  i < nNodes;  i++)
     {
         sal_uInt16 nIdx = nNodes - 1 - i;
-        if (NULL != (pNode = GetSubNode(nIdx)))
+        if (nullptr != (pNode = GetSubNode(nIdx)))
         {
             pNode->Arrange(rDev, rFormat);
             int  nCol = nIdx % nNumCols;
@@ -2571,7 +2571,7 @@ void SmMatrixNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
         aDelta.Y() = aPos.Y() - aLineRect.GetTop();
         aLineRect.Move(aDelta);
         for (j = 0;  j < nNumCols;  j++)
-            if (NULL != (pNode = GetSubNode(i * nNumCols + j)))
+            if (nullptr != (pNode = GetSubNode(i * nNumCols + j)))
                 pNode->Move(aDelta);
 
         ExtendBy(aLineRect, RCP_NONE);
@@ -2617,7 +2617,7 @@ void SmMathSymbolNode::AdaptToX(const OutputDevice &rDev, sal_uLong nWidth)
 
     // get denominator of error factor for width
     long nTmpBorderWidth = GetFont().GetBorderWidth();
-    long nDenom = SmRect(aTmpDev, NULL, GetText(), nTmpBorderWidth).GetItalicWidth();
+    long nDenom = SmRect(aTmpDev, nullptr, GetText(), nTmpBorderWidth).GetItalicWidth();
 
     // scale fontwidth with this error factor
     aFntSize.Width() *= nWidth;
@@ -2653,7 +2653,7 @@ void SmMathSymbolNode::AdaptToY(const OutputDevice &rDev, sal_uLong nHeight)
 
     // get denominator of error factor for height
     long nTmpBorderWidth = GetFont().GetBorderWidth();
-    long nDenom = SmRect(aTmpDev, NULL, GetText(), nTmpBorderWidth).GetHeight();
+    long nDenom = SmRect(aTmpDev, nullptr, GetText(), nTmpBorderWidth).GetHeight();
 
     // scale fontwidth with this error factor
     aFntSize.Height() *= nHeight;
@@ -2730,7 +2730,7 @@ void SmAttributNode::CreateTextFromNode(OUString &rText)
     OSL_ENSURE(nSize == 2, "Node missing members");
     rText += "{";
     sal_Unicode nLast=0;
-    if (NULL != (pNode = GetSubNode(0)))
+    if (nullptr != (pNode = GetSubNode(0)))
     {
         OUString aStr;
         pNode->CreateTextFromNode(aStr);
@@ -2802,7 +2802,7 @@ void SmAttributNode::CreateTextFromNode(OUString &rText)
     }
 
     if (nSize == 2)
-        if (NULL != (pNode = GetSubNode(1)))
+        if (nullptr != (pNode = GetSubNode(1)))
             pNode->CreateTextFromNode(rText);
 
     rText = comphelper::string::stripEnd(rText, ' ');
@@ -2854,7 +2854,7 @@ void SmSpecialNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell
     SmModule  *pp = SM_MOD();
 
     OUString aName(GetToken().aText.copy(1));
-    if (NULL != (pSym = pp->GetSymbolManager().GetSymbolByName( aName )))
+    if (nullptr != (pSym = pp->GetSymbolManager().GetSymbolByName( aName )))
     {
         sal_UCS4 cChar = pSym->GetCharacter();
         OUString aTmp( &cChar, 1 );

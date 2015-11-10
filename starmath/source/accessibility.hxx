@@ -331,8 +331,8 @@ public:
 
     //! access EditEngine and EditView via the functions in the respective window
     //! pointers may be 0 (e.g. during reload)
-    EditEngine * GetEditEngine()    { return pWin ? pWin->GetEditEngine() : 0; }
-    EditView   * GetEditView()      { return pWin ? pWin->GetEditView() : 0; }
+    EditEngine * GetEditEngine()    { return pWin ? pWin->GetEditEngine() : nullptr; }
+    EditView   * GetEditView()      { return pWin ? pWin->GetEditView() : nullptr; }
 
     // XAccessible
     virtual css::uno::Reference< css::accessibility::XAccessibleContext > SAL_CALL getAccessibleContext(  ) throw (css::uno::RuntimeException, std::exception) override;

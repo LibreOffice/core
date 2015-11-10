@@ -262,7 +262,7 @@ void SmModule::GetState(SfxItemSet &rSet)
 
 SfxItemSet*  SmModule::CreateItemSet( sal_uInt16 nId )
 {
-    SfxItemSet*  pRet = 0;
+    SfxItemSet*  pRet = nullptr;
     if(nId == SID_SM_EDITOPTIONS)
     {
         pRet = new SfxItemSet(GetPool(),

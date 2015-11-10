@@ -422,7 +422,7 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
 
     SmDocShell *pDocSh = static_cast < SmDocShell * > (GetObjectShell());
 
-    if ( NULL == pDocSh )
+    if ( nullptr == pDocSh )
         throw UnknownPropertyException();
 
     SmFormat aFormat = pDocSh->GetFormat();
@@ -705,7 +705,7 @@ void SmModel::_getPropertyValues( const PropertyMapEntry **ppEntries, Any *pValu
 {
     SmDocShell *pDocSh = static_cast < SmDocShell * > (GetObjectShell());
 
-    if ( NULL == pDocSh )
+    if ( nullptr == pDocSh )
         throw UnknownPropertyException();
 
     const SmFormat & aFormat = pDocSh->GetFormat();

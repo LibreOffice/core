@@ -59,9 +59,9 @@ public:
         , nProduct(0)
         , nProdVersion(0)
         , nProdSubVersion(0)
-        , pS(NULL)
+        , pS(nullptr)
         , rRet(rIn)
-        , pTree(NULL)
+        , pTree(nullptr)
         , nHAlign(0)
         , nVAlign(0)
         , nPendingAttributes(0)
@@ -87,7 +87,7 @@ public:
         , nProduct(0)
         , nProdVersion(0)
         , nProdSubVersion(0)
-        , pS(NULL)
+        , pS(nullptr)
         , rRet(rIn)
         , pTree(pIn)
         , nHAlign(2)
@@ -154,7 +154,7 @@ private:
     void HandleRoot(SmNode *pNode,int nLevel);
     void HandleSubSupScript(SmNode *pNode,int nLevel);
     sal_uInt8 HandleCScript(SmNode *pNode,SmNode *pContent,int nLevel,
-        sal_uLong *pPos=NULL,bool bTest=true);
+        sal_uLong *pPos=nullptr,bool bTest=true);
     void HandleFractions(SmNode *pNode,int nLevel);
     void HandleBrace(SmNode *pNode,int nLevel);
     void HandleVerticalBrace(SmNode *pNode,int nLevel);

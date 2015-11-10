@@ -125,7 +125,7 @@ void SmWordExportBase::HandleAllSubNodes(const SmNode* pNode, int nLevel)
             ++i)
     {
 // TODO remove when all types of nodes are handled properly
-        if (pNode->GetSubNode(i) == NULL)
+        if (pNode->GetSubNode(i) == nullptr)
         {
             SAL_WARN("starmath.wordbase", "Subnode is NULL, parent node not handled properly");
             continue;
@@ -180,12 +180,12 @@ void SmWordExportBase::HandleMath(const SmNode* pNode, int nLevel)
 void SmWordExportBase::HandleSubSupScript(const SmSubSupNode* pNode, int nLevel)
 {
     // set flags to a bitfield of which sub/sup items exists
-    int flags = (pNode->GetSubSup(CSUB) != NULL ? (1 << CSUB) : 0)
-                | (pNode->GetSubSup(CSUP) != NULL ? (1 << CSUP) : 0)
-                | (pNode->GetSubSup(RSUB) != NULL ? (1 << RSUB) : 0)
-                | (pNode->GetSubSup(RSUP) != NULL ? (1 << RSUP) : 0)
-                | (pNode->GetSubSup(LSUB) != NULL ? (1 << LSUB) : 0)
-                | (pNode->GetSubSup(LSUP) != NULL ? (1 << LSUP) : 0);
+    int flags = (pNode->GetSubSup(CSUB) != nullptr ? (1 << CSUB) : 0)
+                | (pNode->GetSubSup(CSUP) != nullptr ? (1 << CSUP) : 0)
+                | (pNode->GetSubSup(RSUB) != nullptr ? (1 << RSUB) : 0)
+                | (pNode->GetSubSup(RSUP) != nullptr ? (1 << RSUP) : 0)
+                | (pNode->GetSubSup(LSUB) != nullptr ? (1 << LSUB) : 0)
+                | (pNode->GetSubSup(LSUP) != nullptr ? (1 << LSUP) : 0);
     HandleSubSupScriptInternal(pNode, nLevel, flags);
 }
 

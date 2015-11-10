@@ -108,7 +108,7 @@ class SmElementsControl : public Control
 
     //if pContext is not NULL, then draw, otherwise
     //just layout
-    void LayoutOrPaintContents(vcl::RenderContext *pContext = NULL);
+    void LayoutOrPaintContents(vcl::RenderContext *pContext = nullptr);
 
 public:
     SmElementsControl(vcl::Window *pParent);
