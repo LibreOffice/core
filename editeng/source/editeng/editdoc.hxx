@@ -560,7 +560,7 @@ public:
 
 class EditLineList
 {
-    typedef boost::ptr_vector<EditLine> LinesType;
+    typedef std::vector<std::unique_ptr<EditLine> > LinesType;
     LinesType maLines;
 
 public:

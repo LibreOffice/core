@@ -1125,7 +1125,7 @@ sal_Int32 EditLineList::FindLine(sal_Int32 nChar, bool bInclEnd)
     sal_Int32 n = maLines.size();
     for (sal_Int32 i = 0; i < n; ++i)
     {
-        const EditLine& rLine = maLines[i];
+        const EditLine& rLine = *maLines[i].get();
         if ( (bInclEnd && (rLine.GetEnd() >= nChar)) ||
              (rLine.GetEnd() > nChar) )
         {
@@ -1144,22 +1144,22 @@ sal_Int32 EditLineList::Count() const
 
 const EditLine& EditLineList::operator[](sal_Int32 nPos) const
 {
-    return maLines[nPos];
+    return *maLines[nPos].get();
 }
 
 EditLine& EditLineList::operator[](sal_Int32 nPos)
 {
-    return maLines[nPos];
+    return *maLines[nPos].get();
 }
 
 void EditLineList::Append(EditLine* p)
 {
-    maLines.push_back(p);
+    maLines.push_back(std::unique_ptr<EditLine>(p));
 }
 
 void EditLineList::Insert(sal_Int32 nPos, EditLine* p)
 {
-    maLines.insert(maLines.begin()+nPos, p);
+    maLines.insert(maLines.begin()+nPos, std::unique_ptr<EditLine>(p));
 }
 
 EditPaM::EditPaM() : pNode(nullptr), nIndex(0) {}
