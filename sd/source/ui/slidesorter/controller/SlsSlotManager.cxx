@@ -127,7 +127,7 @@ void SlotManager::FuTemporary (SfxRequest& rRequest)
 
     SlideSorterViewShell* pShell
         = dynamic_cast<SlideSorterViewShell*>(mrSlideSorter.GetViewShell());
-    if (pShell == NULL)
+    if (pShell == nullptr)
         return;
 
     switch (rRequest.GetSlot())
@@ -149,10 +149,10 @@ void SlotManager::FuTemporary (SfxRequest& rRequest)
             break;
 
         case SID_PAGES_PER_ROW:
-            if (rRequest.GetArgs() != NULL)
+            if (rRequest.GetArgs() != nullptr)
             {
                 const SfxUInt16Item* pPagesPerRow = rRequest.GetArg<SfxUInt16Item>(SID_PAGES_PER_ROW);
-                if (pPagesPerRow != NULL)
+                if (pPagesPerRow != nullptr)
                 {
                     sal_Int32 nColumnCount = pPagesPerRow->GetValue();
                     // Force the given number of columns by setting
@@ -264,7 +264,7 @@ void SlotManager::FuTemporary (SfxRequest& rRequest)
             SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
             std::unique_ptr<VclAbstractDialog> pDlg(pFact ? pFact->CreateSdPhotoAlbumDialog(
                 mrSlideSorter.GetContentWindow(),
-                pDocument) : 0);
+                pDocument) : nullptr);
 
             if (pDlg)
             {
@@ -281,7 +281,7 @@ void SlotManager::FuTemporary (SfxRequest& rRequest)
              SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
              VclAbstractDialog* pDlg = pFact ?
                  pFact->CreateRemoteDialog( mrSlideSorter.GetContentWindow() ) :
-                 0;
+                 nullptr;
              if (pDlg)
                  pDlg->Execute();
 #endif
@@ -296,7 +296,7 @@ void SlotManager::FuTemporary (SfxRequest& rRequest)
 void SlotManager::FuPermanent (SfxRequest& rRequest)
 {
     ViewShell* pShell = mrSlideSorter.GetViewShell();
-    if (pShell == NULL)
+    if (pShell == nullptr)
         return;
 
     if(pShell->GetCurrentFunction().is())
@@ -342,11 +342,11 @@ void SlotManager::FuSupport (SfxRequest& rRequest)
     switch (rRequest.GetSlot())
     {
         case SID_STYLE_FAMILY:
-            if (rRequest.GetArgs() != NULL)
+            if (rRequest.GetArgs() != nullptr)
             {
                 SdDrawDocument* pDocument
                     = mrSlideSorter.GetModel().GetDocument();
-                if (pDocument != NULL)
+                if (pDocument != nullptr)
                 {
                     const SfxPoolItem& rItem (
                         rRequest.GetArgs()->Get(SID_STYLE_FAMILY));
@@ -371,11 +371,11 @@ void SlotManager::FuSupport (SfxRequest& rRequest)
                 }
             }
             ViewShellBase* pBase = mrSlideSorter.GetViewShellBase();
-            if (pBase != NULL)
+            if (pBase != nullptr)
             {
                 std::shared_ptr<DrawViewShell> pDrawViewShell (
                     std::dynamic_pointer_cast<DrawViewShell>(pBase->GetMainViewShell()));
-                if (pDrawViewShell.get() != NULL)
+                if (pDrawViewShell.get() != nullptr)
                     pDrawViewShell->FuSupport(rRequest);
             }
         }
@@ -394,7 +394,7 @@ void SlotManager::FuSupport (SfxRequest& rRequest)
         case SID_OUTLINEMODE:
         {
             ViewShellBase* pBase = mrSlideSorter.GetViewShellBase();
-            if (pBase != NULL)
+            if (pBase != nullptr)
             {
                 framework::FrameworkHelper::Instance(*pBase)->HandleModeChangeSlot(
                     rRequest.GetSlot(), rRequest);
@@ -407,7 +407,7 @@ void SlotManager::FuSupport (SfxRequest& rRequest)
         {
             SlideSorterViewShell* pViewShell
                 = dynamic_cast<SlideSorterViewShell*>(mrSlideSorter.GetViewShell());
-            if (pViewShell != NULL)
+            if (pViewShell != nullptr)
             {
                 view::SlideSorterView::DrawLock aDrawLock (mrSlideSorter);
                 SlideSorterController::ModelChangeLock aModelLock (mrSlideSorter.GetController());
@@ -422,7 +422,7 @@ void SlotManager::FuSupport (SfxRequest& rRequest)
         {
             SlideSorterViewShell* pViewShell
                 = dynamic_cast<SlideSorterViewShell*>(mrSlideSorter.GetViewShell());
-            if (pViewShell != NULL)
+            if (pViewShell != nullptr)
             {
                 view::SlideSorterView::DrawLock aDrawLock (mrSlideSorter);
                 SlideSorterController::ModelChangeLock aModelLock (mrSlideSorter.GetController());
@@ -450,7 +450,7 @@ void SlotManager::ExecCtrl (SfxRequest& rRequest)
             mrSlideSorter.GetModel().GetDocument()->GetDocSh()->ClearUndoBuffer();
 
             // normal forwarding to ViewFrame for execution
-            if (pViewShell != NULL)
+            if (pViewShell != nullptr)
                 pViewShell->GetViewFrame()->ExecuteSlot(rRequest);
 
             // has to be finished right away
@@ -463,14 +463,14 @@ void SlotManager::ExecCtrl (SfxRequest& rRequest)
         case SID_OUTPUT_QUALITY_CONTRAST:
         {
             // flush page cache
-            if (pViewShell != NULL)
+            if (pViewShell != nullptr)
                 pViewShell->ExecReq (rRequest);
             break;
         }
 
         case SID_MAIL_SCROLLBODY_PAGEDOWN:
         {
-            if (pViewShell != NULL)
+            if (pViewShell != nullptr)
                 pViewShell->ExecReq (rRequest);
             break;
         }
@@ -478,7 +478,7 @@ void SlotManager::ExecCtrl (SfxRequest& rRequest)
         case SID_OPT_LOCALE_CHANGED:
         {
             mrSlideSorter.GetController().UpdateAllPages();
-            if (pViewShell != NULL)
+            if (pViewShell != nullptr)
                 pViewShell->UpdatePreview (pViewShell->GetActualPage());
             rRequest.Done();
             break;
@@ -491,7 +491,7 @@ void SlotManager::ExecCtrl (SfxRequest& rRequest)
             // we have to handle the execution of that slot as well.
             // We try to do that by forwarding the request to the view frame
             // of the view shell.
-            if (pViewShell != NULL)
+            if (pViewShell != nullptr)
                 pViewShell->GetViewFrame()->ExecuteSlot(rRequest);
             break;
 
@@ -508,7 +508,7 @@ void SlotManager::GetAttrState (SfxItemSet& rSet)
     while (nWhich)
     {
         sal_uInt16 nSlotId (nWhich);
-        if (SfxItemPool::IsWhich(nWhich) && mrSlideSorter.GetViewShell()!=NULL)
+        if (SfxItemPool::IsWhich(nWhich) && mrSlideSorter.GetViewShell()!=nullptr)
             nSlotId = mrSlideSorter.GetViewShell()->GetPool().GetSlotId(nWhich);
         switch (nSlotId)
         {
@@ -531,7 +531,7 @@ void SlotManager::GetMenuState (SfxItemSet& rSet)
     ViewShell* pShell = mrSlideSorter.GetViewShell();
     DrawDocShell* pDocShell = mrSlideSorter.GetModel().GetDocument()->GetDocSh();
 
-    if (pShell!=NULL && pShell->GetCurrentFunction().is())
+    if (pShell!=nullptr && pShell->GetCurrentFunction().is())
     {
         sal_uInt16 nSId = pShell->GetCurrentFunction()->GetSlotID();
 
@@ -543,7 +543,7 @@ void SlotManager::GetMenuState (SfxItemSet& rSet)
     rSet.Put( SfxBoolItem( SID_NOTESMODE, false ) );
     rSet.Put( SfxBoolItem( SID_HANDOUTMODE, false ) );
 
-    if (pShell!=NULL && pShell->IsMainViewShell())
+    if (pShell!=nullptr && pShell->IsMainViewShell())
     {
         rSet.DisableItem(SID_SPELL_DIALOG);
         rSet.DisableItem(SID_SEARCH_DLG);
@@ -564,7 +564,7 @@ void SlotManager::GetMenuState (SfxItemSet& rSet)
             {
                 SdPage* pPage = aSelectedPages.GetNextElement()->GetPage();
                 SdrObject* pObj = pPage->GetPresObj(PRESOBJ_OUTLINE);
-                if (pObj!=NULL )
+                if (pObj!=nullptr )
                 {
                     if( !pObj->IsEmptyPresObj() )
                     {
@@ -608,7 +608,7 @@ void SlotManager::GetMenuState (SfxItemSet& rSet)
                 SdPage* pPage = aSelectedPages.GetNextElement()->GetPage();
                 SdrObject* pObj = pPage->GetPresObj(PRESOBJ_TITLE);
 
-                if (pObj!=NULL && !pObj->IsEmptyPresObj())
+                if (pObj!=nullptr && !pObj->IsEmptyPresObj())
                     bDisable = false;
             }
         }
@@ -730,11 +730,11 @@ void SlotManager::GetClipboardState ( SfxItemSet& rSet)
                 // No or just one page.  Check if there is anything that can be
                 // pasted via a DrawViewShell.
                 ViewShellBase* pBase = mrSlideSorter.GetViewShellBase();
-                if (pBase != NULL)
+                if (pBase != nullptr)
                 {
                     std::shared_ptr<DrawViewShell> pDrawViewShell (
                         std::dynamic_pointer_cast<DrawViewShell>(pBase->GetMainViewShell()));
-                    if (pDrawViewShell.get() != NULL)
+                    if (pDrawViewShell.get() != nullptr)
                     {
                         TransferableDataHelper aDataHelper (
                             TransferableDataHelper::CreateFromSystemClipboard(
@@ -828,8 +828,8 @@ void SlotManager::GetClipboardState ( SfxItemSet& rSet)
 void SlotManager::GetStatusBarState (SfxItemSet& rSet)
 {
     // page view and layout
-    SdPage* pPage      = NULL;
-    SdPage* pFirstPage = NULL;
+    SdPage* pPage      = nullptr;
+    SdPage* pFirstPage = nullptr;
     sal_uInt16 nFirstPage;
     sal_Int32 nPageCount;
     sal_Int32 nActivePageCount;
@@ -861,7 +861,7 @@ void SlotManager::GetStatusBarState (SfxItemSet& rSet)
       rSet.Put( SfxStringItem( SID_STATUS_PAGE, aPageStr ) );
     }
     //Set layout
-    if (nSelectedPages == 1 && pPage != NULL)
+    if (nSelectedPages == 1 && pPage != nullptr)
     {
         pFirstPage = pPage;
         aLayoutStr = pFirstPage->GetLayoutName();
@@ -889,13 +889,13 @@ void SlotManager::RenameSlide()
             pDrView->SdrEndTextEdit();
         }
 
-        SdPage* pSelectedPage = NULL;
+        SdPage* pSelectedPage = nullptr;
         model::PageEnumeration aSelectedPages (
             model::PageEnumerationProvider::CreateSelectedPagesEnumeration(
                 mrSlideSorter.GetModel()));
         if (aSelectedPages.HasMoreElements())
             pSelectedPage = aSelectedPages.GetNextElement()->GetPage();
-        if (pSelectedPage != NULL)
+        if (pSelectedPage != nullptr)
         {
             OUString aTitle( SdResId( STR_TITLE_RENAMESLIDE ) );
             OUString aDescr( SdResId( STR_DESC_RENAMESLIDE ) );
@@ -940,11 +940,11 @@ IMPL_LINK_TYPED(SlotManager, RenameSlideHdl, AbstractSvxNameDialog&, rDialog, bo
 
     model::SharedPageDescriptor pDescriptor (
         mrSlideSorter.GetController().GetCurrentSlideManager()->GetCurrentSlide());
-    SdPage* pCurrentPage = NULL;
-    if (pDescriptor.get() != NULL)
+    SdPage* pCurrentPage = nullptr;
+    if (pDescriptor.get() != nullptr)
         pCurrentPage = pDescriptor->GetPage();
 
-    return (pCurrentPage!=NULL && aNewName == pCurrentPage->GetName())
+    return (pCurrentPage!=nullptr && aNewName == pCurrentPage->GetName())
         || (mrSlideSorter.GetViewShell()
             && mrSlideSorter.GetViewShell()->GetDocSh()->IsNewPageNameValid( aNewName ) );
 }
@@ -956,7 +956,7 @@ bool SlotManager::RenameSlideFromDrawViewShell( sal_uInt16 nPageId, const OUStri
     if( pDocument->GetPageByName( rName, bOutDummy ) != SDRPAGE_NOTFOUND )
         return false;
 
-    SdPage* pPageToRename = NULL;
+    SdPage* pPageToRename = nullptr;
     PageKind ePageKind = mrSlideSorter.GetModel().GetPageType();
 
     ::svl::IUndoManager* pManager = pDocument->GetDocSh()->GetUndoManager();
@@ -965,10 +965,10 @@ bool SlotManager::RenameSlideFromDrawViewShell( sal_uInt16 nPageId, const OUStri
     {
         model::SharedPageDescriptor pDescriptor (
             mrSlideSorter.GetController().GetCurrentSlideManager()->GetCurrentSlide());
-        if (pDescriptor.get() != NULL)
+        if (pDescriptor.get() != nullptr)
             pPageToRename = pDescriptor->GetPage();
 
-        if (pPageToRename != NULL)
+        if (pPageToRename != nullptr)
         {
             // Undo
             SdPage* pUndoPage = pPageToRename;
@@ -991,7 +991,7 @@ bool SlotManager::RenameSlideFromDrawViewShell( sal_uInt16 nPageId, const OUStri
             {
                 // also rename notes-page
                 SdPage* pNotesPage = pDocument->GetSdPage( nPageId, PK_NOTES );
-                if (pNotesPage != NULL)
+                if (pNotesPage != nullptr)
                     pNotesPage->SetName (rName);
             }
         }
@@ -1000,7 +1000,7 @@ bool SlotManager::RenameSlideFromDrawViewShell( sal_uInt16 nPageId, const OUStri
     {
         // rename MasterPage -> rename LayoutTemplate
         pPageToRename = pDocument->GetMasterSdPage( nPageId, ePageKind );
-        if (pPageToRename != NULL)
+        if (pPageToRename != nullptr)
         {
             const OUString aOldLayoutName( pPageToRename->GetLayoutName() );
             pManager->AddUndoAction( new RenameLayoutTemplateUndoAction( pDocument, aOldLayoutName, rName ) );
@@ -1008,7 +1008,7 @@ bool SlotManager::RenameSlideFromDrawViewShell( sal_uInt16 nPageId, const OUStri
         }
     }
 
-    bool bSuccess = pPageToRename!=NULL && ( rName == pPageToRename->GetName() );
+    bool bSuccess = pPageToRename!=nullptr && ( rName == pPageToRename->GetName() );
 
     if( bSuccess )
     {
@@ -1020,7 +1020,7 @@ bool SlotManager::RenameSlideFromDrawViewShell( sal_uInt16 nPageId, const OUStri
 
         // inform navigator about change
         SfxBoolItem aItem( SID_NAVIGATOR_INIT, true );
-        if (mrSlideSorter.GetViewShell() != NULL)
+        if (mrSlideSorter.GetViewShell() != nullptr)
             mrSlideSorter.GetViewShell()->GetDispatcher()->Execute(
                 SID_NAVIGATOR_INIT, SfxCallMode::ASYNCHRON | SfxCallMode::RECORD, &aItem, 0L );
     }
@@ -1048,19 +1048,19 @@ void SlotManager::InsertSlide (SfxRequest& rRequest)
 
     PageSelector::BroadcastLock aBroadcastLock (mrSlideSorter);
 
-    SdPage* pNewPage = NULL;
+    SdPage* pNewPage = nullptr;
     if (mrSlideSorter.GetModel().GetEditMode() == EM_PAGE)
     {
         SlideSorterViewShell* pShell = dynamic_cast<SlideSorterViewShell*>(
             mrSlideSorter.GetViewShell());
-        if (pShell != NULL)
+        if (pShell != nullptr)
         {
             pNewPage = pShell->CreateOrDuplicatePage (
                 rRequest,
                 mrSlideSorter.GetModel().GetPageType(),
                 nInsertionIndex>=0
                     ? mrSlideSorter.GetModel().GetPageDescriptor(nInsertionIndex)->GetPage()
-                        : NULL);
+                        : nullptr);
         }
     }
     else
@@ -1084,7 +1084,7 @@ void SlotManager::InsertSlide (SfxRequest& rRequest)
             }
         }
     }
-    if (pNewPage == NULL)
+    if (pNewPage == nullptr)
         return;
 
     // When a new page has been inserted then select it, make it the

@@ -264,7 +264,7 @@ namespace
         {
             DBG_UNHANDLED_EXCEPTION();
         }
-        return NULL;
+        return nullptr;
     }
 }
 
@@ -398,7 +398,7 @@ void FrameworkHelper::Dispose()
 {
     if (mxDisposeListener.is())
         mxDisposeListener->dispose();
-    mxConfigurationController = NULL;
+    mxConfigurationController = nullptr;
 }
 
 bool FrameworkHelper::IsValid()
@@ -425,7 +425,7 @@ Reference<XView> FrameworkHelper::GetView (const Reference<XResourceId>& rxPaneO
     Reference<XView> xView;
 
     if ( ! rxPaneOrViewId.is() || ! mxConfigurationController.is())
-        return NULL;
+        return nullptr;
 
     try
     {
@@ -471,11 +471,11 @@ Reference<XResourceId> FrameworkHelper::RequestView (
     catch (lang::DisposedException&)
     {
         Dispose();
-        xViewId = NULL;
+        xViewId = nullptr;
     }
     catch (RuntimeException&)
     {
-        xViewId = NULL;
+        xViewId = nullptr;
     }
 
     return xViewId;
@@ -591,7 +591,7 @@ void FrameworkHelper::HandleModeChangeSlot (
             // has changed.
             DrawViewShell* pDrawViewShell
                 = dynamic_cast<DrawViewShell*>(pCenterViewShell.get());
-            if (pDrawViewShell != NULL)
+            if (pDrawViewShell != nullptr)
             {
                 pCenterViewShell->Broadcast (
                     ViewShellHint(ViewShellHint::HINT_CHANGE_EDIT_MODE_START));
@@ -702,7 +702,7 @@ void FrameworkHelper::RunOnEvent(
 void FrameworkHelper::disposing (const lang::EventObject& rEventObject)
 {
     if (rEventObject.Source == mxConfigurationController)
-        mxConfigurationController = NULL;
+        mxConfigurationController = nullptr;
 }
 
 void FrameworkHelper::UpdateConfiguration()
@@ -797,7 +797,7 @@ void SAL_CALL FrameworkHelper::DisposeListener::disposing()
 void SAL_CALL FrameworkHelper::DisposeListener::disposing (const lang::EventObject& rEventObject)
     throw(RuntimeException, std::exception)
 {
-    if (mpHelper.get() != NULL)
+    if (mpHelper.get() != nullptr)
         mpHelper->disposing(rEventObject);
 }
 
@@ -842,7 +842,7 @@ CallbackCaller::CallbackCaller (
                 // called.
                 // Call the callback now and tell him that the event it is
                 // waiting for was not sent.
-                mxConfigurationController = NULL;
+                mxConfigurationController = nullptr;
                 maCallback(false);
             }
         }
@@ -864,7 +864,7 @@ void CallbackCaller::disposing()
         if (mxConfigurationController.is())
         {
             Reference<XConfigurationController> xCC (mxConfigurationController);
-            mxConfigurationController = NULL;
+            mxConfigurationController = nullptr;
             xCC->removeConfigurationChangeListener(this);
         }
     }
@@ -879,7 +879,7 @@ void SAL_CALL CallbackCaller::disposing (const lang::EventObject& rEvent)
 {
     if (rEvent.Source == mxConfigurationController)
     {
-        mxConfigurationController = NULL;
+        mxConfigurationController = nullptr;
         maCallback(false);
     }
 }
@@ -896,7 +896,7 @@ void SAL_CALL CallbackCaller::notifyConfigurationChange (
             // Reset the reference to the configuration controller so that
             // dispose() will not try to remove the listener a second time.
             Reference<XConfigurationController> xCC (mxConfigurationController);
-            mxConfigurationController = NULL;
+            mxConfigurationController = nullptr;
 
             // Removing this object from the controller may very likely lead
             // to its destruction, so no calls after that.
@@ -951,7 +951,7 @@ void LifetimeController::Notify (SfxBroadcaster& rBroadcaster, const SfxHint& rH
 {
     (void)rBroadcaster;
     const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
-    if (pSimpleHint != NULL && pSimpleHint->GetId() == SFX_HINT_DYING)
+    if (pSimpleHint != nullptr && pSimpleHint->GetId() == SFX_HINT_DYING)
     {
         mbListeningToViewShellBase = false;
         Update();

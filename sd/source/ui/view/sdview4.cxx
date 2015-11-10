@@ -81,7 +81,7 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
     mnAction = rAction;
 
     // Is there a object at the position rPos?
-    SdrGrafObj*     pNewGrafObj = NULL;
+    SdrGrafObj*     pNewGrafObj = nullptr;
     SdrPageView*    pPV = GetSdrPageView();
     SdrObject*      pPickObj = pObj;
     const bool bOnMaster = pPV && pPV->GetPage() && pPV->GetPage()->IsMasterPage();
@@ -89,7 +89,7 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
     if(pPV && dynamic_cast< const ::sd::slidesorter::view::SlideSorterView* >(this) !=  nullptr)
     {
         if(!pPV->GetPageRect().IsInside(rPos))
-            pPV = 0L;
+            pPV = nullptr;
     }
 
     if( !pPickObj && pPV )
@@ -127,7 +127,7 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
         {
             Rectangle aRect( pNewGrafObj->GetLogicRect() );
             pNewGrafObj->AdjustToMaxRect( aRect );
-            pNewGrafObj->SetOutlinerParaObject(NULL);
+            pNewGrafObj->SetOutlinerParaObject(nullptr);
             pNewGrafObj->SetEmptyPresObj(false);
         }
 
@@ -175,7 +175,7 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
 
         if ( rGraphic.GetPrefMapMode().GetMapUnit() == MAP_PIXEL )
         {
-            ::OutputDevice* pOutDev = 0;
+            ::OutputDevice* pOutDev = nullptr;
             if( mpViewSh )
                 pOutDev = mpViewSh->GetActiveWindow();
 
@@ -203,7 +203,7 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
         bool    bIsPresTarget = false;
 
         if ((mpViewSh
-                && mpViewSh->GetViewShell()!=NULL
+                && mpViewSh->GetViewShell()!=nullptr
                 && mpViewSh->GetViewShell()->GetIPClient()
                 && mpViewSh->GetViewShell()->GetIPClient()->IsObjectInPlaceActive())
             || dynamic_cast<const ::sd::slidesorter::view::SlideSorterView* >(this))
@@ -287,7 +287,7 @@ SdrMediaObj* View::InsertMediaURL( const OUString& rMediaURL, sal_Int8& rAction,
         uno::Reference<frame::XModel> const xModel(
                 GetDoc().GetObjectShell()->GetModel());
         bool const bRet = ::avmedia::EmbedMedia(xModel, rMediaURL, realURL);
-        if (!bRet) { return 0; }
+        if (!bRet) { return nullptr; }
     }
 
     return InsertMediaObj( realURL, "application/vnd.sun.star.media", rAction, rPos, rSize );
@@ -309,7 +309,7 @@ SdrMediaObj* View::Insert3DModelURL(
         uno::Reference<frame::XModel> const xModel(
                 GetDoc().GetObjectShell()->GetModel());
         bool const bRet = ::avmedia::Embed3DModel(xModel, rModelURL, sRealURL);
-        if (!bRet) { return 0; }
+        if (!bRet) { return nullptr; }
     }
 
     SdrMediaObj* pRetObject = InsertMediaObj( sRealURL, "model/vnd.gltf+json", rAction, rPos, rSize );
@@ -326,14 +326,14 @@ SdrMediaObj* View::InsertMediaObj( const OUString& rMediaURL, const OUString& rM
     SdrEndTextEdit();
     mnAction = rAction;
 
-    SdrMediaObj*    pNewMediaObj = NULL;
+    SdrMediaObj*    pNewMediaObj = nullptr;
     SdrPageView*    pPV = GetSdrPageView();
     SdrObject*      pPickObj = GetEmptyPresentationObject( PRESOBJ_MEDIA );
 
     if(pPV && dynamic_cast<const ::sd::slidesorter::view::SlideSorterView* >(this) )
     {
         if(!pPV->GetPageRect().IsInside(rPos))
-            pPV = 0L;
+            pPV = nullptr;
     }
 
     if( !pPickObj && pPV )
@@ -377,7 +377,7 @@ SdrMediaObj* View::InsertMediaObj( const OUString& rMediaURL, const OUString& rM
 
         OUString referer;
         DrawDocShell * sh = GetDocSh();
-        if (sh != 0 && sh->HasName()) {
+        if (sh != nullptr && sh->HasName()) {
             referer = sh->GetMedium()->GetName();
         }
         pNewMediaObj->setURL( rMediaURL, referer, rMimeType );
@@ -433,7 +433,7 @@ IMPL_LINK_NOARG_TYPED(View, DropInsertFileHdl, Idle *, void)
             {
                 sal_Int8    nTempAction = ( aIter == maDropFileVector.begin() ) ? mnAction : 0;
                 const bool bLink = ( ( nTempAction & DND_ACTION_LINK ) != 0 );
-                SdrGrafObj* pGrafObj = InsertGraphic( aGraphic, nTempAction, maDropPos, NULL, NULL );
+                SdrGrafObj* pGrafObj = InsertGraphic( aGraphic, nTempAction, maDropPos, nullptr, nullptr );
                 if(pGrafObj && bLink)
                 {
                     pGrafObj->SetGraphicLink( aCurrentDropFile, ""/*TODO?*/, OUString() );
@@ -447,7 +447,7 @@ IMPL_LINK_NOARG_TYPED(View, DropInsertFileHdl, Idle *, void)
             }
             if( !bOK )
             {
-                const SfxFilter*        pFoundFilter = NULL;
+                const SfxFilter*        pFoundFilter = nullptr;
                 SfxMedium               aSfxMedium( aCurrentDropFile, StreamMode::READ | StreamMode::SHARE_DENYNONE );
                 ErrCode                 nErr = SfxGetpApp()->GetFilterMatcher().GuessFilter(  aSfxMedium, &pFoundFilter );
 
@@ -554,12 +554,12 @@ IMPL_LINK_NOARG_TYPED(View, DropInsertFileHdl, Idle *, void)
                             SdrOle2Obj* pOleObj = new SdrOle2Obj( svt::EmbeddedObjectRef( xObj, nAspect ), aName, aRect );
                             SdrInsertFlags nOptions = SdrInsertFlags::SETDEFLAYER;
 
-                            if (mpViewSh != NULL)
+                            if (mpViewSh != nullptr)
                             {
-                                OSL_ASSERT (mpViewSh->GetViewShell()!=NULL);
+                                OSL_ASSERT (mpViewSh->GetViewShell()!=nullptr);
                                 SfxInPlaceClient* pIpClient =
                                     mpViewSh->GetViewShell()->GetIPClient();
-                                if (pIpClient!=NULL && pIpClient->IsObjectInPlaceActive())
+                                if (pIpClient!=nullptr && pIpClient->IsObjectInPlaceActive())
                                     nOptions |= SdrInsertFlags::DONTMARK;
                             }
 
@@ -591,7 +591,7 @@ IMPL_LINK_NOARG_TYPED(View, DropInsertFileHdl, Idle *, void)
  */
 IMPL_LINK_NOARG_TYPED(View, DropErrorHdl, Idle *, void)
 {
-    ScopedVclPtr<InfoBox>::Create( mpViewSh ? mpViewSh->GetActiveWindow() : 0, SD_RESSTR(STR_ACTION_NOTPOSSIBLE) )->Execute();
+    ScopedVclPtr<InfoBox>::Create( mpViewSh ? mpViewSh->GetActiveWindow() : nullptr, SD_RESSTR(STR_ACTION_NOTPOSSIBLE) )->Execute();
 }
 
 /**

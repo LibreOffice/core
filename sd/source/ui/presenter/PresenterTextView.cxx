@@ -222,7 +222,7 @@ void PresenterTextView::ThrowIfDisposed()
 {
     if (PresenterTextViewInterfaceBase::rBHelper.bDisposed
         || PresenterTextViewInterfaceBase::rBHelper.bInDispose
-        || mpImplementation.get()==NULL)
+        || mpImplementation.get()==nullptr)
     {
         throw lang::DisposedException ("PresenterTextView object has already been disposed",
             static_cast<uno::XWeak*>(this));
@@ -243,7 +243,7 @@ PresenterTextView::Implementation::Implementation()
       mxBitmap(),
       mpCanvas(),
       mpOutputDevice(VclPtr<VirtualDevice>::Create(*Application::GetDefaultDevice(), 0, 0)),
-      mpEditEngine(NULL),
+      mpEditEngine(nullptr),
       mpEditEngineItemPool(EditEngine::CreatePool()),
       maSize(100,100),
       maBackgroundColor(0xffffffff),
@@ -266,7 +266,7 @@ PresenterTextView::Implementation::~Implementation()
 
 EditEngine * PresenterTextView::Implementation::GetEditEngine()
 {
-    if (mpEditEngine == NULL)
+    if (mpEditEngine == nullptr)
         mpEditEngine = CreateEditEngine ();
     return mpEditEngine;
 }
@@ -274,7 +274,7 @@ EditEngine * PresenterTextView::Implementation::GetEditEngine()
 EditEngine* PresenterTextView::Implementation::CreateEditEngine()
 {
     EditEngine* pEditEngine = mpEditEngine;
-    if (pEditEngine == NULL)
+    if (pEditEngine == nullptr)
     {
 
         // set fonts to be used
@@ -344,26 +344,26 @@ EditEngine* PresenterTextView::Implementation::CreateEditEngine()
 void PresenterTextView::Implementation::SetCanvas (const cppcanvas::CanvasSharedPtr& rpCanvas)
 {
     mpCanvas = rpCanvas;
-    mxBitmap = NULL;
+    mxBitmap = nullptr;
 }
 
 void PresenterTextView::Implementation::SetSize (const Size aSize)
 {
-    DBG_ASSERT(mpEditEngine!=NULL, "EditEngine missing");
+    DBG_ASSERT(mpEditEngine!=nullptr, "EditEngine missing");
 
     maSize = aSize;
     mpEditEngine->SetPaperSize(maSize);
     mnTotalHeight = -1;
-    mxBitmap = NULL;
+    mxBitmap = nullptr;
 }
 
 void PresenterTextView::Implementation::SetBackgroundColor (const Color aColor)
 {
     maBackgroundColor = aColor;
-    mxBitmap = NULL;
+    mxBitmap = nullptr;
 
-    DBG_ASSERT(mpEditEngine!=NULL, "EditEngine missing");
-    DBG_ASSERT(mpEditEngineItemPool!=NULL, "EditEngineItemPool missing");
+    DBG_ASSERT(mpEditEngine!=nullptr, "EditEngine missing");
+    DBG_ASSERT(mpEditEngineItemPool!=nullptr, "EditEngineItemPool missing");
     mpEditEngine->SetBackgroundColor(aColor);
     mpEditEngine->EnableAutoColor(false);
     mpEditEngine->ForceAutoColor(false);
@@ -372,18 +372,18 @@ void PresenterTextView::Implementation::SetBackgroundColor (const Color aColor)
 void PresenterTextView::Implementation::SetTextColor (const Color aColor)
 {
     maTextColor = aColor;
-    mxBitmap = NULL;
+    mxBitmap = nullptr;
 
-    DBG_ASSERT(mpEditEngineItemPool!=NULL, "EditEngineItemPool missing");
+    DBG_ASSERT(mpEditEngineItemPool!=nullptr, "EditEngineItemPool missing");
     mpEditEngineItemPool->SetPoolDefaultItem(SvxColorItem(aColor, EE_CHAR_COLOR));
 }
 
 void PresenterTextView::Implementation::SetFontDescriptor (
     const awt::FontDescriptor& rFontDescriptor)
 {
-    mxBitmap = NULL;
+    mxBitmap = nullptr;
 
-    DBG_ASSERT(mpEditEngineItemPool!=NULL, "EditEngineItemPool missing");
+    DBG_ASSERT(mpEditEngineItemPool!=nullptr, "EditEngineItemPool missing");
 
     const sal_Int32 nFontHeight = rFontDescriptor.Height;
 
@@ -403,7 +403,7 @@ void PresenterTextView::Implementation::SetFontDescriptor (
     mpEditEngineItemPool->SetPoolDefaultItem(aSvxFontItem);
 
     mnTotalHeight = -1;
-    mxBitmap = NULL;
+    mxBitmap = nullptr;
 
     CheckTop();
     mnTotalHeight = -1;
@@ -415,22 +415,22 @@ void PresenterTextView::Implementation::SetTop (const sal_Int32 nTop)
         return;
 
     mnTop = nTop;
-    mxBitmap = NULL;
+    mxBitmap = nullptr;
     CheckTop();
 }
 
 void PresenterTextView::Implementation::SetText (const OUString& rText)
 {
-    DBG_ASSERT(mpEditEngine!=NULL, "EditEngine missing");
+    DBG_ASSERT(mpEditEngine!=nullptr, "EditEngine missing");
     msText = rText;
     mpEditEngine->SetPaperSize(maSize);
     mnTotalHeight = -1;
-    mxBitmap = NULL;
+    mxBitmap = nullptr;
 }
 
 sal_Int32 PresenterTextView::Implementation::ParseDistance (const OUString& rsDistance) const
 {
-    DBG_ASSERT(mpEditEngine!=NULL, "EditEngine missing");
+    DBG_ASSERT(mpEditEngine!=nullptr, "EditEngine missing");
     sal_Int32 nDistance (0);
     if (rsDistance.endsWith("px"))
     {
@@ -449,7 +449,7 @@ sal_Int32 PresenterTextView::Implementation::ParseDistance (const OUString& rsDi
 
 Reference<rendering::XBitmap> PresenterTextView::Implementation::GetBitmap()
 {
-    DBG_ASSERT(mpEditEngine!=NULL, "EditEngine missing");
+    DBG_ASSERT(mpEditEngine!=nullptr, "EditEngine missing");
 
     if ( ! mxBitmap.is())
     {
@@ -485,7 +485,7 @@ Reference<rendering::XBitmap> PresenterTextView::Implementation::GetBitmap()
 
 sal_Int32 PresenterTextView::Implementation::GetTotalHeight()
 {
-    DBG_ASSERT(mpEditEngine!=NULL, "EditEngine missing");
+    DBG_ASSERT(mpEditEngine!=nullptr, "EditEngine missing");
 
     if (mnTotalHeight < 0)
     {
@@ -498,11 +498,11 @@ sal_Int32 PresenterTextView::Implementation::GetTotalHeight()
 
 void PresenterTextView::Implementation::CheckTop()
 {
-    DBG_ASSERT(mpEditEngine!=NULL, "EditEngine missing");
+    DBG_ASSERT(mpEditEngine!=nullptr, "EditEngine missing");
 
-    if (mpEditEngine!=NULL && mnTotalHeight < 0)
+    if (mpEditEngine!=nullptr && mnTotalHeight < 0)
         mnTotalHeight = mpEditEngine->GetTextHeight();
-    if (mpEditEngine!=NULL && mnTop >= mnTotalHeight)
+    if (mpEditEngine!=nullptr && mnTop >= mnTotalHeight)
         mnTop = mnTotalHeight - mpEditEngine->GetLineHeight(0);
 
     if (mnTotalHeight < maSize.Height())

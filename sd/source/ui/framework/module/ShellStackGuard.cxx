@@ -41,7 +41,7 @@ namespace sd { namespace framework {
 ShellStackGuard::ShellStackGuard (Reference<frame::XController>& rxController)
     : ShellStackGuardInterfaceBase(m_aMutex),
       mxConfigurationController(),
-      mpBase(NULL),
+      mpBase(nullptr),
       mpUpdateLock(),
       maPrinterPollingIdle()
 {
@@ -56,7 +56,7 @@ ShellStackGuard::ShellStackGuard (Reference<frame::XController>& rxController)
         {
             ::sd::DrawController* pController = reinterpret_cast<sd::DrawController*>(
                 xTunnel->getSomething(sd::DrawController::getUnoTunnelId()));
-            if (pController != NULL)
+            if (pController != nullptr)
                 mpBase = pController->GetViewShellBase();
         }
     }
@@ -85,8 +85,8 @@ void SAL_CALL ShellStackGuard::disposing()
     if (mxConfigurationController.is())
         mxConfigurationController->removeConfigurationChangeListener(this);
 
-    mxConfigurationController = NULL;
-    mpBase = NULL;
+    mxConfigurationController = nullptr;
+    mpBase = nullptr;
 }
 
 void SAL_CALL ShellStackGuard::notifyConfigurationChange (
@@ -95,7 +95,7 @@ void SAL_CALL ShellStackGuard::notifyConfigurationChange (
 {
     if (rEvent.Type.equals(FrameworkHelper::msConfigurationUpdateStartEvent))
     {
-        if (mpUpdateLock.get() == NULL && IsPrinting())
+        if (mpUpdateLock.get() == nullptr && IsPrinting())
         {
             // Prevent configuration updates while the printer is printing.
             mpUpdateLock.reset(new ConfigurationController::Lock(mxConfigurationController));
@@ -113,8 +113,8 @@ void SAL_CALL ShellStackGuard::disposing (
     if (mxConfigurationController.is())
         if (rEvent.Source == mxConfigurationController)
         {
-            mxConfigurationController = NULL;
-            mpBase = NULL;
+            mxConfigurationController = nullptr;
+            mpBase = nullptr;
         }
 }
 
@@ -125,7 +125,7 @@ IMPL_LINK_TYPED(ShellStackGuard, TimeoutHandler, Idle*, pIdle, void)
 #else
     (void)pIdle;
 #endif
-    if (mpUpdateLock.get() != NULL)
+    if (mpUpdateLock.get() != nullptr)
     {
         if ( ! IsPrinting())
         {
@@ -142,10 +142,10 @@ IMPL_LINK_TYPED(ShellStackGuard, TimeoutHandler, Idle*, pIdle, void)
 
 bool ShellStackGuard::IsPrinting() const
 {
-    if (mpBase != NULL)
+    if (mpBase != nullptr)
     {
         SfxPrinter* pPrinter = mpBase->GetPrinter();
-        if (pPrinter != NULL
+        if (pPrinter != nullptr
             && pPrinter->IsPrinting())
         {
             return true;

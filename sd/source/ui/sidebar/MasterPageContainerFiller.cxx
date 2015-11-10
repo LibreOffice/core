@@ -32,7 +32,7 @@ MasterPageContainerFiller::MasterPageContainerFiller (ContainerAdapter& rpAdapte
     : mrContainerAdapter(rpAdapter),
       meState(INITIALIZE_TEMPLATE_SCANNER),
       mpScannerTask(),
-      mpLastAddedEntry(NULL),
+      mpLastAddedEntry(nullptr),
       mnIndex(1)
 {
     // Add one entry for the default master page.  We use temporarily the
@@ -85,7 +85,7 @@ void MasterPageContainerFiller::RunNextStep()
     {
         case DONE:
         case ERROR:
-            if (mpScannerTask.get() != NULL)
+            if (mpScannerTask.get() != nullptr)
             {
                 mrContainerAdapter.FillingDone();
                 mpScannerTask.reset();
@@ -112,7 +112,7 @@ MasterPageContainerFiller::State MasterPageContainerFiller::ScanTemplate()
 {
     State eState (ERROR);
 
-    if (mpScannerTask.get() != NULL)
+    if (mpScannerTask.get() != nullptr)
     {
         if (mpScannerTask->HasNextStep())
         {
@@ -120,7 +120,7 @@ MasterPageContainerFiller::State MasterPageContainerFiller::ScanTemplate()
             if (mpScannerTask->GetLastAddedEntry() != mpLastAddedEntry)
             {
                 mpLastAddedEntry = mpScannerTask->GetLastAddedEntry();
-                if (mpLastAddedEntry != NULL)
+                if (mpLastAddedEntry != nullptr)
                     eState = ADD_TEMPLATE;
                 else
                     eState = SCAN_TEMPLATE;
@@ -137,7 +137,7 @@ MasterPageContainerFiller::State MasterPageContainerFiller::ScanTemplate()
 
 MasterPageContainerFiller::State MasterPageContainerFiller::AddTemplate()
 {
-    if (mpLastAddedEntry != NULL)
+    if (mpLastAddedEntry != nullptr)
     {
         SharedMasterPageDescriptor pDescriptor (new MasterPageDescriptor(
             MasterPageContainer::TEMPLATE,

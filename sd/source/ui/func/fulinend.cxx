@@ -59,7 +59,7 @@ void FuLineEnd::DoExecute( SfxRequest& )
     {
         const SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
         const SdrObject* pNewObj;
-        SdrObject* pConvPolyObj = NULL;
+        SdrObject* pConvPolyObj = nullptr;
 
         if( dynamic_cast< const SdrPathObj *>( pObj ) !=  nullptr )
         {
@@ -114,7 +114,7 @@ void FuLineEnd::DoExecute( SfxRequest& )
         }
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        std::unique_ptr<AbstractSvxNameDialog> pDlg(pFact ? pFact->CreateSvxNameDialog( NULL, aName, aDesc ) : 0);
+        std::unique_ptr<AbstractSvxNameDialog> pDlg(pFact ? pFact->CreateSvxNameDialog( nullptr, aName, aDesc ) : nullptr);
 
         if( pDlg )
         {

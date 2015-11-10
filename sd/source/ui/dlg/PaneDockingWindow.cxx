@@ -68,7 +68,7 @@ void PaneDockingWindow::StateChanged( StateChangedType nType )
             // in-place slide show.
             ViewShellBase* pBase = ViewShellBase::GetViewShellBase(
                 GetBindings().GetDispatcher()->GetFrame());
-            if (pBase != NULL)
+            if (pBase != nullptr)
             {
                 framework::FrameworkHelper::Instance(*pBase)->UpdateConfiguration();
             }
@@ -98,7 +98,7 @@ void PaneDockingWindow::MouseButtonDown (const MouseEvent& rEvent)
 void PaneDockingWindow::SetValidSizeRange (const Range& rValidSizeRange)
 {
     SplitWindow* pSplitWindow = dynamic_cast<SplitWindow*>(GetParent());
-    if (pSplitWindow != NULL)
+    if (pSplitWindow != nullptr)
     {
         const sal_uInt16 nId (pSplitWindow->GetItemId(static_cast< vcl::Window*>(this)));
         const sal_uInt16 nSetId (pSplitWindow->GetSet(nId));
@@ -119,7 +119,7 @@ void PaneDockingWindow::SetValidSizeRange (const Range& rValidSizeRange)
 PaneDockingWindow::Orientation PaneDockingWindow::GetOrientation() const
 {
     SplitWindow* pSplitWindow = dynamic_cast<SplitWindow*>(GetParent());
-    if (pSplitWindow == NULL)
+    if (pSplitWindow == nullptr)
         return UnknownOrientation;
     else if (pSplitWindow->IsHorizontal())
         return HorizontalOrientation;

@@ -71,7 +71,7 @@ bool DrawViewShell::RenameSlide( sal_uInt16 nPageId, const OUString & rName  )
     if( GetDoc()->GetPageByName( rName, bOutDummy ) != SDRPAGE_NOTFOUND )
         return false;
 
-    SdPage* pPageToRename = NULL;
+    SdPage* pPageToRename = nullptr;
     PageKind ePageKind = GetPageKind();
 
     if( GetEditMode() == EM_PAGE )
@@ -128,7 +128,7 @@ bool DrawViewShell::RenameSlide( sal_uInt16 nPageId, const OUString & rName  )
         // accessibility.)
         slidesorter::SlideSorterViewShell* pSlideSorterViewShell
             = slidesorter::SlideSorterViewShell::GetSlideSorter(GetViewShellBase());
-        if (pSlideSorterViewShell != NULL)
+        if (pSlideSorterViewShell != nullptr)
         {
             pSlideSorterViewShell->GetSlideSorter().GetController().PageNameHasChanged(
                 nPageId-1, rName);
@@ -205,7 +205,7 @@ void DrawViewShell::ModifyLayer (
 
         // Call Invalidate at the form shell.
         FmFormShell* pFormShell = GetViewShellBase().GetFormShellManager()->GetFormShell();
-        if (pFormShell != NULL)
+        if (pFormShell != nullptr)
             pFormShell->Invalidate();
     }
 }

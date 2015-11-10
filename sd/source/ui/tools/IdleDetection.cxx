@@ -36,7 +36,7 @@ namespace sd { namespace tools {
 sal_Int32 IdleDetection::GetIdleState (const vcl::Window* pWindow)
 {
     sal_Int32 nResult (CheckInputPending() | CheckSlideShowRunning());
-    if (pWindow != NULL)
+    if (pWindow != nullptr)
         nResult |= CheckWindowPainting(*pWindow);
     return nResult;
 }
@@ -57,7 +57,7 @@ sal_Int32 IdleDetection::CheckSlideShowRunning()
 
     // Iterate over all view frames.
     for (SfxViewFrame* pViewFrame = SfxViewFrame::GetFirst();
-         pViewFrame!=NULL && !bIsSlideShowShowing;
+         pViewFrame!=nullptr && !bIsSlideShowShowing;
          pViewFrame = SfxViewFrame::GetNext(*pViewFrame))
     {
         // Ignore the current frame when it does not exist, is not valid, or
@@ -77,7 +77,7 @@ sal_Int32 IdleDetection::CheckSlideShowRunning()
 
         // Get sd::ViewShell from active frame.
         ViewShellBase* pBase = ViewShellBase::GetViewShellBase(pViewFrame);
-        if (pBase != NULL)
+        if (pBase != nullptr)
         {
             rtl::Reference< SlideShow > xSlideShow( SlideShow::GetSlideShow( *pBase ) );
             if( xSlideShow.is() && xSlideShow->isRunning() )

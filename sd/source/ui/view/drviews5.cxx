@@ -116,7 +116,7 @@ void DrawViewShell::ArrangeGUIElements()
 
     maTabControl->Hide();
 
-    OSL_ASSERT (GetViewShell()!=NULL);
+    OSL_ASSERT (GetViewShell()!=nullptr);
     Client* pIPClient = static_cast<Client*>(GetViewShell()->GetIPClient());
     bool bClientActive = false;
     if ( pIPClient && pIPClient->IsObjectInPlaceActive() )
@@ -436,7 +436,7 @@ void DrawViewShell::SetZoomFactor(const Fraction& rZoomX, const Fraction& rZoomY
 void DrawViewShell::HidePage()
 {
     FmFormShell* pFormShell = GetViewShellBase().GetFormShellManager()->GetFormShell();
-    if (pFormShell != NULL)
+    if (pFormShell != nullptr)
         pFormShell->PrepareClose(false);
 }
 
@@ -538,7 +538,7 @@ void DrawViewShell::VisAreaChanged(const Rectangle& rRect)
 css::uno::Reference<css::accessibility::XAccessible>
     DrawViewShell::CreateAccessibleDocumentView (::sd::Window* pWindow)
 {
-    if (GetViewShellBase().GetController() != NULL)
+    if (GetViewShellBase().GetController() != nullptr)
     {
         accessibility::AccessibleDrawDocumentView* pDocumentView =
             new accessibility::AccessibleDrawDocumentView (
@@ -560,7 +560,7 @@ int DrawViewShell::GetActiveTabLayerIndex() const
 {
     const LayerTabBar* pBar
         = const_cast<DrawViewShell*>(this)->GetLayerTabControl ();
-    if (pBar != NULL)
+    if (pBar != nullptr)
         return pBar->GetPagePos (pBar->GetCurPageId());
     else
         return -1;
@@ -569,7 +569,7 @@ int DrawViewShell::GetActiveTabLayerIndex() const
 void DrawViewShell::SetActiveTabLayerIndex (int nIndex)
 {
     LayerTabBar* pBar = GetLayerTabControl ();
-    if (pBar != NULL)
+    if (pBar != nullptr)
     {
         // Ignore invalid indices silently.
         if (nIndex>=0 && nIndex<pBar->GetPageCount())
@@ -595,7 +595,7 @@ int DrawViewShell::GetTabLayerCount() const
 {
     const LayerTabBar* pBar
         = const_cast<DrawViewShell*>(this)->GetLayerTabControl ();
-    if (pBar != NULL)
+    if (pBar != nullptr)
         return pBar->GetPageCount();
     else
         return 0;

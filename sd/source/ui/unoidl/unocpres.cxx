@@ -39,11 +39,11 @@ using namespace ::com::sun::star;
 
 uno::Reference< uno::XInterface > createUnoCustomShow( SdCustomShow* pShow )
 {
-    return static_cast<cppu::OWeakObject*>(new SdXCustomPresentation( pShow, NULL ));
+    return static_cast<cppu::OWeakObject*>(new SdXCustomPresentation( pShow, nullptr ));
 }
 
 SdXCustomPresentation::SdXCustomPresentation() throw()
-:   mpSdCustomShow(NULL), mpModel(NULL),
+:   mpSdCustomShow(nullptr), mpModel(nullptr),
     aDisposeListeners( aDisposeContainerMutex ),
     bDisposing( false )
 {
@@ -105,10 +105,10 @@ void SAL_CALL SdXCustomPresentation::insertByIndex( sal_Int32 Index, const uno::
 
     if(pPage)
     {
-        if( NULL == mpModel )
+        if( nullptr == mpModel )
             mpModel = pPage->GetModel();
 
-        if( NULL != mpModel && NULL == mpSdCustomShow && mpModel->GetDoc() )
+        if( nullptr != mpModel && nullptr == mpSdCustomShow && mpModel->GetDoc() )
             mpSdCustomShow = new SdCustomShow( mpModel->GetDoc() );
 
         mpSdCustomShow->PagesVector().insert(mpSdCustomShow->PagesVector().begin() + Index,
@@ -254,7 +254,7 @@ void SAL_CALL SdXCustomPresentation::dispose() throw(uno::RuntimeException, std:
     aEvt.Source = xSource;
     aDisposeListeners.disposeAndClear(aEvt);
 
-    mpSdCustomShow = NULL;
+    mpSdCustomShow = nullptr;
 }
 
 void SAL_CALL SdXCustomPresentation::addEventListener( const uno::Reference< lang::XEventListener >& xListener )
@@ -328,34 +328,34 @@ void SAL_CALL SdXCustomPresentationAccess::insertByName( const OUString& aName, 
     SolarMutexGuard aGuard;
 
     // get the documents custom show list
-    SdCustomShowList* pList = 0;
+    SdCustomShowList* pList = nullptr;
     if(mrModel.GetDoc())
         pList = mrModel.GetDoc()->GetCustomShowList(true);
 
     // no list, no cookies
-    if( NULL == pList)
+    if( nullptr == pList)
         throw uno::RuntimeException();
 
     // do we have an container::XIndexContainer?
-    SdXCustomPresentation* pXShow = NULL;
+    SdXCustomPresentation* pXShow = nullptr;
 
     uno::Reference< container::XIndexContainer > xContainer;
     if( (aElement >>= xContainer) && xContainer.is() )
         pXShow = SdXCustomPresentation::getImplementation(xContainer);
 
-    if( NULL == pXShow )
+    if( nullptr == pXShow )
         throw lang::IllegalArgumentException();
 
     // get the internal custom show from the api wrapper
     SdCustomShow* pShow = pXShow->GetSdCustomShow();
-    if( NULL == pShow )
+    if( nullptr == pShow )
     {
         pShow = new SdCustomShow( mrModel.GetDoc(), xContainer );
         pXShow->SetSdCustomShow( pShow );
     }
     else
     {
-        if( NULL == pXShow->GetModel() || *pXShow->GetModel() != mrModel )
+        if( nullptr == pXShow->GetModel() || *pXShow->GetModel() != mrModel )
             throw lang::IllegalArgumentException();
     }
 
@@ -448,7 +448,7 @@ sal_Bool SAL_CALL SdXCustomPresentationAccess::hasByName( const OUString& aName 
     throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    return getSdCustomShow(aName) != NULL;
+    return getSdCustomShow(aName) != nullptr;
 }
 
 // XElementAccess
@@ -483,7 +483,7 @@ SdCustomShow * SdXCustomPresentationAccess::getSdCustomShow( const OUString& Nam
             return pShow;
         nIdx++;
     }
-    return NULL;
+    return nullptr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

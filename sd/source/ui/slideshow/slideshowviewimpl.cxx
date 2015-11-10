@@ -211,7 +211,7 @@ void SAL_CALL SlideShowView::dispose() throw (RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    mpSlideShow = 0;
+    mpSlideShow = nullptr;
 
     // deregister listeners
     if( mxWindow.is() )
@@ -241,19 +241,19 @@ void SAL_CALL SlideShowView::disposing( const lang::EventObject& ) throw(Runtime
     // notify all listeners that _we_ are going down (send a disposing()),
     // then delete listener containers:
     lang::EventObject const evt( static_cast<OWeakObject *>(this) );
-    if (mpViewListeners.get() != 0) {
+    if (mpViewListeners.get() != nullptr) {
         mpViewListeners->disposing( evt );
         mpViewListeners.reset();
     }
-    if (mpPaintListeners.get() != 0) {
+    if (mpPaintListeners.get() != nullptr) {
         mpPaintListeners->disposing( evt );
         mpPaintListeners.reset();
     }
-    if (mpMouseListeners.get() != 0) {
+    if (mpMouseListeners.get() != nullptr) {
         mpMouseListeners->disposing( evt );
         mpMouseListeners.reset();
     }
-    if (mpMouseMotionListeners.get() != 0) {
+    if (mpMouseMotionListeners.get() != nullptr) {
         mpMouseMotionListeners->disposing( evt );
         mpMouseMotionListeners.reset();
     }

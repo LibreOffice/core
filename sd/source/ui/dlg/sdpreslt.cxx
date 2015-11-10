@@ -72,7 +72,7 @@ void SdPresLayoutDlg::dispose()
  */
 void SdPresLayoutDlg::Reset()
 {
-    const SfxPoolItem *pPoolItem = NULL;
+    const SfxPoolItem *pPoolItem = nullptr;
     long nName;
 
     // replace master page

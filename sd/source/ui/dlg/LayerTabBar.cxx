@@ -125,7 +125,7 @@ sal_Int8 LayerTabBar::AcceptDrop( const AcceptDropEvent& rEvt )
         sal_uInt16 nLayerId = pDrViewSh->GetView()->GetDoc().GetLayerAdmin().GetLayerID(
             GetPageText( GetPageId( aPos ) ), false );
 
-        nRet = pDrViewSh->AcceptDrop( rEvt, *this, NULL, nPageId, nLayerId );
+        nRet = pDrViewSh->AcceptDrop( rEvt, *this, nullptr, nPageId, nLayerId );
 
         SwitchPage( aPos );
     }
@@ -141,7 +141,7 @@ sal_Int8 LayerTabBar::ExecuteDrop( const ExecuteDropEvent& rEvt )
     sal_uInt16          nPageId = SDRPAGE_NOTFOUND;
     sal_uInt16 nLayerId = pDrViewSh->GetView()->GetDoc().GetLayerAdmin().GetLayerID(
         GetPageText( GetPageId( PixelToLogic( rEvt.maPosPixel ) ) ), false );
-    sal_Int8        nRet = pDrViewSh->ExecuteDrop( rEvt, *this, NULL, nPageId, nLayerId );
+    sal_Int8        nRet = pDrViewSh->ExecuteDrop( rEvt, *this, nullptr, nPageId, nLayerId );
 
     EndSwitchPage();
 
@@ -279,7 +279,7 @@ void LayerTabBar::EndRenaming()
 
 void LayerTabBar::ActivatePage()
 {
-    if ( /*IsInSwitching*/ true && pDrViewSh!=NULL)
+    if ( /*IsInSwitching*/ true && pDrViewSh!=nullptr)
     {
 
         SfxDispatcher* pDispatcher = pDrViewSh->GetViewFrame()->GetDispatcher();

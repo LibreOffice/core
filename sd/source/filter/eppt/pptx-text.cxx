@@ -60,8 +60,8 @@ PortionObj::PortionObj( const css::uno::Reference< css::beans::XPropertySet > & 
     mnAsianOrComplexFont( 0xffff ),
     mnTextSize          ( 0 ),
     mbLastPortion       ( true ),
-    mpText              ( NULL ),
-    mpFieldEntry        ( NULL )
+    mpText              ( nullptr ),
+    mpFieldEntry        ( nullptr )
 {
     mXPropSet = rXPropSet;
 
@@ -83,8 +83,8 @@ PortionObj::PortionObj(css::uno::Reference< css::text::XTextRange > & rXTextRang
     , mnAsianOrComplexFont(0xffff)
     , mnCharEscapement(0)
     , mbLastPortion(bLast)
-    , mpText(NULL)
-    , mpFieldEntry(NULL)
+    , mpText(nullptr)
+    , mpFieldEntry(nullptr)
 {
     OUString aString( rXTextRange->getString() );
     OUString aURL;
@@ -96,7 +96,7 @@ PortionObj::PortionObj(css::uno::Reference< css::text::XTextRange > & rXTextRang
     if ( mnTextSize )
     {
         bool bRTL_endingParen = false;
-        mpFieldEntry = NULL;
+        mpFieldEntry = nullptr;
         sal_uInt32 nFieldType = 0;
 
         mXPropSet.set( rXTextRange, css::uno::UNO_QUERY );
@@ -456,12 +456,12 @@ void PortionObj::ImplConstruct( const PortionObj& rPortionObj )
         memcpy( mpText, rPortionObj.mpText, mnTextSize << 1 );
     }
     else
-        mpText = NULL;
+        mpText = nullptr;
 
     if ( rPortionObj.mpFieldEntry )
         mpFieldEntry = new FieldEntry( *( rPortionObj.mpFieldEntry ) );
     else
-        mpFieldEntry = NULL;
+        mpFieldEntry = nullptr;
 }
 
 sal_uInt32 PortionObj::ImplCalculateTextPositions( sal_uInt32 nCurrentTextPosition )
@@ -1384,11 +1384,11 @@ void FontCollectionEntry::ImplInit( const OUString& rName )
 FontCollection::~FontCollection()
 {
     pVDev.disposeAndClear();
-    xPPTBreakIter = NULL;
+    xPPTBreakIter = nullptr;
 }
 
 FontCollection::FontCollection() :
-    pVDev ( NULL )
+    pVDev ( nullptr )
 {
     xPPTBreakIter = css::i18n::BreakIterator::create( ::comphelper::getProcessComponentContext() );
 }
@@ -1439,7 +1439,7 @@ sal_uInt32 FontCollection::GetId( FontCollectionEntry& rEntry )
 
 const FontCollectionEntry* FontCollection::GetById( sal_uInt32 nId )
 {
-    return nId < maFonts.size() ? &maFonts[nId] : NULL;
+    return nId < maFonts.size() ? &maFonts[nId] : nullptr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

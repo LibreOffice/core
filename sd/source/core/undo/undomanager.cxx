@@ -23,7 +23,7 @@ using namespace sd;
 
 UndoManager::UndoManager( sal_uInt16 nMaxUndoActionCount /* = 20 */ )
   : SdrUndoManager( nMaxUndoActionCount )
-  , mpLinkedUndoManager(NULL)
+  , mpLinkedUndoManager(nullptr)
 {
 }
 
@@ -56,7 +56,7 @@ void UndoManager::SetLinkedUndoManager (::svl::IUndoManager* pLinkedUndoManager)
 
 void UndoManager::ClearLinkedRedoActions()
 {
-    if (mpLinkedUndoManager != NULL)
+    if (mpLinkedUndoManager != nullptr)
         mpLinkedUndoManager->ClearRedo();
 }
 

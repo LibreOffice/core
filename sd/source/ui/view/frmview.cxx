@@ -69,7 +69,7 @@ FrameView::FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView /* = NULK *
     SetFrameDragSingles();
     SetSlidesPerRow(4);
 
-    if( NULL == pFrameView )
+    if( nullptr == pFrameView )
     {
         DrawDocShell* pDocShell = pDrawDoc->GetDocSh();
 
@@ -86,7 +86,7 @@ FrameView::FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView /* = NULK *
                 SfxViewShell* pSfxViewSh = pSfxViewFrame->GetViewShell();
                 ViewShellBase* pBase = dynamic_cast<ViewShellBase*>( pSfxViewSh  );
 
-                if (pBase != NULL)
+                if (pBase != nullptr)
                 {
                     nSdViewShellCount++;
 

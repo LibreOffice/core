@@ -49,7 +49,7 @@ SlideSorterModule::SlideSorterModule (
 {
     if (mxConfigurationController.is())
     {
-        UpdateViewTabBar(NULL);
+        UpdateViewTabBar(nullptr);
 
         if (SvtSlideSorterBarOptions().GetVisibleImpressView())
             AddActiveMainView(FrameworkHelper::msImpressViewURL);
@@ -105,7 +105,7 @@ void SAL_CALL SlideSorterModule::notifyConfigurationChange (
         {
             // Update the view tab bar because the view in the center pane
             // has changed.
-            UpdateViewTabBar(NULL);
+            UpdateViewTabBar(nullptr);
         }
     }
     else

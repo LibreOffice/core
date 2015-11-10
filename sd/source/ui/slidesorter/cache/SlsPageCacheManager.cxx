@@ -169,7 +169,7 @@ std::shared_ptr<PageCacheManager> PageCacheManager::Instance()
     ::osl::MutexGuard aGuard (::osl::Mutex::getGlobalMutex());
 
     pInstance = mpInstance.lock();
-    if (pInstance.get() == NULL)
+    if (pInstance.get() == nullptr)
     {
         pInstance = std::shared_ptr<PageCacheManager>(
             new PageCacheManager(),
@@ -204,11 +204,11 @@ std::shared_ptr<PageCacheManager::Cache> PageCacheManager::GetCache (
         pResult = iCache->second;
 
     // Look for the cache in the list of recently used caches.
-    if (pResult.get() == NULL)
+    if (pResult.get() == nullptr)
         pResult = GetRecentlyUsedCache(pDocument, rPreviewSize);
 
     // Create the cache when no suitable one does exist.
-    if (pResult.get() == NULL)
+    if (pResult.get() == nullptr)
         pResult.reset(new Cache());
 
     // The cache may be newly created and thus empty or is old and may
@@ -217,7 +217,7 @@ std::shared_ptr<PageCacheManager::Cache> PageCacheManager::GetCache (
     Recycle(pResult, pDocument,rPreviewSize);
 
     // Put the new (or old) cache into the container.
-    if (pResult.get() != NULL)
+    if (pResult.get() != nullptr)
         mpPageCaches->insert(PageCacheContainer::value_type(aKey, pResult));
 
     return pResult;
@@ -284,7 +284,7 @@ std::shared_ptr<PageCacheManager::Cache> PageCacheManager::ChangeSize (
 
     std::shared_ptr<Cache> pResult;
 
-    if (rpCache.get() != NULL)
+    if (rpCache.get() != nullptr)
     {
         // Look up the given cache in the list of active caches.
         PageCacheContainer::iterator iCacheToChange (::std::find_if(
@@ -322,7 +322,7 @@ bool PageCacheManager::InvalidatePreviewBitmap (
 {
     bool bHasChanged (false);
 
-    if (pDocument!=NULL)
+    if (pDocument!=nullptr)
     {
         // Iterate over all caches that are currently in use and invalidate
         // the previews in those that belong to the document.
@@ -347,7 +347,7 @@ bool PageCacheManager::InvalidatePreviewBitmap (
 
 void PageCacheManager::InvalidateAllPreviewBitmaps (DocumentKey pDocument)
 {
-    if (pDocument == NULL)
+    if (pDocument == nullptr)
         return;
 
     // Iterate over all caches that are currently in use and invalidate the

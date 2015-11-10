@@ -216,7 +216,7 @@ namespace {
 template< typename ItemValue, typename ItemType >
 void checkFontAttributes( const SdrTextObj* pObj, ItemValue nVal)
 {
-    CPPUNIT_ASSERT_MESSAGE( "no object", pObj != NULL);
+    CPPUNIT_ASSERT_MESSAGE( "no object", pObj != nullptr);
     const EditTextObject& aEdit = pObj->GetOutlinerParaObject()->GetTextObject();
     std::vector<EECharAttrib> rLst;
     aEdit.GetCharAttribs(0, rLst);
@@ -238,9 +238,9 @@ void SdExportTest::testBnc870233_1()
     xDocShRef = saveAndReload( xDocShRef, PPTX );
 
     SdDrawDocument *pDoc = xDocShRef->GetDoc();
-    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
+    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != nullptr );
     const SdrPage *pPage = pDoc->GetPage (1);
-    CPPUNIT_ASSERT_MESSAGE( "no page", pPage != NULL );
+    CPPUNIT_ASSERT_MESSAGE( "no page", pPage != nullptr );
 
     // The problem was all shapes had the same font (the last parsed font attribues overwrote all previous ones)
 
@@ -267,9 +267,9 @@ void SdExportTest::testBnc870233_2()
     xDocShRef = saveAndReload( xDocShRef, PPTX );
 
     SdDrawDocument *pDoc = xDocShRef->GetDoc();
-    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
+    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != nullptr );
     const SdrPage *pPage = pDoc->GetPage (1);
-    CPPUNIT_ASSERT_MESSAGE( "no page", pPage != NULL );
+    CPPUNIT_ASSERT_MESSAGE( "no page", pPage != nullptr );
 
     // The problem was in some SmartArts font color was wrong
 
@@ -302,9 +302,9 @@ void SdExportTest::testN828390_4()
     xDocShRef = saveAndReload( xDocShRef, PPTX );
 
     SdDrawDocument *pDoc = xDocShRef->GetDoc();
-    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
+    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != nullptr );
     const SdrPage *pPage = pDoc->GetPage(1);
-    CPPUNIT_ASSERT_MESSAGE( "no page", pPage != NULL );
+    CPPUNIT_ASSERT_MESSAGE( "no page", pPage != nullptr );
     {
         std::vector<EECharAttrib> rLst;
         SdrObject *pObj = pPage->GetObj(0);
@@ -340,9 +340,9 @@ void SdExportTest::testN828390_5()
     xDocShRef = saveAndReload( xDocShRef, PPTX );
 
     SdDrawDocument *pDoc = xDocShRef->GetDoc();
-    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
+    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != nullptr );
     const SdrPage *pPage = pDoc->GetPage(1);
-    CPPUNIT_ASSERT_MESSAGE( "no page", pPage != NULL );
+    CPPUNIT_ASSERT_MESSAGE( "no page", pPage != nullptr );
     {
         SdrObject *pObj = pPage->GetObj(0);
         SdrTextObj *pTxtObj = dynamic_cast<SdrTextObj *>( pObj );
@@ -362,9 +362,9 @@ void SdExportTest::testTransparentBackground()
     xDocShRef = saveAndReload( xDocShRef, ODP );
 
     SdDrawDocument *pDoc = xDocShRef->GetDoc();
-    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
+    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != nullptr );
     const SdrPage *pPage = pDoc->GetPage (1);
-    CPPUNIT_ASSERT_MESSAGE( "no page", pPage != NULL );
+    CPPUNIT_ASSERT_MESSAGE( "no page", pPage != nullptr );
 
     const SdrTextObj *pObj1 = dynamic_cast<SdrTextObj *>( pPage->GetObj( 0 ) );
     checkFontAttributes<Color, SvxBackgroundColorItem>( pObj1, Color(COL_TRANSPARENT) );
@@ -382,14 +382,14 @@ void SdExportTest::testMediaEmbedding()
 #endif
 
     SdDrawDocument *pDoc = xDocShRef->GetDoc();
-    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
+    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != nullptr );
     const SdrPage *pPage = pDoc->GetPage (1);
-    CPPUNIT_ASSERT_MESSAGE( "no page", pPage != NULL );
+    CPPUNIT_ASSERT_MESSAGE( "no page", pPage != nullptr );
 
 #if HAVE_FEATURE_GLTF
     // First object is a glTF model
     SdrMediaObj *pModelObj = dynamic_cast<SdrMediaObj*>( pPage->GetObj( 2 ));
-    CPPUNIT_ASSERT_MESSAGE( "missing model", pModelObj != NULL);
+    CPPUNIT_ASSERT_MESSAGE( "missing model", pModelObj != nullptr);
     CPPUNIT_ASSERT_EQUAL( OUString( "vnd.sun.star.Package:Models/duck/duck.json" ), pModelObj->getMediaProperties().getURL());
     CPPUNIT_ASSERT_EQUAL( OUString( "model/vnd.gltf+json" ), pModelObj->getMediaProperties().getMimeType());
 #else
@@ -401,7 +401,7 @@ void SdExportTest::testMediaEmbedding()
 
     // Second object is a sound
     SdrMediaObj *pMediaObj = dynamic_cast<SdrMediaObj*>( pPage->GetObj( 3 ));
-    CPPUNIT_ASSERT_MESSAGE( "missing media object", pMediaObj != NULL);
+    CPPUNIT_ASSERT_MESSAGE( "missing media object", pMediaObj != nullptr);
     CPPUNIT_ASSERT_EQUAL( OUString( "vnd.sun.star.Package:Media/button-1.wav" ), pMediaObj->getMediaProperties().getURL());
     CPPUNIT_ASSERT_EQUAL( OUString( "application/vnd.sun.star.media" ), pMediaObj->getMediaProperties().getMimeType());
 
@@ -429,24 +429,24 @@ void SdExportTest::testFdo71961()
     xDocShRef = saveAndReload( xDocShRef, PPTX );
 
     SdDrawDocument *pDoc = xDocShRef->GetDoc();
-    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
+    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != nullptr );
     const SdrPage *pPage = pDoc->GetPage (1);
-    CPPUNIT_ASSERT_MESSAGE( "no page", pPage != NULL );
+    CPPUNIT_ASSERT_MESSAGE( "no page", pPage != nullptr );
 
     // Export to .pptx changes all text frames to custom shape objects, which obey TextWordWrap property
     // (which is false for text frames otherwise and is ignored). Check that frames that should wrap still do.
     SdrObjCustomShape *pTxtObj = dynamic_cast<SdrObjCustomShape *>( pPage->GetObj( 1 ));
-    CPPUNIT_ASSERT_MESSAGE( "no text object", pTxtObj != NULL);
+    CPPUNIT_ASSERT_MESSAGE( "no text object", pTxtObj != nullptr);
     CPPUNIT_ASSERT_EQUAL( OUString( "Text to be always wrapped" ), pTxtObj->GetOutlinerParaObject()->GetTextObject().GetText(0));
     CPPUNIT_ASSERT_EQUAL( true, (static_cast<const SdrOnOffItem&>(pTxtObj->GetMergedItem(SDRATTR_TEXT_WORDWRAP))).GetValue());
 
     pTxtObj = dynamic_cast<SdrObjCustomShape *>( pPage->GetObj( 2 ));
-    CPPUNIT_ASSERT_MESSAGE( "no text object", pTxtObj != NULL);
+    CPPUNIT_ASSERT_MESSAGE( "no text object", pTxtObj != nullptr);
     CPPUNIT_ASSERT_EQUAL( OUString( "Custom shape non-wrapped text" ), pTxtObj->GetOutlinerParaObject()->GetTextObject().GetText(0));
     CPPUNIT_ASSERT_EQUAL( false, (static_cast<const SdrOnOffItem&>(pTxtObj->GetMergedItem(SDRATTR_TEXT_WORDWRAP))).GetValue());
 
     pTxtObj = dynamic_cast<SdrObjCustomShape *>( pPage->GetObj( 3 ));
-    CPPUNIT_ASSERT_MESSAGE( "no text object", pTxtObj != NULL);
+    CPPUNIT_ASSERT_MESSAGE( "no text object", pTxtObj != nullptr);
     CPPUNIT_ASSERT_EQUAL( OUString( "Custom shape wrapped text" ), pTxtObj->GetOutlinerParaObject()->GetTextObject().GetText(0));
     CPPUNIT_ASSERT_EQUAL( true, (static_cast<const SdrOnOffItem&>(pTxtObj->GetMergedItem(SDRATTR_TEXT_WORDWRAP))).GetValue());
 
@@ -461,9 +461,9 @@ void SdExportTest::testN828390()
     xDocShRef = saveAndReload( xDocShRef, PPTX );
 
     SdDrawDocument *pDoc = xDocShRef->GetDoc();
-    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
+    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != nullptr );
     const SdrPage *pPage = pDoc->GetPage(1);
-    CPPUNIT_ASSERT_MESSAGE( "no page", pPage != NULL );
+    CPPUNIT_ASSERT_MESSAGE( "no page", pPage != nullptr );
     {
         std::vector<EECharAttrib> rLst;
         // Get the object
@@ -496,19 +496,19 @@ void SdExportTest::testBnc880763()
     xDocShRef = saveAndReload( xDocShRef, PPTX );
 
     SdDrawDocument *pDoc = xDocShRef->GetDoc();
-    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
+    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != nullptr );
     const SdrPage *pPage = pDoc->GetPage (1);
-    CPPUNIT_ASSERT_MESSAGE( "no page", pPage != NULL );
+    CPPUNIT_ASSERT_MESSAGE( "no page", pPage != nullptr );
 
     // Check z-order of the two shapes, use background color to identify them
     // First object in the background has blue background color
     const SdrObject *pObj = dynamic_cast<SdrObject *>( pPage->GetObj( 0 ) );
-    CPPUNIT_ASSERT_MESSAGE( "no object", pObj != NULL);
+    CPPUNIT_ASSERT_MESSAGE( "no object", pObj != nullptr);
     CPPUNIT_ASSERT_EQUAL( sal_uInt32(0x0000ff),(static_cast< const XColorItem& >(pObj->GetMergedItem(XATTR_FILLCOLOR))).GetColorValue().GetColor());
 
     // Second object at the front has green background color
     pObj = dynamic_cast<SdrObject *>( pPage->GetObj( 1 ) );
-    CPPUNIT_ASSERT_MESSAGE( "no object", pObj != NULL);
+    CPPUNIT_ASSERT_MESSAGE( "no object", pObj != nullptr);
     CPPUNIT_ASSERT_EQUAL( sal_uInt32(0x00ff00),(static_cast< const XColorItem& >(pObj->GetMergedItem(XATTR_FILLCOLOR))).GetColorValue().GetColor());
 
     xDocShRef->DoClose();
@@ -520,13 +520,13 @@ void SdExportTest::testBnc862510_5()
     xDocShRef = saveAndReload( xDocShRef, PPTX );
 
     SdDrawDocument *pDoc = xDocShRef->GetDoc();
-    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
+    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != nullptr );
     const SdrPage *pPage = pDoc->GetPage (1);
-    CPPUNIT_ASSERT_MESSAGE( "no page", pPage != NULL );
+    CPPUNIT_ASSERT_MESSAGE( "no page", pPage != nullptr );
 
     // Same as testBnc870237, but here we check the horizontal spacing
     const SdrObject* pObj = dynamic_cast<SdrObject*>( pPage->GetObj( 1 ) );
-    CPPUNIT_ASSERT_MESSAGE( "no object", pObj != NULL);
+    CPPUNIT_ASSERT_MESSAGE( "no object", pObj != nullptr);
     CPPUNIT_ASSERT_EQUAL( sal_Int32(0), (static_cast< const SdrMetricItem& >(pObj->GetMergedItem(SDRATTR_TEXT_UPPERDIST))).GetValue());
     CPPUNIT_ASSERT_EQUAL( sal_Int32(0), (static_cast< const SdrMetricItem& >(pObj->GetMergedItem(SDRATTR_TEXT_LOWERDIST))).GetValue());
     CPPUNIT_ASSERT_EQUAL( sal_Int32(7510), (static_cast< const SdrMetricItem& >(pObj->GetMergedItem(SDRATTR_TEXT_RIGHTDIST))).GetValue());
@@ -578,12 +578,12 @@ void SdExportTest::testFdo90607()
     uno::Reference< drawing::XDrawPage > xPage(
         xDoc->getDrawPages()->getByIndex(0), uno::UNO_QUERY_THROW );
      SdDrawDocument *pDoc = xDocShRef->GetDoc();
-    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
+    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != nullptr );
 
     const SdrPage *pPage = pDoc->GetPage(1);
-    CPPUNIT_ASSERT_MESSAGE( "no page", pPage != NULL );
+    CPPUNIT_ASSERT_MESSAGE( "no page", pPage != nullptr );
     SdrTextObj *pTxtObj = dynamic_cast<SdrTextObj *>( pPage->GetObj(1) );
-    CPPUNIT_ASSERT_MESSAGE( "no text object", pTxtObj != NULL);
+    CPPUNIT_ASSERT_MESSAGE( "no text object", pTxtObj != nullptr);
     OutlinerParaObject* pOutlinerParagraphObject = pTxtObj->GetOutlinerParaObject();
     const sal_Int16 nDepth = pOutlinerParagraphObject->GetDepth(0);
     CPPUNIT_ASSERT_MESSAGE("not equal", nDepth != -1);
@@ -596,7 +596,7 @@ void SdExportTest::testFdo83751()
     xDocShRef = saveAndReload( xDocShRef, PPTX );
 
     SdDrawDocument *pDoc = xDocShRef->GetDoc();
-    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
+    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != nullptr );
 
     uno::Reference<document::XDocumentPropertiesSupplier> xDocumentPropertiesSupplier( xDocShRef->GetModel(), uno::UNO_QUERY );
     uno::Reference<document::XDocumentProperties> xProps( xDocumentPropertiesSupplier->getDocumentProperties(), uno::UNO_QUERY );
@@ -743,11 +743,11 @@ void SdExportTest::testLinkedGraphicRT()
 
         // Check whether graphic imported well after export
         SdDrawDocument *pDoc = xDocShRef->GetDoc();
-        CPPUNIT_ASSERT_MESSAGE( sFailedMessage.getStr(), pDoc != NULL );
+        CPPUNIT_ASSERT_MESSAGE( sFailedMessage.getStr(), pDoc != nullptr );
         const SdrPage *pPage = pDoc->GetPage(1);
-        CPPUNIT_ASSERT_MESSAGE( sFailedMessage.getStr(), pPage != NULL );
+        CPPUNIT_ASSERT_MESSAGE( sFailedMessage.getStr(), pPage != nullptr );
         SdrGrafObj* pObject = dynamic_cast<SdrGrafObj*>(pPage->GetObj(2));
-        CPPUNIT_ASSERT_MESSAGE( sFailedMessage.getStr(), pObject != NULL );
+        CPPUNIT_ASSERT_MESSAGE( sFailedMessage.getStr(), pObject != nullptr );
         CPPUNIT_ASSERT_MESSAGE( sFailedMessage.getStr(), pObject->IsLinkedGraphic() );
 
         const GraphicObject& rGraphicObj = pObject->GetGraphicObject(true);
@@ -861,9 +861,9 @@ void SdExportTest::testTableCellFillProperties()
     xDocShRef = loadURL(aTempFile.GetURL(), PPTX);
 
     SdDrawDocument *pDoc = xDocShRef->GetDoc();
-    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
+    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != nullptr );
     const SdrPage *pPage = pDoc->GetPage(1);
-    CPPUNIT_ASSERT_MESSAGE( "no page", pPage != NULL );
+    CPPUNIT_ASSERT_MESSAGE( "no page", pPage != nullptr );
 
     sdr::table::SdrTableObj *pTableObj = dynamic_cast<sdr::table::SdrTableObj*>(pPage->GetObj(0));
     CPPUNIT_ASSERT( pTableObj );
@@ -901,12 +901,12 @@ void SdExportTest::testBulletStartNumber()
     uno::Reference< drawing::XDrawPage > xPage(
         xDoc->getDrawPages()->getByIndex(0), uno::UNO_QUERY_THROW );
     SdDrawDocument *pDoc = xDocShRef->GetDoc();
-    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
+    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != nullptr );
 
     const SdrPage *pPage = pDoc->GetPage(1);
-    CPPUNIT_ASSERT_MESSAGE( "no page", pPage != NULL );
+    CPPUNIT_ASSERT_MESSAGE( "no page", pPage != nullptr );
     SdrTextObj *pTxtObj = dynamic_cast<SdrTextObj *>( pPage->GetObj(0) );
-    CPPUNIT_ASSERT_MESSAGE( "no text object", pTxtObj != NULL);
+    CPPUNIT_ASSERT_MESSAGE( "no text object", pTxtObj != nullptr);
     const EditTextObject& aEdit = pTxtObj->GetOutlinerParaObject()->GetTextObject();
     const SvxNumBulletItem *pNumFmt = dynamic_cast<const SvxNumBulletItem *>(aEdit.GetParaAttribs(0).GetItem(EE_PARA_NUMBULLET));
     CPPUNIT_ASSERT(pNumFmt);
@@ -1022,13 +1022,13 @@ void SdExportTest::testBulletColor()
     uno::Reference< drawing::XDrawPage > xPage(
         xDoc->getDrawPages()->getByIndex(0), uno::UNO_QUERY_THROW );
     SdDrawDocument *pDoc = xDocShRef->GetDoc();
-    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
+    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != nullptr );
 
     const SdrPage *pPage = pDoc->GetPage(1);
-    CPPUNIT_ASSERT_MESSAGE( "no page", pPage != NULL );
+    CPPUNIT_ASSERT_MESSAGE( "no page", pPage != nullptr );
 
     SdrTextObj *pTxtObj = dynamic_cast<SdrTextObj *>( pPage->GetObj(0) );
-    CPPUNIT_ASSERT_MESSAGE( "no text object", pTxtObj != NULL);
+    CPPUNIT_ASSERT_MESSAGE( "no text object", pTxtObj != nullptr);
 
     const EditTextObject& aEdit = pTxtObj->GetOutlinerParaObject()->GetTextObject();
     const SvxNumBulletItem *pNumFmt = dynamic_cast<const SvxNumBulletItem *>(aEdit.GetParaAttribs(0).GetItem(EE_PARA_NUMBULLET));
@@ -1120,7 +1120,7 @@ void SdExportTest::testTdf91378()
     for( sal_uInt32 i=0;i<2;i++)
     {
       SdDrawDocument *pDoc = xDocShRef->GetDoc();
-      CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
+      CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != nullptr );
       uno::Reference<document::XDocumentPropertiesSupplier> xDocumentPropertiesSupplier( xDocShRef->GetModel(), uno::UNO_QUERY );
       uno::Reference<document::XDocumentProperties> xProps( xDocumentPropertiesSupplier->getDocumentProperties(), uno::UNO_QUERY );
       uno::Reference<beans::XPropertySet> xUDProps( xProps->getUserDefinedProperties(), uno::UNO_QUERY );
@@ -1143,12 +1143,12 @@ void SdExportTest::testBnc822341()
     // Export an LO specific ole object (imported from an ODP document)
     {
         SdDrawDocument *pDoc = xDocShRef->GetDoc();
-        CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
+        CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != nullptr );
         const SdrPage *pPage = pDoc->GetPage(1);
-        CPPUNIT_ASSERT_MESSAGE( "no page", pPage != NULL );
+        CPPUNIT_ASSERT_MESSAGE( "no page", pPage != nullptr );
 
         const SdrObject* pObj = dynamic_cast<SdrObject*>( pPage->GetObj(0) );
-        CPPUNIT_ASSERT_MESSAGE( "no object", pObj != NULL);
+        CPPUNIT_ASSERT_MESSAGE( "no object", pObj != nullptr);
         CPPUNIT_ASSERT_EQUAL( static_cast<sal_uInt16>(OBJ_OLE2), pObj->GetObjIdentifier() );
     }
 
@@ -1157,12 +1157,12 @@ void SdExportTest::testBnc822341()
     // Export an MS specific ole object (imported from a PPTX document)
     {
         SdDrawDocument *pDoc = xDocShRef->GetDoc();
-        CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
+        CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != nullptr );
         const SdrPage *pPage = pDoc->GetPage(1);
-        CPPUNIT_ASSERT_MESSAGE( "no page", pPage != NULL );
+        CPPUNIT_ASSERT_MESSAGE( "no page", pPage != nullptr );
 
         const SdrObject* pObj = dynamic_cast<SdrObject*>( pPage->GetObj(0) );
-        CPPUNIT_ASSERT_MESSAGE( "no object", pObj != NULL);
+        CPPUNIT_ASSERT_MESSAGE( "no object", pObj != nullptr);
         CPPUNIT_ASSERT_EQUAL( static_cast<sal_uInt16>(OBJ_OLE2), pObj->GetObjIdentifier() );
     }
 
@@ -1182,13 +1182,13 @@ void SdExportTest::testBulletMarginAndIndentation()
     uno::Reference< drawing::XDrawPage > xPage(
     xDoc->getDrawPages()->getByIndex(0), uno::UNO_QUERY_THROW );
     SdDrawDocument *pDoc = xDocShRef->GetDoc();
-    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
+    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != nullptr );
 
     const SdrPage *pPage = pDoc->GetPage(1);
-    CPPUNIT_ASSERT_MESSAGE( "no page", pPage != NULL );
+    CPPUNIT_ASSERT_MESSAGE( "no page", pPage != nullptr );
 
     SdrTextObj *pTxtObj = dynamic_cast<SdrTextObj *>( pPage->GetObj(0) );
-    CPPUNIT_ASSERT_MESSAGE( "no text object", pTxtObj != NULL);
+    CPPUNIT_ASSERT_MESSAGE( "no text object", pTxtObj != nullptr);
 
     const EditTextObject& aEdit = pTxtObj->GetOutlinerParaObject()->GetTextObject();
     const SvxNumBulletItem *pNumFmt = dynamic_cast<const SvxNumBulletItem *>(aEdit.GetParaAttribs(0).GetItem(EE_PARA_NUMBULLET));
@@ -1246,10 +1246,10 @@ void SdExportTest::testCellLeftAndRightMargin()
 
     uno::Reference< drawing::XDrawPage > xPage(xDoc->getDrawPages()->getByIndex(0), uno::UNO_QUERY_THROW );
     SdDrawDocument *pDoc = xDocShRef->GetDoc();
-    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
+    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != nullptr );
 
     const SdrPage *pPage = pDoc->GetPage(1);
-    CPPUNIT_ASSERT_MESSAGE( "no page", pPage != NULL );
+    CPPUNIT_ASSERT_MESSAGE( "no page", pPage != nullptr );
 
     sdr::table::SdrTableObj *pTableObj = dynamic_cast<sdr::table::SdrTableObj*>(pPage->GetObj(0));
     CPPUNIT_ASSERT( pTableObj );
@@ -1283,10 +1283,10 @@ void SdExportTest::testTableCellBorder()
 
     uno::Reference< drawing::XDrawPage > xPage(xDoc->getDrawPages()->getByIndex(0), uno::UNO_QUERY_THROW );
     SdDrawDocument *pDoc = xDocShRef->GetDoc();
-    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
+    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != nullptr );
 
     const SdrPage *pPage = pDoc->GetPage(1);
-    CPPUNIT_ASSERT_MESSAGE( "no page", pPage != NULL );
+    CPPUNIT_ASSERT_MESSAGE( "no page", pPage != nullptr );
 
     sdr::table::SdrTableObj *pTableObj = dynamic_cast<sdr::table::SdrTableObj*>(pPage->GetObj(0));
     CPPUNIT_ASSERT( pTableObj );

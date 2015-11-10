@@ -129,7 +129,7 @@ public:
     virtual void CompleteRedraw (
         OutputDevice* pDevice,
         const vcl::Region& rPaintArea,
-        sdr::contact::ViewObjectContactRedirector* pRedirector = NULL) override;
+        sdr::contact::ViewObjectContactRedirector* pRedirector = nullptr) override;
     void Paint (OutputDevice& rDevice, const Rectangle& rRepaintArea);
 
     virtual void ConfigurationChanged (

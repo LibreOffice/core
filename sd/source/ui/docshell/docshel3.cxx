@@ -183,11 +183,11 @@ void DrawDocShell::Execute( SfxRequest& rReq )
 
                     if (pShell == pFirstShell)
                     {
-                        pShell = NULL;
+                        pShell = nullptr;
                     }
                 }
 
-                SetDocShellFunction(0);
+                SetDocShellFunction(nullptr);
                 Invalidate();
                 rReq.Done();
             }
@@ -256,7 +256,7 @@ void DrawDocShell::Execute( SfxRequest& rReq )
             if( mpViewShell )
             {
                 rtl::Reference<FuPoor> aFunc( FuHangulHanjaConversion::Create( mpViewShell, mpViewShell->GetActiveWindow(), mpViewShell->GetView(), mpDoc, rReq ) );
-                static_cast< FuHangulHanjaConversion* >( aFunc.get() )->StartConversion( LANGUAGE_KOREAN, LANGUAGE_KOREAN, NULL, i18n::TextConversionOption::CHARACTER_BY_CHARACTER, true );
+                static_cast< FuHangulHanjaConversion* >( aFunc.get() )->StartConversion( LANGUAGE_KOREAN, LANGUAGE_KOREAN, nullptr, i18n::TextConversionOption::CHARACTER_BY_CHARACTER, true );
             }
         }
         break;

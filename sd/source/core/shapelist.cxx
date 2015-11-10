@@ -70,7 +70,7 @@ SdrObject* ShapeList::removeShape( SdrObject& rObject )
     {
         OSL_FAIL("sd::ShapeList::removeShape(), given shape not part of list!");
     }
-    return 0;
+    return nullptr;
 }
 
 /** removes all shapes from this list
@@ -125,7 +125,7 @@ SdrObject* ShapeList::getNextShape()
     }
     else
     {
-        return 0;
+        return nullptr;
     }
 }
 

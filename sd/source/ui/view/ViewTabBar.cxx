@@ -82,9 +82,9 @@ ViewTabBar::ViewTabBar (
       mpTabControl(VclPtr<TabBarControl>::Create(GetAnchorWindow(rxViewTabBarId,rxController), this)),
       mxController(rxController),
       maTabBarButtons(),
-      mpTabPage(NULL),
+      mpTabPage(nullptr),
       mxViewTabBarId(rxViewTabBarId),
-      mpViewShellBase(NULL)
+      mpViewShellBase(nullptr)
 {
     // Set one new tab page for all tab entries.  We need it only to
     // determine the height of the tab bar.
@@ -123,7 +123,7 @@ ViewTabBar::ViewTabBar (
 
     mpTabControl->Show();
 
-    if (mpViewShellBase != NULL
+    if (mpViewShellBase != nullptr
         && rxViewTabBarId->isBoundToURL(
             FrameworkHelper::msCenterPaneURL, AnchorBindingMode_DIRECT))
     {
@@ -137,11 +137,11 @@ ViewTabBar::~ViewTabBar()
 
 void ViewTabBar::disposing()
 {
-    if (mpViewShellBase != NULL
+    if (mpViewShellBase != nullptr
         && mxViewTabBarId->isBoundToURL(
             FrameworkHelper::msCenterPaneURL, AnchorBindingMode_DIRECT))
     {
-        mpViewShellBase->SetViewTabBar(NULL);
+        mpViewShellBase->SetViewTabBar(nullptr);
     }
 
     if (mxConfigurationController.is())
@@ -156,27 +156,27 @@ void ViewTabBar::disposing()
             // Receiving a disposed exception is the normal case.  Is there
             // a way to avoid it?
         }
-        mxConfigurationController = NULL;
+        mxConfigurationController = nullptr;
     }
 
     {
         const SolarMutexGuard aSolarGuard;
         // Set all references to the one tab page to NULL and delete the page.
         for (sal_uInt16 nIndex=0; nIndex<mpTabControl->GetPageCount(); ++nIndex)
-            mpTabControl->SetTabPage(nIndex, NULL);
+            mpTabControl->SetTabPage(nIndex, nullptr);
         mpTabPage.disposeAndClear();
         mpTabControl.disposeAndClear();
     }
 
-    mxController = NULL;
+    mxController = nullptr;
 }
 
 vcl::Window* ViewTabBar::GetAnchorWindow(
     const Reference<XResourceId>& rxViewTabBarId,
     const Reference<frame::XController>& rxController)
 {
-    vcl::Window* pWindow = NULL;
-    ViewShellBase* pBase = NULL;
+    vcl::Window* pWindow = nullptr;
+    ViewShellBase* pBase = nullptr;
 
     // Tunnel through the controller and use the ViewShellBase to obtain the
     // view frame.
@@ -196,12 +196,12 @@ vcl::Window* ViewTabBar::GetAnchorWindow(
         && rxViewTabBarId->isBoundToURL(
             FrameworkHelper::msCenterPaneURL, AnchorBindingMode_DIRECT))
     {
-        if (pBase != NULL && pBase->GetViewFrame() != NULL)
+        if (pBase != nullptr && pBase->GetViewFrame() != nullptr)
             pWindow = &pBase->GetViewFrame()->GetWindow();
     }
 
     // The rest is (at the moment) just for the emergency case.
-    if (pWindow == NULL)
+    if (pWindow == nullptr)
     {
         Reference<XPane> xPane;
         try
@@ -222,7 +222,7 @@ vcl::Window* ViewTabBar::GetAnchorWindow(
             Reference<lang::XUnoTunnel> xTunnel (xPane, UNO_QUERY_THROW);
             framework::Pane* pPane = reinterpret_cast<framework::Pane*>(
                 xTunnel->getSomething(framework::Pane::getUnoTunnelId()));
-            if (pPane != NULL)
+            if (pPane != nullptr)
                 pWindow = pPane->GetWindow()->GetParent();
         }
         catch (const RuntimeException&)
@@ -255,8 +255,8 @@ void SAL_CALL ViewTabBar::disposing(
 {
     if (rEvent.Source == mxConfigurationController)
     {
-        mxConfigurationController = NULL;
-        mxController = NULL;
+        mxConfigurationController = nullptr;
+        mxController = nullptr;
     }
 }
 
@@ -361,10 +361,10 @@ bool ViewTabBar::ActivatePage()
         {
         }
 
-        Client* pIPClient = NULL;
-        if (mpViewShellBase != NULL)
+        Client* pIPClient = nullptr;
+        if (mpViewShellBase != nullptr)
             pIPClient = dynamic_cast<Client*>(mpViewShellBase->GetIPClient());
-        if (pIPClient==NULL || ! pIPClient->IsObjectInPlaceActive())
+        if (pIPClient==nullptr || ! pIPClient->IsObjectInPlaceActive())
         {
             sal_uInt16 nIndex (mpTabControl->GetCurPageId() - 1);
             if (nIndex < maTabBarButtons.size())
@@ -400,7 +400,7 @@ int ViewTabBar::GetHeight()
     {
         TabPage* pActivePage (mpTabControl->GetTabPage(
             mpTabControl->GetCurPageId()));
-        if (pActivePage!=NULL && mpTabControl->IsReallyVisible())
+        if (pActivePage!=nullptr && mpTabControl->IsReallyVisible())
             nHeight = pActivePage->GetPosPixel().Y();
 
         if (nHeight <= 0)
@@ -511,7 +511,7 @@ css::uno::Sequence<css::drawing::framework::TabBarButton>
 void ViewTabBar::UpdateActiveButton()
 {
     Reference<XView> xView;
-    if (mpViewShellBase != NULL)
+    if (mpViewShellBase != nullptr)
         xView = FrameworkHelper::Instance(*mpViewShellBase)->GetView(
             mxViewTabBarId->getAnchor());
     if (xView.is())

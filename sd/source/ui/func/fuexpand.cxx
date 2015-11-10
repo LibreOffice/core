@@ -72,7 +72,7 @@ void FuExpandPage::DoExecute( SfxRequest& )
         mpView->SdrEndTextEdit();
 
     // find selected page (only standard pages)
-    SdPage* pActualPage = NULL;
+    SdPage* pActualPage = nullptr;
     sal_uInt16 i = 0;
     sal_uInt16 nCount = mpDoc->GetSdPageCount(PK_STANDARD);
 
@@ -209,7 +209,7 @@ void FuExpandPage::DoExecute( SfxRequest& )
                     SfxStyleSheet* pSheet = pPage->GetStyleSheetForPresObj(PRESOBJ_TITLE);
                     pTextObj->NbcSetStyleSheet(pSheet, false);
 
-                    SdrTextObj* pOutlineObj = NULL;
+                    SdrTextObj* pOutlineObj = nullptr;
                     sal_Int32 nChildCount = pOutl->GetChildCount(pPara);
                     if (nChildCount > 0)
                         pOutlineObj = static_cast<SdrTextObj*>( pPage->GetPresObj(PRESOBJ_OUTLINE) );

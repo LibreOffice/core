@@ -61,15 +61,15 @@ static OUString GetPathToSetNode()
 
 namespace sd { namespace sidebar {
 
-RecentlyUsedMasterPages* RecentlyUsedMasterPages::mpInstance = NULL;
+RecentlyUsedMasterPages* RecentlyUsedMasterPages::mpInstance = nullptr;
 
 RecentlyUsedMasterPages&  RecentlyUsedMasterPages::Instance()
 {
-    if (mpInstance == NULL)
+    if (mpInstance == nullptr)
     {
         ::osl::GetGlobalMutex aMutexFunctor;
         ::osl::MutexGuard aGuard (aMutexFunctor());
-        if (mpInstance == NULL)
+        if (mpInstance == nullptr)
         {
             RecentlyUsedMasterPages* pInstance = new RecentlyUsedMasterPages();
             pInstance->LateInit();

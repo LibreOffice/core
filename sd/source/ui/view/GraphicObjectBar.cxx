@@ -81,7 +81,7 @@ GraphicObjectBar::GraphicObjectBar (
 
 GraphicObjectBar::~GraphicObjectBar()
 {
-    SetRepeatTarget( NULL );
+    SetRepeatTarget( nullptr );
 }
 
 void GraphicObjectBar::GetAttrState( SfxItemSet& rSet )

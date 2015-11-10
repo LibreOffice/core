@@ -96,7 +96,7 @@ public:
     static bool StartPreview( ViewShellBase& rBase,
         const css::uno::Reference< css::drawing::XDrawPage >& xDrawPage,
         const css::uno::Reference< css::animations::XAnimationNode >& xAnimationNode,
-        vcl::Window* pParent = 0 );
+        vcl::Window* pParent = nullptr );
 
     static void Stop( ViewShellBase& rBase );
 
@@ -112,7 +112,7 @@ public:
     bool startPreview(
         const css::uno::Reference< css::drawing::XDrawPage >& xDrawPage,
         const css::uno::Reference< css::animations::XAnimationNode >& xAnimationNode,
-        vcl::Window* pParent = 0 );
+        vcl::Window* pParent = nullptr );
 
     // uno api
 

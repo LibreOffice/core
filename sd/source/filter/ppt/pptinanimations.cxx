@@ -102,8 +102,8 @@ static bool convertMeasure( OUString& rString )
 {
     bool bRet = false;
 
-    const sal_Char* pSource[] = { "ppt_x", "ppt_y", "ppt_w", "ppt_h", NULL };
-    const sal_Char* pDest[] = { "x", "y", "width", "height", NULL };
+    const sal_Char* pSource[] = { "ppt_x", "ppt_y", "ppt_w", "ppt_h", nullptr };
+    const sal_Char* pDest[] = { "x", "y", "width", "height", nullptr };
     sal_Int32 nIndex = 0;
 
     const sal_Char** ps = pSource;
@@ -197,7 +197,7 @@ void AnimationImporter::processAfterEffectNodes()
 
 Reference< XAnimationNode > AnimationImporter::createNode( const Atom* pAtom, const AnimationNode& rNode )
 {
-    const char* pServiceName = NULL;
+    const char* pServiceName = nullptr;
 
     switch( rNode.mnGroupType )
     {
@@ -453,7 +453,7 @@ int AnimationImporter::importAnimationContainer( const Atom* pAtom, const Refere
 #endif
                 int nANCNodes = importAnimationNodeContainer( pAtom, xNode );
                 if( !convertAnimationNode( xNode, xParent ) )
-                    xNode = 0;
+                    xNode = nullptr;
                 else
                     nNodes += nANCNodes;
                 dump( "/>\n");
@@ -2386,10 +2386,10 @@ void AnimationImporter::importAnimateKeyPoints( const Atom* pAtom, const Referen
     if( pAtom && xAnim.is() )
     {
         // first count keytimes
-        const Atom* pIter = NULL;
+        const Atom* pIter = nullptr;
         int nKeyTimes = 0;
 
-        while( (pIter = pAtom->findNextChildAtom( DFF_msofbtAnimKeyTime,  pIter )) != 0 )
+        while( (pIter = pAtom->findNextChildAtom( DFF_msofbtAnimKeyTime,  pIter )) != nullptr )
             nKeyTimes++;
 
         Sequence< double > aKeyTimes( nKeyTimes );
@@ -2591,7 +2591,7 @@ void AnimationImporter::importAnimationEvents( const Atom* pAtom, const Referenc
     const Atom* pEventAtom = pAtom->findFirstChildAtom( DFF_msofbtAnimEvent );
     while( pEventAtom )
     {
-        Any* pEvents = NULL;
+        Any* pEvents = nullptr;
 
         switch( pEventAtom->getInstance() )
         {
@@ -2763,7 +2763,7 @@ sal_Int32 AnimationImporter::importTargetElementContainer( const Atom* pAtom, An
                 case 1: // shape
                 {
                     SdrObject* pSdrObject = mpPPTImport->getShapeForId( nRefId );
-                    if( pSdrObject == NULL )
+                    if( pSdrObject == nullptr )
                         break;
 
                     rTarget <<= pSdrObject->getUnoShape();
@@ -2780,7 +2780,7 @@ sal_Int32 AnimationImporter::importTargetElementContainer( const Atom* pAtom, An
                         SdrTextObj* pTextObj = static_cast< SdrTextObj* >( pSdrObject );
 
                         const OutlinerParaObject* pOPO = pTextObj->GetOutlinerParaObject();
-                        if( pOPO == NULL )
+                        if( pOPO == nullptr )
                             break;
 
                         const EditTextObject& rEditTextObject = pOPO->GetTextObject();
@@ -2825,7 +2825,7 @@ sal_Int32 AnimationImporter::importTargetElementContainer( const Atom* pAtom, An
                 case 4: // video object
                     {
                         SdrObject* pSdrObject = mpPPTImport->getShapeForId( nRefId );
-                        if( pSdrObject == NULL )
+                        if( pSdrObject == nullptr )
                             break;
 
                         rTarget <<= pSdrObject->getUnoShape();

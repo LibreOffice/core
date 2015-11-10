@@ -92,7 +92,7 @@ Listener::Listener (
     // Connect to the frame to listen for controllers being exchanged.
     bool bIsMainViewShell (false);
     ViewShell* pViewShell = mrSlideSorter.GetViewShell();
-    if (pViewShell != NULL)
+    if (pViewShell != nullptr)
         bIsMainViewShell = pViewShell->IsMainViewShell();
     if ( ! bIsMainViewShell)
     {
@@ -116,10 +116,10 @@ Listener::Listener (
 
     // Listen for hints of the MainViewShell as well.  If that is not yet
     // present then the EventMultiplexer will tell us when it is available.
-    if (mpBase != NULL)
+    if (mpBase != nullptr)
     {
         ViewShell* pMainViewShell = mpBase->GetMainViewShell().get();
-        if (pMainViewShell != NULL
+        if (pMainViewShell != nullptr
             && pMainViewShell!=pViewShell)
         {
             StartListening(*pMainViewShell);
@@ -183,7 +183,7 @@ void Listener::ReleaseListeners()
 
     DisconnectFromController ();
 
-    if (mpBase != NULL)
+    if (mpBase != nullptr)
     {
         Link<sd::tools::EventMultiplexerEvent&,void> aLink (LINK(this, Listener, EventMultiplexerCallback));
         mpBase->GetEventMultiplexer()->RemoveEventListener(
@@ -202,7 +202,7 @@ void Listener::ConnectToController()
 
     // Register at the controller of the main view shell (if we are that not
     // ourself).
-    if (pShell==NULL || ! pShell->IsMainViewShell())
+    if (pShell==nullptr || ! pShell->IsMainViewShell())
     {
         Reference<frame::XController> xController (mrSlideSorter.GetXController());
 
@@ -351,10 +351,10 @@ IMPL_LINK_TYPED(Listener, EventMultiplexerCallback, ::sd::tools::EventMultiplexe
     {
         case tools::EventMultiplexerEvent::EID_MAIN_VIEW_REMOVED:
         {
-            if (mpBase != NULL)
+            if (mpBase != nullptr)
             {
                 ViewShell* pMainViewShell = mpBase->GetMainViewShell().get();
-                if (pMainViewShell != NULL)
+                if (pMainViewShell != nullptr)
                     EndListening(*pMainViewShell);
             }
         }
@@ -365,11 +365,11 @@ IMPL_LINK_TYPED(Listener, EventMultiplexerCallback, ::sd::tools::EventMultiplexe
             break;
 
         case tools::EventMultiplexerEvent::EID_CONFIGURATION_UPDATED:
-            if (mbIsMainViewChangePending && mpBase != NULL)
+            if (mbIsMainViewChangePending && mpBase != nullptr)
             {
                 mbIsMainViewChangePending = false;
                 ViewShell* pMainViewShell = mpBase->GetMainViewShell().get();
-                if (pMainViewShell != NULL
+                if (pMainViewShell != nullptr
                     && pMainViewShell!=mrSlideSorter.GetViewShell())
                 {
                     StartListening (*pMainViewShell);
@@ -396,7 +396,7 @@ IMPL_LINK_TYPED(Listener, EventMultiplexerCallback, ::sd::tools::EventMultiplexe
             break;
 
         case tools::EventMultiplexerEvent::EID_END_TEXT_EDIT:
-            if (rEvent.mpUserData != NULL)
+            if (rEvent.mpUserData != nullptr)
             {
                 const SdrObject* pObject = static_cast<const SdrObject*>(rEvent.mpUserData);
                 HandleShapeModification(pObject->GetPage());
@@ -415,7 +415,7 @@ void SAL_CALL Listener::disposing (
     throw (RuntimeException, std::exception)
 {
     if ((mbListeningToDocument || mbListeningToUNODocument)
-        && mrSlideSorter.GetModel().GetDocument()!=NULL
+        && mrSlideSorter.GetModel().GetDocument()!=nullptr
         && rEventObject.Source
            == mrSlideSorter.GetModel().GetDocument()->getUnoModel())
     {
@@ -533,7 +533,7 @@ void Listener::UpdateEditMode()
     Reference<frame::XController> xController (mxControllerWeak);
     Reference<beans::XPropertySet> xSet (xController, UNO_QUERY);
     bool bIsMasterPageMode = false;
-    if (xSet != NULL)
+    if (xSet != nullptr)
     {
         try
         {
@@ -562,7 +562,7 @@ void Listener::HandleModelChange (const SdrPage* pPage)
 
         // Tell the cache manager that the preview bitmaps for a deleted
         // page can be removed from all caches.
-        if (pPage!=NULL && ! pPage->IsInserted())
+        if (pPage!=nullptr && ! pPage->IsInserted())
             cache::PageCacheManager::Instance()->ReleasePreviewBitmap(pPage);
 
         mrController.GetSelectionManager()->GetSelectionObserver()->NotifyPageEvent(pPage);
@@ -571,7 +571,7 @@ void Listener::HandleModelChange (const SdrPage* pPage)
     // Tell the controller about the model change only when the document is
     // in a sane state, not just in the middle of a larger change.
     SdDrawDocument* pDocument (mrSlideSorter.GetModel().GetDocument());
-    if (pDocument != NULL
+    if (pDocument != nullptr
         && pDocument->GetMasterSdPageCount(PK_STANDARD) == pDocument->GetMasterSdPageCount(PK_NOTES))
     {
         // A model change can make updates of some text fields necessary
@@ -586,7 +586,7 @@ void Listener::HandleModelChange (const SdrPage* pPage)
 
 void Listener::HandleShapeModification (const SdrPage* pPage)
 {
-    if (pPage == NULL)
+    if (pPage == nullptr)
         return;
 
     // Invalidate the preview of the page (in all slide sorters that display
@@ -595,9 +595,9 @@ void Listener::HandleShapeModification (const SdrPage* pPage)
     if ( ! pCacheManager)
         return;
     SdDrawDocument* pDocument = mrSlideSorter.GetModel().GetDocument();
-    if (pDocument == NULL)
+    if (pDocument == nullptr)
     {
-        OSL_ASSERT(pDocument!=NULL);
+        OSL_ASSERT(pDocument!=nullptr);
         return;
     }
     pCacheManager->InvalidatePreviewBitmap(pDocument->getUnoModel(), pPage);
@@ -612,14 +612,14 @@ void Listener::HandleShapeModification (const SdrPage* pPage)
              ++nIndex)
         {
             const SdPage* pCandidate = pDocument->GetSdPage(nIndex, PK_STANDARD);
-            if (pCandidate!=NULL && pCandidate->TRG_HasMasterPage())
+            if (pCandidate!=nullptr && pCandidate->TRG_HasMasterPage())
             {
                 if (&pCandidate->TRG_GetMasterPage() == pPage)
                     pCacheManager->InvalidatePreviewBitmap(pDocument->getUnoModel(), pCandidate);
             }
             else
             {
-                OSL_ASSERT(pCandidate!=NULL && pCandidate->TRG_HasMasterPage());
+                OSL_ASSERT(pCandidate!=nullptr && pCandidate->TRG_HasMasterPage());
             }
         }
     }

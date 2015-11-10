@@ -157,12 +157,12 @@ void DrawDocShell::SetPrinter(SfxPrinter *pNewPrinter)
 void DrawDocShell::UpdateFontList()
 {
     delete mpFontList;
-    OutputDevice* pRefDevice = NULL;
+    OutputDevice* pRefDevice = nullptr;
     if ( mpDoc->GetPrinterIndependentLayout() == css::document::PrinterIndependentLayout::DISABLED )
         pRefDevice = GetPrinter(true);
     else
         pRefDevice = SD_MOD()->GetVirtualRefDevice();
-    mpFontList = new FontList( pRefDevice, NULL, false );
+    mpFontList = new FontList( pRefDevice, nullptr, false );
     SvxFontListItem aFontListItem( mpFontList, SID_ATTR_CHAR_FONTLIST );
     PutItem( aFontListItem );
 }
@@ -341,7 +341,7 @@ bool DrawDocShell::LoadFrom( SfxMedium& rMedium )
 {
     mbNewDocument = false;
 
-    WaitObject* pWait = NULL;
+    WaitObject* pWait = nullptr;
     if( mpViewShell )
         pWait = new WaitObject( static_cast<vcl::Window*>(mpViewShell->GetActiveWindow()) );
 
@@ -574,7 +574,7 @@ bool DrawDocShell::ConvertTo( SfxMedium& rMedium )
     {
         const SfxFilter*    pMediumFilter = rMedium.GetFilter();
         const OUString aTypeName( pMediumFilter->GetTypeName() );
-        SdFilter*           pFilter = NULL;
+        SdFilter*           pFilter = nullptr;
 
         if( aTypeName.indexOf( "graphic_HTML" ) >= 0 )
         {
@@ -678,7 +678,7 @@ bool DrawDocShell::GotoBookmark(const OUString& rBookmark)
 
         bool bIsMasterPage = false;
         sal_uInt16 nPageNumber = SDRPAGE_NOTFOUND;
-        SdrObject* pObj = NULL;
+        SdrObject* pObj = nullptr;
 
         OUString sBookmark( rBookmark );
         const OUString sInteraction( "action?" );
@@ -781,11 +781,11 @@ bool DrawDocShell::GotoBookmark(const OUString& rBookmark)
                 }
                 else
                 {
-                    pDrawViewShell = NULL;
+                    pDrawViewShell = nullptr;
                 }
             }
 
-            if (pDrawViewShell != NULL)
+            if (pDrawViewShell != nullptr)
             {
                 setEditMode(pDrawViewShell, bIsMasterPage);
 
@@ -808,7 +808,7 @@ bool DrawDocShell::GotoBookmark(const OUString& rBookmark)
                     pDrawViewShell->SwitchPage(nSdPgNum);
                 }
 
-                if (pObj != NULL)
+                if (pObj != nullptr)
                 {
                     // show and select object
                     pDrawViewShell->MakeVisible(pObj->GetLogicRect(),
@@ -821,7 +821,7 @@ bool DrawDocShell::GotoBookmark(const OUString& rBookmark)
             }
         }
 
-        SfxBindings& rBindings = ((pDrawViewShell && pDrawViewShell->GetViewFrame()!=NULL)
+        SfxBindings& rBindings = ((pDrawViewShell && pDrawViewShell->GetViewFrame()!=nullptr)
             ? pDrawViewShell->GetViewFrame()
             : SfxViewFrame::Current() )->GetBindings();
 
@@ -867,7 +867,7 @@ bool DrawDocShell::GetObjectIsmarked(const OUString& rBookmark)
         // Is the bookmark a page ?
         bool        bIsMasterPage;
         sal_uInt16  nPgNum = mpDoc->GetPageByName( aBookmark, bIsMasterPage );
-        SdrObject*  pObj = NULL;
+        SdrObject*  pObj = nullptr;
 
         if (nPgNum == SDRPAGE_NOTFOUND)
         {
@@ -946,7 +946,7 @@ bool DrawDocShell::GotoTreeBookmark(const OUString& rBookmark)
         // is the bookmark a page ?
         bool        bIsMasterPage;
         sal_uInt16  nPgNum = mpDoc->GetPageByName( aBookmark, bIsMasterPage );
-        SdrObject*  pObj = NULL;
+        SdrObject*  pObj = nullptr;
 
         if (nPgNum == SDRPAGE_NOTFOUND)
         {
@@ -1111,7 +1111,7 @@ OutputDevice* DrawDocShell::GetDocumentRefDev()
     OutputDevice* pReferenceDevice = SfxObjectShell::GetDocumentRefDev ();
     // Only when our parent does not have a reference device then we return
     // our own.
-    if (pReferenceDevice == NULL && mpDoc != NULL)
+    if (pReferenceDevice == nullptr && mpDoc != nullptr)
         pReferenceDevice = mpDoc->GetRefDevice ();
     return pReferenceDevice;
 }
@@ -1122,7 +1122,7 @@ void DrawDocShell::OpenBookmark( const OUString& rBookmarkURL )
 {
     SfxStringItem   aStrItem( SID_FILE_NAME, rBookmarkURL );
     SfxStringItem   aReferer( SID_REFERER, GetMedium()->GetName() );
-    const SfxPoolItem* ppArgs[] = { &aStrItem, &aReferer, 0 };
+    const SfxPoolItem* ppArgs[] = { &aStrItem, &aReferer, nullptr };
     ( mpViewShell ? mpViewShell->GetViewFrame() : SfxViewFrame::Current() )->GetBindings().Execute( SID_OPENHYPERLINK, ppArgs );
 }
 

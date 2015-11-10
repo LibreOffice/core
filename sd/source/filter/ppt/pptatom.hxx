@@ -77,12 +77,12 @@ private:
 
 inline bool Atom::hasChildAtom( sal_uInt16 nRecType ) const
 {
-    return findFirstChildAtom( nRecType ) != NULL;
+    return findFirstChildAtom( nRecType ) != nullptr;
 }
 
 inline const Atom* Atom::findFirstChildAtom( sal_uInt16 nRecType ) const
 {
-    return findNextChildAtom( nRecType, NULL );
+    return findNextChildAtom( nRecType, nullptr );
 }
 
 inline const Atom* Atom::findFirstChildAtom() const

@@ -144,10 +144,10 @@ void SAL_CALL PresentationFactory::releaseResource (
     {
         ::sd::DrawController* pController = reinterpret_cast<sd::DrawController*>(
             xTunnel->getSomething(sd::DrawController::getUnoTunnelId()));
-        if (pController != NULL)
+        if (pController != nullptr)
         {
             ViewShellBase* pBase = pController->GetViewShellBase();
-            if (pBase != NULL)
+            if (pBase != nullptr)
                 SlideShow::Stop( *pBase );
         }
     }

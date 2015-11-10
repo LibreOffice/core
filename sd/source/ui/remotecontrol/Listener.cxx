@@ -24,7 +24,7 @@ Listener::Listener( const ::rtl::Reference<Communicator>& rCommunicator,
                     sd::Transmitter *aTransmitter  ):
       ::cppu::WeakComponentImplHelper< XSlideShowListener >( m_aMutex ),
       mCommunicator( rCommunicator ),
-      pTransmitter( NULL )
+      pTransmitter( nullptr )
 {
     pTransmitter = aTransmitter;
 }
@@ -134,11 +134,11 @@ void SAL_CALL Listener::slideAnimationsEnded()
 
 void SAL_CALL Listener::disposing()
 {
-    pTransmitter = NULL;
+    pTransmitter = nullptr;
     if ( mController.is() )
     {
         mController->removeSlideShowListener( this );
-        mController = NULL;
+        mController = nullptr;
     }
     mCommunicator->informListenerDestroyed();
 }

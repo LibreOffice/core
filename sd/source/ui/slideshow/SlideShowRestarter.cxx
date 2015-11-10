@@ -38,7 +38,7 @@ namespace sd {
 SlideShowRestarter::SlideShowRestarter (
     const ::rtl::Reference<SlideShow>& rpSlideShow,
     ViewShellBase* pViewShellBase)
-    : mnEventId(0),
+    : mnEventId(nullptr),
       mpSlideShow(rpSlideShow),
       mpViewShellBase(pViewShellBase),
       mnDisplayCount(Application::GetScreenCount()),
@@ -54,7 +54,7 @@ SlideShowRestarter::~SlideShowRestarter()
 void SlideShowRestarter::Restart (bool bForce)
 {
     // Prevent multiple and concurrently restarts.
-    if (mnEventId != 0)
+    if (mnEventId != nullptr)
         return;
 
     if (bForce)
@@ -78,7 +78,7 @@ void SlideShowRestarter::Restart (bool bForce)
 
 IMPL_LINK_NOARG_TYPED(SlideShowRestarter, EndPresentation, void*, void)
 {
-    mnEventId = 0;
+    mnEventId = nullptr;
     if (mpSlideShow.is())
     {
         if (mnDisplayCount != (sal_Int32)Application::GetScreenCount())
@@ -98,7 +98,7 @@ IMPL_LINK_NOARG_TYPED(SlideShowRestarter, EndPresentation, void*, void)
             // console, to disappear.  Only when it is gone, call
             // InitiatePresenterStart(), in order to begin the asynchronous
             // restart of the slide show.
-            if (mpViewShellBase != NULL)
+            if (mpViewShellBase != nullptr)
             {
                 ::std::shared_ptr<FrameworkHelper> pHelper(
                     FrameworkHelper::Instance(*mpViewShellBase));
@@ -131,11 +131,11 @@ void SlideShowRestarter::StartPresentation()
     if (mpViewShellBase && mpViewShellBase->GetDrawController().IsDisposing())
         return;
 
-    if (mpDispatcher == NULL && mpViewShellBase!=NULL)
+    if (mpDispatcher == nullptr && mpViewShellBase!=nullptr)
         mpDispatcher = mpViewShellBase->GetViewFrame()->GetDispatcher();
 
     // Start the slide show on the saved current slide.
-    if (mpDispatcher != NULL)
+    if (mpDispatcher != nullptr)
     {
         mpDispatcher->Execute(SID_PRESENTATION, SfxCallMode::ASYNCHRON);
         if (mpSlideShow.is())

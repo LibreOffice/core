@@ -61,7 +61,7 @@ namespace sd
     {
     public:
         CustomAnimationClonerImpl();
-        Reference< XAnimationNode > Clone( const Reference< XAnimationNode >& xSourceNode, const SdPage* pSource = 0, const SdPage* pTarget = 0 );
+        Reference< XAnimationNode > Clone( const Reference< XAnimationNode >& xSourceNode, const SdPage* pSource = nullptr, const SdPage* pTarget = nullptr );
 
     private:
         void transformNode( const Reference< XAnimationNode >& xNode );

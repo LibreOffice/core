@@ -176,7 +176,7 @@ void CacheCompactionByCompression::Run()
         ::sd::slidesorter::cache::BitmapCache::CacheIndex::iterator iIndex;
         for (iIndex=pIndex->begin(); iIndex!=pIndex->end(); ++iIndex)
         {
-            if (*iIndex == NULL)
+            if (*iIndex == nullptr)
                 continue;
 
             mrCache.Compress(*iIndex, mpCompressor);

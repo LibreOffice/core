@@ -53,14 +53,14 @@ private:
 // static
 SdGlobalResourceContainer& SdGlobalResourceContainer::Instance()
 {
-    DBG_ASSERT(Implementation::mpInstance!=NULL,
+    DBG_ASSERT(Implementation::mpInstance!=nullptr,
         "SdGlobalResourceContainer::Instance(): instance has been deleted");
     // Maybe we should throw an exception when the instance has been deleted.
     return *Implementation::mpInstance;
 }
 
 SdGlobalResourceContainer*
-    SdGlobalResourceContainer::Implementation::mpInstance = NULL;
+    SdGlobalResourceContainer::Implementation::mpInstance = nullptr;
 
 //===== SdGlobalResourceContainer =============================================
 
@@ -170,14 +170,14 @@ SdGlobalResourceContainer::~SdGlobalResourceContainer()
          ++iXInterfaceResource)
     {
         Reference<lang::XComponent> xComponent (*iXInterfaceResource, UNO_QUERY);
-        *iXInterfaceResource = NULL;
+        *iXInterfaceResource = nullptr;
         if (xComponent.is())
             xComponent->dispose();
     }
 
     DBG_ASSERT(Implementation::mpInstance == this,
         "~SdGlobalResourceContainer(): more than one instance of singleton");
-    Implementation::mpInstance = NULL;
+    Implementation::mpInstance = nullptr;
 }
 
 } // end of namespace sd

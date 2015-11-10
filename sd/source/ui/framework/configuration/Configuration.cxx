@@ -84,7 +84,7 @@ void SAL_CALL Configuration::disposing()
 {
     ::osl::MutexGuard aGuard (maMutex);
     mpResourceContainer->clear();
-    mxBroadcaster = NULL;
+    mxBroadcaster = nullptr;
 }
 
 //----- XConfiguration --------------------------------------------------------
@@ -302,10 +302,10 @@ bool AreConfigurationsEquivalent (
     // Get the lists of resources from the two given configurations.
     const Sequence<Reference<XResourceId> > aResources1(
         rxConfiguration1->getResources(
-            NULL, OUString(), AnchorBindingMode_INDIRECT));
+            nullptr, OUString(), AnchorBindingMode_INDIRECT));
     const Sequence<Reference<XResourceId> > aResources2(
         rxConfiguration2->getResources(
-            NULL, OUString(), AnchorBindingMode_INDIRECT));
+            nullptr, OUString(), AnchorBindingMode_INDIRECT));
 
     // When the number of resources differ then the configurations can not
     // be equivalent.
@@ -342,7 +342,7 @@ com_sun_star_comp_Draw_framework_configuration_Configuration_get_implementation(
         css::uno::XComponentContext*,
         css::uno::Sequence<css::uno::Any> const &)
 {
-    return cppu::acquire(new sd::framework::Configuration(NULL, false));
+    return cppu::acquire(new sd::framework::Configuration(nullptr, false));
 }
 
 

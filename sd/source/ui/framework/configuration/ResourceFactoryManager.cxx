@@ -206,7 +206,7 @@ Reference<XResourceFactory> ResourceFactoryManager::FindFactory (const OUString&
                 return iPattern->second;
         }
     }
-    return NULL;
+    return nullptr;
 }
 
 } } // end of namespace sd::framework

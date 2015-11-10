@@ -41,10 +41,10 @@ FullScreenPane::FullScreenPane (
     const Reference<XComponentContext>& rxComponentContext,
     const Reference<XResourceId>& rxPaneId,
     const vcl::Window* pViewShellWindow)
-    : FrameWindowPane(rxPaneId,NULL),
+    : FrameWindowPane(rxPaneId,nullptr),
       mxComponentContext(rxComponentContext)
 {
-    vcl::Window* pParent = NULL;
+    vcl::Window* pParent = nullptr;
     mpWorkWindow.reset(VclPtr<WorkWindow>::Create(
 
         pParent,
@@ -56,7 +56,7 @@ FullScreenPane::FullScreenPane (
     sal_Int32 nScreenNumber = 1;
     ExtractArguments(rxPaneId, nScreenNumber);
 
-    if (mpWorkWindow.get() == NULL)
+    if (mpWorkWindow.get() == nullptr)
         return;
 
     // Create a new top-leve window that is displayed full screen.
@@ -76,7 +76,7 @@ FullScreenPane::FullScreenPane (
 
     // Set title and icon of the new window to those of the current window
     // of the view shell.
-    if (pViewShellWindow != NULL)
+    if (pViewShellWindow != nullptr)
     {
         const SystemWindow* pSystemWindow = pViewShellWindow->GetSystemWindow();
         mpWorkWindow->SetText(pSystemWindow->GetText());
@@ -105,7 +105,7 @@ void SAL_CALL FullScreenPane::disposing()
 {
     mpWindow.disposeAndClear();
 
-    if (mpWorkWindow.get() != NULL)
+    if (mpWorkWindow.get() != nullptr)
     {
         Link<VclWindowEvent&,void> aWindowEventHandler (LINK(this, FullScreenPane, WindowEventHandler));
         mpWorkWindow->RemoveEventListener(aWindowEventHandler);
@@ -147,7 +147,7 @@ Reference<css::accessibility::XAccessible> SAL_CALL FullScreenPane::getAccessibl
     if (mpWorkWindow != nullptr)
         return mpWorkWindow->GetAccessible(false);
     else
-        return NULL;
+        return nullptr;
 }
 
 void SAL_CALL FullScreenPane::setAccessible (
@@ -163,7 +163,7 @@ void SAL_CALL FullScreenPane::setAccessible (
         {
             vcl::Window* pParentWindow = mpWindow->GetParent();
             Reference<css::accessibility::XAccessible> xAccessibleParent;
-            if (pParentWindow != NULL)
+            if (pParentWindow != nullptr)
                 xAccessibleParent = pParentWindow->GetAccessible();
             Sequence<Any> aArguments (1);
             aArguments[0] = Any(xAccessibleParent);
@@ -194,7 +194,7 @@ Reference<rendering::XCanvas> FullScreenPane::CreateCanvas()
     throw (RuntimeException)
 {
     vcl::Window* pWindow = VCLUnoHelper::GetWindow(mxWindow);
-    if (pWindow != NULL)
+    if (pWindow != nullptr)
     {
         Sequence<Any> aArg (5);
 

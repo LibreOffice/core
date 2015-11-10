@@ -68,7 +68,7 @@ ViewTabBarModule::ViewTabBarModule (
                 FrameworkHelper::msResourceDeactivationRequestEvent,
                 makeAny(ResourceDeactivationRequestEvent));
 
-            UpdateViewTabBar(NULL);
+            UpdateViewTabBar(nullptr);
             mxConfigurationController->addConfigurationChangeListener(
                 this,
                 FrameworkHelper::msResourceActivationEvent,
@@ -86,7 +86,7 @@ void SAL_CALL ViewTabBarModule::disposing()
     if (mxConfigurationController.is())
         mxConfigurationController->removeConfigurationChangeListener(this);
 
-    mxConfigurationController = NULL;
+    mxConfigurationController = nullptr;
 }
 
 void SAL_CALL ViewTabBarModule::notifyConfigurationChange (
@@ -132,7 +132,7 @@ void SAL_CALL ViewTabBarModule::disposing (
         && rEvent.Source == mxConfigurationController)
     {
         // Without the configuration controller this class can do nothing.
-        mxConfigurationController = NULL;
+        mxConfigurationController = nullptr;
         disposing();
     }
 }

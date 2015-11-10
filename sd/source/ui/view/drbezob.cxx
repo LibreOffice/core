@@ -79,7 +79,7 @@ BezierObjectBar::BezierObjectBar(
 
 BezierObjectBar::~BezierObjectBar()
 {
-    SetRepeatTarget(NULL);
+    SetRepeatTarget(nullptr);
 }
 
 /**
@@ -96,12 +96,12 @@ void BezierObjectBar::GetAttrState(SfxItemSet& rSet)
 
     if(xFunc.is())
     {
-        if( 0 != dynamic_cast< const FuSelection *>( xFunc.get() ))
+        if( nullptr != dynamic_cast< const FuSelection *>( xFunc.get() ))
         {
             sal_uInt16 nEditMode = static_cast<FuSelection*>(xFunc.get())->GetEditMode();
             rSet.Put(SfxBoolItem(nEditMode, true));
         }
-        else if( 0 != dynamic_cast< const FuConstructBezierPolygon *>( xFunc.get() ))
+        else if( nullptr != dynamic_cast< const FuConstructBezierPolygon *>( xFunc.get() ))
         {
             sal_uInt16 nEditMode = static_cast<FuConstructBezierPolygon*>(xFunc.get())->GetEditMode();
             rSet.Put(SfxBoolItem(nEditMode, true));
@@ -128,7 +128,7 @@ void BezierObjectBar::GetAttrState(SfxItemSet& rSet)
     }
     else
     {
-        IPolyPolygonEditorController* pIPPEC = 0;
+        IPolyPolygonEditorController* pIPPEC = nullptr;
         if( mpView->GetMarkedObjectList().GetMarkCount() )
             pIPPEC = mpView;
         else
@@ -217,7 +217,7 @@ void BezierObjectBar::Execute(SfxRequest& rReq)
         {
             const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
 
-            IPolyPolygonEditorController* pIPPEC = 0;
+            IPolyPolygonEditorController* pIPPEC = nullptr;
             if( rMarkList.GetMarkCount() )
                 pIPPEC = mpView;
             else
@@ -302,11 +302,11 @@ void BezierObjectBar::Execute(SfxRequest& rReq)
 
             if(xFunc.is())
             {
-                if( 0 != dynamic_cast< const FuSelection *>( xFunc.get() ))
+                if( nullptr != dynamic_cast< const FuSelection *>( xFunc.get() ))
                 {
                     static_cast<FuSelection*>(xFunc.get())->SetEditMode(rReq.GetSlot());
                 }
-                else if( 0 != dynamic_cast< const FuConstructBezierPolygon *>( xFunc.get() ))
+                else if( nullptr != dynamic_cast< const FuConstructBezierPolygon *>( xFunc.get() ))
                 {
                     static_cast<FuConstructBezierPolygon*>(xFunc.get())->SetEditMode(rReq.GetSlot());
                 }

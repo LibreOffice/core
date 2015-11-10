@@ -42,8 +42,8 @@ MasterPageDescriptor::MasterPageDescriptor (
       msPageName(rsPageName),
       msStyleName(rsStyleName),
       mbIsPrecious(bIsPrecious),
-      mpMasterPage(NULL),
-      mpSlide(NULL),
+      mpMasterPage(nullptr),
+      mpSlide(nullptr),
       maSmallPreview(),
       maLargePreview(),
       mpPreviewProvider(rpPreviewProvider),
@@ -123,13 +123,13 @@ Image MasterPageDescriptor::GetPreview (MasterPageContainer::PreviewSize eSize) 
         bDataChanged = true;
     }
 
-    if (mpPageObjectProvider.get()==NULL && rDescriptor.mpPageObjectProvider.get()!=NULL)
+    if (mpPageObjectProvider.get()==nullptr && rDescriptor.mpPageObjectProvider.get()!=nullptr)
     {
         mpPageObjectProvider = rDescriptor.mpPageObjectProvider;
         bDataChanged = true;
     }
 
-     if (mpPreviewProvider.get()==NULL && rDescriptor.mpPreviewProvider.get()!=NULL)
+     if (mpPreviewProvider.get()==nullptr && rDescriptor.mpPreviewProvider.get()!=nullptr)
      {
          mpPreviewProvider = rDescriptor.mpPreviewProvider;
          bPreviewChanged = true;
@@ -164,8 +164,8 @@ int MasterPageDescriptor::UpdatePageObject (
     int nModified = 0;
 
     // Update the page object when that is not yet known.
-    if (mpMasterPage == NULL
-        && mpPageObjectProvider.get()!=NULL
+    if (mpMasterPage == nullptr
+        && mpPageObjectProvider.get()!=nullptr
         && (nCostThreshold<0 || mpPageObjectProvider->GetCostIndex()<=nCostThreshold))
     {
         // Note that pDocument may be NULL.
@@ -174,18 +174,18 @@ int MasterPageDescriptor::UpdatePageObject (
         if (meOrigin == MasterPageContainer::MASTERPAGE)
         {
             mpMasterPage = pPage;
-            if (mpMasterPage != NULL)
+            if (mpMasterPage != nullptr)
                 mpMasterPage->SetPrecious(mbIsPrecious);
         }
         else
         {
             // Master pages from templates are copied into the local document.
-            if (pDocument != NULL)
+            if (pDocument != nullptr)
                 mpMasterPage = DocumentHelper::CopyMasterPageToLocalDocument(*pDocument,pPage);
             mpSlide = DocumentHelper::GetSlideForMasterPage(mpMasterPage);
         }
 
-        if (mpMasterPage != NULL)
+        if (mpMasterPage != nullptr)
         {
             // Update page name and style name.
             if (msPageName.isEmpty())
@@ -220,11 +220,11 @@ bool MasterPageDescriptor::UpdatePreview (
 
     // Update the preview when that is not yet known.
     if (maLargePreview.GetSizePixel().Width()==0
-        && mpPreviewProvider.get()!=NULL
+        && mpPreviewProvider.get()!=nullptr
         && (nCostThreshold<0 || mpPreviewProvider->GetCostIndex()<=nCostThreshold))
     {
         SdPage* pPage = mpSlide;
-        if (pPage == NULL)
+        if (pPage == nullptr)
         {
             pPage = mpMasterPage;
         }
@@ -288,7 +288,7 @@ MasterPageDescriptor::URLComparator::URLComparator (const OUString& sURL)
 bool MasterPageDescriptor::URLComparator::operator() (
     const SharedMasterPageDescriptor& rDescriptor)
 {
-    if (rDescriptor.get() == NULL)
+    if (rDescriptor.get() == nullptr)
         return false;
     else
         return rDescriptor->msURL.equals(msURL);
@@ -304,7 +304,7 @@ MasterPageDescriptor::StyleNameComparator::StyleNameComparator (const OUString& 
 bool MasterPageDescriptor::StyleNameComparator::operator() (
     const SharedMasterPageDescriptor& rDescriptor)
 {
-    if (rDescriptor.get() == NULL)
+    if (rDescriptor.get() == nullptr)
         return false;
     else
         return rDescriptor->msStyleName.equals(msStyleName);
@@ -320,7 +320,7 @@ MasterPageDescriptor::PageObjectComparator::PageObjectComparator (const SdPage* 
 bool MasterPageDescriptor::PageObjectComparator::operator() (
     const SharedMasterPageDescriptor& rDescriptor)
 {
-    if (rDescriptor.get() == NULL)
+    if (rDescriptor.get() == nullptr)
         return false;
     else
         return rDescriptor->mpMasterPage==mpMasterPage;
@@ -335,7 +335,7 @@ MasterPageDescriptor::AllComparator::AllComparator(const SharedMasterPageDescrip
 
 bool MasterPageDescriptor::AllComparator::operator() (const SharedMasterPageDescriptor&rDescriptor)
 {
-    if (rDescriptor.get() == NULL)
+    if (rDescriptor.get() == nullptr)
         return false;
     else
     {
@@ -353,10 +353,10 @@ bool MasterPageDescriptor::AllComparator::operator() (const SharedMasterPageDesc
                     && mpDescriptor->msPageName.equals(rDescriptor->msPageName))
                 || (!mpDescriptor->msStyleName.isEmpty()
                     && mpDescriptor->msStyleName.equals(rDescriptor->msStyleName))
-                || (mpDescriptor->mpMasterPage!=NULL
+                || (mpDescriptor->mpMasterPage!=nullptr
                     && mpDescriptor->mpMasterPage==rDescriptor->mpMasterPage)
-                || (mpDescriptor->mpPageObjectProvider.get()!=NULL
-                    && rDescriptor->mpPageObjectProvider.get()!=NULL
+                || (mpDescriptor->mpPageObjectProvider.get()!=nullptr
+                    && rDescriptor->mpPageObjectProvider.get()!=nullptr
                     && mpDescriptor->mpPageObjectProvider==rDescriptor->mpPageObjectProvider));
     }
 }

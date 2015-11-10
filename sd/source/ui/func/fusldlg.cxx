@@ -65,7 +65,7 @@ void FuSlideShowDlg::DoExecute( SfxRequest& )
     std::vector<OUString> aPageNameList(mpDoc->GetSdPageCount( PK_STANDARD ));
     const OUString& rPresPage = rPresentationSettings.maPresPage;
     OUString        aFirstPage;
-    SdPage*         pPage = NULL;
+    SdPage*         pPage = nullptr;
     long            nPage;
 
     for( nPage = mpDoc->GetSdPageCount( PK_STANDARD ) - 1L; nPage >= 0L; nPage-- )
@@ -110,7 +110,7 @@ void FuSlideShowDlg::DoExecute( SfxRequest& )
     aDlgSet.Put( SfxInt32Item( ATTR_PRESENT_DISPLAY, pOptions->GetDisplay() ) );
 
     SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-    std::unique_ptr<AbstractSdStartPresDlg> pDlg(pFact ? pFact->CreateSdStartPresentationDlg(mpWindow, aDlgSet, aPageNameList, pCustomShowList) : 0);
+    std::unique_ptr<AbstractSdStartPresDlg> pDlg(pFact ? pFact->CreateSdStartPresentationDlg(mpWindow, aDlgSet, aPageNameList, pCustomShowList) : nullptr);
     if( pDlg && (pDlg->Execute() == RET_OK) )
     {
         OUString aPage;

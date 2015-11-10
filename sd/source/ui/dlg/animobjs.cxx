@@ -167,7 +167,7 @@ AnimationWindow::AnimationWindow(SfxBindings* pInBindings, SfxChildWindow *pCW, 
     reverseUniqueHelpIdHack(*this);
 
     // create new document with page
-    pMyDoc = new SdDrawDocument(DOCUMENT_TYPE_IMPRESS, NULL);
+    pMyDoc = new SdDrawDocument(DOCUMENT_TYPE_IMPRESS, nullptr);
     SdPage* pPage = pMyDoc->AllocSdPage(false);
     pMyDoc->InsertPage(pPage);
 
@@ -290,14 +290,14 @@ IMPL_LINK_TYPED( AnimationWindow, ClickPlayHdl, Button *, p, void )
     }
 
     // StatusBarManager from 1 second
-    SfxProgress* pProgress = NULL;
+    SfxProgress* pProgress = nullptr;
     if( nFullTime >= 1000 )
     {
         bDisableCtrls = true;
         m_pBtnStop->Enable();
         m_pBtnStop->Update();
         OUString aStr("Animator:"); // here we should think about something smart
-        pProgress = new SfxProgress( NULL, aStr, nFullTime );
+        pProgress = new SfxProgress( nullptr, aStr, nFullTime );
     }
 
     sal_uLong nTmpTime = 0;
@@ -556,7 +556,7 @@ void AnimationWindow::UpdateControl(bool const bDisableCtrls)
     }
     else
     {
-        m_pCtlDisplay->SetBitmapEx(0);
+        m_pCtlDisplay->SetBitmapEx(nullptr);
     }
     m_pCtlDisplay->Invalidate();
     m_pCtlDisplay->Update();
@@ -618,7 +618,7 @@ void AnimationWindow::UpdateControl(bool const bDisableCtrls)
         m_pLbAdjustment->Enable();
     }
 
-    ClickRbtHdl( NULL );
+    ClickRbtHdl( nullptr );
 }
 
 void AnimationWindow::ResetAttrs()
@@ -1020,7 +1020,7 @@ void AnimationWindow::CreateAnimObj (::sd::View& rView )
     {
         // calculate offset for the specified direction
         Size aOffset;
-        SdrObject * pClone = NULL;
+        SdrObject * pClone = nullptr;
         SdPage* pPage = pMyDoc->GetSdPage(0, PK_STANDARD);
 
         for (size_t i = 0; i < nCount; ++i)
@@ -1078,7 +1078,7 @@ void AnimationWindow::CreateAnimObj (::sd::View& rView )
 
         // #i42894# Caution(!) variable pPage looks right, but it is a page from the local
         // document the dialog is using (!), so get the target page from the target view
-        SdPage* pTargetSdPage = dynamic_cast< SdPage* >(rView.GetSdrPageView() ? rView.GetSdrPageView()->GetPage() : 0);
+        SdPage* pTargetSdPage = dynamic_cast< SdPage* >(rView.GetSdrPageView() ? rView.GetSdrPageView()->GetPage() : nullptr);
 
         if(pTargetSdPage)
         {
@@ -1115,7 +1115,7 @@ void AnimationWindow::CreateAnimObj (::sd::View& rView )
         }
     }
 
-    ClickFirstHdl( NULL );
+    ClickFirstHdl( nullptr );
 }
 
 void AnimationWindow::DataChanged( const DataChangedEvent& rDCEvt )

@@ -144,7 +144,7 @@ void FuInsertGraphic::DoExecute( SfxRequest&  )
                 Rectangle aRect(aPos, mpWindow->GetOutputSizePixel() );
                 aPos = aRect.Center();
                 aPos = mpWindow->PixelToLogic(aPos);
-                SdrGrafObj* pGrafObj = mpView->InsertGraphic(aGraphic, nAction, aPos, pPickObj, NULL);
+                SdrGrafObj* pGrafObj = mpView->InsertGraphic(aGraphic, nAction, aPos, pPickObj, nullptr);
 
                 if(pGrafObj && aDlg.IsAsLink())
                 {
@@ -244,7 +244,7 @@ void FuInsertClipboard::DoExecute( SfxRequest&  )
                     ( aDataHelper.HasFormat( SotClipboardFormatId::UNIFORMRESOURCELOCATOR ) &&
                     aDataHelper.GetINetBookmark( SotClipboardFormatId::UNIFORMRESOURCELOCATOR, aINetBookmark ) ) )
                 {
-                    pDrViewSh->InsertURLField( aINetBookmark.GetURL(), aINetBookmark.GetDescription(), "", NULL );
+                    pDrViewSh->InsertURLField( aINetBookmark.GetURL(), aINetBookmark.GetDescription(), "", nullptr );
                 }
             }
         }
@@ -583,7 +583,7 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
                                 // the empty OLE object gets a new IPObj
                                 bInsertNewObject = false;
                                 pObj->SetEmptyPresObj(false);
-                                static_cast<SdrOle2Obj*>(pObj)->SetOutlinerParaObject(NULL);
+                                static_cast<SdrOle2Obj*>(pObj)->SetOutlinerParaObject(nullptr);
                                 static_cast<SdrOle2Obj*>(pObj)->SetObjRef(xObj);
                                 static_cast<SdrOle2Obj*>(pObj)->SetPersistName(aName);
                                 static_cast<SdrOle2Obj*>(pObj)->SetName(aName);

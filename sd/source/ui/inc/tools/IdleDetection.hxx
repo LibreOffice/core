@@ -64,7 +64,7 @@ public:
             IdleStates values or-ed together that describe what the system
             is currently doing so that the caller can decide what to do.
     */
-    static sal_Int32 GetIdleState (const vcl::Window* pWindow = NULL);
+    static sal_Int32 GetIdleState (const vcl::Window* pWindow = nullptr);
 
 private:
     /** Check whether there are input events pending.

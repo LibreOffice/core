@@ -86,15 +86,15 @@ void DrawViewShell::ExecFormText(SfxRequest& rReq)
 void DrawViewShell::GetFormTextState(SfxItemSet& rSet)
 {
     const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
-    const SdrObject* pObj = NULL;
-    SvxFontWorkDialog* pDlg = NULL;
+    const SdrObject* pObj = nullptr;
+    SvxFontWorkDialog* pDlg = nullptr;
 
     sal_uInt16 nId = SvxFontWorkChildWindow::GetChildWindowId();
 
     if (GetViewFrame()->HasChildWindow(nId))
     {
         SfxChildWindow* pWnd = GetViewFrame()->GetChildWindow(nId);
-        pDlg = pWnd ? static_cast<SvxFontWorkDialog*>(pWnd->GetWindow()) : NULL;
+        pDlg = pWnd ? static_cast<SvxFontWorkDialog*>(pWnd->GetWindow()) : nullptr;
     }
 
     if ( rMarkList.GetMarkCount() == 1 )
@@ -155,7 +155,7 @@ void DrawViewShell::ExecAnimationWin( SfxRequest& rReq )
 
             SfxChildWindow* pWnd = GetViewFrame()->GetChildWindow(nId);
 
-            pAnimWin = pWnd ? static_cast<AnimationWindow*>(pWnd->GetWindow()) : NULL;
+            pAnimWin = pWnd ? static_cast<AnimationWindow*>(pWnd->GetWindow()) : nullptr;
 
             if ( pAnimWin )
             {
@@ -282,7 +282,7 @@ void DrawViewShell::ExecBmpMask( SfxRequest& rReq )
 
         case ( SID_BMPMASK_EXEC ) :
         {
-            SdrGrafObj* pObj = 0;
+            SdrGrafObj* pObj = nullptr;
             if( mpDrawView && mpDrawView->GetMarkedObjectList().GetMarkCount() )
                 pObj = dynamic_cast< SdrGrafObj* >( mpDrawView->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj() );
 
@@ -306,7 +306,7 @@ void DrawViewShell::ExecBmpMask( SfxRequest& rReq )
 
                 SfxChildWindow* pWnd = GetViewFrame()->GetChildWindow(
                                          SvxBmpMaskChildWindow::GetChildWindowId());
-                SvxBmpMask* pBmpMask = pWnd ? static_cast<SvxBmpMask*>(pWnd->GetWindow()) : NULL;
+                SvxBmpMask* pBmpMask = pWnd ? static_cast<SvxBmpMask*>(pWnd->GetWindow()) : nullptr;
                 assert(pBmpMask);
                 if (bCont && pBmpMask)
                 {
@@ -340,14 +340,14 @@ void DrawViewShell::ExecBmpMask( SfxRequest& rReq )
 void DrawViewShell::GetBmpMaskState( SfxItemSet& rSet )
 {
     const SdrMarkList&  rMarkList = mpDrawView->GetMarkedObjectList();
-    const SdrObject*    pObj = NULL;
+    const SdrObject*    pObj = nullptr;
     sal_uInt16              nId = SvxBmpMaskChildWindow::GetChildWindowId();
     bool                bEnable = false;
 
     if ( GetViewFrame()->HasChildWindow( nId ) )
     {
         SfxChildWindow* pWnd = GetViewFrame()->GetChildWindow(nId);
-        SvxBmpMask* pDlg = pWnd ? static_cast<SvxBmpMask*>(pWnd->GetWindow()) : NULL;
+        SvxBmpMask* pDlg = pWnd ? static_cast<SvxBmpMask*>(pWnd->GetWindow()) : nullptr;
         if (pDlg && pDlg->NeedsColorList())
             pDlg->SetColorList(GetDoc()->GetColorList());
     }

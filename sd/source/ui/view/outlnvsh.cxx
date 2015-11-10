@@ -190,14 +190,14 @@ OutlineViewShell::OutlineViewShell (
     vcl::Window* pParentWindow,
     FrameView* pFrameViewArgument)
     : ViewShell(pFrame, pParentWindow, rViewShellBase),
-      pOlView(NULL),
-      pLastPage( NULL ),
-      pClipEvtLstnr(NULL),
+      pOlView(nullptr),
+      pLastPage( nullptr ),
+      pClipEvtLstnr(nullptr),
       bPastePossible(false),
       mbInitialized(false)
 
 {
-    if (pFrameViewArgument != NULL)
+    if (pFrameViewArgument != nullptr)
         mpFrameView = pFrameViewArgument;
     else
         mpFrameView = new FrameView(GetDoc());
@@ -260,7 +260,7 @@ void OutlineViewShell::ArrangeGUIElements ()
     ViewShell::ArrangeGUIElements ();
 
     ::sd::Window* pWindow = mpContentWindow.get();
-    if (pWindow != NULL)
+    if (pWindow != nullptr)
     {
         pWindow->SetMinZoomAutoCalc(false);
 
@@ -592,7 +592,7 @@ void OutlineViewShell::FuSupport(SfxRequest &rReq)
         case SID_TRANSLITERATE_HIRAGANA:
         case SID_TRANSLITERATE_KATAGANA:
         {
-            OutlinerView* pOLV = pOlView ? pOlView->GetViewByWindow( GetActiveWindow() ) : 0;
+            OutlinerView* pOLV = pOlView ? pOlView->GetViewByWindow( GetActiveWindow() ) : nullptr;
             if( pOLV )
             {
                 using namespace ::com::sun::star::i18n;
@@ -694,7 +694,7 @@ void OutlineViewShell::FuPermanent(SfxRequest &rReq)
     if(HasOldFunction())
     {
         GetOldFunction()->Deactivate();
-        SetOldFunction(0);
+        SetOldFunction(nullptr);
     }
 
     if(HasCurrentFunction())
@@ -939,10 +939,10 @@ void OutlineViewShell::GetMenuState( SfxItemSet &rSet )
     {
         const SvxFieldItem* pFldItem = pOutlinerView->GetFieldAtSelection();
 
-        if( !( pFldItem && (0 != dynamic_cast< const SvxDateField *>( pFldItem->GetField() ) ||
-                            0 != dynamic_cast< const SvxAuthorField *>( pFldItem->GetField() ) ||
-                            0 != dynamic_cast< const SvxExtFileField *>( pFldItem->GetField() ) ||
-                            0 != dynamic_cast< const SvxExtTimeField *>( pFldItem->GetField() ) ) ) )
+        if( !( pFldItem && (nullptr != dynamic_cast< const SvxDateField *>( pFldItem->GetField() ) ||
+                            nullptr != dynamic_cast< const SvxAuthorField *>( pFldItem->GetField() ) ||
+                            nullptr != dynamic_cast< const SvxExtFileField *>( pFldItem->GetField() ) ||
+                            nullptr != dynamic_cast< const SvxExtTimeField *>( pFldItem->GetField() ) ) ) )
         {
             rSet.DisableItem( SID_MODIFY_FIELD );
         }
@@ -963,7 +963,7 @@ void OutlineViewShell::GetMenuState( SfxItemSet &rSet )
             {
                 SdrObject* pObj = pPage->GetPresObj(PRESOBJ_OUTLINE);
 
-                if (pObj!=NULL )
+                if (pObj!=nullptr )
                 {
                     if( !pObj->IsEmptyPresObj() )
                     {
@@ -1122,7 +1122,7 @@ bool OutlineViewShell::PrepareClose( bool bUI )
     if( !ViewShell::PrepareClose(bUI) )
         return false;
 
-    return pOlView == NULL || pOlView->PrepareClose(bUI);
+    return pOlView == nullptr || pOlView->PrepareClose(bUI);
 }
 
 /**
@@ -1192,7 +1192,7 @@ void OutlineViewShell::Execute(SfxRequest& rReq)
         case SID_SPELL_DIALOG:
         {
             SfxViewFrame* pViewFrame = GetViewFrame();
-            if (rReq.GetArgs() != NULL)
+            if (rReq.GetArgs() != nullptr)
                 pViewFrame->SetChildWindow (SID_SPELL_DIALOG,
                     static_cast<const SfxBoolItem&>(rReq.GetArgs()->
                         Get(SID_SPELL_DIALOG)).GetValue());
@@ -1308,8 +1308,8 @@ void OutlineViewShell::GetStatusBarState(SfxItemSet& rSet)
     std::vector<Paragraph*> aSelList;
     pActiveView->CreateSelectionList(aSelList);
 
-    Paragraph *pFirstPara = NULL;
-    Paragraph *pLastPara = NULL;
+    Paragraph *pFirstPara = nullptr;
+    Paragraph *pLastPara = nullptr;
 
     if (!aSelList.empty())
     {
@@ -1396,7 +1396,7 @@ bool OutlineViewShell::KeyInput(const KeyEvent& rKEvt, ::sd::Window* pWin)
     bool bReturn = false;
     OutlineViewPageChangesGuard aGuard(pOlView);
 
-    if (pWin == NULL && HasCurrentFunction())
+    if (pWin == nullptr && HasCurrentFunction())
     {
         bReturn = GetCurrentFunction()->KeyInput(rKEvt);
     }
@@ -1478,7 +1478,7 @@ void OutlineViewShell::GetAttrState( SfxItemSet& rSet )
 
             case SID_STYLE_EDIT:
             {
-                SfxPoolItem* pItem = NULL;
+                SfxPoolItem* pItem = nullptr;
                 GetViewFrame()->GetBindings().QueryState(SID_STYLE_FAMILY, pItem);
                 SfxUInt16Item* pFamilyItem = dynamic_cast<SfxUInt16Item*>(pItem);
                 if (pFamilyItem && SfxTemplate::NIdToSfxFamilyId(pFamilyItem->GetValue()) == SD_STYLE_FAMILY_PSEUDO)
@@ -1601,7 +1601,7 @@ bool OutlineViewShell::UpdateTitleObject( SdPage* pPage, Paragraph* pPara )
         }
 
         // if we have a title object and a text, set the text
-        OutlinerParaObject* pOPO = pTO ? rOutliner.CreateParaObject(rOutliner.GetAbsPos(pPara), 1) : NULL;
+        OutlinerParaObject* pOPO = pTO ? rOutliner.CreateParaObject(rOutliner.GetAbsPos(pPara), 1) : nullptr;
         if (pOPO)
         {
             pOPO->SetOutlinerMode( OUTLINERMODE_TITLEOBJECT );
@@ -1664,8 +1664,8 @@ bool OutlineViewShell::UpdateOutlineObject( SdPage* pPage, Paragraph* pPara )
         return false;
 
     ::Outliner&         rOutliner = pOlView->GetOutliner();
-    OutlinerParaObject* pOPO = NULL;
-    SdrTextObj*         pTO  = NULL;
+    OutlinerParaObject* pOPO = nullptr;
+    SdrTextObj*         pTO  = nullptr;
 
     bool bNewObject = false;
 
@@ -1849,8 +1849,8 @@ void OutlineViewShell::VisAreaChanged(const Rectangle& rRect)
 css::uno::Reference<css::accessibility::XAccessible>
     OutlineViewShell::CreateAccessibleDocumentView (::sd::Window* pWindow)
 {
-    OSL_ASSERT (GetViewShell()!=NULL);
-    if (GetViewShell()->GetController() != NULL)
+    OSL_ASSERT (GetViewShell()!=nullptr);
+    if (GetViewShell()->GetController() != nullptr)
     {
         ::accessibility::AccessibleOutlineView* pDocumentView =
             new ::accessibility::AccessibleOutlineView (

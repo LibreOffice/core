@@ -70,7 +70,7 @@ DrawController::DrawController (ViewShellBase& rBase) throw()
         cppu::UnoType<view::XSelectionChangeListener>::get()),
       mpBase(&rBase),
       maLastVisArea(),
-      mpCurrentPage(NULL),
+      mpCurrentPage(nullptr),
       mbMasterPageMode(false),
       mbLayerMode(false),
       mbDisposing(false),
@@ -145,15 +145,15 @@ void SAL_CALL DrawController::dispose()
             {
                 pViewShell->DeactivateCurrentFunction();
                 DrawDocShell* pDocShell = pViewShell->GetDocSh();
-                if ( pDocShell != NULL )
-                    pDocShell->SetDocShellFunction(0);
+                if ( pDocShell != nullptr )
+                    pDocShell->SetDocShellFunction(nullptr);
             }
             pViewShell.reset();
 
             // When the controller has not been detached from its view
             // shell, i.e. mpViewShell is not NULL, then tell PaneManager
             // and ViewShellManager to clear the shell stack.
-            if (mxSubController.is() && mpBase!=NULL)
+            if (mxSubController.is() && mpBase!=nullptr)
             {
                 mpBase->DisconnectAllClients();
                 mpBase->GetViewShellManager()->Shutdown();
@@ -303,7 +303,7 @@ void  SAL_CALL
                 view::XSelectionChangeListener* pListener =
                     static_cast<view::XSelectionChangeListener*>(
                         aIterator.next());
-                if (pListener != NULL)
+                if (pListener != nullptr)
                     pListener->selectionChanged (rEvent);
             }
             catch (const RuntimeException&)
@@ -385,7 +385,7 @@ void DrawController::FireSelectionChangeListener() throw()
             {
                 view::XSelectionChangeListener * pL =
                     static_cast<view::XSelectionChangeListener*>(aIt.next());
-                if (pL != NULL)
+                if (pL != nullptr)
                     pL->selectionChanged( aEvent );
             }
             catch (const RuntimeException&)
@@ -432,7 +432,7 @@ void DrawController::FireSwitchCurrentPage (SdPage* pNewCurrentPage) throw()
                 makeAny(Reference<drawing::XDrawPage>(pNewCurrentPage->getUnoPage(), UNO_QUERY)));
 
             Any aOldValue;
-            if (pCurrentPage != NULL)
+            if (pCurrentPage != nullptr)
             {
                 Reference<drawing::XDrawPage> xOldPage (pCurrentPage->getUnoPage(), UNO_QUERY);
                 aOldValue <<= xOldPage;
@@ -552,7 +552,7 @@ void DrawController::BroadcastContextChange() const
 void DrawController::ReleaseViewShellBase()
 {
     DisposeFrameworkControllers();
-    mpBase = NULL;
+    mpBase = nullptr;
 }
 
 //===== XControllerManager ==============================================================
@@ -675,7 +675,7 @@ IPropertyArrayHelper & DrawController::getInfoHelper()
 {
     SolarMutexGuard aGuard;
 
-    if (mpPropertyArrayHelper.get() == NULL)
+    if (mpPropertyArrayHelper.get() == nullptr)
     {
         ::std::vector<beans::Property> aProperties;
         FillPropertyTable (aProperties);
@@ -704,9 +704,9 @@ uno::Reference< form::runtime::XFormController > SAL_CALL DrawController::getFor
     FmFormShell* pFormShell = mpBase->GetFormShellManager()->GetFormShell();
     SdrView* pSdrView = mpBase->GetDrawView();
     std::shared_ptr<ViewShell> pViewShell = mpBase->GetMainViewShell();
-    ::sd::Window* pWindow = pViewShell ? pViewShell->GetActiveWindow() : NULL;
+    ::sd::Window* pWindow = pViewShell ? pViewShell->GetActiveWindow() : nullptr;
 
-    uno::Reference< form::runtime::XFormController > xController( NULL );
+    uno::Reference< form::runtime::XFormController > xController( nullptr );
     if ( pFormShell && pSdrView && pWindow )
         xController = FmFormShell::GetFormController( Form, *pSdrView, *pWindow );
     return xController;
@@ -741,9 +741,9 @@ uno::Reference< awt::XControl > SAL_CALL DrawController::getControl( const uno::
     FmFormShell* pFormShell = mpBase->GetFormShellManager()->GetFormShell();
     SdrView* pSdrView = mpBase->GetDrawView();
     std::shared_ptr<ViewShell> pViewShell = mpBase->GetMainViewShell();
-    ::sd::Window* pWindow = pViewShell ? pViewShell->GetActiveWindow() : NULL;
+    ::sd::Window* pWindow = pViewShell ? pViewShell->GetActiveWindow() : nullptr;
 
-    uno::Reference< awt::XControl > xControl( NULL );
+    uno::Reference< awt::XControl > xControl( nullptr );
     if ( pFormShell && pSdrView && pWindow )
         pFormShell->GetFormControl( xModel, *pSdrView, *pWindow, xControl );
     return xControl;
@@ -838,8 +838,8 @@ void DrawController::ProvideFrameworkControllers()
     }
     catch (const RuntimeException&)
     {
-        mxConfigurationController = NULL;
-        mxModuleController = NULL;
+        mxConfigurationController = nullptr;
+        mxModuleController = nullptr;
     }
 }
 

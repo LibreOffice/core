@@ -36,7 +36,7 @@ class SD_DLLPUBLIC FrameView
     : public SdrView
 {
 public:
-    FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView = NULL );
+    FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView = nullptr );
     FrameView(const FrameView& rFrameView);
     virtual ~FrameView();
 

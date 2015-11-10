@@ -55,7 +55,7 @@ SdUnoPageBackground::SdUnoPageBackground(
     SdDrawDocument* pDoc /* = NULL */,
     const SfxItemSet* pSet /* = NULL */) throw()
 :   mpPropSet(ImplGetPageBackgroundPropertySet()),
-    mpSet(NULL),
+    mpSet(nullptr),
     mpDoc(pDoc)
 {
     if( pDoc )
@@ -89,8 +89,8 @@ void SdUnoPageBackground::Notify( SfxBroadcaster&, const SfxHint& rHint )
         if( pSdrHint->GetKind() == HINT_MODELCLEARED )
         {
             delete mpSet;
-            mpSet = NULL;
-            mpDoc = NULL;
+            mpSet = nullptr;
+            mpDoc = nullptr;
         }
     }
 
@@ -100,7 +100,7 @@ void SdUnoPageBackground::fillItemSet( SdDrawDocument* pDoc, SfxItemSet& rSet ) 
 {
     rSet.ClearItem();
 
-    if( mpSet == NULL )
+    if( mpSet == nullptr )
     {
         StartListening( *pDoc );
         mpDoc = pDoc;
@@ -216,7 +216,7 @@ void SAL_CALL SdUnoPageBackground::setPropertyValue( const OUString& aPropertyNa
 
     const SfxItemPropertySimpleEntry* pEntry = getPropertyMapEntry( aPropertyName );
 
-    if( pEntry == NULL )
+    if( pEntry == nullptr )
     {
         throw beans::UnknownPropertyException();
     }
@@ -274,7 +274,7 @@ uno::Any SAL_CALL SdUnoPageBackground::getPropertyValue( const OUString& Propert
     uno::Any aAny;
     const SfxItemPropertySimpleEntry* pEntry = getPropertyMapEntry(PropertyName);
 
-    if( pEntry == NULL )
+    if( pEntry == nullptr )
     {
         throw beans::UnknownPropertyException();
     }
@@ -332,7 +332,7 @@ beans::PropertyState SAL_CALL SdUnoPageBackground::getPropertyState( const OUStr
 
     const SfxItemPropertySimpleEntry* pEntry = getPropertyMapEntry(PropertyName);
 
-    if( pEntry == NULL )
+    if( pEntry == nullptr )
         throw beans::UnknownPropertyException();
 
     if( mpSet )
@@ -365,7 +365,7 @@ beans::PropertyState SAL_CALL SdUnoPageBackground::getPropertyState( const OUStr
     }
     else
     {
-        if( NULL == mpPropSet->GetUsrAnyForID(pEntry->nWID) )
+        if( nullptr == mpPropSet->GetUsrAnyForID(pEntry->nWID) )
             return beans::PropertyState_DEFAULT_VALUE;
         else
             return beans::PropertyState_DIRECT_VALUE;
@@ -396,7 +396,7 @@ void SAL_CALL SdUnoPageBackground::setPropertyToDefault( const OUString& Propert
 
     const SfxItemPropertySimpleEntry* pEntry = getPropertyMapEntry(PropertyName);
 
-    if( pEntry == NULL )
+    if( pEntry == nullptr )
         throw beans::UnknownPropertyException();
 
     if( mpSet )
@@ -419,7 +419,7 @@ uno::Any SAL_CALL SdUnoPageBackground::getPropertyDefault( const OUString& aProp
     SolarMutexGuard aGuard;
 
     const SfxItemPropertySimpleEntry* pEntry = getPropertyMapEntry(aPropertyName);
-    if( pEntry == NULL || mpSet == NULL )
+    if( pEntry == nullptr || mpSet == nullptr )
         throw beans::UnknownPropertyException();
 
     uno::Any aAny;

@@ -127,7 +127,7 @@ void DrawViewShell::ExecGallery(SfxRequest& rReq)
         aPnt += Point(pPage->GetLftBorder(), pPage->GetUppBorder());
         Rectangle aRect (aPnt, aSize);
 
-        SdrGrafObj* pGrafObj = NULL;
+        SdrGrafObj* pGrafObj = nullptr;
 
         bool bInsertNewObject = true;
 
@@ -152,7 +152,7 @@ void DrawViewShell::ExecGallery(SfxRequest& rReq)
 
                         SdrGrafObj* pNewGrafObj = pGrafObj->Clone();
                         pNewGrafObj->SetEmptyPresObj(false);
-                        pNewGrafObj->SetOutlinerParaObject(NULL);
+                        pNewGrafObj->SetOutlinerParaObject(nullptr);
                         pNewGrafObj->SetGraphic(aGraphic);
 
                         OUString aStr(mpDrawView->GetDescriptionOfMarkedObjects());

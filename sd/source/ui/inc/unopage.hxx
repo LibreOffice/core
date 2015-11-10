@@ -95,7 +95,7 @@ public:
     virtual ~SdGenericDrawPage() throw();
 
     // intern
-    bool isValid() { return (SvxDrawPage::mpPage != NULL) && (mpModel != NULL); }
+    bool isValid() { return (SvxDrawPage::mpPage != nullptr) && (mpModel != nullptr); }
 
     SdPage* GetPage() const { return static_cast<SdPage*>(SvxDrawPage::mpPage); }
     SdXImpressDocument* GetModel() const;

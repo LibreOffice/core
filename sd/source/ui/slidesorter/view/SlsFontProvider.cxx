@@ -29,15 +29,15 @@ using namespace ::sd::slidesorter;
 
 namespace sd { namespace slidesorter { namespace view {
 
-FontProvider* FontProvider::mpInstance = NULL;
+FontProvider* FontProvider::mpInstance = nullptr;
 
 FontProvider& FontProvider::Instance()
 {
-    if (mpInstance == NULL)
+    if (mpInstance == nullptr)
     {
         ::osl::GetGlobalMutex aMutexFunctor;
         ::osl::MutexGuard aGuard (aMutexFunctor());
-        if (mpInstance == NULL)
+        if (mpInstance == nullptr)
         {
             // Create an instance of the class and register it at the
             // SdGlobalResourceContainer so that it is eventually released.
@@ -55,9 +55,9 @@ FontProvider& FontProvider::Instance()
 
     // We throw an exception when for some strange reason no instance of
     // this class exists.
-    if (mpInstance == NULL)
+    if (mpInstance == nullptr)
         throw css::uno::RuntimeException("com.sun.star.document.IndexedPropertyValues",
-            NULL);
+            nullptr);
 
     return *mpInstance;
 }

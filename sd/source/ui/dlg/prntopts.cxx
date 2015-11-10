@@ -154,7 +154,7 @@ bool SdPrintOptions::FillItemSet( SfxItemSet* rAttrs )
 
 void SdPrintOptions::Reset( const SfxItemSet* rAttrs )
 {
-    const SdOptionsPrintItem* pPrintOpts = NULL;
+    const SdOptionsPrintItem* pPrintOpts = nullptr;
     if( SfxItemState::SET == rAttrs->GetItemState( ATTR_OPTIONS_PRINT, false,
                             reinterpret_cast<const SfxPoolItem**>(&pPrintOpts) ) )
     {
@@ -204,7 +204,7 @@ void SdPrintOptions::Reset( const SfxItemSet* rAttrs )
     m_pRbtGrayscale->SaveValue();
     m_pRbtBlackWhite->SaveValue();
 
-    ClickBookletHdl( NULL );
+    ClickBookletHdl( nullptr );
 }
 
 VclPtr<SfxTabPage> SdPrintOptions::Create( vcl::Window* pWindow,

@@ -230,7 +230,7 @@ void ConfigurationControllerResourceManager::DeactivateResource (
     mpBroadcaster->NotifyListeners(
         FrameworkHelper::msResourceDeactivationEndEvent,
         rxResourceId,
-        NULL);
+        nullptr);
 
 #if OSL_DEBUG_LEVEL >= 1
     if (bSuccess)

@@ -80,7 +80,7 @@ namespace sd {
  */
 void ViewShell::UpdateScrollBars()
 {
-    if (mpHorizontalScrollBar.get() != NULL)
+    if (mpHorizontalScrollBar.get() != nullptr)
     {
         long nW = (long)(mpContentWindow->GetVisibleWidth() * 32000);
         long nX = (long)(mpContentWindow->GetVisibleX() * 32000);
@@ -93,7 +93,7 @@ void ViewShell::UpdateScrollBars()
         mpHorizontalScrollBar->SetPageSize(nPage);
     }
 
-    if (mpVerticalScrollBar.get() != NULL)
+    if (mpVerticalScrollBar.get() != nullptr)
     {
         long nH = (long)(mpContentWindow->GetVisibleHeight() * 32000);
         long nY = (long)(mpContentWindow->GetVisibleY() * 32000);
@@ -150,7 +150,7 @@ long ViewShell::VirtHScrollHdl(ScrollBar* pHScroll)
 
         // scroll all windows of the column
         ::sd::View* pView = GetView();
-        OutlinerView* pOLV = NULL;
+        OutlinerView* pOLV = nullptr;
 
         if (pView)
             pOLV = pView->GetTextEditOutlinerView();
@@ -211,7 +211,7 @@ long ViewShell::VirtVScrollHdl(ScrollBar* pVScroll)
         double fY = (double) pVScroll->GetThumbPos() / pVScroll->GetRange().Len();
 
         ::sd::View* pView = GetView();
-        OutlinerView* pOLV = NULL;
+        OutlinerView* pOLV = nullptr;
 
         if (pView)
             pOLV = pView->GetTextEditOutlinerView();
@@ -248,12 +248,12 @@ long ViewShell::VirtVScrollHdl(ScrollBar* pVScroll)
 
 SvxRuler* ViewShell::CreateHRuler(::sd::Window* , bool )
 {
-    return NULL;
+    return nullptr;
 }
 
 SvxRuler* ViewShell::CreateVRuler(::sd::Window* )
 {
-    return NULL;
+    return nullptr;
 }
 
 void ViewShell::UpdateHRuler()
@@ -331,13 +331,13 @@ void ViewShell::SetZoom(long nZoom)
     Fraction aUIScale(nZoom, 100);
     aUIScale *= GetDoc()->GetUIScale();
 
-    if (mpHorizontalRuler.get() != NULL)
+    if (mpHorizontalRuler.get() != nullptr)
         mpHorizontalRuler->SetZoom(aUIScale);
 
-    if (mpVerticalRuler.get() != NULL)
+    if (mpVerticalRuler.get() != nullptr)
         mpVerticalRuler->SetZoom(aUIScale);
 
-    if (mpContentWindow.get() != NULL)
+    if (mpContentWindow.get() != nullptr)
     {
         mpContentWindow->SetZoomIntegral(nZoom);
 
@@ -373,13 +373,13 @@ void ViewShell::SetZoomRect(const Rectangle& rZoomRect)
 
     Point aPos = GetActiveWindow()->GetWinViewPos();
 
-    if (mpHorizontalRuler.get() != NULL)
+    if (mpHorizontalRuler.get() != nullptr)
         mpHorizontalRuler->SetZoom(aUIScale);
 
-    if (mpVerticalRuler.get() != NULL)
+    if (mpVerticalRuler.get() != nullptr)
         mpVerticalRuler->SetZoom(aUIScale);
 
-    if (mpContentWindow.get() != NULL)
+    if (mpContentWindow.get() != nullptr)
     {
         Point aNewPos = mpContentWindow->GetWinViewPos();
         aNewPos.X() = aPos.X();
@@ -413,7 +413,7 @@ void ViewShell::SetZoomRect(const Rectangle& rZoomRect)
 void ViewShell::InitWindows(const Point& rViewOrigin, const Size& rViewSize,
                               const Point& rWinPos, bool bUpdate)
 {
-    if (mpContentWindow.get() != NULL)
+    if (mpContentWindow.get() != nullptr)
     {
         mpContentWindow->SetViewOrigin(rViewOrigin);
         mpContentWindow->SetViewSize(rViewSize);
@@ -442,7 +442,7 @@ void ViewShell::InitWindows(const Point& rViewOrigin, const Size& rViewSize,
  */
 void ViewShell::InvalidateWindows()
 {
-    if (mpContentWindow.get() != NULL)
+    if (mpContentWindow.get() != nullptr)
         mpContentWindow->Invalidate();
 }
 
@@ -451,7 +451,7 @@ void ViewShell::InvalidateWindows()
  */
 void ViewShell::DrawMarkRect(const Rectangle& rRect) const
 {
-    if (mpContentWindow.get() != NULL)
+    if (mpContentWindow.get() != nullptr)
     {
         mpContentWindow->InvertTracking(rRect, SHOWTRACK_OBJECT | SHOWTRACK_WINDOW);
     }
@@ -463,13 +463,13 @@ void ViewShell::SetPageSizeAndBorder(PageKind ePageKind, const Size& rNewSize,
                                        Orientation eOrientation, sal_uInt16 nPaperBin,
                                        bool bBackgroundFullSize)
 {
-    SdPage* pPage = 0;
-    SdUndoGroup* pUndoGroup = NULL;
+    SdPage* pPage = nullptr;
+    SdUndoGroup* pUndoGroup = nullptr;
     pUndoGroup = new SdUndoGroup(GetDoc());
     OUString aString(SdResId(STR_UNDO_CHANGE_PAGEFORMAT));
     pUndoGroup->SetComment(aString);
     SfxViewShell* pViewShell = GetViewShell();
-    OSL_ASSERT (pViewShell!=NULL);
+    OSL_ASSERT (pViewShell!=nullptr);
 
     sal_uInt16 i, nPageCnt = GetDoc()->GetMasterSdPageCount(ePageKind);
 
@@ -631,7 +631,7 @@ void ViewShell::SetZoomFactor(const Fraction& rZoomX, const Fraction&)
 void ViewShell::SetActiveWindow (::sd::Window* pWin)
 {
     SfxViewShell* pViewShell = GetViewShell();
-    OSL_ASSERT (pViewShell!=NULL);
+    OSL_ASSERT (pViewShell!=nullptr);
 
     if (pViewShell->GetWindow() != pWin)
     {
@@ -714,7 +714,7 @@ bool ViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
     bool bAbort = false;
     GetDocSh()->SetWaitCursor( true );
     SfxViewShell* pViewShell = GetViewShell();
-    OSL_ASSERT (pViewShell!=NULL);
+    OSL_ASSERT (pViewShell!=nullptr);
     bool bChangeDefaultsForChart = false;
     OUString aName;
 
@@ -770,8 +770,8 @@ bool ViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
         {
             // OLE object is no longer empty
             pObj->SetEmptyPresObj(false);
-            pObj->SetOutlinerParaObject(NULL);
-            pObj->SetGraphic(NULL);
+            pObj->SetOutlinerParaObject(nullptr);
+            pObj->SetGraphic(nullptr);
 
             // the empty OLE object gets a new IPObj
             if (!aName.isEmpty())
@@ -902,7 +902,7 @@ void ViewShell::SetRuler(bool bRuler)
 {
     mbHasRulers = ( bRuler && !GetDocSh()->IsPreview() ); // no rulers on preview mode
 
-    if (mpHorizontalRuler.get() != NULL)
+    if (mpHorizontalRuler.get() != nullptr)
     {
         if (mbHasRulers)
         {
@@ -914,7 +914,7 @@ void ViewShell::SetRuler(bool bRuler)
         }
     }
 
-    if (mpVerticalRuler.get() != NULL)
+    if (mpVerticalRuler.get() != nullptr)
     {
         if (mbHasRulers)
         {
@@ -926,7 +926,7 @@ void ViewShell::SetRuler(bool bRuler)
         }
     }
 
-    OSL_ASSERT(GetViewShell()!=NULL);
+    OSL_ASSERT(GetViewShell()!=nullptr);
     if (IsMainViewShell())
         GetViewShell()->InvalidateBorder();
 }
@@ -958,12 +958,12 @@ void ViewShell::WriteUserDataSequence ( css::uno::Sequence < css::beans::Propert
     const sal_Int32 nIndex = rSequence.getLength();
     rSequence.realloc( nIndex + 1 );
 
-    OSL_ASSERT (GetViewShell()!=NULL);
+    OSL_ASSERT (GetViewShell()!=nullptr);
     // Get the view id from the view shell in the center pane.  This will
     // usually be the called view shell, but to be on the safe side we call
     // the main view shell explicitly.
     sal_uInt16 nViewID (IMPRESS_FACTORY_ID);
-    if (GetViewShellBase().GetMainViewShell().get() != NULL)
+    if (GetViewShellBase().GetMainViewShell().get() != nullptr)
         nViewID = GetViewShellBase().GetMainViewShell()->mpImpl->GetViewId();
     rSequence[nIndex].Name = sUNO_View_ViewId;
     OUStringBuffer sBuffer( "view" );
@@ -980,13 +980,13 @@ void ViewShell::ReadUserDataSequence ( const css::uno::Sequence < css::beans::Pr
 
 void ViewShell::VisAreaChanged(const Rectangle& rRect)
 {
-    OSL_ASSERT (GetViewShell()!=NULL);
+    OSL_ASSERT (GetViewShell()!=nullptr);
     GetViewShell()->VisAreaChanged(rRect);
 }
 
 void ViewShell::SetWinViewPos(const Point& rWinPos, bool bUpdate)
 {
-    if (mpContentWindow.get() != NULL)
+    if (mpContentWindow.get() != nullptr)
     {
         mpContentWindow->SetWinViewPos(rWinPos);
 

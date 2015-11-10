@@ -149,7 +149,7 @@ SdStyleSheet::SdStyleSheet( const SdStyleSheet & r )
 SdStyleSheet::~SdStyleSheet()
 {
     delete pSet;
-    pSet = NULL;    // that following destructors also get a change
+    pSet = nullptr;    // that following destructors also get a change
 }
 
 void SdStyleSheet::SetApiName( const OUString& rApiName )
@@ -204,7 +204,7 @@ bool SdStyleSheet::SetParent(const OUString& rParentName)
             else
             {
                 bResult = true;
-                GetItemSet().SetParent(NULL);
+                GetItemSet().SetParent(nullptr);
                 Broadcast( SfxSimpleHint( SFX_HINT_DATACHANGED ) );
             }
         }
@@ -369,10 +369,10 @@ SdStyleSheet* SdStyleSheet::GetRealStyleSheet() const
 {
     OUString aRealStyle;
     OUString aSep( SD_LT_SEPARATOR );
-    SdStyleSheet* pRealStyle = NULL;
+    SdStyleSheet* pRealStyle = nullptr;
     SdDrawDocument* pDoc = static_cast<SdStyleSheetPool*>(pPool)->GetDoc();
 
-    ::sd::DrawViewShell* pDrawViewShell = 0;
+    ::sd::DrawViewShell* pDrawViewShell = nullptr;
 
     ::sd::ViewShellBase* pBase = dynamic_cast< ::sd::ViewShellBase* >( SfxViewShell::Current() );
     if( pBase )
@@ -474,7 +474,7 @@ SdStyleSheet* SdStyleSheet::GetRealStyleSheet() const
  */
 SdStyleSheet* SdStyleSheet::GetPseudoStyleSheet() const
 {
-    SdStyleSheet* pPseudoStyle = NULL;
+    SdStyleSheet* pPseudoStyle = nullptr;
     OUString aSep( SD_LT_SEPARATOR );
     OUString aStyleName(aName);
         // without layout name and separator
@@ -659,7 +659,7 @@ void SdStyleSheet::SetHelpId( const OUString& r, sal_uLong nId )
             { RTL_CONSTASCII_STRINGPARAM( "headline1" ),        HID_POOLSHEET_HEADLINE1 },
             { RTL_CONSTASCII_STRINGPARAM( "headline2" ),        HID_POOLSHEET_HEADLINE2 },
             { RTL_CONSTASCII_STRINGPARAM( "measure" ),          HID_POOLSHEET_MEASURE },
-            { 0, 0, 0 }
+            { nullptr, 0, 0 }
         };
 
         ApiNameMap* p = pApiNameMap;
@@ -703,7 +703,7 @@ SdStyleSheet* SdStyleSheet::CreateEmptyUserStyle( SfxStyleSheetBasePool& rPool, 
     {
         aName = aPrefix + OUString::number( nIndex++ );
     }
-    while( rPool.Find( aName, eFamily ) != 0 );
+    while( rPool.Find( aName, eFamily ) != nullptr );
 
     return new SdStyleSheet(aName, rPool, eFamily, SFXSTYLEBIT_USERDEF);
 }
@@ -977,7 +977,7 @@ void SAL_CALL SdStyleSheet::setPropertyValue( const OUString& aPropertyName, con
     throwIfDisposed();
 
     const SfxItemPropertySimpleEntry* pEntry = getPropertyMapEntry( aPropertyName );
-    if( pEntry == NULL )
+    if( pEntry == nullptr )
     {
         throw UnknownPropertyException();
     }
@@ -1064,7 +1064,7 @@ Any SAL_CALL SdStyleSheet::getPropertyValue( const OUString& PropertyName ) thro
     throwIfDisposed();
 
     const SfxItemPropertySimpleEntry* pEntry = getPropertyMapEntry( PropertyName );
-    if( pEntry == NULL )
+    if( pEntry == nullptr )
     {
         throw UnknownPropertyException();
     }
@@ -1167,7 +1167,7 @@ PropertyState SAL_CALL SdStyleSheet::getPropertyState( const OUString& PropertyN
 
     const SfxItemPropertySimpleEntry* pEntry = getPropertyMapEntry( PropertyName );
 
-    if( pEntry == NULL )
+    if( pEntry == nullptr )
         throw UnknownPropertyException();
 
     if( pEntry->nWID == WID_STYLE_FAMILY )
@@ -1226,7 +1226,7 @@ PropertyState SAL_CALL SdStyleSheet::getPropertyState( const OUString& PropertyN
             case XATTR_LINEDASH:
                 {
                     const NameOrIndex* pItem = static_cast<const NameOrIndex*>(rStyleSet.GetItem((sal_uInt16)pEntry->nWID));
-                    if( ( pItem == NULL ) || pItem->GetName().isEmpty() )
+                    if( ( pItem == nullptr ) || pItem->GetName().isEmpty() )
                         eState = PropertyState_DEFAULT_VALUE;
                 }
             }
@@ -1261,7 +1261,7 @@ void SAL_CALL SdStyleSheet::setPropertyToDefault( const OUString& PropertyName )
     throwIfDisposed();
 
     const SfxItemPropertySimpleEntry* pEntry = getPropertyMapEntry( PropertyName );
-    if( pEntry == NULL )
+    if( pEntry == nullptr )
         throw UnknownPropertyException();
 
     SfxItemSet &rStyleSet = GetItemSet();
@@ -1285,7 +1285,7 @@ Any SAL_CALL SdStyleSheet::getPropertyDefault( const OUString& aPropertyName ) t
     throwIfDisposed();
 
     const SfxItemPropertySimpleEntry* pEntry = getPropertyMapEntry( aPropertyName );
-    if( pEntry == NULL )
+    if( pEntry == nullptr )
         throw UnknownPropertyException();
     Any aRet;
     if( pEntry->nWID == WID_STYLE_FAMILY )

@@ -83,7 +83,7 @@ namespace sd {
 void TextObjectBar::Execute( SfxRequest &rReq )
 {
     const SfxItemSet* pArgs = rReq.GetArgs();
-    const SfxPoolItem* pPoolItem = NULL;
+    const SfxPoolItem* pPoolItem = nullptr;
     sal_uInt16 nSlot = rReq.GetSlot();
     OutlinerView* pOLV = mpView->GetTextEditOutlinerView();
 
@@ -145,10 +145,10 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                 }
                 for( sal_Int32 nPara = nStartPara; nPara <= nEndPara; nPara++ )
                 {
-                    SfxStyleSheet* pStyleSheet = NULL;
-                    if (pOLV->GetOutliner() != NULL)
+                    SfxStyleSheet* pStyleSheet = nullptr;
+                    if (pOLV->GetOutliner() != nullptr)
                         pStyleSheet = pOLV->GetOutliner()->GetStyleSheet(nPara);
-                    if (pStyleSheet != NULL)
+                    if (pStyleSheet != nullptr)
                     {
                         SfxItemSet aAttr( pStyleSheet->GetItemSet() );
                         SfxItemSet aTmpSet( pOLV->GetOutliner()->GetParaAttribs( nPara ) );
@@ -344,7 +344,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                     ::Outliner* pOL = pOLV->GetOutliner();
                     if (pOL)
                     {
-                        const SvxNumBulletItem *pItem = NULL;
+                        const SvxNumBulletItem *pItem = nullptr;
                         SfxStyleSheetBasePool* pSSPool = mpView->GetDocSh()->GetStyleSheetPool();
                         OUString sStyleName(SD_RESSTR(STR_PSEUDOSHEET_OUTLINE) + " 1");
                         SfxStyleSheetBase* pFirstStyleSheet = pSSPool->Find(sStyleName, SD_STYLE_FAMILY_PSEUDO);
@@ -391,7 +391,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
         case SID_SHRINK_FONT_SIZE:
         {
             const SvxFontListItem* pFonts = static_cast<const SvxFontListItem*>(mpViewShell->GetDocSh()->GetItem( SID_ATTR_CHAR_FONTLIST ));
-            const FontList* pFontList = pFonts ? pFonts->GetFontList(): 0;
+            const FontList* pFontList = pFonts ? pFonts->GetFontList(): nullptr;
             if( pFontList )
             {
                 FuText::ChangeFontSize( nSlot == SID_GROW_FONT_SIZE, pOLV, pFontList, mpView );

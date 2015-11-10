@@ -48,8 +48,8 @@ VclPtr<vcl::Window> CurrentMasterPagesSelector::Create (
     const css::uno::Reference<css::ui::XSidebar>& rxSidebar)
 {
     SdDrawDocument* pDocument = rViewShellBase.GetDocument();
-    if (pDocument == NULL)
-        return NULL;
+    if (pDocument == nullptr)
+        return nullptr;
 
     std::shared_ptr<MasterPageContainer> pContainer (new MasterPageContainer());
 
@@ -95,13 +95,13 @@ CurrentMasterPagesSelector::~CurrentMasterPagesSelector()
 
 void CurrentMasterPagesSelector::dispose()
 {
-    if (mrDocument.GetDocSh() != NULL)
+    if (mrDocument.GetDocSh() != nullptr)
     {
         EndListening(*mrDocument.GetDocSh());
     }
     else
     {
-        OSL_ASSERT(mrDocument.GetDocSh() != NULL);
+        OSL_ASSERT(mrDocument.GetDocSh() != nullptr);
     }
 
     Link<sd::tools::EventMultiplexerEvent&,void> aLink (LINK(this,CurrentMasterPagesSelector,EventMultiplexerListener));
@@ -114,13 +114,13 @@ void CurrentMasterPagesSelector::LateInit()
 {
     MasterPagesSelector::LateInit();
     MasterPagesSelector::Fill();
-    if (mrDocument.GetDocSh() != NULL)
+    if (mrDocument.GetDocSh() != nullptr)
     {
         StartListening(*mrDocument.GetDocSh());
     }
     else
     {
-        OSL_ASSERT(mrDocument.GetDocSh() != NULL);
+        OSL_ASSERT(mrDocument.GetDocSh() != nullptr);
     }
 }
 
@@ -133,7 +133,7 @@ void CurrentMasterPagesSelector::Fill (ItemList& rItemList)
     for (sal_uInt16 nIndex=0; nIndex<nPageCount; nIndex++)
     {
         SdPage* pMasterPage = mrDocument.GetMasterSdPage (nIndex, PK_STANDARD);
-        if (pMasterPage == NULL)
+        if (pMasterPage == nullptr)
             continue;
 
         // Use the name of the master page to avoid duplicate entries.
@@ -179,7 +179,7 @@ void CurrentMasterPagesSelector::UpdateSelection()
     for (nIndex=0; nIndex<nPageCount && bLoop; nIndex++)
     {
         SdPage* pPage = mrDocument.GetSdPage (nIndex, PK_STANDARD);
-        if (pPage != NULL && pPage->IsSelected())
+        if (pPage != nullptr && pPage->IsSelected())
         {
             if ( ! pPage->TRG_HasMasterPage())
             {
@@ -195,7 +195,7 @@ void CurrentMasterPagesSelector::UpdateSelection()
             {
                 SdrPage& rMasterPage (pPage->TRG_GetMasterPage());
                 SdPage* pMasterPage = static_cast<SdPage*>(&rMasterPage);
-                if (pMasterPage != NULL)
+                if (pMasterPage != nullptr)
                     aNames.insert (pMasterPage->GetName());
             }
         }
@@ -220,7 +220,7 @@ void CurrentMasterPagesSelector::ExecuteCommand (const sal_Int32 nCommandId)
         // Check once again that the master page can safely be deleted,
         // i.e. is not used.
         SdPage* pMasterPage = GetSelectedMasterPage();
-        if (pMasterPage != NULL
+        if (pMasterPage != nullptr
             && mrDocument.GetMasterPageUserCount(pMasterPage) == 0)
         {
             // Removing the precious flag so that the following call to

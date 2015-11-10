@@ -101,24 +101,24 @@ Reference<drawing::XLayer> SdUnoDrawView::getActiveLayer() throw ()
     {
         // Retrieve the layer manager from the model.
         SdXImpressDocument* pModel = GetModel();
-        if (pModel == NULL)
+        if (pModel == nullptr)
             break;
 
         SdDrawDocument* pSdModel = pModel->GetDoc();
-        if (pSdModel == NULL)
+        if (pSdModel == nullptr)
             break;
 
         // From the model get the current SdrLayer object via the layer admin.
         SdrLayerAdmin& rLayerAdmin = pSdModel->GetLayerAdmin ();
         SdrLayer* pLayer = rLayerAdmin.GetLayer (mrView.GetActiveLayer(), true);
-        if (pLayer == NULL)
+        if (pLayer == nullptr)
             break;
 
         // Get the corresponding XLayer object from the implementation
         // object of the layer manager.
         Reference<drawing::XLayerManager> xManager (pModel->getLayerManager(), uno::UNO_QUERY);
         SdLayerManager* pManager = SdLayerManager::getImplementation (xManager);
-        if (pManager != NULL)
+        if (pManager != nullptr)
             xCurrentLayer = pManager->GetLayer (pLayer);
     }
     while (false);
@@ -134,11 +134,11 @@ void SdUnoDrawView::setActiveLayer (const Reference<drawing::XLayer>& rxLayer)
         return;
 
     SdLayer* pLayer = SdLayer::getImplementation (rxLayer);
-    if (pLayer == NULL)
+    if (pLayer == nullptr)
         return;
 
     SdrLayer* pSdrLayer = pLayer->GetSdrLayer();
-    if (pSdrLayer == NULL)
+    if (pSdrLayer == nullptr)
         return;
 
     // Set the new active layer and make the change visible.
@@ -157,7 +157,7 @@ sal_Bool SAL_CALL SdUnoDrawView::select( const Any& aSelection )
 
     ::std::vector<SdrObject*> aObjects;
 
-    SdrPage* pSdrPage = NULL;
+    SdrPage* pSdrPage = nullptr;
 
     Reference< drawing::XShape > xShape;
     aSelection >>= xShape;
@@ -165,7 +165,7 @@ sal_Bool SAL_CALL SdUnoDrawView::select( const Any& aSelection )
     if(xShape.is())
     {
         SvxShape* pShape = SvxShape::getImplementation( xShape );
-        if( pShape && (pShape->GetSdrObject() != NULL) )
+        if( pShape && (pShape->GetSdrObject() != nullptr) )
         {
             SdrObject* pObj = pShape->GetSdrObject();
             pSdrPage = pObj->GetPage();
@@ -189,7 +189,7 @@ sal_Bool SAL_CALL SdUnoDrawView::select( const Any& aSelection )
                 if( xShape.is() )
                 {
                     SvxShape* pShape = SvxShape::getImplementation(xShape);
-                    if( (pShape == NULL) || (pShape->GetSdrObject() == NULL) )
+                    if( (pShape == nullptr) || (pShape->GetSdrObject() == nullptr) )
                     {
                         bOk = false;
                         break;
@@ -197,7 +197,7 @@ sal_Bool SAL_CALL SdUnoDrawView::select( const Any& aSelection )
 
                     SdrObject* pObj = pShape->GetSdrObject();
 
-                    if( pSdrPage == NULL )
+                    if( pSdrPage == nullptr )
                     {
                         pSdrPage = pObj->GetPage();
                     }
@@ -265,11 +265,11 @@ Any SAL_CALL SdUnoDrawView::getSelection()
             for( size_t nNum = 0; nNum < nCount; ++nNum)
             {
                 SdrMark *pMark = rMarkList.GetMark(nNum);
-                if(pMark==NULL)
+                if(pMark==nullptr)
                     continue;
 
                 SdrObject *pObj = pMark->GetMarkedSdrObj();
-                if(pObj==NULL || pObj->GetPage() == NULL)
+                if(pObj==nullptr || pObj->GetPage() == nullptr)
                     continue;
 
                 Reference< drawing::XDrawPage > xPage( pObj->GetPage()->getUnoPage(), UNO_QUERY);
@@ -279,7 +279,7 @@ Any SAL_CALL SdUnoDrawView::getSelection()
 
                 SvxDrawPage* pDrawPage = SvxDrawPage::getImplementation( xPage );
 
-                if(pDrawPage==NULL)
+                if(pDrawPage==nullptr)
                     continue;
 
                 Reference< drawing::XShape > xShape( pObj->getUnoShape(), UNO_QUERY );
@@ -428,7 +428,7 @@ void SAL_CALL SdUnoDrawView::setCurrentPage (
     throw (RuntimeException, std::exception)
 {
     SvxDrawPage* pDrawPage = SvxDrawPage::getImplementation( xPage );
-    SdrPage *pSdrPage = pDrawPage ? pDrawPage->GetSdrPage() : NULL;
+    SdrPage *pSdrPage = pDrawPage ? pDrawPage->GetSdrPage() : nullptr;
 
     if(pSdrPage)
     {
@@ -448,7 +448,7 @@ Reference< drawing::XDrawPage > SAL_CALL SdUnoDrawView::getCurrentPage()
     Reference< drawing::XDrawPage >  xPage;
 
     SdrPageView *pPV = mrView.GetSdrPageView();
-    SdrPage* pPage = pPV ? pPV->GetPage() : NULL;
+    SdrPage* pPage = pPV ? pPV->GetPage() : nullptr;
 
     if(pPage)
         xPage.set( pPage->getUnoPage(), UNO_QUERY );
@@ -535,13 +535,13 @@ void SdUnoDrawView::SetZoomType ( sal_Int16 nType )
 
 SdXImpressDocument* SdUnoDrawView::GetModel() const throw()
 {
-    if (mrView.GetDocSh()!=NULL)
+    if (mrView.GetDocSh()!=nullptr)
     {
         Reference<frame::XModel> xModel (mrView.GetDocSh()->GetModel());
         return SdXImpressDocument::getImplementation(xModel);
     }
     else
-        return NULL;
+        return nullptr;
 }
 
 Any SdUnoDrawView::getDrawViewMode() const

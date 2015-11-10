@@ -41,7 +41,7 @@ BasicToolBarFactory::BasicToolBarFactory (
     : BasicToolBarFactoryInterfaceBase(m_aMutex),
       mxConfigurationController(),
       mxController(),
-      mpViewShellBase(NULL)
+      mpViewShellBase(nullptr)
 {
     (void)rxContext;
 }
@@ -57,14 +57,14 @@ void SAL_CALL BasicToolBarFactory::disposing()
 
 void BasicToolBarFactory::Shutdown()
 {
-    mpViewShellBase = NULL;
+    mpViewShellBase = nullptr;
     Reference<lang::XComponent> xComponent (mxConfigurationController, UNO_QUERY);
     if (xComponent.is())
         xComponent->removeEventListener(static_cast<lang::XEventListener*>(this));
     if (mxConfigurationController.is())
     {
         mxConfigurationController->removeResourceFactoryForReference(this);
-        mxConfigurationController = NULL;
+        mxConfigurationController = nullptr;
     }
 }
 
@@ -84,7 +84,7 @@ void SAL_CALL BasicToolBarFactory::initialize (const Sequence<Any>& aArguments)
             Reference<lang::XUnoTunnel> xTunnel (mxController, UNO_QUERY_THROW);
             ::sd::DrawController* pController = reinterpret_cast<sd::DrawController*>(
                 xTunnel->getSomething(sd::DrawController::getUnoTunnelId()));
-            if (pController != NULL)
+            if (pController != nullptr)
                 mpViewShellBase = pController->GetViewShellBase();
 
             utl::MediaDescriptor aDescriptor (mxController->getModel()->getArgs());
@@ -109,7 +109,7 @@ void SAL_CALL BasicToolBarFactory::initialize (const Sequence<Any>& aArguments)
             {
                 // The view shell is in preview mode and thus does not need
                 // the view tab bar.
-                mxConfigurationController = NULL;
+                mxConfigurationController = nullptr;
             }
         }
         catch (RuntimeException&)
@@ -127,7 +127,7 @@ void SAL_CALL BasicToolBarFactory::disposing (
     throw (RuntimeException, std::exception)
 {
     if (rEventObject.Source == mxConfigurationController)
-        mxConfigurationController = NULL;
+        mxConfigurationController = nullptr;
 }
 
 //===== XPaneFactory ==========================================================

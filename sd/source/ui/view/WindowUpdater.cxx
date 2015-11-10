@@ -33,8 +33,8 @@
 namespace sd {
 
 WindowUpdater::WindowUpdater()
-    : mpViewShell (NULL),
-      mpDocument (NULL)
+    : mpViewShell (nullptr),
+      mpDocument (nullptr)
 {
     maCTLOptions.AddListener(this);
 }
@@ -46,7 +46,7 @@ WindowUpdater::~WindowUpdater() throw ()
 
 void WindowUpdater::RegisterWindow (vcl::Window* pWindow)
 {
-    if (pWindow != NULL)
+    if (pWindow != nullptr)
     {
         tWindowList::iterator aWindowIterator (
             ::std::find (
@@ -85,17 +85,17 @@ void WindowUpdater::Update (
     OutputDevice* pDevice,
     SdDrawDocument* pDocument) const
 {
-    if (pDevice != NULL)
+    if (pDevice != nullptr)
     {
         UpdateWindow (pDevice);
-        if (pDocument != NULL)
+        if (pDocument != nullptr)
             pDocument->ReformatAllTextObjects();
     }
 }
 
 void WindowUpdater::UpdateWindow (OutputDevice* pDevice) const
 {
-    if (pDevice != NULL)
+    if (pDevice != nullptr)
     {
         SvtCTLOptions::TextNumerals aNumeralMode (maCTLOptions.GetCTLTextNumerals());
 
@@ -132,7 +132,7 @@ void WindowUpdater::ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uI
         Update (*aWindowIterator++);
 
     // Reformat the document for the modified state to take effect.
-    if (mpDocument != NULL)
+    if (mpDocument != nullptr)
         mpDocument->ReformatAllTextObjects();
 
     // Invalidate the windows to make the modified state visible.

@@ -43,7 +43,7 @@ AccessiblePageShape::AccessiblePageShape (
     const uno::Reference<XAccessible>& rxParent,
     const AccessibleShapeTreeInfo& rShapeTreeInfo,
     long nIndex)
-    : AccessibleShape (AccessibleShapeInfo (NULL, rxParent, nIndex), rShapeTreeInfo),
+    : AccessibleShape (AccessibleShapeInfo (nullptr, rxParent, nIndex), rShapeTreeInfo),
       mxPage (rxPage)
 {
     // The main part of the initialization is done in the init method which
@@ -89,7 +89,7 @@ awt::Rectangle SAL_CALL AccessiblePageShape::getBounds()
 
     awt::Rectangle aBoundingBox;
 
-    if (maShapeTreeInfo.GetViewForwarder() != NULL)
+    if (maShapeTreeInfo.GetViewForwarder() != nullptr)
     {
         uno::Reference<beans::XPropertySet> xSet (mxPage, uno::UNO_QUERY);
         if (xSet.is())
@@ -259,7 +259,7 @@ void AccessiblePageShape::dispose()
         xComponent->removeEventListener (this);
 
     // Cleanup.
-    mxShape = NULL;
+    mxShape = nullptr;
 
     // Call base classes.
     AccessibleContextBase::dispose ();

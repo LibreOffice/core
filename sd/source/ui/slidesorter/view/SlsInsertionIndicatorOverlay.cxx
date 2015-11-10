@@ -82,7 +82,7 @@ InsertionIndicatorOverlay::~InsertionIndicatorOverlay()
 
 void InsertionIndicatorOverlay::Create (const SdTransferable* pTransferable)
 {
-    if (pTransferable == NULL)
+    if (pTransferable == nullptr)
         return;
 
     std::shared_ptr<controller::TransferableData> pData (
@@ -95,10 +95,10 @@ void InsertionIndicatorOverlay::Create (const SdTransferable* pTransferable)
     else
     {
         DrawDocShell* pDataDocShell = dynamic_cast<DrawDocShell*>(&pTransferable->GetDocShell());
-        if (pDataDocShell != NULL)
+        if (pDataDocShell != nullptr)
         {
             SdDrawDocument* pDataDocument = pDataDocShell->GetDoc();
-            if (pDataDocument != NULL)
+            if (pDataDocument != nullptr)
                 nSelectionCount = pDataDocument->GetSdPageCount(PK_STANDARD);
         }
     }

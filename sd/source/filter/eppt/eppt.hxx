@@ -141,7 +141,7 @@ struct TextRuleEntry
 
     explicit TextRuleEntry( int nPg ) :
         nPageNumber( nPg ),
-        pOut ( NULL ){};
+        pOut ( nullptr ){};
 
     ~TextRuleEntry() { delete pOut; };
 };
@@ -206,14 +206,14 @@ class PPTWriter : public PPTWriterBase, public PPTExBulletProvider
 
         void                ImplWriteExtParaHeader( SvMemoryStream& rSt, sal_uInt32 nRef, sal_uInt32 nInstance, sal_uInt32 nSlideId );
 
-        sal_uInt32          ImplProgBinaryTag( SvStream* pOutStrm = NULL );
-        sal_uInt32          ImplProgBinaryTagContainer( SvStream* pOutStrm = NULL, SvMemoryStream* pBinTag = NULL );
-        sal_uInt32          ImplProgTagContainer( SvStream* pOutStrm = NULL, SvMemoryStream* pBinTag = NULL );
-        static sal_uInt32   ImplOutlineViewInfoContainer( SvStream* pOutStrm = NULL );
-        static sal_uInt32   ImplSlideViewInfoContainer( sal_uInt32 nInstance, SvStream* pOutStrm = NULL );
-        sal_uInt32          ImplVBAInfoContainer( SvStream* pOutStrm = NULL );
-        sal_uInt32          ImplDocumentListContainer( SvStream* pOutStrm = NULL );
-        sal_uInt32          ImplMasterSlideListContainer( SvStream* pOutStrm = NULL );
+        sal_uInt32          ImplProgBinaryTag( SvStream* pOutStrm = nullptr );
+        sal_uInt32          ImplProgBinaryTagContainer( SvStream* pOutStrm = nullptr, SvMemoryStream* pBinTag = nullptr );
+        sal_uInt32          ImplProgTagContainer( SvStream* pOutStrm = nullptr, SvMemoryStream* pBinTag = nullptr );
+        static sal_uInt32   ImplOutlineViewInfoContainer( SvStream* pOutStrm = nullptr );
+        static sal_uInt32   ImplSlideViewInfoContainer( sal_uInt32 nInstance, SvStream* pOutStrm = nullptr );
+        sal_uInt32          ImplVBAInfoContainer( SvStream* pOutStrm = nullptr );
+        sal_uInt32          ImplDocumentListContainer( SvStream* pOutStrm = nullptr );
+        sal_uInt32          ImplMasterSlideListContainer( SvStream* pOutStrm = nullptr );
 
     public:
         static void         WriteCString( SvStream&, const OUString&, sal_uInt32 nInstance = 0 );

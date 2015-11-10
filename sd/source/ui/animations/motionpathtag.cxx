@@ -368,7 +368,7 @@ MotionPathTag::MotionPathTag( CustomAnimationPane& rPane, ::sd::View& rView, con
 
 MotionPathTag::~MotionPathTag()
 {
-    DBG_ASSERT( mpPathObj == 0, "sd::MotionPathTag::~MotionPathTag(), dispose me first!" );
+    DBG_ASSERT( mpPathObj == nullptr, "sd::MotionPathTag::~MotionPathTag(), dispose me first!" );
     Dispose();
 }
 
@@ -402,7 +402,7 @@ void MotionPathTag::updatePathAttributes()
 
 void MotionPathTag::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 {
-    if( mpPathObj && !mbInUpdatePath && dynamic_cast< const SdrHint* >( &rHint ) && (mpEffect.get() != 0) )
+    if( mpPathObj && !mbInUpdatePath && dynamic_cast< const SdrHint* >( &rHint ) && (mpEffect.get() != nullptr) )
     {
         if( mxPolyPoly != mpPathObj->GetPathPoly() )
         {
@@ -505,7 +505,7 @@ bool MotionPathTag::MouseButtonDown( const MouseEvent& rMEvt, SmartHdl& rHdl )
                         if (mrView.IsPointMarked(*pHdl) )
                         {
                             mrView.UnmarkPoint(*pHdl);
-                            pHdl = NULL;
+                            pHdl = nullptr;
                         }
                         else
                         {
@@ -543,7 +543,7 @@ bool MotionPathTag::MouseButtonDown( const MouseEvent& rMEvt, SmartHdl& rHdl )
                         pDragMethod = new PathDragResize( mrView, xTag, aDragPoly );
                     }
 
-                    mrView.BegDragObj(aMDPos, NULL, pHdl, nDrgLog, pDragMethod );
+                    mrView.BegDragObj(aMDPos, nullptr, pHdl, nDrgLog, pDragMethod );
                 }
                 return true;
             }
@@ -652,10 +652,10 @@ bool MotionPathTag::OnMarkHandle( const KeyEvent& rKEvt )
             mrView.MarkPoint(*pHdl);
         }
 
-        if(0L == rHdlList.GetFocusHdl())
+        if(nullptr == rHdlList.GetFocusHdl())
         {
             // restore point with focus
-            SdrHdl* pNewOne = 0L;
+            SdrHdl* pNewOne = nullptr;
 
             for(size_t a = 0; !pNewOne && a < rHdlList.GetHdlCount(); ++a)
             {
@@ -715,7 +715,7 @@ bool MotionPathTag::OnMove( const KeyEvent& rKEvt )
 
             // start dragging
             rtl::Reference< MotionPathTag > xTag( this );
-            SdrDragMethod* pDragMethod = 0;
+            SdrDragMethod* pDragMethod = nullptr;
             if( (pHdl->GetKind() == HDL_MOVE) || (pHdl->GetKind() == HDL_SMARTTAG) )
             {
                 pDragMethod = new PathDragMove( mrView, xTag );
@@ -728,7 +728,7 @@ bool MotionPathTag::OnMove( const KeyEvent& rKEvt )
             {
                 pDragMethod = new PathDragResize( mrView, xTag );
             }
-            mrView.BegDragObj(aStartPoint, 0, pHdl, 0, pDragMethod);
+            mrView.BegDragObj(aStartPoint, nullptr, pHdl, 0, pDragMethod);
 
             if(mrView.IsDragObj())
             {
@@ -822,7 +822,7 @@ bool MotionPathTag::MarkPoints(const Rectangle* pRect, bool bUnmark )
             if( pHdl && (pHdl->getTag().get() == this) && mrView.IsPointMarkable(*pHdl) && pHdl->IsSelected() == bUnmark)
             {
                 Point aPos(pHdl->GetPos());
-                if( pRect==NULL || pRect->IsInside(aPos))
+                if( pRect==nullptr || pRect->IsInside(aPos))
                 {
                     if( mrView.MarkPointHelper(pHdl,mpMark,bUnmark) )
                         bChgd=true;
@@ -934,7 +934,7 @@ void MotionPathTag::addCustomHandles( SdrHdlList& rHandlerList )
                         for (sal_uInt32 nPlusNum=0; nPlusNum<nPlusAnz; nPlusNum++)
                         {
                             SdrHdl* pPlusHdl = mpPathObj->GetPlusHdl(*pSmartHdl,nPlusNum);
-                            if (pPlusHdl!=NULL)
+                            if (pPlusHdl!=nullptr)
                             {
                                 pPlusHdl->SetObj(mpPathObj);
                                 pPlusHdl->SetPageView(mrView.GetSdrPageView());
@@ -998,7 +998,7 @@ void MotionPathTag::disposing()
     if( mpPathObj )
     {
         SdrPathObj* pPathObj = mpPathObj;
-        mpPathObj = 0;
+        mpPathObj = nullptr;
         mrView.updateHandles();
         delete pPathObj;
     }
@@ -1006,7 +1006,7 @@ void MotionPathTag::disposing()
     if( mpMark )
     {
         delete mpMark;
-        mpMark = 0;
+        mpMark = nullptr;
     }
 
     SmartTag::disposing();

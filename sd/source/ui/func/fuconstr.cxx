@@ -86,7 +86,7 @@ bool FuConstruct::MouseButtonDown(const MouseEvent& rMEvt)
 
         SdrHdl* pHdl = mpView->PickHandle(aMDPos);
 
-        if ( pHdl != NULL || mpView->IsMarkedHit(aMDPos, nHitLog) )
+        if ( pHdl != nullptr || mpView->IsMarkedHit(aMDPos, nHitLog) )
         {
             sal_uInt16 nDrgLog = sal_uInt16 ( mpWindow->PixelToLogic(Size(DRGPIX,0)).Width() );
             mpView->BegDragObj(aMDPos, nullptr, pHdl, nDrgLog);
@@ -186,7 +186,7 @@ bool FuConstruct::MouseButtonUp(const MouseEvent& rMEvt)
                  std::abs(aPnt.Y() - aMDPos.Y()) < nDrgLog)
         {
             // toggle between selection and rotation
-            SdrObject* pSingleObj = NULL;
+            SdrObject* pSingleObj = nullptr;
 
             if (mpView->GetMarkedObjectList().GetMarkCount()==1)
             {

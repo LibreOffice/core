@@ -71,7 +71,7 @@
 static SdPage* GetCurrentPage( sd::ViewShell* pViewSh, EditFieldInfo* pInfo, bool& bMasterView )
 {
     if( !pInfo )
-        return 0;
+        return nullptr;
 
     bMasterView = false;
     SdPage* pPage = dynamic_cast< SdPage* >( pInfo->GetSdrPage() );
@@ -86,11 +86,11 @@ static SdPage* GetCurrentPage( sd::ViewShell* pViewSh, EditFieldInfo* pInfo, boo
     }
 
     // first try to check if we are inside the outline view
-    sd::OutlineView* pSdView = NULL;
+    sd::OutlineView* pSdView = nullptr;
     if( dynamic_cast<const sd::OutlineViewShell* >(pViewSh) !=  nullptr )
         pSdView = static_cast<sd::OutlineView*> (static_cast<sd::OutlineViewShell*>(pViewSh)->GetView());
 
-    if (pSdView != NULL && (pOutliner ==  &pSdView->GetOutliner()))
+    if (pSdView != nullptr && (pOutliner ==  &pSdView->GetOutliner()))
     {
         // outline mode
         int nPgNum = 0;
@@ -122,7 +122,7 @@ static SdPage* GetCurrentPage( sd::ViewShell* pViewSh, EditFieldInfo* pInfo, boo
         // currently formatted from the document
         if(!pPage)
         {
-            const SdrTextObj* pTextObj = (pViewSh && pViewSh->GetDoc()) ? pViewSh->GetDoc()->GetFormattingTextObj() : NULL;
+            const SdrTextObj* pTextObj = (pViewSh && pViewSh->GetDoc()) ? pViewSh->GetDoc()->GetFormattingTextObj() : nullptr;
 
             if( pTextObj )
             {
@@ -148,8 +148,8 @@ IMPL_LINK_TYPED(SdModule, CalcFieldValueHdl, EditFieldInfo*, pInfo, void)
         return;
 
     const SvxFieldData* pField = pInfo->GetField().GetField();
-    ::sd::DrawDocShell*     pDocShell = NULL;
-    SdDrawDocument* pDoc = 0;
+    ::sd::DrawDocShell*     pDocShell = nullptr;
+    SdDrawDocument* pDoc = nullptr;
 
     SdrOutliner* pSdrOutliner = dynamic_cast< SdrOutliner* >( pInfo->GetOutliner() );
     if( pSdrOutliner )
@@ -166,23 +166,23 @@ IMPL_LINK_TYPED(SdModule, CalcFieldValueHdl, EditFieldInfo*, pInfo, void)
     if( !pDocShell )
         pDocShell = dynamic_cast< ::sd::DrawDocShell *>( SfxObjectShell::Current() );
 
-    const SvxDateField* pDateField = 0;
-    const SvxExtTimeField* pExtTimeField = 0;
-    const SvxExtFileField* pExtFileField = 0;
-    const SvxAuthorField* pAuthorField = 0;
-    const SvxURLField* pURLField = 0;
+    const SvxDateField* pDateField = nullptr;
+    const SvxExtTimeField* pExtTimeField = nullptr;
+    const SvxExtFileField* pExtFileField = nullptr;
+    const SvxAuthorField* pAuthorField = nullptr;
+    const SvxURLField* pURLField = nullptr;
 
-    if( (pDateField = dynamic_cast< const SvxDateField* >(pField)) != 0 )
+    if( (pDateField = dynamic_cast< const SvxDateField* >(pField)) != nullptr )
     {
         LanguageType eLang = pInfo->GetOutliner()->GetLanguage( pInfo->GetPara(), pInfo->GetPos() );
         pInfo->SetRepresentation( pDateField->GetFormatted( *GetNumberFormatter(), eLang ) );
     }
-    else if( (pExtTimeField = dynamic_cast< const SvxExtTimeField *>(pField)) != 0 )
+    else if( (pExtTimeField = dynamic_cast< const SvxExtTimeField *>(pField)) != nullptr )
     {
         LanguageType eLang = pInfo->GetOutliner()->GetLanguage( pInfo->GetPara(), pInfo->GetPos() );
         pInfo->SetRepresentation( pExtTimeField->GetFormatted( *GetNumberFormatter(), eLang ) );
     }
-    else if( (pExtFileField = dynamic_cast< const SvxExtFileField * >(pField)) != 0 )
+    else if( (pExtFileField = dynamic_cast< const SvxExtFileField * >(pField)) != nullptr )
     {
         if( pDocShell && (pExtFileField->GetType() != SVXFILETYPE_FIX) )
         {
@@ -197,7 +197,7 @@ IMPL_LINK_TYPED(SdModule, CalcFieldValueHdl, EditFieldInfo*, pInfo, void)
         pInfo->SetRepresentation( pExtFileField->GetFormatted() );
 
     }
-    else if( (pAuthorField = dynamic_cast< const SvxAuthorField* >( pField )) != 0  )
+    else if( (pAuthorField = dynamic_cast< const SvxAuthorField* >( pField )) != nullptr  )
     {
         if( pAuthorField->GetType() != SVXAUTHORTYPE_FIX )
         {
@@ -215,8 +215,8 @@ IMPL_LINK_TYPED(SdModule, CalcFieldValueHdl, EditFieldInfo*, pInfo, void)
     {
         OUString aRepresentation(" ");
 
-        ::sd::ViewShell* pViewSh = pDocShell ? pDocShell->GetViewShell() : NULL;
-        if(pViewSh == NULL)
+        ::sd::ViewShell* pViewSh = pDocShell ? pDocShell->GetViewShell() : nullptr;
+        if(pViewSh == nullptr)
         {
             ::sd::ViewShellBase* pBase = dynamic_cast< ::sd::ViewShellBase *>( SfxViewShell::Current() );
             if(pBase)
@@ -252,8 +252,8 @@ IMPL_LINK_TYPED(SdModule, CalcFieldValueHdl, EditFieldInfo*, pInfo, void)
     {
         OUString aRepresentation(" ");
 
-        ::sd::ViewShell* pViewSh = pDocShell ? pDocShell->GetViewShell() : NULL;
-        if(pViewSh == NULL)
+        ::sd::ViewShell* pViewSh = pDocShell ? pDocShell->GetViewShell() : nullptr;
+        if(pViewSh == nullptr)
         {
             ::sd::ViewShellBase* pBase = dynamic_cast< ::sd::ViewShellBase *>( SfxViewShell::Current() );
             if(pBase)
@@ -282,8 +282,8 @@ IMPL_LINK_TYPED(SdModule, CalcFieldValueHdl, EditFieldInfo*, pInfo, void)
     {
         OUString aRepresentation(" ");
 
-        ::sd::ViewShell* pViewSh = pDocShell ? pDocShell->GetViewShell() : NULL;
-        if(pViewSh == NULL)
+        ::sd::ViewShell* pViewSh = pDocShell ? pDocShell->GetViewShell() : nullptr;
+        if(pViewSh == nullptr)
         {
             ::sd::ViewShellBase* pBase = dynamic_cast< ::sd::ViewShellBase *>( SfxViewShell::Current() );
             if(pBase)
@@ -316,7 +316,7 @@ IMPL_LINK_TYPED(SdModule, CalcFieldValueHdl, EditFieldInfo*, pInfo, void)
 
         pInfo->SetRepresentation( aRepresentation );
     }
-    else if( (pURLField = dynamic_cast< const SvxURLField* >(pField)) != 0 )
+    else if( (pURLField = dynamic_cast< const SvxURLField* >(pField)) != nullptr )
     {
         switch ( pURLField->GetFormat() )
         {
@@ -345,17 +345,17 @@ IMPL_LINK_TYPED(SdModule, CalcFieldValueHdl, EditFieldInfo*, pInfo, void)
     {
         OUString aRepresentation;
 
-        bool bHeaderField = dynamic_cast< const SvxHeaderField* >( pField ) != 0;
-        bool bFooterField = !bHeaderField && (dynamic_cast< const SvxFooterField* >( pField ) != 0 );
-        bool bDateTimeField = !bHeaderField && !bFooterField && (dynamic_cast< const SvxDateTimeField* >( pField ) != 0);
+        bool bHeaderField = dynamic_cast< const SvxHeaderField* >( pField ) != nullptr;
+        bool bFooterField = !bHeaderField && (dynamic_cast< const SvxFooterField* >( pField ) != nullptr );
+        bool bDateTimeField = !bHeaderField && !bFooterField && (dynamic_cast< const SvxDateTimeField* >( pField ) != nullptr);
 
         if( bHeaderField || bFooterField || bDateTimeField )
         {
-            sd::ViewShell* pViewSh = pDocShell ? pDocShell->GetViewShell() : NULL;
+            sd::ViewShell* pViewSh = pDocShell ? pDocShell->GetViewShell() : nullptr;
             bool bMasterView = false;
             SdPage* pPage = GetCurrentPage( pViewSh, pInfo, bMasterView );
 
-            if( (pPage == NULL) || bMasterView )
+            if( (pPage == nullptr) || bMasterView )
             {
                 if( bHeaderField )
                     aRepresentation = SdResId(STR_FIELD_PLACEHOLDER_HEADER).toString();
@@ -408,9 +408,9 @@ IMPL_LINK_TYPED(SdModule, CalcFieldValueHdl, EditFieldInfo*, pInfo, void)
  */
 SfxItemSet*  SdModule::CreateItemSet( sal_uInt16 nSlot )
 {
-    ::sd::FrameView* pFrameView = NULL;
+    ::sd::FrameView* pFrameView = nullptr;
     ::sd::DrawDocShell* pDocSh = dynamic_cast< ::sd::DrawDocShell *>( SfxObjectShell::Current() );
-    SdDrawDocument* pDoc = NULL;
+    SdDrawDocument* pDoc = nullptr;
 
     // Here we set the DocType of the option dialog (not document!)
     DocumentType eDocType = DOCUMENT_TYPE_IMPRESS;
@@ -427,7 +427,7 @@ SfxItemSet*  SdModule::CreateItemSet( sal_uInt16 nSlot )
             pFrameView = pDocSh->GetFrameView();
 
         ::sd::ViewShell* pViewShell = pDocSh->GetViewShell();
-        if (pViewShell != NULL)
+        if (pViewShell != nullptr)
             pViewShell->WriteFrameViewData();
     }
 
@@ -531,26 +531,26 @@ SfxItemSet*  SdModule::CreateItemSet( sal_uInt16 nSlot )
 }
 void SdModule::ApplyItemSet( sal_uInt16 nSlot, const SfxItemSet& rSet )
 {
-    const SfxPoolItem*  pItem = NULL;
+    const SfxPoolItem*  pItem = nullptr;
     bool bNewDefTab = false;
     bool bNewPrintOptions = false;
     bool bMiscOptions = false;
 
     ::sd::DrawDocShell* pDocSh = dynamic_cast< ::sd::DrawDocShell *>( SfxObjectShell::Current() );
-    SdDrawDocument* pDoc = NULL;
+    SdDrawDocument* pDoc = nullptr;
     // Here we set the DocType of the option dialog (not document!)
     DocumentType eDocType = DOCUMENT_TYPE_IMPRESS;
     if( nSlot == SID_SD_GRAPHIC_OPTIONS )
         eDocType = DOCUMENT_TYPE_DRAW;
 
-    ::sd::ViewShell* pViewShell = NULL;
+    ::sd::ViewShell* pViewShell = nullptr;
 
     if (pDocSh)
     {
         pDoc = pDocSh->GetDoc();
 
         pViewShell = pDocSh->GetViewShell();
-        if (pViewShell != NULL)
+        if (pViewShell != nullptr)
             pViewShell->WriteFrameViewData();
     }
     SdOptions* pOptions = GetSdOptions(eDocType);
@@ -563,7 +563,7 @@ void SdModule::ApplyItemSet( sal_uInt16 nSlot, const SfxItemSet& rSet )
     }
 
     // Layout
-    const SdOptionsLayoutItem* pLayoutItem = NULL;
+    const SdOptionsLayoutItem* pLayoutItem = nullptr;
     if( SfxItemState::SET == rSet.GetItemState( ATTR_OPTIONS_LAYOUT,
                             false, reinterpret_cast<const SfxPoolItem**>(&pLayoutItem) ))
     {
@@ -607,7 +607,7 @@ void SdModule::ApplyItemSet( sal_uInt16 nSlot, const SfxItemSet& rSet )
     }
 
     // Misc
-    const SdOptionsMiscItem* pMiscItem = NULL;
+    const SdOptionsMiscItem* pMiscItem = nullptr;
     if( SfxItemState::SET == rSet.GetItemState( ATTR_OPTIONS_MISC,
                             false, reinterpret_cast<const SfxPoolItem**>(&pMiscItem) ))
     {
@@ -616,7 +616,7 @@ void SdModule::ApplyItemSet( sal_uInt16 nSlot, const SfxItemSet& rSet )
     }
 
     // Snap
-    const SdOptionsSnapItem* pSnapItem = NULL;
+    const SdOptionsSnapItem* pSnapItem = nullptr;
     if( SfxItemState::SET == rSet.GetItemState( ATTR_OPTIONS_SNAP,
                             false, reinterpret_cast<const SfxPoolItem**>(&pSnapItem) ))
     {
@@ -630,7 +630,7 @@ void SdModule::ApplyItemSet( sal_uInt16 nSlot, const SfxItemSet& rSet )
                     0 );
 
     // Print
-    const SdOptionsPrintItem* pPrintItem = NULL;
+    const SdOptionsPrintItem* pPrintItem = nullptr;
     if( SfxItemState::SET == rSet.GetItemState( ATTR_OPTIONS_PRINT,
                             false, reinterpret_cast<const SfxPoolItem**>(&pPrintItem) ))
     {

@@ -295,7 +295,7 @@ void OutlineViewShell::FuTemporary(SfxRequest &rReq)
         {
 #ifdef ENABLE_SDREMOTE
              SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-             VclAbstractDialog* pDlg = pFact ? pFact->CreateRemoteDialog(GetActiveWindow()) : 0;
+             VclAbstractDialog* pDlg = pFact ? pFact->CreateRemoteDialog(GetActiveWindow()) : nullptr;
              if (pDlg)
                  pDlg->Execute();
 #endif
@@ -314,7 +314,7 @@ void OutlineViewShell::FuTemporary(SfxRequest &rReq)
             SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
             std::unique_ptr<VclAbstractDialog> pDlg(pFact ? pFact->CreateSdPhotoAlbumDialog(
                 GetActiveWindow(),
-                GetDoc()) : 0);
+                GetDoc()) : nullptr);
 
             if (pDlg)
             {
@@ -546,14 +546,14 @@ void OutlineViewShell::FuTemporaryModify(SfxRequest &rReq)
 
             const SvxFieldItem* pOldFldItem = pOutlinerView->GetFieldAtSelection();
 
-            if( pOldFldItem && ( 0 != dynamic_cast< const SvxURLField *>( pOldFldItem->GetField() ) ||
-                                0 != dynamic_cast< const SvxDateField *>( pOldFldItem->GetField() ) ||
-                                0 != dynamic_cast< const SvxTimeField *>( pOldFldItem->GetField() ) ||
-                                0 != dynamic_cast< const SvxExtTimeField *>( pOldFldItem->GetField() ) ||
-                                0 != dynamic_cast< const SvxExtFileField *>( pOldFldItem->GetField() ) ||
-                                0 != dynamic_cast< const SvxAuthorField *>( pOldFldItem->GetField() ) ||
-                                0 != dynamic_cast< const SvxPageField *>( pOldFldItem->GetField() ) ||
-                                0 != dynamic_cast< const SvxPagesField *>( pOldFldItem->GetField() )) )
+            if( pOldFldItem && ( nullptr != dynamic_cast< const SvxURLField *>( pOldFldItem->GetField() ) ||
+                                nullptr != dynamic_cast< const SvxDateField *>( pOldFldItem->GetField() ) ||
+                                nullptr != dynamic_cast< const SvxTimeField *>( pOldFldItem->GetField() ) ||
+                                nullptr != dynamic_cast< const SvxExtTimeField *>( pOldFldItem->GetField() ) ||
+                                nullptr != dynamic_cast< const SvxExtFileField *>( pOldFldItem->GetField() ) ||
+                                nullptr != dynamic_cast< const SvxAuthorField *>( pOldFldItem->GetField() ) ||
+                                nullptr != dynamic_cast< const SvxPageField *>( pOldFldItem->GetField() ) ||
+                                nullptr != dynamic_cast< const SvxPagesField *>( pOldFldItem->GetField() )) )
             {
                 // select field, so it gets deleted on Insert
                 ESelection aSel = pOutlinerView->GetSelection();
@@ -576,14 +576,14 @@ void OutlineViewShell::FuTemporaryModify(SfxRequest &rReq)
         {
             const SvxFieldItem* pFldItem = pOutlinerView->GetFieldAtSelection();
 
-            if( pFldItem && (0 != dynamic_cast< const SvxDateField *>( pFldItem->GetField() ) ||
-                                0 != dynamic_cast< const SvxAuthorField *>( pFldItem->GetField() ) ||
-                                0 != dynamic_cast< const SvxExtFileField *>( pFldItem->GetField() ) ||
-                                0 != dynamic_cast< const SvxExtTimeField *>( pFldItem->GetField() ) ) )
+            if( pFldItem && (nullptr != dynamic_cast< const SvxDateField *>( pFldItem->GetField() ) ||
+                                nullptr != dynamic_cast< const SvxAuthorField *>( pFldItem->GetField() ) ||
+                                nullptr != dynamic_cast< const SvxExtFileField *>( pFldItem->GetField() ) ||
+                                nullptr != dynamic_cast< const SvxExtTimeField *>( pFldItem->GetField() ) ) )
             {
                 // Dialog...
                 SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-                std::unique_ptr<AbstractSdModifyFieldDlg> pDlg(pFact ? pFact->CreateSdModifyFieldDlg(GetActiveWindow(), pFldItem->GetField(), pOutlinerView->GetAttribs() ) : 0);
+                std::unique_ptr<AbstractSdModifyFieldDlg> pDlg(pFact ? pFact->CreateSdModifyFieldDlg(GetActiveWindow(), pFldItem->GetField(), pOutlinerView->GetAttribs() ) : nullptr);
                 if( pDlg && (pDlg->Execute() == RET_OK) )
                 {
                     std::unique_ptr<SvxFieldData> pField(pDlg->GetField());

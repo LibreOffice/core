@@ -108,7 +108,7 @@ public:
     explicit MainSequenceChangeGuard( EffectSequenceHelper* pSequence )
     {
         mpMainSequence = dynamic_cast< MainSequence* >( pSequence );
-        if( mpMainSequence == 0 )
+        if( mpMainSequence == nullptr )
         {
             InteractiveSequence* pI = dynamic_cast< InteractiveSequence* >( pSequence );
             if( pI )
@@ -146,7 +146,7 @@ CustomAnimationEffect::CustomAnimationEffect( const css::uno::Reference< css::an
     mbAutoReverse(false),
     mnTargetSubItem(0),
     mnCommand(0),
-    mpEffectSequence( 0 ),
+    mpEffectSequence( nullptr ),
     mbHasAfterEffect(false),
     mbAfterEffectOnNextEffect(false)
 {
@@ -1604,7 +1604,7 @@ SdrPathObj* CustomAnimationEffect::createSdrPathObjFromPath()
 void CustomAnimationEffect::updateSdrPathObjFromPath( SdrPathObj& rPathObj )
 {
     ::basegfx::B2DPolyPolygon xPolyPoly;
-    if( ::basegfx::tools::importFromSvgD( xPolyPoly, getPath(), true, 0 ) )
+    if( ::basegfx::tools::importFromSvgD( xPolyPoly, getPath(), true, nullptr ) )
     {
         SdrObject* pObj = GetSdrObjectFromXShape( getTargetShape() );
         if( pObj )
@@ -1685,7 +1685,7 @@ void EffectSequenceHelper::reset()
     if( aIter != aEnd )
     {
         CustomAnimationEffectPtr pEffect = (*aIter++);
-        pEffect->setEffectSequence(0);
+        pEffect->setEffectSequence(nullptr);
     }
     maEffects.clear();
 }
@@ -1851,7 +1851,7 @@ void EffectSequenceHelper::remove( const CustomAnimationEffectPtr& pEffect )
 {
     if( pEffect.get() )
     {
-        pEffect->setEffectSequence( 0 );
+        pEffect->setEffectSequence( nullptr );
         maEffects.remove( pEffect );
     }
 
@@ -2186,7 +2186,7 @@ bool EffectSequenceHelper::disposeShape( const Reference< XShape >& xShape )
     {
         if( (*aIter)->getTargetShape() == xShape )
         {
-            (*aIter)->setEffectSequence( 0 );
+            (*aIter)->setEffectSequence( nullptr );
             bChanges = true;
             aIter = maEffects.erase( aIter );
         }
@@ -2253,7 +2253,7 @@ void EffectSequenceHelper::disposeTextRange( const css::uno::Any& aTarget )
                 if( aIterParaTarget.Paragraph == aParaTarget.Paragraph )
                 {
                     // delete this effect if it targets the disposed paragraph directly
-                    (*aIter)->setEffectSequence( 0 );
+                    (*aIter)->setEffectSequence( nullptr );
                     aIter = maEffects.erase( aIter );
                     bChanges = true;
                     bErased = true;
@@ -3166,10 +3166,10 @@ CustomAnimationEffectPtr MainSequence::findEffect( const css::uno::Reference< cs
 {
     CustomAnimationEffectPtr pEffect = EffectSequenceHelper::findEffect( xNode );
 
-    if( pEffect.get() == 0 )
+    if( pEffect.get() == nullptr )
     {
         InteractiveSequenceList::const_iterator aIter;
-        for( aIter = maInteractiveSequenceList.begin(); (aIter != maInteractiveSequenceList.end()) && (pEffect.get() == 0); ++aIter )
+        for( aIter = maInteractiveSequenceList.begin(); (aIter != maInteractiveSequenceList.end()) && (pEffect.get() == nullptr); ++aIter )
         {
             pEffect = (*aIter)->findEffect( xNode );
         }
@@ -3374,7 +3374,7 @@ bool MainSequence::setTrigger( const CustomAnimationEffectPtr& pEffect, const cs
 {
     EffectSequenceHelper* pOldSequence = pEffect->getEffectSequence();
 
-    EffectSequenceHelper* pNewSequence = 0;
+    EffectSequenceHelper* pNewSequence = nullptr;
     if( xTriggerShape.is() )
     {
         InteractiveSequenceList::iterator aIter( maInteractiveSequenceList.begin() );

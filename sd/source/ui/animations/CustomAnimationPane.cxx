@@ -150,7 +150,7 @@ CustomAnimationPane::CustomAnimationPane( Window* pParent, ViewShellBase& rBase,
                                           const Size& rMinSize )
 :   PanelLayout( pParent, "CustomAnimationsPanel", "modules/simpress/ui/customanimationspanel.ui", rxFrame ),
     mrBase( rBase ),
-    mpCustomAnimationPresets(NULL),
+    mpCustomAnimationPresets(nullptr),
     mnPropertyType( nPropertyTypeNone ),
     maMinSize( rMinSize ),
     mxModel( rBase.GetDocShell()->GetDoc()->getUnoModel(), UNO_QUERY ),
@@ -321,7 +321,7 @@ IMPL_LINK_TYPED(CustomAnimationPane,EventMultiplexerListener,
             // At this moment the controller may not yet been set at model
             // or ViewShellBase.  Take it from the view shell passed with
             // the event.
-            if (mrBase.GetMainViewShell() != 0)
+            if (mrBase.GetMainViewShell() != nullptr)
             {
                 if( mrBase.GetMainViewShell()->GetShellType() == ViewShell::ST_IMPRESS )
                 {
@@ -333,8 +333,8 @@ IMPL_LINK_TYPED(CustomAnimationPane,EventMultiplexerListener,
             }
         // fall through intended
         case tools::EventMultiplexerEvent::EID_MAIN_VIEW_REMOVED:
-            mxView = 0;
-            mxCurrentPage = 0;
+            mxView = nullptr;
+            mxCurrentPage = nullptr;
             updateControls();
             break;
 
@@ -526,7 +526,7 @@ void CustomAnimationPane::updateControls()
         CustomAnimationPresetPtr pDescriptor = getPresets().getEffectDescriptor( pEffect->getPresetId() );
         if( pDescriptor.get() )
         {
-            PropertySubControl* pSubControl = NULL;
+            PropertySubControl* pSubControl = nullptr;
 
             Any aValue;
 
@@ -555,16 +555,16 @@ void CustomAnimationPane::updateControls()
             }
             else
             {
-                mpLBProperty->setSubControl( 0 );
+                mpLBProperty->setSubControl( nullptr );
             }
 
-            bool bEnable = (pSubControl != 0) && (pSubControl->getControl()->IsEnabled());
+            bool bEnable = (pSubControl != nullptr) && (pSubControl->getControl()->IsEnabled());
             mpLBProperty->Enable( bEnable );
             mpFTProperty->Enable( bEnable );
         }
         else
         {
-            mpLBProperty->setSubControl( 0 );
+            mpLBProperty->setSubControl( nullptr );
             mpFTProperty->Enable( false );
             mpLBProperty->Enable( false );
             mpPBPropertyMore->Enable( false );
@@ -610,7 +610,7 @@ void CustomAnimationPane::updateControls()
     }
     else
     {
-        mpLBProperty->setSubControl( 0 );
+        mpLBProperty->setSubControl( nullptr );
         mpFTProperty->Enable( false );
         mpLBProperty->Enable( false );
         mpPBPropertyMore->Enable( false );
@@ -654,7 +654,7 @@ void CustomAnimationPane::updateControls()
         {
             MainSequenceRebuildGuard aGuard( mpMainSequence );
 
-            EffectSequenceHelper* pSequence = 0;
+            EffectSequenceHelper* pSequence = nullptr;
             EffectSequence::iterator aRebuildIter( maListSelection.begin() );
             const EffectSequence::iterator aRebuildEnd( maListSelection.end() );
             while( aRebuildIter != aRebuildEnd )
@@ -663,7 +663,7 @@ void CustomAnimationPane::updateControls()
 
                 if( pEffect.get() )
                 {
-                    if( pSequence == 0 )
+                    if( pSequence == nullptr )
                     {
                         pSequence = pEffect->getEffectSequence();
                     }
@@ -737,7 +737,7 @@ void CustomAnimationPane::updateMotionPathTags()
     MotionPathTagVector aTags;
     aTags.swap( maMotionPathTags );
 
-    ::sd::View* pView = 0;
+    ::sd::View* pView = nullptr;
 
     if( mxView.is() )
     {
@@ -2067,7 +2067,7 @@ void CustomAnimationPane::moveSelection( bool bUp )
         return;
 
     EffectSequenceHelper* pSequence = maListSelection.front()->getEffectSequence();
-    if( pSequence == 0 )
+    if( pSequence == nullptr )
         return;
 
     addUndo();
@@ -2217,7 +2217,7 @@ void CustomAnimationPane::onSelect()
 
 const CustomAnimationPresets& CustomAnimationPane::getPresets()
 {
-    if (mpCustomAnimationPresets == NULL)
+    if (mpCustomAnimationPresets == nullptr)
         mpCustomAnimationPresets = &CustomAnimationPresets::getCustomAnimationPresets();
     return *mpCustomAnimationPresets;
 }
@@ -2229,7 +2229,7 @@ void CustomAnimationPane::markShapesFromSelectedEffects()
         ScopeLockGuard aGuard( maSelectionLock );
         DrawViewShell* pViewShell = dynamic_cast< DrawViewShell* >(
             FrameworkHelper::Instance(mrBase)->GetViewShell(FrameworkHelper::msCenterPaneURL).get());
-        DrawView* pView = pViewShell ? pViewShell->GetDrawView() : NULL;
+        DrawView* pView = pViewShell ? pViewShell->GetDrawView() : nullptr;
 
         if( pView )
         {
@@ -2256,7 +2256,7 @@ void CustomAnimationPane::updatePathFromMotionPathTag( const rtl::Reference< Mot
     {
         SdrPathObj* pPathObj = xTag->getPathObj();
         CustomAnimationEffectPtr pEffect = xTag->getEffect();
-        if( (pPathObj != 0) && pEffect.get() != 0 )
+        if( (pPathObj != nullptr) && pEffect.get() != nullptr )
         {
             ::svl::IUndoManager* pManager = mrBase.GetDocShell()->GetUndoManager();
             if( pManager )
@@ -2273,7 +2273,7 @@ void CustomAnimationPane::updatePathFromMotionPathTag( const rtl::Reference< Mot
 
 vcl::Window * createCustomAnimationPanel( vcl::Window* pParent, ViewShellBase& rBase, const css::uno::Reference<css::frame::XFrame>& rxFrame )
 {
-    vcl::Window* pWindow = 0;
+    vcl::Window* pWindow = nullptr;
 
     DrawDocShell* pDocSh = rBase.GetDocShell();
     if( pDocSh )

@@ -84,7 +84,7 @@ public:
             Returns a copy of this object.  When this method is called with
             an argument then this value will be returned.
     */
-    virtual IteratorImplBase* Clone (IteratorImplBase* pObject=NULL) const;
+    virtual IteratorImplBase* Clone (IteratorImplBase* pObject=nullptr) const;
     /** Test the equality of the this object and the given iterator.  Two
         iterators are taken to be equal when they point to the same object.
         Iteration direction is not taken into account.

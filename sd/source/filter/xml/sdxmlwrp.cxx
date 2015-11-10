@@ -193,7 +193,7 @@ sal_Int32 ReadThroughComponent(
     DBG_ASSERT(xInputStream.is(), "input stream missing");
     DBG_ASSERT(xModelComponent.is(), "document missing");
     DBG_ASSERT(rxContext.is(), "factory missing");
-    DBG_ASSERT(NULL != pFilterName,"I need a service name for the component!");
+    DBG_ASSERT(nullptr != pFilterName,"I need a service name for the component!");
 
     SAL_INFO( "sd.filter", "ReadThroughComponent" );
 
@@ -332,7 +332,7 @@ sal_Int32 ReadThroughComponent(
     bool bMustBeSuccessfull )
 {
     DBG_ASSERT(xStorage.is(), "Need storage!");
-    DBG_ASSERT(NULL != pStreamName, "Please, please, give me a name!");
+    DBG_ASSERT(nullptr != pStreamName, "Please, please, give me a name!");
 
     // open stream (and set parser input)
     OUString sStreamName = OUString::createFromAscii(pStreamName);
@@ -351,7 +351,7 @@ sal_Int32 ReadThroughComponent(
         // if no stream can be opened, return immediately with OK signal
 
         // do we even have an alternative name?
-        if ( NULL == pCompatibilityStreamName )
+        if ( nullptr == pCompatibilityStreamName )
             return 0;
 
         // if so, does the stream exist?
@@ -531,9 +531,9 @@ bool SdXMLFilter::Import( ErrCode& nError )
     Reference< io::XActiveDataSource > xSource;
     Reference< XInterface > xPipe;
     Reference< document::XGraphicObjectResolver > xGraphicResolver;
-    SvXMLGraphicHelper *pGraphicHelper = 0;
+    SvXMLGraphicHelper *pGraphicHelper = nullptr;
     Reference< document::XEmbeddedObjectResolver > xObjectResolver;
-    SvXMLEmbeddedObjectHelper *pObjectHelper = 0;
+    SvXMLEmbeddedObjectHelper *pObjectHelper = nullptr;
 
     Reference< lang::XComponent > xModelComp( mxModel, uno::UNO_QUERY );
 
@@ -650,13 +650,13 @@ bool SdXMLFilter::Import( ErrCode& nError )
         if( meFilterMode != SDXMLMODE_Organizer )
         {
             nWarn2 = ReadThroughComponent(
-                xStorage, xModelComp, "settings.xml", NULL, rxContext,
+                xStorage, xModelComp, "settings.xml", nullptr, rxContext,
                 pServices->mpSettings,
                 aFilterArgs, aName, false );
         }
 
         nRet = ReadThroughComponent(
-            xStorage, xModelComp, "styles.xml", NULL, rxContext,
+            xStorage, xModelComp, "styles.xml", nullptr, rxContext,
             pServices->mpStyles,
             aFilterArgs, aName, true );
 
@@ -677,10 +677,10 @@ bool SdXMLFilter::Import( ErrCode& nError )
 
     if( pGraphicHelper )
         SvXMLGraphicHelper::Destroy( pGraphicHelper );
-    xGraphicResolver = 0;
+    xGraphicResolver = nullptr;
     if( pObjectHelper )
         SvXMLEmbeddedObjectHelper::Destroy( pObjectHelper );
-    xObjectResolver = 0;
+    xObjectResolver = nullptr;
 
     if( mxStatusIndicator.is() )
         mxStatusIndicator->end();
@@ -817,8 +817,8 @@ bool SdXMLFilter::Import( ErrCode& nError )
 
 bool SdXMLFilter::Export()
 {
-    SvXMLEmbeddedObjectHelper*  pObjectHelper = NULL;
-    SvXMLGraphicHelper*         pGraphicHelper = NULL;
+    SvXMLEmbeddedObjectHelper*  pObjectHelper = nullptr;
+    SvXMLGraphicHelper*         pGraphicHelper = nullptr;
     bool                    bDocRet = false;
 
     if( !mxModel.is() )
@@ -959,8 +959,8 @@ bool SdXMLFilter::Export()
                 aServices[i++].mpStream  = sXML_metaStreamName;
             };
 
-            aServices[i].mpService = NULL;
-            aServices[i].mpStream  = NULL;
+            aServices[i].mpService = nullptr;
+            aServices[i].mpStream  = nullptr;
 
             XML_SERVICEMAP* pServices = aServices;
 

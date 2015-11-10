@@ -42,7 +42,7 @@ public:
     virtual ~DrawView();
 
     virtual void MarkListHasChanged() override;
-    void CompleteRedraw(OutputDevice* pOutDev, const vcl::Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector = 0L) override;
+    void CompleteRedraw(OutputDevice* pOutDev, const vcl::Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector = nullptr) override;
 
     virtual bool SetAttributes(const SfxItemSet& rSet, bool bReplaceAll = false) override;
 

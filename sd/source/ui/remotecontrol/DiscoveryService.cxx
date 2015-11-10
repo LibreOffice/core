@@ -55,7 +55,7 @@ using namespace sd;
 
 DiscoveryService::DiscoveryService()
     : mSocket(-1)
-    , zService(0)
+    , zService(nullptr)
 {
 }
 
@@ -188,7 +188,7 @@ void SAL_CALL DiscoveryService::run()
     }
 }
 
-DiscoveryService *sd::DiscoveryService::spService = NULL;
+DiscoveryService *sd::DiscoveryService::spService = nullptr;
 
 void DiscoveryService::setup()
 {

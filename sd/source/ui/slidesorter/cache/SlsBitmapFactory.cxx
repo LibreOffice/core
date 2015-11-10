@@ -39,7 +39,7 @@ class PageObjectViewObjectContact;
 namespace sd { namespace slidesorter { namespace cache {
 
 BitmapFactory::BitmapFactory()
-    : maRenderer(NULL, false)
+    : maRenderer(nullptr, false)
 {
 }
 

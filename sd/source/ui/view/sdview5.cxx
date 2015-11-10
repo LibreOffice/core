@@ -43,7 +43,7 @@ static bool implIsMultiPresObj( PresObjKind eKind )
 
 SdPage* View::GetPage()
 {
-    SdPage* pPage = NULL;
+    SdPage* pPage = nullptr;
     SdrPageView*    pPV = GetSdrPageView();
     if( pPV )
     {
@@ -56,7 +56,7 @@ SdPage* View::GetPage()
 // returns selected object in case there's just one object in the selection
 SdrObject* View::GetSelectedSingleObject(SdPage* pPage)
 {
-    SdrObject* pRet = NULL;
+    SdrObject* pRet = nullptr;
     if( pPage )
     {
         // first try selected shape
@@ -78,7 +78,7 @@ SdrObject* View::GetSelectedSingleObject(SdPage* pPage)
 SdrObject* View::GetEmptyPresentationObject( PresObjKind eKind )
 {
     SdPage* pPage = GetPage();
-    SdrObject* pEmptyObj = NULL;
+    SdrObject* pEmptyObj = nullptr;
 
     if ( pPage && !pPage->IsMasterPage() ) {
         SdrObject* pObj = GetSelectedSingleObject( pPage );
@@ -94,7 +94,7 @@ SdrObject* View::GetEmptyPresentationObject( PresObjKind eKind )
             {
                 pEmptyObj = pPage->GetPresObj(eKind, nIndex++ );
             }
-            while( (pEmptyObj != 0) && (!pEmptyObj->IsEmptyPresObj()) );
+            while( (pEmptyObj != nullptr) && (!pEmptyObj->IsEmptyPresObj()) );
         }
 
         // last try to find empty pres obj of multiple type

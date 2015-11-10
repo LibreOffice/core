@@ -96,7 +96,7 @@ SdStartPresentationDlg::SdStartPresentationDlg( vcl::Window* pWindow,
         SdCustomShow* pCustomShow;
         // fill Listbox with CustomShows
         for( pCustomShow = pCustomShowList->First();
-             pCustomShow != NULL;
+             pCustomShow != nullptr;
              pCustomShow = pCustomShowList->Next() )
         {
             aLbCustomshow->InsertEntry( pCustomShow->GetName() );
@@ -144,9 +144,9 @@ SdStartPresentationDlg::SdStartPresentationDlg( vcl::Window* pWindow,
 
     InitMonitorSettings();
 
-    ChangeRangeHdl( NULL );
+    ChangeRangeHdl( nullptr );
 
-    ClickWindowPresentationHdl( NULL );
+    ClickWindowPresentationHdl( nullptr );
     ChangePauseHdl( *aTmfPause );
 }
 

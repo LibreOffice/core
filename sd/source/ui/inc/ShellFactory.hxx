@@ -50,7 +50,7 @@ public:
     virtual ShellType* CreateShell (
         ShellId nId,
         vcl::Window* pParentWindow,
-        FrameView* pFrameView = NULL) = 0;
+        FrameView* pFrameView = nullptr) = 0;
 
     /** Tell the factory that a shell is no longer in use.  It may destroy
         it or put it for future use in a cache.

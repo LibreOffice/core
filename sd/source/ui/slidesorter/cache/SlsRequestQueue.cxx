@@ -197,7 +197,7 @@ CacheKey RequestQueue::GetFront()
 
     if (mpRequestQueue->empty())
         throw css::uno::RuntimeException("RequestQueue::GetFront(): queue is empty",
-            NULL);
+            nullptr);
 
     return mpRequestQueue->begin()->maKey;
 }
@@ -208,7 +208,7 @@ RequestPriorityClass RequestQueue::GetFrontPriorityClass()
 
     if (mpRequestQueue->empty())
         throw css::uno::RuntimeException("RequestQueue::GetFrontPriorityClass(): queue is empty",
-            NULL);
+            nullptr);
 
     return mpRequestQueue->begin()->meClass;
 }

@@ -143,7 +143,7 @@ private:
 
     void CallListeners (
         EventMultiplexerEvent::EventId eId,
-        void* pUserData = NULL);
+        void* pUserData = nullptr);
 
     /** This method throws a DisposedException when the object has already been
         disposed.
@@ -210,10 +210,10 @@ EventMultiplexer::Implementation::Implementation (ViewShellBase& rBase)
       mrBase (rBase),
       mbListeningToController (false),
       mbListeningToFrame (false),
-      mxControllerWeak(NULL),
-      mxFrameWeak(NULL),
-      mxSlideSorterSelectionWeak(NULL),
-      mpDocument(NULL),
+      mxControllerWeak(nullptr),
+      mxFrameWeak(nullptr),
+      mxSlideSorterSelectionWeak(nullptr),
+      mpDocument(nullptr),
       mxConfigurationControllerWeak()
 {
     // Connect to the frame to listen for controllers being exchanged.
@@ -235,7 +235,7 @@ EventMultiplexer::Implementation::Implementation (ViewShellBase& rBase)
 
     // Listen for document changes.
     mpDocument = mrBase.GetDocument();
-    if (mpDocument != NULL)
+    if (mpDocument != nullptr)
         StartListening (*mpDocument);
 
     // Listen for configuration changes.
@@ -292,10 +292,10 @@ void EventMultiplexer::Implementation::ReleaseListeners()
 
     DisconnectFromController ();
 
-    if (mpDocument != NULL)
+    if (mpDocument != nullptr)
     {
         EndListening (*mpDocument);
-        mpDocument = NULL;
+        mpDocument = nullptr;
     }
 
     // Stop listening for configuration changes.
@@ -575,7 +575,7 @@ void SAL_CALL EventMultiplexer::Implementation::notifyConfigurationChange (
                         = dynamic_cast<slidesorter::SlideSorterViewShell*>(
                             FrameworkHelper::GetViewShell(
                                 Reference<XView>(rEvent.ResourceObject,UNO_QUERY)).get());
-                    if (pViewShell != NULL)
+                    if (pViewShell != nullptr)
                         pViewShell->AddSelectionChangeListener (
                             LINK(this,
                                 EventMultiplexer::Implementation,
@@ -603,7 +603,7 @@ void SAL_CALL EventMultiplexer::Implementation::notifyConfigurationChange (
                         = dynamic_cast<slidesorter::SlideSorterViewShell*>(
                             FrameworkHelper::GetViewShell(
                                 Reference<XView>(rEvent.ResourceObject, UNO_QUERY)).get());
-                    if (pViewShell != NULL)
+                    if (pViewShell != nullptr)
                         pViewShell->RemoveSelectionChangeListener (
                             LINK(this,
                                 EventMultiplexer::Implementation,
@@ -676,7 +676,7 @@ void EventMultiplexer::Implementation::Notify (
     {
         const SfxSimpleHint& rSimpleHint = static_cast<const SfxSimpleHint&>(rHint);
         if (rSimpleHint.GetId() == SFX_HINT_DYING)
-            mpDocument = NULL;
+            mpDocument = nullptr;
     }
 }
 

@@ -26,9 +26,9 @@
 using namespace sd;
 
 UndoRemovePresObjectImpl::UndoRemovePresObjectImpl( SdrObject& rObject )
-: mpUndoUsercall(0)
-, mpUndoAnimation(0)
-, mpUndoPresObj(0)
+: mpUndoUsercall(nullptr)
+, mpUndoAnimation(nullptr)
+, mpUndoPresObj(nullptr)
 {
     SdPage* pPage = dynamic_cast< SdPage* >( rObject.GetPage() );
     if( pPage )
@@ -158,7 +158,7 @@ void UndoReplaceObject::Redo()
 
 UndoObjectSetText::UndoObjectSetText( SdrObject& rObject, sal_Int32 nText )
 : SdrUndoObjSetText( rObject, nText )
-, mpUndoAnimation(0)
+, mpUndoAnimation(nullptr)
 , mbNewEmptyPresObj(false)
 , mxSdrObject( &rObject )
 {
@@ -207,7 +207,7 @@ void UndoObjectSetText::Redo()
 UndoObjectUserCall::UndoObjectUserCall(SdrObject& rObject)
 :   SdrUndoObj(rObject)
 ,   mpOldUserCall(static_cast<SdPage*>(rObject.GetUserCall()))
-,   mpNewUserCall(0)
+,   mpNewUserCall(nullptr)
 ,   mxSdrObject( &rObject )
 {
 }

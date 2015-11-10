@@ -86,7 +86,7 @@ void DrawViewShell::GetIMapState( SfxItemSet& rSet )
 
             SvxIMapDlg* pImageMapDialog = ViewShell::Implementation::GetImageMapDialog();
             if ( ( dynamic_cast< const SdrGrafObj *>( pObj ) !=  nullptr /*|| pObj->ISA( SdrOle2Obj )*/ )
-                && pImageMapDialog!=NULL
+                && pImageMapDialog!=nullptr
                 && ( pImageMapDialog->GetEditingObject() == static_cast<void const *>(pObj) ) )
             {
                 bDisable = false;

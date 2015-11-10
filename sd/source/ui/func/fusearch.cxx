@@ -57,7 +57,7 @@ FuSearch::FuSearch (
     SdDrawDocument* pDoc,
     SfxRequest& rReq )
     : FuPoor(pViewSh, pWin, pView, pDoc, rReq),
-      pSdOutliner(NULL),
+      pSdOutliner(nullptr),
       bOwnOutliner(false)
 {
 }
@@ -90,7 +90,7 @@ void FuSearch::DoExecute( SfxRequest& )
 
 FuSearch::~FuSearch()
 {
-    if ( ! mpDocSh->IsInDestruction() && mpDocSh->GetViewShell()!=NULL)
+    if ( ! mpDocSh->IsInDestruction() && mpDocSh->GetViewShell()!=nullptr)
         mpDocSh->GetViewShell()->GetViewFrame()->GetBindings().Invalidate( SidArraySpell );
 
     if (pSdOutliner)
@@ -103,11 +103,11 @@ FuSearch::~FuSearch()
 void FuSearch::SearchAndReplace( const SvxSearchItem* pSearchItem )
 {
     ViewShellBase* pBase = dynamic_cast<ViewShellBase*>( SfxViewShell::Current() );
-    ViewShell* pViewShell = NULL;
-    if (pBase != NULL)
+    ViewShell* pViewShell = nullptr;
+    if (pBase != nullptr)
         pViewShell = pBase->GetMainViewShell().get();
 
-    if (pViewShell != NULL)
+    if (pViewShell != nullptr)
     {
         if ( pSdOutliner && dynamic_cast< const DrawViewShell *>( pViewShell ) !=  nullptr && !bOwnOutliner )
         {

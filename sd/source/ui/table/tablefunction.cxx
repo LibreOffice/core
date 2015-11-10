@@ -127,7 +127,7 @@ void DrawViewShell::FuTable(SfxRequest& rReq)
         if( (nColumns == 0) || (nRows == 0) )
         {
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-            std::unique_ptr<SvxAbstractNewTableDialog> pDlg( pFact ? pFact->CreateSvxNewTableDialog( NULL ) : 0);
+            std::unique_ptr<SvxAbstractNewTableDialog> pDlg( pFact ? pFact->CreateSvxNewTableDialog( nullptr ) : nullptr);
 
             if( !pDlg.get() || (pDlg->Execute() != RET_OK) )
                 break;
@@ -190,7 +190,7 @@ void DrawViewShell::FuTable(SfxRequest& rReq)
 
         rReq.Ignore();
         SfxViewShell* pViewShell = GetViewShell();
-        OSL_ASSERT (pViewShell!=NULL);
+        OSL_ASSERT (pViewShell!=nullptr);
         SfxBindings& rBindings = pViewShell->GetViewFrame()->GetBindings();
         rBindings.Invalidate( SID_INSERT_TABLE, true );
         break;

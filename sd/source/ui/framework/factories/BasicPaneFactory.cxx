@@ -91,7 +91,7 @@ BasicPaneFactory::BasicPaneFactory (
     : BasicPaneFactoryInterfaceBase(m_aMutex),
       mxComponentContext(rxContext),
       mxConfigurationControllerWeak(),
-      mpViewShellBase(NULL),
+      mpViewShellBase(nullptr),
       mpPaneContainer(new PaneContainer)
 {
 }
@@ -265,7 +265,7 @@ Reference<XResource> SAL_CALL BasicPaneFactory::createResource (
         // The requested pane can not be created by any of the factories
         // managed by the called BasicPaneFactory object.
         throw lang::IllegalArgumentException("BasicPaneFactory::createPane() called for unknown resource id",
-            NULL,
+            nullptr,
             0);
     }
 
@@ -294,14 +294,14 @@ void SAL_CALL BasicPaneFactory::releaseResource (
         // on the next createPane() call for the same pane type the pane is
         // created anew.
         ChildWindowPane* pChildWindowPane = dynamic_cast<ChildWindowPane*>(rxPane.get());
-        if (pChildWindowPane != NULL)
+        if (pChildWindowPane != nullptr)
         {
             iDescriptor->mbIsReleased = true;
             pChildWindowPane->Hide();
         }
         else
         {
-            iDescriptor->mxPane = NULL;
+            iDescriptor->mxPane = nullptr;
             Reference<XComponent> xComponent (rxPane, UNO_QUERY);
             if (xComponent.is())
             {
@@ -318,7 +318,7 @@ void SAL_CALL BasicPaneFactory::releaseResource (
         // created by any of the factories managed by the called
         // BasicPaneFactory object.
         throw lang::IllegalArgumentException("BasicPaneFactory::releasePane() called for pane that was not created by same factory.",
-            NULL,
+            nullptr,
             0);
     }
 }
@@ -354,7 +354,7 @@ void SAL_CALL BasicPaneFactory::disposing (
                 ::boost::bind(&PaneDescriptor::ComparePane, _1, xPane)));
         if (iDescriptor != mpPaneContainer->end())
         {
-            iDescriptor->mxPane = NULL;
+            iDescriptor->mxPane = nullptr;
         }
     }
 }
@@ -364,7 +364,7 @@ Reference<XResource> BasicPaneFactory::CreateFrameWindowPane (
 {
     Reference<XResource> xPane;
 
-    if (mpViewShellBase != NULL)
+    if (mpViewShellBase != nullptr)
     {
         xPane = new FrameWindowPane(rxPaneId, mpViewShellBase->GetViewWindow());
     }
@@ -391,7 +391,7 @@ Reference<XResource> BasicPaneFactory::CreateChildWindowPane (
 {
     Reference<XResource> xPane;
 
-    if (mpViewShellBase != NULL)
+    if (mpViewShellBase != nullptr)
     {
         // Create the corresponding shell and determine the id of the child window.
         sal_uInt16 nChildWindowId = 0;
@@ -414,7 +414,7 @@ Reference<XResource> BasicPaneFactory::CreateChildWindowPane (
 
         // With shell and child window id create the ChildWindowPane
         // wrapper.
-        if (pShell.get() != NULL)
+        if (pShell.get() != nullptr)
         {
             xPane = new ChildWindowPane(
                 rxPaneId,

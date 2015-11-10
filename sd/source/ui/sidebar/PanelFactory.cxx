@@ -80,7 +80,7 @@ Reference<ui::XUIElement> SAL_CALL PanelFactory::createUIElement (
 
     // Throw exceptions when the arguments are not as expected.
     vcl::Window* pParentWindow = VCLUnoHelper::GetWindow(xParentWindow);
-    if ( ! xParentWindow.is() || pParentWindow==NULL)
+    if ( ! xParentWindow.is() || pParentWindow==nullptr)
         throw RuntimeException(
             "PanelFactory::createUIElement called without ParentWindow");
     if ( ! xFrame.is())
@@ -88,16 +88,16 @@ Reference<ui::XUIElement> SAL_CALL PanelFactory::createUIElement (
             "PanelFactory::createUIElement called without XFrame");
 
     // Tunnel through the controller to obtain a ViewShellBase.
-    ViewShellBase* pBase = NULL;
+    ViewShellBase* pBase = nullptr;
     Reference<lang::XUnoTunnel> xTunnel (xFrame->getController(), UNO_QUERY);
     if (xTunnel.is())
     {
         ::sd::DrawController* pController = reinterpret_cast<sd::DrawController*>(
             xTunnel->getSomething(sd::DrawController::getUnoTunnelId()));
-        if (pController != NULL)
+        if (pController != nullptr)
             pBase = pController->GetViewShellBase();
     }
-    if (pBase == NULL)
+    if (pBase == nullptr)
         throw RuntimeException("can not get ViewShellBase for frame");
 
     // Get bindings from given arguments.

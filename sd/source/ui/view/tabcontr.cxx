@@ -191,7 +191,7 @@ sal_Int8 TabControl::AcceptDrop( const AcceptDropEvent& rEvt )
 
             if( ( nPageId >= 0 ) && pDoc->GetPage( (sal_uInt16)nPageId ) )
             {
-                nRet = pDrViewSh->AcceptDrop( rEvt, *this, NULL, (sal_uInt16)nPageId, SDRLAYER_NOTFOUND );
+                nRet = pDrViewSh->AcceptDrop( rEvt, *this, nullptr, (sal_uInt16)nPageId, SDRLAYER_NOTFOUND );
                 SwitchPage( aPos );
             }
         }
@@ -266,7 +266,7 @@ sal_Int8 TabControl::ExecuteDrop( const ExecuteDropEvent& rEvt )
 
         if( ( nPageId >= 0 ) && pDoc->GetPage( (sal_uInt16)nPageId ) )
         {
-            nRet = pDrViewSh->ExecuteDrop( rEvt, *this, NULL, (sal_uInt16)nPageId, SDRLAYER_NOTFOUND );
+            nRet = pDrViewSh->ExecuteDrop( rEvt, *this, nullptr, (sal_uInt16)nPageId, SDRLAYER_NOTFOUND );
         }
     }
 

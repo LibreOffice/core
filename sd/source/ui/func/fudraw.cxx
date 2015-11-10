@@ -214,14 +214,14 @@ bool FuDraw::MouseButtonDown(const MouseEvent& rMEvt)
 
         DoModifiers(rMEvt, bSnapModPressed);
 
-        SdrPageView* pPV = 0;
+        SdrPageView* pPV = nullptr;
         sal_uInt16 nHitLog = sal_uInt16 ( mpWindow->PixelToLogic(Size(HITPIX,0)).Width() );
 
         // look only for HelpLines when they are visible (!)
         bool bHelpLine(false);
         if(mpView->IsHlplVisible())
             bHelpLine = mpView->PickHelpLine(aMDPos, nHitLog, *mpWindow, nHelpLine, pPV);
-        bool bHitHdl = (mpView->PickHandle(aMDPos) != NULL);
+        bool bHitHdl = (mpView->PickHandle(aMDPos) != nullptr);
 
         if ( bHelpLine
             && !mpView->IsCreateObj()
@@ -369,11 +369,11 @@ bool FuDraw::KeyInput(const KeyEvent& rKEvt)
                        avoid the restoration of an no more existing object in
                        ::SelectionHasChanged after deletion. All other OLE
                        objects are not affected. */
-                    OSL_ASSERT (mpViewShell->GetViewShell()!=NULL);
+                    OSL_ASSERT (mpViewShell->GetViewShell()!=nullptr);
                     Client* pIPClient = static_cast<Client*>(
                         mpViewShell->GetViewShell()->GetIPClient());
                     if (pIPClient && pIPClient->IsObjectInPlaceActive())
-                        pIPClient->SetSdrGrafObj(NULL);
+                        pIPClient->SetSdrGrafObj(nullptr);
 
                     // wait-mousepointer while deleting object
                     WaitObject aWait( static_cast<vcl::Window*>(mpViewShell->GetActiveWindow()) );
@@ -529,7 +529,7 @@ void FuDraw::ForcePointer(const MouseEvent* pMEvt)
         {
             // pipette mode
             SfxChildWindow* pWnd = mpViewShell->GetViewFrame()->GetChildWindow(SvxBmpMaskChildWindow::GetChildWindowId());
-            SvxBmpMask* pMask = pWnd ? static_cast<SvxBmpMask*>(pWnd->GetWindow()) : NULL;
+            SvxBmpMask* pMask = pWnd ? static_cast<SvxBmpMask*>(pWnd->GetWindow()) : nullptr;
             if (pMask && pMask->IsEyedropping())
             {
                 bDefPointer = false;
@@ -538,8 +538,8 @@ void FuDraw::ForcePointer(const MouseEvent* pMEvt)
         }
         else if (!mpView->IsAction())
         {
-            SdrObject* pObj = NULL;
-            SdrPageView* pPV = NULL;
+            SdrObject* pObj = nullptr;
+            SdrPageView* pPV = nullptr;
             SdrViewEvent aVEvt;
             SdrHitKind eHit = SDRHIT_NONE;
             SdrDragMode eDragMode = mpView->GetDragMode();
@@ -582,7 +582,7 @@ void FuDraw::ForcePointer(const MouseEvent* pMEvt)
                      nSdrObjKind != OBJ_OUTLINETEXT &&
                      aVEvt.pObj->IsEmptyPresObj() )
                 {
-                    pObj = NULL;
+                    pObj = nullptr;
                     bDefPointer = false;
                     mpWindow->SetPointer(Pointer(PointerStyle::Arrow));
                 }
@@ -771,7 +771,7 @@ bool FuDraw::RequestHelp(const HelpEvent& rHEvt)
 
         SdrObject* pObj = aVEvt.pObj;
 
-        if (eHit != SDRHIT_NONE && pObj != NULL)
+        if (eHit != SDRHIT_NONE && pObj != nullptr)
         {
             Point aPosPixel = rHEvt.GetMousePosPixel();
 
@@ -780,7 +780,7 @@ bool FuDraw::RequestHelp(const HelpEvent& rHEvt)
             if (!bReturn && (dynamic_cast< const SdrObjGroup *>( pObj ) != nullptr || dynamic_cast< const E3dPolyScene* >(pObj) !=  nullptr))
             {
                 // take a glance into the group
-                SdrPageView* pPV = NULL;
+                SdrPageView* pPV = nullptr;
 
                 Point aPos(mpWindow->PixelToLogic(mpWindow->ScreenToOutputPixel(aPosPixel)));
 

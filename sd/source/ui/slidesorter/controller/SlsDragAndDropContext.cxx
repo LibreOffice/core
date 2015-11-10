@@ -54,7 +54,7 @@ DragAndDropContext::DragAndDropContext (SlideSorter& rSlideSorter)
     SdTransferable* pTransferable = SD_MOD()->pTransferDrag;
     SdPageObjsTLB::SdPageObjsTransferable* pTreeListBoxTransferable
         = dynamic_cast<SdPageObjsTLB::SdPageObjsTransferable*>(pTransferable);
-    if (pTreeListBoxTransferable!=NULL && !TransferableData::GetFromTransferable(pTransferable))
+    if (pTreeListBoxTransferable!=nullptr && !TransferableData::GetFromTransferable(pTransferable))
     {
         pTransferable->AddUserData(
             sd::slidesorter::controller::Clipboard::CreateTransferableUserData(pTransferable));
@@ -65,7 +65,7 @@ DragAndDropContext::DragAndDropContext (SlideSorter& rSlideSorter)
 
 DragAndDropContext::~DragAndDropContext()
 {
-    SetTargetSlideSorter (NULL, Point(0,0));
+    SetTargetSlideSorter (nullptr, Point(0,0));
 }
 
 void DragAndDropContext::Dispose()
@@ -78,7 +78,7 @@ void DragAndDropContext::UpdatePosition (
     const InsertionIndicatorHandler::Mode eMode,
     const bool bAllowAutoScroll)
 {
-    if (mpTargetSlideSorter == NULL)
+    if (mpTargetSlideSorter == nullptr)
         return;
 
     if (mpTargetSlideSorter->GetProperties()->IsUIReadOnly())
@@ -115,7 +115,7 @@ void DragAndDropContext::SetTargetSlideSorter (
     const InsertionIndicatorHandler::Mode eMode,
     const bool bIsOverSourceView)
 {
-    if (mpTargetSlideSorter != NULL)
+    if (mpTargetSlideSorter != nullptr)
     {
         mpTargetSlideSorter->GetController().GetScrollBarManager().StopAutoScroll();
         mpTargetSlideSorter->GetController().GetInsertionIndicatorHandler()->End(
@@ -124,7 +124,7 @@ void DragAndDropContext::SetTargetSlideSorter (
 
     mpTargetSlideSorter = pSlideSorter;
 
-    if (mpTargetSlideSorter != NULL)
+    if (mpTargetSlideSorter != nullptr)
     {
         mpTargetSlideSorter->GetController().GetInsertionIndicatorHandler()->Start(
             bIsOverSourceView);

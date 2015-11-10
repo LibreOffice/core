@@ -45,7 +45,7 @@ SdAnimationInfo::SdAnimationInfo(SdrObject& rObject)
                  mbDimHide                  (false),
                  mbSoundOn                  (false),
                  mbPlayFull                 (false),
-                 mpPathObj                  (NULL),
+                 mpPathObj                  (nullptr),
                  meClickAction              (presentation::ClickAction_NONE),
                  meSecondEffect             (presentation::AnimationEffect_NONE),
                  meSecondSpeed              (presentation::AnimationSpeed_SLOW),
@@ -74,7 +74,7 @@ SdAnimationInfo::SdAnimationInfo(const SdAnimationInfo& rAnmInfo, SdrObject& rOb
                  maSoundFile                (rAnmInfo.maSoundFile),
                  mbSoundOn                  (rAnmInfo.mbSoundOn),
                  mbPlayFull                 (rAnmInfo.mbPlayFull),
-                 mpPathObj                  (NULL),
+                 mpPathObj                  (nullptr),
                  meClickAction              (rAnmInfo.meClickAction),
                  meSecondEffect             (rAnmInfo.meSecondEffect),
                  meSecondSpeed              (rAnmInfo.meSecondSpeed),
@@ -97,7 +97,7 @@ SdAnimationInfo::~SdAnimationInfo()
 SdrObjUserData* SdAnimationInfo::Clone(SdrObject* pObject) const
 {
     DBG_ASSERT( pObject, "SdAnimationInfo::Clone(), pObject must not be null!" );
-    if( pObject == 0 )
+    if( pObject == nullptr )
         pObject = &mrObject;
 
     return new SdAnimationInfo(*this, *pObject );

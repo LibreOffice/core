@@ -265,7 +265,7 @@ void ViewShellManager::ActivateViewShell (ViewShell* pViewShell)
 
 void ViewShellManager::DeactivateViewShell (const ViewShell* pShell)
 {
-    if (mbValid && pShell!=NULL)
+    if (mbValid && pShell!=nullptr)
         mpImpl->DeactivateViewShell(*pShell);
 }
 
@@ -298,13 +298,13 @@ void ViewShellManager::InvalidateAllSubShells (ViewShell* pViewShell)
 
 void ViewShellManager::ActivateShell (SfxShell* pShell)
 {
-    if (mbValid && pShell!=NULL)
+    if (mbValid && pShell!=nullptr)
         mpImpl->ActivateShell(*pShell);
 }
 
 void ViewShellManager::DeactivateShell (const SfxShell* pShell)
 {
-    if (mbValid && pShell!=NULL)
+    if (mbValid && pShell!=nullptr)
         mpImpl->DeactivateShell(*pShell);
 }
 
@@ -319,7 +319,7 @@ SfxShell* ViewShellManager::GetShell (ShellId nId) const
     if (mbValid)
         return mpImpl->GetShell(nId);
     else
-        return NULL;
+        return nullptr;
 }
 
 SfxShell* ViewShellManager::GetTopShell() const
@@ -327,7 +327,7 @@ SfxShell* ViewShellManager::GetTopShell() const
     if (mbValid)
         return mpImpl->GetTopShell();
     else
-        return NULL;
+        return nullptr;
 }
 
 SfxShell* ViewShellManager::GetTopViewShell() const
@@ -335,7 +335,7 @@ SfxShell* ViewShellManager::GetTopViewShell() const
     if (mbValid)
         return mpImpl->GetTopViewShell();
     else
-        return NULL;
+        return nullptr;
 }
 
 void ViewShellManager::Shutdown()
@@ -369,11 +369,11 @@ ViewShellManager::Implementation::Implementation (
       mnUpdateLockCount(0),
       mbKeepMainViewShellOnTop(false),
       mbShellStackIsUpToDate(true),
-      mpFormShell(NULL),
-      mpFormShellParent(NULL),
+      mpFormShell(nullptr),
+      mpFormShellParent(nullptr),
       mbFormShellAboveParent(true),
-      mpTopShell(NULL),
-      mpTopViewShell(NULL)
+      mpTopShell(nullptr),
+      mpTopViewShell(nullptr)
 {
     (void)rManager;
 }
@@ -427,10 +427,10 @@ void ViewShellManager::Implementation::ActivateViewShell (ViewShell* pViewShell)
 
     // Register as window listener so that the shells of the current
     // window can be moved to the top of the shell stack.
-    if (aResult.mpShell != NULL)
+    if (aResult.mpShell != nullptr)
     {
         vcl::Window* pWindow = aResult.GetWindow();
-        if (pWindow != NULL)
+        if (pWindow != nullptr)
         {
             pWindow->AddEventListener(
                 LINK(this, ViewShellManager::Implementation, WindowEventHandler));
@@ -491,7 +491,7 @@ void ViewShellManager::Implementation::ActivateShell (SfxShell& rShell)
 void ViewShellManager::Implementation::ActivateShell (const ShellDescriptor& rDescriptor)
 {
     // Put shell on top of the active view shells.
-    if (rDescriptor.mpShell != NULL)
+    if (rDescriptor.mpShell != nullptr)
     {
         // Determine where to put the view shell on the stack.  By default
         // it is put on top of the stack.  When the view shell of the center
@@ -571,7 +571,7 @@ void ViewShellManager::Implementation::ActivateSubShell (
     // Add just the id of the sub shell. The actual shell is created
     // later in CreateShells().
     UpdateLock aLock (*this);
-    rList.push_back(ShellDescriptor(NULL, nId));
+    rList.push_back(ShellDescriptor(nullptr, nId));
 }
 
 void ViewShellManager::Implementation::DeactivateSubShell (
@@ -592,7 +592,7 @@ void ViewShellManager::Implementation::DeactivateSubShell (
     if (iShell == rList.end())
         return;
     SfxShell* pShell = iShell->mpShell;
-    if (pShell == NULL)
+    if (pShell == nullptr)
         return;
 
     UpdateLock aLock (*this);
@@ -615,7 +615,7 @@ void ViewShellManager::Implementation::MoveToTop (const SfxShell& rShell)
     // initialized.  Without dispatcher we can not rebuild the shell stack
     // to move the requested shell to the top.  So return right away instead
     // of making a mess without being able to clean up afterwards.
-    if (mrBase.GetDispatcher() == NULL)
+    if (mrBase.GetDispatcher() == nullptr)
         return;
 
     ActiveShellList::iterator iShell (::std::find_if (
@@ -682,7 +682,7 @@ SfxShell* ViewShellManager::Implementation::GetShell (ShellId nId) const
 {
     ::osl::MutexGuard aGuard (maMutex);
 
-    SfxShell* pShell = NULL;
+    SfxShell* pShell = nullptr;
 
     // First search the active view shells.
     ActiveShellList::const_iterator iShell (
@@ -759,16 +759,16 @@ void ViewShellManager::Implementation::UpdateShellStack()
 
     // Remember the undo manager from the top-most shell on the stack.
     SfxShell* pTopMostShell = mrBase.GetSubShell(0);
-    ::svl::IUndoManager* pUndoManager = (pTopMostShell!=NULL)
+    ::svl::IUndoManager* pUndoManager = (pTopMostShell!=nullptr)
         ? pTopMostShell->GetUndoManager()
-        : NULL;
+        : nullptr;
 
     // 1. Create the missing shells.
     CreateShells();
 
     // Update the pointer to the top-most active view shell.
     mpTopViewShell = (maActiveViewShells.empty())
-        ? 0 : maActiveViewShells.begin()->mpShell;
+        ? nullptr : maActiveViewShells.begin()->mpShell;
 
 
     // 2. Create the internal target stack.
@@ -778,7 +778,7 @@ void ViewShellManager::Implementation::UpdateShellStack()
     // 3. Get SFX shell stack.
     ShellStack aSfxShellStack;
     sal_uInt16 nIndex (0);
-    while (mrBase.GetSubShell(nIndex)!=NULL)
+    while (mrBase.GetSubShell(nIndex)!=nullptr)
         ++nIndex;
     aSfxShellStack.reserve(nIndex);
     while (nIndex-- > 0)
@@ -827,13 +827,13 @@ void ViewShellManager::Implementation::UpdateShellStack()
         if (mbShellStackIsUpToDate)
             break;
     }
-    if (mrBase.GetDispatcher() != NULL)
+    if (mrBase.GetDispatcher() != nullptr)
         mrBase.GetDispatcher()->Flush();
 
     // Update the pointer to the top-most shell and set its undo manager
     // to the one of the previous top-most shell.
     mpTopShell = mrBase.GetSubShell(0);
-    if (mpTopShell!=NULL && pUndoManager!=NULL && mpTopShell->GetUndoManager()==NULL)
+    if (mpTopShell!=nullptr && pUndoManager!=nullptr && mpTopShell->GetUndoManager()==nullptr)
         mpTopShell->SetUndoManager(pUndoManager);
 
     // Finally tell an invocation of this method on a higher level that it can (has
@@ -852,9 +852,9 @@ void ViewShellManager::Implementation::TakeShellsFromStack (const SfxShell* pShe
 
     // Remember the undo manager from the top-most shell on the stack.
     SfxShell* pTopMostShell = mrBase.GetSubShell(0);
-    ::svl::IUndoManager* pUndoManager = (pTopMostShell!=NULL)
+    ::svl::IUndoManager* pUndoManager = (pTopMostShell!=nullptr)
         ? pTopMostShell->GetUndoManager()
-        : NULL;
+        : nullptr;
 
 #if OSL_DEBUG_LEVEL >= 2
     SAL_INFO("sd.view", OSL_THIS_FUNC << "TakeShellsFromStack( " << pShell << ")");
@@ -866,18 +866,18 @@ void ViewShellManager::Implementation::TakeShellsFromStack (const SfxShell* pShe
     for (sal_uInt16 nIndex=0; true; nIndex++)
     {
         SfxShell* pShellOnStack = mrBase.GetSubShell(nIndex);
-        if (pShellOnStack == NULL)
+        if (pShellOnStack == nullptr)
         {
             // Set pShell to NULL to indicate the following code that the
             // shell is not on the stack.
-            pShell = NULL;
+            pShell = nullptr;
             break;
         }
         else if (pShellOnStack == pShell)
             break;
     }
 
-    if (pShell != NULL)
+    if (pShell != nullptr)
     {
         // 1. Deactivate our shells on the stack before they are removed so
         // that during the Deactivation() calls the stack is still intact.
@@ -900,13 +900,13 @@ void ViewShellManager::Implementation::TakeShellsFromStack (const SfxShell* pShe
         }
 
         // 3. Update the stack.
-        if (mrBase.GetDispatcher() != NULL)
+        if (mrBase.GetDispatcher() != nullptr)
             mrBase.GetDispatcher()->Flush();
 
         // Update the pointer to the top-most shell and set its undo manager
         // to the one of the previous top-most shell.
         mpTopShell = mrBase.GetSubShell(0);
-        if (mpTopShell!=NULL && pUndoManager!=NULL && mpTopShell->GetUndoManager()==NULL)
+        if (mpTopShell!=nullptr && pUndoManager!=nullptr && mpTopShell->GetUndoManager()==nullptr)
             mpTopShell->SetUndoManager(pUndoManager);
     }
 
@@ -934,9 +934,9 @@ void ViewShellManager::Implementation::CreateShells()
             SubShellSubList::iterator iSubShell;
             for (iSubShell=rList.begin(); iSubShell!=rList.end(); ++iSubShell)
             {
-                if (iSubShell->mpShell == NULL)
+                if (iSubShell->mpShell == nullptr)
                 {
-                    *iSubShell = CreateSubShell(iShell->mpShell,iSubShell->mnId,NULL,NULL);
+                    *iSubShell = CreateSubShell(iShell->mpShell,iSubShell->mnId,nullptr,nullptr);
                 }
             }
         }
@@ -954,7 +954,7 @@ void ViewShellManager::Implementation::CreateTargetStack (ShellStack& rStack) co
     {
         // Possibly place the form shell below the current view shell.
         if ( ! mbFormShellAboveParent
-            && mpFormShell!=NULL
+            && mpFormShell!=nullptr
             && iViewShell->mpShell==mpFormShellParent)
         {
             rStack.push_back(mpFormShell);
@@ -965,7 +965,7 @@ void ViewShellManager::Implementation::CreateTargetStack (ShellStack& rStack) co
 
         // Possibly place the form shell above the current view shell.
         if (mbFormShellAboveParent
-            && mpFormShell!=NULL
+            && mpFormShell!=nullptr
             && iViewShell->mpShell==mpFormShellParent)
         {
             rStack.push_back(mpFormShell);
@@ -1044,11 +1044,11 @@ ShellDescriptor ViewShellManager::Implementation::CreateSubShell (
     for (FactoryList::const_iterator iFactory=aRange.first; iFactory!=aRange.second; ++iFactory)
     {
         SharedShellFactory pFactory = iFactory->second;
-        if (pFactory != 0)
+        if (pFactory != nullptr)
             aResult.mpShell = pFactory->CreateShell(nShellId, pParentWindow, pFrameView);
 
         // Exit the loop when the shell has been successfully created.
-        if (aResult.mpShell != NULL)
+        if (aResult.mpShell != nullptr)
         {
             aResult.mpFactory = pFactory;
             aResult.mnId = nShellId;
@@ -1062,13 +1062,13 @@ ShellDescriptor ViewShellManager::Implementation::CreateSubShell (
 void ViewShellManager::Implementation::DestroyViewShell (
     ShellDescriptor& rDescriptor)
 {
-    OSL_ASSERT(rDescriptor.mpShell != NULL);
+    OSL_ASSERT(rDescriptor.mpShell != nullptr);
 
     if (rDescriptor.mbIsListenerAddedToWindow)
     {
         rDescriptor.mbIsListenerAddedToWindow = false;
         vcl::Window* pWindow = rDescriptor.GetWindow();
-        if (pWindow != NULL)
+        if (pWindow != nullptr)
         {
             pWindow->RemoveEventListener(
                 LINK(this, ViewShellManager::Implementation, WindowEventHandler));
@@ -1082,7 +1082,7 @@ void ViewShellManager::Implementation::DestroyViewShell (
         maShellFactories.erase(aRange.first, aRange.second);
 
     // Release the shell.
-    if (rDescriptor.mpFactory.get() != NULL)
+    if (rDescriptor.mpFactory.get() != nullptr)
         rDescriptor.mpFactory->ReleaseShell(rDescriptor.mpShell);
 }
 
@@ -1091,7 +1091,7 @@ void ViewShellManager::Implementation::DestroySubShell (
     const ShellDescriptor& rDescriptor)
 {
     (void)rParentShell;
-    OSL_ASSERT(rDescriptor.mpFactory.get() != NULL);
+    OSL_ASSERT(rDescriptor.mpFactory.get() != nullptr);
     rDescriptor.mpFactory->ReleaseShell(rDescriptor.mpShell);
 }
 
@@ -1105,7 +1105,7 @@ void ViewShellManager::Implementation::InvalidateAllSubShells (const SfxShell* p
         SubShellSubList& rList (iList->second);
         SubShellSubList::iterator iShell;
         for (iShell=rList.begin(); iShell!=rList.end(); ++iShell)
-            if (iShell->mpShell != NULL)
+            if (iShell->mpShell != nullptr)
                 iShell->mpShell->Invalidate();
     }
 }
@@ -1122,10 +1122,10 @@ void ViewShellManager::Implementation::Shutdown()
         while ( ! maActiveViewShells.empty())
         {
             SfxShell* pShell = maActiveViewShells.front().mpShell;
-            if (pShell != NULL)
+            if (pShell != nullptr)
             {
                 ViewShell* pViewShell = dynamic_cast<ViewShell*>(pShell);
-                if (pViewShell != NULL)
+                if (pViewShell != nullptr)
                     DeactivateViewShell(*pViewShell);
                 else
                     DeactivateShell(*pShell);
@@ -1171,15 +1171,15 @@ void ViewShellManager::Implementation::DumpSfxShellStack()
 
 void ViewShellManager::Implementation::Deactivate (SfxShell* pShell)
 {
-    OSL_ASSERT(pShell!=NULL);
+    OSL_ASSERT(pShell!=nullptr);
 
     // We have to end a text edit for view shells that are to be taken from
     // the shell stack.
     ViewShell* pViewShell = dynamic_cast<ViewShell*>(pShell);
-    if (pViewShell != NULL)
+    if (pViewShell != nullptr)
     {
         sd::View* pView = pViewShell->GetView();
-        if (pView!=NULL && pView->IsTextEdit())
+        if (pView!=nullptr && pView->IsTextEdit())
         {
             pView->SdrEndTextEdit();
             pView->UnmarkAll();
@@ -1208,7 +1208,7 @@ void ViewShellManager::Implementation::SetFormShell (
 namespace {
 
 ShellDescriptor::ShellDescriptor()
-    : mpShell(NULL),
+    : mpShell(nullptr),
       mnId(0),
       mpFactory(),
       mbIsListenerAddedToWindow(false)
@@ -1248,7 +1248,7 @@ ShellDescriptor& ShellDescriptor::operator= (const ShellDescriptor& rDescriptor)
 bool ShellDescriptor::IsMainViewShell() const
 {
     ViewShell* pViewShell = dynamic_cast<ViewShell*>(mpShell);
-    if (pViewShell != NULL)
+    if (pViewShell != nullptr)
         return pViewShell->IsMainViewShell();
     else
         return false;
@@ -1257,10 +1257,10 @@ bool ShellDescriptor::IsMainViewShell() const
 vcl::Window* ShellDescriptor::GetWindow() const
 {
     ViewShell* pViewShell = dynamic_cast<ViewShell*>(mpShell);
-    if (pViewShell != NULL)
+    if (pViewShell != nullptr)
         return pViewShell->GetActiveWindow();
     else
-        return NULL;
+        return nullptr;
 }
 
 } // end of anonymous namespace

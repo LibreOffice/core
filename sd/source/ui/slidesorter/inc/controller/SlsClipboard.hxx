@@ -70,10 +70,10 @@ public:
 
     void HandleSlotCall (SfxRequest& rRequest);
 
-    void DoCut (vcl::Window* pWindow = 0);
-    void DoCopy (vcl::Window* pWindow = 0);
-    void DoPaste (vcl::Window* pWindow = 0);
-    void DoDelete (vcl::Window* pWindow = 0);
+    void DoCut (vcl::Window* pWindow = nullptr);
+    void DoCopy (vcl::Window* pWindow = nullptr);
+    void DoPaste (vcl::Window* pWindow = nullptr);
+    void DoDelete (vcl::Window* pWindow = nullptr);
 
     void StartDrag (
         const Point& rDragPt,
@@ -85,14 +85,14 @@ public:
     sal_Int8 AcceptDrop (
         const AcceptDropEvent& rEvt,
         DropTargetHelper& rTargetHelper,
-        ::sd::Window* pTargetWindow = NULL,
+        ::sd::Window* pTargetWindow = nullptr,
         sal_uInt16 nPage = SDRPAGE_NOTFOUND,
         sal_uInt16 nLayer = SDRPAGE_NOTFOUND );
 
     sal_Int8 ExecuteDrop (
         const ExecuteDropEvent& rEvt,
         DropTargetHelper& rTargetHelper,
-        ::sd::Window* pTargetWindow = NULL,
+        ::sd::Window* pTargetWindow = nullptr,
         sal_uInt16 nPage = SDRPAGE_NOTFOUND,
         sal_uInt16 nLayer = SDRPAGE_NOTFOUND);
 

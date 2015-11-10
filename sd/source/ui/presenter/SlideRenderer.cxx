@@ -108,12 +108,12 @@ Reference<rendering::XBitmap> SlideRenderer::createPreviewForCanvas (
 
     cppcanvas::CanvasSharedPtr pCanvas (
         cppcanvas::VCLFactory::createCanvas(rxCanvas));
-    if (pCanvas.get() != NULL)
+    if (pCanvas.get() != nullptr)
         return cppcanvas::VCLFactory::createBitmap(
             pCanvas,
             CreatePreview(rxSlide, rMaximalSize, nSuperSampleFactor))->getUNOBitmap();
     else
-        return NULL;
+        return nullptr;
 }
 
 awt::Size SAL_CALL SlideRenderer::calculatePreviewSize (
@@ -147,7 +147,7 @@ BitmapEx SlideRenderer::CreatePreview (
            std::exception)
 {
     const SdPage* pPage = SdPage::getImplementation(rxSlide);
-    if (pPage == NULL)
+    if (pPage == nullptr)
         throw lang::IllegalArgumentException("SlideRenderer::createPreview() called with invalid slide",
             static_cast<XWeak*>(this),
             0);

@@ -58,7 +58,7 @@ std::shared_ptr<CanvasUpdateRequester> CanvasUpdateRequester::Instance (
 CanvasUpdateRequester::CanvasUpdateRequester (
     const Reference<rendering::XSpriteCanvas>& rxCanvas)
     : mxCanvas(rxCanvas),
-      mnUserEventId(0),
+      mnUserEventId(nullptr),
       mbUpdateFlag(false)
 {
     Reference<lang::XComponent> xComponent (mxCanvas, UNO_QUERY);
@@ -70,13 +70,13 @@ CanvasUpdateRequester::CanvasUpdateRequester (
 
 CanvasUpdateRequester::~CanvasUpdateRequester()
 {
-    if (mnUserEventId != 0)
+    if (mnUserEventId != nullptr)
         Application::RemoveUserEvent(mnUserEventId);
 }
 
 void CanvasUpdateRequester::RequestUpdate (const bool bUpdateAll)
 {
-    if (mnUserEventId == 0)
+    if (mnUserEventId == nullptr)
     {
         mbUpdateFlag = bUpdateAll;
         mnUserEventId = Application::PostUserEvent(LINK(this, CanvasUpdateRequester, Callback));
@@ -89,7 +89,7 @@ void CanvasUpdateRequester::RequestUpdate (const bool bUpdateAll)
 
 IMPL_LINK_NOARG_TYPED(CanvasUpdateRequester, Callback, void*, void)
 {
-    mnUserEventId = 0;
+    mnUserEventId = nullptr;
     if (mxCanvas.is())
     {
         mxCanvas->updateScreen(mbUpdateFlag);

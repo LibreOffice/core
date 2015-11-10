@@ -60,7 +60,7 @@ public:
     NavDocInfo()
         : bName(false)
         , bActive(false)
-        , mpDocShell(NULL)
+        , mpDocShell(nullptr)
     {
     }
 
@@ -102,7 +102,7 @@ public:
     virtual void                KeyInput( const KeyEvent& rKEvt ) override;
 
     void                        InitTreeLB( const SdDrawDocument* pDoc );
-    void                        RefreshDocumentLB( const OUString* pDocName = NULL );
+    void                        RefreshDocumentLB( const OUString* pDocName = nullptr );
 
     bool                        InsertFile(const OUString& rFileName);
 

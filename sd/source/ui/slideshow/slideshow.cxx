@@ -78,7 +78,7 @@ namespace {
         FullScreenWorkWindow (
             const ::rtl::Reference<SlideShow>& rpSlideShow,
             ViewShellBase* pViewShellBase)
-            : WorkWindow(NULL, WB_HIDE | WB_CLIPCHILDREN),
+            : WorkWindow(nullptr, WB_HIDE | WB_CLIPCHILDREN),
               mpRestarter(new SlideShowRestarter(rpSlideShow, pViewShellBase))
         {}
 
@@ -131,16 +131,16 @@ SlideShow::SlideShow( SdDrawDocument* pDoc )
 , maPropSet(ImplGetPresentationPropertyMap(), SdrObject::GetGlobalDrawObjectItemPool())
 , mbIsInStartup(false)
 , mpDoc( pDoc )
-, mpCurrentViewShellBase( 0 )
-, mpFullScreenViewShellBase( 0 )
-, mpFullScreenFrameView( 0 )
-, mnInPlaceConfigEvent( 0 )
+, mpCurrentViewShellBase( nullptr )
+, mpFullScreenViewShellBase( nullptr )
+, mpFullScreenFrameView( nullptr )
+, mnInPlaceConfigEvent( nullptr )
 {
 }
 
 void SlideShow::ThrowIfDisposed() const throw (RuntimeException)
 {
-    if( mpDoc == 0 )
+    if( mpDoc == nullptr )
         throw DisposedException();
 }
 
@@ -336,7 +336,7 @@ void SAL_CALL SlideShow::setPropertyValue( const OUString& aPropertyName, const 
             if(pCustomShowList)
             {
                 SdCustomShow* pCustomShow;
-                for( pCustomShow = pCustomShowList->First(); pCustomShow != NULL; pCustomShow = pCustomShowList->Next() )
+                for( pCustomShow = pCustomShowList->First(); pCustomShow != nullptr; pCustomShow = pCustomShowList->Next() )
                 {
                     if( pCustomShow->GetName() == aShowName )
                         break;
@@ -551,7 +551,7 @@ Any SAL_CALL SlideShow::getPropertyValue( const OUString& PropertyName ) throw(U
     case ATTR_PRESENT_CUSTOMSHOW:
         {
             SdCustomShowList* pList = mpDoc->GetCustomShowList();
-            SdCustomShow* pShow = (pList && rPresSettings.mbCustomShow) ? pList->GetCurObject() : NULL;
+            SdCustomShow* pShow = (pList && rPresSettings.mbCustomShow) ? pList->GetCurObject() : nullptr;
             OUString aShowName;
 
             if(pShow)
@@ -624,12 +624,12 @@ void SAL_CALL SlideShow::start() throw(RuntimeException, std::exception)
 WorkWindow *SlideShow::GetWorkWindow()
 {
     if( !mpFullScreenViewShellBase )
-        return NULL;
+        return nullptr;
 
     PresentationViewShell* pShell = dynamic_cast<PresentationViewShell*>(mpFullScreenViewShellBase->GetMainViewShell().get());
 
     if( !pShell || !pShell->GetViewFrame() )
-        return NULL;
+        return nullptr;
 
     return dynamic_cast<WorkWindow*>(pShell->GetViewFrame()->GetTopFrame().GetWindow().GetParent());
 }
@@ -667,11 +667,11 @@ void SAL_CALL SlideShow::end()
         if( mpFullScreenFrameView )
         {
             delete mpFullScreenFrameView;
-            mpFullScreenFrameView = 0;
+            mpFullScreenFrameView = nullptr;
         }
 
         ViewShellBase* pFullScreenViewShellBase = mpFullScreenViewShellBase;
-        mpFullScreenViewShellBase = 0;
+        mpFullScreenViewShellBase = nullptr;
 
         // dispose before fullscreen window changes screens
         // (potentially). If this needs to be moved behind
@@ -696,7 +696,7 @@ void SAL_CALL SlideShow::end()
 
         if( pFullScreenViewShellBase )
         {
-            PresentationViewShell* pShell = NULL;
+            PresentationViewShell* pShell = nullptr;
             {
                 // Get the shell pointer in its own scope to be sure that
                 // the shared_ptr to the shell is released before DoClose()
@@ -787,7 +787,7 @@ void SAL_CALL SlideShow::end()
             if (pViewShell)
                 pViewShell->SwitchActiveViewFireFocus();
         }
-        mpCurrentViewShellBase = 0;
+        mpCurrentViewShellBase = nullptr;
     }
 }
 
@@ -828,7 +828,7 @@ void SAL_CALL SlideShow::startWithArguments(const Sequence< PropertyValue >& rAr
     mxCurrentSettings->SetArguments( rArguments );
 
     // if there is no view shell base set, use the current one or the first using this document
-    if( mpCurrentViewShellBase == 0 )
+    if( mpCurrentViewShellBase == nullptr )
     {
         // first check current
         ::sd::ViewShellBase* pBase = ::sd::ViewShellBase::GetViewShellBase( SfxViewFrame::Current() );
@@ -886,7 +886,7 @@ void SAL_CALL SlideShow::disposing()
     if( mnInPlaceConfigEvent )
     {
         Application::RemoveUserEvent( mnInPlaceConfigEvent );
-        mnInPlaceConfigEvent = 0;
+        mnInPlaceConfigEvent = nullptr;
     }
 
     if( mxController.is() )
@@ -895,9 +895,9 @@ void SAL_CALL SlideShow::disposing()
         mxController.clear();
     }
 
-    mpCurrentViewShellBase = 0;
-    mpFullScreenViewShellBase = 0;
-    mpDoc = 0;
+    mpCurrentViewShellBase = nullptr;
+    mpFullScreenViewShellBase = nullptr;
+    mpDoc = nullptr;
 }
 
 bool SlideShow::startPreview( const Reference< XDrawPage >& xDrawPage, const Reference< XAnimationNode >& xAnimationNode, vcl::Window* pParent )
@@ -927,7 +927,7 @@ bool SlideShow::startPreview( const Reference< XDrawPage >& xDrawPage, const Ref
 
 OutputDevice* SlideShow::getShowWindow()
 {
-    return mxController.is() ? mxController->mpShowWindow.get() : 0;
+    return mxController.is() ? mxController->mpShowWindow.get() : nullptr;
 }
 
 int SlideShow::getAnimationMode()
@@ -974,10 +974,10 @@ void SlideShow::activate( ViewShellBase& rBase )
     if( (mpFullScreenViewShellBase == &rBase) && !mxController.is() )
     {
         ::std::shared_ptr<PresentationViewShell> pShell = std::dynamic_pointer_cast<PresentationViewShell>(rBase.GetMainViewShell());
-        if(pShell.get() != NULL)
+        if(pShell.get() != nullptr)
         {
             pShell->FinishInitialization( mpFullScreenFrameView );
-            mpFullScreenFrameView = 0;
+            mpFullScreenFrameView = nullptr;
 
             CreateController( pShell.get(), pShell->GetView(), rBase.GetViewWindow() );
 
@@ -1071,7 +1071,7 @@ bool SlideShow::longpress(const CommandLongPressData& rLongPressData)
 
 void SlideShow::StartInPlacePresentationConfigurationCallback()
 {
-    if( mnInPlaceConfigEvent != 0 )
+    if( mnInPlaceConfigEvent != nullptr )
         Application::RemoveUserEvent( mnInPlaceConfigEvent );
 
     mnInPlaceConfigEvent = Application::PostUserEvent( LINK( this, SlideShow, StartInPlacePresentationConfigurationHdl ) );
@@ -1079,7 +1079,7 @@ void SlideShow::StartInPlacePresentationConfigurationCallback()
 
 IMPL_LINK_NOARG_TYPED(SlideShow, StartInPlacePresentationConfigurationHdl, void*, void)
 {
-    mnInPlaceConfigEvent = 0;
+    mnInPlaceConfigEvent = nullptr;
     StartInPlacePresentation();
 }
 
@@ -1118,7 +1118,7 @@ void SlideShow::StartInPlacePresentation()
         else
         {
             vcl::Window* pParentWindow = mxCurrentSettings->mpParentWindow;
-            if( pParentWindow == 0 )
+            if( pParentWindow == nullptr )
                 pParentWindow = mpCurrentViewShellBase->GetViewWindow();
 
             CreateController( pMainViewShell.get(), pMainViewShell->GetView(), pParentWindow );
@@ -1127,7 +1127,7 @@ void SlideShow::StartInPlacePresentation()
     else if( mxCurrentSettings->mpParentWindow )
     {
         // no current view shell, but parent window
-        CreateController( 0, 0, mxCurrentSettings->mpParentWindow );
+        CreateController( nullptr, nullptr, mxCurrentSettings->mpParentWindow );
     }
 
     if( mxController.is() )
@@ -1169,7 +1169,7 @@ void SlideShow::StartFullscreenPresentation( )
         // frame view of the current view shell.  This avoids that
         // changes made by the presentation have an effect on the other
         // view shells.
-        FrameView* pOriginalFrameView = 0;
+        FrameView* pOriginalFrameView = nullptr;
         ::std::shared_ptr<ViewShell> xShell(mpCurrentViewShellBase->GetMainViewShell());
         if (xShell.get())
             pOriginalFrameView = xShell->GetFrameView();
@@ -1184,7 +1184,7 @@ void SlideShow::StartFullscreenPresentation( )
         pNewFrame->SetPresentationMode(true);
 
         mpFullScreenViewShellBase = static_cast<ViewShellBase*>(pNewFrame->GetCurrentViewFrame()->GetViewShell());
-        if(mpFullScreenViewShellBase != NULL)
+        if(mpFullScreenViewShellBase != nullptr)
         {
             // The following GrabFocus() is responsible for activating the
             // new view shell.  Without it the screen remains blank (under

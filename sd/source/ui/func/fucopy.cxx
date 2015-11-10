@@ -82,7 +82,7 @@ void FuCopy::DoExecute( SfxRequest& rReq )
             // indicate color attribute
             SfxItemSet aAttr( mpDoc->GetPool() );
             mpView->GetAttributes( aAttr );
-            const SfxPoolItem*  pPoolItem = NULL;
+            const SfxPoolItem*  pPoolItem = nullptr;
 
             if( SfxItemState::SET == aAttr.GetItemState( XATTR_FILLSTYLE, true, &pPoolItem ) )
             {
@@ -102,7 +102,7 @@ void FuCopy::DoExecute( SfxRequest& rReq )
             SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
             if( pFact )
             {
-                std::unique_ptr<AbstractCopyDlg> pDlg(pFact->CreateCopyDlg(NULL, aSet, mpDoc->GetColorList(), mpView ));
+                std::unique_ptr<AbstractCopyDlg> pDlg(pFact->CreateCopyDlg(nullptr, aSet, mpDoc->GetColorList(), mpView ));
                 if (!pDlg)
                     return;
 
@@ -131,7 +131,7 @@ void FuCopy::DoExecute( SfxRequest& rReq )
         sal_uInt16              nNumber = 0;
         Color               aStartColor, aEndColor;
         bool                bColor = false;
-        const SfxPoolItem*  pPoolItem = NULL;
+        const SfxPoolItem*  pPoolItem = nullptr;
 
         // Count
         if( pArgs && SfxItemState::SET == pArgs->GetItemState( ATTR_COPY_NUMBER, true, &pPoolItem ) )
@@ -184,7 +184,7 @@ void FuCopy::DoExecute( SfxRequest& rReq )
 
         const SdrMarkList   aMarkList( mpView->GetMarkedObjectList() );
         const size_t nMarkCount = aMarkList.GetMarkCount();
-        SdrObject*          pObj = NULL;
+        SdrObject*          pObj = nullptr;
 
         // calculate number of possible copies
         aRect = mpView->GetAllMarkedRect();

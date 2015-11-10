@@ -86,7 +86,7 @@ void FuPresentationObjects::DoExecute( SfxRequest& )
     pOutlinerView->CreateSelectionList(aSelList);
 
     std::vector<Paragraph*>::const_iterator iter = aSelList.begin();
-    Paragraph* pPara = aSelList.empty() ? NULL : *iter;
+    Paragraph* pPara = aSelList.empty() ? nullptr : *iter;
 
     nDepth = pOutl->GetDepth(pOutl->GetAbsPos( pPara ) );
     bool bPage = ::Outliner::HasParaFlag( pPara, ParaFlag::ISPAGE );
@@ -140,7 +140,7 @@ void FuPresentationObjects::DoExecute( SfxRequest& )
             SfxStyleSheetBase& rStyleSheet = *pStyleSheet;
 
             SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-            std::unique_ptr<SfxAbstractTabDialog> pDlg(pFact ? pFact->CreateSdPresLayoutTemplateDlg( mpDocSh, NULL, SdResId( nDlgId ), rStyleSheet, ePO, pStyleSheetPool ) : 0);
+            std::unique_ptr<SfxAbstractTabDialog> pDlg(pFact ? pFact->CreateSdPresLayoutTemplateDlg( mpDocSh, nullptr, SdResId( nDlgId ), rStyleSheet, ePO, pStyleSheetPool ) : nullptr);
             if( pDlg && (pDlg->Execute() == RET_OK) )
             {
                 const SfxItemSet* pOutSet = pDlg->GetOutputItemSet();

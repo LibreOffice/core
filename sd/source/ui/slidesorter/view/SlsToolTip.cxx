@@ -69,11 +69,11 @@ void ToolTip::SetPage (const model::SharedPageDescriptor& rpDescriptor)
         {
             SdPage* pPage = mpDescriptor->GetPage();
             OUString sHelpText;
-            if (pPage != NULL)
+            if (pPage != nullptr)
                 sHelpText = pPage->GetName();
             else
             {
-                OSL_ASSERT(mpDescriptor->GetPage() != NULL);
+                OSL_ASSERT(mpDescriptor->GetPage() != nullptr);
             }
             if (sHelpText.isEmpty())
             {
@@ -125,7 +125,7 @@ void ToolTip::DoShow()
             return;
 
         vcl::Window* pParent (pWindow);
-        while (pParent!=NULL && pParent->GetParent()!=NULL)
+        while (pParent!=nullptr && pParent->GetParent()!=nullptr)
             pParent = pParent->GetParent();
         const Point aOffset (pWindow->GetWindowExtentsRelative(pParent).TopLeft());
 

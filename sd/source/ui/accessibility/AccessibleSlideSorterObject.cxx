@@ -178,7 +178,7 @@ OUString SAL_CALL AccessibleSlideSorterObject::getAccessibleName()
     const SolarMutexGuard aSolarGuard;
 
     SdPage* pPage = GetPage();
-    if (pPage != NULL)
+    if (pPage != nullptr)
         return pPage->GetName();
     else
         return OUString();
@@ -303,7 +303,7 @@ Reference<XAccessible> SAL_CALL
     AccessibleSlideSorterObject::getAccessibleAtPoint(const awt::Point& )
     throw (uno::RuntimeException, std::exception)
 {
-    return NULL;
+    return nullptr;
 }
 
 awt::Rectangle SAL_CALL AccessibleSlideSorterObject::getBounds()
@@ -449,10 +449,10 @@ SdPage* AccessibleSlideSorterObject::GetPage() const
 {
     ::sd::slidesorter::model::SharedPageDescriptor pDescriptor(
         mrSlideSorter.GetModel().GetPageDescriptor(mnPageNumber));
-    if (pDescriptor.get() != NULL)
+    if (pDescriptor.get() != nullptr)
         return pDescriptor->GetPage();
     else
-        return NULL;
+        return nullptr;
 }
 
 } // end of namespace ::accessibility

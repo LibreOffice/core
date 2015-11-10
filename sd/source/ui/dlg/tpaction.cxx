@@ -99,8 +99,8 @@ SdActionDlg::SdActionDlg (
 SdTPAction::SdTPAction(vcl::Window* pWindow, const SfxItemSet& rInAttrs)
     : SfxTabPage(pWindow, "InteractionPage",
         "modules/simpress/ui/interactionpage.ui", &rInAttrs)
-    , mpView(NULL)
-    , mpDoc(NULL)
+    , mpView(nullptr)
+    , mpDoc(nullptr)
     , bTreeUpdated(false)
 {
     get(m_pLbAction, "listbox");
@@ -188,8 +188,8 @@ void SdTPAction::SetView( const ::sd::View* pSdView )
 void SdTPAction::Construct()
 {
     // fill OLE-Actionlistbox
-    SdrOle2Obj* pOleObj = NULL;
-    SdrGrafObj* pGrafObj = NULL;
+    SdrOle2Obj* pOleObj = nullptr;
+    SdrGrafObj* pGrafObj = nullptr;
     bool        bOLEAction = false;
 
     if ( mpView->AreObjectsMarked() )

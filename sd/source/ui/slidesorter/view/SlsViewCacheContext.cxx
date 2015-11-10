@@ -50,7 +50,7 @@ void ViewCacheContext::NotifyPreviewCreation (
     const Bitmap&)
 {
     const model::SharedPageDescriptor pDescriptor (GetDescriptor(aKey));
-    if (pDescriptor.get() != NULL)
+    if (pDescriptor.get() != nullptr)
     {
         // Force a repaint that will trigger their re-creation.
         mrSlideSorter.GetView().RequestRepaint(pDescriptor);
@@ -114,8 +114,8 @@ model::SharedPageDescriptor ViewCacheContext::GetDescriptor (cache::CacheKey aKe
 
 css::uno::Reference<css::uno::XInterface> ViewCacheContext::GetModel()
 {
-    if (mrModel.GetDocument() == NULL)
-        return NULL;
+    if (mrModel.GetDocument() == nullptr)
+        return nullptr;
     else
         return mrModel.GetDocument()->getUnoModel();
 }

@@ -66,7 +66,7 @@ private:
     OUString  maURL2;
 
 public:
-                    explicit HtmlErrorContext(vcl::Window *pWin=0);
+                    explicit HtmlErrorContext(vcl::Window *pWin=nullptr);
                     virtual ~HtmlErrorContext() {};
 
     virtual bool    GetString( sal_uLong nErrId, OUString& rCtxStr ) override;
@@ -146,7 +146,7 @@ class HtmlExport
 
     static SdrTextObj* GetLayoutTextObject(SdrPage* pPage);
 
-    void SetDocColors( SdPage* pPage = NULL );
+    void SetDocColors( SdPage* pPage = nullptr );
 
     bool        CreateImagesForPresPages( bool bThumbnails = false );
     bool    CreateHtmlTextForPresPages();

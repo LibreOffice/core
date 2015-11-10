@@ -178,7 +178,7 @@ void DrawViewShell::GetNavigatorWinState( SfxItemSet& rSet )
         bEndless = xSlideshow->isEndless();
 
         // Get the page for the current page number.
-        SdPage* pPage = 0;
+        SdPage* pPage = nullptr;
         if( nCurrentPage < GetDoc()->GetSdPageCount( PK_STANDARD ) )
             pPage = GetDoc()->GetSdPage (nCurrentPage, PK_STANDARD);
 
@@ -189,7 +189,7 @@ void DrawViewShell::GetNavigatorWinState( SfxItemSet& rSet )
     {
         nState |= NAVBTN_PEN_DISABLED | NAVTLB_UPDATE;
 
-        if (mpActualPage != NULL)
+        if (mpActualPage != nullptr)
         {
             nCurrentPage = ( mpActualPage->GetPageNum() - 1 ) / 2;
             aPageName = mpActualPage->GetName();

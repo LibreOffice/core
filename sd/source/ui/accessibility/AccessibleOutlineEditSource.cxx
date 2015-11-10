@@ -68,7 +68,7 @@ namespace accessibility
             return &mTextForwarder;
         }
         else
-            return NULL;
+            return nullptr;
     }
 
     SvxViewForwarder* AccessibleOutlineEditSource::GetViewForwarder()
@@ -77,7 +77,7 @@ namespace accessibility
         if( IsValid() )
             return this;
         else
-            return NULL;
+            return nullptr;
     }
 
     SvxEditViewForwarder* AccessibleOutlineEditSource::GetEditViewForwarder( bool )
@@ -89,7 +89,7 @@ namespace accessibility
             return &mViewForwarder;
         }
         else
-            return NULL;
+            return nullptr;
     }
 
     void AccessibleOutlineEditSource::UpdateData()
@@ -179,7 +179,7 @@ namespace accessibility
             if( pHint && (pHint->GetId() == SFX_HINT_DYING) )
             {
                 bDispose = true;
-                mpOutliner = NULL;
+                mpOutliner = nullptr;
             }
         }
         else
@@ -197,8 +197,8 @@ namespace accessibility
         {
             if( mpOutliner )
                 mpOutliner->SetNotifyHdl( Link<EENotify&,void>() );
-            mpOutliner = NULL;
-            mpOutlinerView = NULL;
+            mpOutliner = nullptr;
+            mpOutlinerView = nullptr;
             Broadcast( TextHint( SFX_HINT_DYING ) );
         }
     }

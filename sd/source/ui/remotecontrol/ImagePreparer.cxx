@@ -113,7 +113,7 @@ uno::Sequence<sal_Int8> ImagePreparer::preparePreview(
     sal_uInt64 &rSize )
 {
     OUString aFileURL;
-    FileBase::createTempFile( 0, 0, &aFileURL );
+    FileBase::createTempFile( nullptr, nullptr, &aFileURL );
 
     uno::Reference< drawing::XGraphicExportFilter > xFilter =
         drawing::GraphicExportFilter::create( ::comphelper::getProcessComponentContext() );

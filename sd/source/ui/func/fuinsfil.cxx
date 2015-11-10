@@ -209,7 +209,7 @@ void FuInsertFile::DoExecute( SfxRequest& rReq )
 
                 while( aOtherIter != aOtherFilterVector.end() )
                 {
-                    if( ( pFilter = rMatcher.GetFilter4Mime( *aOtherIter ) ) != NULL )
+                    if( ( pFilter = rMatcher.GetFilter4Mime( *aOtherIter ) ) != nullptr )
                         lcl_AddFilter( aFilterVector, pFilter );
 
                     ++aOtherIter;
@@ -260,7 +260,7 @@ void FuInsertFile::DoExecute( SfxRequest& rReq )
     mpDocSh->SetWaitCursor( true );
 
     SfxMedium*          pMedium = new SfxMedium( aFile, StreamMode::READ | StreamMode::NOCREATE );
-    const SfxFilter*    pFilter = NULL;
+    const SfxFilter*    pFilter = nullptr;
 
     SfxGetpApp()->GetFilterMatcher().GuessFilter( *pMedium, &pFilter );
 
@@ -329,7 +329,7 @@ bool FuInsertFile::InsSDDinDrMode(SfxMedium* pMedium)
 
     mpDocSh->SetWaitCursor( false );
     SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-    std::unique_ptr<AbstractSdInsertPagesObjsDlg> pDlg(pFact ? pFact->CreateSdInsertPagesObjsDlg( NULL, mpDoc, pMedium, aFile ) : 0);
+    std::unique_ptr<AbstractSdInsertPagesObjsDlg> pDlg(pFact ? pFact->CreateSdInsertPagesObjsDlg( nullptr, mpDoc, pMedium, aFile ) : nullptr);
 
     if( !pDlg )
         return false;
@@ -351,8 +351,8 @@ bool FuInsertFile::InsSDDinDrMode(SfxMedium* pMedium)
            First, insert pages */
         std::vector<OUString> aBookmarkList = pDlg->GetList( 1 ); // pages
         bool bLink = pDlg->IsLink();
-        SdPage* pPage = NULL;
-        ::sd::View* pView = mpViewShell ? mpViewShell->GetView() : NULL;
+        SdPage* pPage = nullptr;
+        ::sd::View* pView = mpViewShell ? mpViewShell->GetView() : nullptr;
 
         if (pView)
         {
@@ -398,7 +398,7 @@ bool FuInsertFile::InsSDDinDrMode(SfxMedium* pMedium)
             if( bNameOK )
                 bOK = mpDoc->InsertBookmarkAsPage( aBookmarkList, &aExchangeList,
                                     bLink, bReplace, nPos,
-                                    false, NULL, true, true, false );
+                                    false, nullptr, true, true, false );
 
             aBookmarkList.clear();
             aExchangeList.clear();
@@ -409,7 +409,7 @@ bool FuInsertFile::InsSDDinDrMode(SfxMedium* pMedium)
 
         if( bNameOK )
             bOK = mpDoc->InsertBookmarkAsObject( aObjectBookmarkList, aExchangeList,
-                                bLink, NULL, NULL);
+                                bLink, nullptr, nullptr);
 
         if( pDlg->IsRemoveUnnessesaryMasterPages() )
             mpDoc->RemoveUnnecessaryMasterPages();
@@ -421,7 +421,7 @@ bool FuInsertFile::InsSDDinDrMode(SfxMedium* pMedium)
 void FuInsertFile::InsTextOrRTFinDrMode(SfxMedium* pMedium)
 {
     SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-    std::unique_ptr<AbstractSdInsertPagesObjsDlg> pDlg(pFact ? pFact->CreateSdInsertPagesObjsDlg(NULL, mpDoc, NULL, aFile ) : 0);
+    std::unique_ptr<AbstractSdInsertPagesObjsDlg> pDlg(pFact ? pFact->CreateSdInsertPagesObjsDlg(nullptr, mpDoc, nullptr, aFile ) : nullptr);
     if( !pDlg )
         return;
 
@@ -566,7 +566,7 @@ void FuInsertFile::InsTextOrRTFinOlMode(SfxMedium* pMedium)
     std::vector<Paragraph*> aSelList;
     rDocliner.GetView(0)->CreateSelectionList(aSelList);
 
-    Paragraph* pPara = aSelList.empty() ? NULL : *(aSelList.begin());
+    Paragraph* pPara = aSelList.empty() ? nullptr : *(aSelList.begin());
 
     // what should we insert?
     while (pPara && !Outliner::HasParaFlag(pPara, ParaFlag::ISPAGE))
@@ -728,17 +728,17 @@ bool FuInsertFile::InsSDDinOlMode(SfxMedium* pMedium)
 void FuInsertFile::GetSupportedFilterVector( ::std::vector< OUString >& rFilterVector )
 {
     SfxFilterMatcher&   rMatcher = SfxGetpApp()->GetFilterMatcher();
-    const SfxFilter*    pSearchFilter = NULL;
+    const SfxFilter*    pSearchFilter = nullptr;
 
     rFilterVector.clear();
 
-    if( ( pSearchFilter = rMatcher.GetFilter4Mime( "text/plain" )) != NULL )
+    if( ( pSearchFilter = rMatcher.GetFilter4Mime( "text/plain" )) != nullptr )
         rFilterVector.push_back( pSearchFilter->GetMimeType() );
 
-    if( ( pSearchFilter = rMatcher.GetFilter4Mime( "application/rtf" ) ) != NULL )
+    if( ( pSearchFilter = rMatcher.GetFilter4Mime( "application/rtf" ) ) != nullptr )
         rFilterVector.push_back( pSearchFilter->GetMimeType() );
 
-    if( ( pSearchFilter = rMatcher.GetFilter4Mime( "text/html" ) ) != NULL )
+    if( ( pSearchFilter = rMatcher.GetFilter4Mime( "text/html" ) ) != nullptr )
         rFilterVector.push_back( pSearchFilter->GetMimeType() );
 }
 

@@ -121,7 +121,7 @@ void SdTbxCtlDiaPages::StateChanged( sal_uInt16,
     {
         pFld->Enable();
 
-        const SfxUInt16Item* pItem = 0;
+        const SfxUInt16Item* pItem = nullptr;
         if ( eState == SfxItemState::DEFAULT )
         {
             pItem = dynamic_cast< const SfxUInt16Item* >( pState );

@@ -78,7 +78,7 @@ void DrawViewShell::GetCtrlState(SfxItemSet &rSet)
     if (rSet.GetItemState(SID_RELOAD) != SfxItemState::UNKNOWN)
     {
         // let "last version" of SFx en/disable
-        GetViewFrame()->GetSlotState (SID_RELOAD, NULL, &rSet);
+        GetViewFrame()->GetSlotState (SID_RELOAD, nullptr, &rSet);
     }
 
     if (SfxItemState::DEFAULT == rSet.GetItemState(SID_HYPERLINK_GETLINK))
@@ -207,7 +207,7 @@ void DrawViewShell::GetCtrlState(SfxItemSet &rSet)
     if ( SfxItemState::DEFAULT == rSet.GetItemState(SID_ATTR_YEAR2000) )
     {
         FmFormShell* pFormShell = GetViewShellBase().GetFormShellManager()->GetFormShell();
-        if (pFormShell != NULL)
+        if (pFormShell != nullptr)
         {
             sal_uInt16 nState = 0;
             if (pFormShell->GetY2KState(nState))
@@ -488,7 +488,7 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
 
             case SID_STYLE_WATERCAN:
             {
-                SfxPoolItem* pItem = NULL;
+                SfxPoolItem* pItem = nullptr;
                 GetViewFrame()->GetBindings().QueryState(SID_STYLE_FAMILY, pItem);
                 SfxUInt16Item* pFamilyItem = dynamic_cast<SfxUInt16Item*>(pItem);
                 if (pFamilyItem && SfxTemplate::NIdToSfxFamilyId(pFamilyItem->GetValue()) == SD_STYLE_FAMILY_PSEUDO)
@@ -504,7 +504,7 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
 
             case SID_STYLE_NEW:
             {
-                SfxPoolItem* pItem = NULL;
+                SfxPoolItem* pItem = nullptr;
                 GetViewFrame()->GetBindings().QueryState(SID_STYLE_FAMILY, pItem);
                 SfxUInt16Item* pFamilyItem = dynamic_cast<SfxUInt16Item*>(pItem);
                 if (pFamilyItem && SfxTemplate::NIdToSfxFamilyId(pFamilyItem->GetValue()) == SD_STYLE_FAMILY_PSEUDO)
@@ -517,7 +517,7 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
 
             case SID_STYLE_DRAGHIERARCHIE:
             {
-                SfxPoolItem* pItem = NULL;
+                SfxPoolItem* pItem = nullptr;
                 GetViewFrame()->GetBindings().QueryState(SID_STYLE_FAMILY, pItem);
                 SfxUInt16Item* pFamilyItem = dynamic_cast<SfxUInt16Item*>(pItem);
                 if (pFamilyItem && SfxTemplate::NIdToSfxFamilyId(pFamilyItem->GetValue()) == SD_STYLE_FAMILY_PSEUDO)
@@ -531,7 +531,7 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
                 // It is not possible to create PseudoStyleSheets 'by Example';
                 // normal style sheets need a selected object for that
 
-                SfxPoolItem* pItem = NULL;
+                SfxPoolItem* pItem = nullptr;
                 GetViewFrame()->GetBindings().QueryState(SID_STYLE_FAMILY, pItem);
                 SfxUInt16Item* pFamilyItem = dynamic_cast<SfxUInt16Item*>(pItem);
                 if (pFamilyItem)
@@ -579,7 +579,7 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
                 aNewAttr.Put( aEditAttr, false );
 
                 std::unique_ptr<SvxNumRule> pNumRule;
-                const SfxPoolItem* pTmpItem=NULL;
+                const SfxPoolItem* pTmpItem=nullptr;
                 sal_uInt16 nNumItemId = SID_ATTR_NUMBERING_RULE;
                 sal_uInt16 nActNumLvl = mpDrawView->GetSelectionLevel();
                 pTmpItem=GetNumBulletItem(aNewAttr, nNumItemId);

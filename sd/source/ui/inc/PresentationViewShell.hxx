@@ -39,7 +39,7 @@ private:
     static void InitInterface_Impl();
 
 public:
-    PresentationViewShell( SfxViewFrame* pFrame, ViewShellBase& rViewShellBase, vcl::Window* pParentWindow, FrameView* pFrameView = NULL);
+    PresentationViewShell( SfxViewFrame* pFrame, ViewShellBase& rViewShellBase, vcl::Window* pParentWindow, FrameView* pFrameView = nullptr);
     virtual ~PresentationViewShell();
 
     /** This method is used by a simple class that passes some

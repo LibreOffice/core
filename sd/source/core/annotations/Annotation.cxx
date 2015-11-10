@@ -58,7 +58,7 @@ public:
     explicit Annotation( const Reference< XComponentContext >& context, SdPage* pPage );
 
     SdPage* GetPage() const { return mpPage; }
-    SdrModel* GetModel() { return (mpPage != 0) ? mpPage->GetModel() : 0; }
+    SdrModel* GetModel() { return (mpPage != nullptr) ? mpPage->GetModel() : nullptr; }
 
     // XInterface:
     virtual Any SAL_CALL queryInterface(Type const & type) throw (RuntimeException, std::exception) override;
@@ -179,7 +179,7 @@ Annotation::Annotation( const Reference< XComponentContext >& context, SdPage* p
 // disposed, do it here.
 void SAL_CALL Annotation::disposing()
 {
-    mpPage = 0;
+    mpPage = nullptr;
     if( m_TextRange.is() )
     {
         m_TextRange->dispose();
@@ -249,7 +249,7 @@ RealPoint2D SAL_CALL Annotation::getPosition() throw (RuntimeException, std::exc
 
 void SAL_CALL Annotation::setPosition(const RealPoint2D & the_value) throw (RuntimeException, std::exception)
 {
-    prepareSet("Position", Any(), Any(), 0);
+    prepareSet("Position", Any(), Any(), nullptr);
     {
         osl::MutexGuard g(m_aMutex);
         createChangeUndo();
@@ -266,7 +266,7 @@ RealSize2D SAL_CALL Annotation::getSize() throw (RuntimeException, std::exceptio
 
 void SAL_CALL Annotation::setSize(const RealSize2D & the_value) throw (RuntimeException, std::exception)
 {
-    prepareSet("Size", Any(), Any(), 0);
+    prepareSet("Size", Any(), Any(), nullptr);
     {
         osl::MutexGuard g(m_aMutex);
         createChangeUndo();
@@ -282,7 +282,7 @@ OUString SAL_CALL Annotation::getAuthor() throw (RuntimeException, std::exceptio
 
 void SAL_CALL Annotation::setAuthor(const OUString & the_value) throw (RuntimeException, std::exception)
 {
-    prepareSet("Author", Any(), Any(), 0);
+    prepareSet("Author", Any(), Any(), nullptr);
     {
         osl::MutexGuard g(m_aMutex);
         createChangeUndo();
@@ -298,7 +298,7 @@ util::DateTime SAL_CALL Annotation::getDateTime() throw (RuntimeException, std::
 
 void SAL_CALL Annotation::setDateTime(const util::DateTime & the_value) throw (RuntimeException, std::exception)
 {
-    prepareSet("DateTime", Any(), Any(), 0);
+    prepareSet("DateTime", Any(), Any(), nullptr);
     {
         osl::MutexGuard g(m_aMutex);
         createChangeUndo();
@@ -323,7 +323,7 @@ void Annotation::createChangeUndo()
 Reference< XText > SAL_CALL Annotation::getTextRange() throw (RuntimeException, std::exception)
 {
     osl::MutexGuard g(m_aMutex);
-    if( !m_TextRange.is() && (mpPage != 0) )
+    if( !m_TextRange.is() && (mpPage != nullptr) )
     {
         m_TextRange = TextApiObject::create( static_cast< SdDrawDocument* >( mpPage->GetModel() ) );
     }
@@ -339,7 +339,7 @@ SdrUndoAction* CreateUndoInsertOrRemoveAnnotation( const Reference< XAnnotation 
     }
     else
     {
-        return 0;
+        return nullptr;
     }
 }
 

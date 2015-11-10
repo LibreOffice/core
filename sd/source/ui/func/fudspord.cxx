@@ -35,8 +35,8 @@ TYPEINIT1( FuDisplayOrder, FuPoor );
 
 FuDisplayOrder::FuDisplayOrder( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq)
 : FuPoor(pViewSh, pWin, pView, pDoc, rReq)
-, mpRefObj(NULL)
-, mpOverlay(0L)
+, mpRefObj(nullptr)
+, mpOverlay(nullptr)
 {
 }
 
@@ -50,7 +50,7 @@ void FuDisplayOrder::implClearOverlay()
     if(mpOverlay)
     {
         delete mpOverlay;
-        mpOverlay = 0L;
+        mpOverlay = nullptr;
     }
 }
 
@@ -90,7 +90,7 @@ bool FuDisplayOrder::MouseMove(const MouseEvent& rMEvt)
     }
     else
     {
-        mpRefObj = NULL;
+        mpRefObj = nullptr;
         implClearOverlay();
     }
 
@@ -102,7 +102,7 @@ bool FuDisplayOrder::MouseButtonUp(const MouseEvent& rMEvt)
     // remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
 
-    SdrPageView* pPV = NULL;
+    SdrPageView* pPV = nullptr;
     Point aPnt( mpWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
 
     if ( mpView->PickObj(aPnt, mpView->getHitTolLog(), mpRefObj, pPV) )

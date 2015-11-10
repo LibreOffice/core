@@ -77,8 +77,8 @@ SdNavigatorWin::SdNavigatorWin(
       // On changes of the DragType: adjust SelectionMode of TLB!
     , meDragType ( NAVIGATOR_DRAGTYPE_EMBEDDED )
     , mpBindings ( pInBindings )
-    , mpNavigatorCtrlItem( 0 )
-    , mpPageNameCtrlItem( 0 )
+    , mpNavigatorCtrlItem( nullptr )
+    , mpPageNameCtrlItem( nullptr )
     , maImageList ( SdResId( IL_NAVIGATR ) )
 {
     maTlbObjects->SetViewFrame( mpBindings->GetDispatcher()->GetFrame() );
@@ -141,7 +141,7 @@ SdNavigatorWin::SdNavigatorWin(
         maMinSize.Width() = nMinWidth;
     maMinSize.Height() -= 40;
     SfxDockingWindow* pDockingParent = dynamic_cast<SfxDockingWindow*>(GetParent());
-    if (pDockingParent != NULL)
+    if (pDockingParent != nullptr)
         pDockingParent->SetMinOutputSizePixel( maMinSize );
 
 }
@@ -200,16 +200,16 @@ void SdNavigatorWin::InitTreeLB( const SdDrawDocument* pDoc )
 
     // Restore the 'ShowAllShapes' flag from the last time (in this session)
     // that the navigator was shown.
-    if (pViewShell != NULL)
+    if (pViewShell != nullptr)
     {
         ::sd::FrameView* pFrameView = pViewShell->GetFrameView();
-        if (pFrameView != NULL)
+        if (pFrameView != nullptr)
             maTlbObjects->SetShowAllShapes(pFrameView->IsNavigatorShowingAllShapes(), false);
     }
 
     // Disable the shape filter drop down menu when there is a running slide
     // show.
-    if (pViewShell!=NULL && sd::SlideShow::IsRunning( pViewShell->GetViewShellBase() ))
+    if (pViewShell!=nullptr && sd::SlideShow::IsRunning( pViewShell->GetViewShellBase() ))
         maToolbox->EnableItem(TBI_SHAPE_FILTER, false);
     else
         maToolbox->EnableItem(TBI_SHAPE_FILTER);
@@ -260,7 +260,7 @@ NavigatorDragType SdNavigatorWin::GetNavigatorDragType()
 sd::DrawDocShell* SdNavigatorWin::GetDrawDocShell( const SdDrawDocument* pDoc )
 {
     if( !pDoc )
-        return NULL; // const as const can...
+        return nullptr; // const as const can...
     sd::DrawDocShell* pDocShell = pDoc->GetDocSh();
     return pDocShell;
 }
@@ -330,7 +330,7 @@ IMPL_LINK_TYPED( SdNavigatorWin, DropdownClickToolBoxHdl, ToolBox*, pBox, void )
                  HID_SD_NAVIGATOR_MENU1,
                  HID_SD_NAVIGATOR_MENU2,
                  HID_SD_NAVIGATOR_MENU3,
-                 0
+                 nullptr
             };
 
             for( sal_uInt16 nID = NAVIGATOR_DRAGTYPE_URL;
@@ -430,7 +430,7 @@ IMPL_LINK_NOARG_TYPED(SdNavigatorWin, SelectDocumentHdl, ListBox&, void)
     OUString aStrLb = maLbDocs->GetSelectEntry();
     long   nPos = maLbDocs->GetSelectEntryPos();
     bool   bFound = false;
-    ::sd::DrawDocShell* pDocShell = NULL;
+    ::sd::DrawDocShell* pDocShell = nullptr;
     NavDocInfo* pInfo = GetDocInfo();
 
     // is it a dragged object?
@@ -504,7 +504,7 @@ IMPL_LINK_TYPED( SdNavigatorWin, MenuSelectHdl, Menu *, pMenu, bool )
 
 IMPL_LINK_TYPED( SdNavigatorWin, ShapeFilterCallback, Menu *, pMenu, bool )
 {
-    if (pMenu != NULL)
+    if (pMenu != nullptr)
     {
         bool bShowAllShapes (maTlbObjects->GetShowAllShapes());
         sal_uInt16 nMenuId (pMenu->GetCurItemId());
@@ -528,16 +528,16 @@ IMPL_LINK_TYPED( SdNavigatorWin, ShapeFilterCallback, Menu *, pMenu, bool )
 
         // Remember the selection in the FrameView.
         NavDocInfo* pInfo = GetDocInfo();
-        if (pInfo != NULL)
+        if (pInfo != nullptr)
         {
             ::sd::DrawDocShell* pDocShell = pInfo->mpDocShell;
-            if (pDocShell != NULL)
+            if (pDocShell != nullptr)
             {
                 ::sd::ViewShell* pViewShell = pDocShell->GetViewShell();
-                if (pViewShell != NULL)
+                if (pViewShell != nullptr)
                 {
                     ::sd::FrameView* pFrameView = pViewShell->GetFrameView();
-                    if (pFrameView != NULL)
+                    if (pFrameView != nullptr)
                     {
                         pFrameView->SetIsNavigatorShowingAllShapes(bShowAllShapes);
                     }
@@ -608,7 +608,7 @@ bool SdNavigatorWin::InsertFile(const OUString& rFileName)
     else
     {
         // show dragged-in document
-        const SfxFilter* pFilter = NULL;
+        const SfxFilter* pFilter = nullptr;
         ErrCode nErr = 0;
 
         if (aFileName != maDropFileName)
@@ -753,12 +753,12 @@ NavDocInfo* SdNavigatorWin::GetDocInfo()
     {
         if( nPos == 0 )
         {
-            return NULL;
+            return nullptr;
         }
         nPos--;
     }
 
-    return nPos < maDocList.size() ? &(maDocList[ nPos ]) : NULL;
+    return nPos < maDocList.size() ? &(maDocList[ nPos ]) : nullptr;
 }
 
 /**

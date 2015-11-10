@@ -31,15 +31,15 @@
 
 using namespace sd;
 
-static AvahiClient *client = NULL;
-static AvahiThreadedPoll *threaded_poll = NULL;
-static AvahiEntryGroup *group = NULL;
-static AvahiNetworkService *avahiService = NULL;
+static AvahiClient *client = nullptr;
+static AvahiThreadedPoll *threaded_poll = nullptr;
+static AvahiEntryGroup *group = nullptr;
+static AvahiNetworkService *avahiService = nullptr;
 
 static bool create_services(AvahiClient *c);
 
 static void entry_group_callback(AvahiEntryGroup *g, AvahiEntryGroupState state, AVAHI_GCC_UNUSED void *userdata) {
-    assert(g == group || group == NULL);
+    assert(g == group || group == nullptr);
     group = g;
 
     /* Called whenever the entry group state changes */
@@ -88,7 +88,7 @@ static bool create_services(AvahiClient *c) {
         return false;
 
     if (!group)
-        if (!(group = avahi_entry_group_new(c, entry_group_callback, NULL))) {
+        if (!(group = avahi_entry_group_new(c, entry_group_callback, nullptr))) {
             SAL_WARN("sdremote.wifi", "avahi_entry_group_new() failed: " << avahi_strerror(avahi_client_errno(c)));
             avahiService->clear();
             return false;
@@ -104,7 +104,7 @@ static bool create_services(AvahiClient *c) {
         snprintf(r, sizeof(r), "random=%i", nRandom);
         int ret = avahi_entry_group_add_service(
             group, AVAHI_IF_UNSPEC, AVAHI_PROTO_UNSPEC, static_cast<AvahiPublishFlags>(0),
-            avahiService->getName().c_str(), kREG_TYPE, NULL, NULL, 1599, "local", r, NULL
+            avahiService->getName().c_str(), kREG_TYPE, nullptr, nullptr, 1599, "local", r, NULL
         );
         if (ret < 0) {
 
@@ -175,7 +175,7 @@ void AvahiNetworkService::setup() {
        return;
    }
 
-   if (!(client = avahi_client_new(avahi_threaded_poll_get(threaded_poll), static_cast<AvahiClientFlags>(0), client_callback, NULL, &error))) {
+   if (!(client = avahi_client_new(avahi_threaded_poll_get(threaded_poll), static_cast<AvahiClientFlags>(0), client_callback, nullptr, &error))) {
        SAL_WARN("sdremote.wifi", "avahi_client_new failed");
        return;
    }

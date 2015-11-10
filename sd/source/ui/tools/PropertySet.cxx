@@ -44,7 +44,7 @@ void SAL_CALL PropertySet::disposing()
 Reference<beans::XPropertySetInfo> SAL_CALL PropertySet::getPropertySetInfo()
     throw(RuntimeException, std::exception)
 {
-    return NULL;
+    return nullptr;
 }
 
 void SAL_CALL PropertySet::setPropertyValue (

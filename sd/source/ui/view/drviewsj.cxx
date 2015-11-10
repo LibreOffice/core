@@ -268,10 +268,10 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
             {
                 const SvxFieldItem* pFldItem = pOLV->GetFieldAtSelection();
 
-                if( !( pFldItem && (0 != dynamic_cast< const SvxDateField *>( pFldItem->GetField() ) ||
-                                 0 != dynamic_cast< const SvxAuthorField *>( pFldItem->GetField() ) ||
-                                 0 != dynamic_cast< const SvxExtFileField *>( pFldItem->GetField() ) ||
-                                 0 != dynamic_cast< const SvxExtTimeField *>( pFldItem->GetField() ) ) ) )
+                if( !( pFldItem && (nullptr != dynamic_cast< const SvxDateField *>( pFldItem->GetField() ) ||
+                                 nullptr != dynamic_cast< const SvxAuthorField *>( pFldItem->GetField() ) ||
+                                 nullptr != dynamic_cast< const SvxExtFileField *>( pFldItem->GetField() ) ||
+                                 nullptr != dynamic_cast< const SvxExtTimeField *>( pFldItem->GetField() ) ) ) )
                 {
                     rSet.DisableItem( SID_MODIFY_FIELD );
                 }

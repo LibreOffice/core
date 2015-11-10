@@ -114,7 +114,7 @@ void FuScale::DoExecute( SfxRequest& rReq )
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         if(pFact)
         {
-            pDlg.reset(pFact->CreateSvxZoomDialog(NULL, aNewAttr));
+            pDlg.reset(pFact->CreateSvxZoomDialog(nullptr, aNewAttr));
         }
 
         if( pDlg )

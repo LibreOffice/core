@@ -307,7 +307,7 @@ void CustomAnimationListEntryItem::Paint(const Point& rPos, SvTreeListBox& rDev,
 
 SvLBoxItem* CustomAnimationListEntryItem::Create() const
 {
-    return NULL;
+    return nullptr;
 }
 
 void CustomAnimationListEntryItem::Clone( SvLBoxItem* )
@@ -415,7 +415,7 @@ void CustomAnimationTriggerEntryItem::Paint(const Point& rPos, SvTreeListBox& rD
 
 SvLBoxItem* CustomAnimationTriggerEntryItem::Create() const
 {
-    return NULL;
+    return nullptr;
 }
 
 void CustomAnimationTriggerEntryItem::Clone( SvLBoxItem* )
@@ -425,9 +425,9 @@ void CustomAnimationTriggerEntryItem::Clone( SvLBoxItem* )
 CustomAnimationList::CustomAnimationList( vcl::Window* pParent )
     : SvTreeListBox( pParent, WB_TABSTOP | WB_BORDER | WB_HASLINES | WB_HASBUTTONS | WB_HASBUTTONSATROOT )
     , mbIgnorePaint(false)
-    , mpController(0)
+    , mpController(nullptr)
     , mnLastGroupId(0)
-    , mpLastParentEntry(0)
+    , mpLastParentEntry(nullptr)
 {
 
     EnableContextMenuHandling();
@@ -512,8 +512,8 @@ void CustomAnimationList::clear()
 {
     Clear();
 
-    mpLastParentEntry = 0;
-    mxLastTargetShape = 0;
+    mpLastParentEntry = nullptr;
+    mxLastTargetShape = nullptr;
 }
 
 void CustomAnimationList::update( MainSequencePtr pMainSequence )
@@ -545,7 +545,7 @@ void CustomAnimationList::update()
     mbIgnorePaint = true;
     SetUpdateMode( false );
 
-    CustomAnimationListEntry* pEntry = 0;
+    CustomAnimationListEntry* pEntry = nullptr;
 
     std::list< CustomAnimationEffectPtr > aExpanded;
     std::list< CustomAnimationEffectPtr > aSelected;
@@ -608,7 +608,7 @@ void CustomAnimationList::update()
         long nFirstSelNew = -1;
         long nLastSelNew = -1;
         std::for_each( mpMainSequence->getBegin(), mpMainSequence->getEnd(), stl_append_effect_func( *this ) );
-        mpLastParentEntry = 0;
+        mpLastParentEntry = nullptr;
 
         const InteractiveSequenceList& rISL = mpMainSequence->getInteractiveSequenceList();
 
@@ -635,7 +635,7 @@ void CustomAnimationList::update()
                     pViewData->SetSelectable(false);
 
                 std::for_each( pIS->getBegin(), pIS->getEnd(), stl_append_effect_func( *this ) );
-                mpLastParentEntry = 0;
+                mpLastParentEntry = nullptr;
             }
         }
 
@@ -719,7 +719,7 @@ void CustomAnimationList::append( CustomAnimationEffectPtr pEffect )
     {
         aDescription = getDescription( aTarget, pEffect->getTargetSubItem() != ShapeAnimationSubType::ONLY_BACKGROUND );
 
-        SvTreeListEntry* pParentEntry = 0;
+        SvTreeListEntry* pParentEntry = nullptr;
 
         Reference< XShape > xTargetShape( pEffect->getTargetShape() );
         sal_Int32 nGroupId = pEffect->getGroupId();
@@ -834,7 +834,7 @@ bool CustomAnimationList::isExpanded( const CustomAnimationEffectPtr& pEffect ) 
     if( pEntry )
         pEntry = static_cast<CustomAnimationListEntry*>(GetParent( pEntry ));
 
-    return (pEntry == 0) || IsExpanded( pEntry );
+    return (pEntry == nullptr) || IsExpanded( pEntry );
 }
 
 EffectSequence CustomAnimationList::getSelection() const
@@ -943,7 +943,7 @@ void CustomAnimationList::Paint(vcl::RenderContext& rRenderContext, const Rectan
     SvTreeListBox::Paint(rRenderContext, rRect);
 
     // draw help text if list box is still empty
-    if( First() == 0 )
+    if( First() == nullptr )
     {
         Color aOldColor(rRenderContext.GetTextColor());
         rRenderContext.SetTextColor(rRenderContext.GetSettings().GetStyleSettings().GetDisableColor());

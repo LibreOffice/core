@@ -157,8 +157,8 @@ LayoutToolbarMenu::LayoutToolbarMenu( SlideLayoutController& rController, const 
 , mrController( rController )
 , mxFrame(xFrame)
 , mbInsertPage( bInsertPage )
-, mpLayoutSet1( 0 )
-, mpLayoutSet2( 0 )
+, mpLayoutSet1( nullptr )
+, mpLayoutSet2( nullptr )
 {
     DrawViewMode eMode = DrawViewMode_DRAW;
 
@@ -187,7 +187,7 @@ LayoutToolbarMenu::LayoutToolbarMenu( SlideLayoutController& rController, const 
     mpLayoutSet1 = createEmptyValueSetControl();
     mpLayoutSet1->SetSelectHdl( LINK( this, LayoutToolbarMenu, SelectValueSetHdl ) );
 
-    const snewfoil_value_info* pInfo = 0;
+    const snewfoil_value_info* pInfo = nullptr;
     sal_Int16 nColCount = 4;
     switch( eMode )
     {
@@ -348,7 +348,7 @@ void SAL_CALL SlideLayoutController::initialize( const css::uno::Sequence< css::
 {
     svt::PopupWindowController::initialize( aArguments );
 
-    ToolBox* pToolBox = 0;
+    ToolBox* pToolBox = nullptr;
     sal_uInt16 nId = 0;
     if ( getToolboxId( nId, &pToolBox ) )
     {

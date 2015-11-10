@@ -49,8 +49,8 @@ Pane::~Pane()
 
 void Pane::disposing()
 {
-    mxWindow = NULL;
-    mpWindow = NULL;
+    mxWindow = nullptr;
+    mpWindow = nullptr;
 }
 
 vcl::Window* Pane::GetWindow()
@@ -58,7 +58,7 @@ vcl::Window* Pane::GetWindow()
     if (mxWindow.is())
         return mpWindow;
     else
-        return NULL;
+        return nullptr;
 }
 
 //----- XPane -----------------------------------------------------------------
@@ -91,7 +91,7 @@ sal_Bool SAL_CALL Pane::isVisible()
     ThrowIfDisposed();
 
     const vcl::Window* pWindow = GetWindow();
-    if (pWindow != NULL)
+    if (pWindow != nullptr)
         return pWindow->IsVisible();
     else
         return false;
@@ -103,7 +103,7 @@ void SAL_CALL Pane::setVisible (sal_Bool bIsVisible)
     ThrowIfDisposed();
 
     vcl::Window* pWindow = GetWindow();
-    if (pWindow != NULL)
+    if (pWindow != nullptr)
         pWindow->Show(bIsVisible);
 }
 
@@ -112,10 +112,10 @@ Reference<css::accessibility::XAccessible> SAL_CALL Pane::getAccessible()
 {
     ThrowIfDisposed();
     vcl::Window* pWindow = GetWindow();
-    if (pWindow != NULL)
+    if (pWindow != nullptr)
         return pWindow->GetAccessible(false);
     else
-        return NULL;
+        return nullptr;
 }
 
 void SAL_CALL Pane::setAccessible (
@@ -124,7 +124,7 @@ void SAL_CALL Pane::setAccessible (
 {
     ThrowIfDisposed();
     vcl::Window* pWindow = GetWindow();
-    if (pWindow != NULL)
+    if (pWindow != nullptr)
         pWindow->SetAccessible(rxAccessible);
 }
 
@@ -179,7 +179,7 @@ Reference<rendering::XCanvas> Pane::CreateCanvas()
     {
         ::cppcanvas::SpriteCanvasSharedPtr pCanvas (
             cppcanvas::VCLFactory::createSpriteCanvas(*mpWindow));
-        if (pCanvas.get() != NULL)
+        if (pCanvas.get() != nullptr)
             xCanvas.set(pCanvas->getUNOSpriteCanvas(), UNO_QUERY);
     }
 

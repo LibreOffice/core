@@ -199,7 +199,7 @@ public:
     void                    Fill( const SdDrawDocument*, SfxMedium* pSfxMedium, const OUString& rDocName );
     void                    SetShowAllShapes (const bool bShowAllShapes, const bool bFill);
     bool                    GetShowAllShapes() const { return mbShowAllShapes;}
-    bool                    IsEqualToDoc( const SdDrawDocument* pInDoc = NULL );
+    bool                    IsEqualToDoc( const SdDrawDocument* pInDoc = nullptr );
     bool                    HasSelectedChildren( const OUString& rName );
     bool                    SelectEntry( const OUString& rName );
     OUString                GetSelectEntry();
@@ -219,7 +219,7 @@ public:
 
     std::vector<OUString> GetSelectEntryList (const sal_uInt16 nDepth) const;
 
-    SdDrawDocument*         GetBookmarkDoc(SfxMedium* pMedium = NULL);
+    SdDrawDocument*         GetBookmarkDoc(SfxMedium* pMedium = nullptr);
 
     bool                    IsLinkableSelected() const { return mbLinkableSelected; }
 

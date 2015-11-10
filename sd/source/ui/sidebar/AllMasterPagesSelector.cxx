@@ -83,8 +83,8 @@ VclPtr<vcl::Window> AllMasterPagesSelector::Create (
     const css::uno::Reference<css::ui::XSidebar>& rxSidebar)
 {
     SdDrawDocument* pDocument = rViewShellBase.GetDocument();
-    if (pDocument == NULL)
-        return NULL;
+    if (pDocument == nullptr)
+        return nullptr;
 
     std::shared_ptr<MasterPageContainer> pContainer (new MasterPageContainer());
 

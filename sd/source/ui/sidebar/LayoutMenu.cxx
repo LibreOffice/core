@@ -129,7 +129,7 @@ LayoutMenu::LayoutMenu (
       DropTargetHelper(this),
       mrBase(rViewShellBase),
       mbUseOwnScrollBar(false),
-      mxListener(NULL),
+      mxListener(nullptr),
       mbSelectionUpdatePending(true),
       mbIsMainViewChangePending(false),
       mxSidebar(rxSidebar),
@@ -231,7 +231,7 @@ AutoLayout LayoutMenu::GetSelectedAutoLayout()
     if ( ! IsNoSelection() && GetSelectItemId()!=0)
     {
         AutoLayout* pLayout = static_cast<AutoLayout*>(GetItemData(GetSelectItemId()));
-        if (pLayout != NULL)
+        if (pLayout != nullptr)
             aResult = *pLayout;
     }
 
@@ -318,21 +318,21 @@ void LayoutMenu::MouseButtonDown (const MouseEvent& rEvent)
 void LayoutMenu::InsertPageWithLayout (AutoLayout aLayout)
 {
     ViewShell* pViewShell = mrBase.GetMainViewShell().get();
-    if (pViewShell == NULL)
+    if (pViewShell == nullptr)
         return;
 
     SfxViewFrame* pViewFrame = mrBase.GetViewFrame();
-    if (pViewFrame == NULL)
+    if (pViewFrame == nullptr)
         return;
 
     SfxDispatcher* pDispatcher = pViewFrame->GetDispatcher();
-    if (pDispatcher == NULL)
+    if (pDispatcher == nullptr)
         return;
 
     // Call SID_INSERTPAGE with the right arguments.  This is because
     // the popup menu can not call this slot with arguments directly.
     SfxRequest aRequest (CreateRequest(SID_INSERTPAGE, aLayout));
-    if (aRequest.GetArgs() != NULL)
+    if (aRequest.GetArgs() != nullptr)
     {
         pDispatcher->Execute(
             SID_INSERTPAGE,
@@ -384,7 +384,7 @@ void LayoutMenu::AssignLayoutToSelectedSlides (AutoLayout aLayout)
     {
         // The view shell in the center pane has to be present.
         ViewShell* pMainViewShell = mrBase.GetMainViewShell().get();
-        if (pMainViewShell == NULL)
+        if (pMainViewShell == nullptr)
             break;
 
         // Determine if the current view is in an invalid master page mode.
@@ -397,7 +397,7 @@ void LayoutMenu::AssignLayoutToSelectedSlides (AutoLayout aLayout)
             case ViewShell::ST_IMPRESS:
             {
                 DrawViewShell* pDrawViewShell = static_cast<DrawViewShell*>(pMainViewShell);
-                if (pDrawViewShell != NULL)
+                if (pDrawViewShell != nullptr)
                     if (pDrawViewShell->GetEditMode() == EM_MASTERPAGE)
                         bMasterPageMode = true;
             }
@@ -416,7 +416,7 @@ void LayoutMenu::AssignLayoutToSelectedSlides (AutoLayout aLayout)
         // possible only some of the view shells in the center pane.  When
         // no valid slide sorter is available then ask the main view shell
         // for its current page.
-        SlideSorterViewShell* pSlideSorter = NULL;
+        SlideSorterViewShell* pSlideSorter = nullptr;
         switch (pMainViewShell->GetShellType())
         {
             case ViewShell::ST_IMPRESS:
@@ -427,13 +427,13 @@ void LayoutMenu::AssignLayoutToSelectedSlides (AutoLayout aLayout)
             default:
                 break;
         }
-        if (pSlideSorter != NULL)
+        if (pSlideSorter != nullptr)
         {
             // There is a slide sorter visible so get the list of selected pages from it.
             pPageSelection = pSlideSorter->GetPageSelection();
         }
 
-        if( (pSlideSorter == NULL) || (pPageSelection.get() == 0) || pPageSelection->empty() )
+        if( (pSlideSorter == nullptr) || (pPageSelection.get() == nullptr) || pPageSelection->empty() )
         {
             // No valid slide sorter available.  Ask the main view shell for
             // its current page.
@@ -447,7 +447,7 @@ void LayoutMenu::AssignLayoutToSelectedSlides (AutoLayout aLayout)
         ::std::vector<SdPage*>::iterator iPage;
         for (iPage=pPageSelection->begin(); iPage!=pPageSelection->end(); ++iPage)
             {
-                if ((*iPage) == NULL)
+                if ((*iPage) == nullptr)
                     continue;
 
                 // Call the SID_ASSIGN_LAYOUT slot with all the necessary parameters.
@@ -474,10 +474,10 @@ SfxRequest LayoutMenu::CreateRequest (
         sal_uInt8 aBackgroundObject (rLayerAdmin.GetLayerID(
             SD_RESSTR(STR_LAYER_BCKGRNDOBJ), false));
         ViewShell* pViewShell = mrBase.GetMainViewShell().get();
-        if (pViewShell == NULL)
+        if (pViewShell == nullptr)
             break;
         SdPage* pPage = pViewShell->GetActualPage();
-        if (pPage == NULL)
+        if (pPage == nullptr)
             break;
 
         SetOfByte aVisibleLayers (pPage->TRG_GetMasterPageVisibleLayers());
@@ -502,7 +502,7 @@ void LayoutMenu::Fill()
     SvtLanguageOptions aLanguageOptions;
     bool bVertical = aLanguageOptions.IsVerticalTextEnabled();
     SdDrawDocument* pDocument = mrBase.GetDocument();
-    bool bRightToLeft = (pDocument!=NULL
+    bool bRightToLeft = (pDocument!=nullptr
         && pDocument->GetDefaultWritingMode() == WritingMode_RL_TB);
 
     // Get URL of the view in the center pane.
@@ -521,7 +521,7 @@ void LayoutMenu::Fill()
     catch (RuntimeException&)
     {}
 
-    const snewfoil_value_info* pInfo = NULL;
+    const snewfoil_value_info* pInfo = nullptr;
     if (sCenterPaneViewName.equals(framework::FrameworkHelper::msNotesViewURL))
     {
         pInfo = notes;
@@ -537,12 +537,12 @@ void LayoutMenu::Fill()
     }
     else
     {
-        pInfo = NULL;
+        pInfo = nullptr;
     }
 
     Clear();
     int n = 0;
-    for (sal_uInt16 i=1; pInfo!=NULL&&pInfo->mnBmpResId!=0; i++,pInfo++)
+    for (sal_uInt16 i=1; pInfo!=nullptr&&pInfo->mnBmpResId!=0; i++,pInfo++)
     {
         if ((WritingMode_TB_RL != pInfo->meWritingMode) || bVertical)
         {
@@ -610,14 +610,14 @@ void LayoutMenu::Command (const CommandEvent& rEvent)
                 // Setup the menu.
                 std::shared_ptr<PopupMenu> pMenu (new PopupMenu(SdResId(RID_TASKPANE_LAYOUTMENU_POPUP)));
                 FloatingWindow* pMenuWindow = dynamic_cast<FloatingWindow*>(pMenu->GetWindow());
-                if (pMenuWindow != NULL)
+                if (pMenuWindow != nullptr)
                     pMenuWindow->SetPopupModeFlags(
                         pMenuWindow->GetPopupModeFlags() | FloatWinPopupFlags::NoMouseUpClose);
                 pMenu->SetSelectHdl(LINK(this, LayoutMenu, OnMenuItemSelected));
 
                 // Disable the SID_INSERTPAGE_LAYOUT_MENU item when
                 // the document is read-only.
-                const SfxPoolItem* pItem = NULL;
+                const SfxPoolItem* pItem = nullptr;
                 const SfxItemState aState (
                     mrBase.GetViewFrame()->GetDispatcher()->QueryState(SID_INSERTPAGE, pItem));
                 if (aState == SfxItemState::DISABLED)
@@ -641,9 +641,9 @@ IMPL_LINK_NOARG_TYPED(LayoutMenu, StateChangeHandler, const OUString&, void)
 
 IMPL_LINK_TYPED(LayoutMenu, OnMenuItemSelected, Menu*, pMenu, bool)
 {
-    if (pMenu == NULL)
+    if (pMenu == nullptr)
     {
-        OSL_ENSURE(pMenu!=NULL, "LayoutMenu::OnMenuItemSelected: illegal menu!");
+        OSL_ENSURE(pMenu!=nullptr, "LayoutMenu::OnMenuItemSelected: illegal menu!");
         return false;
     }
 
@@ -672,11 +672,11 @@ void LayoutMenu::UpdateSelection()
     {
         // Get current page of main view.
         ViewShell* pViewShell = mrBase.GetMainViewShell().get();
-        if (pViewShell == NULL)
+        if (pViewShell == nullptr)
             break;
 
         SdPage* pCurrentPage = pViewShell->getCurrentPage();
-        if (pCurrentPage == NULL)
+        if (pCurrentPage == nullptr)
             break;
 
         // Get layout of current page.

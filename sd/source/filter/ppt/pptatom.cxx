@@ -25,8 +25,8 @@ using namespace ppt;
 Atom::Atom( const DffRecordHeader& rRecordHeader, SvStream& rStream )
 : mrStream( rStream )
 , maRecordHeader( rRecordHeader )
-, mpFirstChild( 0 )
-, mpNextAtom( 0 )
+, mpFirstChild( nullptr )
+, mpNextAtom( nullptr )
 {
     if( isContainer() )
     {
@@ -34,7 +34,7 @@ Atom::Atom( const DffRecordHeader& rRecordHeader, SvStream& rStream )
         {
             DffRecordHeader aChildHeader;
 
-            Atom* pLastAtom = NULL;
+            Atom* pLastAtom = nullptr;
 
             // retrieve file size (to allow sanity checks)
             const sal_Size nStreamPos = mrStream.Tell();
@@ -54,7 +54,7 @@ Atom::Atom( const DffRecordHeader& rRecordHeader, SvStream& rStream )
 
                     if( pLastAtom )
                         pLastAtom->mpNextAtom = pAtom;
-                    if( mpFirstChild == NULL )
+                    if( mpFirstChild == nullptr )
                         mpFirstChild = pAtom;
 
                     pLastAtom = pAtom;
@@ -89,14 +89,14 @@ Atom* Atom::import( const DffRecordHeader& rRootRecordHeader, SvStream& rStCtrl 
     else
     {
         delete pRootAtom;
-        return NULL;
+        return nullptr;
     }
 }
 
 /** returns the next child atom after pLast with nRecType or NULL */
 const Atom* Atom::findNextChildAtom( sal_uInt16 nRecType, const Atom* pLast ) const
 {
-    Atom* pChild = pLast != NULL ? pLast->mpNextAtom : mpFirstChild;
+    Atom* pChild = pLast != nullptr ? pLast->mpNextAtom : mpFirstChild;
     while( pChild && pChild->maRecordHeader.nRecType != nRecType )
     {
         pChild = pChild->mpNextAtom;

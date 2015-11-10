@@ -97,7 +97,7 @@ void DrawDocShell::Construct( bool bClipboard )
     mbInDestruction = false;
     SetSlotFilter();     // setzt Filter zurueck
 
-    mbOwnDocument = mpDoc == 0;
+    mbOwnDocument = mpDoc == nullptr;
     if( mbOwnDocument )
         mpDoc = new SdDrawDocument(meDocType, this);
 
@@ -118,13 +118,13 @@ DrawDocShell::DrawDocShell(SfxObjectCreateMode eMode,
                                bool bDataObject,
                                DocumentType eDocumentType) :
     SfxObjectShell( eMode == SfxObjectCreateMode::INTERNAL ?  SfxObjectCreateMode::EMBEDDED : eMode),
-    mpDoc(NULL),
-    mpUndoManager(NULL),
-    mpPrinter(NULL),
-    mpViewShell(NULL),
-    mpFontList(NULL),
+    mpDoc(nullptr),
+    mpUndoManager(nullptr),
+    mpPrinter(nullptr),
+    mpViewShell(nullptr),
+    mpFontList(nullptr),
     meDocType(eDocumentType),
-    mpFilterSIDs(0),
+    mpFilterSIDs(nullptr),
     mbSdDataObj(bDataObject),
     mbOwnPrinter(false),
     mbNewDocument( true )
@@ -134,13 +134,13 @@ DrawDocShell::DrawDocShell(SfxObjectCreateMode eMode,
 
 DrawDocShell::DrawDocShell( SfxModelFlags nModelCreationFlags, bool bDataObject, DocumentType eDocumentType ) :
     SfxObjectShell( nModelCreationFlags ),
-    mpDoc(NULL),
-    mpUndoManager(NULL),
-    mpPrinter(NULL),
-    mpViewShell(NULL),
-    mpFontList(NULL),
+    mpDoc(nullptr),
+    mpUndoManager(nullptr),
+    mpPrinter(nullptr),
+    mpViewShell(nullptr),
+    mpFontList(nullptr),
     meDocType(eDocumentType),
-    mpFilterSIDs(0),
+    mpFilterSIDs(nullptr),
     mbSdDataObj(bDataObject),
     mbOwnPrinter(false),
     mbNewDocument( true )
@@ -153,12 +153,12 @@ DrawDocShell::DrawDocShell(SdDrawDocument* pDoc, SfxObjectCreateMode eMode,
                                DocumentType eDocumentType) :
     SfxObjectShell(eMode == SfxObjectCreateMode::INTERNAL ?  SfxObjectCreateMode::EMBEDDED : eMode),
     mpDoc(pDoc),
-    mpUndoManager(NULL),
-    mpPrinter(NULL),
-    mpViewShell(NULL),
-    mpFontList(NULL),
+    mpUndoManager(nullptr),
+    mpPrinter(nullptr),
+    mpViewShell(nullptr),
+    mpFontList(nullptr),
     meDocType(eDocumentType),
-    mpFilterSIDs(0),
+    mpFilterSIDs(nullptr),
     mbSdDataObj(bDataObject),
     mbOwnPrinter(false),
     mbNewDocument( true )
@@ -176,12 +176,12 @@ DrawDocShell::~DrawDocShell()
 
     mbInDestruction = true;
 
-    SetDocShellFunction(0);
+    SetDocShellFunction(nullptr);
 
     delete mpFontList;
 
     if( mpDoc )
-        mpDoc->SetSdrUndoManager( 0 );
+        mpDoc->SetSdrUndoManager( nullptr );
     delete mpUndoManager;
 
     if (mbOwnPrinter)
@@ -366,7 +366,7 @@ void DrawDocShell::CancelSearching()
 {
     if( dynamic_cast<FuSearch*>( mxDocShellFunction.get() ) )
     {
-        SetDocShellFunction(0);
+        SetDocShellFunction(nullptr);
     }
 }
 
@@ -421,8 +421,8 @@ void DrawDocShell::SetModified( bool bSet /* = true */ )
 // to get hands on the outliner and the text object.
 IMPL_LINK_TYPED(DrawDocShell, OnlineSpellCallback, SpellCallbackInfo&, rInfo, void)
 {
-    SdrObject* pObj = NULL;
-    SdrOutliner* pOutl = NULL;
+    SdrObject* pObj = nullptr;
+    SdrOutliner* pOutl = nullptr;
 
     if(GetViewShell())
     {

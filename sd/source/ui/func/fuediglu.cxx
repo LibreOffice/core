@@ -109,7 +109,7 @@ bool FuEditGluePoints::MouseButtonDown(const MouseEvent& rMEvt)
             if (mpView->IsGluePointMarked(aVEvt.pObj, aVEvt.nGlueId) && rMEvt.IsShift())
             {
                 mpView->UnmarkGluePoint(aVEvt.pObj, aVEvt.nGlueId, aVEvt.pPV);
-                pHdl = NULL;
+                pHdl = nullptr;
             }
 
             if (pHdl)
@@ -134,7 +134,7 @@ bool FuEditGluePoints::MouseButtonDown(const MouseEvent& rMEvt)
         else if (eHit == SDRHIT_MARKEDOBJECT && !rMEvt.IsShift() && !rMEvt.IsMod2())
         {
             // move object
-            mpView->BegDragObj(aMDPos, nullptr, NULL, nDrgLog);
+            mpView->BegDragObj(aMDPos, nullptr, nullptr, nDrgLog);
         }
         else if (eHit == SDRHIT_GLUEPOINT)
         {

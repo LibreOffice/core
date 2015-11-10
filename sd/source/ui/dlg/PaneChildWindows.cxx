@@ -66,7 +66,7 @@ PaneChildWindow::PaneChildWindow (
     SetHideNotDelete(true);
 
     ViewShellBase* pBase = ViewShellBase::GetViewShellBase(pBindings->GetDispatcher()->GetFrame());
-    if (pBase != NULL)
+    if (pBase != nullptr)
     {
         framework::FrameworkHelper::Instance(*pBase)->UpdateConfiguration();
     }
@@ -74,12 +74,12 @@ PaneChildWindow::PaneChildWindow (
 
 PaneChildWindow::~PaneChildWindow()
 {
-    ViewShellBase* pBase = NULL;
+    ViewShellBase* pBase = nullptr;
     PaneDockingWindow* pDockingWindow = dynamic_cast<PaneDockingWindow*>(GetWindow());
-    if (pDockingWindow != NULL)
+    if (pDockingWindow != nullptr)
         pBase = ViewShellBase::GetViewShellBase(
             pDockingWindow->GetBindings().GetDispatcher()->GetFrame());
-    if (pBase != NULL)
+    if (pBase != nullptr)
         framework::FrameworkHelper::Instance(*pBase)->UpdateConfiguration();
 }
 

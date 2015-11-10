@@ -121,7 +121,7 @@ TextObjectBar::TextObjectBar (
 
 TextObjectBar::~TextObjectBar()
 {
-    SetRepeatTarget(NULL);
+    SetRepeatTarget(nullptr);
 }
 
 void TextObjectBar::GetCharState( SfxItemSet& rSet )
@@ -277,7 +277,7 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
 
                         std::vector<Paragraph*> aSelList;
                         pOLV->CreateSelectionList(aSelList);
-                        Paragraph* pPara = aSelList.empty() ? NULL : *(aSelList.begin());
+                        Paragraph* pPara = aSelList.empty() ? nullptr : *(aSelList.begin());
 
                         // find out if we are a OutlineView
                         bool bIsOutlineView(OUTLINERMODE_OUTLINEVIEW == pOLV->GetOutliner()->GetMode());
@@ -331,7 +331,7 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
                         }
 
                         // disable when first para and 2nd is not a title
-                        pPara = aSelList.empty() ? NULL : *(aSelList.begin());
+                        pPara = aSelList.empty() ? nullptr : *(aSelList.begin());
 
                         if(!bDisableDown && bIsOutlineView
                             && pPara

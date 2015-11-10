@@ -95,7 +95,7 @@ public:
     // XEventListener
     virtual void SAL_CALL   disposing( const lang::EventObject& rEventObject ) throw (uno::RuntimeException, std::exception) override;
 
-    void                    ParentDestroyed() { mpParent = NULL; }
+    void                    ParentDestroyed() { mpParent = nullptr; }
 };
 
 ScannerEventListener::~ScannerEventListener()
@@ -118,7 +118,7 @@ DrawViewShell::DrawViewShell( SfxViewFrame* pFrame, ViewShellBase& rViewShellBas
           uno::Reference<frame::XController>(&rViewShellBase.GetDrawController()),
           sfx2::sidebar::EnumContext::Context_Default))
 {
-    if (pFrameViewArgument != NULL)
+    if (pFrameViewArgument != nullptr)
         mpFrameView = pFrameViewArgument;
     else
         mpFrameView = new FrameView(GetDoc());
@@ -138,7 +138,7 @@ DrawViewShell::~DrawViewShell()
     mpAnnotationManager.reset();
     mpViewOverlayManager.reset();
 
-    OSL_ASSERT (GetViewShell()!=NULL);
+    OSL_ASSERT (GetViewShell()!=nullptr);
 
     if( mxScannerListener.is() )
         static_cast< ScannerEventListener* >( mxScannerListener.get() )->ParentDestroyed();
@@ -146,7 +146,7 @@ DrawViewShell::~DrawViewShell()
     // Remove references to items within Svx3DWin
     // (maybe do a listening sometime in Svx3DWin)
     sal_uInt16 nId = Svx3DChildWindow::GetChildWindowId();
-    SfxChildWindow* pWindow = GetViewFrame() ? GetViewFrame()->GetChildWindow(nId) : NULL;
+    SfxChildWindow* pWindow = GetViewFrame() ? GetViewFrame()->GetChildWindow(nId) : nullptr;
     if(pWindow)
     {
         Svx3DWin* p3DWin = static_cast< Svx3DWin* > (pWindow->GetWindow());
@@ -188,7 +188,7 @@ DrawViewShell::~DrawViewShell()
     delete mpDrawView;
     // Set mpView to NULL so that the destructor of the ViewShell base class
     // does not access it.
-    mpView = mpDrawView = NULL;
+    mpView = mpDrawView = nullptr;
 
     mpFrameView->Disconnect();
     maTabControl.disposeAndClear();
@@ -199,10 +199,10 @@ DrawViewShell::~DrawViewShell()
  */
 void DrawViewShell::Construct(DrawDocShell* pDocSh, PageKind eInitialPageKind)
 {
-    mpActualPage = 0;
+    mpActualPage = nullptr;
     mbMousePosFreezed = false;
     mbReadOnly = GetDocSh()->IsReadOnly();
-    mpClipEvtLstnr = 0;
+    mpClipEvtLstnr = nullptr;
     mbPastePossible = false;
     mbIsLayerModeActive = false;
 
@@ -211,7 +211,7 @@ void DrawViewShell::Construct(DrawDocShell* pDocSh, PageKind eInitialPageKind)
 
     mpFrameView->Connect();
 
-    OSL_ASSERT (GetViewShell()!=NULL);
+    OSL_ASSERT (GetViewShell()!=nullptr);
 
     SetPool( &GetDoc()->GetPool() );
 
@@ -682,7 +682,7 @@ void DrawViewShell::GetStatusBarState(SfxItemSet& rSet)
         {
             SdrLayerAdmin& rLayerAdmin = GetDoc()->GetLayerAdmin();
             SdrLayerID nLayer = 0, nOldLayer = 0;
-            SdrObject* pObj = NULL;
+            SdrObject* pObj = nullptr;
             const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
             const size_t nMarkCount = rMarkList.GetMarkCount();
             bool bOneLayer = true;
@@ -733,7 +733,7 @@ void DrawViewShell::GetStatusBarState(SfxItemSet& rSet)
 void DrawViewShell::Notify (SfxBroadcaster&, const SfxHint& rHint)
 {
     const SfxSimpleHint* pSimple = dynamic_cast< const SfxSimpleHint* >(&rHint);
-    if (pSimple!=NULL && pSimple->GetId()==SFX_HINT_MODECHANGED)
+    if (pSimple!=nullptr && pSimple->GetId()==SFX_HINT_MODECHANGED)
     {
         // Change to selection when turning on read-only mode.
         if(GetDocSh()->IsReadOnly() && dynamic_cast< FuSelection* >( GetCurrentFunction().get() ) )

@@ -44,7 +44,7 @@ ToolBarModule::ToolBarModule (
     const Reference<frame::XController>& rxController)
     : ToolBarModuleInterfaceBase(m_aMutex),
       mxConfigurationController(),
-      mpBase(NULL),
+      mpBase(nullptr),
       mpToolBarManagerLock(),
       mbMainViewSwitchUpdatePending(false)
 {
@@ -54,7 +54,7 @@ ToolBarModule::ToolBarModule (
     {
         ::sd::DrawController* pController = reinterpret_cast<sd::DrawController*>(
             xTunnel->getSomething(sd::DrawController::getUnoTunnelId()));
-        if (pController != NULL)
+        if (pController != nullptr)
             mpBase = pController->GetViewShellBase();
     }
 
@@ -93,7 +93,7 @@ void SAL_CALL ToolBarModule::disposing()
     if (mxConfigurationController.is())
         mxConfigurationController->removeConfigurationChangeListener(this);
 
-    mxConfigurationController = NULL;
+    mxConfigurationController = nullptr;
 }
 
 void SAL_CALL ToolBarModule::notifyConfigurationChange (
@@ -139,7 +139,7 @@ void ToolBarModule::HandleUpdateStart()
     // well.  This way the ToolBarManager can optimize the releasing of
     // locks and arranging of updates of both tool bars and the view shell
     // stack.
-    if (mpBase != NULL)
+    if (mpBase != nullptr)
     {
         std::shared_ptr<ToolBarManager> pToolBarManager (mpBase->GetToolBarManager());
         mpToolBarManagerLock.reset(new ToolBarManager::UpdateLock(pToolBarManager));
@@ -161,7 +161,7 @@ void ToolBarModule::HandleUpdateEnd()
             FrameworkHelper::Instance(*mpBase));
         ViewShell* pViewShell
             = pFrameworkHelper->GetViewShell(FrameworkHelper::msCenterPaneURL).get();
-        if (pViewShell != NULL)
+        if (pViewShell != nullptr)
         {
             pToolBarManager->MainViewShellChanged(*pViewShell);
             pToolBarManager->SelectionHasChanged(
@@ -190,7 +190,7 @@ void SAL_CALL ToolBarModule::disposing (const lang::EventObject& rEvent)
         && rEvent.Source == mxConfigurationController)
     {
         // Without the configuration controller this class can do nothing.
-        mxConfigurationController = NULL;
+        mxConfigurationController = nullptr;
         dispose();
     }
 }

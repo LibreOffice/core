@@ -78,7 +78,7 @@ void FuConstructBezierPolygon::DoExecute( SfxRequest& rReq )
     const SfxItemSet* pArgs = rReq.GetArgs();
     if( pArgs )
     {
-        const SfxPoolItem*  pPoolItem = NULL;
+        const SfxPoolItem*  pPoolItem = nullptr;
         if( SfxItemState::SET == pArgs->GetItemState( SID_ADD_MOTION_PATH, true, &pPoolItem ) )
             maTargets = static_cast<const SfxUnoAnyItem*>( pPoolItem )->GetValue();
     }
@@ -177,7 +177,7 @@ bool FuConstructBezierPolygon::MouseButtonUp(const MouseEvent& rMEvt )
     if( bCreated && maTargets.hasValue() )
     {
         SdrPathObj* pPathObj = dynamic_cast< SdrPathObj* >( mpView->GetSdrPageView()->GetObjList()->GetObj( nCount ) );
-        SdPage* pPage = dynamic_cast< SdPage* >( pPathObj ? pPathObj->GetPage() : 0 );
+        SdPage* pPage = dynamic_cast< SdPage* >( pPathObj ? pPathObj->GetPage() : nullptr );
         if( pPage )
         {
             std::shared_ptr< sd::MainSequence > pMainSequence( pPage->getMainSequence() );
@@ -325,7 +325,7 @@ SdrObject* FuConstructBezierPolygon::CreateDefaultObject(const sal_uInt16 nID, c
 
     SdrObject* pObj = SdrObjFactory::MakeNewObject(
         mpView->GetCurrentObjInventor(), mpView->GetCurrentObjIdentifier(),
-        0L, mpDoc);
+        nullptr, mpDoc);
 
     if(pObj)
     {

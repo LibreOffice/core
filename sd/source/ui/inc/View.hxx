@@ -74,7 +74,7 @@ private:
     bool m_bReadOnly;
 public:
     OutlinerMasterViewFilter()
-        : m_pOutl(0)
+        : m_pOutl(nullptr)
         , m_bReadOnly(false)
     {
     }
@@ -90,19 +90,19 @@ public:
     View (
         SdDrawDocument& rDrawDoc,
         OutputDevice* pOutDev,
-        ViewShell* pViewSh=NULL);
+        ViewShell* pViewSh=nullptr);
     virtual ~View();
 
-    void                    CompleteRedraw( OutputDevice* pOutDev, const vcl::Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector = 0L) override;
+    void                    CompleteRedraw( OutputDevice* pOutDev, const vcl::Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector = nullptr) override;
 
     virtual bool            GetAttributes( SfxItemSet& rTargetSet, bool bOnlyHardAttr = false ) const;
     virtual bool            SetAttributes(const SfxItemSet& rSet, bool bReplaceAll = false);
     virtual void            MarkListHasChanged() override;
     virtual void            ModelHasChanged() override;
     void                    SelectAll();
-    void                    DoCut(vcl::Window* pWindow=NULL);
-    void                    DoCopy(vcl::Window* pWindow=NULL);
-    void                    DoPaste(vcl::Window* pWindow=NULL);
+    void                    DoCut(vcl::Window* pWindow=nullptr);
+    void                    DoCopy(vcl::Window* pWindow=nullptr);
+    void                    DoPaste(vcl::Window* pWindow=nullptr);
     virtual void            DoConnect(SdrOle2Obj* pOleObj) override;
     virtual bool            SetStyleSheet(SfxStyleSheet* pStyleSheet, bool bDontRemoveHardAttr = false);
     void                    StartDrag( const Point& rStartPos, vcl::Window* pWindow );
@@ -110,13 +110,13 @@ public:
     virtual sal_Int8 AcceptDrop (
         const AcceptDropEvent& rEvt,
         DropTargetHelper& rTargetHelper,
-        ::sd::Window* pTargetWindow = NULL,
+        ::sd::Window* pTargetWindow = nullptr,
         sal_uInt16 nPage = SDRPAGE_NOTFOUND,
         sal_uInt16 nLayer = SDRPAGE_NOTFOUND);
     virtual sal_Int8 ExecuteDrop (
         const ExecuteDropEvent& rEvt,
         DropTargetHelper& rTargetHelper,
-        ::sd::Window* pTargetWindow = NULL,
+        ::sd::Window* pTargetWindow = nullptr,
         sal_uInt16 nPage = SDRPAGE_NOTFOUND,
         sal_uInt16 nLayer = SDRPAGE_NOTFOUND);
 
@@ -134,8 +134,8 @@ public:
     inline SdDrawDocument& GetDoc() const;
     inline ViewShell* GetViewShell() const { return mpViewSh; }
 
-    virtual bool SdrBeginTextEdit(SdrObject* pObj, SdrPageView* pPV = 0L, vcl::Window* pWin = 0L, bool bIsNewObj = false,
-        SdrOutliner* pGivenOutliner = 0L, OutlinerView* pGivenOutlinerView = 0L,
+    virtual bool SdrBeginTextEdit(SdrObject* pObj, SdrPageView* pPV = nullptr, vcl::Window* pWin = nullptr, bool bIsNewObj = false,
+        SdrOutliner* pGivenOutliner = nullptr, OutlinerView* pGivenOutlinerView = nullptr,
         bool bDontDeleteOutliner = false, bool bOnlyOneView = false, bool bGrabFocus = true) override;
 
     virtual SdrEndTextEditKind SdrEndTextEdit(bool bDontDeleteReally = false) override;

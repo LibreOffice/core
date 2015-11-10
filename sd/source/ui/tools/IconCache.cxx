@@ -45,7 +45,7 @@ private:
     Image GetIcon (sal_uInt16 nResourceId);
 };
 
-IconCache* IconCache::Implementation::mpInstance = NULL;
+IconCache* IconCache::Implementation::mpInstance = nullptr;
 
 Image IconCache::Implementation::GetIcon (sal_uInt16 nResourceId)
 {
@@ -67,11 +67,11 @@ Image IconCache::Implementation::GetIcon (sal_uInt16 nResourceId)
 //static
 IconCache& IconCache::Instance()
 {
-    if (Implementation::mpInstance == NULL)
+    if (Implementation::mpInstance == nullptr)
     {
         ::osl::GetGlobalMutex aMutexFunctor;
         ::osl::MutexGuard aGuard (aMutexFunctor());
-        if (Implementation::mpInstance == NULL)
+        if (Implementation::mpInstance == nullptr)
         {
             IconCache* pCache = new IconCache ();
             SdGlobalResourceContainer::Instance().AddResource (
@@ -85,7 +85,7 @@ IconCache& IconCache::Instance()
         OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
     }
 
-    DBG_ASSERT(Implementation::mpInstance!=NULL,
+    DBG_ASSERT(Implementation::mpInstance!=nullptr,
         "IconCache::Instance(): instance is NULL");
     return *Implementation::mpInstance;
 }

@@ -80,12 +80,12 @@ bool IteratorPosition::operator== (const IteratorPosition& aPosition) const
 
 Iterator::Iterator()
 {
-    mpIterator = NULL;
+    mpIterator = nullptr;
 }
 
 Iterator::Iterator (const Iterator& rIterator)
 {
-    mpIterator = rIterator.mpIterator ? rIterator.mpIterator->Clone() : NULL;
+    mpIterator = rIterator.mpIterator ? rIterator.mpIterator->Clone() : nullptr;
 }
 
 Iterator::Iterator (IteratorImplBase* pObject)
@@ -103,23 +103,23 @@ Iterator& Iterator::operator= (const Iterator& rIterator)
     if (this != &rIterator)
     {
         delete mpIterator;
-        if (rIterator.mpIterator != NULL)
+        if (rIterator.mpIterator != nullptr)
             mpIterator = rIterator.mpIterator->Clone();
         else
-            mpIterator = NULL;
+            mpIterator = nullptr;
     }
     return *this;
 }
 
 const IteratorPosition& Iterator::operator* () const
 {
-    DBG_ASSERT (mpIterator!=NULL, "::sd::outliner::Iterator::operator* : missing implementation object");
+    DBG_ASSERT (mpIterator!=nullptr, "::sd::outliner::Iterator::operator* : missing implementation object");
     return mpIterator->GetPosition();
 }
 
 Iterator& Iterator::operator++ ()
 {
-    if (mpIterator!=NULL)
+    if (mpIterator!=nullptr)
         mpIterator->GotoNextText();
     return *this;
 }
@@ -127,14 +127,14 @@ Iterator& Iterator::operator++ ()
 Iterator Iterator::operator++ (int)
 {
     Iterator aTmp (*this);
-    if (mpIterator!=NULL)
+    if (mpIterator!=nullptr)
         mpIterator->GotoNextText();
     return aTmp;
 }
 
 bool Iterator::operator== (const Iterator& rIterator)
 {
-    if (mpIterator == NULL || rIterator.mpIterator==NULL)
+    if (mpIterator == nullptr || rIterator.mpIterator==nullptr)
         return mpIterator == rIterator.mpIterator;
     else
         return *mpIterator == *rIterator.mpIterator;
@@ -147,7 +147,7 @@ bool Iterator::operator!= (const Iterator& rIterator)
 
 void Iterator::Reverse()
 {
-    if (mpIterator != NULL)
+    if (mpIterator != nullptr)
         mpIterator->Reverse();
 }
 
@@ -334,7 +334,7 @@ sal_Int32 OutlinerContainer::GetPageIndex (
             else
             {
                 const SdPage* pPage = rpViewShell->GetActualPage();
-                if (pPage != NULL)
+                if (pPage != nullptr)
                     nPageIndex = (pPage->GetPageNum()-1)/2;
                 else
                     nPageIndex = 0;
@@ -421,7 +421,7 @@ const IteratorPosition& IteratorImplBase::GetPosition()
 
 IteratorImplBase* IteratorImplBase::Clone (IteratorImplBase* pObject) const
 {
-    if (pObject != NULL)
+    if (pObject != nullptr)
     {
         pObject->maPosition = maPosition;
         pObject->mpDocument = mpDocument;
@@ -456,7 +456,7 @@ SelectionIteratorImpl::~SelectionIteratorImpl()
 IteratorImplBase* SelectionIteratorImpl::Clone (IteratorImplBase* pObject) const
 {
     SelectionIteratorImpl* pIterator = static_cast<SelectionIteratorImpl*>(pObject);
-    if (pIterator == NULL)
+    if (pIterator == nullptr)
         pIterator = new SelectionIteratorImpl (
             mrObjectList, mnObjectIndex, mpDocument, mpViewShellWeak, mbDirectionIsForward);
     return pIterator;
@@ -546,8 +546,8 @@ ViewIteratorImpl::ViewIteratorImpl (
     bool bDirectionIsForward)
     : IteratorImplBase (pDocument, rpViewShellWeak, bDirectionIsForward),
       mbPageChangeOccurred(false),
-      mpPage(NULL),
-      mpObjectIterator(NULL)
+      mpPage(nullptr),
+      mpObjectIterator(nullptr)
 {
     SetPage (nPageIndex);
 }
@@ -561,8 +561,8 @@ ViewIteratorImpl::ViewIteratorImpl (
     EditMode eEditMode)
     : IteratorImplBase (pDocument, rpViewShellWeak, bDirectionIsForward, ePageKind, eEditMode),
       mbPageChangeOccurred(false),
-      mpPage(NULL),
-      mpObjectIterator(NULL)
+      mpPage(nullptr),
+      mpObjectIterator(nullptr)
 {
     SetPage (nPageIndex);
 }
@@ -575,23 +575,23 @@ IteratorImplBase* ViewIteratorImpl::Clone (IteratorImplBase* pObject) const
 {
 
     ViewIteratorImpl* pIterator = static_cast<ViewIteratorImpl*>(pObject);
-    if (pIterator == NULL)
+    if (pIterator == nullptr)
         pIterator = new ViewIteratorImpl (
             maPosition.mnPageIndex, mpDocument, mpViewShellWeak, mbDirectionIsForward);
 
     IteratorImplBase::Clone (pObject);
 
-    if (mpObjectIterator != NULL)
+    if (mpObjectIterator != nullptr)
     {
         pIterator->mpObjectIterator = new SdrObjListIter(*mpPage, IM_DEEPNOGROUPS, !mbDirectionIsForward);
 
         // No direct way to set the object iterator to the current object.
-        pIterator->maPosition.mxObject.reset(NULL);
+        pIterator->maPosition.mxObject.reset(nullptr);
         while (pIterator->mpObjectIterator->IsMore() && pIterator->maPosition.mxObject!=maPosition.mxObject)
             pIterator->maPosition.mxObject.reset(pIterator->mpObjectIterator->Next());
     }
     else
-        pIterator->mpObjectIterator = NULL;
+        pIterator->mpObjectIterator = nullptr;
 
     return pIterator;
 }
@@ -615,10 +615,10 @@ void ViewIteratorImpl::GotoNextText()
         }
     }
 
-    if (mpObjectIterator != NULL && mpObjectIterator->IsMore())
+    if (mpObjectIterator != nullptr && mpObjectIterator->IsMore())
         maPosition.mxObject.reset(mpObjectIterator->Next());
     else
-        maPosition.mxObject.reset(NULL);
+        maPosition.mxObject.reset(nullptr);
 
     if (!maPosition.mxObject.is() )
     {
@@ -627,12 +627,12 @@ void ViewIteratorImpl::GotoNextText()
         else
             SetPage (maPosition.mnPageIndex-1);
 
-        if (mpPage != NULL)
+        if (mpPage != nullptr)
             mpObjectIterator = new SdrObjListIter(*mpPage, IM_DEEPNOGROUPS, !mbDirectionIsForward);
-        if (mpObjectIterator!=NULL && mpObjectIterator->IsMore())
+        if (mpObjectIterator!=nullptr && mpObjectIterator->IsMore())
             maPosition.mxObject.reset(mpObjectIterator->Next());
         else
-            maPosition.mxObject.reset(NULL);
+            maPosition.mxObject.reset(nullptr);
     }
 
     maPosition.mnText = 0;
@@ -675,20 +675,20 @@ void ViewIteratorImpl::SetPage (sal_Int32 nPageIndex)
                     maPosition.mePageKind);
         }
         else
-            mpPage = NULL;
+            mpPage = nullptr;
     }
 
     // Set up object list iterator.
-    if (mpPage != NULL)
+    if (mpPage != nullptr)
         mpObjectIterator = new SdrObjListIter(*mpPage, IM_DEEPNOGROUPS, ! mbDirectionIsForward);
     else
-        mpObjectIterator = NULL;
+        mpObjectIterator = nullptr;
 
     // Get object pointer.
-    if (mpObjectIterator!=NULL && mpObjectIterator->IsMore())
+    if (mpObjectIterator!=nullptr && mpObjectIterator->IsMore())
         maPosition.mxObject.reset( mpObjectIterator->Next() );
     else
-        maPosition.mxObject.reset( NULL );
+        maPosition.mxObject.reset( nullptr );
 
     maPosition.mnText = 0;
     if( !mbDirectionIsForward && maPosition.mxObject.is() )
@@ -705,16 +705,16 @@ void ViewIteratorImpl::Reverse()
     IteratorImplBase::Reverse ();
 
     // Create reversed object list iterator.
-    if (mpObjectIterator != NULL)
+    if (mpObjectIterator != nullptr)
         delete mpObjectIterator;
-    if (mpPage != NULL)
+    if (mpPage != nullptr)
         mpObjectIterator = new SdrObjListIter(*mpPage, IM_DEEPNOGROUPS, ! mbDirectionIsForward);
     else
-        mpObjectIterator = NULL;
+        mpObjectIterator = nullptr;
 
     // Move iterator to the current object.
     SdrObjectWeakRef xObject = maPosition.mxObject;
-    maPosition.mxObject.reset(NULL);
+    maPosition.mxObject.reset(nullptr);
 
     if (!mpObjectIterator)
         return;
@@ -746,7 +746,7 @@ DocumentIteratorImpl::~DocumentIteratorImpl()
 IteratorImplBase* DocumentIteratorImpl::Clone (IteratorImplBase* pObject) const
 {
     DocumentIteratorImpl* pIterator = static_cast<DocumentIteratorImpl*>(pObject);
-    if (pIterator == NULL)
+    if (pIterator == nullptr)
         pIterator = new DocumentIteratorImpl (
             maPosition.mnPageIndex, maPosition.mePageKind, maPosition.meEditMode,
             mpDocument, mpViewShellWeak, mbDirectionIsForward);

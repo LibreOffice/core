@@ -220,14 +220,14 @@ void SdImportTest::testSmoketest()
     sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/smoketest.pptx"), PPTX);
 
     SdDrawDocument *pDoc = xDocShRef->GetDoc();
-    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
+    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != nullptr );
 
     // cf. SdrModel svx/svdmodel.hxx ...
 
     CPPUNIT_ASSERT_MESSAGE( "wrong page count", pDoc->GetPageCount() == 3);
 
     const SdrPage *pPage = pDoc->GetPage (1);
-    CPPUNIT_ASSERT_MESSAGE( "no page", pPage != NULL );
+    CPPUNIT_ASSERT_MESSAGE( "no page", pPage != nullptr );
 
     const size_t nObjs = pPage->GetObjCount();
     for (size_t i = 0; i < nObjs; i++)
@@ -248,9 +248,9 @@ void SdImportTest::testN759180()
     sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/n759180.pptx"), PPTX);
 
     SdDrawDocument *pDoc = xDocShRef->GetDoc();
-    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
+    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != nullptr );
     const SdrPage *pPage = pDoc->GetPage (1);
-    CPPUNIT_ASSERT_MESSAGE( "no page", pPage != NULL );
+    CPPUNIT_ASSERT_MESSAGE( "no page", pPage != nullptr );
 
     //sal_uIntPtr nObjs = pPage->GetObjCount();
     //for (sal_uIntPtr i = 0; i < nObjs; i++)
@@ -286,9 +286,9 @@ void SdImportTest::testN862510_1()
     sd::DrawDocShellRef xDocShRef = loadURL( getURLFromSrc("/sd/qa/unit/data/pptx/n862510_1.pptx"), PPTX );
 
     SdDrawDocument *pDoc = xDocShRef->GetDoc();
-    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
+    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != nullptr );
     const SdrPage *pPage = pDoc->GetPage(1);
-    CPPUNIT_ASSERT_MESSAGE( "no page", pPage != NULL );
+    CPPUNIT_ASSERT_MESSAGE( "no page", pPage != nullptr );
     {
         std::vector<EECharAttrib> rLst;
         SdrObject *pObj = pPage->GetObj( 0 );
@@ -311,9 +311,9 @@ void SdImportTest::testN862510_2()
     sd::DrawDocShellRef xDocShRef = loadURL( getURLFromSrc("/sd/qa/unit/data/pptx/n862510_2.pptx"), PPTX );
 
     SdDrawDocument *pDoc = xDocShRef->GetDoc();
-    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
+    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != nullptr );
     const SdrPage *pPage = pDoc->GetPage(1);
-    CPPUNIT_ASSERT_MESSAGE( "no page", pPage != NULL );
+    CPPUNIT_ASSERT_MESSAGE( "no page", pPage != nullptr );
     {
         SdrObjGroup *pGrpObj = dynamic_cast<SdrObjGroup *>( pPage->GetObj( 0 ) );
         CPPUNIT_ASSERT( pGrpObj );
@@ -330,9 +330,9 @@ void SdImportTest::testN862510_4()
     sd::DrawDocShellRef xDocShRef = loadURL( getURLFromSrc("/sd/qa/unit/data/pptx/n862510_4.pptx"), PPTX );
 
     SdDrawDocument *pDoc = xDocShRef->GetDoc();
-    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
+    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != nullptr );
     const SdrPage *pPage = pDoc->GetPage( 1 );
-    CPPUNIT_ASSERT_MESSAGE( "no page", pPage != NULL );
+    CPPUNIT_ASSERT_MESSAGE( "no page", pPage != nullptr );
     {
         std::vector<EECharAttrib> rLst;
         SdrObject *pObj = pPage->GetObj( 0 );
@@ -355,9 +355,9 @@ void SdImportTest::testN828390_2()
     sd::DrawDocShellRef xDocShRef = loadURL( getURLFromSrc("/sd/qa/unit/data/pptx/n828390_2.pptx"), PPTX );
 
     SdDrawDocument *pDoc = xDocShRef->GetDoc();
-    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
+    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != nullptr );
     const SdrPage *pPage = pDoc->GetPage(1);
-    CPPUNIT_ASSERT_MESSAGE( "no page", pPage != NULL );
+    CPPUNIT_ASSERT_MESSAGE( "no page", pPage != nullptr );
 
     SdrObject *pObj = pPage->GetObj(0);
     SdrTextObj *pTxtObj = dynamic_cast<SdrTextObj *>( pObj );
@@ -375,9 +375,9 @@ void SdImportTest::testN828390_3()
     sd::DrawDocShellRef xDocShRef = loadURL( getURLFromSrc("/sd/qa/unit/data/pptx/n828390_3.pptx"), PPTX );
 
     SdDrawDocument *pDoc = xDocShRef->GetDoc();
-    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
+    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != nullptr );
     const SdrPage *pPage = pDoc->GetPage(1);
-    CPPUNIT_ASSERT_MESSAGE( "no page", pPage != NULL );
+    CPPUNIT_ASSERT_MESSAGE( "no page", pPage != nullptr );
 
     SdrObject *pObj = pPage->GetObj(0);
     SdrTextObj *pTxtObj = dynamic_cast<SdrTextObj *>( pObj );
@@ -407,9 +407,9 @@ void SdImportTest::testMasterPageStyleParent()
     sd::DrawDocShellRef xDocShRef = loadURL( getURLFromSrc("/sd/qa/unit/data/odp/masterpage_style_parent.odp"), ODP );
 
     SdDrawDocument *pDoc = xDocShRef->GetDoc();
-    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
+    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != nullptr );
     const SdrPage *pPage = pDoc->GetPage(1);
-    CPPUNIT_ASSERT_MESSAGE( "no page", pPage != NULL );
+    CPPUNIT_ASSERT_MESSAGE( "no page", pPage != nullptr );
 
     SdStyleSheetPool *const pPool(pDoc->GetSdStyleSheetPool());
 
@@ -502,14 +502,14 @@ void SdImportTest::testN778859()
     sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/pptx/n778859.pptx"), PPTX);
 
     SdDrawDocument *pDoc = xDocShRef->GetDoc();
-    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
+    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != nullptr );
     const SdrPage *pPage = pDoc->GetPage(1);
-    CPPUNIT_ASSERT_MESSAGE( "no page", pPage != NULL );
+    CPPUNIT_ASSERT_MESSAGE( "no page", pPage != nullptr );
     {
         // Get the object
         SdrObject *pObj = pPage->GetObj(1);
         SdrTextObj *pTxtObj = dynamic_cast<SdrTextObj *>( pObj );
-        CPPUNIT_ASSERT_MESSAGE( "no text object", pTxtObj != NULL);
+        CPPUNIT_ASSERT_MESSAGE( "no text object", pTxtObj != nullptr);
         CPPUNIT_ASSERT(!pTxtObj->IsAutoFit());
     }
 
@@ -521,14 +521,14 @@ void SdImportTest::testFdo68594()
     sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/ppt/fdo68594.ppt"), PPT);
 
     SdDrawDocument *pDoc = xDocShRef->GetDoc();
-    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
+    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != nullptr );
     const SdrPage *pPage = &(pDoc->GetPage (1)->TRG_GetMasterPage());
-    CPPUNIT_ASSERT_MESSAGE( "no page", pPage != NULL );
+    CPPUNIT_ASSERT_MESSAGE( "no page", pPage != nullptr );
     SdrObject *pObj = pPage->GetObj(1);
     SdrTextObj *pTxtObj = dynamic_cast<SdrTextObj *>( pObj );
-    CPPUNIT_ASSERT_MESSAGE( "no text object", pTxtObj != NULL);
+    CPPUNIT_ASSERT_MESSAGE( "no text object", pTxtObj != nullptr);
     const SvxColorItem *pC = dynamic_cast<const SvxColorItem *>(&pTxtObj->GetMergedItem(EE_CHAR_COLOR));
-    CPPUNIT_ASSERT_MESSAGE( "no color item", pC != NULL);
+    CPPUNIT_ASSERT_MESSAGE( "no color item", pC != nullptr);
     // Color should be black
     CPPUNIT_ASSERT_MESSAGE( "Placeholder color mismatch", pC->GetValue().GetColor() == 0);
 
@@ -540,9 +540,9 @@ void SdImportTest::testFdo72998()
     sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/pptx/cshapes.pptx"), PPTX);
 
     SdDrawDocument *pDoc = xDocShRef->GetDoc();
-    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
+    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != nullptr );
     const SdrPage *pPage = pDoc->GetPage(1);
-    CPPUNIT_ASSERT_MESSAGE( "no page", pPage != NULL );
+    CPPUNIT_ASSERT_MESSAGE( "no page", pPage != nullptr );
     {
         SdrObjCustomShape *pObj = dynamic_cast<SdrObjCustomShape *>(pPage->GetObj(2));
         CPPUNIT_ASSERT( pObj );
@@ -570,9 +570,9 @@ void SdImportTest::testFdo77027()
     sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/odp/fdo77027.odp"), ODP);
 
     SdDrawDocument *pDoc = xDocShRef->GetDoc();
-    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
+    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != nullptr );
     const SdrPage *pPage = pDoc->GetPage(1);
-    CPPUNIT_ASSERT_MESSAGE( "no page", pPage != NULL );
+    CPPUNIT_ASSERT_MESSAGE( "no page", pPage != nullptr );
     {
         SdrOle2Obj *const pObj = dynamic_cast<SdrOle2Obj*>(pPage->GetObj(0));
         CPPUNIT_ASSERT(pObj);
@@ -639,7 +639,7 @@ void SdImportTest::testFdo71075()
     sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/fdo71075.odp"), ODP);
 
     SdDrawDocument *pDoc = xDocShRef->GetDoc();
-    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
+    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != nullptr );
     uno::Reference< drawing::XDrawPagesSupplier > xDoc(xDocShRef->GetDoc()->getUnoModel(), uno::UNO_QUERY_THROW );
     uno::Reference< drawing::XDrawPage > xPage(xDoc->getDrawPages()->getByIndex(0), uno::UNO_QUERY_THROW );
     uno::Reference< drawing::XShape > xShape(xPage->getByIndex(0), uno::UNO_QUERY_THROW );
@@ -681,7 +681,7 @@ void SdImportTest::testStrictOOXML()
     sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/strict_ooxml.pptx"), PPTX);
 
     SdDrawDocument *pDoc = xDocShRef->GetDoc();
-    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
+    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != nullptr );
     uno::Reference< drawing::XDrawPagesSupplier > xDoc(xDocShRef->GetDoc()->getUnoModel(), uno::UNO_QUERY_THROW );
     uno::Reference< drawing::XDrawPage > xPage(xDoc->getDrawPages()->getByIndex(0), uno::UNO_QUERY_THROW );
     uno::Reference< drawing::XShape > xShape(xPage->getByIndex(0), uno::UNO_QUERY_THROW );
@@ -695,13 +695,13 @@ void SdImportTest::testBnc870237()
     sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/pptx/bnc870237.pptx"), PPTX);
 
     SdDrawDocument *pDoc = xDocShRef->GetDoc();
-    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
+    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != nullptr );
     const SdrPage *pPage = pDoc->GetPage (1);
-    CPPUNIT_ASSERT_MESSAGE( "no page", pPage != NULL );
+    CPPUNIT_ASSERT_MESSAGE( "no page", pPage != nullptr );
 
     // Simulate a:ext inside dsp:txXfrm with changing the lower distance
     const SdrObjGroup* pObj = dynamic_cast<SdrObjGroup*>( pPage->GetObj( 0 ) );
-    CPPUNIT_ASSERT_MESSAGE( "no object", pObj != NULL);
+    CPPUNIT_ASSERT_MESSAGE( "no object", pObj != nullptr);
     CPPUNIT_ASSERT_EQUAL( sal_Int32(0), (static_cast< const SdrMetricItem& >(pObj->GetMergedItem(SDRATTR_TEXT_UPPERDIST))).GetValue());
     CPPUNIT_ASSERT_EQUAL( sal_Int32(9919), (static_cast< const SdrMetricItem& >(pObj->GetMergedItem(SDRATTR_TEXT_LOWERDIST))).GetValue());
     CPPUNIT_ASSERT_EQUAL( sal_Int32(0), (static_cast< const SdrMetricItem& >(pObj->GetMergedItem(SDRATTR_TEXT_RIGHTDIST))).GetValue());
@@ -717,7 +717,7 @@ void SdImportTest::testCreationDate()
     uno::Reference<document::XDocumentProperties> xDocumentProperties = xDocumentPropertiesSupplier->getDocumentProperties();
     util::DateTime aDate = xDocumentProperties->getCreationDate();
     OUStringBuffer aBuffer;
-    sax::Converter::convertDateTime(aBuffer, aDate, 0);
+    sax::Converter::convertDateTime(aBuffer, aDate, nullptr);
     // Metadata wasn't imported, this was 0000-00-00.
     CPPUNIT_ASSERT_EQUAL(OUString("2013-11-09T10:37:56"), aBuffer.makeStringAndClear());
     xDocShRef->DoClose();
@@ -730,9 +730,9 @@ void SdImportTest::testBnc887225()
     // Make sure styles are set properly for individual cells.
 
     SdDrawDocument *pDoc = xDocShRef->GetDoc();
-    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
+    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != nullptr );
     const SdrPage *pPage = pDoc->GetPage(1);
-    CPPUNIT_ASSERT_MESSAGE( "no page", pPage != NULL );
+    CPPUNIT_ASSERT_MESSAGE( "no page", pPage != nullptr );
 
     sdr::table::SdrTableObj *pTableObj = dynamic_cast<sdr::table::SdrTableObj*>(pPage->GetObj(2));
     CPPUNIT_ASSERT( pTableObj );
@@ -781,9 +781,9 @@ void SdImportTest::testBnc480256()
     // this unit test to fail. In that case, feel free to change the numbers.
 
     SdDrawDocument *pDoc = xDocShRef->GetDoc();
-    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
+    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != nullptr );
     const SdrPage *pPage = pDoc->GetPage(1);
-    CPPUNIT_ASSERT_MESSAGE( "no page", pPage != NULL );
+    CPPUNIT_ASSERT_MESSAGE( "no page", pPage != nullptr );
 
     sdr::table::SdrTableObj *pTableObj;
     uno::Reference< table::XCellRange > xTable;
@@ -835,12 +835,12 @@ void SdImportTest::testBnc584721_1()
     sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/pptx/bnc584721_1_2.pptx"), PPTX);
 
     SdDrawDocument *pDoc = xDocShRef->GetDoc();
-    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
+    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != nullptr );
     const SdrPage *pPage = &(pDoc->GetPage (1)->TRG_GetMasterPage());
-    CPPUNIT_ASSERT_MESSAGE( "no page", pPage != NULL );
+    CPPUNIT_ASSERT_MESSAGE( "no page", pPage != nullptr );
     SdrObject *pObj = pPage->GetObj(0);
     SdrTextObj *pTxtObj = dynamic_cast<SdrTextObj *>( pObj );
-    CPPUNIT_ASSERT_MESSAGE( "no text object", pTxtObj != NULL);
+    CPPUNIT_ASSERT_MESSAGE( "no text object", pTxtObj != nullptr);
     const EditTextObject& aEdit = pTxtObj->GetOutlinerParaObject()->GetTextObject();
     CPPUNIT_ASSERT_EQUAL(OUString("Click to edit Master title style"), aEdit.GetText(0));
     xDocShRef->DoClose();
@@ -853,9 +853,9 @@ void SdImportTest::testBnc584721_2()
     sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/pptx/bnc584721_1_2.pptx"), PPTX);
 
     SdDrawDocument *pDoc = xDocShRef->GetDoc();
-    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
+    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != nullptr );
     const SdrPage *pPage = &(pDoc->GetPage(1)->TRG_GetMasterPage());
-    CPPUNIT_ASSERT_MESSAGE( "no page", pPage != NULL );
+    CPPUNIT_ASSERT_MESSAGE( "no page", pPage != nullptr );
     CPPUNIT_ASSERT_EQUAL(size_t(1), pPage->GetObjCount());
 
     xDocShRef->DoClose();
@@ -869,11 +869,11 @@ void SdImportTest::testBnc584721_3()
     sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/pptx/bnc584721_3.pptx"), PPTX);
 
     SdDrawDocument *pDoc = xDocShRef->GetDoc();
-    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
+    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != nullptr );
     const SdrPage *pPage = &(pDoc->GetPage(1)->TRG_GetMasterPage());
-    CPPUNIT_ASSERT_MESSAGE( "no page", pPage != NULL );
+    CPPUNIT_ASSERT_MESSAGE( "no page", pPage != nullptr );
     SdrTextObj *pTxtObj = dynamic_cast<SdrTextObj *>( pPage->GetObj(1) );
-    CPPUNIT_ASSERT_MESSAGE( "no text object", pTxtObj != NULL);
+    CPPUNIT_ASSERT_MESSAGE( "no text object", pTxtObj != nullptr);
 
     // Check the shape type
     uno::Reference< drawing::XShape > xShape( pTxtObj->getUnoShape(), uno::UNO_QUERY );
@@ -969,9 +969,9 @@ void SdImportTest::testBnc904423()
     sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("sd/qa/unit/data/pptx/bnc904423.pptx"), PPTX);
 
     SdDrawDocument *pDoc = xDocShRef->GetDoc();
-    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
+    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != nullptr );
     const SdrPage *pPage = pDoc->GetPage(1);
-    CPPUNIT_ASSERT_MESSAGE( "no page", pPage != NULL );
+    CPPUNIT_ASSERT_MESSAGE( "no page", pPage != nullptr );
 
     // First shape's background color is defined on master slide
     {
@@ -1022,9 +1022,9 @@ void SdImportTest::testShapeLineStyle()
     sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("sd/qa/unit/data/pptx/ShapeLineProperties.pptx"), PPTX);
 
     SdDrawDocument *pDoc = xDocShRef->GetDoc();
-    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
+    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != nullptr );
     const SdrPage *pPage = pDoc->GetPage(1);
-    CPPUNIT_ASSERT_MESSAGE( "no page", pPage != NULL );
+    CPPUNIT_ASSERT_MESSAGE( "no page", pPage != nullptr );
 
     // First shape's line style is defined on master slide
     {
@@ -1159,7 +1159,7 @@ void SdImportTest::testPDFImport()
 {
     sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/pdf/txtpic.pdf"), PDF);
     SdDrawDocument *pDoc = xDocShRef->GetDoc();
-    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
+    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != nullptr );
     uno::Reference< drawing::XDrawPagesSupplier > xDoc(xDocShRef->GetDoc()->getUnoModel(), uno::UNO_QUERY_THROW );
     uno::Reference< drawing::XDrawPage > xPage(xDoc->getDrawPages()->getByIndex(0), uno::UNO_QUERY_THROW );
     CPPUNIT_ASSERT_MESSAGE( "no exactly two shapes", xPage->getCount() == 2 );
@@ -1179,7 +1179,7 @@ void SdImportTest::testPDFImportSkipImages()
 
     sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/pdf/txtpic.pdf"), PDF, pParams);
     SdDrawDocument *pDoc = xDocShRef->GetDoc();
-    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
+    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != nullptr );
     uno::Reference< drawing::XDrawPagesSupplier > xDoc(xDocShRef->GetDoc()->getUnoModel(), uno::UNO_QUERY_THROW );
     uno::Reference< drawing::XDrawPage > xPage(xDoc->getDrawPages()->getByIndex(0), uno::UNO_QUERY_THROW );
     CPPUNIT_ASSERT_MESSAGE( "no exactly one shape", xPage->getCount() == 1 );
@@ -1204,13 +1204,13 @@ void SdImportTest::testBulletSuffix()
     uno::Reference< drawing::XDrawPage > xPage(
         xDoc->getDrawPages()->getByIndex(0), uno::UNO_QUERY_THROW );
     SdDrawDocument *pDoc = xDocShRef->GetDoc();
-    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
+    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != nullptr );
 
     // check suffix of the char bullet
     const SdrPage *pPage = pDoc->GetPage(1);
-    CPPUNIT_ASSERT_MESSAGE( "no page", pPage != NULL );
+    CPPUNIT_ASSERT_MESSAGE( "no page", pPage != nullptr );
     SdrTextObj *pTxtObj = dynamic_cast<SdrTextObj *>( pPage->GetObj(0) );
-    CPPUNIT_ASSERT_MESSAGE( "no text object", pTxtObj != NULL);
+    CPPUNIT_ASSERT_MESSAGE( "no text object", pTxtObj != nullptr);
     const EditTextObject& aEdit = pTxtObj->GetOutlinerParaObject()->GetTextObject();
     const SvxNumBulletItem *pNumFmt = dynamic_cast<const SvxNumBulletItem *>(aEdit.GetParaAttribs(1).GetItem(EE_PARA_NUMBULLET));
     CPPUNIT_ASSERT(pNumFmt);
@@ -1224,9 +1224,9 @@ void SdImportTest::testBnc910045()
     sd::DrawDocShellRef xDocShRef = loadURL( getURLFromSrc("/sd/qa/unit/data/pptx/bnc910045.pptx"), PPTX );
 
     SdDrawDocument *pDoc = xDocShRef->GetDoc();
-    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
+    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != nullptr );
     const SdrPage *pPage = pDoc->GetPage(1);
-    CPPUNIT_ASSERT_MESSAGE( "no page", pPage != NULL );
+    CPPUNIT_ASSERT_MESSAGE( "no page", pPage != nullptr );
 
     sdr::table::SdrTableObj *pTableObj = dynamic_cast<sdr::table::SdrTableObj*>(pPage->GetObj(0));
     CPPUNIT_ASSERT( pTableObj );
@@ -1244,10 +1244,10 @@ void SdImportTest::testRowHeight()
     sd::DrawDocShellRef xDocShRef = loadURL( getURLFromSrc("/sd/qa/unit/data/pptx/n80340.pptx"), PPTX );
 
     SdDrawDocument *pDoc = xDocShRef->GetDoc();
-    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
+    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != nullptr );
 
     const SdrPage *pPage = pDoc->GetPage(1);
-    CPPUNIT_ASSERT_MESSAGE( "no page", pPage != NULL );
+    CPPUNIT_ASSERT_MESSAGE( "no page", pPage != nullptr );
 
     sdr::table::SdrTableObj *pTableObj = dynamic_cast<sdr::table::SdrTableObj*>(pPage->GetObj(0));
     CPPUNIT_ASSERT( pTableObj );

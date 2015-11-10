@@ -75,7 +75,7 @@ FuPoor::FuPoor (
       mpDoc(pDrDoc),
       nSlotId( rReq.GetSlot() ),
       nSlotValue(0),
-      pDialog(NULL),
+      pDialog(nullptr),
       bIsInDragMode(false),
       bNoScrollUntilInside (true),
       bScrollable (false),
@@ -207,7 +207,7 @@ bool FuPoor::KeyInput(const KeyEvent& rKEvt)
                     DrawViewShell* pDrawViewShell =
                         static_cast<DrawViewShell*>(mpViewShell);
                     SdPage* pActualPage = pDrawViewShell->GetActualPage();
-                    SdrTextObj* pCandidate = 0L;
+                    SdrTextObj* pCandidate = nullptr;
 
                     if(pActualPage)
                     {
@@ -551,10 +551,10 @@ bool FuPoor::KeyInput(const KeyEvent& rKEvt)
                         mpView->MarkPoint(*pHdl);
                     }
 
-                    if(0L == rHdlList.GetFocusHdl())
+                    if(nullptr == rHdlList.GetFocusHdl())
                     {
                         // restore point with focus
-                        SdrHdl* pNewOne = 0L;
+                        SdrHdl* pNewOne = nullptr;
 
                         for(size_t a = 0; !pNewOne && a < rHdlList.GetHdlCount(); ++a)
                         {
@@ -624,9 +624,9 @@ bool FuPoor::KeyInput(const KeyEvent& rKEvt)
 
                     bool bIsMoveOfConnectedHandle(false);
                     bool bOldSuppress = false;
-                    SdrEdgeObj* pEdgeObj = 0L;
+                    SdrEdgeObj* pEdgeObj = nullptr;
 
-                    if(pHdl && pHdl->GetObj() && 0 != dynamic_cast< const SdrEdgeObj *>( pHdl->GetObj() ) && 0 == pHdl->GetPolyNum())
+                    if(pHdl && pHdl->GetObj() && nullptr != dynamic_cast< const SdrEdgeObj *>( pHdl->GetObj() ) && 0 == pHdl->GetPolyNum())
                     {
                         pEdgeObj = static_cast<SdrEdgeObj*>(pHdl->GetObj());
 
@@ -688,7 +688,7 @@ bool FuPoor::KeyInput(const KeyEvent& rKEvt)
                         nY *= 100;
                     }
 
-                    if(0L == pHdl)
+                    if(nullptr == pHdl)
                     {
                         // only take action when move is allowed
                         if(mpView->IsMoveAllowed())
@@ -745,7 +745,7 @@ bool FuPoor::KeyInput(const KeyEvent& rKEvt)
                             const SdrDragStat& rDragStat = mpView->GetDragStat();
 
                             // start dragging
-                            mpView->BegDragObj(aStartPoint, 0, pHdl, 0);
+                            mpView->BegDragObj(aStartPoint, nullptr, pHdl, 0);
 
                             if(mpView->IsDragObj())
                             {
@@ -840,7 +840,7 @@ bool FuPoor::KeyInput(const KeyEvent& rKEvt)
                 if (pDrawViewShell && EditEngine::IsSimpleCharInput(rKEvt))
                 {
                     SdPage* pActualPage = pDrawViewShell->GetActualPage();
-                    SdrTextObj* pCandidate = 0L;
+                    SdrTextObj* pCandidate = nullptr;
 
                     if(pActualPage)
                     {
@@ -959,7 +959,7 @@ IMPL_LINK_NOARG_TYPED(FuPoor, DragHdl, Timer *, void)
         sal_uInt16 nHitLog = sal_uInt16 ( mpWindow->PixelToLogic(Size(HITPIX,0)).Width() );
         SdrHdl* pHdl = mpView->PickHandle(aMDPos);
 
-        if ( pHdl==NULL && mpView->IsMarkedHit(aMDPos, nHitLog)
+        if ( pHdl==nullptr && mpView->IsMarkedHit(aMDPos, nHitLog)
              && !mpView->IsPresObjSelected(false) )
         {
             mpWindow->ReleaseMouse();
@@ -1053,7 +1053,7 @@ void FuPoor::ReceiveRequest(SfxRequest& rReq)
 SdrObject* FuPoor::CreateDefaultObject(const sal_uInt16, const Rectangle& )
 {
     // empty base implementation
-    return 0L;
+    return nullptr;
 }
 
 void FuPoor::ImpForceQuadratic(Rectangle& rRect)
@@ -1093,12 +1093,12 @@ void FuPoor::SwitchLayer (sal_Int32 nOffset)
         {
             LayerTabBar* pLayerTabControl =
                 static_cast<DrawViewShell*>(mpViewShell)->GetLayerTabControl();
-            if (pLayerTabControl != NULL)
+            if (pLayerTabControl != nullptr)
                 pLayerTabControl->SendDeactivatePageEvent ();
 
             pDrawViewShell->SetActiveTabLayerIndex (nIndex);
 
-            if (pLayerTabControl != NULL)
+            if (pLayerTabControl != nullptr)
                 pLayerTabControl->SendActivatePageEvent ();
         }
     }

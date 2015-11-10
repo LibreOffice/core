@@ -50,7 +50,7 @@ void ViewClipboard::HandlePageDrop (const SdTransferable& rTransferable)
     // Determine whether to insert the given set of slides or to assign a
     // given master page.
     SdPage* pMasterPage = GetFirstMasterPage (rTransferable);
-    if (pMasterPage != NULL)
+    if (pMasterPage != nullptr)
         AssignMasterPage (rTransferable, pMasterPage);
     else
         InsertSlides (rTransferable, DetermineInsertPosition (rTransferable));
@@ -58,7 +58,7 @@ void ViewClipboard::HandlePageDrop (const SdTransferable& rTransferable)
 
 SdPage* ViewClipboard::GetFirstMasterPage (const SdTransferable& rTransferable)
 {
-    SdPage* pFirstMasterPage = NULL;
+    SdPage* pFirstMasterPage = nullptr;
 
     if (rTransferable.HasPageBookmarks())
     {
@@ -70,11 +70,11 @@ SdPage* ViewClipboard::GetFirstMasterPage (const SdTransferable& rTransferable)
                 break;
 
             DrawDocShell* pDocShell = rTransferable.GetPageDocShell();
-            if (pDocShell == NULL)
+            if (pDocShell == nullptr)
                 break;
 
             SdDrawDocument* pDocument = pDocShell->GetDoc();
-            if (pDocument == NULL)
+            if (pDocument == nullptr)
                 break;
 
             std::vector<OUString>::const_iterator pIter;
@@ -92,10 +92,10 @@ SdPage* ViewClipboard::GetFirstMasterPage (const SdTransferable& rTransferable)
                 {
                     // At least one regular slide: return NULL to indicate
                     // that not all bookmarks point to master pages.
-                    pFirstMasterPage = NULL;
+                    pFirstMasterPage = nullptr;
                     break;
                 }
-                else if (pFirstMasterPage == NULL)
+                else if (pFirstMasterPage == nullptr)
                 {
                     // Remember the first master page for later.
                     if (nBMPage != SDRPAGE_NOTFOUND)
@@ -114,16 +114,16 @@ void ViewClipboard::AssignMasterPage (
     const SdTransferable& rTransferable,
     SdPage* pMasterPage)
 {
-    if (pMasterPage == NULL)
+    if (pMasterPage == nullptr)
         return;
 
     // Get the target page to which the master page is assigned.
     SdrPageView* pPageView = mrView.GetSdrPageView();
-    if (pPageView == NULL)
+    if (pPageView == nullptr)
         return;
 
     SdPage* pPage = static_cast<SdPage*>(pPageView->GetPage());
-    if (pPage == NULL)
+    if (pPage == nullptr)
         return;
 
     SdDrawDocument& rDocument = mrView.GetDoc();
@@ -132,11 +132,11 @@ void ViewClipboard::AssignMasterPage (
         return;
 
     DrawDocShell* pDataDocShell = rTransferable.GetPageDocShell();
-    if (pDataDocShell == NULL)
+    if (pDataDocShell == nullptr)
         return;
 
     SdDrawDocument* pSourceDocument = pDataDocShell->GetDoc();
-    if (pSourceDocument == NULL)
+    if (pSourceDocument == nullptr)
         return;
 
     // We have to remove the layout suffix from the layout name which is
@@ -186,7 +186,7 @@ sal_uInt16 ViewClipboard::InsertSlides (
     bool bMergeMasterPages = !rTransferable.HasSourceDoc( &rDoc );
 
     // Prepare the insertion.
-    const std::vector<OUString> *pBookmarkList = NULL;
+    const std::vector<OUString> *pBookmarkList = nullptr;
     DrawDocShell* pDataDocSh;
     if (rTransferable.HasPageBookmarks())
     {
@@ -204,7 +204,7 @@ sal_uInt16 ViewClipboard::InsertSlides (
         pDataDocSh = static_cast<DrawDocShell*>(pShell);
         SdDrawDocument* pDataDoc = pDataDocSh->GetDoc();
 
-        if (pDataDoc!=NULL && pDataDoc->GetSdPageCount(PK_STANDARD))
+        if (pDataDoc!=nullptr && pDataDoc->GetSdPageCount(PK_STANDARD))
             nInsertPgCnt = pDataDoc->GetSdPageCount(PK_STANDARD);
     }
     if (nInsertPgCnt > 0)
@@ -218,7 +218,7 @@ sal_uInt16 ViewClipboard::InsertSlides (
 
         rDoc.InsertBookmarkAsPage(
             pBookmarkList ? *pBookmarkList : std::vector<OUString>(),
-            NULL,
+            nullptr,
             false,
             false,
             nInsertPosition,

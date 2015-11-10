@@ -324,10 +324,10 @@ public:
 };
 
 AssistentDlgImpl::AssistentDlgImpl( vcl::Window* pWindow, const Link<ListBox&,void>& rFinishLink, bool bAutoPilot ) :
-    mpTemplateRegion(NULL),
-    mpLayoutRegion(NULL),
+    mpTemplateRegion(nullptr),
+    mpLayoutRegion(nullptr),
     mbUserDataDirty(false),
-    xDocShell (NULL),
+    xDocShell (nullptr),
     mpWindowUpdater (new WindowUpdater()),
     mbPreview(true),
     mnShowPage(0),
@@ -622,8 +622,8 @@ AssistentDlgImpl::AssistentDlgImpl( vcl::Window* pWindow, const Link<ListBox&,vo
         ProvideTemplates();
 
         //find aStandardTemplate in maPresentList
-        TemplateDir*   pStandardTemplateDir = 0;
-        TemplateEntry* pStandardTemplateEntry = 0;
+        TemplateDir*   pStandardTemplateDir = nullptr;
+        TemplateEntry* pStandardTemplateEntry = nullptr;
 
         std::vector<TemplateDir*>::iterator I;
         for (I=maPresentList.begin(); I!=maPresentList.end(); ++I)
@@ -680,19 +680,19 @@ void AssistentDlgImpl::CloseDocShell()
         if( xCloseable.is() )
         {
             xCloseable->close( sal_True );
-            xDocShell = NULL;
+            xDocShell = nullptr;
         }
         else
         {
             xDocShell->DoClose();
-            xDocShell = NULL;
+            xDocShell = nullptr;
         }
     }
 }
 
 void AssistentDlgImpl::EndDialog( long )
 {
-    mpWindow = NULL;
+    mpWindow = nullptr;
 }
 
 void    AssistentDlgImpl::ScanDocmenu()
@@ -810,7 +810,7 @@ void AssistentDlgImpl::TemplateScanDone (
     for (i=0,I=maPresentList.begin(); I!=maPresentList.end(); ++I,++i)
     {
         TemplateDir* pDir = *I;
-        if (pDir == NULL)
+        if (pDir == nullptr)
             continue;
 
         // HACK! presnt directory is always initially selected.
@@ -818,7 +818,7 @@ void AssistentDlgImpl::TemplateScanDone (
         if (!pDir->maEntries.empty() )
         {
             TemplateEntry* pEntry = pDir->maEntries.front();
-            if (pEntry != NULL)
+            if (pEntry != nullptr)
                 if (pEntry->msPath.indexOf("presnt") != -1)
                     nFirstEntry = i;
         }
@@ -835,7 +835,7 @@ void AssistentDlgImpl::TemplateScanDone (
     for (i=0,I=maPresentList.begin(); I!=maPresentList.end(); ++I,++i)
     {
         TemplateDir* pDir = *I;
-        if (pDir == NULL)
+        if (pDir == nullptr)
             continue;
 
         // HACK! layout directory is always initially selected.
@@ -843,7 +843,7 @@ void AssistentDlgImpl::TemplateScanDone (
         if (!pDir->maEntries.empty() )
         {
             TemplateEntry* pEntry = pDir->maEntries.front();
-            if (pEntry != NULL)
+            if (pEntry != nullptr)
                 if (pEntry->msPath.indexOf("layout") != -1)
                     nFirstEntry = i;
         }
@@ -907,7 +907,7 @@ OUString AssistentDlgImpl::GetDocFileName()
     if( GetStartType() == ST_TEMPLATE )
     {
         const sal_Int32 nEntry = mpPage1TemplateLB->GetSelectEntryPos();
-        TemplateEntry* pEntry = NULL;
+        TemplateEntry* pEntry = nullptr;
         if (mpTemplateRegion && nEntry != LISTBOX_ENTRY_NOTFOUND)
             pEntry = mpTemplateRegion->maEntries[nEntry];
 
@@ -936,7 +936,7 @@ OUString AssistentDlgImpl::GetDocFileName()
 OUString AssistentDlgImpl::GetLayoutFileName()
 {
     const sal_Int32 nEntry = mpPage2LayoutLB->GetSelectEntryPos();
-    TemplateEntry* pEntry = NULL;
+    TemplateEntry* pEntry = nullptr;
     if(nEntry != LISTBOX_ENTRY_NOTFOUND && nEntry > 0)
         pEntry = mpLayoutRegion->maEntries[nEntry-1];
 
@@ -953,7 +953,7 @@ SfxObjectShellLock AssistentDlgImpl::GetDocument()
 
     SfxObjectShell* pShell = xDocShell;
     ::sd::DrawDocShell* pDocShell = dynamic_cast< ::sd::DrawDocShell *>( pShell );
-    SdDrawDocument* pDoc = pDocShell?pDocShell->GetDoc():NULL;
+    SdDrawDocument* pDoc = pDocShell?pDocShell->GetDoc():nullptr;
 
     if(pDoc)
     {
@@ -1001,7 +1001,7 @@ SfxObjectShellLock AssistentDlgImpl::GetDocument()
     }
 
     SfxObjectShellLock xRet = xDocShell;
-    xDocShell = NULL;
+    xDocShell = nullptr;
 
     return xRet;
 }
@@ -1324,8 +1324,8 @@ void AssistentDlgImpl::UpdateUserData()
 
     SfxObjectShell* pShell = xDocShell;
     DrawDocShell* pDocShell = dynamic_cast< DrawDocShell *>( pShell );
-    SdDrawDocument* pDoc = pDocShell?pDocShell->GetDoc():NULL;
-    SdPage* pPage = pDoc?pDoc->GetSdPage(0, PK_STANDARD):NULL;
+    SdDrawDocument* pDoc = pDocShell?pDocShell->GetDoc():nullptr;
+    SdPage* pPage = pDoc?pDoc->GetSdPage(0, PK_STANDARD):nullptr;
 
     if (pPage && (!aTopic.isEmpty() || !aName.isEmpty() || !aInfo.isEmpty()))
     {
@@ -1339,7 +1339,7 @@ void AssistentDlgImpl::UpdateUserData()
             pObj  = dynamic_cast<SdrTextObj*>( pPage->GetPresObj( PRESOBJ_TITLE ) );
             if( pObj )
             {
-                pPage->SetObjText( pObj, NULL, PRESOBJ_TITLE, aTopic );
+                pPage->SetObjText( pObj, nullptr, PRESOBJ_TITLE, aTopic );
                 pObj->NbcSetStyleSheet( pPage->GetStyleSheetForPresObj( PRESOBJ_TITLE ), true );
                 pObj->SetEmptyPresObj(false);
             }
@@ -1356,7 +1356,7 @@ void AssistentDlgImpl::UpdateUserData()
             pObj = dynamic_cast<SdrTextObj*>( pPage->GetPresObj( PRESOBJ_OUTLINE ) );
             if( pObj )
             {
-                pPage->SetObjText( pObj, NULL, PRESOBJ_OUTLINE, aStrTmp );
+                pPage->SetObjText( pObj, nullptr, PRESOBJ_OUTLINE, aStrTmp );
                 pObj->NbcSetStyleSheet( pPage->GetStyleSheetForPresObj( PRESOBJ_OUTLINE ), true );
                 pObj->SetEmptyPresObj(false);
             }
@@ -1365,7 +1365,7 @@ void AssistentDlgImpl::UpdateUserData()
                 pObj = dynamic_cast<SdrTextObj*>( pPage->GetPresObj( PRESOBJ_TEXT ) );
                 if( pObj )
                 {
-                    pPage->SetObjText( pObj, NULL, PRESOBJ_TEXT, aStrTmp );
+                    pPage->SetObjText( pObj, nullptr, PRESOBJ_TEXT, aStrTmp );
                     pObj->NbcSetStyleSheet( pPage->GetStyleSheetForPresObj( PRESOBJ_TEXT ), true );
                     pObj->SetEmptyPresObj(false);
                 }
@@ -1387,7 +1387,7 @@ void AssistentDlgImpl::UpdatePageList()
 
     SfxObjectShell* pShell = xDocShell;
     DrawDocShell* pDocShell = dynamic_cast< DrawDocShell *>( pShell );
-    SdDrawDocument* pDoc = pDocShell?pDocShell->GetDoc():NULL;
+    SdDrawDocument* pDoc = pDocShell?pDocShell->GetDoc():nullptr;
 
     mpPage5PageListCT->Clear();
 
@@ -1407,7 +1407,7 @@ void AssistentDlgImpl::UpdatePreview( bool bDocPreview )
     if(!mbPreview && bDocPreview)
     {
         mpPreview->Invalidate();
-        mpPreview->SetObjectShell(0);
+        mpPreview->SetObjectShell(nullptr);
         mbPreviewUpdating = false;
         return;
     }
@@ -1446,7 +1446,7 @@ void AssistentDlgImpl::UpdatePreview( bool bDocPreview )
         {
             SfxObjectShell* pShell = xDocShell;
             DrawDocShell* pDocShell = dynamic_cast< DrawDocShell *>( pShell );
-            ::svl::IUndoManager* pUndoMgr = pDocShell?pDocShell->GetUndoManager():NULL;
+            ::svl::IUndoManager* pUndoMgr = pDocShell?pDocShell->GetUndoManager():nullptr;
             if(pUndoMgr)
                 pUndoMgr->Undo();
             mbUserDataDirty = true;
@@ -1524,11 +1524,11 @@ void AssistentDlgImpl::UpdatePreview( bool bDocPreview )
         // determine the implementation
         SfxObjectShell* pShell = xDocShell;
         DrawDocShell* pDocShell = dynamic_cast< DrawDocShell *>( pShell );
-        SdDrawDocument* pDoc = pDocShell?pDocShell->GetDoc():NULL;
+        SdDrawDocument* pDoc = pDocShell?pDocShell->GetDoc():nullptr;
 
         pShell = xLayoutDocShell;
         pDocShell = dynamic_cast< DrawDocShell *>( pShell );
-        SdDrawDocument* pLayoutDoc = pDocShell?pDocShell->GetDoc():NULL;
+        SdDrawDocument* pLayoutDoc = pDocShell?pDocShell->GetDoc():nullptr;
 
         if( pDoc && pLayoutDoc )
         {
@@ -1547,7 +1547,7 @@ void AssistentDlgImpl::UpdatePreview( bool bDocPreview )
         UpdateUserData();
 
     if ( !xDocShell.Is() || !mbPreview )
-        mpPreview->SetObjectShell( 0 );
+        mpPreview->SetObjectShell( nullptr );
     else
     {
         mpPreview->SetObjectShell( xDocShell, mnShowPage );
@@ -1573,7 +1573,7 @@ void AssistentDlgImpl::SavePassword( SfxObjectShellLock xDoc, const OUString& rP
           if( aEncryptionData.getLength() )
           {
 
-            PasswordEntry* pEntry = NULL;
+            PasswordEntry* pEntry = nullptr;
             for ( size_t i = 0, n = maPasswordList.size(); i < n; ++i )
             {
                 if ( maPasswordList[ i ].maPath == rPath )
@@ -1583,7 +1583,7 @@ void AssistentDlgImpl::SavePassword( SfxObjectShellLock xDoc, const OUString& rP
                 }
             }
 
-            if(pEntry == NULL)
+            if(pEntry == nullptr)
             {
                 pEntry = new PasswordEntry();
                 pEntry->maPath = rPath;

@@ -80,7 +80,7 @@ void FramePainter::AdaptColor (
     if (maCenter.maBitmap.IsEmpty())
         return;
     BitmapReadAccess* pReadAccess = maCenter.maBitmap.GetBitmap().AcquireReadAccess();
-    if (pReadAccess == NULL)
+    if (pReadAccess == nullptr)
         return;
     const Color aSourceColor = pReadAccess->GetColor(0,0);
     Bitmap::ReleaseAccess(pReadAccess);

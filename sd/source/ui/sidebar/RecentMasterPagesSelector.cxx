@@ -38,8 +38,8 @@ VclPtr<vcl::Window> RecentMasterPagesSelector::Create (
     const css::uno::Reference<css::ui::XSidebar>& rxSidebar)
 {
     SdDrawDocument* pDocument = rViewShellBase.GetDocument();
-    if (pDocument == NULL)
-        return NULL;
+    if (pDocument == nullptr)
+        return nullptr;
 
     std::shared_ptr<MasterPageContainer> pContainer (new MasterPageContainer());
 
@@ -100,7 +100,7 @@ void RecentMasterPagesSelector::Fill (ItemList& rItemList)
     for (nIndex=0; nIndex<nMasterPageCount; nIndex++)
     {
         SdPage* pMasterPage = mrDocument.GetMasterSdPage (nIndex, PK_STANDARD);
-        if (pMasterPage != NULL)
+        if (pMasterPage != nullptr)
             aCurrentNames.insert (pMasterPage->GetName());
     }
 

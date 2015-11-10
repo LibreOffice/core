@@ -58,13 +58,13 @@ TransferableData::TransferableData (
     : mpViewShell(pViewShell),
       maRepresentatives(rRepresentatives)
 {
-    if (mpViewShell != NULL)
+    if (mpViewShell != nullptr)
         StartListening(*mpViewShell);
 }
 
 TransferableData::~TransferableData()
 {
-    if (mpViewShell != NULL)
+    if (mpViewShell != nullptr)
         EndListening(*mpViewShell);
 }
 
@@ -80,7 +80,7 @@ void TransferableData::Notify (SfxBroadcaster&, const SfxHint& rHint)
             // which but both are sufficient to disconnect from the
             // ViewShell.
             EndListening(*mpViewShell);
-            mpViewShell = NULL;
+            mpViewShell = nullptr;
         }
     }
 }

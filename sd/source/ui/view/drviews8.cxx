@@ -98,7 +98,7 @@ void DrawViewShell::ScannerEvent( const css::lang::EventObject& )
                     Point aPnt ( ( aPageSize.Width() - aBmpSize.Width() ) >> 1, ( aPageSize.Height() - aBmpSize.Height() ) >> 1 );
                     aPnt += Point( pPage->GetLftBorder(), pPage->GetUppBorder() );
                     Rectangle   aRect( aPnt, aBmpSize );
-                    SdrGrafObj* pGrafObj = NULL;
+                    SdrGrafObj* pGrafObj = nullptr;
                     bool        bInsertNewObject = true;
 
                     if( GetView()->AreObjectsMarked() )
@@ -118,7 +118,7 @@ void DrawViewShell::ScannerEvent( const css::lang::EventObject& )
                                 {
                                     bInsertNewObject = false;
                                     pGrafObj->SetEmptyPresObj(false);
-                                    pGrafObj->SetOutlinerParaObject(NULL);
+                                    pGrafObj->SetOutlinerParaObject(nullptr);
                                     pGrafObj->SetGraphic( Graphic( aScanBmp ) );
                                 }
                             }

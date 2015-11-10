@@ -217,7 +217,7 @@ const SvxItemPropertySet* ImplGetDrawPagePropertySet( bool bImpress, PageKind eP
     };
 
     bool bWithoutBackground = ePageKind != PK_STANDARD && ePageKind != PK_HANDOUT;
-    const SvxItemPropertySet* pRet = 0;
+    const SvxItemPropertySet* pRet = nullptr;
     if( bImpress )
     {
         if( ePageKind == PK_STANDARD )
@@ -303,7 +303,7 @@ const SvxItemPropertySet* ImplGetMasterPagePropertySet( PageKind ePageKind )
         { OUString(), 0, css::uno::Type(), 0, 0 }
     };
 
-    const SvxItemPropertySet* pRet = 0;
+    const SvxItemPropertySet* pRet = nullptr;
     if( ePageKind == PK_HANDOUT )
     {
         static SvxItemPropertySet aHandoutMasterPagePropertySet_Impl( aHandoutMasterPagePropertyMap_Impl, SdrObject::GetGlobalDrawObjectItemPool() );
@@ -344,7 +344,7 @@ SdGenericDrawPage::SdGenericDrawPage( SdXImpressDocument* _pModel, SdPage* pInPa
 :       SvxFmDrawPage( static_cast<SdrPage*>(pInPage) ),
         SdUnoSearchReplaceShape(this),
         mpModel     ( _pModel ),
-        mpSdrModel(0),
+        mpSdrModel(nullptr),
         mnTempPageNumber(0),
         mpPropSet   ( _pSet ),
         mbIsImpressDocument(false)
@@ -361,7 +361,7 @@ SdGenericDrawPage::~SdGenericDrawPage() throw()
 
 void SdGenericDrawPage::throwIfDisposed() const throw (css::uno::RuntimeException )
 {
-    if( (SvxFmDrawPage::mpModel == 0) || (mpModel == 0) || (SvxFmDrawPage::mpPage == 0) )
+    if( (SvxFmDrawPage::mpModel == nullptr) || (mpModel == nullptr) || (SvxFmDrawPage::mpPage == nullptr) )
         throw lang::DisposedException();
 }
 
@@ -379,7 +379,7 @@ SdXImpressDocument* SdGenericDrawPage::GetModel() const
         }
         else
         {
-            const_cast< SdGenericDrawPage* >(this)->mpModel = 0;
+            const_cast< SdGenericDrawPage* >(this)->mpModel = nullptr;
         }
     }
 
@@ -390,8 +390,8 @@ SdXImpressDocument* SdGenericDrawPage::GetModel() const
 SdrObject * SdGenericDrawPage::_CreateSdrObject( const Reference< drawing::XShape >& xShape )
     throw (css::uno::RuntimeException, std::exception)
 {
-    if( NULL == SvxFmDrawPage::mpPage || !xShape.is() )
-        return NULL;
+    if( nullptr == SvxFmDrawPage::mpPage || !xShape.is() )
+        return nullptr;
 
     OUString aType( xShape->getShapeType() );
     const OUString aPrefix( "com.sun.star.presentation." );
@@ -506,7 +506,7 @@ SdrObject * SdGenericDrawPage::_CreateSdrObject( const Reference< drawing::XShap
     const awt::Size aSize( aRect.GetWidth(), aRect.GetHeight() );
     xShape->setSize( aSize );
 
-    SdrObject *pPresObj = 0;
+    SdrObject *pPresObj = nullptr;
     if( (eObjKind == PRESOBJ_TABLE) || (eObjKind == PRESOBJ_MEDIA) )
     {
         pPresObj = SvxFmDrawPage::_CreateSdrObject( xShape );
@@ -1122,7 +1122,7 @@ Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyName )
                         xMetaFile->SetPrefSize( aSize );
 
                         SvMemoryStream aDestStrm( 65535, 65535 );
-                        ConvertGDIMetaFileToWMF( *xMetaFile, aDestStrm, NULL, false );
+                        ConvertGDIMetaFileToWMF( *xMetaFile, aDestStrm, nullptr, false );
                         Sequence<sal_Int8> aSeq( static_cast<sal_Int8 const *>(aDestStrm.GetData()), aDestStrm.Tell() );
                         aAny <<= aSeq;
                     }
@@ -1386,7 +1386,7 @@ Reference< drawing::XShape >  SdGenericDrawPage::_CreateShape(SdrObject *pObj) c
     {
         PresObjKind eKind = GetPage()->GetPresObjKind(pObj);
 
-        SvxShape* pShape = NULL;
+        SvxShape* pShape = nullptr;
 
         if(pObj->GetObjInventor() == SdrInventor)
         {
@@ -1583,7 +1583,7 @@ Reference< drawing::XShape > SAL_CALL SdGenericDrawPage::combine( const Referenc
     DBG_ASSERT(mpView, "SdrView ist NULL! [CL]");
 
     Reference< drawing::XShape > xShape;
-    if(mpView==NULL||!xShapes.is()||GetPage()==NULL)
+    if(mpView==nullptr||!xShapes.is()||GetPage()==nullptr)
         return xShape;
 
     SdrPageView* pPageView = mpView->ShowSdrPage( GetPage() );
@@ -1615,7 +1615,7 @@ void SAL_CALL SdGenericDrawPage::split( const Reference< drawing::XShape >& xGro
 
     throwIfDisposed();
 
-    if(mpView==NULL||!xGroup.is()||GetPage()==NULL)
+    if(mpView==nullptr||!xGroup.is()||GetPage()==nullptr)
         return;
 
     SdrPageView* pPageView = mpView->ShowSdrPage( GetPage() );
@@ -1634,7 +1634,7 @@ Reference< drawing::XShape > SAL_CALL SdGenericDrawPage::bind( const Reference< 
     throwIfDisposed();
 
     uno::Reference< drawing::XShape > xShape;
-    if(mpView==NULL||!xShapes.is()||GetPage()==NULL)
+    if(mpView==nullptr||!xShapes.is()||GetPage()==nullptr)
         return xShape;
 
     SdrPageView* pPageView = mpView->ShowSdrPage( GetPage() );
@@ -1666,7 +1666,7 @@ void SAL_CALL SdGenericDrawPage::unbind( const Reference< drawing::XShape >& xSh
 
     throwIfDisposed();
 
-    if(mpView==NULL||!xShape.is()||GetPage()==NULL)
+    if(mpView==nullptr||!xShape.is()||GetPage()==nullptr)
         return;
 
     SdrPageView* pPageView = mpView->ShowSdrPage( GetPage() );
@@ -1869,7 +1869,7 @@ void SdGenericDrawPage::release() throw()
 // XComponent
 void SdGenericDrawPage::disposing() throw()
 {
-    mpModel = 0;
+    mpModel = nullptr;
     SvxFmDrawPage::disposing();
 }
 
@@ -1909,7 +1909,7 @@ sal_Bool SAL_CALL SdPageLinkTargets::hasElements()
     ::SolarMutexGuard aGuard;
 
     SdPage* pPage = mpUnoPage->GetPage();
-    if( pPage != NULL )
+    if( pPage != nullptr )
     {
         SdrObjListIter aIter( *pPage, IM_DEEPWITHGROUPS );
 
@@ -1936,7 +1936,7 @@ Any SAL_CALL SdPageLinkTargets::getByName( const OUString& aName )
     ::SolarMutexGuard aGuard;
 
     SdPage* pPage = mpUnoPage->GetPage();
-    if( pPage != NULL )
+    if( pPage != nullptr )
     {
         SdrObject* pObj = FindObject( aName );
         if( pObj )
@@ -1957,7 +1957,7 @@ Sequence< OUString > SAL_CALL SdPageLinkTargets::getElementNames()
     sal_uInt32 nObjCount = 0;
 
     SdPage* pPage = mpUnoPage->GetPage();
-    if( pPage != NULL )
+    if( pPage != nullptr )
     {
         SdrObjListIter aIter( *pPage, IM_DEEPWITHGROUPS );
         while( aIter.IsMore() )
@@ -1996,14 +1996,14 @@ sal_Bool SAL_CALL SdPageLinkTargets::hasByName( const OUString& aName )
 {
     ::SolarMutexGuard aGuard;
 
-    return FindObject( aName ) != NULL;
+    return FindObject( aName ) != nullptr;
 }
 
 SdrObject* SdPageLinkTargets::FindObject( const OUString& rName ) const throw()
 {
     SdPage* pPage = mpUnoPage->GetPage();
-    if( pPage == NULL )
-        return NULL;
+    if( pPage == nullptr )
+        return nullptr;
 
     SdrObjListIter aIter( *pPage, IM_DEEPWITHGROUPS );
 
@@ -2017,7 +2017,7 @@ SdrObject* SdPageLinkTargets::FindObject( const OUString& rName ) const throw()
             return pObj;
     }
 
-    return NULL;
+    return nullptr;
 }
 
 // XServiceInfo
@@ -2063,7 +2063,7 @@ Any SAL_CALL SdDrawPage::queryInterface( const uno::Type & rType )
              && rType == cppu::UnoType<presentation::XPresentationPage>::get() )
     {
         SdPage * p = dynamic_cast<SdPage *>(SvxDrawPage::mpPage);
-        if( p == 0 || p->GetPageKind() != PK_HANDOUT )
+        if( p == nullptr || p->GetPageKind() != PK_HANDOUT )
         {
             return makeAny( Reference< presentation::XPresentationPage >( this ) );
         }
@@ -2318,7 +2318,7 @@ void SAL_CALL SdDrawPage::setName( const OUString& rName )
 
         // fake a mode change to repaint the page tab bar
         ::sd::DrawDocShell* pDocSh = GetModel()->GetDocShell();
-        ::sd::ViewShell* pViewSh = pDocSh ? pDocSh->GetViewShell() : NULL;
+        ::sd::ViewShell* pViewSh = pDocSh ? pDocSh->GetViewShell() : nullptr;
         if( pViewSh && dynamic_cast< const ::sd::DrawViewShell* >(pViewSh) !=  nullptr)
         {
             ::sd::DrawViewShell* pDrawViewSh = static_cast<
@@ -2369,7 +2369,7 @@ Reference< drawing::XDrawPage > SAL_CALL SdDrawPage::getMasterPage(  )
 
         return xPage;
     }
-    return NULL;
+    return nullptr;
 }
 
 void SAL_CALL SdDrawPage::setMasterPage( const Reference< drawing::XDrawPage >& xMasterPage )
@@ -2427,7 +2427,7 @@ Reference< drawing::XDrawPage > SAL_CALL SdDrawPage::getNotesPage()
             return xPage;
         }
     }
-    return NULL;
+    return nullptr;
 }
 
 // XIndexAccess
@@ -2477,7 +2477,7 @@ void SAL_CALL SdDrawPage::remove( const Reference< drawing::XShape >& xShape )
         if( pObj )
         {
             GetPage()->RemovePresObj(pObj);
-            pObj->SetUserCall(NULL);
+            pObj->SetUserCall(nullptr);
         }
     }
 
@@ -2815,7 +2815,7 @@ sal_Bool SAL_CALL SdMasterPage::hasElements() throw(uno::RuntimeException, std::
 
     throwIfDisposed();
 
-    if( SvxFmDrawPage::mpPage == NULL )
+    if( SvxFmDrawPage::mpPage == nullptr )
         return sal_False;
 
     return SvxFmDrawPage::mpPage->GetObjCount() > 0;
@@ -3036,7 +3036,7 @@ void SAL_CALL SdMasterPage::setName( const OUString& rName )
 
         // fake a mode change to repaint the page tab bar
         ::sd::DrawDocShell* pDocSh = GetModel()->GetDocShell();
-        ::sd::ViewShell* pViewSh = pDocSh ? pDocSh->GetViewShell() : NULL;
+        ::sd::ViewShell* pViewSh = pDocSh ? pDocSh->GetViewShell() : nullptr;
         if( pViewSh && dynamic_cast< const ::sd::DrawViewShell* >(pViewSh) !=  nullptr )
         {
             ::sd::DrawViewShell* pDrawViewSh =
@@ -3089,7 +3089,7 @@ Reference< drawing::XDrawPage > SAL_CALL SdMasterPage::getNotesPage()
             return xPage;
         }
     }
-    return NULL;
+    return nullptr;
 }
 
 // XShapes

@@ -83,7 +83,7 @@ DrawView::DrawView( DrawDocShell* pDocSh, OutputDevice* pOutDev, DrawViewShell* 
 : ::sd::View(*pDocSh->GetDoc(), pOutDev, pShell)
 , mpDocShell(pDocSh)
 , mpDrawViewShell(pShell)
-, mpVDev(NULL)
+, mpVDev(nullptr)
 , mnPOCHSmph(0)
 {
     SetCurrentObj(OBJ_RECT);
@@ -188,7 +188,7 @@ bool DrawView::SetAttributes(const SfxItemSet& rSet,
                     pOV->CreateSelectionList(aSelList);
 
                     std::vector<Paragraph*>::reverse_iterator iter = aSelList.rbegin();
-                    Paragraph* pPara = iter != aSelList.rend() ? *iter : NULL;
+                    Paragraph* pPara = iter != aSelList.rend() ? *iter : nullptr;
 
                     while (pPara)
                     {
@@ -234,7 +234,7 @@ bool DrawView::SetAttributes(const SfxItemSet& rSet,
                         }
 
                         ++iter;
-                        pPara = iter != aSelList.rend() ? *iter : NULL;
+                        pPara = iter != aSelList.rend() ? *iter : nullptr;
 
                         bool bJumpToLevel1 = false;
                         if( !pPara && nDepth > 0 && rSet.GetItemState( EE_PARA_NUMBULLET ) == SfxItemState::SET )
@@ -549,7 +549,7 @@ void DrawView::DeleteMarked()
         pUndoManager->EnterListAction(aUndo, aUndo);
     }
 
-    SdPage* pPage = 0;
+    SdPage* pPage = nullptr;
     bool bResetLayout = false;
 
     const size_t nMarkCount = GetMarkedObjectList().GetMarkCount();
@@ -583,7 +583,7 @@ void DrawView::DeleteMarked()
                     SdrTextObj* pTextObj = dynamic_cast< SdrTextObj* >( pObj );
                     bool bVertical = pTextObj && pTextObj->IsVerticalWriting();
                     Rectangle aRect( pObj->GetLogicRect() );
-                    SdrObject* pNewObj = pPage->InsertAutoLayoutShape( 0, ePresObjKind, bVertical, aRect, true );
+                    SdrObject* pNewObj = pPage->InsertAutoLayoutShape( nullptr, ePresObjKind, bVertical, aRect, true );
 
                     // pUndoManager should not be NULL (see assert above)
                     // but since we have defensive code

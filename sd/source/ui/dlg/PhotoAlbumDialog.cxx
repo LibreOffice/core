@@ -179,7 +179,7 @@ IMPL_LINK_NOARG_TYPED(SdPhotoAlbumDialog, CreateHdl, Button*, void)
 
             for( sal_Int32 i = 0; i < pImagesLst->GetEntryCount(); i+=2 )
             {
-                OUString const * pData = NULL;
+                OUString const * pData = nullptr;
 
                 // create the slide
                 Reference< drawing::XDrawPage > xSlide = appendNewSlide(AUTOLAYOUT_NONE, xDrawPages);
@@ -285,7 +285,7 @@ IMPL_LINK_NOARG_TYPED(SdPhotoAlbumDialog, CreateHdl, Button*, void)
 
             for( sal_Int32 i = 0; i < pImagesLst->GetEntryCount(); i+=4 )
             {
-                OUString* pData = NULL;
+                OUString* pData = nullptr;
                 // create the slide
                 Reference< drawing::XDrawPage > xSlide = appendNewSlide(AUTOLAYOUT_NONE, xDrawPages);
                 Reference< beans::XPropertySet > xSlideProps( xSlide, uno::UNO_QUERY );
@@ -602,14 +602,14 @@ IMPL_LINK_NOARG_TYPED(SdPhotoAlbumDialog, SelectHdl, ListBox&, void)
             SvStream* pStream = ::utl::UcbStreamHelper::CreateStream( sImgUrl, StreamMode::READ );
 
             if( pStream )
-                mpGraphicFilter->ImportGraphic( aGraphic, sImgUrl, *pStream, nFilter, NULL, nFilterImportFlags );
+                mpGraphicFilter->ImportGraphic( aGraphic, sImgUrl, *pStream, nFilter, nullptr, nFilterImportFlags );
             else
-                mpGraphicFilter->ImportGraphic( aGraphic, aURLObj, nFilter, NULL, nFilterImportFlags );
+                mpGraphicFilter->ImportGraphic( aGraphic, aURLObj, nFilter, nullptr, nFilterImportFlags );
             delete pStream;
         }
         else
         {
-            mpGraphicFilter->ImportGraphic( aGraphic, aURLObj, nFilter, NULL, nFilterImportFlags );
+            mpGraphicFilter->ImportGraphic( aGraphic, aURLObj, nFilter, nullptr, nFilterImportFlags );
         }
 
         Bitmap aBmp = aGraphic.GetBitmap();

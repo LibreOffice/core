@@ -57,8 +57,8 @@ void DrawViewShell::UpdateIMapDlg( SdrObject* pObj )
          GetViewFrame()->HasChildWindow( SvxIMapDlgChildWindow::GetChildWindowId() ) )
     {
         Graphic     aGraphic;
-        ImageMap*   pIMap = NULL;
-        TargetList* pTargetList = NULL;
+        ImageMap*   pIMap = nullptr;
+        TargetList* pTargetList = nullptr;
         SdIMapInfo* pIMapInfo = GetDoc()->GetIMapInfo( pObj );
 
         // get graphic from shape

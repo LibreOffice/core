@@ -253,8 +253,8 @@ void SdDLL::Init()
     if ( SD_MOD() )
         return;
 
-    SfxObjectFactory* pDrawFact = NULL;
-    SfxObjectFactory* pImpressFact = NULL;
+    SfxObjectFactory* pDrawFact = nullptr;
+    SfxObjectFactory* pImpressFact = nullptr;
 
     if (utl::ConfigManager::IsAvoidConfig() || SvtModuleOptions().IsImpress())
         pImpressFact = &::sd::DrawDocShell::Factory();

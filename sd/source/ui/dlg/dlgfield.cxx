@@ -74,7 +74,7 @@ void SdModifyFieldDlg::dispose()
  */
 SvxFieldData* SdModifyFieldDlg::GetField()
 {
-    SvxFieldData* pNewField = NULL;
+    SvxFieldData* pNewField = nullptr;
 
     if( m_pRbtFix->IsValueChangedFromSaved() ||
         m_pRbtVar->IsValueChangedFromSaved() ||

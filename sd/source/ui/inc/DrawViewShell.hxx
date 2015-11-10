@@ -90,7 +90,7 @@ public:
         ViewShellBase& rViewShellBase,
         vcl::Window* pParentWindow,
         PageKind ePageKind = PK_STANDARD,
-        FrameView* pFrameView = NULL);
+        FrameView* pFrameView = nullptr);
 
     virtual ~DrawViewShell();
 

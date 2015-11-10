@@ -45,7 +45,7 @@ BreakDlg::BreakDlg(
     sal_uLong nSumActionCount,
     sal_uLong nObjCount )
     : SfxModalDialog(pWindow, "BreakDialog", "modules/sdraw/ui/breakdialog.ui")
-    , mpProgress( NULL )
+    , mpProgress( nullptr )
 {
     get(m_pFiObjInfo, "metafiles");
     get(m_pFiActInfo, "metaobjects");
@@ -72,9 +72,9 @@ BreakDlg::~BreakDlg()
 void BreakDlg::dispose()
 {
     delete mpProgress;
-    mpProgress = NULL;
+    mpProgress = nullptr;
     delete pProgrInfo;
-    pProgrInfo = NULL;
+    pProgrInfo = nullptr;
     m_pFiObjInfo.clear();
     m_pFiActInfo.clear();
     m_pFiInsInfo.clear();
@@ -97,7 +97,7 @@ IMPL_LINK_NOARG_TYPED(BreakDlg, CancelButtonHdl, Button*, void)
  */
 IMPL_LINK_TYPED( BreakDlg, UpDate, void*, nInit, bool )
 {
-    if(pProgrInfo == NULL)
+    if(pProgrInfo == nullptr)
       return true;
 
     // update status bar or show a error message?

@@ -613,7 +613,7 @@ void ShowWindow::DeleteWindowFromPaintView()
 void ShowWindow::AddWindowToPaintView()
 {
     if( mpViewShell->GetView() )
-        mpViewShell->GetView()->AddWindowToPaintView( this, 0 );
+        mpViewShell->GetView()->AddWindowToPaintView( this, nullptr );
 
     sal_uInt16 nChild = GetChildCount();
     while( nChild-- )
@@ -629,7 +629,7 @@ css::uno::Reference<css::accessibility::XAccessible>
     {
         return xAcc;
     }
-    if (mpViewShell != NULL)
+    if (mpViewShell != nullptr)
     {
         xAcc = mpViewShell->CreateAccessibleDocumentView (this);
         SetAccessible(xAcc);

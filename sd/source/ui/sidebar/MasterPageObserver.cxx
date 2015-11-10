@@ -88,17 +88,17 @@ private:
     void SendEvent (MasterPageObserverEvent& rEvent);
 };
 
-MasterPageObserver* MasterPageObserver::Implementation::mpInstance = NULL;
+MasterPageObserver* MasterPageObserver::Implementation::mpInstance = nullptr;
 
 //===== MasterPageObserver ====================================================
 
 MasterPageObserver&  MasterPageObserver::Instance()
 {
-    if (Implementation::mpInstance == NULL)
+    if (Implementation::mpInstance == nullptr)
     {
         ::osl::GetGlobalMutex aMutexFunctor;
         ::osl::MutexGuard aGuard (aMutexFunctor());
-        if (Implementation::mpInstance == NULL)
+        if (Implementation::mpInstance == nullptr)
         {
             MasterPageObserver* pInstance = new MasterPageObserver ();
             SdGlobalResourceContainer::Instance().AddResource (
@@ -112,7 +112,7 @@ MasterPageObserver&  MasterPageObserver::Instance()
         OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
     }
 
-    DBG_ASSERT(Implementation::mpInstance!=NULL,
+    DBG_ASSERT(Implementation::mpInstance!=nullptr,
         "MasterPageObserver::Instance(): instance is NULL");
     return *Implementation::mpInstance;
 }
@@ -156,7 +156,7 @@ void MasterPageObserver::Implementation::RegisterDocument (
     for (sal_uInt16 nIndex=0; nIndex<nMasterPageCount; nIndex++)
     {
         SdPage* pMasterPage = rDocument.GetMasterSdPage (nIndex, PK_STANDARD);
-        if (pMasterPage != NULL)
+        if (pMasterPage != nullptr)
             aMasterPageSet.insert (pMasterPage->GetName());
     }
 
@@ -259,7 +259,7 @@ void MasterPageObserver::Implementation::AnalyzeUsedMasterPages (
     for (sal_uInt16 nIndex=0; nIndex<nMasterPageCount; nIndex++)
     {
         SdPage* pMasterPage = rDocument.GetMasterSdPage (nIndex, PK_STANDARD);
-        if (pMasterPage != NULL)
+        if (pMasterPage != nullptr)
             aCurrentMasterPages.insert (pMasterPage->GetName());
         OSL_TRACE("currently used master page %d is %s",
             nIndex,

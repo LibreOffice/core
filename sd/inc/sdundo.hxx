@@ -35,7 +35,7 @@ public:
 
     void                    SetComment(const OUString& rStr) { maComment = rStr; }
     virtual OUString        GetComment() const override { return maComment; }
-    virtual SdUndoAction*   Clone() const { return NULL; }
+    virtual SdUndoAction*   Clone() const { return nullptr; }
 
 protected:
     SdDrawDocument* mpDoc;

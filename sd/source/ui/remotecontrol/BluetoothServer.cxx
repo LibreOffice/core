@@ -104,8 +104,8 @@ struct sd::BluetoothServer::Impl {
 
     Impl()
         : mpContext( g_main_context_new() )
-        , mpConnection( NULL )
-        , mpService( NULL )
+        , mpConnection( nullptr )
+        , mpService( nullptr )
         , mbExitMainloop( false )
         , maBluezVersion( UNKNOWN )
     { }
@@ -123,7 +123,7 @@ struct sd::BluetoothServer::Impl {
         }
         else
         {
-            return NULL;
+            return nullptr;
         }
     }
 };
@@ -141,7 +141,7 @@ dbusConnectToNameOnBus()
     {
         SAL_WARN( "sdremote.bluetooth", "failed to get dbus system bus: " << aError.message );
         dbus_error_free( &aError );
-        return NULL;
+        return nullptr;
     }
 
     return pConnection;
@@ -150,14 +150,14 @@ dbusConnectToNameOnBus()
 static DBusMessage *
 sendUnrefAndWaitForReply( DBusConnection *pConnection, DBusMessage *pMsg )
 {
-    DBusPendingCall *pPending = NULL;
+    DBusPendingCall *pPending = nullptr;
 
     if( !pMsg || !dbus_connection_send_with_reply( pConnection, pMsg, &pPending,
                                                    -1 /* default timeout */ ) )
     {
         SAL_WARN( "sdremote.bluetooth", "Memory allocation failed on message send" );
         dbus_message_unref( pMsg );
-        return NULL;
+        return nullptr;
     }
     dbus_connection_flush( pConnection );
     dbus_message_unref( pMsg );
@@ -217,7 +217,7 @@ getBluez5Adapter(DBusConnection *pConnection)
     // org.bluez.Adapter1 .
     pMsg = DBusObject( "org.bluez", "/", "org.freedesktop.DBus.ObjectManager" ).getMethodCall( "GetManagedObjects" );
     if (!pMsg)
-        return NULL;
+        return nullptr;
 
     const gchar* pInterfaceType = "org.bluez.Adapter1";
 
@@ -236,7 +236,7 @@ getBluez5Adapter(DBusConnection *pConnection)
                 {
                     DBusMessageIter aContainerIter;
                     dbus_message_iter_recurse(&aObject, &aContainerIter);
-                    char *pPath = 0;
+                    char *pPath = nullptr;
                     do
                     {
                         if (DBUS_TYPE_OBJECT_PATH == dbus_message_iter_get_arg_type(&aContainerIter))
@@ -287,7 +287,7 @@ getBluez5Adapter(DBusConnection *pConnection)
         dbus_message_unref(pMsg);
     }
 
-    return NULL;
+    return nullptr;
 }
 
 static DBusObject *
@@ -305,7 +305,7 @@ bluez4GetDefaultService( DBusConnection *pConnection )
     if (!pMsg)
     {
         SAL_WARN("sdremote.bluetooth", "Couldn't retrieve DBusObject for DefaultAdapter");
-        return NULL;
+        return nullptr;
     }
 
     SAL_INFO("sdremote.bluetooth", "successfully retrieved org.bluez.Manager.DefaultAdapter, attempting to use.");
@@ -313,13 +313,13 @@ bluez4GetDefaultService( DBusConnection *pConnection )
 
     if(!pMsg || !dbus_message_iter_init( pMsg, &it ) )
     {
-        return NULL;
+        return nullptr;
     }
 
     // This works for Bluez 4
     if( DBUS_TYPE_OBJECT_PATH == dbus_message_iter_get_arg_type( &it ) )
     {
-        const char *pObjectPath = NULL;
+        const char *pObjectPath = nullptr;
         dbus_message_iter_get_basic( &it, &pObjectPath );
         SAL_INFO( "sdremote.bluetooth", "DefaultAdapter retrieved: '"
                 << pObjectPath << "' '" << pInterfaceType << "'" );
@@ -330,7 +330,7 @@ bluez4GetDefaultService( DBusConnection *pConnection )
     // this method doesn't exist.
     else if ( DBUS_TYPE_STRING == dbus_message_iter_get_arg_type( &it ) )
     {
-        const char *pMessage = NULL;
+        const char *pMessage = nullptr;
         dbus_message_iter_get_basic( &it, &pMessage );
         SAL_INFO( "sdremote.bluetooth", "Error message: '"
                 << pMessage << "' '" << pInterfaceType << "'" );
@@ -341,7 +341,7 @@ bluez4GetDefaultService( DBusConnection *pConnection )
                 << (const char) dbus_message_iter_get_arg_type( &it ) << "'" );
     }
     dbus_message_unref(pMsg);
-    return NULL;
+    return nullptr;
 }
 
 static bool
@@ -642,11 +642,11 @@ getBluez4BooleanProperty( DBusConnection *pConnection, DBusObject *pAdapter,
         DBusMessageIter dictIt;
         dbus_message_iter_recurse( &arrayIt, &dictIt );
 
-        const char *pName = NULL;
+        const char *pName = nullptr;
         if( dbus_message_iter_get_arg_type( &dictIt ) == DBUS_TYPE_STRING )
         {
             dbus_message_iter_get_basic( &dictIt, &pName );
-            if( pName != NULL && !strcmp( pName, pPropertyName ) )
+            if( pName != nullptr && !strcmp( pName, pPropertyName ) )
             {
                 SAL_INFO( "sdremote.bluetooth", "hit " << pPropertyName << " property" );
                 dbus_message_iter_next( &dictIt );
@@ -843,7 +843,7 @@ setDiscoverable( DBusConnection *pConnection, DBusObject *pAdapter, bool bDiscov
         dbus_uint32_t nTimeout = 0;
         dbus_message_iter_append_basic( &varIt, DBUS_TYPE_UINT32, &nTimeout );
         dbus_message_iter_close_container( &it, &varIt );
-        dbus_connection_send( pConnection, pMsg, NULL ); // async send - why not ?
+        dbus_connection_send( pConnection, pMsg, nullptr ); // async send - why not ?
         dbus_message_unref( pMsg );
 
         // set discoverable value
@@ -856,7 +856,7 @@ setDiscoverable( DBusConnection *pConnection, DBusObject *pAdapter, bool bDiscov
         dbus_bool_t bValue = bDiscoverable;
         dbus_message_iter_append_basic( &varIt, DBUS_TYPE_BOOLEAN, &bValue );
         dbus_message_iter_close_container( &it, &varIt ); // async send - why not ?
-        dbus_connection_send( pConnection, pMsg, NULL );
+        dbus_connection_send( pConnection, pMsg, nullptr );
         dbus_message_unref( pMsg );
     }
     else if  (pAdapter->maInterface == "org.bluez.Adapter1") // Bluez 5
@@ -876,7 +876,7 @@ registerWithDefaultAdapter( DBusConnection *pConnection )
                                      bluetooth_service_record ) )
         {
             delete pService;
-            return NULL;
+            return nullptr;
         }
     }
 
@@ -943,7 +943,7 @@ DBusHandlerResult ProfileMessageFunction
 
                 // For some reason an (empty?) reply is expected.
                 DBusMessage* pRet = dbus_message_new_method_return(pMessage);
-                dbus_connection_send(pConnection, pRet, NULL);
+                dbus_connection_send(pConnection, pRet, nullptr);
                 dbus_message_unref(pRet);
 
                 // We could read the remote profile version and features here
@@ -1032,7 +1032,7 @@ registerBluez5Profile(DBusConnection* pConnection, std::vector<Communicator*>* p
     DBusMessageIter aEntry;
 
     {
-        dbus_message_iter_open_container(&aOptionsIter, DBUS_TYPE_DICT_ENTRY, NULL, &aEntry);
+        dbus_message_iter_open_container(&aOptionsIter, DBUS_TYPE_DICT_ENTRY, nullptr, &aEntry);
 
         const char *pString = "Name";
         dbus_message_iter_append_basic(&aEntry, DBUS_TYPE_STRING, &pString);
@@ -1105,7 +1105,7 @@ void BluetoothServer::ensureDiscoverable()
     if( !spServer )
         return;
     GSource *pIdle = g_idle_source_new();
-    g_source_set_callback( pIdle, ensureDiscoverable_cb, NULL, NULL );
+    g_source_set_callback( pIdle, ensureDiscoverable_cb, nullptr, nullptr );
     g_source_set_priority( pIdle, G_PRIORITY_DEFAULT );
     g_source_attach( pIdle, spServer->mpImpl->mpContext );
     g_source_unref( pIdle );
@@ -1119,7 +1119,7 @@ void BluetoothServer::restoreDiscoverable()
     if( !spServer )
         return;
     GSource *pIdle = g_idle_source_new();
-    g_source_set_callback( pIdle, restoreDiscoverable_cb, NULL, NULL );
+    g_source_set_callback( pIdle, restoreDiscoverable_cb, nullptr, nullptr );
     g_source_set_priority( pIdle, G_PRIORITY_DEFAULT_IDLE );
     g_source_attach( pIdle, spServer->mpImpl->mpContext );
     g_source_unref( pIdle );
@@ -1222,8 +1222,8 @@ void SAL_CALL BluetoothServer::run()
         }
         unregisterBluez5Profile( pConnection );
         g_main_context_unref( mpImpl->mpContext );
-        mpImpl->mpConnection = NULL;
-        mpImpl->mpContext = NULL;
+        mpImpl->mpConnection = nullptr;
+        mpImpl->mpContext = nullptr;
         return;
     }
 
@@ -1311,8 +1311,8 @@ void SAL_CALL BluetoothServer::run()
 
     unregisterBluez5Profile( pConnection );
     g_main_context_unref( mpImpl->mpContext );
-    mpImpl->mpConnection = NULL;
-    mpImpl->mpContext = NULL;
+    mpImpl->mpConnection = nullptr;
+    mpImpl->mpContext = nullptr;
 
 #elif defined(WIN32)
     WORD wVersionRequested;
@@ -1528,7 +1528,7 @@ void SAL_CALL BluetoothServer::run()
 #endif
 }
 
-BluetoothServer *sd::BluetoothServer::spServer = NULL;
+BluetoothServer *sd::BluetoothServer::spServer = nullptr;
 
 void BluetoothServer::setup( std::vector<Communicator*>* pCommunicators )
 {

@@ -81,7 +81,7 @@ void SdOptionsItem::SetModified()
 // - SdOptionsGeneric -
 SdOptionsGeneric::SdOptionsGeneric(sal_uInt16 nConfigId, const OUString& rSubTree)
     : maSubTree(rSubTree)
-    , mpCfgItem( NULL)
+    , mpCfgItem( nullptr)
     , mnConfigId(nConfigId)
     , mbInit(rSubTree.isEmpty())
     , mbEnableModify(false)
@@ -116,7 +116,7 @@ void SdOptionsGeneric::Init() const
 SdOptionsGeneric::~SdOptionsGeneric()
 {
     delete mpCfgItem;
-    mpCfgItem = NULL;
+    mpCfgItem = nullptr;
 }
 
 void SdOptionsGeneric::Commit( SdOptionsItem& rCfgItem ) const

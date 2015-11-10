@@ -116,7 +116,7 @@ void MasterPageContainerQueue::LateInit()
 bool MasterPageContainerQueue::RequestPreview (const SharedMasterPageDescriptor& rpDescriptor)
 {
     bool bSuccess (false);
-    if (rpDescriptor.get() != NULL
+    if (rpDescriptor.get() != nullptr
         && rpDescriptor->maLargePreview.GetSizePixel().Width() == 0)
     {
         sal_Int32 nPriority (CalculatePriority(rpDescriptor));
@@ -153,11 +153,11 @@ sal_Int32 MasterPageContainerQueue::CalculatePriority (
 
     // The cost is used as a starting value.
     int nCost (0);
-    if (rpDescriptor->mpPreviewProvider.get() != NULL)
+    if (rpDescriptor->mpPreviewProvider.get() != nullptr)
     {
         nCost = rpDescriptor->mpPreviewProvider->GetCostIndex();
         if (rpDescriptor->mpPreviewProvider->NeedsPageObject())
-            if (rpDescriptor->mpPageObjectProvider.get() != NULL)
+            if (rpDescriptor->mpPageObjectProvider.get() != nullptr)
                 nCost += rpDescriptor->mpPageObjectProvider->GetCostIndex();
     }
 
@@ -214,13 +214,13 @@ IMPL_LINK_TYPED(MasterPageContainerQueue, DelayedPreviewCreation, Timer*, pTimer
 
         mpRequestQueue->erase(mpRequestQueue->begin());
 
-        if (aRequest.mpDescriptor.get() != NULL)
+        if (aRequest.mpDescriptor.get() != nullptr)
         {
             mnRequestsServedCount += 1;
             if ( ! mpWeakContainer.expired())
             {
                 std::shared_ptr<ContainerAdapter> pContainer (mpWeakContainer);
-                if (pContainer.get() != NULL)
+                if (pContainer.get() != nullptr)
                     pContainer->UpdateDescriptor(aRequest.mpDescriptor,false,true,true);
             }
         }

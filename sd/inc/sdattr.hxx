@@ -90,7 +90,7 @@ public:
             DiaEffectItem( css::presentation::FadeEffect eFade = css::presentation::FadeEffect_NONE );
             DiaEffectItem( SvStream& rIn );
 
-    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const override;
+    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = nullptr ) const override;
     virtual SfxPoolItem*    Create( SvStream& rIn, sal_uInt16 nVer ) const override;
             sal_uInt16          GetValueCount() const override { return FADE_EFFECT_COUNT; }
 };
@@ -102,7 +102,7 @@ public:
             DiaSpeedItem( FadeSpeed = FADE_SPEED_MEDIUM );
             DiaSpeedItem( SvStream& rIn );
 
-    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const override;
+    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = nullptr ) const override;
     virtual SfxPoolItem*    Create( SvStream& rIn, sal_uInt16 nVer ) const override;
             sal_uInt16          GetValueCount() const override { return FADE_SPEED_COUNT; }
 };
@@ -114,7 +114,7 @@ public:
             DiaAutoItem( PresChange = PRESCHANGE_MANUAL );
             DiaAutoItem( SvStream& rIn );
 
-    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const override;
+    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = nullptr ) const override;
     virtual SfxPoolItem*    Create( SvStream& rIn, sal_uInt16 nVer ) const override;
             sal_uInt16          GetValueCount() const override { return PRESCHANGE_COUNT; }
 };
@@ -125,7 +125,7 @@ public:
             TYPEINFO_OVERRIDE();
             DiaTimeItem( sal_uInt32 nValue = 0L );
 
-    virtual SfxPoolItem* Clone( SfxItemPool* pPool = 0 ) const override;
+    virtual SfxPoolItem* Clone( SfxItemPool* pPool = nullptr ) const override;
     virtual bool         operator==( const SfxPoolItem& ) const override;
 };
 

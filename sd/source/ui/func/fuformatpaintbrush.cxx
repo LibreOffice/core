@@ -98,14 +98,14 @@ bool FuFormatPaintBrush::MouseButtonDown(const MouseEvent& rMEvt)
         SdrViewEvent aVEvt;
         SdrHitKind eHit = mpView->PickAnything(rMEvt, SdrMouseEventKind::BUTTONDOWN, aVEvt);
 
-        if( (eHit == SDRHIT_TEXTEDIT) || (eHit == SDRHIT_TEXTEDITOBJ && ( mpViewShell->GetFrameView()->IsQuickEdit() || dynamic_cast< sdr::table::SdrTableObj* >( aVEvt.pObj ) != NULL ) ))
+        if( (eHit == SDRHIT_TEXTEDIT) || (eHit == SDRHIT_TEXTEDITOBJ && ( mpViewShell->GetFrameView()->IsQuickEdit() || dynamic_cast< sdr::table::SdrTableObj* >( aVEvt.pObj ) != nullptr ) ))
         {
-            SdrObject* pPickObj=0;
-            SdrPageView* pPV=0;
+            SdrObject* pPickObj=nullptr;
+            SdrPageView* pPV=nullptr;
             sal_uInt16 nHitLog = sal_uInt16 ( mpWindow->PixelToLogic(Size(HITPIX,0)).Width() );
             mpView->PickObj( mpWindow->PixelToLogic( rMEvt.GetPosPixel() ),nHitLog, pPickObj, pPV, SdrSearchOptions::PICKMARKABLE);
 
-            if( (pPickObj != 0) && !pPickObj->IsEmptyPresObj() )
+            if( (pPickObj != nullptr) && !pPickObj->IsEmptyPresObj() )
             {
                 // if we text hit another shape than the one currently selected, unselect the old one now
                 const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
@@ -130,7 +130,7 @@ bool FuFormatPaintBrush::MouseButtonDown(const MouseEvent& rMEvt)
                 return FuText::MouseButtonDown(aMEvt);
             }
 
-            if( aVEvt.pObj == 0 )
+            if( aVEvt.pObj == nullptr )
                 aVEvt.pObj = pPickObj;
         }
 
@@ -160,8 +160,8 @@ bool FuFormatPaintBrush::MouseMove(const MouseEvent& rMEvt)
         else
         {
             sal_uInt16 nHitLog = sal_uInt16 ( mpWindow->PixelToLogic(Size(HITPIX,0)).Width() );
-            SdrObject* pObj=0;
-            SdrPageView* pPV=0;
+            SdrObject* pObj=nullptr;
+            SdrPageView* pPV=nullptr;
             bool bOverMarkableObject = mpView->PickObj( mpWindow->PixelToLogic( rMEvt.GetPosPixel() ),nHitLog, pObj, pPV, SdrSearchOptions::PICKMARKABLE);
 
             if(bOverMarkableObject && HasContentForThisType(pObj->GetObjInventor(),pObj->GetObjIdentifier()) )
@@ -233,7 +233,7 @@ void FuFormatPaintBrush::Deactivate()
 
 bool FuFormatPaintBrush::HasContentForThisType( sal_uInt32 nObjectInventor, sal_uInt16 nObjectIdentifier ) const
 {
-    if( mxItemSet.get() == 0 )
+    if( mxItemSet.get() == nullptr )
         return false;
     if( !mpView || (!SdrObjEditView::SupportsFormatPaintbrush( nObjectInventor, nObjectIdentifier) ) )
         return false;
@@ -245,7 +245,7 @@ void FuFormatPaintBrush::Paste( bool bNoCharacterFormats, bool bNoParagraphForma
     const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
     if( mxItemSet.get() && ( rMarkList.GetMarkCount() == 1 ) )
     {
-        SdrObject* pObj( NULL );
+        SdrObject* pObj( nullptr );
         bool bUndo = mpDoc->IsUndoEnabled();
 
         if( bUndo && !mpView->GetTextEditOutlinerView() )

@@ -89,11 +89,11 @@ FuSelection::FuSelection (
       bTempRotation(false),
       bSelectionChanged(false),
       bHideAndAnimate(false),
-      pHdl(NULL),
+      pHdl(nullptr),
       bSuppressChangesOfSelection(false),
       bMirrorSide0(false),
       nEditMode(SID_BEZIER_MOVE),
-      pWaterCanCandidate(NULL)
+      pWaterCanCandidate(nullptr)
      //Add Shift+UP/DOWN/LEFT/RIGHT key to move the position of insert point,
      //and SHIFT+ENTER key to decide the position and draw the new insert point
     ,bBeginInsertPoint(false),
@@ -133,7 +133,7 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
     // Hack for #?????#
     bHideAndAnimate = false;
 
-    pHdl = NULL;
+    pHdl = nullptr;
     bool bReturn = FuDraw::MouseButtonDown(rMEvt);
     bool bWaterCan = SD_MOD()->GetWaterCan();
     const bool bReadOnly = mpDocSh->IsReadOnly();
@@ -202,14 +202,14 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
         SdrViewEvent aVEvt;
         SdrHitKind eHit = mpView->PickAnything(rMEvt, SdrMouseEventKind::BUTTONDOWN, aVEvt);
 
-        if ( eHit == SDRHIT_TEXTEDITOBJ && ( mpViewShell->GetFrameView()->IsQuickEdit() || dynamic_cast< sdr::table::SdrTableObj* >( aVEvt.pObj ) != NULL ) )
+        if ( eHit == SDRHIT_TEXTEDITOBJ && ( mpViewShell->GetFrameView()->IsQuickEdit() || dynamic_cast< sdr::table::SdrTableObj* >( aVEvt.pObj ) != nullptr ) )
         {
             bTextEdit = true;
         }
 
         if(!bTextEdit
             && !mpDocSh->IsReadOnly()
-            && ((mpView->IsMarkedHit(aMDPos, nHitLog) && !rMEvt.IsShift() && !rMEvt.IsMod2()) || pHdl != NULL)
+            && ((mpView->IsMarkedHit(aMDPos, nHitLog) && !rMEvt.IsShift() && !rMEvt.IsMod2()) || pHdl != nullptr)
             && (rMEvt.GetClicks() != 2)
             )
         {
@@ -360,7 +360,7 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
 
                     if ( !rMEvt.IsShift() && !rMEvt.IsMod2() )
                     {
-                        OSL_ASSERT (mpViewShell->GetViewShell()!=NULL);
+                        OSL_ASSERT (mpViewShell->GetViewShell()!=nullptr);
                         Client* pIPClient = static_cast<Client*>(
                             mpViewShell->GetViewShell()->GetIPClient());
 
@@ -472,7 +472,7 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
             * Move object
             ******************************************************************/
             if ( ! rMEvt.IsRight())
-                mpView->BegDragObj(aMDPos, nullptr, NULL, nDrgLog);
+                mpView->BegDragObj(aMDPos, nullptr, nullptr, nDrgLog);
         }
         else if (eHit == SDRHIT_HANDLE)
         {
@@ -491,7 +491,7 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                     if (mpView->IsPointMarked(*aVEvt.pHdl))
                     {
                         mpView->UnmarkPoint(*aVEvt.pHdl);
-                        pHdl = NULL;
+                        pHdl = nullptr;
                     }
                     else
                     {
@@ -630,7 +630,7 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
     {
         // Animation is still running -> return immediately
         bHideAndAnimate = false;
-        pHdl = NULL;
+        pHdl = nullptr;
         mpWindow->ReleaseMouse();
         return true;
     }
@@ -694,7 +694,7 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
                 /**************************************************************
                 * Toggle between selection and rotation
                 **************************************************************/
-                SdrObject* pSingleObj = NULL;
+                SdrObject* pSingleObj = nullptr;
 
                 if (mpView->GetMarkedObjectList().GetMarkCount()==1)
                 {
@@ -776,18 +776,18 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
                 // In watering-can mode, on press onto right mouse button, a undo is executed
                 mpViewShell->GetViewFrame()->GetDispatcher()->Execute( SID_UNDO, SfxCallMode::ASYNCHRON );
             }
-            else if (pWaterCanCandidate != NULL)
+            else if (pWaterCanCandidate != nullptr)
             {
                 // Is the candidate object still under the mouse?
                 if (pickObject (aPnt) == pWaterCanCandidate)
                 {
                     SdStyleSheetPool* pPool = static_cast<SdStyleSheetPool*>(
                         mpDocSh->GetStyleSheetPool());
-                    if (pPool != NULL)
+                    if (pPool != nullptr)
                     {
                         SfxStyleSheet* pStyleSheet = static_cast<SfxStyleSheet*>(
                             pPool->GetActualStyleSheet());
-                        if (pStyleSheet != NULL && mpView->IsUndoEnabled() )
+                        if (pStyleSheet != nullptr && mpView->IsUndoEnabled() )
                         {
                             // Added UNDOs for the WaterCan mode. This was never done in
                             // the past, thus it was missing all the time.
@@ -819,9 +819,9 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
         bMBDown = false;
 
         ForcePointer(&rMEvt);
-        pHdl = NULL;
+        pHdl = nullptr;
         mpWindow->ReleaseMouse();
-        SdrObject* pSingleObj = NULL;
+        SdrObject* pSingleObj = nullptr;
         const size_t nMarkCount = mpView->GetMarkedObjectList().GetMarkCount();
 
         if (nMarkCount==1)
@@ -840,7 +840,7 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
         {
             bReturn = true;
             ForcePointer(&rMEvt);
-            pHdl = NULL;
+            pHdl = nullptr;
             mpWindow->ReleaseMouse();
             FuDraw::MouseButtonUp(rMEvt);
             mpViewShell->GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SfxCallMode::SYNCHRON);
@@ -904,7 +904,7 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
         }
 
         ForcePointer(&rMEvt);
-        pHdl = NULL;
+        pHdl = nullptr;
         mpWindow->ReleaseMouse();
 
         FuDraw::MouseButtonUp(rMEvt);
@@ -1496,7 +1496,7 @@ bool FuSelection::cancel()
 
 SdrObject* FuSelection::pickObject (const Point& rTestPoint)
 {
-    SdrObject* pObject = NULL;
+    SdrObject* pObject = nullptr;
     SdrPageView* pPageView;
     sal_uInt16 nHitLog = sal_uInt16 (mpWindow->PixelToLogic(Size(HITPIX,0)).Width());
     mpView->PickObj (rTestPoint, nHitLog, pObject, pPageView, SdrSearchOptions::PICKMARKABLE);

@@ -73,7 +73,7 @@ void SelectionObserver::NotifyPageEvent (const SdrPage* pSdrPage)
         return;
 
     const SdPage* pPage = dynamic_cast<const SdPage*>(pSdrPage);
-    if (pPage == NULL)
+    if (pPage == nullptr)
         return;
 
     if (pPage->IsInserted())

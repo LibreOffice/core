@@ -101,7 +101,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
 
     // get StyleSheet parameter
     SfxStyleSheetBasePool* pSSPool = mpDoc->GetDocSh()->GetStyleSheetPool();
-    SfxStyleSheetBase* pStyleSheet = NULL;
+    SfxStyleSheetBase* pStyleSheet = nullptr;
 
     const SfxPoolItem* pItem;
     sal_uInt16 nFamily = USHRT_MAX;
@@ -167,7 +167,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
             if(p)
             {
                 pSSPool->Remove(p);
-                p = 0;
+                p = nullptr;
             }
             pStyleSheet = &pSSPool->Make( aStyleName, (SfxStyleFamily) nFamily, SFXSTYLEBIT_USERDEF );
 
@@ -190,7 +190,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
             if(p)
             {
                 pSSPool->Remove(p);
-                p = 0;
+                p = nullptr;
             }
             pStyleSheet = &pSSPool->Make( aStyleName, (SfxStyleFamily) nFamily, SFXSTYLEBIT_USERDEF );
             pStyleSheet->SetParent(SD_RESSTR(STR_STANDARD_STYLESHEET_NAME));
@@ -306,7 +306,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
 
                 if (eFamily == SD_STYLE_FAMILY_GRAPHICS)
                 {
-                    pStdDlg.reset(pFact ? pFact->CreateSdTabTemplateDlg( 0, mpDoc->GetDocSh(), *pStyleSheet, mpDoc, mpView ) : 0);
+                    pStdDlg.reset(pFact ? pFact->CreateSdTabTemplateDlg( nullptr, mpDoc->GetDocSh(), *pStyleSheet, mpDoc, mpView ) : nullptr);
                 }
                 else if (eFamily == SD_STYLE_FAMILY_PSEUDO)
                 {
@@ -370,7 +370,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
 
                     if( !bOldDocInOtherLanguage )
                     {
-                        pPresDlg.reset(pFact ? pFact->CreateSdPresLayoutTemplateDlg( mpDocSh, NULL, SdResId(nDlgId), *pStyleSheet, ePO, pSSPool ) : 0);
+                        pPresDlg.reset(pFact ? pFact->CreateSdPresLayoutTemplateDlg( mpDocSh, nullptr, SdResId(nDlgId), *pStyleSheet, ePO, pSSPool ) : nullptr);
                     }
                 }
                 else if (eFamily == SD_STYLE_FAMILY_CELL)
@@ -378,7 +378,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                 }
 
                 sal_uInt16 nResult = RET_CANCEL;
-                const SfxItemSet* pOutSet = NULL;
+                const SfxItemSet* pOutSet = nullptr;
                 if (pStdDlg)
                 {
                     nResult = pStdDlg->Execute();

@@ -82,21 +82,21 @@ void RemoteServer::execute()
     if (!xContext.is()/* || !officecfg::Office::Common::Misc::ExperimentalMode::get(xContext)*/)
     {
         // SAL_INFO("sdremote", "not in experimental mode, disabling TCP server");
-        spServer = NULL;
+        spServer = nullptr;
         return;
     }
     osl::SocketAddr aAddr( "0", PORT );
     if ( !mSocket.bind( aAddr ) )
     {
         SAL_WARN( "sdremote", "bind failed" << mSocket.getErrorAsString() );
-        spServer = NULL;
+        spServer = nullptr;
         return;
     }
 
     if ( !mSocket.listen(3) )
     {
         SAL_WARN( "sdremote", "listen failed" << mSocket.getErrorAsString() );
-        spServer = NULL;
+        spServer = nullptr;
         return;
     }
     while ( true )
@@ -106,7 +106,7 @@ void RemoteServer::execute()
         if ( mSocket.acceptConnection( aSocket ) == osl_Socket_Error )
         {
             SAL_WARN( "sdremote", "accept failed" << mSocket.getErrorAsString() );
-            spServer = NULL;
+            spServer = nullptr;
             return; // Closed, or other issue.
         }
         BufferedStreamSocket *pSocket = new BufferedStreamSocket( aSocket);
@@ -179,10 +179,10 @@ void RemoteServer::execute()
         }
     }
     SAL_INFO( "sdremote", "shutting down RemoteServer" );
-    spServer = NULL; // Object is destroyed when Thread::execute() ends.
+    spServer = nullptr; // Object is destroyed when Thread::execute() ends.
 }
 
-RemoteServer *sd::RemoteServer::spServer = NULL;
+RemoteServer *sd::RemoteServer::spServer = nullptr;
 ::osl::Mutex sd::RemoteServer::sDataMutex;
 ::std::vector<Communicator*> sd::RemoteServer::sCommunicators;
 

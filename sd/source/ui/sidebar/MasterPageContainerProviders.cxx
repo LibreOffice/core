@@ -51,7 +51,7 @@ Image PagePreviewProvider::operator () (
 {
     Image aPreview;
 
-    if (pPage != NULL)
+    if (pPage != nullptr)
     {
         // Use the given renderer to create a preview of the given page
         // object.
@@ -118,24 +118,24 @@ SdPage* TemplatePageObjectProvider::operator() (SdDrawDocument* pContainerDocume
     // Unused parameters.
     (void)pContainerDocument;
 
-    SdPage* pPage = NULL;
+    SdPage* pPage = nullptr;
 
-    mxDocumentShell = NULL;
-    ::sd::DrawDocShell* pDocumentShell = NULL;
+    mxDocumentShell = nullptr;
+    ::sd::DrawDocShell* pDocumentShell = nullptr;
     try
     {
         // Load the template document and return its first page.
         pDocumentShell = LoadDocument (msURL);
-        if (pDocumentShell != NULL)
+        if (pDocumentShell != nullptr)
         {
             SdDrawDocument* pDocument = pDocumentShell->GetDoc();
-            if (pDocument != NULL)
+            if (pDocument != nullptr)
             {
                 pPage = pDocument->GetMasterSdPage(0, PK_STANDARD);
                 // In order to make the newly loaded master page deletable
                 // when copied into documents it is marked as no "precious".
                 // When it is modified then it is marked as "precious".
-                if (pPage != NULL)
+                if (pPage != nullptr)
                     pPage->SetPrecious(false);
             }
         }
@@ -143,7 +143,7 @@ SdPage* TemplatePageObjectProvider::operator() (SdDrawDocument* pContainerDocume
     catch (const uno::RuntimeException&)
     {
         DBG_UNHANDLED_EXCEPTION();
-        pPage = NULL;
+        pPage = nullptr;
     }
 
     return pPage;
@@ -157,7 +157,7 @@ SdPage* TemplatePageObjectProvider::operator() (SdDrawDocument* pContainerDocume
     pSet->Put (SfxBoolItem (SID_PREVIEW, true));
     if (pSfxApp->LoadTemplate (mxDocumentShell, sFileName, true, pSet))
     {
-        mxDocumentShell = NULL;
+        mxDocumentShell = nullptr;
     }
     SfxObjectShell* pShell = mxDocumentShell;
     return dynamic_cast< ::sd::DrawDocShell *>( pShell );
@@ -172,7 +172,7 @@ bool TemplatePageObjectProvider::operator== (const PageObjectProvider& rProvider
 {
     const TemplatePageObjectProvider* pTemplatePageObjectProvider
         = dynamic_cast<const TemplatePageObjectProvider*>(&rProvider);
-    if (pTemplatePageObjectProvider != NULL)
+    if (pTemplatePageObjectProvider != nullptr)
         return (msURL == pTemplatePageObjectProvider->msURL);
     else
         return false;
@@ -186,16 +186,16 @@ DefaultPageObjectProvider::DefaultPageObjectProvider()
 
 SdPage* DefaultPageObjectProvider::operator () (SdDrawDocument* pContainerDocument)
 {
-    SdPage* pLocalMasterPage = NULL;
-    if (pContainerDocument != NULL)
+    SdPage* pLocalMasterPage = nullptr;
+    if (pContainerDocument != nullptr)
     {
         sal_Int32 nIndex (0);
         SdPage* pLocalSlide = pContainerDocument->GetSdPage((sal_uInt16)nIndex, PK_STANDARD);
-        if (pLocalSlide!=NULL && pLocalSlide->TRG_HasMasterPage())
+        if (pLocalSlide!=nullptr && pLocalSlide->TRG_HasMasterPage())
             pLocalMasterPage = dynamic_cast<SdPage*>(&pLocalSlide->TRG_GetMasterPage());
     }
 
-    if (pLocalMasterPage == NULL)
+    if (pLocalMasterPage == nullptr)
     {
         DBG_ASSERT(false, "can not create master page for slide");
     }
@@ -210,7 +210,7 @@ int DefaultPageObjectProvider::GetCostIndex()
 
 bool DefaultPageObjectProvider::operator== (const PageObjectProvider& rProvider)
 {
-    return (dynamic_cast<const DefaultPageObjectProvider*>(&rProvider) != NULL);
+    return (dynamic_cast<const DefaultPageObjectProvider*>(&rProvider) != nullptr);
 }
 
 //===== ExistingPageProvider ==================================================
@@ -236,7 +236,7 @@ bool ExistingPageProvider::operator== (const PageObjectProvider& rProvider)
 {
     const ExistingPageProvider* pExistingPageProvider
         = dynamic_cast<const ExistingPageProvider*>(&rProvider);
-    if (pExistingPageProvider != NULL)
+    if (pExistingPageProvider != nullptr)
         return (mpPage == pExistingPageProvider->mpPage);
     else
         return false;

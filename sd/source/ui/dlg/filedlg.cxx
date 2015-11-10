@@ -98,7 +98,7 @@ void SAL_CALL SdFileDialog_Imp::ControlStateChanged( const css::ui::dialogs::Fil
 IMPL_LINK_NOARG_TYPED(SdFileDialog_Imp, PlayMusicHdl, void*, void)
 {
     maUpdateIdle.Stop();
-    mnPlaySoundEvent = 0;
+    mnPlaySoundEvent = nullptr;
 
     if (mxPlayer.is())
     {
@@ -216,7 +216,7 @@ void SdFileDialog_Imp::CheckSelectionState()
 SdFileDialog_Imp::SdFileDialog_Imp( const short     nDialogType,
                                     bool        bUsableSelection    ) :
     FileDialogHelper( nDialogType, 0 ),
-    mnPlaySoundEvent( 0 ),
+    mnPlaySoundEvent( nullptr ),
     mbUsableSelection( bUsableSelection ),
     mbLabelPlaying(false)
 {

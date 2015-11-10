@@ -49,7 +49,7 @@ private:
 };
 
 Test::Test()
-    : m_pDoc(0)
+    : m_pDoc(nullptr)
 {
     m_xContext = cppu::defaultBootstrap_InitialComponentContext();
 
@@ -68,7 +68,7 @@ Test::Test()
 
 void Test::setUp()
 {
-    m_pDoc = new SdDrawDocument(DOCUMENT_TYPE_IMPRESS, NULL);
+    m_pDoc = new SdDrawDocument(DOCUMENT_TYPE_IMPRESS, nullptr);
 }
 
 void Test::tearDown()

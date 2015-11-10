@@ -106,7 +106,7 @@ void DrawViewShell::UIActivating( SfxInPlaceClient* pCli )
 
     // Disable own controls
     maTabControl->Disable();
-    if (GetLayerTabControl() != NULL)
+    if (GetLayerTabControl() != nullptr)
         GetLayerTabControl()->Disable();
 }
 
@@ -114,7 +114,7 @@ void DrawViewShell::UIDeactivated( SfxInPlaceClient* pCli )
 {
     // Enable own controls
     maTabControl->Enable();
-    if (GetLayerTabControl() != NULL)
+    if (GetLayerTabControl() != nullptr)
         GetLayerTabControl()->Enable();
 
     ViewShell::UIDeactivated(pCli);
@@ -165,7 +165,7 @@ void DrawViewShell::SelectionHasChanged()
     GetViewFrame()->GetDispatcher()->Execute(
         SID_3D_STATE, SfxCallMode::ASYNCHRON | SfxCallMode::RECORD, &aItem, 0L );
 
-    SdrOle2Obj* pOleObj = NULL;
+    SdrOle2Obj* pOleObj = nullptr;
 
     if ( mpDrawView->AreObjectsMarked() )
     {
@@ -338,7 +338,7 @@ void DrawViewShell::ChangeEditMode(EditMode eEMode, bool bIsLayerModeActive)
         }
 
         LayerTabBar* pLayerBar = GetLayerTabControl();
-        if (pLayerBar != NULL)
+        if (pLayerBar != nullptr)
             pLayerBar->EndEditMode();
         maTabControl->EndEditMode();
 
@@ -578,7 +578,7 @@ void DrawViewShell::UpdateHRuler()
     Invalidate( SID_RULER_OBJECT );
     Invalidate( SID_RULER_TEXT_RIGHT_TO_LEFT );
 
-    if (mpHorizontalRuler.get() != NULL)
+    if (mpHorizontalRuler.get() != nullptr)
         mpHorizontalRuler->ForceUpdate();
 }
 
@@ -592,7 +592,7 @@ void DrawViewShell::UpdateVRuler()
     Invalidate( SID_RULER_PAGE_POS );
     Invalidate( SID_RULER_OBJECT );
 
-    if (mpVerticalRuler.get() != NULL)
+    if (mpVerticalRuler.get() != nullptr)
         mpVerticalRuler->ForceUpdate();
 }
 
@@ -675,7 +675,7 @@ void DrawViewShell::ResetActualPage()
         // Update for TabControl
         maTabControl->Clear();
 
-        SdPage* pPage = NULL;
+        SdPage* pPage = nullptr;
 
         for (sal_uInt16 i = 0; i < nPageCount; i++)
         {
@@ -759,10 +759,10 @@ bool DrawViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
 
         bActivated = ViewShell::ActivateObject(pObj, nVerb);
 
-        OSL_ASSERT(GetViewShell()!=NULL);
+        OSL_ASSERT(GetViewShell()!=nullptr);
         Client* pClient = static_cast<Client*>(GetViewShell()->GetIPClient());
         if (pClient)
-            pClient->SetSdrGrafObj(NULL);
+            pClient->SetSdrGrafObj(nullptr);
     }
 
     return bActivated;
@@ -828,7 +828,7 @@ bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage)
 
         if (mpActualPage)
         {
-            SdPage* pNewPage = NULL;
+            SdPage* pNewPage = nullptr;
 
             if (meEditMode == EM_MASTERPAGE)
             {
@@ -853,7 +853,7 @@ bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage)
             }
             else
             {
-                OSL_ASSERT(mpFrameView!=NULL);
+                OSL_ASSERT(mpFrameView!=nullptr);
                 mpFrameView->SetSelectedPage(nSelectedPage);
 
                 if (GetDoc()->GetSdPageCount(mePageKind) > nSelectedPage)
@@ -863,7 +863,7 @@ bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage)
                 {
                     SdrPageView* pPV = mpDrawView->GetSdrPageView();
 
-                    SdPage* pCurrentPage = pPV ? dynamic_cast<SdPage*>(pPV->GetPage()) : NULL;
+                    SdPage* pCurrentPage = pPV ? dynamic_cast<SdPage*>(pPV->GetPage()) : nullptr;
                     if (pCurrentPage
                         && pNewPage == pCurrentPage
                         && maTabControl->GetPageText(nSelectedPage+1).equals(pNewPage->GetName()))
@@ -877,7 +877,7 @@ bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage)
 
         mpDrawView->SdrEndTextEdit();
 
-        mpActualPage = NULL;
+        mpActualPage = nullptr;
 
         if (meEditMode == EM_PAGE)
         {
@@ -935,7 +935,7 @@ bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage)
         {
             // tighten VisArea, to possibly deactivate objects
             // !!! only if we are not in presentation mode (#96279) !!!
-            OSL_ASSERT (GetViewShell()!=NULL);
+            OSL_ASSERT (GetViewShell()!=nullptr);
             GetViewShell()->DisconnectAllClients();
             VisAreaChanged(Rectangle(Point(), Size(1, 1)));
         }
@@ -1079,7 +1079,7 @@ bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage)
             {
                 // set pages for all available handout presentation objects
                 sd::ShapeList& rShapeList = pMaster->GetPresentationShapeList();
-                SdrObject* pObj = 0;
+                SdrObject* pObj = nullptr;
                 rShapeList.seekShape(0);
 
                 while( (pObj = rShapeList.getNextShape()) )
@@ -1088,7 +1088,7 @@ bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage)
                     {
                         // #i105146# We want no content to be displayed for PK_HANDOUT,
                         // so just never set a page as content
-                        static_cast<SdrPageObj*>(pObj)->SetReferencedPage(0);
+                        static_cast<SdrPageObj*>(pObj)->SetReferencedPage(nullptr);
                     }
                 }
             }
@@ -1124,7 +1124,7 @@ bool DrawViewShell::IsSwitchPageAllowed() const
     bool bOK = true;
 
     FmFormShell* pFormShell = GetViewShellBase().GetFormShellManager()->GetFormShell();
-    if (pFormShell != NULL && !pFormShell->PrepareClose(false))
+    if (pFormShell != nullptr && !pFormShell->PrepareClose(false))
         bOK = false;
 
     return bOK;
@@ -1137,7 +1137,7 @@ bool DrawViewShell::IsSwitchPageAllowed() const
 void DrawViewShell::ResetActualLayer()
 {
     LayerTabBar* pLayerBar = GetLayerTabControl();
-    if (pLayerBar != NULL)
+    if (pLayerBar != nullptr)
     {
         // remember old layer cound and current layer id
         // this is needed when one layer is renamed to

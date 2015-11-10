@@ -113,7 +113,7 @@ IMPL_LINK_NOARG_TYPED(QueueProcessor, ProcessRequestHdl, Timer *, void)
 
 void QueueProcessor::ProcessRequests()
 {
-    OSL_ASSERT(mpCacheContext.get()!=NULL);
+    OSL_ASSERT(mpCacheContext.get()!=nullptr);
 
     // Never process more than one request at a time in order to prevent the
     // lock up of the edit view.
@@ -121,7 +121,7 @@ void QueueProcessor::ProcessRequests()
         && ! mbIsPaused
         &&  mpCacheContext->IsIdle())
     {
-        CacheKey aKey = NULL;
+        CacheKey aKey = nullptr;
         RequestPriorityClass ePriorityClass (NOT_VISIBLE);
         {
             ::osl::MutexGuard aGuard (mrQueue.GetMutex());
@@ -135,7 +135,7 @@ void QueueProcessor::ProcessRequests()
             }
         }
 
-        if (aKey != NULL)
+        if (aKey != nullptr)
             ProcessOneRequest(aKey, ePriorityClass);
     }
 
@@ -156,11 +156,11 @@ void QueueProcessor::ProcessOneRequest (
         ::osl::MutexGuard aGuard (maMutex);
 
         // Create a new preview bitmap and store it in the cache.
-        if (mpCache.get() != NULL
-            && mpCacheContext.get() != NULL)
+        if (mpCache.get() != nullptr
+            && mpCacheContext.get() != nullptr)
         {
             const SdPage* pSdPage = dynamic_cast<const SdPage*>(mpCacheContext->GetPage(aKey));
-            if (pSdPage != NULL)
+            if (pSdPage != nullptr)
             {
                 const Bitmap aPreview (
                     maBitmapFactory.CreateBitmap(*pSdPage, maPreviewSize, mbDoSuperSampling));

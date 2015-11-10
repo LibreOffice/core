@@ -194,7 +194,7 @@ IMPL_LINK_TYPED( DrawViewShell, ClipboardChanged, TransferableDataHelper*, pData
     TransferableDataHelper aDataHelper (
         TransferableDataHelper::CreateFromSystemClipboard(GetActiveWindow()));
     ::std::unique_ptr<SvxClipboardFormatItem> pFormats (GetSupportedClipboardFormats(aDataHelper));
-    if (mpDrawView == NULL)
+    if (mpDrawView == nullptr)
         return;
     mpCurrentClipboardFormats = std::move(pFormats);
 
@@ -214,29 +214,29 @@ void DrawViewShell::GetDrawAttrState(SfxItemSet& rSet)
 ::Outliner* DrawViewShell::GetOutlinerForMasterPageOutlineTextObj(ESelection &rSel)
 {
     if( !mpDrawView )
-        return NULL;
+        return nullptr;
 
     //when there is one object selected
     if (!mpDrawView->AreObjectsMarked() || (mpDrawView->GetMarkedObjectList().GetMarkCount() != 1))
-        return NULL;
+        return nullptr;
 
     //and we are editing the outline object
     if (!mpDrawView->IsTextEdit())
-        return NULL;
+        return nullptr;
 
     SdrPageView* pPageView = mpDrawView->GetSdrPageView();
     if (!pPageView)
-        return NULL;
+        return nullptr;
 
     SdPage* pPage = static_cast<SdPage*>(pPageView->GetPage());
     //only show these in a normal master page
     if (!pPage || (pPage->GetPageKind() != PK_STANDARD) || !pPage->IsMasterPage())
-        return NULL;
+        return nullptr;
 
     OutlinerView* pOLV = mpDrawView->GetTextEditOutlinerView();
-    ::Outliner* pOL = pOLV ? pOLV->GetOutliner() : NULL;
+    ::Outliner* pOL = pOLV ? pOLV->GetOutliner() : nullptr;
     if (!pOL)
-        return NULL;
+        return nullptr;
     rSel = pOLV->GetSelection();
 
     return pOL;
@@ -244,10 +244,10 @@ void DrawViewShell::GetDrawAttrState(SfxItemSet& rSet)
 
 void DrawViewShell::GetMenuState( SfxItemSet &rSet )
 {
-    if (mpDrawView == NULL)
+    if (mpDrawView == nullptr)
     {
         // This assertion and return are here to prevent crashes.
-        DBG_ASSERT(mpDrawView!=NULL, "Please report this assertion to the Impress team.");
+        DBG_ASSERT(mpDrawView!=nullptr, "Please report this assertion to the Impress team.");
         return;
     }
 
@@ -314,7 +314,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
             {
                 SdrObject* pObj = pPage->GetPresObj(PRESOBJ_OUTLINE);
 
-                if (pObj!=NULL )
+                if (pObj!=nullptr )
                 {
                     if( !pObj->IsEmptyPresObj() )
                     {
@@ -633,7 +633,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         }
         else if( SfxItemState::DEFAULT == rSet.GetItemState( SID_CLIPBOARD_FORMAT_ITEMS ) )
         {
-            if (mpCurrentClipboardFormats.get() != NULL)
+            if (mpCurrentClipboardFormats.get() != nullptr)
                 rSet.Put(*mpCurrentClipboardFormats);
         }
     }
@@ -643,14 +643,14 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         rSet.DisableItem(SID_CHANGEBEZIER);
     }
 
-    if (mpDrawView == NULL)
+    if (mpDrawView == nullptr)
     {
         // The mpDrawView was not NULL but is now.
         // The reason for this may be that the DrawViewShell has been
         // destroyed in the mean time.
         // We can only return immediately and hope that the deleted
         // DrawViewShell is not called again.
-        DBG_ASSERT(mpDrawView!=NULL, "Please report this assertion to the Impress team.");
+        DBG_ASSERT(mpDrawView!=nullptr, "Please report this assertion to the Impress team.");
         return;
     }
 
@@ -1030,7 +1030,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
     }
 
     // EditText active
-    if (GetViewShellBase().GetViewShellManager()->GetShell(RID_DRAW_TEXT_TOOLBOX) != NULL)
+    if (GetViewShellBase().GetViewShellManager()->GetShell(RID_DRAW_TEXT_TOOLBOX) != nullptr)
     {
         sal_uInt16 nCurrentSId = SID_ATTR_CHAR;
 
@@ -1597,7 +1597,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         || rSet.GetItemState(SID_DISPLAY_MASTER_OBJECTS) == SfxItemState::DEFAULT)
     {
         SdPage* pPage = GetActualPage();
-        if (pPage != NULL && GetDoc() != NULL)
+        if (pPage != nullptr && GetDoc() != nullptr)
         {
             SetOfByte aVisibleLayers = pPage->TRG_GetMasterPageVisibleLayers();
             SdrLayerAdmin& rLayerAdmin = GetDoc()->GetLayerAdmin();
@@ -1622,7 +1622,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
     {
         bool bDisableSaveBackground = true;
         SdPage* pPage = GetActualPage();
-        if (pPage != NULL && GetDoc() != NULL)
+        if (pPage != nullptr && GetDoc() != nullptr)
         {
             SfxItemSet aMergedAttr(GetDoc()->GetPool(), XATTR_FILL_FIRST, XATTR_FILL_LAST, 0);
             SdStyleSheet* pStyleSheet = pPage->getPresentationStyle(HID_PSEUDOSHEET_BACKGROUND);
@@ -1752,7 +1752,7 @@ void DrawViewShell::Execute (SfxRequest& rReq)
         case SID_SPELL_DIALOG:
         {
             SfxViewFrame* pViewFrame = GetViewFrame();
-            if (rReq.GetArgs() != NULL)
+            if (rReq.GetArgs() != nullptr)
                 pViewFrame->SetChildWindow (SID_SPELL_DIALOG,
                     static_cast<const SfxBoolItem&>(rReq.GetArgs()->
                         Get(SID_SPELL_DIALOG)).GetValue());

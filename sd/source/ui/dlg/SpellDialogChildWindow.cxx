@@ -40,7 +40,7 @@ SpellDialogChildWindow::SpellDialogChildWindow (
     SfxBindings* pBindings,
     SfxChildWinInfo* pInfo)
     : svx::SpellDialogChildWindow (_pParent, nId, pBindings, pInfo),
-      mpSdOutliner (NULL),
+      mpSdOutliner (nullptr),
       mbOwnOutliner (false)
 {
     ProvideOutliner();
@@ -65,7 +65,7 @@ svx::SpellPortions SpellDialogChildWindow::GetNextWrongSentence( bool /*bRecheck
 {
     svx::SpellPortions aResult;
 
-    if (mpSdOutliner != NULL)
+    if (mpSdOutliner != nullptr)
     {
         ProvideOutliner();
         aResult = mpSdOutliner->GetNextSpellSentence();
@@ -76,10 +76,10 @@ svx::SpellPortions SpellDialogChildWindow::GetNextWrongSentence( bool /*bRecheck
 void SpellDialogChildWindow::ApplyChangedSentence (
     const svx::SpellPortions& rChanged, bool bRecheck )
 {
-    if (mpSdOutliner != NULL)
+    if (mpSdOutliner != nullptr)
     {
         OutlinerView* pOutlinerView = mpSdOutliner->GetView(0);
-        if (pOutlinerView != NULL)
+        if (pOutlinerView != nullptr)
             mpSdOutliner->ApplyChangedSentence (
                 pOutlinerView->GetEditView(),
                 rChanged, bRecheck);
@@ -107,7 +107,7 @@ void SpellDialogChildWindow::EndSpellingAndClearOutliner()
     mpSdOutliner->EndSpelling();
     if (mbOwnOutliner)
         delete mpSdOutliner;
-    mpSdOutliner = NULL;
+    mpSdOutliner = nullptr;
     mbOwnOutliner = false;
 }
 
@@ -126,12 +126,12 @@ void SpellDialogChildWindow::ProvideOutliner()
 {
     ViewShellBase* pViewShellBase = dynamic_cast<ViewShellBase*>( SfxViewShell::Current() );
 
-    if (pViewShellBase != NULL)
+    if (pViewShellBase != nullptr)
     {
         ViewShell* pViewShell = pViewShellBase->GetMainViewShell().get();
         // If there already exists an outliner that has been created
         // for another view shell then destroy it first.
-        if (mpSdOutliner != NULL)
+        if (mpSdOutliner != nullptr)
             if(( dynamic_cast< const DrawViewShell *>( pViewShell ) !=  nullptr && ! mbOwnOutliner)
                 || (dynamic_cast< const OutlineViewShell *>( pViewShell ) !=  nullptr && mbOwnOutliner))
             {
@@ -139,7 +139,7 @@ void SpellDialogChildWindow::ProvideOutliner()
             }
 
         // Now create/get an outliner if none is present.
-        if (mpSdOutliner == NULL)
+        if (mpSdOutliner == nullptr)
         {
             if( dynamic_cast< const DrawViewShell *>( pViewShell ) !=  nullptr)
             {
@@ -161,7 +161,7 @@ void SpellDialogChildWindow::ProvideOutliner()
             }
 
             // Initialize spelling.
-            if (mpSdOutliner != NULL)
+            if (mpSdOutliner != nullptr)
             {
                 mpSdOutliner->PrepareSpelling();
                 mpSdOutliner->StartSpelling();

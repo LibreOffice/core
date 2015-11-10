@@ -86,7 +86,7 @@ AccessibleDrawDocumentView::AccessibleDrawDocumentView (
     const uno::Reference<XAccessible>& rxParent)
     : AccessibleDocumentViewBase (pSdWindow, pViewShell, rxController, rxParent),
       mpSdViewSh( pViewShell ),
-      mpChildrenManager (NULL)
+      mpChildrenManager (nullptr)
 {
     OSL_TRACE ("AccessibleDrawDocumentView");
     UpdateAccessibleName();
@@ -127,7 +127,7 @@ void AccessibleDrawDocumentView::ViewForwarderChanged (ChangeType aChangeType,
     const IAccessibleViewForwarder* pViewForwarder)
 {
     AccessibleDocumentViewBase::ViewForwarderChanged (aChangeType, pViewForwarder);
-    if (mpChildrenManager != NULL)
+    if (mpChildrenManager != nullptr)
         mpChildrenManager->ViewForwarderChanged (aChangeType, pViewForwarder);
 }
 
@@ -195,7 +195,7 @@ sal_Int32 SAL_CALL
     long mpChildCount = AccessibleDocumentViewBase::getAccessibleChildCount();
 
     // Forward request to children manager.
-    if (mpChildrenManager != NULL)
+    if (mpChildrenManager != nullptr)
         mpChildCount += mpChildrenManager->GetChildCount ();
 
     return mpChildCount;
@@ -225,7 +225,7 @@ uno::Reference<XAccessible> SAL_CALL
     aGuard.clear();
 
     // Forward request to children manager.
-    if (pChildrenManager != NULL)
+    if (pChildrenManager != nullptr)
     {
         return pChildrenManager->GetChild (nIndex);
     }
@@ -284,7 +284,7 @@ void SAL_CALL
     {
         ::osl::Guard< ::osl::Mutex> aGuard (::osl::Mutex::getGlobalMutex());
         // maShapeTreeInfo has been modified in base class.
-        if (mpChildrenManager != NULL)
+        if (mpChildrenManager != nullptr)
             mpChildrenManager->SetInfo (maShapeTreeInfo);
     }
 }
@@ -311,7 +311,7 @@ void SAL_CALL
 
         // The current page changed.  Update the children manager accordingly.
         uno::Reference<drawing::XDrawView> xView (mxController, uno::UNO_QUERY);
-        if (xView.is() && mpChildrenManager!=NULL)
+        if (xView.is() && mpChildrenManager!=nullptr)
         {
             // Inform the children manager to forget all children and give
             // him the new ones.
@@ -334,7 +334,7 @@ void SAL_CALL
     else if ( rEventObject.PropertyName == "VisibleArea" )
     {
         OSL_TRACE ("    visible area changed");
-        if (mpChildrenManager != NULL)
+        if (mpChildrenManager != nullptr)
             mpChildrenManager->ViewForwarderChanged (
                 IAccessibleViewForwarderListener::VISIBLE_AREA,
                 &maViewForwarder);
@@ -349,7 +349,7 @@ void SAL_CALL
 
         // The current page changed.  Update the children manager accordingly.
         uno::Reference<drawing::XDrawView> xView (mxController, uno::UNO_QUERY);
-        if (xView.is() && mpChildrenManager!=NULL)
+        if (xView.is() && mpChildrenManager!=nullptr)
         {
             // Inform the children manager to forget all children and give
             // him the new ones.
@@ -472,15 +472,15 @@ uno::Sequence< sal_Int32 > SAL_CALL
         return aRet;
     }
     //find all the child in the page, insert them into a vector and sort
-    if ( mpChildrenManager == NULL )
+    if ( mpChildrenManager == nullptr )
     {
         return aRet;
     }
     std::vector< uno::Reference<drawing::XShape> > vXShapes;
     sal_Int32 nCount = mpChildrenManager->GetChildCount();
     //get pointer of SdView & SdrPageView for further use.
-    SdrPageView* pPV = NULL;
-    ::sd::View* pSdView = NULL;
+    SdrPageView* pPV = nullptr;
+    ::sd::View* pSdView = nullptr;
     if ( mpSdViewSh )
     {
         pSdView = mpSdViewSh->GetView();
@@ -786,7 +786,7 @@ void
 
 void AccessibleDrawDocumentView::Activated()
 {
-    if (mpChildrenManager != NULL)
+    if (mpChildrenManager != nullptr)
     {
         bool bChange = false;
         // When none of the children has the focus then claim it for the
@@ -807,17 +807,17 @@ void AccessibleDrawDocumentView::Activated()
 
 void AccessibleDrawDocumentView::Deactivated()
 {
-    if (mpChildrenManager != NULL)
+    if (mpChildrenManager != nullptr)
         mpChildrenManager->RemoveFocus();
     ResetState (AccessibleStateType::FOCUSED);
 }
 
 void AccessibleDrawDocumentView::impl_dispose()
 {
-    if (mpChildrenManager != NULL)
+    if (mpChildrenManager != nullptr)
     {
         delete mpChildrenManager;
-        mpChildrenManager = NULL;
+        mpChildrenManager = nullptr;
     }
 
     AccessibleDocumentViewBase::impl_dispose();
@@ -830,10 +830,10 @@ void SAL_CALL AccessibleDrawDocumentView::disposing()
 {
 
     // Release resources.
-    if (mpChildrenManager != NULL)
+    if (mpChildrenManager != nullptr)
     {
         delete mpChildrenManager;
-        mpChildrenManager = NULL;
+        mpChildrenManager = nullptr;
     }
 
     // Forward call to base classes.

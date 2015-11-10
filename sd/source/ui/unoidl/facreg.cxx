@@ -49,7 +49,7 @@ namespace {
 static std::shared_ptr<FactoryMap> spFactoryMap;
 std::shared_ptr<FactoryMap> GetFactoryMap()
 {
-    if (spFactoryMap.get() == NULL)
+    if (spFactoryMap.get() == nullptr)
     {
         spFactoryMap.reset(new FactoryMap);
         (*spFactoryMap)[SdDrawingDocument_getImplementationName()] = SdDrawingDocumentFactoryId;
@@ -67,7 +67,7 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL sd_component_getFactory(
     void           * pServiceManager,
     void           *  )
 {
-    void * pRet = 0;
+    void * pRet = nullptr;
 
     if( pServiceManager )
     {
@@ -115,7 +115,7 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL sd_component_getFactory(
         }
     }
 
-    if (pRet != NULL)
+    if (pRet != nullptr)
         SdDLL::Init();
     return pRet;
 }

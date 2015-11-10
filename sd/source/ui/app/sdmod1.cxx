@@ -219,7 +219,7 @@ void SdModule::Execute(SfxRequest& rReq)
                         // Prevent documents from opening while the slide
                         // show is running, except when this request comes
                         // from a shape interaction.
-                        if (rReq.GetArgs() == NULL)
+                        if (rReq.GetArgs() == nullptr)
                         {
                             bIntercept = true;
                         }
@@ -237,7 +237,7 @@ void SdModule::Execute(SfxRequest& rReq)
 
                 const SfxLinkItem* pLinkItem = rReq.GetArg<SfxLinkItem>(SID_DONELINK);
                 if( pLinkItem )
-                    pLinkItem->GetValue().Call( 0 );
+                    pLinkItem->GetValue().Call( nullptr );
             }
         }
         break;
@@ -291,7 +291,7 @@ bool SdModule::OutlineToImpress(SfxRequest& rRequest)
                 // (Otherwise the request will be ignored anyway.)
                 ::sd::ViewShellBase* pBase
                     = dynamic_cast< ::sd::ViewShellBase*>(pViewFrame->GetViewShell());
-                if (pBase != NULL)
+                if (pBase != nullptr)
                 {
                     std::shared_ptr<FrameworkHelper> pHelper (
                         FrameworkHelper::Instance(*pBase));
@@ -456,7 +456,7 @@ void SdModule::AddSummaryPage (SfxViewFrame* pViewFrame, SdDrawDocument* pDocume
     pViewFrame->GetDispatcher()->Execute(SID_SUMMARY_PAGE,
         SfxCallMode::SYNCHRON | SfxCallMode::RECORD);
 
-    OSL_ASSERT (pDocument!=NULL);
+    OSL_ASSERT (pDocument!=nullptr);
 
     sal_Int32 nPageCount = pDocument->GetSdPageCount (PK_STANDARD);
 
@@ -466,12 +466,12 @@ void SdModule::AddSummaryPage (SfxViewFrame* pViewFrame, SdDrawDocument* pDocume
     {
         // Get a page from which to retrieve the transition parameters.
         SdPage* pTemplatePage = pDocument->GetSdPage (0, PK_STANDARD);
-        OSL_ASSERT (pTemplatePage!=NULL);
+        OSL_ASSERT (pTemplatePage!=nullptr);
 
         // The summary page, if it exists, is the last page.
         SdPage* pSummaryPage = pDocument->GetSdPage (
             (sal_uInt16)nPageCount-1, PK_STANDARD);
-        OSL_ASSERT (pSummaryPage!=NULL);
+        OSL_ASSERT (pSummaryPage!=nullptr);
 
         // Take the change mode of the template page as indication of the
         // document's kiosk mode.
@@ -490,7 +490,7 @@ void SdModule::AddSummaryPage (SfxViewFrame* pViewFrame, SdDrawDocument* pDocume
 
 SfxFrame* SdModule::CreateFromTemplate( const OUString& rTemplatePath, const Reference< XFrame >& i_rFrame )
 {
-    SfxFrame* pFrame = 0;
+    SfxFrame* pFrame = nullptr;
 
     SfxObjectShellLock xDocShell;
 
@@ -509,7 +509,7 @@ SfxFrame* SdModule::CreateFromTemplate( const OUString& rTemplatePath, const Ref
     {
         SfxViewFrame* pViewFrame = SfxViewFrame::LoadDocumentIntoFrame( *pDocShell, i_rFrame );
         OSL_ENSURE( pViewFrame, "SdModule::CreateFromTemplate: no view frame - was the document really loaded?" );
-        pFrame = pViewFrame ? &pViewFrame->GetFrame() : NULL;
+        pFrame = pViewFrame ? &pViewFrame->GetFrame() : nullptr;
     }
 
     return pFrame;
@@ -518,7 +518,7 @@ SfxFrame* SdModule::CreateFromTemplate( const OUString& rTemplatePath, const Ref
 
 SfxFrame* SdModule::ExecuteNewDocument( SfxRequest& rReq )
 {
-    SfxFrame* pFrame = 0;
+    SfxFrame* pFrame = nullptr;
     if ( SvtModuleOptions().IsImpress() )
     {
         Reference< XFrame > xTargetFrame;
@@ -552,7 +552,7 @@ SfxFrame* SdModule::ExecuteNewDocument( SfxRequest& rReq )
         else
         {
             SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-            std::unique_ptr< AbstractAssistentDlg > pPilotDlg( pFact ? pFact->CreateAssistentDlg( NULL, !bNewDocDirect ) : 0 );
+            std::unique_ptr< AbstractAssistentDlg > pPilotDlg( pFact ? pFact->CreateAssistentDlg( nullptr, !bNewDocDirect ) : nullptr );
 
             // Open the Pilot
             if( pPilotDlg.get() && pPilotDlg->Execute()==RET_OK )
@@ -636,7 +636,7 @@ SfxFrame* SdModule::ExecuteNewDocument( SfxRequest& rReq )
                     {
                         SfxViewFrame* pViewFrame = SfxViewFrame::LoadDocumentIntoFrame( *pShell, xTargetFrame );
                         DBG_ASSERT( pViewFrame, "no ViewFrame!!" );
-                        pFrame = pViewFrame ? &pViewFrame->GetFrame() : NULL;
+                        pFrame = pViewFrame ? &pViewFrame->GetFrame() : nullptr;
 
                         if(bNewDocDirect && !bStartWithTemplate)
                         {
@@ -645,13 +645,13 @@ SfxFrame* SdModule::ExecuteNewDocument( SfxRequest& rReq )
                                 ApplyItemSet( SID_SD_EDITOPTIONS, *pRet.get() );
                         }
 
-                        ::sd::DrawDocShell* pDocShell(NULL);
-                        ::sd::ViewShellBase* pBase(NULL);
-                        SdDrawDocument* pDoc(NULL);
+                        ::sd::DrawDocShell* pDocShell(nullptr);
+                        ::sd::ViewShellBase* pBase(nullptr);
+                        SdDrawDocument* pDoc(nullptr);
                         if (pShell && pViewFrame)
                         {
                             pDocShell = dynamic_cast< ::sd::DrawDocShell *>( pShell );
-                            pDoc = pDocShell ? pDocShell->GetDoc() : NULL;
+                            pDoc = pDocShell ? pDocShell->GetDoc() : nullptr;
                             pBase = ::sd::ViewShellBase::GetViewShellBase(pViewFrame);
                         }
 
@@ -713,7 +713,7 @@ SfxFrame* SdModule::ExecuteNewDocument( SfxRequest& rReq )
 
 SfxFrame* SdModule::CreateEmptyDocument( DocumentType eDocType, const Reference< XFrame >& i_rFrame )
 {
-    SfxFrame* pFrame = 0;
+    SfxFrame* pFrame = nullptr;
 
     SfxObjectShellLock xDocShell;
     ::sd::DrawDocShell* pNewDocSh;
@@ -728,7 +728,7 @@ SfxFrame* SdModule::CreateEmptyDocument( DocumentType eDocType, const Reference<
 
     SfxViewFrame* pViewFrame = SfxViewFrame::LoadDocumentIntoFrame( *pNewDocSh, i_rFrame );
     OSL_ENSURE( pViewFrame, "SdModule::CreateEmptyDocument: no view frame - was the document really loaded?" );
-    pFrame = pViewFrame ? &pViewFrame->GetFrame() : NULL;
+    pFrame = pViewFrame ? &pViewFrame->GetFrame() : nullptr;
 
     return pFrame;
 }
@@ -906,7 +906,7 @@ OutlineToImpressFinalizer::OutlineToImpressFinalizer (
     // OutlineToImpressFinalizer object.  Therefore a local copy of the
     // stream is created.
     const SvStream* pStream (rBytes.GetStream());
-    if (pStream != NULL)
+    if (pStream != nullptr)
     {
         // Create a memory stream and prepare to fill it with the content of
         // the original stream.
@@ -964,7 +964,7 @@ void OutlineToImpressFinalizer::operator() (bool)
     ::sd::OutlineViewShell* pOutlineShell
         = dynamic_cast<sd::OutlineViewShell*>(FrameworkHelper::Instance(mrBase)->GetViewShell(FrameworkHelper::msCenterPaneURL).get());
 
-    if (pOutlineShell != NULL && mpStream.get() != NULL)
+    if (pOutlineShell != nullptr && mpStream.get() != nullptr)
     {
         sd::OutlineView* pView = static_cast<sd::OutlineView*>(pOutlineShell->GetView());
         // mba: the stream can't contain any relative URLs, because we don't

@@ -254,7 +254,7 @@ void ScrollBarManager::UpdateScrollBars (bool bResetThumbPosition, bool bUseScro
 
 IMPL_LINK_TYPED(ScrollBarManager, VerticalScrollBarHandler, ScrollBar*, pScrollBar, void)
 {
-    if (pScrollBar!=NULL
+    if (pScrollBar!=nullptr
         && pScrollBar==mpVerticalScrollBar.get()
         && pScrollBar->IsVisible()
         && mrSlideSorter.GetContentWindow())
@@ -269,7 +269,7 @@ IMPL_LINK_TYPED(ScrollBarManager, VerticalScrollBarHandler, ScrollBar*, pScrollB
 
 IMPL_LINK_TYPED(ScrollBarManager, HorizontalScrollBarHandler, ScrollBar*, pScrollBar, void)
 {
-    if (pScrollBar!=NULL
+    if (pScrollBar!=nullptr
         && pScrollBar==mpHorizontalScrollBar.get()
         && pScrollBar->IsVisible()
         && mrSlideSorter.GetContentWindow())
@@ -520,7 +520,7 @@ bool ScrollBarManager::RepeatAutoScroll()
 {
     if (maAutoScrollOffset != Size(0,0))
     {
-        if (mrSlideSorter.GetViewShell() != NULL)
+        if (mrSlideSorter.GetViewShell() != nullptr)
         {
             mrSlideSorter.GetViewShell()->Scroll(
                 maAutoScrollOffset.Width(),

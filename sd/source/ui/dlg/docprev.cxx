@@ -74,7 +74,7 @@ VCL_BUILDER_DECL_FACTORY(SdDocPreviewWin)
 }
 
 SdDocPreviewWin::SdDocPreviewWin( vcl::Window* pParent, const WinBits nStyle )
-: Control(pParent, nStyle), pMetaFile( 0 ), bInEffect(false), mpObj(NULL), mnShowPage(0)
+: Control(pParent, nStyle), pMetaFile( nullptr ), bInEffect(false), mpObj(nullptr), mnShowPage(0)
 {
     SetBorderStyle( WindowBorderStyle::MONO );
     svtools::ColorConfig aColorConfig;
@@ -214,7 +214,7 @@ bool SdDocPreviewWin::Notify( NotifyEvent& rNEvt )
 void SdDocPreviewWin::updateViewSettings()
 {
     ::sd::DrawDocShell* pDocShell = dynamic_cast< ::sd::DrawDocShell *>( mpObj );
-    SdDrawDocument* pDoc = pDocShell?pDocShell->GetDoc():NULL;
+    SdDrawDocument* pDoc = pDocShell?pDocShell->GetDoc():nullptr;
 
     SvtAccessibilityOptions aAccOptions;
     bool bUseWhiteColor = !aAccOptions.GetIsForPagePreviews() && GetSettings().GetStyleSettings().GetHighContrastMode();
@@ -228,7 +228,7 @@ void SdDocPreviewWin::updateViewSettings()
         maDocumentColor = Color( aColorConfig.GetColorValue( svtools::DOCCOLOR ).nColor );
     }
 
-    GDIMetaFile* pMtf = NULL;
+    GDIMetaFile* pMtf = nullptr;
 
     if(pDoc)
     {
@@ -253,7 +253,7 @@ void SdDocPreviewWin::updateViewSettings()
 
             pMtf->Record( pVDev );
 
-            ::sd::DrawView* pView = new ::sd::DrawView(pDocShell, this, NULL);
+            ::sd::DrawView* pView = new ::sd::DrawView(pDocShell, this, nullptr);
 
             const Size aSize( pPage->GetSize() );
 

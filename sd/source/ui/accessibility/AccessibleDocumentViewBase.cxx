@@ -68,7 +68,7 @@ AccessibleDocumentViewBase::AccessibleDocumentViewBase (
                                      AccessibleRole::DOCUMENT),
       mpWindow (pSdWindow),
       mxController (rxController),
-      mxModel (NULL),
+      mxModel (nullptr),
       maViewForwarder (
         static_cast<SdrPaintView*>(pViewShell->GetView()),
         *static_cast<OutputDevice*>(pSdWindow))
@@ -135,7 +135,7 @@ void AccessibleDocumentViewBase::Init()
     // Register at VCL Window to be informed of activated and deactivated
     // OLE objects.
     vcl::Window* pWindow = maShapeTreeInfo.GetWindow();
-    if (pWindow != NULL)
+    if (pWindow != nullptr)
     {
         maWindowLink = LINK(
             this, AccessibleDocumentViewBase, WindowChildEventListener);
@@ -172,7 +172,7 @@ IMPL_LINK_TYPED(AccessibleDocumentViewBase, WindowChildEventListener,
                 vcl::Window* pWindow = maShapeTreeInfo.GetWindow();
                 vcl::Window* pDyingWindow = static_cast<vcl::Window*>(
                     rEvent.GetWindow());
-                if (pWindow==pDyingWindow && pWindow!=NULL && maWindowLink.IsSet())
+                if (pWindow==pDyingWindow && pWindow!=nullptr && maWindowLink.IsSet())
                 {
                     pWindow->RemoveChildEventListener (maWindowLink);
                     maWindowLink = Link<VclWindowEvent&,void>();
@@ -185,7 +185,7 @@ IMPL_LINK_TYPED(AccessibleDocumentViewBase, WindowChildEventListener,
                 // A new window has been created.  Is it an OLE object?
                 vcl::Window* pChildWindow = static_cast<vcl::Window*>(
                     rEvent.GetData());
-                if (pChildWindow!=NULL
+                if (pChildWindow!=nullptr
                     && (pChildWindow->GetAccessibleRole()
                         == AccessibleRole::EMBEDDED_OBJECT))
                 {
@@ -200,11 +200,11 @@ IMPL_LINK_TYPED(AccessibleDocumentViewBase, WindowChildEventListener,
                 // object?
                 vcl::Window* pChildWindow = static_cast<vcl::Window*>(
                     rEvent.GetData());
-                if (pChildWindow!=NULL
+                if (pChildWindow!=nullptr
                     && (pChildWindow->GetAccessibleRole()
                         == AccessibleRole::EMBEDDED_OBJECT))
                 {
-                    SetAccessibleOLEObject (NULL);
+                    SetAccessibleOLEObject (nullptr);
                 }
             }
             break;
@@ -491,7 +491,7 @@ void AccessibleDocumentViewBase::impl_dispose()
     {
         mxWindow->removeWindowListener (this);
         mxWindow->removeFocusListener (this);
-        mxWindow = NULL;
+        mxWindow = nullptr;
     }
 
     // Unregister form the model.
@@ -511,14 +511,14 @@ void AccessibleDocumentViewBase::impl_dispose()
     }
 
     // Propagate change of controller down the shape tree.
-    maShapeTreeInfo.SetModelBroadcaster (NULL);
+    maShapeTreeInfo.SetModelBroadcaster (nullptr);
 
     // Reset the model reference.
-    mxModel = NULL;
+    mxModel = nullptr;
     // Reset the model reference.
-    mxController = NULL;
+    mxController = nullptr;
 
-    maShapeTreeInfo.SetDocumentWindow (NULL);
+    maShapeTreeInfo.SetDocumentWindow (nullptr);
 }
 
 //=====  XEventListener  ======================================================
@@ -738,7 +738,7 @@ uno::Any SAL_CALL AccessibleDocumentViewBase::getExtendedAttributes()
 
     uno::Any anyAtrribute;
     OUString sValue;
-    if (0 != dynamic_cast<const ::sd::DrawViewShell* > (mpViewShell))
+    if (nullptr != dynamic_cast<const ::sd::DrawViewShell* > (mpViewShell))
     {
         ::sd::DrawViewShell* pDrViewSh = static_cast< ::sd::DrawViewShell*>(mpViewShell);
         OUString sDisplay;

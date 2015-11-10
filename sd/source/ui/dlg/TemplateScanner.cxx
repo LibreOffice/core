@@ -141,7 +141,7 @@ void TemplateDir::EnableSorting(bool bSortingEnabled)
     mbSortingEnabled = bSortingEnabled;
     if (mbSortingEnabled)
     {
-        if (mpEntryCompare.get() == NULL)
+        if (mpEntryCompare.get() == nullptr)
             mpEntryCompare.reset(new TemplateEntryCompare);
 
         ::std::sort(maEntries.begin(), maEntries.end(), *mpEntryCompare);
@@ -168,10 +168,10 @@ class TemplateScanner::FolderDescriptorList
 TemplateScanner::TemplateScanner()
     : meState(INITIALIZE_SCANNING),
       maFolderContent(),
-      mpTemplateDirectory(NULL),
+      mpTemplateDirectory(nullptr),
       maFolderList(),
       mbEntrySortingEnabled(false),
-      mpLastAddedEntry(NULL),
+      mpLastAddedEntry(nullptr),
       mpFolderDescriptors(new FolderDescriptorList()),
       mxTemplateRoot(),
       mxFolderEnvironment(),
@@ -190,7 +190,7 @@ TemplateScanner::~TemplateScanner()
     // transferred to another object.
     std::vector<TemplateDir*>::iterator I;
     for (I=maFolderList.begin(); I!=maFolderList.end(); ++I)
-        if (*I != NULL)
+        if (*I != nullptr)
             delete *I;
 }
 
@@ -273,7 +273,7 @@ TemplateScanner::State TemplateScanner::ScanEntry()
             if (mpTemplateDirectory->maEntries.empty())
             {
                 delete mpTemplateDirectory;
-                mpTemplateDirectory = NULL;
+                mpTemplateDirectory = nullptr;
             }
             else
             {
@@ -431,7 +431,7 @@ void TemplateScanner::RunNextStep()
             mxEntryEnvironment.clear();
             mxFolderResultSet.clear();
             mxEntryResultSet.clear();
-            mpLastAddedEntry = NULL;
+            mpLastAddedEntry = nullptr;
             break;
         default:
             break;

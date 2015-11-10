@@ -127,7 +127,7 @@ using namespace ::sd;
 void SdDrawDocument::CreateLayoutTemplates()
 {
     SdStyleSheetPool*       pSSPool = static_cast<SdStyleSheetPool*>(GetStyleSheetPool());
-    SfxStyleSheetBase*      pSheet = NULL;
+    SfxStyleSheetBase*      pSheet = nullptr;
     OUString                aHelpFile;
     OUString                aStdName(SD_RESSTR(STR_STANDARD_STYLESHEET_NAME));
 
@@ -253,7 +253,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     // New BulletItem
     SdStyleSheetPool::PutNumBulletItem( pSheet, aBulletFont );
 
-    SfxItemSet* pISet = NULL;
+    SfxItemSet* pISet = nullptr;
 
     // Object with arrowhead
     aName = SD_RESSTR(STR_POOLSHEET_OBJWITHARROW);
@@ -535,7 +535,7 @@ static void implCreateTableTemplate( const Reference< XNameContainer >& xTableFa
 void SdDrawDocument::CreateDefaultCellStyles()
 {
     SdStyleSheetPool*       pSSPool = static_cast< SdStyleSheetPool* >(GetStyleSheetPool());
-    SfxStyleSheetBase*      pSheet = NULL;
+    SfxStyleSheetBase*      pSheet = nullptr;
     OUString                aHelpFile;
 
     Reference< XNameContainer > xTableFamily( pSSPool->getByName( "table" ), UNO_QUERY );
@@ -731,10 +731,10 @@ void SdDrawDocument::StopOnlineSpelling()
     }
 
     delete mpOnlineSpellingIdle;
-    mpOnlineSpellingIdle = NULL;
+    mpOnlineSpellingIdle = nullptr;
 
     delete mpOnlineSpellingList;
-    mpOnlineSpellingList = NULL;
+    mpOnlineSpellingList = nullptr;
 }
 
 // Start OnlineSpelling in the background
@@ -825,7 +825,7 @@ void SdDrawDocument::FillOnlineSpellingList(SdPage* pPage)
 // OnlineSpelling in the background
 IMPL_LINK_NOARG_TYPED(SdDrawDocument, OnlineSpellingHdl, Idle *, void)
 {
-    if (mpOnlineSpellingList!=NULL
+    if (mpOnlineSpellingList!=nullptr
         && ( !mbOnlineSpell || mpOnlineSpellingList->hasMore()))
     {
         // Spell next object
@@ -870,7 +870,7 @@ IMPL_LINK_NOARG_TYPED(SdDrawDocument, OnlineSpellingHdl, Idle *, void)
         StopOnlineSpelling();
 
         delete mpOnlineSearchItem;
-        mpOnlineSearchItem = NULL;
+        mpOnlineSearchItem = nullptr;
     }
 }
 
@@ -967,7 +967,7 @@ IMPL_LINK_TYPED(SdDrawDocument, OnlineSpellEventHdl, EditStatus&, rEditStat, voi
 void SdDrawDocument::ImpOnlineSpellCallback(SpellCallbackInfo* pInfo, SdrObject* pObj, SdrOutliner* pOutl)
 {
     delete mpOnlineSearchItem;
-    mpOnlineSearchItem = NULL;
+    mpOnlineSearchItem = nullptr;
 
     SpellCallbackCommand nCommand = pInfo->nCommand;
 
@@ -1236,7 +1236,7 @@ void SdDrawDocument::SetTextDefaults() const
 
 css::text::WritingMode SdDrawDocument::GetDefaultWritingMode() const
 {
-    const SfxPoolItem*                  pItem = ( pItemPool ? pItemPool->GetPoolDefaultItem( EE_PARA_WRITINGDIR ) : NULL );
+    const SfxPoolItem*                  pItem = ( pItemPool ? pItemPool->GetPoolDefaultItem( EE_PARA_WRITINGDIR ) : nullptr );
     css::text::WritingMode eRet = css::text::WritingMode_LR_TB;
 
     if( pItem )
@@ -1322,7 +1322,7 @@ SdStyleSheetPool* SdDrawDocument::GetSdStyleSheetPool() const
 }
 
 ModifyGuard::ModifyGuard( SdDrawDocument* pDoc )
-: mpDocShell( 0 ), mpDoc( pDoc )
+: mpDocShell( nullptr ), mpDoc( pDoc )
 {
     init();
 }

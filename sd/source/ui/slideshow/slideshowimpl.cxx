@@ -496,14 +496,14 @@ SlideshowImpl::SlideshowImpl( const Reference< XPresentation2 >& xPresentation, 
 , mpViewShell(pViewSh)
 , mpDocSh(pDoc->GetDocSh())
 , mpDoc(pDoc)
-, mpNewAttr(0)
+, mpNewAttr(nullptr)
 , mpParentWindow(pParentWindow)
-, mpShowWindow(0)
-, mpTimeButton(0)
+, mpShowWindow(nullptr)
+, mpTimeButton(nullptr)
 , mnRestoreSlide(0)
 , maPresSize( -1, -1 )
 , meAnimationMode(ANIMATIONMODE_SHOW)
-, mpOldActiveWindow(0)
+, mpOldActiveWindow(nullptr)
 , mnChildMask( 0 )
 , mbGridVisible(false)
 , mbBordVisible(false)
@@ -530,8 +530,8 @@ SlideshowImpl::SlideshowImpl( const Reference< XPresentation2 >& xPresentation, 
 , msOnClick( "OnClick" )
 , msBookmark( "Bookmark" )
 , msVerb( "Verb" )
-, mnEndShowEvent(0)
-, mnContextMenuEvent(0)
+, mnEndShowEvent(nullptr)
+, mnContextMenuEvent(nullptr)
 , mxPresentation( xPresentation )
 {
     if( mpViewShell )
@@ -568,7 +568,7 @@ SlideshowImpl::~SlideshowImpl()
     SdModule *pModule = SD_MOD();
     //rhbz#806663 SlideshowImpl can outlive SdModule
     SdOptions* pOptions = pModule ?
-        pModule->GetSdOptions(DOCUMENT_TYPE_IMPRESS) : NULL;
+        pModule->GetSdOptions(DOCUMENT_TYPE_IMPRESS) : nullptr;
     if( pOptions )
     {
         pOptions->SetPresentationPenColor(mnUserPaintColor);
@@ -658,7 +658,7 @@ void SAL_CALL SlideshowImpl::disposing()
     {
         mpViewShell->SetActiveWindow(mpOldActiveWindow);
         if (mpShowWindow)
-            mpShowWindow->SetViewShell( NULL );
+            mpShowWindow->SetViewShell( nullptr );
     }
 
     if( mpView )
@@ -802,7 +802,7 @@ bool SlideshowImpl::startPreview(
         mpSlideController->insertSlideNumber( nSlideNumber-1 );
         mpSlideController->setPreviewNode( xAnimationNode );
 
-        mpShowWindow = VclPtr<ShowWindow>::Create( this, ((pParent == 0) && mpViewShell) ?  mpParentWindow.get() : pParent );
+        mpShowWindow = VclPtr<ShowWindow>::Create( this, ((pParent == nullptr) && mpViewShell) ?  mpParentWindow.get() : pParent );
         if( mpViewShell )
         {
             mpViewShell->SetActiveWindow( mpShowWindow );
@@ -812,7 +812,7 @@ bool SlideshowImpl::startPreview(
 
         if( mpView )
         {
-            mpView->AddWindowToPaintView( mpShowWindow, 0 );
+            mpView->AddWindowToPaintView( mpShowWindow, nullptr );
             mpView->SetAnimationPause( true );
         }
 
@@ -1006,7 +1006,7 @@ bool SlideshowImpl::startShow( PresentationSettingsEx* pPresSettings )
 
             if( mpView )
             {
-                mpView->AddWindowToPaintView( mpShowWindow, 0 );
+                mpView->AddWindowToPaintView( mpShowWindow, nullptr );
                 mpView->SetAnimationPause( true );
             }
 
@@ -1426,7 +1426,7 @@ void SlideshowImpl::endPresentation()
 
 IMPL_LINK_NOARG_TYPED(SlideshowImpl, endPresentationHdl, void*, void)
 {
-    mnEndShowEvent = 0;
+    mnEndShowEvent = nullptr;
 
     if( mxPresentation.is() )
         mxPresentation->end();
@@ -2091,9 +2091,9 @@ void SlideshowImpl::mouseButtonUp(const MouseEvent& rMEvt)
 
 IMPL_LINK_NOARG_TYPED(SlideshowImpl, ContextMenuHdl, void*, void)
 {
-    mnContextMenuEvent = 0;
+    mnContextMenuEvent = nullptr;
 
-    if( mpSlideController.get() == 0 )
+    if( mpSlideController.get() == nullptr )
         return;
 
     mbWasPaused = mbIsPaused;
@@ -2411,7 +2411,7 @@ void SlideshowImpl::createSlideList( bool bAll, const OUString& rPresSlide )
         if( mpDoc->GetCustomShowList() && maPresSettings.mbCustomShow )
             pCustomShow = mpDoc->GetCustomShowList()->GetCurObject();
         else
-            pCustomShow = NULL;
+            pCustomShow = nullptr;
 
         // create animation slide controller
         AnimationSlideController::Mode eMode =
@@ -2514,7 +2514,7 @@ void SlideshowImpl::hideChildWindows()
 
         if( pViewFrame )
         {
-            if( pViewFrame->GetChildWindow( SID_NAVIGATOR ) != NULL )
+            if( pViewFrame->GetChildWindow( SID_NAVIGATOR ) != nullptr )
                 mnChildMask |= NAVIGATOR_CHILD_MASK;
 
             for( sal_uLong i = 0, nCount = sizeof( aShowChildren ) / sizeof( FncGetChildWindowId ); i < nCount; i++ )
@@ -2551,17 +2551,17 @@ void SlideshowImpl::showChildWindows()
 
 SfxViewFrame* SlideshowImpl::getViewFrame() const
 {
-    return mpViewShell ? mpViewShell->GetViewFrame() : 0;
+    return mpViewShell ? mpViewShell->GetViewFrame() : nullptr;
 }
 
 SfxDispatcher* SlideshowImpl::getDispatcher() const
 {
-    return (mpViewShell && mpViewShell->GetViewFrame()) ? mpViewShell->GetViewFrame()->GetDispatcher() : 0;
+    return (mpViewShell && mpViewShell->GetViewFrame()) ? mpViewShell->GetViewFrame()->GetDispatcher() : nullptr;
 }
 
 SfxBindings* SlideshowImpl::getBindings() const
 {
-    return (mpViewShell && mpViewShell->GetViewFrame()) ? &mpViewShell->GetViewFrame()->GetBindings() : 0;
+    return (mpViewShell && mpViewShell->GetViewFrame()) ? &mpViewShell->GetViewFrame()->GetBindings() : nullptr;
 }
 
 void SlideshowImpl::resize( const Size& rSize )
@@ -2640,7 +2640,7 @@ void SAL_CALL SlideshowImpl::activate() throw (RuntimeException, std::exception)
             if( mpShowWindow )
             {
                 SfxViewFrame* pViewFrame = getViewFrame();
-                SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : 0;
+                SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : nullptr;
 
                 hideChildWindows();
 
@@ -2729,7 +2729,7 @@ void SlideshowImpl::receiveRequest(SfxRequest& rReq)
             // is the bookmark a Slide?
             bool        bIsMasterPage;
             sal_uInt16  nPgNum = mpDoc->GetPageByName( aTarget, bIsMasterPage );
-            SdrObject*  pObj   = NULL;
+            SdrObject*  pObj   = nullptr;
 
             if( nPgNum == SDRPAGE_NOTFOUND )
             {
@@ -2817,7 +2817,7 @@ sal_Int32 SAL_CALL SlideshowImpl::getCurrentSlideIndex() throw (RuntimeException
 
 Reference< XDrawPage > SAL_CALL SlideshowImpl::getSlideByIndex(::sal_Int32 Index) throw (RuntimeException, css::lang::IndexOutOfBoundsException, std::exception)
 {
-    if( (mpSlideController.get() == 0 ) || (Index < 0) || (Index >= mpSlideController->getSlideIndexCount() ) )
+    if( (mpSlideController.get() == nullptr ) || (Index < 0) || (Index >= mpSlideController->getSlideIndexCount() ) )
         throw IndexOutOfBoundsException();
 
     return mpSlideController->getSlideByNumber( mpSlideController->getSlideNumber( Index ) );
@@ -3277,7 +3277,7 @@ PresentationSettingsEx::PresentationSettingsEx( const PresentationSettingsEx& r 
 : PresentationSettings( r )
 , mbRehearseTimings(r.mbRehearseTimings)
 , mbPreview(r.mbPreview)
-, mpParentWindow( 0 )
+, mpParentWindow( nullptr )
 {
 }
 
@@ -3285,7 +3285,7 @@ PresentationSettingsEx::PresentationSettingsEx( PresentationSettings& r )
 : PresentationSettings( r )
 , mbRehearseTimings(false)
 , mbPreview(false)
-, mpParentWindow(0)
+, mpParentWindow(nullptr)
 {
 }
 

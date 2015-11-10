@@ -154,7 +154,7 @@ SdrObject* FuConstructUnoControl::CreateDefaultObject(const sal_uInt16, const Re
 
     SdrObject* pObj = SdrObjFactory::MakeNewObject(
         mpView->GetCurrentObjInventor(), mpView->GetCurrentObjIdentifier(),
-        0L, mpDoc);
+        nullptr, mpDoc);
 
     if(pObj)
     {

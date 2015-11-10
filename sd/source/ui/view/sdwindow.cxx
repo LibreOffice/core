@@ -54,7 +54,7 @@ namespace sd {
 Window::Window(vcl::Window* pParent)
     : vcl::Window(pParent, WinBits(WB_CLIPCHILDREN | WB_DIALOGCONTROL)),
       DropTargetHelper( this ),
-      mpShareWin(NULL),
+      mpShareWin(nullptr),
       maWinPos(0, 0),           // precautionary; but the values should be set
       maViewOrigin(0, 0),       // again from the owner of the window
       maViewSize(1000, 1000),
@@ -66,7 +66,7 @@ Window::Window(vcl::Window* pParent)
       mbCenterAllowed(true),
       mnTicks (0),
       mbDraggedFrom(false),
-      mpViewShell(NULL),
+      mpViewShell(nullptr),
       mbUseDropScroll (true)
 {
     SetDialogControlFlags( DialogControlFlags::Return | DialogControlFlags::WantFocus );
@@ -99,10 +99,10 @@ Window::~Window()
 
 void Window::dispose()
 {
-    if (mpViewShell != NULL)
+    if (mpViewShell != nullptr)
     {
         WindowUpdater* pWindowUpdater = mpViewShell->GetWindowUpdater();
-        if (pWindowUpdater != NULL)
+        if (pWindowUpdater != nullptr)
             pWindowUpdater->UnregisterWindow (this);
     }
     mpShareWin.clear();
@@ -111,22 +111,22 @@ void Window::dispose()
 
 void Window::SetViewShell (ViewShell* pViewSh)
 {
-    WindowUpdater* pWindowUpdater = NULL;
+    WindowUpdater* pWindowUpdater = nullptr;
     // Unregister at device updater of old view shell.
-    if (mpViewShell != NULL)
+    if (mpViewShell != nullptr)
     {
         pWindowUpdater = mpViewShell->GetWindowUpdater();
-        if (pWindowUpdater != NULL)
+        if (pWindowUpdater != nullptr)
             pWindowUpdater->UnregisterWindow (this);
     }
 
     mpViewShell = pViewSh;
 
     // Register at device updater of new view shell
-    if (mpViewShell != NULL)
+    if (mpViewShell != nullptr)
     {
         pWindowUpdater = mpViewShell->GetWindowUpdater();
-        if (pWindowUpdater != NULL)
+        if (pWindowUpdater != nullptr)
             pWindowUpdater->RegisterWindow (this);
     }
 }
@@ -223,7 +223,7 @@ void Window::KeyInput(const KeyEvent& rKEvt)
 {
     if (getenv("SD_DEBUG") && rKEvt.GetKeyCode().GetCode() == KEY_F12 && mpViewShell)
     {
-        mpViewShell->GetDoc()->dumpAsXml(0);
+        mpViewShell->GetDoc()->dumpAsXml(nullptr);
         return;
     }
 
@@ -961,7 +961,7 @@ css::uno::Reference<css::accessibility::XAccessible>
     {
         return xAcc;
     }
-    if (mpViewShell != NULL)
+    if (mpViewShell != nullptr)
     {
         xAcc = mpViewShell->CreateAccessibleDocumentView (this);
         SetAccessible(xAcc);

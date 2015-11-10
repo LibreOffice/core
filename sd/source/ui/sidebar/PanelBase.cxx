@@ -25,7 +25,7 @@ PanelBase::PanelBase (
     vcl::Window* pParentWindow,
     ViewShellBase& rViewShellBase)
     : Control(pParentWindow),
-      mpWrappedControl(NULL),
+      mpWrappedControl(nullptr),
       mxSidebar(),
       mrViewShellBase(rViewShellBase)
 {
@@ -75,7 +75,7 @@ bool PanelBase::ProvideWrappedControl()
         if (mxSidebar.is())
             mxSidebar->requestLayout();
     }
-    return mpWrappedControl.get() != NULL;
+    return mpWrappedControl.get() != nullptr;
 }
 
 ISidebarReceiver::~ISidebarReceiver()

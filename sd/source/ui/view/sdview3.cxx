@@ -110,7 +110,7 @@ SdrObject* ImpGetClone(std::vector<ImpRememberOrigAndClone*>& aConnectorContaine
         if(pConnObj == aConnectorContainer[a]->pOrig)
             return aConnectorContainer[a]->pClone;
     }
-    return 0L;
+    return nullptr;
 }
 
 // restrict movement to WorkArea
@@ -251,7 +251,7 @@ bool View::InsertMetaFile( TransferableDataHelper& rDataHelper, const Point& rPo
 
     aGraphic.SetPrefMapMode( aMtf.GetPrefMapMode() );
     aGraphic.SetPrefSize( aMtf.GetPrefSize() );
-    InsertGraphic( aGraphic, mnAction, aInsertPos, NULL, pImageMap );
+    InsertGraphic( aGraphic, mnAction, aInsertPos, nullptr, pImageMap );
 
     return true;
 }
@@ -265,39 +265,39 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
     mbIsDropAllowed = false;
 
     TransferableDataHelper  aDataHelper( rDataHelper );
-    SdrObject*              pPickObj = NULL;
-    SdPage*                 pPage = NULL;
+    SdrObject*              pPickObj = nullptr;
+    SdPage*                 pPage = nullptr;
     std::unique_ptr<ImageMap> pImageMap;
     bool bReturn = false;
     bool                    bLink = ( ( mnAction & DND_ACTION_LINK ) != 0 );
     bool                    bCopy = ( ( ( mnAction & DND_ACTION_COPY ) != 0 ) || bLink );
     SdrInsertFlags          nPasteOptions = SdrInsertFlags::SETDEFLAYER;
 
-    if (mpViewSh != NULL)
+    if (mpViewSh != nullptr)
     {
-        OSL_ASSERT (mpViewSh->GetViewShell()!=NULL);
+        OSL_ASSERT (mpViewSh->GetViewShell()!=nullptr);
         SfxInPlaceClient* pIpClient = mpViewSh->GetViewShell()->GetIPClient();
         if( dynamic_cast< ::sd::slidesorter::SlideSorterViewShell *>( mpViewSh ) !=  nullptr
-            || (pIpClient!=NULL && pIpClient->IsObjectInPlaceActive()))
+            || (pIpClient!=nullptr && pIpClient->IsObjectInPlaceActive()))
         nPasteOptions |= SdrInsertFlags::DONTMARK;
     }
 
     if( bDrag )
     {
-        SdrPageView* pPV = NULL;
+        SdrPageView* pPV = nullptr;
         PickObj( rPos, getHitTolLog(), pPickObj, pPV );
     }
 
     if( nPage != SDRPAGE_NOTFOUND )
         pPage = static_cast<SdPage*>( mrDoc.GetPage( nPage ) );
 
-    SdTransferable* pOwnData = NULL;
+    SdTransferable* pOwnData = nullptr;
     SdTransferable* pImplementation = SdTransferable::getImplementation( aDataHelper.GetTransferable() );
 
     if(pImplementation && (rDnDAction & DND_ACTION_LINK))
     {
         // suppress own data when it's intention is to use it as fill information
-        pImplementation = 0;
+        pImplementation = nullptr;
     }
 
     // try to get own transfer data
@@ -615,7 +615,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                     if (nPos != -1)
                         aLayout = aLayout.copy(0, nPos);
                     pPage->SetPresentationLayout( aLayout, false, false );
-                    pSourceDoc->CreatingDataObj( NULL );
+                    pSourceDoc->CreatingDataObj( nullptr );
                 }
                 else
                 {
@@ -691,8 +691,8 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                     {
                         // only one object
                         SdrObject*      pObj = pModel->GetSdPage( 0, PK_STANDARD )->GetObj( 0 );
-                        SdrObject*      pPickObj2 = NULL;
-                        SdrPageView*    pPV = NULL;
+                        SdrObject*      pPickObj2 = nullptr;
+                        SdrPageView*    pPV = nullptr;
                         PickObj( rPos, getHitTolLog(), pPickObj2, pPV );
 
                         if( ( mnAction & DND_ACTION_MOVE ) && pPickObj2 && pObj )
@@ -983,12 +983,12 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                     SdrPageView*    pPV = GetSdrPageView();
                     SdrInsertFlags  nOptions = SdrInsertFlags::SETDEFLAYER;
 
-                    if (mpViewSh!=NULL)
+                    if (mpViewSh!=nullptr)
                     {
-                        OSL_ASSERT (mpViewSh->GetViewShell()!=NULL);
+                        OSL_ASSERT (mpViewSh->GetViewShell()!=nullptr);
                         SfxInPlaceClient* pIpClient
                             = mpViewSh->GetViewShell()->GetIPClient();
-                        if (pIpClient!=NULL && pIpClient->IsObjectInPlaceActive())
+                        if (pIpClient!=nullptr && pIpClient->IsObjectInPlaceActive())
                             nOptions |= SdrInsertFlags::DONTMARK;
                     }
 
@@ -1153,12 +1153,12 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                     SdrPageView*    pPV = GetSdrPageView();
                     SdrInsertFlags  nOptions = SdrInsertFlags::SETDEFLAYER;
 
-                    if (mpViewSh!=NULL)
+                    if (mpViewSh!=nullptr)
                     {
-                        OSL_ASSERT (mpViewSh->GetViewShell()!=NULL);
+                        OSL_ASSERT (mpViewSh->GetViewShell()!=nullptr);
                         SfxInPlaceClient* pIpClient
                             = mpViewSh->GetViewShell()->GetIPClient();
-                        if (pIpClient!=NULL && pIpClient->IsObjectInPlaceActive())
+                        if (pIpClient!=nullptr && pIpClient->IsObjectInPlaceActive())
                             nOptions |= SdrInsertFlags::DONTMARK;
                     }
 
@@ -1215,7 +1215,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
             ImpCheckInsertPos(aInsertPos, aImageMapSize, GetWorkArea());
 
-            InsertGraphic( aGraphic, mnAction, aInsertPos, NULL, pImageMap.get() );
+            InsertGraphic( aGraphic, mnAction, aInsertPos, nullptr, pImageMap.get() );
             bReturn = true;
         }
     }
@@ -1294,7 +1294,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
             Size aImageMapSize(aBmpEx.GetPrefSize());
             ImpCheckInsertPos(aInsertPos, aImageMapSize, GetWorkArea());
 
-            InsertGraphic( aBmpEx, mnAction, aInsertPos, NULL, pImageMap.get() );
+            InsertGraphic( aBmpEx, mnAction, aInsertPos, nullptr, pImageMap.get() );
             bReturn = true;
         }
     }

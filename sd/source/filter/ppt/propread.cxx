@@ -574,7 +574,7 @@ const Section* PropRead::GetSection( const sal_uInt8* pFMTID )
         if ( memcmp( it->GetFMTID(), pFMTID, 16 ) == 0 )
             return &(*it);
     }
-    return NULL;
+    return nullptr;
 }
 
 void PropRead::Read()

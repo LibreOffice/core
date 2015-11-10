@@ -71,7 +71,7 @@ void GraphicViewShell::ChangeEditMode (
 
 void GraphicViewShell::ArrangeGUIElements()
 {
-    if (mpLayerTabBar.get()!=NULL && mpLayerTabBar->IsVisible())
+    if (mpLayerTabBar.get()!=nullptr && mpLayerTabBar->IsVisible())
     {
         Size aSize = mpLayerTabBar->GetSizePixel();
         const Size aFrameSize (GetViewFrame()->GetWindow().GetOutputSizePixel());

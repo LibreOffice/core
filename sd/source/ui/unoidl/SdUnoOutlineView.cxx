@@ -87,10 +87,10 @@ void SAL_CALL SdUnoOutlineView::setCurrentPage (
     throw(RuntimeException, std::exception)
 {
     SvxDrawPage* pDrawPage = SvxDrawPage::getImplementation( xPage );
-    SdrPage *pSdrPage = pDrawPage ? pDrawPage->GetSdrPage() : NULL;
+    SdrPage *pSdrPage = pDrawPage ? pDrawPage->GetSdrPage() : nullptr;
     SdPage *pSdPage = dynamic_cast<SdPage*>(pSdrPage);
 
-    if (pSdPage != NULL)
+    if (pSdPage != nullptr)
         mrOutlineViewShell.SetCurrentPage(pSdPage);
 }
 
@@ -100,7 +100,7 @@ Reference< drawing::XDrawPage > SAL_CALL SdUnoOutlineView::getCurrentPage()
     Reference<drawing::XDrawPage>  xPage;
 
     SdPage* pPage = mrOutlineViewShell.getCurrentPage();
-    if (pPage != NULL)
+    if (pPage != nullptr)
         xPage.set(pPage->getUnoPage(), UNO_QUERY);
 
     return xPage;
@@ -143,7 +143,7 @@ Any SAL_CALL SdUnoOutlineView::getFastPropertyValue (
         case DrawController::PROPERTY_CURRENTPAGE:
         {
             SdPage* pPage = const_cast<OutlineViewShell&>(mrOutlineViewShell).GetActualPage();
-            if (pPage != NULL)
+            if (pPage != nullptr)
                 aValue <<= pPage->getUnoPage();
         }
         break;

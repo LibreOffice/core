@@ -150,7 +150,7 @@ static SfxBindings* getBindings( ViewShellBase& rBase )
     if( rBase.GetMainViewShell().get() && rBase.GetMainViewShell()->GetViewFrame() )
         return &rBase.GetMainViewShell()->GetViewFrame()->GetBindings();
     else
-        return 0;
+        return nullptr;
 }
 
 static SfxDispatcher* getDispatcher( ViewShellBase& rBase )
@@ -158,7 +158,7 @@ static SfxDispatcher* getDispatcher( ViewShellBase& rBase )
     if( rBase.GetMainViewShell().get() && rBase.GetMainViewShell()->GetViewFrame() )
         return rBase.GetMainViewShell()->GetViewFrame()->GetDispatcher();
     else
-        return 0;
+        return nullptr;
 }
 
 IMPL_LINK_NOARG_TYPED(TableDesignWidget, implValueSetHdl, ValueSet*, void)
@@ -632,7 +632,7 @@ const Bitmap CreateDesignPreview( const Reference< XIndexAccess >& xTableStyle, 
 // bccccccccccb
 // bbbbbbbbbbbb
 
-    Bitmap aPreviewBmp( Size( nBitmapWidth, nBitmapHeight), 24, NULL );
+    Bitmap aPreviewBmp( Size( nBitmapWidth, nBitmapHeight), 24, nullptr );
     BitmapWriteAccess* pAccess = aPreviewBmp.AcquireWriteAccess();
     if( pAccess )
     {

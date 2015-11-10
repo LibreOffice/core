@@ -37,7 +37,7 @@ SlotStateListener::SlotStateListener (
     const OUString& rSlotName)
     : SlotStateListenerInterfaceBase(maMutex),
       maCallback(),
-      mxDispatchProviderWeak(NULL)
+      mxDispatchProviderWeak(nullptr)
 {
     SetCallback(rCallback);
     ConnectToDispatchProvider(rxDispatchProvider);
@@ -89,7 +89,7 @@ void SlotStateListener::ObserveSlot (const OUString& rSlotName)
 void SlotStateListener::disposing()
 {
     ReleaseListeners();
-    mxDispatchProviderWeak = uno::WeakReference<frame::XDispatchProvider>(NULL);
+    mxDispatchProviderWeak = uno::WeakReference<frame::XDispatchProvider>(nullptr);
     maCallback = Link<const OUString&,void>();
 }
 

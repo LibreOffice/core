@@ -206,9 +206,9 @@ ColorPropertyBox::ColorPropertyBox( sal_Int32 nControlType, vcl::Window* pParent
     SfxObjectShell* pDocSh = SfxObjectShell::Current();
     DBG_ASSERT( pDocSh, "DocShell not found!" );
     XColorListRef pColorList;
-    const SfxPoolItem* pItem = NULL;
+    const SfxPoolItem* pItem = nullptr;
 
-    if ( pDocSh && ( ( pItem = pDocSh->GetItem( SID_COLOR_TABLE ) ) != 0) )
+    if ( pDocSh && ( ( pItem = pDocSh->GetItem( SID_COLOR_TABLE ) ) != nullptr) )
         pColorList = static_cast<const SvxColorListItem*>(pItem)->GetColorList();
 
     if ( !pColorList.is() )
@@ -286,15 +286,15 @@ FontPropertyBox::FontPropertyBox( sal_Int32 nControlType, vcl::Window* pParent, 
     SfxObjectShell* pDocSh = SfxObjectShell::Current();
     const SfxPoolItem* pItem;
 
-    const FontList* pFontList = 0;
+    const FontList* pFontList = nullptr;
     bool bMustDelete = false;
 
-    if ( pDocSh && ( (pItem = pDocSh->GetItem( SID_ATTR_CHAR_FONTLIST ) ) != 0) )
+    if ( pDocSh && ( (pItem = pDocSh->GetItem( SID_ATTR_CHAR_FONTLIST ) ) != nullptr) )
         pFontList = static_cast<const SvxFontListItem*>(pItem)->GetFontList();
 
     if(!pFontList)
     {
-        pFontList = new FontList( Application::GetDefaultDevice(), NULL, false );
+        pFontList = new FontList( Application::GetDefaultDevice(), nullptr, false );
         bMustDelete = true;
     }
 
@@ -358,7 +358,7 @@ private:
 
 DropdownMenuBox::DropdownMenuBox( vcl::Window* pParent, Edit* pSubControl, PopupMenu* pMenu )
 :   Edit( pParent, WB_BORDER|WB_TABSTOP| WB_DIALOGCONTROL ),
-    mpSubControl(pSubControl),mpDropdownButton(0),mpMenu(pMenu)
+    mpSubControl(pSubControl),mpDropdownButton(nullptr),mpMenu(pMenu)
 {
     mpDropdownButton = VclPtr<MenuButton>::Create( this, WB_NOLIGHTBORDER | WB_RECTSTYLE | WB_NOTABSTOP);
     mpDropdownButton->SetSymbol(SymbolType::SPIN_DOWN);
@@ -1080,9 +1080,9 @@ CustomAnimationEffectTabPage::CustomAnimationEffectTabPage( vcl::Window* pParent
     SfxObjectShell* pDocSh = SfxObjectShell::Current();
     DBG_ASSERT( pDocSh, "DocShell not found!" );
     XColorListRef pColorList;
-    const SfxPoolItem* pItem = NULL;
+    const SfxPoolItem* pItem = nullptr;
 
-    if ( pDocSh && ( (pItem = pDocSh->GetItem( SID_COLOR_TABLE ) ) != 0 ) )
+    if ( pDocSh && ( (pItem = pDocSh->GetItem( SID_COLOR_TABLE ) ) != nullptr ) )
         pColorList = static_cast<const SvxColorListItem*>(pItem)->GetColorList();
 
     if ( !pColorList.is() )
@@ -2203,7 +2203,7 @@ IMPL_LINK_NOARG_TYPED(CustomAnimationTextAnimTabPage, implSelectHdl, ListBox&, v
 CustomAnimationDialog::CustomAnimationDialog(vcl::Window* pParent, STLPropertySet* pSet, const OString& sPage)
 : TabDialog( pParent, "CustomAnimationProperties", "modules/simpress/ui/customanimationproperties.ui")
 , mpSet( pSet )
-, mpResultSet( 0 )
+, mpResultSet( nullptr )
 {
     get(mpTabControl, "tabs");
 
@@ -2227,7 +2227,7 @@ CustomAnimationDialog::CustomAnimationDialog(vcl::Window* pParent, STLPropertySe
     }
     else
     {
-        mpTextAnimTabPage = 0;
+        mpTextAnimTabPage = nullptr;
         mpTabControl->RemovePage( mnTextAnimId );
     }
 
@@ -2316,7 +2316,7 @@ STLPropertySet* CustomAnimationDialog::createDefaultSet()
 }
 
 PropertyControl::PropertyControl( vcl::Window* pParent )
-: ListBox( pParent, WB_TABSTOP | WB_BORDER | WB_DROPDOWN ), mpSubControl(0)
+: ListBox( pParent, WB_TABSTOP | WB_BORDER | WB_DROPDOWN ), mpSubControl(nullptr)
 {
 }
 
@@ -2340,7 +2340,7 @@ void PropertyControl::setSubControl( PropertySubControl* pSubControl )
 
     mpSubControl = pSubControl;
 
-    Control* pControl = pSubControl ? pSubControl->getControl() : 0;
+    Control* pControl = pSubControl ? pSubControl->getControl() : nullptr;
 
     if( pControl )
     {
@@ -2357,7 +2357,7 @@ void PropertyControl::setSubControl( PropertySubControl* pSubControl )
 
 void PropertyControl::Resize()
 {
-    Control* pControl = mpSubControl ? mpSubControl->getControl() : 0;
+    Control* pControl = mpSubControl ? mpSubControl->getControl() : nullptr;
     if( pControl )
         pControl->SetPosSizePixel( GetPosPixel(), GetSizePixel() );
     ListBox::Resize();
@@ -2369,7 +2369,7 @@ PropertySubControl::~PropertySubControl()
 
 PropertySubControl* PropertySubControl::create( sal_Int32 nType, vcl::Window* pParent, const Any& rValue, const OUString& rPresetId, const Link<LinkParamNone*,void>& rModifyHdl )
 {
-    PropertySubControl* pSubControl = NULL;
+    PropertySubControl* pSubControl = nullptr;
     switch( nType )
     {
     case nPropertyTypeDirection:

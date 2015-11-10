@@ -97,7 +97,7 @@ public:
             text objects.  This refromatting is necessary for the new values
             to take effect.
     */
-    void Update (OutputDevice* pDevice, SdDrawDocument* pDocument=0) const;
+    void Update (OutputDevice* pDevice, SdDrawDocument* pDocument=nullptr) const;
 
     /** Callback that waits for notifications of a
         <type>SvtCTLOptions</type> object.

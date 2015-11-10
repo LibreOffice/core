@@ -96,7 +96,7 @@ void PresentationViewShell::FinishInitialization( FrameView* pFrameView )
 
     // Use the frame view that comes form the view shell that initiated our
     // creation.
-    if (pFrameView != NULL)
+    if (pFrameView != nullptr)
     {
         GetFrameView()->Disconnect();
         SetFrameView (pFrameView);
@@ -110,12 +110,12 @@ void PresentationViewShell::FinishInitialization( FrameView* pFrameView )
 
 SvxRuler* PresentationViewShell::CreateHRuler(::sd::Window*, bool)
 {
-    return NULL;
+    return nullptr;
 }
 
 SvxRuler* PresentationViewShell::CreateVRuler(::sd::Window*)
 {
-    return NULL;
+    return nullptr;
 }
 
 void PresentationViewShell::Activate( bool bIsMDIActivate )

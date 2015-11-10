@@ -63,7 +63,7 @@ public:
     virtual bool cancel() override;
 
     //let mouse cursor move
-    virtual void ForcePointer(const MouseEvent* pMEvt = NULL) override;
+    virtual void ForcePointer(const MouseEvent* pMEvt = nullptr) override;
 protected:
     FuSelection (ViewShell* pViewSh,
         ::sd::Window* pWin,

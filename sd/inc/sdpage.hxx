@@ -197,7 +197,7 @@ public:
     SdrObject*      InsertAutoLayoutShape(SdrObject* pObj, PresObjKind eObjKind, bool bVertical, const Rectangle& rRect, bool bInit);
 
     virtual void       NbcInsertObject(SdrObject* pObj, size_t nPos=SAL_MAX_SIZE,
-                                       const SdrInsertReason* pReason=NULL) override;
+                                       const SdrInsertReason* pReason=nullptr) override;
     virtual SdrObject* NbcRemoveObject(size_t nObjNum) override;
     virtual SdrObject* RemoveObject(size_t nObjNum) override;
 

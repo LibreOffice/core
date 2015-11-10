@@ -189,7 +189,7 @@ model::SharedPageDescriptor FocusManager::GetFocusedPageDescriptor() const
 
 void FocusManager::SetFocusedPage (const model::SharedPageDescriptor& rpDescriptor)
 {
-    if (rpDescriptor.get() != NULL)
+    if (rpDescriptor.get() != nullptr)
     {
         FocusHider aFocusHider (*this);
         mnPageIndex = (rpDescriptor->GetPage()->GetPageNum()-1)/2;
@@ -214,7 +214,7 @@ bool FocusManager::IsFocusShowing() const
 
 void FocusManager::HideFocusIndicator (const model::SharedPageDescriptor& rpDescriptor)
 {
-    if (rpDescriptor.get() != NULL)
+    if (rpDescriptor.get() != nullptr)
     {
         mrSlideSorter.GetView().SetState(rpDescriptor, model::PageDescriptor::ST_Focused, false);
 
@@ -227,7 +227,7 @@ void FocusManager::ShowFocusIndicator (
     const model::SharedPageDescriptor& rpDescriptor,
     const bool bScrollToFocus)
 {
-    if (rpDescriptor.get() != NULL)
+    if (rpDescriptor.get() != nullptr)
     {
         mrSlideSorter.GetView().SetState(rpDescriptor, model::PageDescriptor::ST_Focused, true);
 
@@ -268,7 +268,7 @@ void FocusManager::NotifyFocusChangeListeners() const
     ::std::vector<Link<LinkParamNone*,void>>::iterator iEnd (aListeners.end());
     for (; iListener!=iEnd; ++iListener)
     {
-        iListener->Call(NULL);
+        iListener->Call(nullptr);
     }
 }
 

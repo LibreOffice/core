@@ -372,7 +372,7 @@ private:
             The return value specifies whether the search ended (</sal_True>) or
             another call to this method is required (</sal_False>).
     */
-    bool SearchAndReplaceOnce(std::vector<SearchSelection>* pSelections = 0);
+    bool SearchAndReplaceOnce(std::vector<SearchSelection>* pSelections = nullptr);
 
     /** Detect changes of the document or view and react accordingly.  Such
         changes may occur because different calls to

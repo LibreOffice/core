@@ -38,7 +38,7 @@ PageDescriptor::PageDescriptor (
     const sal_Int32 nIndex)
     : mpPage(pPage),
       mxPage(rxPage),
-      mpMasterPage(NULL),
+      mpMasterPage(nullptr),
       mnIndex(nIndex),
       maBoundingBox(),
       maVisualState(nIndex),
@@ -52,7 +52,7 @@ PageDescriptor::PageDescriptor (
 {
     OSL_ASSERT(mpPage);
     OSL_ASSERT(mpPage == SdPage::getImplementation(rxPage));
-    if (mpPage != NULL)
+    if (mpPage != nullptr)
     {
         if (mpPage->TRG_HasMasterPage())
             mpMasterPage = &mpPage->TRG_GetMasterPage();
@@ -73,8 +73,8 @@ void PageDescriptor::SetPageIndex (const sal_Int32 nNewIndex)
 
 bool PageDescriptor::UpdateMasterPage()
 {
-    const SdrPage* pMaster = NULL;
-    if (mpPage!=NULL && mpPage->TRG_HasMasterPage())
+    const SdrPage* pMaster = nullptr;
+    if (mpPage!=nullptr && mpPage->TRG_HasMasterPage())
         pMaster = &mpPage->TRG_GetMasterPage();
     if (mpMasterPage != pMaster)
     {
@@ -88,7 +88,7 @@ bool PageDescriptor::UpdateMasterPage()
 bool PageDescriptor::UpdateTransitionFlag()
 {
     bool bHasSlideTransition (false);
-    if (mpPage != NULL)
+    if (mpPage != nullptr)
         bHasSlideTransition = mpPage->getTransitionType() > 0;
     if (bHasSlideTransition != mbHasTransition)
     {
@@ -122,7 +122,7 @@ bool PageDescriptor::HasState (const State eState) const
             return mbIsCurrent;
 
         case ST_Excluded:
-            return mpPage!=NULL && mpPage->IsExcluded();
+            return mpPage!=nullptr && mpPage->IsExcluded();
 
         default:
             OSL_ASSERT(false);
@@ -174,7 +174,7 @@ bool PageDescriptor::SetState (const State eState, const bool bNewStateValue)
         case ST_Excluded:
             // This is a state of the page and has to be handled differently
             // from the view-only states.
-            if (mpPage != NULL)
+            if (mpPage != nullptr)
                 if (bNewStateValue != mpPage->IsExcluded())
                 {
                     mpPage->SetExcluded(bNewStateValue);
@@ -190,7 +190,7 @@ bool PageDescriptor::SetState (const State eState, const bool bNewStateValue)
 
 bool PageDescriptor::GetCoreSelection()
 {
-    if (mpPage!=NULL && mpPage->IsSelected() != mbIsSelected)
+    if (mpPage!=nullptr && mpPage->IsSelected() != mbIsSelected)
         return SetState(ST_Selected, !mbIsSelected);
     else
         return false;
@@ -198,14 +198,14 @@ bool PageDescriptor::GetCoreSelection()
 
 void PageDescriptor::SetCoreSelection()
 {
-    if (mpPage != NULL)
+    if (mpPage != nullptr)
         if (HasState(ST_Selected))
             mpPage->SetSelected(true);
         else
             mpPage->SetSelected(false);
     else
     {
-        OSL_ASSERT(mpPage!=NULL);
+        OSL_ASSERT(mpPage!=nullptr);
     }
 }
 

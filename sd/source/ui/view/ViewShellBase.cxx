@@ -235,8 +235,8 @@ ViewShellBase::ViewShellBase (
         | SfxViewShellFlags::HAS_PRINTOPTIONS),
       maMutex(),
       mpImpl(),
-      mpDocShell (NULL),
-      mpDocument (NULL)
+      mpDocShell (nullptr),
+      mpDocument (nullptr)
 {
     mpImpl.reset(new Implementation(*this));
     mpImpl->mpViewWindow = VclPtr<FocusForwardingWindow>::Create(_pFrame->GetWindow(),*this);
@@ -245,10 +245,10 @@ ViewShellBase::ViewShellBase (
     _pFrame->GetWindow().SetBackground(Application::GetSettings().GetStyleSettings().GetLightColor());
 
     // Set up the members in the correct order.
-    if (0 != dynamic_cast< DrawDocShell *>( GetViewFrame()->GetObjectShell() ))
+    if (nullptr != dynamic_cast< DrawDocShell *>( GetViewFrame()->GetObjectShell() ))
         mpDocShell = static_cast<DrawDocShell*>(
             GetViewFrame()->GetObjectShell());
-    if (mpDocShell != NULL)
+    if (mpDocShell != nullptr)
         mpDocument = mpDocShell->GetDoc();
     mpImpl->mpViewShellManager.reset(new ViewShellManager(*this));
 
@@ -270,15 +270,15 @@ ViewShellBase::~ViewShellBase()
     xSlideShow.clear();
 
     // Tell the controller that the ViewShellBase is not available anymore.
-    if (mpImpl->mpController.get() != NULL)
+    if (mpImpl->mpController.get() != nullptr)
         mpImpl->mpController->ReleaseViewShellBase();
 
     // We have to hide the main window to prevent SFX complaining after a
     // reload about it being already visible.
     ViewShell* pShell = GetMainViewShell().get();
-    if (pShell!=NULL
-        && pShell->GetActiveWindow()!=NULL
-        && pShell->GetActiveWindow()->GetParent()!=NULL)
+    if (pShell!=nullptr
+        && pShell->GetActiveWindow()!=nullptr
+        && pShell->GetActiveWindow()->GetParent()!=nullptr)
     {
         pShell->GetActiveWindow()->GetParent()->Hide();
     }
@@ -289,7 +289,7 @@ ViewShellBase::~ViewShellBase()
     EndListening(*GetViewFrame());
     EndListening(*GetDocShell());
 
-    SetWindow(NULL);
+    SetWindow(nullptr);
 
     mpImpl->mpFormShellManager.reset();
 }
@@ -337,7 +337,7 @@ void ViewShellBase::LateInit (const OUString& rsDefaultView)
             // has been created.
             sd::framework::ConfigurationController* pConfigurationController
                 = dynamic_cast<sd::framework::ConfigurationController*>(xConfigurationController.get());
-            if (pConfigurationController != NULL)
+            if (pConfigurationController != nullptr)
             {
                 while (
                     ! pConfigurationController->getResource(xCenterViewId).is()
@@ -359,10 +359,10 @@ void ViewShellBase::LateInit (const OUString& rsDefaultView)
 
     // Remember the type of the current main view shell in the frame view.
     ViewShell* pViewShell = GetMainViewShell().get();
-    if (pViewShell != NULL)
+    if (pViewShell != nullptr)
     {
         FrameView* pFrameView = pViewShell->GetFrameView();
-        if (pFrameView != NULL)
+        if (pFrameView != nullptr)
             pFrameView->SetViewShellTypeOnLoad(pViewShell->GetShellType());
     }
 }
@@ -377,7 +377,7 @@ std::shared_ptr<ViewShell> ViewShellBase::GetMainViewShell() const
     std::shared_ptr<ViewShell> pMainViewShell (
         framework::FrameworkHelper::Instance(*const_cast<ViewShellBase*>(this))
             ->GetViewShell(framework::FrameworkHelper::msCenterPaneURL));
-    if (pMainViewShell.get() == NULL)
+    if (pMainViewShell.get() == nullptr)
         pMainViewShell = framework::FrameworkHelper::Instance(*const_cast<ViewShellBase*>(this))
             ->GetViewShell(framework::FrameworkHelper::msFullScreenPaneURL);
     return pMainViewShell;
@@ -385,14 +385,14 @@ std::shared_ptr<ViewShell> ViewShellBase::GetMainViewShell() const
 
 ViewShellBase* ViewShellBase::GetViewShellBase (SfxViewFrame* pViewFrame)
 {
-    ViewShellBase* pBase = NULL;
+    ViewShellBase* pBase = nullptr;
 
-    if (pViewFrame != NULL)
+    if (pViewFrame != nullptr)
     {
         // Get the view shell for the frame and cast it to
         // sd::ViewShellBase.
         SfxViewShell* pSfxViewShell = pViewFrame->GetViewShell();
-        if (pSfxViewShell!=NULL && dynamic_cast< ::sd::ViewShellBase *>( pSfxViewShell ) !=  nullptr)
+        if (pSfxViewShell!=nullptr && dynamic_cast< ::sd::ViewShellBase *>( pSfxViewShell ) !=  nullptr)
             pBase = static_cast<ViewShellBase*>(pSfxViewShell);
     }
 
@@ -474,13 +474,13 @@ void ViewShellBase::OuterResizePixel (const Point& rOrigin, const Size &rSize)
 
 void ViewShellBase::Rearrange()
 {
-    OSL_ASSERT(GetViewFrame()!=NULL);
+    OSL_ASSERT(GetViewFrame()!=nullptr);
 
     // There is a bug in the communication between embedded objects and the
     // framework::LayoutManager that leads to missing resize updates.  The
     // following workaround enforces such an update by cycling the border to
     // zero and back to the current value.
-    if (GetWindow() != NULL)
+    if (GetWindow() != nullptr)
     {
         SetBorderPixel(SvBorder());
         UpdateBorder(true);
@@ -498,7 +498,7 @@ ErrCode ViewShellBase::DoVerb (long nVerb)
     ErrCode aResult = ERRCODE_NONE;
 
     ::sd::ViewShell* pShell = GetMainViewShell().get();
-    if (pShell != NULL)
+    if (pShell != nullptr)
         aResult = pShell->DoVerb (nVerb);
 
     return aResult;
@@ -513,7 +513,7 @@ Reference<view::XRenderable> ViewShellBase::GetRenderable()
 
 SfxPrinter* ViewShellBase::GetPrinter (bool bCreate)
 {
-    OSL_ASSERT(mpImpl.get()!=NULL);
+    OSL_ASSERT(mpImpl.get()!=nullptr);
 
     return GetDocShell()->GetPrinter (bCreate);
 }
@@ -523,7 +523,7 @@ sal_uInt16 ViewShellBase::SetPrinter (
     SfxPrinterChangeFlags nDiffFlags,
     bool bIsAPI)
 {
-    OSL_ASSERT(mpImpl.get()!=NULL);
+    OSL_ASSERT(mpImpl.get()!=nullptr);
 
     GetDocShell()->SetPrinter(pNewPrinter);
 
@@ -660,7 +660,7 @@ void ViewShellBase::GetState (SfxItemSet& rSet)
 {
     mpImpl->GetSlotState(rSet);
 
-    FuBullet::GetSlotState( rSet, 0, GetViewFrame() );
+    FuBullet::GetSlotState( rSet, nullptr, GetViewFrame() );
 }
 
 void ViewShellBase::WriteUserDataSequence (
@@ -669,7 +669,7 @@ void ViewShellBase::WriteUserDataSequence (
 {
     // Forward call to main sub shell.
     ViewShell* pShell = GetMainViewShell().get();
-    if (pShell != NULL)
+    if (pShell != nullptr)
         pShell->WriteUserDataSequence (rSequence, bBrowse);
 }
 
@@ -679,7 +679,7 @@ void ViewShellBase::ReadUserDataSequence (
 {
     // Forward call to main sub shell.
     ViewShell* pShell = GetMainViewShell().get();
-    if (pShell != NULL)
+    if (pShell != nullptr)
     {
         pShell->ReadUserDataSequence (rSequence, bBrowse);
 
@@ -746,7 +746,7 @@ void ViewShellBase::SetZoomFactor (
     SfxViewShell::SetZoomFactor (rZoomX, rZoomY);
     // Forward call to main sub shell.
     ViewShell* pShell = GetMainViewShell().get();
-    if (pShell != NULL)
+    if (pShell != nullptr)
         pShell->SetZoomFactor (rZoomX, rZoomY);
 }
 
@@ -760,7 +760,7 @@ bool ViewShellBase::PrepareClose (bool bUI)
 
         // Forward call to main sub shell.
         ViewShell* pShell = GetMainViewShell().get();
-        if (pShell != NULL)
+        if (pShell != nullptr)
             bResult = pShell->PrepareClose (bUI);
     }
 
@@ -773,7 +773,7 @@ void ViewShellBase::WriteUserData (OUString& rString, bool bBrowse)
 
     // Forward call to main sub shell.
     ViewShell* pShell = GetMainViewShell().get();
-    if (pShell != NULL)
+    if (pShell != nullptr)
         pShell->WriteUserData (rString);
 }
 
@@ -783,7 +783,7 @@ void ViewShellBase::ReadUserData (const OUString& rString, bool bBrowse)
 
     // Forward call to main sub shell.
     ViewShell* pShell = GetMainViewShell().get();
-    if (pShell != NULL)
+    if (pShell != nullptr)
         pShell->ReadUserData (rString);
 }
 
@@ -791,7 +791,7 @@ SdrView* ViewShellBase::GetDrawView() const
 {
     // Forward call to main sub shell.
     ViewShell* pShell = GetMainViewShell().get();
-    if (pShell != NULL)
+    if (pShell != nullptr)
         return pShell->GetDrawView ();
     else
         return SfxViewShell::GetDrawView();
@@ -804,7 +804,7 @@ void ViewShellBase::AdjustPosSizePixel (const Point &rOfs, const Size &rSize)
 
 void ViewShellBase::SetBusyState (bool bBusy)
 {
-    if (GetDocShell() != NULL)
+    if (GetDocShell() != nullptr)
         GetDocShell()->SetWaitCursor (bBusy);
 }
 
@@ -817,7 +817,7 @@ void ViewShellBase::UpdateBorder ( bool bForce /* = false */ )
     // We have to check the existence of the window, too.
     // The SfxViewFrame accesses the window without checking it.
     ViewShell* pMainViewShell = GetMainViewShell().get();
-    if (pMainViewShell != NULL && GetWindow()!=NULL)
+    if (pMainViewShell != nullptr && GetWindow()!=nullptr)
     {
         SvBorder aCurrentBorder (GetBorderPixel());
         bool bOuterResize ( ! GetDocShell()->IsInPlaceActive());
@@ -838,7 +838,7 @@ void ViewShellBase::ShowUIControls (bool bVisible)
         mpImpl->mpViewTabBar->GetTabControl()->Show(bVisible);
 
     ViewShell* pMainViewShell = GetMainViewShell().get();
-    if (pMainViewShell != NULL)
+    if (pMainViewShell != nullptr)
         pMainViewShell->ShowUIControls (bVisible);
 
     UpdateBorder();
@@ -911,8 +911,8 @@ OUString ViewShellBase::GetInitialViewShellType()
 
 std::shared_ptr<tools::EventMultiplexer> ViewShellBase::GetEventMultiplexer()
 {
-    OSL_ASSERT(mpImpl.get()!=NULL);
-    OSL_ASSERT(mpImpl->mpEventMultiplexer.get()!=NULL);
+    OSL_ASSERT(mpImpl.get()!=nullptr);
+    OSL_ASSERT(mpImpl->mpEventMultiplexer.get()!=nullptr);
 
     return mpImpl->mpEventMultiplexer;
 }
@@ -924,37 +924,37 @@ const Rectangle& ViewShellBase::getClientRectangle() const
 
 std::shared_ptr<ToolBarManager> ViewShellBase::GetToolBarManager() const
 {
-    OSL_ASSERT(mpImpl.get()!=NULL);
-    OSL_ASSERT(mpImpl->mpToolBarManager.get()!=NULL);
+    OSL_ASSERT(mpImpl.get()!=nullptr);
+    OSL_ASSERT(mpImpl->mpToolBarManager.get()!=nullptr);
 
     return mpImpl->mpToolBarManager;
 }
 
 std::shared_ptr<FormShellManager> ViewShellBase::GetFormShellManager() const
 {
-    OSL_ASSERT(mpImpl.get()!=NULL);
-    OSL_ASSERT(mpImpl->mpFormShellManager.get()!=NULL);
+    OSL_ASSERT(mpImpl.get()!=nullptr);
+    OSL_ASSERT(mpImpl->mpFormShellManager.get()!=nullptr);
 
     return mpImpl->mpFormShellManager;
 }
 
 DrawController& ViewShellBase::GetDrawController() const
 {
-    OSL_ASSERT(mpImpl.get()!=NULL);
+    OSL_ASSERT(mpImpl.get()!=nullptr);
 
     return *mpImpl->mpController;
 }
 
 void ViewShellBase::SetViewTabBar (const ::rtl::Reference<ViewTabBar>& rViewTabBar)
 {
-    OSL_ASSERT(mpImpl.get()!=NULL);
+    OSL_ASSERT(mpImpl.get()!=nullptr);
 
     mpImpl->mpViewTabBar = rViewTabBar;
 }
 
 vcl::Window* ViewShellBase::GetViewWindow()
 {
-    OSL_ASSERT(mpImpl.get()!=NULL);
+    OSL_ASSERT(mpImpl.get()!=nullptr);
 
     return mpImpl->mpViewWindow.get();
 }
@@ -1022,8 +1022,8 @@ ViewShellBase::Implementation::Implementation (ViewShellBase& rBase)
 
 ViewShellBase::Implementation::~Implementation()
 {
-    mpController = NULL;
-    mpViewTabBar = NULL;
+    mpController = nullptr;
+    mpViewTabBar = nullptr;
     mpViewWindow.disposeAndClear();
     mpToolBarManager.reset();
 }
@@ -1036,10 +1036,10 @@ void ViewShellBase::Implementation::LateInit()
 void ViewShellBase::Implementation::ProcessRestoreEditingViewSlot()
 {
     ViewShell* pViewShell = mrBase.GetMainViewShell().get();
-    if (pViewShell != NULL)
+    if (pViewShell != nullptr)
     {
         FrameView* pFrameView = pViewShell->GetFrameView();
-        if (pFrameView != NULL)
+        if (pFrameView != nullptr)
         {
             // Set view shell, edit mode, and page kind.
             pFrameView->SetViewShEditMode(
@@ -1086,7 +1086,7 @@ void ViewShellBase::Implementation::ResizePixel (
 
     // Calculate and set the border before the controls are placed.
     SvBorder aBorder;
-    if (pMainViewShell != NULL)
+    if (pMainViewShell != nullptr)
         aBorder = pMainViewShell->GetBorder(bOuterResize);
     aBorder += mrBase.GetBorder(bOuterResize);
     if (mrBase.GetBorderPixel() != aBorder)
@@ -1134,7 +1134,7 @@ void ViewShellBase::Implementation::SetPaneVisibility (
         const SfxItemSet* pArguments = rRequest.GetArgs();
         bool bShowChildWindow;
         sal_uInt16 nSlotId = rRequest.GetSlot();
-        if (pArguments != NULL)
+        if (pArguments != nullptr)
             bShowChildWindow = static_cast<const SfxBoolItem&>(
                 pArguments->Get(nSlotId)).GetValue();
         else
@@ -1318,14 +1318,14 @@ CurrentPageSetter::CurrentPageSetter (ViewShellBase& rBase)
 
 void CurrentPageSetter::operator() (bool)
 {
-    FrameView* pFrameView = NULL;
+    FrameView* pFrameView = nullptr;
 
-    if (mrBase.GetMainViewShell() != 0)
+    if (mrBase.GetMainViewShell() != nullptr)
     {
         pFrameView = mrBase.GetMainViewShell()->GetFrameView();
     }
 
-    if (pFrameView!=NULL)
+    if (pFrameView!=nullptr)
     {
         try
         {
@@ -1395,10 +1395,10 @@ void FocusForwardingWindow::dispose()
 void FocusForwardingWindow::KeyInput (const KeyEvent& rKEvt)
 {
     std::shared_ptr<ViewShell> pViewShell = mrBase.GetMainViewShell();
-    if (pViewShell.get() != NULL)
+    if (pViewShell.get() != nullptr)
     {
         vcl::Window* pWindow = pViewShell->GetActiveWindow();
-        if (pWindow != NULL)
+        if (pWindow != nullptr)
         {
             // Forward the focus so that the window is called directly the
             // next time.
@@ -1412,10 +1412,10 @@ void FocusForwardingWindow::KeyInput (const KeyEvent& rKEvt)
 void FocusForwardingWindow::Command (const CommandEvent& rEvent)
 {
     std::shared_ptr<ViewShell> pViewShell = mrBase.GetMainViewShell();
-    if (pViewShell.get() != NULL)
+    if (pViewShell.get() != nullptr)
     {
         vcl::Window* pWindow = pViewShell->GetActiveWindow();
-        if (pWindow != NULL)
+        if (pWindow != nullptr)
         {
             pWindow->Command(rEvent);
         }

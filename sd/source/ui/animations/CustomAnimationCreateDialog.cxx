@@ -626,8 +626,8 @@ namespace
 {
 vcl::Window * lcl_GetTopmostParent( vcl::Window * pWindow )
 {
-    vcl::Window * pResult = 0;
-    vcl::Window * pCurrent = pWindow ? pWindow->GetParent() : 0;
+    vcl::Window * pResult = nullptr;
+    vcl::Window * pCurrent = pWindow ? pWindow->GetParent() : nullptr;
     while( pCurrent )
     {
         pResult = pCurrent;

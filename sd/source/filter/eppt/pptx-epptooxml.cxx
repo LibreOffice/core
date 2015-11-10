@@ -448,7 +448,7 @@ void PowerPointExport::ImplWriteBackground( FSHelperPtr pFS, Reference< XPropert
 
 const char* PowerPointExport::GetSideDirection( sal_uInt8 nDirection )
 {
-    const char* pDirection = NULL;
+    const char* pDirection = nullptr;
 
     switch(nDirection)
     {
@@ -471,7 +471,7 @@ const char* PowerPointExport::GetSideDirection( sal_uInt8 nDirection )
 
 const char* PowerPointExport::GetCornerDirection( sal_uInt8 nDirection )
 {
-    const char* pDirection = NULL;
+    const char* pDirection = nullptr;
 
     switch( nDirection ) {
     case 4:
@@ -522,11 +522,11 @@ void PowerPointExport::WriteTransition( FSHelperPtr pFS )
     bool bOOXmlSpecificTransition = false;
 
     sal_Int32 nTransition = 0;
-    const char* pDirection = NULL;
-    const char* pDirection14 = NULL;
-    const char* pOrientation = NULL;
-    const char* pThruBlk = NULL;
-    const char* pSpokes = NULL;
+    const char* pDirection = nullptr;
+    const char* pDirection14 = nullptr;
+    const char* pOrientation = nullptr;
+    const char* pThruBlk = nullptr;
+    const char* pSpokes = nullptr;
     char pSpokesTmp[2] = "0";
 
     // p14
@@ -598,7 +598,7 @@ void PowerPointExport::WriteTransition( FSHelperPtr pFS )
         return;
 
     AnimationSpeed animationSpeed = AnimationSpeed_MEDIUM;
-    const char* speed = NULL;
+    const char* speed = nullptr;
     sal_Int32 advanceTiming = -1;
     sal_Int32 changeType = 0;
 
@@ -635,7 +635,7 @@ void PowerPointExport::WriteTransition( FSHelperPtr pFS )
 
         pFS->startElementNS(XML_p, XML_transition,
                             XML_spd, speed,
-                            XML_advTm, advanceTiming != -1 ? I32S( advanceTiming*1000 ) : NULL,
+                            XML_advTm, advanceTiming != -1 ? I32S( advanceTiming*1000 ) : nullptr,
                             FSEND );
 
         if (nTransition14)
@@ -660,7 +660,7 @@ void PowerPointExport::WriteTransition( FSHelperPtr pFS )
 
     pFS->startElementNS(XML_p, XML_transition,
                         XML_spd, speed,
-                        XML_advTm, advanceTiming != -1 ? I32S( advanceTiming*1000 ) : NULL,
+                        XML_advTm, advanceTiming != -1 ? I32S( advanceTiming*1000 ) : nullptr,
                         FSEND );
 
     if (!bOOXmlSpecificTransition)
@@ -807,7 +807,7 @@ void PowerPointExport::WriteAnimateValues( FSHelperPtr pFS, const Reference< XAn
     DBG(printf("animate value %d: %f\n", i, aKeyTimes[ i ]));
     if( aValues[ i ].hasValue() ) {
         pFS->startElementNS( XML_p, XML_tav,
-                 XML_fmla, sFormula.isEmpty() ? NULL : USS( sFormula ),
+                 XML_fmla, sFormula.isEmpty() ? nullptr : USS( sFormula ),
                  XML_tm, I32S( ( sal_Int32 )( aKeyTimes[ i ]*100000.0 ) ),
                  FSEND );
         pFS->startElementNS( XML_p, XML_val, FSEND );
@@ -849,7 +849,7 @@ void PowerPointExport::WriteAnimationAttributeName( FSHelperPtr pFS, const OUStr
 
     DBG(printf("write attribute name: %s\n", USS( rAttributeName )));
 
-    const char* sAttributeName = NULL;
+    const char* sAttributeName = nullptr;
     if ( rAttributeName == "Visibility" ) {
         sAttributeName = "style.visibility";
     } else if ( rAttributeName == "X" ) {
@@ -895,8 +895,8 @@ void PowerPointExport::WriteAnimationNodeAnimate( FSHelperPtr pFS, const Referen
     if( !rXAnimate.is() )
         return;
 
-    const char* pCalcMode = NULL;
-    const char* pValueType = NULL;
+    const char* pCalcMode = nullptr;
+    const char* pValueType = nullptr;
     bool bSimple = ( nXmlNodeType != XML_anim );
 
     if( !bSimple ) {
@@ -936,7 +936,7 @@ void PowerPointExport::WriteAnimationNodeAnimateInside( FSHelperPtr pFS, const R
     if( !rXAnimate.is() )
         return;
 
-    const char* pAdditive = NULL;
+    const char* pAdditive = nullptr;
 
     if( !bSimple ) {
     switch( rXAnimate->getAdditive() ) {
@@ -997,8 +997,8 @@ void PowerPointExport::WriteAnimationCondition( FSHelperPtr pFS, Any& rAny, bool
     double fDelay = 0;
     Timing eTiming;
     Event aEvent;
-    const char* pDelay = NULL;
-    const char* pEvent = NULL;
+    const char* pDelay = nullptr;
+    const char* pEvent = nullptr;
 
     if( rAny >>= fDelay )
         bHasFDelay = true;
@@ -1068,11 +1068,11 @@ void PowerPointExport::WriteAnimationCondition( FSHelperPtr pFS, Any& rAny, bool
 
 void PowerPointExport::WriteAnimationNodeCommonPropsStart( FSHelperPtr pFS, const Reference< XAnimationNode >& rXNode, bool bSingle, bool bMainSeqChild )
 {
-    const char* pDuration = NULL;
-    const char* pRestart = NULL;
-    const char* pNodeType = NULL;
-    const char* pPresetClass = NULL;
-    const char* pFill = NULL;
+    const char* pDuration = nullptr;
+    const char* pRestart = nullptr;
+    const char* pNodeType = nullptr;
+    const char* pPresetClass = nullptr;
+    const char* pFill = nullptr;
     double fDuration = 0;
     Any aAny;
 
@@ -1201,8 +1201,8 @@ void PowerPointExport::WriteAnimationNodeCommonPropsStart( FSHelperPtr pFS, cons
              XML_nodeType, pNodeType,
              XML_fill, pFill,
              XML_presetClass, pPresetClass,
-             XML_presetID, bPresetId ? I64S( nPresetId ) : NULL,
-             XML_presetSubtype, bPresetSubType ? I64S( nPresetSubType ) : NULL,
+             XML_presetID, bPresetId ? I64S( nPresetId ) : nullptr,
+             XML_presetSubtype, bPresetSubType ? I64S( nPresetSubType ) : nullptr,
              FSEND );
 
     aAny = rXNode->getBegin();
@@ -1265,11 +1265,11 @@ void PowerPointExport::WriteAnimationNodeSeq( FSHelperPtr pFS, const Reference< 
     WriteAnimationNodeCommonPropsStart( pFS, rXNode, true, bMainSeqChild );
 
     pFS->startElementNS( XML_p, XML_prevCondLst, FSEND );
-    WriteAnimationCondition( pFS, NULL, "onPrev", 0, true );
+    WriteAnimationCondition( pFS, nullptr, "onPrev", 0, true );
     pFS->endElementNS( XML_p, XML_prevCondLst );
 
     pFS->startElementNS( XML_p, XML_nextCondLst, FSEND );
-    WriteAnimationCondition( pFS, NULL, "onNext", 0, true );
+    WriteAnimationCondition( pFS, nullptr, "onNext", 0, true );
     pFS->endElementNS( XML_p, XML_nextCondLst );
 
     pFS->endElementNS( XML_p, XML_seq );
@@ -1299,7 +1299,7 @@ void PowerPointExport::WriteAnimationNode( FSHelperPtr pFS, const Reference< XAn
     DBG(printf ("export node type: %d\n", rXNode->getType()));
     sal_Int32 xmlNodeType = -1;
     typedef void (PowerPointExport::*AnimationNodeWriteMethod)( FSHelperPtr, const Reference< XAnimationNode >&, sal_Int32, bool );
-    AnimationNodeWriteMethod pMethod = NULL;
+    AnimationNodeWriteMethod pMethod = nullptr;
 
     switch( rXNode->getType() ) {
     case AnimationNodeType::PAR:
@@ -1520,7 +1520,7 @@ void PowerPointExport::ImplWriteSlide( sal_uInt32 nPageNum, sal_uInt32 nMasterNu
         mpSlidesFSArray.resize( mnPages );
     mpSlidesFSArray[ nPageNum ] = pFS;
 
-    const char* pShow = NULL;
+    const char* pShow = nullptr;
 
     if( GETA( Visible ) ) {
     bool bShow(false);
@@ -1887,7 +1887,7 @@ ShapeExport& PowerPointShapeExport::WritePlaceholderShape( Reference< XShape > x
     mpFS->endElementNS( XML_p, XML_cNvSpPr );
     mpFS->startElementNS( XML_p, XML_nvPr, FSEND );
 
-    const char* pType = NULL;
+    const char* pType = nullptr;
     switch( ePlaceholder ) {
     case SlideImage:
         pType = "sldImg";
@@ -2301,9 +2301,9 @@ static const struct cppu::ImplementationEntry g_entries[] =
         oox::core::PowerPointExport_getImplementationName,
        oox::core::PowerPointExport_getSupportedServiceNames,
         cppu::createSingleComponentFactory,
-        0 , 0
+        nullptr , 0
     },
-    { 0, 0, 0, 0, 0, 0 }
+    { nullptr, nullptr, nullptr, nullptr, nullptr, 0 }
 };
 
 #ifdef __cplusplus

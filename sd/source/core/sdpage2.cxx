@@ -94,7 +94,7 @@ void SdPage::SetPresentationLayout(const OUString& rLayoutName,
     if (bSetMasterPage && !IsMasterPage())
     {
         SdPage* pMaster;
-        SdPage* pFoundMaster = 0;
+        SdPage* pFoundMaster = nullptr;
         sal_uInt16 nMaster = 0;
         sal_uInt16 nMasterCount = pModel->GetMasterPageCount();
 
@@ -126,7 +126,7 @@ void SdPage::SetPresentationLayout(const OUString& rLayoutName,
         DBG_ASSERT(pFoundMaster, "Masterpage for presentation layout not found!");
 
         // this should never happen, but we play failsafe here
-        if( pFoundMaster == 0 )
+        if( pFoundMaster == nullptr )
             pFoundMaster = static_cast< SdDrawDocument *>(pModel)->GetSdPage( 0, mePageKind );
 
         if( pFoundMaster )
@@ -157,7 +157,7 @@ void SdPage::SetPresentationLayout(const OUString& rLayoutName,
             {
                 OUString aFullName;
                 OUString aOldFullName;
-                SfxStyleSheetBase* pSheet = NULL;
+                SfxStyleSheetBase* pSheet = nullptr;
                 SfxStyleSheetBasePool* pStShPool = pModel->GetStyleSheetPool();
 
                 for (sal_Int16 i = -1; i < 9; i++)
@@ -316,7 +316,7 @@ bool SdPage::IsReadOnly() const
 
 void SdPage::ConnectLink()
 {
-    sfx2::LinkManager* pLinkManager = pModel!=NULL ? pModel->GetLinkManager() : NULL;
+    sfx2::LinkManager* pLinkManager = pModel!=nullptr ? pModel->GetLinkManager() : nullptr;
 
     if (pLinkManager && !mpPageLink && !maFileName.isEmpty() && !maBookmarkName.isEmpty() &&
         mePageKind==PK_STANDARD && !IsMasterPage() &&
@@ -348,7 +348,7 @@ void SdPage::ConnectLink()
 
 void SdPage::DisconnectLink()
 {
-    sfx2::LinkManager* pLinkManager = pModel!=NULL ? pModel->GetLinkManager() : NULL;
+    sfx2::LinkManager* pLinkManager = pModel!=nullptr ? pModel->GetLinkManager() : nullptr;
 
     if (pLinkManager && mpPageLink)
     {
@@ -357,7 +357,7 @@ void SdPage::DisconnectLink()
         * (remove deletes *pGraphicLink implicit)
         **********************************************************************/
         pLinkManager->Remove(mpPageLink);
-        mpPageLink=NULL;
+        mpPageLink=nullptr;
     }
 }
 
@@ -370,7 +370,7 @@ void SdPage::DisconnectLink()
 SdPage::SdPage(const SdPage& rSrcPage)
 :   FmFormPage(rSrcPage)
 ,   SdrObjUserCall()
-,   mpItems(NULL)
+,   mpItems(nullptr)
 {
     mePageKind           = rSrcPage.mePageKind;
     meAutoLayout         = rSrcPage.meAutoLayout;
@@ -399,7 +399,7 @@ SdPage::SdPage(const SdPage& rSrcPage)
     mnPaperBin           = rSrcPage.mnPaperBin;
     meOrientation        = rSrcPage.meOrientation;
 
-    mpPageLink           = NULL;    // is set when inserting via ConnectLink()
+    mpPageLink           = nullptr;    // is set when inserting via ConnectLink()
 
     mbIsPrecious         = false;
 }
@@ -429,12 +429,12 @@ void SdPage::lateInit(const SdPage& rSrcPage)
 
 SdrPage* SdPage::Clone() const
 {
-    return Clone(NULL);
+    return Clone(nullptr);
 }
 
 SdrPage* SdPage::Clone(SdrModel* pNewModel) const
 {
-    DBG_ASSERT( pNewModel == 0, "sd::SdPage::Clone(), new page ignored, please check code! CL" );
+    DBG_ASSERT( pNewModel == nullptr, "sd::SdPage::Clone(), new page ignored, please check code! CL" );
     (void)pNewModel;
 
     SdPage* pNewPage = new SdPage(*this);
@@ -477,7 +477,7 @@ SfxStyleSheet* SdPage::GetTextStyleSheetForObject( SdrObject* pObj ) const
 
 SfxItemSet* SdPage::getOrCreateItems()
 {
-    if( mpItems == NULL )
+    if( mpItems == nullptr )
         mpItems = new SfxItemSet( pModel->GetItemPool(), SDRATTR_XMLATTRIBUTES, SDRATTR_XMLATTRIBUTES );
 
     return mpItems;
@@ -501,7 +501,7 @@ void SdPage::getAlienAttributes( css::uno::Any& rAttributes )
 {
     const SfxPoolItem* pItem;
 
-    if( (mpItems == NULL) || ( SfxItemState::SET != mpItems->GetItemState( SDRATTR_XMLATTRIBUTES, false, &pItem ) ) )
+    if( (mpItems == nullptr) || ( SfxItemState::SET != mpItems->GetItemState( SDRATTR_XMLATTRIBUTES, false, &pItem ) ) )
     {
         SvXMLAttrContainerItem aAlienAttributes;
         aAlienAttributes.QueryValue( rAttributes );
@@ -639,7 +639,7 @@ void SdPage::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
     xmlTextWriterStartElement(pWriter, BAD_CAST("sdPage"));
 
-    const char* pPageKind = 0;
+    const char* pPageKind = nullptr;
     switch (mePageKind)
     {
     case PK_STANDARD:

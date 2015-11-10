@@ -116,8 +116,8 @@ void ImplTranslateAttribute( OUString& rString, const TranslateMode eTranslateMo
         }
         else if ( eTranslateMode & TRANSLATE_MEASURE )
         {
-            const sal_Char* pDest[] = { "#ppt_x", "#ppt_y", "#ppt_w", "#ppt_h", NULL };
-            const sal_Char* pSource[] = { "x", "y", "width", "height", NULL };
+            const sal_Char* pDest[] = { "#ppt_x", "#ppt_y", "#ppt_w", "#ppt_h", nullptr };
+            const sal_Char* pSource[] = { "x", "y", "width", "height", nullptr };
             sal_Int32 nIndex = 0;
 
             const sal_Char** ps = pSource;
@@ -228,7 +228,7 @@ sal_uInt32 AnimationExporter::TranslatePresetSubType( const sal_uInt32 nPresetCl
 
 const sal_Char* AnimationExporter::FindTransitionName( const sal_Int16 nType, const sal_Int16 nSubType, const bool bDirection )
 {
-    const sal_Char* pRet = NULL;
+    const sal_Char* pRet = nullptr;
     int             nFit = 0;
 
     const oox::ppt::transition* p = oox::ppt::transition::getList();
@@ -342,7 +342,7 @@ void AnimationExporter::doexport( const Reference< XDrawPage >& xPage, SvStream&
         if( xRootNode.is() )
         {
             processAfterEffectNodes( xRootNode );
-            exportNode( rStrm, xRootNode, NULL, DFF_msofbtAnimGroup, 1, 0, false, AnimationFill::AUTO );
+            exportNode( rStrm, xRootNode, nullptr, DFF_msofbtAnimGroup, 1, 0, false, AnimationFill::AUTO );
         }
     }
 }
@@ -1583,7 +1583,7 @@ sal_uInt32 AnimationExporter::GetValueTypeForAttributeName( const OUString& rAtt
         { "width", 1 },
         { "x", 1 },
         { "y", 1 },
-        { NULL, 0 }
+        { nullptr, 0 }
     };
     const Entry* pPtr = &lcl_attributeMap[ 0 ];
     while( pPtr->pName )

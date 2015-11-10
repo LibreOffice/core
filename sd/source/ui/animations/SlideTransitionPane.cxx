@@ -960,7 +960,7 @@ IMPL_LINK_TYPED(SlideTransitionPane,EventMultiplexerListener,
                 // At this moment the controller may not yet been set at
                 // model or ViewShellBase.  Take it from the view shell
                 // passed with the event.
-                if (mrBase.GetMainViewShell() != 0)
+                if (mrBase.GetMainViewShell() != nullptr)
                 {
                     mxView.set(mrBase.GetController(), css::uno::UNO_QUERY);
                     onSelectionChanged();
@@ -1129,7 +1129,7 @@ IMPL_LINK_NOARG_TYPED(SlideTransitionPane, LateInitCallback, Timer *, void)
 
 vcl::Window * createSlideTransitionPanel( vcl::Window* pParent, ViewShellBase& rBase, const css::uno::Reference<css::frame::XFrame>& rxFrame )
 {
-    vcl::Window* pWindow = 0;
+    vcl::Window* pWindow = nullptr;
 
     DrawDocShell* pDocSh = rBase.GetDocShell();
     if( pDocSh )

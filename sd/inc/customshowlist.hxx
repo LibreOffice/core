@@ -53,14 +53,14 @@ public:
     SdCustomShow* First()
     {
         if( mShows.empty() )
-            return NULL;
+            return nullptr;
         mnCurPos = 0;
         return mShows[mnCurPos];
     }
     SdCustomShow* Next()
     {
         ++mnCurPos;
-        return mnCurPos >= mShows.size() ? NULL : mShows[mnCurPos];
+        return mnCurPos >= mShows.size() ? nullptr : mShows[mnCurPos];
     }
     void Last()
     {
@@ -69,13 +69,13 @@ public:
     }
     SdCustomShow* GetCurObject()
     {
-        return mShows.empty() ? NULL : mShows[mnCurPos];
+        return mShows.empty() ? nullptr : mShows[mnCurPos];
     }
     SdCustomShow* Remove(SdCustomShow* p)
     {
         std::vector<SdCustomShow*>::iterator it = std::find(mShows.begin(), mShows.end(), p);
         if( it == mShows.end() )
-            return NULL;
+            return nullptr;
         mShows.erase(it);
         return p;
     }

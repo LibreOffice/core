@@ -110,12 +110,12 @@ FuPage::FuPage( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView,
 :   FuPoor(pViewSh, pWin, pView, pDoc, rReq),
     mrReq(rReq),
     mpArgs( rReq.GetArgs() ),
-    mpBackgroundObjUndoAction( 0 ),
+    mpBackgroundObjUndoAction( nullptr ),
     mbPageBckgrdDeleted( false ),
     mbMasterPage( false ),
     mbDisplayBackgroundTabPage( true ),
-    mpPage(0),
-    mpDrawViewShell(0)
+    mpPage(nullptr),
+    mpDrawViewShell(nullptr)
 {
 }
 
@@ -203,7 +203,7 @@ void MergePageBackgroundFilling(SdPage *pPage, SdStyleSheet *pStyleSheet, bool b
 const SfxItemSet* FuPage::ExecuteDialog( vcl::Window* pParent )
 {
     if (!mpDrawViewShell)
-        return NULL;
+        return nullptr;
 
     PageKind ePageKind = mpDrawViewShell->GetPageKind();
 
@@ -329,7 +329,7 @@ const SfxItemSet* FuPage::ExecuteDialog( vcl::Window* pParent )
     {
         // create the dialog
         SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-        std::unique_ptr<SfxAbstractTabDialog> pDlg( pFact ? pFact->CreateSdTabPageDialog(NULL, &aMergedAttr, mpDocSh, mbDisplayBackgroundTabPage ) : 0 );
+        std::unique_ptr<SfxAbstractTabDialog> pDlg( pFact ? pFact->CreateSdTabPageDialog(nullptr, &aMergedAttr, mpDocSh, mbDisplayBackgroundTabPage ) : nullptr );
         if( pDlg.get() && pDlg->Execute() == RET_OK )
             pTempSet.reset( new SfxItemSet(*pDlg->GetOutputItemSet()) );
     }
@@ -482,7 +482,7 @@ const SfxItemSet* FuPage::ExecuteDialog( vcl::Window* pParent )
             SdrPage& rUsedMasterPage = mpPage->IsMasterPage() ? *mpPage : mpPage->TRG_GetMasterPage();
             OSL_ENSURE(rUsedMasterPage.IsMasterPage(), "No MasterPage (!)");
             rUsedMasterPage.getSdrPageProperties().ClearItem();
-            OSL_ENSURE(0 != rUsedMasterPage.getSdrPageProperties().GetStyleSheet(),
+            OSL_ENSURE(nullptr != rUsedMasterPage.getSdrPageProperties().GetStyleSheet(),
                 "MasterPage without StyleSheet detected (!)");
         }
 
@@ -493,7 +493,7 @@ const SfxItemSet* FuPage::ExecuteDialog( vcl::Window* pParent )
     }
     else
     {
-        return 0;
+        return nullptr;
     }
 }
 
@@ -619,7 +619,7 @@ void FuPage::ApplyItemSet( const SfxItemSet* pArgs )
     {
         // set merge flag, because a SdUndoGroupAction could have been inserted before
         mpDocSh->GetUndoManager()->AddUndoAction( mpBackgroundObjUndoAction, true );
-        mpBackgroundObjUndoAction = 0;
+        mpBackgroundObjUndoAction = nullptr;
     }
 
     // Objects can not be bigger than ViewSize

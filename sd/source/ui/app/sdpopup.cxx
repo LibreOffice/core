@@ -163,7 +163,7 @@ void SdFieldPopup::Fill( LanguageType eLanguage )
  */
 SvxFieldData* SdFieldPopup::GetField()
 {
-    SvxFieldData* pNewField = NULL;
+    SvxFieldData* pNewField = nullptr;
     sal_uInt16 nCount = GetItemCount();
 
     if( dynamic_cast< const SvxDateField *>( pField ) !=  nullptr )

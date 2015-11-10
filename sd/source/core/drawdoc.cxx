@@ -113,7 +113,7 @@ using ::com::sun::star::beans::PropertyValue;
 
 TYPEINIT1( SdDrawDocument, FmFormModel );
 
-SdDrawDocument* SdDrawDocument::pDocLockedInsertingLinks = NULL;
+SdDrawDocument* SdDrawDocument::pDocLockedInsertingLinks = nullptr;
 
 PresentationSettings::PresentationSettings()
 :   mbAll( true ),
@@ -151,17 +151,17 @@ PresentationSettings::PresentationSettings( const PresentationSettings& r )
 }
 
 SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
-: FmFormModel( !utl::ConfigManager::IsAvoidConfig() ? SvtPathOptions().GetPalettePath() : OUString(), NULL, pDrDocSh )
+: FmFormModel( !utl::ConfigManager::IsAvoidConfig() ? SvtPathOptions().GetPalettePath() : OUString(), nullptr, pDrDocSh )
 , bReadOnly(false)
-, mpOutliner(NULL)
-, mpInternalOutliner(NULL)
-, mpWorkStartupTimer(NULL)
-, mpOnlineSpellingIdle(NULL)
-, mpOnlineSpellingList(NULL)
-, mpOnlineSearchItem(NULL)
-, mpCustomShowList(NULL)
+, mpOutliner(nullptr)
+, mpInternalOutliner(nullptr)
+, mpWorkStartupTimer(nullptr)
+, mpOnlineSpellingIdle(nullptr)
+, mpOnlineSpellingList(nullptr)
+, mpOnlineSearchItem(nullptr)
+, mpCustomShowList(nullptr)
 , mpDocSh(static_cast< ::sd::DrawDocShell*>(pDrDocSh))
-, mpCreatingTransferable( NULL )
+, mpCreatingTransferable( nullptr )
 , mbHasOnlineSpellErrors(false)
 , mbInitialOnlineSpellingEnabled(true)
 , mbNewOrLoadCompleted(false)
@@ -174,8 +174,8 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
 , mePageNumType(SVX_ARABIC)
 , mbAllocDocSh(false)
 , meDocType(eType)
-, mpCharClass(NULL)
-, mpLocale(NULL)
+, mpCharClass(nullptr)
+, mpLocale(nullptr)
 , mbUseEmbedFonts(false)
 {
     mpDrawPageListWatcher.reset(new ImpDrawPageListWatcher(*this));
@@ -382,12 +382,12 @@ SdDrawDocument::~SdDrawDocument()
             mpWorkStartupTimer->Stop();
 
         delete mpWorkStartupTimer;
-        mpWorkStartupTimer = NULL;
+        mpWorkStartupTimer = nullptr;
     }
 
     StopOnlineSpelling();
     delete mpOnlineSearchItem;
-    mpOnlineSearchItem = NULL;
+    mpOnlineSearchItem = nullptr;
 
     CloseBookmarkDoc();
     SetAllocDocSh(false);
@@ -403,7 +403,7 @@ SdDrawDocument::~SdDrawDocument()
         }
 
         delete pLinkManager;
-        pLinkManager = NULL;
+        pLinkManager = nullptr;
     }
 
     std::vector<sd::FrameView*>::iterator pIter;
@@ -420,20 +420,20 @@ SdDrawDocument::~SdDrawDocument()
         }
 
         delete mpCustomShowList;
-        mpCustomShowList = NULL;
+        mpCustomShowList = nullptr;
     }
 
     delete mpOutliner;
-    mpOutliner = NULL;
+    mpOutliner = nullptr;
 
     delete mpInternalOutliner;
-    mpInternalOutliner = NULL;
+    mpInternalOutliner = nullptr;
 
     delete mpLocale;
-    mpLocale = NULL;
+    mpLocale = nullptr;
 
     delete mpCharClass;
-    mpCharClass = NULL;
+    mpCharClass = nullptr;
 }
 
 SdrModel* SdDrawDocument::AllocModel() const
@@ -446,14 +446,14 @@ SdrModel* SdDrawDocument::AllocModel() const
 // parts of it) into the clipboard/DragServer.
 SdDrawDocument* SdDrawDocument::AllocSdDrawDocument() const
 {
-    SdDrawDocument* pNewModel = NULL;
+    SdDrawDocument* pNewModel = nullptr;
 
     if( mpCreatingTransferable )
     {
         // Document is created for drag & drop/clipboard. To be able to
         // do this, the document has to know a DocShell (SvPersist).
-        SfxObjectShell*   pObj = NULL;
-        ::sd::DrawDocShell*     pNewDocSh = NULL;
+        SfxObjectShell*   pObj = nullptr;
+        ::sd::DrawDocShell*     pNewDocSh = nullptr;
 
         if( meDocType == DOCUMENT_TYPE_IMPRESS )
             mpCreatingTransferable->SetDocShell( new ::sd::DrawDocShell(
@@ -498,7 +498,7 @@ SdDrawDocument* SdDrawDocument::AllocSdDrawDocument() const
     }
     else
     {
-        pNewModel = new SdDrawDocument(meDocType, NULL);
+        pNewModel = new SdDrawDocument(meDocType, nullptr);
     }
 
     return pNewModel;
@@ -566,7 +566,7 @@ void SdDrawDocument::NewOrLoadCompleted(DocCreationMode eMode)
         CheckMasterPages();
 
         if ( GetMasterSdPageCount(PK_STANDARD) > 1 )
-            RemoveUnnecessaryMasterPages( NULL, true, false );
+            RemoveUnnecessaryMasterPages( nullptr, true, false );
 
         for ( sal_uInt16 i = 0; i < GetPageCount(); i++ )
         {
@@ -700,7 +700,7 @@ void SdDrawDocument::UpdateAllLinks()
         pLinkManager->UpdateAllLinks();  // query box: update all links?
 
         if( pDocLockedInsertingLinks == this )
-            pDocLockedInsertingLinks = NULL;  // unlock inserting links
+            pDocLockedInsertingLinks = nullptr;  // unlock inserting links
     }
 }
 
@@ -721,7 +721,7 @@ void SdDrawDocument::NewOrLoadCompleted( SdPage* pPage, SdStyleSheetPool* pSPool
 
         SfxStyleSheet* pTitleSheet = static_cast<SfxStyleSheet*>(pSPool->GetTitleSheet(aName));
 
-        SdrObject* pObj = 0;
+        SdrObject* pObj = nullptr;
         rPresentationShapes.seekShape(0);
 
         // Now look for title and outline text objects, then make those objects
@@ -1067,7 +1067,7 @@ void SdDrawDocument::dumpAsXml(xmlTextWriterPtr pWriter) const
     if (!pWriter)
     {
         pWriter = xmlNewTextWriterFilename("model.xml", 0);
-        xmlTextWriterStartDocument(pWriter, NULL, NULL, NULL);
+        xmlTextWriterStartDocument(pWriter, nullptr, nullptr, nullptr);
         bOwns = true;
     }
     FmFormModel::dumpAsXml(pWriter);

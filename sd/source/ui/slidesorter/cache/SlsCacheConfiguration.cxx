@@ -47,12 +47,12 @@ std::shared_ptr<CacheConfiguration> CacheConfiguration::Instance()
 {
     SolarMutexGuard aSolarGuard;
     CacheConfigSharedPtr &rInstancePtr = theInstance::get();
-    if (rInstancePtr.get() == NULL)
+    if (rInstancePtr.get() == nullptr)
     {
         // Maybe somebody else kept a previously created instance alive.
         if ( ! mpWeakInstance.expired())
             rInstancePtr = std::shared_ptr<CacheConfiguration>(mpWeakInstance);
-        if (rInstancePtr.get() == NULL)
+        if (rInstancePtr.get() == nullptr)
         {
             // We have to create a new instance.
             rInstancePtr.reset(new CacheConfiguration());
@@ -121,7 +121,7 @@ Any CacheConfiguration::GetValue (const OUString& rName)
 {
     Any aResult;
 
-    if (mxCacheNode != NULL)
+    if (mxCacheNode != nullptr)
     {
         try
         {

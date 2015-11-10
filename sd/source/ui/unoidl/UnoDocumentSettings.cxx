@@ -403,7 +403,7 @@ throw (UnknownPropertyException, PropertyVetoException,
 
     SdDrawDocument* pDoc = mxModel->GetDoc();
     ::sd::DrawDocShell* pDocSh = mxModel->GetDocShell();
-    if( NULL == pDoc || NULL == pDocSh )
+    if( nullptr == pDoc || nullptr == pDocSh )
     {
         throw RuntimeException("Document or Shell missing",
                 static_cast<OWeakObject *>(this));
@@ -417,7 +417,7 @@ throw (UnknownPropertyException, PropertyVetoException,
     SfxPrinter* pPrinter = pDocSh->GetPrinter( false );
     if( pPrinter )
     {
-        SdOptionsPrintItem const * pPrinterOptions = NULL;
+        SdOptionsPrintItem const * pPrinterOptions = nullptr;
         if(pPrinter->GetOptions().GetItemState( ATTR_OPTIONS_PRINT, false, reinterpret_cast<const SfxPoolItem**>(&pPrinterOptions)) == SfxItemState::SET)
             aOptionsPrintItem.GetOptionsPrint() = pPrinterOptions->GetOptionsPrint();
     }
@@ -771,7 +771,7 @@ throw (UnknownPropertyException, PropertyVetoException,
 
                             pDocSh->SetPrinter( pPrinter );
 
-                            pPrinter = NULL;
+                            pPrinter = nullptr;
                         }
                     }
                 }
@@ -986,7 +986,7 @@ throw (UnknownPropertyException, WrappedTargetException, RuntimeException, std::
 
     SdDrawDocument* pDoc = mxModel->GetDoc();
     ::sd::DrawDocShell* pDocSh = mxModel->GetDocShell();
-    if( NULL == pDoc || NULL == pDocSh )
+    if( nullptr == pDoc || nullptr == pDocSh )
     {
         throw RuntimeException("Document or Shell missing",
                 static_cast<OWeakObject *>(this));
@@ -997,7 +997,7 @@ throw (UnknownPropertyException, WrappedTargetException, RuntimeException, std::
     SfxPrinter* pPrinter = pDocSh->GetPrinter( false );
     if( pPrinter )
     {
-        SdOptionsPrintItem const * pPrinterOptions = NULL;
+        SdOptionsPrintItem const * pPrinterOptions = nullptr;
         if(pPrinter->GetOptions().GetItemState( ATTR_OPTIONS_PRINT, false, reinterpret_cast<const SfxPoolItem**>(&pPrinterOptions)) == SfxItemState::SET)
             aOptionsPrintItem.GetOptionsPrint() = pPrinterOptions->GetOptionsPrint();
     }

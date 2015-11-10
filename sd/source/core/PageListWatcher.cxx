@@ -28,7 +28,7 @@ void ImpPageListWatcher::ImpRecreateSortedPageListOnDemand()
     // clear vectors
     maPageVectorStandard.clear();
     maPageVectorNotes.clear();
-    mpHandoutPage = 0L;
+    mpHandoutPage = nullptr;
 
     // build up vectors again
     const sal_uInt32 nPageCount(ImpGetPageCount());
@@ -65,7 +65,7 @@ void ImpPageListWatcher::ImpRecreateSortedPageListOnDemand()
 
 ImpPageListWatcher::ImpPageListWatcher(const SdrModel& rModel)
     : mrModel(rModel)
-    , mpHandoutPage(0L)
+    , mpHandoutPage(nullptr)
     , mbPageListValid(false)
 {
 }
@@ -76,7 +76,7 @@ ImpPageListWatcher::~ImpPageListWatcher()
 
 SdPage* ImpPageListWatcher::GetSdPage(PageKind ePgKind, sal_uInt32 nPgNum)
 {
-    SdPage* pRetval(0L);
+    SdPage* pRetval(nullptr);
 
     if(!mbPageListValid)
     {

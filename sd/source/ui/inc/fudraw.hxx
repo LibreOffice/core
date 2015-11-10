@@ -46,7 +46,7 @@ public:
     virtual void Activate() override;
     virtual void Deactivate() override;
 
-    virtual void ForcePointer(const MouseEvent* pMEvt = NULL);
+    virtual void ForcePointer(const MouseEvent* pMEvt = nullptr);
 
     virtual void DoubleClick(const MouseEvent& rMEvt);
 

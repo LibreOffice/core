@@ -38,7 +38,7 @@ extern "C" SdAbstractDialogFactory* SdCreateDialogFactory();
 
 SdAbstractDialogFactory* SdAbstractDialogFactory::Create()
 {
-    SdFuncPtrCreateDialogFactory fp = 0;
+    SdFuncPtrCreateDialogFactory fp = nullptr;
 #if HAVE_FEATURE_DESKTOP
 #ifndef DISABLE_DYNLOADING
     static ::osl::Module aDialogLibrary;
@@ -52,7 +52,7 @@ SdAbstractDialogFactory* SdAbstractDialogFactory::Create()
 #endif
     if ( fp )
         return fp();
-    return 0;
+    return nullptr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

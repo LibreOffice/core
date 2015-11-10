@@ -541,7 +541,7 @@ void CustomAnimationPresets::changePresetSubType( CustomAnimationEffectPtr pEffe
     }
 }
 
-CustomAnimationPresets* CustomAnimationPresets::mpCustomAnimationPresets = 0;
+CustomAnimationPresets* CustomAnimationPresets::mpCustomAnimationPresets = nullptr;
 
 const CustomAnimationPresets& CustomAnimationPresets::getCustomAnimationPresets()
 {
@@ -563,7 +563,7 @@ Reference< XAnimationNode > CustomAnimationPresets::getRandomPreset( sal_Int16 n
 {
     Reference< XAnimationNode > xNode;
 
-    const PresetCategoryList* pCategoryList = 0;
+    const PresetCategoryList* pCategoryList = nullptr;
     switch( nPresetClass )
     {
     case EffectPresetClass::ENTRANCE:   pCategoryList = &maEntrancePresets; break;
@@ -571,7 +571,7 @@ Reference< XAnimationNode > CustomAnimationPresets::getRandomPreset( sal_Int16 n
     case EffectPresetClass::EMPHASIS:   pCategoryList = &maEmphasisPresets; break;
     case EffectPresetClass::MOTIONPATH: pCategoryList = &maMotionPathsPresets; break;
     default:
-        pCategoryList = 0;
+        pCategoryList = nullptr;
     }
 
     if( pCategoryList && pCategoryList->size() )

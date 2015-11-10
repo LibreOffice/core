@@ -160,7 +160,7 @@ void SdUnoForbiddenCharsTable::Notify( SfxBroadcaster&, const SfxHint& rHint ) t
     {
         if( HINT_MODELCLEARED == pSdrHint->GetKind() )
         {
-            mpModel = NULL;
+            mpModel = nullptr;
         }
     }
 }
@@ -209,7 +209,7 @@ const SvxItemPropertySet* ImplGetDrawModelPropertySet()
 SdXImpressDocument::SdXImpressDocument (::sd::DrawDocShell* pShell, bool bClipBoard ) throw()
 :   SfxBaseModel( pShell ),
     mpDocShell( pShell ),
-    mpDoc( pShell ? pShell->GetDoc() : NULL ),
+    mpDoc( pShell ? pShell->GetDoc() : nullptr ),
     mbDisposed(false),
     mbImpressDoc( pShell && pShell->GetDoc() && pShell->GetDoc()->GetDocumentType() == DOCUMENT_TYPE_IMPRESS ),
     mbClipBoard( bClipBoard ),
@@ -226,8 +226,8 @@ SdXImpressDocument::SdXImpressDocument (::sd::DrawDocShell* pShell, bool bClipBo
 }
 
 SdXImpressDocument::SdXImpressDocument( SdDrawDocument* pDoc, bool bClipBoard ) throw()
-:   SfxBaseModel( NULL ),
-    mpDocShell( NULL ),
+:   SfxBaseModel( nullptr ),
+    mpDocShell( nullptr ),
     mpDoc( pDoc ),
     mbDisposed(false),
     mbImpressDoc( pDoc && pDoc->GetDocumentType() == DOCUMENT_TYPE_IMPRESS ),
@@ -336,7 +336,7 @@ SdXImpressDocument* SdXImpressDocument::getImplementation( const uno::Reference<
     if( xUT.is() )
         return reinterpret_cast<SdXImpressDocument*>(sal::static_int_cast<sal_IntPtr>(xUT->getSomething( SdXImpressDocument::getUnoTunnelId() )));
     else
-        return NULL;
+        return nullptr;
 }
 
 sal_Int64 SAL_CALL SdXImpressDocument::getSomething( const css::uno::Sequence< sal_Int8 >& rIdentifier ) throw(css::uno::RuntimeException, std::exception)
@@ -421,8 +421,8 @@ void SdXImpressDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
             {
                 if( mpDoc )
                     EndListening( *mpDoc );
-                mpDoc = NULL;
-                mpDocShell = NULL;
+                mpDoc = nullptr;
+                mpDocShell = nullptr;
             }
         }
         else
@@ -462,7 +462,7 @@ SdPage* SdXImpressDocument::InsertSdPage( sal_uInt16 nPage, bool bDuplicate )
     sal_uInt8 aBckgrnd = rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRND), false);
     sal_uInt8 aBckgrndObj = rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRNDOBJ), false);
 
-    SdPage* pStandardPage = NULL;
+    SdPage* pStandardPage = nullptr;
 
     if( 0 == nPageCount )
     {
@@ -530,7 +530,7 @@ SdPage* SdXImpressDocument::InsertSdPage( sal_uInt16 nPage, bool bDuplicate )
         /**************************************************************
         * notes page
         **************************************************************/
-        SdPage* pNotesPage = NULL;
+        SdPage* pNotesPage = nullptr;
 
         if( bDuplicate )
             pNotesPage = static_cast<SdPage*>( pPreviousNotesPage->Clone() );
@@ -575,7 +575,7 @@ void SAL_CALL SdXImpressDocument    ::lockControllers(  )
 {
     ::SolarMutexGuard aGuard;
 
-    if( NULL == mpDoc )
+    if( nullptr == mpDoc )
         throw lang::DisposedException();
 
     mpDoc->setLock(true);
@@ -586,7 +586,7 @@ void SAL_CALL SdXImpressDocument::unlockControllers(  )
 {
     ::SolarMutexGuard aGuard;
 
-    if( NULL == mpDoc )
+    if( nullptr == mpDoc )
         throw lang::DisposedException();
 
     if( mpDoc->isLocked() )
@@ -600,7 +600,7 @@ sal_Bool SAL_CALL SdXImpressDocument::hasControllersLocked(  )
 {
     ::SolarMutexGuard aGuard;
 
-    if( NULL == mpDoc )
+    if( nullptr == mpDoc )
         throw lang::DisposedException();
 
     return mpDoc && mpDoc->isLocked();
@@ -612,7 +612,7 @@ uno::Reference < container::XIndexAccess > SAL_CALL SdXImpressDocument::getViewD
 {
     ::SolarMutexGuard aGuard;
 
-    if( NULL == mpDoc )
+    if( nullptr == mpDoc )
         throw lang::DisposedException();
 
     uno::Reference < container::XIndexAccess > xRet( SfxBaseModel::getViewData() );
@@ -648,7 +648,7 @@ void SAL_CALL SdXImpressDocument::setViewData( const uno::Reference < container:
 {
     ::SolarMutexGuard aGuard;
 
-    if( NULL == mpDoc )
+    if( nullptr == mpDoc )
         throw lang::DisposedException();
 
     SfxBaseModel::setViewData( xData );
@@ -685,7 +685,7 @@ uno::Reference< drawing::XDrawPage > SAL_CALL SdXImpressDocument::duplicate( con
 {
     ::SolarMutexGuard aGuard;
 
-    if( NULL == mpDoc )
+    if( nullptr == mpDoc )
         throw lang::DisposedException();
 
     // get pPage from xPage and determine the Id (nPos ) afterwards
@@ -713,7 +713,7 @@ uno::Reference< drawing::XDrawPages > SAL_CALL SdXImpressDocument::getDrawPages(
 {
     ::SolarMutexGuard aGuard;
 
-    if( NULL == mpDoc )
+    if( nullptr == mpDoc )
         throw lang::DisposedException();
 
     uno::Reference< drawing::XDrawPages >  xDrawPages( mxDrawPagesAccess );
@@ -733,7 +733,7 @@ uno::Reference< drawing::XDrawPages > SAL_CALL SdXImpressDocument::getMasterPage
 {
     ::SolarMutexGuard aGuard;
 
-    if( NULL == mpDoc )
+    if( nullptr == mpDoc )
         throw lang::DisposedException();
 
     uno::Reference< drawing::XDrawPages >  xMasterPages( mxMasterPagesAccess );
@@ -754,7 +754,7 @@ uno::Reference< container::XNameAccess > SAL_CALL SdXImpressDocument::getLayerMa
 {
     ::SolarMutexGuard aGuard;
 
-    if( NULL == mpDoc )
+    if( nullptr == mpDoc )
         throw lang::DisposedException();
 
     uno::Reference< container::XNameAccess >  xLayerManager( mxLayerManager );
@@ -771,7 +771,7 @@ uno::Reference< container::XNameContainer > SAL_CALL SdXImpressDocument::getCust
 {
     ::SolarMutexGuard aGuard;
 
-    if( NULL == mpDoc )
+    if( nullptr == mpDoc )
         throw lang::DisposedException();
 
     uno::Reference< container::XNameContainer >  xCustomPres( mxCustomPresentationAccess );
@@ -788,7 +788,7 @@ uno::Reference< presentation::XPresentation > SAL_CALL SdXImpressDocument::getPr
 {
     ::SolarMutexGuard aGuard;
 
-    if( NULL == mpDoc )
+    if( nullptr == mpDoc )
         throw lang::DisposedException();
 
     return uno::Reference< presentation::XPresentation >( mpDoc->getPresentation().get() );
@@ -800,7 +800,7 @@ uno::Reference< drawing::XDrawPage > SAL_CALL SdXImpressDocument::getHandoutMast
 {
     ::SolarMutexGuard aGuard;
 
-    if( NULL == mpDoc )
+    if( nullptr == mpDoc )
         throw lang::DisposedException();
 
     uno::Reference< drawing::XDrawPage > xPage;
@@ -822,7 +822,7 @@ css::uno::Reference<css::uno::XInterface> SdXImpressDocument::create(
 {
     ::SolarMutexGuard aGuard;
 
-    if( NULL == mpDoc )
+    if( nullptr == mpDoc )
         throw lang::DisposedException();
 
     if( aServiceSpecifier == "com.sun.star.drawing.DashTable" )
@@ -958,8 +958,8 @@ css::uno::Reference<css::uno::XInterface> SdXImpressDocument::create(
 
     if( aServiceSpecifier == "com.sun.star.document.ExportEmbeddedObjectResolver" )
     {
-        ::comphelper::IEmbeddedHelper *pPersist = mpDoc ? mpDoc->GetPersist() : NULL;
-        if( NULL == pPersist )
+        ::comphelper::IEmbeddedHelper *pPersist = mpDoc ? mpDoc->GetPersist() : nullptr;
+        if( nullptr == pPersist )
             throw lang::DisposedException();
 
         return static_cast<cppu::OWeakObject *>(new SvXMLEmbeddedObjectHelper( *pPersist, EMBEDDEDOBJECTHELPER_MODE_WRITE ));
@@ -967,8 +967,8 @@ css::uno::Reference<css::uno::XInterface> SdXImpressDocument::create(
 
     if( aServiceSpecifier == "com.sun.star.document.ImportEmbeddedObjectResolver" )
     {
-        ::comphelper::IEmbeddedHelper *pPersist = mpDoc ? mpDoc->GetPersist() : NULL;
-        if( NULL == pPersist )
+        ::comphelper::IEmbeddedHelper *pPersist = mpDoc ? mpDoc->GetPersist() : nullptr;
+        if( nullptr == pPersist )
             throw lang::DisposedException();
 
         return static_cast<cppu::OWeakObject *>(new SvXMLEmbeddedObjectHelper( *pPersist, EMBEDDEDOBJECTHELPER_MODE_READ ));
@@ -979,7 +979,7 @@ css::uno::Reference<css::uno::XInterface> SdXImpressDocument::create(
     if( aServiceSpecifier.startsWith( "com.sun.star.presentation.") )
     {
         const OUString aType( aServiceSpecifier.copy(26) );
-        SvxShape* pShape = NULL;
+        SvxShape* pShape = nullptr;
 
         sal_uInt16 nType = OBJ_TEXT;
         // create a shape wrapper
@@ -1079,7 +1079,7 @@ css::uno::Reference<css::uno::XInterface> SdXImpressDocument::create(
     }
 
     uno::Reference< drawing::XShape > xShape( xRet, uno::UNO_QUERY );
-    SvxShape* pShape = xShape.is() ? SvxShape::getImplementation(xShape) : NULL;
+    SvxShape* pShape = xShape.is() ? SvxShape::getImplementation(xShape) : nullptr;
     if (pShape)
     {
         xRet.clear();
@@ -1120,7 +1120,7 @@ uno::Sequence< OUString > SAL_CALL SdXImpressDocument::getAvailableServiceNames(
 {
     ::SolarMutexGuard aGuard;
 
-    if( NULL == mpDoc )
+    if( nullptr == mpDoc )
         throw lang::DisposedException();
 
     const uno::Sequence< OUString > aSNS_ORG( SvxFmMSFactory::getAvailableServiceNames() );
@@ -1231,7 +1231,7 @@ void SAL_CALL SdXImpressDocument::setPropertyValue( const OUString& aPropertyNam
 {
     ::SolarMutexGuard aGuard;
 
-    if( NULL == mpDoc )
+    if( nullptr == mpDoc )
         throw lang::DisposedException();
 
     const SfxItemPropertySimpleEntry* pEntry = mpPropSet->getPropertyMapEntry(aPropertyName);
@@ -1310,7 +1310,7 @@ uno::Any SAL_CALL SdXImpressDocument::getPropertyValue( const OUString& Property
     ::SolarMutexGuard aGuard;
 
     uno::Any aAny;
-    if( NULL == mpDoc )
+    if( nullptr == mpDoc )
         throw lang::DisposedException();
 
     const SfxItemPropertySimpleEntry* pEntry = mpPropSet->getPropertyMapEntry(PropertyName);
@@ -1393,7 +1393,7 @@ uno::Any SAL_CALL SdXImpressDocument::getPropertyValue( const OUString& Property
 
                     for( sal_uInt32 j = 0; j < nItems; ++j )
                     {
-                        if( 0 != (pItem = rPool.GetItem2( nWhichId, j ) ) )
+                        if( nullptr != (pItem = rPool.GetItem2( nWhichId, j ) ) )
                         {
                             const SvxFontItem *pFont = static_cast<const SvxFontItem *>(pItem);
 
@@ -1440,7 +1440,7 @@ uno::Reference< container::XNameAccess > SAL_CALL SdXImpressDocument::getLinks()
 {
     ::SolarMutexGuard aGuard;
 
-    if( NULL == mpDoc )
+    if( nullptr == mpDoc )
         throw lang::DisposedException();
 
     uno::Reference< container::XNameAccess > xLinks( mxLinks );
@@ -1455,7 +1455,7 @@ uno::Reference< container::XNameAccess > SAL_CALL SdXImpressDocument::getStyleFa
 {
     ::SolarMutexGuard aGuard;
 
-    if( NULL == mpDoc )
+    if( nullptr == mpDoc )
         throw lang::DisposedException();
 
     uno::Reference< container::XNameAccess > xStyles( dynamic_cast< container::XNameAccess* >( mpDoc->GetStyleSheetPool()) );
@@ -1477,7 +1477,7 @@ sal_Int32 SAL_CALL SdXImpressDocument::getRendererCount( const uno::Any& rSelect
     ::SolarMutexGuard aGuard;
     sal_Int32   nRet = 0;
 
-    if( NULL == mpDoc )
+    if( nullptr == mpDoc )
         throw lang::DisposedException();
 
     if( mpDocShell && mpDoc )
@@ -1507,7 +1507,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SdXImpressDocument::getRenderer( 
 {
     ::SolarMutexGuard aGuard;
 
-    if( NULL == mpDoc )
+    if( nullptr == mpDoc )
         throw lang::DisposedException();
 
     bool bExportNotesPages = false;
@@ -1587,7 +1587,7 @@ sal_Int32 ImplPDFGetBookmarkPage( const OUString& rBookmark, SdDrawDocument& rDo
     // is the bookmark a page ?
     bool        bIsMasterPage;
     sal_uInt16  nPgNum = rDoc.GetPageByName( aBookmark, bIsMasterPage );
-    SdrObject*  pObj = NULL;
+    SdrObject*  pObj = nullptr;
 
     if ( nPgNum == SDRPAGE_NOTFOUND )
     {
@@ -1880,7 +1880,7 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
 {
     ::SolarMutexGuard aGuard;
 
-    if( NULL == mpDoc )
+    if( nullptr == mpDoc )
         throw lang::DisposedException();
 
     if( mpDocShell && mpDoc )
@@ -1914,12 +1914,12 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
                 if ( !( (mpDoc->GetSdPage((sal_Int16) nPageNumber-1, PK_STANDARD))->IsExcluded() ) ||
                     (pPDFExtOutDevData && pPDFExtOutDevData->GetIsExportHiddenSlides()) )
                 {
-                    ::sd::ClientView* pView = new ::sd::ClientView( mpDocShell, pOut, NULL );
+                    ::sd::ClientView* pView = new ::sd::ClientView( mpDocShell, pOut, nullptr );
                     Rectangle               aVisArea = Rectangle( Point(), mpDoc->GetSdPage( (sal_uInt16)nPageNumber - 1, ePageKind )->GetSize() );
                     vcl::Region                  aRegion( aVisArea );
 
                     ::sd::ViewShell* pOldViewSh = mpDocShell->GetViewShell();
-                    ::sd::View* pOldSdView = pOldViewSh ? pOldViewSh->GetView() : NULL;
+                    ::sd::View* pOldSdView = pOldViewSh ? pOldViewSh->GetView() : nullptr;
 
                     if  ( pOldSdView )
                         pOldSdView->SdrEndTextEdit();
@@ -1955,7 +1955,7 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
                             pPV, pPDFExtOutDevData );
 
                         // background color for outliner :o
-                        SdPage* pPage = pPV ? static_cast<SdPage*>(pPV->GetPage()) : NULL;
+                        SdPage* pPage = pPV ? static_cast<SdPage*>(pPV->GetPage()) : nullptr;
                         if( pPage )
                         {
                             SdrOutliner& rOutl = mpDoc->GetDrawOutliner();
@@ -2193,10 +2193,10 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
 
                         if( xShapes.is() && xShapes->getCount() )
                         {
-                        SdrPageView* pPV = NULL;
+                        SdrPageView* pPV = nullptr;
 
                         ImplRenderPaintProc  aImplRenderPaintProc( mpDoc->GetLayerAdmin(),
-                                            pOldSdView ? pOldSdView->GetSdrPageView() : NULL, pPDFExtOutDevData );
+                                            pOldSdView ? pOldSdView->GetSdrPageView() : nullptr, pPDFExtOutDevData );
 
                             for( sal_uInt32 i = 0, nCount = xShapes->getCount(); i < nCount; i++ )
                             {
@@ -2240,7 +2240,7 @@ DrawViewShell* SdXImpressDocument::GetViewShell()
     if (!pViewSh)
     {
         SAL_WARN("sd", "DrawViewShell not available!");
-        return NULL;
+        return nullptr;
     }
     return pViewSh;
 }
@@ -2593,7 +2593,7 @@ void SAL_CALL SdXImpressDocument::dispose() throw (css::uno::RuntimeException, s
             if( mpDoc )
             {
                 EndListening( *mpDoc );
-                mpDoc = NULL;
+                mpDoc = nullptr;
             }
 
             // Call the base class dispose() before setting the mbDisposed flag
@@ -2612,7 +2612,7 @@ void SAL_CALL SdXImpressDocument::dispose() throw (css::uno::RuntimeException, s
                 if( xComp.is() )
                     xComp->dispose();
 
-                xStyles = 0;
+                xStyles = nullptr;
             }
 
             uno::Reference< presentation::XPresentation > xPresentation( mxPresentation );
@@ -2631,7 +2631,7 @@ void SAL_CALL SdXImpressDocument::dispose() throw (css::uno::RuntimeException, s
                 if( xComp.is() )
                     xComp->dispose();
 
-                xLinks = 0;
+                xLinks = nullptr;
             }
 
             uno::Reference< drawing::XDrawPages > xDrawPagesAccess( mxDrawPagesAccess );
@@ -2641,7 +2641,7 @@ void SAL_CALL SdXImpressDocument::dispose() throw (css::uno::RuntimeException, s
                 if( xComp.is() )
                     xComp->dispose();
 
-                xDrawPagesAccess = 0;
+                xDrawPagesAccess = nullptr;
             }
 
             uno::Reference< drawing::XDrawPages > xMasterPagesAccess( mxMasterPagesAccess );
@@ -2651,7 +2651,7 @@ void SAL_CALL SdXImpressDocument::dispose() throw (css::uno::RuntimeException, s
                 if( xComp.is() )
                     xComp->dispose();
 
-                xDrawPagesAccess = 0;
+                xDrawPagesAccess = nullptr;
             }
 
             uno::Reference< container::XNameAccess > xLayerManager( mxLayerManager );
@@ -2661,7 +2661,7 @@ void SAL_CALL SdXImpressDocument::dispose() throw (css::uno::RuntimeException, s
                 if( xComp.is() )
                     xComp->dispose();
 
-                xLayerManager = 0;
+                xLayerManager = nullptr;
             }
 
             uno::Reference< container::XNameContainer > xCustomPresentationAccess( mxCustomPresentationAccess );
@@ -2671,16 +2671,16 @@ void SAL_CALL SdXImpressDocument::dispose() throw (css::uno::RuntimeException, s
                 if( xComp.is() )
                     xComp->dispose();
 
-                xCustomPresentationAccess = 0;
+                xCustomPresentationAccess = nullptr;
             }
 
-            mxDashTable = 0;
-            mxGradientTable = 0;
-            mxHatchTable = 0;
-            mxBitmapTable = 0;
-            mxTransGradientTable = 0;
-            mxMarkerTable = 0;
-            mxDrawingPool = 0;
+            mxDashTable = nullptr;
+            mxGradientTable = nullptr;
+            mxHatchTable = nullptr;
+            mxBitmapTable = nullptr;
+            mxTransGradientTable = nullptr;
+            mxMarkerTable = nullptr;
+            mxDrawingPool = nullptr;
         }
     }
 }
@@ -2702,7 +2702,7 @@ sal_Int32 SAL_CALL SdDrawPagesAccess::getCount()
 {
     ::SolarMutexGuard aGuard;
 
-    if( NULL == mpModel )
+    if( nullptr == mpModel )
         throw lang::DisposedException();
 
     return mpModel->mpDoc->GetSdPageCount( PK_STANDARD );
@@ -2713,7 +2713,7 @@ uno::Any SAL_CALL SdDrawPagesAccess::getByIndex( sal_Int32 Index )
 {
     ::SolarMutexGuard aGuard;
 
-    if( NULL == mpModel )
+    if( nullptr == mpModel )
         throw lang::DisposedException();
 
     uno::Any aAny;
@@ -2736,7 +2736,7 @@ uno::Any SAL_CALL SdDrawPagesAccess::getByName( const OUString& aName ) throw(co
 {
     ::SolarMutexGuard aGuard;
 
-    if( NULL == mpModel )
+    if( nullptr == mpModel )
         throw lang::DisposedException();
 
     if( !aName.isEmpty() )
@@ -2746,7 +2746,7 @@ uno::Any SAL_CALL SdDrawPagesAccess::getByName( const OUString& aName ) throw(co
         for( nPage = 0; nPage < nCount; nPage++ )
         {
             SdPage* pPage = mpModel->mpDoc->GetSdPage( nPage, PK_STANDARD );
-            if(NULL == pPage)
+            if(nullptr == pPage)
                 continue;
 
             if( aName == SdDrawPage::getPageApiName( pPage ) )
@@ -2766,7 +2766,7 @@ uno::Sequence< OUString > SAL_CALL SdDrawPagesAccess::getElementNames() throw(un
 {
     ::SolarMutexGuard aGuard;
 
-    if( NULL == mpModel )
+    if( nullptr == mpModel )
         throw lang::DisposedException();
 
     const sal_uInt16 nCount = mpModel->mpDoc->GetSdPageCount( PK_STANDARD );
@@ -2787,7 +2787,7 @@ sal_Bool SAL_CALL SdDrawPagesAccess::hasByName( const OUString& aName ) throw(un
 {
     ::SolarMutexGuard aGuard;
 
-    if( NULL == mpModel )
+    if( nullptr == mpModel )
         throw lang::DisposedException();
 
     const sal_uInt16 nCount = mpModel->mpDoc->GetSdPageCount( PK_STANDARD );
@@ -2795,7 +2795,7 @@ sal_Bool SAL_CALL SdDrawPagesAccess::hasByName( const OUString& aName ) throw(un
     for( nPage = 0; nPage < nCount; nPage++ )
     {
         SdPage* pPage = mpModel->mpDoc->GetSdPage( nPage, PK_STANDARD );
-        if(NULL == pPage)
+        if(nullptr == pPage)
             continue;
 
         if( aName == SdDrawPage::getPageApiName( pPage ) )
@@ -2829,7 +2829,7 @@ uno::Reference< drawing::XDrawPage > SAL_CALL SdDrawPagesAccess::insertNewByInde
 {
     ::SolarMutexGuard aGuard;
 
-    if( NULL == mpModel )
+    if( nullptr == mpModel )
         throw lang::DisposedException();
 
     if( mpModel->mpDoc )
@@ -2855,7 +2855,7 @@ void SAL_CALL SdDrawPagesAccess::remove( const uno::Reference< drawing::XDrawPag
 {
     ::SolarMutexGuard aGuard;
 
-    if( NULL == mpModel || mpModel->mpDoc == NULL )
+    if( nullptr == mpModel || mpModel->mpDoc == nullptr )
         throw lang::DisposedException();
 
     SdDrawDocument& rDoc = *mpModel->mpDoc;
@@ -2926,7 +2926,7 @@ uno::Sequence< OUString > SAL_CALL SdDrawPagesAccess::getSupportedServiceNames( 
 // XComponent
 void SAL_CALL SdDrawPagesAccess::dispose(  ) throw (uno::RuntimeException, std::exception)
 {
-    mpModel = NULL;
+    mpModel = nullptr;
 }
 
 void SAL_CALL SdDrawPagesAccess::addEventListener( const uno::Reference< lang::XEventListener >&  ) throw (uno::RuntimeException, std::exception)
@@ -2953,7 +2953,7 @@ SdMasterPagesAccess::~SdMasterPagesAccess() throw()
 // XComponent
 void SAL_CALL SdMasterPagesAccess::dispose(  ) throw (uno::RuntimeException, std::exception)
 {
-    mpModel = NULL;
+    mpModel = nullptr;
 }
 
 void SAL_CALL SdMasterPagesAccess::addEventListener( const uno::Reference< lang::XEventListener >&  ) throw (uno::RuntimeException, std::exception)
@@ -2972,7 +2972,7 @@ sal_Int32 SAL_CALL SdMasterPagesAccess::getCount()
 {
     ::SolarMutexGuard aGuard;
 
-    if( NULL == mpModel->mpDoc )
+    if( nullptr == mpModel->mpDoc )
         throw lang::DisposedException();
 
     return mpModel->mpDoc->GetMasterSdPageCount(PK_STANDARD);
@@ -2987,7 +2987,7 @@ uno::Any SAL_CALL SdMasterPagesAccess::getByIndex( sal_Int32 Index )
 {
     ::SolarMutexGuard aGuard;
 
-    if( NULL == mpModel )
+    if( nullptr == mpModel )
         throw lang::DisposedException();
 
     uno::Any aAny;
@@ -3024,7 +3024,7 @@ uno::Reference< drawing::XDrawPage > SAL_CALL SdMasterPagesAccess::insertNewByIn
 {
     ::SolarMutexGuard aGuard;
 
-    if( NULL == mpModel )
+    if( nullptr == mpModel )
         throw lang::DisposedException();
 
     uno::Reference< drawing::XDrawPage > xDrawPage;
@@ -3120,13 +3120,13 @@ void SAL_CALL SdMasterPagesAccess::remove( const uno::Reference< drawing::XDrawP
 {
     ::SolarMutexGuard aGuard;
 
-    if( NULL == mpModel || mpModel->mpDoc == NULL )
+    if( nullptr == mpModel || mpModel->mpDoc == nullptr )
         throw lang::DisposedException();
 
     SdDrawDocument& rDoc = *mpModel->mpDoc;
 
     SdMasterPage* pSdPage = SdMasterPage::getImplementation( xPage );
-    if(pSdPage == NULL)
+    if(pSdPage == nullptr)
         return;
 
     SdPage* pPage = dynamic_cast< SdPage* > (pSdPage->GetSdrPage());
@@ -3203,7 +3203,7 @@ SdDocLinkTargets::~SdDocLinkTargets() throw()
 // XComponent
 void SAL_CALL SdDocLinkTargets::dispose(  ) throw (uno::RuntimeException, std::exception)
 {
-    mpModel = NULL;
+    mpModel = nullptr;
 }
 
 void SAL_CALL SdDocLinkTargets::addEventListener( const uno::Reference< lang::XEventListener >&  ) throw (uno::RuntimeException, std::exception)
@@ -3222,12 +3222,12 @@ uno::Any SAL_CALL SdDocLinkTargets::getByName( const OUString& aName )
 {
     ::SolarMutexGuard aGuard;
 
-    if( NULL == mpModel )
+    if( nullptr == mpModel )
         throw lang::DisposedException();
 
     SdPage* pPage = FindPage( aName );
 
-    if( pPage == NULL )
+    if( pPage == nullptr )
         throw container::NoSuchElementException();
 
     uno::Any aAny;
@@ -3244,11 +3244,11 @@ uno::Sequence< OUString > SAL_CALL SdDocLinkTargets::getElementNames()
 {
     ::SolarMutexGuard aGuard;
 
-    if( NULL == mpModel )
+    if( nullptr == mpModel )
         throw lang::DisposedException();
 
     SdDrawDocument* mpDoc = mpModel->GetDoc();
-    if( mpDoc == NULL )
+    if( mpDoc == nullptr )
     {
         uno::Sequence< OUString > aSeq;
         return aSeq;
@@ -3297,10 +3297,10 @@ sal_Bool SAL_CALL SdDocLinkTargets::hasByName( const OUString& aName )
 {
     ::SolarMutexGuard aGuard;
 
-    if( NULL == mpModel )
+    if( nullptr == mpModel )
         throw lang::DisposedException();
 
-    return FindPage( aName ) != NULL;
+    return FindPage( aName ) != nullptr;
 }
 
 // container::XElementAccess
@@ -3315,17 +3315,17 @@ sal_Bool SAL_CALL SdDocLinkTargets::hasElements()
 {
     ::SolarMutexGuard aGuard;
 
-    if( NULL == mpModel )
+    if( nullptr == mpModel )
         throw lang::DisposedException();
 
-    return mpModel->GetDoc() != NULL;
+    return mpModel->GetDoc() != nullptr;
 }
 
 SdPage* SdDocLinkTargets::FindPage( const OUString& rName ) const throw(std::exception)
 {
     SdDrawDocument* mpDoc = mpModel->GetDoc();
-    if( mpDoc == NULL )
-        return NULL;
+    if( mpDoc == nullptr )
+        return nullptr;
 
     const sal_uInt16 nMaxPages = mpDoc->GetPageCount();
     const sal_uInt16 nMaxMasterPages = mpDoc->GetMasterPageCount();
@@ -3353,7 +3353,7 @@ SdPage* SdDocLinkTargets::FindPage( const OUString& rName ) const throw(std::exc
             return pPage;
     }
 
-    return NULL;
+    return nullptr;
 }
 
 // XServiceInfo

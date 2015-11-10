@@ -102,7 +102,7 @@ void SAL_CALL PresenterPreviewCache::setDocumentSlides (
     throw (RuntimeException, std::exception)
 {
     ThrowIfDisposed();
-    OSL_ASSERT(mpCacheContext.get()!=NULL);
+    OSL_ASSERT(mpCacheContext.get()!=nullptr);
 
     mpCacheContext->SetDocumentSlides(rxSlides, rxDocument);
 }
@@ -113,7 +113,7 @@ void SAL_CALL PresenterPreviewCache::setVisibleRange (
     throw (css::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed();
-    OSL_ASSERT(mpCacheContext.get()!=NULL);
+    OSL_ASSERT(mpCacheContext.get()!=nullptr);
 
     mpCacheContext->SetVisibleSlideRange (nFirstVisibleSlideIndex, nLastVisibleSlideIndex);
 }
@@ -123,7 +123,7 @@ void SAL_CALL PresenterPreviewCache::setPreviewSize (
     throw (css::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed();
-    OSL_ASSERT(mpCache.get()!=NULL);
+    OSL_ASSERT(mpCache.get()!=nullptr);
 
     maPreviewSize = Size(rSize.Width, rSize.Height);
     mpCache->ChangeSize(maPreviewSize, Bitmap::HasFastScale());
@@ -135,18 +135,18 @@ Reference<rendering::XBitmap> SAL_CALL PresenterPreviewCache::getSlidePreview (
     throw (css::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed();
-    OSL_ASSERT(mpCacheContext.get()!=NULL);
+    OSL_ASSERT(mpCacheContext.get()!=nullptr);
 
     cppcanvas::CanvasSharedPtr pCanvas (
         cppcanvas::VCLFactory::createCanvas(rxCanvas));
 
     const SdrPage* pPage = mpCacheContext->GetPage(nSlideIndex);
-    if (pPage == NULL)
+    if (pPage == nullptr)
         throw RuntimeException();
 
     const BitmapEx aPreview (mpCache->GetPreviewBitmap(pPage,true));
     if (aPreview.IsEmpty())
-        return NULL;
+        return nullptr;
     else
         return cppcanvas::VCLFactory::createBitmap(
             pCanvas,
@@ -175,7 +175,7 @@ void SAL_CALL PresenterPreviewCache::pause()
     throw (css::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed();
-    OSL_ASSERT(mpCache.get()!=NULL);
+    OSL_ASSERT(mpCache.get()!=nullptr);
     mpCache->Pause();
 }
 
@@ -183,7 +183,7 @@ void SAL_CALL PresenterPreviewCache::resume()
     throw (css::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed();
-    OSL_ASSERT(mpCache.get()!=NULL);
+    OSL_ASSERT(mpCache.get()!=nullptr);
     mpCache->Resume();
 }
 
@@ -346,9 +346,9 @@ const SdrPage* PresenterPreviewCache::PresenterCacheContext::GetPage (
     const sal_Int32 nSlideIndex) const
 {
     if ( ! mxSlides.is())
-        return NULL;
+        return nullptr;
     if (nSlideIndex < 0 || nSlideIndex >= mxSlides->getCount())
-        return NULL;
+        return nullptr;
 
     Reference<drawing::XDrawPage> xSlide (mxSlides->getByIndex(nSlideIndex), UNO_QUERY);
     const SdPage* pPage = SdPage::getImplementation(xSlide);

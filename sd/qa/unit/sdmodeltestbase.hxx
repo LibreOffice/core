@@ -66,7 +66,7 @@ FileFormat aFileFormats[] =
     { "html", "graphic_HTML", "graphic_HTML", "", HTML_FORMAT_TYPE },
     { "pdf",  "draw_pdf_import", "pdf_Portable_Document_Format", "", PDF_FORMAT_TYPE },
     { "fodg",  "OpenDocument Drawing Flat XML", "Flat XML ODF Drawing", "", FODG_FORMAT_TYPE },
-    { 0, 0, 0, 0, SfxFilterFlags::NONE }
+    { nullptr, nullptr, nullptr, nullptr, SfxFilterFlags::NONE }
 };
 
 #define ODP  0
@@ -104,10 +104,10 @@ public:
 
 protected:
     /// Load the document.
-    sd::DrawDocShellRef loadURL( const OUString &rURL, sal_Int32 nFormat, SfxAllItemSet *pParams = 0 )
+    sd::DrawDocShellRef loadURL( const OUString &rURL, sal_Int32 nFormat, SfxAllItemSet *pParams = nullptr )
     {
         FileFormat *pFmt = getFormat(nFormat);
-        CPPUNIT_ASSERT_MESSAGE( "missing filter info", pFmt->pName != NULL );
+        CPPUNIT_ASSERT_MESSAGE( "missing filter info", pFmt->pName != nullptr );
 
         SotClipboardFormatId nOptions = SotClipboardFormatId::NONE;
         if (pFmt->nFormatType != SfxFilterFlags::NONE)

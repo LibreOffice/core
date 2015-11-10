@@ -94,7 +94,7 @@ PresStyleMap& SdStyleFamilyImpl::getStyleSheets()
 SdStyleFamily::SdStyleFamily( const rtl::Reference< SfxStyleSheetPool >& xPool, SfxStyleFamily nFamily )
 : mnFamily( nFamily )
 , mxPool( xPool )
-, mpImpl( 0 )
+, mpImpl( nullptr )
 {
 }
 
@@ -124,7 +124,7 @@ SdStyleSheet* SdStyleFamily::GetValidNewSheet( const Any& rElement ) throw(Illeg
     Reference< XStyle > xStyle( rElement, UNO_QUERY );
     SdStyleSheet* pStyle = static_cast< SdStyleSheet* >( xStyle.get() );
 
-    if( pStyle == 0 || (pStyle->GetFamily() != mnFamily) || (&pStyle->GetPool() != mxPool.get()) || (mxPool->Find( pStyle->GetName(), mnFamily) != 0) )
+    if( pStyle == nullptr || (pStyle->GetFamily() != mnFamily) || (&pStyle->GetPool() != mxPool.get()) || (mxPool->Find( pStyle->GetName(), mnFamily) != nullptr) )
         throw IllegalArgumentException();
 
     return pStyle;
@@ -132,7 +132,7 @@ SdStyleSheet* SdStyleFamily::GetValidNewSheet( const Any& rElement ) throw(Illeg
 
 SdStyleSheet* SdStyleFamily::GetSheetByName( const OUString& rName ) throw(NoSuchElementException, WrappedTargetException )
 {
-    SdStyleSheet* pRet = 0;
+    SdStyleSheet* pRet = nullptr;
     if( !rName.isEmpty() )
     {
         if( mnFamily == SD_STYLE_FAMILY_MASTERPAGE )
@@ -188,7 +188,7 @@ OUString SAL_CALL SdStyleFamily::getName() throw (RuntimeException, std::excepti
     if( mnFamily == SD_STYLE_FAMILY_MASTERPAGE )
     {
         SdPage* pPage = static_cast< SdPage* >( mpImpl->mxMasterPage.get() );
-        if( pPage == 0 )
+        if( pPage == nullptr )
             throw DisposedException();
 
         OUString aLayoutName( pPage->GetLayoutName() );
@@ -464,7 +464,7 @@ void SAL_CALL SdStyleFamily::dispose(  ) throw (RuntimeException, std::exception
     if( mpImpl )
     {
         delete mpImpl;
-        mpImpl = 0;
+        mpImpl = nullptr;
     }
 }
 

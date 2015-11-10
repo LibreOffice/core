@@ -105,7 +105,7 @@ void SAL_CALL ResourceManager::disposing()
     if (mxConfigurationController.is())
     {
         mxConfigurationController->removeConfigurationChangeListener(this);
-        mxConfigurationController = NULL;
+        mxConfigurationController = nullptr;
     }
 }
 
@@ -235,7 +235,7 @@ void SAL_CALL ResourceManager::disposing (
     {
         SaveResourceState();
         // Without the configuration controller this class can do nothing.
-        mxConfigurationController = NULL;
+        mxConfigurationController = nullptr;
         dispose();
     }
 }

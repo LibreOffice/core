@@ -45,8 +45,8 @@ bool ConfigurationClassifier::Partition()
     maC1andC2.clear();
 
     PartitionResources(
-        mxConfiguration1->getResources(NULL, OUString(), AnchorBindingMode_DIRECT),
-        mxConfiguration2->getResources(NULL, OUString(), AnchorBindingMode_DIRECT));
+        mxConfiguration1->getResources(nullptr, OUString(), AnchorBindingMode_DIRECT),
+        mxConfiguration2->getResources(nullptr, OUString(), AnchorBindingMode_DIRECT));
 
     return !maC1minusC2.empty() || !maC2minusC1.empty();
 }

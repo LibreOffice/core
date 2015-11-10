@@ -45,7 +45,7 @@ PaneHider::PaneHider (const ViewShell& rViewShell, SlideshowImpl* pSlideShow)
 {
      // Hide the left and right pane windows when a slideshow exists and is
     // not full screen.
-    if (pSlideShow!=NULL && !pSlideShow->isFullScreen()) try
+    if (pSlideShow!=nullptr && !pSlideShow->isFullScreen()) try
     {
         Reference<XControllerManager> xControllerManager (
             mrViewShell.GetViewShellBase().GetController(), UNO_QUERY_THROW);
@@ -59,7 +59,7 @@ PaneHider::PaneHider (const ViewShell& rViewShell, SlideshowImpl* pSlideShow)
                 // Iterate over the resources and deactivate the panes.
                 Sequence<Reference<XResourceId> > aResources (
                     mxConfiguration->getResources(
-                        NULL,
+                        nullptr,
                         framework::FrameworkHelper::msPaneURLPrefix,
                         AnchorBindingMode_DIRECT));
                 for (sal_Int32 nIndex=0; nIndex<aResources.getLength(); ++nIndex)

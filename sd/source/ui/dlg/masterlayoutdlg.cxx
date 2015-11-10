@@ -44,7 +44,7 @@ MasterLayoutDialog::MasterLayoutDialog( vcl::Window* pParent, SdDrawDocument* pD
         mpCurrentPage = static_cast<SdPage*>(&(mpCurrentPage->TRG_GetMasterPage()));
     }
 
-    if( mpCurrentPage == 0 )
+    if( mpCurrentPage == nullptr )
     {
         mpCurrentPage = pDoc->GetMasterSdPage( 0, PK_STANDARD );
         OSL_FAIL( "MasterLayoutDialog::MasterLayoutDialog() - no current page?" );
@@ -64,10 +64,10 @@ MasterLayoutDialog::MasterLayoutDialog( vcl::Window* pParent, SdDrawDocument* pD
             break;
     }
 
-    mbOldHeader = mpCurrentPage->GetPresObj( PRESOBJ_HEADER ) != NULL;
-    mbOldDate = mpCurrentPage->GetPresObj( PRESOBJ_DATETIME ) != NULL;
-    mbOldFooter = mpCurrentPage->GetPresObj( PRESOBJ_FOOTER ) != NULL;
-    mbOldPageNumber = mpCurrentPage->GetPresObj( PRESOBJ_SLIDENUMBER ) != NULL;
+    mbOldHeader = mpCurrentPage->GetPresObj( PRESOBJ_HEADER ) != nullptr;
+    mbOldDate = mpCurrentPage->GetPresObj( PRESOBJ_DATETIME ) != nullptr;
+    mbOldFooter = mpCurrentPage->GetPresObj( PRESOBJ_FOOTER ) != nullptr;
+    mbOldPageNumber = mpCurrentPage->GetPresObj( PRESOBJ_SLIDENUMBER ) != nullptr;
 
     mpCBHeader->Check( mbOldHeader );
     mpCBDate->Check( mbOldDate );

@@ -96,7 +96,7 @@ void SdTpOptionsSnap::Reset( const SfxItemSet* rAttrs )
     pMtrFldAngle->SetValue( aOptsItem.GetOptionsSnap().GetAngle() );
     pMtrFldBezAngle->SetValue( aOptsItem.GetOptionsSnap().GetEliminatePolyPointLimitAngle() );
 
-    pCbxRotate->GetClickHdl().Call(0);
+    pCbxRotate->GetClickHdl().Call(nullptr);
 }
 
 VclPtr<SfxTabPage> SdTpOptionsSnap::Create( vcl::Window* pWindow,
@@ -327,7 +327,7 @@ void SdTpOptionsMisc::ActivatePage( const SfxItemSet& rSet )
     m_pLbMetric->SaveValue();
     // change metric if necessary (since TabPage is in the Dialog where
     // the metric is set)
-    const SfxPoolItem* pAttr = NULL;
+    const SfxPoolItem* pAttr = nullptr;
     if( SfxItemState::SET == rSet.GetItemState( SID_ATTR_METRIC , false,
                                     &pAttr ))
     {

@@ -71,7 +71,7 @@ extern "C" { static void SAL_CALL thisModule() {} }
     std::unique_ptr< osl::Module > mod(new osl::Module);
     return mod->loadRelative(&thisModule, ImplGetFullLibraryName(rLibraryName),
                              SAL_LOADMODULE_GLOBAL | SAL_LOADMODULE_LAZY)
-        ? mod.release() : 0;
+        ? mod.release() : nullptr;
 }
 
 #endif

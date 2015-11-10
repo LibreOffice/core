@@ -35,8 +35,8 @@ SdCustomShowDlg::SdCustomShowDlg( vcl::Window* pWindow,
                             SdDrawDocument& rDrawDoc ) :
     ModalDialog     ( pWindow, "CustomSlideShows", "modules/simpress/ui/customslideshows.ui" ),
     rDoc            ( rDrawDoc ),
-    pCustomShowList ( NULL ),
-    pCustomShow     ( NULL ),
+    pCustomShowList ( nullptr ),
+    pCustomShow     ( nullptr ),
     bModified       ( false )
 {
     get( m_pBtnNew, "new" );
@@ -69,7 +69,7 @@ SdCustomShowDlg::SdCustomShowDlg( vcl::Window* pWindow,
         long nPosToSelect = pCustomShowList->GetCurPos();
         // fill ListBox with CustomShows
         for( pCustomShow = pCustomShowList->First();
-             pCustomShow != NULL;
+             pCustomShow != nullptr;
              pCustomShow = pCustomShowList->Next() )
         {
             m_pLbCustomShows->InsertEntry( pCustomShow->GetName() );
@@ -131,7 +131,7 @@ void SdCustomShowDlg::SelectHdl(void *p)
     // new CustomShow
     if( p == m_pBtnNew )
     {
-        pCustomShow = NULL;
+        pCustomShow = nullptr;
         ScopedVclPtrInstance< SdDefineCustomShowDlg > aDlg( this, rDoc, pCustomShow );
         if( aDlg->Execute() == RET_OK )
         {
@@ -221,7 +221,7 @@ void SdCustomShowDlg::SelectHdl(void *p)
             {
                 bDifferent = true;
                 for( pCustomShow = pCustomShowList->First();
-                     pCustomShow != NULL && bDifferent;
+                     pCustomShow != nullptr && bDifferent;
                      pCustomShow = pCustomShowList->Next() )
                 {
                     if( aStr == pCustomShow->GetName() )
@@ -374,7 +374,7 @@ void SdDefineCustomShowDlg::CheckState()
 {
     bool bPages = m_pLbPages->GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND;
     //sal_Bool bCSPages = aLbCustomPages.GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND;
-    bool bCSPages = m_pLbCustomPages->FirstSelected() != NULL;
+    bool bCSPages = m_pLbCustomPages->FirstSelected() != nullptr;
     bool bCount = m_pLbCustomPages->GetEntryCount() > 0;
 
     m_pBtnOK->Enable( bCount );
@@ -415,7 +415,7 @@ void SdDefineCustomShowDlg::ClickButtonHdl2(void* p)
             {
                 OUString aStr = m_pLbPages->GetSelectEntry( i );
                 pEntry = m_pLbCustomPages->InsertEntry( aStr,
-                                            0, false, nPosCP );
+                                            nullptr, false, nPosCP );
 
                 m_pLbCustomPages->Select( pEntry );
                 SdPage* pPage = rDoc.GetSdPage( (sal_uInt16) m_pLbPages->
@@ -454,7 +454,7 @@ void SdDefineCustomShowDlg::ClickButtonHdl2(void* p)
 void SdDefineCustomShowDlg::CheckCustomShow()
 {
     bool bDifferent = false;
-    SvTreeListEntry* pEntry = NULL;
+    SvTreeListEntry* pEntry = nullptr;
 
     // compare count
     if( rpCustomShow->PagesVector().size() != m_pLbCustomPages->GetEntryCount() )
@@ -468,7 +468,7 @@ void SdDefineCustomShowDlg::CheckCustomShow()
     {
         SdCustomShow::PageVec::iterator it1 = rpCustomShow->PagesVector().begin();
         pEntry = m_pLbCustomPages->First();
-        for( ; it1 != rpCustomShow->PagesVector().end() && pEntry != NULL && !bDifferent;
+        for( ; it1 != rpCustomShow->PagesVector().end() && pEntry != nullptr && !bDifferent;
              ++it1, pEntry = m_pLbCustomPages->Next( pEntry ) )
         {
             if( *it1 != pEntry->GetUserData() )
@@ -483,7 +483,7 @@ void SdDefineCustomShowDlg::CheckCustomShow()
     if( bDifferent )
     {
         for( pEntry = m_pLbCustomPages->First();
-             pEntry != NULL;
+             pEntry != nullptr;
              pEntry = m_pLbCustomPages->Next( pEntry ) )
         {
             SdPage* pPage = static_cast<SdPage*>(pEntry->GetUserData());
@@ -514,7 +514,7 @@ IMPL_LINK_NOARG_TYPED(SdDefineCustomShowDlg, OKHdl, Button*, void)
 
         long nPosToSelect = pCustomShowList->GetCurPos();
         for( pCustomShow = pCustomShowList->First();
-             pCustomShow != NULL;
+             pCustomShow != nullptr;
              pCustomShow = pCustomShowList->Next() )
         {
             if( aName == pCustomShow->GetName() && aName != aOldName )

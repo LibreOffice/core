@@ -240,7 +240,7 @@ bool SdGRFFilter::Export()
      uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
     uno::Reference< drawing::XGraphicExportFilter > xExporter = drawing::GraphicExportFilter::create( xContext );
 
-    SdPage* pPage = NULL;
+    SdPage* pPage = nullptr;
     sd::DrawViewShell*  pDrawViewShell = dynamic_cast<::sd::DrawViewShell* >(mrDocShell.GetViewShell() );
 
     PageKind ePageKind = PK_STANDARD;

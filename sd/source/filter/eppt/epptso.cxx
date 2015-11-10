@@ -2102,7 +2102,7 @@ bool PPTWriter::ImplCreatePresentationPlaceholder( const bool bMasterPage, const
 
         SvMemoryStream  aExtBu( 0x200, 0x200 );
         SvMemoryStream  aClientTextBox( 0x200, 0x200 );
-        ImplWriteTextStyleAtom( aClientTextBox, nStyleInstance, 0, NULL, aExtBu, &aPropOpt );
+        ImplWriteTextStyleAtom( aClientTextBox, nStyleInstance, 0, nullptr, aExtBu, &aPropOpt );
 
         aPropOpt.CreateTextProperties( mXPropSet, mnTxId += 0x60 );
         aPropOpt.CreateShapeProperties( mXShape );
@@ -2174,8 +2174,8 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
     bool bSecOutl = false;
     sal_uInt32 nPObjects = 0;
 
-    SvMemoryStream* pClientTextBox = NULL;
-    SvMemoryStream* pClientData = NULL;
+    SvMemoryStream* pClientTextBox = nullptr;
+    SvMemoryStream* pClientData = nullptr;
 
     while( GetNextGroupEntry() )
     {
@@ -2229,7 +2229,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                     aXIndexAccess( mXShape, css::uno::UNO_QUERY );
                 if ( EnterGroup( aXIndexAccess ) )
                 {
-                    SvMemoryStream* pTmp = NULL;
+                    SvMemoryStream* pTmp = nullptr;
 
                     if ( bEffect && !mbUseNewAnimations )
                     {
@@ -3183,7 +3183,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
             }
             else if ( (mType == "drawing.Table") || (mType == "presentation.Table") )
             {
-                SvMemoryStream* pTmp = NULL;
+                SvMemoryStream* pTmp = nullptr;
                 if ( bEffect && !mbUseNewAnimations )
                 {
                     pTmp = new SvMemoryStream( 0x200, 0x200 );
@@ -3312,13 +3312,13 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                         TextRuleEntry aTextRule( nPageNumber );
                         SvMemoryStream aExtBu( 0x200, 0x200 );
                         ImplGetText();
-                        ImplWriteTextStyleAtom( *pClientTextBox, nTextType, nPObjects, &aTextRule, aExtBu, NULL );
+                        ImplWriteTextStyleAtom( *pClientTextBox, nTextType, nPObjects, &aTextRule, aExtBu, nullptr );
                         ImplWriteExtParaHeader( aExtBu, nPObjects++, nTextType, nPageNumber + 0x100 );
                         SvMemoryStream* pOut = aTextRule.pOut;
                         if ( pOut )
                         {
                             pClientTextBox->Write( pOut->GetData(), pOut->Tell() );
-                            delete pOut, aTextRule.pOut = NULL;
+                            delete pOut, aTextRule.pOut = nullptr;
                         }
                         if ( aExtBu.Tell() )
                         {
@@ -3345,7 +3345,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                             pClientTextBox = new SvMemoryStream( 0x200, 0x200 );
 
                         SvMemoryStream  aExtBu( 0x200, 0x200 );
-                        ImplWriteTextStyleAtom( *pClientTextBox, nInstance2, 0, NULL, aExtBu, &aPropOpt );
+                        ImplWriteTextStyleAtom( *pClientTextBox, nInstance2, 0, nullptr, aExtBu, &aPropOpt );
                         if ( aExtBu.Tell() )
                         {
                             if ( !pClientData )
@@ -3381,7 +3381,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                        .WriteUInt32( pClientData->Tell() );
 
                 mpStrm->Write( pClientData->GetData(), pClientData->Tell() );
-                delete pClientData, pClientData = NULL;
+                delete pClientData, pClientData = nullptr;
             }
             if ( pClientTextBox )
             {
@@ -3389,7 +3389,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                        .WriteUInt32( pClientTextBox->Tell() );
 
                 mpStrm->Write( pClientTextBox->GetData(), pClientTextBox->Tell() );
-                delete pClientTextBox, pClientTextBox = NULL;
+                delete pClientTextBox, pClientTextBox = nullptr;
             }
             mpPptEscherEx->CloseContainer();      // ESCHER_SpContainer
         }
@@ -3441,7 +3441,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                 pClientTextBox = new SvMemoryStream( 0x200, 0x200 );
 
             SvMemoryStream  aExtBu( 0x200, 0x200 );
-            ImplWriteTextStyleAtom( *pClientTextBox, EPP_TEXTTYPE_Other, 0, NULL, aExtBu, &aPropOpt );
+            ImplWriteTextStyleAtom( *pClientTextBox, EPP_TEXTTYPE_Other, 0, nullptr, aExtBu, &aPropOpt );
 
             aPropOpt.CreateShapeProperties( mXShape );
             aPropOpt.Commit( *mpStrm );
@@ -3454,7 +3454,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                    .WriteUInt32( pClientTextBox->Tell() );
 
             mpStrm->Write( pClientTextBox->GetData(), pClientTextBox->Tell() );
-            delete pClientTextBox, pClientTextBox = NULL;
+            delete pClientTextBox, pClientTextBox = nullptr;
 
             mpPptEscherEx->CloseContainer();  // ESCHER_SpContainer
 
@@ -3690,7 +3690,7 @@ void PPTWriter::ImplCreateTable( uno::Reference< drawing::XShape >& rXShape, Esc
                         SvMemoryStream aClientTextBox( 0x200, 0x200 );
                         SvMemoryStream  aExtBu( 0x200, 0x200 );
 
-                        ImplWriteTextStyleAtom( aClientTextBox, EPP_TEXTTYPE_Other, 0, NULL, aExtBu, &aPropOptSp );
+                        ImplWriteTextStyleAtom( aClientTextBox, EPP_TEXTTYPE_Other, 0, nullptr, aExtBu, &aPropOptSp );
 
                         // need write client data for extend bullet
                         if ( aExtBu.Tell() )
@@ -3701,7 +3701,7 @@ void PPTWriter::ImplCreateTable( uno::Reference< drawing::XShape >& rXShape, Esc
                                .WriteUInt32( pClientData->Tell() );
 
                             mpStrm->Write( pClientData->GetData(), pClientData->Tell() );
-                            delete pClientData, pClientData = NULL;
+                            delete pClientData, pClientData = nullptr;
                         }
 
                         aPropOptSp.Commit( *mpStrm );

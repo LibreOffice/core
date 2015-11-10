@@ -50,7 +50,7 @@ ChildWindowPane::ChildWindowPane (
     mrViewShellBase.GetViewShellManager()->ActivateShell(mpShell.get());
 
     SfxViewFrame* pViewFrame = mrViewShellBase.GetViewFrame();
-    if (pViewFrame != NULL)
+    if (pViewFrame != nullptr)
     {
         if (mrViewShellBase.IsActive())
         {
@@ -95,14 +95,14 @@ ChildWindowPane::~ChildWindowPane()
 void ChildWindowPane::Hide()
 {
     SfxViewFrame* pViewFrame = mrViewShellBase.GetViewFrame();
-    if (pViewFrame != NULL)
+    if (pViewFrame != nullptr)
         if (pViewFrame->KnowsChildWindow(mnChildWindowId))
             if (pViewFrame->HasChildWindow(mnChildWindowId))
                 pViewFrame->SetChildWindow(mnChildWindowId, false);
 
     // Release the window because when the child window is shown again it
     // may use a different window.
-    mxWindow = NULL;
+    mxWindow = nullptr;
 }
 
 void SAL_CALL ChildWindowPane::disposing()
@@ -135,12 +135,12 @@ vcl::Window* ChildWindowPane::GetWindow()
         // visible to early then some layouting seems to be made twice or at
         // an inconvenient time and the overall process of initializing the
         // Impress takes longer.
-        if ( ! mbHasBeenActivated && mpShell.get()!=NULL && ! mpShell->IsActive())
+        if ( ! mbHasBeenActivated && mpShell.get()!=nullptr && ! mpShell->IsActive())
             break;
 
         mbHasBeenActivated = true;
         SfxViewFrame* pViewFrame = mrViewShellBase.GetViewFrame();
-        if (pViewFrame == NULL)
+        if (pViewFrame == nullptr)
             break;
         // The view frame has to know the child window.  This can be the
         // case, when for example the document is in read-only mode:  the
@@ -150,7 +150,7 @@ vcl::Window* ChildWindowPane::GetWindow()
 
         pViewFrame->SetChildWindow(mnChildWindowId, true);
         SfxChildWindow* pChildWindow = pViewFrame->GetChildWindow(mnChildWindowId);
-        if (pChildWindow == NULL)
+        if (pChildWindow == nullptr)
             if (pViewFrame->HasChildWindow(mnChildWindowId))
             {
                 // The child window is not yet visible.  Ask the view frame
@@ -161,14 +161,14 @@ vcl::Window* ChildWindowPane::GetWindow()
             }
 
         // When the child window is still not visible then we have to try later.
-        if (pChildWindow == NULL)
+        if (pChildWindow == nullptr)
             break;
 
         // From the child window get the docking window and from that the
         // content window that is the container for the actual content.
         PaneDockingWindow* pDockingWindow = dynamic_cast<PaneDockingWindow*>(
             pChildWindow->GetWindow());
-        if (pDockingWindow == NULL)
+        if (pDockingWindow == nullptr)
             break;
 
         // At last, we have access to the window and its UNO wrapper.
@@ -213,8 +213,8 @@ void SAL_CALL ChildWindowPane::disposing (const lang::EventObject& rEvent)
     {
         // The window is gone but the pane remains alive.  The next call to
         // GetWindow() may create the window anew.
-        mxWindow = NULL;
-        mpWindow = NULL;
+        mxWindow = nullptr;
+        mpWindow = nullptr;
     }
 }
 

@@ -72,7 +72,7 @@ void FuThesaurus::DoExecute( SfxRequest& )
 
     if (mpViewShell && dynamic_cast< DrawViewShell *>( mpViewShell ) !=  nullptr)
     {
-        SdrTextObj* pTextObj = NULL;
+        SdrTextObj* pTextObj = nullptr;
 
         if ( mpView->AreObjectsMarked() )
         {

@@ -65,7 +65,7 @@ ConfigurationUpdater::ConfigurationUpdater (
     const Reference<XControllerManager>& rxControllerManager)
     : mxControllerManager(),
       mpBroadcaster(rpBroadcaster),
-      mxCurrentConfiguration(Reference<XConfiguration>(new Configuration(NULL, false))),
+      mxCurrentConfiguration(Reference<XConfiguration>(new Configuration(nullptr, false))),
       mxRequestedConfiguration(),
       mbUpdatePending(false),
       mbUpdateBeingProcessed(false),
@@ -283,7 +283,7 @@ void ConfigurationUpdater::CheckPureAnchors (
     // Get a list of all resources in the configuration.
     Sequence<Reference<XResourceId> > aResources(
         rxConfiguration->getResources(
-            NULL, OUString(), AnchorBindingMode_INDIRECT));
+            nullptr, OUString(), AnchorBindingMode_INDIRECT));
     sal_Int32 nCount (aResources.getLength());
 
     // Prepare the list of pure anchors that have to be deactivated.

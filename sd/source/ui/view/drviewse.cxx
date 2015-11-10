@@ -191,7 +191,7 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
         {
             if(GetOldFunction() == GetCurrentFunction())
             {
-                SetOldFunction(0);
+                SetOldFunction(nullptr);
             }
         }
 
@@ -219,7 +219,7 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
             GetCurrentFunction()->Deactivate();
         }
 
-        SetCurrentFunction(0);
+        SetCurrentFunction(nullptr);
 
         SfxBindings& rBind = GetViewFrame()->GetBindings();
         rBind.Invalidate(nOldSId);
@@ -267,7 +267,7 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
             {
                 // get the form view
                 FmFormView* pFormView = dynamic_cast<FmFormView*>( mpDrawView );
-                SdrPageView* pPageView = pFormView ? pFormView->GetSdrPageView() : NULL;
+                SdrPageView* pPageView = pFormView ? pFormView->GetSdrPageView() : nullptr;
 
                 if(pPageView)
                 {
@@ -348,7 +348,7 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
 
                 while (i < nMarkCnt && !b3DObjMarked)
                 {
-                    if (0 != dynamic_cast< E3dObject *>( rMarkList.GetMark(i)->GetMarkedSdrObj() ))
+                    if (nullptr != dynamic_cast< E3dObject *>( rMarkList.GetMark(i)->GetMarkedSdrObj() ))
                     {
                         b3DObjMarked = true;
                     }
@@ -548,7 +548,7 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
         sal_uInt16 nSlotId = GetOldFunction()->GetSlotID();
 
         GetOldFunction()->Deactivate();
-        SetOldFunction(0);
+        SetOldFunction(nullptr);
 
         SfxBindings& rBind = GetViewFrame()->GetBindings();
         rBind.Invalidate( nSlotId );
@@ -933,7 +933,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
                         ( aDataHelper.HasFormat( SotClipboardFormatId::UNIFORMRESOURCELOCATOR ) &&
                           aDataHelper.GetINetBookmark( SotClipboardFormatId::UNIFORMRESOURCELOCATOR, aINetBookmark ) ) )
                     {
-                        InsertURLField( aINetBookmark.GetURL(), aINetBookmark.GetDescription(), "", NULL );
+                        InsertURLField( aINetBookmark.GetURL(), aINetBookmark.GetDescription(), "", nullptr );
                     }
                 }
             }
@@ -952,7 +952,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
                     KeyEvent aKEvt( 0, aKCode);
                     //pOLV->PostKeyEvent(aKEvt);
                     // We use SdrObjEditView to handle DEL for underflow handling
-                    mpDrawView->KeyInput(aKEvt, NULL);
+                    mpDrawView->KeyInput(aKEvt, nullptr);
 
                 }
             }
@@ -1709,9 +1709,9 @@ void DrawViewShell::InsertURLButton(const OUString& rURL, const OUString& rText,
 
         SdrInsertFlags nOptions = SdrInsertFlags::SETDEFLAYER;
 
-        OSL_ASSERT (GetViewShell()!=NULL);
+        OSL_ASSERT (GetViewShell()!=nullptr);
         SfxInPlaceClient* pIpClient = GetViewShell()->GetIPClient();
-        if (pIpClient!=NULL && pIpClient->IsObjectInPlaceActive())
+        if (pIpClient!=nullptr && pIpClient->IsObjectInPlaceActive())
         {
             nOptions |= SdrInsertFlags::DONTMARK;
         }

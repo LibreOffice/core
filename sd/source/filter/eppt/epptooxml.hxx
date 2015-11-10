@@ -74,10 +74,10 @@ public:
     virtual bool exportDocument() throw (css::uno::RuntimeException, std::exception) override;
 
     // only needed for import, leave them empty, refactor later XmlFilterBase to export and import base?
-    virtual oox::vml::Drawing* getVmlDrawing() override { return NULL; }
-    virtual const oox::drawingml::Theme* getCurrentTheme() const override { return NULL; }
+    virtual oox::vml::Drawing* getVmlDrawing() override { return nullptr; }
+    virtual const oox::drawingml::Theme* getCurrentTheme() const override { return nullptr; }
     virtual const oox::drawingml::table::TableStyleListPtr getTableStyles() override { return oox::drawingml::table::TableStyleListPtr(); }
-    virtual oox::drawingml::chart::ChartConverter* getChartConverter() override { return NULL; }
+    virtual oox::drawingml::chart::ChartConverter* getChartConverter() override { return nullptr; }
 
     static const char* GetSideDirection( sal_uInt8 nDirection );
     static const char* GetCornerDirection( sal_uInt8 nDirection );

@@ -188,10 +188,10 @@ IMPL_LINK_TYPED(MasterPagesSelector, RightClickHandler, const MouseEvent&, rEven
     PreviewValueSet::GrabFocus ();
     PreviewValueSet::ReleaseMouse();
     SfxViewFrame* pViewFrame = mrBase.GetViewFrame();
-    if (pViewFrame != NULL)
+    if (pViewFrame != nullptr)
     {
         SfxDispatcher* pDispatcher = pViewFrame->GetDispatcher();
-        if (pDispatcher != NULL)
+        if (pDispatcher != nullptr)
         {
             sal_uInt16 nIndex = PreviewValueSet::GetItemId (rEvent.GetPosPixel());
             if (nIndex > 0)
@@ -225,7 +225,7 @@ void MasterPagesSelector::Command (const CommandEvent& rEvent)
                 // Setup the menu.
                 std::unique_ptr<PopupMenu> pMenu (new PopupMenu(GetContextMenuResId()));
                 FloatingWindow* pMenuWindow = dynamic_cast<FloatingWindow*>(pMenu->GetWindow());
-                if (pMenuWindow != NULL)
+                if (pMenuWindow != nullptr)
                     pMenuWindow->SetPopupModeFlags(
                         pMenuWindow->GetPopupModeFlags() | FloatWinPopupFlags::NoMouseUpClose);
                 pMenu->SetSelectHdl(LINK(this, MasterPagesSelector, OnMenuItemSelected));
@@ -252,9 +252,9 @@ void MasterPagesSelector::ProcessPopupMenu (Menu& rMenu)
 
 IMPL_LINK_TYPED(MasterPagesSelector, OnMenuItemSelected, Menu*, pMenu, bool)
 {
-    if (pMenu == NULL)
+    if (pMenu == nullptr)
     {
-        OSL_ENSURE(pMenu!=NULL, "MasterPagesSelector::OnMenuItemSelected: illegal menu!");
+        OSL_ENSURE(pMenu!=nullptr, "MasterPagesSelector::OnMenuItemSelected: illegal menu!");
         return false;
     }
 
@@ -308,10 +308,10 @@ void MasterPagesSelector::ExecuteCommand (const sal_Int32 nCommandId)
             if (pMasterPage)
                 xSelectedMaster.set(pMasterPage->getUnoPage(), uno::UNO_QUERY);
             SfxViewFrame* pViewFrame = mrBase.GetViewFrame();
-            if (pViewFrame != NULL && xSelectedMaster.is())
+            if (pViewFrame != nullptr && xSelectedMaster.is())
             {
                 SfxDispatcher* pDispatcher = pViewFrame->GetDispatcher();
-                if (pDispatcher != NULL)
+                if (pDispatcher != nullptr)
                 {
                     sal_uInt16 nIndex = PreviewValueSet::GetSelectItemId();
                     pDispatcher->Execute(SID_MASTERPAGE, SfxCallMode::SYNCHRON);
@@ -339,10 +339,10 @@ SdPage* MasterPagesSelector::GetSelectedMasterPage()
 {
     const ::osl::MutexGuard aGuard (maMutex);
 
-    SdPage* pMasterPage = NULL;
+    SdPage* pMasterPage = nullptr;
     sal_uInt16 nIndex = PreviewValueSet::GetSelectItemId();
     UserData* pData = GetUserData(nIndex);
-    if (pData != NULL)
+    if (pData != nullptr)
     {
         pMasterPage = mpContainer->GetPageObjectForToken(pData->second);
     }
@@ -354,7 +354,7 @@ SdPage* MasterPagesSelector::GetSelectedMasterPage()
 */
 void MasterPagesSelector::AssignMasterPageToAllSlides (SdPage* pMasterPage)
 {
-    if (pMasterPage == NULL)
+    if (pMasterPage == nullptr)
         return;
 
     sal_uInt16 nPageCount = mrDocument.GetSdPageCount(PK_STANDARD);
@@ -370,7 +370,7 @@ void MasterPagesSelector::AssignMasterPageToAllSlides (SdPage* pMasterPage)
     for (sal_uInt16 nPageIndex=0; nPageIndex<nPageCount; nPageIndex++)
     {
         SdPage* pPage = mrDocument.GetSdPage (nPageIndex, PK_STANDARD);
-        if (pPage != NULL && pPage->GetLayoutName() != sFullLayoutName)
+        if (pPage != nullptr && pPage->GetLayoutName() != sFullLayoutName)
         {
             pPageList->push_back (pPage);
         }
@@ -388,12 +388,12 @@ void MasterPagesSelector::AssignMasterPageToSelectedSlides (
     using namespace ::sd::slidesorter;
     using namespace ::sd::slidesorter::controller;
 
-    if (pMasterPage == NULL)
+    if (pMasterPage == nullptr)
         return;
 
     // Find a visible slide sorter.
     SlideSorterViewShell* pSlideSorter = SlideSorterViewShell::GetSlideSorter(mrBase);
-    if (pSlideSorter == NULL)
+    if (pSlideSorter == nullptr)
         return;
 
     // Get a list of selected pages.
@@ -470,7 +470,7 @@ MasterPagesSelector::UserData* MasterPagesSelector::GetUserData (int nIndex) con
     if (nIndex>0 && static_cast<unsigned int>(nIndex)<=PreviewValueSet::GetItemCount())
         return static_cast<UserData*>(PreviewValueSet::GetItemData((sal_uInt16)nIndex));
     else
-        return NULL;
+        return nullptr;
 }
 
 void MasterPagesSelector::SetUserData (int nIndex, UserData* pData)
@@ -480,7 +480,7 @@ void MasterPagesSelector::SetUserData (int nIndex, UserData* pData)
     if (nIndex>0 && static_cast<unsigned int>(nIndex)<=PreviewValueSet::GetItemCount())
     {
         UserData* pOldData = GetUserData(nIndex);
-        if (pOldData!=NULL && pOldData!=pData)
+        if (pOldData!=nullptr && pOldData!=pData)
             delete pOldData;
         PreviewValueSet::SetItemData((sal_uInt16)nIndex, pData);
     }
@@ -552,7 +552,7 @@ void MasterPagesSelector::RemoveTokenToIndexEntry (
     const ::osl::MutexGuard aGuard (maMutex);
 
     UserData* pData = GetUserData(nIndex);
-    if (pData != NULL)
+    if (pData != nullptr)
     {
         // Get the token that the index pointed to previously.
         MasterPageContainer::Token aOldToken (pData->second);
@@ -572,7 +572,7 @@ void MasterPagesSelector::InvalidatePreview (const SdPage* pPage)
     for (size_t nIndex=1; nIndex<=PreviewValueSet::GetItemCount(); nIndex++)
     {
         UserData* pData = GetUserData(nIndex);
-        if (pData != NULL)
+        if (pData != nullptr)
         {
             MasterPageContainer::Token aToken (pData->second);
             if (pPage == mpContainer->GetPageObjectForToken(aToken,false))
@@ -592,7 +592,7 @@ void MasterPagesSelector::UpdateAllPreviews()
     for (size_t nIndex=1; nIndex<=PreviewValueSet::GetItemCount(); nIndex++)
     {
         UserData* pData = GetUserData(nIndex);
-        if (pData != NULL)
+        if (pData != nullptr)
         {
             MasterPageContainer::Token aToken (pData->second);
             PreviewValueSet::SetItemImage(
@@ -612,7 +612,7 @@ void MasterPagesSelector::ClearPageSet()
     for (size_t nIndex=1; nIndex<=PreviewValueSet::GetItemCount(); nIndex++)
     {
         UserData* pData = GetUserData(nIndex);
-        if (pData != NULL)
+        if (pData != nullptr)
             delete pData;
     }
     PreviewValueSet::Clear();

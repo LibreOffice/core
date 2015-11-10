@@ -147,7 +147,7 @@ public:
     sal_Int32 mnDataSize;
     Size maImageSize;
     PngReplacement()
-        : mpData(NULL),
+        : mpData(nullptr),
           mnDataSize(0),
           maImageSize(0,0)
     {}
@@ -181,7 +181,7 @@ Bitmap PngCompression::Decompress (
 {
     Bitmap aResult;
     const PngReplacement* pData (dynamic_cast<const PngReplacement*>(&rBitmapData));
-    if (pData != NULL)
+    if (pData != nullptr)
     {
         SvMemoryStream aStream (pData->mpData, pData->mnDataSize, StreamMode::READ);
         vcl::PNGReader aReader (aStream);

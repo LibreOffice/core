@@ -27,7 +27,7 @@ GroupTable::GroupTable()
     , mnCurrentGroupEntry(0)
     , mnMaxGroupEntry(0)
     , mnGroupsClosed(0)
-    , mpGroupEntry(NULL)
+    , mpGroupEntry(nullptr)
 {
     ImplResizeGroupTable( 32 );
 }

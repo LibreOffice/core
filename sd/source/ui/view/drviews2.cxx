@@ -328,7 +328,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             Cancel();
             if(HasCurrentFunction(SID_BEZIER_EDIT) )
                 GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SfxCallMode::ASYNCHRON);
-            if (pNewPage != NULL)
+            if (pNewPage != nullptr)
                 SwitchPage((pNewPage->GetPageNum()-1)/2);
             rReq.Done ();
         }
@@ -838,7 +838,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
                 for ( size_t i = 0; i < nCount; ++i )
                 {
-                    SfxStyleSheet* pSheet = NULL;
+                    SfxStyleSheet* pSheet = nullptr;
                     SdrObject* pObj = rMarkList.GetMark(i)->GetMarkedSdrObj();
 
                     if (pObj->GetObjIdentifier() == OBJ_TITLETEXT)
@@ -1392,7 +1392,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 aNewAttr.Put( SdAttrLayerThisPage() );
 
                 SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-                std::unique_ptr<AbstractSdInsertLayerDlg> pDlg(pFact ? pFact->CreateSdInsertLayerDlg(NULL, aNewAttr, true, SD_RESSTR(STR_INSERTLAYER)) : 0);
+                std::unique_ptr<AbstractSdInsertLayerDlg> pDlg(pFact ? pFact->CreateSdInsertLayerDlg(nullptr, aNewAttr, true, SD_RESSTR(STR_INSERTLAYER)) : nullptr);
                 if( pDlg )
                 {
                     pDlg->SetHelpId( SD_MOD()->GetSlotPool()->GetSlot( SID_INSERTLAYER )->GetCommand() );
@@ -1560,7 +1560,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 aNewAttr.Put( SdAttrLayerThisPage() );
 
                 SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-                std::unique_ptr<AbstractSdInsertLayerDlg> pDlg(pFact ? pFact->CreateSdInsertLayerDlg(NULL, aNewAttr, bDelete, SD_RESSTR(STR_MODIFYLAYER)) : 0);
+                std::unique_ptr<AbstractSdInsertLayerDlg> pDlg(pFact ? pFact->CreateSdInsertLayerDlg(nullptr, aNewAttr, bDelete, SD_RESSTR(STR_MODIFYLAYER)) : nullptr);
                 if( pDlg )
                 {
                     pDlg->SetHelpId( SD_MOD()->GetSlotPool()->GetSlot( SID_MODIFYLAYER )->GetCommand() );
@@ -1740,12 +1740,12 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 if (pHLItem->GetInsertMode() == HLINK_FIELD)
                 {
                     InsertURLField(pHLItem->GetURL(), pHLItem->GetName(),
-                                   pHLItem->GetTargetFrame(), NULL);
+                                   pHLItem->GetTargetFrame(), nullptr);
                 }
                 else if (pHLItem->GetInsertMode() == HLINK_BUTTON)
                 {
                     InsertURLButton(pHLItem->GetURL(), pHLItem->GetName(),
-                                    pHLItem->GetTargetFrame(), NULL);
+                                    pHLItem->GetTargetFrame(), nullptr);
                 }
                 else if (pHLItem->GetInsertMode() == HLINK_DEFAULT)
                 {
@@ -1754,12 +1754,12 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                     if (pOlView)
                     {
                         InsertURLField(pHLItem->GetURL(), pHLItem->GetName(),
-                                       pHLItem->GetTargetFrame(), NULL);
+                                       pHLItem->GetTargetFrame(), nullptr);
                     }
                     else
                     {
                         InsertURLButton(pHLItem->GetURL(), pHLItem->GetName(),
-                                        pHLItem->GetTargetFrame(), NULL);
+                                        pHLItem->GetTargetFrame(), nullptr);
                     }
                 }
             }
@@ -1898,13 +1898,13 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             {
                 const SvxFieldItem* pOldFldItem = pOLV->GetFieldAtSelection();
 
-                if( pOldFldItem && ( 0 != dynamic_cast< const SvxURLField *>( pOldFldItem->GetField() ) ||
-                                    0 != dynamic_cast< const SvxDateField *>( pOldFldItem->GetField() ) ||
-                                    0 != dynamic_cast< const SvxTimeField *>( pOldFldItem->GetField() ) ||
-                                    0 != dynamic_cast< const SvxExtTimeField *>( pOldFldItem->GetField() ) ||
-                                    0 != dynamic_cast< const SvxExtFileField *>( pOldFldItem->GetField() ) ||
-                                    0 != dynamic_cast< const SvxAuthorField *>( pOldFldItem->GetField() ) ||
-                                    0 != dynamic_cast< const SvxPageField *>( pOldFldItem->GetField() ) ) )
+                if( pOldFldItem && ( nullptr != dynamic_cast< const SvxURLField *>( pOldFldItem->GetField() ) ||
+                                    nullptr != dynamic_cast< const SvxDateField *>( pOldFldItem->GetField() ) ||
+                                    nullptr != dynamic_cast< const SvxTimeField *>( pOldFldItem->GetField() ) ||
+                                    nullptr != dynamic_cast< const SvxExtTimeField *>( pOldFldItem->GetField() ) ||
+                                    nullptr != dynamic_cast< const SvxExtFileField *>( pOldFldItem->GetField() ) ||
+                                    nullptr != dynamic_cast< const SvxAuthorField *>( pOldFldItem->GetField() ) ||
+                                    nullptr != dynamic_cast< const SvxPageField *>( pOldFldItem->GetField() ) ) )
                 {
                     // select field, then it will be deleted when inserting
                     ESelection aSel = pOLV->GetSelection();
@@ -1921,7 +1921,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 Outliner* pOutl = GetDoc()->GetInternalOutliner();
                 pOutl->Init( OUTLINERMODE_TEXTOBJECT );
                 sal_uInt16 nOutlMode = pOutl->GetMode();
-                pOutl->SetStyleSheet( 0, NULL );
+                pOutl->SetStyleSheet( 0, nullptr );
                 pOutl->QuickInsertField( *pFieldItem, ESelection() );
                 OutlinerParaObject* pOutlParaObject = pOutl->CreateParaObject();
 
@@ -1963,14 +1963,14 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             {
                 const SvxFieldItem* pFldItem = pOLV->GetFieldAtSelection();
 
-                if( pFldItem && (0 != dynamic_cast< const SvxDateField *>( pFldItem->GetField() ) ||
-                                 0 != dynamic_cast< const SvxAuthorField *>( pFldItem->GetField() ) ||
-                                 0 != dynamic_cast< const SvxExtFileField *>( pFldItem->GetField() ) ||
-                                 0 != dynamic_cast< const SvxExtTimeField *>( pFldItem->GetField() ) ) )
+                if( pFldItem && (nullptr != dynamic_cast< const SvxDateField *>( pFldItem->GetField() ) ||
+                                 nullptr != dynamic_cast< const SvxAuthorField *>( pFldItem->GetField() ) ||
+                                 nullptr != dynamic_cast< const SvxExtFileField *>( pFldItem->GetField() ) ||
+                                 nullptr != dynamic_cast< const SvxExtTimeField *>( pFldItem->GetField() ) ) )
                 {
                     // Dialog...
                     SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-                    std::unique_ptr<AbstractSdModifyFieldDlg> pDlg(pFact ? pFact->CreateSdModifyFieldDlg(GetActiveWindow(), pFldItem->GetField(), pOLV->GetAttribs() ) : 0);
+                    std::unique_ptr<AbstractSdModifyFieldDlg> pDlg(pFact ? pFact->CreateSdModifyFieldDlg(GetActiveWindow(), pFldItem->GetField(), pOLV->GetAttribs() ) : nullptr);
                     if( pDlg && pDlg->Execute() == RET_OK )
                     {
                         // To make a correct SetAttribs() call at the utlinerView
@@ -2079,7 +2079,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "Dialog creation failed!");
-                std::unique_ptr<AbstractSvxObjectNameDialog> pDlg(pFact->CreateSvxObjectNameDialog(NULL, aName));
+                std::unique_ptr<AbstractSvxObjectNameDialog> pDlg(pFact->CreateSvxObjectNameDialog(nullptr, aName));
                 OSL_ENSURE(pDlg, "Dialog creation failed!");
 
                 pDlg->SetCheckNameHdl(LINK(this, DrawViewShell, NameObjectHdl));
@@ -2112,7 +2112,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "Dialog creation failed!");
-                std::unique_ptr<AbstractSvxObjectTitleDescDialog> pDlg(pFact->CreateSvxObjectTitleDescDialog(NULL, aTitle, aDescription));
+                std::unique_ptr<AbstractSvxObjectTitleDescDialog> pDlg(pFact->CreateSvxObjectTitleDescDialog(nullptr, aTitle, aDescription));
                 OSL_ENSURE(pDlg, "Dialog creation failed!");
 
                 if(RET_OK == pDlg->Execute())
@@ -2500,7 +2500,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
         case SID_SELECTALL:  // BASIC
         {
-            if( (dynamic_cast<FuSelection*>( GetOldFunction().get() ) != 0) &&
+            if( (dynamic_cast<FuSelection*>( GetOldFunction().get() ) != nullptr) &&
                 !GetView()->IsFrameDragSingles() && GetView()->HasMarkablePoints())
             {
                 if ( !mpDrawView->IsAction() )
@@ -2531,7 +2531,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 if( pStyleSheet && pStyleSheet->GetFamily() == SD_STYLE_FAMILY_MASTERPAGE)
                     pStyleSheet = static_cast<SdStyleSheet*>(pStyleSheet)->GetPseudoStyleSheet();
 
-                if( (pStyleSheet == NULL) && GetView()->IsTextEdit() )
+                if( (pStyleSheet == nullptr) && GetView()->IsTextEdit() )
                 {
                     GetView()->SdrEndTextEdit();
 
@@ -2540,7 +2540,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                         pStyleSheet = static_cast<SdStyleSheet*>(pStyleSheet)->GetPseudoStyleSheet();
                 }
 
-                if( pStyleSheet == NULL )
+                if( pStyleSheet == nullptr )
                 {
                     rReq.Ignore();
                     break;
@@ -2578,7 +2578,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             GetViewFrame()->GetBindings().Invalidate( SID_IMAP );
 
             if ( GetViewFrame()->HasChildWindow( nId )
-                && ( ( ViewShell::Implementation::GetImageMapDialog() ) != NULL ) )
+                && ( ( ViewShell::Implementation::GetImageMapDialog() ) != nullptr ) )
             {
                 const SdrMarkList&  rMarkList = mpDrawView->GetMarkedObjectList();
 
@@ -2788,7 +2788,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         {
 #ifdef ENABLE_SDREMOTE
              SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-             VclAbstractDialog* pDlg = pFact ? pFact->CreateRemoteDialog(GetActiveWindow()) : 0;
+             VclAbstractDialog* pDlg = pFact ? pFact->CreateRemoteDialog(GetActiveWindow()) : nullptr;
              if (pDlg)
                  pDlg->Execute();
 #endif
@@ -2853,8 +2853,8 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             // Determine current page and toggle visibility of layers
             // associated with master page background or master page shapes.
             SdPage* pPage = GetActualPage();
-            if (pPage != NULL
-                && GetDoc() != NULL)
+            if (pPage != nullptr
+                && GetDoc() != nullptr)
             {
                 SetOfByte aVisibleLayers = pPage->TRG_GetMasterPageVisibleLayers();
                 SdrLayerAdmin& rLayerAdmin = GetDoc()->GetLayerAdmin();
@@ -2876,7 +2876,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
             std::unique_ptr<VclAbstractDialog> pDlg(pFact ? pFact->CreateSdPhotoAlbumDialog(
                 GetActiveWindow(),
-                GetDoc()) : 0);
+                GetDoc()) : nullptr);
 
             if (pDlg)
             {
@@ -3058,10 +3058,10 @@ void DrawViewShell::ExecChar( SfxRequest &rReq )
     case SID_GROW_FONT_SIZE:
         {
             const SvxFontListItem* pFonts = dynamic_cast<const SvxFontListItem*>(GetDocSh()->GetItem( SID_ATTR_CHAR_FONTLIST ) );
-            const FontList* pFontList = pFonts ? pFonts->GetFontList() : NULL;
+            const FontList* pFontList = pFonts ? pFonts->GetFontList() : nullptr;
             if( pFontList )
             {
-                FuText::ChangeFontSize( nSId == SID_GROW_FONT_SIZE, NULL, pFontList, mpView );
+                FuText::ChangeFontSize( nSId == SID_GROW_FONT_SIZE, nullptr, pFontList, mpView );
                 GetViewFrame()->GetBindings().Invalidate( SID_ATTR_CHAR_FONTHEIGHT );
             }
         }
@@ -3085,7 +3085,7 @@ SdPage* DrawViewShell::CreateOrDuplicatePage (
     SdPage* pPage,
     const sal_Int32 nInsertPosition)
 {
-    SdPage* pNewPage = NULL;
+    SdPage* pNewPage = nullptr;
     if (ePageKind == PK_STANDARD && meEditMode != EM_MASTERPAGE)
     {
         if ( mpDrawView->IsTextEdit() )

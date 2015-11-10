@@ -293,7 +293,7 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
         case SID_INSERT_DATE_TIME:
         {
             SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-            std::unique_ptr<AbstractHeaderFooterDialog> pDlg(pFact ? pFact->CreateHeaderFooterDialog( this, GetActiveWindow(), GetDoc(), mpActualPage ) : 0);
+            std::unique_ptr<AbstractHeaderFooterDialog> pDlg(pFact ? pFact->CreateHeaderFooterDialog( this, GetActiveWindow(), GetDoc(), mpActualPage ) : nullptr);
             if( pDlg )
             {
                 pDlg->Execute();
@@ -317,7 +317,7 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
                 pPage = static_cast<SdPage*>(&pPage->TRG_GetMasterPage());
 
             SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-            std::unique_ptr<VclAbstractDialog> pDlg(pFact ? pFact->CreateMasterLayoutDialog( GetActiveWindow(), GetDoc(), pPage ) : 0);
+            std::unique_ptr<VclAbstractDialog> pDlg(pFact ? pFact->CreateMasterLayoutDialog( GetActiveWindow(), GetDoc(), pPage ) : nullptr);
             if( pDlg )
             {
                 pDlg->Execute();
@@ -330,7 +330,7 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
         case SID_OBJECTRESIZE:
         {
             // The server likes to change the client size
-            OSL_ASSERT (GetViewShell()!=NULL);
+            OSL_ASSERT (GetViewShell()!=nullptr);
             SfxInPlaceClient* pIPClient = GetViewShell()->GetIPClient();
 
             if ( pIPClient && pIPClient->IsObjectInPlaceActive() )
@@ -454,7 +454,7 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
         case SID_ATTR_YEAR2000:
         {
             FmFormShell* pFormShell = GetViewShellBase().GetFormShellManager()->GetFormShell();
-            if (pFormShell != NULL)
+            if (pFormShell != nullptr)
             {
                 const SfxPoolItem* pItem;
                 if (rReq.GetArgs()->GetItemState(

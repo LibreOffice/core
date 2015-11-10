@@ -76,7 +76,7 @@ namespace {
 
         bool IsWarningOrientation() const
         {
-            return GetBoolValue(NULL, true);
+            return GetBoolValue(nullptr, true);
         }
 
         bool IsPrintPageName() const
@@ -298,11 +298,11 @@ namespace {
 
         // Set the visible layers
         SdrPageView* pPageView = rPrintView.GetSdrPageView();
-        OSL_ASSERT(pPageView!=NULL);
+        OSL_ASSERT(pPageView!=nullptr);
         pPageView->SetVisibleLayers(rVisibleLayers);
         pPageView->SetPrintableLayers(rPrintableLayers);
 
-        if (pView!=NULL && bPrintMarkedOnly)
+        if (pView!=nullptr && bPrintMarkedOnly)
             pView->DrawMarkedObj(rPrinter);
         else
             rPrintView.CompleteRedraw(&rPrinter,
@@ -783,7 +783,7 @@ namespace {
         {
             (void)rViewShell;
             SdPage* pPageToPrint = rDocument.GetSdPage(mnPageIndex, mePageKind);
-            if (pPageToPrint==NULL)
+            if (pPageToPrint==nullptr)
                 return;
             MapMode aMap (rPrinter.GetMapMode());
 
@@ -973,7 +973,7 @@ namespace {
             int nHangoverCount = 0;
             while (aPageObjIter != aHandoutPageObjects.end())
             {
-                (*aPageObjIter++)->SetReferencedPage(0L);
+                (*aPageObjIter++)->SetReferencedPage(nullptr);
                 nHangoverCount++;
             }
 
@@ -1036,7 +1036,7 @@ namespace {
                 while (aShapeIter.IsMore())
                 {
                     SdrPathObj* pPathObj = dynamic_cast<SdrPathObj*>(aShapeIter.Next());
-                    if (pPathObj != NULL)
+                    if (pPathObj != nullptr)
                         pPathObj->SetMergedItem(XLineStyleItem(drawing::LineStyle_SOLID));
                 }
             }
@@ -1134,7 +1134,7 @@ public:
         : mxObjectShell(rBase.GetDocShell())
         , mrBase(rBase)
         , mbIsDisposed(false)
-        , mpPrinter(NULL)
+        , mpPrinter(nullptr)
         , mpOptions()
         , maPrinterPages()
         , mpPrintView()
@@ -1155,7 +1155,7 @@ public:
     virtual void Notify (SfxBroadcaster& rBroadcaster, const SfxHint& rHint) override
     {
         const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
-        if (pSimpleHint != NULL
+        if (pSimpleHint != nullptr
             && pSimpleHint->GetId() == SFX_HINT_DYING
             && &rBroadcaster == &static_cast<SfxBroadcaster&>(mrBase))
         {
@@ -1252,13 +1252,13 @@ public:
             return;
 
         SdDrawDocument* pDocument = pViewShell->GetDoc();
-        OSL_ASSERT(pDocument!=NULL);
+        OSL_ASSERT(pDocument!=nullptr);
 
         std::shared_ptr<DrawViewShell> pDrawViewShell(
             std::dynamic_pointer_cast<DrawViewShell>(mrBase.GetMainViewShell()));
 
         if (!mpPrintView)
-            mpPrintView.reset(new DrawView(mrBase.GetDocShell(), &rPrinter, NULL));
+            mpPrintView.reset(new DrawView(mrBase.GetDocShell(), &rPrinter, nullptr));
 
         if (nIndex<0 || sal::static_int_cast<sal_uInt32>(nIndex)>=maPrinterPages.size())
             return;
@@ -1304,7 +1304,7 @@ public:
             rPrinter,
             *pDocument,
             *pViewShell,
-            pDrawViewShell ? pDrawViewShell->GetView() : NULL,
+            pDrawViewShell ? pDrawViewShell->GetView() : nullptr,
             *mpPrintView,
             pViewShell->GetFrameView()->GetVisibleLayers(),
             pViewShell->GetFrameView()->GetPrintableLayers());
@@ -1337,7 +1337,7 @@ private:
     sal_Int32 GetCurrentPageIndex() const
     {
         const ViewShell *pShell = mrBase.GetMainViewShell().get();
-        const SdPage *pCurrentPage = pShell ? pShell->getCurrentPage() : NULL;
+        const SdPage *pCurrentPage = pShell ? pShell->getCurrentPage() : nullptr;
         return pCurrentPage ? (pCurrentPage->GetPageNum()-1)/2 : -1;
     }
 
@@ -1405,7 +1405,7 @@ private:
 
         PrintInfo aInfo (mpPrinter, mpOptions->IsPrintMarkedOnly());
 
-        if (aInfo.mpPrinter!=nullptr && pShell!=NULL)
+        if (aInfo.mpPrinter!=nullptr && pShell!=nullptr)
         {
 
             MapMode aMap (aInfo.mpPrinter->GetMapMode());
@@ -1570,17 +1570,17 @@ private:
         const sal_Int32 nPageIndex,
         const PageKind ePageKind) const
     {
-        OSL_ASSERT(mrBase.GetDocument() != NULL);
+        OSL_ASSERT(mrBase.GetDocument() != nullptr);
         OSL_ASSERT(nPageIndex>=0);
         SdPage* pPage = mrBase.GetDocument()->GetSdPage(
             sal::static_int_cast<sal_uInt16>(nPageIndex),
             ePageKind);
-        if (pPage == NULL)
-            return NULL;
+        if (pPage == nullptr)
+            return nullptr;
         if ( ! pPage->IsExcluded() || mpOptions->IsPrintExcluded())
             return pPage;
         else
-            return NULL;
+            return nullptr;
     }
 
     /** Prepare the outline of the document for printing.  There is no fixed
@@ -1631,19 +1631,19 @@ private:
             pOutliner->Clear();
             pOutliner->SetFirstPageNumber(aPages[nIndex]+1);
 
-            Paragraph* pPara = NULL;
+            Paragraph* pPara = nullptr;
             sal_Int32 nH (0);
             while (nH < nPageH && nIndex<nCount)
             {
                 SdPage* pPage = GetFilteredPage(aPages[nIndex], PK_STANDARD);
                 ++nIndex;
-                if (pPage == NULL)
+                if (pPage == nullptr)
                     continue;
 
-                SdrTextObj* pTextObj = NULL;
+                SdrTextObj* pTextObj = nullptr;
                 size_t nObj (0);
 
-                while (pTextObj==NULL && nObj < pPage->GetObjCount())
+                while (pTextObj==nullptr && nObj < pPage->GetObjCount())
                 {
                     SdrObject* pObj = pPage->GetObj(nObj++);
                     if (pObj->GetObjInventor() == SdrInventor
@@ -1655,7 +1655,7 @@ private:
 
                 pPara = pOutliner->GetParagraph(pOutliner->GetParagraphCount() - 1);
 
-                if (pTextObj!=NULL
+                if (pTextObj!=nullptr
                     && !pTextObj->IsEmptyPresObj()
                     && pTextObj->GetOutlinerParaObject())
                 {
@@ -1664,10 +1664,10 @@ private:
                 else
                     pOutliner->Insert(OUString());
 
-                pTextObj = NULL;
+                pTextObj = nullptr;
                 nObj = 0;
 
-                while (pTextObj==NULL && nObj<pPage->GetObjCount())
+                while (pTextObj==nullptr && nObj<pPage->GetObjCount())
                 {
                     SdrObject* pObj = pPage->GetObj(nObj++);
                     if (pObj->GetObjInventor() == SdrInventor
@@ -1686,7 +1686,7 @@ private:
 
                 sal_Int32 nParaCount1 = pOutliner->GetParagraphCount();
 
-                if (pTextObj!=NULL
+                if (pTextObj!=nullptr
                     && !pTextObj->IsEmptyPresObj()
                     && pTextObj->GetOutlinerParaObject())
                 {
@@ -1699,7 +1699,7 @@ private:
                     for (sal_Int32 nPara=nParaCount1; nPara<nParaCount2; ++nPara)
                     {
                         Paragraph* pP = pOutliner->GetParagraph(nPara);
-                        if (pP!=NULL && pOutliner->GetDepth(nPara) > 0)
+                        if (pP!=nullptr && pOutliner->GetDepth(nPara) > 0)
                             pOutliner->SetDepth(pP, 0);
                     }
                 }
@@ -1709,7 +1709,7 @@ private:
 
             // Remove the last paragraph when that does not fit completely on
             // the current page.
-            if (nH > nPageH && pPara!=NULL)
+            if (nH > nPageH && pPara!=nullptr)
             {
                 sal_Int32 nCnt = pOutliner->GetAbsPos(
                     pOutliner->GetParagraph( pOutliner->GetParagraphCount() - 1 ) );
@@ -1746,7 +1746,7 @@ private:
     void PrepareHandout (PrintInfo& rInfo)
     {
         SdDrawDocument* pDocument = mrBase.GetDocument();
-        OSL_ASSERT(pDocument != NULL);
+        OSL_ASSERT(pDocument != nullptr);
         SdPage& rHandoutPage (*pDocument->GetSdPage(0, PK_HANDOUT));
 
         const bool bScalePage (mpOptions->IsPageSize());
@@ -1903,7 +1903,7 @@ private:
              ++it)
         {
             SdPage* pPage = GetFilteredPage(*it, ePageKind);
-            if (pPage == NULL)
+            if (pPage == nullptr)
                 continue;
 
             MapMode aMap (rInfo.maMap);
@@ -2030,7 +2030,7 @@ private:
              ++it)
         {
             SdPage* pPage = GetFilteredPage(*it, ePageKind);
-            if (pPage != NULL)
+            if (pPage != nullptr)
                 aPageVector.push_back(*it);
         }
 

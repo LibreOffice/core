@@ -38,7 +38,7 @@ void RequestFactory::operator()(
 
     // Add the requests for the visible pages.
     aKeys = rpCacheContext->GetEntryList(true);
-    if (aKeys.get() != NULL)
+    if (aKeys.get() != nullptr)
     {
         std::vector<CacheKey>::const_iterator iKey;
         std::vector<CacheKey>::const_iterator iEnd (aKeys->end());
@@ -48,7 +48,7 @@ void RequestFactory::operator()(
 
     // Add the requests for the non-visible pages.
     aKeys = rpCacheContext->GetEntryList(false);
-    if (aKeys.get() != NULL)
+    if (aKeys.get() != nullptr)
     {
         std::vector<CacheKey>::const_iterator iKey;
         std::vector<CacheKey>::const_iterator iEnd (aKeys->end());

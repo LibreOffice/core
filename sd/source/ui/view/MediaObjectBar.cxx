@@ -74,7 +74,7 @@ MediaObjectBar::MediaObjectBar( ViewShell* pSdViewShell, ::sd::View* pSdView ) :
 
 MediaObjectBar::~MediaObjectBar()
 {
-    SetRepeatTarget( NULL );
+    SetRepeatTarget( nullptr );
 }
 
 void MediaObjectBar::GetState( SfxItemSet& rSet )
@@ -119,7 +119,7 @@ void MediaObjectBar::Execute( SfxRequest& rReq )
         const SfxPoolItem*  pItem;
 
         if( !pArgs || ( SfxItemState::SET != pArgs->GetItemState( SID_AVMEDIA_TOOLBOX, false, &pItem ) ) )
-            pItem = NULL;
+            pItem = nullptr;
 
         if( pItem )
         {

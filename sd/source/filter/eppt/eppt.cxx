@@ -80,10 +80,10 @@ PPTWriter::PPTWriter( tools::SvRef<SotStorage>& rSvStorage,
     mbFontIndependentLineSpacing( false ),
     mnTextSize( 0 ),
     mrStg                   ( rSvStorage ),
-    mpCurUserStrm           ( NULL ),
-    mpStrm                  ( NULL ),
-    mpPicStrm               ( NULL ),
-    mpPptEscherEx           ( NULL ),
+    mpCurUserStrm           ( nullptr ),
+    mpStrm                  ( nullptr ),
+    mpPicStrm               ( nullptr ),
+    mpPptEscherEx           ( nullptr ),
     mnVBAOleOfs             ( 0 ),
     mpVBA                   ( pVBA ),
     mnExEmbed               ( 0 ),
@@ -287,7 +287,7 @@ void PPTWriter::ImplWriteSlide( sal_uInt32 nPageNum, sal_uInt32 nMasterNum, sal_
     EscherSolverContainer aSolverContainer;
     mpPptEscherEx->OpenContainer( EPP_PPDrawing );
     mpPptEscherEx->OpenContainer( ESCHER_DgContainer );
-    mpPptEscherEx->EnterGroup(0,0);
+    mpPptEscherEx->EnterGroup(nullptr,nullptr);
     ImplWritePage( rLayout, aSolverContainer, NORMAL, false, nPageNum );    // the shapes of the pages are created in the PPT document
     mpPptEscherEx->LeaveGroup();
 
@@ -426,7 +426,7 @@ void PPTWriter::ImplWriteSlideMaster( sal_uInt32 nPageNum, Reference< XPropertyS
     mpPptEscherEx->OpenContainer( EPP_PPDrawing );
     mpPptEscherEx->OpenContainer( ESCHER_DgContainer );
 
-    mpPptEscherEx->EnterGroup(0,0);
+    mpPptEscherEx->EnterGroup(nullptr,nullptr);
     ImplWritePage( GetLayout( 0 ), aSolverContainer, MASTER, true );    // the shapes of the pages are created in the PPT document
     mpPptEscherEx->LeaveGroup();
 
@@ -539,7 +539,7 @@ bool PPTWriter::ImplCreateDocumentSummaryInformation()
         else
         {
             sfx2::SaveOlePropertySet( xDocProps, mrStg,
-                    NULL, &aGuidSeq, &aHyperSeq );
+                    nullptr, &aGuidSeq, &aHyperSeq );
         }
     }
 
@@ -1013,7 +1013,7 @@ bool PPTWriter::ImplCreateMainNotes()
            .WriteUInt32( 0 );                                                       // follow nothing
     mpPptEscherEx->OpenContainer( EPP_PPDrawing );
     mpPptEscherEx->OpenContainer( ESCHER_DgContainer );
-    mpPptEscherEx->EnterGroup(0,0);
+    mpPptEscherEx->EnterGroup(nullptr,nullptr);
 
     ImplWritePage( GetLayout( 20 ), aSolverContainer, NOTICE, true );
 
@@ -1142,7 +1142,7 @@ void PPTWriter::ImplWriteNotes( sal_uInt32 nPageNum )
 
     mpPptEscherEx->OpenContainer( EPP_PPDrawing );
     mpPptEscherEx->OpenContainer( ESCHER_DgContainer );
-    mpPptEscherEx->EnterGroup(0,0);
+    mpPptEscherEx->EnterGroup(nullptr,nullptr);
 
     ImplWritePage( GetLayout( 20 ), aSolverContainer, NOTICE, false );  // the shapes of the pages are created in the PPT document
 
@@ -1258,7 +1258,7 @@ void PPTWriter::ImplWriteOLE( )
     for ( std::vector<PPTExOleObjEntry*>::const_iterator it = maExOleObj.begin(); it != maExOleObj.end(); ++it )
     {
         PPTExOleObjEntry* pPtr = *it;
-        SvMemoryStream* pStrm = NULL;
+        SvMemoryStream* pStrm = nullptr;
         pPtr->nOfsB = mpStrm->Tell();
         switch ( pPtr->eType )
         {

@@ -102,13 +102,13 @@ TimerBasedTaskExecution::~TimerBasedTaskExecution()
 void TimerBasedTaskExecution::SetSelf (
     const std::shared_ptr<TimerBasedTaskExecution>& rpSelf)
 {
-    if (mpTask.get() != NULL)
+    if (mpTask.get() != nullptr)
         mpSelf = rpSelf;
 }
 
 IMPL_LINK_NOARG_TYPED(TimerBasedTaskExecution, TimerCallback, Timer *, void)
 {
-    if (mpTask.get() != NULL)
+    if (mpTask.get() != nullptr)
     {
         if (mpTask->HasNextStep())
         {

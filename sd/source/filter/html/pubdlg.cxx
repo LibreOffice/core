@@ -366,7 +366,7 @@ SdPublishingDlg::SdPublishingDlg(vcl::Window* pWindow, DocumentType eDocType)
 ,   aAssistentFunc(NOOFPAGES)
 ,   m_bButtonsDirty(true)
 ,   m_bDesignListDirty(false)
-,   m_pDesign(NULL)
+,   m_pDesign(nullptr)
 {
     get(pLastPageButton, "lastPageButton");
     get(pNextPageButton, "nextPageButton");
@@ -947,7 +947,7 @@ IMPL_LINK_TYPED( SdPublishingDlg, DesignHdl, Button *, pButton, void )
         pPage1_OldDesign->Check(false);
         pPage1_Designs->Disable();
         pPage1_DelDesign->Disable();
-        m_pDesign = NULL;
+        m_pDesign = nullptr;
 
         SdPublishingDesign aDefault;
         SetDesign(&aDefault);
@@ -1172,7 +1172,7 @@ IMPL_LINK_NOARG_TYPED(SdPublishingDlg, FinishHdl, Button*, void)
                 {
                     m_aDesignList.push_back(pDesign);
                     m_bDesignListDirty = true;
-                    pDesign = NULL;
+                    pDesign = nullptr;
                 }
             }
         }

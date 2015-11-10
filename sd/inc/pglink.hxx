@@ -35,7 +35,7 @@ public:
     virtual void Closed() override;
     virtual ::sfx2::SvBaseLink::UpdateResult DataChanged(
         const OUString& rMimeType, const css::uno::Any & rValue ) override;
-    bool         Connect() { return 0 != SvBaseLink::GetRealObject(); }
+    bool         Connect() { return nullptr != SvBaseLink::GetRealObject(); }
 };
 
 #endif // INCLUDED_SD_INC_PGLINK_HXX

@@ -111,7 +111,7 @@ Color ColorFromAlphaColor(sal_uInt8 aTransparency, Color &aFront, Color &aBack )
 
 AnnotationTextWindow::AnnotationTextWindow( AnnotationWindow* pParent, WinBits nBits )
 : Control(pParent, nBits)
-, mpOutlinerView(0)
+, mpOutlinerView(nullptr)
 , mpAnnotationWindow( pParent )
 {
 }
@@ -276,14 +276,14 @@ AnnotationWindow::AnnotationWindow( AnnotationManagerImpl& rManager, DrawDocShel
 , mrManager( rManager )
 , mpDocShell( pDocShell )
 , mpDoc( pDocShell->GetDoc() )
-, mpOutlinerView(0)
-, mpOutliner(0)
-, mpVScrollbar(0)
+, mpOutlinerView(nullptr)
+, mpOutliner(nullptr)
+, mpVScrollbar(nullptr)
 , mbReadonly(pDocShell->IsReadOnly())
 , mbProtected(false)
 , mbMouseOverButton(false)
-, mpTextWindow(0)
-, mpMeta(0)
+, mpTextWindow(nullptr)
+, mpMeta(nullptr)
 {
 }
 
@@ -520,7 +520,7 @@ TextApiObject* getTextApiObject( const Reference< XAnnotation >& xAnnotation )
         Reference< XText > xText( xAnnotation->getTextRange() );
         return TextApiObject::getImplementation( xText );
     }
-    return 0;
+    return nullptr;
 }
 
 void AnnotationWindow::setAnnotation( const Reference< XAnnotation >& xAnnotation, bool bGrabFocus )

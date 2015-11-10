@@ -52,7 +52,7 @@ void DrawDocShell::Draw(OutputDevice* pOut, const JobSetup&, sal_uInt16 nAspect)
       // THUMBNAIL: here we may can set the draft mode
     }
 
-    ClientView* pView = new ClientView(this, pOut, NULL);
+    ClientView* pView = new ClientView(this, pOut, nullptr);
 
     pView->SetHlplVisible(false);
     pView->SetGridVisible(false);
@@ -60,7 +60,7 @@ void DrawDocShell::Draw(OutputDevice* pOut, const JobSetup&, sal_uInt16 nAspect)
     pView->SetPageVisible(false);
     pView->SetGlueVisible(false);
 
-    SdPage* pSelectedPage = NULL;
+    SdPage* pSelectedPage = nullptr;
 
     const std::vector<sd::FrameView*> &rViews = mpDoc->GetFrameViewList();
     if( !rViews.empty() )
@@ -73,9 +73,9 @@ void DrawDocShell::Draw(OutputDevice* pOut, const JobSetup&, sal_uInt16 nAspect)
         }
     }
 
-    if( NULL == pSelectedPage )
+    if( nullptr == pSelectedPage )
     {
-        SdPage* pPage = NULL;
+        SdPage* pPage = nullptr;
         sal_uInt16 nPageCnt = (sal_uInt16) mpDoc->GetSdPageCount(PK_STANDARD);
 
         for (sal_uInt16 i = 0; i < nPageCnt; i++)
@@ -86,7 +86,7 @@ void DrawDocShell::Draw(OutputDevice* pOut, const JobSetup&, sal_uInt16 nAspect)
                 pSelectedPage = pPage;
         }
 
-        if( NULL == pSelectedPage )
+        if( nullptr == pSelectedPage )
             pSelectedPage = mpDoc->GetSdPage(0, PK_STANDARD);
     }
 
@@ -163,13 +163,13 @@ void DrawDocShell::Disconnect(ViewShell* pViewSh)
 {
     if (mpViewShell == pViewSh)
     {
-        mpViewShell = NULL;
+        mpViewShell = nullptr;
     }
 }
 
 FrameView* DrawDocShell::GetFrameView()
 {
-    FrameView* pFrameView = NULL;
+    FrameView* pFrameView = nullptr;
 
     if (mpViewShell)
     {
@@ -211,7 +211,7 @@ Bitmap DrawDocShell::GetPagePreviewBitmap(SdPage* pPage, sal_uInt16 nMaxEdgePixe
     aMapMode.SetScaleY( aFrac );
     pVDev->SetMapMode( aMapMode );
 
-    ClientView* pView = new ClientView( this, pVDev, NULL );
+    ClientView* pView = new ClientView( this, pVDev, nullptr );
     FrameView*      pFrameView = GetFrameView();
     pView->ShowSdrPage( pPage );
 
@@ -290,7 +290,7 @@ bool DrawDocShell::CheckPageName (vcl::Window* pWin, OUString& rName )
     {
         OUString aDesc( SD_RESSTR( STR_WARN_PAGE_EXISTS ) );
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        AbstractSvxNameDialog* aNameDlg = pFact ? pFact->CreateSvxNameDialog( pWin, aStrForDlg, aDesc ) : 0;
+        AbstractSvxNameDialog* aNameDlg = pFact ? pFact->CreateSvxNameDialog( pWin, aStrForDlg, aDesc ) : nullptr;
         if( aNameDlg )
         {
             aNameDlg->SetEditHelpId( HID_SD_NAMEDIALOG_PAGE );

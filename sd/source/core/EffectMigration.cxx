@@ -152,7 +152,7 @@ deprecated_FadeEffect_conversion_table[] =
 
     { FadeEffect_DISSOLVE,                  "fade-smoothly" },
 
-    { FadeEffect_NONE, 0 }
+    { FadeEffect_NONE, nullptr }
 };
 
 /* todo
@@ -229,7 +229,7 @@ struct deprecated_AnimationEffect_conversion_table_entry
 deprecated_AnimationEffect_conversion_table[] =
 {
 // OOo 1.x entrance effects
-    { AnimationEffect_APPEAR, "ooo-entrance-appear",0 },
+    { AnimationEffect_APPEAR, "ooo-entrance-appear",nullptr },
 
     { AnimationEffect_FADE_TO_CENTER, "ooo-entrance-box","in" },
     { AnimationEffect_FADE_FROM_CENTER, "ooo-entrance-box","out" },
@@ -242,7 +242,7 @@ deprecated_AnimationEffect_conversion_table[] =
     { AnimationEffect_FADE_FROM_LOWERLEFT, "ooo-entrance-diagonal-squares","right-to-top" },
     { AnimationEffect_FADE_FROM_LOWERRIGHT, "ooo-entrance-diagonal-squares","left-to-top" },
 
-    { AnimationEffect_DISSOLVE, "ooo-entrance-dissolve-in",0 },
+    { AnimationEffect_DISSOLVE, "ooo-entrance-dissolve-in",nullptr },
 
     { AnimationEffect_MOVE_FROM_LEFT, "ooo-entrance-fly-in","from-left" },
     { AnimationEffect_MOVE_FROM_TOP, "ooo-entrance-fly-in","from-top" },
@@ -266,7 +266,7 @@ deprecated_AnimationEffect_conversion_table[] =
     { AnimationEffect_VERTICAL_LINES, "ooo-entrance-random-bars","horizontal" },
     { AnimationEffect_HORIZONTAL_LINES, "ooo-entrance-random-bars","vertical" },
 
-    { AnimationEffect_RANDOM, "ooo-entrance-random",0 },
+    { AnimationEffect_RANDOM, "ooo-entrance-random",nullptr },
 
     { AnimationEffect_CLOSE_VERTICAL, "ooo-entrance-split","horizontal-in" },
     { AnimationEffect_CLOSE_HORIZONTAL, "ooo-entrance-split","vertical-in" },
@@ -293,7 +293,7 @@ deprecated_AnimationEffect_conversion_table[] =
     { AnimationEffect_STRETCH_FROM_BOTTOM, "ooo-entrance-stretchy","from-bottom" },
     { AnimationEffect_STRETCH_FROM_LOWERLEFT, "ooo-entrance-stretchy","from-bottom-left" },
 
-    { AnimationEffect_HORIZONTAL_STRETCH, "ooo-entrance-expand", 0 },
+    { AnimationEffect_HORIZONTAL_STRETCH, "ooo-entrance-expand", nullptr },
 
     { AnimationEffect_CLOCKWISE, "ooo-entrance-wheel","1" },
     { AnimationEffect_COUNTERCLOCKWISE, "ooo-entrance-clock-wipe","counter-clockwise" },
@@ -309,7 +309,7 @@ deprecated_AnimationEffect_conversion_table[] =
     { AnimationEffect_WAVYLINE_FROM_BOTTOM, "ooo-entrance-snake-wipe","from-bottom-right-horizontal" },
 
 // ooo 1.x exit effects
-    { AnimationEffect_HIDE, "ooo-exit-disappear",0 },
+    { AnimationEffect_HIDE, "ooo-exit-disappear",nullptr },
     { AnimationEffect_MOVE_TO_LEFT, "ooo-exit-fly-out", "from-right" },
     { AnimationEffect_MOVE_TO_TOP, "ooo-exit-fly-out", "from-bottom" },
     { AnimationEffect_MOVE_TO_RIGHT, "ooo-exit-fly-out", "from-left" },
@@ -349,30 +349,30 @@ deprecated_AnimationEffect_conversion_table[] =
     { AnimationEffect_FADE_FROM_CENTER, "ooo-entrance-diamond", "out" },
     { AnimationEffect_FADE_TO_CENTER, "ooo-entrance-plus", "in" },
     { AnimationEffect_FADE_FROM_CENTER, "ooo-entrance-plus", "out" },
-    { AnimationEffect_CLOCKWISE, "ooo-entrance-wedge", 0 },
+    { AnimationEffect_CLOCKWISE, "ooo-entrance-wedge", nullptr },
     { AnimationEffect_CLOCKWISE, "ooo-entrance-wheel", "2" },
     { AnimationEffect_CLOCKWISE, "ooo-entrance-wheel", "3" },
     { AnimationEffect_CLOCKWISE, "ooo-entrance-wheel", "4" },
     { AnimationEffect_CLOCKWISE, "ooo-entrance-wheel", "8" },
 
-    { AnimationEffect_MOVE_FROM_RIGHT, "ooo-entrance-boomerang", 0 },
-    { AnimationEffect_MOVE_FROM_UPPERRIGHT, "ooo-entrance-bounce", 0 },
-    { AnimationEffect_MOVE_FROM_BOTTOM, "ooo-entrance-curve-up", 0 },
-    { AnimationEffect_MOVE_FROM_TOP, "ooo-entrance-float", 0 },
-    { AnimationEffect_MOVE_FROM_LEFT, "ooo-entrance-glide", 0 },
-    { AnimationEffect_MOVE_FROM_BOTTOM, "ooo-entrance-magnify", 0 },
-    { AnimationEffect_HORIZONTAL_ROTATE, "ooo-entrance-pinwheel", 0 },
-    { AnimationEffect_MOVE_FROM_LEFT, "ooo-entrance-breaks", 0 },
-    { AnimationEffect_MOVE_FROM_LEFT, "ooo-entrance-sling", 0 },
-    { AnimationEffect_MOVE_FROM_LEFT, "ooo-entrance-spiral-in", 0 },
-    { AnimationEffect_MOVE_FROM_LEFT, "ooo-entrance-thread", 0 },
-    { AnimationEffect_MOVE_FROM_BOTTOM, "ooo-entrance-ascend", 0 },
-    { AnimationEffect_MOVE_FROM_BOTTOM, "ooo-entrance-center-revolve", 0 },
-    { AnimationEffect_APPEAR, "ooo-entrance-compress", 0 },
-    { AnimationEffect_MOVE_SHORT_FROM_TOP, "ooo-entrance-descend", 0 },
-    { AnimationEffect_MOVE_SHORT_FROM_LEFT, "ooo-entrance-ease-in", 0 },
-    { AnimationEffect_MOVE_FROM_BOTTOM, "ooo-entrance-rise-up", 0 },
-    { AnimationEffect_HORIZONTAL_ROTATE, "ooo-entrance-spin-in", 0 },
+    { AnimationEffect_MOVE_FROM_RIGHT, "ooo-entrance-boomerang", nullptr },
+    { AnimationEffect_MOVE_FROM_UPPERRIGHT, "ooo-entrance-bounce", nullptr },
+    { AnimationEffect_MOVE_FROM_BOTTOM, "ooo-entrance-curve-up", nullptr },
+    { AnimationEffect_MOVE_FROM_TOP, "ooo-entrance-float", nullptr },
+    { AnimationEffect_MOVE_FROM_LEFT, "ooo-entrance-glide", nullptr },
+    { AnimationEffect_MOVE_FROM_BOTTOM, "ooo-entrance-magnify", nullptr },
+    { AnimationEffect_HORIZONTAL_ROTATE, "ooo-entrance-pinwheel", nullptr },
+    { AnimationEffect_MOVE_FROM_LEFT, "ooo-entrance-breaks", nullptr },
+    { AnimationEffect_MOVE_FROM_LEFT, "ooo-entrance-sling", nullptr },
+    { AnimationEffect_MOVE_FROM_LEFT, "ooo-entrance-spiral-in", nullptr },
+    { AnimationEffect_MOVE_FROM_LEFT, "ooo-entrance-thread", nullptr },
+    { AnimationEffect_MOVE_FROM_BOTTOM, "ooo-entrance-ascend", nullptr },
+    { AnimationEffect_MOVE_FROM_BOTTOM, "ooo-entrance-center-revolve", nullptr },
+    { AnimationEffect_APPEAR, "ooo-entrance-compress", nullptr },
+    { AnimationEffect_MOVE_SHORT_FROM_TOP, "ooo-entrance-descend", nullptr },
+    { AnimationEffect_MOVE_SHORT_FROM_LEFT, "ooo-entrance-ease-in", nullptr },
+    { AnimationEffect_MOVE_FROM_BOTTOM, "ooo-entrance-rise-up", nullptr },
+    { AnimationEffect_HORIZONTAL_ROTATE, "ooo-entrance-spin-in", nullptr },
     { AnimationEffect_STRETCH_FROM_LEFT, "ooo-entrance-stretchy", "across" },
     { AnimationEffect_STRETCH_FROM_TOP, "ooo-entrance-stretchy", "downward" },
 
@@ -383,14 +383,14 @@ deprecated_AnimationEffect_conversion_table[] =
     { AnimationEffect_FADE_TO_CENTER, "ooo-entrance-zoom","out-slightly" },
     { AnimationEffect_FADE_TO_CENTER, "ooo-entrance-zoom","out-from-screen-center" },
 
-    { AnimationEffect_DISSOLVE, "ooo-entrance-fade-in", 0 },
-    { AnimationEffect_DISSOLVE, "ooo-entrance-fade-in-and-zoom", 0 },
-    { AnimationEffect_DISSOLVE, "ooo-entrance-fade-in-and-swivel", 0 },
+    { AnimationEffect_DISSOLVE, "ooo-entrance-fade-in", nullptr },
+    { AnimationEffect_DISSOLVE, "ooo-entrance-fade-in-and-zoom", nullptr },
+    { AnimationEffect_DISSOLVE, "ooo-entrance-fade-in-and-swivel", nullptr },
 
     // still open (no matching effect: AnimationEffect_ZOOM_IN_FROM_*,
     // AnimationEffect_ZOOM_OUT_FROM_*, AnimationEffect_PATH
 
-    { AnimationEffect_NONE, 0, 0 }
+    { AnimationEffect_NONE, nullptr, nullptr }
 };
 
 EffectSequence::iterator ImplFindEffect( MainSequencePtr& pMainSequence, const Reference< XShape >& rShape, sal_Int16 nSubItem )
@@ -491,7 +491,7 @@ void EffectMigration::SetAnimationEffect( SvxShape* pShape, AnimationEffect eEff
                     CustomAnimationEffectPtr pEffect( new CustomAnimationEffect( xNode ) );
                     pEffect->setTarget( makeAny( xShape ) );
                     SdPage* pPage = dynamic_cast< SdPage* >( pObj->GetPage() );
-                    const bool bManual = (pPage == 0) || (pPage->GetPresChange() == PRESCHANGE_MANUAL);
+                    const bool bManual = (pPage == nullptr) || (pPage->GetPresChange() == PRESCHANGE_MANUAL);
                     if( !bManual )
                         pEffect->setNodeType( EffectNodeType::AFTER_PREVIOUS );
 
@@ -569,7 +569,7 @@ AnimationEffect EffectMigration::GetAnimationEffect( SvxShape* pShape )
     AnimationEffect eEffect = AnimationEffect_NONE;
 
     if( !ConvertPreset( aPresetId, &aPresetSubType, eEffect ) )
-        ConvertPreset( aPresetId, 0, eEffect );
+        ConvertPreset( aPresetId, nullptr, eEffect );
 
     return eEffect;
 }
@@ -598,7 +598,7 @@ void EffectMigration::SetTextAnimationEffect( SvxShape* pShape, AnimationEffect 
     SdrTextObj* pTextObj = dynamic_cast< SdrTextObj* >( pObj );
 
     // ignore old text effects on shape without text
-    if( (pTextObj == 0) || (!pTextObj->HasText()) )
+    if( (pTextObj == nullptr) || (!pTextObj->HasText()) )
         return;
 
     const CustomAnimationPresets& rPresets = CustomAnimationPresets::getCustomAnimationPresets();
@@ -626,7 +626,7 @@ void EffectMigration::SetTextAnimationEffect( SvxShape* pShape, AnimationEffect 
         }
 
         // if there is not yet a group, create it
-        if( pGroup.get() == 0 )
+        if( pGroup.get() == nullptr )
         {
             CustomAnimationEffectPtr pShapeEffect;
 
@@ -665,7 +665,7 @@ void EffectMigration::SetTextAnimationEffect( SvxShape* pShape, AnimationEffect 
             if( pShapeEffect.get() )
             {
                 SdPage* pPage = dynamic_cast< SdPage* >( pObj->GetPage() );
-                const bool bManual = (pPage == 0) || (pPage->GetPresChange() == PRESCHANGE_MANUAL);
+                const bool bManual = (pPage == nullptr) || (pPage->GetPresChange() == PRESCHANGE_MANUAL);
 
                 // now create effects for each paragraph
                 pGroup =
@@ -674,7 +674,7 @@ void EffectMigration::SetTextAnimationEffect( SvxShape* pShape, AnimationEffect 
             }
         }
 
-        if( pGroup.get() != 0 )
+        if( pGroup.get() != nullptr )
         {
             const bool bLaserEffect = (eEffect >= AnimationEffect_LASER_FROM_LEFT) && (eEffect <= AnimationEffect_LASER_FROM_LOWERRIGHT);
 
@@ -738,7 +738,7 @@ AnimationEffect EffectMigration::GetTextAnimationEffect( SvxShape* pShape )
     AnimationEffect eEffect = AnimationEffect_NONE;
 
     if( !ConvertPreset( aPresetId, &aPresetSubType, eEffect ) )
-        ConvertPreset( aPresetId, 0, eEffect );
+        ConvertPreset( aPresetId, nullptr, eEffect );
 
     return eEffect;
 }
@@ -753,8 +753,8 @@ bool EffectMigration::ConvertPreset( const OUString& rPresetId, const OUString* 
         while( p->mpPresetId )
         {
             if( rPresetId.equalsAscii( p->mpPresetId ) &&
-                (( p->mpPresetSubType == 0 ) ||
-                 ( pPresetSubType == 0) ||
+                (( p->mpPresetSubType == nullptr ) ||
+                 ( pPresetSubType == nullptr) ||
                  ( pPresetSubType->equalsAscii( p->mpPresetSubType )) ) )
             {
                 rEffect = p->meEffect;
@@ -1401,7 +1401,7 @@ void EffectMigration::CreateAnimatedGroup(SdrObjGroup& rGroupObj, SdPage& rPage)
             Reference< XTimeContainer > xParentContainer(xOuterSeqTimeContainer, UNO_QUERY_THROW);
 
             // prepare loop over objects
-            SdrObject* pNext = 0;
+            SdrObject* pNext = nullptr;
             const double fDurationShow(0.2);
             const double fDurationHide(0.001);
 

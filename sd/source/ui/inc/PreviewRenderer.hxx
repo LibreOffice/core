@@ -48,7 +48,7 @@ public:
             preview.  This makes the actual preview smaller.
     */
     PreviewRenderer (
-        OutputDevice* pTemplate = NULL,
+        OutputDevice* pTemplate = nullptr,
         const bool bPaintFrame = true);
 
     virtual ~PreviewRenderer();

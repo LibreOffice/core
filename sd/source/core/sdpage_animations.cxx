@@ -42,7 +42,7 @@ using ::com::sun::star::drawing::XShape;
 /** returns a helper class to manipulate effects inside the main sequence */
 sd::MainSequencePtr SdPage::getMainSequence()
 {
-    if( 0 == mpMainSequence.get() )
+    if( nullptr == mpMainSequence.get() )
         mpMainSequence.reset( new sd::MainSequence( getAnimationNode() ) );
 
     return mpMainSequence;

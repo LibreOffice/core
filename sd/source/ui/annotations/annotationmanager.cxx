@@ -103,8 +103,8 @@ namespace sd {
 
 SfxItemPool* GetAnnotationPool()
 {
-    static SfxItemPool* mpAnnotationPool = 0;
-    if( mpAnnotationPool == 0 )
+    static SfxItemPool* mpAnnotationPool = nullptr;
+    if( mpAnnotationPool == nullptr )
     {
         mpAnnotationPool = EditEngine::CreatePool( false );
         mpAnnotationPool->SetPoolDefaultItem(SvxFontHeightItem(423,100,EE_CHAR_FONTHEIGHT));
@@ -121,7 +121,7 @@ static SfxBindings* getBindings( ViewShellBase& rBase )
     if( rBase.GetMainViewShell().get() && rBase.GetMainViewShell()->GetViewFrame() )
         return &rBase.GetMainViewShell()->GetViewFrame()->GetBindings();
 
-    return 0;
+    return nullptr;
 }
 
 static SfxDispatcher* getDispatcher( ViewShellBase& rBase )
@@ -129,7 +129,7 @@ static SfxDispatcher* getDispatcher( ViewShellBase& rBase )
     if( rBase.GetMainViewShell().get() && rBase.GetMainViewShell()->GetViewFrame() )
         return rBase.GetMainViewShell()->GetViewFrame()->GetDispatcher();
 
-    return 0;
+    return nullptr;
 }
 
 css::util::DateTime getCurrentDateTime()
@@ -172,7 +172,7 @@ AnnotationManagerImpl::AnnotationManagerImpl( ViewShellBase& rViewShellBase )
 , mrBase( rViewShellBase )
 , mpDoc( rViewShellBase.GetDocument() )
 , mbShowAnnotations( true )
-, mnUpdateTagsEvent( 0 )
+, mnUpdateTagsEvent( nullptr )
 {
     SdOptions* pOptions = SD_MOD()->GetSdOptions(mpDoc->GetDocumentType());
     if( pOptions )
@@ -222,7 +222,7 @@ void SAL_CALL AnnotationManagerImpl::disposing ()
     if( mnUpdateTagsEvent )
     {
         Application::RemoveUserEvent( mnUpdateTagsEvent );
-        mnUpdateTagsEvent = 0;
+        mnUpdateTagsEvent = nullptr;
     }
 
     mxView.clear();
@@ -302,7 +302,7 @@ void AnnotationManagerImpl::ExecuteDeleteAnnotation(SfxRequest& rReq)
     case SID_DELETEALLBYAUTHOR_POSTIT:
         if( pArgs )
         {
-            const SfxPoolItem*  pPoolItem = NULL;
+            const SfxPoolItem*  pPoolItem = nullptr;
             if( SfxItemState::SET == pArgs->GetItemState( SID_DELETEALLBYAUTHOR_POSTIT, true, &pPoolItem ) )
             {
                 OUString sAuthor( static_cast<const SfxStringItem*>( pPoolItem )->GetValue() );
@@ -318,7 +318,7 @@ void AnnotationManagerImpl::ExecuteDeleteAnnotation(SfxRequest& rReq)
             {
                 if( pArgs )
                 {
-                    const SfxPoolItem*  pPoolItem = NULL;
+                    const SfxPoolItem*  pPoolItem = nullptr;
                     if( SfxItemState::SET == pArgs->GetItemState( SID_DELETE_POSTIT, true, &pPoolItem ) )
                         static_cast<const SfxUnoAnyItem*>(pPoolItem)->GetValue() >>= xAnnotation;
                 }
@@ -418,7 +418,7 @@ void AnnotationManagerImpl::ExecuteReplyToAnnotation( SfxRequest& rReq )
     const SfxItemSet* pArgs = rReq.GetArgs();
     if( pArgs )
     {
-        const SfxPoolItem*  pPoolItem = NULL;
+        const SfxPoolItem*  pPoolItem = nullptr;
         if( SfxItemState::SET == pArgs->GetItemState( rReq.GetSlot(), true, &pPoolItem ) )
             static_cast<const SfxUnoAnyItem*>( pPoolItem )->GetValue() >>= xAnnotation;
     }
@@ -499,7 +499,7 @@ void AnnotationManagerImpl::DeleteAnnotationsByAuthor( const OUString& sAuthor )
     if( mpDoc->IsUndoEnabled() )
         mpDoc->BegUndo( SD_RESSTR( STR_ANNOTATION_UNDO_DELETE ) );
 
-    SdPage* pPage = 0;
+    SdPage* pPage = nullptr;
     do
     {
         pPage = GetNextPage( pPage, true );
@@ -529,7 +529,7 @@ void AnnotationManagerImpl::DeleteAllAnnotations()
     if( mpDoc->IsUndoEnabled() )
         mpDoc->BegUndo( SD_RESSTR( STR_ANNOTATION_UNDO_DELETE ) );
 
-    SdPage* pPage = 0;
+    SdPage* pPage = nullptr;
     do
     {
         pPage = GetNextPage( pPage, true );
@@ -557,7 +557,7 @@ void AnnotationManagerImpl::GetAnnotationState(SfxItemSet& rSet)
     SdPage* pCurrentPage = GetCurrentPage();
 
     const bool bReadOnly = mrBase.GetDocShell()->IsReadOnly();
-    const bool bWrongPageKind = (pCurrentPage == 0) || (pCurrentPage->GetPageKind() != PK_STANDARD);
+    const bool bWrongPageKind = (pCurrentPage == nullptr) || (pCurrentPage->GetPageKind() != PK_STANDARD);
 
     const SvtSaveOptions::ODFDefaultVersion nCurrentODFVersion( SvtSaveOptions().GetODFDefaultVersion() );
 
@@ -572,7 +572,7 @@ void AnnotationManagerImpl::GetAnnotationState(SfxItemSet& rSet)
     if( !xAnnotation.is() || bReadOnly )
         rSet.DisableItem( SID_DELETE_POSTIT );
 
-    SdPage* pPage = 0;
+    SdPage* pPage = nullptr;
 
     bool bHasAnnotations = false;
     do
@@ -669,7 +669,7 @@ void AnnotationManagerImpl::SelectNextAnnotation(bool bForeward)
             {
                 // switch to next/previous slide with annotations
                 std::shared_ptr<DrawViewShell> pDrawViewShell(std::dynamic_pointer_cast<DrawViewShell>(mrBase.GetMainViewShell()));
-                if (pDrawViewShell.get() != NULL)
+                if (pDrawViewShell.get() != nullptr)
                 {
                     pDrawViewShell->ChangeEditMode(pPage->IsMasterPage() ? EM_MASTERPAGE : EM_PAGE, false);
                     pDrawViewShell->SwitchPage((pPage->GetPageNum() - 1) >> 1);
@@ -781,7 +781,7 @@ void AnnotationManagerImpl::UpdateTags( bool bSynchron )
         if( mnUpdateTagsEvent )
             Application::RemoveUserEvent( mnUpdateTagsEvent );
 
-        UpdateTagsHdl(0);
+        UpdateTagsHdl(nullptr);
     }
     else
     {
@@ -792,7 +792,7 @@ void AnnotationManagerImpl::UpdateTags( bool bSynchron )
 
 IMPL_LINK_NOARG_TYPED(AnnotationManagerImpl, UpdateTagsHdl, void*, void)
 {
-    mnUpdateTagsEvent  = 0;
+    mnUpdateTagsEvent  = nullptr;
     DisposeTags();
 
     if( mbShowAnnotations )
@@ -907,7 +907,7 @@ void AnnotationManagerImpl::ExecuteAnnotationContextMenu( Reference< XAnnotation
 
     const bool bReadOnly = mrBase.GetDocShell()->IsReadOnly();
 
-    AnnotationWindow* pAnnotationWindow = bButtonMenu ? 0 : dynamic_cast< AnnotationWindow* >( pParent );
+    AnnotationWindow* pAnnotationWindow = bButtonMenu ? nullptr : dynamic_cast< AnnotationWindow* >( pParent );
 
     if( bReadOnly && !pAnnotationWindow )
         return;
@@ -1077,7 +1077,7 @@ Color AnnotationManagerImpl::GetColorDark(sal_uInt16 aAuthorIndex)
 
 SdPage* AnnotationManagerImpl::GetNextPage( SdPage* pPage, bool bForeward )
 {
-    if( pPage == 0 )
+    if( pPage == nullptr )
         return bForeward ? GetFirstPage() : GetLastPage();
 
     sal_uInt16 nPageNum = (pPage->GetPageNum() - 1) >> 1;
@@ -1097,7 +1097,7 @@ SdPage* AnnotationManagerImpl::GetNextPage( SdPage* pPage, bool bForeward )
         else
         {
             if( nPageNum == 0 )
-                return 0; // we are already on the first draw page, finished
+                return nullptr; // we are already on the first draw page, finished
 
             nPageNum--;
         }
@@ -1109,7 +1109,7 @@ SdPage* AnnotationManagerImpl::GetNextPage( SdPage* pPage, bool bForeward )
         {
             if( nPageNum >= mpDoc->GetMasterSdPageCount(PK_STANDARD)-1 )
             {
-                return 0;   // we reached the end, there is nothing more to see here
+                return nullptr;   // we reached the end, there is nothing more to see here
             }
             nPageNum++;
         }

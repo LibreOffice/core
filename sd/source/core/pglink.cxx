@@ -58,7 +58,7 @@ SdPageLink::~SdPageLink()
     const OUString&, const css::uno::Any& )
 {
     SdDrawDocument* pDoc = static_cast<SdDrawDocument*>( pPage->GetModel() );
-    sfx2::LinkManager* pLinkManager = pDoc!=NULL ? pDoc->GetLinkManager() : NULL;
+    sfx2::LinkManager* pLinkManager = pDoc!=nullptr ? pDoc->GetLinkManager() : nullptr;
 
     if (pLinkManager)
     {
@@ -69,7 +69,7 @@ SdPageLink::~SdPageLink()
         OUString aFileName;
         OUString aBookmarkName;
         OUString aFilterName;
-        sfx2::LinkManager::GetDisplayNames( this,0, &aFileName, &aBookmarkName,
+        sfx2::LinkManager::GetDisplayNames( this,nullptr, &aFileName, &aBookmarkName,
                                       &aFilterName);
         pPage->SetFileName(aFileName);
         pPage->SetBookmarkName(aBookmarkName);
@@ -103,8 +103,8 @@ SdPageLink::~SdPageLink()
                 bCopy = true;
             }
 
-            pDoc->InsertBookmarkAsPage(aBookmarkList, NULL, bLink, bReplace,
-                                       nInsertPos, bNoDialogs, NULL, bCopy, true, true);
+            pDoc->InsertBookmarkAsPage(aBookmarkList, nullptr, bLink, bReplace,
+                                       nInsertPos, bNoDialogs, nullptr, bCopy, true, true);
 
             if( !pDoc->pDocLockedInsertingLinks )
                 pDoc->CloseBookmarkDoc();

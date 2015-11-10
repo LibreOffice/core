@@ -67,7 +67,7 @@ void FuLine::DoExecute( SfxRequest& rReq )
 
     if( !pArgs )
     {
-        const SdrObject* pObj = NULL;
+        const SdrObject* pObj = nullptr;
         const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
         if( rMarkList.GetMarkCount() == 1 )
             pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
@@ -76,7 +76,7 @@ void FuLine::DoExecute( SfxRequest& rReq )
         mpView->GetAttributes( *pNewAttr );
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        std::unique_ptr<SfxAbstractTabDialog> pDlg(pFact ? pFact->CreateSvxLineTabDialog(NULL,pNewAttr.get(),mpDoc,pObj,bHasMarked) : 0);
+        std::unique_ptr<SfxAbstractTabDialog> pDlg(pFact ? pFact->CreateSvxLineTabDialog(nullptr,pNewAttr.get(),mpDoc,pObj,bHasMarked) : nullptr);
         if( pDlg && (pDlg->Execute() == RET_OK) )
         {
             mpView->SetAttributes (*(pDlg->GetOutputItemSet ()));

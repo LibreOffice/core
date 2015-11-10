@@ -57,7 +57,7 @@ public:
         SfxViewFrame* pFrame,
         ViewShellBase& rViewShellBase,
         vcl::Window* pParentWindow,
-        FrameView* pFrameView = NULL);
+        FrameView* pFrameView = nullptr);
 
     virtual ~OutlineViewShell();
 

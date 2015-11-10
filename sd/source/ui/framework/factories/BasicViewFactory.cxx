@@ -89,8 +89,8 @@ BasicViewFactory::BasicViewFactory (
     : BasicViewFactoryInterfaceBase(MutexOwner::maMutex),
       mxConfigurationController(),
       mpViewShellContainer(new ViewShellContainer()),
-      mpBase(NULL),
-      mpFrameView(NULL),
+      mpBase(nullptr),
+      mpFrameView(nullptr),
       mpWindow(VclPtr<WorkWindow>::Create(nullptr,WB_STDWORK)),
       mpViewCache(new ViewCache()),
       mxLocalPane(new Pane(Reference<XResourceId>(), mpWindow.get()))
@@ -105,10 +105,10 @@ BasicViewFactory::~BasicViewFactory()
 void SAL_CALL BasicViewFactory::disposing()
 {
     // Disconnect from the frame view.
-    if (mpFrameView != NULL)
+    if (mpFrameView != nullptr)
     {
         mpFrameView->Disconnect();
-        mpFrameView = NULL;
+        mpFrameView = nullptr;
     }
 
     // Relase the view cache.
@@ -144,34 +144,34 @@ Reference<XResource> SAL_CALL BasicViewFactory::createResource (
         xPane.set(mxConfigurationController->getResource(rxViewId->getAnchor()), UNO_QUERY);
 
     // For main views use the frame view of the last main view.
-    ::sd::FrameView* pFrameView = NULL;
+    ::sd::FrameView* pFrameView = nullptr;
     if (xPane.is() && bIsCenterPane)
     {
         pFrameView = mpFrameView;
     }
 
     // Get Window pointer for XWindow of the pane.
-    vcl::Window* pWindow = NULL;
+    vcl::Window* pWindow = nullptr;
     if (xPane.is())
         pWindow = VCLUnoHelper::GetWindow(xPane->getWindow());
 
     // Get the view frame.
-    SfxViewFrame* pFrame = NULL;
-    if (mpBase != NULL)
+    SfxViewFrame* pFrame = nullptr;
+    if (mpBase != nullptr)
         pFrame = mpBase->GetViewFrame();
 
-    if (pFrame != NULL && mpBase!=NULL && pWindow!=NULL)
+    if (pFrame != nullptr && mpBase!=nullptr && pWindow!=nullptr)
     {
         // Try to get the view from the cache.
         std::shared_ptr<ViewDescriptor> pDescriptor (GetViewFromCache(rxViewId, xPane));
 
         // When the requested view is not in the cache then create a new view.
-        if (pDescriptor.get() == NULL)
+        if (pDescriptor.get() == nullptr)
         {
             pDescriptor = CreateView(rxViewId, *pFrame, *pWindow, xPane, pFrameView, bIsCenterPane);
         }
 
-        if (pDescriptor.get() != NULL)
+        if (pDescriptor.get() != nullptr)
             xView = pDescriptor->mxView;
 
         mpViewShellContainer->push_back(pDescriptor);
@@ -191,7 +191,7 @@ void SAL_CALL BasicViewFactory::releaseResource (const Reference<XResource>& rxV
     if ( ! rxView.is())
         throw lang::IllegalArgumentException();
 
-    if (rxView.is() && mpBase!=NULL)
+    if (rxView.is() && mpBase!=nullptr)
     {
         ViewShellContainer::iterator iViewShell (
             ::std::find_if(
@@ -208,7 +208,7 @@ void SAL_CALL BasicViewFactory::releaseResource (const Reference<XResource>& rxV
                 // Obtain a pointer to and connect to the frame view of the
                 // view.  The next view, that is created, will be
                 // initialized with this frame view.
-                if (mpFrameView == NULL)
+                if (mpFrameView == nullptr)
                 {
                     mpFrameView = pViewShell->GetFrameView();
                     if (mpFrameView)
@@ -221,7 +221,7 @@ void SAL_CALL BasicViewFactory::releaseResource (const Reference<XResource>& rxV
                     Reference<drawing::XDrawSubController>());
 
                 SfxViewShell* pSfxViewShell = pViewShell->GetViewShell();
-                if (pSfxViewShell != NULL)
+                if (pSfxViewShell != nullptr)
                     pSfxViewShell->DisconnectAllClients();
             }
 
@@ -251,7 +251,7 @@ void SAL_CALL BasicViewFactory::initialize (const Sequence<Any>& aArguments)
             Reference<lang::XUnoTunnel> xTunnel (xController, UNO_QUERY_THROW);
             ::sd::DrawController* pController = reinterpret_cast<sd::DrawController*>(
                 xTunnel->getSomething(sd::DrawController::getUnoTunnelId()));
-            if (pController != NULL)
+            if (pController != nullptr)
                 mpBase = pController->GetViewShellBase();
 
             // Register the factory for its supported views.
@@ -269,7 +269,7 @@ void SAL_CALL BasicViewFactory::initialize (const Sequence<Any>& aArguments)
         }
         catch (RuntimeException&)
         {
-            mpBase = NULL;
+            mpBase = nullptr;
             if (mxConfigurationController.is())
                 mxConfigurationController->removeResourceFactoryForReference(this);
             throw;
@@ -295,7 +295,7 @@ std::shared_ptr<BasicViewFactory::ViewDescriptor> BasicViewFactory::CreateView (
         bIsCenterPane);
     pDescriptor->mxViewId = rxViewId;
 
-    if (pDescriptor->mpViewShell.get() != NULL)
+    if (pDescriptor->mpViewShell.get() != nullptr)
     {
         pDescriptor->mpViewShell->Init(bIsCenterPane);
         mpBase->GetViewShellManager()->ActivateViewShell(pDescriptor->mpViewShell.get());
@@ -310,7 +310,7 @@ std::shared_ptr<BasicViewFactory::ViewDescriptor> BasicViewFactory::CreateView (
         if (xWindow.is())
         {
             xWindow->addWindowListener(pDescriptor->mpWrapper);
-            if (pDescriptor->mpViewShell != 0)
+            if (pDescriptor->mpViewShell != nullptr)
             {
                 pDescriptor->mpViewShell->Resize();
             }
@@ -493,7 +493,7 @@ std::shared_ptr<BasicViewFactory::ViewDescriptor> BasicViewFactory::GetViewFromC
 
     // When the view has been found then relocate it to the given pane and
     // remove it from the cache.
-    if (pDescriptor.get() != NULL)
+    if (pDescriptor.get() != nullptr)
     {
         bool bRelocationSuccessfull (false);
         Reference<XRelocatableResource> xResource (pDescriptor->mxView, UNO_QUERY);

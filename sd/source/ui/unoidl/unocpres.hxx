@@ -145,7 +145,7 @@ inline SdCustomShowList* SdXCustomPresentationAccess::GetCustomShowList() const 
     if(mrModel.GetDoc())
         return mrModel.GetDoc()->GetCustomShowList();
     else
-        return NULL;
+        return nullptr;
 };
 
 #endif

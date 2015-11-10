@@ -128,8 +128,8 @@ static PHLayout pPHLayout[] =
 };
 
 PPTWriterBase::PPTWriterBase()
-    : mXModel(0)
-    , mXStatusIndicator(0)
+    : mXModel(nullptr)
+    , mXStatusIndicator(nullptr)
     , mbStatusIndicator(false)
     , mbPresObj(false)
     , mbEmptyPresObj(false)
@@ -141,7 +141,7 @@ PPTWriterBase::PPTWriterBase()
     , maMapModeSrc(MAP_100TH_MM)
     , maMapModeDest(MAP_INCH, Point(), maFraction, maFraction)
     , meLatestPageType(NORMAL)
-    , mpStyleSheet(0)
+    , mpStyleSheet(nullptr)
 {
     DBG(printf ("PPTWriterBase::PPTWriterBase()\n"));
 }
@@ -161,7 +161,7 @@ PPTWriterBase::PPTWriterBase( const Reference< XModel > & rXModel,
     , maMapModeSrc(MAP_100TH_MM)
     , maMapModeDest(MAP_INCH, Point(), maFraction, maFraction)
     , meLatestPageType (NORMAL)
-    , mpStyleSheet(0)
+    , mpStyleSheet(nullptr)
 {
 }
 

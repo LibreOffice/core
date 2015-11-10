@@ -29,8 +29,8 @@ using namespace osl;
 Communicator::Communicator( IBluetoothSocket *pSocket ):
     Thread( "CommunicatorThread" ),
     mpSocket( pSocket ),
-    pTransmitter( 0 ),
-    mListener( 0 )
+    pTransmitter( nullptr ),
+    mListener( nullptr )
 {
 }
 
@@ -120,11 +120,11 @@ void Communicator::execute()
 
     pTransmitter->notifyFinished();
     pTransmitter->join();
-    pTransmitter = NULL;
+    pTransmitter = nullptr;
 
     mpSocket->close();
     delete mpSocket;
-    mpSocket = NULL;
+    mpSocket = nullptr;
 
     RemoteServer::removeCommunicator( this );
 }
@@ -152,7 +152,7 @@ void Communicator::disposeListener()
     if ( mListener.is() )
     {
         mListener->disposing();
-        mListener = NULL;
+        mListener = nullptr;
     }
 }
 

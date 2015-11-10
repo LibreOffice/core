@@ -109,9 +109,9 @@ View::View(SdDrawDocument& rDrawDoc, OutputDevice* pOutDev,
     mrDoc(rDrawDoc),
     mpDocSh(rDrawDoc.GetDocSh()),
     mpViewSh(pViewShell),
-    mpDragSrcMarkList(NULL),
-    mpDropMarkerObj(NULL),
-    mpDropMarker(NULL),
+    mpDragSrcMarkList(nullptr),
+    mpDropMarkerObj(nullptr),
+    mpDropMarker(nullptr),
     mnDragSrcPgNum(SDRPAGE_NOTFOUND),
     mnAction(DND_ACTION_NONE),
     mnLockRedrawSmph(0),
@@ -149,7 +149,7 @@ void View::ImplClearDrawDropMarker()
     if(mpDropMarker)
     {
         delete mpDropMarker;
-        mpDropMarker = 0L;
+        mpDropMarker = nullptr;
     }
 }
 
@@ -653,7 +653,7 @@ void OutlinerMasterViewFilter::End()
     {
         OutlinerView* pOutlView = m_pOutl->GetView(0);
         pOutlView->SetReadOnly(m_bReadOnly);
-        m_pOutl = NULL;
+        m_pOutl = nullptr;
     }
 }
 
@@ -663,13 +663,13 @@ bool View::SdrBeginTextEdit(
     SdrOutliner* pOutl, OutlinerView* pGivenOutlinerView,
     bool bDontDeleteOutliner, bool bOnlyOneView, bool bGrabFocus )
 {
-    SdrPage* pPage = pObj ? pObj->GetPage() : NULL;
+    SdrPage* pPage = pObj ? pObj->GetPage() : nullptr;
     bool bMasterPage = pPage && pPage->IsMasterPage();
 
     GetViewShell()->GetViewShellBase().GetEventMultiplexer()->MultiplexEvent(
         sd::tools::EventMultiplexerEvent::EID_BEGIN_TEXT_EDIT, static_cast<void*>(pObj) );
 
-    if( pOutl==NULL && pObj )
+    if( pOutl==nullptr && pObj )
         pOutl = SdrMakeOutliner(OUTLINERMODE_TEXTOBJECT, *pObj->GetModel());
 
     // make draw&impress specific initialisations
@@ -726,11 +726,11 @@ bool View::SdrBeginTextEdit(
             {
                 aBackground = pObj->GetPage()->GetPageBackgroundColor(pPV);
             }
-            if (pOL != NULL)
+            if (pOL != nullptr)
                 pOL->SetBackgroundColor( aBackground  );
         }
 
-        if (pOL != NULL)
+        if (pOL != nullptr)
         {
             pOL->SetParaInsertedHdl(LINK(this, View, OnParagraphInsertedHdl));
             pOL->SetParaRemovingHdl(LINK(this, View, OnParagraphRemovingHdl));
@@ -740,7 +740,7 @@ bool View::SdrBeginTextEdit(
     if (bMasterPage && bReturn && pOutl)
     {
         const SdrTextObj* pTextObj = pOutl->GetTextObj();
-        const SdPage* pSdPage = pTextObj ? static_cast<const SdPage*>(pTextObj->GetPage()) : NULL;
+        const SdPage* pSdPage = pTextObj ? static_cast<const SdPage*>(pTextObj->GetPage()) : nullptr;
         const PresObjKind eKind = pSdPage ? pSdPage->GetPresObjKind(const_cast<SdrTextObj*>(pTextObj)) : PRESOBJ_NONE;
         switch (eKind)
         {
@@ -1211,7 +1211,7 @@ void View::OnEndPasteOrDrop( PasteOrDropInfos* pInfos )
     {
         SdPage* pPage = static_cast< SdPage* >( pTextObj->GetPage() );
 
-        SfxStyleSheet* pStyleSheet = 0;
+        SfxStyleSheet* pStyleSheet = nullptr;
 
         const PresObjKind eKind = pPage->GetPresObjKind(pTextObj);
         if( eKind != PRESOBJ_NONE )
@@ -1229,7 +1229,7 @@ void View::OnEndPasteOrDrop( PasteOrDropInfos* pInfos )
             {
                 sal_Int16 nDepth = pOutliner->GetDepth( nPara );
 
-                SfxStyleSheet* pStyle = 0;
+                SfxStyleSheet* pStyle = nullptr;
                 if( nDepth > 0 )
                 {
                     OUString aStyleSheetName( pStyleSheet->GetName() );
@@ -1333,7 +1333,7 @@ void View::ChangeMarkedObjectsBulletsNumbering(
         return;
 
     const bool bUndoEnabled = pSdrModel->IsUndoEnabled();
-    SdrUndoGroup* pUndoGroup = bUndoEnabled ? new SdrUndoGroup(*pSdrModel) : 0;
+    SdrUndoGroup* pUndoGroup = bUndoEnabled ? new SdrUndoGroup(*pSdrModel) : nullptr;
 
     const bool bToggleOn = ShouldToggleOn( bToggle, bHandleBullets );
 

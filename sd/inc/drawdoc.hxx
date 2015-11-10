@@ -244,7 +244,7 @@ public:
         If a reference document is given, the sizes and border settings of that document are used
         for newly created slides.
     */
-    void   CreateFirstPages( SdDrawDocument* pRefDocument = 0 );
+    void   CreateFirstPages( SdDrawDocument* pRefDocument = nullptr );
     bool                CreateMissingNotesAndHandoutPages();
 
     SAL_DLLPRIVATE void                MovePage(sal_uInt16 nPgNum, sal_uInt16 nNewPos) override;
@@ -255,7 +255,7 @@ public:
     SAL_DLLPRIVATE virtual void     InsertMasterPage(SdrPage* pPage, sal_uInt16 nPos=0xFFFF) override;
     SAL_DLLPRIVATE virtual SdrPage* RemoveMasterPage(sal_uInt16 nPgNum) override;
 
-    SAL_DLLPRIVATE void                RemoveUnnecessaryMasterPages( SdPage* pMaster=NULL, bool bOnlyDuplicatePages=false, bool bUndo=true );
+    SAL_DLLPRIVATE void                RemoveUnnecessaryMasterPages( SdPage* pMaster=nullptr, bool bOnlyDuplicatePages=false, bool bUndo=true );
     void   SetMasterPage(sal_uInt16 nSdPageNum, const OUString& rLayoutName,
                                       SdDrawDocument* pSourceDoc, bool bMaster, bool bCheckMasters);
 
@@ -434,7 +434,7 @@ public:
     SAL_DLLPRIVATE bool                IsNewOrLoadCompleted() const {return mbNewOrLoadCompleted; }
 
     SAL_DLLPRIVATE ::sd::FrameView* GetFrameView(sal_uLong nPos) {
-        return nPos < maFrameViewList.size() ? maFrameViewList[nPos] : NULL; }
+        return nPos < maFrameViewList.size() ? maFrameViewList[nPos] : nullptr; }
 
     /** deprecated*/
     SAL_DLLPRIVATE SdAnimationInfo*    GetAnimationInfo(SdrObject* pObject) const;
