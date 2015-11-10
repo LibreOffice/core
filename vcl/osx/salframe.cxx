@@ -49,14 +49,14 @@
 
 using namespace std;
 
-AquaSalFrame* AquaSalFrame::s_pCaptureFrame = NULL;
+AquaSalFrame* AquaSalFrame::s_pCaptureFrame = nullptr;
 
 AquaSalFrame::AquaSalFrame( SalFrame* pParent, SalFrameStyleFlags salFrameStyle ) :
     mpNSWindow(nil),
     mpNSView(nil),
     mpDockMenuEntry(nil),
-    mpGraphics(NULL),
-    mpParent(NULL),
+    mpGraphics(nullptr),
+    mpParent(nullptr),
     mnMinWidth(0),
     mnMinHeight(0),
     mnMaxWidth(0),
@@ -72,11 +72,11 @@ AquaSalFrame::AquaSalFrame( SalFrame* pParent, SalFrameStyleFlags salFrameStyle 
     mnStyleMask( 0 ),
     mnLastEventTime( 0 ),
     mnLastModifierFlags( 0 ),
-    mpMenu( NULL ),
+    mpMenu( nullptr ),
     mnExtStyle( 0 ),
     mePointerStyle( PointerStyle::Arrow ),
     mnTrackingRectTag( 0 ),
-    mrClippingPath( 0 ),
+    mrClippingPath( nullptr ),
     mnICOptions( InputContextFlags::NONE )
 {
     maSysData.nSize     = sizeof( SystemEnvData );
@@ -109,7 +109,7 @@ AquaSalFrame::~AquaSalFrame()
 
     DBG_ASSERT( this != s_pCaptureFrame, "capture frame destroyed" );
     if( this == s_pCaptureFrame )
-        s_pCaptureFrame = NULL;
+        s_pCaptureFrame = nullptr;
 
     delete mpGraphics;
 
@@ -172,7 +172,7 @@ void AquaSalFrame::initWindowAndView()
         if( (mnStyle & SalFrameStyleFlags::MOVEABLE) )
         {
             mnStyleMask |= NSTitledWindowMask;
-            if( mpParent == NULL )
+            if( mpParent == nullptr )
                 mnStyleMask |= NSMiniaturizableWindowMask;
         }
         if( (mnStyle & SalFrameStyleFlags::SIZEABLE) )
@@ -256,13 +256,13 @@ void AquaSalFrame::screenParametersChanged()
 
     if( mpGraphics )
         mpGraphics->updateResolution();
-    CallCallback( SALEVENT_DISPLAYCHANGED, 0 );
+    CallCallback( SALEVENT_DISPLAYCHANGED, nullptr );
 }
 
 SalGraphics* AquaSalFrame::AcquireGraphics()
 {
     if ( mbGraphics )
-        return NULL;
+        return nullptr;
 
     if ( !mpGraphics )
     {
@@ -300,10 +300,10 @@ void AquaSalFrame::SetTitle(const OUString& rTitle)
 
     // create an entry in the dock menu
     const SalFrameStyleFlags nAppWindowStyle = (SalFrameStyleFlags::CLOSEABLE | SalFrameStyleFlags::MOVEABLE);
-    if( mpParent == NULL &&
+    if( mpParent == nullptr &&
         (mnStyle & nAppWindowStyle) == nAppWindowStyle )
     {
-        if( mpDockMenuEntry == NULL )
+        if( mpDockMenuEntry == nullptr )
         {
             NSMenu* pDock = AquaSalInstance::GetDynamicDockMenu();
 
@@ -417,7 +417,7 @@ void AquaSalFrame::Show(bool bVisible, bool bNoActivate)
         if( mbInitShow )
             initShow();
 
-        CallCallback(SALEVENT_RESIZE, 0);
+        CallCallback(SALEVENT_RESIZE, nullptr);
         // trigger filling our backbuffer
         SendPaintEvent();
 
@@ -589,7 +589,7 @@ void AquaSalFrame::SetWindowState( const SalFrameState* pState )
     }
     // send event that we were moved/sized
     if( nEvent )
-        CallCallback( nEvent, NULL );
+        CallCallback( nEvent, nullptr );
 
     if( mbShown && mpNSWindow )
     {
@@ -746,7 +746,7 @@ void AquaSalFrame::ShowFullScreen( bool bFullScreen, sal_Int32 nDisplay )
         UpdateFrameGeometry();
 
         if( mbShown )
-            CallCallback( SALEVENT_MOVERESIZE, NULL );
+            CallCallback( SALEVENT_MOVERESIZE, nullptr );
     }
     else
     {
@@ -756,7 +756,7 @@ void AquaSalFrame::ShowFullScreen( bool bFullScreen, sal_Int32 nDisplay )
         UpdateFrameGeometry();
 
         if( mbShown )
-            CallCallback( SALEVENT_MOVERESIZE, NULL );
+            CallCallback( SALEVENT_MOVERESIZE, nullptr );
 
         // show the dock and the menubar
         [NSMenu setMenuBarVisible:YES];
@@ -1315,7 +1315,7 @@ void AquaSalFrame::SetPosSize(long nX, long nY, long nWidth, long nHeight, sal_u
     UpdateFrameGeometry();
 
     if (nEvent)
-        CallCallback(nEvent, NULL);
+        CallCallback(nEvent, nullptr);
 
     if( mbShown && bPaint )
     {
@@ -1577,7 +1577,7 @@ void AquaSalFrame::CaptureMouse( bool bCapture )
     if( bCapture )
         s_pCaptureFrame = this;
     else if( ! bCapture && s_pCaptureFrame == this )
-        s_pCaptureFrame = NULL;
+        s_pCaptureFrame = nullptr;
 }
 
 void AquaSalFrame::ResetClipRegion()
@@ -1592,7 +1592,7 @@ void AquaSalFrame::ResetClipRegion()
 
     // release old path and indicate no clipping
     CGPathRelease( mrClippingPath );
-    mrClippingPath = NULL;
+    mrClippingPath = nullptr;
 
     if( mpNSView && mbShown )
         [mpNSView setNeedsDisplay: YES];
@@ -1617,7 +1617,7 @@ void AquaSalFrame::BeginSetClipRegion( sal_uLong nRects )
     if( mrClippingPath )
     {
         CGPathRelease( mrClippingPath );
-        mrClippingPath = NULL;
+        mrClippingPath = nullptr;
     }
 
     if( maClippingRects.size() > SAL_CLIPRECT_COUNT && nRects < maClippingRects.size() )
@@ -1655,13 +1655,13 @@ void AquaSalFrame::EndSetClipRegion()
     if( ! maClippingRects.empty() )
     {
         mrClippingPath = CGPathCreateMutable();
-        CGPathAddRects( mrClippingPath, NULL, &maClippingRects[0], maClippingRects.size() );
+        CGPathAddRects( mrClippingPath, nullptr, &maClippingRects[0], maClippingRects.size() );
     }
     if( mpNSView && mbShown )
         [mpNSView setNeedsDisplay: YES];
     if( mpNSWindow )
     {
-        [mpNSWindow setOpaque: (mrClippingPath != NULL) ? NO : YES];
+        [mpNSWindow setOpaque: (mrClippingPath != nullptr) ? NO : YES];
         [mpNSWindow setBackgroundColor: [NSColor clearColor]];
         // shadow is invalidated when view gets drawn again
     }

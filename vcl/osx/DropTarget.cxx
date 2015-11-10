@@ -117,7 +117,7 @@ namespace /* private */
 DropTarget::DropTarget() :
     WeakComponentImplHelper<XInitialization, XDropTarget, XDropTargetDragContext, XDropTargetDropContext, XServiceInfo>(m_aMutex),
     mView(nil),
-    mpFrame(NULL),
+    mpFrame(nullptr),
     mDropTargetHelper(nil),
     mbActive(false),
     mDragSourceSupportedActions(DNDConstants::ACTION_NONE),

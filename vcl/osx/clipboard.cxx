@@ -61,7 +61,7 @@ using namespace comphelper;
 
 -(void)disposing
 {
-    pAquaClipboard = NULL;
+    pAquaClipboard = nullptr;
 }
 
 @end
@@ -86,7 +86,7 @@ AquaClipboard::AquaClipboard(NSPasteboard* pasteboard, bool bUseSystemPasteboard
 
     mpDataFlavorMapper = DataFlavorMapperPtr_t(new DataFlavorMapper());
 
-    if (pasteboard != NULL)
+    if (pasteboard != nullptr)
     {
       mPasteboard = pasteboard;
       mIsSystemPasteboard = false;
@@ -289,9 +289,9 @@ void AquaClipboard::provideDataForType(NSPasteboard* sender, const NSString* typ
     if( mXClipboardContent.is() )
     {
         DataProviderPtr_t dp = mpDataFlavorMapper->getDataProvider(type, mXClipboardContent);
-        NSData* pBoardData = NULL;
+        NSData* pBoardData = nullptr;
 
-        if (dp.get() != NULL)
+        if (dp.get() != nullptr)
         {
             pBoardData = (NSData*)dp->getSystemData();
             [sender setData: pBoardData forType:const_cast<NSString*>(type)];
@@ -312,7 +312,7 @@ void SAL_CALL AquaClipboard::flushClipboard()
         {
             const NSString* sysType = mpDataFlavorMapper->openOfficeToSystemFlavor(flavorList[i], bInternal);
 
-            if (sysType != NULL)
+            if (sysType != nullptr)
             {
                 provideDataForType(mPasteboard, sysType);
             }

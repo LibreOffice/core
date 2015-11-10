@@ -77,7 +77,7 @@ CoreTextFontData::~CoreTextFontData()
 {
     if( mpCharMap )
     {
-        mpCharMap = 0;
+        mpCharMap = nullptr;
     }
 }
 
@@ -100,7 +100,7 @@ const FontCharMapPtr CoreTextFontData::GetFontCharMap() const
 
     // get the CMAP byte size
     // allocate a buffer for the CMAP raw data
-    const int nBufSize = GetFontTable( "cmap", NULL );
+    const int nBufSize = GetFontTable( "cmap", nullptr );
     DBG_ASSERT( (nBufSize > 0), "CoreTextFontData::GetFontCharMap : GetFontTable1 failed!\n");
     if( nBufSize <= 0 )
         return mpCharMap;
@@ -138,7 +138,7 @@ bool CoreTextFontData::GetFontCapabilities(vcl::FontCapabilities &rFontCapabilit
 
     int nBufSize = 0;
     // prepare to get the GSUB table raw data
-    nBufSize = GetFontTable( "GSUB", NULL );
+    nBufSize = GetFontTable( "GSUB", nullptr );
     if( nBufSize > 0 )
     {
         // allocate a buffer for the GSUB raw data
@@ -151,7 +151,7 @@ bool CoreTextFontData::GetFontCapabilities(vcl::FontCapabilities &rFontCapabilit
             vcl::getTTScripts(maFontCapabilities.maGSUBScriptTags, pGSUBTable, nRawLength);
         }
     }
-    nBufSize = GetFontTable( "OS/2", NULL );
+    nBufSize = GetFontTable( "OS/2", nullptr );
     if( nBufSize > 0 )
     {
         // allocate a buffer for the OS/2 raw data
@@ -180,7 +180,7 @@ void CoreTextFontData::ReadOs2Table() const
     mbHasOs2Table = false;
 
     // prepare to get the OS/2 table raw data
-    const int nBufSize = GetFontTable( "OS/2", NULL );
+    const int nBufSize = GetFontTable( "OS/2", nullptr );
     DBG_ASSERT( (nBufSize > 0), "CoreTextFontData::ReadOs2Table : GetFontTable1 failed!\n");
     if( nBufSize <= 0 )
         return;
@@ -207,7 +207,7 @@ void CoreTextFontData::ReadMacCmapEncoding() const
 
     mbCmapEncodingRead = true;
 
-    const int nBufSize = GetFontTable( "cmap", NULL );
+    const int nBufSize = GetFontTable( "cmap", nullptr );
     if( nBufSize <= 0 )
         return;
 
@@ -224,26 +224,26 @@ void CoreTextFontData::ReadMacCmapEncoding() const
 }
 
 AquaSalGraphics::AquaSalGraphics()
-    : mxLayer( NULL )
-    , mrContext( NULL )
+    : mxLayer( nullptr )
+    , mrContext( nullptr )
 #ifdef MACOSX
-    , mpFrame( NULL )
+    , mpFrame( nullptr )
 #endif
 #if OSL_DEBUG_LEVEL > 0
     , mnContextStackDepth( 0 )
 #endif
-    , mpXorEmulation( NULL )
+    , mpXorEmulation( nullptr )
     , mnXorMode( 0 )
     , mnWidth( 0 )
     , mnHeight( 0 )
     , mnBitmapDepth( 0 )
     , mnRealDPIX( 0 )
     , mnRealDPIY( 0 )
-    , mxClipPath( NULL )
+    , mxClipPath( nullptr )
     , maLineColor( COL_WHITE )
     , maFillColor( COL_BLACK )
-    , mpFontData( NULL )
-    , mpTextStyle( NULL )
+    , mpFontData( nullptr )
+    , mpTextStyle( nullptr )
     , maTextColor( COL_BLACK )
     , mbNonAntialiasedText( false )
     , mbPrinter( false )
@@ -290,13 +290,13 @@ AquaSalGraphics::~AquaSalGraphics()
         // destroy backbuffer bitmap context that we created ourself
         SAL_INFO("vcl.cg", "CGContextRelease(" << mrContext << ")" );
         CGContextRelease( mrContext );
-        mrContext = NULL;
+        mrContext = nullptr;
     }
 }
 
 SalGraphicsImpl* AquaSalGraphics::GetImpl() const
 {
-    return NULL;
+    return nullptr;
 }
 
 void AquaSalGraphics::SetTextColor( SalColor nSalColor )
@@ -316,8 +316,8 @@ static bool AddTempDevFont(const OUString& rFontFileURL)
     OSL_VERIFY( !osl::FileBase::getSystemPathFromFileURL( rFontFileURL, aUSytemPath ) );
     OString aCFileName = OUStringToOString( aUSytemPath, RTL_TEXTENCODING_UTF8 );
 
-    CFStringRef rFontPath = CFStringCreateWithCString(NULL, aCFileName.getStr(), kCFStringEncodingUTF8);
-    CFURLRef rFontURL = CFURLCreateWithFileSystemPath(NULL, rFontPath, kCFURLPOSIXPathStyle, true);
+    CFStringRef rFontPath = CFStringCreateWithCString(nullptr, aCFileName.getStr(), kCFStringEncodingUTF8);
+    CFURLRef rFontURL = CFURLCreateWithFileSystemPath(nullptr, rFontPath, kCFURLPOSIXPathStyle, true);
 
     CFErrorRef error;
     bool success = CTFontManagerRegisterFontsForURL(rFontURL, kCTFontManagerScopeProcess, &error);
@@ -390,7 +390,7 @@ void AquaSalGraphics::ClearDevFontCache()
 {
     SalData* pSalData = GetSalData();
     delete pSalData->mpFontList;
-    pSalData->mpFontList = NULL;
+    pSalData->mpFontList = nullptr;
 }
 
 bool AquaSalGraphics::AddTempDevFont( PhysicalFontCollection*,
@@ -419,12 +419,12 @@ sal_uInt16 AquaSalGraphics::SetFont( FontSelectPattern* pReqFont, int /*nFallbac
 {
     // release the text style
     delete mpTextStyle;
-    mpTextStyle = NULL;
+    mpTextStyle = nullptr;
 
     // handle NULL request meaning: release-font-resources request
     if( !pReqFont )
     {
-        mpFontData = NULL;
+        mpFontData = nullptr;
         return 0;
     }
 
@@ -508,8 +508,8 @@ bool AquaSalGraphics::GetRawFontData( const PhysicalFontFace* pFontData,
     const CoreTextFontData* pMacFont = static_cast<const CoreTextFontData*>(pFontData);
 
     // short circuit for CFF-only fonts
-    const int nCffSize = pMacFont->GetFontTable( "CFF ", NULL);
-    if( pJustCFF != NULL )
+    const int nCffSize = pMacFont->GetFontTable( "CFF ", nullptr);
+    if( pJustCFF != nullptr )
     {
         *pJustCFF = (nCffSize > 0);
         if( *pJustCFF)
@@ -525,27 +525,27 @@ bool AquaSalGraphics::GetRawFontData( const PhysicalFontFace* pFontData,
     }
 
     // get font table availability and size in bytes
-    const int nHeadSize = pMacFont->GetFontTable( "head", NULL);
+    const int nHeadSize = pMacFont->GetFontTable( "head", nullptr);
     if( nHeadSize <= 0)
         return false;
 
-    const int nMaxpSize = pMacFont->GetFontTable( "maxp", NULL);
+    const int nMaxpSize = pMacFont->GetFontTable( "maxp", nullptr);
     if( nMaxpSize <= 0)
         return false;
 
-    const int nCmapSize = pMacFont->GetFontTable( "cmap", NULL);
+    const int nCmapSize = pMacFont->GetFontTable( "cmap", nullptr);
     if( nCmapSize <= 0)
         return false;
 
-    const int nNameSize = pMacFont->GetFontTable( "name", NULL);
+    const int nNameSize = pMacFont->GetFontTable( "name", nullptr);
     if( nNameSize <= 0)
         return false;
 
-    const int nHheaSize = pMacFont->GetFontTable( "hhea", NULL);
+    const int nHheaSize = pMacFont->GetFontTable( "hhea", nullptr);
     if( nHheaSize <= 0)
         return false;
 
-    const int nHmtxSize = pMacFont->GetFontTable( "hmtx", NULL);
+    const int nHmtxSize = pMacFont->GetFontTable( "hmtx", nullptr);
     if( nHmtxSize <= 0)
         return false;
 
@@ -554,11 +554,11 @@ bool AquaSalGraphics::GetRawFontData( const PhysicalFontFace* pFontData,
     int nGlyfSize = 0;
     if( nCffSize <= 0)
     {
-        nLocaSize = pMacFont->GetFontTable( "loca", NULL);
+        nLocaSize = pMacFont->GetFontTable( "loca", nullptr);
         if( nLocaSize <= 0)
             return false;
 
-        nGlyfSize = pMacFont->GetFontTable( "glyf", NULL);
+        nGlyfSize = pMacFont->GetFontTable( "glyf", nullptr);
         if( nGlyfSize <= 0)
             return false;
     }
@@ -566,9 +566,9 @@ bool AquaSalGraphics::GetRawFontData( const PhysicalFontFace* pFontData,
     int nPrepSize = 0, nCvtSize = 0, nFpgmSize = 0;
     if( nGlyfSize) // TODO: reduce PDF size by making hint subsetting optional
     {
-        nPrepSize = pMacFont->GetFontTable( "prep", NULL);
-        nCvtSize  = pMacFont->GetFontTable( "cvt ", NULL);
-        nFpgmSize = pMacFont->GetFontTable( "fpgm", NULL);
+        nPrepSize = pMacFont->GetFontTable( "prep", nullptr);
+        nCvtSize  = pMacFont->GetFontTable( "cvt ", nullptr);
+        nFpgmSize = pMacFont->GetFontTable( "fpgm", nullptr);
     }
 
     // prepare a byte buffer for a fake font
@@ -705,7 +705,7 @@ void AquaSalGraphics::GetGlyphWidths( const PhysicalFontFace* pFontData, bool bV
     }
 
     ByteVector aBuffer;
-    if( !GetRawFontData( pFontData, aBuffer, NULL ) )
+    if( !GetRawFontData( pFontData, aBuffer, nullptr ) )
         return;
 
     // TODO: modernize psprint's horrible fontsubset C-API
@@ -713,7 +713,7 @@ void AquaSalGraphics::GetGlyphWidths( const PhysicalFontFace* pFontData, bool bV
     // that can preserve change history after file renames
 
     // use the font subsetter to get the widths
-    TrueTypeFont* pSftFont = NULL;
+    TrueTypeFont* pSftFont = nullptr;
     int nRC = ::OpenTTFontBuffer( static_cast<void*>(&aBuffer[0]), aBuffer.size(), 0, &pSftFont);
     if( nRC != SF_OK )
         return;
@@ -760,7 +760,7 @@ void AquaSalGraphics::GetGlyphWidths( const PhysicalFontFace* pFontData, bool bV
             }
         }
 
-        pMap = 0;
+        pMap = nullptr;
     }
 
     ::CloseTTFont( pSftFont );
@@ -770,7 +770,7 @@ const Ucs2SIntMap* AquaSalGraphics::GetFontEncodingVector( const PhysicalFontFac
                                                            const Ucs2OStrMap** /*ppNonEncoded*/,
                                                            std::set<sal_Unicode> const** )
 {
-    return NULL;
+    return nullptr;
 }
 
 const void* AquaSalGraphics::GetEmbedFontData( const PhysicalFontFace*,
@@ -780,7 +780,7 @@ const void* AquaSalGraphics::GetEmbedFontData( const PhysicalFontFace*,
                                                FontSubsetInfo&,
                                                long* /*pDataLen*/ )
 {
-    return NULL;
+    return nullptr;
 }
 
 void AquaSalGraphics::FreeEmbedFontData( const void* pData, long /*nDataLen*/ )
@@ -788,7 +788,7 @@ void AquaSalGraphics::FreeEmbedFontData( const void* pData, long /*nDataLen*/ )
     // TODO: implementing this only makes sense when the implementation of
     //      AquaSalGraphics::GetEmbedFontData() returns non-NULL
     (void)pData;
-    DBG_ASSERT( (pData!=NULL), "AquaSalGraphics::FreeEmbedFontData() is not implemented\n");
+    DBG_ASSERT( (pData!=nullptr), "AquaSalGraphics::FreeEmbedFontData() is not implemented\n");
 }
 
 bool AquaSalGraphics::IsFlipped() const

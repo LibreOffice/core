@@ -93,8 +93,8 @@ static bool isValidBitCount( sal_uInt16 nBitCount )
 }
 
 QuartzSalBitmap::QuartzSalBitmap()
-  : mxGraphicContext( NULL )
-  , mxCachedImage( NULL )
+  : mxGraphicContext( nullptr )
+  , mxCachedImage( nullptr )
   , mnBits(0)
   , mnWidth(0)
   , mnHeight(0)
@@ -211,14 +211,14 @@ void QuartzSalBitmap::DestroyContext()
     {
         SAL_INFO("vcl.cg", "CGImageRelease(" << mxCachedImage << ")" );
         CGImageRelease( mxCachedImage );
-        mxCachedImage = NULL;
+        mxCachedImage = nullptr;
     }
 
     if( mxGraphicContext )
     {
         SAL_INFO("vcl.cg", "CGContextRelease(" << mxGraphicContext << ")" );
         CGContextRelease( mxGraphicContext );
-        mxGraphicContext = NULL;
+        mxGraphicContext = nullptr;
         maContextBuffer.reset();
     }
 }
@@ -275,7 +275,7 @@ bool QuartzSalBitmap::CreateContext()
         }
         catch( const std::bad_alloc& )
         {
-            mxGraphicContext = 0;
+            mxGraphicContext = nullptr;
         }
     }
 
@@ -290,7 +290,7 @@ bool QuartzSalBitmap::CreateContext()
     if( !mxGraphicContext )
         maContextBuffer.reset();
 
-    return mxGraphicContext != NULL;
+    return mxGraphicContext != nullptr;
 }
 
 bool QuartzSalBitmap::AllocateUserData()
@@ -328,7 +328,7 @@ bool QuartzSalBitmap::AllocateUserData()
     if (!alloc)
     {
         SAL_WARN( "vcl.quartz", "bad alloc " << mnBytesPerRow << "x" << mnHeight);
-        maUserBuffer.reset( static_cast<sal_uInt8*>(NULL) );
+        maUserBuffer.reset( static_cast<sal_uInt8*>(nullptr) );
         mnBytesPerRow = 0;
     }
 #ifdef DBG_UTIL
@@ -341,7 +341,7 @@ bool QuartzSalBitmap::AllocateUserData()
     }
 #endif
 
-    return maUserBuffer.get() != 0;
+    return maUserBuffer.get() != nullptr;
 }
 
 namespace {
@@ -569,7 +569,7 @@ ImplPixelFormat* ImplPixelFormat::GetFormat( sal_uInt16 nBits, const BitmapPalet
         return nullptr;
     }
 
-    return 0;
+    return nullptr;
 }
 
 } // namespace
@@ -747,7 +747,7 @@ BitmapBuffer* QuartzSalBitmap::AcquireBuffer( BitmapAccessMode /*nMode*/ )
     {
         // fprintf(stderr,"ASB::Acq(%dx%d,d=%d)\n",mnWidth,mnHeight,mnBits);
         // TODO: AllocateUserData();
-        return NULL;
+        return nullptr;
     }
 
     BitmapBuffer* pBuffer = new BitmapBuffer;
@@ -828,14 +828,14 @@ CGImageRef QuartzSalBitmap::CreateCroppedImage( int nX, int nY, int nNewWidth, i
         {
             if( !const_cast<QuartzSalBitmap*>(this)->CreateContext() )
             {
-                return NULL;
+                return nullptr;
             }
         }
         mxCachedImage = CGBitmapContextCreateImage( mxGraphicContext );
         SAL_INFO("vcl.cg", "CGBitmapContextCreateImage(" << mxGraphicContext << ") = " << mxCachedImage );
     }
 
-    CGImageRef xCroppedImage = NULL;
+    CGImageRef xCroppedImage = nullptr;
     // short circuit if there is nothing to crop
     if( !nX && !nY && (mnWidth == nNewWidth) && (mnHeight == nNewHeight) )
     {
@@ -864,7 +864,7 @@ CGImageRef QuartzSalBitmap::CreateWithMask( const QuartzSalBitmap& rMask,
 {
     CGImageRef xImage( CreateCroppedImage( nX, nY, nWidth, nHeight ) );
     if( !xImage )
-        return NULL;
+        return nullptr;
 
     CGImageRef xMask = rMask.CreateCroppedImage( nX, nY, nWidth, nHeight );
     if( !xMask )
@@ -888,10 +888,10 @@ CGImageRef QuartzSalBitmap::CreateWithMask( const QuartzSalBitmap& rMask,
         CGContextDrawImage( xMaskContext, xImageRect, xMask );
         SAL_INFO("vcl.cg", "CFRelease(" << xMask << ")" );
         CFRelease( xMask );
-        CGDataProviderRef xDataProvider( CGDataProviderCreateWithData( NULL,
+        CGDataProviderRef xDataProvider( CGDataProviderCreateWithData( nullptr,
         pMaskMem, nHeight * nMaskBytesPerRow, &CFRTLFree ) );
 
-        static const CGFloat* pDecode = NULL;
+        static const CGFloat* pDecode = nullptr;
         xMask = CGImageMaskCreate( nWidth, nHeight, 8, 8, nMaskBytesPerRow, xDataProvider, pDecode, false );
         SAL_INFO("vcl.cg", "CGImageMaskCreate(" << nWidth << "," << nHeight << ",8,8) = " << xMask );
         CFRelease( xDataProvider );
@@ -919,7 +919,7 @@ CGImageRef QuartzSalBitmap::CreateWithMask( const QuartzSalBitmap& rMask,
 CGImageRef QuartzSalBitmap::CreateColorMask( int nX, int nY, int nWidth,
                                              int nHeight, SalColor nMaskColor ) const
 {
-    CGImageRef xMask = 0;
+    CGImageRef xMask = nullptr;
     if( maUserBuffer.get() && (nX + nWidth <= mnWidth) && (nY + nHeight <= mnHeight) )
     {
         const sal_uInt32 nDestBytesPerRow = nWidth << 2;
@@ -953,8 +953,8 @@ CGImageRef QuartzSalBitmap::CreateColorMask( int nX, int nY, int nWidth,
                 pSource += mnBytesPerRow;
             }
 
-            CGDataProviderRef xDataProvider( CGDataProviderCreateWithData(NULL, pMaskBuffer, nHeight * nDestBytesPerRow, &CFRTLFree) );
-            xMask = CGImageCreate(nWidth, nHeight, 8, 32, nDestBytesPerRow, GetSalData()->mxRGBSpace, kCGImageAlphaPremultipliedFirst, xDataProvider, NULL, true, kCGRenderingIntentDefault);
+            CGDataProviderRef xDataProvider( CGDataProviderCreateWithData(nullptr, pMaskBuffer, nHeight * nDestBytesPerRow, &CFRTLFree) );
+            xMask = CGImageCreate(nWidth, nHeight, 8, 32, nDestBytesPerRow, GetSalData()->mxRGBSpace, kCGImageAlphaPremultipliedFirst, xDataProvider, nullptr, true, kCGRenderingIntentDefault);
             SAL_INFO("vcl.cg", "CGImageCreate(" << nWidth << "x" << nHeight << "x8) = " << xMask );
             CFRelease(xDataProvider);
         }

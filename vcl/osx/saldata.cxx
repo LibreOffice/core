@@ -26,7 +26,7 @@
 
 #import "apple_remote/RemoteMainController.h"
 
-oslThreadKey SalData::s_aAutoReleaseKey = 0;
+oslThreadKey SalData::s_aAutoReleaseKey = nullptr;
 
 static void SAL_CALL releasePool( void* pPool )
 {
@@ -36,26 +36,26 @@ static void SAL_CALL releasePool( void* pPool )
 
 SalData::SalData()
 :
-    mpTimerProc( NULL ),
-    mpFirstInstance( NULL ),
-    mpFirstObject( NULL ),
-    mpFirstVD( NULL ),
-    mpFirstPrinter( NULL ),
-    mpFontList( NULL ),
+    mpTimerProc( nullptr ),
+    mpFirstInstance( nullptr ),
+    mpFirstObject( nullptr ),
+    mpFirstVD( nullptr ),
+    mpFirstPrinter( nullptr ),
+    mpFontList( nullptr ),
     mpStatusItem( nil ),
     mxRGBSpace( CGColorSpaceCreateWithName(kCGColorSpaceGenericRGB) ),
     mxGraySpace( CGColorSpaceCreateWithName(kCGColorSpaceGenericGray) ),
     maCursors(),
     mbIsScrollbarDoubleMax( false ),
 #if !HAVE_FEATURE_MACOSX_SANDBOX
-    mpAppleRemoteMainController( NULL ),
+    mpAppleRemoteMainController( nullptr ),
 #endif
     mpDockIconClickHandler( nil ),
     mnDPIX( 0 ),
     mnDPIY( 0 )
 {
     maCursors.fill( INVALID_CURSOR_PTR );
-    if( s_aAutoReleaseKey == 0 )
+    if( s_aAutoReleaseKey == nullptr )
         s_aAutoReleaseKey = osl_createThreadKey( releasePool );
 }
 
@@ -74,12 +74,12 @@ SalData::~SalData()
         NSAutoreleasePool* pPool = reinterpret_cast<NSAutoreleasePool*>( osl_getThreadKeyData( s_aAutoReleaseKey ) );
         if( pPool )
         {
-            osl_setThreadKeyData( s_aAutoReleaseKey, NULL );
+            osl_setThreadKeyData( s_aAutoReleaseKey, nullptr );
             [pPool release];
         }
 
         osl_destroyThreadKey( s_aAutoReleaseKey );
-        s_aAutoReleaseKey = 0;
+        s_aAutoReleaseKey = nullptr;
     }
 #if !HAVE_FEATURE_MACOSX_SANDBOX
     if ( mpAppleRemoteMainController )
@@ -113,35 +113,35 @@ typedef struct
 
 const o3tl::enumarray<PointerStyle, curs_ent> aCursorTab =
 {
-curs_ent{ NULL, { 0, 0 } }, //PointerStyle::Arrow
+curs_ent{ nullptr, { 0, 0 } }, //PointerStyle::Arrow
 { "nullptr", { 16, 16 } }, //PointerStyle::Null
 { "hourglass", { 15, 15 } }, //PointerStyle::Wait
-{ NULL, { 0, 0 } }, //PointerStyle::Text
+{ nullptr, { 0, 0 } }, //PointerStyle::Text
 { "help", { 0, 0 } }, //PointerStyle::Help
-{ NULL, { 0, 0 } }, //PointerStyle::Cross
-{ NULL, { 0, 0 } }, //PointerStyle::Move
-{ NULL, { 0, 0 } }, //PointerStyle::NSize
-{ NULL, { 0, 0 } }, //PointerStyle::SSize
-{ NULL, { 0, 0 } }, //PointerStyle::WSize
-{ NULL, { 0, 0 } }, //PointerStyle::ESize
+{ nullptr, { 0, 0 } }, //PointerStyle::Cross
+{ nullptr, { 0, 0 } }, //PointerStyle::Move
+{ nullptr, { 0, 0 } }, //PointerStyle::NSize
+{ nullptr, { 0, 0 } }, //PointerStyle::SSize
+{ nullptr, { 0, 0 } }, //PointerStyle::WSize
+{ nullptr, { 0, 0 } }, //PointerStyle::ESize
 { "nwsesize", { 15, 15 } }, //PointerStyle::NWSize
 { "neswsize", { 15, 15 } }, //PointerStyle::NESize
 { "neswsize", { 15, 15 } }, //PointerStyle::SWSize
 { "nwsesize", { 15, 15 } }, //PointerStyle::SESize
-{ NULL, { 0, 0 } }, //PointerStyle::WindowNSize
-{ NULL, { 0, 0 } }, //PointerStyle::WindowSSize
-{ NULL, { 0, 0 } }, //PointerStyle::WindowWSize
-{ NULL, { 0, 0 } }, //PointerStyle::WindowESize
+{ nullptr, { 0, 0 } }, //PointerStyle::WindowNSize
+{ nullptr, { 0, 0 } }, //PointerStyle::WindowSSize
+{ nullptr, { 0, 0 } }, //PointerStyle::WindowWSize
+{ nullptr, { 0, 0 } }, //PointerStyle::WindowESize
 { "nwsesize", { 15, 15 } }, //PointerStyle::WindowNWSize
 { "neswsize", { 15, 15 } }, //PointerStyle::WindowNESize
 { "neswsize", { 15, 15 } }, //PointerStyle::WindowSWSize
 { "nwsesize", { 15, 15 } }, //PointerStyle::WindowSESize
-{ NULL, { 0, 0 } }, //PointerStyle::HSplit
-{ NULL, { 0, 0 } }, //PointerStyle::VSplit
-{ NULL, { 0, 0 } }, //PointerStyle::HSizeBar
-{ NULL, { 0, 0 } }, //PointerStyle::VSizeBar
-{ NULL, { 0, 0 } }, //PointerStyle::Hand
-{ NULL, { 0, 0 } }, //PointerStyle::RefHand
+{ nullptr, { 0, 0 } }, //PointerStyle::HSplit
+{ nullptr, { 0, 0 } }, //PointerStyle::VSplit
+{ nullptr, { 0, 0 } }, //PointerStyle::HSizeBar
+{ nullptr, { 0, 0 } }, //PointerStyle::VSizeBar
+{ nullptr, { 0, 0 } }, //PointerStyle::Hand
+{ nullptr, { 0, 0 } }, //PointerStyle::RefHand
 { "pen", { 3, 27 } }, //PointerStyle::Pen
 { "magnify", { 12, 13 } }, //PointerStyle::Magnify
 { "fill", { 10, 22 } }, //PointerStyle::Fill

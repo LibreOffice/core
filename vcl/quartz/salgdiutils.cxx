@@ -55,7 +55,7 @@ void AquaSalGraphics::SetPrinterGraphics( CGContextRef xContext, long nDPIX, lon
     if( mxClipPath )
     {
         CGPathRelease( mxClipPath );
-        mxClipPath = NULL;
+        mxClipPath = nullptr;
     }
 
     if( mrContext )
@@ -70,7 +70,7 @@ void AquaSalGraphics::SetPrinterGraphics( CGContextRef xContext, long nDPIX, lon
 void AquaSalGraphics::InvalidateContext()
 {
     UnsetState();
-    mrContext = 0;
+    mrContext = nullptr;
 }
 
 void AquaSalGraphics::UnsetState()
@@ -79,13 +79,13 @@ void AquaSalGraphics::UnsetState()
     {
         SAL_INFO( "vcl.cg", "CGContextRestoreGState(" << mrContext << ")" );
         CGContextRestoreGState( mrContext );
-        mrContext = 0;
+        mrContext = nullptr;
     }
     if( mxClipPath )
     {
         SAL_INFO( "vcl.cg", "CGPathRelease(" << mxClipPath << ")" );
         CGPathRelease( mxClipPath );
-        mxClipPath = NULL;
+        mxClipPath = nullptr;
     }
 }
 
@@ -100,8 +100,8 @@ bool AquaSalGraphics::CheckContext()
         const unsigned int nWidth = mpFrame->maGeometry.nWidth;
         const unsigned int nHeight = mpFrame->maGeometry.nHeight;
 
-        CGContextRef rReleaseContext = 0;
-        CGLayerRef   rReleaseLayer = NULL;
+        CGContextRef rReleaseContext = nullptr;
+        CGLayerRef   rReleaseLayer = nullptr;
 
         // check if a new drawing context is needed (e.g. after a resize)
         if( (unsigned(mnWidth) != nWidth) || (unsigned(mnHeight) != nHeight) )
@@ -111,8 +111,8 @@ bool AquaSalGraphics::CheckContext()
             // prepare to release the corresponding resources
             rReleaseContext = mrContext;
             rReleaseLayer   = mxLayer;
-            mrContext = NULL;
-            mxLayer = NULL;
+            mrContext = nullptr;
+            mxLayer = nullptr;
         }
 
         if( !mrContext )
@@ -120,7 +120,7 @@ bool AquaSalGraphics::CheckContext()
             const CGSize aLayerSize = { static_cast<CGFloat>(nWidth), static_cast<CGFloat>(nHeight) };
             NSGraphicsContext* pNSGContext = [NSGraphicsContext graphicsContextWithWindow: mpFrame->getNSWindow()];
             CGContextRef xCGContext = static_cast<CGContextRef>([pNSGContext graphicsPort]);
-            mxLayer = CGLayerCreateWithContext( xCGContext, aLayerSize, NULL );
+            mxLayer = CGLayerCreateWithContext( xCGContext, aLayerSize, nullptr );
             SAL_INFO( "vcl.cg", "CGLayerCreateWithContext(" << xCGContext << "," << aLayerSize << ",NULL) = " << mxLayer );
             if( mxLayer )
             {
@@ -166,7 +166,7 @@ bool AquaSalGraphics::CheckContext()
     }
 
     DBG_ASSERT( mrContext || mbPrinter, "<<<WARNING>>> AquaSalGraphics::CheckContext() FAILED!!!!\n" );
-    return (mrContext != NULL);
+    return (mrContext != nullptr);
 }
 
 CGContextRef AquaSalGraphics::GetContext()
@@ -191,7 +191,7 @@ void AquaSalGraphics::UpdateWindow( NSRect& )
     }
 
     NSGraphicsContext* pContext = [NSGraphicsContext currentContext];
-    if( (mxLayer != NULL) && (pContext != NULL) )
+    if( (mxLayer != nullptr) && (pContext != nullptr) )
     {
         CGContextRef rCGContext = static_cast<CGContextRef>([pContext graphicsPort]);
         SAL_INFO( "vcl.cg", "[[NSGraphicsContext currentContext] graphicsPort] = " << rCGContext );

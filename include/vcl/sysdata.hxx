@@ -79,7 +79,7 @@ struct SystemEnvData
 #if defined( WNT )
         , hWnd(0)
 #elif defined( MACOSX )
-        , mpNSView(NULL)
+        , mpNSView(nullptr)
         , mbOpenGL(false)
 #elif defined( ANDROID )
 #elif defined( IOS )
@@ -161,7 +161,7 @@ struct SystemGraphicsData
         , hDC( 0 )
         , hWnd( 0 )
 #elif defined( MACOSX )
-        , rCGContext( NULL )
+        , rCGContext( nullptr )
 #elif defined( ANDROID )
     // Nothing
 #elif defined( IOS )

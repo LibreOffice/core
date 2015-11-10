@@ -123,7 +123,7 @@ static void AddPolygonToPath( CGMutablePathRef xPath,
         {
             // first point => just move there
             SAL_INFO( "vcl.cg", "CGPathMoveToPoint(" << xPath << ",NULL," << aPoint.getX() << "," << aPoint.getY() << ")");
-            CGPathMoveToPoint( xPath, NULL, aPoint.getX(), aPoint.getY() );
+            CGPathMoveToPoint( xPath, nullptr, aPoint.getX(), aPoint.getY() );
             continue;
         }
 
@@ -137,7 +137,7 @@ static void AddPolygonToPath( CGMutablePathRef xPath,
         if( !bPendingCurve )    // line segment
         {
             SAL_INFO( "vcl.cg", "CGPathAddLineToPoint(" << xPath << ",NULL," << aPoint.getX() << "," << aPoint.getY() << ")");
-            CGPathAddLineToPoint( xPath, NULL, aPoint.getX(), aPoint.getY() );
+            CGPathAddLineToPoint( xPath, nullptr, aPoint.getX(), aPoint.getY() );
         }
         else                        // cubic bezier segment
         {
@@ -150,7 +150,7 @@ static void AddPolygonToPath( CGMutablePathRef xPath,
             }
             SAL_INFO( "vcl.cg", "CGPathAddCurveToPoint(" << xPath << ",NULL," << aCP1.getX() << "," << aCP1.getY() << "," <<
                       aCP2.getX() << "," << aCP2.getY() << "," << aPoint.getX() << "," << aPoint.getY() << ")" );
-            CGPathAddCurveToPoint( xPath, NULL, aCP1.getX(), aCP1.getY(),
+            CGPathAddCurveToPoint( xPath, nullptr, aCP1.getX(), aCP1.getY(),
                                     aCP2.getX(), aCP2.getY(), aPoint.getX(), aPoint.getY() );
         }
     }
@@ -215,7 +215,7 @@ bool AquaSalGraphics::CreateFontSubset( const OUString& rToFile,
 
         // make the subsetter provide the requested subset
         FILE* pOutFile = fopen( aToFile.getStr(), "wb" );
-        bool bRC = rInfo.CreateFontSubset( FontSubsetInfo::TYPE1_PFB, pOutFile, NULL,
+        bool bRC = rInfo.CreateFontSubset( FontSubsetInfo::TYPE1_PFB, pOutFile, nullptr,
                                            pGlyphIds, pEncoding, nGlyphCount, pGlyphWidths );
         fclose( pOutFile );
         return bRC;
@@ -226,7 +226,7 @@ bool AquaSalGraphics::CreateFontSubset( const OUString& rToFile,
     // that can preserve change history after file renames
 
     // prepare data for psprint's font subsetter
-    TrueTypeFont* pSftFont = NULL;
+    TrueTypeFont* pSftFont = nullptr;
     int nRC = ::OpenTTFontBuffer( static_cast<void*>(&aBuffer[0]), aBuffer.size(), 0, &pSftFont);
     if( nRC != SF_OK )
     {
@@ -332,7 +332,7 @@ bool AquaSalGraphics::CreateFontSubset( const OUString& rToFile,
 
     // write subset into destination file
     nRC = ::CreateTTFromTTGlyphs( pSftFont, aToFile.getStr(), aShortIDs,
-                                  aTempEncs, nGlyphCount, 0, NULL, 0 );
+                                  aTempEncs, nGlyphCount, 0, nullptr, 0 );
     ::CloseTTFont(pSftFont);
     return (nRC == SF_OK);
 }
@@ -551,7 +551,7 @@ void AquaSalGraphics::copyArea( long nDstX, long nDstY,long nSrcX, long nSrcY,
     // TODO: if( mnBitmapDepth > 0 )
     {
         const CGSize aSrcSize = CGSizeMake(nSrcWidth, nSrcHeight);
-        xSrcLayer = CGLayerCreateWithContext( xCopyContext, aSrcSize, NULL );
+        xSrcLayer = CGLayerCreateWithContext( xCopyContext, aSrcSize, nullptr );
         SAL_INFO( "vcl.cg", "CGLayerCreateWithContext(" << xCopyContext << "," << aSrcSize << ",NULL) = " << xSrcLayer );
 
         const CGContextRef xSrcContext = CGLayerGetContext( xSrcLayer );
@@ -679,7 +679,7 @@ bool AquaSalGraphics::drawTransformedBitmap(
     }
 
     // get the Quartz image
-    CGImageRef xImage = NULL;
+    CGImageRef xImage = nullptr;
     const Size aSize = rSrcBitmap.GetSize();
     const QuartzSalBitmap& rSrcSalBmp = static_cast<const QuartzSalBitmap&>(rSrcBitmap);
     const QuartzSalBitmap* pMaskSalBmp = static_cast<const QuartzSalBitmap*>(pAlphaBmp);
@@ -1469,7 +1469,7 @@ SalBitmap* AquaSalGraphics::getBitmap( long  nX, long  nY, long  nDX, long  nDY 
     if( !pBitmap->Create( mxLayer, mnBitmapDepth, nX, nY, nDX, nDY) )
     {
         delete pBitmap;
-        pBitmap = NULL;
+        pBitmap = nullptr;
     }
     return pBitmap;
 }
@@ -1788,9 +1788,9 @@ void AquaSalGraphics::invert( sal_uInt32 nPoints, const SalPoint*  pPtAry, SalIn
 void AquaSalGraphics::Pattern50Fill()
 {
     static const CGFloat aFillCol[4] = { 1,1,1,1 };
-    static const CGPatternCallbacks aCallback = { 0, &DrawPattern50, NULL };
+    static const CGPatternCallbacks aCallback = { 0, &DrawPattern50, nullptr };
     static const CGColorSpaceRef mxP50Space = CGColorSpaceCreatePattern( GetSalData()->mxRGBSpace );
-    static const CGPatternRef mxP50Pattern = CGPatternCreate( NULL, CGRectMake( 0, 0, 4, 4 ),
+    static const CGPatternRef mxP50Pattern = CGPatternCreate( nullptr, CGRectMake( 0, 0, 4, 4 ),
                                                               CGAffineTransformIdentity, 4, 4,
                                                               kCGPatternTilingConstantSpacing,
                                                               false, &aCallback );
@@ -1810,7 +1810,7 @@ void AquaSalGraphics::ResetClipRegion()
     {
         SAL_INFO( "vcl.cg", "CGPathRelease(" << mxClipPath << ")" );
         CGPathRelease( mxClipPath );
-        mxClipPath = NULL;
+        mxClipPath = nullptr;
     }
     if( CheckContext() )
     {
@@ -1916,7 +1916,7 @@ bool AquaSalGraphics::setClipRegion( const vcl::Region& i_rClip )
     {
         SAL_INFO( "vcl.cg", "CGPathRelease(" << mxClipPath << ")" );
         CGPathRelease( mxClipPath );
-        mxClipPath = NULL;
+        mxClipPath = nullptr;
     }
     mxClipPath = CGPathCreateMutable();
     SAL_INFO( "vcl.cg", "CGPathCreateMutable() = " << mxClipPath );
@@ -1946,7 +1946,7 @@ bool AquaSalGraphics::setClipRegion( const vcl::Region& i_rClip )
                 {
                     const CGRect aRect = CGRectMake( aRectIter->Left(), aRectIter->Top(), nW, nH);
                     SAL_INFO( "vcl.cg", "CGPathAddRect(" << mxClipPath << ",NULL," << aRect << ")" );
-                    CGPathAddRect( mxClipPath, NULL, aRect );
+                    CGPathAddRect( mxClipPath, nullptr, aRect );
                 }
             }
         }
@@ -1995,11 +1995,11 @@ void AquaSalGraphics::SetXORMode( bool bSet, bool bInvertOnly )
         return;
     }
 
-    if( (mpXorEmulation == NULL) && !bSet )
+    if( (mpXorEmulation == nullptr) && !bSet )
     {
         return;
     }
-    if( (mpXorEmulation != NULL) && (bSet == mpXorEmulation->IsEnabled()) )
+    if( (mpXorEmulation != nullptr) && (bSet == mpXorEmulation->IsEnabled()) )
     {
         return;
     }
@@ -2042,12 +2042,12 @@ void AquaSalGraphics::updateResolution()
 #endif
 
 XorEmulation::XorEmulation()
-  : m_xTargetLayer( NULL )
-  , m_xTargetContext( NULL )
-  , m_xMaskContext( NULL )
-  , m_xTempContext( NULL )
-  , m_pMaskBuffer( NULL )
-  , m_pTempBuffer( NULL )
+  : m_xTargetLayer( nullptr )
+  , m_xTargetContext( nullptr )
+  , m_xMaskContext( nullptr )
+  , m_xTempContext( nullptr )
+  , m_pMaskBuffer( nullptr )
+  , m_pTempBuffer( nullptr )
   , m_nBufferLongs( 0 )
   , m_bIsEnabled( false )
 {
@@ -2058,7 +2058,7 @@ XorEmulation::~XorEmulation()
 {
     SAL_INFO( "vcl.quartz", "XorEmulation::~XorEmulation() this=" << this );
     Disable();
-    SetTarget( 0, 0, 0, NULL, NULL );
+    SetTarget( 0, 0, 0, nullptr, nullptr );
 }
 
 void XorEmulation::SetTarget( int nWidth, int nHeight, int nTargetDepth,
@@ -2075,8 +2075,8 @@ void XorEmulation::SetTarget( int nWidth, int nHeight, int nTargetDepth,
         SAL_INFO( "vcl.cg", "CGContextRelease(" << m_xMaskContext << ")" );
         CGContextRelease( m_xMaskContext );
         delete[] m_pMaskBuffer;
-        m_xMaskContext = NULL;
-        m_pMaskBuffer = NULL;
+        m_xMaskContext = nullptr;
+        m_pMaskBuffer = nullptr;
 
         // cleanup the temp context if needed
         if( m_xTempContext )
@@ -2084,8 +2084,8 @@ void XorEmulation::SetTarget( int nWidth, int nHeight, int nTargetDepth,
             SAL_INFO( "vcl.cg", "CGContextRelease(" << m_xTempContext << ")" );
             CGContextRelease( m_xTempContext );
             delete[] m_pTempBuffer;
-            m_xTempContext = NULL;
-            m_pTempBuffer = NULL;
+            m_xTempContext = nullptr;
+            m_pTempBuffer = nullptr;
         }
     }
 
@@ -2180,7 +2180,7 @@ bool XorEmulation::UpdateTarget()
     // update the temp bitmap buffer if needed
     if( m_xTempContext )
     {
-        SAL_WARN_IF( m_xTargetContext == NULL, "vcl.quartz", "Target layer is NULL");
+        SAL_WARN_IF( m_xTargetContext == nullptr, "vcl.quartz", "Target layer is NULL");
         SAL_INFO( "vcl.cg", "CGContextDrawLayerAtPoint(" << m_xTempContext << "," << CGPointZero << "," << m_xTargetLayer << ")" );
         CGContextDrawLayerAtPoint( m_xTempContext, CGPointZero, m_xTargetLayer );
     }

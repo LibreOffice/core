@@ -430,7 +430,7 @@ bool AquaSalGraphics::drawNativeControl(ControlType nType,
                 aMenuItemDrawInfo.version = 0;
                 aMenuItemDrawInfo.state = kThemeMenuActive;
                 aMenuItemDrawInfo.itemType = kThemeMenuItemHierBackground;
-                HIThemeDrawMenuItem(&rc, &rc, &aMenuItemDrawInfo, mrContext, kHIThemeOrientationNormal, NULL);
+                HIThemeDrawMenuItem(&rc, &rc, &aMenuItemDrawInfo, mrContext, kHIThemeOrientationNormal, nullptr);
             }
 #endif
             bOK = true;
@@ -526,7 +526,7 @@ bool AquaSalGraphics::drawNativeControl(ControlType nType,
             // no animation
             aPushInfo.animation.time.start = 0;
             aPushInfo.animation.time.current = 0;
-            PushButtonValue const * pPBVal = aValue.getType() == CTRL_PUSHBUTTON ? static_cast<PushButtonValue const *>(&aValue) : NULL;
+            PushButtonValue const * pPBVal = aValue.getType() == CTRL_PUSHBUTTON ? static_cast<PushButtonValue const *>(&aValue) : nullptr;
             int nPaintHeight = static_cast<int>(rc.size.height);
 
             if( pPBVal && pPBVal->mbBevelButton )
@@ -571,7 +571,7 @@ bool AquaSalGraphics::drawNativeControl(ControlType nType,
             if( nState & ControlState::FOCUSED )
                 aPushInfo.adornment |= kThemeAdornmentFocus;
 
-            HIThemeDrawButton( &rc, &aPushInfo, mrContext, kHIThemeOrientationNormal, NULL );
+            HIThemeDrawButton( &rc, &aPushInfo, mrContext, kHIThemeOrientationNormal, nullptr );
             bOK = true;
         }
         break;
@@ -601,7 +601,7 @@ bool AquaSalGraphics::drawNativeControl(ControlType nType,
               kThemeAdornmentNone;
             if( nState & ControlState::FOCUSED )
                 aInfo.adornment |= kThemeAdornmentFocus;
-            HIThemeDrawButton( &rc, &aInfo, mrContext, kHIThemeOrientationNormal, NULL );
+            HIThemeDrawButton( &rc, &aInfo, mrContext, kHIThemeOrientationNormal, nullptr );
             bOK = true;
         }
         break;
@@ -658,7 +658,7 @@ bool AquaSalGraphics::drawNativeControl(ControlType nType,
                         break;
                 }
 
-                HIThemeDrawButton( &rc, &aInfo, mrContext, kHIThemeOrientationNormal, NULL );
+                HIThemeDrawButton( &rc, &aInfo, mrContext, kHIThemeOrientationNormal, nullptr );
             }
             bOK = true;
         }
@@ -688,7 +688,7 @@ bool AquaSalGraphics::drawNativeControl(ControlType nType,
             aTrackInfo.filler1              = 0;
             aTrackInfo.trackInfo.progress.phase   = static_cast<UInt8>(CFAbsoluteTimeGetCurrent()*10.0);
 
-            HIThemeDrawTrack( &aTrackInfo, NULL, mrContext, kHIThemeOrientationNormal );
+            HIThemeDrawTrack( &aTrackInfo, nullptr, mrContext, kHIThemeOrientationNormal );
             bOK = true;
         }
         break;
@@ -717,7 +717,7 @@ bool AquaSalGraphics::drawNativeControl(ControlType nType,
                 aSlideInfo.pressState = 0;
                 aTrackDraw.trackInfo.slider = aSlideInfo;
 
-                HIThemeDrawTrack( &aTrackDraw, NULL, mrContext, kHIThemeOrientationNormal );
+                HIThemeDrawTrack( &aTrackDraw, nullptr, mrContext, kHIThemeOrientationNormal );
                 bOK = true;
             }
         }
@@ -725,7 +725,7 @@ bool AquaSalGraphics::drawNativeControl(ControlType nType,
 
     case CTRL_SCROLLBAR:
         {
-            const ScrollbarValue* pScrollbarVal = (aValue.getType() == CTRL_SCROLLBAR) ? static_cast<const ScrollbarValue*>(&aValue) : NULL;
+            const ScrollbarValue* pScrollbarVal = (aValue.getType() == CTRL_SCROLLBAR) ? static_cast<const ScrollbarValue*>(&aValue) : nullptr;
 
             if( nPart == PART_DRAW_BACKGROUND_VERT ||
                 nPart == PART_DRAW_BACKGROUND_HORZ )
@@ -772,7 +772,7 @@ bool AquaSalGraphics::drawNativeControl(ControlType nType,
 
                 aTrackDraw.trackInfo.scrollbar = aScrollInfo;
 
-                HIThemeDrawTrack( &aTrackDraw, NULL, mrContext, kHIThemeOrientationNormal );
+                HIThemeDrawTrack( &aTrackDraw, nullptr, mrContext, kHIThemeOrientationNormal );
                 bOK = true;
             }
         }
@@ -945,7 +945,7 @@ bool AquaSalGraphics::drawNativeControl(ControlType nType,
                 if(nState & ControlState::FOCUSED) HIThemeDrawFocusRect(&rc, true, mrContext, kHIThemeOrientationNormal);
 
                 //buttons:
-                const SpinbuttonValue* pSpinButtonVal = (aValue.getType() == CTRL_SPINBUTTONS) ? static_cast<const SpinbuttonValue*>(&aValue) : NULL;
+                const SpinbuttonValue* pSpinButtonVal = (aValue.getType() == CTRL_SPINBUTTONS) ? static_cast<const SpinbuttonValue*>(&aValue) : nullptr;
                 ControlState nUpperState = ControlState::ENABLED;//state of the upper button
                 ControlState nLowerState = ControlState::ENABLED;//and of the lower button
                 if(pSpinButtonVal) {//pSpinButtonVal is sometimes null
@@ -993,7 +993,7 @@ bool AquaSalGraphics::drawNativeControl(ControlType nType,
                     if( (nUpperState & ControlState::FOCUSED) || (nLowerState & ControlState::FOCUSED))
                         aSpinInfo.adornment |= kThemeAdornmentFocus;
 
-                    HIThemeDrawButton( &buttonRc, &aSpinInfo, mrContext, kHIThemeOrientationNormal, NULL );
+                    HIThemeDrawButton( &buttonRc, &aSpinInfo, mrContext, kHIThemeOrientationNormal, nullptr );
                 }
 
                 bOK=true;
@@ -1014,7 +1014,7 @@ bool AquaSalGraphics::drawNativeControl(ControlType nType,
                     if( rc.origin.y + rc.size.height >= mpFrame->maGeometry.nHeight-3 )
                     {
                         CGMutablePathRef rPath = CGPathCreateMutable();
-                        CGPathAddRect( rPath, NULL, CGRectMake( 0, 0, mpFrame->maGeometry.nWidth-1, mpFrame->maGeometry.nHeight-1 ) );
+                        CGPathAddRect( rPath, nullptr, CGRectMake( 0, 0, mpFrame->maGeometry.nWidth-1, mpFrame->maGeometry.nHeight-1 ) );
 
                         CGContextBeginPath( mrContext );
                         CGContextAddPath( mrContext, rPath );

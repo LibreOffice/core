@@ -79,7 +79,7 @@
     (void)aSender;
     SolarMutexGuard aGuard;
 
-    const AquaSalFrame* pFrame = mpMenuItem->mpParentMenu ? mpMenuItem->mpParentMenu->getFrame() : NULL;
+    const AquaSalFrame* pFrame = mpMenuItem->mpParentMenu ? mpMenuItem->mpParentMenu->getFrame() : nullptr;
     if( pFrame && AquaSalFrame::isAlive( pFrame ) && ! pFrame->GetWindow()->IsInModalMode() )
     {
         SalMenuEvent aMenuEvt( mpMenuItem->mnId, mpMenuItem->mpVCLMenu );
@@ -193,7 +193,7 @@
                                     { static_cast<CGFloat>(rButtons[i].maButton.maImage.GetSizePixel().Width()),
                                       static_cast<CGFloat>(rButtons[i].maButton.maImage.GetSizePixel().Height()) } };
                 if( rButtons[i].mpToolTipString )
-                    [self addToolTipRect: aImgRect owner: rButtons[i].mpToolTipString userData: NULL];
+                    [self addToolTipRect: aImgRect owner: rButtons[i].mpToolTipString userData: nullptr];
                 aSize.width += 2 + aImgRect.size.width;
             }
         }

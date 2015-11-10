@@ -218,7 +218,7 @@ public:
 
     SAL_DLLPRIVATE vcl::Window* ImplGetWindow() const { return pWindow; }
 #if defined(MACOSX)
-    void ImplSelectWithStart( Menu* pStartMenu = NULL );
+    void ImplSelectWithStart( Menu* pStartMenu = nullptr );
 #endif
 
 protected:

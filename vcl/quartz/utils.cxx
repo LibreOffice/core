@@ -29,7 +29,7 @@
 
 OUString GetOUString( CFStringRef rStr )
 {
-    if( rStr == 0 )
+    if( rStr == nullptr )
     {
         return OUString();
     }

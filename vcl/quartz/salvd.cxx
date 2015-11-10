@@ -65,13 +65,13 @@ SalVirtualDevice* AquaSalInstance::CreateVirtualDevice( SalGraphics* pGraphics,
 AquaSalVirtualDevice::AquaSalVirtualDevice( AquaSalGraphics* pGraphic, long &nDX, long &nDY,
                                             sal_uInt16 nBitCount, const SystemGraphicsData *pData )
   : mbGraphicsUsed( false )
-  , mxBitmapContext( NULL )
+  , mxBitmapContext( nullptr )
   , mnBitmapDepth( 0 )
-  , mxLayer( NULL )
+  , mxLayer( nullptr )
 {
     SAL_INFO( "vcl.virdev", "AquaSalVirtualDevice::AquaSalVirtualDevice() this=" << this
               << " size=(" << nDX << "x" << nDY << ") bitcount=" << nBitCount <<
-              " pData=" << pData << " context=" << (pData ? pData->rCGContext : 0) );
+              " pData=" << pData << " context=" << (pData ? pData->rCGContext : nullptr) );
 
     if( pGraphic && pData && pData->rCGContext )
     {
@@ -88,7 +88,7 @@ AquaSalVirtualDevice::AquaSalVirtualDevice( AquaSalGraphics* pGraphic, long &nDX
         {
             nDY = 1;
         }
-        mxLayer = CGLayerCreateWithContext( pData->rCGContext, CGSizeMake( nDX, nDY), NULL );
+        mxLayer = CGLayerCreateWithContext( pData->rCGContext, CGSizeMake( nDX, nDY), nullptr );
         // Interrogate the context as to its real size
         if (mxLayer)
         {
@@ -137,9 +137,9 @@ AquaSalVirtualDevice::~AquaSalVirtualDevice()
 
     if( mpGraphics )
     {
-        mpGraphics->SetVirDevGraphics( NULL, NULL );
+        mpGraphics->SetVirDevGraphics( nullptr, nullptr );
         delete mpGraphics;
-        mpGraphics = 0;
+        mpGraphics = nullptr;
     }
     Destroy();
 }
@@ -151,7 +151,7 @@ void AquaSalVirtualDevice::Destroy()
     if( mbForeignContext )
     {
         // Do not delete mxContext that we have received from outside VCL
-        mxLayer = NULL;
+        mxLayer = nullptr;
         return;
     }
 
@@ -159,11 +159,11 @@ void AquaSalVirtualDevice::Destroy()
     {
         if( mpGraphics )
         {
-            mpGraphics->SetVirDevGraphics( NULL, NULL );
+            mpGraphics->SetVirDevGraphics( nullptr, nullptr );
         }
         SAL_INFO( "vcl.cg",  "CGLayerRelease(" << mxLayer << ")" );
         CGLayerRelease( mxLayer );
-        mxLayer = NULL;
+        mxLayer = nullptr;
     }
 
     if( mxBitmapContext )
@@ -172,7 +172,7 @@ void AquaSalVirtualDevice::Destroy()
         rtl_freeMemory( pRawData );
         SAL_INFO( "vcl.cg",  "CGContextRelease(" << mxBitmapContext << ")" );
         CGContextRelease( mxBitmapContext );
-        mxBitmapContext = NULL;
+        mxBitmapContext = nullptr;
     }
 }
 
@@ -180,7 +180,7 @@ SalGraphics* AquaSalVirtualDevice::AcquireGraphics()
 {
     if( mbGraphicsUsed || !mpGraphics )
     {
-        return 0;
+        return nullptr;
     }
     mbGraphicsUsed = true;
     return mpGraphics;
@@ -216,7 +216,7 @@ bool AquaSalVirtualDevice::SetSize( long nDX, long nDY )
     Destroy();
 
     // create a Quartz layer matching to the intended virdev usage
-    CGContextRef xCGContext = NULL;
+    CGContextRef xCGContext = nullptr;
     if( mnBitmapDepth && (mnBitmapDepth < 16) )
     {
         mnBitmapDepth = 8;  // TODO: are 1bit vdevs worth it?
@@ -251,7 +251,7 @@ bool AquaSalVirtualDevice::SetSize( long nDX, long nDY )
             {
                 // ensure we don't reuse a dead AquaSalFrame on the very
                 // unlikely case of no other frame to use
-                pSalFrame = NULL;
+                pSalFrame = nullptr;
             }
             // update the frame reference
             mpGraphics->setGraphicsFrame( pSalFrame );
@@ -308,7 +308,7 @@ bool AquaSalVirtualDevice::SetSize( long nDX, long nDY )
     SAL_WARN_IF( !xCGContext, "vcl.quartz", "No context" );
 
     const CGSize aNewSize = { static_cast<CGFloat>(nDX), static_cast<CGFloat>(nDY) };
-    mxLayer = CGLayerCreateWithContext( xCGContext, aNewSize, NULL );
+    mxLayer = CGLayerCreateWithContext( xCGContext, aNewSize, nullptr );
     SAL_INFO( "vcl.cg",  "CGLayerCreateWithContext(" << xCGContext << "," << aNewSize << ",NULL) = " << mxLayer );
 
     if( mxLayer && mpGraphics )
@@ -319,7 +319,7 @@ bool AquaSalVirtualDevice::SetSize( long nDX, long nDY )
         mpGraphics->SetVirDevGraphics( mxLayer, xDrawContext, mnBitmapDepth );
     }
 
-    return (mxLayer != NULL);
+    return (mxLayer != nullptr);
 }
 
 long AquaSalVirtualDevice::GetWidth() const

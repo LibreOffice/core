@@ -46,7 +46,7 @@ using namespace com::sun::star;
 using namespace com::sun::star::beans;
 
 AquaSalInfoPrinter::AquaSalInfoPrinter( const SalPrinterQueueInfo& i_rQueue ) :
-    mpGraphics( 0 ),
+    mpGraphics( nullptr ),
     mbGraphics( false ),
     mbJob( false ),
     mpPrinter( nil ),
@@ -143,7 +143,7 @@ void AquaSalInfoPrinter::SetupPrinterGraphics( CGContextRef i_rContext ) const
 
 SalGraphics* AquaSalInfoPrinter::AcquireGraphics()
 {
-    SalGraphics* pGraphics = mbGraphics ? NULL : mpGraphics;
+    SalGraphics* pGraphics = mbGraphics ? nullptr : mpGraphics;
     mbGraphics = true;
     return pGraphics;
 }
@@ -666,9 +666,9 @@ void AquaSalInfoPrinter::InitPaperFormats( const ImplJobSetup* )
 const PaperInfo* AquaSalInfoPrinter::matchPaper( long i_nWidth, long i_nHeight, Orientation& o_rOrientation ) const
 {
     if( ! m_bPapersInit )
-        const_cast<AquaSalInfoPrinter*>(this)->InitPaperFormats( NULL );
+        const_cast<AquaSalInfoPrinter*>(this)->InitPaperFormats( nullptr );
 
-    const PaperInfo* pMatch = NULL;
+    const PaperInfo* pMatch = nullptr;
     o_rOrientation = ORIENTATION_PORTRAIT;
     for( int n = 0; n < 2 ; n++ )
     {

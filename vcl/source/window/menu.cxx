@@ -319,7 +319,7 @@ void Menu::ImplSelectWithStart( Menu* pSMenu )
 {
     Menu* pOldStartedFrom = pStartedFrom;
     pStartedFrom = pSMenu;
-    Menu* pOldStartedStarted = pOldStartedFrom ? pOldStartedFrom->pStartedFrom : NULL;
+    Menu* pOldStartedStarted = pOldStartedFrom ? pOldStartedFrom->pStartedFrom : nullptr;
     Select();
     if( pOldStartedFrom )
         pOldStartedFrom->pStartedFrom = pOldStartedStarted;

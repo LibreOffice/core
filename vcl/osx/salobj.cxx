@@ -37,7 +37,7 @@ AquaSalObject::AquaSalObject( AquaSalFrame* pFrame, SystemWindowData* pWindowDat
     mnHeight( 20 )
 {
     maSysData.nSize = sizeof( maSysData );
-    maSysData.mpNSView = NULL;
+    maSysData.mpNSView = nullptr;
     maSysData.mbOpenGL = false;
 
     NSRect aInitFrame = { NSZeroPoint, { 20, 20 } };
@@ -50,7 +50,7 @@ AquaSalObject::AquaSalObject( AquaSalFrame* pFrame, SystemWindowData* pWindowDat
     if (pWindowData && pWindowData->bOpenGL)
     {
         maSysData.mbOpenGL = true;
-        NSOpenGLPixelFormat* pixFormat = NULL;
+        NSOpenGLPixelFormat* pixFormat = nullptr;
 
         if (pWindowData->bLegacy)
         {

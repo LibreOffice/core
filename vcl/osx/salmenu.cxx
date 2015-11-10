@@ -57,7 +57,7 @@ void releaseButtonEntry( AquaSalMenu::MenuBarButtonEntry& i_rEntry )
 
 }
 
-const AquaSalMenu* AquaSalMenu::pCurrentMenuBar = NULL;
+const AquaSalMenu* AquaSalMenu::pCurrentMenuBar = nullptr;
 
 @interface MainMenuSelector : NSObject
 {
@@ -238,7 +238,7 @@ void AquaSalInstance::DestroyMenu( SalMenu* pSalMenu )
 SalMenuItem* AquaSalInstance::CreateMenuItem( const SalItemParams* pItemData )
 {
     if( !pItemData )
-        return NULL;
+        return nullptr;
 
     AquaSalMenuItem *pSalMenuItem = new AquaSalMenuItem( pItemData );
 
@@ -257,9 +257,9 @@ void AquaSalInstance::DestroyMenuItem( SalMenuItem* pSalMenuItem )
 AquaSalMenu::AquaSalMenu( bool bMenuBar ) :
     mbMenuBar( bMenuBar ),
     mpMenu( nil ),
-    mpVCLMenu( NULL ),
-    mpFrame( NULL ),
-    mpParentSalMenu( NULL )
+    mpVCLMenu( nullptr ),
+    mpFrame( nullptr ),
+    mpParentSalMenu( nullptr )
 {
     if( ! mbMenuBar )
     {
@@ -278,7 +278,7 @@ AquaSalMenu::~AquaSalMenu()
     // actually someone should have done AquaSalFrame::SetMenu( NULL )
     // on our frame, alas it is not so
     if( mpFrame && AquaSalFrame::isAlive( mpFrame ) && mpFrame->mpMenu == this )
-        const_cast<AquaSalFrame*>(mpFrame)->mpMenu = NULL;
+        const_cast<AquaSalFrame*>(mpFrame)->mpMenu = nullptr;
 
     // this should normally be empty already, but be careful...
     for( size_t i = 0; i < maButtons.size(); i++ )
@@ -305,7 +305,7 @@ AquaSalMenu::~AquaSalMenu()
 
             // in ! mbMenuBar case our mpMenu is actually a SalNSMenu*
             // so we can safely cast here
-            [static_cast<SalNSMenu*>(mpMenu) setSalMenu: NULL];
+            [static_cast<SalNSMenu*>(mpMenu) setSalMenu: nullptr];
             /* #i89860# FIXME:
                using [autorelease] here (and in AquaSalMenuItem::~AquaSalMenuItem)
                instead of [release] fixes an occasional crash. That should
@@ -417,12 +417,12 @@ const AquaSalFrame* AquaSalMenu::getFrame() const
     const AquaSalMenu* pMenu = this;
     while( pMenu && ! pMenu->mpFrame )
         pMenu = pMenu->mpParentSalMenu;
-    return pMenu ? pMenu->mpFrame : NULL;
+    return pMenu ? pMenu->mpFrame : nullptr;
 }
 
 void AquaSalMenu::unsetMainMenu()
 {
-    pCurrentMenuBar = NULL;
+    pCurrentMenuBar = nullptr;
 
     // remove items from main menu
     NSMenu* pMenu = [NSApp mainMenu];
@@ -502,7 +502,7 @@ void AquaSalMenu::addFallbackMenuItem( NSMenuItem* pNewItem )
     [pNewItem retain];
     rFallbackMenu.push_back( pNewItem );
 
-    if( pCurrentMenuBar == NULL )
+    if( pCurrentMenuBar == nullptr )
         setDefaultMenu();
 }
 
@@ -520,7 +520,7 @@ void AquaSalMenu::removeFallbackMenuItem( NSMenuItem* pOldItem )
             rFallbackMenu.erase( rFallbackMenu.begin() + i );
             [pOldItem release];
 
-            if( pCurrentMenuBar == NULL )
+            if( pCurrentMenuBar == nullptr )
                 setDefaultMenu();
 
             return;
@@ -554,9 +554,9 @@ void AquaSalMenu::InsertItem( SalMenuItem* pSalMenuItem, unsigned nPos )
     AquaSalMenuItem *pAquaSalMenuItem = static_cast<AquaSalMenuItem*>(pSalMenuItem);
 
     pAquaSalMenuItem->mpParentMenu = this;
-    DBG_ASSERT( pAquaSalMenuItem->mpVCLMenu == NULL        ||
+    DBG_ASSERT( pAquaSalMenuItem->mpVCLMenu == nullptr        ||
                 pAquaSalMenuItem->mpVCLMenu == mpVCLMenu   ||
-                mpVCLMenu == NULL,
+                mpVCLMenu == nullptr,
                 "resetting menu ?" );
     if( pAquaSalMenuItem->mpVCLMenu )
         mpVCLMenu = pAquaSalMenuItem->mpVCLMenu;
@@ -577,7 +577,7 @@ void AquaSalMenu::InsertItem( SalMenuItem* pSalMenuItem, unsigned nPos )
 
 void AquaSalMenu::RemoveItem( unsigned nPos )
 {
-    AquaSalMenuItem* pRemoveItem = NULL;
+    AquaSalMenuItem* pRemoveItem = nullptr;
     if( nPos == MENU_APPEND || nPos == (maItems.size()-1) )
     {
         pRemoveItem = maItems.back();
@@ -594,7 +594,7 @@ void AquaSalMenu::RemoveItem( unsigned nPos )
         return;
     }
 
-    pRemoveItem->mpParentMenu = NULL;
+    pRemoveItem->mpParentMenu = nullptr;
 
     if( ! mbMenuBar || pCurrentMenuBar == this )
         [mpMenu removeItemAtIndex: getItemIndexByPos(nPos)];
@@ -608,7 +608,7 @@ void AquaSalMenu::SetSubMenu( SalMenuItem* pSalMenuItem, SalMenu* pSubMenu, unsi
     if (subAquaSalMenu)
     {
         pAquaSalMenuItem->mpSubMenu = subAquaSalMenu;
-        if( subAquaSalMenu->mpParentSalMenu == NULL )
+        if( subAquaSalMenu->mpParentSalMenu == nullptr )
         {
             subAquaSalMenu->mpParentSalMenu = this;
             [pAquaSalMenuItem->mpMenuItem setSubmenu: subAquaSalMenu->mpMenu];
@@ -633,9 +633,9 @@ void AquaSalMenu::SetSubMenu( SalMenuItem* pSalMenuItem, SalMenu* pSubMenu, unsi
         if( pAquaSalMenuItem->mpSubMenu )
         {
             if( pAquaSalMenuItem->mpSubMenu->mpParentSalMenu == this )
-                pAquaSalMenuItem->mpSubMenu->mpParentSalMenu = NULL;
+                pAquaSalMenuItem->mpSubMenu->mpParentSalMenu = nullptr;
         }
-        pAquaSalMenuItem->mpSubMenu = NULL;
+        pAquaSalMenuItem->mpSubMenu = nullptr;
         [pAquaSalMenuItem->mpMenuItem setSubmenu: nil];
     }
 }
@@ -800,7 +800,7 @@ AquaSalMenu::MenuBarButtonEntry* AquaSalMenu::findButtonItem( sal_uInt16 i_nItem
         if( maButtons[i].maButton.mnId == i_nItemId )
             return &maButtons[i];
     }
-    return NULL;
+    return nullptr;
 }
 
 void AquaSalMenu::statusLayout()
@@ -903,8 +903,8 @@ Rectangle AquaSalMenu::GetMenuBarButtonRectPixel( sal_uInt16 i_nItemId, SalFrame
 AquaSalMenuItem::AquaSalMenuItem( const SalItemParams* pItemData ) :
     mnId( pItemData->nId ),
     mpVCLMenu( pItemData->pMenu ),
-    mpParentMenu( NULL ),
-    mpSubMenu( NULL ),
+    mpParentMenu( nullptr ),
+    mpSubMenu( nullptr ),
     mpMenuItem( nil )
 {
     // Delete mnemonics

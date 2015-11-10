@@ -128,8 +128,8 @@ void AquaA11yFocusTracker::toolbox_open_floater(vcl::Window *pWindow)
 {
     bool bToolboxFound = false;
     bool bFloatingWindowFound = false;
-    vcl::Window * pFloatingWindow = NULL;
-    while ( pWindow != NULL ) {
+    vcl::Window * pFloatingWindow = nullptr;
+    while ( pWindow != nullptr ) {
         if ( pWindow->GetType() == WINDOW_TOOLBOX ) {
             bToolboxFound = true;
         } else if ( pWindow->GetType() == WINDOW_FLOATINGWINDOW ) {

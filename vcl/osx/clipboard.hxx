@@ -80,7 +80,7 @@ public:
      system clipboard will be created (bUseSystemClipboard == true) or if
      the DragPasteboard if bUseSystemClipboard == false
    */
-  AquaClipboard(NSPasteboard* pasteboard = NULL,
+  AquaClipboard(NSPasteboard* pasteboard = nullptr,
                 bool bUseSystemClipboard = true);
 
   virtual ~AquaClipboard();

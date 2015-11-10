@@ -122,7 +122,7 @@ Any SAL_CALL OSXTransferable::getTransferData( const DataFlavor& aFlavor )
       dp = DataFlavorMapper::getDataProvider(sysFormat, sysData);
     }
 
-  if (dp.get() == NULL)
+  if (dp.get() == nullptr)
     {
       throw UnsupportedFlavorException("AquaClipboard: Unsupported data flavor",
                                        static_cast<XTransferable*>(this));
@@ -151,7 +151,7 @@ void OSXTransferable::initClipboardItemList()
 {
   NSArray* pboardFormats = [mPasteboard types];
 
-  if (pboardFormats == NULL)
+  if (pboardFormats == nullptr)
     {
       throw RuntimeException("AquaClipboard: Cannot get clipboard data",
                              static_cast<XTransferable*>(this));

@@ -67,7 +67,7 @@
 using namespace std;
 using namespace ::com::sun::star;
 
-static int* gpnInit = 0;
+static int* gpnInit = nullptr;
 static NSMenu* pDockMenu = nil;
 static bool bNoSVMain = true;
 static bool bLeftMain = false;
@@ -85,7 +85,7 @@ class AquaDelayedSettingsChanged : public Idle
     {
         SalData* pSalData = GetSalData();
         if( ! pSalData->maFrames.empty() )
-            pSalData->maFrames.front()->CallCallback( SALEVENT_SETTINGSCHANGED, NULL );
+            pSalData->maFrames.front()->CallCallback( SALEVENT_SETTINGSCHANGED, nullptr );
 
         if( mbInvalidate )
         {
@@ -205,7 +205,7 @@ bool ImplSVMainHook( int * pnInit )
     const char* pArgv[] = { aByteExe.getStr(), NULL };
     NSApplicationMain( 3, pArgv );
 #else
-    const char* pArgv[] = { aByteExe.getStr(), NULL };
+    const char* pArgv[] = { aByteExe.getStr(), nullptr };
     NSApplicationMain( 1, pArgv );
 #endif
 
@@ -246,7 +246,7 @@ void DeInitSalData()
         pSalData->mpStatusItem = nil;
     }
     delete pSalData;
-    SetSalData( NULL );
+    SetSalData( nullptr );
 }
 
 extern "C" {
@@ -322,7 +322,7 @@ SalInstance* CreateSalInstance()
         initNSApp();
 
     SalData* pSalData = GetSalData();
-    DBG_ASSERT( pSalData->mpFirstInstance == NULL, "more than one instance created" );
+    DBG_ASSERT( pSalData->mpFirstInstance == nullptr, "more than one instance created" );
     AquaSalInstance* pInst = new AquaSalInstance;
 
     // init instance (only one instance in this version !!!)
@@ -360,7 +360,7 @@ AquaSalInstance::AquaSalInstance()
 
 AquaSalInstance::~AquaSalInstance()
 {
-    ::comphelper::SolarMutex::setSolarMutex( 0 );
+    ::comphelper::SolarMutex::setSolarMutex( nullptr );
     mpSalYieldMutex->release();
     delete mpSalYieldMutex;
     osl_destroyMutex( maUserEventListMutex );
@@ -524,7 +524,7 @@ void AquaSalInstance::handleAppDefinedEvent( NSEvent* pEvent )
                 break;
         }
         AquaSalFrame* pFrame = pSalData->maFrames.front();
-        vcl::Window* pWindow = pFrame ? pFrame->GetWindow() : NULL;
+        vcl::Window* pWindow = pFrame ? pFrame->GetWindow() : nullptr;
 
         if( pWindow )
         {
@@ -580,7 +580,7 @@ void AquaSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents, sal_uLon
 
         // get one user event
         osl_acquireMutex( maUserEventListMutex );
-        SalUserEvent aEvent( NULL, NULL, 0 );
+        SalUserEvent aEvent( nullptr, nullptr, 0 );
         if( ! maUserEvents.empty() )
         {
             aEvent = maUserEvents.front();
@@ -752,12 +752,12 @@ bool AquaSalInstance::AnyInput( VclInputFlags nType )
 
     NSEvent* pEvent = [NSApp nextEventMatchingMask: nEventMask untilDate: nil
                             inMode: NSDefaultRunLoopMode dequeue: NO];
-    return (pEvent != NULL);
+    return (pEvent != nullptr);
 }
 
 SalFrame* AquaSalInstance::CreateChildFrame( SystemParentData*, SalFrameStyleFlags /*nSalFrameStyle*/ )
 {
-    return NULL;
+    return nullptr;
 }
 
 SalFrame* AquaSalInstance::CreateFrame( SalFrame* pParent, SalFrameStyleFlags nSalFrameStyle )
@@ -775,7 +775,7 @@ void AquaSalInstance::DestroyFrame( SalFrame* pFrame )
 
 SalObject* AquaSalInstance::CreateObject( SalFrame* pParent, SystemWindowData* pWindowData, bool /* bShow */ )
 {
-    AquaSalObject *pObject = NULL;
+    AquaSalObject *pObject = nullptr;
 
     if ( pParent )
         pObject = new AquaSalObject( static_cast<AquaSalFrame*>(pParent), pWindowData );
@@ -817,7 +817,7 @@ void AquaSalInstance::GetPrinterQueueInfo( ImplPrnQueueList* pList )
                 pInfo->maDriver     = GetOUString( pType );
             pInfo->mnStatus         = PrintQueueFlags::NONE;
             pInfo->mnJobs           = 0;
-            pInfo->mpSysData        = NULL;
+            pInfo->mpSysData        = nullptr;
 
             pList->Add( pInfo );
         }
@@ -863,7 +863,7 @@ SalInfoPrinter* AquaSalInstance::CreateInfoPrinter( SalPrinterQueueInfo* pQueueI
     // #i113170# may not be the main thread if called from UNO API
     SalData::ensureThreadAutoreleasePool();
 
-    SalInfoPrinter* pNewInfoPrinter = NULL;
+    SalInfoPrinter* pNewInfoPrinter = nullptr;
     if( pQueueInfo )
     {
         pNewInfoPrinter = new AquaSalInfoPrinter( *pQueueInfo );
@@ -968,7 +968,7 @@ SalBitmap* AquaSalInstance::CreateSalBitmap()
 
 SalSession* AquaSalInstance::CreateSalSession()
 {
-    return NULL;
+    return nullptr;
 }
 
 class MacImeStatus : public SalI18NImeStatus
@@ -1011,15 +1011,15 @@ CGImageRef CreateCGImage( const Image& rImage )
     Bitmap aBmp( aBmpEx.GetBitmap() );
 
     if( ! aBmp || ! aBmp.ImplGetImpBitmap() )
-        return NULL;
+        return nullptr;
 
     // simple case, no transparency
     QuartzSalBitmap* pSalBmp = static_cast<QuartzSalBitmap*>(aBmp.ImplGetImpBitmap()->ImplGetSalBitmap());
 
     if( ! pSalBmp )
-        return NULL;
+        return nullptr;
 
-    CGImageRef xImage = NULL;
+    CGImageRef xImage = nullptr;
     if( ! (aBmpEx.IsAlpha() || aBmpEx.IsTransparent() ) )
         xImage = pSalBmp->CreateCroppedImage( 0, 0, pSalBmp->mnWidth, pSalBmp->mnHeight );
     else if( aBmpEx.IsAlpha() )

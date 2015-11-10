@@ -364,7 +364,7 @@ NSData* PNGDataProvider::getSystemData()
     mData >>= pngData;
 
     Sequence<sal_Int8> imgData;
-    NSData* sysData = NULL;
+    NSData* sysData = nullptr;
     if( PNGToImage( pngData, imgData, meImageType))
         sysData = [NSData dataWithBytes: imgData.getArray() length: imgData.getLength()];
 
@@ -505,7 +505,7 @@ DataFlavor DataFlavorMapper::systemToOpenOfficeFlavor( const NSString* systemDat
 
 const NSString* DataFlavorMapper::openOfficeToSystemFlavor( const DataFlavor& oOOFlavor, bool& rbInternal) const
 {
-    const NSString* sysFlavor = NULL;
+    const NSString* sysFlavor = nullptr;
     rbInternal = false;
 
     for( size_t i = 0; i < SIZE_FLAVOR_MAP; ++i )
@@ -657,7 +657,7 @@ NSArray* DataFlavorMapper::flavorSequenceToTypesArray(const com::sun::star::uno:
       {
           const NSString* str = openOfficeToSystemFlavor(flavors[i], bNeedDummyInternalFlavor);
 
-          if (str != NULL)
+          if (str != nullptr)
           {
               [str retain];
               [array addObject: str];

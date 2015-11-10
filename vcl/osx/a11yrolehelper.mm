@@ -33,7 +33,7 @@ using namespace ::com::sun::star::uno;
 +(id)simpleMapNativeRoleFrom: (XAccessibleContext *) accessibleContext {
     id nativeRole = nil;
 
-    if (accessibleContext == NULL)
+    if (accessibleContext == nullptr)
         return nativeRole;
 
     switch( accessibleContext -> getAccessibleRole() ) {

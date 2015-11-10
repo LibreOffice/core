@@ -130,7 +130,7 @@ Sequence<sal_Int8> HTMLFormatToTextHtml(const Sequence<sal_Int8>& aHTMLFormat)
 
   // It doesn't seem to be HTML? Well then simply return what has been
   // provided in non-debug builds
-  if (htmlStartTag == NULL)
+  if (htmlStartTag == nullptr)
     {
     return aHTMLFormat;
     }

@@ -85,8 +85,8 @@ private:
 
 CTLayout::CTLayout( const CoreTextStyle* pTextStyle )
     : mpTextStyle( pTextStyle )
-    , mpAttrString( NULL )
-    , mpCTLine( NULL )
+    , mpAttrString( nullptr )
+    , mpCTLine( nullptr )
     , mnCharCount( 0 )
     , mnTrailingSpaceCount( 0 )
     , mfTrailingSpaceWidth( 0.0 )
@@ -115,13 +115,13 @@ bool CTLayout::LayoutText( ImplLayoutArgs& rArgs )
     // release an eventual older layout
     if( mpAttrString )
         CFRelease( mpAttrString );
-    mpAttrString = NULL;
+    mpAttrString = nullptr;
     if( mpCTLine )
     {
         SAL_INFO( "vcl.ct", "CFRelease(" << mpCTLine << ")" );
         CFRelease( mpCTLine );
     }
-    mpCTLine = NULL;
+    mpCTLine = nullptr;
 
     // initialize the new layout
     SalLayout::AdjustLayout( rArgs );
@@ -134,12 +134,12 @@ bool CTLayout::LayoutText( ImplLayoutArgs& rArgs )
     const sal_Unicode *pStr = rArgs.mrStr.getStr();
 
     // create the CoreText line layout
-    CFStringRef aCFText = CFStringCreateWithCharactersNoCopy( NULL,
+    CFStringRef aCFText = CFStringCreateWithCharactersNoCopy( nullptr,
                                                               pStr + mnMinCharPos,
                                                               mnCharCount,
                                                               kCFAllocatorNull );
     // CFAttributedStringCreate copies the attribues parameter
-    mpAttrString = CFAttributedStringCreate( NULL, aCFText, mpTextStyle->GetStyleDict() );
+    mpAttrString = CFAttributedStringCreate( nullptr, aCFText, mpTextStyle->GetStyleDict() );
     mpCTLine = CTLineCreateWithAttributedString( mpAttrString );
     SAL_INFO( "vcl.ct", "CTLineCreateWithAttributedString(\"" << GetOUString(aCFText) << "\") =p " << mpCTLine );
     CFRelease( aCFText);
@@ -212,11 +212,11 @@ void CTLayout::AdjustLayout( ImplLayoutArgs& rArgs )
         SAL_INFO( "vcl.ct", "CFRelease(" << mpCTLine << ")" );
         CFRelease( mpCTLine );
         const sal_Unicode *pStr = rArgs.mrStr.getStr();
-        CFStringRef aCFText = CFStringCreateWithCharactersNoCopy( NULL,
+        CFStringRef aCFText = CFStringCreateWithCharactersNoCopy( nullptr,
                                                                   pStr + mnMinCharPos,
                                                                   mnCharCount - mnTrailingSpaceCount,
                                                                   kCFAllocatorNull );
-        CFAttributedStringRef pAttrStr = CFAttributedStringCreate( NULL,
+        CFAttributedStringRef pAttrStr = CFAttributedStringCreate( nullptr,
                                                                    aCFText,
                                                                    mpTextStyle->GetStyleDict() );
         mpCTLine = CTLineCreateWithAttributedString( pAttrStr );
@@ -489,9 +489,9 @@ int CTLayout::GetNextGlyphs( int nLen, sal_GlyphId* pOutGlyphIds, Point& rPos, i
     {
         nStart = 0;
     }
-    const PhysicalFontFace* pFallbackFont = NULL;
-    CTFontRef pFont = NULL;
-    CTFontDescriptorRef pFontDesc = NULL;
+    const PhysicalFontFace* pFallbackFont = nullptr;
+    CTFontRef pFont = nullptr;
+    CTFontDescriptorRef pFontDesc = nullptr;
     ImplDevFontAttributes rDevFontAttr;
 
     boost::ptr_vector<CTRunData>::const_iterator iter = m_vRunData.begin();
@@ -510,7 +510,7 @@ int CTLayout::GetNextGlyphs( int nLen, sal_GlyphId* pOutGlyphIds, Point& rPos, i
         {
             pFont = static_cast<CTFontRef>(CFDictionaryGetValue( mpTextStyle->GetStyleDict(), kCTFontAttributeName ));
             pFontDesc = CTFontCopyFontDescriptor( iter->m_pFont );
-            rDevFontAttr = DevFontFromCTFontDescriptor( pFontDesc, NULL );
+            rDevFontAttr = DevFontFromCTFontDescriptor( pFontDesc, nullptr );
         }
     }
     int i = nStart;
@@ -537,7 +537,7 @@ int CTLayout::GetNextGlyphs( int nLen, sal_GlyphId* pOutGlyphIds, Point& rPos, i
             }
             else
             {
-                *(pFallbackFonts++) = NULL;
+                *(pFallbackFonts++) = nullptr;
             }
         }
         if( i == nStart )
@@ -559,7 +559,7 @@ int CTLayout::GetNextGlyphs( int nLen, sal_GlyphId* pOutGlyphIds, Point& rPos, i
             {
                 pFont = static_cast<CTFontRef>(CFDictionaryGetValue( mpTextStyle->GetStyleDict(), kCTFontAttributeName ));
                 pFontDesc = CTFontCopyFontDescriptor( iter->m_pFont );
-                rDevFontAttr = DevFontFromCTFontDescriptor( pFontDesc, NULL );
+                rDevFontAttr = DevFontFromCTFontDescriptor( pFontDesc, nullptr );
             }
         }
     }
@@ -576,7 +576,7 @@ DeviceCoordinate CTLayout::GetTextWidth() const
 
     if( mfCachedWidth < 0.0 )
     {
-        mfCachedWidth = CTLineGetTypographicBounds( mpCTLine, NULL, NULL, NULL);
+        mfCachedWidth = CTLineGetTypographicBounds( mpCTLine, nullptr, nullptr, nullptr);
     }
 
     return mfCachedWidth;

@@ -92,7 +92,7 @@ public:
     void Disable() { m_bIsEnabled = false; }
     bool IsEnabled() const { return m_bIsEnabled; }
     CGContextRef GetTargetContext() const { return m_xTargetContext; }
-    CGContextRef GetMaskContext() const { return (m_bIsEnabled ? m_xMaskContext : NULL); }
+    CGContextRef GetMaskContext() const { return (m_bIsEnabled ? m_xMaskContext : nullptr); }
 
 private:
     CGLayerRef m_xTargetLayer;

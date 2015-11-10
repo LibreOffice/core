@@ -143,8 +143,8 @@ Sequence<OUString> dragSource_getSupportedServiceNames()
 
 DragSource::DragSource():
   WeakComponentImplHelper<XDragSource, XInitialization, XServiceInfo>(m_aMutex),
-  mView(NULL),
-  mpFrame(NULL),
+  mView(nullptr),
+  mpFrame(nullptr),
   mLastMouseEventBeforeStartDrag(nil),
   m_MouseButton(0)
 {
@@ -231,7 +231,7 @@ void SAL_CALL DragSource::startDrag(const DragGestureEvent& trigger,
   m_MouseButton= mMouseEvent.Buttons;
   mXDragSrcListener = listener;
   mXCurrentContext = static_cast<XDragSourceContext*>(new DragSourceContext);
-  rtl::Reference<AquaClipboard> clipb(new AquaClipboard(NULL, false));
+  rtl::Reference<AquaClipboard> clipb(new AquaClipboard(nullptr, false));
   g_XTransferable = transferable;
   clipb->setContents(g_XTransferable, uno::Reference<XClipboardOwner>());
   mDragSourceActions = sourceActions;

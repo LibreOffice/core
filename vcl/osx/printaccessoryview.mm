@@ -984,7 +984,7 @@ static void addEdit( NSView* pCurParent, long& rCurX, long& rCurY, long nAttachO
     [pAccessoryController withPrinterController: pController];
     [pAccessoryController withViewState: pState];
 
-    NSView* pCurParent = 0;
+    NSView* pCurParent = nullptr;
     long nCurY = 0;
     long nCurX = 0;
     NSSize aMaxTabSize = NSZeroSize;
