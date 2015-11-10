@@ -204,7 +204,7 @@ void Writer::sendRequest(
             typelib_InterfaceAttributeTypeDescription * atd =
                 reinterpret_cast< typelib_InterfaceAttributeTypeDescription * >(
                     member.get());
-            OSL_ASSERT(atd->pInterface != 0);
+            OSL_ASSERT(atd->pInterface != nullptr);
             if (!t.is()) {
                 t = css::uno::TypeDescription(&atd->pInterface->aBase);
             }
@@ -221,7 +221,7 @@ void Writer::sendRequest(
             typelib_InterfaceMethodTypeDescription * mtd =
                 reinterpret_cast< typelib_InterfaceMethodTypeDescription * >(
                     member.get());
-            assert(mtd->pInterface != 0);
+            assert(mtd->pInterface != nullptr);
             if (!t.is()) {
                 t = css::uno::TypeDescription(&mtd->pInterface->aBase);
             }

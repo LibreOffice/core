@@ -123,10 +123,10 @@ bool IncomingRequest::execute_throw(
     BinaryAny * returnValue, std::vector< BinaryAny > * outArguments) const
 {
     OSL_ASSERT(
-        returnValue != 0 &&
+        returnValue != nullptr &&
         returnValue->getType().equals(
             css::uno::TypeDescription(cppu::UnoType<void>::get())) &&
-        outArguments != 0 && outArguments->empty());
+        outArguments != nullptr && outArguments->empty());
     bool isExc = false;
     switch (functionId_) {
     case SPECIAL_FUNCTION_ID_RESERVED:
@@ -237,19 +237,19 @@ bool IncomingRequest::execute_throw(
             uno_Any exc;
             uno_Any * pexc = &exc;
             (*object_.get()->pDispatcher)(
-                object_.get(), member_.get(), retBuf.empty() ? 0 : &retBuf[0],
-                args.empty() ? 0 : &args[0], &pexc);
-            isExc = pexc != 0;
+                object_.get(), member_.get(), retBuf.empty() ? nullptr : &retBuf[0],
+                args.empty() ? nullptr : &args[0], &pexc);
+            isExc = pexc != nullptr;
             if (isExc) {
                 *returnValue = BinaryAny(
                     css::uno::TypeDescription(
                         cppu::UnoType< css::uno::Any >::get()),
                     &exc);
-                uno_any_destruct(&exc, 0);
+                uno_any_destruct(&exc, nullptr);
             } else {
                 if (!retBuf.empty()) {
                     *returnValue = BinaryAny(retType, &retBuf[0]);
-                    uno_destructData(&retBuf[0], retType.get(), 0);
+                    uno_destructData(&retBuf[0], retType.get(), nullptr);
                 }
                 if (!outArguments->empty()) {
                     OSL_ASSERT(
@@ -271,7 +271,7 @@ bool IncomingRequest::execute_throw(
                         }
                         if (!mtd->pParams[k].bIn) {
                             uno_type_destructData(
-                                &(*j++)[0], mtd->pParams[k].pTypeRef, 0);
+                                &(*j++)[0], mtd->pParams[k].pTypeRef, nullptr);
                         }
                     }
                     OSL_ASSERT(i == outArguments->end());

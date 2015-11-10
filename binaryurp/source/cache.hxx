@@ -48,7 +48,7 @@ public:
     }
 
     IdxType add( const T& rContent, bool* pbFound) {
-        assert( pbFound != NULL);
+        assert( pbFound != nullptr);
         if( !size_) {
             *pbFound = false;
             return cache::ignore;

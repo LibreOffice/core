@@ -30,18 +30,18 @@
 namespace binaryurp {
 
 BinaryAny::BinaryAny() throw () {
-    uno_any_construct(&data_, 0, 0, 0);
+    uno_any_construct(&data_, nullptr, nullptr, nullptr);
 }
 
 BinaryAny::BinaryAny(css::uno::TypeDescription const & type, void * value)
     throw ()
 {
     assert(type.is());
-    uno_any_construct(&data_, value, type.get(), 0);
+    uno_any_construct(&data_, value, type.get(), nullptr);
 }
 
 BinaryAny::BinaryAny(uno_Any const & raw) throw () {
-    assert(raw.pType != 0);
+    assert(raw.pType != nullptr);
     data_.pType = raw.pType;
     typelib_typedescriptionreference_acquire(data_.pType);
     data_.pData = raw.pData == &raw.pReserved ? &data_.pReserved : raw.pData;
@@ -49,16 +49,16 @@ BinaryAny::BinaryAny(uno_Any const & raw) throw () {
 }
 
 BinaryAny::BinaryAny(BinaryAny const & other) throw () {
-    uno_type_any_construct(&data_, other.data_.pData, other.data_.pType, 0);
+    uno_type_any_construct(&data_, other.data_.pData, other.data_.pType, nullptr);
 }
 
 BinaryAny::~BinaryAny() throw () {
-    uno_any_destruct(&data_, 0);
+    uno_any_destruct(&data_, nullptr);
 }
 
 BinaryAny & BinaryAny::operator =(BinaryAny const & other) throw () {
     if (&other != this) {
-        uno_type_any_assign(&data_, other.data_.pData, other.data_.pType, 0, 0);
+        uno_type_any_assign(&data_, other.data_.pData, other.data_.pType, nullptr, nullptr);
     }
     return *this;
 }

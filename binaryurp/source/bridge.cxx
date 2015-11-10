@@ -82,19 +82,19 @@ sal_Int32 random() {
 
 OUString toString(css::uno::TypeDescription const & type) {
     typelib_TypeDescription * d = type.get();
-    assert(d != 0 && d->pTypeName != 0);
+    assert(d != nullptr && d->pTypeName != nullptr);
     return OUString(d->pTypeName);
 }
 
 extern "C" void SAL_CALL freeProxyCallback(
     SAL_UNUSED_PARAMETER uno_ExtEnvironment *, void * pProxy)
 {
-    assert(pProxy != 0);
+    assert(pProxy != nullptr);
     static_cast< Proxy * >(pProxy)->do_free();
 }
 
 bool isThread(salhelper::Thread * thread) {
-    assert(thread != 0);
+    assert(thread != nullptr);
     return osl::Thread::getCurrentIdentifier() == thread->getIdentifier();
 }
 
@@ -115,7 +115,7 @@ private:
 };
 
 AttachThread::AttachThread(uno_ThreadPool threadPool): threadPool_(threadPool) {
-    sal_Sequence * s = 0;
+    sal_Sequence * s = nullptr;
     uno_getIdOfCurrentThread(&s);
     tid_ = rtl::ByteSequence(s, rtl::BYTESEQ_NOACQUIRE);
     uno_threadpool_attach(threadPool_);
@@ -190,7 +190,7 @@ Bridge::Bridge(
             css::uno::Reference< css::bridge::XProtocolProperties > >::get()),
     protPropRequest_("com.sun.star.bridge.XProtocolProperties::requestChange"),
     protPropCommit_("com.sun.star.bridge.XProtocolProperties::commitChange"),
-    state_(STATE_INITIAL), threadPool_(0), currentContextMode_(false),
+    state_(STATE_INITIAL), threadPool_(nullptr), currentContextMode_(false),
     proxies_(0), calls_(0), normalCall_(false), activeCalls_(0),
     mode_(MODE_REQUESTED)
 {
@@ -210,10 +210,10 @@ void Bridge::start() {
     {
         osl::MutexGuard g(mutex_);
         assert(
-            state_ == STATE_INITIAL && threadPool_ == 0 && !writer_.is() &&
+            state_ == STATE_INITIAL && threadPool_ == nullptr && !writer_.is() &&
             !reader_.is());
         threadPool_ = uno_threadpool_create();
-        assert(threadPool_ != 0);
+        assert(threadPool_ != nullptr);
         reader_ = r;
         writer_ = w;
         state_ = STATE_STARTED;
@@ -252,7 +252,7 @@ void Bridge::terminate(bool final) {
                     {
                         osl::MutexGuard g2(mutex_);
                         tp = threadPool_;
-                        threadPool_ = 0;
+                        threadPool_ = nullptr;
                         if (reader_.is()) {
                             if (!isThread(reader_.get())) {
                                 r = reader_;
@@ -273,7 +273,7 @@ void Bridge::terminate(bool final) {
                     } else if (w.is()) {
                         w->join();
                     }
-                    if (tp != 0) {
+                    if (tp != nullptr) {
                         uno_threadpool_destroy(tp);
                     }
                 }
@@ -306,7 +306,7 @@ void Bridge::terminate(bool final) {
         if (joinW) {
             w->join();
         }
-        assert(tp != 0);
+        assert(tp != nullptr);
         uno_threadpool_dispose(tp);
         Stubs s;
         {
@@ -343,7 +343,7 @@ void Bridge::terminate(bool final) {
     {
         osl::MutexGuard g(mutex_);
         if (final) {
-            threadPool_ = 0;
+            threadPool_ = nullptr;
         }
     }
     terminated_.set();
@@ -366,7 +366,7 @@ BinaryAny Bridge::mapCppToBinaryAny(css::uno::Any const & cppAny) {
 uno_ThreadPool Bridge::getThreadPool() {
     osl::MutexGuard g(mutex_);
     checkDisposed();
-    assert(threadPool_ != 0);
+    assert(threadPool_ != nullptr);
     return threadPool_;
 }
 
@@ -608,7 +608,7 @@ bool Bridge::makeCall(
         decrementActiveCalls();
         decrementCalls();
     }
-    if (resp.get() == 0) {
+    if (resp.get() == nullptr) {
         throw css::lang::DisposedException(
             "Binary URP bridge disposed during call",
             static_cast< cppu::OWeakObject * >(this));

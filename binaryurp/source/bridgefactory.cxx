@@ -211,8 +211,8 @@ static cppu::ImplementationEntry const services[] = {
     { &binaryurp::BridgeFactory::static_create,
       &binaryurp::BridgeFactory::static_getImplementationName,
       &binaryurp::BridgeFactory::static_getSupportedServiceNames,
-      &cppu::createOneInstanceComponentFactory, 0, 0 },
-    { 0, 0, 0, 0, 0, 0 }
+      &cppu::createOneInstanceComponentFactory, nullptr, 0 },
+    { nullptr, nullptr, nullptr, nullptr, nullptr, 0 }
 };
 
 }

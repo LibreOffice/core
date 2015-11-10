@@ -79,7 +79,7 @@ css::uno::Sequence< sal_Int8 > read(
 }
 
 extern "C" void SAL_CALL request(void * pThreadSpecificData) {
-    assert(pThreadSpecificData != 0);
+    assert(pThreadSpecificData != nullptr);
     std::unique_ptr< IncomingRequest >(
         static_cast< IncomingRequest * >(pThreadSpecificData))->
         execute();
@@ -359,7 +359,7 @@ void Reader::readReplyMessage(Unmarshal & unmarshal, sal_uInt8 flags1) {
                 ret.getType().get()))
         {
             sal_Int32 n = 0;
-            typelib_TypeDescriptionReference ** p = 0;
+            typelib_TypeDescriptionReference ** p = nullptr;
             switch (req.member.get()->eTypeClass) {
             case typelib_TypeClass_INTERFACE_ATTRIBUTE:
                 {
@@ -443,7 +443,7 @@ void Reader::readReplyMessage(Unmarshal & unmarshal, sal_uInt8 flags1) {
             std::unique_ptr< IncomingReply > resp(
                 new IncomingReply(exc, ret, outArgs));
             uno_threadpool_putJob(
-                bridge_->getThreadPool(), tid.getHandle(), resp.get(), 0,
+                bridge_->getThreadPool(), tid.getHandle(), resp.get(), nullptr,
                 false);
             resp.release();
             break;

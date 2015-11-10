@@ -38,7 +38,7 @@ css::uno::UnoInterfaceReference get() {
     css::uno::UnoInterfaceReference cc;
     if (!uno_getCurrentContext(
             reinterpret_cast< void ** >(&cc.m_pUnoI),
-            OUString(UNO_LB_UNO).pData, 0))
+            OUString(UNO_LB_UNO).pData, nullptr))
     {
         throw css::uno::RuntimeException("uno_getCurrentContext failed");
     }
@@ -49,7 +49,7 @@ void set(css::uno::UnoInterfaceReference const & value) {
     css::uno::UnoInterfaceReference cc(value);
     if (!uno_setCurrentContext(
             cc.m_pUnoI,
-            OUString(UNO_LB_UNO).pData, 0))
+            OUString(UNO_LB_UNO).pData, nullptr))
     {
         throw css::uno::RuntimeException("uno_setCurrentContext failed");
     }

@@ -72,7 +72,7 @@ void writeCompressed(std::vector< unsigned char > * buffer, sal_uInt32 value) {
 void writeString(
     std::vector< unsigned char > * buffer, OUString const & value)
 {
-    assert(buffer != 0);
+    assert(buffer != nullptr);
     OString v;
     if (!value.convertToString(
             &v, RTL_TEXTENCODING_UTF8,
@@ -97,7 +97,7 @@ Marshal::Marshal(rtl::Reference< Bridge > const & bridge, WriterState & state):
 Marshal::~Marshal() {}
 
 void Marshal::write8(std::vector< unsigned char > * buffer, sal_uInt8 value) {
-    assert(buffer != 0);
+    assert(buffer != nullptr);
     buffer->push_back(value);
 }
 
@@ -187,7 +187,7 @@ void Marshal::writeValue(
     std::vector< unsigned char > * buffer,
     css::uno::TypeDescription const & type, void const * value)
 {
-    assert(buffer != 0 && type.is());
+    assert(buffer != nullptr && type.is());
     type.makeComplete();
     switch (type.get()->eTypeClass) {
     case typelib_TypeClass_VOID:
@@ -279,11 +279,11 @@ void Marshal::writeMemberValues(
         type.is() &&
         (type.get()->eTypeClass == typelib_TypeClass_STRUCT ||
          type.get()->eTypeClass == typelib_TypeClass_EXCEPTION) &&
-        aggregateValue != 0);
+        aggregateValue != nullptr);
     type.makeComplete();
     typelib_CompoundTypeDescription * ctd =
         reinterpret_cast< typelib_CompoundTypeDescription * >(type.get());
-    if (ctd->pBaseTypeDescription != 0) {
+    if (ctd->pBaseTypeDescription != nullptr) {
         writeMemberValues(
             buffer,
             css::uno::TypeDescription(&ctd->pBaseTypeDescription->aBase),

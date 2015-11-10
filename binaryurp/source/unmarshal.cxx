@@ -56,7 +56,7 @@ namespace {
 
 void * allocate(sal_Size size) {
     void * p = rtl_allocateMemory(size);
-    if (p == 0) {
+    if (p == nullptr) {
         throw std::bad_alloc();
     }
     return p;
@@ -70,12 +70,12 @@ std::vector< BinaryAny >::iterator copyMemberValues(
         type.is() &&
         (type.get()->eTypeClass == typelib_TypeClass_STRUCT ||
          type.get()->eTypeClass == typelib_TypeClass_EXCEPTION) &&
-        buffer != 0);
+        buffer != nullptr);
     type.makeComplete();
     std::vector< BinaryAny >::iterator i(it);
     typelib_CompoundTypeDescription * ctd =
         reinterpret_cast< typelib_CompoundTypeDescription * >(type.get());
-    if (ctd->pBaseTypeDescription != 0) {
+    if (ctd->pBaseTypeDescription != nullptr) {
         i = copyMemberValues(
             css::uno::TypeDescription(&ctd->pBaseTypeDescription->aBase), i,
             buffer);
@@ -84,7 +84,7 @@ std::vector< BinaryAny >::iterator copyMemberValues(
         uno_type_copyData(
             static_cast< char * >(buffer) + ctd->pMemberOffsets[j],
             i++->getValue(css::uno::TypeDescription(ctd->ppTypeRefs[j])),
-            ctd->ppTypeRefs[j], 0);
+            ctd->ppTypeRefs[j], nullptr);
     }
     return i;
 }
@@ -345,7 +345,7 @@ BinaryAny Unmarshal::readValue(css::uno::TypeDescription const & type) {
             raw.pType = reinterpret_cast< typelib_TypeDescriptionReference * >(
                 type.get());
             raw.pData = buf;
-            raw.pReserved = 0;
+            raw.pReserved = nullptr;
             return BinaryAny(raw);
         }
     case typelib_TypeClass_INTERFACE:
@@ -427,7 +427,7 @@ BinaryAny Unmarshal::readSequence(css::uno::TypeDescription const & type) {
             "binaryurp::Unmarshal: sequence size too large");
     }
     if (n == 0) {
-        return BinaryAny(type, 0);
+        return BinaryAny(type, nullptr);
     }
     css::uno::TypeDescription ctd(
         reinterpret_cast< typelib_IndirectTypeDescription * >(
@@ -461,7 +461,7 @@ BinaryAny Unmarshal::readSequence(css::uno::TypeDescription const & type) {
     for (sal_uInt32 i = 0; i != n; ++i) {
         uno_copyData(
             static_cast< sal_Sequence * >(buf)->elements + i * ctd.get()->nSize,
-            as[i].getValue(ctd), ctd.get(), 0);
+            as[i].getValue(ctd), ctd.get(), nullptr);
     }
     return BinaryAny(type, &buf);
 }
@@ -473,11 +473,11 @@ void Unmarshal::readMemberValues(
         type.is() &&
         (type.get()->eTypeClass == typelib_TypeClass_STRUCT ||
          type.get()->eTypeClass == typelib_TypeClass_EXCEPTION) &&
-        values != 0);
+        values != nullptr);
     type.makeComplete();
     typelib_CompoundTypeDescription * ctd =
         reinterpret_cast< typelib_CompoundTypeDescription * >(type.get());
-    if (ctd->pBaseTypeDescription != 0) {
+    if (ctd->pBaseTypeDescription != nullptr) {
         readMemberValues(
             css::uno::TypeDescription(&ctd->pBaseTypeDescription->aBase),
             values);

@@ -42,12 +42,12 @@ namespace binaryurp {
 namespace {
 
 extern "C" void SAL_CALL proxy_acquireInterface(uno_Interface * pInterface) {
-    assert(pInterface != 0);
+    assert(pInterface != nullptr);
     static_cast< Proxy * >(pInterface)->do_acquire();
 }
 
 extern "C" void SAL_CALL proxy_releaseInterface(uno_Interface * pInterface) {
-    assert(pInterface != 0);
+    assert(pInterface != nullptr);
     static_cast< Proxy * >(pInterface)->do_release();
 }
 
@@ -55,7 +55,7 @@ extern "C" void SAL_CALL proxy_dispatchInterface(
     uno_Interface * pUnoI, typelib_TypeDescription const * pMemberType,
     void * pReturn, void ** pArgs, uno_Any ** ppException)
 {
-    assert(pUnoI != 0);
+    assert(pUnoI != nullptr);
     static_cast< Proxy * >(pUnoI)->do_dispatch(
         pMemberType, pReturn, pArgs, ppException);
 }
@@ -132,12 +132,12 @@ void Proxy::do_dispatch_throw(
     void ** arguments, uno_Any ** exception) const
 {
     //TODO: Optimize queryInterface:
-    assert(member != 0);
+    assert(member != nullptr);
     bool bSetter = false;
     std::vector< BinaryAny > inArgs;
     switch (member->eTypeClass) {
     case typelib_TypeClass_INTERFACE_ATTRIBUTE:
-        bSetter = returnValue == 0;
+        bSetter = returnValue == nullptr;
         if (bSetter) {
             inArgs.push_back(
                 BinaryAny(
@@ -178,7 +178,7 @@ void Proxy::do_dispatch_throw(
     {
         assert(ret.getType().get()->eTypeClass == typelib_TypeClass_EXCEPTION);
         uno_any_construct(
-            *exception, ret.getValue(ret.getType()), ret.getType().get(), 0);
+            *exception, ret.getValue(ret.getType()), ret.getType().get(), nullptr);
     } else {
         switch (member->eTypeClass) {
         case typelib_TypeClass_INTERFACE_ATTRIBUTE:
@@ -188,7 +188,7 @@ void Proxy::do_dispatch_throw(
                         typelib_InterfaceAttributeTypeDescription const * >(
                             member)->
                     pAttributeTypeRef);
-                uno_copyData(returnValue, ret.getValue(t), t.get(), 0);
+                uno_copyData(returnValue, ret.getValue(t), t.get(), nullptr);
             }
             break;
         case typelib_TypeClass_INTERFACE_METHOD:
@@ -199,7 +199,7 @@ void Proxy::do_dispatch_throw(
                             member);
                 css::uno::TypeDescription t(mtd->pReturnTypeRef);
                 if (t.get()->eTypeClass != typelib_TypeClass_VOID) {
-                    uno_copyData(returnValue, ret.getValue(t), t.get(), 0);
+                    uno_copyData(returnValue, ret.getValue(t), t.get(), nullptr);
                 }
                 std::vector< BinaryAny >::iterator i(outArgs.begin());
                 for (sal_Int32 j = 0; j != mtd->nParams; ++j) {
@@ -208,10 +208,10 @@ void Proxy::do_dispatch_throw(
                         if (mtd->pParams[j].bIn) {
                             (void) uno_assignData(
                                 arguments[j], pt.get(), i++->getValue(pt),
-                                pt.get(), 0, 0, 0);
+                                pt.get(), nullptr, nullptr, nullptr);
                         } else {
                             uno_copyData(
-                                arguments[j], i++->getValue(pt), pt.get(), 0);
+                                arguments[j], i++->getValue(pt), pt.get(), nullptr);
                         }
                     }
                 }
@@ -222,14 +222,14 @@ void Proxy::do_dispatch_throw(
             assert(false); // this cannot happen
             break;
         }
-        *exception = 0;
+        *exception = nullptr;
     }
 }
 
 bool Proxy::isProxy(
     rtl::Reference< Bridge > const & bridge, OUString * oid) const
 {
-    assert(oid != 0);
+    assert(oid != nullptr);
     if (bridge == bridge_) {
         *oid = oid_;
         return true;
