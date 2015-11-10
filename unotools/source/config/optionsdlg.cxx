@@ -37,7 +37,7 @@ using namespace com::sun::star::uno;
 #define PAGES_NODE              "Pages"
 #define OPTIONS_NODE            "Options"
 
-static SvtOptionsDlgOptions_Impl*   pOptions = NULL;
+static SvtOptionsDlgOptions_Impl*   pOptions = nullptr;
 static sal_Int32                    nRefCount = 0;
 
 class SvtOptionsDlgOptions_Impl : public utl::ConfigItem
@@ -222,7 +222,7 @@ SvtOptionsDialogOptions::~SvtOptionsDialogOptions()
         if ( pOptions->IsModified() )
             pOptions->Commit();
         delete pOptions;
-        pOptions = NULL;
+        pOptions = nullptr;
     }
 }
 

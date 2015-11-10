@@ -41,7 +41,7 @@ class OReadAccelatorDocumentHandler : public css::xml::sax::XDocumentHandler,
             m_nElementDepth( 0 ),
             m_bAcceleratorMode( false ),
             m_bItemCloseExpected( false ),
-            m_xLocator( 0 ),
+            m_xLocator( nullptr ),
             m_aReadAcceleratorList( aNewAcceleratorItemList ) {}
         virtual ~OReadAccelatorDocumentHandler() {}
 

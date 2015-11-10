@@ -115,7 +115,7 @@ class SvtDynMenu
             lProperties[OFFSET_IMAGEIDENTIFIER].Name = PROPERTYNAME_IMAGEIDENTIFIER;
             lProperties[OFFSET_TARGETNAME     ].Name = PROPERTYNAME_TARGETNAME;
 
-            while( pList != NULL )
+            while( pList != nullptr )
             {
                 for( vector< SvtDynMenuEntry >::const_iterator pItem =pList->begin();
                                                          pItem!=pList->end();
@@ -141,7 +141,7 @@ class SvtDynMenu
                 if( pList == &lSetupEntries )
                     pList = &lUserEntries;
                 else
-                    pList = NULL;
+                    pList = nullptr;
             }
             return lResult;
         }
@@ -571,7 +571,7 @@ void SvtDynamicMenuOptions_Impl::impl_SortAndExpandPropertyNames( const Sequence
 //  DON'T DO IT IN YOUR HEADER!
 //  see definition for further information
 
-SvtDynamicMenuOptions_Impl*     SvtDynamicMenuOptions::m_pDataContainer = NULL;
+SvtDynamicMenuOptions_Impl*     SvtDynamicMenuOptions::m_pDataContainer = nullptr;
 sal_Int32                       SvtDynamicMenuOptions::m_nRefCount      = 0;
 
 //  constructor
@@ -583,7 +583,7 @@ SvtDynamicMenuOptions::SvtDynamicMenuOptions()
     // Increase our refcount ...
     ++m_nRefCount;
     // ... and initialize our data container only if it not already exist!
-    if( m_pDataContainer == NULL )
+    if( m_pDataContainer == nullptr )
     {
         m_pDataContainer = new SvtDynamicMenuOptions_Impl;
         ItemHolder1::holdConfigItem(E_DYNAMICMENUOPTIONS);
@@ -603,7 +603,7 @@ SvtDynamicMenuOptions::~SvtDynamicMenuOptions()
     if( m_nRefCount <= 0 )
     {
         delete m_pDataContainer;
-        m_pDataContainer = NULL;
+        m_pDataContainer = nullptr;
     }
 }
 

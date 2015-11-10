@@ -247,7 +247,7 @@ void ItemHolder1::impl_deleteItem(TItemInfo& rItem)
     if (rItem.pItem)
     {
         delete rItem.pItem;
-        rItem.pItem = 0;
+        rItem.pItem = nullptr;
     }
 }
 

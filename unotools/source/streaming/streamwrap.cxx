@@ -118,7 +118,7 @@ void SAL_CALL OInputStreamWrapper::closeInput() throw( css::io::NotConnectedExce
     if (m_bSvStreamOwner)
         delete m_pSvStream;
 
-    m_pSvStream = NULL;
+    m_pSvStream = nullptr;
 }
 
 void OInputStreamWrapper::checkConnected() const

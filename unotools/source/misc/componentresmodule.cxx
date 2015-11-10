@@ -43,7 +43,7 @@ namespace utl
 
     public:
         explicit OComponentResModuleImpl( const OString& _rResFilePrefix )
-            :m_pResources( NULL )
+            :m_pResources( nullptr )
             ,m_bInitialized( false )
             ,m_sResFilePrefix( _rResFilePrefix )
         {
@@ -65,7 +65,7 @@ namespace utl
 
     void OComponentResModuleImpl::freeResManager()
     {
-        delete m_pResources, m_pResources = NULL;
+        delete m_pResources, m_pResources = nullptr;
         m_bInitialized = false;
     }
 

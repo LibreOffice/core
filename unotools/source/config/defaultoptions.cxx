@@ -101,7 +101,7 @@ private:
 
 // global ----------------------------------------------------------------
 
-static SvtDefaultOptions_Impl*  pOptions = NULL;
+static SvtDefaultOptions_Impl*  pOptions = nullptr;
 static sal_Int32                nRefCount = 0;
 
 typedef OUString SvtDefaultOptions_Impl:: *PathStrPtr;

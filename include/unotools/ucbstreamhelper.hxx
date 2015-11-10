@@ -53,13 +53,13 @@ namespace utl
     {
     public:
         static SvStream*    CreateStream( const OUString& rFileName, StreamMode eOpenMode,
-                                          UcbLockBytesHandler* pHandler=0 );
+                                          UcbLockBytesHandler* pHandler=nullptr );
         static SvStream*    CreateStream( const OUString& rFileName, StreamMode eOpenMode,
                                           css::uno::Reference < css::task::XInteractionHandler >,
-                                          UcbLockBytesHandler* pHandler=0 );
+                                          UcbLockBytesHandler* pHandler=nullptr );
         static SvStream*    CreateStream( const OUString& rFileName, StreamMode eOpenMode,
                                           bool bFileExists,
-                                UcbLockBytesHandler* pHandler=0 );
+                                UcbLockBytesHandler* pHandler=nullptr );
         static SvStream*    CreateStream( css::uno::Reference < css::io::XInputStream > xStream );
         static SvStream*    CreateStream( css::uno::Reference < css::io::XStream > xStream );
         static SvStream*    CreateStream( css::uno::Reference < css::io::XInputStream > xStream, bool bCloseStream );

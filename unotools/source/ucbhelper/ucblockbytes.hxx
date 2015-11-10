@@ -107,7 +107,7 @@ public:
                                             const ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >& rProps,
                                             StreamMode eMode,
                                             const ::com::sun::star::uno::Reference < ::com::sun::star::task::XInteractionHandler >& xInter,
-                                            UcbLockBytesHandler* pHandler=0 );
+                                            UcbLockBytesHandler* pHandler=nullptr );
 
     static UcbLockBytesRef  CreateInputLockBytes( const ::com::sun::star::uno::Reference < ::com::sun::star::io::XInputStream >& xContent );
     static UcbLockBytesRef  CreateLockBytes( const ::com::sun::star::uno::Reference < ::com::sun::star::io::XStream >& xContent );

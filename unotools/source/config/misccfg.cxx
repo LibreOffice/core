@@ -33,7 +33,7 @@ using namespace com::sun::star::uno;
 namespace utl
 {
 
-static SfxMiscCfg* pOptions = NULL;
+static SfxMiscCfg* pOptions = nullptr;
 static sal_Int32 nRefCount = 0;
 
 class SfxMiscCfg : public utl::ConfigItem

@@ -123,14 +123,14 @@ void AccessibleRelationSetHelperImpl::AddRelation(const AccessibleRelation& rRel
 //=====  internal  ============================================================
 
 AccessibleRelationSetHelper::AccessibleRelationSetHelper ()
-    : mpHelperImpl(NULL)
+    : mpHelperImpl(nullptr)
 {
     mpHelperImpl = new AccessibleRelationSetHelperImpl();
 }
 
 AccessibleRelationSetHelper::AccessibleRelationSetHelper (const AccessibleRelationSetHelper& rHelper)
     : cppu::WeakImplHelper1<XAccessibleRelationSet>()
-    , mpHelperImpl(NULL)
+    , mpHelperImpl(nullptr)
 {
     if (rHelper.mpHelperImpl)
         mpHelperImpl = new AccessibleRelationSetHelperImpl(*rHelper.mpHelperImpl);

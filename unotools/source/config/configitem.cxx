@@ -470,8 +470,8 @@ bool ConfigItem::PutProperties( const Sequence< OUString >& rNames,
     {
         Sequence< OUString >    lNames;
         Sequence< Any >         lValues;
-        const OUString*         pNames  = NULL;
-        const Any*              pValues = NULL;
+        const OUString*         pNames  = nullptr;
+        const Any*              pValues = nullptr;
         sal_Int32               nNameCount;
         if(( m_nMode & ConfigItemMode::AllLocales ) == ConfigItemMode::AllLocales )
         {
@@ -574,7 +574,7 @@ void ConfigItem::RemoveChangesListener()
         try
         {
             xChgNot->removeChangesListener( xChangeLstnr );
-            xChangeLstnr = 0;
+            xChangeLstnr = nullptr;
         }
         catch (const Exception&)
         {

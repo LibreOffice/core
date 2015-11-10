@@ -161,7 +161,7 @@ class SvtPathOptions_Impl
 
 // global ----------------------------------------------------------------
 
-static SvtPathOptions_Impl* pOptions = NULL;
+static SvtPathOptions_Impl* pOptions = nullptr;
 static sal_Int32 nRefCount = 0;
 
 // functions -------------------------------------------------------------

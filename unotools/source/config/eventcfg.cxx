@@ -305,7 +305,7 @@ bool SAL_CALL GlobalEventConfig_Impl::hasElements(  ) throw (RuntimeException)
 // and now the wrapper
 
 //initialize static member
-GlobalEventConfig_Impl*     GlobalEventConfig::m_pImpl = NULL;
+GlobalEventConfig_Impl*     GlobalEventConfig::m_pImpl = nullptr;
 sal_Int32                   GlobalEventConfig::m_nRefCount      = 0;
 
 GlobalEventConfig::GlobalEventConfig()
@@ -315,7 +315,7 @@ GlobalEventConfig::GlobalEventConfig()
     // Increase our refcount ...
     ++m_nRefCount;
     // ... and initialize our data container only if it not already exist!
-    if( m_pImpl == NULL )
+    if( m_pImpl == nullptr )
     {
         m_pImpl = new GlobalEventConfig_Impl;
         ItemHolder1::holdConfigItem(E_EVENTCFG);
@@ -333,7 +333,7 @@ GlobalEventConfig::~GlobalEventConfig()
     if( m_nRefCount <= 0 )
     {
         delete m_pImpl;
-        m_pImpl = NULL;
+        m_pImpl = nullptr;
     }
 }
 

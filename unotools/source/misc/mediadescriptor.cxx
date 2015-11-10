@@ -707,7 +707,7 @@ bool MediaDescriptor::impl_openStreamWithURL( const OUString& sURL, bool bLockFi
         try
         {
             css::uno::Reference< css::ucb::XContentIdentifier > xContId(
-                aContent.get().is() ? aContent.get()->getIdentifier() : 0 );
+                aContent.get().is() ? aContent.get()->getIdentifier() : nullptr );
 
             if ( xContId.is() )
                 aScheme = xContId->getContentProviderScheme();

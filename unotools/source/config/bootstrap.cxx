@@ -422,9 +422,9 @@ static void addMissingDirectoryError(OUStringBuffer& _rBuf, OUString const& _aPa
     _rBuf.append(IS_MISSING).append(PERIOD);
 }
 
-static void addUnexpectedError(OUStringBuffer& _rBuf, AsciiString _sExtraInfo = NULL)
+static void addUnexpectedError(OUStringBuffer& _rBuf, AsciiString _sExtraInfo = nullptr)
 {
-    if (NULL == _sExtraInfo)
+    if (nullptr == _sExtraInfo)
         _sExtraInfo = "An internal failure occurred";
 
     _rBuf.appendAscii(_sExtraInfo).append(PERIOD);
@@ -736,7 +736,7 @@ bool Bootstrap::Impl::getVersionValue(OUString const& _sName, OUString& _rValue,
     OUString uri;
     rtl::Bootstrap::get( "BRAND_BASE_DIR", uri);
     rtl::Bootstrap aData( uri + "/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("version") );
-    if ( aData.getHandle() == NULL )
+    if ( aData.getHandle() == nullptr )
         // version.ini (versionrc) doesn't exist
         return false;
 

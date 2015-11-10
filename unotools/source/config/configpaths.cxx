@@ -168,7 +168,7 @@ OUString extractFirstFromConfigurationPath(OUString const& _sInPath, OUString* _
     OUString sResult = (nEnd >= 0) ? _sInPath.copy(nStart, nEnd-nStart) : _sInPath;
     lcl_resolveCharEntities(sResult);
 
-    if (_sOutPath != 0)
+    if (_sOutPath != nullptr)
     {
         *_sOutPath = (nSep >= 0) ? _sInPath.copy(nSep + 1) : OUString();
     }

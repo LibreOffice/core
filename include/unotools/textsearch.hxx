@@ -143,10 +143,10 @@ public:
     */
     bool SearchForward( const OUString &rStr,
                         sal_Int32* pStart, sal_Int32* pEnd,
-                        css::util::SearchResult* pRes = 0 );
+                        css::util::SearchResult* pRes = nullptr );
     bool SearchBackward( const OUString &rStr,
                         sal_Int32* pStart, sal_Int32* pEnd,
-                        css::util::SearchResult* pRes = 0 );
+                        css::util::SearchResult* pRes = nullptr );
 
     void SetLocale( const css::util::SearchOptions& rOpt,
                     const css::lang::Locale& rLocale );

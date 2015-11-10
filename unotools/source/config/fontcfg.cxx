@@ -444,7 +444,7 @@ static const char* const aImplKillLeadingList[] =
     "ipa",
     "sazanami",
     "kochi",
-    NULL
+    nullptr
 };
 
 static const char* const aImplKillTrailingList[] =
@@ -494,14 +494,14 @@ static const char* const aImplKillTrailingList[] =
     "24cpi",
     "scale",
     "pc",
-    NULL
+    nullptr
 };
 
 static const char* const aImplKillTrailingWithExceptionsList[] =
 {
-    "ce", "monospace", "oldface", NULL,
-    "ps", "caps", NULL,
-    NULL
+    "ce", "monospace", "oldface", nullptr,
+    "ps", "caps", nullptr,
+    nullptr
 };
 
 struct ImplFontAttrWeightSearchData
@@ -527,7 +527,7 @@ static ImplFontAttrWeightSearchData const aImplWeightAttrSearchList[] =
 {   "ultralight",           WEIGHT_ULTRALIGHT },
 {   "light",                WEIGHT_LIGHT },
 {   "medium",               WEIGHT_MEDIUM },
-{   NULL,                   WEIGHT_DONTKNOW },
+{   nullptr,                   WEIGHT_DONTKNOW },
 };
 
 struct ImplFontAttrWidthSearchData
@@ -548,7 +548,7 @@ static ImplFontAttrWidthSearchData const aImplWidthAttrSearchList[] =
 {   "condensed",            WIDTH_CONDENSED },
 {   "cond",                 WIDTH_CONDENSED },
 {   "cn",                   WIDTH_CONDENSED },
-{   NULL,                   WIDTH_DONTKNOW },
+{   nullptr,                   WIDTH_DONTKNOW },
 };
 
 struct ImplFontAttrTypeSearchData
@@ -618,7 +618,7 @@ static ImplFontAttrTypeSearchData const aImplTypeAttrSearchList[] =
 {   "ms",                   ImplFontAttrs::None },
 {   "cpi",                  ImplFontAttrs::None },
 {   "no",                   ImplFontAttrs::None },
-{   NULL,                   ImplFontAttrs::None },
+{   nullptr,                   ImplFontAttrs::None },
 };
 
 static bool ImplKillLeading( OUString& rName, const char* const* ppStr )
@@ -1104,7 +1104,7 @@ const FontNameAttr* FontSubstConfiguration::getSubstInfo( const OUString& rFontN
         const LanguageTag& rLanguageTag ) const
 {
     if( rFontName.isEmpty() )
-        return NULL;
+        return nullptr;
 
     // search if a  (language dep.) replacement table for the given font exists
     // fallback is english
@@ -1142,7 +1142,7 @@ const FontNameAttr* FontSubstConfiguration::getSubstInfo( const OUString& rFontN
             }
         }
     }
-    return NULL;
+    return nullptr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

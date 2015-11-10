@@ -28,9 +28,9 @@ IntlWrapper::IntlWrapper(
         :
         maLanguageTag( rLanguageTag ),
         m_xContext( rxContext ),
-        pLocaleData( NULL ),
-        pCollator( NULL ),
-        pCaseCollator( NULL )
+        pLocaleData( nullptr ),
+        pCollator( nullptr ),
+        pCaseCollator( nullptr )
 {
 }
 
@@ -39,9 +39,9 @@ IntlWrapper::IntlWrapper(
         :
         maLanguageTag( rLanguageTag ),
         m_xContext( comphelper::getProcessComponentContext() ),
-        pLocaleData( NULL ),
-        pCollator( NULL ),
-        pCaseCollator( NULL )
+        pLocaleData( nullptr ),
+        pCollator( nullptr ),
+        pCaseCollator( nullptr )
 {
 }
 

@@ -40,7 +40,7 @@ typedef ::std::vector< OUString* > StringList_Impl;
 
 ::com::sun::star::uno::Sequence < OUString > LocalFileHelper::GetFolderContents( const OUString& rFolder, bool bFolder )
 {
-    StringList_Impl* pFiles = NULL;
+    StringList_Impl* pFiles = nullptr;
     try
     {
         ::ucbhelper::Content aCnt(

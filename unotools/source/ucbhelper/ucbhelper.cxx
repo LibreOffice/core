@@ -186,7 +186,7 @@ bool utl::UCBContentHelper::IsFolder(OUString const & url) {
 bool utl::UCBContentHelper::GetTitle(
     OUString const & url, OUString * title)
 {
-    assert(title != 0);
+    assert(title != nullptr);
     try {
         return content(url).getPropertyValue("Title") >>= *title;
     } catch (css::uno::RuntimeException const &) {

@@ -291,7 +291,7 @@ Sequence< OUString > SvtCommandOptions_Impl::impl_GetPropertyNames()
 //  DON'T DO IT IN YOUR HEADER!
 //  see definition for further information
 
-SvtCommandOptions_Impl*     SvtCommandOptions::m_pDataContainer = NULL;
+SvtCommandOptions_Impl*     SvtCommandOptions::m_pDataContainer = nullptr;
 sal_Int32                   SvtCommandOptions::m_nRefCount      = 0;
 
 //  constructor
@@ -303,7 +303,7 @@ SvtCommandOptions::SvtCommandOptions()
     // Increase our refcount ...
     ++m_nRefCount;
     // ... and initialize our data container only if it not already exist!
-    if( m_pDataContainer == NULL )
+    if( m_pDataContainer == nullptr )
     {
         m_pDataContainer = new SvtCommandOptions_Impl;
         ItemHolder1::holdConfigItem(E_CMDOPTIONS);
@@ -323,7 +323,7 @@ SvtCommandOptions::~SvtCommandOptions()
     if( m_nRefCount <= 0 )
     {
         delete m_pDataContainer;
-        m_pDataContainer = NULL;
+        m_pDataContainer = nullptr;
     }
 }
 

@@ -31,7 +31,7 @@ OTempFileService::OTempFileService(css::uno::Reference< css::uno::XComponentCont
     context
     , static_cast< Implements >( IMPLEMENTS_PROPERTY_SET | IMPLEMENTS_FAST_PROPERTY_SET | IMPLEMENTS_PROPERTY_ACCESS )
     , com::sun::star::uno::Sequence< OUString >() )
-, mpStream( NULL )
+, mpStream( nullptr )
 , mbRemoveFile( true )
 , mbInClosed( false )
 , mbOutClosed( false )
@@ -74,12 +74,12 @@ throw ()
 css::uno::Sequence< css::uno::Type > SAL_CALL OTempFileService::getTypes(  )
 throw ( css::uno::RuntimeException, std::exception )
 {
-    static ::cppu::OTypeCollection* pTypeCollection = NULL;
-    if ( pTypeCollection == NULL )
+    static ::cppu::OTypeCollection* pTypeCollection = nullptr;
+    if ( pTypeCollection == nullptr )
     {
         ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
 
-        if ( pTypeCollection == NULL )
+        if ( pTypeCollection == nullptr )
         {
             static ::cppu::OTypeCollection aTypeCollection(
                 cppu::UnoType<css::beans::XPropertySet>::get()
@@ -178,7 +178,7 @@ throw (css::io::NotConnectedException, css::io::BufferSizeExceededException, css
         mnCachedPos = mpStream->Tell();
         mbHasCachedPos = true;
 
-        mpStream = NULL;
+        mpStream = nullptr;
         if ( mpTempFile )
             mpTempFile->CloseStream();
     }
@@ -245,12 +245,12 @@ throw ( css::io::NotConnectedException, css::io::IOException, css::uno::RuntimeE
     if ( mbOutClosed )
     {
         // stream will be deleted by TempFile implementation
-        mpStream = NULL;
+        mpStream = nullptr;
 
         if ( mpTempFile )
         {
             delete mpTempFile;
-            mpTempFile = NULL;
+            mpTempFile = nullptr;
         }
     }
 }
@@ -296,7 +296,7 @@ throw ( css::io::NotConnectedException, css::io::BufferSizeExceededException, cs
         mnCachedPos = mpStream->Tell();
         mbHasCachedPos = true;
 
-        mpStream = NULL;
+        mpStream = nullptr;
         if ( mpTempFile )
             mpTempFile->CloseStream();
     }
@@ -304,12 +304,12 @@ throw ( css::io::NotConnectedException, css::io::BufferSizeExceededException, cs
     if ( mbInClosed )
     {
         // stream will be deleted by TempFile implementation
-        mpStream = NULL;
+        mpStream = nullptr;
 
         if ( mpTempFile )
         {
             delete mpTempFile;
-            mpTempFile = NULL;
+            mpTempFile = nullptr;
         }
     }
 }
@@ -334,7 +334,7 @@ void OTempFileService::checkConnected ()
             }
             else
             {
-                mpStream = NULL;
+                mpStream = nullptr;
                 mpTempFile->CloseStream();
             }
         }

@@ -73,7 +73,7 @@ namespace utl
 
     */
     UNOTOOLS_DLLPUBLIC OUString extractFirstFromConfigurationPath(
-        OUString const& _sInPath, OUString* _sOutPath = 0);
+        OUString const& _sInPath, OUString* _sOutPath = nullptr);
 
     /** check whether a path is to a nested node with respect to a parent path.
 

@@ -1311,35 +1311,35 @@ static const RecodeTable aStarSymbolRecodeTable[] =
 {
     // the first two entries must be StarMath and StarBats; do not reorder!
     // reason: fgrep for FONTTOSUBSFONT_ONLYOLDSOSYMBOLFONTS
-    {"starbats",        {aStarBatsTab,  "StarSymbol", NULL}},
-    {"starmath",        {aStarMathTab,  "StarSymbol", NULL}},
+    {"starbats",        {aStarBatsTab,  "StarSymbol", nullptr}},
+    {"starmath",        {aStarMathTab,  "StarSymbol", nullptr}},
 
-    {"symbol",          {aAdobeSymbolTab, "StarSymbol", NULL}},
-    {"standardsymbols", {aAdobeSymbolTab, "StarSymbol", NULL}},
-    {"standardsymbolsl",{aAdobeSymbolTab, "StarSymbol", NULL}},
+    {"symbol",          {aAdobeSymbolTab, "StarSymbol", nullptr}},
+    {"standardsymbols", {aAdobeSymbolTab, "StarSymbol", nullptr}},
+    {"standardsymbolsl",{aAdobeSymbolTab, "StarSymbol", nullptr}},
 
-    {"monotypesorts",   {aMonotypeSortsTab, "StarSymbol", NULL}},
+    {"monotypesorts",   {aMonotypeSortsTab, "StarSymbol", nullptr}},
 //  {"monotypesorts2",  {aMonotypeSorts2Tab, "StarSymbol", NULL}}
-    {"zapfdingbats",    {aMonotypeSortsTab, "StarSymbol", NULL}},  //ZapfDingbats=MonotypeSorts-X?
-    {"itczapfdingbats", {aMonotypeSortsTab, "StarSymbol", NULL}},
-    {"dingbats",        {aMonotypeSortsTab, "StarSymbol", NULL}},
+    {"zapfdingbats",    {aMonotypeSortsTab, "StarSymbol", nullptr}},  //ZapfDingbats=MonotypeSorts-X?
+    {"itczapfdingbats", {aMonotypeSortsTab, "StarSymbol", nullptr}},
+    {"dingbats",        {aMonotypeSortsTab, "StarSymbol", nullptr}},
 
-    {"webdings",        {aWebDingsTab,   "StarSymbol", NULL}},
-    {"wingdings",       {aWingDingsTab,  "StarSymbol", NULL}},
-    {"wingdings2",      {aWingDings2Tab, "StarSymbol", NULL}},
-    {"wingdings3",      {aWingDings3Tab, "StarSymbol", NULL}},
-    {"mtextra",         {aMTExtraTab, "StarSymbol", NULL}}
+    {"webdings",        {aWebDingsTab,   "StarSymbol", nullptr}},
+    {"wingdings",       {aWingDingsTab,  "StarSymbol", nullptr}},
+    {"wingdings2",      {aWingDings2Tab, "StarSymbol", nullptr}},
+    {"wingdings3",      {aWingDings3Tab, "StarSymbol", nullptr}},
+    {"mtextra",         {aMTExtraTab, "StarSymbol", nullptr}}
 };
 
 static const RecodeTable aAppleSymbolRecodeTable[] = {
-    {"symbol",         {aAdobeSymbolToAppleSymbolTab, "AppleSymbol", NULL}}
+    {"symbol",         {aAdobeSymbolToAppleSymbolTab, "AppleSymbol", nullptr}}
 };
 
-static ConvertChar aImplStarSymbolCvt = { NULL, "StarBats", ImplStarSymbolToStarBats };
+static ConvertChar aImplStarSymbolCvt = { nullptr, "StarBats", ImplStarSymbolToStarBats };
 
 const ConvertChar* ConvertChar::GetRecodeData( const OUString& rOrgFontName, const OUString& rMapFontName )
 {
-    const ConvertChar* pCvt = NULL;
+    const ConvertChar* pCvt = nullptr;
 
     // clean up and lowercase font name
     OUString aOrgName( GetEnglishSearchFontName( rOrgFontName ) );
@@ -1382,7 +1382,7 @@ const ConvertChar* ConvertChar::GetRecodeData( const OUString& rOrgFontName, con
 
 FontToSubsFontConverter CreateFontToSubsFontConverter( const OUString& rOrgName, FontToSubsFontFlags nFlags )
 {
-    const ConvertChar* pCvt = NULL;
+    const ConvertChar* pCvt = nullptr;
 
     OUString aName = GetEnglishSearchFontName( rOrgName );
 

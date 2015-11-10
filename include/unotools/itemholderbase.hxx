@@ -89,7 +89,7 @@ enum EItem
 struct TItemInfo
 {
     TItemInfo()
-        : pItem(0)
+        : pItem(nullptr)
         , eItem(E_USEROPTIONS)
     {
     }

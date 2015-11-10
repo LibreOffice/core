@@ -247,7 +247,7 @@ Sequence< OUString > SvtFontOptions_Impl::impl_GetPropertyNames()
 //  DON'T DO IT IN YOUR HEADER!
 //  see definition for further information
 
-SvtFontOptions_Impl*    SvtFontOptions::m_pDataContainer    = NULL;
+SvtFontOptions_Impl*    SvtFontOptions::m_pDataContainer    = nullptr;
 sal_Int32               SvtFontOptions::m_nRefCount         = 0;
 
 //  constructor
@@ -259,7 +259,7 @@ SvtFontOptions::SvtFontOptions()
     // Increase our refcount ...
     ++m_nRefCount;
     // ... and initialize our data container only if it not already exist!
-    if( m_pDataContainer == NULL )
+    if( m_pDataContainer == nullptr )
     {
         m_pDataContainer = new SvtFontOptions_Impl;
 
@@ -280,7 +280,7 @@ SvtFontOptions::~SvtFontOptions()
     if( m_nRefCount <= 0 )
     {
         delete m_pDataContainer;
-        m_pDataContainer = NULL;
+        m_pDataContainer = nullptr;
     }
 }
 

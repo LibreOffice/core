@@ -222,7 +222,7 @@ Sequence< OUString > SvtLocalisationOptions_Impl::GetPropertyNames()
 //  DON'T DO IT IN YOUR HEADER!
 //  see definition for further information
 
-SvtLocalisationOptions_Impl*    SvtLocalisationOptions::m_pDataContainer    = NULL;
+SvtLocalisationOptions_Impl*    SvtLocalisationOptions::m_pDataContainer    = nullptr;
 sal_Int32                       SvtLocalisationOptions::m_nRefCount         = 0;
 
 //  constructor
@@ -234,7 +234,7 @@ SvtLocalisationOptions::SvtLocalisationOptions()
     // Increase our refcount ...
     ++m_nRefCount;
     // ... and initialize our data container only if it not already exist!
-    if( m_pDataContainer == NULL )
+    if( m_pDataContainer == nullptr )
     {
         m_pDataContainer = new SvtLocalisationOptions_Impl;
 
@@ -255,7 +255,7 @@ SvtLocalisationOptions::~SvtLocalisationOptions()
     if( m_nRefCount <= 0 )
     {
         delete m_pDataContainer;
-        m_pDataContainer = NULL;
+        m_pDataContainer = nullptr;
     }
 }
 

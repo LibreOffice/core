@@ -48,12 +48,12 @@ public:
     }
 
     ~RegisterConfigItemHelper() {
-        if (item_ != 0) {
+        if (item_ != nullptr) {
             manager_.removeConfigItem(*item_);
         }
     }
 
-    void keep() { item_ = 0; }
+    void keep() { item_ = nullptr; }
 
 private:
     utl::ConfigManager & manager_;
@@ -189,7 +189,7 @@ void utl::ConfigManager::removeConfigItem(utl::ConfigItem & item) {
 }
 
 void utl::ConfigManager::registerConfigItem(utl::ConfigItem * item) {
-    OSL_ASSERT(item != 0);
+    OSL_ASSERT(item != nullptr);
     items_.push_back(item);
 }
 

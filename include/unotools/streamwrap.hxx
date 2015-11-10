@@ -48,7 +48,7 @@ protected:
     SvStream*       m_pSvStream;
     bool        m_bSvStreamOwner : 1;
     OInputStreamWrapper()
-                    { m_pSvStream = 0; m_bSvStreamOwner = false; }
+                    { m_pSvStream = nullptr; m_bSvStreamOwner = false; }
     void            SetStream(SvStream* _pStream, bool bOwner )
                     { m_pSvStream = _pStream; m_bSvStreamOwner = bOwner; }
 

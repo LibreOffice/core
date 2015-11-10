@@ -173,7 +173,7 @@ public:
     explicit SequentialTokens(bool showZero): m_value(0), m_show(showZero) {}
 
     bool next(OUString * token) override {
-        assert(token != 0);
+        assert(token != nullptr);
         if (m_value == SAL_MAX_UINT32) {
             return false;
         }
@@ -193,7 +193,7 @@ public:
     UniqueTokens(): m_count(0) {}
 
     bool next(OUString * token) override {
-        assert(token != 0);
+        assert(token != nullptr);
         // Because of the shared globalValue, no single instance of UniqueTokens
         // is guaranteed to exhaustively test all 36^6 possible values, but stop
         // after that many attempts anyway:
@@ -302,12 +302,12 @@ OUString CreateTempName_Impl( const OUString* pParent, bool bKeep, bool bDir = t
 #endif
 #endif
     UniqueTokens t;
-    return lcl_createName(aEyeCatcher, t, 0, pParent, bDir, bKeep, false);
+    return lcl_createName(aEyeCatcher, t, nullptr, pParent, bDir, bKeep, false);
 }
 
 OUString TempFile::CreateTempName()
 {
-    OUString aName(CreateTempName_Impl( 0, false ));
+    OUString aName(CreateTempName_Impl( nullptr, false ));
 
     // convert to file URL
     OUString aTmp;
@@ -317,7 +317,7 @@ OUString TempFile::CreateTempName()
 }
 
 TempFile::TempFile( const OUString* pParent, bool bDirectory )
-    : pStream( 0 )
+    : pStream( nullptr )
     , bIsDirectory( bDirectory )
     , bKillingFileEnabled( false )
 {
@@ -325,7 +325,7 @@ TempFile::TempFile( const OUString* pParent, bool bDirectory )
 }
 
 TempFile::TempFile( const OUString& rLeadingChars, bool _bStartWithZero, const OUString* pExtension, const OUString* pParent, bool bDirectory)
-    : pStream( 0 )
+    : pStream( nullptr )
     , bIsDirectory( bDirectory )
     , bKillingFileEnabled( false )
 {
@@ -375,7 +375,7 @@ SvStream* TempFile::GetStream( StreamMode eMode )
         if (!aName.isEmpty())
             pStream = new SvFileStream(aName, eMode);
         else
-            pStream = new SvMemoryStream(NULL, 0, eMode);
+            pStream = new SvMemoryStream(nullptr, 0, eMode);
     }
 
     return pStream;
@@ -386,7 +386,7 @@ void TempFile::CloseStream()
     if ( pStream )
     {
         delete pStream;
-        pStream = NULL;
+        pStream = nullptr;
     }
 }
 
@@ -418,7 +418,7 @@ OUString TempFile::SetTempNameBaseDirectory( const OUString &rBaseName )
         OUString &rTempNameBase_Impl = TempNameBase_Impl::get();
         rTempNameBase_Impl = rBaseName + "/";
 
-        TempFile aBase( NULL, true );
+        TempFile aBase( nullptr, true );
         if ( aBase.IsValid() )
             // use it in case of success
             rTempNameBase_Impl = aBase.aName;

@@ -33,7 +33,7 @@
 using namespace osl;
 using namespace com::sun::star;
 
-SvtSysLocale_Impl*  SvtSysLocale::pImpl = NULL;
+SvtSysLocale_Impl*  SvtSysLocale::pImpl = nullptr;
 sal_Int32           SvtSysLocale::nRefCount = 0;
 
 class SvtSysLocale_Impl : public utl::ConfigurationListener
@@ -53,7 +53,7 @@ private:
     void                        setDateAcceptancePatternsConfig();
 };
 
-SvtSysLocale_Impl::SvtSysLocale_Impl() : pCharClass(NULL)
+SvtSysLocale_Impl::SvtSysLocale_Impl() : pCharClass(nullptr)
 {
     pLocaleData = new LocaleDataWrapper( aSysLocaleOptions.GetRealLanguageTag() );
     setDateAcceptancePatternsConfig();
@@ -127,14 +127,14 @@ SvtSysLocale::~SvtSysLocale()
     if ( !--nRefCount )
     {
         delete pImpl;
-        pImpl = NULL;
+        pImpl = nullptr;
     }
 }
 
 // static
 Mutex& SvtSysLocale::GetMutex()
 {
-    static Mutex* pMutex = NULL;
+    static Mutex* pMutex = nullptr;
     if( !pMutex )
     {
         MutexGuard aGuard( Mutex::getGlobalMutex() );

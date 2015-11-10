@@ -317,7 +317,7 @@ static ImplLocalizedFontName aImplLocalizedNamesList[] =
 {   "hiraginokakugothicpron", aHiraginoKakuGothicProN },
 {   "hiraginomarugothicpro", aHiraginoMaruGothicPro },
 {   "hiraginomarugothicpron", aHiraginoMaruGothicProN },
-{   NULL,                   NULL },
+{   nullptr,                   nullptr },
 };
 
 OUString StripScriptFromName(const OUString& _aName)
@@ -531,7 +531,7 @@ OUString GetSubsFontName( const OUString& rName, SubsFontFlags nFlags )
     {
         for( int i = 0; i < 3; i++ )
         {
-            const ::std::vector< OUString >* pVector = NULL;
+            const ::std::vector< OUString >* pVector = nullptr;
             switch( i )
             {
                 case 0:

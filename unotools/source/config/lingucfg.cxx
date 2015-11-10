@@ -256,9 +256,9 @@ static struct NamesToHdl
 {/* 31 */    "GrammarChecking/IsInteractiveCheck",            UPN_IS_GRAMMAR_INTERACTIVE,               UPH_IS_GRAMMAR_INTERACTIVE},
 
             /* similar to entry 0 (thus no own configuration entry) but with different property name and type */
-{            NULL,                                           UPN_DEFAULT_LANGUAGE,                      UPH_DEFAULT_LANGUAGE},
+{            nullptr,                                           UPN_DEFAULT_LANGUAGE,                      UPH_DEFAULT_LANGUAGE},
 
-{            NULL,                                            NULL,                                      -1}
+{            nullptr,                                            nullptr,                                      -1}
 };
 
 const uno::Sequence< OUString > SvtLinguConfigItem::GetPropertyNames()
@@ -290,7 +290,7 @@ bool SvtLinguConfigItem::GetHdlByName(
 
     if (bFullPropName)
     {
-        while (pEntry && pEntry->pFullPropName != NULL)
+        while (pEntry && pEntry->pFullPropName != nullptr)
         {
             if (rPropertyName.equalsAscii( pEntry->pFullPropName ))
             {
@@ -299,11 +299,11 @@ bool SvtLinguConfigItem::GetHdlByName(
             }
             ++pEntry;
         }
-        return pEntry && pEntry->pFullPropName != NULL;
+        return pEntry && pEntry->pFullPropName != nullptr;
     }
     else
     {
-        while (pEntry && pEntry->pPropName != NULL)
+        while (pEntry && pEntry->pPropName != nullptr)
         {
             if (rPropertyName.equalsAscii( pEntry->pPropName ))
             {
@@ -312,7 +312,7 @@ bool SvtLinguConfigItem::GetHdlByName(
             }
             ++pEntry;
         }
-        return pEntry && pEntry->pPropName != NULL;
+        return pEntry && pEntry->pPropName != nullptr;
     }
 }
 
@@ -330,9 +330,9 @@ uno::Any SvtLinguConfigItem::GetProperty( sal_Int32 nPropertyHandle ) const
 
     uno::Any aRes;
 
-    const sal_Int16 *pnVal = 0;
-    const bool  *pbVal = 0;
-    const sal_Int32 *pnInt32Val = 0;
+    const sal_Int16 *pnVal = nullptr;
+    const bool  *pbVal = nullptr;
+    const sal_Int32 *pnInt32Val = nullptr;
 
     const SvtLinguOptions &rOpt = const_cast< SvtLinguConfigItem * >(this)->aOpt;
     switch (nPropertyHandle)
@@ -427,9 +427,9 @@ bool SvtLinguConfigItem::SetProperty( sal_Int32 nPropertyHandle, const uno::Any 
 
     bool bMod = false;
 
-    sal_Int16 *pnVal = 0;
-    bool  *pbVal = 0;
-    sal_Int32 *pnInt32Val = 0;
+    sal_Int16 *pnVal = nullptr;
+    bool  *pbVal = nullptr;
+    sal_Int32 *pnInt32Val = nullptr;
 
     SvtLinguOptions &rOpt = aOpt;
     switch (nPropertyHandle)
@@ -789,7 +789,7 @@ bool SvtLinguConfigItem::IsReadOnly( sal_Int32 nPropertyHandle ) const
     return bReadOnly;
 }
 
-static SvtLinguConfigItem *pCfgItem = 0;
+static SvtLinguConfigItem *pCfgItem = nullptr;
 static sal_Int32           nCfgItemRefCount = 0;
 
 static const char aG_SupportedDictionaryFormats[] = "SupportedDictionaryFormats";
@@ -816,7 +816,7 @@ SvtLinguConfig::~SvtLinguConfig()
     if (--nCfgItemRefCount <= 0)
     {
         delete pCfgItem;
-        pCfgItem = 0;
+        pCfgItem = nullptr;
     }
 }
 

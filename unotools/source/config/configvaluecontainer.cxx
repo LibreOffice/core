@@ -55,7 +55,7 @@ namespace utl
 
         void bind( void* _pLocation, const Type& _rType );
 
-        bool                    isBound( ) const        { return ( ltUnbound != eLocationType ) && ( NULL != pLocation ); }
+        bool                    isBound( ) const        { return ( ltUnbound != eLocationType ) && ( nullptr != pLocation ); }
         const OUString&  getPath( ) const        { return sRelativePath; }
         LocationType            getLocType( ) const     { return eLocationType; }
         void*                   getLocation( ) const    { return pLocation; }
@@ -67,7 +67,7 @@ namespace utl
     NodeValueAccessor::NodeValueAccessor( const OUString& _rNodePath )
         :sRelativePath( _rNodePath )
         ,eLocationType( ltUnbound )
-        ,pLocation( NULL )
+        ,pLocation( nullptr )
     {
     }
 

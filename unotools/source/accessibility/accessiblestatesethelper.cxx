@@ -126,13 +126,13 @@ inline void AccessibleStateSetHelperImpl::RemoveState(sal_Int16 aState)
 //=====  internal  ============================================================
 
 AccessibleStateSetHelper::AccessibleStateSetHelper ()
-    : mpHelperImpl(NULL)
+    : mpHelperImpl(nullptr)
 {
     mpHelperImpl = new AccessibleStateSetHelperImpl();
 }
 
 AccessibleStateSetHelper::AccessibleStateSetHelper ( const sal_Int64 _nInitialStates )
-    : mpHelperImpl(NULL)
+    : mpHelperImpl(nullptr)
 {
     mpHelperImpl = new AccessibleStateSetHelperImpl();
     mpHelperImpl->AddStates( _nInitialStates );
@@ -140,7 +140,7 @@ AccessibleStateSetHelper::AccessibleStateSetHelper ( const sal_Int64 _nInitialSt
 
 AccessibleStateSetHelper::AccessibleStateSetHelper (const AccessibleStateSetHelper& rHelper)
     : cppu::WeakImplHelper1<XAccessibleStateSet>()
-    , mpHelperImpl(NULL)
+    , mpHelperImpl(nullptr)
 {
     if (rHelper.mpHelperImpl)
         mpHelperImpl = new AccessibleStateSetHelperImpl(*rHelper.mpHelperImpl);

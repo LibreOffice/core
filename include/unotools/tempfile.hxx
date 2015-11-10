@@ -59,7 +59,7 @@ public:
                     The temporary object is created in the local file system, even if there is no UCB that can access it.
                     If the given folder is part of the local file system, the TempFile is created in this folder.
                     */
-                    TempFile( const OUString* pParent=NULL, bool bDirectory=false );
+                    TempFile( const OUString* pParent=nullptr, bool bDirectory=false );
 
                     /**
                     Same as above; additionally the name starts with some given characters followed by a counter ( example:
@@ -67,7 +67,7 @@ public:
                     The extension string may be f.e. ".txt" or "", if no extension string is given, ".tmp" is used
                         @param  _bStartWithZero If set to false names will be generated like "abc","abc0","abc1"
                     */
-                    TempFile( const OUString& rLeadingChars, bool _bStartWithZero=true, const OUString* pExtension=NULL, const OUString* pParent=NULL, bool bDirectory=false);
+                    TempFile( const OUString& rLeadingChars, bool _bStartWithZero=true, const OUString* pExtension=nullptr, const OUString* pParent=nullptr, bool bDirectory=false);
 
                     /**
                     TempFile will be removed from disk in dtor if EnableKillingFile(true) was called before.

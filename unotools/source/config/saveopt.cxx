@@ -49,7 +49,7 @@ struct SvtLoadSaveOptions_Impl
     SvtLoadOptions_Impl* pLoadOpt;
 };
 
-static SvtLoadSaveOptions_Impl* pOptions = NULL;
+static SvtLoadSaveOptions_Impl* pOptions = nullptr;
 static sal_Int32           nRefCount = 0;
 
 class SvtSaveOptions_Impl : public utl::ConfigItem

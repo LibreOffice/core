@@ -65,13 +65,13 @@
 
 //  initialization!
 
-SvtViewOptionsBase_Impl*     SvtViewOptions::m_pDataContainer_Dialogs    =   NULL    ;
+SvtViewOptionsBase_Impl*     SvtViewOptions::m_pDataContainer_Dialogs    =   nullptr    ;
 sal_Int32                    SvtViewOptions::m_nRefCount_Dialogs         =   0       ;
-SvtViewOptionsBase_Impl*     SvtViewOptions::m_pDataContainer_TabDialogs =   NULL    ;
+SvtViewOptionsBase_Impl*     SvtViewOptions::m_pDataContainer_TabDialogs =   nullptr    ;
 sal_Int32                    SvtViewOptions::m_nRefCount_TabDialogs      =   0       ;
-SvtViewOptionsBase_Impl*     SvtViewOptions::m_pDataContainer_TabPages   =   NULL    ;
+SvtViewOptionsBase_Impl*     SvtViewOptions::m_pDataContainer_TabPages   =   nullptr    ;
 sal_Int32                    SvtViewOptions::m_nRefCount_TabPages        =   0       ;
-SvtViewOptionsBase_Impl*     SvtViewOptions::m_pDataContainer_Windows    =   NULL    ;
+SvtViewOptionsBase_Impl*     SvtViewOptions::m_pDataContainer_Windows    =   nullptr    ;
 sal_Int32                    SvtViewOptions::m_nRefCount_Windows         =   0       ;
 
 /*-************************************************************************************************************
@@ -654,7 +654,7 @@ SvtViewOptions::~SvtViewOptions()
                                     if( m_nRefCount_Dialogs == 0 )
                                     {
                                         delete m_pDataContainer_Dialogs;
-                                        m_pDataContainer_Dialogs = NULL;
+                                        m_pDataContainer_Dialogs = nullptr;
                                     }
                                 }
                                 break;
@@ -665,7 +665,7 @@ SvtViewOptions::~SvtViewOptions()
                                     if( m_nRefCount_TabDialogs == 0 )
                                     {
                                         delete m_pDataContainer_TabDialogs;
-                                        m_pDataContainer_TabDialogs = NULL;
+                                        m_pDataContainer_TabDialogs = nullptr;
                                     }
                                 }
                                 break;
@@ -676,7 +676,7 @@ SvtViewOptions::~SvtViewOptions()
                                     if( m_nRefCount_TabPages == 0 )
                                     {
                                         delete m_pDataContainer_TabPages;
-                                        m_pDataContainer_TabPages = NULL;
+                                        m_pDataContainer_TabPages = nullptr;
                                     }
                                 }
                                 break;
@@ -687,7 +687,7 @@ SvtViewOptions::~SvtViewOptions()
                                     if( m_nRefCount_Windows == 0 )
                                     {
                                         delete m_pDataContainer_Windows;
-                                        m_pDataContainer_Windows = NULL;
+                                        m_pDataContainer_Windows = nullptr;
                                     }
                                 }
                                 break;
@@ -1047,22 +1047,22 @@ void SvtViewOptions::ReleaseOptions()
     if( --m_nRefCount_Dialogs == 0 )
     {
         delete m_pDataContainer_Dialogs;
-        m_pDataContainer_Dialogs = NULL;
+        m_pDataContainer_Dialogs = nullptr;
     }
     if( --m_nRefCount_TabDialogs == 0 )
     {
         delete m_pDataContainer_TabDialogs;
-        m_pDataContainer_TabDialogs = NULL;
+        m_pDataContainer_TabDialogs = nullptr;
     }
     if( --m_nRefCount_TabPages == 0 )
     {
         delete m_pDataContainer_TabPages;
-        m_pDataContainer_TabPages = NULL;
+        m_pDataContainer_TabPages = nullptr;
     }
     if( --m_nRefCount_Windows == 0 )
     {
         delete m_pDataContainer_Windows;
-        m_pDataContainer_Windows = NULL;
+        m_pDataContainer_Windows = nullptr;
     }
 }
 

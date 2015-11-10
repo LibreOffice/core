@@ -756,7 +756,7 @@ void SvtModuleOptions_Impl::impl_Read( const css::uno::Sequence< OUString >& lFa
 
     sal_Int32                   nPropertyStart  = 0;
     sal_Int32                   nNodeCount      = lFactories.getLength();
-    FactoryInfo*                pInfo           = NULL;
+    FactoryInfo*                pInfo           = nullptr;
     SvtModuleOptions::EFactory  eFactory;
 
     for( sal_Int32 nSetNode=0; nSetNode<nNodeCount; ++nSetNode )
@@ -828,7 +828,7 @@ void SvtModuleOptions_Impl::MakeReadonlyStatesAvailable()
 //  DON'T DO IT IN YOUR HEADER!
 //  see definition for further information
 
-SvtModuleOptions_Impl*  SvtModuleOptions::m_pDataContainer  = NULL;
+SvtModuleOptions_Impl*  SvtModuleOptions::m_pDataContainer  = nullptr;
 sal_Int32               SvtModuleOptions::m_nRefCount       = 0;
 
 /*-************************************************************************************************************
@@ -858,7 +858,7 @@ SvtModuleOptions::~SvtModuleOptions()
     if( m_nRefCount == 0 )
     {
         delete m_pDataContainer;
-        m_pDataContainer = NULL;
+        m_pDataContainer = nullptr;
     }
 }
 

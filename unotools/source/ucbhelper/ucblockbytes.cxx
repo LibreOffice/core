@@ -517,14 +517,14 @@ Moderator::Moderator(
       m_aContent(
           xContent,
           new UcbTaskEnvironment(
-              xInteract.is() ? new ModeratorsInteractionHandler(*this) : 0,
-              0),
+              xInteract.is() ? new ModeratorsInteractionHandler(*this) : nullptr,
+              nullptr),
           comphelper::getProcessComponentContext())
 {
     // now exchange the whole data sink stuff
     // with a thread safe version
 
-    Reference<XInterface> *pxSink = NULL;
+    Reference<XInterface> *pxSink = nullptr;
 
     PostCommandArgument2 aPostArg;
     OpenCommandArgument2 aOpenArg;
@@ -731,7 +731,7 @@ static bool UCBOpenContentSync(
     //        headers is valid
 
     Reference<XContentIdentifier> xContId(
-        xContent.is() ? xContent->getIdentifier() : 0 );
+        xContent.is() ? xContent->getIdentifier() : nullptr );
 
     OUString aScheme;
     if(xContId.is())
@@ -765,7 +765,7 @@ static bool UCBOpenContentSync(
     bool bAborted(false);
     bool bResultAchieved(false);
 
-    Moderator* pMod = 0;
+    Moderator* pMod = nullptr;
     try
     {
         pMod = new Moderator(xContent,xInteract,rArg);
@@ -964,7 +964,7 @@ static bool _UCBOpenContentSync(
     Reference < XInteractionHandler > xInteract )
 {
     ::ucbhelper::Content aContent(
-        xContent, new UcbTaskEnvironment( xInteract, 0 ),
+        xContent, new UcbTaskEnvironment( xInteract, nullptr ),
         comphelper::getProcessComponentContext() );
     Reference < XContentIdentifier > xIdent = xContent->getIdentifier();
     OUString aScheme = xIdent->getContentProviderScheme();
@@ -1043,7 +1043,7 @@ static bool _UCBOpenContentSync(
 
 UcbLockBytes::UcbLockBytes( UcbLockBytesHandler* pHandler )
     : m_aExpireDate( DateTime::EMPTY )
-    , m_xInputStream (NULL)
+    , m_xInputStream (nullptr)
     , m_xHandler( pHandler )
     , m_nError( ERRCODE_NONE )
     , m_bTerminated  (false)
@@ -1373,7 +1373,7 @@ ErrCode UcbLockBytes::Stat( SvLockBytesStat *pStat, SvLockBytesStatFlag) const
 UcbLockBytesRef UcbLockBytes::CreateInputLockBytes( const Reference< XInputStream >& xInputStream )
 {
     if( !xInputStream.is() )
-        return NULL;
+        return nullptr;
 
     UcbLockBytesRef xLockBytes = new UcbLockBytes(nullptr);
     xLockBytes->setDontClose_Impl();
@@ -1385,7 +1385,7 @@ UcbLockBytesRef UcbLockBytes::CreateInputLockBytes( const Reference< XInputStrea
 UcbLockBytesRef UcbLockBytes::CreateLockBytes( const Reference< XStream >& xStream )
 {
     if( !xStream.is() )
-        return NULL;
+        return nullptr;
 
     UcbLockBytesRef xLockBytes = new UcbLockBytes(nullptr);
     xLockBytes->setDontClose_Impl();
@@ -1398,7 +1398,7 @@ UcbLockBytesRef UcbLockBytes::CreateLockBytes( const Reference < XContent >& xCo
         StreamMode eOpenMode, const Reference < XInteractionHandler >& xInteractionHandler, UcbLockBytesHandler* pHandler )
 {
     if( !xContent.is() )
-        return NULL;
+        return nullptr;
 
     UcbLockBytesRef xLockBytes = new UcbLockBytes( pHandler );
     xLockBytes->SetSynchronMode( !pHandler );

@@ -256,7 +256,7 @@ class UNOTOOLS_DLLPUBLIC MediaDescriptor : public comphelper::SequenceAsHashMap
         css::uno::Sequence< css::beans::NamedValue > requestAndVerifyDocPassword(
             comphelper::IDocPasswordVerifier& rVerifier,
             comphelper::DocPasswordRequestType eRequestType,
-            const ::std::vector< OUString >* pDefaultPasswords = 0 );
+            const ::std::vector< OUString >* pDefaultPasswords = nullptr );
 
     // helper
     private:

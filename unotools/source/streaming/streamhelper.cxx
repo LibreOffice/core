@@ -118,7 +118,7 @@ void SAL_CALL OInputStreamHelper::closeInput()
     if (!m_xLockBytes.Is())
         throw css::io::NotConnectedException(OUString(), static_cast<css::uno::XWeak*>(this));
 
-    m_xLockBytes = NULL;
+    m_xLockBytes = nullptr;
 }
 
 } // namespace utl
