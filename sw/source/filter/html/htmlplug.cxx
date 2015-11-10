@@ -465,7 +465,7 @@ void SwHTMLParser::InsertEmbed()
 
     // und in das Dok einfuegen
     SwFrameFormat* pFlyFormat =
-        m_pDoc->getIDocumentContentOperations().Insert( *m_pPam, ::svt::EmbeddedObjectRef( xObj, embed::Aspects::MSOLE_CONTENT ), &aFrmSet, NULL, NULL );
+        m_pDoc->getIDocumentContentOperations().Insert( *m_pPam, ::svt::EmbeddedObjectRef( xObj, embed::Aspects::MSOLE_CONTENT ), &aFrmSet, nullptr, nullptr );
 
     // Namen am FrameFormat setzen
     if( !aName.isEmpty() )
@@ -600,7 +600,7 @@ void SwHTMLParser::NewObject()
     if( !bIsApplet )
     {
         delete m_pAppletImpl;
-        m_pAppletImpl = 0;
+        m_pAppletImpl = nullptr;
         return;
     }
 
@@ -640,8 +640,8 @@ void SwHTMLParser::EndObject()
             m_pDoc->getIDocumentContentOperations().Insert( *m_pPam,
                     ::svt::EmbeddedObjectRef( m_pAppletImpl->GetApplet(), embed::Aspects::MSOLE_CONTENT ),
                     &m_pAppletImpl->GetItemSet(),
-                    NULL,
-                    NULL );
+                    nullptr,
+                    nullptr );
 
         // den alternativen Namen setzen
         SwNoTextNode *pNoTextNd =
@@ -653,7 +653,7 @@ void SwHTMLParser::EndObject()
         RegisterFlyFrm( pFlyFormat );
 
         delete m_pAppletImpl;
-        m_pAppletImpl = 0;
+        m_pAppletImpl = nullptr;
     }
 #else
     (void) this;                // Silence loplugin:staticmethods
@@ -732,7 +732,7 @@ void SwHTMLParser::InsertApplet()
     if( aCode.isEmpty() )
     {
         delete m_pAppletImpl;
-        m_pAppletImpl = 0;
+        m_pAppletImpl = nullptr;
         return;
     }
 
@@ -774,8 +774,8 @@ void SwHTMLParser::EndApplet()
         m_pDoc->getIDocumentContentOperations().Insert( *m_pPam,
                     ::svt::EmbeddedObjectRef( m_pAppletImpl->GetApplet(), embed::Aspects::MSOLE_CONTENT ),
                     &m_pAppletImpl->GetItemSet(),
-                    NULL,
-                    NULL );
+                    nullptr,
+                    nullptr );
 
     // den alternativen Namen setzen
     SwNoTextNode *pNoTextNd =
@@ -787,7 +787,7 @@ void SwHTMLParser::EndApplet()
     RegisterFlyFrm( pFlyFormat );
 
     delete m_pAppletImpl;
-    m_pAppletImpl = 0;
+    m_pAppletImpl = nullptr;
 #else
     (void) this;
 #endif
@@ -945,7 +945,7 @@ void SwHTMLParser::InsertFloatingFrame()
 
     // und in das Dok einfuegen
     SwFrameFormat* pFlyFormat =
-        m_pDoc->getIDocumentContentOperations().Insert( *m_pPam, ::svt::EmbeddedObjectRef( xObj, embed::Aspects::MSOLE_CONTENT ), &aFrmSet, NULL, NULL );
+        m_pDoc->getIDocumentContentOperations().Insert( *m_pPam, ::svt::EmbeddedObjectRef( xObj, embed::Aspects::MSOLE_CONTENT ), &aFrmSet, nullptr, nullptr );
 
     // den alternativen Namen setzen
     SwNoTextNode *pNoTextNd =

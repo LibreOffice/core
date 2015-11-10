@@ -27,7 +27,7 @@ using std::find;
 
 SwNumberTreeNode::SwNumberTreeNode()
     : mChildren(),
-      mpParent( 0 ),
+      mpParent( nullptr ),
       mnNumber( 0 ),
       mbContinueingPreviousSubTree( false ),
       mbPhantom( false ),
@@ -53,7 +53,7 @@ SwNumberTreeNode::~SwNumberTreeNode()
         }
     }
 
-    OSL_ENSURE( IsPhantom() || mpParent == NULL, ": I'm not supposed to have a parent.");
+    OSL_ENSURE( IsPhantom() || mpParent == nullptr, ": I'm not supposed to have a parent.");
 
     mpParent = reinterpret_cast<SwNumberTreeNode *>(0xdeadbeef);
 
@@ -62,7 +62,7 @@ SwNumberTreeNode::~SwNumberTreeNode()
 
 SwNumberTreeNode * SwNumberTreeNode::CreatePhantom()
 {
-    SwNumberTreeNode * pNew = NULL;
+    SwNumberTreeNode * pNew = nullptr;
 
     if (! mChildren.empty() &&
         (*mChildren.begin())->IsPhantom())
@@ -83,7 +83,7 @@ SwNumberTreeNode * SwNumberTreeNode::CreatePhantom()
             OSL_FAIL("insert of phantom failed!");
 
             delete pNew;
-            pNew = NULL;
+            pNew = nullptr;
         }
     }
 
@@ -404,7 +404,7 @@ void SwNumberTreeNode::MoveChildren(SwNumberTreeNode * pDest)
 
         if (pMyFirst->IsPhantom())
         {
-            SwNumberTreeNode * pDestLast = NULL;
+            SwNumberTreeNode * pDestLast = nullptr;
 
             if (pDest->mChildren.empty())
                 pDestLast = pDest->CreatePhantom();
@@ -471,7 +471,7 @@ void SwNumberTreeNode::AddChild( SwNumberTreeNode * pChild,
         return;
     }
 
-    if ( pChild->GetParent() != NULL || pChild->GetChildCount() > 0 )
+    if ( pChild->GetParent() != nullptr || pChild->GetChildCount() > 0 )
     {
         OSL_FAIL("only orphans allowed.");
         return;
@@ -616,7 +616,7 @@ void SwNumberTreeNode::RemoveChild(SwNumberTreeNode * pChild)
     {
         SwNumberTreeNode * pRemove = *aRemoveIt;
 
-        pRemove->mpParent = NULL;
+        pRemove->mpParent = nullptr;
 
         tSwNumberTreeChildren::const_iterator aItPred = mChildren.end();
 
@@ -965,9 +965,9 @@ bool SwNumberTreeNodeLessThan(const SwNumberTreeNode * pA,
 {
   bool bResult = false;
 
-  if (pA == NULL && pB != NULL)
+  if (pA == nullptr && pB != nullptr)
     bResult = true;
-  else if (pA != NULL && pB != NULL)
+  else if (pA != nullptr && pB != nullptr)
     bResult = pA->LessThan(*pB);
 
   return bResult;
@@ -975,7 +975,7 @@ bool SwNumberTreeNodeLessThan(const SwNumberTreeNode * pA,
 
 SwNumberTreeNode * SwNumberTreeNode::GetLastDescendant() const
 {
-    SwNumberTreeNode * pResult = NULL;
+    SwNumberTreeNode * pResult = nullptr;
     tSwNumberTreeChildren::const_reverse_iterator aIt = mChildren.rbegin();
 
     if (aIt != mChildren.rend())
@@ -996,7 +996,7 @@ bool SwNumberTreeNode::LessThan(const SwNumberTreeNode & rTreeNode) const
 
 SwNumberTreeNode * SwNumberTreeNode::GetPred(bool bSibling) const
 {
-    SwNumberTreeNode * pResult = NULL;
+    SwNumberTreeNode * pResult = nullptr;
 
     if (mpParent)
     {
@@ -1007,7 +1007,7 @@ SwNumberTreeNode * SwNumberTreeNode::GetPred(bool bSibling) const
         {
             // #i64311#
             // root node is no valid predecessor
-            pResult = mpParent->GetParent() ? mpParent : NULL;
+            pResult = mpParent->GetParent() ? mpParent : nullptr;
         }
         else
         {
@@ -1184,7 +1184,7 @@ void SwNumberTreeNode::NotifyInvalidChildren()
 
 void SwNumberTreeNode::NotifyInvalidSiblings()
 {
-    if (mpParent != NULL)
+    if (mpParent != nullptr)
         mpParent->NotifyInvalidChildren();
 }
 
@@ -1192,7 +1192,7 @@ void SwNumberTreeNode::NotifyInvalidSiblings()
 const SwNumberTreeNode* SwNumberTreeNode::GetPrecedingNodeOf(
                                         const SwNumberTreeNode& rNode ) const
 {
-    const SwNumberTreeNode* pPrecedingNode( 0 );
+    const SwNumberTreeNode* pPrecedingNode( nullptr );
 
     if ( GetChildCount() > 0 )
     {
@@ -1205,7 +1205,7 @@ const SwNumberTreeNode* SwNumberTreeNode::GetPrecedingNodeOf(
         }
     }
 
-    if ( pPrecedingNode == 0 && GetRoot() )
+    if ( pPrecedingNode == nullptr && GetRoot() )
     {
         // <this> node has no children or the given node precedes all its children
         // and the <this> node isn't the root node.

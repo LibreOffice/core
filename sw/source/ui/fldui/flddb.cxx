@@ -180,7 +180,7 @@ void SwFieldDBPage::Reset(const SfxItemSet*)
             }
         }
     }
-    TypeHdl(0);
+    TypeHdl(nullptr);
 
     m_pTypeLB->SetUpdateMode(true);
     m_pTypeLB->SetSelectHdl(LINK(this, SwFieldDBPage, TypeListBoxHdl));
@@ -420,7 +420,7 @@ void SwFieldDBPage::CheckInsert()
         if (nTypeId == TYP_DBFLD && pEntry)
             pEntry = m_pDatabaseTLB->GetParent(pEntry);
 
-        bInsert &= pEntry != 0;
+        bInsert &= pEntry != nullptr;
     }
     else
         bInsert = false;
@@ -453,7 +453,7 @@ IMPL_LINK_TYPED( SwFieldDBPage, TreeSelectHdl, SvTreeListBox *, pBox, void )
         {
             bool bNumFormat = false;
 
-            if (pEntry != 0)
+            if (pEntry != nullptr)
             {
                 OUString sTableName;
                 OUString sColumnName;

@@ -165,11 +165,11 @@ bool sw_frmitems_setXMLBorder( SvxBorderLine*& rpLine,
     if( (bHasStyle && API_LINE_NONE == nStyle) ||
         (bHasWidth && USHRT_MAX == nNamedWidth && 0 == nWidth) )
     {
-        bool bRet = 0 != rpLine;
+        bool bRet = nullptr != rpLine;
         if( rpLine )
         {
             delete rpLine;
-            rpLine = 0;
+            rpLine = nullptr;
         }
 
         return bRet;

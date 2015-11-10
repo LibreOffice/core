@@ -120,7 +120,7 @@ public:
                     else if( pSh )
                         pSh->StartAction();
                 }
-                pLast->ModifyNotification( 0, &aUpdateDDE );
+                pLast->ModifyNotification( nullptr, &aUpdateDDE );
                 bCallModify = true;
             }
         }
@@ -168,7 +168,7 @@ void SwIntrnlRefLink::Closed()
 const SwNode* SwIntrnlRefLink::GetAnchor() const
 {
     // here, any anchor of the normal NodesArray should be sufficient
-    const SwNode* pNd = 0;
+    const SwNode* pNd = nullptr;
     SwIterator<SwClient,SwFieldType> aIter(rFieldType);
     for(SwClient* pLast = aIter.First(); pLast; pLast = aIter.Next())
     {
@@ -184,7 +184,7 @@ const SwNode* SwIntrnlRefLink::GetAnchor() const
 
         if( pNd && &rFieldType.GetDoc()->GetNodes() == &pNd->GetNodes() )
             break;
-        pNd = 0;
+        pNd = nullptr;
     }
     return pNd;
 }
@@ -230,7 +230,7 @@ bool SwIntrnlRefLink::IsInRange( sal_uLong nSttNd, sal_uLong nEndNd,
 SwDDEFieldType::SwDDEFieldType(const OUString& rName,
                                const OUString& rCmd, SfxLinkUpdateMode nUpdateType )
     : SwFieldType( RES_DDEFLD ),
-    aName( rName ), pDoc( 0 ), nRefCnt( 0 )
+    aName( rName ), pDoc( nullptr ), nRefCnt( 0 )
 {
     bCRLFFlag = bDeleted = false;
     refLink = new SwIntrnlRefLink( *this, nUpdateType, SotClipboardFormatId::STRING );

@@ -56,7 +56,7 @@ public:
                 const OUString& sResType = OUString("FrameDialog"),
                 bool bFormat     = false,
                 const OString& sDefPage = OString(),
-                const OUString* pFormatStr  = 0);
+                const OUString* pFormatStr  = nullptr);
 
     virtual ~SwFrmDlg();
 

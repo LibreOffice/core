@@ -35,7 +35,7 @@ namespace
         SfxItemSet aSet( pSh->GetAttrPool(), RES_PAGEDESC, RES_PAGEDESC );
         if (pSh->GetCurAttr( aSet ))
         {
-            const SfxPoolItem* pItem(0);
+            const SfxPoolItem* pItem(nullptr);
             if (SfxItemState::SET == aSet.GetItemState( RES_PAGEDESC, true, &pItem ) && pItem)
             {
                 ::boost::optional<sal_uInt16> oNumOffset = static_cast<const SwFormatPageDesc *>(pItem)->GetNumOffset();
@@ -55,7 +55,7 @@ namespace
         const size_t nCurIdx = pSh->GetCurPageDesc();
         const SwPageDesc &rCurrentDesc = pSh->GetPageDesc( nCurIdx );
 
-        const SwFormatPageDesc *pPageFormatDesc(0);
+        const SwFormatPageDesc *pPageFormatDesc(nullptr);
         sal_uInt16 nDontCare;
         lcl_GetPageDesc(pSh, nDontCare, &pPageFormatDesc);
 
@@ -152,7 +152,7 @@ sal_uInt16 SwTitlePageDlg::GetInsertPosition() const
 
 SwTitlePageDlg::SwTitlePageDlg( vcl::Window *pParent ) :
     SfxModalDialog( pParent, "DLG_TITLEPAGE", "modules/swriter/ui/titlepage.ui"),
-    mpPageFormatDesc(0)
+    mpPageFormatDesc(nullptr)
 {
     get(m_pUseExistingPagesRB, "RB_USE_EXISTING_PAGES");
     get(m_pPageCountNF, "NF_PAGE_COUNT");
@@ -199,7 +199,7 @@ SwTitlePageDlg::SwTitlePageDlg( vcl::Window *pParent ) :
                 if (mpIndexDesc != &rPageDesc)
                 {
                     mpNormalDesc = &rPageDesc;
-                    bMaybeResetNumbering = lcl_GetPageDesc(mpSh, nResetPage, NULL);
+                    bMaybeResetNumbering = lcl_GetPageDesc(mpSh, nResetPage, nullptr);
                     break;
                 }
                 ++nTitlePages;
@@ -333,7 +333,7 @@ IMPL_LINK_NOARG_TYPED(SwTitlePageDlg, OKHdl, Button*, void)
     if (m_pRestartNumberingCB->IsChecked() || nNoPages > 1)
     {
         sal_uInt16 nPgNo = m_pRestartNumberingCB->IsChecked() ? m_pRestartNumberingNF->GetValue() : 0;
-        const SwPageDesc *pNewDesc = nNoPages > 1 ? mpNormalDesc : 0;
+        const SwPageDesc *pNewDesc = nNoPages > 1 ? mpNormalDesc : nullptr;
         mpSh->GotoPage(GetInsertPosition() + nNoPages, false);
         lcl_ChangePage(mpSh, nPgNo, pNewDesc);
     }

@@ -98,7 +98,7 @@ SwHHCWrapper::SwHHCWrapper(
     , m_pView( pSwView )
     , m_pWin( &pSwView->GetEditWin() )
     , m_rWrtShell( pSwView->GetWrtShell() )
-    , m_pConvArgs( 0 )
+    , m_pConvArgs( nullptr )
     , m_nLastPos( 0 )
     , m_nUnitOffset( 0 )
     , m_nPageCount( 0 )
@@ -116,7 +116,7 @@ SwHHCWrapper::~SwHHCWrapper()
 {
     delete m_pConvArgs;
 
-    SwViewShell::SetCareWin( NULL );
+    SwViewShell::SetCareWin( nullptr );
 
     // check for existence of a draw view which means that there are
     // (or previously were) draw objects present in the document.
@@ -376,7 +376,7 @@ void SwHHCWrapper::ReplaceUnit(
     OUString aOrigText( m_rWrtShell.GetSelText() );
     OUString aNewText( rReplaceWith );
     OSL_ENSURE( aOrigText == rOrigText, "!! text mismatch !!" );
-    SwFormatRuby *pRuby = 0;
+    SwFormatRuby *pRuby = nullptr;
     bool bRubyBelow = false;
     OUString  aNewOrigText;
     switch (eAction)
@@ -429,7 +429,7 @@ void SwHHCWrapper::ReplaceUnit(
         {
             // according to FT we currently should not bother about keeping
             // attributes in Hangul/Hanja conversion
-            ChangeText( aNewOrigText, rOrigText, NULL, NULL );
+            ChangeText( aNewOrigText, rOrigText, nullptr, nullptr );
 
             //!! since Delete, Insert in 'ChangeText' do not set the WrtShells
             //!! bInSelect flag
@@ -465,7 +465,7 @@ void SwHHCWrapper::ReplaceUnit(
         if (bIsChineseConversion)
             ChangeText( aNewText, rOrigText, &rOffsets, m_rWrtShell.GetCrsr() );
         else
-            ChangeText( aNewText, rOrigText, NULL, NULL );
+            ChangeText( aNewText, rOrigText, nullptr, nullptr );
 
         // change language and font if necessary
         if (bIsChineseConversion)
@@ -518,7 +518,7 @@ bool SwHHCWrapper::HasRubySupport() const
 
 void SwHHCWrapper::Convert()
 {
-    OSL_ENSURE( m_pConvArgs == 0, "NULL pointer expected" );
+    OSL_ENSURE( m_pConvArgs == nullptr, "NULL pointer expected" );
     {
         SwPaM *pCrsr = m_pView->GetWrtShell().GetCrsr();
         SwPosition* pSttPos = pCrsr->Start();
@@ -701,7 +701,7 @@ bool SwHHCWrapper::ConvContinue_impl( SwConversionArgs *pConversionArgs )
     bool bProgress = !m_bIsDrawObj && !m_bIsSelection;
     (pConversionArgs->aConvText).clear();
     pConversionArgs->nConvTextLang = LANGUAGE_NONE;
-    m_pView->GetWrtShell().SpellContinue( &m_nPageCount, bProgress ? &m_nPageStart : NULL, pConversionArgs );
+    m_pView->GetWrtShell().SpellContinue( &m_nPageCount, bProgress ? &m_nPageStart : nullptr, pConversionArgs );
     return !pConversionArgs->aConvText.isEmpty();
 }
 

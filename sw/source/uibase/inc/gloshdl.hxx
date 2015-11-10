@@ -45,7 +45,7 @@ public:
     void        GlossaryDlg();
 
     size_t      GetGroupCnt() const;
-    OUString    GetGroupName( size_t, OUString* pTitle = 0 );
+    OUString    GetGroupName( size_t, OUString* pTitle = nullptr );
     bool        NewGroup(OUString & rGroupName, const OUString& rTitle);
     bool        DelGroup(const OUString &);
     bool        RenameGroup(const OUString& rOld, OUString& rNew, const OUString& rNewTitle);
@@ -74,13 +74,13 @@ public:
     void    SetMacros(const OUString& rName,
                       const SvxMacro* pStart,
                       const SvxMacro* pEnd,
-                      SwTextBlocks *pGlossary = 0 );
+                      SwTextBlocks *pGlossary = nullptr );
     void    GetMacros(const OUString& rShortName,
                       SvxMacro& rStart,
                       SvxMacro& rEnd,
-                      SwTextBlocks* pGlossary = 0 );
+                      SwTextBlocks* pGlossary = nullptr );
 
-    bool    IsReadOnly( const OUString* = 0 ) const;
+    bool    IsReadOnly( const OUString* = nullptr ) const;
     bool    IsOld() const;
 
     bool    FindGroupName(OUString& rGroup); // find group without path index

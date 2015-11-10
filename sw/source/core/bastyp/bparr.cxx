@@ -406,7 +406,7 @@ sal_uInt16 BigPtrArray::Compress( short nMax )
     // represents the "old" and <qq> the "new" array.
     BlockInfo** pp = ppInf, **qq = pp;
     BlockInfo* p;
-    BlockInfo* pLast(0);                 // last empty block
+    BlockInfo* pLast(nullptr);                 // last empty block
     sal_uInt16 nLast = 0;                // missing elements
     sal_uInt16 nBlkdel = 0;              // number of deleted blocks
     sal_uInt16 nFirstChgPos = USHRT_MAX; // at which position was the 1st change?
@@ -454,7 +454,7 @@ sal_uInt16 BigPtrArray::Compress( short nMax )
             {
                 // than remove
                 delete[] p->pData;
-                delete   p, p = 0;
+                delete   p, p = nullptr;
                 ++nBlkdel;
             }
             else

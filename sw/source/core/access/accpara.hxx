@@ -192,7 +192,7 @@ protected:
     SwAccessiblePortionData& GetPortionData()
         throw( css::uno::RuntimeException )
     {
-        if( pPortionData == NULL )
+        if( pPortionData == nullptr )
             UpdatePortionData();
         return *pPortionData;
     }

@@ -492,7 +492,7 @@ public:
     virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) throw( css::uno::RuntimeException, std::exception ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( css::uno::RuntimeException, std::exception ) override;
 
-    void    Invalidate() {pxDoc = 0;}
+    void    Invalidate() {pxDoc = nullptr;}
 };
 
 class SwXLinkNameAccessWrapper : public cppu::WeakImplHelper
@@ -608,7 +608,7 @@ public:
     void AdjustViewOptions( SwPrintData const* const pPrtOptions );
     bool checkShell( const SwViewShell& rCompare ) const
     { return &rCompare == m_pShell; }
-    void DontTouchThatViewShellItSmellsFunny() { m_pShell = 0; }
+    void DontTouchThatViewShellItSmellsFunny() { m_pShell = nullptr; }
 };
 
 #endif

@@ -109,9 +109,9 @@ void SAL_CALL SwLinguServiceEventListener::disposing(
     SolarMutexGuard aGuard;
 
     if (xLngSvcMgr.is() && rEventObj.Source == xLngSvcMgr)
-        xLngSvcMgr = 0;
+        xLngSvcMgr = nullptr;
     if (xLngSvcMgr.is() && rEventObj.Source == xGCIterator)
-        xGCIterator = 0;
+        xGCIterator = nullptr;
 }
 
 void SAL_CALL SwLinguServiceEventListener::queryTermination(
@@ -129,10 +129,10 @@ void SAL_CALL SwLinguServiceEventListener::notifyTermination(
     if (xDesktop.is()  &&  rEventObj.Source == xDesktop)
     {
         if (xLngSvcMgr.is())
-            xLngSvcMgr = 0;
+            xLngSvcMgr = nullptr;
         if (xGCIterator.is())
-            xGCIterator = 0;
-        xDesktop = NULL;
+            xGCIterator = nullptr;
+        xDesktop = nullptr;
     }
 }
 

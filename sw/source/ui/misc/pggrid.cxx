@@ -220,7 +220,7 @@ void    SwTextGridPage::Reset(const SfxItemSet *rSet)
     if(SfxItemState::DEFAULT <= rSet->GetItemState(RES_TEXTGRID))
     {
         const SwTextGridItem& rGridItem = static_cast<const SwTextGridItem&>(rSet->Get(RES_TEXTGRID));
-        RadioButton* pButton = 0;
+        RadioButton* pButton = nullptr;
         switch(rGridItem.GetGridType())
         {
             case GRID_NONE :        pButton = m_pNoGridRB;    break;

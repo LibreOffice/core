@@ -196,7 +196,7 @@ public:
     SwLinePortion* MakeRestPortion(const SwLineLayout* pLine, sal_Int32 nPos);
 
     const SwFormatDrop *GetDropFormat() const { return pDropFormat; }
-    void ClearDropFormat() { pDropFormat = 0; }
+    void ClearDropFormat() { pDropFormat = nullptr; }
 
     SwMultiPortion *GetMulti() const { return pMulti; }
 

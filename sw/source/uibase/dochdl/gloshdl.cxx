@@ -315,7 +315,7 @@ bool SwGlossaryHdl::NewGlossary(const OUString& rName, const OUString& rShortNam
         return false;
 
     OUString sOnlyText;
-    OUString* pOnlyText = 0;
+    OUString* pOnlyText = nullptr;
     if( bNoAttr )
     {
         if( !pWrtShell->GetSelectedText( sOnlyText, GETSELTXT_PARABRK_TO_ONLYCR ))
@@ -443,7 +443,7 @@ bool SwGlossaryHdl::Expand( const OUString& rShortName,
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 assert(pFact && "SwAbstractDialogFactory fail!");
 
-                std::unique_ptr<AbstractSwSelGlossaryDlg> pDlg(pFact->CreateSwSelGlossaryDlg(0, aShortName));
+                std::unique_ptr<AbstractSwSelGlossaryDlg> pDlg(pFact->CreateSwSelGlossaryDlg(nullptr, aShortName));
                 assert(pDlg && "Dialog creation failed!");
                 for(size_t i = 0; i < aFoundArr.size(); ++i)
                 {
@@ -625,7 +625,7 @@ SwGlossaryHdl::SwGlossaryHdl(SfxViewFrame* pVwFrm, SwWrtShell *pSh)
     aCurGrp( SwGlossaries::GetDefName() ),
     pViewFrame( pVwFrm ),
     pWrtShell( pSh ),
-    pCurGrp( 0 )
+    pCurGrp( nullptr )
 {
 }
 
@@ -662,7 +662,7 @@ bool SwGlossaryHdl::Rename(const OUString& rOldShort, const OUString& rNewShortN
 
 bool SwGlossaryHdl::IsReadOnly( const OUString* pGrpNm ) const
 {
-    SwTextBlocks *pGlossary = 0;
+    SwTextBlocks *pGlossary = nullptr;
 
     if (pGrpNm)
         pGlossary = rStatGlossaries.GetGroupDoc( *pGrpNm );
@@ -713,16 +713,16 @@ bool SwGlossaryHdl::ImportGlossaries( const OUString& rName )
     bool bRet = false;
     if( !rName.isEmpty() )
     {
-        const SfxFilter* pFilter = 0;
-        std::unique_ptr<SfxMedium> pMed(new SfxMedium( rName, StreamMode::READ, 0, 0 ));
+        const SfxFilter* pFilter = nullptr;
+        std::unique_ptr<SfxMedium> pMed(new SfxMedium( rName, StreamMode::READ, nullptr, nullptr ));
         SfxFilterMatcher aMatcher( OUString("swriter") );
         pMed->UseInteractionHandler( true );
         if (!aMatcher.GuessFilter(*pMed, &pFilter, SfxFilterFlags::NONE))
         {
-            SwTextBlocks *pGlossary = NULL;
+            SwTextBlocks *pGlossary = nullptr;
             pMed->SetFilter( pFilter );
             Reader* pR = SwReaderWriter::GetReader( pFilter->GetUserData() );
-            if( pR && 0 != ( pGlossary = pCurGrp ? pCurGrp
+            if( pR && nullptr != ( pGlossary = pCurGrp ? pCurGrp
                                     : rStatGlossaries.GetGroupDoc(aCurGrp)) )
             {
                 SwReader aReader( *pMed, rName );

@@ -51,7 +51,7 @@ static sal_Int32 lcl_AddSpace( const SwTextSizeInfo &rInf, const OUString* pStr,
                                const SwLinePortion& rPor )
 {
     sal_Int32 nPos, nEnd;
-    const SwScriptInfo* pSI = 0;
+    const SwScriptInfo* pSI = nullptr;
 
     if ( pStr )
     {
@@ -114,7 +114,7 @@ static sal_Int32 lcl_AddSpace( const SwTextSizeInfo &rInf, const OUString* pStr,
     {
         if ( SwScriptInfo::IsArabicText( *pStr, nPos, nEnd - nPos ) && pSI->CountKashida() )
         {
-            const sal_Int32 nKashRes = pSI->KashidaJustify( 0, 0, nPos, nEnd - nPos );
+            const sal_Int32 nKashRes = pSI->KashidaJustify( nullptr, nullptr, nPos, nEnd - nPos );
             // i60591: need to check result of KashidaJustify
             // determine if kashida justification is applicable
             if (nKashRes != -1)
@@ -130,7 +130,7 @@ static sal_Int32 lcl_AddSpace( const SwTextSizeInfo &rInf, const OUString* pStr,
 
         if ( LANGUAGE_THAI == aLang )
         {
-            nCnt = SwScriptInfo::ThaiJustify( *pStr, 0, 0, nPos, nEnd - nPos );
+            nCnt = SwScriptInfo::ThaiJustify( *pStr, nullptr, nullptr, nPos, nEnd - nPos );
 
             const SwLinePortion* pPor = rPor.GetPortion();
             if ( pPor && ( pPor->IsKernPortion() ||
@@ -442,7 +442,7 @@ bool SwTextPortion::Format( SwTextFormatInfo &rInf )
         Width( 0 );
         SetLen( 0 );
         SetAscent( 0 );
-        SetPortion( NULL );  // ????
+        SetPortion( nullptr );  // ????
         return true;
     }
 
@@ -543,9 +543,9 @@ void SwTextPortion::Paint( const SwTextPaintInfo &rInf ) const
         const SwWrongList *pGrammarCheckList = rInf.GetGrammarCheckList();
         const SwWrongList *pSmarttags = rInf.GetSmartTags();
 
-        const bool bWrong = 0 != pWrongList;
-        const bool bGrammarCheck = 0 != pGrammarCheckList;
-        const bool bSmartTags = 0 != pSmarttags;
+        const bool bWrong = nullptr != pWrongList;
+        const bool bGrammarCheck = nullptr != pGrammarCheckList;
+        const bool bSmartTags = nullptr != pSmarttags;
 
         if ( bWrong || bSmartTags || bGrammarCheck )
             rInf.DrawMarkedText( *this, rInf.GetLen(), false, bWrong, bSmartTags, bGrammarCheck );
@@ -585,7 +585,7 @@ sal_Int32 SwTextPortion::GetSpaceCnt( const SwTextSizeInfo &rInf,
     }
     else if( !IsDropPortion() )
     {
-        nCnt = nCnt + lcl_AddSpace( rInf, 0, *this );
+        nCnt = nCnt + lcl_AddSpace( rInf, nullptr, *this );
         nPos = GetLen();
     }
     rCharCnt = rCharCnt + nPos;
@@ -620,7 +620,7 @@ long SwTextPortion::CalcSpacing( long nSpaceAdd, const SwTextSizeInfo &rInf ) co
     else if( !IsDropPortion() )
     {
         if( nSpaceAdd > 0 )
-            nCnt = nCnt + lcl_AddSpace( rInf, 0, *this );
+            nCnt = nCnt + lcl_AddSpace( rInf, nullptr, *this );
         else
         {
             nSpaceAdd = -nSpaceAdd;
@@ -743,8 +743,8 @@ void SwHolePortion::Paint( const SwTextPaintInfo &rInf ) const
 
     // #i68503# the hole must have no decoration for a consistent visual appearance
     const SwFont* pOrigFont = rInf.GetFont();
-    SwFont* pHoleFont = NULL;
-    SwFontSave* pFontSave = NULL;
+    SwFont* pHoleFont = nullptr;
+    SwFontSave* pFontSave = nullptr;
     if( pOrigFont->GetUnderline() != UNDERLINE_NONE
     ||  pOrigFont->GetOverline() != UNDERLINE_NONE
     ||  pOrigFont->GetStrikeout() != STRIKEOUT_NONE )

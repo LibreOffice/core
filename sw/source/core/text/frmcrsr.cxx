@@ -127,7 +127,7 @@ bool sw_ChangeOffset( SwTextFrm* pFrm, sal_Int32 nNew )
                     nNew = 0;
                 }
                 pFrm->SetOfst( nNew );
-                pFrm->SetPara( 0 );
+                pFrm->SetPara( nullptr );
                 pFrm->GetFormatted();
                 if( pFrm->Frm().HasArea() )
                     pFrm->getRootFrm()->GetCurrShell()->InvalidateWindows( pFrm->Frm() );
@@ -561,7 +561,7 @@ bool SwTextFrm::_GetCrsrOfst(SwPosition* pPos, const Point& rPoint,
         SwitchRTLtoLTR( (Point&)rPoint );
 
     SwFillData *pFillData = ( pCMS && pCMS->m_pFill ) ?
-                        new SwFillData( pCMS, pPos, Frm(), rPoint ) : NULL;
+                        new SwFillData( pCMS, pPos, Frm(), rPoint ) : nullptr;
 
     if ( IsEmpty() )
     {
@@ -811,7 +811,7 @@ bool SwTextFrm::_UnitUp( SwPaM *pPam, const SwTwips nOffset,
             {
                 aLine.PrevLine();
                 while ( aLine.GetStart() == nStart &&
-                        0 != ( pPrevLine = aLine.GetPrevLine() ) &&
+                        nullptr != ( pPrevLine = aLine.GetPrevLine() ) &&
                         pPrevLine != aLine.GetCurr() )
                     aLine.PrevLine();
             }
@@ -874,7 +874,7 @@ bool SwTextFrm::_UnitUp( SwPaM *pPam, const SwTwips nOffset,
                 if ( pPrevPrev->IsFollow() )
                     pPrevPrev = pTmpPrev->FindMaster();
                 else
-                    pPrevPrev = NULL;
+                    pPrevPrev = nullptr;
             }
             if ( !pPrevPrev )
                 return pTmpPrev->SwContentFrm::UnitUp( pPam, nOffset, bSetInReadOnly );
@@ -895,7 +895,7 @@ static void lcl_VisualMoveRecursion( const SwLineLayout& rCurrLine, sal_Int32 nI
                               sal_uInt8& nCrsrLevel, sal_uInt8 nDefaultDir )
 {
     const SwLinePortion* pPor = rCurrLine.GetFirstPortion();
-    const SwLinePortion* pLast = 0;
+    const SwLinePortion* pLast = nullptr;
 
     // What's the current portion?
     while ( pPor && nIdx + pPor->GetLen() <= nPos )
@@ -1081,7 +1081,7 @@ void SwTextFrm::PrepareVisualMove( sal_Int32& nPos, sal_uInt8& nCrsrLevel,
 
     UErrorCode nError = U_ZERO_ERROR;
     UBiDi* pBidi = ubidi_openSized( nLen, 0, &nError );
-    ubidi_setPara( pBidi, reinterpret_cast<const UChar *>(pLineString), nLen, nDefaultDir, NULL, &nError ); // UChar != sal_Unicode in MinGW
+    ubidi_setPara( pBidi, reinterpret_cast<const UChar *>(pLineString), nLen, nDefaultDir, nullptr, &nError ); // UChar != sal_Unicode in MinGW
 
     sal_Int32 nTmpPos = 0;
     bool bOutOfBounds = false;
@@ -1153,7 +1153,7 @@ bool SwTextFrm::_UnitDown(SwPaM *pPam, const SwTwips nOffset,
     const_cast<SwTextFrm*>(this)->GetFormatted();
     const sal_Int32 nPos = pPam->GetPoint()->nContent.GetIndex();
     SwRect aCharBox;
-    const SwContentFrm *pTmpFollow = 0;
+    const SwContentFrm *pTmpFollow = nullptr;
 
     if ( IsVertical() )
         const_cast<SwTextFrm*>(this)->SwapWidthAndHeight();
@@ -1207,7 +1207,7 @@ bool SwTextFrm::_UnitDown(SwPaM *pPam, const SwTwips nOffset,
 
                 return true;
             }
-            if( 0 != ( pTmpFollow = GetFollow() ) )
+            if( nullptr != ( pTmpFollow = GetFollow() ) )
             {   // Skip protected follows
                 const SwContentFrm* pTmp = pTmpFollow;
                 SwViewShell *pSh = getRootFrm()->GetCurrShell();
@@ -1466,7 +1466,7 @@ void SwTextFrm::FillCrsrPos( SwFillData& rFill ) const
                 if( FILL_TAB != rFill.Mode() )
                 {
                     const OUString aTmp("  ");
-                    SwDrawTextInfo aDrawInf( pSh, *pOut, 0, aTmp, 0, 2 );
+                    SwDrawTextInfo aDrawInf( pSh, *pOut, nullptr, aTmp, 0, 2 );
                     nSpace = pFnt->_GetTextSize( aDrawInf ).Width()/2;
                 }
                 if( rFill.X() >= nRight )

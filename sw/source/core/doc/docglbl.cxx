@@ -68,12 +68,12 @@ bool SwDoc::GenerateGlobalDoc( const OUString& rPath,
 
 bool SwDoc::GenerateGlobalDoc( const OUString& rPath, int nOutlineLevel )
 {
-    return SplitDoc( SPLITDOC_TO_GLOBALDOC, rPath, true, 0, nOutlineLevel );
+    return SplitDoc( SPLITDOC_TO_GLOBALDOC, rPath, true, nullptr, nOutlineLevel );
 }
 
 bool SwDoc::GenerateHTMLDoc( const OUString& rPath, int nOutlineLevel )
 {
-    return SplitDoc( SPLITDOC_TO_HTML, rPath, true, 0, nOutlineLevel );
+    return SplitDoc( SPLITDOC_TO_HTML, rPath, true, nullptr, nOutlineLevel );
 }
 
 bool SwDoc::GenerateHTMLDoc( const OUString& rPath,
@@ -93,7 +93,7 @@ SwNodePtr GetStartNode( SwOutlineNodes* pOutlNds, int nOutlineLevel, sal_uInt16*
             return pNd;
         }
 
-    return 0;
+    return nullptr;
 }
 
 SwNodePtr GetEndNode( SwOutlineNodes* pOutlNds, int nOutlineLevel, sal_uInt16* nOutl )
@@ -112,7 +112,7 @@ SwNodePtr GetEndNode( SwOutlineNodes* pOutlNds, int nOutlineLevel, sal_uInt16* n
             return pNd;
         }
     }
-    return 0;
+    return nullptr;
 }
 
 // two helpers for collection mode
@@ -126,7 +126,7 @@ SwNodePtr GetStartNode( const SwOutlineNodes* pOutlNds, const SwTextFormatColl* 
         {
             return pNd;
         }
-    return 0;
+    return nullptr;
 }
 
 SwNodePtr GetEndNode( const SwOutlineNodes* pOutlNds, const SwTextFormatColl* pSplitColl, sal_uInt16* nOutl )
@@ -148,7 +148,7 @@ SwNodePtr GetEndNode( const SwOutlineNodes* pOutlNds, const SwTextFormatColl* pS
             return pNd;
         }
     }
-    return 0;
+    return nullptr;
 }
 
 bool SwDoc::SplitDoc( sal_uInt16 eDocType, const OUString& rPath, bool bOutline, const SwTextFormatColl* pSplitColl, int nOutlineLevel )
@@ -353,8 +353,8 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const OUString& rPath, bool bOutline,
                         if( nNodeDiff )
                         {
                             SwPaM aTmp( *pStartNd, aEndIdx.GetNode(), 1, -1 );
-                            aTmp.GetPoint()->nContent.Assign( 0, 0 );
-                            aTmp.GetMark()->nContent.Assign( 0, 0 );
+                            aTmp.GetPoint()->nContent.Assign( nullptr, 0 );
+                            aTmp.GetMark()->nContent.Assign( nullptr, 0 );
                             SwNodeIndex aSIdx( aTmp.GetMark()->nNode );
                             SwNodeIndex aEIdx( aTmp.GetPoint()->nNode );
 
@@ -400,7 +400,7 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const OUString& rPath, bool bOutline,
                         // If the link cannot be found anymore,
                         // it has to be a bug!
                         if( !pOutlNds->Seek_Entry( pStartNd, &nOutl ))
-                            pStartNd = 0;
+                            pStartNd = nullptr;
                         ++nOutl;
                     }
                     break;
@@ -410,7 +410,7 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const OUString& rPath, bool bOutline,
                         const OUString sNm( INetURLObject( sFileName ).GetName() );
                         SwSectionData aSectData( FILE_LINK_SECTION,
                                         GetUniqueSectionName( &sNm ));
-                        SwSectionFormat* pFormat = MakeSectionFormat( 0 );
+                        SwSectionFormat* pFormat = MakeSectionFormat( nullptr );
                         aSectData.SetLinkFileName(sFileName);
                         aSectData.SetProtectFlag(true);
 
@@ -465,12 +465,12 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const OUString& rPath, bool bOutline,
                         if (aEndIdx >= aStartIdx)
                         {
                             pSectNd = GetNodes().InsertTextSection(aStartIdx,
-                                *pFormat, aSectData, 0, &aEndIdx, false);
+                                *pFormat, aSectData, nullptr, &aEndIdx, false);
                         }
                         else
                         {
                             pSectNd = GetNodes().InsertTextSection(aEndIdx,
-                                *pFormat, aSectData, 0, &aStartIdx, false);
+                                *pFormat, aSectData, nullptr, &aStartIdx, false);
                         }
                         // <- #i26762#
 

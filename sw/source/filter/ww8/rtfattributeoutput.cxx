@@ -476,7 +476,7 @@ void RtfAttributeOutput::StartRuby(const SwTextNode& rNode, sal_Int32 /*nPos*/, 
         nRubyScript = i18n::ScriptType::ASIAN;
 
     const SwTextRuby* pRubyText = rRuby.GetTextRuby();
-    const SwCharFormat* pFormat = pRubyText ? pRubyText->GetCharFormat() : 0;
+    const SwCharFormat* pFormat = pRubyText ? pRubyText->GetCharFormat() : nullptr;
     OUString sFamilyName;
     long nHeight;
     if (pFormat)
@@ -531,16 +531,16 @@ void RtfAttributeOutput::StartRuby(const SwTextNode& rNode, sal_Int32 /*nPos*/, 
     aStr += OUString::number(nHeight);
     aStr += "(";
     EndRun();
-    m_rExport.OutputField(0, ww::eEQ, aStr, WRITEFIELD_START | WRITEFIELD_CMD_START);
+    m_rExport.OutputField(nullptr, ww::eEQ, aStr, WRITEFIELD_START | WRITEFIELD_CMD_START);
     aStr  = rRuby.GetText();
     aStr += ")";
     aStr += ",";
-    m_rExport.OutputField(0, ww::eEQ, aStr, 0);
+    m_rExport.OutputField(nullptr, ww::eEQ, aStr, 0);
 }
 
 void RtfAttributeOutput::EndRuby()
 {
-    m_rExport.OutputField(0, ww::eEQ, ")", WRITEFIELD_END | WRITEFIELD_CLOSE);
+    m_rExport.OutputField(nullptr, ww::eEQ, ")", WRITEFIELD_END | WRITEFIELD_CLOSE);
     EndRun();
 }
 
@@ -981,7 +981,7 @@ void RtfAttributeOutput::InitTableHelper(ww8::WW8TableNodeInfoInner::Pointer_t p
 void RtfAttributeOutput::StartTable(ww8::WW8TableNodeInfoInner::Pointer_t /*pTableTextNodeInfoInner*/)
 {
     // To trigger calling InitTableHelper()
-    m_pTableWrt.reset(0);
+    m_pTableWrt.reset(nullptr);
 }
 
 void RtfAttributeOutput::StartTableRow(ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner)
@@ -1075,7 +1075,7 @@ void RtfAttributeOutput::EndTable()
     if (m_nTableDepth > 0)
     {
         m_nTableDepth--;
-        m_pTableWrt.reset(0);
+        m_pTableWrt.reset(nullptr);
     }
 
     // We closed the table; if it is a nested table, the cell that contains it
@@ -1083,7 +1083,7 @@ void RtfAttributeOutput::EndTable()
     m_bTableCellOpen = true;
 
     // Cleans the table helper
-    m_pTableWrt.reset(0);
+    m_pTableWrt.reset(nullptr);
 }
 
 void RtfAttributeOutput::FinishTableRowCell(ww8::WW8TableNodeInfoInner::Pointer_t pInner, bool /*bForceEmptyParagraph*/)
@@ -1293,7 +1293,7 @@ void RtfAttributeOutput::SectionPageNumbering(sal_uInt16 nNumType, const ::boost
         m_aSectionBreaks.append(OOO_STRING_SVTOOLS_RTF_PGNRESTART);
     }
 
-    const char* pStr = 0;
+    const char* pStr = nullptr;
     switch (nNumType)
     {
     case SVX_NUM_CHARS_UPPER_LETTER:
@@ -1327,7 +1327,7 @@ void RtfAttributeOutput::SectionType(sal_uInt8 nBreakCode)
      * break code:   0 No break, 1 New column
      * 2 New page, 3 Even page, 4 Odd page
      */
-    const char* sType = NULL;
+    const char* sType = nullptr;
     switch (nBreakCode)
     {
     case 1:
@@ -1828,7 +1828,7 @@ void RtfAttributeOutput::writeTextFrame(const sw::Frame& rFrame, bool bTextBox)
         m_nTableDepth = nTableDepth;
     }
 
-    m_rExport.m_pParentFrame = NULL;
+    m_rExport.m_pParentFrame = nullptr;
 
     m_rExport.Strm().WriteChar('}');   // shptxt
 
@@ -1843,7 +1843,7 @@ void RtfAttributeOutput::writeTextFrame(const sw::Frame& rFrame, bool bTextBox)
 void RtfAttributeOutput::OutputFlyFrame_Impl(const sw::Frame& rFrame, const Point& /*rNdTopLeft*/)
 {
     const SwNode* pNode = rFrame.GetContent();
-    const SwGrfNode* pGrfNode = pNode ? pNode->GetGrfNode() : 0;
+    const SwGrfNode* pGrfNode = pNode ? pNode->GetGrfNode() : nullptr;
 
     switch (rFrame.GetWriterType())
     {
@@ -1872,7 +1872,7 @@ void RtfAttributeOutput::OutputFlyFrame_Impl(const sw::Frame& rFrame, const Poin
         m_rExport.Strm().WriteCharPtr(m_aRunText.makeStringAndClear().getStr());
         m_rExport.Strm().WriteCharPtr(m_aStyles.makeStringAndClear().getStr());
         m_rExport.m_bOutFlyFrmAttrs = m_rExport.bRTFFlySyntax = false;
-        m_pFlyFrameSize = 0;
+        m_pFlyFrameSize = nullptr;
 
         const SwFrameFormat& rFrameFormat = rFrame.GetFrameFormat();
         lcl_TextFrameShadow(m_aFlyProperties, rFrameFormat);
@@ -1907,7 +1907,7 @@ void RtfAttributeOutput::OutputFlyFrame_Impl(const sw::Frame& rFrame, const Poin
             m_aRunText->append("{" OOO_STRING_SVTOOLS_RTF_IGNORE);
             m_rExport.OutputFormat(rFrame.GetFrameFormat(), false, false, true);
             m_aRunText->append('}');
-            m_rExport.m_pParentFrame = NULL;
+            m_rExport.m_pParentFrame = nullptr;
         }
 
         if (pGrfNode)
@@ -1943,7 +1943,7 @@ void RtfAttributeOutput::OutputFlyFrame_Impl(const sw::Frame& rFrame, const Poin
             m_aRunText->append('}');
 
             if (bSwapInPage)
-                const_cast< SdrObject* >(pSdrObj)->SetPage(0);
+                const_cast< SdrObject* >(pSdrObj)->SetPage(nullptr);
         }
     }
     break;
@@ -2354,7 +2354,7 @@ void RtfAttributeOutput::CharShadow(const SvxShadowedItem& rShadow)
 
 void RtfAttributeOutput::CharUnderline(const SvxUnderlineItem& rUnderline)
 {
-    const char* pStr = 0;
+    const char* pStr = nullptr;
     const SfxPoolItem* pItem = m_rExport.HasItem(RES_CHRATR_WORDLINEMODE);
     bool bWord = false;
     if (pItem)
@@ -2594,7 +2594,7 @@ void RtfAttributeOutput::CharRelief(const SvxCharReliefItem& rRelief)
         pStr = OOO_STRING_SVTOOLS_RTF_IMPR;
         break;
     default:
-        pStr = 0;
+        pStr = nullptr;
         break;
     }
 
@@ -2630,7 +2630,7 @@ void RtfAttributeOutput::TextINetFormat(const SwFormatINetFormat& rURL)
         const SwCharFormat* pFormat;
         const SwTextINetFormat* pTextAtr = rURL.GetTextINetFormat();
 
-        if (pTextAtr && 0 != (pFormat = pTextAtr->GetCharFormat()))
+        if (pTextAtr && nullptr != (pFormat = pTextAtr->GetCharFormat()))
         {
             sal_uInt16 nStyle = m_rExport.GetId(pFormat);
             OString* pString = m_rExport.GetStyle(nStyle);
@@ -2751,7 +2751,7 @@ void RtfAttributeOutput::ParaTabStop(const SvxTabStopItem& rTabStop)
         const SvxTabStop& rTS = rTabStop[ n ];
         if (SVX_TAB_ADJUST_DEFAULT != rTS.GetAdjustment())
         {
-            const char* pFill = 0;
+            const char* pFill = nullptr;
             switch (rTS.GetFill())
             {
             case cDfltFillChar:
@@ -2775,7 +2775,7 @@ void RtfAttributeOutput::ParaTabStop(const SvxTabStopItem& rTabStop)
             if (pFill)
                 m_aStyles.append(pFill);
 
-            const sal_Char* pAdjStr = 0;
+            const sal_Char* pAdjStr = nullptr;
             switch (rTS.GetAdjustment())
             {
             case SVX_TAB_ADJUST_RIGHT:
@@ -2811,7 +2811,7 @@ void RtfAttributeOutput::ParaHyphenZone(const SvxHyphenZoneItem& rHyphenZone)
 
 void RtfAttributeOutput::ParaNumRule_Impl(const SwTextNode* pTextNd, sal_Int32 nLvl, sal_Int32 nNumId)
 {
-    if (USHRT_MAX == nNumId || 0 == nNumId || 0 == pTextNd)
+    if (USHRT_MAX == nNumId || 0 == nNumId || nullptr == pTextNd)
         return;
 
     const SwNumRule* pRule = pTextNd->GetNumRule();
@@ -3500,8 +3500,8 @@ RtfAttributeOutput::RtfAttributeOutput(RtfExport& rExport)
       m_aCells(),
       m_bSingleEmptyRun(false),
       m_bInRun(false),
-      m_pFlyFrameSize(0),
-      m_pPrevPageDesc(0)
+      m_pFlyFrameSize(nullptr),
+      m_pPrevPageDesc(nullptr)
 {
 }
 
@@ -3677,7 +3677,7 @@ static void lcl_AppendSP(OStringBuffer& rBuffer,
 
 static OString ExportPICT(const SwFlyFrameFormat* pFlyFrameFormat, const Size& rOrig, const Size& rRendered, const Size& rMapped,
                           const SwCropGrf& rCr, const char* pBLIPType, const sal_uInt8* pGraphicAry,
-                          unsigned long nSize, const RtfExport& rExport, SvStream* pStream = 0, bool bWritePicProp = true)
+                          unsigned long nSize, const RtfExport& rExport, SvStream* pStream = nullptr, bool bWritePicProp = true)
 {
     OStringBuffer aRet;
     if (pBLIPType && nSize && pGraphicAry)
@@ -3764,7 +3764,7 @@ void RtfAttributeOutput::FlyFrameOLEReplacement(const SwFlyFrameFormat* pFlyFram
     Size aMapped(pGraphic->GetPrefSize());
     const SwCropGrf& rCr = static_cast<const SwCropGrf&>(rOLENode.GetAttr(RES_GRFATR_CROPGRF));
     const sal_Char* pBLIPType = OOO_STRING_SVTOOLS_RTF_PNGBLIP;
-    const sal_uInt8* pGraphicAry = 0;
+    const sal_uInt8* pGraphicAry = nullptr;
     SvMemoryStream aStream;
     if (GraphicConverter::Export(aStream, *pGraphic, ConvertDataFormat::PNG) != ERRCODE_NONE)
         SAL_WARN("sw.rtf", "failed to export the graphic");
@@ -3803,7 +3803,7 @@ bool RtfAttributeOutput::FlyFrameOLEMath(const SwFlyFrameFormat* pFlyFrameFormat
 // so help it with an intermediate cast. I'm not sure what exactly the problem is, seems to be unrelated
 // to RTLD_GLOBAL, so most probably a gcc bug.
     oox::FormulaExportBase* pBase = dynamic_cast<oox::FormulaExportBase*>(dynamic_cast<SfxBaseModel*>(xClosable.get()));
-    assert(pBase != NULL);
+    assert(pBase != nullptr);
     OStringBuffer aBuf;
     if (pBase)
         pBase->writeFormulaRtf(aBuf, m_rExport.eCurrentEncoding);
@@ -3828,7 +3828,7 @@ void RtfAttributeOutput::FlyFrameOLE(const SwFlyFrameFormat* pFlyFrameFormat, Sw
 void RtfAttributeOutput::FlyFrameGraphic(const SwFlyFrameFormat* pFlyFrameFormat, const SwGrfNode* pGrfNode)
 {
     SvMemoryStream aStream;
-    const sal_uInt8* pGraphicAry = 0;
+    const sal_uInt8* pGraphicAry = nullptr;
     sal_uInt32 nSize = 0;
 
     const Graphic& rGraphic(pGrfNode->GetGrf());
@@ -3841,7 +3841,7 @@ void RtfAttributeOutput::FlyFrameGraphic(const SwFlyFrameFormat* pFlyFrameFormat
     const sal_Char* pConvertDestinationBLIPType = OOO_STRING_SVTOOLS_RTF_WMETAFILE;
 
     GfxLink aGraphicLink;
-    const sal_Char* pBLIPType = 0;
+    const sal_Char* pBLIPType = nullptr;
     if (rGraphic.IsLink())
     {
         aGraphicLink = rGraphic.GetLink();
@@ -3859,7 +3859,7 @@ void RtfAttributeOutput::FlyFrameGraphic(const SwFlyFrameFormat* pFlyFrameFormat
         // compatible, keep it that way by assigning NULL value to pGraphicAry
         case GFX_LINK_TYPE_NATIVE_BMP:
             //    pBLIPType = OOO_STRING_SVTOOLS_RTF_WBITMAP;
-            pGraphicAry = 0;
+            pGraphicAry = nullptr;
             break;
 
         case GFX_LINK_TYPE_NATIVE_JPG:
@@ -3908,7 +3908,7 @@ void RtfAttributeOutput::FlyFrameGraphic(const SwFlyFrameFormat* pFlyFrameFormat
     aRendered.Width() = rS.GetWidth();
     aRendered.Height() = rS.GetHeight();
 
-    sw::Frame* pFrame = 0;
+    sw::Frame* pFrame = nullptr;
     for (sw::FrameIter it = m_rExport.m_aFrames.begin(); it != m_rExport.m_aFrames.end(); ++it)
     {
         if (pFlyFrameFormat == &it->GetFrameFormat())
@@ -3938,8 +3938,8 @@ void RtfAttributeOutput::FlyFrameGraphic(const SwFlyFrameFormat* pFlyFrameFormat
         m_rExport.m_bOutFlyFrmAttrs = m_rExport.bRTFFlySyntax = true;
         m_rExport.OutputFormat(pFrame->GetFrameFormat(), false, false, true);
         m_rExport.m_bOutFlyFrmAttrs = m_rExport.bRTFFlySyntax = false;
-        m_rExport.m_pParentFrame = NULL;
-        m_pFlyFrameSize = 0;
+        m_rExport.m_pParentFrame = nullptr;
+        m_pFlyFrameSize = nullptr;
 
         std::vector< std::pair<OString, OString> > aFlyProperties;
         aFlyProperties.push_back(std::make_pair<OString, OString>("shapeType", OString::number(ESCHER_ShpInst_PictureFrame)));
@@ -4031,7 +4031,7 @@ void RtfAttributeOutput::BulletDefinition(int /*nId*/, const Graphic& rGraphic, 
     m_rExport.OutULong(aSize.Height());
 
     m_rExport.Strm().WriteCharPtr(SAL_NEWLINE_STRING);
-    const sal_uInt8* pGraphicAry = 0;
+    const sal_uInt8* pGraphicAry = nullptr;
     SvMemoryStream aStream;
     if (GraphicConverter::Export(aStream, rGraphic, ConvertDataFormat::PNG) != ERRCODE_NONE)
         SAL_WARN("sw.rtf", "failed to export the numbering picture bullet");

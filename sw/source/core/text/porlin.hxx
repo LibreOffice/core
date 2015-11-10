@@ -202,7 +202,7 @@ inline bool SwLinePortion::operator==(const SwLinePortion &rPortion ) const
 
 inline SwLinePortion::SwLinePortion(const SwLinePortion &rPortion) :
     SwPosSize( rPortion ),
-    pPortion( 0 ),
+    pPortion( nullptr ),
     nLineLength( rPortion.nLineLength ),
     nAscent( rPortion.nAscent ),
     nWhichPor( rPortion.nWhichPor ),

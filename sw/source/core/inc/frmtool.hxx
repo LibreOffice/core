@@ -102,13 +102,13 @@ void PaintCharacterBorder(
 // Implementation in feshview.cxx
 SwFlyFrm *GetFlyFromMarked( const SdrMarkList *pLst, SwViewShell *pSh );
 
-SwFrm *SaveContent( SwLayoutFrm *pLay, SwFrm *pStart = NULL );
+SwFrm *SaveContent( SwLayoutFrm *pLay, SwFrm *pStart = nullptr );
 void RestoreContent( SwFrm *pSav, SwLayoutFrm *pParent, SwFrm *pSibling, bool bGrow );
 
 // Get ContentNodes, create ContentFrms, and add them to LayFrm.
 void _InsertCnt( SwLayoutFrm *pLay, SwDoc *pDoc, sal_uLong nIndex,
                  bool bPages = false, sal_uLong nEndIndex = 0,
-                 SwFrm *pPrv = 0 );
+                 SwFrm *pPrv = nullptr );
 
 // Creation of frames for a specific section (uses _InsertCnt)
 void MakeFrms( SwDoc *pDoc, const SwNodeIndex &rSttIdx,
@@ -133,7 +133,7 @@ void RegistFlys( SwPageFrm*, const SwLayoutFrm* );
 
 // notification of Fly's background if needed
 void Notify( SwFlyFrm *pFly, SwPageFrm *pOld, const SwRect &rOld,
-             const SwRect* pOldRect = 0 );
+             const SwRect* pOldRect = nullptr );
 
 void Notify_Background( const SdrObject* pObj,
                         SwPageFrm* pPage,
@@ -156,8 +156,8 @@ const SwFrm * FindPage( const SwRect &rRect, const SwFrm *pPage );
 SwFrm* GetFrmOfModify( const SwRootFrm* pLayout,
                        SwModify const&,
                        sal_uInt16 const nFrmType,
-                       const Point* = 0,
-                       const SwPosition *pPos = 0,
+                       const Point* = nullptr,
+                       const SwPosition *pPos = nullptr,
                        const bool bCalcFrm = false );
 
 // Should extra data (redline stroke, line numbers) be painted?
@@ -313,14 +313,14 @@ class SwBorderAttrs : public SwCacheObj
     // #i25029# - If <_pPrevFrm> is set, its value is taken for testing, if
     // borders/shadow have to be joined with previous frame.
     void _GetTopLine   ( const SwFrm& _rFrm,
-                         const SwFrm* _pPrevFrm = 0L );
+                         const SwFrm* _pPrevFrm = nullptr );
     void _GetBottomLine( const SwFrm& _rFrm );
 
     // calculate cached values <m_bJoinedWithPrev> and <m_bJoinedWithNext>
     // #i25029# - If <_pPrevFrm> is set, its value is taken for testing, if
     // borders/shadow have to be joined with previous frame.
     void _CalcJoinedWithPrev( const SwFrm& _rFrm,
-                              const SwFrm* _pPrevFrm = 0L );
+                              const SwFrm* _pPrevFrm = nullptr );
     void _CalcJoinedWithNext( const SwFrm& _rFrm );
 
     // internal helper method for _CalcJoinedWithPrev and _CalcJoinedWithNext
@@ -362,7 +362,7 @@ public:
     // #i25029# - If <_pPrevFrm> is set, its value is taken for testing, if
     // borders/shadow have to be joined with previous frame.
     inline sal_uInt16 GetTopLine   ( const SwFrm& _rFrm,
-                                 const SwFrm* _pPrevFrm = 0L ) const;
+                                 const SwFrm* _pPrevFrm = nullptr ) const;
     inline sal_uInt16 GetBottomLine( const SwFrm& _rFrm ) const;
     inline void   SetGetCacheLine( bool bNew ) const;
 
@@ -370,7 +370,7 @@ public:
     // #i25029# - If <_pPrevFrm> is set, its value is taken for testing, if
     // borders/shadow have to be joined with previous frame.
     bool JoinedWithPrev( const SwFrm& _rFrm,
-                         const SwFrm* _pPrevFrm = 0L ) const;
+                         const SwFrm* _pPrevFrm = nullptr ) const;
     bool JoinedWithNext( const SwFrm& _rFrm ) const;
 };
 
@@ -551,7 +551,7 @@ private:
 public:
     SwDeletionChecker( const SwFrm* pFrm )
             : mpFrm( pFrm ),
-              mpRegIn( pFrm ? const_cast<SwFrm*>(pFrm)->GetRegisteredIn() : 0 )
+              mpRegIn( pFrm ? const_cast<SwFrm*>(pFrm)->GetRegisteredIn() : nullptr )
     {
     }
 

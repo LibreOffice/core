@@ -204,7 +204,7 @@ void PageMarginControl::FillValueSet(
     aHelpText += aBottom;
     aHelpText += aNarrowValText;
     mpMarginValueSet->AddItem(
-        Image((bLandscape) ? SW_RES(IMG_NARROW_L) : SW_RES(IMG_NARROW)), 0,
+        Image((bLandscape) ? SW_RES(IMG_NARROW_L) : SW_RES(IMG_NARROW)), nullptr,
         SW_RESSTR(STR_NARROW), &aHelpText );
 
     SetMetricValue( *maWidthHeightField.get(), SWPAGE_NORMAL_VALUE, meUnit );
@@ -218,7 +218,7 @@ void PageMarginControl::FillValueSet(
     aHelpText += aBottom;
     aHelpText += aNormalValText;
     mpMarginValueSet->AddItem(
-        Image((bLandscape) ? SW_RES(IMG_NORMAL_L) : SW_RES(IMG_NORMAL)), 0,
+        Image((bLandscape) ? SW_RES(IMG_NORMAL_L) : SW_RES(IMG_NORMAL)), nullptr,
         SW_RESSTR(STR_NORMAL), &aHelpText );
 
     SetMetricValue( *maWidthHeightField.get(), SWPAGE_WIDE_VALUE1, meUnit );
@@ -234,7 +234,7 @@ void PageMarginControl::FillValueSet(
     aHelpText += aBottom;
     aHelpText += aWide1ValText;
     mpMarginValueSet->AddItem(
-        Image((bLandscape) ? SW_RES(IMG_WIDE_L) : SW_RES(IMG_WIDE)), 0,
+        Image((bLandscape) ? SW_RES(IMG_WIDE_L) : SW_RES(IMG_WIDE)), nullptr,
         SW_RESSTR(STR_WIDE), &aHelpText );
 
     const OUString aInner = SW_RESSTR(STR_MARGIN_TOOLTIP_INNER);
@@ -251,7 +251,7 @@ void PageMarginControl::FillValueSet(
     aHelpText += aBottom;
     aHelpText += aWide1ValText;
     mpMarginValueSet->AddItem(
-        Image((bLandscape) ? SW_RES(IMG_MIRRORED_L) : SW_RES(IMG_MIRRORED)), 0,
+        Image((bLandscape) ? SW_RES(IMG_MIRRORED_L) : SW_RES(IMG_MIRRORED)), nullptr,
         SW_RESSTR(STR_MIRRORED), &aHelpText );
 
     if ( bUserCustomValuesAvailable )
@@ -274,7 +274,7 @@ void PageMarginControl::FillValueSet(
         aHelpText.clear();
     }
     mpMarginValueSet->AddItem(
-        Image((bUserCustomValuesAvailable) ? SW_RES(IMG_CUSTOM) : SW_RES(IMG_CUSTOM_DIS)), 0,
+        Image((bUserCustomValuesAvailable) ? SW_RES(IMG_CUSTOM) : SW_RES(IMG_CUSTOM_DIS)), nullptr,
         SW_RESSTR(STR_LCVALUE), &aHelpText );
 }
 

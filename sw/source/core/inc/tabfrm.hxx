@@ -96,8 +96,8 @@ class SwTabFrm: public SwLayoutFrm, public SwFlowFrm
     void _UpdateAttr(
         const SfxPoolItem*,
         const SfxPoolItem*, sal_uInt8 &,
-        SwAttrSetChg *pa = 0,
-        SwAttrSetChg *pb = 0 );
+        SwAttrSetChg *pa = nullptr,
+        SwAttrSetChg *pb = nullptr );
 
     virtual bool ShouldBwdMoved( SwLayoutFrm *pNewUpper, bool bHead, bool &rReformat ) override;
 
@@ -106,7 +106,7 @@ class SwTabFrm: public SwLayoutFrm, public SwFlowFrm
 
 protected:
     virtual void MakeAll(vcl::RenderContext* pRenderContext) override;
-    virtual void Format( vcl::RenderContext* pRenderContext, const SwBorderAttrs *pAttrs = 0 ) override;
+    virtual void Format( vcl::RenderContext* pRenderContext, const SwBorderAttrs *pAttrs = nullptr ) override;
     virtual void Modify( const SfxPoolItem*, const SfxPoolItem* ) override;
     // only changes the Framesize, not the PrtArea size
     virtual SwTwips GrowFrm  ( SwTwips, bool bTst = false, bool bInfo = false ) override;
@@ -126,14 +126,14 @@ public:
 
     virtual bool GetInfo( SfxPoolItem &rHint ) const override;
     virtual void Paint( vcl::RenderContext& rRenderContext, SwRect const&,
-                        SwPrintData const*const pPrintData = NULL ) const override;
+                        SwPrintData const*const pPrintData = nullptr ) const override;
     virtual void CheckDirection( bool bVert ) override;
 
     virtual void Cut() override;
-    virtual void Paste( SwFrm* pParent, SwFrm* pSibling = 0 ) override;
+    virtual void Paste( SwFrm* pParent, SwFrm* pSibling = nullptr ) override;
 
     virtual bool Prepare( const PrepareHint ePrep = PREP_CLEAR,
-                          const void *pVoid = 0, bool bNotify = true ) override;
+                          const void *pVoid = nullptr, bool bNotify = true ) override;
 
                  SwContentFrm *FindLastContent();
     inline const SwContentFrm *FindLastContent() const;

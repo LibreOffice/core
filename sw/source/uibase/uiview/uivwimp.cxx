@@ -57,16 +57,16 @@ using namespace ::com::sun::star::datatransfer::clipboard;
 SwView_Impl::SwView_Impl(SwView* pShell)
     : mxXTextView()
     , pView(pShell)
-    , pScanEvtLstnr(0)
-    , pClipEvtLstnr(0)
+    , pScanEvtLstnr(nullptr)
+    , pClipEvtLstnr(nullptr)
     , eShellMode(SHELL_MODE_TEXT)
 #if HAVE_FEATURE_DBCONNECTIVITY
-    , pConfigItem(0)
+    , pConfigItem(nullptr)
     , nMailMergeRestartPage(0)
     , bMailMergeSourceView(true)
 #endif
-    , m_pDocInserter(NULL)
-    , m_pRequest(NULL)
+    , m_pDocInserter(nullptr)
+    , m_pRequest(nullptr)
     , m_nParam(0)
     , m_bSelectObject(false)
     , m_bEditingPositionSet(false)
@@ -78,9 +78,9 @@ SwView_Impl::SwView_Impl(SwView* pShell)
 SwView_Impl::~SwView_Impl()
 {
     Reference<XUnoTunnel> xDispTunnel(xDisProvInterceptor, UNO_QUERY);
-    SwXDispatchProviderInterceptor* pInterceptor = 0;
+    SwXDispatchProviderInterceptor* pInterceptor = nullptr;
     if(xDispTunnel.is() &&
-        0 != (pInterceptor = reinterpret_cast< SwXDispatchProviderInterceptor * >(
+        nullptr != (pInterceptor = reinterpret_cast< SwXDispatchProviderInterceptor * >(
                     sal::static_int_cast< sal_IntPtr >(
                     xDispTunnel->getSomething(SwXDispatchProviderInterceptor::getUnoTunnelId())))))
     {

@@ -119,7 +119,7 @@ void SwDBTreeList_Impl::elementRemoved( const ContainerEvent& rEvent ) throw (Ru
 
 void SwDBTreeList_Impl::disposing( const EventObject&  ) throw (RuntimeException, std::exception)
 {
-    m_xDatabaseContext = 0;
+    m_xDatabaseContext = nullptr;
 }
 
 void SwDBTreeList_Impl::elementReplaced( const ContainerEvent& rEvent ) throw (RuntimeException, std::exception)
@@ -153,7 +153,7 @@ SwDBTreeList::SwDBTreeList(vcl::Window *pParent, WinBits nStyle)
     , aImageList(SW_RES(ILIST_DB_DLG))
     , bInitialized(false)
     , bShowColumns(false)
-    , pImpl(new SwDBTreeList_Impl(NULL))
+    , pImpl(new SwDBTreeList_Impl(nullptr))
 {
     if (IsVisible())
         InitTreeList();
@@ -181,7 +181,7 @@ SwDBTreeList::~SwDBTreeList()
 void SwDBTreeList::dispose()
 {
     delete pImpl;
-    pImpl = NULL;
+    pImpl = nullptr;
     SvTreeListBox::dispose();
 }
 
@@ -208,7 +208,7 @@ void SwDBTreeList::InitTreeList()
     for(long i = 0; i < nCount; i++)
     {
         OUString sDBName(pDBNames[i]);
-        InsertEntry(sDBName, aImg, aImg, NULL, true);
+        InsertEntry(sDBName, aImg, aImg, nullptr, true);
     }
     OUString sDBName(sDefDBName.getToken(0, DB_DELIM));
     OUString sTableName(sDefDBName.getToken(1, DB_DELIM));
@@ -221,7 +221,7 @@ void SwDBTreeList::InitTreeList()
 void    SwDBTreeList::AddDataSource(const OUString& rSource)
 {
     Image aImg = aImageList.GetImage(IMG_DB);
-    SvTreeListEntry* pEntry = InsertEntry(rSource, aImg, aImg, NULL, true);
+    SvTreeListEntry* pEntry = InsertEntry(rSource, aImg, aImg, nullptr, true);
     SvTreeListBox::Select(pEntry);
 }
 
@@ -244,7 +244,7 @@ void SwDBTreeList::ShowColumns(bool bShowCol)
             Collapse(pEntry);       // zuklappen
 
             SvTreeListEntry* pChild;
-            while ((pChild = FirstChild(pEntry)) != 0L)
+            while ((pChild = FirstChild(pEntry)) != nullptr)
                 GetModel()->Remove(pChild);
 
             pEntry = Next(pEntry);
@@ -273,7 +273,7 @@ void  SwDBTreeList::RequestingChildren(SvTreeListEntry* pParent)
                 if(!pImpl->GetContext()->hasByName(sSourceName))
                     return;
                 Reference<XConnection> xConnection = pImpl->GetConnection(sSourceName);
-                bool bTable = pParent->GetUserData() == 0;
+                bool bTable = pParent->GetUserData() == nullptr;
                 Reference<XColumnsSupplier> xColsSupplier;
                 if(bTable)
                 {
@@ -409,7 +409,7 @@ OUString SwDBTreeList::GetDBName(OUString& rTableName, OUString& rColumnName, sa
         sDBName = GetEntryText(GetParent(pEntry));
         if(pbIsTable)
         {
-            *pbIsTable = pEntry->GetUserData() == 0;
+            *pbIsTable = pEntry->GetUserData() == nullptr;
         }
         rTableName = GetEntryText(pEntry);
     }
@@ -424,13 +424,13 @@ void SwDBTreeList::Select(const OUString& rDBName, const OUString& rTableName, c
     sal_uInt16 nParent = 0;
     sal_uInt16 nChild = 0;
 
-    while ((pParent = GetEntry(nParent++)) != NULL)
+    while ((pParent = GetEntry(nParent++)) != nullptr)
     {
         if (rDBName == GetEntryText(pParent))
         {
             if (!pParent->HasChildren())
                 RequestingChildren(pParent);
-            while ((pChild = GetEntry(pParent, nChild++)) != NULL)
+            while ((pChild = GetEntry(pParent, nChild++)) != nullptr)
             {
                 if (rTableName == GetEntryText(pChild))
                 {
@@ -443,7 +443,7 @@ void SwDBTreeList::Select(const OUString& rDBName, const OUString& rTableName, c
                         if (!pParent->HasChildren())
                             RequestingChildren(pParent);
 
-                        while ((pChild = GetEntry(pParent, nChild++)) != NULL)
+                        while ((pChild = GetEntry(pParent, nChild++)) != nullptr)
                             if (rColumnName == GetEntryText(pChild))
                                 break;
                     }

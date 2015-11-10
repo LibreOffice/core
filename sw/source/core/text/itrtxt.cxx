@@ -58,7 +58,7 @@ void SwTextIter::Init()
     nStart = pInf->GetTextStart();
     nY = nFrameStart;
     bPrev = true;
-    pPrev = 0;
+    pPrev = nullptr;
     nLineNr = 1;
 }
 
@@ -70,11 +70,11 @@ void SwTextIter::CalcAscentAndHeight( sal_uInt16 &rAscent, sal_uInt16 &rHeight )
 
 SwLineLayout *SwTextIter::_GetPrev()
 {
-    pPrev = 0;
+    pPrev = nullptr;
     bPrev = true;
     SwLineLayout *pLay = pInf->GetParaPortion();
     if( pCurr == pLay )
-        return 0;
+        return nullptr;
     while( pLay->GetNext() != pCurr )
         pLay = pLay->GetNext();
     return pPrev = pLay;
@@ -102,7 +102,7 @@ const SwLineLayout *SwTextIter::Prev()
         return pCurr;
     }
     else
-        return 0;
+        return nullptr;
 }
 
 const SwLineLayout *SwTextIter::Next()
@@ -118,7 +118,7 @@ const SwLineLayout *SwTextIter::Next()
         return pCurr = pCurr->GetNext();
     }
     else
-        return 0;
+        return nullptr;
 }
 
 const SwLineLayout *SwTextIter::NextLine()
@@ -145,7 +145,7 @@ const SwLineLayout *SwTextIter::GetPrevLine()
 {
     const SwLineLayout *pRoot = pInf->GetParaPortion();
     if( pRoot == pCurr )
-        return 0;
+        return nullptr;
     const SwLineLayout *pLay = pRoot;
 
     while( pLay->GetNext() != pCurr )
@@ -154,7 +154,7 @@ const SwLineLayout *SwTextIter::GetPrevLine()
     if( pLay->IsDummy() )
     {
         const SwLineLayout *pTmp = pRoot;
-        pLay = pRoot->IsDummy() ? 0 : pRoot;
+        pLay = pRoot->IsDummy() ? nullptr : pRoot;
         while( pTmp->GetNext() != pCurr )
         {
             if( !pTmp->IsDummy() )
@@ -171,7 +171,7 @@ const SwLineLayout *SwTextIter::PrevLine()
 {
     const SwLineLayout *pMyPrev = Prev();
     if( !pMyPrev )
-        return 0;
+        return nullptr;
 
     const SwLineLayout *pLast = pMyPrev;
     while( pMyPrev && pMyPrev->IsDummy() )
@@ -321,7 +321,7 @@ void SwTextIter::TruncLines( bool bNoteFollow )
 
     if( pDel )
     {
-        pCurr->SetNext( 0 );
+        pCurr->SetNext( nullptr );
         if( GetHints() && bNoteFollow )
         {
             GetInfo().GetParaPortion()->SetFollowField( pDel->IsRest() ||

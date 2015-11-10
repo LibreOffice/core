@@ -154,7 +154,7 @@ double SwTableBox::GetValue( SwTableCalcPara& rCalcPara ) const
         {
             SwTextField * const pTextField =
                 static_txtattr_cast<SwTextField*>(pTextNd->GetTextAttrForCharAt(nSttPos, RES_TXTATR_FIELD));
-            if ( pTextField == NULL )
+            if ( pTextField == nullptr )
                 break;
 
             rCalcPara.rCalc.SetCalcError( CALC_NOERR ); // reset status
@@ -202,7 +202,7 @@ double SwTableBox::GetValue( SwTableCalcPara& rCalcPara ) const
             const SwTextInputField * pTextInputField =
                 dynamic_cast< const SwTextInputField* >(
                     pTextNd->GetTextAttrAt( nSttPos, RES_TXTATR_INPUTFIELD ) );
-            if ( pTextInputField == NULL )
+            if ( pTextInputField == nullptr )
                 break;
             nRet = rCalcPara.rCalc.Calculate( pTextInputField->GetFieldContent() ).GetDouble();
         }
@@ -251,7 +251,7 @@ double SwTableBox::GetValue( SwTableCalcPara& rCalcPara ) const
 // structure needed for calculation of tables
 
 SwTableCalcPara::SwTableCalcPara( SwCalc& rCalculator, const SwTable& rTable )
-    : pLastTableBox( 0 ), nStackCnt( 0 ), nMaxSize( cMAXSTACKSIZE ),
+    : pLastTableBox( nullptr ), nStackCnt( 0 ), nMaxSize( cMAXSTACKSIZE ),
     rCalc( rCalculator ), pTable( &rTable )
 {
     pBoxStk = new SwTableSortBoxes;
@@ -317,7 +317,7 @@ void SwTableFormula::_MakeFormula( const SwTable& rTable, OUString& rNewStr,
     if( pCalcPara->rCalc.IsCalcError() )        // stop if there is already an error set
         return;
 
-    SwTableBox *pEndBox = 0;
+    SwTableBox *pEndBox = nullptr;
 
     rFirstBox = rFirstBox.copy(1); // erase label of this box
     // a region in this area?
@@ -327,14 +327,14 @@ void SwTableFormula::_MakeFormula( const SwTable& rTable, OUString& rNewStr,
 
         // Is it actually a valid pointer?
         if( rTable.GetTabSortBoxes().find( pEndBox ) == rTable.GetTabSortBoxes().end() )
-            pEndBox = 0;
+            pEndBox = nullptr;
         rFirstBox = rFirstBox.copy( pLastBox->getLength()+1 );
     }
     SwTableBox* pSttBox = reinterpret_cast<SwTableBox*>(
                             sal::static_int_cast<sal_IntPtr>(rFirstBox.toInt64()));
     // Is it actually a valid pointer?
     if( rTable.GetTabSortBoxes().find( pSttBox ) == rTable.GetTabSortBoxes().end() )
-        pSttBox = 0;
+        pSttBox = nullptr;
 
     rNewStr += " ";
     if( pEndBox && pSttBox )    // area?
@@ -532,8 +532,8 @@ void SwTableFormula::BoxNmsToPtr( const SwTable& rTable, OUString& rNewStr,
 /// create external formula (for UI)
 void SwTableFormula::PtrToBoxNm( const SwTable* pTable )
 {
-    const SwNode* pNd = 0;
-    FnScanFormula fnFormula = 0;
+    const SwNode* pNd = nullptr;
+    FnScanFormula fnFormula = nullptr;
     switch (m_eNmType)
     {
     case INTRNL_NAME:
@@ -557,8 +557,8 @@ void SwTableFormula::PtrToBoxNm( const SwTable* pTable )
 /// create internal formula (in CORE)
 void SwTableFormula::BoxNmToPtr( const SwTable* pTable )
 {
-    const SwNode* pNd = 0;
-    FnScanFormula fnFormula = 0;
+    const SwNode* pNd = nullptr;
+    FnScanFormula fnFormula = nullptr;
     switch (m_eNmType)
     {
     case EXTRNL_NAME:
@@ -582,8 +582,8 @@ void SwTableFormula::BoxNmToPtr( const SwTable* pTable )
 /// create relative formula (for copy)
 void SwTableFormula::ToRelBoxNm( const SwTable* pTable )
 {
-    const SwNode* pNd = 0;
-    FnScanFormula fnFormula = 0;
+    const SwNode* pNd = nullptr;
+    FnScanFormula fnFormula = nullptr;
     switch (m_eNmType)
     {
     case INTRNL_NAME:
@@ -691,7 +691,7 @@ OUString SwTableFormula::ScanString( FnScanFormula fnFormula, const SwTable& rTa
                 (this->*fnFormula)( *pTable, aStr, sBox, &aFirstBox, pPara );
             }
             else
-                (this->*fnFormula)( *pTable, aStr, sBox, 0, pPara );
+                (this->*fnFormula)( *pTable, aStr, sBox, nullptr, pPara );
         }
 
         nFormula = nEnd+1;
@@ -702,15 +702,15 @@ OUString SwTableFormula::ScanString( FnScanFormula fnFormula, const SwTable& rTa
 const SwTable* SwTableFormula::FindTable( SwDoc& rDoc, const OUString& rNm )
 {
     const SwFrameFormats& rTableFormats = *rDoc.GetTableFrameFormats();
-    const SwTable* pTmpTable = 0, *pRet = 0;
+    const SwTable* pTmpTable = nullptr, *pRet = nullptr;
     for( auto nFormatCnt = rTableFormats.size(); nFormatCnt; )
     {
         SwFrameFormat* pFormat = rTableFormats[ --nFormatCnt ];
         // if we are called from Sw3Writer, a number is dependent on the format name
         SwTableBox* pFBox;
         if ( rNm.equals(pFormat->GetName().getToken(0, 0x0a)) &&
-            0 != ( pTmpTable = SwTable::FindTable( pFormat ) ) &&
-            0 != (pFBox = pTmpTable->GetTabSortBoxes()[0] ) &&
+            nullptr != ( pTmpTable = SwTable::FindTable( pFormat ) ) &&
+            nullptr != (pFBox = pTmpTable->GetTabSortBoxes()[0] ) &&
             pFBox->GetSttNd() &&
             pFBox->GetSttNd()->GetNodes().IsDocNodes() )
         {
@@ -728,7 +728,7 @@ static const SwFrm* lcl_GetBoxFrm( const SwTableBox& rBox )
     SwContentNode* pCNd = aIdx.GetNodes().GoNext( &aIdx );
     OSL_ENSURE( pCNd, "Box has no TextNode" );
     Point aPt;      // get the first frame of the layout - table headline
-    return pCNd->getLayoutFrm( pCNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), &aPt, NULL, false );
+    return pCNd->getLayoutFrm( pCNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), &aPt, nullptr, false );
 }
 
 static sal_Int32 lcl_GetLongBoxNum( OUString& rStr )
@@ -753,14 +753,14 @@ static const SwTableBox* lcl_RelToBox( const SwTable& rTable,
                                     const OUString& _sGetName )
 {
     // get line
-    const SwTableBox* pBox = 0;
+    const SwTableBox* pBox = nullptr;
     OUString sGetName = _sGetName;
 
     // Is it really a relative value?
     if ( cRelIdentifier == sGetName[0] ) // yes
     {
         if( !pRefBox )
-            return 0;
+            return nullptr;
 
         sGetName = sGetName.copy( 1 );
 
@@ -784,17 +784,17 @@ static const SwTableBox* lcl_RelToBox( const SwTable& rTable,
 
         if( nBoxOffset < 0 || nBoxOffset >= USHRT_MAX ||
             nLineOffset < 0 || nLineOffset >= USHRT_MAX )
-            return 0;
+            return nullptr;
 
         if( static_cast<size_t>(nLineOffset) >= pLines->size() )
-            return 0;
+            return nullptr;
 
         pLine = (*pLines)[ nLineOffset ];
 
         // ... then search the box
         pBoxes = &pLine->GetTabBoxes();
         if( static_cast<size_t>(nBoxOffset) >= pBoxes->size() )
-            return 0;
+            return nullptr;
         pBox = (*pBoxes)[ nBoxOffset ];
 
         while (!sGetName.isEmpty())
@@ -886,7 +886,7 @@ void SwTableFormula::_GetFormulaBoxes( const SwTable& rTable, OUString& ,
                     OUString& rFirstBox, OUString* pLastBox, void* pPara ) const
 {
     SwSelBoxes* pBoxes = static_cast<SwSelBoxes*>(pPara);
-    SwTableBox* pEndBox = 0;
+    SwTableBox* pEndBox = nullptr;
 
     rFirstBox = rFirstBox.copy(1); // delete box label
     // area in these parentheses?
@@ -896,7 +896,7 @@ void SwTableFormula::_GetFormulaBoxes( const SwTable& rTable, OUString& ,
 
         // Is it actually a valid pointer?
         if( rTable.GetTabSortBoxes().find( pEndBox ) == rTable.GetTabSortBoxes().end() )
-            pEndBox = 0;
+            pEndBox = nullptr;
         rFirstBox = rFirstBox.copy( pLastBox->getLength()+1 );
     }
 
@@ -923,12 +923,12 @@ void SwTableFormula::GetBoxes( const SwTableBox& rSttBox,
     // get all selected boxes via layout
     const SwLayoutFrm *pStt, *pEnd;
     const SwFrm* pFrm = lcl_GetBoxFrm( rSttBox );
-    pStt = pFrm ? pFrm->GetUpper() : 0;
-    pEnd = ( 0 != (pFrm = lcl_GetBoxFrm( rEndBox ))) ? pFrm->GetUpper() : 0;
+    pStt = pFrm ? pFrm->GetUpper() : nullptr;
+    pEnd = ( nullptr != (pFrm = lcl_GetBoxFrm( rEndBox ))) ? pFrm->GetUpper() : nullptr;
     if( !pStt || !pEnd )
         return ;                        // no valid selection
 
-    GetTableSel( pStt, pEnd, rBoxes, 0 );
+    GetTableSel( pStt, pEnd, rBoxes, nullptr );
 
     const SwTable* pTable = pStt->FindTabFrm()->GetTable();
 
@@ -978,7 +978,7 @@ void SwTableFormula::_HasValidBoxes( const SwTable& rTable, OUString& ,
     bool* pBValid = static_cast<bool*>(pPara);
     if( *pBValid )      // wrong is wrong
     {
-        SwTableBox* pSttBox = 0, *pEndBox = 0;
+        SwTableBox* pSttBox = nullptr, *pEndBox = nullptr;
         rFirstBox = rFirstBox.copy(1);       // Kennung fuer Box loeschen
 
         // area in this parenthesis?
@@ -996,7 +996,7 @@ void SwTableFormula::_HasValidBoxes( const SwTable& rTable, OUString& ,
         case REL_NAME:
             {
                 const SwNode* pNd = GetNodeOfFormula();
-                const SwTableBox* pBox = !pNd ? 0
+                const SwTableBox* pBox = !pNd ? nullptr
                                                : const_cast<SwTableBox *>(rTable.GetTableBox(
                                     pNd->FindTableBoxStartNode()->GetIndex() ));
                 if( pLastBox )
@@ -1024,7 +1024,7 @@ bool SwTableFormula::HasValidBoxes() const
 {
     bool bRet = true;
     const SwNode* pNd = GetNodeOfFormula();
-    if( pNd && 0 != ( pNd = pNd->FindTableNode() ) )
+    if( pNd && nullptr != ( pNd = pNd->FindTableNode() ) )
         ScanString( &SwTableFormula::_HasValidBoxes,
                         static_cast<const SwTableNode*>(pNd)->GetTable(), &bRet );
     return bRet;
@@ -1091,7 +1091,7 @@ void SwTableFormula::_SplitMergeBoxNm( const SwTable& rTable, OUString& rNewStr,
     if( pTableNmBox == pLastBox )
         rFirstBox = rFirstBox.copy( nLastBoxLen + 1 );
 
-    SwTableBox* pSttBox = 0, *pEndBox = 0;
+    SwTableBox* pSttBox = nullptr, *pEndBox = nullptr;
     switch (m_eNmType)
     {
     case INTRNL_NAME:
@@ -1104,7 +1104,7 @@ void SwTableFormula::_SplitMergeBoxNm( const SwTable& rTable, OUString& rNewStr,
         {
             const SwNode* pNd = GetNodeOfFormula();
             const SwTableBox* pBox = pNd ? pTable->GetTableBox(
-                            pNd->FindTableBoxStartNode()->GetIndex() ) : 0;
+                            pNd->FindTableBoxStartNode()->GetIndex() ) : nullptr;
             if( pLastBox )
                 pEndBox = const_cast<SwTableBox*>(lcl_RelToBox( *pTable, pBox, *pLastBox ));
             pSttBox = const_cast<SwTableBox*>(lcl_RelToBox( *pTable, pBox, rFirstBox ));
@@ -1119,9 +1119,9 @@ void SwTableFormula::_SplitMergeBoxNm( const SwTable& rTable, OUString& rNewStr,
     }
 
     if( pLastBox && pTable->GetTabSortBoxes().find( pEndBox ) == pTable->GetTabSortBoxes().end() )
-        pEndBox = 0;
+        pEndBox = nullptr;
     if( pTable->GetTabSortBoxes().find( pSttBox ) == pTable->GetTabSortBoxes().end() )
-        pSttBox = 0;
+        pSttBox = nullptr;
 
     if( TBL_SPLITTBL == rTableUpd.m_eFlags )
     {
@@ -1193,7 +1193,7 @@ void SwTableFormula::ToSplitMergeBoxNm( SwTableFormulaUpdate& rTableUpd )
 {
     const SwTable* pTable;
     const SwNode* pNd = GetNodeOfFormula();
-    if( pNd && 0 != ( pNd = pNd->FindTableNode() ))
+    if( pNd && nullptr != ( pNd = pNd->FindTableNode() ))
         pTable = &static_cast<const SwTableNode*>(pNd)->GetTable();
     else
         pTable = rTableUpd.m_pTable;

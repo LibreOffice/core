@@ -257,7 +257,7 @@ public:
     IDocumentListItems& getIDocumentListItems();
 
     /// Is node in the visible area of the Shell?
-    bool IsInVisibleArea( SwViewShell const * pSh = 0 ) const;
+    bool IsInVisibleArea( SwViewShell const * pSh = nullptr ) const;
     /// Is node in an protected area?
     bool IsInProtectSect() const;
     /**  Is node in something that is protected (range, frame,
@@ -267,7 +267,7 @@ public:
     /** Search PageDesc with which this node is formatted. If layout is existent
        search over layout, else only the hard way is left: search over the nodes
        to the front!! */
-    const SwPageDesc* FindPageDesc( bool bCalcLay, size_t* pPgDescNdIdx = 0 ) const;
+    const SwPageDesc* FindPageDesc( bool bCalcLay, size_t* pPgDescNdIdx = nullptr ) const;
 
     /// If node is in a fly return the respective format.
     SwFrameFormat* GetFlyFormat() const;
@@ -391,8 +391,8 @@ public:
     virtual SwContentNode *JoinPrev();
     /** Is it possible to join two nodes?
        In pIdx the second position can be returned. */
-    bool CanJoinNext( SwNodeIndex* pIdx =0 ) const;
-    bool CanJoinPrev( SwNodeIndex* pIdx =0 ) const;
+    bool CanJoinNext( SwNodeIndex* pIdx =nullptr ) const;
+    bool CanJoinPrev( SwNodeIndex* pIdx =nullptr ) const;
 
     void MakeStartIndex( SwIndex * pIdx )   { pIdx->Assign( this, 0 ); }
     void MakeEndIndex( SwIndex * pIdx )     { pIdx->Assign( this, Len() ); }
@@ -402,16 +402,16 @@ public:
 
     /// Replacement for good old GetFrm(..):
     SwContentFrm *getLayoutFrm( const SwRootFrm*,
-                        const Point* pDocPos = 0,
-                        const SwPosition *pPos = 0,
+                        const Point* pDocPos = nullptr,
+                        const SwPosition *pPos = nullptr,
                         const bool bCalcFrm = true ) const;
     /** @return the real size of the frame or an empty rectangle if
        no layout exists. Needed for export filters. */
     SwRect FindLayoutRect( const bool bPrtArea = false,
-                            const Point* pPoint = 0,
+                            const Point* pPoint = nullptr,
                             const bool bCalcFrm = false  ) const;
     SwRect FindPageFrmRect( const bool bPrtArea = false,
-                            const Point* pPoint = 0,
+                            const Point* pPoint = nullptr,
                             const bool bCalcFrm = false  ) const;
 
     /** Method creates all views of document for given node. The content
@@ -554,7 +554,7 @@ public:
        On default the frames are created until the end of the range.
        When another NodeIndex pEnd is passed a MakeFrms is called up to it.
        Used by TableToText. */
-    void MakeFrms( SwNodeIndex* pIdxBehind, SwNodeIndex* pEnd = NULL );
+    void MakeFrms( SwNodeIndex* pIdxBehind, SwNodeIndex* pEnd = nullptr );
 
     /** Method deletes all views of document for the node. The
      content frames are removed from the respective layout. */
@@ -589,43 +589,43 @@ private:
 
 inline       SwEndNode   *SwNode::GetEndNode()
 {
-     return ND_ENDNODE == m_nNodeType ? static_cast<SwEndNode*>(this) : 0;
+     return ND_ENDNODE == m_nNodeType ? static_cast<SwEndNode*>(this) : nullptr;
 }
 inline const SwEndNode   *SwNode::GetEndNode() const
 {
-     return ND_ENDNODE == m_nNodeType ? static_cast<const SwEndNode*>(this) : 0;
+     return ND_ENDNODE == m_nNodeType ? static_cast<const SwEndNode*>(this) : nullptr;
 }
 inline       SwStartNode *SwNode::GetStartNode()
 {
-     return ND_STARTNODE & m_nNodeType ? static_cast<SwStartNode*>(this) : 0;
+     return ND_STARTNODE & m_nNodeType ? static_cast<SwStartNode*>(this) : nullptr;
 }
 inline const SwStartNode *SwNode::GetStartNode() const
 {
-     return ND_STARTNODE & m_nNodeType ? static_cast<const SwStartNode*>(this) : 0;
+     return ND_STARTNODE & m_nNodeType ? static_cast<const SwStartNode*>(this) : nullptr;
 }
 inline       SwTableNode *SwNode::GetTableNode()
 {
-     return ND_TABLENODE == m_nNodeType ? static_cast<SwTableNode*>(this) : 0;
+     return ND_TABLENODE == m_nNodeType ? static_cast<SwTableNode*>(this) : nullptr;
 }
 inline const SwTableNode *SwNode::GetTableNode() const
 {
-     return ND_TABLENODE == m_nNodeType ? static_cast<const SwTableNode*>(this) : 0;
+     return ND_TABLENODE == m_nNodeType ? static_cast<const SwTableNode*>(this) : nullptr;
 }
 inline       SwSectionNode *SwNode::GetSectionNode()
 {
-     return ND_SECTIONNODE == m_nNodeType ? static_cast<SwSectionNode*>(this) : 0;
+     return ND_SECTIONNODE == m_nNodeType ? static_cast<SwSectionNode*>(this) : nullptr;
 }
 inline const SwSectionNode *SwNode::GetSectionNode() const
 {
-     return ND_SECTIONNODE == m_nNodeType ? static_cast<const SwSectionNode*>(this) : 0;
+     return ND_SECTIONNODE == m_nNodeType ? static_cast<const SwSectionNode*>(this) : nullptr;
 }
 inline       SwContentNode *SwNode::GetContentNode()
 {
-     return ND_CONTENTNODE & m_nNodeType ? static_cast<SwContentNode*>(this) : 0;
+     return ND_CONTENTNODE & m_nNodeType ? static_cast<SwContentNode*>(this) : nullptr;
 }
 inline const SwContentNode *SwNode::GetContentNode() const
 {
-     return ND_CONTENTNODE & m_nNodeType ? static_cast<const SwContentNode*>(this) : 0;
+     return ND_CONTENTNODE & m_nNodeType ? static_cast<const SwContentNode*>(this) : nullptr;
 }
 
 inline bool SwNode::IsStartNode() const
@@ -717,7 +717,7 @@ inline const SwDoc* SwNode::GetDoc() const
 
 inline SwFormatColl* SwContentNode::GetCondFormatColl() const
 {
-    return m_pCondColl ? static_cast<SwFormatColl*>(m_pCondColl->GetRegisteredIn()) : 0;
+    return m_pCondColl ? static_cast<SwFormatColl*>(m_pCondColl->GetRegisteredIn()) : nullptr;
 }
 
 inline SwFormatColl& SwContentNode::GetAnyFormatColl() const

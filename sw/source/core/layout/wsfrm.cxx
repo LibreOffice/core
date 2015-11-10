@@ -256,7 +256,7 @@ void SwFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem * pNew )
         if ( nInvFlags & 0x08 )
             SetCompletePaint();
         SwFrm *pNxt;
-        if ( nInvFlags & 0x30 && 0 != (pNxt = GetNext()) )
+        if ( nInvFlags & 0x30 && nullptr != (pNxt = GetNext()) )
         {
             pNxt->InvalidatePage( pPage );
             if ( nInvFlags & 0x10 )
@@ -307,8 +307,8 @@ void SwFrm::_UpdateAttrFrm( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
         {
             if ( IsRowFrm() )
             {
-                bool bInFollowFlowRow = 0 != IsInFollowFlowRow();
-                if ( bInFollowFlowRow || 0 != IsInSplitTableRow() )
+                bool bInFollowFlowRow = nullptr != IsInFollowFlowRow();
+                if ( bInFollowFlowRow || nullptr != IsInSplitTableRow() )
                 {
                     SwTabFrm* pTab = FindTabFrm();
                     if ( bInFollowFlowRow )
@@ -532,7 +532,7 @@ void SwFrm::InsertBefore( SwLayoutFrm* pParent, SwFrm* pBehind )
     mpNext = pBehind;
     if( pBehind )
     {   //Insert before pBehind.
-        if( 0 != (mpPrev = pBehind->mpPrev) )
+        if( nullptr != (mpPrev = pBehind->mpPrev) )
             mpPrev->mpNext = this;
         else
             mpUpper->m_pLower = this;
@@ -568,7 +568,7 @@ void SwFrm::InsertBehind( SwLayoutFrm *pParent, SwFrm *pBefore )
     if ( pBefore )
     {
         //Insert after pBefore
-        if ( 0 != (mpNext = pBefore->mpNext) )
+        if ( nullptr != (mpNext = pBefore->mpNext) )
             mpNext->mpPrev = this;
         pBefore->mpNext = this;
     }
@@ -634,10 +634,10 @@ bool SwFrm::InsertGroupBefore( SwFrm* pParent, SwFrm* pBehind, SwFrm* pSct )
         if( pBehind )
         {   // Insert before pBehind.
             if( pBehind->GetPrev() )
-                pBehind->GetPrev()->mpNext = NULL;
+                pBehind->GetPrev()->mpNext = nullptr;
             else
                 pBehind->GetUpper()->m_pLower = nullptr;
-            pBehind->mpPrev = NULL;
+            pBehind->mpPrev = nullptr;
             SwLayoutFrm* pTmp = static_cast<SwLayoutFrm*>(pSct);
             if( pTmp->Lower() )
             {
@@ -673,7 +673,7 @@ bool SwFrm::InsertGroupBefore( SwFrm* pParent, SwFrm* pBehind, SwFrm* pSct )
         pLast->mpNext = pBehind;
         if( pBehind )
         {   // Insert before pBehind.
-            if( 0 != (mpPrev = pBehind->mpPrev) )
+            if( nullptr != (mpPrev = pBehind->mpPrev) )
                 mpPrev->mpNext = this;
             else
                 mpUpper->m_pLower = this;
@@ -712,8 +712,8 @@ void SwFrm::RemoveFromLayout()
         mpNext->mpPrev = mpPrev;
 
     // Remove link
-    mpNext  = mpPrev  = 0;
-    mpUpper = 0;
+    mpNext  = mpPrev  = nullptr;
+    mpUpper = nullptr;
 }
 
 void SwContentFrm::Paste( SwFrm* pParent, SwFrm* pSibling)
@@ -751,7 +751,7 @@ void SwContentFrm::Paste( SwFrm* pParent, SwFrm* pSibling)
         if( pNxt->IsSctFrm() )
             pNxt = static_cast<SwSectionFrm*>(pNxt)->ContainsContent();
         if( pNxt && pNxt->IsTextFrm() && pNxt->IsInFootnote() )
-            pNxt->Prepare( PREP_FTN, 0, false );
+            pNxt->Prepare( PREP_FTN, nullptr, false );
     }
 
     if ( Frm().Height() )
@@ -791,11 +791,11 @@ void SwContentFrm::Paste( SwFrm* pParent, SwFrm* pSibling)
         if( pFrm && pFrm->IsSctFrm() )
             pFrm = static_cast<SwSectionFrm*>(pFrm)->ContainsAny();
         if( pFrm )
-            pFrm->Prepare( PREP_QUOVADIS, 0, false );
+            pFrm->Prepare( PREP_QUOVADIS, nullptr, false );
         if( !GetNext() )
         {
             pFrm = FindFootnoteFrm()->GetNext();
-            if( pFrm && 0 != (pFrm=static_cast<SwLayoutFrm*>(pFrm)->ContainsAny()) )
+            if( pFrm && nullptr != (pFrm=static_cast<SwLayoutFrm*>(pFrm)->ContainsAny()) )
                 pFrm->_InvalidatePrt();
         }
     }
@@ -806,7 +806,7 @@ void SwContentFrm::Paste( SwFrm* pParent, SwFrm* pSibling)
     {
         while ( pNxt && pNxt->IsInTab() )
         {
-            if( 0 != (pNxt = pNxt->FindTabFrm()) )
+            if( nullptr != (pNxt = pNxt->FindTabFrm()) )
                 pNxt = pNxt->FindNextCnt();
         }
         if ( pNxt )
@@ -833,7 +833,7 @@ void SwContentFrm::Cut()
         {
             pFrm->_InvalidatePrt();
             if( IsInFootnote() )
-                pFrm->Prepare( PREP_QUOVADIS, 0, false );
+                pFrm->Prepare( PREP_QUOVADIS, nullptr, false );
         }
         // #i26250# - invalidate printing area of previous
         // table frame.
@@ -848,7 +848,7 @@ void SwContentFrm::Cut()
     {
         while ( pNxt && pNxt->IsInTab() )
         {
-            if( 0 != (pNxt = pNxt->FindTabFrm()) )
+            if( nullptr != (pNxt = pNxt->FindTabFrm()) )
                 pNxt = pNxt->FindNextCnt();
         }
         if ( pNxt )
@@ -859,7 +859,7 @@ void SwContentFrm::Cut()
         }
     }
 
-    if( 0 != (pFrm = GetIndNext()) )
+    if( nullptr != (pFrm = GetIndNext()) )
     {
         // The old follow may have calculated a gap to the predecessor which
         // now becomes obsolete or different as it becomes the first one itself
@@ -877,7 +877,7 @@ void SwContentFrm::Cut()
             }
         }
         if( pFrm && IsInFootnote() )
-            pFrm->Prepare( PREP_ERGOSUM, 0, false );
+            pFrm->Prepare( PREP_ERGOSUM, nullptr, false );
         if( IsInSct() && !GetPrev() )
         {
             SwSectionFrm* pSct = FindSctFrm();
@@ -892,7 +892,7 @@ void SwContentFrm::Cut()
     {
         InvalidateNextPos();
         //Someone needs to do the retouching: predecessor or upper
-        if ( 0 != (pFrm = GetPrev()) )
+        if ( nullptr != (pFrm = GetPrev()) )
         {   pFrm->SetRetouche();
             pFrm->Prepare( PREP_WIDOWS_ORPHANS );
             pFrm->_InvalidatePos();
@@ -922,7 +922,7 @@ void SwContentFrm::Cut()
             if ( IsInTab() )
             {
                 SwTabFrm* pThisTab = FindTabFrm();
-                SwTabFrm* pMasterTab = pThisTab && pThisTab->IsFollow() ? pThisTab->FindMaster() : 0;
+                SwTabFrm* pMasterTab = pThisTab && pThisTab->IsFollow() ? pThisTab->FindMaster() : nullptr;
                 if ( pMasterTab )
                 {
                     pMasterTab->_InvalidatePos();
@@ -936,7 +936,7 @@ void SwContentFrm::Cut()
     RemoveFromLayout();
     if ( pUp )
     {
-        SwSectionFrm *pSct = 0;
+        SwSectionFrm *pSct = nullptr;
         if ( !pUp->Lower() &&
              ( ( pUp->IsFootnoteFrm() && !pUp->IsColLocked() ) ||
                ( pUp->IsInSct() &&
@@ -1049,7 +1049,7 @@ void SwLayoutFrm::Paste( SwFrm* pParent, SwFrm* pSibling)
     if( !IsColumnFrm() )
     {
         SwFrm *pFrm = GetIndNext();
-        if( 0 != pFrm )
+        if( nullptr != pFrm )
         {
             pFrm->_InvalidatePos();
             if( IsInFootnote() )
@@ -1057,15 +1057,15 @@ void SwLayoutFrm::Paste( SwFrm* pParent, SwFrm* pSibling)
                 if( pFrm->IsSctFrm() )
                     pFrm = static_cast<SwSectionFrm*>(pFrm)->ContainsAny();
                 if( pFrm )
-                    pFrm->Prepare( PREP_ERGOSUM, 0, false );
+                    pFrm->Prepare( PREP_ERGOSUM, nullptr, false );
             }
         }
-        if ( IsInFootnote() && 0 != ( pFrm = GetIndPrev() ) )
+        if ( IsInFootnote() && nullptr != ( pFrm = GetIndPrev() ) )
         {
             if( pFrm->IsSctFrm() )
                 pFrm = static_cast<SwSectionFrm*>(pFrm)->ContainsAny();
             if( pFrm )
-                pFrm->Prepare( PREP_QUOVADIS, 0, false );
+                pFrm->Prepare( PREP_QUOVADIS, nullptr, false );
         }
     }
 
@@ -1384,7 +1384,7 @@ SwTwips SwFrm::AdjustNeighbourhood( SwTwips nDiff, bool bTst )
                     Prt().SSize().Height() = nOldFrmHeight;
 
                 if ( pUp->GetUpper() )
-                    static_cast<SwRootFrm*>(pUp->GetUpper())->CheckViewLayout( 0, 0 );
+                    static_cast<SwRootFrm*>(pUp->GetUpper())->CheckViewLayout( nullptr, nullptr );
                 //static_cast<SwPageFrm*>(pUp)->AdjustRootSize( CHG_CHGPAGE, &aOldRect );
 
                 Frm().SSize().Height() = nOldFrmHeight;
@@ -1406,7 +1406,7 @@ SwTwips SwFrm::AdjustNeighbourhood( SwTwips nDiff, bool bTst )
 
     SwTwips nReal = 0,
             nAdd  = 0;
-    SwFrm *pFrm = 0;
+    SwFrm *pFrm = nullptr;
     SWRECTFN( this )
 
     if( IsBodyFrm() )
@@ -1507,7 +1507,7 @@ SwTwips SwFrm::AdjustNeighbourhood( SwTwips nDiff, bool bTst )
         if( nReal < 0 && pFrm->IsInSct() )
         {
             SwLayoutFrm* pUp = pFrm->GetUpper();
-            if( pUp && 0 != ( pUp = pUp->GetUpper() ) && pUp->IsSctFrm() &&
+            if( pUp && nullptr != ( pUp = pUp->GetUpper() ) && pUp->IsSctFrm() &&
                 !pUp->IsColLocked() )
                 pUp->InvalidateSize();
         }
@@ -1754,7 +1754,7 @@ SwTwips SwContentFrm::GrowFrm( SwTwips nDist, bool bTst, bool bInfo )
         (Frm().*fnRect->fnSetHeight)( nOld + nDist );
         if( IsVertical()&& !IsVertLR() && !IsReverse() )
             Frm().Pos().X() -= nDist;
-        SwTabFrm *pTab = (nOld && IsInTab()) ? FindTabFrm() : NULL;
+        SwTabFrm *pTab = (nOld && IsInTab()) ? FindTabFrm() : nullptr;
         if (pTab)
         {
             if ( pTab->GetTable()->GetHTMLTableLayout() &&
@@ -1842,7 +1842,7 @@ SwTwips SwContentFrm::ShrinkFrm( SwTwips nDist, bool bTst, bool bInfo )
         if( IsVertical() && !IsVertLR() )
             Frm().Pos().X() += nDist;
         nDist = nRstHeight;
-        SwTabFrm *pTab = IsInTab() ? FindTabFrm() : NULL;
+        SwTabFrm *pTab = IsInTab() ? FindTabFrm() : nullptr;
         if (pTab)
         {
             if ( pTab->GetTable()->GetHTMLTableLayout() &&
@@ -1874,7 +1874,7 @@ SwTwips SwContentFrm::ShrinkFrm( SwTwips nDist, bool bTst, bool bInfo )
             bool bInvalidate = true;
             const SwRect aRect( Frm() );
             const SwPageFrm* pPage = FindPageFrm();
-            const SwSortedObjs* pSorted = pPage ? pPage->GetSortedObjs() : 0;
+            const SwSortedObjs* pSorted = pPage ? pPage->GetSortedObjs() : nullptr;
             if( pSorted )
             {
                 for ( size_t i = 0; i < pSorted->size(); ++i )
@@ -2264,7 +2264,7 @@ SwTwips SwLayoutFrm::GrowFrm( SwTwips nDist, bool bTst, bool bInfo )
                         if ( -1 == rEndCell.GetTabBox()->getRowSpan() )
                             pToGrow = rEndCell.GetUpper();
                         else
-                            pToGrow = 0;
+                            pToGrow = nullptr;
                     }
 
                     nGrow = pToGrow ? pToGrow->Grow( nReal, bTst, bInfo ) : 0;
@@ -2511,7 +2511,7 @@ SwTwips SwLayoutFrm::ShrinkFrm( SwTwips nDist, bool bTst, bool bInfo )
         if( IsFootnoteFrm() && !static_cast<SwFootnoteFrm*>(this)->GetAttr()->GetFootnote().IsEndNote() &&
             ( GetFormat()->GetDoc()->GetFootnoteInfo().ePos != FTNPOS_CHAPTER ||
               ( IsInSct() && FindSctFrm()->IsFootnoteAtEnd() ) ) &&
-              0 != (pCnt = static_cast<SwFootnoteFrm*>(this)->GetRefFromAttr() ) )
+              nullptr != (pCnt = static_cast<SwFootnoteFrm*>(this)->GetRefFromAttr() ) )
         {
             if ( pCnt->IsFollow() )
             {   // If we are in an other column/page than the frame with the
@@ -2591,7 +2591,7 @@ void SwLayoutFrm::ChgLowersProp( const Size& rOldSize )
         if( pLowerFrm->IsSctFrm() )
             pLowerFrm = static_cast<SwSectionFrm*>(pLowerFrm)->GetSection() &&
                    !static_cast<SwSectionFrm*>(pLowerFrm)->ToMaximize( false ) ?
-                   static_cast<SwSectionFrm*>(pLowerFrm)->FindLastContent() : NULL;
+                   static_cast<SwSectionFrm*>(pLowerFrm)->FindLastContent() : nullptr;
 
         // continue with found last lower, probably the last content of a section
         if ( pLowerFrm )
@@ -2905,7 +2905,7 @@ void SwLayoutFrm::ChgLowersProp( const Size& rOldSize )
            Lower()->IsColumnFrm() )
     {
         // get column attribute
-        const SwFormatCol* pColAttr = NULL;
+        const SwFormatCol* pColAttr = nullptr;
         if ( IsPageBodyFrm() )
         {
             OSL_ENSURE( GetUpper()->IsPageFrm(), "Upper is not page frame" );
@@ -3142,7 +3142,7 @@ static long lcl_CalcMinColDiff( SwLayoutFrm *pLayFrm )
         }
         //Skip empty columns!
         pCol = static_cast<SwLayoutFrm*>(pCol->GetNext());
-        while ( pCol && 0 == (pFrm = pCol->Lower()) )
+        while ( pCol && nullptr == (pFrm = pCol->Lower()) )
             pCol = static_cast<SwLayoutFrm*>(pCol->GetNext());
 
     } while ( pFrm && pCol );
@@ -3198,8 +3198,8 @@ void SwLayoutFrm::FormatWidthCols( const SwBorderAttrs &rAttrs,
     bool bEnd = false;
     bool bBackLock = false;
     SwViewShell *pSh = getRootFrm()->GetCurrShell();
-    SwViewShellImp *pImp = pSh ? pSh->Imp() : 0;
-    vcl::RenderContext* pRenderContext = pSh ? pSh->GetOut() : 0;
+    SwViewShellImp *pImp = pSh ? pSh->Imp() : nullptr;
+    vcl::RenderContext* pRenderContext = pSh ? pSh->GetOut() : nullptr;
     {
         // Underlying algorithm
         // We try to find the optimal height for the column.
@@ -3284,7 +3284,7 @@ void SwLayoutFrm::FormatWidthCols( const SwBorderAttrs &rAttrs,
         // #i3317# - reset temporarly consideration
         // of wrapping style influence
         SwPageFrm* pPageFrm = FindPageFrm();
-        SwSortedObjs* pObjs = pPageFrm ? pPageFrm->GetSortedObjs() : 0L;
+        SwSortedObjs* pObjs = pPageFrm ? pPageFrm->GetSortedObjs() : nullptr;
         if ( pObjs )
         {
             for ( size_t i = 0; i < pObjs->size(); ++i )
@@ -3333,7 +3333,7 @@ void SwLayoutFrm::FormatWidthCols( const SwBorderAttrs &rAttrs,
             // OD 28.03.2003 #108446# - check for all column content and all columns
             while ( bMinDiff && pCol )
             {
-                bMinDiff = 0 != pCol->ContainsContent();
+                bMinDiff = nullptr != pCol->ContainsContent();
                 pCol = static_cast<SwLayoutFrm*>(pCol->GetNext());
             }
             pCol = static_cast<SwLayoutFrm*>(Lower());
@@ -3480,7 +3480,7 @@ void SwLayoutFrm::FormatWidthCols( const SwBorderAttrs &rAttrs,
                     // #i3317# - reset temporarly consideration
                     // of wrapping style influence
                     SwPageFrm* pTmpPageFrm = FindPageFrm();
-                    SwSortedObjs* pTmpObjs = pTmpPageFrm ? pTmpPageFrm->GetSortedObjs() : 0L;
+                    SwSortedObjs* pTmpObjs = pTmpPageFrm ? pTmpPageFrm->GetSortedObjs() : nullptr;
                     if ( pTmpObjs )
                     {
                         for ( size_t i = 0; i < pTmpObjs->size(); ++i )
@@ -3542,7 +3542,7 @@ static SwContentFrm* lcl_InvalidateSection( SwFrm *pCnt, sal_uInt8 nInv )
     // Exception: If a table is directly passed.
     if( ( ( pCnt->IsInTab() && !pSect->IsInTab() ) ||
         ( pCnt->IsInFootnote() && !pSect->IsInFootnote() ) ) && !pCnt->IsTabFrm() )
-        return NULL;
+        return nullptr;
     if( nInv & INV_SIZE )
         pSect->_InvalidateSize();
     if( nInv & INV_POS )
@@ -3551,7 +3551,7 @@ static SwContentFrm* lcl_InvalidateSection( SwFrm *pCnt, sal_uInt8 nInv )
         pSect->_InvalidatePrt();
     SwFlowFrm *pFoll = pSect->GetFollow();
     // Temporary separation from follow
-    pSect->SetFollow( NULL );
+    pSect->SetFollow( nullptr );
     SwContentFrm* pRet = pSect->FindLastContent();
     pSect->SetFollow( pFoll );
     return pRet;
@@ -3574,8 +3574,8 @@ static void lcl_InvalidateAllContent( SwContentFrm *pCnt, sal_uInt8 nInv );
 
 static void lcl_InvalidateContent( SwContentFrm *pCnt, sal_uInt8 nInv )
 {
-    SwContentFrm *pLastTabCnt = NULL;
-    SwContentFrm *pLastSctCnt = NULL;
+    SwContentFrm *pLastTabCnt = nullptr;
+    SwContentFrm *pLastSctCnt = nullptr;
     while ( pCnt )
     {
         if( nInv & INV_SECTION )
@@ -3586,7 +3586,7 @@ static void lcl_InvalidateContent( SwContentFrm *pCnt, sal_uInt8 nInv )
                 if( !pLastSctCnt )
                     pLastSctCnt = lcl_InvalidateSection( pCnt, nInv );
                 if( pLastSctCnt == pCnt )
-                    pLastSctCnt = NULL;
+                    pLastSctCnt = nullptr;
             }
 #if OSL_DEBUG_LEVEL > 0
             else
@@ -3607,12 +3607,12 @@ static void lcl_InvalidateContent( SwContentFrm *pCnt, sal_uInt8 nInv )
                 if( !pLastTabCnt )
                 {
                     pLastTabCnt = lcl_InvalidateTable( pCnt->FindTabFrm(), nInv );
-                    pLastSctCnt = NULL;
+                    pLastSctCnt = nullptr;
                 }
                 if( pLastTabCnt == pCnt )
                 {
-                    pLastTabCnt = NULL;
-                    pLastSctCnt = NULL;
+                    pLastTabCnt = nullptr;
+                    pLastSctCnt = nullptr;
                 }
             }
 #if OSL_DEBUG_LEVEL > 0
@@ -3622,7 +3622,7 @@ static void lcl_InvalidateContent( SwContentFrm *pCnt, sal_uInt8 nInv )
         }
 
         if( nInv & INV_SIZE )
-            pCnt->Prepare( PREP_CLEAR, 0, false );
+            pCnt->Prepare( PREP_CLEAR, nullptr, false );
         if( nInv & INV_POS )
             pCnt->_InvalidatePos();
         if( nInv & INV_PRTAREA )

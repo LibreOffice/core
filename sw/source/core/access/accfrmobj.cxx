@@ -40,31 +40,31 @@
 namespace sw { namespace access {
 
 SwAccessibleChild::SwAccessibleChild()
-    : mpFrm( 0 )
-    , mpDrawObj( 0 )
-    , mpWindow( 0 )
+    : mpFrm( nullptr )
+    , mpDrawObj( nullptr )
+    , mpWindow( nullptr )
 {}
 
 SwAccessibleChild::SwAccessibleChild( const SdrObject* pDrawObj )
-    : mpFrm( 0 )
-    , mpDrawObj( 0 )
-    , mpWindow( 0 )
+    : mpFrm( nullptr )
+    , mpDrawObj( nullptr )
+    , mpWindow( nullptr )
 {
     Init( pDrawObj );
 }
 
 SwAccessibleChild::SwAccessibleChild( const SwFrm* pFrm )
-    : mpFrm( 0 )
-    , mpDrawObj( 0 )
-    , mpWindow( 0 )
+    : mpFrm( nullptr )
+    , mpDrawObj( nullptr )
+    , mpWindow( nullptr )
 {
     Init( pFrm );
 }
 
 SwAccessibleChild::SwAccessibleChild( vcl::Window* pWindow )
-    : mpFrm( 0 )
-    , mpDrawObj( 0 )
-    , mpWindow( 0 )
+    : mpFrm( nullptr )
+    , mpDrawObj( nullptr )
+    , mpWindow( nullptr )
 {
     Init( pWindow );
 }
@@ -72,9 +72,9 @@ SwAccessibleChild::SwAccessibleChild( vcl::Window* pWindow )
 SwAccessibleChild::SwAccessibleChild( const SwFrm* pFrm,
                                       const SdrObject* pDrawObj,
                                       vcl::Window* pWindow )
-    : mpFrm( 0 )
-    , mpDrawObj( 0 )
-    , mpWindow( 0 )
+    : mpFrm( nullptr )
+    , mpDrawObj( nullptr )
+    , mpWindow( nullptr )
 {
     if ( pFrm )
     {
@@ -100,8 +100,8 @@ void SwAccessibleChild::Init( const SdrObject* pDrawObj )
     mpDrawObj = pDrawObj;
     mpFrm = mpDrawObj && dynamic_cast<const SwVirtFlyDrawObj*>( mpDrawObj) !=  nullptr
             ? static_cast < const SwVirtFlyDrawObj * >( mpDrawObj )->GetFlyFrm()
-            : 0;
-    mpWindow = 0;
+            : nullptr;
+    mpWindow = nullptr;
 }
 
 void SwAccessibleChild::Init( const SwFrm* pFrm )
@@ -109,15 +109,15 @@ void SwAccessibleChild::Init( const SwFrm* pFrm )
     mpFrm = pFrm;
     mpDrawObj = mpFrm && mpFrm->IsFlyFrm()
                 ? static_cast < const SwFlyFrm * >( mpFrm )->GetVirtDrawObj()
-                : 0;
-    mpWindow = 0;
+                : nullptr;
+    mpWindow = nullptr;
 }
 
 void SwAccessibleChild::Init( vcl::Window* pWindow )
 {
     mpWindow = pWindow;
-    mpFrm = 0;
-    mpDrawObj = 0;
+    mpFrm = nullptr;
+    mpDrawObj = nullptr;
 }
 
 bool SwAccessibleChild::IsAccessible( bool bPagePreview ) const
@@ -128,7 +128,7 @@ bool SwAccessibleChild::IsAccessible( bool bPagePreview ) const
     {
         bRet = mpFrm->IsAccessibleFrm() &&
                ( !mpFrm->IsCellFrm() ||
-                 static_cast<const SwCellFrm *>( mpFrm )->GetTabBox()->GetSttNd() != 0 ) &&
+                 static_cast<const SwCellFrm *>( mpFrm )->GetTabBox()->GetSttNd() != nullptr ) &&
                !mpFrm->IsInCoveredCell() &&
                ( bPagePreview ||
                  !mpFrm->IsPageFrm() );
@@ -210,8 +210,8 @@ bool SwAccessibleChild::operator==( const SwAccessibleChild& r ) const
 
 bool SwAccessibleChild::IsValid() const
 {
-    return mpFrm != 0 ||
-           mpDrawObj != 0 ||
+    return mpFrm != nullptr ||
+           mpDrawObj != nullptr ||
            mpWindow != nullptr;
 }
 
@@ -314,7 +314,7 @@ bool SwAccessibleChild::AlwaysIncludeAsChild() const
 
 const SwFrm* SwAccessibleChild::GetParent( const bool bInPagePreview ) const
 {
-    const SwFrm* pParent( 0 );
+    const SwFrm* pParent( nullptr );
 
     if ( mpFrm )
     {

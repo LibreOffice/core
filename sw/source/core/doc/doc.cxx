@@ -238,7 +238,7 @@ sal_uInt32 SwDoc::getRsid() const
 
 void SwDoc::setRsid( sal_uInt32 nVal )
 {
-    static bool bHack = (getenv("LIBO_ONEWAY_STABLE_ODF_EXPORT") != NULL);
+    static bool bHack = (getenv("LIBO_ONEWAY_STABLE_ODF_EXPORT") != nullptr);
 
     sal_uInt32 nIncrease = 0;
     if (!bHack)
@@ -502,7 +502,7 @@ void SwDoc::ChgDBData(const SwDBData& rNewData)
 
 struct _PostItField : public _SetGetExpField
 {
-    _PostItField( const SwNodeIndex& rNdIdx, const SwTextField* pField,  const SwIndex* pIdx = 0 )
+    _PostItField( const SwNodeIndex& rNdIdx, const SwTextField* pField,  const SwIndex* pIdx = nullptr )
         : _SetGetExpField( rNdIdx, pField, pIdx ) {}
 
     sal_uInt16 GetPageNo( const StringRangeEnumerator &rRangeEnum,
@@ -561,7 +561,7 @@ bool sw_GetPostIts(
         for( SwFormatField* pField = aIter.First(); pField;  pField = aIter.Next() )
         {
             const SwTextField* pTextField;
-            if( 0 != ( pTextField = pField->GetTextField() ) &&
+            if( nullptr != ( pTextField = pField->GetTextField() ) &&
                 pTextField->GetTextNode().GetNodes().IsDocNodes() )
             {
                 bHasPostIts = true;
@@ -639,7 +639,7 @@ static sal_Int32 lcl_GetPaperBin( const SwPageFrm *pStartFrm )
     sal_Int32 nRes = -1;
 
     const SwFrameFormat &rFormat = pStartFrm->GetPageDesc()->GetMaster();
-    const SfxPoolItem *pItem = NULL;
+    const SfxPoolItem *pItem = nullptr;
     SfxItemState eState = rFormat.GetItemState( RES_PAPER_BIN, false, &pItem );
     const SvxPaperBinItem *pPaperBinItem = dynamic_cast< const SvxPaperBinItem * >(pItem);
     if (eState > SfxItemState::DEFAULT && pPaperBinItem)
@@ -953,7 +953,7 @@ void SwDoc::CalculatePagePairsForProspectPrinting(
         // (4 'normal' pages are needed for a single prospect paper
         //  with back and front)
         while( aVec.size() & 3 )
-            aVec.push_back( 0 );
+            aVec.push_back( nullptr );
     }
 
     // make sure that all pages are in correct order
@@ -978,7 +978,7 @@ void SwDoc::CalculatePagePairsForProspectPrinting(
             nPrintCount < nCntPage; ++nPrintCount )
     {
         pStPage = aVec[ nSPg ];
-        const SwPageFrm* pNxtPage = nEPg < aVec.size() ? aVec[ nEPg ] : 0;
+        const SwPageFrm* pNxtPage = nEPg < aVec.size() ? aVec[ nEPg ] : nullptr;
 
         short nRtlOfs = bPrintProspectRTL ? 1 : 0;
         if ( 0 == (( nSPg + nRtlOfs) & 1 ) )     // switch for odd number in LTR, even number in RTL
@@ -1019,7 +1019,7 @@ const SwFormatRefMark* SwDoc::GetRefMark( const OUString& rName ) const
     for( sal_uInt32 n = 0; n < nMaxItems; ++n )
     {
         const SfxPoolItem* pItem;
-        if( 0 == (pItem = GetAttrPool().GetItem2( RES_TXTATR_REFMARK, n ) ))
+        if( nullptr == (pItem = GetAttrPool().GetItem2( RES_TXTATR_REFMARK, n ) ))
             continue;
 
         const SwFormatRefMark* pFormatRef = static_cast<const SwFormatRefMark*>(pItem);
@@ -1028,14 +1028,14 @@ const SwFormatRefMark* SwDoc::GetRefMark( const OUString& rName ) const
             rName == pFormatRef->GetRefName() )
             return pFormatRef;
     }
-    return 0;
+    return nullptr;
 }
 
 /// @return the RefMark per index - for Uno
 const SwFormatRefMark* SwDoc::GetRefMark( sal_uInt16 nIndex ) const
 {
     const SwTextRefMark* pTextRef;
-    const SwFormatRefMark* pRet = 0;
+    const SwFormatRefMark* pRet = nullptr;
 
     sal_uInt32 nMaxItems = GetAttrPool().GetItemCount2( RES_TXTATR_REFMARK );
     sal_uInt32 nCount = 0;
@@ -1043,8 +1043,8 @@ const SwFormatRefMark* SwDoc::GetRefMark( sal_uInt16 nIndex ) const
     {
         const SfxPoolItem* pItem;
 
-        if( 0 != (pItem = GetAttrPool().GetItem2( RES_TXTATR_REFMARK, n )) &&
-            0 != (pTextRef = static_cast<const SwFormatRefMark*>(pItem)->GetTextRefMark()) &&
+        if( nullptr != (pItem = GetAttrPool().GetItem2( RES_TXTATR_REFMARK, n )) &&
+            nullptr != (pTextRef = static_cast<const SwFormatRefMark*>(pItem)->GetTextRefMark()) &&
             &pTextRef->GetTextNode().GetNodes() == &GetNodes() )
         {
             if(nCount == nIndex)
@@ -1071,8 +1071,8 @@ sal_uInt16 SwDoc::GetRefMarks( std::vector<OUString>* pNames ) const
     {
         const SfxPoolItem* pItem;
 
-        if( 0 != (pItem = GetAttrPool().GetItem2( RES_TXTATR_REFMARK, n )) &&
-            0 != (pTextRef = static_cast<const SwFormatRefMark*>(pItem)->GetTextRefMark()) &&
+        if( nullptr != (pItem = GetAttrPool().GetItem2( RES_TXTATR_REFMARK, n )) &&
+            nullptr != (pTextRef = static_cast<const SwFormatRefMark*>(pItem)->GetTextRefMark()) &&
             &pTextRef->GetTextNode().GetNodes() == &GetNodes() )
         {
             if( pNames )
@@ -1123,7 +1123,7 @@ static bool lcl_CheckSmartTagsAgain( const SwNodePtr& rpNd, void*  )
         pTextNode->SetSmartTagDirty( true );
         if( pTextNode->GetSmartTags() )
         {
-            pTextNode->SetSmartTags( NULL );
+            pTextNode->SetSmartTags( nullptr );
         }
     }
     return true;
@@ -1180,16 +1180,16 @@ const SwFormatINetFormat* SwDoc::FindINetAttr( const OUString& rName ) const
     for( n = 0; n < nMaxItems; ++n )
     {
         pItem = static_cast<const SwFormatINetFormat*>( GetAttrPool().GetItem2( RES_TXTATR_INETFMT, n ) );
-        if( 0 != pItem &&
+        if( nullptr != pItem &&
             pItem->GetName() == rName &&
-            0 != ( pTextAttr = pItem->GetTextINetFormat()) &&
-            0 != ( pTextNd = pTextAttr->GetpTextNode() ) &&
+            nullptr != ( pTextAttr = pItem->GetTextINetFormat()) &&
+            nullptr != ( pTextNd = pTextAttr->GetpTextNode() ) &&
             &pTextNd->GetNodes() == &GetNodes() )
         {
             return pItem;
         }
     }
-    return 0;
+    return nullptr;
 }
 
 void SwDoc::Summary( SwDoc* pExtDoc, sal_uInt8 nLevel, sal_uInt8 nPara, bool bImpress )
@@ -1268,7 +1268,7 @@ void SwDoc::Summary( SwDoc* pExtDoc, sal_uInt8 nLevel, sal_uInt8 nPara, bool bIm
 bool SwDoc::RemoveInvisibleContent()
 {
     bool bRet = false;
-    GetIDocumentUndoRedo().StartUndo( UNDO_UI_DELETE_INVISIBLECNTNT, NULL );
+    GetIDocumentUndoRedo().StartUndo( UNDO_UI_DELETE_INVISIBLECNTNT, nullptr );
 
     {
         SwTextNode* pTextNd;
@@ -1276,7 +1276,7 @@ bool SwDoc::RemoveInvisibleContent()
         for( SwFormatField* pFormatField = aIter.First(); pFormatField;  pFormatField = aIter.Next() )
         {
             if( pFormatField->GetTextField() &&
-                0 != ( pTextNd = pFormatField->GetTextField()->GetpTextNode() ) &&
+                nullptr != ( pTextNd = pFormatField->GetTextField()->GetpTextNode() ) &&
                 pTextNd->GetpSwpHints() && pTextNd->HasHiddenParaField() &&
                 &pTextNd->GetNodes() == &GetNodes() )
             {
@@ -1362,7 +1362,7 @@ bool SwDoc::RemoveInvisibleContent()
             if( pSect->CalcHiddenFlag() )
             {
                 SwSection* pParent = pSect, *pTmp;
-                while( 0 != (pTmp = pParent->GetParent() ))
+                while( nullptr != (pTmp = pParent->GetParent() ))
                 {
                     if( pTmp->IsHiddenFlag() )
                         pSect = pTmp;
@@ -1429,7 +1429,7 @@ bool SwDoc::RemoveInvisibleContent()
 
     if( bRet )
         getIDocumentState().SetModified();
-    GetIDocumentUndoRedo().EndUndo( UNDO_UI_DELETE_INVISIBLECNTNT, NULL );
+    GetIDocumentUndoRedo().EndUndo( UNDO_UI_DELETE_INVISIBLECNTNT, nullptr );
     return bRet;
 }
 
@@ -1465,7 +1465,7 @@ bool SwDoc::HasInvisibleContent() const
 bool SwDoc::RestoreInvisibleContent()
 {
     SwUndoId nLastUndoId(UNDO_EMPTY);
-    if (GetIDocumentUndoRedo().GetLastUndoInfo(0, & nLastUndoId)
+    if (GetIDocumentUndoRedo().GetLastUndoInfo(nullptr, & nLastUndoId)
         && (UNDO_UI_DELETE_INVISIBLECNTNT == nLastUndoId))
     {
         GetIDocumentUndoRedo().Undo();
@@ -1479,7 +1479,7 @@ bool SwDoc::ConvertFieldsToText()
 {
     bool bRet = false;
     getIDocumentFieldsAccess().LockExpFields();
-    GetIDocumentUndoRedo().StartUndo( UNDO_UI_REPLACE, NULL );
+    GetIDocumentUndoRedo().StartUndo( UNDO_UI_REPLACE, nullptr );
 
     const SwFieldTypes* pMyFieldTypes = getIDocumentFieldsAccess().GetFieldTypes();
     const SwFieldTypes::size_type nCount = pMyFieldTypes->size();
@@ -1574,7 +1574,7 @@ bool SwDoc::ConvertFieldsToText()
 
     if( bRet )
         getIDocumentState().SetModified();
-    GetIDocumentUndoRedo().EndUndo( UNDO_UI_REPLACE, NULL );
+    GetIDocumentUndoRedo().EndUndo( UNDO_UI_REPLACE, nullptr );
     getIDocumentFieldsAccess().UnlockExpFields();
     return bRet;
 
@@ -1642,7 +1642,7 @@ OUString SwDoc::GetPaMDescr(const SwPaM & rPam)
     {
         SwTextNode * pTextNode = rPam.GetNode().GetTextNode();
 
-        if (0 != pTextNode)
+        if (nullptr != pTextNode)
         {
             const sal_Int32 nStart = rPam.Start()->nContent.GetIndex();
             const sal_Int32 nEnd = rPam.End()->nContent.GetIndex();

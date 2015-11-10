@@ -34,7 +34,7 @@
 
 SwUndoInserts::SwUndoInserts( SwUndoId nUndoId, const SwPaM& rPam )
     : SwUndo( nUndoId ), SwUndRng( rPam ),
-    pTextFormatColl( 0 ), pLastNdColl(0), pFrameFormats( 0 ), pRedlData( 0 ),
+    pTextFormatColl( nullptr ), pLastNdColl(nullptr), pFrameFormats( nullptr ), pRedlData( nullptr ),
     bSttWasTextNd( true ), nNdDiff( 0 ), nSetPos( 0 )
 {
     pHistory = new SwHistory;
@@ -126,7 +126,7 @@ void SwUndoInserts::SetInsertRange( const SwPaM& rPam, bool bScanFlys,
                     pFrameFormats->erase( it );
             }
         }
-        delete pFrameFormats, pFrameFormats = 0;
+        delete pFrameFormats, pFrameFormats = nullptr;
     }
 }
 
@@ -225,7 +225,7 @@ void SwUndoInserts::UndoImpl(::sw::UndoRedoContext & rContext)
                 pTextNode->JoinNext();
             }
             // reset all text attributes in the paragraph!
-            pTextNode->RstTextAttr( SwIndex(pTextNode, 0), pTextNode->Len(), 0, 0, true );
+            pTextNode->RstTextAttr( SwIndex(pTextNode, 0), pTextNode->Len(), 0, nullptr, true );
 
             pTextNode->ResetAllAttr();
 

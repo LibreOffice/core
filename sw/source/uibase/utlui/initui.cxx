@@ -39,10 +39,10 @@
 
 // Global Pointer
 
-SwGlossaries*       pGlossaries = 0;
+SwGlossaries*       pGlossaries = nullptr;
 
 // Provides all needed paths. Is initialized by UI.
-SwGlossaryList*     pGlossaryList = 0;
+SwGlossaryList*     pGlossaryList = nullptr;
 
 namespace
 {
@@ -57,7 +57,7 @@ enum CachedStringID
     CachedStrings
 };
 
-OUString *StringCache[CachedStrings] = {0};
+OUString *StringCache[CachedStrings] = {nullptr};
 
 inline OUString GetCachedString(CachedStringID id)
 {
@@ -139,8 +139,8 @@ void SetCurrGlosGroup(const OUString& sStr)
 namespace
 {
 
-std::vector<OUString>* pAuthFieldNameList = 0;
-std::vector<OUString>* pAuthFieldTypeList = 0;
+std::vector<OUString>* pAuthFieldNameList = nullptr;
+std::vector<OUString>* pAuthFieldTypeList = nullptr;
 
 }
 
@@ -149,7 +149,7 @@ std::vector<OUString>* pAuthFieldTypeList = 0;
 void _FinitUI()
 {
     delete SwViewShell::GetShellRes();
-    SwViewShell::SetShellRes( 0 );
+    SwViewShell::SetShellRes( nullptr );
 
     SwEditWin::_FinitStaticData();
 
@@ -208,7 +208,7 @@ ShellResource::ShellResource()
     aTOXCitationName(    SW_RES(STR_TOX_CITATION)),
     aLinkCtrlClick(SW_RESSTR(STR_LINK_CTRL_CLICK)),
     aLinkClick(SW_RESSTR(STR_LINK_CLICK)),
-    pAutoFormatNameLst(0),
+    pAutoFormatNameLst(nullptr),
     sPageDescFirstName(     SW_RES(STR_PAGEDESC_FIRSTNAME)),
     sPageDescFollowName(    SW_RES(STR_PAGEDESC_FOLLOWNAME)),
     sPageDescName(          SW_RES(STR_PAGEDESC_NAME))
@@ -262,7 +262,7 @@ SwGlossaries* GetGlossaries()
 
 bool HasGlossaryList()
 {
-    return pGlossaryList != 0;
+    return pGlossaryList != nullptr;
 }
 
 SwGlossaryList* GetGlossaryList()

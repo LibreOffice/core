@@ -414,7 +414,7 @@ void DocxExport::OutputDML(uno::Reference<drawing::XShape>& xShape)
         nNamespace = XML_wpg;
     else if (xServiceInfo->supportsService("com.sun.star.drawing.GraphicObjectShape"))
         nNamespace = XML_pic;
-    oox::drawingml::ShapeExport aExport(nNamespace, m_pAttrOutput->GetSerializer(), 0, m_pFilter, oox::drawingml::DrawingML::DOCUMENT_DOCX, m_pAttrOutput);
+    oox::drawingml::ShapeExport aExport(nNamespace, m_pAttrOutput->GetSerializer(), nullptr, m_pFilter, oox::drawingml::DrawingML::DOCUMENT_DOCX, m_pAttrOutput);
     aExport.WriteShape(xShape);
 }
 
@@ -454,8 +454,8 @@ void DocxExport::ExportDocument_Impl()
     WriteEmbeddings();
 
     m_aLinkedTextboxesHelper.clear();   //final cleanup
-    delete m_pStyles, m_pStyles = NULL;
-    delete m_pSections, m_pSections = NULL;
+    delete m_pStyles, m_pStyles = nullptr;
+    delete m_pSections, m_pSections = nullptr;
 }
 
 void DocxExport::AppendSection( const SwPageDesc *pPageDesc, const SwSectionFormat* pFormat, sal_uLong nLnNum )
@@ -1344,7 +1344,7 @@ void DocxExport::WriteMainText()
 
     // the last section info
     m_pAttrOutput->EndParaSdtBlock();
-    const WW8_SepInfo *pSectionInfo = m_pSections? m_pSections->CurrentSectionInfo(): NULL;
+    const WW8_SepInfo *pSectionInfo = m_pSections? m_pSections->CurrentSectionInfo(): nullptr;
     if ( pSectionInfo )
         SectionProperties( *pSectionInfo );
 
@@ -1397,7 +1397,7 @@ void DocxExport::WriteOutliner(const OutlinerParaObject& rParaObj, sal_uInt8 nTy
         sal_Int32 nAktPos = 0;
         const sal_Int32 nEnd = aStr.getLength();
         do {
-            AttrOutput().StartRun( NULL );
+            AttrOutput().StartRun( nullptr );
             const sal_Int32 nNextAttr = std::min(aAttrIter.WhereNext(), nEnd);
             rtl_TextEncoding eNextChrSet = aAttrIter.GetNextCharSet();
 
@@ -1414,7 +1414,7 @@ void DocxExport::WriteOutliner(const OutlinerParaObject& rParaObj, sal_uInt8 nTy
             }
             AttrOutput().StartRunProperties();
             aAttrIter.OutAttr( nAktPos );
-            AttrOutput().EndRunProperties( NULL );
+            AttrOutput().EndRunProperties( nullptr );
 
             nAktPos = nNextAttr;
             eChrSet = eNextChrSet;
@@ -1434,14 +1434,14 @@ void DocxExport::SetFS( ::sax_fastparser::FSHelperPtr pFS )
 DocxExport::DocxExport( DocxExportFilter *pFilter, SwDoc *pDocument, SwPaM *pCurrentPam, SwPaM *pOriginalPam )
     : MSWordExportBase( pDocument, pCurrentPam, pOriginalPam ),
       m_pFilter( pFilter ),
-      m_pAttrOutput( NULL ),
-      m_pSections( NULL ),
+      m_pAttrOutput( nullptr ),
+      m_pSections( nullptr ),
       m_nHeaders( 0 ),
       m_nFooters( 0 ),
       m_nOLEObjects( 0 ),
       m_nHeadersFootersInSection(0),
-      m_pVMLExport( NULL ),
-      m_pSdrExport( NULL )
+      m_pVMLExport( nullptr ),
+      m_pSdrExport( nullptr )
 {
     // Write the document properies
     WriteProperties( );
@@ -1471,10 +1471,10 @@ DocxExport::DocxExport( DocxExportFilter *pFilter, SwDoc *pDocument, SwPaM *pCur
 
 DocxExport::~DocxExport()
 {
-    delete m_pSdrExport, m_pSdrExport = NULL;
-    delete m_pVMLExport, m_pVMLExport = NULL;
-    delete m_pAttrOutput, m_pAttrOutput = NULL;
-    delete m_pDrawingML, m_pDrawingML = NULL;
+    delete m_pSdrExport, m_pSdrExport = nullptr;
+    delete m_pVMLExport, m_pVMLExport = nullptr;
+    delete m_pAttrOutput, m_pAttrOutput = nullptr;
+    delete m_pDrawingML, m_pDrawingML = nullptr;
 }
 
 DocxSettingsData::DocxSettingsData()

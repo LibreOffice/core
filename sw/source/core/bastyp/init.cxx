@@ -433,24 +433,24 @@ SfxItemInfo aSlotTab[] =
     { 0, SfxItemPoolFlags::POOLABLE }                            // RES_UNKNOWNATR_CONTAINER
 };
 
-sal_uInt16* SwAttrPool::pVersionMap1 = 0;
-sal_uInt16* SwAttrPool::pVersionMap2 = 0;
-sal_uInt16* SwAttrPool::pVersionMap3 = 0;
-sal_uInt16* SwAttrPool::pVersionMap4 = 0;
+sal_uInt16* SwAttrPool::pVersionMap1 = nullptr;
+sal_uInt16* SwAttrPool::pVersionMap2 = nullptr;
+sal_uInt16* SwAttrPool::pVersionMap3 = nullptr;
+sal_uInt16* SwAttrPool::pVersionMap4 = nullptr;
 // #i18732#
-sal_uInt16* SwAttrPool::pVersionMap5 = 0;
-sal_uInt16* SwAttrPool::pVersionMap6 = 0;
-sal_uInt16* SwAttrPool::pVersionMap7 = 0;
+sal_uInt16* SwAttrPool::pVersionMap5 = nullptr;
+sal_uInt16* SwAttrPool::pVersionMap6 = nullptr;
+sal_uInt16* SwAttrPool::pVersionMap7 = nullptr;
 
-std::vector<SvGlobalName*> *pGlobalOLEExcludeList = 0;
+std::vector<SvGlobalName*> *pGlobalOLEExcludeList = nullptr;
 
-SwAutoCompleteWord* SwDoc::mpACmpltWords = 0;
+SwAutoCompleteWord* SwDoc::mpACmpltWords = nullptr;
 
-SwCheckIt* pCheckIt = 0;
-CharClass* pAppCharClass = 0;
+SwCheckIt* pCheckIt = nullptr;
+CharClass* pAppCharClass = nullptr;
 
-CollatorWrapper* pCollator = 0,
-                *pCaseCollator = 0;
+CollatorWrapper* pCollator = nullptr,
+                *pCaseCollator = nullptr;
 
 salhelper::SingletonRef<SwCalendarWrapper>* s_getCalendarWrapper()
 {
@@ -525,13 +525,13 @@ void _InitCore()
     aAttrTab[ RES_TXTATR_METAFIELD - POOLATTR_BEGIN ] =     SwFormatMeta::CreatePoolDefault(RES_TXTATR_METAFIELD);
     aAttrTab[ RES_TXTATR_AUTOFMT- POOLATTR_BEGIN ] =        new SwFormatAutoFormat;
     aAttrTab[ RES_TXTATR_INETFMT - POOLATTR_BEGIN ] =       new SwFormatINetFormat( OUString(), OUString() );
-    aAttrTab[ RES_TXTATR_CHARFMT- POOLATTR_BEGIN ] =        new SwFormatCharFormat( 0 );
+    aAttrTab[ RES_TXTATR_CHARFMT- POOLATTR_BEGIN ] =        new SwFormatCharFormat( nullptr );
     aAttrTab[ RES_TXTATR_CJK_RUBY - POOLATTR_BEGIN ] =      new SwFormatRuby( OUString() );
     aAttrTab[ RES_TXTATR_UNKNOWN_CONTAINER - POOLATTR_BEGIN ] = new SvXMLAttrContainerItem( RES_TXTATR_UNKNOWN_CONTAINER );
     aAttrTab[ RES_TXTATR_INPUTFIELD - POOLATTR_BEGIN ] = new SwFormatField( RES_TXTATR_INPUTFIELD );
 
     aAttrTab[ RES_TXTATR_FIELD- POOLATTR_BEGIN ] =          new SwFormatField( RES_TXTATR_FIELD );
-    aAttrTab[ RES_TXTATR_FLYCNT - POOLATTR_BEGIN ] =        new SwFormatFlyCnt( 0 );
+    aAttrTab[ RES_TXTATR_FLYCNT - POOLATTR_BEGIN ] =        new SwFormatFlyCnt( nullptr );
     aAttrTab[ RES_TXTATR_FTN - POOLATTR_BEGIN ] =           new SwFormatFootnote;
     aAttrTab[ RES_TXTATR_ANNOTATION - POOLATTR_BEGIN ] = new SwFormatField( RES_TXTATR_ANNOTATION );
 
@@ -731,7 +731,7 @@ void _InitCore()
         SwAttrPool::pVersionMap7[ i-1 ] = i + 4;
 
     SwBreakIt::_Create( ::comphelper::getProcessComponentContext() );
-    pCheckIt = NULL;
+    pCheckIt = nullptr;
 
     _FrmInit();
     _TextInit();
@@ -822,7 +822,7 @@ void _FinitCore()
     for( sal_uInt16 n = 0; n < POOLATTR_END - POOLATTR_BEGIN; n++ )
     {
         SfxPoolItem* pHt;
-        if( 0 != ( pHt = aAttrTab[n] ))
+        if( nullptr != ( pHt = aAttrTab[n] ))
             delete pHt;
     }
 

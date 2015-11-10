@@ -258,7 +258,7 @@ SwTemplateDlg::SwTemplateDlg(vcl::Window* pParent,
             m_nColumnId = AddTabPage("columns", SwColumnPage::Create,
                                         SwColumnPage::GetRanges );
 
-            m_nMacroId = AddTabPage("macros", pFact->GetTabPageCreatorFunc(RID_SVXPAGE_MACROASSIGN), 0);
+            m_nMacroId = AddTabPage("macros", pFact->GetTabPageCreatorFunc(RID_SVXPAGE_MACROASSIGN), nullptr);
 
         break;
         }

@@ -80,8 +80,8 @@ public:
 
     SwPrintData()
     {
-        m_pPrintUIOptions       = NULL;
-        m_pRenderData        = NULL;
+        m_pPrintUIOptions       = nullptr;
+        m_pRenderData        = nullptr;
 
         bPrintGraphic           =
         bPrintTable             =
@@ -251,21 +251,21 @@ public:
     SwRenderData();
     ~SwRenderData();
 
-    bool HasPostItData() const  { return m_pPostItShell != 0; }
+    bool HasPostItData() const  { return m_pPostItShell != nullptr; }
     void CreatePostItData( SwDoc *pDoc, const SwViewOption *pViewOpt, OutputDevice *pOutDev );
     void DeletePostItData();
 
     SfxObjectShellLock const& GetTempDocShell() const { return m_xTempDocShell;}
     void SetTempDocShell(SfxObjectShellLock const&);
 
-    bool IsViewOptionAdjust() const  { return m_pViewOptionAdjust != 0; }
+    bool IsViewOptionAdjust() const  { return m_pViewOptionAdjust != nullptr; }
     bool NeedNewViewOptionAdjust( const SwViewShell& ) const;
     void ViewOptionAdjustStart( SwViewShell &rSh, const SwViewOption &rViewOptions);
     void ViewOptionAdjust( SwPrintData const* const pPrtOptions );
     void ViewOptionAdjustStop();
     void ViewOptionAdjustCrashPreventionKludge();
 
-    bool HasSwPrtOptions() const    { return m_pPrtOptions != 0; }
+    bool HasSwPrtOptions() const    { return m_pPrtOptions != nullptr; }
     SwPrintData const*  GetSwPrtOptions() const { return m_pPrtOptions.get(); }
     void MakeSwPrtOptions( SwDocShell const*const pDocShell,
             SwPrintUIOptions const*const pOpt, bool const bIsPDFExport );

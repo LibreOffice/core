@@ -317,7 +317,7 @@ public:
 
     void                TbxMenuHdl(sal_uInt16 nTbxId, ToolBox* pBox);
     void                InsertRegion( const SwGlblDocContent* pCont,
-                                        const OUString* pFileName = 0 );
+                                        const OUString* pFileName = nullptr );
     void                EditContent(const SwGlblDocContent* pCont );
 
     void                ShowTree();

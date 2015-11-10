@@ -361,7 +361,7 @@ void ContentIdxStoreImpl::RestoreFlys(SwDoc* pDoc, updater_t& rUpdater, bool bAu
                 rUpdater(aNewPos, aEntry.m_nContent);
                 if ( FLY_AT_CHAR != rFlyAnchor.GetAnchorId() )
                 {
-                    aNewPos.nContent.Assign( 0, 0 );
+                    aNewPos.nContent.Assign( nullptr, 0 );
                 }
                 aNew.SetAnchor( &aNewPos );
                 pFrameFormat->SetFormatAttr( aNew );
@@ -420,7 +420,7 @@ void ContentIdxStoreImpl::SaveShellCrsrs(SwDoc* pDoc, sal_uLong nNode, sal_Int32
             if( _pStkCrsr )
                 do {
                     lcl_ChkPaMBoth( m_aShellCrsrEntries, nNode, nContent, *_pStkCrsr);
-                } while ( (_pStkCrsr != 0 ) &&
+                } while ( (_pStkCrsr != nullptr ) &&
                     ((_pStkCrsr = _pStkCrsr->GetNext()) != static_cast<SwCrsrShell*>(&rCurShell)->GetStkCrsr()) );
 
             for(SwPaM& rPaM : (static_cast<SwCrsrShell*>(&rCurShell)->_GetCrsr())->GetRingContainer())

@@ -150,7 +150,7 @@ bool SwDoc::InsertGlossary( SwTextBlocks& rBlock, const OUString& rEntry,
             OSL_ENSURE(pGDoc->GetDocShell(), "no SwDocShell at glossary");
             if (GetDocShell() && pGDoc->GetDocShell())
                 pGDoc->ReplaceDocumentProperties( *this );
-            pGDoc->getIDocumentFieldsAccess().SetFixFields(false, NULL);
+            pGDoc->getIDocumentFieldsAccess().SetFixFields(false, nullptr);
 
             // StartAllAction();
             getIDocumentFieldsAccess().LockExpFields();
@@ -167,7 +167,7 @@ bool SwDoc::InsertGlossary( SwTextBlocks& rBlock, const OUString& rEntry,
             aCpyPam.GetPoint()->nContent.Assign(
                     pContentNd, (pContentNd) ? pContentNd->Len() : 0 );
 
-            GetIDocumentUndoRedo().StartUndo( UNDO_INSGLOSSARY, NULL );
+            GetIDocumentUndoRedo().StartUndo( UNDO_INSGLOSSARY, nullptr );
             SwPaM *_pStartCrsr = &rPaM, *__pStartCrsr = _pStartCrsr;
             do {
 
@@ -194,11 +194,11 @@ bool SwDoc::InsertGlossary( SwTextBlocks& rBlock, const OUString& rEntry,
                     pShell->SaveTableBoxContent( &rInsPos );
             } while( (_pStartCrsr = static_cast<SwPaM *>(_pStartCrsr->GetNext())) !=
                         __pStartCrsr );
-            GetIDocumentUndoRedo().EndUndo( UNDO_INSGLOSSARY, NULL );
+            GetIDocumentUndoRedo().EndUndo( UNDO_INSGLOSSARY, nullptr );
 
             getIDocumentFieldsAccess().UnlockExpFields();
             if( !getIDocumentFieldsAccess().IsExpFieldsLocked() )
-                getIDocumentFieldsAccess().UpdateExpFields(NULL, true);
+                getIDocumentFieldsAccess().UpdateExpFields(nullptr, true);
             bRet = true;
         }
         mbInsOnlyTextGlssry = bSav_IsInsGlossary;

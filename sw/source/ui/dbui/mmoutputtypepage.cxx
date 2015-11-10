@@ -130,7 +130,7 @@ const SwMailDescriptor* SwSendMailDialog_Impl::GetNextDescriptor()
         ++nCurrentDescriptor;
         return &aDescriptors[nCurrentDescriptor - 1];
     }
-    return 0;
+    return nullptr;
 }
 
 using namespace ::com::sun::star;
@@ -182,7 +182,7 @@ void SwMailDispatcherListener_Impl::mailDelivered(
                         uno::Reference< mail::XMailMessage> xMailMessage)
 {
     SolarMutexGuard aGuard;
-    m_pSendMailDialog->DocumentSent( xMailMessage, true, 0 );
+    m_pSendMailDialog->DocumentSent( xMailMessage, true, nullptr );
     DeleteAttachments( xMailMessage );
 }
 

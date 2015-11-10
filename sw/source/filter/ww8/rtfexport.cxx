@@ -177,7 +177,7 @@ void RtfExport::WriteChar(sal_Unicode)
     /* WriteChar() has nothing to do for rtf. */
 }
 
-static bool IsExportNumRule(const SwNumRule& rRule, sal_uInt8* pEnd = 0)
+static bool IsExportNumRule(const SwNumRule& rRule, sal_uInt8* pEnd = nullptr)
 {
     sal_uInt8 nEnd = MAXLEVEL;
     while (nEnd-- && !rRule.GetNumFormat(nEnd))
@@ -388,7 +388,7 @@ void RtfExport::WriteMainText()
 
     SwTableNode* pTableNode = m_pCurPam->GetNode().FindTableNode();
     if (m_pWriter && m_pWriter->bWriteOnlyFirstTable
-            && pTableNode != 0)
+            && pTableNode != nullptr)
     {
         m_pCurPam->GetPoint()->nNode = *pTableNode;
         m_pCurPam->GetMark()->nNode = *(pTableNode->EndOfSectionNode());
@@ -556,11 +556,11 @@ void RtfExport::ExportDocument_Impl()
     if (m_pDoc->GetPageDescCnt())
     {
         // Seeking the first SwFormatPageDesc. If no set, the default is valid
-        const SwFormatPageDesc* pSttPgDsc = 0;
+        const SwFormatPageDesc* pSttPgDsc = nullptr;
         {
             const SwNode& rSttNd = *m_pDoc->GetNodes()[
                                        m_pDoc->GetNodes().GetEndOfExtras().GetIndex() + 2 ];
-            const SfxItemSet* pSet = 0;
+            const SfxItemSet* pSet = nullptr;
 
             if (rSttNd.IsContentNode())
                 pSet = &rSttNd.GetContentNode()->GetSwAttrSet();
@@ -577,7 +577,7 @@ void RtfExport::ExportDocument_Impl()
                 size_t nPosInDoc;
                 pSttPgDsc = static_cast<const SwFormatPageDesc*>(&pSet->Get(RES_PAGEDESC));
                 if (!pSttPgDsc->GetPageDesc())
-                    pSttPgDsc = 0;
+                    pSttPgDsc = nullptr;
                 else if (m_pDoc->FindPageDesc(pSttPgDsc->GetPageDesc()->GetName(), &nPosInDoc))
                 {
                     Strm().WriteChar('{').WriteCharPtr(OOO_STRING_SVTOOLS_RTF_IGNORE).WriteCharPtr(OOO_STRING_SVTOOLS_RTF_PGDSCNO);
@@ -812,7 +812,7 @@ RtfExport::RtfExport(RtfExportFilter* pFilter, SwDoc* pDocument, SwPaM* pCurrent
       m_pFilter(pFilter),
       m_pWriter(pWriter),
       m_pAttrOutput(),
-      m_pSections(NULL),
+      m_pSections(nullptr),
       m_pSdrExport(),
       m_bOutOutlineOnly(bOutOutlineOnly),
       eDefaultEncoding(rtl_getTextEncodingFromWindowsCharset(sw::ms::rtl_TextEncodingToWinCharset(DEF_ENCODING))),
@@ -940,7 +940,7 @@ void RtfExport::InsColor(const Color& rCol)
 
 void RtfExport::InsColorLine(const SvxBoxItem& rBox)
 {
-    const editeng::SvxBorderLine* pLine = 0;
+    const editeng::SvxBorderLine* pLine = nullptr;
 
     if (rBox.GetTop())
         InsColor((pLine = rBox.GetTop())->GetColor());
@@ -981,12 +981,12 @@ void RtfExport::OutColorTable()
     {
         const SvxColorItem* pCol = static_cast<const SvxColorItem*>(GetDfltAttr(RES_CHRATR_COLOR));
         InsColor(pCol->GetValue());
-        if (0 != (pCol = static_cast<const SvxColorItem*>(rPool.GetPoolDefaultItem(RES_CHRATR_COLOR))))
+        if (nullptr != (pCol = static_cast<const SvxColorItem*>(rPool.GetPoolDefaultItem(RES_CHRATR_COLOR))))
             InsColor(pCol->GetValue());
         nMaxItem = rPool.GetItemCount2(RES_CHRATR_COLOR);
         for (sal_uInt32 n = 0; n < nMaxItem; ++n)
         {
-            if (0 != (pCol = static_cast<const SvxColorItem*>(rPool.GetItem2(RES_CHRATR_COLOR, n))))
+            if (nullptr != (pCol = static_cast<const SvxColorItem*>(rPool.GetItem2(RES_CHRATR_COLOR, n))))
                 InsColor(pCol->GetValue());
         }
 
@@ -995,7 +995,7 @@ void RtfExport::OutColorTable()
         nMaxItem = rPool.GetItemCount2(RES_CHRATR_UNDERLINE);
         for (sal_uInt32 n = 0; n < nMaxItem; ++n)
         {
-            if (0 != (pUnder = static_cast<const SvxUnderlineItem*>(rPool.GetItem2(RES_CHRATR_UNDERLINE, n))))
+            if (nullptr != (pUnder = static_cast<const SvxUnderlineItem*>(rPool.GetItem2(RES_CHRATR_UNDERLINE, n))))
                 InsColor(pUnder->GetColor());
 
         }
@@ -1005,7 +1005,7 @@ void RtfExport::OutColorTable()
         nMaxItem = rPool.GetItemCount2(RES_CHRATR_OVERLINE);
         for (sal_uInt32 n = 0; n < nMaxItem; ++n)
         {
-            if (0 != (pOver = static_cast<const SvxOverlineItem*>(rPool.GetItem2(RES_CHRATR_OVERLINE, n))))
+            if (nullptr != (pOver = static_cast<const SvxOverlineItem*>(rPool.GetItem2(RES_CHRATR_OVERLINE, n))))
                 InsColor(pOver->GetColor());
 
         }
@@ -1022,14 +1022,14 @@ void RtfExport::OutColorTable()
     {
         const SvxBrushItem* pBkgrd = static_cast<const SvxBrushItem*>(GetDfltAttr(*pIds));
         InsColor(pBkgrd->GetColor());
-        if (0 != (pBkgrd = static_cast<const SvxBrushItem*>(rPool.GetPoolDefaultItem(*pIds))))
+        if (nullptr != (pBkgrd = static_cast<const SvxBrushItem*>(rPool.GetPoolDefaultItem(*pIds))))
         {
             InsColor(pBkgrd->GetColor());
         }
         nMaxItem = rPool.GetItemCount2(*pIds);
         for (sal_uInt32 n = 0; n < nMaxItem; ++n)
         {
-            if (0 != (pBkgrd = static_cast<const SvxBrushItem*>(rPool.GetItem2(*pIds , n))))
+            if (nullptr != (pBkgrd = static_cast<const SvxBrushItem*>(rPool.GetItem2(*pIds , n))))
             {
                 InsColor(pBkgrd->GetColor());
             }
@@ -1040,14 +1040,14 @@ void RtfExport::OutColorTable()
     {
         const SvxShadowItem* pShadow = static_cast<const SvxShadowItem*>(GetDfltAttr(RES_SHADOW));
         InsColor(pShadow->GetColor());
-        if (0 != (pShadow = static_cast<const SvxShadowItem*>(rPool.GetPoolDefaultItem(RES_SHADOW))))
+        if (nullptr != (pShadow = static_cast<const SvxShadowItem*>(rPool.GetPoolDefaultItem(RES_SHADOW))))
         {
             InsColor(pShadow->GetColor());
         }
         nMaxItem = rPool.GetItemCount2(RES_SHADOW);
         for (sal_uInt32 n = 0; n < nMaxItem; ++n)
         {
-            if (0 != (pShadow = static_cast<const SvxShadowItem*>(rPool.GetItem2(RES_SHADOW, n))))
+            if (nullptr != (pShadow = static_cast<const SvxShadowItem*>(rPool.GetItem2(RES_SHADOW, n))))
             {
                 InsColor(pShadow->GetColor());
             }
@@ -1057,24 +1057,24 @@ void RtfExport::OutColorTable()
     // frame border color
     {
         const SvxBoxItem* pBox;
-        if (0 != (pBox = static_cast<const SvxBoxItem*>(rPool.GetPoolDefaultItem(RES_BOX))))
+        if (nullptr != (pBox = static_cast<const SvxBoxItem*>(rPool.GetPoolDefaultItem(RES_BOX))))
             InsColorLine(*pBox);
         nMaxItem = rPool.GetItemCount2(RES_BOX);
         for (sal_uInt32 n = 0; n < nMaxItem; ++n)
         {
-            if (0 != (pBox = static_cast<const SvxBoxItem*>(rPool.GetItem2(RES_BOX, n))))
+            if (nullptr != (pBox = static_cast<const SvxBoxItem*>(rPool.GetItem2(RES_BOX, n))))
                 InsColorLine(*pBox);
         }
     }
 
     {
         const SvxBoxItem* pCharBox;
-        if (0 != (pCharBox = static_cast<const SvxBoxItem*>(rPool.GetPoolDefaultItem(RES_CHRATR_BOX))))
+        if (nullptr != (pCharBox = static_cast<const SvxBoxItem*>(rPool.GetPoolDefaultItem(RES_CHRATR_BOX))))
             InsColorLine(*pCharBox);
         nMaxItem = rPool.GetItemCount2(RES_CHRATR_BOX);
         for (sal_uInt32 n = 0; n < nMaxItem; ++n)
         {
-            if (0 != (pCharBox = static_cast<const SvxBoxItem*>(rPool.GetItem2(RES_CHRATR_BOX, n))))
+            if (nullptr != (pCharBox = static_cast<const SvxBoxItem*>(rPool.GetItem2(RES_CHRATR_BOX, n))))
                 InsColorLine(*pCharBox);
         }
     }
@@ -1111,7 +1111,7 @@ OString* RtfExport::GetStyle(sal_uInt16 nId)
     std::map<sal_uInt16,OString>::iterator i = m_aStyTable.find(nId);
     if (i != m_aStyTable.end())
         return &i->second;
-    return NULL;
+    return nullptr;
 }
 
 sal_uInt16 RtfExport::GetRedline(const OUString& rAuthor)
@@ -1130,7 +1130,7 @@ const OUString* RtfExport::GetRedline(sal_uInt16 nId)
     for (std::map<OUString,sal_uInt16>::iterator aIter = m_aRedlineTable.begin(); aIter != m_aRedlineTable.end(); ++aIter)
         if ((*aIter).second == nId)
             return &(*aIter).first;
-    return NULL;
+    return nullptr;
 }
 
 void RtfExport::OutPageDescription(const SwPageDesc& rPgDsc, bool bWriteReset, bool bCheckForFirstPage)
@@ -1253,7 +1253,7 @@ SwRTFWriter::~SwRTFWriter()
 sal_uLong SwRTFWriter::WriteStream()
 {
     SwPaM aPam(*pCurPam->End(), *pCurPam->Start());
-    RtfExport aExport(NULL, pDoc, &aPam, pCurPam, this, m_bOutOutlineOnly);
+    RtfExport aExport(nullptr, pDoc, &aPam, pCurPam, this, m_bOutOutlineOnly);
     aExport.ExportDocument(true);
     return 0;
 }

@@ -158,7 +158,7 @@ public:
 
     /// Write a section break
     /// msword::ColumnBreak or msword::PageBreak
-    virtual void SectionBreak(sal_uInt8 nC, const WW8_SepInfo* pSectionInfo = NULL) override;
+    virtual void SectionBreak(sal_uInt8 nC, const WW8_SepInfo* pSectionInfo = nullptr) override;
 
     /// Start of the section properties.
     virtual void StartSection() override;
@@ -210,7 +210,7 @@ public:
                                 sal_Int16 nFirstLineIndex,
                                 sal_Int16 nListTabPos,
                                 const OUString& rNumberingString,
-                                const SvxBrushItem* pBrush = 0) override;//For i120928,to export graphic of bullet
+                                const SvxBrushItem* pBrush = nullptr) override;//For i120928,to export graphic of bullet
 
     void WriteField_Impl(const SwField* pField, ww::eField eType, const OUString& rFieldCmd, sal_uInt8 nMode);
     void WriteBookmarks_Impl(std::vector< OUString >& rStarts, std::vector< OUString >& rEnds);
@@ -631,7 +631,7 @@ public:
     void FontPitchType(FontPitch ePitch) const;
 
     /// Writes binary data as a hex dump.
-    static OString WriteHex(const sal_uInt8* pData, sal_uInt32 nSize, SvStream* pStream = 0, sal_uInt32 nLimit = 64);
+    static OString WriteHex(const sal_uInt8* pData, sal_uInt32 nSize, SvStream* pStream = nullptr, sal_uInt32 nLimit = 64);
 
     void BulletDefinition(int nId, const Graphic& rGraphic, Size aSize) override;
 

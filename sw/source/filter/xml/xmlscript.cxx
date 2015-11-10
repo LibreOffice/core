@@ -29,7 +29,7 @@ using namespace ::com::sun::star;
 SvXMLImportContext *SwXMLImport::CreateScriptContext(
                                        const OUString& rLocalName )
 {
-    SvXMLImportContext *pContext = 0;
+    SvXMLImportContext *pContext = nullptr;
 
     if( !(IsStylesOnlyMode() || IsInsertMode()) )
     {

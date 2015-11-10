@@ -45,7 +45,7 @@ using namespace ::com::sun::star;
 
 SwFlyFreeFrm::SwFlyFreeFrm( SwFlyFrameFormat *pFormat, SwFrm* pSib, SwFrm *pAnch ) :
     SwFlyFrm( pFormat, pSib, pAnch ),
-    pPage( 0 ),
+    pPage( nullptr ),
     // #i34753#
     mbNoMakePos( false ),
     // #i37068#
@@ -113,7 +113,7 @@ void SwFlyFreeFrm::MakeAll(vcl::RenderContext* /*pRenderContext*/)
     if( !GetPageFrm() && GetAnchorFrm() && GetAnchorFrm()->IsInFly() )
     {
         SwFlyFrm* pFly = AnchorFrm()->FindFlyFrm();
-        SwPageFrm *pPageFrm = pFly ? pFly->FindPageFrm() : NULL;
+        SwPageFrm *pPageFrm = pFly ? pFly->FindPageFrm() : nullptr;
         if( pPageFrm )
             pPageFrm->AppendFlyToPage( this );
     }
@@ -480,7 +480,7 @@ void SwFlyLayFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
 {
     const sal_uInt16 nWhich = pNew ? pNew->Which() : 0;
 
-    const SwFormatAnchor *pAnch = 0;
+    const SwFormatAnchor *pAnch = nullptr;
     if( RES_ATTRSET_CHG == nWhich && SfxItemState::SET ==
         static_cast<const SwAttrSetChg*>(pNew)->GetChgSet()->GetItemState( RES_ANCHOR, false,
             reinterpret_cast<const SfxPoolItem**>(&pAnch) ))
@@ -517,7 +517,7 @@ void SwFlyLayFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
                 if ( i == nPgNum )
                 {
                     // #i50432# - adjust synopsis of <PlaceFly(..)>
-                    pTmpPage->PlaceFly( this, 0 );
+                    pTmpPage->PlaceFly( this, nullptr );
                 }
             }
             if( !pTmpPage )
@@ -530,7 +530,7 @@ void SwFlyLayFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
         {
             SwNodeIndex aIdx( pAnch->GetContentAnchor()->nNode );
             SwContentFrm *pContent = GetFormat()->GetDoc()->GetNodes().GoNext( &aIdx )->
-                         GetContentNode()->getLayoutFrm( getRootFrm(), 0, 0, false );
+                         GetContentNode()->getLayoutFrm( getRootFrm(), nullptr, nullptr, false );
             if( pContent )
             {
                 SwFlyFrm *pTmp = pContent->FindFlyFrm();
@@ -595,7 +595,7 @@ void SwPageFrm::AppendFlyToPage( SwFlyFrm *pNew )
         (void) bSucessInserted;
 
         // #i87493#
-        OSL_ENSURE( pNew->GetPageFrm() == 0 || pNew->GetPageFrm() == this,
+        OSL_ENSURE( pNew->GetPageFrm() == nullptr || pNew->GetPageFrm() == this,
                 "<SwPageFrm::AppendFlyToPage(..)> - anchored fly frame seems to be registered at another page frame. Serious defect." );
         // #i28701# - use new method <SetPageFrm(..)>
         pNew->SetPageFrm( this );
@@ -634,7 +634,7 @@ void SwPageFrm::AppendFlyToPage( SwFlyFrm *pNew )
                 // #i87493#
                 if ( pTmpObj->GetPageFrm() != this )
                 {
-                    if ( pTmpObj->GetPageFrm() != 0 )
+                    if ( pTmpObj->GetPageFrm() != nullptr )
                     {
                         pTmpObj->GetPageFrm()->RemoveDrawObjFromPage( *pTmpObj );
                     }
@@ -675,7 +675,7 @@ void SwPageFrm::RemoveFlyFromPage( SwFlyFrm *pToRemove )
         if (!m_pSortedObjs->size())
         {
             delete m_pSortedObjs;
-            m_pSortedObjs = 0;
+            m_pSortedObjs = nullptr;
         }
     }
 
@@ -691,7 +691,7 @@ void SwPageFrm::RemoveFlyFromPage( SwFlyFrm *pToRemove )
     }
 
     // #i28701# - use new method <SetPageFrm(..)>
-    pToRemove->SetPageFrm( 0L );
+    pToRemove->SetPageFrm( nullptr );
 }
 
 void SwPageFrm::MoveFly( SwFlyFrm *pToMove, SwPageFrm *pDest )
@@ -833,7 +833,7 @@ void SwPageFrm::AppendDrawObjToPage( SwAnchoredObject& _rNewObj )
                 "Drawing object not appended into list <pSortedObjs>." );
     }
     // #i87493#
-    OSL_ENSURE( _rNewObj.GetPageFrm() == 0 || _rNewObj.GetPageFrm() == this,
+    OSL_ENSURE( _rNewObj.GetPageFrm() == nullptr || _rNewObj.GetPageFrm() == this,
             "<SwPageFrm::AppendDrawObjToPage(..)> - anchored draw object seems to be registered at another page frame. Serious defect." );
     _rNewObj.SetPageFrm( this );
 
@@ -867,7 +867,7 @@ void SwPageFrm::RemoveDrawObjFromPage( SwAnchoredObject& _rToRemoveObj )
             static_cast<SwRootFrm*>(GetUpper())->InvalidateBrowseWidth();
         }
     }
-    _rToRemoveObj.SetPageFrm( 0 );
+    _rToRemoveObj.SetPageFrm( nullptr );
 }
 
 // #i50432# - adjust method description and synopsis.
@@ -1034,7 +1034,7 @@ bool CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, bool bMove )
                         const_cast<SwFlyFrm*>(pFly)->GetAnchorFrmContainingAnchPos();
                 SWRECTFN( pClip )
                 const SwLayoutFrm *pUp = pClip->GetUpper();
-                const SwFrm *pCell = pUp->IsCellFrm() ? pUp : 0;
+                const SwFrm *pCell = pUp->IsCellFrm() ? pUp : nullptr;
                 const sal_uInt16 nType = bMove ? FRM_ROOT   | FRM_FLY | FRM_HEADER |
                                        FRM_FOOTER | FRM_FTN
                                      : FRM_BODY   | FRM_FLY | FRM_HEADER |
@@ -1052,7 +1052,7 @@ bool CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, bool bMove )
                     {
                         rRect  = pUp->Prt();
                         rRect += pUp->Frm().Pos();
-                        pUp = 0;
+                        pUp = nullptr;
                     }
                 }
                 if ( pUp )

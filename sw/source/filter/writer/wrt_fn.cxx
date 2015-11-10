@@ -30,7 +30,7 @@ Writer& Out( const SwAttrFnTab pTab, const SfxPoolItem& rHt, Writer & rWrt )
     sal_uInt16 nId = rHt.Which();
     OSL_ENSURE(  nId < POOLATTR_END && nId >= POOLATTR_BEGIN, "SwAttrFnTab::Out()" );
     FnAttrOut pOut;
-    if( 0 != ( pOut = pTab[ nId - RES_CHRATR_BEGIN] ))
+    if( nullptr != ( pOut = pTab[ nId - RES_CHRATR_BEGIN] ))
         (*pOut)( rWrt, rHt );
     return rWrt;
 
@@ -47,12 +47,12 @@ Writer& Out_SfxItemSet( const SwAttrFnTab pTab, Writer& rWrt,
     {
         if( !bDeep )
             return rWrt;
-        while( 0 != ( pSet = pSet->GetParent() ) && !pSet->Count() )
+        while( nullptr != ( pSet = pSet->GetParent() ) && !pSet->Count() )
             ;
         if( !pSet )
             return rWrt;
     }
-    const SfxPoolItem* pItem(0);
+    const SfxPoolItem* pItem(nullptr);
     FnAttrOut pOut;
     if( !bDeep || !pSet->GetParent() )
     {
@@ -61,9 +61,9 @@ Writer& Out_SfxItemSet( const SwAttrFnTab pTab, Writer& rWrt,
         pItem = aIter.GetCurItem();
         do {
             // pTab only covers POOLATTR_BEGIN..POOLATTR_END.
-            if( pItem->Which() <= POOLATTR_END && 0 != ( pOut = pTab[ pItem->Which() - RES_CHRATR_BEGIN] ))
+            if( pItem->Which() <= POOLATTR_END && nullptr != ( pOut = pTab[ pItem->Which() - RES_CHRATR_BEGIN] ))
                     (*pOut)( rWrt, *pItem );
-        } while( !aIter.IsAtEnd() && 0 != ( pItem = aIter.NextItem() ) );
+        } while( !aIter.IsAtEnd() && nullptr != ( pItem = aIter.NextItem() ) );
     }
     else
     {
@@ -76,7 +76,7 @@ Writer& Out_SfxItemSet( const SwAttrFnTab pTab, Writer& rWrt,
                     *pItem != rPool.GetDefaultItem( nWhich )
                     || ( pSet->GetParent() &&
                         *pItem != pSet->GetParent()->Get( nWhich ))
-                )) && 0 != ( pOut = pTab[ nWhich - RES_CHRATR_BEGIN] ))
+                )) && nullptr != ( pOut = pTab[ nWhich - RES_CHRATR_BEGIN] ))
                     (*pOut)( rWrt, *pItem );
             nWhich = aIter.NextWhich();
         }
@@ -108,7 +108,7 @@ Writer& Out( const SwNodeFnTab pTab, SwNode& rNode, Writer & rWrt )
             break;
     }
     FnNodeOut pOut;
-    if( 0 != ( pOut = pTab[ nId - RES_NODE_BEGIN ] ))
+    if( nullptr != ( pOut = pTab[ nId - RES_NODE_BEGIN ] ))
         (*pOut)( rWrt, *pCNd );
     return rWrt;
 }

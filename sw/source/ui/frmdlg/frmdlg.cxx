@@ -56,7 +56,7 @@ SwFrmDlg::SwFrmDlg( SfxViewFrame*       pViewFrame,
     : SfxTabDialog(pViewFrame, pParent, sResType,
         "modules/swriter/ui/" +
         sResType.toAsciiLowerCase() +
-        (".ui"), &rCoreSet, pStr != 0)
+        (".ui"), &rCoreSet, pStr != nullptr)
     , m_bFormat(bFormat)
     , m_bNew(bNewFrm)
     , m_rSet(rCoreSet)
@@ -85,18 +85,18 @@ SwFrmDlg::SwFrmDlg( SfxViewFrame*       pViewFrame,
         SetText(GetText() + SW_RESSTR(STR_COLL_HEADER) + *pStr + ")");
     }
 
-    m_nStdId = AddTabPage("type",  SwFrmPage::Create, 0);
-    m_nAddId = AddTabPage("options",  SwFrmAddPage::Create, 0);
-    m_nWrapId = AddTabPage("wrap", SwWrapTabPage::Create, 0);
-    m_nUrlId = AddTabPage("hyperlink",  SwFrmURLPage::Create, 0);
+    m_nStdId = AddTabPage("type",  SwFrmPage::Create, nullptr);
+    m_nAddId = AddTabPage("options",  SwFrmAddPage::Create, nullptr);
+    m_nWrapId = AddTabPage("wrap", SwWrapTabPage::Create, nullptr);
+    m_nUrlId = AddTabPage("hyperlink",  SwFrmURLPage::Create, nullptr);
     if (m_sDlgType == "PictureDialog")
     {
-        m_nPictureId = AddTabPage("picture", SwGrfExtPage::Create, 0);
+        m_nPictureId = AddTabPage("picture", SwGrfExtPage::Create, nullptr);
         m_nCropId = AddTabPage("crop", RID_SVXPAGE_GRFCROP);
     }
     if (m_sDlgType == "FrameDialog")
     {
-        m_nColumnId = AddTabPage("columns", SwColumnPage::Create, 0);
+        m_nColumnId = AddTabPage("columns", SwColumnPage::Create, nullptr);
     }
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
     OSL_ENSURE(pFact, "Dialog creation failed!");
@@ -108,8 +108,8 @@ SwFrmDlg::SwFrmDlg( SfxViewFrame*       pViewFrame,
     m_nAreaId = AddTabPage("area", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_AREA ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_AREA ));
     m_nTransparenceId = AddTabPage("transparence", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_TRANSPARENCE ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_TRANSPARENCE ) );
 
-    m_nMacroId = AddTabPage("macro", pFact->GetTabPageCreatorFunc(RID_SVXPAGE_MACROASSIGN), 0);
-    m_nBorderId = AddTabPage("borders", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BORDER ), 0);
+    m_nMacroId = AddTabPage("macro", pFact->GetTabPageCreatorFunc(RID_SVXPAGE_MACROASSIGN), nullptr);
+    m_nBorderId = AddTabPage("borders", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BORDER ), nullptr);
 
     if(m_bHTMLMode)
     {

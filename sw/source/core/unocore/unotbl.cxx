@@ -241,7 +241,7 @@ static void lcl_SetSpecialProperty(SwFrameFormat* pFormat,
         {
             OUString sPageStyle;
             aValue >>= sPageStyle;
-            const SwPageDesc* pDesc = 0;
+            const SwPageDesc* pDesc = nullptr;
             if (!sPageStyle.isEmpty())
             {
                 SwStyleNameMapper::FillUIName(sPageStyle, sPageStyle, nsSwGetPoolIdFromName::GET_POOLID_PAGEDESC, true );
@@ -1532,7 +1532,7 @@ sal_Bool SwXTextTableCursor::goUp(sal_Int16 Count, sal_Bool bExpand) throw( uno:
     SwUnoCrsr& rUnoCrsr = GetCrsr();
     SwUnoTableCrsr& rTableCrsr = dynamic_cast<SwUnoTableCrsr&>(rUnoCrsr);
     lcl_CrsrSelect(rTableCrsr, bExpand);
-    return rTableCrsr.UpDown(true, Count, 0, 0);
+    return rTableCrsr.UpDown(true, Count, nullptr, 0);
 }
 
 sal_Bool SwXTextTableCursor::goDown(sal_Int16 Count, sal_Bool bExpand) throw( uno::RuntimeException, std::exception )
@@ -1541,7 +1541,7 @@ sal_Bool SwXTextTableCursor::goDown(sal_Int16 Count, sal_Bool bExpand) throw( un
     SwUnoCrsr& rUnoCrsr = GetCrsr();
     SwUnoTableCrsr& rTableCrsr = dynamic_cast<SwUnoTableCrsr&>(rUnoCrsr);
     lcl_CrsrSelect(rTableCrsr, bExpand);
-    return rTableCrsr.UpDown(false, Count, 0, 0);
+    return rTableCrsr.UpDown(false, Count, nullptr, 0);
 }
 
 void SwXTextTableCursor::gotoStart(sal_Bool bExpand) throw( uno::RuntimeException, std::exception )
@@ -1955,7 +1955,7 @@ SwXTextTable::SwXTextTable(SwFrameFormat& rFrameFormat)
     , m_pImpl(new Impl)
     ,
     m_pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_TABLE)),
-    pTableProps(0),
+    pTableProps(nullptr),
     bIsDescriptor(false),
     nRows(0),
     nColumns(0),
@@ -2085,7 +2085,7 @@ void SwXTextTable::attachToRange(const uno::Reference< text::XTextRange > & xTex
     {
         UnoActionContext aCont(pDoc);
 
-        pDoc->GetIDocumentUndoRedo().StartUndo(UNDO_EMPTY, NULL);
+        pDoc->GetIDocumentUndoRedo().StartUndo(UNDO_EMPTY, nullptr);
         const SwTable* pTable(nullptr);
         if( 0 != aPam.Start()->nContent.GetIndex() )
         {
@@ -2127,7 +2127,7 @@ void SwXTextTable::attachToRange(const uno::Reference< text::XTextRange > & xTex
             bIsDescriptor = false;
             DELETEZ(pTableProps);
         }
-        pDoc->GetIDocumentUndoRedo().EndUndo( UNDO_END, NULL );
+        pDoc->GetIDocumentUndoRedo().EndUndo( UNDO_END, nullptr );
     }
 }
 
@@ -2599,22 +2599,22 @@ void SwXTextTable::setPropertyValue(const OUString& rPropertyName, const uno::An
                     SvxBoxItem aBox( RES_BOX );
                     SvxBoxInfoItem aBoxInfo( SID_ATTR_BORDER_INNER );
 
-                    aBox.SetLine(aTopLine.isEmpty() ? 0 : &aTopLine, SvxBoxItemLine::TOP);
+                    aBox.SetLine(aTopLine.isEmpty() ? nullptr : &aTopLine, SvxBoxItemLine::TOP);
                     aBoxInfo.SetValid(SvxBoxInfoItemValidFlags::TOP, aBorder.IsTopLineValid);
 
-                    aBox.SetLine(aBottomLine.isEmpty() ? 0 : &aBottomLine, SvxBoxItemLine::BOTTOM);
+                    aBox.SetLine(aBottomLine.isEmpty() ? nullptr : &aBottomLine, SvxBoxItemLine::BOTTOM);
                     aBoxInfo.SetValid(SvxBoxInfoItemValidFlags::BOTTOM, aBorder.IsBottomLineValid);
 
-                    aBox.SetLine(aLeftLine.isEmpty() ? 0 : &aLeftLine, SvxBoxItemLine::LEFT);
+                    aBox.SetLine(aLeftLine.isEmpty() ? nullptr : &aLeftLine, SvxBoxItemLine::LEFT);
                     aBoxInfo.SetValid(SvxBoxInfoItemValidFlags::LEFT, aBorder.IsLeftLineValid);
 
-                    aBox.SetLine(aRightLine.isEmpty() ? 0 : &aRightLine, SvxBoxItemLine::RIGHT);
+                    aBox.SetLine(aRightLine.isEmpty() ? nullptr : &aRightLine, SvxBoxItemLine::RIGHT);
                     aBoxInfo.SetValid(SvxBoxInfoItemValidFlags::RIGHT, aBorder.IsRightLineValid);
 
-                    aBoxInfo.SetLine(aHoriLine.isEmpty() ? 0 : &aHoriLine, SvxBoxInfoItemLine::HORI);
+                    aBoxInfo.SetLine(aHoriLine.isEmpty() ? nullptr : &aHoriLine, SvxBoxInfoItemLine::HORI);
                     aBoxInfo.SetValid(SvxBoxInfoItemValidFlags::HORI, aBorder.IsHorizontalLineValid);
 
-                    aBoxInfo.SetLine(aVertLine.isEmpty() ? 0 : &aVertLine, SvxBoxInfoItemLine::VERT);
+                    aBoxInfo.SetLine(aVertLine.isEmpty() ? nullptr : &aVertLine, SvxBoxInfoItemLine::VERT);
                     aBoxInfo.SetValid(SvxBoxInfoItemValidFlags::VERT, aBorder.IsVerticalLineValid);
 
                     aBox.SetDistance((sal_uInt16)convertMm100ToTwip(aBorder.Distance));
@@ -2644,7 +2644,7 @@ void SwXTextTable::setPropertyValue(const OUString& rPropertyName, const uno::An
                     SwDoc* pDoc = pFormat->GetDoc();
                     SwTable* pTable = SwTable::FindTable( pFormat );
                     SwTableLines &rLines = pTable->GetTabLines();
-                    pDoc->GetIDocumentUndoRedo().StartUndo(UNDO_START, NULL);
+                    pDoc->GetIDocumentUndoRedo().StartUndo(UNDO_START, nullptr);
                     for(size_t i = 0; i < rLines.size(); ++i)
                     {
                         SwTableLine* pLine = rLines[i];
@@ -2674,7 +2674,7 @@ void SwXTextTable::setPropertyValue(const OUString& rPropertyName, const uno::An
                             }
                         }
                     }
-                    pDoc->GetIDocumentUndoRedo().EndUndo(UNDO_END, NULL);
+                    pDoc->GetIDocumentUndoRedo().EndUndo(UNDO_END, nullptr);
                 }
                 break;
 
@@ -2937,7 +2937,7 @@ uno::Any SwXTextTable::getPropertyValue(const OUString& rPropertyName)
     }
     else if(bIsDescriptor)
     {
-        const uno::Any* pAny = 0;
+        const uno::Any* pAny = nullptr;
         if(!pTableProps->GetProperty(pEntry->nWID, pEntry->nMemberId, pAny))
             throw lang::IllegalArgumentException();
         else if(pAny)
@@ -3002,7 +3002,7 @@ void SwXTextTable::setName(const OUString& rName) throw( uno::RuntimeException, 
 
         SwStartNode *pStNd;
         SwNodeIndex aIdx( *pFormat->GetDoc()->GetNodes().GetEndOfAutotext().StartOfSectionNode(), 1 );
-        while ( 0 != (pStNd = aIdx.GetNode().GetStartNode()) )
+        while ( nullptr != (pStNd = aIdx.GetNode().GetStartNode()) )
         {
             ++aIdx;
             SwNode *const pNd = & aIdx.GetNode();

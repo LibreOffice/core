@@ -201,7 +201,7 @@ static SwTableRep*  lcl_TableParamToItemSet( SfxItemSet& rSet, SwWrtShell &rSh )
     rSh.GetTabBorders( rSet );
 
     //row split
-    SwFormatRowSplit* pSplit = 0;
+    SwFormatRowSplit* pSplit = nullptr;
     rSh.GetRowSplit(pSplit);
     if(pSplit)
     {
@@ -274,7 +274,7 @@ void ItemSetToTableParam( const SfxItemSet& rSet,
 {
     rSh.StartAllAction();
     rSh.StartUndo( UNDO_TABLE_ATTR );
-    const SfxPoolItem* pItem = 0;
+    const SfxPoolItem* pItem = nullptr;
 
     if(SfxItemState::SET == rSet.GetItemState(SID_BACKGRND_DESTINATION, false, &pItem))
     {
@@ -284,14 +284,14 @@ void ItemSetToTableParam( const SfxItemSet& rSet,
     }
     bool bBorder = ( SfxItemState::SET == rSet.GetItemState( RES_BOX ) ||
             SfxItemState::SET == rSet.GetItemState( SID_ATTR_BORDER_INNER ) );
-    pItem = 0;
+    pItem = nullptr;
     bool bBackground = SfxItemState::SET == rSet.GetItemState( RES_BACKGROUND, false, &pItem );
-    const SfxPoolItem* pRowItem = 0, *pTableItem = 0;
+    const SfxPoolItem* pRowItem = nullptr, *pTableItem = nullptr;
     bBackground |= SfxItemState::SET == rSet.GetItemState( SID_ATTR_BRUSH_ROW, false, &pRowItem );
     bBackground |= SfxItemState::SET == rSet.GetItemState( SID_ATTR_BRUSH_TABLE, false, &pTableItem );
-    const SfxPoolItem* pSplit = 0;
+    const SfxPoolItem* pSplit = nullptr;
     bool bRowSplit = SfxItemState::SET == rSet.GetItemState( RES_ROW_SPLIT, false, &pSplit );
-    const SfxPoolItem* pBoxDirection = 0;
+    const SfxPoolItem* pBoxDirection = nullptr;
     bool bBoxDirection = SfxItemState::SET == rSet.GetItemState( FN_TABLE_BOX_TEXTORIENTATION, false, &pBoxDirection );
     if( bBackground || bBorder || bRowSplit || bBoxDirection)
     {
@@ -353,7 +353,7 @@ void ItemSetToTableParam( const SfxItemSet& rSet,
 
     SwTabCols aTabCols;
     bool bTabCols = false;
-    SwTableRep* pRep = 0;
+    SwTableRep* pRep = nullptr;
     SwFrameFormat *pFormat = rSh.GetTableFormat();
     SfxItemSet aSet( rSh.GetAttrPool(), RES_FRMATR_BEGIN, RES_FRMATR_END-1 );
     if(SfxItemState::SET == rSet.GetItemState( FN_TABLE_REP, false, &pItem ))
@@ -454,7 +454,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
 
     // At first the slots which doesn't need a FrmMgr.
     bool bMore = false;
-    const SfxPoolItem* pItem = 0;
+    const SfxPoolItem* pItem = nullptr;
     sal_uInt16 nSlot = rReq.GetSlot();
     if(pArgs)
         pArgs->GetItemState(GetPool().GetWhich(nSlot), false, &pItem);
@@ -476,7 +476,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
             rSh.GetTabBorders( aCoreSet );
             const SvxBoxItem& rCoreBox = static_cast<const SvxBoxItem&>(
                                                     aCoreSet.Get(RES_BOX));
-            const SfxPoolItem *pBoxItem = 0;
+            const SfxPoolItem *pBoxItem = nullptr;
             if ( pArgs->GetItemState(RES_BOX, true, &pBoxItem) == SfxItemState::SET )
             {
                 aBox = *static_cast<const SvxBoxItem*>(pBoxItem);
@@ -788,7 +788,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
             break;
         case FN_TABLE_SET_READ_ONLY_CELLS:
             rSh.ProtectCells();
-            rSh.ResetSelect( 0, false );
+            rSh.ResetSelect( nullptr, false );
             bCallDone = true;
             break;
         case FN_TABLE_UNSET_READ_ONLY_CELLS:
@@ -923,7 +923,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
             if ( FN_TABLE_INSERT_ROW_DLG != nSlot || !rSh.IsInRepeatedHeadline())
             {
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                std::unique_ptr<SvxAbstractInsRowColDlg> pDlg( pFact ? pFact->CreateSvxInsRowColDlg( GetView().GetWindow(), nSlot == FN_TABLE_INSERT_COL_DLG, pSlot->GetCommand() ) : 0);
+                std::unique_ptr<SvxAbstractInsRowColDlg> pDlg( pFact ? pFact->CreateSvxInsRowColDlg( GetView().GetWindow(), nSlot == FN_TABLE_INSERT_COL_DLG, pSlot->GetCommand() ) : nullptr);
 
                 if( pDlg.get() && (pDlg->Execute() == 1) )
                 {
@@ -1168,7 +1168,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
         case FN_TABLE_ROW_SPLIT :
         {
             const SfxBoolItem* pBool = static_cast<const SfxBoolItem*>(pItem);
-            SwFormatRowSplit* pSplit = 0;
+            SwFormatRowSplit* pSplit = nullptr;
             if(!pBool)
             {
                 rSh.GetRowSplit(pSplit);
@@ -1347,7 +1347,7 @@ void SwTableShell::GetState(SfxItemSet &rSet)
                 }
                 else
                 {
-                    SwFormatRowSplit* pSplit = 0;
+                    SwFormatRowSplit* pSplit = nullptr;
                     rSh.GetRowSplit(pSplit);
                     if(pSplit)
                         rSet.Put(*pSplit);
@@ -1407,7 +1407,7 @@ void SwTableShell::ExecTableStyle(SfxRequest& rReq)
                     const SvxLineItem &rLineItem = static_cast<const SvxLineItem&>(pArgs->
                                                             Get( SID_FRAME_LINESTYLE ));
                     const SvxBorderLine* pBorderLine = rLineItem.GetLine();
-                    rSh.SetTabLineStyle( 0, true, pBorderLine);
+                    rSh.SetTabLineStyle( nullptr, true, pBorderLine);
                 }
                 else
                 {
@@ -1446,7 +1446,7 @@ void SwTableShell::ExecNumberFormat(SfxRequest& rReq)
     SwWrtShell &rSh = GetShell();
 
     // At first the slots, which doesn't need a FrmMgr.
-    const SfxPoolItem* pItem = 0;
+    const SfxPoolItem* pItem = nullptr;
     const sal_uInt16 nSlot = rReq.GetSlot();
     if(pArgs)
         pArgs->GetItemState(GetPool().GetWhich(nSlot), false, &pItem);

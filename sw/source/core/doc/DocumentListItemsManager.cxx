@@ -37,7 +37,7 @@ bool DocumentListItemsManager::lessThanNodeNum::operator()( const SwNodeNum* pNo
 
 void DocumentListItemsManager::addListItem( const SwNodeNum& rNodeNum )
 {
-    if ( mpListItemsList == 0 )
+    if ( mpListItemsList == nullptr )
     {
         return;
     }
@@ -54,7 +54,7 @@ void DocumentListItemsManager::addListItem( const SwNodeNum& rNodeNum )
 
 void DocumentListItemsManager::removeListItem( const SwNodeNum& rNodeNum )
 {
-    if ( mpListItemsList == 0 )
+    if ( mpListItemsList == nullptr )
     {
         return;
     }
@@ -98,7 +98,7 @@ DocumentListItemsManager::~DocumentListItemsManager()
 {
 // #i83479#
 delete mpListItemsList;
-mpListItemsList = 0;
+mpListItemsList = nullptr;
 }
 
 

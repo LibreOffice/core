@@ -103,7 +103,7 @@ class SwXMLTableContext : public XMLTextTableContext
                                 sal_uInt32 nTopRow, sal_uInt32 nLeftCol,
                                 sal_uInt32 nBottomRow, sal_uInt32 nRightCol );
 
-    void _MakeTable( SwTableBox *pBox=0 );
+    void _MakeTable( SwTableBox *pBox=nullptr );
     void MakeTable( SwTableBox *pBox, sal_Int32 nWidth );
     void MakeTable();
 
@@ -146,7 +146,7 @@ public:
     SwXMLImport& GetSwImport() { return static_cast<SwXMLImport&>(GetImport()); }
 
     void InsertColumn( sal_Int32 nWidth, bool bRelWidth,
-                       const OUString *pDfltCellStyleName = 0 );
+                       const OUString *pDfltCellStyleName = nullptr );
     sal_Int32 GetColumnWidth( sal_uInt32 nCol, sal_uInt32 nColSpan=1UL ) const;
     OUString GetColumnDefaultCellStyleName( sal_uInt32 nCol ) const;
     inline sal_uInt32 GetColumnCount() const;
@@ -155,18 +155,18 @@ public:
     bool IsInsertCellPossible() const { return nCurCol < GetColumnCount(); }
     bool IsInsertColPossible() const { return nCurCol < USHRT_MAX; }
     bool IsInsertRowPossible() const { return nCurRow < USHRT_MAX; }
-    bool IsValid() const { return pTableNode != 0; }
+    bool IsValid() const { return pTableNode != nullptr; }
 
     void InsertCell( const OUString& rStyleName,
                      sal_uInt32 nRowSpan=1U, sal_uInt32 nColSpan=1U,
-                     const SwStartNode *pStNd=0,
+                     const SwStartNode *pStNd=nullptr,
                      const OUString & i_rXmlId = OUString(),
-                     SwXMLTableContext *pTable=0,
+                     SwXMLTableContext *pTable=nullptr,
                      bool bIsProtected = false,
-                     const OUString *pFormula=0,
+                     const OUString *pFormula=nullptr,
                      bool bHasValue = false,
                      double fValue = 0.0,
-                     OUString const*const pStringValue = 0);
+                     OUString const*const pStringValue = nullptr);
     void InsertRow( const OUString& rStyleName,
                     const OUString& rDfltCellStyleName,
                     bool bInHead,
@@ -175,8 +175,8 @@ public:
     void InsertRepRows( sal_uInt32 nCount );
     const SwXMLTableCell_Impl *GetCell( sal_uInt32 nRow, sal_uInt32 nCol ) const;
     SwXMLTableCell_Impl *GetCell( sal_uInt32 nRow, sal_uInt32 nCol );
-    const SwStartNode *InsertTableSection(const SwStartNode *pPrevSttNd = 0,
-                                  OUString const* pStringValueStyleName = 0);
+    const SwStartNode *InsertTableSection(const SwStartNode *pPrevSttNd = nullptr,
+                                  OUString const* pStringValueStyleName = nullptr);
 
     virtual void EndElement() override;
 
@@ -200,7 +200,7 @@ inline const SwStartNode *SwXMLTableContext::GetLastStartNode() const
 
 inline bool SwXMLTableContext::HasColumnDefaultCellStyleNames() const
 {
-    return pColumnDefaultCellStyleNames != 0;
+    return pColumnDefaultCellStyleNames != nullptr;
 }
 
 #endif

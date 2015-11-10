@@ -52,9 +52,9 @@ void _InsTableBox( SwDoc* pDoc, SwTableNode* pTableNd,
                 SwTableLine* pLine, SwTableBoxFormat* pBoxFrameFormat,
                 SwTableBox* pBox, sal_uInt16 nInsPos, sal_uInt16 nCnt = 1 );
 
-SW_DLLPUBLIC void _DeleteBox( SwTable& rTable, SwTableBox* pBox, SwUndo* pUndo = 0,
+SW_DLLPUBLIC void _DeleteBox( SwTable& rTable, SwTableBox* pBox, SwUndo* pUndo = nullptr,
                 bool bCalcNewSize = true, const bool bCorrBorder = true,
-                SwShareBoxFormats* pShareFormats = 0 );
+                SwShareBoxFormats* pShareFormats = nullptr );
 
 /**
  * Class for SplitTable
@@ -73,7 +73,7 @@ class SwCollectTableLineBoxes
     bool bGetValues : 1;
 
 public:
-    SwCollectTableLineBoxes( bool bTop, sal_uInt16 nMd = 0, SwHistory* pHist=0 )
+    SwCollectTableLineBoxes( bool bTop, sal_uInt16 nMd = 0, SwHistory* pHist=nullptr )
         :
         pHst( pHist ), nMode( nMd ), nWidth( 0 ),
         bGetFromTop( bTop ), bGetValues( true )
@@ -85,7 +85,7 @@ public:
     void AddToUndoHistory( const SwContentNode& rNd );
 
     size_t Count() const                { return m_Boxes.size(); }
-    const SwTableBox& GetBox( std::size_t nPos, sal_uInt16* pWidth = 0 ) const
+    const SwTableBox& GetBox( std::size_t nPos, sal_uInt16* pWidth = nullptr ) const
         {
             // We need the EndPos of the column here!
             if( pWidth )
@@ -126,10 +126,10 @@ struct _SwGCLineBorder
     sal_uInt16 nLinePos;
 
     _SwGCLineBorder( const SwTable& rTable )
-        : pLines( &rTable.GetTabLines() ), pShareFormats(0), nLinePos( 0 )  {}
+        : pLines( &rTable.GetTabLines() ), pShareFormats(nullptr), nLinePos( 0 )  {}
 
     _SwGCLineBorder( const SwTableBox& rBox )
-        : pLines( &rBox.GetTabLines() ), pShareFormats(0), nLinePos( 0 )  {}
+        : pLines( &rBox.GetTabLines() ), pShareFormats(nullptr), nLinePos( 0 )  {}
     bool IsLastLine() const { return nLinePos + 1 >= (sal_uInt16)pLines->size(); }
 };
 
@@ -138,7 +138,7 @@ class _SwGCBorder_BoxBrd
     const editeng::SvxBorderLine* pBrdLn;
     bool bAnyBorderFnd;
 public:
-    _SwGCBorder_BoxBrd() : pBrdLn( 0 ), bAnyBorderFnd( false ) {}
+    _SwGCBorder_BoxBrd() : pBrdLn( nullptr ), bAnyBorderFnd( false ) {}
 
     void SetBorder( const editeng::SvxBorderLine& rBorderLine )
         { pBrdLn = &rBorderLine; bAnyBorderFnd = false; }

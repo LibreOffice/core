@@ -34,7 +34,7 @@ static const WordDialogTable aWordDialogTable[] =
     { word::WdWordDialog::wdDialogFileOpen, ".uno:Open" },
     { word::WdWordDialog::wdDialogFilePrint, ".uno:Print" },
     { word::WdWordDialog::wdDialogFileSaveAs, ".uno:SaveAs" },
-    { 0, 0 }
+    { 0, nullptr }
 };
 
 OUString

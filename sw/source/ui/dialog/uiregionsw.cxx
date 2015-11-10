@@ -118,7 +118,7 @@ static void lcl_FillList( SwWrtShell& rSh, ComboBox& rSubRegions, ComboBox* pAva
 
 static void lcl_FillSubRegionList( SwWrtShell& rSh, ComboBox& rSubRegions, ComboBox* pAvailNames )
 {
-    lcl_FillList( rSh, rSubRegions, pAvailNames, 0 );
+    lcl_FillList( rSh, rSubRegions, pAvailNames, nullptr );
     IDocumentMarkAccess* const pMarkAccess = rSh.getIDocumentMarkAccess();
     for( IDocumentMarkAccess::const_iterator_t ppMark = pMarkAccess->getBookmarksBegin();
         ppMark != pMarkAccess->getBookmarksEnd();
@@ -307,8 +307,8 @@ SwEditRegionDlg::SwEditRegionDlg( vcl::Window* pParent, SwWrtShell& rWrtSh )
     , m_bSubRegionsFilled(false)
     , aImageIL(SW_RES(IL_SECTION_BITMAPS))
     , rSh(rWrtSh)
-    , m_pDocInserter(NULL)
-    , m_pOldDefDlgParent(NULL)
+    , m_pDocInserter(nullptr)
+    , m_pOldDefDlgParent(nullptr)
     , bDontCheckPasswd(true)
 {
     get(m_pCurName, "curname");
@@ -378,7 +378,7 @@ SwEditRegionDlg::SwEditRegionDlg( vcl::Window* pParent, SwWrtShell& rWrtSh )
     m_pDDECB->SetClickHdl(LINK(this, SwEditRegionDlg, DDEHdl));
 
     pCurrSect = rSh.GetCurrSection();
-    RecurseList( 0, 0 );
+    RecurseList( nullptr, nullptr );
     // if the cursor is not in a region
     // the first one will always be selected
     if( !m_pTree->FirstSelected() && m_pTree->First() )
@@ -435,7 +435,7 @@ bool SwEditRegionDlg::CheckPasswd(CheckBox* pBox)
 // recursively look for child-sections
 void SwEditRegionDlg::RecurseList( const SwSectionFormat* pFormat, SvTreeListEntry* pEntry )
 {
-    SvTreeListEntry* pSelEntry = 0;
+    SvTreeListEntry* pSelEntry = nullptr;
     if (!pFormat)
     {
         const size_t nCount=rSh.GetSectionFormatCount();
@@ -491,7 +491,7 @@ void SwEditRegionDlg::RecurseList( const SwSectionFormat* pFormat, SvTreeListEnt
             }
         }
     }
-    if(0 != pSelEntry)
+    if(nullptr != pSelEntry)
     {
         m_pTree->MakeVisible(pSelEntry);
         m_pTree->Select(pSelEntry);
@@ -766,7 +766,7 @@ IMPL_LINK_NOARG_TYPED(SwEditRegionDlg, OkHdl, Button*, void)
 
     rSh.StartAllAction();
     rSh.StartUndo();
-    rSh.ResetSelect( 0,false );
+    rSh.ResetSelect( nullptr,false );
     SvTreeListEntry* pEntry = m_pTree->First();
 
     while( pEntry )
@@ -804,7 +804,7 @@ IMPL_LINK_NOARG_TYPED(SwEditRegionDlg, OkHdl, Button*, void)
                 pSet->Put( pRepr->GetLRSpace());
 
             rSh.UpdateSection( nNewPos, pRepr->GetSectionData(),
-                               pSet->Count() ? pSet.get() : 0 );
+                               pSet->Count() ? pSet.get() : nullptr );
         }
         pEntry = m_pTree->Next( pEntry );
     }
@@ -917,13 +917,13 @@ IMPL_LINK_NOARG_TYPED(SwEditRegionDlg, ChangeDismissHdl, Button*, void)
     while(pEntry)
     {
         SectRepr* const pSectRepr = static_cast<SectRepr*>(pEntry->GetUserData());
-        SvTreeListEntry* pRemove = 0;
+        SvTreeListEntry* pRemove = nullptr;
         bool bRestart = false;
         if(pSectRepr->IsSelected())
         {
             m_SectReprs.insert(std::make_pair(pSectRepr->GetArrPos(),
                         std::unique_ptr<SectRepr>(pSectRepr)));
-            while( (pChild = m_pTree->FirstChild(pEntry) )!= 0 )
+            while( (pChild = m_pTree->FirstChild(pEntry) )!= nullptr )
             {
                 // because of the repositioning we have to start at the beginning again
                 bRestart = true;
@@ -940,7 +940,7 @@ IMPL_LINK_NOARG_TYPED(SwEditRegionDlg, ChangeDismissHdl, Button*, void)
             m_pTree->GetModel()->Remove( pRemove );
     }
 
-    if ( m_pTree->FirstSelected() == 0 )
+    if ( m_pTree->FirstSelected() == nullptr )
     {
         m_pConditionFT->Enable(false);
         m_pConditionED->Enable(false);
@@ -1368,7 +1368,7 @@ IMPL_LINK_TYPED( SwEditRegionDlg, SubRegionEventHdl, VclWindowEvent&, rEvent, vo
             ::lcl_ReadSections(aMedium, *m_pSubRegionED);
         }
         else
-            lcl_FillSubRegionList(rSh, *m_pSubRegionED, 0);
+            lcl_FillSubRegionList(rSh, *m_pSubRegionED, nullptr);
         m_bSubRegionsFilled = true;
     }
 }
@@ -1407,11 +1407,11 @@ SwInsertSectionTabDialog::SwInsertSectionTabDialog(
 {
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
     OSL_ENSURE(pFact, "Dialog creation failed!");
-    m_nSectionPageId = AddTabPage("section", SwInsertSectionTabPage::Create, 0);
-    m_nColumnPageId = AddTabPage("columns",   SwColumnPage::Create,    0);
-    m_nBackPageId = AddTabPage("background", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), 0);
-    m_nNotePageId = AddTabPage("notes", SwSectionFootnoteEndTabPage::Create, 0);
-    m_nIndentPage = AddTabPage("indents", SwSectionIndentTabPage::Create, 0);
+    m_nSectionPageId = AddTabPage("section", SwInsertSectionTabPage::Create, nullptr);
+    m_nColumnPageId = AddTabPage("columns",   SwColumnPage::Create,    nullptr);
+    m_nBackPageId = AddTabPage("background", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), nullptr);
+    m_nNotePageId = AddTabPage("notes", SwSectionFootnoteEndTabPage::Create, nullptr);
+    m_nIndentPage = AddTabPage("indents", SwSectionIndentTabPage::Create, nullptr);
 
     SvxHtmlOptions& rHtmlOpt = SvxHtmlOptions::Get();
     long nHtmlMode = rHtmlOpt.GetExportMode();
@@ -1502,9 +1502,9 @@ SwInsertSectionTabPage::SwInsertSectionTabPage(
                             vcl::Window *pParent, const SfxItemSet &rAttrSet)
     : SfxTabPage(pParent, "SectionPage",
         "modules/swriter/ui/sectionpage.ui", &rAttrSet)
-    , m_pWrtSh(0)
-    , m_pDocInserter(NULL)
-    , m_pOldDefDlgParent(NULL)
+    , m_pWrtSh(nullptr)
+    , m_pDocInserter(nullptr)
+    , m_pOldDefDlgParent(nullptr)
 {
     get(m_pCurName, "sectionnames");
     m_pCurName->SetStyle(m_pCurName->GetStyle() | WB_SORT);
@@ -2088,10 +2088,10 @@ SwSectionPropertyTabDialog::SwSectionPropertyTabDialog(
 {
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
     OSL_ENSURE(pFact, "Dialog creation failed!");
-    m_nColumnPageId = AddTabPage("columns",   SwColumnPage::Create,    0);
-    m_nBackPageId = AddTabPage("background", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), 0 );
-    m_nNotePageId = AddTabPage("notes", SwSectionFootnoteEndTabPage::Create, 0);
-    m_nIndentPage = AddTabPage("indents", SwSectionIndentTabPage::Create, 0);
+    m_nColumnPageId = AddTabPage("columns",   SwColumnPage::Create,    nullptr);
+    m_nBackPageId = AddTabPage("background", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), nullptr );
+    m_nNotePageId = AddTabPage("notes", SwSectionFootnoteEndTabPage::Create, nullptr);
+    m_nIndentPage = AddTabPage("indents", SwSectionIndentTabPage::Create, nullptr);
 
     SvxHtmlOptions& rHtmlOpt = SvxHtmlOptions::Get();
     long nHtmlMode = rHtmlOpt.GetExportMode();

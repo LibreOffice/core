@@ -104,7 +104,7 @@ SwUndoPageDesc::SwUndoPageDesc(const SwPageDesc & _aOld,
               UNDO_CHANGE_PAGEDESC ),
       aOld(_aOld, _pDoc), aNew(_aNew, _pDoc), pDoc(_pDoc), bExchange( false )
 {
-    OSL_ENSURE(0 != pDoc, "no document?");
+    OSL_ENSURE(nullptr != pDoc, "no document?");
 
 #if OSL_DEBUG_LEVEL > 1
     DebugHeaderFooterContent( aOld.m_PageDesc );
@@ -368,7 +368,7 @@ SwUndoPageDescCreate::SwUndoPageDescCreate(const SwPageDesc * pNew,
     : SwUndo(UNDO_CREATE_PAGEDESC), pDesc(pNew), aNew(*pNew, _pDoc),
       pDoc(_pDoc)
 {
-    OSL_ENSURE(0 != pDoc, "no document?");
+    OSL_ENSURE(nullptr != pDoc, "no document?");
 }
 
 SwUndoPageDescCreate::~SwUndoPageDescCreate()
@@ -380,7 +380,7 @@ void SwUndoPageDescCreate::UndoImpl(::sw::UndoRedoContext &)
     if (pDesc)
     {
         aNew = *pDesc;
-        pDesc = NULL;
+        pDesc = nullptr;
     }
 
     pDoc->DelPageDesc(aNew.GetName(), true);
@@ -419,7 +419,7 @@ SwUndoPageDescDelete::SwUndoPageDescDelete(const SwPageDesc & _aOld,
                                            SwDoc * _pDoc)
     : SwUndo(UNDO_DELETE_PAGEDESC), aOld(_aOld, _pDoc), pDoc(_pDoc)
 {
-    OSL_ENSURE(0 != pDoc, "no document?");
+    OSL_ENSURE(nullptr != pDoc, "no document?");
 }
 
 SwUndoPageDescDelete::~SwUndoPageDescDelete()

@@ -64,7 +64,7 @@ SwAnnotationWin::SwAnnotationWin( SwEditWin& rEditWin,
     : SwSidebarWin( rEditWin, nBits, aMgr, aBits, rSidebarItem )
     , mpFormatField(aField)
     , mpField( static_cast<SwPostItField*>(aField->GetField()))
-    , mpButtonPopup(0)
+    , mpButtonPopup(nullptr)
 {
     if (SupportsDoubleBuffering())
         // When double-buffering, allow parents to paint on our area. That's
@@ -139,12 +139,12 @@ void SwAnnotationWin::UpdateData()
             SwPosition aPosition( pTextField->GetTextNode() );
             aPosition.nContent = pTextField->GetStart();
             rUndoRedo.AppendUndo(
-                new SwUndoFieldFromDoc(aPosition, *pOldField, *mpField, 0, true));
+                new SwUndoFieldFromDoc(aPosition, *pOldField, *mpField, nullptr, true));
         }
         // so we get a new layout of notes (anchor position is still the same and we would otherwise not get one)
         Mgr().SetLayout();
         // #i98686# if we have several views, all notes should update their text
-        mpFormatField->Broadcast(SwFormatFieldHint( 0, SwFormatFieldHintWhich::CHANGED));
+        mpFormatField->Broadcast(SwFormatFieldHint( nullptr, SwFormatFieldHintWhich::CHANGED));
         DocView().GetDocShell()->SetModified();
     }
     Engine()->ClearModifyFlag();
@@ -186,7 +186,7 @@ bool SwAnnotationWin::CalcFollow()
         pTextField->GetTextNode().GetTextAttrForCharAt(
             aPosition.nContent.GetIndex() - 1,
             RES_TXTATR_ANNOTATION );
-    const SwField* pField = pTextAttr ? pTextAttr->GetFormatField().GetField() : 0;
+    const SwField* pField = pTextAttr ? pTextAttr->GetFormatField().GetField() : nullptr;
     return pField && (pField->Which()== RES_POSTITFLD);
 }
 
@@ -203,7 +203,7 @@ sal_uInt32 SwAnnotationWin::CountFollowing()
                                         RES_TXTATR_ANNOTATION );
     SwField* pField = pTextAttr
                     ? const_cast<SwField*>(pTextAttr->GetFormatField().GetField())
-                    : 0;
+                    : nullptr;
     while ( pField && ( pField->Which()== RES_POSTITFLD ) )
     {
         aCount++;
@@ -212,7 +212,7 @@ sal_uInt32 SwAnnotationWin::CountFollowing()
                                         RES_TXTATR_ANNOTATION );
         pField = pTextAttr
                ? const_cast<SwField*>(pTextAttr->GetFormatField().GetField())
-               : 0;
+               : nullptr;
     }
     return aCount - 1;
 }
@@ -281,7 +281,7 @@ void SwAnnotationWin::InitAnswer(OutlinerParaObject* pText)
         SwPosition aPosition( pTextField->GetTextNode() );
         aPosition.nContent = pTextField->GetStart();
         rUndoRedo.AppendUndo(
-            new SwUndoFieldFromDoc(aPosition, *pOldField, *mpField, 0, true));
+            new SwUndoFieldFromDoc(aPosition, *pOldField, *mpField, nullptr, true));
     }
     Engine()->SetModifyHdl( LINK( this, SwAnnotationWin, ModifyHdl ) );
     Engine()->ClearModifyFlag();

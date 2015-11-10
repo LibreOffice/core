@@ -478,7 +478,7 @@ public:
 
     virtual void PaintBorder( const SwRect&, const SwPageFrm *pPage,
                               const SwBorderAttrs & ) const;
-    void PaintBaBo( const SwRect&, const SwPageFrm *pPage = 0,
+    void PaintBaBo( const SwRect&, const SwPageFrm *pPage = nullptr,
                     const bool bLowerBorder = false, const bool bOnlyTextBackground = false ) const;
     void PaintBackground( const SwRect&, const SwPageFrm *pPage,
                           const SwBorderAttrs &,
@@ -560,13 +560,13 @@ public:
 
         @return boolean, indicating, if frame is moveable in given environment
     */
-    bool IsMoveable( const SwLayoutFrm* _pLayoutFrm = 0L ) const;
+    bool IsMoveable( const SwLayoutFrm* _pLayoutFrm = nullptr ) const;
 
     // Is it permitted for the (Text)Frm to add a footnote in the current
     // environment (not e.g. for repeating table headlines)
     bool IsFootnoteAllowed() const;
 
-    virtual void  Format( vcl::RenderContext* pRenderContext, const SwBorderAttrs *pAttrs = 0 );
+    virtual void  Format( vcl::RenderContext* pRenderContext, const SwBorderAttrs *pAttrs = nullptr );
 
     virtual void CheckDirection( bool bVert );
 
@@ -577,7 +577,7 @@ public:
     inline bool HasFixSize() const { return mbFixSize; }
 
     // check all pages (starting from the given) and correct them if needed
-    static void CheckPageDescs( SwPageFrm *pStart, bool bNotifyFields = true, SwPageFrm** ppPrev = 0);
+    static void CheckPageDescs( SwPageFrm *pStart, bool bNotifyFields = true, SwPageFrm** ppPrev = nullptr);
 
     // might return 0, with and without const
     SwFrm               *GetNext()  { return mpNext; }
@@ -671,7 +671,7 @@ public:
     virtual void Cut() = 0;
     //Add a method to change the acc table dispose state.
     void SetAccTableDispose(bool bDispose) { mbIfAccTableShouldDisposing = bDispose;}
-    virtual void Paste( SwFrm* pParent, SwFrm* pSibling = 0 ) = 0;
+    virtual void Paste( SwFrm* pParent, SwFrm* pSibling = nullptr ) = 0;
 
     void ValidateLineNum() { mbValidLineNum = true; }
 
@@ -748,22 +748,22 @@ public:
     */
     void InvalidateNextPrtArea();
 
-    void InvalidatePage( const SwPageFrm *pPage = 0 ) const;
+    void InvalidatePage( const SwPageFrm *pPage = nullptr ) const;
 
     virtual bool    FillSelection( SwSelectionList& rList, const SwRect& rRect ) const;
 
     virtual bool    GetCrsrOfst( SwPosition *, Point&,
-                                 SwCrsrMoveState* = 0, bool bTestBackground = false ) const;
+                                 SwCrsrMoveState* = nullptr, bool bTestBackground = false ) const;
     virtual bool    GetCharRect( SwRect &, const SwPosition&,
-                                 SwCrsrMoveState* = 0 ) const;
+                                 SwCrsrMoveState* = nullptr ) const;
     virtual void Paint( vcl::RenderContext& rRenderContext, SwRect const&,
-                        SwPrintData const*const pPrintData = NULL ) const;
+                        SwPrintData const*const pPrintData = nullptr ) const;
 
     // HACK: shortcut between frame and formatting
     // It's your own fault if you cast void* incorrectly! In any case check
     // the void* for 0.
     virtual bool Prepare( const PrepareHint ePrep = PREP_CLEAR,
-                          const void *pVoid = 0, bool bNotify = true );
+                          const void *pVoid = nullptr, bool bNotify = true );
 
     // true if it is the correct class, false otherwise
     inline bool IsLayoutFrm() const;
@@ -856,7 +856,7 @@ public:
 
 public:
     // if writer is NULL, dumps the layout structure as XML in layout.xml
-    virtual void dumpAsXml(xmlTextWriterPtr writer = NULL) const;
+    virtual void dumpAsXml(xmlTextWriterPtr writer = nullptr) const;
     void dumpInfosAsXml(xmlTextWriterPtr writer) const;
     virtual void dumpAsXmlAttributes(xmlTextWriterPtr writer) const;
     void dumpChildrenAsXml(xmlTextWriterPtr writer) const;
@@ -1004,7 +1004,7 @@ inline const SwFrm *SwFrm::FindFooterOrHeader() const
 }
 inline SwTabFrm *SwFrm::FindTabFrm()
 {
-    return IsInTab() ? ImplFindTabFrm() : 0;
+    return IsInTab() ? ImplFindTabFrm() : nullptr;
 }
 inline const SwFootnoteBossFrm *SwFrm::FindFootnoteBossFrm( bool bFootnote ) const
 {
@@ -1012,32 +1012,32 @@ inline const SwFootnoteBossFrm *SwFrm::FindFootnoteBossFrm( bool bFootnote ) con
 }
 inline SwFootnoteFrm *SwFrm::FindFootnoteFrm()
 {
-    return IsInFootnote() ? ImplFindFootnoteFrm() : 0;
+    return IsInFootnote() ? ImplFindFootnoteFrm() : nullptr;
 }
 inline SwFlyFrm *SwFrm::FindFlyFrm()
 {
-    return IsInFly() ? ImplFindFlyFrm() : 0;
+    return IsInFly() ? ImplFindFlyFrm() : nullptr;
 }
 inline SwSectionFrm *SwFrm::FindSctFrm()
 {
-    return IsInSct() ? ImplFindSctFrm() : 0;
+    return IsInSct() ? ImplFindSctFrm() : nullptr;
 }
 
 inline const SwTabFrm *SwFrm::FindTabFrm() const
 {
-    return IsInTab() ? const_cast<SwFrm*>(this)->ImplFindTabFrm() : 0;
+    return IsInTab() ? const_cast<SwFrm*>(this)->ImplFindTabFrm() : nullptr;
 }
 inline const SwFootnoteFrm *SwFrm::FindFootnoteFrm() const
 {
-    return IsInFootnote() ? const_cast<SwFrm*>(this)->ImplFindFootnoteFrm() : 0;
+    return IsInFootnote() ? const_cast<SwFrm*>(this)->ImplFindFootnoteFrm() : nullptr;
 }
 inline const SwFlyFrm *SwFrm::FindFlyFrm() const
 {
-    return IsInFly() ? const_cast<SwFrm*>(this)->ImplFindFlyFrm() : 0;
+    return IsInFly() ? const_cast<SwFrm*>(this)->ImplFindFlyFrm() : nullptr;
 }
 inline const SwSectionFrm *SwFrm::FindSctFrm() const
 {
-    return IsInSct() ? const_cast<SwFrm*>(this)->ImplFindSctFrm() : 0;
+    return IsInSct() ? const_cast<SwFrm*>(this)->ImplFindSctFrm() : nullptr;
 }
 inline SwFrm *SwFrm::FindNext()
 {

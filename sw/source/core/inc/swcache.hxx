@@ -209,7 +209,7 @@ public:
 
     /// Shorthand for those who know that they did not override isAvailable()
     /// FIXME: wtf?
-    bool IsAvail() const { return pObj != 0; }
+    bool IsAvail() const { return pObj != nullptr; }
 };
 
 inline void SwCache::IncreaseMax( const sal_uInt16 nAdd )
@@ -238,25 +238,25 @@ inline SwCacheObj *SwCache::Next( SwCacheObj *pCacheObj)
     if ( pCacheObj )
         return pCacheObj->GetNext();
     else
-        return NULL;
+        return nullptr;
 }
 
 inline SwCacheAccess::SwCacheAccess( SwCache &rC, const void *pOwn, bool bSeek ) :
     rCache( rC ),
-    pObj( 0 ),
+    pObj( nullptr ),
     pOwner( pOwn )
 {
-    if ( bSeek && pOwner && 0 != (pObj = rCache.Get( pOwner )) )
+    if ( bSeek && pOwner && nullptr != (pObj = rCache.Get( pOwner )) )
         pObj->Lock();
 }
 
 inline SwCacheAccess::SwCacheAccess( SwCache &rC, const void *pOwn,
                               const sal_uInt16 nIndex ) :
     rCache( rC ),
-    pObj( 0 ),
+    pObj( nullptr ),
     pOwner( pOwn )
 {
-    if ( pOwner && 0 != (pObj = rCache.Get( pOwner, nIndex )) )
+    if ( pOwner && nullptr != (pObj = rCache.Get( pOwner, nIndex )) )
         pObj->Lock();
 }
 

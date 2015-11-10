@@ -212,7 +212,7 @@ void SwXMLImportTableItemMapper_Impl::finished(
                 continue; // already read fo:margin-top etc.
             }
             // first get item from itemset
-            SfxPoolItem const* pItem = 0;
+            SfxPoolItem const* pItem = nullptr;
             SfxItemState eState =
                 rSet.GetItemState(Ids[i][0], true, &pItem);
 
@@ -294,7 +294,7 @@ SvXMLImportContext *SwXMLItemSetContext_Impl::CreateChildContext(
                    const SvXMLItemMapEntry& rEntry,
                    const SvXMLUnitConverter& _rUnitConv )
 {
-    SvXMLImportContext *pContext = 0;
+    SvXMLImportContext *pContext = nullptr;
 
     switch( rEntry.nWhichId )
     {

@@ -94,7 +94,7 @@ public:
 
     // "pure virtual methods" of SfxPoolItem
     virtual bool            operator==( const SfxPoolItem& ) const override;
-    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const override;
+    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = nullptr ) const override;
 
     void InvalidateTOXMark();
 
@@ -426,7 +426,7 @@ protected:
 public:
     SwTOXBase( const SwTOXType* pTyp, const SwForm& rForm,
                sal_uInt16 nCreaType, const OUString& rTitle );
-    SwTOXBase( const SwTOXBase& rCopy, SwDoc* pDoc = 0 );
+    SwTOXBase( const SwTOXBase& rCopy, SwDoc* pDoc = nullptr );
     virtual ~SwTOXBase();
 
     virtual bool GetInfo( SfxPoolItem& rInfo ) const override;

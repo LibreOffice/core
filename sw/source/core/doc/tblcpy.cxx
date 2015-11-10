@@ -176,7 +176,7 @@ namespace
         maCols.push_front(0);
         sal_uInt16 nCnt = 0;
         for( auto pLine : rTable.GetTabLines() )
-            addLine( nCnt, pLine->GetTabBoxes(), 0, rTable.IsNewModel() );
+            addLine( nCnt, pLine->GetTabBoxes(), nullptr, rTable.IsNewModel() );
     }
 
     TableStructure::TableStructure( const SwTable& rTable,
@@ -226,7 +226,7 @@ namespace
                     addLine( nCnt, rLines[nLine]->GetTabBoxes(),
                              pSelBoxes, rTable.IsNewModel() );
                     if( bNoSelection )
-                        pSelBoxes = 0;
+                        pSelBoxes = nullptr;
                 }
             }
             if( bNoSelection && mnStartCol < USHRT_MAX )
@@ -318,7 +318,7 @@ namespace
                 mnStartCol = (sal_uInt16)maLines[nLine].size();
                 if( pSelBoxes->size() < 2 )
                 {
-                    pSelBoxes = 0;
+                    pSelBoxes = nullptr;
                     aInfo.mbSelected = false;
                 }
             }
@@ -339,8 +339,8 @@ namespace
             incColSpan( nLine, rnCol );
         }
         aInfo.mnColSpan = rnCol - nLeftCol;
-        aInfo.mpCopy = 0;
-        aInfo.mpBox = bCovered ? 0 : pBox;
+        aInfo.mpCopy = nullptr;
+        aInfo.mpBox = bCovered ? nullptr : pBox;
         maLines[nLine].push_back( aInfo );
         if( aInfo.mbSelected )
         {
@@ -374,7 +374,7 @@ namespace
             while( mnAddLine )
             {
                 SwTableLine *pLine = rLines[ nLineCount - mnAddLine ];
-                addLine( nLine, pLine->GetTabBoxes(), 0, rTable.IsNewModel() );
+                addLine( nLine, pLine->GetTabBoxes(), nullptr, rTable.IsNewModel() );
                 --mnAddLine;
             }
         }
@@ -462,11 +462,11 @@ namespace
                                 pCurrBox = pFirstBox;
                             else
                             {
-                                rInfo.mbSelected = rInfo.mpCopy == 0;
+                                rInfo.mbSelected = rInfo.mpCopy == nullptr;
                                 break;
                             }
                         }
-                        rInfo.mbSelected = rInfo.mpCopy == 0;
+                        rInfo.mbSelected = rInfo.mpCopy == nullptr;
                     }
                 }
             }
@@ -519,7 +519,7 @@ static void lcl_CpyBox( const SwTable& rCpyTable, const SwTableBox* pCpyBox,
     // Do not create empty Sections, otherwise they will be deleted!
     std::unique_ptr< SwNodeRange > pRg( pCpyBox ?
         new SwNodeRange ( *pCpyBox->GetSttNd(), 1,
-        *pCpyBox->GetSttNd()->EndOfSectionNode() ) : 0 );
+        *pCpyBox->GetSttNd()->EndOfSectionNode() ) : nullptr );
 
     SwNodeIndex aInsIdx( *pDstBox->GetSttNd(), bDelContent ? 1 :
                         pDstBox->GetSttNd()->EndOfSectionIndex() -
@@ -533,7 +533,7 @@ static void lcl_CpyBox( const SwTable& rCpyTable, const SwTableBox* pCpyBox,
 
     SwNodeIndex aSavePos( aInsIdx, -1 );
     if( pRg.get() )
-        pCpyDoc->GetDocumentContentOperationsManager().CopyWithFlyInFly( *pRg, 0, aInsIdx, NULL, false );
+        pCpyDoc->GetDocumentContentOperationsManager().CopyWithFlyInFly( *pRg, 0, aInsIdx, nullptr, false );
     else
         pDoc->GetNodes().MakeTextNode( aInsIdx, pDoc->GetDfltTextFormatColl() );
     ++aSavePos;
@@ -666,7 +666,7 @@ bool SwTable::InsNewTable( const SwTable& rCpyTable, const SwSelBoxes& rSelBoxes
     TableStructure aCopyStruct( rCpyTable );
 
     // Analyze target structure (from start box) and selected substructure
-    _FndBox aFndBox( 0, 0 );
+    _FndBox aFndBox( nullptr, nullptr );
     {   // get all boxes/lines
         _FndPara aPara( rSelBoxes, &aFndBox );
         ForEach_FndLineCopyCol( GetTabLines(), &aPara );
@@ -722,7 +722,7 @@ bool SwTable::InsNewTable( const SwTable& rCpyTable, const SwSelBoxes& rSelBoxes
 bool SwTable::InsTable( const SwTable& rCpyTable, const SwNodeIndex& rSttBox,
                         SwUndoTableCpyTable* pUndo )
 {
-    SetHTMLTableLayout( 0 );    // Delete HTML Layout
+    SetHTMLTableLayout( nullptr );    // Delete HTML Layout
 
     SwDoc* pDoc = GetFrameFormat()->GetDoc();
 
@@ -735,7 +735,7 @@ bool SwTable::InsTable( const SwTable& rCpyTable, const SwNodeIndex& rSttBox,
     OSL_ENSURE( pMyBox, "Index is not in a Box in this Table" );
 
     // First delete the Table's Frames
-    _FndBox aFndBox( 0, 0 );
+    _FndBox aFndBox( nullptr, nullptr );
     aFndBox.DelFrms( pTableNd->GetTable() );
 
     SwDoc* pCpyDoc = rCpyTable.GetFrameFormat()->GetDoc();
@@ -764,11 +764,11 @@ bool SwTable::InsTable( const SwTable& rCpyTable, const SwNodeIndex& rSttBox,
             // Do not create empty Sections, otherwise they will be deleted!
             lcl_CpyBox( rCpyTable, pCpyBox, *this, pMyBox, bDelContent, pUndo );
 
-            if( 0 == (pTmp = pCpyBox->FindNextBox( rCpyTable, pCpyBox, false )))
+            if( nullptr == (pTmp = pCpyBox->FindNextBox( rCpyTable, pCpyBox, false )))
                 break;      // no more Boxes
             pCpyBox = pTmp;
 
-            if( 0 == ( pTmp = pMyBox->FindNextBox( *this, pMyBox, false )))
+            if( nullptr == ( pTmp = pMyBox->FindNextBox( *this, pMyBox, false )))
                 bDelContent = false;  // No space left?
             else
                 pMyBox = const_cast<SwTableBox*>(pTmp);
@@ -803,7 +803,7 @@ bool SwTable::InsTable( const SwTable& rCpyTable, const SwSelBoxes& rSelBoxes,
 {
     OSL_ENSURE( !rSelBoxes.empty(), "Missing selection" );
 
-    SetHTMLTableLayout( 0 );    // Delete HTML Layout
+    SetHTMLTableLayout( nullptr );    // Delete HTML Layout
 
     if( IsNewModel() || rCpyTable.IsNewModel() )
         return InsNewTable( rCpyTable, rSelBoxes, pUndo );
@@ -817,8 +817,8 @@ bool SwTable::InsTable( const SwTable& rCpyTable, const SwSelBoxes& rSelBoxes,
 
     SwTableBox *pSttBox = rSelBoxes[0];
 
-    _FndLine *pFLine, *pInsFLine = 0;
-    _FndBox aFndBox( 0, 0 );
+    _FndLine *pFLine, *pInsFLine = nullptr;
+    _FndBox aFndBox( nullptr, nullptr );
     // Find all Boxes/Lines
     {
         _FndPara aPara( rSelBoxes, &aFndBox );

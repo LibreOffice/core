@@ -382,7 +382,7 @@ void SidebarTextControl::Command( const CommandEvent& rCEvt )
             }
             else
             {
-                HandleScrollCommand( rCEvt, 0 , mrSidebarWin.Scrollbar());
+                HandleScrollCommand( rCEvt, nullptr , mrSidebarWin.Scrollbar());
             }
         }
         else

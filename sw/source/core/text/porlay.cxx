@@ -182,7 +182,7 @@ bool SwLineLayout::Format( SwTextFormatInfo &rInf )
 SwMarginPortion *SwLineLayout::CalcLeftMargin()
 {
     SwMarginPortion *pLeft = (GetPortion() && GetPortion()->IsMarginPortion()) ?
-        static_cast<SwMarginPortion *>(GetPortion()) : 0;
+        static_cast<SwMarginPortion *>(GetPortion()) : nullptr;
     if( !GetPortion() )
          SetPortion(SwTextPortion::CopyLinePortion(*this));
     if( !pLeft )
@@ -197,7 +197,7 @@ SwMarginPortion *SwLineLayout::CalcLeftMargin()
         pLeft->Width( 0 );
         pLeft->SetLen( 0 );
         pLeft->SetAscent( 0 );
-        pLeft->SetPortion( NULL );
+        pLeft->SetPortion( nullptr );
         pLeft->SetFixWidth(0);
     }
 
@@ -213,7 +213,7 @@ SwMarginPortion *SwLineLayout::CalcLeftMargin()
                 GetKanaComp().pop_front();
         }
         else
-            pPos = 0;
+            pPos = nullptr;
     }
     return pLeft;
 }
@@ -260,7 +260,7 @@ void SwLineLayout::CalcLine( SwTextFormatter &rLine, SwTextFormatInfo &rInf )
     SetHanging( false );
 
     bool bTmpDummy = !GetLen();
-    SwFlyCntPortion* pFlyCnt = 0;
+    SwFlyCntPortion* pFlyCnt = nullptr;
     if( bTmpDummy )
     {
         nFlyAscent = 0;
@@ -922,7 +922,7 @@ void SwScriptInfo::InitScriptInfo( const SwTextNode& rNode, bool bRTL )
         // we search for connecting opportunities (kashida)
         else if ( bAdjustBlock && i18n::ScriptType::COMPLEX == nScript )
         {
-            SwScanner aScanner( rNode, rNode.GetText(), 0, ModelToViewHelper(),
+            SwScanner aScanner( rNode, rNode.GetText(), nullptr, ModelToViewHelper(),
                                 i18n::WordType::DICTIONARY_WORD,
                                 nLastKashida, nChg );
 
@@ -1210,7 +1210,7 @@ void SwScriptInfo::UpdateBidiInfo( const OUString& rText )
     nError = U_ZERO_ERROR;
 
     ubidi_setPara( pBidi, reinterpret_cast<const UChar *>(rText.getStr()), rText.getLength(),    // UChar != sal_Unicode in MinGW
-                   nDefaultDir, NULL, &nError );
+                   nDefaultDir, nullptr, &nError );
     nError = U_ZERO_ERROR;
     int nCount = ubidi_countRuns( pBidi, &nError );
     int32_t nStart = 0;
@@ -1938,7 +1938,7 @@ SwScriptInfo* SwScriptInfo::GetScriptInfo( const SwTextNode& rTNd,
                                            bool bAllowInvalid )
 {
     SwIterator<SwTextFrm,SwTextNode> aIter( rTNd );
-    SwScriptInfo* pScriptInfo = 0;
+    SwScriptInfo* pScriptInfo = nullptr;
 
     for( SwTextFrm* pLast = aIter.First(); pLast; pLast = aIter.Next() )
     {
@@ -1947,7 +1947,7 @@ SwScriptInfo* SwScriptInfo::GetScriptInfo( const SwTextNode& rTNd,
         {
             if ( bAllowInvalid || COMPLETE_STRING == pScriptInfo->GetInvalidityA() )
                 break;
-            pScriptInfo = 0;
+            pScriptInfo = nullptr;
         }
     }
 
@@ -1996,9 +1996,9 @@ const SwDropPortion *SwParaPortion::FindDropPortion() const
             pPos = pPos->GetPortion();
         if( pPos && pPos->IsDropPortion() )
             return static_cast<const SwDropPortion *>(pPos);
-        pLay = pLay->GetLen() ? NULL : pLay->GetNext();
+        pLay = pLay->GetLen() ? nullptr : pLay->GetNext();
     }
-    return NULL;
+    return nullptr;
 }
 
 void SwLineLayout::Init( SwLinePortion* pNextPortion )
@@ -2062,7 +2062,7 @@ void SwScriptInfo::selectHiddenTextProperty(const SwTextNode& rNode, MultiSelect
     assert((rNode.GetText().isEmpty() && rHiddenMulti.GetTotalRange().Len() == 1)
         || (rNode.GetText().getLength() == rHiddenMulti.GetTotalRange().Len()));
 
-    const SfxPoolItem* pItem = 0;
+    const SfxPoolItem* pItem = nullptr;
     if( SfxItemState::SET == rNode.GetSwAttrSet().GetItemState( RES_CHRATR_HIDDEN, true, &pItem ) &&
         static_cast<const SvxCharHiddenItem*>(pItem)->GetValue() )
     {

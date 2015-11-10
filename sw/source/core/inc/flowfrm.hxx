@@ -94,7 +94,7 @@ class SwFlowFrm
         optional input parameter - pointer to frame, which should be used
         instead of the direct previous frame.
     */
-    const SwFrm* _GetPrevFrmForUpperSpaceCalc( const SwFrm* _pProposedPrevFrm = 0L ) const;
+    const SwFrm* _GetPrevFrmForUpperSpaceCalc( const SwFrm* _pProposedPrevFrm = nullptr ) const;
 
     /** method to detemine the upper space amount, which is considered for
         the previous frame
@@ -158,10 +158,10 @@ public:
     bool IsPrevObjMove() const;
 
     /** hook tree onto new parent with minimal operations and notifications */
-    void MoveSubTree( SwLayoutFrm* pParent, SwFrm* pSibling = 0 );
+    void MoveSubTree( SwLayoutFrm* pParent, SwFrm* pSibling = nullptr );
 
     bool HasFollow() const { return m_pFollow != nullptr; }
-    bool IsFollow() const { return 0 != m_pPrecede; }
+    bool IsFollow() const { return nullptr != m_pPrecede; }
     bool IsAnFollow( const SwFlowFrm *pFlow ) const;
     const SwFlowFrm *GetFollow() const { return m_pFollow; }
           SwFlowFrm *GetFollow()       { return m_pFollow; }
@@ -190,8 +190,8 @@ public:
         @param _bConsiderGrid
         optional input parameter - consider the page grid while calculating?
     */
-    SwTwips CalcUpperSpace( const SwBorderAttrs *pAttrs = NULL,
-                            const SwFrm* pPr = NULL,
+    SwTwips CalcUpperSpace( const SwBorderAttrs *pAttrs = nullptr,
+                            const SwFrm* pPr = nullptr,
                             const bool _bConsiderGrid = true ) const;
 
     /** method to determine the upper space amount, which is considered for
@@ -203,7 +203,7 @@ public:
     SwTwips GetUpperSpaceAmountConsideredForPrevFrmAndPageGrid() const;
 
     /** calculation of lower space */
-    SwTwips CalcLowerSpace( const SwBorderAttrs* _pAttrs = 0L ) const;
+    SwTwips CalcLowerSpace( const SwBorderAttrs* _pAttrs = nullptr ) const;
 
     /** calculation of the additional space to be considered, if flow frame
         is the last inside a table cell
@@ -218,7 +218,7 @@ public:
         @return SwTwips
     */
     SwTwips CalcAddLowerSpaceAsLastInTableCell(
-                                    const SwBorderAttrs* _pAttrs = 0L ) const;
+                                    const SwBorderAttrs* _pAttrs = nullptr ) const;
 
     void CheckKeep();
 
@@ -233,7 +233,7 @@ public:
 
 inline bool SwFlowFrm::IsFwdMoveAllowed()
 {
-    return m_rThis.GetIndPrev() != 0;
+    return m_rThis.GetIndPrev() != nullptr;
 }
 
 //use this to protect a SwLayoutFrm for a given scope from getting merged with

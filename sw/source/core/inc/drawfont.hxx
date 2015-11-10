@@ -114,7 +114,7 @@ public:
                     vcl::TextLayoutCache const*const pCachedVclData = nullptr)
         : m_pCachedVclData(pCachedVclData)
     {
-        m_pFrm = NULL;
+        m_pFrm = nullptr;
         m_pSh = pSh;
         m_pOut = &rOut;
         m_pScriptInfo = pSI;
@@ -127,7 +127,7 @@ public:
         m_nNumberOfBlanks = 0;
         m_nCursorBidiLevel = 0;
         m_bBullet = bBullet;
-        m_pUnderFnt = 0;
+        m_pUnderFnt = nullptr;
         m_bGreyWave = false;
         m_bSpaceStop = false;
         m_bSnapToGrid = false;
@@ -136,11 +136,11 @@ public:
 
         // These values are initialized but have to be set explicitly via their
         // Set-function before they may be accessed by their Get-function:
-        m_pWrong = 0;
-        m_pGrammarCheck = 0;
-        m_pSmartTags = 0;
-        m_pFnt = 0;
-        m_pHyphPos = 0;
+        m_pWrong = nullptr;
+        m_pGrammarCheck = nullptr;
+        m_pSmartTags = nullptr;
+        m_pFnt = nullptr;
+        m_pHyphPos = nullptr;
         m_nLeft = 0;
         m_nRight = 0;
         m_nKanaDiff = 0;
@@ -605,7 +605,7 @@ public:
     // sets a new color at the output device if necessary if a font is passed
     // as argument, the change if made to the font otherwise the font at the
     // output device is changed returns if the font has been changed
-    bool ApplyAutoColor( vcl::Font* pFnt = 0 );
+    bool ApplyAutoColor( vcl::Font* pFnt = nullptr );
 };
 
 #endif

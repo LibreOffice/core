@@ -32,23 +32,23 @@ SwUndoInsNum::SwUndoInsNum( const SwNumRule& rOldRule,
                             const SwNumRule& rNewRule,
                             SwUndoId nUndoId )
     : SwUndo( nUndoId ),
-    aNumRule( rNewRule ), pHistory( 0 ), nSttSet( ULONG_MAX ),
+    aNumRule( rNewRule ), pHistory( nullptr ), nSttSet( ULONG_MAX ),
     pOldNumRule( new SwNumRule( rOldRule )), nLRSavePos( 0 )
 {
 }
 
 SwUndoInsNum::SwUndoInsNum( const SwPaM& rPam, const SwNumRule& rRule )
     : SwUndo( UNDO_INSNUM ), SwUndRng( rPam ),
-    aNumRule( rRule ), pHistory( 0 ),
-    nSttSet( ULONG_MAX ), pOldNumRule( 0 ), nLRSavePos( 0 )
+    aNumRule( rRule ), pHistory( nullptr ),
+    nSttSet( ULONG_MAX ), pOldNumRule( nullptr ), nLRSavePos( 0 )
 {
 }
 
 SwUndoInsNum::SwUndoInsNum( const SwPosition& rPos, const SwNumRule& rRule,
                             const OUString& rReplaceRule )
     : SwUndo( UNDO_INSNUM ),
-    aNumRule( rRule ), pHistory( 0 ),
-    nSttSet( ULONG_MAX ), pOldNumRule( 0 ),
+    aNumRule( rRule ), pHistory( nullptr ),
+    nSttSet( ULONG_MAX ), pOldNumRule( nullptr ),
     sReplaceRule( rReplaceRule ), nLRSavePos( 0 )
 {
     // No selection!
@@ -82,10 +82,10 @@ void SwUndoInsNum::UndoImpl(::sw::UndoRedoContext & rContext)
     {
         SwTextNode* pNd;
         if( ULONG_MAX != nSttSet &&
-            0 != ( pNd = rDoc.GetNodes()[ nSttSet ]->GetTextNode() ))
+            nullptr != ( pNd = rDoc.GetNodes()[ nSttSet ]->GetTextNode() ))
                 pNd->SetListRestart( true );
         else
-            pNd = 0;
+            pNd = nullptr;
 
         if( nLRSavePos )
         {
@@ -298,7 +298,7 @@ void SwUndoNumOrNoNum::UndoImpl(::sw::UndoRedoContext & rContext)
     SwNodeIndex aIdx( rContext.GetDoc().GetNodes(), nIdx );
     SwTextNode * pTextNd = aIdx.GetNode().GetTextNode();
 
-    if (NULL != pTextNd)
+    if (nullptr != pTextNd)
     {
         pTextNd->SetCountedInList(mbOldNum);
     }
@@ -310,7 +310,7 @@ void SwUndoNumOrNoNum::RedoImpl(::sw::UndoRedoContext & rContext)
     SwNodeIndex aIdx( rContext.GetDoc().GetNodes(), nIdx );
     SwTextNode * pTextNd = aIdx.GetNode().GetTextNode();
 
-    if (NULL != pTextNd)
+    if (nullptr != pTextNd)
     {
         pTextNd->SetCountedInList(mbNewNum);
     }

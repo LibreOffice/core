@@ -78,8 +78,8 @@ void SwOleClient::RequestNewObjectArea( Rectangle& aLogRect )
 
     rSh.EndAllAction();
 
-    SwRect aFrm( rSh.GetAnyCurRect( RECT_FLY_EMBEDDED,     0, GetObject() )),
-           aPrt( rSh.GetAnyCurRect( RECT_FLY_PRT_EMBEDDED, 0, GetObject() ));
+    SwRect aFrm( rSh.GetAnyCurRect( RECT_FLY_EMBEDDED,     nullptr, GetObject() )),
+           aPrt( rSh.GetAnyCurRect( RECT_FLY_PRT_EMBEDDED, nullptr, GetObject() ));
     aLogRect.SetPos( aPrt.Pos() + aFrm.Pos() );
     aLogRect.SetSize( aPrt.SSize() );
 }
@@ -87,7 +87,7 @@ void SwOleClient::RequestNewObjectArea( Rectangle& aLogRect )
 void SwOleClient::ObjectAreaChanged()
 {
     SwWrtShell &rSh  = static_cast<SwView*>(GetViewShell())->GetWrtShell();
-    SwRect aFrm( rSh.GetAnyCurRect( RECT_FLY_EMBEDDED,     0, GetObject() ));
+    SwRect aFrm( rSh.GetAnyCurRect( RECT_FLY_EMBEDDED,     nullptr, GetObject() ));
     if ( !aFrm.IsOver( rSh.VisArea() ) )
         rSh.MakeVisible( aFrm );
 }

@@ -144,7 +144,7 @@ void SwDoc::SetOutlineNumRule( const SwNumRule& rRule )
     if( !GetFootnoteIdxs().empty() && FTNNUM_CHAPTER == GetFootnoteInfo().eNum )
         GetFootnoteIdxs().UpdateAllFootnote();
 
-    getIDocumentFieldsAccess().UpdateExpFields(NULL, true);
+    getIDocumentFieldsAccess().UpdateExpFields(nullptr, true);
 
     getIDocumentState().SetModified();
 }
@@ -216,7 +216,7 @@ bool SwDoc::OutlineUpDown( const SwPaM& rPam, short nOffset )
     /* Find the last occupied level (backward). */
     for (n = MAXLEVEL - 1; n > 0; n--)
     {
-        if (aCollArr[n] != 0)
+        if (aCollArr[n] != nullptr)
             break;
     }
 
@@ -224,7 +224,7 @@ bool SwDoc::OutlineUpDown( const SwPaM& rPam, short nOffset )
        unoccupied) until a valid level is found. If no occupied level
        was found n is 0 and aCollArr[0] is 0. In this case no demoting
        is possible. */
-    if (aCollArr[n] != 0)
+    if (aCollArr[n] != nullptr)
     {
         while (n < MAXLEVEL - 1)
         {
@@ -245,7 +245,7 @@ bool SwDoc::OutlineUpDown( const SwPaM& rPam, short nOffset )
     /* Find the first occupied level (forward). */
     for (n = 0; n < MAXLEVEL - 1; n++)
     {
-        if (aCollArr[n] != 0)
+        if (aCollArr[n] != nullptr)
             break;
     }
 
@@ -253,7 +253,7 @@ bool SwDoc::OutlineUpDown( const SwPaM& rPam, short nOffset )
        unoccupied) until a valid level is found. If no occupied level
        was found n is MAXLEVEL - 1 and aCollArr[MAXLEVEL - 1] is 0. In
        this case no demoting is possible. */
-    if (aCollArr[n] != 0)
+    if (aCollArr[n] != nullptr)
     {
         while (n > 0)
         {
@@ -308,7 +308,7 @@ bool SwDoc::OutlineUpDown( const SwPaM& rPam, short nOffset )
            If outline level n has no assigned paragraph style
            aMoveArr[n] is set to -1.
         */
-        if (aCollArr[n] != NULL)
+        if (aCollArr[n] != nullptr)
         {
             int m = n;
             int nCount = nNum;
@@ -317,7 +317,7 @@ bool SwDoc::OutlineUpDown( const SwPaM& rPam, short nOffset )
             {
                 m += nStep;
 
-                if (aCollArr[m] != NULL)
+                if (aCollArr[m] != nullptr)
                     nCount--;
             }
 
@@ -363,7 +363,7 @@ bool SwDoc::OutlineUpDown( const SwPaM& rPam, short nOffset )
 
     if (GetIDocumentUndoRedo().DoesUndo())
     {
-        GetIDocumentUndoRedo().StartUndo(UNDO_OUTLINE_LR, NULL);
+        GetIDocumentUndoRedo().StartUndo(UNDO_OUTLINE_LR, nullptr);
         SwUndo *const pUndoOLR( new SwUndoOutlineLeftRight( rPam, nOffset ) );
         GetIDocumentUndoRedo().AppendUndo(pUndoOLR);
     }
@@ -385,7 +385,7 @@ bool SwDoc::OutlineUpDown( const SwPaM& rPam, short nOffset )
             {
                 pColl = aCollArr[ aMoveArr[nLevel] ];
 
-                if (pColl != NULL)
+                if (pColl != nullptr)
                     pTextNd->ChgFormatColl( pColl );
             }
 
@@ -401,7 +401,7 @@ bool SwDoc::OutlineUpDown( const SwPaM& rPam, short nOffset )
     }
     if (GetIDocumentUndoRedo().DoesUndo())
     {
-        GetIDocumentUndoRedo().EndUndo(UNDO_OUTLINE_LR, NULL);
+        GetIDocumentUndoRedo().EndUndo(UNDO_OUTLINE_LR, nullptr);
     }
 
     ChkCondColls();
@@ -829,18 +829,18 @@ OUString SwDoc::SetNumRule( const SwPaM& rPam,
 {
     OUString sListId;
 
-    SwUndoInsNum * pUndo = NULL;
+    SwUndoInsNum * pUndo = nullptr;
     if (GetIDocumentUndoRedo().DoesUndo())
     {
         // Start/End for attributes!
-        GetIDocumentUndoRedo().StartUndo( UNDO_INSNUM, NULL );
+        GetIDocumentUndoRedo().StartUndo( UNDO_INSNUM, nullptr );
         pUndo = new SwUndoInsNum( rPam, rRule );
         GetIDocumentUndoRedo().AppendUndo(pUndo);
     }
 
     SwNumRule* pNewOrChangedNumRule = FindNumRulePtr( rRule.GetName() );
     bool bNewNumRuleCreated = false;
-    if ( pNewOrChangedNumRule == NULL )
+    if ( pNewOrChangedNumRule == nullptr )
     {
         // create new numbering rule based on given one
         pNewOrChangedNumRule = ( *mpNumRuleTable )[MakeNumRule( rRule.GetName(), &rRule )];
@@ -893,7 +893,7 @@ OUString SwDoc::SetNumRule( const SwPaM& rPam,
     {
         SwTextNode * pTextNd = rPam.GetPoint()->nNode.GetNode().GetTextNode();
         // robust code: consider case that the PaM doesn't denote a text node - e.g. it denotes a graphic node
-        if ( pTextNd != NULL )
+        if ( pTextNd != nullptr )
         {
             SwNumRule * pRule = pTextNd->GetNumRule();
 
@@ -936,7 +936,7 @@ OUString SwDoc::SetNumRule( const SwPaM& rPam,
 
     if (GetIDocumentUndoRedo().DoesUndo())
     {
-        GetIDocumentUndoRedo().EndUndo( UNDO_INSNUM, NULL );
+        GetIDocumentUndoRedo().EndUndo( UNDO_INSNUM, nullptr );
     }
 
     getIDocumentState().SetModified();
@@ -1046,7 +1046,7 @@ void SwDoc::ChgNumRuleFormats( const SwNumRule& rRule )
     SwNumRule* pRule = FindNumRulePtr( rRule.GetName() );
     if( pRule )
     {
-        SwUndoInsNum* pUndo = 0;
+        SwUndoInsNum* pUndo = nullptr;
         if (GetIDocumentUndoRedo().DoesUndo())
         {
             pUndo = new SwUndoInsNum( *pRule, rRule );
@@ -1127,11 +1127,11 @@ bool SwDoc::ReplaceNumRule( const SwPosition& rPos,
               *pNewRule = FindNumRulePtr( rNewRule );
     if( pOldRule && pNewRule && pOldRule != pNewRule )
     {
-        SwUndoInsNum* pUndo = 0;
+        SwUndoInsNum* pUndo = nullptr;
         if (GetIDocumentUndoRedo().DoesUndo())
         {
             // Start/End for attributes!
-            GetIDocumentUndoRedo().StartUndo( UNDO_START, NULL );
+            GetIDocumentUndoRedo().StartUndo( UNDO_START, nullptr );
             pUndo = new SwUndoInsNum( rPos, *pNewRule, rOldRule );
             GetIDocumentUndoRedo().AppendUndo(pUndo);
         }
@@ -1140,7 +1140,7 @@ bool SwDoc::ReplaceNumRule( const SwPosition& rPos,
         pOldRule->GetTextNodeList( aTextNodeList );
         if ( aTextNodeList.size() > 0 )
         {
-            SwRegHistory aRegH( pUndo ? pUndo->GetHistory() : 0 );
+            SwRegHistory aRegH( pUndo ? pUndo->GetHistory() : nullptr );
             sal_uInt16 nChgFormatLevel = 0;
             for( sal_uInt8 n = 0; n < MAXLEVEL; ++n )
             {
@@ -1168,7 +1168,7 @@ bool SwDoc::ReplaceNumRule( const SwPosition& rPos,
                     pTextNd->NumRuleChgd();
                 }
             }
-            GetIDocumentUndoRedo().EndUndo( UNDO_END, NULL );
+            GetIDocumentUndoRedo().EndUndo( UNDO_END, nullptr );
             getIDocumentState().SetModified();
 
             bRet = true;
@@ -1187,7 +1187,7 @@ namespace
         OUString sListId;
 
         ListStyleData()
-            : pReplaceNumRule( 0 ),
+            : pReplaceNumRule( nullptr ),
               bCreateNewList( false ),
               sListId()
         {}
@@ -1216,7 +1216,7 @@ void SwDoc::MakeUniqueNumRules(const SwPaM & rPaM)
             {
                 ListStyleData aListStyleData = aMyNumRuleMap[pRule];
 
-                if ( aListStyleData.pReplaceNumRule == 0 )
+                if ( aListStyleData.pReplaceNumRule == nullptr )
                 {
                     if (bFirst)
                     {
@@ -1228,7 +1228,7 @@ void SwDoc::MakeUniqueNumRules(const SwPaM & rPaM)
                                             aListStyleData.sListId, true ));
                     }
 
-                    if ( aListStyleData.pReplaceNumRule == 0 )
+                    if ( aListStyleData.pReplaceNumRule == nullptr )
                     {
                         aListStyleData.pReplaceNumRule = new SwNumRule(*pRule);
                         aListStyleData.pReplaceNumRule->SetName( GetUniqueNumRuleName(), getIDocumentListsAccess() );
@@ -1296,16 +1296,16 @@ void SwDoc::DelNumRules( const SwPaM& rPam )
         GetIDocumentUndoRedo().AppendUndo(pUndo);
     }
     else
-        pUndo = 0;
+        pUndo = nullptr;
 
-    SwRegHistory aRegH( pUndo ? pUndo->GetHistory() : 0 );
+    SwRegHistory aRegH( pUndo ? pUndo->GetHistory() : nullptr );
 
     SwNumRuleItem aEmptyRule( aEmptyOUStr );
-    const SwNode* pOutlNd = 0;
+    const SwNode* pOutlNd = nullptr;
     for( ; nStt <= nEnd; ++nStt )
     {
         SwTextNode* pTNd = GetNodes()[ nStt ]->GetTextNode();
-        SwNumRule* pNumRuleOfTextNode = pTNd ? pTNd->GetNumRule() : 0;
+        SwNumRule* pNumRuleOfTextNode = pTNd ? pTNd->GetNumRule() : nullptr;
         if ( pTNd && pNumRuleOfTextNode )
         {
             // recognize changes of attribute for undo
@@ -1399,7 +1399,7 @@ static bool lcl_GotoNextPrevNum( SwPosition& rPos, bool bNext,
                             bool bOverUpper, sal_uInt8* pUpper, sal_uInt8* pLower )
 {
     const SwTextNode* pNd = rPos.nNode.GetNode().GetTextNode();
-    if( !pNd || 0 == pNd->GetNumRule() )
+    if( !pNd || nullptr == pNd->GetNumRule() )
         return false;
 
     sal_uInt8 nSrchNum = static_cast<sal_uInt8>(pNd->GetActualListLevel());
@@ -1443,7 +1443,7 @@ static bool lcl_GotoNextPrevNum( SwPosition& rPos, bool bNext,
     if( bNext )
         ++aIdx, pLast = pNd;
     else
-        --aIdx, pLast = 0;
+        --aIdx, pLast = nullptr;
 
     while( bNext ? ( aIdx.GetIndex() < aIdx.GetNodes().Count() - 1 )
                  : aIdx.GetIndex() != 0 )
@@ -1517,7 +1517,7 @@ const SwNumRule *  SwDoc::SearchNumRule(const SwPosition & rPos,
                                         OUString& sListId,
                                         const bool bInvestigateStartNode)
 {
-    const SwNumRule * pResult = NULL;
+    const SwNumRule * pResult = nullptr;
     SwTextNode * pTextNd = rPos.nNode.GetNode().GetTextNode();
     SwNode * pStartFromNode = pTextNd;
 
@@ -1526,7 +1526,7 @@ const SwNumRule *  SwDoc::SearchNumRule(const SwPosition & rPos,
         SwNodeIndex aIdx(rPos.nNode);
 
         // - the start node has also been investigated, if requested.
-        const SwNode * pNode = NULL;
+        const SwNode * pNode = nullptr;
         do
         {
             if ( !bInvestigateStartNode )
@@ -1555,7 +1555,7 @@ const SwNumRule *  SwDoc::SearchNumRule(const SwPosition & rPos,
 
                     break;
                 }
-                else if (pTextNd->Len() > 0 || NULL != pTextNd->GetNumRule())
+                else if (pTextNd->Len() > 0 || nullptr != pTextNd->GetNumRule())
                 {
                     if (nNonEmptyAllowed == 0)
                         break;
@@ -1839,7 +1839,7 @@ bool SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, bool bIsOutlMv )
     SwNodeIndex aIdx( nOffset > 0 ? pEnd->nNode : pStt->nNode, nOffs );
     SwNodeRange aMvRg( pStt->nNode, 0, pEnd->nNode, +1 );
 
-    SwRangeRedline* pOwnRedl = 0;
+    SwRangeRedline* pOwnRedl = nullptr;
     if( getIDocumentRedlineAccess().IsRedlineOn() )
     {
         // If the range is completely in the own Redline, we can move it!
@@ -1865,21 +1865,21 @@ bool SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, bool bIsOutlMv )
                     pTmp = getIDocumentRedlineAccess().GetRedlineTable()[ nRedlPos+1 ];
                     if( *pTmp->Start() == *pREnd )
                         // then don't!
-                        pOwnRedl = 0;
+                        pOwnRedl = nullptr;
                 }
 
                 if( pOwnRedl &&
                     !( pRStt->nNode <= aIdx && aIdx <= pREnd->nNode ))
                 {
                     // it's not in itself, so don't move it
-                    pOwnRedl = 0;
+                    pOwnRedl = nullptr;
                 }
             }
         }
 
         if( !pOwnRedl )
         {
-            GetIDocumentUndoRedo().StartUndo( UNDO_START, NULL );
+            GetIDocumentUndoRedo().StartUndo( UNDO_START, nullptr );
 
             // First the Insert, then the Delete
             SwPosition aInsPos( aIdx );
@@ -1969,14 +1969,14 @@ bool SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, bool bIsOutlMv )
             // prevent assertion from aPam's target being deleted
             // (Alternatively, one could just let aPam go out of scope, but
             // that requires touching a lot of code.)
-            aPam.GetBound().nContent.Assign( NULL, 0 );
-            aPam.GetBound(false).nContent.Assign( NULL, 0 );
+            aPam.GetBound().nContent.Assign( nullptr, 0 );
+            aPam.GetBound(false).nContent.Assign( nullptr, 0 );
 
             getIDocumentRedlineAccess().AppendRedline( pNewRedline, true );
 
             // Still NEEDS to be optimized!
             getIDocumentRedlineAccess().SetRedlineMode( eOld );
-            GetIDocumentUndoRedo().EndUndo( UNDO_END, NULL );
+            GetIDocumentUndoRedo().EndUndo( UNDO_END, nullptr );
             getIDocumentState().SetModified();
 
             return true;
@@ -1997,7 +1997,7 @@ bool SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, bool bIsOutlMv )
         nRedlEndNd = pREnd->nNode.GetIndex();
     }
 
-    SwUndoMoveNum* pUndo = 0;
+    SwUndoMoveNum* pUndo = nullptr;
     sal_uLong nMoved = 0;
     if (GetIDocumentUndoRedo().DoesUndo())
     {
@@ -2043,7 +2043,7 @@ bool SwDoc::NumOrNoNum( const SwNodeIndex& rIdx, bool bDel )
     bool bResult = false;
     SwTextNode * pTextNd = rIdx.GetNode().GetTextNode();
 
-    if (pTextNd && pTextNd->GetNumRule() != NULL &&
+    if (pTextNd && pTextNd->GetNumRule() != nullptr &&
         (pTextNd->HasNumber() || pTextNd->HasBullet()))
     {
         if ( !pTextNd->IsCountedInList() == !bDel)
@@ -2080,10 +2080,10 @@ bool SwDoc::NumOrNoNum( const SwNodeIndex& rIdx, bool bDel )
 
 SwNumRule* SwDoc::GetNumRuleAtPos( const SwPosition& rPos )
 {
-    SwNumRule* pRet = NULL;
+    SwNumRule* pRet = nullptr;
     SwTextNode* pTNd = rPos.nNode.GetNode().GetTextNode();
 
-    if ( pTNd != NULL )
+    if ( pTNd != nullptr )
     {
         pRet = pTNd->GetNumRule();
     }
@@ -2102,7 +2102,7 @@ sal_uInt16 SwDoc::FindNumRule( const OUString& rName ) const
 
 SwNumRule* SwDoc::FindNumRulePtr( const OUString& rName ) const
 {
-    SwNumRule * pResult = 0;
+    SwNumRule * pResult = nullptr;
 
     pResult = maNumRuleMap[rName];
 
@@ -2195,7 +2195,7 @@ OUString SwDoc::GetUniqueNumRuleName( const OUString* pChkStr, bool bAutoNum ) c
     OUString aName;
     if( bAutoNum )
     {
-        static bool bHack = (getenv("LIBO_ONEWAY_STABLE_ODF_EXPORT") != NULL);
+        static bool bHack = (getenv("LIBO_ONEWAY_STABLE_ODF_EXPORT") != nullptr);
 
         if (bHack)
         {
@@ -2210,13 +2210,13 @@ OUString SwDoc::GetUniqueNumRuleName( const OUString* pChkStr, bool bAutoNum ) c
             aName = OUString::number( (n < 0 ? -n : n) );
         }
         if( pChkStr && pChkStr->isEmpty() )
-            pChkStr = 0;
+            pChkStr = nullptr;
     }
     else if( pChkStr && !pChkStr->isEmpty() )
         aName = *pChkStr;
     else
     {
-        pChkStr = 0;
+        pChkStr = nullptr;
         aName = SW_RESSTR( STR_NUMRULE_DEFNAME );
     }
 
@@ -2233,7 +2233,7 @@ OUString SwDoc::GetUniqueNumRuleName( const OUString* pChkStr, bool bAutoNum ) c
         if( ++nNmLen < aName.getLength() )
         {
             aName = aName.copy(0, nNmLen );
-            pChkStr = 0;
+            pChkStr = nullptr;
         }
     }
 
@@ -2241,7 +2241,7 @@ OUString SwDoc::GetUniqueNumRuleName( const OUString* pChkStr, bool bAutoNum ) c
     sal_uInt16 n;
 
     for( n = 0; n < mpNumRuleTable->size(); ++n )
-        if( 0 != ( pNumRule = (*mpNumRuleTable)[ n ] ) )
+        if( nullptr != ( pNumRule = (*mpNumRuleTable)[ n ] ) )
         {
             const OUString sNm = pNumRule->GetName();
             if( sNm.startsWith( aName ) )
@@ -2252,7 +2252,7 @@ OUString SwDoc::GetUniqueNumRuleName( const OUString* pChkStr, bool bAutoNum ) c
                     pSetFlags[ nNum / 8 ] |= (0x01 << ( nNum & 0x07 ));
             }
             if( pChkStr && *pChkStr==sNm )
-                pChkStr = 0;
+                pChkStr = nullptr;
         }
 
     if( !pChkStr )
@@ -2308,7 +2308,7 @@ bool SwDoc::IsFirstOfNumRuleAtPos( const SwPosition & rPos )
     bool bResult = false;
 
     const SwTextNode* pTextNode = rPos.nNode.GetNode().GetTextNode();
-    if ( pTextNode != NULL )
+    if ( pTextNode != nullptr )
     {
         bResult = pTextNode->IsFirstOfNumRule();
     }

@@ -104,7 +104,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
     sal_uInt16      nSlotId = rReq.GetSlot();
     bool        bChanged = pSdrView->GetModel()->IsChanged();
     pSdrView->GetModel()->SetChanged(false);
-    const SfxPoolItem* pItem = 0;
+    const SfxPoolItem* pItem = nullptr;
     if(pArgs)
         pArgs->GetItemState(nSlotId, false, &pItem);
 
@@ -131,7 +131,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
                 if(!pArgs)
                 {
                     const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
-                    if( rMarkList.GetMark(0) != 0 )
+                    if( rMarkList.GetMark(0) != nullptr )
                     {
                         SfxItemSet aSet(GetPool(),  RES_SURROUND, RES_SURROUND,
                                                     RES_ANCHOR, RES_ANCHOR,
@@ -180,7 +180,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
                 if(!pArgs)
                 {
                     const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
-                    if( rMarkList.GetMark(0) != 0 )
+                    if( rMarkList.GetMark(0) != nullptr )
                     {
                         SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
                         std::unique_ptr<SfxAbstractTabDialog> pDlg;
@@ -201,7 +201,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
                         {
                             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                             AbstractSvxCaptionDialog* pCaptionDlg =
-                                    pFact->CreateCaptionDialog( NULL, pSdrView, nAllowedAnchors );
+                                    pFact->CreateCaptionDialog( nullptr, pSdrView, nAllowedAnchors );
                             pCaptionDlg->SetValidateFramePosLink( LINK(this, SwDrawBaseShell, ValidatePosition) );
                             pDlg.reset(pCaptionDlg);
                         }
@@ -209,7 +209,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
                         {
                             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                             AbstractSvxTransformTabDialog* pTransform =
-                                        pFact->CreateSvxTransformTabDialog( NULL, NULL, pSdrView, nAllowedAnchors );
+                                        pFact->CreateSvxTransformTabDialog( nullptr, nullptr, pSdrView, nAllowedAnchors );
                             pTransform->SetValidateFramePosLink( LINK(this, SwDrawBaseShell, ValidatePosition) );
                             pDlg.reset(pTransform);
                         }
@@ -287,10 +287,10 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
                                     aFrmAttrSet.Put( aAnchor );
                                 }
                             }
-                            const SfxPoolItem* pHoriOrient = 0;
-                            const SfxPoolItem* pHoriRelation = 0;
-                            const SfxPoolItem* pHoriPosition = 0;
-                            const SfxPoolItem* pHoriMirror = 0;
+                            const SfxPoolItem* pHoriOrient = nullptr;
+                            const SfxPoolItem* pHoriRelation = nullptr;
+                            const SfxPoolItem* pHoriPosition = nullptr;
+                            const SfxPoolItem* pHoriMirror = nullptr;
                             pOutSet->GetItemState(SID_ATTR_TRANSFORM_HORI_ORIENT, false, &pHoriOrient);
                             pOutSet->GetItemState(SID_ATTR_TRANSFORM_HORI_RELATION, false, &pHoriRelation);
                             pOutSet->GetItemState(SID_ATTR_TRANSFORM_HORI_POSITION, false, &pHoriPosition);
@@ -310,9 +310,9 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
                                 aFrmAttrSet.Put(aHOrient);
                             }
 
-                            const SfxPoolItem* pVertOrient = 0;
-                            const SfxPoolItem* pVertRelation = 0;
-                            const SfxPoolItem* pVertPosition = 0;
+                            const SfxPoolItem* pVertOrient = nullptr;
+                            const SfxPoolItem* pVertRelation = nullptr;
+                            const SfxPoolItem* pVertPosition = nullptr;
                             pOutSet->GetItemState(SID_ATTR_TRANSFORM_VERT_ORIENT, false, &pVertOrient);
                             pOutSet->GetItemState(SID_ATTR_TRANSFORM_VERT_RELATION, false, &pVertRelation);
                             pOutSet->GetItemState(SID_ATTR_TRANSFORM_VERT_POSITION, false, &pVertPosition);
@@ -328,7 +328,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
                                     aVOrient.SetPos( static_cast<const SfxInt32Item*>(pVertPosition)->GetValue());
                                 aFrmAttrSet.Put( aVOrient );
                             }
-                            const SfxPoolItem* pFollowItem = 0;
+                            const SfxPoolItem* pFollowItem = nullptr;
                             pOutSet->GetItemState(RES_FOLLOW_TEXT_FLOW, false, &pFollowItem);
                             if(pFollowItem)
                                 aFrmAttrSet.Put(*pFollowItem);
@@ -376,7 +376,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
                     if (GetView().GetDrawFuncPtr())
                     {
                         GetView().GetDrawFuncPtr()->Deactivate();
-                        GetView().SetDrawFuncPtr(NULL);
+                        GetView().SetDrawFuncPtr(nullptr);
                     }
                     GetView().LeaveDrawCreate();    // Switch to selection mode
                 }
@@ -523,7 +523,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
 
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "Dialog creation failed!");
-                std::unique_ptr<AbstractSvxObjectNameDialog> pDlg(pFact->CreateSvxObjectNameDialog(NULL, aName));
+                std::unique_ptr<AbstractSvxObjectNameDialog> pDlg(pFact->CreateSvxObjectNameDialog(nullptr, aName));
                 OSL_ENSURE(pDlg, "Dialog creation failed!");
 
                 pDlg->SetCheckNameHdl(LINK(this, SwDrawBaseShell, CheckGroupShapeNameHdl));
@@ -553,7 +553,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
 
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "Dialog creation failed!");
-                std::unique_ptr<AbstractSvxObjectTitleDescDialog> pDlg(pFact->CreateSvxObjectTitleDescDialog(NULL, aTitle, aDescription));
+                std::unique_ptr<AbstractSvxObjectTitleDescDialog> pDlg(pFact->CreateSvxObjectTitleDescDialog(nullptr, aTitle, aDescription));
                 OSL_ENSURE(pDlg, "Dialog creation failed!");
 
                 if(RET_OK == pDlg->Execute())
@@ -698,7 +698,7 @@ void SwDrawBaseShell::GetState(SfxItemSet& rSet)
             // #i68101#
             case FN_TITLE_DESCRIPTION_SHAPE:
                 {
-                    const bool bIsWebView(NULL != dynamic_cast<SwWebView*>(&GetView()));
+                    const bool bIsWebView(nullptr != dynamic_cast<SwWebView*>(&GetView()));
 
                     if(!bIsWebView && 1L != pSdrView->GetMarkedObjectCount())
                     {
@@ -716,7 +716,7 @@ void SwDrawBaseShell::GetDrawAttrStateForIFBX( SfxItemSet& rSet )
     SwWrtShell *pSh = &GetShell();
     SdrView*    pSdrView = pSh->GetDrawView();
     const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
-    if( rMarkList.GetMark(0) != 0 )
+    if( rMarkList.GetMark(0) != nullptr )
     {
         SfxItemSet aNewAttr(pSdrView->GetGeoAttrFromMarked());
         rSet.Put(aNewAttr,false);
@@ -759,7 +759,7 @@ IMPL_LINK_TYPED(SwDrawBaseShell, ValidatePosition, SvxSwFrameValidation&, rValid
     // OD 18.09.2003 #i18732# - adjustment for allowing vertical position
     //      aligned to page for fly frame anchored to paragraph or to character.
     const RndStdIds eAnchorType = static_cast<RndStdIds >(rValidation.nAnchorType);
-    const SwPosition* pContentPos = 0;
+    const SwPosition* pContentPos = nullptr;
     SdrView*  pSdrView = pSh->GetDrawView();
     const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
     if( rMarkList.GetMarkCount() == 1 )
@@ -774,7 +774,7 @@ IMPL_LINK_TYPED(SwDrawBaseShell, ValidatePosition, SvxSwFrameValidation&, rValid
                            rValidation.nVRelOrient,
                            pContentPos,
                            rValidation.bFollowTextFlow,
-                           rValidation.bMirror, NULL, &rValidation.aPercentSize);
+                           rValidation.bMirror, nullptr, &rValidation.aPercentSize);
 
     bool bIsInVertical( false );
     {

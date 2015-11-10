@@ -398,7 +398,7 @@ private:
     SwFlyFrameFormat* _MakeFlySection( const SwPosition& rAnchPos,
                                 const SwContentNode& rNode, RndStdIds eRequestId,
                                 const SfxItemSet* pFlyAttrSet,
-                                SwFrameFormat* = 0 );
+                                SwFrameFormat* = nullptr );
     sal_Int8 SetFlyFrmAnchor( SwFrameFormat& rFlyFormat, SfxItemSet& rSet, bool bNewFrms );
 
     typedef SwFormat* (SwDoc:: *FNCopyFormat)( const OUString&, SwFormat*, bool, bool );
@@ -626,7 +626,7 @@ public:
      have to be surrounded completely by css::awt::Selection.
      ( Start < Pos < End ) !!!
      (Required for Writers.) */
-    SwPosFlyFrms GetAllFlyFormats( const SwPaM* = 0,
+    SwPosFlyFrms GetAllFlyFormats( const SwPaM* = nullptr,
                         bool bDrawAlso = false,
                         bool bAsCharAlso = false ) const;
 
@@ -649,12 +649,12 @@ public:
     */
     SwFlyFrameFormat* MakeFlySection( RndStdIds eAnchorType,
                                  const SwPosition* pAnchorPos,
-                                 const SfxItemSet* pSet = 0,
-                                 SwFrameFormat *pParent = 0,
+                                 const SfxItemSet* pSet = nullptr,
+                                 SwFrameFormat *pParent = nullptr,
                                  bool bCalledFromShell = false );
     SwFlyFrameFormat* MakeFlyAndMove( const SwPaM& rPam, const SfxItemSet& rSet,
-                                const SwSelBoxes* pSelBoxes = 0,
-                                SwFrameFormat *pParent = 0 );
+                                const SwSelBoxes* pSelBoxes = nullptr,
+                                SwFrameFormat *pParent = nullptr );
 
     //UUUU Helper that checks for unique items for DrawingLayer items of type NameOrIndex
     // and evtl. corrects that items to ensure unique names for that type. This call may
@@ -666,7 +666,7 @@ public:
     bool SetFlyFrmAttr( SwFrameFormat& rFlyFormat, SfxItemSet& rSet );
 
     bool SetFrameFormatToFly( SwFrameFormat& rFlyFormat, SwFrameFormat& rNewFormat,
-                        SfxItemSet* pSet = 0, bool bKeepOrient = false );
+                        SfxItemSet* pSet = nullptr, bool bKeepOrient = false );
     void SetFlyFrmTitle( SwFlyFrameFormat& rFlyFrameFormat,
                          const OUString& sNewTitle );
     void SetFlyFrmDescription( SwFlyFrameFormat& rFlyFrameFormat,
@@ -690,7 +690,7 @@ public:
     css::uno::Any
             Spell( SwPaM&, css::uno::Reference< css::linguistic2::XSpellChecker1 > &,
                    sal_uInt16* pPageCnt, sal_uInt16* pPageSt, bool bGrammarCheck,
-                   SwConversionArgs *pConvArgs = 0 ) const;
+                   SwConversionArgs *pConvArgs = nullptr ) const;
 
     css::uno::Reference< css::linguistic2::XHyphenatedWord >
             Hyphenate( SwPaM *pPam, const Point &rCrsrPos,
@@ -708,9 +708,9 @@ public:
 
     bool IsInHeaderFooter( const SwNodeIndex& rIdx ) const;
     short GetTextDirection( const SwPosition& rPos,
-                            const Point* pPt = 0 ) const;
+                            const Point* pPt = nullptr ) const;
     bool IsInVerticalText( const SwPosition& rPos,
-                               const Point* pPt = 0 ) const;
+                               const Point* pPt = nullptr ) const;
 
     // Database  and DB-Manager
     void SetDBManager( SwDBManager* pNewMgr )     { mpDBManager = pNewMgr; }
@@ -721,7 +721,7 @@ public:
 
     // Find out which databases are used by fields.
     void GetAllUsedDB( std::vector<OUString>& rDBNameList,
-                       const std::vector<OUString>* pAllDBNames = 0 );
+                       const std::vector<OUString>* pAllDBNames = nullptr );
 
     void ChgDBData( const SwDBData& rNewData );
     SwDBData GetDBData();
@@ -905,7 +905,7 @@ public:
 
     // travel over PaM Ring
     bool InsertGlossary( SwTextBlocks& rBlock, const OUString& rEntry,
-                        SwPaM& rPaM, SwCrsrShell* pShell = 0);
+                        SwPaM& rPaM, SwCrsrShell* pShell = nullptr);
 
     /** get the set of printable pages for the XRenderable API by
      evaluating the respective settings (see implementation) */
@@ -945,7 +945,7 @@ public:
     void DelPageDesc( const OUString & rName, bool bBroadcast = false);
     void DelPageDesc( size_t i, bool bBroadcast = false );
     void PreDelPageDesc(SwPageDesc * pDel);
-    SwPageDesc* MakePageDesc(const OUString &rName, const SwPageDesc* pCpy = 0,
+    SwPageDesc* MakePageDesc(const OUString &rName, const SwPageDesc* pCpy = nullptr,
                              bool bRegardLanguage = true,
                              bool bBroadcast = false);
     void BroadcastStyleOperation(const OUString& rName, SfxStyleFamily eFamily,
@@ -965,11 +965,11 @@ public:
     // Insert/Renew table/indes
     SwTOXBaseSection* InsertTableOf( const SwPosition& rPos,
                                             const SwTOXBase& rTOX,
-                                            const SfxItemSet* pSet = 0,
+                                            const SfxItemSet* pSet = nullptr,
                                             bool bExpand = false );
     const SwTOXBaseSection* InsertTableOf( sal_uLong nSttNd, sal_uLong nEndNd,
                                             const SwTOXBase& rTOX,
-                                            const SfxItemSet* pSet = 0 );
+                                            const SfxItemSet* pSet = nullptr );
     static SwTOXBase* GetCurTOX( const SwPosition& rPos );
     static const SwAttrSet& GetTOXBaseAttrSet(const SwTOXBase& rTOX);
 
@@ -1103,7 +1103,7 @@ public:
 
     // add optional parameter <eDefaultNumberFormatPositionAndSpaceMode>
     sal_uInt16 MakeNumRule( const OUString &rName,
-        const SwNumRule* pCpy = 0,
+        const SwNumRule* pCpy = nullptr,
         bool bBroadcast = false,
         const SvxNumberFormat::SvxNumPositionAndSpaceMode eDefaultNumberFormatPositionAndSpaceMode =
             SvxNumberFormat::LABEL_WIDTH_AND_POSITION );
@@ -1114,7 +1114,7 @@ public:
     bool RenameNumRule(const OUString & aOldName, const OUString & aNewName,
                            bool bBroadcast = false);
     bool DelNumRule( const OUString& rName, bool bBroadCast = false );
-    OUString GetUniqueNumRuleName( const OUString* pChkStr = 0, bool bAutoNum = true ) const;
+    OUString GetUniqueNumRuleName( const OUString* pChkStr = nullptr, bool bAutoNum = true ) const;
 
     void UpdateNumRule();   // Update all invalids.
     void ChgNumRuleFormats( const SwNumRule& rRule );
@@ -1123,9 +1123,9 @@ public:
 
     // Goto next/previous on same level.
     static bool GotoNextNum( SwPosition&, bool bOverUpper = true,
-                        sal_uInt8* pUpper = 0, sal_uInt8* pLower = 0 );
+                        sal_uInt8* pUpper = nullptr, sal_uInt8* pLower = nullptr );
     static bool GotoPrevNum( SwPosition&, bool bOverUpper = true,
-                        sal_uInt8* pUpper = 0, sal_uInt8* pLower = 0 );
+                        sal_uInt8* pUpper = nullptr, sal_uInt8* pLower = nullptr );
 
     /** Searches for a text node with a numbering rule.
 
@@ -1190,8 +1190,8 @@ public:
     const SwTable* InsertTable( const SwInsertTableOptions& rInsTableOpts,  // HEADLINE_NO_BORDER
                                 const SwPosition& rPos, sal_uInt16 nRows,
                                 sal_uInt16 nCols, short eAdjust,
-                                const SwTableAutoFormat* pTAFormat = 0,
-                                const std::vector<sal_uInt16> *pColArr = 0,
+                                const SwTableAutoFormat* pTAFormat = nullptr,
+                                const std::vector<sal_uInt16> *pColArr = nullptr,
                                 bool bCalledFromShell = false,
                                 bool bNewModel = true );
 
@@ -1203,7 +1203,7 @@ public:
     const SwTable* TextToTable( const SwInsertTableOptions& rInsTableOpts, // HEADLINE_NO_BORDER,
                                 const SwPaM& rRange, sal_Unicode cCh,
                                 short eAdjust,
-                                const SwTableAutoFormat* = 0 );
+                                const SwTableAutoFormat* = nullptr );
 
     // text to table conversion - API support
     const SwTable* TextToTable( const std::vector< std::vector<SwNodeRange> >& rTableNodes );
@@ -1238,13 +1238,13 @@ public:
 
     // From FEShell (for Undo and BModified).
     static void GetTabCols( SwTabCols &rFill, const SwCursor* pCrsr,
-                    const SwCellFrm* pBoxFrm = 0 );
+                    const SwCellFrm* pBoxFrm = nullptr );
     void SetTabCols( const SwTabCols &rNew, bool bCurRowOnly,
-                    const SwCursor* pCrsr, const SwCellFrm* pBoxFrm = 0 );
+                    const SwCursor* pCrsr, const SwCellFrm* pBoxFrm = nullptr );
     static void GetTabRows( SwTabCols &rFill, const SwCursor* pCrsr,
-                    const SwCellFrm* pBoxFrm = 0 );
+                    const SwCellFrm* pBoxFrm = nullptr );
     void SetTabRows( const SwTabCols &rNew, bool bCurColOnly, const SwCursor* pCrsr,
-                     const SwCellFrm* pBoxFrm = 0 );
+                     const SwCellFrm* pBoxFrm = nullptr );
 
     // Direct access for UNO.
     void SetTabCols(SwTable& rTab, const SwTabCols &rNew, const SwTabCols &rOld,
@@ -1276,15 +1276,15 @@ public:
     void ClearLineNumAttrs( SwPosition & rPos );
 
     bool InsCopyOfTable( SwPosition& rInsPos, const SwSelBoxes& rBoxes,
-                        const SwTable* pCpyTable = 0, bool bCpyName = false,
+                        const SwTable* pCpyTable = nullptr, bool bCpyName = false,
                         bool bCorrPos = false );
 
     bool UnProtectCells( const OUString& rTableName );
     bool UnProtectCells( const SwSelBoxes& rBoxes );
     bool UnProtectTables( const SwPaM& rPam );
     bool HasTableAnyProtection( const SwPosition* pPos,
-                              const OUString* pTableName = 0,
-                              bool* pFullTableProtection = 0 );
+                              const OUString* pTableName = nullptr,
+                              bool* pFullTableProtection = nullptr );
 
     // Split table at baseline position, i.e. create a new table.
     bool SplitTable( const SwPosition& rPos, sal_uInt16 eMode = 0,
@@ -1312,7 +1312,7 @@ public:
 
     /** @return names of all references that are set in document.
      If array pointer is 0 return only whether a RefMark is set in document. */
-    sal_uInt16 GetRefMarks( std::vector<OUString>* = 0 ) const;
+    sal_uInt16 GetRefMarks( std::vector<OUString>* = nullptr ) const;
 
     // Insert label. If a FlyFormat is created, return it.
     SwFlyFrameFormat* InsertLabel( const SwLabelType eType, const OUString &rText, const OUString& rSeparator,
@@ -1339,18 +1339,18 @@ public:
 
     // insert section (the ODF kind of section, not the nodesarray kind)
     SwSection * InsertSwSection(SwPaM const& rRange, SwSectionData &,
-            SwTOXBase const*const pTOXBase = 0,
-            SfxItemSet const*const pAttr = 0, bool const bUpdate = true);
+            SwTOXBase const*const pTOXBase = nullptr,
+            SfxItemSet const*const pAttr = nullptr, bool const bUpdate = true);
     static sal_uInt16 IsInsRegionAvailable( const SwPaM& rRange,
-                                const SwNode** ppSttNd = 0 );
+                                const SwNode** ppSttNd = nullptr );
     static SwSection* GetCurrSection( const SwPosition& rPos );
     SwSectionFormats& GetSections() { return *mpSectionFormatTable; }
     const SwSectionFormats& GetSections() const { return *mpSectionFormatTable; }
     SwSectionFormat *MakeSectionFormat( SwSectionFormat *pDerivedFrom );
     void DelSectionFormat( SwSectionFormat *pFormat, bool bDelNodes = false );
     void UpdateSection(size_t const nSect, SwSectionData &,
-            SfxItemSet const*const = 0, bool const bPreventLinkUpdate = false);
-    OUString GetUniqueSectionName( const OUString* pChkStr = 0 ) const;
+            SfxItemSet const*const = nullptr, bool const bPreventLinkUpdate = false);
+    OUString GetUniqueSectionName( const OUString* pChkStr = nullptr ) const;
 
     /* @@@MAINTAINABILITY-HORROR@@@
        The model should not have anything to do with a shell.
@@ -1404,11 +1404,11 @@ public:
     const SwFormatINetFormat* FindINetAttr( const OUString& rName ) const;
 
     // Call into intransparent Basic; expect possible Return String.
-    bool ExecMacro( const SvxMacro& rMacro, OUString* pRet = 0, SbxArray* pArgs = 0 );
+    bool ExecMacro( const SvxMacro& rMacro, OUString* pRet = nullptr, SbxArray* pArgs = nullptr );
 
     // Call into intransparent Basic / JavaScript.
     sal_uInt16 CallEvent( sal_uInt16 nEvent, const SwCallMouseEvent& rCallEvent,
-                        bool bChkPtr = false, SbxArray* pArgs = 0 );
+                        bool bChkPtr = false, SbxArray* pArgs = nullptr );
 
     /** Adjust left margin via object bar (similar to adjustment of numerations).
      One can either change the margin "by" adding or subtracting a given
@@ -1431,10 +1431,10 @@ public:
     // Create sub-documents according to given collection.
     // If no collection is given, use chapter styles for 1st level.
     bool GenerateGlobalDoc( const OUString& rPath,
-                                const SwTextFormatColl* pSplitColl = 0 );
+                                const SwTextFormatColl* pSplitColl = nullptr );
     bool GenerateGlobalDoc( const OUString& rPath, int nOutlineLevel = 0 );
     bool GenerateHTMLDoc( const OUString& rPath,
-                                const SwTextFormatColl* pSplitColl = 0 );
+                                const SwTextFormatColl* pSplitColl = nullptr );
     bool GenerateHTMLDoc( const OUString& rPath, int nOutlineLevel = 0 );
 
     //  Compare two documents.
@@ -1448,7 +1448,7 @@ public:
 
     // For AutoFormat: with Undo/Redlining.
     void SetTextFormatCollByAutoFormat( const SwPosition& rPos, sal_uInt16 nPoolId,
-                                const SfxItemSet* pSet = 0 );
+                                const SfxItemSet* pSet = nullptr );
     void SetFormatItemByAutoFormat( const SwPaM& rPam, const SfxItemSet& );
 
     // Only for SW-textbloxks! Does not pay any attention to layout!
@@ -1638,7 +1638,7 @@ public:
      * Dumps the entire nodes structure to the given destination (file nodes.xml in the current directory by default)
      * @since 3.5
      */
-    void dumpAsXml(struct _xmlTextWriter* = 0) const;
+    void dumpAsXml(struct _xmlTextWriter* = nullptr) const;
 
     std::set<Color> GetDocColors();
     std::vector< std::weak_ptr<SwUnoCrsr> > mvUnoCrsrTbl;

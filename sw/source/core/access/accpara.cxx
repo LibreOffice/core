@@ -125,7 +125,7 @@ const SwTextNode* SwAccessibleParagraph::GetTextNode() const
     OSL_ENSURE( pFrm->IsTextFrm(), "The text frame has mutated!" );
 
     const SwTextNode* pNode = static_cast<const SwTextFrm*>(pFrm)->GetTextNode();
-    OSL_ENSURE( pNode != NULL, "A text frame without a text node." );
+    OSL_ENSURE( pNode != nullptr, "A text frame without a text node." );
 
     return pNode;
 }
@@ -148,7 +148,7 @@ sal_Int32 SwAccessibleParagraph::GetCaretPos()
     // #i27301# - consider adjusted method signature
     SwPaM* pCaret = GetCursor( false );  // caret is first PaM in PaM-ring
 
-    if( pCaret != NULL )
+    if( pCaret != nullptr )
     {
         const SwTextNode* pNode = GetTextNode();
 
@@ -205,7 +205,7 @@ bool SwAccessibleParagraph::GetSelection(
 
     // get the selection, and test whether it affects our text node
     SwPaM* pCrsr = GetCursor( true ); // #i27301# - consider adjusted method signature
-    if( pCrsr != NULL )
+    if( pCrsr != nullptr )
     {
         // get SwPosition for my node
         const SwTextNode* pNode = GetTextNode();
@@ -324,15 +324,15 @@ SwPaM* SwAccessibleParagraph::GetCursor( const bool _bForSelection )
 {
     // get the cursor shell; if we don't have any, we don't have a
     // cursor/selection either
-    SwPaM* pCrsr = NULL;
+    SwPaM* pCrsr = nullptr;
     SwCrsrShell* pCrsrShell = SwAccessibleParagraph::GetCrsrShell();
     // #i27301# - if cursor is retrieved for selection, the cursors for
     // a table selection has to be returned.
-    if ( pCrsrShell != NULL &&
+    if ( pCrsrShell != nullptr &&
          ( _bForSelection || !pCrsrShell->IsTableMode() ) )
     {
         SwFEShell *pFESh = dynamic_cast<const SwFEShell*>( pCrsrShell) !=  nullptr
-                            ? static_cast< SwFEShell * >( pCrsrShell ) : 0;
+                            ? static_cast< SwFEShell * >( pCrsrShell ) : nullptr;
         if( !pFESh ||
             !(pFESh->IsFrmSelected() || pFESh->IsObjSelected() > 0) )
         {
@@ -370,7 +370,7 @@ void SwAccessibleParagraph::GetStates(
     // FOCUSED (simulates node index of cursor)
     SwPaM* pCaret = GetCursor( false ); // #i27301# - consider adjusted method signature
     const SwTextNode* pTextNd = GetTextNode();
-    if( pCaret != 0 && pTextNd != 0 &&
+    if( pCaret != nullptr && pTextNd != nullptr &&
         pTextNd->GetIndex() == pCaret->GetPoint()->nNode.GetIndex() &&
         nOldCaretPos != -1)
     {
@@ -536,8 +536,8 @@ SwAccessibleParagraph::SwAccessibleParagraph(
     : SwClient( const_cast<SwTextNode*>(rTextFrm.GetTextNode()) ) // #i108125#
     , SwAccessibleContext( &rInitMap, AccessibleRole::PARAGRAPH, &rTextFrm )
     , sDesc()
-    , pPortionData( NULL )
-    , pHyperTextData( NULL )
+    , pPortionData( nullptr )
+    , pHyperTextData( nullptr )
     , nOldCaretPos( -1 )
     , bIsHeading( false )
     //Get the real heading level, Heading1 ~ Heading10
@@ -578,7 +578,7 @@ void SwAccessibleParagraph::UpdatePortionData()
     throw( uno::RuntimeException )
 {
     // obtain the text frame
-    OSL_ENSURE( GetFrm() != NULL, "The text frame has vanished!" );
+    OSL_ENSURE( GetFrm() != nullptr, "The text frame has vanished!" );
     OSL_ENSURE( GetFrm()->IsTextFrm(), "The text frame has mutated!" );
     const SwTextFrm* pFrm = static_cast<const SwTextFrm*>( GetFrm() );
 
@@ -588,37 +588,37 @@ void SwAccessibleParagraph::UpdatePortionData()
         pFrm->GetTextNode(), GetMap()->GetShell()->GetViewOptions() );
     pFrm->VisitPortions( *pPortionData );
 
-    OSL_ENSURE( pPortionData != NULL, "UpdatePortionData() failed" );
+    OSL_ENSURE( pPortionData != nullptr, "UpdatePortionData() failed" );
 }
 
 void SwAccessibleParagraph::ClearPortionData()
 {
     delete pPortionData;
-    pPortionData = NULL;
+    pPortionData = nullptr;
 
     delete pHyperTextData;
-    pHyperTextData = 0;
+    pHyperTextData = nullptr;
 }
 
 void SwAccessibleParagraph::ExecuteAtViewShell( sal_uInt16 nSlot )
 {
-    OSL_ENSURE( GetMap() != NULL, "no map?" );
+    OSL_ENSURE( GetMap() != nullptr, "no map?" );
     SwViewShell* pViewShell = GetMap()->GetShell();
 
-    OSL_ENSURE( pViewShell != NULL, "View shell expected!" );
+    OSL_ENSURE( pViewShell != nullptr, "View shell expected!" );
     SfxViewShell* pSfxShell = pViewShell->GetSfxViewShell();
 
-    OSL_ENSURE( pSfxShell != NULL, "SfxViewShell shell expected!" );
+    OSL_ENSURE( pSfxShell != nullptr, "SfxViewShell shell expected!" );
     if( !pSfxShell )
         return;
 
     SfxViewFrame *pFrame = pSfxShell->GetViewFrame();
-    OSL_ENSURE( pFrame != NULL, "View frame expected!" );
+    OSL_ENSURE( pFrame != nullptr, "View frame expected!" );
     if( !pFrame )
         return;
 
     SfxDispatcher *pDispatcher = pFrame->GetDispatcher();
-    OSL_ENSURE( pDispatcher != NULL, "Dispatcher expected!" );
+    OSL_ENSURE( pDispatcher != nullptr, "Dispatcher expected!" );
     if( !pDispatcher )
         return;
 
@@ -686,7 +686,7 @@ SwTOXSortTabBase* SwAccessibleParagraph::GetTOXSortTabBase()
             const  SwTOXBaseSection *pTOXBaseSect = static_cast<const SwTOXBaseSection *>(pSect);
             if( pSect->GetType() == TOX_CONTENT_SECTION )
             {
-                SwTOXSortTabBase* pSortBase = 0;
+                SwTOXSortTabBase* pSortBase = nullptr;
                 size_t nSize = pTOXBaseSect->GetTOXSortTabBases().size();
 
                 for(size_t nIndex = 0; nIndex<nSize; nIndex++ )
@@ -703,13 +703,13 @@ SwTOXSortTabBase* SwAccessibleParagraph::GetTOXSortTabBase()
             }
         }
     }
-    return NULL;
+    return nullptr;
 }
 
 //the function is to check whether the position is in a redline range.
 const SwRangeRedline* SwAccessibleParagraph::GetRedlineAtIndex( sal_Int32 )
 {
-    const SwRangeRedline* pRedline = NULL;
+    const SwRangeRedline* pRedline = nullptr;
     SwPaM* pCrSr = GetCursor( true );
     if ( pCrSr )
     {
@@ -720,7 +720,7 @@ const SwRangeRedline* SwAccessibleParagraph::GetRedlineAtIndex( sal_Int32 )
             const SwDoc* pDoc = pNode->GetDoc();
             if ( pDoc )
             {
-                pRedline = pDoc->getIDocumentRedlineAccess().GetRedline( *pStart, NULL );
+                pRedline = pDoc->getIDocumentRedlineAccess().GetRedline( *pStart, nullptr );
             }
         }
     }
@@ -751,7 +751,7 @@ bool SwAccessibleParagraph::GetWordBoundary(
     bool bRet = false;
 
     // now ask the Break-Iterator for the word
-    OSL_ENSURE( g_pBreakIt != NULL, "We always need a break." );
+    OSL_ENSURE( g_pBreakIt != nullptr, "We always need a break." );
     OSL_ENSURE( g_pBreakIt->GetBreakIter().is(), "No break-iterator." );
     if( g_pBreakIt->GetBreakIter().is() )
     {
@@ -838,7 +838,7 @@ bool SwAccessibleParagraph::GetGlyphBoundary(
 
     // ask the Break-Iterator for the glyph by moving one cell
     // forward, and then one cell back
-    OSL_ENSURE( g_pBreakIt != NULL, "We always need a break." );
+    OSL_ENSURE( g_pBreakIt != nullptr, "We always need a break." );
     OSL_ENSURE( g_pBreakIt->GetBreakIter().is(), "No break-iterator." );
     if( g_pBreakIt->GetBreakIter().is() )
     {
@@ -1008,8 +1008,8 @@ void SAL_CALL SwAccessibleParagraph::grabFocus()
     const SwTextFrm *pTextFrm = static_cast<const SwTextFrm*>( GetFrm() );
     const SwTextNode* pTextNd = pTextFrm->GetTextNode();
 
-    if( pCrsrSh != 0 && pTextNd != 0 &&
-        ( pCrsr == 0 ||
+    if( pCrsrSh != nullptr && pTextNd != nullptr &&
+        ( pCrsr == nullptr ||
            pCrsr->GetPoint()->nNode.GetIndex() != pTextNd->GetIndex() ||
           !pTextFrm->IsInside( pCrsr->GetPoint()->nContent.GetIndex()) ) )
     {
@@ -1027,7 +1027,7 @@ void SAL_CALL SwAccessibleParagraph::grabFocus()
     // ->#i13955#
     vcl::Window * pWindow = GetWindow();
 
-    if (pWindow != NULL)
+    if (pWindow != nullptr)
         pWindow->GrabFocus();
     // <-#i13955#
 }
@@ -1037,8 +1037,8 @@ static bool lcl_GetBackgroundColor( Color & rColor,
                              const SwFrm* pFrm,
                              SwCrsrShell* pCrsrSh )
 {
-    const SvxBrushItem* pBackgrdBrush = 0;
-    const Color* pSectionTOXColor = 0;
+    const SvxBrushItem* pBackgrdBrush = nullptr;
+    const Color* pSectionTOXColor = nullptr;
     SwRect aDummyRect;
 
     //UUUU
@@ -1125,9 +1125,9 @@ uno::Sequence< OUString > SAL_CALL SwAccessibleParagraph::getSupportedServiceNam
 
 uno::Sequence< OUString > getAttributeNames()
 {
-    static uno::Sequence< OUString >* pNames = NULL;
+    static uno::Sequence< OUString >* pNames = nullptr;
 
-    if( pNames == NULL )
+    if( pNames == nullptr )
     {
         // Add the font name to attribute list
         uno::Sequence< OUString >* pSeq = new uno::Sequence< OUString >( 13 );
@@ -1158,9 +1158,9 @@ uno::Sequence< OUString > getAttributeNames()
 
 uno::Sequence< OUString > getSupplementalAttributeNames()
 {
-    static uno::Sequence< OUString >* pNames = NULL;
+    static uno::Sequence< OUString >* pNames = nullptr;
 
-    if( pNames == NULL )
+    if( pNames == nullptr )
     {
         uno::Sequence< OUString >* pSeq = new uno::Sequence< OUString >( 9 );
 
@@ -1318,7 +1318,7 @@ sal_Bool SAL_CALL SwAccessibleParagraph::setCaretPosition( sal_Int32 nIndex )
 
     // get cursor shell
     SwCrsrShell* pCrsrShell = GetCrsrShell();
-    if( pCrsrShell != NULL )
+    if( pCrsrShell != nullptr )
     {
         // create pam for selection
         SwTextNode* pNode = const_cast<SwTextNode*>( GetTextNode() );
@@ -1433,7 +1433,7 @@ OUString SwAccessibleParagraph::GetFieldTypeNameAtIndex(sal_Int32 nIndex)
 {
     OUString strTypeName;
     SwFieldMgr aMgr;
-    SwTextField* pTextField = NULL;
+    SwTextField* pTextField = nullptr;
     SwTextNode* pTextNd = const_cast<SwTextNode*>( GetTextNode() );
     SwIndex fldIndex( pTextNd, nIndex );
     sal_Int32 nFieldIndex = GetPortionData().GetFieldIndex(nIndex);
@@ -1955,7 +1955,7 @@ void SwAccessibleParagraph::_getRunAttributesImpl(
         tAccParaPropValMap& rRunAttrSeq )
 {
     // create PaM for character at position <nIndex>
-    SwPaM* pPaM( 0 );
+    SwPaM* pPaM( nullptr );
     {
         const SwTextNode* pTextNode( GetTextNode() );
         SwPosition* pStartPos = new SwPosition( *pTextNode );
@@ -2013,7 +2013,7 @@ void SwAccessibleParagraph::_getRunAttributesImpl(
             PropertyEntryVector_t::const_iterator aPropIt = aPropertyEntries.begin();
             while ( aPropIt != aPropertyEntries.end() )
             {
-                const SfxPoolItem* pItem( 0 );
+                const SfxPoolItem* pItem( nullptr );
                 // #i82637# - Found character attributes, whose value equals the value of
                 // the corresponding default character attributes, are excluded.
                 if ( aSet.GetItemState( aPropIt->nWID, true, &pItem ) == SfxItemState::SET )
@@ -2289,10 +2289,10 @@ void SwAccessibleParagraph::_correctValues( const sal_Int32 nIndex,
         {
             //misspelled word
             SwCrsrShell* pCrsrShell = GetCrsrShell();
-            if( pCrsrShell != NULL && pCrsrShell->GetViewOptions() && pCrsrShell->GetViewOptions()->IsOnlineSpell())
+            if( pCrsrShell != nullptr && pCrsrShell->GetViewOptions() && pCrsrShell->GetViewOptions()->IsOnlineSpell())
             {
                 const SwWrongList* pWrongList = pTextNode->GetWrong();
-                if( NULL != pWrongList )
+                if( nullptr != pWrongList )
                 {
                     sal_Int32 nBegin = nIndex;
                     sal_Int32 nLen = 1;
@@ -2310,10 +2310,10 @@ void SwAccessibleParagraph::_correctValues( const sal_Int32 nIndex,
         {
             //misspelled word
             SwCrsrShell* pCrsrShell = GetCrsrShell();
-            if( pCrsrShell != NULL && pCrsrShell->GetViewOptions() && pCrsrShell->GetViewOptions()->IsOnlineSpell())
+            if( pCrsrShell != nullptr && pCrsrShell->GetViewOptions() && pCrsrShell->GetViewOptions()->IsOnlineSpell())
             {
                 const SwWrongList* pWrongList = pTextNode->GetWrong();
-                if( NULL != pWrongList )
+                if( nullptr != pWrongList )
                 {
                     sal_Int32 nBegin = nIndex;
                     sal_Int32 nLen = 1;
@@ -2499,7 +2499,7 @@ sal_Int32 SwAccessibleParagraph::getIndexAtPoint( const awt::Point& rPoint )
     }
 
     // ask core for position
-    OSL_ENSURE( GetFrm() != NULL, "The text frame has vanished!" );
+    OSL_ENSURE( GetFrm() != nullptr, "The text frame has vanished!" );
     OSL_ENSURE( GetFrm()->IsTextFrm(), "The text frame has mutated!" );
     const SwTextFrm* pFrm = static_cast<const SwTextFrm*>( GetFrm() );
     SwCrsrMoveState aMoveState;
@@ -2591,7 +2591,7 @@ sal_Bool SwAccessibleParagraph::setSelection( sal_Int32 nStartIndex, sal_Int32 n
 
     // get cursor shell
     SwCrsrShell* pCrsrShell = GetCrsrShell();
-    if( pCrsrShell != NULL )
+    if( pCrsrShell != nullptr )
     {
         // create pam for selection
         SwTextNode* pNode = const_cast<SwTextNode*>( GetTextNode() );
@@ -3108,7 +3108,7 @@ SwHyperlinkIter_Impl::SwHyperlinkIter_Impl( const SwTextFrm *pTextFrm ) :
 
 const SwTextAttr *SwHyperlinkIter_Impl::next()
 {
-    const SwTextAttr *pAttr = 0;
+    const SwTextAttr *pAttr = nullptr;
     if( pHints )
     {
         while( !pAttr && nPos < pHints->Count() )
@@ -3320,7 +3320,7 @@ sal_Int32 SAL_CALL SwAccessibleParagraph::getSelectedPortionCount(  )
 
     sal_Int32 nSeleted = 0;
     SwPaM* pCrsr = GetCursor( true );
-    if( pCrsr != NULL )
+    if( pCrsr != nullptr )
     {
         // get SwPosition for my node
         const SwTextNode* pNode = GetTextNode();
@@ -3393,7 +3393,7 @@ sal_Bool SAL_CALL SwAccessibleParagraph::removeSelection( sal_Int32 selectionInd
     // get the selection, and test whether it affects our text node
     SwPaM* pCrsr = GetCursor( true );
 
-    if( pCrsr != NULL )
+    if( pCrsr != nullptr )
     {
         bool bRet = false;
 
@@ -3488,7 +3488,7 @@ sal_Int32 SAL_CALL SwAccessibleParagraph::addSelection( sal_Int32, sal_Int32 sta
 
     // get cursor shell
     SwCrsrShell* pCrsrShell = GetCrsrShell();
-    if( pCrsrShell != NULL )
+    if( pCrsrShell != nullptr )
     {
         // create pam for selection
         pCrsrShell->StartAction();
@@ -3640,7 +3640,7 @@ sal_Int32 SAL_CALL SwAccessibleParagraph::getNumberOfLineWithCaret()
         if ( nCaretPos == aLineBound.startPos )
         {
             SwCrsrShell* pCrsrShell = SwAccessibleParagraph::GetCrsrShell();
-            if ( pCrsrShell != 0 )
+            if ( pCrsrShell != nullptr )
             {
                 const awt::Rectangle aCharRect = getCharacterBounds( nCaretPos );
 
@@ -3693,7 +3693,7 @@ bool SwAccessibleParagraph::GetSelectionAtIndex(
 
     // get the selection, and test whether it affects our text node
     SwPaM* pCrsr = GetCursor( true );
-    if( pCrsr != NULL )
+    if( pCrsr != nullptr )
     {
         // get SwPosition for my node
         const SwTextNode* pNode = GetTextNode();

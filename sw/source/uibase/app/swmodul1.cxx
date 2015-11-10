@@ -111,7 +111,7 @@ SwWrtShell* GetActiveWrtShell()
     SwView *pActive = ::GetActiveView();
     if( pActive )
         return &pActive->GetWrtShell();
-    return 0;
+    return nullptr;
 }
 
 SwView* GetActiveView()
@@ -139,7 +139,7 @@ void SwModule::ApplyUsrPref(const SwViewOption &rUsrPref, SwView* pActView,
                             sal_uInt16 nDest )
 {
     SwView* pCurrView = pActView;
-    SwViewShell* pSh = pCurrView ? &pCurrView->GetWrtShell() : 0;
+    SwViewShell* pSh = pCurrView ? &pCurrView->GetWrtShell() : nullptr;
 
     SwMasterUsrPref* pPref = const_cast<SwMasterUsrPref*>(GetUsrPref(
                                          nDest == VIEWOPT_DEST_WEB
@@ -150,7 +150,7 @@ void SwModule::ApplyUsrPref(const SwViewOption &rUsrPref, SwView* pActView,
     bool bViewOnly = VIEWOPT_DEST_VIEW_ONLY == nDest;
     // fob Preview off
     SwPagePreview* pPPView;
-    if( !pCurrView && 0 != (pPPView = dynamic_cast<SwPagePreview*>( SfxViewShell::Current()))  )
+    if( !pCurrView && nullptr != (pPPView = dynamic_cast<SwPagePreview*>( SfxViewShell::Current()))  )
     {
         if(!bViewOnly)
             pPref->SetUIOptions( rUsrPref );

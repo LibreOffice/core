@@ -179,7 +179,7 @@ public:
 
     WW8TabDesc( SwWW8ImplReader* pIoClass, WW8_CP nStartCp );
     bool Ok() const { return bOk; }
-    void CreateSwTable(SvxULSpaceItem* pULSpaceItem = 0);
+    void CreateSwTable(SvxULSpaceItem* pULSpaceItem = nullptr);
     void UseSwTable();
     void SetSizePosition(SwFrameFormat* pFrameFormat);
     void TableCellEnd();
@@ -300,7 +300,7 @@ sal_uInt16 SwWW8ImplReader::End_Footnote()
     sal_Int32 nPos = m_pPaM->GetPoint()->nContent.GetIndex();
 
     OUString sChar;
-    SwTextAttr* pFN = 0;
+    SwTextAttr* pFN = nullptr;
     //There should have been a footnote char, we will replace this.
     if (pText && nPos)
     {
@@ -419,7 +419,7 @@ bool SwWW8ImplReader::SearchRowEnd(WW8PLCFx_Cp_FKP* pPap, WW8_CP &rStartCp,
     int nLevel) const
 {
     WW8PLCFxDesc aRes;
-    aRes.pMemPos = 0;
+    aRes.pMemPos = nullptr;
     aRes.nEndPos = rStartCp;
     bool bReadRes(false);
     WW8PLCFxDesc aPrevRes;
@@ -431,8 +431,8 @@ bool SwWW8ImplReader::SearchRowEnd(WW8PLCFx_Cp_FKP* pPap, WW8_CP &rStartCp,
             const sal_uInt8* pB = pPap->HasSprm(TabRowSprm(nLevel));
             if (pB && *pB == 1)
             {
-                const sal_uInt8 *pLevel = 0;
-                if (0 != (pLevel = pPap->HasSprm(0x6649)))
+                const sal_uInt8 *pLevel = nullptr;
+                if (nullptr != (pLevel = pPap->HasSprm(0x6649)))
                 {
                     if (nLevel + 1 == *pLevel)
                         return true;
@@ -446,7 +446,7 @@ bool SwWW8ImplReader::SearchRowEnd(WW8PLCFx_Cp_FKP* pPap, WW8_CP &rStartCp,
         }
 
         aRes.nStartPos = aRes.nEndPos;
-        aRes.pMemPos = 0;
+        aRes.pMemPos = nullptr;
         //Seek to our next block of properties
         if (!(pPap->SeekPos(aRes.nStartPos)))
         {
@@ -472,12 +472,12 @@ bool SwWW8ImplReader::SearchRowEnd(WW8PLCFx_Cp_FKP* pPap, WW8_CP &rStartCp,
 ApoTestResults SwWW8ImplReader::TestApo(int nCellLevel, bool bTableRowEnd,
     const WW8_TablePos *pTabPos)
 {
-    const WW8_TablePos *pTopLevelTable = nCellLevel <= 1 ? pTabPos : 0;
+    const WW8_TablePos *pTopLevelTable = nCellLevel <= 1 ? pTabPos : nullptr;
     ApoTestResults aRet;
     // Frame in Style Definition (word appears to ignore them if inside an
     // text autoshape)
     if (!m_bTxbxFlySection && m_nAktColl < m_vColl.size())
-        aRet.mpStyleApo = StyleExists(m_nAktColl) ? m_vColl[m_nAktColl].pWWFly : 0;
+        aRet.mpStyleApo = StyleExists(m_nAktColl) ? m_vColl[m_nAktColl].pWWFly : nullptr;
 
     /*
     #i1140#
@@ -500,7 +500,7 @@ ApoTestResults SwWW8ImplReader::TestApo(int nCellLevel, bool bTableRowEnd,
 
     aRet.m_bHasSprm37 = m_pPlcxMan->HasParaSprm( m_bVer67 ? 37 : 0x2423 );
     const sal_uInt8 *pSrpm29 = m_pPlcxMan->HasParaSprm( m_bVer67 ? 29 : 0x261B );
-    aRet.m_bHasSprm29 = pSrpm29 != NULL;
+    aRet.m_bHasSprm29 = pSrpm29 != nullptr;
     aRet.m_nSprm29 = pSrpm29 ? *pSrpm29 : 0;
 
     // Is there some frame data here
@@ -760,7 +760,7 @@ SwNumRule* SwWW8ImplReader::GetStyRule()
     const OUString aName( m_rDoc.GetUniqueNumRuleName( &aBaseName, false) );
 
     // #i86652#
-    sal_uInt16 nRul = m_rDoc.MakeNumRule( aName, 0, false,
+    sal_uInt16 nRul = m_rDoc.MakeNumRule( aName, nullptr, false,
                                     SvxNumberFormat::LABEL_ALIGNMENT );
     m_pStyles->pStyRule = m_rDoc.GetNumRuleTable()[nRul];
     // Auto == false-> Nummerierungsvorlage
@@ -783,7 +783,7 @@ void SwWW8ImplReader::Read_ANLevelNo( sal_uInt16, const sal_uInt8* pData, short 
         // only for SwTextFormatColl, not CharFormat
         // WW: 0 = no Numbering
         SwWW8StyInf * pColl = GetStyle(m_nAktColl);
-        if (pColl != NULL && pColl->bColl && *pData)
+        if (pColl != nullptr && pColl->bColl && *pData)
         {
             // Range WW:1..9 -> SW:0..8 no bullets / numbering
 
@@ -847,7 +847,7 @@ void SwWW8ImplReader::Read_ANLevelDesc( sal_uInt16, const sal_uInt8* pData, shor
         m_pAktColl->SetFormatAttr( SwNumRuleItem( pNR->GetName() ) );
 
         pStyInf = GetStyle(m_nAktColl);
-        if (pStyInf != NULL)
+        if (pStyInf != nullptr)
             pStyInf->bHasStyNumRule = true;
     }
 }
@@ -884,7 +884,7 @@ void SwWW8ImplReader::Read_OLST( sal_uInt16, const sal_uInt8* pData, short nLen 
     delete m_pNumOlst;
     if (nLen <= 0)
     {
-        m_pNumOlst = 0;
+        m_pNumOlst = nullptr;
         return;
     }
     m_pNumOlst = new WW8_OLST;
@@ -934,7 +934,7 @@ void SwWW8ImplReader::StartAnl(const sal_uInt8* pSprm13)
     SwNumRule *pNumRule = m_aANLDRules.GetNumRule(m_nWwNumType);
 
     // check for COL numbering:
-    const sal_uInt8* pS12 = 0;// sprmAnld
+    const sal_uInt8* pS12 = nullptr;// sprmAnld
     OUString sNumRule;
 
     if (m_pTableDesc)
@@ -956,7 +956,7 @@ void SwWW8ImplReader::StartAnl(const sal_uInt8* pSprm13)
     }
 
     SwWW8StyInf * pStyInf = GetStyle(m_nAktColl);
-    if (sNumRule.isEmpty() && pStyInf != NULL &&  pStyInf->bHasStyNumRule)
+    if (sNumRule.isEmpty() && pStyInf != nullptr &&  pStyInf->bHasStyNumRule)
     {
         sNumRule = pStyInf->pFormat->GetNumRule().GetValue();
         pNumRule = m_rDoc.FindNumRulePtr(sNumRule);
@@ -970,7 +970,7 @@ void SwWW8ImplReader::StartAnl(const sal_uInt8* pSprm13)
         {
             // #i86652#
             pNumRule = m_rDoc.GetNumRuleTable()[
-                            m_rDoc.MakeNumRule( sNumRule, 0, false,
+                            m_rDoc.MakeNumRule( sNumRule, nullptr, false,
                                               SvxNumberFormat::LABEL_ALIGNMENT ) ];
         }
         if (m_pTableDesc)
@@ -1073,7 +1073,7 @@ void SwWW8ImplReader::StopAnlToRestart(sal_uInt8 nNewType, bool bGoBack)
     else
         m_pCtrlStck->SetAttr(*m_pPaM->GetPoint(), RES_FLTR_NUMRULE);
 
-    m_aANLDRules.mpNumberingNumRule = 0;
+    m_aANLDRules.mpNumberingNumRule = nullptr;
     /*
      #i18816#
      my take on this problem is that moving either way from an outline to a
@@ -1083,7 +1083,7 @@ void SwWW8ImplReader::StopAnlToRestart(sal_uInt8 nNewType, bool bGoBack)
         (((m_nWwNumType == WW8_Outline) && (nNewType == WW8_Numbering)) ||
         ((m_nWwNumType == WW8_Numbering) && (nNewType == WW8_Outline)));
     if (!bNumberingNotStopOutline)
-        m_aANLDRules.mpOutlineNumRule = 0;
+        m_aANLDRules.mpOutlineNumRule = nullptr;
 
     m_nSwNumLevel = 0xff;
     m_nWwNumType = WW8_None;
@@ -1135,9 +1135,9 @@ void WW8TabBandDesc::ReadDef(bool bVer67, const sal_uInt8* pS)
     nLen -= 2 * ( nCols + 1 );
     if( nCols != nOldCols ) // different column count
     {
-        delete[] pTCs, pTCs = 0;
-        delete[] pSHDs, pSHDs = 0;
-        delete[] pNewSHDs, pNewSHDs = 0;
+        delete[] pTCs, pTCs = nullptr;
+        delete[] pSHDs, pSHDs = nullptr;
+        delete[] pNewSHDs, pNewSHDs = nullptr;
     }
 
     short nFileCols = nLen / ( bVer67 ? 10 : 20 );  // really saved
@@ -1589,7 +1589,7 @@ const sal_uInt8 *HasTabCellSprm(WW8PLCFx_Cp_FKP* pPap, bool bVer67)
         pParams = pPap->HasSprm(24);
     else
     {
-        if (0 == (pParams = pPap->HasSprm(0x244B)))
+        if (nullptr == (pParams = pPap->HasSprm(0x244B)))
             pParams = pPap->HasSprm(0x2416);
     }
     return pParams;
@@ -1718,17 +1718,17 @@ wwTableSprm GetTableSprm(sal_uInt16 nId, ww::WordVersion eVer)
 }
 
 WW8TabDesc::WW8TabDesc(SwWW8ImplReader* pIoClass, WW8_CP nStartCp) :
-    mpOldRedlineStack(0),
+    mpOldRedlineStack(nullptr),
     pIo(pIoClass),
-    pFirstBand(0),
-    pActBand(0),
-    pTmpPos(0),
-    pTableNd(0),
-    pTabLines(0),
-    pTabLine(0),
-    pTabBoxes(0),
-    pTabBox(0),
-    pAktWWCell(0),
+    pFirstBand(nullptr),
+    pActBand(nullptr),
+    pTmpPos(nullptr),
+    pTableNd(nullptr),
+    pTabLines(nullptr),
+    pTabLine(nullptr),
+    pTabBoxes(nullptr),
+    pTabBox(nullptr),
+    pAktWWCell(nullptr),
     nRows(0),
     nDefaultSwCols(0),
     nBands(0),
@@ -1746,9 +1746,9 @@ WW8TabDesc::WW8TabDesc(SwWW8ImplReader* pIoClass, WW8_CP nStartCp) :
     nAktBandRow(0),
     nAktCol(0),
     nRowsToRepeat(0),
-    pTable(0),
-    pParentPos(0),
-    pFlyFormat(0),
+    pTable(nullptr),
+    pParentPos(nullptr),
+    pFlyFormat(nullptr),
     aItemSet(pIo->m_rDoc.GetAttrPool(),RES_FRMATR_BEGIN,RES_FRMATR_END-1)
 {
     pIo->m_bAktAND_fNumberAcross = false;
@@ -1777,12 +1777,12 @@ WW8TabDesc::WW8TabDesc(SwWW8ImplReader* pIoClass, WW8_CP nStartCp) :
     {
         short nTabeDxaNew      = SHRT_MAX;
         bool bTabRowJustRead   = false;
-        const sal_uInt8* pShadeSprm = 0;
-        const sal_uInt8* pNewShadeSprm = 0;
-        const sal_uInt8* pTableBorders = 0;
-        const sal_uInt8* pTableBorders90 = 0;
+        const sal_uInt8* pShadeSprm = nullptr;
+        const sal_uInt8* pNewShadeSprm = nullptr;
+        const sal_uInt8* pTableBorders = nullptr;
+        const sal_uInt8* pTableBorders90 = nullptr;
         std::vector<const sal_uInt8*> aTSetBrcs, aTSetBrc90s;
-        WW8_TablePos *pTabPos  = 0;
+        WW8_TablePos *pTabPos  = nullptr;
 
         // search end of a tab row
         if(!(pIo->SearchRowEnd(pPap, nStartCp, pIo->m_nInTable)))
@@ -1801,7 +1801,7 @@ WW8TabDesc::WW8TabDesc(SwWW8ImplReader* pIoClass, WW8_CP nStartCp) :
         {
             bool bRepeatedSprm = false;
             const sal_uInt8* pParams;
-            while (aSprmIter.GetSprms() && 0 != (pParams = aSprmIter.GetAktParams()))
+            while (aSprmIter.GetSprms() && nullptr != (pParams = aSprmIter.GetAktParams()))
             {
                 sal_uInt16 nId = aSprmIter.GetAktId();
                 wwTableSprm eSprm = GetTableSprm(nId, pIo->GetFib().GetFIBVersion());
@@ -1961,7 +1961,7 @@ WW8TabDesc::WW8TabDesc(SwWW8ImplReader* pIoClass, WW8_CP nStartCp) :
 
         //Seek our pap to its next block of properties
         WW8PLCFxDesc aRes;
-        aRes.pMemPos = 0;
+        aRes.pMemPos = nullptr;
         aRes.nStartPos = nStartCp;
 
         if (!(pPap->SeekPos(aRes.nStartPos)))
@@ -1999,7 +1999,7 @@ WW8TabDesc::WW8TabDesc(SwWW8ImplReader* pIoClass, WW8_CP nStartCp) :
                 pTabPos = &aTabPos;
 
         //Move back to this cell
-        aRes.pMemPos = 0;
+        aRes.pMemPos = nullptr;
         aRes.nStartPos = nStartCp;
 
         // PlcxMan currently points too far ahead so we need to bring
@@ -2050,7 +2050,7 @@ WW8TabDesc::WW8TabDesc(SwWW8ImplReader* pIoClass, WW8_CP nStartCp) :
             pNewBand->nRows = 1;
             pActBand->pNextBand = pNewBand; // am Ende einschleifen
             nBands++;
-            pNewBand = 0;                   // do not delete
+            pNewBand = nullptr;                   // do not delete
         }
         CalcDefaults();
     }
@@ -2400,7 +2400,7 @@ void WW8TabDesc::CreateSwTable(SvxULSpaceItem* pULSpaceItem)
     {
         if (const SfxItemSet* pSet = pNd->GetpSwAttrSet())
         {
-            SfxPoolItem *pSetAttr = 0;
+            SfxPoolItem *pSetAttr = nullptr;
             const SfxPoolItem* pItem;
             if (SfxItemState::SET == pSet->GetItemState(RES_BREAK, false, &pItem))
             {
@@ -2523,7 +2523,7 @@ void WW8TabDesc::MergeCells()
             for( short j = 0; j < pActBand->nRows; j++, nRow++ )
                 for( short i = 0; i < pActBand->nWwCols; i++ )
                 {
-                    WW8SelBoxInfo* pActMGroup = 0;
+                    WW8SelBoxInfo* pActMGroup = nullptr;
 
                     // start a new merge group if appropriate
 
@@ -2608,7 +2608,7 @@ void WW8TabDesc::MergeCells()
                         {
                             WW8SelBoxInfo* p = FindMergeGroup(
                                 nX1, pActMGroup->nGroupWidth, false );
-                            if (p == 0)
+                            if (p == nullptr)
                             {
                                 break;
                             }
@@ -2633,14 +2633,14 @@ void WW8TabDesc::MergeCells()
 //match, see #i23022#/#i18644#
 void WW8TabDesc::ParkPaM()
 {
-    SwTableBox *pTabBox2 = 0;
+    SwTableBox *pTabBox2 = nullptr;
     short nRow = nAktRow + 1;
     if (nRow < (sal_uInt16)pTabLines->size())
     {
         if (SwTableLine *pLine = (*pTabLines)[nRow])
         {
             SwTableBoxes &rBoxes = pLine->GetTabBoxes();
-            pTabBox2 = rBoxes.empty() ? 0 : rBoxes.front();
+            pTabBox2 = rBoxes.empty() ? nullptr : rBoxes.front();
         }
     }
 
@@ -2678,13 +2678,13 @@ void WW8TabDesc::FinishSwTable()
     pIo->m_pRedlineStack->closeall(*pIo->m_pPaM->GetPoint());
     delete pIo->m_pRedlineStack;
     pIo->m_pRedlineStack = mpOldRedlineStack;
-    mpOldRedlineStack = 0;
+    mpOldRedlineStack = nullptr;
 
     WW8DupProperties aDup(pIo->m_rDoc,pIo->m_pCtrlStck);
     pIo->m_pCtrlStck->SetAttr( *pIo->m_pPaM->GetPoint(), 0, false);
 
     MoveOutsideTable();
-    delete pTmpPos, pTmpPos = 0;
+    delete pTmpPos, pTmpPos = nullptr;
 
     aDup.Insert(*pIo->m_pPaM->GetPoint());
 
@@ -2716,7 +2716,7 @@ void WW8TabDesc::FinishSwTable()
                 }
             }
         }
-        pIo->m_pFormatOfJustInsertedApo = 0;
+        pIo->m_pFormatOfJustInsertedApo = nullptr;
         m_MergeGroups.clear();
     }
 }
@@ -2778,7 +2778,7 @@ WW8SelBoxInfo* WW8TabDesc::FindMergeGroup(short nX1, short nWidth, bool bExact)
             }
         }
     }
-    return 0;
+    return nullptr;
 }
 
 bool WW8TabDesc::IsValidCell(short nCol) const
@@ -2939,7 +2939,7 @@ void WW8TabDesc::InsertCells( short nIns )
     pTabBox = (*pTabBoxes)[0];
 
     pIo->m_rDoc.GetNodes().InsBoxen( pTableNd, pTabLine, static_cast<SwTableBoxFormat*>(pTabBox->GetFrameFormat()),
-                            const_cast<SwTextFormatColl*>(pIo->m_pDfltTextFormatColl), 0, pTabBoxes->size(), nIns );
+                            const_cast<SwTextFormatColl*>(pIo->m_pDfltTextFormatColl), nullptr, pTabBoxes->size(), nIns );
     // The third parameter contains the FrameFormat of the boxes.
     // Here it is possible to optimize to save (reduce) FrameFormats.
 }
@@ -3175,7 +3175,7 @@ void WW8TabDesc::AdjustNewBand()
             if(nOldBoxRightLineWidth>nCurrentRightLineWidth)
                 aCurrentBox.SetLine(aOldBox.GetLine(SvxBoxItemLine::RIGHT), SvxBoxItemLine::LEFT);
 
-            aOldBox.SetLine(0, SvxBoxItemLine::RIGHT);
+            aOldBox.SetLine(nullptr, SvxBoxItemLine::RIGHT);
             pBox2->GetFrameFormat()->SetFormatAttr(aOldBox);
         }
 
@@ -3261,7 +3261,7 @@ SwTableBox* WW8TabDesc::UpdateTableMergeGroup(  WW8_TCell&     rCell,
                                                 sal_uInt16         nCol )
 {
     // set default for return
-    SwTableBox* pResult = 0;
+    SwTableBox* pResult = nullptr;
 
     // check if the box has to be merged
     // If cell is the first one to be merged, a new merge group has to be provided.
@@ -3275,7 +3275,7 @@ SwTableBox* WW8TabDesc::UpdateTableMergeGroup(  WW8_TCell&     rCell,
            rCell.bVertRestart ) )
     {
         // detect appropriate merge group
-        WW8SelBoxInfo* pTheMergeGroup = 0;
+        WW8SelBoxInfo* pTheMergeGroup = nullptr;
         if( pActGroup )
             // assign group
             pTheMergeGroup = pActGroup;
@@ -3341,15 +3341,15 @@ bool SwWW8ImplReader::StartTable(WW8_CP nStartCp, SvxULSpaceItem* pULSpaceItem)
 
     // #i33818# - determine absolute position object attributes,
     // if possible. It's needed for nested tables.
-    WW8FlyPara* pTableWFlyPara( 0L );
-    WW8SwFlyPara* pTableSFlyPara( 0L );
+    WW8FlyPara* pTableWFlyPara( nullptr );
+    WW8SwFlyPara* pTableSFlyPara( nullptr );
     // #i45301# - anchor nested table inside Writer fly frame
     // only at-character, if absolute position object attributes are available.
     // Thus, default anchor type is as-character anchored.
     RndStdIds eAnchor( FLY_AS_CHAR );
     if ( m_nInTable )
     {
-        WW8_TablePos* pNestedTabPos( 0L );
+        WW8_TablePos* pNestedTabPos( nullptr );
         WW8_TablePos aNestedTabPos;
         WW8PLCFxSave1 aSave;
         m_pPlcxMan->GetPap()->Save( aSave );
@@ -3429,7 +3429,7 @@ bool SwWW8ImplReader::StartTable(WW8_CP nStartCp, SvxULSpaceItem* pULSpaceItem)
             m_pTableDesc->pFlyFormat->SetFormatAttr( SwFormatFollowTextFlow( true ) );
         }
         else
-            m_pTableDesc->SetSizePosition(0);
+            m_pTableDesc->SetSizePosition(nullptr);
         m_pTableDesc->UseSwTable();
     }
     else
@@ -3439,7 +3439,7 @@ bool SwWW8ImplReader::StartTable(WW8_CP nStartCp, SvxULSpaceItem* pULSpaceItem)
     delete pTableWFlyPara;
     delete pTableSFlyPara;
 
-    return 0 != m_pTableDesc;
+    return nullptr != m_pTableDesc;
 }
 
 void SwWW8ImplReader::TabCellEnd()
@@ -3473,7 +3473,7 @@ void SwWW8ImplReader::PopTableDesc()
 
     delete m_pTableDesc;
     if (m_aTableStack.empty())
-        m_pTableDesc = 0;
+        m_pTableDesc = nullptr;
     else
     {
        m_pTableDesc = m_aTableStack.top();
@@ -3536,7 +3536,7 @@ sal_uInt16 SwWW8ImplReader::StyleUsingLFO( sal_uInt16 nLFOIndex ) const
 
 const SwFormat* SwWW8ImplReader::GetStyleWithOrgWWName( OUString& rName ) const
 {
-    SwFormat* pRet = 0;
+    SwFormat* pRet = nullptr;
     if( !m_vColl.empty() )
     {
         for(sal_uInt16 nI = 0; nI < m_pStyles->GetCount(); nI++ )
@@ -3555,7 +3555,7 @@ const SwFormat* SwWW8ImplReader::GetStyleWithOrgWWName( OUString& rName ) const
 const sal_uInt8* WW8RStyle::HasParaSprm( sal_uInt16 nId ) const
 {
     if( !pParaSprms || !nSprmsLen )
-        return 0;
+        return nullptr;
 
     return maSprmParser.findSprmData(nId, pParaSprms, nSprmsLen);
 }
@@ -3578,7 +3578,7 @@ void WW8RStyle::ImportSprms(sal_uInt8 *pSprms, short nLen, bool bPap)
         aSprmIter.advance();
     }
 
-    pParaSprms = 0;
+    pParaSprms = nullptr;
     nSprmsLen = 0;
 }
 
@@ -3679,8 +3679,8 @@ WW8RStyle::WW8RStyle(WW8Fib& _rFib, SwWW8ImplReader* pI)
     , maSprmParser(_rFib.GetFIBVersion())
     , pIo(pI)
     , pStStrm(pI->m_pTableStream)
-    , pStyRule(0)
-    , pParaSprms(0)
+    , pStyRule(nullptr)
+    , pParaSprms(nullptr)
     , nSprmsLen(0)
     , nWwNumLevel(0)
     , bTextColChanged(false)
@@ -3812,7 +3812,7 @@ bool WW8RStyle::PrepareStyle(SwWW8StyInf &rSI, ww::sti eSti, sal_uInt16 nThisSty
 
     rSI.nFollow = nNextStyle;       // remember Follow
 
-    pStyRule = 0;                   // recreate if necessary
+    pStyRule = nullptr;                   // recreate if necessary
     bTextColChanged = bFontChanged = bCJKFontChanged = bCTLFontChanged =
         bFSizeChanged = bFCTLSizeChanged = bWidowsChanged = false;
     pIo->SetNAktColl( nThisStyle );
@@ -3835,7 +3835,7 @@ void WW8RStyle::PostStyle(SwWW8StyInf &rSI, bool bOldNoImp)
         Set1StyleDefaults();
     }
 
-    pStyRule = 0;                   // to be on the safe side
+    pStyRule = nullptr;                   // to be on the safe side
     pIo->m_bStyNormal = false;
     pIo->SetNAktColl( 0 );
     pIo->m_bNoAttrImport = bOldNoImp;
@@ -3959,8 +3959,8 @@ void WW8RStyle::ScanStyles()        // investigate style dependencies
         SwWW8StyInf &rSI = pIo->m_vColl[i];
 
         rSI.nFilePos = pStStrm->Tell();        // remember FilePos
-        WW8_STD* pStd = Read1Style( nSkip, 0, 0 );  // read STD
-        rSI.bValid = (0 != pStd);
+        WW8_STD* pStd = Read1Style( nSkip, nullptr, nullptr );  // read STD
+        rSI.bValid = (nullptr != pStd);
         if (rSI.bValid)
         {
             rSI.nBase = pStd->istdBase;        // remember Basis
@@ -4509,7 +4509,7 @@ void WW8RStyle::Import()
     }
 
     // we do not read styles anymore:
-    pIo->m_pAktColl = 0;
+    pIo->m_pAktColl = nullptr;
 }
 
 rtl_TextEncoding SwWW8StyInf::GetCharSet() const

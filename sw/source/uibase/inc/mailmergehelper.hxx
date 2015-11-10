@@ -50,7 +50,7 @@ namespace SwMailMergeHelper
                             css::uno::Reference<css::mail::XMailService>& xInMailService,
                             const OUString& rInMailServerPassword,
                             const OUString& rOutMailServerPassword,
-                            vcl::Window* pDialogParentWindow = 0);
+                            vcl::Window* pDialogParentWindow = nullptr);
 }
 
 struct SwAddressPreview_Impl;
@@ -107,7 +107,7 @@ public:
 
     // fill the actual data into a string (address block or greeting)
     static OUString FillData(const OUString& rAddress, SwMailMergeConfigItem& rConfigItem,
-                             const css::uno::Sequence<OUString>* pAssignments = 0);
+                             const css::uno::Sequence<OUString>* pAssignments = nullptr);
 
     void SetSelectHdl (const Link<LinkParamNone*,void>& rLink) { m_aSelectHdl = rLink; }
 };
@@ -146,7 +146,7 @@ class SW_DLLPUBLIC SwAuthenticator :
     VclPtr<vcl::Window> m_pParentWindow;
 public:
     SwAuthenticator()
-        : m_pParentWindow(0)
+        : m_pParentWindow(nullptr)
     {}
     SwAuthenticator(const OUString& username, const OUString& password, vcl::Window* pParent)
         : m_aUserName(username)

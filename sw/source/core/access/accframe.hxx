@@ -93,7 +93,7 @@ protected:
 
     inline void ClearFrm()
     {
-        mpFrm = 0;
+        mpFrm = nullptr;
     }
 
     SwAccessibleFrame( const SwRect& rVisArea,
@@ -117,7 +117,7 @@ protected:
     // Return the bounding box of the frame clipped to the vis area. If
     // no frame is specified, use this' frame.
     SwRect GetBounds( const SwAccessibleMap& rAccMap,
-                      const SwFrm *pFrm = 0 );
+                      const SwFrm *pFrm = nullptr );
 
     // Return the upper that has a context attached. This might be
     // another one than the immediate upper.

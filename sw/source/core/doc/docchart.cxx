@@ -97,8 +97,8 @@ void SwDoc::DoUpdateAllCharts()
             const SwTableNode* pTableNd;
             const SwFrameFormat* pFormat = rTableFormats[ n ];
 
-            if( 0 != ( pTmpTable = SwTable::FindTable( pFormat ) ) &&
-                0 != ( pTableNd = pTmpTable->GetTableNode() ) &&
+            if( nullptr != ( pTmpTable = SwTable::FindTable( pFormat ) ) &&
+                nullptr != ( pTableNd = pTmpTable->GetTableNode() ) &&
                 pTableNd->GetNodes().IsDocNodes() )
             {
                 _UpdateCharts( *pTmpTable, *pVSh );
@@ -112,11 +112,11 @@ void SwDoc::_UpdateCharts( const SwTable& rTable, SwViewShell const & rVSh ) con
     OUString aName( rTable.GetFrameFormat()->GetName() );
     SwStartNode *pStNd;
     SwNodeIndex aIdx( *GetNodes().GetEndOfAutotext().StartOfSectionNode(), 1 );
-    while( 0 != (pStNd = aIdx.GetNode().GetStartNode()) )
+    while( nullptr != (pStNd = aIdx.GetNode().GetStartNode()) )
     {
         ++aIdx;
         SwOLENode *pONd;
-        if( 0 != ( pONd = aIdx.GetNode().GetOLENode() ) &&
+        if( nullptr != ( pONd = aIdx.GetNode().GetOLENode() ) &&
             aName == pONd->GetChartTableName() &&
             pONd->getLayoutFrm( rVSh.GetLayout() ) )
         {
@@ -169,7 +169,7 @@ void SwDoc::SetTableName( SwFrameFormat& rTableFormat, const OUString &rNewName 
 
     SwStartNode *pStNd;
     SwNodeIndex aIdx( *GetNodes().GetEndOfAutotext().StartOfSectionNode(), 1 );
-    while ( 0 != (pStNd = aIdx.GetNode().GetStartNode()) )
+    while ( nullptr != (pStNd = aIdx.GetNode().GetStartNode()) )
     {
         ++aIdx;
         SwOLENode *pNd = aIdx.GetNode().GetOLENode();

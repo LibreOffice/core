@@ -540,7 +540,7 @@ void SwVirtFlyDrawObj::SetSnapRect(const Rectangle& )
     SetRect();
     SetChanged();
     BroadcastObjectChange();
-    if (pUserCall!=NULL)
+    if (pUserCall!=nullptr)
         pUserCall->Changed(*this, SDRUSERCALL_RESIZE, aTmp);
 }
 
@@ -561,7 +561,7 @@ void SwVirtFlyDrawObj::SetLogicRect(const Rectangle& )
     SetRect();
     SetChanged();
     BroadcastObjectChange();
-    if (pUserCall!=NULL)
+    if (pUserCall!=nullptr)
         pUserCall->Changed(*this, SDRUSERCALL_RESIZE, aTmp);
 }
 
@@ -994,7 +994,7 @@ SdrObject* SwVirtFlyDrawObj::CheckMacroHit( const SdrObjMacroHitRec& rRec ) cons
                     pFlyFrm->GetFormat()->GetIMapObject( rRec.aPos, pFlyFrm ))
                     return const_cast<SdrObject*>(static_cast<SdrObject const *>(this));
 
-                return 0;
+                return nullptr;
             }
         }
     }

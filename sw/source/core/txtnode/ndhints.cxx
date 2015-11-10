@@ -150,8 +150,8 @@ bool SwpHints::Check(bool bPortionsMerged) const
     sal_Int32 nLastStart = 0;
     sal_Int32 nLastEnd   = 0;
 
-    const SwTextAttr *pLastStart = 0;
-    const SwTextAttr *pLastEnd = 0;
+    const SwTextAttr *pLastStart = nullptr;
+    const SwTextAttr *pLastEnd = nullptr;
     std::set<SwTextAttr const*> RsidOnlyAutoFormats;
     if (bPortionsMerged)
     {
@@ -233,7 +233,7 @@ bool SwpHints::Check(bool bPortionsMerged) const
 
         // 8) style portion check
         const SwTextAttr* pHtThis = m_HintsByStart[i];
-        const SwTextAttr* pHtLast = i > 0 ? m_HintsByStart[i-1] : 0;
+        const SwTextAttr* pHtLast = i > 0 ? m_HintsByStart[i-1] : nullptr;
         CHECK_ERR( (0 == i)
             ||  (   (RES_TXTATR_CHARFMT != pHtLast->Which())
                 &&  (RES_TXTATR_AUTOFMT != pHtLast->Which()))

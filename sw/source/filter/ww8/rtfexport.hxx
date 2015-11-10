@@ -133,8 +133,8 @@ protected:
     /// Get ready for a new section.
     virtual void PrepareNewPageDesc(const SfxItemSet* pSet,
                                     const SwNode& rNd,
-                                    const SwFormatPageDesc* pNewPgDescFormat = 0,
-                                    const SwPageDesc* pNewPgDesc = 0) override;
+                                    const SwFormatPageDesc* pNewPgDescFormat = nullptr,
+                                    const SwPageDesc* pNewPgDesc = nullptr) override;
 
     /// Return value indicates if an inherited outline numbering is suppressed.
     virtual bool DisallowInheritingOutlineNumbering(const SwFormat& rFormat) override;

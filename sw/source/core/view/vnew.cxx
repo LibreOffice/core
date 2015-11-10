@@ -83,7 +83,7 @@ void SwViewShell::Init( const SwViewOption *pNewOpt )
 
     SAL_INFO( "sw.core", "View::Init - before InitPrt" );
     // --> FME 2007-11-06 #i82967#
-    OutputDevice* pPDFOut = 0;
+    OutputDevice* pPDFOut = nullptr;
 
     if ( mpOut && mpOut->GetPDFWriter() )
         pPDFOut = mpOut;
@@ -151,27 +151,27 @@ SwViewShell::SwViewShell( SwDoc& rDocument, vcl::Window *pWindow,
                         long nFlags )
     :
     maBrowseBorder(),
-    mpSfxViewShell( 0 ),
+    mpSfxViewShell( nullptr ),
     mpImp( new SwViewShellImp( this ) ),
     mpWin( pWindow ),
     mpOut( pOutput ? pOutput
                   : pWindow ? static_cast<OutputDevice*>(pWindow)
                             : static_cast<OutputDevice*>(rDocument.getIDocumentDeviceAccess().getPrinter( true ))),
-    mpTmpRef( 0 ),
-    mpOpt( 0 ),
+    mpTmpRef( nullptr ),
+    mpOpt( nullptr ),
     mpAccOptions( new SwAccessibilityOptions ),
     mbShowHeaderSeparator( false ),
     mbShowFooterSeparator( false ),
     mbHeaderFooterEdit( false ),
-    mpTargetPaintWindow(0), // #i74769#
-    mpBufferedOut(0), // #i74769#
+    mpTargetPaintWindow(nullptr), // #i74769#
+    mpBufferedOut(nullptr), // #i74769#
     mpDoc( &rDocument ),
     mnStartAction( 0 ),
     mnLockPaint( 0 ),
     mbSelectAll(false),
     mbInLibreOfficeKitCallback(false),
     mbOutputToWindow(false),
-    mpPrePostOutDev(0), // #i72754#
+    mpPrePostOutDev(nullptr), // #i72754#
     maPrePostMapMode()
 {
     // OD 2004-06-01 #i26791# - in order to suppress event handling in
@@ -228,27 +228,27 @@ SwViewShell::SwViewShell( SwViewShell& rShell, vcl::Window *pWindow,
                         OutputDevice *pOutput, long nFlags ) :
     Ring( &rShell ),
     maBrowseBorder( rShell.maBrowseBorder ),
-    mpSfxViewShell( 0 ),
+    mpSfxViewShell( nullptr ),
     mpImp( new SwViewShellImp( this ) ),
     mpWin( pWindow ),
     mpOut( pOutput ? pOutput
                   : pWindow ? static_cast<OutputDevice*>(pWindow)
                             : static_cast<OutputDevice*>(rShell.GetDoc()->getIDocumentDeviceAccess().getPrinter( true ))),
-    mpTmpRef( 0 ),
-    mpOpt( 0 ),
+    mpTmpRef( nullptr ),
+    mpOpt( nullptr ),
     mpAccOptions( new SwAccessibilityOptions ),
     mbShowHeaderSeparator( false ),
     mbShowFooterSeparator( false ),
     mbHeaderFooterEdit( false ),
-    mpTargetPaintWindow(0), // #i74769#
-    mpBufferedOut(0), // #i74769#
+    mpTargetPaintWindow(nullptr), // #i74769#
+    mpBufferedOut(nullptr), // #i74769#
     mpDoc( rShell.GetDoc() ),
     mnStartAction( 0 ),
     mnLockPaint( 0 ),
     mbSelectAll(false),
     mbInLibreOfficeKitCallback(false),
     mbOutputToWindow(false),
-    mpPrePostOutDev(0), // #i72754#
+    mpPrePostOutDev(nullptr), // #i72754#
     maPrePostMapMode()
 {
     // OD 2004-06-01 #i26791# - in order to suppress event handling in
@@ -311,11 +311,11 @@ SwViewShell::~SwViewShell()
 
             SwStartNode *pStNd;
             SwNodeIndex aIdx( *rNds.GetEndOfAutotext().StartOfSectionNode(), 1 );
-            while ( 0 != (pStNd = aIdx.GetNode().GetStartNode()) )
+            while ( nullptr != (pStNd = aIdx.GetNode().GetStartNode()) )
             {
                 ++aIdx;
                 SwGrfNode *pGNd = aIdx.GetNode().GetGrfNode();
-                if ( 0 != pGNd )
+                if ( nullptr != pGNd )
                 {
                     if( pGNd->IsAnimated() )
                     {
@@ -334,12 +334,12 @@ SwViewShell::~SwViewShell()
         }
 
         delete mpImp; // Delete first, so that the LayoutViews are destroyed.
-        mpImp = 0;   // Set to zero, because ~SwFrm relies on it.
+        mpImp = nullptr;   // Set to zero, because ~SwFrm relies on it.
 
         if ( mpDoc )
         {
             if( !mpDoc->release() )
-                delete mpDoc, mpDoc = 0;
+                delete mpDoc, mpDoc = nullptr;
             else
                 GetLayout()->ResetNewLayout();
         }

@@ -51,7 +51,7 @@ SfxPoolItem* SwTableBoxNumFormat::Clone( SfxItemPool* ) const
 SwTableBoxFormula::SwTableBoxFormula( const OUString& rFormula )
     : SfxPoolItem( RES_BOXATR_FORMULA ),
     SwTableFormula( rFormula ),
-    pDefinedIn( 0 )
+    pDefinedIn( nullptr )
 {
 }
 
@@ -79,7 +79,7 @@ SfxPoolItem* SwTableBoxFormula::Clone( SfxItemPool* ) const
 */
 const SwNode* SwTableBoxFormula::GetNodeOfFormula() const
 {
-    const SwNode* pRet = 0;
+    const SwNode* pRet = nullptr;
     if( pDefinedIn )
     {
         SwTableBox* pBox = SwIterator<SwTableBox,SwModify>( *pDefinedIn ).First();
@@ -91,7 +91,7 @@ const SwNode* SwTableBoxFormula::GetNodeOfFormula() const
 
 SwTableBox* SwTableBoxFormula::GetTableBox()
 {
-    SwTableBox* pBox = 0;
+    SwTableBox* pBox = nullptr;
     if( pDefinedIn )
         pBox = SwIterator<SwTableBox,SwModify>( *pDefinedIn ).First();
     return pBox;
@@ -116,7 +116,7 @@ void SwTableBoxFormula::ChangeState( const SfxPoolItem* pItem )
     const SwTableNode* pTableNd;
     const SwNode* pNd = GetNodeOfFormula();
     if( pNd && &pNd->GetNodes() == &pNd->GetDoc()->GetNodes() &&
-        0 != ( pTableNd = pNd->FindTableNode() ))
+        nullptr != ( pTableNd = pNd->FindTableNode() ))
     {
         switch( pUpdateField->m_eFlags )
         {

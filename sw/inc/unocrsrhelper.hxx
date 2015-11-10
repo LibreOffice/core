@@ -85,7 +85,7 @@ namespace SwUnoCursorHelper
                                         , SwPaM& rPam
                                         , css::uno::Any *pAny
                                         , css::beans::PropertyState& eState
-                                        , const SwTextNode* pNode = 0 );
+                                        , const SwTextNode* pNode = nullptr );
 
     void                        GetCurPageStyle(SwPaM& rPaM, OUString &rString);
 

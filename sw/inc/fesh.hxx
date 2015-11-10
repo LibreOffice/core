@@ -157,7 +157,7 @@ struct SwGetCurColNumPara
 {
     const SwFrameFormat* pFrameFormat;
     const SwRect* pPrtRect, *pFrmRect;
-    SwGetCurColNumPara() : pFrameFormat( 0 ), pPrtRect( 0 ), pFrmRect( 0 ) {}
+    SwGetCurColNumPara() : pFrameFormat( nullptr ), pPrtRect( nullptr ), pFrmRect( nullptr ) {}
 };
 
 enum class SwPasteSdr
@@ -218,7 +218,7 @@ private:
 
     /** Used for mouse operations on a table:
      @return a cell frame that is 'close' to rPt. */
-    SAL_DLLPRIVATE const SwFrm *GetBox( const Point &rPt, bool* pbRow = 0, bool* pbCol = 0 ) const;
+    SAL_DLLPRIVATE const SwFrm *GetBox( const Point &rPt, bool* pbRow = nullptr, bool* pbCol = nullptr ) const;
 
     // 0 == not in any column.
     SAL_DLLPRIVATE sal_uInt16 _GetCurColNum( const SwFrm *pFrm,
@@ -249,12 +249,12 @@ public:
     using SwEditShell::Insert;
 
     TYPEINFO_OVERRIDE();
-    SwFEShell( SwDoc& rDoc, vcl::Window *pWin, const SwViewOption *pOpt = 0 );
+    SwFEShell( SwDoc& rDoc, vcl::Window *pWin, const SwViewOption *pOpt = nullptr );
     SwFEShell( SwEditShell& rShell, vcl::Window *pWin );
     virtual ~SwFEShell();
 
     /// Copy and Paste methods for internal clipboard.
-    bool Copy( SwDoc* pClpDoc, const OUString* pNewClpText = 0 );
+    bool Copy( SwDoc* pClpDoc, const OUString* pNewClpText = nullptr );
     bool Paste( SwDoc* pClpDoc, bool bIncludingPageFrames = false);
 
     /// Paste some pages into another doc - used in mailmerge.
@@ -271,7 +271,7 @@ public:
 
     /** If an object as been given, exactly this object is selected
      (instead of searching over position). */
-    bool SelectObj( const Point& rSelPt, sal_uInt8 nFlag = 0, SdrObject *pObj = 0 );
+    bool SelectObj( const Point& rSelPt, sal_uInt8 nFlag = 0, SdrObject *pObj = nullptr );
     void DelSelectedObj();
 
     /** Move selection upwards or downwards (Z-Order).
@@ -315,7 +315,7 @@ public:
     bool IsSelContainsControl() const;
 
     ObjCntType GetObjCntType( const Point &rPt, SdrObject *&rpObj ) const;
-    ObjCntType GetObjCntTypeOfSelection( SdrObject** ppObj = 0 ) const;
+    ObjCntType GetObjCntTypeOfSelection( SdrObject** ppObj = nullptr ) const;
 
     /// For adjustment of PosAttr when anchor changes.
     SwRect  GetObjRect() const;
@@ -335,7 +335,7 @@ public:
                         bool _bMirror = false,
                         Point* _opRef = nullptr,
                         Size* _opPercent = nullptr,
-                        const SwFormatFrmSize* pFormatFrmSize = 0 ) const;
+                        const SwFormatFrmSize* pFormatFrmSize = nullptr ) const;
 
     /// Set size of draw objects.
     void SetObjRect( const SwRect& rRect );
@@ -359,7 +359,7 @@ public:
 
     /** @return FrameFormat of object that may be under Point.
      Object does not become selected! */
-    const SwFrameFormat* GetFormatFromObj( const Point& rPt, SwRect** pRectToFill = 0 ) const;
+    const SwFrameFormat* GetFormatFromObj( const Point& rPt, SwRect** pRectToFill = nullptr ) const;
 
     /// @return a format too, if the point is over the text of any fly.
     const SwFrameFormat* GetFormatFromAnyObj( const Point& rPt ) const;
@@ -381,9 +381,9 @@ public:
     bool GetFlyFrmAttr( SfxItemSet &rSet ) const;
     bool SetFlyFrmAttr( SfxItemSet &rSet );
     static SfxItemSet makeItemSetFromFormatAnchor(SfxItemPool& rPool, const SwFormatAnchor &rAnchor);
-    bool ResetFlyFrmAttr( sal_uInt16 nWhich, const SfxItemSet* pSet = 0 );
+    bool ResetFlyFrmAttr( sal_uInt16 nWhich, const SfxItemSet* pSet = nullptr );
     const SwFrameFormat *NewFlyFrm( const SfxItemSet &rSet, bool bAnchValid = false,
-                         SwFrameFormat *pParent = 0 );
+                         SwFrameFormat *pParent = nullptr );
     void SetFlyPos( const Point &rAbsPos);
     Point FindAnchorPos( const Point &rAbsPos, bool bMoveIt = false );
 
@@ -393,7 +393,7 @@ public:
     bool IsFrmVertical(const bool bEnvironment, bool& bRightToLeft, bool& bVertL2R) const;
 
     SwFrameFormat* GetSelectedFrameFormat() const; ///< If frame then frame style, else 0.
-    void SetFrameFormat( SwFrameFormat *pFormat, bool bKeepOrient = false, Point* pDocPos = 0 ); ///< If frame then set frame style.
+    void SetFrameFormat( SwFrameFormat *pFormat, bool bKeepOrient = false, Point* pDocPos = nullptr ); ///< If frame then set frame style.
 
     // Get selected fly
     SwFlyFrm* GetSelectedFlyFrm() const;
@@ -438,8 +438,8 @@ public:
      If a pointer is passed on a size, this is the object's current core-size.
      Else the size is provided via GetCurFlyRect(). */
     virtual void CalcAndSetScale( svt::EmbeddedObjectRef& xObj,
-                                  const SwRect *pFlyPrtRect = 0,
-                                  const SwRect *pFlyFrmRect = 0,
+                                  const SwRect *pFlyPrtRect = nullptr,
+                                  const SwRect *pFlyFrmRect = nullptr,
                                   const bool bNoTextFrmPrtAreaChanged = false ) = 0;
 
     /** Connect objects with ActivateWhenVisible at Paint.
@@ -470,9 +470,9 @@ public:
                   bool bSelFrame = true );
 
     /// Position is a graphic with URL?
-    const SwFrameFormat* IsURLGrfAtPos( const Point& rPt, OUString* pURL = 0,
-                                    OUString *pTargetFrameName = 0,
-                                    OUString *pURLDescription = 0 ) const;
+    const SwFrameFormat* IsURLGrfAtPos( const Point& rPt, OUString* pURL = nullptr,
+                                    OUString *pTargetFrameName = nullptr,
+                                    OUString *pURLDescription = nullptr ) const;
 
     /** For Chain always connect Fly specified by format with that hit by point.
      rRect contains rect of Fly (for its highlight). */
@@ -557,7 +557,7 @@ public:
      Return value indicates if it was converted. */
     bool GetDrawObjGraphic( SotClipboardFormatId nFormat, Graphic& rGrf ) const;
 
-    void Paste( SvStream& rStm, SwPasteSdr nAction, const Point* pPt = 0 );
+    void Paste( SvStream& rStm, SwPasteSdr nAction, const Point* pPt = nullptr );
     bool Paste( const Graphic &rGrf, const OUString& rURL );
 
     bool IsAlignPossible() const;
@@ -565,22 +565,22 @@ public:
 
     void Insert(const OUString& rGrfName,
                 const OUString& rFltName,
-                const Graphic* pGraphic = 0,
-                const SfxItemSet* pFlyAttrSet = 0,
-                const SfxItemSet* pGrfAttrSet = 0,
-                SwFrameFormat* = 0 );
+                const Graphic* pGraphic = nullptr,
+                const SfxItemSet* pFlyAttrSet = nullptr,
+                const SfxItemSet* pGrfAttrSet = nullptr,
+                SwFrameFormat* = nullptr );
 
     /// Insertion of a drawing object which have to be already inserted in the DrawModel.
     void InsertDrawObj( SdrObject& rDrawObj,
                         const Point& rInsertPosition );
 
     bool ReplaceSdrObj( const OUString& rGrfName, const OUString& rFltName,
-                        const Graphic* pGrf = 0 );
+                        const Graphic* pGrf = nullptr );
 
     // --> #i972#
     /** for starmath formulas anchored 'as char' it aligns it baseline to baseline
      changing the previous vertical orientation */
-    void AlignFormulaToBaseline( const css::uno::Reference < css::embed::XEmbeddedObject >& xObj, SwFlyFrm * pFly = 0 );
+    void AlignFormulaToBaseline( const css::uno::Reference < css::embed::XEmbeddedObject >& xObj, SwFlyFrm * pFly = nullptr );
 
     /// aligns all formulas with anchor 'as char' to baseline
     void AlignAllFormulasToBaseline();
@@ -602,7 +602,7 @@ public:
     size_t GetPageDescCnt() const;
     SwPageDesc* FindPageDescByName( const OUString& rName,
                                     bool bGetFromPool = false,
-                                    size_t* pPos = 0 );
+                                    size_t* pPos = nullptr );
 
     const SwPageDesc& GetPageDesc( size_t i ) const;
     void  ChgPageDesc( size_t i, const SwPageDesc& );
@@ -611,7 +611,7 @@ public:
     const SwPageDesc* GetSelectedPageDescs() const;
 
     const SwRect& GetAnyCurRect( CurRectType eType,
-                                 const Point* pPt = 0,
+                                 const Point* pPt = nullptr,
                                  const css::uno::Reference < css::embed::XEmbeddedObject >& =
                                  css::uno::Reference < css::embed::XEmbeddedObject >() ) const;
 
@@ -620,9 +620,9 @@ public:
     bool GetPageNumber( long nYPos, bool bAtCrsrPos, sal_uInt16& rPhyNum, sal_uInt16& rVirtNum, OUString &rDisplay ) const;
 
     SwFlyFrameFormat* InsertObject( const svt::EmbeddedObjectRef&,
-                const SfxItemSet* pFlyAttrSet = 0,
-                const SfxItemSet* pGrfAttrSet = 0,
-                SwFrameFormat* = 0 );
+                const SfxItemSet* pFlyAttrSet = nullptr,
+                const SfxItemSet* pGrfAttrSet = nullptr,
+                SwFrameFormat* = nullptr );
     bool    FinishOLEObj(); ///< Shutdown server.
 
     void GetTableAttr( SfxItemSet & ) const;
@@ -686,7 +686,7 @@ public:
                           const Point &rPt );
 
     /// pEnd will be used during MouseMove
-    bool SelTableRowCol( const Point& rPt, const Point* pEnd = 0, bool bRowDrag = false );
+    bool SelTableRowCol( const Point& rPt, const Point* pEnd = nullptr, bool bRowDrag = false );
 
     void GetTabRows( SwTabCols &rToFill ) const;
     void SetTabRows( const SwTabCols &rNew, bool bCurColOnly );
@@ -697,8 +697,8 @@ public:
                              cursor is not allowed in readonly. */
     void UnProtectCells();  ///< Refers to table selection.
     void UnProtectTables();   ///< Unprotect all tables in selection.
-    bool HasTableAnyProtection( const OUString* pTableName = 0,
-                              bool* pFullTableProtection = 0 );
+    bool HasTableAnyProtection( const OUString* pTableName = nullptr,
+                              bool* pFullTableProtection = nullptr );
     bool CanUnProtectCells() const;
 
     sal_uInt16 GetRowsToRepeat() const;
@@ -749,12 +749,12 @@ public:
                       const bool bCpyBrd = true );
 
     /// The ruler needs some information too.
-    sal_uInt16 GetCurColNum( SwGetCurColNumPara* pPara = 0 ) const; //0 == not in any column.
+    sal_uInt16 GetCurColNum( SwGetCurColNumPara* pPara = nullptr ) const; //0 == not in any column.
     sal_uInt16 GetCurMouseColNum( const Point &rPt,
-                            SwGetCurColNumPara* pPara = 0 ) const;
+                            SwGetCurColNumPara* pPara = nullptr ) const;
     size_t GetCurTabColNum() const;     //0 == not in any table.
     size_t GetCurMouseTabColNum( const Point &rPt ) const;
-    sal_uInt16 GetCurOutColNum( SwGetCurColNumPara* pPara = 0 ) const;  ///< Current outer column.
+    sal_uInt16 GetCurOutColNum( SwGetCurColNumPara* pPara = nullptr ) const;  ///< Current outer column.
 
     bool IsTableRightToLeft() const;
     bool IsMouseTableRightToLeft( const Point &rPt ) const;

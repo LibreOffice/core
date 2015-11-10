@@ -143,7 +143,7 @@ sal_uLong SwASCIIParser::CallParser()
 
     ::StartProgress( STR_STATSTR_W4WREAD, 0, nFileSize, pDoc->GetDocShell() );
 
-    SwPaM* pInsPam = 0;
+    SwPaM* pInsPam = nullptr;
     sal_Int32 nSttContent = 0;
     if (!bNewDoc)
     {
@@ -152,7 +152,7 @@ sal_uLong SwASCIIParser::CallParser()
         nSttContent = pPam->GetPoint()->nContent.GetIndex();
     }
 
-    SwTextFormatColl *pColl = 0;
+    SwTextFormatColl *pColl = nullptr;
 
     if (bNewDoc)
     {
@@ -234,7 +234,7 @@ sal_uLong SwASCIIParser::CallParser()
                 pDoc->getIDocumentContentOperations().InsertItemSet( *pInsPam, *pItemSet );
             }
         }
-        delete pItemSet, pItemSet = 0;
+        delete pItemSet, pItemSet = nullptr;
     }
 
     delete pInsPam;
@@ -245,7 +245,7 @@ sal_uLong SwASCIIParser::CallParser()
 
 sal_uLong SwASCIIParser::ReadChars()
 {
-    sal_Unicode *pStt = 0, *pEnd = 0, *pLastStt = 0;
+    sal_Unicode *pStt = nullptr, *pEnd = nullptr, *pLastStt = nullptr;
     long nReadCnt = 0, nLineLen = 0;
     sal_Unicode cLastCR = 0;
     bool bSwapUnicode = false;
@@ -273,8 +273,8 @@ sal_uLong SwASCIIParser::ReadChars()
         pUseMe=&aEmpty;
     }
 
-    rtl_TextToUnicodeConverter hConverter=0;
-    rtl_TextToUnicodeContext hContext=0;
+    rtl_TextToUnicodeConverter hConverter=nullptr;
+    rtl_TextToUnicodeContext hContext=nullptr;
     rtl_TextEncoding currentCharSet = pUseMe->GetCharSet();
     if (RTL_TEXTENCODING_UCS2 != currentCharSet)
     {

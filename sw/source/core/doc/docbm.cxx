@@ -59,7 +59,7 @@ namespace
 {
     static bool lcl_GreaterThan( const SwPosition& rPos, const SwNodeIndex& rNdIdx, const SwIndex* pIdx )
     {
-        return pIdx != NULL
+        return pIdx != nullptr
                ? ( rPos.nNode > rNdIdx
                    || ( rPos.nNode == rNdIdx
                         && rPos.nContent >= pIdx->GetIndex() ) )
@@ -69,7 +69,7 @@ namespace
     static bool lcl_Lower( const SwPosition& rPos, const SwNodeIndex& rNdIdx, const SwIndex* pIdx )
     {
         return rPos.nNode < rNdIdx
-               || ( pIdx != NULL
+               || ( pIdx != nullptr
                     && rPos.nNode == rNdIdx
                     && rPos.nContent < pIdx->GetIndex() );
     }
@@ -118,19 +118,19 @@ namespace
     {
         SwContentNode * pNode = rEnd.GetNode().GetContentNode();
         bool bPosAtEndOfNode = false;
-        if ( pNode == NULL)
+        if ( pNode == nullptr)
         {
             SwNodeIndex aEnd = SwNodeIndex(rEnd);
             pNode = rEnd.GetNodes().GoNext( &aEnd );
             bPosAtEndOfNode = false;
         }
-        if ( pNode == NULL )
+        if ( pNode == nullptr )
         {
             SwNodeIndex aStt = SwNodeIndex(rStt);
             pNode = SwNodes::GoPrevious(&aStt);
             bPosAtEndOfNode = true;
         }
-        if ( pNode != NULL )
+        if ( pNode != nullptr )
         {
             return lcl_PositionFromContentNode( pNode, bPosAtEndOfNode );
         }
@@ -145,7 +145,7 @@ namespace
             rMarks.end(),
             rPos,
             sw::mark::CompareIMarkStartsAfter());
-        if(pMarkAfter == rMarks.end()) return NULL;
+        if(pMarkAfter == rMarks.end()) return nullptr;
         return pMarkAfter->get();
     };
 
@@ -167,7 +167,7 @@ namespace
             back_inserter(vCandidates),
             [&rPos] (IDocumentMarkAccess::pMark_t const& rpMark) { return !rpMark->EndsBefore(rPos); } );
         // no candidate left => we are in front of the first mark or there are none
-        if(vCandidates.empty()) return NULL;
+        if(vCandidates.empty()) return nullptr;
         // return the highest (last) candidate using mark end ordering
         return max_element(vCandidates.begin(), vCandidates.end(), &lcl_MarkOrderingByEnd)->get();
     }
@@ -195,10 +195,10 @@ namespace
             }
             io_pMark->ClearOtherMarkPos();
             DdeBookmark * const pDdeBkmk = dynamic_cast< DdeBookmark*>(io_pMark);
-            if ( pDdeBkmk != NULL
+            if ( pDdeBkmk != nullptr
                  && pDdeBkmk->IsServer() )
             {
-                pDdeBkmk->SetRefObject(NULL);
+                pDdeBkmk->SetRefObject(nullptr);
             }
             return true;
         }
@@ -378,7 +378,7 @@ namespace sw { namespace mark
         {   // this can happen via UNO API
             SAL_WARN("sw.core", "MarkManager::makeMark(..)"
                 " - refusing to create duplicate CrossRefBookmark");
-            return 0;
+            return nullptr;
         }
 
         // create mark
@@ -419,7 +419,7 @@ namespace sw { namespace mark
         MarkBase* pMarkBase = dynamic_cast<MarkBase*>(pMark.get());
 
         if (!pMarkBase)
-            return 0;
+            return nullptr;
 
         if(pMark->GetMarkPos() != pMark->GetMarkStart())
             pMarkBase->Swap();
@@ -698,7 +698,7 @@ namespace sw { namespace mark
                                       && lcl_GreaterThan(pMark->GetOtherMarkPos(), rStt, pSttIdx)
                                       && lcl_Lower(pMark->GetOtherMarkPos(), rEnd, pEndIdx);
             // special case: completely in range, touching the end?
-            if ( pEndIdx != NULL
+            if ( pEndIdx != nullptr
                  && ( ( bIsOtherPosInRange
                         && pMark->GetMarkPos().nNode == rEnd
                         && pMark->GetMarkPos().nContent == *pEndIdx )
@@ -729,7 +729,7 @@ namespace sw { namespace mark
                         // no delete of UNO mark, if it is not expanded and only touches the start of the range
                         bDeleteMark = bIsOtherPosInRange
                                       || pMark->IsExpanded()
-                                      || pSttIdx == NULL
+                                      || pSttIdx == nullptr
                                       || !( pMark->GetMarkPos().nNode == rStt
                                             && pMark->GetMarkPos().nContent == *pSttIdx );
                         break;
@@ -755,7 +755,7 @@ namespace sw { namespace mark
 
                 ::std::unique_ptr< SwPosition > pNewPos;
                 {
-                    if ( pEndIdx != NULL )
+                    if ( pEndIdx != nullptr )
                     {
                         pNewPos = ::std::unique_ptr< SwPosition >( new SwPosition( rEnd, *pEndIdx ) );
                     }
@@ -777,7 +777,7 @@ namespace sw { namespace mark
                         break;
                     case IDocumentMarkAccess::MarkType::ANNOTATIONMARK:
                         // no move of annotation marks, if method is called to collect deleted marks
-                        bMoveMark = pSaveBkmk == NULL;
+                        bMoveMark = pSaveBkmk == nullptr;
                         break;
                     default:
                         bMoveMark = true;
@@ -1016,7 +1016,7 @@ namespace sw { namespace mark
             m_vFieldmarks.begin(),
             m_vFieldmarks.end(),
             [&rPos] (pMark_t const& rpMark) { return rpMark->IsCoveringPosition(rPos); } );
-        if(pFieldmark == m_vFieldmarks.end()) return NULL;
+        if(pFieldmark == m_vFieldmarks.end()) return nullptr;
         return dynamic_cast<IFieldmark*>(pFieldmark->get());
     }
 
@@ -1024,7 +1024,7 @@ namespace sw { namespace mark
     {
         IFieldmark *pMark = getFieldmarkFor(rPos);
         if (!pMark || pMark->GetFieldname() != ODF_FORMDROPDOWN)
-            return NULL;
+            return nullptr;
         return pMark;
     }
 
@@ -1083,7 +1083,7 @@ namespace sw { namespace mark
             m_vAnnotationMarks.end(),
             [&rPos] (pMark_t const& rpMark) { return rpMark->IsCoveringPosition(rPos); } );
         if (pAnnotationMark == m_vAnnotationMarks.end())
-            return NULL;
+            return nullptr;
         return pAnnotationMark->get();
     }
 
@@ -1350,11 +1350,11 @@ void _DelBookmarks(
             {
                 bool bStt = true;
                 SwContentNode* pCNd = pRStt->nNode.GetNode().GetContentNode();
-                if( !pCNd && 0 == ( pCNd = pDoc->GetNodes().GoNext( &pRStt->nNode )) )
+                if( !pCNd && nullptr == ( pCNd = pDoc->GetNodes().GoNext( &pRStt->nNode )) )
                 {
                     bStt = false;
                     pRStt->nNode = rStt;
-                    if( 0 == ( pCNd = SwNodes::GoPrevious( &pRStt->nNode )) )
+                    if( nullptr == ( pCNd = SwNodes::GoPrevious( &pRStt->nNode )) )
                     {
                         pRStt->nNode = pREnd->nNode;
                         pCNd = pRStt->nNode.GetNode().GetContentNode();
@@ -1372,11 +1372,11 @@ void _DelBookmarks(
             {
                 bool bStt = false;
                 SwContentNode* pCNd = pREnd->nNode.GetNode().GetContentNode();
-                if( !pCNd && 0 == ( pCNd = SwNodes::GoPrevious( &pREnd->nNode )) )
+                if( !pCNd && nullptr == ( pCNd = SwNodes::GoPrevious( &pREnd->nNode )) )
                 {
                     bStt = true;
                     pREnd->nNode = rEnd;
-                    if( 0 == ( pCNd = pDoc->GetNodes().GoNext( &pREnd->nNode )) )
+                    if( nullptr == ( pCNd = pDoc->GetNodes().GoNext( &pREnd->nNode )) )
                     {
                         pREnd->nNode = pRStt->nNode;
                         pCNd = pREnd->nNode.GetNode().GetContentNode();

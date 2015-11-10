@@ -46,7 +46,7 @@ SwAccessibleHyperlink::SwAccessibleHyperlink( size_t nHPos,
 
 const SwTextAttr *SwAccessibleHyperlink::GetTextAttr() const
 {
-    const SwTextAttr *pTextAttr = 0;
+    const SwTextAttr *pTextAttr = nullptr;
     if( xPara.is() && xPara->GetMap() )
     {
         const SwTextNode *pTextNd = xPara->GetTextNode();
@@ -250,7 +250,7 @@ sal_Bool SAL_CALL SwAccessibleHyperlink::isValid(  )
 void SwAccessibleHyperlink::Invalidate()
 {
     SolarMutexGuard aGuard;
-    xPara = 0;
+    xPara = nullptr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

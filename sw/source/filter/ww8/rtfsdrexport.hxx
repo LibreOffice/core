@@ -89,7 +89,7 @@ private:
     virtual void OpenContainer(sal_uInt16 nEscherContainer, int nRecInstance = 0) override;
     virtual void CloseContainer() override;
 
-    virtual sal_uInt32 EnterGroup(const OUString& rShapeName, const Rectangle* pBoundRect = 0) override;
+    virtual sal_uInt32 EnterGroup(const OUString& rShapeName, const Rectangle* pBoundRect = nullptr) override;
     virtual void LeaveGroup() override;
 
     virtual void AddShape(sal_uInt32 nShapeType, sal_uInt32 nShapeFlags, sal_uInt32 nShapeId = 0) override;

@@ -48,12 +48,12 @@ const SvxTabStop *SwLineInfo::GetTabStop( const SwTwips nSearchPos, const SwTwip
     {
         const SvxTabStop &rTabStop = pRuler->operator[](i);
         if( rTabStop.GetTabPos() > SwTwips(nRight) )
-            return i ? 0 : &rTabStop;
+            return i ? nullptr : &rTabStop;
 
         if( rTabStop.GetTabPos() > nSearchPos )
             return &rTabStop;
     }
-    return 0;
+    return nullptr;
 }
 
 sal_uInt16 SwLineInfo::NumberOfTabStops() const
@@ -250,7 +250,7 @@ SwTabPortion *SwTextFormatter::NewTabPortion( SwTextFormatInfo &rInf, bool bAuto
         nNewTabPos = sal_uInt16(nNextPos);
     }
 
-    SwTabPortion *pTabPor = 0;
+    SwTabPortion *pTabPor = nullptr;
     if ( bAuto )
     {
         if ( SVX_TAB_ADJUST_DECIMAL == eAdj &&
@@ -415,7 +415,7 @@ bool SwTabPortion::PreFormat( SwTextFormatInfo &rInf )
             Width( 0 );
             SetLen( 0 );
             SetAscent( 0 );
-            SetPortion( NULL ); //?????
+            SetPortion( nullptr ); //?????
         }
         return true;
     }
@@ -489,7 +489,7 @@ bool SwTabPortion::PostFormat( SwTextFormatInfo &rInf )
     }
     SetFixWidth( PrtWidth() );
     // reset last values
-    rInf.SetLastTab(0);
+    rInf.SetLastTab(nullptr);
     if( POR_TABDECIMAL == nWhich )
         rInf.SetTabDecimal(0);
 

@@ -21,7 +21,7 @@
 #include <tools/resmgr.hxx>
 
 #ifndef DISABLE_DYNLOADING
-ResMgr* pSwResMgr=0;
+ResMgr* pSwResMgr=nullptr;
 #else
 static ResMgr *pSwResMgr;
 #endif

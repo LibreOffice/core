@@ -43,7 +43,7 @@ static rtl::Reference<SwDocStyleSheet> lcl_getDocStyleSheet(const OUString& rNam
     SfxStyleSheetBase* pStyle = mpBase->Find(rName, (SfxStyleFamily)nFamily);
     SAL_WARN_IF( !pStyle, "linenumbering.ui", "Style not found" );
     if(!pStyle)
-        return NULL;
+        return nullptr;
     return new SwDocStyleSheet(*static_cast<SwDocStyleSheet*>(pStyle));
 }
 

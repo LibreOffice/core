@@ -57,16 +57,16 @@ class SW_DLLPUBLIC SwGrfNode: public SwNoTextNode
                const OUString& rGrfName, const OUString& rFltName,
                const Graphic* pGraphic,
                SwGrfFormatColl* pGrfColl,
-               SwAttrSet* pAutoAttr = 0 );
+               SwAttrSet* pAutoAttr = nullptr );
     ///< Ctor for reading (SW/G) without graphics.
     SwGrfNode( const SwNodeIndex& rWhere,
                const OUString& rGrfName, const OUString& rFltName,
                SwGrfFormatColl* pGrfColl,
-               SwAttrSet* pAutoAttr = 0 );
+               SwAttrSet* pAutoAttr = nullptr );
     SwGrfNode( const SwNodeIndex& rWhere,
                const GraphicObject& rGrfObj,
                SwGrfFormatColl* pGrfColl,
-               SwAttrSet* pAutoAttr = 0 );
+               SwAttrSet* pAutoAttr = nullptr );
 
     void InsertLink( const OUString& rGrfName, const OUString& rFltName );
     bool ImportGraphic( SvStream& rStrm );
@@ -127,8 +127,8 @@ public:
     void SetGraphic(const Graphic& rGraphic, const OUString& rLink);
 
     /// wrappers for non-const calls at GraphicObject
-    void StartGraphicAnimation(OutputDevice* pOut, const Point& rPt, const Size& rSz, long nExtraData = 0, const GraphicAttr* pAttr = NULL, GraphicManagerDrawFlags nFlags = GraphicManagerDrawFlags::STANDARD, OutputDevice* pFirstFrameOutDev = NULL) { maGrfObj.StartAnimation(pOut, rPt, rSz, nExtraData, pAttr, nFlags, pFirstFrameOutDev); }
-    void StopGraphicAnimation(OutputDevice* pOut = NULL, long nExtraData = 0) { maGrfObj.StopAnimation(pOut, nExtraData); }
+    void StartGraphicAnimation(OutputDevice* pOut, const Point& rPt, const Size& rSz, long nExtraData = 0, const GraphicAttr* pAttr = nullptr, GraphicManagerDrawFlags nFlags = GraphicManagerDrawFlags::STANDARD, OutputDevice* pFirstFrameOutDev = nullptr) { maGrfObj.StartAnimation(pOut, rPt, rSz, nExtraData, pAttr, nFlags, pFirstFrameOutDev); }
+    void StopGraphicAnimation(OutputDevice* pOut = nullptr, long nExtraData = 0) { maGrfObj.StopAnimation(pOut, nExtraData); }
 
     virtual Size GetTwipSize() const override;
     void SetTwipSize( const Size& rSz );
@@ -158,8 +158,8 @@ public:
     /** Re-read in case graphic was not OK. The current one
        gets replaced by the new one. */
     bool ReRead( const OUString& rGrfName, const OUString& rFltName,
-                 const Graphic* pGraphic = 0,
-                 const GraphicObject* pGrfObj = 0,
+                 const Graphic* pGraphic = nullptr,
+                 const GraphicObject* pGrfObj = nullptr,
                  bool bModify = true );
 private:
     /// Loading of graphic immediately before displaying.
@@ -205,12 +205,12 @@ public:
 // Inline methods from Node.hxx - it is only now that we know TextNode!!
 inline       SwGrfNode   *SwNode::GetGrfNode()
 {
-     return ND_GRFNODE == m_nNodeType ? static_cast<SwGrfNode*>(this) : 0;
+     return ND_GRFNODE == m_nNodeType ? static_cast<SwGrfNode*>(this) : nullptr;
 }
 
 inline const SwGrfNode   *SwNode::GetGrfNode() const
 {
-     return ND_GRFNODE == m_nNodeType ? static_cast<const SwGrfNode*>(this) : 0;
+     return ND_GRFNODE == m_nNodeType ? static_cast<const SwGrfNode*>(this) : nullptr;
 }
 
 inline bool SwGrfNode::IsLinkedFile() const

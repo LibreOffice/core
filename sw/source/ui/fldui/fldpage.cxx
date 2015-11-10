@@ -44,8 +44,8 @@ using namespace ::com::sun::star;
 SwFieldPage::SwFieldPage(vcl::Window *pParent, const OString& rID,
     const OUString& rUIXMLDescription, const SfxItemSet &rAttrSet)
     : SfxTabPage(pParent, rID, rUIXMLDescription, &rAttrSet)
-    , m_pCurField(0)
-    , m_pWrtShell(0)
+    , m_pCurField(nullptr)
+    , m_pWrtShell(nullptr)
     , m_nTypeSel(LISTBOX_ENTRY_NOTFOUND)
     , m_nSelectionSel(LISTBOX_ENTRY_NOTFOUND)
     , m_bFieldEdit(false)
@@ -66,7 +66,7 @@ void SwFieldPage::Init()
     SwDocShell* pDocSh = static_cast<SwDocShell*>(SfxObjectShell::Current());
     bool bNewMode = 0 != (::GetHtmlMode(pDocSh) & HTMLMODE_ON);
 
-    m_bFieldEdit = 0 == GetTabDialog();
+    m_bFieldEdit = nullptr == GetTabDialog();
 
     // newly initialise FieldManager. important for
     // Dok-Switch (fldtdlg:ReInitTabPage)
@@ -110,7 +110,7 @@ void SwFieldPage::EditNewField( bool bOnlyActivate )
     }
     m_nSelectionSel = LISTBOX_ENTRY_NOTFOUND;
     m_bRefresh = true;
-    Reset(0);
+    Reset(nullptr);
     m_bRefresh = false;
 }
 
@@ -125,7 +125,7 @@ bool SwFieldPage::InsertField(sal_uInt16 nTypeId, sal_uInt16 nSubType, const OUS
 
     if (!IsFieldEdit())   // insert new field
     {
-        SwInsertField_Data aData(nTypeId, nSubType, rPar1, rPar2, nFormatId, 0, cSeparator, bIsAutomaticLanguage );
+        SwInsertField_Data aData(nTypeId, nSubType, rPar1, rPar2, nFormatId, nullptr, cSeparator, bIsAutomaticLanguage );
         //#i26566# provide parent for SwWrtShell::StartInputFieldDlg
         aData.m_pParent = &GetTabDialog()->GetOKButton();
         bRet = m_aMgr.InsertField( aData );
@@ -237,7 +237,7 @@ bool SwFieldPage::InsertField(sal_uInt16 nTypeId, sal_uInt16 nSubType, const OUS
         case TYP_INPUTFLD:
             {
                 // User- or SetField ?
-                if (m_aMgr.GetFieldType(RES_USERFLD, sPar1) == 0 &&
+                if (m_aMgr.GetFieldType(RES_USERFLD, sPar1) == nullptr &&
                 !(pTmpField->GetSubType() & INP_TXT)) // SETEXPFLD
                 {
                     SwSetExpField* pField = static_cast<SwSetExpField*>(pTmpField);

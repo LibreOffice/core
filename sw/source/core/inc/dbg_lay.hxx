@@ -88,7 +88,7 @@ public:
         if( SwProtocol::Record( nFunc ) )
             Ctor( pFrm, nFunc, nAct, pPar );
         else
-            pImpl = NULL;
+            pImpl = nullptr;
     }
     ~SwEnterLeave()
     {

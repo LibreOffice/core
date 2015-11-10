@@ -63,7 +63,7 @@ public:
 
     // Is it a comparison? Returns position in frame.
     sal_Int32 GetBigIndent( sal_Int32& rFndPos,
-                        const SwTextFrm *pNextFrm = 0 ) const;
+                        const SwTextFrm *pNextFrm = nullptr ) const;
 };
 
 #endif

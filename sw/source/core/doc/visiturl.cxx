@@ -60,14 +60,14 @@ void SwURLStateChanged::Notify( SfxBroadcaster& , const SfxHint& rHint )
         for( sal_uInt32 n = 0; n < nMaxItems; ++n )
         {
             const SwFormatINetFormat* pItem = static_cast<const SwFormatINetFormat*>(pDoc->GetAttrPool().GetItem2(RES_TXTATR_INETFMT, n ));
-            if( pItem != 0 &&
+            if( pItem != nullptr &&
                 ( pItem->GetValue() == sURL || ( !sBkmk.isEmpty() && pItem->GetValue() == sBkmk )))
             {
                 const SwTextINetFormat* pTextAttr = pItem->GetTextINetFormat();
-                if (pTextAttr != 0)
+                if (pTextAttr != nullptr)
                 {
                     const SwTextNode* pTextNd = pTextAttr->GetpTextNode();
-                    if (pTextNd != 0)
+                    if (pTextNd != nullptr)
                     {
                         if( !bAction && pESh )
                         {

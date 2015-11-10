@@ -228,12 +228,12 @@ void SwHTMLParser::InsertFootEndNoteText()
 void SwHTMLParser::DeleteFootEndNoteImpl()
 {
     delete m_pFootEndNoteImpl;
-    m_pFootEndNoteImpl = 0;
+    m_pFootEndNoteImpl = nullptr;
 }
 
 SwNodeIndex *SwHTMLParser::GetFootEndNoteSection( const OUString& rName )
 {
-    SwNodeIndex *pStartNodeIdx = 0;
+    SwNodeIndex *pStartNodeIdx = nullptr;
 
     if( m_pFootEndNoteImpl )
     {
@@ -250,7 +250,7 @@ SwNodeIndex *SwHTMLParser::GetFootEndNoteSection( const OUString& rName )
                 if(m_pFootEndNoteImpl->aNames.empty())
                 {
                     delete m_pFootEndNoteImpl;
-                    m_pFootEndNoteImpl = 0;
+                    m_pFootEndNoteImpl = nullptr;
                 }
 
                 break;
@@ -386,7 +386,7 @@ void SwHTMLWriter::OutFootEndNotes()
             else
                 m_nFootNote++;
 
-            m_pFormatFootnote = 0;
+            m_pFormatFootnote = nullptr;
         }
     }
 
@@ -398,13 +398,13 @@ void SwHTMLWriter::OutFootEndNotes()
 #endif
 
     delete m_pFootEndNotes;
-    m_pFootEndNotes = 0;
+    m_pFootEndNotes = nullptr;
     m_nFootNote = m_nEndNote = 0;
 }
 
 OUString SwHTMLWriter::GetFootEndNoteSym( const SwFormatFootnote& rFormatFootnote )
 {
-    const SwEndNoteInfo * pInfo = 0;
+    const SwEndNoteInfo * pInfo = nullptr;
     if( rFormatFootnote.GetNumStr().isEmpty() )
         pInfo = rFormatFootnote.IsEndNote() ? &pDoc->GetEndNoteInfo()
                                     : &pDoc->GetFootnoteInfo();

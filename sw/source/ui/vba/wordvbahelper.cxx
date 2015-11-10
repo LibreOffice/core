@@ -48,13 +48,13 @@ SwDocShell* getDocShell( const uno::Reference< frame::XModel>& xModel )
 {
     uno::Reference< lang::XUnoTunnel > xTunnel( xModel, uno::UNO_QUERY_THROW );
     SwXTextDocument* pXDoc = reinterpret_cast< SwXTextDocument * >( sal::static_int_cast< sal_IntPtr >(xTunnel->getSomething(SwXTextDocument::getUnoTunnelId())));
-    return pXDoc ? pXDoc->GetDocShell() : 0;
+    return pXDoc ? pXDoc->GetDocShell() : nullptr;
 }
 
 SwView* getView( const uno::Reference< frame::XModel>& xModel )
 {
     SwDocShell* pDocShell = getDocShell( xModel );
-    return pDocShell? pDocShell->GetView() : 0;
+    return pDocShell? pDocShell->GetView() : nullptr;
 }
 
 uno::Reference< text::XTextViewCursor > getXTextViewCursor( const uno::Reference< frame::XModel >& xModel ) throw (uno::RuntimeException)
@@ -86,7 +86,7 @@ uno::Reference< style::XStyle > getCurrentPageStyle( const uno::Reference< frame
 sal_Int32 getPageCount( const uno::Reference< frame::XModel>& xModel ) throw (uno::RuntimeException)
 {
     SwDocShell* pDocShell = getDocShell( xModel );
-    SwViewShell* pViewSh = pDocShell ? pDocShell->GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell() : 0;
+    SwViewShell* pViewSh = pDocShell ? pDocShell->GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell() : nullptr;
     return pViewSh ? pViewSh->GetPageCount() : 0;
 }
 

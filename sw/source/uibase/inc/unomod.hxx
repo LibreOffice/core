@@ -114,7 +114,7 @@ protected:
     virtual ~SwXPrintSettings()
         throw();
 public:
-    SwXPrintSettings( SwXPrintSettingsType eType, SwDoc * pDoc = NULL );
+    SwXPrintSettings( SwXPrintSettingsType eType, SwDoc * pDoc = nullptr );
 
     //XServiceInfo
     virtual OUString SAL_CALL getImplementationName()

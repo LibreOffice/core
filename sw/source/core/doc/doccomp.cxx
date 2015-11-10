@@ -103,7 +103,7 @@ private:
 
 public:
     CompareData(SwDoc& rD, bool bRecordDiff)
-        : rDoc( rD ), pIndex( 0 ), pChangedFlag( 0 ), pInsRing(0), pDelRing(0)
+        : rDoc( rD ), pIndex( nullptr ), pChangedFlag( nullptr ), pInsRing(nullptr), pDelRing(nullptr)
         , m_bRecordDiff(bRecordDiff)
     {
     }
@@ -186,7 +186,7 @@ class Hash
         const SwCompareLine* pLine;
 
         _HashData()
-            : nNext( 0 ), nHash( 0 ), pLine(0) {}
+            : nNext( 0 ), nHash( 0 ), pLine(nullptr) {}
     };
 
     sal_uLong* pHashArr;
@@ -338,7 +338,7 @@ protected:
         delete[] pData;
     }
 
-    int FindLCS( int *pLcs1 = 0, int *pLcs2 = 0, int nStt1 = 0,
+    int FindLCS( int *pLcs1 = nullptr, int *pLcs2 = nullptr, int nStt1 = 0,
                     int nEnd1 = 0, int nStt2 = 0, int nEnd2 = 0 );
 
 public:
@@ -529,13 +529,13 @@ static const sal_uLong primes[] =
     pDataArr = new _HashData[ nSize ];
     pDataArr[0].nNext = 0;
     pDataArr[0].nHash = 0,
-    pDataArr[0].pLine = 0;
+    pDataArr[0].pLine = nullptr;
     nPrime = primes[0];
 
     for( i = 0; primes[i] < nSize / 3;  i++)
         if( !primes[i] )
         {
-            pHashArr = 0;
+            pHashArr = nullptr;
             return;
         }
     nPrime = primes[ i ];
@@ -763,7 +763,7 @@ void Compare::CheckDiscard( sal_uLong nLen, sal_Char* pDiscard )
 }
 
 Compare::MovedData::MovedData( CompareData& rData, sal_Char* pDiscard )
-    : pIndex( 0 ), pLineNum( 0 ), nCount( 0 )
+    : pIndex( nullptr ), pLineNum( nullptr ), nCount( 0 )
 {
     sal_uLong nLen = rData.GetLineCount();
     sal_uLong n;
@@ -1404,7 +1404,7 @@ sal_uLong CompareData::NextIdx( const SwNode* pNd )
     {
         const SwSectionNode* pSNd;
         if( pNd->IsTableNode() ||
-            ( 0 != (pSNd = pNd->GetSectionNode() ) &&
+            ( nullptr != (pSNd = pNd->GetSectionNode() ) &&
                 ( CONTENT_SECTION != pSNd->GetSection().GetType() ||
                     pSNd->GetSection().IsProtect() ) ) )
             pNd = pNd->EndOfSectionNode();
@@ -1418,7 +1418,7 @@ sal_uLong CompareData::PrevIdx( const SwNode* pNd )
     {
         const SwSectionNode* pSNd;
         if( pNd->StartOfSectionNode()->IsTableNode() ||
-            ( 0 != (pSNd = pNd->StartOfSectionNode()->GetSectionNode() ) &&
+            ( nullptr != (pSNd = pNd->StartOfSectionNode()->GetSectionNode() ) &&
                 ( CONTENT_SECTION != pSNd->GetSection().GetType() ||
                     pSNd->GetSection().IsProtect() ) ) )
             pNd = pNd->StartOfSectionNode();
@@ -1501,7 +1501,7 @@ void CompareData::ShowDelete(
         static_cast<const SwCompareLine*>(rData.GetLine( nEnd-1 ))->GetEndNode(), 1 );
 
     sal_uInt16 nOffset = 0;
-    const SwCompareLine* pLine = 0;
+    const SwCompareLine* pLine = nullptr;
     if( nInsPos >= 1 )
     {
         if( GetLineCount() == nInsPos )
@@ -1642,7 +1642,7 @@ void CompareData::SetRedlinesToDoc( bool bUseDocInfo )
     if( pTmp )
     {
         SwRedlineData aRedlnData( nsRedlineType_t::REDLINE_DELETE, nAuthor, aTimeStamp,
-                                    OUString(), 0, 0 );
+                                    OUString(), nullptr, nullptr );
         do {
             // #i65201#: Expand again, see comment above.
             if( pTmp->GetPoint()->nContent == 0 )
@@ -1694,7 +1694,7 @@ void CompareData::SetRedlinesToDoc( bool bUseDocInfo )
             }
         } while( pInsRing != ( pTmp = pTmp->GetNext()) );
         SwRedlineData aRedlnData( nsRedlineType_t::REDLINE_INSERT, nAuthor, aTimeStamp,
-                                    OUString(), 0, 0 );
+                                    OUString(), nullptr, nullptr );
 
         // combine consecutive
         if( pTmp->GetNext() != pInsRing )
@@ -1706,7 +1706,7 @@ void CompareData::SetRedlinesToDoc( bool bUseDocInfo )
                 if( rSttEnd == rEndStt ||
                     (!rEndStt.nContent.GetIndex() &&
                     rEndStt.nNode.GetIndex() - 1 == rSttEnd.nNode.GetIndex() &&
-                    0 != ( pCNd = rSttEnd.nNode.GetNode().GetContentNode() ) &&
+                    nullptr != ( pCNd = rSttEnd.nNode.GetNode().GetContentNode() ) &&
                     rSttEnd.nContent.GetIndex() == pCNd->Len()))
                 {
                     if( pTmp->GetNext() == pInsRing )
@@ -1812,7 +1812,7 @@ long SwDoc::CompareDoc( const SwDoc& rDoc )
         CmpOptions.nIgnoreLen = SW_MOD()->IsIgnorePieces() ? SW_MOD()->GetPieceLen() : 0;
     }
 
-    GetIDocumentUndoRedo().StartUndo(UNDO_EMPTY, NULL);
+    GetIDocumentUndoRedo().StartUndo(UNDO_EMPTY, nullptr);
     bool bDocWasModified = getIDocumentState().IsModified();
     SwDoc& rSrcDoc = (SwDoc&)rDoc;
     bool bSrcModified = rSrcDoc.getIDocumentState().IsModified();
@@ -1850,7 +1850,7 @@ long SwDoc::CompareDoc( const SwDoc& rDoc )
     if( !bSrcModified )
         rSrcDoc.getIDocumentState().ResetModified();
 
-    GetIDocumentUndoRedo().EndUndo(UNDO_EMPTY, NULL);
+    GetIDocumentUndoRedo().EndUndo(UNDO_EMPTY, nullptr);
 
     return nRet;
 }
@@ -1954,7 +1954,7 @@ sal_uInt16 SaveMergeRedline::InsertRedline(SwPaM* pLastDestRedline)
 
                 case POS_INSIDE:
                 case POS_EQUAL:
-                    delete pDestRedl, pDestRedl = 0;
+                    delete pDestRedl, pDestRedl = nullptr;
                     // break; -> no break !!!!
 
                 case POS_COLLIDE_END:
@@ -1973,7 +1973,7 @@ sal_uInt16 SaveMergeRedline::InsertRedline(SwPaM* pLastDestRedline)
 
                         SwUndoCompDoc *const pUndo =
                             (pDoc->GetIDocumentUndoRedo().DoesUndo())
-                                    ? new SwUndoCompDoc( *pCpyRedl ) : 0;
+                                    ? new SwUndoCompDoc( *pCpyRedl ) : nullptr;
 
                         // now modify doc: append redline, undo (and count)
                         pDoc->getIDocumentRedlineAccess().AppendRedline( pCpyRedl, true );
@@ -2008,7 +2008,7 @@ sal_uInt16 SaveMergeRedline::InsertRedline(SwPaM* pLastDestRedline)
     if( pDestRedl )
     {
         SwUndoCompDoc *const pUndo = (pDoc->GetIDocumentUndoRedo().DoesUndo())
-            ? new SwUndoCompDoc( *pDestRedl ) : 0;
+            ? new SwUndoCompDoc( *pDestRedl ) : nullptr;
 
         // now modify doc: append redline, undo (and count)
         bool bRedlineAccepted = pDoc->getIDocumentRedlineAccess().AppendRedline( pDestRedl, true );
@@ -2021,7 +2021,7 @@ sal_uInt16 SaveMergeRedline::InsertRedline(SwPaM* pLastDestRedline)
         // if AppendRedline has deleted our redline, we may not keep a
         // reference to it
         if( ! bRedlineAccepted )
-            pDestRedl = NULL;
+            pDestRedl = nullptr;
     }
     return nIns;
 }
@@ -2034,7 +2034,7 @@ long SwDoc::MergeDoc( const SwDoc& rDoc )
 
     long nRet = 0;
 
-    GetIDocumentUndoRedo().StartUndo(UNDO_EMPTY, NULL);
+    GetIDocumentUndoRedo().StartUndo(UNDO_EMPTY, nullptr);
 
     SwDoc& rSrcDoc = (SwDoc&)rDoc;
     bool bSrcModified = rSrcDoc.getIDocumentState().IsModified();
@@ -2097,7 +2097,7 @@ long SwDoc::MergeDoc( const SwDoc& rDoc )
 
     getIDocumentRedlineAccess().SetRedlineMode((RedlineMode_t)(nsRedlineMode_t::REDLINE_SHOW_INSERT | nsRedlineMode_t::REDLINE_SHOW_DELETE));
 
-    GetIDocumentUndoRedo().EndUndo(UNDO_EMPTY, NULL);
+    GetIDocumentUndoRedo().EndUndo(UNDO_EMPTY, nullptr);
 
     return nRet;
 }

@@ -50,7 +50,7 @@ public:
     // if PaintMultiPortion is called recursively, we have to pass the
     // surrounding SwBidiPortion
     void PaintMultiPortion( const SwRect &rPaint, SwMultiPortion& rMulti,
-                            const SwMultiPortion* pEnvPor = 0 );
+                            const SwMultiPortion* pEnvPor = nullptr );
     inline void SetPaintDrop( const bool bNew ) { bPaintDrop = bNew; }
     inline bool IsPaintDrop() const { return bPaintDrop; }
     inline SwTextPaintInfo &GetInfo()

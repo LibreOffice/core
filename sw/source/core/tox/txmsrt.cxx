@@ -131,7 +131,7 @@ SwTOXSortTabBase::SwTOXSortTabBase( TOXSortType nTyp, const SwContentNode* pNd,
                                     const SwTextTOXMark* pMark,
                                     const SwTOXInternational* pInter,
                                     const lang::Locale* pLocale )
-    : pTOXNd( 0 ), pTextMark( pMark ), pTOXIntl( pInter ),
+    : pTOXNd( nullptr ), pTextMark( pMark ), pTOXIntl( pInter ),
     nPos( 0 ), nCntPos( 0 ), nType( static_cast<sal_uInt16>(nTyp) ), bValidText( false )
 {
     if ( pLocale )
@@ -158,7 +158,7 @@ SwTOXSortTabBase::SwTOXSortTabBase( TOXSortType nTyp, const SwContentNode* pNd,
             {
                 // Then get the 'anchor' (body) position
                 Point aPt;
-                const SwContentFrm* pFrm = pNd->getLayoutFrm( pNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), &aPt, 0, false );
+                const SwContentFrm* pFrm = pNd->getLayoutFrm( pNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), &aPt, nullptr, false );
                 if( pFrm )
                 {
                     SwPosition aPos( *pNd );
@@ -405,7 +405,7 @@ SwTOXCustom::SwTOXCustom(const TextAndReading& rKey,
                          sal_uInt16 nLevel,
                          const SwTOXInternational& rIntl,
                          const lang::Locale& rLocale )
-    : SwTOXSortTabBase( TOX_SORT_CUSTOM, 0, 0, &rIntl, &rLocale ),
+    : SwTOXSortTabBase( TOX_SORT_CUSTOM, nullptr, nullptr, &rIntl, &rLocale ),
     m_aKey(rKey), nLev(nLevel)
 {
 }
@@ -482,7 +482,7 @@ sal_uInt16 SwTOXContent::GetLevel() const
 // Watch out for OLE/graphics when sorting!
 // The position must not come from the document, but from the "anchor"!
 SwTOXPara::SwTOXPara( const SwContentNode& rNd, SwTOXElement eT, sal_uInt16 nLevel, const OUString& sSeqName )
-    : SwTOXSortTabBase( TOX_SORT_PARA, &rNd, 0, 0 ),
+    : SwTOXSortTabBase( TOX_SORT_PARA, &rNd, nullptr, nullptr ),
     eType( eT ),
     m_nLevel(nLevel),
     nStartIndex(0),
@@ -594,7 +594,7 @@ OUString SwTOXPara::GetURL() const
                 case nsSwTOXElement::TOX_OLE:       pStr = "ole"; break;
                 case nsSwTOXElement::TOX_GRAPHIC:   pStr = "graphic"; break;
                 case nsSwTOXElement::TOX_FRAME:     pStr = "frame"; break;
-                default:            pStr = 0;
+                default:            pStr = nullptr;
                 }
                 if( pStr )
                     aText += OUString::createFromAscii( pStr );
@@ -614,7 +614,7 @@ OUString SwTOXPara::GetURL() const
 
 // Table
 SwTOXTable::SwTOXTable( const SwContentNode& rNd )
-    : SwTOXSortTabBase( TOX_SORT_TABLE, &rNd, 0, 0 ),
+    : SwTOXSortTabBase( TOX_SORT_TABLE, &rNd, nullptr, nullptr ),
     nLevel(FORM_ALPHA_DELIMITTER)
 {
 }
@@ -660,7 +660,7 @@ OUString SwTOXTable::GetURL() const
 
 SwTOXAuthority::SwTOXAuthority( const SwContentNode& rNd,
                 SwFormatField& rField, const SwTOXInternational& rIntl ) :
-    SwTOXSortTabBase( TOX_SORT_AUTHORITY, &rNd, 0, &rIntl ),
+    SwTOXSortTabBase( TOX_SORT_AUTHORITY, &rNd, nullptr, &rIntl ),
     m_rField(rField)
 {
     if(rField.GetTextField())

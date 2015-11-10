@@ -127,19 +127,19 @@ class SW_DLLPUBLIC SwDocShell
         sal_uInt16 nMask,
         const bool bNew,
         const OString& sPageId = OString(),
-        SwWrtShell* pActShell = 0,
+        SwWrtShell* pActShell = nullptr,
         const bool bBasic = false );
 
     SAL_DLLPRIVATE bool                  Delete(const OUString &rName, sal_uInt16 nFamily);
     SAL_DLLPRIVATE bool                  Hide(const OUString &rName, sal_uInt16 nFamily, bool bHidden);
     SAL_DLLPRIVATE sal_uInt16            ApplyStyles(const OUString &rName,
         const sal_uInt16 nFamily,
-        SwWrtShell* pShell = 0,
+        SwWrtShell* pShell = nullptr,
         sal_uInt16 nMode = 0);
     SAL_DLLPRIVATE sal_uInt16            DoWaterCan( const OUString &rName, sal_uInt16 nFamily);
-    SAL_DLLPRIVATE sal_uInt16            UpdateStyle(const OUString &rName, sal_uInt16 nFamily, SwWrtShell* pShell = 0);
+    SAL_DLLPRIVATE sal_uInt16            UpdateStyle(const OUString &rName, sal_uInt16 nFamily, SwWrtShell* pShell = nullptr);
     SAL_DLLPRIVATE sal_uInt16            MakeByExample(const OUString &rName,
-                                        sal_uInt16 nFamily, sal_uInt16 nMask, SwWrtShell* pShell = 0);
+                                        sal_uInt16 nFamily, sal_uInt16 nMask, SwWrtShell* pShell = nullptr);
 
     SAL_DLLPRIVATE void                  SubInitNew();   ///< for InitNew and HtmlSourceMode.
 
@@ -192,7 +192,7 @@ public:
     void                    ExecStyleSheet(SfxRequest&);
 
     void                    GetState(SfxItemSet &);
-    void                    StateStyleSheet(SfxItemSet&, SwWrtShell* pSh = 0 );
+    void                    StateStyleSheet(SfxItemSet&, SwWrtShell* pSh = nullptr );
 
     /// returns Doc. But be careful!
     inline SwDoc*                   GetDoc() { return m_pDoc; }
@@ -229,7 +229,7 @@ public:
 
     /// For inserting document.
     Reader* StartConvertFrom(SfxMedium& rMedium, SwReader** ppRdr,
-                            SwCrsrShell* pCrsrSh = 0, SwPaM* pPaM = 0);
+                            SwCrsrShell* pCrsrSh = nullptr, SwPaM* pPaM = nullptr);
 
 #if defined WNT
     virtual bool DdeGetData( const OUString& rItem, const OUString& rMimeType,

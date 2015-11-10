@@ -68,7 +68,7 @@ static void lcl_GetCharRectInsideField( SwTextSizeInfo& rInf, SwRect& rOrig,
         sal_Int32 nFieldLen = 0;
 
         OUString sString;
-        const OUString* pString = 0;
+        const OUString* pString = nullptr;
         const SwLinePortion* pPor = &rPor;
         do
         {
@@ -80,7 +80,7 @@ static void lcl_GetCharRectInsideField( SwTextSizeInfo& rInf, SwRect& rOrig,
             }
             else
             {
-                pString = 0;
+                pString = nullptr;
                 nFieldLen = 0;
             }
 
@@ -99,7 +99,7 @@ static void lcl_GetCharRectInsideField( SwTextSizeInfo& rInf, SwRect& rOrig,
         if ( pString )
         {
             // get script for field portion
-            rInf.GetFont()->SetActual( SwScriptInfo::WhichFont( 0, pString, 0 ) );
+            rInf.GetFont()->SetActual( SwScriptInfo::WhichFont( 0, pString, nullptr ) );
 
             sal_Int32 nOldLen = pPor->GetLen();
             const_cast<SwLinePortion*>(pPor)->SetLen( nLen - 1 );
@@ -509,7 +509,7 @@ void SwTextCursor::_GetCharRect( SwRect* pOrig, const sal_Int32 nOfst,
         SwTwips nX = 0;
         SwTwips nTmpFirst = 0;
         SwLinePortion *pPor = pCurr->GetFirstPortion();
-        SwBidiPortion* pLastBidiPor = 0;
+        SwBidiPortion* pLastBidiPor = nullptr;
         SwTwips nLastBidiPorWidth = 0;
         std::deque<sal_uInt16>* pKanaComp = pCurr->GetpKanaComp();
         sal_uInt16 nSpaceIdx = 0;
@@ -1155,7 +1155,7 @@ void SwTextCursor::_GetCharRect( SwRect* pOrig, const sal_Int32 nOfst,
 
         if ( pCMS && pCMS->m_bRealHeight )
         {
-            nTmpAscent = AdjustBaseLine( *pCurr, 0, nPorHeight, nPorAscent );
+            nTmpAscent = AdjustBaseLine( *pCurr, nullptr, nPorHeight, nPorAscent );
             if ( nTmpAscent > nPorAscent )
                 pCMS->m_aRealHeight.X() = nTmpAscent - nPorAscent;
             else
@@ -1390,7 +1390,7 @@ sal_Int32 SwTextCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
             bLastHyph = pPor->InHyphGrp();
     }
 
-    const bool bLastPortion = (0 == pPor->GetPortion());
+    const bool bLastPortion = (nullptr == pPor->GetPortion());
 
     if( nX==nWidth )
     {
@@ -1602,7 +1602,7 @@ sal_Int32 SwTextCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
                 const_cast<SwTextCursor*>(this)->SeekAndChg( aSizeInf );
                 SwTextSlot aDiffText( &aSizeInf, static_cast<SwTextPortion*>(pPor), false, false );
                 SwFontSave aSave( aSizeInf, pPor->IsDropPortion() ?
-                        static_cast<SwDropPortion*>(pPor)->GetFnt() : NULL );
+                        static_cast<SwDropPortion*>(pPor)->GetFnt() : nullptr );
 
                 SwParaPortion* pPara = const_cast<SwParaPortion*>(GetInfo().GetParaPortion());
                 OSL_ENSURE( pPara, "No paragraph!" );

@@ -36,7 +36,7 @@
 void SwView::ExecDlg(SfxRequest &rReq)
 {
     // Thus, from the basic no dialogues for background views are called:
-    const SfxPoolItem* pItem = 0;
+    const SfxPoolItem* pItem = nullptr;
     const SfxItemSet* pArgs = rReq.GetArgs();
 
     sal_uInt16 nSlot = rReq.GetSlot();

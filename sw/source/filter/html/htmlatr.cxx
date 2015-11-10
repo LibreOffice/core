@@ -87,7 +87,7 @@ HTMLOutEvent aAnchorEventTable[] =
     { OOO_STRING_SVTOOLS_HTML_O_SDonclick,      OOO_STRING_SVTOOLS_HTML_O_onclick,      SFX_EVENT_MOUSECLICK_OBJECT },
     { OOO_STRING_SVTOOLS_HTML_O_SDonmouseover,  OOO_STRING_SVTOOLS_HTML_O_onmouseover,  SFX_EVENT_MOUSEOVER_OBJECT  },
     { OOO_STRING_SVTOOLS_HTML_O_SDonmouseout,       OOO_STRING_SVTOOLS_HTML_O_onmouseout,       SFX_EVENT_MOUSEOUT_OBJECT   },
-    { 0,                        0,                      0                           }
+    { nullptr,                        nullptr,                      0                           }
 };
 
 static Writer& OutHTML_SvxAdjust( Writer& rWrt, const SfxPoolItem& rHt );
@@ -232,8 +232,8 @@ SwHTMLFormatInfo::SwHTMLFormatInfo( const SwFormat *pF, SwDoc *pDoc, SwDoc *pTem
                               LanguageType eDfltLang,
                               sal_uInt16 nCSS1Script, bool bHardDrop )
     : pFormat(pF)
-    , pRefFormat(0)
-    , pItemSet(0)
+    , pRefFormat(nullptr)
+    , pItemSet(nullptr)
     , nLeftMargin(0)
     , nRightMargin(0)
     , nFirstLineIndent(0)
@@ -253,7 +253,7 @@ SwHTMLFormatInfo::SwHTMLFormatInfo( const SwFormat *pF, SwDoc *pDoc, SwDoc *pTem
     bool bTextColl = pFormat->Which() == RES_TXTFMTCOLL ||
                     pFormat->Which() == RES_CONDTXTFMTCOLL;
 
-    const SwFormat *pReferenceFormat = 0; // Vergleichs-Format
+    const SwFormat *pReferenceFormat = nullptr; // Vergleichs-Format
     if( nDeep != 0 )
     {
         // Es ist eine HTML-Tag-Vorlage oder die Vorlage ist von einer
@@ -316,7 +316,7 @@ SwHTMLFormatInfo::SwHTMLFormatInfo( const SwFormat *pF, SwDoc *pDoc, SwDoc *pTem
         if( !pItemSet->Count() )
         {
             delete pItemSet;
-            pItemSet = 0;
+            pItemSet = nullptr;
         }
     }
 
@@ -649,7 +649,7 @@ void OutHTML_SwFormat( Writer& rWrt, const SwFormat& rFormat,
     }
 
     // soll ein ALIGN=... geschrieben werden?
-    const SfxPoolItem* pAdjItem = 0;
+    const SfxPoolItem* pAdjItem = nullptr;
     const SfxPoolItem* pItem;
 
     if( rInfo.pItemSet &&
@@ -821,7 +821,7 @@ void OutHTML_SwFormat( Writer& rWrt, const SwFormat& rFormat,
         rHWrt.m_bOutOpts = true;
         OutHTML_SvxAdjust( rWrt, *pAdjItem );
         rWrt.Strm().WriteChar( '>' );
-        pAdjItem = 0;
+        pAdjItem = nullptr;
         rHWrt.m_bNoAlign = false;
         rInfo.bOutDiv = true;
         rHWrt.IncIndentLevel();
@@ -1017,7 +1017,7 @@ void OutHTML_SwFormatOff( Writer& rWrt, const SwHTMLTextCollOutputInfo& rInfo )
                 rHWrt.ChangeParaToken( 0 );
             OutHTML_NumBulListEnd( rHWrt, rNextInfo );
         }
-        else if( rNextInfo.GetNumRule() != 0 )
+        else if( rNextInfo.GetNumRule() != nullptr )
             rHWrt.ChangeParaToken( 0 );
 
         return;
@@ -1177,9 +1177,9 @@ public:
                                sal_uInt16 nWeak=CSS1_OUTMODE_ANY_SCRIPT );
 
     void OutStartAttrs( SwHTMLWriter& rHWrt, sal_Int32 nPos,
-                        HTMLOutContext *pContext = 0 );
+                        HTMLOutContext *pContext = nullptr );
     void OutEndAttrs( SwHTMLWriter& rHWrt, sal_Int32 nPos,
-                      HTMLOutContext *pContext = 0 );
+                      HTMLOutContext *pContext = nullptr );
 
     bool IsHTMLMode( sal_uLong nMode ) const { return (nHTMLMode & nMode) != 0; }
 };
@@ -1935,7 +1935,7 @@ void HTMLEndPosLst::OutStartAttrs( SwHTMLWriter& rHWrt, sal_Int32 nPos,
     // die Attribute in der Start-Liste sind aufsteigend sortiert
     for( HTMLStartEndPositions::size_type i=0; i< aStartLst.size(); ++i )
     {
-        HTMLStartEndPos *pPos = 0;
+        HTMLStartEndPos *pPos = nullptr;
         if( nCharBoxIndex < aStartLst.size() )
         {
             if( i == 0 )
@@ -1968,7 +1968,7 @@ void HTMLEndPosLst::OutStartAttrs( SwHTMLWriter& rHWrt, sal_Int32 nPos,
             if( pContext )
             {
                 HTMLOutFuncs::FlushToAscii( rHWrt.Strm(), *pContext );
-                pContext = 0; // one time ony
+                pContext = nullptr; // one time ony
             }
             Out( aHTMLAttrFnTab, *pPos->GetItem(), rHWrt );
             rHWrt.m_nCSS1Script = nCSS1Script;
@@ -1993,7 +1993,7 @@ void HTMLEndPosLst::OutEndAttrs( SwHTMLWriter& rHWrt, sal_Int32 nPos,
             if( pContext )
             {
                 HTMLOutFuncs::FlushToAscii( rHWrt.Strm(), *pContext );
-                pContext = 0; // one time ony
+                pContext = nullptr; // one time ony
             }
             // Skip closing span if next character span has the same border (border merge)
             bool bSkipOut = false;
@@ -2330,7 +2330,7 @@ Writer& OutHTML_SwTextNode( Writer& rWrt, const SwContentNode& rNode )
         {
             rHTMLWrt.OutFootEndNoteSym( *rHTMLWrt.m_pFormatFootnote, aFootEndNoteSym,
                                         aEndPosLst.GetScriptAtPos( aOutlineText.getLength(), rHTMLWrt.m_nCSS1Script ) );
-            rHTMLWrt.m_pFormatFootnote = 0;
+            rHTMLWrt.m_pFormatFootnote = nullptr;
         }
     }
 
@@ -2340,7 +2340,7 @@ Writer& OutHTML_SwTextNode( Writer& rWrt, const SwContentNode& rNode )
 
     size_t nAttrPos = 0;
     sal_Int32 nStrPos = rHTMLWrt.pCurPam->GetPoint()->nContent.GetIndex();
-    const SwTextAttr * pHt = 0;
+    const SwTextAttr * pHt = nullptr;
     const size_t nCntAttr = pNd->HasHints() ? pNd->GetSwpHints().Count() : 0;
     if( nCntAttr && nStrPos > ( pHt = pNd->GetSwpHints().Get(0) )->GetStart() )
     {
@@ -2409,7 +2409,7 @@ Writer& OutHTML_SwTextNode( Writer& rWrt, const SwContentNode& rNode )
             }
 
             bool bOutChar = true;
-            const SwTextAttr * pTextHt = 0;
+            const SwTextAttr * pTextHt = nullptr;
             if( nAttrPos < nCntAttr && pHt->GetStart() == nStrPos
                 && nStrPos != nEnd )
             {
@@ -2851,7 +2851,7 @@ static Writer& OutHTML_SvxEscapement( Writer& rWrt, const SfxPoolItem& rHt )
 
     const SvxEscapement eEscape =
         (const SvxEscapement)static_cast<const SvxEscapementItem&>(rHt).GetEnumValue();
-    const sal_Char *pStr = 0;
+    const sal_Char *pStr = nullptr;
     switch( eEscape )
     {
     case SVX_ESCAPEMENT_SUPERSCRIPT: pStr = OOO_STRING_SVTOOLS_HTML_superscript; break;
@@ -2899,7 +2899,7 @@ static Writer& OutHTML_SwFlyCnt( Writer& rWrt, const SfxPoolItem& rHt )
     const SwFormatFlyCnt& rFlyCnt = static_cast<const SwFormatFlyCnt&>(rHt);
 
     const SwFrameFormat& rFormat = *rFlyCnt.GetFrameFormat();
-    const SdrObject *pSdrObj = 0;
+    const SdrObject *pSdrObj = nullptr;
 
     SwHTMLFrmType eType =
         (SwHTMLFrmType)rHTMLWrt.GuessFrmType( rFormat, pSdrObj );
@@ -2935,7 +2935,7 @@ Writer& OutHTML_INetFormat( Writer& rWrt, const SwFormatINetFormat& rINetFormat,
 
     OUString aURL( rINetFormat.GetValue() );
     const SvxMacroTableDtor *pMacTable = rINetFormat.GetMacroTable();
-    bool bEvents = pMacTable != 0 && !pMacTable->empty();
+    bool bEvents = pMacTable != nullptr && !pMacTable->empty();
 
     // Anything to output at all?
     if( aURL.isEmpty() && !bEvents && rINetFormat.GetName().isEmpty() )
@@ -2976,7 +2976,7 @@ Writer& OutHTML_INetFormat( Writer& rWrt, const SwFormatINetFormat& rINetFormat,
     if( bScriptDependent )
     {
         sOut += " " + OString(OOO_STRING_SVTOOLS_HTML_O_class) + "=\"";
-        const sal_Char* pStr = 0;
+        const sal_Char* pStr = nullptr;
         switch( rHTMLWrt.m_nCSS1Script )
         {
         case CSS1_OUTMODE_WESTERN:
@@ -3177,7 +3177,7 @@ static Writer& OutHTML_SvxAdjust( Writer& rWrt, const SfxPoolItem& rHt )
         return  rWrt;
 
     const SvxAdjustItem& rAdjust = static_cast<const SvxAdjustItem&>(rHt);
-    const sal_Char* pStr = 0;
+    const sal_Char* pStr = nullptr;
     switch( rAdjust.GetAdjust() )
     {
     case SVX_ADJUST_CENTER: pStr = OOO_STRING_SVTOOLS_HTML_AL_center; break;
@@ -3206,9 +3206,9 @@ static Writer& OutHTML_SvxAdjust( Writer& rWrt, const SfxPoolItem& rHt )
 
 SwAttrFnTab aHTMLAttrFnTab = {
 /* RES_CHRATR_CASEMAP   */          OutHTML_CSS1Attr,
-/* RES_CHRATR_CHARSETCOLOR  */      0,
+/* RES_CHRATR_CHARSETCOLOR  */      nullptr,
 /* RES_CHRATR_COLOR */              OutHTML_SvxColor,
-/* RES_CHRATR_CONTOUR   */          0,
+/* RES_CHRATR_CONTOUR   */          nullptr,
 /* RES_CHRATR_CROSSEDOUT    */      OutHTML_SwCrossedOut,
 /* RES_CHRATR_ESCAPEMENT    */      OutHTML_SvxEscapement,
 /* RES_CHRATR_FONT  */              OutHTML_SvxFont,
@@ -3216,15 +3216,15 @@ SwAttrFnTab aHTMLAttrFnTab = {
 /* RES_CHRATR_KERNING   */          OutHTML_CSS1Attr,
 /* RES_CHRATR_LANGUAGE  */          OutHTML_SvxLanguage,
 /* RES_CHRATR_POSTURE   */          OutHTML_SwPosture,
-/* RES_CHRATR_PROPORTIONALFONTSIZE*/0,
-/* RES_CHRATR_SHADOWED  */          0,
+/* RES_CHRATR_PROPORTIONALFONTSIZE*/nullptr,
+/* RES_CHRATR_SHADOWED  */          nullptr,
 /* RES_CHRATR_UNDERLINE */          OutHTML_SwUnderline,
 /* RES_CHRATR_WEIGHT    */          OutHTML_SwWeight,
-/* RES_CHRATR_WORDLINEMODE  */      0,
-/* RES_CHRATR_AUTOKERN  */          0,
+/* RES_CHRATR_WORDLINEMODE  */      nullptr,
+/* RES_CHRATR_AUTOKERN  */          nullptr,
 /* RES_CHRATR_BLINK */              OutHTML_SwBlink,
-/* RES_CHRATR_NOHYPHEN  */          0, // Neu: nicht trennen
-/* RES_CHRATR_NOLINEBREAK */        0, // Neu: nicht umbrechen
+/* RES_CHRATR_NOHYPHEN  */          nullptr, // Neu: nicht trennen
+/* RES_CHRATR_NOLINEBREAK */        nullptr, // Neu: nicht umbrechen
 /* RES_CHRATR_BACKGROUND */         OutHTML_CSS1Attr, // Neu: Zeichenhintergrund
 /* RES_CHRATR_CJK_FONT */           OutHTML_SvxFont,
 /* RES_CHRATR_CJK_FONTSIZE */       OutHTML_SvxFontHeight,
@@ -3236,131 +3236,131 @@ SwAttrFnTab aHTMLAttrFnTab = {
 /* RES_CHRATR_CTL_LANGUAGE */       OutHTML_SvxLanguage,
 /* RES_CHRATR_CTL_POSTURE */        OutHTML_SwPosture,
 /* RES_CHRATR_CTL_WEIGHT */         OutHTML_SwWeight,
-/* RES_CHRATR_ROTATE */             0,
-/* RES_CHRATR_EMPHASIS_MARK */      0,
-/* RES_CHRATR_TWO_LINES */          0,
-/* RES_CHRATR_SCALEW */             0,
-/* RES_CHRATR_RELIEF */             0,
+/* RES_CHRATR_ROTATE */             nullptr,
+/* RES_CHRATR_EMPHASIS_MARK */      nullptr,
+/* RES_CHRATR_TWO_LINES */          nullptr,
+/* RES_CHRATR_SCALEW */             nullptr,
+/* RES_CHRATR_RELIEF */             nullptr,
 /* RES_CHRATR_HIDDEN */             OutHTML_CSS1Attr,
 /* RES_CHRATR_OVERLINE */           OutHTML_CSS1Attr,
-/* RES_CHRATR_RSID */               0,
+/* RES_CHRATR_RSID */               nullptr,
 /* RES_CHRATR_BOX */                OutHTML_CSS1Attr,
-/* RES_CHRATR_SHADOW */             0,
-/* RES_CHRATR_HIGHLIGHT */          0,
-/* RES_CHRATR_GRABBAG */            0,
-/* RES_CHRATR_BIDIRTL */            0,
-/* RES_CHRATR_IDCTHINT */           0,
+/* RES_CHRATR_SHADOW */             nullptr,
+/* RES_CHRATR_HIGHLIGHT */          nullptr,
+/* RES_CHRATR_GRABBAG */            nullptr,
+/* RES_CHRATR_BIDIRTL */            nullptr,
+/* RES_CHRATR_IDCTHINT */           nullptr,
 
-/* RES_TXTATR_REFMARK */            0,
-/* RES_TXTATR_TOXMARK */            0,
-/* RES_TXTATR_META */               0,
-/* RES_TXTATR_METAFIELD */          0,
-/* RES_TXTATR_AUTOFMT */            0,
+/* RES_TXTATR_REFMARK */            nullptr,
+/* RES_TXTATR_TOXMARK */            nullptr,
+/* RES_TXTATR_META */               nullptr,
+/* RES_TXTATR_METAFIELD */          nullptr,
+/* RES_TXTATR_AUTOFMT */            nullptr,
 /* RES_TXTATR_INETFMT */            OutHTML_SwFormatINetFormat,
 /* RES_TXTATR_CHARFMT */            OutHTML_SwTextCharFormat,
-/* RES_TXTATR_CJK_RUBY */           0,
-/* RES_TXTATR_UNKNOWN_CONTAINER */  0,
+/* RES_TXTATR_CJK_RUBY */           nullptr,
+/* RES_TXTATR_UNKNOWN_CONTAINER */  nullptr,
 /* RES_TXTATR_INPUTFIELD */         OutHTML_SwFormatField,
 
 /* RES_TXTATR_FIELD */              OutHTML_SwFormatField,
 /* RES_TXTATR_FLYCNT */             OutHTML_SwFlyCnt,
 /* RES_TXTATR_FTN */                OutHTML_SwFormatFootnote,
 /* RES_TXTATR_ANNOTATION */         OutHTML_SwFormatField,
-/* RES_TXTATR_DUMMY3 */             0,
-/* RES_TXTATR_DUMMY1 */             0, // Dummy:
-/* RES_TXTATR_DUMMY2 */             0, // Dummy:
+/* RES_TXTATR_DUMMY3 */             nullptr,
+/* RES_TXTATR_DUMMY1 */             nullptr, // Dummy:
+/* RES_TXTATR_DUMMY2 */             nullptr, // Dummy:
 
-/* RES_PARATR_LINESPACING   */      0,
+/* RES_PARATR_LINESPACING   */      nullptr,
 /* RES_PARATR_ADJUST    */          OutHTML_SvxAdjust,
-/* RES_PARATR_SPLIT */              0,
-/* RES_PARATR_WIDOWS    */          0,
-/* RES_PARATR_ORPHANS   */          0,
-/* RES_PARATR_TABSTOP   */          0,
-/* RES_PARATR_HYPHENZONE*/          0,
+/* RES_PARATR_SPLIT */              nullptr,
+/* RES_PARATR_WIDOWS    */          nullptr,
+/* RES_PARATR_ORPHANS   */          nullptr,
+/* RES_PARATR_TABSTOP   */          nullptr,
+/* RES_PARATR_HYPHENZONE*/          nullptr,
 /* RES_PARATR_DROP */               OutHTML_CSS1Attr,
-/* RES_PARATR_REGISTER */           0, // neu:  Registerhaltigkeit
-/* RES_PARATR_NUMRULE */            0, // Dummy:
-/* RES_PARATR_SCRIPTSPACE */        0, // Dummy:
-/* RES_PARATR_HANGINGPUNCTUATION */ 0, // Dummy:
-/* RES_PARATR_FORBIDDEN_RULES */    0, // new
-/* RES_PARATR_VERTALIGN */          0, // new
-/* RES_PARATR_SNAPTOGRID*/          0, // new
-/* RES_PARATR_CONNECT_TO_BORDER */  0, // new
-/* RES_PARATR_OUTLINELEVEL */       0,
-/* RES_PARATR_RSID */               0,
-/* RES_PARATR_GRABBAG */            0,
+/* RES_PARATR_REGISTER */           nullptr, // neu:  Registerhaltigkeit
+/* RES_PARATR_NUMRULE */            nullptr, // Dummy:
+/* RES_PARATR_SCRIPTSPACE */        nullptr, // Dummy:
+/* RES_PARATR_HANGINGPUNCTUATION */ nullptr, // Dummy:
+/* RES_PARATR_FORBIDDEN_RULES */    nullptr, // new
+/* RES_PARATR_VERTALIGN */          nullptr, // new
+/* RES_PARATR_SNAPTOGRID*/          nullptr, // new
+/* RES_PARATR_CONNECT_TO_BORDER */  nullptr, // new
+/* RES_PARATR_OUTLINELEVEL */       nullptr,
+/* RES_PARATR_RSID */               nullptr,
+/* RES_PARATR_GRABBAG */            nullptr,
 
-/* RES_PARATR_LIST_ID */            0, // new
-/* RES_PARATR_LIST_LEVEL */         0, // new
-/* RES_PARATR_LIST_ISRESTART */     0, // new
-/* RES_PARATR_LIST_RESTARTVALUE */  0, // new
-/* RES_PARATR_LIST_ISCOUNTED */     0, // new
+/* RES_PARATR_LIST_ID */            nullptr, // new
+/* RES_PARATR_LIST_LEVEL */         nullptr, // new
+/* RES_PARATR_LIST_ISRESTART */     nullptr, // new
+/* RES_PARATR_LIST_RESTARTVALUE */  nullptr, // new
+/* RES_PARATR_LIST_ISCOUNTED */     nullptr, // new
 
-/* RES_FILL_ORDER   */              0,
-/* RES_FRM_SIZE */                  0,
-/* RES_PAPER_BIN    */              0,
-/* RES_LR_SPACE */                  0,
-/* RES_UL_SPACE */                  0,
-/* RES_PAGEDESC */                  0,
-/* RES_BREAK */                     0,
-/* RES_CNTNT */                     0,
-/* RES_HEADER */                    0,
-/* RES_FOOTER */                    0,
-/* RES_PRINT */                     0,
-/* RES_OPAQUE */                    0,
-/* RES_PROTECT */                   0,
-/* RES_SURROUND */                  0,
-/* RES_VERT_ORIENT */               0,
-/* RES_HORI_ORIENT */               0,
-/* RES_ANCHOR */                    0,
-/* RES_BACKGROUND */                0,
-/* RES_BOX  */                      0,
-/* RES_SHADOW */                    0,
-/* RES_FRMMACRO */                  0,
-/* RES_COL */                       0,
-/* RES_KEEP */                      0,
-/* RES_URL */                       0,
-/* RES_EDIT_IN_READONLY */          0,
-/* RES_LAYOUT_SPLIT */              0,
-/* RES_CHAIN */                     0,
-/* RES_TEXTGRID */                  0,
-/* RES_LINENUMBER */                0,
-/* RES_FTN_AT_TXTEND */             0,
-/* RES_END_AT_TXTEND */             0,
-/* RES_COLUMNBALANCE */             0,
-/* RES_FRAMEDIR */                  0,
-/* RES_HEADER_FOOTER_EAT_SPACING */ 0,
-/* RES_ROW_SPLIT */                 0,
-/* RES_FOLLOW_TEXT_FLOW */          0,
-/* RES_COLLAPSING_BORDERS */        0,
-/* RES_WRAP_INFLUENCE_ON_OBJPOS */  0,
-/* RES_AUTO_STYLE */                0,
-/* RES_FRMATR_STYLE_NAME */         0,
-/* RES_FRMATR_CONDITIONAL_STYLE_NAME */ 0,
-/* RES_FRMATR_GRABBAG */            0,
-/* RES_TEXT_VERT_ADJUST */          0,
+/* RES_FILL_ORDER   */              nullptr,
+/* RES_FRM_SIZE */                  nullptr,
+/* RES_PAPER_BIN    */              nullptr,
+/* RES_LR_SPACE */                  nullptr,
+/* RES_UL_SPACE */                  nullptr,
+/* RES_PAGEDESC */                  nullptr,
+/* RES_BREAK */                     nullptr,
+/* RES_CNTNT */                     nullptr,
+/* RES_HEADER */                    nullptr,
+/* RES_FOOTER */                    nullptr,
+/* RES_PRINT */                     nullptr,
+/* RES_OPAQUE */                    nullptr,
+/* RES_PROTECT */                   nullptr,
+/* RES_SURROUND */                  nullptr,
+/* RES_VERT_ORIENT */               nullptr,
+/* RES_HORI_ORIENT */               nullptr,
+/* RES_ANCHOR */                    nullptr,
+/* RES_BACKGROUND */                nullptr,
+/* RES_BOX  */                      nullptr,
+/* RES_SHADOW */                    nullptr,
+/* RES_FRMMACRO */                  nullptr,
+/* RES_COL */                       nullptr,
+/* RES_KEEP */                      nullptr,
+/* RES_URL */                       nullptr,
+/* RES_EDIT_IN_READONLY */          nullptr,
+/* RES_LAYOUT_SPLIT */              nullptr,
+/* RES_CHAIN */                     nullptr,
+/* RES_TEXTGRID */                  nullptr,
+/* RES_LINENUMBER */                nullptr,
+/* RES_FTN_AT_TXTEND */             nullptr,
+/* RES_END_AT_TXTEND */             nullptr,
+/* RES_COLUMNBALANCE */             nullptr,
+/* RES_FRAMEDIR */                  nullptr,
+/* RES_HEADER_FOOTER_EAT_SPACING */ nullptr,
+/* RES_ROW_SPLIT */                 nullptr,
+/* RES_FOLLOW_TEXT_FLOW */          nullptr,
+/* RES_COLLAPSING_BORDERS */        nullptr,
+/* RES_WRAP_INFLUENCE_ON_OBJPOS */  nullptr,
+/* RES_AUTO_STYLE */                nullptr,
+/* RES_FRMATR_STYLE_NAME */         nullptr,
+/* RES_FRMATR_CONDITIONAL_STYLE_NAME */ nullptr,
+/* RES_FRMATR_GRABBAG */            nullptr,
+/* RES_TEXT_VERT_ADJUST */          nullptr,
 
-/* RES_GRFATR_MIRRORGRF */          0,
-/* RES_GRFATR_CROPGRF   */          0,
-/* RES_GRFATR_ROTATION */           0,
-/* RES_GRFATR_LUMINANCE */          0,
-/* RES_GRFATR_CONTRAST */           0,
-/* RES_GRFATR_CHANNELR */           0,
-/* RES_GRFATR_CHANNELG */           0,
-/* RES_GRFATR_CHANNELB */           0,
-/* RES_GRFATR_GAMMA */              0,
-/* RES_GRFATR_INVERT */             0,
-/* RES_GRFATR_TRANSPARENCY */       0,
-/* RES_GRFATR_DRWAMODE */           0,
-/* RES_GRFATR_DUMMY1 */             0,
-/* RES_GRFATR_DUMMY2 */             0,
-/* RES_GRFATR_DUMMY3 */             0,
-/* RES_GRFATR_DUMMY4 */             0,
-/* RES_GRFATR_DUMMY5 */             0,
+/* RES_GRFATR_MIRRORGRF */          nullptr,
+/* RES_GRFATR_CROPGRF   */          nullptr,
+/* RES_GRFATR_ROTATION */           nullptr,
+/* RES_GRFATR_LUMINANCE */          nullptr,
+/* RES_GRFATR_CONTRAST */           nullptr,
+/* RES_GRFATR_CHANNELR */           nullptr,
+/* RES_GRFATR_CHANNELG */           nullptr,
+/* RES_GRFATR_CHANNELB */           nullptr,
+/* RES_GRFATR_GAMMA */              nullptr,
+/* RES_GRFATR_INVERT */             nullptr,
+/* RES_GRFATR_TRANSPARENCY */       nullptr,
+/* RES_GRFATR_DRWAMODE */           nullptr,
+/* RES_GRFATR_DUMMY1 */             nullptr,
+/* RES_GRFATR_DUMMY2 */             nullptr,
+/* RES_GRFATR_DUMMY3 */             nullptr,
+/* RES_GRFATR_DUMMY4 */             nullptr,
+/* RES_GRFATR_DUMMY5 */             nullptr,
 
-/* RES_BOXATR_FORMAT */             0,
-/* RES_BOXATR_FORMULA */            0,
-/* RES_BOXATR_VALUE */              0
+/* RES_BOXATR_FORMAT */             nullptr,
+/* RES_BOXATR_FORMULA */            nullptr,
+/* RES_BOXATR_VALUE */              nullptr
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

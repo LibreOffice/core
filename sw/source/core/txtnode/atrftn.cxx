@@ -119,8 +119,8 @@ namespace {
 
 SwFormatFootnote::SwFormatFootnote( bool bEndNote )
     : SfxPoolItem( RES_TXTATR_FTN )
-    , SwModify(0)
-    , m_pTextAttr(0)
+    , SwModify(nullptr)
+    , m_pTextAttr(nullptr)
     , m_nNumber(0)
     , m_bEndNote(bEndNote)
 {
@@ -148,7 +148,7 @@ void SwFormatFootnote::Modify(SfxPoolItem const* pOld, SfxPoolItem const* pNew)
     NotifyClients(pOld, pNew);
     if (pOld && (RES_REMOVE_UNO_OBJECT == pOld->Which()))
     {   // invalidate cached UNO object
-        SetXFootnote(css::uno::Reference<css::text::XFootnote>(0));
+        SetXFootnote(css::uno::Reference<css::text::XFootnote>(nullptr));
     }
 }
 
@@ -165,7 +165,7 @@ void SwFormatFootnote::SetEndNote( bool b )
     {
         if ( GetTextFootnote() )
         {
-            GetTextFootnote()->DelFrms(0);
+            GetTextFootnote()->DelFrms(nullptr);
         }
         m_bEndNote = b;
     }
@@ -208,7 +208,7 @@ OUString SwFormatFootnote::GetViewNumStr( const SwDoc& rDoc, bool bInclStrings )
         bool bMakeNum = true;
         const SwSectionNode* pSectNd = m_pTextAttr
                     ? SwUpdFootnoteEndNtAtEnd::FindSectNdWithEndAttr( *m_pTextAttr )
-                    : 0;
+                    : nullptr;
 
         if( pSectNd )
         {
@@ -248,8 +248,8 @@ OUString SwFormatFootnote::GetViewNumStr( const SwDoc& rDoc, bool bInclStrings )
 
 SwTextFootnote::SwTextFootnote( SwFormatFootnote& rAttr, sal_Int32 nStartPos )
     : SwTextAttr( rAttr, nStartPos )
-    , m_pStartNode( 0 )
-    , m_pTextNode( 0 )
+    , m_pStartNode( nullptr )
+    , m_pTextNode( nullptr )
     , m_nSeqNo( USHRT_MAX )
 {
     rAttr.m_pTextAttr = this;
@@ -258,7 +258,7 @@ SwTextFootnote::SwTextFootnote( SwFormatFootnote& rAttr, sal_Int32 nStartPos )
 
 SwTextFootnote::~SwTextFootnote()
 {
-    SetStartNode( 0 );
+    SetStartNode( nullptr );
 }
 
 void SwTextFootnote::SetStartNode( const SwNodeIndex *pNewNode, bool bDelNode )
@@ -309,7 +309,7 @@ void SwTextFootnote::SetStartNode( const SwNodeIndex *pNewNode, bool bDelNode )
                 // Werden die Nodes nicht geloescht mussen sie bei den Seiten
                 // abmeldet (Frms loeschen) werden, denn sonst bleiben sie
                 // stehen (Undo loescht sie nicht!)
-                DelFrms( 0 );
+                DelFrms( nullptr );
         }
         DELETEZ( m_pStartNode );
 
@@ -341,7 +341,7 @@ void SwTextFootnote::SetNumber( const sal_uInt16 nNewNum, const OUString &sNumSt
 
     OSL_ENSURE( m_pTextNode, "SwTextFootnote: where is my TextNode?" );
     SwNodes &rNodes = m_pTextNode->GetDoc()->GetNodes();
-    m_pTextNode->ModifyNotification( 0, &rFootnote );
+    m_pTextNode->ModifyNotification( nullptr, &rFootnote );
     if ( m_pStartNode )
     {
         // must iterate over all TextNodes because of footnotes on other pages
@@ -352,7 +352,7 @@ void SwTextFootnote::SetNumber( const sal_uInt16 nNewNum, const OUString &sNumSt
             // Es koennen ja auch Grafiken in der Fussnote stehen ...
             SwNode* pNd;
             if( ( pNd = rNodes[ nSttIdx ] )->IsTextNode() )
-                static_cast<SwTextNode*>(pNd)->ModifyNotification( 0, &rFootnote );
+                static_cast<SwTextNode*>(pNd)->ModifyNotification( nullptr, &rFootnote );
         }
     }
 }
@@ -423,7 +423,7 @@ void SwTextFootnote::MakeNewTextSection( SwNodes& rNodes )
         nPoolId = RES_POOLCOLL_FOOTNOTE;
     }
 
-    if( 0 == (pFormatColl = pInfo->GetFootnoteTextColl() ) )
+    if( nullptr == (pFormatColl = pInfo->GetFootnoteTextColl() ) )
         pFormatColl = rNodes.GetDoc()->getIDocumentStylePoolAccess().GetTextCollFromPool( nPoolId );
 
     SwStartNode* pSttNd = rNodes.MakeTextSection( SwNodeIndex( rNodes.GetEndOfInserts() ),
@@ -438,7 +438,7 @@ void SwTextFootnote::DelFrms( const SwFrm* pSib )
     if ( !m_pTextNode )
         return;
 
-    const SwRootFrm* pRoot = pSib ? pSib->getRootFrm() : 0;
+    const SwRootFrm* pRoot = pSib ? pSib->getRootFrm() : nullptr;
     bool bFrmFnd = false;
     {
         SwIterator<SwContentFrm,SwTextNode> aIter( *m_pTextNode );
@@ -522,7 +522,7 @@ void SwTextFootnote::SetUniqueSeqRefNo( SwDoc& rDoc )
 {
     std::set<sal_uInt16> aUsedNums;
     std::vector<SwTextFootnote*> badRefNums;
-    ::lcl_FillUsedFootnoteRefNumbers(rDoc, NULL, aUsedNums, badRefNums);
+    ::lcl_FillUsedFootnoteRefNumbers(rDoc, nullptr, aUsedNums, badRefNums);
     std::vector<sal_uInt16> aUnused;
     ::lcl_FillUnusedSeqRefNums(aUnused, aUsedNums, badRefNums.size());
 

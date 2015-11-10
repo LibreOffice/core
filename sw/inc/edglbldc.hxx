@@ -48,9 +48,9 @@ public:
     /// Query contents.
     GlobalDocContentType GetType() const { return eType; }
     const SwSection* GetSection() const
-                            { return GLBLDOC_SECTION == eType ? PTR.pSect : 0; }
+                            { return GLBLDOC_SECTION == eType ? PTR.pSect : nullptr; }
     const SwTOXBase* GetTOX() const
-                            { return GLBLDOC_TOXBASE == eType ? PTR.pTOX : 0; }
+                            { return GLBLDOC_TOXBASE == eType ? PTR.pTOX : nullptr; }
     sal_uLong GetDocPos() const { return nDocPos; }
 
     /// For sorting.

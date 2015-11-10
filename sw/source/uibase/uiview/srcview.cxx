@@ -219,7 +219,7 @@ static OUString lcl_ConvertTabsToSpaces( const OUString& sLine )
 SwSrcView::SwSrcView(SfxViewFrame* pViewFrame, SfxViewShell*) :
     SfxViewShell( pViewFrame, SWSRCVIEWFLAGS ),
     aEditWin( VclPtr<SwSrcEditWindow>::Create( &pViewFrame->GetWindow(), this ) ),
-    pSearchItem(0),
+    pSearchItem(nullptr),
     bSourceSaved(false),
     eLoadEncoding(RTL_TEXTENCODING_DONTKNOW)
 {
@@ -338,7 +338,7 @@ void SwSrcView::Execute(SfxRequest& rReq)
         case SID_SAVEDOC:
         {
             SwDocShell* pDocShell = GetDocShell();
-            SfxMedium* pMed = 0;
+            SfxMedium* pMed = nullptr;
             if(pDocShell->HasName())
                 pMed = pDocShell->GetMedium();
             else

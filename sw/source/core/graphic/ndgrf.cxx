@@ -68,7 +68,7 @@ SwGrfNode::SwGrfNode(
         SwAttrSet* pAutoAttr ) :
     SwNoTextNode( rWhere, ND_GRFNODE, pGrfColl, pAutoAttr ),
     maGrfObj(),
-    mpReplacementGraphic(0),
+    mpReplacementGraphic(nullptr),
     // #i73788#
     mbLinkedInputStreamReady( false ),
     mbIsStreamReadOnly( false )
@@ -78,7 +78,7 @@ SwGrfNode::SwGrfNode(
         bFrameInPaint = bScaleImageMap = false;
 
     bGraphicArrived = true;
-    ReRead(rGrfName, rFltName, pGraphic, 0, false);
+    ReRead(rGrfName, rFltName, pGraphic, nullptr, false);
 }
 
 SwGrfNode::SwGrfNode( const SwNodeIndex & rWhere,
@@ -86,7 +86,7 @@ SwGrfNode::SwGrfNode( const SwNodeIndex & rWhere,
                       SwGrfFormatColl *pGrfColl, SwAttrSet* pAutoAttr ) :
     SwNoTextNode( rWhere, ND_GRFNODE, pGrfColl, pAutoAttr ),
     maGrfObj(rGrfObj),
-    mpReplacementGraphic(0),
+    mpReplacementGraphic(nullptr),
     // #i73788#
     mbLinkedInputStreamReady( false ),
     mbIsStreamReadOnly( false )
@@ -109,7 +109,7 @@ SwGrfNode::SwGrfNode( const SwNodeIndex & rWhere,
                       SwAttrSet* pAutoAttr ) :
     SwNoTextNode( rWhere, ND_GRFNODE, pGrfColl, pAutoAttr ),
     maGrfObj(),
-    mpReplacementGraphic(0),
+    mpReplacementGraphic(nullptr),
     // #i73788#
     mbLinkedInputStreamReady( false ),
     mbIsStreamReadOnly( false )
@@ -144,7 +144,7 @@ bool SwGrfNode::ReRead(
     bool bReadGrf = false;
     bool bSetTwipSize = true;
     delete mpReplacementGraphic;
-    mpReplacementGraphic = 0;
+    mpReplacementGraphic = nullptr;
 
     OSL_ENSURE( pGraphic || pGrfObj || !rGrfName.isEmpty(),
             "GraphicNode without a name, Graphic or GraphicObject" );
@@ -165,7 +165,7 @@ bool SwGrfNode::ReRead(
                     nNewType = OBJECT_CLIENT_DDE;
                 else
                 {
-                    sfx2::MakeLnkName( sCmd, 0, rGrfName, OUString(), &rFltName );
+                    sfx2::MakeLnkName( sCmd, nullptr, rGrfName, OUString(), &rFltName );
                     nNewType = OBJECT_CLIENT_GRF;
                 }
 
@@ -277,7 +277,7 @@ bool SwGrfNode::ReRead(
     // Bug 39281: Do not delete Size immediately - Events on ImageMaps should have
     // something to work with when swapping
     if( bSetTwipSize )
-        SetTwipSize( ::GetGraphicSizeTwip( maGrfObj.GetGraphic(), 0 ) );
+        SetTwipSize( ::GetGraphicSizeTwip( maGrfObj.GetGraphic(), nullptr ) );
 
     // create an updates for the frames
     if( bReadGrf && bNewGrf )
@@ -292,7 +292,7 @@ bool SwGrfNode::ReRead(
 SwGrfNode::~SwGrfNode()
 {
     delete mpReplacementGraphic;
-    mpReplacementGraphic = 0;
+    mpReplacementGraphic = nullptr;
 
     // #i73788#
     mpThreadConsumer.reset();
@@ -458,7 +458,7 @@ bool SwGrfNode::ImportGraphic( SvStream& rStrm )
     if(!GraphicFilter::GetGraphicFilter().ImportGraphic(aGraphic, aURL, rStrm))
     {
         delete mpReplacementGraphic;
-        mpReplacementGraphic = 0;
+        mpReplacementGraphic = nullptr;
 
         maGrfObj.SetGraphic( aGraphic );
         onGraphicChanged();
@@ -536,7 +536,7 @@ bool SwGrfNode::SwapIn( bool bWaitForData )
             {
                 // no default bitmap anymore, thus re-paint
                 delete mpReplacementGraphic;
-                mpReplacementGraphic = 0;
+                mpReplacementGraphic = nullptr;
 
                 maGrfObj.SetGraphic( Graphic() );
                 onGraphicChanged();
@@ -596,7 +596,7 @@ bool SwGrfNode::SwapIn( bool bWaitForData )
     if( bRet )
     {
         if( !nGrfSize.Width() && !nGrfSize.Height() )
-            SetTwipSize( ::GetGraphicSizeTwip( maGrfObj.GetGraphic(), 0 ) );
+            SetTwipSize( ::GetGraphicSizeTwip( maGrfObj.GetGraphic(), nullptr ) );
     }
     bInSwapIn = false;
     return bRet;
@@ -630,7 +630,7 @@ bool SwGrfNode::GetFileFilterNms( OUString* pFileNm, OUString* pFilterNm ) const
         sal_uInt16 nType = refLink->GetObjType();
         if( OBJECT_CLIENT_GRF == nType )
             bRet = sfx2::LinkManager::GetDisplayNames(
-                    refLink, 0, pFileNm, 0, pFilterNm );
+                    refLink, nullptr, pFileNm, nullptr, pFilterNm );
         else if( OBJECT_CLIENT_DDE == nType && pFileNm && pFilterNm )
         {
             OUString sApp;
@@ -721,7 +721,7 @@ void SwGrfNode::InsertLink( const OUString& rGrfName, const OUString& rFltName )
 
             rIDLA.GetLinkManager().InsertFileLink( *refLink,
                                             OBJECT_CLIENT_GRF, rGrfName,
-                                (!bSync && !rFltName.isEmpty() ? &rFltName : 0) );
+                                (!bSync && !rFltName.isEmpty() ? &rFltName : nullptr) );
         }
     }
     maGrfObj.SetLink( rGrfName );
@@ -887,7 +887,7 @@ SvStream* SwGrfNode::_GetStreamForEmbedGrf(
             const uno::Reference< embed::XStorage >& _refPics,
             const OUString& rStreamName ) const
 {
-    SvStream* pStrm( 0L );
+    SvStream* pStrm( nullptr );
 
     if( _refPics.is() && !rStreamName.isEmpty() )
     {
@@ -935,7 +935,7 @@ SwContentNode* SwGrfNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
 
     OUString sFile, sFilter;
     if( IsLinkedFile() )
-        sfx2::LinkManager::GetDisplayNames( refLink, 0, &sFile, 0, &sFilter );
+        sfx2::LinkManager::GetDisplayNames( refLink, nullptr, &sFile, nullptr, &sFilter );
     else if( IsLinkedDDE() )
     {
         OUString sTmp1, sTmp2;
@@ -1090,15 +1090,15 @@ void SwGrfNode::TriggerAsyncRetrieveInputStream()
         return;
     }
 
-    if ( mpThreadConsumer.get() == 0 )
+    if ( mpThreadConsumer.get() == nullptr )
     {
         mpThreadConsumer.reset( new SwAsyncRetrieveInputStreamThreadConsumer( *this ) );
 
         OUString sGrfNm;
-        sfx2::LinkManager::GetDisplayNames( refLink, 0, &sGrfNm );
+        sfx2::LinkManager::GetDisplayNames( refLink, nullptr, &sGrfNm );
         OUString sReferer;
         SfxObjectShell * sh = GetDoc()->GetPersist();
-        if (sh != 0 && sh->HasName())
+        if (sh != nullptr && sh->HasName())
         {
             sReferer = sh->GetMedium()->GetName();
         }
@@ -1150,7 +1150,7 @@ bool SwGrfNode::IsAsyncRetrieveInputStreamPossible() const
     if ( IsLinkedFile() )
     {
         OUString sGrfNm;
-        sfx2::LinkManager::GetDisplayNames( refLink, 0, &sGrfNm );
+        sfx2::LinkManager::GetDisplayNames( refLink, nullptr, &sGrfNm );
         if ( !sGrfNm.startsWith( "vnd.sun.star.pkg:" ) )
         {
             bRet = true;

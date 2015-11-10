@@ -115,9 +115,9 @@ using namespace com::sun::star;
         m_fnSetCrsr(&SwWrtShell::SetCrsr),\
         m_fnEndDrag(&SwWrtShell::DefaultEndDrag),\
         m_fnKillSel(&SwWrtShell::Ignore),\
-        m_pModeStack(0), \
+        m_pModeStack(nullptr), \
         m_ePageMove(MV_NO),\
-        m_pCrsrStack(0),  \
+        m_pCrsrStack(nullptr),  \
         m_rView(rShell),\
         m_aNavigationMgr(*this), \
         m_bDestOnStack(false)
@@ -142,7 +142,7 @@ static SvxAutoCorrect* lcl_IsAutoCorr()
     if( pACorr && !pACorr->IsAutoCorrFlag( CapitalStartSentence | CapitalStartWord |
                             AddNonBrkSpace | ChgOrdinalNumber |
                             ChgToEnEmDash | SetINetAttr | Autocorrect ))
-        pACorr = 0;
+        pACorr = nullptr;
     return pACorr;
 }
 
@@ -408,8 +408,8 @@ void SwWrtShell::InsertObject( const svt::EmbeddedObjectRef& xRef, SvGlobalName 
 
                 if ( xObj.GetViewAspect() == embed::Aspects::MSOLE_ICON )
                 {
-                    SwRect aArea = GetAnyCurRect( RECT_FLY_PRT_EMBEDDED, 0, xObj.GetObject() );
-                    aArea.Pos() += GetAnyCurRect( RECT_FLY_EMBEDDED, 0, xObj.GetObject() ).Pos();
+                    SwRect aArea = GetAnyCurRect( RECT_FLY_PRT_EMBEDDED, nullptr, xObj.GetObject() );
+                    aArea.Pos() += GetAnyCurRect( RECT_FLY_EMBEDDED, nullptr, xObj.GetObject() ).Pos();
                     MapMode aMapMode( MAP_TWIP );
                     Size aSize = xObj.GetSize( &aMapMode );
                     aArea.Width( aSize.Width() );
@@ -573,7 +573,7 @@ void SwWrtShell::LaunchOLEObj( long nVerb )
     {
         svt::EmbeddedObjectRef& xRef = GetOLEObject();
         OSL_ENSURE( xRef.is(), "OLE not found" );
-        SfxInPlaceClient* pCli=0;
+        SfxInPlaceClient* pCli=nullptr;
 
         pCli = GetView().FindIPClient( xRef.GetObject(), &GetView().GetEditWin() );
         if ( !pCli )
@@ -638,7 +638,7 @@ void SwWrtShell::CalcAndSetScale( svt::EmbeddedObjectRef& xObj,
         {
             // TODO/MBA: testing
             SwRect aRect( pFlyPrtRect ? *pFlyPrtRect
-                        : GetAnyCurRect( RECT_FLY_PRT_EMBEDDED, 0, xObj.GetObject() ));
+                        : GetAnyCurRect( RECT_FLY_PRT_EMBEDDED, nullptr, xObj.GetObject() ));
             if( !aRect.IsEmpty() )
             {
                 // TODO/LEAN: getMapUnit can switch object to running state
@@ -759,7 +759,7 @@ void SwWrtShell::CalcAndSetScale( svt::EmbeddedObjectRef& xObj,
         if ( pFlyPrtRect )
             aObjArea = pFlyPrtRect->SSize();
         else
-            aObjArea = GetAnyCurRect( RECT_FLY_PRT_EMBEDDED, 0, xObj.GetObject() ).SSize();
+            aObjArea = GetAnyCurRect( RECT_FLY_PRT_EMBEDDED, nullptr, xObj.GetObject() ).SSize();
 
         // differ the aObjArea and _aVisArea by 1 Pixel then set new VisArea
         long nX, nY;
@@ -793,8 +793,8 @@ void SwWrtShell::CalcAndSetScale( svt::EmbeddedObjectRef& xObj,
     }
     else
     {
-        aArea = GetAnyCurRect( RECT_FLY_PRT_EMBEDDED, 0, xObj.GetObject() );
-        aArea.Pos() += GetAnyCurRect( RECT_FLY_EMBEDDED, 0, xObj.GetObject() ).Pos();
+        aArea = GetAnyCurRect( RECT_FLY_PRT_EMBEDDED, nullptr, xObj.GetObject() );
+        aArea.Pos() += GetAnyCurRect( RECT_FLY_EMBEDDED, nullptr, xObj.GetObject() ).Pos();
     }
 
     if ( bUseObjectSize )
@@ -806,7 +806,7 @@ void SwWrtShell::CalcAndSetScale( svt::EmbeddedObjectRef& xObj,
         {
             const Point &rPoint = pFlyFrameFormat->GetLastFlyFrmPrtRectPos();
             SwRect aRect( pFlyPrtRect ? *pFlyPrtRect
-                        : GetAnyCurRect( RECT_FLY_PRT_EMBEDDED, 0, xObj.GetObject() ));
+                        : GetAnyCurRect( RECT_FLY_PRT_EMBEDDED, nullptr, xObj.GetObject() ));
             aArea += rPoint - aRect.Pos(); // adjust area by diff of printing area position in order to keep baseline alignment correct.
         }
         aArea.Width ( _aVisArea.Width() );
@@ -851,7 +851,7 @@ void SwWrtShell::InsertPageBreak(const OUString *pPageDesc, const ::boost::optio
         }
 
         const SwPageDesc *pDesc = pPageDesc
-                                ? FindPageDescByName( *pPageDesc, true ) : 0;
+                                ? FindPageDescByName( *pPageDesc, true ) : nullptr;
         if( pDesc )
         {
             SwFormatPageDesc aDesc( pDesc );
@@ -1010,7 +1010,7 @@ void SwWrtShell::NumOrBulletOn(bool bNum)
                     mpDoc->FindNumRulePtr(pColl->GetNumRule( false ).GetValue());
             if ( !pDirectCollRule )
             {
-                pCollRule = 0;
+                pCollRule = nullptr;
             }
         }
 
@@ -1109,12 +1109,12 @@ void SwWrtShell::NumOrBulletOn(bool bNum)
     {
         if ( !pNumRule->IsAutoRule() )
         {
-            pNumRule = 0;
+            pNumRule = nullptr;
         }
         else if ( pNumRule == GetDoc()->GetOutlineNumRule() &&
                   !bActivateOutlineRule && !bContinueFoundNumRule )
         {
-            pNumRule = 0;
+            pNumRule = nullptr;
         }
     }
 
@@ -1125,7 +1125,7 @@ void SwWrtShell::NumOrBulletOn(bool bNum)
         pNumRule = GetDoc()->SearchNumRule( *GetCrsr()->GetPoint(),
                                             false, bNum, false, 0,
                                             sContinuedListId );
-        bContinueFoundNumRule = pNumRule != 0;
+        bContinueFoundNumRule = pNumRule != nullptr;
     }
 
     if (pNumRule)
@@ -1188,7 +1188,7 @@ void SwWrtShell::NumOrBulletOn(bool bNum)
         // Only apply user defined default bullet font
         const vcl::Font* pFnt = numfunc::IsDefBulletFontUserDefined()
                            ? &numfunc::GetDefBulletFont()
-                           : 0;
+                           : nullptr;
 
         if (bNum)
         {
@@ -1488,7 +1488,7 @@ SwFrameFormat *SwWrtShell::GetTableStyle(const OUString &rFormatName)
             pFormat->GetName() == rFormatName && IsUsed( *pFormat ) )
             return pFormat;
     }
-    return 0;
+    return nullptr;
 }
 
 void SwWrtShell::addCurrentPosition() {
@@ -1635,8 +1635,8 @@ SwWrtShell::SwWrtShell( SwWrtShell& rSh, vcl::Window *_pWin, SwView &rShell )
     SetFlyMacroLnk( LINK(this, SwWrtShell, ExecFlyMac) );
 
     // place the cursor on the first field...
-    IFieldmark *pBM = NULL;
-    if ( IsFormProtected() && ( pBM = GetFieldmarkAfter( ) ) !=NULL ) {
+    IFieldmark *pBM = nullptr;
+    if ( IsFormProtected() && ( pBM = GetFieldmarkAfter( ) ) !=nullptr ) {
         GotoFieldmark(pBM);
     }
 }
@@ -1652,8 +1652,8 @@ SwWrtShell::SwWrtShell( SwDoc& rDoc, vcl::Window *_pWin, SwView &rShell,
     SetFlyMacroLnk( LINK(this, SwWrtShell, ExecFlyMac) );
 
     // place the cursor on the first field...
-    IFieldmark *pBM = NULL;
-    if ( IsFormProtected() && ( pBM = GetFieldmarkAfter( ) ) !=NULL ) {
+    IFieldmark *pBM = nullptr;
+    if ( IsFormProtected() && ( pBM = GetFieldmarkAfter( ) ) !=nullptr ) {
         GotoFieldmark(pBM);
     }
 }
@@ -1736,7 +1736,7 @@ OUString SwWrtShell::GetSelDescr() const
         }
         break;
     default:
-        if (0 != mpDoc)
+        if (nullptr != mpDoc)
             aResult = GetCrsrDescr();
     }
 

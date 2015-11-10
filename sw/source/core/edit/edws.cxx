@@ -172,7 +172,7 @@ SwMvContext::~SwMvContext()
 SwFrameFormat *SwEditShell::GetTableFormat() // fastest test on a table
 {
     const SwTableNode* pTableNd = IsCrsrInTable();
-    return pTableNd ? static_cast<SwFrameFormat*>(pTableNd->GetTable().GetFrameFormat()) : 0;
+    return pTableNd ? static_cast<SwFrameFormat*>(pTableNd->GetTable().GetFrameFormat()) : nullptr;
 }
 
 // TODO: Why is this called 3x for a new document?

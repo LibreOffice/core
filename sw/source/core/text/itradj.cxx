@@ -41,7 +41,7 @@ void SwTextAdjuster::FormatBlock( )
     // And for tabs it doesn't exist out of tradition
     // If we have Flys we continue.
 
-    const SwLinePortion *pFly = 0;
+    const SwLinePortion *pFly = nullptr;
 
     bool bSkip = !IsLastBlock() &&
         nStart + pCurr->GetLen() >= GetInfo().GetText().getLength();
@@ -60,7 +60,7 @@ void SwTextAdjuster::FormatBlock( )
                     bSkip = false;
                 pPor = pPor->GetPortion();
             }
-            pLay = bSkip ? pLay->GetNext() : 0;
+            pLay = bSkip ? pLay->GetNext() : nullptr;
         }
     }
 
@@ -75,7 +75,7 @@ void SwTextAdjuster::FormatBlock( )
         }
         else
         {
-            const SwLinePortion *pTmpFly = NULL;
+            const SwLinePortion *pTmpFly = nullptr;
 
             // End at the last Fly
             const SwLinePortion *pPos = pCurr->GetFirstPortion();
@@ -87,7 +87,7 @@ void SwTextAdjuster::FormatBlock( )
                 else if ( pTmpFly && pPos->InTextGrp() )
                 {
                     pFly = pTmpFly; // A Fly with follow-up text!
-                    pTmpFly = NULL;
+                    pTmpFly = nullptr;
                 }
                 pPos = pPos->GetPortion();
             }
@@ -121,7 +121,7 @@ static bool lcl_CheckKashidaPositions( SwScriptInfo& rSI, SwTextSizeInfo& rInf, 
     // total number of kashida positions, or the number of kashida positions after some positions
     // have been dropped.
     // Here we want the clean total, which is OK: We have called ClearKashidaInvalid() before.
-    rKashidas = rSI.KashidaJustify ( 0, 0, rItr.GetStart(), rItr.GetLength() );
+    rKashidas = rSI.KashidaJustify ( nullptr, nullptr, rItr.GetStart(), rItr.GetLength() );
 
     if (rKashidas <= 0) // nothing to do
         return true;
@@ -145,7 +145,7 @@ static bool lcl_CheckKashidaPositions( SwScriptInfo& rSI, SwTextSizeInfo& rInf, 
 
         if ( nNext == COMPLETE_STRING || nNext > nEnd )
             nNext = nEnd;
-        sal_Int32 nKashidasInAttr = rSI.KashidaJustify ( 0, 0, nIdx, nNext - nIdx );
+        sal_Int32 nKashidasInAttr = rSI.KashidaJustify ( nullptr, nullptr, nIdx, nNext - nIdx );
         if (nKashidasInAttr > 0)
         {
             // Kashida glyph looks suspicious, skip Kashida justification
@@ -212,7 +212,7 @@ static bool lcl_CheckKashidaWidth ( SwScriptInfo& rSI, SwTextSizeInfo& rInf, SwT
 
             if ( nNext == COMPLETE_STRING || nNext > nEnd )
                 nNext = nEnd;
-            sal_Int32 nKashidasInAttr = rSI.KashidaJustify ( 0, 0, nIdx, nNext - nIdx );
+            sal_Int32 nKashidasInAttr = rSI.KashidaJustify ( nullptr, nullptr, nIdx, nNext - nIdx );
 
             long nFontMinKashida = rInf.GetOut()->GetMinKashida();
             if ( nFontMinKashida && nKashidasInAttr > 0 && SwScriptInfo::IsArabicText( rInf.GetText(), nIdx, nNext - nIdx ) )
@@ -689,7 +689,7 @@ SwFlyPortion *SwTextAdjuster::CalcFlyPortion( const long nRealWidth,
     SwTextFly aTextFly( GetTextFrm() );
 
     const sal_uInt16 nCurrWidth = pCurr->PrtWidth();
-    SwFlyPortion *pFlyPortion = 0;
+    SwFlyPortion *pFlyPortion = nullptr;
 
     SwRect aLineVert( rCurrRect );
     if ( GetTextFrm()->IsRightToLeft() )
@@ -759,7 +759,7 @@ void SwTextAdjuster::CalcDropAdjust()
                 pPor = pPor->GetPortion();
 
             SwGluePortion *pRight = ( pPor && pPor->InGlueGrp() ) ?
-                                    static_cast<SwGluePortion*>(pPor) : 0;
+                                    static_cast<SwGluePortion*>(pPor) : nullptr;
             if( pRight && pRight != pLeft )
             {
                 // 5) Calculate nMinLeft. Who is the most to left?
@@ -775,7 +775,7 @@ void SwTextAdjuster::CalcDropAdjust()
 
                         pPor = pCurr->GetFirstPortion();
                         const SwMarginPortion *pMar = pPor->IsMarginPortion() ?
-                                                      static_cast<SwMarginPortion*>(pPor) : 0;
+                                                      static_cast<SwMarginPortion*>(pPor) : nullptr;
                         if( !pMar )
                             nMinLeft = 0;
                         else

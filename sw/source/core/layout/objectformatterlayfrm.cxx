@@ -45,10 +45,10 @@ SwObjectFormatterLayFrm* SwObjectFormatterLayFrm::CreateObjFormatter(
          !_rAnchorLayFrm.IsFlyFrm() )
     {
         OSL_FAIL( "<SwObjectFormatterLayFrm::CreateObjFormatter(..)> - unexpected type of anchor frame " );
-        return 0L;
+        return nullptr;
     }
 
-    SwObjectFormatterLayFrm* pObjFormatter = 0L;
+    SwObjectFormatterLayFrm* pObjFormatter = nullptr;
 
     // create object formatter, if floating screen objects are registered at
     // given anchor layout frame.

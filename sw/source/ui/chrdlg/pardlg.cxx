@@ -54,7 +54,7 @@ SwParaDlg::SwParaDlg(vcl::Window *pParent,
     : SfxTabDialog(pParent,
                  "ParagraphPropertiesDialog",
                  "modules/swriter/ui/paradialog.ui",
-                 &rCoreSet,  0 != pTitle)
+                 &rCoreSet,  nullptr != pTitle)
     , rView(rVw)
     , nDlgMode(nDialogMode)
     , bDrawParaDlg(bDraw)
@@ -208,7 +208,7 @@ void SwParaDlg::PageCreated(sal_uInt16 nId, SfxTabPage& rPage)
     else if( m_nParaExt == nId )
     {
         // pagebreak only when the cursor is in the body-area and not in a table
-        const FrmTypeFlags eType = rSh.GetFrmType(0,true);
+        const FrmTypeFlags eType = rSh.GetFrmType(nullptr,true);
         if( !(FrmTypeFlags::BODY & eType) ||
             rSh.GetSelectionType() & nsSelectionType::SEL_TBL )
         {
@@ -226,7 +226,7 @@ void SwParaDlg::PageCreated(sal_uInt16 nId, SfxTabPage& rPage)
         nHtmlMode & HTMLMODE_SOME_STYLES)
         {
             // pagebreak only when the cursor is in the body-area and not in a table
-            const FrmTypeFlags eType = rSh.GetFrmType(0,true);
+            const FrmTypeFlags eType = rSh.GetFrmType(nullptr,true);
             if(!(FrmTypeFlags::BODY & eType) ||
                 rSh.GetSelectionType() & nsSelectionType::SEL_TBL)
             {

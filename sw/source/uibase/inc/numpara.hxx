@@ -64,7 +64,7 @@ class SwParagraphNumTabPage : public SfxTabPage
 protected:
     static bool ExecuteEditNumStyle_Impl( sal_uInt16 nId, const OUString& rStr, const OUString& rRefStr,
                           sal_uInt16 nFamily, sal_uInt16 nMask = 0,
-                          const sal_uInt16* pModifier = NULL );
+                          const sal_uInt16* pModifier = nullptr );
 
 public:
     SwParagraphNumTabPage(vcl::Window* pParent, const SfxItemSet& rSet );

@@ -99,8 +99,8 @@ void SAL_CALL SwXTextMarkup::commitTextRangeMarkup(::sal_Int32 nType, const OUSt
 
     if(!xRangeTunnel.is()) return;
 
-    SwXTextRange* pRange = 0;
-    OTextCursorHelper* pCursor = 0;
+    SwXTextRange* pRange = nullptr;
+    OTextCursorHelper* pCursor = nullptr;
 
     if(xRangeTunnel.is())
     {
@@ -151,7 +151,7 @@ void SAL_CALL SwXTextMarkup::commitStringMarkup(
         return;
 
     // get appropriate list to use...
-    SwWrongList* pWList = 0;
+    SwWrongList* pWList = nullptr;
     bool bRepaint = false;
     if ( nType == text::TextMarkupType::SPELLCHECK )
     {
@@ -423,7 +423,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
         return;
 
     // get appropriate list to use...
-    SwGrammarMarkUp* pWList = 0;
+    SwGrammarMarkUp* pWList = nullptr;
     bool bRepaint = false;
     IGrammarContact *pGrammarContact = getGrammarContact(*m_pImpl->m_pTextNode);
     if( pGrammarContact )
@@ -484,7 +484,7 @@ void SwXTextMarkup::Impl::Modify( const SfxPoolItem* /*pOld*/, const SfxPoolItem
     if ( GetRegisteredIn() )
         GetRegisteredInNonConst()->Remove( this );
 
-    m_pTextNode = 0;
+    m_pTextNode = nullptr;
 }
 
 SwXStringKeyMap::SwXStringKeyMap()

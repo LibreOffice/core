@@ -123,7 +123,7 @@ void SwModelessRedlineAcceptDlg::Activate()
 
 void SwModelessRedlineAcceptDlg::Initialize(SfxChildWinInfo *pInfo)
 {
-    if (pInfo != NULL)
+    if (pInfo != nullptr)
         pImplDlg->Initialize(pInfo->aExtraString);
 
     SfxModelessDialog::Initialize(pInfo);
@@ -303,7 +303,7 @@ void SwRedlineAcceptDlg::InitAuthors()
         pFilterPage->SelectAuthor(aStrings[0]);
 
     bool bEnable = pTable->GetEntryCount() != 0 && !pSh->getIDocumentRedlineAccess().GetRedlinePassword().getLength();
-    bool bSel = pTable->FirstSelected() != 0;
+    bool bSel = pTable->FirstSelected() != nullptr;
 
     SvTreeListEntry* pSelEntry = pTable->FirstSelected();
     while (pSelEntry)
@@ -515,7 +515,7 @@ sal_uInt16 SwRedlineAcceptDlg::CalcDiff(sal_uInt16 nStart, bool bChild)
             }
             pBackupData = pNext;
         }
-        pParent->pNext = 0;
+        pParent->pNext = nullptr;
 
         // insert new children
         InsertChildren(pParent, rRedln, nAutoFormat);
@@ -560,7 +560,7 @@ sal_uInt16 SwRedlineAcceptDlg::CalcDiff(sal_uInt16 nStart, bool bChild)
 void SwRedlineAcceptDlg::InsertChildren(SwRedlineDataParent *pParent, const SwRangeRedline& rRedln, const sal_uInt16 nAutoFormat)
 {
     OUString sChild;
-    SwRedlineDataChild *pLastRedlineChild = 0;
+    SwRedlineDataChild *pLastRedlineChild = nullptr;
     const SwRedlineData *pRedlineData = &rRedln.GetRedlineData();
     bool bAutoFormat = (rRedln.GetRealType() & nAutoFormat) != 0;
 
@@ -581,7 +581,7 @@ void SwRedlineAcceptDlg::InsertChildren(SwRedlineDataParent *pParent, const SwRa
                     pTable->SetEntryText(
                             sAutoFormat, (*ret.first)->pTLBParent, 0);
                     pTable->RemoveEntry(pParent->pTLBParent);
-                    pParent->pTLBParent = 0;
+                    pParent->pTLBParent = nullptr;
                 }
                 return;
             }
@@ -625,18 +625,18 @@ void SwRedlineAcceptDlg::InsertChildren(SwRedlineDataParent *pParent, const SwRa
                 pTable->Expand(pParent->pTLBParent);
         }
         else
-            pRedlineChild->pTLBChild = 0;
+            pRedlineChild->pTLBChild = nullptr;
 
         pLastRedlineChild = pRedlineChild;
     }
 
     if (pLastRedlineChild)
-        pLastRedlineChild->pNext = 0;
+        pLastRedlineChild->pNext = nullptr;
 
     if (!bValidTree && pParent->pTLBParent)
     {
         pTable->RemoveEntry(pParent->pTLBParent);
-        pParent->pTLBParent = 0;
+        pParent->pTLBParent = nullptr;
         if (nAutoFormat)
             aUsedSeqNo.erase(pParent);
     }
@@ -658,8 +658,8 @@ void SwRedlineAcceptDlg::RemoveParents(sal_uInt16 nStart, sal_uInt16 nEnd)
     // set the cursor after the last entry because otherwise performance problem in TLB.
     // TLB would otherwise reset the cursor at every Remove (expensive)
     sal_uInt16 nPos = std::min((sal_uInt16)nCount, (sal_uInt16)m_RedlineParents.size());
-    SvTreeListEntry *pCurEntry = NULL;
-    while( ( pCurEntry == NULL ) && ( nPos > 0 ) )
+    SvTreeListEntry *pCurEntry = nullptr;
+    while( ( pCurEntry == nullptr ) && ( nPos > 0 ) )
     {
         --nPos;
         pCurEntry = m_RedlineParents[nPos]->pTLBParent;
@@ -741,13 +741,13 @@ void SwRedlineAcceptDlg::InsertParents(sal_uInt16 nStart, sal_uInt16 nEnd)
         if( !pCurrRedline )
         {
             pSh->SwCrsrShell::Push();
-            if( 0 == (pCurrRedline = pSh->SelNextRedline()))
+            if( nullptr == (pCurrRedline = pSh->SelNextRedline()))
                 pCurrRedline = pSh->SelPrevRedline();
             pSh->SwCrsrShell::Pop( false );
         }
     }
     else
-        pCurrRedline = 0;
+        pCurrRedline = nullptr;
 
     for (sal_uInt16 i = nStart; i <= nEnd; i++)
     {
@@ -756,7 +756,7 @@ void SwRedlineAcceptDlg::InsertParents(sal_uInt16 nStart, sal_uInt16 nEnd)
 
         pRedlineParent = new SwRedlineDataParent;
         pRedlineParent->pData    = pRedlineData;
-        pRedlineParent->pNext    = 0;
+        pRedlineParent->pNext    = nullptr;
         OUString sComment(rRedln.GetComment());
         pRedlineParent->sComment = sComment.replace('\n', ' ');
         m_RedlineParents.insert(m_RedlineParents.begin() + i,
@@ -767,7 +767,7 @@ void SwRedlineAcceptDlg::InsertParents(sal_uInt16 nStart, sal_uInt16 nEnd)
         pData->bDisabled = false;
 
         sParent = GetRedlineText(rRedln, pData->aDateTime);
-        pParent = pTable->InsertEntry(GetActionImage(rRedln), sParent, pData, 0, i);
+        pParent = pTable->InsertEntry(GetActionImage(rRedln), sParent, pData, nullptr, i);
         if( pCurrRedline == &rRedln )
         {
             pTable->SetCurEntry( pParent );
@@ -910,7 +910,7 @@ IMPL_LINK_NOARG_TYPED(SwRedlineAcceptDlg, UndoHdl, SvxTPView*, void)
     SwView * pView = ::GetActiveView();
     pView->GetViewFrame()->GetDispatcher()->
                 Execute(SID_UNDO, SfxCallMode::SYNCHRON);
-    pTPView->EnableUndo(pView->GetSlotState(SID_UNDO) != 0);
+    pTPView->EnableUndo(pView->GetSlotState(SID_UNDO) != nullptr);
 
     Activate();
 }
@@ -956,7 +956,7 @@ IMPL_LINK_NOARG_TYPED(SwRedlineAcceptDlg, GotoHdl, Timer *, void)
     //#107938# But not only ask pTable if it has the focus. To move
     //         the selection to the selected redline any child of pParentDlg
     //         may the focus.
-    SvTreeListEntry* pSelEntry = 0;
+    SvTreeListEntry* pSelEntry = nullptr;
 
     if (pParentDlg->HasChildPathFocus())
         pSelEntry = pTable->FirstSelected();
@@ -1003,7 +1003,7 @@ IMPL_LINK_NOARG_TYPED(SwRedlineAcceptDlg, GotoHdl, Timer *, void)
 
         pSh->LeaveAddMode();
         pSh->EndAction();
-        SwViewShell::SetCareWin(NULL);
+        SwViewShell::SetCareWin(nullptr);
     }
     bool bEnable = !pSh->getIDocumentRedlineAccess().GetRedlinePassword().getLength();
     pTPView->EnableAccept( bEnable && bSel /*&& !bReadonlySel*/ );
@@ -1021,7 +1021,7 @@ IMPL_LINK_NOARG_TYPED(SwRedlineAcceptDlg, CommandHdl, SvSimpleTable*, void)
         {
             SwWrtShell* pSh = ::GetActiveView()->GetWrtShellPtr();
             SvTreeListEntry* pEntry = pTable->FirstSelected();
-            const SwRangeRedline *pRed = 0;
+            const SwRangeRedline *pRed = nullptr;
 
             if (pEntry)
             {
@@ -1033,7 +1033,7 @@ IMPL_LINK_NOARG_TYPED(SwRedlineAcceptDlg, CommandHdl, SvSimpleTable*, void)
                 sal_uInt16 nPos = GetRedlinePos(*pTopEntry);
 
                 // disable commenting for protected areas
-                if (nPos != USHRT_MAX && (pRed = pSh->GotoRedline(nPos, true)) != 0)
+                if (nPos != USHRT_MAX && (pRed = pSh->GotoRedline(nPos, true)) != nullptr)
                 {
                     if( pSh->IsCrsrPtAtEnd() )
                         pSh->SwapPam();
@@ -1048,7 +1048,7 @@ IMPL_LINK_NOARG_TYPED(SwRedlineAcceptDlg, CommandHdl, SvSimpleTable*, void)
 //                                          && pRed->HasReadonlySel()
                                             );
 
-            aPopup.EnableItem( MN_SUB_SORT, pTable->First() != 0 );
+            aPopup.EnableItem( MN_SUB_SORT, pTable->First() != nullptr );
             sal_uInt16 nColumn = pTable->GetSortedCol();
             if (nColumn == 0xffff)
                 nColumn = 4;
@@ -1142,7 +1142,7 @@ IMPL_LINK_NOARG_TYPED(SwRedlineAcceptDlg, CommandHdl, SvSimpleTable*, void)
                         }
 
                         pDlg.reset();
-                        SwViewShell::SetCareWin(NULL);
+                        SwViewShell::SetCareWin(nullptr);
                     }
 
                 }
@@ -1250,7 +1250,7 @@ SwRedlineAcceptPanel::~SwRedlineAcceptPanel()
 void SwRedlineAcceptPanel::dispose()
 {
     delete mpImplDlg;
-    mpImplDlg = NULL;
+    mpImplDlg = nullptr;
     PanelLayout::dispose();
 }
 

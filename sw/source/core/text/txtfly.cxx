@@ -219,7 +219,7 @@ const SwRect SwContourCache::ContourRect( const SwFormat* pFormat,
             delete pTextRanger[ nObjCnt ];
         }
         ::basegfx::B2DPolyPolygon aPolyPolygon;
-        ::basegfx::B2DPolyPolygon* pPolyPolygon = 0L;
+        ::basegfx::B2DPolyPolygon* pPolyPolygon = nullptr;
 
         if ( dynamic_cast< const SwVirtFlyDrawObj *>( pObj ) !=  nullptr )
         {
@@ -311,11 +311,11 @@ const SwRect SwContourCache::ContourRect( const SwFormat* pFormat,
 }
 
 SwTextFly::SwTextFly()
-    : pPage(0)
-    , mpCurrAnchoredObj(0)
-    , pCurrFrm(0)
-    , pMaster(0)
-    , mpAnchoredObjList(0)
+    : pPage(nullptr)
+    , mpCurrAnchoredObj(nullptr)
+    , pCurrFrm(nullptr)
+    , pMaster(nullptr)
+    , mpAnchoredObjList(nullptr)
     , nMinBottom(0)
     , nNextTop(0)
     , nIndex(0)
@@ -345,7 +345,7 @@ SwTextFly::SwTextFly( const SwTextFly& rTextFly )
     }
     else
     {
-        mpAnchoredObjList = NULL;
+        mpAnchoredObjList = nullptr;
     }
 
     bOn = rTextFly.bOn;
@@ -373,15 +373,15 @@ void SwTextFly::CtorInitTextFly( const SwTextFrm *pFrm )
     // #i68520#
     mpCurrAnchoredObj = pTmp;
     pCurrFrm = pFrm;
-    pMaster = pCurrFrm->IsFollow() ? NULL : pCurrFrm;
+    pMaster = pCurrFrm->IsFollow() ? nullptr : pCurrFrm;
     // #i68520#
-    mpAnchoredObjList = NULL;
+    mpAnchoredObjList = nullptr;
     // If we're not overlapped by a frame or if a FlyCollection does not exist
     // at all, we switch off forever.
     // It could be, however, that a line is added while formatting, that
     // extends into a frame.
     // That's why we do not optimize for: bOn = pSortedFlys && IsAnyFrm();
-    bOn = pPage->GetSortedObjs() != 0;
+    bOn = pPage->GetSortedObjs() != nullptr;
     bTopRule = true;
     nMinBottom = 0;
     nNextTop = 0;
@@ -415,7 +415,7 @@ bool SwTextFly::IsAnyFrm() const
     SwRect aRect( pCurrFrm->Frm().Pos() + pCurrFrm->Prt().Pos(),
         pCurrFrm->Prt().SSize() );
 
-    return ForEach( aRect, NULL, false );
+    return ForEach( aRect, nullptr, false );
 }
 
 bool SwTextFly::IsAnyObj( const SwRect &rRect ) const
@@ -534,7 +534,7 @@ bool SwTextFly::DrawTextOpaque( SwDrawTextInfo &rInf )
                         const SwNoTextFrm *pNoText =
                                 rFly.Lower() && rFly.Lower()->IsNoTextFrm()
                                                    ? static_cast<const SwNoTextFrm*>(rFly.Lower())
-                                                   : 0;
+                                                   : nullptr;
                         if ( !pNoText ||
                              (!pNoText->IsTransparent() && !rSur.IsContour()) )
                         {
@@ -820,12 +820,12 @@ bool SwTextFly::GetTop( const SwAnchoredObject* _pAnchoredObj,
                 return true;
             }
 
-            const SwFrm* pHeader = 0;
+            const SwFrm* pHeader = nullptr;
             if ( pCurrFrm->GetNext() != pTmp &&
                  ( IsFrmInSameKontext( pTmp, pCurrFrm ) ||
                    // #i13832#, #i24135# wrap around objects in page header
                    ( !pIDSA->get(DocumentSettingId::USE_FORMER_TEXT_WRAPPING) &&
-                     0 != ( pHeader = pTmp->FindFooterOrHeader() ) &&
+                     nullptr != ( pHeader = pTmp->FindFooterOrHeader() ) &&
                      !pHeader->IsFooterFrm() &&
                      pCurrFrm->IsInDocBody() ) ) )
             {
@@ -864,7 +864,7 @@ SwAnchoredObjList* SwTextFly::InitAnchoredObjList()
     const size_t nCount = pSorted ? pSorted->size() : 0;
     // --> #108724# Page header/footer content doesn't have to wrap around
     //              floating screen objects
-    const bool bFooterHeader = 0 != pCurrFrm->FindFooterOrHeader();
+    const bool bFooterHeader = nullptr != pCurrFrm->FindFooterOrHeader();
     const IDocumentSettingAccess* pIDSA = pCurrFrm->GetTextNode()->getIDocumentSettingAccess();
     // #i40155# - check, if frame is marked not to wrap
     const bool bWrapAllowed = ( pIDSA->get(DocumentSettingId::USE_FORMER_TEXT_WRAPPING) ||
@@ -989,7 +989,7 @@ SwTwips SwTextFly::CalcMinBottom() const
     SwTwips nRet = 0;
     const SwContentFrm *pLclMaster = GetMaster();
     OSL_ENSURE(pLclMaster, "SwTextFly without master");
-    const SwSortedObjs *pDrawObj = pLclMaster ? pLclMaster->GetDrawObjs() : NULL;
+    const SwSortedObjs *pDrawObj = pLclMaster ? pLclMaster->GetDrawObjs() : nullptr;
     const size_t nCount = pDrawObj ? pDrawObj->size() : 0;
     if( nCount )
     {
@@ -1407,7 +1407,7 @@ bool SwTextFly::IsAnyFrm( const SwRect &rLine ) const
 
     OSL_ENSURE( bOn, "IsAnyFrm: Why?" );
 
-    return ForEach( rLine, NULL, false );
+    return ForEach( rLine, nullptr, false );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

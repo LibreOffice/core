@@ -281,13 +281,13 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
 
     SwTextFormatColl *const pLocal = pStyle->GetCollection();
     UnoActionContext aAction(pDoc);
-    pDoc->GetIDocumentUndoRedo().StartUndo( UNDO_START, NULL );
+    pDoc->GetIDocumentUndoRedo().StartUndo( UNDO_START, nullptr );
     SwPaM *pTmpCrsr = &rPaM;
     do {
         pDoc->SetTextFormatColl(*pTmpCrsr, pLocal);
         pTmpCrsr = static_cast<SwPaM*>(pTmpCrsr->GetNext());
     } while ( pTmpCrsr != &rPaM );
-    pDoc->GetIDocumentUndoRedo().EndUndo( UNDO_END, NULL );
+    pDoc->GetIDocumentUndoRedo().EndUndo( UNDO_END, nullptr );
 }
 
 bool
@@ -351,7 +351,7 @@ lcl_SetNodeNumStart(SwPaM & rCrsr, uno::Any const& rValue)
 
     if( rCrsr.GetNext() != &rCrsr )         // MultiSelection?
     {
-        pDoc->GetIDocumentUndoRedo().StartUndo( UNDO_START, NULL );
+        pDoc->GetIDocumentUndoRedo().StartUndo( UNDO_START, nullptr );
         SwPamRanges aRangeArr( rCrsr );
         SwPaM aPam( *rCrsr.GetPoint() );
         for( size_t n = 0; n < aRangeArr.Count(); ++n )
@@ -360,7 +360,7 @@ lcl_SetNodeNumStart(SwPaM & rCrsr, uno::Any const& rValue)
           pDoc->SetNodeNumStart(*aRangeArr.SetPam( n, aPam ).GetPoint(),
                     nStt );
         }
-        pDoc->GetIDocumentUndoRedo().EndUndo( UNDO_END, NULL );
+        pDoc->GetIDocumentUndoRedo().EndUndo( UNDO_END, nullptr );
     }
     else
     {
@@ -381,7 +381,7 @@ lcl_setCharFormatSequence(SwPaM & rPam, uno::Any const& rValue)
     for (sal_Int32 nStyle = 0; nStyle < aCharStyles.getLength(); nStyle++)
     {
         uno::Any aStyle;
-        rPam.GetDoc()->GetIDocumentUndoRedo().StartUndo(UNDO_START, NULL);
+        rPam.GetDoc()->GetIDocumentUndoRedo().StartUndo(UNDO_START, nullptr);
         aStyle <<= aCharStyles.getConstArray()[nStyle];
         // create a local set and apply each format directly
         SfxItemSet aSet(rPam.GetDoc()->GetAttrPool(),
@@ -392,7 +392,7 @@ lcl_setCharFormatSequence(SwPaM & rPam, uno::Any const& rValue)
         SwUnoCursorHelper::SetCrsrAttr(rPam, aSet, (nStyle)
                 ? SetAttrMode::DONTREPLACE
                 : SetAttrMode::DEFAULT);
-        rPam.GetDoc()->GetIDocumentUndoRedo().EndUndo(UNDO_START, NULL);
+        rPam.GetDoc()->GetIDocumentUndoRedo().EndUndo(UNDO_START, nullptr);
     }
     return true;
 }
@@ -421,7 +421,7 @@ lcl_setDropcapCharStyle(SwPaM & rPam, SfxItemSet & rItemSet,
         throw lang::IllegalArgumentException();
     }
     ::std::unique_ptr<SwFormatDrop> pDrop;
-    SfxPoolItem const* pItem(0);
+    SfxPoolItem const* pItem(nullptr);
     if (SfxItemState::SET ==
             rItemSet.GetItemState(RES_PARATR_DROP, true, &pItem))
     {
@@ -527,7 +527,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException,
                     if (nLevel < 0 || MAXLEVEL <= nLevel)
                     {
                         throw lang::IllegalArgumentException(
-                            "invalid NumberingLevel", 0, 0);
+                            "invalid NumberingLevel", nullptr, 0);
                     }
                     pTextNd->SetAttrListLevel(nLevel);
                 }
@@ -615,7 +615,7 @@ SwFormatColl *
 SwUnoCursorHelper::GetCurTextFormatColl(SwPaM & rPaM, const bool bConditional)
 {
     static const sal_uLong nMaxLookup = 1000;
-    SwFormatColl *pFormat = 0;
+    SwFormatColl *pFormat = nullptr;
     bool bError = false;
     SwPaM *pTmpCrsr = &rPaM;
     do
@@ -625,7 +625,7 @@ SwUnoCursorHelper::GetCurTextFormatColl(SwPaM & rPaM, const bool bConditional)
 
         if( nEndNd - nSttNd >= nMaxLookup )
         {
-            pFormat = 0;
+            pFormat = nullptr;
             break;
         }
 
@@ -651,7 +651,7 @@ SwUnoCursorHelper::GetCurTextFormatColl(SwPaM & rPaM, const bool bConditional)
 
         pTmpCrsr = static_cast<SwPaM*>(pTmpCrsr->GetNext());
     } while ( pTmpCrsr != &rPaM );
-    return (bError) ? 0 : pFormat;
+    return (bError) ? nullptr : pFormat;
 }
 
 class SwXTextCursor::Impl
@@ -681,7 +681,7 @@ public:
 
     SwUnoCrsr& GetCursorOrThrow() {
         if(!m_pUnoCursor)
-            throw uno::RuntimeException("SwXTextCursor: disposed or invalid", 0);
+            throw uno::RuntimeException("SwXTextCursor: disposed or invalid", nullptr);
         return *m_pUnoCursor;
     }
 };
@@ -715,7 +715,7 @@ SwXTextCursor::SwXTextCursor(uno::Reference< text::XText > const& xParent,
         SwPaM const& rSourceCursor, const enum CursorType eType)
     : m_pImpl( new Impl(*rSourceCursor.GetDoc(), eType,
                 xParent, *rSourceCursor.GetPoint(),
-                rSourceCursor.HasMark() ? rSourceCursor.GetMark() : 0) )
+                rSourceCursor.HasMark() ? rSourceCursor.GetMark() : nullptr) )
 {
 }
 
@@ -733,7 +733,7 @@ void SwXTextCursor::DeleteAndInsert(const OUString& rText,
         SwDoc* pDoc = pUnoCrsr->GetDoc();
         UnoActionContext aAction(pDoc);
         const sal_Int32 nTextLen = rText.getLength();
-        pDoc->GetIDocumentUndoRedo().StartUndo(UNDO_INSERT, NULL);
+        pDoc->GetIDocumentUndoRedo().StartUndo(UNDO_INSERT, nullptr);
         auto pCurrent = static_cast<SwCursor*>(pUnoCrsr);
         do
         {
@@ -755,7 +755,7 @@ void SwXTextCursor::DeleteAndInsert(const OUString& rText,
             }
             pCurrent = static_cast<SwCursor*>(pCurrent->GetNext());
         } while (pCurrent != pUnoCrsr);
-        pDoc->GetIDocumentUndoRedo().EndUndo(UNDO_INSERT, NULL);
+        pDoc->GetIDocumentUndoRedo().EndUndo(UNDO_INSERT, nullptr);
     }
 }
 
@@ -982,12 +982,12 @@ SwXTextCursor::gotoStart(sal_Bool Expand) throw (uno::RuntimeException, std::exc
         rUnoCursor.Move( fnMoveBackward, fnGoDoc );
         //check, that the cursor is not in a table
         SwTableNode * pTableNode = rUnoCursor.GetNode().FindTableNode();
-        SwContentNode * pCNode = 0;
+        SwContentNode * pCNode = nullptr;
         while (pTableNode)
         {
             rUnoCursor.GetPoint()->nNode = *pTableNode->EndOfSectionNode();
             pCNode = GetDoc()->GetNodes().GoNext(&rUnoCursor.GetPoint()->nNode);
-            pTableNode = (pCNode) ? pCNode->FindTableNode() : 0;
+            pTableNode = (pCNode) ? pCNode->FindTableNode() : nullptr;
         }
         if (pCNode)
         {
@@ -1067,8 +1067,8 @@ throw (uno::RuntimeException, std::exception)
     SwUnoCrsr & rOwnCursor( m_pImpl->GetCursorOrThrow() );
 
     uno::Reference<lang::XUnoTunnel> xRangeTunnel( xRange, uno::UNO_QUERY);
-    SwXTextRange* pRange = 0;
-    OTextCursorHelper* pCursor = 0;
+    SwXTextRange* pRange = nullptr;
+    OTextCursorHelper* pCursor = nullptr;
     if(xRangeTunnel.is())
     {
         pRange  = ::sw::UnoTunnelGetImplementation<SwXTextRange>(xRangeTunnel);
@@ -1082,7 +1082,7 @@ throw (uno::RuntimeException, std::exception)
     }
 
     SwPaM aPam(GetDoc()->GetNodes());
-    const SwPaM * pPam(0);
+    const SwPaM * pPam(nullptr);
     if (pCursor)
     {
         pPam = pCursor->GetPaM();
@@ -1116,7 +1116,7 @@ throw (uno::RuntimeException, std::exception)
         }
 
         const SwStartNode* pOwnStartNode = rOwnCursor.GetNode().FindSttNodeByType(eSearchNodeType);
-        while ( pOwnStartNode != NULL
+        while ( pOwnStartNode != nullptr
                 && pOwnStartNode->IsSectionNode())
         {
             pOwnStartNode = pOwnStartNode->StartOfSectionNode();
@@ -1124,7 +1124,7 @@ throw (uno::RuntimeException, std::exception)
 
         const SwStartNode* pTmp =
             pPam->GetNode().FindSttNodeByType(eSearchNodeType);
-        while ( pTmp != NULL
+        while ( pTmp != nullptr
                 && pTmp->IsSectionNode() )
         {
             pTmp = pTmp->StartOfSectionNode();
@@ -1394,7 +1394,7 @@ SwXTextCursor::isStartOfSentence() throw (uno::RuntimeException, std::exception)
     if (!bRet && (!rUnoCursor.HasMark() ||
                     *rUnoCursor.GetPoint() == *rUnoCursor.GetMark()))
     {
-        SwCursor aCrsr(*rUnoCursor.GetPoint(),0,false);
+        SwCursor aCrsr(*rUnoCursor.GetPoint(),nullptr,false);
         SwPosition aOrigPos = *aCrsr.GetPoint();
         aCrsr.GoSentence(SwCursor::START_SENT );
         bRet = aOrigPos == *aCrsr.GetPoint();
@@ -1418,7 +1418,7 @@ SwXTextCursor::isEndOfSentence() throw (uno::RuntimeException, std::exception)
     if (!bRet && (!rUnoCursor.HasMark() ||
                     *rUnoCursor.GetPoint() == *rUnoCursor.GetMark()))
     {
-        SwCursor aCrsr(*rUnoCursor.GetPoint(), 0, false);
+        SwCursor aCrsr(*rUnoCursor.GetPoint(), nullptr, false);
         SwPosition aOrigPos = *aCrsr.GetPoint();
         aCrsr.GoSentence(SwCursor::END_SENT);
         bRet = aOrigPos == *aCrsr.GetPoint();
@@ -1743,7 +1743,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     {
         throw beans::UnknownPropertyException(
             "Unknown property: " + rPropertyName,
-            static_cast<cppu::OWeakObject *>(0));
+            static_cast<cppu::OWeakObject *>(nullptr));
     }
 
     beans::PropertyState eTemp;
@@ -1866,9 +1866,9 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
     }
 
     if (!aUnknownExMsg.isEmpty())
-        throw beans::UnknownPropertyException(aUnknownExMsg, static_cast<cppu::OWeakObject *>(0));
+        throw beans::UnknownPropertyException(aUnknownExMsg, static_cast<cppu::OWeakObject *>(nullptr));
     if (!aPropertyVetoExMsg.isEmpty())
-        throw beans::PropertyVetoException(aPropertyVetoExMsg, static_cast<cppu::OWeakObject *>(0));
+        throw beans::PropertyVetoException(aPropertyVetoExMsg, static_cast<cppu::OWeakObject *>(nullptr));
 }
 
 uno::Sequence< beans::PropertyState >
@@ -1908,7 +1908,7 @@ throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception)
             {
                 throw beans::UnknownPropertyException(
                     "Unknown property: " + pNames[i],
-                    static_cast<cppu::OWeakObject *>(0));
+                    static_cast<cppu::OWeakObject *>(nullptr));
             }
         }
         if (((SW_PROPERTY_STATE_CALLER_SWX_TEXT_PORTION == eCaller)  ||
@@ -1926,7 +1926,7 @@ throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception)
                  pEntry->nWID <= FN_UNO_RANGE_END )
             {
                 (void)SwUnoCursorHelper::getCrsrPropertyValue(
-                    *pEntry, rPaM, 0, pStates[i] );
+                    *pEntry, rPaM, nullptr, pStates[i] );
             }
             else
             {
@@ -2029,14 +2029,14 @@ throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception)
     {
         throw beans::UnknownPropertyException(
             "Unknown property: " + rPropertyName,
-            static_cast<cppu::OWeakObject *>(0));
+            static_cast<cppu::OWeakObject *>(nullptr));
     }
 
     if (pEntry->nFlags & beans::PropertyAttribute::READONLY)
     {
         throw uno::RuntimeException(
                 "setPropertyToDefault: property is read-only: "
-                + rPropertyName, 0);
+                + rPropertyName, nullptr);
     }
 
     if (pEntry->nWID < RES_FRMATR_END)
@@ -2069,7 +2069,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     if (!pEntry)
     {
         throw beans::UnknownPropertyException(
-            "Unknown property: " + rPropertyName, static_cast<cppu::OWeakObject *>(0));
+            "Unknown property: " + rPropertyName, static_cast<cppu::OWeakObject *>(nullptr));
     }
 
     uno::Any aRet;
@@ -2486,7 +2486,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
                 }
                 throw beans::UnknownPropertyException(
                     "Unknown property: " + pNames[i],
-                    static_cast<cppu::OWeakObject *>(0));
+                    static_cast<cppu::OWeakObject *>(nullptr));
             }
             if (pEntry->nWID < RES_FRMATR_END)
             {
@@ -2510,31 +2510,31 @@ throw (uno::RuntimeException, std::exception)
 
     SwTextNode* txtNode = node.GetTextNode();
 
-    if (txtNode == 0) return;
+    if (txtNode == nullptr) return;
 
     if ( text::TextMarkupType::SPELLCHECK == nType )
     {
         txtNode->SetWrongDirty(SwTextNode::WrongState::TODO);
-        txtNode->SetWrong(0);
+        txtNode->SetWrong(nullptr);
     }
     else if( text::TextMarkupType::PROOFREADING == nType )
     {
         txtNode->SetGrammarCheckDirty(true);
-        txtNode->SetGrammarCheck(0);
+        txtNode->SetGrammarCheck(nullptr);
     }
     else if ( text::TextMarkupType::SMARTTAG == nType )
     {
         txtNode->SetSmartTagDirty(true);
-        txtNode->SetSmartTags(0);
+        txtNode->SetSmartTags(nullptr);
     }
     else return;
 
     SwFormatColl* fmtColl=txtNode->GetFormatColl();
 
-    if (fmtColl == 0) return;
+    if (fmtColl == nullptr) return;
 
     SwFormatChg aNew( fmtColl );
-    txtNode->NotifyClients( 0, &aNew );
+    txtNode->NotifyClients( nullptr, &aNew );
 }
 
 void SAL_CALL
@@ -2951,7 +2951,7 @@ SwXTextCursor::createEnumeration() throw (uno::RuntimeException, std::exception)
 
     const uno::Reference<lang::XUnoTunnel> xTunnel(
             m_pImpl->m_xParentText, uno::UNO_QUERY);
-    SwXText* pParentText = 0;
+    SwXText* pParentText = nullptr;
     if (xTunnel.is())
     {
         pParentText = ::sw::UnoTunnelGetImplementation<SwXText>(xTunnel);
@@ -2972,9 +2972,9 @@ SwXTextCursor::createEnumeration() throw (uno::RuntimeException, std::exception)
             ? CURSOR_SELECTION_IN_TABLE : CURSOR_SELECTION;
     SwTableNode const*const pStartNode( (CURSOR_TBLTEXT == m_pImpl->m_eType)
             ? rUnoCursor.GetPoint()->nNode.GetNode().FindTableNode()
-            : 0);
+            : nullptr);
     SwTable const*const pTable(
-            (pStartNode) ? & pStartNode->GetTable() : 0 );
+            (pStartNode) ? & pStartNode->GetTable() : nullptr );
     return SwXParagraphEnumeration::Create(pParentText, pNewCrsr, eSetType, pStartNode, pTable);
 }
 

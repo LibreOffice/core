@@ -39,7 +39,7 @@ private:
     bool m_bSkipOverProtectSections : 1;
 
 public:
-    SwUnoCrsr( const SwPosition &rPos, SwPaM* pRing = 0 );
+    SwUnoCrsr( const SwPosition &rPos, SwPaM* pRing = nullptr );
     virtual ~SwUnoCrsr();
 
 protected:

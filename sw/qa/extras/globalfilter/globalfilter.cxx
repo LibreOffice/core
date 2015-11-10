@@ -666,15 +666,15 @@ void Test::testSkipImages()
     // during DOC and DOCX import, using the "SkipImages" FilterOptions.
 
     const char* aFilterNames[][2] = {
-        { "/sw/qa/extras/globalfilter/data/skipimages.doc", NULL },
+        { "/sw/qa/extras/globalfilter/data/skipimages.doc", nullptr },
         { "/sw/qa/extras/globalfilter/data/skipimages.doc", "SkipImages" },
-        { "/sw/qa/extras/globalfilter/data/skipimages.docx", NULL },
+        { "/sw/qa/extras/globalfilter/data/skipimages.docx", nullptr },
         { "/sw/qa/extras/globalfilter/data/skipimages.docx", "SkipImages" }
     };
 
     for( size_t nFilter = 0; nFilter < SAL_N_ELEMENTS(aFilterNames); ++nFilter )
     {
-        bool bSkipImages = aFilterNames[nFilter][1] != NULL;
+        bool bSkipImages = aFilterNames[nFilter][1] != nullptr;
         OString sFailedMessage = OString("Failed on filter: ") + aFilterNames[nFilter][0];
 
         if (mxComponent.is())

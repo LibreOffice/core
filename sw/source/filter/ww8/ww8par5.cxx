@@ -506,14 +506,14 @@ sal_uInt16 SwWW8ImplReader::End_Field()
         switch (nRet)
         {
         case 70:
-        if (bUseEnhFields && m_pPaM!=NULL && m_pPaM->GetPoint()!=NULL) {
+        if (bUseEnhFields && m_pPaM!=nullptr && m_pPaM->GetPoint()!=nullptr) {
             SwPosition aEndPos = *m_pPaM->GetPoint();
             SwPaM aFieldPam( m_aFieldStack.back().GetPtNode(), m_aFieldStack.back().GetPtContent(), aEndPos.nNode, aEndPos.nContent.GetIndex());
             IDocumentMarkAccess* pMarksAccess = m_rDoc.getIDocumentMarkAccess( );
             IFieldmark *pFieldmark = dynamic_cast<IFieldmark*>( pMarksAccess->makeFieldBookmark(
                         aFieldPam, m_aFieldStack.back().GetBookmarkName(), ODF_FORMTEXT ) );
-            OSL_ENSURE(pFieldmark!=NULL, "hmmm; why was the bookmark not created?");
-            if (pFieldmark!=NULL) {
+            OSL_ENSURE(pFieldmark!=nullptr, "hmmm; why was the bookmark not created?");
+            if (pFieldmark!=nullptr) {
                 const IFieldmark::parameter_map_t& pParametersToAdd = m_aFieldStack.back().getParameters();
                 pFieldmark->GetParameters()->insert(pParametersToAdd.begin(), pParametersToAdd.end());
             }
@@ -548,7 +548,7 @@ sal_uInt16 SwWW8ImplReader::End_Field()
                         {
                             *m_pPaM = *m_pPosAfterTOC;
                             delete m_pPosAfterTOC;
-                            m_pPosAfterTOC = 0;
+                            m_pPosAfterTOC = nullptr;
                         }
                     }
                 }
@@ -713,18 +713,18 @@ long SwWW8ImplReader::Read_Field(WW8PLCFManResult* pRes)
     enum Limits {eMax = 96};
     static const FNReadField aWW8FieldTab[eMax+1] =
     {
-        0,
+        nullptr,
         &SwWW8ImplReader::Read_F_Input,
-        0,
+        nullptr,
         &SwWW8ImplReader::Read_F_Ref,               // 3
-        0,
-        0,
+        nullptr,
+        nullptr,
         &SwWW8ImplReader::Read_F_Set,               // 6
-        0,
+        nullptr,
         &SwWW8ImplReader::Read_F_Tox,               // 8
-        0,
-        0,
-        0,
+        nullptr,
+        nullptr,
+        nullptr,
         &SwWW8ImplReader::Read_F_Seq,               // 12
         &SwWW8ImplReader::Read_F_Tox,               // 13
         &SwWW8ImplReader::Read_F_DocInfo,           // 14
@@ -747,71 +747,71 @@ long SwWW8ImplReader::Read_Field(WW8PLCFManResult* pRes)
         &SwWW8ImplReader::Read_F_DateTime,          // 31
         &SwWW8ImplReader::Read_F_DateTime,          // 32
         &SwWW8ImplReader::Read_F_CurPage,           // 33
-        0,
-        0,
+        nullptr,
+        nullptr,
         &SwWW8ImplReader::Read_F_IncludeText,       // 36
         &SwWW8ImplReader::Read_F_PgRef,             // 37
         &SwWW8ImplReader::Read_F_InputVar,          // 38
         &SwWW8ImplReader::Read_F_Input,             // 39
-        0,
+        nullptr,
         &SwWW8ImplReader::Read_F_DBNext,            // 41
-        0,
-        0,
+        nullptr,
+        nullptr,
         &SwWW8ImplReader::Read_F_DBNum,             // 44
-        0,
-        0,
-        0,
-        0,
+        nullptr,
+        nullptr,
+        nullptr,
+        nullptr,
         &SwWW8ImplReader::Read_F_Equation,          // 49
-        0,
+        nullptr,
         &SwWW8ImplReader::Read_F_Macro,             // 51
         &SwWW8ImplReader::Read_F_ANumber,           // 52
         &SwWW8ImplReader::Read_F_ANumber,           // 53
         &SwWW8ImplReader::Read_F_ANumber,           // 54
-        0,
+        nullptr,
 
-        0,                                          // 56
+        nullptr,                                          // 56
 
         &SwWW8ImplReader::Read_F_Symbol,            // 57
         &SwWW8ImplReader::Read_F_Embedd,            // 58
         &SwWW8ImplReader::Read_F_DBField,           // 59
-        0,
-        0,
-        0,
-        0,
+        nullptr,
+        nullptr,
+        nullptr,
+        nullptr,
         &SwWW8ImplReader::Read_F_DocInfo,           // 64 - DOCVARIABLE
-        0,
-        0,
+        nullptr,
+        nullptr,
         &SwWW8ImplReader::Read_F_IncludePicture,    // 67
         &SwWW8ImplReader::Read_F_IncludeText,       // 68
-        0,
+        nullptr,
         &SwWW8ImplReader::Read_F_FormTextBox,       // 70
         &SwWW8ImplReader::Read_F_FormCheckBox,      // 71
         &SwWW8ImplReader::Read_F_NoteReference,     // 72
-        0, /*&SwWW8ImplReader::Read_F_Tox*/
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
+        nullptr, /*&SwWW8ImplReader::Read_F_Tox*/
+        nullptr,
+        nullptr,
+        nullptr,
+        nullptr,
+        nullptr,
+        nullptr,
+        nullptr,
+        nullptr,
+        nullptr,
         &SwWW8ImplReader::Read_F_FormListBox,       // 83
-        0,                                          // 84
+        nullptr,                                          // 84
         &SwWW8ImplReader::Read_F_DocInfo,           // 85
-        0,                                          // 86
+        nullptr,                                          // 86
         &SwWW8ImplReader::Read_F_OCX,               // 87
         &SwWW8ImplReader::Read_F_Hyperlink,         // 88
-        0,                                          // 89
-        0,                                          // 90
+        nullptr,                                          // 89
+        nullptr,                                          // 90
         &SwWW8ImplReader::Read_F_HTMLControl,       // 91
-        0,                                          // 92
-        0,                                          // 93
-        0,                                          // 94
+        nullptr,                                          // 92
+        nullptr,                                          // 93
+        nullptr,                                          // 94
         &SwWW8ImplReader::Read_F_Shape,             // 95
-        0                                           // eMax - Dummy leer Methode
+        nullptr                                           // eMax - Dummy leer Methode
     };
     OSL_ENSURE( ( sizeof( aWW8FieldTab ) / sizeof( *aWW8FieldTab ) == eMax+1 ),
             "FeldFunc-Tabelle stimmt nicht" );
@@ -1232,7 +1232,7 @@ filter itself.
 SwFltStackEntry *SwWW8FltRefStack::RefToVar(const SwField* pField,
     SwFltStackEntry &rEntry)
 {
-    SwFltStackEntry *pRet=0;
+    SwFltStackEntry *pRet=nullptr;
     if (pField && RES_GETREFFLD == pField->Which())
     {
         //Get the name of the ref field, and see if actually a variable
@@ -2324,9 +2324,9 @@ eF_ResT SwWW8ImplReader::Read_F_IncludePicture( WW8FieldDesc*, OUString& rStr )
         m_pFlyFormatOfJustInsertedGraphic = m_rDoc.getIDocumentContentOperations().Insert( *m_pPaM,
                                                     aGrfName,
                                                     OUString(),
-                                                    0,          // Graphic*
+                                                    nullptr,          // Graphic*
                                                     &aFlySet,
-                                                    0, 0);         // SwFrameFormat*
+                                                    nullptr, nullptr);         // SwFrameFormat*
         m_aGrfNameGenerator.SetUniqueGraphName(m_pFlyFormatOfJustInsertedGraphic,
             INetURLObject(aGrfName).GetBase());
     }
@@ -2389,7 +2389,7 @@ eF_ResT SwWW8ImplReader::Read_F_IncludeText( WW8FieldDesc* /*pF*/, OUString& rSt
     aSection.SetProtectFlag(true);
 
     SwSection *const pSection =
-        m_rDoc.InsertSwSection(*m_pPaM, aSection, 0, 0, false);
+        m_rDoc.InsertSwSection(*m_pPaM, aSection, nullptr, nullptr, false);
     OSL_ENSURE(pSection, "no section inserted");
     if (!pSection)
         return FLD_TEXT;
@@ -2617,7 +2617,7 @@ void SwWW8ImplReader::Read_SubF_Ruby( WW8ReadFieldParams& rReadParam)
         }
 
         SwFormatRuby aRuby(sRuby);
-        const SwCharFormat *pCharFormat=0;
+        const SwCharFormat *pCharFormat=nullptr;
         //Make a guess at which of asian of western we should be setting
         sal_uInt16 nScript;
         if (g_pBreakIt->GetBreakIter().is())
@@ -2649,7 +2649,7 @@ void SwWW8ImplReader::Read_SubF_Ruby( WW8ReadFieldParams& rReadParam)
         //Create a new char style if necessary
         if (!pCharFormat)
         {
-            SwCharFormat *pFormat=0;
+            SwCharFormat *pFormat=nullptr;
             OUString aNm;
             //Take this as the base name
             SwStyleNameMapper::FillUIName(RES_POOLCHR_RUBYTEXT,aNm);
@@ -2990,7 +2990,7 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, OUString& rStr )
                 case 'o':
                     {
                         sal_Int32 nVal;
-                        if( !aReadParam.GetTokenSttFromTo(0, &nVal, WW8ListManager::nMaxLevel) )
+                        if( !aReadParam.GetTokenSttFromTo(nullptr, &nVal, WW8ListManager::nMaxLevel) )
                             nVal = lcl_GetMaxValidWordTOCLevel(aOrigForm);
                         if( nMaxLevel < nVal )
                             nMaxLevel = nVal;
@@ -3003,7 +3003,7 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, OUString& rStr )
                 case 'l':
                     {
                         sal_Int32 nVal;
-                        if( aReadParam.GetTokenSttFromTo(0, &nVal, WW8ListManager::nMaxLevel) )
+                        if( aReadParam.GetTokenSttFromTo(nullptr, &nVal, WW8ListManager::nMaxLevel) )
                         {
                             if( nMaxLevel < nVal )
                                 nMaxLevel = nVal;
@@ -3183,7 +3183,7 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, OUString& rStr )
                             // In an ideal world we could handle the tab stop between the number and
                             // the entry correctly, but I currently have no clue how to obtain
                             // the tab stop position. It is _not_ set at the paragraph style.
-                            SwForm* pForm = 0;
+                            SwForm* pForm = nullptr;
                             for (size_t nI = 0; nI < m_vColl.size(); ++nI)
                             {
                                 const SwWW8StyInf& rSI = m_vColl[nI];

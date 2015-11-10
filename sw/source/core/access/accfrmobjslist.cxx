@@ -56,7 +56,7 @@ SwAccessibleChildSList_const_iterator::SwAccessibleChildSList_const_iterator(
                 {
                     aCurr = (nNextObj < pObjs->size())
                             ? (*pObjs)[nNextObj++]->GetDrawObj()
-                            : static_cast< const SdrObject *>( 0 );
+                            : static_cast< const SdrObject *>( nullptr );
                 }
             }
             if ( !aCurr.IsValid() )
@@ -110,7 +110,7 @@ SwAccessibleChildSList_const_iterator& SwAccessibleChildSList_const_iterator::ne
             const SwSortedObjs *pObjs = rPgFrm.GetSortedObjs();
             aCurr = ( pObjs && nNextObj < pObjs->size() )
                     ? (*pObjs)[nNextObj++]->GetDrawObj()
-                    : static_cast< const SdrObject *>( 0 );
+                    : static_cast< const SdrObject *>( nullptr );
         }
         else if( rFrm.IsTextFrm() )
         {
@@ -118,12 +118,12 @@ SwAccessibleChildSList_const_iterator& SwAccessibleChildSList_const_iterator::ne
             const size_t nObjsCount = pObjs ? pObjs->size() : 0;
             aCurr = ( pObjs && nNextObj < nObjsCount )
                     ? (*pObjs)[nNextObj++]->GetDrawObj()
-                    : static_cast< const SdrObject *>( 0 );
+                    : static_cast< const SdrObject *>( nullptr );
             while( aCurr.IsValid() && !aCurr.IsBoundAsChar() )
             {
                 aCurr = ( nNextObj < nObjsCount )
                         ? (*pObjs)[nNextObj++]->GetDrawObj()
-                        : static_cast< const SdrObject *>( 0 );
+                        : static_cast< const SdrObject *>( nullptr );
             }
             if ( !aCurr.IsValid() )
             {

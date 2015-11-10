@@ -104,7 +104,7 @@
 #include <comphelper/string.hxx>
 
 sal_uLong SwProtocol::nRecord = 0;
-SwImplProtocol* SwProtocol::pImpl = NULL;
+SwImplProtocol* SwProtocol::pImpl = nullptr;
 
 static sal_uLong lcl_GetFrameId( const SwFrm* pFrm )
 {
@@ -247,7 +247,7 @@ void SwProtocol::Stop()
      if( pImpl )
      {
         delete pImpl;
-        pImpl = NULL;
+        pImpl = nullptr;
         if( pFntCache )
             pFntCache->Flush();
      }
@@ -255,7 +255,7 @@ void SwProtocol::Stop()
 }
 
 SwImplProtocol::SwImplProtocol()
-    : pStream( NULL ), pFrmIds( NULL ), nTypes( 0xffff ),
+    : pStream( nullptr ), pFrmIds( nullptr ), nTypes( 0xffff ),
       nLineCount( 0 ), nMaxLines( USHRT_MAX ), nTestMode( 0 )
 {
     NewStream();
@@ -269,9 +269,9 @@ bool SwImplProtocol::NewStream()
     if( pStream->GetError() )
     {
         delete pStream;
-        pStream = NULL;
+        pStream = nullptr;
     }
-    return 0 != pStream;
+    return nullptr != pStream;
 }
 
 SwImplProtocol::~SwImplProtocol()
@@ -301,7 +301,7 @@ void SwImplProtocol::CheckLine( OString& rLine )
             nInitFile = 1;
             pFrmIds->clear();
             delete pFrmIds;
-            pFrmIds = NULL;         // default: log all frames
+            pFrmIds = nullptr;         // default: log all frames
         }
         else if (aTmp == "[frmtype")// section types
         {
@@ -508,8 +508,8 @@ void SwImplProtocol::_Record( const SwFrm* pFrm, sal_uLong nFunction, sal_uLong 
         {
             case 1: InsertFrm( nId ); break;
             case 2: DeleteFrm( nId ); break;
-            case 3: pFrmIds->clear(); delete pFrmIds; pFrmIds = NULL; break;
-            case 4: delete pStream; pStream = NULL; break;
+            case 3: pFrmIds->clear(); delete pFrmIds; pFrmIds = nullptr; break;
+            case 4: delete pStream; pStream = nullptr; break;
         }
         return;
     }

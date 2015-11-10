@@ -68,9 +68,9 @@ public:
     // single argument ctors shall be explicit.
     explicit SwTOXDescription(TOXTypes eType) :
         eTOXType(eType),
-        pTitle(0),
-        pTOUName(0),
-        pForm(0),
+        pTitle(nullptr),
+        pTOUName(nullptr),
+        pForm(nullptr),
         nContent(nsSwTOXElement::TOX_MARK | nsSwTOXElement::TOX_OUTLINELEVEL),
         nIndexOptions(nsSwTOIOptions::TOI_SAME_ENTRY|nsSwTOIOptions::TOI_FF|nsSwTOIOptions::TOI_CASE_SENSITIVE),
         nOLEOptions(0),
@@ -194,13 +194,13 @@ public:
         eTOXType(eType),
         nLevel(0),
         bMainEntry(false),
-        pPrimKey(0),
-        pSecKey(0),
-        pAltStr(0),
-        pTOUName(0),
-        pPhoneticReadingOfAltStr(0),
-        pPhoneticReadingOfPrimKey(0),
-        pPhoneticReadingOfSecKey(0)
+        pPrimKey(nullptr),
+        pSecKey(nullptr),
+        pAltStr(nullptr),
+        pTOUName(nullptr),
+        pPhoneticReadingOfAltStr(nullptr),
+        pPhoneticReadingOfPrimKey(nullptr),
+        pPhoneticReadingOfSecKey(nullptr)
         {
         }
     ~SwTOXMarkDescription()
@@ -282,7 +282,7 @@ public:
 
     // methods for directories
 
-    bool    UpdateOrInsertTOX(const SwTOXDescription& rDesc, SwTOXBase** ppBase = 0, const SfxItemSet* pSet = 0);
+    bool    UpdateOrInsertTOX(const SwTOXDescription& rDesc, SwTOXBase** ppBase = nullptr, const SfxItemSet* pSet = nullptr);
 
     const SwTOXType*    GetTOXType(TOXTypes eTyp, sal_uInt16 nId) const;
     const SwTOXBase*    GetCurTOX();

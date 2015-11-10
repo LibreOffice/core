@@ -199,7 +199,7 @@ public:
 
     bool Insert( SwRangeRedline* p, bool bIns = true );
     bool Insert( SwRangeRedline* p, sal_uInt16& rInsPos, bool bIns = true );
-    bool InsertWithValidRanges( SwRangeRedline* p, sal_uInt16* pInsPos = 0 );
+    bool InsertWithValidRanges( SwRangeRedline* p, sal_uInt16* pInsPos = nullptr );
 
     void Remove( sal_uInt16 nPos );
     bool Remove( const SwRangeRedline* p );

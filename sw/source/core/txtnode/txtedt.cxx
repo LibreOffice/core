@@ -211,7 +211,7 @@ static SwRect lcl_CalculateRepaintRect( SwTextFrm& rTextFrm, sal_Int32 nChgStart
         delete pEnd2Pos;
     }
 
-    aTmpState.m_p2Lines = NULL;
+    aTmpState.m_p2Lines = nullptr;
     SwRect aTmp;
     aPos = SwPosition( aNdIdx, SwIndex( pNode, nChgStart ) );
     rTextFrm.GetCharRect( aTmp, aPos, &aTmpState );
@@ -306,7 +306,7 @@ static bool lcl_HaveCommonAttributes( IStyleAccess& rStyleAccess,
 {
     bool bRet = false;
 
-    SfxItemSet* pNewSet = 0;
+    SfxItemSet* pNewSet = nullptr;
 
     if ( !pSet1 )
     {
@@ -387,11 +387,11 @@ void SwTextNode::RstTextAttr(
     {
         // enlarge range for the reset of text attributes in case of an overlapping input field
         const SwTextInputField* pTextInputField = dynamic_cast<const SwTextInputField*>(GetTextAttrAt( nStt, RES_TXTATR_INPUTFIELD, PARENT ));
-        if ( pTextInputField == NULL )
+        if ( pTextInputField == nullptr )
         {
             pTextInputField = dynamic_cast<const SwTextInputField*>(GetTextAttrAt(nEnd, RES_TXTATR_INPUTFIELD, PARENT ));
         }
-        if ( pTextInputField != NULL )
+        if ( pTextInputField != nullptr )
         {
             if ( nStt > pTextInputField->GetStart() )
             {
@@ -419,7 +419,7 @@ void SwTextNode::RstTextAttr(
     // iterate over attribute array until start of attribute is behind deletion range
     size_t i = 0;
     sal_Int32 nAttrStart;
-    SwTextAttr *pHt = NULL;
+    SwTextAttr *pHt = nullptr;
     while ( (i < m_pSwpHints->Count())
             && ( ( ( nAttrStart = m_pSwpHints->Get(i)->GetStart()) < nEnd )
                  || nLen==0 ) && !bExactRange)
@@ -430,7 +430,7 @@ void SwTextNode::RstTextAttr(
         // but consider <bInclRefToxMark> used by Undo
         sal_Int32* const pAttrEnd = pHt->GetEnd();
         const bool bKeepAttrWithoutEnd =
-            pAttrEnd == NULL
+            pAttrEnd == nullptr
             && ( !bInclRefToxMark
                  || ( RES_TXTATR_REFMARK != pHt->Which()
                       && RES_TXTATR_TOXMARK != pHt->Which()
@@ -471,7 +471,7 @@ void SwTextNode::RstTextAttr(
             bSkipAttr = nWhich != pHt->Which();
             if ( bSkipAttr && RES_TXTATR_AUTOFMT == pHt->Which() )
             {
-                bSkipAttr = !lcl_HaveCommonAttributes( getIDocumentStyleAccess(), 0, nWhich, *static_cast<const SwFormatAutoFormat&>(pHt->GetAttr()).GetStyleHandle(), pStyleHandle );
+                bSkipAttr = !lcl_HaveCommonAttributes( getIDocumentStyleAccess(), nullptr, nWhich, *static_cast<const SwFormatAutoFormat&>(pHt->GetAttr()).GetStyleHandle(), pStyleHandle );
             }
         }
         else if ( !bInclRefToxMark )
@@ -493,7 +493,7 @@ void SwTextNode::RstTextAttr(
 
         if (nStt <= nAttrStart)     // Case: 1,3,5
         {
-            const sal_Int32 nAttrEnd = pAttrEnd != NULL
+            const sal_Int32 nAttrEnd = pAttrEnd != nullptr
                                         ? *pAttrEnd
                                         : nAttrStart;
             if (nEnd > nAttrStart
@@ -533,7 +533,7 @@ void SwTextNode::RstTextAttr(
                 }
             }
         }
-        else if (pAttrEnd != 0)         // Case: 2,4,5
+        else if (pAttrEnd != nullptr)         // Case: 2,4,5
         {
             if (*pAttrEnd > nStt)       // Case: 2,4
             {
@@ -650,9 +650,9 @@ void SwTextNode::RstTextAttr(
             nMax,
             0);
 
-        NotifyClients( 0, &aHint );
+        NotifyClients( nullptr, &aHint );
         SwFormatChg aNew( GetFormatColl() );
-        NotifyClients( 0, &aNew );
+        NotifyClients( nullptr, &aNew );
     }
 }
 
@@ -962,7 +962,7 @@ bool SwTextNode::Spell(SwSpellArgs* pArgs)
             ? m_Text.getLength()
             : pArgs->pEndIdx->GetIndex();
 
-    pArgs->xSpellAlt = NULL;
+    pArgs->xSpellAlt = nullptr;
 
     // 4 cases:
 
@@ -1006,7 +1006,7 @@ bool SwTextNode::Spell(SwSpellArgs* pArgs)
 
         // In case 2. we pass the wrong list to the scanned, because only
         // the words in the wrong list have to be checked
-        SwScanner aScanner( *this, m_Text, 0, ModelToViewHelper(),
+        SwScanner aScanner( *this, m_Text, nullptr, ModelToViewHelper(),
                             WordType::DICTIONARY_WORD,
                             nBegin, nEnd );
         while( !pArgs->xSpellAlt.is() && aScanner.NextWord() )
@@ -1029,7 +1029,7 @@ bool SwTextNode::Spell(SwSpellArgs* pArgs)
                 {
                     if( IsSymbol( aScanner.GetBegin() ) )
                     {
-                        pArgs->xSpellAlt = NULL;
+                        pArgs->xSpellAlt = nullptr;
                     }
                     else
                     {
@@ -1042,7 +1042,7 @@ bool SwTextNode::Spell(SwSpellArgs* pArgs)
                         sal_Int32 nLeft = 0;
                         while (pChar && *pChar++ == CH_TXTATR_INWORD)
                             ++nLeft;
-                        pChar = rWord.getLength() ? rWord.getStr() + rWord.getLength() - 1 : 0;
+                        pChar = rWord.getLength() ? rWord.getStr() + rWord.getLength() - 1 : nullptr;
                         sal_Int32 nRight = 0;
                         while (pChar && *pChar-- == CH_TXTATR_INWORD)
                             ++nRight;
@@ -1324,7 +1324,7 @@ SwRect SwTextFrm::_AutoSpell( const SwContentNode* pActNode, sal_Int32 nActPos )
         uno::Reference< XSpellChecker1 > xSpell( ::GetSpellChecker() );
         SwDoc* pDoc = pNode->GetDoc();
 
-        SwScanner aScanner( *pNode, pNode->GetText(), 0, ModelToViewHelper(),
+        SwScanner aScanner( *pNode, pNode->GetText(), nullptr, ModelToViewHelper(),
                             WordType::DICTIONARY_WORD, nBegin, nEnd);
 
         while( aScanner.NextWord() )
@@ -1359,7 +1359,7 @@ SwRect SwTextFrm::_AutoSpell( const SwContentNode* pActNode, sal_Int32 nActPos )
                         switch (eState)
                         {
                             case SwWrongList::FreshState::FRESH:
-                                pNode->GetWrong()->Insert(OUString(), 0, nBegin, nLen, nInsertPos++);
+                                pNode->GetWrong()->Insert(OUString(), nullptr, nBegin, nLen, nInsertPos++);
                                 break;
                             case SwWrongList::FreshState::CURSOR:
                                 bPending = true; // fall-through to mark as invalid
@@ -1403,7 +1403,7 @@ SwRect SwTextFrm::_AutoSpell( const SwContentNode* pActNode, sal_Int32 nActPos )
             aRect = lcl_CalculateRepaintRect( *this, nChgStart, nChgEnd );
 
             // fdo#71558 notify misspelled word to accessibility
-            SwViewShell* pViewSh = getRootFrm() ? getRootFrm()->GetCurrShell() : 0;
+            SwViewShell* pViewSh = getRootFrm() ? getRootFrm()->GetCurrShell() : nullptr;
             if( pViewSh )
                 pViewSh->InvalidateAccessibleParaAttrs( *this );
         }
@@ -1416,7 +1416,7 @@ SwRect SwTextFrm::_AutoSpell( const SwContentNode* pActNode, sal_Int32 nActPos )
                     : SwTextNode::WrongState::TODO)
                 : SwTextNode::WrongState::DONE);
         if( !pNode->GetWrong()->Count() && ! pNode->IsWrongDirty() )
-            pNode->SetWrong( NULL );
+            pNode->SetWrong( nullptr );
     }
     else
         pNode->SetWrongDirty(SwTextNode::WrongState::DONE);
@@ -1537,7 +1537,7 @@ SwRect SwTextFrm::SmartTagScan( SwContentNode* /*pActNode*/, sal_Int32 /*nActPos
         pNode->SetSmartTagDirty( COMPLETE_STRING != pSmartTagList->GetBeginInv() );
 
         if( !pSmartTagList->Count() && !pNode->IsSmartTagDirty() )
-            pNode->SetSmartTags( NULL );
+            pNode->SetSmartTags( nullptr );
 
         // Calculate repaint area:
 #if OSL_DEBUG_LEVEL > 1
@@ -1574,7 +1574,7 @@ void SwTextFrm::CollectAutoCmplWrds( SwContentNode* pActNode, sal_Int32 nActPos 
     if( nBegin < nEnd )
     {
         int nCnt = 200;
-        SwScanner aScanner( *pNode, pNode->GetText(), 0, ModelToViewHelper(),
+        SwScanner aScanner( *pNode, pNode->GetText(), nullptr, ModelToViewHelper(),
                             WordType::DICTIONARY_WORD, nBegin, nEnd );
         while( aScanner.NextWord() )
         {
@@ -1851,7 +1851,7 @@ void SwTextNode::TransliterateText(
             if( rTrans.needLanguageForTheMode() )
                 pIter = new SwLanguageIterator( *this, nStt );
             else
-                pIter = 0;
+                pIter = nullptr;
 
             sal_Int32 nEndPos = 0;
             sal_uInt16 nLang = LANGUAGE_NONE;
@@ -1957,10 +1957,10 @@ void SwTextNode::ReplaceTextOnly( sal_Int32 nPos, sal_Int32 nLen,
 
     // notify the layout!
     SwDelText aDelHint( nPos, nTLen );
-    NotifyClients( 0, &aDelHint );
+    NotifyClients( nullptr, &aDelHint );
 
     SwInsText aHint( nPos, nTLen );
-    NotifyClients( 0, &aHint );
+    NotifyClients( nullptr, &aHint );
 }
 
 // the return values allows us to see if we did the heavy-
@@ -2042,7 +2042,7 @@ bool SwTextNode::CountWords( SwDocStat& rStat,
         if (g_pBreakIt->GetBreakIter().is())
         {
             // zero is NULL for pLanguage -----------v               last param = true for clipping
-            SwScanner aScanner( *this, aExpandText, 0, aConversionMap, i18n::WordType::WORD_COUNT,
+            SwScanner aScanner( *this, aExpandText, nullptr, aConversionMap, i18n::WordType::WORD_COUNT,
                                 nExpandBegin, nExpandEnd, true );
 
             // used to filter out scanner returning almost empty strings (len=1; unichar=0x0001)
@@ -2133,9 +2133,9 @@ struct SwParaIdleData_Impl
     bool bAutoComplDirty;               // die ACompl-Liste muss angepasst werden
 
     SwParaIdleData_Impl() :
-        pWrong              ( 0 ),
-        pGrammarCheck       ( 0 ),
-        pSmartTags          ( 0 ),
+        pWrong              ( nullptr ),
+        pGrammarCheck       ( nullptr ),
+        pSmartTags          ( nullptr ),
         nNumberOfWords      ( 0 ),
         nNumberOfAsianWords ( 0 ),
         nNumberOfChars      ( 0 ),
@@ -2159,7 +2159,7 @@ void SwTextNode::InitSwParaStatistics( bool bNew )
         delete m_pParaIdleData_Impl->pGrammarCheck;
         delete m_pParaIdleData_Impl->pSmartTags;
         delete m_pParaIdleData_Impl;
-        m_pParaIdleData_Impl = 0;
+        m_pParaIdleData_Impl = nullptr;
     }
 }
 
@@ -2177,13 +2177,13 @@ void SwTextNode::SetWrong( SwWrongList* pNew, bool bDelete )
 
 SwWrongList* SwTextNode::GetWrong()
 {
-    return m_pParaIdleData_Impl ? m_pParaIdleData_Impl->pWrong : 0;
+    return m_pParaIdleData_Impl ? m_pParaIdleData_Impl->pWrong : nullptr;
 }
 
 // #i71360#
 const SwWrongList* SwTextNode::GetWrong() const
 {
-    return m_pParaIdleData_Impl ? m_pParaIdleData_Impl->pWrong : 0;
+    return m_pParaIdleData_Impl ? m_pParaIdleData_Impl->pWrong : nullptr;
 }
 
 void SwTextNode::SetGrammarCheck( SwGrammarMarkUp* pNew, bool bDelete )
@@ -2200,7 +2200,7 @@ void SwTextNode::SetGrammarCheck( SwGrammarMarkUp* pNew, bool bDelete )
 
 SwGrammarMarkUp* SwTextNode::GetGrammarCheck()
 {
-    return m_pParaIdleData_Impl ? m_pParaIdleData_Impl->pGrammarCheck : 0;
+    return m_pParaIdleData_Impl ? m_pParaIdleData_Impl->pGrammarCheck : nullptr;
 }
 
 void SwTextNode::SetSmartTags( SwWrongList* pNew, bool bDelete )
@@ -2220,7 +2220,7 @@ void SwTextNode::SetSmartTags( SwWrongList* pNew, bool bDelete )
 
 SwWrongList* SwTextNode::GetSmartTags()
 {
-    return m_pParaIdleData_Impl ? m_pParaIdleData_Impl->pSmartTags : 0;
+    return m_pParaIdleData_Impl ? m_pParaIdleData_Impl->pSmartTags : nullptr;
 }
 
 void SwTextNode::SetParaNumberOfWords( sal_uLong nNew ) const

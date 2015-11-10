@@ -143,7 +143,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
             "wrong shell on dispatcher" );
 
     const SfxItemSet *pArgs = rReq.GetArgs();
-    const SfxPoolItem* pItem = 0;
+    const SfxPoolItem* pItem = nullptr;
     const sal_uInt16 nSlot = rReq.GetSlot();
     if(pArgs)
         pArgs->GetItemState(nSlot, false, &pItem );
@@ -272,7 +272,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
                     }
                 }
 
-                rSh.InsertObject( xObj, 0, true, nSlot);
+                rSh.InsertObject( xObj, nullptr, true, nSlot);
             }
         }
     }
@@ -283,7 +283,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
     case SID_INSERT_PLUGIN:
     {
         const SfxGlobalNameItem* pNameItem = rReq.GetArg<SfxGlobalNameItem>(SID_INSERT_OBJECT);
-        SvGlobalName *pName = NULL;
+        SvGlobalName *pName = nullptr;
         SvGlobalName aName;
         if ( pNameItem )
         {
@@ -413,7 +413,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
         }
         else
         {
-            rSh.InsertObject( xObj, 0, true, nSlot);
+            rSh.InsertObject( xObj, nullptr, true, nSlot);
             rReq.Done();
         }
     }
@@ -526,7 +526,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
     case FN_INSERT_FRAME:
     {
         bool bSingleCol = false;
-        if( 0!= dynamic_cast< SwWebDocShell*>( GetView().GetDocShell()) )
+        if( nullptr!= dynamic_cast< SwWebDocShell*>( GetView().GetDocShell()) )
         {
             SvxHtmlOptions& rHtmlOpt = SvxHtmlOptions::Get();
             if( HTML_CFG_MSIE == rHtmlOpt.GetExportMode() )
@@ -926,7 +926,7 @@ void SwTextShell::ExecRotateTransliteration( SfxRequest & rReq )
 }
 
 SwTextShell::SwTextShell(SwView &_rView) :
-    SwBaseShell(_rView), pPostItFieldMgr( 0 )
+    SwBaseShell(_rView), pPostItFieldMgr( nullptr )
 {
     SetName("Text");
     SetHelpId(SW_TEXTSHELL);
@@ -983,7 +983,7 @@ SfxItemSet SwTextShell::CreateInsertFrameItemSet(SwFlyFrmAttrMgr& rMgr)
 void SwTextShell::InsertSymbol( SfxRequest& rReq )
 {
     const SfxItemSet *pArgs = rReq.GetArgs();
-    const SfxPoolItem* pItem = 0;
+    const SfxPoolItem* pItem = nullptr;
     if( pArgs )
         pArgs->GetItemState(GetPool().GetWhich(SID_CHARMAP), false, &pItem);
 
@@ -991,7 +991,7 @@ void SwTextShell::InsertSymbol( SfxRequest& rReq )
     if ( pItem )
     {
         aChars = static_cast<const SfxStringItem*>(pItem)->GetValue();
-        const SfxPoolItem* pFtItem = NULL;
+        const SfxPoolItem* pFtItem = nullptr;
         pArgs->GetItemState( GetPool().GetWhich(SID_ATTR_SPECIALCHAR), false, &pFtItem);
         const SfxStringItem* pFontItem = dynamic_cast<const SfxStringItem*>( pFtItem  );
         if ( pFontItem )

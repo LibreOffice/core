@@ -401,7 +401,7 @@ IMPL_LINK_NOARG_TYPED(SwLabFormatPage, PreviewHdl, Idle *, void)
 IMPL_LINK_TYPED( SwLabFormatPage, LoseFocusHdl, Control&, rControl, void )
 {
     if (static_cast<Edit*>( &rControl)->IsModified())
-        PreviewHdl(0);
+        PreviewHdl(nullptr);
 }
 
 void SwLabFormatPage::ChangeMinMax()
@@ -560,7 +560,7 @@ void SwLabFormatPage::Reset(const SfxItemSet* )
     m_pRowsField->SetValue(aItem.m_nRows);
     m_pMakeFI->SetText(aItem.m_aMake);
     m_pTypeFI->SetText(aItem.m_aType);
-    PreviewHdl(0);
+    PreviewHdl(nullptr);
 }
 
 IMPL_LINK_NOARG_TYPED(SwLabFormatPage, SaveHdl, Button*, void)

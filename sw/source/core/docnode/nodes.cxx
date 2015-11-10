@@ -125,7 +125,7 @@ void SwNodes::ChgNode( SwNodeIndex& rDelPos, sal_uLong nSz,
     // in the idle-handler of the doc
     if( GetDoc()->getIDocumentFieldsAccess().SetFieldsDirty( true, &rDelPos.GetNode(), nSz ) &&
         rNds.GetDoc() != GetDoc() )
-        rNds.GetDoc()->getIDocumentFieldsAccess().SetFieldsDirty( true, NULL, 0 );
+        rNds.GetDoc()->getIDocumentFieldsAccess().SetFieldsDirty( true, nullptr, 0 );
 
     // NEVER include nodes from the RedLineArea
     sal_uLong nNd = rInsPos.GetIndex();
@@ -189,7 +189,7 @@ void SwNodes::ChgNode( SwNodeIndex& rDelPos, sal_uLong nSz,
     {
         bool bSavePersData(GetDoc()->GetIDocumentUndoRedo().IsUndoNodes(rNds));
         bool bRestPersData(GetDoc()->GetIDocumentUndoRedo().IsUndoNodes(*this));
-        SwDoc* pDestDoc = rNds.GetDoc() != GetDoc() ? rNds.GetDoc() : 0;
+        SwDoc* pDestDoc = rNds.GetDoc() != GetDoc() ? rNds.GetDoc() : nullptr;
         OSL_ENSURE(!pDestDoc, "SwNodes::ChgNode(): "
             "the code to handle text fields here looks broken\n"
             "if the target is in a different document.");
@@ -317,7 +317,7 @@ void SwNodes::ChgNode( SwNodeIndex& rDelPos, sal_uLong nSz,
                                     SwTextMeta *const pTextMeta(
                                         static_txtattr_cast<SwTextMeta*>(pAttr));
                                     // force removal of UNO object
-                                    pTextMeta->ChgTextNode(0);
+                                    pTextMeta->ChgTextNode(nullptr);
                                     pTextMeta->ChgTextNode(pTextNd);
                                 }
                                 break;
@@ -344,9 +344,9 @@ void SwNodes::ChgNode( SwNodeIndex& rDelPos, sal_uLong nSz,
 
     // declare all fields as invalid, updating will happen
     // in the idle-handler of the doc
-    GetDoc()->getIDocumentFieldsAccess().SetFieldsDirty( true, NULL, 0 );
+    GetDoc()->getIDocumentFieldsAccess().SetFieldsDirty( true, nullptr, 0 );
     if( rNds.GetDoc() != GetDoc() )
-        rNds.GetDoc()->getIDocumentFieldsAccess().SetFieldsDirty( true, NULL, 0 );
+        rNds.GetDoc()->getIDocumentFieldsAccess().SetFieldsDirty( true, nullptr, 0 );
 
     if( bNewFrms )
         bNewFrms = &GetDoc()->GetNodes() == &rNds &&
@@ -366,7 +366,7 @@ void SwNodes::ChgNode( SwNodeIndex& rDelPos, sal_uLong nSz,
             aFrmNdIdx = rNds.GetEndOfContent();
             pFrmNd = SwNodes::GoPrevSection( &aFrmNdIdx, true, false );
             if( pFrmNd && !static_cast<SwContentNode*>(pFrmNd)->HasWriterListeners() )
-                pFrmNd = 0;
+                pFrmNd = nullptr;
             OSL_ENSURE( pFrmNd, "ChgNode() - no FrameNode found" );
         }
         if( pFrmNd )
@@ -504,7 +504,7 @@ bool SwNodes::_MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
                         for( sal_uLong n = 0; n < nInsPos; ++n )
                         {
                             SwNodeIndex aMvIdx( aRg.aEnd, 1 );
-                            SwContentNode* pCNd = 0;
+                            SwContentNode* pCNd = nullptr;
                             SwNode* pTmpNd = &aMvIdx.GetNode();
                             if( pTmpNd->IsContentNode() )
                             {
@@ -518,7 +518,7 @@ bool SwNodes::_MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
                                     m_pOutlineNodes->erase( pCNd );
                                 }
                                 else
-                                    pCNd = 0;
+                                    pCNd = nullptr;
                             }
 
                             BigPtrArray::Move( aMvIdx.GetIndex(), aIdx.GetIndex() );
@@ -736,7 +736,7 @@ bool SwNodes::_MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
 
                     // also set correct StartNode for all decreased nodes
                     while( aTmpSIdx < aTmpEIdx )
-                        if( 0 != (( pAktNode = &aTmpEIdx.GetNode())->GetEndNode()) )
+                        if( nullptr != (( pAktNode = &aTmpEIdx.GetNode())->GetEndNode()) )
                             aTmpEIdx = pAktNode->StartOfSectionIndex();
                         else
                         {
@@ -1283,15 +1283,15 @@ void SwNodes::GoEndOfSection(SwNodeIndex *pIdx)
 SwContentNode* SwNodes::GoNext(SwNodeIndex *pIdx) const
 {
     if( pIdx->GetIndex() >= Count() - 1 )
-        return 0;
+        return nullptr;
 
     SwNodeIndex aTmp(*pIdx, +1);
-    SwNode* pNd = 0;
+    SwNode* pNd = nullptr;
     while( aTmp < Count()-1 && !( pNd = &aTmp.GetNode())->IsContentNode() )
         ++aTmp;
 
     if( aTmp == Count()-1 )
-        pNd = 0;
+        pNd = nullptr;
     else
         (*pIdx) = aTmp;
     return static_cast<SwContentNode*>(pNd);
@@ -1300,15 +1300,15 @@ SwContentNode* SwNodes::GoNext(SwNodeIndex *pIdx) const
 SwContentNode* SwNodes::GoPrevious(SwNodeIndex *pIdx)
 {
     if( !pIdx->GetIndex() )
-        return 0;
+        return nullptr;
 
     SwNodeIndex aTmp( *pIdx, -1 );
-    SwNode* pNd = 0;
+    SwNode* pNd = nullptr;
     while( aTmp.GetIndex() && !( pNd = &aTmp.GetNode())->IsContentNode() )
         --aTmp;
 
     if( !aTmp.GetIndex() )
-        pNd = 0;
+        pNd = nullptr;
     else
         (*pIdx) = aTmp;
     return static_cast<SwContentNode*>(pNd);
@@ -1361,7 +1361,7 @@ void SwNodes::DelNodes( const SwNodeIndex & rStart, sal_uLong nCnt )
         SwNode* aEndNdArr[] = { m_pEndOfContent,
                                 m_pEndOfPostIts, m_pEndOfInserts,
                                 m_pEndOfAutotext, m_pEndOfRedlines,
-                                0
+                                nullptr
                               };
 
         SwNode** ppEndNdArr = aEndNdArr;
@@ -1550,7 +1550,7 @@ void SwNodes::MoveRange( SwPaM & rPam, SwPosition & rPos, SwNodes& rNodes )
             // Also, a selection is invalidated.
             pEnd->nContent = pStt->nContent;
             rPam.DeleteMark();
-            GetDoc()->GetDocShell()->Broadcast( SwFormatFieldHint( 0,
+            GetDoc()->GetDocShell()->Broadcast( SwFormatFieldHint( nullptr,
                 rNodes.IsDocNodes() ? SwFormatFieldHintWhich::INSERTED : SwFormatFieldHintWhich::REMOVED ) );
             return;
         }
@@ -1672,7 +1672,7 @@ void SwNodes::MoveRange( SwPaM & rPam, SwPosition & rPos, SwNodes& rNodes )
     // Also, a selection is invalidated.
     *pEnd = *pStt;
     rPam.DeleteMark();
-    GetDoc()->GetDocShell()->Broadcast( SwFormatFieldHint( 0,
+    GetDoc()->GetDocShell()->Broadcast( SwFormatFieldHint( nullptr,
                 rNodes.IsDocNodes() ? SwFormatFieldHintWhich::INSERTED : SwFormatFieldHintWhich::REMOVED ) );
 }
 
@@ -1961,7 +1961,7 @@ SwContentNode* SwNodes::GoNextSection( SwNodeIndex * pIdx,
         {
             const SwSectionNode* pSectNd;
             if( ( bSkipHidden || bSkipProtect ) &&
-                0 != (pSectNd = pNd->FindSectionNode() ) &&
+                nullptr != (pSectNd = pNd->FindSectionNode() ) &&
                 ( ( bSkipHidden && pSectNd->GetSection().IsHiddenFlag() ) ||
                   ( bSkipProtect && pSectNd->GetSection().IsProtectFlag() )) )
             {
@@ -1976,7 +1976,7 @@ SwContentNode* SwNodes::GoNextSection( SwNodeIndex * pIdx,
         ++aTmp;
         bFirst = false;
     }
-    return 0;
+    return nullptr;
 }
 
 ///@see SwNodes::GoNextSection (TODO: seems to be C&P programming here)
@@ -2019,7 +2019,7 @@ SwContentNode* SwNodes::GoPrevSection( SwNodeIndex * pIdx,
         {
             const SwSectionNode* pSectNd;
             if( ( bSkipHidden || bSkipProtect ) &&
-                0 != (pSectNd = pNd->FindSectionNode() ) &&
+                nullptr != (pSectNd = pNd->FindSectionNode() ) &&
                 ( ( bSkipHidden && pSectNd->GetSection().IsHiddenFlag() ) ||
                   ( bSkipProtect && pSectNd->GetSection().IsProtectFlag() )) )
             {
@@ -2033,7 +2033,7 @@ SwContentNode* SwNodes::GoPrevSection( SwNodeIndex * pIdx,
         }
         --aTmp;
     }
-    return 0;
+    return nullptr;
 }
 
 //TODO: improve documentation
@@ -2050,7 +2050,7 @@ SwContentNode* SwNodes::GoPrevSection( SwNodeIndex * pIdx,
 SwNode* SwNodes::FindPrvNxtFrmNode( SwNodeIndex& rFrmIdx,
                                     const SwNode* pEnd ) const
 {
-    SwNode* pFrmNd = 0;
+    SwNode* pFrmNd = nullptr;
 
     // no layout -> skip
     if( GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell() )
@@ -2082,7 +2082,7 @@ SwNode* SwNodes::FindPrvNxtFrmNode( SwNodeIndex& rFrmIdx,
                 rFrmIdx = aIdx;
 
             // search forward or backward for a content node
-            else if( 0 != ( pFrmNd = GoPrevSection( &aIdx, true, false )) &&
+            else if( nullptr != ( pFrmNd = GoPrevSection( &aIdx, true, false )) &&
                     ::CheckNodesRange( aIdx, rFrmIdx, true ) &&
                     // Never out of the table at the start
                     pFrmNd->FindTableNode() == pTableNd &&
@@ -2104,7 +2104,7 @@ SwNode* SwNodes::FindPrvNxtFrmNode( SwNodeIndex& rFrmIdx,
 
                 // NEVER leave the section when doing this!
                 if( ( pEnd && ( pFrmNd = &aIdx.GetNode())->IsContentNode() ) ||
-                    ( 0 != ( pFrmNd = GoNextSection( &aIdx, true, false )) &&
+                    ( nullptr != ( pFrmNd = GoNextSection( &aIdx, true, false )) &&
                     ::CheckNodesRange( aIdx, rFrmIdx, true ) &&
                     ( pFrmNd->FindTableNode() == pTableNd &&
                         // NEVER go out of the table cell at the end
@@ -2119,7 +2119,7 @@ SwNode* SwNodes::FindPrvNxtFrmNode( SwNodeIndex& rFrmIdx,
                     // SttNode is a section or a table!
                     SwTableNode* pTableNode;
                     if (pSttNd->IsTableNode() &&
-                        0 != (pTableNode = pFrmNd->FindTableNode()) &&
+                        nullptr != (pTableNode = pFrmNd->FindTableNode()) &&
                         // TABLE IN TABLE:
                         pTableNode != pSttNd->StartOfSectionNode()->FindTableNode())
                     {
@@ -2145,7 +2145,7 @@ SwNode* SwNodes::FindPrvNxtFrmNode( SwNodeIndex& rFrmIdx,
                         rFrmIdx = aIdx;
                     else
                     {
-                        pFrmNd = 0;
+                        pFrmNd = nullptr;
 
                         // is there some sectionnodes before a tablenode?
                         while( aIdx.GetNode().IsSectionNode() )
@@ -2322,7 +2322,7 @@ void SwNodes::InsertNode( const SwNodePtr pNode,
 // ->#112139#
 SwNode * SwNodes::DocumentSectionStartNode(SwNode * pNode) const
 {
-    if (NULL != pNode)
+    if (nullptr != pNode)
     {
         SwNodeIndex aIdx(*pNode);
 

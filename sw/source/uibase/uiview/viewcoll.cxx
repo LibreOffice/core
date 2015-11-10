@@ -33,7 +33,7 @@
 void SwView::ExecColl(SfxRequest &rReq)
 {
     const SfxItemSet* pArgs = rReq.GetArgs();
-    const SfxPoolItem* pItem = 0;
+    const SfxPoolItem* pItem = nullptr;
     sal_uInt16 nWhich = rReq.GetSlot();
     switch( nWhich )
     {

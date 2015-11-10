@@ -65,8 +65,8 @@ SW_DLLPUBLIC bool UCB_IsReadOnlyFileName( const OUString& rURL );
     //                       !! objects must be deleted from the caller!!
 bool UCB_GetFileListOfFolder( const OUString& rURL,
                                 std::vector<OUString>& rList,
-                                const OUString* pExtension = 0,
-                                std::vector<DateTime*>* pDateTimeList = 0 );
+                                const OUString* pExtension = nullptr,
+                                std::vector<DateTime*>* pDateTimeList = nullptr );
 
     // is the URL an existing file?
 SW_DLLPUBLIC bool UCB_IsFile( const OUString& rURL );

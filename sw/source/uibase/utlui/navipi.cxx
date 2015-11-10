@@ -161,7 +161,7 @@ void SwNavigationPI::FillBox()
         SwView *pView = GetCreateView();
         if(!pView)
         {
-            m_aContentTree->SetActiveShell(0);
+            m_aContentTree->SetActiveShell(nullptr);
         }
         else if( pView != m_pActContView)
         {
@@ -179,7 +179,7 @@ void SwNavigationPI::UsePage(SwWrtShell *pSh)
     if (!pSh)
     {
         SwView *pView = GetCreateView();
-        pSh = pView ? &pView->GetWrtShell() : 0;
+        pSh = pView ? &pView->GetWrtShell() : nullptr;
         GetPageEdit().SetValue(1);
     }
     if (pSh)
@@ -227,7 +227,7 @@ IMPL_LINK_TYPED( SwNavigationPI, ToolBoxSelectHdl, ToolBox *, pBox, void )
         break;
         case FN_SHOW_CONTENT_BOX:
         case FN_SELECT_CONTENT:
-            if(m_pContextWin!=NULL && m_pContextWin->GetFloatingWindow()!=NULL)
+            if(m_pContextWin!=nullptr && m_pContextWin->GetFloatingWindow()!=nullptr)
             {
                 if(_IsZoomedIn() )
                 {
@@ -244,7 +244,7 @@ IMPL_LINK_TYPED( SwNavigationPI, ToolBoxSelectHdl, ToolBox *, pBox, void )
         case FN_SELECT_FOOTER:
         {
             rSh.MoveCrsr();
-            const FrmTypeFlags eType = rSh.GetFrmType(0,false);
+            const FrmTypeFlags eType = rSh.GetFrmType(nullptr,false);
             if (eType & FrmTypeFlags::FOOTER)
             {
                 if (rSh.EndPg())
@@ -258,7 +258,7 @@ IMPL_LINK_TYPED( SwNavigationPI, ToolBoxSelectHdl, ToolBox *, pBox, void )
         case FN_SELECT_HEADER:
         {
             rSh.MoveCrsr();
-            const FrmTypeFlags eType = rSh.GetFrmType(0,false);
+            const FrmTypeFlags eType = rSh.GetFrmType(nullptr,false);
             if (eType & FrmTypeFlags::HEADER)
             {
                 if (rSh.SttPg())
@@ -272,7 +272,7 @@ IMPL_LINK_TYPED( SwNavigationPI, ToolBoxSelectHdl, ToolBox *, pBox, void )
         case FN_SELECT_FOOTNOTE:
         {
             rSh.MoveCrsr();
-            const FrmTypeFlags eFrmType = rSh.GetFrmType(0,false);
+            const FrmTypeFlags eFrmType = rSh.GetFrmType(nullptr,false);
                 // Jump from the footnote to the anchor.
             if (eFrmType & FrmTypeFlags::FOOTNOTE)
             {
@@ -518,7 +518,7 @@ void SwNavigationPI::GotoPage()
         _ZoomIn();
     if(IsGlobalMode())
         ToggleTree();
-    UsePage(0);
+    UsePage(nullptr);
     GetPageEdit().GrabFocus();
 }
 
@@ -526,14 +526,14 @@ void SwNavigationPI::_ZoomOut()
 {
     if (_IsZoomedIn())
     {
-        FloatingWindow* pFloat = m_pContextWin!=NULL ? m_pContextWin->GetFloatingWindow() : NULL;
+        FloatingWindow* pFloat = m_pContextWin!=nullptr ? m_pContextWin->GetFloatingWindow() : nullptr;
         m_bIsZoomedIn = false;
         Size aSz(GetOutputSizePixel());
         aSz.Height() = m_nZoomOut;
         Size aMinOutSizePixel = static_cast<SfxDockingWindow*>(GetParent())->GetMinOutputSizePixel();
         static_cast<SfxDockingWindow*>(GetParent())->SetMinOutputSizePixel(Size(
                             aMinOutSizePixel.Width(),m_nZoomOutInit));
-        if (pFloat != NULL)
+        if (pFloat != nullptr)
             pFloat->SetOutputSizePixel(aSz);
         FillBox();
         if(IsGlobalMode())
@@ -555,7 +555,7 @@ void SwNavigationPI::_ZoomOut()
 
 void SwNavigationPI::_ZoomIn()
 {
-    if (m_pContextWin != NULL)
+    if (m_pContextWin != nullptr)
     {
         FloatingWindow* pFloat = m_pContextWin->GetFloatingWindow();
         if (pFloat &&
@@ -591,7 +591,7 @@ void SwNavigationPI::Resize()
         Size aNewSize (pParent->GetOutputSizePixel());
 
         SfxDockingWindow* pDockingParent = dynamic_cast<SfxDockingWindow*>(pParent);
-        if (pDockingParent != NULL)
+        if (pDockingParent != nullptr)
         {
             FloatingWindow* pFloat =  pDockingParent->GetFloatingWindow();
             //change the minimum width depending on the dock status
@@ -648,13 +648,13 @@ SwNavigationPI::SwNavigationPI( SfxBindings* _pBindings,
     m_aGlobalTree(VclPtr<SwGlobalTree>::Create(this, SW_RES(TL_GLOBAL))),
     m_aDocListBox(VclPtr<ListBox>::Create(this, SW_RES(LB_DOCS))),
 
-    m_pxObjectShell(0),
-    m_pContentView(0),
-    m_pContentWrtShell(0),
-    m_pActContView(0),
-    m_pCreateView(0),
-    m_pPopupWindow(0),
-    m_pFloatingWindow(0),
+    m_pxObjectShell(nullptr),
+    m_pContentView(nullptr),
+    m_pContentWrtShell(nullptr),
+    m_pActContView(nullptr),
+    m_pCreateView(nullptr),
+    m_pPopupWindow(nullptr),
+    m_pFloatingWindow(nullptr),
 
     m_pContextWin(pCw),
 
@@ -731,7 +731,7 @@ SwNavigationPI::SwNavigationPI( SfxBindings* _pBindings,
     m_nWishWidth += 2 * m_aContentToolBox->GetPosPixel().X();
 
     DockingWindow* pDockingParent = dynamic_cast<DockingWindow*>(pParent);
-    if (pDockingParent != NULL)
+    if (pDockingParent != nullptr)
     {
         FloatingWindow* pFloat =  pDockingParent->GetFloatingWindow();
         Size aMinSize(pFloat ? m_nWishWidth : 0, pFloat ? m_nZoomOutInit : 0);
@@ -739,7 +739,7 @@ SwNavigationPI::SwNavigationPI( SfxBindings* _pBindings,
         SetOutputSizePixel( Size( m_nWishWidth, m_nZoomOutInit));
 
         SfxDockingWindow* pSfxDockingParent = dynamic_cast<SfxDockingWindow*>(pParent);
-        if (pSfxDockingParent != NULL)
+        if (pSfxDockingParent != nullptr)
         {
             Size aTmpParentSize(pSfxDockingParent->GetSizePixel());
             if (aTmpParentSize.Width() < aMinSize.Width()
@@ -817,7 +817,7 @@ SwNavigationPI::SwNavigationPI( SfxBindings* _pBindings,
     }
     else
         m_aContentTree->GrabFocus();
-    UsePage(0);
+    UsePage(nullptr);
     m_aPageChgIdle.SetIdleHdl(LINK(this, SwNavigationPI, ChangePageHdl));
     m_aPageChgIdle.SetPriority(SchedulerPriority::LOWEST);
 
@@ -825,7 +825,7 @@ SwNavigationPI::SwNavigationPI( SfxBindings* _pBindings,
     m_aGlobalTree->SetAccessibleName(SW_RESSTR(STR_ACCESS_TL_GLOBAL));
     m_aDocListBox->SetAccessibleName(m_aStatusArr[3]);
 
-    if (m_pContextWin == NULL)
+    if (m_pContextWin == nullptr)
     {
         // When the context window is missing then the navigator is
         // displayed in the sidebar.  While the navigator could change
@@ -897,22 +897,22 @@ IMPL_LINK_NOARG_TYPED(SwNavigationPI, PopupModeEndHdl, FloatingWindow*, void)
         // floating window instance.
         m_pFloatingWindow.disposeAndClear();
         m_pFloatingWindow = m_pPopupWindow;
-        m_pPopupWindow    = 0;
+        m_pPopupWindow    = nullptr;
     }
     else
     {
         // Popup window has been closed by the user. No replacement, instance
         // will destroy itself.
-        m_pPopupWindow = 0;
+        m_pPopupWindow = nullptr;
     }
 }
 
 IMPL_LINK_TYPED( SwNavigationPI, ClosePopupWindow, SfxPopupWindow *, pWindow, void )
 {
     if ( pWindow == m_pFloatingWindow )
-        m_pFloatingWindow = 0;
+        m_pFloatingWindow = nullptr;
     else
-        m_pPopupWindow = 0;
+        m_pPopupWindow = nullptr;
 }
 
 void SwNavigationPI::StateChanged( sal_uInt16 nSID, SfxItemState /*eState*/,
@@ -939,7 +939,7 @@ void SwNavigationPI::StateChanged( sal_uInt16 nSID, SfxItemState /*eState*/,
         }
         else
         {
-            m_aContentTree->SetActiveShell(0);
+            m_aContentTree->SetActiveShell(nullptr);
         }
         UpdateListBox();
     }
@@ -959,7 +959,7 @@ void SwNavigationPI::Notify( SfxBroadcaster& rBrdc, const SfxHint& rHint )
     {
         if(dynamic_cast<const SfxSimpleHint*>(&rHint) && static_cast<const SfxSimpleHint&>(rHint).GetId() == SFX_HINT_DYING)
         {
-            m_pCreateView = 0;
+            m_pCreateView = nullptr;
         }
     }
     else
@@ -1012,7 +1012,7 @@ void SwNavigationPI::UpdateListBox()
     m_aDocListBox->SetUpdateMode(false);
     m_aDocListBox->Clear();
     SwView *pActView = GetCreateView();
-    bool bDisable = pActView == 0;
+    bool bDisable = pActView == nullptr;
     SwView *pView = SwModule::GetFirstView();
     sal_Int32 nCount = 0;
     sal_Int32 nAct = 0;
@@ -1020,7 +1020,7 @@ void SwNavigationPI::UpdateListBox()
     const SwView* pConstView = m_aContentTree->IsConstantView() &&
                                 m_aContentTree->GetActiveWrtShell() ?
                                     &m_aContentTree->GetActiveWrtShell()->GetView():
-                                        0;
+                                        nullptr;
     while (pView)
     {
         SfxObjectShell* pDoc = pView->GetDocShell();
@@ -1089,7 +1089,7 @@ IMPL_LINK_TYPED(SwNavigationPI, DoneLink, SfxPoolItem *, pItem, void)
             if(m_pContentView)
                 m_pContentWrtShell = m_pContentView->GetWrtShellPtr();
             else
-                m_pContentWrtShell = 0;
+                m_pContentWrtShell = nullptr;
             m_pxObjectShell = new SfxObjectShellLock(pFrame->GetObjectShell());
             FillBox();
             m_aContentTree->Update();
@@ -1171,7 +1171,7 @@ sal_Int8 SwNavigationPI::ExecuteDrop( const ExecuteDropEvent& rEvt )
         m_sContentFileName = sFileName;
         if(m_pxObjectShell)
         {
-            m_aContentTree->SetHiddenShell( 0 );
+            m_aContentTree->SetHiddenShell( nullptr );
             (*m_pxObjectShell)->DoClose();
             DELETEZ( m_pxObjectShell);
         }

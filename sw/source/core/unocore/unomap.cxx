@@ -104,8 +104,8 @@ SwUnoPropertyMapProvider::SwUnoPropertyMapProvider()
 {
     for( sal_uInt16 i = 0; i < PROPERTY_MAP_END; i++ )
     {
-        m_aMapEntriesArr[i] = 0;
-        m_aPropertySetArr[i] = 0;
+        m_aMapEntriesArr[i] = nullptr;
+        m_aPropertySetArr[i] = nullptr;
     }
 }
 

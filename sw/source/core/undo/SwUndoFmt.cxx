@@ -34,7 +34,7 @@
 SwUndoFormatCreate::SwUndoFormatCreate
 (SwUndoId nUndoId, SwFormat * _pNew, SwFormat * _pDerivedFrom, SwDoc * _pDoc)
     : SwUndo(nUndoId), pNew(_pNew),
-      pDoc(_pDoc), pNewSet(NULL), nId(0), bAuto(false)
+      pDoc(_pDoc), pNewSet(nullptr), nId(0), bAuto(false)
 {
     if (_pDerivedFrom)
         sDerivedFrom = _pDerivedFrom->GetName();
@@ -81,7 +81,7 @@ void SwUndoFormatCreate::RedoImpl(::sw::UndoRedoContext &)
         pNew = pFormat;
     }
     else
-        pNew = NULL;
+        pNew = nullptr;
 }
 
 SwRewriter SwUndoFormatCreate::GetRewriter() const

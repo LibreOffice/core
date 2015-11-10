@@ -30,16 +30,16 @@ SwFormatRefMark::~SwFormatRefMark( )
 
 SwFormatRefMark::SwFormatRefMark( const OUString& rName )
     : SfxPoolItem(RES_TXTATR_REFMARK)
-    , SwModify(0)
-    , pTextAttr(0)
+    , SwModify(nullptr)
+    , pTextAttr(nullptr)
     , aRefName(rName)
 {
 }
 
 SwFormatRefMark::SwFormatRefMark( const SwFormatRefMark& rAttr )
     : SfxPoolItem(RES_TXTATR_REFMARK)
-    , SwModify(0)
-    , pTextAttr(0)
+    , SwModify(nullptr)
+    , pTextAttr(nullptr)
     , aRefName(rAttr.aRefName)
 {
 }
@@ -60,7 +60,7 @@ void SwFormatRefMark::Modify(SfxPoolItem const* pOld, SfxPoolItem const* pNew)
     NotifyClients(pOld, pNew);
     if (pOld && (RES_REMOVE_UNO_OBJECT == pOld->Which()))
     {   // invalidate cached UNO object
-        SetXRefMark(css::uno::Reference<css::text::XTextContent>(0));
+        SetXRefMark(css::uno::Reference<css::text::XTextContent>(nullptr));
     }
 }
 
@@ -77,8 +77,8 @@ SwTextRefMark::SwTextRefMark( SwFormatRefMark& rAttr,
             sal_Int32 const nStartPos, sal_Int32 const*const pEnd)
     : SwTextAttr(rAttr, nStartPos)
     , SwTextAttrEnd( rAttr, nStartPos, nStartPos )
-    , m_pTextNode( 0 )
-    , m_pEnd( 0 )
+    , m_pTextNode( nullptr )
+    , m_pEnd( nullptr )
 {
     rAttr.pTextAttr = this;
     if ( pEnd )

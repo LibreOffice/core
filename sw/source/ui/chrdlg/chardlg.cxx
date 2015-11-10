@@ -61,8 +61,8 @@ using namespace ::sfx2;
 
 SwCharDlg::SwCharDlg(vcl::Window* pParent, SwView& rVw, const SfxItemSet& rCoreSet,
     sal_uInt8 nDialogMode, const OUString* pStr)
-    : SfxTabDialog(0, pParent, "CharacterPropertiesDialog",
-        "modules/swriter/ui/characterproperties.ui", &rCoreSet, pStr != 0)
+    : SfxTabDialog(nullptr, pParent, "CharacterPropertiesDialog",
+        "modules/swriter/ui/characterproperties.ui", &rCoreSet, pStr != nullptr)
     , m_rView(rVw)
     , m_nDialogMode(nDialogMode)
 {
@@ -72,13 +72,13 @@ SwCharDlg::SwCharDlg(vcl::Window* pParent, SwView& rVw, const SfxItemSet& rCoreS
     }
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
     OSL_ENSURE(pFact, "Dialog creation failed!");
-    m_nCharStdId = AddTabPage("font", pFact->GetTabPageCreatorFunc(RID_SVXPAGE_CHAR_NAME), 0);
-    m_nCharExtId = AddTabPage("fonteffects", pFact->GetTabPageCreatorFunc(RID_SVXPAGE_CHAR_EFFECTS), 0);
-    m_nCharPosId = AddTabPage("position", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_POSITION ), 0 );
-    m_nCharTwoId = AddTabPage("asianlayout", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_TWOLINES ), 0 );
-    m_nCharUrlId = AddTabPage("hyperlink", SwCharURLPage::Create, 0);
-    m_nCharBgdId = AddTabPage("background", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), 0 );
-    m_nCharBrdId = AddTabPage("borders", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BORDER ), 0 );
+    m_nCharStdId = AddTabPage("font", pFact->GetTabPageCreatorFunc(RID_SVXPAGE_CHAR_NAME), nullptr);
+    m_nCharExtId = AddTabPage("fonteffects", pFact->GetTabPageCreatorFunc(RID_SVXPAGE_CHAR_EFFECTS), nullptr);
+    m_nCharPosId = AddTabPage("position", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_POSITION ), nullptr );
+    m_nCharTwoId = AddTabPage("asianlayout", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_TWOLINES ), nullptr );
+    m_nCharUrlId = AddTabPage("hyperlink", SwCharURLPage::Create, nullptr);
+    m_nCharBgdId = AddTabPage("background", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), nullptr );
+    m_nCharBrdId = AddTabPage("borders", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BORDER ), nullptr );
 
     SvtCJKOptions aCJKOptions;
     if(m_nDialogMode == DLG_CHAR_DRAW || m_nDialogMode == DLG_CHAR_ANN)
@@ -135,7 +135,7 @@ void SwCharDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
 
 SwCharURLPage::SwCharURLPage(vcl::Window* pParent, const SfxItemSet& rCoreSet)
     : SfxTabPage(pParent, "CharURLPage", "modules/swriter/ui/charurlpage.ui", &rCoreSet)
-    , pINetItem(0)
+    , pINetItem(nullptr)
     , bModified(false)
 
 {
@@ -153,8 +153,8 @@ SwCharURLPage::SwCharURLPage(vcl::Window* pParent, const SfxItemSet& rCoreSet)
     const SfxPoolItem* pItem;
     SfxObjectShell* pShell;
     if(SfxItemState::SET == rCoreSet.GetItemState(SID_HTML_MODE, false, &pItem) ||
-        ( 0 != ( pShell = SfxObjectShell::Current()) &&
-                    0 != (pItem = pShell->GetItem(SID_HTML_MODE))))
+        ( nullptr != ( pShell = SfxObjectShell::Current()) &&
+                    nullptr != (pItem = pShell->GetItem(SID_HTML_MODE))))
     {
         sal_uInt16 nHtmlMode = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
         if(HTMLMODE_ON & nHtmlMode)

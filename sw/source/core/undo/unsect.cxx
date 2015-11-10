@@ -45,7 +45,7 @@ static SfxItemSet* lcl_GetAttrSet( const SwSection& rSect )
     // save attributes of the format (columns, color, ...)
     // Content and Protect items are not interesting since they are already
     // stored in Section, thus delete them.
-    SfxItemSet* pAttr = 0;
+    SfxItemSet* pAttr = nullptr;
     if( rSect.GetFormat() )
     {
         sal_uInt16 nCnt = 1;
@@ -58,7 +58,7 @@ static SfxItemSet* lcl_GetAttrSet( const SwSection& rSect )
             pAttr->ClearItem( RES_PROTECT );
             pAttr->ClearItem( RES_CNTNT );
             if( !pAttr->Count() )
-                delete pAttr, pAttr = 0;
+                delete pAttr, pAttr = nullptr;
         }
     }
     return pAttr;
@@ -69,8 +69,8 @@ SwUndoInsSection::SwUndoInsSection(
         SfxItemSet const*const pSet, SwTOXBase const*const pTOXBase)
     : SwUndo( UNDO_INSSECTION ), SwUndRng( rPam )
     , m_pSectionData(new SwSectionData(rNewData))
-    , m_pTOXBase( (pTOXBase) ? new SwTOXBase(*pTOXBase) : 0 )
-    , m_pAttrSet( (pSet && pSet->Count()) ? new SfxItemSet( *pSet ) : 0 )
+    , m_pTOXBase( (pTOXBase) ? new SwTOXBase(*pTOXBase) : nullptr )
+    , m_pAttrSet( (pSet && pSet->Count()) ? new SfxItemSet( *pSet ) : nullptr )
     , m_nSectionNodePos(0)
     , m_bSplitAtStart(false)
     , m_bSplitAtEnd(false)
@@ -85,7 +85,7 @@ SwUndoInsSection::SwUndoInsSection(
     }
         m_pRedlineSaveData.reset( new SwRedlineSaveDatas );
         if( !FillSaveData( rPam, *m_pRedlineSaveData, false ))
-            m_pRedlineSaveData.reset( NULL );
+            m_pRedlineSaveData.reset( nullptr );
 
     if( !rPam.HasMark() )
     {
@@ -165,7 +165,7 @@ void SwUndoInsSection::RedoImpl(::sw::UndoRedoContext & rContext)
     SwDoc & rDoc = rContext.GetDoc();
     SwPaM & rPam( AddUndoRedoPaM(rContext) );
 
-    const SwTOXBaseSection* pUpdateTOX = 0;
+    const SwTOXBaseSection* pUpdateTOX = nullptr;
     if (m_pTOXBase.get())
     {
         pUpdateTOX = rDoc.InsertTableOf( *rPam.GetPoint(),
@@ -173,7 +173,7 @@ void SwUndoInsSection::RedoImpl(::sw::UndoRedoContext & rContext)
     }
     else
     {
-        rDoc.InsertSwSection(rPam, *m_pSectionData, 0, m_pAttrSet.get());
+        rDoc.InsertSwSection(rPam, *m_pSectionData, nullptr, m_pAttrSet.get());
     }
 
     if (m_pHistory.get())
@@ -223,7 +223,7 @@ void SwUndoInsSection::RepeatImpl(::sw::RepeatContext & rContext)
     else
     {
         rDoc.InsertSwSection(rContext.GetRepeatPaM(),
-            *m_pSectionData, 0, m_pAttrSet.get());
+            *m_pSectionData, nullptr, m_pAttrSet.get());
     }
 }
 
@@ -243,7 +243,7 @@ void SwUndoInsSection::Join( SwDoc& rDoc, sal_uLong nNode )
     if (m_pHistory.get())
     {
         SwIndex aCntIdx( pTextNd, 0 );
-        pTextNd->RstTextAttr( aCntIdx, pTextNd->Len(), 0, 0, true );
+        pTextNd->RstTextAttr( aCntIdx, pTextNd->Len(), 0, nullptr, true );
     }
 }
 
@@ -304,7 +304,7 @@ SwUndoDelSection::SwUndoDelSection(
     , m_pSectionData( new SwSectionData(rSection) )
     , m_pTOXBase( dynamic_cast<const SwTOXBaseSection*>( &rSection) !=  nullptr
             ? new SwTOXBase(static_cast<SwTOXBaseSection const&>(rSection))
-            : 0 )
+            : nullptr )
     , m_pAttrSet( ::lcl_GetAttrSet(rSection) )
     , m_pMetadataUndo( rSectionFormat.CreateUndo() )
     , m_nStartNode( pIndex->GetIndex() )
@@ -329,7 +329,7 @@ void SwUndoDelSection::UndoImpl(::sw::UndoRedoContext & rContext)
     {
         SwNodeIndex aStt( rDoc.GetNodes(), m_nStartNode );
         SwNodeIndex aEnd( rDoc.GetNodes(), m_nEndNode-2 );
-        SwSectionFormat* pFormat = rDoc.MakeSectionFormat( 0 );
+        SwSectionFormat* pFormat = rDoc.MakeSectionFormat( nullptr );
         if (m_pAttrSet.get())
         {
             pFormat->SetFormatAttr( *m_pAttrSet );
@@ -338,7 +338,7 @@ void SwUndoDelSection::UndoImpl(::sw::UndoRedoContext & rContext)
         /// OD 04.10.2002 #102894#
         /// remember inserted section node for further calculations
         SwSectionNode* pInsertedSectNd = rDoc.GetNodes().InsertTextSection(
-                aStt, *pFormat, *m_pSectionData, 0, & aEnd);
+                aStt, *pFormat, *m_pSectionData, nullptr, & aEnd);
 
         if( SfxItemState::SET == pFormat->GetItemState( RES_FTN_AT_TXTEND ) ||
             SfxItemState::SET == pFormat->GetItemState( RES_END_AT_TXTEND ))

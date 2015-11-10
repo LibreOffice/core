@@ -91,7 +91,7 @@ void SwBaseShell::InsertRegionDialog(SfxRequest& rReq)
     }
     else
     {
-        const SfxPoolItem *pItem = 0;
+        const SfxPoolItem *pItem = nullptr;
         OUString aTmpStr;
         if ( SfxItemState::SET ==
                 pSet->GetItemState(FN_PARAM_REGION_NAME, true, &pItem) )
@@ -169,7 +169,7 @@ void SwBaseShell::InsertRegionDialog(SfxRequest& rReq)
             aSection.SetType( FILE_LINK_SECTION );
             aSection.SetLinkFileName(sLinkFileName);
         }
-        rSh.InsertSection(aSection, aSet.Count() ? &aSet : 0);
+        rSh.InsertSection(aSection, aSet.Count() ? &aSet : nullptr);
         rReq.Done();
     }
 }
@@ -206,7 +206,7 @@ void SwBaseShell::EditRegionDialog(SfxRequest& rReq)
 {
     const SfxItemSet* pArgs = rReq.GetArgs();
     sal_uInt16 nSlot = rReq.GetSlot();
-    const SfxPoolItem* pItem = 0;
+    const SfxPoolItem* pItem = nullptr;
     if(pArgs)
         pArgs->GetItemState(nSlot, false, &pItem);
     SwWrtShell& rWrtShell = GetShell();

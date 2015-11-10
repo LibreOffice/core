@@ -119,7 +119,7 @@ static void
 lcl_ReAssignTOXType(SwDoc* pDoc, SwTOXBase& rTOXBase, const OUString& rNewName)
 {
     const sal_uInt16 nUserCount = pDoc->GetTOXTypeCount( TOX_USER );
-    const SwTOXType* pNewType = 0;
+    const SwTOXType* pNewType = nullptr;
     for(sal_uInt16 nUser = 0; nUser < nUserCount; nUser++)
     {
         const SwTOXType* pType = pDoc->GetTOXType( TOX_USER, nUser );
@@ -334,16 +334,16 @@ public:
     Impl(   SwDoc & rDoc,
             const TOXTypes eType,
             SwTOXBaseSection *const pBaseSection)
-        : SwClient((pBaseSection) ? pBaseSection->GetFormat() : 0)
+        : SwClient((pBaseSection) ? pBaseSection->GetFormat() : nullptr)
         , m_Listeners(m_Mutex)
         , m_rPropSet(
             *aSwMapProvider.GetPropertySet(lcl_TypeToPropertyMap_Index(eType)))
         , m_eTOXType(eType)
-        , m_bIsDescriptor(0 == pBaseSection)
+        , m_bIsDescriptor(nullptr == pBaseSection)
         , m_pDoc(&rDoc)
         , m_pProps((m_bIsDescriptor)
             ? new SwDocIndexDescriptorProperties_Impl(rDoc.GetTOXType(eType, 0))
-            : 0)
+            : nullptr)
     {
     }
 
@@ -359,11 +359,11 @@ public:
             ?  &m_pProps->GetTOXBase()
             : ((pSectionFormat)
                 ? static_cast<SwTOXBaseSection*>(pSectionFormat->GetSection())
-                : 0));
+                : nullptr));
         if (!pTOXSection)
         {
             throw uno::RuntimeException(
-                    "SwXDocumentIndex: disposed or invalid", 0);
+                    "SwXDocumentIndex: disposed or invalid", nullptr);
         }
         return *pTOXSection;
     }
@@ -406,7 +406,7 @@ SwXDocumentIndex::SwXDocumentIndex(
 }
 
 SwXDocumentIndex::SwXDocumentIndex(const TOXTypes eType, SwDoc& rDoc)
-    : m_pImpl( new SwXDocumentIndex::Impl(rDoc, eType, 0) )
+    : m_pImpl( new SwXDocumentIndex::Impl(rDoc, eType, nullptr) )
 {
 }
 
@@ -902,7 +902,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     }
 
     SwSectionFormat *const pSectionFormat( m_pImpl->GetSectionFormat() );
-    SwTOXBase* pTOXBase = 0;
+    SwTOXBase* pTOXBase = nullptr;
     if (pSectionFormat)
     {
         pTOXBase = static_cast<SwTOXBaseSection*>(pSectionFormat->GetSection());
@@ -1258,8 +1258,8 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
 
 void lcl_CalcLayout(SwDoc *pDoc)
 {
-    SwViewShell *pViewShell = 0;
-    SwEditShell* pEditShell = 0;
+    SwViewShell *pViewShell = nullptr;
+    SwEditShell* pEditShell = nullptr;
     if( pDoc )
     {
         pViewShell = pDoc->getIDocumentLayoutAccess().GetCurrentViewShell();
@@ -1284,7 +1284,7 @@ void SAL_CALL SwXDocumentIndex::refresh() throw (uno::RuntimeException, std::exc
 
         SwSectionFormat *const pFormat = m_pImpl->GetSectionFormat();
         SwTOXBaseSection *const pTOXBase = (pFormat) ?
-            static_cast<SwTOXBaseSection*>(pFormat->GetSection()) : 0;
+            static_cast<SwTOXBaseSection*>(pFormat->GetSection()) : nullptr;
         if (!pTOXBase)
         {
             throw uno::RuntimeException(
@@ -1345,7 +1345,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
         ::sw::UnoTunnelGetImplementation<OTextCursorHelper>(xRangeTunnel);
 
     SwDoc *const pDoc =
-        (pRange) ? &pRange->GetDoc() : ((pCursor) ? pCursor->GetDoc() : 0);
+        (pRange) ? &pRange->GetDoc() : ((pCursor) ? pCursor->GetDoc() : nullptr);
     if (!pDoc)
     {
         throw lang::IllegalArgumentException();
@@ -1513,9 +1513,9 @@ uno::Reference<frame::XModel> SwXDocumentIndex::GetModel()
     if (pSectionFormat)
     {
         SwDocShell const*const pShell( pSectionFormat->GetDoc()->GetDocShell() );
-        return (pShell) ? pShell->GetModel() : 0;
+        return (pShell) ? pShell->GetModel() : nullptr;
     }
-    return 0;
+    return nullptr;
 }
 
 static sal_uInt16
@@ -1575,7 +1575,7 @@ public:
             *aSwMapProvider.GetPropertySet(lcl_TypeToPropertyMap_Mark(eType)))
         , m_eTOXType(eType)
         , m_EventListeners(m_Mutex)
-        , m_bIsDescriptor(0 == pMark)
+        , m_bIsDescriptor(nullptr == pMark)
         , m_TypeDepend(this, pType)
         , m_pTOXMark(pMark)
         , m_pDoc(pDoc)
@@ -1592,7 +1592,7 @@ public:
     void DeleteTOXMark()
     {
         m_pDoc->DeleteTOXMark(m_pTOXMark); // calls Invalidate() via Modify!
-        m_pTOXMark = 0;
+        m_pTOXMark = nullptr;
     }
 
     void InsertTOXMark(SwTOXType & rTOXType, SwTOXMark & rMark, SwPaM & rPam,
@@ -1604,7 +1604,7 @@ public:
         DeleteTOXMark();
         m_bInReplaceMark = false;
         try {
-            InsertTOXMark(rTOXType, rMark, rPam, 0);
+            InsertTOXMark(rTOXType, rMark, rPam, nullptr);
         } catch (...) {
             OSL_FAIL("ReplaceTOXMark() failed!");
             lang::EventObject const ev(
@@ -1641,8 +1641,8 @@ void SwXDocumentIndexMark::Impl::Invalidate()
             m_EventListeners.disposeAndClear(ev);
         }
     }
-    m_pDoc = 0;
-    m_pTOXMark = 0;
+    m_pDoc = nullptr;
+    m_pTOXMark = nullptr;
 }
 
 void SwXDocumentIndexMark::Impl::Modify(const SfxPoolItem *pOld, const SfxPoolItem *pNew)
@@ -1656,7 +1656,7 @@ void SwXDocumentIndexMark::Impl::Modify(const SfxPoolItem *pOld, const SfxPoolIt
 }
 
 SwXDocumentIndexMark::SwXDocumentIndexMark(const TOXTypes eToxType)
-    : m_pImpl( new SwXDocumentIndexMark::Impl(*this, 0, eToxType, 0, 0) )
+    : m_pImpl( new SwXDocumentIndexMark::Impl(*this, nullptr, eToxType, nullptr, nullptr) )
 {
 }
 
@@ -1839,13 +1839,13 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
     OTextCursorHelper *const pCursor =
         ::sw::UnoTunnelGetImplementation<OTextCursorHelper>(xRangeTunnel);
     SwDoc *const pDoc =
-        (pRange) ? &pRange->GetDoc() : ((pCursor) ? pCursor->GetDoc() : 0);
+        (pRange) ? &pRange->GetDoc() : ((pCursor) ? pCursor->GetDoc() : nullptr);
     if (!pDoc)
     {
         throw lang::IllegalArgumentException();
     }
 
-    const SwTOXType* pTOXType = 0;
+    const SwTOXType* pTOXType = nullptr;
     switch (m_pImpl->m_eTOXType)
     {
         case TOX_INDEX:
@@ -2000,7 +2000,7 @@ void SwXDocumentIndexMark::Impl::InsertTOXMark(
     }
 
     // rMark was copied into the document pool; now retrieve real format...
-    SwTextAttr * pTextAttr(0);
+    SwTextAttr * pTextAttr(nullptr);
     if (bMark)
     {
         // #i107672#
@@ -2027,7 +2027,7 @@ void SwXDocumentIndexMark::Impl::InsertTOXMark(
     {
         throw uno::RuntimeException(
             "SwXDocumentIndexMark::InsertTOXMark(): cannot insert attribute",
-            0);
+            nullptr);
     }
 
     m_pDoc = pDoc;
@@ -2806,7 +2806,7 @@ static const struct TokenType_ g_TokenTypes[] =
     { "TokenHyperlinkStart",        TOKEN_LINK_START },
     { "TokenHyperlinkEnd",          TOKEN_LINK_END },
     { "TokenBibliographyDataField", TOKEN_AUTHORITY },
-    { 0, static_cast<enum FormTokenType>(0) }
+    { nullptr, static_cast<enum FormTokenType>(0) }
 };
 
 void SAL_CALL

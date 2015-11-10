@@ -39,11 +39,11 @@
 #include <IDocumentFieldsAccess.hxx>
 #include <DocumentLayoutManager.hxx>
 
-SwLayVout     *SwRootFrm::mpVout = 0;
+SwLayVout     *SwRootFrm::mpVout = nullptr;
 bool           SwRootFrm::mbInPaint = false;
 bool           SwRootFrm::mbNoVirDev = false;
 
-SwCache *SwFrm::mpCache = 0;
+SwCache *SwFrm::mpCache = nullptr;
 
 long FirstMinusSecond( long nFirst, long nSecond )
     { return nFirst - nSecond; }
@@ -384,7 +384,7 @@ CurrShell::CurrShell( SwViewShell *pNew )
         pRoot->mpCurrShells->insert( this );
     }
     else
-        pPrev = 0;
+        pPrev = nullptr;
 }
 
 CurrShell::~CurrShell()
@@ -397,7 +397,7 @@ CurrShell::~CurrShell()
         if ( pRoot->mpCurrShells->empty() && pRoot->mpWaitingCurrShell )
         {
             pRoot->mpCurrShell = pRoot->mpWaitingCurrShell;
-            pRoot->mpWaitingCurrShell = 0;
+            pRoot->mpWaitingCurrShell = nullptr;
         }
     }
 }
@@ -429,14 +429,14 @@ void SwRootFrm::DeRegisterShell( SwViewShell *pSh )
 
     // Doesn't matter anymore
     if ( mpWaitingCurrShell == pSh )
-        mpWaitingCurrShell = 0;
+        mpWaitingCurrShell = nullptr;
 
     // Remove references
     for ( SwCurrShells::iterator it = mpCurrShells->begin(); it != mpCurrShells->end(); ++it )
     {
         CurrShell *pC = *it;
         if (pC->pPrev == pSh)
-            pC->pPrev = 0;
+            pC->pPrev = nullptr;
     }
 }
 
@@ -452,7 +452,7 @@ void InitCurrShells( SwRootFrm *pRoot )
 |*/
 SwRootFrm::SwRootFrm( SwFrameFormat *pFormat, SwViewShell * pSh ) :
     SwLayoutFrm( pFormat->GetDoc()->MakeFrameFormat(
-        "Root", pFormat ), 0 ),
+        "Root", pFormat ), nullptr ),
     maPagesArea(),
     mnViewWidth( -1 ),
     mnColumns( 0 ),
@@ -469,13 +469,13 @@ SwRootFrm::SwRootFrm( SwFrameFormat *pFormat, SwViewShell * pSh ) :
     mbCallbackActionEnabled ( false ),
     mbLayoutFreezed ( false ),
     mnBrowseWidth( MM50*4 ), //2cm minimum
-    mpTurbo( 0 ),
-    mpLastPage( 0 ),
+    mpTurbo( nullptr ),
+    mpLastPage( nullptr ),
     mpCurrShell( pSh ),
-    mpWaitingCurrShell( 0 ),
-    mpCurrShells(NULL),
-    mpDrawPage( 0 ),
-    mpDestroy( 0 ),
+    mpWaitingCurrShell( nullptr ),
+    mpCurrShells(nullptr),
+    mpDrawPage( nullptr ),
+    mpDestroy( nullptr ),
     mnPhyPageNums( 0 ),
     mnAccessibleShells( 0 )
 {
@@ -513,10 +513,10 @@ void SwRootFrm::Init( SwFrameFormat* pFormat )
     SwNodeIndex aIndex( *pDoc->GetNodes().GetEndOfContent().StartOfSectionNode() );
     SwContentNode *pNode = pDoc->GetNodes().GoNextSection( &aIndex, true, false );
     // #123067# pNode = 0 can really happen
-    SwTableNode *pTableNd= pNode ? pNode->FindTableNode() : 0;
+    SwTableNode *pTableNd= pNode ? pNode->FindTableNode() : nullptr;
 
     // Get hold of PageDesc (either via FrameFormat of the first node or the initial one).
-    SwPageDesc *pDesc = 0;
+    SwPageDesc *pDesc = nullptr;
     ::boost::optional<sal_uInt16> oPgNum;
 
     if ( pTableNd )
@@ -545,7 +545,7 @@ void SwRootFrm::Init( SwFrameFormat* pFormat )
     bool bFirst = !oPgNum || 1 == oPgNum.get();
 
     // Create a page and put it in the layout
-    SwPageFrm *pPage = ::InsertNewPage( *pDesc, this, bOdd, bFirst, false, false, 0 );
+    SwPageFrm *pPage = ::InsertNewPage( *pDesc, this, bOdd, bFirst, false, false, nullptr );
 
     // Find the first page in the Bodytext section.
     SwLayoutFrm *pLay = pPage->FindBodyCont();
@@ -557,7 +557,7 @@ void SwRootFrm::Init( SwFrameFormat* pFormat )
     //Remove masters that haven't been replaced yet from the list.
     RemoveMasterObjs( mpDrawPage );
     if( rSettingAccess.get(DocumentSettingId::GLOBAL_DOCUMENT) )
-        rFieldsAccess.UpdateRefFields( NULL );
+        rFieldsAccess.UpdateRefFields( nullptr );
     //b6433357: Update page fields after loading
     if ( !mpCurrShell || !mpCurrShell->Imp()->IsUpdateExpFields() )
     {
@@ -576,7 +576,7 @@ void SwRootFrm::Init( SwFrameFormat* pFormat )
 void SwRootFrm::DestroyImpl()
 {
     mbTurboAllowed = false;
-    mpTurbo = 0;
+    mpTurbo = nullptr;
     // fdo#39510 crash on document close with footnotes
     // Object ownership in writer and esp. in layout are a mess: Before the
     // document/layout split SwDoc and SwRootFrm were essentially one object
@@ -586,7 +586,7 @@ void SwRootFrm::DestroyImpl()
     // also searches backwards to find the master of footnotes, they must be
     // considered to be owned by the SwRootFrm and also be destroyed here,
     // before tearing down the (now footnote free) rest of the layout.
-    RemoveFootnotes(0, false, true);
+    RemoveFootnotes(nullptr, false, true);
 
     if(pBlink)
         pBlink->FrmDelete( this );
@@ -598,14 +598,14 @@ void SwRootFrm::DestroyImpl()
         pDoc->GetDocumentLayoutManager().ClearSwLayouterEntries();
     }
     delete mpDestroy;
-    mpDestroy = 0;
+    mpDestroy = nullptr;
 
     // Remove references
     for ( SwCurrShells::iterator it = mpCurrShells->begin(); it != mpCurrShells->end(); ++it )
-        (*it)->pRoot = 0;
+        (*it)->pRoot = nullptr;
 
     delete mpCurrShells;
-    mpCurrShells = 0;
+    mpCurrShells = nullptr;
 
     // Some accessible shells are left => problems on second SwFrm::Destroy call
     assert(0 == mnAccessibleShells);

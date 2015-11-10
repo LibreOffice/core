@@ -407,7 +407,7 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
             {
                 nPorLen = nBreakPos - rInf.GetIdx();
                 if( '-' == rInf.GetText()[ nBreakPos - 1 ] )
-                    xHyphWord = NULL;
+                    xHyphWord = nullptr;
             }
         }
         else if ( !bHyph && nBreakPos >= rInf.GetLineStart() )
@@ -415,7 +415,7 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
             OSL_ENSURE( nBreakPos != COMPLETE_STRING, "we should have found a break pos" );
 
             // found break position within line
-            xHyphWord = NULL;
+            xHyphWord = nullptr;
 
             // check, if break position is soft hyphen and an underflow
             // has to be triggered

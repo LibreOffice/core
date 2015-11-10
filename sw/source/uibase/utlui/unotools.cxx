@@ -159,12 +159,12 @@ void SwOneExampleFrame::CreateControl()
 
 void    SwOneExampleFrame::DisposeControl()
 {
-    _xCursor = 0;
+    _xCursor = nullptr;
     if(_xControl.is())
         _xControl->dispose();
-    _xControl = 0;
-    _xModel = 0;
-    _xController = 0;
+    _xControl = nullptr;
+    _xModel = nullptr;
+    _xController = nullptr;
 }
 
 static void disableScrollBars(uno::Reference< beans::XPropertySet > xViewProps,

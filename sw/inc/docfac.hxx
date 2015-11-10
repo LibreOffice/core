@@ -29,7 +29,7 @@ protected:
     SwDoc* pDoc;
 
 public:
-    SwDocFac( SwDoc *pDoc = 0 );
+    SwDocFac( SwDoc *pDoc = nullptr );
     ~SwDocFac();
 
     /// Document is created after calling Read(...).

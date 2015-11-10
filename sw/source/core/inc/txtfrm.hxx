@@ -132,7 +132,7 @@ class SwTextFrm: public SwContentFrm
 
     // Changes the Frame or not (cf. FlyCnt)
     bool _GetCrsrOfst(SwPosition *pPos, const Point &rPoint,
-                      const bool bChgFrm, SwCrsrMoveState* = 0 ) const;
+                      const bool bChgFrm, SwCrsrMoveState* = nullptr ) const;
     void FillCrsrPos( SwFillData &rFill ) const;
 
     // Format exactly one Line
@@ -228,7 +228,7 @@ public:
      * Returns false if rPos > number of character is string
      */
     virtual bool GetCharRect( SwRect& rRect, const SwPosition& rPos,
-                                SwCrsrMoveState* pCMS = 0 ) const override;
+                                SwCrsrMoveState* pCMS = nullptr ) const override;
 
     /// A slimmer version of GetCharRect for autopositioning Frames
     bool GetAutoPos( SwRect &, const SwPosition& ) const;
@@ -267,7 +267,7 @@ public:
      *          returns true
      */
     virtual bool GetCrsrOfst( SwPosition *, Point&,
-                                  SwCrsrMoveState* = 0, bool bTestBackground = false ) const override;
+                                  SwCrsrMoveState* = nullptr, bool bTestBackground = false ) const override;
 
     /**
      * Makes sure that the Frame is not switched (e.g. switched for a
@@ -279,7 +279,7 @@ public:
     void   PaintExtraData( const SwRect & rRect ) const; /// Page number etc.
     SwRect Paint();
     virtual void Paint( vcl::RenderContext& rRenderContext, SwRect const&,
-                        SwPrintData const*const pPrintData = NULL ) const override;
+                        SwPrintData const*const pPrintData = nullptr ) const override;
     virtual bool GetInfo( SfxPoolItem & ) const override;
 
     /**
@@ -338,7 +338,7 @@ public:
      * potentially destroyed and replaced by Prepare
      */
     virtual bool Prepare( const PrepareHint ePrep = PREP_CLEAR,
-                          const void *pVoid = 0, bool bNotify = true ) override;
+                          const void *pVoid = nullptr, bool bNotify = true ) override;
 
     /**
      * nMaxHeight is the required height
@@ -433,7 +433,7 @@ public:
      */
     SwTwips GetFootnoteLine( const SwTextFootnote *pFootnote ) const;
 
-    virtual void Format( vcl::RenderContext* pRenderContext, const SwBorderAttrs *pAttrs = 0 ) override;
+    virtual void Format( vcl::RenderContext* pRenderContext, const SwBorderAttrs *pAttrs = nullptr ) override;
     virtual void CheckDirection( bool bVert ) override;
 
     /// Returns the sum of line height in pLine
@@ -644,7 +644,7 @@ public:
     //SwTextFrm::_AdjustFollow removing the pFrm we're trying to Make
     TextFrmLockGuard(SwFrm* pFrm)
     {
-        m_pTextFrm = pFrm->IsTextFrm() ? static_cast<SwTextFrm*>(pFrm) : 0;
+        m_pTextFrm = pFrm->IsTextFrm() ? static_cast<SwTextFrm*>(pFrm) : nullptr;
         if (m_pTextFrm)
         {
             m_bOldLocked = m_pTextFrm->IsLocked();

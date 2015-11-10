@@ -226,8 +226,8 @@ void SwFrm::CheckDirChange()
             }
 
             SwFrm* pFrm = static_cast<SwLayoutFrm*>(this)->Lower();
-            const SwFormatCol* pCol = NULL;
-            SwLayoutFrm* pBody = 0;
+            const SwFormatCol* pCol = nullptr;
+            SwLayoutFrm* pBody = nullptr;
             if( pFrm )
             {
                 if( IsPageFrm() )
@@ -367,7 +367,7 @@ void SwFrm::DestroyImpl()
             }
         }
         delete mpDrawObjs;
-        mpDrawObjs = 0;
+        mpDrawObjs = nullptr;
     }
 }
 
@@ -422,7 +422,7 @@ SwContentFrm::SwContentFrm( SwContentNode * const pContent, SwFrm* pSib ) :
 void SwContentFrm::DestroyImpl()
 {
     const SwContentNode* pCNd;
-    if( 0 != ( pCNd = dynamic_cast<SwContentNode*>( GetRegisteredIn() ) ) &&
+    if( nullptr != ( pCNd = dynamic_cast<SwContentNode*>( GetRegisteredIn() ) ) &&
         !pCNd->GetDoc()->IsInDtor() )
     {
         //Unregister from root if I'm still in turbo there.

@@ -41,7 +41,7 @@ public:
     }
 
     inline ~SwSaveClip();
-    inline void ChgClip( const SwRect &rRect, const SwTextFrm* pFrm = 0,
+    inline void ChgClip( const SwRect &rRect, const SwTextFrm* pFrm = nullptr,
                          bool bEnlargeRect = false)
              { if( pOut ) _ChgClip( rRect, pFrm, bEnlargeRect ); }
            void Reset();
@@ -82,7 +82,7 @@ public:
 };
 
 inline SwDbgOut::SwDbgOut( OutputDevice* pOutDev, const bool bOn )
-               :pOut( bOn ? pOutDev : 0 )
+               :pOut( bOn ? pOutDev : nullptr )
 { }
 
 inline DbgBackColor::DbgBackColor( OutputDevice* pOutDev, const bool bOn,

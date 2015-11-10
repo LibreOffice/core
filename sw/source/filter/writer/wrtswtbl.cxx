@@ -52,7 +52,7 @@ sal_Int16 SwWriteTableCell::GetVertOri() const
 }
 
 SwWriteTableRow::SwWriteTableRow( long nPosition, bool bUseLayoutHeights )
-    : pBackground(0), nPos(nPosition), mbUseLayoutHeights(bUseLayoutHeights),
+    : pBackground(nullptr), nPos(nPosition), mbUseLayoutHeights(bUseLayoutHeights),
     nTopBorder(USHRT_MAX), nBottomBorder(USHRT_MAX), bTopBorder(true),
     bBottomBorder(true)
 {
@@ -174,17 +174,17 @@ const SvxBrushItem *SwWriteTable::GetLineBrush( const SwTableBox *pBox,
             {
                 if( !pRow->GetBackground() )
                     pRow->SetBackground( static_cast<const SvxBrushItem *>(pItem) );
-                pItem = 0;
+                pItem = nullptr;
             }
 
             return static_cast<const SvxBrushItem *>(pItem);
         }
 
         pBox = pLine->GetUpper();
-        pLine = pBox ? pBox->GetUpper() : 0;
+        pLine = pBox ? pBox->GetUpper() : nullptr;
     }
 
-    return 0;
+    return nullptr;
 }
 
 void SwWriteTable::MergeBorders( const SvxBorderLine* pBorderLine,
@@ -362,7 +362,7 @@ long SwWriteTable::GetAbsHeight(long nRawHeight, size_t const nRow,
 
     // Additional subtract in the first column CELLSPACING and
     // line thickness once again.
-    const SwWriteTableRow *pRow = 0;
+    const SwWriteTableRow *pRow = nullptr;
     if( nRow==0 )
     {
         nRawHeight -= nCellSpacing;
@@ -607,7 +607,7 @@ void SwWriteTable::FillTableRowsCols( long nStartRPos, sal_uInt16 nStartRow,
             if( bOutAtRow )
             {
                 pRow->SetBackground( pLineBrush );
-                pBrushItem = 0;
+                pBrushItem = nullptr;
             }
             else
                 pBrushItem = pLineBrush;
@@ -615,7 +615,7 @@ void SwWriteTable::FillTableRowsCols( long nStartRPos, sal_uInt16 nStartRow,
         else
         {
             pRow->SetBackground( pLineBrush );
-            pBrushItem = 0;
+            pBrushItem = nullptr;
         }
 
         const SwTableBoxes::size_type nBoxes = rBoxes.size();
@@ -750,7 +750,7 @@ SwWriteTable::SwWriteTable(const SwTable* pTable, const SwTableLines& rLines, lo
     // and is highly coupled to CollectTableRowsCols - sadly.
     bUseLayoutHeights = true;
     // And now fill with life
-    FillTableRowsCols( 0, 0, 0, 0, 0, nParentWidth, rLines, 0, nMaxDepth - 1, static_cast< sal_uInt16 >(nNumOfRowsToRepeat) );
+    FillTableRowsCols( 0, 0, 0, 0, 0, nParentWidth, rLines, nullptr, nMaxDepth - 1, static_cast< sal_uInt16 >(nNumOfRowsToRepeat) );
 
     // Adjust some Twip values to pixel boundaries
     if( !nBorder )

@@ -49,7 +49,7 @@ private:
     VclPtr<CheckBox> m_pNumberingOnCB;
     VclPtr<CheckBox> m_pNumberingOnFooterHeader;
     DECL_LINK_TYPED(OKHdl, Button*, void);
-    DECL_LINK_TYPED(LineOnOffHdl, Button* = 0, void);
+    DECL_LINK_TYPED(LineOnOffHdl, Button* = nullptr, void);
     DECL_LINK_TYPED(ModifyHdl, Edit&, void);
 
 public:

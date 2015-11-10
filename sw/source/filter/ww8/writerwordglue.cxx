@@ -156,7 +156,7 @@ namespace myImplHelpers
 
         OSL_ENSURE(SAL_N_ELEMENTS(aArr) == 75, "Style Array has false size");
 
-        SwTextFormatColl* pRet = 0;
+        SwTextFormatColl* pRet = nullptr;
         //If this is a built-in word style that has a built-in writer
         //equivalent, then map it to one of our built in styles regardless
         //of its name
@@ -220,7 +220,7 @@ namespace myImplHelpers
                 eLookup = RES_POOLCHR_NORMAL_END;
                 break;
         }
-        SwCharFormat *pRet = 0;
+        SwCharFormat *pRet = nullptr;
         if (eLookup != RES_POOLCHR_NORMAL_END)
             pRet = mrDoc.getIDocumentStylePoolAccess().GetCharFormatFromPool( static_cast< sal_uInt16 >(eLookup) );
         return pRet;
@@ -567,7 +567,7 @@ namespace sw
             UErrorCode nError = U_ZERO_ERROR;
             UBiDi* pBidi = ubidi_openSized(rText.getLength(), 0, &nError);
             ubidi_setPara(pBidi, reinterpret_cast<const UChar *>(rText.getStr()), rText.getLength(),
-                    static_cast< UBiDiLevel >(eDefaultDir), 0, &nError);
+                    static_cast< UBiDiLevel >(eDefaultDir), nullptr, &nError);
 
             sal_Int32 nCount = ubidi_countRuns(pBidi, &nError);
             aDirChanges.reserve(nCount);

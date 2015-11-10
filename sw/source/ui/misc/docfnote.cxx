@@ -47,8 +47,8 @@ SwFootNoteOptionDlg::SwFootNoteOptionDlg(vcl::Window *pParent, SwWrtShell &rS)
     aOldOkHdl = GetOKButton().GetClickHdl();
     GetOKButton().SetClickHdl( LINK( this, SwFootNoteOptionDlg, OkHdl ) );
 
-    m_nFootNoteId = AddTabPage( "footnotes", SwFootNoteOptionPage::Create, 0 );
-    m_nEndNoteId = AddTabPage( "endnotes",  SwEndNoteOptionPage::Create, 0 );
+    m_nFootNoteId = AddTabPage( "footnotes", SwFootNoteOptionPage::Create, nullptr );
+    m_nEndNoteId = AddTabPage( "endnotes",  SwEndNoteOptionPage::Create, nullptr );
 }
 
 void SwFootNoteOptionDlg::PageCreated( sal_uInt16 /*nId*/, SfxTabPage &rPage )
@@ -74,13 +74,13 @@ SwEndNoteOptionPage::SwEndNoteOptionPage(vcl::Window *pParent, bool bEN,
         bEN ? OString("EndnotePage") : OString("FootnotePage"),
         bEN ? OUString("modules/swriter/ui/endnotepage.ui") : OUString("modules/swriter/ui/footnotepage.ui"),
         &rSet)
-    , m_pNumCountBox(NULL)
-    , m_pPosFT(NULL)
-    , m_pPosPageBox(NULL)
-    , m_pPosChapterBox(NULL)
-    , m_pContEdit(NULL)
-    , m_pContFromEdit(NULL)
-    , pSh(0)
+    , m_pNumCountBox(nullptr)
+    , m_pPosFT(nullptr)
+    , m_pPosPageBox(nullptr)
+    , m_pPosChapterBox(nullptr)
+    , m_pContEdit(nullptr)
+    , m_pContFromEdit(nullptr)
+    , pSh(nullptr)
     , bPosDoc(false)
     , bEndNote(bEN)
 {
@@ -338,7 +338,7 @@ IMPL_LINK_NOARG_TYPED(SwEndNoteOptionPage, PosChapterHdl, Button*, void)
 
 static SwCharFormat* lcl_GetCharFormat( SwWrtShell* pSh, const OUString& rCharFormatName )
 {
-    SwCharFormat* pFormat = 0;
+    SwCharFormat* pFormat = nullptr;
     const sal_uInt16 nChCount = pSh->GetCharFormatCount();
     for(sal_uInt16 i = 0; i< nChCount; i++)
     {

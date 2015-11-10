@@ -42,7 +42,7 @@ public:
     virtual void MouseMove( const MouseEvent& rMEvt ) override;
     virtual void Activate( ) override;
 
-    void UpdatePosition( const Point* pEvtPt = NULL );
+    void UpdatePosition( const Point* pEvtPt = nullptr );
 
     virtual void ShowAll( bool bShow ) override;
     virtual bool Contains( const Point &rDocPt ) const override;

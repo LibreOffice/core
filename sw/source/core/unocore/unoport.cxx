@@ -82,8 +82,8 @@ SwXTextPortion::SwXTextPortion(
             ?  PROPERTY_MAP_REDLINE_PORTION
             :  PROPERTY_MAP_TEXTPORTION_EXTENSIONS))
     , m_xParentText(rParent)
-    , m_FrameDepend(this, 0)
-    , m_pFrameFormat(0)
+    , m_FrameDepend(this, nullptr)
+    , m_pFrameFormat(nullptr)
     , m_ePortionType(eType)
     , m_bIsCollapsed(false)
 {
@@ -115,12 +115,12 @@ SwXTextPortion::SwXTextPortion(
     , m_pPropSet(aSwMapProvider.GetPropertySet(
                     PROPERTY_MAP_TEXTPORTION_EXTENSIONS))
     , m_xParentText(xParent)
-    , m_pRubyText   ( bIsEnd ? 0 : new uno::Any )
-    , m_pRubyStyle  ( bIsEnd ? 0 : new uno::Any )
-    , m_pRubyAdjust ( bIsEnd ? 0 : new uno::Any )
-    , m_pRubyIsAbove( bIsEnd ? 0 : new uno::Any )
-    , m_FrameDepend(this, 0)
-    , m_pFrameFormat(0)
+    , m_pRubyText   ( bIsEnd ? nullptr : new uno::Any )
+    , m_pRubyStyle  ( bIsEnd ? nullptr : new uno::Any )
+    , m_pRubyAdjust ( bIsEnd ? nullptr : new uno::Any )
+    , m_pRubyIsAbove( bIsEnd ? nullptr : new uno::Any )
+    , m_FrameDepend(this, nullptr)
+    , m_pFrameFormat(nullptr)
     , m_ePortionType( bIsEnd ? PORTION_RUBY_END : PORTION_RUBY_START )
     , m_bIsCollapsed(false)
 {
@@ -278,7 +278,7 @@ void SwXTextPortion::GetPropertyValue(
                     pRet = "AnnotationEnd";
                     break;
                 default:
-                    pRet = 0;
+                    pRet = nullptr;
                 }
 
                 OUString sRet;
@@ -360,7 +360,7 @@ void SwXTextPortion::GetPropertyValue(
             break;
             case RES_TXTATR_CJK_RUBY:
             {
-                const uno::Any* pToSet = 0;
+                const uno::Any* pToSet = nullptr;
                 switch(rEntry.nMemberId)
                 {
                     case MID_RUBY_TEXT :    pToSet = m_pRubyText.get();   break;
@@ -404,7 +404,7 @@ uno::Sequence< uno::Any > SAL_CALL SwXTextPortion::GetPropertyValues_Impl(
     SwUnoCrsr& rUnoCrsr = GetCursor();
 
     {
-        SfxItemSet *pSet = 0;
+        SfxItemSet *pSet = nullptr;
         // get starting point for the look-up, either the provided one or else
         // from the beginning of the map
         const SfxItemPropertyMap& rMap = m_pPropSet->getPropertyMap();
@@ -621,7 +621,7 @@ uno::Sequence< beans::GetDirectPropertyTolerantResult > SAL_CALL SwXTextPortion:
         sal_Int32 nProps = rPropertyNames.getLength();
         const OUString *pProp = rPropertyNames.getConstArray();
 
-        SfxItemSet *pSet = 0;
+        SfxItemSet *pSet = nullptr;
 
         const SfxItemPropertyMap& rPropMap = m_pPropSet->getPropertyMap();
 

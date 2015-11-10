@@ -102,7 +102,7 @@ SwDropPortion::SwDropPortion( const sal_uInt16 nLineCnt,
                               const sal_uInt16 nDrpHeight,
                               const sal_uInt16 nDrpDescent,
                               const sal_uInt16 nDist )
-  : pPart( 0 ),
+  : pPart( nullptr ),
     nLines( nLineCnt ),
     nDropHeight(nDrpHeight),
     nDropDescent(nDrpDescent),
@@ -346,7 +346,7 @@ void SwDropPortion::Paint( const SwTextPaintInfo &rInf ) const
             rInf.DrawBackground( *this );
 
         // make sure that font is not rotated
-        SwFont* pTmpFont = 0;
+        SwFont* pTmpFont = nullptr;
         if ( rInf.GetFont()->GetOrientation( rInf.GetTextFrm()->IsVertical() ) )
         {
             pTmpFont = new SwFont( *rInf.GetFont() );
@@ -371,7 +371,7 @@ bool SwDropPortion::FormatText( SwTextFormatInfo &rInf )
         return false;
 
     // looks like shit, but what can we do?
-    rInf.SetUnderflow( 0 );
+    rInf.SetUnderflow( nullptr );
     Truncate();
     SetLen( nOldLen );
     rInf.SetLen( nOldInfLen );
@@ -407,7 +407,7 @@ SwPosSize SwDropPortion::GetTextSize( const SwTextSizeInfo &rInf ) const
     }
 
     // robust
-    SwFontSave aFontSave( rInf, pCurrPart ? &pCurrPart->GetFont() : 0 );
+    SwFontSave aFontSave( rInf, pCurrPart ? &pCurrPart->GetFont() : nullptr );
     SwPosSize aPosSize( SwTextPortion::GetTextSize( rInf ) );
     aPosSize.Width( aPosSize.Width() + nMyX );
 
@@ -507,17 +507,17 @@ void SwTextFormatter::GuessDropHeight( const sal_uInt16 nLines )
 SwDropPortion *SwTextFormatter::NewDropPortion( SwTextFormatInfo &rInf )
 {
     if( !pDropFormat )
-        return 0;
+        return nullptr;
 
     sal_Int32 nPorLen = pDropFormat->GetWholeWord() ? 0 : pDropFormat->GetChars();
     nPorLen = pFrm->GetTextNode()->GetDropLen( nPorLen );
     if( !nPorLen )
     {
         static_cast<SwTextFormatter*>(this)->ClearDropFormat();
-        return 0;
+        return nullptr;
     }
 
-    SwDropPortion *pDropPor = 0;
+    SwDropPortion *pDropPor = nullptr;
 
     // first or second round?
     if ( !( GetDropHeight() || IsOnceMore() ) )
@@ -551,7 +551,7 @@ SwDropPortion *SwTextFormatter::NewDropPortion( SwTextFormatInfo &rInf )
     OSL_ENSURE( ! rInf.GetIdx(), "Drop Portion not at 0 position!" );
     sal_Int32 nNextChg = 0;
     const SwCharFormat* pFormat = pDropFormat->GetCharFormat();
-    SwDropPortionPart* pCurrPart = 0;
+    SwDropPortionPart* pCurrPart = nullptr;
 
     while ( nNextChg  < nPorLen )
     {
@@ -668,7 +668,7 @@ void SwDropPortion::DeleteDropCapCache()
 
 void SwDropCapCache::CalcFontSize( SwDropPortion* pDrop, SwTextFormatInfo &rInf )
 {
-    const void* pFntNo = 0;
+    const void* pFntNo = nullptr;
     sal_uInt16 nTmpIdx = 0;
 
     OSL_ENSURE( pDrop->GetPart(),"DropPortion without part during font calculation");
@@ -1002,7 +1002,7 @@ bool SwDropPortion::Format( SwTextFormatInfo &rInf )
             // And now for another round
             nDropHeight = nLines = 0;
             delete pPart;
-            pPart = NULL;
+            pPart = nullptr;
 
             // Meanwhile use normal formatting
             bFull = SwTextPortion::Format( rInf );

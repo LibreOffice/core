@@ -85,9 +85,9 @@ SwTextFormatColl* SwEditShell::MakeTextFormatColl(const OUString& rFormatCollNam
         SwTextFormatColl* pParent)
 {
     SwTextFormatColl *pColl;
-    if ( pParent == 0 )
+    if ( pParent == nullptr )
         pParent = &GetTextFormatColl(0);
-    if (  (pColl=GetDoc()->MakeTextFormatColl(rFormatCollName, pParent)) == 0 )
+    if (  (pColl=GetDoc()->MakeTextFormatColl(rFormatCollName, pParent)) == nullptr )
     {
         OSL_FAIL( "MakeTextFormatColl failed" );
     }
@@ -113,11 +113,11 @@ void SwEditShell::FillByEx(SwTextFormatColl* pColl, bool bReset)
 
         // Do NOT copy AutoNumRules into the template
         const SfxPoolItem* pItem;
-        const SwNumRule* pRule = 0;
+        const SwNumRule* pRule = nullptr;
         if( SfxItemState::SET == pSet->GetItemState( RES_BREAK, false ) ||
             SfxItemState::SET == pSet->GetItemState( RES_PAGEDESC,false ) ||
             ( SfxItemState::SET == pSet->GetItemState( RES_PARATR_NUMRULE,
-                false, &pItem ) && 0 != (pRule = GetDoc()->FindNumRulePtr(
+                false, &pItem ) && nullptr != (pRule = GetDoc()->FindNumRulePtr(
                 static_cast<const SwNumRuleItem*>(pItem)->GetValue() )) &&
                 pRule && pRule->IsAutoRule() )
             )
@@ -127,7 +127,7 @@ void SwEditShell::FillByEx(SwTextFormatColl* pColl, bool bReset)
             aSet.ClearItem( RES_PAGEDESC );
 
             if( pRule || (SfxItemState::SET == pSet->GetItemState( RES_PARATR_NUMRULE,
-                false, &pItem ) && 0 != (pRule = GetDoc()->FindNumRulePtr(
+                false, &pItem ) && nullptr != (pRule = GetDoc()->FindNumRulePtr(
                 static_cast<const SwNumRuleItem*>(pItem)->GetValue() )) &&
                 pRule && pRule->IsAutoRule() ))
                 aSet.ClearItem( RES_PARATR_NUMRULE );

@@ -57,7 +57,7 @@ void SwRenderData::CreatePostItData( SwDoc *pDoc, const SwViewOption *pViewOpt, 
     SwViewOption  aViewOpt( *pViewOpt );
     aViewOpt.SetOnlineSpell( false );
 
-    m_pPostItShell.reset(new SwViewShell(*new SwDoc, 0, &aViewOpt, pOutDev));
+    m_pPostItShell.reset(new SwViewShell(*new SwDoc, nullptr, &aViewOpt, pOutDev));
 }
 
 void SwRenderData::DeletePostItData()
@@ -65,7 +65,7 @@ void SwRenderData::DeletePostItData()
     if (HasPostItData())
     {
         // printer needs to remain at the real document
-        m_pPostItShell->GetDoc()->getIDocumentDeviceAccess().setPrinter( 0, false, false );
+        m_pPostItShell->GetDoc()->getIDocumentDeviceAccess().setPrinter( nullptr, false, false );
         m_pPostItShell.reset();
         m_pPostItFields.reset();
     }

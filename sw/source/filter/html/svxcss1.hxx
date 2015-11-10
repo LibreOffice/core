@@ -145,7 +145,7 @@ public:
     void CopyBorderInfo( sal_uInt16 nCount, sal_uInt16 nWhat );
 
     void SetBoxItem( SfxItemSet& rItemSet, sal_uInt16 nMinBorderDist,
-                     const SvxBoxItem* pDflt=0, bool bTable = false );
+                     const SvxBoxItem* pDflt=nullptr, bool bTable = false );
 
 };
 
@@ -242,7 +242,7 @@ public:
     SvxCSS1Parser( SfxItemPool& rPool,
                     const OUString& rBaseURL,
                    sal_uInt16 nMinFixLineSp,
-                   sal_uInt16 *pWhichIds=0, sal_uInt16 nWhichIds=0 );
+                   sal_uInt16 *pWhichIds=nullptr, sal_uInt16 nWhichIds=0 );
     virtual ~SvxCSS1Parser();
 
     bool IsIgnoreFontFamily() const { return bIgnoreFontFamily; }

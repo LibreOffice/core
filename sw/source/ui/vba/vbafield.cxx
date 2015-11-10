@@ -386,32 +386,32 @@ struct DocPropertyTable
 static const DocPropertyTable aDocPropertyTables[] =
 {
     { "Author", "com.sun.star.text.textfield.docinfo.CreateAuthor" },
-    { "Bytes", NULL },
-    { "Category", NULL },
-    { "Characters",NULL },
-    { "CharactersWithSpaces", NULL },
+    { "Bytes", nullptr },
+    { "Category", nullptr },
+    { "Characters",nullptr },
+    { "CharactersWithSpaces", nullptr },
     { "Comments", "com.sun.star.text.textfield.docinfo.Description" },
-    { "Company", NULL },
+    { "Company", nullptr },
     { "CreateTime", "com.sun.star.text.textfield.docinfo.CreateDateTime" },
-    { "HyperlinkBase", NULL },
+    { "HyperlinkBase", nullptr },
     { "Keywords", "com.sun.star.text.textfield.docinfo.Keywords" },
     { "LastPrinted", "com.sun.star.text.textfield.docinfo.PrintDateTime" },
     { "LastSavedBy", "com.sun.star.text.textfield.docinfo.ChangeAuthor" },
     { "LastSavedTime", "com.sun.star.text.textfield.docinfo.ChangeDateTime" },
-    { "Lines", NULL },
-    { "Manager", NULL },
-    { "NameofApplication", NULL },
-    { "ODMADocID", NULL },
+    { "Lines", nullptr },
+    { "Manager", nullptr },
+    { "NameofApplication", nullptr },
+    { "ODMADocID", nullptr },
     { "Pages", "com.sun.star.text.textfield.PageCount" },
     { "Paragraphs", "com.sun.star.text.textfield.ParagraphCount" },
     { "RevisionNumber", "com.sun.star.text.textfield.docinfo.Revision" },
-    { "Security", NULL },
+    { "Security", nullptr },
     { "Subject", "com.sun.star.text.textfield.docinfo.Subject" },
     { "Template", "com.sun.star.text.textfield.TemplateName" },
     { "Title", "com.sun.star.text.textfield.docinfo.Title" },
     { "TotalEditingTime", "com.sun.star.text.textfield.docinfo.EditTime" },
     { "Words", "com.sun.star.text.textfield.WordCount" },
-    { NULL, NULL }
+    { nullptr, nullptr }
 };
 
 uno::Reference< text::XTextField > SwVbaFields::Create_Field_DocProperty( const OUString& _text ) throw (uno::RuntimeException)
@@ -443,11 +443,11 @@ uno::Reference< text::XTextField > SwVbaFields::Create_Field_DocProperty( const 
     bool bCustom = true;
     OUString sFieldService;
     // find the build in document properties
-    for( const DocPropertyTable* pTable = aDocPropertyTables; pTable->sDocPropertyName != NULL; pTable++ )
+    for( const DocPropertyTable* pTable = aDocPropertyTables; pTable->sDocPropertyName != nullptr; pTable++ )
     {
         if( aDocProperty.equalsIgnoreAsciiCaseAscii( pTable->sDocPropertyName ) )
         {
-            if( pTable->sFieldService != NULL )
+            if( pTable->sFieldService != nullptr )
                 sFieldService = OUString::createFromAscii(pTable->sFieldService);
             bCustom = false;
             break;

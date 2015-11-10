@@ -43,14 +43,14 @@ using utl::AccessibleRelationSetHelper;
 
 const SwNoTextNode *SwAccessibleNoTextFrame::GetNoTextNode() const
 {
-    const SwNoTextNode *pNd  = 0;
+    const SwNoTextNode *pNd  = nullptr;
     const SwFlyFrm *pFlyFrm = static_cast< const SwFlyFrm *>( GetFrm() );
     if( pFlyFrm->Lower() && pFlyFrm->Lower()->IsNoTextFrm() )
     {
         const SwContentFrm *pCntFrm =
             static_cast<const SwContentFrm *>( pFlyFrm->Lower() );
         const SwContentNode* pSwContentNode = pCntFrm->GetNode();
-        if(pSwContentNode != NULL)
+        if(pSwContentNode != nullptr)
         {
             pNd = pSwContentNode->GetNoTextNode();
         }
@@ -343,7 +343,7 @@ uno::Reference< XAccessibleHyperlink > SAL_CALL
         return alink;
     }
 
-    return NULL;
+    return nullptr;
 }
 
 sal_Int32 SAL_CALL SwAccessibleNoTextFrame::getHyperLinkIndex( sal_Int32 )

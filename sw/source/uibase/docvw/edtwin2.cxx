@@ -121,7 +121,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
         if( pSdrView )
         {
             SdrPageView* pPV = pSdrView->GetSdrPageView();
-            SwDPage* pPage = pPV ? static_cast<SwDPage*>(pPV->GetPage()) : 0;
+            SwDPage* pPage = pPV ? static_cast<SwDPage*>(pPV->GetPage()) : nullptr;
             bContinue = pPage && pPage->RequestHelp(this, pSdrView, rEvt);
         }
     }
@@ -452,7 +452,7 @@ void SwEditWin::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect
         // fully resides inside?
         if( rRect.IsInside( aRect ) )
             // dann aufheben
-            delete m_pShadCrsr, m_pShadCrsr = 0;
+            delete m_pShadCrsr, m_pShadCrsr = nullptr;
         else if( rRect.IsOver( aRect ))
         {
             // resides somewhat above, then everything is clipped outside

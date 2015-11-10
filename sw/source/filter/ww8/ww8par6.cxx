@@ -112,7 +112,7 @@ using namespace nsHdFtFlags;
 
 
 static sal_uInt8 lcl_ReadBorders(bool bVer67, WW8_BRCVer9* brc, WW8PLCFx_Cp_FKP* pPap,
-    const WW8RStyle* pSty = 0, const WW8PLCFx_SEPX* pSep = 0);
+    const WW8RStyle* pSty = nullptr, const WW8PLCFx_SEPX* pSep = nullptr);
 
 ColorData SwWW8ImplReader::GetCol(sal_uInt8 nIco)
 {
@@ -661,16 +661,16 @@ SwSectionFormat *wwSectionManager::InsertSection(
     aSection.SetProtectFlag(SectionIsProtected(rSection));
 
     rSection.mpSection =
-        mrReader.m_rDoc.InsertSwSection( rMyPaM, aSection, 0, & aSet );
+        mrReader.m_rDoc.InsertSwSection( rMyPaM, aSection, nullptr, & aSet );
     OSL_ENSURE(rSection.mpSection, "section not inserted!");
     if (!rSection.mpSection)
-        return 0;
+        return nullptr;
 
-    SwPageDesc *pPage = 0;
+    SwPageDesc *pPage = nullptr;
     mySegrIter aEnd = maSegments.rend();
     for (mySegrIter aIter = maSegments.rbegin(); aIter != aEnd; ++aIter)
     {
-        if (0 != (pPage = aIter->mpPage))
+        if (nullptr != (pPage = aIter->mpPage))
             break;
     }
 
@@ -680,12 +680,12 @@ SwSectionFormat *wwSectionManager::InsertSection(
         pPage = &mrReader.m_rDoc.GetPageDesc(0);
 
     if (!pPage)
-        return 0;
+        return nullptr;
 
     SwSectionFormat *pFormat = rSection.mpSection->GetFormat();
     OSL_ENSURE(pFormat, "impossible");
     if (!pFormat)
-        return 0;
+        return nullptr;
 
     SwFrameFormat& rFormat = pPage->GetMaster();
     const SvxLRSpaceItem& rLR = rFormat.GetLRSpace();
@@ -755,8 +755,8 @@ void SwWW8ImplReader::HandleLineNumbering(const wwSection &rSection)
 }
 
 wwSection::wwSection(const SwPosition &rPos) : maStart(rPos.nNode)
-    , mpSection(0)
-    , mpPage(0)
+    , mpSection(nullptr)
+    , mpPage(nullptr)
     , meDir(FRMDIR_HORI_LEFT_TOP)
     , mLinkId(0)
     , nPgWidth(SvxPaperInfo::GetPaperSize(PAPER_A4).Width())
@@ -834,7 +834,7 @@ void wwSectionManager::CreateSep(const long nTextPos, bool /*bMustHaveBreak*/)
         aSection.SetLinkFileName( sSectionName );
         aSection.SetProtectFlag(true);
         // #i19922# - improvement: return value of method <Insert> not used.
-        mrReader.m_rDoc.InsertSwSection(*mrReader.m_pPaM, aSection, 0, 0, false);
+        mrReader.m_rDoc.InsertSwSection(*mrReader.m_pPaM, aSection, nullptr, nullptr, false);
     }
 
     wwSection aLastSection(*mrReader.m_pPaM->GetPoint());
@@ -1112,7 +1112,7 @@ void wwSectionManager::CreateSep(const long nTextPos, bool /*bMustHaveBreak*/)
         aNewSection.maSep.pgbOffsetFrom = (pgbProp & 0x00E0) >> 5;
 
         aNewSection.mnBorders =
-            ::lcl_ReadBorders(eVer <= ww::eWW7, aNewSection.brc, 0, 0, pSep);
+            ::lcl_ReadBorders(eVer <= ww::eWW7, aNewSection.brc, nullptr, nullptr, pSep);
     }
 
     // check if Line Numbering must be activated or reset
@@ -1237,7 +1237,7 @@ static bool _SetWW8_BRC(int nBrcVer, WW8_BRCVer9& rVar, const sal_uInt8* pS)
             rVar = WW8_BRCVer9(WW8_BRC(*reinterpret_cast<const WW8_BRCVer6*>(pS)));
     }
 
-    return 0 != pS;
+    return nullptr != pS;
 }
 
 static sal_uInt8 lcl_ReadBorders(bool bVer67, WW8_BRCVer9* brc, WW8PLCFx_Cp_FKP* pPap,
@@ -1327,7 +1327,7 @@ static sal_uInt8 lcl_ReadBorders(bool bVer67, WW8_BRCVer9* brc, WW8PLCFx_Cp_FKP*
 
 void GetLineIndex(SvxBoxItem &rBox, short nLineThickness, short nSpace,
     sal_uInt32 cv, short nIdx, SvxBoxItemLine nOOIndex, sal_uInt16 nWWIndex,
-    short *pSize=0)
+    short *pSize=nullptr)
 {
     // LO cannot handle outset/inset (new in WW9 BRC) so fall back same as WW8
     if ( nIdx == 0x1A || nIdx == 0x1B )
@@ -1418,7 +1418,7 @@ bool SwWW8ImplReader::SetBorder(SvxBoxItem& rBox, const WW8_BRCVer9* pbrc,
             border, so with a sprm set, but no border, then disable the
             appropriate border
             */
-            rBox.SetLine( 0, aIdArr[ i ].second );
+            rBox.SetLine( nullptr, aIdArr[ i ].second );
         }
     }
     return bChange;
@@ -1494,7 +1494,7 @@ inline bool SetValSprm( sal_Int16* pVar, WW8PLCFx_Cp_FKP* pPap, sal_uInt16 nId )
     const sal_uInt8* pS = pPap->HasSprm( nId );
     if( pS )
         *pVar = (sal_Int16)SVBT16ToShort( pS );
-    return ( pS != 0 );
+    return ( pS != nullptr );
 }
 
 inline bool SetValSprm( sal_Int16* pVar, const WW8RStyle* pStyle, sal_uInt16 nId )
@@ -1502,7 +1502,7 @@ inline bool SetValSprm( sal_Int16* pVar, const WW8RStyle* pStyle, sal_uInt16 nId
     const sal_uInt8* pS = pStyle->HasParaSprm( nId );
     if( pS )
         *pVar = (sal_Int16)SVBT16ToShort( pS );
-    return ( pS != 0 );
+    return ( pS != nullptr );
 }
 
 /*
@@ -1561,7 +1561,7 @@ bool WW8FlyPara::operator==(const WW8FlyPara& rSrc) const
 // Read for normal text
 void WW8FlyPara::Read(sal_uInt8 nOrigSp29, WW8PLCFx_Cp_FKP* pPap)
 {
-    const sal_uInt8* pS = 0;
+    const sal_uInt8* pS = nullptr;
     if( bVer67 )
     {
         SetValSprm( &nSp26, pPap, 26 ); // X-position   //sprmPDxaAbs
@@ -1653,10 +1653,10 @@ void WW8FlyPara::ReadFull(sal_uInt8 nOrigSp29, SwWW8ImplReader* pIo)
             }
 
             ww::WordVersion eVer = pIo->GetFib().GetFIBVersion();
-            WW8FlyPara *pNowStyleApo=0;
+            WW8FlyPara *pNowStyleApo=nullptr;
             sal_uInt16 nColl = pPap->GetIstd();
             ww::sti eSti = eVer < ww::eWW6 ? ww::GetCanonicalStiFromStc( static_cast< sal_uInt8 >(nColl) ) : static_cast<ww::sti>(nColl);
-            while (eSti != ww::stiNil && nColl < pIo->m_vColl.size() && 0 == (pNowStyleApo = pIo->m_vColl[nColl].pWWFly))
+            while (eSti != ww::stiNil && nColl < pIo->m_vColl.size() && nullptr == (pNowStyleApo = pIo->m_vColl[nColl].pWWFly))
             {
                 nColl = pIo->m_vColl[nColl].nBase;
                 eSti = eVer < ww::eWW6 ? ww::GetCanonicalStiFromStc( static_cast< sal_uInt8 >(nColl) ) : static_cast<ww::sti>(nColl);
@@ -1679,7 +1679,7 @@ void WW8FlyPara::ReadFull(sal_uInt8 nOrigSp29, SwWW8ImplReader* pIo)
 // read for Apo definitions in Styledefs
 void WW8FlyPara::Read(sal_uInt8 nOrigSp29, WW8RStyle* pStyle)
 {
-    const sal_uInt8* pS = 0;
+    const sal_uInt8* pS = nullptr;
     if (bVer67)
     {
         SetValSprm( &nSp26, pStyle, 26 );   // X-position
@@ -1713,7 +1713,7 @@ void WW8FlyPara::Read(sal_uInt8 nOrigSp29, WW8RStyle* pStyle)
             nSp37 = *pS;
     }
 
-    if (::lcl_ReadBorders(bVer67, brc, 0, pStyle))      // border
+    if (::lcl_ReadBorders(bVer67, brc, nullptr, pStyle))      // border
         bBorderLines = ::lcl_IsBorder(brc);
 
     /*
@@ -2162,7 +2162,7 @@ void WW8DupProperties::Insert(const SwPosition &rPos)
             do
             {
                 pCtrlStck->NewAttr(rPos, *pItem);
-            }while( !aIter.IsAtEnd() && 0 != ( pItem = aIter.NextItem() ) );
+            }while( !aIter.IsAtEnd() && nullptr != ( pItem = aIter.NextItem() ) );
         }
     }
 }
@@ -2263,7 +2263,7 @@ SwTwips SwWW8ImplReader::MoveOutsideFly(SwFrameFormat *pFlyFormat,
 WW8FlyPara *SwWW8ImplReader::ConstructApo(const ApoTestResults &rApo,
     const WW8_TablePos *pTabPos)
 {
-    WW8FlyPara *pRet = 0;
+    WW8FlyPara *pRet = nullptr;
     OSL_ENSURE(rApo.HasFrame() || pTabPos,
         "If no frame found, *MUST* be in a table");
 
@@ -2276,7 +2276,7 @@ WW8FlyPara *SwWW8ImplReader::ConstructApo(const ApoTestResults &rApo,
     pRet->ApplyTabPos(pTabPos);
 
     if (pRet->IsEmpty())
-        delete pRet, pRet = 0;
+        delete pRet, pRet = nullptr;
     return pRet;
 }
 
@@ -2285,7 +2285,7 @@ bool SwWW8ImplReader::IsDropCap()
     // Find the DCS (Drop Cap Specifier) for the paragraph
     // if does not exist or if the first three bits are 0
     // then there is no dropcap on the paragraph
-    WW8PLCFx_Cp_FKP *pPap = m_pPlcxMan ? m_pPlcxMan->GetPapPLCF() : 0;
+    WW8PLCFx_Cp_FKP *pPap = m_pPlcxMan ? m_pPlcxMan->GetPapPLCF() : nullptr;
     if (pPap)
     {
         const sal_uInt8 *pDCS;
@@ -2313,7 +2313,7 @@ bool SwWW8ImplReader::StartApo(const ApoTestResults &rApo,
     const WW8_TablePos *pTabPos,
     SvxULSpaceItem* pULSpaceItem)
 {
-    if (0 == (m_pWFlyPara = ConstructApo(rApo, pTabPos)))
+    if (nullptr == (m_pWFlyPara = ConstructApo(rApo, pTabPos)))
         return false;
 
     // <WW8SwFlyPara> constructor has changed - new 4th parameter
@@ -2345,7 +2345,7 @@ bool SwWW8ImplReader::StartApo(const ApoTestResults &rApo,
 
         if (pTabPos && pTabPos->bNoFly)
         {
-            m_pSFlyPara->pFlyFormat = 0;
+            m_pSFlyPara->pFlyFormat = nullptr;
             if (pULSpaceItem)
             {
                 // Word positioned tables can have a position (like a
@@ -2353,7 +2353,7 @@ bool SwWW8ImplReader::StartApo(const ApoTestResults &rApo,
                 // pages. If we decide to import this as a normal table (so it
                 // can flow across multiple pages), then turn the vertical
                 // orientation position of the fly into a table upper margin.
-                const SfxPoolItem* pItem = 0;
+                const SfxPoolItem* pItem = nullptr;
                 if (aFlySet.HasItem(RES_VERT_ORIENT, &pItem))
                 {
                     const SwFormatVertOrient* pOrient = static_cast<const SwFormatVertOrient*>(pItem);
@@ -2582,7 +2582,7 @@ void SwWW8ImplReader::StopApo()
             m_pSFlyPara->pFlyFormat->SetFormatAttr(aSize);
         }
 
-        delete m_pSFlyPara->pMainTextPos, m_pSFlyPara->pMainTextPos = 0;
+        delete m_pSFlyPara->pMainTextPos, m_pSFlyPara->pMainTextPos = nullptr;
 // To create the SwFrms when inserting into an existing document, fltshell.cxx
 // will call pFlyFrm->MakeFrms() when setting the FltAnchor attribute
 
@@ -2665,14 +2665,14 @@ void SwWW8ImplReader::NewAttr( const SfxPoolItem& rAttr,
 // fetches attribute from FormatColl / Stack / Doc
 const SfxPoolItem* SwWW8ImplReader::GetFormatAttr( sal_uInt16 nWhich )
 {
-    const SfxPoolItem* pRet = 0;
+    const SfxPoolItem* pRet = nullptr;
     if (m_pAktColl)
         pRet = &(m_pAktColl->GetFormatAttr(nWhich));
     else if (m_pAktItemSet)
     {
         pRet = m_pAktItemSet->GetItem(nWhich);
         if (!pRet)
-            pRet = m_pStandardFormatColl ? &(m_pStandardFormatColl->GetFormatAttr(nWhich)) : 0;
+            pRet = m_pStandardFormatColl ? &(m_pStandardFormatColl->GetFormatAttr(nWhich)) : nullptr;
         if (!pRet)
             pRet = &m_rDoc.GetAttrPool().GetDefaultItem(nWhich);
     }
@@ -2688,7 +2688,7 @@ const SfxPoolItem* SwWW8ImplReader::GetFormatAttr( sal_uInt16 nWhich )
             }
         }
         if (!pRet)
-            pRet = m_pStandardFormatColl ? &(m_pStandardFormatColl->GetFormatAttr(nWhich)) : 0;
+            pRet = m_pStandardFormatColl ? &(m_pStandardFormatColl->GetFormatAttr(nWhich)) : nullptr;
         if (!pRet)
             pRet = &m_rDoc.GetAttrPool().GetDefaultItem(nWhich);
     }
@@ -2758,17 +2758,17 @@ void SwWW8ImplReader::Read_POutLvl(sal_uInt16, const sal_uInt8* pData, short nLe
         return;
     }
 
-    if (m_pAktColl != NULL)
+    if (m_pAktColl != nullptr)
     {
         SwWW8StyInf* pSI = GetStyle(m_nAktColl);
-        if (pSI != NULL)
+        if (pSI != nullptr)
         {
             pSI->mnWW8OutlineLevel =
                     static_cast< sal_uInt8 >( ( pData ? *pData : 0 ) );
             NewAttr( SfxUInt16Item( RES_PARATR_OUTLINELEVEL, SwWW8StyInf::WW8OutlineLevelToOutlinelevel( pSI->mnWW8OutlineLevel ) ) );
         }
     }
-    else if (m_pPaM != NULL)
+    else if (m_pPaM != nullptr)
     {
         const sal_uInt8 nOutlineLevel
             = SwWW8StyInf::WW8OutlineLevelToOutlinelevel(
@@ -2821,7 +2821,7 @@ void SwWW8ImplReader::Read_Symbol(sal_uInt16, const sal_uInt8* pData, short nLen
 
 SwWW8StyInf *SwWW8ImplReader::GetStyle(sal_uInt16 nColl) const
 {
-    return const_cast<SwWW8StyInf *>(nColl < m_vColl.size() ? &m_vColl[nColl] : 0);
+    return const_cast<SwWW8StyInf *>(nColl < m_vColl.size() ? &m_vColl[nColl] : nullptr);
 }
 
 // Read_BoldUsw for italic, bold, small caps, majuscule, struck out,
@@ -3171,7 +3171,7 @@ SwFrameFormat *SwWW8ImplReader::ContainsSingleInlineGraphic(const SwPaM &rRegion
     contains only a single graphic, and if that graphic is anchored as
     FLY_AS_CHAR and then we can change its anchoring to centered in the line.
     */
-    SwFrameFormat *pRet=0;
+    SwFrameFormat *pRet=nullptr;
     SwNodeIndex aBegin(rRegion.Start()->nNode);
     const sal_Int32 nBegin(rRegion.Start()->nContent.GetIndex());
     SwNodeIndex aEnd(rRegion.End()->nNode);
@@ -3180,8 +3180,8 @@ SwFrameFormat *SwWW8ImplReader::ContainsSingleInlineGraphic(const SwPaM &rRegion
     const SwTextAttr* pTFlyAttr;
     if (
          aBegin == aEnd && nBegin == nEnd - 1 &&
-         0 != (pTNd = aBegin.GetNode().GetTextNode()) &&
-         0 != (pTFlyAttr = pTNd->GetTextAttrForCharAt(nBegin, RES_TXTATR_FLYCNT))
+         nullptr != (pTNd = aBegin.GetNode().GetTextNode()) &&
+         nullptr != (pTFlyAttr = pTNd->GetTextAttrForCharAt(nBegin, RES_TXTATR_FLYCNT))
        )
     {
         const SwFormatFlyCnt& rFly = pTFlyAttr->GetFlyCnt();
@@ -3213,10 +3213,10 @@ bool SwWW8ImplReader::ConvertSubToGraphicPlacement()
         SwFltPosition aMkPos((*m_pCtrlStck)[nPos].m_aMkPos);
         SwFltPosition aPtPos(*m_pPaM->GetPoint());
 
-        SwFrameFormat *pFlyFormat = 0;
+        SwFrameFormat *pFlyFormat = nullptr;
         if (
              SwFltStackEntry::MakeRegion(&m_rDoc,aRegion,false,aMkPos,aPtPos) &&
-             0 != (pFlyFormat = ContainsSingleInlineGraphic(aRegion))
+             nullptr != (pFlyFormat = ContainsSingleInlineGraphic(aRegion))
            )
         {
             m_pCtrlStck->DeleteAndDestroy(nPos);
@@ -3247,7 +3247,7 @@ void SwWW8ImplReader::Read_SubSuperProp( sal_uInt16, const sal_uInt8* pData, sho
 
     // #i59022: Check ensure nHeight != 0. Div by zero otherwise.
     sal_Int32 nHeight = 240;
-    if (pF != NULL && pF->GetHeight() != 0)
+    if (pF != nullptr && pF->GetHeight() != 0)
         nHeight = pF->GetHeight();
     nPos2 /= nHeight;                       // ... now in % (rounded)
     if( nPos2 > 100 )                       // for safety
@@ -3424,7 +3424,7 @@ void SwWW8ImplReader::Read_UnderlineColor(sal_uInt16, const sal_uInt8* pData, sh
         else
         {
             SvxUnderlineItem* pUnderlineAttr = const_cast<SvxUnderlineItem*>(static_cast<const SvxUnderlineItem*>(m_pCtrlStck->GetOpenStackAttr( *m_pPaM->GetPoint(), RES_CHRATR_UNDERLINE )));
-            if( pUnderlineAttr != NULL )
+            if( pUnderlineAttr != nullptr )
                 pUnderlineAttr->SetColor( Color( msfilter::util::BGRToRGB(SVBT32ToUInt32( pData ))));
         }
     }
@@ -3917,7 +3917,7 @@ void SwWW8ImplReader::Read_NoLineNumb(sal_uInt16 , const sal_uInt8* pData, short
 
 bool lcl_HasExplicitLeft(const WW8PLCFMan *pPlcxMan, bool bVer67)
 {
-    WW8PLCFx_Cp_FKP *pPap = pPlcxMan ? pPlcxMan->GetPapPLCF() : 0;
+    WW8PLCFx_Cp_FKP *pPap = pPlcxMan ? pPlcxMan->GetPapPLCF() : nullptr;
     if (pPap)
     {
         if (bVer67)
@@ -4316,7 +4316,7 @@ bool SwWW8ImplReader::IsRightToLeft()
 {
     bool bRTL = false;
     const sal_uInt8 *pDir =
-        m_pPlcxMan ? m_pPlcxMan->GetPapPLCF()->HasSprm(0x2441) : 0;
+        m_pPlcxMan ? m_pPlcxMan->GetPapPLCF()->HasSprm(0x2441) : nullptr;
     if (pDir)
         bRTL = *pDir != 0;
     else
@@ -4413,7 +4413,7 @@ void SwWW8ImplReader::Read_Emphasis( sal_uInt16, const sal_uInt8* pData, short n
         //Only the cjk language setting seems to matter to word, the western
         //one is ignored
         const sal_uInt8 *pLang =
-            m_pPlcxMan ? m_pPlcxMan->GetChpPLCF()->HasSprm(0x486E) : 0;
+            m_pPlcxMan ? m_pPlcxMan->GetChpPLCF()->HasSprm(0x486E) : nullptr;
 
         if (pLang)
             nLang = SVBT16ToShort( pLang );
@@ -4759,9 +4759,9 @@ void SwWW8ImplReader::Read_Border(sal_uInt16 , const sal_uInt8*, short nLen)
         sal_uInt8 nBorder;
 
         if( m_pAktColl )
-            nBorder = ::lcl_ReadBorders(m_bVer67, aBrcs, 0, m_pStyles);
+            nBorder = ::lcl_ReadBorders(m_bVer67, aBrcs, nullptr, m_pStyles);
         else
-            nBorder = ::lcl_ReadBorders(m_bVer67, aBrcs, m_pPlcxMan ? m_pPlcxMan->GetPapPLCF() : NULL);
+            nBorder = ::lcl_ReadBorders(m_bVer67, aBrcs, m_pPlcxMan ? m_pPlcxMan->GetPapPLCF() : nullptr);
 
         if( nBorder )                                   // Border
         {
@@ -4837,10 +4837,10 @@ void SwWW8ImplReader::Read_CharBorder(sal_uInt16 nId, const sal_uInt8* pData, sh
             // Border style is none -> no border, no shadow
             if( editeng::ConvertBorderStyleFromWord(aBrc.brcType()) != table::BorderLineStyle::NONE )
             {
-                Set1Border(aBoxItem, aBrc, SvxBoxItemLine::TOP, 0, 0, true);
-                Set1Border(aBoxItem, aBrc, SvxBoxItemLine::BOTTOM, 0, 0, true);
-                Set1Border(aBoxItem, aBrc, SvxBoxItemLine::LEFT, 0, 0, true);
-                Set1Border(aBoxItem, aBrc, SvxBoxItemLine::RIGHT, 0, 0, true);
+                Set1Border(aBoxItem, aBrc, SvxBoxItemLine::TOP, 0, nullptr, true);
+                Set1Border(aBoxItem, aBrc, SvxBoxItemLine::BOTTOM, 0, nullptr, true);
+                Set1Border(aBoxItem, aBrc, SvxBoxItemLine::LEFT, 0, nullptr, true);
+                Set1Border(aBoxItem, aBrc, SvxBoxItemLine::RIGHT, 0, nullptr, true);
                 NewAttr( aBoxItem );
 
                 short aSizeArray[WW8_RIGHT+1]={0}; aSizeArray[WW8_RIGHT] = 1;
@@ -4976,34 +4976,34 @@ void SwWW8ImplReader::Read_ApoPPC( sal_uInt16, const sal_uInt8* pData, short )
         m_vColl[m_nAktColl].pWWFly = pFly;
         pFly->Read(*pData, m_pStyles);
         if (pFly->IsEmpty())
-            delete m_vColl[m_nAktColl].pWWFly, m_vColl[m_nAktColl].pWWFly = 0;
+            delete m_vColl[m_nAktColl].pWWFly, m_vColl[m_nAktColl].pWWFly = nullptr;
     }
 }
 
 bool SwWW8ImplReader::ParseTabPos(WW8_TablePos *pTabPos, WW8PLCFx_Cp_FKP* pPap)
 {
     bool bRet = false;
-    const sal_uInt8 *pRes=0;
+    const sal_uInt8 *pRes=nullptr;
     memset(pTabPos, 0, sizeof(WW8_TablePos));
-    if (0 != (pRes = pPap->HasSprm(0x360D)))
+    if (nullptr != (pRes = pPap->HasSprm(0x360D)))
     {
         pTabPos->nSp29 = *pRes;
         pTabPos->nSp37 = 2;     //Possible fail area, always parallel wrap
-        if (0 != (pRes = pPap->HasSprm(0x940E)))
+        if (nullptr != (pRes = pPap->HasSprm(0x940E)))
             pTabPos->nSp26 = SVBT16ToShort(pRes);
-        if (0 != (pRes = pPap->HasSprm(0x940F)))
+        if (nullptr != (pRes = pPap->HasSprm(0x940F)))
             pTabPos->nSp27 = SVBT16ToShort(pRes);
-        if (0 != (pRes = pPap->HasSprm(0x9410)))
+        if (nullptr != (pRes = pPap->HasSprm(0x9410)))
             pTabPos->nLeMgn = SVBT16ToShort(pRes);
-        if (0 != (pRes = pPap->HasSprm(0x941E)))
+        if (nullptr != (pRes = pPap->HasSprm(0x941E)))
             pTabPos->nRiMgn = SVBT16ToShort(pRes);
-        if (0 != (pRes = pPap->HasSprm(0x9411)))
+        if (nullptr != (pRes = pPap->HasSprm(0x9411)))
             pTabPos->nUpMgn = SVBT16ToShort(pRes);
-        if (0 != (pRes = pPap->HasSprm(0x941F)))
+        if (nullptr != (pRes = pPap->HasSprm(0x941F)))
             pTabPos->nLoMgn = SVBT16ToShort(pRes);
         bRet = true;
     }
-    if (0 != (pRes = pPap->HasSprm(NS_sprm::LN_TDefTable)))
+    if (nullptr != (pRes = pPap->HasSprm(NS_sprm::LN_TDefTable)))
     {
         WW8TabBandDesc aDesc;
         aDesc.ReadDef(false, pRes);
@@ -5058,8 +5058,8 @@ void SwWW8ImplReader::EndExtSprm(sal_uInt16 nSprmId)
         /* 0 (256) */   &SwWW8ImplReader::End_Footnote,      // FootNote
         /* 1 (257) */   &SwWW8ImplReader::End_Footnote,      // EndNote
         /* 2 (258) */   &SwWW8ImplReader::End_Field,  // Feld
-        /* 3 (259) */   0,   // Bookmark
-        /* 4 (260) */   0     // Annotation
+        /* 3 (259) */   nullptr,   // Bookmark
+        /* 4 (260) */   nullptr     // Annotation
     };
 
     sal_uInt8 nIdx = static_cast< sal_uInt8 >(nSprmId - eFTN);
@@ -5090,25 +5090,25 @@ const wwSprmDispatcher *GetWW2SprmDispatcher()
 {
     static SprmReadInfo aSprms[] =
     {
-          {0, 0},                                    // "0" Default bzw. Error
+          {0, nullptr},                                    // "0" Default bzw. Error
                                                      //wird uebersprungen! ,
           {2, &SwWW8ImplReader::Read_StyleCode},     //"sprmPIstd",  pap.istd
                                                      //(style code)
-          {3, 0},                                    //"sprmPIstdPermute", pap.istd
+          {3, nullptr},                                    //"sprmPIstdPermute", pap.istd
                                                      //permutation
-          {4, 0},                                    //"sprmPIncLv1",
+          {4, nullptr},                                    //"sprmPIncLv1",
                                                      //pap.istddifference
           {5, &SwWW8ImplReader::Read_Justify},       //"sprmPJc", pap.jc
                                                      //(justification)
-          {6, 0},                                    //"sprmPFSideBySide",
+          {6, nullptr},                                    //"sprmPFSideBySide",
                                                      //pap.fSideBySide
           {7, &SwWW8ImplReader::Read_KeepLines},     //"sprmPFKeep", pap.fKeep
           {8, &SwWW8ImplReader::Read_KeepParas},     //"sprmPFKeepFollow ",
                                                      //pap.fKeepFollow
           {9, &SwWW8ImplReader::Read_BreakBefore},   //"sprmPPageBreakBefore",
                                                      //pap.fPageBreakBefore
-         {10, 0},                                    //"sprmPBrcl", pap.brcl
-         {11, 0},                                    //"sprmPBrcp ", pap.brcp
+         {10, nullptr},                                    //"sprmPBrcl", pap.brcl
+         {11, nullptr},                                    //"sprmPBrcp ", pap.brcp
          {12, &SwWW8ImplReader::Read_ANLevelDesc},   //"sprmPAnld", pap.anld (ANLD
                                                      //structure)
          {13, &SwWW8ImplReader::Read_ANLevelNo},     //"sprmPNLvlAnm", pap.nLvlAnm
@@ -5118,37 +5118,37 @@ const wwSprmDispatcher *GetWW2SprmDispatcher()
                                                      //pap.itbdMac, ...
          {16, &SwWW8ImplReader::Read_LR},            //"sprmPDxaRight", pap.dxaRight
          {17, &SwWW8ImplReader::Read_LR},            //"sprmPDxaLeft", pap.dxaLeft
-         {18, 0},                                    //"sprmPNest", pap.dxaLeft
+         {18, nullptr},                                    //"sprmPNest", pap.dxaLeft
          {19, &SwWW8ImplReader::Read_LR},            //"sprmPDxaLeft1", pap.dxaLeft1
          {20, &SwWW8ImplReader::Read_LineSpace},     //"sprmPDyaLine", pap.lspd
                                                      //an LSPD
          {21, &SwWW8ImplReader::Read_UL},            //"sprmPDyaBefore",
                                                      //pap.dyaBefore
          {22, &SwWW8ImplReader::Read_UL},            //"sprmPDyaAfter", pap.dyaAfter
-         {23, 0},                                    //"?sprmPChgTabs", pap.itbdMac,
+         {23, nullptr},                                    //"?sprmPChgTabs", pap.itbdMac,
                                                      //pap.rgdxaTab, ...
-         {24, 0},                                    //"sprmPFInTable", pap.fInTable
+         {24, nullptr},                                    //"sprmPFInTable", pap.fInTable
          {25, &SwWW8ImplReader::Read_TabRowEnd},     //"sprmPTtp", pap.fTtp
-         {26, 0},                                    //"sprmPDxaAbs", pap.dxaAbs
-         {27, 0},                                    //"sprmPDyaAbs", pap.dyaAbs
-         {28, 0},                                    //"sprmPDxaWidth", pap.dxaWidth
+         {26, nullptr},                                    //"sprmPDxaAbs", pap.dxaAbs
+         {27, nullptr},                                    //"sprmPDyaAbs", pap.dyaAbs
+         {28, nullptr},                                    //"sprmPDxaWidth", pap.dxaWidth
          {29, &SwWW8ImplReader::Read_ApoPPC},        //"sprmPPc", pap.pcHorz,
                                                      //pap.pcVert
-         {30, 0},                                    //"sprmPBrcTop10", pap.brcTop
+         {30, nullptr},                                    //"sprmPBrcTop10", pap.brcTop
                                                      //BRC10
-         {31, 0},                                    //"sprmPBrcLeft10",
+         {31, nullptr},                                    //"sprmPBrcLeft10",
                                                      //pap.brcLeft BRC10
-         {32, 0},                                    //"sprmPBrcBottom10",
+         {32, nullptr},                                    //"sprmPBrcBottom10",
                                                      //pap.brcBottom BRC10
-         {33, 0},                                    //"sprmPBrcRight10",
+         {33, nullptr},                                    //"sprmPBrcRight10",
                                                      //pap.brcRight BRC10
-         {34, 0},                                    //"sprmPBrcBetween10",
+         {34, nullptr},                                    //"sprmPBrcBetween10",
                                                      //pap.brcBetween BRC10
-         {35, 0},                                    //"sprmPBrcBar10", pap.brcBar
+         {35, nullptr},                                    //"sprmPBrcBar10", pap.brcBar
                                                      //BRC10
-         {36, 0},                                    //"sprmPFromText10",
+         {36, nullptr},                                    //"sprmPFromText10",
                                                      //pap.dxaFromText dxa
-         {37, 0},                                    //"sprmPWr", pap.wr wr
+         {37, nullptr},                                    //"sprmPWr", pap.wr wr
          {38, &SwWW8ImplReader::Read_Border},        //"sprmPBrcTop", pap.brcTop BRC
          {39, &SwWW8ImplReader::Read_Border},        //"sprmPBrcLeft",
                                                      //pap.brcLeft BRC
@@ -5158,30 +5158,30 @@ const wwSprmDispatcher *GetWW2SprmDispatcher()
                                                      //pap.brcRight BRC
          {42, &SwWW8ImplReader::Read_Border},        //"sprmPBrcBetween",
                                                      //pap.brcBetween BRC
-         {43, 0},                                    //"sprmPBrcBar", pap.brcBar
+         {43, nullptr},                                    //"sprmPBrcBar", pap.brcBar
                                                      //BRC word
          {44, &SwWW8ImplReader::Read_Hyphenation},   //"sprmPFNoAutoHyph",
                                                      //pap.fNoAutoHyph
-         {45, 0},                                    //"sprmPWHeightAbs",
+         {45, nullptr},                                    //"sprmPWHeightAbs",
                                                      //pap.wHeightAbs w
-         {46, 0},                                    //"sprmPDcs", pap.dcs DCS
+         {46, nullptr},                                    //"sprmPDcs", pap.dcs DCS
          {47, &SwWW8ImplReader::Read_Shade},         //"sprmPShd", pap.shd SHD
-         {48, 0},                                    //"sprmPDyaFromText",
+         {48, nullptr},                                    //"sprmPDyaFromText",
                                                      //pap.dyaFromText dya
-         {49, 0},                                    //"sprmPDxaFromText",
+         {49, nullptr},                                    //"sprmPDxaFromText",
                                                      //pap.dxaFromText dxa
-         {50, 0},                                    //"sprmPFLocked", pap.fLocked
+         {50, nullptr},                                    //"sprmPFLocked", pap.fLocked
                                                      //0 or 1 byte
          {51, &SwWW8ImplReader::Read_WidowControl},  //"sprmPFWidowControl",
                                                      //pap.fWidowControl 0 or 1 byte
-         {52, 0},                                    //"?sprmPRuler 52",
-         {53, 0},                                    //"??53",
-         {54, 0},                                    //"??54",
-         {55, 0},                                    //"??55",
-         {56, 0},                                    //"??56",
-         {57, 0},                                    //"??57",
-         {58, 0},                                    //"??58",
-         {59, 0},                                    //"??59",
+         {52, nullptr},                                    //"?sprmPRuler 52",
+         {53, nullptr},                                    //"??53",
+         {54, nullptr},                                    //"??54",
+         {55, nullptr},                                    //"??55",
+         {56, nullptr},                                    //"??56",
+         {57, nullptr},                                    //"??57",
+         {58, nullptr},                                    //"??58",
+         {59, nullptr},                                    //"??59",
 
          {60, &SwWW8ImplReader::Read_BoldUsw},       //"sprmCFBold", chp.fBold 0,1,
                                                      //128, or 129 byte
@@ -5202,17 +5202,17 @@ const wwSprmDispatcher *GetWW2SprmDispatcher()
                                                      //0,1, 128, or 129 byte
          {68, &SwWW8ImplReader::Read_FontCode},      //"sprmCFtc", chp.ftc ftc word
          {69, &SwWW8ImplReader::Read_Underline},     // "sprmCKul", chp.kul kul byte
-         {70, 0},                                    //"sprmCSizePos", chp.hps,
+         {70, nullptr},                                    //"sprmCSizePos", chp.hps,
                                                      //chp.hpsPos 3 bytes
          {71, &SwWW8ImplReader::Read_Kern},          //"sprmCDxaSpace",
                                                      //chp.dxaSpace dxa word
          {72, &SwWW8ImplReader::Read_Language},      //"sprmCLid", chp.lid LID word
          {73, &SwWW8ImplReader::Read_TextColor},      //"sprmCIco", chp.ico ico byte
          {74, &SwWW8ImplReader::Read_FontSize},      //"sprmCHps", chp.hps hps word!
-         {75, 0},                                    //"sprmCHpsInc", chp.hps byte
+         {75, nullptr},                                    //"sprmCHpsInc", chp.hps byte
          {76, &SwWW8ImplReader::Read_SubSuperProp},  //"sprmCHpsPos", chp.hpsPos
                                                      //hps byte
-         {77, 0},                                    //"sprmCHpsPosAdj", chp.hpsPos
+         {77, nullptr},                                    //"sprmCHpsPosAdj", chp.hpsPos
                                                      //hps byte
          {78, &SwWW8ImplReader::Read_Majority},      //"?sprmCMajority", chp.fBold,
                                                      //chp.fItalic, chp.fSmallCaps
@@ -5222,20 +5222,20 @@ const wwSprmDispatcher *GetWW2SprmDispatcher()
          {83, &SwWW8ImplReader::Read_Language},      //sprmClidBi
          {84, &SwWW8ImplReader::Read_TextColor},      //sprmCIcoBi
          {85, &SwWW8ImplReader::Read_FontSize},      //sprmCHpsBi
-         {86, 0},                                    //sprmCFBiDi
-         {87, 0},                                    //sprmCFDiacColor
-         {94, 0},                                    //"sprmPicBrcl", pic.brcl brcl
+         {86, nullptr},                                    //sprmCFBiDi
+         {87, nullptr},                                    //sprmCFDiacColor
+         {94, nullptr},                                    //"sprmPicBrcl", pic.brcl brcl
                                                      //(see PIC structure
                                                      //definition) byte
-         {95, 0},                                    //"sprmPicScale", pic.mx,
+         {95, nullptr},                                    //"sprmPicScale", pic.mx,
                                                      //pic.my, pic.dxaCropleft,
-         {96, 0},                                    //"sprmPicBrcTop", pic.brcTop
+         {96, nullptr},                                    //"sprmPicBrcTop", pic.brcTop
                                                      //BRC word
-         {97, 0},                                    //"sprmPicBrcLeft",
+         {97, nullptr},                                    //"sprmPicBrcLeft",
                                                      //pic.brcLeft BRC word
-         {98, 0},                                    //"sprmPicBrcBottom",
+         {98, nullptr},                                    //"sprmPicBrcBottom",
                                                      //pic.brcBottom BRC word
-         {99, 0}                                     //"sprmPicBrcRight",
+         {99, nullptr}                                     //"sprmPicBrcRight",
     };
 
     static wwSprmDispatcher aSprmSrch(aSprms, sizeof(aSprms) / sizeof(aSprms[0]));
@@ -5246,25 +5246,25 @@ const wwSprmDispatcher *GetWW6SprmDispatcher()
 {
     static SprmReadInfo aSprms[] =
     {
-          {0, 0},                                    // "0" Default bzw. Error
+          {0, nullptr},                                    // "0" Default bzw. Error
                                                      //wird uebersprungen! ,
           {2, &SwWW8ImplReader::Read_StyleCode},     //"sprmPIstd",  pap.istd
                                                      //(style code)
-          {3, 0},                                    //"sprmPIstdPermute", pap.istd
+          {3, nullptr},                                    //"sprmPIstdPermute", pap.istd
                                                      //permutation
-          {4, 0},                                    //"sprmPIncLv1",
+          {4, nullptr},                                    //"sprmPIncLv1",
                                                      //pap.istddifference
           {5, &SwWW8ImplReader::Read_Justify},       //"sprmPJc", pap.jc
                                                      //(justification)
-          {6, 0},                                    //"sprmPFSideBySide",
+          {6, nullptr},                                    //"sprmPFSideBySide",
                                                      //pap.fSideBySide
           {7, &SwWW8ImplReader::Read_KeepLines},     //"sprmPFKeep", pap.fKeep
           {8, &SwWW8ImplReader::Read_KeepParas},     //"sprmPFKeepFollow ",
                                                      //pap.fKeepFollow
           {9, &SwWW8ImplReader::Read_BreakBefore},   //"sprmPPageBreakBefore",
                                                      //pap.fPageBreakBefore
-         {10, 0},                                    //"sprmPBrcl", pap.brcl
-         {11, 0},                                    //"sprmPBrcp ", pap.brcp
+         {10, nullptr},                                    //"sprmPBrcl", pap.brcl
+         {11, nullptr},                                    //"sprmPBrcp ", pap.brcp
          {12, &SwWW8ImplReader::Read_ANLevelDesc},   //"sprmPAnld", pap.anld (ANLD
                                                      //structure)
          {13, &SwWW8ImplReader::Read_ANLevelNo},     //"sprmPNLvlAnm", pap.nLvlAnm
@@ -5274,37 +5274,37 @@ const wwSprmDispatcher *GetWW6SprmDispatcher()
                                                      //pap.itbdMac, ...
          {16, &SwWW8ImplReader::Read_LR},            //"sprmPDxaRight", pap.dxaRight
          {17, &SwWW8ImplReader::Read_LR},            //"sprmPDxaLeft", pap.dxaLeft
-         {18, 0},                                    //"sprmPNest", pap.dxaLeft
+         {18, nullptr},                                    //"sprmPNest", pap.dxaLeft
          {19, &SwWW8ImplReader::Read_LR},            //"sprmPDxaLeft1", pap.dxaLeft1
          {20, &SwWW8ImplReader::Read_LineSpace},     //"sprmPDyaLine", pap.lspd
                                                      //an LSPD
          {21, &SwWW8ImplReader::Read_UL},            //"sprmPDyaBefore",
                                                      //pap.dyaBefore
          {22, &SwWW8ImplReader::Read_UL},            //"sprmPDyaAfter", pap.dyaAfter
-         {23, 0},                                    //"?sprmPChgTabs", pap.itbdMac,
+         {23, nullptr},                                    //"?sprmPChgTabs", pap.itbdMac,
                                                      //pap.rgdxaTab, ...
-         {24, 0},                                    //"sprmPFInTable", pap.fInTable
+         {24, nullptr},                                    //"sprmPFInTable", pap.fInTable
          {25, &SwWW8ImplReader::Read_TabRowEnd},     //"sprmPTtp", pap.fTtp
-         {26, 0},                                    //"sprmPDxaAbs", pap.dxaAbs
-         {27, 0},                                    //"sprmPDyaAbs", pap.dyaAbs
-         {28, 0},                                    //"sprmPDxaWidth", pap.dxaWidth
+         {26, nullptr},                                    //"sprmPDxaAbs", pap.dxaAbs
+         {27, nullptr},                                    //"sprmPDyaAbs", pap.dyaAbs
+         {28, nullptr},                                    //"sprmPDxaWidth", pap.dxaWidth
          {29, &SwWW8ImplReader::Read_ApoPPC},        //"sprmPPc", pap.pcHorz,
                                                      //pap.pcVert
-         {30, 0},                                    //"sprmPBrcTop10", pap.brcTop
+         {30, nullptr},                                    //"sprmPBrcTop10", pap.brcTop
                                                      //BRC10
-         {31, 0},                                    //"sprmPBrcLeft10",
+         {31, nullptr},                                    //"sprmPBrcLeft10",
                                                      //pap.brcLeft BRC10
-         {32, 0},                                    //"sprmPBrcBottom10",
+         {32, nullptr},                                    //"sprmPBrcBottom10",
                                                      //pap.brcBottom BRC10
-         {33, 0},                                    //"sprmPBrcRight10",
+         {33, nullptr},                                    //"sprmPBrcRight10",
                                                      //pap.brcRight BRC10
-         {34, 0},                                    //"sprmPBrcBetween10",
+         {34, nullptr},                                    //"sprmPBrcBetween10",
                                                      //pap.brcBetween BRC10
-         {35, 0},                                    //"sprmPBrcBar10", pap.brcBar
+         {35, nullptr},                                    //"sprmPBrcBar10", pap.brcBar
                                                      //BRC10
-         {36, 0},                                    //"sprmPFromText10",
+         {36, nullptr},                                    //"sprmPFromText10",
                                                      //pap.dxaFromText dxa
-         {37, 0},                                    //"sprmPWr", pap.wr wr
+         {37, nullptr},                                    //"sprmPWr", pap.wr wr
          {38, &SwWW8ImplReader::Read_Border},        //"sprmPBrcTop", pap.brcTop BRC
          {39, &SwWW8ImplReader::Read_Border},        //"sprmPBrcLeft",
                                                      //pap.brcLeft BRC
@@ -5314,34 +5314,34 @@ const wwSprmDispatcher *GetWW6SprmDispatcher()
                                                      //pap.brcRight BRC
          {42, &SwWW8ImplReader::Read_Border},        //"sprmPBrcBetween",
                                                      //pap.brcBetween BRC
-         {43, 0},                                    //"sprmPBrcBar", pap.brcBar
+         {43, nullptr},                                    //"sprmPBrcBar", pap.brcBar
                                                      //BRC word
          {44, &SwWW8ImplReader::Read_Hyphenation},   //"sprmPFNoAutoHyph",
                                                      //pap.fNoAutoHyph
-         {45, 0},                                    //"sprmPWHeightAbs",
+         {45, nullptr},                                    //"sprmPWHeightAbs",
                                                      //pap.wHeightAbs w
-         {46, 0},                                    //"sprmPDcs", pap.dcs DCS
+         {46, nullptr},                                    //"sprmPDcs", pap.dcs DCS
          {47, &SwWW8ImplReader::Read_Shade},         //"sprmPShd", pap.shd SHD
-         {48, 0},                                    //"sprmPDyaFromText",
+         {48, nullptr},                                    //"sprmPDyaFromText",
                                                      //pap.dyaFromText dya
-         {49, 0},                                    //"sprmPDxaFromText",
+         {49, nullptr},                                    //"sprmPDxaFromText",
                                                      //pap.dxaFromText dxa
-         {50, 0},                                    //"sprmPFLocked", pap.fLocked
+         {50, nullptr},                                    //"sprmPFLocked", pap.fLocked
                                                      //0 or 1 byte
          {51, &SwWW8ImplReader::Read_WidowControl},  //"sprmPFWidowControl",
                                                      //pap.fWidowControl 0 or 1 byte
-         {52, 0},                                    //"?sprmPRuler 52",
-         {53, 0},                                    //"??53",
-         {54, 0},                                    //"??54",
-         {55, 0},                                    //"??55",
-         {56, 0},                                    //"??56",
-         {57, 0},                                    //"??57",
-         {58, 0},                                    //"??58",
-         {59, 0},                                    //"??59",
-         {60, 0},                                    //"??60",
-         {61, 0},                                    //"??61",
-         {62, 0},                                    //"??62",
-         {63, 0},                                    //"??63",
+         {52, nullptr},                                    //"?sprmPRuler 52",
+         {53, nullptr},                                    //"??53",
+         {54, nullptr},                                    //"??54",
+         {55, nullptr},                                    //"??55",
+         {56, nullptr},                                    //"??56",
+         {57, nullptr},                                    //"??57",
+         {58, nullptr},                                    //"??58",
+         {59, nullptr},                                    //"??59",
+         {60, nullptr},                                    //"??60",
+         {61, nullptr},                                    //"??61",
+         {62, nullptr},                                    //"??62",
+         {63, nullptr},                                    //"??63",
          {64, &SwWW8ImplReader::Read_ParaBiDi},      //"rtl bidi ?
          {65, &SwWW8ImplReader::Read_CFRMarkDel},    //"sprmCFStrikeRM",
                                                      //chp.fRMarkDel 1 or 0 bit
@@ -5351,14 +5351,14 @@ const wwSprmDispatcher *GetWW6SprmDispatcher()
                                                      //chp.fFieldVanish 1 or 0 bit
          {68, &SwWW8ImplReader::Read_PicLoc},        //"sprmCPicLocation",
                                                      //chp.fcPic and chp.fSpec
-         {69, 0},                                    //"sprmCIbstRMark",
+         {69, nullptr},                                    //"sprmCIbstRMark",
                                                      //chp.ibstRMark index into
                                                      //sttbRMark
-         {70, 0},                                    //"sprmCDttmRMark", chp.dttm
+         {70, nullptr},                                    //"sprmCDttmRMark", chp.dttm
                                                      //DTTM long
-         {71, 0},                                    //"sprmCFData", chp.fData 1 or
+         {71, nullptr},                                    //"sprmCFData", chp.fData 1 or
                                                      //0 bit
-         {72, 0},                                    //"sprmCRMReason",
+         {72, nullptr},                                    //"sprmCRMReason",
                                                      //chp.idslRMReason an index to
                                                      //a table
          {73, &SwWW8ImplReader::Read_CharSet},       //"sprmCChse", chp.fChsDiff
@@ -5367,20 +5367,20 @@ const wwSprmDispatcher *GetWW6SprmDispatcher()
                                                      //chp.chSym and chp.ftcSym
          {75, &SwWW8ImplReader::Read_Obj},           //"sprmCFOle2", chp.fOle2 1
                                                      //or 0 bit
-         {76, 0},                                    //"??76",
-         {77, 0},                                    //"??77",
-         {78, 0},                                    //"??78",
-         {79, 0},                                    //"??79",
+         {76, nullptr},                                    //"??76",
+         {77, nullptr},                                    //"??77",
+         {78, nullptr},                                    //"??78",
+         {79, nullptr},                                    //"??79",
          {80, &SwWW8ImplReader::Read_CColl},         //"sprmCIstd", chp.istd istd,
                                                      //see stylesheet definition
                                                      //short
-         {81, 0},                                    //"sprmCIstdPermute", chp.istd
+         {81, nullptr},                                    //"sprmCIstdPermute", chp.istd
                                                      //permutation vector
-         {82, 0},                                    //"sprmCDefault", whole CHP
+         {82, nullptr},                                    //"sprmCDefault", whole CHP
                                                      //none variable length
-         {83, 0},                                    //"sprmCPlain", whole CHP
+         {83, nullptr},                                    //"sprmCPlain", whole CHP
                                                      //none 0
-         {84, 0},                                    //"??84",
+         {84, nullptr},                                    //"??84",
          {85, &SwWW8ImplReader::Read_BoldUsw},       //"sprmCFBold", chp.fBold 0,1,
                                                      //128, or 129 byte
          {86, &SwWW8ImplReader::Read_BoldUsw},       //"sprmCFItalic", chp.fItalic
@@ -5400,25 +5400,25 @@ const wwSprmDispatcher *GetWW6SprmDispatcher()
                                                      //0,1, 128, or 129 byte
          {93, &SwWW8ImplReader::Read_FontCode},      //"sprmCFtc", chp.ftc ftc word
          {94, &SwWW8ImplReader::Read_Underline},     // "sprmCKul", chp.kul kul byte
-         {95, 0},                                    //"sprmCSizePos", chp.hps,
+         {95, nullptr},                                    //"sprmCSizePos", chp.hps,
                                                      //chp.hpsPos 3 bytes
          {96, &SwWW8ImplReader::Read_Kern},          //"sprmCDxaSpace",
                                                      //chp.dxaSpace dxa word
          {97, &SwWW8ImplReader::Read_Language},      //"sprmCLid", chp.lid LID word
          {98, &SwWW8ImplReader::Read_TextColor},      //"sprmCIco", chp.ico ico byte
          {99, &SwWW8ImplReader::Read_FontSize},      //"sprmCHps", chp.hps hps word!
-        {100, 0},                                    //"sprmCHpsInc", chp.hps byte
+        {100, nullptr},                                    //"sprmCHpsInc", chp.hps byte
         {101, &SwWW8ImplReader::Read_SubSuperProp},  //"sprmCHpsPos", chp.hpsPos
                                                      //hps byte
-        {102, 0},                                    //"sprmCHpsPosAdj", chp.hpsPos
+        {102, nullptr},                                    //"sprmCHpsPosAdj", chp.hpsPos
                                                      //hps byte
         {103, &SwWW8ImplReader::Read_Majority},      //"?sprmCMajority", chp.fBold,
                                                      //chp.fItalic, chp.fSmallCaps
         {104, &SwWW8ImplReader::Read_SubSuper},      //"sprmCIss", chp.iss iss byte
-        {105, 0},                                    //"sprmCHpsNew50", chp.hps hps
+        {105, nullptr},                                    //"sprmCHpsNew50", chp.hps hps
                                                      //variable width, length
                                                      //always recorded as 2
-        {106, 0},                                    //"sprmCHpsInc1", chp.hps
+        {106, nullptr},                                    //"sprmCHpsInc1", chp.hps
                                                      //complex variable width,
                                                      //length always recorded as 2
         {107, &SwWW8ImplReader::Read_FontKern},      //"sprmCHpsKern", chp.hpsKern
@@ -5426,9 +5426,9 @@ const wwSprmDispatcher *GetWW6SprmDispatcher()
         {108, &SwWW8ImplReader::Read_Majority},      //"sprmCMajority50", chp.fBold,
                                                      //chp.fItalic, chp.fSmallCaps,
                                                      // chp.fVanish, ...
-        {109, 0},                                    //"sprmCHpsMul", chp.hps
+        {109, nullptr},                                    //"sprmCHpsMul", chp.hps
                                                      //percentage to grow hps short
-        {110, 0},                                    //"sprmCCondHyhen", chp.ysri
+        {110, nullptr},                                    //"sprmCCondHyhen", chp.ysri
                                                      //ysri short
         {111, &SwWW8ImplReader::Read_FontCode},      //ww7 font
         {112, &SwWW8ImplReader::Read_FontCode},      //ww7 CJK font
@@ -5440,164 +5440,164 @@ const wwSprmDispatcher *GetWW6SprmDispatcher()
                                                      //or 0 bit
         {118, &SwWW8ImplReader::Read_Obj},           //"sprmCFObj", chp.fObj 1 or 0
                                                      //bit
-        {119, 0},                                    //"sprmPicBrcl", pic.brcl brcl
+        {119, nullptr},                                    //"sprmPicBrcl", pic.brcl brcl
                                                      //(see PIC structure
                                                      //definition) byte
-        {120, 0},                                    //"sprmPicScale", pic.mx,
+        {120, nullptr},                                    //"sprmPicScale", pic.mx,
                                                      //pic.my, pic.dxaCropleft,
-        {121, 0},                                    //"sprmPicBrcTop", pic.brcTop
+        {121, nullptr},                                    //"sprmPicBrcTop", pic.brcTop
                                                      //BRC word
-        {122, 0},                                    //"sprmPicBrcLeft",
+        {122, nullptr},                                    //"sprmPicBrcLeft",
                                                      //pic.brcLeft BRC word
-        {123, 0},                                    //"sprmPicBrcBottom",
+        {123, nullptr},                                    //"sprmPicBrcBottom",
                                                      //pic.brcBottom BRC word
-        {124, 0},                                    //"sprmPicBrcRight",
+        {124, nullptr},                                    //"sprmPicBrcRight",
                                                      //pic.brcRight BRC word
-        {125, 0},                                    //"??125",
-        {126, 0},                                    //"??126",
-        {127, 0},                                    //"??127",
-        {128, 0},                                    //"??128",
-        {129, 0},                                    //"??129",
-        {130, 0},                                    //"??130",
-        {131, 0},                                    //"sprmSScnsPgn", sep.cnsPgn
+        {125, nullptr},                                    //"??125",
+        {126, nullptr},                                    //"??126",
+        {127, nullptr},                                    //"??127",
+        {128, nullptr},                                    //"??128",
+        {129, nullptr},                                    //"??129",
+        {130, nullptr},                                    //"??130",
+        {131, nullptr},                                    //"sprmSScnsPgn", sep.cnsPgn
                                                      //cns byte
-        {132, 0},                                    //"sprmSiHeadingPgn",
+        {132, nullptr},                                    //"sprmSiHeadingPgn",
                                                      //sep.iHeadingPgn heading
                                                      //number level byte
         {133, &SwWW8ImplReader::Read_OLST},          //"sprmSOlstAnm", sep.olstAnm
                                                      //OLST variable length
-        {134, 0},                                    //"??135",
-        {135, 0},                                    //"??135",
-        {136, 0},                                    //"sprmSDxaColWidth",
+        {134, nullptr},                                    //"??135",
+        {135, nullptr},                                    //"??135",
+        {136, nullptr},                                    //"sprmSDxaColWidth",
                                                      //sep.rgdxaColWidthSpacing
                                                      //complex 3 bytes
-        {137, 0},                                    //"sprmSDxaColSpacing",
+        {137, nullptr},                                    //"sprmSDxaColSpacing",
                                                      //sep.rgdxaColWidthSpacing
                                                      //complex 3 bytes
-        {138, 0},                                    //"sprmSFEvenlySpaced",
+        {138, nullptr},                                    //"sprmSFEvenlySpaced",
                                                      //sep.fEvenlySpaced 1 or 0 byte
-        {139, 0},                                    //"sprmSFProtected",
+        {139, nullptr},                                    //"sprmSFProtected",
                                                      //sep.fUnlocked 1 or 0 byte
-        {140, 0},                                    //"sprmSDmBinFirst",
+        {140, nullptr},                                    //"sprmSDmBinFirst",
                                                      //sep.dmBinFirst  word
-        {141, 0},                                    //"sprmSDmBinOther",
+        {141, nullptr},                                    //"sprmSDmBinOther",
                                                      //sep.dmBinOther  word
-        {142, 0},                                    //"sprmSBkc", sep.bkc bkc
+        {142, nullptr},                                    //"sprmSBkc", sep.bkc bkc
                                                      //byte BreakCode
-        {143, 0},                                    //"sprmSFTitlePage",
+        {143, nullptr},                                    //"sprmSFTitlePage",
                                                      //sep.fTitlePage 0 or 1 byte
-        {144, 0},                                    //"sprmSCcolumns", sep.ccolM1
+        {144, nullptr},                                    //"sprmSCcolumns", sep.ccolM1
                                                      //# of cols - 1 word
-        {145, 0},                                    //"sprmSDxaColumns",
+        {145, nullptr},                                    //"sprmSDxaColumns",
                                                      //sep.dxaColumns dxa word
-        {146, 0},                                    //"sprmSFAutoPgn",
+        {146, nullptr},                                    //"sprmSFAutoPgn",
                                                      //sep.fAutoPgn obsolete byte
-        {147, 0},                                    //"sprmSNfcPgn", sep.nfcPgn
+        {147, nullptr},                                    //"sprmSNfcPgn", sep.nfcPgn
                                                      //nfc byte
-        {148, 0},                                    //"sprmSDyaPgn", sep.dyaPgn
+        {148, nullptr},                                    //"sprmSDyaPgn", sep.dyaPgn
                                                      //dya short
-        {149, 0},                                    //"sprmSDxaPgn", sep.dxaPgn
+        {149, nullptr},                                    //"sprmSDxaPgn", sep.dxaPgn
                                                      //dya short
-        {150, 0},                                    //"sprmSFPgnRestart",
+        {150, nullptr},                                    //"sprmSFPgnRestart",
                                                      //sep.fPgnRestart 0 or 1 byte
-        {151, 0},                                    //"sprmSFEndnote", sep.fEndnote
+        {151, nullptr},                                    //"sprmSFEndnote", sep.fEndnote
                                                      //0 or 1 byte
-        {152, 0},                                    //"sprmSLnc", sep.lnc lnc byte
-        {153, 0},                                    //"sprmSGprfIhdt", sep.grpfIhdt
+        {152, nullptr},                                    //"sprmSLnc", sep.lnc lnc byte
+        {153, nullptr},                                    //"sprmSGprfIhdt", sep.grpfIhdt
                                                      //grpfihdt byte
-        {154, 0},                                    //"sprmSNLnnMod", sep.nLnnMod
+        {154, nullptr},                                    //"sprmSNLnnMod", sep.nLnnMod
                                                      //non-neg int. word
-        {155, 0},                                    //"sprmSDxaLnn", sep.dxaLnn
+        {155, nullptr},                                    //"sprmSDxaLnn", sep.dxaLnn
                                                      //dxa word
-        {156, 0},                                    //"sprmSDyaHdrTop",
+        {156, nullptr},                                    //"sprmSDyaHdrTop",
                                                      //sep.dyaHdrTop dya word
-        {157, 0},                                    //"sprmSDyaHdrBottom",
+        {157, nullptr},                                    //"sprmSDyaHdrBottom",
                                                      //sep.dyaHdrBottom dya word
-        {158, 0},                                    //"sprmSLBetween",
+        {158, nullptr},                                    //"sprmSLBetween",
                                                      //sep.fLBetween 0 or 1 byte
-        {159, 0},                                    //"sprmSVjc", sep.vjc vjc byte
-        {160, 0},                                    //"sprmSLnnMin", sep.lnnMin
+        {159, nullptr},                                    //"sprmSVjc", sep.vjc vjc byte
+        {160, nullptr},                                    //"sprmSLnnMin", sep.lnnMin
                                                      //lnn word
-        {161, 0},                                    //"sprmSPgnStart", sep.pgnStart
+        {161, nullptr},                                    //"sprmSPgnStart", sep.pgnStart
                                                      //pgn word
-        {162, 0},                                    //"sprmSBOrientation",
+        {162, nullptr},                                    //"sprmSBOrientation",
                                                      //sep.dmOrientPage dm byte
-        {163, 0},                                    //"?SprmSBCustomize 163", ?
-        {164, 0},                                    //"sprmSXaPage", sep.xaPage xa
+        {163, nullptr},                                    //"?SprmSBCustomize 163", ?
+        {164, nullptr},                                    //"sprmSXaPage", sep.xaPage xa
                                                      //word
-        {165, 0},                                    //"sprmSYaPage", sep.yaPage ya
+        {165, nullptr},                                    //"sprmSYaPage", sep.yaPage ya
                                                      //word
-        {166, 0},                                    //"sprmSDxaLeft", sep.dxaLeft
+        {166, nullptr},                                    //"sprmSDxaLeft", sep.dxaLeft
                                                      //dxa word
-        {167, 0},                                    //"sprmSDxaRight", sep.dxaRight
+        {167, nullptr},                                    //"sprmSDxaRight", sep.dxaRight
                                                      //dxa word
-        {168, 0},                                    //"sprmSDyaTop", sep.dyaTop                                                     //dya word
-        {169, 0},                                    //"sprmSDyaBottom",
+        {168, nullptr},                                    //"sprmSDyaTop", sep.dyaTop                                                     //dya word
+        {169, nullptr},                                    //"sprmSDyaBottom",
                                                      //sep.dyaBottom dya word
-        {170, 0},                                    //"sprmSDzaGutter",
+        {170, nullptr},                                    //"sprmSDzaGutter",
                                                      //sep.dzaGutter dza word
-        {171, 0},                                    //"sprmSDMPaperReq",
+        {171, nullptr},                                    //"sprmSDMPaperReq",
                                                      //sep.dmPaperReq dm word
-        {172, 0},                                    //"??172",
-        {173, 0},                                    //"??173",
-        {174, 0},                                    //"??174",
-        {175, 0},                                    //"??175",
-        {176, 0},                                    //"??176",
-        {177, 0},                                    //"??177",
-        {178, 0},                                    //"??178",
-        {179, 0},                                    //"??179",
-        {180, 0},                                    //"??180",
-        {181, 0},                                    //"??181",
-        {182, 0},                                    //"sprmTJc", tap.jc jc word
+        {172, nullptr},                                    //"??172",
+        {173, nullptr},                                    //"??173",
+        {174, nullptr},                                    //"??174",
+        {175, nullptr},                                    //"??175",
+        {176, nullptr},                                    //"??176",
+        {177, nullptr},                                    //"??177",
+        {178, nullptr},                                    //"??178",
+        {179, nullptr},                                    //"??179",
+        {180, nullptr},                                    //"??180",
+        {181, nullptr},                                    //"??181",
+        {182, nullptr},                                    //"sprmTJc", tap.jc jc word
                                                      //(low order byte is
                                                      //significant)
-        {183, 0},                                    //"sprmTDxaLeft",
+        {183, nullptr},                                    //"sprmTDxaLeft",
                                                      //tap.rgdxaCenter dxa word
-        {184, 0},                                    //"sprmTDxaGapHalf",
+        {184, nullptr},                                    //"sprmTDxaGapHalf",
                                                      //tap.dxaGapHalf,
                                                      //tap.rgdxaCenter dxa word
-        {185, 0},                                    //"sprmTFCantSplit"
+        {185, nullptr},                                    //"sprmTFCantSplit"
                                                      //tap.fCantSplit 1 or 0 byte
-        {186, 0},                                    //"sprmTTableHeader",
+        {186, nullptr},                                    //"sprmTTableHeader",
                                                      //tap.fTableHeader 1 or 0 byte
-        {187, 0},                                    //"sprmTTableBorders",
+        {187, nullptr},                                    //"sprmTTableBorders",
                                                      //tap.rgbrcTable complex
                                                      //12 bytes
-        {188, 0},                                    //"sprmTDefTable10",
+        {188, nullptr},                                    //"sprmTDefTable10",
                                                      //tap.rgdxaCenter, tap.rgtc
                                                      //complex variable length
-        {189, 0},                                    //"sprmTDyaRowHeight",
+        {189, nullptr},                                    //"sprmTDyaRowHeight",
                                                      //tap.dyaRowHeight dya word
-        {190, 0},                                    //"?sprmTDefTable", tap.rgtc
+        {190, nullptr},                                    //"?sprmTDefTable", tap.rgtc
                                                      //complex
-        {191, 0},                                    //"?sprmTDefTableShd",
+        {191, nullptr},                                    //"?sprmTDefTableShd",
                                                      //tap.rgshd complex
-        {192, 0},                                    //"sprmTTlp", tap.tlp TLP
+        {192, nullptr},                                    //"sprmTTlp", tap.tlp TLP
                                                      //4 bytes
-        {193, 0},                                    //"sprmTSetBrc",
+        {193, nullptr},                                    //"sprmTSetBrc",
                                                      //tap.rgtc[].rgbrc complex
                                                      //5 bytes
-        {194, 0},                                    //"sprmTInsert",
+        {194, nullptr},                                    //"sprmTInsert",
                                                      //tap.rgdxaCenter,
                                                      //tap.rgtc complex 4 bytes
-        {195, 0},                                    //"sprmTDelete",
+        {195, nullptr},                                    //"sprmTDelete",
                                                      //tap.rgdxaCenter,
                                                      //tap.rgtc complex word
-        {196, 0},                                    //"sprmTDxaCol",
+        {196, nullptr},                                    //"sprmTDxaCol",
                                                      //tap.rgdxaCenter complex
                                                      //4 bytes
-        {197, 0},                                    //"sprmTMerge",
+        {197, nullptr},                                    //"sprmTMerge",
                                                      //tap.fFirstMerged,
                                                      //tap.fMerged complex word
-        {198, 0},                                    //"sprmTSplit",
+        {198, nullptr},                                    //"sprmTSplit",
                                                      //tap.fFirstMerged,
                                                      //tap.fMerged complex word
-        {199, 0},                                    //"sprmTSetBrc10",
+        {199, nullptr},                                    //"sprmTSetBrc10",
                                                      //tap.rgtc[].rgbrc complex
                                                      //5 bytes
-        {200, 0},                                    //"sprmTSetShd", tap.rgshd
+        {200, nullptr},                                    //"sprmTSetShd", tap.rgshd
                                                      //complex 4 bytes
-        {207, 0},                                    //dunno
+        {207, nullptr},                                    //dunno
     };
 
     static wwSprmDispatcher aSprmSrch(aSprms, sizeof(aSprms) / sizeof(aSprms[0]));
@@ -5608,20 +5608,20 @@ const wwSprmDispatcher *GetWW8SprmDispatcher()
 {
     static SprmReadInfo aSprms[] =
     {
-        {0,      0},                                 // "0" Default bzw. Error
+        {0,      nullptr},                                 // "0" Default bzw. Error
 
         {0x4600, &SwWW8ImplReader::Read_StyleCode},  //"sprmPIstd" pap.istd;istd
                                                      //(style code);short;
-        {0xC601, 0},                                 //"sprmPIstdPermute" pap.istd;
+        {0xC601, nullptr},                                 //"sprmPIstdPermute" pap.istd;
                                                      //permutation vector;
                                                      //variable length;
-        {0x2602, 0},                                 //"sprmPIncLvl" pap.istd,
+        {0x2602, nullptr},                                 //"sprmPIncLvl" pap.istd,
                                                      //pap.lvl;difference between
                                                      //istd of base PAP and istd of
                                                      //PAP to be produced; byte;
         {0x2403, &SwWW8ImplReader::Read_Justify},    //"sprmPJc" pap.jc;jc
                                                      //(justification);byte;
-        {0x2404, 0},                                 //"sprmPFSideBySide"
+        {0x2404, nullptr},                                 //"sprmPFSideBySide"
                                                      //pap.fSideBySide;0 or 1;byte;
         {0x2405, &SwWW8ImplReader::Read_KeepLines},  //"sprmPFKeep" pap.fKeep;0 or
                                                      //1;byte;
@@ -5630,9 +5630,9 @@ const wwSprmDispatcher *GetWW8SprmDispatcher()
         {0x2407, &SwWW8ImplReader::Read_BreakBefore},//"sprmPFPageBreakBefore"
                                                      //pap.fPageBreakBefore;0 or 1;
                                                      //byte;
-        {0x2408, 0},                                 //"sprmPBrcl" pap.brcl;brcl;
+        {0x2408, nullptr},                                 //"sprmPBrcl" pap.brcl;brcl;
                                                      //byte;
-        {0x2409, 0},                                 //"sprmPBrcp" pap.brcp;brcp;
+        {0x2409, nullptr},                                 //"sprmPBrcp" pap.brcp;brcp;
                                                      //byte;
         {0x260A, &SwWW8ImplReader::Read_ListLevel},  //"sprmPIlvl" pap.ilvl;ilvl;
                                                      //byte;
@@ -5648,7 +5648,7 @@ const wwSprmDispatcher *GetWW8SprmDispatcher()
                                                      //dxa;word;
         {0x840F, &SwWW8ImplReader::Read_LR},         //Apparently Word 97 version of "sprmPDxaLeft" pap.dxaLeft;
                                                      //dxa;word;
-        {0x4610, 0},                                 //"sprmPNest" pap.dxaLeft;
+        {0x4610, nullptr},                                 //"sprmPNest" pap.dxaLeft;
                                                      //dxa;word;
         {0x8411, &SwWW8ImplReader::Read_LR},         //Word 97 version of "sprmPDxaLeft1" pap.dxaLeft1;
                                                      //dxa;word;
@@ -5662,36 +5662,36 @@ const wwSprmDispatcher *GetWW8SprmDispatcher()
                                                      //pap.dyaBefore;dya;word;
         {0xA414, &SwWW8ImplReader::Read_UL},         //"sprmPDyaAfter" pap.dyaAfter;
                                                      //dya;word;
-        {0xC615, 0},                                 //"sprmPChgTabs" pap.itbdMac,
+        {0xC615, nullptr},                                 //"sprmPChgTabs" pap.itbdMac,
                                                      //pap.rgdxaTab, pap.rgtbd;
                                                      //complex;variable length;
-        {0x2416, 0},                                 //"sprmPFInTable" pap.fInTable;
+        {0x2416, nullptr},                                 //"sprmPFInTable" pap.fInTable;
                                                      //0 or 1;byte;
         {0x2417, &SwWW8ImplReader::Read_TabRowEnd},  //"sprmPFTtp" pap.fTtp;0 or 1;
                                                      //byte;
-        {0x8418, 0},                                 //"sprmPDxaAbs" pap.dxaAbs;dxa;
+        {0x8418, nullptr},                                 //"sprmPDxaAbs" pap.dxaAbs;dxa;
                                                      //word;
-        {0x8419, 0},                                 //"sprmPDyaAbs" pap.dyaAbs;dya;
+        {0x8419, nullptr},                                 //"sprmPDyaAbs" pap.dyaAbs;dya;
                                                      //word;
-        {0x841A, 0},                                 //"sprmPDxaWidth" pap.dxaWidth;
+        {0x841A, nullptr},                                 //"sprmPDxaWidth" pap.dxaWidth;
                                                      //dxa;word;
         {0x261B, &SwWW8ImplReader::Read_ApoPPC},     //"sprmPPc" pap.pcHorz,
                                                      //pap.pcVert;complex;byte;
-        {0x461C, 0},                                 //"sprmPBrcTop10" pap.brcTop;
+        {0x461C, nullptr},                                 //"sprmPBrcTop10" pap.brcTop;
                                                      //BRC10;word;
-        {0x461D, 0},                                 //"sprmPBrcLeft10" pap.brcLeft;
+        {0x461D, nullptr},                                 //"sprmPBrcLeft10" pap.brcLeft;
                                                      //BRC10;word;
-        {0x461E, 0},                                 //"sprmPBrcBottom10"
+        {0x461E, nullptr},                                 //"sprmPBrcBottom10"
                                                      //pap.brcBottom;BRC10;word;
-        {0x461F, 0},                                 //"sprmPBrcRight10"
+        {0x461F, nullptr},                                 //"sprmPBrcRight10"
                                                      //pap.brcRight;BRC10;word;
-        {0x4620, 0},                                 //"sprmPBrcBetween10"
+        {0x4620, nullptr},                                 //"sprmPBrcBetween10"
                                                      //pap.brcBetween;BRC10;word;
-        {0x4621, 0},                                 //"sprmPBrcBar10" pap.brcBar;
+        {0x4621, nullptr},                                 //"sprmPBrcBar10" pap.brcBar;
                                                      //BRC10;word;
-        {0x4622, 0},                                 //"sprmPDxaFromText10"
+        {0x4622, nullptr},                                 //"sprmPDxaFromText10"
                                                      //pap.dxaFromText;dxa;word;
-        {0x2423, 0},                                 //"sprmPWr" pap.wr;wr;byte;
+        {0x2423, nullptr},                                 //"sprmPWr" pap.wr;wr;byte;
         {0x6424, &SwWW8ImplReader::Read_Border},     //"sprmPBrcTop80" pap.brcTop;BRC;
                                                      //long;
         {0x6425, &SwWW8ImplReader::Read_Border},     //"sprmPBrcLeft80" pap.brcLeft;
@@ -5702,68 +5702,68 @@ const wwSprmDispatcher *GetWW8SprmDispatcher()
                                                      //BRC;long;
         {0x6428, &SwWW8ImplReader::Read_Border},     //"sprmPBrcBetween80"
                                                      //pap.brcBetween;BRC;long;
-        {0x6629, 0},                                 //"sprmPBrcBar" pap.brcBar;BRC;
+        {0x6629, nullptr},                                 //"sprmPBrcBar" pap.brcBar;BRC;
                                                      //long;
         {0x242A, &SwWW8ImplReader::Read_Hyphenation},//"sprmPFNoAutoHyph"
                                                      //pap.fNoAutoHyph;0 or 1;byte;
-        {0x442B, 0},                                 //"sprmPWHeightAbs"
+        {0x442B, nullptr},                                 //"sprmPWHeightAbs"
                                                      //pap.wHeightAbs;w;word;
-        {0x442C, 0},                                 //"sprmPDcs" pap.dcs;DCS;short;
+        {0x442C, nullptr},                                 //"sprmPDcs" pap.dcs;DCS;short;
         {0x442D, &SwWW8ImplReader::Read_Shade},      //"sprmPShd" pap.shd;SHD;word;
-        {0x842E, 0},                                 //"sprmPDyaFromText"
+        {0x842E, nullptr},                                 //"sprmPDyaFromText"
                                                      //pap.dyaFromText;dya;word;
-        {0x842F, 0},                                 //"sprmPDxaFromText"
+        {0x842F, nullptr},                                 //"sprmPDxaFromText"
                                                      //pap.dxaFromText;dxa;word;
-        {0x2430, 0},                                 //"sprmPFLocked" pap.fLocked;
+        {0x2430, nullptr},                                 //"sprmPFLocked" pap.fLocked;
                                                      //0 or 1;byte;
         {0x2431, &SwWW8ImplReader::Read_WidowControl},//"sprmPFWidowControl"
                                                      //pap.fWidowControl;0 or 1;byte
-        {0xC632, 0},                                 //"sprmPRuler" variable length;
+        {0xC632, nullptr},                                 //"sprmPRuler" variable length;
         {0x2433, &SwWW8ImplReader::Read_BoolItem},   //"sprmPFKinsoku" pap.fKinsoku;
                                                      //0 or 1;byte;
-        {0x2434, 0},                                 //"sprmPFWordWrap"
+        {0x2434, nullptr},                                 //"sprmPFWordWrap"
                                                      //pap.fWordWrap;0 or 1;byte;
         {0x2435, &SwWW8ImplReader::Read_BoolItem},   //"sprmPFOverflowPunct"
                                                      //pap.fOverflowPunct; 0 or 1;
                                                      //byte;
-        {0x2436, 0},                                 //"sprmPFTopLinePunct"
+        {0x2436, nullptr},                                 //"sprmPFTopLinePunct"
                                                      //pap.fTopLinePunct;0 or 1;byte
         {0x2437, &SwWW8ImplReader::Read_BoolItem},   //"sprmPFAutoSpaceDE"
                                                      //pap.fAutoSpaceDE;0 or 1;byte;
-        {0x2438, 0},                                 //"sprmPFAutoSpaceDN"
+        {0x2438, nullptr},                                 //"sprmPFAutoSpaceDN"
                                                      //pap.fAutoSpaceDN;0 or 1;byte;
         {NS_sprm::LN_PWAlignFont, &SwWW8ImplReader::Read_AlignFont},  //"sprmPWAlignFont"
                                                      //pap.wAlignFont;iFa; word;
-        {0x443A, 0},                                 //"sprmPFrameTextFlow"
+        {0x443A, nullptr},                                 //"sprmPFrameTextFlow"
                                                      //pap.fVertical pap.fBackward
                                                      //pap.fRotateFont;complex; word
-        {0x243B, 0},                                 //"sprmPISnapBaseLine" obsolete
+        {0x243B, nullptr},                                 //"sprmPISnapBaseLine" obsolete
                                                      //not applicable in Word97
                                                      //and later versions;;byte;
         {0xC63E, &SwWW8ImplReader::Read_ANLevelDesc},//"sprmPAnld" pap.anld;;
                                                      //variable length;
-        {0xC63F, 0},                                 //"sprmPPropRMark"
+        {0xC63F, nullptr},                                 //"sprmPPropRMark"
                                                      //pap.fPropRMark;complex;
                                                      //variable length;
         {0x2640,  &SwWW8ImplReader::Read_POutLvl},   //"sprmPOutLvl" pap.lvl;has no
                                                      //effect if pap.istd is < 1 or
                                                      //is > 9;byte;
         {0x2441, &SwWW8ImplReader::Read_ParaBiDi},   //"sprmPFBiDi" ;;byte;
-        {0x2443, 0},                                 //"sprmPFNumRMIns"
+        {0x2443, nullptr},                                 //"sprmPFNumRMIns"
                                                      //pap.fNumRMIns;1 or 0;bit;
-        {0x2444, 0},                                 //"sprmPCrLf" ;;byte;
-        {0xC645, 0},                                 //"sprmPNumRM" pap.numrm;;
+        {0x2444, nullptr},                                 //"sprmPCrLf" ;;byte;
+        {0xC645, nullptr},                                 //"sprmPNumRM" pap.numrm;;
                                                      //variable length;
-        {0x6645, 0},                                 //"sprmPHugePapx" ;fc in the
+        {0x6645, nullptr},                                 //"sprmPHugePapx" ;fc in the
                                                      //data stream to locate the
                                                      //huge grpprl; long;
-        {0x6646, 0},                                 //"sprmPHugePapx" ;fc in the
+        {0x6646, nullptr},                                 //"sprmPHugePapx" ;fc in the
                                                      //data stream to locate the
                                                      //huge grpprl; long;
         {0x2447, &SwWW8ImplReader::Read_UsePgsuSettings},//"sprmPFUsePgsuSettings"
                                                      //pap.fUsePgsuSettings;1 or 0;
                                                      //byte;
-        {0x2448, 0},                                 //"sprmPFAdjustRight"
+        {0x2448, nullptr},                                 //"sprmPFAdjustRight"
                                                      //pap.fAdjustRight;1 or 0;byte;
         {0x0800, &SwWW8ImplReader::Read_CFRMarkDel}, //"sprmCFRMarkDel"
                                                      //chp.fRMarkDel;1 or 0;bit;
@@ -5775,14 +5775,14 @@ const wwSprmDispatcher *GetWW8SprmDispatcher()
                                                      //and chp.fSpec;variable
                                                      //length, length recorded is
                                                      //always 4;
-        {0x4804, 0},                                 //"sprmCIbstRMark"
+        {0x4804, nullptr},                                 //"sprmCIbstRMark"
                                                      //chp.ibstRMark;index into
                                                      //sttbRMark;short;
-        {0x6805, 0},                                 //"sprmCDttmRMark"
+        {0x6805, nullptr},                                 //"sprmCDttmRMark"
                                                      //chp.dttmRMark;DTTM;long;
-        {0x0806, 0},                                 //"sprmCFData" chp.fData;1 or
+        {0x0806, nullptr},                                 //"sprmCFData" chp.fData;1 or
                                                      //0;bit;
-        {0x4807, 0},                                 //"sprmCIdslRMark"
+        {0x4807, nullptr},                                 //"sprmCIdslRMark"
                                                      //chp.idslRMReason;an index to
                                                      //a table of strings defined in
                                                      //Word 6.0 executables;short;
@@ -5807,12 +5807,12 @@ const wwSprmDispatcher *GetWW8SprmDispatcher()
       //0x2A10, ? ? ?,                               //"sprmCFFtcAsciSymb"
         {0x4A30, &SwWW8ImplReader::Read_CColl},      //"sprmCIstd" chp.istd;istd,
                                                      //short;
-        {0xCA31, 0},                                 //"sprmCIstdPermute" chp.istd;
+        {0xCA31, nullptr},                                 //"sprmCIstdPermute" chp.istd;
                                                      //permutation vector; variable
                                                      //length;
-        {0x2A32, 0},                                 //"sprmCDefault" whole CHP;none
+        {0x2A32, nullptr},                                 //"sprmCDefault" whole CHP;none
                                                      //;variable length;
-        {0x2A33, 0},                                 //"sprmCPlain" whole CHP;none;
+        {0x2A33, nullptr},                                 //"sprmCPlain" whole CHP;none;
                                                      //Laenge: 0;
         {0x2A34, &SwWW8ImplReader::Read_Emphasis},   //"sprmCKcd"
         {0x0835, &SwWW8ImplReader::Read_BoldUsw},    //"sprmCFBold" chp.fBold;0,1,
@@ -5836,7 +5836,7 @@ const wwSprmDispatcher *GetWW8SprmDispatcher()
                                                      //used internally, never
                                                      //stored in file;word;
         {0x2A3E, &SwWW8ImplReader::Read_Underline},  //"sprmCKul" chp.kul;kul;byte;
-        {0xEA3F, 0},                                 //"sprmCSizePos" chp.hps,
+        {0xEA3F, nullptr},                                 //"sprmCSizePos" chp.hps,
                                                      //chp.hpsPos;3 bytes;
         {0x8840, &SwWW8ImplReader::Read_Kern},       //"sprmCDxaSpace" chp.dxaSpace;
                                                      //dxa;word;
@@ -5844,10 +5844,10 @@ const wwSprmDispatcher *GetWW8SprmDispatcher()
                                                      //internally never stored;word;
         {0x2A42, &SwWW8ImplReader::Read_TextColor},   //"sprmCIco" chp.ico;ico;byte;
         {0x4A43, &SwWW8ImplReader::Read_FontSize},   //"sprmCHps" chp.hps;hps;byte;
-        {0x2A44, 0},                                 //"sprmCHpsInc" chp.hps;byte;
+        {0x2A44, nullptr},                                 //"sprmCHpsInc" chp.hps;byte;
         {0x4845, &SwWW8ImplReader::Read_SubSuperProp},//"sprmCHpsPos" chp.hpsPos;
                                                      //hps; byte;
-        {0x2A46, 0},                                 //"sprmCHpsPosAdj" chp.hpsPos;
+        {0x2A46, nullptr},                                 //"sprmCHpsPosAdj" chp.hpsPos;
                                                      //hps; byte;
         {0xCA47, &SwWW8ImplReader::Read_Majority},   //"sprmCMajority" chp.fBold,
                                                      //chp.fItalic, chp.fSmallCaps,
@@ -5859,10 +5859,10 @@ const wwSprmDispatcher *GetWW8SprmDispatcher()
                                                      //length, length byte plus
                                                      //size of following grpprl;
         {0x2A48, &SwWW8ImplReader::Read_SubSuper},   //"sprmCIss" chp.iss;iss;byte;
-        {0xCA49, 0},                                 //"sprmCHpsNew50" chp.hps;hps;
+        {0xCA49, nullptr},                                 //"sprmCHpsNew50" chp.hps;hps;
                                                      //variable width, length
                                                      //always recorded as 2;
-        {0xCA4A, 0},                                 //"sprmCHpsInc1" chp.hps;
+        {0xCA4A, nullptr},                                 //"sprmCHpsInc1" chp.hps;
                                                      //complex; variable width,
                                                      //length always recorded as 2;
         {0x484B, &SwWW8ImplReader::Read_FontKern},   //"sprmCHpsKern" chp.hpsKern;
@@ -5874,9 +5874,9 @@ const wwSprmDispatcher *GetWW8SprmDispatcher()
                                                      //chp.hpsPos, chp.kul,
                                                      //chp.dxaSpace, chp.ico;
                                                      //complex; variable length;
-        {0x4A4D, 0},                                 //"sprmCHpsMul" chp.hps;
+        {0x4A4D, nullptr},                                 //"sprmCHpsMul" chp.hps;
                                                      //percentage to grow hps;short;
-        {0x484E, 0},                                 //"sprmCYsri" chp.ysri;ysri;
+        {0x484E, nullptr},                                 //"sprmCYsri" chp.ysri;ysri;
                                                      //short;
         {0x4A4F, &SwWW8ImplReader::Read_FontCode},   //"sprmCRgFtc0" chp.rgftc[0];
                                                      //ftc for ASCII text; short;
@@ -5905,36 +5905,36 @@ const wwSprmDispatcher *GetWW8SprmDispatcher()
         {0x2859, &SwWW8ImplReader::Read_TextAnim},    //"sprmCSfxText" chp.sfxtText;
                                                      //text animation;byte;
         {0x085A, &SwWW8ImplReader::Read_Bidi},                                 //"sprmCFBiDi"
-        {0x085B, 0},                                 //"sprmCFDiacColor"
+        {0x085B, nullptr},                                 //"sprmCFDiacColor"
         {0x085C, &SwWW8ImplReader::Read_BoldBiDiUsw},//"sprmCFBoldBi"
         {0x085D, &SwWW8ImplReader::Read_BoldBiDiUsw},//"sprmCFItalicBi"
         {0x4A5E, &SwWW8ImplReader::Read_FontCode},   //"sprmCFtcBi"
         {0x485F, &SwWW8ImplReader::Read_Language},   //"sprmCLidBi"
       //0x4A60, ? ? ?,                               //"sprmCIcoBi",
         {0x4A61, &SwWW8ImplReader::Read_FontSize},   //"sprmCHpsBi"
-        {0xCA62, 0},                                 //"sprmCDispFieldRMark"
+        {0xCA62, nullptr},                                 //"sprmCDispFieldRMark"
                                                      //chp.fDispFieldRMark,
                                                      //chp.ibstDispFieldRMark,
                                                      //chp.dttmDispFieldRMark ;
                                                      //Complex;variable length
                                                      //always recorded as 39 bytes;
-        {0x4863, 0},                                 //"sprmCIbstRMarkDel"
+        {0x4863, nullptr},                                 //"sprmCIbstRMarkDel"
                                                      //chp.ibstRMarkDel;index into
                                                      //sttbRMark;short;
-        {NS_sprm::LN_CDttmRMarkDel, 0},
+        {NS_sprm::LN_CDttmRMarkDel, nullptr},
                                                      //chp.dttmRMarkDel;DTTM;long;
         {0x6865, &SwWW8ImplReader::Read_CharBorder}, //"sprmCBrc80" chp.brc;BRC;long;
         {0xca72, &SwWW8ImplReader::Read_CharBorder}, //"sprmCBrc" chp.brc;BRC;long;
         {0x4866, &SwWW8ImplReader::Read_CharShadow}, //"sprmCShd80" chp.shd;SHD;short;
-        {0x4867, 0},                                 //"sprmCIdslRMarkDel"
+        {0x4867, nullptr},                                 //"sprmCIdslRMarkDel"
                                                      //chp.idslRMReasonDel;an index
                                                      //to a table of strings
                                                      //defined in Word 6.0
                                                      //executables;short;
-        {0x0868, 0},                                 //"sprmCFUsePgsuSettings"
+        {0x0868, nullptr},                                 //"sprmCFUsePgsuSettings"
                                                      //chp.fUsePgsuSettings; 1 or 0;
                                                      //bit;
-        {0x486B, 0},                                 //"sprmCCpg" ;;word;
+        {0x486B, nullptr},                                 //"sprmCCpg" ;;word;
         {0x486D, &SwWW8ImplReader::Read_Language},   //"sprmCRgLid0_80" chp.rglid[0];
                                                      //LID: for non-Far East text;
                                                      //word;
@@ -5942,102 +5942,102 @@ const wwSprmDispatcher *GetWW8SprmDispatcher()
                                                      //LID: for Far East text;word;
         {0x286F, &SwWW8ImplReader::Read_IdctHint},   //"sprmCIdctHint" chp.idctHint;
                                                      //IDCT: byte;
-        {0x2E00, 0},                                 //"sprmPicBrcl" pic.brcl;brcl
+        {0x2E00, nullptr},                                 //"sprmPicBrcl" pic.brcl;brcl
                                                      //(see PIC structure
                                                      //definition);byte;
-        {0xCE01, 0},                                 //"sprmPicScale" pic.mx,
+        {0xCE01, nullptr},                                 //"sprmPicScale" pic.mx,
                                                      //pic.my, pic.dxaCropleft,
                                                      //pic.dyaCropTop
                                                      //pic.dxaCropRight,
                                                      //pic.dyaCropBottom;Complex;
                                                      //length byte plus 12 bytes;
-        {0x6C02, 0},                                 //"sprmPicBrcTop80" pic.brcTop;
+        {0x6C02, nullptr},                                 //"sprmPicBrcTop80" pic.brcTop;
                                                      //BRC;long;
-        {0x6C03, 0},                                 //"sprmPicBrcLeft80" pic.brcLeft;
+        {0x6C03, nullptr},                                 //"sprmPicBrcLeft80" pic.brcLeft;
                                                      //BRC;long;
-        {0x6C04, 0},                                 //"sprmPicBrcBottom80"
+        {0x6C04, nullptr},                                 //"sprmPicBrcBottom80"
                                                      //pic.brcBottom;BRC;long;
-        {0x6C05, 0},                                 //"sprmPicBrcRight80"
+        {0x6C05, nullptr},                                 //"sprmPicBrcRight80"
                                                      //pic.brcRight;BRC;long;
-        {0x3000, 0},                                 //"sprmScnsPgn" sep.cnsPgn;cns;
+        {0x3000, nullptr},                                 //"sprmScnsPgn" sep.cnsPgn;cns;
                                                      //byte;
-        {0x3001, 0},                                 //"sprmSiHeadingPgn"
+        {0x3001, nullptr},                                 //"sprmSiHeadingPgn"
                                                      //sep.iHeadingPgn;heading
                                                      //number level;byte;
         {0xD202, &SwWW8ImplReader::Read_OLST},       //"sprmSOlstAnm" sep.olstAnm;
                                                      //OLST;variable length;
-        {0xF203, 0},                                 //"sprmSDxaColWidth"
+        {0xF203, nullptr},                                 //"sprmSDxaColWidth"
                                                      //sep.rgdxaColWidthSpacing;
                                                      //complex; 3 bytes;
-        {0xF204, 0},                                 //"sprmSDxaColSpacing"
+        {0xF204, nullptr},                                 //"sprmSDxaColSpacing"
                                                      //sep.rgdxaColWidthSpacing;
                                                      //complex; 3 bytes;
-        {0x3005, 0},                                 //"sprmSFEvenlySpaced"
+        {0x3005, nullptr},                                 //"sprmSFEvenlySpaced"
                                                      //sep.fEvenlySpaced; 1 or 0;
                                                      //byte;
-        {0x3006, 0},                                 //"sprmSFProtected"
+        {0x3006, nullptr},                                 //"sprmSFProtected"
                                                      //sep.fUnlocked;1 or 0;byte;
-        {0x5007, 0},                                 //"sprmSDmBinFirst"
+        {0x5007, nullptr},                                 //"sprmSDmBinFirst"
                                                      //sep.dmBinFirst;;word;
-        {0x5008, 0},                                 //"sprmSDmBinOther"
+        {0x5008, nullptr},                                 //"sprmSDmBinOther"
                                                      //sep.dmBinOther;;word;
-        {0x3009, 0},                                 //"sprmSBkc" sep.bkc;bkc;byte;
-        {0x300A, 0},                                 //"sprmSFTitlePage"
+        {0x3009, nullptr},                                 //"sprmSBkc" sep.bkc;bkc;byte;
+        {0x300A, nullptr},                                 //"sprmSFTitlePage"
                                                      //sep.fTitlePage;0 or 1;byte;
-        {0x500B, 0},                                 //"sprmSCcolumns" sep.ccolM1;
+        {0x500B, nullptr},                                 //"sprmSCcolumns" sep.ccolM1;
                                                      //# of cols - 1;word;
-        {0x900C, 0},                                 //"sprmSDxaColumns"
+        {0x900C, nullptr},                                 //"sprmSDxaColumns"
                                                      //sep.dxaColumns;dxa;word;
-        {0x300D, 0},                                 //"sprmSFAutoPgn" sep.fAutoPgn;
+        {0x300D, nullptr},                                 //"sprmSFAutoPgn" sep.fAutoPgn;
                                                      //obsolete;byte;
-        {0x300E, 0},                                 //"sprmSNfcPgn" sep.nfcPgn;nfc;
+        {0x300E, nullptr},                                 //"sprmSNfcPgn" sep.nfcPgn;nfc;
                                                      //byte;
-        {0xB00F, 0},                                 //"sprmSDyaPgn" sep.dyaPgn;dya;
+        {0xB00F, nullptr},                                 //"sprmSDyaPgn" sep.dyaPgn;dya;
                                                      //short;
-        {0xB010, 0},                                 //"sprmSDxaPgn" sep.dxaPgn;dya;
+        {0xB010, nullptr},                                 //"sprmSDxaPgn" sep.dxaPgn;dya;
                                                      //short;
-        {0x3011, 0},                                 //"sprmSFPgnRestart"
+        {0x3011, nullptr},                                 //"sprmSFPgnRestart"
                                                      //sep.fPgnRestart;0 or 1;byte;
-        {0x3012, 0},                                 //"sprmSFEndnote" sep.fEndnote;
+        {0x3012, nullptr},                                 //"sprmSFEndnote" sep.fEndnote;
                                                      //0 or 1;byte;
-        {0x3013, 0},                                 //"sprmSLnc" sep.lnc;lnc;byte;
-        {0x3014, 0},                                 //"sprmSGprfIhdt" sep.grpfIhdt;
+        {0x3013, nullptr},                                 //"sprmSLnc" sep.lnc;lnc;byte;
+        {0x3014, nullptr},                                 //"sprmSGprfIhdt" sep.grpfIhdt;
                                                      //grpfihdt; byte;
-        {0x5015, 0},                                 //"sprmSNLnnMod" sep.nLnnMod;
+        {0x5015, nullptr},                                 //"sprmSNLnnMod" sep.nLnnMod;
                                                      //non-neg int.;word;
-        {0x9016, 0},                                 //"sprmSDxaLnn" sep.dxaLnn;dxa;
+        {0x9016, nullptr},                                 //"sprmSDxaLnn" sep.dxaLnn;dxa;
                                                      //word;
-        {0xB017, 0},                                 //"sprmSDyaHdrTop"
+        {0xB017, nullptr},                                 //"sprmSDyaHdrTop"
                                                      //sep.dyaHdrTop;dya;word;
-        {0xB018, 0},                                 //"sprmSDyaHdrBottom"
+        {0xB018, nullptr},                                 //"sprmSDyaHdrBottom"
                                                      //sep.dyaHdrBottom;dya;word;
-        {0x3019, 0},                                 //"sprmSLBetween"
+        {0x3019, nullptr},                                 //"sprmSLBetween"
                                                      //sep.fLBetween;0 or 1;byte;
         {0x301A, &SwWW8ImplReader::Read_TextVerticalAdjustment},  //"sprmSVjc" sep.vjc;vjc;byte;
-        {0x501B, 0},                                 //"sprmSLnnMin" sep.lnnMin;lnn;
+        {0x501B, nullptr},                                 //"sprmSLnnMin" sep.lnnMin;lnn;
                                                      //word;
-        {0x501C, 0},                                 //"sprmSPgnStart" sep.pgnStart;
+        {0x501C, nullptr},                                 //"sprmSPgnStart" sep.pgnStart;
                                                      //pgn;word;
-        {0x301D, 0},                                 //"sprmSBOrientation"
+        {0x301D, nullptr},                                 //"sprmSBOrientation"
                                                      //sep.dmOrientPage;dm;byte;
       //0x301E, ? ? ?,                               //"sprmSBCustomize"
-        {0xB01F, 0},                                 //"sprmSXaPage" sep.xaPage;xa;
+        {0xB01F, nullptr},                                 //"sprmSXaPage" sep.xaPage;xa;
                                                      //word;
-        {0xB020, 0},                                 //"sprmSYaPage" sep.yaPage;ya;
+        {0xB020, nullptr},                                 //"sprmSYaPage" sep.yaPage;ya;
                                                      //word;
-        {0x2205, 0},                                 //"sprmSDxaLeft" sep.dxaLeft;
+        {0x2205, nullptr},                                 //"sprmSDxaLeft" sep.dxaLeft;
                                                      //dxa;word;
-        {0xB022, 0},                                 //"sprmSDxaRight" sep.dxaRight;
+        {0xB022, nullptr},                                 //"sprmSDxaRight" sep.dxaRight;
                                                      //dxa;word;
-        {0x9023, 0},                                 //"sprmSDyaTop" sep.dyaTop;dya;
+        {0x9023, nullptr},                                 //"sprmSDyaTop" sep.dyaTop;dya;
                                                      //word;
-        {0x9024, 0},                                 //"sprmSDyaBottom"
+        {0x9024, nullptr},                                 //"sprmSDyaBottom"
                                                      //sep.dyaBottom;dya;word;
-        {0xB025, 0},                                 //"sprmSDzaGutter"
+        {0xB025, nullptr},                                 //"sprmSDzaGutter"
                                                      //sep.dzaGutter;dza;word;
-        {0x5026, 0},                                 //"sprmSDmPaperReq"
+        {0x5026, nullptr},                                 //"sprmSDmPaperReq"
                                                      //sep.dmPaperReq;dm;word;
-        {0xD227, 0},                                 //"sprmSPropRMark"
+        {0xD227, nullptr},                                 //"sprmSPropRMark"
                                                      //sep.fPropRMark,
                                                      //sep.ibstPropRMark,
                                                      //sep.dttmPropRMark ;complex;
@@ -6045,148 +6045,148 @@ const wwSprmDispatcher *GetWW8SprmDispatcher()
                                                      //recorded as 7 bytes;
       //0x3228, ? ? ?,                               //"sprmSFBiDi",
       //0x3229, ? ? ?,                               //"sprmSFFacingCol"
-        {0x322A, 0},                                 //"sprmSFRTLGutter", set to 1
+        {0x322A, nullptr},                                 //"sprmSFRTLGutter", set to 1
                                                      //if gutter is on the right.
-        {0x702B, 0},                                 //"sprmSBrcTop80" sep.brcTop;BRC;
+        {0x702B, nullptr},                                 //"sprmSBrcTop80" sep.brcTop;BRC;
                                                      //long;
-        {0x702C, 0},                                 //"sprmSBrcLeft80" sep.brcLeft;
+        {0x702C, nullptr},                                 //"sprmSBrcLeft80" sep.brcLeft;
                                                      //BRC;long;
-        {0x702D, 0},                                 //"sprmSBrcBottom80"
+        {0x702D, nullptr},                                 //"sprmSBrcBottom80"
                                                      //sep.brcBottom;BRC;long;
-        {0x702E, 0},                                 //"sprmSBrcRight80" sep.brcRight;
+        {0x702E, nullptr},                                 //"sprmSBrcRight80" sep.brcRight;
                                                      //BRC;long;
-        {0x522F, 0},                                 //"sprmSPgbProp" sep.pgbProp;
+        {0x522F, nullptr},                                 //"sprmSPgbProp" sep.pgbProp;
                                                      //word;
-        {0x7030, 0},                                 //"sprmSDxtCharSpace"
+        {0x7030, nullptr},                                 //"sprmSDxtCharSpace"
                                                      //sep.dxtCharSpace;dxt;long;
-        {0x9031, 0},                                 //"sprmSDyaLinePitch"
+        {0x9031, nullptr},                                 //"sprmSDyaLinePitch"
                                                      //sep.dyaLinePitch;dya;
                                                      //WRONG:long; RIGHT:short; !
       //0x5032, ? ? ?,                               //"sprmSClm"
-        {0x5033, 0},                                 //"sprmSTextFlow"
+        {0x5033, nullptr},                                 //"sprmSTextFlow"
                                                      //sep.wTextFlow;complex ;short
-        {0x5400, 0},                                 //"sprmTJc90" tap.jc;jc;word (low
+        {0x5400, nullptr},                                 //"sprmTJc90" tap.jc;jc;word (low
                                                      //order byte is significant);
-        {0x9601, 0},                                 //"sprmTDxaLeft"
+        {0x9601, nullptr},                                 //"sprmTDxaLeft"
                                                      //tap.rgdxaCenter; dxa; word;
-        {0x9602, 0},                                 //"sprmTDxaGapHalf"
+        {0x9602, nullptr},                                 //"sprmTDxaGapHalf"
                                                      //tap.dxaGapHalf,
                                                      //tap.rgdxaCenter; dxa; word;
-        {0x3403, 0},                                 //"sprmTFCantSplit"
+        {0x3403, nullptr},                                 //"sprmTFCantSplit"
                                                      //tap.fCantSplit;1 or 0;byte;
-        {0x3404, 0},                                 //"sprmTTableHeader"
+        {0x3404, nullptr},                                 //"sprmTTableHeader"
                                                      //tap.fTableHeader;1 or 0;byte;
-        {0x3466, 0},                                 //"sprmTFCantSplit90"
+        {0x3466, nullptr},                                 //"sprmTFCantSplit90"
                                                      //tap.fCantSplit90;1 or 0;byte;
-        {0xD605, 0},                                 //"sprmTTableBorders80"
+        {0xD605, nullptr},                                 //"sprmTTableBorders80"
                                                      //tap.rgbrcTable;complex;
                                                      //24 bytes;
-        {0xD606, 0},                                 //"sprmTDefTable10"
+        {0xD606, nullptr},                                 //"sprmTDefTable10"
                                                      //tap.rgdxaCenter,
                                                      //tap.rgtc;complex; variable
                                                      //length;
-        {0x9407, 0},                                 //"sprmTDyaRowHeight"
+        {0x9407, nullptr},                                 //"sprmTDyaRowHeight"
                                                      //tap.dyaRowHeight;dya;word;
-        {0xD608, 0},                                 //"sprmTDefTable"
+        {0xD608, nullptr},                                 //"sprmTDefTable"
                                                      //tap.rgtc;complex
-        {0xD609, 0},                                 //"sprmTDefTableShd80"
+        {0xD609, nullptr},                                 //"sprmTDefTableShd80"
                                                      //tap.rgshd;complex
-        {0x740A, 0},                                 //"sprmTTlp" tap.tlp;TLP;
+        {0x740A, nullptr},                                 //"sprmTTlp" tap.tlp;TLP;
                                                      //4 bytes;
       //0x560B, ? ? ?,                               //"sprmTFBiDi"
       //0x740C, ? ? ?,                               //"sprmTHTMLProps"
-        {0xD620, 0},                                 //"sprmTSetBrc80"
+        {0xD620, nullptr},                                 //"sprmTSetBrc80"
                                                      //tap.rgtc[].rgbrc;complex;
                                                      //5 bytes;
-        {0x7621, 0},                                 //"sprmTInsert"
+        {0x7621, nullptr},                                 //"sprmTInsert"
                                                      //tap.rgdxaCenter,
                                                      //tap.rgtc;complex ;4 bytes;
-        {0x5622, 0},                                 //"sprmTDelete"
+        {0x5622, nullptr},                                 //"sprmTDelete"
                                                      //tap.rgdxaCenter,
                                                      //tap.rgtc;complex ;word;
-        {0x7623, 0},                                 //"sprmTDxaCol"
+        {0x7623, nullptr},                                 //"sprmTDxaCol"
                                                      //tap.rgdxaCenter;complex;
                                                      //4 bytes;
-        {0x5624, 0},                                 //"sprmTMerge"
+        {0x5624, nullptr},                                 //"sprmTMerge"
                                                      //tap.fFirstMerged,
                                                      //tap.fMerged;complex; word;
-        {0x5625, 0},                                 //"sprmTSplit"
+        {0x5625, nullptr},                                 //"sprmTSplit"
                                                      //tap.fFirstMerged,
                                                      //tap.fMerged;complex ;word;
-        {0xD626, 0},                                 //"sprmTSetBrc10"
+        {0xD626, nullptr},                                 //"sprmTSetBrc10"
                                                      //tap.rgtc[].rgbrc;complex;
                                                      //5 bytes;
-        {0x7627, 0},                                 //"sprmTSetShd80" tap.rgshd;
+        {0x7627, nullptr},                                 //"sprmTSetShd80" tap.rgshd;
                                                      //complex; 4 bytes;
-        {0x7628, 0},                                 //"sprmTSetShdOdd80"
+        {0x7628, nullptr},                                 //"sprmTSetShdOdd80"
                                                      //tap.rgshd;complex;4 bytes;
-        {0x7629, 0},                                 //"sprmTTextFlow"
+        {0x7629, nullptr},                                 //"sprmTTextFlow"
                                                      //tap.rgtc[].fVertical
                                                      //tap.rgtc[].fBackward
                                                      //tap.rgtc[].fRotateFont
                                                      //0 or 10 or 10 or 1;word;
       //0xD62A, ? ? ?  ,                             //"sprmTDiagLine"
-        {0xD62B, 0},                                 //"sprmTVertMerge"
+        {0xD62B, nullptr},                                 //"sprmTVertMerge"
                                                      //tap.rgtc[].vertMerge;complex;
                                                      //variable length always
                                                      //recorded as 2 bytes;
-        {0xD62C, 0},                                 //"sprmTVertAlign"
+        {0xD62C, nullptr},                                 //"sprmTVertAlign"
                                                      //tap.rgtc[].vertAlign;complex
                                                      //variable length always
                                                      //recorded as 3 byte;
         {NS_sprm::LN_CFELayout, &SwWW8ImplReader::Read_DoubleLine_Rotate},
-        {0x6649, 0},                                 //undocumented
-        {0xF614, 0},                                 //"sprmTTableWidth"
+        {0x6649, nullptr},                                 //undocumented
+        {0xF614, nullptr},                                 //"sprmTTableWidth"
                                                      //recorded as 3 bytes;
-        {0xD612, 0},                                 //"sprmTCellShd"
-        {0xD613, 0},                                 //"sprmTTableBorders"
-        {0xD61A, 0},                                 //undocumented
-        {0xD61B, 0},                                 //undocumented
-        {0xD61C, 0},                                 //undocumented
-        {0xD61D, 0},                                 //undocumented
-        {0xD634, 0},                                 //undocumented
-        {0xD632, 0},                                 //undocumented
-        {0xD238, 0},                                 //undocumented sep
+        {0xD612, nullptr},                                 //"sprmTCellShd"
+        {0xD613, nullptr},                                 //"sprmTTableBorders"
+        {0xD61A, nullptr},                                 //undocumented
+        {0xD61B, nullptr},                                 //undocumented
+        {0xD61C, nullptr},                                 //undocumented
+        {0xD61D, nullptr},                                 //undocumented
+        {0xD634, nullptr},                                 //undocumented
+        {0xD632, nullptr},                                 //undocumented
+        {0xD238, nullptr},                                 //undocumented sep
         {0xC64E, &SwWW8ImplReader::Read_Border},     //"sprmPBrcTop"
         {0xC64F, &SwWW8ImplReader::Read_Border},     //"sprmPBrcLeft"
         {0xC650, &SwWW8ImplReader::Read_Border},     //"sprmPBrcBottom"
         {0xC651, &SwWW8ImplReader::Read_Border},     //"sprmPBrcRight"
         {0xC652, &SwWW8ImplReader::Read_Border},     //"sprmPBorderBetween"
-        {0xF661, 0},                                 //undocumented
+        {0xF661, nullptr},                                 //undocumented
         {0x4873, &SwWW8ImplReader::Read_Language},   //"sprmCRgLid0" chp.rglid[0];
                                                      //LID: for non-Far East text;
                                                      //(like a duplicate of 486D)
-        {0x4874, 0},                                 //"sprmCRgLid1" chp.rglid[1];
+        {0x4874, nullptr},                                 //"sprmCRgLid1" chp.rglid[1];
                                                      //LID: for Far East text
                                                      //(like a duplicate of 486E)
-        {0x6463, 0},                                 //undocumented
+        {0x6463, nullptr},                                 //undocumented
         {0x2461, &SwWW8ImplReader::Read_RTLJustify}, //undoc, must be asian version
                                                      //of "sprmPJc"
         {0x845E, &SwWW8ImplReader::Read_LR},         //Apparently post-Word 97 version of "sprmPDxaLeft"
         {0x8460, &SwWW8ImplReader::Read_LR},         //Post-Word 97 version of "sprmPDxaLeft1"
         {0x845D, &SwWW8ImplReader::Read_LR},         //Post-Word 97 version of "sprmPDxaRight"
-        {0x3615, 0},                                 //undocumented
-        {0x360D, 0},                                 //undocumented
-        {0x940E, 0},                                 //undocumented
-        {0x940F, 0},                                 //undocumented
-        {0x9410, 0},                                 //undocumented
-        {0x703A, 0},                                 //undocumented
-        {0x303B, 0},                                 //undocumented
+        {0x3615, nullptr},                                 //undocumented
+        {0x360D, nullptr},                                 //undocumented
+        {0x940E, nullptr},                                 //undocumented
+        {0x940F, nullptr},                                 //undocumented
+        {0x9410, nullptr},                                 //undocumented
+        {0x703A, nullptr},                                 //undocumented
+        {0x303B, nullptr},                                 //undocumented
         {0x244B, &SwWW8ImplReader::Read_TabCellEnd}, //undocumented, must be
                                                      //subtable "sprmPFInTable"
         {0x244C, &SwWW8ImplReader::Read_TabRowEnd},  //undocumented, must be
                                                      // subtable "sprmPFTtp"
-        {0x6815, 0},                                 //undocumented
-        {0x6816, 0},                                 //undocumented
+        {0x6815, nullptr},                                 //undocumented
+        {0x6816, nullptr},                                 //undocumented
         {NS_sprm::LN_CCv, &SwWW8ImplReader::Read_TextForeColor},
         {NS_sprm::LN_CCvUl, &SwWW8ImplReader::Read_UnderlineColor},
         {0xC64D, &SwWW8ImplReader::Read_ParaBackColor},
-        {0x6467, 0},                                 //undocumented
-        {0xF617, 0},                                 //undocumented
-        {0xD660, 0},                                 //undocumented
-        {0xD670, 0},                                 //undocumented
+        {0x6467, nullptr},                                 //undocumented
+        {0xF617, nullptr},                                 //undocumented
+        {0xD660, nullptr},                                 //undocumented
+        {0xD670, nullptr},                                 //undocumented
         {0xCA71, &SwWW8ImplReader::Read_TextBackColor},//"sprmCShd"
-        {0x303C, 0},                                 //undocumented
+        {0x303C, nullptr},                                 //undocumented
         {0x245B, &SwWW8ImplReader::Read_ParaAutoBefore},//undocumented, para
         {0x245C, &SwWW8ImplReader::Read_ParaAutoAfter},//undocumented, para
         {0x246D, &SwWW8ImplReader::Read_ParaContextualSpacing} //"sprmPFContextualSpacing"
@@ -6209,7 +6209,7 @@ const SprmReadInfo& SwWW8ImplReader::GetSprmReadInfo(sal_uInt16 nId) const
     else
         pDispatcher = GetWW8SprmDispatcher();
 
-    SprmReadInfo aSrch = {0, 0};
+    SprmReadInfo aSrch = {0, nullptr};
     aSrch.nId = nId;
     const SprmReadInfo* pFound = pDispatcher->search(aSrch);
 
@@ -6231,7 +6231,7 @@ void SwWW8ImplReader::EndSprm( sal_uInt16 nId )
     const SprmReadInfo& rSprm = GetSprmReadInfo( nId );
 
     if (rSprm.pReadFnc)
-        (this->*rSprm.pReadFnc)( nId, 0, -1 );
+        (this->*rSprm.pReadFnc)( nId, nullptr, -1 );
 }
 
 short SwWW8ImplReader::ImportSprm(const sal_uInt8* pPos,sal_uInt16 nId)

@@ -53,7 +53,7 @@ protected:
 
 public:
         TextViewOutWin(vcl::Window* pParent, WinBits nBits) :
-            Window(pParent, nBits), pTextView(0){}
+            Window(pParent, nBits), pTextView(nullptr){}
 
     void    SetTextView( ExtTextView* pView ) {pTextView = pView;}
 

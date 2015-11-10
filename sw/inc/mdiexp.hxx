@@ -43,8 +43,8 @@ extern void PageNumNotify( SwViewShell* pVwSh,
 enum FlyMode { FLY_DRAG_START, FLY_DRAG, FLY_DRAG_END };
 extern void FrameNotify( SwViewShell* pVwSh, FlyMode eMode = FLY_DRAG );
 
-SW_DLLPUBLIC void StartProgress    ( sal_uInt16 nMessId, long nStartVal, long nEndVal, SwDocShell *pDocSh = 0 );
-SW_DLLPUBLIC void EndProgress      ( SwDocShell *pDocSh = 0 );
+SW_DLLPUBLIC void StartProgress    ( sal_uInt16 nMessId, long nStartVal, long nEndVal, SwDocShell *pDocSh = nullptr );
+SW_DLLPUBLIC void EndProgress      ( SwDocShell *pDocSh = nullptr );
 SW_DLLPUBLIC void SetProgressState  ( long nPosition, SwDocShell *pDocShell );
 void SetProgressText   ( sal_uInt16 nMessId, SwDocShell *pDocShell );
 void RescheduleProgress( SwDocShell *pDocShell );

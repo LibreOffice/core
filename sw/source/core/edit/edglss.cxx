@@ -182,7 +182,7 @@ bool SwEditShell::_CopySelToDoc( SwDoc* pInsDoc, SwNodeIndex* pSttNd )
         SwTableNode* pTableNd;
         SwSelBoxes aBoxes;
         GetTableSel( *this, aBoxes );
-        if( !aBoxes.empty() && 0 != (pTableNd = const_cast<SwTableNode*>(aBoxes[0]
+        if( !aBoxes.empty() && nullptr != (pTableNd = const_cast<SwTableNode*>(aBoxes[0]
             ->GetSttNd()->FindTableNode()) ))
         {
             // check if the table name can be copied
@@ -198,7 +198,7 @@ bool SwEditShell::_CopySelToDoc( SwDoc* pInsDoc, SwNodeIndex* pSttNd )
                         break;
                     }
             }
-            bRet = pInsDoc->InsCopyOfTable( aPos, aBoxes, 0, bCpyTableNm );
+            bRet = pInsDoc->InsCopyOfTable( aPos, aBoxes, nullptr, bCpyTableNm );
         }
         else
             bRet = false;
@@ -215,7 +215,7 @@ bool SwEditShell::_CopySelToDoc( SwDoc* pInsDoc, SwNodeIndex* pSttNd )
                 if( !rPaM.HasMark() )
                 {
                     SwContentNode *const pNd = rPaM.GetContentNode();
-                    if (0 != pNd &&
+                    if (nullptr != pNd &&
                         ( bColSel || !pNd->GetTextNode() ) )
                     {
                         rPaM.SetMark();
@@ -248,7 +248,7 @@ bool SwEditShell::_CopySelToDoc( SwDoc* pInsDoc, SwNodeIndex* pSttNd )
 
     pInsDoc->getIDocumentFieldsAccess().UnlockExpFields();
     if( !pInsDoc->getIDocumentFieldsAccess().IsExpFieldsLocked() )
-        pInsDoc->getIDocumentFieldsAccess().UpdateExpFields(NULL, true);
+        pInsDoc->getIDocumentFieldsAccess().UpdateExpFields(nullptr, true);
 
     // set the saved Node position back to the correct Node
     if( bRet && pSttNd )

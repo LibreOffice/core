@@ -337,7 +337,7 @@ public:
     virtual AbstractSwBreakDlg * CreateSwBreakDlg(vcl::Window *pParent, SwWrtShell &rSh) = 0;
     virtual VclAbstractDialog   * CreateSwChangeDBDlg(SwView& rVw) = 0;
     virtual SfxAbstractTabDialog *  CreateSwCharDlg(vcl::Window* pParent, SwView& pVw, const SfxItemSet& rCoreSet,
-        sal_uInt8 nDialogMode, const OUString* pFormatStr = 0) = 0;
+        sal_uInt8 nDialogMode, const OUString* pFormatStr = nullptr) = 0;
     virtual AbstractSwConvertTableDlg* CreateSwConvertTableDlg(SwView& rView, bool bToTable) = 0;
     virtual VclAbstractDialog * CreateSwCaptionDialog ( vcl::Window *pParent, SwView &rV,int nResId) = 0;
 
@@ -360,7 +360,7 @@ public:
                                                     SwView& rVw,
                                                     const SfxItemSet& rCoreSet,
                                                     sal_uInt8 nDialogMode,
-                                                    const OUString *pCollName = 0,
+                                                    const OUString *pCollName = nullptr,
                                                     bool bDraw = false,
                                                     const OString& sDefPage = OString() ) = 0;
 
@@ -371,7 +371,7 @@ public:
 
     virtual AbstractSwAutoFormatDlg * CreateSwAutoFormatDlg( vcl::Window* pParent, SwWrtShell* pShell,
                                                             bool bSetAutoFormat = true,
-                                                            const SwTableAutoFormat* pSelFormat = 0 ) = 0;
+                                                            const SwTableAutoFormat* pSelFormat = nullptr ) = 0;
     virtual SfxAbstractDialog * CreateSwBorderDlg ( vcl::Window* pParent, SfxItemSet& rSet, SwBorderModes nType, int nResId ) = 0;
     virtual SfxAbstractDialog * CreateSwWrapDlg ( vcl::Window* pParent, SfxItemSet& rSet, SwWrtShell* pSh, bool bDrawMode, int nResId ) = 0;
 
@@ -393,7 +393,7 @@ public:
                                                 bool bNewFrm = true,
                                                 bool bFormat = false,
                                                 const OString& sDefPage = OString(),
-                                                const OUString* pFormatStr = 0) = 0;
+                                                const OUString* pFormatStr = nullptr) = 0;
     /// @param nSlot
     /// Identifies optional Slot by which the creation of the Template (Style) dialog is triggered.
     /// Currently used, if nRegion == SFX_STYLE_FAMILY_PAGE in order to activate certain dialog pane
@@ -402,7 +402,7 @@ public:
                                                 SfxStyleSheetBase&  rBase,
                                                 sal_uInt16          nRegion,
                                                 const OString&      sPage = OString(),
-                                                SwWrtShell*         pActShell = 0,
+                                                SwWrtShell*         pActShell = nullptr,
                                                 bool                bNew = false) = 0;
     virtual AbstractGlossaryDlg*        CreateGlossaryDlg(SfxViewFrame* pViewFrame,
                                                 SwGlossaryHdl* pGlosHdl,
@@ -422,7 +422,7 @@ public:
                                                 const OUString& rTableName,
                                                 sal_Int32 nCommandType,
                                                 const css::uno::Reference< css::sdbc::XConnection>& xConnection,
-                                                css::uno::Sequence< css::uno::Any >* pSelection = 0 ) = 0;
+                                                css::uno::Sequence< css::uno::Any >* pSelection = nullptr ) = 0;
     virtual AbstractMailMergeCreateFromDlg*     CreateMailMergeCreateFromDlg(vcl::Window* pParent) = 0;
     virtual AbstractMailMergeFieldConnectionsDlg* CreateMailMergeFieldConnectionsDlg(vcl::Window* pParent) = 0;
     virtual VclAbstractDialog*          CreateMultiTOXMarkDlg(vcl::Window* pParent, SwTOXMgr &rTOXMgr) = 0;

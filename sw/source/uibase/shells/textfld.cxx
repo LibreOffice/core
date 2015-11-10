@@ -109,7 +109,7 @@ static OUString lcl_BuildTitleWithRedline( const SwRangeRedline *pRedline )
 void SwTextShell::ExecField(SfxRequest &rReq)
 {
     SwWrtShell& rSh = GetShell();
-    const SfxPoolItem* pItem = 0;
+    const SfxPoolItem* pItem = nullptr;
 
     sal_uInt16 nSlot = rReq.GetSlot();
     const SfxItemSet* pArgs = rReq.GetArgs();
@@ -183,7 +183,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                 bool bRet = false;
                 SwFieldType* pField = rSh.GetFieldType( 0, RES_INPUTFLD );
                 const bool bAddSetExpressionFields = !( rSh.GetViewOptions()->IsReadonly() );
-                if ( pField != NULL
+                if ( pField != nullptr
                      && rSh.MoveFieldType(
                             pField,
                             FN_GOTO_NEXT_INPUTFLD == nSlot,
@@ -191,7 +191,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                             bAddSetExpressionFields ) )
                 {
                     rSh.ClearMark();
-                    if ( dynamic_cast<SwInputField*>(rSh.GetCurField( true )) != NULL )
+                    if ( dynamic_cast<SwInputField*>(rSh.GetCurField( true )) != nullptr )
                     {
                         rSh.SttSelect();
                         rSh.SelectText(
@@ -304,7 +304,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                 {
                     SfxViewFrame* pVFrame = GetView().GetViewFrame();
                     pVFrame->ToggleChildWindow(FN_INSERT_FIELD);
-                    bRes = pVFrame->GetChildWindow( nSlot ) != 0;
+                    bRes = pVFrame->GetChildWindow( nSlot ) != nullptr;
                     Invalidate(rReq.GetSlot());
                     Invalidate(FN_INSERT_FIELD_CTRL);
                     rReq.Ignore();
@@ -420,7 +420,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                     {
                         if ( pSwFormatField->GetField() == pPostIt )
                         {
-                            pSwFormatField->Broadcast( SwFormatFieldHint( 0, SwFormatFieldHintWhich::FOCUS, &GetView() ) );
+                            pSwFormatField->Broadcast( SwFormatFieldHint( nullptr, SwFormatFieldHintWhich::FOCUS, &GetView() ) );
                             break;
                         }
                         pSwFormatField = aIter.Next();
@@ -477,7 +477,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                         pActRed = rSh.SelPrevRedline();
                     }
 
-                    bool bPrev = pActRed != 0;
+                    bool bPrev = pActRed != nullptr;
                     rSh.Pop(false);
                     rSh.EndAction();
 
@@ -487,7 +487,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                     rSh.StartAction();
                     rSh.Push();
                     pActRed = rSh.SelNextRedline();
-                    bool bNext = pActRed != 0;
+                    bool bNext = pActRed != nullptr;
                     rSh.Pop(false); // Restore cursor position
 
                     if( rSh.IsCrsrPtAtEnd() )
@@ -525,7 +525,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                     }
 
                     pDlg.reset();
-                    SwViewShell::SetCareWin(NULL);
+                    SwViewShell::SetCareWin(nullptr);
                     g_bNoInterrupt = false;
                     rSh.ClearMark();
                     GetView().AttrChangedNotify(GetShellPtr());
@@ -643,7 +643,7 @@ void SwTextShell::StateField( SfxItemSet &rSet )
 {
     SwWrtShell& rSh = GetShell();
     SfxWhichIter aIter( rSet );
-    const SwField* pField = 0;
+    const SwField* pField = nullptr;
     bool bGetField = false;
     sal_uInt16 nWhich = aIter.FirstWhich();
 
@@ -869,7 +869,7 @@ IMPL_LINK_TYPED( SwTextShell, RedlineNextHdl, AbstractSvxPostItDialog&, rDlg, vo
 
         pSh->Push();
         const SwRangeRedline *pActRed = pSh->SelNextRedline();
-        pSh->Pop(pActRed != 0);
+        pSh->Pop(pActRed != nullptr);
 
         bool bEnable = false;
 
@@ -877,7 +877,7 @@ IMPL_LINK_TYPED( SwTextShell, RedlineNextHdl, AbstractSvxPostItDialog&, rDlg, vo
         {
             pSh->StartAction();
             pSh->Push();
-            bEnable = pSh->SelNextRedline() != 0;
+            bEnable = pSh->SelNextRedline() != nullptr;
             pSh->Pop(false);
             pSh->EndAction();
         }
@@ -913,7 +913,7 @@ IMPL_LINK_TYPED( SwTextShell, RedlinePrevHdl, AbstractSvxPostItDialog&, rDlg, vo
         // Traveling only if more than one field.
         pSh->Push();
         const SwRangeRedline *pActRed = pSh->SelPrevRedline();
-        pSh->Pop(pActRed != 0);
+        pSh->Pop(pActRed != nullptr);
 
         bool bEnable = false;
 
@@ -921,7 +921,7 @@ IMPL_LINK_TYPED( SwTextShell, RedlinePrevHdl, AbstractSvxPostItDialog&, rDlg, vo
         {
             pSh->StartAction();
             pSh->Push();
-            bEnable = pSh->SelPrevRedline() != 0;
+            bEnable = pSh->SelPrevRedline() != nullptr;
             pSh->Pop(false);
             pSh->EndAction();
         }

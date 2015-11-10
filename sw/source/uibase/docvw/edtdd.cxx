@@ -82,7 +82,7 @@ void SwEditWin::StartDrag( sal_Int8 /*nAction*/, const Point& rPosPixel )
     if ( !m_pApplyTempl && !rSh.IsDrawCreate() && !IsDrawAction())
     {
         bool bStart = false, bDelSelect = false;
-        SdrObject *pObj = NULL;
+        SdrObject *pObj = nullptr;
         Point aDocPos( PixelToLogic( rPosPixel ) );
         if ( !rSh.IsInSelect() && rSh.ChgCurrPam( aDocPos, true, true))
             //We are not selecting and aren't at a selection
@@ -174,8 +174,8 @@ void SwEditWin::CleanupDropUserMarker()
     if ( m_pUserMarker )
     {
         delete m_pUserMarker;
-        m_pUserMarker = 0;
-        m_pUserMarkerObj = 0;
+        m_pUserMarker = nullptr;
+        m_pUserMarkerObj = nullptr;
     }
 }
 
@@ -195,11 +195,11 @@ sal_Int8 SwEditWin::ExecuteDrop( const ExecuteDropEvent& rEvt )
     //A Drop to an open OutlinerView doesn't concern us (also see QueryDrop)
     SwWrtShell &rSh = m_rView.GetWrtShell();
     const Point aDocPt( PixelToLogic( rEvt.maPosPixel ));
-    SdrObject *pObj = 0;
+    SdrObject *pObj = nullptr;
     OutlinerView* pOLV;
     rSh.GetObjCntType( aDocPt, pObj );
 
-    if( pObj && 0 != ( pOLV = rSh.GetDrawView()->GetTextEditOutlinerView() ))
+    if( pObj && nullptr != ( pOLV = rSh.GetDrawView()->GetTextEditOutlinerView() ))
     {
         Rectangle aRect( pOLV->GetOutputArea() );
         aRect.Union( pObj->GetLogicRect() );
@@ -250,7 +250,7 @@ SotExchangeDest SwEditWin::GetDropDestination( const Point& rPixPnt, SdrObject *
         || rSh.DocPtInsideInputField( aDocPt ) )
         return SotExchangeDest::NONE;
 
-    SdrObject *pObj = NULL;
+    SdrObject *pObj = nullptr;
     const ObjCntType eType = rSh.GetObjCntType( aDocPt, pObj );
 
     //Drop to OutlinerView (TextEdit in Drawing) should decide it on its own!
@@ -278,7 +278,7 @@ SotExchangeDest SwEditWin::GetDropDestination( const Point& rPixPnt, SdrObject *
         case OBJCNT_GRF:
             {
                 bool bLink,
-                    bIMap = 0 != rSh.GetFormatFromObj( aDocPt )->GetURL().GetMap();
+                    bIMap = nullptr != rSh.GetFormatFromObj( aDocPt )->GetURL().GetMap();
                 OUString aDummy;
                 rSh.GetGrfAtPos( aDocPt, aDummy, bLink );
                 if ( bLink && bIMap )
@@ -368,7 +368,7 @@ sal_Int8 SwEditWin::AcceptDrop( const AcceptDropEvent& rEvt )
         m_bOldIdleSet = false;
     }
 
-    SdrObject *pObj = NULL;
+    SdrObject *pObj = nullptr;
     m_nDropDestination = GetDropDestination( aPixPt, &pObj );
     if( !bool(m_nDropDestination) )
         return DND_ACTION_NONE;

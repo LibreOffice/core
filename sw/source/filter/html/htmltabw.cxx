@@ -89,8 +89,8 @@ public:
     explicit SwHTMLWrtTable( const SwHTMLTableLayout *pLayoutInfo );
 
     void Write( SwHTMLWriter& rWrt, sal_Int16 eAlign=text::HoriOrientation::NONE,
-                bool bTHead=false, const SwFrameFormat *pFrameFormat=0,
-                const OUString *pCaption=0, bool bTopCaption=false,
+                bool bTHead=false, const SwFrameFormat *pFrameFormat=nullptr,
+                const OUString *pCaption=nullptr, bool bTopCaption=false,
                 sal_uInt16 nHSpace=0, sal_uInt16 nVSpace=0 ) const;
 };
 
@@ -98,13 +98,13 @@ SwHTMLWrtTable::SwHTMLWrtTable( const SwTableLines& rLines, long nWidth,
                                 sal_uInt32 nBWidth, bool bRel,
                                 sal_uInt16 nLSub, sal_uInt16 nRSub,
                                 sal_uInt16 nNumOfRowsToRepeat )
-    : SwWriteTable(NULL, rLines, nWidth, nBWidth, bRel, MAX_DEPTH, nLSub, nRSub, nNumOfRowsToRepeat)
+    : SwWriteTable(nullptr, rLines, nWidth, nBWidth, bRel, MAX_DEPTH, nLSub, nRSub, nNumOfRowsToRepeat)
 {
     PixelizeBorders();
 }
 
 SwHTMLWrtTable::SwHTMLWrtTable( const SwHTMLTableLayout *pLayoutInfo )
-    : SwWriteTable(NULL, pLayoutInfo)
+    : SwWriteTable(nullptr, pLayoutInfo)
 {
     // Einige Twip-Werte an Pixel-Grenzen anpassen
     if( bCollectBorderWidth )
@@ -414,7 +414,7 @@ void SwHTMLWrtTable::OutTableCell( SwHTMLWriter& rWrt,
 
     rWrt.m_bTextAttr = false;
     rWrt.m_bOutOpts = true;
-    const SvxBrushItem *pBrushItem = 0;
+    const SvxBrushItem *pBrushItem = nullptr;
     if( SfxItemState::SET==rItemSet.GetItemState( RES_BACKGROUND, false, &pItem ) )
     {
         pBrushItem = static_cast<const SvxBrushItem *>(pItem);
@@ -1110,7 +1110,7 @@ Writer& OutHTML_SwTableNode( Writer& rWrt, SwTableNode & rNode,
     {
     SwViewShell *pSh = rWrt.pDoc->getIDocumentLayoutAccess().GetCurrentViewShell();
     if ( pSh && pSh->GetViewOptions()->IsTest1() )
-        pLayout = 0;
+        pLayout = nullptr;
     }
 #endif
 

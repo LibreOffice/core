@@ -93,7 +93,7 @@ class CSS1Selector
 
 public:
     CSS1Selector( CSS1SelectorType eTyp, const OUString &rSel )
-        : eType(eTyp), aSelector( rSel ), pNext( 0 )
+        : eType(eTyp), aSelector( rSel ), pNext( nullptr )
     {}
 
     ~CSS1Selector();
@@ -123,7 +123,7 @@ struct CSS1Expression
 public:
     CSS1Expression( CSS1Token eTyp, const OUString &rVal,
                     double nVal, sal_Unicode cO = 0 )
-        : cOp(cO), eType(eTyp), aValue(rVal), nValue(nVal), pNext(0)
+        : cOp(cO), eType(eTyp), aValue(rVal), nValue(nVal), pNext(nullptr)
     {}
 
     ~CSS1Expression();
@@ -148,7 +148,7 @@ public:
 inline void CSS1Expression::Set( CSS1Token eTyp, const OUString &rVal,
                                  double nVal, sal_Unicode cO )
 {
-    cOp = cO; eType = eTyp; aValue = rVal; nValue = nVal; pNext = 0;
+    cOp = cO; eType = eTyp; aValue = rVal; nValue = nVal; pNext = nullptr;
 }
 
 inline sal_uInt32 CSS1Expression::GetULength() const

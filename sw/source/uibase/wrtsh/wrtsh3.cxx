@@ -43,7 +43,7 @@ extern bool g_bNoInterrupt;       // in swmodule.cxx
 bool SwWrtShell::MoveBookMark( BookMarkMove eFuncId, const ::sw::mark::IMark* const pMark)
 {
     addCurrentPosition();
-    (this->*m_fnKillSel)( 0, false );
+    (this->*m_fnKillSel)( nullptr, false );
 
     bool bRet = true;
     switch(eFuncId)
@@ -69,7 +69,7 @@ bool SwWrtShell::MoveBookMark( BookMarkMove eFuncId, const ::sw::mark::IMark* co
 
 bool SwWrtShell::GotoField( const SwFormatField& rField )
 {
-    (this->*m_fnKillSel)( 0, false );
+    (this->*m_fnKillSel)( nullptr, false );
 
     bool bRet = SwCrsrShell::GotoFormatField( rField );
     if( bRet && IsSelFrmMode() )
@@ -89,7 +89,7 @@ bool SwWrtShell::GotoField( const SwFormatField& rField )
 
 bool SwWrtShell::GotoFieldmark(::sw::mark::IFieldmark const * const pMark)
 {
-    (this->*m_fnKillSel)( 0, false );
+    (this->*m_fnKillSel)( nullptr, false );
     bool bRet = SwCrsrShell::GotoFieldmark(pMark);
     if( bRet && IsSelFrmMode() )
     {

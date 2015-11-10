@@ -220,7 +220,7 @@ private:
 protected:
 
     SwXFieldmark(bool isReplacementObject,
-            ::sw::mark::IMark* pBkm = 0, SwDoc* pDoc = 0);
+            ::sw::mark::IMark* pBkm = nullptr, SwDoc* pDoc = nullptr);
 
 public:
 
@@ -257,7 +257,7 @@ public:
 class SwXODFCheckboxField : public SwXFieldmark
 {
 public:
-    SwXODFCheckboxField( ::sw::mark::IMark* pBkm = 0, SwDoc* pDoc = 0) : SwXFieldmark(true,
+    SwXODFCheckboxField( ::sw::mark::IMark* pBkm = nullptr, SwDoc* pDoc = nullptr) : SwXFieldmark(true,
             pBkm, pDoc) {}
 };
 #endif // INCLUDED_SW_SOURCE_CORE_INC_UNOBOOKMARK_HXX

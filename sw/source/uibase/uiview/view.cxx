@@ -126,15 +126,15 @@ extern bool g_bNoInterrupt;       // in swmodule.cxx
 
 bool bDocSzUpdated = true;
 
-SvxSearchItem*  SwView::m_pSrchItem   = 0;
+SvxSearchItem*  SwView::m_pSrchItem   = nullptr;
 
 bool            SwView::m_bExtra      = false;
 bool            SwView::m_bFound      = false;
 bool            SwView::m_bJustOpened = false;
 
 VclPtr<SvxSearchDialog> SwView::m_pSrchDlg    = nullptr;
-SearchAttrItemList*     SwView::m_pSrchList   = 0;
-SearchAttrItemList*     SwView::m_pReplList   = 0;
+SearchAttrItemList*     SwView::m_pSrchList   = nullptr;
+SearchAttrItemList*     SwView::m_pReplList   = nullptr;
 
 inline SfxDispatcher &SwView::GetDispatcher()
 {
@@ -184,7 +184,7 @@ void SwView::GotFocus() const
         SwAnnotationShell* pAsAnnotationShell = dynamic_cast<SwAnnotationShell*>( pTopShell  );
         if ( pAsAnnotationShell )
         {
-            m_pPostItMgr->SetActiveSidebarWin(0);
+            m_pPostItMgr->SetActiveSidebarWin(nullptr);
             const_cast< SwView* >( this )->AttrChangedNotify( m_pWrtShell );
         }
     }
@@ -210,7 +210,7 @@ IMPL_LINK_NOARG_TYPED(SwView, FormControlActivated, LinkParamNone*, void)
     if ( !pAsFormShell )
     {
         // if we're editing text currently, cancel this
-        SdrView *pSdrView = m_pWrtShell ? m_pWrtShell->GetDrawView() : NULL;
+        SdrView *pSdrView = m_pWrtShell ? m_pWrtShell->GetDrawView() : nullptr;
         if ( pSdrView && pSdrView->IsTextEdit() )
             pSdrView->SdrEndTextEdit( true );
 
@@ -682,25 +682,25 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
     : SfxViewShell( _pFrame, SWVIEWFLAGS ),
     m_nNewPage(USHRT_MAX),
     m_nOldPageNum(0),
-    m_pNumRuleNodeFromDoc(0),
+    m_pNumRuleNodeFromDoc(nullptr),
     m_pEditWin( VclPtr<SwEditWin>::Create( &_pFrame->GetWindow(), *this ) ),
-    m_pWrtShell(0),
-    m_pShell(0),
-    m_pFormShell(0),
-    m_pHScrollbar(0),
-    m_pVScrollbar(0),
+    m_pWrtShell(nullptr),
+    m_pShell(nullptr),
+    m_pFormShell(nullptr),
+    m_pHScrollbar(nullptr),
+    m_pVScrollbar(nullptr),
     m_pScrollFill(VclPtr<ScrollBarBox>::Create( &_pFrame->GetWindow(), _pFrame->GetFrame().GetParentFrame() ? 0 : WB_SIZEABLE )),
     m_pVRuler(VclPtr<SvxRuler>::Create(&GetViewFrame()->GetWindow(), m_pEditWin,
                             SvxRulerSupportFlags::TABS | SvxRulerSupportFlags::PARAGRAPH_MARGINS_VERTICAL|
                                 SvxRulerSupportFlags::BORDERS | SvxRulerSupportFlags::REDUCED_METRIC,
                             GetViewFrame()->GetBindings(),
                             WB_VSCROLL |  WB_EXTRAFIELD | WB_BORDER )),
-    m_pTogglePageBtn(0),
-    m_pGlosHdl(0),
-    m_pDrawActual(0),
-    m_pLastTableFormat(0),
+    m_pTogglePageBtn(nullptr),
+    m_pGlosHdl(nullptr),
+    m_pDrawActual(nullptr),
+    m_pLastTableFormat(nullptr),
     m_pFormatClipboard(new SwFormatClipboard()),
-    m_pPostItMgr(0),
+    m_pPostItMgr(nullptr),
     m_nSelectionType( INT_MAX ),
     m_nPageCnt(0),
     m_nDrawSfxId( USHRT_MAX ),
@@ -766,7 +766,7 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
 
     // determine if there is an existing view for
     // document
-    SfxViewShell* pExistingSh = 0;
+    SfxViewShell* pExistingSh = nullptr;
     if ( pOldSh )
     {
         pExistingSh = pOldSh;
@@ -940,7 +940,7 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
             SET_CURR_SHELL( m_pWrtShell );
             m_pWrtShell->StartAction();
             m_pWrtShell->CalcLayout();
-            m_pWrtShell->GetDoc()->getIDocumentFieldsAccess().UpdateFields(NULL, false);
+            m_pWrtShell->GetDoc()->getIDocumentFieldsAccess().UpdateFields(nullptr, false);
             m_pWrtShell->EndAction();
         }
         m_pWrtShell->GetDoc()->getIDocumentState().SetUpdateExpFieldStat( false );
@@ -1017,7 +1017,7 @@ SwView::~SwView()
 {
     GetViewFrame()->GetWindow().RemoveChildEventListener( LINK( this, SwView, WindowChildEventListener ) );
     delete m_pPostItMgr;
-    m_pPostItMgr = 0;
+    m_pPostItMgr = nullptr;
 
     m_bInDtor = true;
     m_pEditWin->Hide(); // prevent problems with painting
@@ -1025,27 +1025,27 @@ SwView::~SwView()
     // Set pointer in SwDocShell to the view again
     SwDocShell* pDocSh = GetDocShell();
     if( pDocSh && pDocSh->GetView() == this )
-        pDocSh->SetView( 0 );
+        pDocSh->SetView( nullptr );
     if ( SW_MOD()->GetView() == this )
-        SW_MOD()->SetView( 0 );
+        SW_MOD()->SetView( nullptr );
 
     if( m_aTimer.IsActive() && m_bAttrChgNotifiedWithRegistrations )
         GetViewFrame()->GetBindings().LEAVEREGISTRATIONS();
 
     // the last view must end the text edit
-    SdrView *pSdrView = m_pWrtShell ? m_pWrtShell->GetDrawView() : 0;
+    SdrView *pSdrView = m_pWrtShell ? m_pWrtShell->GetDrawView() : nullptr;
     if( pSdrView && pSdrView->IsTextEdit() )
         pSdrView->SdrEndTextEdit( true );
 
-    SetWindow( 0 );
+    SetWindow( nullptr );
 
     m_pViewImpl->Invalidate();
     EndListening(*GetViewFrame());
     EndListening(*GetDocShell());
     m_pScrollFill.disposeAndClear();
     delete m_pWrtShell;
-    m_pWrtShell = 0;      // Set to 0, so that it is not accessible by the following dtors cannot.
-    m_pShell = 0;
+    m_pWrtShell = nullptr;      // Set to 0, so that it is not accessible by the following dtors cannot.
+    m_pShell = nullptr;
     m_pHScrollbar.disposeAndClear();
     m_pVScrollbar.disposeAndClear();
     m_pHRuler.disposeAndClear();
@@ -1658,7 +1658,7 @@ void SwView::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         if (!bDesignMode && GetDrawFuncPtr())
         {
             GetDrawFuncPtr()->Deactivate();
-            SetDrawFuncPtr(NULL);
+            SetDrawFuncPtr(nullptr);
             LeaveDrawCreate();
             AttrChangedNotify(m_pWrtShell);
         }

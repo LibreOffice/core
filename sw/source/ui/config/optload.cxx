@@ -64,7 +64,7 @@ using namespace ::com::sun::star;
 
 SwLoadOptPage::SwLoadOptPage(vcl::Window* pParent, const SfxItemSet& rSet)
     : SfxTabPage(pParent, "OptGeneralPage", "modules/swriter/ui/optgeneralpage.ui", &rSet)
-    , m_pWrtShell(NULL)
+    , m_pWrtShell(nullptr)
     , m_nLastTab(0)
     , m_nOldLinkMode(MANUAL)
 {
@@ -672,7 +672,7 @@ void SwCaptionOptPage::DelUserData()
     while (pEntry)
     {
         delete static_cast<InsCaptionOpt*>(pEntry->GetUserData());
-        pEntry->SetUserData(0);
+        pEntry->SetUserData(nullptr);
         pEntry = m_pCheckLB->Next(pEntry);
     }
 }
@@ -827,7 +827,7 @@ IMPL_LINK_NOARG_TYPED(SwCaptionOptPage, ModifyHdl, Edit&, void)
     const OUString sFieldTypeName = m_pCategoryBox->GetText();
 
     SfxSingleTabDialog *pDlg = dynamic_cast<SfxSingleTabDialog*>(GetParentDialog());
-    PushButton *pBtn = pDlg ? pDlg->GetOKButton() : NULL;
+    PushButton *pBtn = pDlg ? pDlg->GetOKButton() : nullptr;
     if (pBtn)
         pBtn->Enable(!sFieldTypeName.isEmpty());
     bool bEnable = m_pCategoryBox->IsEnabled() && sFieldTypeName != m_sNone;

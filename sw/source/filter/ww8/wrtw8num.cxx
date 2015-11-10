@@ -408,7 +408,7 @@ void MSWordExportBase::AbstractNumberingDefinitions()
             OUString sNumStr;
             OUString sFontName;
             bool bWriteBullet = false;
-            const vcl::Font* pBulletFont=0;
+            const vcl::Font* pBulletFont=nullptr;
             rtl_TextEncoding eChrSet=0;
             FontFamily eFamily=FAMILY_DECORATIVE;
             if( SVX_NUM_CHAR_SPECIAL == rFormat.GetNumberingType() ||
@@ -480,8 +480,8 @@ void MSWordExportBase::AbstractNumberingDefinitions()
             }
 
             // Attributes of the numbering
-            wwFont *pPseudoFont = NULL;
-            const SfxItemSet* pOutSet = NULL;
+            wwFont *pPseudoFont = nullptr;
+            const SfxItemSet* pOutSet = nullptr;
 
             // cbGrpprlChpx
             SfxItemSet aSet( m_pDoc->GetAttrPool(), RES_CHRATR_BEGIN,
@@ -534,7 +534,7 @@ void MSWordExportBase::AbstractNumberingDefinitions()
                     pPseudoFont, pOutSet,
                     nIndentAt, nFirstLineIndex, nListTabPos,
                     sNumStr,
-                    rFormat.GetNumberingType()==SVX_NUM_BITMAP ? rFormat.GetBrush():0);
+                    rFormat.GetNumberingType()==SVX_NUM_BITMAP ? rFormat.GetBrush():nullptr);
 
             delete pPseudoFont;
         }

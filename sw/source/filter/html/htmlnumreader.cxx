@@ -48,7 +48,7 @@ static HTMLOptionEnum aHTMLULTypeTable[] =
     { OOO_STRING_SVTOOLS_HTML_ULTYPE_disc,      HTML_BULLETCHAR_DISC   },
     { OOO_STRING_SVTOOLS_HTML_ULTYPE_circle,    HTML_BULLETCHAR_CIRCLE },
     { OOO_STRING_SVTOOLS_HTML_ULTYPE_square,    HTML_BULLETCHAR_SQUARE },
-    { 0,                                        0                      }
+    { nullptr,                                        0                      }
 };
 
 
@@ -77,7 +77,7 @@ void SwHTMLParser::NewNumBulList( int nToken )
 
     // das Format anpassen, falls es fuer den Level noch nicht
     // geschehen ist!
-    bool bNewNumFormat = rInfo.GetNumRule()->GetNumFormat( nLevel ) == 0;
+    bool bNewNumFormat = rInfo.GetNumRule()->GetNumFormat( nLevel ) == nullptr;
     bool bChangeNumFormat = false;
 
     // das default Numerierungsformat erstellen
@@ -227,7 +227,7 @@ void SwHTMLParser::NewNumBulList( int nToken )
         aBrushItem.SetGraphicPos( GPOS_AREA );
 
         // Die Groesse nur beachten, wenn Breite und Hoehe vorhanden sind
-        Size aTwipSz( nWidth, nHeight), *pTwipSz=0;
+        Size aTwipSz( nWidth, nHeight), *pTwipSz=nullptr;
         if( nWidth!=USHRT_MAX && nHeight!=USHRT_MAX )
         {
             aTwipSz =
@@ -239,7 +239,7 @@ void SwHTMLParser::NewNumBulList( int nToken )
         // Die Ausrichtung auch nur beachten, wenn eine Ausrichtung
         // angegeben wurde
         aNumFormat.SetGraphicBrush( &aBrushItem, pTwipSz,
-                            text::VertOrientation::NONE!=eVertOri ? &eVertOri : 0);
+                            text::VertOrientation::NONE!=eVertOri ? &eVertOri : nullptr);
 
         // Und noch die Grafik merken, um sie in den Absaetzen nicht
         // einzufuegen
@@ -352,7 +352,7 @@ void SwHTMLParser::EndNumBulList( int nToken )
         AddParSpace();
 
     // den aktuellen Kontext vom Stack holen
-    _HTMLAttrContext *pCntxt = nToken!=0 ? PopContext( static_cast< sal_uInt16 >(nToken & ~1) ) : 0;
+    _HTMLAttrContext *pCntxt = nToken!=0 ? PopContext( static_cast< sal_uInt16 >(nToken & ~1) ) : nullptr;
 
     // Keine Liste aufgrund eines Tokens beenden, wenn der Kontext
     // nie angelgt wurde oder nicht beendet werden darf.
@@ -363,7 +363,7 @@ void SwHTMLParser::EndNumBulList( int nToken )
         {
             // Die noch nicht angepassten Formate werden jetzt noch
             // angepasst, damit es sich besser Editieren laesst.
-            const SwNumFormat *pRefNumFormat = 0;
+            const SwNumFormat *pRefNumFormat = nullptr;
             bool bChanged = false;
             for( sal_uInt16 i=0; i<MAXLEVEL; i++ )
             {
@@ -558,7 +558,7 @@ void SwHTMLParser::EndNumBulListItem( int nToken, bool bSetColl,
         AppendTextNode( AM_NOSPACE );
 
     // Kontext zu dem Token suchen und vom Stack holen
-    _HTMLAttrContext *pCntxt = 0;
+    _HTMLAttrContext *pCntxt = nullptr;
     auto nPos = m_aContexts.size();
     nToken &= ~1;
     while( !pCntxt && nPos>m_nContextStMin )

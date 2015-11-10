@@ -89,10 +89,10 @@ inline bool IsMarkInSameSection( SwWrtShell& rWrtSh, const SwSection* pSect )
 SwColumnDlg::SwColumnDlg(vcl::Window* pParent, SwWrtShell& rSh)
     : SfxModalDialog(pParent, "ColumnDialog", "modules/swriter/ui/columndialog.ui")
     , rWrtShell(rSh)
-    , pPageSet(0)
-    , pSectionSet(0)
-    , pSelectionSet(0)
-    , pFrameSet(0)
+    , pPageSet(nullptr)
+    , pSectionSet(nullptr)
+    , pSelectionSet(nullptr)
+    , pFrameSet(nullptr)
     , nOldSelection(0)
     , nSelectionWidth(0)
     , bPageChanged(false)
@@ -105,7 +105,7 @@ SwColumnDlg::SwColumnDlg(vcl::Window* pParent, SwWrtShell& rSh)
 
     nSelectionWidth = aRect.Width();
 
-    SfxItemSet* pColPgSet = 0;
+    SfxItemSet* pColPgSet = nullptr;
     static sal_uInt16 const aSectIds[] = { RES_COL, RES_COL,
                                                 RES_FRM_SIZE, RES_FRM_SIZE,
                                                 RES_COLUMNBALANCE, RES_FRAMEDIR,
@@ -202,7 +202,7 @@ SwColumnDlg::SwColumnDlg(vcl::Window* pParent, SwWrtShell& rSh)
         m_pApplyToLB->RemoveEntry( nPagePos );
 
     m_pApplyToLB->SelectEntryPos(0);
-    ObjectHdl(0);
+    ObjectHdl(nullptr);
 
     m_pApplyToLB->SetSelectHdl(LINK(this, SwColumnDlg, ObjectListBoxHdl));
     OKButton *pOK = get<OKButton>("ok");
@@ -236,7 +236,7 @@ IMPL_LINK_TYPED(SwColumnDlg, ObjectListBoxHdl, ListBox&, rBox, void)
 }
 void SwColumnDlg::ObjectHdl(ListBox* pBox)
 {
-    SfxItemSet* pSet = 0;
+    SfxItemSet* pSet = nullptr;
     switch(nOldSelection)
     {
         case LISTBOX_SELECTION  :
@@ -299,7 +299,7 @@ void SwColumnDlg::ObjectHdl(ListBox* pBox)
 IMPL_LINK_NOARG_TYPED(SwColumnDlg, OkHdl, Button*, void)
 {
     // evaluate current selection
-    SfxItemSet* pSet = 0;
+    SfxItemSet* pSet = nullptr;
     switch(nOldSelection)
     {
         case LISTBOX_SELECTION  :
@@ -407,10 +407,10 @@ void SwColumnPage::ResetColWidth()
 // Now as TabPage
 SwColumnPage::SwColumnPage(vcl::Window *pParent, const SfxItemSet &rSet)
     : SfxTabPage(pParent, "ColumnPage", "modules/swriter/ui/columnpage.ui", &rSet)
-    , pColMgr(0)
+    , pColMgr(nullptr)
     , nFirstVis(0)
     , nMinWidth(MINLAY)
-    , pModifiedField(0)
+    , pModifiedField(nullptr)
     , bFormat(false)
     , bFrm(false)
     , bHtmlMode(false)
@@ -535,7 +535,7 @@ SwColumnPage::SwColumnPage(vcl::Window *pParent, const SfxItemSet &rSet)
     if ( pDocSh )
     {
         const SfxPoolItem*  pItem = pDocSh->GetItem( SID_COLOR_TABLE );
-        if ( pItem != NULL )
+        if ( pItem != nullptr )
             pColorList = static_cast<const SvxColorListItem*>(pItem)->GetColorList();
     }
 
@@ -678,7 +678,7 @@ bool SwColumnPage::FillItemSet(SfxItemSet *rSet)
 
     const SfxPoolItem* pOldItem;
     const SwFormatCol& rCol = pColMgr->GetColumns();
-    if(0 == (pOldItem = GetOldItem( *rSet, RES_COL )) ||
+    if(nullptr == (pOldItem = GetOldItem( *rSet, RES_COL )) ||
                 rCol != *pOldItem )
         rSet->Put(rCol);
 
@@ -859,7 +859,7 @@ void SwColumnPage::Init()
     }
 
     UpdateCols();
-    Update(NULL);
+    Update(nullptr);
 
         // set maximum number of columns
         // values below 1 are not allowed
@@ -996,7 +996,7 @@ void SwColumnPage::ColModify(NumericField* pNF)
         SetLabels( nFirstVis );
         UpdateCols();
         ResetColWidth();
-        Update(NULL);
+        Update(nullptr);
     }
 }
 
@@ -1098,7 +1098,7 @@ IMPL_LINK_TYPED( SwColumnPage, AutoWidthHdl, Button*, pButton, void )
     }
     pColMgr->SetAutoWidth(pBox->IsChecked(), sal_uInt16(nDist));
     UpdateCols();
-    Update(NULL);
+    Update(nullptr);
 }
 
 // scroll up the contents of the edits
@@ -1108,7 +1108,7 @@ IMPL_LINK_NOARG_TYPED(SwColumnPage, Up, Button*, void)
     {
         --nFirstVis;
         SetLabels( nFirstVis );
-        Update(NULL);
+        Update(nullptr);
     }
 }
 
@@ -1119,7 +1119,7 @@ IMPL_LINK_NOARG_TYPED(SwColumnPage, Down, Button*, void)
     {
         ++nFirstVis;
         SetLabels( nFirstVis );
-        Update(NULL);
+        Update(nullptr);
     }
 }
 
@@ -1162,10 +1162,10 @@ void SwColumnPage::Timeout()
             }
         }
         nColWidth[nChanged] = nNewWidth;
-        pModifiedField = 0;
+        pModifiedField = nullptr;
     }
 
-    Update(pField ? pField->get() : NULL);
+    Update(pField ? pField->get() : nullptr);
 }
 
 // Update the view
@@ -1265,7 +1265,7 @@ void SwColumnPage::ActivatePage(const SfxItemSet& rSet)
             if( pColMgr->GetActualSize() != nActWidth)
             {
                 pColMgr->SetActualWidth(nActWidth);
-                ColModify( 0 );
+                ColModify( nullptr );
                 UpdateColMgr( *m_pLineWidthEdit );
             }
         }
@@ -1325,7 +1325,7 @@ void SwColumnPage::ActivatePage(const SfxItemSet& rSet)
         aDistEd1.SetMetricFieldMin(0);
         aDistEd2.SetMetricFieldMin(0);
     }
-    Update(NULL);
+    Update(nullptr);
 }
 
 SfxTabPage::sfxpg SwColumnPage::DeactivatePage(SfxItemSet *_pSet)
@@ -1344,7 +1344,7 @@ IMPL_LINK_TYPED( SwColumnPage, SetDefaultsHdl, ValueSet *, pVS, void )
         m_pCLNrEdt->SetValue( nItem );
         m_pAutoWidthBox->Check();
         aDistEd1.SetPrcntValue(0);
-        ColModify(0);
+        ColModify(nullptr);
     }
     else
     {
@@ -1352,7 +1352,7 @@ IMPL_LINK_TYPED( SwColumnPage, SetDefaultsHdl, ValueSet *, pVS, void )
         m_pCLNrEdt->SetValue( 2 );
         m_pAutoWidthBox->Check(false);
         aDistEd1.SetPrcntValue(0);
-        ColModify(0);
+        ColModify(nullptr);
         // now set the width ratio to 2 : 1 or 1 : 2 respectively
         const long nSmall = static_cast< long >(pColMgr->GetActualSize() / 3);
         if(nItem == 4)

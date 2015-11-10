@@ -45,8 +45,8 @@ SwJavaEditDialog::SwJavaEditDialog(vcl::Window* pParent, SwWrtShell* pWrtSh) :
     bIsUrl(false),
 
     pSh(pWrtSh),
-    pFileDlg(NULL),
-    pOldDefDlgParent(NULL)
+    pFileDlg(nullptr),
+    pOldDefDlgParent(nullptr)
 {
     get(m_pTypeED, "scripttype");
     get(m_pUrlRB, "url");
@@ -83,7 +83,7 @@ SwJavaEditDialog::SwJavaEditDialog(vcl::Window* pParent, SwWrtShell* pWrtSh) :
     if( !bNew )
         SetText( SW_RES( STR_JAVA_EDIT ) );
 
-    RadioButtonHdl(NULL);
+    RadioButtonHdl(nullptr);
 }
 
 SwJavaEditDialog::~SwJavaEditDialog()
@@ -118,7 +118,7 @@ IMPL_LINK_NOARG_TYPED(SwJavaEditDialog, PrevHdl, Button*, void)
     pMgr->GoPrev();
     pField = static_cast<SwScriptField*>(pMgr->GetCurField());
     CheckTravel();
-    RadioButtonHdl(NULL);
+    RadioButtonHdl(nullptr);
 }
 
 IMPL_LINK_NOARG_TYPED(SwJavaEditDialog, NextHdl, Button*, void)
@@ -129,7 +129,7 @@ IMPL_LINK_NOARG_TYPED(SwJavaEditDialog, NextHdl, Button*, void)
     pMgr->GoNext();
     pField = static_cast<SwScriptField*>(pMgr->GetCurField());
     CheckTravel();
-    RadioButtonHdl(NULL);
+    RadioButtonHdl(nullptr);
 }
 
 IMPL_LINK_NOARG_TYPED(SwJavaEditDialog, OKHdl, Button*, void)

@@ -148,7 +148,7 @@ void SwMailMergeAddressBlockPage::ActivatePage()
         m_pAddressCB->Check(rConfigItem.IsAddressBlock());
         AddressBlockHdl_Impl(m_pAddressCB);
         m_pSettingsWIN->SetLayout(1, 2);
-        InsertDataHdl_Impl(0);
+        InsertDataHdl_Impl(nullptr);
     }
 }
 
@@ -174,7 +174,7 @@ IMPL_LINK_NOARG_TYPED(SwMailMergeAddressBlockPage, AddressListHdl_Impl, Button*,
                             xAddrDialog->GetDBData());
             OUString sFilter = xAddrDialog->GetFilter();
             rConfigItem.SetFilter( sFilter );
-            InsertDataHdl_Impl(0);
+            InsertDataHdl_Impl(nullptr);
             GetWizard()->UpdateRoadmap();
             GetWizard()->enableButtons(WizardButtonFlags::NEXT, GetWizard()->isStateEnabled(MM_GREETINGSPAGE));
         }
@@ -205,7 +205,7 @@ IMPL_LINK_TYPED(SwMailMergeAddressBlockPage, SettingsHdl_Impl, Button*, pButton,
         m_pSettingsWIN->SelectAddress(0);
         m_pSettingsWIN->Invalidate();    // #i40408
         rConfig.SetCountrySettings(pDlg->IsIncludeCountry(), pDlg->GetCountry());
-        InsertDataHdl_Impl(0);
+        InsertDataHdl_Impl(nullptr);
     }
     pDlg.reset();
     GetWizard()->UpdateRoadmap();
@@ -222,7 +222,7 @@ IMPL_LINK_TYPED(SwMailMergeAddressBlockPage, AssignHdl_Impl, Button*, pButton, v
     if(RET_OK == pDlg->Execute())
     {
         //preview update
-        InsertDataHdl_Impl(0);
+        InsertDataHdl_Impl(nullptr);
         GetWizard()->UpdateRoadmap();
         GetWizard()->enableButtons(WizardButtonFlags::NEXT, GetWizard()->isStateEnabled(MM_GREETINGSPAGE));
     }
@@ -684,7 +684,7 @@ IMPL_LINK_TYPED(SwCustomizeAddressBlockDialog, SelectionChangedHdl_Impl, Address
     {
         //search in ListBox if it's one of the first entries
         OUString sSelect;
-        ::std::vector<OUString>* pVector = 0;
+        ::std::vector<OUString>* pVector = nullptr;
         switch(nSelected) {
             case USER_DATA_SALUTATION:
                 sSelect =  m_sCurrentSalutation;
@@ -840,7 +840,7 @@ SwAssignFieldsControl::SwAssignFieldsControl(vcl::Window* pParent, WinBits nBits
     m_aVScroll(VclPtr<ScrollBar>::Create(this)),
     m_aHeaderHB(VclPtr<HeaderBar>::Create(this, WB_BUTTONSTYLE | WB_BOTTOMBORDER)),
     m_aWindow(VclPtr<vcl::Window>::Create(this, WB_BORDER | WB_DIALOGCONTROL)),
-    m_rConfigItem(NULL),
+    m_rConfigItem(nullptr),
     m_nLBStartTopPos(0),
     m_nYOffset(0),
     m_nFirstYPos(0)
@@ -872,7 +872,7 @@ void SwAssignFieldsControl::Init(SwMailMergeConfigItem& rConfigItem)
     //get the actual data
     uno::Reference< XColumnsSupplier > xColsSupp( rConfigItem.GetResultSet(), uno::UNO_QUERY);
     //get the name of the actual columns
-    uno::Reference <XNameAccess> xColAccess = xColsSupp.is() ? xColsSupp->getColumns() : 0;
+    uno::Reference <XNameAccess> xColAccess = xColsSupp.is() ? xColsSupp->getColumns() : nullptr;
     uno::Sequence< OUString > aFields;
     if(xColAccess.is())
         aFields = xColAccess->getElementNames();
@@ -1044,7 +1044,7 @@ void SwAssignFieldsControl::Command( const CommandEvent& rCEvt )
             const CommandWheelData* pWheelData = rCEvt.GetWheelData();
             if(pWheelData && !pWheelData->IsHorz() && CommandWheelMode::ZOOM != pWheelData->GetMode())
             {
-                HandleScrollCommand( rCEvt, 0, m_aVScroll.get() );
+                HandleScrollCommand( rCEvt, nullptr, m_aVScroll.get() );
             }
         }
         break;
@@ -1103,7 +1103,7 @@ IMPL_LINK_TYPED(SwAssignFieldsControl, MatchHdl_Impl, ListBox&, rBox, void)
 {
     const OUString sColumn = rBox.GetSelectEntry();
     uno::Reference< XColumnsSupplier > xColsSupp( m_rConfigItem->GetResultSet(), uno::UNO_QUERY);
-    uno::Reference <XNameAccess> xColAccess = xColsSupp.is() ? xColsSupp->getColumns() : 0;
+    uno::Reference <XNameAccess> xColAccess = xColsSupp.is() ? xColsSupp->getColumns() : nullptr;
     OUString sPreview;
     if(xColAccess.is() && xColAccess->hasByName(sColumn))
     {
@@ -1130,7 +1130,7 @@ IMPL_LINK_TYPED(SwAssignFieldsControl, MatchHdl_Impl, ListBox&, rBox, void)
             break;
         }
     }
-    m_aModifyHdl.Call(0);
+    m_aModifyHdl.Call(nullptr);
 }
 
 IMPL_LINK_TYPED(SwAssignFieldsControl, GotFocusHdl_Impl, Control&, rControl, void)
@@ -1244,7 +1244,7 @@ IMPL_LINK_NOARG_TYPED(SwAssignFieldsDialog, AssignmentModifyHdl_Impl, LinkParamN
 
 DDListBox::DDListBox(vcl::Window* pParent, WinBits nStyle)
     : SvTreeListBox(pParent, nStyle)
-    , m_pParentDialog(NULL)
+    , m_pParentDialog(nullptr)
 {
     SetStyle( GetStyle() | /*WB_HASBUTTONS|WB_HASBUTTONSATROOT|*/
                             WB_CLIPCHILDREN );
@@ -1305,7 +1305,7 @@ void  DDListBox::StartDrag( sal_Int8 /*nAction*/, const Point& /*rPosPixel*/ )
 
 AddressMultiLineEdit::AddressMultiLineEdit(vcl::Window* pParent, WinBits nBits)
     : VclMultiLineEdit(pParent, nBits)
-    , m_pParentDialog(NULL)
+    , m_pParentDialog(nullptr)
 {
     GetTextView()->SupportProtectAttribute(true);
     StartListening(*GetTextEngine());
@@ -1429,7 +1429,7 @@ void AddressMultiLineEdit::InsertNewEntry( const OUString& rStr )
     sal_Int32 nIndex = rSelection.GetEnd().GetIndex();
     ExtTextEngine *pTextEngine = GetTextEngine();
     const TextCharAttrib *pAttrib;
-    if(0 != (pAttrib = pTextEngine->FindCharAttrib( rSelection.GetStart(), TEXTATTR_PROTECTED )))
+    if(nullptr != (pAttrib = pTextEngine->FindCharAttrib( rSelection.GetStart(), TEXTATTR_PROTECTED )))
         nIndex = pAttrib->GetEnd();
     InsertNewEntryAtPosition( rStr, nPara, nIndex );
 

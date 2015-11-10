@@ -51,7 +51,7 @@ protected:
     virtual void DestroyImpl() override;
     virtual ~SwLayoutFrm();
 
-    virtual void Format( vcl::RenderContext* pRenderContext, const SwBorderAttrs *pAttrs = 0 ) override;
+    virtual void Format( vcl::RenderContext* pRenderContext, const SwBorderAttrs *pAttrs = nullptr ) override;
     virtual void MakeAll(vcl::RenderContext* pRenderContext) override;
 
     SwFrm * m_pLower;
@@ -85,10 +85,10 @@ public:
     virtual bool    FillSelection( SwSelectionList& rList, const SwRect& rRect ) const override;
 
     virtual bool GetCrsrOfst( SwPosition *, Point&,
-                               SwCrsrMoveState* = 0, bool bTestBackground = false ) const override;
+                               SwCrsrMoveState* = nullptr, bool bTestBackground = false ) const override;
 
     virtual void Cut() override;
-    virtual void Paste( SwFrm* pParent, SwFrm* pSibling = 0 ) override;
+    virtual void Paste( SwFrm* pParent, SwFrm* pSibling = nullptr ) override;
 
     /**
      * Finds the closest Content for the SPoint
@@ -97,13 +97,13 @@ public:
     const SwContentFrm* GetContentPos( Point &rPoint, const bool bDontLeave,
                                    const bool bBodyOnly = false,
                                    const bool bCalc = false,
-                                   const SwCrsrMoveState *pCMS = 0,
+                                   const SwCrsrMoveState *pCMS = nullptr,
                                    const bool bDefaultExpand = true ) const;
 
     SwLayoutFrm( SwFrameFormat*, SwFrm* );
 
     virtual void Paint( vcl::RenderContext& rRenderContext, SwRect const&,
-                        SwPrintData const*const pPrintData = NULL ) const override;
+                        SwPrintData const*const pPrintData = nullptr ) const override;
     const SwFrm *Lower() const { return m_pLower; }
           SwFrm *Lower()       { return m_pLower; }
     const SwContentFrm *ContainsContent() const;

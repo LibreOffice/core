@@ -134,7 +134,7 @@ namespace CharFormat
 /// Returns the item set associated with an character/inet/auto style
 const SfxItemSet* GetItemSet( const SfxPoolItem& rAttr )
 {
-    const SfxItemSet* pSet = 0;
+    const SfxItemSet* pSet = nullptr;
 
     if ( RES_TXTATR_AUTOFMT == rAttr.Which() )
     {
@@ -163,16 +163,16 @@ const SfxPoolItem* GetItem( const SwTextAttr& rAttr, sal_uInt16 nWhich )
          RES_TXTATR_AUTOFMT == rAttr.Which() )
     {
         const SfxItemSet* pSet = CharFormat::GetItemSet( rAttr.GetAttr() );
-        if ( !pSet ) return 0;
+        if ( !pSet ) return nullptr;
 
        bool bInParent = RES_TXTATR_AUTOFMT != rAttr.Which();
        const SfxPoolItem* pItem;
        bool bRet = SfxItemState::SET == pSet->GetItemState( nWhich, bInParent, &pItem );
 
-       return bRet ? pItem : 0;
+       return bRet ? pItem : nullptr;
     }
 
-    return ( nWhich == rAttr.Which() ) ? &rAttr.GetAttr() : 0;
+    return ( nWhich == rAttr.Which() ) ? &rAttr.GetAttr() : nullptr;
 }
 
 /// Checks if item is included in character/inet/auto style
@@ -323,7 +323,7 @@ void SwAttrHandler::SwAttrStack::Remove( const SwTextAttr& rAttr )
 
 const SwTextAttr* SwAttrHandler::SwAttrStack::Top() const
 {
-    return nCount ? pArray[ nCount - 1 ] : 0;
+    return nCount ? pArray[ nCount - 1 ] : nullptr;
 }
 
 sal_uInt16 SwAttrHandler::SwAttrStack::Pos( const SwTextAttr& rAttr ) const
@@ -343,9 +343,9 @@ sal_uInt16 SwAttrHandler::SwAttrStack::Pos( const SwTextAttr& rAttr ) const
 }
 
 SwAttrHandler::SwAttrHandler()
-    : mpIDocumentSettingAccess(NULL)
-    , mpShell(NULL)
-    , pFnt(NULL)
+    : mpIDocumentSettingAccess(nullptr)
+    , mpShell(nullptr)
+    , pFnt(nullptr)
     , bVertLayout(false)
 {
     memset( pDefaultArray, 0, NUM_DEFAULT_VALUES * sizeof(SfxPoolItem*) );
@@ -476,7 +476,7 @@ bool SwAttrHandler::Push( const SwTextAttr& rAttr, const SfxPoolItem& rItem )
     if ( !pTopAttr
          || rAttr.IsPriorityAttr()
          || ( !pTopAttr->IsPriorityAttr()
-              && !lcl_ChgHyperLinkColor( *pTopAttr, rItem, mpShell, 0 ) ) )
+              && !lcl_ChgHyperLinkColor( *pTopAttr, rItem, mpShell, nullptr ) ) )
     {
         aAttrStack[ nStack ].Push( rAttr );
         return true;
@@ -549,7 +549,7 @@ void SwAttrHandler::ActivateTop( SwFont& rFnt, const sal_uInt16 nAttr )
     const SwTextAttr* pTopAt = aAttrStack[ nStackPos ].Top();
     if ( pTopAt )
     {
-        const SfxPoolItem* pItemNext(NULL);
+        const SfxPoolItem* pItemNext(nullptr);
 
         // check if top attribute is collection of attributes
         if ( RES_TXTATR_INETFMT == pTopAt->Which() ||

@@ -38,7 +38,7 @@ namespace TextFormatCollFunc
     */
     void CheckTextFormatCollForDeletionOfAssignmentToOutlineStyle(
                                     SwFormat* pFormat,
-                                    const SwNumRuleItem* pNewNumRuleItem = 0L );
+                                    const SwNumRuleItem* pNewNumRuleItem = nullptr );
 
     /** determines the list style, which directly set at the given paragraph style
 

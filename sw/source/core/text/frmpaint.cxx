@@ -89,11 +89,11 @@ public:
 SwExtraPainter::SwExtraPainter( const SwTextFrm *pFrm, SwViewShell *pVwSh,
                                 const SwLineNumberInfo &rLnInf, const SwRect &rRct,
                                 sal_Int16 eHor, bool bLnNm )
-    : aClip( pVwSh->GetWin() || pFrm->IsUndersized() ? pVwSh->GetOut() : 0 )
+    : aClip( pVwSh->GetWin() || pFrm->IsUndersized() ? pVwSh->GetOut() : nullptr )
     , aRect( rRct )
     , pTextFrm( pFrm )
     , pSh( pVwSh )
-    , pFnt( 0 )
+    , pFnt( nullptr )
     , rLineInf( rLnInf )
     , nX(0)
     , nRedX(0)
@@ -186,13 +186,13 @@ void SwExtraPainter::PaintExtra( SwTwips nY, long nAsc, long nMax, bool bRed )
                                 : rLineInf.GetDivider() );
 
     // Get script type of line numbering:
-    pFnt->SetActual( SwScriptInfo::WhichFont( 0, &aTmp, 0 ) );
+    pFnt->SetActual( SwScriptInfo::WhichFont( 0, &aTmp, nullptr ) );
 
-    SwDrawTextInfo aDrawInf( pSh, *pSh->GetOut(), 0, aTmp, 0, aTmp.getLength() );
+    SwDrawTextInfo aDrawInf( pSh, *pSh->GetOut(), nullptr, aTmp, 0, aTmp.getLength() );
     aDrawInf.SetSpace( 0 );
-    aDrawInf.SetWrong( NULL );
-    aDrawInf.SetGrammarCheck( NULL );
-    aDrawInf.SetSmartTags( NULL );
+    aDrawInf.SetWrong( nullptr );
+    aDrawInf.SetGrammarCheck( nullptr );
+    aDrawInf.SetSmartTags( nullptr );
     aDrawInf.SetLeft( 0 );
     aDrawInf.SetRight( LONG_MAX );
     aDrawInf.SetFrm( pTextFrm );
@@ -310,7 +310,7 @@ void SwTextFrm::PaintExtraData( const SwRect &rRect ) const
         aLayoutModeModifier.Modify( false );
 
         // #i16816# tagged pdf support
-        SwTaggedPDFHelper aTaggedPDFHelper( 0, 0, 0, *pSh->GetOut() );
+        SwTaggedPDFHelper aTaggedPDFHelper( nullptr, nullptr, nullptr, *pSh->GetOut() );
 
         SwExtraPainter aExtra( this, pSh, rLineInf, rRect, eHor, bLineNum );
 
@@ -486,7 +486,7 @@ bool SwTextFrm::PaintEmpty( const SwRect &rRect, bool bCheck ) const
                 {
                     SwAttrHandler aAttrHandler;
                     aAttrHandler.Init(  rTextNode.GetSwAttrSet(),
-                                       *rTextNode.getIDocumentSettingAccess(), NULL );
+                                       *rTextNode.getIDocumentSettingAccess(), nullptr );
                     SwRedlineItr aRedln( rTextNode, *pFnt, aAttrHandler, nRedlPos, true );
                 }
             }
@@ -523,7 +523,7 @@ bool SwTextFrm::PaintEmpty( const SwRect &rRect, bool bCheck ) const
                     pClip->ChgClip( rRect );
                 }
                 else
-                    pClip = NULL;
+                    pClip = nullptr;
 
                 aPos.Y() += pFnt->GetAscent( pSh, *pSh->GetOut() );
 
@@ -546,15 +546,15 @@ bool SwTextFrm::PaintEmpty( const SwRect &rRect, bool bCheck ) const
                 if ( EmptyHeight( ) > 1 )
                 {
                     const OUString aTmp( CH_PAR );
-                    SwDrawTextInfo aDrawInf( pSh, *pSh->GetOut(), 0, aTmp, 0, 1 );
+                    SwDrawTextInfo aDrawInf( pSh, *pSh->GetOut(), nullptr, aTmp, 0, 1 );
                     aDrawInf.SetLeft( rRect.Left() );
                     aDrawInf.SetRight( rRect.Right() );
                     aDrawInf.SetPos( aPos );
                     aDrawInf.SetSpace( 0 );
                     aDrawInf.SetKanaComp( 0 );
-                    aDrawInf.SetWrong( NULL );
-                    aDrawInf.SetGrammarCheck( NULL );
-                    aDrawInf.SetSmartTags( NULL );
+                    aDrawInf.SetWrong( nullptr );
+                    aDrawInf.SetGrammarCheck( nullptr );
+                    aDrawInf.SetSmartTags( nullptr );
                     aDrawInf.SetFrm( this );
                     aDrawInf.SetFont( pFnt );
                     aDrawInf.SetSnapToGrid( false );
@@ -581,10 +581,10 @@ void SwTextFrm::Paint(vcl::RenderContext& rRenderContext, SwRect const& rRect, S
     SwViewShell *pSh = getRootFrm()->GetCurrShell();
 
     Num_Info aNumInfo( *this );
-    SwTaggedPDFHelper aTaggedPDFHelperNumbering( &aNumInfo, 0, 0, rRenderContext );
+    SwTaggedPDFHelper aTaggedPDFHelperNumbering( &aNumInfo, nullptr, nullptr, rRenderContext );
 
     Frm_Info aFrmInfo( *this );
-    SwTaggedPDFHelper aTaggedPDFHelperParagraph( 0, &aFrmInfo, 0, rRenderContext );
+    SwTaggedPDFHelper aTaggedPDFHelperParagraph( nullptr, &aFrmInfo, nullptr, rRenderContext );
 
     if( !IsEmpty() || !PaintEmpty( rRect, true ) )
     {
@@ -667,9 +667,9 @@ void SwTextFrm::Paint(vcl::RenderContext& rRenderContext, SwRect const& rRect, S
             aInf.GetTextFly().Relax();
 
             OutputDevice* pOut = aInf.GetOut();
-            const bool bOnWin = pSh->GetWin() != 0;
+            const bool bOnWin = pSh->GetWin() != nullptr;
 
-            SwSaveClip aClip( bOnWin || IsUndersized() ? pOut : 0 );
+            SwSaveClip aClip( bOnWin || IsUndersized() ? pOut : nullptr );
 
             // Output loop: For each Line ... (which is still visible) ...
             //   adapt rRect (Top + 1, Bottom - 1)

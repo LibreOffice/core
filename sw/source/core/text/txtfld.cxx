@@ -62,7 +62,7 @@ static bool lcl_IsInBody( SwFrm *pFrm )
     {
         const SwFrm *pTmp = pFrm;
         const SwFlyFrm *pFly;
-        while ( 0 != (pFly = pTmp->FindFlyFrm()) )
+        while ( nullptr != (pFly = pTmp->FindFlyFrm()) )
             pTmp = pFly->GetAnchorFrm();
         return pTmp->IsInDocBody();
     }
@@ -71,12 +71,12 @@ static bool lcl_IsInBody( SwFrm *pFrm )
 SwExpandPortion *SwTextFormatter::NewFieldPortion( SwTextFormatInfo &rInf,
                                                 const SwTextAttr *pHint ) const
 {
-    SwExpandPortion *pRet = 0;
+    SwExpandPortion *pRet = nullptr;
     SwFrm *pFrame = pFrm;
     SwField *pField = const_cast<SwField*>(pHint->GetFormatField().GetField());
     const bool bName = rInf.GetOpt().IsFieldName();
 
-    SwCharFormat* pChFormat = 0;
+    SwCharFormat* pChFormat = nullptr;
     bool bNewFlyPor = false;
     sal_uInt16 subType = 0;
 
@@ -91,7 +91,7 @@ SwExpandPortion *SwTextFormatter::NewFieldPortion( SwTextFormatInfo &rInf,
     }
 
     SwViewShell *pSh = rInf.GetVsh();
-    SwDoc *const pDoc( (pSh) ? pSh->GetDoc() : 0 );
+    SwDoc *const pDoc( (pSh) ? pSh->GetDoc() : nullptr );
     bool const bInClipboard( pDoc == nullptr || pDoc->IsClipBoard() );
     bool bPlaceHolder = false;
 
@@ -165,7 +165,7 @@ SwExpandPortion *SwTextFormatter::NewFieldPortion( SwTextFormatInfo &rInf,
                 static_cast<SwPageNumberField*>(pField)
                     ->ChangeExpansion(nVirtNum, nNumPages);
                 pPageNr->ChangeExpansion(pDoc,
-                                            bVirt, nNumFormat > -1 ? &nNumFormat : 0);
+                                            bVirt, nNumFormat > -1 ? &nNumFormat : nullptr);
             }
             {
                 OUString const aStr( (bName)
@@ -275,7 +275,7 @@ SwExpandPortion *SwTextFormatter::NewFieldPortion( SwTextFormatInfo &rInf,
 
     if( bNewFlyPor )
     {
-        SwFont *pTmpFnt = 0;
+        SwFont *pTmpFnt = nullptr;
         if( !bName )
         {
             pTmpFnt = new SwFont( *pFnt );
@@ -301,7 +301,7 @@ static SwFieldPortion * lcl_NewMetaPortion(SwTextAttr & rHint, const bool bPrefi
     OSL_ENSURE(pField, "lcl_NewMetaPortion: no meta field?");
     if (pField)
     {
-        pField->GetPrefixAndSuffix((bPrefix) ? &fix : 0, (bPrefix) ? 0 : &fix);
+        pField->GetPrefixAndSuffix((bPrefix) ? &fix : nullptr, (bPrefix) ? nullptr : &fix);
     }
     return new SwFieldPortion( fix );
 }
@@ -340,13 +340,13 @@ SwExpandPortion * SwTextFormatter::TryNewNoLengthPortion(SwTextFormatInfo & rInf
             }
         }
     }
-    return 0;
+    return nullptr;
 }
 
 SwLinePortion *SwTextFormatter::NewExtraPortion( SwTextFormatInfo &rInf )
 {
     SwTextAttr *pHint = GetAttr( rInf.GetIdx() );
-    SwLinePortion *pRet = 0;
+    SwLinePortion *pRet = nullptr;
     if( !pHint )
     {
         pRet = new SwTextPortion;
@@ -416,7 +416,7 @@ static void checkApplyParagraphMarkFormatToNumbering( SwFont* pNumFnt, SwTextFor
             SwTextAttr* hint = hints->Get( i );
             // Formatting for the paragraph mark is set to apply only to the (non-existent) extra character
             // the at end of the txt node.
-            if( hint->Which() == RES_TXTATR_AUTOFMT && hint->GetEnd() != NULL
+            if( hint->Which() == RES_TXTATR_AUTOFMT && hint->GetEnd() != nullptr
                 && hint->GetStart() == *hint->GetEnd() && hint->GetStart() == node->Len())
             {
                 std::shared_ptr<SfxItemSet> pSet(hint->GetAutoFormat().GetStyleHandle());
@@ -451,9 +451,9 @@ SwNumberPortion *SwTextFormatter::NewNumberPortion( SwTextFormatInfo &rInf ) con
 {
     if( rInf.IsNumDone() || rInf.GetTextStart() != nStart
                 || rInf.GetTextStart() != rInf.GetIdx() )
-        return 0;
+        return nullptr;
 
-    SwNumberPortion *pRet = 0;
+    SwNumberPortion *pRet = nullptr;
     const SwTextNode* pTextNd = GetTextFrm()->GetTextNode();
     const SwNumRule* pNumRule = pTextNd->GetNumRule();
 
@@ -495,10 +495,10 @@ SwNumberPortion *SwTextFormatter::NewNumberPortion( SwTextFormatInfo &rInf ) con
             // The SwFont is created dynamically and passed in the ctor,
             // as the CharFormat only returns an SV-Font.
             // In the dtor of SwNumberPortion, the SwFont is deleted.
-            SwFont *pNumFnt = 0;
+            SwFont *pNumFnt = nullptr;
             const SwAttrSet* pFormat = rNumFormat.GetCharFormat() ?
                                     &rNumFormat.GetCharFormat()->GetAttrSet() :
-                                    NULL;
+                                    nullptr;
             const IDocumentSettingAccess* pIDSA = pTextNd->getIDocumentSettingAccess();
 
             if( SVX_NUM_CHAR_SPECIAL == rNumFormat.GetNumberingType() )

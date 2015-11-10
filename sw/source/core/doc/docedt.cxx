@@ -65,7 +65,7 @@ void _RestFlyInRange( _SaveFlyArr & rArr, const SwNodeIndex& rSttIdx,
 
         if( rSave.bInsertPosition )
         {
-            if( pInsertPos != NULL )
+            if( pInsertPos != nullptr )
                 aPos.nNode = *pInsertPos;
             else
                 aPos.nNode = rSttIdx.GetIndex();
@@ -80,7 +80,7 @@ void _RestFlyInRange( _SaveFlyArr & rArr, const SwNodeIndex& rSttIdx,
         // SetFormatAttr should call Modify() and add it to the node
         pFormat->SetFormatAttr( aAnchor );
         SwContentNode* pCNd = aPos.nNode.GetNode().GetContentNode();
-        if( pCNd && pCNd->getLayoutFrm( pFormat->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), 0, 0, false ) )
+        if( pCNd && pCNd->getLayoutFrm( pFormat->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), nullptr, nullptr, false ) )
             pFormat->MakeFrms();
     }
     sw::CheckAnchoredFlyConsistency(*rSttIdx.GetNode().GetDoc());
@@ -141,7 +141,7 @@ void _SaveFlyInRange( const SwPaM& rPam, const SwNodeIndex& rInsPos,
             ((FLY_AT_PARA == pAnchor->GetAnchorId()) ||
              (FLY_AT_CHAR == pAnchor->GetAnchorId())) &&
             // do not move if the InsPos is in the ContentArea of the Fly
-            ( 0 == ( pContentIdx = pFormat->GetContent().GetContentIdx() ) ||
+            ( nullptr == ( pContentIdx = pFormat->GetContent().GetContentIdx() ) ||
               !( *pContentIdx < rInsPos &&
                 rInsPos < pContentIdx->GetNode().EndOfSectionIndex() )) )
         {
@@ -240,7 +240,7 @@ void DelFlyInRange( const SwNodeIndex& rMkNdIdx,
 // From now on this class saves the redline positions of all redlines which ends exact at the
 // insert position (node _and_ content index)
 _SaveRedlEndPosForRestore::_SaveRedlEndPosForRestore( const SwNodeIndex& rInsIdx, sal_Int32 nCnt )
-    : pSavArr( 0 ), pSavIdx( 0 ), nSavContent( nCnt )
+    : pSavArr( nullptr ), pSavIdx( nullptr ), nSavContent( nCnt )
 {
     SwNode& rNd = rInsIdx.GetNode();
     SwDoc* pDest = rNd.GetDoc();
@@ -315,7 +315,7 @@ void sw_GetJoinFlags( SwPaM& rPam, bool& rJoinText, bool& rJoinPrev )
         if( pSttNd )
         {
             SwTextNode *pEndNd = pEnd->nNode.GetNode().GetTextNode();
-            rJoinText = 0 != pEndNd;
+            rJoinText = nullptr != pEndNd;
             if( rJoinText )
             {
                 bool bExchange = pStt == rPam.GetPoint();
@@ -495,7 +495,7 @@ uno::Any SwDoc::Spell( SwPaM& rPaM,
 {
     SwPosition* pSttPos = rPaM.Start(), *pEndPos = rPaM.End();
 
-    SwSpellArgs      *pSpellArgs = 0;
+    SwSpellArgs      *pSpellArgs = nullptr;
     if (pConvArgs)
     {
         pConvArgs->SetStart(pSttPos->nNode.GetNode().GetTextNode(), pSttPos->nContent);
@@ -521,7 +521,7 @@ uno::Any SwDoc::Spell( SwPaM& rPaM,
             switch( pNd->GetNodeType() )
             {
             case ND_TEXTNODE:
-                if( 0 != ( pCntFrm = pNd->GetTextNode()->getLayoutFrm( getIDocumentLayoutAccess().GetCurrentLayout() )) )
+                if( nullptr != ( pCntFrm = pNd->GetTextNode()->getLayoutFrm( getIDocumentLayoutAccess().GetCurrentLayout() )) )
                 {
                     // skip protected and hidden Cells and Flys
                     if( pCntFrm->IsProtected() )
@@ -557,7 +557,7 @@ uno::Any SwDoc::Spell( SwPaM& rPaM,
                             {
                                 SwIndex aStartIndex( dynamic_cast< SwTextNode* >( pNd ), nBeginGrammarCheck );
                                 SwPosition aStart( *pNd, aStartIndex );
-                                SwCursor aCrsr(aStart, 0, false);
+                                SwCursor aCrsr(aStart, nullptr, false);
                                 SwPosition aOrigPos = *aCrsr.GetPoint();
                                 aCrsr.GoSentence( SwCursor::START_SENT );
                                 if( aOrigPos != *aCrsr.GetPoint() )
@@ -691,7 +691,7 @@ public:
 
 SwHyphArgs::SwHyphArgs( const SwPaM *pPam, const Point &rCrsrPos,
                          sal_uInt16* pPageCount, sal_uInt16* pPageStart )
-     : SwInterHyphInfo( rCrsrPos ), pNode(0),
+     : SwInterHyphInfo( rCrsrPos ), pNode(nullptr),
      pPageCnt( pPageCount ), pPageSt( pPageStart )
 {
     // The following constraints have to be met:
@@ -804,7 +804,7 @@ void SwDoc::SetAutoCorrExceptWord( SwAutoCorrExceptWord* pNew )
 void SwDoc::DeleteAutoCorrExceptWord()
 {
     delete mpACEWord;
-    mpACEWord = 0;
+    mpACEWord = nullptr;
 }
 
 void SwDoc::CountWords( const SwPaM& rPaM, SwDocStat& rStat )
@@ -838,10 +838,10 @@ void SwDoc::CountWords( const SwPaM& rPaM, SwDocStat& rStat )
         }
 
         for( ; aIdx.GetIndex() < nEndNd; ++aIdx )
-            if( 0 != ( pTNd = aIdx.GetNode().GetTextNode() ))
+            if( nullptr != ( pTNd = aIdx.GetNode().GetTextNode() ))
                 pTNd->CountWords( rStat, 0, pTNd->GetText().getLength() );
 
-        if( nEndCnt && 0 != ( pTNd = pEnd->nNode.GetNode().GetTextNode() ))
+        if( nEndCnt && nullptr != ( pTNd = pEnd->nNode.GetNode().GetTextNode() ))
             pTNd->CountWords( rStat, 0, nEndCnt );
     }
     else if( pTNd && nSttCnt < nEndCnt )

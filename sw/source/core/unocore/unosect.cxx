@@ -121,8 +121,8 @@ public:
         , m_rPropSet(*aSwMapProvider.GetPropertySet(PROPERTY_MAP_SECTION))
         , m_EventListeners(m_Mutex)
         , m_bIndexHeader(bIndexHeader)
-        , m_bIsDescriptor(0 == pFormat)
-        , m_pProps((pFormat) ? 0 : new SwTextSectionProperties_Impl())
+        , m_bIsDescriptor(nullptr == pFormat)
+        , m_pProps((pFormat) ? nullptr : new SwTextSectionProperties_Impl())
     {
     }
 
@@ -135,7 +135,7 @@ public:
     SwSectionFormat & GetSectionFormatOrThrow() const {
         SwSectionFormat *const pFormat( GetSectionFormat() );
         if (!pFormat) {
-            throw uno::RuntimeException("SwXTextSection: disposed or invalid", 0);
+            throw uno::RuntimeException("SwXTextSection: disposed or invalid", nullptr);
         }
         return *pFormat;
     }
@@ -240,7 +240,7 @@ SwXTextSection::getParentSection() throw (uno::RuntimeException, std::exception)
 
     SwSectionFormat *const pParentFormat = rSectionFormat.GetParent();
     const uno::Reference< text::XTextSection > xRet =
-        (pParentFormat) ? CreateXTextSection(pParentFormat) : 0;
+        (pParentFormat) ? CreateXTextSection(pParentFormat) : nullptr;
     return xRet;
 }
 
@@ -275,8 +275,8 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
     }
 
     uno::Reference<lang::XUnoTunnel> xRangeTunnel( xTextRange, uno::UNO_QUERY);
-    SwXTextRange* pRange = 0;
-    OTextCursorHelper* pCursor = 0;
+    SwXTextRange* pRange = nullptr;
+    OTextCursorHelper* pCursor = nullptr;
     if(xRangeTunnel.is())
     {
         pRange  = ::sw::UnoTunnelGetImplementation<SwXTextRange>(xRangeTunnel);
@@ -285,7 +285,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
     }
 
     SwDoc *const pDoc =
-        (pRange) ? &pRange->GetDoc() : ((pCursor) ? pCursor->GetDoc() : 0);
+        (pRange) ? &pRange->GetDoc() : ((pCursor) ? pCursor->GetDoc() : nullptr);
     if (!pDoc)
     {
         throw lang::IllegalArgumentException();
@@ -295,7 +295,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
     //das muss jetzt true liefern
     ::sw::XTextRangeToSwPaM(aPam, xTextRange);
     UnoActionContext aCont(pDoc);
-    pDoc->GetIDocumentUndoRedo().StartUndo( UNDO_INSSECTION, NULL );
+    pDoc->GetIDocumentUndoRedo().StartUndo( UNDO_INSSECTION, nullptr );
 
     if (m_pImpl->m_sName.isEmpty())
     {
@@ -395,11 +395,11 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
     }
 
     SwSection *const pRet =
-        pDoc->InsertSwSection( aPam, aSect, 0, aSet.Count() ? &aSet : 0 );
+        pDoc->InsertSwSection( aPam, aSect, nullptr, aSet.Count() ? &aSet : nullptr );
     if (!pRet) // fdo#42450 text range could partially overlap existing section
     {
         // shouldn't have created an undo object yet
-        pDoc->GetIDocumentUndoRedo().EndUndo( UNDO_INSSECTION, NULL );
+        pDoc->GetIDocumentUndoRedo().EndUndo( UNDO_INSSECTION, nullptr );
         throw lang::IllegalArgumentException(
                 "SwXTextSection::attach(): invalid TextRange",
                 static_cast< ::cppu::OWeakObject*>(this), 0);
@@ -426,7 +426,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
     }
 
     // Undo-Klammerung hier beenden
-    pDoc->GetIDocumentUndoRedo().EndUndo( UNDO_INSSECTION, NULL );
+    pDoc->GetIDocumentUndoRedo().EndUndo( UNDO_INSSECTION, nullptr );
     m_pImpl->m_pProps.reset();
     m_pImpl->m_bIsDescriptor = false;
 }
@@ -441,8 +441,8 @@ SwXTextSection::getAnchor() throw (uno::RuntimeException, std::exception)
     if(pSectFormat)
     {
         const SwNodeIndex* pIdx;
-        if( 0 != ( pSectFormat->GetSection() ) &&
-            0 != ( pIdx = pSectFormat->GetContent().GetContentIdx() ) &&
+        if( nullptr != ( pSectFormat->GetSection() ) &&
+            nullptr != ( pIdx = pSectFormat->GetContent().GetContentIdx() ) &&
             pIdx->GetNode().GetNodes().IsDocNodes() )
         {
             SwPaM aPaM(*pIdx);
@@ -564,7 +564,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
     }
 
     ::std::unique_ptr<SwSectionData> const pSectionData(
-        (pFormat) ? new SwSectionData(*pFormat->GetSection()) : 0);
+        (pFormat) ? new SwSectionData(*pFormat->GetSection()) : nullptr);
 
     OUString const*const pPropertyNames = rPropertyNames.getConstArray();
     uno::Any const*const pValues = rValues.getConstArray();
@@ -821,7 +821,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
                 }
                 else
                 {
-                    SfxPoolItem* pPutItem = 0;
+                    SfxPoolItem* pPutItem = nullptr;
                     if (RES_COL == pEntry->nWID)
                     {
                         if (!m_pProps->m_pColItem.get())
@@ -960,7 +960,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
 
     uno::Sequence< uno::Any > aRet(rPropertyNames.getLength());
     uno::Any* pRet = aRet.getArray();
-    SwSection *const pSect = (pFormat) ? pFormat->GetSection() : 0;
+    SwSection *const pSect = (pFormat) ? pFormat->GetSection() : nullptr;
     const OUString* pPropertyNames = rPropertyNames.getConstArray();
 
     for (sal_Int32 nProperty = 0; nProperty < rPropertyNames.getLength();
@@ -1093,13 +1093,13 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
             {
                 // search enclosing index
                 SwSection* pEnclosingSection = pSect;
-                while ((pEnclosingSection != NULL) &&
+                while ((pEnclosingSection != nullptr) &&
                        (TOX_CONTENT_SECTION != pEnclosingSection->GetType()))
                 {
                     pEnclosingSection = pEnclosingSection->GetParent();
                 }
                 SwTOXBaseSection* const pTOXBaseSect = pEnclosingSection ?
-                    dynamic_cast<SwTOXBaseSection*>( pEnclosingSection ) : NULL;
+                    dynamic_cast<SwTOXBaseSection*>( pEnclosingSection ) : nullptr;
                 if (pTOXBaseSect)
                 {
                     // convert section to TOXBase and get SwXDocumentIndex
@@ -1113,7 +1113,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
             break;
             case WID_SECT_IS_GLOBAL_DOC_SECTION:
             {
-                const bool bRet = pFormat && (NULL != pFormat->GetGlobalDocSection());
+                const bool bRet = pFormat && (nullptr != pFormat->GetGlobalDocSection());
                 pRet[nProperty] <<= bRet;
             }
             break;
@@ -1171,7 +1171,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
                 }
                 else
                 {
-                    const SfxPoolItem* pQueryItem = 0;
+                    const SfxPoolItem* pQueryItem = nullptr;
                     if (RES_COL == pEntry->nWID)
                     {
                         if (!m_pProps->m_pColItem.get())
@@ -1478,7 +1478,7 @@ throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception)
     }
 
     ::std::unique_ptr<SwSectionData> const pSectionData(
-        (pFormat) ? new SwSectionData(*pFormat->GetSection()) : 0);
+        (pFormat) ? new SwSectionData(*pFormat->GetSection()) : nullptr);
 
     ::std::unique_ptr<SfxItemSet> pNewAttrSet;
     bool bLinkModeChanged = false;
@@ -1758,9 +1758,9 @@ uno::Reference<frame::XModel> SwXTextSection::GetModel()
     if (pSectionFormat)
     {
         SwDocShell const*const pShell( pSectionFormat->GetDoc()->GetDocShell() );
-        return (pShell) ? pShell->GetModel() : 0;
+        return (pShell) ? pShell->GetModel() : nullptr;
     }
-    return 0;
+    return nullptr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

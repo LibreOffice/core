@@ -53,8 +53,8 @@ void SwEditShell::HandleUndoRedoContext(::sw::UndoRedoContext & rContext)
         return;
     }
 
-    SwFrameFormat * pSelFormat(0);
-    SdrMarkList * pMarkList(0);
+    SwFrameFormat * pSelFormat(nullptr);
+    SdrMarkList * pMarkList(nullptr);
     rContext.GetSelections(pSelFormat, pMarkList);
 
     if (pSelFormat) // select frame
@@ -113,7 +113,7 @@ bool SwEditShell::Undo(sal_uInt16 const nCount)
         // Keep Cursor - so that we're able to set it at
         // the same position for autoformat or autocorrection
         SwUndoId nLastUndoId(UNDO_EMPTY);
-        GetLastUndoInfo(0, & nLastUndoId);
+        GetLastUndoInfo(nullptr, & nLastUndoId);
         const bool bRestoreCrsr = nCount == 1
                                   && ( UNDO_AUTOFORMAT == nLastUndoId
                                        || UNDO_AUTOCORRECT == nLastUndoId
@@ -172,7 +172,7 @@ bool SwEditShell::Redo(sal_uInt16 const nCount)
         ClearMark();
 
         SwUndoId nFirstRedoId(UNDO_EMPTY);
-        GetDoc()->GetIDocumentUndoRedo().GetFirstRedoInfo(0, & nFirstRedoId);
+        GetDoc()->GetIDocumentUndoRedo().GetFirstRedoInfo(nullptr, & nFirstRedoId);
         const bool bRestoreCrsr = nCount == 1 && UNDO_SETDEFTATTR == nFirstRedoId;
         Push();
 
@@ -229,8 +229,8 @@ bool SwEditShell::Repeat(sal_uInt16 const nCount)
 static void lcl_SelectSdrMarkList( SwEditShell* pShell,
                             const SdrMarkList* pSdrMarkList )
 {
-    OSL_ENSURE( pShell != NULL, "need shell!" );
-    OSL_ENSURE( pSdrMarkList != NULL, "need mark list" );
+    OSL_ENSURE( pShell != nullptr, "need shell!" );
+    OSL_ENSURE( pSdrMarkList != nullptr, "need mark list" );
 
     if( dynamic_cast<const SwFEShell*>( pShell) !=  nullptr )
     {

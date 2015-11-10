@@ -98,7 +98,7 @@ SwLinePortion *SwTextPainter::CalcPaintOfst( const SwRect &rPaint )
     // 8310: painten von LineBreaks in leeren Zeilen.
     if( nPaintOfst && pCurr->Width() )
     {
-        SwLinePortion *pLast = 0;
+        SwLinePortion *pLast = nullptr;
         // 7529 und 4757: nicht <= nPaintOfst
         while( pPor && GetInfo().X() + pPor->Width() + (pPor->Height()/2)
                        < nPaintOfst )
@@ -237,7 +237,7 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
     SwTextGridItem const*const pGrid(GetGridItem(GetTextFrm()->FindPageFrm()));
     const bool bAdjustBaseLine =
         ( !GetTextFrm()->IsVertical() || GetLineInfo().HasSpecialAlign( true ) ) && (! GetTextFrm()->IsInFly()) &&
-        ( 0 != pGrid );
+        ( nullptr != pGrid );
     const SwTwips nLineBaseLine = GetInfo().GetPos().Y() + nTmpAscent;
     if ( ! bAdjustBaseLine )
         GetInfo().Y( nLineBaseLine );
@@ -251,7 +251,7 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
         {
             const SwTwips nOldY = GetInfo().Y();
 
-            GetInfo().Y( GetInfo().GetPos().Y() + AdjustBaseLine( *pCurr, 0,
+            GetInfo().Y( GetInfo().GetPos().Y() + AdjustBaseLine( *pCurr, nullptr,
                 GetInfo().GetFont()->GetHeight( GetInfo().GetVsh(), *pOut ),
                 GetInfo().GetFont()->GetAscent( GetInfo().GetVsh(), *pOut )
             ) );
@@ -270,7 +270,7 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
     const bool bRest = pCurr->IsRest();
     bool bFirst = true;
 
-    SwArrowPortion *pArrow = NULL;
+    SwArrowPortion *pArrow = nullptr;
     // Reference portion for the paragraph end portion
     SwLinePortion* pEndTempl = pCurr->GetFirstPortion();
 
@@ -357,17 +357,17 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
         }
 
         // in extended input mode we do not want a common underline font.
-        SwUnderlineFont* pOldUnderLineFnt = 0;
+        SwUnderlineFont* pOldUnderLineFnt = nullptr;
         if ( GetRedln() && GetRedln()->ExtOn() )
         {
             pOldUnderLineFnt = GetInfo().GetUnderFnt();
-            GetInfo().SetUnderFnt( 0 );
+            GetInfo().SetUnderFnt( nullptr );
         }
 
         {
             // #i16816# tagged pdf support
             Por_Info aPorInfo( *pPor, *this );
-            SwTaggedPDFHelper aTaggedPDFHelper( 0, 0, &aPorInfo, *pOut );
+            SwTaggedPDFHelper aTaggedPDFHelper( nullptr, nullptr, &aPorInfo, *pOut );
 
             if( pPor->IsMultiPortion() )
                 PaintMultiPortion( rPaint, static_cast<SwMultiPortion&>(*pPor) );
@@ -397,12 +397,12 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
                  GetInfo().GetVsh()->GetViewOptions()->IsPDFExport() &&
                  pNext && pNext->IsHolePortion() ) ?
                pNext :
-               0;
+               nullptr;
     }
 
     // delete underline font
     delete GetInfo().GetUnderFnt();
-    GetInfo().SetUnderFnt( 0 );
+    GetInfo().SetUnderFnt( nullptr );
 
     // paint remaining stuff
     if( bDrawInWindow )
@@ -472,7 +472,7 @@ void SwTextPainter::CheckSpecialUnderline( const SwLinePortion* pPor,
     {
         // delete underline font
         delete GetInfo().GetUnderFnt();
-        GetInfo().SetUnderFnt( 0 );
+        GetInfo().SetUnderFnt( nullptr );
         return;
     }
 
@@ -536,7 +536,7 @@ void SwTextPainter::CheckSpecialUnderline( const SwLinePortion* pPor,
         nUnderEnd = GetEnd() - 1;
 
     // calculate the new common underline font
-    SwFont* pUnderlineFnt = 0;
+    SwFont* pUnderlineFnt = nullptr;
     Point aCommonBaseLine;
 
     // check, if underlining is not isolated
@@ -644,7 +644,7 @@ void SwTextPainter::CheckSpecialUnderline( const SwLinePortion* pPor,
     }
     else
         // I'm sorry, we do not have a special underlining font for you.
-        GetInfo().SetUnderFnt( 0 );
+        GetInfo().SetUnderFnt( nullptr );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

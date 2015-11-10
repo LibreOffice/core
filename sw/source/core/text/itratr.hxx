@@ -64,29 +64,29 @@ private:
 protected:
     void Chg( SwTextAttr *pHt );
     void Rst( SwTextAttr *pHt );
-    void CtorInitAttrIter( SwTextNode& rTextNode, SwScriptInfo& rScrInf, SwTextFrm* pFrm = 0 );
+    void CtorInitAttrIter( SwTextNode& rTextNode, SwScriptInfo& rScrInf, SwTextFrm* pFrm = nullptr );
     explicit SwAttrIter(SwTextNode* pTextNode)
-        : pShell(0)
-        , pFnt(0)
-        , pHints(0)
-        , pAttrSet(0)
-        , pScriptInfo(0)
-        , pLastOut(0)
+        : pShell(nullptr)
+        , pFnt(nullptr)
+        , pHints(nullptr)
+        , pAttrSet(nullptr)
+        , pScriptInfo(nullptr)
+        , pLastOut(nullptr)
         , nChgCnt(0)
-        , pRedln(0)
+        , pRedln(nullptr)
         , nStartIndex(0)
         , nEndIndex(0)
         , nPos(0)
         , nPropFont(0)
         , m_pTextNode(pTextNode)
         {
-            aMagicNo[SW_LATIN] = aMagicNo[SW_CJK] = aMagicNo[SW_CTL] = NULL;
+            aMagicNo[SW_LATIN] = aMagicNo[SW_CJK] = aMagicNo[SW_CTL] = nullptr;
         }
 
 public:
     // Constructor, destructor
     SwAttrIter( SwTextNode& rTextNode, SwScriptInfo& rScrInf )
-        : pShell(0), pFnt(0), pHints(0), pScriptInfo(0), pLastOut(0), nChgCnt(0), pRedln(0),nPropFont(0), m_pTextNode(&rTextNode)
+        : pShell(nullptr), pFnt(nullptr), pHints(nullptr), pScriptInfo(nullptr), pLastOut(nullptr), nChgCnt(0), pRedln(nullptr),nPropFont(0), m_pTextNode(&rTextNode)
         { CtorInitAttrIter( rTextNode, rScrInf ); }
 
     virtual ~SwAttrIter();
@@ -108,7 +108,7 @@ public:
     bool SeekStartAndChgAttrIter( OutputDevice* pOut, const bool bParaFont = false );
 
     // Do we have an attribute change at all?
-    bool HasHints() const { return 0 != pHints; }
+    bool HasHints() const { return nullptr != pHints; }
 
     // Returns the attribute for a position
     SwTextAttr *GetAttr( const sal_Int32 nPos ) const;

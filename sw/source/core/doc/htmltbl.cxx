@@ -81,7 +81,7 @@ SwHTMLTableLayoutCnts::SwHTMLTableLayoutCnts( const SwStartNode *pSttNd,
                                           SwHTMLTableLayout* pTab,
                                           bool bNoBrTag,
                                           SwHTMLTableLayoutCnts* pNxt ) :
-    pNext( pNxt ), pBox( 0 ), pTable( pTab ), pStartNode( pSttNd ),
+    pNext( pNxt ), pBox( nullptr ), pTable( pTab ), pStartNode( pSttNd ),
     nPass1Done( 0 ), nWidthSet( 0 ), bNoBreakTag( bNoBrTag )
 {}
 
@@ -127,7 +127,7 @@ SwHTMLTableLayoutColumn::SwHTMLTableLayoutColumn( sal_uInt16 nWidth,
 SwHTMLTableLayoutConstraints::SwHTMLTableLayoutConstraints(
     sal_uLong nMin, sal_uLong nMax, sal_uInt16 nRw, sal_uInt16 nColumn, sal_uInt16 nColSp ):
     nRow( nRw ), nCol( nColumn ), nColSpan( nColSp ),
-    pNext( 0 ),
+    pNext( nullptr ),
     nMinNoAlign( nMin ), nMaxNoAlign( nMax )
 {}
 
@@ -139,7 +139,7 @@ SwHTMLTableLayoutConstraints::~SwHTMLTableLayoutConstraints()
 SwHTMLTableLayoutConstraints *SwHTMLTableLayoutConstraints::InsertNext(
     SwHTMLTableLayoutConstraints *pNxt )
 {
-    SwHTMLTableLayoutConstraints *pPrev = 0;
+    SwHTMLTableLayoutConstraints *pPrev = nullptr;
     SwHTMLTableLayoutConstraints *pConstr = this;
     while( pConstr )
     {
@@ -179,8 +179,8 @@ SwHTMLTableLayout::SwHTMLTableLayout( const SwTable * pTable,
     : m_aColumns( new SwHTMLTableLayoutColumn*[nCls] )
     , m_aCells( new SwHTMLTableLayoutCell*[static_cast<size_t>(nRws)*nCls] )
     , m_pSwTable( pTable )
-    , m_pLeftFillerBox( 0 )
-    , m_pRightFillerBox( 0 )
+    , m_pLeftFillerBox( nullptr )
+    , m_pRightFillerBox( nullptr )
     , m_nMin( 0 )
     , m_nMax( 0 )
     , m_nRows( nRws )
@@ -422,7 +422,7 @@ const SwStartNode *SwHTMLTableLayout::GetAnyBoxStartNode() const
     const SwStartNode *pBoxSttNd;
 
     const SwTableBox* pBox = m_pSwTable->GetTabLines()[0]->GetTabBoxes()[0];
-    while( 0 == (pBoxSttNd = pBox->GetSttNd()) )
+    while( nullptr == (pBoxSttNd = pBox->GetSttNd()) )
     {
         OSL_ENSURE( pBox->GetTabLines().size() > 0,
                 "Box without start node and lines" );
@@ -478,7 +478,7 @@ void SwHTMLTableLayout::AutoLayoutPass1()
     bool bFixRelWidths = false;
     sal_uInt16 i;
 
-    SwHTMLTableLayoutConstraints *pConstraints = 0;
+    SwHTMLTableLayoutConstraints *pConstraints = nullptr;
 
     for( i=0; i<m_nCols; i++ )
     {

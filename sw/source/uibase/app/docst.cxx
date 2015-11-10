@@ -108,7 +108,7 @@ void  SwDocShell::StateStyleSheet(SfxItemSet& rSet, SwWrtShell* pSh)
     else
     {
         SfxViewFrame* pFrame = pShell->GetView().GetViewFrame();
-        SfxPoolItem* pItem = NULL;
+        SfxPoolItem* pItem = nullptr;
         pFrame->GetBindings().QueryState(SID_STYLE_FAMILY, pItem);
         SfxUInt16Item* pFamilyItem = dynamic_cast<SfxUInt16Item*>(pItem);
         if (pFamilyItem)
@@ -169,7 +169,7 @@ void  SwDocShell::StateStyleSheet(SfxItemSet& rSet, SwWrtShell* pSh)
                         nMask = SWSTYLEBIT_HTML;
                     else
                     {
-                        const FrmTypeFlags nSelection = pShell->GetFrmType(0,true);
+                        const FrmTypeFlags nSelection = pShell->GetFrmType(nullptr,true);
                         if(pShell->GetCurTOX())
                             nMask = SWSTYLEBIT_IDX  ;
                         else if(nSelection & FrmTypeFlags::HEADER     ||
@@ -296,7 +296,7 @@ void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
             if (sName.isEmpty() && m_xBasePool.get())
                 sName = SfxStyleDialog::GenerateUnusedName(*m_xBasePool);
 
-            nRet = Edit( sName, sParent, nFamily, nMask, true, OString(), 0, rReq.IsAPI() );
+            nRet = Edit( sName, sParent, nFamily, nMask, true, OString(), nullptr, rReq.IsAPI() );
         }
         break;
 
@@ -346,7 +346,7 @@ void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
             OUString aParam;
             sal_uInt16 nFamily = SFX_STYLE_FAMILY_PARA;
             sal_uInt16 nMask = 0;
-            SwWrtShell* pActShell = 0;
+            SwWrtShell* pActShell = nullptr;
 
             if( !pArgs )
             {
@@ -518,7 +518,7 @@ public:
     DECL_LINK_TYPED( ApplyHdl, LinkParamNone*, void );
     void apply()
     {
-        ApplyHdl(NULL);
+        ApplyHdl(nullptr);
     }
     sal_uInt16 getRet() const { return m_nRet; }
 private:
@@ -579,7 +579,7 @@ IMPL_LINK_NOARG_TYPED(ApplyStyle, ApplyHdl, LinkParamNone*, void)
 
         if( SFX_STYLE_FAMILY_PAGE == m_nFamily && SvtLanguageOptions().IsCTLFontEnabled() )
         {
-            const SfxPoolItem *pItem = NULL;
+            const SfxPoolItem *pItem = nullptr;
             if( aTmpSet.GetItemState( m_rDocSh.GetPool().GetTrueWhich( SID_ATTR_FRAMEDIRECTION, false ) , true, &pItem ) == SfxItemState::SET )
                 SwChartHelper::DoUpdateAllCharts( pDoc );
         }
@@ -624,7 +624,7 @@ sal_uInt16 SwDocShell::Edit(
     const bool bBasic )
 {
     assert( GetWrtShell() );
-    SfxStyleSheetBase *pStyle = 0;
+    SfxStyleSheetBase *pStyle = nullptr;
 
     sal_uInt16 nRet = nMask;
     bool bModified = m_pDoc->getIDocumentState().IsModified();
@@ -731,7 +731,7 @@ sal_uInt16 SwDocShell::Edit(
         {
             //Get the undo id for the type of style that was created in order to re-use that comment for the grouped
             //create style + change style operations
-            m_pWrtShell->GetLastUndoInfo(0, &nNewStyleUndoId);
+            m_pWrtShell->GetLastUndoInfo(nullptr, &nNewStyleUndoId);
         }
     }
     else
@@ -789,7 +789,7 @@ sal_uInt16 SwDocShell::Edit(
         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
         assert( pFact );
         std::unique_ptr<SfxAbstractApplyTabDialog> pDlg(pFact->CreateTemplateDialog(
-                                                    0, *(xTmp.get()), nFamily, sPage,
+                                                    nullptr, *(xTmp.get()), nFamily, sPage,
                                                     pActShell ? pActShell : m_pWrtShell, bNew));
         assert( pDlg );
         ApplyStyle aApplyStyleHelper(*this, bNew, pStyle, nRet, xTmp, nFamily, pDlg.get(), m_xBasePool, bModified);
@@ -1087,7 +1087,7 @@ sal_uInt16 SwDocShell::UpdateStyle(const OUString &rName, sal_uInt16 nFamily, Sw
         {
             const SwNumRule* pCurRule;
             if( pStyle->GetNumRule() &&
-                0 != ( pCurRule = pCurrWrtShell->GetNumRuleAtCurrCrsrPos() ))
+                nullptr != ( pCurRule = pCurrWrtShell->GetNumRuleAtCurrCrsrPos() ))
             {
                 SwNumRule aRule( *pCurRule );
                 // #i91400#
@@ -1281,7 +1281,7 @@ void SwDocShell::_LoadStyles( SfxObjectShell& rSource, bool bPreserveCurrentDocu
         // of the template, update all the Source's
         // FixFields once.
         if(!bPreserveCurrentDocument)
-            static_cast<SwDocShell&>(rSource).m_pDoc->getIDocumentFieldsAccess().SetFixFields(false, NULL);
+            static_cast<SwDocShell&>(rSource).m_pDoc->getIDocumentFieldsAccess().SetFixFields(false, nullptr);
         if (m_pWrtShell)
         {
             // rhbz#818557, fdo#58893: EndAllAction will call SelectShell(),

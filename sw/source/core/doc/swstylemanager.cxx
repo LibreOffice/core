@@ -67,8 +67,8 @@ public:
     explicit SwStyleManager( SfxItemSet* pIgnorableParagraphItems )
         : aAutoCharPool(),
           aAutoParaPool( pIgnorableParagraphItems ),
-          mpCharCache(0),
-          mpParaCache(0)
+          mpCharCache(nullptr),
+          mpParaCache(nullptr)
     {}
     virtual ~SwStyleManager();
     virtual StylePool::SfxItemSet_Pointer_t getAutomaticStyle( const SfxItemSet& rSet,
@@ -96,9 +96,9 @@ SwStyleManager::~SwStyleManager()
 void SwStyleManager::clearCaches()
 {
     delete mpCharCache;
-    mpCharCache = 0;
+    mpCharCache = nullptr;
     delete mpParaCache;
-    mpParaCache = 0;
+    mpParaCache = nullptr;
 }
 
 StylePool::SfxItemSet_Pointer_t SwStyleManager::getAutomaticStyle( const SfxItemSet& rSet,

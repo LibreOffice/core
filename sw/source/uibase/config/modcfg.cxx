@@ -56,7 +56,7 @@ InsCaptionOpt* InsCaptionOptArr::Find(const SwCapObjType eType, const SvGlobalNa
             return &rObj;
     }
 
-    return NULL;
+    return nullptr;
 }
 
 void InsCaptionOptArr::Insert(InsCaptionOpt* pObj)
@@ -70,7 +70,7 @@ const InsCaptionOpt* SwModuleOptions::GetCapOption(
     if(bHTML)
     {
         OSL_FAIL("no caption option in sw/web!");
-        return 0;
+        return nullptr;
     }
     else
     {
@@ -588,8 +588,8 @@ const Sequence<OUString>& SwInsertConfig::GetPropertyNames()
 SwInsertConfig::SwInsertConfig(bool bWeb) :
     ConfigItem(bWeb ? OUString("Office.WriterWeb/Insert") : OUString("Office.Writer/Insert"),
         ConfigItemMode::DelayedUpdate|ConfigItemMode::ReleaseTree),
-    pCapOptions(0),
-    pOLEMiscOpt(0),
+    pCapOptions(nullptr),
+    pOLEMiscOpt(nullptr),
     bInsWithCaption( false ),
     bCaptionOrderNumberingFirst( false ),
     aInsTableOpts(0,0),
@@ -639,14 +639,14 @@ void SwInsertConfig::ImplCommit()
 
     for(int nProp = 0; nProp < aNames.getLength(); nProp++)
     {
-        const InsCaptionOpt* pWriterTableOpt = 0;
-        const InsCaptionOpt* pWriterFrameOpt = 0;
-        const InsCaptionOpt* pWriterGraphicOpt = 0;
-        const InsCaptionOpt* pOLECalcOpt = 0;
-        const InsCaptionOpt* pOLEImpressOpt = 0;
-        const InsCaptionOpt* pOLEChartOpt = 0;
-        const InsCaptionOpt* pOLEFormulaOpt = 0;
-        const InsCaptionOpt* pOLEDrawOpt = 0;
+        const InsCaptionOpt* pWriterTableOpt = nullptr;
+        const InsCaptionOpt* pWriterFrameOpt = nullptr;
+        const InsCaptionOpt* pWriterGraphicOpt = nullptr;
+        const InsCaptionOpt* pOLECalcOpt = nullptr;
+        const InsCaptionOpt* pOLEImpressOpt = nullptr;
+        const InsCaptionOpt* pOLEChartOpt = nullptr;
+        const InsCaptionOpt* pOLEFormulaOpt = nullptr;
+        const InsCaptionOpt* pOLEDrawOpt = nullptr;
         if(pCapOptions)
         {
             pWriterTableOpt = pCapOptions->Find(TABLE_CAP);
@@ -873,14 +873,14 @@ void SwInsertConfig::Load()
     Sequence<Any> aValues = GetProperties(aNames);
     const Any* pValues = aValues.getConstArray();
     assert(aValues.getLength() == aNames.getLength());
-    InsCaptionOpt* pWriterTableOpt = 0;
-    InsCaptionOpt* pWriterFrameOpt = 0;
-    InsCaptionOpt* pWriterGraphicOpt = 0;
-    InsCaptionOpt* pOLECalcOpt = 0;
-    InsCaptionOpt* pOLEImpressOpt = 0;
-    InsCaptionOpt* pOLEChartOpt = 0;
-    InsCaptionOpt* pOLEFormulaOpt = 0;
-    InsCaptionOpt* pOLEDrawOpt = 0;
+    InsCaptionOpt* pWriterTableOpt = nullptr;
+    InsCaptionOpt* pWriterFrameOpt = nullptr;
+    InsCaptionOpt* pWriterGraphicOpt = nullptr;
+    InsCaptionOpt* pOLECalcOpt = nullptr;
+    InsCaptionOpt* pOLEImpressOpt = nullptr;
+    InsCaptionOpt* pOLEChartOpt = nullptr;
+    InsCaptionOpt* pOLEFormulaOpt = nullptr;
+    InsCaptionOpt* pOLEDrawOpt = nullptr;
     if (pCapOptions)
     {
         pWriterTableOpt = pCapOptions->Find(TABLE_CAP);

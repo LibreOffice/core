@@ -230,8 +230,8 @@ struct SwHTMLFormatInfo
     // Konstruktor fuer einen Dummy zum Suchen
     explicit SwHTMLFormatInfo( const SwFormat *pF ) :
         pFormat( pF ),
-        pRefFormat(0),
-        pItemSet( 0 ),
+        pRefFormat(nullptr),
+        pItemSet( nullptr ),
         nLeftMargin( 0 ),
         nRightMargin( 0 ),
         nFirstLineIndent(0),
@@ -417,11 +417,11 @@ public:
 
     // gebe die evt. an der akt. Position stehenden FlyFrame aus.
     bool OutFlyFrm( sal_uLong nNdIdx, sal_Int32 nContentIdx,
-                        sal_uInt8 nPos, HTMLOutContext *pContext = 0 );
+                        sal_uInt8 nPos, HTMLOutContext *pContext = nullptr );
     void OutFrameFormat( sal_uInt8 nType, const SwFrameFormat& rFormat,
                     const SdrObject *pSdrObj );
 
-    void OutForm( bool bTagOn=true, const SwStartNode *pStNd=0 );
+    void OutForm( bool bTagOn=true, const SwStartNode *pStNd=nullptr );
     void OutHiddenForms();
     void OutHiddenForm( const css::uno::Reference<css::form::XForm>& rForm );
 
@@ -478,8 +478,8 @@ public:
     void OutCSS1_TableCellBorderHack(const SwFrameFormat& rFrameFormat);
     void OutCSS1_SectionFormatOptions( const SwFrameFormat& rFrameFormat, const SwFormatCol *pCol );
     void OutCSS1_FrameFormatOptions( const SwFrameFormat& rFrameFormat, sal_uInt32 nFrmOpts,
-                                const SdrObject *pSdrObj=0,
-                                const SfxItemSet *pItemSet=0 );
+                                const SdrObject *pSdrObj=nullptr,
+                                const SfxItemSet *pItemSet=nullptr );
     void OutCSS1_FrameFormatBackground( const SwFrameFormat& rFrameFormat );
 
     void ChangeParaToken( sal_uInt16 nNew );
@@ -534,7 +534,7 @@ public:
     static const SdrObject* GetMarqueeTextObj( const SwDrawFrameFormat& rFormat );
     static sal_uInt16 GetCSS1Selector( const SwFormat *pFormat, OString& rToken,
                                    OUString& rClass, sal_uInt16& rRefPoolId,
-                                   OUString *pPseudo=0 );
+                                   OUString *pPseudo=nullptr );
 
     static const SwFormat *GetTemplateFormat( sal_uInt16 nPoolId, IDocumentStylePoolAccess* /*SwDoc*/ pTemplate );
     static const SwFormat *GetParentFormat( const SwFormat& rFormat, sal_uInt16 nDeep );
@@ -543,7 +543,7 @@ public:
                                  const SfxItemSet& rRefItemSet,
                                  bool bSetDefaults,
                                  bool bClearSame = true,
-                                   const SfxItemSet *pRefScriptItemSet=0 );
+                                   const SfxItemSet *pRefScriptItemSet=nullptr );
     static bool HasScriptDependentItems( const SfxItemSet& rItemSet,
                                                bool bCheckDropCap );
 
@@ -590,19 +590,19 @@ inline bool SwHTMLWriter::IsCSS1Script( sal_uInt16 n ) const
 inline void SwHTMLWriter::OutCSS1_PropertyAscii( const sal_Char *pProp,
                                                  const sal_Char *pVal )
 {
-    OutCSS1_Property( pProp, pVal, 0 );
+    OutCSS1_Property( pProp, pVal, nullptr );
 }
 
 inline void SwHTMLWriter::OutCSS1_PropertyAscii( const sal_Char *pProp,
                                                  const OString& rVal )
 {
-    OutCSS1_Property( pProp, rVal.getStr(), 0 );
+    OutCSS1_Property( pProp, rVal.getStr(), nullptr );
 }
 
 inline void SwHTMLWriter::OutCSS1_Property( const sal_Char *pProp,
                                             const OUString& rVal )
 {
-    OutCSS1_Property( pProp, 0, &rVal );
+    OutCSS1_Property( pProp, nullptr, &rVal );
 }
 
 // Struktur speichert die aktuellen Daten des Writers zwischen, um
@@ -628,7 +628,7 @@ struct HTMLSaveData
 
     HTMLSaveData( SwHTMLWriter&, sal_uLong nStt, sal_uLong nEnd,
                   bool bSaveNum=true,
-                  const SwFrameFormat *pFrameFormat=0  );
+                  const SwFrameFormat *pFrameFormat=nullptr  );
     ~HTMLSaveData();
 };
 
@@ -640,7 +640,7 @@ Writer& OutHTML_FrameFormatOLENodeGrf( Writer& rWrt, const SwFrameFormat& rForma
 
 Writer& OutHTML_SwTextNode( Writer&, const SwContentNode& );
 Writer& OutHTML_SwTableNode( Writer& , SwTableNode &, const SwFrameFormat *,
-                           const OUString* pCaption=0, bool bTopCaption=false );
+                           const OUString* pCaption=nullptr, bool bTopCaption=false );
 
 Writer& OutHTML_DrawFrameFormatAsControl( Writer& rWrt, const SwDrawFrameFormat& rFormat,
                                      const SdrUnoObj& rSdrObj, bool bInCntnr );
@@ -653,8 +653,8 @@ Writer& OutHTML_HeaderFooter( Writer& rWrt, const SwFrameFormat& rFrameFormat,
 Writer& OutHTML_Image( Writer&, const SwFrameFormat& rFormat,
                        Graphic& rGraphic, const OUString& rAlternateText,
                        const Size& rRealSize, sal_uInt32 nFrmOpts,
-                       const sal_Char *pMarkType = 0,
-                       const ImageMap *pGenImgMap = 0 );
+                       const sal_Char *pMarkType = nullptr,
+                       const ImageMap *pGenImgMap = nullptr );
 
 Writer& OutHTML_BulletImage( Writer& rWrt, const sal_Char *pTag,
                              const SvxBrushItem* pBrush );

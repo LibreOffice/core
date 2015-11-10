@@ -326,7 +326,7 @@ IMPL_LINK_TYPED( SwEnvFormatPage, EditHdl, MenuButton *, pButton, void )
         if ( pDlg->Execute() == RET_OK )
         {
             // maybe relocate defaults
-            const SfxPoolItem* pItem = 0;
+            const SfxPoolItem* pItem = nullptr;
             SfxItemSet* pOutputSet = const_cast<SfxItemSet*>(pDlg->GetOutputItemSet());
             sal_uInt16 nNewDist;
 

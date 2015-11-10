@@ -154,7 +154,7 @@ public:
     }
 
     SwModelTestBase(const char* pTestDocumentPath = "", const char* pFilter = "")
-        : mpXmlBuffer(0)
+        : mpXmlBuffer(nullptr)
         , mpTestDocumentPath(pTestDocumentPath)
         , mpFilter(pFilter)
         , mnStartTime(0)
@@ -297,7 +297,7 @@ private:
         // create the xml writer
         mpXmlBuffer = xmlBufferCreate();
         xmlTextWriterPtr pXmlWriter = xmlNewTextWriterMemory(mpXmlBuffer, 0);
-        xmlTextWriterStartDocument(pXmlWriter, NULL, NULL, NULL);
+        xmlTextWriterStartDocument(pXmlWriter, nullptr, nullptr, nullptr);
 
         // create the dump
         SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
@@ -317,7 +317,7 @@ protected:
         if (mpXmlBuffer)
         {
             xmlBufferFree(mpXmlBuffer);
-            mpXmlBuffer = 0;
+            mpXmlBuffer = nullptr;
         }
     }
 
@@ -654,7 +654,7 @@ protected:
     xmlDocPtr parseExport(const OUString& rStreamName = OUString("word/document.xml"))
     {
         if (!mbExported)
-            return 0;
+            return nullptr;
 
         return parseExportInternal( maTempFile.GetURL(), rStreamName );
     }

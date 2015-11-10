@@ -67,7 +67,7 @@ bool SwAutoCorrect::PutText( const uno::Reference < embed::XStorage >&  rStg,
                                  const OUString& rFileName, const OUString& rShort,
                                  SfxObjectShell& rObjSh, OUString& rLong )
 {
-    if( 0 == dynamic_cast<const SwDocShell*>( &rObjSh) )
+    if( nullptr == dynamic_cast<const SwDocShell*>( &rObjSh) )
         return false;
 
     SwDocShell& rDShell = static_cast<SwDocShell&>(rObjSh);

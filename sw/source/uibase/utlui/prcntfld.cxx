@@ -20,7 +20,7 @@
 #include "prcntfld.hxx"
 
 PercentField::PercentField()
-    : m_pField(NULL)
+    : m_pField(nullptr)
     , nRefValue(0)
     , nOldMax(0)
     , nOldMin(0)

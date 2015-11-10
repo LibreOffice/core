@@ -65,7 +65,7 @@ class SwFlyFrm : public SwLayoutFrm, public SwAnchoredObject
     void FinitDrawObj();                  // constructors
 
     void _UpdateAttr( const SfxPoolItem*, const SfxPoolItem*, sal_uInt8 &,
-                      SwAttrSetChg *pa = 0, SwAttrSetChg *pb = 0 );
+                      SwAttrSetChg *pa = nullptr, SwAttrSetChg *pb = nullptr );
 
     using SwLayoutFrm::CalcRel;
 
@@ -121,7 +121,7 @@ protected:
     Point m_aContentPos;        // content area's position relatively to Frm
     bool m_bValidContentPos;
 
-    virtual void Format( vcl::RenderContext* pRenderContext, const SwBorderAttrs *pAttrs = 0 ) override;
+    virtual void Format( vcl::RenderContext* pRenderContext, const SwBorderAttrs *pAttrs = nullptr ) override;
     void MakePrtArea( const SwBorderAttrs &rAttrs );
     void MakeContentPos( const SwBorderAttrs &rAttrs );
 
@@ -158,20 +158,20 @@ public:
     // get client information
     virtual bool GetInfo( SfxPoolItem& ) const override;
     virtual void Paint( vcl::RenderContext& rRenderContext, SwRect const&,
-                        SwPrintData const*const pPrintData = NULL ) const override;
+                        SwPrintData const*const pPrintData = nullptr ) const override;
     virtual Size ChgSize( const Size& aNewSize ) override;
     virtual bool GetCrsrOfst( SwPosition *, Point&,
-                              SwCrsrMoveState* = 0, bool bTestBackground = false ) const override;
+                              SwCrsrMoveState* = nullptr, bool bTestBackground = false ) const override;
 
     virtual void CheckDirection( bool bVert ) override;
     virtual void Cut() override;
 #ifdef DBG_UTIL
-    virtual void Paste( SwFrm* pParent, SwFrm* pSibling = 0 ) override;
+    virtual void Paste( SwFrm* pParent, SwFrm* pSibling = nullptr ) override;
 #endif
 
     SwTwips _Shrink( SwTwips, bool bTst );
     SwTwips _Grow  ( SwTwips, bool bTst );
-    void    _Invalidate( SwPageFrm *pPage = 0 );
+    void    _Invalidate( SwPageFrm *pPage = nullptr );
 
     bool FrmSizeChg( const SwFormatFrmSize & );
 
@@ -181,7 +181,7 @@ public:
     static void ChainFrames( SwFlyFrm *pMaster, SwFlyFrm *pFollow );
     static void UnchainFrames( SwFlyFrm *pMaster, SwFlyFrm *pFollow );
 
-    SwFlyFrm *FindChainNeighbour( SwFrameFormat &rFormat, SwFrm *pAnch = 0 );
+    SwFlyFrm *FindChainNeighbour( SwFrameFormat &rFormat, SwFrm *pAnch = nullptr );
 
     // #i26791#
     const SwVirtFlyDrawObj* GetVirtDrawObj() const;

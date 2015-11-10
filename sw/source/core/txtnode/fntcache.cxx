@@ -58,16 +58,16 @@ using namespace ::com::sun::star;
 
 // global variables declared in fntcache.hxx
 // FontCache is created in txtinit.cxx _TextInit and deleted in _TextFinit
-SwFntCache *pFntCache = NULL;
+SwFntCache *pFntCache = nullptr;
 // last Font set by ChgFntCache
-SwFntObj *pLastFont = NULL;
+SwFntObj *pLastFont = nullptr;
 // "MagicNumber" used to identify Fonts
-sal_uInt8* pMagicNo = NULL;
+sal_uInt8* pMagicNo = nullptr;
 
-Color *pWaveCol = 0;
+Color *pWaveCol = nullptr;
 
 long SwFntObj::nPixWidth;
-MapMode* SwFntObj::pPixMap = NULL;
+MapMode* SwFntObj::pPixMap = nullptr;
 VclPtr<OutputDevice> SwFntObj::pPixOut;
 
 namespace
@@ -99,7 +99,7 @@ void SwFntCache::Flush( )
     if ( pLastFont )
     {
         pLastFont->Unlock();
-        pLastFont = NULL;
+        pLastFont = nullptr;
     }
     SwCache::Flush( );
 }
@@ -107,9 +107,9 @@ void SwFntCache::Flush( )
 SwFntObj::SwFntObj(const SwSubFont &rFont, const void *pOwn, SwViewShell const *pSh)
     : SwCacheObj(pOwn)
     , aFont(rFont)
-    , pScrFont(NULL)
+    , pScrFont(nullptr)
     , pPrtFont(&aFont)
-    , pPrinter(NULL)
+    , pPrinter(nullptr)
     , nGuessedLeading(USHRT_MAX)
     , nExtLeading(USHRT_MAX)
     , nScrAscent(0)
@@ -154,7 +154,7 @@ void SwFntObj::CreatePrtFont( const OutputDevice& rPrt )
             ++nWidth;
         pPrtFont = new vcl::Font( aFont );
         pPrtFont->SetSize( Size( nWidth, aFont.GetSize().Height() ) );
-        pScrFont = NULL;
+        pScrFont = nullptr;
     }
 }
 
@@ -718,7 +718,7 @@ static void lcl_DrawLineForWrongListData(
 
             const SwWrongArea* wrongArea = pWList->GetElement(wrongPos);
 
-            if (wrongArea != 0)
+            if (wrongArea != nullptr)
             {
                 if (WRONGAREA_DASHED == wrongArea->mLineType)
                 {
@@ -1259,7 +1259,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                     if ( SwScriptInfo::IsArabicText( rInf.GetText(), rInf.GetIdx(), rInf.GetLen() ) )
                     {
                         if ( pSI && pSI->CountKashida() &&
-                            pSI->KashidaJustify( pKernArray, 0, rInf.GetIdx(),
+                            pSI->KashidaJustify( pKernArray, nullptr, rInf.GetIdx(),
                                                  rInf.GetLen(), nSpaceAdd ) != -1 )
                         {
                             bSpecialJust = true;
@@ -1277,7 +1277,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                     {
                         // Use rInf.GetSpace() because it has more precision than
                         // nSpaceAdd:
-                        SwScriptInfo::ThaiJustify( rInf.GetText(), pKernArray, 0,
+                        SwScriptInfo::ThaiJustify( rInf.GetText(), pKernArray, nullptr,
                                                    rInf.GetIdx(), rInf.GetLen(),
                                                    rInf.GetNumberOfBlanks(),
                                                    rInf.GetSpace() );
@@ -2062,7 +2062,7 @@ sal_Int32 SwFntObj::GetCrsrOfst( SwDrawTextInfo &rInf )
             if ( SwScriptInfo::IsArabicText( rInf.GetText(), rInf.GetIdx(), rInf.GetLen() ) )
             {
                 if ( pSI && pSI->CountKashida() &&
-                    pSI->KashidaJustify( pKernArray, 0, rInf.GetIdx(), rInf.GetLen(),
+                    pSI->KashidaJustify( pKernArray, nullptr, rInf.GetIdx(), rInf.GetLen(),
                                          nSpaceAdd ) != -1 )
                     nSpaceAdd = 0;
             }
@@ -2075,7 +2075,7 @@ sal_Int32 SwFntObj::GetCrsrOfst( SwDrawTextInfo &rInf )
 
             if ( LANGUAGE_THAI == aLang )
             {
-                SwScriptInfo::ThaiJustify( rInf.GetText(), pKernArray, 0,
+                SwScriptInfo::ThaiJustify( rInf.GetText(), pKernArray, nullptr,
                                            rInf.GetIdx(), rInf.GetLen(),
                                            rInf.GetNumberOfBlanks(),
                                            rInf.GetSpace() );
@@ -2220,7 +2220,7 @@ SwFntAccess::SwFntAccess( const void* &rMagic,
     }
 
     {
-        OutputDevice* pOut = 0;
+        OutputDevice* pOut = nullptr;
         sal_uInt16 nZoom = USHRT_MAX;
 
         // Get the reference device
@@ -2242,7 +2242,7 @@ SwFntAccess::SwFntAccess( const void* &rMagic,
                 return; // result of Check: Drucker+Zoom okay.
             }
             pFntObj->Unlock(); // forget this object, printer/zoom differs
-            pObj = NULL;
+            pObj = nullptr;
         }
 
         // Search by font comparison, quite expensive!
@@ -2285,7 +2285,7 @@ SwFntAccess::SwFntAccess( const void* &rMagic,
                 OSL_ENSURE( !pFntObj->pPrinter, "SwFntAccess: Printer Changed" );
                 pFntObj->CreatePrtFont( *pOut );
                 pFntObj->pPrinter = pOut;
-                pFntObj->pScrFont = NULL;
+                pFntObj->pScrFont = nullptr;
                 pFntObj->nGuessedLeading = USHRT_MAX;
                 pFntObj->nExtLeading = USHRT_MAX;
                 pFntObj->nPrtAscent = USHRT_MAX;
@@ -2529,7 +2529,7 @@ bool SwDrawTextInfo::ApplyAutoColor( vcl::Font* pFont )
         if ( bChgFntColor )
         {
             // check if current background has a user defined setting
-            const Color* pCol = GetFont() ? GetFont()->GetBackColor() : NULL;
+            const Color* pCol = GetFont() ? GetFont()->GetBackColor() : nullptr;
             Color aColor;
             if( ! pCol || COL_TRANSPARENT == pCol->GetColor() )
             {
@@ -2563,10 +2563,10 @@ bool SwDrawTextInfo::ApplyAutoColor( vcl::Font* pFont )
                     /// OD 30.08.2002 #99657#
                     /// determined color <pCol> can be <COL_TRANSPARENT>. Thus, check it.
                     if ( pCol->GetColor() == COL_TRANSPARENT)
-                        pCol = NULL;
+                        pCol = nullptr;
                 }
                 else
-                    pCol = NULL;
+                    pCol = nullptr;
             }
 
             // no user defined color at paragraph or font background

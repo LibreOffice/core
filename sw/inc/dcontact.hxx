@@ -400,8 +400,8 @@ class SwDrawContact : public SwContact
         virtual SdrObject* GetMaster() override;
         virtual void SetMaster( SdrObject* _pNewMaster ) override;
 
-        const SwFrm* GetAnchorFrm( const SdrObject* _pDrawObj = 0L ) const;
-        SwFrm* GetAnchorFrm( SdrObject* _pDrawObj = 0L );
+        const SwFrm* GetAnchorFrm( const SdrObject* _pDrawObj = nullptr ) const;
+        SwFrm* GetAnchorFrm( SdrObject* _pDrawObj = nullptr );
 
         inline const SwPageFrm* GetPageFrm() const
         {
@@ -421,7 +421,7 @@ class SwDrawContact : public SwContact
         /** Inserts SdrObject in the arrays of the layout ((SwPageFrm and SwFrm).
          The anchor is determined according to the attribute SwFormatAnchor.
          If required the object gets unregistered with the old anchor. */
-        void ConnectToLayout( const SwFormatAnchor *pAnch = 0 );
+        void ConnectToLayout( const SwFormatAnchor *pAnch = nullptr );
         /** method to insert 'master' drawing object
          into drawing page */
         void InsertMasterIntoDrawPage();

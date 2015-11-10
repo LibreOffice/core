@@ -162,7 +162,7 @@ void SwMailMergeGreetingsPage::UpdatePreview()
         const OUString sFemaleValue = m_pFemaleFieldCB->GetText();
         const OUString sFemaleColumn = m_pFemaleColumnLB->GetSelectEntry();
         Reference< sdbcx::XColumnsSupplier > xColsSupp( m_pWizard->GetConfigItem().GetResultSet(), UNO_QUERY);
-        Reference < container::XNameAccess> xColAccess = xColsSupp.is() ? xColsSupp->getColumns() : 0;
+        Reference < container::XNameAccess> xColAccess = xColsSupp.is() ? xColsSupp->getColumns() : nullptr;
         if(!sFemaleValue.isEmpty() && !sFemaleColumn.isEmpty() &&
                 xColAccess.is() &&
                 xColAccess->hasByName(sFemaleColumn))
@@ -284,7 +284,7 @@ SwMailMergeGreetingsPage::SwMailMergeGreetingsPage(SwMailMergeWizard* _pParent)
     m_pGreetingLineCB->Check(rConfig.IsGreetingLine(false));
     m_pPersonalizedCB->Check(rConfig.IsIndividualGreeting(false));
     ContainsHdl_Impl(m_pGreetingLineCB);
-    aIndividualLink.Call(0);
+    aIndividualLink.Call(nullptr);
 
     lcl_FillGreetingsBox(*m_pFemaleLB, rConfig, SwMailMergeConfigItem::FEMALE);
     lcl_FillGreetingsBox(*m_pMaleLB, rConfig, SwMailMergeConfigItem::MALE);
@@ -459,7 +459,7 @@ SwMailBodyDialog::SwMailBodyDialog(vcl::Window* pParent, SwMailMergeWizard* _pWi
     m_pGreetingLineCB->Check(rConfig.IsGreetingLine(true));
     m_pPersonalizedCB->Check(rConfig.IsIndividualGreeting(true));
     ContainsHdl_Impl(m_pGreetingLineCB);
-    aIndividualLink.Call(0);
+    aIndividualLink.Call(nullptr);
 
     lcl_FillGreetingsBox(*m_pFemaleLB, rConfig, SwMailMergeConfigItem::FEMALE);
     lcl_FillGreetingsBox(*m_pMaleLB, rConfig, SwMailMergeConfigItem::MALE);

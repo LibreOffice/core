@@ -98,7 +98,7 @@ void SwView::GetState(SfxItemSet &rSet)
                     // There are captions for graphics, OLE objects, frames and tables
                     if( !bGetFrmType )
                     {
-                        eFrmType = m_pWrtShell->GetFrmType(0, true);
+                        eFrmType = m_pWrtShell->GetFrmType(nullptr, true);
                         bGetFrmType = true;
                     }
                     if (! ( ((eFrmType & FrmTypeFlags::FLY_ANY) && m_nSelectionType != nsSelectionType::SEL_DRW_TXT)||
@@ -130,7 +130,7 @@ void SwView::GetState(SfxItemSet &rSet)
 
             case FN_CHANGE_PAGENUM:
             {
-                FrmTypeFlags nType = m_pWrtShell->GetFrmType(0,true);
+                FrmTypeFlags nType = m_pWrtShell->GetFrmType(nullptr,true);
                 if( ( FrmTypeFlags::FLY_ANY | FrmTypeFlags::HEADER | FrmTypeFlags::FOOTER |
                       FrmTypeFlags::FOOTNOTE | FrmTypeFlags::DRAWOBJ ) & nType )
                     rSet.DisableItem(nWhich);
@@ -175,7 +175,7 @@ void SwView::GetState(SfxItemSet &rSet)
             break;
             case SID_CLEARHISTORY:
             {
-                rSet.Put(SfxBoolItem(nWhich, m_pWrtShell->GetLastUndoInfo(0, 0)));
+                rSet.Put(SfxBoolItem(nWhich, m_pWrtShell->GetLastUndoInfo(nullptr, nullptr)));
             }
             break;
             case SID_UNDO:
@@ -206,8 +206,8 @@ void SwView::GetState(SfxItemSet &rSet)
             case FN_EDIT_CURRENT_TOX:
             case FN_UPDATE_CUR_TOX:
             {
-                const SwTOXBase* pBase = 0;
-                if(0 == (pBase = m_pWrtShell->GetCurTOX()) ||
+                const SwTOXBase* pBase = nullptr;
+                if(nullptr == (pBase = m_pWrtShell->GetCurTOX()) ||
                     (FN_EDIT_CURRENT_TOX == nWhich && pBase->IsTOXBaseInReadonly()))
                     rSet.DisableItem(nWhich);
             }
@@ -280,9 +280,9 @@ void SwView::GetState(SfxItemSet &rSet)
                     sal_uInt16 index = 0;
                     const SwRedlineTable& table = pDoc->getIDocumentRedlineAccess().GetRedlineTable();
                     const SwRangeRedline* redline = table.FindAtPosition( *pCursor->Start(), index );
-                    if( redline != NULL && *redline->Start() == *pCursor->End())
-                        redline = NULL;
-                    if( redline == NULL )
+                    if( redline != nullptr && *redline->Start() == *pCursor->End())
+                        redline = nullptr;
+                    if( redline == nullptr )
                     {
                         for(; index < table.size(); ++index )
                         {
@@ -296,14 +296,14 @@ void SwView::GetState(SfxItemSet &rSet)
                             }
                         }
                     }
-                    if( redline == NULL )
+                    if( redline == nullptr )
                         rSet.DisableItem(nWhich);
                 }
                 else
                 {
                     // If the cursor position isn't on a redline, disable
                     // accepting/rejecting changes.
-                    if (0 == pDoc->getIDocumentRedlineAccess().GetRedline(*pCursor->Start(), 0))
+                    if (nullptr == pDoc->getIDocumentRedlineAccess().GetRedline(*pCursor->Start(), nullptr))
                         rSet.DisableItem(nWhich);
                 }
             }
@@ -430,7 +430,7 @@ void SwView::GetState(SfxItemSet &rSet)
                     //the draw shell cannot provide a status per item - only one for SID_OBJECT_ALIGN
                     if(nWhich != SID_ALIGN_ANY_JUSTIFIED)
                     {
-                        const SfxPoolItem* pItem = 0;
+                        const SfxPoolItem* pItem = nullptr;
                         GetViewFrame()->GetDispatcher()->QueryState( SID_OBJECT_ALIGN, pItem );
                         if(pItem)
                             bDraw = true;
@@ -449,7 +449,7 @@ void SwView::GetState(SfxItemSet &rSet)
                     }
                 }
                 //these slots are either re-mapped to text or object alignment
-                const SfxPoolItem* pState = 0;
+                const SfxPoolItem* pState = nullptr;
                 if(nAlias)
                     GetViewFrame()->GetDispatcher()->QueryState( nAlias, pState );
                 if(pState)
@@ -534,7 +534,7 @@ bool SwView::HasUIFeature( sal_uInt32 nFeature )
     {
         case CHILDWIN_LABEL     : bRet = m_pWrtShell->IsLabelDoc(); break;
 #if HAVE_FEATURE_DBCONNECTIVITY
-        case CHILDWIN_MAILMERGE : bRet = 0 != GetMailMergeConfigItem(); break;
+        case CHILDWIN_MAILMERGE : bRet = nullptr != GetMailMergeConfigItem(); break;
 #endif
     }
     return bRet;

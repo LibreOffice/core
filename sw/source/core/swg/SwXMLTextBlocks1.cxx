@@ -87,7 +87,7 @@ sal_uLong SwXMLTextBlocks::GetDoc( sal_uInt16 nIdx )
         {
         }
 
-        xRoot = 0;
+        xRoot = nullptr;
     }
     else
     {
@@ -142,7 +142,7 @@ sal_uLong SwXMLTextBlocks::GetDoc( sal_uInt16 nIdx )
         {
         }
 
-        xRoot = 0;
+        xRoot = nullptr;
     }
     return 0;
 }
@@ -153,7 +153,7 @@ const struct SvEventDescription aAutotextEvents[] =
 {
     { SW_EVENT_START_INS_GLOSSARY,  "OnInsertStart" },
     { SW_EVENT_END_INS_GLOSSARY,    "OnInsertDone" },
-    { 0, NULL }
+    { 0, nullptr }
 };
 
 sal_uLong SwXMLTextBlocks::GetMacroTable( sal_uInt16 nIdx,
@@ -328,7 +328,7 @@ sal_uLong SwXMLTextBlocks::GetBlockText( const OUString& rShort, OUString& rText
             // re throw ?
         }
 
-        xRoot = 0;
+        xRoot = nullptr;
     }
     catch ( uno::Exception& )
     {
@@ -396,7 +396,7 @@ sal_uLong SwXMLTextBlocks::PutBlockText( const OUString& rShort, const OUString&
         nRes = ERR_SWG_WRITE_ERROR;
     }
 
-    xRoot = 0;
+    xRoot = nullptr;
 
     //TODO/LATER: error handling
     /*
@@ -615,7 +615,7 @@ sal_uLong SwXMLTextBlocks::SetMacroTable(
                     xTrans->commit();
             }
 
-            xRoot = 0;
+            xRoot = nullptr;
         }
         catch ( uno::Exception& )
         {

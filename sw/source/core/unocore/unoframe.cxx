@@ -200,14 +200,14 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxI
     rToSet.Put(aAnchor);
 
     //UUUU check for SvxBrushItem (RES_BACKGROUND) properties
-    const ::uno::Any* pCol = 0; GetProperty(RES_BACKGROUND, MID_BACK_COLOR, pCol );
-    const ::uno::Any* pRGBCol = 0; GetProperty(RES_BACKGROUND, MID_BACK_COLOR_R_G_B, pRGBCol );
-    const ::uno::Any* pColTrans = 0; GetProperty(RES_BACKGROUND, MID_BACK_COLOR_TRANSPARENCY, pColTrans);
-    const ::uno::Any* pTrans = 0; GetProperty(RES_BACKGROUND, MID_GRAPHIC_TRANSPARENT, pTrans );
-    const ::uno::Any* pGrLoc = 0; GetProperty(RES_BACKGROUND, MID_GRAPHIC_POSITION, pGrLoc );
-    const ::uno::Any* pGrURL = 0; GetProperty(RES_BACKGROUND, MID_GRAPHIC_URL, pGrURL     );
-    const ::uno::Any* pGrFilter = 0; GetProperty(RES_BACKGROUND, MID_GRAPHIC_FILTER, pGrFilter     );
-    const ::uno::Any* pGrTranparency = 0; GetProperty(RES_BACKGROUND, MID_GRAPHIC_TRANSPARENCY, pGrTranparency     );
+    const ::uno::Any* pCol = nullptr; GetProperty(RES_BACKGROUND, MID_BACK_COLOR, pCol );
+    const ::uno::Any* pRGBCol = nullptr; GetProperty(RES_BACKGROUND, MID_BACK_COLOR_R_G_B, pRGBCol );
+    const ::uno::Any* pColTrans = nullptr; GetProperty(RES_BACKGROUND, MID_BACK_COLOR_TRANSPARENCY, pColTrans);
+    const ::uno::Any* pTrans = nullptr; GetProperty(RES_BACKGROUND, MID_GRAPHIC_TRANSPARENT, pTrans );
+    const ::uno::Any* pGrLoc = nullptr; GetProperty(RES_BACKGROUND, MID_GRAPHIC_POSITION, pGrLoc );
+    const ::uno::Any* pGrURL = nullptr; GetProperty(RES_BACKGROUND, MID_GRAPHIC_URL, pGrURL     );
+    const ::uno::Any* pGrFilter = nullptr; GetProperty(RES_BACKGROUND, MID_GRAPHIC_FILTER, pGrFilter     );
+    const ::uno::Any* pGrTranparency = nullptr; GetProperty(RES_BACKGROUND, MID_GRAPHIC_TRANSPARENCY, pGrTranparency     );
     const bool bSvxBrushItemPropertiesUsed(
         pCol ||
         pTrans ||
@@ -219,40 +219,40 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxI
         pRGBCol);
 
     //UUUU check for FillStyle properties in the range XATTR_FILL_FIRST, XATTR_FILL_LAST
-    const uno::Any* pXFillStyleItem = 0; GetProperty(XATTR_FILLSTYLE, 0, pXFillStyleItem);
-    const uno::Any* pXFillColorItem = 0; GetProperty(XATTR_FILLCOLOR, 0, pXFillColorItem);
+    const uno::Any* pXFillStyleItem = nullptr; GetProperty(XATTR_FILLSTYLE, 0, pXFillStyleItem);
+    const uno::Any* pXFillColorItem = nullptr; GetProperty(XATTR_FILLCOLOR, 0, pXFillColorItem);
 
     // XFillGradientItem: two possible slots supported in UNO API
-    const uno::Any* pXFillGradientItem = 0; GetProperty(XATTR_FILLGRADIENT, MID_FILLGRADIENT, pXFillGradientItem);
-    const uno::Any* pXFillGradientNameItem = 0; GetProperty(XATTR_FILLGRADIENT, MID_NAME, pXFillGradientNameItem);
+    const uno::Any* pXFillGradientItem = nullptr; GetProperty(XATTR_FILLGRADIENT, MID_FILLGRADIENT, pXFillGradientItem);
+    const uno::Any* pXFillGradientNameItem = nullptr; GetProperty(XATTR_FILLGRADIENT, MID_NAME, pXFillGradientNameItem);
 
     // XFillHatchItem: two possible slots supported in UNO API
-    const uno::Any* pXFillHatchItem = 0; GetProperty(XATTR_FILLHATCH, MID_FILLHATCH, pXFillHatchItem);
-    const uno::Any* pXFillHatchNameItem = 0; GetProperty(XATTR_FILLHATCH, MID_NAME, pXFillHatchNameItem);
+    const uno::Any* pXFillHatchItem = nullptr; GetProperty(XATTR_FILLHATCH, MID_FILLHATCH, pXFillHatchItem);
+    const uno::Any* pXFillHatchNameItem = nullptr; GetProperty(XATTR_FILLHATCH, MID_NAME, pXFillHatchNameItem);
 
     // XFillBitmapItem: three possible slots supported in UNO API
-    const uno::Any* pXFillBitmapItem = 0; GetProperty(XATTR_FILLBITMAP, MID_BITMAP, pXFillBitmapItem);
-    const uno::Any* pXFillBitmapNameItem = 0; GetProperty(XATTR_FILLBITMAP, MID_NAME, pXFillBitmapNameItem);
-    const uno::Any* pXFillBitmapURLItem = 0; GetProperty(XATTR_FILLBITMAP, MID_GRAFURL, pXFillBitmapURLItem);
+    const uno::Any* pXFillBitmapItem = nullptr; GetProperty(XATTR_FILLBITMAP, MID_BITMAP, pXFillBitmapItem);
+    const uno::Any* pXFillBitmapNameItem = nullptr; GetProperty(XATTR_FILLBITMAP, MID_NAME, pXFillBitmapNameItem);
+    const uno::Any* pXFillBitmapURLItem = nullptr; GetProperty(XATTR_FILLBITMAP, MID_GRAFURL, pXFillBitmapURLItem);
 
-    const uno::Any* pXFillTransparenceItem = 0; GetProperty(XATTR_FILLTRANSPARENCE, 0, pXFillTransparenceItem);
-    const uno::Any* pXGradientStepCountItem = 0; GetProperty(XATTR_GRADIENTSTEPCOUNT, 0, pXGradientStepCountItem);
-    const uno::Any* pXFillBmpPosItem = 0; GetProperty(XATTR_FILLBMP_POS, 0, pXFillBmpPosItem);
-    const uno::Any* pXFillBmpSizeXItem = 0; GetProperty(XATTR_FILLBMP_SIZEX, 0, pXFillBmpSizeXItem);
-    const uno::Any* pXFillBmpSizeYItem = 0; GetProperty(XATTR_FILLBMP_SIZEY, 0, pXFillBmpSizeYItem);
+    const uno::Any* pXFillTransparenceItem = nullptr; GetProperty(XATTR_FILLTRANSPARENCE, 0, pXFillTransparenceItem);
+    const uno::Any* pXGradientStepCountItem = nullptr; GetProperty(XATTR_GRADIENTSTEPCOUNT, 0, pXGradientStepCountItem);
+    const uno::Any* pXFillBmpPosItem = nullptr; GetProperty(XATTR_FILLBMP_POS, 0, pXFillBmpPosItem);
+    const uno::Any* pXFillBmpSizeXItem = nullptr; GetProperty(XATTR_FILLBMP_SIZEX, 0, pXFillBmpSizeXItem);
+    const uno::Any* pXFillBmpSizeYItem = nullptr; GetProperty(XATTR_FILLBMP_SIZEY, 0, pXFillBmpSizeYItem);
 
     // XFillFloatTransparenceItem: two possible slots supported in UNO API
-    const uno::Any* pXFillFloatTransparenceItem = 0; GetProperty(XATTR_FILLFLOATTRANSPARENCE, MID_FILLGRADIENT, pXFillFloatTransparenceItem);
-    const uno::Any* pXFillFloatTransparenceNameItem = 0; GetProperty(XATTR_FILLFLOATTRANSPARENCE, MID_NAME, pXFillFloatTransparenceNameItem);
+    const uno::Any* pXFillFloatTransparenceItem = nullptr; GetProperty(XATTR_FILLFLOATTRANSPARENCE, MID_FILLGRADIENT, pXFillFloatTransparenceItem);
+    const uno::Any* pXFillFloatTransparenceNameItem = nullptr; GetProperty(XATTR_FILLFLOATTRANSPARENCE, MID_NAME, pXFillFloatTransparenceNameItem);
 
-    const uno::Any* pXSecondaryFillColorItem = 0; GetProperty(XATTR_SECONDARYFILLCOLOR, 0, pXSecondaryFillColorItem);
-    const uno::Any* pXFillBmpSizeLogItem = 0; GetProperty(XATTR_FILLBMP_SIZELOG, 0, pXFillBmpSizeLogItem);
-    const uno::Any* pXFillBmpTileOffsetXItem = 0; GetProperty(XATTR_FILLBMP_TILEOFFSETX, 0, pXFillBmpTileOffsetXItem);
-    const uno::Any* pXFillBmpTileOffsetYItem = 0; GetProperty(XATTR_FILLBMP_TILEOFFSETY, 0, pXFillBmpTileOffsetYItem);
-    const uno::Any* pXFillBmpPosOffsetXItem = 0; GetProperty(XATTR_FILLBMP_POSOFFSETX, 0, pXFillBmpPosOffsetXItem);
-    const uno::Any* pXFillBmpPosOffsetYItem = 0; GetProperty(XATTR_FILLBMP_POSOFFSETY, 0, pXFillBmpPosOffsetYItem);
-    const uno::Any* pXFillBackgroundItem = 0; GetProperty(XATTR_FILLBACKGROUND, 0, pXFillBackgroundItem);
-    const uno::Any* pOwnAttrFillBmpItem = 0; GetProperty(OWN_ATTR_FILLBMP_MODE, 0, pOwnAttrFillBmpItem);
+    const uno::Any* pXSecondaryFillColorItem = nullptr; GetProperty(XATTR_SECONDARYFILLCOLOR, 0, pXSecondaryFillColorItem);
+    const uno::Any* pXFillBmpSizeLogItem = nullptr; GetProperty(XATTR_FILLBMP_SIZELOG, 0, pXFillBmpSizeLogItem);
+    const uno::Any* pXFillBmpTileOffsetXItem = nullptr; GetProperty(XATTR_FILLBMP_TILEOFFSETX, 0, pXFillBmpTileOffsetXItem);
+    const uno::Any* pXFillBmpTileOffsetYItem = nullptr; GetProperty(XATTR_FILLBMP_TILEOFFSETY, 0, pXFillBmpTileOffsetYItem);
+    const uno::Any* pXFillBmpPosOffsetXItem = nullptr; GetProperty(XATTR_FILLBMP_POSOFFSETX, 0, pXFillBmpPosOffsetXItem);
+    const uno::Any* pXFillBmpPosOffsetYItem = nullptr; GetProperty(XATTR_FILLBMP_POSOFFSETY, 0, pXFillBmpPosOffsetYItem);
+    const uno::Any* pXFillBackgroundItem = nullptr; GetProperty(XATTR_FILLBACKGROUND, 0, pXFillBackgroundItem);
+    const uno::Any* pOwnAttrFillBmpItem = nullptr; GetProperty(OWN_ATTR_FILLBMP_MODE, 0, pOwnAttrFillBmpItem);
 
     // tdf#91140: ignore SOLID fill style for determining if fill style is used
     // but there is a GraphicURL
@@ -627,11 +627,11 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxI
         }
     }
     {
-        const ::uno::Any* pCont = 0;
+        const ::uno::Any* pCont = nullptr;
         GetProperty(RES_PROTECT, MID_PROTECT_CONTENT, pCont );
-        const ::uno::Any* pPos = 0;
+        const ::uno::Any* pPos = nullptr;
         GetProperty(RES_PROTECT,MID_PROTECT_POSITION, pPos );
-        const ::uno::Any* pName = 0;
+        const ::uno::Any* pName = nullptr;
         GetProperty(RES_PROTECT, MID_PROTECT_SIZE, pName );
         if(pCont||pPos||pName)
         {
@@ -646,13 +646,13 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxI
         }
     }
     {
-        const ::uno::Any* pHori  = 0;
+        const ::uno::Any* pHori  = nullptr;
         GetProperty(RES_HORI_ORIENT, MID_HORIORIENT_ORIENT, pHori );
-        const ::uno::Any* pHoriP = 0;
+        const ::uno::Any* pHoriP = nullptr;
         GetProperty(RES_HORI_ORIENT, MID_HORIORIENT_POSITION|CONVERT_TWIPS, pHoriP );
-        const ::uno::Any* pHoriR = 0;
+        const ::uno::Any* pHoriR = nullptr;
         GetProperty(RES_HORI_ORIENT, MID_HORIORIENT_RELATION, pHoriR );
-        const ::uno::Any* pPageT = 0;
+        const ::uno::Any* pPageT = nullptr;
         GetProperty(RES_HORI_ORIENT, MID_HORIORIENT_PAGETOGGLE, pPageT);
         if(pHori||pHoriP||pHoriR||pPageT)
         {
@@ -670,11 +670,11 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxI
     }
 
     {
-        const ::uno::Any* pVert  = 0;
+        const ::uno::Any* pVert  = nullptr;
         GetProperty(RES_VERT_ORIENT, MID_VERTORIENT_ORIENT, pVert);
-        const ::uno::Any* pVertP = 0;
+        const ::uno::Any* pVertP = nullptr;
         GetProperty(RES_VERT_ORIENT, MID_VERTORIENT_POSITION|CONVERT_TWIPS, pVertP );
-        const ::uno::Any* pVertR = 0;
+        const ::uno::Any* pVertR = nullptr;
         GetProperty(RES_VERT_ORIENT, MID_VERTORIENT_RELATION, pVertR );
         if(pVert||pVertP||pVertR)
         {
@@ -689,13 +689,13 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxI
         }
     }
     {
-        const ::uno::Any* pURL = 0;
+        const ::uno::Any* pURL = nullptr;
         GetProperty(RES_URL, MID_URL_URL, pURL );
-        const ::uno::Any* pTarget = 0;
+        const ::uno::Any* pTarget = nullptr;
         GetProperty(RES_URL, MID_URL_TARGET, pTarget );
-        const ::uno::Any* pHyLNm = 0;
+        const ::uno::Any* pHyLNm = nullptr;
         GetProperty(RES_URL, MID_URL_HYPERLINKNAME, pHyLNm );
-        const ::uno::Any* pHySMp = 0;
+        const ::uno::Any* pHySMp = nullptr;
         GetProperty(RES_URL, MID_URL_SERVERMAP, pHySMp );
         if(pURL||pTarget||pHyLNm||pHySMp)
         {
@@ -711,9 +711,9 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxI
             rToSet.Put(aURL);
         }
     }
-    const ::uno::Any* pL = 0;
+    const ::uno::Any* pL = nullptr;
     GetProperty(RES_LR_SPACE, MID_L_MARGIN|CONVERT_TWIPS, pL );
-    const ::uno::Any* pR = 0;
+    const ::uno::Any* pR = nullptr;
     GetProperty(RES_LR_SPACE, MID_R_MARGIN|CONVERT_TWIPS, pR );
     if(pL||pR)
     {
@@ -724,9 +724,9 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxI
             bRet &= ((SfxPoolItem&)aLR).PutValue(*pR, MID_R_MARGIN|CONVERT_TWIPS);
         rToSet.Put(aLR);
     }
-    const ::uno::Any* pT = 0;
+    const ::uno::Any* pT = nullptr;
     GetProperty(RES_UL_SPACE, MID_UP_MARGIN|CONVERT_TWIPS, pT );
-    const ::uno::Any* pB = 0;
+    const ::uno::Any* pB = nullptr;
     GetProperty(RES_UL_SPACE, MID_LO_MARGIN|CONVERT_TWIPS, pB );
     if(pT||pB)
     {
@@ -765,9 +765,9 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxI
         bRet &= aSh.PutValue(*pShTr, MID_SHADOW_TRANSPARENCE);
         rToSet.Put(aSh);
     }
-    const ::uno::Any* pSur      = 0;
+    const ::uno::Any* pSur      = nullptr;
     GetProperty(RES_SURROUND, MID_SURROUND_SURROUNDTYPE, pSur);
-    const ::uno::Any* pSurAnch = 0;
+    const ::uno::Any* pSurAnch = nullptr;
     GetProperty(RES_SURROUND, MID_SURROUND_ANCHORONLY, pSurAnch);
     if(pSur || pSurAnch)
     {
@@ -778,27 +778,27 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxI
             bRet &= ((SfxPoolItem&)aSrnd).PutValue(*pSurAnch, MID_SURROUND_ANCHORONLY);
         rToSet.Put(aSrnd);
     }
-    const ::uno::Any* pLeft        = 0;
+    const ::uno::Any* pLeft        = nullptr;
     GetProperty(RES_BOX, LEFT_BORDER  |CONVERT_TWIPS,    pLeft  );
-    const ::uno::Any* pRight       = 0;
+    const ::uno::Any* pRight       = nullptr;
     GetProperty(RES_BOX, CONVERT_TWIPS|RIGHT_BORDER ,    pRight );
-    const ::uno::Any* pTop         = 0;
+    const ::uno::Any* pTop         = nullptr;
     GetProperty(RES_BOX, CONVERT_TWIPS|TOP_BORDER     , pTop   );
-    const ::uno::Any* pBottom  = 0;
+    const ::uno::Any* pBottom  = nullptr;
     GetProperty(RES_BOX, CONVERT_TWIPS|BOTTOM_BORDER,    pBottom);
-    const ::uno::Any* pDistance    = 0;
+    const ::uno::Any* pDistance    = nullptr;
     GetProperty(RES_BOX, CONVERT_TWIPS|BORDER_DISTANCE,  pDistance);
-    const ::uno::Any* pLeftDistance    = 0;
+    const ::uno::Any* pLeftDistance    = nullptr;
     GetProperty(RES_BOX, CONVERT_TWIPS|LEFT_BORDER_DISTANCE, pLeftDistance);
-    const ::uno::Any* pRightDistance   = 0;
+    const ::uno::Any* pRightDistance   = nullptr;
     GetProperty(RES_BOX, CONVERT_TWIPS|RIGHT_BORDER_DISTANCE,    pRightDistance);
-    const ::uno::Any* pTopDistance     = 0;
+    const ::uno::Any* pTopDistance     = nullptr;
     GetProperty(RES_BOX, CONVERT_TWIPS|TOP_BORDER_DISTANCE,  pTopDistance);
-    const ::uno::Any* pBottomDistance  = 0;
+    const ::uno::Any* pBottomDistance  = nullptr;
     GetProperty(RES_BOX, CONVERT_TWIPS|BOTTOM_BORDER_DISTANCE,   pBottomDistance);
-    const ::uno::Any* pLineStyle  = 0;
+    const ::uno::Any* pLineStyle  = nullptr;
     GetProperty(RES_BOX, LINE_STYLE,   pLineStyle);
-    const ::uno::Any* pLineWidth  = 0;
+    const ::uno::Any* pLineWidth  = nullptr;
     GetProperty(RES_BOX, LINE_WIDTH,   pLineWidth);
     if( pLeft || pRight || pTop ||  pBottom || pDistance ||
         pLeftDistance  || pRightDistance || pTopDistance || pBottomDistance ||
@@ -830,27 +830,27 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxI
         rToSet.Put(aBox);
     }
     {
-        const ::uno::Any* pRelH = 0;
+        const ::uno::Any* pRelH = nullptr;
         GetProperty(RES_FRM_SIZE, MID_FRMSIZE_REL_HEIGHT, pRelH);
-        const ::uno::Any* pRelHRelation = 0;
+        const ::uno::Any* pRelHRelation = nullptr;
         GetProperty(RES_FRM_SIZE, MID_FRMSIZE_REL_HEIGHT_RELATION, pRelHRelation);
-        const ::uno::Any* pRelW = 0;
+        const ::uno::Any* pRelW = nullptr;
         GetProperty(RES_FRM_SIZE, MID_FRMSIZE_REL_WIDTH, pRelW);
-        const ::uno::Any* pRelWRelation = 0;
+        const ::uno::Any* pRelWRelation = nullptr;
         GetProperty(RES_FRM_SIZE, MID_FRMSIZE_REL_WIDTH_RELATION, pRelWRelation);
-        const ::uno::Any* pSyncWidth = 0;
+        const ::uno::Any* pSyncWidth = nullptr;
         GetProperty(RES_FRM_SIZE, MID_FRMSIZE_IS_SYNC_WIDTH_TO_HEIGHT, pSyncWidth);
-        const ::uno::Any* pSyncHeight = 0;
+        const ::uno::Any* pSyncHeight = nullptr;
         GetProperty(RES_FRM_SIZE, MID_FRMSIZE_IS_SYNC_HEIGHT_TO_WIDTH, pSyncHeight);
-        const ::uno::Any* pWidth = 0;
+        const ::uno::Any* pWidth = nullptr;
         GetProperty(RES_FRM_SIZE, MID_FRMSIZE_WIDTH|CONVERT_TWIPS, pWidth);
-        const ::uno::Any* pHeight = 0;
+        const ::uno::Any* pHeight = nullptr;
         GetProperty(RES_FRM_SIZE, MID_FRMSIZE_HEIGHT|CONVERT_TWIPS, pHeight);
-        const ::uno::Any* pSize = 0;
+        const ::uno::Any* pSize = nullptr;
         GetProperty(RES_FRM_SIZE, MID_FRMSIZE_SIZE|CONVERT_TWIPS, pSize);
-        const ::uno::Any* pSizeType = 0;
+        const ::uno::Any* pSizeType = nullptr;
         GetProperty(RES_FRM_SIZE, MID_FRMSIZE_SIZE_TYPE, pSizeType);
-        const ::uno::Any* pWidthType = 0;
+        const ::uno::Any* pWidthType = nullptr;
         GetProperty(RES_FRM_SIZE, MID_FRMSIZE_WIDTH_TYPE, pWidthType);
         if( pWidth || pHeight ||pRelH || pRelHRelation || pRelW || pRelWRelation || pSize ||pSizeType ||
             pWidthType ||pSyncWidth || pSyncHeight )
@@ -898,7 +898,7 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxI
             rToSet.Put(aFrmSz);
         }
     }
-    const ::uno::Any* pFrameDirection = 0;
+    const ::uno::Any* pFrameDirection = nullptr;
     GetProperty(RES_FRAMEDIR, 0, pFrameDirection);
     if(pFrameDirection)
     {
@@ -906,7 +906,7 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxI
         aAttr.PutValue(*pFrameDirection, 0);
         rToSet.Put(aAttr);
     }
-    const ::uno::Any* pUnknown = 0;
+    const ::uno::Any* pUnknown = nullptr;
     GetProperty(RES_UNKNOWNATR_CONTAINER, 0, pUnknown);
     if(pUnknown)
     {
@@ -916,7 +916,7 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxI
     }
 
     // #i18732#
-    const ::uno::Any* pFollowTextFlow = 0;
+    const ::uno::Any* pFollowTextFlow = nullptr;
     GetProperty(RES_FOLLOW_TEXT_FLOW, 0, pFollowTextFlow);
     if ( pFollowTextFlow )
     {
@@ -926,7 +926,7 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxI
     }
 
     // #i28701# - RES_WRAP_INFLUENCE_ON_OBJPOS
-    const ::uno::Any* pWrapInfluenceOnObjPos = 0;
+    const ::uno::Any* pWrapInfluenceOnObjPos = nullptr;
     GetProperty(RES_WRAP_INFLUENCE_ON_OBJPOS, MID_WRAP_INFLUENCE, pWrapInfluenceOnObjPos);
     if ( pWrapInfluenceOnObjPos )
     {
@@ -936,7 +936,7 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxI
     }
 
     {
-        const ::uno::Any* pTextVertAdjust = 0;
+        const ::uno::Any* pTextVertAdjust = nullptr;
         GetProperty(RES_TEXT_VERT_ADJUST, 0, pTextVertAdjust);
         if ( pTextVertAdjust )
         {
@@ -977,7 +977,7 @@ bool SwFrameProperties_Impl::AnyToItemSet(SwDoc *pDoc, SfxItemSet& rSet, SfxItem
 {
     //Properties fuer alle Frames
     const ::uno::Any *pStyleName;
-    SwDocStyleSheet* pStyle = NULL;
+    SwDocStyleSheet* pStyle = nullptr;
     bool bRet;
 
     if ( GetProperty ( FN_UNO_FRAME_STYLE_NAME, 0, pStyleName ) )
@@ -989,7 +989,7 @@ bool SwFrameProperties_Impl::AnyToItemSet(SwDoc *pDoc, SfxItemSet& rSet, SfxItem
                                                     SFX_STYLE_FAMILY_FRAME));
     }
 
-    const ::uno::Any* pColumns = NULL;
+    const ::uno::Any* pColumns = nullptr;
     GetProperty (RES_COL, MID_COLUMNS, pColumns);
     if ( pStyle )
     {
@@ -1052,7 +1052,7 @@ bool SwGraphicProperties_Impl::AnyToItemSet(
     //Properties fuer alle Frames
     bool bRet;
     const ::uno::Any *pStyleName;
-    SwDocStyleSheet* pStyle = NULL;
+    SwDocStyleSheet* pStyle = nullptr;
 
     if ( GetProperty ( FN_UNO_FRAME_STYLE_NAME, 0, pStyleName ) )
     {
@@ -1063,9 +1063,9 @@ bool SwGraphicProperties_Impl::AnyToItemSet(
                                                     SFX_STYLE_FAMILY_FRAME));
     }
 
-    const ::uno::Any* pHEvenMirror = 0;
-    const ::uno::Any* pHOddMirror = 0;
-    const ::uno::Any* pVMirror = 0;
+    const ::uno::Any* pHEvenMirror = nullptr;
+    const ::uno::Any* pHOddMirror = nullptr;
+    const ::uno::Any* pVMirror = nullptr;
     GetProperty(RES_GRFATR_MIRRORGRF, MID_MIRROR_HORZ_EVEN_PAGES, pHEvenMirror);
     GetProperty(RES_GRFATR_MIRRORGRF, MID_MIRROR_HORZ_ODD_PAGES, pHOddMirror);
     GetProperty(RES_GRFATR_MIRRORGRF, MID_MIRROR_VERT, pVMirror);
@@ -1198,7 +1198,7 @@ SwXFrame::SwXFrame(FlyCntType eSet, const ::SfxItemPropertySet* pSet, SwDoc *pDo
     , m_pDoc(pDoc)
     , eType(eSet)
     , bIsDescriptor(true)
-    , m_pCopySource(0)
+    , m_pCopySource(nullptr)
 {
     // Register ourselves as a listener to the document (via the page descriptor)
     pDoc->getIDocumentStylePoolAccess().GetPageDescFromPool(RES_POOLPAGE_STANDARD)->Add(this);
@@ -1239,7 +1239,7 @@ SwXFrame::SwXFrame(FlyCntType eSet, const ::SfxItemPropertySet* pSet, SwDoc *pDo
         break;
 
         default:
-            pProps = NULL;
+            pProps = nullptr;
             ;
     }
 }
@@ -1249,11 +1249,11 @@ SwXFrame::SwXFrame(SwFrameFormat& rFrameFormat, FlyCntType eSet, const ::SfxItem
     , m_pImpl(new Impl)
     ,
     m_pPropSet(pSet),
-    m_pDoc( 0 ),
+    m_pDoc( nullptr ),
     eType(eSet),
-    pProps(0),
+    pProps(nullptr),
     bIsDescriptor(false),
-    m_pCopySource(0)
+    m_pCopySource(nullptr)
 {
 
 }
@@ -1384,7 +1384,7 @@ SdrObject *SwXFrame::GetOrCreateSdrObject(SwFlyFrameFormat &rFormat)
 
 static SwFrameFormat *lcl_GetFrameFormat( const ::uno::Any& rValue, SwDoc *pDoc )
 {
-    SwFrameFormat *pRet = 0;
+    SwFrameFormat *pRet = nullptr;
     SwDocShell* pDocSh = pDoc->GetDocShell();
     if(pDocSh)
     {
@@ -1468,7 +1468,7 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const ::uno::Any&
                 {
                     drawing::PointSequenceSequence aParam;
                     if(!aValue.hasValue())
-                        pNoText->SetContour(0);
+                        pNoText->SetContour(nullptr);
                     else if(aValue >>= aParam)
                     {
                         tools::PolyPolygon aPoly((sal_uInt16)aParam.getLength());
@@ -1543,14 +1543,14 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const ::uno::Any&
             {
                 UnoActionContext aAction(pFormat->GetDoc());
 
-                SfxItemSet* pSet = 0;
+                SfxItemSet* pSet = nullptr;
                 // #i31771#, #i25798# - No adjustment of
                 // anchor ( no call of method <sw_ChkAndSetNewAnchor(..)> ),
                 // if document is currently in reading mode.
                 if ( !pFormat->GetDoc()->IsInReading() )
                 {
                     // see SwFEShell::SetFrameFormat( SwFrameFormat *pNewFormat, bool bKeepOrient, Point* pDocPos )
-                    SwFlyFrm *pFly = 0;
+                    SwFlyFrm *pFly = nullptr;
                     {
                         const SwFrameFormat* pFormatXX = pFormat;
                         if (dynamic_cast<const SwFlyFrameFormat*>( pFormatXX) )
@@ -1563,9 +1563,9 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const ::uno::Any&
                         {
                             pSet = new SfxItemSet( pDoc->GetAttrPool(), aFrameFormatSetRange );
                             pSet->Put( *pItem );
-                            if ( pFormat->GetDoc()->GetEditShell() != NULL
+                            if ( pFormat->GetDoc()->GetEditShell() != nullptr
                                  && !sw_ChkAndSetNewAnchor( *pFly, *pSet ) )
-                                delete pSet, pSet = 0;
+                                delete pSet, pSet = nullptr;
                         }
                     }
                 }
@@ -1581,7 +1581,7 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const ::uno::Any&
         {
             OUString sGrfName;
             OUString sFltName;
-            GraphicObject *pGrfObj = 0;
+            GraphicObject *pGrfObj = nullptr;
             SwDoc::GetGrfNms( *static_cast<SwFlyFrameFormat*>(pFormat), &sGrfName, &sFltName );
             OUString sTmp;
             aValue >>= sTmp;
@@ -1623,7 +1623,7 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const ::uno::Any&
                     throw uno::RuntimeException();
                 }
                 SwPaM aGrfPaM(*pGrfNode);
-                pFormat->GetDoc()->getIDocumentContentOperations().ReRead( aGrfPaM, sGrfName, sFltName, 0,
+                pFormat->GetDoc()->getIDocumentContentOperations().ReRead( aGrfPaM, sGrfName, sFltName, nullptr,
                                         pGrfObj );
             }
             delete pGrfObj;
@@ -1645,7 +1645,7 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const ::uno::Any&
                     }
                     SwPaM aGrfPaM(*pGrfNode);
                     Graphic aGraphic( xGraphic );
-                    pFormat->GetDoc()->getIDocumentContentOperations().ReRead( aGrfPaM, OUString(), OUString(), &aGraphic, 0 );
+                    pFormat->GetDoc()->getIDocumentContentOperations().ReRead( aGrfPaM, OUString(), OUString(), &aGraphic, nullptr );
                 }
             }
         }
@@ -1656,7 +1656,7 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const ::uno::Any&
             Graphic aGraphic;
             if( bURL )
             {
-                GraphicObject *pGrfObj = 0;
+                GraphicObject *pGrfObj = nullptr;
                 OUString aGrfUrl;
                 aValue >>= aGrfUrl;
 
@@ -1722,7 +1722,7 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const ::uno::Any&
             {
                 const size_t nCount = pDoc->GetFlyCount(FLYCNTTYPE_FRM);
 
-                SwFrameFormat* pChain = 0;
+                SwFrameFormat* pChain = nullptr;
                 for( size_t i = 0; i < nCount; ++i )
                 {
                     SwFrameFormat* pFormat2 = pDoc->GetFlyNum(i, FLYCNTTYPE_FRM);
@@ -1765,7 +1765,7 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const ::uno::Any&
                 uno::Reference<lang::XUnoTunnel> xTunnel(xFrame, uno::UNO_QUERY);
                 SwXFrame* pFrame = xTunnel.is() ?
                         reinterpret_cast< SwXFrame * >( sal::static_int_cast< sal_IntPtr >( xTunnel->getSomething(SwXFrame::getUnoTunnelId()) ))
-                        : 0;
+                        : nullptr;
                 if(pFrame && this != pFrame && pFrame->GetFrameFormat() && pFrame->GetFrameFormat()->GetDoc() == pDoc)
                 {
                     SfxItemSet aSet( pDoc->GetAttrPool(),
@@ -1908,7 +1908,7 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const ::uno::Any&
                 if(aAnchor.GetAnchorId() == FLY_AT_FLY)
                 {
                     const ::SwPosition* pPosition = aAnchor.GetContentAnchor();
-                    SwFrameFormat* pFlyFormat = pPosition ? pPosition->nNode.GetNode().GetFlyFormat() : 0;
+                    SwFrameFormat* pFlyFormat = pPosition ? pPosition->nNode.GetNode().GetFlyFormat() : nullptr;
                     if(!pFlyFormat || pFlyFormat->Which() == RES_DRAWFRMFMT)
                     {
                         lang::IllegalArgumentException aExcept;
@@ -1939,7 +1939,7 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const ::uno::Any&
                 if ( !pFormat->GetDoc()->IsInReading() )
                 {
                     // see SwFEShell::SetFlyFrmAttr( SfxItemSet& rSet )
-                    SwFlyFrm *pFly = 0;
+                    SwFlyFrm *pFly = nullptr;
                     if (dynamic_cast<SwFlyFrameFormat*>( pFormat) )
                         pFly = static_cast<SwFlyFrameFormat*>(pFormat)->GetFrm();
                     if (pFly)
@@ -1948,7 +1948,7 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const ::uno::Any&
                         if( SfxItemState::SET == aSet.GetItemState( RES_ANCHOR, false, &pItem ))
                         {
                             aSet.Put( *pItem );
-                            if ( pFormat->GetDoc()->GetEditShell() != NULL )
+                            if ( pFormat->GetDoc()->GetEditShell() != nullptr )
                             {
                                 sw_ChkAndSetNewAnchor( *pFly, aSet );
                             }
@@ -2081,7 +2081,7 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
                     throw uno::RuntimeException();
                 if( pGrfNode->IsGrfLink() )
                 {
-                    SwDoc::GetGrfNms( *static_cast<SwFlyFrameFormat*>(pFormat), &sGrfName, 0 );
+                    SwDoc::GetGrfNms( *static_cast<SwFlyFrameFormat*>(pFormat), &sGrfName, nullptr );
                 }
                 else
                 {
@@ -2119,7 +2119,7 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
         else if( FN_UNO_GRAPHIC_FILTER == pEntry->nWID )
         {
             OUString sFltName;
-            SwDoc::GetGrfNms( *static_cast<SwFlyFrameFormat*>(pFormat), 0, &sFltName );
+            SwDoc::GetGrfNms( *static_cast<SwFlyFrameFormat*>(pFormat), nullptr, &sFltName );
                 aAny <<= sFltName;
         }
         else if( FN_UNO_GRAPHIC == pEntry->nWID )
@@ -2175,7 +2175,7 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
         else if(FN_UNO_Z_ORDER == pEntry->nWID)
         {
             const SdrObject* pObj = pFormat->FindRealSdrObject();
-            if( pObj == NULL )
+            if( pObj == nullptr )
                 pObj = pFormat->FindSdrObject();
             if( pObj )
             {
@@ -2301,7 +2301,7 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
             throw uno::RuntimeException();
         if(WID_LAYOUT_SIZE != pEntry->nWID)  // there is no LayoutSize in a descriptor
         {
-            const uno::Any* pAny = 0;
+            const uno::Any* pAny = nullptr;
             if( !pProps->GetProperty( pEntry->nWID, nMemberId, pAny ) )
                 aAny = mxStyleData->getPropertyValue( rPropertyName );
             else if ( pAny )
@@ -2624,7 +2624,7 @@ void SwXFrame::Modify(const SfxPoolItem* pOld, const SfxPoolItem *pNew)
     }
     mxStyleData.clear();
     mxStyleFamily.clear();
-    m_pDoc = 0;
+    m_pDoc = nullptr;
     uno::Reference<uno::XInterface> const xThis(m_pImpl->m_wThis);
     if (!xThis.is())
     {   // fdo#72695: if UNO object is already dead, don't revive it with event
@@ -2677,7 +2677,7 @@ uno::Reference< text::XTextRange >  SwXFrame::getAnchor() throw( uno::RuntimeExc
             (rAnchor.GetContentAnchor() && !rAnchor.GetPageNum()))
         {
             const SwPosition &rPos = *(rAnchor.GetContentAnchor());
-            aRef = SwXTextRange::CreateXTextRange(*pFormat->GetDoc(), rPos, 0);
+            aRef = SwXTextRange::CreateXTextRange(*pFormat->GetDoc(), rPos, nullptr);
         }
     }
     else
@@ -2700,8 +2700,8 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
     if(!IsDescriptor())
         throw uno::RuntimeException();
     uno::Reference<lang::XUnoTunnel> xRangeTunnel( xTextRange, uno::UNO_QUERY);
-    SwXTextRange* pRange = 0;
-    OTextCursorHelper* pCursor = 0;
+    SwXTextRange* pRange = nullptr;
+    OTextCursorHelper* pCursor = nullptr;
     if(xRangeTunnel.is())
     {
         pRange  = reinterpret_cast< SwXTextRange * >(
@@ -2710,7 +2710,7 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
                 sal::static_int_cast< sal_IntPtr >( xRangeTunnel->getSomething( OTextCursorHelper::getUnoTunnelId()) ));
     }
 
-    SwDoc* pDoc = pRange ? &pRange->GetDoc() : pCursor ? pCursor->GetDoc() : 0;
+    SwDoc* pDoc = pRange ? &pRange->GetDoc() : pCursor ? pCursor->GetDoc() : nullptr;
     if(pDoc)
     {
         SwUnoInternalPaM aIntPam(*pDoc);
@@ -2777,17 +2777,17 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
         }
 
         const ::uno::Any* pStyle;
-        SwFrameFormat *pParentFrameFormat = 0;
+        SwFrameFormat *pParentFrameFormat = nullptr;
         if(pProps->GetProperty(FN_UNO_FRAME_STYLE_NAME, 0, pStyle))
             pParentFrameFormat = lcl_GetFrameFormat( *pStyle, pDoc );
 
-        SwFlyFrameFormat* pFormat = 0;
+        SwFlyFrameFormat* pFormat = nullptr;
         if( eType == FLYCNTTYPE_FRM)
         {
             UnoActionContext aCont(pDoc);
             if(m_pCopySource)
             {
-                SwFormatAnchor* pAnchorItem = 0;
+                SwFormatAnchor* pAnchorItem = nullptr;
                 // the frame is inserted bound to page
                 // to prevent conflicts if the to-be-anchored position is part of the to-be-copied text
                 if (eAnchorId != FLY_AT_PAGE)
@@ -2799,7 +2799,7 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
                 aPam.DeleteMark(); // mark position node will be deleted!
                 aIntPam.DeleteMark(); // mark position node will be deleted!
                 pFormat = pDoc->MakeFlyAndMove( *m_pCopySource, aFrmSet,
-                               0,
+                               nullptr,
                                pParentFrameFormat );
                 if(pAnchorItem && pFormat)
                 {
@@ -2831,7 +2831,7 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
             UnoActionContext aCont(pDoc);
             const ::uno::Any* pGraphicURL;
             OUString sGraphicURL;
-            GraphicObject *pGrfObj = 0;
+            GraphicObject *pGrfObj = nullptr;
             if(pProps->GetProperty(FN_UNO_GRAPHIC_U_R_L, 0, pGraphicURL))
             {
                 (*pGraphicURL) >>= sGraphicURL;
@@ -2901,9 +2901,9 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
         }
         else
         {
-            const ::uno::Any* pCLSID = 0;
-            const ::uno::Any* pStreamName = 0;
-            const ::uno::Any* pEmbeddedObject = 0;
+            const ::uno::Any* pCLSID = nullptr;
+            const ::uno::Any* pStreamName = nullptr;
+            const ::uno::Any* pEmbeddedObject = nullptr;
             if(!pProps->GetProperty(FN_UNO_CLSID, 0, pCLSID)
                 && !pProps->GetProperty( FN_UNO_STREAM_NAME, 0, pStreamName )
                 && !pProps->GetProperty( FN_EMBEDDED_OBJECT, 0, pEmbeddedObject ))
@@ -2930,7 +2930,7 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
                 if ( xIPObj.is() )
                 {
                     UnoActionContext aAction(pDoc);
-                    pDoc->GetIDocumentUndoRedo().StartUndo(UNDO_INSERT, NULL);
+                    pDoc->GetIDocumentUndoRedo().StartUndo(UNDO_INSERT, nullptr);
                     if(!bSizeFound)
                     {
                         //TODO/LATER: from where do I get a ViewAspect? And how do I transport it to the OLENode?
@@ -2969,15 +2969,15 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
                         aFrmSz.SetSize(aSz);
                         aFrmSet.Put(aFrmSz);
                     }
-                    SwFlyFrameFormat* pFormat2 = 0;
+                    SwFlyFrameFormat* pFormat2 = nullptr;
 
                     // TODO/LATER: Is it the only possible aspect here?
                     sal_Int64 nAspect = embed::Aspects::MSOLE_CONTENT;
                     ::svt::EmbeddedObjectRef xObjRef( xIPObj, nAspect );
-                    pFormat2 = pDoc->getIDocumentContentOperations().Insert(aPam, xObjRef, &aFrmSet, NULL, NULL );
+                    pFormat2 = pDoc->getIDocumentContentOperations().Insert(aPam, xObjRef, &aFrmSet, nullptr, nullptr );
                     assert(pFormat2 && "Doc->Insert(notxt) failed.");
 
-                    pDoc->GetIDocumentUndoRedo().EndUndo(UNDO_INSERT, NULL);
+                    pDoc->GetIDocumentUndoRedo().EndUndo(UNDO_INSERT, nullptr);
                     pFormat2->Add(this);
                     if(!m_sName.isEmpty())
                         pDoc->SetFlyName((SwFlyFrameFormat&)*pFormat2, m_sName);
@@ -2987,11 +2987,11 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
             {
                 OUString sStreamName;
                 (*pStreamName) >>= sStreamName;
-                pDoc->GetIDocumentUndoRedo().StartUndo(UNDO_INSERT, NULL);
+                pDoc->GetIDocumentUndoRedo().StartUndo(UNDO_INSERT, nullptr);
 
-                SwFlyFrameFormat* pFrameFormat = 0;
-                pFrameFormat = pDoc->getIDocumentContentOperations().InsertOLE( aPam, sStreamName, embed::Aspects::MSOLE_CONTENT, &aFrmSet, NULL, NULL );
-                pDoc->GetIDocumentUndoRedo().EndUndo(UNDO_INSERT, NULL);
+                SwFlyFrameFormat* pFrameFormat = nullptr;
+                pFrameFormat = pDoc->getIDocumentContentOperations().InsertOLE( aPam, sStreamName, embed::Aspects::MSOLE_CONTENT, &aFrmSet, nullptr, nullptr );
+                pDoc->GetIDocumentUndoRedo().EndUndo(UNDO_INSERT, nullptr);
                 pFrameFormat->Add(this);
                 if(!m_sName.isEmpty())
                     pDoc->SetFlyName((SwFlyFrameFormat&)*pFrameFormat, m_sName);
@@ -3003,7 +3003,7 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
                 svt::EmbeddedObjectRef xObj;
                 xObj.Assign( obj, embed::Aspects::MSOLE_CONTENT );
 
-                pDoc->GetIDocumentUndoRedo().StartUndo(UNDO_INSERT, NULL);
+                pDoc->GetIDocumentUndoRedo().StartUndo(UNDO_INSERT, nullptr);
 
                 // Not sure if these setParent() and InsertEmbeddedObject() calls are really
                 // needed, it seems to work without, but logic from code elsewhere suggests
@@ -3015,9 +3015,9 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
                 OUString rName;
                 mrPers.GetEmbeddedObjectContainer().InsertEmbeddedObject( obj, rName );
 
-                SwFlyFrameFormat* pFrameFormat = 0;
-                pFrameFormat = pDoc->getIDocumentContentOperations().Insert( aPam, xObj, &aFrmSet, NULL, NULL );
-                pDoc->GetIDocumentUndoRedo().EndUndo(UNDO_INSERT, NULL);
+                SwFlyFrameFormat* pFrameFormat = nullptr;
+                pFrameFormat = pDoc->getIDocumentContentOperations().Insert( aPam, xObj, &aFrmSet, nullptr, nullptr );
+                pDoc->GetIDocumentUndoRedo().EndUndo(UNDO_INSERT, nullptr);
                 pFrameFormat->Add(this);
                 if(!m_sName.isEmpty())
                     pDoc->SetFlyName((SwFlyFrameFormat&)*pFrameFormat, m_sName);
@@ -3063,7 +3063,7 @@ void SwXFrame::attach(const uno::Reference< text::XTextRange > & xTextRange)
     SwFrameFormat* pFormat;
     if(IsDescriptor())
         attachToRange(xTextRange);
-    else if(0 != (pFormat = GetFrameFormat()))
+    else if(nullptr != (pFormat = GetFrameFormat()))
     {
         uno::Reference<lang::XUnoTunnel> xRangeTunnel( xTextRange, uno::UNO_QUERY);
         SwDoc* pDoc = pFormat->GetDoc();
@@ -3118,7 +3118,7 @@ OUString SwXFrame::getShapeType() throw( uno::RuntimeException, std::exception )
 }
 
 SwXTextFrame::SwXTextFrame( SwDoc *_pDoc ) :
-    SwXText(0, CURSOR_FRAME),
+    SwXText(nullptr, CURSOR_FRAME),
     SwXFrame(FLYCNTTYPE_FRM, aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_FRAME), _pDoc )
 {
 }
@@ -3198,7 +3198,7 @@ uno::Reference< text::XText >  SwXTextFrame::getText() throw( uno::RuntimeExcept
 
 const SwStartNode *SwXTextFrame::GetStartNode() const
 {
-    const SwStartNode *pSttNd = 0;
+    const SwStartNode *pSttNd = nullptr;
 
     const SwFrameFormat* pFormat = GetFrameFormat();
     if(pFormat)
@@ -3232,7 +3232,7 @@ uno::Reference< text::XTextCursor >  SwXTextFrame::createTextCursor() throw( uno
         SwPaM aPam(rNode);
         aPam.Move(fnMoveForward, fnGoNode);
         SwTableNode* pTableNode = aPam.GetNode().FindTableNode();
-        SwContentNode* pCont = 0;
+        SwContentNode* pCont = nullptr;
         while( pTableNode )
         {
             aPam.GetPoint()->nNode = *pTableNode->EndOfSectionNode();
@@ -3764,7 +3764,7 @@ void SwXOLEListener::modified( const lang::EventObject& /*rEvent*/ )
 {
     SolarMutexGuard aGuard;
 
-    SwOLENode* pNd = 0;
+    SwOLENode* pNd = nullptr;
     SwFormat* pFormat = GetFormat();
     if(pFormat)
     {const SwNodeIndex* pIdx = pFormat->GetContent().GetContentIdx();
@@ -3816,7 +3816,7 @@ void SwXOLEListener::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
 {
     ClientModify(this, pOld, pNew);
     if(!GetRegisteredIn())
-        xOLEModel = 0;
+        xOLEModel = nullptr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

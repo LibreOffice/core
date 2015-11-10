@@ -88,7 +88,7 @@ SwParaPortion *SwTextFrm::GetPara()
         else
             mnCacheIndex = USHRT_MAX;
     }
-    return 0;
+    return nullptr;
 }
 
 void SwTextFrm::ClearPara()
@@ -101,7 +101,7 @@ void SwTextFrm::ClearPara()
         if ( pTextLine )
         {
             delete pTextLine->GetPara();
-            pTextLine->SetPara( 0 );
+            pTextLine->SetPara( nullptr );
         }
         else
             mnCacheIndex = USHRT_MAX;

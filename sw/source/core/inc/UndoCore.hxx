@@ -87,8 +87,8 @@ public:
     UndoRedoContext(SwDoc & rDoc, IShellCursorSupplier & rCursorSupplier)
         : m_rDoc(rDoc)
         , m_rCursorSupplier(rCursorSupplier)
-        , m_pSelFormat(0)
-        , m_pMarkList(0)
+        , m_pSelFormat(nullptr)
+        , m_pMarkList(nullptr)
     { }
 
     SwDoc & GetDoc() const { return m_rDoc; }

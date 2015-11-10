@@ -59,7 +59,7 @@ public:
     virtual void SAL_CALL disposing(
                     const css::lang::EventObject& rEventObject ) throw(css::uno::RuntimeException, std::exception) override;
 
-    void ViewDestroyed() { pView = 0; }
+    void ViewDestroyed() { pView = nullptr; }
 };
 
 // Clipboard EventListener
@@ -81,7 +81,7 @@ public:
     SwClipboardChangeListener( SwView& rView ) : pView( &rView ) {}
     virtual ~SwClipboardChangeListener();
 
-    void ViewDestroyed() { pView = 0; }
+    void ViewDestroyed() { pView = nullptr; }
 
     void AddRemoveListener( bool bAdd );
 };

@@ -46,7 +46,7 @@ size_t SwSortedObjs::size() const
 
 SwAnchoredObject* SwSortedObjs::operator[]( size_t _nIndex ) const
 {
-    SwAnchoredObject* pAnchoredObj = 0L;
+    SwAnchoredObject* pAnchoredObj = nullptr;
 
     if ( _nIndex >= size() )
     {

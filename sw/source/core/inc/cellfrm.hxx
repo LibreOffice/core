@@ -36,15 +36,15 @@ class SwCellFrm: public SwLayoutFrm
     virtual ~SwCellFrm();
 
 protected:
-    virtual void Format( vcl::RenderContext* pRenderContext, const SwBorderAttrs *pAttrs = 0 ) override;
+    virtual void Format( vcl::RenderContext* pRenderContext, const SwBorderAttrs *pAttrs = nullptr ) override;
     virtual void Modify( const SfxPoolItem*, const SfxPoolItem* ) override;
 
 public:
     SwCellFrm( const SwTableBox &, SwFrm*, bool bInsertContent = true );
 
-    virtual bool GetCrsrOfst( SwPosition *, Point&, SwCrsrMoveState* = 0, bool bTestBackground = false ) const override;
+    virtual bool GetCrsrOfst( SwPosition *, Point&, SwCrsrMoveState* = nullptr, bool bTestBackground = false ) const override;
     virtual void Paint( vcl::RenderContext& rRenderContext, SwRect const&,
-                        SwPrintData const*const pPrintData = NULL ) const override;
+                        SwPrintData const*const pPrintData = nullptr ) const override;
     virtual void CheckDirection( bool bVert ) override;
 
     // #i103961#

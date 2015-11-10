@@ -46,7 +46,7 @@ SfxItemPool* SwSvxUnoDrawPool::getModelPool( bool /*bReadOnly*/ ) throw()
         m_pDoc->getIDocumentDrawModelAccess().GetOrCreateDrawModel();
         return &(m_pDoc->GetAttrPool());
     }
-    return 0;
+    return nullptr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

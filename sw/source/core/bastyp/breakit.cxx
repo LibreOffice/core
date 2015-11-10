@@ -34,7 +34,7 @@
 
 using namespace com::sun::star;
 
-SwBreakIt* g_pBreakIt = 0;
+SwBreakIt* g_pBreakIt = nullptr;
 
 void SwBreakIt::_Create( const uno::Reference<uno::XComponentContext> & rxContext )
 {
@@ -43,7 +43,7 @@ void SwBreakIt::_Create( const uno::Reference<uno::XComponentContext> & rxContex
 
 void SwBreakIt::_Delete()
 {
-    delete g_pBreakIt, g_pBreakIt = 0;
+    delete g_pBreakIt, g_pBreakIt = nullptr;
 }
 
 SwBreakIt * SwBreakIt::Get()
@@ -53,8 +53,8 @@ SwBreakIt * SwBreakIt::Get()
 
 SwBreakIt::SwBreakIt( const uno::Reference<uno::XComponentContext> & rxContext )
     : m_xContext( rxContext ),
-      m_pLanguageTag( NULL ),
-      m_pForbidden( NULL ),
+      m_pLanguageTag( nullptr ),
+      m_pForbidden( nullptr ),
       aForbiddenLang( LANGUAGE_DONTKNOW )
 {
     OSL_ENSURE( m_xContext.is(), "SwBreakIt: no MultiServiceFactory" );

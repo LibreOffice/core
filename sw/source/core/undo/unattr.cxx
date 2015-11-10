@@ -191,7 +191,7 @@ void SwUndoFormatAttr::UndoImpl(::sw::UndoRedoContext & rContext)
         }
 
         if ( RES_FLYFRMFMT == m_nFormatWhich || RES_DRAWFRMFMT == m_nFormatWhich ) {
-            rContext.SetSelections(static_cast<SwFrameFormat*>(m_pFormat), 0);
+            rContext.SetSelections(static_cast<SwFrameFormat*>(m_pFormat), nullptr);
         }
     }
 }
@@ -266,16 +266,16 @@ bool SwUndoFormatAttr::IsFormatInDoc( SwDoc* pDoc )
     if ( !bFound )
     {
         // Format does not exist; reset
-        m_pFormat = 0;
+        m_pFormat = nullptr;
     }
 
-    return 0 != m_pFormat;
+    return nullptr != m_pFormat;
 }
 
 // Check if it is still in Doc
 SwFormat* SwUndoFormatAttr::GetFormat( SwDoc& rDoc )
 {
-    return m_pFormat && IsFormatInDoc( &rDoc ) ? m_pFormat : 0;
+    return m_pFormat && IsFormatInDoc( &rDoc ) ? m_pFormat : nullptr;
 }
 
 void SwUndoFormatAttr::RedoImpl(::sw::UndoRedoContext & rContext)
@@ -483,7 +483,7 @@ bool SwUndoFormatAttr::RestoreFlyAnchor(::sw::UndoRedoContext & rContext)
         }
     }
 
-    SwDrawContact *pCont = NULL;
+    SwDrawContact *pCont = nullptr;
     if ( RES_DRAWFRMFMT == pFrameFormat->Which() ) {
         pCont = static_cast<SwDrawContact*>(pFrameFormat->FindContactObj());
         // The Draw model also prepared an Undo object for its right positioning
@@ -519,7 +519,7 @@ bool SwUndoFormatAttr::RestoreFlyAnchor(::sw::UndoRedoContext & rContext)
         pCont->GetAnchoredObj(pSdrObj)->MakeObjPos();
     }
 
-    rContext.SetSelections(pFrameFormat, 0);
+    rContext.SetSelections(pFrameFormat, nullptr);
 
     // #i35443# - anchor attribute restored.
     return true;
@@ -531,7 +531,7 @@ SwUndoFormatResetAttr::SwUndoFormatResetAttr( SwFormat& rChangedFormat,
     , m_pChangedFormat( &rChangedFormat )
     , m_nWhichId( nWhichId )
 {
-    const SfxPoolItem* pItem = 0;
+    const SfxPoolItem* pItem = nullptr;
     if (rChangedFormat.GetItemState(nWhichId, false, &pItem ) == SfxItemState::SET && pItem) {
         m_pOldItem.reset( pItem->Clone() );
     }
@@ -706,7 +706,7 @@ void SwUndoAttr::SaveRedlineData( const SwPaM& rPam, bool bIsContent )
 
     m_pRedlineSaveData.reset( new SwRedlineSaveDatas );
     if ( !FillSaveDataForFormat( rPam, *m_pRedlineSaveData )) {
-        m_pRedlineSaveData.reset(0);
+        m_pRedlineSaveData.reset(nullptr);
     }
 
     SetRedlineMode( pDoc->getIDocumentRedlineAccess().GetRedlineMode() );
@@ -878,7 +878,7 @@ void SwUndoDefaultAttr::UndoImpl(::sw::UndoRedoContext & rContext)
         SwUndoFormatAttrHelper aTmp(
             *rDoc.GetDfltTextFormatColl() );
         rDoc.SetDefault( *m_pOldSet );
-        m_pOldSet.reset( 0 );
+        m_pOldSet.reset( nullptr );
         if ( aTmp.GetUndo() ) {
             // transfer ownership of helper object's old set
             m_pOldSet = std::move(aTmp.GetUndo()->m_pOldSet);

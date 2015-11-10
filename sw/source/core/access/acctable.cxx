@@ -468,7 +468,7 @@ const SwFrm *SwAccessibleTableData_Impl::GetCellAtPos(
 {
     Point aPos( mpTabFrm->Frm().Pos() );
     aPos.Move( nLeft, nTop );
-    const SwFrm *pRet = 0;
+    const SwFrm *pRet = nullptr;
     FindCell( aPos, mpTabFrm, bExact, pRet );
 
     return pRet;
@@ -660,9 +660,9 @@ void SwAccAllTableSelHander_Impl::Unselect( sal_Int32 nRowOrCol,
 
 const SwSelBoxes *SwAccessibleTable::GetSelBoxes() const
 {
-    const SwSelBoxes *pSelBoxes = 0;
+    const SwSelBoxes *pSelBoxes = nullptr;
     const SwCrsrShell *pCSh = GetCrsrShell();
-    if( (pCSh != NULL) && pCSh->IsTableMode() )
+    if( (pCSh != nullptr) && pCSh->IsTableMode() )
     {
         pSelBoxes = &pCSh->GetTableCrsr()->GetSelectedBoxes();
     }
@@ -692,14 +692,14 @@ const SwTableBox* SwAccessibleTable::GetTableBox( sal_Int32 nChildIndex ) const
     OSL_ENSURE( nChildIndex >= 0, "Illegal child index." );
     OSL_ENSURE( nChildIndex < const_cast<SwAccessibleTable*>(this)->getAccessibleChildCount(), "Illegal child index." ); // #i77106#
 
-    const SwTableBox* pBox = NULL;
+    const SwTableBox* pBox = nullptr;
 
     // get table box for 'our' table cell
     SwAccessibleChild aCell( GetChild( *(const_cast<SwAccessibleMap*>(GetMap())), nChildIndex ) );
     if( aCell.GetSwFrm()  )
     {
         const SwFrm* pChildFrm = aCell.GetSwFrm();
-        if( (pChildFrm != NULL) && pChildFrm->IsCellFrm() )
+        if( (pChildFrm != nullptr) && pChildFrm->IsCellFrm() )
         {
             const SwCellFrm* pCellFrm =
                 static_cast<const SwCellFrm*>( pChildFrm );
@@ -707,7 +707,7 @@ const SwTableBox* SwAccessibleTable::GetTableBox( sal_Int32 nChildIndex ) const
         }
     }
 
-    OSL_ENSURE( pBox != NULL, "We need the table box." );
+    OSL_ENSURE( pBox != nullptr, "We need the table box." );
     return pBox;
 }
 
@@ -718,7 +718,7 @@ bool SwAccessibleTable::IsChildSelected( sal_Int32 nChildIndex ) const
     if( pSelBoxes )
     {
         const SwTableBox* pBox = GetTableBox( nChildIndex );
-        OSL_ENSURE( pBox != NULL, "We need the table box." );
+        OSL_ENSURE( pBox != nullptr, "We need the table box." );
         bRet = pSelBoxes->find( const_cast<SwTableBox*>( pBox ) ) != pSelBoxes->end();
     }
 
@@ -766,7 +766,7 @@ SwAccessibleTable::SwAccessibleTable(
         SwAccessibleMap* pInitMap,
         const SwTabFrm* pTabFrm  ) :
     SwAccessibleContext( pInitMap, AccessibleRole::TABLE, pTabFrm ),
-    mpTableData( 0 )
+    mpTableData( nullptr )
 {
     SolarMutexGuard aGuard;
 
@@ -908,7 +908,7 @@ void SwAccessibleTable::UpdateTableData()
 void SwAccessibleTable::ClearTableData()
 {
     delete mpTableData;
-    mpTableData = 0;
+    mpTableData = nullptr;
 }
 
 OUString SAL_CALL SwAccessibleTable::getAccessibleDescription()
@@ -1497,10 +1497,10 @@ void SAL_CALL SwAccessibleTable::selectAccessibleChild(
 
     // preliminaries: get 'our' table box, and get the cursor shell
     const SwTableBox* pBox = GetTableBox( nChildIndex );
-    OSL_ENSURE( pBox != NULL, "We need the table box." );
+    OSL_ENSURE( pBox != nullptr, "We need the table box." );
 
     SwCrsrShell* pCrsrShell = GetCrsrShell();
-    if( pCrsrShell == NULL )
+    if( pCrsrShell == nullptr )
         return;
 
     // assure, that child, identified by the given index, isn't already selected.
@@ -1516,21 +1516,21 @@ void SAL_CALL SwAccessibleTable::selectAccessibleChild(
     // if we have a selection in a table, check if it's in the
     // same table that we're trying to select in
     const SwTableNode* pSelectedTable = pCrsrShell->IsCrsrInTable();
-    if( pSelectedTable != NULL )
+    if( pSelectedTable != nullptr )
     {
         // get top-most table line
         const SwTableLine* pUpper = pBox->GetUpper();
-        while( pUpper->GetUpper() != NULL )
+        while( pUpper->GetUpper() != nullptr )
             pUpper = pUpper->GetUpper()->GetUpper();
         sal_uInt16 nPos =
             pSelectedTable->GetTable().GetTabLines().GetPos( pUpper );
         if( nPos == USHRT_MAX )
-            pSelectedTable = NULL;
+            pSelectedTable = nullptr;
     }
 
     // create the new selection
     const SwStartNode* pStartNode = pBox->GetSttNd();
-    if( pSelectedTable == NULL || !pCrsrShell->GetTableCrs() )
+    if( pSelectedTable == nullptr || !pCrsrShell->GetTableCrs() )
     {
         pCrsrShell->StartAction();
         // Set cursor into current cell. This deletes any table cursor.
@@ -1586,7 +1586,7 @@ void SAL_CALL SwAccessibleTable::clearAccessibleSelection(  )
     CHECK_FOR_DEFUNC( XAccessibleTable );
 
     SwCrsrShell* pCrsrShell = GetCrsrShell();
-    if( pCrsrShell != NULL )
+    if( pCrsrShell != nullptr )
     {
         pCrsrShell->StartAction();
         pCrsrShell->ClearMark();
@@ -1671,7 +1671,7 @@ void SAL_CALL SwAccessibleTable::deselectAccessibleChild(
         return;
 
     const SwTableBox* pBox = GetTableBox( nChildIndex );
-    OSL_ENSURE( pBox != NULL, "We need the table box." );
+    OSL_ENSURE( pBox != nullptr, "We need the table box." );
 
     // If we unselect point, then set cursor to mark. If we clear another
     // selected box, then set cursor to point.
@@ -1823,7 +1823,7 @@ sal_Bool SAL_CALL SwAccessibleTable::unselectRow( sal_Int32 row )
     if( isAccessibleSelected( row , 0 ) &&  isAccessibleSelected( row , getAccessibleColumnCount()-1 ) )
     {
         SwCrsrShell* pCrsrShell = GetCrsrShell();
-        if( pCrsrShell != NULL )
+        if( pCrsrShell != nullptr )
         {
             pCrsrShell->StartAction();
             pCrsrShell->ClearMark();
@@ -1844,7 +1844,7 @@ sal_Bool SAL_CALL SwAccessibleTable::unselectColumn( sal_Int32 column )
     if( isAccessibleSelected( 0 , column ) &&  isAccessibleSelected( getAccessibleRowCount()-1,column))
     {
         SwCrsrShell* pCrsrShell = GetCrsrShell();
-        if( pCrsrShell != NULL )
+        if( pCrsrShell != nullptr )
         {
             pCrsrShell->StartAction();
             pCrsrShell->ClearMark();

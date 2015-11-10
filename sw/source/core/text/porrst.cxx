@@ -88,7 +88,7 @@ sal_uInt16 SwBreakPortion::GetViewWidth( const SwTextSizeInfo & ) const
 { return 0; }
 
 SwLinePortion *SwBreakPortion::Compress()
-{ return (GetPortion() && GetPortion()->InTextGrp() ? 0 : this); }
+{ return (GetPortion() && GetPortion()->InTextGrp() ? nullptr : this); }
 
 void SwBreakPortion::Paint( const SwTextPaintInfo &rInf ) const
 {
@@ -240,7 +240,7 @@ SwTwips SwTextFrm::EmptyHeight() const
     if ( IsVertical() )
         pFnt->SetVertical( 2700 );
 
-    OutputDevice* pOut = pSh ? pSh->GetOut() : 0;
+    OutputDevice* pOut = pSh ? pSh->GetOut() : nullptr;
     if ( !pOut || !pSh->GetViewOptions()->getBrowseMode() ||
          pSh->GetViewOptions()->IsPrtFormat() )
     {
@@ -255,7 +255,7 @@ SwTwips SwTextFrm::EmptyHeight() const
         {
             SwAttrHandler aAttrHandler;
             aAttrHandler.Init(  GetTextNode()->GetSwAttrSet(),
-                               *GetTextNode()->getIDocumentSettingAccess(), NULL );
+                               *GetTextNode()->getIDocumentSettingAccess(), nullptr );
             SwRedlineItr aRedln( rTextNode, *pFnt, aAttrHandler,
                                  nRedlPos, true );
         }
@@ -283,7 +283,7 @@ bool SwTextFrm::FormatEmpty()
     bool bCollapse = EmptyHeight( ) == 1 && this->IsCollapse( );
 
     if ( HasFollow() || GetTextNode()->GetpSwpHints() ||
-        0 != GetTextNode()->GetNumRule() ||
+        nullptr != GetTextNode()->GetNumRule() ||
         GetTextNode()->HasHiddenCharAttribute( true ) ||
          IsInFootnote() || ( HasPara() && GetPara()->IsPrepMustFit() ) )
         return false;
@@ -381,7 +381,7 @@ bool SwTextFrm::FillRegister( SwTwips& rRegStart, sal_uInt16& rRegDiff )
                             SwFontAccess aFontAccess( pFormat, pSh );
                             SwFont aFnt( aFontAccess.Get()->GetFont() );
 
-                            OutputDevice *pOut = 0;
+                            OutputDevice *pOut = nullptr;
                             if( !pSh || !pSh->GetViewOptions()->getBrowseMode() ||
                                 pSh->GetViewOptions()->IsPrtFormat() )
                                 pOut = GetTextNode()->getIDocumentDeviceAccess().getReferenceDevice( true );

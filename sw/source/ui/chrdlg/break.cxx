@@ -197,7 +197,7 @@ void SwBreakDlg::CheckEnable()
         m_pPageCollBox->Enable(false);
         bEnable = false;
     }
-    else if(rSh.GetFrmType(0,true)
+    else if(rSh.GetFrmType(nullptr,true)
         & (FrmTypeFlags::FLY_ANY | FrmTypeFlags::HEADER | FrmTypeFlags::FOOTER  | FrmTypeFlags::FOOTNOTE))
     {
         m_pPageBtn->Enable(false);

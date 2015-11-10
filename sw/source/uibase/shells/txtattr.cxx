@@ -171,16 +171,16 @@ void SwTextShell::ExecCharAttrArgs(SfxRequest &rReq)
 {
     sal_uInt16 nSlot = rReq.GetSlot();
     const SfxItemSet* pArgs = rReq.GetArgs();
-    bool bArgs = pArgs != 0 && pArgs->Count() > 0;
+    bool bArgs = pArgs != nullptr && pArgs->Count() > 0;
     SwWrtShell& rWrtSh = GetShell();
-    SwTextFormatColl* pColl = 0;
+    SwTextFormatColl* pColl = nullptr;
 
     // Is only set if the whole paragraph is selected and AutoUpdateFormat is set.
     if (rWrtSh.HasSelection() && rWrtSh.IsSelFullPara())
     {
         pColl = rWrtSh.GetCurTextFormatColl();
         if ( pColl && !pColl->IsAutoUpdateFormat() )
-            pColl = 0;
+            pColl = nullptr;
     }
     SfxItemPool& rPool = GetPool();
     sal_uInt16 nWhich = rPool.GetWhich( nSlot );
@@ -389,7 +389,7 @@ SET_LINESPACE:
                         else if(SVX_ADJUST_RIGHT == aFormat.GetNumAdjust())
                             aFormat.SetNumAdjust( SVX_ADJUST_LEFT );
 
-                        aRule.SetLevel(i, aFormat, aRule.Get(i) != 0);
+                        aRule.SetLevel(i, aFormat, aRule.Get(i) != nullptr);
                     }
                     SwNumRule aSetRule( pCurRule->GetName(),
                                         pCurRule->Get( 0 ).GetPositionAndSpaceMode() );
@@ -421,7 +421,7 @@ void SwTextShell::ExecParaAttrArgs(SfxRequest &rReq)
 {
     SwWrtShell &rSh = GetShell();
     const SfxItemSet *pArgs = rReq.GetArgs();
-    const SfxPoolItem *pItem = 0;
+    const SfxPoolItem *pItem = nullptr;
 
     sal_uInt16 nSlot = rReq.GetSlot();
     if(pArgs)
@@ -435,7 +435,7 @@ void SwTextShell::ExecParaAttrArgs(SfxRequest &rReq)
                 SfxItemSet aSet(GetPool(), RES_PARATR_DROP, RES_PARATR_DROP, 0L);
                 rSh.GetCurAttr(aSet);
                 SwFormatDrop aDropItem(static_cast<const SwFormatDrop&>(aSet.Get(RES_PARATR_DROP)));
-                SwCharFormat* pFormat = 0;
+                SwCharFormat* pFormat = nullptr;
                 if(!sCharStyleName.isEmpty())
                     pFormat = rSh.FindCharFormatByName( sCharStyleName );
                 aDropItem.SetCharFormat( pFormat );
@@ -519,7 +519,7 @@ void SwTextShell::GetAttrState(SfxItemSet &rSet)
     sal_uInt16 nSlot = aIter.FirstWhich();
     bool bFlag = false;
     SfxBoolItem aFlagItem;
-    const SfxPoolItem* pItem = 0;
+    const SfxPoolItem* pItem = nullptr;
     int eAdjust = -1;   // Illegal value to recognize DONTCARE.
     SfxItemState eState = aCoreSet.GetItemState(RES_PARATR_ADJUST, false, &pItem);
 

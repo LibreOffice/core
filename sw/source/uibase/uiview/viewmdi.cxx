@@ -152,7 +152,7 @@ void SwView::_SetZoom( const Size &rEditSize, SvxZoomType eZoomType,
         {
             pUsrPref->SetZoom(nZoomFac);
             pUsrPref->SetZoomType(eZoomType);
-            SW_MOD()->ApplyUsrPref(*pUsrPref, 0);
+            SW_MOD()->ApplyUsrPref(*pUsrPref, nullptr);
             pUsrPref->SetModified();
         }
         if ( pOpt->GetZoom() != nZoomFac )
@@ -226,7 +226,7 @@ void SwView::SetViewLayout( sal_uInt16 nColumns, bool bBookMode, bool bViewOnly 
         {
             pUsrPref->SetViewLayoutColumns(nColumns);
             pUsrPref->SetViewLayoutBookMode(bBookMode);
-            SW_MOD()->ApplyUsrPref(*pUsrPref, 0);
+            SW_MOD()->ApplyUsrPref(*pUsrPref, nullptr);
             pUsrPref->SetModified();
         }
     }
@@ -420,7 +420,7 @@ IMPL_LINK_TYPED( SwView, MoveNavigationHdl, void*, p, void )
                 rSh.EnterStdMode();
                 sw::sidebarwindows::SwSidebarWin* pPostIt = GetPostItMgr()->GetActiveSidebarWin();
                 if (pPostIt)
-                    GetPostItMgr()->SetActiveSidebarWin(0);
+                    GetPostItMgr()->SetActiveSidebarWin(nullptr);
                 SwFieldType* pFieldType = rSh.GetFieldType(0, RES_POSTITFLD);
                 if ( rSh.MoveFieldType( pFieldType, bNext ) )
                     GetViewFrame()->GetDispatcher()->Execute(FN_POSTIT);

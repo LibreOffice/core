@@ -97,8 +97,8 @@ SwTextAPIEditSource::SwTextAPIEditSource(SwDoc* pDoc)
 {
     pImpl->mpPool = &pDoc->GetDocShell()->GetPool();
     pImpl->mpDoc = pDoc;
-    pImpl->mpOutliner = 0;
-    pImpl->mpTextForwarder = 0;
+    pImpl->mpOutliner = nullptr;
+    pImpl->mpTextForwarder = nullptr;
     pImpl->mnRef = 1;
 }
 
@@ -110,8 +110,8 @@ SwTextAPIEditSource::~SwTextAPIEditSource()
 
 void SwTextAPIEditSource::Dispose()
 {
-    pImpl->mpPool=0;
-    pImpl->mpDoc=0;
+    pImpl->mpPool=nullptr;
+    pImpl->mpDoc=nullptr;
     DELETEZ(pImpl->mpTextForwarder);
     DELETEZ(pImpl->mpOutliner);
 }
@@ -119,7 +119,7 @@ void SwTextAPIEditSource::Dispose()
 SvxTextForwarder* SwTextAPIEditSource::GetTextForwarder()
 {
     if( !pImpl->mpPool )
-        return 0; // mpPool == 0 can be used to flag this as disposed
+        return nullptr; // mpPool == 0 can be used to flag this as disposed
 
     if( !pImpl->mpOutliner )
     {
@@ -173,7 +173,7 @@ OutlinerParaObject* SwTextAPIEditSource::CreateText()
     if ( pImpl->mpPool && pImpl->mpOutliner )
         return pImpl->mpOutliner->CreateParaObject();
     else
-        return 0;
+        return nullptr;
 }
 
 OUString SwTextAPIEditSource::GetText()

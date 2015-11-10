@@ -163,28 +163,28 @@ SwMarginPortion::SwMarginPortion( const sal_uInt16 nFixedWidth )
  */
 void SwMarginPortion::AdjustRight( const SwLineLayout *pCurr )
 {
-    SwGluePortion *pRight = 0;
-    bool bNoMove = 0 != pCurr->GetpKanaComp();
+    SwGluePortion *pRight = nullptr;
+    bool bNoMove = nullptr != pCurr->GetpKanaComp();
     while( pRight != this )
     {
 
         // 1) We search for the left Glue
         SwLinePortion *pPos = this;
-        SwGluePortion *pLeft = 0;
+        SwGluePortion *pLeft = nullptr;
         while( pPos )
         {
             if( pPos->InFixMargGrp() )
                 pLeft = static_cast<SwGluePortion*>(pPos);
             pPos = pPos->GetPortion();
             if( pPos == pRight)
-                pPos = 0;
+                pPos = nullptr;
         }
 
         // Two adjoining FlyPortions are merged
         if( pRight && pLeft && pLeft->GetPortion() == pRight )
         {
             pRight->MoveAllGlue( pLeft );
-            pRight = 0;
+            pRight = nullptr;
         }
         sal_uInt16 nRightGlue = pRight && 0 < pRight->GetPrtGlue()
                           ? sal_uInt16(pRight->GetPrtGlue()) : 0;

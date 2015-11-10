@@ -85,7 +85,7 @@ using namespace ::com::sun::star::lang;
 
 static void lcl_EnsureValidPam( SwPaM& rPam )
 {
-    if( rPam.GetContentNode() != NULL )
+    if( rPam.GetContentNode() != nullptr )
     {
         // set proper point content
         if( rPam.GetContentNode() != rPam.GetPoint()->nContent.GetIdxReg() )
@@ -95,7 +95,7 @@ static void lcl_EnsureValidPam( SwPaM& rPam )
         // else: point was already valid
 
         // if mark is invalid, we delete it
-        if( ( rPam.GetContentNode( false ) == NULL ) ||
+        if( ( rPam.GetContentNode( false ) == nullptr ) ||
             ( rPam.GetContentNode( false ) != rPam.GetMark()->nContent.GetIdxReg() ) )
         {
             rPam.DeleteMark();
@@ -139,7 +139,7 @@ sal_Int32 ReadThroughComponent(
     OSL_ENSURE(xInputStream.is(), "input stream missing");
     OSL_ENSURE(xModelComponent.is(), "document missing");
     OSL_ENSURE(rxContext.is(), "factory missing");
-    OSL_ENSURE(NULL != pFilterName,"I need a service name for the component!");
+    OSL_ENSURE(nullptr != pFilterName,"I need a service name for the component!");
 
     // prepare ParserInputSrouce
     xml::sax::InputSource aParserInput;
@@ -288,7 +288,7 @@ sal_Int32 ReadThroughComponent(
     bool bMustBeSuccessfull)
 {
     OSL_ENSURE(xStorage.is(), "Need storage!");
-    OSL_ENSURE(NULL != pStreamName, "Please, please, give me a name!");
+    OSL_ENSURE(nullptr != pStreamName, "Please, please, give me a name!");
 
     // open stream (and set parser input)
     OUString sStreamName = OUString::createFromAscii(pStreamName);
@@ -307,7 +307,7 @@ sal_Int32 ReadThroughComponent(
         // if no stream can be opened, return immediately with OK signal
 
         // do we even have an alternative name?
-        if ( NULL == pCompatibilityStreamName )
+        if ( nullptr == pCompatibilityStreamName )
             return 0;
 
         // if so, does the stream exist?
@@ -398,7 +398,7 @@ static void lcl_AdjustOutlineStylesForOOo(SwDoc& _rDoc)
         for ( sal_uInt8 i = 0; i < MAXLEVEL; ++i )
         {
             aOutlineLevelAssigned[ i ] = false;
-            aCreatedDefaultOutlineStyles[ i ] = 0L;
+            aCreatedDefaultOutlineStyles[ i ] = nullptr;
         }
     }
 
@@ -415,7 +415,7 @@ static void lcl_AdjustOutlineStylesForOOo(SwDoc& _rDoc)
 
         for ( sal_uInt8 i = 0; i < MAXLEVEL; ++i )
         {
-            if ( aCreatedDefaultOutlineStyles[ i ] == 0L &&
+            if ( aCreatedDefaultOutlineStyles[ i ] == nullptr &&
                  pColl->GetName() == aDefOutlStyleNames[i] )
             {
                 aCreatedDefaultOutlineStyles[ i ] = pColl;
@@ -433,7 +433,7 @@ static void lcl_AdjustOutlineStylesForOOo(SwDoc& _rDoc)
         // Do not change assignment of already created default outline style
         // to a certain outline level.
         if ( !aOutlineLevelAssigned[ i ] &&
-             aCreatedDefaultOutlineStyles[ i ] != 0 &&
+             aCreatedDefaultOutlineStyles[ i ] != nullptr &&
              ! aCreatedDefaultOutlineStyles[ i ]->IsAssignedToListLevelOfOutlineStyle() )
         {
             // apply outline level at created default outline style
@@ -498,9 +498,9 @@ sal_uLong XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, c
     uno::Reference< io::XActiveDataSource > xSource;
     uno::Reference< XInterface > xPipe;
     uno::Reference< document::XGraphicObjectResolver > xGraphicResolver;
-    SvXMLGraphicHelper *pGraphicHelper = 0;
+    SvXMLGraphicHelper *pGraphicHelper = nullptr;
     uno::Reference< document::XEmbeddedObjectResolver > xObjectResolver;
-    SvXMLEmbeddedObjectHelper *pObjectHelper = 0;
+    SvXMLEmbeddedObjectHelper *pObjectHelper = nullptr;
 
     // get the input stream (storage or stream)
     uno::Reference<io::XInputStream> xInputStream;
@@ -721,14 +721,14 @@ sal_uLong XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, c
     else if( bInsertMode )
     {
         const uno::Reference<text::XTextRange> xInsertTextRange =
-            SwXTextRange::CreateXTextRange(rDoc, *rPaM.GetPoint(), 0);
+            SwXTextRange::CreateXTextRange(rDoc, *rPaM.GetPoint(), nullptr);
         xInfoSet->setPropertyValue( "TextInsertModeRange",
                                     makeAny(xInsertTextRange) );
     }
     else
     {
-        rPaM.GetBound().nContent.Assign(0, 0);
-        rPaM.GetBound(false).nContent.Assign(0, 0);
+        rPaM.GetBound().nContent.Assign(nullptr, 0);
+        rPaM.GetBound(false).nContent.Assign(nullptr, 0);
     }
 
     if( IsBlockMode() )
@@ -851,14 +851,14 @@ sal_uLong XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, c
           bInsertMode) )
     {
         nWarn2 = ReadThroughComponent(
-            xStorage, xModelComp, "settings.xml", NULL, xContext,
+            xStorage, xModelComp, "settings.xml", nullptr, xContext,
             (bOASIS ? "com.sun.star.comp.Writer.XMLOasisSettingsImporter"
                     : "com.sun.star.comp.Writer.XMLSettingsImporter"),
             aFilterArgs, rName, false );
     }
 
     nRet = ReadThroughComponent(
-        xStorage, xModelComp, "styles.xml", NULL, xContext,
+        xStorage, xModelComp, "styles.xml", nullptr, xContext,
         (bOASIS ? "com.sun.star.comp.Writer.XMLOasisStylesImporter"
                 : "com.sun.star.comp.Writer.XMLStylesImporter"),
         aFilterArgs, rName, true );
@@ -923,10 +923,10 @@ sal_uLong XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, c
 
     if( pGraphicHelper )
         SvXMLGraphicHelper::Destroy( pGraphicHelper );
-    xGraphicResolver = 0;
+    xGraphicResolver = nullptr;
     if( pObjectHelper )
         SvXMLEmbeddedObjectHelper::Destroy( pObjectHelper );
-    xObjectResolver = 0;
+    xObjectResolver = nullptr;
     (void)rDoc.release();
 
     if ( !bOASIS )

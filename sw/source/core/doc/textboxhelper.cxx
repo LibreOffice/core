@@ -151,8 +151,8 @@ std::set<const SwFrameFormat*> SwTextBoxHelper::findTextBoxes(const SwDoc* pDoc)
 std::set<const SwFrameFormat*> SwTextBoxHelper::findTextBoxes(const SwNode& rNode)
 {
     const SwDoc* pDoc = rNode.GetDoc();
-    const SwContentNode* pContentNode = 0;
-    const SwContentFrm* pContentFrm = 0;
+    const SwContentNode* pContentNode = nullptr;
+    const SwContentFrm* pContentFrm = nullptr;
     bool bHaveViewShell = pDoc->getIDocumentLayoutAccess().GetCurrentViewShell();
     if (bHaveViewShell && (pContentNode = rNode.GetContentNode()) && (pContentFrm = pContentNode->getLayoutFrm(pDoc->getIDocumentLayoutAccess().GetCurrentLayout())))
     {
@@ -225,7 +225,7 @@ uno::Any SwTextBoxHelper::getByIndex(SdrPage* pPage, sal_Int32 nIndex, std::set<
     if (nIndex < 0)
         throw lang::IndexOutOfBoundsException();
 
-    SdrObject* pRet = 0;
+    SdrObject* pRet = nullptr;
     sal_Int32 nCount = 0; // Current logical index.
     for (size_t i = 0; i < pPage->GetObjCount(); ++i)
     {
@@ -268,14 +268,14 @@ SwFrameFormat* SwTextBoxHelper::findTextBox(uno::Reference<drawing::XShape> xSha
 {
     SwXShape* pShape = dynamic_cast<SwXShape*>(xShape.get());
     if (!pShape)
-        return 0;
+        return nullptr;
 
     return findTextBox(pShape->GetFrameFormat());
 }
 
 SwFrameFormat* SwTextBoxHelper::findTextBox(const SwFrameFormat* pShape)
 {
-    SwFrameFormat* pRet = 0;
+    SwFrameFormat* pRet = nullptr;
 
     // Only draw frames can have TextBoxes.
     if (pShape && pShape->Which() == RES_DRAWFRMFMT && pShape->GetAttrSet().HasItem(RES_CNTNT))

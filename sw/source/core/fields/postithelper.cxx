@@ -45,23 +45,23 @@ SwPostItHelper::SwLayoutStatus SwPostItHelper::getLayoutInfos(
 {
     SwLayoutStatus aRet = INVISIBLE;
     SwTextNode* pTextNode = rAnchorPos.nNode.GetNode().GetTextNode();
-    if ( pTextNode == NULL )
+    if ( pTextNode == nullptr )
         return aRet;
 
     SwIterator<SwTextFrm,SwContentNode> aIter( *pTextNode );
-    for( SwTextFrm* pTextFrm = aIter.First(); pTextFrm != NULL; pTextFrm = aIter.Next() )
+    for( SwTextFrm* pTextFrm = aIter.First(); pTextFrm != nullptr; pTextFrm = aIter.Next() )
     {
         if( !pTextFrm->IsFollow() )
         {
             pTextFrm = pTextFrm->GetFrmAtPos( rAnchorPos );
-            SwPageFrm *pPage = pTextFrm ? pTextFrm->FindPageFrm() : 0;
-            if ( pPage != NULL && !pPage->IsInvalid() && !pPage->IsInvalidFly() )
+            SwPageFrm *pPage = pTextFrm ? pTextFrm->FindPageFrm() : nullptr;
+            if ( pPage != nullptr && !pPage->IsInvalid() && !pPage->IsInvalidFly() )
             {
                 aRet = VISIBLE;
 
                 o_rInfo.mpAnchorFrm = pTextFrm;
                 pTextFrm->GetCharRect( o_rInfo.mPosition, rAnchorPos );
-                if ( pAnnotationStartPos != NULL )
+                if ( pAnnotationStartPos != nullptr )
                 {
                     o_rInfo.mnStartNodeIdx = pAnnotationStartPos->nNode.GetIndex();
                     o_rInfo.mnStartContent = pAnnotationStartPos->nContent.GetIndex();
@@ -81,7 +81,7 @@ SwPostItHelper::SwLayoutStatus SwPostItHelper::getLayoutInfos(
                 const IDocumentRedlineAccess& rIDRA = pTextNode->getIDocumentRedlineAccess();
                 if( IDocumentRedlineAccess::IsShowChanges( rIDRA.GetRedlineMode() ) )
                 {
-                    const SwRangeRedline* pRedline = rIDRA.GetRedline( rAnchorPos, 0 );
+                    const SwRangeRedline* pRedline = rIDRA.GetRedline( rAnchorPos, nullptr );
                     if( pRedline )
                     {
                         if( nsRedlineType_t::REDLINE_INSERT == pRedline->GetType() )
@@ -119,7 +119,7 @@ void SwPostItHelper::setSidebarChanged( SwRootFrm* pRoot, bool bBrowseMode )
 unsigned long SwPostItHelper::getPageInfo( SwRect& rPageFrm, const SwRootFrm* pRoot, const Point& rPoint )
 {
     unsigned long nRet = 0;
-    const SwFrm* pPage = pRoot->GetPageAtPos( rPoint, 0, true );
+    const SwFrm* pPage = pRoot->GetPageAtPos( rPoint, nullptr, true );
     if( pPage )
     {
         nRet = pPage->GetPhyPageNum();

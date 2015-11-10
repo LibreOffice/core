@@ -43,7 +43,7 @@ class SwLayoutCache
     sal_uInt16 nLockCount;
 
 public:
-    SwLayoutCache() : pImpl( NULL ), nLockCount( 0 ) {}
+    SwLayoutCache() : pImpl( nullptr ), nLockCount( 0 ) {}
     ~SwLayoutCache();
 
     void Read( SvStream &rStream );
@@ -53,7 +53,7 @@ public:
     bool IsLocked() const { return nLockCount > 0; }
     sal_uInt16& GetLockCount() { return nLockCount; }
     SwLayCacheImpl *LockImpl()
-        { if( nLockCount & 0x8000 ) return NULL;
+        { if( nLockCount & 0x8000 ) return nullptr;
           if ( pImpl )
             ++nLockCount;
           return pImpl; }

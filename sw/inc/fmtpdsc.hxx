@@ -47,7 +47,7 @@ protected:
     virtual void SwClientNotify( const SwModify&, const SfxHint& rHint ) override;
 
 public:
-    SwFormatPageDesc( const SwPageDesc *pDesc = 0 );
+    SwFormatPageDesc( const SwPageDesc *pDesc = nullptr );
     SwFormatPageDesc( const SwFormatPageDesc &rCpy );
     SwFormatPageDesc &operator=( const SwFormatPageDesc &rCpy );
     virtual ~SwFormatPageDesc();
@@ -56,12 +56,12 @@ public:
 
     /// "Pure virtual methods" of SfxPoolItem.
     virtual bool            operator==( const SfxPoolItem& ) const override;
-    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const override;
+    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = nullptr ) const override;
     virtual bool GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     OUString &rText,
-                                    const IntlWrapper*    pIntl = 0 ) const override;
+                                    const IntlWrapper*    pIntl = nullptr ) const override;
     virtual bool QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
     virtual bool PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 

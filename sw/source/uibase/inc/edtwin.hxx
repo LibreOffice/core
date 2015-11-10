@@ -156,7 +156,7 @@ friend void     PageNumNotify(  SwViewShell* pVwSh,
     void            DropCleanup();
     void            CleanupDropUserMarker();
     SotExchangeDest GetDropDestination( const Point& rPixPnt,
-                                        SdrObject ** ppObj = 0 );
+                                        SdrObject ** ppObj = nullptr );
     //select the object/cursor at the mouse position of the context menu request
     bool            SelectMenuPosition(SwWrtShell& rSh, const Point& rMousePos );
 

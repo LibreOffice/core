@@ -39,7 +39,7 @@ void SwHTMLNumRuleInfo::Set( const SwTextNode& rTextNd )
     }
     else
     {
-        pNumRule = 0;
+        pNumRule = nullptr;
         nDeep = 0;
         bNumbered = bRestart = false;
     }

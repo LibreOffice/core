@@ -89,7 +89,7 @@ public:
         , m_rPropSet(*aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT))
         , m_eType(eType)
         , m_pDoc(pDoc)
-        , m_bIsValid(0 != pDoc)
+        , m_bIsValid(nullptr != pDoc)
     {
     }
 
@@ -150,7 +150,7 @@ void SwXText::SetDoc(SwDoc *const pDoc)
     OSL_ENSURE(!m_pImpl->m_pDoc || !pDoc,
         "SwXText::SetDoc: already have a doc?");
     m_pImpl->m_pDoc = pDoc;
-    m_pImpl->m_bIsValid = (0 != pDoc);
+    m_pImpl->m_bIsValid = (nullptr != pDoc);
 }
 
 void
@@ -307,7 +307,7 @@ throw (uno::RuntimeException, std::exception)
 
     const SwStartNode *const pOwnStartNode = GetStartNode();
     SwPaM aPam(GetDoc()->GetNodes());
-    const SwPaM * pPam(0);
+    const SwPaM * pPam(nullptr);
     if (pCursor)
     {
         pPam = pCursor->GetPaM();
@@ -344,7 +344,7 @@ throw (uno::RuntimeException, std::exception)
         catch (const lang::IllegalArgumentException& iae)
         {
             // stupid method not allowed to throw iae
-            throw uno::RuntimeException(iae.Message, 0);
+            throw uno::RuntimeException(iae.Message, nullptr);
         }
     }
     if (bAbsorb)
@@ -469,7 +469,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
         OTextCursorHelper *const pCursor =
             ::sw::UnoTunnelGetImplementation<OTextCursorHelper>(xRangeTunnel);
 
-        SwCursor aCrsr(*aPam.GetPoint(), 0, false);
+        SwCursor aCrsr(*aPam.GetPoint(), nullptr, false);
         SwUnoCursorHelper::SelectPam(aCrsr, true);
         aCrsr.Left(1, CRSR_SKIP_CHARS, false, false);
         // here, the PaM needs to be moved:
@@ -592,7 +592,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
     SwXTextField* pTextField =
         ::sw::UnoTunnelGetImplementation<SwXTextField>(xContentTunnel);
     if (pTextField && pTextField->GetServiceId() != SW_SERVICE_FIELDTYPE_ANNOTATION)
-        pTextField = 0;
+        pTextField = nullptr;
 
     const bool bAttribute = pBookmark || pDocumentIndexMark
         || pSection || pReferenceMark || pMeta || pTextField;
@@ -642,8 +642,8 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
             ::sw::UnoTunnelGetImplementation<SwXTextSection>(xSuccTunnel);
     SwXTextTable *const pXTable =
             ::sw::UnoTunnelGetImplementation<SwXTextTable>(xSuccTunnel);
-    SwFrameFormat *const pTableFormat = (pXTable) ? pXTable->GetFrameFormat() : 0;
-    SwTextNode * pTextNode = 0;
+    SwFrameFormat *const pTableFormat = (pXTable) ? pXTable->GetFrameFormat() : nullptr;
+    SwTextNode * pTextNode = nullptr;
     if(pTableFormat && pTableFormat->GetDoc() == GetDoc())
     {
         SwTable *const pTable = SwTable::FindTable( pTableFormat );
@@ -700,9 +700,9 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
             ::sw::UnoTunnelGetImplementation<SwXTextSection>(xPredTunnel);
     SwXTextTable *const pXTable =
             ::sw::UnoTunnelGetImplementation<SwXTextTable>(xPredTunnel);
-    SwFrameFormat *const pTableFormat = (pXTable) ? pXTable->GetFrameFormat() : 0;
+    SwFrameFormat *const pTableFormat = (pXTable) ? pXTable->GetFrameFormat() : nullptr;
     bool bRet = false;
-    SwTextNode * pTextNode = 0;
+    SwTextNode * pTextNode = nullptr;
     if(pTableFormat && pTableFormat->GetDoc() == GetDoc())
     {
         SwTable *const pTable = SwTable::FindTable( pTableFormat );
@@ -751,7 +751,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
             ::sw::UnoTunnelGetImplementation<SwXTextSection>(xSuccTunnel);
     SwXTextTable *const pXTable =
             ::sw::UnoTunnelGetImplementation<SwXTextTable>(xSuccTunnel);
-    SwFrameFormat *const pTableFormat = (pXTable) ? pXTable->GetFrameFormat() : 0;
+    SwFrameFormat *const pTableFormat = (pXTable) ? pXTable->GetFrameFormat() : nullptr;
     if(pTableFormat && pTableFormat->GetDoc() == GetDoc())
     {
         SwTable *const pTable = SwTable::FindTable( pTableFormat );
@@ -804,7 +804,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
             ::sw::UnoTunnelGetImplementation<SwXTextSection>(xPredTunnel);
     SwXTextTable *const pXTable =
             ::sw::UnoTunnelGetImplementation<SwXTextTable>(xPredTunnel);
-    SwFrameFormat *const pTableFormat = (pXTable) ? pXTable->GetFrameFormat() : 0;
+    SwFrameFormat *const pTableFormat = (pXTable) ? pXTable->GetFrameFormat() : nullptr;
     if(pTableFormat && pTableFormat->GetDoc() == GetDoc())
     {
         SwTable *const pTable = SwTable::FindTable( pTableFormat );
@@ -928,7 +928,7 @@ SwXText::setString(const OUString& rString) throw (uno::RuntimeException, std::e
         throw uno::RuntimeException();
     }
 
-    GetDoc()->GetIDocumentUndoRedo().StartUndo(UNDO_START, NULL);
+    GetDoc()->GetIDocumentUndoRedo().StartUndo(UNDO_START, nullptr);
     //insert an empty paragraph at the start and at the end to ensure that
     //all tables and sections can be removed by the selecting text::XTextCursor
     if (CURSOR_META != m_pImpl->m_eType)
@@ -966,14 +966,14 @@ SwXText::setString(const OUString& rString) throw (uno::RuntimeException, std::e
     const uno::Reference< text::XTextCursor > xRet = CreateCursor();
     if(!xRet.is())
     {
-        GetDoc()->GetIDocumentUndoRedo().EndUndo(UNDO_END, NULL);
+        GetDoc()->GetIDocumentUndoRedo().EndUndo(UNDO_END, nullptr);
         uno::RuntimeException aRuntime;
         aRuntime.Message = cInvalidObject;
         throw aRuntime;
     }
     xRet->gotoEnd(sal_True);
     xRet->setString(rString);
-    GetDoc()->GetIDocumentUndoRedo().EndUndo(UNDO_END, NULL);
+    GetDoc()->GetIDocumentUndoRedo().EndUndo(UNDO_END, nullptr);
 }
 
 //FIXME why is CheckForOwnMember duplicated in some insert methods?
@@ -1275,7 +1275,7 @@ SwXText::Impl::finishOrAppendParagraph(
     bool bIllegalException = false;
     bool bRuntimeException = false;
     OUString sMessage;
-    m_pDoc->GetIDocumentUndoRedo().StartUndo(UNDO_START , NULL);
+    m_pDoc->GetIDocumentUndoRedo().StartUndo(UNDO_START , nullptr);
     // find end node, go backward - don't skip tables because the new
     // paragraph has to be the last node
     //aPam.Move( fnMoveBackward, fnGoNode );
@@ -1324,7 +1324,7 @@ SwXText::Impl::finishOrAppendParagraph(
         bRuntimeException = true;
     }
 
-    m_pDoc->GetIDocumentUndoRedo().EndUndo(UNDO_END, NULL);
+    m_pDoc->GetIDocumentUndoRedo().EndUndo(UNDO_END, nullptr);
     if (bIllegalException || bRuntimeException)
     {
         m_pDoc->GetIDocumentUndoRedo().Undo();
@@ -1380,7 +1380,7 @@ SwXText::insertTextPortion(
     bool bIllegalException = false;
     bool bRuntimeException = false;
     OUString sMessage;
-    m_pImpl->m_pDoc->GetIDocumentUndoRedo().StartUndo(UNDO_INSERT, NULL);
+    m_pImpl->m_pDoc->GetIDocumentUndoRedo().StartUndo(UNDO_INSERT, nullptr);
 
     auto& rCursor(pTextCursor->GetCursor());
     m_pImpl->m_pDoc->DontExpandFormat( *rCursor.Start() );
@@ -1412,7 +1412,7 @@ SwXText::insertTextPortion(
         sMessage = rRuntime.Message;
         bRuntimeException = true;
     }
-    m_pImpl->m_pDoc->GetIDocumentUndoRedo().EndUndo(UNDO_INSERT, NULL);
+    m_pImpl->m_pDoc->GetIDocumentUndoRedo().EndUndo(UNDO_INSERT, nullptr);
     if (bIllegalException || bRuntimeException)
     {
         m_pImpl->m_pDoc->GetIDocumentUndoRedo().Undo();
@@ -1466,7 +1466,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
         throw  uno::RuntimeException();
     }
 
-    m_pImpl->m_pDoc->GetIDocumentUndoRedo().StartUndo(UNDO_INSERT, NULL);
+    m_pImpl->m_pDoc->GetIDocumentUndoRedo().StartUndo(UNDO_INSERT, nullptr);
 
     // now attach the text content here
     insertTextContent( xInsertPosition, xTextContent, false );
@@ -1490,13 +1490,13 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
         }
         catch (const uno::Exception& e)
         {
-            m_pImpl->m_pDoc->GetIDocumentUndoRedo().EndUndo(UNDO_INSERT, NULL);
+            m_pImpl->m_pDoc->GetIDocumentUndoRedo().EndUndo(UNDO_INSERT, nullptr);
             lang::WrappedTargetRuntimeException wrapped;
             wrapped.TargetException <<= e;
             throw wrapped;
         }
     }
-    m_pImpl->m_pDoc->GetIDocumentUndoRedo().EndUndo(UNDO_INSERT, NULL);
+    m_pImpl->m_pDoc->GetIDocumentUndoRedo().EndUndo(UNDO_INSERT, nullptr);
     return xInsertPosition;
 }
 
@@ -1557,7 +1557,7 @@ SwXText::convertToTextFrame(
         pEndRange->Invalidate();
     }
 
-    m_pImpl->m_pDoc->GetIDocumentUndoRedo().StartUndo( UNDO_START, NULL );
+    m_pImpl->m_pDoc->GetIDocumentUndoRedo().StartUndo( UNDO_START, nullptr );
     bool bIllegalException = false;
     bool bRuntimeException = false;
     OUString sMessage;
@@ -1581,7 +1581,7 @@ SwXText::convertToTextFrame(
         // todo: if the start/end is in a table then insert a paragraph
         // before/after, move the start/end nodes, then convert and
         // remove the additional paragraphs in the end
-        SwTableNode * pStartTableNode(0);
+        SwTableNode * pStartTableNode(nullptr);
         if (pStartStartNode->GetStartNodeType() == SwTableBoxStartNode)
         {
             pStartTableNode = pStartStartNode->FindTableNode();
@@ -1620,7 +1620,7 @@ SwXText::convertToTextFrame(
             // if not - remove the additional paragraphs and throw
             if (bParaBeforeInserted)
             {
-                SwCursor aDelete(*aStartPam.GetPoint(), 0, false);
+                SwCursor aDelete(*aStartPam.GetPoint(), nullptr, false);
                 *aStartPam.GetPoint() = // park it because node is deleted
                     SwPosition(GetDoc()->GetNodes().GetEndOfContent());
                 aDelete.MovePara(fnParaCurr, fnParaStart);
@@ -1630,7 +1630,7 @@ SwXText::convertToTextFrame(
             }
             if (bParaAfterInserted)
             {
-                SwCursor aDelete(*pEndPam->GetPoint(), 0, false);
+                SwCursor aDelete(*pEndPam->GetPoint(), nullptr, false);
                 *pEndPam->GetPoint() = // park it because node is deleted
                     SwPosition(GetDoc()->GetNodes().GetEndOfContent());
                 aDelete.MovePara(fnParaCurr, fnParaStart);
@@ -1656,7 +1656,7 @@ SwXText::convertToTextFrame(
     }
     aStartPam.SetMark();
     *aStartPam.End() = *pEndPam->End();
-    pEndPam.reset(0);
+    pEndPam.reset(nullptr);
 
     // see if there are frames already anchored to this node
     std::set<OUString> aAnchoredFrames;
@@ -1678,7 +1678,7 @@ SwXText::convertToTextFrame(
     }
 
     const uno::Reference<text::XTextFrame> xNewFrame(
-            SwXTextFrame::CreateXTextFrame(*m_pImpl->m_pDoc, 0));
+            SwXTextFrame::CreateXTextFrame(*m_pImpl->m_pDoc, nullptr));
     SwXTextFrame& rNewFrame = dynamic_cast<SwXTextFrame&>(*xNewFrame.get());
     rNewFrame.SetSelection( aStartPam );
     try
@@ -1771,7 +1771,7 @@ SwXText::convertToTextFrame(
         }
     }
 
-    m_pImpl->m_pDoc->GetIDocumentUndoRedo().EndUndo(UNDO_END, NULL);
+    m_pImpl->m_pDoc->GetIDocumentUndoRedo().EndUndo(UNDO_END, nullptr);
     if (bIllegalException || bRuntimeException)
     {
         m_pImpl->m_pDoc->GetIDocumentUndoRedo().Undo();
@@ -1847,14 +1847,14 @@ void SwXText::Impl::ConvertCell(
     SwNodeRange * pCorrectedRange =
         SwNodes::ExpandRangeForTableBox(aTmpRange);
 
-    if (pCorrectedRange != NULL)
+    if (pCorrectedRange != nullptr)
     {
         SwPaM aNewStartPaM(pCorrectedRange->aStart, 0);
         aStartCellPam = aNewStartPaM;
 
         sal_Int32 nEndLen = 0;
         SwTextNode * pTextNode = pCorrectedRange->aEnd.GetNode().GetTextNode();
-        if (pTextNode != NULL)
+        if (pTextNode != nullptr)
             nEndLen = pTextNode->Len();
 
         SwPaM aNewEndPaM(pCorrectedRange->aEnd, nEndLen);
@@ -2463,7 +2463,7 @@ SwXTextCursor * SwXBodyText::CreateTextCursor(const bool bIgnoreTables)
 {
     if(!IsValid())
     {
-        return 0;
+        return nullptr;
     }
 
     // the cursor has to skip tables contained in this text
@@ -2472,7 +2472,7 @@ SwXTextCursor * SwXBodyText::CreateTextCursor(const bool bIgnoreTables)
     if (!bIgnoreTables)
     {
         SwTableNode * pTableNode = aPam.GetNode().FindTableNode();
-        SwContentNode * pCont = 0;
+        SwContentNode * pCont = nullptr;
         while (pTableNode)
         {
             aPam.GetPoint()->nNode = *pTableNode->EndOfSectionNode();
@@ -2613,7 +2613,7 @@ public:
     SwFrameFormat & GetHeadFootFormatOrThrow() {
         SwFrameFormat *const pFormat( GetHeadFootFormat() );
         if (!pFormat) {
-            throw uno::RuntimeException("SwXHeadFootText: disposed or invalid", 0);
+            throw uno::RuntimeException("SwXHeadFootText: disposed or invalid", nullptr);
         }
         return *pFormat;
     }
@@ -2689,7 +2689,7 @@ SwXHeadFootText::getSupportedServiceNames() throw (uno::RuntimeException, std::e
 
 const SwStartNode *SwXHeadFootText::GetStartNode() const
 {
-    const SwStartNode *pSttNd = 0;
+    const SwStartNode *pSttNd = nullptr;
     SwFrameFormat *const pHeadFootFormat = m_pImpl->GetHeadFootFormat();
     if(pHeadFootFormat)
     {
@@ -2754,7 +2754,7 @@ SwXHeadFootText::createTextCursor() throw (uno::RuntimeException, std::exception
             (m_pImpl->m_bIsHeader) ? SwHeaderStartNode : SwFooterStartNode);
     // is there a table here?
     SwTableNode* pTableNode = rUnoCrsr.GetNode().FindTableNode();
-    SwContentNode* pCont = 0;
+    SwContentNode* pCont = nullptr;
     while (pTableNode)
     {
         rUnoCrsr.GetPoint()->nNode = *pTableNode->EndOfSectionNode();

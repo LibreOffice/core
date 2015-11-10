@@ -140,7 +140,7 @@ eF_ResT SwWW8ImplReader::Read_F_FormTextBox( WW8FieldDesc* pF, OUString& rStr )
     {
         WW8PLCFx_Book* pB = m_pPlcxMan->GetBook();
         OUString aBookmarkName;
-        if (pB!=NULL) {
+        if (pB!=nullptr) {
             WW8_CP currentCP=pF->nSCode;
             WW8_CP currentLen=pF->nLen;
 
@@ -155,7 +155,7 @@ eF_ResT SwWW8ImplReader::Read_F_FormTextBox( WW8FieldDesc* pF, OUString& rStr )
             }
         }
 
-        if (pB!=NULL && aBookmarkName.isEmpty()) {
+        if (pB!=nullptr && aBookmarkName.isEmpty()) {
             aBookmarkName=pB->GetUniqueBookmarkName(aFormula.msTitle);
         }
 
@@ -191,7 +191,7 @@ eF_ResT SwWW8ImplReader::Read_F_FormCheckBox( WW8FieldDesc* pF, OUString& rStr )
 
     OUString aBookmarkName;
     WW8PLCFx_Book* pB = m_pPlcxMan->GetBook();
-    if (pB!=NULL) {
+    if (pB!=nullptr) {
         WW8_CP currentCP=pF->nSCode;
         WW8_CP currentLen=pF->nLen;
 
@@ -206,7 +206,7 @@ eF_ResT SwWW8ImplReader::Read_F_FormCheckBox( WW8FieldDesc* pF, OUString& rStr )
         }
     }
 
-    if (pB!=NULL && aBookmarkName.isEmpty()) {
+    if (pB!=nullptr && aBookmarkName.isEmpty()) {
         aBookmarkName=pB->GetUniqueBookmarkName(aFormula.msTitle);
     }
 
@@ -215,8 +215,8 @@ eF_ResT SwWW8ImplReader::Read_F_FormCheckBox( WW8FieldDesc* pF, OUString& rStr )
         IDocumentMarkAccess* pMarksAccess = m_rDoc.getIDocumentMarkAccess( );
         IFieldmark* pFieldmark = dynamic_cast<IFieldmark*>( pMarksAccess->makeNoTextFieldBookmark(
                 *m_pPaM, aBookmarkName, ODF_FORMCHECKBOX ) );
-        OSL_ENSURE(pFieldmark!=NULL, "hmmm; why was the bookmark not created?");
-        if (pFieldmark!=NULL) {
+        OSL_ENSURE(pFieldmark!=nullptr, "hmmm; why was the bookmark not created?");
+        if (pFieldmark!=nullptr) {
             IFieldmark::parameter_map_t* const pParameters = pFieldmark->GetParameters();
             ICheckboxFieldmark* pCheckboxFm = dynamic_cast<ICheckboxFieldmark*>(pFieldmark);
             (*pParameters)[ODF_FORMCHECKBOX_NAME] = uno::makeAny(OUString(aFormula.msTitle));
@@ -263,7 +263,7 @@ eF_ResT SwWW8ImplReader::Read_F_FormListBox( WW8FieldDesc* pF, OUString& rStr)
         // TODO: review me
         OUString aBookmarkName;
         WW8PLCFx_Book* pB = m_pPlcxMan->GetBook();
-        if (pB!=NULL)
+        if (pB!=nullptr)
         {
             WW8_CP currentCP=pF->nSCode;
             WW8_CP currentLen=pF->nLen;
@@ -279,7 +279,7 @@ eF_ResT SwWW8ImplReader::Read_F_FormListBox( WW8FieldDesc* pF, OUString& rStr)
             }
         }
 
-        if (pB!=NULL && aBookmarkName.isEmpty())
+        if (pB!=nullptr && aBookmarkName.isEmpty())
             aBookmarkName=pB->GetUniqueBookmarkName(aFormula.msTitle);
 
         if (!aBookmarkName.isEmpty())
@@ -287,8 +287,8 @@ eF_ResT SwWW8ImplReader::Read_F_FormListBox( WW8FieldDesc* pF, OUString& rStr)
             IDocumentMarkAccess* pMarksAccess = m_rDoc.getIDocumentMarkAccess( );
             IFieldmark *pFieldmark = dynamic_cast<IFieldmark*>(
                     pMarksAccess->makeNoTextFieldBookmark( *m_pPaM, aBookmarkName, ODF_FORMDROPDOWN ) );
-            OSL_ENSURE(pFieldmark!=NULL, "hmmm; why was the bookmark not created?");
-            if ( pFieldmark != NULL )
+            OSL_ENSURE(pFieldmark!=nullptr, "hmmm; why was the bookmark not created?");
+            if ( pFieldmark != nullptr )
             {
                 uno::Sequence< OUString > vListEntries(aFormula.maListEntries.size());
                 ::std::copy(aFormula.maListEntries.begin(), aFormula.maListEntries.end(), vListEntries.begin());
@@ -313,7 +313,7 @@ eF_ResT SwWW8ImplReader::Read_F_HTMLControl(WW8FieldDesc*, OUString&)
 
 void SwWW8ImplReader::DeleteFormImpl()
 {
-    delete m_pFormImpl, m_pFormImpl = 0;
+    delete m_pFormImpl, m_pFormImpl = nullptr;
 }
 
 // Hilfs-Deklarationen
@@ -476,7 +476,7 @@ WW8LSTInfo* WW8ListManager::GetLSTByListId( sal_uInt32 nIdLst ) const
     std::vector<WW8LSTInfo *>::const_iterator aResult =
         std::find_if(maLSTInfos.begin(),maLSTInfos.end(),ListWithId(nIdLst));
     if (aResult == maLSTInfos.end())
-        return 0;
+        return nullptr;
     return *aResult;
 }
 
@@ -581,8 +581,8 @@ bool WW8ListManager::ReadLVL(SwNumFormat& rNumFormat, SfxItemSet*& rpItemSet,
         // "sprmPDxaLeft"  pap.dxaLeft;dxa;word;
         sal_uInt8* pSprm;
         if (
-            (0 != (pSprm = GrpprlHasSprm(0x840F,aGrpprlPapx[0],aLVL.nLenGrpprlPapx))) ||
-            (0 != (pSprm = GrpprlHasSprm(0x845E,aGrpprlPapx[0],aLVL.nLenGrpprlPapx)))
+            (nullptr != (pSprm = GrpprlHasSprm(0x840F,aGrpprlPapx[0],aLVL.nLenGrpprlPapx))) ||
+            (nullptr != (pSprm = GrpprlHasSprm(0x845E,aGrpprlPapx[0],aLVL.nLenGrpprlPapx)))
             )
         {
             sal_uInt8 *pBegin = pSprm-2;
@@ -595,8 +595,8 @@ bool WW8ListManager::ReadLVL(SwNumFormat& rNumFormat, SfxItemSet*& rpItemSet,
 
         // "sprmPDxaLeft1" pap.dxaLeft1;dxa;word;
         if (
-            (0 != (pSprm = GrpprlHasSprm(0x8411,aGrpprlPapx[0],aLVL.nLenGrpprlPapx)) ) ||
-            (0 != (pSprm = GrpprlHasSprm(0x8460,aGrpprlPapx[0],aLVL.nLenGrpprlPapx)) )
+            (nullptr != (pSprm = GrpprlHasSprm(0x8411,aGrpprlPapx[0],aLVL.nLenGrpprlPapx)) ) ||
+            (nullptr != (pSprm = GrpprlHasSprm(0x8460,aGrpprlPapx[0],aLVL.nLenGrpprlPapx)) )
             )
         {
             sal_uInt8 *pBegin = pSprm-2;
@@ -606,7 +606,7 @@ bool WW8ListManager::ReadLVL(SwNumFormat& rNumFormat, SfxItemSet*& rpItemSet,
         }
 
         // #i86652# - read tab setting
-        if(0 != (pSprm = GrpprlHasSprm(0xC615,aGrpprlPapx[0],aLVL.nLenGrpprlPapx)) )
+        if(nullptr != (pSprm = GrpprlHasSprm(0xC615,aGrpprlPapx[0],aLVL.nLenGrpprlPapx)) )
         {
             bool bDone = false;
             if (*(pSprm-1) == 5)
@@ -720,7 +720,7 @@ bool WW8ListManager::ReadLVL(SwNumFormat& rNumFormat, SfxItemSet*& rpItemSet,
         }
 
         // Reader-ItemSet-Pointer und Reader-Style zuruecksetzen
-        rReader.SetAktItemSet( 0 );
+        rReader.SetAktItemSet( nullptr );
         rReader.SetNAktColl( nOldColl );
         rReader.SetToggleAttrFlags(nOldFlags1);
         rReader.SetToggleBiDiAttrFlags(nOldFlags2);
@@ -1118,7 +1118,7 @@ SwNumRule* WW8ListManager::CreateNextRule(bool bSimple)
     const OUString sPrefix("WW8Num" + OUString::number(nUniqueList++));
     // #i86652#
     sal_uInt16 nRul =
-            rDoc.MakeNumRule( rDoc.GetUniqueNumRuleName(&sPrefix), 0, false,
+            rDoc.MakeNumRule( rDoc.GetUniqueNumRuleName(&sPrefix), nullptr, false,
                               SvxNumberFormat::LABEL_ALIGNMENT );
     SwNumRule* pMyNumRule = rDoc.GetNumRuleTable()[nRul];
     pMyNumRule->SetAutoRule(false);
@@ -1131,7 +1131,7 @@ SwNumRule* WW8ListManager::GetNumRule(size_t i)
     if (i < maLSTInfos.size())
         return maLSTInfos[i]->pNumRule;
     else
-        return 0;
+        return nullptr;
 }
 
 // oeffentliche Methoden
@@ -1555,7 +1555,7 @@ SwNumRule* WW8ListManager::GetNumRuleForActivation(sal_uInt16 nLFOPosition,
     const sal_uInt8 nLevel, std::vector<sal_uInt8> &rParaSprms, SwTextNode *pNode)
 {
     if (m_LFOInfos.size() <= nLFOPosition)
-        return 0;
+        return nullptr;
 
     WW8LFOInfo& rLFOInfo = *m_LFOInfos[nLFOPosition];
 
@@ -1563,7 +1563,7 @@ SwNumRule* WW8ListManager::GetNumRuleForActivation(sal_uInt16 nLFOPosition,
     rLFOInfo.bUsedInDoc = true;
 
     if( !rLFOInfo.pNumRule )
-        return 0;
+        return nullptr;
 
     // #i25545#
     // #i100132# - a number format does not have to exist on given list level
@@ -1793,7 +1793,7 @@ void SwWW8ImplReader::RegisterNumFormatOnStyle(sal_uInt16 nStyle)
             ItemGet<SvxLRSpaceItem>(*rStyleInf.pFormat, RES_LR_SPACE);
 
         // Phase 2: aktualisieren der StyleDef nach einlesen aller Listen
-        SwNumRule* pNmRule = 0;
+        SwNumRule* pNmRule = nullptr;
         const sal_uInt16 nLFO = rStyleInf.nLFOIndex;
         const sal_uInt8  nLevel = rStyleInf.nListLevel;
         if (
@@ -1805,7 +1805,7 @@ void SwWW8ImplReader::RegisterNumFormatOnStyle(sal_uInt16 nStyle)
             pNmRule = m_pLstManager->GetNumRuleForActivation(nLFO, nLevel,
                 aParaSprms);
 
-            if (pNmRule != NULL)
+            if (pNmRule != nullptr)
             {
                 if (rStyleInf.IsWW8BuiltInHeadingStyle()
                     && rStyleInf.HasWW8OutlineLevel())
@@ -1845,9 +1845,9 @@ void SwWW8ImplReader::RegisterNumFormatOnTextNode(sal_uInt16 nActLFO,
         std::vector<sal_uInt8> aParaSprms;
         const SwNumRule* pRule = bSetAttr ?
             m_pLstManager->GetNumRuleForActivation( nActLFO, nActLevel,
-                aParaSprms, pTextNd) : 0;
+                aParaSprms, pTextNd) : nullptr;
 
-        if (pRule != NULL || !bSetAttr)
+        if (pRule != nullptr || !bSetAttr)
         {
             if (bSetAttr && pTextNd->GetNumRule() != pRule
                 && pTextNd->GetNumRule() != m_rDoc.GetOutlineNumRule())
@@ -2300,7 +2300,7 @@ awt::Size SwWW8ImplReader::MiserableDropDownFormHack(const OUString &rString,
         { RES_CHRATR_UNDERLINE,       "FontUnderline" },
         { RES_CHRATR_CROSSEDOUT,      "FontStrikeout" },
         { RES_CHRATR_POSTURE,         "FontSlant" },
-        { 0,                          0 }
+        { 0,                          nullptr }
     };
 
     vcl::Font aFont;

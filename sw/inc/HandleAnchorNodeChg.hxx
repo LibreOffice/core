@@ -49,7 +49,7 @@ public:
     */
     SwHandleAnchorNodeChg( SwFlyFrameFormat& _rFlyFrameFormat,
                            const SwFormatAnchor& _rNewAnchorFormat,
-                           SwFlyFrm* _pKeepThisFlyFrm = 0L );
+                           SwFlyFrm* _pKeepThisFlyFrm = nullptr );
 
     /** calls <SwFlyFrameFormat::MakeFrms>, if re-creation of fly frames is necessary.
 

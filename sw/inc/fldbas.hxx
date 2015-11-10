@@ -267,7 +267,7 @@ public:
 
 inline void SwFieldType::UpdateFields() const
 {
-    const_cast<SwFieldType*>(this)->ModifyNotification( 0, 0 );
+    const_cast<SwFieldType*>(this)->ModifyNotification( nullptr, nullptr );
 }
 
 /** Base class of all fields.

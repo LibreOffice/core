@@ -36,7 +36,7 @@ namespace sw {
 
 DocumentChartDataProviderManager::DocumentChartDataProviderManager( SwDoc& i_rSwdoc ) : m_rDoc( i_rSwdoc ),
                                                                                         maChartDataProviderImplRef(),
-                                                                                        mpChartControllerHelper( 0 )
+                                                                                        mpChartControllerHelper( nullptr )
 {
 
 }
@@ -62,12 +62,12 @@ void DocumentChartDataProviderManager::CreateChartInternalDataProviders( const S
         SwOLENode *pONd;
         SwStartNode *pStNd;
         SwNodeIndex aIdx( *m_rDoc.GetNodes().GetEndOfAutotext().StartOfSectionNode(), 1 );
-        while (0 != (pStNd = aIdx.GetNode().GetStartNode()))
+        while (nullptr != (pStNd = aIdx.GetNode().GetStartNode()))
         {
             ++aIdx;
-            if( 0 != ( pONd = aIdx.GetNode().GetOLENode() ) &&
+            if( nullptr != ( pONd = aIdx.GetNode().GetOLENode() ) &&
                 aName == pONd->GetChartTableName() /* OLE node is chart? */ &&
-                0 != (pONd->getLayoutFrm( m_rDoc.getIDocumentLayoutAccess().GetCurrentLayout() )) /* chart frame is not hidden */ )
+                nullptr != (pONd->getLayoutFrm( m_rDoc.getIDocumentLayoutAccess().GetCurrentLayout() )) /* chart frame is not hidden */ )
             {
                 uno::Reference < embed::XEmbeddedObject > xIP = pONd->GetOLEObj().GetOleRef();
                 if ( svt::EmbeddedObjectRef::TryRunningState( xIP ) )

@@ -87,8 +87,8 @@ SwIndexMarkPane::SwIndexMarkPane(Dialog &rDialog, bool bNewDlg,
     , bPhoneticED2_ChangedByUser(false)
     , nLangForPhoneticReading(LANGUAGE_CHINESE_SIMPLIFIED)
     , bIsPhoneticReadingEnabled(false)
-    , xExtendedIndexEntrySupplier(NULL)
-    , pTOXMgr(0)
+    , xExtendedIndexEntrySupplier(nullptr)
+    , pTOXMgr(nullptr)
     , pSh(&rWrtShell)
 {
     rDialog.get(m_pFrame, "frame");
@@ -266,7 +266,7 @@ void SwIndexMarkPane::InitControls()
 
             //to include all equal entries may only be allowed in the body and even there
             //only when a simple selection exists
-            const FrmTypeFlags nFrmType = pSh->GetFrmType(0,true);
+            const FrmTypeFlags nFrmType = pSh->GetFrmType(nullptr,true);
             m_pApplyToAllCB->Show();
             m_pSearchCaseSensitiveCB->Show();
             m_pSearchCaseWordOnlyCB->Show();
@@ -354,7 +354,7 @@ void    SwIndexMarkPane::Activate()
 
             //to include all equal entries may only be allowed in the body and even there
             //only when a simple selection exists
-            const FrmTypeFlags nFrmType = pSh->GetFrmType(0,true);
+            const FrmTypeFlags nFrmType = pSh->GetFrmType(nullptr,true);
             m_pApplyToAllCB->Show();
             m_pSearchCaseSensitiveCB->Show();
             m_pSearchCaseWordOnlyCB->Show();
@@ -371,7 +371,7 @@ void SwIndexMarkPane::Apply()
 {
     InsertUpdate();
     if(bSelected)
-        pSh->ResetSelect(0, false);
+        pSh->ResetSelect(nullptr, false);
 }
 
 // apply changes
@@ -488,7 +488,7 @@ void SwIndexMarkPane::InsertMark()
 void SwIndexMarkPane::UpdateMark()
 {
     OUString  aAltText(m_pEntryED->GetText());
-    OUString* pAltText = aOrgStr != m_pEntryED->GetText() ? &aAltText : 0;
+    OUString* pAltText = aOrgStr != m_pEntryED->GetText() ? &aAltText : nullptr;
     //empty alternative texts are not allowed
     if(pAltText && pAltText->isEmpty())
         return;
@@ -977,7 +977,7 @@ void SwIndexMarkModalDlg::Apply()
 
 void SwIndexMarkModalDlg::dispose()
 {
-    SwViewShell::SetCareWin(0);
+    SwViewShell::SetCareWin(nullptr);
     SvxStandardDialog::dispose();
 }
 
@@ -1063,7 +1063,7 @@ SwAuthorMarkPane::SwAuthorMarkPane(Dialog &rDialog, bool bNewDlg)
     : m_rDialog(rDialog)
     , bNewEntry(bNewDlg)
     , bBibAccessInitialized(false)
-    , pSh(0)
+    , pSh(nullptr)
 {
     m_rDialog.get(m_pFromComponentRB, "frombibliography");
     m_rDialog.get(m_pFromDocContentRB, "fromdocument");
@@ -1165,7 +1165,7 @@ IMPL_LINK_TYPED( SwAuthorMarkPane, CompEntryHdl, ListBox&, rBox, void)
         {
             const SwAuthorityFieldType* pFType = static_cast<const SwAuthorityFieldType*>(
                                         pSh->GetFieldType(RES_AUTHORITY, OUString()));
-            const SwAuthEntry*  pEntry = pFType ? pFType->GetEntryByIdentifier(sEntry) : 0;
+            const SwAuthEntry*  pEntry = pFType ? pFType->GetEntryByIdentifier(sEntry) : nullptr;
             for(int i = 0; i < AUTH_FIELD_END; i++)
                 m_sFields[i] = pEntry ?
                             pEntry->GetAuthorField((ToxAuthorityField)i) : OUString();
@@ -1193,7 +1193,7 @@ IMPL_LINK_NOARG_TYPED(SwAuthorMarkPane, InsertHdl, Button*, void)
                                         pSh->GetFieldType(RES_AUTHORITY, OUString()));
         const SwAuthEntry*  pEntry = pFType ?
                 pFType->GetEntryByIdentifier( m_sFields[AUTH_FIELD_IDENTIFIER])
-                : 0;
+                : nullptr;
         if(pEntry)
         {
             for(int i = 0; i < AUTH_FIELD_END && !bDifferent; i++)
@@ -1230,7 +1230,7 @@ IMPL_LINK_NOARG_TYPED(SwAuthorMarkPane, InsertHdl, Button*, void)
         }
     }
     if(!bNewEntry)
-        CloseHdl(0);
+        CloseHdl(nullptr);
 }
 
 IMPL_LINK_TYPED(SwAuthorMarkPane, CreateEntryHdl, Button*, pButton, void)
@@ -1417,8 +1417,8 @@ SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(vcl::Window* pParent,
 
     ,
 
-    pTypeListBox(0),
-    pIdentifierBox(0),
+    pTypeListBox(nullptr),
+    pIdentifierBox(nullptr),
     rWrtSh(rSh),
     m_bNewEntryMode(bNewEntry),
     m_bNameAllowed(true)
@@ -1440,7 +1440,7 @@ SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(vcl::Window* pParent,
         pFixedTexts[nIndex]->set_grid_top_attach(bLeft ? nLeftRow : nRightRow);
         pFixedTexts[nIndex]->SetText(SW_RES(STR_AUTH_FIELD_START + aCurInfo.nToxField));
         pFixedTexts[nIndex]->Show();
-        pEdits[nIndex] = 0;
+        pEdits[nIndex] = nullptr;
         if( AUTH_FIELD_AUTHORITY_TYPE == aCurInfo.nToxField )
         {
             pTypeListBox = VclPtr<ListBox>::Create(bLeft ? pLeft : pRight, WB_DROPDOWN|WB_BORDER|WB_VCENTER);
@@ -1634,7 +1634,7 @@ SwAuthMarkModalDlg::SwAuthMarkModalDlg(vcl::Window *pParent, SwWrtShell& rSh)
 
 void SwAuthMarkModalDlg::Apply()
 {
-    m_aContent.InsertHdl(0);
+    m_aContent.InsertHdl(nullptr);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

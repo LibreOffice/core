@@ -43,14 +43,14 @@ SwList* DocumentListsManager::createList( const OUString& rListId,
     if ( getListByName( sListId ) )
     {
         OSL_FAIL( "<DocumentListsManager::createList(..)> - provided list id already used. Serious defect." );
-        return 0;
+        return nullptr;
     }
 
     SwNumRule* pDefaultNumRuleForNewList = m_rDoc.FindNumRulePtr( sDefaultListStyleName );
     if ( !pDefaultNumRuleForNewList )
     {
         OSL_FAIL( "<DocumentListsManager::createList(..)> - for provided default list style name no list style is found. Serious defect." );
-        return 0;
+        return nullptr;
     }
 
     SwList* pNewList = new SwList( sListId, *pDefaultNumRuleForNewList, m_rDoc.GetNodes() );
@@ -71,7 +71,7 @@ void DocumentListsManager::deleteList( const OUString& sListId )
 
 SwList* DocumentListsManager::getListByName( const OUString& sListId ) const
 {
-    SwList* pList = 0;
+    SwList* pList = nullptr;
 
     std::unordered_map< OUString, SwList*, OUStringHash >::const_iterator
                                             aListIter = maLists.find( sListId );
@@ -88,20 +88,20 @@ SwList* DocumentListsManager::createListForListStyle( const OUString& sListStyle
     if ( sListStyleName.isEmpty() )
     {
         OSL_FAIL( "<DocumentListsManager::createListForListStyle(..)> - no list style name provided. Serious defect." );
-        return 0;
+        return nullptr;
     }
 
     if ( getListForListStyle( sListStyleName ) )
     {
         OSL_FAIL( "<DocumentListsManager::createListForListStyle(..)> - a list for the provided list style name already exists. Serious defect." );
-        return 0;
+        return nullptr;
     }
 
     SwNumRule* pNumRule = m_rDoc.FindNumRulePtr( sListStyleName );
     if ( !pNumRule )
     {
         OSL_FAIL( "<DocumentListsManager::createListForListStyle(..)> - for provided list style name no list style is found. Serious defect." );
-        return 0;
+        return nullptr;
     }
 
     OUString sListId( pNumRule->GetDefaultListId() ); // can be empty String
@@ -118,7 +118,7 @@ SwList* DocumentListsManager::createListForListStyle( const OUString& sListStyle
 
 SwList* DocumentListsManager::getListForListStyle( const OUString& sListStyleName ) const
 {
-    SwList* pList = 0;
+    SwList* pList = nullptr;
 
     std::unordered_map< OUString, SwList*, OUStringHash >::const_iterator
                             aListIter = maListStyleLists.find( sListStyleName );
@@ -177,7 +177,7 @@ void DocumentListsManager::trackChangeOfListStyleName( const OUString& sListStyl
     OSL_ENSURE( pList,
             "<DocumentListsManager::changeOfListStyleName(..)> - misusage of method: no list found for given list style name" );
 
-    if ( pList != 0 )
+    if ( pList != nullptr )
     {
         maListStyleLists.erase( sListStyleName );
         maListStyleLists[sNewListStyleName] = pList;
@@ -218,7 +218,7 @@ const OUString DocumentListsManager::MakeListIdUnique( const OUString& aSuggeste
 
 const OUString DocumentListsManager::CreateUniqueListId()
 {
-    static bool bHack = (getenv("LIBO_ONEWAY_STABLE_ODF_EXPORT") != NULL);
+    static bool bHack = (getenv("LIBO_ONEWAY_STABLE_ODF_EXPORT") != nullptr);
     if (bHack)
     {
         static sal_Int64 nIdCounter = SAL_CONST_INT64(7000000000);

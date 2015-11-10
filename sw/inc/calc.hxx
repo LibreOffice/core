@@ -137,11 +137,11 @@ struct SwCalcExp : public SwHash
     const SwFieldType* pFieldType;
 
     SwCalcExp( const OUString& rStr, const SwSbxValue& rVal,
-                const SwFieldType* pFieldType = 0 );
+                const SwFieldType* pFieldType = nullptr );
 };
 
 SwHash* Find( const OUString& rSrch, SwHash* const * ppTable,
-                sal_uInt16 nTableSize, sal_uInt16* pPos = 0 );
+                sal_uInt16 nTableSize, sal_uInt16* pPos = nullptr );
 
 void DeleteHashTable( SwHash** ppTable, sal_uInt16 nTableSize );
 
@@ -203,12 +203,12 @@ public:
 
     static bool Str2Double( const OUString& rStr, sal_Int32& rPos,
                                 double& rVal,
-                                LocaleDataWrapper const*const pData = 0 );
+                                LocaleDataWrapper const*const pData = nullptr );
     static bool Str2Double( const OUString& rStr, sal_Int32& rPos,
                                 double& rVal, SwDoc *const pDoc );
 
     SW_DLLPUBLIC static bool IsValidVarName( const OUString& rStr,
-                                    OUString* pValidName = 0 );
+                                    OUString* pValidName = nullptr );
 };
 
 #endif

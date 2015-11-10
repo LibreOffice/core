@@ -192,7 +192,7 @@ SwGlossaryDlg::SwGlossaryDlg(SfxViewFrame* pViewFrame,
     : SvxStandardDialog(&pViewFrame->GetWindow(), "AutoTextDialog",
         "modules/swriter/ui/autotext.ui")
     , sReadonlyPath(SW_RESSTR(STR_READONLY_PATH))
-    , pExampleFrame(0)
+    , pExampleFrame(nullptr)
     , pGlossaryHdl(pGlosHdl)
     , bResume(false)
     , bSelection(pWrtShell->IsSelection())
@@ -367,7 +367,7 @@ SvTreeListEntry* SwGlossaryDlg::DoesBlockExist(const OUString& rBlock,
             }
         }
     }
-    return 0;
+    return nullptr;
 }
 
 IMPL_LINK_TYPED( SwGlossaryDlg, NameModify, Edit&, rEdit, void )
@@ -423,7 +423,7 @@ IMPL_LINK_TYPED( SwGlossaryDlg, EnableHdl, Menu *, pMn, bool )
 
     const OUString aEditText(m_pNameED->GetText());
     const bool bHasEntry = !aEditText.isEmpty() && !m_pShortNameEdit->GetText().isEmpty();
-    const bool bExists = 0 != DoesBlockExist(aEditText, m_pShortNameEdit->GetText());
+    const bool bExists = nullptr != DoesBlockExist(aEditText, m_pShortNameEdit->GetText());
     const bool bIsGroup = pEntry && !m_pCategoryBox->GetParent(pEntry);
     pMn->EnableItem("new", bSelection && bHasEntry && !bExists);
     pMn->EnableItem("newtext", bSelection && bHasEntry && !bExists);
@@ -693,7 +693,7 @@ void SwGlossaryDlg::Init()
     m_pCategoryBox->Clear();
     // display text block regions
     const size_t nCnt = pGlossaryHdl->GetGroupCnt();
-    SvTreeListEntry* pSelEntry = 0;
+    SvTreeListEntry* pSelEntry = nullptr;
     const OUString sSelStr(::GetCurrGlosGroup().getToken(0, GLOS_DELIM));
     const sal_Int32 nSelPath = ::GetCurrGlosGroup().getToken(1, GLOS_DELIM).toInt32();
     // #i66304# - "My AutoText" comes from mytexts.bau, but should be translated
@@ -836,7 +836,7 @@ IMPL_LINK_TYPED( SwGlossaryDlg, CheckBoxHdl, Button *, pBox, void )
 SwGlTreeListBox::SwGlTreeListBox(vcl::Window* pParent, WinBits nBits)
     : SvTreeListBox(pParent, nBits)
     , sReadonly(SW_RESSTR(SW_STR_READONLY)),
-    pDragEntry(0)
+    pDragEntry(nullptr)
 {
     SetDragDropMode( DragDropMode::CTRL_MOVE|DragDropMode::CTRL_COPY );
 }
@@ -970,7 +970,7 @@ TriState SwGlTreeListBox::NotifyCopyingOrMoving(
     SvTreeListEntry*  pEntry,
     bool              bIsMove)
 {
-    pDragEntry = 0;
+    pDragEntry = nullptr;
     // 1. move in different groups?
     // 2. allowed to write to both groups?
     if(!pTarget) // move to the beginning

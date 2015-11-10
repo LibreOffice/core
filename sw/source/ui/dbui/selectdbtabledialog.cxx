@@ -162,7 +162,7 @@ IMPL_LINK_TYPED(SwSelectDBTableDialog, PreviewHdl, Button*, pButton, void)
     if(pEntry)
     {
         OUString sTableOrQuery = SvTabListBox::GetEntryText(pEntry, 0);
-        sal_Int32 nCommandType = 0 == pEntry->GetUserData() ? 0 : 1;
+        sal_Int32 nCommandType = nullptr == pEntry->GetUserData() ? 0 : 1;
 
         OUString sDataSourceName;
         Reference<XChild> xChild(m_xConnection, UNO_QUERY);
@@ -204,7 +204,7 @@ void   SwSelectDBTableDialog::SetSelectedTable(const OUString& rTable, bool bIsT
     while(pEntry)
     {
         if((SvTabListBox::GetEntryText(pEntry, 0) == rTable) &&
-           ((pEntry->GetUserData() == 0 ) == bIsTable))
+           ((pEntry->GetUserData() == nullptr ) == bIsTable))
         {
             m_pTable->Select(pEntry);
             break;

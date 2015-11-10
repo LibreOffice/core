@@ -118,7 +118,7 @@ bool WW8Export::TestOleNeedsGraphic(const SwAttrSet& rSet,
                 bGraphicNeeded = true;
         }
     } while( !bGraphicNeeded && !aIter.IsAtEnd() &&
-        0 != ( pItem = aIter.NextItem() ) );
+        nullptr != ( pItem = aIter.NextItem() ) );
 
     /*
     Now we must see if the object contains a preview itself which is equal to
@@ -141,14 +141,14 @@ bool WW8Export::TestOleNeedsGraphic(const SwAttrSet& rSet,
         if ( pOLENd )
             nAspect = pOLENd->GetAspect();
         SdrOle2Obj *pRet = SvxMSDffManager::CreateSdrOLEFromStorage(
-            rStorageName,xObjStg,m_pDoc->GetDocStorage(),aGraph,aRect,aVisArea,0,nErr,0,nAspect);
+            rStorageName,xObjStg,m_pDoc->GetDocStorage(),aGraph,aRect,aVisArea,nullptr,nErr,0,nAspect);
 
         if (pRet)
         {
             uno::Reference< embed::XEmbeddedObject > xObj = pOLENd->GetOLEObj().GetOleRef();
             if ( xObj.is() )
             {
-                SvStream* pGraphicStream = NULL;
+                SvStream* pGraphicStream = nullptr;
                 comphelper::EmbeddedObjectContainer aCnt( m_pDoc->GetDocStorage() );
                 try
                 {
@@ -263,7 +263,7 @@ void WW8Export::OutputOLENode( const SwOLENode& rOLENode )
                 // in the escher export
                 OUString sServer = FieldString(ww::eEMBED) + xOleStg->GetUserName() + " ";
 
-                OutputField(0, ww::eEMBED, sServer, WRITEFIELD_START |
+                OutputField(nullptr, ww::eEMBED, sServer, WRITEFIELD_START |
                     WRITEFIELD_CMD_START | WRITEFIELD_CMD_END);
 
                 m_pChpPlc->AppendFkpEntry( Strm().Tell(),
@@ -309,7 +309,7 @@ void WW8Export::OutputOLENode( const SwOLENode& rOLENode )
                     OutGrf(*m_pParentFrame);
                 }
 
-                OutputField(0, ww::eEMBED, OUString(),
+                OutputField(nullptr, ww::eEMBED, OUString(),
                     WRITEFIELD_END | WRITEFIELD_CLOSE);
 
                 if (bEndCR) //No newline in inline case
@@ -379,7 +379,7 @@ void WW8Export::OutGrf(const sw::Frame &rFrame)
     // #i29408#
     // linked, as-character anchored graphics have to be exported as fields.
     const SwGrfNode* pGrfNd = rFrame.IsInline() && rFrame.GetContent()
-                              ? rFrame.GetContent()->GetGrfNode() : 0;
+                              ? rFrame.GetContent()->GetGrfNode() : nullptr;
     if ( pGrfNd && pGrfNd->IsLinkedFile() )
     {
         OUString sStr( FieldString(ww::eINCLUDEPICTURE) );
@@ -388,13 +388,13 @@ void WW8Export::OutGrf(const sw::Frame &rFrame)
             if ( pGrfNd )
             {
                 OUString aFileURL;
-                pGrfNd->GetFileFilterNms( &aFileURL, 0 );
+                pGrfNd->GetFileFilterNms( &aFileURL, nullptr );
                 sStr += aFileURL;
             }
         }
         sStr += "\" \\d";
 
-        OutputField( 0, ww::eINCLUDEPICTURE, sStr,
+        OutputField( nullptr, ww::eINCLUDEPICTURE, sStr,
                    WRITEFIELD_START | WRITEFIELD_CMD_START | WRITEFIELD_CMD_END );
     }
 
@@ -473,7 +473,7 @@ void WW8Export::OutGrf(const sw::Frame &rFrame)
     // linked, as-character anchored graphics have to be exported as fields.
     else if ( pGrfNd && pGrfNd->IsLinkedFile() )
     {
-        OutputField( 0, ww::eINCLUDEPICTURE, OUString(), WRITEFIELD_CLOSE );
+        OutputField( nullptr, ww::eINCLUDEPICTURE, OUString(), WRITEFIELD_CLOSE );
     }
     //Added for i120568,the hyperlink info within a graphic whose anchor type is
     //"As character" will be exported to ensure the fidelity
@@ -659,7 +659,7 @@ void SwWW8WrGrf::WriteGrfFromGrfNode(SvStream& rStrm, const SwGrfNode &rGrfNd,
     if (rGrfNd.IsLinkedFile())     // Linked File
     {
         OUString aFileN;
-        rGrfNd.GetFileFilterNms( &aFileN, 0 );
+        rGrfNd.GetFileFilterNms( &aFileN, nullptr );
 
             sal_uInt16 mm = 94;                    // 94 = BMP, GIF
 
@@ -786,7 +786,7 @@ void SwWW8WrGrf::WriteGraphicNode(SvStream& rStrm, const GraphicDetails &rItem)
         case sw::Frame::eGraphic:
         {
             const SwNode *pNode = rItem.maFly.GetContent();
-            const SwGrfNode *pNd = pNode ? pNode->GetGrfNode() : 0;
+            const SwGrfNode *pNd = pNode ? pNode->GetGrfNode() : nullptr;
             OSL_ENSURE(pNd, "Impossible");
             if (pNd)
                 WriteGrfFromGrfNode(rStrm, *pNd, rItem.maFly, nWidth, nHeight);
@@ -806,7 +806,7 @@ void SwWW8WrGrf::WriteGraphicNode(SvStream& rStrm, const GraphicDetails &rItem)
         case sw::Frame::eOle:
         {
             const SwNode *pNode = rItem.maFly.GetContent();
-            const SwOLENode *pNd = pNode ? pNode->GetOLENode() : 0;
+            const SwOLENode *pNd = pNode ? pNode->GetOLENode() : nullptr;
             OSL_ENSURE(pNd, "Impossible");
             if (pNd)
             {

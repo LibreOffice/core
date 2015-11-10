@@ -148,10 +148,10 @@ IMPL_LINK_TYPED( DocumentTimerManager, DoIdleJobs, Idle*, pIdle, void )
             const bool bOldLockView = pShell->IsViewLocked();
             pShell->LockView( true );
 
-            m_rDoc.getIDocumentFieldsAccess().GetSysFieldType( RES_CHAPTERFLD )->ModifyNotification( 0, 0 );    // ChapterField
-            m_rDoc.getIDocumentFieldsAccess().UpdateExpFields( 0, false );      // Updates ExpressionFields
-            m_rDoc.getIDocumentFieldsAccess().UpdateTableFields(NULL);                // Tables
-            m_rDoc.getIDocumentFieldsAccess().UpdateRefFields(NULL);                // References
+            m_rDoc.getIDocumentFieldsAccess().GetSysFieldType( RES_CHAPTERFLD )->ModifyNotification( nullptr, nullptr );    // ChapterField
+            m_rDoc.getIDocumentFieldsAccess().UpdateExpFields( nullptr, false );      // Updates ExpressionFields
+            m_rDoc.getIDocumentFieldsAccess().UpdateTableFields(nullptr);                // Tables
+            m_rDoc.getIDocumentFieldsAccess().UpdateRefFields(nullptr);                // References
 
             pTmpRoot->EndAllAction();
 

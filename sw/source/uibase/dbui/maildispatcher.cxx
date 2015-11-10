@@ -269,7 +269,7 @@ void MailDispatcher::onTerminated()
 {
     //keep the reference until the end of onTerminated() because of the call order in the
     //_threadFunc() from osl/thread.hxx
-    m_xSelfReference = 0;
+    m_xSelfReference = nullptr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

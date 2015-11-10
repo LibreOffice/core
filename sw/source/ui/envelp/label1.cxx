@@ -94,7 +94,7 @@ SwLabDlg::SwLabDlg(vcl::Window* pParent, const SfxItemSet& rSet,
     : SfxTabDialog(pParent, "LabelDialog",
         "modules/swriter/ui/labeldialog.ui", &rSet)
     , pDBManager(pDBManager_)
-    , pPrtPage(0)
+    , pPrtPage(nullptr)
     , aTypeIds(50, 10)
     , m_pRecs(new SwLabRecs)
     , m_bLabel(bLabel)
@@ -107,9 +107,9 @@ SwLabDlg::SwLabDlg(vcl::Window* pParent, const SfxItemSet& rSet,
 {
     WaitObject aWait( pParent );
 
-    m_nFormatId = AddTabPage("format", SwLabFormatPage::Create, 0);
-    m_nOptionsId = AddTabPage("options", SwLabPrtPage::Create, 0);
-    m_nCardsId = AddTabPage("cards", SwVisitingCardPage::Create, 0);
+    m_nFormatId = AddTabPage("format", SwLabFormatPage::Create, nullptr);
+    m_nOptionsId = AddTabPage("options", SwLabPrtPage::Create, nullptr);
+    m_nCardsId = AddTabPage("cards", SwVisitingCardPage::Create, nullptr);
     m_sBusinessCardDlg = GetPageText(m_nCardsId);
 
     if (m_bLabel)
@@ -118,15 +118,15 @@ SwLabDlg::SwLabDlg(vcl::Window* pParent, const SfxItemSet& rSet,
         RemoveTabPage("private");
         RemoveTabPage("cards");
         RemoveTabPage("medium");
-        m_nLabelId = AddTabPage("labels", SwLabPage::Create, 0);
+        m_nLabelId = AddTabPage("labels", SwLabPage::Create, nullptr);
     }
     else
     {
         RemoveTabPage("labels");
         RemoveTabPage("cards");
-        m_nLabelId = AddTabPage("medium", SwLabPage::Create, 0);
-        m_nBusinessId = AddTabPage("business", SwBusinessDataPage::Create, 0 );
-        m_nPrivateId = AddTabPage("private", SwPrivateDataPage::Create, 0);
+        m_nLabelId = AddTabPage("medium", SwLabPage::Create, nullptr);
+        m_nBusinessId = AddTabPage("business", SwBusinessDataPage::Create, nullptr );
+        m_nPrivateId = AddTabPage("private", SwPrivateDataPage::Create, nullptr);
         SetText(m_sBusinessCardDlg);
     }
     // Read user label from writer.cfg
@@ -201,7 +201,7 @@ void SwLabDlg::GetLabItem(SwLabItem &rItem)
 
 SwLabRec* SwLabDlg::GetRecord(const OUString &rRecName, bool bCont)
 {
-    SwLabRec* pRec = NULL;
+    SwLabRec* pRec = nullptr;
     bool bFound = false;
     const OUString sCustom(SW_RES(STR_CUSTOM));
 
@@ -227,13 +227,13 @@ Printer *SwLabDlg::GetPrt()
     if (pPrtPage)
         return pPrtPage->GetPrt();
     else
-        return NULL;
+        return nullptr;
 }
 
 SwLabPage::SwLabPage(vcl::Window* pParent, const SfxItemSet& rSet)
     : SfxTabPage(pParent, "CardMediumPage",
         "modules/swriter/ui/cardmediumpage.ui", &rSet)
-    , pDBManager(NULL)
+    , pDBManager(nullptr)
     , aItem(static_cast<const SwLabItem&>(rSet.Get(FN_LABEL)))
     , m_bLabel(false)
 {
@@ -352,7 +352,7 @@ IMPL_LINK_NOARG_TYPED(SwLabPage, FieldHdl, Button*, void)
 {
     OUString aStr("<" + m_pDatabaseLB->GetSelectEntry() + "." +
                   m_pTableLB->GetSelectEntry() + "." +
-                  (m_pTableLB->GetSelectEntryData() == 0 ? OUString("0") : OUString("1")) + "." +
+                  (m_pTableLB->GetSelectEntryData() == nullptr ? OUString("0") : OUString("1")) + "." +
                   m_pDBFieldLB->GetSelectEntry() + ">");
     m_pWritingEdit->ReplaceSelected(aStr);
     Selection aSel = m_pWritingEdit->GetSelection();
@@ -584,7 +584,7 @@ void SwVisitingCardPage::SetUserData( sal_uInt32 nCnt,
 SwVisitingCardPage::SwVisitingCardPage(vcl::Window* pParent, const SfxItemSet& rSet)
     : SfxTabPage(pParent, "CardFormatPage",
         "modules/swriter/ui/cardformatpage.ui", &rSet)
-    , pExampleFrame(0)
+    , pExampleFrame(nullptr)
 {
     get(m_pAutoTextLB, "treeview");
     m_pAutoTextLB->set_height_request(m_pAutoTextLB->GetTextHeight() * 16);
@@ -613,7 +613,7 @@ void SwVisitingCardPage::dispose()
 {
     for(sal_Int32 i = 0; i < m_pAutoTextGroupLB->GetEntryCount(); ++i)
         delete static_cast<OUString*>(m_pAutoTextGroupLB->GetEntryData( i ));
-    m_xAutoText = 0;
+    m_xAutoText = nullptr;
 
     ClearUserData();
     delete pExampleFrame;

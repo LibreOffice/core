@@ -89,8 +89,8 @@ void SAL_CALL SwXTextDefaults::setPropertyValue( const OUString& rPropertyName, 
             SwStyleNameMapper::FillUIName(uStyle, sStyle, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT, true );
             SwDocStyleSheet* pStyle =
                 static_cast<SwDocStyleSheet*>(m_pDoc->GetDocShell()->GetStyleSheetPool()->Find(sStyle, SFX_STYLE_FAMILY_CHAR));
-            SwFormatDrop* pDrop = 0;
-            SwFormatCharFormat *pCharFormat = 0;
+            SwFormatDrop* pDrop = nullptr;
+            SwFormatCharFormat *pCharFormat = nullptr;
             if(pStyle)
             {
                 rtl::Reference< SwDocStyleSheet > xStyle( new SwDocStyleSheet( *pStyle ) );

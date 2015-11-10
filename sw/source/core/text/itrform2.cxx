@@ -84,7 +84,7 @@ namespace {
 inline void ClearFly( SwTextFormatInfo &rInf )
 {
     delete rInf.GetFly();
-    rInf.SetFly(0);
+    rInf.SetFly(nullptr);
 }
 
 void SwTextFormatter::CtorInitTextFormatter( SwTextFrm *pNewFrm, SwTextFormatInfo *pNewInf )
@@ -92,7 +92,7 @@ void SwTextFormatter::CtorInitTextFormatter( SwTextFrm *pNewFrm, SwTextFormatInf
     CtorInitTextPainter( pNewFrm, pNewInf );
     pInf = pNewInf;
     pDropFormat = GetInfo().GetDropFormat();
-    pMulti = NULL;
+    pMulti = nullptr;
 
     bOnceMore = false;
     bFlyInCntBase = false;
@@ -103,7 +103,7 @@ void SwTextFormatter::CtorInitTextFormatter( SwTextFrm *pNewFrm, SwTextFormatInf
     nLeftScanIdx = COMPLETE_STRING;
     nRightScanIdx = 0;
     m_nHintEndIndex = 0;
-    m_pFirstOfBorderMerge = 0;
+    m_pFirstOfBorderMerge = nullptr;
 
     if( nStart > GetInfo().GetText().getLength() )
     {
@@ -120,7 +120,7 @@ SwTextFormatter::~SwTextFormatter()
     if( GetInfo().GetRest() )
     {
         delete GetInfo().GetRest();
-        GetInfo().SetRest(0);
+        GetInfo().SetRest(nullptr);
     }
 }
 
@@ -158,7 +158,7 @@ SwLinePortion *SwTextFormatter::Underflow( SwTextFormatInfo &rInf )
     // Save values and initialize rInf
     SwLinePortion *pUnderflow = rInf.GetUnderflow();
     if( !pUnderflow )
-        return 0;
+        return nullptr;
 
     // We format backwards, i.e. attribute changes can happen the next
     // line again.
@@ -170,13 +170,13 @@ SwLinePortion *SwTextFormatter::Underflow( SwTextFormatInfo &rInf )
     // Save flys and set to 0, or else segmentation fault
     // Not ClearFly(rInf) !
     SwFlyPortion *pFly = rInf.GetFly();
-    rInf.SetFly( 0 );
+    rInf.SetFly( nullptr );
 
     FeedInf( rInf );
     rInf.SetLast( pCurr );
     // pUnderflow does not need to be deleted, because it will drown in the following
     // Truncate()
-    rInf.SetUnderflow(0);
+    rInf.SetUnderflow(nullptr);
     rInf.SetSoftHyphPos( nSoftHyphPos );
     rInf.SetUnderScorePos( nUnderScorePos );
     rInf.SetPaintOfst( GetLeftMargin() );
@@ -248,7 +248,7 @@ SwLinePortion *SwTextFormatter::Underflow( SwTextFormatInfo &rInf )
     if( !pPor || !(rInf.X() + pPor->Width()) )
     {
         delete pFly;
-        return 0;
+        return nullptr;
     }
 
     // Preparing for Format()
@@ -269,7 +269,7 @@ SwLinePortion *SwTextFormatter::Underflow( SwTextFormatInfo &rInf )
         rInf.SetFly( pFly );
         CalcFlyWidth( rInf );
     }
-    rInf.GetLast()->SetPortion(0);
+    rInf.GetLast()->SetPortion(nullptr);
 
     // The SwLineLayout is an exception to this, which splits at the first
     // portion change.
@@ -282,7 +282,7 @@ SwLinePortion *SwTextFormatter::Underflow( SwTextFormatInfo &rInf )
             *static_cast<SwLinePortion*>(pCurr) = *pPor;
             pCurr->SetPortion( pPor->GetPortion() );
             pCurr->SetWhichPor( nOldWhich );
-            pPor->SetPortion( 0 );
+            pPor->SetPortion( nullptr );
             delete pPor;
             pPor = pCurr;
         }
@@ -296,7 +296,7 @@ SwLinePortion *SwTextFormatter::Underflow( SwTextFormatInfo &rInf )
         --m_nHintEndIndex;
     }
     delete pRest;
-    rInf.SetRest(0);
+    rInf.SetRest(nullptr);
     return pPor;
 }
 
@@ -390,7 +390,7 @@ void SwTextFormatter::BuildPortions( SwTextFormatInfo &rInf )
     // used for grid mode only:
     // the pointer is stored, because after formatting of non-asian text,
     // the width of the kerning portion has to be adjusted
-    SwKernPortion* pGridKernPortion = 0;
+    SwKernPortion* pGridKernPortion = nullptr;
 
     bool bFull = false;
     SwTwips nUnderLineStart = 0;
@@ -476,7 +476,7 @@ void SwTextFormatter::BuildPortions( SwTextFormatInfo &rInf )
                     SwKernPortion* pKrn =
                         new SwKernPortion( *rInf.GetLast(), nLstHeight,
                                            pLast->InFieldGrp() && pPor->InFieldGrp() );
-                    rInf.GetLast()->SetPortion( NULL );
+                    rInf.GetLast()->SetPortion( nullptr );
                     InsertPortion( rInf, pKrn );
                 }
             }
@@ -631,7 +631,7 @@ void SwTextFormatter::BuildPortions( SwTextFormatInfo &rInf )
             const sal_uInt8 nCurrScript = pFnt->GetActual(); // pScriptInfo->ScriptType( rInf.GetIdx() );
             const sal_uInt8 nNextScript = nTmp >= rInf.GetText().getLength() ?
                                      SW_CJK :
-                                     SwScriptInfo::WhichFont( nTmp, 0, pScriptInfo );
+                                     SwScriptInfo::WhichFont( nTmp, nullptr, pScriptInfo );
 
             // snap non-asian text to grid if next portion is ASIAN or
             // there are no more portions in this line
@@ -668,13 +668,13 @@ void SwTextFormatter::BuildPortions( SwTextFormatInfo &rInf )
                     new SwKernPortion( *pPor, (short)(nKernWidth - nKernWidth_1),
                                        false, true );
 
-                pGridKernPortion = 0;
+                pGridKernPortion = nullptr;
             }
             else if ( pPor->IsMultiPortion() || pPor->InFixMargGrp() ||
                       pPor->IsFlyCntPortion() || pPor->InNumberGrp() ||
                       pPor->InFieldGrp() || nCurrScript != nNextScript )
                 // next portion should snap to grid
-                pGridKernPortion = 0;
+                pGridKernPortion = nullptr;
         }
 
         rInf.SetFull( bFull );
@@ -850,7 +850,7 @@ namespace sw { namespace mark {
 
 SwTextPortion *SwTextFormatter::WhichTextPor( SwTextFormatInfo &rInf ) const
 {
-    SwTextPortion *pPor = 0;
+    SwTextPortion *pPor = nullptr;
     if( GetFnt()->IsTox() )
     {
         pPor = new SwToxPortion;
@@ -883,8 +883,8 @@ SwTextPortion *SwTextFormatter::WhichTextPor( SwTextFormatInfo &rInf ) const
                 SwIndex aIndex(pNd, rInf.GetIdx());
                 SwPosition aPosition(*pNd, aIndex);
                 sw::mark::IFieldmark *pBM = doc->getIDocumentMarkAccess()->getFieldmarkFor(aPosition);
-                OSL_ENSURE(pBM != NULL, "Where is my form field bookmark???");
-                if (pBM != NULL)
+                OSL_ENSURE(pBM != nullptr, "Where is my form field bookmark???");
+                if (pBM != nullptr)
                 {
                     if (pBM->GetFieldname( ) == ODF_FORMCHECKBOX)
                     {
@@ -998,13 +998,13 @@ SwTextPortion *SwTextFormatter::NewTextPortion( SwTextFormatInfo &rInf )
 
 SwLinePortion *SwTextFormatter::WhichFirstPortion(SwTextFormatInfo &rInf)
 {
-    SwLinePortion *pPor = 0;
+    SwLinePortion *pPor = nullptr;
 
     if( rInf.GetRest() )
     {
         // Tabs and fields
         if( '\0' != rInf.GetHookChar() )
-            return 0;
+            return nullptr;
 
         pPor = rInf.GetRest();
         if( pPor->IsErgoSumPortion() )
@@ -1016,7 +1016,7 @@ SwLinePortion *SwTextFormatter::WhichFirstPortion(SwTextFormatInfo &rInf)
                 if( pPor->InNumberGrp() )
                     rInf.SetNumDone(true);
 
-        rInf.SetRest(0);
+        rInf.SetRest(nullptr);
         pCurr->SetRest( true );
         return pPor;
     }
@@ -1061,7 +1061,7 @@ SwLinePortion *SwTextFormatter::WhichFirstPortion(SwTextFormatInfo &rInf)
             if( pPor )
             {
                 pCurr->SetRest( true );
-                rInf.SetRest(0);
+                rInf.SetRest(nullptr);
             }
         }
     }
@@ -1175,7 +1175,7 @@ SwLinePortion *SwTextFormatter::NewPortion( SwTextFormatInfo &rInf )
         // LineBreaks and Flys (bug05.sdw)
         // IsDummy()
         if( rInf.IsNewLine() && (!rInf.GetFly() || !pCurr->IsDummy()) )
-            return 0;
+            return nullptr;
 
         // Wenn der Text an den Fly gestossen ist, oder wenn
         // der Fly als erstes drankommt, weil er ueber dem linken
@@ -1187,7 +1187,7 @@ SwLinePortion *SwTextFormatter::NewPortion( SwTextFormatInfo &rInf )
             if( rInf.GetLast()->IsBreakPortion() )
             {
                 delete rInf.GetFly();
-                rInf.SetFly( 0 );
+                rInf.SetFly( nullptr );
             }
 
             return rInf.GetFly();
@@ -1218,7 +1218,7 @@ SwLinePortion *SwTextFormatter::NewPortion( SwTextFormatInfo &rInf )
             }
         }
 
-        return 0;
+        return nullptr;
     }
 
     SwLinePortion *pPor = WhichFirstPortion( rInf );
@@ -1244,7 +1244,7 @@ SwLinePortion *SwTextFormatter::NewPortion( SwTextFormatInfo &rInf )
             SwMultiCreator* pCreate = rInf.GetMultiCreator( nEnd, pMulti );
             if( pCreate )
             {
-                SwMultiPortion* pTmp = NULL;
+                SwMultiPortion* pTmp = nullptr;
 
                 if ( SW_MC_BIDI == pCreate->nId )
                     pTmp = new SwBidiPortion( nEnd, pCreate->nLevel );
@@ -1252,7 +1252,7 @@ SwLinePortion *SwTextFormatter::NewPortion( SwTextFormatInfo &rInf )
                 {
                     Seek( rInf.GetIdx() );
                     bool bRubyTop = false;
-                    bool* pRubyPos = 0;
+                    bool* pRubyPos = nullptr;
 
                     if ( rInf.SnapToGrid() )
                     {
@@ -1363,15 +1363,15 @@ SwLinePortion *SwTextFormatter::NewPortion( SwTextFormatInfo &rInf )
                     if( rInf.IsFull() )
                     {
                         rInf.SetNewLine(true);
-                        return 0;
+                        return nullptr;
                     }
                     pPor = rInf.GetRest();
-                    rInf.SetRest(0);
+                    rInf.SetRest(nullptr);
                 }
                 else
                 {
                     if( rInf.IsFull() )
-                        return 0;
+                        return nullptr;
                     pPor = NewTextPortion( rInf );
                 }
                 break;
@@ -1387,7 +1387,7 @@ SwLinePortion *SwTextFormatter::NewPortion( SwTextFormatInfo &rInf )
         if( !pPor || rInf.IsStop() )
         {
             delete pPor;
-            return 0;
+            return nullptr;
         }
     }
 
@@ -1599,7 +1599,7 @@ sal_Int32 SwTextFormatter::FormatLine(const sal_Int32 nStartPos)
                 if ( GetInfo().GetRest() )
                 {
                     delete GetInfo().GetRest();
-                    GetInfo().SetRest( 0 );
+                    GetInfo().SetRest( nullptr );
                 }
 
                 // set original rest portion
@@ -1966,7 +1966,7 @@ bool SwTextFormatter::AllowRepaintOpt() const
             else
             {
                 // ????: Blank in der letzten Masterzeile (blocksat.sdw)
-                bOptimizeRepaint = 0 == pCurr->GetNext() && !pFrm->GetFollow();
+                bOptimizeRepaint = nullptr == pCurr->GetNext() && !pFrm->GetFollow();
                 if ( bOptimizeRepaint )
                 {
                     SwLinePortion *pPos = pCurr->GetFirstPortion();
@@ -2124,7 +2124,7 @@ void SwTextFormatter::UpdatePos( SwLineLayout *pCurrent, Point aStart,
                 aSt.Y() += pLay->Height();
                 pLay = pLay->GetNext();
             } while ( pLay );
-            const_cast<SwTextFormatter*>(this)->pMulti = NULL;
+            const_cast<SwTextFormatter*>(this)->pMulti = nullptr;
         }
         pPos->Move( aTmpInf );
         pPos = pPos->GetPortion();
@@ -2475,7 +2475,7 @@ void SwTextFormatter::CalcFlyWidth( SwTextFormatInfo &rInf )
 SwFlyCntPortion *SwTextFormatter::NewFlyCntPortion( SwTextFormatInfo &rInf,
                                                    SwTextAttr *pHint ) const
 {
-    SwFlyCntPortion *pRet = 0;
+    SwFlyCntPortion *pRet = nullptr;
     const SwFrm *pFrame = static_cast<SwFrm*>(pFrm);
 
     SwFlyInCntFrm *pFly;
@@ -2483,7 +2483,7 @@ SwFlyCntPortion *SwTextFormatter::NewFlyCntPortion( SwTextFormatInfo &rInf,
     if( RES_FLYFRMFMT == pFrameFormat->Which() )
         pFly = static_cast<SwTextFlyCnt*>(pHint)->GetFlyFrm(pFrame);
     else
-        pFly = NULL;
+        pFly = nullptr;
     // aBase is the document-global position, from which the new extra portion is placed
     // aBase.X() = Offset in the line after the current position
     // aBase.Y() = LineIter.Y() + Ascent of the current position
@@ -2672,7 +2672,7 @@ void SwTextFormatter::MergeCharacterBorder( SwLinePortion& rPortion, SwTextForma
                         bReachCurrent = true;
                     }
                 }
-                m_pFirstOfBorderMerge = 0;
+                m_pFirstOfBorderMerge = nullptr;
             }
         }
         Seek(rInf.GetIdx());

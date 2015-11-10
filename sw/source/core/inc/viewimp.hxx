@@ -155,7 +155,7 @@ public:
     void DelRegion();
 
     /// New Interface for StarView Drawing
-    bool  HasDrawView()             const { return 0 != m_pDrawView; }
+    bool  HasDrawView()             const { return nullptr != m_pDrawView; }
           SwDrawView* GetDrawView()       { return m_pDrawView; }
     const SwDrawView* GetDrawView() const { return m_pDrawView; }
           SdrPageView*GetPageView()       { return m_pSdrPageView; }
@@ -173,9 +173,9 @@ public:
     void   PaintLayer( const SdrLayerID _nLayerID,
                        SwPrintData const*const pPrintData,
                        const SwRect& _rRect,
-                       const Color* _pPageBackgrdColor = 0,
+                       const Color* _pPageBackgrdColor = nullptr,
                        const bool _bIsPageRightToLeft = false,
-                       sdr::contact::ViewObjectContactRedirector* pRedirector = 0 );
+                       sdr::contact::ViewObjectContactRedirector* pRedirector = nullptr );
 
     /**
      * Is passed to the DrawEngine as a Link and decides what is painted
@@ -187,8 +187,8 @@ public:
     void NotifySizeChg( const Size &rNewSz );
 
     /// SS for the Lay-/IdleAction and relatives
-    bool  IsAction() const                   { return m_pLayAction  != 0; }
-    bool  IsIdleAction() const               { return m_pIdleAct != 0; }
+    bool  IsAction() const                   { return m_pLayAction  != nullptr; }
+    bool  IsIdleAction() const               { return m_pIdleAct != nullptr; }
           SwLayAction &GetLayAction()        { return *m_pLayAction; }
     const SwLayAction &GetLayAction() const  { return *m_pLayAction; }
 
@@ -219,7 +219,7 @@ public:
     }
 
     /// Is this view accessible?
-    bool IsAccessible() const { return m_pAccessibleMap != 0; }
+    bool IsAccessible() const { return m_pAccessibleMap != nullptr; }
 
     inline SwAccessibleMap& GetAccessibleMap();
 
@@ -251,7 +251,7 @@ public:
 
     /// Invalidate editable state for all accessible frames
     void InvalidateAccessibleEditableState( bool bAllShells = true,
-                                               const SwFrm *pFrm=0 );
+                                               const SwFrm *pFrm=nullptr );
 
     /// Invalidate frame's relation set (for chained frames)
     void InvalidateAccessibleRelationSet( const SwFlyFrm *pMaster,
@@ -281,30 +281,30 @@ inline SwAccessibleMap& SwViewShellImp::GetAccessibleMap()
 inline void SwViewShellImp::DisposeAccessibleFrm( const SwFrm *pFrm,
                                bool bRecursive )
 {
-    DisposeAccessible( pFrm, 0, bRecursive );
+    DisposeAccessible( pFrm, nullptr, bRecursive );
 }
 
 inline void SwViewShellImp::DisposeAccessibleObj( const SdrObject *pObj )
 {
-    DisposeAccessible( 0, pObj, false );
+    DisposeAccessible( nullptr, pObj, false );
 }
 
 inline void SwViewShellImp::MoveAccessibleFrm( const SwFrm *pFrm,
                                           const SwRect& rOldFrm )
 {
-    MoveAccessible( pFrm, 0, rOldFrm );
+    MoveAccessible( pFrm, nullptr, rOldFrm );
 }
 
 inline void SwViewShellImp::AddAccessibleFrm( const SwFrm *pFrm )
 {
     SwRect aEmptyRect;
-    MoveAccessible( pFrm, 0, aEmptyRect );
+    MoveAccessible( pFrm, nullptr, aEmptyRect );
 }
 
 inline void SwViewShellImp::AddAccessibleObj( const SdrObject *pObj )
 {
     SwRect aEmptyRect;
-    MoveAccessible( 0, pObj, aEmptyRect );
+    MoveAccessible( nullptr, pObj, aEmptyRect );
 }
 #endif // INCLUDED_SW_SOURCE_CORE_INC_VIEWIMP_HXX
 

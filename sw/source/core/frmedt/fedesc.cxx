@@ -53,7 +53,7 @@ void SwFEShell::ChgCurPageDesc( const SwPageDesc& rDesc )
     StartAllAction();
 
     SwPageFrm *pPage = GetCurrFrm()->FindPageFrm();
-    const SwFrm *pFlow = 0;
+    const SwFrm *pFlow = nullptr;
     ::boost::optional<sal_uInt16> oPageNumOffset;
 
     OSL_ENSURE( !GetCrsr()->HasMark(), "ChgCurPageDesc only without selection!");
@@ -131,7 +131,7 @@ SwPageDesc* SwFEShell::FindPageDescByName( const OUString& rName,
     {
         sal_uInt16 nPoolId = SwStyleNameMapper::GetPoolIdFromUIName( rName, nsSwGetPoolIdFromName::GET_POOLID_PAGEDESC );
         if( USHRT_MAX != nPoolId &&
-            0 != (pDesc = GetDoc()->getIDocumentStylePoolAccess().GetPageDescFromPool( nPoolId ))
+            nullptr != (pDesc = GetDoc()->getIDocumentStylePoolAccess().GetPageDescFromPool( nPoolId ))
             && pPos )
                 // appended always
             *pPos = GetDoc()->GetPageDescCnt() - 1 ;
@@ -186,21 +186,21 @@ const SwPageDesc* SwFEShell::GetSelectedPageDescs() const
     for(SwPaM& rPaM : GetCrsr()->GetRingContainer())
     {
 
-        if( 0 != (pCNd = rPaM.GetContentNode() ) &&
-            0 != ( pPtFrm = pCNd->getLayoutFrm( GetLayout(), &aNulPt, 0, false )) )
+        if( nullptr != (pCNd = rPaM.GetContentNode() ) &&
+            nullptr != ( pPtFrm = pCNd->getLayoutFrm( GetLayout(), &aNulPt, nullptr, false )) )
             pPtFrm = pPtFrm->FindPageFrm();
         else
-            pPtFrm = 0;
+            pPtFrm = nullptr;
 
         if( rPaM.HasMark() &&
-            0 != (pCNd = rPaM.GetContentNode( false ) ) &&
-            0 != ( pMkFrm = pCNd->getLayoutFrm( GetLayout(), &aNulPt, 0, false )) )
+            nullptr != (pCNd = rPaM.GetContentNode( false ) ) &&
+            nullptr != ( pMkFrm = pCNd->getLayoutFrm( GetLayout(), &aNulPt, nullptr, false )) )
             pMkFrm = pMkFrm->FindPageFrm();
         else
             pMkFrm = pPtFrm;
 
         if( !pMkFrm || !pPtFrm )
-            pFnd = 0;
+            pFnd = nullptr;
         else if( pMkFrm == pPtFrm )
             pFnd = static_cast<const SwPageFrm*>(pMkFrm)->GetPageDesc();
         else
@@ -218,7 +218,7 @@ const SwPageDesc* SwFEShell::GetSelectedPageDescs() const
             {
                 pMkFrm = pMkFrm->GetNext();
                 if( !pMkFrm || pFnd != static_cast<const SwPageFrm*>(pMkFrm)->GetPageDesc() )
-                    pFnd = 0;
+                    pFnd = nullptr;
             }
         }
 
@@ -226,7 +226,7 @@ const SwPageDesc* SwFEShell::GetSelectedPageDescs() const
             pRetDesc = pFnd;
         else if( pFnd != pRetDesc )
         {
-            pRetDesc = 0;
+            pRetDesc = nullptr;
             break;
         }
 

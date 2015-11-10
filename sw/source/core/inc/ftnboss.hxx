@@ -86,7 +86,7 @@ public:
     static void ChangeFootnoteRef( const SwContentFrm *pOld, const SwTextFootnote *,
                        SwContentFrm *pNew );
     void RearrangeFootnotes( const SwTwips nDeadLine, const bool bLock = false,
-                        const SwTextFootnote *pAttr = 0 );
+                        const SwTextFootnote *pAttr = nullptr );
 
     // Set DeadLine (in document coordinates) so that the text formatter can
     // temporarily limit footnote height.
@@ -106,7 +106,7 @@ public:
                               SwFootnoteFrm*           _pFootnote,
                               SwFootnoteFrms&          _rFootnoteArr,
                               const bool      _bCollectOnlyPreviousFootnotes = false,
-                              const SwFootnoteBossFrm* _pRefFootnoteBossFrm = NULL);
+                              const SwFootnoteBossFrm* _pRefFootnoteBossFrm = nullptr);
     // The parameter <_bCollectOnlyPreviousFootnotes> controls if only footnotes
     // that are positioned before the footnote boss-frame <this> have to be
     // collected.

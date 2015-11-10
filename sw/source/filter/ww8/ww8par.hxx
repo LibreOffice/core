@@ -152,7 +152,7 @@ public:
     //the rParaSprms returns back the original word paragraph indent
     //sprms which were attached to the original numbering format
     SwNumRule* GetNumRuleForActivation(sal_uInt16 nLFOPosition, const sal_uInt8 nLevel,
-        std::vector<sal_uInt8> &rParaSprms, SwTextNode *pNode=0);
+        std::vector<sal_uInt8> &rParaSprms, SwTextNode *pNode=nullptr);
     SwNumRule* CreateNextRule(bool bSimple);
     ~WW8ListManager();
     SwNumRule* GetNumRule(size_t i);
@@ -204,7 +204,7 @@ struct WW8FlyPara
                                 // the contained graphics *not* as a character
     bool mbVertSet;             // true if vertical positioning has been set
 
-    WW8FlyPara(bool bIsVer67, const WW8FlyPara* pSrc = 0);
+    WW8FlyPara(bool bIsVer67, const WW8FlyPara* pSrc = nullptr);
     bool operator==(const WW8FlyPara& rSrc) const;
     void Read(sal_uInt8 nSprm29, WW8PLCFx_Cp_FKP* pPap);
     void ReadFull(sal_uInt8 nSprm29, SwWW8ImplReader* pIo);
@@ -261,9 +261,9 @@ public:
         eLTRFontSrcCharSet(0),
         eRTLFontSrcCharSet(0),
         eCJKFontSrcCharSet(0),
-        pFormat( 0 ),
-        pWWFly( 0 ),
-        pOutlineNumrule( 0 ),
+        pFormat( nullptr ),
+        pWWFly( nullptr ),
+        pOutlineNumrule( nullptr ),
         nFilePos( 0 ),
         nBase( 0 ),
         nFollow( 0 ),
@@ -309,7 +309,7 @@ public:
 
     bool HasWW8OutlineLevel() const
     {
-        return (pFormat != NULL && (MAXLEVEL > mnWW8OutlineLevel));
+        return (pFormat != nullptr && (MAXLEVEL > mnWW8OutlineLevel));
     }
 
     bool IsOutlineNumbered() const
@@ -744,7 +744,7 @@ public:
         css::uno::Reference<  css::drawing::XShape > *pShape, bool bFloatingCtrl) override;
     bool ExportControl(WW8Export &rWrt, const SdrUnoObj& rFormObj);
     bool ReadOCXStream( tools::SvRef<SotStorage>& rSrc1,
-        css::uno::Reference< css::drawing::XShape > *pShapeRef=0,
+        css::uno::Reference< css::drawing::XShape > *pShapeRef=nullptr,
         bool bFloatingCtrl=false );
 private:
     sal_uInt32 GenerateObjectID() { return ++mnObjectId; }
@@ -978,7 +978,7 @@ struct ApoTestResults
     WW8FlyPara* mpStyleApo;
     ApoTestResults()
         : mbStartApo(false), mbStopApo(false), m_bHasSprm37(false)
-        , m_bHasSprm29(false), m_nSprm29(0), mpStyleApo(0) {}
+        , m_bHasSprm29(false), m_nSprm29(0), mpStyleApo(nullptr) {}
     bool HasStartStop() const { return (mbStartApo || mbStopApo); }
     bool HasFrame() const { return (m_bHasSprm29 || m_bHasSprm37 || mpStyleApo); }
 };
@@ -989,7 +989,7 @@ struct ANLDRuleMap
     SwNumRule* mpNumberingNumRule;  // WinWord 6 numbering, variant 2
     SwNumRule* GetNumRule(sal_uInt8 nNumType);
     void SetNumRule(SwNumRule*, sal_uInt8 nNumType);
-    ANLDRuleMap() : mpOutlineNumRule(0), mpNumberingNumRule(0) {}
+    ANLDRuleMap() : mpOutlineNumRule(nullptr), mpNumberingNumRule(nullptr) {}
 };
 
 struct SprmReadInfo;
@@ -1396,15 +1396,15 @@ private:
                            SwPageDesc* pNewPageDesc, sal_uInt8 nCode );
 
     void DeleteStk(SwFltControlStack* prStck);
-    void DeleteCtrlStk()    { DeleteStk( m_pCtrlStck  ); m_pCtrlStck   = 0; }
+    void DeleteCtrlStk()    { DeleteStk( m_pCtrlStck  ); m_pCtrlStck   = nullptr; }
     void DeleteRefStks()
     {
         DeleteStk( m_pReffedStck );
-        m_pReffedStck = 0;
+        m_pReffedStck = nullptr;
         DeleteStk( m_pReffingStck );
-        m_pReffingStck = 0;
+        m_pReffingStck = nullptr;
     }
-    void DeleteAnchorStk()  { DeleteStk( m_pAnchorStck ); m_pAnchorStck = 0; }
+    void DeleteAnchorStk()  { DeleteStk( m_pAnchorStck ); m_pAnchorStck = nullptr; }
     void emulateMSWordAddTextToParagraph(const OUString& rAddString);
     void simpleAddTextToParagraph(const OUString& rAddString);
     bool HandlePageBreakChar();
@@ -1458,14 +1458,14 @@ private:
     // Note #i20672# we can't properly support between lines so best to ignore
     // them for now
     static bool SetBorder(SvxBoxItem& rBox, const WW8_BRCVer9* pbrc,
-        short *pSizeArray=0, sal_uInt8 nSetBorders=0xFF);
+        short *pSizeArray=nullptr, sal_uInt8 nSetBorders=0xFF);
     static void GetBorderDistance(const WW8_BRCVer9* pbrc, Rectangle& rInnerDist);
     static sal_uInt16 GetParagraphAutoSpace(bool fDontUseHTMLAutoSpacing);
     static bool SetShadow(SvxShadowItem& rShadow, const short *pSizeArray,
         const WW8_BRCVer9& aRightBrc);
     //returns true is a shadow was set
     static bool SetFlyBordersShadow(SfxItemSet& rFlySet, const WW8_BRCVer9 *pbrc,
-        short *SizeArray=0);
+        short *SizeArray=nullptr);
     static void SetPageBorder(SwFrameFormat &rFormat, const wwSection &rSection);
 
     static sal_Int32 MatchSdrBoxIntoFlyBoxItem( const Color& rLineColor,
@@ -1488,7 +1488,7 @@ private:
     //Apo == Absolutely Positioned Object, MSWord's old-style frames
     WW8FlyPara *ConstructApo(const ApoTestResults &rApo,
         const WW8_TablePos *pTabPos);
-    bool StartApo(const ApoTestResults &rApo, const WW8_TablePos *pTabPos, SvxULSpaceItem* pULSpaceItem = 0);
+    bool StartApo(const ApoTestResults &rApo, const WW8_TablePos *pTabPos, SvxULSpaceItem* pULSpaceItem = nullptr);
     void StopApo();
     bool TestSameApo(const ApoTestResults &rApo, const WW8_TablePos *pTabPos);
     ApoTestResults TestApo(int nCellLevel, bool bTableRowEnd,
@@ -1515,13 +1515,13 @@ private:
 
     SwFrameFormat *AddAutoAnchor(SwFrameFormat *pFormat);
     SwFrameFormat* ImportGraf1(WW8_PIC& rPic, SvStream* pSt, sal_uLong nFilePos);
-    SwFrameFormat* ImportGraf(SdrTextObj* pTextObj = 0, SwFrameFormat* pFlyFormat = 0);
+    SwFrameFormat* ImportGraf(SdrTextObj* pTextObj = nullptr, SwFrameFormat* pFlyFormat = nullptr);
 
-    SdrObject* ImportOleBase( Graphic& rGraph, const Graphic* pGrf=0,
-        const SfxItemSet* pFlySet=0, const Rectangle& aVisArea = Rectangle() );
+    SdrObject* ImportOleBase( Graphic& rGraph, const Graphic* pGrf=nullptr,
+        const SfxItemSet* pFlySet=nullptr, const Rectangle& aVisArea = Rectangle() );
 
-    SwFrameFormat* ImportOle( const Graphic* = 0, const SfxItemSet* pFlySet = 0,
-        const SfxItemSet* pGrfSet = 0, const Rectangle& aVisArea = Rectangle() );
+    SwFrameFormat* ImportOle( const Graphic* = nullptr, const SfxItemSet* pFlySet = nullptr,
+        const SfxItemSet* pGrfSet = nullptr, const Rectangle& aVisArea = Rectangle() );
     SwFlyFrameFormat* InsertOle(SdrOle2Obj &rObject, const SfxItemSet &rFlySet,
         const SfxItemSet *rGrfSet);
 
@@ -1539,7 +1539,7 @@ private:
 
     void ReadDocVars();
 
-    bool StartTable(WW8_CP nStartCp, SvxULSpaceItem* pULSpaceItem = 0);
+    bool StartTable(WW8_CP nStartCp, SvxULSpaceItem* pULSpaceItem = nullptr);
     bool InEqualApo(int nLvl) const;
     bool InLocalApo() const { return InEqualApo(m_nInTable); }
     bool InEqualOrHigherApo(int nLvl) const;
@@ -1587,9 +1587,9 @@ private:
     SwFrameFormat* InsertTxbxText(SdrTextObj* pTextObj, Size* pObjSiz,
         sal_uInt16 nTxBxS, sal_uInt16 nSequence, long nPosCp, SwFrameFormat* pFlyFormat,
         bool bMakeSdrGrafObj, bool& rbEraseTextObj,
-        bool* pbTestTxbxContainsText = 0, long* pnStartCp = 0,
-        long* pnEndCp = 0, bool* pbContainsGraphics = 0,
-        SvxMSDffImportRec* pRecord = 0);
+        bool* pbTestTxbxContainsText = nullptr, long* pnStartCp = nullptr,
+        long* pnEndCp = nullptr, bool* pbContainsGraphics = nullptr,
+        SvxMSDffImportRec* pRecord = nullptr);
     bool TxbxChainContainsRealText( sal_uInt16 nTxBxS,
                                     long&  rStartCp,
                                     long&  rEndCp );
@@ -1884,7 +1884,7 @@ public:     // really private, but can only be done public
 
     const OUString& GetBaseURL() const { return m_sBaseURL; }
     // load a complete doc file
-    sal_uLong LoadDoc(WW8Glossary *pGloss=0);
+    sal_uLong LoadDoc(WW8Glossary *pGloss=nullptr);
     rtl_TextEncoding GetCurrentCharSet();
     rtl_TextEncoding GetCurrentCJKCharSet();
     rtl_TextEncoding GetCharSetFromLanguage();

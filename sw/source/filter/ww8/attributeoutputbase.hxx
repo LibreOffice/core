@@ -292,7 +292,7 @@ public:
 
     /// Write a section break
     /// msword::ColumnBreak or msword::PageBreak
-    virtual void SectionBreak( sal_uInt8 nC, const WW8_SepInfo* pSectionInfo = NULL ) = 0;
+    virtual void SectionBreak( sal_uInt8 nC, const WW8_SepInfo* pSectionInfo = nullptr ) = 0;
 
     // preserve page vertical alignment
     virtual void TextVerticalAdjustment( const css::drawing::TextVerticalAdjust) {};
@@ -358,7 +358,7 @@ public:
         sal_Int16 nFirstLineIndex,
         sal_Int16 nListTabPos,
         const OUString &rNumberingString,
-        const SvxBrushItem* pBrush = 0) = 0; // #i120928 export graphic of bullet
+        const SvxBrushItem* pBrush = nullptr) = 0; // #i120928 export graphic of bullet
 
 protected:
 

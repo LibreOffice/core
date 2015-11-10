@@ -41,7 +41,7 @@ class SwBlinkPortion
 public:
     SwBlinkPortion(const SwLinePortion* pPortion, sal_uInt16 nDirection)
         : pPor(pPortion)
-        , pFrm(NULL)
+        , pFrm(nullptr)
         , nDir(nDirection)
     {
     }

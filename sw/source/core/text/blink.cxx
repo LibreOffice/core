@@ -35,7 +35,7 @@
  * They are then triggered rhythimcally for a repaint. They can query
  * for being visible or invisible with IsVisible().
  */
-SwBlink *pBlink = NULL;
+SwBlink *pBlink = nullptr;
 
 SwBlink::SwBlink()
 {

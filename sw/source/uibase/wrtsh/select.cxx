@@ -131,7 +131,7 @@ long SwWrtShell::SelAll()
         bool bMoveTable = false;
         std::unique_ptr<SwPosition> pStartPos;
         std::unique_ptr<SwPosition> pEndPos;
-        SwShellCrsr* pTmpCrsr = 0;
+        SwShellCrsr* pTmpCrsr = nullptr;
 
         // Query these early, before we move the cursor.
         bool bHasWholeTabSelection = HasWholeTabSelection();
@@ -237,7 +237,7 @@ sal_uLong SwWrtShell::SearchTempl( const OUString &rTempl,
     if(!(eFlags & FND_IN_SEL))
         ClearMark();
     SwTextFormatColl *pColl = GetParaStyle(rTempl, SwWrtShell::GETSTYLE_CREATESOME);
-    SwTextFormatColl *pReplaceColl = 0;
+    SwTextFormatColl *pReplaceColl = nullptr;
     if( pReplTempl )
         pReplaceColl = GetParaStyle(*pReplTempl, SwWrtShell::GETSTYLE_CREATESOME );
 
@@ -284,7 +284,7 @@ void SwWrtShell::PushMode()
 
 void SwWrtShell::PopMode()
 {
-    if ( 0 == m_pModeStack )
+    if ( nullptr == m_pModeStack )
         return;
 
     if ( m_bExtMode && !m_pModeStack->bExt )
@@ -400,11 +400,11 @@ void SwWrtShell::EndSelect()
         m_bInSelect = false;
         if (m_bAddMode)
         {
-            AddLeaveSelect(0);
+            AddLeaveSelect(nullptr);
         }
         else
         {
-            SttLeaveSelect(0);
+            SttLeaveSelect(nullptr);
             m_fnSetCrsr = &SwWrtShell::SetCrsrKillSel;
             m_fnKillSel = &SwWrtShell::ResetSelect;
         }

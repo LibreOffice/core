@@ -44,7 +44,7 @@ class SwSectionFrm: public SwLayoutFrm, public SwFlowFrm
     bool m_bFootnoteLock; // ftn, don't leave this section bwd
 
     void _UpdateAttr( const SfxPoolItem*, const SfxPoolItem*, sal_uInt8 &,
-                      SwAttrSetChg *pa = 0, SwAttrSetChg *pb = 0 );
+                      SwAttrSetChg *pa = nullptr, SwAttrSetChg *pb = nullptr );
     void _Cut( bool bRemove );
     // Is there a FootnoteContainer?
     // An empty sectionfrm without FootnoteCont is superfluous
@@ -60,7 +60,7 @@ class SwSectionFrm: public SwLayoutFrm, public SwFlowFrm
 protected:
     virtual void MakeAll(vcl::RenderContext* pRenderContext) override;
     virtual bool ShouldBwdMoved( SwLayoutFrm *pNewUpper, bool bHead, bool &rReformat ) override;
-    virtual void Format( vcl::RenderContext* pRenderContext, const SwBorderAttrs *pAttrs = 0 ) override;
+    virtual void Format( vcl::RenderContext* pRenderContext, const SwBorderAttrs *pAttrs = nullptr ) override;
     virtual void Modify( const SfxPoolItem*, const SfxPoolItem* ) override;
     virtual void SwClientNotify( const SwModify&, const SfxHint& ) override;
 
@@ -74,7 +74,7 @@ public:
     virtual void PaintSubsidiaryLines( const SwPageFrm*, const SwRect& ) const override;
 
     virtual void Cut() override;
-    virtual void Paste( SwFrm* pParent, SwFrm* pSibling = 0 ) override;
+    virtual void Paste( SwFrm* pParent, SwFrm* pSibling = nullptr ) override;
 
     inline const SwSectionFrm *GetFollow() const;
     inline       SwSectionFrm *GetFollow();
@@ -99,7 +99,7 @@ public:
      */
     bool SplitSect( SwFrm* pFrm, bool bApres );
     void DelEmpty( bool bRemove ); // Like Cut(), except for that Follow chaining is maintained
-    SwFootnoteContFrm* ContainsFootnoteCont( const SwFootnoteContFrm* pCont = NULL ) const;
+    SwFootnoteContFrm* ContainsFootnoteCont( const SwFootnoteContFrm* pCont = nullptr ) const;
     bool Growable() const;
     SwTwips _Shrink( SwTwips, bool bTst );
     SwTwips _Grow  ( SwTwips, bool bTst );
@@ -132,7 +132,7 @@ public:
     void InvalidateFootnotePos();
     void CollectEndnotes( SwLayouter* pLayouter );
     const SwSectionFormat* GetEndSectFormat() const
-        { if( IsEndnAtEnd() ) return _GetEndSectFormat(); return NULL; }
+        { if( IsEndnAtEnd() ) return _GetEndSectFormat(); return nullptr; }
 
     static void MoveContentAndDelete( SwSectionFrm* pDel, bool bSave );
 

@@ -166,8 +166,8 @@ public:
 
     bool FindAutomaticStyle( sal_uInt16 nFamily,
                              const OUString& rName,
-                             const SfxItemSet **ppItemSet=0,
-                             OUString *pParent=0 ) const;
+                             const SfxItemSet **ppItemSet=nullptr,
+                             OUString *pParent=nullptr ) const;
 
     virtual void SetStatistics(
         const css::uno::Sequence< css::beans::NamedValue> & i_rStats) override;

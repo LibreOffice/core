@@ -72,7 +72,7 @@ SwTbxAutoTextCtrl::SwTbxAutoTextCtrl(
     sal_uInt16 nId,
     ToolBox& rTbx ) :
     SfxToolBoxControl( nSlotId, nId, rTbx ),
-    pPopup(0)
+    pPopup(nullptr)
 {
     rTbx.SetItemBits( nId, ToolBoxItemBits::DROPDOWN | rTbx.GetItemBits( nId ) );
 }
@@ -128,7 +128,7 @@ VclPtr<SfxPopupWindow> SwTbxAutoTextCtrl::CreatePopupWindow()
     }
     GetToolBox().EndSelection();
     DelPopup();
-    return 0;
+    return nullptr;
 
 }
 
@@ -172,7 +172,7 @@ void SwTbxAutoTextCtrl::DelPopup()
             delete pSubPopup;
         }
         delete pPopup;
-        pPopup = 0;
+        pPopup = nullptr;
     }
 }
 
@@ -221,7 +221,7 @@ VclPtr<SfxPopupWindow> SwTbxFieldCtrl::CreatePopupWindow()
 
     GetToolBox().EndSelection();
 
-    return 0;
+    return nullptr;
 }
 
 void SwTbxFieldCtrl::StateChanged( sal_uInt16,

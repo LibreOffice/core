@@ -60,7 +60,7 @@ int SwFindParaFormatColl::Find( SwPaM* pCrsr, SwMoveFn fnMove, const SwPaM* pReg
 
 bool SwFindParaFormatColl::IsReplaceMode() const
 {
-    return 0 != pReplColl;
+    return nullptr != pReplColl;
 }
 
 /// search for Format-Collections
@@ -96,7 +96,7 @@ sal_uLong SwCursor::Find( const SwTextFormatColl& rFormatColl, SwDocPositions nS
 
     if (bStartUndo)
     {
-        pDoc->GetIDocumentUndoRedo().EndUndo(UNDO_END, 0);
+        pDoc->GetIDocumentUndoRedo().EndUndo(UNDO_END, nullptr);
     }
     return nRet;
 }

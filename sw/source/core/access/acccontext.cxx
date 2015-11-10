@@ -81,7 +81,7 @@ uno::Reference< XAccessible > SwAccessibleContext::GetWeakParent() const
 
 vcl::Window *SwAccessibleContext::GetWindow()
 {
-    vcl::Window *pWin = 0;
+    vcl::Window *pWin = nullptr;
 
     if( GetMap() )
     {
@@ -100,12 +100,12 @@ vcl::Window *SwAccessibleContext::GetWindow()
 SwCrsrShell* SwAccessibleContext::GetCrsrShell()
 {
     SwCrsrShell* pCrsrShell;
-    SwViewShell* pViewShell = GetMap() ? GetMap()->GetShell() : 0;
+    SwViewShell* pViewShell = GetMap() ? GetMap()->GetShell() : nullptr;
     OSL_ENSURE( pViewShell, "no view shell" );
     if( pViewShell && dynamic_cast<const SwCrsrShell*>( pViewShell) !=  nullptr )
         pCrsrShell = static_cast<SwCrsrShell*>( pViewShell );
     else
-        pCrsrShell = NULL;
+        pCrsrShell = nullptr;
 
     return pCrsrShell;
 }
@@ -114,12 +114,12 @@ const SwCrsrShell* SwAccessibleContext::GetCrsrShell() const
 {
     // just like non-const GetCrsrShell
     const SwCrsrShell* pCrsrShell;
-    const SwViewShell* pViewShell = GetMap() ? GetMap()->GetShell() : 0;
+    const SwViewShell* pViewShell = GetMap() ? GetMap()->GetShell() : nullptr;
     OSL_ENSURE( pViewShell, "no view shell" );
     if( pViewShell && dynamic_cast<const SwCrsrShell*>( pViewShell) !=  nullptr )
         pCrsrShell = static_cast<const SwCrsrShell*>( pViewShell );
     else
-        pCrsrShell = NULL;
+        pCrsrShell = nullptr;
 
     return pCrsrShell;
 }
@@ -609,7 +609,7 @@ uno::Reference< XAccessible> SAL_CALL SwAccessibleContext::getAccessibleParent()
     CHECK_FOR_DEFUNC( XAccessibleContext )
 
     const SwFrm *pUpper = GetParent();
-    OSL_ENSURE( pUpper != 0 || m_isDisposing, "no upper found" );
+    OSL_ENSURE( pUpper != nullptr || m_isDisposing, "no upper found" );
 
     uno::Reference< XAccessible > xAcc;
     if( pUpper )
@@ -634,7 +634,7 @@ sal_Int32 SAL_CALL SwAccessibleContext::getAccessibleIndexInParent()
     CHECK_FOR_DEFUNC( XAccessibleContext )
 
     const SwFrm *pUpper = GetParent();
-    OSL_ENSURE( pUpper != 0 || m_isDisposing, "no upper found" );
+    OSL_ENSURE( pUpper != nullptr || m_isDisposing, "no upper found" );
 
     sal_Int32 nIndex = -1;
     if( pUpper )
@@ -919,7 +919,7 @@ void SAL_CALL SwAccessibleContext::grabFocus()
     }
     else
     {
-        const SwContentFrm *pCFrm = 0;
+        const SwContentFrm *pCFrm = nullptr;
         if( GetFrm()->IsContentFrm() )
             pCFrm = static_cast< const SwContentFrm * >( GetFrm() );
         else if( GetFrm()->IsLayoutFrm() )
@@ -997,7 +997,7 @@ void SwAccessibleContext::DisposeShape( const SdrObject *pObj,
 void SwAccessibleContext::ScrolledInShape( const SdrObject* ,
                                 ::accessibility::AccessibleShape *pAccImpl )
 {
-    if(NULL == pAccImpl)
+    if(nullptr == pAccImpl)
     {
         return ;
     }
@@ -1336,14 +1336,14 @@ bool SwAccessibleContext::Select( SwPaM *pPaM, SdrObject *pObj,
 
     SwFEShell* pFEShell = dynamic_cast<const SwFEShell*>( pCrsrShell) !=  nullptr
                                 ? static_cast<SwFEShell*>( pCrsrShell )
-                                : 0;
+                                : nullptr;
     // Get rid of activated OLE object
     if( pFEShell )
         pFEShell->FinishOLEObj();
 
     SwWrtShell* pWrtShell = dynamic_cast<const SwWrtShell*>( pCrsrShell) !=  nullptr
                                 ? static_cast<SwWrtShell*>( pCrsrShell )
-                                : 0;
+                                : nullptr;
 
     bool bRet = false;
     if( pObj )
@@ -1436,7 +1436,7 @@ bool SwAccessibleContext::HasAdditionalAccessibleChildren()
 /** #i88070# - get additional accessible child by index */
 vcl::Window* SwAccessibleContext::GetAdditionalAccessibleChild( const sal_Int32 nIndex )
 {
-    vcl::Window* pAdditionalAccessibleChild( 0 );
+    vcl::Window* pAdditionalAccessibleChild( nullptr );
 
     if ( GetFrm()->IsTextFrm() )
     {

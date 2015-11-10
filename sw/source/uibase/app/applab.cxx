@@ -159,7 +159,7 @@ void SwModule::InsertLab(SfxRequest& rReq, bool bLabel)
 
 #if HAVE_FEATURE_DBCONNECTIVITY
     // Create DB-Manager
-    std::unique_ptr<SwDBManager> pDBManager(new SwDBManager(0));
+    std::unique_ptr<SwDBManager> pDBManager(new SwDBManager(nullptr));
 #endif
 
     // Read SwLabItem from Config
@@ -172,7 +172,7 @@ void SwModule::InsertLab(SfxRequest& rReq, bool bLabel)
     SwAbstractDialogFactory* pDialogFactory = SwAbstractDialogFactory::Create();
     OSL_ENSURE(pDialogFactory, "SwAbstractDialogFactory fail!");
 
-    std::unique_ptr<AbstractSwLabDlg> pDlg(pDialogFactory->CreateSwLabDlg(0, aSet,
+    std::unique_ptr<AbstractSwLabDlg> pDlg(pDialogFactory->CreateSwLabDlg(nullptr, aSet,
 #if HAVE_FEATURE_DBCONNECTIVITY
                                                                             pDBManager.get(),
 #else
@@ -301,7 +301,7 @@ void SwModule::InsertLab(SfxRequest& rReq, bool bLabel)
             pFormat->SetFormatAttr( aFrmNoULSpace );
             pFormat->SetFormatAttr( aFrmNoLRSpace );
 
-            const SwFrameFormat *pFirstFlyFormat = 0;
+            const SwFrameFormat *pFirstFlyFormat = nullptr;
             if ( rItem.m_bPage )
             {
                 SwFormatVertOrient aFrmVertOrient( pFormat->GetVertOrient() );
@@ -327,7 +327,7 @@ void SwModule::InsertLab(SfxRequest& rReq, bool bLabel)
                                 // don't leave the fly!!!
                                 pSh->Push();
                                 pSh->SttDoc();
-                                bool bInFly = 0 != pSh->WizardGetFly();
+                                bool bInFly = nullptr != pSh->WizardGetFly();
                                 pSh->Pop( bInFly );
 
                                 if( bInFly )

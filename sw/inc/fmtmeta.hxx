@@ -110,7 +110,7 @@ public:
 
     /// SfxPoolItem
     virtual bool             operator==( const SfxPoolItem & ) const override;
-    virtual SfxPoolItem *    Clone( SfxItemPool *pPool = 0 ) const override;
+    virtual SfxPoolItem *    Clone( SfxItemPool *pPool = nullptr ) const override;
 
     /// notify clients registered at m_pMeta that this meta is being (re-)moved
     void NotifyChangeTextNode(SwTextNode *const pTextNode);
@@ -152,7 +152,7 @@ protected:
     virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew ) override;
 
 public:
-    explicit Meta(SwFormatMeta * const i_pFormat = 0);
+    explicit Meta(SwFormatMeta * const i_pFormat = nullptr);
     virtual ~Meta();
 
     /// sfx2::Metadatable
@@ -179,7 +179,7 @@ private:
     bool IsFixedLanguage() const    { return m_bIsFixedLanguage; }
     void SetIsFixedLanguage(bool b) { m_bIsFixedLanguage = b; }
 
-    explicit MetaField(SwFormatMeta * const i_pFormat = 0,
+    explicit MetaField(SwFormatMeta * const i_pFormat = nullptr,
             const sal_uInt32 nNumberFormat = SAL_MAX_UINT32,
             const bool bIsFixedLanguage = false );
 
@@ -200,7 +200,7 @@ private:
 public:
     MetaFieldManager();
     std::shared_ptr<MetaField> makeMetaField(
-                SwFormatMeta * const i_pFormat = 0,
+                SwFormatMeta * const i_pFormat = nullptr,
                 const sal_uInt32 nNumberFormat = SAL_MAX_UINT32,
                 const bool bIsFixedLanguage = false );
     /// get all meta fields

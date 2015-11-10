@@ -184,7 +184,7 @@ void SwView::StateFormatPaintbrush(SfxItemSet &rSet)
 void SwView::UpdateWordCount(SfxShell* pShell, sal_uInt16 nSlot)
 {
     SfxViewFrame* pVFrame = GetViewFrame();
-    if (pVFrame != NULL)
+    if (pVFrame != nullptr)
     {
         pVFrame->ToggleChildWindow(FN_WORDCOUNT_DIALOG);
         pShell->Invalidate(nSlot);

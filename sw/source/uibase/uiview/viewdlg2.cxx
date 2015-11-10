@@ -145,7 +145,7 @@ void SwView::InsertCaption(const InsCaptionOpt *pOpt)
     }
 
     sal_uInt16       nID    = USHRT_MAX;
-    SwFieldType* pType  = 0;
+    SwFieldType* pType  = nullptr;
     const size_t nCount = aMgr.GetFieldTypeCount();
     if( !rName.isEmpty() )
     {

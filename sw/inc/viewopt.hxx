@@ -244,7 +244,7 @@ public:
         { b ? (m_nCoreOptions |= VIEWOPT_1_POSTITS ) : ( m_nCoreOptions &= ~VIEWOPT_1_POSTITS); }
     static void PaintPostIts( OutputDevice *pOut, const SwRect &rRect,
                               bool bIsScript );
-    static sal_uInt16 GetPostItsWidth( const OutputDevice *pOut = 0 );
+    static sal_uInt16 GetPostItsWidth( const OutputDevice *pOut = nullptr );
 
     inline bool IsShowHiddenChar(bool bHard = false) const
         { return !m_bReadonly && (m_nCoreOptions & VIEWOPT_1_CHAR_HIDDEN) &&

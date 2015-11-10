@@ -57,7 +57,7 @@ class SwSubFont : public SvxFont
     sal_uInt16      m_nProportionalWidth;     // proportional width
     bool m_bSmallCapsPercentage66;
     inline SwSubFont() : m_aSize(0,0)
-    { m_pMagic = NULL; m_nFontIndex = m_nOrgHeight = m_nOrgAscent = 0; m_nProportionalWidth =100; m_bSmallCapsPercentage66 = false; }
+    { m_pMagic = nullptr; m_nFontIndex = m_nOrgHeight = m_nOrgAscent = 0; m_nProportionalWidth =100; m_bSmallCapsPercentage66 = false; }
 
     sal_uInt16 CalcEscAscent( const sal_uInt16 nOldAscent ) const;
     sal_uInt16 CalcEscHeight( const sal_uInt16 nOldHeight,
@@ -112,7 +112,7 @@ class SwSubFont : public SvxFont
     inline short CheckKerning()
     {   return GetFixKerning() >= 0 ? GetFixKerning() : _CheckKerning( ); }
     inline void SetPropWidth( const sal_uInt16 nNew )
-        { m_pMagic = 0; m_nProportionalWidth = nNew; }
+        { m_pMagic = nullptr; m_nProportionalWidth = nNew; }
 public:
     sal_uInt16 GetPropWidth() const { return m_nProportionalWidth; }
 };
@@ -399,7 +399,7 @@ public:
         const SvxShadowItemSide nShadow, const bool bVertLayout,
         const bool bSkipLeft, const bool bSkipRight ) const;
 
-    void dumpAsXml( xmlTextWriterPtr writer = NULL ) const;
+    void dumpAsXml( xmlTextWriterPtr writer = nullptr ) const;
 };
 
 inline void SwFont::SetColor( const Color& rColor )
@@ -413,14 +413,14 @@ inline void SwFont::SetColor( const Color& rColor )
 // encapsulated SV-Font-method
 inline void SwSubFont::SetColor( const Color& rColor )
 {
-    m_pMagic = 0;
+    m_pMagic = nullptr;
     Font::SetColor( rColor );
 }
 
 // encapsulated SV-Font-method
 inline void SwSubFont::SetFillColor( const Color& rColor )
 {
-    m_pMagic = 0;
+    m_pMagic = nullptr;
     Font::SetFillColor( rColor );
 }
 
@@ -435,7 +435,7 @@ inline void SwFont::SetFillColor( const Color& rColor )
 // encapsulated SV-Font-method
 inline void SwSubFont::SetFamily( const FontFamily eFamily )
 {
-    m_pMagic = 0;
+    m_pMagic = nullptr;
     Font::SetFamily( eFamily );
 }
 
@@ -448,7 +448,7 @@ inline void SwFont::SetFamily( const FontFamily eFamily, const sal_uInt8 nWhich 
 // encapsulated SV-Font-method
 inline void SwSubFont::SetName( const OUString& rName )
 {
-    m_pMagic = 0;
+    m_pMagic = nullptr;
     Font::SetName( rName );
 }
 
@@ -461,7 +461,7 @@ inline void SwFont::SetName( const OUString& rName, const sal_uInt8 nWhich )
 // encapsulated SV-Font-method
 inline void SwSubFont::SetStyleName( const OUString& rStyleName )
 {
-    m_pMagic = 0;
+    m_pMagic = nullptr;
     Font::SetStyleName( rStyleName );
 }
 
@@ -474,7 +474,7 @@ inline void SwFont::SetStyleName( const OUString& rStyle, const sal_uInt8 nWhich
 // encapsulated SV-Font-method
 inline void SwSubFont::SetCharSet( const rtl_TextEncoding eCharSet )
 {
-    m_pMagic = 0;
+    m_pMagic = nullptr;
     Font::SetCharSet( eCharSet );
 }
 
@@ -487,7 +487,7 @@ inline void SwFont::SetCharSet( const rtl_TextEncoding eCharSet, const sal_uInt8
 // encapsulated SV-Font-method
 inline void SwSubFont::SetPitch( const FontPitch ePitch )
 {
-    m_pMagic = 0;
+    m_pMagic = nullptr;
     Font::SetPitch( ePitch );
 }
 
@@ -501,7 +501,7 @@ inline void SwFont::SetPitch( const FontPitch ePitch, const sal_uInt8 nWhich )
 // encapsulated SV-Font-method
 inline void SwSubFont::SetAlign( const FontAlign eAlign )
 {
-    m_pMagic = 0;
+    m_pMagic = nullptr;
     Font::SetAlign( eAlign );
 }
 
@@ -516,7 +516,7 @@ inline void SwFont::SetAlign( const FontAlign eAlign )
 // encapsulated SV-Font-method
 inline void SwSubFont::SetWeight( const FontWeight eWeight )
 {
-    m_pMagic = 0;
+    m_pMagic = nullptr;
     Font::SetWeight( eWeight );
 }
 
@@ -529,7 +529,7 @@ inline void SwFont::SetWeight( const FontWeight eWeight, const sal_uInt8 nWhich 
 // encapsulated SV-Font-method
 inline void SwSubFont::SetUnderline( const FontUnderline eUnderline )
 {
-    m_pMagic = 0;
+    m_pMagic = nullptr;
     Font::SetUnderline( eUnderline );
 }
 
@@ -544,7 +544,7 @@ inline void SwFont::SetUnderline( const FontUnderline eUnderline )
 // encapsulated SV-Font-method
 inline void SwSubFont::SetOverline( const FontUnderline eOverline )
 {
-    m_pMagic = 0;
+    m_pMagic = nullptr;
     Font::SetOverline( eOverline );
 }
 
@@ -559,7 +559,7 @@ inline void SwFont::SetOverline( const FontUnderline eOverline )
 // encapsulated SV-Font-method
 inline void SwSubFont::SetStrikeout( const FontStrikeout eStrikeout )
 {
-    m_pMagic = 0;
+    m_pMagic = nullptr;
     Font::SetStrikeout( eStrikeout );
 }
 
@@ -574,7 +574,7 @@ inline void SwFont::SetStrikeout( const FontStrikeout eStrikeout )
 // encapsulated SV-Font-method
 inline void SwSubFont::SetItalic( const FontItalic eItalic )
 {
-    m_pMagic = 0;
+    m_pMagic = nullptr;
     Font::SetItalic( eItalic );
 }
 
@@ -587,7 +587,7 @@ inline void SwFont::SetItalic( const FontItalic eItalic, const sal_uInt8 nWhich 
 // encapsulated SV-Font-method
 inline void SwSubFont::SetOutline( const bool bOutline )
 {
-    m_pMagic = 0;
+    m_pMagic = nullptr;
     Font::SetOutline( bOutline );
 }
 
@@ -602,7 +602,7 @@ inline void SwFont::SetOutline( const bool bOutline )
 // encapsulated SV-Font-method
 inline void SwSubFont::SetShadow( const bool bShadow )
 {
-    m_pMagic = 0;
+    m_pMagic = nullptr;
     Font::SetShadow( bShadow );
 }
 
@@ -617,7 +617,7 @@ inline void SwFont::SetShadow( const bool bShadow )
 // encapsulated SV-Font-method
 inline void SwSubFont::SetAutoKern( FontKerning nAutoKern )
 {
-    m_pMagic = 0;
+    m_pMagic = nullptr;
     Font::SetKerning( nAutoKern );
 }
 
@@ -655,7 +655,7 @@ inline void SwFont::SetCaseMap( const SvxCaseMap eNew )
 // encapsulated SV-Font-method
 inline void SwSubFont::SetWordLineMode( const bool bWordLineMode )
 {
-    m_pMagic = 0;
+    m_pMagic = nullptr;
     Font::SetWordLineMode( bWordLineMode );
 }
 
@@ -669,7 +669,7 @@ inline void SwFont::SetWordLineMode( const bool bWordLineMode )
 // encapsulated SV-Font-method
 inline void SwSubFont::SetEmphasisMark( const FontEmphasisMark eValue )
 {
-    m_pMagic = 0;
+    m_pMagic = nullptr;
     Font::SetEmphasisMark( eValue );
 }
 
@@ -695,7 +695,7 @@ inline void SwFont::SetPropWidth( const sal_uInt16 nNew )
 // encapsulated SV-Font-method
 inline void SwSubFont::SetRelief( const FontRelief eNew )
 {
-    m_pMagic = 0;
+    m_pMagic = nullptr;
     Font::SetRelief( eNew );
 }
 
@@ -722,7 +722,7 @@ inline void SwSubFont::SetSize( const Size& rSize )
             (long) m_aSize.Width() * GetPropr() / 100L,
             (long) m_aSize.Height() * GetPropr() / 100L ) );
     }
-    m_pMagic = 0;
+    m_pMagic = nullptr;
 }
 
 inline void SwFont::SetSize( const Size& rSize, const sal_uInt8 nWhich )
@@ -747,7 +747,7 @@ inline void SwFont::SetActual( sal_uInt8 nNew )
 
 inline void SwSubFont::SetProportion( const sal_uInt8 nNewPropr )
 {
-    m_pMagic = 0;
+    m_pMagic = nullptr;
     Font::SetSize( Size( (long) m_aSize.Width() * nNewPropr / 100L,
                          (long) m_aSize.Height() * nNewPropr / 100L ) );
     SvxFont::SetPropr( nNewPropr );
@@ -768,7 +768,7 @@ inline void SwFont::SetProportion( const sal_uInt8 nNewPropr )
 
 inline void SwSubFont::SetEscapement( const short nNewEsc )
 {
-    m_pMagic = 0;
+    m_pMagic = nullptr;
     SvxFont::SetEscapement( nNewEsc );
 }
 
@@ -789,7 +789,7 @@ inline void SwFont::SetEscapement( const short nNewEsc )
 
 inline void SwSubFont::SetLanguage( LanguageType eNewLang )
 {
-    m_pMagic = 0;
+    m_pMagic = nullptr;
     if( eNewLang == LANGUAGE_SYSTEM )
         eNewLang = (LanguageType)GetAppLanguage();
     SvxFont::SetLanguage( eNewLang );
@@ -828,7 +828,7 @@ inline void SwFont::SetNoCol( const bool bNew )
 
 inline void SwSubFont::SetVertical( const sal_uInt16 nDir, const bool bVertFormat )
 {
-    m_pMagic = 0;
+    m_pMagic = nullptr;
     Font::SetVertical( bVertFormat );
     Font::SetOrientation( nDir );
 }
@@ -837,28 +837,28 @@ inline void SwFont::SetTopBorderDist( const sal_uInt16 nTopDist )
 {
     m_nTopBorderDist = nTopDist;
     m_bFontChg = true;
-    m_aSub[SW_LATIN].m_pMagic = m_aSub[SW_CJK].m_pMagic = m_aSub[SW_CTL].m_pMagic = 0;
+    m_aSub[SW_LATIN].m_pMagic = m_aSub[SW_CJK].m_pMagic = m_aSub[SW_CTL].m_pMagic = nullptr;
 }
 
 inline void SwFont::SetBottomBorderDist( const sal_uInt16 nBottomDist )
 {
     m_nBottomBorderDist = nBottomDist;
     m_bFontChg = true;
-    m_aSub[SW_LATIN].m_pMagic = m_aSub[SW_CJK].m_pMagic = m_aSub[SW_CTL].m_pMagic = 0;
+    m_aSub[SW_LATIN].m_pMagic = m_aSub[SW_CJK].m_pMagic = m_aSub[SW_CTL].m_pMagic = nullptr;
 }
 
 inline void SwFont::SetRightBorderDist( const sal_uInt16 nRightDist )
 {
     m_nRightBorderDist = nRightDist;
     m_bFontChg = true;
-    m_aSub[SW_LATIN].m_pMagic = m_aSub[SW_CJK].m_pMagic = m_aSub[SW_CTL].m_pMagic = 0;
+    m_aSub[SW_LATIN].m_pMagic = m_aSub[SW_CJK].m_pMagic = m_aSub[SW_CTL].m_pMagic = nullptr;
 }
 
 inline void SwFont::SetLeftBorderDist( const sal_uInt16 nLeftDist )
 {
     m_nLeftBorderDist = nLeftDist;
     m_bFontChg = true;
-    m_aSub[SW_LATIN].m_pMagic = m_aSub[SW_CJK].m_pMagic = m_aSub[SW_CTL].m_pMagic = 0;
+    m_aSub[SW_LATIN].m_pMagic = m_aSub[SW_CJK].m_pMagic = m_aSub[SW_CTL].m_pMagic = nullptr;
 }
 
 inline sal_uInt16 SwFont::GetTopBorderSpace() const
@@ -930,28 +930,28 @@ inline void SwFont::SetShadowColor( const Color& rColor )
 {
     m_aShadowColor = rColor;
     m_bFontChg = true;
-    m_aSub[SW_LATIN].m_pMagic = m_aSub[SW_CJK].m_pMagic = m_aSub[SW_CTL].m_pMagic = 0;
+    m_aSub[SW_LATIN].m_pMagic = m_aSub[SW_CJK].m_pMagic = m_aSub[SW_CTL].m_pMagic = nullptr;
 }
 
 inline void SwFont::SetShadowWidth( const sal_uInt16 nWidth )
 {
     m_nShadowWidth = nWidth;
     m_bFontChg = true;
-    m_aSub[SW_LATIN].m_pMagic = m_aSub[SW_CJK].m_pMagic = m_aSub[SW_CTL].m_pMagic = 0;
+    m_aSub[SW_LATIN].m_pMagic = m_aSub[SW_CJK].m_pMagic = m_aSub[SW_CTL].m_pMagic = nullptr;
 }
 
 inline void SwFont::SetShadowLocation( const SvxShadowLocation aLocation )
 {
     m_aShadowLocation = aLocation;
     m_bFontChg = true;
-    m_aSub[SW_LATIN].m_pMagic = m_aSub[SW_CJK].m_pMagic = m_aSub[SW_CTL].m_pMagic = 0;
+    m_aSub[SW_LATIN].m_pMagic = m_aSub[SW_CJK].m_pMagic = m_aSub[SW_CTL].m_pMagic = nullptr;
 }
 
 inline void SwFont::SetHighlightColor( const Color& aNewColor )
 {
     m_aHighlightColor = aNewColor;
     m_bFontChg = true;
-    m_aSub[SW_LATIN].m_pMagic = m_aSub[SW_CJK].m_pMagic = m_aSub[SW_CTL].m_pMagic = 0;
+    m_aSub[SW_LATIN].m_pMagic = m_aSub[SW_CJK].m_pMagic = m_aSub[SW_CTL].m_pMagic = nullptr;
 }
 
 // Used for the "continuous underline" feature.

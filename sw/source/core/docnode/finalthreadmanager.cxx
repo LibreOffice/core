@@ -235,9 +235,9 @@ FinalThreadManager::FinalThreadManager(css::uno::Reference< css::uno::XComponent
     : m_xContext(context),
       maMutex(),
       maThreads(),
-      mpCancelJobsThread( 0 ),
-      mpTerminateOfficeThread( 0 ),
-      mpPauseThreadStarting( 0 ),
+      mpCancelJobsThread( nullptr ),
+      mpTerminateOfficeThread( nullptr ),
+      mpPauseThreadStarting( nullptr ),
       mbRegisteredAtDesktop( false )
 {
 
@@ -251,16 +251,16 @@ void FinalThreadManager::registerAsListenerAtDesktop()
 
 FinalThreadManager::~FinalThreadManager()
 {
-    if ( mpPauseThreadStarting != 0 )
+    if ( mpPauseThreadStarting != nullptr )
     {
         delete mpPauseThreadStarting;
-        mpPauseThreadStarting = 0;
+        mpPauseThreadStarting = nullptr;
     }
 
-    if ( mpTerminateOfficeThread != 0 )
+    if ( mpTerminateOfficeThread != nullptr )
     {
         mpTerminateOfficeThread->StopOfficeTermination(); // thread kills itself.
-        mpTerminateOfficeThread = 0;
+        mpTerminateOfficeThread = nullptr;
     }
 
     if ( !maThreads.empty() )
@@ -269,7 +269,7 @@ FinalThreadManager::~FinalThreadManager()
         cancelAllJobs();
     }
 
-    if ( mpCancelJobsThread != 0 )
+    if ( mpCancelJobsThread != nullptr )
     {
         if ( !mpCancelJobsThread->allJobsCancelled() )
             OSL_FAIL( "<FinalThreadManager::~FinalThreadManager()> - cancellation of registered jobs not yet finished -> wait for its finish" );
@@ -277,7 +277,7 @@ FinalThreadManager::~FinalThreadManager()
         mpCancelJobsThread->stopWhenAllJobsCancelled();
         mpCancelJobsThread->join();
         delete mpCancelJobsThread;
-        mpCancelJobsThread = 0;
+        mpCancelJobsThread = nullptr;
     }
 }
 
@@ -334,13 +334,13 @@ void SAL_CALL FinalThreadManager::cancelAllJobs() throw (css::uno::RuntimeExcept
     {
         osl::MutexGuard aGuard(maMutex);
 
-        if ( mpCancelJobsThread == 0 )
+        if ( mpCancelJobsThread == nullptr )
         {
             mpCancelJobsThread = new CancelJobsThread( aThreads );;
             if ( !mpCancelJobsThread->create() )
             {
                 delete mpCancelJobsThread;
-                mpCancelJobsThread = 0;
+                mpCancelJobsThread = nullptr;
                 while ( !aThreads.empty() )
                 {
                     aThreads.front()->cancel();
@@ -361,7 +361,7 @@ void SAL_CALL FinalThreadManager::queryTermination( const css::lang::EventObject
     cancelAllJobs();
     // Sleep 1 second to give the thread for job cancellation some time.
     // Probably, all started threads have already finished its work.
-    if ( mpCancelJobsThread != 0 &&
+    if ( mpCancelJobsThread != nullptr &&
          !mpCancelJobsThread->allJobsCancelled() )
     {
         TimeValue aSleepTime;
@@ -370,24 +370,24 @@ void SAL_CALL FinalThreadManager::queryTermination( const css::lang::EventObject
         osl_waitThread( &aSleepTime );
     }
 
-    if ( mpCancelJobsThread != 0 &&
+    if ( mpCancelJobsThread != nullptr &&
          !mpCancelJobsThread->allJobsCancelled() )
     {
-        if ( mpTerminateOfficeThread != 0 )
+        if ( mpTerminateOfficeThread != nullptr )
         {
             if ( mpTerminateOfficeThread->isRunning() )
                 mpTerminateOfficeThread->StopOfficeTermination(); // thread kills itself.
             else
                 delete mpTerminateOfficeThread;
 
-            mpTerminateOfficeThread = 0;
+            mpTerminateOfficeThread = nullptr;
         }
         mpTerminateOfficeThread = new TerminateOfficeThread( *mpCancelJobsThread,
                                                  m_xContext );
         if ( !mpTerminateOfficeThread->create() )
         {
             delete mpTerminateOfficeThread;
-            mpTerminateOfficeThread = 0;
+            mpTerminateOfficeThread = nullptr;
         }
 
         throw css::frame::TerminationVetoException();
@@ -400,10 +400,10 @@ void SAL_CALL FinalThreadManager::queryTermination( const css::lang::EventObject
 
 void SAL_CALL FinalThreadManager::cancelTermination( const css::lang::EventObject& ) throw (css::uno::RuntimeException, std::exception)
 {
-    if ( mpPauseThreadStarting != 0 )
+    if ( mpPauseThreadStarting != nullptr )
     {
         delete mpPauseThreadStarting;
-        mpPauseThreadStarting = 0;
+        mpPauseThreadStarting = nullptr;
     }
 
     return;
@@ -411,25 +411,25 @@ void SAL_CALL FinalThreadManager::cancelTermination( const css::lang::EventObjec
 
 void SAL_CALL FinalThreadManager::notifyTermination( const css::lang::EventObject& ) throw (css::uno::RuntimeException, std::exception)
 {
-    if ( mpTerminateOfficeThread != 0 )
+    if ( mpTerminateOfficeThread != nullptr )
     {
         if ( mpTerminateOfficeThread->isRunning() )
             mpTerminateOfficeThread->StopOfficeTermination(); // thread kills itself.
         else
             delete mpTerminateOfficeThread;
 
-        mpTerminateOfficeThread = 0;
+        mpTerminateOfficeThread = nullptr;
     }
 
     if ( !maThreads.empty() )
         cancelAllJobs();
 
-    if ( mpCancelJobsThread != 0 )
+    if ( mpCancelJobsThread != nullptr )
     {
         mpCancelJobsThread->stopWhenAllJobsCancelled();
         mpCancelJobsThread->join();
         delete mpCancelJobsThread;
-        mpCancelJobsThread = 0;
+        mpCancelJobsThread = nullptr;
     }
 
     // get reference of this

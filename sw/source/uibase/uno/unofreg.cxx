@@ -46,7 +46,7 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL sw_component_getFactory(
     void * pServiceManager,
     void * )
 {
-    void * pRet = 0;
+    void * pRet = nullptr;
     if( pServiceManager )
     {
         uno::Reference< XMultiServiceFactory > xMSF(

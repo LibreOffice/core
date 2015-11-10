@@ -86,10 +86,10 @@
 #endif
 
 bool SwViewShell::mbLstAct = false;
-ShellResource *SwViewShell::mpShellRes = 0;
+ShellResource *SwViewShell::mpShellRes = nullptr;
 VclPtr<vcl::Window> SwViewShell::mpCareWindow = nullptr;
-BitmapEx* SwViewShell::mpErrorBmp = NULL;
-BitmapEx* SwViewShell::mpReplaceBmp = NULL;
+BitmapEx* SwViewShell::mpErrorBmp = nullptr;
+BitmapEx* SwViewShell::mpReplaceBmp = nullptr;
 
 bool bInSizeNotify = false;
 
@@ -238,7 +238,7 @@ void SwViewShell::DLPostPaint2(bool bPaintFormLayer)
         return;
     }
     mPrePostPaintRegions.pop(); // clear
-    if(0 != mpTargetPaintWindow)
+    if(nullptr != mpTargetPaintWindow)
     {
         // #i74769# restore buffered OutDev
         if(mpTargetPaintWindow->GetPreRenderDevice())
@@ -248,7 +248,7 @@ void SwViewShell::DLPostPaint2(bool bPaintFormLayer)
 
         // #i74769# use SdrPaintWindow now direct
         Imp()->GetDrawView()->EndDrawLayers(*mpTargetPaintWindow, bPaintFormLayer);
-        mpTargetPaintWindow = 0;
+        mpTargetPaintWindow = nullptr;
     }
 }
 // end of Pre/PostPaints
@@ -337,7 +337,7 @@ void SwViewShell::ImplEndAction( const bool bIdleEnd )
             {
                 SwRootFrm* pCurrentLayout = GetLayout();
 
-                Imp()->m_pRegion = NULL;
+                Imp()->m_pRegion = nullptr;
 
                 //First Invert then Compress, never the other way round!
                 pRegion->Invert();
@@ -620,12 +620,12 @@ vcl::Window* SwViewShell::CareChildWin(SwViewShell& rVSh)
         const sal_uInt16 nId = SvxSearchDialogWrapper::GetChildWindowId();
         SfxViewFrame* pVFrame = rVSh.mpSfxViewShell->GetViewFrame();
         const SfxChildWindow* pChWin = pVFrame->GetChildWindow( nId );
-        vcl::Window *pWin = pChWin ? pChWin->GetWindow() : NULL;
+        vcl::Window *pWin = pChWin ? pChWin->GetWindow() : nullptr;
         if ( pWin && pWin->IsVisible() )
             return pWin;
 #endif
     }
-    return NULL;
+    return nullptr;
 }
 
 Point SwViewShell::GetPagePos( sal_uInt16 nPageNum ) const
@@ -661,7 +661,7 @@ void SwViewShell::UpdateFields(bool bCloseDB)
     else
         StartAction();
 
-    GetDoc()->getIDocumentFieldsAccess().UpdateFields(0, bCloseDB);
+    GetDoc()->getIDocumentFieldsAccess().UpdateFields(nullptr, bCloseDB);
 
     if ( bCrsr )
         static_cast<SwCrsrShell*>(this)->EndAction();
@@ -956,7 +956,7 @@ void SwViewShell::CalcLayout()
                                   SwTextFrm::GetTextCache()->GetCurMax() - 50 );
 
     //switch on Progress when none is running yet.
-    const bool bEndProgress = SfxProgress::GetActiveProgress( GetDoc()->GetDocShell() ) == 0;
+    const bool bEndProgress = SfxProgress::GetActiveProgress( GetDoc()->GetDocShell() ) == nullptr;
     if ( bEndProgress )
     {
         long nEndPage = GetLayout()->GetPageNum();
@@ -984,7 +984,7 @@ void SwViewShell::CalcLayout()
 
         SwDocPosUpdate aMsgHint( 0 );
         GetDoc()->getIDocumentFieldsAccess().UpdatePageFields( &aMsgHint );
-        GetDoc()->getIDocumentFieldsAccess().UpdateExpFields(NULL, true);
+        GetDoc()->getIDocumentFieldsAccess().UpdateExpFields(nullptr, true);
 
         aAction.Action(GetOut());
     }
@@ -1016,7 +1016,7 @@ void SwViewShell::SizeChgNotify()
         {
             const SwFrm *pCnt = static_cast<SwCrsrShell*>(this)->GetCurrFrm( false );
             const SwPageFrm *pPage;
-            if ( pCnt && 0 != (pPage = pCnt->FindPageFrm()) )
+            if ( pCnt && nullptr != (pPage = pCnt->FindPageFrm()) )
             {
                 const sal_uInt16 nVirtNum = pPage->GetVirtPageNum();
                 const SvxNumberType& rNum = pPage->GetPageDesc()->GetNumType();
@@ -1172,7 +1172,7 @@ void SwViewShell::VisPortChgd( const SwRect &rRect)
             {
                 bScrolled = true;
                 maVisArea.Pos() = aPrevArea.Pos();
-                if ( SmoothScroll( nXDiff, nYDiff, 0 ) )
+                if ( SmoothScroll( nXDiff, nYDiff, nullptr ) )
                     return;
                 maVisArea.Pos() = rRect.Pos();
             }
@@ -1294,13 +1294,13 @@ bool SwViewShell::SmoothScroll( long lXDiff, long lYDiff, const Rectangle *pRect
                 if(!HasDrawView())
                     MakeDrawView();
                 SdrView* pDrawView = GetDrawView();
-                pDrawView->AddWindowToPaintView(pVout, 0);
+                pDrawView->AddWindowToPaintView(pVout, nullptr);
 
                 // clear mpWin during DLPrePaint2 to get paint preparation for mpOut, but set it again
                 // immediately afterwards. There are many decisions in SW which imply that Printing
                 // is used when mpWin == 0 (wrong but widely used).
                 vcl::Window* pOldWin = mpWin;
-                mpWin = 0;
+                mpWin = nullptr;
                 DLPrePaint2(vcl::Region(aRect.SVRect()));
                 mpWin = pOldWin;
 
@@ -1629,7 +1629,7 @@ bool SwViewShell::CheckInvalidForPaint( const SwRect &rRect )
             if ( bStop )
             {
                 Imp()->DelRegion();
-                pRegion = 0;
+                pRegion = nullptr;
             }
         }
 
@@ -2002,7 +2002,7 @@ SwRootFrm *SwViewShell::GetLayout() const
 
 OutputDevice& SwViewShell::GetRefDev() const
 {
-    OutputDevice* pTmpOut = 0;
+    OutputDevice* pTmpOut = nullptr;
     if (  GetWin() &&
           GetViewOptions()->getBrowseMode() &&
          !GetViewOptions()->IsPrtFormat() )
@@ -2101,7 +2101,7 @@ void SwViewShell::ImplApplyViewOptions( const SwViewOption &rOpt )
         if( pFieldType && pFieldType->HasWriterListeners() )
         {
             SwMsgPoolItem aHint( RES_HIDDENPARA_PRINT );
-            pFieldType->ModifyNotification( &aHint, 0);
+            pFieldType->ModifyNotification( &aHint, nullptr);
         }
         bReformat = true;
     }
@@ -2340,7 +2340,7 @@ uno::Reference< css::accessibility::XAccessible > SwViewShell::CreateAccessibleP
                     GetLayout()->GetPageByPageNum( PagePreviewLayout()->mnSelectedPageNum ),
                     PagePreviewLayout()->maWinSize );
     }
-    return NULL;
+    return nullptr;
 }
 
 void SwViewShell::InvalidateAccessibleFocus()
@@ -2390,7 +2390,7 @@ SwAccessibleMap* SwViewShell::GetAccessibleMap()
         return &(Imp()->GetAccessibleMap());
     }
 
-    return 0;
+    return nullptr;
 }
 
 void SwViewShell::ApplyAccessiblityOptions(SvtAccessibilityOptions& rAccessibilityOptions)
@@ -2509,11 +2509,11 @@ void SwViewShell::DeleteReplacementBitmaps()
 
 SwPostItMgr* SwViewShell::GetPostItMgr()
 {
-    SwView* pView =  GetDoc()->GetDocShell() ? GetDoc()->GetDocShell()->GetView() : 0;
+    SwView* pView =  GetDoc()->GetDocShell() ? GetDoc()->GetDocShell()->GetView() : nullptr;
     if ( pView )
         return pView->GetPostItMgr();
 
-    return 0;
+    return nullptr;
 }
 
 /*

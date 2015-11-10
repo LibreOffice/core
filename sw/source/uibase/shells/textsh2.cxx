@@ -90,12 +90,12 @@ void SwTextShell::ExecDB(SfxRequest &rReq)
     OUString sSourceArg, sCommandArg;
     sal_Int32 nCommandTypeArg = 0;
 
-    const SfxPoolItem* pSourceItem = 0;
-    const SfxPoolItem* pCursorItem = 0;
-    const SfxPoolItem* pConnectionItem = 0;
-    const SfxPoolItem* pCommandItem = 0;
-    const SfxPoolItem* pCommandTypeItem = 0;
-    const SfxPoolItem* pSelectionItem = 0;
+    const SfxPoolItem* pSourceItem = nullptr;
+    const SfxPoolItem* pCursorItem = nullptr;
+    const SfxPoolItem* pConnectionItem = nullptr;
+    const SfxPoolItem* pCommandItem = nullptr;
+    const SfxPoolItem* pCommandTypeItem = nullptr;
+    const SfxPoolItem* pSelectionItem = nullptr;
 
     // first get the selection of rows to be inserted
     pArgs->GetItemState(FN_DB_DATA_SELECTION_ANY, false, &pSelectionItem);
@@ -187,8 +187,8 @@ void SwTextShell::ExecDB(SfxRequest &rReq)
 
         case FN_QRY_INSERT_FIELD:
             {
-                const SfxPoolItem* pColumnItem = 0;
-                const SfxPoolItem* pColumnNameItem = 0;
+                const SfxPoolItem* pColumnItem = nullptr;
+                const SfxPoolItem* pColumnNameItem = nullptr;
 
                 pArgs->GetItemState(FN_DB_COLUMN_ANY, false, &pColumnItem);
                 pArgs->GetItemState(FN_DB_DATA_COLUMN_NAME_ANY, false, &pColumnNameItem);

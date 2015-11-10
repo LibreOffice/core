@@ -42,11 +42,11 @@ class SwExtend
     bool Inside() const { return ( nPos >= nStart && nPos < nEnd ); }
     static void ActualizeFont( SwFont &rFnt, sal_uInt16 nAttr );
 public:
-    SwExtend( const std::vector<sal_uInt16> &rA, sal_Int32 nSt ) : pFnt(0), rArr( rA ),
+    SwExtend( const std::vector<sal_uInt16> &rA, sal_Int32 nSt ) : pFnt(nullptr), rArr( rA ),
         nStart( nSt ), nPos( COMPLETE_STRING ), nEnd( nStart + rA.size() ) {}
     ~SwExtend() { delete pFnt; }
-    bool IsOn() const { return pFnt != 0; }
-    void Reset() { if( pFnt ) { delete pFnt; pFnt = NULL; } nPos = COMPLETE_STRING; }
+    bool IsOn() const { return pFnt != nullptr; }
+    void Reset() { if( pFnt ) { delete pFnt; pFnt = nullptr; } nPos = COMPLETE_STRING; }
     bool Leave( SwFont& rFnt, sal_Int32 nNew )
         { return pFnt && _Leave( rFnt, nNew ); }
     short Enter( SwFont& rFnt, sal_Int32 nNew );
@@ -81,7 +81,7 @@ class SwRedlineItr
         { if( pExt ) return pExt->Next( nNext ); return nNext; }
 public:
     SwRedlineItr( const SwTextNode& rTextNd, SwFont& rFnt, SwAttrHandler& rAH,
-        sal_Int32 nRedlPos, bool bShw, const std::vector<sal_uInt16> *pArr = 0,
+        sal_Int32 nRedlPos, bool bShw, const std::vector<sal_uInt16> *pArr = nullptr,
         sal_Int32 nExtStart = COMPLETE_STRING );
     ~SwRedlineItr();
     inline bool IsOn() const { return bOn || ( pExt && pExt->IsOn() ); }

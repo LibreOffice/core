@@ -141,7 +141,7 @@ static const BuiltinStyleTable aBuiltinStyleTable[] =
     { word::WdBuiltinStyle::wdStyleTOC7, "Contents 7", word::WdStyleType::wdStyleTypeParagraph },
     { word::WdBuiltinStyle::wdStyleTOC8, "Contents 8", word::WdStyleType::wdStyleTypeParagraph },
     { word::WdBuiltinStyle::wdStyleTOC9, "Contents 9", word::WdStyleType::wdStyleTypeParagraph },
-    { 0, 0, 0 }
+    { 0, nullptr, 0 }
 };
 
 struct MSOStyleNameTable
@@ -154,7 +154,7 @@ struct MSOStyleNameTable
 static const MSOStyleNameTable aMSOStyleNameTable[] =
 {
     { "Normal", "Default", "ParagraphStyles" },
-    { 0, 0, 0 }
+    { nullptr, nullptr, nullptr }
 };
 
 class StyleCollectionHelper : public ::cppu::WeakImplHelper< container::XNameAccess,
@@ -190,7 +190,7 @@ public:
     virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) throw (uno::RuntimeException, std::exception) override
     {
         // search in the MSOStyleName table first
-        for( const MSOStyleNameTable* pTable = aMSOStyleNameTable; pTable->pMSOStyleName != NULL; pTable++ )
+        for( const MSOStyleNameTable* pTable = aMSOStyleNameTable; pTable->pMSOStyleName != nullptr; pTable++ )
         {
             if( aName.equalsIgnoreAsciiCaseAscii( pTable->pMSOStyleName ) )
             {
@@ -300,7 +300,7 @@ SwVbaStyles::Item( const uno::Any& Index1, const uno::Any& Index2 )
     sal_Int32 nIndex = 0;
     if( ( Index1 >>= nIndex ) && ( nIndex < 0 ) )
     {
-        for( const BuiltinStyleTable* pTable = aBuiltinStyleTable; pTable != NULL; pTable++ )
+        for( const BuiltinStyleTable* pTable = aBuiltinStyleTable; pTable != nullptr; pTable++ )
         {
             if( nIndex == pTable->wdBuiltinStyle )
             {

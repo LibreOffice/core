@@ -134,14 +134,14 @@ OUString ReplacePoint( const OUString& rTmpName, bool bWithCommandType )
 SwTextNode* GetFirstTextNode( const SwDoc& rDoc, SwPosition& rPos,
                             const SwContentFrm *pCFrm, Point &rPt )
 {
-    SwTextNode* pTextNode = 0;
+    SwTextNode* pTextNode = nullptr;
     if ( !pCFrm )
     {
         const SwNodes& rNodes = rDoc.GetNodes();
         rPos.nNode = *rNodes.GetEndOfContent().StartOfSectionNode();
         SwContentNode* pCNd;
-        while( 0 != (pCNd = rNodes.GoNext( &rPos.nNode ) ) &&
-                0 == ( pTextNode = pCNd->GetTextNode() ) )
+        while( nullptr != (pCNd = rNodes.GoNext( &rPos.nNode ) ) &&
+                nullptr == ( pTextNode = pCNd->GetTextNode() ) )
                         ;
         OSL_ENSURE( pTextNode, "Where is the 1. TextNode?" );
         rPos.nContent.Assign( pTextNode, 0 );
@@ -164,7 +164,7 @@ const SwTextNode* GetBodyTextNode( const SwDoc& rDoc, SwPosition& rPos,
                                 const SwFrm& rFrm )
 {
     const SwLayoutFrm* pLayout = rFrm.GetUpper();
-    const SwTextNode* pTextNode = 0;
+    const SwTextNode* pTextNode = nullptr;
 
     while( pLayout )
     {
@@ -197,7 +197,7 @@ const SwTextNode* GetBodyTextNode( const SwDoc& rDoc, SwPosition& rPos,
 
                 // do not break yet, might be as well in Header/Footer/Footnote/Fly
                 pLayout = static_cast<const SwFlyFrm*>(pLayout)->GetAnchorFrm()
-                            ? static_cast<const SwFlyFrm*>(pLayout)->GetAnchorFrm()->GetUpper() : 0;
+                            ? static_cast<const SwFlyFrm*>(pLayout)->GetAnchorFrm()->GetUpper() : nullptr;
                 continue;
             }
             else
@@ -222,8 +222,8 @@ const SwTextNode* GetBodyTextNode( const SwDoc& rDoc, SwPosition& rPos,
             if( pLayout->IsHeaderFrm() )
             {
                 const SwTabFrm *pTab;
-                if( 0 != ( pCntFrm = pPgFrm->FindFirstBodyContent()) &&
-                    0 != (pTab = pCntFrm->FindTabFrm()) && pTab->IsFollow() &&
+                if( nullptr != ( pCntFrm = pPgFrm->FindFirstBodyContent()) &&
+                    nullptr != (pTab = pCntFrm->FindTabFrm()) && pTab->IsFollow() &&
                     pTab->GetTable()->GetRowsToRepeat() > 0 &&
                     pTab->IsInHeadline( *pCntFrm ) )
                 {
@@ -272,7 +272,7 @@ SwFieldType* SwGetExpFieldType::Copy() const
 void SwGetExpFieldType::Modify( const SfxPoolItem*, const SfxPoolItem* pNew )
 {
     if( pNew && RES_DOCPOS_UPDATE == pNew->Which() )
-        NotifyClients( 0, pNew );
+        NotifyClients( nullptr, pNew );
     // do not expand anything else
 }
 
@@ -487,7 +487,7 @@ bool SwGetExpField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 SwSetExpFieldType::SwSetExpFieldType( SwDoc* pDc, const OUString& rName, sal_uInt16 nTyp )
     : SwValueFieldType( pDc, RES_SETEXPFLD ),
     sName( rName ),
-    pOutlChgNd( 0 ),
+    pOutlChgNd( nullptr ),
     sDelim( "." ),
     nType(nTyp), nLevel( UCHAR_MAX ),
     bDeleted( false )
@@ -545,7 +545,7 @@ sal_uInt16 SwSetExpFieldType::SetSeqRefNo( SwSetExpField& rField )
     {
         const SwTextNode* pNd;
         if( pF->GetField() != &rField && pF->GetTextField() &&
-            0 != ( pNd = pF->GetTextField()->GetpTextNode() ) &&
+            nullptr != ( pNd = pF->GetTextField()->GetpTextNode() ) &&
             pNd->GetNodes().IsDocNodes() )
         {
             InsertSort( aArr, static_cast<SwSetExpField*>(pF->GetField())->GetSeqNumber() );
@@ -590,7 +590,7 @@ size_t SwSetExpFieldType::GetSeqFieldList( SwSeqFieldList& rList )
     {
         const SwTextNode* pNd;
         if( pF->GetTextField() &&
-            0 != ( pNd = pF->GetTextField()->GetpTextNode() ) &&
+            nullptr != ( pNd = pF->GetTextField()->GetpTextNode() ) &&
             pNd->GetNodes().IsDocNodes() )
         {
             _SeqFieldLstElem* pNew = new _SeqFieldLstElem(
@@ -776,7 +776,7 @@ SwSetExpField::SwSetExpField(SwSetExpFieldType* pTyp, const OUString& rFormel,
                                         sal_uLong nFormat)
     : SwFormulaField( pTyp, nFormat, 0.0 ), nSeqNo( USHRT_MAX ),
     nSubType(0)
-    , mpFormatField(0)
+    , mpFormatField(nullptr)
 {
     SetFormula(rFormel);
     // ignore SubType
@@ -1132,7 +1132,7 @@ SwInputField::SwInputField( SwInputFieldType* pFieldType,
     , aPText(rPrompt)
     , nSubType(nSub)
     , mbIsFormField( bIsFormField )
-    , mpFormatField( NULL )
+    , mpFormatField( nullptr )
 {
 }
 
@@ -1149,10 +1149,10 @@ void SwInputField::SetFormatField( SwFormatField& rFormatField )
 
 void SwInputField::LockNotifyContentChange()
 {
-    if ( GetFormatField() != NULL )
+    if ( GetFormatField() != nullptr )
     {
         SwTextInputField* pTextInputField = dynamic_cast< SwTextInputField* >(GetFormatField()->GetTextField());
-        if ( pTextInputField != NULL )
+        if ( pTextInputField != nullptr )
         {
             pTextInputField->LockNotifyContentChange();
         }
@@ -1161,10 +1161,10 @@ void SwInputField::LockNotifyContentChange()
 
 void SwInputField::UnlockNotifyContentChange()
 {
-    if ( GetFormatField() != NULL )
+    if ( GetFormatField() != nullptr )
     {
         SwTextInputField* pTextInputField = dynamic_cast< SwTextInputField* >(GetFormatField()->GetTextField());
-        if ( pTextInputField != NULL )
+        if ( pTextInputField != nullptr )
         {
             pTextInputField->UnlockNotifyContentChange();
         }

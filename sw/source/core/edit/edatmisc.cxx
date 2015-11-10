@@ -38,7 +38,7 @@ void SwEditShell::ResetAttr( const std::set<sal_uInt16> &attrs, SwPaM* pPaM )
     bool bUndoGroup = pCrsr->GetNext() != pCrsr;
     if( bUndoGroup )
     {
-        GetDoc()->GetIDocumentUndoRedo().StartUndo(UNDO_RESETATTR, NULL);
+        GetDoc()->GetIDocumentUndoRedo().StartUndo(UNDO_RESETATTR, nullptr);
     }
 
     for(SwPaM& rCurCrsr : pCrsr->GetRingContainer())
@@ -46,7 +46,7 @@ void SwEditShell::ResetAttr( const std::set<sal_uInt16> &attrs, SwPaM* pPaM )
 
     if( bUndoGroup )
     {
-        GetDoc()->GetIDocumentUndoRedo().EndUndo(UNDO_RESETATTR, NULL);
+        GetDoc()->GetIDocumentUndoRedo().EndUndo(UNDO_RESETATTR, nullptr);
     }
     CallChgLnk();
     EndAllAction();
@@ -74,7 +74,7 @@ void SwEditShell::GCAttr()
                 if( pNd->IsTextNode() )
                     static_cast<SwTextNode*>(pNd)->GCAttr();
             }
-            while( 0 != ( pNd = GetDoc()->GetNodes().GoNext( &aIdx )) &&
+            while( nullptr != ( pNd = GetDoc()->GetNodes().GoNext( &aIdx )) &&
                     aIdx <= rEnd );
         }
     }
@@ -103,7 +103,7 @@ void SwEditShell::SetAttrItem( const SfxPoolItem& rHint, SetAttrMode nFlags )
     if( pCrsr->GetNext() != pCrsr )     // Ring of Cursors
     {
         bool bIsTableMode = IsTableMode();
-        GetDoc()->GetIDocumentUndoRedo().StartUndo(UNDO_INSATTR, NULL);
+        GetDoc()->GetIDocumentUndoRedo().StartUndo(UNDO_INSATTR, nullptr);
 
         for(SwPaM& rPaM : GetCrsr()->GetRingContainer())
         {
@@ -114,7 +114,7 @@ void SwEditShell::SetAttrItem( const SfxPoolItem& rHint, SetAttrMode nFlags )
             }
         }
 
-        GetDoc()->GetIDocumentUndoRedo().EndUndo(UNDO_INSATTR, NULL);
+        GetDoc()->GetIDocumentUndoRedo().EndUndo(UNDO_INSATTR, nullptr);
     }
     else
     {
@@ -134,7 +134,7 @@ void SwEditShell::SetAttrSet( const SfxItemSet& rSet, SetAttrMode nFlags, SwPaM*
     if( pCrsr->GetNext() != pCrsr )     // Ring of Cursors
     {
         bool bIsTableMode = IsTableMode();
-        GetDoc()->GetIDocumentUndoRedo().StartUndo(UNDO_INSATTR, NULL);
+        GetDoc()->GetIDocumentUndoRedo().StartUndo(UNDO_INSATTR, nullptr);
 
         for(SwPaM& rTmpCrsr : pCrsr->GetRingContainer())
         {
@@ -145,7 +145,7 @@ void SwEditShell::SetAttrSet( const SfxItemSet& rSet, SetAttrMode nFlags, SwPaM*
             }
         }
 
-        GetDoc()->GetIDocumentUndoRedo().EndUndo(UNDO_INSATTR, NULL);
+        GetDoc()->GetIDocumentUndoRedo().EndUndo(UNDO_INSATTR, nullptr);
     }
     else
     {

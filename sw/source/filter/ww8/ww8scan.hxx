@@ -82,7 +82,7 @@ public:
 
     SprmInfo const * search(sal_uInt16 id) const {
         Map::const_iterator i(map_.find(id));
-        return i == map_.end() ? 0 : &i->second;
+        return i == map_.end() ? nullptr : &i->second;
     }
 
 private:
@@ -170,7 +170,7 @@ class  WW8PLCFx_PCD;
  */
 void WW8ReadSTTBF(bool bVer8, SvStream& rStrm, sal_uInt32 nStart, sal_Int32 nLen,
     sal_uInt16 nExtraLen, rtl_TextEncoding eCS, ::std::vector<OUString> &rArray,
-    ::std::vector<ww::bytes>* pExtraArray = 0, ::std::vector<OUString>* pValueArray = 0);
+    ::std::vector<ww::bytes>* pExtraArray = nullptr, ::std::vector<OUString>* pValueArray = nullptr);
 
 struct WW8FieldDesc
 {
@@ -228,7 +228,7 @@ public:
 
     const void* GetData( long nInIdx ) const
     {
-        return ( nInIdx >= nIMax ) ? 0
+        return ( nInIdx >= nIMax ) ? nullptr
             : static_cast<const void*>(&pPLCF_Contents[nInIdx * nStru]);
     }
     sal_Int32 GetPos( long nInIdx ) const
@@ -263,7 +263,7 @@ public:
     const sal_uInt8* FindSprm(sal_uInt16 nId);
     void  advance();
     const sal_uInt8* GetSprms() const
-        { return ( pSprms && (0 < nRemLen) ) ? pSprms : 0; }
+        { return ( pSprms && (0 < nRemLen) ) ? pSprms : nullptr; }
     const sal_uInt8* GetAktParams() const { return pAktParams; }
     sal_uInt16 GetAktId() const { return nAktId; }
 
@@ -314,7 +314,7 @@ public:
 
     const void* GetData( sal_Int32 nInIdx ) const
     {
-        return ( nInIdx >= nIMax ) ? 0 :
+        return ( nInIdx >= nIMax ) ? nullptr :
             static_cast<const void*>(&pPLCF_Contents[nInIdx * nStru]);
     }
 };
@@ -491,7 +491,7 @@ public:
             sal_uInt16 mnIStd; // only for Fkp.Papx (actually Style-Nr)
             bool mbMustDelete;
 
-            explicit Entry(WW8_FC nFC) : mnFC(nFC), mpData(0), mnLen(0),
+            explicit Entry(WW8_FC nFC) : mnFC(nFC), mpData(nullptr), mnLen(0),
                 mnIStd(0), mbMustDelete(false) {}
             Entry(const Entry &rEntry);
             ~Entry();
@@ -596,7 +596,7 @@ public:
     void GetPCDSprms( WW8PLCFxDesc& rDesc );
     const sal_uInt8* HasSprm( sal_uInt16 nId );
     bool HasSprm(sal_uInt16 nId, std::vector<const sal_uInt8 *> &rResult);
-    bool HasFkp() const { return (0 != pFkp); }
+    bool HasFkp() const { return (nullptr != pFkp); }
 };
 
 /// iterator for Piece Table Exceptions of Fkps works on CPs (high-level)
@@ -685,7 +685,7 @@ public:
     // returns reference descriptors
     const void* GetData( long nIdx = -1 ) const
     {
-        return pRef ? pRef->GetData( -1L == nIdx ? pRef->GetIdx() : nIdx ) : 0;
+        return pRef ? pRef->GetData( -1L == nIdx ? pRef->GetIdx() : nIdx ) : nullptr;
     }
 
     virtual void GetSprms(WW8PLCFxDesc* p) override;
@@ -851,9 +851,9 @@ struct WW8PLCFxDesc
     //GetSprms will not search for the sprms, but instead take the
     //existing ones.
     WW8PLCFxDesc()
-        : pPLCFx(0)
-        , pIdStk(0)
-        , pMemPos(0)
+        : pPLCFx(nullptr)
+        , pIdStk(nullptr)
+        , pMemPos(nullptr)
         , nOrigSprmsLen(0)
         , nStartPos(WW8_CP_MAX)
         , nEndPos(WW8_CP_MAX)
@@ -896,7 +896,7 @@ private:
 
     const WW8Fib* pWwFib;
 
-    sal_uInt16 WhereIdx(bool* pbStart=0, long* pPos=0) const;
+    sal_uInt16 WhereIdx(bool* pbStart=nullptr, long* pPos=nullptr) const;
     void AdjustEnds(WW8PLCFxDesc& rDesc);
     void GetNewSprms(WW8PLCFxDesc& rDesc);
     static void GetNewNoSprms(WW8PLCFxDesc& rDesc);
@@ -1024,8 +1024,8 @@ public:
     //given that we never write fastsaved files you can use it, otherwise
     //I will beat you with a stick
     WW8_CP WW8Fc2Cp(WW8_FC nFcPos) const ;
-    WW8_FC WW8Cp2Fc(WW8_CP nCpPos, bool* pIsUnicode = 0,
-        WW8_CP* pNextPieceCp = 0, bool* pTestFlag = 0) const;
+    WW8_FC WW8Cp2Fc(WW8_CP nCpPos, bool* pIsUnicode = nullptr,
+        WW8_CP* pNextPieceCp = nullptr, bool* pTestFlag = nullptr) const;
 
     sal_Int32 WW8ReadString(SvStream& rStrm, OUString& rStr, WW8_CP nAktStartCp,
         long nTotalLen, rtl_TextEncoding eEnc ) const;

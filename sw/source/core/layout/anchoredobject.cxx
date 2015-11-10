@@ -36,7 +36,7 @@ using namespace ::com::sun::star;
 // implementation of helper class <SwObjPositioningInProgress>
 
 SwObjPositioningInProgress::SwObjPositioningInProgress( SdrObject& _rSdrObj ) :
-    mpAnchoredObj( 0L ),
+    mpAnchoredObj( nullptr ),
     // --> #i52904#
     mbOldObjPositioningInProgress( false )
 {
@@ -67,14 +67,14 @@ SwObjPositioningInProgress::~SwObjPositioningInProgress()
 TYPEINIT0(SwAnchoredObject);
 
 SwAnchoredObject::SwAnchoredObject() :
-    mpDrawObj( 0L ),
-    mpAnchorFrm( 0L ),
+    mpDrawObj( nullptr ),
+    mpAnchorFrm( nullptr ),
     // --> #i28701#
-    mpPageFrm( 0L ),
+    mpPageFrm( nullptr ),
     maRelPos(),
     maLastCharRect(),
     mnLastTopOfLine( 0L ),
-    mpVertPosOrientFrm( 0L ),
+    mpVertPosOrientFrm( nullptr ),
     // --> #i28701#
     mbPositioningInProgress( false ),
     mbConsiderForTextWrap( false ),
@@ -98,7 +98,7 @@ void SwAnchoredObject::ClearVertPosOrientFrm()
     if (mpVertPosOrientFrm)
     {
         const_cast<SwLayoutFrm*>(mpVertPosOrientFrm)->ClearVertPosOrientFrmFor(this);
-        mpVertPosOrientFrm = NULL;
+        mpVertPosOrientFrm = nullptr;
     }
 }
 
@@ -697,7 +697,7 @@ bool SwAnchoredObject::InvalidationOfPosAllowed() const
 */
 SwPageFrm* SwAnchoredObject::FindPageFrmOfAnchor()
 {
-    SwPageFrm* pRetPageFrm = 0L;
+    SwPageFrm* pRetPageFrm = nullptr;
 
     // --> #i44339# - check, if anchor frame exists.
     if ( mpAnchorFrm )
@@ -720,7 +720,7 @@ SwPageFrm* SwAnchoredObject::FindPageFrmOfAnchor()
 */
 SwTextFrm* SwAnchoredObject::FindAnchorCharFrm()
 {
-    SwTextFrm* pAnchorCharFrm( 0L );
+    SwTextFrm* pAnchorCharFrm( nullptr );
 
     // --> #i44339# - check, if anchor frame exists.
     if ( mpAnchorFrm )
@@ -852,7 +852,7 @@ Point SwAnchoredObject::GetRelPosToPageFrm( const bool _bFollowTextFlow,
     aRelPos = GetObjRect().Pos();
     // --> #i33818# - search for cell frame, if object has to
     // follow the text flow.
-    const SwFrm* pFrm( 0L );
+    const SwFrm* pFrm( nullptr );
     if ( _bFollowTextFlow && !GetAnchorFrm()->IsPageFrm() )
     {
         pFrm = GetAnchorFrm()->GetUpper();

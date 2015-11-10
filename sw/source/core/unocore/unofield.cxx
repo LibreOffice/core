@@ -810,7 +810,7 @@ SwFieldType* SwXFieldMaster::GetFieldType(bool const bDontCreate) const
     }
 #endif
     if (m_pImpl->m_bIsDescriptor)
-        return 0;
+        return nullptr;
     else
         return static_cast<SwFieldType*>(m_pImpl->GetRegisteredIn());
 }
@@ -880,7 +880,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
                 aRet >>= aDataSource;
                 aRet <<= OUString();
 
-                OUString *pStr = 0;     // only one of this properties will return
+                OUString *pStr = nullptr;     // only one of this properties will return
                                         // a non-empty string.
                 INetURLObject aObj;
                 aObj.SetURL( aDataSource );
@@ -1033,7 +1033,7 @@ void SwXFieldMaster::Impl::Modify(
         return; // core object still alive
     }
 
-    m_pDoc = 0;
+    m_pDoc = nullptr;
     uno::Reference<uno::XInterface> const xThis(m_wThis);
     if (!xThis.is())
     {   // fdo#72695: if UNO object is already dead, don't revive it with event
@@ -1109,7 +1109,7 @@ struct SwFieldProperties_Impl
     SwFieldProperties_Impl():
         aDate( Date::EMPTY ),
         fDouble(0.),
-        pDateTime(0),
+        pDateTime(nullptr),
         nSubType(0),
         nFormat(0),
         nUSHORT1(0),
@@ -1155,13 +1155,13 @@ public:
         , m_EventListeners(m_Mutex)
         , m_pFormatField(pFormat)
         , m_pDoc(pDoc)
-        , m_pTextObject(0)
-        , m_bIsDescriptor(pFormat == 0)
+        , m_pTextObject(nullptr)
+        , m_bIsDescriptor(pFormat == nullptr)
         , m_bCallUpdate(false)
         , m_nServiceId((pFormat)
                 ? lcl_GetServiceForField(*pFormat->GetField())
                 : nServiceId)
-        , m_pProps((pFormat) ? 0 : new SwFieldProperties_Impl)
+        , m_pProps((pFormat) ? nullptr : new SwFieldProperties_Impl)
     { }
 
     virtual ~Impl()
@@ -1202,7 +1202,7 @@ throw (uno::RuntimeException, std::exception)
 SwXTextField::SwXTextField(
     sal_uInt16 nServiceId,
     SwDoc* pDoc)
-    : m_pImpl(new Impl(pDoc, 0, nServiceId))
+    : m_pImpl(new Impl(pDoc, nullptr, nServiceId))
 {
     //Set visible as default!
     if ( SW_SERVICE_FIELDTYPE_SET_EXP == nServiceId
@@ -1278,7 +1278,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
     SwXFieldMaster* pMaster = reinterpret_cast< SwXFieldMaster * >(
             sal::static_int_cast< sal_IntPtr >( xMasterTunnel->getSomething( SwXFieldMaster::getUnoTunnelId()) ));
 
-    SwFieldType* pFieldType = pMaster ? pMaster->GetFieldType() : 0;
+    SwFieldType* pFieldType = pMaster ? pMaster->GetFieldType() : nullptr;
     if (!pFieldType ||
         pFieldType->Which() != lcl_ServiceIdToResId(m_pImpl->m_nServiceId))
     {
@@ -1292,7 +1292,7 @@ uno::Reference< beans::XPropertySet > SAL_CALL
 SwXTextField::getTextFieldMaster() throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    SwFieldType* pType = 0;
+    SwFieldType* pType = nullptr;
     if (m_pImpl->m_bIsDescriptor && m_pImpl->m_FieldTypeClient.GetRegisteredIn())
     {
         pType = static_cast<SwFieldType*>(
@@ -1331,8 +1331,8 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
     if (m_pImpl->m_bIsDescriptor)
     {
     uno::Reference<lang::XUnoTunnel> xRangeTunnel( xTextRange, uno::UNO_QUERY);
-    SwXTextRange* pRange = 0;
-    OTextCursorHelper* pCursor = 0;
+    SwXTextRange* pRange = nullptr;
+    OTextCursorHelper* pCursor = nullptr;
     if(xRangeTunnel.is())
     {
         pRange  = reinterpret_cast< SwXTextRange * >(
@@ -1341,7 +1341,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
                 sal::static_int_cast< sal_IntPtr >( xRangeTunnel->getSomething( OTextCursorHelper::getUnoTunnelId()) ));
     }
 
-    SwDoc* pDoc = pRange ? &pRange->GetDoc() : pCursor ? pCursor->GetDoc() : 0;
+    SwDoc* pDoc = pRange ? &pRange->GetDoc() : pCursor ? pCursor->GetDoc() : nullptr;
     // if a FieldMaster was attached, then the document is already fixed!
     // NOTE: sw.SwXAutoTextEntry unoapi test depends on m_pDoc = 0 being valid
     if (!pDoc || (m_pImpl->m_pDoc && m_pImpl->m_pDoc != pDoc))
@@ -1350,7 +1350,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
     SwUnoInternalPaM aPam(*pDoc);
     // this now needs to return TRUE
     ::sw::XTextRangeToSwPaM(aPam, xTextRange);
-    SwField* pField = 0;
+    SwField* pField = nullptr;
     switch (m_pImpl->m_nServiceId)
     {
         case SW_SERVICE_FIELDTYPE_ANNOTATION:
@@ -1974,8 +1974,8 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
             {
                 // create annotation mark
                 const SwPostItField* pPostItField = dynamic_cast< const SwPostItField* >(pTextAttr->GetFormatField().GetField());
-                OSL_ENSURE( pPostItField != NULL, "<SwXTextField::attachToRange(..)> - annotation field missing!" );
-                if ( pPostItField != NULL )
+                OSL_ENSURE( pPostItField != nullptr, "<SwXTextField::attachToRange(..)> - annotation field missing!" );
+                if ( pPostItField != nullptr )
                 {
                     IDocumentMarkAccess* pMarksAccess = pDoc->getIDocumentMarkAccess();
                     pMarksAccess->makeAnnotationMark( aPam, pPostItField->GetName() );
@@ -2000,8 +2000,8 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
     if (m_pImpl->m_bCallUpdate)
         update();
     }
-    else if ( m_pImpl->m_pFormatField != NULL
-              && m_pImpl->m_pDoc != NULL
+    else if ( m_pImpl->m_pFormatField != nullptr
+              && m_pImpl->m_pDoc != nullptr
               && m_pImpl->m_nServiceId == SW_SERVICE_FIELDTYPE_ANNOTATION )
     {
         SwUnoInternalPaM aIntPam( *m_pImpl->m_pDoc );
@@ -2030,7 +2030,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
                 // keep inserted annotation
                 {
                     SwTextField* pTextAttr = aEnd.GetNode().GetTextNode()->GetFieldTextAttrAt( aEnd.End()->nContent.GetIndex()-1, true );
-                    if ( pTextAttr != NULL )
+                    if ( pTextAttr != nullptr )
                     {
                         m_pImpl->m_pFormatField = &pTextAttr->GetFormatField();
 
@@ -2038,8 +2038,8 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
                         {
                             // create annotation mark
                             const SwPostItField* pField = dynamic_cast< const SwPostItField* >(pTextAttr->GetFormatField().GetField());
-                            OSL_ENSURE( pField != NULL, "<SwXTextField::attach(..)> - annotation field missing!" );
-                            if ( pField != NULL )
+                            OSL_ENSURE( pField != nullptr, "<SwXTextField::attach(..)> - annotation field missing!" );
+                            if ( pField != nullptr )
                             {
                                 IDocumentMarkAccess* pMarksAccess = aIntPam.GetDoc()->getIDocumentMarkAccess();
                                 pMarksAccess->makeAnnotationMark( aIntPam, pField->GetName() );
@@ -2063,7 +2063,7 @@ SwXTextField::getAnchor() throw (uno::RuntimeException, std::exception)
 
     SwField const*const pField = m_pImpl->GetField();
     if (!pField)
-        return 0;
+        return nullptr;
 
     const SwTextField* pTextField = m_pImpl->m_pFormatField->GetTextField();
     if (!pTextField)
@@ -2071,8 +2071,8 @@ SwXTextField::getAnchor() throw (uno::RuntimeException, std::exception)
 
     std::shared_ptr< SwPaM > pPamForTextField;
     SwTextField::GetPamForTextField(*pTextField, pPamForTextField);
-    if (pPamForTextField.get() == NULL)
-        return 0;
+    if (pPamForTextField.get() == nullptr)
+        return nullptr;
 
     // If this is a postit field, then return the range of its annotation mark if it has one.
     if (pField->Which() == RES_POSTITFLD)
@@ -2110,7 +2110,7 @@ void SAL_CALL SwXTextField::dispose() throw (uno::RuntimeException, std::excepti
     {
         m_pImpl->m_pTextObject->DisposeEditSource();
         m_pImpl->m_pTextObject->release();
-        m_pImpl->m_pTextObject = 0;
+        m_pImpl->m_pTextObject = nullptr;
     }
 }
 
@@ -2200,7 +2200,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
         if (RES_POSTITFLD == nWhich && m_pImpl->m_pFormatField)
         {
             const_cast<SwFormatField*>(m_pImpl->m_pFormatField)->Broadcast(
-                    SwFormatFieldHint( 0, SwFormatFieldHintWhich::CHANGED ));
+                    SwFormatFieldHint( nullptr, SwFormatFieldHintWhich::CHANGED ));
         }
 
         // fdo#42073 notify SwTextField about changes of the expanded string
@@ -2217,7 +2217,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
     }
     else if (m_pImpl->m_pProps)
     {
-        bool* pBool = 0;
+        bool* pBool = nullptr;
         switch(pEntry->nWID)
         {
         case FIELD_PROP_PAR1:
@@ -2355,8 +2355,8 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
                 // correctly evaluated the document needs a layout
                 // (has to be already formatted)
                 SwDoc *pDoc = m_pImpl->m_pDoc;
-                SwViewShell *pViewShell = 0;
-                SwEditShell *pEditShell = 0;
+                SwViewShell *pViewShell = nullptr;
+                SwEditShell *pEditShell = nullptr;
                 if( pDoc )
                 {
                     pViewShell = pDoc->getIDocumentLayoutAccess().GetCurrentViewShell();
@@ -2372,9 +2372,9 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
 
                 // get text node for the text field
                 const SwFormatField *pFieldFormat =
-                    (m_pImpl->GetField()) ? m_pImpl->m_pFormatField : 0;
+                    (m_pImpl->GetField()) ? m_pImpl->m_pFormatField : nullptr;
                 const SwTextField* pTextField = (pFieldFormat)
-                    ? m_pImpl->m_pFormatField->GetTextField() : 0;
+                    ? m_pImpl->m_pFormatField->GetTextField() : nullptr;
                 if(!pTextField)
                     throw uno::RuntimeException();
                 const SwTextNode& rTextNode = pTextField->GetTextNode();
@@ -2568,7 +2568,7 @@ void SAL_CALL SwXTextField::update() throw (uno::RuntimeException, std::exceptio
             break;
         }
         // Text formatting has to be triggered.
-        const_cast<SwFormatField*>(m_pImpl->m_pFormatField)->ModifyNotification(0, 0);
+        const_cast<SwFormatField*>(m_pImpl->m_pFormatField)->ModifyNotification(nullptr, nullptr);
     }
     else
         m_pImpl->m_bCallUpdate = true;
@@ -2627,8 +2627,8 @@ void SwXTextField::Impl::Invalidate()
     if (GetRegisteredIn())
     {
         GetRegisteredInNonConst()->Remove(this);
-        m_pFormatField = 0;
-        m_pDoc = 0;
+        m_pFormatField = nullptr;
+        m_pDoc = nullptr;
         uno::Reference<uno::XInterface> const xThis(m_wThis);
         if (!xThis.is())
         {   // fdo#72695: if UNO object is already dead, don't revive it with event
@@ -2665,7 +2665,7 @@ const SwField*  SwXTextField::Impl::GetField() const
     {
         return m_pFormatField->GetField();
     }
-    return 0;
+    return nullptr;
 }
 
 OUString SwXTextFieldMasters::getImplementationName() throw( uno::RuntimeException, std::exception )
@@ -2849,7 +2849,7 @@ sal_Bool SwXTextFieldMasters::hasByName(const OUString& rName) throw( uno::Runti
     if( USHRT_MAX != nResId )
     {
         sName = sName.copy(std::min(sTypeName.getLength()+1, sName.getLength()));
-        bRet = USHRT_MAX != nResId && 0 != GetDoc()->getIDocumentFieldsAccess().GetFieldType(nResId, sName, true);
+        bRet = USHRT_MAX != nResId && nullptr != GetDoc()->getIDocumentFieldsAccess().GetFieldType(nResId, sName, true);
     }
     return bRet;
 }
@@ -2944,7 +2944,7 @@ void SAL_CALL SwXTextFieldTypes::refresh() throw (uno::RuntimeException, std::ex
             throw uno::RuntimeException();
         UnoActionContext aContext(GetDoc());
         GetDoc()->getIDocumentStatistics().UpdateDocStat( false, true );
-        GetDoc()->getIDocumentFieldsAccess().UpdateFields(0, false);
+        GetDoc()->getIDocumentFieldsAccess().UpdateFields(nullptr, false);
     }
     // call refresh listeners (without SolarMutex locked)
     lang::EventObject const event(static_cast< ::cppu::OWeakObject*>(this));
@@ -3097,7 +3097,7 @@ throw (container::NoSuchElementException, lang::WrappedTargetException,
         m_pImpl->m_Items.getArray()[ m_pImpl->m_nNextIndex++ ];
     uno::Any aRet;
     aRet <<= rxField;
-    rxField = 0;  // free memory for item that is not longer used
+    rxField = nullptr;  // free memory for item that is not longer used
     return aRet;
 }
 
@@ -3106,7 +3106,7 @@ void SwXFieldEnumeration::Impl::Modify(
 {
     ClientModify(this, pOld, pNew);
     if(!GetRegisteredIn())
-        m_pDoc = 0;
+        m_pDoc = nullptr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -82,7 +82,7 @@ public:
     void            SetGrfBulletCP(sal_Unicode cP){m_cGrfBulletCP = cP;}
     sal_Unicode     GetGrfBulletCP() const {return m_cGrfBulletCP;}
 
-    virtual void    SetGraphicBrush( const SvxBrushItem* pBrushItem, const Size* pSize = 0, const sal_Int16* pOrient = 0) override;
+    virtual void    SetGraphicBrush( const SvxBrushItem* pBrushItem, const Size* pSize = nullptr, const sal_Int16* pOrient = nullptr) override;
 
     virtual void                SetVertOrient(sal_Int16 eSet) override;
     virtual sal_Int16   GetVertOrient() const override;
@@ -173,7 +173,7 @@ public:
                           const bool bInclStrings = true,
                           const bool bOnlyArabic = false,
                           const unsigned int _nRestrictToThisLevel = MAXLEVEL,
-                          Extremities* pExtremities = 0 ) const;
+                          Extremities* pExtremities = nullptr ) const;
     OUString MakeRefNumString( const SwNodeNum& rNodeNum,
                              const bool bInclSuperiorNumLabels = false,
                              const sal_uInt8 nRestrictInclToThisLevel = 0 ) const;

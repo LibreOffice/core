@@ -190,7 +190,7 @@ void SwSectionFrm::DelEmpty( bool bRemove )
         if( !GetFollow() && !pMaster->IsColLocked() )
             pMaster->InvalidateSize();
     }
-    SetFollow(0);
+    SetFollow(nullptr);
     if( pUp )
     {
         Frm().Height( 0 );
@@ -205,7 +205,7 @@ void SwSectionFrm::DelEmpty( bool bRemove )
         }
         else if( getRootFrm() )
             getRootFrm()->InsertEmptySct( this );
-        m_pSection = NULL;  // like this a reanimation is virtually impossible though
+        m_pSection = nullptr;  // like this a reanimation is virtually impossible though
     }
 }
 
@@ -223,7 +223,7 @@ void SwSectionFrm::_Cut( bool bRemove )
     SwPageFrm *pPage = FindPageFrm();
     InvalidatePage( pPage );
     SwFrm *pFrm = GetNext();
-    SwFrm* pPrepFrm = NULL;
+    SwFrm* pPrepFrm = nullptr;
     while( pFrm && pFrm->IsSctFrm() && !static_cast<SwSectionFrm*>(pFrm)->GetSection() )
         pFrm = pFrm->GetNext();
     if( pFrm )
@@ -244,7 +244,7 @@ void SwSectionFrm::_Cut( bool bRemove )
     {
         InvalidateNextPos();
         // Someone has to take over the retouching: predecessor or Upper
-        if ( 0 != (pFrm = GetPrev()) )
+        if ( nullptr != (pFrm = GetPrev()) )
         {   pFrm->SetRetouche();
             pFrm->Prepare( PREP_WIDOWS_ORPHANS );
             if ( pFrm->IsContentFrm() )
@@ -269,7 +269,7 @@ void SwSectionFrm::_Cut( bool bRemove )
         {
             pUp->Cut();
             SwFrm::DestroyFrm(pUp);
-            pUp = NULL;
+            pUp = nullptr;
         }
     }
     if( pPrepFrm )
@@ -310,7 +310,7 @@ void SwSectionFrm::Paste( SwFrm* pParent, SwFrm* pSibling )
         if ( pTableFrm &&
              pSect->IsAnLower( pTableFrm ) )
         {
-            pSect = 0;
+            pSect = nullptr;
         }
     }
 
@@ -324,7 +324,7 @@ void SwSectionFrm::Paste( SwFrm* pParent, SwFrm* pSibling )
             // for the content of the next column to be moved correctly to the
             // newly created pSect by the InsertGroup
             SwColumnFrm *pCol = static_cast<SwColumnFrm*>(pParent->GetUpper());
-            while( !pSibling && 0 != ( pCol = static_cast<SwColumnFrm*>(pCol->GetNext()) ) )
+            while( !pSibling && nullptr != ( pCol = static_cast<SwColumnFrm*>(pCol->GetNext()) ) )
                 pSibling = static_cast<SwLayoutFrm*>(static_cast<SwColumnFrm*>(pCol)->Lower())->Lower();
             if( pSibling )
             {
@@ -332,7 +332,7 @@ void SwSectionFrm::Paste( SwFrm* pParent, SwFrm* pSibling )
                 // be attached to the pSibling-chain in order to be
                 // taken along
                 SwFrm *pTmp = pSibling;
-                while ( 0 != ( pCol = static_cast<SwColumnFrm*>(pCol->GetNext()) ) )
+                while ( nullptr != ( pCol = static_cast<SwColumnFrm*>(pCol->GetNext()) ) )
                 {
                     while ( pTmp->GetNext() )
                         pTmp = pTmp->GetNext();
@@ -347,7 +347,7 @@ void SwSectionFrm::Paste( SwFrm* pParent, SwFrm* pSibling )
         // if pParent is decomposed into two parts, its Follow has to be attached
         // to the new second part
         pSect->SetFollow( static_cast<SwSectionFrm*>(pParent)->GetFollow() );
-        static_cast<SwSectionFrm*>(pParent)->SetFollow( NULL );
+        static_cast<SwSectionFrm*>(pParent)->SetFollow( nullptr );
         if( pSect->GetFollow() )
             pParent->_InvalidateSize();
 
@@ -364,7 +364,7 @@ void SwSectionFrm::Paste( SwFrm* pParent, SwFrm* pSibling )
         }
     }
     else
-        InsertGroupBefore( pParent, pSibling, NULL );
+        InsertGroupBefore( pParent, pSibling, nullptr );
 
     _InvalidateAll();
     SwPageFrm *pPage = FindPageFrm();
@@ -452,7 +452,7 @@ void SwSectionFrm::MergeNext( SwSectionFrm* pNxt )
             ::RestoreContent( pTmp, pLay, pLast, true );
         }
         SetFollow( pNxt->GetFollow() );
-        pNxt->SetFollow( NULL );
+        pNxt->SetFollow( nullptr );
         pNxt->Cut();
         SwFrm::DestroyFrm(pNxt);
         InvalidateSize();
@@ -483,7 +483,7 @@ bool SwSectionFrm::SplitSect( SwFrm* pFrm, bool bApres )
         pNew->InsertBehind( pSect->GetUpper(), pSect );
         pNew->Init();
         SWRECTFN( this )
-        (pNew->*fnRect->fnMakePos)( NULL, pSect, true );
+        (pNew->*fnRect->fnMakePos)( nullptr, pSect, true );
         // OD 25.03.2003 #108339# - restore content:
         // determine layout frame for restoring content after the initialization
         // of the section frame. In the section initialization the columns are
@@ -493,13 +493,13 @@ bool SwSectionFrm::SplitSect( SwFrm* pFrm, bool bApres )
             // Search for last layout frame, e.g. for columned sections.
             while( pLay->Lower() && pLay->Lower()->IsLayoutFrm() )
                 pLay = static_cast<SwLayoutFrm*>(pLay->Lower());
-            ::RestoreContent( pSav, pLay, NULL, true );
+            ::RestoreContent( pSav, pLay, nullptr, true );
         }
         _InvalidateSize();
         if( HasFollow() )
         {
             pNew->SetFollow( GetFollow() );
-            SetFollow( NULL );
+            SetFollow( nullptr );
         }
         return true;
     }
@@ -547,23 +547,23 @@ static SwContentFrm* lcl_GetNextContentFrm( const SwLayoutFrm* pLay, bool bFwd )
     }
 
     const SwFrm* pFrm = pLay;
-    SwContentFrm *pContentFrm = 0;
+    SwContentFrm *pContentFrm = nullptr;
     bool bGoingUp = true;
     do {
-        const SwFrm *p = 0;
+        const SwFrm *p = nullptr;
         bool bGoingFwdOrBwd = false;
 
-        bool bGoingDown = !bGoingUp && ( 0 !=  ( p = pFrm->IsLayoutFrm() ? static_cast<const SwLayoutFrm*>(pFrm)->Lower() : 0 ) );
+        bool bGoingDown = !bGoingUp && ( nullptr !=  ( p = pFrm->IsLayoutFrm() ? static_cast<const SwLayoutFrm*>(pFrm)->Lower() : nullptr ) );
         if ( !bGoingDown )
         {
-            bGoingFwdOrBwd = ( 0 != ( p = pFrm->IsFlyFrm() ?
+            bGoingFwdOrBwd = ( nullptr != ( p = pFrm->IsFlyFrm() ?
                                           ( bFwd ? static_cast<const SwFlyFrm*>(pFrm)->GetNextLink() : static_cast<const SwFlyFrm*>(pFrm)->GetPrevLink() ) :
                                           ( bFwd ? pFrm->GetNext() :pFrm->GetPrev() ) ) );
             if ( !bGoingFwdOrBwd )
             {
-                bGoingUp = (0 != (p = pFrm->GetUpper() ) );
+                bGoingUp = (nullptr != (p = pFrm->GetUpper() ) );
                 if ( !bGoingUp )
-                    return 0;
+                    return nullptr;
             }
         }
 
@@ -574,7 +574,7 @@ static SwContentFrm* lcl_GetNextContentFrm( const SwLayoutFrm* pLay, bool bFwd )
                 p = p->GetNext();
 
         pFrm = p;
-    } while ( 0 == (pContentFrm = (pFrm->IsContentFrm() ? const_cast<SwContentFrm*>(static_cast<const SwContentFrm*>(pFrm)) : 0) ));
+    } while ( nullptr == (pContentFrm = (pFrm->IsContentFrm() ? const_cast<SwContentFrm*>(static_cast<const SwContentFrm*>(pFrm)) : nullptr) ));
 
     return pContentFrm;
 }
@@ -589,8 +589,8 @@ void SwSectionFrm::MoveContentAndDelete( SwSectionFrm* pDel, bool bSave )
     SwFrm* pPrv = pDel->GetPrev();
     SwLayoutFrm* pUp = pDel->GetUpper();
     // OD 27.03.2003 #i12711# - initialize local pointer variables.
-    SwSectionFrm* pPrvSct = NULL;
-    SwSectionFrm* pNxtSct = NULL;
+    SwSectionFrm* pPrvSct = nullptr;
+    SwSectionFrm* pNxtSct = nullptr;
     SwSectionFormat* pParent = static_cast<SwSectionFormat*>(pDel->GetFormat())->GetParent();
     if( pDel->IsInTab() && pParent )
     {
@@ -598,7 +598,7 @@ void SwSectionFrm::MoveContentAndDelete( SwSectionFrm* pDel, bool bSave )
         // If we are within a table, we can only have broken up sections that
         // are inside as well, but not a section that contains the whole table.
         if( pTab->IsInSct() && pParent == pTab->FindSctFrm()->GetFormat() )
-            pParent = NULL;
+            pParent = nullptr;
     }
     // If our Format has a parent, we have probably broken up another
     // SectionFrm, which has to be checked. To do so we first acquire the
@@ -609,18 +609,18 @@ void SwSectionFrm::MoveContentAndDelete( SwSectionFrm* pDel, bool bSave )
     if ( pParent )
     {
         SwFrm* pPrvContent = lcl_GetNextContentFrm( pDel, false );
-        pPrvSct = pPrvContent ? pPrvContent->FindSctFrm() : NULL;
+        pPrvSct = pPrvContent ? pPrvContent->FindSctFrm() : nullptr;
         SwFrm* pNxtContent = lcl_GetNextContentFrm( pDel, true );
-        pNxtSct = pNxtContent ? pNxtContent->FindSctFrm() : NULL;
+        pNxtSct = pNxtContent ? pNxtContent->FindSctFrm() : nullptr;
     }
     else
     {
-        pParent = NULL;
-        pPrvSct = pNxtSct = NULL;
+        pParent = nullptr;
+        pPrvSct = pNxtSct = nullptr;
     }
 
     // Now the content is put aside and the frame is destroyed
-    SwFrm *pSave = bSave ? ::SaveContent( pDel ) : NULL;
+    SwFrm *pSave = bSave ? ::SaveContent( pDel ) : nullptr;
     bool bOldFootnote = true;
     if( pSave && pUp->IsFootnoteFrm() )
     {
@@ -634,9 +634,9 @@ void SwSectionFrm::MoveContentAndDelete( SwSectionFrm* pDel, bool bSave )
         if( pNxtSct && pNxtSct->GetFormat() == pParent )
         {   // Here we can insert outselves at the beginning
             pUp = FIRSTLEAF( pNxtSct );
-            pPrv = NULL;
+            pPrv = nullptr;
             if( pPrvSct && !( pPrvSct->GetFormat() == pParent ) )
-                pPrvSct = NULL; // In order that nothing is merged
+                pPrvSct = nullptr; // In order that nothing is merged
         }
         else if( pPrvSct && pPrvSct->GetFormat() == pParent )
         {   // Wonderful, here we can insert ourselves at the end
@@ -649,7 +649,7 @@ void SwSectionFrm::MoveContentAndDelete( SwSectionFrm* pDel, bool bSave )
             }
             // In order to perform the insertion after the last one
             pPrv = pUp->GetLastLower();
-            pPrvSct = NULL; // Such that nothing is merged
+            pPrvSct = nullptr; // Such that nothing is merged
         }
         else
         {
@@ -666,9 +666,9 @@ void SwSectionFrm::MoveContentAndDelete( SwSectionFrm* pDel, bool bSave )
                 SWRECTFN( pUp )
                 (pPrvSct->*fnRect->fnMakePos)( pUp, pPrv, true );
                 pUp = FIRSTLEAF( pPrvSct );
-                pPrv = NULL;
+                pPrv = nullptr;
             }
-            pPrvSct = NULL; // Such that nothing will be merged
+            pPrvSct = nullptr; // Such that nothing will be merged
         }
     }
     // The content is going to be inserted..
@@ -762,7 +762,7 @@ const SwSectionFormat* SwSectionFrm::_GetEndSectFormat() const
         if( dynamic_cast< const SwSectionFormat *>( pFormat->GetRegisteredIn()) !=  nullptr )
             pFormat = static_cast<const SwSectionFormat*>(pFormat->GetRegisteredIn());
         else
-            return NULL;
+            return nullptr;
     }
     return pFormat;
 }
@@ -799,8 +799,8 @@ static void lcl_FindContentFrm( SwContentFrm* &rpContentFrm, SwFootnoteFrm* &rpF
 
 SwContentFrm *SwSectionFrm::FindLastContent( sal_uInt8 nMode )
 {
-    SwContentFrm *pRet = NULL;
-    SwFootnoteFrm *pFootnoteFrm = NULL;
+    SwContentFrm *pRet = nullptr;
+    SwFootnoteFrm *pFootnoteFrm = nullptr;
     SwSectionFrm *pSect = this;
     if( nMode )
     {
@@ -863,7 +863,7 @@ static SwFootnoteFrm* lcl_FindEndnote( SwSectionFrm* &rpSect, bool &rbEmpty,
                 "InsertEndnotes: Where's my column?" );
 
         // i73332: Columned section in endnote
-        SwColumnFrm* pCol = 0;
+        SwColumnFrm* pCol = nullptr;
         if(pSect->Lower() && pSect->Lower()->IsColumnFrm())
             pCol = static_cast<SwColumnFrm*>(pSect->Lower());
 
@@ -886,7 +886,7 @@ static SwFootnoteFrm* lcl_FindEndnote( SwSectionFrm* &rpSect, bool &rbEmpty,
                             if( pLayouter )
                                 pLayouter->CollectEndnote( pRet );
                             else
-                                return 0;
+                                return nullptr;
                         }
                         else
                             return pRet; // Found
@@ -897,10 +897,10 @@ static SwFootnoteFrm* lcl_FindEndnote( SwSectionFrm* &rpSect, bool &rbEmpty,
             pCol = static_cast<SwColumnFrm*>(pCol->GetNext());
         }
         rpSect = pSect;
-        pSect = pLayouter ? pSect->GetFollow() : NULL;
+        pSect = pLayouter ? pSect->GetFollow() : nullptr;
         rbEmpty = true;
     }
-    return NULL;
+    return nullptr;
 }
 
 static void lcl_ColumnRefresh( SwSectionFrm* pSect, bool bFollow )
@@ -927,7 +927,7 @@ static void lcl_ColumnRefresh( SwSectionFrm* pSect, bool bFollow )
         if( bFollow )
             pSect = pSect->GetFollow();
         else
-            pSect = NULL;
+            pSect = nullptr;
     }
 }
 
@@ -943,7 +943,7 @@ void SwSectionFrm::CollectEndnotes( SwLayouter* pLayouter )
     // pSect is the last sectionfrm without endnotes or the this-pointer
     // the first sectionfrm with endnotes may be destroyed, when the endnotes
     // is cutted
-    while( 0 != (pFootnote = lcl_FindEndnote( pSect, bEmpty, pLayouter )) )
+    while( nullptr != (pFootnote = lcl_FindEndnote( pSect, bEmpty, pLayouter )) )
         pLayouter->CollectEndnote( pFootnote );
     if( pLayouter->HasEndnotes() )
         lcl_ColumnRefresh( this, true );
@@ -992,7 +992,7 @@ void SwSectionFrm::_CheckClipping( bool bGrow, bool bMaximize )
         SwSectionFrm *pSect = this;
         bool bEmpty = false;
         SwLayoutFrm* pFootnote = IsEndnAtEnd() ?
-            lcl_FindEndnote( pSect, bEmpty, NULL ) : NULL;
+            lcl_FindEndnote( pSect, bEmpty, nullptr ) : nullptr;
         if( pFootnote )
         {
             pFootnote = pFootnote->FindFootnoteBossFrm();
@@ -1096,7 +1096,7 @@ class ExtraFormatToPositionObjs
             {
                 // release keep locked position of lower floating screen objects
                 SwPageFrm* pPageFrm = mpSectFrm->FindPageFrm();
-                SwSortedObjs* pObjs = pPageFrm ? pPageFrm->GetSortedObjs() : 0L;
+                SwSortedObjs* pObjs = pPageFrm ? pPageFrm->GetSortedObjs() : nullptr;
                 if ( pObjs )
                 {
                     for ( size_t i = 0; i < pObjs->size(); ++i )
@@ -1127,10 +1127,10 @@ class ExtraFormatToPositionObjs
                 }
             }
             SwLayoutFrm* pLayoutFrm = dynamic_cast<SwLayoutFrm*>(&rFrm);
-            if ( pLayoutFrm != 0 )
+            if ( pLayoutFrm != nullptr )
             {
                 SwFrm* pLowerFrm = pLayoutFrm->GetLower();
-                while ( pLowerFrm != 0 )
+                while ( pLowerFrm != nullptr )
                 {
                     InitObjs( *pLowerFrm );
 
@@ -1190,7 +1190,7 @@ class ExtraFormatToPositionObjs
 
                 // keep locked position of lower floating screen objects
                 SwPageFrm* pPageFrm = mpSectFrm->FindPageFrm();
-                SwSortedObjs* pObjs = pPageFrm ? pPageFrm->GetSortedObjs() : 0L;
+                SwSortedObjs* pObjs = pPageFrm ? pPageFrm->GetSortedObjs() : nullptr;
                 if ( pObjs )
                 {
                     for ( size_t i = 0; i < pObjs->size(); ++i )
@@ -1223,7 +1223,7 @@ void SwSectionFrm::Format( vcl::RenderContext* pRenderContext, const SwBorderAtt
     SWRECTFN( this )
     if ( !mbValidPrtArea )
     {
-        PROTOCOL( this, PROT_PRTAREA, 0, 0 )
+        PROTOCOL( this, PROT_PRTAREA, 0, nullptr )
         mbValidPrtArea = true;
         SwTwips nUpper = CalcUpperSpace();
 
@@ -1243,7 +1243,7 @@ void SwSectionFrm::Format( vcl::RenderContext* pRenderContext, const SwBorderAtt
 
     if ( !mbValidSize )
     {
-        PROTOCOL_ENTER( this, PROT_SIZE, 0, 0 )
+        PROTOCOL_ENTER( this, PROT_SIZE, 0, nullptr )
         const long nOldHeight = (Frm().*fnRect->fnGetHeight)();
         bool bOldLock = IsColLocked();
         ColLock();
@@ -1275,7 +1275,7 @@ void SwSectionFrm::Format( vcl::RenderContext* pRenderContext, const SwBorderAtt
         // which still have a width of 0.
         const bool bHasColumns = Lower() && Lower()->IsColumnFrm();
         if ( bHasColumns && Lower()->GetNext() )
-            AdjustColumns( 0, false );
+            AdjustColumns( nullptr, false );
 
         if( GetUpper() )
         {
@@ -1442,7 +1442,7 @@ SwLayoutFrm *SwFrm::GetNextSctLeaf( MakePageType eMakePage )
     // Inside a section, in tables, or sections of headers/footers, there can be only
     // one column shift be made, one of the above shortcuts should have applied!
     if( GetUpper()->IsInTab() || FindFooterOrHeader() )
-        return 0;
+        return nullptr;
 
     SwSectionFrm *pSect = FindSctFrm();
     bool bWrongPage = false;
@@ -1466,7 +1466,7 @@ SwLayoutFrm *SwFrm::GetNextSctLeaf( MakePageType eMakePage )
         {
             SwFrm* pTmp;
             if( !pSect->GetUpper()->IsColBodyFrm() ||
-                0 == ( pTmp = pSect->GetUpper()->GetUpper()->GetNext() ) )
+                nullptr == ( pTmp = pSect->GetUpper()->GetUpper()->GetNext() ) )
                 pTmp = pSect->FindPageFrm()->GetNext();
             if( pTmp ) // is now the next column or page
             {
@@ -1501,11 +1501,11 @@ SwLayoutFrm *SwFrm::GetNextSctLeaf( MakePageType eMakePage )
     SwLayoutFrm *pLayLeaf;
     // A shortcut for TabFrms such that not all cells need to be visited
     if( bWrongPage )
-        pLayLeaf = 0;
+        pLayLeaf = nullptr;
     else if( IsTabFrm() )
     {
         SwContentFrm* pTmpCnt = static_cast<SwTabFrm*>(this)->FindLastContent();
-        pLayLeaf = pTmpCnt ? pTmpCnt->GetUpper() : 0;
+        pLayLeaf = pTmpCnt ? pTmpCnt->GetUpper() : nullptr;
     }
     else
     {
@@ -1517,7 +1517,7 @@ SwLayoutFrm *SwFrm::GetNextSctLeaf( MakePageType eMakePage )
         }
     }
 
-    SwLayoutFrm *pOldLayLeaf = 0;           // Such that in case of newly
+    SwLayoutFrm *pOldLayLeaf = nullptr;           // Such that in case of newly
                                             // created pages, the search is
                                             // not started over at the beginning
 
@@ -1531,7 +1531,7 @@ SwLayoutFrm *SwFrm::GetNextSctLeaf( MakePageType eMakePage )
             SwPageFrm* pNxtPg = pLayLeaf->FindPageFrm();
             if ( !bFootnotePage && pNxtPg->IsFootnotePage() )
             {   // If I reached the end note pages it's over
-                pLayLeaf = 0;
+                pLayLeaf = nullptr;
                 continue;
             }
             // Once inBody always inBody, don't step into tables and not into other sections
@@ -1550,9 +1550,9 @@ SwLayoutFrm *SwFrm::GetNextSctLeaf( MakePageType eMakePage )
             {
                 if( bWrongPage )
                     break; // there's a column between me and my right page
-                pLayLeaf = 0;
+                pLayLeaf = nullptr;
                 bWrongPage = true;
-                pOldLayLeaf = 0;
+                pOldLayLeaf = nullptr;
                 continue;
             }
         }
@@ -1592,7 +1592,7 @@ SwLayoutFrm *SwFrm::GetNextSctLeaf( MakePageType eMakePage )
             pNew->InsertBefore( pLayLeaf, pLayLeaf->Lower() );
             pNew->Init();
             SWRECTFN( pNew )
-            (pNew->*fnRect->fnMakePos)( pLayLeaf, NULL, true );
+            (pNew->*fnRect->fnMakePos)( pLayLeaf, nullptr, true );
 
             // If our section frame has a successor then that has to be
             // moved behind the new Follow of the section frames
@@ -1600,7 +1600,7 @@ SwLayoutFrm *SwFrm::GetNextSctLeaf( MakePageType eMakePage )
             if( pTmp && pTmp != pSect->GetFollow() )
             {
                 SwFlowFrm* pNxt;
-                SwContentFrm* pNxtContent = NULL;
+                SwContentFrm* pNxtContent = nullptr;
                 if( pTmp->IsContentFrm() )
                 {
                     pNxt = static_cast<SwContentFrm*>(pTmp);
@@ -1616,7 +1616,7 @@ SwLayoutFrm *SwFrm::GetNextSctLeaf( MakePageType eMakePage )
                         OSL_ENSURE( pTmp->IsTabFrm(), "GetNextSctLeaf: Wrong Type" );
                         pNxt = static_cast<SwTabFrm*>(pTmp);
                     }
-                    while( !pNxtContent && 0 != ( pTmp = pTmp->GetNext() ) )
+                    while( !pNxtContent && nullptr != ( pTmp = pTmp->GetNext() ) )
                     {
                         if( pTmp->IsContentFrm() )
                             pNxtContent = static_cast<SwContentFrm*>(pTmp);
@@ -1658,7 +1658,7 @@ SwLayoutFrm *SwFrm::GetPrevSctLeaf( MakePageType )
     else if( GetUpper()->IsColBodyFrm() )
         pCol = GetUpper()->GetUpper();
     else
-        pCol = NULL;
+        pCol = nullptr;
     bool bJump = false;
     if( pCol )
     {
@@ -1682,7 +1682,7 @@ SwLayoutFrm *SwFrm::GetPrevSctLeaf( MakePageType )
             pCol = static_cast<SwLayoutFrm*>(pCol->Lower());
         }
         else
-            pCol = NULL;
+            pCol = nullptr;
     }
 
     if( bJump )     // Did we skip a blank page?
@@ -1714,7 +1714,7 @@ SwLayoutFrm *SwFrm::GetPrevSctLeaf( MakePageType )
 
     {
         SwFrm *pPrv;
-        if( 0 != ( pPrv = pSect->GetIndPrev() ) )
+        if( nullptr != ( pPrv = pSect->GetIndPrev() ) )
         {
             // Mooching, half dead SectionFrms shouldn't confuse us
             while( pPrv && pPrv->IsSctFrm() && !static_cast<SwSectionFrm*>(pPrv)->GetSection() )
@@ -1728,7 +1728,7 @@ SwLayoutFrm *SwFrm::GetPrevSctLeaf( MakePageType )
     const bool bFly  = IsInFly();
 
     SwLayoutFrm *pLayLeaf = GetPrevLayoutLeaf();
-    SwLayoutFrm *pPrevLeaf = 0;
+    SwLayoutFrm *pPrevLeaf = nullptr;
 
     while ( pLayLeaf )
     {
@@ -1777,7 +1777,7 @@ SwLayoutFrm *SwFrm::GetPrevSctLeaf( MakePageType )
         pLayLeaf = pPrevLeaf;
     }
 
-    SwSectionFrm* pNew = NULL;
+    SwSectionFrm* pNew = nullptr;
     // At first go to the end of the layout sheet
     SwFrm *pTmp = pLayLeaf->Lower();
     if( pTmp )
@@ -1797,7 +1797,7 @@ SwLayoutFrm *SwFrm::GetPrevSctLeaf( MakePageType )
     if( !pNew )
     {
         pNew = new SwSectionFrm( *pSect, true );
-        pNew->InsertBefore( pLayLeaf, NULL );
+        pNew->InsertBefore( pLayLeaf, nullptr );
         pNew->Init();
         SWRECTFN( pNew )
         (pNew->*fnRect->fnMakePos)( pLayLeaf, pNew->GetPrev(), true );
@@ -2127,7 +2127,7 @@ bool SwSectionFrm::MoveAllowed( const SwFrm* pFrm) const
     if( IsInTab() || ( !IsInDocBody() && FindFooterOrHeader() ) )
         return false; // It doesn't work in tables/headers/footers
     if( IsInFly() ) // In column based or chained frames
-        return 0 != const_cast<SwFrm*>(static_cast<SwFrm const *>(GetUpper()))->GetNextLeaf( MAKEPAGE_NONE );
+        return nullptr != const_cast<SwFrm*>(static_cast<SwFrm const *>(GetUpper()))->GetNextLeaf( MAKEPAGE_NONE );
     return true;
 }
 
@@ -2140,7 +2140,7 @@ bool SwSectionFrm::MoveAllowed( const SwFrm* pFrm) const
 */
 SwFrm* SwFrm::_GetIndPrev() const
 {
-    SwFrm *pRet = NULL;
+    SwFrm *pRet = nullptr;
     // #i79774#
     // Do not assert, if the frame has a direct previous frame, because it
     // could be an empty section frame. The caller has to assure, that the
@@ -2149,7 +2149,7 @@ SwFrm* SwFrm::_GetIndPrev() const
     OSL_ENSURE( /*!pPrev &&*/ IsInSct(), "Why?" );
     const SwFrm* pSct = GetUpper();
     if( !pSct )
-        return NULL;
+        return nullptr;
     if( pSct->IsSctFrm() )
         pRet = pSct->GetIndPrev();
     else if( pSct->IsColBodyFrm() && (pSct = pSct->GetUpper()->GetUpper())->IsSctFrm() )
@@ -2163,7 +2163,7 @@ SwFrm* SwFrm::_GetIndPrev() const
             OSL_ENSURE( pCol->GetLower() && pCol->GetLower()->IsBodyFrm(),
                     "GetIndPrev(): Where's the body?");
             if( static_cast<const SwLayoutFrm*>(static_cast<const SwLayoutFrm*>(pCol)->Lower())->Lower() )
-                return NULL;
+                return nullptr;
             pCol = pCol->GetPrev();
         }
         pRet = pSct->GetIndPrev();
@@ -2180,7 +2180,7 @@ SwFrm* SwFrm::_GetIndNext()
     OSL_ENSURE( !mpNext && IsInSct(), "Why?" );
     SwFrm* pSct = GetUpper();
     if( !pSct )
-        return NULL;
+        return nullptr;
     if( pSct->IsSctFrm() )
         return pSct->GetIndNext();
     if( pSct->IsColBodyFrm() && (pSct = pSct->GetUpper()->GetUpper())->IsSctFrm() )
@@ -2193,12 +2193,12 @@ SwFrm* SwFrm::_GetIndNext()
             OSL_ENSURE( pCol->GetLower() && pCol->GetLower()->IsBodyFrm(),
                     "GetIndNext(): Where's the body?");
             if( static_cast<SwLayoutFrm*>(static_cast<SwLayoutFrm*>(pCol)->Lower())->Lower() )
-                return NULL;
+                return nullptr;
             pCol = pCol->GetNext();
         }
         return pSct->GetIndNext();
     }
-    return NULL;
+    return nullptr;
 }
 
 bool SwSectionFrm::IsDescendantFrom( const SwSectionFormat* pFormat ) const
@@ -2439,7 +2439,7 @@ bool SwSectionFrm::ToMaximize( bool bCheckFollow ) const
         return false;
     const SwFootnoteContFrm* pCont = ContainsFootnoteCont();
     if( !IsEndnAtEnd() )
-        return 0 != pCont;
+        return nullptr != pCont;
     bool bRet = false;
     while( pCont && !bRet )
     {
@@ -2454,7 +2454,7 @@ bool SwSectionFrm::ToMaximize( bool bCheckFollow ) const
 /// Check every Column for FootnoteContFrms.
 SwFootnoteContFrm* SwSectionFrm::ContainsFootnoteCont( const SwFootnoteContFrm* pCont ) const
 {
-    SwFootnoteContFrm* pRet = NULL;
+    SwFootnoteContFrm* pRet = nullptr;
     const SwLayoutFrm* pLay;
     if( pCont )
     {
@@ -2465,7 +2465,7 @@ SwFootnoteContFrm* SwSectionFrm::ContainsFootnoteCont( const SwFootnoteContFrm* 
     else if( Lower() && Lower()->IsColumnFrm() )
         pLay = static_cast<const SwLayoutFrm*>(Lower());
     else
-        pLay = NULL;
+        pLay = nullptr;
     while ( !pRet && pLay )
     {
         if( pLay->Lower() && pLay->Lower()->GetNext() )

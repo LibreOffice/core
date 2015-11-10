@@ -56,8 +56,8 @@ SdrHHCWrapper::SdrHHCWrapper( SwView* pVw,
                              GetDrawOutliner().GetEmptyItemSet().GetPool(),
                 OUTLINERMODE_TEXTOBJECT ),
     pView( pVw ),
-    pTextObj( NULL ),
-    pOutlView( NULL ),
+    pTextObj( nullptr ),
+    pOutlView( nullptr ),
     nOptions( nConvOptions ),
     nDocIndex( 0 ),
     nSourceLang( nSourceLanguage ),
@@ -119,7 +119,7 @@ bool SdrHHCWrapper::ConvertNextDocument()
         pOutlView->SetOutputArea( Rectangle( Point(), Size(1, 1) ) );
         SetPaperSize( Size(1, 1) );
         Clear();
-        pTextObj = NULL;
+        pTextObj = nullptr;
     }
 
     const auto n = nDocIndex;
@@ -164,7 +164,7 @@ bool SdrHHCWrapper::ConvertNextDocument()
             }
 
             if ( !bNextDoc )
-                pTextObj = NULL;
+                pTextObj = nullptr;
             else
                 break;
         }

@@ -226,7 +226,7 @@ namespace SwLangHelper
 
     void SetLanguage( SwWrtShell &rWrtSh, const OUString &rLangText, bool bIsForSelection, SfxItemSet &rCoreSet )
     {
-        SetLanguage( rWrtSh, 0 , ESelection(), rLangText, bIsForSelection, rCoreSet );
+        SetLanguage( rWrtSh, nullptr , ESelection(), rLangText, bIsForSelection, rCoreSet );
     }
 
     void SetLanguage( SwWrtShell &rWrtSh, OutlinerView* pOLV, const ESelection& rSelection, const OUString &rLangText, bool bIsForSelection, SfxItemSet &rCoreSet )
@@ -234,7 +234,7 @@ namespace SwLangHelper
         const LanguageType nLang = SvtLanguageTable::GetLanguageType( rLangText );
         if (nLang != LANGUAGE_DONTKNOW)
         {
-            EditEngine* pEditEngine = pOLV ? pOLV->GetEditView().GetEditEngine() : NULL;
+            EditEngine* pEditEngine = pOLV ? pOLV->GetEditView().GetEditEngine() : nullptr;
             OSL_ENSURE( !pOLV || pEditEngine, "OutlinerView without EditEngine???" );
 
             //get ScriptType
@@ -308,7 +308,7 @@ namespace SwLangHelper
 
     void SetLanguage_None( SwWrtShell &rWrtSh, bool bIsForSelection, SfxItemSet &rCoreSet )
     {
-        SetLanguage_None( rWrtSh,0,ESelection(),bIsForSelection,rCoreSet );
+        SetLanguage_None( rWrtSh,nullptr,ESelection(),bIsForSelection,rCoreSet );
     }
 
     void SetLanguage_None( SwWrtShell &rWrtSh, OutlinerView* pOLV, const ESelection& rSelection, bool bIsForSelection, SfxItemSet &rCoreSet )
@@ -335,7 +335,7 @@ namespace SwLangHelper
             // (for paragraph is handled by previosuly having set the selection to the
             // whole paragraph)
 
-            EditEngine* pEditEngine = pOLV ? pOLV->GetEditView().GetEditEngine() : NULL;
+            EditEngine* pEditEngine = pOLV ? pOLV->GetEditView().GetEditEngine() : nullptr;
             OSL_ENSURE( !pOLV || pEditEngine, "OutlinerView without EditEngine???" );
             if (pEditEngine)
             {
@@ -368,7 +368,7 @@ namespace SwLangHelper
 
     void ResetLanguages( SwWrtShell &rWrtSh, bool bIsForSelection )
     {
-        ResetLanguages( rWrtSh, 0 , ESelection(), bIsForSelection );
+        ResetLanguages( rWrtSh, nullptr , ESelection(), bIsForSelection );
     }
 
     void ResetLanguages( SwWrtShell &rWrtSh, OutlinerView* pOLV, const ESelection& rSelection, bool bIsForSelection )
@@ -416,7 +416,7 @@ namespace SwLangHelper
 
         LanguageType nLang = LANGUAGE_SYSTEM;
 
-        const SfxPoolItem *pItem = 0;
+        const SfxPoolItem *pItem = nullptr;
         SfxItemState nState = aSet.GetItemState( nLangWhichId, true, &pItem );
         if (nState > SfxItemState::DEFAULT && pItem)
         {

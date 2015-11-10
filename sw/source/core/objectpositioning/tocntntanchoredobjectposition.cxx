@@ -47,12 +47,12 @@ using namespace ::com::sun::star;
 
 SwToContentAnchoredObjectPosition::SwToContentAnchoredObjectPosition( SdrObject& _rDrawObj )
     : SwAnchoredObjectPosition ( _rDrawObj ),
-      mpVertPosOrientFrm( 0 ),
+      mpVertPosOrientFrm( nullptr ),
       // #i26791#
       maOffsetToFrmAnchorPos( Point() ),
       mbAnchorToChar ( false ),
-      mpToCharOrientFrm( 0 ),
-      mpToCharRect( 0 ),
+      mpToCharOrientFrm( nullptr ),
+      mpToCharRect( nullptr ),
       // #i22341#
       mnToCharTopOfLine( 0 )
 {}
@@ -143,7 +143,7 @@ void SwToContentAnchoredObjectPosition::CalcPosition()
     // at a frame belonging to the footer.
     const SwFrm* pFooter = GetAnchorFrm().FindFooterOrHeader();
     if ( pFooter && !pFooter->IsFooterFrm() )
-        pFooter = NULL;
+        pFooter = nullptr;
 
     // declare and set <bBrowse> to true, if document is in browser mode and
     // object is anchored at the body, but not at frame belonging to a table.
@@ -434,7 +434,7 @@ void SwToContentAnchoredObjectPosition::CalcPosition()
         // #i28701# - determine 'virtual' anchor frame.
         // This frame is used in the following instead of the 'real' anchor
         // frame <rAnchorTextFrm> for the 'vertical' position in all cases.
-        const SwLayoutFrm* pUpperOfOrientFrm = 0L;
+        const SwLayoutFrm* pUpperOfOrientFrm = nullptr;
         {
             // #i28701# - As long as the anchor frame is on the
             // same page as <pOrientFrm> and the vertical position isn't aligned
@@ -594,7 +594,7 @@ void SwToContentAnchoredObjectPosition::CalcPosition()
                     // #i23512# - correction:
                     // consider section frame for grow in online layout.
                     // use new local method <lcl_DoesVertPosFits(..)>
-                    SwLayoutFrm* pLayoutFrmToGrow = 0L;
+                    SwLayoutFrm* pLayoutFrmToGrow = nullptr;
                     const bool bDoesVertPosFits = lcl_DoesVertPosFits(
                             nRelPosY, nAvail, pUpperOfOrientFrm, bBrowse,
                             bGrow, pLayoutFrmToGrow );
@@ -759,7 +759,7 @@ void SwToContentAnchoredObjectPosition::CalcPosition()
             // #i23512# - correction:
             // consider section frame for grow in online layout and
             // consider page alignment for grow in table.
-            SwLayoutFrm* pLayoutFrmToGrow = 0L;
+            SwLayoutFrm* pLayoutFrmToGrow = nullptr;
             if ( bBrowse && rAnchorTextFrm.IsMoveable() )
             {
                 if ( pUpperOfOrientFrm->IsInSct() )
@@ -770,7 +770,7 @@ void SwToContentAnchoredObjectPosition::CalcPosition()
                               (pLayoutFrmToGrow->*fnRect->fnGetPrtBottom)() );
                     if ( nDist >= 0 )
                     {
-                        pLayoutFrmToGrow = 0L;
+                        pLayoutFrmToGrow = nullptr;
                     }
                 }
                 else
@@ -897,7 +897,7 @@ void SwToContentAnchoredObjectPosition::CalcPosition()
                     // isn't a footnote frame, object can't follow the text flow
                     if ( bInFootnote && pNextLay && !pNextLay->IsFootnoteFrm() )
                     {
-                        pNextLay = 0L;
+                        pNextLay = nullptr;
                     }
                     if ( pNextLay )
                     {

@@ -27,18 +27,18 @@
 SwIndex::SwIndex(SwIndexReg *const pReg, sal_Int32 const nIdx)
     : m_nIndex( nIdx )
     , m_pIndexReg( pReg )
-    , m_pNext( 0 )
-    , m_pPrev( 0 )
-    , m_pMark( 0 )
+    , m_pNext( nullptr )
+    , m_pPrev( nullptr )
+    , m_pMark( nullptr )
 {
     Init(m_nIndex);
 }
 
 SwIndex::SwIndex( const SwIndex& rIdx, short nDiff )
     : m_pIndexReg( rIdx.m_pIndexReg )
-    , m_pNext( 0 )
-    , m_pPrev( 0 )
-    , m_pMark( 0 )
+    , m_pNext( nullptr )
+    , m_pPrev( nullptr )
+    , m_pMark( nullptr )
 {
     ChgValue( rIdx, rIdx.m_nIndex + nDiff );
 }
@@ -46,9 +46,9 @@ SwIndex::SwIndex( const SwIndex& rIdx, short nDiff )
 SwIndex::SwIndex( const SwIndex& rIdx )
     : m_nIndex( rIdx.m_nIndex )
     , m_pIndexReg( rIdx.m_pIndexReg )
-    , m_pNext( 0 )
-    , m_pPrev( 0 )
-    , m_pMark( 0 )
+    , m_pNext( nullptr )
+    , m_pPrev( nullptr )
+    , m_pMark( nullptr )
 {
     ChgValue( rIdx, rIdx.m_nIndex );
 }
@@ -88,7 +88,7 @@ SwIndex& SwIndex::ChgValue( const SwIndex& rIdx, sal_Int32 nNewValue )
     if (rIdx.m_nIndex > nNewValue) // move forwards
     {
         SwIndex* pPrv;
-        while ((0 != (pPrv = pFnd->m_pPrev)) && (pPrv->m_nIndex > nNewValue))
+        while ((nullptr != (pPrv = pFnd->m_pPrev)) && (pPrv->m_nIndex > nNewValue))
             pFnd = pPrv;
 
         if( pFnd != this )
@@ -108,7 +108,7 @@ SwIndex& SwIndex::ChgValue( const SwIndex& rIdx, sal_Int32 nNewValue )
     else if (rIdx.m_nIndex < nNewValue)
     {
         SwIndex* pNxt;
-        while ((0 != (pNxt = pFnd->m_pNext)) && (pNxt->m_nIndex < nNewValue))
+        while ((nullptr != (pNxt = pFnd->m_pNext)) && (pNxt->m_nIndex < nNewValue))
             pFnd = pNxt;
 
         if( pFnd != this )
@@ -184,7 +184,7 @@ SwIndex& SwIndex::operator=( const SwIndex& rIdx )
     {
         Remove();
         m_pIndexReg = rIdx.m_pIndexReg;
-        m_pNext = m_pPrev = 0;
+        m_pNext = m_pPrev = nullptr;
         bEqual = false;
     }
     else
@@ -201,7 +201,7 @@ SwIndex& SwIndex::Assign( SwIndexReg* pArr, sal_Int32 nIdx )
     {
         Remove();
         m_pIndexReg = pArr;
-        m_pNext = m_pPrev = 0;
+        m_pNext = m_pPrev = nullptr;
         Init(nIdx);
     }
     else if (m_nIndex != nIdx)
@@ -217,7 +217,7 @@ void SwIndex::SetMark(const sw::mark::IMark* pMark)
 }
 
 SwIndexReg::SwIndexReg()
-    : m_pFirst( 0 ), m_pLast( 0 )
+    : m_pFirst( nullptr ), m_pLast( nullptr )
 {
 }
 
@@ -288,7 +288,7 @@ void SwIndexReg::MoveTo( SwIndexReg& rArr )
             pIdx->Assign( &rArr, pIdx->GetIndex() );
             pIdx = pNext;
         }
-        m_pFirst = 0, m_pLast = 0;
+        m_pFirst = nullptr, m_pLast = nullptr;
     }
 }
 

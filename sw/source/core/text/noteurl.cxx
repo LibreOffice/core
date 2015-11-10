@@ -25,7 +25,7 @@
 #include <svtools/imap.hxx>
 
 // Global variable
-SwNoteURL *pNoteURL = NULL;
+SwNoteURL *pNoteURL = nullptr;
 
 void SwNoteURL::InsertURLNote( const OUString& rURL, const OUString& rTarget,
     const SwRect& rRect )

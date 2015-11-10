@@ -34,7 +34,7 @@ struct SwProgress
     SfxProgress *pProgress;
 };
 
-static std::vector<SwProgress*> *pProgressContainer = 0;
+static std::vector<SwProgress*> *pProgressContainer = nullptr;
 
 static SwProgress *lcl_SwFindProgress( SwDocShell *pDocShell )
 {
@@ -44,7 +44,7 @@ static SwProgress *lcl_SwFindProgress( SwDocShell *pDocShell )
         if ( pTmp->pDocShell == pDocShell )
             return pTmp;
     }
-    return 0;
+    return nullptr;
 }
 
 void StartProgress( sal_uInt16 nMessResId, long nStartValue, long nEndValue,
@@ -52,13 +52,13 @@ void StartProgress( sal_uInt16 nMessResId, long nStartValue, long nEndValue,
 {
     if( !SW_MOD()->IsEmbeddedLoadSave() )
     {
-        SwProgress *pProgress = 0;
+        SwProgress *pProgress = nullptr;
 
         if ( !pProgressContainer )
             pProgressContainer = new std::vector<SwProgress*>;
         else
         {
-            if ( 0 != (pProgress = lcl_SwFindProgress( pDocShell )) )
+            if ( nullptr != (pProgress = lcl_SwFindProgress( pDocShell )) )
                 ++pProgress->nStartCount;
         }
         if ( !pProgress )
@@ -91,7 +91,7 @@ void EndProgress( SwDocShell *pDocShell )
 {
     if( pProgressContainer && !SW_MOD()->IsEmbeddedLoadSave() )
     {
-        SwProgress *pProgress = 0;
+        SwProgress *pProgress = nullptr;
         sal_uInt16 i;
         for ( i = 0; i < pProgressContainer->size(); ++i )
         {
@@ -112,7 +112,7 @@ void EndProgress( SwDocShell *pDocShell )
             //#112337# it may happen that the container has been removed
             //while rescheduling
             if ( pProgressContainer && pProgressContainer->empty() )
-                delete pProgressContainer, pProgressContainer = 0;
+                delete pProgressContainer, pProgressContainer = nullptr;
         }
     }
 }

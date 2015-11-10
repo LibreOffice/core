@@ -27,11 +27,11 @@ extern const sal_uInt8 StackPos[];
 
 // globale Variablen, werden in SwFntCch.Hxx bekanntgegeben
 // Der FontCache wird in TextInit.Cxx _TXTINIT erzeugt und in _TXTEXIT geloescht
-SwFontCache *pSwFontCache = NULL;
+SwFontCache *pSwFontCache = nullptr;
 
 SwFontObj::SwFontObj( const void *pOwn, SwViewShell *pSh ) :
     SwCacheObj( pOwn ),
-    aSwFont( &static_cast<SwTextFormatColl const *>(pOwn)->GetAttrSet(), pSh ? &pSh->getIDocumentSettingAccess() : 0 )
+    aSwFont( &static_cast<SwTextFormatColl const *>(pOwn)->GetAttrSet(), pSh ? &pSh->getIDocumentSettingAccess() : nullptr )
 {
     aSwFont.GoMagic( pSh, aSwFont.GetActual() );
     const SwAttrSet& rAttrSet = static_cast<SwTextFormatColl const *>(pOwn)->GetAttrSet();

@@ -196,7 +196,7 @@ SwAnchoredDrawObject::SwAnchoredDrawObject() :
     SwAnchoredObject(),
     mbValidPos( false ),
     // --> #i34748#
-    mpLastObjRect( 0L ),
+    mpLastObjRect( nullptr ),
     mbNotYetAttachedToAnchorFrame( true ),
     // --> #i28749#
     mbNotYetPositioned( true ),
@@ -834,7 +834,7 @@ void SwAnchoredDrawObject::NotifyBackground( SwPageFrm* _pPageFrm,
 */
 void SwAnchoredDrawObject::RegisterAtCorrectPage()
 {
-    SwPageFrm* pPageFrm( 0L );
+    SwPageFrm* pPageFrm( nullptr );
     if ( GetVertPosOrientFrm() )
     {
         pPageFrm = const_cast<SwPageFrm*>(GetVertPosOrientFrm()->FindPageFrm());

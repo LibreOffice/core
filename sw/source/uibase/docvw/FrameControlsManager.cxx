@@ -129,7 +129,7 @@ void SwFrameControlsManager::SetHeaderFooterControl( const SwPageFrm* pPageFrm, 
     Rectangle aPageRect = m_pEditWin->LogicToPixel( pPageFrm->Frm().SVRect() );
 
     SwHeaderFooterWin* pWin = dynamic_cast<SwHeaderFooterWin *>(pControl->GetWindow());
-    assert( pWin != NULL) ;
+    assert( pWin != nullptr) ;
     assert( pWin->IsHeader() == bHeader );
     pWin->SetOffset( aOffset, aPageRect.Left(), aPageRect.Right() );
 
@@ -160,7 +160,7 @@ void SwFrameControlsManager::SetPageBreakControl( const SwPageFrm* pPageFrm )
     }
 
     SwPageBreakWin* pWin = dynamic_cast<SwPageBreakWin *>(pControl->GetWindow());
-    assert (pWin != NULL);
+    assert (pWin != nullptr);
     pWin->UpdatePosition();
     if (!pWin->IsVisible())
         pControl->ShowAll( true );
@@ -181,7 +181,7 @@ const SwPageFrm* SwFrameMenuButtonBase::GetPageFrame()
 void SwFrameMenuButtonBase::dispose()
 {
     m_pEditWin.clear();
-    m_pFrm = NULL;
+    m_pFrm = nullptr;
     MenuButton::dispose();
 }
 
@@ -194,7 +194,7 @@ SwFrameControl::SwFrameControl( const VclPtr<vcl::Window> &pWindow )
 
 SwFrameControl::~SwFrameControl()
 {
-    mpIFace = NULL;
+    mpIFace = nullptr;
     mxWindow.disposeAndClear();
 }
 

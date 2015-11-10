@@ -121,7 +121,7 @@ void SwUndoFlyBase::InsFly(::sw::UndoRedoContext & rContext, bool bShowSelFrm)
 
     if( bShowSelFrm )
     {
-        rContext.SetSelections(pFrameFormat, 0);
+        rContext.SetSelections(pFrameFormat, nullptr);
     }
 
     if( GetHistory() )
@@ -305,7 +305,7 @@ void SwUndoInsLayFormat::RepeatImpl(::sw::RepeatContext & rContext)
         SwPosition aPos( *rContext.GetRepeatPaM().GetPoint() );
         if (FLY_AT_PARA == aAnchor.GetAnchorId())
         {
-            aPos.nContent.Assign( 0, 0 );
+            aPos.nContent.Assign( nullptr, 0 );
         }
         aAnchor.SetAnchor( &aPos );
     }
@@ -497,7 +497,7 @@ void SwUndoSetFlyFormat::GetAnchor( SwFormatAnchor& rAnchor,
                     static_cast<SwStartNode*>(pNd)->GetStartNodeType() )
                 : !pNd->IsTextNode() )
         {
-            pNd = 0;    // invalid position
+            pNd = nullptr;    // invalid position
         }
         else
         {
@@ -507,7 +507,7 @@ void SwUndoSetFlyFormat::GetAnchor( SwFormatAnchor& rAnchor,
             {
                 if (nContent > pNd->GetTextNode()->GetText().getLength())
                 {
-                    pNd = 0;    // invalid position
+                    pNd = nullptr;    // invalid position
                 }
                 else
                 {
@@ -600,7 +600,7 @@ void SwUndoSetFlyFormat::UndoImpl(::sw::UndoRedoContext & rContext)
 
             pFrameFormat->MakeFrms();
         }
-        rContext.SetSelections(pFrameFormat, 0);
+        rContext.SetSelections(pFrameFormat, nullptr);
     }
 }
 
@@ -623,7 +623,7 @@ void SwUndoSetFlyFormat::RedoImpl(::sw::UndoRedoContext & rContext)
         else
             rDoc.SetFrameFormatToFly( *pFrameFormat, *pNewFormat );
 
-        rContext.SetSelections(pFrameFormat, 0);
+        rContext.SetSelections(pFrameFormat, nullptr);
     }
 }
 

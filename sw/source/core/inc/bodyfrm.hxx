@@ -27,7 +27,7 @@ class SwBorderAttrs;
 class SwBodyFrm: public SwLayoutFrm
 {
 protected:
-    virtual void Format( vcl::RenderContext* pRenderContext, const SwBorderAttrs *pAttrs = 0 ) override;
+    virtual void Format( vcl::RenderContext* pRenderContext, const SwBorderAttrs *pAttrs = nullptr ) override;
 
 public:
     SwBodyFrm( SwFrameFormat*, SwFrm* );

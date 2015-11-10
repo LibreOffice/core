@@ -162,7 +162,7 @@ private:
     SwXTextField(SwFormatField& rFormat, SwDoc & rDoc);
 
     /// descriptor
-    SwXTextField(sal_uInt16 nServiceId, SwDoc* pDoc=0);
+    SwXTextField(sal_uInt16 nServiceId, SwDoc* pDoc=nullptr);
 
 public:
     sal_uInt16 GetServiceId() const;

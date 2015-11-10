@@ -132,7 +132,7 @@ struct SwTOXSortTabBase
                       const SwContentNode* pTOXSrc,
                       const SwTextTOXMark* pTextMark,
                       const SwTOXInternational* pIntl,
-                      const css::lang::Locale* pLocale = NULL );
+                      const css::lang::Locale* pLocale = nullptr );
     virtual ~SwTOXSortTabBase() {}
 
     sal_uInt16  GetType() const         { return nType; }

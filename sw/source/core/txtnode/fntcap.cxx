@@ -94,7 +94,7 @@ protected:
     SwDrawTextInfo &rInf;
     SwCapitalInfo* pCapInf; // referes to additional information
                            // required by the ::Do function
-    explicit SwDoCapitals ( SwDrawTextInfo &rInfo ) : rInf( rInfo ), pCapInf( 0 ) { }
+    explicit SwDoCapitals ( SwDrawTextInfo &rInfo ) : rInf( rInfo ), pCapInf( nullptr ) { }
     ~SwDoCapitals() {}
 public:
     virtual void Init( SwFntObj *pUpperFont, SwFntObj *pLowerFont ) = 0;
@@ -217,9 +217,9 @@ sal_Int32 SwFont::GetCapitalBreak( SwViewShell const * pSh, const OutputDevice* 
         0, false);
     aInfo.SetPos( aPos );
     aInfo.SetSpace( 0 );
-    aInfo.SetWrong( NULL );
-    aInfo.SetGrammarCheck( NULL );
-    aInfo.SetSmartTags( NULL );
+    aInfo.SetWrong( nullptr );
+    aInfo.SetGrammarCheck( nullptr );
+    aInfo.SetSmartTags( nullptr );
     aInfo.SetDrawSpace( false );
     aInfo.SetKern( CheckKerning() );
     aInfo.SetKanaComp( pScript ? 0 : 100 );
@@ -237,7 +237,7 @@ protected:
     SwFntObj *pLowerFnt;
 public:
     explicit SwDoDrawCapital( SwDrawTextInfo &rInfo ) :
-        SwDoCapitals( rInfo ), pUpperFnt(0), pLowerFnt(0)
+        SwDoCapitals( rInfo ), pUpperFnt(nullptr), pLowerFnt(nullptr)
         { }
     virtual ~SwDoDrawCapital() {}
     virtual void Init( SwFntObj *pUpperFont, SwFntObj *pLowerFont ) override;
@@ -321,7 +321,7 @@ protected:
     sal_uInt16 nOfst;
 public:
     SwDoCapitalCrsrOfst( SwDrawTextInfo &rInfo, const sal_uInt16 nOfs ) :
-        SwDoCapitals( rInfo ), pUpperFnt(0), pLowerFnt(0), nCrsr( 0 ), nOfst( nOfs )
+        SwDoCapitals( rInfo ), pUpperFnt(nullptr), pLowerFnt(nullptr), nCrsr( 0 ), nOfst( nOfs )
         { }
     virtual ~SwDoCapitalCrsrOfst() {}
     virtual void Init( SwFntObj *pUpperFont, SwFntObj *pLowerFont ) override;
@@ -489,12 +489,12 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
         rDo.SetCapInf( aCapInf );
 
     SwFntObj *pOldLast = pLastFont;
-    SwFntAccess *pBigFontAccess = NULL;
+    SwFntAccess *pBigFontAccess = nullptr;
     SwFntObj *pBigFont;
-    SwFntAccess *pSpaceFontAccess = NULL;
-    SwFntObj *pSpaceFont = NULL;
+    SwFntAccess *pSpaceFontAccess = nullptr;
+    SwFntObj *pSpaceFont = nullptr;
 
-    const void *pMagic2 = NULL;
+    const void *pMagic2 = nullptr;
     sal_uInt16 nIndex2 = 0;
     SwSubFont aFont( *this );
     Point aStartPos( rDo.GetInf().GetPos() );
@@ -522,7 +522,7 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
         aFont.SetUnderline( UNDERLINE_NONE );
         aFont.SetOverline( UNDERLINE_NONE );
         aFont.SetStrikeout( STRIKEOUT_NONE );
-        pMagic2 = NULL;
+        pMagic2 = nullptr;
         nIndex2 = 0;
         pBigFontAccess = new SwFntAccess( pMagic2, nIndex2, &aFont,
                                           rDo.GetInf().GetShell() );
@@ -538,7 +538,7 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
     // the option there).
     int smallCapsPercentage = m_bSmallCapsPercentage66 ? 66 : SMALL_CAPS_PERCENTAGE;
     aFont.SetProportion( (aFont.GetPropr() * smallCapsPercentage ) / 100 );
-    pMagic2 = NULL;
+    pMagic2 = nullptr;
     nIndex2 = 0;
     SwFntAccess *pSmallFontAccess = new SwFntAccess( pMagic2, nIndex2, &aFont,
                                                      rDo.GetInf().GetShell() );

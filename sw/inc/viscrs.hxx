@@ -99,7 +99,7 @@ public:
     // make a complete swap access to m_pCursorOverlay is needed there
     void swapContent(SwSelPaintRects& rSwap);
 
-    void Show(std::vector<OString>* pSelectionRectangles = 0);
+    void Show(std::vector<OString>* pSelectionRectangles = nullptr);
     void Hide();
     void Invalidate( const SwRect& rRect );
 
@@ -112,7 +112,7 @@ public:
     // check current MapMode of the shell and set possibly the static members.
     // Optional set the parameters pX, pY
     static void Get1PixelInLogic( const SwViewShell& rSh,
-                                    long* pX = 0, long* pY = 0 );
+                                    long* pX = nullptr, long* pY = nullptr );
 };
 
 class SwShellCrsr : public virtual SwCursor, public SwSelPaintRects
@@ -128,7 +128,7 @@ private:
 public:
     SwShellCrsr( const SwCrsrShell& rCrsrSh, const SwPosition &rPos );
     SwShellCrsr( const SwCrsrShell& rCrsrSh, const SwPosition &rPos,
-                    const Point& rPtPos, SwPaM* pRing = 0 );
+                    const Point& rPtPos, SwPaM* pRing = nullptr );
     // note: *intentionally* links the new shell cursor into the old one's Ring
     SwShellCrsr( SwShellCrsr& );
     virtual ~SwShellCrsr();
@@ -152,10 +152,10 @@ public:
 
     virtual void SetMark() override;
 
-    virtual SwCursor* Create( SwPaM* pRing = 0 ) const override;
+    virtual SwCursor* Create( SwPaM* pRing = nullptr ) const override;
 
     virtual short MaxReplaceArived() override; //returns RET_YES/RET_CANCEL/RET_NO
-    virtual void SaveTableBoxContent( const SwPosition* pPos = 0 ) override;
+    virtual void SaveTableBoxContent( const SwPosition* pPos = nullptr ) override;
 
     bool UpDown( bool bUp, sal_uInt16 nCnt = 1 );
 
@@ -192,10 +192,10 @@ public:
     bool IsInside( const Point& rPt ) const;
 
     virtual void SetMark() override;
-    virtual SwCursor* Create( SwPaM* pRing = 0 ) const override;
+    virtual SwCursor* Create( SwPaM* pRing = nullptr ) const override;
 
     virtual short MaxReplaceArived() override; //returns RET_YES/RET_CANCEL/RET_NO
-    virtual void SaveTableBoxContent( const SwPosition* pPos = 0 ) override;
+    virtual void SaveTableBoxContent( const SwPosition* pPos = nullptr ) override;
 
     // true: Cursor can be set to this position.
     virtual bool IsAtValidPos( bool bPoint = true ) const override;

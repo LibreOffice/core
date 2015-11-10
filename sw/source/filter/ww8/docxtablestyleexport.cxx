@@ -92,7 +92,7 @@ void DocxTableStyleExport::CnfStyle(uno::Sequence<beans::PropertyValue>& rAttrib
                 {"firstRowLastColumn", XML_firstRowLastColumn},
                 {"lastRowFirstColumn", XML_lastRowFirstColumn},
                 {"lastRowLastColumn", XML_lastRowLastColumn},
-                {0, 0}
+                {nullptr, 0}
             };
 
             if (sal_Int32 nToken = DocxStringGetToken(aTokens, rAttributeList[j].Name))
@@ -143,7 +143,7 @@ void DocxTableStyleExport::Impl::tableStyleTableCellMar(uno::Sequence<beans::Pro
         {"end", XML_end},
         {"top", XML_top},
         {"bottom", XML_bottom},
-        {0, 0}
+        {nullptr, 0}
     };
 
     if (!rTableCellMar.hasElements())
@@ -174,7 +174,7 @@ void DocxTableStyleExport::Impl::tableStyleTcBorder(sal_Int32 nToken, const uno:
         {"space", XML_space},
         {"themeColor", XML_themeColor},
         {"themeTint", XML_themeTint},
-        {0, 0}
+        {nullptr, 0}
     };
 
     if (!rTcBorder.hasElements())
@@ -203,7 +203,7 @@ void DocxTableStyleExport::Impl::tableStyleTcBorders(uno::Sequence<beans::Proper
         {"insideV", XML_insideV},
         {"tl2br", XML_tl2br},
         {"tr2bl", XML_tr2bl},
-        {0, 0}
+        {nullptr, 0}
     };
 
     if (!rTcBorders.hasElements())

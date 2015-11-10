@@ -236,7 +236,7 @@ SwAutoCompleteWord::~SwAutoCompleteWord()
 bool SwAutoCompleteWord::InsertWord( const OUString& rWord, SwDoc& rDoc )
 {
     SwDocShell* pDocShell = rDoc.GetDocShell();
-    SfxMedium* pMedium = pDocShell ? pDocShell->GetMedium() : 0;
+    SfxMedium* pMedium = pDocShell ? pDocShell->GetMedium() : nullptr;
     // strings from help module should not be added
     if( pMedium )
     {

@@ -105,13 +105,13 @@ public:
 
     SwDropCapsPict(vcl::Window *pParent, WinBits nBits)
         : Control(pParent, nBits)
-        , mpPage(NULL)
+        , mpPage(nullptr)
         , mnLines(0)
         , mnTotLineH(0)
         , mnLineH(0)
         , mnTextH(0)
         , mnDistance(0)
-        , mpPrinter(NULL)
+        , mpPrinter(nullptr)
         , mbDelPrinter(false)
     {}
 
@@ -800,7 +800,7 @@ void SwDropCapsPage::FillSet( SfxItemSet &rSet )
 
         // set attributes
         const SfxPoolItem* pOldItem;
-        if (0 == (pOldItem = GetOldItem(rSet, FN_FORMAT_DROPCAPS)) || aFormat != *pOldItem)
+        if (nullptr == (pOldItem = GetOldItem(rSet, FN_FORMAT_DROPCAPS)) || aFormat != *pOldItem)
             rSet.Put(aFormat);
 
         // hard text formatting

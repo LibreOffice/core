@@ -71,8 +71,8 @@ TYPEINIT2(SwFlyFrm,SwLayoutFrm,SwAnchoredObject);
 SwFlyFrm::SwFlyFrm( SwFlyFrameFormat *pFormat, SwFrm* pSib, SwFrm *pAnch ) :
     SwLayoutFrm( pFormat, pSib ),
     SwAnchoredObject(), // #i26791#
-    m_pPrevLink( 0 ),
-    m_pNextLink( 0 ),
+    m_pPrevLink( nullptr ),
+    m_pNextLink( nullptr ),
     m_bInCnt( false ),
     m_bAtCnt( false ),
     m_bLayout( false ),
@@ -108,7 +108,7 @@ SwFlyFrm::SwFlyFrm( SwFlyFrameFormat *pFormat, SwFrm* pSib, SwFrm *pAnch ) :
         }
         else
         {
-            const SwViewShell *pSh = getRootFrm() ? getRootFrm()->GetCurrShell() : 0;
+            const SwViewShell *pSh = getRootFrm() ? getRootFrm()->GetCurrShell() : nullptr;
             if( pSh && pSh->GetViewOptions()->getBrowseMode() )
             {
                 mbVertLR = false;
@@ -343,7 +343,7 @@ sal_uInt32 SwFlyFrm::_GetOrdNumForNewRef( const SwFlyDrawContact* pContact )
 
     // search for another Writer fly frame registered at same frame format
     SwIterator<SwFlyFrm,SwFormat> aIter( *pContact->GetFormat() );
-    const SwFlyFrm* pFlyFrm( 0L );
+    const SwFlyFrm* pFlyFrm( nullptr );
     for ( pFlyFrm = aIter.First(); pFlyFrm; pFlyFrm = aIter.Next() )
     {
         if ( pFlyFrm != this )
@@ -379,8 +379,8 @@ SwVirtFlyDrawObj* SwFlyFrm::CreateNewRef( SwFlyDrawContact *pContact )
     // order to transport the z-order.
     // After creating the first Reference the Masters are removed from the
     // List and are not important anymore.
-    SdrPage* pPg( 0L );
-    if ( 0 != ( pPg = pContact->GetMaster()->GetPage() ) )
+    SdrPage* pPg( nullptr );
+    if ( nullptr != ( pPg = pContact->GetMaster()->GetPage() ) )
     {
         const size_t nOrdNum = pContact->GetMaster()->GetOrdNum();
         pPg->ReplaceObject( pDrawObj, nOrdNum );
@@ -450,7 +450,7 @@ void SwFlyFrm::FinitDrawObj()
     // Take VirtObject to the grave.
     // If the last VirtObject is destroyed, the DrawObject and the DrawContact
     // also need to be destroyed.
-    SwFlyDrawContact *pMyContact = 0;
+    SwFlyDrawContact *pMyContact = nullptr;
     if ( GetFormat() )
     {
         bool bContinue = true;
@@ -473,9 +473,9 @@ void SwFlyFrm::FinitDrawObj()
     // Writer fly frame again.
     if ( pMyContact )
     {
-        pMyContact->GetMaster()->SetUserCall( 0 );
+        pMyContact->GetMaster()->SetUserCall( nullptr );
     }
-    GetVirtDrawObj()->SetUserCall( 0 ); // Else calls delete of the ContactObj
+    GetVirtDrawObj()->SetUserCall( nullptr ); // Else calls delete of the ContactObj
     delete GetVirtDrawObj();            // Deregisters itself at the Master
     delete pMyContact;                  // Destroys the Master itself
 }
@@ -504,7 +504,7 @@ void SwFlyFrm::ChainFrames( SwFlyFrm *pMaster, SwFlyFrm *pFollow )
                 pInva = pInva->FindPrev();
             }
             else
-                pInva = 0;
+                pInva = nullptr;
         }
     }
 
@@ -530,8 +530,8 @@ void SwFlyFrm::ChainFrames( SwFlyFrm *pMaster, SwFlyFrm *pFollow )
 
 void SwFlyFrm::UnchainFrames( SwFlyFrm *pMaster, SwFlyFrm *pFollow )
 {
-    pMaster->m_pNextLink = 0;
-    pFollow->m_pPrevLink = 0;
+    pMaster->m_pNextLink = nullptr;
+    pFollow->m_pPrevLink = nullptr;
 
     if ( pFollow->ContainsContent() )
     {
@@ -732,7 +732,7 @@ void SwFlyFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem * pNew )
         if ( ( nInvFlags & 0x40 ) && Lower() && Lower()->IsNoTextFrm() )
             ClrContourCache( GetVirtDrawObj() );
         SwRootFrm *pRoot;
-        if ( nInvFlags & 0x20 && 0 != (pRoot = getRootFrm()) )
+        if ( nInvFlags & 0x20 && nullptr != (pRoot = getRootFrm()) )
             pRoot->InvalidateBrowseWidth();
         // #i28701#
         if ( nInvFlags & 0x80 )
@@ -791,7 +791,7 @@ void SwFlyFrm::_UpdateAttr( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
             {
                 SwNoTextNode *pNd = static_cast<SwNoTextNode*>(static_cast<SwContentFrm*>(Lower())->GetNode());
                 if ( pNd->HasContour() )
-                    pNd->SetContour( 0 );
+                    pNd->SetContour( nullptr );
             }
             // #i28701# - perform reorder of object lists
             // at anchor frame and at page frame.
@@ -864,8 +864,8 @@ void SwFlyFrm::_UpdateAttr( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
 
             SwFormatURL aURL( GetFormat()->GetURL() );
 
-            SwFormatFrmSize *pNewFormatFrmSize = NULL;
-            SwFormatChg *pOldFormatChg = NULL;
+            SwFormatFrmSize *pNewFormatFrmSize = nullptr;
+            SwFormatChg *pOldFormatChg = nullptr;
             if (nWhich == RES_FRM_SIZE)
                 pNewFormatFrmSize = const_cast<SwFormatFrmSize*>(static_cast<const SwFormatFrmSize*>(pNew));
             else
@@ -909,7 +909,7 @@ void SwFlyFrm::_UpdateAttr( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
                 {
                     SwNoTextNode *pNd = static_cast<SwNoTextNode*>(static_cast<SwContentFrm*>(Lower())->GetNode());
                     if ( pNd->HasContour() )
-                        pNd->SetContour( 0 );
+                        pNd->SetContour( nullptr );
                 }
                 else if( !Lower()->IsColumnFrm() )
                 {
@@ -1090,7 +1090,7 @@ void SwFlyFrm::_Invalidate( SwPageFrm *pPage )
     m_bNotifyBack = m_bInvalid = true;
 
     SwFlyFrm *pFrm;
-    if ( GetAnchorFrm() && 0 != (pFrm = AnchorFrm()->FindFlyFrm()) )
+    if ( GetAnchorFrm() && nullptr != (pFrm = AnchorFrm()->FindFlyFrm()) )
     {
         // Very bad case: If the Fly is bound within another Fly which
         // contains columns, the Format should be from that one.
@@ -1106,7 +1106,7 @@ void SwFlyFrm::_Invalidate( SwPageFrm *pPage )
     if ( GetVertPosOrientFrm() && GetVertPosOrientFrm()->IsLayoutFrm() )
     {
         const SwSectionFrm* pSectFrm( GetVertPosOrientFrm()->FindSctFrm() );
-        if ( pSectFrm && pSectFrm->GetSection() == 0 )
+        if ( pSectFrm && pSectFrm->GetSection() == nullptr )
         {
             InvalidatePos();
             ClearVertPosOrientFrm();
@@ -1132,7 +1132,7 @@ void SwFlyFrm::ChgRelPos( const Point &rNewPos )
                          RES_VERT_ORIENT, RES_HORI_ORIENT);
 
         SwFormatVertOrient aVert( pFormat->GetVertOrient() );
-        const SwTextFrm *pAutoFrm = NULL;
+        const SwTextFrm *pAutoFrm = nullptr;
         // #i34948# - handle also at-page and at-fly anchored
         // Writer fly frames
         const RndStdIds eAnchorType = GetFrameFormat().GetAnchor().GetAnchorId();
@@ -1255,7 +1255,7 @@ void SwFlyFrm::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderAtt
 
         // Check column width and set it if needed
         if ( Lower() && Lower()->IsColumnFrm() )
-            AdjustColumns( 0, false );
+            AdjustColumns( nullptr, false );
 
         mbValidSize = true;
 
@@ -1308,7 +1308,7 @@ void SwFlyFrm::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderAtt
                     Size aSize((Frm().*fnRect->fnGetWidth)(), (Frm().*fnRect->fnGetHeight)());
                     pCustomShape->SuggestTextFrameSize(aSize);
                     // Do the calculations normally done after touching editeng text of the shape.
-                    pCustomShape->NbcSetOutlinerParaObjectForText(0, 0);
+                    pCustomShape->NbcSetOutlinerParaObjectForText(nullptr, nullptr);
                 }
             }
         }
@@ -1393,7 +1393,7 @@ void CalcContent( SwLayoutFrm *pLay,
         pSect->CalcFootnoteContent();
     }
     else
-        pSect = NULL;
+        pSect = nullptr;
     SwFrm *pFrm = pLay->ContainsAny();
     if ( !pFrm )
     {
@@ -1426,13 +1426,13 @@ void CalcContent( SwLayoutFrm *pLay,
     do
     {
         // local variables to avoid loops caused by anchored object positioning
-        SwAnchoredObject* pAgainObj1 = 0;
-        SwAnchoredObject* pAgainObj2 = 0;
+        SwAnchoredObject* pAgainObj1 = nullptr;
+        SwAnchoredObject* pAgainObj2 = nullptr;
 
         // FME 2007-08-30 #i81146# new loop control
         int nLoopControlRuns = 0;
         const int nLoopControlMax = 20;
-        const SwFrm* pLoopControlCond = 0;
+        const SwFrm* pLoopControlCond = nullptr;
 
         SwFrm* pLast;
         do
@@ -1483,8 +1483,8 @@ void CalcContent( SwLayoutFrm *pLay,
             // #i57765# - do not consider invalid previous
             // frame, if current frame has a column/page break before attribute.
             SwFrm* pTmpPrev = pFrm->FindPrev();
-            SwFlowFrm* pTmpPrevFlowFrm = pTmpPrev && pTmpPrev->IsFlowFrm() ? SwFlowFrm::CastFlowFrm(pTmpPrev) : 0;
-            SwFlowFrm* pTmpFlowFrm     = pFrm->IsFlowFrm() ? SwFlowFrm::CastFlowFrm(pFrm) : 0;
+            SwFlowFrm* pTmpPrevFlowFrm = pTmpPrev && pTmpPrev->IsFlowFrm() ? SwFlowFrm::CastFlowFrm(pTmpPrev) : nullptr;
+            SwFlowFrm* pTmpFlowFrm     = pFrm->IsFlowFrm() ? SwFlowFrm::CastFlowFrm(pFrm) : nullptr;
 
             bool bPrevInvalid = pTmpPrevFlowFrm && pTmpFlowFrm &&
                                !pTmpFlowFrm->IsFollow() &&
@@ -1584,8 +1584,8 @@ void CalcContent( SwLayoutFrm *pLay,
                 if ( bRestartLayoutProcess )
                 {
                     pFrm = pLay->ContainsAny();
-                    pAgainObj1 = 0L;
-                    pAgainObj2 = 0L;
+                    pAgainObj1 = nullptr;
+                    pAgainObj2 = nullptr;
                     continue;
                 }
 
@@ -2035,7 +2035,7 @@ void SwFrm::AppendFly( SwFlyFrm *pNew )
     // Register at the page
     // If there's none present, register via SwPageFrm::PreparePage
     SwPageFrm* pPage = FindPageFrm();
-    if ( pPage != NULL )
+    if ( pPage != nullptr )
     {
         pPage->AppendFlyToPage( pNew );
     }
@@ -2073,7 +2073,7 @@ void SwFrm::RemoveFly( SwFlyFrm *pToRemove )
     if ( !mpDrawObjs->size() )
         DELETEZ( mpDrawObjs );
 
-    pToRemove->ChgAnchorFrm( 0 );
+    pToRemove->ChgAnchorFrm( nullptr );
 
     if ( !pToRemove->IsFlyInCntFrm() && GetUpper() && IsInTab() )//MA_FLY_HEIGHT
         GetUpper()->InvalidateSize();
@@ -2176,7 +2176,7 @@ void SwFrm::RemoveDrawObj( SwAnchoredObject& _rToRemoveObj )
     if ( !mpDrawObjs->size() )
         DELETEZ( mpDrawObjs );
 
-    _rToRemoveObj.ChgAnchorFrm( 0 );
+    _rToRemoveObj.ChgAnchorFrm( nullptr );
 
     assert(!mpDrawObjs || mpDrawObjs->is_sorted());
 }
@@ -2471,7 +2471,7 @@ bool SwFlyFrm::GetContour( tools::PolyPolygon&   rContour,
         // OD 16.04.2003 #i13147# - determine <GraphicObject> instead of <Graphic>
         // in order to avoid load of graphic, if <SwNoTextNode> contains a graphic
         // node and method is called for paint.
-        const GraphicObject* pGrfObj = NULL;
+        const GraphicObject* pGrfObj = nullptr;
         bool bGrfObjCreated = false;
         const SwGrfNode* pGrfNd = pNd->GetGrfNode();
         if ( pGrfNd && _bForPaint )

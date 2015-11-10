@@ -138,10 +138,10 @@ struct SwApplyTemplate
     SwApplyTemplate() :
         eType(0),
         nColor(0),
-        m_pFormatClipboard(0),
+        m_pFormatClipboard(nullptr),
         nUndo(0)
     {
-        aColl.pTextColl = 0;
+        aColl.pTextColl = nullptr;
     }
 };
 
@@ -261,7 +261,7 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
     // methods for searching
     // set search context
     SAL_DLLPRIVATE bool              SearchAndWrap(bool bApi = false);
-    SAL_DLLPRIVATE bool          SearchAll(sal_uInt16* pFound = 0);
+    SAL_DLLPRIVATE bool          SearchAll(sal_uInt16* pFound = nullptr);
     SAL_DLLPRIVATE sal_uLong         FUNC_Search( const SwSearchOptions& rOptions );
     SAL_DLLPRIVATE void          Replace();
 
@@ -309,8 +309,8 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
 
     // used for spell checking and text conversion
     SAL_DLLPRIVATE void          SpellStart( SvxSpellArea eSpell, bool bStartDone,
-                                        bool bEndDone, SwConversionArgs *pConvArgs = 0 );
-    SAL_DLLPRIVATE void          SpellEnd( SwConversionArgs *pConvArgs = 0 );
+                                        bool bEndDone, SwConversionArgs *pConvArgs = nullptr );
+    SAL_DLLPRIVATE void          SpellEnd( SwConversionArgs *pConvArgs = nullptr );
 
     SAL_DLLPRIVATE void          HyphStart( SvxSpellArea eSpell );
     SAL_DLLPRIVATE void          SpellKontext(bool bOn = true)
@@ -536,8 +536,8 @@ public:
     bool            AreOnlyFormsSelected() const;
     bool            HasDrwObj(SdrObject *pSdrObj) const;
     bool            HasOnlyObj(SdrObject *pSdrObj, sal_uInt32 eObjInventor) const;
-    bool            BeginTextEdit(  SdrObject* pObj, SdrPageView* pPV=NULL,
-                                    vcl::Window* pWin=NULL, bool bIsNewObj=false, bool bSetSelectionToStart=false );
+    bool            BeginTextEdit(  SdrObject* pObj, SdrPageView* pPV=nullptr,
+                                    vcl::Window* pWin=nullptr, bool bIsNewObj=false, bool bSetSelectionToStart=false );
 
     void            StateTabWin(SfxItemSet&);
 
@@ -549,7 +549,7 @@ public:
 
     // edit links
     void            EditLinkDlg();
-    void            AutoCaption(const sal_uInt16 nType, const SvGlobalName *pOleId = 0);
+    void            AutoCaption(const sal_uInt16 nType, const SvGlobalName *pOleId = nullptr);
     void            InsertCaption(const InsCaptionOpt *pOpt);
 
     // Async call by Core
@@ -565,7 +565,7 @@ public:
     inline virtual const FmFormShell    *GetFormShell() const override { return m_pFormShell; }
 
     // so that in the SubShells' DTors m_pShell can be reset if applicable
-    void ResetSubShell()    { m_pShell = 0; }
+    void ResetSubShell()    { m_pShell = nullptr; }
 
     virtual void    WriteUserData(OUString &, bool bBrowse = false) override;
     virtual void    ReadUserData(const OUString &, bool bBrowse = false) override;
@@ -617,8 +617,8 @@ public:
 
     //public fuer D&D
     int     InsertGraphic( const OUString &rPath, const OUString &rFilter,
-                            bool bLink = true, GraphicFilter *pFlt = 0,
-                            Graphic* pPreviewGrf = 0,
+                            bool bLink = true, GraphicFilter *pFlt = nullptr,
+                            Graphic* pPreviewGrf = nullptr,
                             bool bRule = false );
 
     void ExecuteScan( SfxRequest& rReq );

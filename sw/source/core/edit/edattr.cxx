@@ -150,7 +150,7 @@ bool SwEditShell::GetPaMAttr( SwPaM* pPaM, SfxItemSet& rSet,
                 break;
 
             default:
-                pNd = 0;
+                pNd = nullptr;
             }
 
             if( pNd )
@@ -263,7 +263,7 @@ SwTextFormatColl* SwEditShell::GetPaMTextFormatColl( SwPaM* pPaM ) const
 
             // if the maximum number of node that can be inspected has been reached
             if (numberOfLookup >= getMaxLookup())
-                return NULL;
+                return nullptr;
 
             if( pNd->IsTextNode() )
             {
@@ -271,14 +271,14 @@ SwTextFormatColl* SwEditShell::GetPaMTextFormatColl( SwPaM* pPaM ) const
                 SwTextFormatColl* pFormat = pNd->GetTextNode()->GetTextColl();
 
                 // if the paragraph format exist stop here and return it
-                if( pFormat != NULL )
+                if( pFormat != nullptr )
                     return pFormat;
             }
         }
     }
 
     // if none of the selected node contain a named paragraph format
-    return NULL;
+    return nullptr;
 }
 
 std::vector<std::pair< const SfxPoolItem*, std::unique_ptr<SwPaM> >> SwEditShell::GetItemWithPaM( sal_uInt16 nWhich )
@@ -293,8 +293,8 @@ std::vector<std::pair< const SfxPoolItem*, std::unique_ptr<SwPaM> >> SwEditShell
         sal_Int32 nSttCnt = rCurrentPaM.Start()->nContent.GetIndex();
         sal_Int32 nEndCnt = rCurrentPaM.End()->nContent.GetIndex();
 
-        SwPaM* pNewPaM = 0;
-        const SfxPoolItem* pItem = 0;
+        SwPaM* pNewPaM = nullptr;
+        const SfxPoolItem* pItem = nullptr;
 
         // for all the nodes in the current selection
         for( sal_uLong n = nSttNd; n <= nEndNd; ++n )
@@ -398,7 +398,7 @@ bool SwEditShell::GetCurFootnote( SwFormatFootnote* pFillFootnote )
         pFillFootnote->SetNumber( rFootnote );
         pFillFootnote->SetEndNote( rFootnote.IsEndNote() );
     }
-    return 0 != pFootnote;
+    return nullptr != pFootnote;
 }
 
 bool SwEditShell::SetCurFootnote( const SwFormatFootnote& rFillFootnote )
@@ -490,7 +490,7 @@ bool SwEditShell::IsMoveLeftMargin( bool bRight, bool bModulus ) const
 
         SwContentNode* pCNd;
         for( sal_uLong n = nSttNd; bRet && n <= nEndNd; ++n )
-            if( 0 != ( pCNd = GetDoc()->GetNodes()[ n ]->GetTextNode() ))
+            if( nullptr != ( pCNd = GetDoc()->GetNodes()[ n ]->GetTextNode() ))
             {
                 const SvxLRSpaceItem& rLS = static_cast<const SvxLRSpaceItem&>(
                                             pCNd->GetAttr( RES_LR_SPACE ));

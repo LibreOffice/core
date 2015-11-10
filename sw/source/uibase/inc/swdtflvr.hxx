@@ -85,7 +85,7 @@ class SW_DLLPUBLIC SwTransferable : public TransferableHelper
     static SwTransferable* GetSwTransferable( const TransferableDataHelper& rData );
     static void SetSelInShell( SwWrtShell& , bool , const Point* );
     static bool _CheckForURLOrLNKFile( TransferableDataHelper& rData,
-                                OUString& rFileName, OUString* pTitle = 0 );
+                                OUString& rFileName, OUString* pTitle = nullptr );
     static bool _TestAllowedFormat( const TransferableDataHelper& rData,
                                         SotClipboardFormatId nFormat, SotExchangeDest nDestination );
 
@@ -150,7 +150,7 @@ public:
     SwTransferable( SwWrtShell& );
     virtual ~SwTransferable();
 
-    static SotExchangeDest GetSotDestination( const SwWrtShell& rSh, const Point* = 0 );
+    static SotExchangeDest GetSotDestination( const SwWrtShell& rSh, const Point* = nullptr );
 
     // set properties on the document, like PageMargin, VisArea.
     // And set real Size
@@ -173,7 +173,7 @@ public:
                           SwWrtShell& rSh, sal_uInt16 nAction, SotClipboardFormatId nFormat,
                           SotExchangeDest nDestination, bool bIsPasteFormat,
                           bool bIsDefault,
-                          const Point* pDDPos = 0, sal_Int8 nDropAction = 0,
+                          const Point* pDDPos = nullptr, sal_Int8 nDropAction = 0,
                           bool bPasteSelection = false );
 
     static bool IsPasteSpecial( const SwWrtShell& rWrtShell,
@@ -196,12 +196,12 @@ public:
     // Interfaces for Selection
     /* #96392# Added pCreator to distinguish SwFrameShell from SwWrtShell. */
     static void CreateSelection( SwWrtShell & rSh,
-                                 const SwFrameShell * pCreator = NULL );
+                                 const SwFrameShell * pCreator = nullptr );
     static void ClearSelection( SwWrtShell& rSh,
-                                const SwFrameShell * pCreator = NULL );
+                                const SwFrameShell * pCreator = nullptr );
 
     // the related SwView is being closed and the SwTransferable is invalid now
-    void    Invalidate() {m_pWrtShell = 0;}
+    void    Invalidate() {m_pWrtShell = nullptr;}
     static const css::uno::Sequence< sal_Int8 >& getUnoTunnelId();
 
     virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& rId ) throw( css::uno::RuntimeException, std::exception ) override;

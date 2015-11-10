@@ -205,7 +205,7 @@ SwHash* Find( const OUString& rStr, SwHash* const * ppTable,
             return pEntry;
         }
     }
-    return 0;
+    return nullptr;
 }
 
 inline LanguageType GetDocAppScriptLang( SwDoc& rDoc )
@@ -230,7 +230,7 @@ static double lcl_ConvertToDateValue( SwDoc& rDoc, sal_Int32 nDate )
 }
 
 SwCalc::SwCalc( SwDoc& rD )
-    : aErrExpr( OUString(), SwSbxValue(), 0 )
+    : aErrExpr( OUString(), SwSbxValue(), nullptr )
     , nCommandPos(0)
     , rDoc( rD )
     , pLclData( m_aSysLocale.GetLocaleDataPtr() )
@@ -333,7 +333,7 @@ SwCalc::SwCalc( SwDoc& rD )
     for( n = 0; n < 25; ++n )
     {
         sTmpStr = OUString::createFromAscii(sNTypeTab[n]);
-        VarTable[ aHashValue[ n ] ] = new SwCalcExp( sTmpStr, nVal, 0 );
+        VarTable[ aHashValue[ n ] ] = new SwCalcExp( sTmpStr, nVal, nullptr );
     }
 
     static_cast<SwCalcExp*>(VarTable[ aHashValue[ 0 ] ])->nValue.PutBool( false );
@@ -358,7 +358,7 @@ SwCalc::SwCalc( SwDoc& rD )
 
     nVal.PutString( rUserOptions.GetToken( aAdrToken[ 11 ] ));
     sTmpStr = OUString::createFromAscii(sNTypeTab[25]);
-    VarTable[ aHashValue[ 25 ] ]->pNext = new SwCalcExp( sTmpStr, nVal, 0 );
+    VarTable[ aHashValue[ 25 ] ]->pNext = new SwCalcExp( sTmpStr, nVal, nullptr );
 
 } // SwCalc::SwCalc
 
@@ -544,7 +544,7 @@ SwCalcExp* SwCalc::VarLook( const OUString& rStr, bool bIns )
             }
 
             sal_uLong nTmpRec = 0;
-            if( 0 != ( pFnd = Find( sDBNum, VarTable, TBLSZ ) ) )
+            if( nullptr != ( pFnd = Find( sDBNum, VarTable, TBLSZ ) ) )
                 nTmpRec = static_cast<SwCalcExp*>(pFnd)->nValue.GetULong();
 
             OUString sResult;
@@ -572,7 +572,7 @@ SwCalcExp* SwCalc::VarLook( const OUString& rStr, bool bIns )
         return &aErrExpr;
     }
 
-    SwCalcExp* pNewExp = new SwCalcExp( aStr, SwSbxValue(), 0 );
+    SwCalcExp* pNewExp = new SwCalcExp( aStr, SwSbxValue(), nullptr );
     pNewExp->pNext = VarTable[ ii ];
     VarTable[ ii ] = pNewExp;
 
@@ -617,7 +617,7 @@ void SwCalc::VarChange( const OUString& rStr, const SwSbxValue& rValue )
 
     if( !pFnd )
     {
-        pFnd = new SwCalcExp( aStr, SwSbxValue( rValue ), 0 );
+        pFnd = new SwCalcExp( aStr, SwSbxValue( rValue ), nullptr );
         pFnd->pNext = VarTable[ nPos ];
         VarTable[ nPos ] = pFnd;
     }
@@ -1257,7 +1257,7 @@ SwSbxValue SwCalc::Prim()
 {
     SwSbxValue nErg;
 
-    pfCalc pFnc = 0;
+    pfCalc pFnc = nullptr;
 
     bool bChkTrig = false, bChkPow = false;
 
@@ -1569,7 +1569,7 @@ bool SwCalc::IsValidVarName( const OUString& rStr, OUString* pValidName )
 
 SwHash::SwHash(const OUString& rStr)
     : aStr(rStr)
-    , pNext(0)
+    , pNext(nullptr)
 {
 }
 

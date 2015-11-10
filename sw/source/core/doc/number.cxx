@@ -59,10 +59,10 @@ using namespace ::com::sun::star;
 
 sal_uInt16 SwNumRule::mnRefCount = 0;
 SwNumFormat* SwNumRule::maBaseFormats[ RULE_END ][ MAXLEVEL ] = {
-    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } };
+    {nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr } };
 
 SwNumFormat* SwNumRule::maLabelAlignmentBaseFormats[ RULE_END ][ MAXLEVEL ] = {
-    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } };
+    {nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr } };
 
 const sal_uInt16 SwNumRule::maDefNumIndents[ MAXLEVEL ] = {
 //inch:   0,5  1,0  1,5  2,0   2,5   3,0   3,5   4,0   4,5   5,0
@@ -87,7 +87,7 @@ const SwNumFormat& SwNumRule::Get( sal_uInt16 i ) const
 
 const SwNumFormat* SwNumRule::GetNumFormat( sal_uInt16 i ) const
 {
-    const SwNumFormat * pResult = NULL;
+    const SwNumFormat * pResult = nullptr;
 
     OSL_ASSERT( i < MAXLEVEL && meRuleType < RULE_END );
     if ( i < MAXLEVEL && meRuleType < RULE_END)
@@ -177,7 +177,7 @@ static void lcl_SetRuleChgd( SwTextNode& rNd, sal_uInt8 nLevel )
 
 SwNumFormat::SwNumFormat() :
     SvxNumberFormat(SVX_NUM_ARABIC),
-    SwClient( 0 ),
+    SwClient( nullptr ),
     m_pVertOrient(new SwFormatVertOrient( 0, text::VertOrientation::NONE))
     ,m_cGrfBulletCP(USHRT_MAX)//For i120928,record the cp info of graphic within bullet
 {
@@ -212,7 +212,7 @@ SwNumFormat::SwNumFormat(const SvxNumberFormat& rNumFormat, SwDoc* pDoc)
                                             nsSwGetPoolIdFromName::GET_POOLID_CHRFMT );
             pCFormat = nId != USHRT_MAX
                         ? pDoc->getIDocumentStylePoolAccess().GetCharFormatFromPool( nId )
-                        : pDoc->MakeCharFormat( rCharStyleName, 0 );
+                        : pDoc->MakeCharFormat( rCharStyleName, nullptr );
         }
         pCFormat->Add( this );
     }
@@ -285,7 +285,7 @@ void SwNumFormat::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
 {
     // Look for the NumRules object in the Doc where this NumFormat is set.
     // The format does not need to exist!
-    const SwCharFormat* pFormat = 0;
+    const SwCharFormat* pFormat = nullptr;
     sal_uInt16 nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0;
     switch( nWhich )
     {
@@ -362,7 +362,7 @@ const SwFormatVertOrient*      SwNumFormat::GetGraphicOrientation() const
 {
     sal_Int16  eOrient = SvxNumberFormat::GetVertOrient();
     if(text::VertOrientation::NONE == eOrient)
-        return 0;
+        return nullptr;
     else
     {
         m_pVertOrient->SetVertOrient(eOrient);
@@ -376,7 +376,7 @@ SwNumRule::SwNumRule( const OUString& rNm,
                       bool bAutoFlg )
   : maTextNodeList(),
     maParagraphStyleList(),
-    mpNumRuleMap(0),
+    mpNumRuleMap(nullptr),
     msName( rNm ),
     meRuleType( eType ),
     mnPoolFormatId( USHRT_MAX ),
@@ -474,7 +474,7 @@ SwNumRule::SwNumRule( const OUString& rNm,
 SwNumRule::SwNumRule( const SwNumRule& rNumRule )
     : maTextNodeList(),
       maParagraphStyleList(),
-      mpNumRuleMap(0),
+      mpNumRuleMap(nullptr),
       msName( rNumRule.msName ),
       meRuleType( rNumRule.meRuleType ),
       mnPoolFormatId( rNumRule.GetPoolFormatId() ),
@@ -513,17 +513,17 @@ SwNumRule::~SwNumRule()
             int n;
 
             for( n = 0; n < MAXLEVEL; ++n, ++ppFormats )
-                delete *ppFormats, *ppFormats = 0;
+                delete *ppFormats, *ppFormats = nullptr;
 
             // Outline:
             for( n = 0; n < MAXLEVEL; ++n, ++ppFormats )
-                delete *ppFormats, *ppFormats = 0;
+                delete *ppFormats, *ppFormats = nullptr;
 
             ppFormats = &SwNumRule::maLabelAlignmentBaseFormats[0][0];
             for( n = 0; n < MAXLEVEL; ++n, ++ppFormats )
-                delete *ppFormats, *ppFormats = 0;
+                delete *ppFormats, *ppFormats = nullptr;
             for( n = 0; n < MAXLEVEL; ++n, ++ppFormats )
-                delete *ppFormats, *ppFormats = 0;
+                delete *ppFormats, *ppFormats = nullptr;
     }
 
     maTextNodeList.clear();
@@ -535,7 +535,7 @@ void SwNumRule::CheckCharFormats( SwDoc* pDoc )
     for( sal_uInt8 n = 0; n < MAXLEVEL; ++n )
     {
         SwCharFormat* pFormat;
-        if( maFormats[ n ] && 0 != ( pFormat = maFormats[ n ]->GetCharFormat() ) &&
+        if( maFormats[ n ] && nullptr != ( pFormat = maFormats[ n ]->GetCharFormat() ) &&
             pFormat->GetDoc() != pDoc )
         {
             // copy
@@ -619,7 +619,7 @@ void SwNumRule::Set( sal_uInt16 i, const SwNumFormat* pNumFormat )
         }
     }
     else if( !pNumFormat )
-        delete pOld, maFormats[ i ] = 0, mbInvalidRuleFlag = true;
+        delete pOld, maFormats[ i ] = nullptr, mbInvalidRuleFlag = true;
     else if( *pOld != *pNumFormat )
         *pOld = *pNumFormat, mbInvalidRuleFlag = true;
 }
@@ -843,7 +843,7 @@ void SwNumRule::SetSvxRule(const SvxNumRule& rNumRule, SwDoc* pDoc)
     {
         const SvxNumberFormat* pSvxFormat = rNumRule.Get(n);
         delete maFormats[n];
-        maFormats[n] = pSvxFormat ? new SwNumFormat(*pSvxFormat, pDoc) : 0;
+        maFormats[n] = pSvxFormat ? new SwNumFormat(*pSvxFormat, pDoc) : nullptr;
     }
 
     mbInvalidRuleFlag = true;
@@ -861,7 +861,7 @@ SvxNumRule SwNumRule::MakeSvxNumRule() const
         SwNumFormat aNumFormat = Get(n);
         if(aNumFormat.GetCharFormat())
             aNumFormat.SetCharFormatName(aNumFormat.GetCharFormat()->GetName());
-        aRule.SetLevel(n, aNumFormat, maFormats[n] != 0);
+        aRule.SetLevel(n, aNumFormat, maFormats[n] != nullptr);
     }
     return aRule;
 }
@@ -1141,7 +1141,7 @@ namespace numfunc
           mbUserDefinedFontname( false ),
           meFontWeight( WEIGHT_DONTKNOW ),
           meFontItalic( ITALIC_NONE ),
-          mpFont( 0 )
+          mpFont( nullptr )
     {
         SetToDefault();
         LoadConfig();

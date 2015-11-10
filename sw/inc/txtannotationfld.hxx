@@ -36,7 +36,7 @@ public:
     virtual ~SwTextAnnotationField();
 
     ::sw::mark::IMark* GetAnnotationMark(
-        SwDoc* pDoc = NULL ) const;
+        SwDoc* pDoc = nullptr ) const;
 };
 
 #endif

@@ -48,10 +48,10 @@ SwFlyFrm *SwFEShell::FindFlyFrm( const uno::Reference < embed::XEmbeddedObject >
     {
         SwOLENode *pNd = static_cast<SwNoTextFrm*>(pFly->Lower())->GetNode()->GetOLENode();
         if ( !pNd || pNd->GetOLEObj().GetOleRef() != xObj )
-            pFly = 0;
+            pFly = nullptr;
     }
     else
-        pFly = 0;
+        pFly = nullptr;
 
     if ( !pFly )
     {
@@ -61,7 +61,7 @@ SwFlyFrm *SwFEShell::FindFlyFrm( const uno::Reference < embed::XEmbeddedObject >
         sal_uLong nSttIdx = GetNodes().GetEndOfAutotext().StartOfSectionIndex() + 1,
               nEndIdx = GetNodes().GetEndOfAutotext().GetIndex();
         while( nSttIdx < nEndIdx &&
-                0 != (pStNd = GetNodes()[ nSttIdx ]->GetStartNode()) )
+                nullptr != (pStNd = GetNodes()[ nSttIdx ]->GetStartNode()) )
         {
             SwNode *pNd = GetNodes()[ nSttIdx+1 ];
             if ( pNd->IsOLENode() &&

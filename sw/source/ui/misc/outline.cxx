@@ -170,8 +170,8 @@ SwOutlineTabDialog::SwOutlineTabDialog(vcl::Window* pParent, const SfxItemSet* p
     pNumRule = new SwNumRule( *rSh.GetOutlineNumRule() );
     GetCancelButton().SetClickHdl(LINK(this, SwOutlineTabDialog, CancelHdl));
 
-    m_nNumPosId = AddTabPage("position", &SwNumPositionTabPage::Create, 0);
-    m_nOutlineId = AddTabPage("numbering", &SwOutlineSettingsTabPage::Create, 0);
+    m_nNumPosId = AddTabPage("position", &SwNumPositionTabPage::Create, nullptr);
+    m_nOutlineId = AddTabPage("numbering", &SwOutlineSettingsTabPage::Create, nullptr);
 
     OUString sHeadline;
     sal_uInt16 i;
@@ -287,7 +287,7 @@ IMPL_LINK_TYPED( SwOutlineTabDialog, MenuSelectHdl, Menu *, pMenu, bool )
             if(pRules)
                 aStrArr[i] = &pRules->GetName();
             else
-                aStrArr[i] = 0;
+                aStrArr[i] = nullptr;
         }
         pDlg->SetUserNames(aStrArr);
         if(RET_OK == pDlg->Execute())
@@ -419,9 +419,9 @@ SwOutlineSettingsTabPage::SwOutlineSettingsTabPage(vcl::Window* pParent,
     : SfxTabPage(pParent, "OutlineNumberingPage",
         "modules/swriter/ui/outlinenumberingpage.ui", &rSet)
     , aNoFormatName(SW_RESSTR(SW_STR_NONE))
-    , pSh(NULL)
-    , pNumRule(NULL)
-    , pCollNames(NULL)
+    , pSh(nullptr)
+    , pNumRule(nullptr)
+    , pCollNames(nullptr)
     , nActLevel(1)
 {
     get(m_pLevelLB, "level");
@@ -464,7 +464,7 @@ void    SwOutlineSettingsTabPage::Update()
         bool bSameCharFormat = true;
 
         const SwNumFormat* aNumFormatArr[MAXLEVEL];
-        const SwCharFormat* pFirstFormat = 0;
+        const SwCharFormat* pFirstFormat = nullptr;
 
         for(sal_uInt16 i = 0; i < MAXLEVEL; i++)
         {
@@ -703,7 +703,7 @@ IMPL_LINK_NOARG_TYPED(SwOutlineSettingsTabPage, CharFormatHdl, ListBox&, void)
     OUString sEntry = m_pCharFormatLB->GetSelectEntry();
     sal_uInt16 nMask = 1;
     bool bFormatNone = sEntry == SwViewShell::GetShellRes()->aStrNone;
-    SwCharFormat* pFormat = 0;
+    SwCharFormat* pFormat = nullptr;
     if(!bFormatNone)
     {
         sal_uInt16 nChCount = pSh->GetCharFormatCount();
@@ -734,7 +734,7 @@ IMPL_LINK_NOARG_TYPED(SwOutlineSettingsTabPage, CharFormatHdl, ListBox&, void)
         {
             SwNumFormat aNumFormat(pNumRule->Get(i));
             if(bFormatNone)
-                aNumFormat.SetCharFormat(0);
+                aNumFormat.SetCharFormat(nullptr);
             else
                 aNumFormat.SetCharFormat(pFormat);
             pNumRule->Set(i, aNumFormat);
@@ -1097,7 +1097,7 @@ void NumberingPreview::Paint(vcl::RenderContext& rRenderContext, const Rectangle
                 pVDev->SetFont(aStdFont);
                 pVDev->DrawText(
                     Point(nXStart + nTextOffset, nYStart),
-                    (pOutlineNames == 0
+                    (pOutlineNames == nullptr
                      ? utl::ConfigManager::getProductName()
                      : pOutlineNames[nLevel]));
             }

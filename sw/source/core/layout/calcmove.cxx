@@ -349,18 +349,18 @@ void SwFrm::OptPrepareMake()
     {
         {
             SwFrmDeleteGuard aDeleteGuard(this);
-            GetUpper()->Calc(getRootFrm()->GetCurrShell() ? getRootFrm()->GetCurrShell()->GetOut() : 0);
+            GetUpper()->Calc(getRootFrm()->GetCurrShell() ? getRootFrm()->GetCurrShell()->GetOut() : nullptr);
         }
         OSL_ENSURE( GetUpper(), ":-( Layout unstable (Upper gone)." );
         if ( !GetUpper() )
             return;
     }
     if ( GetPrev() && !GetPrev()->IsValid() )
-        PrepareMake(getRootFrm()->GetCurrShell() ? getRootFrm()->GetCurrShell()->GetOut() : 0);
+        PrepareMake(getRootFrm()->GetCurrShell() ? getRootFrm()->GetCurrShell()->GetOut() : nullptr);
     else
     {
         StackHack aHack;
-        MakeAll(IsRootFrm() ? 0 : getRootFrm()->GetCurrShell()->GetOut());
+        MakeAll(IsRootFrm() ? nullptr : getRootFrm()->GetCurrShell()->GetOut());
     }
 }
 
@@ -370,7 +370,7 @@ void SwFrm::PrepareCrsr()
     if( GetUpper() && !GetUpper()->IsSctFrm() )
     {
         GetUpper()->PrepareCrsr();
-        GetUpper()->Calc(getRootFrm()->GetCurrShell() ? getRootFrm()->GetCurrShell()->GetOut() : 0);
+        GetUpper()->Calc(getRootFrm()->GetCurrShell() ? getRootFrm()->GetCurrShell()->GetOut() : nullptr);
 
         OSL_ENSURE( GetUpper(), ":-( Layout unstable (Upper gone)." );
         if ( !GetUpper() )
@@ -381,7 +381,7 @@ void SwFrm::PrepareCrsr()
         bool bNoSect = IsInSct();
 
         bool bOldTabLock = false, bFoll;
-        SwFlowFrm* pThis = bCnt ? static_cast<SwContentFrm*>(this) : NULL;
+        SwFlowFrm* pThis = bCnt ? static_cast<SwContentFrm*>(this) : nullptr;
 
         if ( bTab )
         {
@@ -438,7 +438,7 @@ void SwFrm::PrepareCrsr()
         if ( bTab && !bOldTabLock )
             ::PrepareUnlock( static_cast<SwTabFrm*>(this) );
     }
-    Calc(getRootFrm()->GetCurrShell() ? getRootFrm()->GetCurrShell()->GetOut() : 0);
+    Calc(getRootFrm()->GetCurrShell() ? getRootFrm()->GetCurrShell()->GetOut() : nullptr);
 }
 
 // Here we return GetPrev(); however we will ignore empty SectionFrms
@@ -482,7 +482,7 @@ void SwFrm::MakePos()
                  !pPrv->GetAttrSet()->GetKeep().GetValue()
                )
             {
-                pPrv->Calc(getRootFrm()->GetCurrShell() ? getRootFrm()->GetCurrShell()->GetOut() : 0);   // This may cause Prev to vanish!
+                pPrv->Calc(getRootFrm()->GetCurrShell() ? getRootFrm()->GetCurrShell()->GetOut() : nullptr);   // This may cause Prev to vanish!
             }
             else if ( pPrv->Frm().Top() == 0 )
             {
@@ -640,12 +640,12 @@ static void lcl_CheckObjects( SwSortedObjs* pSortedObjs, SwFrm* pFrm, long& rBot
 
 void SwPageFrm::MakeAll(vcl::RenderContext* pRenderContext)
 {
-    PROTOCOL_ENTER( this, PROT_MAKEALL, 0, 0 )
+    PROTOCOL_ENTER( this, PROT_MAKEALL, 0, nullptr )
 
     const SwRect aOldRect( Frm() );     // Adjust root size
     const SwLayNotify aNotify( this );  // takes care of the notification in the dtor
     std::unique_ptr<SwBorderAttrAccess> pAccess;
-    const SwBorderAttrs*pAttrs = 0;
+    const SwBorderAttrs*pAttrs = nullptr;
 
     while ( !mbValidPos || !mbValidSize || !mbValidPrtArea )
     {
@@ -776,7 +776,7 @@ void SwPageFrm::MakeAll(vcl::RenderContext* pRenderContext)
     } //while ( !mbValidPos || !mbValidSize || !mbValidPrtArea )
 
     if ( Frm() != aOldRect && GetUpper() )
-        static_cast<SwRootFrm*>(GetUpper())->CheckViewLayout( 0, 0 );
+        static_cast<SwRootFrm*>(GetUpper())->CheckViewLayout( nullptr, nullptr );
 
     OSL_ENSURE( !GetUpper() || GetUpper()->Prt().Width() >= maFrm.Width(),
         "Upper (Root) must be wide enough to contain the widest page");
@@ -784,7 +784,7 @@ void SwPageFrm::MakeAll(vcl::RenderContext* pRenderContext)
 
 void SwLayoutFrm::MakeAll(vcl::RenderContext* /*pRenderContext*/)
 {
-    PROTOCOL_ENTER( this, PROT_MAKEALL, 0, 0 )
+    PROTOCOL_ENTER( this, PROT_MAKEALL, 0, nullptr )
 
     // takes care of the notification in the dtor
     const SwLayNotify aNotify( this );
@@ -793,7 +793,7 @@ void SwLayoutFrm::MakeAll(vcl::RenderContext* /*pRenderContext*/)
     SwRectFn fnRect = ( IsNeighbourFrm() == bVert )? fnRectHori : ( IsVertLR() ? fnRectVertL2R : fnRectVert );
 
     std::unique_ptr<SwBorderAttrAccess> pAccess;
-    const SwBorderAttrs*pAttrs = 0;
+    const SwBorderAttrs*pAttrs = nullptr;
 
     while ( !mbValidPos || !mbValidSize || !mbValidPrtArea )
     {
@@ -869,12 +869,12 @@ bool SwTextNode::IsCollapse() const
         const SwEndNode *pNdAfter=GetNodes()[nIdx+1]->GetEndNode();
 
         // The paragraph is collapsed only if the NdAfter is the end of a cell
-        bool bInTable = this->FindTableNode( ) != NULL;
+        bool bInTable = this->FindTableNode( ) != nullptr;
 
         SwSortedObjs* pObjs = this->getLayoutFrm( GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout() )->GetDrawObjs( );
-        const size_t nObjs = ( pObjs != NULL ) ? pObjs->size( ) : 0;
+        const size_t nObjs = ( pObjs != nullptr ) ? pObjs->size( ) : 0;
 
-        return pNdBefore!=NULL && pNdAfter!=NULL && nObjs == 0 && bInTable;
+        return pNdBefore!=nullptr && pNdAfter!=nullptr && nObjs == 0 && bInTable;
     }
 
     return false;
@@ -1056,7 +1056,7 @@ void SwContentFrm::MakeAll(vcl::RenderContext* /*pRenderContext*/)
     long nFormatCount = 0;
     // - loop prevention
     int nConsecutiveFormatsWithoutChange = 0;
-    PROTOCOL_ENTER( this, PROT_MAKEALL, 0, 0 )
+    PROTOCOL_ENTER( this, PROT_MAKEALL, 0, nullptr )
 
 #ifdef DBG_UTIL
     const SwDoc *pDoc = GetAttrSet()->GetDoc();
@@ -1112,7 +1112,7 @@ void SwContentFrm::MakeAll(vcl::RenderContext* /*pRenderContext*/)
 
     const bool bKeep = IsKeep( rAttrs.GetAttrSet() );
 
-    SwSaveFootnoteHeight *pSaveFootnote = 0;
+    SwSaveFootnoteHeight *pSaveFootnote = nullptr;
     if ( bFootnote )
     {
         SwFootnoteFrm *pFootnote = FindFootnoteFrm();
@@ -1179,7 +1179,7 @@ void SwContentFrm::MakeAll(vcl::RenderContext* /*pRenderContext*/)
     if ( bFootnote && !mbValidPos )
     {
         SwFootnoteFrm* pFootnote = FindFootnoteFrm();
-        SwContentFrm* pRefCnt = pFootnote ? pFootnote->GetRef() : 0;
+        SwContentFrm* pRefCnt = pFootnote ? pFootnote->GetRef() : nullptr;
         if ( pRefCnt && !pRefCnt->IsValid() )
         {
             SwFootnoteBossFrm* pFootnoteBossOfFootnote = pFootnote->FindFootnoteBossFrm();
@@ -1309,7 +1309,7 @@ void SwContentFrm::MakeAll(vcl::RenderContext* /*pRenderContext*/)
             if ( bMoveable && !bFormatted && ( GetFollow() ||
                  ( (Frm().*fnRect->fnOverStep)( nDeadLine ) ) ) )
             {
-                Prepare( PREP_WIDOWS_ORPHANS, 0, false );
+                Prepare( PREP_WIDOWS_ORPHANS, nullptr, false );
                 mbValidSize = bWidow = false;
             }
             if( (Frm().*fnRect->fnGetPos)() != aOldFrmPos ||
@@ -1320,7 +1320,7 @@ void SwContentFrm::MakeAll(vcl::RenderContext* /*pRenderContext*/)
                 Prepare( PREP_POS_CHGD, static_cast<const void*>(&bFormatted), false );
                 if ( bWidow && GetFollow() )
                 {
-                    Prepare( PREP_WIDOWS_ORPHANS, 0, false );
+                    Prepare( PREP_WIDOWS_ORPHANS, nullptr, false );
                     mbValidSize = false;
                 }
             }
@@ -1383,16 +1383,16 @@ void SwContentFrm::MakeAll(vcl::RenderContext* /*pRenderContext*/)
                             const long nOldW = (Prt().*fnRect->fnGetWidth)();
                             MakePrtArea( rAttrs );
                             if( nOldW != (Prt().*fnRect->fnGetWidth)() )
-                                Prepare( PREP_FIXSIZE_CHG, 0, false );
+                                Prepare( PREP_FIXSIZE_CHG, nullptr, false );
                         }
                         if( GetFollow() )
-                            Prepare( PREP_WIDOWS_ORPHANS, 0, false );
+                            Prepare( PREP_WIDOWS_ORPHANS, nullptr, false );
                         mbValidSize = true;
                         bFormatted = sal_True;
                         Format(getRootFrm()->GetCurrShell()->GetOut());
                     }
                 }
-                SwFrm *pNxt = HasFollow() ? NULL : FindNext();
+                SwFrm *pNxt = HasFollow() ? nullptr : FindNext();
                 while( pNxt && pNxt->IsSctFrm() )
                 {   // Leave empty sections out, go into the other ones.
                     if( static_cast<SwSectionFrm*>(pNxt)->GetSection() )
@@ -1482,7 +1482,7 @@ void SwContentFrm::MakeAll(vcl::RenderContext* /*pRenderContext*/)
                 // bMoveFwdInvalid is required for #38407#. This was originally solved
                 // in flowfrm.cxx rev 1.38, but broke the above schema and
                 // preferred to play towers of hanoi (#43669#).
-                SwFrm *pNxt = HasFollow() ? NULL : FindNext();
+                SwFrm *pNxt = HasFollow() ? nullptr : FindNext();
                 // For sections we prefer the content, because it can change
                 // the page if required.
                 while( pNxt && pNxt->IsSctFrm() )
@@ -1496,7 +1496,7 @@ void SwContentFrm::MakeAll(vcl::RenderContext* /*pRenderContext*/)
                 }
                 if ( pNxt )
                 {
-                    const bool bMoveFwdInvalid = 0 != GetIndNext();
+                    const bool bMoveFwdInvalid = nullptr != GetIndNext();
                     const bool bNxtNew =
                         ( 0 == (pNxt->Prt().*fnRect->fnGetHeight)() ) &&
                         (!pNxt->IsTextFrm() ||!static_cast<SwTextFrm*>(pNxt)->IsHiddenNow());
@@ -1556,7 +1556,7 @@ void SwContentFrm::MakeAll(vcl::RenderContext* /*pRenderContext*/)
         // Finally, we are able to split table rows. Therefore, bDontMoveMe
         // can be set to false:
         if( bDontMoveMe && IsInTab() &&
-            0 != GetNextCellLeaf( MAKEPAGE_NONE ) )
+            nullptr != GetNextCellLeaf( MAKEPAGE_NONE ) )
             bDontMoveMe = false;
 
         if ( bDontMoveMe && (Frm().*fnRect->fnGetHeight)() >
@@ -1569,7 +1569,7 @@ void SwContentFrm::MakeAll(vcl::RenderContext* /*pRenderContext*/)
                 bool bSplit = !IsFwdMoveAllowed();
                 if ( nTmp > 0 && WouldFit( nTmp, bSplit, false ) )
                 {
-                    Prepare( PREP_WIDOWS_ORPHANS, 0, false );
+                    Prepare( PREP_WIDOWS_ORPHANS, nullptr, false );
                     mbValidSize = false;
                     bFitPromise = true;
                     continue;
@@ -1643,7 +1643,7 @@ void SwContentFrm::MakeAll(vcl::RenderContext* /*pRenderContext*/)
             // FME 2007-08-30 #i81146# new loop control
             if ( nConsecutiveFormatsWithoutChange <= cnStopFormat )
             {
-                Prepare( PREP_MUST_FIT, 0, false );
+                Prepare( PREP_MUST_FIT, nullptr, false );
                 mbValidSize = false;
                 bMustFit = true;
                 continue;
@@ -1765,7 +1765,7 @@ bool SwContentFrm::_WouldFit( SwTwips nSpace,
     // To have the footnote select it's place carefully, it needs
     // to be moved in any case if there is at least one page/column
     // between the footnote and the new Upper.
-    SwFootnoteFrm* pFootnoteFrm = 0;
+    SwFootnoteFrm* pFootnoteFrm = nullptr;
     if ( IsInFootnote() )
     {
         if( !lcl_IsNextFootnoteBoss( pNewUpper, this ) )
@@ -1807,7 +1807,7 @@ bool SwContentFrm::_WouldFit( SwTwips nSpace,
             SwLayoutFrm *pUp = pTmpFrm->GetUpper();
             SwFrm *pOldNext = pTmpFrm->GetNext();
             pTmpFrm->RemoveFromLayout();
-            pTmpFrm->InsertBefore( pNewUpper, 0 );
+            pTmpFrm->InsertBefore( pNewUpper, nullptr );
             if ( pFrm->IsTextFrm() &&
                  ( bTstMove ||
                    static_cast<SwTextFrm*>(pFrm)->HasFollow() ||
@@ -1843,7 +1843,7 @@ bool SwContentFrm::_WouldFit( SwTwips nSpace,
 
             if ( pTmpPrev )
             {
-                nUpper = CalcUpperSpace( NULL, pTmpPrev );
+                nUpper = CalcUpperSpace( nullptr, pTmpPrev );
 
                 // in balanced columned section frames we do not want the
                 // common border
@@ -1936,7 +1936,7 @@ bool SwContentFrm::_WouldFit( SwTwips nSpace,
                 }
             }
             SwFrm *pNxt;
-            if( 0 != (pNxt = pFrm->FindNext()) && pNxt->IsContentFrm() &&
+            if( nullptr != (pNxt = pFrm->FindNext()) && pNxt->IsContentFrm() &&
                 ( !pFootnoteFrm || ( pNxt->IsInFootnote() &&
                   pNxt->FindFootnoteFrm()->GetAttr() == pFootnoteFrm->GetAttr() ) ) )
             {
@@ -1957,7 +1957,7 @@ bool SwContentFrm::_WouldFit( SwTwips nSpace,
                 // spacing has been calculated already, and we don't need to re-calculate
                 // it in an expensive way.
                 if( lcl_NotHiddenPrev( pNxt ) )
-                    pTmpPrev = 0;
+                    pTmpPrev = nullptr;
                 else
                 {
                     if( pFrm->IsTextFrm() && static_cast<SwTextFrm*>(pFrm)->IsHiddenNow() )
@@ -1968,10 +1968,10 @@ bool SwContentFrm::_WouldFit( SwTwips nSpace,
                 pFrm = static_cast<SwContentFrm*>(pNxt);
             }
             else
-                pFrm = 0;
+                pFrm = nullptr;
         }
         else
-            pFrm = 0;
+            pFrm = nullptr;
 
     } while ( bRet && pFrm );
 

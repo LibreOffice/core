@@ -88,7 +88,7 @@ void SwDBTablePreviewDialog::dispose()
 {
     if(m_xFrame.is())
     {
-        m_xFrame->setComponent(NULL, NULL);
+        m_xFrame->setComponent(nullptr, nullptr);
         m_xFrame->dispose();
     }
     m_pDescriptionFI.clear();

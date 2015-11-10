@@ -110,7 +110,7 @@ const SwTable& SwEditShell::InsertTable( const SwInsertTableOptions& rInsTableOp
     const SwTable *pTable = GetDoc()->InsertTable( rInsTableOpts, *pPos,
                                                    nRows, nCols,
                                                    eAdj, pTAFormat,
-                                                   0, true );
+                                                   nullptr, true );
     if( bEndUndo )
         EndUndo( UNDO_END );
 
@@ -129,7 +129,7 @@ bool SwEditShell::TextToTable( const SwInsertTableOptions& rInsTableOpts,
     for(SwPaM& rPaM : GetCrsr()->GetRingContainer())
     {
         if( rPaM.HasMark() )
-            bRet |= 0 != GetDoc()->TextToTable( rInsTableOpts, rPaM, cCh,
+            bRet |= nullptr != GetDoc()->TextToTable( rInsTableOpts, rPaM, cCh,
                                                 eAdj, pTAFormat );
     }
     EndAllAction();
@@ -161,7 +161,7 @@ bool SwEditShell::TableToText( sal_Unicode cCh )
     SwNodeIndex aTabIdx( *pTableNd );
     pCrsr->DeleteMark();
     pCrsr->GetPoint()->nNode = *pTableNd->EndOfSectionNode();
-    pCrsr->GetPoint()->nContent.Assign( 0, 0 );
+    pCrsr->GetPoint()->nContent.Assign( nullptr, 0 );
     // move sPoint and Mark out of the area!
     pCrsr->SetMark();
     pCrsr->DeleteMark();
@@ -359,12 +359,12 @@ void SwEditShell::SetTableBoxFormulaAttrs( const SfxItemSet& rSet )
         ClearTableBoxContent();
 
     StartAllAction();
-    GetDoc()->GetIDocumentUndoRedo().StartUndo( UNDO_START, NULL );
+    GetDoc()->GetIDocumentUndoRedo().StartUndo( UNDO_START, nullptr );
     for (size_t n = 0; n < aBoxes.size(); ++n)
     {
         GetDoc()->SetTableBoxFormulaAttrs( *aBoxes[ n ], rSet );
     }
-    GetDoc()->GetIDocumentUndoRedo().EndUndo( UNDO_END, NULL );
+    GetDoc()->GetIDocumentUndoRedo().EndUndo( UNDO_END, nullptr );
     EndAllAction();
 }
 
@@ -373,7 +373,7 @@ bool SwEditShell::IsTableBoxTextFormat() const
     if( IsTableMode() )
         return false;
 
-    const SwTableBox *pBox = 0;
+    const SwTableBox *pBox = nullptr;
     {
         SwFrm *pFrm = GetCurrFrm();
         do {
@@ -413,7 +413,7 @@ OUString SwEditShell::GetTableBoxText() const
     OUString sRet;
     if( !IsTableMode() )
     {
-        const SwTableBox *pBox = 0;
+        const SwTableBox *pBox = nullptr;
         {
             SwFrm *pFrm = GetCurrFrm();
             do {
@@ -437,11 +437,11 @@ bool SwEditShell::SplitTable( sal_uInt16 eMode )
     if( pCrsr->GetNode().FindTableNode() )
     {
         StartAllAction();
-        GetDoc()->GetIDocumentUndoRedo().StartUndo(UNDO_EMPTY, NULL);
+        GetDoc()->GetIDocumentUndoRedo().StartUndo(UNDO_EMPTY, nullptr);
 
         bRet = GetDoc()->SplitTable( *pCrsr->GetPoint(), eMode, true );
 
-        GetDoc()->GetIDocumentUndoRedo().EndUndo(UNDO_EMPTY, NULL);
+        GetDoc()->GetIDocumentUndoRedo().EndUndo(UNDO_EMPTY, nullptr);
         ClearFEShellTabCols();
         EndAllAction();
     }
@@ -455,11 +455,11 @@ bool SwEditShell::MergeTable( bool bWithPrev, sal_uInt16 nMode )
     if( pCrsr->GetNode().FindTableNode() )
     {
         StartAllAction();
-        GetDoc()->GetIDocumentUndoRedo().StartUndo(UNDO_EMPTY, NULL);
+        GetDoc()->GetIDocumentUndoRedo().StartUndo(UNDO_EMPTY, nullptr);
 
         bRet = GetDoc()->MergeTable( *pCrsr->GetPoint(), bWithPrev, nMode );
 
-        GetDoc()->GetIDocumentUndoRedo().EndUndo(UNDO_EMPTY, NULL);
+        GetDoc()->GetIDocumentUndoRedo().EndUndo(UNDO_EMPTY, nullptr);
         ClearFEShellTabCols();
         EndAllAction();
     }
@@ -493,14 +493,14 @@ bool SwEditShell::CanMergeTable( bool bWithPrev, bool* pChkNxtPrv ) const
         }
         else
         {
-            const SwTableNode* pTmpTableNd = 0;
+            const SwTableNode* pTmpTableNd = nullptr;
 
             if( bWithPrev )
             {
                 pTmpTableNd = rNds[ pTableNd->GetIndex() - 1 ]->FindTableNode();
                 // Consider table in table case
                 if ( pTmpTableNd && pTmpTableNd->EndOfSectionIndex() != pTableNd->GetIndex() - 1 )
-                    pTmpTableNd = 0;
+                    pTmpTableNd = nullptr;
             }
             else
                 pTmpTableNd = rNds[ pTableNd->EndOfSectionIndex() + 1 ]->GetTableNode();

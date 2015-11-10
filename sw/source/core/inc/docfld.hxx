@@ -60,36 +60,36 @@ class _SetGetExpField
         } eSetGetExpFieldType;
 
 public:
-    _SetGetExpField( const SwNodeIndex& rNdIdx, const SwTextField* pField = 0,
-                    const SwIndex* pIdx = 0 );
+    _SetGetExpField( const SwNodeIndex& rNdIdx, const SwTextField* pField = nullptr,
+                    const SwIndex* pIdx = nullptr );
 
     _SetGetExpField( const SwNodeIndex& rNdIdx, const SwTextINetFormat& rINet,
-                    const SwIndex* pIdx = 0 );
+                    const SwIndex* pIdx = nullptr );
 
     _SetGetExpField( const SwSectionNode& rSectNode,
-                    const SwPosition* pPos = 0  );
+                    const SwPosition* pPos = nullptr  );
 
     _SetGetExpField( const SwTableBox& rTableBox,
-                    const SwPosition* pPos = 0  );
+                    const SwPosition* pPos = nullptr  );
 
     _SetGetExpField( const SwNodeIndex& rNdIdx, const SwTextTOXMark& rTOX,
                     const SwIndex* pIdx );
 
     _SetGetExpField( const SwPosition& rPos );
 
-    _SetGetExpField( const SwFlyFrameFormat& rFlyFormat, const SwPosition* pPos = 0 );
+    _SetGetExpField( const SwFlyFrameFormat& rFlyFormat, const SwPosition* pPos = nullptr );
 
     bool operator==( const _SetGetExpField& rField ) const;
     bool operator<( const _SetGetExpField& rField ) const;
 
     const SwTextField* GetTextField() const
-        { return TEXTFIELD == eSetGetExpFieldType ? CNTNT.pTextField : 0; }
+        { return TEXTFIELD == eSetGetExpFieldType ? CNTNT.pTextField : nullptr; }
     const SwSection* GetSection() const
-        { return SECTIONNODE == eSetGetExpFieldType ? CNTNT.pSection : 0; }
+        { return SECTIONNODE == eSetGetExpFieldType ? CNTNT.pSection : nullptr; }
     const SwTextINetFormat* GetINetFormat() const
-        { return TEXTINET == eSetGetExpFieldType ? CNTNT.pTextINet : 0; }
+        { return TEXTINET == eSetGetExpFieldType ? CNTNT.pTextINet : nullptr; }
     const SwFlyFrameFormat* GetFlyFormat() const
-        { return FLYFRAME == eSetGetExpFieldType ? CNTNT.pFlyFormat : 0; }
+        { return FLYFRAME == eSetGetExpFieldType ? CNTNT.pFlyFormat : nullptr; }
 
     sal_uLong GetNode() const { return nNode; }
     sal_Int32 GetContent() const { return nContent; }
@@ -113,7 +113,7 @@ public:
 struct _HashStr : public SwHash
 {
     OUString aSetStr;
-    _HashStr( const OUString& rName, const OUString& rText, _HashStr* = 0 );
+    _HashStr( const OUString& rName, const OUString& rText, _HashStr* = nullptr );
 };
 
 struct SwCalcFieldType : public SwHash
@@ -127,7 +127,7 @@ struct SwCalcFieldType : public SwHash
 
 // search for the string that was saved under rName in the hash table
 OUString LookString( SwHash** ppTable, sal_uInt16 nSize, const OUString& rName,
-                     sal_uInt16* pPos = 0 );
+                     sal_uInt16* pPos = nullptr );
 
 const int GETFLD_ALL        = 3;        // combine flags via OR
 const int GETFLD_CALC       = 1;

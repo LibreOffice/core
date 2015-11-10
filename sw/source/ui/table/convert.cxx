@@ -96,7 +96,7 @@ void SwConvertTableDlg::GetValues(  sal_Unicode& rDelim,
 SwConvertTableDlg::SwConvertTableDlg( SwView& rView, bool bToTable )
     : SfxModalDialog(&rView.GetViewFrame()->GetWindow(), "ConvertTextTableDialog", "modules/swriter/ui/converttexttable.ui" )
     , sConvertTextTable(SW_RES(STR_CONVERT_TEXT_TABLE))
-    , pTAutoFormat(0)
+    , pTAutoFormat(nullptr)
     , pShell(&rView.GetWrtShell())
 {
     get(mpTabBtn, "tabs");

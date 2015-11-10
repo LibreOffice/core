@@ -41,7 +41,7 @@ SwNoTextNode::SwNoTextNode( const SwNodeIndex & rWhere,
                   SwGrfFormatColl *pGrfColl,
                   SwAttrSet* pAutoAttr ) :
     SwContentNode( rWhere, nNdType, pGrfColl ),
-    pContour( 0 ),
+    pContour( nullptr ),
     bAutomaticContour( false ),
     bContourMapModeValid( true ),
     bPixelContour( false )
@@ -92,7 +92,7 @@ void SwNoTextNode::SetContour( const tools::PolyPolygon *pPoly, bool bAutomatic 
     if ( pPoly )
         pContour = new tools::PolyPolygon( *pPoly );
     else
-        pContour = 0;
+        pContour = nullptr;
     bAutomaticContour = bAutomatic;
     bContourMapModeValid = true;
     bPixelContour = false;
@@ -142,7 +142,7 @@ const tools::PolyPolygon *SwNoTextNode::HasContour() const
                         "scale factor for pixel unsupported" );
             OutputDevice* pOutDev =
                 (bPixelGrf || bPixelContour) ? Application::GetDefaultDevice()
-                                             : 0;
+                                             : nullptr;
             sal_uInt16 nPolyCount = pContour->Count();
             for( sal_uInt16 j=0; j<nPolyCount; j++ )
             {
@@ -190,7 +190,7 @@ void SwNoTextNode::SetContourAPI( const tools::PolyPolygon *pPoly )
     if ( pPoly )
         pContour = new tools::PolyPolygon( *pPoly );
     else
-        pContour = 0;
+        pContour = nullptr;
     bContourMapModeValid = false;
 }
 

@@ -118,7 +118,7 @@ bool SwTableLine::hasSoftPageBreak() const
             // No soft page break at the first page of the document
             if( pPage && !pPage->GetPrev() )
                 return false;
-            const SwContentFrm* pFirst = pPage ? pPage->FindFirstBodyContent() : NULL;
+            const SwContentFrm* pFirst = pPage ? pPage->FindFirstBodyContent() : nullptr;
             // No soft page break for
             //   tables which does not contain the first body content of the page
             if( !pFirst || !pTab->IsAnLower( pFirst->FindTabFrm() ) )

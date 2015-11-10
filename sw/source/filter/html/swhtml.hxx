@@ -88,7 +88,7 @@ class _HTMLAttr
     _HTMLAttr **ppHead; // der Listenkopf
 
     _HTMLAttr( const SwPosition& rPos, const SfxPoolItem& rItem,
-               _HTMLAttr **pHd=0 );
+               _HTMLAttr **pHd=nullptr );
 
     _HTMLAttr( const _HTMLAttr &rAttr, const SwNodeIndex &rEndPara,
                sal_Int32 nEndCnt, _HTMLAttr **pHd );
@@ -122,7 +122,7 @@ public:
 
     _HTMLAttr *GetPrev() const { return pPrev; }
     void InsertPrev( _HTMLAttr *pPrv );
-    void ClearPrev() { pPrev = 0; }
+    void ClearPrev() { pPrev = nullptr; }
 
     void SetHead( _HTMLAttr **ppHd ) { ppHead = ppHd; }
 
@@ -233,8 +233,8 @@ public:
     _HTMLAttrContext( sal_uInt16 nTokn, sal_uInt16 nPoolId, const OUString& rClass,
                       bool bDfltColl=false ) :
         aClass( rClass ),
-        pSaveDocContext( 0 ),
-        pFrmItemSet( 0 ),
+        pSaveDocContext( nullptr ),
+        pFrmItemSet( nullptr ),
         nToken( nTokn ),
         nTextFormatColl( nPoolId ),
         nLeftMargin( 0 ),
@@ -255,8 +255,8 @@ public:
     {}
 
     explicit _HTMLAttrContext( sal_uInt16 nTokn ) :
-        pSaveDocContext( 0 ),
-        pFrmItemSet( 0 ),
+        pSaveDocContext( nullptr ),
+        pFrmItemSet( nullptr ),
         nToken( nTokn ),
         nTextFormatColl( 0 ),
         nLeftMargin( 0 ),
@@ -305,7 +305,7 @@ public:
     void SetPopStack( bool bSet ) { bPopStack = bSet; }
     bool GetPopStack() const { return bPopStack; }
 
-    bool HasSaveDocContext() const { return pSaveDocContext!=0; }
+    bool HasSaveDocContext() const { return pSaveDocContext!=nullptr; }
     _HTMLAttrContext_SaveDoc *GetSaveDocContext( bool bCreate=false );
 
     const SfxItemSet *GetFrmItemSet() const { return pFrmItemSet; }
@@ -484,7 +484,7 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
     void DocumentDetected();
     void Show();
     void ShowStatline();
-    SwViewShell *CallStartAction( SwViewShell *pVSh = 0, bool bChkPtr = true );
+    SwViewShell *CallStartAction( SwViewShell *pVSh = nullptr, bool bChkPtr = true );
     SwViewShell *CallEndAction( bool bChkAction = false, bool bChkPtr = true );
     SwViewShell *CheckActionViewShell();
 
@@ -493,7 +493,7 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
     // Attribute am Dok setzen
     void _SetAttr( bool bChkEnd, bool bBeforeTable, _HTMLAttrs *pPostIts );
     inline void SetAttr( bool bChkEnd = true, bool bBeforeTable = false,
-                         _HTMLAttrs *pPostIts = 0 )
+                         _HTMLAttrs *pPostIts = nullptr )
     {
         if( !m_aSetAttrTab.empty() || !m_aMoveFlyFrms.empty() )
             _SetAttr( bChkEnd, bBeforeTable, pPostIts );
@@ -509,7 +509,7 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
     // ppDepAttr gibt einen Attribut-Tabellen-Eintrag an, dessen Attribute
     // gesetzt sein muessen, bevor das Attribut beendet werden darf
     void NewAttr( _HTMLAttr **ppAttr, const SfxPoolItem& rItem );
-    bool EndAttr( _HTMLAttr *pAttr, _HTMLAttr **ppDepAttr=0,
+    bool EndAttr( _HTMLAttr *pAttr, _HTMLAttr **ppDepAttr=nullptr,
                   bool bChkEmpty=true );
     void DeleteAttr( _HTMLAttr* pAttr );
 
@@ -552,7 +552,7 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
     // Verwalten von Absatz-Vorlagen
 
     // die Vorlagen auf dem Stack bzw. deren Attribute setzen
-    void SetTextCollAttrs( _HTMLAttrContext *pContext = 0 );
+    void SetTextCollAttrs( _HTMLAttrContext *pContext = nullptr );
 
     void InsertParaAttrs( const SfxItemSet& rItemSet );
 
@@ -606,7 +606,7 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
     void NewMultiCol( sal_uInt16 columnsFromCss=0 );
 
     // <MARQUEE>
-    void NewMarquee( HTMLTable *pCurTable=0 );
+    void NewMarquee( HTMLTable *pCurTable=nullptr );
     void EndMarquee();
     void InsertMarqueeText();
 
@@ -633,8 +633,8 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
     void NewStdAttr( int nToken );
     void NewStdAttr( int nToken,
                      _HTMLAttr **ppAttr, const SfxPoolItem & rItem,
-                     _HTMLAttr **ppAttr2=0, const SfxPoolItem *pItem2=0,
-                     _HTMLAttr **ppAttr3=0, const SfxPoolItem *pItem3=0 );
+                     _HTMLAttr **ppAttr2=nullptr, const SfxPoolItem *pItem2=nullptr,
+                     _HTMLAttr **ppAttr3=nullptr, const SfxPoolItem *pItem3=nullptr );
     void EndTag( int nToken );
 
     // Font-Attribute behandeln
@@ -731,8 +731,8 @@ private:
     // eine Bookmark einfuegen
     void InsertBookmark( const OUString& rName );
 
-    void InsertCommentText( const sal_Char *pTag = 0 );
-    void InsertComment( const OUString& rName, const sal_Char *pTag = 0 );
+    void InsertCommentText( const sal_Char *pTag = nullptr );
+    void InsertComment( const OUString& rName, const sal_Char *pTag = nullptr );
 
     // sind im aktuellen Absatz Bookmarks vorhanden?
     bool HasCurrentParaBookmarks( bool bIgnoreStack=false ) const;
@@ -756,12 +756,12 @@ private:
     void EndStyle();
 
     static inline bool HasStyleOptions( const OUString &rStyle, const OUString &rId,
-                                 const OUString &rClass, const OUString *pLang=0,
-                                 const OUString *pDir=0 );
+                                 const OUString &rClass, const OUString *pLang=nullptr,
+                                 const OUString *pDir=nullptr );
     bool ParseStyleOptions( const OUString &rStyle, const OUString &rId,
                             const OUString &rClass, SfxItemSet &rItemSet,
                             SvxCSS1PropertyInfo &rPropInfo,
-                            const OUString *pLang=0, const OUString *pDir=0 );
+                            const OUString *pLang=nullptr, const OUString *pDir=nullptr );
 
     // Inserting Controls and Forms (htmlform.cxx)
 
@@ -890,7 +890,7 @@ public:
                     const OUString& rFileName,
                     const OUString& rBaseURL,
                     bool bReadNewDoc = true,
-                    SfxMedium* pMed = 0, bool bReadUTF8 = false,
+                    SfxMedium* pMed = nullptr, bool bReadUTF8 = false,
                     bool bIgnoreHTMLComments = false );
 
     virtual SvParserState CallParser() override;
@@ -916,7 +916,7 @@ struct SwPendingStack
     SwPendingStack* pNext;
 
     SwPendingStack( int nTkn, SwPendingStack* pNxt )
-        : nToken( nTkn ), pData( 0 ), pNext( pNxt )
+        : nToken( nTkn ), pData( nullptr ), pNext( pNxt )
         {}
 };
 

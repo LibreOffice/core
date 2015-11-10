@@ -145,7 +145,7 @@ public:
 
     ~SwIndexMarkPane();
 
-    void    ReInitDlg(SwWrtShell& rWrtShell, SwTOXMark* pCurTOXMark = 0);
+    void    ReInitDlg(SwWrtShell& rWrtShell, SwTOXMark* pCurTOXMark = nullptr);
     bool    IsTOXType(const OUString& rName)
                 {return LISTBOX_ENTRY_NOTFOUND != m_pTypeDCB->GetEntryPos(rName);}
 };

@@ -79,13 +79,13 @@ OUString SwTableField::GetFieldName() const
 const SwNode* SwTableField::GetNodeOfFormula() const
 {
     if( !GetTyp()->HasWriterListeners() )
-        return 0;
+        return nullptr;
 
     SwIterator<SwFormatField,SwFieldType> aIter( *GetTyp() );
     for( SwFormatField* pFormatField = aIter.First(); pFormatField; pFormatField = aIter.Next() )
             if( this == pFormatField->GetField() )
                 return &pFormatField->GetTextField()->GetTextNode();
-    return 0;
+    return nullptr;
 }
 
 OUString SwTableField::GetCommand()
@@ -93,7 +93,7 @@ OUString SwTableField::GetCommand()
     if (EXTRNL_NAME != GetNameType())
     {
         SwNode const*const pNd = GetNodeOfFormula();
-        SwTableNode const*const pTableNd = (pNd) ? pNd->FindTableNode() : 0;
+        SwTableNode const*const pTableNd = (pNd) ? pNd->FindTableNode() : nullptr;
         if (pTableNd)
         {
             PtrToBoxNm( &pTableNd->GetTable() );

@@ -106,7 +106,7 @@ void SwViewLayoutControl::StateChanged( sal_uInt16 /*nSID*/, SfxItemState eState
     }
 
     if ( GetStatusBar().AreItemsVisible() )
-        GetStatusBar().SetItemData( GetId(), 0 );    // force repaint
+        GetStatusBar().SetItemData( GetId(), nullptr );    // force repaint
 }
 
 void SwViewLayoutControl::Paint( const UserDrawEvent& rUsrEvt )

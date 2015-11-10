@@ -33,7 +33,7 @@ class SwTextLine : public SwCacheObj
 public:
     DECL_FIXEDMEMPOOL_NEWDEL(SwTextLine)
 
-    SwTextLine( SwTextFrm *pFrm, SwParaPortion *pNew = 0 );
+    SwTextLine( SwTextFrm *pFrm, SwParaPortion *pNew = nullptr );
     virtual ~SwTextLine();
 
     inline       SwParaPortion *GetPara()       { return pLine; }

@@ -363,7 +363,7 @@ bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
         case FN_UNO_PARA_CONDITIONAL_STYLE_NAME:
         case FN_UNO_PARA_STYLE :
         {
-            SwFormatColl* pFormat = 0;
+            SwFormatColl* pFormat = nullptr;
             if(pNode)
                 pFormat = FN_UNO_PARA_CONDITIONAL_STYLE_NAME == rEntry.nWID
                             ? pNode->GetFormatColl() : &pNode->GetAnyFormatColl();
@@ -513,8 +513,8 @@ bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
                 rPam.GetDoc()->GetNodes()[pPos->nNode.GetIndex()]->GetTextNode();
             const SwTextAttr* pTextAttr = (pTextNd)
                 ? pTextNd->GetFieldTextAttrAt( pPos->nContent.GetIndex(), true )
-                : 0;
-            if ( pTextAttr != NULL )
+                : nullptr;
+            if ( pTextAttr != nullptr )
             {
                 if( pAny )
                 {
@@ -563,7 +563,7 @@ bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
             SwStartNodeType eType = pSttNode->GetStartNodeType();
 
             SwFrameFormat* pFormat;
-            if(eType == SwFlyStartNode && 0 != (pFormat = pSttNode->GetFlyFormat()))
+            if(eType == SwFlyStartNode && nullptr != (pFormat = pSttNode->GetFlyFormat()))
             {
                 if( pAny )
                 {
@@ -596,7 +596,7 @@ bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
         {
             SwTextAttr *const pTextAttr = rPam.GetNode().IsTextNode() ?
                 rPam.GetNode().GetTextNode()->GetTextAttrForCharAt(
-                    rPam.GetPoint()->nContent.GetIndex(), RES_TXTATR_FTN) : 0;
+                    rPam.GetPoint()->nContent.GetIndex(), RES_TXTATR_FTN) : nullptr;
             if(pTextAttr)
             {
                 const SwFormatFootnote& rFootnote = pTextAttr->GetFootnote();
@@ -646,7 +646,7 @@ bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
             uno::Reference<XTextContent> const xRet(rPam.GetNode().IsTextNode()
                 ? GetNestedTextContent(*rPam.GetNode().GetTextNode(),
                     rPam.GetPoint()->nContent.GetIndex(), false)
-                : 0);
+                : nullptr);
             if (xRet.is())
             {
                 if (pAny)
@@ -750,7 +750,7 @@ void setNumberingProperty(const Any& rValue, SwPaM& rPam)
     uno::Reference<XIndexReplace> xIndexReplace;
     if(rValue >>= xIndexReplace)
     {
-        SwXNumberingRules* pSwNum = 0;
+        SwXNumberingRules* pSwNum = nullptr;
 
         uno::Reference<XUnoTunnel> xNumTunnel(xIndexReplace, UNO_QUERY);
         if(xNumTunnel.is())
@@ -779,14 +779,14 @@ void setNumberingProperty(const Any& rValue, SwPaM& rPam)
                             // FIXME
                             // Is something missing/wrong here?
                             // if condition is always false due to outer check!
-                            aFormat.SetCharFormat(0);
+                            aFormat.SetCharFormat(nullptr);
                         }
                         else
                         {
 
                             // get CharStyle and set the rule
                             const size_t nChCount = pDoc->GetCharFormats()->size();
-                            SwCharFormat* pCharFormat = 0;
+                            SwCharFormat* pCharFormat = nullptr;
                             for(size_t nCharFormat = 0; nCharFormat < nChCount; ++nCharFormat)
                             {
                                 SwCharFormat& rChFormat = *((*(pDoc->GetCharFormats()))[nCharFormat]);
@@ -834,7 +834,7 @@ void setNumberingProperty(const Any& rValue, SwPaM& rPam)
 
                 if( rPam.GetNext() != &rPam )           // Multiple selection?
                 {
-                    pDoc->GetIDocumentUndoRedo().StartUndo( UNDO_START, NULL );
+                    pDoc->GetIDocumentUndoRedo().StartUndo( UNDO_START, nullptr );
                     SwPamRanges aRangeArr( rPam );
                     SwPaM aPam( *rPam.GetPoint() );
                     for ( size_t n = 0; n < aRangeArr.Count(); ++n )
@@ -842,7 +842,7 @@ void setNumberingProperty(const Any& rValue, SwPaM& rPam)
                         // no start of a new list
                         pDoc->SetNumRule( aRangeArr.SetPam( n, aPam ), aRule, false );
                     }
-                    pDoc->GetIDocumentUndoRedo().EndUndo( UNDO_END, NULL );
+                    pDoc->GetIDocumentUndoRedo().EndUndo( UNDO_END, nullptr );
                 }
                 else
                 {
@@ -924,12 +924,12 @@ void resetCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry, SwPaM& rPa
 
             if( rPam.GetNext() != &rPam )           // Multiple selection?
             {
-                pDoc->GetIDocumentUndoRedo().StartUndo( UNDO_START, NULL );
+                pDoc->GetIDocumentUndoRedo().StartUndo( UNDO_START, nullptr );
                 SwPamRanges aRangeArr( rPam );
                 SwPaM aPam( *rPam.GetPoint() );
                 for( size_t n = 0; n < aRangeArr.Count(); ++n )
                     pDoc->SetNodeNumStart( *aRangeArr.SetPam( n, aPam ).GetPoint(), 1 );
-                pDoc->GetIDocumentUndoRedo().EndUndo( UNDO_END, NULL );
+                pDoc->GetIDocumentUndoRedo().EndUndo( UNDO_END, nullptr );
             }
             else
                 pDoc->SetNodeNumStart( *rPam.GetPoint(), 0 );
@@ -955,7 +955,7 @@ void InsertFile(SwUnoCrsr* pUnoCrsr, const OUString& rURL,
     throw (lang::IllegalArgumentException, io::IOException,
            uno::RuntimeException, std::exception)
 {
-    SfxMedium* pMed = 0;
+    SfxMedium* pMed = nullptr;
     SwDoc* pDoc = pUnoCrsr->GetDoc();
     SwDocShell* pDocSh = pDoc->GetDocShell();
     utl::MediaDescriptor aMediaDescriptor( rOptions );
@@ -1008,8 +1008,8 @@ void InsertFile(SwUnoCrsr* pUnoCrsr, const OUString& rURL,
         }
         else
             pMed = xReadStorage.is() ?
-                new SfxMedium(xReadStorage, sBaseURL, 0 ) :
-                new SfxMedium(sFileName, StreamMode::READ, 0, 0 );
+                new SfxMedium(xReadStorage, sBaseURL, nullptr ) :
+                new SfxMedium(sFileName, StreamMode::READ, nullptr, nullptr );
         if( !sBaseURL.isEmpty() )
             pMed->GetItemSet()->Put( SfxStringItem( SID_DOC_BASEURL, sBaseURL ) );
 
@@ -1034,11 +1034,11 @@ void InsertFile(SwUnoCrsr* pUnoCrsr, const OUString& rURL,
             {
                 if( xReadStorage.is() )
                 {
-                    pMed = new SfxMedium(xReadStorage, sBaseURL, 0 );
+                    pMed = new SfxMedium(xReadStorage, sBaseURL, nullptr );
                     pMed->SetFilter( pFilter );
                 }
                 else
-                    pMed = new SfxMedium(sFileName, StreamMode::READ, pFilter, 0);
+                    pMed = new SfxMedium(sFileName, StreamMode::READ, pFilter, nullptr);
             }
         }
         if(!sFilterOptions.isEmpty())
@@ -1061,7 +1061,7 @@ void InsertFile(SwUnoCrsr* pUnoCrsr, const OUString& rURL,
         pSet->Put(SfxBoolItem(FN_API_CALL, true));
         if(!sPassword.isEmpty())
             pSet->Put(SfxStringItem(SID_PASSWORD, sPassword));
-        Reader *pRead = pDocSh->StartConvertFrom( *pMed, &pRdr, 0, pUnoCrsr);
+        Reader *pRead = pDocSh->StartConvertFrom( *pMed, &pRdr, nullptr, pUnoCrsr);
         if( pRead )
         {
 
@@ -1204,7 +1204,7 @@ void makeRedline( SwPaM& rPaM,
         DateTime( Date( aStamp.Day, aStamp.Month, aStamp.Year ), tools::Time( aStamp.Hours, aStamp.Minutes, aStamp.Seconds ) ) );
     }
 
-    SwRedlineExtraData_FormattingChanges* pRedlineExtraData = NULL;
+    SwRedlineExtraData_FormattingChanges* pRedlineExtraData = nullptr;
 
     // Read the 'Redline Revert Properties' from the parameters
     uno::Sequence< beans::PropertyValue > aRevertProperties;
@@ -1332,7 +1332,7 @@ void makeTableRowRedline( SwTableLine& rTableLine,
 
     SwTableRowRedline* pRedline = new SwTableRowRedline( aRedlineData, rTableLine );
     RedlineMode_t nPrevMode = pRedlineAccess->GetRedlineMode( );
-    pRedline->SetExtraData( NULL );
+    pRedline->SetExtraData( nullptr );
 
     pRedlineAccess->SetRedlineMode_intern(nsRedlineMode_t::REDLINE_ON);
     bool bRet = pRedlineAccess->AppendTableRowRedline( pRedline, false );
@@ -1389,7 +1389,7 @@ void makeTableCellRedline( SwTableBox& rTableBox,
 
     SwTableCellRedline* pRedline = new SwTableCellRedline( aRedlineData, rTableBox );
     RedlineMode_t nPrevMode = pRedlineAccess->GetRedlineMode( );
-    pRedline->SetExtraData( NULL );
+    pRedline->SetExtraData( nullptr );
 
     pRedlineAccess->SetRedlineMode_intern(nsRedlineMode_t::REDLINE_ON);
     bool bRet = pRedlineAccess->AppendTableCellRedline( pRedline, false );

@@ -45,7 +45,7 @@ SwTextAttr * MakeTextAttr(
     sal_Int32 const nStt,
     sal_Int32 const nEnd,
     CopyOrNew_t const bIsCopy = NEW,
-    SwTextNode *const pTextNode = 0 );
+    SwTextNode *const pTextNode = nullptr );
 
 SwTextAttr * MakeTextAttr(
     SwDoc & rDoc,
@@ -172,7 +172,7 @@ public:
     /// register a History, which receives all attribute changes (for Undo)
     void Register( SwRegHistory* pHist ) { m_pHistory = pHist; }
     /// deregister the currently registered History
-    void DeRegister() { Register(0); }
+    void DeRegister() { Register(nullptr); }
     SwRegHistory* GetHistory() const    { return m_pHistory; }
 
     /// try to insert the hint

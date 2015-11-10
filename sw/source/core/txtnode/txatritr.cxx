@@ -97,7 +97,7 @@ SwTextAttrIterator::SwTextAttrIterator( const SwTextNode& rTNd, sal_uInt16 nWhch
                                         sal_Int32 nStt,
                                         bool bUseGetWhichOfScript )
     : aSIter( rTNd.GetText(), nStt ), rTextNd( rTNd ),
-    pParaItem( 0 ), nAttrPos( 0 ), nChgPos( nStt ), nWhichId( nWhchId ),
+    pParaItem( nullptr ), nAttrPos( 0 ), nChgPos( nStt ), nWhichId( nWhchId ),
     bIsUseGetWhichOfScript( bUseGetWhichOfScript )
 {
     SearchNextChg();
@@ -171,7 +171,7 @@ void SwTextAttrIterator::SearchNextChg()
     if( nChgPos == aSIter.GetScriptChgPos() )
     {
         aSIter.Next();
-        pParaItem = 0;
+        pParaItem = nullptr;
         nAttrPos = 0;       // must be restart at the beginning, because
                             // some attributes can start before or inside
                             // the current scripttype!
@@ -199,7 +199,7 @@ void SwTextAttrIterator::SearchNextChg()
                                           aSIter.GetCurrScript() ) : nWhichId;
         }
 
-        const SfxPoolItem* pItem = 0;
+        const SfxPoolItem* pItem = nullptr;
         for( ; nAttrPos < pHts->Count(); ++nAttrPos )
         {
             const SwTextAttr* pHt = pHts->Get( nAttrPos );

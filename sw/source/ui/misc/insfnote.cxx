@@ -68,7 +68,7 @@ void SwInsFootNoteDlg::Apply()
                                eCharSet, RES_CHRATR_FONT );
             aSet.Put( aFont );
             rSh.SetAttrSet( aSet, SetAttrMode::DONTEXPAND );
-            rSh.ResetSelect(0, false);
+            rSh.ResetSelect(nullptr, false);
             rSh.Left(CRSR_SKIP_CHARS, false, 1, false );
         }
         rSh.EndUndo( UNDO_END );
@@ -143,7 +143,7 @@ IMPL_LINK_TYPED( SwInsFootNoteDlg, NextPrevHdl, Button *, pBtn, void )
     Apply();
 
     // go to the next foot/endnote here
-    rSh.ResetSelect(0, false);
+    rSh.ResetSelect(nullptr, false);
     if (pBtn == m_pNextBT)
         rSh.GotoNextFootnoteAnchor();
     else
@@ -198,10 +198,10 @@ SwInsFootNoteDlg::~SwInsFootNoteDlg()
 
 void SwInsFootNoteDlg::dispose()
 {
-    SwViewShell::SetCareWin(0);
+    SwViewShell::SetCareWin(nullptr);
 
     if (bEdit)
-        rSh.ResetSelect(0, false);
+        rSh.ResetSelect(nullptr, false);
 
     m_pNumberFrame.clear();
     m_pNumberAutoBtn.clear();

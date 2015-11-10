@@ -53,7 +53,7 @@ void SwEditShell::DeleteSel( SwPaM& rPam, bool* pUndo )
         // group the Undo in the table
         if( pUndo && !*pUndo )
         {
-            GetDoc()->GetIDocumentUndoRedo().StartUndo( UNDO_START, NULL );
+            GetDoc()->GetIDocumentUndoRedo().StartUndo( UNDO_START, nullptr );
             *pUndo = true;
         }
         SwPaM aDelPam( *rPam.Start() );
@@ -65,7 +65,7 @@ void SwEditShell::DeleteSel( SwPaM& rPam, bool* pUndo )
             if( pEndSelPos->nNode.GetIndex() <= rEndNd.GetIndex() )
             {
                 *aDelPam.GetPoint() = *pEndSelPos;
-                pEndSelPos = 0;     // misuse a pointer as a flag
+                pEndSelPos = nullptr;     // misuse a pointer as a flag
             }
             else
             {
@@ -136,7 +136,7 @@ long SwEditShell::Delete()
         // If undo container then close here
         if( bUndo )
         {
-            GetDoc()->GetIDocumentUndoRedo().EndUndo(UNDO_END, 0);
+            GetDoc()->GetIDocumentUndoRedo().EndUndo(UNDO_END, nullptr);
         }
         EndAllAction();
         nRet = 1;
@@ -156,7 +156,7 @@ bool SwEditShell::Copy( SwEditShell* pDestShell )
 
     // Fill list of insert positions
     {
-        SwPosition * pPos = 0;
+        SwPosition * pPos = nullptr;
         std::shared_ptr<SwPosition> pInsertPos;
         sal_uInt16 nMove = 0;
         for(SwPaM& rPaM : GetCrsr()->GetRingContainer())
@@ -178,8 +178,8 @@ bool SwEditShell::Copy( SwEditShell* pDestShell )
                 // by simulated cursor movements from the given first insert position
                 if( nMove )
                 {
-                    SwCursor aCrsr( *pPos, 0, false);
-                    if( aCrsr.UpDown( false, nMove, 0, 0 ) )
+                    SwCursor aCrsr( *pPos, nullptr, false);
+                    if( aCrsr.UpDown( false, nMove, nullptr, 0 ) )
                     {
                         pInsertPos.reset( new SwPosition( *aCrsr.GetPoint() ) );
                         aInsertList.push_back( pInsertPos );
@@ -198,7 +198,7 @@ bool SwEditShell::Copy( SwEditShell* pDestShell )
     }
 
     pDestShell->StartAllAction();
-    SwPosition *pPos = 0;
+    SwPosition *pPos = nullptr;
     bool bRet = false;
     bool bFirstMove = true;
     SwNodeIndex aSttNdIdx( pDestShell->GetDoc()->GetNodes() );
@@ -206,7 +206,7 @@ bool SwEditShell::Copy( SwEditShell* pDestShell )
     // For block selection this list is filled with the insert positions
     std::list< std::shared_ptr<SwPosition> >::iterator pNextInsert = aInsertList.begin();
 
-    pDestShell->GetDoc()->GetIDocumentUndoRedo().StartUndo( UNDO_START, NULL );
+    pDestShell->GetDoc()->GetIDocumentUndoRedo().StartUndo( UNDO_START, nullptr );
     for(SwPaM& rPaM : GetCrsr()->GetRingContainer())
     {
         if( !pPos )
@@ -285,7 +285,7 @@ bool SwEditShell::Copy( SwEditShell* pDestShell )
 #endif
 
     // close Undo container here
-    pDestShell->GetDoc()->GetIDocumentUndoRedo().EndUndo( UNDO_END, NULL );
+    pDestShell->GetDoc()->GetIDocumentUndoRedo().EndUndo( UNDO_END, nullptr );
     pDestShell->EndAllAction();
 
     pDestShell->SaveTableBoxContent( pDestShell->GetCrsr()->GetPoint() );
@@ -308,7 +308,7 @@ bool SwEditShell::Replace( const OUString& rNewStr, bool bRegExpRplc )
     if( !HasReadonlySel() )
     {
         StartAllAction();
-        GetDoc()->GetIDocumentUndoRedo().StartUndo(UNDO_EMPTY, NULL);
+        GetDoc()->GetIDocumentUndoRedo().StartUndo(UNDO_EMPTY, nullptr);
 
         for(SwPaM& rPaM : GetCrsr()->GetRingContainer())
         {
@@ -321,7 +321,7 @@ bool SwEditShell::Replace( const OUString& rNewStr, bool bRegExpRplc )
         }
 
         // close Undo container here
-        GetDoc()->GetIDocumentUndoRedo().EndUndo(UNDO_EMPTY, NULL);
+        GetDoc()->GetIDocumentUndoRedo().EndUndo(UNDO_EMPTY, nullptr);
         EndAllAction();
     }
     return bRet;

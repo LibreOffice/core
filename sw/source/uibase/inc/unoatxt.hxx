@@ -232,7 +232,7 @@ public:
     // XEventsSupplier
     virtual css::uno::Reference< css::container::XNameReplace > SAL_CALL getEvents(  ) throw( css::uno::RuntimeException, std::exception ) override;
 
-    void    Invalidate() {pGlossaries = 0;}
+    void    Invalidate() {pGlossaries = nullptr;}
     const SwGlossaries* GetGlossaries() { return pGlossaries; }
     const OUString&   GetGroupName() {return sGroupName;}
     const OUString&   GetEntryName() {return sEntryName;}

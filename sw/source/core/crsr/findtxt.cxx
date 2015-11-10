@@ -245,7 +245,7 @@ bool SwPaM::Find( const SearchOptions& rSearchOpt, bool bSearchInNotes , utl::Te
     const bool bChkParaEnd = bRegSearch && rSearchOpt.searchString == "$";
 
     // LanguageType eLastLang = 0;
-    while( 0 != ( pNode = ::GetNode( *pPam, bFirst, fnMove, bInReadOnly ) ))
+    while( nullptr != ( pNode = ::GetNode( *pPam, bFirst, fnMove, bInReadOnly ) ))
     {
         if( pNode->IsTextNode() )
         {
@@ -298,8 +298,8 @@ bool SwPaM::Find( const SearchOptions& rSearchOpt, bool bSearchInNotes , utl::Te
             }
 
             SwDocShell *const pDocShell = pNode->GetDoc()->GetDocShell();
-            SwWrtShell *const pWrtShell = (pDocShell) ? pDocShell->GetWrtShell() : 0;
-            SwPostItMgr *const pPostItMgr = (pWrtShell) ? pWrtShell->GetPostItMgr() : 0;
+            SwWrtShell *const pWrtShell = (pDocShell) ? pDocShell->GetWrtShell() : nullptr;
+            SwPostItMgr *const pPostItMgr = (pWrtShell) ? pWrtShell->GetPostItMgr() : nullptr;
 
             SvxSearchItem aSearchItem(SID_SEARCH_ITEM);
             aSearchItem.SetSearchOptions(rSearchOpt);
@@ -318,7 +318,7 @@ bool SwPaM::Find( const SearchOptions& rSearchOpt, bool bSearchInNotes , utl::Te
                     {
                         const SwPosition* pPosition = pFrameFormat->GetAnchor().GetContentAnchor();
                         if (!pPosition || pPosition->nNode.GetIndex() != pNode->GetIndex())
-                            pObject = 0;
+                            pObject = nullptr;
                     }
                 }
 
@@ -398,7 +398,7 @@ bool SwPaM::Find( const SearchOptions& rSearchOpt, bool bSearchInNotes , utl::Te
                 }
                 else
                 {
-                    pPostItMgr->SetActiveSidebarWin(0);
+                    pPostItMgr->SetActiveSidebarWin(nullptr);
                 }
             }
 
@@ -506,7 +506,7 @@ bool SwPaM::DoSearch( const SearchOptions& rSearchOpt, utl::TextSearch& rSText,
         sCleanStr = lcl_CleanStr(*pNode->GetTextNode(), nEnd, nStart,
                         aFltArr, bRemoveSoftHyphens);
 
-    SwScriptIterator* pScriptIter = 0;
+    SwScriptIterator* pScriptIter = nullptr;
     sal_uInt16 nSearchScript = 0;
     sal_uInt16 nCurrScript = 0;
 
@@ -549,7 +549,7 @@ bool SwPaM::DoSearch( const SearchOptions& rSearchOpt, utl::TextSearch& rSText,
         sal_Int32 nProxyStart = nStart;
         sal_Int32 nProxyEnd = nEnd;
         if( nSearchScript == nCurrScript &&
-                (rSText.*fnMove->fnSearch)( sCleanStr, &nProxyStart, &nProxyEnd, 0 ) &&
+                (rSText.*fnMove->fnSearch)( sCleanStr, &nProxyStart, &nProxyEnd, nullptr ) &&
                 !(bZeroMatch = (nProxyStart == nProxyEnd)))
         {
             nStart = nProxyStart;
@@ -669,7 +669,7 @@ int SwFindParaText::Find( SwPaM* pCrsr, SwMoveFn fnMove,
         }
 
         std::unique_ptr<OUString> pRepl( (bRegExp)
-                ? ReplaceBackReferences( m_rSearchOpt, pCrsr ) : 0 );
+                ? ReplaceBackReferences( m_rSearchOpt, pCrsr ) : nullptr );
         bool const bReplaced =
             m_rCursor.GetDoc()->getIDocumentContentOperations().ReplaceRange(
                 *pCrsr,
@@ -719,7 +719,7 @@ sal_uLong SwCursor::Find( const SearchOptions& rSearchOpt, bool bSearchInNotes,
     bool const bStartUndo = pDoc->GetIDocumentUndoRedo().DoesUndo() && bReplace;
     if (bStartUndo)
     {
-        pDoc->GetIDocumentUndoRedo().StartUndo( UNDO_REPLACE, NULL );
+        pDoc->GetIDocumentUndoRedo().StartUndo( UNDO_REPLACE, nullptr );
     }
 
     bool bSearchSel = 0 != (rSearchOpt.searchFlag & SearchFlags::REG_NOT_BEGINOFLINE);
@@ -742,7 +742,7 @@ sal_uLong SwCursor::Find( const SearchOptions& rSearchOpt, bool bSearchInNotes,
 
 OUString *ReplaceBackReferences( const SearchOptions& rSearchOpt, SwPaM* pPam )
 {
-    OUString *pRet = 0;
+    OUString *pRet = nullptr;
     if( pPam && pPam->HasMark() &&
         SearchAlgorithms_REGEXP == rSearchOpt.algorithmType )
     {

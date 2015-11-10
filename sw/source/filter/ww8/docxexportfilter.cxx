@@ -53,7 +53,7 @@ bool DocxExportFilter::exportDocument()
 
     // update layout (if present), for SwWriteTable
     SwViewShell* pViewShell = pDoc->getIDocumentLayoutAccess().GetCurrentViewShell();
-    if (pViewShell != NULL)
+    if (pViewShell != nullptr)
         pViewShell->CalcLayout();
 
     // get SwPaM*
@@ -114,14 +114,14 @@ extern "C"
     {
         DocxExport_createInstance, DocxExport_getImplementationName,
         DocxExport_getSupportedServiceNames, ::cppu::createSingleComponentFactory,
-        0, 0
+        nullptr, 0
     },
     {
         RtfExport_createInstance, RtfExport_getImplementationName,
         RtfExport_getSupportedServiceNames, ::cppu::createSingleComponentFactory,
-        0, 0
+        nullptr, 0
     },
-    { 0, 0, 0, 0, 0, 0 }
+    { nullptr, nullptr, nullptr, nullptr, nullptr, 0 }
 };
 
 SAL_DLLPUBLIC_EXPORT void* SAL_CALL msword_component_getFactory( const sal_Char* pImplName, void* pServiceManager, void* pRegistryKey )

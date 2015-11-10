@@ -81,7 +81,7 @@ SwChangeDBDlg::SwChangeDBDlg(SwView& rVw)
     m_pUsedDBTLB->SetDeselectHdl(aLink);
     m_pAvailDBTLB->SetSelectHdl(aLink);
     m_pAvailDBTLB->SetSelectHdl(aLink);
-    TreeSelectHdl(NULL);
+    TreeSelectHdl(nullptr);
 }
 
 // initialise database listboxes
@@ -107,8 +107,8 @@ void SwChangeDBDlg::FillDBPopup()
 
     size_t nCount = aDBNameList.size();
     m_pUsedDBTLB->Clear();
-    SvTreeListEntry *pFirst = 0;
-    SvTreeListEntry *pLast = 0;
+    SvTreeListEntry *pFirst = nullptr;
+    SvTreeListEntry *pLast = nullptr;
 
     for(size_t k = 0; k < nCount; k++)
     {
@@ -140,11 +140,11 @@ SvTreeListEntry* SwChangeDBDlg::Insert(const OUString& rDBName)
     Image aDBImg = aImageList.GetImage(IMG_DB);
     Image aQueryImg = aImageList.GetImage(IMG_DBQUERY);
     Image& rToInsert = nCommandType ? aQueryImg : aTableImg;
-    while ((pParent = m_pUsedDBTLB->GetEntry(nParent++)) != NULL)
+    while ((pParent = m_pUsedDBTLB->GetEntry(nParent++)) != nullptr)
     {
         if (sDBName == m_pUsedDBTLB->GetEntryText(pParent))
         {
-            while ((pChild = m_pUsedDBTLB->GetEntry(pParent, nChild++)) != NULL)
+            while ((pChild = m_pUsedDBTLB->GetEntry(pParent, nChild++)) != nullptr)
             {
                 if (sTableName == m_pUsedDBTLB->GetEntryText(pChild))
                     return pChild;

@@ -42,7 +42,7 @@ class SwBlockCursor
 
 public:
     SwBlockCursor( const SwCrsrShell& rCrsrSh, const SwPosition &rPos ) :
-        aCursor( rCrsrSh, rPos ), pStartPt(0), pEndPt(0) {}
+        aCursor( rCrsrSh, rPos ), pStartPt(nullptr), pEndPt(nullptr) {}
     /** Access to the shell cursor
 
         @return SwShellCrsr& which represents the start and end position of the

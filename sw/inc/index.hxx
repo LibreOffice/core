@@ -123,7 +123,7 @@ protected:
     virtual void Update( SwIndex const & rPos, const sal_Int32 nChangeLen,
                  const bool bNegative = false, const bool bDelete = false );
 
-    bool HasAnyIndex() const { return 0 != m_pFirst; }
+    bool HasAnyIndex() const { return nullptr != m_pFirst; }
 
 public:
     SwIndexReg();

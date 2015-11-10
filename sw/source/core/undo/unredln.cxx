@@ -35,7 +35,7 @@
 
 SwUndoRedline::SwUndoRedline( SwUndoId nUsrId, const SwPaM& rRange )
     : SwUndo( UNDO_REDLINE ), SwUndRng( rRange ),
-    mpRedlData( 0 ), mpRedlSaveData( 0 ), mnUserId( nUsrId ),
+    mpRedlData( nullptr ), mpRedlSaveData( nullptr ), mnUserId( nUsrId ),
     mbHiddenRedlines( false )
 {
     // consider Redline
@@ -58,7 +58,7 @@ SwUndoRedline::SwUndoRedline( SwUndoId nUsrId, const SwPaM& rRange )
 
     mpRedlSaveData = new SwRedlineSaveDatas;
     if( !FillSaveData( rRange, *mpRedlSaveData, false, UNDO_REJECT_REDLINE != mnUserId ))
-        delete mpRedlSaveData, mpRedlSaveData = 0;
+        delete mpRedlSaveData, mpRedlSaveData = nullptr;
     else
     {
         mbHiddenRedlines = HasHiddenRedlines( *mpRedlSaveData );
@@ -145,7 +145,7 @@ SwUndoRedlineDelete::SwUndoRedlineDelete( const SwPaM& rRange, SwUndoId nUsrId )
     const SwTextNode* pTNd;
     if( UNDO_DELETE == mnUserId &&
         nSttNode == nEndNode && nSttContent + 1 == nEndContent &&
-        0 != (pTNd = rRange.GetNode().GetTextNode()) )
+        nullptr != (pTNd = rRange.GetNode().GetTextNode()) )
     {
         sal_Unicode const cCh = pTNd->GetText()[nSttContent];
         if( CH_TXTATR_BREAKWORD != cCh && CH_TXTATR_INWORD != cCh )
@@ -352,8 +352,8 @@ void SwUndoRejectRedline::RepeatImpl(::sw::RepeatContext & rContext)
 }
 
 SwUndoCompDoc::SwUndoCompDoc( const SwPaM& rRg, bool bIns )
-    : SwUndo( UNDO_COMPAREDOC ), SwUndRng( rRg ), pRedlData( 0 ),
-    pUnDel( 0 ), pUnDel2( 0 ), pRedlSaveData( 0 ), bInsert( bIns )
+    : SwUndo( UNDO_COMPAREDOC ), SwUndRng( rRg ), pRedlData( nullptr ),
+    pUnDel( nullptr ), pUnDel2( nullptr ), pRedlSaveData( nullptr ), bInsert( bIns )
 {
     SwDoc* pDoc = rRg.GetDoc();
     if( pDoc->getIDocumentRedlineAccess().IsRedlineOn() )
@@ -365,8 +365,8 @@ SwUndoCompDoc::SwUndoCompDoc( const SwPaM& rRg, bool bIns )
 }
 
 SwUndoCompDoc::SwUndoCompDoc( const SwRangeRedline& rRedl )
-    : SwUndo( UNDO_COMPAREDOC ), SwUndRng( rRedl ), pRedlData( 0 ),
-    pUnDel( 0 ), pUnDel2( 0 ), pRedlSaveData( 0 ),
+    : SwUndo( UNDO_COMPAREDOC ), SwUndRng( rRedl ), pRedlData( nullptr ),
+    pUnDel( nullptr ), pUnDel2( nullptr ), pRedlSaveData( nullptr ),
     // for MergeDoc the corresponding inverse is needed
     bInsert( nsRedlineType_t::REDLINE_DELETE == rRedl.GetType() )
 {
@@ -379,7 +379,7 @@ SwUndoCompDoc::SwUndoCompDoc( const SwRangeRedline& rRedl )
 
     pRedlSaveData = new SwRedlineSaveDatas;
     if( !FillSaveData( rRedl, *pRedlSaveData, false ))
-        delete pRedlSaveData, pRedlSaveData = 0;
+        delete pRedlSaveData, pRedlSaveData = nullptr;
 }
 
 SwUndoCompDoc::~SwUndoCompDoc()
@@ -434,8 +434,8 @@ void SwUndoCompDoc::UndoImpl(::sw::UndoRedoContext & rContext)
             {
                 rPam.SetMark();
                 ++rPam.GetPoint()->nNode;
-                rPam.GetBound().nContent.Assign( 0, 0 );
-                rPam.GetBound( false ).nContent.Assign( 0, 0 );
+                rPam.GetBound().nContent.Assign( nullptr, 0 );
+                rPam.GetBound( false ).nContent.Assign( nullptr, 0 );
                 pUnDel2 = new SwUndoDelete(rPam, true);
             }
         }
@@ -476,10 +476,10 @@ void SwUndoCompDoc::RedoImpl(::sw::UndoRedoContext & rContext)
         if( pUnDel2 )
         {
             pUnDel2->UndoImpl(rContext);
-            delete pUnDel2, pUnDel2 = 0;
+            delete pUnDel2, pUnDel2 = nullptr;
         }
         pUnDel->UndoImpl(rContext);
-        delete pUnDel, pUnDel = 0;
+        delete pUnDel, pUnDel = nullptr;
 
         SetPaM(rPam);
 

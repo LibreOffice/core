@@ -50,10 +50,10 @@ namespace sw { namespace mark
                 bool bSaveOtherPos,
                 const ::sw::mark::IMark& rBkmk,
                 const SwNodeIndex& rMvPos,
-                const SwIndex* pIdx =0);
+                const SwIndex* pIdx =nullptr);
             void SetInDoc(SwDoc* pDoc,
                 const SwNodeIndex&,
-                const SwIndex* pIdx =0);
+                const SwIndex* pIdx =nullptr);
 
     private:
             OUString m_aName;
@@ -85,9 +85,9 @@ namespace sw { namespace mark
 
 void _DelBookmarks(const SwNodeIndex& rStt,
     const SwNodeIndex& rEnd,
-    ::std::vector< ::sw::mark::SaveBookmark> * SaveBkmk =0,
-    const SwIndex* pSttIdx =0,
-    const SwIndex* pEndIdx =0);
+    ::std::vector< ::sw::mark::SaveBookmark> * SaveBkmk =nullptr,
+    const SwIndex* pSttIdx =nullptr,
+    const SwIndex* pEndIdx =nullptr);
 
 /** data structure to temporarily hold fly anchor positions relative to some
  *  location. */

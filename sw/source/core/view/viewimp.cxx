@@ -88,21 +88,21 @@ void SwViewShellImp::Init( const SwViewOption *pNewOpt )
 /// CTor for the core internals
 SwViewShellImp::SwViewShellImp( SwViewShell *pParent ) :
     m_pShell( pParent ),
-    m_pDrawView( 0 ),
-    m_pSdrPageView( 0 ),
-    m_pFirstVisiblePage( 0 ),
-    m_pRegion( 0 ),
-    m_pLayAction( 0 ),
-    m_pIdleAct( 0 ),
-    m_pAccessibleMap( 0 ),
-    m_pSdrObjectCached(NULL),
+    m_pDrawView( nullptr ),
+    m_pSdrPageView( nullptr ),
+    m_pFirstVisiblePage( nullptr ),
+    m_pRegion( nullptr ),
+    m_pLayAction( nullptr ),
+    m_pIdleAct( nullptr ),
+    m_pAccessibleMap( nullptr ),
+    m_pSdrObjectCached(nullptr),
     m_bFirstPageInvalid( true ),
     m_bResetHdlHiddenPaint( false ),
     m_bSmoothUpdate( false ),
     m_bStopSmooth( false ),
     m_nRestoreActions( 0 ),
     // OD 12.12.2002 #103492#
-    m_pPagePreviewLayout( 0 )
+    m_pPagePreviewLayout( nullptr )
 {
 }
 
@@ -311,7 +311,7 @@ void SwViewShellImp::DisposeAccessible( const SwFrm *pFrm,
     for(SwViewShell& rTmp : GetShell()->GetRingContainer())
     {
         if( rTmp.Imp()->IsAccessible() )
-            rTmp.Imp()->GetAccessibleMap().Dispose( pFrm, pObj, 0, bRecursive );
+            rTmp.Imp()->GetAccessibleMap().Dispose( pFrm, pObj, nullptr, bRecursive );
     }
 }
 
@@ -322,7 +322,7 @@ void SwViewShellImp::MoveAccessible( const SwFrm *pFrm, const SdrObject *pObj,
     for(SwViewShell& rTmp : GetShell()->GetRingContainer())
     {
         if( rTmp.Imp()->IsAccessible() )
-            rTmp.Imp()->GetAccessibleMap().InvalidatePosOrSize( pFrm, pObj, 0,
+            rTmp.Imp()->GetAccessibleMap().InvalidatePosOrSize( pFrm, pObj, nullptr,
                                                                  rOldFrm );
     }
 }

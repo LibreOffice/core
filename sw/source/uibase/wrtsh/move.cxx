@@ -45,7 +45,7 @@ class ShellMoveCrsr
 public:
     inline ShellMoveCrsr( SwWrtShell* pWrtSh, bool bSel )
     {
-        bAct = !pWrtSh->ActionPend() && (pWrtSh->GetFrmType(0,false) & FrmTypeFlags::FLY_ANY);
+        bAct = !pWrtSh->ActionPend() && (pWrtSh->GetFrmType(nullptr,false) & FrmTypeFlags::FLY_ANY);
         ( pSh = pWrtSh )->MoveCrsr( bSel );
         pWrtSh->GetView().GetViewFrame()->GetBindings().Invalidate(SID_HYPERLINK_GETLINK);
     }
@@ -74,7 +74,7 @@ void SwWrtShell::MoveCrsr( bool bWithSelect )
     else
     {
         EndSelect();
-        (this->*m_fnKillSel)( 0, false );
+        (this->*m_fnKillSel)( nullptr, false );
     }
 }
 
@@ -237,7 +237,7 @@ bool SwWrtShell::GoStart( bool bKeepArea, bool *pMoveTable,
         else
             SttSelect();
     }
-    const FrmTypeFlags nFrmType = GetFrmType(0,false);
+    const FrmTypeFlags nFrmType = GetFrmType(nullptr,false);
     if ( FrmTypeFlags::FLY_ANY & nFrmType )
     {
         if( MoveSection( fnSectionCurr, fnSectionStart ) )
@@ -270,7 +270,7 @@ bool SwWrtShell::GoEnd(bool bKeepArea, bool *pMoveTable)
     }
     else
     {
-        const FrmTypeFlags nFrmType = GetFrmType(0,false);
+        const FrmTypeFlags nFrmType = GetFrmType(nullptr,false);
         if ( FrmTypeFlags::FLY_ANY & nFrmType )
         {
             if ( MoveSection( fnSectionCurr, fnSectionEnd ) )
@@ -294,7 +294,7 @@ bool SwWrtShell::GoEnd(bool bKeepArea, bool *pMoveTable)
 bool SwWrtShell::SttDoc( bool bSelect )
 {
     ShellMoveCrsr aTmp( this, bSelect );
-    return GoStart(false, 0, bSelect );
+    return GoStart(false, nullptr, bSelect );
 }
 
 bool SwWrtShell::EndDoc( bool bSelect)
@@ -439,7 +439,7 @@ bool SwWrtShell::PushCrsr(SwTwips lOffset, bool bSelect)
             LeaveSelFrmMode();
             if ( bIsObjSel )
             {
-                GetView().SetDrawFuncPtr( NULL );
+                GetView().SetDrawFuncPtr( nullptr );
                 GetView().LeaveDrawCreate();
             }
 
@@ -470,7 +470,7 @@ bool SwWrtShell::PushCrsr(SwTwips lOffset, bool bSelect)
 
 bool SwWrtShell::PopCrsr(bool bUpdate, bool bSelect)
 {
-    if( 0 == m_pCrsrStack)
+    if( nullptr == m_pCrsrStack)
         return false;
 
     const bool bValidPos = m_pCrsrStack->bValidCurPos;
@@ -507,7 +507,7 @@ bool SwWrtShell::PopCrsr(bool bUpdate, bool bSelect)
     CrsrStack *pTmp = m_pCrsrStack;
     m_pCrsrStack = m_pCrsrStack->pNext;
     delete pTmp;
-    if( 0 == m_pCrsrStack )
+    if( nullptr == m_pCrsrStack )
     {
         m_ePageMove = MV_NO;
         m_bDestOnStack = false;

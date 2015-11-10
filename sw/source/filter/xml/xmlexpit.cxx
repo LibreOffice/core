@@ -149,7 +149,7 @@ void SvXMLExportItemMapper::exportXML( const SvXMLExport& rExport,
         }
         if( dynamic_cast<const SvXMLAttrContainerItem*>( &rItem) !=  nullptr )
         {
-            SvXMLNamespaceMap *pNewNamespaceMap = 0;
+            SvXMLNamespaceMap *pNewNamespaceMap = nullptr;
             const SvXMLNamespaceMap *pNamespaceMap = &rNamespaceMap;
 
             const SvXMLAttrContainerItem *pUnknown =
@@ -274,7 +274,7 @@ const SfxPoolItem* SvXMLExportItemMapper::GetItem( const SfxItemSet& rSet,
     }
     else
     {
-        return NULL;
+        return nullptr;
     }
 }
 
@@ -594,8 +594,8 @@ bool SvXMLExportItemMapper::QueryXMLValue(
                     case TOP_BORDER:
                     case BOTTOM_BORDER:
                     {
-                        bool bEqual = ( NULL == pTop && NULL == pBottom &&
-                                            NULL == pLeft && NULL == pRight ) ||
+                        bool bEqual = ( nullptr == pTop && nullptr == pBottom &&
+                                            nullptr == pLeft && nullptr == pRight ) ||
                                           ( pTop && pBottom && pLeft && pRight &&
                                            *pTop == *pBottom  && *pTop == *pLeft &&
                                             *pTop == *pRight );
@@ -617,10 +617,10 @@ bool SvXMLExportItemMapper::QueryXMLValue(
                         if( !pTop && !pBottom && !pLeft && !pRight )
                             return false;
 
-                        bool bEqual = NULL != pTop &&
-                                          NULL != pBottom &&
-                                          NULL != pLeft &&
-                                          NULL != pRight;
+                        bool bEqual = nullptr != pTop &&
+                                          nullptr != pBottom &&
+                                          nullptr != pLeft &&
+                                          nullptr != pRight;
 
                         if( bEqual )
                         {
@@ -651,25 +651,25 @@ bool SvXMLExportItemMapper::QueryXMLValue(
                                     return false;
                                 break;
                             case LEFT_BORDER_LINE_WIDTH:
-                                if( bEqual || NULL == pLeft ||
+                                if( bEqual || nullptr == pLeft ||
                                     0 == pLeft->GetDistance() ||
                                     !lcl_isOdfDoubleLine( pLeft ) )
                                     return false;
                                 break;
                             case RIGHT_BORDER_LINE_WIDTH:
-                                if( bEqual || NULL == pRight ||
+                                if( bEqual || nullptr == pRight ||
                                     0 == pRight->GetDistance() ||
                                     !lcl_isOdfDoubleLine( pRight ) )
                                     return false;
                                 break;
                             case TOP_BORDER_LINE_WIDTH:
-                                if( bEqual || NULL == pTop ||
+                                if( bEqual || nullptr == pTop ||
                                     0 == pTop->GetDistance() ||
                                     !lcl_isOdfDoubleLine( pTop ) )
                                     return false;
                                 break;
                             case BOTTOM_BORDER_LINE_WIDTH:
-                                if( bEqual || NULL == pBottom ||
+                                if( bEqual || nullptr == pBottom ||
                                     0 == pBottom->GetDistance() ||
                                     !lcl_isOdfDoubleLine( pBottom ) )
                                     return false;
@@ -721,11 +721,11 @@ bool SvXMLExportItemMapper::QueryXMLValue(
                             pLine = pBottom;
                             break;
                         default:
-                            pLine = NULL;
+                            pLine = nullptr;
                             break;
                         }
 
-                        if( NULL != pLine )
+                        if( nullptr != pLine )
                         {
                             sal_Int32 nWidth = pLine->GetWidth();
 

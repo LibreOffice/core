@@ -43,7 +43,7 @@ using namespace ::com::sun::star::uno;
 SwUndoOverwrite::SwUndoOverwrite( SwDoc* pDoc, SwPosition& rPos,
                                     sal_Unicode cIns )
     : SwUndo(UNDO_OVERWRITE),
-      pRedlSaveData( 0 ), bGroup( false )
+      pRedlSaveData( nullptr ), bGroup( false )
 {
     if( !pDoc->getIDocumentRedlineAccess().IsIgnoreRedline() && !pDoc->getIDocumentRedlineAccess().GetRedlineTable().empty() )
     {
@@ -51,7 +51,7 @@ SwUndoOverwrite::SwUndoOverwrite( SwDoc* pDoc, SwPosition& rPos,
                     rPos.nNode, rPos.nContent.GetIndex()+1 );
         pRedlSaveData = new SwRedlineSaveDatas;
         if( !FillSaveData( aPam, *pRedlSaveData, false ))
-            delete pRedlSaveData, pRedlSaveData = 0;
+            delete pRedlSaveData, pRedlSaveData = nullptr;
     }
 
     nSttNode = rPos.nNode.GetIndex();
@@ -188,7 +188,7 @@ void SwUndoOverwrite::UndoImpl(::sw::UndoRedoContext & rContext)
     {
         if( 1 == aInsStr.getLength() && 1 == aDelStr.getLength() )
             pACEWord->CheckChar( *pAktPam->GetPoint(), aDelStr[0] );
-        pDoc->SetAutoCorrExceptWord( 0 );
+        pDoc->SetAutoCorrExceptWord( nullptr );
     }
 
     // If there was not only a overwrite but also an insert, delete the surplus
@@ -329,7 +329,7 @@ struct _UndoTransliterate_Data
     sal_Int32      nStart, nLen;
 
     _UndoTransliterate_Data( sal_uLong nNd, sal_Int32 nStt, sal_Int32 nStrLen, const OUString& rText )
-        : sText( rText ), pHistory( 0 ), pOffsets( 0 ),
+        : sText( rText ), pHistory( nullptr ), pOffsets( nullptr ),
         nNdIdx( nNd ), nStart( nStt ), nLen( nStrLen )
     {}
     ~_UndoTransliterate_Data() { delete pOffsets; delete pHistory; }
@@ -432,7 +432,7 @@ void SwUndoTransliterate::AddChanges( SwTextNode& rTNd,
             {
                 // same node and have a history?
                 pNew->pHistory = pD->pHistory;
-                pD->pHistory = 0;
+                pD->pHistory = nullptr;
                 break;          // more can't exist
             }
         }

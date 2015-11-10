@@ -37,7 +37,7 @@ protected:
 public:
     TYPEINFO_OVERRIDE();
 
-    SwBaseLink( SfxLinkUpdateMode nMode, SotClipboardFormatId nFormat, SwContentNode* pNode = 0 )
+    SwBaseLink( SfxLinkUpdateMode nMode, SotClipboardFormatId nFormat, SwContentNode* pNode = nullptr )
         : ::sfx2::SvBaseLink( nMode, nFormat ), pContentNode( pNode ),
         bSwapIn( false ), bNoDataFlag( false ), bIgnoreDataChanged( false )
     {}
@@ -53,7 +53,7 @@ public:
     // For graphics only.
     bool SwapIn( bool bWaitForData = false, bool bNativFormat = false );
 
-    bool Connect() { return 0 != SvBaseLink::GetRealObject(); }
+    bool Connect() { return nullptr != SvBaseLink::GetRealObject(); }
 
     // Only for graphics-links (for switching between DDE / Grf-link).
     void SetObjType( sal_uInt16 nType ) { SvBaseLink::SetObjType( nType ); }

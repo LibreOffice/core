@@ -74,7 +74,7 @@ public:
 
     // <_bNewTOX> : distinguish between the creation of a new table-of-content
     //              (true) or an update of a table-of-content (false)
-    void Update( const SfxItemSet* pAttr = 0,
+    void Update( const SfxItemSet* pAttr = nullptr,
                  const bool        _bNewTOX = false );
     void UpdatePageNum();               // insert page numbering
     TYPEINFO_OVERRIDE();                         // for rtti
@@ -96,14 +96,14 @@ struct SwDefTOXBase_Impl
     SwTOXBase* pBiblioBase;
 
     SwDefTOXBase_Impl() :
-    pContBase(0),
-    pIdxBase(0),
-    pUserBase(0),
-    pTableBase(0),
-    pObjBase(0),
-    pIllBase(0),
-    pAuthBase(0),
-    pBiblioBase(0)
+    pContBase(nullptr),
+    pIdxBase(nullptr),
+    pUserBase(nullptr),
+    pTableBase(nullptr),
+    pObjBase(nullptr),
+    pIllBase(nullptr),
+    pAuthBase(nullptr),
+    pBiblioBase(nullptr)
     {
     }
     ~SwDefTOXBase_Impl()

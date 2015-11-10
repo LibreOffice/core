@@ -42,7 +42,7 @@ public:
 
     virtual SwTwips ShrinkFrm( SwTwips, bool bTst = false, bool bInfo = false ) override;
     virtual SwTwips GrowFrm  ( SwTwips, bool bTst = false, bool bInfo = false ) override;
-    virtual void    Format( vcl::RenderContext* pRenderContext, const SwBorderAttrs *pAttrs = 0 ) override;
+    virtual void    Format( vcl::RenderContext* pRenderContext, const SwBorderAttrs *pAttrs = nullptr ) override;
     virtual void    PaintBorder( const SwRect &, const SwPageFrm *pPage,
                                  const SwBorderAttrs & ) const override;
     virtual void PaintSubsidiaryLines( const SwPageFrm*, const SwRect& ) const override;
@@ -74,7 +74,7 @@ public:
     SwFootnoteFrm( SwFrameFormat*, SwFrm*, SwContentFrm*, SwTextFootnote* );
 
     virtual void Cut() override;
-    virtual void Paste( SwFrm* pParent, SwFrm* pSibling = 0 ) override;
+    virtual void Paste( SwFrm* pParent, SwFrm* pSibling = nullptr ) override;
 
     virtual void PaintSubsidiaryLines( const SwPageFrm*, const SwRect& ) const override;
 

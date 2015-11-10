@@ -46,7 +46,7 @@ class SW_DLLPUBLIC SwNoTextNode : public SwContentNode
 
 protected:
     SwNoTextNode( const SwNodeIndex &rWhere, const sal_uInt8 nNdType,
-                SwGrfFormatColl *pGrColl, SwAttrSet* pAutoAttr = 0 );
+                SwGrfFormatColl *pGrColl, SwAttrSet* pAutoAttr = nullptr );
 
 public:
     virtual ~SwNoTextNode();
@@ -68,7 +68,7 @@ public:
     void               SetContour( const tools::PolyPolygon *pPoly,
                                    bool bAutomatic = false );
     const tools::PolyPolygon *HasContour() const;
-    bool               _HasContour() const { return pContour!=0; };
+    bool               _HasContour() const { return pContour!=nullptr; };
     void               GetContour( tools::PolyPolygon &rPoly ) const;
     void               CreateContour();
 
@@ -93,11 +93,11 @@ public:
 // Inline methods from Node.hxx - we know TextNode only here!!
 inline SwNoTextNode *SwNode::GetNoTextNode()
 {
-    return ND_NOTXTNODE & m_nNodeType ? static_cast<SwNoTextNode*>(this) : 0;
+    return ND_NOTXTNODE & m_nNodeType ? static_cast<SwNoTextNode*>(this) : nullptr;
 }
 inline const SwNoTextNode *SwNode::GetNoTextNode() const
 {
-    return ND_NOTXTNODE & m_nNodeType ? static_cast<const SwNoTextNode*>(this) : 0;
+    return ND_NOTXTNODE & m_nNodeType ? static_cast<const SwNoTextNode*>(this) : nullptr;
 }
 
 #endif // INCLUDED_SW_INC_NDNOTXT_HXX

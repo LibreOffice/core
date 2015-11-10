@@ -54,8 +54,8 @@ const Sequence<OUString>& SwDBConfig::GetPropertyNames()
 SwDBConfig::SwDBConfig() :
     ConfigItem("Office.DataAccess",
         ConfigItemMode::DelayedUpdate|ConfigItemMode::ReleaseTree),
-    pAdrImpl(0),
-    pBibImpl(0)
+    pAdrImpl(nullptr),
+    pBibImpl(nullptr)
 {
 };
 

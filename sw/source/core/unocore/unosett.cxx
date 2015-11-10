@@ -186,7 +186,7 @@ const SfxItemPropertySet* GetLineNumberingSet()
 
 static SwCharFormat* lcl_getCharFormat(SwDoc* pDoc, const uno::Any& aValue)
 {
-    SwCharFormat* pRet = 0;
+    SwCharFormat* pRet = nullptr;
     OUString uTmp;
     aValue >>= uTmp;
     OUString sCharFormat;
@@ -492,7 +492,7 @@ uno::Any SwXFootnoteProperties::getPropertyValue(const OUString& rPropertyName)
                 case WID_CHARACTER_STYLE:
                 {
                     OUString aString;
-                    const SwCharFormat* pCharFormat = 0;
+                    const SwCharFormat* pCharFormat = nullptr;
                     if( pEntry->nWID == WID_ANCHOR_CHARACTER_STYLE )
                     {
                         if( rFootnoteInfo.GetAnchorCharFormatDep()->GetRegisteredIn() )
@@ -731,7 +731,7 @@ uno::Any SwXEndnoteProperties::getPropertyValue(const OUString& rPropertyName)
                 case WID_CHARACTER_STYLE:
                 {
                     OUString aString;
-                    const SwCharFormat* pCharFormat = 0;
+                    const SwCharFormat* pCharFormat = nullptr;
                     if( pEntry->nWID == WID_ANCHOR_CHARACTER_STYLE )
                     {
                         if( rEndInfo.GetAnchorCharFormatDep()->GetRegisteredIn() )
@@ -1103,7 +1103,7 @@ Sequence< OUString > SwXNumberingRules::getSupportedServiceNames() throw( Runtim
 
 SwXNumberingRules::SwXNumberingRules(const SwNumRule& rRule, SwDoc* doc) :
     pDoc(doc),
-    pDocShell(0),
+    pDocShell(nullptr),
     pNumRule(new SwNumRule(rRule)),
     m_pPropertySet(GetNumberingRulesSet()),
     bOwnNumRuleCreated(true)
@@ -1130,9 +1130,9 @@ SwXNumberingRules::SwXNumberingRules(const SwNumRule& rRule, SwDoc* doc) :
 }
 
 SwXNumberingRules::SwXNumberingRules(SwDocShell& rDocSh) :
-    pDoc(0),
+    pDoc(nullptr),
     pDocShell(&rDocSh),
-    pNumRule(0),
+    pNumRule(nullptr),
     m_pPropertySet(GetNumberingRulesSet()),
     bOwnNumRuleCreated(false)
 {
@@ -1141,8 +1141,8 @@ SwXNumberingRules::SwXNumberingRules(SwDocShell& rDocSh) :
 
 SwXNumberingRules::SwXNumberingRules(SwDoc& rDoc) :
     pDoc(&rDoc),
-    pDocShell(0),
-    pNumRule(0),
+    pDocShell(nullptr),
+    pNumRule(nullptr),
     m_pPropertySet(GetNumberingRulesSet()),
     bOwnNumRuleCreated(false)
 {
@@ -1151,7 +1151,7 @@ SwXNumberingRules::SwXNumberingRules(SwDoc& rDoc) :
 #if OSL_DEBUG_LEVEL > 1
     const sal_uInt16 nIndex =
 #endif
-    rDoc.MakeNumRule( m_sCreatedNumRuleName, 0, false,
+    rDoc.MakeNumRule( m_sCreatedNumRuleName, nullptr, false,
                       // #i89178#
                       numfunc::GetDefaultPositionAndSpaceMode() );
 #if OSL_DEBUG_LEVEL > 1
@@ -1180,7 +1180,7 @@ void SwXNumberingRules::replaceByIndex(sal_Int32 nIndex, const uno::Any& rElemen
         throw lang::IllegalArgumentException();
     const uno::Sequence<beans::PropertyValue>& rProperties =
                     *static_cast<const uno::Sequence<beans::PropertyValue>*>(rElement.getValue());
-    SwNumRule* pRule = 0;
+    SwNumRule* pRule = nullptr;
     if(pNumRule)
         SwXNumberingRules::SetNumberingRuleByIndex( *pNumRule,
                             rProperties, nIndex);
@@ -1200,7 +1200,7 @@ void SwXNumberingRules::replaceByIndex(sal_Int32 nIndex, const uno::Any& rElemen
                 m_sNewCharStyleNames[i] != UNO_NAME_CHARACTER_FORMAT_NONE &&
                 (!aFormat.GetCharFormat() || aFormat.GetCharFormat()->GetName()!= m_sNewCharStyleNames[i]))
             {
-                SwCharFormat* pCharFormat = 0;
+                SwCharFormat* pCharFormat = nullptr;
                 for(size_t j = 0; j< nChCount; ++j)
                 {
                     SwCharFormat* pTmp = (*pFormats)[j];
@@ -1227,7 +1227,7 @@ void SwXNumberingRules::replaceByIndex(sal_Int32 nIndex, const uno::Any& rElemen
         pDocShell->GetDoc()->SetOutlineNumRule( aNumRule );
     }
     else if(!pNumRule && pDoc && !m_sCreatedNumRuleName.isEmpty() &&
-        0 != (pRule = pDoc->FindNumRulePtr( m_sCreatedNumRuleName )))
+        nullptr != (pRule = pDoc->FindNumRulePtr( m_sCreatedNumRuleName )))
     {
         SwXNumberingRules::SetNumberingRuleByIndex( *pRule,
                             rProperties, nIndex);
@@ -1335,7 +1335,7 @@ uno::Sequence<beans::PropertyValue> SwXNumberingRules::GetNumberingRuleByIndex(
         SwStyleNameMapper::FillProgName(sValue, aUString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, true);
     }
 
-    return GetPropertiesForNumFormat(rFormat, CharStyleName, (pDocShell) ? & aUString : 0);
+    return GetPropertiesForNumFormat(rFormat, CharStyleName, (pDocShell) ? & aUString : nullptr);
 
 }
 
@@ -1343,7 +1343,7 @@ uno::Sequence<beans::PropertyValue> SwXNumberingRules::GetPropertiesForNumFormat
         const SwNumFormat& rFormat, OUString const& rCharFormatName,
         OUString const*const pHeadingStyleName)
 {
-    bool bChapterNum = pHeadingStyleName != 0;
+    bool bChapterNum = pHeadingStyleName != nullptr;
 
     ::std::vector<PropertyValue> aPropertyValues;
     aPropertyValues.reserve(32);
@@ -1472,7 +1472,7 @@ uno::Sequence<beans::PropertyValue> SwXNumberingRules::GetPropertiesForNumFormat
             aPropertyValues.push_back(comphelper::makePropertyValue(UNO_NAME_GRAPHIC_URL, aUString));
 
             //graphicbitmap
-            const Graphic* pGraphic = 0;
+            const Graphic* pGraphic = nullptr;
             if(pBrush )
                 pGraphic = pBrush->GetGraphic();
             if(pGraphic)
@@ -1515,7 +1515,7 @@ static PropertyValue const* lcl_FindProperty(
         if (sCmp == pTemp->Name)
             return pTemp;
     }
-    return 0;
+    return nullptr;
 }
 
 void SwXNumberingRules::SetNumberingRuleByIndex(
@@ -1655,9 +1655,9 @@ void SwXNumberingRules::SetPropertiesToNumFormat(
     bool bWrongArg = false;
     if(!bExcept)
        {
-        SvxBrushItem* pSetBrush = 0;
-        Size* pSetSize = 0;
-        SwFormatVertOrient* pSetVOrient = 0;
+        SvxBrushItem* pSetBrush = nullptr;
+        Size* pSetSize = nullptr;
+        SwFormatVertOrient* pSetVOrient = nullptr;
         bool bCharStyleNameSet = false;
 
         for(size_t i = 0; i < SAL_N_ELEMENTS( aNumPropertyNames ) && !bExcept && !bWrongArg; ++i)
@@ -1714,7 +1714,7 @@ void SwXNumberingRules::SetPropertiesToNumFormat(
                     if (sCharFormatName == UNO_NAME_CHARACTER_FORMAT_NONE)
                     {
                         rCharStyleName = aInvalidStyle;
-                        aFormat.SetCharFormat(0);
+                        aFormat.SetCharFormat(nullptr);
                     }
                     else if(pDocShell || pDoc)
                     {
@@ -1722,7 +1722,7 @@ void SwXNumberingRules::SetPropertiesToNumFormat(
                         const SwCharFormats* pFormats = pLocalDoc->GetCharFormats();
                         const size_t nChCount = pFormats->size();
 
-                        SwCharFormat* pCharFormat = 0;
+                        SwCharFormat* pCharFormat = nullptr;
                         if (!sCharFormatName.isEmpty())
                         {
                             for(size_t j = 0; j< nChCount; ++j)
@@ -1916,7 +1916,7 @@ void SwXNumberingRules::SetPropertiesToNumFormat(
                     assert( !pDocShell );
                     OUString sBulletFontName;
                     pProp->Value >>= sBulletFontName;
-                    SwDocShell* pLclDocShell = pDocShell ? pDocShell : pDoc ? pDoc->GetDocShell() : 0;
+                    SwDocShell* pLclDocShell = pDocShell ? pDocShell : pDoc ? pDoc->GetDocShell() : nullptr;
                     if( !sBulletFontName.isEmpty() && pLclDocShell )
                     {
                         const SvxFontListItem* pFontListItem =
@@ -2060,12 +2060,12 @@ void SwXNumberingRules::SetPropertiesToNumFormat(
                     {
                         const Graphic* pGraphic = pSetBrush->GetGraphic();
                         if(pGraphic)
-                            *pSetSize = ::GetGraphicSizeTwip(*pGraphic, 0);
+                            *pSetSize = ::GetGraphicSizeTwip(*pGraphic, nullptr);
                     }
                 }
                 sal_Int16 eOrient = pSetVOrient ?
                     (sal_Int16)pSetVOrient->GetVertOrient() : text::VertOrientation::NONE;
-                aFormat.SetGraphicBrush( pSetBrush, pSetSize, text::VertOrientation::NONE == eOrient ? 0 : &eOrient );
+                aFormat.SetGraphicBrush( pSetBrush, pSetSize, text::VertOrientation::NONE == eOrient ? nullptr : &eOrient );
             }
         }
         if ((!bCharStyleNameSet || rCharStyleName.isEmpty())
@@ -2100,8 +2100,8 @@ void SwXNumberingRules::setPropertyValue( const OUString& rPropertyName, const A
         IllegalArgumentException, WrappedTargetException, RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    SwNumRule* pDocRule = 0;
-    SwNumRule* pCreatedRule = 0;
+    SwNumRule* pDocRule = nullptr;
+    SwNumRule* pCreatedRule = nullptr;
     if(!pNumRule)
     {
         if(!pNumRule && pDocShell)
@@ -2264,8 +2264,8 @@ void SwXNumberingRules::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew
     {
         if(bOwnNumRuleCreated)
             delete pNumRule;
-        pNumRule = 0;
-        pDoc = 0;
+        pNumRule = nullptr;
+        pDoc = nullptr;
     }
 }
 

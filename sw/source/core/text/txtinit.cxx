@@ -38,10 +38,10 @@
 #include "txtfly.hxx"
 #include "dbg_lay.hxx"
 
-SwCache *SwTextFrm::pTextCache = 0;
+SwCache *SwTextFrm::pTextCache = nullptr;
 long SwTextFrm::nMinPrtLine = 0;
-SwContourCache *pContourCache = 0;
-SwDropCapCache *pDropCapCache = 0;
+SwContourCache *pContourCache = nullptr;
+SwDropCapCache *pDropCapCache = nullptr;
 
 IMPL_FIXEDMEMPOOL_NEWDEL( SwTextLine )
 IMPL_FIXEDMEMPOOL_NEWDEL( SwParaPortion ) // Paragraphs

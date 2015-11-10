@@ -262,7 +262,7 @@ namespace sw
         template<class T> const T * item_cast(const SfxPoolItem *pItem)
         {
             if (pItem && !pItem->IsA(STATICTYPE(T)))
-                pItem = 0;
+                pItem = nullptr;
             return static_cast<const T *>(pItem);
         }
 
@@ -565,7 +565,7 @@ namespace sw
             @author
             <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
         */
-        Frames GetFrames(const SwDoc &rDoc, SwPaM *pPaM = 0);
+        Frames GetFrames(const SwDoc &rDoc, SwPaM *pPaM = nullptr);
 
         /** fix up frame positions, must be called after SetRedlineMode */
         void UpdateFramePositions(Frames & rFrames);

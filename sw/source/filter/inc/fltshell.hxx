@@ -178,7 +178,7 @@ public:
     void StealAttr(const SwNodeIndex& rNode, sal_uInt16 nAttrId = 0);
     void MarkAllAttrsOld();
     void KillUnlockedAttrs(const SwPosition& pPos);
-    SfxPoolItem* GetFormatStackAttr(sal_uInt16 nWhich, sal_uInt16 * pPos = 0);
+    SfxPoolItem* GetFormatStackAttr(sal_uInt16 nWhich, sal_uInt16 * pPos = nullptr);
     const SfxPoolItem* GetOpenStackAttr(const SwPosition& rPos, sal_uInt16 nWhich);
     void Delete(const SwPaM &rPam);
 
@@ -203,7 +203,7 @@ public:
 
     // "pure virtual Methoden" vom SfxPoolItem
     virtual bool operator==(const SfxPoolItem&) const override;
-    virtual SfxPoolItem* Clone(SfxItemPool* = 0) const override;
+    virtual SfxPoolItem* Clone(SfxItemPool* = nullptr) const override;
     void SetFrameFormat(SwFrameFormat * _pFrameFormat);
     const SwFrameFormat* GetFrameFormat() const { return pFrameFormat;}
           SwFrameFormat* GetFrameFormat() { return pFrameFormat;}
@@ -234,7 +234,7 @@ public:
                  const DateTime& rStamp_,
                  RedlineType_t   eTypePrev_    = nsRedlineType_t::REDLINE_INSERT,
                  sal_uInt16          nAutorNoPrev_ = USHRT_MAX,
-                 const DateTime* pStampPrev_   = 0)
+                 const DateTime* pStampPrev_   = nullptr)
         : SfxPoolItem(RES_FLTR_REDLINE), aStamp(rStamp_),
         aStampPrev( DateTime::EMPTY ),
         eType(eType_),
@@ -255,7 +255,7 @@ public:
         {}
     // "pure virtual Methoden" vom SfxPoolItem
     virtual bool operator==(const SfxPoolItem& rItem) const override;
-    virtual SfxPoolItem* Clone(SfxItemPool* = 0) const override;
+    virtual SfxPoolItem* Clone(SfxItemPool* = nullptr) const override;
 };
 
 class SW_DLLPUBLIC SwFltBookmark : public SfxPoolItem
@@ -276,7 +276,7 @@ public:
 
     // "pure virtual Methoden" vom SfxPoolItem
     virtual bool operator==(const SfxPoolItem&) const override;
-    virtual SfxPoolItem* Clone(SfxItemPool* = 0) const override;
+    virtual SfxPoolItem* Clone(SfxItemPool* = nullptr) const override;
 
     long GetHandle() const              { return mnHandle; }
     const OUString& GetName() const       { return maName; }
@@ -298,7 +298,7 @@ public:
     SwFltTOX(const SwFltTOX&);
     // "pure virtual Methoden" vom SfxPoolItem
     virtual bool operator==(const SfxPoolItem&) const override;
-    virtual SfxPoolItem* Clone(SfxItemPool* = 0) const override;
+    virtual SfxPoolItem* Clone(SfxItemPool* = nullptr) const override;
     SwTOXBase* GetBase()            { return pTOXBase; }
     void SetHadBreakItem(    bool bVal ) { bHadBreakItem    = bVal; }
     void SetHadPageDescItem( bool bVal ) { bHadPageDescItem = bVal; }

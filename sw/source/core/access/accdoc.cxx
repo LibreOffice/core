@@ -74,7 +74,7 @@ SwAccessibleDocumentBase::SwAccessibleDocumentBase ( SwAccessibleMap *_pMap ) :
     SwAccessibleContext( _pMap, AccessibleRole::DOCUMENT_TEXT,
                          _pMap->GetShell()->GetLayout() ),
     mxParent( _pMap->GetShell()->GetWin()->GetAccessibleParentWindow()->GetAccessible() ),
-    mpChildWin( 0 )
+    mpChildWin( nullptr )
 {
 }
 
@@ -129,7 +129,7 @@ void SwAccessibleDocumentBase::RemoveChild( vcl::Window *pWin )
         aEvent.OldValue <<= mpChildWin->GetAccessible();
         FireAccessibleEvent( aEvent );
 
-        mpChildWin = 0;
+        mpChildWin = nullptr;
     }
 }
 
@@ -208,7 +208,7 @@ OUString SAL_CALL SwAccessibleDocumentBase::getAccessibleName()
     SolarMutexGuard g;
 
     OUString sAccName = GetResource( STR_ACCESS_DOC_WORDPROCESSING );
-    SwDoc *pDoc = GetMap() ? GetShell()->GetDoc() : 0;
+    SwDoc *pDoc = GetMap() ? GetShell()->GetDoc() : nullptr;
     if ( pDoc )
     {
         OUString sFileName = pDoc->getDocAccTitle();
@@ -282,7 +282,7 @@ css::awt::Point SAL_CALL SwAccessibleDocumentBase::getLocationOnScreen()
 
     CHECK_FOR_WINDOW( XAccessibleComponent, pWin )
 
-    Point aPixPos( pWin->GetWindowExtentsRelative( 0 ).TopLeft() );
+    Point aPixPos( pWin->GetWindowExtentsRelative( nullptr ).TopLeft() );
     awt::Point aLoc( aPixPos.getX(), aPixPos.getY() );
 
     return aLoc;
@@ -297,7 +297,7 @@ css::awt::Size SAL_CALL SwAccessibleDocumentBase::getSize()
 
     CHECK_FOR_WINDOW( XAccessibleComponent, pWin )
 
-    Size aPixSize( pWin->GetWindowExtentsRelative( 0 ).GetSize() );
+    Size aPixSize( pWin->GetWindowExtentsRelative( nullptr ).GetSize() );
     awt::Size aSize( aPixSize.Width(), aPixSize.Height() );
 
     return aSize;
@@ -313,7 +313,7 @@ sal_Bool SAL_CALL SwAccessibleDocumentBase::containsPoint(
 
     CHECK_FOR_WINDOW( XAccessibleComponent, pWin )
 
-    Rectangle aPixBounds( pWin->GetWindowExtentsRelative( 0 ) );
+    Rectangle aPixBounds( pWin->GetWindowExtentsRelative( nullptr ) );
     aPixBounds.Move(-aPixBounds.Left(), -aPixBounds.Top());
 
     Point aPixPoint( aPoint.X, aPoint.Y );
@@ -375,7 +375,7 @@ SwAccessibleDocument::SwAccessibleDocument ( SwAccessibleMap* pInitMap ) :
 
 SwAccessibleDocument::~SwAccessibleDocument()
 {
-    vcl::Window *pWin = GetMap() ? GetMap()->GetShell()->GetWin() : 0;
+    vcl::Window *pWin = GetMap() ? GetMap()->GetShell()->GetWin() : nullptr;
     if( pWin )
         pWin->RemoveChildEventListener( LINK( this, SwAccessibleDocument, WindowChildEventListener ));
 }
@@ -384,7 +384,7 @@ void SwAccessibleDocument::Dispose( bool bRecursive )
 {
     OSL_ENSURE( GetFrm() && GetMap(), "already disposed" );
 
-    vcl::Window *pWin = GetMap() ? GetMap()->GetShell()->GetWin() : 0;
+    vcl::Window *pWin = GetMap() ? GetMap()->GetShell()->GetWin() : nullptr;
     if( pWin )
         pWin->RemoveChildEventListener( LINK( this, SwAccessibleDocument, WindowChildEventListener ));
     SwAccessibleContext::Dispose( bRecursive );
@@ -555,7 +555,7 @@ uno::Any SAL_CALL SwAccessibleDocument::getExtendedAttributes()
     SolarMutexGuard g;
 
     uno::Any anyAtrribute;
-    SwDoc *pDoc = GetMap() ? GetShell()->GetDoc() : 0;
+    SwDoc *pDoc = GetMap() ? GetShell()->GetDoc() : nullptr;
 
     if (!pDoc)
         return anyAtrribute;
@@ -565,7 +565,7 @@ uno::Any SAL_CALL SwAccessibleDocument::getExtendedAttributes()
 
     SwFEShell* pFEShell = dynamic_cast<const SwFEShell*>( pCrsrShell) !=  nullptr
                                 ? static_cast<SwFEShell*>( pCrsrShell )
-                            : 0;
+                            : nullptr;
     OUString sAttrName;
     OUString sValue;
     sal_uInt16 nPage, nLogPage;
@@ -590,8 +590,8 @@ uno::Any SAL_CALL SwAccessibleDocument::getExtendedAttributes()
         SwContentFrm* pCurrFrm = pCrsrShell->GetCurrFrm();
         SwPageFrm* pCurrPage=static_cast<SwFrm*>(pCurrFrm)->FindPageFrm();
         sal_uLong nLineNum = 0;
-        SwTextFrm* pTextFrm = NULL;
-        SwTextFrm* pCurrTextFrm = NULL;
+        SwTextFrm* pTextFrm = nullptr;
+        SwTextFrm* pCurrTextFrm = nullptr;
         pTextFrm = static_cast< SwTextFrm* >(static_cast< SwPageFrm* > (pCurrPage)->ContainsContent());
         if (pCurrFrm->IsInFly())//such as, graphic,chart
         {
@@ -612,7 +612,7 @@ uno::Any SAL_CALL SwAccessibleDocument::getExtendedAttributes()
         while ( pFrm && !pFrm->IsHeaderFrm() && !pFrm->IsFooterFrm() )
             pFrm = pFrm->GetUpper();
         if ( pFrm )
-            pCurrTextFrm = NULL;
+            pCurrTextFrm = nullptr;
         //check shape
         if(pCrsrShell->Imp()->GetDrawView())
         {
@@ -623,7 +623,7 @@ uno::Any SAL_CALL SwAccessibleDocument::getExtendedAttributes()
                 SwFrameFormat* pFormat = static_cast<SwDrawContact*>(pObj->GetUserCall())->GetFormat();
                 const SwFormatAnchor& rAnchor = pFormat->GetAnchor();
                 if( FLY_AS_CHAR != rAnchor.GetAnchorId() )
-                    pCurrTextFrm = NULL;
+                    pCurrTextFrm = nullptr;
             }
         }
         //calculate line number
@@ -651,7 +651,7 @@ uno::Any SAL_CALL SwAccessibleDocument::getExtendedAttributes()
                 {
                     if (pCurrTextFrm->IsTextFrm())
                     {
-                        const SwPosition* pPoint = NULL;
+                        const SwPosition* pPoint = nullptr;
                         if(pCurrTextFrm->IsInFly())
                         {
                             SwFlyFrm *pFlyFrm = pCurrTextFrm->FindFlyFrm();
@@ -690,7 +690,7 @@ uno::Any SAL_CALL SwAccessibleDocument::getExtendedAttributes()
         sValue += sAttrName;
 
         int nCurrCol = 1;
-        if(pCurrCol!=NULL)
+        if(pCurrCol!=nullptr)
         {
             //SwLayoutFrm* pParent = pCurrCol->GetUpper();
             SwFrm* pCurrPageCol=static_cast<SwFrm*>(pCurrFrm)->FindColFrm();
@@ -701,7 +701,7 @@ uno::Any SAL_CALL SwAccessibleDocument::getExtendedAttributes()
 
             SwLayoutFrm* pParent = pCurrPageCol->GetUpper();
 
-            if(pParent!=NULL)
+            if(pParent!=nullptr)
             {
                 SwFrm* pCol = pParent->Lower();
                 while(pCol&&(pCol!=pCurrPageCol))
@@ -725,7 +725,7 @@ uno::Any SAL_CALL SwAccessibleDocument::getExtendedAttributes()
         sValue += ";";
 
         SwSectionFrm* pCurrSctFrm=static_cast<SwFrm*>(pCurrFrm)->FindSctFrm();
-        if(pCurrSctFrm!=NULL && pCurrSctFrm->GetSection()!=NULL )
+        if(pCurrSctFrm!=nullptr && pCurrSctFrm->GetSection()!=nullptr )
         {
             sAttrName = "section-name:";
 
@@ -747,10 +747,10 @@ uno::Any SAL_CALL SwAccessibleDocument::getExtendedAttributes()
 
             nCurrCol = 1;
 
-            if(pCurrCol!=NULL)
+            if(pCurrCol!=nullptr)
             {
                 SwLayoutFrm* pParent = pCurrCol->GetUpper();
-                if(pParent!=NULL)
+                if(pParent!=nullptr)
                 {
                     SwFrm* pCol = pParent->Lower();
                     while(pCol&&(pCol!=pCurrCol))
@@ -862,7 +862,7 @@ css::uno::Sequence< css::uno::Any >
         if ( pCrsrShell )
         {
             SwPaM *_pStartCrsr = pCrsrShell->GetCrsr(), *__pStartCrsr = _pStartCrsr;
-            SwContentNode* pPrevNode = NULL;
+            SwContentNode* pPrevNode = nullptr;
             std::vector<SwFrm*> vFrmList;
             do
             {
@@ -873,7 +873,7 @@ css::uno::Sequence< css::uno::Any >
                     {
                         continue;
                     }
-                    SwFrm* pFrm = pContentNode ? pContentNode->getLayoutFrm( pCrsrShell->GetLayout() ) : NULL;
+                    SwFrm* pFrm = pContentNode ? pContentNode->getLayoutFrm( pCrsrShell->GetLayout() ) : nullptr;
                     if ( pFrm )
                     {
                         vFrmList.push_back( pFrm );

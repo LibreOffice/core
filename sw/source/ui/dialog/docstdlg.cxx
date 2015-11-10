@@ -121,7 +121,7 @@ void SwDocStatPage::SetData(const SwDocStat &rStat)
 void SwDocStatPage::Update()
 {
     SfxViewShell *pVSh = SfxViewShell::Current();
-    SwViewShell *pSh = 0;
+    SwViewShell *pSh = nullptr;
     if ( dynamic_cast< const SwView *>( pVSh ) !=  nullptr )
         pSh = static_cast<SwView*>(pVSh)->GetWrtShellPtr();
     else if ( dynamic_cast< const SwPagePreview *>( pVSh ) !=  nullptr )

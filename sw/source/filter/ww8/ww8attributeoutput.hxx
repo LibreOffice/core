@@ -145,7 +145,7 @@ public:
 
     /// Write a section break
     /// msword::ColumnBreak or msword::PageBreak
-    virtual void SectionBreak( sal_uInt8 nC, const WW8_SepInfo* pSectionInfo = NULL ) override;
+    virtual void SectionBreak( sal_uInt8 nC, const WW8_SepInfo* pSectionInfo = nullptr ) override;
 
     // preserve DOC page vertical alignment
     virtual void TextVerticalAdjustment( const css::drawing::TextVerticalAdjust ) SAL_OVERRIDE;
@@ -196,7 +196,7 @@ public:
         sal_Int16 nFirstLineIndex,
         sal_Int16 nListTabPos,
         const OUString &rNumberingString,
-        const SvxBrushItem* pBrush = 0) override; //For i120928,transfer graphic of bullet
+        const SvxBrushItem* pBrush = nullptr) override; //For i120928,transfer graphic of bullet
 
 protected:
     /// Output frames - the implementation.

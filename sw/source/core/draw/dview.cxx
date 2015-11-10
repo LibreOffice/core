@@ -77,7 +77,7 @@ bool SwSdrHdl::IsFocusHdl() const
 static const SwFrm *lcl_FindAnchor( const SdrObject *pObj, bool bAll )
 {
     const SwVirtFlyDrawObj *pVirt = dynamic_cast< const SwVirtFlyDrawObj *>( pObj ) !=  nullptr ?
-                                            static_cast<const SwVirtFlyDrawObj*>(pObj) : 0;
+                                            static_cast<const SwVirtFlyDrawObj*>(pObj) : nullptr;
     if ( pVirt )
     {
         if ( bAll || !pVirt->GetFlyFrm()->IsFlyInCntFrm() )
@@ -89,7 +89,7 @@ static const SwFrm *lcl_FindAnchor( const SdrObject *pObj, bool bAll )
         if ( pCont )
             return pCont->GetAnchorFrm( pObj );
     }
-    return 0;
+    return nullptr;
 }
 
 SwDrawView::SwDrawView( SwViewShellImp &rI, SdrModel *pMd, OutputDevice *pOutDev) :
@@ -175,7 +175,7 @@ SdrObject* impLocalHitCorrection(SdrObject* pRetval, const Point& rPnt, sal_uInt
                     if(aInnerBound.isInside(basegfx::B2DPoint(rPnt.X(), rPnt.Y())))
                     {
                         // exclude this hit
-                        pRetval = 0;
+                        pRetval = nullptr;
                     }
                 }
             }
@@ -221,7 +221,7 @@ void SwDrawView::AddCustomHdl()
         return;
 
     const SwFrm* pAnch;
-    if(0 == (pAnch = CalcAnchor()))
+    if(nullptr == (pAnch = CalcAnchor()))
         return;
 
     Point aPos(aAnchorPoint);
@@ -284,7 +284,7 @@ SdrObject* SwDrawView::GetMaxToTopObj( SdrObject* pObj ) const
             }
         }
     }
-    return 0;
+    return nullptr;
 }
 
 SdrObject* SwDrawView::GetMaxToBtmObj(SdrObject* pObj) const
@@ -299,11 +299,11 @@ SdrObject* SwDrawView::GetMaxToBtmObj(SdrObject* pObj) const
             if ( pFly )
             {
                 SdrObject *pRet = const_cast<SdrObject*>(static_cast<SdrObject const *>(pFly->GetVirtDrawObj()));
-                return pRet != pObj ? pRet : 0;
+                return pRet != pObj ? pRet : nullptr;
             }
         }
     }
-    return 0;
+    return nullptr;
 }
 
 /// determine maximal order number for a 'child' object of given 'parent' object
@@ -537,7 +537,7 @@ void SwDrawView::ObjOrderChanged( SdrObject* pObj, sal_uLong nOldPos,
     {
         size_t nTmpNewPos( nNewPos );
         const SwFrameFormat* pParentFrameFormat =
-                pParentAnchoredObj ? &(pParentAnchoredObj->GetFrameFormat()) : 0L;
+                pParentAnchoredObj ? &(pParentAnchoredObj->GetFrameFormat()) : nullptr;
         const SdrObject* pTmpObj = pDrawPage->GetObj( nNewPos + 1 );
         while ( pTmpObj )
         {
@@ -547,7 +547,7 @@ void SwDrawView::ObjOrderChanged( SdrObject* pObj, sal_uLong nOldPos,
             // section), no anchor frame exists.
             const SwFrm* pTmpAnchorFrm = lcl_FindAnchor( pTmpObj, true );
             const SwFlyFrm* pTmpParentObj = pTmpAnchorFrm
-                                            ? pTmpAnchorFrm->FindFlyFrm() : 0L;
+                                            ? pTmpAnchorFrm->FindFlyFrm() : nullptr;
             if ( pTmpParentObj &&
                  &(pTmpParentObj->GetFrameFormat()) != pParentFrameFormat )
             {
@@ -600,7 +600,7 @@ void SwDrawView::ObjOrderChanged( SdrObject* pObj, sal_uLong nOldPos,
             // section), no anchor frame exists.
             const SwFrm* pTmpAnchorFrm = lcl_FindAnchor( pTmpObj, true );
             const SwFlyFrm* pTmpParentObj = pTmpAnchorFrm
-                                            ? pTmpAnchorFrm->FindFlyFrm() : 0L;
+                                            ? pTmpAnchorFrm->FindFlyFrm() : nullptr;
             if ( pTmpParentObj &&
                  ( ( pTmpParentObj == pFlyFrm ) ||
                    ( pFlyFrm->IsUpperOf( *pTmpParentObj ) ) ) )
@@ -668,7 +668,7 @@ const SwFrm* SwDrawView::CalcAnchor()
 {
     const SdrMarkList &rMrkList = GetMarkedObjectList();
     if ( rMrkList.GetMarkCount() != 1 )
-        return NULL;
+        return nullptr;
 
     SdrObject* pObj = rMrkList.GetMark( 0 )->GetMarkedSdrObj();
 
@@ -707,7 +707,7 @@ const SwFrm* SwDrawView::CalcAnchor()
     if ( IsAction() )
     {
         if ( !TakeDragObjAnchorPos( aPt, bTopRight ) )
-            return NULL;
+            return nullptr;
     }
     else
     {
@@ -739,7 +739,7 @@ const SwFrm* SwDrawView::CalcAnchor()
     if( pAnch && !pAnch->IsProtected() )
         aAnchorPoint = pAnch->GetFrmAnchorPos( ::HasWrap( pObj ) );
     else
-        pAnch = 0;
+        pAnch = nullptr;
     return pAnch;
 }
 
@@ -818,7 +818,7 @@ void SwDrawView::CheckPossibilities()
     for ( size_t i = 0; !bProtect && i < rMrkList.GetMarkCount(); ++i )
     {
         const SdrObject *pObj = rMrkList.GetMark( i )->GetMarkedSdrObj();
-        const SwFrm *pFrm = NULL;
+        const SwFrm *pFrm = nullptr;
         if ( dynamic_cast< const SwVirtFlyDrawObj *>( pObj ) !=  nullptr )
         {
             const SwFlyFrm *pFly = static_cast<const SwVirtFlyDrawObj*>(pObj)->GetFlyFrm();
@@ -925,7 +925,7 @@ void SwDrawView::DeleteMarked()
     SwRootFrm *pTmpRoot = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
     if ( pTmpRoot )
         pTmpRoot->StartAllAction();
-    pDoc->GetIDocumentUndoRedo().StartUndo(UNDO_EMPTY, NULL);
+    pDoc->GetIDocumentUndoRedo().StartUndo(UNDO_EMPTY, nullptr);
     // replace marked <SwDrawVirtObj>-objects by its reference objects.
     {
         SdrPageView* pDrawPageView = rImp.GetPageView();
@@ -960,7 +960,7 @@ void SwDrawView::DeleteMarked()
         for (std::vector<SwFrameFormat*>::iterator i = aTextBoxesToDelete.begin(); i != aTextBoxesToDelete.end(); ++i)
             pDoc->getIDocumentLayoutAccess().DelLayoutFormat(*i);
     }
-    pDoc->GetIDocumentUndoRedo().EndUndo(UNDO_EMPTY, NULL);
+    pDoc->GetIDocumentUndoRedo().EndUndo(UNDO_EMPTY, nullptr);
     if( pTmpRoot )
         pTmpRoot->EndAllAction();
 }
@@ -970,7 +970,7 @@ SdrUndoManager* SwDrawView::getSdrUndoManagerForEnhancedTextEdit() const
 {
     SwDoc* pDoc = Imp().GetShell()->GetDoc();
 
-    return pDoc ? dynamic_cast< SdrUndoManager* >(&(pDoc->GetUndoManager())) : 0;
+    return pDoc ? dynamic_cast< SdrUndoManager* >(&(pDoc->GetUndoManager())) : nullptr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

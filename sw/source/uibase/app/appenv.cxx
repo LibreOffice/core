@@ -156,7 +156,7 @@ void SwModule::InsertEnv( SfxRequest& rReq )
 
     // Get current shell
     pMyDocSh = static_cast<SwDocShell*>( SfxObjectShell::Current());
-    pOldSh   = pMyDocSh ? pMyDocSh->GetWrtShell() : 0;
+    pOldSh   = pMyDocSh ? pMyDocSh->GetWrtShell() : nullptr;
 
     // Create new document (don't show!)
     SfxObjectShellLock xDocSh( new SwDocShell( SfxObjectCreateMode::STANDARD ) );
@@ -207,7 +207,7 @@ void SwModule::InsertEnv( SfxRequest& rReq )
 
     }
 
-    vcl::Window *pParent = pOldSh ? pOldSh->GetWin() : 0;
+    vcl::Window *pParent = pOldSh ? pOldSh->GetWin() : nullptr;
     std::unique_ptr<SfxAbstractTabDialog> pDlg;
     short nMode = ENV_INSERT;
 
@@ -250,7 +250,7 @@ void SwModule::InsertEnv( SfxRequest& rReq )
         }
 
         SwWrtShell *pTmp = nMode == ENV_INSERT ? pOldSh : pSh;
-        const SwPageDesc* pFollow = 0;
+        const SwPageDesc* pFollow = nullptr;
         SwTextFormatColl *pSend = pTmp->GetTextCollFromPool( RES_POOLCOLL_SENDADRESS ),
                      *pAddr = pTmp->GetTextCollFromPool( RES_POOLCOLL_JAKETADRESS);
         const OUString sSendMark = pSend->GetName();

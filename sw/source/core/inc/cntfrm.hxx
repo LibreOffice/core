@@ -48,7 +48,7 @@ class SwContentFrm: public SwFrm, public SwFlowFrm
     virtual void MakeAll(vcl::RenderContext* pRenderContext) override;
 
     void _UpdateAttr( const SfxPoolItem*, const SfxPoolItem*, sal_uInt8 &,
-                      SwAttrSetChg *pa = 0, SwAttrSetChg *pb = 0 );
+                      SwAttrSetChg *pa = nullptr, SwAttrSetChg *pb = nullptr );
 
     virtual bool ShouldBwdMoved( SwLayoutFrm *pNewUpper, bool, bool& ) override;
 
@@ -70,7 +70,7 @@ public:
     TYPEINFO_OVERRIDE(); // already in base class
 
     virtual void Cut() override;
-    virtual void Paste( SwFrm* pParent, SwFrm* pSibling = 0 ) override;
+    virtual void Paste( SwFrm* pParent, SwFrm* pSibling = nullptr ) override;
 
     inline const SwContentNode *GetNode() const;
     inline       SwContentNode *GetNode();

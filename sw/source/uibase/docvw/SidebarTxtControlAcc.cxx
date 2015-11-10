@@ -161,7 +161,7 @@ class SidebarTextControlAccessibleContext : public VCLXAccessibleComponent
 SidebarTextControlAccessibleContext::SidebarTextControlAccessibleContext( SidebarTextControl& rSidebarTextControl )
     : VCLXAccessibleComponent( rSidebarTextControl.GetWindowPeer() )
     , mrSidebarTextControl( rSidebarTextControl )
-    , mpAccessibleTextHelper( 0 )
+    , mpAccessibleTextHelper( nullptr )
     , maMutex()
 {
     mpAccessibleTextHelper = new ::accessibility::AccessibleTextHelper( o3tl::make_unique<SidebarTextEditSource>(mrSidebarTextControl) );
@@ -176,7 +176,7 @@ SidebarTextControlAccessibleContext::~SidebarTextControlAccessibleContext()
 void SidebarTextControlAccessibleContext::defunc()
 {
     delete mpAccessibleTextHelper;
-    mpAccessibleTextHelper = 0;
+    mpAccessibleTextHelper = nullptr;
 }
 
 sal_Int32 SAL_CALL SidebarTextControlAccessibleContext::getAccessibleChildCount()

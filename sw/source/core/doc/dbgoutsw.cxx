@@ -561,7 +561,7 @@ static OUString lcl_dbg_out(const SwNode & rNode)
 
         const SwNumRule * pNumRule = pTextNode->GetNumRule();
 
-        if (pNumRule != NULL)
+        if (pNumRule != nullptr)
         {
             aTmpStr += "<number>";
             if ( pTextNode->GetNum() )
@@ -573,7 +573,7 @@ static OUString lcl_dbg_out(const SwNode & rNode)
             aTmpStr += "<rule>";
             aTmpStr += pNumRule->GetName();
 
-            const SfxPoolItem * pItem = NULL;
+            const SfxPoolItem * pItem = nullptr;
 
             if (pAttrSet && SfxItemState::SET ==
                 pAttrSet->GetItemState(RES_PARATR_NUMRULE, false, &pItem))
@@ -585,7 +585,7 @@ static OUString lcl_dbg_out(const SwNode & rNode)
                 aTmpStr += "*";
             }
 
-            const SwNumFormat * pNumFormat = NULL;
+            const SwNumFormat * pNumFormat = nullptr;
             aTmpStr += "</rule>";
 
             if (pTextNode->GetActualListLevel() > 0)
@@ -661,7 +661,7 @@ static OUString lcl_dbg_out(const SwNode & rNode)
         aTmpStr += "<start end=\"";
 
         const SwStartNode * pStartNode = dynamic_cast<const SwStartNode *> (&rNode);
-        if (pStartNode != NULL)
+        if (pStartNode != nullptr)
             aTmpStr += OUString::number(pStartNode->EndOfSectionNode()->GetIndex());
 
         aTmpStr += "\"/>";
@@ -681,26 +681,26 @@ const char * dbg_out(const SwNode & rNode)
 
 const char * dbg_out(const SwNode * pNode)
 {
-    if (NULL != pNode)
+    if (nullptr != pNode)
         return dbg_out(*pNode);
     else
-        return NULL;
+        return nullptr;
 }
 
 const char * dbg_out(const SwContentNode * pNode)
 {
-    if (NULL != pNode)
+    if (nullptr != pNode)
         return dbg_out(*pNode);
     else
-        return NULL;
+        return nullptr;
 }
 
 const char * dbg_out(const SwTextNode * pNode)
 {
-    if (NULL != pNode)
+    if (nullptr != pNode)
         return dbg_out(*pNode);
     else
-        return NULL;
+        return nullptr;
 }
 
 static void lcl_dbg_nodes_inner(OUString & aStr, SwNodes & rNodes, sal_uLong & nIndex)
@@ -708,8 +708,8 @@ static void lcl_dbg_nodes_inner(OUString & aStr, SwNodes & rNodes, sal_uLong & n
     SwNode * pNode = rNodes[nIndex];
     SwStartNode * pStartNode = dynamic_cast<SwStartNode *> (pNode);
 
-    SwNode * pEndNode = NULL;
-    if (pStartNode != NULL)
+    SwNode * pEndNode = nullptr;
+    if (pStartNode != nullptr)
         pEndNode = pStartNode->EndOfSectionNode();
 
     sal_uLong nCount = rNodes.Count();

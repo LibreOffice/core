@@ -191,9 +191,9 @@ bool SwXMLTableFrameFormatsSort_Impl::AddRow( SwFrameFormat& rFrameFormat,
                                          const OUString& rNamePrefix,
                                             sal_uInt32 nLine )
 {
-    const SwFormatFrmSize *pFrmSize = 0;
-    const SwFormatRowSplit* pRowSplit = 0;
-    const SvxBrushItem *pBrush = 0;
+    const SwFormatFrmSize *pFrmSize = nullptr;
+    const SwFormatRowSplit* pRowSplit = nullptr;
+    const SvxBrushItem *pBrush = nullptr;
 
     const SfxItemSet& rItemSet = rFrameFormat.GetAttrSet();
     const SfxPoolItem *pItem;
@@ -215,9 +215,9 @@ bool SwXMLTableFrameFormatsSort_Impl::AddRow( SwFrameFormat& rFrameFormat,
     SwXMLFrameFormats_Impl::iterator i;
     for( i = aFormatList.begin(); i < aFormatList.end(); ++i )
     {
-        const SwFormatFrmSize *pTestFrmSize = 0;
-        const SwFormatRowSplit* pTestRowSplit = 0;
-        const SvxBrushItem *pTestBrush = 0;
+        const SwFormatFrmSize *pTestFrmSize = nullptr;
+        const SwFormatRowSplit* pTestRowSplit = nullptr;
+        const SvxBrushItem *pTestBrush = nullptr;
         const SwFrameFormat *pTestFormat = *i;
         const SfxItemSet& rTestSet = pTestFormat->GetAttrSet();
         if( SfxItemState::SET == rTestSet.GetItemState( RES_FRM_SIZE, false,
@@ -307,11 +307,11 @@ bool SwXMLTableFrameFormatsSort_Impl::AddCell( SwFrameFormat& rFrameFormat,
                                          const OUString& rNamePrefix,
                                             sal_uInt32 nCol, sal_uInt32 nRow, bool bTop )
 {
-    const SwFormatVertOrient *pVertOrient = 0;
-    const SvxBrushItem *pBrush = 0;
-    const SvxBoxItem *pBox = 0;
-    const SwTableBoxNumFormat *pNumFormat = 0;
-    const SvxFrameDirectionItem *pFrameDir = 0;
+    const SwFormatVertOrient *pVertOrient = nullptr;
+    const SvxBrushItem *pBrush = nullptr;
+    const SvxBoxItem *pBox = nullptr;
+    const SwTableBoxNumFormat *pNumFormat = nullptr;
+    const SvxFrameDirectionItem *pFrameDir = nullptr;
 
     const SfxItemSet& rItemSet = rFrameFormat.GetAttrSet();
     const SfxPoolItem *pItem;
@@ -346,11 +346,11 @@ bool SwXMLTableFrameFormatsSort_Impl::AddCell( SwFrameFormat& rFrameFormat,
     SwXMLFrameFormats_Impl::iterator i;
     for( i = aFormatList.begin(); i < aFormatList.end(); ++i )
     {
-        const SwFormatVertOrient *pTestVertOrient = 0;
-        const SvxBrushItem *pTestBrush = 0;
-        const SvxBoxItem *pTestBox = 0;
-        const SwTableBoxNumFormat *pTestNumFormat = 0;
-        const SvxFrameDirectionItem *pTestFrameDir = 0;
+        const SwFormatVertOrient *pTestVertOrient = nullptr;
+        const SvxBrushItem *pTestBrush = nullptr;
+        const SvxBoxItem *pTestBox = nullptr;
+        const SwTableBoxNumFormat *pTestNumFormat = nullptr;
+        const SvxFrameDirectionItem *pTestFrameDir = nullptr;
         const SwFrameFormat* pTestFormat = *i;
         const SfxItemSet& rTestSet = pTestFormat->GetAttrSet();
         if( SfxItemState::SET == rTestSet.GetItemState( RES_VERT_ORIENT, false,
@@ -948,7 +948,7 @@ void SwXMLExport::ExportTableLines( const SwTableLines& rLines,
     if( !pTableLines || pTableLines->empty() )
         return;
 
-    SwXMLTableLines_Impl* pLines = NULL;
+    SwXMLTableLines_Impl* pLines = nullptr;
     size_t nInfoPos;
     for( nInfoPos=0; nInfoPos < pTableLines->size(); nInfoPos++ )
     {
@@ -972,7 +972,7 @@ void SwXMLExport::ExportTableLines( const SwTableLines& rLines,
     if( pTableLines->empty() )
     {
         delete pTableLines ;
-        pTableLines = NULL;
+        pTableLines = nullptr;
     }
 
     // pass 2: export columns
@@ -980,12 +980,12 @@ void SwXMLExport::ExportTableLines( const SwTableLines& rLines,
     size_t nColumn = 0U;
     const size_t nColumns = rCols.size();
     sal_Int32 nColRep = 1;
-    SwXMLTableColumn_Impl *pColumn = (nColumns > 0) ? rCols[0U] : 0;
+    SwXMLTableColumn_Impl *pColumn = (nColumns > 0) ? rCols[0U] : nullptr;
     while( pColumn )
     {
         nColumn++;
         SwXMLTableColumn_Impl *pNextColumn =
-            (nColumn < nColumns) ? rCols[nColumn] : 0;
+            (nColumn < nColumns) ? rCols[nColumn] : nullptr;
         if( pNextColumn &&
             pNextColumn->GetStyleName() == pColumn->GetStyleName() )
         {
@@ -1128,7 +1128,7 @@ void SwXMLTextParagraphExport::exportTable(
     OSL_ENSURE( xTextTable.is(), "text table missing" );
     if( xTextTable.is() )
     {
-        const SwXTextTable *pXTable = 0;
+        const SwXTextTable *pXTable = nullptr;
         Reference<XUnoTunnel> xTableTunnel( rTextContent, UNO_QUERY);
         if( xTableTunnel.is() )
         {

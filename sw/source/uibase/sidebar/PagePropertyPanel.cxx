@@ -86,12 +86,12 @@ VclPtr<vcl::Window> PagePropertyPanel::Create (
     const css::uno::Reference< css::frame::XFrame>& rxFrame,
     SfxBindings* pBindings)
 {
-    if (pParent == NULL)
-        throw css::lang::IllegalArgumentException("no parent Window given to PagePropertyPanel::Create", NULL, 0);
+    if (pParent == nullptr)
+        throw css::lang::IllegalArgumentException("no parent Window given to PagePropertyPanel::Create", nullptr, 0);
     if ( ! rxFrame.is())
-        throw css::lang::IllegalArgumentException("no XFrame given to PagePropertyPanel::Create", NULL, 1);
-    if (pBindings == NULL)
-        throw css::lang::IllegalArgumentException("no SfxBindings given to PagePropertyPanel::Create", NULL, 2);
+        throw css::lang::IllegalArgumentException("no XFrame given to PagePropertyPanel::Create", nullptr, 1);
+    if (pBindings == nullptr)
+        throw css::lang::IllegalArgumentException("no SfxBindings given to PagePropertyPanel::Create", nullptr, 2);
 
     return VclPtr<PagePropertyPanel>::Create( pParent,
                                               rxFrame,
@@ -106,8 +106,8 @@ PagePropertyPanel::PagePropertyPanel(
     , mpBindings(pBindings)
 
     // image resources
-    , maImgSize                 (NULL)
-    , maImgSize_L                   (NULL)
+    , maImgSize                 (nullptr)
+    , maImgSize_L                   (nullptr)
     , mImgPortrait              (SW_RES(IMG_PAGE_PORTRAIT))
     , mImgLandscape             (SW_RES(IMG_PAGE_LANDSCAPE))
     , mImgNarrow                    (SW_RES(IMG_PAGE_NARROW))
@@ -203,9 +203,9 @@ PagePropertyPanel::~PagePropertyPanel()
 void PagePropertyPanel::dispose()
 {
     delete[] maImgSize;
-    maImgSize = NULL;
+    maImgSize = nullptr;
     delete[] maImgSize_L;
-    maImgSize_L = NULL;
+    maImgSize_L = nullptr;
 
     mpPageItem.reset();
     mpPageLRMarginItem.reset();
@@ -566,7 +566,7 @@ void PagePropertyPanel::MetricState( SfxItemState eState, const SfxPoolItem* pSt
     else
     {
         SfxViewFrame* pFrame = SfxViewFrame::Current();
-        SfxObjectShell* pSh = NULL;
+        SfxObjectShell* pSh = nullptr;
         if ( pFrame )
             pSh = pFrame->GetObjectShell();
         if ( pSh )
@@ -588,9 +588,9 @@ void PagePropertyPanel::MetricState( SfxItemState eState, const SfxPoolItem* pSt
 
 void PagePropertyPanel::ChangeMarginImage()
 {
-    if ( mpPageLRMarginItem.get() == 0 ||
-         mpPageULMarginItem.get() == 0 ||
-         mpPageItem.get() == 0 )
+    if ( mpPageLRMarginItem.get() == nullptr ||
+         mpPageULMarginItem.get() == nullptr ||
+         mpPageItem.get() == nullptr )
     {
         return;
     }
@@ -632,8 +632,8 @@ void PagePropertyPanel::ChangeMarginImage()
 
 void PagePropertyPanel::ChangeSizeImage()
 {
-    if ( mpPageSizeItem.get() == 0 ||
-         mpPageItem.get() == 0 )
+    if ( mpPageSizeItem.get() == nullptr ||
+         mpPageItem.get() == nullptr )
     {
         return;
     }
@@ -695,7 +695,7 @@ void PagePropertyPanel::ChangeSizeImage()
 
 void PagePropertyPanel::ChangeColumnImage( const sal_uInt16 nColumnType )
 {
-    if ( mpPageItem.get() == 0 )
+    if ( mpPageItem.get() == nullptr )
     {
         return;
     }

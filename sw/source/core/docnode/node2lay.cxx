@@ -51,18 +51,18 @@ public:
     // Inserts a Frame under every pUpper of the array
     void RestoreUpperFrms( SwNodes& rNds, sal_uLong nStt, sal_uLong nEnd );
 
-    SwFrm* GetFrm( const Point* pDocPos = 0,
-                    const SwPosition *pPos = 0,
+    SwFrm* GetFrm( const Point* pDocPos = nullptr,
+                    const SwPosition *pPos = nullptr,
                     const bool bCalcFrm = true ) const;
 };
 
 SwNode* GoNextWithFrm(const SwNodes& rNodes, SwNodeIndex *pIdx)
 {
     if( pIdx->GetIndex() >= rNodes.Count() - 1 )
-        return 0;
+        return nullptr;
 
     SwNodeIndex aTmp(*pIdx, +1);
-    SwNode* pNd = 0;
+    SwNode* pNd = nullptr;
     while( aTmp < rNodes.Count()-1 )
     {
         pNd = &aTmp.GetNode();
@@ -73,7 +73,7 @@ SwNode* GoNextWithFrm(const SwNodes& rNodes, SwNodeIndex *pIdx)
             bFound = SwIterator<SwFrm,SwFormat>(*static_cast<SwTableNode*>(pNd)->GetTable().GetFrameFormat()).First() ;
         else if( pNd->IsEndNode() && !pNd->StartOfSectionNode()->IsSectionNode() )
         {
-            pNd = 0;
+            pNd = nullptr;
             break;
         }
         if ( bFound )
@@ -82,7 +82,7 @@ SwNode* GoNextWithFrm(const SwNodes& rNodes, SwNodeIndex *pIdx)
     }
 
     if( aTmp == rNodes.Count()-1 )
-        pNd = 0;
+        pNd = nullptr;
     else if( pNd )
         (*pIdx) = aTmp;
     return pNd;
@@ -91,10 +91,10 @@ SwNode* GoNextWithFrm(const SwNodes& rNodes, SwNodeIndex *pIdx)
 SwNode* GoPreviousWithFrm(SwNodeIndex *pIdx)
 {
     if( !pIdx->GetIndex() )
-        return 0;
+        return nullptr;
 
     SwNodeIndex aTmp( *pIdx, -1 );
-    SwNode* pNd(0);
+    SwNode* pNd(nullptr);
     while( aTmp.GetIndex() )
     {
         pNd = &aTmp.GetNode();
@@ -105,7 +105,7 @@ SwNode* GoPreviousWithFrm(SwNodeIndex *pIdx)
             bFound = SwIterator<SwFrm,SwFormat>(*static_cast<SwTableNode*>(pNd)->GetTable().GetFrameFormat()).First();
         else if( pNd->IsStartNode() && !pNd->IsSectionNode() )
         {
-            pNd = 0;
+            pNd = nullptr;
             break;
         }
         if ( bFound )
@@ -114,7 +114,7 @@ SwNode* GoPreviousWithFrm(SwNodeIndex *pIdx)
     }
 
     if( !aTmp.GetIndex() )
-        pNd = 0;
+        pNd = nullptr;
     else if( pNd )
         (*pIdx) = aTmp;
     return pNd;
@@ -130,7 +130,7 @@ SwNode* GoPreviousWithFrm(SwNodeIndex *pIdx)
  *                          We insert before or after it.
  */
 SwNode2LayImpl::SwNode2LayImpl( const SwNode& rNode, sal_uLong nIdx, bool bSearch )
-    : pUpperFrms( NULL ), nIndex( nIdx ), bInit( false )
+    : pUpperFrms( nullptr ), nIndex( nIdx ), bInit( false )
 {
     const SwNode* pNd;
     if( bSearch || rNode.IsSectionNode() )
@@ -142,7 +142,7 @@ SwNode2LayImpl::SwNode2LayImpl( const SwNode& rNode, sal_uLong nIdx, bool bSearc
             SwNodeIndex aTmp( *rNode.EndOfSectionNode(), +1 );
             pNd = GoPreviousWithFrm( &aTmp );
             if( !bSearch && pNd && rNode.GetIndex() > pNd->GetIndex() )
-                pNd = NULL; // Do not go over the limits
+                pNd = nullptr; // Do not go over the limits
             bMaster = false;
         }
         else
@@ -151,7 +151,7 @@ SwNode2LayImpl::SwNode2LayImpl( const SwNode& rNode, sal_uLong nIdx, bool bSearc
             pNd = GoNextWithFrm( rNode.GetNodes(), &aTmp );
             bMaster = true;
             if( !bSearch && pNd && rNode.EndOfSectionIndex() < pNd->GetIndex() )
-                pNd = NULL; // Do not go over the limits
+                pNd = nullptr; // Do not go over the limits
         }
     }
     else
@@ -172,8 +172,8 @@ SwNode2LayImpl::SwNode2LayImpl( const SwNode& rNode, sal_uLong nIdx, bool bSearc
     }
     else
     {
-        pIter = NULL;
-        pMod = 0;
+        pIter = nullptr;
+        pMod = nullptr;
     }
 }
 
@@ -195,7 +195,7 @@ SwFrm* SwNode2LayImpl::NextFrm()
 {
     SwFrm* pRet;
     if( !pIter )
-        return NULL;
+        return nullptr;
     if( !bInit )
     {
          pRet = pIter->First();
@@ -247,14 +247,14 @@ SwFrm* SwNode2LayImpl::NextFrm()
         }
         pRet = pIter->Next();
     }
-    return NULL;
+    return nullptr;
 }
 
 void SwNode2LayImpl::SaveUpperFrms()
 {
     pUpperFrms = new std::vector<SwFrm*>;
     SwFrm* pFrm;
-    while( 0 != (pFrm = NextFrm()) )
+    while( nullptr != (pFrm = NextFrm()) )
     {
         SwFrm* pPrv = pFrm->GetPrev();
         pFrm = pFrm->GetUpper();
@@ -271,15 +271,15 @@ void SwNode2LayImpl::SaveUpperFrms()
         }
     }
     delete pIter;
-    pIter = NULL;
-    pMod = 0;
+    pIter = nullptr;
+    pMod = nullptr;
 }
 
 SwLayoutFrm* SwNode2LayImpl::UpperFrm( SwFrm* &rpFrm, const SwNode &rNode )
 {
     rpFrm = NextFrm();
     if( !rpFrm )
-        return NULL;
+        return nullptr;
     SwLayoutFrm* pUpper = rpFrm->GetUpper();
     if( rpFrm->IsSctFrm() )
     {
@@ -306,7 +306,7 @@ SwLayoutFrm* SwNode2LayImpl::UpperFrm( SwFrm* &rpFrm, const SwNode &rNode )
                     }
                     OSL_ENSURE( pFrm->IsLayoutFrm(),
                             "<SwNode2LayImpl::UpperFrm(..)> - expected upper frame isn't a layout frame." );
-                    rpFrm = bMaster ? NULL
+                    rpFrm = bMaster ? nullptr
                                     : static_cast<SwLayoutFrm*>(pFrm)->Lower();
                     OSL_ENSURE( !rpFrm || rpFrm->IsFlowFrm(),
                             "<SwNode2LayImpl::UpperFrm(..)> - expected sibling isn't a flow frame." );
@@ -317,7 +317,7 @@ SwLayoutFrm* SwNode2LayImpl::UpperFrm( SwFrm* &rpFrm, const SwNode &rNode )
                 pUpper->Paste( rpFrm->GetUpper(),
                                bMaster ? rpFrm : rpFrm->GetNext() );
                 static_cast<SwSectionFrm*>(pUpper)->Init();
-                rpFrm = NULL;
+                rpFrm = nullptr;
                 // 'Go down' the section frame as long as the layout frame
                 // is found, which would contain content.
                 while ( pUpper->Lower() &&
@@ -343,7 +343,7 @@ void SwNode2LayImpl::RestoreUpperFrms( SwNodes& rNds, sal_uLong nStt, sal_uLong 
     bool bFirst = true;
     for( ; nStt < nEnd; ++nStt )
     {
-        SwFrm* pNew = 0;
+        SwFrm* pNew = nullptr;
         SwFrm* pNxt;
         SwLayoutFrm* pUp;
         if( (pNd = rNds[nStt])->IsContentNode() )
@@ -417,7 +417,7 @@ SwFrm* SwNode2LayImpl::GetFrm( const Point* pDocPos,
                                 const bool bCalcFrm ) const
 {
     // test if change of member pIter -> pMod broke anything
-    return pMod ? ::GetFrmOfModify( 0, *pMod, USHRT_MAX, pDocPos, pPos, bCalcFrm ) : 0;
+    return pMod ? ::GetFrmOfModify( nullptr, *pMod, USHRT_MAX, pDocPos, pPos, bCalcFrm ) : nullptr;
 }
 
 SwNode2Layout::SwNode2Layout( const SwNode& rNd, sal_uLong nIdx )

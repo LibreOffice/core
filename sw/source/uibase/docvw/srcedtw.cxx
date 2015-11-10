@@ -239,11 +239,11 @@ private:
 SwSrcEditWindow::SwSrcEditWindow( vcl::Window* pParent, SwSrcView* pParentView ) :
     Window( pParent, WB_BORDER|WB_CLIPCHILDREN ),
 
-    pTextEngine(0),
+    pTextEngine(nullptr),
 
-    pOutWin(0),
-    pHScrollbar(0),
-    pVScrollbar(0),
+    pOutWin(nullptr),
+    pHScrollbar(nullptr),
+    pVScrollbar(nullptr),
 
     pSrcView(pParentView),
 
@@ -289,7 +289,7 @@ void SwSrcEditWindow::dispose()
     }
     aSyntaxIdle.Stop();
     if ( pOutWin )
-        pOutWin->SetTextView( NULL );
+        pOutWin->SetTextView( nullptr );
 
     if ( pTextEngine )
     {
@@ -297,9 +297,9 @@ void SwSrcEditWindow::dispose()
         pTextEngine->RemoveView( pTextView );
 
         delete pTextView;
-        pTextView = NULL;
+        pTextView = nullptr;
         delete pTextEngine;
-        pTextEngine = NULL;
+        pTextEngine = nullptr;
     }
     pHScrollbar.disposeAndClear();
     pVScrollbar.disposeAndClear();
@@ -596,7 +596,7 @@ IMPL_LINK_TYPED(SwSrcEditWindow, ScrollHdl, ScrollBar*, pScroll, void)
 IMPL_LINK_TYPED( SwSrcEditWindow, SyntaxTimerHdl, Idle *, pIdle, void )
 {
     tools::Time aSyntaxCheckStart( tools::Time::SYSTEM );
-    SAL_WARN_IF(pTextView == 0, "sw", "No View yet, but syntax highlighting?!");
+    SAL_WARN_IF(pTextView == nullptr, "sw", "No View yet, but syntax highlighting?!");
 
     bHighlighting = true;
     sal_uInt16 nCount  = 0;
@@ -661,7 +661,7 @@ void SwSrcEditWindow::DoSyntaxHighlight( sal_uInt16 nPara )
         ImpDoHighlight( aSource, nPara );
         TextView* pTmp = pTextEngine->GetActiveView();
         pTmp->SetAutoScroll(false);
-        pTextEngine->SetActiveView(0);
+        pTextEngine->SetActiveView(nullptr);
         pTextEngine->SetUpdateMode( true );
         pTextEngine->SetActiveView(pTmp);
         pTmp->SetAutoScroll(true);

@@ -120,7 +120,7 @@ bool SwEditShell::SetRedlineComment( const OUString& rS )
 
 const SwRangeRedline* SwEditShell::GetCurrRedline() const
 {
-    return GetDoc()->getIDocumentRedlineAccess().GetRedline( *GetCrsr()->GetPoint(), 0 );
+    return GetDoc()->getIDocumentRedlineAccess().GetRedline( *GetCrsr()->GetPoint(), nullptr );
 }
 
 void SwEditShell::UpdateRedlineAttr()

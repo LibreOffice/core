@@ -66,8 +66,8 @@ public:
     SwLayoutFrm* UpperFrm( SwFrm* &rpFrm, const SwNode& rNode );
     void RestoreUpperFrms( SwNodes& rNds, sal_uLong nStt, sal_uLong nEnd );
 
-    SwFrm *GetFrm( const Point* pDocPos = 0,
-                    const SwPosition *pPos = 0,
+    SwFrm *GetFrm( const Point* pDocPos = nullptr,
+                    const SwPosition *pPos = nullptr,
                     const bool bCalcFrm = true ) const;
 };
 

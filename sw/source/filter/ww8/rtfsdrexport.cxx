@@ -32,10 +32,10 @@
 using namespace css;
 
 RtfSdrExport::RtfSdrExport(RtfExport& rExport)
-    : EscherEx(EscherExGlobalRef(new EscherExGlobal), 0),
+    : EscherEx(EscherExGlobalRef(new EscherExGlobal), nullptr),
       m_rExport(rExport),
       m_rAttrOutput(static_cast<RtfAttributeOutput&>(m_rExport.AttrOutput())),
-      m_pSdrObject(NULL),
+      m_pSdrObject(nullptr),
       m_nShapeType(ESCHER_ShpInst_Nil),
       m_nShapeFlags(0) ,
       m_aShapeStyle(200),
@@ -48,8 +48,8 @@ RtfSdrExport::RtfSdrExport(RtfExport& rExport)
 
 RtfSdrExport::~RtfSdrExport()
 {
-    delete mpOutStrm, mpOutStrm = NULL;
-    delete[] m_pShapeTypeWritten, m_pShapeTypeWritten = NULL;
+    delete mpOutStrm, mpOutStrm = nullptr;
+    delete[] m_pShapeTypeWritten, m_pShapeTypeWritten = nullptr;
 }
 
 void RtfSdrExport::OpenContainer(sal_uInt16 nEscherContainer, int nRecInstance)
@@ -514,7 +514,7 @@ sal_Int32 RtfSdrExport::StartShape()
     {
         if (SwFrameFormat* pTextBox = SwTextBoxHelper::findTextBox(pShape))
         {
-            sw::Frame* pFrame = 0;
+            sw::Frame* pFrame = nullptr;
             for (sw::FrameIter it = m_rExport.m_aFrames.begin(); it != m_rExport.m_aFrames.end(); ++it)
             {
                 if (pTextBox == &it->GetFrameFormat())
@@ -533,7 +533,7 @@ sal_Int32 RtfSdrExport::StartShape()
     const SdrTextObj* pTextObj = dynamic_cast<const SdrTextObj*>(m_pSdrObject);
     if (pTextObj)
     {
-        const OutlinerParaObject* pParaObj = 0;
+        const OutlinerParaObject* pParaObj = nullptr;
         std::unique_ptr<const OutlinerParaObject> pOwnedParaObj;
 
         /*

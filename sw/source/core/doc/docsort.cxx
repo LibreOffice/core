@@ -53,13 +53,13 @@
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star;
 
-SwSortOptions*      SwSortElement::pOptions = 0;
-SwDoc*              SwSortElement::pDoc = 0;
-const FlatFndBox*   SwSortElement::pBox = 0;
-CollatorWrapper*    SwSortElement::pSortCollator = 0;
-lang::Locale*       SwSortElement::pLocale = 0;
-OUString*           SwSortElement::pLastAlgorithm = 0;
-LocaleDataWrapper*  SwSortElement::pLclData = 0;
+SwSortOptions*      SwSortElement::pOptions = nullptr;
+SwDoc*              SwSortElement::pDoc = nullptr;
+const FlatFndBox*   SwSortElement::pBox = nullptr;
+CollatorWrapper*    SwSortElement::pSortCollator = nullptr;
+lang::Locale*       SwSortElement::pLocale = nullptr;
+OUString*           SwSortElement::pLastAlgorithm = nullptr;
+LocaleDataWrapper*  SwSortElement::pLclData = nullptr;
 
 // List of all sorted elements
 
@@ -90,13 +90,13 @@ void SwSortElement::Init( SwDoc* pD, const SwSortOptions& rOpt,
 
 void SwSortElement::Finit()
 {
-    delete pOptions, pOptions = 0;
-    delete pLocale, pLocale = 0;
-    delete pLastAlgorithm, pLastAlgorithm = 0;
-    delete pSortCollator, pSortCollator = 0;
-    delete pLclData, pLclData = 0;
-    pDoc = 0;
-    pBox = 0;
+    delete pOptions, pOptions = nullptr;
+    delete pLocale, pLocale = nullptr;
+    delete pLastAlgorithm, pLastAlgorithm = nullptr;
+    delete pSortCollator, pSortCollator = nullptr;
+    delete pLclData, pLclData = nullptr;
+    pDoc = nullptr;
+    pBox = nullptr;
 }
 
 SwSortElement::~SwSortElement()
@@ -254,7 +254,7 @@ OUString SwSortBoxElement::GetKey(sal_uInt16 nKey) const
         if( pMyBox->GetSttNd() )
         {
             // Iterate over all the Box's TextNodes
-            const SwNode *pNd = 0, *pEndNd = pMyBox->GetSttNd()->EndOfSectionNode();
+            const SwNode *pNd = nullptr, *pEndNd = pMyBox->GetSttNd()->EndOfSectionNode();
             for( sal_uLong nIdx = pMyBox->GetSttIdx() + 1; pNd != pEndNd; ++nIdx )
                 if( ( pNd = pDoc->GetNodes()[ nIdx ])->IsTextNode() )
                     aRetStr += pNd->GetTextNode()->GetText();
@@ -318,12 +318,12 @@ bool SwDoc::SortText(const SwPaM& rPaM, const SwSortOptions& rOpt)
     bool const bUndo = GetIDocumentUndoRedo().DoesUndo();
     if( bUndo )
     {
-        GetIDocumentUndoRedo().StartUndo( UNDO_START, NULL );
+        GetIDocumentUndoRedo().StartUndo( UNDO_START, nullptr );
     }
 
-    SwPaM* pRedlPam = 0;
-    SwUndoRedlineSort* pRedlUndo = 0;
-    SwUndoSort* pUndoSort = 0;
+    SwPaM* pRedlPam = nullptr;
+    SwUndoRedlineSort* pRedlUndo = nullptr;
+    SwUndoSort* pUndoSort = nullptr;
 
     // To-Do - add 'SwExtraRedlineTable' also ?
     if( getIDocumentRedlineAccess().IsRedlineOn() || (!getIDocumentRedlineAccess().IsIgnoreRedline() && !getIDocumentRedlineAccess().GetRedlineTable().empty() ))
@@ -356,7 +356,7 @@ bool SwDoc::SortText(const SwPaM& rPaM, const SwSortOptions& rOpt)
             pCNd = pRedlPam->GetContentNode();
             sal_Int32 nCLen = 0;
             if( !pCNd &&
-                0 != (pCNd = GetNodes()[ aEndIdx.GetIndex()-1 ]->GetContentNode()))
+                nullptr != (pCNd = GetNodes()[ aEndIdx.GetIndex()-1 ]->GetContentNode()))
             {
                 nCLen = pCNd->Len();
                 pRedlPam->GetPoint()->nNode.Assign( *pCNd );
@@ -369,7 +369,7 @@ bool SwDoc::SortText(const SwPaM& rPaM, const SwSortOptions& rOpt)
         else
         {
             getIDocumentRedlineAccess().DeleteRedline( *pRedlPam, true, USHRT_MAX );
-            delete pRedlPam, pRedlPam = 0;
+            delete pRedlPam, pRedlPam = nullptr;
         }
     }
 
@@ -460,12 +460,12 @@ bool SwDoc::SortText(const SwPaM& rPaM, const SwSortOptions& rOpt)
         if( pRedlUndo )
             pRedlUndo->SetOffset( aSttIdx );
 
-        delete pRedlPam, pRedlPam = 0;
+        delete pRedlPam, pRedlPam = nullptr;
     }
     GetIDocumentUndoRedo().DoUndo( bUndo );
     if( bUndo )
     {
-        GetIDocumentUndoRedo().EndUndo( UNDO_END, NULL );
+        GetIDocumentUndoRedo().EndUndo( UNDO_END, nullptr );
     }
 
     return true;
@@ -482,7 +482,7 @@ bool SwDoc::SortTable(const SwSelBoxes& rBoxes, const SwSortOptions& rOpt)
 
     // We begin sorting
     // Find all Boxes/Lines
-    _FndBox aFndBox( 0, 0 );
+    _FndBox aFndBox( nullptr, nullptr );
     {
         _FndPara aPara( rBoxes, &aFndBox );
         ForEach_FndLineCopyCol( pTableNd->GetTable().GetTabLines(), &aPara );
@@ -530,7 +530,7 @@ bool SwDoc::SortTable(const SwSelBoxes& rBoxes, const SwSortOptions& rOpt)
         return false;
 
     // Delete HTML layout
-    pTableNd->GetTable().SetHTMLTableLayout( 0 );
+    pTableNd->GetTable().SetHTMLTableLayout( nullptr );
 
     // #i37739# A simple 'MakeFrms' after the node sorting
     // does not work if the table is inside a frame and has no prev/next.
@@ -540,7 +540,7 @@ bool SwDoc::SortTable(const SwSelBoxes& rBoxes, const SwSortOptions& rOpt)
     pTableNd->DelFrms();
     // ? TL_CHART2: ?
 
-    SwUndoSort* pUndoSort = 0;
+    SwUndoSort* pUndoSort = nullptr;
     if (GetIDocumentUndoRedo().DoesUndo())
     {
         pUndoSort = new SwUndoSort( rBoxes[0]->GetSttIdx(),
@@ -742,8 +742,8 @@ void MoveCell(SwDoc* pDoc, const SwTableBox* pSource, const SwTableBox* pTar,
 FlatFndBox::FlatFndBox(SwDoc* pDocPtr, const _FndBox& rBox) :
     pDoc(pDocPtr),
     rBoxRef(rBox),
-    pArr(0),
-    ppItemSets(0),
+    pArr(nullptr),
+    ppItemSets(nullptr),
     nRow(0),
     nCol(0)
 { // If the array is symmetric
@@ -940,7 +940,7 @@ const SfxItemSet* FlatFndBox::GetItemSet(sal_uInt16 n_Col, sal_uInt16 n_Row) con
 {
     OSL_ENSURE( !ppItemSets || ( n_Col < nCols && n_Row < nRows), "invalid array access");
 
-    return ppItemSets ? *(ppItemSets + (n_Row * nCols + n_Col )) : 0;
+    return ppItemSets ? *(ppItemSets + (n_Row * nCols + n_Col )) : nullptr;
 }
 
 sal_uInt16 SwMovedBoxes::GetPos(const SwTableBox* pTableBox) const

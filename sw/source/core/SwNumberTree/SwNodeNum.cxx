@@ -28,13 +28,13 @@
 SwNodeNum::SwNodeNum( SwTextNode* pTextNode )
     : SwNumberTreeNode(),
       mpTextNode( pTextNode ),
-      mpNumRule( 0 )
+      mpNumRule( nullptr )
 {
 }
 
 SwNodeNum::SwNodeNum( SwNumRule* pNumRule )
     : SwNumberTreeNode(),
-      mpTextNode( 0 ),
+      mpTextNode( nullptr ),
       mpNumRule( pNumRule )
 {
 }
@@ -118,7 +118,7 @@ void SwNodeNum::PostRemove()
         {
             GetNumRule()->RemoveTextNode( *(GetTextNode()) );
         }
-        mpNumRule = 0;
+        mpNumRule = nullptr;
     }
 }
 
@@ -228,9 +228,9 @@ bool SwNodeNum::LessThan(const SwNumberTreeNode & rNode) const
     bool bResult = false;
     const SwNodeNum & rTmpNode = static_cast<const SwNodeNum &>(rNode);
 
-    if (mpTextNode == NULL && rTmpNode.mpTextNode != NULL)
+    if (mpTextNode == nullptr && rTmpNode.mpTextNode != nullptr)
         bResult = true;
-    else if (mpTextNode != NULL && rTmpNode.mpTextNode != NULL)
+    else if (mpTextNode != nullptr && rTmpNode.mpTextNode != nullptr)
     {
         // #i83479# - refactoring
         // simplify comparison by comparing the indexes of the text nodes
@@ -366,7 +366,7 @@ void SwNodeNum::_UnregisterMeAndChildrenDueToRootDelete( SwNodeNum& rNodeNum )
 // #i81002#
 const SwNodeNum* SwNodeNum::GetPrecedingNodeNumOf( const SwTextNode& rTextNode ) const
 {
-    const SwNodeNum* pPrecedingNodeNum( 0 );
+    const SwNodeNum* pPrecedingNodeNum( nullptr );
 
     // #i83479#
     SwNodeNum aNodeNumForTextNode( const_cast<SwTextNode*>(&rTextNode) );

@@ -181,7 +181,7 @@ void SwModule::StateOther(SfxItemSet &rSet)
                 break;
             case FN_EDIT_FORMULA:
                 {
-                    SwWrtShell* pSh = 0;
+                    SwWrtShell* pSh = nullptr;
                     int nSelection = 0;
                     if( pActView )
                         pSh = &pActView->GetWrtShell();
@@ -217,7 +217,7 @@ namespace
 
 SwView* lcl_LoadDoc(SwView* pView, const OUString& rURL)
 {
-    SwView* pNewView = 0;
+    SwView* pNewView = nullptr;
     if(!rURL.isEmpty())
     {
         SfxStringItem aURL(SID_FILE_NAME, rURL);
@@ -227,14 +227,14 @@ SwView* lcl_LoadDoc(SwView* pView, const OUString& rURL)
         const SfxObjectItem* pItem = static_cast<const SfxObjectItem*>(pView->GetViewFrame()->GetDispatcher()->
                 Execute(SID_OPENDOC, SfxCallMode::SYNCHRON,
                             &aURL, &aHidden, &aReferer, &aTargetFrameName, 0L));
-        SfxShell* pShell = pItem ? pItem->GetShell() : 0;
+        SfxShell* pShell = pItem ? pItem->GetShell() : nullptr;
 
         if(pShell)
         {
             SfxViewShell* pViewShell = pShell->GetViewShell();
             if(pViewShell)
             {
-                if( 0!= dynamic_cast<SwView*>(pViewShell) )
+                if( nullptr!= dynamic_cast<SwView*>(pViewShell) )
                 {
                     pNewView = dynamic_cast< SwView* >(pViewShell);
                     pNewView->GetViewFrame()->GetFrame().Appear();
@@ -252,9 +252,9 @@ SwView* lcl_LoadDoc(SwView* pView, const OUString& rURL)
         const SfxFrameItem* pItem = static_cast<const SfxFrameItem*>(
                             pView->GetViewFrame()->GetDispatcher()->Execute(SID_NEWDOCDIRECT,
                                 SfxCallMode::SYNCHRON, &aFactory, 0L));
-        SfxFrame* pFrm = pItem ? pItem->GetFrame() : 0;
-        SfxViewFrame* pFrame = pFrm ? pFrm->GetCurrentViewFrame() : 0;
-        pNewView = pFrame ? dynamic_cast<SwView*>( pFrame->GetViewShell() ) : 0;
+        SfxFrame* pFrm = pItem ? pItem->GetFrame() : nullptr;
+        SfxViewFrame* pFrame = pFrm ? pFrm->GetCurrentViewFrame() : nullptr;
+        pNewView = pFrame ? dynamic_cast<SwView*>( pFrame->GetViewShell() ) : nullptr;
     }
 
     return pNewView;
@@ -284,17 +284,17 @@ public:
 };
 
 SwMailMergeWizardExecutor::SwMailMergeWizardExecutor()
-    : m_pView( 0 ),
-      m_pView2Close( NULL ),
-      m_pMMConfig( 0 ),
-      m_pWizard( 0 )
+    : m_pView( nullptr ),
+      m_pView2Close( nullptr ),
+      m_pMMConfig( nullptr ),
+      m_pWizard( nullptr )
 {
 }
 
 SwMailMergeWizardExecutor::~SwMailMergeWizardExecutor()
 {
-    OSL_ENSURE( m_pWizard == 0, "SwMailMergeWizardExecutor: m_pWizard must be Null!" );
-    OSL_ENSURE( m_pMMConfig == 0, "SwMailMergeWizardExecutor: m_pMMConfig must be Null!" );
+    OSL_ENSURE( m_pWizard == nullptr, "SwMailMergeWizardExecutor: m_pWizard must be Null!" );
+    OSL_ENSURE( m_pMMConfig == nullptr, "SwMailMergeWizardExecutor: m_pMMConfig must be Null!" );
 }
 
 void SwMailMergeWizardExecutor::ExecuteMailMergeWizard( const SfxItemSet * pArgs )
@@ -310,7 +310,7 @@ void SwMailMergeWizardExecutor::ExecuteMailMergeWizard( const SfxItemSet * pArgs
             OUString sInteraction;
             xSyncDbusSessionHelper->InstallPackageNames(0, vPackages, sInteraction);
             SolarMutexGuard aGuard;
-            executeRestartDialog(comphelper::getProcessComponentContext(), NULL, RESTART_REASON_MAILMERGE_INSTALL);
+            executeRestartDialog(comphelper::getProcessComponentContext(), nullptr, RESTART_REASON_MAILMERGE_INSTALL);
         }
         catch (const css::uno::Exception & e)
         {
@@ -345,7 +345,7 @@ void SwMailMergeWizardExecutor::ExecuteMailMergeWizard( const SfxItemSet * pArgs
             nRestartPage = m_pView->GetMailMergeRestartPage();
             if(m_pView->IsMailMergeSourceView())
                 m_pMMConfig->SetSourceView( m_pView );
-            m_pView->SetMailMergeConfigItem(0, 0, true);
+            m_pView->SetMailMergeConfigItem(nullptr, 0, true);
             SfxViewFrame* pViewFrame = m_pView->GetViewFrame();
             pViewFrame->ShowChildWindow(FN_MAILMERGE_CHILDWINDOW, false);
             OSL_ENSURE(m_pMMConfig, "no MailMergeConfigItem available");
@@ -358,7 +358,7 @@ void SwMailMergeWizardExecutor::ExecuteMailMergeWizard( const SfxItemSet * pArgs
             m_pMMConfig->SetSourceView(m_pView);
 
             //set the first used database as default source on the config item
-            const SfxPoolItem* pItem = 0;
+            const SfxPoolItem* pItem = nullptr;
             if(pArgs && SfxItemState::SET == pArgs->GetItemState(
                    FN_PARAM_DATABASE_PROPERTIES, false, &pItem))
             {
@@ -424,7 +424,7 @@ void SwMailMergeWizardExecutor::ExecutionFinished( bool bDeleteConfigItem )
     if ( bDeleteConfigItem ) // owner?
         delete m_pMMConfig;
 
-    m_pMMConfig = 0;
+    m_pMMConfig = nullptr;
 
     // release/destroy asynchronously
     Application::PostUserEvent( LINK( this, SwMailMergeWizardExecutor, DestroyDialogHdl ) );
@@ -523,7 +523,7 @@ IMPL_LINK_NOARG_TYPED( SwMailMergeWizardExecutor, EndDialogHdl, Dialog&, void )
                 pSourceView->GetViewFrame()->GetFrame().AppearWithUpdate();
                 // the current view has be set when the target is destroyed
                 m_pView = pSourceView;
-                m_pMMConfig->SetTargetView(0);
+                m_pMMConfig->SetTargetView(nullptr);
 
                 // destroy wizard asynchronously
                 Application::PostUserEvent(
@@ -571,7 +571,7 @@ IMPL_LINK_NOARG_TYPED( SwMailMergeWizardExecutor, EndDialogHdl, Dialog&, void )
 IMPL_LINK_NOARG_TYPED(SwMailMergeWizardExecutor, DestroyDialogHdl, void*, void)
 {
     delete m_pWizard;
-    m_pWizard = 0;
+    m_pWizard = nullptr;
 
     release();
 }
@@ -586,16 +586,16 @@ IMPL_LINK_NOARG_TYPED(SwMailMergeWizardExecutor, CancelHdl, void*, void)
     if(m_pMMConfig->GetTargetView())
     {
         m_pMMConfig->GetTargetView()->GetViewFrame()->DoClose();
-        m_pMMConfig->SetTargetView(0);
+        m_pMMConfig->SetTargetView(nullptr);
     }
     if(m_pMMConfig->GetSourceView())
         m_pMMConfig->GetSourceView()->GetViewFrame()->GetFrame().AppearWithUpdate();
 
     m_pMMConfig->Commit();
     delete m_pMMConfig;
-    m_pMMConfig = 0;
+    m_pMMConfig = nullptr;
     // m_pWizard already deleted by closing the target view
-    m_pWizard = 0;
+    m_pWizard = nullptr;
     release();
 }
 
@@ -604,7 +604,7 @@ IMPL_LINK_NOARG_TYPED(SwMailMergeWizardExecutor, CloseFrameHdl, void*, void)
     if ( m_pView2Close )
     {
         m_pView2Close->GetViewFrame()->DoClose();
-        m_pView2Close = NULL;
+        m_pView2Close = nullptr;
     }
 }
 
@@ -615,7 +615,7 @@ IMPL_LINK_NOARG_TYPED(SwMailMergeWizardExecutor, CloseFrameHdl, void*, void)
 void SwModule::ExecOther(SfxRequest& rReq)
 {
     const SfxItemSet *pArgs = rReq.GetArgs();
-    const SfxPoolItem* pItem = 0;
+    const SfxPoolItem* pItem = nullptr;
 
     sal_uInt16 nWhich = rReq.GetSlot();
     switch (nWhich)
@@ -703,7 +703,7 @@ void SwModule::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                     const SfxBoolItem* pTemplateItem = SfxItemSet::GetItem<SfxBoolItem>(pDocSh->GetMedium()->GetItemSet(), SID_TEMPLATE, false);
                     if (pTemplateItem && pTemplateItem->GetValue())
                     {
-                        pDocSh->GetDoc()->getIDocumentFieldsAccess().SetFixFields(false, 0);
+                        pDocSh->GetDoc()->getIDocumentFieldsAccess().SetFixFields(false, nullptr);
                     }
                 }
                 break;

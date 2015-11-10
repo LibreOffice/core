@@ -88,7 +88,7 @@ SwAddressControl_Impl::SwAddressControl_Impl(vcl::Window* pParent, WinBits nBits
     Control(pParent, nBits),
     m_pScrollBar(VclPtr<ScrollBar>::Create(this)),
     m_pWindow(VclPtr<vcl::Window>::Create(this, WB_DIALOGCONTROL)),
-    m_pData(0),
+    m_pData(nullptr),
     m_nLineHeight(0),
     m_nCurrentDataSet(0),
     m_bNoDataSet(true)
@@ -175,7 +175,7 @@ void SwAddressControl_Impl::SetData(SwCSVData& rDBData)
 
     Link<Control&,void> aFocusLink = LINK(this, SwAddressControl_Impl, GotFocusHdl_Impl);
     Link<Edit&,void> aEditModifyLink = LINK(this, SwAddressControl_Impl, EditModifyHdl_Impl);
-    Edit* pLastEdit = 0;
+    Edit* pLastEdit = nullptr;
     sal_Int32 nVisibleLines = 0;
     sal_uIntPtr nLines = 0;
     for(aHeaderIter = m_pData->aDBColumnHeaders.begin();
@@ -334,7 +334,7 @@ void SwAddressControl_Impl::Command( const CommandEvent& rCEvt )
             const CommandWheelData* pWheelData = rCEvt.GetWheelData();
             if(pWheelData && !pWheelData->IsHorz() && CommandWheelMode::ZOOM != pWheelData->GetMode())
             {
-                HandleScrollCommand( rCEvt, 0, m_pScrollBar );
+                HandleScrollCommand( rCEvt, nullptr, m_pScrollBar );
             }
         }
         break;
@@ -395,7 +395,7 @@ SwCreateAddressListDialog::SwCreateAddressListDialog(
     m_sAddressListFilterName( SW_RES(    ST_FILTERNAME)),
     m_sURL(rURL),
     m_pCSVData( new SwCSVData ),
-    m_pFindDlg(0)
+    m_pFindDlg(nullptr)
 {
     get(m_pNewPB, "NEW");
     get(m_pDeletePB, "DELETE");

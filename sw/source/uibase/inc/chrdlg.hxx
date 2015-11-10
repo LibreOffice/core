@@ -50,7 +50,7 @@ class SwCharDlg: public SfxTabDialog
 
 public:
     SwCharDlg(vcl::Window* pParent, SwView& pVw, const SfxItemSet& rCoreSet,
-              sal_uInt8 nDialogMode, const OUString* pFormatStr = 0);
+              sal_uInt8 nDialogMode, const OUString* pFormatStr = nullptr);
 
     virtual ~SwCharDlg();
 

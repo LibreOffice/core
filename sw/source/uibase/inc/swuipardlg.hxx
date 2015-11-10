@@ -44,7 +44,7 @@ public:
                 SwView& rVw,
                 const SfxItemSet&,
                 sal_uInt8 nDialogMode,
-                const OUString *pCollName = 0,
+                const OUString *pCollName = nullptr,
                 bool bDraw = false,
                 const OString& sDefPage = OString());
     virtual ~SwParaDlg();

@@ -92,7 +92,7 @@ public:
         DBuriMap::const_iterator pos = aDBuriMap.find( aURI );
         if (pos == aDBuriMap.end())
         {
-            aDBName = SwDBManager::LoadAndRegisterDataSource( aURI, NULL, &aWorkDir );
+            aDBName = SwDBManager::LoadAndRegisterDataSource( aURI, nullptr, &aWorkDir );
             aDBuriMap.insert( std::pair< OUString, OUString >( aURI, aDBName ) );
             std::cout << "New datasource name: '" << aDBName << "'" << std::endl;
         }
@@ -170,7 +170,7 @@ public:
     xmlDocPtr parseMailMergeExport(int number, const OUString& rStreamName = OUString("word/document.xml"))
     {
         if (mnCurOutputType != text::MailMergeType::FILE)
-            return 0;
+            return nullptr;
 
         OUString name = mailMergeOutputPrefix + OUString::number( number ) + ".odt";
         return parseExportInternal( mailMergeOutputURL + "/" + name, rStreamName );

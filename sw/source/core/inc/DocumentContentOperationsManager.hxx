@@ -129,8 +129,8 @@ public:
         bool bExactRange;
 
         ParaRstFormat(const SwPosition* pStt, const SwPosition* pEnd,
-                   SwHistory* pHst, sal_uInt16 nWhch = 0, const SfxItemSet* pSet = 0)
-            : pFormatColl(0)
+                   SwHistory* pHst, sal_uInt16 nWhch = 0, const SfxItemSet* pSet = nullptr)
+            : pFormatColl(nullptr)
             , pHistory(pHst)
             , pSttNd(pStt)
             , pEndNd(pEnd)
@@ -160,7 +160,7 @@ private:
     SwFlyFrameFormat* _InsNoTextNode( const SwPosition&rPos, SwNoTextNode*,
                                 const SfxItemSet* pFlyAttrSet,
                                 const SfxItemSet* pGrfAttrSet,
-                                SwFrameFormat* = 0 );
+                                SwFrameFormat* = nullptr );
     /* Copy a range within the same or to another document.
      Position may not lie within range! */
     bool CopyImpl( SwPaM&, SwPosition&, const bool MakeNewFrms /*= true */,

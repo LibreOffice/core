@@ -50,8 +50,8 @@ TYPEINIT1_AUTOFACTORY( SwParaConnectBorderItem, SfxBoolItem);
 
 SwFormatDrop::SwFormatDrop()
     : SfxPoolItem( RES_PARATR_DROP ),
-    SwClient( 0 ),
-    pDefinedIn( 0 ),
+    SwClient( nullptr ),
+    pDefinedIn( nullptr ),
     nDistance( 0 ),
     nReadFormat( USHRT_MAX ),
     nLines( 0 ),
@@ -63,7 +63,7 @@ SwFormatDrop::SwFormatDrop()
 SwFormatDrop::SwFormatDrop( const SwFormatDrop &rCpy )
     : SfxPoolItem( RES_PARATR_DROP ),
     SwClient( rCpy.GetRegisteredInNonConst() ),
-    pDefinedIn( 0 ),
+    pDefinedIn( nullptr ),
     nDistance( rCpy.GetDistance() ),
     nReadFormat( rCpy.nReadFormat ),
     nLines( rCpy.GetLines() ),

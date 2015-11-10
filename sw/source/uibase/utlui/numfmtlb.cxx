@@ -61,8 +61,8 @@ NumFormatListBox::NumFormatListBox(vcl::Window* pWin, WinBits nStyle) :
     nStdEntry           (0),
     bOneArea            (false),
     nDefFormat          (0),
-    pVw                 (0),
-    pOwnFormatter       (0),
+    pVw                 (nullptr),
+    pOwnFormatter       (nullptr),
     bShowLanguageControl(false),
     bUseAutomaticLanguage(true)
 {
@@ -261,7 +261,7 @@ void NumFormatListBox::SetFormatType(const short nFormatType)
         if (!pOwnFormatter)
         {
             const sal_Int32 nPos = InsertEntry(SW_RESSTR( STR_DEFINE_NUMBERFORMAT ));
-            SetEntryData( nPos, NULL );
+            SetEntryData( nPos, nullptr );
         }
 
         SelectEntryPos( nStdEntry );
@@ -311,7 +311,7 @@ void NumFormatListBox::SetDefFormat(const sal_uLong nDefaultFormat)
     // No entry found:
     double fValue = GetDefValue(nType);
     OUString sValue;
-    Color* pCol = 0;
+    Color* pCol = nullptr;
 
     if (nType == css::util::NumberFormat::TEXT)
     {

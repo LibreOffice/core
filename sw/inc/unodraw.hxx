@@ -158,7 +158,7 @@ class SwXShape : public SwXShapeBaseClass,
 
         @author OD
     */
-    SdrObject* _GetTopGroupObj( SvxShape* _pSvxShape = 0L );
+    SdrObject* _GetTopGroupObj( SvxShape* _pSvxShape = nullptr );
 
     /** method to determine position according to the positioning attributes
 

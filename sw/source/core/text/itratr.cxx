@@ -103,7 +103,7 @@ SwAttrIter::~SwAttrIter()
  */
 SwTextAttr *SwAttrIter::GetAttr( const sal_Int32 nPosition ) const
 {
-    return (m_pTextNode) ? m_pTextNode->GetTextAttrForCharAt(nPosition) : 0;
+    return (m_pTextNode) ? m_pTextNode->GetTextAttrForCharAt(nPosition) : nullptr;
 }
 
 bool SwAttrIter::SeekAndChgAttrIter( const sal_Int32 nNewPos, OutputDevice* pOut )
@@ -243,7 +243,7 @@ bool SwAttrIter::Seek( const sal_Int32 nNewPos )
         if( !nNewPos || nNewPos < nPos )
         {
             if( pRedln )
-                pRedln->Clear( NULL );
+                pRedln->Clear( nullptr );
 
             // reset font to its original state
             aAttrHandler.Reset();
@@ -268,7 +268,7 @@ bool SwAttrIter::Seek( const sal_Int32 nNewPos )
         SeekFwd( nNewPos );
     }
 
-    pFnt->SetActual( SwScriptInfo::WhichFont( nNewPos, 0, pScriptInfo ) );
+    pFnt->SetActual( SwScriptInfo::WhichFont( nNewPos, nullptr, pScriptInfo ) );
 
     if( pRedln )
         nChgCnt = nChgCnt + pRedln->Seek( *pFnt, nNewPos, nPos );
@@ -307,7 +307,7 @@ sal_Int32 SwAttrIter::GetNextAttr( ) const
             }
         }
     }
-    if (m_pTextNode!=NULL) {
+    if (m_pTextNode!=nullptr) {
         // TODO: maybe use hints like FieldHints for this instead of looking at the text...
         const sal_Int32 l = nNext<m_pTextNode->Len() ? nNext : m_pTextNode->Len();
         sal_Int32 p=nPos;
@@ -390,7 +390,7 @@ static bool lcl_MinMaxString( SwMinMaxArgs& rArg, SwFont* pFnt, const OUString &
             }
         }
 
-        SwDrawTextInfo aDrawInf( rArg.pSh, *rArg.pOut, 0, rText, nIdx, nStop - nIdx );
+        SwDrawTextInfo aDrawInf( rArg.pSh, *rArg.pOut, nullptr, rText, nIdx, nStop - nIdx );
         long nAktWidth = pFnt->_GetTextSize( aDrawInf ).Width();
         rArg.nRowWidth += nAktWidth;
         if( bClear )
@@ -446,7 +446,7 @@ static void lcl_MinMaxNode( SwFrameFormat* pNd, SwMinMaxNodeArgs* pIn )
         return;
 
     long nMin, nMax;
-    SwHTMLTableLayout *pLayout = 0;
+    SwHTMLTableLayout *pLayout = nullptr;
     const bool bIsDrawFrameFormat = pNd->Which()==RES_DRAWFRMFMT;
     if( !bIsDrawFrameFormat )
     {
@@ -624,7 +624,7 @@ void SwTextNode::GetMinMaxSize( sal_uLong nIndex, sal_uLong& rMin, sal_uLong &rM
         sal_Int32 nStop = aScriptInfo.NextScriptChg( nIdx );
         if( nNextChg > nStop )
             nNextChg = nStop;
-        SwTextAttr *pHint = NULL;
+        SwTextAttr *pHint = nullptr;
         sal_Unicode cChar = CH_BLANK;
         nStop = nIdx;
         while( nStop < nLen && nStop < nNextChg &&
@@ -634,7 +634,7 @@ void SwTextNode::GetMinMaxSize( sal_uLong nIndex, sal_uLong& rMin, sal_uLong &rM
                !pHint )
         {
             if( ( CH_TXTATR_BREAKWORD != cChar && CH_TXTATR_INWORD != cChar )
-                || ( 0 == ( pHint = aIter.GetAttr( nStop ) ) ) )
+                || ( nullptr == ( pHint = aIter.GetAttr( nStop ) ) ) )
                 ++nStop;
         }
         if ( lcl_MinMaxString( aArg, aIter.GetFnt(), m_Text, nIdx, nStop ) )
@@ -668,7 +668,7 @@ void SwTextNode::GetMinMaxSize( sal_uLong nIndex, sal_uLong& rMin, sal_uLong &rM
             {
                 OUString sTmp( cChar );
                 SwDrawTextInfo aDrawInf( getIDocumentLayoutAccess().GetCurrentViewShell(),
-                    *pOut, 0, sTmp, 0, 1, 0, false );
+                    *pOut, nullptr, sTmp, 0, 1, 0, false );
                 nAktWidth = aIter.GetFnt()->_GetTextSize( aDrawInf ).Width();
                 aArg.nWordWidth += nAktWidth;
                 aArg.nRowWidth += nAktWidth;
@@ -791,7 +791,7 @@ sal_uInt16 SwTextNode::GetScalingOfSelectedText( sal_Int32 nStt, sal_Int32 nEnd 
     const
 {
     SwViewShell const * pSh = GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
-    OutputDevice* pOut = NULL;
+    OutputDevice* pOut = nullptr;
 
     if ( pSh )
         pOut = &pSh->GetRefDev();
@@ -866,7 +866,7 @@ sal_uInt16 SwTextNode::GetScalingOfSelectedText( sal_Int32 nStt, sal_Int32 nEnd 
 
         sal_Int32 nStop = nIdx;
         sal_Unicode cChar = CH_BLANK;
-        SwTextAttr* pHint = NULL;
+        SwTextAttr* pHint = nullptr;
 
         // stop at special characters in [ nIdx, nNextChg ]
         while( nStop < nEnd && nStop < nNextChg )
@@ -880,7 +880,7 @@ sal_uInt16 SwTextNode::GetScalingOfSelectedText( sal_Int32 nStt, sal_Int32 nEnd 
                 CHAR_SOFTHYPHEN == cChar ||
                 (
                   (CH_TXTATR_BREAKWORD == cChar || CH_TXTATR_INWORD == cChar) &&
-                  (0 == (pHint = aIter.GetAttr(nStop)))
+                  (nullptr == (pHint = aIter.GetAttr(nStop)))
                 )
                )
             {
@@ -893,7 +893,7 @@ sal_uInt16 SwTextNode::GetScalingOfSelectedText( sal_Int32 nStt, sal_Int32 nEnd 
         // calculate text widths up to cChar
         if ( nStop > nIdx )
         {
-            SwDrawTextInfo aDrawInf( pSh, *pOut, 0, GetText(), nIdx, nStop - nIdx );
+            SwDrawTextInfo aDrawInf( pSh, *pOut, nullptr, GetText(), nIdx, nStop - nIdx );
             nProWidth += aIter.GetFnt()->_GetTextSize( aDrawInf ).Width();
         }
 
@@ -910,7 +910,7 @@ sal_uInt16 SwTextNode::GetScalingOfSelectedText( sal_Int32 nStt, sal_Int32 nEnd 
         {
             // tab receives width of one space
             OUString sTmp( CH_BLANK );
-            SwDrawTextInfo aDrawInf( pSh, *pOut, 0, sTmp, 0, 1 );
+            SwDrawTextInfo aDrawInf( pSh, *pOut, nullptr, sTmp, 0, 1 );
             nProWidth += aIter.GetFnt()->_GetTextSize( aDrawInf ).Width();
             nIdx++;
         }
@@ -919,7 +919,7 @@ sal_uInt16 SwTextNode::GetScalingOfSelectedText( sal_Int32 nStt, sal_Int32 nEnd 
         else if ( cChar == CHAR_HARDBLANK || cChar == CHAR_HARDHYPHEN )
         {
             OUString sTmp( cChar );
-            SwDrawTextInfo aDrawInf( pSh, *pOut, 0, sTmp, 0, 1 );
+            SwDrawTextInfo aDrawInf( pSh, *pOut, nullptr, sTmp, 0, 1 );
             nProWidth += aIter.GetFnt()->_GetTextSize( aDrawInf ).Width();
             nIdx++;
         }
@@ -930,7 +930,7 @@ sal_uInt16 SwTextNode::GetScalingOfSelectedText( sal_Int32 nStt, sal_Int32 nEnd 
             case RES_TXTATR_FTN :
                 {
                     const OUString aText = pHint->GetFootnote().GetNumStr();
-                    SwDrawTextInfo aDrawInf( pSh, *pOut, 0, aText, 0, aText.getLength() );
+                    SwDrawTextInfo aDrawInf( pSh, *pOut, nullptr, aText, 0, aText.getLength() );
 
                     nProWidth += aIter.GetFnt()->_GetTextSize( aDrawInf ).Width();
                     break;
@@ -941,7 +941,7 @@ sal_uInt16 SwTextNode::GetScalingOfSelectedText( sal_Int32 nStt, sal_Int32 nEnd 
                 {
                     SwField *pField = const_cast<SwField*>(pHint->GetFormatField().GetField());
                     OUString const aText = pField->ExpandField(true);
-                    SwDrawTextInfo aDrawInf( pSh, *pOut, 0, aText, 0, aText.getLength() );
+                    SwDrawTextInfo aDrawInf( pSh, *pOut, nullptr, aText, 0, aText.getLength() );
 
                     nProWidth += aIter.GetFnt()->_GetTextSize( aDrawInf ).Width();
                     break;
@@ -960,7 +960,7 @@ sal_uInt16 SwTextNode::GetScalingOfSelectedText( sal_Int32 nStt, sal_Int32 nEnd 
 
     // search for a text frame this node belongs to
     SwIterator<SwTextFrm,SwTextNode> aFrmIter( *this );
-    SwTextFrm* pFrm = 0;
+    SwTextFrm* pFrm = nullptr;
     for( SwTextFrm* pTmpFrm = aFrmIter.First(); pTmpFrm; pTmpFrm = aFrmIter.Next() )
     {
             if ( pTmpFrm->GetOfst() <= nStt &&
@@ -988,7 +988,7 @@ sal_uInt16 SwTextNode::GetScalingOfSelectedText( sal_Int32 nStt, sal_Int32 nEnd 
     aIter.SeekAndChgAttrIter( nStt, pOut );
     pOut->SetMapMode( aOldMap );
 
-    SwDrawTextInfo aDrawInf( pSh, *pOut, 0, GetText(), nStt, 1 );
+    SwDrawTextInfo aDrawInf( pSh, *pOut, nullptr, GetText(), nStt, 1 );
     return (sal_uInt16)
            ( nWidth ? ((100 * aIter.GetFnt()->_GetTextSize( aDrawInf ).Height()) / nWidth ) : 0 );
 }

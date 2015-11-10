@@ -197,15 +197,15 @@ public:
           void     SetDrawPage( SdrPage* pNew ){ mpDrawPage = pNew; }
 
     virtual bool  GetCrsrOfst( SwPosition *, Point&,
-                               SwCrsrMoveState* = 0, bool bTestBackground = false ) const override;
+                               SwCrsrMoveState* = nullptr, bool bTestBackground = false ) const override;
 
     virtual void Paint( vcl::RenderContext& rRenderContext, SwRect const&,
-                        SwPrintData const*const pPrintData = NULL ) const override;
+                        SwPrintData const*const pPrintData = nullptr ) const override;
     virtual SwTwips ShrinkFrm( SwTwips, bool bTst = false, bool bInfo = false ) override;
     virtual SwTwips GrowFrm  ( SwTwips, bool bTst = false, bool bInfo = false ) override;
 #ifdef DBG_UTIL
     virtual void Cut() override;
-    virtual void Paste( SwFrm* pParent, SwFrm* pSibling = 0 ) override;
+    virtual void Paste( SwFrm* pParent, SwFrm* pSibling = nullptr ) override;
 #endif
 
     virtual bool FillSelection( SwSelectionList& rList, const SwRect& rRect ) const override;
@@ -221,7 +221,7 @@ public:
         SwViewShell* pCurrShell = GetCurrShell();
         // May be NULL if called from SfxBaseModel::dispose
         // (this happens in the build test 'rtfexport').
-        if (pCurrShell != NULL)
+        if (pCurrShell != nullptr)
             pCurrShell->GetDoc()->getIDocumentTimerAccess().StartBackgroundJobs();
     }
     bool IsIdleFormat()  const { return mbIdleFormat; }
@@ -237,7 +237,7 @@ public:
             SwViewShell* pCurrShell = GetCurrShell();
             // May be NULL if called from SfxBaseModel::dispose
             // (this happens in the build test 'rtfexport').
-            if (pCurrShell != NULL)
+            if (pCurrShell != nullptr)
                 pCurrShell->GetDoc()->getIDocumentTimerAccess().StartBackgroundJobs();
         }
     }
@@ -289,7 +289,7 @@ public:
      * bool bExtend: Extend each page to the left/right/top/botton up to the
      * next page margin
      */
-    const SwPageFrm* GetPageAtPos( const Point& rPt, const Size* pSize = 0, bool bExtend = false ) const;
+    const SwPageFrm* GetPageAtPos( const Point& rPt, const Size* pSize = nullptr, bool bExtend = false ) const;
 
     /**
     * Point rPt: The point to test
@@ -314,14 +314,14 @@ public:
     void ResetTurboFlag() const { const_cast<SwRootFrm*>(this)->mbTurboAllowed = true; }
     bool IsTurboAllowed() const { return mbTurboAllowed; }
     void SetTurbo( const SwContentFrm *pContent ) { mpTurbo = pContent; }
-    void ResetTurbo() { mpTurbo = 0; }
+    void ResetTurbo() { mpTurbo = nullptr; }
     const SwContentFrm *GetTurbo() { return mpTurbo; }
 
     /// Update the footernumbers of all Pages
     void UpdateFootnoteNums(); // Only for page by page numnbering!
 
     /// Remove all footnotes (but no references)
-    void RemoveFootnotes( SwPageFrm *pPage = 0, bool bPageOnly = false,
+    void RemoveFootnotes( SwPageFrm *pPage = nullptr, bool bPageOnly = false,
                      bool bEndNotes = false );
     void CheckFootnotePageDescs( bool bEndNote );
 

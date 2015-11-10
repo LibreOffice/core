@@ -66,9 +66,9 @@ void SwExpandPortion::Paint( const SwTextPaintInfo &rInf ) const
     SwTextSlot aDiffText( &rInf, this, true, true );
     const SwFont aOldFont = *rInf.GetFont();
     if( GetJoinBorderWithPrev() )
-        const_cast<SwTextPaintInfo&>(rInf).GetFont()->SetLeftBorder(0);
+        const_cast<SwTextPaintInfo&>(rInf).GetFont()->SetLeftBorder(nullptr);
     if( GetJoinBorderWithNext() )
-        const_cast<SwTextPaintInfo&>(rInf).GetFont()->SetRightBorder(0);
+        const_cast<SwTextPaintInfo&>(rInf).GetFont()->SetRightBorder(nullptr);
 
     rInf.DrawBackBrush( *this );
     rInf.DrawBorder( *this );
@@ -86,7 +86,7 @@ void SwExpandPortion::Paint( const SwTextPaintInfo &rInf ) const
     // ST2
     if ( rInf.GetSmartTags() || rInf.GetGrammarCheckList() )
         rInf.DrawMarkedText( *this, rInf.GetLen(), false, false,
-            0 != rInf.GetSmartTags(), 0 != rInf.GetGrammarCheckList() );
+            nullptr != rInf.GetSmartTags(), nullptr != rInf.GetGrammarCheckList() );
     else
         rInf.DrawText( *this, rInf.GetLen() );
 

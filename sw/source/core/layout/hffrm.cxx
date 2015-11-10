@@ -741,7 +741,7 @@ void SwPageFrm::PrepareFooter()
     {   // Remove footer if already present
         ::DelFlys( pLay, this );
         SwViewShell *pShell;
-        if ( pLay->GetPrev() && 0 != (pShell = getRootFrm()->GetCurrShell()) &&
+        if ( pLay->GetPrev() && nullptr != (pShell = getRootFrm()->GetCurrShell()) &&
              pShell->VisArea().HasArea() )
             pShell->InvalidateWindows( pShell->VisArea() );
         pLay->Cut();

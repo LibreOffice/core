@@ -134,7 +134,7 @@ namespace ww
     const sal_Char* GetEnglishNameFromSti(sti eSti) throw()
     {
         if (eSti >= stiMax)
-            return 0;
+            return nullptr;
         else
             return GetStiNames()[eSti];
     }

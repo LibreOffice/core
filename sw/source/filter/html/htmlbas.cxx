@@ -55,7 +55,7 @@ static HTMLOutEvent aBodyEventTable[] =
     { OOO_STRING_SVTOOLS_HTML_O_SDonunload, OOO_STRING_SVTOOLS_HTML_O_onunload, SFX_EVENT_PREPARECLOSEDOC   },
     { OOO_STRING_SVTOOLS_HTML_O_SDonfocus,  OOO_STRING_SVTOOLS_HTML_O_onfocus,  SFX_EVENT_ACTIVATEDOC   },
     { OOO_STRING_SVTOOLS_HTML_O_SDonblur,       OOO_STRING_SVTOOLS_HTML_O_onblur,       SFX_EVENT_DEACTIVATEDOC },
-    { 0,                    0,                  0                   }
+    { nullptr,                    nullptr,                  0                   }
 };
 
 void SwHTMLParser::NewScript()

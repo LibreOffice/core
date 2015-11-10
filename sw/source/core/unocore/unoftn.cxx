@@ -68,20 +68,20 @@ public:
         , m_rThis(rThis)
         , m_bIsEndnote(bIsEndnote)
         , m_EventListeners(m_Mutex)
-        , m_bIsDescriptor(0 == pFootnote)
+        , m_bIsDescriptor(nullptr == pFootnote)
         , m_pFormatFootnote(pFootnote)
     {
     }
 
     const SwFormatFootnote* GetFootnoteFormat() const {
-        return m_rThis.GetDoc() ? m_pFormatFootnote : 0;
+        return m_rThis.GetDoc() ? m_pFormatFootnote : nullptr;
     }
 
     SwFormatFootnote const& GetFootnoteFormatOrThrow() {
         SwFormatFootnote const*const pFootnote( GetFootnoteFormat() );
         if (!pFootnote) {
             throw uno::RuntimeException(OUString(
-                        "SwXFootnote: disposed or invalid"), 0);
+                        "SwXFootnote: disposed or invalid"), nullptr);
         }
         return *pFootnote;
     }
@@ -99,8 +99,8 @@ void SwXFootnote::Impl::Invalidate()
     {
         GetRegisteredIn()->Remove(this);
     }
-    m_pFormatFootnote = 0;
-    m_rThis.SetDoc(0);
+    m_pFormatFootnote = nullptr;
+    m_rThis.SetDoc(nullptr);
     uno::Reference<uno::XInterface> const xThis(m_wThis);
     if (!xThis.is())
     {   // fdo#72695: if UNO object is already dead, don't revive it with event
@@ -121,8 +121,8 @@ void SwXFootnote::Impl::Modify(const SfxPoolItem *pOld, const SfxPoolItem *pNew)
 }
 
 SwXFootnote::SwXFootnote(const bool bEndnote)
-    : SwXText(0, CURSOR_FOOTNOTE)
-    , m_pImpl( new SwXFootnote::Impl(*this, 0, bEndnote) )
+    : SwXText(nullptr, CURSOR_FOOTNOTE)
+    , m_pImpl( new SwXFootnote::Impl(*this, nullptr, bEndnote) )
 {
 }
 
@@ -305,7 +305,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
     OTextCursorHelper *const pCursor =
         ::sw::UnoTunnelGetImplementation<OTextCursorHelper>(xRangeTunnel);
     SwDoc *const pNewDoc =
-        (pRange) ? &pRange->GetDoc() : ((pCursor) ? pCursor->GetDoc() : 0);
+        (pRange) ? &pRange->GetDoc() : ((pCursor) ? pCursor->GetDoc() : nullptr);
     if (!pNewDoc)
     {
         throw lang::IllegalArgumentException();
@@ -416,7 +416,7 @@ const SwStartNode *SwXFootnote::GetStartNode() const
             return pTextFootnote->GetStartNode()->GetNode().GetStartNode();
         }
     }
-    return 0;
+    return nullptr;
 }
 
 uno::Reference< text::XTextCursor >

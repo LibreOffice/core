@@ -192,7 +192,7 @@ class SW_DLLPUBLIC SwPagePreview: public SfxViewShell
     bool mbResetFormDesignMode:1;
     bool mbFormDesignModeToReset:1;
 
-    SAL_DLLPRIVATE void Init(const SwViewOption* = 0);
+    SAL_DLLPRIVATE void Init(const SwViewOption* = nullptr);
     SAL_DLLPRIVATE Point AlignToPixel(const Point& rPt) const;
 
     SAL_DLLPRIVATE int _CreateScrollbar( bool bHori);
@@ -217,7 +217,7 @@ class SW_DLLPUBLIC SwPagePreview: public SfxViewShell
         optional input parameter - pointer to the <SfxRequest> instance, if existing.
     */
     SAL_DLLPRIVATE void _ExecPgUpAndPgDown( const bool  _bPgUp,
-                             SfxRequest* _pReq = 0 );
+                             SfxRequest* _pReq = nullptr );
 
 protected:
     virtual void    InnerResizePixel( const Point &rOfs, const Size &rSize ) override;

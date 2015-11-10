@@ -77,7 +77,7 @@ struct SwConversionArgs : SwArgsBase
           nConvSrcLang( nLang ),
           nConvTextLang( LANGUAGE_NONE ),
           nConvTargetLang( LANGUAGE_NONE ),
-          pTargetFont( NULL ),
+          pTargetFont( nullptr ),
           bAllowImplicitChangesForNotConvertibleText( false )
         {}
 };
@@ -137,7 +137,7 @@ public:
     }
     const Point *GetCrsrPos() const
     {
-        return aCrsrPos.X() || aCrsrPos.Y() ? &aCrsrPos : 0;
+        return aCrsrPos.X() || aCrsrPos.Y() ? &aCrsrPos : nullptr;
     }
     bool IsCheck() const { return bCheck; }
     void SetCheck( const bool bNew ) { bCheck = bNew; }

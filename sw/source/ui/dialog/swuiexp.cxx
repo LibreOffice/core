@@ -48,7 +48,7 @@
 
 namespace swui
 {
-    static SwAbstractDialogFactory_Impl* pFactory=NULL;
+    static SwAbstractDialogFactory_Impl* pFactory=nullptr;
     SwAbstractDialogFactory * GetFactory()
     {
         if ( !pFactory )

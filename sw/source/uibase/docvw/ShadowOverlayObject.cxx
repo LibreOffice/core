@@ -167,7 +167,7 @@ ImplPrimitive2DIDBlock(ShadowPrimitive, PRIMITIVE2D_ID_SWSIDEBARSHADOWPRIMITIVE)
 
 /* static */ ShadowOverlayObject* ShadowOverlayObject::CreateShadowOverlayObject( SwView& rDocView )
 {
-    ShadowOverlayObject* pShadowOverlayObject( 0 );
+    ShadowOverlayObject* pShadowOverlayObject( nullptr );
 
     if ( rDocView.GetDrawView() )
     {

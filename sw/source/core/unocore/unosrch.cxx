@@ -60,7 +60,7 @@ SwSearchProperties_Impl::SwSearchProperties_Impl() :
     nArrLen = aPropertyEntries.size();
     pValueArr = new beans::PropertyValue*[nArrLen];
     for(sal_uInt32 i = 0; i < nArrLen; i++)
-        pValueArr[i] = 0;
+        pValueArr[i] = nullptr;
 }
 
 SwSearchProperties_Impl::~SwSearchProperties_Impl()
@@ -79,7 +79,7 @@ void    SwSearchProperties_Impl::SetProperties(const uno::Sequence< beans::Prope
     for(sal_uInt32 i = 0; i < nArrLen; ++i)
     {
         delete pValueArr[i];
-        pValueArr[i] = 0;
+        pValueArr[i] = nullptr;
     }
 
     const sal_uInt32 nLen = aSearchAttribs.getLength();
@@ -122,60 +122,60 @@ const uno::Sequence< beans::PropertyValue > SwSearchProperties_Impl::GetProperti
 void SwSearchProperties_Impl::FillItemSet(SfxItemSet& rSet, bool bIsValueSearch) const
 {
 
-    SfxPoolItem* pBoxItem = 0,
-    *pCharBoxItem = 0,
-    *pBreakItem = 0,
-    *pAutoKernItem  = 0,
-    *pWLineItem   = 0,
-    *pTabItem  = 0,
-    *pSplitItem  = 0,
-    *pRegItem  = 0,
-    *pLineSpaceItem  = 0,
-    *pLineNumItem  = 0,
-    *pKeepItem  = 0,
-    *pLRItem  = 0,
-    *pULItem  = 0,
-    *pBackItem  = 0,
-    *pAdjItem  = 0,
-    *pDescItem  = 0,
-    *pInetItem  = 0,
-    *pDropItem  = 0,
-    *pWeightItem  = 0,
-    *pULineItem  = 0,
-    *pOLineItem  = 0,
-    *pCharFormatItem  = 0,
-    *pShadItem  = 0,
-    *pPostItem  = 0,
-    *pNHyphItem  = 0,
-    *pLangItem  = 0,
-    *pKernItem  = 0,
-    *pFontSizeItem  = 0,
-    *pFontItem  = 0,
-    *pBlinkItem  = 0,
-    *pEscItem  = 0,
-    *pCrossedOutItem  = 0,
-    *pContourItem  = 0,
-    *pCharColorItem  = 0,
-    *pCasemapItem  = 0,
-    *pBrushItem  = 0,
-    *pFontCJKItem = 0,
-    *pFontSizeCJKItem = 0,
-    *pCJKLangItem = 0,
-    *pCJKPostureItem = 0,
-    *pCJKWeightItem = 0,
-    *pFontCTLItem = 0,
-    *pFontSizeCTLItem = 0,
-    *pCTLLangItem = 0,
-    *pCTLPostureItem = 0,
-    *pCTLWeightItem = 0,
-    *pShadowItem  = 0;
+    SfxPoolItem* pBoxItem = nullptr,
+    *pCharBoxItem = nullptr,
+    *pBreakItem = nullptr,
+    *pAutoKernItem  = nullptr,
+    *pWLineItem   = nullptr,
+    *pTabItem  = nullptr,
+    *pSplitItem  = nullptr,
+    *pRegItem  = nullptr,
+    *pLineSpaceItem  = nullptr,
+    *pLineNumItem  = nullptr,
+    *pKeepItem  = nullptr,
+    *pLRItem  = nullptr,
+    *pULItem  = nullptr,
+    *pBackItem  = nullptr,
+    *pAdjItem  = nullptr,
+    *pDescItem  = nullptr,
+    *pInetItem  = nullptr,
+    *pDropItem  = nullptr,
+    *pWeightItem  = nullptr,
+    *pULineItem  = nullptr,
+    *pOLineItem  = nullptr,
+    *pCharFormatItem  = nullptr,
+    *pShadItem  = nullptr,
+    *pPostItem  = nullptr,
+    *pNHyphItem  = nullptr,
+    *pLangItem  = nullptr,
+    *pKernItem  = nullptr,
+    *pFontSizeItem  = nullptr,
+    *pFontItem  = nullptr,
+    *pBlinkItem  = nullptr,
+    *pEscItem  = nullptr,
+    *pCrossedOutItem  = nullptr,
+    *pContourItem  = nullptr,
+    *pCharColorItem  = nullptr,
+    *pCasemapItem  = nullptr,
+    *pBrushItem  = nullptr,
+    *pFontCJKItem = nullptr,
+    *pFontSizeCJKItem = nullptr,
+    *pCJKLangItem = nullptr,
+    *pCJKPostureItem = nullptr,
+    *pCJKWeightItem = nullptr,
+    *pFontCTLItem = nullptr,
+    *pFontSizeCTLItem = nullptr,
+    *pCTLLangItem = nullptr,
+    *pCTLPostureItem = nullptr,
+    *pCTLWeightItem = nullptr,
+    *pShadowItem  = nullptr;
 
     PropertyEntryVector_t::const_iterator aIt = aPropertyEntries.begin();
     for(sal_uInt32 i = 0; i < nArrLen; i++, ++aIt)
     {
         if(pValueArr[i])
         {
-            SfxPoolItem* pTempItem = 0;
+            SfxPoolItem* pTempItem = nullptr;
             switch(aIt->nWID)
             {
                 case  RES_BOX:

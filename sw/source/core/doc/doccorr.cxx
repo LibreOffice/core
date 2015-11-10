@@ -40,7 +40,7 @@ namespace
     static const SwStartNode* lcl_FindUnoCrsrSection( const SwNode& rNode )
     {
         const SwStartNode* pStartNode = rNode.StartOfSectionNode();
-        while( ( pStartNode != NULL ) &&
+        while( ( pStartNode != nullptr ) &&
                ( pStartNode->StartOfSectionNode() != pStartNode ) &&
                ( pStartNode->GetStartNodeType() == SwNormalStartNode ) )
             pStartNode = pStartNode->StartOfSectionNode();
@@ -108,7 +108,7 @@ void PaMCorrAbs( const SwPaM& rRange,
             if( _pStkCrsr )
                 do {
                     lcl_PaMCorrAbs( *_pStkCrsr, aStart, aEnd, aNewPos );
-                } while ( (_pStkCrsr != 0 ) &&
+                } while ( (_pStkCrsr != nullptr ) &&
                     ((_pStkCrsr = static_cast<SwPaM *>(_pStkCrsr->GetNext())) != pCrsrShell->GetStkCrsr()) );
 
             for(SwPaM& rPaM : const_cast<SwShellCrsr*>(pCrsrShell->_GetCrsr())->GetRingContainer())
@@ -159,7 +159,7 @@ void PaMCorrAbs( const SwPaM& rRange,
         {
             // the UNO cursor has left its section. We need to notify it!
             SwMsgPoolItem aHint( RES_UNOCURSOR_LEAVES_SECTION );
-            pUnoCursor->ModifyNotification( &aHint, NULL );
+            pUnoCursor->ModifyNotification( &aHint, nullptr );
         }
     }
 }
@@ -187,7 +187,7 @@ void SwDoc::CorrAbs(const SwNodeIndex& rOldNode,
                 lcl_PaMCorrAbs(*pRedline, *aPam.Start(), *aPam.End(), aNewPos);
             // clean up empty redlines: docredln.cxx asserts these as invalid
             if (bChanged && (*pRedline->GetPoint() == *pRedline->GetMark())
-                         && (pRedline->GetContentIdx() == NULL))
+                         && (pRedline->GetContentIdx() == nullptr))
             {
                 rTable.DeleteAndDestroy(n);
             }
@@ -215,7 +215,7 @@ void SwDoc::CorrAbs(
     SwPosition aEnd(*rRange.End());
     SwPosition aNewPos(rNewPos);
 
-    _DelBookmarks( aStart.nNode, aEnd.nNode, NULL, &aStart.nContent, &aEnd.nContent );
+    _DelBookmarks( aStart.nNode, aEnd.nNode, nullptr, &aStart.nContent, &aEnd.nContent );
 
     if(bMoveCrsr)
         ::PaMCorrAbs(rRange, rNewPos);
@@ -260,7 +260,7 @@ void PaMCorrRel( const SwNodeIndex &rOldNode,
             if( _pStkCrsr )
                 do {
                     lcl_PaMCorrRel1( _pStkCrsr, pOldNode, aNewPos, nCntIdx );
-                } while ( (_pStkCrsr != 0 ) &&
+                } while ( (_pStkCrsr != nullptr ) &&
                     ((_pStkCrsr = static_cast<SwPaM *>(_pStkCrsr->GetNext())) != pCrsrShell->GetStkCrsr()) );
 
             SwPaM* pStartPaM = pCrsrShell->_GetCrsr();

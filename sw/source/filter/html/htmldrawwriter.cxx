@@ -66,7 +66,7 @@ const sal_uInt32 HTML_FRMOPTS_MARQUEE_CSS1  =
 const SdrObject *SwHTMLWriter::GetMarqueeTextObj( const SwDrawFrameFormat& rFormat )
 {
     const SdrObject* pObj = rFormat.FindSdrObject();
-    return (pObj && ::IsMarqueeTextObj( *pObj )) ? pObj : 0;
+    return (pObj && ::IsMarqueeTextObj( *pObj )) ? pObj : nullptr;
 }
 
 void SwHTMLWriter::GetEEAttrsFromDrwObj( SfxItemSet& rItemSet,
@@ -158,7 +158,7 @@ Writer& OutHTML_DrawFrameFormatAsMarquee( Writer& rWrt,
             SDRTEXTANI_SLIDE==eAniKind,
             "Text-Draw-Objekt nicht fuer Marquee geeignet" );
 
-    const sal_Char *pStr = 0;
+    const sal_Char *pStr = nullptr;
     switch( eAniKind )
     {
     case SDRTEXTANI_SCROLL:     pStr = OOO_STRING_SVTOOLS_HTML_BEHAV_scroll;        break;
@@ -175,7 +175,7 @@ Writer& OutHTML_DrawFrameFormatAsMarquee( Writer& rWrt,
     }
 
     // DIRECTION
-    pStr = 0;
+    pStr = nullptr;
     SdrTextAniDirection eAniDir = pTextObj->GetTextAniDirection();
     switch( eAniDir )
     {
@@ -293,7 +293,7 @@ Writer& OutHTML_DrawFrameFormatAsMarquee( Writer& rWrt,
     rWrt.Strm().WriteChar( '>' );
 
     // Was jetzt kommt ist das Gegenstueck zu SdrTextObjectt::SetText()
-    Outliner aOutliner(0, OUTLINERMODE_TEXTOBJECT);
+    Outliner aOutliner(nullptr, OUTLINERMODE_TEXTOBJECT);
     aOutliner.SetUpdateMode( false );
     aOutliner.SetText( *pOutlinerParaObj );
     OUString aText( aOutliner.GetText( aOutliner.GetParagraph(0),

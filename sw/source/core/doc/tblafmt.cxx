@@ -88,7 +88,7 @@ const sal_uInt16 AUTOFORMAT_ID          = AUTOFORMAT_ID_31005;
 const sal_uInt16 AUTOFORMAT_DATA_ID     = AUTOFORMAT_DATA_ID_31005;
 const sal_uInt16 AUTOFORMAT_FILE_VERSION= SOFFICE_FILEFORMAT_50;
 
-SwBoxAutoFormat* SwTableAutoFormat::pDfltBoxAutoFormat = 0;
+SwBoxAutoFormat* SwTableAutoFormat::pDfltBoxAutoFormat = nullptr;
 
 #define AUTOTABLE_FORMAT_NAME "autotbl.fmt"
 
@@ -611,7 +611,7 @@ SwTableAutoFormat::SwTableAutoFormat( const SwTableAutoFormat& rNew )
     , m_aShadow( RES_SHADOW )
 {
     for( sal_uInt8 n = 0; n < 16; ++n )
-        aBoxAutoFormat[ n ] = 0;
+        aBoxAutoFormat[ n ] = nullptr;
     *this = rNew;
 }
 
@@ -629,7 +629,7 @@ SwTableAutoFormat& SwTableAutoFormat::operator=( const SwTableAutoFormat& rNew )
         if( pFormat )      // if is set -> copy
             aBoxAutoFormat[ n ] = new SwBoxAutoFormat( *pFormat );
         else            // else default
-            aBoxAutoFormat[ n ] = 0;
+            aBoxAutoFormat[ n ] = nullptr;
     }
 
     m_aName = rNew.m_aName;
@@ -735,10 +735,10 @@ void SwTableAutoFormat::UpdateFromSet( sal_uInt8 nPos,
         pFormat->SetVerticalAlignment(static_cast<const SwFormatVertOrient&>(rSet.Get(RES_VERT_ORIENT)));
 
         const SwTableBoxNumFormat* pNumFormatItem;
-        const SvNumberformat* pNumFormat = 0;
+        const SvNumberformat* pNumFormat = nullptr;
         if( SfxItemState::SET == rSet.GetItemState( RES_BOXATR_FORMAT, true,
             reinterpret_cast<const SfxPoolItem**>(&pNumFormatItem) ) && pNFormatr &&
-            0 != (pNumFormat = pNFormatr->GetEntry( pNumFormatItem->GetValue() )) )
+            nullptr != (pNumFormat = pNFormatr->GetEntry( pNumFormatItem->GetValue() )) )
             pFormat->SetValueFormat( pNumFormat->GetFormatstring(),
                                     pNumFormat->GetLanguage(),
                                     ::GetAppLanguage());
@@ -882,11 +882,11 @@ void SwTableAutoFormat::StoreTableProperties(const SwTable &table)
         return;
 
     SwEditShell *pShell = pDoc->GetEditShell();
-    SwFormatRowSplit *pRowSplit = 0;
+    SwFormatRowSplit *pRowSplit = nullptr;
     SwDoc::GetRowSplit(*pShell->getShellCrsr(false), pRowSplit);
     m_bRowSplit = pRowSplit && pRowSplit->GetValue();
     delete pRowSplit;
-    pRowSplit = 0;
+    pRowSplit = nullptr;
 
     const SfxItemSet &rSet = pFormat->GetAttrSet();
 
@@ -935,7 +935,7 @@ bool SwTableAutoFormat::Load( SvStream& rStream, const SwAfVersions& rVersions )
 
         if (nVal >= AUTOFORMAT_DATA_ID_31005 && WriterSpecificBlockExists(rStream))
         {
-            SfxPoolItem* pNew = 0;
+            SfxPoolItem* pNew = nullptr;
 
             READ(m_aBreak, SvxFormatBreakItem, AUTOFORMAT_FILE_VERSION);
             READ(m_aPageDesc, SwFormatPageDesc, AUTOFORMAT_FILE_VERSION);
@@ -1117,8 +1117,8 @@ SwTableAutoFormatTable::SwTableAutoFormatTable()
 
     for( i = 0; i <= 15; ++i )
     {
-        aBox.SetLine( i <= 3 ? &aLn : 0, SvxBoxItemLine::TOP );
-        aBox.SetLine( (3 == ( i & 3 )) ? &aLn : 0, SvxBoxItemLine::RIGHT );
+        aBox.SetLine( i <= 3 ? &aLn : nullptr, SvxBoxItemLine::TOP );
+        aBox.SetLine( (3 == ( i & 3 )) ? &aLn : nullptr, SvxBoxItemLine::RIGHT );
         const_cast<SwBoxAutoFormat&>(pNew->GetBoxFormat( i )).SetBox( aBox );
     }
 

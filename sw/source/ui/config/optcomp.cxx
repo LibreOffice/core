@@ -94,7 +94,7 @@ struct SwCompatibilityOptPage_Impl
 SwCompatibilityOptPage::SwCompatibilityOptPage(vcl::Window* pParent, const SfxItemSet& rSet)
     : SfxTabPage(pParent, "OptCompatPage",
         "modules/swriter/ui/optcompatpage.ui", &rSet)
-    , m_pWrtShell(NULL)
+    , m_pWrtShell(nullptr)
     , m_pImpl(new SwCompatibilityOptPage_Impl)
     , m_nSavedOptions(0)
 {
@@ -199,8 +199,8 @@ void SwCompatibilityOptPage::InitControls( const SfxItemSet& rSet )
 {
     // init objectshell and detect document name
     OUString sDocTitle;
-    const SfxPoolItem* pItem = NULL;
-    SfxObjectShell* pObjShell = NULL;
+    const SfxPoolItem* pItem = nullptr;
+    SfxObjectShell* pObjShell = nullptr;
     if ( SfxItemState::SET == rSet.GetItemState( FN_PARAM_WRTSHELL, false, &pItem ) )
         m_pWrtShell = static_cast<SwWrtShell*>(static_cast<const SwPtrItem*>(pItem)->GetValue());
     if ( m_pWrtShell )

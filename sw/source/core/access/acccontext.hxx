@@ -362,11 +362,11 @@ public:
     bool Select( SwPaM *pPaM, SdrObject *pObj, bool bAdd );
     inline bool Select( SwPaM& rPaM )
     {
-        return Select( &rPaM, 0, false );
+        return Select( &rPaM, nullptr, false );
     }
     inline bool Select( SdrObject *pObj, bool bAdd )
     {
-        return Select( 0, pObj, bAdd );
+        return Select( nullptr, pObj, bAdd );
     }
 
     //This method is used to updated the selected state and fire the selected state changed event.
@@ -374,8 +374,8 @@ public:
     bool  IsSeletedInDoc() { return m_isSelectedInDoc; }
 
     static OUString GetResource( sal_uInt16 nResId,
-                                        const OUString *pArg1 = 0,
-                                        const OUString *pArg2 = 0 );
+                                        const OUString *pArg1 = nullptr,
+                                        const OUString *pArg2 = nullptr );
 };
 
 // some heavily used exception support

@@ -32,7 +32,7 @@ class SwTextTOXMark : public SwTextAttrEnd
 
 public:
     SwTextTOXMark( SwTOXMark& rAttr,
-            sal_Int32 const nStart, sal_Int32 const*const pEnd = 0);
+            sal_Int32 const nStart, sal_Int32 const*const pEnd = nullptr);
     virtual ~SwTextTOXMark();
 
     virtual sal_Int32 *GetEnd() override;     // SwTextAttr

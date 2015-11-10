@@ -73,7 +73,7 @@ public:
                     SfxStyleSheetBase&  rBase,
                     sal_uInt16          nRegion,
                     const OString&      sPage = OString(),
-                    SwWrtShell*         pActShell = 0,
+                    SwWrtShell*         pActShell = nullptr,
                     bool                bNew = false );
 
     virtual void RefreshInputSet() override;

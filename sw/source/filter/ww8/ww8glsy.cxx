@@ -35,7 +35,7 @@
 
 WW8Glossary::WW8Glossary(tools::SvRef<SotStorageStream> &refStrm, sal_uInt8 nVersion,
     SotStorage *pStg)
-    : pGlossary(0), rStrm(refStrm), xStg(pStg), nStrings(0)
+    : pGlossary(nullptr), rStrm(refStrm), xStg(pStg), nStrings(0)
 {
     refStrm->SetEndian(SvStreamEndian::LITTLE);
     WW8Fib aWwFib(*refStrm, nVersion);
@@ -109,13 +109,13 @@ bool WW8Glossary::MakeEntries(SwDoc *pD, SwTextBlocks &rBlocks,
         SwTextFormatColl* pColl = pD->getIDocumentStylePoolAccess().GetTextCollFromPool
             (RES_POOLCOLL_STANDARD, false);
         sal_uInt16 nGlosEntry = 0;
-        SwContentNode* pCNd = 0;
+        SwContentNode* pCNd = nullptr;
         do {
             SwPaM aPam( aStart );
             {
                 SwNodeIndex& rIdx = aPam.GetPoint()->nNode;
                 ++rIdx;
-                if( 0 == ( pCNd = rIdx.GetNode().GetTextNode() ) )
+                if( nullptr == ( pCNd = rIdx.GetNode().GetTextNode() ) )
                 {
                     pCNd = pD->GetNodes().MakeTextNode( rIdx, pColl );
                     rIdx = *pCNd;
@@ -126,7 +126,7 @@ bool WW8Glossary::MakeEntries(SwDoc *pD, SwTextBlocks &rBlocks,
             {
                 SwNodeIndex& rIdx = aPam.GetPoint()->nNode;
                 rIdx = aStart.GetNode().EndOfSectionIndex() - 1;
-                if(( 0 == ( pCNd = rIdx.GetNode().GetContentNode() ) )
+                if(( nullptr == ( pCNd = rIdx.GetNode().GetContentNode() ) )
                         || HasBareGraphicEnd(pD,rIdx))
                 {
                     ++rIdx;

@@ -178,7 +178,7 @@ struct SwMergeDescriptor
         bPrintAsync( false ),
         bCreateSingleFile( false ),
         bSubjectIsFilename( false ),
-        pMailMergeConfigItem(0)
+        pMailMergeConfigItem(nullptr)
         {}
 
 };
@@ -357,7 +357,7 @@ public:
      the filename returned by a file picker and additional settings dialog.
      In case of success it returns the registered name, otherwise an empty string.
      */
-    static OUString            LoadAndRegisterDataSource(SwDocShell* pDocShell = 0);
+    static OUString            LoadAndRegisterDataSource(SwDocShell* pDocShell = nullptr);
 
     /**
      Loads a data source from file and registers it.
@@ -367,16 +367,16 @@ public:
      */
     static OUString            LoadAndRegisterDataSource(const DBConnURITypes type, const css::uno::Any &rUnoURI,
                                                          const css::uno::Reference < css::beans::XPropertySet > *pSettings,
-                                                         const OUString &rURI, const OUString *pPrefix = 0, const OUString *pDestDir = 0,
-                                                         SwDocShell* pDocShell = 0);
+                                                         const OUString &rURI, const OUString *pPrefix = nullptr, const OUString *pDestDir = nullptr,
+                                                         SwDocShell* pDocShell = nullptr);
     /**
      Loads a data source from file and registers it.
 
      Convenience function, which calls GetDBunoURI and has just one mandatory parameter.
      In case of success it returns the registered name, otherwise an empty string.
      */
-    static OUString            LoadAndRegisterDataSource(const OUString& rURI, const OUString *pPrefix = 0, const OUString *pDestDir = 0,
-                                                         const css::uno::Reference < css::beans::XPropertySet > *pSettings = 0);
+    static OUString            LoadAndRegisterDataSource(const OUString& rURI, const OUString *pPrefix = nullptr, const OUString *pDestDir = nullptr,
+                                                         const css::uno::Reference < css::beans::XPropertySet > *pSettings = nullptr);
 
     /// Load the embedded data source of the document and also register it.
     void LoadAndRegisterEmbeddedDataSource(const SwDBData& rData, const SwDocShell& rDocShell);

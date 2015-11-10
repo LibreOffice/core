@@ -184,7 +184,7 @@ long SwWrtShell::DelLeft()
         // changed the table cell, compare DelRight().
         const SwStartNode * pSNdOld = pWasInTableNd ?
                                       GetSwCrsr()->GetNode().FindTableBoxStartNode() :
-                                      0;
+                                      nullptr;
 
         // If the cursor is at the beginning of a paragraph, try to step
         // backwards. On failure we are done.
@@ -199,7 +199,7 @@ long SwWrtShell::DelLeft()
 
         const SwStartNode* pSNdNew = pIsInTableNd ?
                                      GetSwCrsr()->GetNode().FindTableBoxStartNode() :
-                                     0;
+                                     nullptr;
 
         // #i4032# Don't actually call a 'delete' if we
         // changed the table cell, compare DelRight().
@@ -234,7 +234,7 @@ long SwWrtShell::DelRight()
     if(nSelection & nsSelectionType::SEL_TXT)
         nSelection = nsSelectionType::SEL_TXT;
 
-    const SwTableNode * pWasInTableNd = NULL;
+    const SwTableNode * pWasInTableNd = nullptr;
 
     switch( nSelection & ~(nsSelectionType::SEL_BEZ) )
     {
@@ -365,7 +365,7 @@ long SwWrtShell::DelRight()
                 if (GetView().GetDrawFuncPtr())
                 {
                     GetView().GetDrawFuncPtr()->Deactivate();
-                    GetView().SetDrawFuncPtr(NULL);
+                    GetView().SetDrawFuncPtr(nullptr);
                 }
                 if ( GetView().IsDrawMode() )
                 {

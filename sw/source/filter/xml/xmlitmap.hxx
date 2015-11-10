@@ -66,7 +66,7 @@ public:
 
     SvXMLItemMapEntry* getByName( sal_uInt16 nNameSpace,
                                   const OUString& rString,
-                                  SvXMLItemMapEntry* pStartAt = NULL ) const;
+                                  SvXMLItemMapEntry* pStartAt = nullptr ) const;
     SvXMLItemMapEntry& getByIndex( sal_uInt16 nIndex ) const;
 
     sal_uInt16 getCount() const;

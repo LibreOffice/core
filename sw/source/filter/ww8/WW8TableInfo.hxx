@@ -276,7 +276,7 @@ public:
     ~WW8TableCellGrid();
 
     void insert(const SwRect & rRect, WW8TableNodeInfo * pNodeInfo,
-                unsigned long * pFormatFrmWidth = NULL);
+                unsigned long * pFormatFrmWidth = nullptr);
     void addShadowCells();
     WW8TableNodeInfo *connectCells(RowEndInners_t &rLastRowEnds);
 
@@ -330,7 +330,7 @@ class WW8TableInfo
                         sal_uInt32 nRow,
                         sal_uInt32 nCell,
                         sal_uInt32 nDepth,
-                        SwRect * pRect = NULL);
+                        SwRect * pRect = nullptr);
 
     WW8TableCellGrid::Pointer_t getCellGridForTable(const SwTable * pTable,
                                                     bool bCreate = true);

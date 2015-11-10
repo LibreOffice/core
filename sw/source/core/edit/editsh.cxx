@@ -178,7 +178,7 @@ void SwEditShell::Overwrite(const OUString &rStr)
 long SwEditShell::SplitNode( bool bAutoFormat, bool bCheckTableStart )
 {
     StartAllAction();
-    GetDoc()->GetIDocumentUndoRedo().StartUndo(UNDO_EMPTY, NULL);
+    GetDoc()->GetIDocumentUndoRedo().StartUndo(UNDO_EMPTY, nullptr);
 
     for(SwPaM& rPaM : GetCrsr()->GetRingContainer())
     {
@@ -187,7 +187,7 @@ long SwEditShell::SplitNode( bool bAutoFormat, bool bCheckTableStart )
         GetDoc()->getIDocumentContentOperations().SplitNode( *rPaM.GetPoint(), bCheckTableStart );
     }
 
-    GetDoc()->GetIDocumentUndoRedo().EndUndo(UNDO_EMPTY, NULL);
+    GetDoc()->GetIDocumentUndoRedo().EndUndo(UNDO_EMPTY, nullptr);
 
     if( bAutoFormat )
         AutoFormatBySplitNode();
@@ -202,7 +202,7 @@ bool SwEditShell::AppendTextNode()
 {
     bool bRet = false;
     StartAllAction();
-    GetDoc()->GetIDocumentUndoRedo().StartUndo(UNDO_EMPTY, NULL);
+    GetDoc()->GetIDocumentUndoRedo().StartUndo(UNDO_EMPTY, nullptr);
 
     for(SwPaM& rPaM : GetCrsr()->GetRingContainer())
     {
@@ -210,7 +210,7 @@ bool SwEditShell::AppendTextNode()
         bRet = GetDoc()->getIDocumentContentOperations().AppendTextNode( *rPaM.GetPoint()) || bRet;
     }
 
-    GetDoc()->GetIDocumentUndoRedo().EndUndo(UNDO_EMPTY, NULL);
+    GetDoc()->GetIDocumentUndoRedo().EndUndo(UNDO_EMPTY, nullptr);
 
     ClearTableBoxContent();
 
@@ -221,7 +221,7 @@ bool SwEditShell::AppendTextNode()
 // the returned SwGrfNode pointer is used in GetGraphic() and GetGraphicSize()
 SwGrfNode * SwEditShell::_GetGrfNode() const
 {
-    SwGrfNode *pGrfNode = 0;
+    SwGrfNode *pGrfNode = nullptr;
     SwPaM* pCrsr = GetCrsr();
     if( !pCrsr->HasMark() ||
         pCrsr->GetPoint()->nNode == pCrsr->GetMark()->nNode )
@@ -235,7 +235,7 @@ SwGrfNode * SwEditShell::_GetGrfNode() const
 const Graphic* SwEditShell::GetGraphic( bool bWait ) const
 {
     SwGrfNode* pGrfNode = _GetGrfNode();
-    const Graphic* pGrf( 0L );
+    const Graphic* pGrf( nullptr );
     if ( pGrfNode )
     {
         pGrf = &(pGrfNode->GetGrf(bWait && GRAPHIC_DEFAULT == pGrfNode->GetGrf().GetType()));
@@ -256,7 +256,7 @@ bool SwEditShell::IsGrfSwapOut( bool bOnlyLinked ) const
 const GraphicObject* SwEditShell::GetGraphicObj() const
 {
     SwGrfNode* pGrfNode = _GetGrfNode();
-    return pGrfNode ? &(pGrfNode->GetGrfObj()) : 0L;
+    return pGrfNode ? &(pGrfNode->GetGrfObj()) : nullptr;
 }
 
 sal_uInt16 SwEditShell::GetGraphicType() const
@@ -273,7 +273,7 @@ bool SwEditShell::GetGrfSize(Size& rSz) const
     SwPaM* pCurrentCrsr = GetCrsr();
     if( ( !pCurrentCrsr->HasMark()
          || pCurrentCrsr->GetPoint()->nNode == pCurrentCrsr->GetMark()->nNode )
-         && 0 != ( pNoTextNd = pCurrentCrsr->GetNode().GetNoTextNode() ) )
+         && nullptr != ( pNoTextNd = pCurrentCrsr->GetNode().GetNoTextNode() ) )
     {
         rSz = pNoTextNd->GetTwipSize();
         return true;
@@ -332,7 +332,7 @@ void SwEditShell::ClearAutomaticContour()
     if( pNd->HasAutomaticContour() )
     {
         StartAllAction();
-        pNd->SetContour( NULL );
+        pNd->SetContour( nullptr );
         SwFlyFrm *pFly = static_cast<SwFlyFrm*>(pNd->getLayoutFrm(GetLayout())->GetUpper());
         const SwFormatSurround &rSur = pFly->GetFormat()->GetSurround();
         pFly->GetFormat()->NotifyClients( &rSur, &rSur );
@@ -365,7 +365,7 @@ bool SwEditShell::HasOLEObj( const OUString &rName ) const
 {
     SwStartNode *pStNd;
     SwNodeIndex aIdx( *GetNodes().GetEndOfAutotext().StartOfSectionNode(), 1 );
-    while ( 0 != (pStNd = aIdx.GetNode().GetStartNode()) )
+    while ( nullptr != (pStNd = aIdx.GetNode().GetStartNode()) )
     {
         ++aIdx;
         SwNode& rNd = aIdx.GetNode();
@@ -609,7 +609,7 @@ bool SwEditShell::InsertURL( const SwFormatINetFormat& rFormat, const OUString& 
     if( rFormat.GetValue().isEmpty() || ( rStr.isEmpty() && !HasSelection() ) )
         return false;
     StartAllAction();
-    GetDoc()->GetIDocumentUndoRedo().StartUndo( UNDO_UI_INSERT_URLTXT, NULL);
+    GetDoc()->GetIDocumentUndoRedo().StartUndo( UNDO_UI_INSERT_URLTXT, nullptr);
     bool bInsText = true;
 
     if( !rStr.isEmpty() )
@@ -652,7 +652,7 @@ bool SwEditShell::InsertURL( const SwFormatINetFormat& rFormat, const OUString& 
         ClearMark();
     if( bInsText )
         DontExpandFormat();
-    GetDoc()->GetIDocumentUndoRedo().EndUndo( UNDO_UI_INSERT_URLTXT, NULL );
+    GetDoc()->GetIDocumentUndoRedo().EndUndo( UNDO_UI_INSERT_URLTXT, nullptr );
     EndAllAction();
     return true;
 }
@@ -668,7 +668,7 @@ void SwEditShell::GetINetAttrs( SwGetINetAttrs& rArr )
         SwIterator<SwTextINetFormat,SwCharFormat> aIter(*(*pFormats)[--n]);
         for( SwTextINetFormat* pFnd = aIter.First(); pFnd; pFnd = aIter.Next() )
         {
-            if( 0 != ( pTextNd = pFnd->GetpTextNode()) &&
+            if( nullptr != ( pTextNd = pFnd->GetpTextNode()) &&
                 pTextNd->GetNodes().IsDocNodes() )
             {
                 SwTextINetFormat& rAttr = *pFnd;
@@ -748,7 +748,7 @@ void SwEditShell::SetNumberingRestart()
                 switch( pNd->GetNodeType() )
                 {
                 case ND_TEXTNODE:
-                    if( 0 != ( pCntFrm = static_cast<SwTextNode*>(pNd)->getLayoutFrm( GetLayout() )) )
+                    if( nullptr != ( pCntFrm = static_cast<SwTextNode*>(pNd)->getLayoutFrm( GetLayout() )) )
                     {
                         // skip hidden frames - ignore protection!
                         if( !static_cast<SwTextFrm*>(pCntFrm)->IsHiddenNow() )
@@ -817,7 +817,7 @@ sal_uInt16 SwEditShell::GetLineCount( bool bActPos )
     SwNodeIndex& rPtIdx = pPam->GetPoint()->nNode;
     SwNodeIndex aStart( rPtIdx );
     SwContentNode* pCNd;
-    SwContentFrm *pCntFrm = 0;
+    SwContentFrm *pCntFrm = nullptr;
     sal_uLong nTmpPos;
 
     if( !bActPos )
@@ -827,8 +827,8 @@ sal_uInt16 SwEditShell::GetLineCount( bool bActPos )
         aStart = nTmpPos + 1;
     else
     {
-        if( 0 != ( pCNd = pPam->GetContentNode() ) &&
-            0 != ( pCntFrm = pCNd->getLayoutFrm( GetLayout() ) ) )
+        if( nullptr != ( pCNd = pPam->GetContentNode() ) &&
+            nullptr != ( pCntFrm = pCNd->getLayoutFrm( GetLayout() ) ) )
         {
             const SwStartNode *pTmp;
             if( pCntFrm->IsInFly() )                        // Fly
@@ -853,10 +853,10 @@ sal_uInt16 SwEditShell::GetLineCount( bool bActPos )
         OSL_ENSURE( pCNd && pCntFrm, "Missing Layout-Information" );
     }
 
-    while( 0 != ( pCNd = GetDoc()->GetNodes().GoNextSection(
+    while( nullptr != ( pCNd = GetDoc()->GetNodes().GoNextSection(
                 &aStart, true, false )) && ( !bActPos || aStart <= rPtIdx ) )
     {
-        if( 0 != ( pCntFrm = pCNd->getLayoutFrm( GetLayout() ) ) && pCntFrm->IsTextFrm() )
+        if( nullptr != ( pCntFrm = pCNd->getLayoutFrm( GetLayout() ) ) && pCntFrm->IsTextFrm() )
         {
             const sal_Int32 nActPos = bActPos && aStart == rPtIdx ?
                 pPam->GetPoint()->nContent.GetIndex() : COMPLETE_STRING;
@@ -1021,13 +1021,13 @@ void SwEditShell::TransliterateText( sal_uInt32 nType )
     SwPaM* pCrsr = GetCrsr();
     if( pCrsr->GetNext() != pCrsr )
     {
-        GetDoc()->GetIDocumentUndoRedo().StartUndo(UNDO_EMPTY, NULL);
+        GetDoc()->GetIDocumentUndoRedo().StartUndo(UNDO_EMPTY, nullptr);
         for(SwPaM& rPaM : GetCrsr()->GetRingContainer())
         {
             if( rPaM.HasMark() )
                 GetDoc()->getIDocumentContentOperations().TransliterateText( rPaM, aTrans );
         }
-        GetDoc()->GetIDocumentUndoRedo().EndUndo(UNDO_EMPTY, NULL);
+        GetDoc()->GetIDocumentUndoRedo().EndUndo(UNDO_EMPTY, nullptr);
     }
     else
         GetDoc()->getIDocumentContentOperations().TransliterateText( *pCrsr, aTrans );

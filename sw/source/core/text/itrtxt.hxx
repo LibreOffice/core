@@ -55,10 +55,10 @@ protected:
     void CtorInitTextIter( SwTextFrm *pFrm, SwTextInfo *pInf );
     explicit SwTextIter(SwTextNode* pTextNode)
         : SwAttrIter(pTextNode)
-        , pFrm(NULL)
-        , pInf(NULL)
-        , pCurr(NULL)
-        , pPrev(NULL)
+        , pFrm(nullptr)
+        , pInf(nullptr)
+        , pCurr(nullptr)
+        , pPrev(nullptr)
         , nFrameStart(0)
         , nY(0)
         , nRegStart(0)
@@ -243,7 +243,7 @@ protected:
         SwTwips nReal = 0, bool bSkipKashida = false );
     SwTwips CalcKanaAdj( SwLineLayout *pCurr );
 public:
-    inline SwTextAdjuster( SwTextFrm *pTextFrm, SwTextSizeInfo *pTextSizeInf ) : SwTextMargin(pTextFrm!=NULL?pTextFrm->GetTextNode():NULL)
+    inline SwTextAdjuster( SwTextFrm *pTextFrm, SwTextSizeInfo *pTextSizeInf ) : SwTextMargin(pTextFrm!=nullptr?pTextFrm->GetTextNode():nullptr)
            { CtorInitTextMargin( pTextFrm, pTextSizeInf ); }
 
     // Is overloaded by SwTextFormatter due to UpdatePos
@@ -279,12 +279,12 @@ public:
     {
         CtorInitTextCursor(pTextFrm, pTextSizeInf);
     }
-    bool GetCharRect(SwRect *, const sal_Int32, SwCrsrMoveState* = 0,
+    bool GetCharRect(SwRect *, const sal_Int32, SwCrsrMoveState* = nullptr,
         const long nMax = 0 );
-    bool GetEndCharRect(SwRect *, const sal_Int32, SwCrsrMoveState* = 0,
+    bool GetEndCharRect(SwRect *, const sal_Int32, SwCrsrMoveState* = nullptr,
         const long nMax = 0 );
     sal_Int32 GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
-                bool bChgNode, SwCrsrMoveState* = 0 ) const;
+                bool bChgNode, SwCrsrMoveState* = nullptr ) const;
     // Respects ambiguities: For the implementation see below
     const SwLineLayout *CharCrsrToLine( const sal_Int32 nPos );
 

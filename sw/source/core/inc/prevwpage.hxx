@@ -40,7 +40,7 @@ struct PreviewPage
 };
 
 inline PreviewPage::PreviewPage()
-    : pPage( 0 ),
+    : pPage( nullptr ),
       bVisible( false ),
       aPageSize( Size(0,0) ),
       aPreviewWinPos( Point(0,0) ),

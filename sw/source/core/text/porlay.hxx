@@ -143,7 +143,7 @@ public:
     inline const SwLineLayout *GetNext() const { return pNext; }
     inline void SetNext( SwLineLayout *pNew ) { pNext = pNew; }
 
-    void Init( SwLinePortion *pNextPortion = NULL);
+    void Init( SwLinePortion *pNextPortion = nullptr);
 
     // Collects the data for the line
     void CalcLine( SwTextFormatter &rLine, SwTextFormatInfo &rInf );
@@ -161,10 +161,10 @@ public:
     virtual bool Format( SwTextFormatInfo &rInf ) override;
 
     // Stuff for justified alignment
-    inline bool IsSpaceAdd() { return pLLSpaceAdd != NULL; }
+    inline bool IsSpaceAdd() { return pLLSpaceAdd != nullptr; }
     void InitSpaceAdd();     // Creates pLLSpaceAdd if necessary
     void CreateSpaceAdd( const long nInit = 0 );
-    inline void FinishSpaceAdd() { delete pLLSpaceAdd; pLLSpaceAdd = NULL; }
+    inline void FinishSpaceAdd() { delete pLLSpaceAdd; pLLSpaceAdd = nullptr; }
     inline sal_uInt16 GetLLSpaceAddCount() const { return sal::static_int_cast< sal_uInt16 >(pLLSpaceAdd->size()); }
     inline void SetLLSpaceAdd( long nNew, sal_uInt16 nIdx )
     {
@@ -179,7 +179,7 @@ public:
 
     // Stuff for Kana compression
     inline void SetKanaComp( std::deque<sal_uInt16>* pNew ){ pKanaComp = pNew; }
-    inline void FinishKanaComp() { delete pKanaComp; pKanaComp = NULL; }
+    inline void FinishKanaComp() { delete pKanaComp; pKanaComp = nullptr; }
     inline std::deque<sal_uInt16>* GetpKanaComp() const { return pKanaComp; }
     inline std::deque<sal_uInt16>& GetKanaComp() { return *pKanaComp; }
 
@@ -219,7 +219,7 @@ public:
                            SwTwips& _orDescent,
                            SwTwips& _orObjAscent,
                            SwTwips& _orObjDescent,
-                           const SwLinePortion* _pDontConsiderPortion = NULL,
+                           const SwLinePortion* _pDontConsiderPortion = nullptr,
                            const bool _bNoFlyCntPorAndLinePor = false ) const;
 
     OUTPUT_OPERATOR_OVERRIDE
@@ -324,7 +324,7 @@ inline void SwLineLayout::ResetFlags()
 }
 
 inline SwLineLayout::SwLineLayout()
-    : pNext( 0 ), pLLSpaceAdd( 0 ), pKanaComp( 0 ), nRealHeight( 0 ),
+    : pNext( nullptr ), pLLSpaceAdd( nullptr ), pKanaComp( nullptr ), nRealHeight( 0 ),
       bUnderscore( false )
 {
     ResetFlags();

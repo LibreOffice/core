@@ -152,7 +152,7 @@ static void lcl_html_outEvents( SvStream& rStrm,
             sListener = sListener.getToken( nTok-1, '.' );
         OUString sMethod( pDescs[i].EventMethod );
 
-        const sal_Char *pOpt = 0;
+        const sal_Char *pOpt = nullptr;
         for( int j=0; aEventListenerTable[j]; j++ )
         {
             if( sListener.equalsAscii( aEventListenerTable[j] ) &&
@@ -266,7 +266,7 @@ void SwHTMLWriter::OutForm( bool bTag_On, const SwStartNode *pStartNd )
         //   Tabelle/dem Bereich liegen
 
         uno::Reference< container::XIndexContainer > xCurrentFormComps;// die aktuelle Form in der Tabelle
-        const SwStartNode *pCurrentStNd = 0; // und der Start-Node eines Ctrls
+        const SwStartNode *pCurrentStNd = nullptr; // und der Start-Node eines Ctrls
         sal_Int32 nCurrentCtrls = 0;   // und die in ihr gefundenen Controls
         sal_uInt32 nEndIdx =  pStartNd->EndOfSectionIndex();
         for( ; i < m_aHTMLControls.size() &&
@@ -500,7 +500,7 @@ void SwHTMLWriter::OutForm( bool bOn,
     {
         form::FormSubmitEncoding eEncType =
                     *static_cast<form::FormSubmitEncoding const *>(aTmp.getValue());
-        const sal_Char *pStr = 0;
+        const sal_Char *pStr = nullptr;
         switch( eEncType )
         {
         case form::FormSubmitEncoding_MULTIPART:
@@ -637,7 +637,7 @@ const SdrObject *SwHTMLWriter::GetHTMLControl( const SwDrawFrameFormat& rFormat 
     // Schauen, ob es ein SdrObject dafuer gibt
     const SdrObject *pObj = rFormat.FindSdrObject();
     if( !pObj || FmFormInventor != pObj->GetObjInventor() )
-        return 0;
+        return nullptr;
 
     const SdrUnoObj& rFormObj = dynamic_cast<const SdrUnoObj&>(*pObj);
     uno::Reference< awt::XControlModel >  xControlModel =
@@ -645,13 +645,13 @@ const SdrObject *SwHTMLWriter::GetHTMLControl( const SwDrawFrameFormat& rFormat 
 
     OSL_ENSURE( xControlModel.is(), "UNO-Control ohne Model" );
     if( !xControlModel.is() )
-        return 0;
+        return nullptr;
 
     uno::Reference< beans::XPropertySet >  xPropSet( xControlModel, uno::UNO_QUERY );
 
     OUString sPropName("ClassId");
     if( !xPropSet->getPropertySetInfo()->hasPropertyByName( sPropName ) )
-        return 0;
+        return nullptr;
 
     uno::Any aTmp = xPropSet->getPropertyValue( sPropName );
     if( aTmp.getValueType() == ::cppu::UnoType<sal_Int16>::get()&&
@@ -660,7 +660,7 @@ const SdrObject *SwHTMLWriter::GetHTMLControl( const SwDrawFrameFormat& rFormat 
         return pObj;
     }
 
-    return 0;
+    return nullptr;
 }
 
 static void GetControlSize(const SdrUnoObj& rFormObj, Size& rSz, SwDoc *pDoc)
@@ -846,7 +846,7 @@ Writer& OutHTML_DrawFrameFormatAsControl( Writer& rWrt,
                     (aTmp.getValueType() == cppu::UnoType<bool>::get() &&
                     !*static_cast<sal_Bool const *>(aTmp.getValue())) )
                 {
-                    const sal_Char *pWrapStr = 0;
+                    const sal_Char *pWrapStr = nullptr;
                     aTmp = xPropSet->getPropertyValue( "HardLineBreaks" );
                     pWrapStr =
                         (aTmp.getValueType() == cppu::UnoType<bool>::get() &&
@@ -1158,7 +1158,7 @@ Writer& OutHTML_DrawFrameFormatAsControl( Writer& rWrt,
             sal_Int32 nCnt = aList.getLength();
             const OUString *pStrings = aList.getConstArray();
 
-            const OUString *pValues = 0;
+            const OUString *pValues = nullptr;
             sal_Int32 nValCnt = 0;
             aTmp = xPropSet->getPropertyValue( "ListSource" );
             uno::Sequence<OUString> aValList;
@@ -1170,7 +1170,7 @@ Writer& OutHTML_DrawFrameFormatAsControl( Writer& rWrt,
             }
 
             uno::Any aSelTmp = xPropSet->getPropertyValue( "DefaultSelection" );
-            const sal_Int16 *pSels = 0;
+            const sal_Int16 *pSels = nullptr;
             sal_Int32 nSel = 0;
             sal_Int32 nSelCnt = 0;
             uno::Sequence<sal_Int16> aSelList;

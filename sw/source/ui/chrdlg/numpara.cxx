@@ -80,8 +80,8 @@ SwParagraphNumTabPage::SwParagraphNumTabPage(vcl::Window* pParent, const SfxItem
     const SfxPoolItem* pItem;
     SfxObjectShell* pObjSh;
     if(SfxItemState::SET == rAttr.GetItemState(SID_HTML_MODE, false, &pItem) ||
-        ( 0 != ( pObjSh = SfxObjectShell::Current()) &&
-          0 != (pItem = pObjSh->GetItem(SID_HTML_MODE))))
+        ( nullptr != ( pObjSh = SfxObjectShell::Current()) &&
+          nullptr != (pItem = pObjSh->GetItem(SID_HTML_MODE))))
     {
         const sal_uInt16 nHtmlMode = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
 
@@ -150,7 +150,7 @@ bool SwParagraphNumTabPage::FillItemSet( SfxItemSet* rSet )
         if(m_pNumberStyleLB->GetSelectEntryPos())
             aStyle = m_pNumberStyleLB->GetSelectEntry();
         const SfxStringItem* pOldRule = static_cast<const SfxStringItem*>(GetOldItem( *rSet, SID_ATTR_PARA_NUMRULE));
-        SfxStringItem* pRule = pOldRule ? static_cast<SfxStringItem*>(pOldRule->Clone()) : NULL;
+        SfxStringItem* pRule = pOldRule ? static_cast<SfxStringItem*>(pOldRule->Clone()) : nullptr;
         if (pRule)
         {
             pRule->SetValue(aStyle);
@@ -364,7 +364,7 @@ bool SwParagraphNumTabPage::ExecuteEditNumStyle_Impl(
     if( !rRefStr.isEmpty() )
         pItems[ nCount++ ] = &aRefName;
 
-    pItems[ nCount++ ] = 0;
+    pItems[ nCount++ ] = nullptr;
 
     sal_uInt16 nModi = pModifier ? *pModifier : 0;
     const SfxPoolItem* mpItem = rDispatcher.Execute(

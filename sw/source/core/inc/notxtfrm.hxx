@@ -34,7 +34,7 @@ class SwNoTextFrm: public SwContentFrm
 
     void InitCtor();
 
-    void Format ( vcl::RenderContext* pRenderContext, const SwBorderAttrs *pAttrs = 0 ) override;
+    void Format ( vcl::RenderContext* pRenderContext, const SwBorderAttrs *pAttrs = nullptr ) override;
     void PaintPicture( vcl::RenderContext*, const SwRect& ) const;
 
     virtual void DestroyImpl() override;
@@ -47,17 +47,17 @@ public:
     SwNoTextFrm( SwNoTextNode * const, SwFrm* );
 
     virtual void Paint( vcl::RenderContext& rRenderContext, SwRect const&,
-                        SwPrintData const*const pPrintData = NULL ) const override;
+                        SwPrintData const*const pPrintData = nullptr ) const override;
     virtual bool GetCharRect( SwRect &, const SwPosition&,
-                              SwCrsrMoveState* = 0) const override;
+                              SwCrsrMoveState* = nullptr) const override;
     virtual bool GetCrsrOfst(SwPosition* pPos, Point& aPoint,
-                     SwCrsrMoveState* = 0, bool bTestBackground = false) const override;
+                     SwCrsrMoveState* = nullptr, bool bTestBackground = false) const override;
 
-    void GetGrfArea( SwRect &rRect, SwRect * = 0, bool bMirror = true ) const;
+    void GetGrfArea( SwRect &rRect, SwRect * = nullptr, bool bMirror = true ) const;
 
     bool IsTransparent() const;
 
-    void StopAnimation( OutputDevice* = 0 ) const;
+    void StopAnimation( OutputDevice* = nullptr ) const;
     bool HasAnimation()  const;
 };
 

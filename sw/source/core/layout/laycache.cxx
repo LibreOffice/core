@@ -65,7 +65,7 @@ void SwLayoutCache::Read( SvStream &rStream )
         if( !pImpl->Read( rStream ) )
         {
             delete pImpl;
-            pImpl = 0;
+            pImpl = nullptr;
         }
     }
 }
@@ -173,7 +173,7 @@ void SwLayoutCache::Write( SvStream &rStream, const SwDoc& rDoc )
             if( pPage->GetPrev() )
             {
                 SwLayoutFrm* pLay = pPage->FindBodyCont();
-                SwFrm* pTmp = pLay ? pLay->ContainsAny() : NULL;
+                SwFrm* pTmp = pLay ? pLay->ContainsAny() : nullptr;
                 // We are only interested in paragraph or table frames,
                 // a section frames contains paragraphs/tables.
                 if( pTmp && pTmp->IsSctFrm() )
@@ -334,7 +334,7 @@ bool SwLayoutCache::CompareLayout( const SwDoc& rDoc ) const
                 return false;
 
             const SwLayoutFrm* pLay = pPage->FindBodyCont();
-            const SwFrm* pTmp = pLay ? pLay->ContainsAny() : NULL;
+            const SwFrm* pTmp = pLay ? pLay->ContainsAny() : nullptr;
             if( pTmp && pTmp->IsSctFrm() )
                 pTmp = static_cast<const SwSectionFrm*>(pTmp)->ContainsAny();
             if( pTmp )
@@ -431,7 +431,7 @@ void SwLayoutCache::ClearImpl()
     if( !IsLocked() )
     {
         delete pImpl;
-        pImpl = 0;
+        pImpl = nullptr;
     }
 }
 
@@ -477,7 +477,7 @@ SwLayHelper::SwLayHelper( SwDoc *pD, SwFrm* &rpF, SwFrm* &rpP, SwPageFrm* &rpPg,
     , nFlyIdx( 0 )
     , bFirst( bCache )
 {
-    pImpl = pDoc->GetLayoutCache() ? pDoc->GetLayoutCache()->LockImpl() : NULL;
+    pImpl = pDoc->GetLayoutCache() ? pDoc->GetLayoutCache()->LockImpl() : nullptr;
     if( pImpl )
     {
         nMaxParaPerPage = 1000;
@@ -492,7 +492,7 @@ SwLayHelper::SwLayHelper( SwDoc *pD, SwFrm* &rpF, SwFrm* &rpP, SwPageFrm* &rpPg,
         if( nIndex >= pImpl->size() )
         {
             pDoc->GetLayoutCache()->UnlockImpl();
-            pImpl = NULL;
+            pImpl = nullptr;
         }
     }
     else
@@ -519,7 +519,7 @@ sal_uLong SwLayHelper::CalcPageCount()
 {
     sal_uLong nPgCount;
     SwLayCacheImpl *pCache = pDoc->GetLayoutCache() ?
-                             pDoc->GetLayoutCache()->LockImpl() : NULL;
+                             pDoc->GetLayoutCache()->LockImpl() : nullptr;
     if( pCache )
     {
         nPgCount = pCache->size() + 1;
@@ -558,7 +558,7 @@ sal_uLong SwLayHelper::CalcPageCount()
             }
             if ( nNdCount < 1000 )
                 nPgCount = 0;// no progress bar for small documents
-            SwViewShell *pSh = 0;
+            SwViewShell *pSh = nullptr;
             if( rpLay && rpLay->getRootFrm() )
                 pSh = rpLay->getRootFrm()->GetCurrShell();
             if( pSh && pSh->GetViewOptions()->getBrowseMode() )
@@ -579,7 +579,7 @@ sal_uLong SwLayHelper::CalcPageCount()
  */
 bool SwLayHelper::CheckInsertPage()
 {
-    bool bEnd = 0 == rpPage->GetNext();
+    bool bEnd = nullptr == rpPage->GetNext();
     const SwAttrSet* pAttr = rpFrm->GetAttrSet();
     const SvxFormatBreakItem& rBrk = pAttr->GetBreak();
     const SwFormatPageDesc& rDesc = pAttr->GetPageDesc();
@@ -587,7 +587,7 @@ bool SwLayHelper::CheckInsertPage()
     // is a follow frame!
     const SwPageDesc* pDesc = rpFrm->IsFlowFrm() &&
                               SwFlowFrm::CastFlowFrm( rpFrm )->IsFollow() ?
-                              0 :
+                              nullptr :
                               rDesc.GetPageDesc();
 
     bool bBrk = nParagraphCnt > nMaxParaPerPage || rbBreakAfter;
@@ -790,14 +790,14 @@ bool SwLayHelper::CheckInsert( sal_uLong nNodeIndex )
 
                                 // Insert new headlines:
                                 sal_uInt16 nRowIdx = 0;
-                                SwRowFrm* pHeadline = 0;
+                                SwRowFrm* pHeadline = nullptr;
                                 while( nRowIdx < nRepeat )
                                 {
                                     OSL_ENSURE( pTab->GetTable()->GetTabLines()[ nRowIdx ], "Table ohne Zeilen?" );
                                     pHeadline =
                                         new SwRowFrm( *pTab->GetTable()->GetTabLines()[ nRowIdx ], pTab );
                                     pHeadline->SetRepeatedHeadline( true );
-                                    pHeadline->InsertBefore( pFoll, 0 );
+                                    pHeadline->InsertBefore( pFoll, nullptr );
                                     pHeadline->RegistFlys();
 
                                     ++nRowIdx;
@@ -808,7 +808,7 @@ bool SwLayHelper::CheckInsert( sal_uLong nNodeIndex )
                                 nRows = nRows + nRepeat;
                             }
                             else
-                                pPrv = 0;
+                                pPrv = nullptr;
                             while( pRow && nRowCount < nOfst )
                             {
                                 pRow = pRow->GetNext();
@@ -846,7 +846,7 @@ bool SwLayHelper::CheckInsert( sal_uLong nNodeIndex )
                     rpPrv->Frm().Height( rpPrv->GetUpper()->Prt().Height() );
 
                 bRet = true;
-                rpPrv = 0;
+                rpPrv = nullptr;
                 nParagraphCnt = 0;
 
                 if ( rpActualSection )
@@ -868,7 +868,7 @@ bool SwLayHelper::CheckInsert( sal_uLong nNodeIndex )
                         bInit = true;
                     }
                     rpActualSection->SetSectionFrm( pSct );
-                    pSct->InsertBehind( rpLay, 0 );
+                    pSct->InsertBehind( rpLay, nullptr );
                     if( bInit )
                         pSct->Init();
                     pSct->Frm().Pos() = rpLay->Frm().Pos();

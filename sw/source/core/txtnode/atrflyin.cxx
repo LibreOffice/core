@@ -37,7 +37,7 @@
 
 SwFormatFlyCnt::SwFormatFlyCnt( SwFrameFormat *pFrameFormat )
     : SfxPoolItem( RES_TXTATR_FLYCNT ),
-    pTextAttr( 0 ),
+    pTextAttr( nullptr ),
     pFormat( pFrameFormat )
 {
 }
@@ -123,7 +123,7 @@ void SwTextFlyCnt::CopyFlyFormat( SwDoc* pDoc )
         }
         else
         {
-            pos.nContent.Assign( 0, 0 );
+            pos.nContent.Assign( nullptr, 0 );
             OSL_ENSURE( false, "CopyFlyFormat: Was fuer ein Anker?" );
         }
         aAnchor.SetAnchor( &pos );
@@ -218,7 +218,7 @@ SwFlyInCntFrm *SwTextFlyCnt::_GetFlyFrm( const SwFrm *pCurrFrm )
     if( RES_DRAWFRMFMT == pFrameFormat->Which() )
     {
         OSL_ENSURE(  false, "SwTextFlyCnt::_GetFlyFrm: DrawInCnt-Baustelle!" );
-        return NULL;
+        return nullptr;
     }
 
     SwIterator<SwFlyFrm,SwFormat> aIter( *GetFlyCnt().pFormat );

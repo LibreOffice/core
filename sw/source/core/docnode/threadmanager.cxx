@@ -142,7 +142,7 @@ void ThreadManager::RemoveThread( const oslInterlockedCount nThreadID,
         }
 
         // Try to start thread from waiting ones
-        TryToStartNewThread( 0 );
+        TryToStartNewThread( nullptr );
     }
     else
     {

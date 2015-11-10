@@ -1088,12 +1088,12 @@ SwTextFormatColl* DocumentStylePoolManager::GetTextCollFromPool( sal_uInt16 nId,
 /// exist, create it.
 SwFormat* DocumentStylePoolManager::GetFormatFromPool( sal_uInt16 nId )
 {
-    SwFormat *pNewFormat = 0;
-    SwFormat *pDeriveFormat = 0;
+    SwFormat *pNewFormat = nullptr;
+    SwFormat *pDeriveFormat = nullptr;
 
     SwFormatsBase* pArray[ 2 ];
     sal_uInt16 nArrCnt = 1, nRCId = 0;
-    sal_uInt16* pWhichRange = 0;
+    sal_uInt16* pWhichRange = nullptr;
 
     switch( nId & (COLL_GET_RANGE_BITS + POOLGRP_NOCOLLID) )
     {
@@ -1139,7 +1139,7 @@ SwFormat* DocumentStylePoolManager::GetFormatFromPool( sal_uInt16 nId )
     default:
         // Fault, unknown Format
         OSL_ENSURE( nId, "invalid Id" );
-        return 0;
+        return nullptr;
     }
     OSL_ENSURE( nRCId, "invalid Id" );
 
@@ -1396,7 +1396,7 @@ SwPageDesc* DocumentStylePoolManager::GetPageDescFromPool( sal_uInt16 nId, bool 
         nId = RES_POOLPAGE_BEGIN;
     }
 
-    SwPageDesc* pNewPgDsc = 0;
+    SwPageDesc* pNewPgDsc = nullptr;
     {
         const ResId aResId( sal_uInt32(RC_POOLPAGEDESC_BEGIN + nId - RES_POOLPAGE_BEGIN), *pSwResMgr );
         const OUString aNm( aResId );
@@ -1404,7 +1404,7 @@ SwPageDesc* DocumentStylePoolManager::GetPageDescFromPool( sal_uInt16 nId, bool 
 
         {
             ::sw::UndoGuard const undoGuard(m_rDoc.GetIDocumentUndoRedo());
-            pNewPgDsc = m_rDoc.MakePageDesc(aNm, 0, bRegardLanguage);
+            pNewPgDsc = m_rDoc.MakePageDesc(aNm, nullptr, bRegardLanguage);
         }
 
         pNewPgDsc->SetPoolFormatId( nId );
@@ -1574,14 +1574,14 @@ SwNumRule* DocumentStylePoolManager::GetNumRuleFromPool( sal_uInt16 nId )
     ResId aResId( sal_uInt32(RC_POOLNUMRULE_BEGIN + nId - RES_POOLNUMRULE_BEGIN), *pSwResMgr );
     OUString aNm( aResId );
 
-    SwCharFormat *pNumCFormat = 0, *pBullCFormat = 0;
+    SwCharFormat *pNumCFormat = nullptr, *pBullCFormat = nullptr;
 
     const SvxNumberFormat::SvxNumPositionAndSpaceMode eNumberFormatPositionAndSpaceMode
                                   = numfunc::GetDefaultPositionAndSpaceMode(); //#i89178#
     {
         bool bIsModified = m_rDoc.getIDocumentState().IsModified();
 
-        sal_uInt16 n = m_rDoc.MakeNumRule( aNm, 0, false, eNumberFormatPositionAndSpaceMode );
+        sal_uInt16 n = m_rDoc.MakeNumRule( aNm, nullptr, false, eNumberFormatPositionAndSpaceMode );
 
         pNewRule = m_rDoc.GetNumRuleTable()[ n ];
         pNewRule->SetPoolFormatId( nId );
@@ -2129,7 +2129,7 @@ bool DocumentStylePoolManager::IsPoolTextCollUsed( sal_uInt16 nId ) const
         (RES_POOLCOLL_HTML_BEGIN <= nId && nId < RES_POOLCOLL_HTML_END),
             "Wrong AutoFormat Id" );
 
-    SwTextFormatColl* pNewColl = 0;
+    SwTextFormatColl* pNewColl = nullptr;
     bool bFnd = false;
     for( sal_uInt16 n = 0; !bFnd && n < m_rDoc.GetTextFormatColls()->size(); ++n )
     {
@@ -2148,7 +2148,7 @@ bool DocumentStylePoolManager::IsPoolTextCollUsed( sal_uInt16 nId ) const
 /// Check if this AutoCollection is already/still in use
 bool DocumentStylePoolManager::IsPoolFormatUsed( sal_uInt16 nId ) const
 {
-    const SwFormat *pNewFormat = 0;
+    const SwFormat *pNewFormat = nullptr;
     const SwFormatsBase* pArray[ 2 ];
     sal_uInt16 nArrCnt = 1;
     bool bFnd = true;
@@ -2200,7 +2200,7 @@ bool DocumentStylePoolManager::IsPoolPageDescUsed( sal_uInt16 nId ) const
 {
     OSL_ENSURE( RES_POOLPAGE_BEGIN <= nId && nId < RES_POOLPAGE_END,
             "Wrong AutoFormat Id" );
-    SwPageDesc *pNewPgDsc = 0;
+    SwPageDesc *pNewPgDsc = nullptr;
     bool bFnd = false;
     for( size_t n = 0; !bFnd && n < m_rDoc.GetPageDescCnt(); ++n )
     {

@@ -165,12 +165,12 @@ namespace sw
 {
     //For i120928,size conversion before exporting graphic of bullet
     Frame::Frame(const Graphic &rGrf, const SwPosition &rPos)
-        : mpFlyFrm(NULL)
+        : mpFlyFrm(nullptr)
         , maPos(rPos)
         , maSize()
         , maLayoutSize()
         , meWriterType(eBulletGrf)
-        , mpStartFrameContent(0)
+        , mpStartFrameContent(nullptr)
         , mbIsInline(true)
         , mbForBullet(true)
         , maGrf(rGrf)
@@ -195,7 +195,7 @@ namespace sw
         , maSize()
         , maLayoutSize() // #i43447#
         , meWriterType(eTextBox)
-        , mpStartFrameContent(0)
+        , mpStartFrameContent(nullptr)
         // #i43447# - move to initialization list
         , mbIsInline( (rFormat.GetAnchor().GetAnchorId() == FLY_AS_CHAR) )
         // #i120928# - handle graphic of bullet within existing implementation
@@ -321,7 +321,7 @@ namespace sw
                                                                     rName,
                                                                     OUString() );
 
-                mxIPRef = 0;
+                mxIPRef = nullptr;
             }
 
             return bSuccess;
@@ -342,7 +342,7 @@ namespace sw
                 {
                 }
 
-                mxIPRef = 0;
+                mxIPRef = nullptr;
             }
         }
     }
@@ -424,7 +424,7 @@ namespace sw
                 sal_uInt16 nTotal = rSet.TotalCount();
                 for( sal_uInt16 nItem =0; nItem < nTotal; ++nItem )
                 {
-                    const SfxPoolItem* pItem = 0;
+                    const SfxPoolItem* pItem = nullptr;
                     if( SfxItemState::SET == rSet.GetItemState( rSet.GetWhichByPos( nItem ), true, &pItem ) )
                     {
                         rItems[pItem->Which()] = pItem;
@@ -438,7 +438,7 @@ namespace sw
                 {
                     do
                         rItems[pItem->Which()] = pItem;
-                    while (!aIter.IsAtEnd() && 0 != (pItem = aIter.NextItem()));
+                    while (!aIter.IsAtEnd() && nullptr != (pItem = aIter.NextItem()));
                 }
             }
         }
@@ -449,7 +449,7 @@ namespace sw
             sw::cPoolItemIter aIter = rItems.find(eType);
             if (aIter != rItems.end())
                 return aIter->second;
-            return 0;
+            return nullptr;
         }
 
         void ClearOverridesFromSet(const SwFormatCharFormat &rFormat, SfxItemSet &rSet)
@@ -462,7 +462,7 @@ namespace sw
                     const SfxPoolItem *pItem = aIter.GetCurItem();
                     do
                         rSet.ClearItem(pItem->Which());
-                    while (!aIter.IsAtEnd() && 0 != (pItem = aIter.NextItem()));
+                    while (!aIter.IsAtEnd() && nullptr != (pItem = aIter.NextItem()));
                 }
             }
         }
@@ -556,17 +556,17 @@ namespace sw
             if (nLevel < 0 || nLevel >= MAXLEVEL)
             {
                 OSL_FAIL("Invalid level");
-                return NULL;
+                return nullptr;
             }
             return &(rRule.Get( static_cast< sal_uInt16 >(nLevel) ));
         }
 
         const SwNumFormat* GetNumFormatFromTextNode(const SwTextNode &rTextNode)
         {
-            const SwNumRule *pRule = 0;
+            const SwNumRule *pRule = nullptr;
             if (
                 rTextNode.IsNumbered() && rTextNode.IsCountedInList() &&
-                0 != (pRule = rTextNode.GetNumRule())
+                nullptr != (pRule = rTextNode.GetNumRule())
                 )
             {
                 return GetNumFormatFromSwNumRuleLevel(*pRule,
@@ -575,18 +575,18 @@ namespace sw
 
             OSL_ENSURE(rTextNode.GetDoc(), "No document for node?, suspicious");
             if (!rTextNode.GetDoc())
-                return 0;
+                return nullptr;
 
             if (
                 rTextNode.IsNumbered() && rTextNode.IsCountedInList() &&
-                0 != (pRule = rTextNode.GetDoc()->GetOutlineNumRule())
+                nullptr != (pRule = rTextNode.GetDoc()->GetOutlineNumRule())
                 )
             {
                 return GetNumFormatFromSwNumRuleLevel(*pRule,
                     rTextNode.GetActualListLevel());
             }
 
-            return 0;
+            return nullptr;
         }
 
         const SwNumRule* GetNumRuleFromTextNode(const SwTextNode &rTextNode)
@@ -596,16 +596,16 @@ namespace sw
 
         const SwNumRule* GetNormalNumRuleFromTextNode(const SwTextNode &rTextNode)
         {
-            const SwNumRule *pRule = 0;
+            const SwNumRule *pRule = nullptr;
 
             if (
                 rTextNode.IsNumbered() && rTextNode.IsCountedInList() &&
-                0 != (pRule = rTextNode.GetNumRule())
+                nullptr != (pRule = rTextNode.GetNumRule())
                )
             {
                 return pRule;
             }
-            return 0;
+            return nullptr;
         }
 
         SwNoTextNode *GetNoTextNodeFromSwFrameFormat(const SwFrameFormat &rFormat)
@@ -613,14 +613,14 @@ namespace sw
             const SwNodeIndex *pIndex = rFormat.GetContent().GetContentIdx();
             OSL_ENSURE(pIndex, "No NodeIndex in SwFrameFormat ?, suspicious");
             if (!pIndex)
-                return 0;
+                return nullptr;
             SwNodeIndex aIdx(*pIndex, 1);
             return aIdx.GetNode().GetNoTextNode();
         }
 
         bool HasPageBreak(const SwNode &rNd)
         {
-            const SvxFormatBreakItem *pBreak = 0;
+            const SvxFormatBreakItem *pBreak = nullptr;
             if (rNd.IsTableNode() && rNd.GetTableNode())
             {
                 const SwTable& rTable = rNd.GetTableNode()->GetTable();
@@ -766,13 +766,13 @@ namespace sw
                 {
                     SwRedlineData aData(pFltRedline->eTypePrev,
                         pFltRedline->nAutorNoPrev, pFltRedline->aStampPrev, OUString(),
-                        0);
+                        nullptr);
 
                     mrDoc.getIDocumentRedlineAccess().AppendRedline(new SwRangeRedline(aData, aRegion), true);
                 }
 
                 SwRedlineData aData(pFltRedline->eType, pFltRedline->nAutorNo,
-                        pFltRedline->aStamp, OUString(), 0);
+                        pFltRedline->aStamp, OUString(), nullptr);
 
                 SwRangeRedline *const pNewRedline(new SwRangeRedline(aData, aRegion));
                 // the point node may be deleted in AppendRedline, so park
@@ -856,7 +856,7 @@ namespace sw
                 {
                     SwFrameFormat * pFrameFormat = pTable->GetTable().GetFrameFormat();
 
-                    if (pFrameFormat != NULL)
+                    if (pFrameFormat != nullptr)
                     {
                         SwNodeIndex *pIndex = aIter->second;
                         pTable->DelFrms();

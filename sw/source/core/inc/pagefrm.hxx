@@ -71,7 +71,7 @@ class SwPageFrm: public SwFootnoteBossFrm
     static const sal_Int8 mnShadowPxWidth;
 
     void _UpdateAttr( const SfxPoolItem*, const SfxPoolItem*, sal_uInt8 &,
-                      SwAttrSetChg *pa = 0, SwAttrSetChg *pb = 0 );
+                      SwAttrSetChg *pa = nullptr, SwAttrSetChg *pb = nullptr );
 
     /// Adapt the max. footnote height in each single column
     void SetColMaxFootnoteHeight();
@@ -165,12 +165,12 @@ public:
     void PlaceFly( SwFlyFrm* pFly, SwFlyFrameFormat* pFormat );
 
     virtual bool GetCrsrOfst( SwPosition *, Point&,
-                              SwCrsrMoveState* = 0, bool bTestBackground = false ) const override;
+                              SwCrsrMoveState* = nullptr, bool bTestBackground = false ) const override;
     /// Get info from Client
     virtual bool GetInfo( SfxPoolItem& ) const override;
 
     virtual void Cut() override;
-    virtual void Paste( SwFrm* pParent, SwFrm* pSibling = 0 ) override;
+    virtual void Paste( SwFrm* pParent, SwFrm* pSibling = nullptr ) override;
     virtual void CheckDirection( bool bVert ) override;
     void CheckGrid( bool bInvalidate );
     void PaintGrid( OutputDevice* pOut, SwRect &rRect ) const;
@@ -336,12 +336,12 @@ public:
 inline SwContentFrm *SwPageFrm::FindFirstBodyContent()
 {
     SwLayoutFrm *pBody = FindBodyCont();
-    return pBody ? pBody->ContainsContent() : 0;
+    return pBody ? pBody->ContainsContent() : nullptr;
 }
 inline const SwContentFrm *SwPageFrm::FindFirstBodyContent() const
 {
     const SwLayoutFrm *pBody = FindBodyCont();
-    return pBody ? pBody->ContainsContent() : 0;
+    return pBody ? pBody->ContainsContent() : nullptr;
 }
 inline const SwContentFrm *SwPageFrm::FindLastBodyContent() const
 {

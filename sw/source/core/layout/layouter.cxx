@@ -50,7 +50,7 @@ class SwEndnoter
     SwFootnoteFrms*    pEndArr;
 public:
     explicit SwEndnoter( SwLayouter* pLay )
-        : pMaster( pLay ), pSect( NULL ), pEndArr( NULL ) {}
+        : pMaster( pLay ), pSect( nullptr ), pEndArr( nullptr ) {}
     ~SwEndnoter() { delete pEndArr; }
     void CollectEndnotes( SwSectionFrm* pSct );
     void CollectEndnote( SwFootnoteFrm* pFootnote );
@@ -125,7 +125,7 @@ void SwEndnoter::InsertEndnotes()
         return;
     if( !pEndArr || pEndArr->empty() )
     {
-        pSect = NULL;
+        pSect = nullptr;
         return;
     }
     OSL_ENSURE( pSect->Lower() && pSect->Lower()->IsFootnoteBossFrm(),
@@ -135,8 +135,8 @@ void SwEndnoter::InsertEndnotes()
                                : static_cast<SwFootnoteBossFrm*>(pSect->Lower());
     pBoss->_MoveFootnotes( *pEndArr );
     delete pEndArr;
-    pEndArr = NULL;
-    pSect = NULL;
+    pEndArr = nullptr;
+    pSect = nullptr;
 }
 
 SwLooping::SwLooping( SwPageFrm* pPage )
@@ -203,12 +203,12 @@ void SwLooping::Control( SwPageFrm* pPage )
 }
 
 SwLayouter::SwLayouter()
-        : mpEndnoter( NULL ),
-          mpLooping( NULL ),
+        : mpEndnoter( nullptr ),
+          mpLooping( nullptr ),
           // #i28701#
-          mpMovedFwdFrms( 0L ),
+          mpMovedFwdFrms( nullptr ),
           // #i35911#
-          mpObjsTmpConsiderWrapInfl( 0L )
+          mpObjsTmpConsiderWrapInfl( nullptr )
 {
 }
 
@@ -218,10 +218,10 @@ SwLayouter::~SwLayouter()
     delete mpLooping;
     // #i28701#
     delete mpMovedFwdFrms;
-    mpMovedFwdFrms = 0L;
+    mpMovedFwdFrms = nullptr;
     // #i35911#
     delete mpObjsTmpConsiderWrapInfl;
-    mpObjsTmpConsiderWrapInfl = 0L;
+    mpObjsTmpConsiderWrapInfl = nullptr;
 }
 
 void SwLayouter::_CollectEndnotes( SwSectionFrm* pSect )
@@ -276,7 +276,7 @@ bool SwLayouter::StartLooping( SwPageFrm* pPage )
 void SwLayouter::EndLoopControl()
 {
     delete mpLooping;
-    mpLooping = NULL;
+    mpLooping = nullptr;
 }
 
 void SwLayouter::CollectEndnotes( SwDoc* pDoc, SwSectionFrm* pSect )

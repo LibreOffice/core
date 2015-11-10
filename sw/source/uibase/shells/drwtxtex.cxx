@@ -422,7 +422,7 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 assert(pFact && "SwAbstractDialogFactory fail!");
 
-                std::unique_ptr<SfxAbstractTabDialog> pDlg(pFact->CreateSwParaDlg( GetView().GetWindow(), GetView(), aDlgAttr,DLG_STD, 0, true ));
+                std::unique_ptr<SfxAbstractTabDialog> pDlg(pFact->CreateSwParaDlg( GetView().GetWindow(), GetView(), aDlgAttr,DLG_STD, nullptr, true ));
                 assert(pDlg && "Dialog creation failed!");
                 sal_uInt16 nRet = pDlg->Execute();
                 if(RET_OK == nRet)
@@ -457,7 +457,7 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
         break;
         case SID_HYPERLINK_SETLINK:
         {
-            const SfxPoolItem* pItem = 0;
+            const SfxPoolItem* pItem = nullptr;
             if(pNewAttrs)
                 pNewAttrs->GetItemState(nSlot, false, &pItem);
 
@@ -590,7 +590,7 @@ void SwDrawTextShell::GetState(SfxItemSet& rSet)
     sal_uInt16 nWhich = aIter.FirstWhich();
 
     SfxItemSet aEditAttr( pOLV->GetAttribs() );
-    const SfxPoolItem *pAdjust = 0, *pLSpace = 0, *pEscItem = 0;
+    const SfxPoolItem *pAdjust = nullptr, *pLSpace = nullptr, *pEscItem = nullptr;
     int eAdjust, nLSpace, nEsc;
 
     while(nWhich)

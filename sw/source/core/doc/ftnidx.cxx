@@ -268,7 +268,7 @@ SwTextFootnote* SwFootnoteIdxs::SeekEntry( const SwNodeIndex& rPos, size_t* pFnd
             {
                 if( pFndPos )
                     *pFndPos = nU;
-                return 0;
+                return nullptr;
             }
             else
                 nO = nM - 1;
@@ -276,7 +276,7 @@ SwTextFootnote* SwFootnoteIdxs::SeekEntry( const SwNodeIndex& rPos, size_t* pFnd
     }
     if( pFndPos )
         *pFndPos = nU;
-    return 0;
+    return nullptr;
 }
 
 const SwSectionNode* SwUpdFootnoteEndNtAtEnd::FindSectNdWithEndAttr(

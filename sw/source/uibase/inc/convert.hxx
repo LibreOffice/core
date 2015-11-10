@@ -57,8 +57,8 @@ class SwConvertTableDlg: public SfxModalDialog
 
     DECL_LINK_TYPED( AutoFormatHdl, Button*, void );
     DECL_LINK_TYPED( BtnHdl, Button*, void );
-    DECL_LINK_TYPED( CheckBoxHdl, Button* = 0, void );
-    DECL_LINK_TYPED( ReapeatHeaderCheckBoxHdl, Button* = 0, void );
+    DECL_LINK_TYPED( CheckBoxHdl, Button* = nullptr, void );
+    DECL_LINK_TYPED( ReapeatHeaderCheckBoxHdl, Button* = nullptr, void );
 
 public:
     SwConvertTableDlg( SwView& rView, bool bToTable );

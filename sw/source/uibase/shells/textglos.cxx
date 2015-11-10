@@ -41,7 +41,7 @@ void SwTextShell::ExecGlossary(SfxRequest &rReq)
     bool bUpdateList = false;
 
     const SfxItemSet *pArgs = rReq.GetArgs();
-    const SfxPoolItem* pItem = 0;
+    const SfxPoolItem* pItem = nullptr;
     if(pArgs)
        pArgs->GetItemState(nSlot, false, &pItem );
 

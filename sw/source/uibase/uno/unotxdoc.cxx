@@ -174,13 +174,13 @@ static SwPrintUIOptions * lcl_GetPrintUIOptions(
     const SfxViewShell * pView )
 {
     if (!pDocShell)
-        return NULL;
+        return nullptr;
 
-    const bool bWebDoc      = NULL != dynamic_cast< const SwWebDocShell * >(pDocShell);
-    const bool bSwSrcView   = NULL != dynamic_cast< const SwSrcView * >(pView);
+    const bool bWebDoc      = nullptr != dynamic_cast< const SwWebDocShell * >(pDocShell);
+    const bool bSwSrcView   = nullptr != dynamic_cast< const SwSrcView * >(pView);
     const SwView * pSwView = dynamic_cast< const SwView * >(pView);
     const bool bHasSelection    = pSwView && pSwView->HasSelection( false );  // check for any selection, not just text selection
-    const bool bHasPostIts      = sw_GetPostIts( &pDocShell->GetDoc()->getIDocumentFieldsAccess(), 0 );
+    const bool bHasPostIts      = sw_GetPostIts( &pDocShell->GetDoc()->getIDocumentFieldsAccess(), nullptr );
 
     // get default values to use in dialog from documents SwPrintData
     const SwPrintData &rPrintData = pDocShell->GetDoc()->getIDocumentDeviceAccess().getPrintData();
@@ -375,11 +375,11 @@ SwXTextDocument::SwXTextDocument(SwDocShell* pShell)
 
     pDocShell(pShell),
 
-    bObjectValid(pShell != 0),
+    bObjectValid(pShell != nullptr),
 
-    pDrawPage(0),
+    pDrawPage(nullptr),
     mxXDrawPage(),
-    pBodyText(0),
+    pBodyText(nullptr),
     mxXNumberingRules(),
     mxXFootnotes(),
     mxXFootnoteSettings(),
@@ -402,10 +402,10 @@ SwXTextDocument::SwXTextDocument(SwDocShell* pShell)
     mxXLineNumberingProperties(),
     mxLinkTargetSupplier(),
     mxXRedlines(),
-    m_pHiddenViewFrame(0),
-    pPropertyHelper(0),
-    m_pPrintUIOptions( NULL ),
-    m_pRenderData( NULL ),
+    m_pHiddenViewFrame(nullptr),
+    pPropertyHelper(nullptr),
+    m_pPrintUIOptions( nullptr ),
+    m_pRenderData( nullptr ),
     // #i117783#
     bApplyPagePrintSettingsFromXPagePrintable( false )
 {
@@ -418,7 +418,7 @@ SwXTextDocument::~SwXTextDocument()
     {
         Reference< XInterface >  x0;
         xNumFormatAgg->setDelegator(x0);
-        xNumFormatAgg = 0;
+        xNumFormatAgg = nullptr;
     }
     delete m_pPrintUIOptions;
     if (m_pRenderData && m_pRenderData->IsViewOptionAdjust())
@@ -461,7 +461,7 @@ void SwXTextDocument::GetNumberFormatter()
         {
             const uno::Type& rTunnelType = cppu::UnoType<XUnoTunnel>::get();
             Any aNumTunnel = xNumFormatAgg->queryAggregation(rTunnelType);
-            SvNumberFormatsSupplierObj* pNumFormat = 0;
+            SvNumberFormatsSupplierObj* pNumFormat = nullptr;
             Reference< XUnoTunnel > xNumTunnel;
             if(aNumTunnel >>= xNumTunnel)
             {
@@ -763,7 +763,7 @@ sal_Int32 SwXTextDocument::replaceAll(const Reference< util::XSearchDescriptor >
         nResult = (sal_Int32)pUnoCrsr->Find( aSearch, !pSearch->bStyles,
                     eStart, eEnd, bCancel,
                     (FindRanges)eRanges,
-                    !pSearch->sSearchText.isEmpty() ? &aSearchOpt : 0,
+                    !pSearch->sSearchText.isEmpty() ? &aSearchOpt : nullptr,
                     &aReplace );
     }
     else if(pSearch->bStyles)
@@ -820,13 +820,13 @@ SwUnoCrsr* SwXTextDocument::FindAny(const Reference< util::XSearchDescriptor > &
     if(xLastResult.is())
     {
         Reference<XUnoTunnel> xCursorTunnel( xLastResult, UNO_QUERY);
-        OTextCursorHelper* pPosCrsr = 0;
+        OTextCursorHelper* pPosCrsr = nullptr;
         if(xCursorTunnel.is())
         {
             pPosCrsr = reinterpret_cast<OTextCursorHelper*>(xCursorTunnel->getSomething(
                                     OTextCursorHelper::getUnoTunnelId()));
         }
-        SwPaM* pCrsr = pPosCrsr ? pPosCrsr->GetPaM() : 0;
+        SwPaM* pCrsr = pPosCrsr ? pPosCrsr->GetPaM() : nullptr;
         if(pCrsr)
         {
             *pUnoCrsr->GetPoint() = *pCrsr->End();
@@ -834,7 +834,7 @@ SwUnoCrsr* SwXTextDocument::FindAny(const Reference< util::XSearchDescriptor > &
         }
         else
         {
-            SwXTextRange* pRange = 0;
+            SwXTextRange* pRange = nullptr;
             if(xCursorTunnel.is())
             {
                 pRange = reinterpret_cast<SwXTextRange*>(xCursorTunnel->getSomething(
@@ -893,13 +893,13 @@ SwUnoCrsr* SwXTextDocument::FindAny(const Reference< util::XSearchDescriptor > &
             nResult = (sal_Int32)pUnoCrsr->Find( aSearch, !pSearch->bStyles,
                         eStart, eEnd, bCancel,
                         (FindRanges)eRanges,
-                        !pSearch->sSearchText.isEmpty() ? &aSearchOpt : 0 );
+                        !pSearch->sSearchText.isEmpty() ? &aSearchOpt : nullptr );
         }
         else if(pSearch->bStyles)
         {
             SwTextFormatColl *pSearchColl = lcl_GetParaStyle(pSearch->sSearchText, pUnoCrsr->GetDoc());
             //pSearch->sReplaceText
-            SwTextFormatColl *pReplaceColl = 0;
+            SwTextFormatColl *pReplaceColl = nullptr;
             bool bCancel;
             nResult = (sal_Int32)pUnoCrsr->Find( *pSearchColl,
                         eStart, eEnd, bCancel,
@@ -1375,18 +1375,18 @@ void SwXTextDocument::Invalidate()
     {
         const uno::Type& rTunnelType = cppu::UnoType<XUnoTunnel>::get();
         Any aNumTunnel = xNumFormatAgg->queryAggregation(rTunnelType);
-        SvNumberFormatsSupplierObj* pNumFormat = 0;
+        SvNumberFormatsSupplierObj* pNumFormat = nullptr;
         Reference< XUnoTunnel > xNumTunnel;
         if(aNumTunnel >>= xNumTunnel)
         {
             pNumFormat = reinterpret_cast<SvNumberFormatsSupplierObj*>(
                     xNumTunnel->getSomething(SvNumberFormatsSupplierObj::getUnoTunnelId()));
-            pNumFormat->SetNumberFormatter(0);
+            pNumFormat->SetNumberFormatter(nullptr);
         }
         OSL_ENSURE(pNumFormat, "No number formatter available");
     }
     InitNewDoc();
-    pDocShell = 0;
+    pDocShell = nullptr;
     lang::EventObject const ev(static_cast<SwXTextDocumentBaseClass &>(*this));
     m_pImpl->m_RefreshListeners.disposeAndClear(ev);
 }
@@ -1432,15 +1432,15 @@ void    SwXTextDocument::InitNewDoc()
 
     if(xBodyText.is())
     {
-        xBodyText = 0;
-        pBodyText = 0;
+        xBodyText = nullptr;
+        pBodyText = nullptr;
     }
 
     if(xNumFormatAgg.is())
     {
         const uno::Type& rTunnelType = cppu::UnoType<XUnoTunnel>::get();
         Any aNumTunnel = xNumFormatAgg->queryAggregation(rTunnelType);
-        SvNumberFormatsSupplierObj* pNumFormat = 0;
+        SvNumberFormatsSupplierObj* pNumFormat = nullptr;
         Reference< XUnoTunnel > xNumTunnel;
         if(aNumTunnel >>= xNumTunnel)
         {
@@ -1450,7 +1450,7 @@ void    SwXTextDocument::InitNewDoc()
         }
         OSL_ENSURE(pNumFormat, "No number formatter available");
         if (pNumFormat)
-            pNumFormat->SetNumberFormatter(0);
+            pNumFormat->SetNumberFormatter(nullptr);
     }
 
     if(mxXTextFieldTypes.is())
@@ -1580,8 +1580,8 @@ void    SwXTextDocument::InitNewDoc()
     if(xPropertyHelper.is())
     {
         pPropertyHelper->Invalidate();
-        xPropertyHelper = 0;
-        pPropertyHelper = 0;
+        xPropertyHelper = nullptr;
+        pPropertyHelper = nullptr;
     }
 }
 
@@ -1667,7 +1667,7 @@ css::uno::Reference<css::uno::XInterface> SwXTextDocument::create(
         aTmpServiceName = "com.sun.star.drawing.OLE2Shape";
     }
     Reference<XInterface> xTmp(
-        arguments == 0
+        arguments == nullptr
         ? SvxFmMSFactory::createInstance(aTmpServiceName)
         : SvxFmMSFactory::createInstanceWithArguments(
             aTmpServiceName, *arguments));
@@ -1686,7 +1686,7 @@ css::uno::Reference<css::uno::XInterface> SwXTextDocument::create(
 Reference< XInterface >  SwXTextDocument::createInstance(const OUString& rServiceName)
                                         throw( Exception, RuntimeException, std::exception )
 {
-    return create(rServiceName, 0);
+    return create(rServiceName, nullptr);
 }
 
 Reference< XInterface >  SwXTextDocument::createInstanceWithArguments(
@@ -1889,7 +1889,7 @@ void SwXTextDocument::setPropertyValue(const OUString& rPropertyName, const Any&
             SwDrawModel * pDrawDoc;
             bool bAuto = *static_cast<sal_Bool const *>(aValue.getValue());
 
-            if ( 0 != ( pDrawDoc = pDocShell->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel() ) )
+            if ( nullptr != ( pDrawDoc = pDocShell->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel() ) )
                 pDrawDoc->SetAutoControlFocus( bAuto );
             else if (bAuto)
             {
@@ -1909,7 +1909,7 @@ void SwXTextDocument::setPropertyValue(const OUString& rPropertyName, const Any&
             SwDrawModel * pDrawDoc;
             bool bMode = *static_cast<sal_Bool const *>(aValue.getValue());
 
-            if ( 0 != ( pDrawDoc = pDocShell->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel() ) )
+            if ( nullptr != ( pDrawDoc = pDocShell->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel() ) )
                 pDrawDoc->SetOpenInDesignMode( bMode );
             else if (!bMode)
             {
@@ -2056,7 +2056,7 @@ Any SwXTextDocument::getPropertyValue(const OUString& rPropertyName)
         {
             SwDrawModel * pDrawDoc;
             bool bAuto;
-            if ( 0 != ( pDrawDoc = pDocShell->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel() ) )
+            if ( nullptr != ( pDrawDoc = pDocShell->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel() ) )
                 bAuto = pDrawDoc->GetAutoControlFocus();
             else
                 bAuto = false;
@@ -2067,7 +2067,7 @@ Any SwXTextDocument::getPropertyValue(const OUString& rPropertyName)
         {
             SwDrawModel * pDrawDoc;
             bool bMode;
-            if ( 0 != ( pDrawDoc = pDocShell->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel() ) )
+            if ( nullptr != ( pDrawDoc = pDocShell->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel() ) )
                 bMode = pDrawDoc->GetOpenInDesignMode();
             else
                 bMode = true;
@@ -2313,7 +2313,7 @@ SfxViewShell * SwXTextDocument::GetRenderView(
     bool bIsPDFExport )
 {
     // get view shell to use
-    SfxViewShell *pView = 0;
+    SfxViewShell *pView = nullptr;
     if (bIsPDFExport)
         pView = GuessViewShell( rbIsSwSrcView );
     else
@@ -2353,7 +2353,7 @@ SwDoc * SwXTextDocument::GetRenderDoc(
     const uno::Any& rSelection,
     bool bIsPDFExport )
 {
-    SwDoc *pDoc = 0;
+    SwDoc *pDoc = nullptr;
 
     uno::Reference< frame::XModel > xModel;
     rSelection >>= xModel;
@@ -2386,7 +2386,7 @@ SwDoc * SwXTextDocument::GetRenderDoc(
                 if (!m_pRenderData)
                 {
                     OSL_FAIL("GetRenderDoc: no renderdata");
-                    return 0;
+                    return nullptr;
                 }
                 SwView *const pSwView(static_cast<SwView *>(rpView));
                 SfxObjectShellLock xDocSh(m_pRenderData->GetTempDocShell());
@@ -2482,7 +2482,7 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
         SwDocShell *pRenderDocShell = pDoc->GetDocShell();
 
         // TODO/mba: we really need a generic way to get the SwViewShell!
-        SwViewShell* pViewShell = 0;
+        SwViewShell* pViewShell = nullptr;
         SwView* pSwView = dynamic_cast<SwView*>( pView );
         if ( pSwView )
         {
@@ -2543,7 +2543,7 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
             {
                 // PDF export should not make use of the SwPrtOptions
                 const SwPrintData *pPrtOptions = (bIsPDFExport)
-                    ? NULL : m_pRenderData->GetSwPrtOptions();
+                    ? nullptr : m_pRenderData->GetSwPrtOptions();
                 m_pRenderData->ViewOptionAdjust( pPrtOptions );
             }
 
@@ -2657,7 +2657,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwXTextDocument::getRenderer(
         throw IllegalArgumentException();
 
     // TODO/mba: we really need a generic way to get the SwViewShell!
-    SwViewShell* pVwSh = 0;
+    SwViewShell* pVwSh = nullptr;
     SwView* pSwView = dynamic_cast<SwView*>( pView );
     if ( pSwView )
         pVwSh = pSwView->GetWrtShellPtr();
@@ -2848,10 +2848,10 @@ SfxViewShell * SwXTextDocument::GuessViewShell(
     // #130810# SfxViewShell::Current() / SfxViewShell::GetObjectShell()
     // must not be used (see comment from MBA)
 
-    SfxViewShell    *pView = 0;
-    SwView          *pSwView = 0;
-    SwPagePreview   *pSwPagePreview = 0;
-    SwSrcView       *pSwSrcView = 0;
+    SfxViewShell    *pView = nullptr;
+    SwView          *pSwView = nullptr;
+    SwPagePreview   *pSwPagePreview = nullptr;
+    SwSrcView       *pSwSrcView = nullptr;
     SfxViewFrame    *pFrame = SfxViewFrame::GetFirst( pDocShell, false );
 
     // look for the view shell with the same controller in use,
@@ -2876,7 +2876,7 @@ SfxViewShell * SwXTextDocument::GuessViewShell(
 
     OSL_ENSURE( pSwView || pSwPagePreview || pSwSrcView, "failed to get view shell" );
     if (pView)
-        rbIsSwSrcView = pSwSrcView != 0;
+        rbIsSwSrcView = pSwSrcView != nullptr;
     return pView;
 }
 
@@ -2942,7 +2942,7 @@ void SAL_CALL SwXTextDocument::render(
                 // or SwPagePreview for PDF export of the page preview
                 //!! (check for SwView first as in GuessViewShell) !!
                 OSL_ENSURE( pView, "!! view missing !!" );
-                SwViewShell* pVwSh = 0;
+                SwViewShell* pVwSh = nullptr;
                 if (pView)
                 {
                     // TODO/mba: we really need a generic way to get the SwViewShell!
@@ -2978,7 +2978,7 @@ void SAL_CALL SwXTextDocument::render(
 
                     SwWrtShell* pWrtShell = dynamic_cast< const SwView *>( pView ) !=  nullptr ?
                                             static_cast<SwView*>(pView)->GetWrtShellPtr() :
-                                            0;
+                                            nullptr;
 
                     SwPrintData const& rSwPrtOptions =
                         *m_pRenderData->GetSwPrtOptions();
@@ -3020,7 +3020,7 @@ void SAL_CALL SwXTextDocument::render(
                         if (m_pHiddenViewFrame)
                         {
                             lcl_DisposeView( m_pHiddenViewFrame, pDocShell );
-                            m_pHiddenViewFrame = 0;
+                            m_pHiddenViewFrame = nullptr;
 
                             // prevent crash described in #i108805
                             SwDocShell *pRenderDocShell = pDoc->GetDocShell();
@@ -3035,8 +3035,8 @@ void SAL_CALL SwXTextDocument::render(
     }
     if( bLastPage )
     {
-        delete m_pRenderData;       m_pRenderData     = NULL;
-        delete m_pPrintUIOptions;   m_pPrintUIOptions = NULL;
+        delete m_pRenderData;       m_pRenderData     = nullptr;
+        delete m_pPrintUIOptions;   m_pPrintUIOptions = nullptr;
     }
 }
 
@@ -3386,7 +3386,7 @@ void SwXTextDocument::resetSelection()
     SolarMutexGuard aGuard;
 
     SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
-    pWrtShell->ResetSelect(0, false);
+    pWrtShell->ResetSelect(nullptr, false);
 }
 
 void SAL_CALL SwXTextDocument::paintTile( const ::css::uno::Any& Parent, ::sal_Int32 nOutputWidth, ::sal_Int32 nOutputHeight, ::sal_Int32 nTilePosX, ::sal_Int32 nTilePosY, ::sal_Int32 nTileWidth, ::sal_Int32 nTileHeight ) throw (::css::uno::RuntimeException, ::std::exception)
@@ -3743,7 +3743,7 @@ uno::Type  SwXLinkTargetSupplier::getElementType()
 
 sal_Bool SwXLinkTargetSupplier::hasElements() throw( RuntimeException, std::exception )
 {
-    return 0 != pxDoc;
+    return nullptr != pxDoc;
 }
 
 OUString SwXLinkTargetSupplier::getImplementationName() throw( RuntimeException, std::exception )
@@ -3772,7 +3772,7 @@ SwXLinkNameAccessWrapper::SwXLinkNameAccessWrapper(
     pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_LINK_TARGET)),
     sLinkSuffix(sSuffix),
     sLinkDisplayName(rLinkDisplayName),
-    pxDoc(0)
+    pxDoc(nullptr)
 {
 }
 
@@ -4196,14 +4196,14 @@ Reference<XInterface> SwXDocumentPropertyHelper::GetDrawTable(short nWhich)
 
 void SwXDocumentPropertyHelper::Invalidate()
 {
-    xDashTable = 0;
-    xGradientTable = 0;
-    xHatchTable = 0;
-    xBitmapTable = 0;
-    xTransGradientTable = 0;
-    xMarkerTable = 0;
-    xDrawDefaults = 0;
-    m_pDoc = 0;
+    xDashTable = nullptr;
+    xGradientTable = nullptr;
+    xHatchTable = nullptr;
+    xBitmapTable = nullptr;
+    xTransGradientTable = nullptr;
+    xMarkerTable = nullptr;
+    xDrawDefaults = nullptr;
+    m_pDoc = nullptr;
     SvxUnoForbiddenCharsTable::mxForbiddenChars.clear();
 }
 
@@ -4279,7 +4279,7 @@ SwViewOptionAdjust_Impl::AdjustViewOptions(SwPrintData const*const pPrtOptions)
 
     if (m_aOldViewOptions != aRenderViewOptions)  // check if reformatting is necessary
     {
-        aRenderViewOptions.SetPrinting( pPrtOptions != NULL );
+        aRenderViewOptions.SetPrinting( pPrtOptions != nullptr );
         m_pShell->ApplyViewOptions( aRenderViewOptions );
     }
 }

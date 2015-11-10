@@ -11,8 +11,8 @@
 
 RtfStringBufferValue::RtfStringBufferValue()
     : m_aBuffer(),
-      m_pFlyFrameFormat(0),
-      m_pGrfNode(0)
+      m_pFlyFrameFormat(nullptr),
+      m_pGrfNode(nullptr)
 {
 }
 
@@ -38,7 +38,7 @@ OString RtfStringBufferValue::makeStringAndClear()
 
 bool RtfStringBufferValue::isGraphic() const
 {
-    return m_pFlyFrameFormat != 0 && m_pGrfNode != 0;
+    return m_pFlyFrameFormat != nullptr && m_pGrfNode != nullptr;
 }
 
 RtfStringBuffer::RtfStringBuffer()

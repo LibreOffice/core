@@ -392,7 +392,7 @@ CSS1Token CSS1Parser::GetNextToken()
                         aIdent += sTmpBuffer2.makeStringAndClear();
 
                         // Ist es eine Einheit?
-                        const sal_Char *pCmp1 = 0, *pCmp2 = 0, *pCmp3 = 0;
+                        const sal_Char *pCmp1 = nullptr, *pCmp2 = nullptr, *pCmp3 = nullptr;
                         double nScale1 = 1., nScale2 = 1.;
                         CSS1Token nToken1 = CSS1_LENGTH,
                                   nToken2 = CSS1_LENGTH,
@@ -826,10 +826,10 @@ void CSS1Parser::ParseRule()
 
 CSS1Selector *CSS1Parser::ParseSelector()
 {
-    CSS1Selector *pRoot = 0, *pLast = 0;
+    CSS1Selector *pRoot = nullptr, *pLast = nullptr;
 
     bool bDone = false;
-    CSS1Selector *pNew = 0;
+    CSS1Selector *pNew = nullptr;
 
     LOOP_CHECK_DECL
 
@@ -927,7 +927,7 @@ CSS1Selector *CSS1Parser::ParseSelector()
         // falls ein Selektor angelegt wurd, ihn speichern
         if( pNew )
         {
-            OSL_ENSURE( (pRoot!=0) == (pLast!=0),
+            OSL_ENSURE( (pRoot!=nullptr) == (pLast!=nullptr),
                     "Root-Selektor, aber kein Last" );
             if( pLast )
                 pLast->SetNext( pNew );
@@ -935,7 +935,7 @@ CSS1Selector *CSS1Parser::ParseSelector()
                 pRoot = pNew;
 
             pLast = pNew;
-            pNew = 0;
+            pNew = nullptr;
         }
 
         if( bNextToken && !bDone )
@@ -993,7 +993,7 @@ CSS1Selector *CSS1Parser::ParseSelector()
 // beruecksichtigt und wird auf nValue angewendet!
 CSS1Expression *CSS1Parser::ParseDeclaration( OUString& rProperty )
 {
-    CSS1Expression *pRoot = 0, *pLast = 0;
+    CSS1Expression *pRoot = nullptr, *pLast = nullptr;
 
     // property
     if( CSS1_IDENT != nToken )
@@ -1018,7 +1018,7 @@ CSS1Expression *CSS1Parser::ParseDeclaration( OUString& rProperty )
     // Problem sein
     bool bDone = false;
     sal_Unicode cSign = 0, cOp = 0;
-    CSS1Expression *pNew = 0;
+    CSS1Expression *pNew = nullptr;
 
     LOOP_CHECK_DECL
 
@@ -1074,7 +1074,7 @@ CSS1Expression *CSS1Parser::ParseDeclaration( OUString& rProperty )
         // falls ein Expression angelegt wurde, diesen speichern
         if( pNew )
         {
-            OSL_ENSURE( (pRoot!=0) == (pLast!=0),
+            OSL_ENSURE( (pRoot!=nullptr) == (pLast!=nullptr),
                     "Root-Selektor, aber kein Last" );
             if( pLast )
                 pLast->SetNext( pNew );
@@ -1082,7 +1082,7 @@ CSS1Expression *CSS1Parser::ParseDeclaration( OUString& rProperty )
                 pRoot = pNew;
 
             pLast = pNew;
-            pNew = 0;
+            pNew = nullptr;
         }
 
         if( !bDone )

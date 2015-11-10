@@ -109,7 +109,7 @@ public:
     // werden aus dem Item-Set geloescht ). Wird fuer's BODY-Tag
     // aufgerufen.
     void SetPageDescAttrs( const SvxBrushItem *pBrush,
-                           SfxItemSet *pItemSet=0 );
+                           SfxItemSet *pItemSet=nullptr );
 
     void ChgPageDesc( const SwPageDesc *pPageDesc,
                       const SwPageDesc& rNewPageDesc );
@@ -120,7 +120,7 @@ public:
 
     // Fuellen eines DropCap-Attributs
     void FillDropCap( SwFormatDrop& rDrop, SfxItemSet& rItemSet,
-                      const OUString *pName=0 );
+                      const OUString *pName=nullptr );
 
     bool SetFormatBreak( SfxItemSet& rItemSet,
                       const SvxCSS1PropertyInfo& rPropInfo );

@@ -120,8 +120,8 @@ static bool lcl_Save( SwWrtShell& rSh, const OUString& rGroupName,
 
     if(aStart.HasMacro() || aEnd.HasMacro() )
     {
-        SvxMacro* pStart = aStart.HasMacro() ? &aStart : 0;
-        SvxMacro* pEnd = aEnd.HasMacro() ? &aEnd : 0;
+        SvxMacro* pStart = aStart.HasMacro() ? &aStart : nullptr;
+        SvxMacro* pEnd = aEnd.HasMacro() ? &aEnd : nullptr;
         pGlosHdl->SetMacros( rShortNm, pStart, pEnd, pBlock.get() );
     }
 
@@ -208,7 +208,7 @@ SwDocShellRef SwGlossaries::EditGroupDoc( const OUString& rGroup, const OUString
     if (pGroup && pGroup->GetCount())
     {
         // query which view is registered. In WebWriter there is no normal view
-        sal_uInt16 nViewId = 0 != SwView::Factory() ? 2 : 6;
+        sal_uInt16 nViewId = nullptr != SwView::Factory() ? 2 : 6;
         const OUString sLongName = pGroup->GetLongName(pGroup->GetIndex( rShortName ));
 
         if( 6 == nViewId )

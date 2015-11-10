@@ -116,7 +116,7 @@ public:
     void SetCondition(OUString const& rNew) { m_sCondition = rNew; }
 
     OUString GetLinkFileName() const        { return m_sLinkFileName; }
-    void SetLinkFileName(OUString const& rNew, OUString const* pPassWd = 0)
+    void SetLinkFileName(OUString const& rNew, OUString const* pPassWd = nullptr)
     {
         m_sLinkFileName = rNew;
         if (pPassWd) { SetLinkFilePassword(*pPassWd); }
@@ -203,7 +203,7 @@ public:
     void SetCondition(OUString const& rNew) { m_Data.SetCondition(rNew); }
 
     OUString GetLinkFileName() const;
-    void SetLinkFileName(OUString const& rNew, OUString const*const pPassWd = 0);
+    void SetLinkFileName(OUString const& rNew, OUString const*const pPassWd = nullptr);
     // Password of linked file (only valid during runtime!)
     OUString GetLinkFilePassword() const
         { return m_Data.GetLinkFilePassword(); }
@@ -354,7 +354,7 @@ SwSectionFormat const * SwSection::GetFormat() const
 inline SwSection* SwSection::GetParent() const
 {
     SwSectionFormat const * pFormat = GetFormat();
-    SwSection* pRet = 0;
+    SwSection* pRet = nullptr;
     if( pFormat )
         pRet = pFormat->GetParentSection();
     return pRet;
@@ -362,7 +362,7 @@ inline SwSection* SwSection::GetParent() const
 
 inline SwSectionFormat* SwSectionFormat::GetParent() const
 {
-    SwSectionFormat* pRet = 0;
+    SwSectionFormat* pRet = nullptr;
     if( GetRegisteredIn() )
         pRet = const_cast<SwSectionFormat*>(dynamic_cast< const SwSectionFormat* >( GetRegisteredIn() ));
     return pRet;
@@ -371,7 +371,7 @@ inline SwSectionFormat* SwSectionFormat::GetParent() const
 inline SwSection* SwSectionFormat::GetParentSection() const
 {
     SwSectionFormat* pParent = GetParent();
-    SwSection* pRet = 0;
+    SwSection* pRet = nullptr;
     if( pParent )
     {
         pRet = pParent->GetSection();

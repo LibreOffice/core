@@ -84,7 +84,7 @@ using namespace com::sun::star;
 
 inline bool GetRealURL( const SwGrfNode& rNd, OUString& rText )
 {
-    bool bRet = rNd.GetFileFilterNms( &rText, 0 );
+    bool bRet = rNd.GetFileFilterNms( &rText, nullptr );
     if( bRet )
         rText = URIHelper::removePassword( rText, INetURLObject::WAS_ENCODED,
                                            INetURLObject::DECODE_UNAMBIGUOUS);
@@ -97,7 +97,7 @@ static void lcl_PaintReplacement( const SwRect &rRect, const OUString &rText,
                            const SwViewShell &rSh, const SwNoTextFrm *pFrm,
                            bool bDefect )
 {
-    static vcl::Font *pFont = 0;
+    static vcl::Font *pFont = nullptr;
     if ( !pFont )
     {
         pFont = new vcl::Font();
@@ -730,7 +730,7 @@ bool paintUsingPrimitivesHelper(
                 aMappingTransform,
                 rOutputDevice.GetViewTransformation(),
                 rTargetRange,
-                0,
+                nullptr,
                 0.0,
                 uno::Sequence< beans::PropertyValue >());
 
@@ -923,7 +923,7 @@ void SwNoTextFrm::PaintPicture( vcl::RenderContext* pOut, const SwRect &rGrfArea
                                           pShell->GetWin();
 
                 if( bAnimate &&
-                    FindFlyFrm() != ::GetFlyFromMarked( 0, pShell ))
+                    FindFlyFrm() != ::GetFlyFromMarked( nullptr, pShell ))
                 {
                     OutputDevice* pVout;
                     if( pOut == pShell->GetOut() && SwRootFrm::FlushVout() )
@@ -932,7 +932,7 @@ void SwNoTextFrm::PaintPicture( vcl::RenderContext* pOut, const SwRect &rGrfArea
                              OUTDEV_VIRDEV == pOut->GetOutDevType() )
                         pVout = pOut, pOut = pShell->GetWin();
                     else
-                        pVout = 0;
+                        pVout = nullptr;
 
                     OSL_ENSURE( OUTDEV_VIRDEV != pOut->GetOutDevType() ||
                             pShell->GetViewOptions()->IsPDFExport() || pShell->isOutputToWindow(),
@@ -940,7 +940,7 @@ void SwNoTextFrm::PaintPicture( vcl::RenderContext* pOut, const SwRect &rGrfArea
 
                     pGrfNd->StartGraphicAnimation(pOut, aAlignedGrfArea.Pos(),
                                         aAlignedGrfArea.SSize(), sal_IntPtr(this),
-                                        0, GraphicManagerDrawFlags::STANDARD, pVout );
+                                        nullptr, GraphicManagerDrawFlags::STANDARD, pVout );
                 }
                 else
                 {
@@ -1046,7 +1046,7 @@ void SwNoTextFrm::PaintPicture( vcl::RenderContext* pOut, const SwRect &rGrfArea
                     pOLENd->GetOLEObj().GetObject().IsGLChart()))
             {
                 const SwFlyFrm *pFly = FindFlyFrm();
-                assert( pFly != NULL );
+                assert( pFly != nullptr );
                 static_cast<SwFEShell*>(pShell)->ConnectObj( pOLENd->GetOLEObj().GetObject(), pFly->Prt(), pFly->Frm());
             }
         }
@@ -1066,7 +1066,7 @@ bool SwNoTextFrm::IsTransparent() const
         return true;
 
     const SwGrfNode *pNd;
-    if( 0 != (pNd = GetNode()->GetGrfNode()) )
+    if( nullptr != (pNd = GetNode()->GetGrfNode()) )
         return pNd->IsTransparent();
 
     //#29381# OLE are always transparent

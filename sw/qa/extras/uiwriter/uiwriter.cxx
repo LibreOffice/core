@@ -248,7 +248,7 @@ public:
     CPPUNIT_TEST_SUITE_END();
 
 private:
-    SwDoc* createDoc(const char* pName = 0);
+    SwDoc* createDoc(const char* pName = nullptr);
 };
 
 SwDoc* SwUiWriterTest::createDoc(const char* pName)
@@ -483,7 +483,7 @@ void SwUiWriterTest::testImportRTF()
     SvMemoryStream aStream(const_cast<sal_Char*>(aData.getStr()), aData.getLength(), StreamMode::READ);
     SwReader aReader(aStream, OUString(), OUString(), *pWrtShell->GetCrsr());
     Reader* pRTFReader = SwReaderWriter::GetReader(READER_WRITER_RTF);
-    CPPUNIT_ASSERT(pRTFReader != 0);
+    CPPUNIT_ASSERT(pRTFReader != nullptr);
     CPPUNIT_ASSERT_EQUAL(sal_uLong(0), aReader.Read(*pRTFReader));
 
     sal_uLong nIndex = pWrtShell->GetCrsr()->GetNode().GetIndex();
@@ -719,7 +719,7 @@ void SwUiWriterTest::testChineseConversionBlank()
     SwPaM aPaM(aIdx);
 
     // When
-    SwHHCWrapper aWrap( pView, xContext, LANGUAGE_CHINESE_TRADITIONAL, LANGUAGE_CHINESE_SIMPLIFIED, NULL,
+    SwHHCWrapper aWrap( pView, xContext, LANGUAGE_CHINESE_TRADITIONAL, LANGUAGE_CHINESE_SIMPLIFIED, nullptr,
                         i18n::TextConversionOption::CHARACTER_BY_CHARACTER, false,
                         true, false, false );
     aWrap.Convert();
@@ -743,7 +743,7 @@ void SwUiWriterTest::testChineseConversionNonChineseText()
     pDoc->getIDocumentContentOperations().InsertString(aPaM, NON_CHINESE_CONTENT);
 
     // When
-    SwHHCWrapper aWrap( pView, xContext, LANGUAGE_CHINESE_TRADITIONAL, LANGUAGE_CHINESE_SIMPLIFIED, NULL,
+    SwHHCWrapper aWrap( pView, xContext, LANGUAGE_CHINESE_TRADITIONAL, LANGUAGE_CHINESE_SIMPLIFIED, nullptr,
                         i18n::TextConversionOption::CHARACTER_BY_CHARACTER, false,
                         true, false, false );
     aWrap.Convert();
@@ -767,7 +767,7 @@ void SwUiWriterTest::testChineseConversionTraditionalToSimplified()
     pDoc->getIDocumentContentOperations().InsertString(aPaM, CHINESE_TRADITIONAL_CONTENT);
 
     // When
-    SwHHCWrapper aWrap( pView, xContext, LANGUAGE_CHINESE_TRADITIONAL, LANGUAGE_CHINESE_SIMPLIFIED, NULL,
+    SwHHCWrapper aWrap( pView, xContext, LANGUAGE_CHINESE_TRADITIONAL, LANGUAGE_CHINESE_SIMPLIFIED, nullptr,
                         i18n::TextConversionOption::CHARACTER_BY_CHARACTER, false,
                         true, false, false );
     aWrap.Convert();
@@ -791,7 +791,7 @@ void SwUiWriterTest::testChineseConversionSimplifiedToTraditional()
     pDoc->getIDocumentContentOperations().InsertString(aPaM, CHINESE_SIMPLIFIED_CONTENT);
 
     // When
-    SwHHCWrapper aWrap( pView, xContext, LANGUAGE_CHINESE_SIMPLIFIED, LANGUAGE_CHINESE_TRADITIONAL, NULL,
+    SwHHCWrapper aWrap( pView, xContext, LANGUAGE_CHINESE_SIMPLIFIED, LANGUAGE_CHINESE_TRADITIONAL, nullptr,
                         i18n::TextConversionOption::CHARACTER_BY_CHARACTER, false,
                         true, false, false );
     aWrap.Convert();
@@ -2546,14 +2546,14 @@ void SwUiWriterTest::testShapeAnchorUndo()
     Rectangle aOrigLogicRect(pObject->GetLogicRect());
 
     sw::UndoManager& rUndoManager = pDoc->GetUndoManager();
-    rUndoManager.StartUndo(UNDO_START, NULL);
+    rUndoManager.StartUndo(UNDO_START, nullptr);
 
     pWrtShell->SelectObj(Point(), 0, pObject);
 
     pWrtShell->GetDrawView()->MoveMarkedObj(Size(100, 100));
     pWrtShell->ChgAnchor(0, true);
 
-    rUndoManager.EndUndo(UNDO_END, NULL);
+    rUndoManager.EndUndo(UNDO_END, nullptr);
 
     CPPUNIT_ASSERT(aOrigLogicRect != pObject->GetLogicRect());
 
@@ -2679,7 +2679,7 @@ void SwUiWriterTest::testTdf87922()
     // Create an SwDrawTextInfo.
     SwDoc* pDoc = createDoc("tdf87922.odt");
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
-    SwScriptInfo* pScriptInfo = 0;
+    SwScriptInfo* pScriptInfo = nullptr;
     // Get access to the single paragraph in the document.
     SwNodeIndex aNodeIndex(pDoc->GetNodes().GetEndOfContent(), -1);
     const OUString& rText = aNodeIndex.GetNode().GetTextNode()->GetText();

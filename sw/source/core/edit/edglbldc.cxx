@@ -157,7 +157,7 @@ bool SwEditShell::InsertGlobalDocContent( const SwGlblDocContent& rInsPos,
     else
     {
         bEndUndo = true;
-        pMyDoc->GetIDocumentUndoRedo().StartUndo( UNDO_START, NULL );
+        pMyDoc->GetIDocumentUndoRedo().StartUndo( UNDO_START, nullptr );
         --rPos.nNode;
         pMyDoc->getIDocumentContentOperations().AppendTextNode( rPos );
         pCrsr->SetMark();
@@ -167,7 +167,7 @@ bool SwEditShell::InsertGlobalDocContent( const SwGlblDocContent& rInsPos,
 
     if( bEndUndo )
     {
-        pMyDoc->GetIDocumentUndoRedo().EndUndo( UNDO_END, NULL );
+        pMyDoc->GetIDocumentUndoRedo().EndUndo( UNDO_END, nullptr );
     }
     EndAllAction();
 
@@ -199,7 +199,7 @@ bool SwEditShell::InsertGlobalDocContent( const SwGlblDocContent& rInsPos,
     else
     {
         bEndUndo = true;
-        pMyDoc->GetIDocumentUndoRedo().StartUndo( UNDO_START, NULL );
+        pMyDoc->GetIDocumentUndoRedo().StartUndo( UNDO_START, nullptr );
         --rPos.nNode;
         pMyDoc->getIDocumentContentOperations().AppendTextNode( rPos );
     }
@@ -208,7 +208,7 @@ bool SwEditShell::InsertGlobalDocContent( const SwGlblDocContent& rInsPos,
 
     if( bEndUndo )
     {
-        pMyDoc->GetIDocumentUndoRedo().EndUndo( UNDO_END, NULL );
+        pMyDoc->GetIDocumentUndoRedo().EndUndo( UNDO_END, nullptr );
     }
     EndAllAction();
 
@@ -229,7 +229,7 @@ bool SwEditShell::InsertGlobalDocContent( const SwGlblDocContent& rInsPos )
 
     SwPosition& rPos = *pCrsr->GetPoint();
     rPos.nNode = rInsPos.GetDocPos() - 1;
-    rPos.nContent.Assign( 0, 0 );
+    rPos.nContent.Assign( nullptr, 0 );
 
     SwDoc* pMyDoc = GetDoc();
     pMyDoc->getIDocumentContentOperations().AppendTextNode( rPos );
@@ -260,7 +260,7 @@ bool SwEditShell::DeleteGlobalDocContent( const SwGlblDocContents& rArr ,
     {
         // we need at least one node!
         rPos.nNode = nDelIdx - 1;
-        rPos.nContent.Assign( 0, 0 );
+        rPos.nContent.Assign( nullptr, 0 );
 
         pMyDoc->getIDocumentContentOperations().AppendTextNode( rPos );
         ++nDelIdx;
@@ -368,7 +368,7 @@ bool SwEditShell::GotoGlobalDocContent( const SwGlblDocContent& rPos )
 SwGlblDocContent::SwGlblDocContent( sal_uLong nPos )
 {
     eType = GLBLDOC_UNKNOWN;
-    PTR.pTOX = 0;
+    PTR.pTOX = nullptr;
     nDocPos = nPos;
 }
 

@@ -194,7 +194,7 @@ void sw_CharDialog( SwWrtShell &rWrtSh, bool bUseDialog, sal_uInt16 nSlot,const 
             pDlg->SetCurPageId(OUStringToOString(pItem->GetValue(), RTL_TEXTENCODING_UTF8));
     }
 
-    const SfxItemSet* pSet = NULL;
+    const SfxItemSet* pSet = nullptr;
     if ( !bUseDialog )
         pSet = pArgs;
     else if ( pDlg && pDlg->Execute() == RET_OK ) /* #110771# pDlg can be NULL */
@@ -283,7 +283,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
     bool bUseDialog = true;
     const SfxItemSet *pArgs = rReq.GetArgs();
     SwWrtShell& rWrtSh = GetShell();
-    const SfxPoolItem* pItem = 0;
+    const SfxPoolItem* pItem = nullptr;
     const sal_uInt16 nSlot = rReq.GetSlot();
     if(pArgs)
         pArgs->GetItemState(GetPool().GetWhich(nSlot), false, &pItem);
@@ -473,7 +473,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 SvxFontItem aFont( rFont.GetFamily(), pFont->GetValue(),
                                     rFont.GetStyleName(), rFont.GetPitch(), RTL_TEXTENCODING_DONTKNOW, RES_CHRATR_FONT );
                 rWrtSh.SetAttrSet( aSet, SetAttrMode::DONTEXPAND );
-                rWrtSh.ResetSelect(0, false);
+                rWrtSh.ResetSelect(nullptr, false);
                 rWrtSh.EndSelect();
                 rWrtSh.GotoFootnoteText();
             }
@@ -900,11 +900,11 @@ void SwTextShell::Execute(SfxRequest &rReq)
         }
         case SID_PARA_DLG:
         {
-            SwPaM* pPaM = NULL;
+            SwPaM* pPaM = nullptr;
 
             if ( pArgs )
             {
-                const SfxPoolItem* pPaMItem = 0;
+                const SfxPoolItem* pPaMItem = nullptr;
                 pArgs->GetItemState( GetPool().GetWhich( FN_PARAM_PAM ), false, &pPaMItem );
                 if ( pPaMItem )
                     pPaM = static_cast< const SwPaMItem* >( pPaMItem )->GetValue( );
@@ -1006,10 +1006,10 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-                pDlg.reset(pFact->CreateSwParaDlg( GetView().GetWindow(),GetView(), aCoreSet, DLG_STD, NULL, false, sDefPage ));
+                pDlg.reset(pFact->CreateSwParaDlg( GetView().GetWindow(),GetView(), aCoreSet, DLG_STD, nullptr, false, sDefPage ));
                 OSL_ENSURE(pDlg, "Dialog creation failed!");
             }
-            SfxItemSet* pSet = NULL;
+            SfxItemSet* pSet = nullptr;
             if ( !bUseDialog )
             {
                 if ( nSlot == SID_ATTR_PARA_LRSPACE)
@@ -1526,7 +1526,7 @@ void SwTextShell::GetState( SfxItemSet &rSet )
             {
                 const FrmTypeFlags nNoType =
                     FrmTypeFlags::FLY_ANY | FrmTypeFlags::HEADER | FrmTypeFlags::FOOTER | FrmTypeFlags::FOOTNOTE;
-                if ( rSh.GetFrmType(0,true) & nNoType )
+                if ( rSh.GetFrmType(nullptr,true) & nNoType )
                     rSet.DisableItem(nWhich);
 
                 if ( rSh.CrsrInsideInputField() )
@@ -1549,7 +1549,7 @@ void SwTextShell::GetState( SfxItemSet &rSet )
         case FN_INSERT_TABLE:
             if ( rSh.CrsrInsideInputField()
                  || rSh.GetTableFormat()
-                 || (rSh.GetFrmType(0,true) & FrmTypeFlags::FOOTNOTE) )
+                 || (rSh.GetFrmType(nullptr,true) & FrmTypeFlags::FOOTNOTE) )
             {
                 rSet.DisableItem( nWhich );
             }
@@ -1708,7 +1708,7 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                 }
                 else
                 {
-                    rSet.Put(SfxBoolItem( nWhich, 0 != GetView().GetViewFrame()->GetChildWindow( nWhich ) ));
+                    rSet.Put(SfxBoolItem( nWhich, nullptr != GetView().GetViewFrame()->GetChildWindow( nWhich ) ));
                 }
                 break;
 

@@ -62,7 +62,7 @@ bool SwUnoCrsr::IsReadOnlyAvailable() const
 const SwContentFrm*
 SwUnoCrsr::DoSetBidiLevelLeftRight( bool &, bool, bool )
 {
-    return 0; // not for uno cursor
+    return nullptr; // not for uno cursor
 }
 
 void SwUnoCrsr::DoSetBidiLevelUpDown()
@@ -97,7 +97,7 @@ bool SwUnoCrsr::IsSelOvr( int eFlags )
                 // (only over SwSection's !)
                 const SwStartNode* pInvalidNode;
                 do {
-                    pInvalidNode = 0;
+                    pInvalidNode = nullptr;
                     pNewSttNd = rPtIdx.GetNode().StartOfSectionNode();
 
                     const SwStartNode *pSttNd = pNewSttNd, *pEndNd = pOldSttNd;
@@ -157,10 +157,10 @@ bool SwUnoCrsr::IsSelOvr( int eFlags )
 }
 
 SwUnoTableCrsr::SwUnoTableCrsr(const SwPosition& rPos)
-    : SwCursor(rPos, 0, false)
+    : SwCursor(rPos, nullptr, false)
     , SwUnoCrsr(rPos)
     , SwTableCursor(rPos)
-    , m_aTableSel(rPos, 0, false)
+    , m_aTableSel(rPos, nullptr, false)
 {
     SetRemainInSection(false);
 }
@@ -189,8 +189,8 @@ void SwUnoTableCrsr::MakeBoxSels()
     const SwContentNode* pCNd;
     bool bMakeTableCrsrs = true;
     if( GetPoint()->nNode.GetIndex() && GetMark()->nNode.GetIndex() &&
-            0 != ( pCNd = GetContentNode() ) && pCNd->getLayoutFrm( pCNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout() ) &&
-            0 != ( pCNd = GetContentNode(false) ) && pCNd->getLayoutFrm( pCNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout() ) )
+            nullptr != ( pCNd = GetContentNode() ) && pCNd->getLayoutFrm( pCNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout() ) &&
+            nullptr != ( pCNd = GetContentNode(false) ) && pCNd->getLayoutFrm( pCNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout() ) )
         bMakeTableCrsrs = GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout()->MakeTableCrsrs( *this );
 
     if ( !bMakeTableCrsrs )
@@ -209,8 +209,8 @@ void SwUnoTableCrsr::MakeBoxSels()
         {
             const SwTableBox* pBox;
             const SwNode* pBoxNd = GetPoint()->nNode.GetNode().FindTableBoxStartNode();
-            const SwTableNode* pTableNd = pBoxNd ? pBoxNd->FindTableNode() : 0;
-            if( pTableNd && 0 != ( pBox = pTableNd->GetTable().GetTableBox( pBoxNd->GetIndex() )) )
+            const SwTableNode* pTableNd = pBoxNd ? pBoxNd->FindTableNode() : nullptr;
+            if( pTableNd && nullptr != ( pBox = pTableNd->GetTable().GetTableBox( pBoxNd->GetIndex() )) )
                 InsertBox( *pBox );
         }
     }

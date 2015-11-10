@@ -42,7 +42,7 @@ class SwDropPortionPart
 
 public:
     SwDropPortionPart( SwFont& rFont, const sal_Int32 nL )
-            : pFollow( 0 ), pFnt( &rFont ), nLen( nL ), nWidth( 0 ), m_bJoinBorderWithNext(false), m_bJoinBorderWithPrev(false) {};
+            : pFollow( nullptr ), pFnt( &rFont ), nLen( nL ), nWidth( 0 ), m_bJoinBorderWithNext(false), m_bJoinBorderWithPrev(false) {};
     ~SwDropPortionPart();
 
     inline SwDropPortionPart* GetFollow() const { return pFollow; };
@@ -98,7 +98,7 @@ public:
 
     inline void SetY( short nNew )  { nY = nNew; }
 
-    inline SwFont* GetFnt() const { return pPart ? &pPart->GetFont() : NULL; }
+    inline SwFont* GetFnt() const { return pPart ? &pPart->GetFont() : nullptr; }
 
     static void DeleteDropCapCache();
 

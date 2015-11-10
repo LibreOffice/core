@@ -85,13 +85,13 @@ public:
     SwRect          aRect;
 
     SwQueuedPaint( SwViewShell *pNew, const SwRect &rRect ) :
-        pNext( 0 ),
+        pNext( nullptr ),
         pSh( pNew ),
         aRect( rRect )
     {}
 };
 
-SwQueuedPaint *SwPaintQueue::pQueue = 0;
+SwQueuedPaint *SwPaintQueue::pQueue = nullptr;
 
 // saves some settings from the draw view
 class SwDrawViewSave
@@ -106,7 +106,7 @@ public:
 void SwPaintQueue::Add( SwViewShell *pNew, const SwRect &rNew )
 {
     SwQueuedPaint *pPt;
-    if ( 0 != (pPt = pQueue) )
+    if ( nullptr != (pPt = pQueue) )
     {
         while ( pPt->pSh != pNew && pPt->pNext )
             pPt = pPt->pNext;
@@ -156,9 +156,9 @@ void SwPaintQueue::Repaint()
 void SwPaintQueue::Remove( SwViewShell *pSh )
 {
     SwQueuedPaint *pPt;
-    if ( 0 != (pPt = pQueue) )
+    if ( nullptr != (pPt = pQueue) )
     {
-        SwQueuedPaint *pPrev = 0;
+        SwQueuedPaint *pPrev = nullptr;
         while ( pPt && pPt->pSh != pSh )
         {
             pPrev = pPt;
@@ -169,7 +169,7 @@ void SwPaintQueue::Remove( SwViewShell *pSh )
             if ( pPrev )
                 pPrev->pNext = pPt->pNext;
             else if ( pPt == pQueue )
-                pQueue = 0;
+                pQueue = nullptr;
             delete pPt;
         }
     }
@@ -337,7 +337,7 @@ SwDoc * SwViewShell::FillPrtDoc( SwDoc *pPrtDoc, const SfxPrinter* pPrt)
     for( sal_uInt16 nWh = POOLATTR_BEGIN; nWh < POOLATTR_END; ++nWh )
     {
         const SfxPoolItem* pCpyItem = rPool.GetPoolDefaultItem( nWh );
-        if( 0 != pCpyItem )
+        if( nullptr != pCpyItem )
             pPrtDoc->GetAttrPool().SetPoolDefaultItem( *pCpyItem );
     }
 
@@ -359,7 +359,7 @@ SwDoc * SwViewShell::FillPrtDoc( SwDoc *pPrtDoc, const SfxPrinter* pPrt)
         SwShellTableCrsr* pShellTableCrsr = pFESh->GetTableCrsr();
 
         const SwContentNode* pContentNode = pShellTableCrsr->GetNode().GetContentNode();
-        const SwContentFrm *pContentFrm = pContentNode ? pContentNode->getLayoutFrm( GetLayout(), 0, pShellTableCrsr->Start() ) : 0;
+        const SwContentFrm *pContentFrm = pContentNode ? pContentNode->getLayoutFrm( GetLayout(), nullptr, pShellTableCrsr->Start() ) : nullptr;
         if( pContentFrm )
         {
             SwRect aCharRect;
@@ -440,7 +440,7 @@ sw_getPage(SwRootFrm const& rLayout, sal_Int32 const nPage)
     }
     OSL_ENSURE(pPage, "ERROR: SwPageFrm expected");
     OSL_FAIL("non-existent page requested");
-    return 0;
+    return nullptr;
 }
 
 bool SwViewShell::PrintOrPDFExport(
@@ -463,14 +463,14 @@ bool SwViewShell::PrintOrPDFExport(
     // and then scale that metafile down so that the comments
     // will fit on the real page, and replay that scaled
     // output to the real outputdevice
-    GDIMetaFile *pOrigRecorder(NULL);
-    GDIMetaFile *pMetaFile(NULL);
+    GDIMetaFile *pOrigRecorder(nullptr);
+    GDIMetaFile *pMetaFile(nullptr);
     SwPostItMode nPostItMode = rPrintData.GetPrintPostIts();
     if (nPostItMode == SwPostItMode::InMargins)
     {
         //get and disable the existing recorder
         pOrigRecorder = pOutDev->GetConnectMetaFile();
-        pOutDev->SetConnectMetaFile(NULL);
+        pOutDev->SetConnectMetaFile(nullptr);
         // turn off output to the device
         pOutDev->EnableOutput(false);
         // just record the rendering commands to the metafile
@@ -487,7 +487,7 @@ bool SwViewShell::PrintOrPDFExport(
     // It is implemented this way because PDF export calls this Prt function
     // once per page and we do not like to always have the temporary document
     // to be created that often here.
-    SwViewShell *pShell = new SwViewShell(*this, 0, pOutDev);
+    SwViewShell *pShell = new SwViewShell(*this, nullptr, pOutDev);
 
     SdrView *pDrawView = pShell->GetDrawView();
     if (pDrawView)
@@ -538,7 +538,7 @@ bool SwViewShell::PrintOrPDFExport(
         SwPaintQueue::Repaint();
 
         SwPostItMgr *pPostItManager = (nPostItMode == SwPostItMode::InMargins) ?
-            pShell->GetPostItMgr() : NULL;
+            pShell->GetPostItMgr() : nullptr;
         if (pPostItManager)
         {
             pPostItManager->CalcRects();
@@ -589,9 +589,9 @@ void SwViewShell::PrtOle2( SwDoc *pDoc, const SwViewOption *pOpt, const SwPrintD
     // create a new view, or it has none, than we create the first view.
     SwViewShell *pSh;
     if( pDoc->getIDocumentLayoutAccess().GetCurrentViewShell() )
-        pSh = new SwViewShell( *pDoc->getIDocumentLayoutAccess().GetCurrentViewShell(), 0, &rRenderContext,VSHELLFLAG_SHARELAYOUT );
+        pSh = new SwViewShell( *pDoc->getIDocumentLayoutAccess().GetCurrentViewShell(), nullptr, &rRenderContext,VSHELLFLAG_SHARELAYOUT );
     else
-        pSh = new SwViewShell( *pDoc, 0, pOpt, &rRenderContext);
+        pSh = new SwViewShell( *pDoc, nullptr, pOpt, &rRenderContext);
 
     {
         SET_CURR_SHELL( pSh );
@@ -631,7 +631,7 @@ bool SwViewShell::IsAnyFieldInDoc() const
     sal_uInt32 nMaxItems = mpDoc->GetAttrPool().GetItemCount2( RES_TXTATR_FIELD );
     for( sal_uInt32 n = 0; n < nMaxItems; ++n )
     {
-        if( 0 != (pItem = mpDoc->GetAttrPool().GetItem2( RES_TXTATR_FIELD, n )))
+        if( nullptr != (pItem = mpDoc->GetAttrPool().GetItem2( RES_TXTATR_FIELD, n )))
         {
             const SwFormatField* pFormatField = static_cast<const SwFormatField*>(pItem);
             const SwTextField* pTextField = pFormatField->GetTextField();
@@ -645,7 +645,7 @@ bool SwViewShell::IsAnyFieldInDoc() const
     nMaxItems = mpDoc->GetAttrPool().GetItemCount2( RES_TXTATR_INPUTFIELD );
     for( sal_uInt32 n = 0; n < nMaxItems; ++n )
     {
-        if( 0 != (pItem = mpDoc->GetAttrPool().GetItem2( RES_TXTATR_INPUTFIELD, n )))
+        if( nullptr != (pItem = mpDoc->GetAttrPool().GetItem2( RES_TXTATR_INPUTFIELD, n )))
         {
             const SwFormatField* pFormatField = static_cast<const SwFormatField*>(pItem);
             const SwTextField* pTextField = pFormatField->GetTextField();

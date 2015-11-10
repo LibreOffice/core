@@ -70,7 +70,7 @@ using namespace com::sun::star;
 static SwContentNode* GetContentNode(SwDoc* pDoc, SwNodeIndex& rIdx, bool bNext)
 {
     SwContentNode * pCNd = rIdx.GetNode().GetContentNode();
-    if(!pCNd && 0 == (pCNd = bNext ? pDoc->GetNodes().GoNext(&rIdx)
+    if(!pCNd && nullptr == (pCNd = bNext ? pDoc->GetNodes().GoNext(&rIdx)
                                      : SwNodes::GoPrevious(&rIdx)))
     {
         pCNd = bNext ? SwNodes::GoPrevious(&rIdx)
@@ -329,7 +329,7 @@ SwFltStackEntry* SwFltControlStack::SetAttr(const SwPosition& rPos,
     sal_uInt16 nAttrId, bool bTstEnde, long nHand,
     bool consumedByField)
 {
-    SwFltStackEntry *pRet = NULL;
+    SwFltStackEntry *pRet = nullptr;
 
     SwFltPosition aFltPos(rPos);
 
@@ -516,7 +516,7 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
     case RES_FLTR_ANCHOR:
         {
             SwFrameFormat* pFormat = static_cast<SwFltAnchor*>(rEntry.pAttr)->GetFrameFormat();
-            if (pFormat != NULL)
+            if (pFormat != nullptr)
             {
                 MakePoint(rEntry, pDoc, aRegion);
                 SwFormatAnchor aAnchor(pFormat->GetAnchor());
@@ -621,7 +621,7 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
             // test if on this node there had been a pagebreak BEFORE the
             //     tox attribute was put on the stack
             SfxItemSet aBkSet( pDoc->GetAttrPool(), RES_PAGEDESC, RES_BREAK );
-            SwContentNode* pNd = 0;
+            SwContentNode* pNd = nullptr;
             if( !pTOXAttr->HadBreakItem() || !pTOXAttr->HadPageDescItem() )
             {
                 pNd = pPoint->nNode.GetNode().GetContentNode();
@@ -669,7 +669,7 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
                                         rFltRedline.nAutorNoPrev,
                                         rFltRedline.aStampPrev,
                                         OUString(),
-                                        0
+                                        nullptr
                                         );
                     pDoc->getIDocumentRedlineAccess().AppendRedline(new SwRangeRedline(aData, aRegion), true);
                 }
@@ -677,7 +677,7 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
                                     rFltRedline.nAutorNo,
                                     rFltRedline.aStamp,
                                     OUString(),
-                                    0
+                                    nullptr
                                     );
                 pDoc->getIDocumentRedlineAccess().AppendRedline( new SwRangeRedline(aData, aRegion), true );
                 pDoc->getIDocumentRedlineAccess().SetRedlineMode((RedlineMode_t)( nsRedlineMode_t::REDLINE_NONE
@@ -742,7 +742,7 @@ SfxPoolItem* SwFltControlStack::GetFormatStackAttr(sal_uInt16 nWhich, sal_uInt16
             return rEntry.pAttr;      // Ok, so stop
         }
     }
-    return 0;
+    return nullptr;
 }
 
 const SfxPoolItem* SwFltControlStack::GetOpenStackAttr(const SwPosition& rPos, sal_uInt16 nWhich)
@@ -759,7 +759,7 @@ const SfxPoolItem* SwFltControlStack::GetOpenStackAttr(const SwPosition& rPos, s
             return rEntry.pAttr;
         }
     }
-    return 0;
+    return nullptr;
 }
 
 void SwFltControlStack::Delete(const SwPaM &rPam)
@@ -896,11 +896,11 @@ void  SwFltAnchorClient::Modify(const SfxPoolItem *, const SfxPoolItem * pNew)
     {
         const SwFormatChg * pFormatChg = dynamic_cast<const SwFormatChg *> (pNew);
 
-        if (pFormatChg != NULL)
+        if (pFormatChg != nullptr)
         {
             SwFrameFormat * pFrameFormat = dynamic_cast<SwFrameFormat *> (pFormatChg->pChangedFormat);
 
-            if (pFrameFormat != NULL)
+            if (pFrameFormat != nullptr)
                 m_pFltAnchor->SetFrameFormat(pFrameFormat);
         }
     }

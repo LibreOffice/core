@@ -99,14 +99,14 @@ SwSidebarWin::SwSidebarWin(SwEditWin& rEditWin,
     , mrMgr(aMgr)
     , mrView(rEditWin.GetView())
     , nFlags(aBits)
-    , mnEventId(0)
-    , mpOutlinerView(0)
-    , mpOutliner(0)
-    , mpSidebarTextControl(0)
-    , mpVScrollbar(0)
-    , mpMetadataAuthor(0)
-    , mpMetadataDate(0)
-    , mpMenuButton(0)
+    , mnEventId(nullptr)
+    , mpOutlinerView(nullptr)
+    , mpOutliner(nullptr)
+    , mpSidebarTextControl(nullptr)
+    , mpVScrollbar(nullptr)
+    , mpMetadataAuthor(nullptr)
+    , mpMetadataDate(nullptr)
+    , mpMenuButton(nullptr)
     , mpAnchor(nullptr)
     , mpShadow(nullptr)
     , mpTextRangeOverlay(nullptr)
@@ -155,7 +155,7 @@ void SwSidebarWin::dispose()
     {
         if ( mpOutlinerView )
         {
-            mpOutlinerView->SetWindow( 0 );
+            mpOutlinerView->SetWindow( nullptr );
         }
     }
     mpSidebarTextControl.disposeAndClear();
@@ -163,13 +163,13 @@ void SwSidebarWin::dispose()
     if ( mpOutlinerView )
     {
         delete mpOutlinerView;
-        mpOutlinerView = 0;
+        mpOutlinerView = nullptr;
     }
 
     if (mpOutliner)
     {
         delete mpOutliner;
-        mpOutliner = 0;
+        mpOutliner = nullptr;
     }
 
     if (mpMetadataAuthor)
@@ -1073,7 +1073,7 @@ void SwSidebarWin::DeactivatePostIt()
 
     if ( !IsProtected() && Engine()->GetEditEngine().GetText().isEmpty() )
     {
-        mnEventId = Application::PostUserEvent( LINK( this, SwSidebarWin, DeleteHdl), 0, true );
+        mnEventId = Application::PostUserEvent( LINK( this, SwSidebarWin, DeleteHdl), nullptr, true );
     }
 }
 
@@ -1109,7 +1109,7 @@ void SwSidebarWin::ExecuteCommand(sal_uInt16 nSlot)
                 mrMgr.RegisterAnswer(pPara);
             }
             if (mrMgr.HasActiveSidebarWin())
-                mrMgr.SetActiveSidebarWin(0);
+                mrMgr.SetActiveSidebarWin(nullptr);
             SwitchToFieldPos();
             mrView.GetViewFrame()->GetDispatcher()->Execute(FN_POSTIT);
             break;
@@ -1117,13 +1117,13 @@ void SwSidebarWin::ExecuteCommand(sal_uInt16 nSlot)
         case FN_DELETE_COMMENT:
 
                 //Delete(); // do not kill the parent of our open popup menu
-                mnEventId = Application::PostUserEvent( LINK( this, SwSidebarWin, DeleteHdl), 0, true );
+                mnEventId = Application::PostUserEvent( LINK( this, SwSidebarWin, DeleteHdl), nullptr, true );
             break;
         case FN_FORMAT_ALL_NOTES:
         case FN_DELETE_ALL_NOTES:
         case FN_HIDE_ALL_NOTES:
             // not possible as slot as this would require that "this" is the active postit
-            mrView.GetViewFrame()->GetBindings().Execute( nSlot, 0, 0, SfxCallMode::ASYNCHRON );
+            mrView.GetViewFrame()->GetBindings().Execute( nSlot, nullptr, 0, SfxCallMode::ASYNCHRON );
             break;
         case FN_DELETE_NOTE_AUTHOR:
         case FN_HIDE_NOTE_AUTHOR:
@@ -1132,7 +1132,7 @@ void SwSidebarWin::ExecuteCommand(sal_uInt16 nSlot)
             SfxStringItem aItem( nSlot, GetAuthor() );
             const SfxPoolItem* aItems[2];
             aItems[0] = &aItem;
-            aItems[1] = 0;
+            aItems[1] = nullptr;
             mrView.GetViewFrame()->GetBindings().Execute( nSlot, aItems, 0, SfxCallMode::ASYNCHRON );
         }
             break;
@@ -1206,12 +1206,12 @@ void SwSidebarWin::Delete()
 {
     if ( mrMgr.GetActiveSidebarWin() == this)
     {
-        mrMgr.SetActiveSidebarWin(0);
+        mrMgr.SetActiveSidebarWin(nullptr);
         // if the note is empty, the previous line will send a delete event, but we are already there
         if (mnEventId)
         {
             Application::RemoveUserEvent( mnEventId );
-            mnEventId = 0;
+            mnEventId = nullptr;
         }
     }
 }
@@ -1229,7 +1229,7 @@ IMPL_LINK_NOARG_TYPED(SwSidebarWin, ModifyHdl, LinkParamNone*, void)
 
 IMPL_LINK_NOARG_TYPED(SwSidebarWin, DeleteHdl, void*, void)
 {
-    mnEventId = 0;
+    mnEventId = nullptr;
     Delete();
 }
 
@@ -1336,7 +1336,7 @@ void SwSidebarWin::SetViewState(ViewState bViewState)
                     SwSidebarWin* pTopWinSelf = GetTopReplyNote();
                     SwSidebarWin* pTopWinActive = mrMgr.HasActiveSidebarWin()
                                                   ? mrMgr.GetActiveSidebarWin()->GetTopReplyNote()
-                                                  : 0;
+                                                  : nullptr;
                     // #i111964#
                     if ( pTopWinSelf && ( pTopWinSelf != pTopWinActive ) &&
                          pTopWinSelf->Anchor() )
@@ -1369,12 +1369,12 @@ void SwSidebarWin::SetViewState(ViewState bViewState)
 
 SwSidebarWin* SwSidebarWin::GetTopReplyNote()
 {
-    SwSidebarWin* pTopNote = 0;
-    SwSidebarWin* pSidebarWin = IsFollow() ? mrMgr.GetNextPostIt(KEY_PAGEUP, this) : 0;
+    SwSidebarWin* pTopNote = nullptr;
+    SwSidebarWin* pSidebarWin = IsFollow() ? mrMgr.GetNextPostIt(KEY_PAGEUP, this) : nullptr;
     while (pSidebarWin)
     {
         pTopNote = pSidebarWin;
-        pSidebarWin = pSidebarWin->IsFollow() ? mrMgr.GetNextPostIt(KEY_PAGEUP, pSidebarWin) : 0;
+        pSidebarWin = pSidebarWin->IsFollow() ? mrMgr.GetNextPostIt(KEY_PAGEUP, pSidebarWin) : nullptr;
     }
     return pTopNote;
 }
@@ -1382,7 +1382,7 @@ SwSidebarWin* SwSidebarWin::GetTopReplyNote()
 void SwSidebarWin::SwitchToFieldPos()
 {
     if ( mrMgr.GetActiveSidebarWin() == this )
-            mrMgr.SetActiveSidebarWin(0);
+            mrMgr.SetActiveSidebarWin(nullptr);
     GotoPos();
     sal_uInt32 aCount = MoveCaret();
     if (aCount)

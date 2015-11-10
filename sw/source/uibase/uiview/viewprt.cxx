@@ -255,17 +255,17 @@ VclPtr<SfxTabPage> CreatePrintOptionsPage( vcl::Window *pParent,
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
     OSL_ENSURE(pFact, "No Print Dialog");
     if (!pFact)
-        return NULL;
+        return nullptr;
 
     ::CreateTabPage fnCreatePage = pFact->GetTabPageCreatorFunc(TP_OPTPRINT_PAGE);
     OSL_ENSURE(pFact, "No Page Creator");
     if (!fnCreatePage)
-        return NULL;
+        return nullptr;
 
     VclPtr<SfxTabPage> pPage = fnCreatePage(pParent, &rOptions);
     OSL_ENSURE(pPage, "No page");
     if (!pPage)
-        return NULL;
+        return nullptr;
 
     SfxAllItemSet aSet(*(rOptions.GetPool()));
     aSet.Put(SfxBoolItem(SID_PREVIEWFLAG_TYPE, bPreview));

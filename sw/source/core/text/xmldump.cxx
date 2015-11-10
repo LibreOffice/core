@@ -216,7 +216,7 @@ namespace
     xmlTextWriterPtr lcl_createDefaultWriter()
     {
         xmlTextWriterPtr writer = xmlNewTextWriterFilename( "layout.xml", 0 );
-        xmlTextWriterStartDocument( writer, NULL, NULL, NULL );
+        xmlTextWriterStartDocument( writer, nullptr, nullptr, nullptr );
         return writer;
     }
 
@@ -229,11 +229,11 @@ namespace
 
 void SwFrm::dumpAsXml( xmlTextWriterPtr writer ) const
 {
-    bool bCreateWriter = ( NULL == writer );
+    bool bCreateWriter = ( nullptr == writer );
     if ( bCreateWriter )
         writer = lcl_createDefaultWriter();
 
-    const char *name = NULL;
+    const char *name = nullptr;
 
     switch ( GetType(  ) )
     {
@@ -287,7 +287,7 @@ void SwFrm::dumpAsXml( xmlTextWriterPtr writer ) const
         break;
     };
 
-    if ( name != NULL )
+    if ( name != nullptr )
     {
         xmlTextWriterStartElement( writer, reinterpret_cast<const xmlChar *>(name) );
 
@@ -395,7 +395,7 @@ void SwFrm::dumpAsXmlAttributes( xmlTextWriterPtr writer ) const
 void SwFrm::dumpChildrenAsXml( xmlTextWriterPtr writer ) const
 {
     const SwFrm *pFrm = GetLower(  );
-    for ( ; pFrm != NULL; pFrm = pFrm->GetNext(  ) )
+    for ( ; pFrm != nullptr; pFrm = pFrm->GetNext(  ) )
     {
         pFrm->dumpAsXml( writer );
     }
@@ -403,7 +403,7 @@ void SwFrm::dumpChildrenAsXml( xmlTextWriterPtr writer ) const
 
 void SwAnchoredObject::dumpAsXml( xmlTextWriterPtr writer ) const
 {
-    bool bCreateWriter = ( NULL == writer );
+    bool bCreateWriter = ( nullptr == writer );
     if ( bCreateWriter )
         writer = lcl_createDefaultWriter();
 
@@ -437,7 +437,7 @@ void SwTextFrm::dumpAsXmlAttributes( xmlTextWriterPtr writer ) const
     if ( HasFollow() )
         xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "follow" ), "%" SAL_PRIuUINT32, GetFollow()->GetFrmId() );
 
-    if (m_pPrecede != NULL)
+    if (m_pPrecede != nullptr)
         xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "precede" ), "%" SAL_PRIuUINT32, static_cast<SwTextFrm*>(m_pPrecede)->GetFrmId() );
 }
 
@@ -447,7 +447,7 @@ void SwSectionFrm::dumpAsXmlAttributes( xmlTextWriterPtr writer ) const
     if ( HasFollow() )
         xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "follow" ), "%" SAL_PRIuUINT32, GetFollow()->GetFrmId() );
 
-    if (m_pPrecede != NULL)
+    if (m_pPrecede != nullptr)
         xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "precede" ), "%" SAL_PRIuUINT32, static_cast<SwSectionFrm*>( m_pPrecede )->GetFrmId() );
 }
 
@@ -457,7 +457,7 @@ void SwTabFrm::dumpAsXmlAttributes( xmlTextWriterPtr writer ) const
     if ( HasFollow() )
         xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "follow" ), "%" SAL_PRIuUINT32, GetFollow()->GetFrmId() );
 
-    if (m_pPrecede != NULL)
+    if (m_pPrecede != nullptr)
         xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "precede" ), "%" SAL_PRIuUINT32, static_cast<SwTabFrm*>( m_pPrecede )->GetFrmId() );
 }
 

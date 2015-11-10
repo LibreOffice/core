@@ -166,7 +166,7 @@ class SwAutoFormat
     bool IsNoAlphaLine( const SwTextNode&) const;
     bool IsEnumericChar( const SwTextNode&) const;
     static bool IsBlanksInString( const SwTextNode&);
-    sal_uInt16 CalcLevel( const SwTextNode&, sal_uInt16 *pDigitLvl = 0 ) const;
+    sal_uInt16 CalcLevel( const SwTextNode&, sal_uInt16 *pDigitLvl = nullptr ) const;
     sal_Int32 GetBigIndent( sal_Int32& rAktSpacePos ) const;
 
     static OUString DelLeadingBlanks(const OUString& rStr);
@@ -176,8 +176,8 @@ class SwAutoFormat
 
     bool IsFirstCharCapital( const SwTextNode& rNd ) const;
     sal_uInt16 GetDigitLevel( const SwTextNode& rTextNd, sal_Int32& rPos,
-                            OUString* pPrefix = 0, OUString* pPostfix = 0,
-                            OUString* pNumTypes = 0 ) const;
+                            OUString* pPrefix = nullptr, OUString* pPostfix = nullptr,
+                            OUString* pNumTypes = nullptr ) const;
     /// get the FORMATTED TextFrame
     SwTextFrm* GetFrm( const SwTextNode& rTextNd ) const;
 
@@ -224,18 +224,18 @@ class SwAutoFormat
     bool SetRedlineText( sal_uInt16 nId )
         { if( m_aFlags.bWithRedlining )   _SetRedlineText( nId );  return true; }
     bool ClearRedlineText()
-        { if( m_aFlags.bWithRedlining )   m_pDoc->GetDocumentRedlineManager().SetAutoFormatRedlineComment(0);  return true; }
+        { if( m_aFlags.bWithRedlining )   m_pDoc->GetDocumentRedlineManager().SetAutoFormatRedlineComment(nullptr);  return true; }
 
 public:
     SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFormatFlags& rFlags,
-                SwNodeIndex* pSttNd = 0, SwNodeIndex* pEndNd = 0 );
+                SwNodeIndex* pSttNd = nullptr, SwNodeIndex* pEndNd = nullptr );
 };
 
 const sal_Unicode* StrChr( const sal_Unicode* pSrc, sal_Unicode c )
 {
     while( *pSrc && *pSrc != c )
         ++pSrc;
-    return *pSrc ? pSrc : 0;
+    return *pSrc ? pSrc : nullptr;
 }
 
 SwTextFrm* SwAutoFormat::GetFrm( const SwTextNode& rTextNd ) const
@@ -292,7 +292,7 @@ void SwAutoFormat::_SetRedlineText( sal_uInt16 nActionId )
 
 OUString SwAutoFormat::GoNextPara()
 {
-    SwNode* pNewNd = 0;
+    SwNode* pNewNd = nullptr;
     do {
         // has to be checked twice before and after incrementation
         if( m_aNdIdx.GetIndex() >= m_aEndNdIdx.GetIndex() )
@@ -361,7 +361,7 @@ bool SwAutoFormat::HasObjects( const SwNode& rNd )
 const SwTextNode* SwAutoFormat::GetNextNode() const
 {
     if( m_aNdIdx.GetIndex()+1 >= m_aEndNdIdx.GetIndex() )
-        return 0;
+        return nullptr;
     return m_pDoc->GetNodes()[ m_aNdIdx.GetIndex() + 1 ]->GetTextNode();
 }
 
@@ -468,7 +468,7 @@ sal_uInt16 SwAutoFormat::CalcLevel( const SwTextNode& rNd, sal_uInt16 *pDigitLvl
 sal_Int32 SwAutoFormat::GetBigIndent( sal_Int32& rAktSpacePos ) const
 {
     SwTextFrmInfo aFInfo( GetFrm( *m_pCurTextNd ) );
-    const SwTextFrm* pNxtFrm = 0;
+    const SwTextFrm* pNxtFrm = nullptr;
 
     if( !m_bMoreLines )
     {
@@ -656,7 +656,7 @@ bool SwAutoFormat::DoTable()
         m_aDelPam.Move( fnMoveForward );
         m_pDoc->InsertTable( SwInsertTableOptions( tabopts::ALL_TBL_INS_ATTR , 1 ),
                            *m_aDelPam.GetPoint(), 1, nColCnt, eHori,
-                           0, &aPosArr );
+                           nullptr, &aPosArr );
         m_aDelPam.GetPoint()->nNode = aIdx;
     }
     return 1 < aPosArr.size();
@@ -1385,8 +1385,8 @@ void SwAutoFormat::BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel )
                      // #i89178#
                      numfunc::GetDefaultPositionAndSpaceMode() );
 
-    const SwNumRule* pCur = 0;
-    if( m_aFlags.bSetNumRule && 0 != (pCur = m_pCurTextNd->GetNumRule()) )
+    const SwNumRule* pCur = nullptr;
+    if( m_aFlags.bSetNumRule && nullptr != (pCur = m_pCurTextNd->GetNumRule()) )
         aRule = *pCur;
 
     // replace bullet character with defined one
@@ -1395,7 +1395,7 @@ void SwAutoFormat::BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel )
     const sal_Unicode* pFndBulletChr;
     if( m_aFlags.bChgEnumNum &&
         2 < rStr.getLength() &&
-        0 != ( pFndBulletChr = StrChr( pBulletChar, rStr[ nTextStt ] ))
+        nullptr != ( pFndBulletChr = StrChr( pBulletChar, rStr[ nTextStt ] ))
         && IsSpace( rStr[ nTextStt + 1 ] ) )
     {
         if( m_aFlags.bAFormatByInput )
@@ -1410,7 +1410,7 @@ void SwAutoFormat::BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel )
                 {
                     int nBulletPos = pFndBulletChr - pBulletChar;
                     sal_Unicode cBullChar;
-                    const vcl::Font* pBullFnt( 0 );
+                    const vcl::Font* pBullFnt( nullptr );
                     if( nBulletPos < cnPosEnDash )
                     {
                         cBullChar = m_aFlags.cBullet;
@@ -1807,7 +1807,7 @@ void SwAutoFormat::AutoCorrect( sal_Int32 nPos )
 
     SwAutoCorrDoc aACorrDoc( *m_pEditShell, m_aDelPam );
 
-    SwTextFrmInfo aFInfo( 0 );
+    SwTextFrmInfo aFInfo( nullptr );
 
     sal_Int32 nSttPos, nLastBlank = nPos;
     bool bFirst = m_aFlags.bCapitalStartSentence, bFirstSent = bFirst;
@@ -1853,7 +1853,7 @@ void SwAutoFormat::AutoCorrect( sal_Int32 nPos )
                     m_pCurTextNd = m_aNdIdx.GetNode().GetTextNode();
                     pText = &m_pCurTextNd->GetText();
                     m_aDelPam.SetMark();
-                    aFInfo.SetFrm( 0 );
+                    aFInfo.SetFrm( nullptr );
                 }
 
                 nPos += sReplace.getLength() - 1;
@@ -1905,7 +1905,7 @@ void SwAutoFormat::AutoCorrect( sal_Int32 nPos )
                             pText = &m_pCurTextNd->GetText();
                             m_aDelPam.SetMark();
                             m_aDelPam.DeleteMark();
-                            aFInfo.SetFrm( 0 );
+                            aFInfo.SetFrm( nullptr );
                         }
 
                         nPos += sReplace.getLength() - 1;
@@ -1946,7 +1946,7 @@ void SwAutoFormat::AutoCorrect( sal_Int32 nPos )
                                 pText = &m_pCurTextNd->GetText();
                                 m_aDelPam.SetMark();
                                 m_aDelPam.DeleteMark();
-                                aFInfo.SetFrm( 0 );
+                                aFInfo.SetFrm( nullptr );
                             }
                             //#125102# in case of the mode REDLINE_SHOW_DELETE the ** are still contained in pText
                             if(0 == (m_pDoc->getIDocumentRedlineAccess().GetRedlineMode() & nsRedlineMode_t::REDLINE_SHOW_DELETE))
@@ -2001,7 +2001,7 @@ void SwAutoFormat::AutoCorrect( sal_Int32 nPos )
             m_aDelPam.GetPoint()->nContent = nPos;
             SetRedlineText( STR_AUTOFMTREDL_USE_REPLACE );
             if( m_aFlags.bAutoCorrect &&
-                aACorrDoc.ChgAutoCorrWord( nSttPos, nPos, *pATst, 0 ) )
+                aACorrDoc.ChgAutoCorrWord( nSttPos, nPos, *pATst, nullptr ) )
             {
                 nPos = m_aDelPam.GetPoint()->nContent.GetIndex();
 
@@ -2078,7 +2078,7 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFormatFlags& rFlags,
     m_aEndNdIdx( pEdShell->GetDoc()->GetNodes().GetEndOfContent() ),
     m_pEditShell( pEdShell ),
     m_pDoc( pEdShell->GetDoc() ),
-    m_pCurTextNd( 0 ), m_pCurTextFrm( 0 ),
+    m_pCurTextNd( nullptr ), m_pCurTextFrm( nullptr ),
     m_nRedlAutoFormatSeqId( 0 )
 {
     OSL_ENSURE( (pSttNd && pEndNd) || (!pSttNd && !pEndNd),
@@ -2089,7 +2089,7 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFormatFlags& rFlags,
 
     bool bReplaceStyles = !m_aFlags.bAFormatByInput || m_aFlags.bReplaceStyles;
 
-    const SwTextNode* pNxtNd = 0;
+    const SwTextNode* pNxtNd = nullptr;
     bool bNxtEmpty = false;
     bool bNxtAlpha = false;
     sal_uInt16 nNxtLevel = 0;
@@ -2143,7 +2143,7 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFormatFlags& rFlags,
     sal_uInt16 nDigitLvl = 0;
 
     // set defaults
-    SwTextFrmInfo aFInfo( 0 );
+    SwTextFrmInfo aFInfo( nullptr );
 
     // This is the automat for autoformatting
     m_eStat = READ_NEXT_PARA;

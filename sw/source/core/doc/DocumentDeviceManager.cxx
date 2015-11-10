@@ -50,11 +50,11 @@ class SwWait;
 
 namespace sw {
 
-DocumentDeviceManager::DocumentDeviceManager( SwDoc& i_rSwdoc ) : m_rDoc( i_rSwdoc ), mpPrt(0), mpVirDev(0), mpPrtData(0) {}
+DocumentDeviceManager::DocumentDeviceManager( SwDoc& i_rSwdoc ) : m_rDoc( i_rSwdoc ), mpPrt(nullptr), mpVirDev(nullptr), mpPrtData(nullptr) {}
 
 SfxPrinter* DocumentDeviceManager::getPrinter(/*[in]*/ bool bCreate ) const
 {
-    SfxPrinter* pRet = 0;
+    SfxPrinter* pRet = nullptr;
     if ( !bCreate || mpPrt )
         pRet = mpPrt;
     else
@@ -95,7 +95,7 @@ void DocumentDeviceManager::setPrinter(/*[in]*/ SfxPrinter *pP,/*[in]*/ bool bDe
 
 VirtualDevice* DocumentDeviceManager::getVirtualDevice(/*[in]*/ bool bCreate ) const
 {
-    VirtualDevice* pRet = 0;
+    VirtualDevice* pRet = nullptr;
     if ( !bCreate || mpVirDev )
         pRet = mpVirDev;
     else
@@ -123,7 +123,7 @@ void DocumentDeviceManager::setVirtualDevice(/*[in]*/ VirtualDevice* pVd,/*[in]*
 
 OutputDevice* DocumentDeviceManager::getReferenceDevice(/*[in]*/ bool bCreate ) const
 {
-    OutputDevice* pRet = 0;
+    OutputDevice* pRet = nullptr;
     if ( !m_rDoc.GetDocumentSettingManager().get(DocumentSettingId::USE_VIRTUAL_DEVICE) )
     {
         pRet = getPrinter( bCreate );
@@ -181,7 +181,7 @@ void DocumentDeviceManager::setReferenceDeviceType(/*[in]*/ bool bNewVirtual, /*
 
 const JobSetup* DocumentDeviceManager::getJobsetup() const
 {
-    return mpPrt ? &mpPrt->GetJobSetup() : 0;
+    return mpPrt ? &mpPrt->GetJobSetup() : nullptr;
 }
 
 void DocumentDeviceManager::setJobsetup(/*[in]*/ const JobSetup &rJobSetup )
@@ -308,7 +308,7 @@ void DocumentDeviceManager::PrtDataChanged()
 
     // #i41075#
     OSL_ENSURE( m_rDoc.getIDocumentSettingAccess().get(DocumentSettingId::USE_VIRTUAL_DEVICE) ||
-            0 != getPrinter( false ), "PrtDataChanged will be called recursively!" );
+            nullptr != getPrinter( false ), "PrtDataChanged will be called recursively!" );
     SwRootFrm* pTmpRoot = m_rDoc.getIDocumentLayoutAccess().GetCurrentLayout();
     std::unique_ptr<SwWait> pWait;
     bool bEndAction = false;

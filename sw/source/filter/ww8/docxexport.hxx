@@ -200,8 +200,8 @@ protected:
     /// Get ready for a new section.
     virtual void PrepareNewPageDesc( const SfxItemSet* pSet,
                                      const SwNode& rNd,
-                                     const SwFormatPageDesc* pNewPgDescFormat = 0,
-                                     const SwPageDesc* pNewPgDesc = 0 ) override;
+                                     const SwFormatPageDesc* pNewPgDescFormat = nullptr,
+                                     const SwPageDesc* pNewPgDesc = nullptr ) override;
 
 private:
     /// Setup pStyles and write styles.xml

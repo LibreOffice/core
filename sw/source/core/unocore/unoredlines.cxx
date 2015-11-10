@@ -180,7 +180,7 @@ void SwXRedlineEnumeration::Modify( const SfxPoolItem* pOld, const SfxPoolItem *
 {
     ClientModify(this, pOld, pNew);
     if(!GetRegisteredIn())
-        pDoc = 0;
+        pDoc = nullptr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

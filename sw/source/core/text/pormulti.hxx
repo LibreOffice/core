@@ -86,7 +86,7 @@ class SwMultiPortion : public SwLinePortion
     sal_uInt8 nDirection:2; // Direction (0/90/180/270 degrees)
 protected:
     explicit SwMultiPortion(sal_Int32 nEnd)
-        : pFieldRest(0)
+        : pFieldRest(nullptr)
         , bTab1(false)
         , bTab2(false)
         , bDouble(false)
@@ -242,7 +242,7 @@ public:
 
 inline bool SwMultiPortion::HasBrackets() const
 {
-    return IsDouble() && 0 != static_cast<const SwDoubleLinePortion*>(this)->GetBrackets();
+    return IsDouble() && nullptr != static_cast<const SwDoubleLinePortion*>(this)->GetBrackets();
 }
 
 #endif

@@ -95,8 +95,8 @@ static void lcl_GetLayTree( const SwFrm* pFrm, std::vector<const SwFrm*>& rArr )
 bool IsFrameBehind( const SwTextNode& rMyNd, sal_Int32 nMySttPos,
                     const SwTextNode& rBehindNd, sal_Int32 nSttPos )
 {
-    const SwTextFrm *pMyFrm = static_cast<SwTextFrm*>(rMyNd.getLayoutFrm( rMyNd.GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), 0, 0, false) ),
-                   *pFrm = static_cast<SwTextFrm*>(rBehindNd.getLayoutFrm( rBehindNd.GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), 0, 0, false) );
+    const SwTextFrm *pMyFrm = static_cast<SwTextFrm*>(rMyNd.getLayoutFrm( rMyNd.GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), nullptr, nullptr, false) ),
+                   *pFrm = static_cast<SwTextFrm*>(rBehindNd.getLayoutFrm( rBehindNd.GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), nullptr, nullptr, false) );
 
     while( pFrm && !pFrm->IsInside( nSttPos ) )
         pFrm = pFrm->GetFollow();
@@ -162,7 +162,7 @@ bool IsFrameBehind( const SwTextNode& rMyNd, sal_Int32 nMySttPos,
                 bRefIsLower = pRefFrm->Frm().Left() < pFieldFrm->Frm().Left() ||
                             ( pRefFrm->Frm().Left() == pFieldFrm->Frm().Left() &&
                               pRefFrm->Frm().Top() < pFieldFrm->Frm().Top() );
-            pRefFrm = 0;
+            pRefFrm = nullptr;
         }
         else if( ( FRM_COLUMN | FRM_CELL ) & pFieldFrm->GetType() )
             pFieldFrm = aArr[ nCnt - 1 ];
@@ -242,7 +242,7 @@ const SwTextNode* SwGetRefField::GetReferencedTextNode() const
 {
     SwGetRefFieldType *pTyp = dynamic_cast<SwGetRefFieldType*>(GetTyp());
     if (!pTyp)
-        return NULL;
+        return nullptr;
     sal_Int32 nDummy = -1;
     return SwGetRefFieldType::FindAnchor( pTyp->GetDoc(), sSetRefName, nSubType, nSeqNo, &nDummy );
 }
@@ -420,17 +420,17 @@ void SwGetRefField::UpdateField( const SwTextField* pFieldTextAttr )
     case REF_PAGE:
     case REF_PAGE_PGDESC:
         {
-            const SwTextFrm* pFrm = static_cast<SwTextFrm*>(pTextNd->getLayoutFrm( pDoc->getIDocumentLayoutAccess().GetCurrentLayout(), 0, 0, false)),
+            const SwTextFrm* pFrm = static_cast<SwTextFrm*>(pTextNd->getLayoutFrm( pDoc->getIDocumentLayoutAccess().GetCurrentLayout(), nullptr, nullptr, false)),
                         *pSave = pFrm;
             while( pFrm && !pFrm->IsInside( nNumStart ) )
                 pFrm = pFrm->GetFollow();
 
-            if( pFrm || 0 != ( pFrm = pSave ))
+            if( pFrm || nullptr != ( pFrm = pSave ))
             {
                 sal_uInt16 nPageNo = pFrm->GetVirtPageNum();
                 const SwPageFrm *pPage;
                 if( REF_PAGE_PGDESC == GetFormat() &&
-                    0 != ( pPage = pFrm->FindPageFrm() ) &&
+                    nullptr != ( pPage = pFrm->FindPageFrm() ) &&
                     pPage->GetPageDesc() )
                     sText = pPage->GetPageDesc()->GetNumType().GetNumStr( nPageNo );
                 else
@@ -524,7 +524,7 @@ OUString SwGetRefField::MakeRefNumStr( const SwTextNode& rTextNodeOfField,
              rTextNodeOfField.FindFooterStartNode()
                             == rTextNodeOfReferencedItem.FindFooterStartNode() )
         {
-            const SwNodeNum* pNodeNumForTextNodeOfField( 0 );
+            const SwNodeNum* pNodeNumForTextNodeOfField( nullptr );
             if ( rTextNodeOfField.HasNumber() &&
                  rTextNodeOfField.GetNumRule() == rTextNodeOfReferencedItem.GetNumRule() )
             {
@@ -799,7 +799,7 @@ void SwGetRefFieldType::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew
             SwGetRefField* pGRef = static_cast<SwGetRefField*>(pFormatField->GetField());
             const SwTextField* pTField;
             if( !pGRef->GetLanguage() &&
-                0 != ( pTField = pFormatField->GetTextField()) &&
+                nullptr != ( pTField = pFormatField->GetTextField()) &&
                 pTField->GetpTextNode() )
             {
                 pGRef->SetLanguage( pTField->GetpTextNode()->GetLang(
@@ -820,7 +820,7 @@ SwTextNode* SwGetRefFieldType::FindAnchor( SwDoc* pDoc, const OUString& rRefMark
 {
     OSL_ENSURE( pStt, "Why did no one check the StartPos?" );
 
-    SwTextNode* pTextNd = 0;
+    SwTextNode* pTextNd = nullptr;
     switch( nSubType )
     {
     case REF_SETREFATTR:
@@ -905,7 +905,7 @@ SwTextNode* SwGetRefFieldType::FindAnchor( SwDoc* pDoc, const OUString& rRefMark
                     if( pIdx )
                     {
                         SwNodeIndex aIdx( *pIdx, 1 );
-                        if( 0 == ( pTextNd = aIdx.GetNode().GetTextNode()))
+                        if( nullptr == ( pTextNd = aIdx.GetNode().GetTextNode()))
                             pTextNd = static_cast<SwTextNode*>(pDoc->GetNodes().GoNext( &aIdx ));
                     }
                     *pStt = 0;
@@ -1106,7 +1106,7 @@ void SwGetRefFieldType::MergeWithOtherDoc( SwDoc& rDestDoc )
             {
             case REF_SEQUENCEFLD:
                 {
-                    _RefIdsMap* pMap = 0;
+                    _RefIdsMap* pMap = nullptr;
                     for( auto n = aFieldMap.size(); n; )
                     {
                         if (aFieldMap[ --n ]->GetName() == rRefField.GetSetRefName())

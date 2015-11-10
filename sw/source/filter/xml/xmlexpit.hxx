@@ -82,7 +82,7 @@ public:
                                     const SfxPoolItem& rItem,
                                     const SvXMLUnitConverter& rUnitConverter,
                                     const SvXMLNamespaceMap& rNamespaceMap,
-                                    const SfxItemSet *pSet = NULL ) const;
+                                    const SfxItemSet *pSet = nullptr ) const;
 
     /** this method is called for every item that has the
         MID_SW_FLAG_NO_ITEM_EXPORT flag set */

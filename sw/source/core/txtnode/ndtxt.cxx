@@ -127,7 +127,7 @@ SwTextNode *SwNodes::MakeTextNode( const SwNodeIndex & rWhere,
     // if there is no layout or it is in a hidden section, MakeFrms is not needed
     const SwSectionNode* pSectNd;
     if( !GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell() ||
-        ( 0 != (pSectNd = pNode->FindSectionNode()) &&
+        ( nullptr != (pSectNd = pNode->FindSectionNode()) &&
             pSectNd->GetSection().IsHiddenFlag() ))
         return pNode;
 
@@ -199,10 +199,10 @@ SwTextNode *SwNodes::MakeTextNode( const SwNodeIndex & rWhere,
 
 SwTextNode::SwTextNode( const SwNodeIndex &rWhere, SwTextFormatColl *pTextColl, const SfxItemSet* pAutoAttr )
 :   SwContentNode( rWhere, ND_TEXTNODE, pTextColl ),
-    m_pSwpHints( 0 ),
-    mpNodeNum( 0 ),
+    m_pSwpHints( nullptr ),
+    mpNodeNum( nullptr ),
     m_Text(),
-    m_pParaIdleData_Impl(0),
+    m_pParaIdleData_Impl(nullptr),
     m_bContainsHiddenChars(false),
     m_bHiddenCharsHidePara(false),
     m_bRecalcHiddenCharFlags(false),
@@ -210,7 +210,7 @@ SwTextNode::SwTextNode( const SwNodeIndex &rWhere, SwTextFormatColl *pTextColl, 
     m_bNotifiable( false ),
     mbEmptyListStyleSetDueToSetOutlineLevelAttr( false ),
     mbInSetOrResetAttr( false ),
-    mpList( 0 ),
+    mpList( nullptr ),
     m_pNumStringCache(),
     m_wXParagraph(),
     maFillAttributes()
@@ -247,7 +247,7 @@ SwTextNode::~SwTextNode()
     {
         // do not delete attributes twice when those delte their content
         SwpHints* pTmpHints = m_pSwpHints;
-        m_pSwpHints = 0;
+        m_pSwpHints = nullptr;
 
         for( size_t j = pTmpHints->Count(); j; )
         {
@@ -303,11 +303,11 @@ static void lcl_ChangeFootnoteRef( SwTextNode &rNode )
     SwpHints *pSwpHints = rNode.GetpSwpHints();
     if( pSwpHints && rNode.GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell() )
     {
-        SwContentFrm* pFrm = NULL;
+        SwContentFrm* pFrm = nullptr;
         // OD 07.11.2002 #104840# - local variable to remember first footnote
         // of node <rNode> in order to invalidate position of its first content.
         // Thus, in its <MakeAll()> it will checked its position relative to its reference.
-        SwFootnoteFrm* pFirstFootnoteOfNode = 0;
+        SwFootnoteFrm* pFirstFootnoteOfNode = nullptr;
         for( size_t j = pSwpHints->Count(); j; )
         {
             SwTextAttr* pHt = pSwpHints->Get(--j);
@@ -350,7 +350,7 @@ static void lcl_ChangeFootnoteRef( SwTextNode &rNode )
                         }
                     }
 #if OSL_DEBUG_LEVEL > 0
-                    while( 0 != (pContent = aIter.Next()) )
+                    while( nullptr != (pContent = aIter.Next()) )
                     {
                         SwFootnoteFrm *pDbgFootnote = pContent->FindFootnoteFrm();
                         OSL_ENSURE( !pDbgFootnote || pDbgFootnote->GetRef() == pFrm,
@@ -397,7 +397,7 @@ SwContentNode *SwTextNode::SplitContentNode( const SwPosition &rPos )
     ResetAttr( RES_PARATR_LIST_ISRESTART );
     ResetAttr( RES_PARATR_LIST_RESTARTVALUE );
     ResetAttr( RES_PARATR_LIST_ISCOUNTED );
-    if ( GetNumRule() == 0 || (parentIsOutline && !IsOutline()) )
+    if ( GetNumRule() == nullptr || (parentIsOutline && !IsOutline()) )
     {
         ResetAttr( RES_PARATR_LIST_ID );
         ResetAttr( RES_PARATR_LIST_LEVEL );
@@ -448,7 +448,7 @@ SwContentNode *SwTextNode::SplitContentNode( const SwPosition &rPos )
             if ( pNode->m_pSwpHints->CanBeDeleted() )
             {
                 delete pNode->m_pSwpHints;
-                pNode->m_pSwpHints = 0;
+                pNode->m_pSwpHints = nullptr;
             }
             else
             {
@@ -504,19 +504,19 @@ SwContentNode *SwTextNode::SplitContentNode( const SwPosition &rPos )
         // text node.
         const SwRootFrm *pRootFrm;
         if ( (nTextLen != nSplitPos) ||
-            ( (pRootFrm = pNode->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout()) != 0 &&
+            ( (pRootFrm = pNode->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout()) != nullptr &&
               pRootFrm->IsAnyShellAccessible() ) )
         {
             // dann sage den Frames noch, das am Ende etwas "geloescht" wurde
             if( 1 == nTextLen - nSplitPos )
             {
                 SwDelChr aHint( nSplitPos );
-                pNode->NotifyClients( 0, &aHint );
+                pNode->NotifyClients( nullptr, &aHint );
             }
             else
             {
                 SwDelText aHint( nSplitPos, nTextLen - nSplitPos );
-                pNode->NotifyClients( 0, &aHint );
+                pNode->NotifyClients( nullptr, &aHint );
             }
         }
         if ( HasHints() )
@@ -529,17 +529,17 @@ SwContentNode *SwTextNode::SplitContentNode( const SwPosition &rPos )
     else
     {
         SwWrongList *pList = GetWrong();
-        SetWrong( 0, false );
+        SetWrong( nullptr, false );
         SetWrongDirty(WrongState::TODO);
 
         SwGrammarMarkUp *pList3 = GetGrammarCheck();
-        SetGrammarCheck( 0, false );
+        SetGrammarCheck( nullptr, false );
         SetGrammarCheckDirty( true );
 
         SetWordCountDirty( true );
 
         SwWrongList *pList2 = GetSmartTags();
-        SetSmartTags( 0, false );
+        SetSmartTags( nullptr, false );
         SetSmartTagDirty( true );
 
         SwIndex aIdx( this );
@@ -652,7 +652,7 @@ SwContentNode *SwTextNode::JoinNext()
         {
             pList->JoinList( pTextNode->GetWrong(), nOldLen );
             SetWrongDirty(WrongState::TODO);
-            SetWrong( 0, false );
+            SetWrong( nullptr, false );
         }
         else
         {
@@ -661,7 +661,7 @@ SwContentNode *SwTextNode::JoinNext()
             {
                 pList->Move( 0, nOldLen );
                 SetWrongDirty(WrongState::TODO);
-                pTextNode->SetWrong( 0, false );
+                pTextNode->SetWrong( nullptr, false );
             }
         }
 
@@ -670,7 +670,7 @@ SwContentNode *SwTextNode::JoinNext()
         {
             pList3->JoinGrammarList( pTextNode->GetGrammarCheck(), nOldLen );
             SetGrammarCheckDirty( true );
-            SetGrammarCheck( 0, false );
+            SetGrammarCheck( nullptr, false );
         }
         else
         {
@@ -679,7 +679,7 @@ SwContentNode *SwTextNode::JoinNext()
             {
                 pList3->MoveGrammar( 0, nOldLen );
                 SetGrammarCheckDirty( true );
-                pTextNode->SetGrammarCheck( 0, false );
+                pTextNode->SetGrammarCheck( nullptr, false );
             }
         }
 
@@ -688,7 +688,7 @@ SwContentNode *SwTextNode::JoinNext()
         {
             pList2->JoinList( pTextNode->GetSmartTags(), nOldLen );
             SetSmartTagDirty( true );
-            SetSmartTags( 0, false );
+            SetSmartTags( nullptr, false );
         }
         else
         {
@@ -697,7 +697,7 @@ SwContentNode *SwTextNode::JoinNext()
             {
                 pList2->Move( 0, nOldLen );
                 SetSmartTagDirty( true );
-                pTextNode->SetSmartTags( 0, false );
+                pTextNode->SetSmartTags( nullptr, false );
             }
         }
 
@@ -743,8 +743,8 @@ SwContentNode *SwTextNode::JoinPrev()
         {
             pList->JoinList( GetWrong(), Len() );
             SetWrongDirty(WrongState::TODO);
-            pTextNode->SetWrong( 0, false );
-            SetWrong( NULL );
+            pTextNode->SetWrong( nullptr, false );
+            SetWrong( nullptr );
         }
         else
         {
@@ -753,7 +753,7 @@ SwContentNode *SwTextNode::JoinPrev()
             {
                 pList->Move( 0, nLen );
                 SetWrongDirty(WrongState::TODO);
-                SetWrong( 0, false );
+                SetWrong( nullptr, false );
             }
         }
 
@@ -762,8 +762,8 @@ SwContentNode *SwTextNode::JoinPrev()
         {
             pList3->JoinGrammarList( GetGrammarCheck(), Len() );
             SetGrammarCheckDirty( true );
-            pTextNode->SetGrammarCheck( 0, false );
-            SetGrammarCheck( NULL );
+            pTextNode->SetGrammarCheck( nullptr, false );
+            SetGrammarCheck( nullptr );
         }
         else
         {
@@ -772,7 +772,7 @@ SwContentNode *SwTextNode::JoinPrev()
             {
                 pList3->MoveGrammar( 0, nLen );
                 SetGrammarCheckDirty( true );
-                SetGrammarCheck( 0, false );
+                SetGrammarCheck( nullptr, false );
             }
         }
 
@@ -781,8 +781,8 @@ SwContentNode *SwTextNode::JoinPrev()
         {
             pList2->JoinList( GetSmartTags(), Len() );
             SetSmartTagDirty( true );
-            pTextNode->SetSmartTags( 0, false );
-            SetSmartTags( NULL );
+            pTextNode->SetSmartTags( nullptr, false );
+            SetSmartTags( nullptr );
         }
         else
         {
@@ -791,7 +791,7 @@ SwContentNode *SwTextNode::JoinPrev()
             {
                 pList2->Move( 0, nLen );
                 SetSmartTagDirty( true );
-                SetSmartTags( 0, false );
+                SetSmartTags( nullptr, false );
             }
         }
 
@@ -1184,7 +1184,7 @@ void SwTextNode::Update(
     //Any drawing objects anchored into this text node may be sorted by their
     //anchor position which may have changed here, so resort them
     SwContentFrm* pContentFrm = getLayoutFrm(GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout());
-    SwSortedObjs* pSortedObjs = pContentFrm ? pContentFrm->GetDrawObjs() : NULL;
+    SwSortedObjs* pSortedObjs = pContentFrm ? pContentFrm->GetDrawObjs() : nullptr;
     if (pSortedObjs)
         pSortedObjs->UpdateAll();
 }
@@ -1288,7 +1288,7 @@ lcl_GetTextAttrs(
 {
     size_t const nSize = (pSwpHints) ? pSwpHints->Count() : 0;
     sal_Int32 nPreviousIndex(0); // index of last hint with nWhich
-    bool (*pMatchFunc)(sal_Int32, sal_Int32, sal_Int32)=0;
+    bool (*pMatchFunc)(sal_Int32, sal_Int32, sal_Int32)=nullptr;
     switch (eMode)
     {
         case SwTextNode::DEFAULT:   pMatchFunc = &lcl_GetTextAttrDefault; break;
@@ -1347,7 +1347,7 @@ SwTextNode::GetTextAttrsAt(sal_Int32 const nIndex, RES_TXTATR const nWhich,
                         enum GetTextAttrMode const eMode) const
 {
     ::std::vector<SwTextAttr *> ret;
-    lcl_GetTextAttrs(& ret, 0, m_pSwpHints, nIndex, nWhich, eMode);
+    lcl_GetTextAttrs(& ret, nullptr, m_pSwpHints, nIndex, nWhich, eMode);
     return ret;
 }
 
@@ -1364,18 +1364,18 @@ SwTextNode::GetTextAttrAt(sal_Int32 const nIndex, RES_TXTATR const nWhich,
             || (nWhich == RES_TXTATR_INPUTFIELD ) );
             // "GetTextAttrAt() will give wrong result for this hint!")
 
-    SwTextAttr * pRet(0);
-    lcl_GetTextAttrs(0, & pRet, m_pSwpHints, nIndex, nWhich, eMode);
+    SwTextAttr * pRet(nullptr);
+    lcl_GetTextAttrs(nullptr, & pRet, m_pSwpHints, nIndex, nWhich, eMode);
     return pRet;
 }
 
 const SwTextInputField* SwTextNode::GetOverlappingInputField( const SwTextAttr& rTextAttr ) const
 {
-    const SwTextInputField* pTextInputField = NULL;
+    const SwTextInputField* pTextInputField = nullptr;
 
     pTextInputField = dynamic_cast<const SwTextInputField*>(GetTextAttrAt( rTextAttr.GetStart(), RES_TXTATR_INPUTFIELD, PARENT ));
 
-    if ( pTextInputField == NULL && rTextAttr.End() != NULL )
+    if ( pTextInputField == nullptr && rTextAttr.End() != nullptr )
     {
         pTextInputField = dynamic_cast<const SwTextInputField*>(GetTextAttrAt( *(rTextAttr.End()), RES_TXTATR_INPUTFIELD, PARENT ));
     }
@@ -1385,13 +1385,13 @@ const SwTextInputField* SwTextNode::GetOverlappingInputField( const SwTextAttr& 
 
 void SwTextNode::DelFrms_TextNodePart()
 {
-    SetWrong( NULL );
+    SetWrong( nullptr );
     SetWrongDirty(WrongState::TODO);
 
-    SetGrammarCheck( NULL );
+    SetGrammarCheck( nullptr );
     SetGrammarCheckDirty( true );
 
-    SetSmartTags( NULL );
+    SetSmartTags( nullptr );
     SetSmartTagDirty( true );
 
     SetWordCountDirty( true );
@@ -1402,14 +1402,14 @@ SwTextField* SwTextNode::GetFieldTextAttrAt(
     const sal_Int32 nIndex,
     const bool bIncludeInputFieldAtStart ) const
 {
-    SwTextField* pTextField = NULL;
+    SwTextField* pTextField = nullptr;
 
     pTextField = dynamic_cast<SwTextField*>(GetTextAttrForCharAt( nIndex, RES_TXTATR_FIELD ));
-    if ( pTextField == NULL )
+    if ( pTextField == nullptr )
     {
         pTextField = dynamic_cast<SwTextField*>(GetTextAttrForCharAt( nIndex, RES_TXTATR_ANNOTATION ));
     }
-    if ( pTextField == NULL )
+    if ( pTextField == nullptr )
     {
         pTextField =
             dynamic_cast<SwTextField*>( GetTextAttrAt(
@@ -1433,7 +1433,7 @@ static SwCharFormat* lcl_FindCharFormat( const SwCharFormats* pCharFormats, cons
                 return pFormat;
         }
     }
-    return NULL;
+    return nullptr;
 }
 
 void lcl_CopyHint(
@@ -1458,7 +1458,7 @@ void lcl_CopyHint(
     // TabellenFormel muessen relativ kopiert werden.
     case RES_TXTATR_FIELD :
         {
-            if( pOtherDoc != NULL )
+            if( pOtherDoc != nullptr )
             {
                 static_txtattr_cast<const SwTextField*>(pHt)->CopyTextField(
                         static_txtattr_cast<SwTextField*>(pNewHt));
@@ -1485,7 +1485,7 @@ void lcl_CopyHint(
 
     case RES_TXTATR_INPUTFIELD :
     case RES_TXTATR_ANNOTATION :
-        if( pOtherDoc != NULL )
+        if( pOtherDoc != nullptr )
         {
             static_txtattr_cast<const SwTextField*>(pHt)->CopyTextField(
                     static_txtattr_cast<SwTextField*>(pNewHt));
@@ -1575,7 +1575,7 @@ void SwTextNode::CopyAttr( SwTextNode *pDest, const sal_Int32 nTextStartIdx,
     if ( HasHints() )    // keine Attribute, keine Kekse
     {
         SwDoc* const pOtherDoc = (pDest->GetDoc() != GetDoc()) ?
-                pDest->GetDoc() : 0;
+                pDest->GetDoc() : nullptr;
 
         for ( size_t i = 0; i < m_pSwpHints->Count(); ++i )
         {
@@ -1606,7 +1606,7 @@ void SwTextNode::CopyAttr( SwTextNode *pDest, const sal_Int32 nTextStartIdx,
                     }
                     else if( !pOtherDoc
                              ? GetDoc()->IsCopyIsMove()
-                             : 0 == pOtherDoc->GetRefMark( pHt->GetRefMark().GetRefName() ) )
+                             : nullptr == pOtherDoc->GetRefMark( pHt->GetRefMark().GetRefName() ) )
                     {
                         pDest->InsertItem(
                             pHt->GetAttr(), nOldPos, nOldPos, SetAttrMode::IS_COPY);
@@ -1624,7 +1624,7 @@ void SwTextNode::CopyAttr( SwTextNode *pDest, const sal_Int32 nTextStartIdx,
             nOldPos,
             0);
 
-        pDest->ModifyNotification( 0, &aHint );
+        pDest->ModifyNotification( nullptr, &aHint );
     }
 }
 
@@ -1708,7 +1708,7 @@ void SwTextNode::CopyText( SwTextNode *const pDest,
     if ( !nLen ) // string not longer?
         return;
 
-    SwDoc* const pOtherDoc = (pDest->GetDoc() != GetDoc()) ? pDest->GetDoc() : 0;
+    SwDoc* const pOtherDoc = (pDest->GetDoc() != GetDoc()) ? pDest->GetDoc() : nullptr;
 
     // harte Absatz umspannende Attribute kopieren
     if( HasSwAttrSet() )
@@ -1781,7 +1781,7 @@ void SwTextNode::CopyText( SwTextNode *const pDest,
                                   && ( bUndoNodes
                                        || ( !pOtherDoc
                                             ? GetDoc()->IsCopyIsMove()
-                                            : 0 == pOtherDoc->GetRefMark( pHt->GetRefMark().GetRefName() ) ) );
+                                            : nullptr == pOtherDoc->GetRefMark( pHt->GetRefMark().GetRefName() ) ) );
 
         if ( pEndIdx
              && RES_TXTATR_REFMARK == nWhich
@@ -1793,10 +1793,10 @@ void SwTextNode::CopyText( SwTextNode *const pDest,
         // Input Fields are only copied, if completely covered by copied text
         if ( nWhich == RES_TXTATR_INPUTFIELD )
         {
-            OSL_ENSURE( pEndIdx != NULL,
+            OSL_ENSURE( pEndIdx != nullptr,
                     "<SwTextNode::CopyText(..)> - RES_TXTATR_INPUTFIELD without EndIndex!" );
             if ( nAttrStartIdx < nTextStartIdx
-                 || ( pEndIdx != NULL
+                 || ( pEndIdx != nullptr
                       && *(pEndIdx) > nEnd ) )
             {
                 continue;
@@ -1839,7 +1839,7 @@ void SwTextNode::CopyText( SwTextNode *const pDest,
             }
         }
 
-        SwTextAttr * pNewHt = 0;
+        SwTextAttr * pNewHt = nullptr;
 
         if( pDest == this )
         {
@@ -1847,7 +1847,7 @@ void SwTextNode::CopyText( SwTextNode *const pDest,
             pNewHt = MakeTextAttr( *GetDoc(), pHt->GetAttr(),
                     nAttrStt, nAttrEnd, COPY, pDest );
 
-            lcl_CopyHint(nWhich, pHt, pNewHt, 0, pDest);
+            lcl_CopyHint(nWhich, pHt, pNewHt, nullptr, pDest);
             aArr.push_back( pNewHt );
         }
         else
@@ -2015,7 +2015,7 @@ OUString SwTextNode::InsertText( const OUString & rStr, const SwIndex & rIdx,
     if ( HasWriterListeners() )
     {
         SwInsText aHint( aPos, nLen );
-        NotifyClients( 0, &aHint );
+        NotifyClients( nullptr, &aHint );
     }
 
     // By inserting a character, the hidden flags
@@ -2115,7 +2115,7 @@ void SwTextNode::CutImpl( SwTextNode * const pDest, const SwIndex & rDestStart,
             break;
         const sal_Int32 * const pEndIdx = pHt->GetEnd();
         const sal_uInt16 nWhich = pHt->Which();
-        SwTextAttr *pNewHt = 0;
+        SwTextAttr *pNewHt = nullptr;
 
         // if the hint has a dummy character, then it must not be split!
         if(nAttrStartIdx < nTextStartIdx)
@@ -2242,9 +2242,9 @@ void SwTextNode::CutImpl( SwTextNode * const pDest, const SwIndex & rDestStart,
 
     // Frames benachrichtigen;
     SwInsText aInsHint( nDestStart, nLen );
-    pDest->ModifyNotification( 0, &aInsHint );
+    pDest->ModifyNotification( nullptr, &aInsHint );
     SwDelText aDelHint( nTextStartIdx, nLen );
-    ModifyNotification( 0, &aDelHint );
+    ModifyNotification( nullptr, &aDelHint );
 }
 
 void SwTextNode::EraseText(const SwIndex &rIdx, const sal_Int32 nCount,
@@ -2331,12 +2331,12 @@ void SwTextNode::EraseText(const SwIndex &rIdx, const sal_Int32 nCount,
     if( 1 == nCnt )
     {
         SwDelChr aHint( nStartIdx );
-        NotifyClients( 0, &aHint );
+        NotifyClients( nullptr, &aHint );
     }
     else
     {
         SwDelText aHint( nStartIdx, nCnt );
-        NotifyClients( 0, &aHint );
+        NotifyClients( nullptr, &aHint );
     }
 
     OSL_ENSURE(rIdx.GetIndex() == nStartIdx, "huh? start index has changed?");
@@ -2389,16 +2389,16 @@ void SwTextNode::GCAttr()
             nMax,
             0);
 
-        NotifyClients( 0, &aHint );
+        NotifyClients( nullptr, &aHint );
         SwFormatChg aNew( GetTextColl() );
-        NotifyClients( 0, &aNew );
+        NotifyClients( nullptr, &aNew );
     }
 }
 
 // #i23726#
 SwNumRule* SwTextNode::_GetNumRule(bool bInParent) const
 {
-    SwNumRule* pRet = 0;
+    SwNumRule* pRet = nullptr;
 
     const SfxPoolItem* pItem = GetNoCondAttr( RES_PARATR_NUMRULE, bInParent );
     bool bNoNumRule = false;
@@ -2427,7 +2427,7 @@ SwNumRule* SwTextNode::_GetNumRule(bool bInParent) const
                 const SwNumRuleItem& rDirectItem = pColl->GetNumRule( false );
                 if ( rDirectItem.GetValue().isEmpty() )
                 {
-                    pRet = 0L;
+                    pRet = nullptr;
                 }
             }
         }
@@ -2474,7 +2474,7 @@ void SwTextNode::NumRuleChgd()
 // -> #i27615#
 bool SwTextNode::IsNumbered() const
 {
-    SwNumRule* pRule = GetNum() ? GetNum()->GetNumRule() : 0L;
+    SwNumRule* pRule = GetNum() ? GetNum()->GetNumRule() : nullptr;
     return pRule && IsCountedInList();
 }
 
@@ -2496,7 +2496,7 @@ SwTextNode* SwTextNode::_MakeNewTextNode( const SwNodeIndex& rPos, bool bNext,
                                        bool bChgFollow )
 {
     /* hartes PageBreak/PageDesc/ColumnBreak aus AUTO-Set ignorieren */
-    SwAttrSet* pNewAttrSet = 0;
+    SwAttrSet* pNewAttrSet = nullptr;
     // #i75353#
     bool bClearHardSetNumRuleWhenFormatCollChanges( false );
     if( HasSwAttrSet() )
@@ -2592,7 +2592,7 @@ SwTextNode* SwTextNode::_MakeNewTextNode( const SwNodeIndex& rPos, bool bNext,
         ( bChgFollow && pColl != GetTextColl() ))
         return pNode;       // mehr duerfte nicht gemacht werden oder ????
 
-    pNode->_ChgTextCollUpdateNum( 0, pColl ); // fuer Nummerierung/Gliederung
+    pNode->_ChgTextCollUpdateNum( nullptr, pColl ); // fuer Nummerierung/Gliederung
     if( bNext || !bChgFollow )
         return pNode;
 
@@ -2628,7 +2628,7 @@ SwContentNode* SwTextNode::AppendNode( const SwPosition & rPos )
     pNew->ResetAttr( RES_PARATR_LIST_ISRESTART );
     pNew->ResetAttr( RES_PARATR_LIST_RESTARTVALUE );
     pNew->ResetAttr( RES_PARATR_LIST_ISCOUNTED );
-    if ( pNew->GetNumRule() == 0 )
+    if ( pNew->GetNumRule() == nullptr )
     {
         pNew->ResetAttr( RES_PARATR_LIST_ID );
         pNew->ResetAttr( RES_PARATR_LIST_LEVEL );
@@ -2656,16 +2656,16 @@ SwTextAttr * SwTextNode::GetTextAttrForCharAt(
             const sal_Int32 nStartPos = pHint->GetStart();
             if ( nIndex < nStartPos )
             {
-                return 0;
+                return nullptr;
             }
             if ( (nIndex == nStartPos) && pHint->HasDummyChar() )
             {
                 return ( RES_TXTATR_END == nWhich || nWhich == pHint->Which() )
-                       ? pHint : 0;
+                       ? pHint : nullptr;
             }
         }
     }
-    return 0;
+    return nullptr;
 }
 
 namespace
@@ -2683,7 +2683,7 @@ bool SwTextNode::HasNumber() const
 {
     bool bResult = false;
 
-    const SwNumRule* pRule = GetNum() ? GetNum()->GetNumRule() : 0L;
+    const SwNumRule* pRule = GetNum() ? GetNum()->GetNumRule() : nullptr;
     if ( pRule )
     {
         SwNumFormat aFormat(pRule->Get(lcl_BoundListLevel(GetActualListLevel())));
@@ -2700,7 +2700,7 @@ bool SwTextNode::HasBullet() const
 {
     bool bResult = false;
 
-    const SwNumRule* pRule = GetNum() ? GetNum()->GetNumRule() : 0L;
+    const SwNumRule* pRule = GetNum() ? GetNum()->GetNumRule() : nullptr;
     if ( pRule )
     {
         SwNumFormat aFormat(pRule->Get(lcl_BoundListLevel(GetActualListLevel())));
@@ -2722,7 +2722,7 @@ OUString SwTextNode::GetNumString( const bool _bInclPrefixAndSuffixStrings,
         // #i111677# do not expand number strings in clipboard documents
         return *m_pNumStringCache;
     }
-    const SwNumRule* pRule = GetNum() ? GetNum()->GetNumRule() : 0L;
+    const SwNumRule* pRule = GetNum() ? GetNum()->GetNumRule() : nullptr;
     if ( pRule &&
          IsCountedInList() )
     {
@@ -2745,7 +2745,7 @@ OUString SwTextNode::GetNumString( const bool _bInclPrefixAndSuffixStrings,
 long SwTextNode::GetLeftMarginWithNum( bool bTextLeft ) const
 {
     long nRet = 0;
-    const SwNumRule* pRule = GetNum() ? GetNum()->GetNumRule() : 0L;
+    const SwNumRule* pRule = GetNum() ? GetNum()->GetNumRule() : nullptr;
     if( pRule )
     {
         const SwNumFormat& rFormat = pRule->Get(lcl_BoundListLevel(GetActualListLevel()));
@@ -2791,7 +2791,7 @@ bool SwTextNode::GetFirstLineOfsWithNum( short& rFLOffset ) const
     rFLOffset = 0;
 
     // #i51089#
-    const SwNumRule* pRule = GetNum() ? GetNum()->GetNumRule() : 0L;
+    const SwNumRule* pRule = GetNum() ? GetNum()->GetNumRule() : nullptr;
     if ( pRule )
     {
         if ( IsCountedInList() )
@@ -2832,7 +2832,7 @@ SwTwips SwTextNode::GetAdditionalIndentForStartingNewList() const
 {
     SwTwips nAdditionalIndent = 0;
 
-    const SwNumRule* pRule = GetNum() ? GetNum()->GetNumRule() : 0L;
+    const SwNumRule* pRule = GetNum() ? GetNum()->GetNumRule() : nullptr;
     if ( pRule )
     {
         const SwNumFormat& rFormat = pRule->Get(lcl_BoundListLevel(GetActualListLevel()));
@@ -2895,7 +2895,7 @@ long SwTextNode::GetLeftMarginForTabCalculation() const
     long nLeftMarginForTabCalc = 0;
 
     bool bLeftMarginForTabCalcSetToListLevelIndent( false );
-    const SwNumRule* pRule = GetNum() ? GetNum()->GetNumRule() : 0;
+    const SwNumRule* pRule = GetNum() ? GetNum()->GetNumRule() : nullptr;
     if( pRule )
     {
         const SwNumFormat& rFormat = pRule->Get(lcl_BoundListLevel(GetActualListLevel()));
@@ -3356,10 +3356,10 @@ void SwTextNode::ReplaceText( const SwIndex& rStart, const sal_Int32 nDelLen,
 
     SetIgnoreDontExpand( bOldExpFlg );
     SwDelText aDelHint( nStartPos, nDelLen );
-    NotifyClients( 0, &aDelHint );
+    NotifyClients( nullptr, &aDelHint );
 
     SwInsText aHint( nStartPos, sInserted.getLength() );
-    NotifyClients( 0, &aHint );
+    NotifyClients( nullptr, &aHint );
 }
 
 namespace {
@@ -3404,7 +3404,7 @@ namespace {
                 if( rTextNode.GetNodes().IsDocNodes() )
                 {
                     const SwNumRule* pFormerNumRuleAtTextNode =
-                        rTextNode.GetNum() ? rTextNode.GetNum()->GetNumRule() : 0;
+                        rTextNode.GetNum() ? rTextNode.GetNum()->GetNumRule() : nullptr;
                     if ( pFormerNumRuleAtTextNode )
                     {
                         sOldNumRule = pFormerNumRuleAtTextNode->GetName();
@@ -3428,9 +3428,9 @@ namespace {
             }
             case RES_ATTRSET_CHG:
             {
-                const SfxPoolItem* pItem = 0;
+                const SfxPoolItem* pItem = nullptr;
                 const SwNumRule* pFormerNumRuleAtTextNode =
-                    rTextNode.GetNum() ? rTextNode.GetNum()->GetNumRule() : 0;
+                    rTextNode.GetNum() ? rTextNode.GetNum()->GetNumRule() : nullptr;
                 if ( pFormerNumRuleAtTextNode )
                 {
                     sOldNumRule = pFormerNumRuleAtTextNode->GetName();
@@ -3458,7 +3458,7 @@ namespace {
                 if ( rTextNode.GetNodes().IsDocNodes() )
                 {
                     const SwNumRule* pFormerNumRuleAtTextNode =
-                        rTextNode.GetNum() ? rTextNode.GetNum()->GetNumRule() : 0;
+                        rTextNode.GetNum() ? rTextNode.GetNum()->GetNumRule() : nullptr;
                     if ( pFormerNumRuleAtTextNode )
                     {
                         sOldNumRule = pFormerNumRuleAtTextNode->GetName();
@@ -3592,7 +3592,7 @@ void SwTextNode::Modify( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewVa
 
     if (pOldValue && (RES_REMOVE_UNO_OBJECT == pOldValue->Which()))
     {   // invalidate cached uno object
-        SetXParagraph(css::uno::Reference<css::text::XTextContent>(0));
+        SetXParagraph(css::uno::Reference<css::text::XTextContent>(nullptr));
     }
 }
 
@@ -3666,7 +3666,7 @@ bool SwTextNode::IsOutline() const
     }
     else
     {
-        const SwNumRule* pRule( GetNum() ? GetNum()->GetNumRule() : 0L );
+        const SwNumRule* pRule( GetNum() ? GetNum()->GetNumRule() : nullptr );
         if ( pRule && pRule->IsOutlineRule() )
         {
             bResult = !IsInRedlines();
@@ -3786,7 +3786,7 @@ bool SwTextNode::IsListRestart() const
  */
 bool SwTextNode::HasVisibleNumberingOrBullet() const
 {
-    const SwNumRule* pRule = GetNum() ? GetNum()->GetNumRule() : 0L;
+    const SwNumRule* pRule = GetNum() ? GetNum()->GetNumRule() : nullptr;
     if ( pRule && IsCountedInList())
     {
         // #i87154#
@@ -3912,7 +3912,7 @@ void SwTextNode::AddToList()
     if (!sListId.isEmpty())
     {
         SwList* pList = GetDoc()->getIDocumentListsAccess().getListByName( sListId );
-        if ( pList == 0 )
+        if ( pList == nullptr )
         {
             // Create corresponding list.
             SwNumRule* pNumRule = GetNumRule();
@@ -3921,7 +3921,7 @@ void SwTextNode::AddToList()
                 pList = GetDoc()->getIDocumentListsAccess().createList( sListId, GetNumRule()->GetName() );
             }
         }
-        OSL_ENSURE( pList != 0,
+        OSL_ENSURE( pList != nullptr,
                 "<SwTextNode::AddToList()> - no list for given list id. Serious defect" );
         if ( pList )
         {
@@ -3936,9 +3936,9 @@ void SwTextNode::RemoveFromList()
     if ( IsInList() )
     {
         SwList::RemoveListItem( *mpNodeNum );
-        mpList = 0;
+        mpList = nullptr;
         delete mpNodeNum;
-        mpNodeNum = 0L;
+        mpNodeNum = nullptr;
 
         SetWordCountDirty( true );
     }
@@ -3946,7 +3946,7 @@ void SwTextNode::RemoveFromList()
 
 bool SwTextNode::IsInList() const
 {
-    return GetNum() != 0 && GetNum()->GetParent() != 0;
+    return GetNum() != nullptr && GetNum()->GetParent() != nullptr;
 }
 
 bool SwTextNode::IsFirstOfNumRule() const
@@ -4080,7 +4080,7 @@ bool SwTextNode::GetListTabStopPosition( long& nListTabStopPosition ) const
 {
     bool bListTanStopPositionProvided( false );
 
-    const SwNumRule* pNumRule = GetNum() ? GetNum()->GetNumRule() : 0;
+    const SwNumRule* pNumRule = GetNum() ? GetNum()->GetNumRule() : nullptr;
     if ( pNumRule && HasVisibleNumberingOrBullet() && GetActualListLevel() >= 0 )
     {
         const SwNumFormat& rFormat = pNumRule->Get( static_cast<sal_uInt16>(GetActualListLevel()) );
@@ -4112,7 +4112,7 @@ bool SwTextNode::GetListTabStopPosition( long& nListTabStopPosition ) const
 
 OUString SwTextNode::GetLabelFollowedBy() const
 {
-    const SwNumRule* pNumRule = GetNum() ? GetNum()->GetNumRule() : 0;
+    const SwNumRule* pNumRule = GetNum() ? GetNum()->GetNumRule() : nullptr;
     if ( pNumRule && HasVisibleNumberingOrBullet() && GetActualListLevel() >= 0 )
     {
         const SwNumFormat& rFormat = pNumRule->Get( static_cast<sal_uInt16>(GetActualListLevel()) );
@@ -4339,7 +4339,7 @@ namespace {
           // #i70748#
           mbOutlineLevelSet( false )
     {
-        const SfxPoolItem* pItem = 0;
+        const SfxPoolItem* pItem = nullptr;
         // handle RES_PARATR_NUMRULE
         if ( rItemSet.GetItemState( RES_PARATR_NUMRULE, false, &pItem ) == SfxItemState::SET )
         {
@@ -4473,7 +4473,7 @@ namespace {
             }
             else
             {
-                const SfxPoolItem* pItem = 0;
+                const SfxPoolItem* pItem = nullptr;
                 if ( mrTextNode.GetSwAttrSet().GetItemState( RES_PARATR_NUMRULE,
                                                             true, &pItem )
                                                                 != SfxItemState::SET )
@@ -4566,7 +4566,7 @@ namespace {
             // RES_PARATR_NUMRULE and RES_PARATR_LIST_ID
             if ( nWhich1 <= RES_PARATR_NUMRULE && RES_PARATR_NUMRULE <= nWhich2 )
             {
-                bRemoveFromList = mrTextNode.GetNumRule() != 0;
+                bRemoveFromList = mrTextNode.GetNumRule() != nullptr;
                 mbListStyleOrIdReset = true;
             }
             else if ( nWhich1 <= RES_PARATR_LIST_ID && RES_PARATR_LIST_ID <= nWhich2 )
@@ -4609,7 +4609,7 @@ namespace {
             // RES_PARATR_NUMRULE and RES_PARATR_LIST_ID
             if ( nWhich1 == RES_PARATR_NUMRULE )
             {
-                bRemoveFromList = mrTextNode.GetNumRule() != 0;
+                bRemoveFromList = mrTextNode.GetNumRule() != nullptr;
                 mbListStyleOrIdReset = true;
             }
             else if ( nWhich1 == RES_PARATR_LIST_ID )
@@ -4667,7 +4667,7 @@ namespace {
                 if ( *it == RES_PARATR_NUMRULE )
                 {
                     bRemoveFromList = bRemoveFromList ||
-                                      mrTextNode.GetNumRule() != 0;
+                                      mrTextNode.GetNumRule() != nullptr;
                     mbListStyleOrIdReset = true;
                 }
                 else if ( *it == RES_PARATR_LIST_ID )

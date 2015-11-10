@@ -58,7 +58,7 @@ private:
     typedef std::vector<std::unique_ptr<InsCaptionOpt>> InsCapOptArr;
     InsCapOptArr m_InsCapOptArr;
 public:
-    InsCaptionOpt* Find(const SwCapObjType eType, const SvGlobalName *pOleId = 0);
+    InsCaptionOpt* Find(const SwCapObjType eType, const SvGlobalName *pOleId = nullptr);
     void Insert(InsCaptionOpt* pObj);
 };
 

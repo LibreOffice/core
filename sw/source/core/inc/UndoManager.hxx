@@ -63,7 +63,7 @@ public:
                                  SwUndoId *const o_pId) const override;
     virtual SwUndoComments_t GetUndoComments() const override;
     virtual bool GetFirstRedoInfo(OUString *const o_pStr,
-                                  SwUndoId *const o_pId = 0) const override;
+                                  SwUndoId *const o_pId = nullptr) const override;
     virtual SwUndoComments_t GetRedoComments() const override;
     virtual bool Repeat(::sw::RepeatContext & rContext,
                         sal_uInt16 const nRepeatCnt) override;

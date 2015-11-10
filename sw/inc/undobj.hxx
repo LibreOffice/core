@@ -54,7 +54,7 @@ protected:
     bool bCacheComment;
     mutable OUString * pComment;
 
-    static void RemoveIdxFromSection( SwDoc&, sal_uLong nSttIdx, sal_uLong* pEndIdx = 0 );
+    static void RemoveIdxFromSection( SwDoc&, sal_uLong nSttIdx, sal_uLong* pEndIdx = nullptr );
     static void RemoveIdxFromRange( SwPaM& rPam, bool bMoveNext );
     static void RemoveIdxRel( sal_uLong, const SwPosition& );
 
@@ -149,11 +149,11 @@ protected:
     // MoveTo:      moves from the NodesArray into the UndoNodesArray.
     // MoveFrom:    moves from the UndoNodesArray into the NodesArray.
     static void MoveToUndoNds( SwPaM& rPam,
-                        SwNodeIndex* pNodeIdx = 0,
-                        sal_uLong* pEndNdIdx = 0, sal_Int32 * pEndCntIdx = 0 );
+                        SwNodeIndex* pNodeIdx = nullptr,
+                        sal_uLong* pEndNdIdx = nullptr, sal_Int32 * pEndCntIdx = nullptr );
     static void MoveFromUndoNds( SwDoc& rDoc, sal_uLong nNodeIdx,
                           SwPosition& rInsPos,
-                          sal_uLong* pEndNdIdx = 0, sal_Int32 * pEndCntIdx = 0 );
+                          sal_uLong* pEndNdIdx = nullptr, sal_Int32 * pEndCntIdx = nullptr );
 
     // These two methods move the SPoint back/forth from PaM. With it
     // a range can be spanned for Undo/Redo. (In this case the SPoint

@@ -80,7 +80,7 @@ SwChapterNumRules::~SwChapterNumRules()
 void  SwChapterNumRules::Init()
 {
     for(sal_uInt16 i = 0; i < nMaxRules; ++i )
-        pNumRules[i] = 0;
+        pNumRules[i] = nullptr;
 
     OUString sNm(CHAPTER_FILENAME);
     SvtPathOptions aOpt;
@@ -119,7 +119,7 @@ SwNumRulesWithName::SwNumRulesWithName( const SwNumRule &rCopy,
         if( pFormat )
             aFormats[ n ] = new _SwNumFormatGlobal( *pFormat );
         else
-            aFormats[ n ] = 0;
+            aFormats[ n ] = nullptr;
     }
 }
 
@@ -153,7 +153,7 @@ const SwNumRulesWithName& SwNumRulesWithName::operator=(const SwNumRulesWithName
             if( pFormat )
                 aFormats[ n ] = new _SwNumFormatGlobal( *pFormat );
             else
-                aFormats[ n ] = 0;
+                aFormats[ n ] = nullptr;
         }
     }
     return *this;
@@ -167,7 +167,7 @@ void SwNumRulesWithName::MakeNumRule( SwWrtShell& rSh, SwNumRule& rChg ) const
     for( sal_uInt16 n = 0; n < MAXLEVEL; ++n )
     {
         _SwNumFormatGlobal* pFormat = aFormats[ n ];
-        if( 0 != pFormat)
+        if( nullptr != pFormat)
         {
             SwNumFormat aNew;
             pFormat->ChgNumFormat( rSh, aNew );
@@ -179,8 +179,8 @@ void SwNumRulesWithName::MakeNumRule( SwWrtShell& rSh, SwNumRule& rChg ) const
 void SwNumRulesWithName::GetNumFormat(
     size_t const nIndex, SwNumFormat const*& rpNumFormat, OUString const*& rpName) const
 {
-    rpNumFormat = (aFormats[nIndex]) ? &aFormats[nIndex]->aFormat : 0;
-    rpName = (aFormats[nIndex]) ? &aFormats[nIndex]->sCharFormatName : 0;
+    rpNumFormat = (aFormats[nIndex]) ? &aFormats[nIndex]->aFormat : nullptr;
+    rpName = (aFormats[nIndex]) ? &aFormats[nIndex]->sCharFormatName : nullptr;
 }
 
 void SwNumRulesWithName::SetNumFormat(
@@ -216,7 +216,7 @@ SwNumRulesWithName::_SwNumFormatGlobal::_SwNumFormatGlobal( const SwNumFormat& r
             }
         }
 
-        aFormat.SetCharFormat( 0 );
+        aFormat.SetCharFormat( nullptr );
     }
 }
 
@@ -239,7 +239,7 @@ SwNumRulesWithName::_SwNumFormatGlobal::~_SwNumFormatGlobal()
 void SwNumRulesWithName::_SwNumFormatGlobal::ChgNumFormat( SwWrtShell& rSh,
                             SwNumFormat& rNew ) const
 {
-    SwCharFormat* pFormat = 0;
+    SwCharFormat* pFormat = nullptr;
     if( !sCharFormatName.isEmpty() )
     {
         // at first, look for the name
@@ -250,7 +250,7 @@ void SwNumRulesWithName::_SwNumFormatGlobal::ChgNumFormat( SwWrtShell& rSh,
             if (pFormat->GetName()==sCharFormatName)
                 // exists, so leave attributes as they are!
                 break;
-            pFormat = 0;
+            pFormat = nullptr;
         }
 
         if( !pFormat )
@@ -275,7 +275,7 @@ void SwNumRulesWithName::_SwNumFormatGlobal::ChgNumFormat( SwWrtShell& rSh,
     const_cast<SwNumFormat&>(aFormat).SetCharFormat( pFormat );
     rNew = aFormat;
     if( pFormat )
-        const_cast<SwNumFormat&>(aFormat).SetCharFormat( 0 );
+        const_cast<SwNumFormat&>(aFormat).SetCharFormat( nullptr );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

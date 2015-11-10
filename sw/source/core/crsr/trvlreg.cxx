@@ -38,7 +38,7 @@ bool GotoPrevRegion( SwPaM& rCurCrsr, SwPosRegion fnPosRegion,
 
     do {
         while( aIdx.GetIndex() &&
-            0 == ( pNd = aIdx.GetNode().StartOfSectionNode()->GetSectionNode()) )
+            nullptr == ( pNd = aIdx.GetNode().StartOfSectionNode()->GetSectionNode()) )
             --aIdx;
 
         if( pNd ) // is there another section node?
@@ -92,7 +92,7 @@ bool GotoNextRegion( SwPaM& rCurCrsr, SwPosRegion fnPosRegion,
     sal_uLong nEndCount = aIdx.GetNode().GetNodes().Count()-1;
     do {
         while( aIdx.GetIndex() < nEndCount &&
-                0 == ( pNd = aIdx.GetNode().GetSectionNode()) )
+                nullptr == ( pNd = aIdx.GetNode().GetSectionNode()) )
             ++aIdx;
 
         if( pNd ) // is there another section node?
@@ -162,7 +162,7 @@ bool GotoCurrRegion( SwPaM& rCurCrsr, SwPosRegion fnPosRegion,
         pPos->nNode = *pCNd;
         pPos->nContent.Assign( pCNd, bMoveBackward ? pCNd->Len() : 0 );
     }
-    return 0 != pCNd;
+    return nullptr != pCNd;
 }
 
 bool GotoCurrRegionAndSkip( SwPaM& rCurCrsr, SwPosRegion fnPosRegion,
@@ -205,7 +205,7 @@ bool GotoCurrRegionAndSkip( SwPaM& rCurCrsr, SwPosRegion fnPosRegion,
 
         // try also the parent of this section
         SwSection* pParent = pNd->GetSection().GetParent();
-        pNd = pParent ? pParent->GetFormat()->GetSectionNode() : 0;
+        pNd = pParent ? pParent->GetFormat()->GetSectionNode() : nullptr;
     } while( pNd );
     return false;
 }
@@ -236,11 +236,11 @@ bool SwCursor::GotoRegion( const OUString& rName )
     for( SwSectionFormats::size_type n = rFormats.size(); n; )
     {
         const SwSectionFormat* pFormat = rFormats[ --n ];
-        const SwNodeIndex* pIdx = 0;
+        const SwNodeIndex* pIdx = nullptr;
         const SwSection* pSect;
-        if( 0 != ( pSect = pFormat->GetSection() ) &&
+        if( nullptr != ( pSect = pFormat->GetSection() ) &&
             pSect->GetSectionName() == rName &&
-            0 != ( pIdx = pFormat->GetContent().GetContentIdx() ) &&
+            nullptr != ( pIdx = pFormat->GetContent().GetContentIdx() ) &&
             pIdx->GetNode().GetNodes().IsDocNodes() )
         {
             // area in normal nodes array

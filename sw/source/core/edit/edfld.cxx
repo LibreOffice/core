@@ -108,7 +108,7 @@ SwFieldType* SwEditShell::GetFieldType(size_t nField, sal_uInt16 nResId, bool bU
             }
         }
     }
-    return 0;
+    return nullptr;
 }
 
 /// get first type with given ResId and name
@@ -211,15 +211,15 @@ void SwEditShell::Insert2(SwField& rField, const bool bForceExpandHints)
 static SwTextField* lcl_FindInputField( SwDoc* pDoc, SwField& rField )
 {
     // Search field via its address. For input fields this needs to be done in protected fields.
-    SwTextField* pTField = 0;
+    SwTextField* pTField = nullptr;
     if( RES_INPUTFLD == rField.Which() )
     {
         const sal_uInt32 nMaxItems =
             pDoc->GetAttrPool().GetItemCount2( RES_TXTATR_INPUTFIELD );
         for( sal_uInt32 n = 0; n < nMaxItems; ++n )
         {
-            const SfxPoolItem* pItem = NULL;
-            if( 0 != (pItem = pDoc->GetAttrPool().GetItem2( RES_TXTATR_INPUTFIELD, n ) )
+            const SfxPoolItem* pItem = nullptr;
+            if( nullptr != (pItem = pDoc->GetAttrPool().GetItem2( RES_TXTATR_INPUTFIELD, n ) )
                 && static_cast<const SwFormatField*>(pItem)->GetField() == &rField )
             {
                 pTField = const_cast<SwFormatField*>(static_cast<const SwFormatField*>(pItem))->GetTextField();
@@ -234,8 +234,8 @@ static SwTextField* lcl_FindInputField( SwDoc* pDoc, SwField& rField )
             pDoc->GetAttrPool().GetItemCount2( RES_TXTATR_FIELD );
         for( sal_uInt32 n = 0; n < nMaxItems; ++n )
         {
-            const SfxPoolItem* pItem = NULL;
-            if( 0 != (pItem = pDoc->GetAttrPool().GetItem2( RES_TXTATR_FIELD, n ) )
+            const SfxPoolItem* pItem = nullptr;
+            if( nullptr != (pItem = pDoc->GetAttrPool().GetItem2( RES_TXTATR_FIELD, n ) )
                 && static_cast<const SwFormatField*>(pItem)->GetField() == &rField )
             {
                 pTField = const_cast<SwFormatField*>(static_cast<const SwFormatField*>(pItem))->GetTextField();
@@ -252,7 +252,7 @@ void SwEditShell::UpdateFields( SwField &rField )
     StartAllAction();
     {
         // If there are no selections so take the value of the current cursor position.
-        SwMsgPoolItem* pMsgHint = 0;
+        SwMsgPoolItem* pMsgHint = nullptr;
         SwRefMarkFieldUpdate aRefMkHt( GetOut() );
         sal_uInt16 nFieldWhich = rField.GetTyp()->Which();
         if( RES_GETREFFLD == nFieldWhich )
@@ -269,7 +269,7 @@ void SwEditShell::UpdateFields( SwField &rField )
             if (!pTextField) // #i30221#
                 pTextField = lcl_FindInputField( GetDoc(), rField);
 
-            if (pTextField != 0)
+            if (pTextField != nullptr)
                 GetDoc()->getIDocumentFieldsAccess().UpdateField(pTextField, rField, pMsgHint, true);
         }
 
@@ -309,7 +309,7 @@ void SwEditShell::UpdateFields( SwField &rField )
                     if( aPam.Start()->nContent != pCurStt->nContent )
                         bOkay = false;
 
-                    if( 0 != (pTextField = GetTextFieldAtPos( pCurStt, true )) )
+                    if( nullptr != (pTextField = GetTextFieldAtPos( pCurStt, true )) )
                     {
                         pFormatField = const_cast<SwFormatField*>(&pTextField->GetFormatField());
                         SwField *pCurField = pFormatField->GetField();
@@ -368,7 +368,7 @@ void SwEditShell::UpdateExpFields(bool bCloseDB)
 {
     SET_CURR_SHELL( this );
     StartAllAction();
-    GetDoc()->getIDocumentFieldsAccess().UpdateExpFields(NULL, true);
+    GetDoc()->getIDocumentFieldsAccess().UpdateExpFields(nullptr, true);
     if (bCloseDB)
     {
 #if HAVE_FEATURE_DBCONNECTIVITY

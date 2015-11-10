@@ -76,9 +76,9 @@ using namespace ::com::sun::star::view;
 SwMailMergeLayoutPage::SwMailMergeLayoutPage( SwMailMergeWizard* _pParent) :
     svt::OWizardPage(_pParent, "MMLayoutPage",
         "modules/swriter/ui/mmlayoutpage.ui")
-    , m_pExampleFrame(0)
-    , m_pExampleWrtShell(0)
-    , m_pAddressBlockFormat(0)
+    , m_pExampleFrame(nullptr)
+    , m_pExampleWrtShell(nullptr)
+    , m_pAddressBlockFormat(nullptr)
     , m_bIsGreetingInserted(false)
     , m_pWizard(_pParent)
 {
@@ -206,14 +206,14 @@ void SwMailMergeLayoutPage::ActivatePage()
             }
         }
         if(!rConfigItem.IsAddressInserted() &&
-                rConfigItem.IsAddressBlock() != ( 0 != m_pAddressBlockFormat ))
+                rConfigItem.IsAddressBlock() != ( nullptr != m_pAddressBlockFormat ))
         {
             if( m_pAddressBlockFormat )
             {
                 m_pExampleWrtShell->Push();
                 m_pExampleWrtShell->GotoFly( m_pAddressBlockFormat->GetName() );
                 m_pExampleWrtShell->DelRight();
-                m_pAddressBlockFormat = 0;
+                m_pAddressBlockFormat = nullptr;
                 m_pExampleWrtShell->Pop(false);
             }
             else
@@ -252,7 +252,7 @@ SwFrameFormat*  SwMailMergeLayoutPage::InsertAddressAndGreeting(SwView* pView,
         const Point& rAddressPosition,
         bool bAlignToBody)
 {
-    SwFrameFormat* pAddressBlockFormat = 0;
+    SwFrameFormat* pAddressBlockFormat = nullptr;
     pView->GetWrtShell().StartUndo(UNDO_INSERT);
     if(rConfigItem.IsAddressBlock() && !rConfigItem.IsAddressInserted())
     {
@@ -617,7 +617,7 @@ void SwMailMergeLayoutPage::InsertGreeting(SwWrtShell& rShell, SwMailMergeConfig
     //put the cursor to the start of the paragraph
     rShell.SttPara();
 
-    OSL_ENSURE(0 == rShell.GetTableFormat(), "What to do with a table here?");
+    OSL_ENSURE(nullptr == rShell.GetTableFormat(), "What to do with a table here?");
 }
 
 IMPL_LINK_NOARG_TYPED(SwMailMergeLayoutPage, PreviewLoadedHdl_Impl, SwOneExampleFrame&, void)

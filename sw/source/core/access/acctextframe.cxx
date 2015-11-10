@@ -307,7 +307,7 @@ uno::Sequence< sal_Int8 > SAL_CALL SwAccessibleTextFrame::getImplementationId()
 
 SwFlyFrm* SwAccessibleTextFrame::getFlyFrm() const
 {
-    SwFlyFrm* pFlyFrm = NULL;
+    SwFlyFrm* pFlyFrm = nullptr;
 
     const SwFrm* pFrm = GetFrm();
     assert(pFrm);
@@ -339,12 +339,12 @@ uno::Reference<XAccessibleRelationSet> SAL_CALL SwAccessibleTextFrame::getAccess
     assert(pFlyFrm);
 
     const SwFlyFrm* pPrevFrm = pFlyFrm->GetPrevLink();
-    if( pPrevFrm != NULL )
+    if( pPrevFrm != nullptr )
         pHelper->AddRelation( makeRelation(
             AccessibleRelationType::CONTENT_FLOWS_FROM, pPrevFrm ) );
 
     const SwFlyFrm* pNextFrm = pFlyFrm->GetNextLink();
-    if( pNextFrm != NULL )
+    if( pNextFrm != nullptr )
         pHelper->AddRelation( makeRelation(
             AccessibleRelationType::CONTENT_FLOWS_TO, pNextFrm ) );
 

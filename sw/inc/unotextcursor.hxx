@@ -83,7 +83,7 @@ public:
             css::uno::Reference< css::text::XText > const& xParent,
             const enum CursorType eType,
             SwPosition const& rPos,
-            SwPosition const*const pMark = 0);
+            SwPosition const*const pMark = nullptr);
     SwXTextCursor(
             css::uno::Reference< css::text::XText > const& xParent,
             SwPaM const& rSourceCursor,

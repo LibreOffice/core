@@ -372,7 +372,7 @@ SwMailMergeDlg::~SwMailMergeDlg()
 void SwMailMergeDlg::dispose()
 {
     if(m_xFrame.is()) {
-        m_xFrame->setComponent(NULL, NULL);
+        m_xFrame->setComponent(nullptr, nullptr);
         m_xFrame->dispose();
     }
 

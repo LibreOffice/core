@@ -255,7 +255,7 @@ void SwDoc::CopyMasterHeader(const SwPageDesc &rChged, const SwFormatHeader &rHe
         const SwFormatHeader &rFormatHead = rDescFrameFormat.GetHeader();
         if ( !rFormatHead.IsActive() )
         {
-            SwFormatHeader aHead( getIDocumentLayoutAccess().MakeLayoutFormat( RND_STD_HEADERL, 0 ) );
+            SwFormatHeader aHead( getIDocumentLayoutAccess().MakeLayoutFormat( RND_STD_HEADERL, nullptr ) );
             rDescFrameFormat.SetFormatAttr( aHead );
             // take over additional attributes (margins, borders ...)
             ::lcl_DescSetAttr( *rHead.GetHeaderFormat(), *aHead.GetHeaderFormat(), false);
@@ -328,7 +328,7 @@ void SwDoc::CopyMasterFooter(const SwPageDesc &rChged, const SwFormatFooter &rFo
         const SwFormatFooter &rFormatFoot = rDescFrameFormat.GetFooter();
         if ( !rFormatFoot.IsActive() )
         {
-            SwFormatFooter aFoot( getIDocumentLayoutAccess().MakeLayoutFormat( RND_STD_FOOTER, 0 ) );
+            SwFormatFooter aFoot( getIDocumentLayoutAccess().MakeLayoutFormat( RND_STD_FOOTER, nullptr ) );
             rDescFrameFormat.SetFormatAttr( aFoot );
             // Take over additional attributes (margins, borders ...).
             ::lcl_DescSetAttr( *rFoot.GetFooterFormat(), *aFoot.GetFooterFormat(), false);
@@ -528,7 +528,7 @@ void SwDoc::ChgPageDesc( size_t i, const SwPageDesc &rChged )
     }
 
     SfxBindings* pBindings =
-        ( GetDocShell() && GetDocShell()->GetDispatcher() ) ? GetDocShell()->GetDispatcher()->GetBindings() : 0;
+        ( GetDocShell() && GetDocShell()->GetDispatcher() ) ? GetDocShell()->GetDispatcher()->GetBindings() : nullptr;
     if ( pBindings )
     {
         pBindings->Invalidate( SID_ATTR_PAGE_COLUMN );
@@ -551,7 +551,7 @@ void SwDoc::ChgPageDesc( size_t i, const SwPageDesc &rChged )
 // #i7983#
 void SwDoc::PreDelPageDesc(SwPageDesc * pDel)
 {
-    if (0 == pDel)
+    if (nullptr == pDel)
         return;
 
     // mba: test iteration as clients are removed while iteration
@@ -604,7 +604,7 @@ void SwDoc::BroadcastStyleOperation(const OUString& rName, SfxStyleFamily eFamil
             pPool->SetSearchMask(eFamily);
             SfxStyleSheetBase * pBase = pPool->Find(rName);
 
-            if (pBase != NULL)
+            if (pBase != nullptr)
                 pPool->Broadcast(SfxStyleSheetHint( nOp, *pBase ));
         }
     }
@@ -819,7 +819,7 @@ static SwPageDesc* lcl_FindPageDesc( SwPageDescs *pPageDescs,
 {
     SwPageDescs::iterator it = std::find_if(
         pPageDescs->begin(), pPageDescs->end(), pred);
-    SwPageDesc* res = NULL;
+    SwPageDesc* res = nullptr;
     if( it != pPageDescs->end() )
     {
         res = it->get();
@@ -846,12 +846,12 @@ struct CompareSwPageDescToPtr {
 
 bool SwDoc::ContainsPageDesc( const SwPageDesc *pDesc, size_t* pPos )
 {
-    if (pDesc == NULL)
+    if (pDesc == nullptr)
         return false;
     SwPageDesc *res = lcl_FindPageDesc<CompareSwPageDescToPtr>(
         &m_PageDescs, pPos,
         CompareSwPageDescToPtr(pDesc) );
-    return res != NULL;
+    return res != nullptr;
 }
 
 void SwDoc::DelPageDesc( const OUString & rName, bool bBroadcast )

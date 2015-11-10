@@ -56,7 +56,7 @@ public:
         if ( m_nCurrent < 0 )
         {
             rId = -1;
-            return NULL;
+            return nullptr;
         }
 
         // skip ids 0 and 1 - they are reserved for separator and

@@ -97,7 +97,7 @@ void SwTemplateControl::Command( const CommandEvent& rCEvt )
         {
             SwView* pView = ::GetActiveView();
             SwWrtShell* pWrtShell;
-            if( pView && 0 != (pWrtShell = pView->GetWrtShellPtr()) &&
+            if( pView && nullptr != (pWrtShell = pView->GetWrtShellPtr()) &&
                 !pWrtShell->SwCrsrShell::HasSelection()&&
                 !pWrtShell->IsSelFrmMode() &&
                 !pWrtShell->IsObjSelected())

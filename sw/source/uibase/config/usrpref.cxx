@@ -55,7 +55,7 @@ SwMasterUsrPref::SwMasterUsrPref(bool bWeb) :
     aLayoutConfig(bWeb, *this),
     aGridConfig(bWeb, *this),
     aCursorConfig(*this),
-    pWebColorConfig(bWeb ? new SwWebColorConfig(*this) : 0),
+    pWebColorConfig(bWeb ? new SwWebColorConfig(*this) : nullptr),
     bApplyCharUnit(false)
 {
     if (utl::ConfigManager::IsAvoidConfig())

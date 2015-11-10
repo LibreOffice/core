@@ -318,11 +318,11 @@ void SwTextShell::ExecMoveMisc(SfxRequest &rReq)
         case SID_FM_TOGGLECONTROLFOCUS:
             {
                 const SwDoc* pDoc = rSh.GetDoc();
-                const SwDocShell* pDocShell = pDoc ? pDoc->GetDocShell() : NULL;
-                const SwView* pView = pDocShell ? pDocShell->GetView() : NULL;
-                const FmFormShell* pFormShell = pView ? pView->GetFormShell() : NULL;
-                SdrView* pDrawView = pView ? pView->GetDrawView() : NULL;
-                vcl::Window* pWindow = pView ? pView->GetWrtShell().GetWin() : NULL;
+                const SwDocShell* pDocShell = pDoc ? pDoc->GetDocShell() : nullptr;
+                const SwView* pView = pDocShell ? pDocShell->GetView() : nullptr;
+                const FmFormShell* pFormShell = pView ? pView->GetFormShell() : nullptr;
+                SdrView* pDrawView = pView ? pView->GetDrawView() : nullptr;
+                vcl::Window* pWindow = pView ? pView->GetWrtShell().GetWin() : nullptr;
 
                 OSL_ENSURE( pFormShell && pDrawView && pWindow, "SwXTextView::ExecMoveMisc: no chance!" );
                 if ( !pFormShell || !pDrawView || !pWindow )
@@ -363,7 +363,7 @@ void SwTextShell::ExecMoveMisc(SfxRequest &rReq)
             break;
         case FN_TO_HEADER:
             rSh.MoveCrsr();
-            if ( FrmTypeFlags::HEADER & rSh.GetFrmType(0,false) )
+            if ( FrmTypeFlags::HEADER & rSh.GetFrmType(nullptr,false) )
                 rSh.SttPg();
             else
             {
@@ -375,7 +375,7 @@ void SwTextShell::ExecMoveMisc(SfxRequest &rReq)
             break;
         case FN_TO_FOOTER:
             rSh.MoveCrsr();
-            if ( FrmTypeFlags::FOOTER & rSh.GetFrmType(0,false) )
+            if ( FrmTypeFlags::FOOTER & rSh.GetFrmType(nullptr,false) )
                 rSh.EndPg();
             else
             {
@@ -387,7 +387,7 @@ void SwTextShell::ExecMoveMisc(SfxRequest &rReq)
             break;
         case FN_FOOTNOTE_TO_ANCHOR:
             rSh.MoveCrsr();
-            if ( FrmTypeFlags::FOOTNOTE & rSh.GetFrmType(0,false) )
+            if ( FrmTypeFlags::FOOTNOTE & rSh.GetFrmType(nullptr,false) )
                 rSh.GotoFootnoteAnchor();
             else
                 rSh.GotoFootnoteText();

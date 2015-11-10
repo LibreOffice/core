@@ -366,7 +366,7 @@ AutoTextGroup* SwGlossaryList::FindGroup(const OUString& rGroupName)
         if(pRet->sName == rGroupName)
             return pRet;
     }
-    return 0;
+    return nullptr;
 }
 
 void SwGlossaryList::FillGroup(AutoTextGroup* pGroup, SwGlossaries* pGlossaries)

@@ -153,7 +153,7 @@ void SwPageNumberFieldType::ChangeExpansion( SwDoc* pDoc,
         for( sal_uInt32 n = 0; n < nMaxItems; ++n )
         {
             const SwFormatPageDesc *pDesc;
-            if( 0 != (pDesc = static_cast<const SwFormatPageDesc*>(rPool.GetItem2( RES_PAGEDESC, n )) )
+            if( nullptr != (pDesc = static_cast<const SwFormatPageDesc*>(rPool.GetItem2( RES_PAGEDESC, n )) )
                 && pDesc->GetNumOffset() && pDesc->GetDefinedIn() )
             {
                 const SwContentNode* pNd = dynamic_cast<const SwContentNode*>( pDesc->GetDefinedIn()  );
@@ -865,7 +865,7 @@ static void lcl_GetLocalDataWrapper( sal_uLong nLang,
 OUString SwDocInfoFieldType::Expand( sal_uInt16 nSub, sal_uInt32 nFormat,
                                     sal_uInt16 nLang, const OUString& rName ) const
 {
-    const LocaleDataWrapper *pAppLocalData = 0, *pLocalData = 0;
+    const LocaleDataWrapper *pAppLocalData = nullptr, *pLocalData = nullptr;
     SwDocShell *pDocShell(GetDoc()->GetDocShell());
     OSL_ENSURE(pDocShell, "no SwDocShell");
     if (!pDocShell) { return OUString(); }
@@ -1651,14 +1651,14 @@ SwPostItField::SwPostItField( SwPostItFieldType* pT,
     , sInitials( rInitials )
     , sName( rName )
     , aDateTime( rDateTime )
-    , mpText( NULL )
-    , m_pTextObject( NULL )
+    , mpText( nullptr )
+    , m_pTextObject( nullptr )
 {
 }
 
 SwPostItField::~SwPostItField()
 {
-    if ( m_pTextObject != NULL )
+    if ( m_pTextObject != nullptr )
     {
         m_pTextObject->DisposeEditSource();
         m_pTextObject->release();
@@ -1800,7 +1800,7 @@ bool SwPostItField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
         if (mpText)
         {
             delete mpText;
-            mpText = 0;
+            mpText = nullptr;
         }
         break;
     case FIELD_PROP_PAR3:
@@ -2088,7 +2088,7 @@ bool SwRefPageGetFieldType::MakeSetList( _SetGetExpFields& rTmpLst )
 
                 // Always the first! (in Tab-Headline, header/footer )
                 Point aPt;
-                const SwContentFrm* pFrm = rTextNd.getLayoutFrm( rTextNd.GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), &aPt, 0, false );
+                const SwContentFrm* pFrm = rTextNd.getLayoutFrm( rTextNd.GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), &aPt, nullptr, false );
 
                 _SetGetExpField* pNew;
 
@@ -2147,9 +2147,9 @@ void SwRefPageGetFieldType::UpdateField( SwTextField* pTextField,
             {
                 // determine the correct offset
                 Point aPt;
-                const SwContentFrm* pFrm = pTextNode->getLayoutFrm( pTextNode->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), &aPt, 0, false );
-                const SwContentFrm* pRefFrm = pRefTextField->GetTextNode().getLayoutFrm( pRefTextField->GetTextNode().GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), &aPt, 0, false );
-                const SwPageFrm* pPgFrm = 0;
+                const SwContentFrm* pFrm = pTextNode->getLayoutFrm( pTextNode->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), &aPt, nullptr, false );
+                const SwContentFrm* pRefFrm = pRefTextField->GetTextNode().getLayoutFrm( pRefTextField->GetTextNode().GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), &aPt, nullptr, false );
+                const SwPageFrm* pPgFrm = nullptr;
                 const short nDiff = ( pFrm && pRefFrm )
                         ?   (pPgFrm = pFrm->FindPageFrm())->GetPhyPageNum() -
                             pRefFrm->FindPageFrm()->GetPhyPageNum() + 1
@@ -2166,7 +2166,7 @@ void SwRefPageGetFieldType::UpdateField( SwTextField* pTextField,
         }
     }
     // start formatting
-    const_cast<SwFormatField&>(pTextField->GetFormatField()).ModifyNotification( 0, 0 );
+    const_cast<SwFormatField&>(pTextField->GetFormatField()).ModifyNotification( nullptr, nullptr );
 }
 
 // queries for relative page numbering
@@ -2230,7 +2230,7 @@ void SwRefPageGetField::ChangeExpansion( const SwFrm* pFrm,
     const SwRefPageSetField* pSetField =
                         static_cast<const SwRefPageSetField*>(pRefTextField->GetFormatField().GetField());
     Point aPt;
-    const SwContentFrm* pRefFrm = pRefTextField->GetTextNode().getLayoutFrm( pFrm->getRootFrm(), &aPt, 0, false );
+    const SwContentFrm* pRefFrm = pRefTextField->GetTextNode().getLayoutFrm( pFrm->getRootFrm(), &aPt, nullptr, false );
     if( pSetField->IsOn() && pRefFrm )
     {
         // determine the correct offset
@@ -2289,7 +2289,7 @@ bool SwRefPageGetField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 // field type to jump to and edit
 
 SwJumpEditFieldType::SwJumpEditFieldType( SwDoc* pD )
-    : SwFieldType( RES_JUMPEDITFLD ), pDoc( pD ), aDep( this, 0 )
+    : SwFieldType( RES_JUMPEDITFLD ), pDoc( pD ), aDep( this, nullptr )
 {
 }
 

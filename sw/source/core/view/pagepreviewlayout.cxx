@@ -1356,7 +1356,7 @@ const PreviewPage* SwPagePreviewLayout::_GetPreviewPageByPageNum( const sal_uInt
                           EqualsPageNumPred( _nPageNum ) );
 
     if ( aFoundPreviewPageIter == maPreviewPages.end() )
-        return 0;
+        return nullptr;
 
     return (*aFoundPreviewPageIter);
 }
@@ -1468,7 +1468,7 @@ sal_uInt16 SwPagePreviewLayout::ConvertRelativeToAbsolutePageNum( sal_uInt16 _nR
     }
 
     const SwPageFrm* pTmpPage = static_cast<const SwPageFrm*>(mrLayoutRootFrm.Lower());
-    const SwPageFrm* pRet = 0;
+    const SwPageFrm* pRet = nullptr;
 
     sal_uInt16 i = 0;
     while( pTmpPage && i != _nRelPageNum )

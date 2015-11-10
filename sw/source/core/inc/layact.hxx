@@ -130,7 +130,7 @@ public:
     bool IsWaitAllowed()        const       { return bWaitAllowed; }
     bool IsNextCycle()          const       { return bNextCycle; }
     bool IsInput()              const       { return bInput; }
-    bool IsWait()               const       { return 0 != pWait;  }
+    bool IsWait()               const       { return nullptr != pWait;  }
     bool IsPaint()              const       { return bPaint; }
     bool IsIdle()               const       { return bIdle;  }
     bool IsReschedule()         const       { return bReschedule;  }

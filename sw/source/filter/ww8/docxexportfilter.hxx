@@ -35,9 +35,9 @@ public:
     // FIXME these should not even exist for the export-only filter!
     // For now, let's just do empty implementations of those.
     virtual bool        importDocument() override { return false; }
-    virtual const ::oox::drawingml::Theme* getCurrentTheme() const override { return NULL; }
-    virtual ::oox::vml::Drawing* getVmlDrawing() override { return NULL; }
-    virtual ::oox::drawingml::chart::ChartConverter* getChartConverter() override { return NULL; }
+    virtual const ::oox::drawingml::Theme* getCurrentTheme() const override { return nullptr; }
+    virtual ::oox::vml::Drawing* getVmlDrawing() override { return nullptr; }
+    virtual ::oox::drawingml::chart::ChartConverter* getChartConverter() override { return nullptr; }
     virtual const ::oox::drawingml::table::TableStyleListPtr getTableStyles() override { return ::oox::drawingml::table::TableStyleListPtr(); }
 
     // Actual export of the DOCX document
@@ -48,7 +48,7 @@ private:
 
     virtual ::oox::ole::VbaProject* implCreateVbaProject() const override
     {
-        return NULL; // FIXME: implement me !
+        return nullptr; // FIXME: implement me !
     }
 };
 

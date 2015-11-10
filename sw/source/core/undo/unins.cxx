@@ -63,7 +63,7 @@ using namespace ::com::sun::star;
 
 OUString * SwUndoInsert::GetTextFromDoc() const
 {
-    OUString * pResult = NULL;
+    OUString * pResult = nullptr;
 
     SwNodeIndex aNd( pDoc->GetNodes(), nNode);
     SwContentNode* pCNd = aNd.GetNode().GetContentNode();
@@ -110,7 +110,7 @@ SwUndoInsert::SwUndoInsert( const SwNodeIndex& rNd, sal_Int32 nCnt,
             sal_Int32 nL,
             const SwInsertFlags nInsertFlags,
             bool bWDelim )
-    : SwUndo(UNDO_TYPING), pText( 0 ), pRedlData( 0 ),
+    : SwUndo(UNDO_TYPING), pText( nullptr ), pRedlData( nullptr ),
         nNode( rNd.GetIndex() ), nContent(nCnt), nLen(nL),
         bIsWordDelim( bWDelim ), bIsAppend( false )
     , m_bWithRsid(false)
@@ -120,8 +120,8 @@ SwUndoInsert::SwUndoInsert( const SwNodeIndex& rNd, sal_Int32 nCnt,
 }
 
 SwUndoInsert::SwUndoInsert( const SwNodeIndex& rNd )
-    : SwUndo(UNDO_SPLITNODE), pText( 0 ),
-        pRedlData( 0 ), nNode( rNd.GetIndex() ), nContent(0), nLen(1),
+    : SwUndo(UNDO_SPLITNODE), pText( nullptr ),
+        pRedlData( nullptr ), nNode( rNd.GetIndex() ), nContent(0), nLen(1),
         bIsWordDelim( false ), bIsAppend( true )
     , m_bWithRsid(false)
     , m_nInsertFlags(SwInsertFlags::EMPTYEXPAND)
@@ -344,7 +344,7 @@ void SwUndoInsert::RedoImpl(::sw::UndoRedoContext & rContext)
                 DELETEZ( pText );
                 if (m_bWithRsid) // re-insert RSID
                 {
-                    SwPaM pam(*pPam->GetMark(), 0); // mark -> point
+                    SwPaM pam(*pPam->GetMark(), nullptr); // mark -> point
                     pTmpDoc->UpdateRsid(pam, ins.getLength());
                 }
             }
@@ -421,7 +421,7 @@ void SwUndoInsert::RepeatImpl(::sw::RepeatContext & rContext)
 
             rDoc.getIDocumentContentOperations().Insert( rContext.GetRepeatPaM(), sFile, sFilter,
                                 &pGrfNd->GetGrf(),
-                                0/* Graphics collection*/, NULL, NULL );
+                                nullptr/* Graphics collection*/, nullptr, nullptr );
         }
         break;
 
@@ -442,7 +442,7 @@ void SwUndoInsert::RepeatImpl(::sw::RepeatContext & rContext)
                 rDoc.getIDocumentContentOperations().Insert( rContext.GetRepeatPaM(),
                     svt::EmbeddedObjectRef( aNew,
                         static_cast<SwOLENode*>(pCNd)->GetAspect() ),
-                    NULL, NULL, NULL );
+                    nullptr, nullptr, nullptr );
             }
 
             break;
@@ -453,7 +453,7 @@ void SwUndoInsert::RepeatImpl(::sw::RepeatContext & rContext)
 SwRewriter SwUndoInsert::GetRewriter() const
 {
     SwRewriter aResult;
-    OUString * pStr = NULL;
+    OUString * pStr = nullptr;
     bool bDone = false;
 
     if (pText)
@@ -639,7 +639,7 @@ SwUndoReplace::Impl::Impl(
     }
 
     if( !pHistory->Count() )
-        delete pHistory, pHistory = 0;
+        delete pHistory, pHistory = nullptr;
 
     const sal_Int32 nECnt = m_bSplitNext ? pNd->GetText().getLength()
         : pEnd->nContent.GetIndex();
@@ -663,7 +663,7 @@ void SwUndoReplace::Impl::UndoImpl(::sw::UndoRedoContext & rContext)
             SwPosition aPos( *pNd ); aPos.nContent.Assign( pNd, m_nSttCnt );
             pACEWord->CheckChar( aPos, m_sOld[ 0 ] );
         }
-        pDoc->SetAutoCorrExceptWord( 0 );
+        pDoc->SetAutoCorrExceptWord( nullptr );
     }
 
     SwIndex aIdx( pNd, m_nSttCnt );
@@ -675,7 +675,7 @@ void SwUndoReplace::Impl::UndoImpl(::sw::UndoRedoContext & rContext)
         rPam.GetPoint()->nNode = m_nEndNd - m_nOffset;
         rPam.GetPoint()->nContent.Assign( rPam.GetContentNode(), m_nEndCnt );
         // move it out of the way so it is not registered at deleted node
-        aIdx.Assign(0, 0);
+        aIdx.Assign(nullptr, 0);
 
         pDoc->getIDocumentContentOperations().DeleteAndJoin( rPam );
         rPam.DeleteMark();
@@ -766,7 +766,7 @@ void SwUndoReplace::Impl::RedoImpl(::sw::UndoRedoContext & rContext)
         DelContentIndex( *rPam.GetMark(), *rPam.GetPoint() );
         m_nSetPos = pHistory->Count();
         if( !m_nSetPos )
-            delete pHistory, pHistory = 0;
+            delete pHistory, pHistory = nullptr;
     }
 
     rDoc.getIDocumentContentOperations().ReplaceRange( rPam, m_sIns, m_bRegExp );
@@ -824,7 +824,7 @@ void SwUndoReRead::SetAndSave(::sw::UndoRedoContext & rContext)
     if( RES_MIRROR_GRAPH_DONT != nOldMirr )
         pGrfNd->SetAttr( SwMirrorGrf() );
 
-    rContext.SetSelections(pGrfNd->GetFlyFormat(), 0);
+    rContext.SetSelections(pGrfNd->GetFlyFormat(), nullptr);
 }
 
 void SwUndoReRead::UndoImpl(::sw::UndoRedoContext & rContext)
@@ -844,12 +844,12 @@ void SwUndoReRead::SaveGraphicData( const SwGrfNode& rGrfNd )
         pNm = new OUString;
         pFltr = new OUString;
         rGrfNd.GetFileFilterNms( pNm, pFltr );
-        pGrf = 0;
+        pGrf = nullptr;
     }
     else
     {
         pGrf = new Graphic( rGrfNd.GetGrf(true) );
-        pNm = pFltr = 0;
+        pNm = pFltr = nullptr;
     }
     nMirr = rGrfNd.GetSwAttrSet().GetMirrorGrf().GetValue();
 }
@@ -874,8 +874,8 @@ SwUndoInsertLabel::SwUndoInsertLabel( const SwLabelType eTyp,
       bCpyBrd( bCpyBorder )
 {
     bUndoKeep = false;
-    OBJECT.pUndoFly = 0;
-    OBJECT.pUndoAttr = 0;
+    OBJECT.pUndoFly = nullptr;
+    OBJECT.pUndoAttr = nullptr;
 }
 
 SwUndoInsertLabel::~SwUndoInsertLabel()
@@ -897,11 +897,11 @@ void SwUndoInsertLabel::UndoImpl(::sw::UndoRedoContext & rContext)
     {
         OSL_ENSURE( OBJECT.pUndoAttr && OBJECT.pUndoFly, "Pointer not initialized" );
         SwFrameFormat* pFormat;
-        SdrObject *pSdrObj = 0;
+        SdrObject *pSdrObj = nullptr;
         if( OBJECT.pUndoAttr &&
-            0 != (pFormat = static_cast<SwFrameFormat*>(OBJECT.pUndoAttr->GetFormat( rDoc ))) &&
+            nullptr != (pFormat = static_cast<SwFrameFormat*>(OBJECT.pUndoAttr->GetFormat( rDoc ))) &&
             ( LTYPE_DRAW != eType ||
-              0 != (pSdrObj = pFormat->FindSdrObject()) ) )
+              nullptr != (pSdrObj = pFormat->FindSdrObject()) ) )
         {
             OBJECT.pUndoAttr->UndoImpl(rContext);
             OBJECT.pUndoFly->UndoImpl(rContext);
@@ -936,11 +936,11 @@ void SwUndoInsertLabel::RedoImpl(::sw::UndoRedoContext & rContext)
     {
         OSL_ENSURE( OBJECT.pUndoAttr && OBJECT.pUndoFly, "Pointer not initialized" );
         SwFrameFormat* pFormat;
-        SdrObject *pSdrObj = 0;
+        SdrObject *pSdrObj = nullptr;
         if( OBJECT.pUndoAttr &&
-            0 != (pFormat = static_cast<SwFrameFormat*>(OBJECT.pUndoAttr->GetFormat( rDoc ))) &&
+            nullptr != (pFormat = static_cast<SwFrameFormat*>(OBJECT.pUndoAttr->GetFormat( rDoc ))) &&
             ( LTYPE_DRAW != eType ||
-              0 != (pSdrObj = pFormat->FindSdrObject()) ) )
+              nullptr != (pSdrObj = pFormat->FindSdrObject()) ) )
         {
             OBJECT.pUndoFly->RedoImpl(rContext);
             OBJECT.pUndoAttr->RedoImpl(rContext);
@@ -965,7 +965,7 @@ void SwUndoInsertLabel::RedoImpl(::sw::UndoRedoContext & rContext)
                 pNd->GetTable().GetFrameFormat()->SetFormatAttr( SvxFormatKeepItem(true, RES_KEEP) );
         }
         NODE.pUndoInsNd->UndoImpl(rContext);
-        delete NODE.pUndoInsNd, NODE.pUndoInsNd = 0;
+        delete NODE.pUndoInsNd, NODE.pUndoInsNd = nullptr;
     }
 }
 
@@ -993,7 +993,7 @@ void SwUndoInsertLabel::RepeatImpl(::sw::RepeatContext & rContext)
             {
                 SwFlyFrm* pFly;
                 SwContentFrm *pCnt = pCNd->getLayoutFrm( rDoc.getIDocumentLayoutAccess().GetCurrentLayout() );
-                if( pCnt && 0 != ( pFly = pCnt->FindFlyFrm() ) )
+                if( pCnt && nullptr != ( pFly = pCnt->FindFlyFrm() ) )
                     nIdx = pFly->GetFormat()->GetContent().GetContentIdx()->GetIndex();
             }
             break;

@@ -82,7 +82,7 @@ void SwUndRng::SetPaM( SwPaM & rPam, bool bCorrToContent ) const
     else if( bCorrToContent )
         rPam.Move( fnMoveForward, fnGoContent );
     else
-        rPam.GetPoint()->nContent.Assign( 0, 0 );
+        rPam.GetPoint()->nContent.Assign( nullptr, 0 );
 
     if( !nEndNode && COMPLETE_STRING == nEndContent )       // no selection
         return ;
@@ -97,7 +97,7 @@ void SwUndRng::SetPaM( SwPaM & rPam, bool bCorrToContent ) const
     else if( bCorrToContent )
         rPam.Move( fnMoveBackward, fnGoContent );
     else
-        rPam.GetPoint()->nContent.Assign( 0, 0 );
+        rPam.GetPoint()->nContent.Assign( nullptr, 0 );
 }
 
 SwPaM & SwUndRng::AddUndoRedoPaM(
@@ -135,7 +135,7 @@ void SwUndo::RemoveIdxFromRange( SwPaM& rPam, bool bMoveNext )
             if( !rPam.Move( fnMoveBackward ) )
             {
                 rPam.GetPoint()->nNode = rPam.GetDoc()->GetNodes().GetEndOfPostIts();
-                rPam.GetPoint()->nContent.Assign( 0, 0 );
+                rPam.GetPoint()->nContent.Assign( nullptr, 0 );
             }
         }
 
@@ -155,7 +155,7 @@ void SwUndo::RemoveIdxRel( sal_uLong nIdx, const SwPosition& rPos )
 
 SwUndo::SwUndo(SwUndoId const nId)
     : m_nId(nId), nOrigRedlineMode(nsRedlineMode_t::REDLINE_NONE),
-      bCacheComment(true), pComment(NULL)
+      bCacheComment(true), pComment(nullptr)
 {
 }
 
@@ -286,7 +286,7 @@ SwRewriter SwUndo::GetRewriter() const
 }
 
 SwUndoSaveContent::SwUndoSaveContent()
-    : pHistory( 0 )
+    : pHistory( nullptr )
 {}
 
 SwUndoSaveContent::~SwUndoSaveContent()
@@ -380,7 +380,7 @@ void SwUndoSaveContent::MoveFromUndoNds( SwDoc& rDoc, sal_uLong nNodeIdx,
             ( aPaM.GetPoint()->nNode++ &&       // still empty Nodes at the end?
             &rNds.GetEndOfExtras() != &aPaM.GetPoint()->nNode.GetNode() ))
         {
-            aPaM.GetPoint()->nContent.Assign( 0, 0 );
+            aPaM.GetPoint()->nContent.Assign( nullptr, 0 );
             aPaM.SetMark();
             rNds.Delete( aPaM.GetPoint()->nNode,
                         rNds.GetEndOfExtras().GetIndex() -
@@ -394,7 +394,7 @@ void SwUndoSaveContent::MoveFromUndoNds( SwDoc& rDoc, sal_uLong nNodeIdx,
         SwNodeRange aRg( rNds, nNodeIdx, rNds, (pEndNdIdx
                         ? ((*pEndNdIdx) + 1)
                         : rNds.GetEndOfExtras().GetIndex() ) );
-        rNds._MoveNodes( aRg, rDoc.GetNodes(), rInsPos.nNode, 0 == pEndNdIdx );
+        rNds._MoveNodes( aRg, rDoc.GetNodes(), rInsPos.nNode, nullptr == pEndNdIdx );
 
     }
     else {
@@ -415,7 +415,7 @@ bool SwUndoSaveContent::MovePtBackward( SwPaM& rPam )
     // If there is no content onwards, set Point simply to the previous position
     // (Node and Content, so that Content will be detached!)
     --rPam.GetPoint()->nNode;
-    rPam.GetPoint()->nContent.Assign( 0, 0 );
+    rPam.GetPoint()->nContent.Assign( nullptr, 0 );
     return false;
 }
 
@@ -546,7 +546,7 @@ void SwUndoSaveContent::DelContentIndex( const SwPosition& rMark,
                 switch( pAnchor->GetAnchorId() )
                 {
                 case FLY_AS_CHAR:
-                    if( 0 != (pAPos = pAnchor->GetContentAnchor() ) &&
+                    if( nullptr != (pAPos = pAnchor->GetContentAnchor() ) &&
                         (( nsDelContentType::DELCNT_CHKNOCNTNT & nDelContentType )
                         ? ( pStt->nNode <= pAPos->nNode &&
                             pAPos->nNode < pEnd->nNode )
@@ -613,7 +613,7 @@ void SwUndoSaveContent::DelContentIndex( const SwPosition& rMark,
                     }
                     break;
                 case FLY_AT_CHAR:
-                    if( 0 != (pAPos = pAnchor->GetContentAnchor() ) &&
+                    if( nullptr != (pAPos = pAnchor->GetContentAnchor() ) &&
                         ( pStt->nNode <= pAPos->nNode && pAPos->nNode <= pEnd->nNode ) )
                     {
                         if( !pHistory )
@@ -644,7 +644,7 @@ void SwUndoSaveContent::DelContentIndex( const SwPosition& rMark,
                     break;
                 case FLY_AT_FLY:
 
-                    if( 0 != (pAPos = pAnchor->GetContentAnchor() ) &&
+                    if( nullptr != (pAPos = pAnchor->GetContentAnchor() ) &&
                         pStt->nNode == pAPos->nNode )
                     {
                         if( !pHistory )
@@ -785,7 +785,7 @@ void SwUndoSaveContent::DelContentIndex( const SwPosition& rMark,
 
 // save a complete section into UndoNodes array
 SwUndoSaveSection::SwUndoSaveSection()
-    : pMvStt( 0 ), pRedlSaveData( 0 ), nMvLen( 0 ), nStartPos( ULONG_MAX )
+    : pMvStt( nullptr ), pRedlSaveData( nullptr ), nMvLen( 0 ), nStartPos( ULONG_MAX )
 {
 }
 
@@ -825,7 +825,7 @@ void SwUndoSaveSection::SaveSection(
 
     pRedlSaveData = new SwRedlineSaveDatas;
     if( !SwUndo::FillSaveData( aPam, *pRedlSaveData ))
-        delete pRedlSaveData, pRedlSaveData = 0;
+        delete pRedlSaveData, pRedlSaveData = nullptr;
 
     nStartPos = rRange.aStart.GetIndex();
 
@@ -835,7 +835,7 @@ void SwUndoSaveSection::SaveSection(
     SwContentNode* pCNd = aPam.GetContentNode( false );
     if( pCNd )
         aPam.GetMark()->nContent.Assign( pCNd, 0 );
-    if( 0 != ( pCNd = aPam.GetContentNode()) )
+    if( nullptr != ( pCNd = aPam.GetContentNode()) )
         aPam.GetPoint()->nContent.Assign( pCNd, pCNd->Len() );
 
     // Keep positions as SwIndex so that this section can be deleted in DTOR
@@ -879,7 +879,7 @@ void SwUndoSaveSection::RestoreSection( SwDoc* pDoc, const SwNodeIndex& rInsPos 
         if( pRedlSaveData )
         {
             SwUndo::SetSaveData( *pDoc, *pRedlSaveData );
-            delete pRedlSaveData, pRedlSaveData = 0;
+            delete pRedlSaveData, pRedlSaveData = nullptr;
         }
     }
 }
@@ -921,7 +921,7 @@ SwRedlineSaveData::SwRedlineSaveData(
         {
             // than move section into UndoArray and memorize it
             SaveSection( *rRedl.GetContentIdx() );
-            rRedl.SetContentIdx( 0 );
+            rRedl.SetContentIdx( nullptr );
         }
         break;
 

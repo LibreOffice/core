@@ -83,7 +83,7 @@ void SvXMLImportItemMapper::importXML( SfxItemSet& rSet,
 {
     sal_Int16 nAttr = xAttrList->getLength();
 
-    SvXMLAttrContainerItem *pUnknownItem = 0;
+    SvXMLAttrContainerItem *pUnknownItem = nullptr;
     for( sal_Int16 i=0; i < nAttr; i++ )
     {
         const OUString& rAttrName = xAttrList->getNameByIndex( i );
@@ -106,7 +106,7 @@ void SvXMLImportItemMapper::importXML( SfxItemSet& rSet,
                                        MID_SW_FLAG_ELEMENT_ITEM_IMPORT)) )
             {
                 // first get item from itemset
-                const SfxPoolItem* pItem = 0;
+                const SfxPoolItem* pItem = nullptr;
                 SfxItemState eState = rSet.GetItemState( pEntry->nWhichId, true,
                                                          &pItem );
 
@@ -154,7 +154,7 @@ void SvXMLImportItemMapper::importXML( SfxItemSet& rSet,
         {
             if( !pUnknownItem )
             {
-                const SfxPoolItem* pItem = 0;
+                const SfxPoolItem* pItem = nullptr;
                 if( SfxItemState::SET == rSet.GetItemState( nUnknownWhich, true,
                                                        &pItem ) )
                 {
@@ -231,14 +231,14 @@ struct BoxHolder : private boost::noncopyable
 
     explicit BoxHolder(SvxBoxItem& rBox)
     {
-        pTop    = rBox.GetTop() == NULL ?
-            NULL : new SvxBorderLine( *rBox.GetTop() );
-        pBottom = rBox.GetBottom() == NULL ?
-            NULL : new SvxBorderLine( *rBox.GetBottom() );
-        pLeft   = rBox.GetLeft() == NULL ?
-            NULL : new SvxBorderLine( *rBox.GetLeft() );
-        pRight  = rBox.GetRight() == NULL ?
-            NULL : new SvxBorderLine( *rBox.GetRight() );
+        pTop    = rBox.GetTop() == nullptr ?
+            nullptr : new SvxBorderLine( *rBox.GetTop() );
+        pBottom = rBox.GetBottom() == nullptr ?
+            nullptr : new SvxBorderLine( *rBox.GetBottom() );
+        pLeft   = rBox.GetLeft() == nullptr ?
+            nullptr : new SvxBorderLine( *rBox.GetLeft() );
+        pRight  = rBox.GetRight() == nullptr ?
+            nullptr : new SvxBorderLine( *rBox.GetRight() );
     }
 
     ~BoxHolder()
@@ -932,7 +932,7 @@ bool SvXMLImportItemMapper::PutXMLValue(
             const XMLPropertyHandler* pWritingModeHandler =
                 XMLPropertyHandlerFactory::CreatePropertyHandler(
                     XML_TYPE_TEXT_WRITING_MODE_WITH_DEFAULT );
-            if( pWritingModeHandler != NULL )
+            if( pWritingModeHandler != nullptr )
             {
                 Any aAny;
                 bOk = pWritingModeHandler->importXML( rValue, aAny,

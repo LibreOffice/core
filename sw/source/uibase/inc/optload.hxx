@@ -161,7 +161,7 @@ private:
     DECL_LINK_TYPED(SaveEntryHdl, SvTreeListBox*, void);
 
     void DelUserData();
-    void SetOptions(const sal_uLong nPos, const SwCapObjType eType, const SvGlobalName *pOleId = 0);
+    void SetOptions(const sal_uLong nPos, const SwCapObjType eType, const SvGlobalName *pOleId = nullptr);
     void SaveEntry(SvTreeListEntry* pEntry);
     void InvalidatePreview();
 

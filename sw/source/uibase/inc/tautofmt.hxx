@@ -80,7 +80,7 @@ class SwAutoFormatDlg : public SfxModalDialog
 public:
     SwAutoFormatDlg( vcl::Window* pParent, SwWrtShell* pShell,
                         bool bSetAutoFormat = true,
-                        const SwTableAutoFormat* pSelFormat = 0 );
+                        const SwTableAutoFormat* pSelFormat = nullptr );
     virtual ~SwAutoFormatDlg();
     virtual void dispose() override;
 

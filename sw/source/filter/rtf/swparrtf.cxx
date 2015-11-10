@@ -49,7 +49,7 @@ sal_uLong SwRTFReader::Read(SwDoc& rDoc, const OUString& /*rBaseURL*/, SwPaM& rP
     // We want to work in an empty paragraph.
     // Step 1: XTextRange will be updated when content is inserted, so we know
     // the end position.
-    const uno::Reference<text::XTextRange> xInsertPosition = SwXTextRange::CreateXTextRange(rDoc, *rPam.GetPoint(), 0);
+    const uno::Reference<text::XTextRange> xInsertPosition = SwXTextRange::CreateXTextRange(rDoc, *rPam.GetPoint(), nullptr);
     std::shared_ptr<SwNodeIndex> pSttNdIdx(new SwNodeIndex(rDoc.GetNodes()));
     const SwPosition* pPos = rPam.GetPoint();
 
@@ -75,7 +75,7 @@ sal_uLong SwRTFReader::Read(SwDoc& rDoc, const OUString& /*rBaseURL*/, SwPaM& rP
     xImporter->setTargetDocument(xDstDoc);
 
     const uno::Reference<text::XTextRange> xInsertTextRange =
-        SwXTextRange::CreateXTextRange(rDoc, *rPam.GetPoint(), 0);
+        SwXTextRange::CreateXTextRange(rDoc, *rPam.GetPoint(), nullptr);
 
     uno::Reference<document::XFilter> xFilter(xInterface, uno::UNO_QUERY_THROW);
     uno::Sequence<beans::PropertyValue> aDescriptor(3);

@@ -89,7 +89,7 @@ public:
     void DelDiffs( const SwFormat& rFormat ) { DelDiffs( rFormat.GetAttrSet() ); }
 
     /// 0 is Default.
-    bool SetDerivedFrom(SwFormat *pDerivedFrom = 0);
+    bool SetDerivedFrom(SwFormat *pDerivedFrom = nullptr);
 
     /// If bInParents is FALSE, search only in this format for attribute.
     //UUUUinline
@@ -97,7 +97,7 @@ public:
                                    bool bInParents = true ) const;
     //UUUUinline
     SfxItemState GetItemState( sal_uInt16 nWhich, bool bSrchInParent = true,
-                                    const SfxPoolItem **ppItem = 0 ) const;
+                                    const SfxPoolItem **ppItem = nullptr ) const;
     SfxItemState GetBackgroundState(SvxBrushItem &rItem,
                                     bool bSrchInParent = true) const;
     virtual bool SetFormatAttr( const SfxPoolItem& rAttr );
@@ -109,7 +109,7 @@ public:
     virtual sal_uInt16 ResetAllFormatAttr();
 
     inline SwFormat* DerivedFrom() const { return const_cast<SwFormat*>(static_cast<const SwFormat*>(GetRegisteredIn())); }
-    inline bool IsDefault() const { return DerivedFrom() == 0; }
+    inline bool IsDefault() const { return DerivedFrom() == nullptr; }
 
     inline OUString GetName() const                  { return m_aFormatName; }
     inline bool HasName(const OUString &rName) const { return m_aFormatName == rName; }

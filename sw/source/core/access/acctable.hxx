@@ -81,7 +81,7 @@ protected:
     inline SwAccessibleTableData_Impl& GetTableData();
 
     // Is table data evailable?
-    bool HasTableData() const { return (mpTableData != 0); }
+    bool HasTableData() const { return (mpTableData != nullptr); }
 
     virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) override;
 

@@ -81,7 +81,7 @@ const SwRect& SwFEShell::GetAnyCurRect( CurRectType eType, const Point* pPt,
     const SwFrm *pFrm = Imp()->HasDrawView()
                 ? ::GetFlyFromMarked( &Imp()->GetDrawView()->GetMarkedObjectList(),
                                       const_cast<SwViewShell*>(static_cast<SwViewShell const *>(this)))
-                : 0;
+                : nullptr;
 
     if( !pFrm )
     {
@@ -146,7 +146,7 @@ const SwRect& SwFEShell::GetAnyCurRect( CurRectType eType, const Point* pPt,
                                     break;
 
         case RECT_HEADERFOOTER_PRT: bFrm = false; /* no break */
-        case RECT_HEADERFOOTER:     if( 0 == (pFrm = pFrm->FindFooterOrHeader()) )
+        case RECT_HEADERFOOTER:     if( nullptr == (pFrm = pFrm->FindFooterOrHeader()) )
                                         return GetLayout()->Frm();
                                     break;
 
@@ -200,7 +200,7 @@ bool SwFEShell::GetPageNumber( long nYPos, bool bAtCrsrPos, sal_uInt16& rPhyNum,
         rDisplay = rNum.GetNumStr( rVirtNum );
     }
 
-    return 0 != pPage;
+    return nullptr != pPage;
 }
 
 bool SwFEShell::IsDirectlyInSection() const
@@ -392,7 +392,7 @@ void SwFEShell::InsertLabel( const SwLabelType eType, const OUString &rText, con
                              const bool bCpyBrd )
 {
     // get node index of cursor position, SwDoc can do everything else itself
-    SwContentFrm *pCnt = LTYPE_DRAW==eType ? 0 : GetCurrFrm( false );
+    SwContentFrm *pCnt = LTYPE_DRAW==eType ? nullptr : GetCurrFrm( false );
     if( LTYPE_DRAW==eType || pCnt )
     {
         StartAllAction();
@@ -401,7 +401,7 @@ void SwFEShell::InsertLabel( const SwLabelType eType, const OUString &rText, con
 
         sal_uLong nIdx = 0;
         bool bInnerCntIsFly = false;
-        SwFlyFrameFormat* pFlyFormat = 0;
+        SwFlyFrameFormat* pFlyFormat = nullptr;
         switch( eType )
         {
         case LTYPE_OBJECT:
@@ -611,9 +611,9 @@ sal_uInt16 SwFEShell::_GetCurColNum( const SwFrm *pFrm,
                 }
                 if( !pFrm )
                 {
-                    pPara->pFrameFormat = 0;
-                    pPara->pPrtRect = 0;
-                    pPara->pFrmRect = 0;
+                    pPara->pFrameFormat = nullptr;
+                    pPara->pPrtRect = nullptr;
+                    pPara->pFrmRect = nullptr;
                 }
             }
             break;
@@ -682,7 +682,7 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
     if( _opRef )
     {
         pFrm = GetCurrFrm();
-        if( 0 != ( pFly = pFrm->FindFlyFrm() ) )
+        if( nullptr != ( pFly = pFrm->FindFlyFrm() ) )
             pFrm = pFly->GetAnchorFrm();
     }
     else

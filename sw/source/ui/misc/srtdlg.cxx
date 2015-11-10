@@ -87,7 +87,7 @@ static bool lcl_GetSelTable( SwWrtShell &rSh, sal_uInt16& rX, sal_uInt16& rY )
     if( !pTableNd )
         return false;
 
-    _FndBox aFndBox( 0, 0 );
+    _FndBox aFndBox( nullptr, nullptr );
 
     // look for all boxes / lines
     {
@@ -112,7 +112,7 @@ SwSortDlg::SwSortDlg(vcl::Window* pParent, SwWrtShell &rShell)
     , aRowText(SW_RES(STR_ROW))
     , aNumericText(SW_RES(STR_NUMERIC))
     , rSh(rShell)
-    , pColRes(0)
+    , pColRes(nullptr)
     , nX(99)
     , nY(99)
 {
@@ -208,7 +208,7 @@ SwSortDlg::SwSortDlg(vcl::Window* pParent, SwWrtShell &rShell)
     m_pLangLB->SetLanguageList( SvxLanguageListFlags::ALL | SvxLanguageListFlags::ONLY_KNOWN, true );
     m_pLangLB->SelectLanguage( nLang );
 
-    LanguageHdl( 0 );
+    LanguageHdl( nullptr );
     m_pLangLB->SetSelectHdl( LINK( this, SwSortDlg, LanguageListBoxHdl ));
 
     m_pSortUp1RB->Check(bAsc1);
@@ -332,7 +332,7 @@ void SwSortDlg::Apply()
         OUString sEntry( m_pTypDLB1->GetSelectEntry() );
         if( sEntry == aNumericText )
             sEntry.clear();
-        else if( 0 != (pUserData = m_pTypDLB1->GetSelectEntryData()) )
+        else if( nullptr != (pUserData = m_pTypDLB1->GetSelectEntryData()) )
             sEntry = *static_cast<OUString*>(pUserData);
 
         SwSortKey *pKey = new SwSortKey( nCol1, sEntry,
@@ -345,7 +345,7 @@ void SwSortDlg::Apply()
         OUString sEntry( m_pTypDLB2->GetSelectEntry() );
         if( sEntry == aNumericText )
             sEntry.clear();
-        else if( 0 != (pUserData = m_pTypDLB2->GetSelectEntryData()) )
+        else if( nullptr != (pUserData = m_pTypDLB2->GetSelectEntryData()) )
             sEntry = *static_cast<OUString*>(pUserData);
 
         SwSortKey *pKey = new SwSortKey( nCol2, sEntry,
@@ -358,7 +358,7 @@ void SwSortDlg::Apply()
         OUString sEntry( m_pTypDLB3->GetSelectEntry() );
         if( sEntry == aNumericText )
             sEntry.clear();
-        else if( 0 != (pUserData = m_pTypDLB3->GetSelectEntryData()) )
+        else if( nullptr != (pUserData = m_pTypDLB3->GetSelectEntryData()) )
             sEntry = *static_cast<OUString*>(pUserData);
 
         SwSortKey *pKey = new SwSortKey( nCol3, sEntry,

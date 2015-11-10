@@ -109,10 +109,10 @@ namespace sw
             const std::vector< basegfx::B2DRange >& rRanges,
             const bool bShowSolidBorder )
         {
-            OverlayRanges* pOverlayRanges = NULL;
+            OverlayRanges* pOverlayRanges = nullptr;
 
             SdrView* pView = rDocView.GetDrawView();
-            if ( pView != NULL )
+            if ( pView != nullptr )
             {
                 SdrPaintWindow* pCandidate = pView->GetPaintWindow(0);
                 rtl::Reference<sdr::overlay::OverlayManager> xTargetOverlay = pCandidate->GetOverlayManager();

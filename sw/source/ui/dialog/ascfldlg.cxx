@@ -174,7 +174,7 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( vcl::Window* pParent, SwDocShell& rDocSh,
 
         {
             bool bDelPrinter = false;
-            VclPtr<SfxPrinter> pPrt = pDoc ? pDoc->getIDocumentDeviceAccess().getPrinter(false) : 0;
+            VclPtr<SfxPrinter> pPrt = pDoc ? pDoc->getIDocumentDeviceAccess().getPrinter(false) : nullptr;
             if( !pPrt )
             {
                 SfxItemSet* pSet = new SfxItemSet( rDocSh.GetPool(),
@@ -225,7 +225,7 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( vcl::Window* pParent, SwDocShell& rDocSh,
     }
 
     // initialize character set
-    m_pCharSetLB->FillFromTextEncodingTable( pStream != NULL );
+    m_pCharSetLB->FillFromTextEncodingTable( pStream != nullptr );
     m_pCharSetLB->SelectTextEncoding( aOpt.GetCharSet()  );
 
     m_pCharSetLB->SetSelectHdl( LINK( this, SwAsciiFilterDlg, CharSetSelHdl ));

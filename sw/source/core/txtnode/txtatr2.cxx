@@ -42,7 +42,7 @@ SwTextCharFormat::SwTextCharFormat( SwFormatCharFormat& rAttr,
                     sal_Int32 nStt, sal_Int32 nEnde )
     : SwTextAttr( rAttr, nStt )
     , SwTextAttrEnd( rAttr, nStt, nEnde )
-    , m_pTextNode( 0 )
+    , m_pTextNode( nullptr )
     , m_nSortNumber( 0 )
 {
     rAttr.pTextAttr = this;
@@ -104,8 +104,8 @@ SwTextINetFormat::SwTextINetFormat( SwFormatINetFormat& rAttr,
                             sal_Int32 nStart, sal_Int32 nEnd )
     : SwTextAttr( rAttr, nStart )
     , SwTextAttrNesting( rAttr, nStart, nEnd )
-    , SwClient( 0 )
-    , m_pTextNode( 0 )
+    , SwClient( nullptr )
+    , m_pTextNode( nullptr )
     , m_bVisited( false )
     , m_bVisitedValid( false )
 {
@@ -120,7 +120,7 @@ SwTextINetFormat::~SwTextINetFormat( )
 SwCharFormat* SwTextINetFormat::GetCharFormat()
 {
     const SwFormatINetFormat& rFormat = SwTextAttrEnd::GetINetFormat();
-    SwCharFormat* pRet = NULL;
+    SwCharFormat* pRet = nullptr;
 
     if (!rFormat.GetValue().isEmpty())
     {
@@ -207,8 +207,8 @@ SwTextRuby::SwTextRuby( SwFormatRuby& rAttr,
                       sal_Int32 nStart, sal_Int32 nEnd )
     : SwTextAttr( rAttr, nStart )
     , SwTextAttrNesting( rAttr, nStart, nEnd )
-    , SwClient( 0 )
-    , m_pTextNode( 0 )
+    , SwClient( nullptr )
+    , m_pTextNode( nullptr )
 {
     rAttr.pTextAttr  = this;
 }
@@ -250,7 +250,7 @@ bool SwTextRuby::GetInfo( SfxPoolItem& rInfo ) const
 SwCharFormat* SwTextRuby::GetCharFormat()
 {
     const SwFormatRuby& rFormat = SwTextAttrEnd::GetRuby();
-    SwCharFormat* pRet = 0;
+    SwCharFormat* pRet = nullptr;
 
     if( !rFormat.GetText().isEmpty() )
     {
@@ -321,7 +321,7 @@ SwTextMeta::~SwTextMeta()
     SwFormatMeta & rFormatMeta( static_cast<SwFormatMeta &>(GetAttr()) );
     if (rFormatMeta.GetTextAttr() == this)
     {
-        rFormatMeta.SetTextAttr(0);
+        rFormatMeta.SetTextAttr(nullptr);
     }
 }
 

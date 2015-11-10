@@ -60,7 +60,7 @@ FORMAT_PAINTBRUSH_FRAME_IDS
 
 SfxItemSet* lcl_CreateEmptyItemSet( int nSelectionType, SfxItemPool& rPool, bool bNoParagraphFormats = false )
 {
-    SfxItemSet* pItemSet = 0;
+    SfxItemSet* pItemSet = nullptr;
     if( nSelectionType & (nsSelectionType::SEL_FRM | nsSelectionType::SEL_OLE | nsSelectionType::SEL_GRF) )
     {
         pItemSet = new SfxItemSet(rPool,
@@ -121,7 +121,7 @@ void lcl_getTableAttributes( SfxItemSet& rSet, SwWrtShell &rSh )
         rSet.Put( pFrameFormat->GetFrmDir() );
     }
 
-    SwFormatRowSplit* pSplit = 0;
+    SwFormatRowSplit* pSplit = nullptr;
     rSh.GetRowSplit(pSplit);
     if(pSplit)
         rSet.Put(*pSplit);
@@ -129,11 +129,11 @@ void lcl_getTableAttributes( SfxItemSet& rSet, SwWrtShell &rSh )
 
 void lcl_setTableAttributes( const SfxItemSet& rSet, SwWrtShell &rSh )
 {
-    const SfxPoolItem* pItem = 0;
+    const SfxPoolItem* pItem = nullptr;
     bool bBorder = ( SfxItemState::SET == rSet.GetItemState( RES_BOX ) ||
             SfxItemState::SET == rSet.GetItemState( SID_ATTR_BORDER_INNER ) );
     bool bBackground = SfxItemState::SET == rSet.GetItemState( RES_BACKGROUND, false, &pItem );
-    const SfxPoolItem* pRowItem = 0, *pTableItem = 0;
+    const SfxPoolItem* pRowItem = nullptr, *pTableItem = nullptr;
     bBackground |= SfxItemState::SET == rSet.GetItemState( SID_ATTR_BRUSH_ROW, false, &pRowItem );
     bBackground |= SfxItemState::SET == rSet.GetItemState( SID_ATTR_BRUSH_TABLE, false, &pTableItem );
 
@@ -164,37 +164,37 @@ void lcl_setTableAttributes( const SfxItemSet& rSet, SwWrtShell &rSh )
     if(pFrameFormat)
     {
         //RES_SHADOW
-        pItem=0;
+        pItem=nullptr;
         rSet.GetItemState(rSet.GetPool()->GetWhich(RES_SHADOW), false, &pItem);
         if(pItem)
             pFrameFormat->SetFormatAttr( *pItem );
 
         //RES_BREAK
-        pItem=0;
+        pItem=nullptr;
         rSet.GetItemState(rSet.GetPool()->GetWhich(RES_BREAK), false, &pItem);
         if(pItem)
             pFrameFormat->SetFormatAttr( *pItem );
 
         //RES_PAGEDESC
-        pItem=0;
+        pItem=nullptr;
         rSet.GetItemState(rSet.GetPool()->GetWhich(RES_PAGEDESC), false, &pItem);
         if(pItem)
             pFrameFormat->SetFormatAttr( *pItem );
 
         //RES_LAYOUT_SPLIT
-        pItem=0;
+        pItem=nullptr;
         rSet.GetItemState(rSet.GetPool()->GetWhich(RES_LAYOUT_SPLIT), false, &pItem);
         if(pItem)
             pFrameFormat->SetFormatAttr( *pItem );
 
         //RES_KEEP
-        pItem=0;
+        pItem=nullptr;
         rSet.GetItemState(rSet.GetPool()->GetWhich(RES_KEEP), false, &pItem);
         if(pItem)
             pFrameFormat->SetFormatAttr( *pItem );
 
         //RES_FRAMEDIR
-        pItem=0;
+        pItem=nullptr;
         rSet.GetItemState(rSet.GetPool()->GetWhich(RES_FRAMEDIR), false, &pItem);
         if(pItem)
             pFrameFormat->SetFormatAttr( *pItem );
@@ -217,9 +217,9 @@ void lcl_setTableAttributes( const SfxItemSet& rSet, SwWrtShell &rSh )
 
 SwFormatClipboard::SwFormatClipboard()
         : m_nSelectionType(0)
-        , m_pItemSet_TextAttr(0)
-        , m_pItemSet_ParAttr(0)
-        , m_pTableItemSet(0)
+        , m_pItemSet_TextAttr(nullptr)
+        , m_pItemSet_ParAttr(nullptr)
+        , m_pTableItemSet(nullptr)
         , m_bPersistentCopy(false)
 {
 }
@@ -232,9 +232,9 @@ SwFormatClipboard::~SwFormatClipboard()
 
 bool SwFormatClipboard::HasContent() const
 {
-    return m_pItemSet_TextAttr!=0
-        || m_pItemSet_ParAttr!=0
-        || m_pTableItemSet != 0
+    return m_pItemSet_TextAttr!=nullptr
+        || m_pItemSet_ParAttr!=nullptr
+        || m_pTableItemSet != nullptr
         || !m_aCharStyle.isEmpty()
         || !m_aParaStyle.isEmpty()
         ;
@@ -578,13 +578,13 @@ void SwFormatClipboard::Erase()
     m_nSelectionType = 0;
 
     delete m_pItemSet_TextAttr;
-    m_pItemSet_TextAttr = 0;
+    m_pItemSet_TextAttr = nullptr;
 
     delete m_pItemSet_ParAttr;
-    m_pItemSet_ParAttr = 0;
+    m_pItemSet_ParAttr = nullptr;
 
     delete m_pTableItemSet;
-    m_pTableItemSet = 0;
+    m_pTableItemSet = nullptr;
 
     if( !m_aCharStyle.isEmpty() )
         m_aCharStyle.clear();

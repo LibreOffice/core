@@ -53,14 +53,14 @@ protected:
         const sal_Char* pFormatNm,
         SwFrameFormat *pDrvdFrm,
         sal_uInt16 nFormatWhich = RES_FRMFMT,
-        const sal_uInt16* pWhichRange = 0);
+        const sal_uInt16* pWhichRange = nullptr);
 
     SwFrameFormat(
         SwAttrPool& rPool,
         const OUString &rFormatNm,
         SwFrameFormat *pDrvdFrm,
         sal_uInt16 nFormatWhich = RES_FRMFMT,
-        const sal_uInt16* pWhichRange = 0);
+        const sal_uInt16* pWhichRange = nullptr);
 
     virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNewValue ) override;
 
@@ -81,13 +81,13 @@ public:
         rPoint - test on DocPosition.
         pFly - optional FlyFrame, in case it is already known. */
     IMapObject* GetIMapObject( const Point& rPoint,
-                                const SwFlyFrm *pFly = 0 ) const;
+                                const SwFlyFrm *pFly = nullptr ) const;
 
     /** @return the real size of the frame - or an empty rectangle
        if no layout exists.
        If pPoint is given, look for the frame closest to it. */
     SwRect FindLayoutRect( const bool bPrtArea = false,
-                           const Point* pPoint = 0,
+                           const Point* pPoint = nullptr,
                            const bool bCalcFrm = false ) const;
 
     /** Searches SdrObject. SdrObjUserCall is client of the format.
@@ -175,10 +175,10 @@ public:
     /// Creates the views.
     virtual void MakeFrms() override;
 
-    SwFlyFrm* GetFrm( const Point* pDocPos = 0,
+    SwFlyFrm* GetFrm( const Point* pDocPos = nullptr,
                       const bool bCalcFrm = false ) const;
 
-    SwAnchoredObject* GetAnchoredObj( const Point* pDocPos = 0,
+    SwAnchoredObject* GetAnchoredObj( const Point* pDocPos = nullptr,
                                       const bool bCalcFrm = false ) const;
 
     virtual Graphic MakeGraphic( ImageMap* pMap = nullptr ) override;

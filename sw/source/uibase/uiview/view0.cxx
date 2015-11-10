@@ -372,7 +372,7 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
 
     const SfxItemSet *pArgs = rReq.GetArgs();
     sal_uInt16 nSlot = rReq.GetSlot();
-    const SfxPoolItem* pAttr=NULL;
+    const SfxPoolItem* pAttr=nullptr;
 
     if( pArgs && SfxItemState::SET == pArgs->GetItemState( nSlot , false, &pAttr ))
     {
@@ -543,7 +543,7 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
             if (bSet)
             {
                 SwDocShell *pDocSh = GetDocShell();
-                SwDoc *pDoc = pDocSh? pDocSh->GetDoc() : NULL;
+                SwDoc *pDoc = pDocSh? pDocSh->GetDoc() : nullptr;
 
                 // right now we don't have view options for automatic grammar checking. Thus...
                 bool bIsAutoGrammar = false;

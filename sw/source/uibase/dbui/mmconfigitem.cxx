@@ -723,7 +723,7 @@ void SwMailMergeConfigItem_Impl::SetCurrentGreeting(
 
 namespace
 {
-    static SwMailMergeConfigItem_Impl* pOptions = NULL;
+    static SwMailMergeConfigItem_Impl* pOptions = nullptr;
     static sal_Int32            nRefCount = 0;
 
     class theMailMergeConfigMutex : public rtl::Static<osl::Mutex, theMailMergeConfigMutex> {};
@@ -736,8 +736,8 @@ SwMailMergeConfigItem::SwMailMergeConfigItem() :
     m_nGreetingMoves(0),
     m_nStartPrint(0),
     m_nEndPrint(0),
-    m_pSourceView(0),
-    m_pTargetView(0)
+    m_pSourceView(nullptr),
+    m_pTargetView(nullptr)
 {
     // Global access, must be guarded (multithreading)
     ::osl::MutexGuard aGuard( theMailMergeConfigMutex::get() );
@@ -839,7 +839,7 @@ void SwMailMergeConfigItem::SetCurrentConnection(
         m_pImpl->m_xConnection        = rConnection     ;
         m_pImpl->m_xColumnsSupplier   = xColumnsSupplier;
         m_pImpl->m_aDBData = rDBData;
-        m_pImpl->m_xResultSet         = 0;
+        m_pImpl->m_xResultSet         = nullptr;
         m_pImpl->m_nResultSetCursorPos = 0;
         m_pImpl->SetModified();
 }
@@ -877,8 +877,8 @@ void SwMailMergeConfigItem::SetCurrentDBData( const SwDBData& rDBData)
     {
         m_pImpl->m_aDBData = rDBData;
         m_pImpl->m_xConnection.clear();
-        m_pImpl->m_xSource = 0;
-        m_pImpl->m_xColumnsSupplier = 0;
+        m_pImpl->m_xSource = nullptr;
+        m_pImpl->m_xColumnsSupplier = nullptr;
         m_pImpl->SetModified();
     }
 }
@@ -1612,7 +1612,7 @@ static SwView* lcl_ExistsView(SwView* pView)
 
         pViewShell = SfxViewShell::GetNext( *pViewShell, false, checkSfxViewShell<SwView> );
     }
-    return 0;
+    return nullptr;
 }
 
 SwView*  SwMailMergeConfigItem::GetTargetView()

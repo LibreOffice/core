@@ -80,9 +80,9 @@ sal_uInt32 SwXMLWriter::_Write( const uno::Reference < task::XStatusIndicator >&
     uno::Reference< io::XOutputStream > xOut;
     tools::SvRef<SotStorageStream> xDocStream;
     uno::Reference< document::XGraphicObjectResolver > xGraphicResolver;
-    SvXMLGraphicHelper *pGraphicHelper = 0;
+    SvXMLGraphicHelper *pGraphicHelper = nullptr;
     uno::Reference< document::XEmbeddedObjectResolver > xObjectResolver;
-    SvXMLEmbeddedObjectHelper *pObjectHelper = 0;
+    SvXMLEmbeddedObjectHelper *pObjectHelper = nullptr;
 
     OSL_ENSURE( xStg.is(), "Where is my storage?" );
     pGraphicHelper = SvXMLGraphicHelper::Create( xStg,
@@ -393,11 +393,11 @@ sal_uInt32 SwXMLWriter::_Write( const uno::Reference < task::XStatusIndicator >&
 
     if( pGraphicHelper )
         SvXMLGraphicHelper::Destroy( pGraphicHelper );
-    xGraphicResolver = 0;
+    xGraphicResolver = nullptr;
 
     if( pObjectHelper )
         SvXMLEmbeddedObjectHelper::Destroy( pObjectHelper );
-    xObjectResolver = 0;
+    xObjectResolver = nullptr;
 
     // restore redline mode
     aAny = xInfoSet->getPropertyValue( sShowChanges );
@@ -469,8 +469,8 @@ bool SwXMLWriter::WriteThroughComponent(
     const Sequence<beans::PropertyValue> & rMediaDesc )
 {
     OSL_ENSURE( xStg.is(), "Need storage!" );
-    OSL_ENSURE( NULL != pStreamName, "Need stream name!" );
-    OSL_ENSURE( NULL != pServiceName, "Need service name!" );
+    OSL_ENSURE( nullptr != pStreamName, "Need stream name!" );
+    OSL_ENSURE( nullptr != pServiceName, "Need service name!" );
 
     SAL_INFO( "sw.filter", "SwXMLWriter::WriteThroughComponent : stream " << pStreamName );
     // open stream
@@ -529,7 +529,7 @@ bool SwXMLWriter::WriteThroughComponent(
 {
     OSL_ENSURE( xOutputStream.is(), "I really need an output stream!" );
     OSL_ENSURE( xComponent.is(), "Need component!" );
-    OSL_ENSURE( NULL != pServiceName, "Need component name!" );
+    OSL_ENSURE( nullptr != pServiceName, "Need component name!" );
 
     // get component
     uno::Reference< xml::sax::XWriter > xSaxWriter = xml::sax::Writer::create(rxContext);

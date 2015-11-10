@@ -87,12 +87,12 @@ SwXMLExport::SwXMLExport(
     OUString const & implementationName, SvXMLExportFlags nExportFlags)
 :   SvXMLExport( util::MeasureUnit::INCH, rContext, implementationName, XML_TEXT,
         nExportFlags ),
-    pTableItemMapper( 0 ),
-    pTableLines( 0 ),
+    pTableItemMapper( nullptr ),
+    pTableLines( nullptr ),
     bBlock( false ),
     bShowProgress( true ),
     bSavedShowChanges( false ),
-    doc( NULL ),
+    doc( nullptr ),
     sNumberFormat("NumberFormat"),
     sIsProtected("IsProtected"),
     sCell("Cell")
@@ -163,7 +163,7 @@ sal_uInt32 SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
             for( sal_uInt32 i = 0; i < nItems; ++i )
             {
                 const SfxPoolItem* const pItem = rPool.GetItem2( nWhichId , i );
-                if( 0 != pItem )
+                if( nullptr != pItem )
                 {
                     const SvXMLAttrContainerItem *pUnknown =
                                 dynamic_cast<const SvXMLAttrContainerItem*>( pItem  );
@@ -250,7 +250,7 @@ sal_uInt32 SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
     // we don't need it here.
     // else: keep default pClass that we received
 
-    SvXMLGraphicHelper *pGraphicResolver = 0;
+    SvXMLGraphicHelper *pGraphicResolver = nullptr;
     if( !GetGraphicResolver().is() )
     {
         pGraphicResolver = SvXMLGraphicHelper::Create( GRAPHICHELPER_MODE_WRITE );
@@ -258,7 +258,7 @@ sal_uInt32 SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
         SetGraphicResolver( xGraphicResolver );
     }
 
-    SvXMLEmbeddedObjectHelper *pEmbeddedResolver = 0;
+    SvXMLEmbeddedObjectHelper *pEmbeddedResolver = nullptr;
     if( !GetEmbeddedResolver().is() )
     {
         SfxObjectShell *pPersist = pDoc->GetPersist();
@@ -523,7 +523,7 @@ sal_Int64 SAL_CALL SwXMLExport::getSomething( const Sequence< sal_Int8 >& rId )
 
 SwDoc* SwXMLExport::getDoc()
 {
-    if( doc != NULL )
+    if( doc != nullptr )
         return doc;
     Reference < XTextDocument > xTextDoc( GetModel(), UNO_QUERY );
     Reference < XText > xText = xTextDoc->getText();
@@ -531,9 +531,9 @@ SwDoc* SwXMLExport::getDoc()
     assert( xTextTunnel.is());
     SwXText *pText = reinterpret_cast< SwXText *>(
             sal::static_int_cast< sal_IntPtr >( xTextTunnel->getSomething( SwXText::getUnoTunnelId() )));
-    assert( pText != NULL );
+    assert( pText != nullptr );
     doc = pText->GetDoc();
-    assert( doc != NULL );
+    assert( doc != nullptr );
     return doc;
 }
 

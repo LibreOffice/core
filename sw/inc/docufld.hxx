@@ -140,7 +140,7 @@ public:
     OUString Expand( sal_uInt32 nFormat, short nOff, sal_uInt16 const nPageNumber,
                      sal_uInt16 const nMaxPage, const OUString& ) const;
     void ChangeExpansion( SwDoc* pDoc,
-                            bool bVirtPageNum, const sal_Int16* pNumFormat = 0 );
+                            bool bVirtPageNum, const sal_Int16* pNumFormat = nullptr );
     virtual SwFieldType* Copy() const override;
 };
 

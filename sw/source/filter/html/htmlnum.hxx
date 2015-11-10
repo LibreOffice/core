@@ -47,7 +47,7 @@ public:
     void Set( const SwTextNode& rTextNd );
 
     SwHTMLNumRuleInfo() :
-        pNumRule( 0 ), nDeep( 0 ),
+        pNumRule( nullptr ), nDeep( 0 ),
         bRestart( false ), bNumbered( false )
     {
         memset( &aNumStarts, 0xff, sizeof( aNumStarts ) );
@@ -101,7 +101,7 @@ inline void SwHTMLNumRuleInfo::Set( const SwHTMLNumRuleInfo& rInf )
 
 inline void SwHTMLNumRuleInfo::Clear()
 {
-    pNumRule = 0;
+    pNumRule = nullptr;
     nDeep = 0;
     bRestart = bNumbered = false;
     memset( &aNumStarts, 0xff, sizeof( aNumStarts ) );
@@ -110,7 +110,7 @@ inline void SwHTMLNumRuleInfo::Clear()
 inline sal_uInt8 SwHTMLNumRuleInfo::GetLevel() const
 {
     return
-        (sal_uInt8)( pNumRule!=0 && nDeep != 0
+        (sal_uInt8)( pNumRule!=nullptr && nDeep != 0
             ? ( nDeep<=MAXLEVEL ? nDeep-1 : MAXLEVEL - 1 )
             : 0 );
 }

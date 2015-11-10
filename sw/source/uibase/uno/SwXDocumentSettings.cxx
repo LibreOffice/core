@@ -237,9 +237,9 @@ SwXDocumentSettings::SwXDocumentSettings ( SwXTextDocument * pModel )
                       &Application::GetSolarMutex () )
 , mxModel ( pModel )
 , mpModel ( pModel )
-, mpDocSh ( NULL )
-, mpDoc ( NULL )
-, mpPrinter( NULL )
+, mpDocSh ( nullptr )
+, mpDoc ( nullptr )
+, mpPrinter( nullptr )
 {
     registerSlave ( new SwXPrintSettings ( PRINT_SETTINGS_DOCUMENT, mpModel->GetDocShell()->GetDoc() ) );
 }
@@ -303,11 +303,11 @@ void SwXDocumentSettings::_preSetValues ()
         throw(beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException )
 {
     mpDocSh = mpModel->GetDocShell();
-    if (NULL == mpDocSh)
+    if (nullptr == mpDocSh)
         throw UnknownPropertyException();
 
     mpDoc = mpDocSh->GetDoc();
-    if (NULL == mpDoc)
+    if (nullptr == mpDoc)
         throw UnknownPropertyException();
 }
 
@@ -315,7 +315,7 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
         throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     if (rInfo.mnAttributes & PropertyAttribute::READONLY)
-        throw PropertyVetoException ("Property is read-only: " + rInfo.maName, static_cast < cppu::OWeakObject * > ( 0 ) );
+        throw PropertyVetoException ("Property is read-only: " + rInfo.maName, static_cast < cppu::OWeakObject * > ( nullptr ) );
 
     switch( rInfo.mnHandle )
     {
@@ -859,19 +859,19 @@ void SwXDocumentSettings::_postSetValues ()
         mpDoc->getIDocumentDeviceAccess().setPrinter( mpPrinter, true, true );
     }
 
-    mpPrinter = 0;
-    mpDocSh = 0;
-    mpDoc = 0;
+    mpPrinter = nullptr;
+    mpDocSh = nullptr;
+    mpDoc = nullptr;
 }
 
 void SwXDocumentSettings::_preGetValues ()
         throw(beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException )
 {
     mpDocSh = mpModel->GetDocShell();
-    if (NULL == mpDocSh)
+    if (nullptr == mpDocSh)
         throw UnknownPropertyException();
     mpDoc = mpDocSh->GetDoc();
-    if (NULL == mpDoc)
+    if (nullptr == mpDoc)
         throw UnknownPropertyException();
 }
 
@@ -1244,8 +1244,8 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
 void SwXDocumentSettings::_postGetValues ()
         throw(beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException )
 {
-    mpDocSh = 0;
-    mpDoc = 0;
+    mpDocSh = nullptr;
+    mpDoc = nullptr;
 }
 
 // XServiceInfo

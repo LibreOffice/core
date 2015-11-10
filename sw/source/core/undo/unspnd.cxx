@@ -37,7 +37,7 @@
 
 SwUndoSplitNode::SwUndoSplitNode( SwDoc* pDoc, const SwPosition& rPos,
                                     bool bChkTable )
-    : SwUndo( UNDO_SPLITNODE ), pHistory( 0 ), pRedlData( 0 ), nNode( rPos.nNode.GetIndex() ),
+    : SwUndo( UNDO_SPLITNODE ), pHistory( nullptr ), pRedlData( nullptr ), nNode( rPos.nNode.GetIndex() ),
         nContent( rPos.nContent.GetIndex() ),
         bTableFlag( false ), bChkTableStt( bChkTable )
 {
@@ -81,7 +81,7 @@ void SwUndoSplitNode::UndoImpl(::sw::UndoRedoContext & rContext)
         SwNode* pCurrNd = pDoc->GetNodes()[ nNode + 1 ];
         SwTableNode* pTableNd = pCurrNd->FindTableNode();
         if( pCurrNd->IsContentNode() && pTableNd &&
-            0 != ( pTNd = pDoc->GetNodes()[ pTableNd->GetIndex()-1 ]->GetTextNode() ))
+            nullptr != ( pTNd = pDoc->GetNodes()[ pTableNd->GetIndex()-1 ]->GetTextNode() ))
         {
             // move break attributes
             SwFrameFormat* pTableFormat = pTableNd->GetTable().GetFrameFormat();

@@ -74,7 +74,7 @@ class SwDocTest : public test::BootstrapFixture
 {
 public:
     SwDocTest()
-        : m_pDoc(NULL)
+        : m_pDoc(nullptr)
     {
     }
 
@@ -571,7 +571,7 @@ void SwDocTest::testSwScanner()
     {
         SwScanner aScanner(*pTextNode,
             OUString("Hello World"),
-            0, ModelToViewHelper(), i18n::WordType::DICTIONARY_WORD, 0,
+            nullptr, ModelToViewHelper(), i18n::WordType::DICTIONARY_WORD, 0,
             RTL_CONSTASCII_LENGTH("Hello World"));
 
         bool bFirstOk = aScanner.NextWord();
@@ -926,7 +926,7 @@ void SwDocTest::testMergePortionsDeleteNotSorted()
     SwPaM aPaM(aIdx);
     m_pDoc->getIDocumentContentOperations().InsertString(aPaM, "  AABBCC");
 
-    SwCharFormat *const pCharFormat(m_pDoc->MakeCharFormat("foo", 0));
+    SwCharFormat *const pCharFormat(m_pDoc->MakeCharFormat("foo", nullptr));
     SwFormatCharFormat const charFormat(pCharFormat);
 
     SwFormatINetFormat const inetFormat("http://example.com", "");
@@ -973,8 +973,8 @@ void SwDocTest::testGraphicAnchorDeletion()
     SwFormatAnchor aAnchor(FLY_AS_CHAR);
     aAnchor.SetAnchor(aPaM.GetPoint());
     aFlySet.Put(aAnchor);
-    SwFlyFrameFormat *pFrame = m_pDoc->getIDocumentContentOperations().Insert(aPaM, OUString(), OUString(), NULL, &aFlySet, NULL, NULL);
-    CPPUNIT_ASSERT_MESSAGE("Expected frame", pFrame != NULL);
+    SwFlyFrameFormat *pFrame = m_pDoc->getIDocumentContentOperations().Insert(aPaM, OUString(), OUString(), nullptr, &aFlySet, nullptr, nullptr);
+    CPPUNIT_ASSERT_MESSAGE("Expected frame", pFrame != nullptr);
 
     CPPUNIT_ASSERT_MESSAGE("Should be 1 graphic", m_pDoc->GetFlyCount(FLYCNTTYPE_GRF) == 1);
 
@@ -1067,7 +1067,7 @@ void SwDocTest::randomTest()
         for( int i = 0; i < 2000; i++ )
         {
             SwPaM aPam(m_pDoc->GetNodes());
-            SwCursor aCrs(getRandomPosition(m_pDoc, i/20), 0, false);
+            SwCursor aCrs(getRandomPosition(m_pDoc, i/20), nullptr, false);
             aCrs.SetMark();
 
             switch (getRand (i < 50 ? 3 : 6)) {
@@ -1596,7 +1596,7 @@ void SwDocTest::test64kPageDescs()
 
     size_t nPos;
     SwPageDesc *pDesc = m_pDoc->FindPageDesc( aChanged, &nPos );
-    CPPUNIT_ASSERT( pDesc != NULL );
+    CPPUNIT_ASSERT( pDesc != nullptr );
     CPPUNIT_ASSERT( nPos == nPageDescCount );
 
     // check if we didn't mess up PageDesc at pos 0
@@ -1608,12 +1608,12 @@ void SwDocTest::test64kPageDescs()
     m_pDoc->DelPageDesc( aChanged, nPos );
     pDesc = m_pDoc->FindPageDesc( aChanged, &nPos );
     // not there anymore
-    CPPUNIT_ASSERT( pDesc == NULL );
+    CPPUNIT_ASSERT( pDesc == nullptr );
     CPPUNIT_ASSERT( nPos == SIZE_MAX );
 
     // check if PageDesc at pos 0 is still there
     pDesc = m_pDoc->FindPageDesc( aZeroName, &nPos );
-    CPPUNIT_ASSERT( pDesc != NULL );
+    CPPUNIT_ASSERT( pDesc != nullptr );
     CPPUNIT_ASSERT( nPos == 0 );
 }
 
@@ -1634,7 +1634,7 @@ void SwDocTest::setUp()
 
 void SwDocTest::tearDown()
 {
-    m_pDoc = 0; // deleted by DoClose()
+    m_pDoc = nullptr; // deleted by DoClose()
     m_xDocShRef->DoClose();
     m_xDocShRef.Clear();
 

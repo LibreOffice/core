@@ -34,7 +34,7 @@ class BigPtrEntry
     BlockInfo* pBlock;
     sal_uInt16 nOffset;
 public:
-    BigPtrEntry() : pBlock(0), nOffset(0) {}
+    BigPtrEntry() : pBlock(nullptr), nOffset(0) {}
     virtual ~BigPtrEntry() {}
 
     inline sal_uLong GetPos() const;

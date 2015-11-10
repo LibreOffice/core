@@ -43,7 +43,7 @@ SwPageDesc::SwPageDesc(const OUString& rName, SwFrameFormat *pFormat, SwDoc *con
     , m_Left( pDoc->GetAttrPool(), rName, pFormat )
     , m_FirstMaster( pDoc->GetAttrPool(), rName, pFormat )
     , m_FirstLeft( pDoc->GetAttrPool(), rName, pFormat )
-    , m_Depend( this, 0 )
+    , m_Depend( this, nullptr )
     , m_pFollow( this )
     , m_nRegHeight( 0 )
     , m_nRegAscent( 0 )
@@ -246,18 +246,18 @@ static const SwFrm* lcl_GetFrmOfNode( const SwNode& rNd )
         nFrmType = FRM_TAB;
     }
     else
-        pMod = 0;
+        pMod = nullptr;
 
     Point aNullPt;
-    return pMod ? ::GetFrmOfModify( 0, *pMod, nFrmType, &aNullPt )
-                : 0;
+    return pMod ? ::GetFrmOfModify( nullptr, *pMod, nFrmType, &aNullPt )
+                : nullptr;
 }
 
 const SwPageDesc* SwPageDesc::GetPageDescOfNode(const SwNode& rNd)
 {
-    const SwPageDesc* pRet = 0;
+    const SwPageDesc* pRet = nullptr;
     const SwFrm* pChkFrm = lcl_GetFrmOfNode( rNd );
-    if (pChkFrm && 0 != (pChkFrm = pChkFrm->FindPageFrm()))
+    if (pChkFrm && nullptr != (pChkFrm = pChkFrm->FindPageFrm()))
         pRet = static_cast<const SwPageFrm*>(pChkFrm)->GetPageDesc();
     return pRet;
 }
@@ -269,7 +269,7 @@ const SwFrameFormat* SwPageDesc::GetPageFormatOfNode( const SwNode& rNd,
     const SwFrameFormat* pRet;
     const SwFrm* pChkFrm = lcl_GetFrmOfNode( rNd );
 
-    if( pChkFrm && 0 != ( pChkFrm = pChkFrm->FindPageFrm() ))
+    if( pChkFrm && nullptr != ( pChkFrm = pChkFrm->FindPageFrm() ))
     {
         const SwPageDesc* pPd = bCheckForThisPgDc ? this :
                                 static_cast<const SwPageFrm*>(pChkFrm)->GetPageDesc();
@@ -293,7 +293,7 @@ bool SwPageDesc::IsFollowNextPageOfNode( const SwNode& rNd ) const
     if( GetFollow() && this != GetFollow() )
     {
         const SwFrm* pChkFrm = lcl_GetFrmOfNode( rNd );
-        if( pChkFrm && 0 != ( pChkFrm = pChkFrm->FindPageFrm() ) &&
+        if( pChkFrm && nullptr != ( pChkFrm = pChkFrm->FindPageFrm() ) &&
             pChkFrm->IsPageFrm() &&
             ( !pChkFrm->GetNext() || GetFollow() ==
                         static_cast<const SwPageFrm*>(pChkFrm->GetNext())->GetPageDesc() ))
@@ -307,14 +307,14 @@ SwFrameFormat *SwPageDesc::GetLeftFormat(bool const bFirst)
 {
     return (nsUseOnPage::PD_LEFT & m_eUse)
             ? ((bFirst) ? &m_FirstLeft : &m_Left)
-            : 0;
+            : nullptr;
 }
 
 SwFrameFormat *SwPageDesc::GetRightFormat(bool const bFirst)
 {
     return (nsUseOnPage::PD_RIGHT & m_eUse)
             ? ((bFirst) ? &m_FirstMaster : &m_Master)
-            : 0;
+            : nullptr;
 }
 
 bool SwPageDesc::IsFirstShared() const
@@ -352,7 +352,7 @@ SwPageDesc* SwPageDesc::GetByName(SwDoc& rDoc, const OUString& rName)
         }
     }
 
-    return 0;
+    return nullptr;
 }
 
 SwPageFootnoteInfo::SwPageFootnoteInfo()
@@ -456,7 +456,7 @@ SwPageDescExt::operator SwPageDesc() const
 
     SwPageDesc * pPageDesc = m_pDoc->FindPageDesc(m_sFollow);
 
-    if ( 0 != pPageDesc )
+    if ( nullptr != pPageDesc )
         aResult.SetFollow(pPageDesc);
 
     return aResult;

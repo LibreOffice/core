@@ -31,42 +31,42 @@
 
 extern ResMgr* pSwResMgr;
 // Initialise UI names to 0
-::std::vector<OUString> *SwStyleNameMapper::m_pTextUINameArray = 0,
-                *SwStyleNameMapper::m_pListsUINameArray = 0,
-                *SwStyleNameMapper::m_pExtraUINameArray = 0,
-                *SwStyleNameMapper::m_pRegisterUINameArray = 0,
-                *SwStyleNameMapper::m_pDocUINameArray = 0,
-                *SwStyleNameMapper::m_pHTMLUINameArray = 0,
-                *SwStyleNameMapper::m_pFrameFormatUINameArray = 0,
-                *SwStyleNameMapper::m_pChrFormatUINameArray = 0,
-                *SwStyleNameMapper::m_pHTMLChrFormatUINameArray = 0,
-                *SwStyleNameMapper::m_pPageDescUINameArray = 0,
-                *SwStyleNameMapper::m_pNumRuleUINameArray = 0,
+::std::vector<OUString> *SwStyleNameMapper::m_pTextUINameArray = nullptr,
+                *SwStyleNameMapper::m_pListsUINameArray = nullptr,
+                *SwStyleNameMapper::m_pExtraUINameArray = nullptr,
+                *SwStyleNameMapper::m_pRegisterUINameArray = nullptr,
+                *SwStyleNameMapper::m_pDocUINameArray = nullptr,
+                *SwStyleNameMapper::m_pHTMLUINameArray = nullptr,
+                *SwStyleNameMapper::m_pFrameFormatUINameArray = nullptr,
+                *SwStyleNameMapper::m_pChrFormatUINameArray = nullptr,
+                *SwStyleNameMapper::m_pHTMLChrFormatUINameArray = nullptr,
+                *SwStyleNameMapper::m_pPageDescUINameArray = nullptr,
+                *SwStyleNameMapper::m_pNumRuleUINameArray = nullptr,
 
 // Initialise programmatic names to 0
-                *SwStyleNameMapper::m_pTextProgNameArray = 0,
-                *SwStyleNameMapper::m_pListsProgNameArray = 0,
-                *SwStyleNameMapper::m_pExtraProgNameArray = 0,
-                *SwStyleNameMapper::m_pRegisterProgNameArray = 0,
-                *SwStyleNameMapper::m_pDocProgNameArray = 0,
-                *SwStyleNameMapper::m_pHTMLProgNameArray = 0,
-                *SwStyleNameMapper::m_pFrameFormatProgNameArray = 0,
-                *SwStyleNameMapper::m_pChrFormatProgNameArray = 0,
-                *SwStyleNameMapper::m_pHTMLChrFormatProgNameArray = 0,
-                *SwStyleNameMapper::m_pPageDescProgNameArray = 0,
-                *SwStyleNameMapper::m_pNumRuleProgNameArray = 0;
+                *SwStyleNameMapper::m_pTextProgNameArray = nullptr,
+                *SwStyleNameMapper::m_pListsProgNameArray = nullptr,
+                *SwStyleNameMapper::m_pExtraProgNameArray = nullptr,
+                *SwStyleNameMapper::m_pRegisterProgNameArray = nullptr,
+                *SwStyleNameMapper::m_pDocProgNameArray = nullptr,
+                *SwStyleNameMapper::m_pHTMLProgNameArray = nullptr,
+                *SwStyleNameMapper::m_pFrameFormatProgNameArray = nullptr,
+                *SwStyleNameMapper::m_pChrFormatProgNameArray = nullptr,
+                *SwStyleNameMapper::m_pHTMLChrFormatProgNameArray = nullptr,
+                *SwStyleNameMapper::m_pPageDescProgNameArray = nullptr,
+                *SwStyleNameMapper::m_pNumRuleProgNameArray = nullptr;
 
-NameToIdHash    *SwStyleNameMapper::m_pParaUIMap = 0,
-                *SwStyleNameMapper::m_pCharUIMap = 0,
-                *SwStyleNameMapper::m_pPageUIMap = 0,
-                *SwStyleNameMapper::m_pFrameUIMap = 0,
-                *SwStyleNameMapper::m_pNumRuleUIMap = 0,
+NameToIdHash    *SwStyleNameMapper::m_pParaUIMap = nullptr,
+                *SwStyleNameMapper::m_pCharUIMap = nullptr,
+                *SwStyleNameMapper::m_pPageUIMap = nullptr,
+                *SwStyleNameMapper::m_pFrameUIMap = nullptr,
+                *SwStyleNameMapper::m_pNumRuleUIMap = nullptr,
 
-                *SwStyleNameMapper::m_pParaProgMap = 0,
-                *SwStyleNameMapper::m_pCharProgMap = 0,
-                *SwStyleNameMapper::m_pPageProgMap = 0,
-                *SwStyleNameMapper::m_pFrameProgMap = 0,
-                *SwStyleNameMapper::m_pNumRuleProgMap = 0;
+                *SwStyleNameMapper::m_pParaProgMap = nullptr,
+                *SwStyleNameMapper::m_pCharProgMap = nullptr,
+                *SwStyleNameMapper::m_pPageProgMap = nullptr,
+                *SwStyleNameMapper::m_pFrameProgMap = nullptr,
+                *SwStyleNameMapper::m_pNumRuleProgMap = nullptr;
 
 // SwTableEntry so we can pass the length to the String CTOR
 struct SwTableEntry
@@ -103,7 +103,7 @@ const struct SwTableEntry TextProgNameTable [] =
     ENTRY( "Heading 8" ),
     ENTRY( "Heading 9" ),
     ENTRY( "Heading 10" ), // RES_POOLCOLL_TEXT_END
-    { 0, NULL }
+    { 0, nullptr }
 };
 
 const struct SwTableEntry ListsProgNameTable [] =
@@ -149,7 +149,7 @@ const struct SwTableEntry ListsProgNameTable [] =
     ENTRY( "List 5" ),
     ENTRY( "List 5 End" ),
     ENTRY( "List 5 Cont." ), // STR_POCO_PRGM_BUL_NONUM5
-    { 0, NULL }
+    { 0, nullptr }
 };
 
 const struct SwTableEntry ExtraProgNameTable [] =
@@ -172,7 +172,7 @@ const struct SwTableEntry ExtraProgNameTable [] =
     ENTRY( "Sender" ),
     ENTRY( "Endnote" ),
     ENTRY( "Drawing" ), // RES_POOLCOLL_LABEL_DRAWING
-    { 0, NULL }
+    { 0, nullptr }
 };
 
 const struct SwTableEntry RegisterProgNameTable [] =
@@ -213,14 +213,14 @@ const struct SwTableEntry RegisterProgNameTable [] =
     ENTRY( "User Index 8" ),
     ENTRY( "User Index 9" ),
     ENTRY( "User Index 10" ), // STR_POCO_PRGM_TOX_USER10
-    { 0, NULL }
+    { 0, nullptr }
 };
 
 const struct SwTableEntry DocProgNameTable [] =
 {
     ENTRY( "Title" ), // STR_POCO_PRGM_DOC_TITEL
     ENTRY( "Subtitle" ),
-    { 0, NULL }
+    { 0, nullptr }
 };
 
 const struct SwTableEntry HTMLProgNameTable [] =
@@ -230,7 +230,7 @@ const struct SwTableEntry HTMLProgNameTable [] =
     ENTRY( "Horizontal Line" ),
     ENTRY( "List Contents" ),
     ENTRY( "List Heading" ), // STR_POCO_PRGM_HTML_DT
-    { 0, NULL }
+    { 0, nullptr }
 };
 
 const struct SwTableEntry FrameFormatProgNameTable [] =
@@ -242,7 +242,7 @@ const struct SwTableEntry FrameFormatProgNameTable [] =
     ENTRY( "Marginalia" ),
     ENTRY( "Watermark" ),
     ENTRY( "Labels" ), // RES_POOLFRM_LABEL
-    { 0, NULL }
+    { 0, nullptr }
 };
 
 const struct SwTableEntry ChrFormatProgNameTable [] =
@@ -264,7 +264,7 @@ const struct SwTableEntry ChrFormatProgNameTable [] =
     ENTRY( "Endnote anchor" ),
     ENTRY( "Rubies" ), // RES_POOLCHR_RUBYTEXT
     ENTRY( "Vertical Numbering Symbols" ), // RES_POOLCHR_VERT_NUMBER
-    { 0, NULL }
+    { 0, nullptr }
 };
 
 const struct SwTableEntry HTMLChrFormatProgNameTable [] =
@@ -278,7 +278,7 @@ const struct SwTableEntry HTMLChrFormatProgNameTable [] =
     ENTRY( "Variable" ),
     ENTRY( "Definition" ),
     ENTRY( "Teletype" ), // RES_POOLCHR_HTML_TELETYPE
-    { 0, NULL }
+    { 0, nullptr }
 };
 
 const struct SwTableEntry PageDescProgNameTable [] =
@@ -293,7 +293,7 @@ const struct SwTableEntry PageDescProgNameTable [] =
     ENTRY( "Footnote" ),
     ENTRY( "Endnote" ), // STR_POOLPAGE_PRGM_ENDNOTE
     ENTRY( "Landscape" ),
-    { 0, NULL }
+    { 0, nullptr }
 };
 
 const struct SwTableEntry NumRuleProgNameTable [] =
@@ -308,7 +308,7 @@ const struct SwTableEntry NumRuleProgNameTable [] =
     ENTRY( "List 3" ),
     ENTRY( "List 4" ),
     ENTRY( "List 5" ), // STR_POOLNUMRULE_PRGM_BUL5
-    { 0, NULL }
+    { 0, nullptr }
 };
 #undef ENTRY
 
@@ -424,7 +424,7 @@ void SwStyleNameMapper::testNameTable( SwGetPoolIdFromName const nFamily, sal_uI
 const NameToIdHash & SwStyleNameMapper::getHashTable ( SwGetPoolIdFromName eFlags, bool bProgName )
 {
     // pHashPointer is a pointer to a pointer which stores the UI/prog name array
-    NameToIdHash **pHashPointer = 0;
+    NameToIdHash **pHashPointer = nullptr;
     // Stores tuples representing (index start, index end, pointer to function which returns ref to name array)
     ::std::vector<NameArrayIndexTuple_t> vIndexes;
 
@@ -588,7 +588,7 @@ const OUString& SwStyleNameMapper::getNameFromId(
         sal_uInt16 const nId, const OUString& rFillName, bool const bProgName)
 {
     sal_uInt16 nStt = 0;
-    const ::std::vector<OUString>* pStrArr = 0;
+    const ::std::vector<OUString>* pStrArr = nullptr;
 
     switch( (USER_FMT | COLL_GET_RANGE_BITS | POOLGRP_NOCOLLID) & nId )
     {

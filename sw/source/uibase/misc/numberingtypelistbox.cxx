@@ -78,7 +78,7 @@ void SwNumberingTypeListBox::Reload(sal_uInt16 nTypeFlags)
 {
     Clear();
     uno::Sequence<sal_Int16> aTypes;
-    const sal_Int16* pTypes = NULL;
+    const sal_Int16* pTypes = nullptr;
     if(0 != (nTypeFlags&INSERT_NUM_EXTENDED_TYPES) )
     {
         if(pImpl->xInfo.is())

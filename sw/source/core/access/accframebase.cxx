@@ -276,12 +276,12 @@ SwPaM* SwAccessibleFrameBase::GetCrsr()
 {
     // get the cursor shell; if we don't have any, we don't have a
     // cursor/selection either
-    SwPaM* pCrsr = NULL;
+    SwPaM* pCrsr = nullptr;
     SwCrsrShell* pCrsrShell = GetCrsrShell();
-    if( pCrsrShell != NULL && !pCrsrShell->IsTableMode() )
+    if( pCrsrShell != nullptr && !pCrsrShell->IsTableMode() )
     {
         SwFEShell *pFESh = dynamic_cast<const SwFEShell*>( pCrsrShell) !=  nullptr
-                            ? static_cast< SwFEShell * >( pCrsrShell ) : 0;
+                            ? static_cast< SwFEShell * >( pCrsrShell ) : nullptr;
         if( !pFESh ||
             !(pFESh->IsFrmSelected() || pFESh->IsObjSelected() > 0) )
         {
@@ -315,7 +315,7 @@ bool SwAccessibleFrameBase::GetSelectedState( )
     if( pPos->nNode.GetNode().GetTextNode() )
     {
         SwPaM* pCrsr = GetCrsr();
-        if( pCrsr != NULL )
+        if( pCrsr != nullptr )
         {
             const SwTextNode* pNode = pPos->nNode.GetNode().GetTextNode();
             sal_uLong nHere = pNode->GetIndex();
@@ -363,7 +363,7 @@ bool SwAccessibleFrameBase::GetSelectedState( )
 
 SwFlyFrm* SwAccessibleFrameBase::getFlyFrm() const
 {
-    SwFlyFrm* pFlyFrm = NULL;
+    SwFlyFrm* pFlyFrm = nullptr;
 
     const SwFrm* pFrm = GetFrm();
     assert(pFrm);

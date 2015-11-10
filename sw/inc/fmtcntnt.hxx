@@ -34,13 +34,13 @@ class SW_DLLPUBLIC SwFormatContent: public SfxPoolItem
     SwFormatContent &operator=( const SwFormatContent & ) = delete;
 
 public:
-    SwFormatContent( const SwStartNode* pStartNode = 0 );
+    SwFormatContent( const SwStartNode* pStartNode = nullptr );
     SwFormatContent( const SwFormatContent &rCpy );
     virtual ~SwFormatContent();
 
     /// "Pure virtual methods" of SfxPoolItem.
     virtual bool            operator==( const SfxPoolItem& ) const override;
-    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const override;
+    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = nullptr ) const override;
 
     const SwNodeIndex *GetContentIdx() const { return pStartNode; }
     void SetNewContentIdx( const SwNodeIndex *pIdx );

@@ -444,7 +444,7 @@ void MSWordStyles::SetStyleDefaults( const SwFormat& rFormat, bool bPap )
     // dynamic defaults
     const SfxItemPool& rPool = *rFormat.GetAttrSet().GetPool();
     for( n = nStt; n < nEnd; ++n )
-        aFlags[ n - RES_CHRATR_BEGIN ] = 0 != rPool.GetPoolDefaultItem( n );
+        aFlags[ n - RES_CHRATR_BEGIN ] = nullptr != rPool.GetPoolDefaultItem( n );
 
     // static defaults, that differs between WinWord and SO
     if( bPap )
@@ -504,14 +504,14 @@ void MSWordStyles::WriteProperties( const SwFormat* pFormat, bool bParProp, sal_
 {
     m_rExport.AttrOutput().StartStyleProperties( bParProp, nPos );
 
-    OSL_ENSURE( m_rExport.m_pCurrentStyle == NULL, "Current style not NULL" ); // set current style before calling out
+    OSL_ENSURE( m_rExport.m_pCurrentStyle == nullptr, "Current style not NULL" ); // set current style before calling out
     m_rExport.m_pCurrentStyle = pFormat;
 
     m_rExport.OutputFormat( *pFormat, bParProp, !bParProp );
 
     OSL_ENSURE( m_rExport.m_pCurrentStyle == pFormat, "current style was changed" );
     // reset current style...
-    m_rExport.m_pCurrentStyle = NULL;
+    m_rExport.m_pCurrentStyle = nullptr;
 
     if ( bInsDefCharSiz  )                   // not derived from other Style
         SetStyleDefaults( *pFormat, bParProp );
@@ -849,7 +849,7 @@ void wwFontHelper::InitFontTable(const SwDoc& rDoc)
         pFont->GetFamily(), pFont->GetCharSet()));
 
     const SfxItemPool& rPool = rDoc.GetAttrPool();
-    if (0 != (pFont = static_cast<const SvxFontItem*>(rPool.GetPoolDefaultItem(RES_CHRATR_FONT))))
+    if (nullptr != (pFont = static_cast<const SvxFontItem*>(rPool.GetPoolDefaultItem(RES_CHRATR_FONT))))
     {
         GetId(wwFont(pFont->GetFamilyName(), pFont->GetPitch(),
             pFont->GetFamily(), pFont->GetCharSet()));
@@ -865,7 +865,7 @@ void wwFontHelper::InitFontTable(const SwDoc& rDoc)
         for (sal_uInt32 nGet = 0; nGet < nMaxItem; ++nGet)
         {
             pFont = static_cast<const SvxFontItem*>(rPool.GetItem2( *pId, nGet ));
-            if (0 != pFont)
+            if (nullptr != pFont)
             {
                 GetId(wwFont(pFont->GetFamilyName(), pFont->GetPitch(),
                             pFont->GetFamily(), pFont->GetCharSet()));
@@ -963,12 +963,12 @@ void WW8_WrPlc0::Write( SvStream& rStrm )
 MSWordSections::MSWordSections( MSWordExportBase& rExport )
     : mbDocumentIsProtected( false )
 {
-    const SwSectionFormat *pFormat = 0;
+    const SwSectionFormat *pFormat = nullptr;
     rExport.m_pAktPageDesc = &rExport.m_pDoc->GetPageDesc( 0 );
 
     const SfxPoolItem* pI;
     const SwNode* pNd = rExport.m_pCurPam->GetContentNode();
-    const SfxItemSet* pSet = pNd ? &static_cast<const SwContentNode*>(pNd)->GetSwAttrSet() : 0;
+    const SfxItemSet* pSet = pNd ? &static_cast<const SwContentNode*>(pNd)->GetSwAttrSet() : nullptr;
 
     sal_uLong nRstLnNum =  pSet ? static_cast<const SwFormatLineNumber&>(pSet->Get( RES_LINENUMBER )).GetStartValue() : 0;
 
@@ -979,7 +979,7 @@ MSWordSections::MSWordSections( MSWordExportBase& rExport )
         pSet = &pTableNd->GetTable().GetFrameFormat()->GetAttrSet();
         pNd = pTableNd;
     }
-    else if (pNd && 0 != ( pSectNd = pNd->FindSectionNode() ))
+    else if (pNd && nullptr != ( pSectNd = pNd->FindSectionNode() ))
     {
         if ( TOX_HEADER_SECTION == pSectNd->GetSection().GetType() &&
              pSectNd->StartOfSectionNode()->IsSectionNode() )
@@ -1011,7 +1011,7 @@ MSWordSections::MSWordSections( MSWordExportBase& rExport )
 WW8_WrPlcSepx::WW8_WrPlcSepx( MSWordExportBase& rExport )
     : MSWordSections( rExport )
     , m_bHeaderFooterWritten( false )
-    , pTextPos( 0 )
+    , pTextPos( nullptr )
 {
     // to be in sync with the AppendSection() call in the MSWordSections
     // constructor
@@ -1076,7 +1076,7 @@ const WW8_SepInfo* MSWordSections::CurrentSectionInfo()
     if ( !aSects.empty() )
         return &aSects.back();
 
-    return NULL;
+    return nullptr;
 }
 
 void MSWordSections::AppendSection( const SwPageDesc* pPd,
@@ -1085,7 +1085,7 @@ void MSWordSections::AppendSection( const SwPageDesc* pPd,
     if (HeaderFooterWritten()) {
         return; // #i117955# prevent new sections in endnotes
     }
-    aSects.push_back( WW8_SepInfo( pPd, pSectionFormat, nLnNumRestartNo, boost::none, NULL, bIsFirstParagraph ) );
+    aSects.push_back( WW8_SepInfo( pPd, pSectionFormat, nLnNumRestartNo, boost::none, nullptr, bIsFirstParagraph ) );
     NeedsDocumentProtected( aSects.back() );
 }
 
@@ -1738,7 +1738,7 @@ void MSWordExportBase::SectionProperties( const WW8_SepInfo& rSepInfo, WW8_PdAtt
     */
 
     const SwTextNode *pOldPageRoot = GetHdFtPageRoot();
-    SetHdFtPageRoot( rSepInfo.pPDNd ? rSepInfo.pPDNd->GetTextNode() : 0 );
+    SetHdFtPageRoot( rSepInfo.pPDNd ? rSepInfo.pPDNd->GetTextNode() : nullptr );
 
     WriteHeadersFooters( nHeadFootFlags, *pPdFormat, *pPdLeftFormat, *pPdFirstPgFormat, nBreakCode );
 
@@ -1795,7 +1795,7 @@ bool WW8_WrPlcSepx::WriteKFText( WW8Export& rWrt )
         rWrt.pFib->ccpHdr = nCpEnd - nCpStart;
     }
     else
-        delete pTextPos, pTextPos = 0;
+        delete pTextPos, pTextPos = nullptr;
 
     return rWrt.pFib->ccpHdr != 0;
 }
@@ -1807,7 +1807,7 @@ void WW8_WrPlcSepx::WriteSepx( SvStream& rStrm ) const
     for (size_t i = 0; i < m_SectionAttributes.size(); i++) // all sections
     {
         WW8_PdAttrDesc *const pA = m_SectionAttributes[i].get();
-        if (pA->m_nLen && pA->m_pData != 0)
+        if (pA->m_nLen && pA->m_pData != nullptr)
         {
             SVBT16 nL;
             pA->m_nSepxFcPos = rStrm.Tell();
@@ -1894,7 +1894,7 @@ void MSWordExportBase::WriteHeaderFooterText( const SwFormat& rFormat, bool bHea
             m_bOutKF = bOldKF;
         }
         else
-            pSttIdx = 0;
+            pSttIdx = nullptr;
     }
 
     if ( !pSttIdx )
@@ -1910,7 +1910,7 @@ void MSWordExportBase::WriteHeaderFooterText( const SwFormat& rFormat, bool bHea
 // WW8_WrPlcFootnoteEdn is the class for Footnotes and Endnotes
 
 WW8_WrPlcSubDoc::WW8_WrPlcSubDoc()
-    : pTextPos( 0 )
+    : pTextPos( nullptr )
 {
 }
 
@@ -1941,7 +1941,7 @@ WW8_Annotation::WW8_Annotation(const SwPostItField* pPostIt, WW8_CP nRangeStart,
 
 WW8_Annotation::WW8_Annotation(const SwRedlineData* pRedline)
     :
-        mpRichText(0),
+        mpRichText(nullptr),
         maDateTime( DateTime::EMPTY ),
         m_nRangeStart(0),
         m_nRangeEnd(0)
@@ -2031,7 +2031,7 @@ bool WW8_WrPlcSubDoc::WriteGenericText( WW8Export& rWrt, sal_uInt8 nTTyp,
                 aCps.insert( aCps.begin()+i, nCP );
                 pTextPos->Append( nCP );
 
-                if( aContent[ i ] != NULL )
+                if( aContent[ i ] != nullptr )
                 {
                     // is it an writer or sdr - textbox?
                     const SdrObject& rObj = *static_cast<SdrObject const *>(aContent[ i ]);
@@ -2307,7 +2307,7 @@ void WW8_WrPlcSubDoc::WriteGenericPlc( WW8Export& rWrt, sal_uInt8 nTTyp,
                             pChn = &pChn->GetNext()->GetChain();
                         }
                     }
-                    if( NULL == pObj )
+                    if( nullptr == pObj )
                     {
                         if (i < aSpareFormats.size() && aSpareFormats[i])
                         {
@@ -2445,7 +2445,7 @@ void WW8_WrPlcSubDoc::WriteGenericPlc( WW8Export& rWrt, sal_uInt8 nTTyp,
 
 const std::vector<sal_uInt32>* WW8_WrPlcSubDoc::GetShapeIdArr() const
 {
-    return 0;
+    return nullptr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

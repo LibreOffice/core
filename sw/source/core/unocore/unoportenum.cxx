@@ -153,7 +153,7 @@ namespace
         if(rEndPos.nNode == nOwnNode)
         {
             unique_ptr<SwPosition> pCrossRefEndPos;
-            const SwPosition* pEndPos = NULL;
+            const SwPosition* pEndPos = nullptr;
             ::sw::mark::CrossRefBookmark *const pCrossRefMark(dynamic_cast< ::sw::mark::CrossRefBookmark*>(pBkmk));
             if(hasOther)
             {
@@ -290,7 +290,7 @@ namespace
             ::sw::mark::AnnotationMark* const pAnnotationMark =
                 dynamic_cast< ::sw::mark::AnnotationMark* >(ppMark->get());
 
-            if ( pAnnotationMark == NULL )
+            if ( pAnnotationMark == nullptr )
             {
                 continue;
             }
@@ -299,8 +299,8 @@ namespace
             if ( rStartPos.nNode == nOwnNode )
             {
                 const SwFormatField* pAnnotationFormatField = pAnnotationMark->GetAnnotationFormatField();
-                OSL_ENSURE( pAnnotationFormatField != NULL, "<lcl_FillAnnotationStartArray(..)> - annotation fmt fld instance missing!" );
-                if ( pAnnotationFormatField != NULL )
+                OSL_ENSURE( pAnnotationFormatField != nullptr, "<lcl_FillAnnotationStartArray(..)> - annotation fmt fld instance missing!" );
+                if ( pAnnotationFormatField != nullptr )
                 {
                     rAnnotationStartArr.insert(
                         SwAnnotationStartPortion_ImplSharedPtr(
@@ -449,13 +449,13 @@ lcl_ExportFieldMark(
     if ( *pUnoCrsr->GetMark() == *pUnoCrsr->GetPoint() )
     {
         OSL_FAIL("cannot move cursor?");
-        return 0;
+        return nullptr;
     }
 
     const sal_Unicode Char = pTextNode->GetText()[start];
     if (CH_TXT_ATR_FIELDSTART == Char)
     {
-        ::sw::mark::IFieldmark* pFieldmark = NULL;
+        ::sw::mark::IFieldmark* pFieldmark = nullptr;
         if (pDoc)
         {
             pFieldmark = pDoc->getIDocumentMarkAccess()->
@@ -472,7 +472,7 @@ lcl_ExportFieldMark(
     }
     else if (CH_TXT_ATR_FIELDEND == Char)
     {
-        ::sw::mark::IFieldmark* pFieldmark = NULL;
+        ::sw::mark::IFieldmark* pFieldmark = nullptr;
         if (pDoc)
         {
             pFieldmark = pDoc->getIDocumentMarkAccess()->
@@ -489,7 +489,7 @@ lcl_ExportFieldMark(
     }
     else if (CH_TXT_ATR_FORMELEMENT == Char)
     {
-        ::sw::mark::IFieldmark* pFieldmark = NULL;
+        ::sw::mark::IFieldmark* pFieldmark = nullptr;
         if (pDoc)
         {
             pFieldmark = pDoc->getIDocumentMarkAccess()->getFieldmarkFor(*pUnoCrsr->GetMark());
@@ -525,7 +525,7 @@ lcl_CreateRefMarkPortion(
         xContent = SwXReferenceMark::CreateXReferenceMark(*pDoc, &rRefMark);
     }
 
-    SwXTextPortion* pPortion = 0;
+    SwXTextPortion* pPortion = nullptr;
     if (!bEnd)
     {
         pPortion = new SwXTextPortion(pUnoCrsr, xParent, PORTION_REFMARK_START);
@@ -566,7 +566,7 @@ lcl_CreateTOXMarkPortion(
         SwXDocumentIndexMark::CreateXDocumentIndexMark(*pDoc, & rTOXMark),
         uno::UNO_QUERY);
 
-    SwXTextPortion* pPortion = 0;
+    SwXTextPortion* pPortion = nullptr;
     if (!bEnd)
     {
         pPortion = new SwXTextPortion(pUnoCrsr, xParent, PORTION_TOXMARK_START);
@@ -590,7 +590,7 @@ lcl_CreateMetaPortion(
     const uno::Reference<rdf::XMetadatable> xMeta( SwXMeta::CreateXMeta(
             *static_cast<SwFormatMeta &>(rAttr.GetAttr()).GetMeta(),
             xParent, std::move(pPortions)));
-    SwXTextPortion * pPortion(0);
+    SwXTextPortion * pPortion(nullptr);
     if (RES_TXTATR_META == rAttr.Which())
     {
         const uno::Reference<text::XTextContent> xContent(xMeta,
@@ -625,7 +625,7 @@ static void lcl_ExportBookmark(
         if ( nIndex < pPtr->getIndex() )
             break;
 
-        SwXTextPortion* pPortion = 0;
+        SwXTextPortion* pPortion = nullptr;
         if ((BKM_TYPE_START     == pPtr->nBkmType) ||
             (BKM_TYPE_START_END == pPtr->nBkmType))
         {
@@ -846,8 +846,8 @@ lcl_ExportHints(
                             break;
 
                         const SwTextAnnotationField* pTextAnnotationField = dynamic_cast<const SwTextAnnotationField*>( pAttr );
-                        ::sw::mark::IMark* pAnnotationMark = pTextAnnotationField ? pTextAnnotationField->GetAnnotationMark() : NULL;
-                        if ( pAnnotationMark != NULL )
+                        ::sw::mark::IMark* pAnnotationMark = pTextAnnotationField ? pTextAnnotationField->GetAnnotationMark() : nullptr;
+                        if ( pAnnotationMark != nullptr )
                         {
                             SwXTextPortion* pPortion = new SwXTextPortion( pUnoCrsr, xParent, PORTION_ANNOTATION_END );
                             pPortion->SetBookmark(SwXBookmark::CreateXBookmark(

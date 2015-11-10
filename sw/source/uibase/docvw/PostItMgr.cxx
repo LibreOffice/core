@@ -129,17 +129,17 @@ SwPostItMgr::SwPostItMgr(SwView* pView)
     : mpView(pView)
     , mpWrtShell(mpView->GetDocShell()->GetWrtShell())
     , mpEditWin(&mpView->GetEditWin())
-    , mnEventId(0)
+    , mnEventId(nullptr)
     , mbWaitingForCalcRects(false)
-    , mpActivePostIt(0)
+    , mpActivePostIt(nullptr)
     , mbLayout(false)
     , mbLayoutHeight(0)
     , mbLayouting(false)
     , mbReadOnly(mpView->GetDocShell()->IsReadOnly())
     , mbDeleteNote(true)
-    , mpAnswer(0)
+    , mpAnswer(nullptr)
     , mbIsShowAnchor( false )
-    , mpFrmSidebarWinContainer( 0 )
+    , mpFrmSidebarWinContainer( nullptr )
 {
     if(!mpView->GetDrawView() )
         mpView->GetWrtShell().MakeDrawView();
@@ -178,7 +178,7 @@ SwPostItMgr::~SwPostItMgr()
     mPages.clear();
 
     delete mpFrmSidebarWinContainer;
-    mpFrmSidebarWinContainer = 0;
+    mpFrmSidebarWinContainer = nullptr;
 }
 
 void SwPostItMgr::CheckForRemovedPostIts()
@@ -192,7 +192,7 @@ void SwPostItMgr::CheckForRemovedPostIts()
             SwSidebarItem* p = (*it);
             mvPostItFields.remove(*it);
             if (GetActiveSidebarWin() == p->pPostIt)
-                SetActiveSidebarWin(0);
+                SetActiveSidebarWin(nullptr);
             p->pPostIt.disposeAndClear();
             delete p;
             bRemoved = true;
@@ -241,7 +241,7 @@ void SwPostItMgr::RemoveItem( SfxBroadcaster* pBroadcast )
         {
             SwSidebarItem* p = (*i);
             if (GetActiveSidebarWin() == p->pPostIt)
-                SetActiveSidebarWin(0);
+                SetActiveSidebarWin(nullptr);
             p->pPostIt.disposeAndClear();
             mvPostItFields.erase(i);
             delete p;
@@ -441,7 +441,7 @@ bool SwPostItMgr::CalcRects()
         // if CalcRects() was forced and an event is still pending: remove it
         // it is superfluous and also may cause reentrance problems if triggered while layouting
         Application::RemoveUserEvent( mnEventId );
-        mnEventId = 0;
+        mnEventId = nullptr;
     }
 
     bool bChange = false;
@@ -655,7 +655,7 @@ void SwPostItMgr::LayoutPostIts()
                                 if (pPostIt->CalcFollow()) //do we really have another note in front of this one
                                     static_cast<sw::annotation::SwAnnotationWin*>(pPostIt)->InitAnswer(mpAnswer);
                                 delete mpAnswer;
-                                mpAnswer = 0;
+                                mpAnswer = nullptr;
                             }
                         }
 
@@ -791,7 +791,7 @@ void SwPostItMgr::LayoutPostIts()
                     (*i)->pPostIt->HideNote();
                     if ((*i)->pPostIt->HasChildPathFocus())
                     {
-                        SetActiveSidebarWin(0);
+                        SetActiveSidebarWin(nullptr);
                         (*i)->pPostIt->GrabFocusToDocument();
                     }
                 }
@@ -1346,7 +1346,7 @@ void SwPostItMgr::Delete(const OUString& rAuthor)
     mpWrtShell->StartAllAction();
     if (HasActiveSidebarWin() && (GetActiveSidebarWin()->GetAuthor() == rAuthor))
     {
-        SetActiveSidebarWin(0);
+        SetActiveSidebarWin(nullptr);
     }
     SwRewriter aRewriter;
     aRewriter.AddRule(UndoArg1, SW_RESSTR(STR_DELETE_AUTHOR_NOTES) + rAuthor);
@@ -1370,7 +1370,7 @@ void SwPostItMgr::Delete(const OUString& rAuthor)
 void SwPostItMgr::Delete()
 {
     mpWrtShell->StartAllAction();
-    SetActiveSidebarWin(0);
+    SetActiveSidebarWin(nullptr);
     SwRewriter aRewriter;
     aRewriter.AddRule(UndoArg1, SW_RES(STR_DELETE_ALL_NOTES) );
     mpWrtShell->StartUndo( UNDO_DELETE, &aRewriter );
@@ -1638,7 +1638,7 @@ void SwPostItMgr::SetShadowState(const SwPostItField* pField,bool bCursor)
                 if (pOldPostIt && pOldPostIt->Shadow() && (pOldPostIt->Shadow()->GetShadowState() != SS_EDIT))
                 {
                     pOldPostIt->SetViewState(ViewState::NORMAL);
-                    mShadowState.mpShadowField = 0;
+                    mShadowState.mpShadowField = nullptr;
                 }
             }
         }
@@ -1754,7 +1754,7 @@ void SwPostItMgr::CorrectPositions()
        return;
 
    // find first valid note
-   SwSidebarWin *pFirstPostIt = 0;
+   SwSidebarWin *pFirstPostIt = nullptr;
    for(SwSidebarItem_iterator i = mvPostItFields.begin(); i != mvPostItFields.end() ; ++i)
    {
        pFirstPostIt = (*i)->pPostIt;
@@ -1886,13 +1886,13 @@ void SwPostItMgr::SetActiveSidebarWin( SwSidebarWin* p)
         if (pActive)
         {
             pActive->DeactivatePostIt();
-            mShadowState.mpShadowField = 0;
+            mShadowState.mpShadowField = nullptr;
         }
         if (mpActivePostIt)
         {
             mpActivePostIt->GotoPos();
             mpView->SetAnnotationMode(true);
-            mpView->AttrChangedNotify(0);
+            mpView->AttrChangedNotify(nullptr);
             mpView->SetAnnotationMode(false);
             mpActivePostIt->ActivatePostIt();
         }
@@ -1901,7 +1901,7 @@ void SwPostItMgr::SetActiveSidebarWin( SwSidebarWin* p)
 
 IMPL_LINK_NOARG_TYPED( SwPostItMgr, CalcHdl, void*, void )
 {
-    mnEventId = 0;
+    mnEventId = nullptr;
     if ( mbLayouting )
     {
         OSL_FAIL("Reentrance problem in Layout Manager!");
@@ -1981,7 +1981,7 @@ sal_uInt16 SwPostItMgr::Replace(SvxSearchItem* pItem)
     SwSidebarWin* pWin = GetActiveSidebarWin();
     sal_uInt16 aResult = pWin->GetOutlinerView()->StartSearchAndReplace( *pItem );
     if (!aResult)
-        SetActiveSidebarWin(0);
+        SetActiveSidebarWin(nullptr);
     return aResult;
 }
 
@@ -1993,7 +1993,7 @@ sal_uInt16 SwPostItMgr::FinishSearchReplace(const css::util::SearchOptions& rSea
     aItem.SetBackward(!bSrchForward);
     sal_uInt16 aResult = pWin->GetOutlinerView()->StartSearchAndReplace( aItem );
     if (!aResult)
-        SetActiveSidebarWin(0);
+        SetActiveSidebarWin(nullptr);
     return aResult;
 }
 
@@ -2056,7 +2056,7 @@ bool SwPostItMgr::HasActiveSidebarWin() const
 bool SwPostItMgr::HasActiveAnnotationWin() const
 {
     return HasActiveSidebarWin() &&
-           dynamic_cast<sw::annotation::SwAnnotationWin*>(mpActivePostIt.get()) != 0;
+           dynamic_cast<sw::annotation::SwAnnotationWin*>(mpActivePostIt.get()) != nullptr;
 }
 
 void SwPostItMgr::GrabFocusOnActiveSidebarWin()
@@ -2103,7 +2103,7 @@ void SwPostItMgr::ConnectSidebarWinToFrm( const SwFrm& rFrm,
                                           const SwFormatField& rFormatField,
                                           SwSidebarWin& rSidebarWin )
 {
-    if ( mpFrmSidebarWinContainer == 0 )
+    if ( mpFrmSidebarWinContainer == nullptr )
     {
         mpFrmSidebarWinContainer = new SwFrmSidebarWinContainer();
     }
@@ -2112,20 +2112,20 @@ void SwPostItMgr::ConnectSidebarWinToFrm( const SwFrm& rFrm,
     if ( bInserted &&
          mpWrtShell->GetAccessibleMap() )
     {
-        mpWrtShell->GetAccessibleMap()->InvalidatePosOrSize( 0, 0, &rSidebarWin, SwRect() );
+        mpWrtShell->GetAccessibleMap()->InvalidatePosOrSize( nullptr, nullptr, &rSidebarWin, SwRect() );
     }
 }
 
 void SwPostItMgr::DisconnectSidebarWinFromFrm( const SwFrm& rFrm,
                                                SwSidebarWin& rSidebarWin )
 {
-    if ( mpFrmSidebarWinContainer != 0 )
+    if ( mpFrmSidebarWinContainer != nullptr )
     {
         const bool bRemoved = mpFrmSidebarWinContainer->remove( rFrm, rSidebarWin );
         if ( bRemoved &&
              mpWrtShell->GetAccessibleMap() )
         {
-            mpWrtShell->GetAccessibleMap()->Dispose( 0, 0, &rSidebarWin );
+            mpWrtShell->GetAccessibleMap()->Dispose( nullptr, nullptr, &rSidebarWin );
         }
     }
 }
@@ -2134,7 +2134,7 @@ bool SwPostItMgr::HasFrmConnectedSidebarWins( const SwFrm& rFrm )
 {
     bool bRet( false );
 
-    if ( mpFrmSidebarWinContainer != 0 )
+    if ( mpFrmSidebarWinContainer != nullptr )
     {
         bRet = !mpFrmSidebarWinContainer->empty( rFrm );
     }
@@ -2145,9 +2145,9 @@ bool SwPostItMgr::HasFrmConnectedSidebarWins( const SwFrm& rFrm )
 vcl::Window* SwPostItMgr::GetSidebarWinForFrmByIndex( const SwFrm& rFrm,
                                                  const sal_Int32 nIndex )
 {
-    vcl::Window* pSidebarWin( 0 );
+    vcl::Window* pSidebarWin( nullptr );
 
-    if ( mpFrmSidebarWinContainer != 0 )
+    if ( mpFrmSidebarWinContainer != nullptr )
     {
         pSidebarWin = mpFrmSidebarWinContainer->get( rFrm, nIndex );
     }
@@ -2158,7 +2158,7 @@ vcl::Window* SwPostItMgr::GetSidebarWinForFrmByIndex( const SwFrm& rFrm,
 void SwPostItMgr::GetAllSidebarWinForFrm( const SwFrm& rFrm,
                                           std::vector< vcl::Window* >* pChildren )
 {
-    if ( mpFrmSidebarWinContainer != 0 )
+    if ( mpFrmSidebarWinContainer != nullptr )
     {
         mpFrmSidebarWinContainer->getAll( rFrm, pChildren );
     }

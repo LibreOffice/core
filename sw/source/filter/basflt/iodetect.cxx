@@ -84,7 +84,7 @@ const SfxFilter* SwIoSystem::GetFilterOfFormat(const OUString& rFormatNm,
             break;
         pFltCnt = &aCntSwWeb;
     } while( true );
-    return 0;
+    return nullptr;
 }
 
 bool SwIoSystem::IsValidStgFilter( const css::uno::Reference < css::embed::XStorage >& rStg, const SfxFilter& rFilter)
@@ -151,7 +151,7 @@ const SfxFilter* SwIoSystem::GetFileFilter(const OUString& rFileName)
     SfxFilterMatcherIter aIter( aMatcher );
     const SfxFilter* pFilter = aIter.First();
     if ( !pFilter )
-        return 0;
+        return nullptr;
 
     if (SotStorage::IsStorageFile(rFileName))
     {
@@ -163,7 +163,7 @@ const SfxFilter* SwIoSystem::GetFileFilter(const OUString& rFileName)
         SfxMedium aMedium(aObj.GetMainURL(INetURLObject::NO_DECODE), STREAM_STD_READ);
 
         // templates should not get precedence over "normal" filters (#i35508, #i33168)
-        const SfxFilter* pTemplateFilter = 0;
+        const SfxFilter* pTemplateFilter = nullptr;
         if (aMedium.IsStorage())
         {
             uno::Reference<embed::XStorage> const xStor = aMedium.GetStorage();

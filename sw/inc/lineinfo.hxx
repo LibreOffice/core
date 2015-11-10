@@ -91,7 +91,7 @@ public:
     bool   IsRestartEachPage() const    { return bRestartEachPage;  }
     void   SetRestartEachPage( bool b ) { bRestartEachPage = b;     }
 
-    bool   HasCharFormat() const { return GetRegisteredIn() != 0; }
+    bool   HasCharFormat() const { return GetRegisteredIn() != nullptr; }
 };
 
 #endif

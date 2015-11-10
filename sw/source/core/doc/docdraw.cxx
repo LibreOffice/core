@@ -200,18 +200,18 @@ SwDrawContact* SwDoc::GroupSelection( SdrView& rDrawView )
 
     const SdrMarkList &rMrkList = rDrawView.GetMarkedObjectList();
     SdrObject *pObj = rMrkList.GetMark( 0 )->GetMarkedSdrObj();
-    bool bNoGroup = ( 0 == pObj->GetUpGroup() );
-    SwDrawContact* pNewContact = 0;
+    bool bNoGroup = ( nullptr == pObj->GetUpGroup() );
+    SwDrawContact* pNewContact = nullptr;
     if( bNoGroup )
     {
-        SwDrawFrameFormat *pFormat = 0L;
+        SwDrawFrameFormat *pFormat = nullptr;
 
         // Revoke anchor attribute.
         SwDrawContact *pMyContact = static_cast<SwDrawContact*>(GetUserCall(pObj));
         const SwFormatAnchor aAnch( pMyContact->GetFormat()->GetAnchor() );
 
         SwUndoDrawGroup *const pUndo = (!GetIDocumentUndoRedo().DoesUndo())
-                                 ? 0
+                                 ? nullptr
                                  : new SwUndoDrawGroup( (sal_uInt16)rMrkList.GetMarkCount() );
 
         // #i53320#
@@ -238,7 +238,7 @@ SwDrawContact* SwDoc::GroupSelection( SdrView& rDrawView )
             pFormat = static_cast<SwDrawFrameFormat*>(pContact->GetFormat());
             // Deletes itself!
             pContact->Changed(*pObj, SDRUSERCALL_DELETE, pObj->GetLastBoundRect() );
-            pObj->SetUserCall( 0 );
+            pObj->SetUserCall( nullptr );
 
             if( pUndo )
                 pUndo->AddObj( i, pFormat, pObj );
@@ -309,7 +309,7 @@ void SwDoc::UnGroupSelection( SdrView& rDrawView )
     SwDrawView::ReplaceMarkedDrawVirtObjs( rDrawView );
 
     const SdrMarkList &rMrkList = rDrawView.GetMarkedObjectList();
-    std::vector< std::pair< SwDrawFrameFormat*, SdrObject* > >* pFormatsAndObjs( 0L );
+    std::vector< std::pair< SwDrawFrameFormat*, SdrObject* > >* pFormatsAndObjs( nullptr );
     const size_t nMarkCount( rMrkList.GetMarkCount() );
     if ( nMarkCount )
     {
@@ -327,7 +327,7 @@ void SwDoc::UnGroupSelection( SdrView& rDrawView )
                     SwFormatAnchor aAnch( pContact->GetFormat()->GetAnchor() );
                     SdrObjList *pLst = static_cast<SdrObjGroup*>(pObj)->GetSubList();
 
-                    SwUndoDrawUnGroup* pUndo = 0;
+                    SwUndoDrawUnGroup* pUndo = nullptr;
                     if( bUndo )
                     {
                         pUndo = new SwUndoDrawUnGroup( static_cast<SdrObjGroup*>(pObj) );
@@ -357,7 +357,7 @@ void SwDoc::UnGroupSelection( SdrView& rDrawView )
     // its connection to the Writer layout.
     for ( size_t i = 0; i < nMarkCount; ++i )
     {
-        SwUndoDrawUnGroupConnectToLayout* pUndo = 0;
+        SwUndoDrawUnGroupConnectToLayout* pUndo = nullptr;
         if( bUndo )
         {
             pUndo = new SwUndoDrawUnGroupConnectToLayout();
@@ -390,7 +390,7 @@ bool SwDoc::DeleteSelection( SwDrawView& rDrawView )
     const SdrMarkList &rMrkList = rDrawView.GetMarkedObjectList();
     if( rMrkList.GetMarkCount() )
     {
-        GetIDocumentUndoRedo().StartUndo(UNDO_EMPTY, NULL);
+        GetIDocumentUndoRedo().StartUndo(UNDO_EMPTY, nullptr);
         bool bDelMarked = true;
 
         if( 1 == rMrkList.GetMarkCount() )
@@ -432,7 +432,7 @@ bool SwDoc::DeleteSelection( SwDrawView& rDrawView )
             {
                 SwUndoDrawDelete *const pUndo =
                     (!GetIDocumentUndoRedo().DoesUndo())
-                        ? 0
+                        ? nullptr
                             : new SwUndoDrawDelete( (sal_uInt16)rMrkList.GetMarkCount() );
 
                 // Destroy ContactObjects, save formats.
@@ -454,7 +454,7 @@ bool SwDoc::DeleteSelection( SwDrawView& rDrawView )
                         }
                         // Deletes itself!
                         pContact->Changed(*pObj, SDRUSERCALL_DELETE, pObj->GetLastBoundRect() );
-                        pObj->SetUserCall( 0 );
+                        pObj->SetUserCall( nullptr );
 
                         if( pUndo )
                             pUndo->AddObj( i, pFormat, rMark );
@@ -472,7 +472,7 @@ bool SwDoc::DeleteSelection( SwDrawView& rDrawView )
         }
         getIDocumentState().SetModified();
 
-        GetIDocumentUndoRedo().EndUndo(UNDO_EMPTY, NULL);
+        GetIDocumentUndoRedo().EndUndo(UNDO_EMPTY, nullptr);
     }
 
     return bCallBase;

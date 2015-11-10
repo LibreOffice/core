@@ -382,7 +382,7 @@ public:
     virtual AbstractSwBreakDlg * CreateSwBreakDlg(vcl::Window *pParent, SwWrtShell &rSh) override;
     virtual VclAbstractDialog   * CreateSwChangeDBDlg(SwView& rVw) override;
     virtual SfxAbstractTabDialog *  CreateSwCharDlg(vcl::Window* pParent, SwView& pVw, const SfxItemSet& rCoreSet,
-        sal_uInt8 nDialogMode, const OUString* pFormatStr = 0) override;
+        sal_uInt8 nDialogMode, const OUString* pFormatStr = nullptr) override;
     virtual AbstractSwConvertTableDlg* CreateSwConvertTableDlg(SwView& rView, bool bToTable) override;
     virtual VclAbstractDialog * CreateSwCaptionDialog ( vcl::Window *pParent, SwView &rV,int nResId) override;
 
@@ -403,7 +403,7 @@ public:
                                                     SwView& rVw,
                                                     const SfxItemSet& rCoreSet,
                                                     sal_uInt8 nDialogMode,
-                                                    const OUString *pCollName = 0,
+                                                    const OUString *pCollName = nullptr,
                                                     bool bDraw = false,
                                                     const OString& sDefPage = OString() ) override;
 
@@ -413,7 +413,7 @@ public:
 
     virtual AbstractSwAutoFormatDlg * CreateSwAutoFormatDlg( vcl::Window* pParent, SwWrtShell* pShell,
                                                             bool bSetAutoFormat = true,
-                                                            const SwTableAutoFormat* pSelFormat = 0 ) override;
+                                                            const SwTableAutoFormat* pSelFormat = nullptr ) override;
     virtual SfxAbstractDialog * CreateSwBorderDlg (vcl::Window* pParent, SfxItemSet& rSet, SwBorderModes nType, int nResId ) override;
 
     virtual SfxAbstractDialog * CreateSwWrapDlg ( vcl::Window* pParent, SfxItemSet& rSet, SwWrtShell* pSh, bool bDrawMode, int nResId ) override;
@@ -434,13 +434,13 @@ public:
                                                 bool bNewFrm  = true,
                                                 bool bFormat     = false,
                                                 const OString& sDefPage = OString(),
-                                                const OUString*   pFormatStr  = 0) override;
+                                                const OUString*   pFormatStr  = nullptr) override;
     virtual SfxAbstractApplyTabDialog*  CreateTemplateDialog(
                                                 vcl::Window*             pParent,
                                                 SfxStyleSheetBase&  rBase,
                                                 sal_uInt16          nRegion,
                                                 const OString&      sPage = OString(),
-                                                SwWrtShell*         pActShell = 0,
+                                                SwWrtShell*         pActShell = nullptr,
                                                 bool                bNew = false) override;
     virtual AbstractGlossaryDlg*        CreateGlossaryDlg(SfxViewFrame* pViewFrame,
                                                 SwGlossaryHdl* pGlosHdl,
@@ -460,7 +460,7 @@ public:
                                                 const OUString& rTableName,
                                                 sal_Int32 nCommandType,
                                                 const css::uno::Reference< css::sdbc::XConnection>& xConnection,
-                                                css::uno::Sequence< css::uno::Any >* pSelection = 0 ) override;
+                                                css::uno::Sequence< css::uno::Any >* pSelection = nullptr ) override;
     virtual AbstractMailMergeCreateFromDlg*     CreateMailMergeCreateFromDlg(vcl::Window* pParent) override;
     virtual AbstractMailMergeFieldConnectionsDlg* CreateMailMergeFieldConnectionsDlg(vcl::Window* pParent) override;
     virtual VclAbstractDialog*          CreateMultiTOXMarkDlg(vcl::Window* pParent, SwTOXMgr &rTOXMgr) override;

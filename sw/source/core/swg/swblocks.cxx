@@ -90,7 +90,7 @@ SwImpBlocks::SwImpBlocks( const OUString& rFile, bool )
     : aFile( rFile ),
     aDateModified( Date::EMPTY ),
     aTimeModified( tools::Time::EMPTY ),
-    pDoc( 0 ), nCur( USHRT_MAX ),
+    pDoc( nullptr ), nCur( USHRT_MAX ),
     bReadOnly( true ), bInPutMuchBlocks( false ),
     bInfoChanged(false)
 {
@@ -233,7 +233,7 @@ bool SwImpBlocks::PutMuchEntries( bool )
 }
 
 SwTextBlocks::SwTextBlocks( const OUString& rFile )
-    : pImp( 0 ), nErr( 0 )
+    : pImp( nullptr ), nErr( 0 )
 {
     INetURLObject aObj(rFile);
     const OUString sFileName = aObj.GetMainURL( INetURLObject::NO_DECODE );
@@ -517,7 +517,7 @@ SwDoc* SwTextBlocks::GetDoc()
 {
     if( pImp )
         return pImp->pDoc;
-    return 0;
+    return nullptr;
 }
 
 void SwTextBlocks::ClearDoc()

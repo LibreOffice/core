@@ -150,8 +150,8 @@ bool SwDocShell::InsertGeneratedStream(SfxMedium & rMedium,
     if (!::sw::XTextRangeToSwPaM(aPam, xInsertPosition))
         return false;
     // similar to SwView::InsertMedium
-    SwReader *pReader(0);
-    Reader *const pRead = StartConvertFrom(rMedium, &pReader, 0, &aPam);
+    SwReader *pReader(nullptr);
+    Reader *const pRead = StartConvertFrom(rMedium, &pReader, nullptr, &aPam);
     if (!pRead)
         return false;
     sal_uLong const nError = pReader->Read(*pRead);
@@ -167,7 +167,7 @@ Reader* SwDocShell::StartConvertFrom(SfxMedium& rMedium, SwReader** ppRdr,
     bool bAPICall = false;
     const SfxPoolItem* pApiItem;
     const SfxItemSet* pMedSet;
-    if( 0 != ( pMedSet = rMedium.GetItemSet() ) && SfxItemState::SET ==
+    if( nullptr != ( pMedSet = rMedium.GetItemSet() ) && SfxItemState::SET ==
             pMedSet->GetItemState( FN_API_CALL, true, &pApiItem ) )
             bAPICall = static_cast<const SfxBoolItem*>(pApiItem)->GetValue();
 
@@ -178,12 +178,12 @@ Reader* SwDocShell::StartConvertFrom(SfxMedium& rMedium, SwReader** ppRdr,
         {
             ScopedVclPtr<InfoBox>::Create( nullptr, SW_RESSTR(STR_CANTOPEN))->Execute();
         }
-        return 0;
+        return nullptr;
     }
     OUString aFileName( rMedium.GetName() );
     SwRead pRead = SwReaderWriter::GetReader( pFlt->GetUserData() );
     if( !pRead )
-        return 0;
+        return nullptr;
 
     if( rMedium.IsStorage()
         ? SW_STORAGE_READER & pRead->GetReaderType()
@@ -195,7 +195,7 @@ Reader* SwDocShell::StartConvertFrom(SfxMedium& rMedium, SwReader** ppRdr,
                     : new SwReader( rMedium, aFileName, m_pDoc );
     }
     else
-        return 0;
+        return nullptr;
 
     // #i30171# set the UpdateDocMode at the SwDocShell
     const SfxUInt16Item* pUpdateDocItem = SfxItemSet::GetItem<SfxUInt16Item>(rMedium.GetItemSet(), SID_UPDATEDOCMODE, false);
@@ -204,13 +204,13 @@ Reader* SwDocShell::StartConvertFrom(SfxMedium& rMedium, SwReader** ppRdr,
     if (!pFlt->GetDefaultTemplate().isEmpty())
         pRead->SetTemplateName( pFlt->GetDefaultTemplate() );
 
-    if( pRead == ReadAscii && 0 != rMedium.GetInStream() &&
+    if( pRead == ReadAscii && nullptr != rMedium.GetInStream() &&
         pFlt->GetUserData() == FILTER_TEXT_DLG )
     {
         SwAsciiOptions aOpt;
         const SfxItemSet* pSet;
         const SfxPoolItem* pItem;
-        if( 0 != ( pSet = rMedium.GetItemSet() ) && SfxItemState::SET ==
+        if( nullptr != ( pSet = rMedium.GetItemSet() ) && SfxItemState::SET ==
             pSet->GetItemState( SID_FILE_FILTEROPTIONS, true, &pItem ) )
             aOpt.ReadUserData( static_cast<const SfxStringItem*>(pItem)->GetValue() );
 
@@ -270,7 +270,7 @@ bool SwDocShell::ConvertFrom( SfxMedium& rMedium )
     }
 
     UpdateFontList();
-    InitDrawModelAndDocShell(this, m_pDoc ? m_pDoc->getIDocumentDrawModelAccess().GetDrawModel() : 0);
+    InitDrawModelAndDocShell(this, m_pDoc ? m_pDoc->getIDocumentDrawModelAccess().GetDrawModel() : nullptr);
 
     delete pRdr;
 
@@ -529,7 +529,7 @@ static SwSrcView* lcl_GetSourceView( SwDocShell* pSh )
 {
     // are we in SourceView?
     SfxViewFrame* pVFrame = SfxViewFrame::GetFirst( pSh );
-    SfxViewShell* pViewShell = pVFrame ? pVFrame->GetViewShell() : 0;
+    SfxViewShell* pViewShell = pVFrame ? pVFrame->GetViewShell() : nullptr;
     return dynamic_cast<SwSrcView*>( pViewShell );
 }
 
@@ -702,7 +702,7 @@ bool SwDocShell::ConvertTo( SfxMedium& rMedium )
         OUString sItemOpt;
         const SfxItemSet* pSet;
         const SfxPoolItem* pItem;
-        if( 0 != ( pSet = rMedium.GetItemSet() ) )
+        if( nullptr != ( pSet = rMedium.GetItemSet() ) )
         {
             if( SfxItemState::SET == pSet->GetItemState( SID_FILE_FILTEROPTIONS,
                                                     true, &pItem ) )
@@ -815,7 +815,7 @@ void SwDocShell::Draw( OutputDevice* pDev, const JobSetup& rSetup,
     // reconnect it after PrtOle2. We don't use an empty JobSetup because
     // that would only lead to questionable results after expensive
     // reformatting (Preview!)
-    JobSetup *pOrig = 0;
+    JobSetup *pOrig = nullptr;
     if ( !rSetup.GetPrinterName().isEmpty() && ASPECT_THUMBNAIL != nAspect )
     {
         pOrig = const_cast<JobSetup*>(m_pDoc->getIDocumentDeviceAccess().getJobsetup());
@@ -907,7 +907,7 @@ void SwDocShell::OnDocumentPrinterChanged( Printer * pNewPrinter )
     if ( pNewPrinter )
         GetDoc()->getIDocumentDeviceAccess().setJobsetup( pNewPrinter->GetJobSetup() );
     else
-        GetDoc()->getIDocumentDeviceAccess().setPrinter( 0, true, true );
+        GetDoc()->getIDocumentDeviceAccess().setPrinter( nullptr, true, true );
 }
 
 sal_uLong SwDocShell::GetMiscStatus() const
@@ -1104,7 +1104,7 @@ void SwDocShell::SetView(SwView* pVw)
     if (m_pView)
         m_pWrtShell = &m_pView->GetWrtShell();
     else
-        m_pWrtShell = 0;
+        m_pWrtShell = nullptr;
 }
 
 void SwDocShell::PrepareReload()
@@ -1262,7 +1262,7 @@ OUString SwDocShell::GetEventName( sal_Int32 nIndex )
 
 const ::sfx2::IXmlIdRegistry* SwDocShell::GetXmlIdRegistry() const
 {
-    return m_pDoc ? &m_pDoc->GetXmlIdRegistry() : 0;
+    return m_pDoc ? &m_pDoc->GetXmlIdRegistry() : nullptr;
 }
 
 bool SwDocShell::IsChangeRecording() const
@@ -1290,7 +1290,7 @@ bool SwDocShell::SetProtectionPassword( const OUString &rNewPassword )
 {
     const SfxAllItemSet aSet( GetPool() );
     const SfxItemSet*   pArgs = &aSet;
-    const SfxPoolItem*  pItem = NULL;
+    const SfxPoolItem*  pItem = nullptr;
 
     IDocumentRedlineAccess& rIDRA = m_pWrtShell->getIDocumentRedlineAccess();
     Sequence< sal_Int8 > aPasswd = rIDRA.GetRedlinePassword();
@@ -1325,7 +1325,7 @@ bool SwDocShell::GetProtectionHash( /*out*/ css::uno::Sequence< sal_Int8 > &rPas
 
     const SfxAllItemSet aSet( GetPool() );
     const SfxItemSet*   pArgs = &aSet;
-    const SfxPoolItem*  pItem = NULL;
+    const SfxPoolItem*  pItem = nullptr;
 
     IDocumentRedlineAccess& rIDRA = m_pWrtShell->getIDocumentRedlineAccess();
     Sequence< sal_Int8 > aPasswdHash( rIDRA.GetRedlinePassword() );

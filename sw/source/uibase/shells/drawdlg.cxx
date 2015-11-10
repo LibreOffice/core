@@ -55,7 +55,7 @@ void SwDrawShell::ExecDrawDlg(SfxRequest& rReq)
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
             if ( pFact )
             {
-                std::unique_ptr<SfxAbstractTabDialog> pDlg(pFact->CreateTextTabDialog( NULL, &aNewAttr, pView ));
+                std::unique_ptr<SfxAbstractTabDialog> pDlg(pFact->CreateTextTabDialog( nullptr, &aNewAttr, pView ));
                 sal_uInt16 nResult = pDlg->Execute();
 
                 if (nResult == RET_OK)
@@ -77,7 +77,7 @@ void SwDrawShell::ExecDrawDlg(SfxRequest& rReq)
             bool bHasMarked = pView->AreObjectsMarked();
 
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-            std::unique_ptr<AbstractSvxAreaTabDialog> pDlg(pFact->CreateSvxAreaTabDialog( NULL,
+            std::unique_ptr<AbstractSvxAreaTabDialog> pDlg(pFact->CreateSvxAreaTabDialog( nullptr,
                                                                             &aNewAttr,
                                                                             pDoc,
                                                                             true));
@@ -112,14 +112,14 @@ void SwDrawShell::ExecDrawDlg(SfxRequest& rReq)
         {
             bool bHasMarked = pView->AreObjectsMarked();
 
-            const SdrObject* pObj = NULL;
+            const SdrObject* pObj = nullptr;
             const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
             if( rMarkList.GetMarkCount() == 1 )
                 pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
 
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
             OSL_ENSURE(pFact, "Dialog creation failed!");
-            std::unique_ptr<SfxAbstractTabDialog> pDlg(pFact->CreateSvxLineTabDialog( NULL,
+            std::unique_ptr<SfxAbstractTabDialog> pDlg(pFact->CreateSvxLineTabDialog( nullptr,
                     &aNewAttr,
                 pDoc,
                 pObj,

@@ -164,7 +164,7 @@ OUString AbstractTabDialog_Impl::GetText() const
 IMPL_LINK_NOARG_TYPED(AbstractApplyTabDialog_Impl, ApplyHdl, Button*, void)
 {
     if (pDlg->Apply())
-        m_aHandler.Call(NULL);
+        m_aHandler.Call(nullptr);
 }
 
 void AbstractApplyTabDialog_Impl::SetApplyHdl( const Link<LinkParamNone*,void>& rLink )
@@ -640,7 +640,7 @@ SfxAbstractDialog* SwAbstractDialogFactory_Impl::CreateSfxDialog( vcl::Window* p
                                                                   sal_uInt32 nResId
                                                                 )
 {
-    SfxModalDialog* pDlg=NULL;
+    SfxModalDialog* pDlg=nullptr;
     switch ( nResId )
     {
         case RC_DLG_ADDR :
@@ -661,7 +661,7 @@ SfxAbstractDialog* SwAbstractDialogFactory_Impl::CreateSfxDialog( vcl::Window* p
 
     if ( pDlg )
         return new SwAbstractSfxDialog_Impl( pDlg );
-    return 0;
+    return nullptr;
 }
 
 AbstractSwAsciiFilterDlg* SwAbstractDialogFactory_Impl::CreateSwAsciiFilterDlg( vcl::Window* pParent,
@@ -677,7 +677,7 @@ VclAbstractDialog* SwAbstractDialogFactory_Impl::CreateSwInsertBookmarkDlg( vcl:
                                                                            SfxRequest& rReq,
                                                                            int nResId )
 {
-    Dialog* pDlg=NULL;
+    Dialog* pDlg=nullptr;
     switch ( nResId )
     {
         case DLG_INSERT_BOOKMARK :
@@ -690,7 +690,7 @@ VclAbstractDialog* SwAbstractDialogFactory_Impl::CreateSwInsertBookmarkDlg( vcl:
 
     if ( pDlg )
         return new VclAbstractDialog_Impl( pDlg );
-    return 0;
+    return nullptr;
 }
 
 AbstractSwBreakDlg * SwAbstractDialogFactory_Impl::CreateSwBreakDlg(vcl::Window *pParent,
@@ -734,7 +734,7 @@ VclAbstractDialog * SwAbstractDialogFactory_Impl::CreateSwCaptionDialog ( vcl::W
 
     if ( pDlg.get() )
         return new VclAbstractDialog_Impl( pDlg );
-    return 0;
+    return nullptr;
 }
 
 AbstractSwInsertDBColAutoPilot* SwAbstractDialogFactory_Impl::CreateSwInsertDBColAutoPilot( SwView& rView,
@@ -813,7 +813,7 @@ VclAbstractDialog * SwAbstractDialogFactory_Impl::CreateVclAbstractDialog ( vcl:
 
     if ( pDlg.get() )
         return new VclAbstractDialog_Impl( pDlg );
-    return 0;
+    return nullptr;
 }
 
 AbstractSplitTableDialog * SwAbstractDialogFactory_Impl::CreateSplitTableDialog ( vcl::Window *pParent, SwWrtShell &rSh )
@@ -848,7 +848,7 @@ SfxAbstractDialog * SwAbstractDialogFactory_Impl::CreateSwBorderDlg(vcl::Window*
 
     if ( pDlg.get() )
         return new SwAbstractSfxDialog_Impl( pDlg );
-    return 0;
+    return nullptr;
 }
 
 SfxAbstractDialog* SwAbstractDialogFactory_Impl::CreateSwWrapDlg ( vcl::Window* pParent, SfxItemSet& rSet, SwWrtShell* pSh, bool bDrawMode, int nResId )
@@ -865,7 +865,7 @@ SfxAbstractDialog* SwAbstractDialogFactory_Impl::CreateSwWrapDlg ( vcl::Window* 
 
     if ( pDlg.get() )
         return new SwAbstractSfxDialog_Impl( pDlg );
-    return 0;
+    return nullptr;
 }
 
 VclAbstractDialog * SwAbstractDialogFactory_Impl::CreateSwTableWidthDlg(vcl::Window *pParent, SwTableFUNC &rFnc)
@@ -901,7 +901,7 @@ SfxAbstractDialog*   SwAbstractDialogFactory_Impl::CreateSwFieldEditDlg ( SwView
 
     if ( pDlg.get() )
         return new SwAbstractSfxDialog_Impl( pDlg );
-    return 0;
+    return nullptr;
 }
 
 AbstractSwRenameXNamedDlg * SwAbstractDialogFactory_Impl::CreateSwRenameXNamedDlg(vcl::Window* pParent,
@@ -1014,7 +1014,7 @@ AbstractMailMergeDlg * SwAbstractDialogFactory_Impl::CreateMailMergeDlg( int nRe
     }
     if ( pDlg.get() )
         return new AbstractMailMergeDlg_Impl( pDlg );
-    return 0;
+    return nullptr;
 }
 
 AbstractMailMergeCreateFromDlg * SwAbstractDialogFactory_Impl::CreateMailMergeCreateFromDlg(vcl::Window* pParent)
@@ -1055,7 +1055,7 @@ SfxAbstractTabDialog* SwAbstractDialogFactory_Impl::CreateSwTabDialog( int nResI
     }
     if ( pDlg.get() )
         return new AbstractTabDialog_Impl( pDlg );
-    return 0;
+    return nullptr;
 }
 
 AbstractMultiTOXTabDialog * SwAbstractDialogFactory_Impl::CreateMultiTOXTabDialog(
@@ -1139,7 +1139,7 @@ GlossarySetActGroup SwAbstractDialogFactory_Impl::SetGlossaryActGroupFunc()
 // Factories for TabPages
 CreateTabPage SwAbstractDialogFactory_Impl::GetTabPageCreatorFunc( sal_uInt16 nId )
 {
-    CreateTabPage pRet = 0;
+    CreateTabPage pRet = nullptr;
     switch ( nId )
     {
         case RID_SW_TP_OPTCOMPATIBILITY_PAGE :

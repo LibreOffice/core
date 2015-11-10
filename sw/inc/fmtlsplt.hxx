@@ -32,12 +32,12 @@ public:
     SwFormatLayoutSplit( bool bSplit = true ) : SfxBoolItem( RES_LAYOUT_SPLIT, bSplit ) {}
 
     /// "pure virtual methods" of SfxPoolItem
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const override;
+    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
     virtual bool GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     OUString &rText,
-                                    const IntlWrapper*    pIntl = 0 ) const override;
+                                    const IntlWrapper*    pIntl = nullptr ) const override;
 };
 
 inline const SwFormatLayoutSplit &SwAttrSet::GetLayoutSplit(bool bInP) const

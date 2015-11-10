@@ -211,7 +211,7 @@ void SwLabDlg::UpdateFieldInformation(uno::Reference< frame::XModel > & xModel, 
         { "BC_COMP_FAX"        , &SwLabItem::m_aCompFax },
         { "BC_COMP_WWW"        , &SwLabItem::m_aCompWWW },
         { "BC_COMP_MAIL"       , &SwLabItem::m_aCompMail },
-        { 0, 0 }
+        { nullptr, nullptr }
     };
 
     try

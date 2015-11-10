@@ -44,9 +44,9 @@
 bool SwCrsrShell::GoNextCell( bool bAppendLine )
 {
     bool bRet = false;
-    const SwTableNode* pTableNd = 0;
+    const SwTableNode* pTableNd = nullptr;
 
-    if( IsTableMode() || 0 != ( pTableNd = IsCrsrInTable() ))
+    if( IsTableMode() || nullptr != ( pTableNd = IsCrsrInTable() ))
     {
         SwCursor* pCrsr = m_pTableCrsr ? m_pTableCrsr : m_pCurCrsr;
         SwCallLink aLk( *this ); // watch Crsr-Moves
@@ -55,7 +55,7 @@ bool SwCrsrShell::GoNextCell( bool bAppendLine )
         // Check if we have to move the cursor to a covered cell before
         // proceeding:
         const SwNode* pTableBoxStartNode = pCrsr->GetNode().FindTableBoxStartNode();
-        const SwTableBox* pTableBox = 0;
+        const SwTableBox* pTableBox = nullptr;
 
         if ( pCrsr->GetCrsrRowSpanOffset() )
         {
@@ -141,8 +141,8 @@ bool SwCrsrShell::_SelTableRowOrCol( bool bRow, bool bRowSimple )
 
     SET_CURR_SHELL( this );
 
-    const SwTableBox* pStt = 0;
-    const SwTableBox* pEnd = 0;
+    const SwTableBox* pStt = nullptr;
+    const SwTableBox* pEnd = nullptr;
 
     // search box based on layout
     SwSelBoxes aBoxes;
@@ -179,7 +179,7 @@ bool SwCrsrShell::_SelTableRowOrCol( bool bRow, bool bRowSimple )
         const SwShellCrsr *pCrsr = _GetCrsr();
         const SwFrm* pStartFrm = pFrm;
         const SwContentNode *pCNd = pCrsr->GetContentNode( false );
-        const SwFrm* pEndFrm   = pCNd ? pCNd->getLayoutFrm( GetLayout(), &pCrsr->GetMkPos() ) : 0;
+        const SwFrm* pEndFrm   = pCNd ? pCNd->getLayoutFrm( GetLayout(), &pCrsr->GetMkPos() ) : nullptr;
 
         if ( bRow )
         {
@@ -202,7 +202,7 @@ bool SwCrsrShell::_SelTableRowOrCol( bool bRow, bool bRowSimple )
         SwCellFrms aCells;
         GetTableSel( static_cast<const SwCellFrm*>(pStartFrm),
                    static_cast<const SwCellFrm*>(pEndFrm),
-                   aBoxes, bSelectUp ? 0 : &aCells, eType );
+                   aBoxes, bSelectUp ? nullptr : &aCells, eType );
 
         if( aBoxes.empty() || ( !bSelectUp && 4 != aCells.size() ) )
             return false;
@@ -296,10 +296,10 @@ bool SwCrsrShell::SelTableBox()
     // frame. This should yield the same result as searching for the
     // table box start node, right?
     SwFrm *pFrm = GetCurrFrm();
-    OSL_ENSURE( !pFrm->IsInTab() == !(pStartNode != NULL),
+    OSL_ENSURE( !pFrm->IsInTab() == !(pStartNode != nullptr),
                 "Schroedinger's table: We're in a box, and also we aren't." );
 #endif
-    if( pStartNode == NULL )
+    if( pStartNode == nullptr )
         return false;
 
     SET_CURR_SHELL( this );
@@ -371,7 +371,7 @@ static bool lcl_FindNextCell( SwNodeIndex& rIdx, bool bInReadOnly )
 
     SwContentFrm* pFrm = pCNd->getLayoutFrm( pCNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout() );
 
-    if ( 0 == pFrm || pCNd->FindTableNode() != pTableNd ||
+    if ( nullptr == pFrm || pCNd->FindTableNode() != pTableNd ||
         (!bInReadOnly && pFrm->IsProtected() ) )
     {
         // we are not located inside a 'valid' cell. We have to continue searching...
@@ -393,7 +393,7 @@ static bool lcl_FindNextCell( SwNodeIndex& rIdx, bool bInReadOnly )
 
             // ok, get the next content node:
             pCNd = aTmp.GetNode().GetContentNode();
-            if( 0 == pCNd )
+            if( nullptr == pCNd )
                 pCNd = rNds.GoNext( &aTmp );
 
             // robust:
@@ -403,7 +403,7 @@ static bool lcl_FindNextCell( SwNodeIndex& rIdx, bool bInReadOnly )
             // check if we have found a suitable table cell:
             pFrm = pCNd->getLayoutFrm( pCNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout() );
 
-            if ( 0 != pFrm && pCNd->FindTableNode() == pTableNd &&
+            if ( nullptr != pFrm && pCNd->FindTableNode() == pTableNd &&
                 (bInReadOnly || !pFrm->IsProtected() ) )
             {
                 // finally, we have found a suitable table cell => set index and return
@@ -443,7 +443,7 @@ static bool lcl_FindPrevCell( SwNodeIndex& rIdx, bool bInReadOnly  )
 
     SwContentFrm* pFrm = pCNd->getLayoutFrm( pCNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout() );
 
-    if( 0 == pFrm || pCNd->FindTableNode() != pTableNd ||
+    if( nullptr == pFrm || pCNd->FindTableNode() != pTableNd ||
         (!bInReadOnly && pFrm->IsProtected() ))
     {
         // skip before current section
@@ -456,7 +456,7 @@ static bool lcl_FindPrevCell( SwNodeIndex& rIdx, bool bInReadOnly  )
                 return false;
 
             pCNd = aTmp.GetNode().GetContentNode();
-            if( 0 == pCNd )
+            if( nullptr == pCNd )
                 pCNd = SwNodes::GoPrevious( &aTmp );
 
             if ( !pCNd )
@@ -464,7 +464,7 @@ static bool lcl_FindPrevCell( SwNodeIndex& rIdx, bool bInReadOnly  )
 
             pFrm = pCNd->getLayoutFrm( pCNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout() );
 
-            if( 0 != pFrm && pCNd->FindTableNode() == pTableNd &&
+            if( nullptr != pFrm && pCNd->FindTableNode() == pTableNd &&
                 (bInReadOnly || !pFrm->IsProtected() ) )
             {
                 rIdx = *pCNd;
@@ -487,10 +487,10 @@ bool GotoPrevTable( SwPaM& rCurCrsr, SwPosTable fnPosTable,
     {
         // #i26532#: If we are inside a table, we may not go backward to the
         // table start node, because we would miss any tables inside this table.
-        SwTableNode* pInnerTableNd = 0;
+        SwTableNode* pInnerTableNd = nullptr;
         SwNodeIndex aTmpIdx( aIdx );
         while( aTmpIdx.GetIndex() &&
-                0 == ( pInnerTableNd = aTmpIdx.GetNode().StartOfSectionNode()->GetTableNode()) )
+                nullptr == ( pInnerTableNd = aTmpIdx.GetNode().StartOfSectionNode()->GetTableNode()) )
             --aTmpIdx;
 
         if( pInnerTableNd == pTableNd )
@@ -499,7 +499,7 @@ bool GotoPrevTable( SwPaM& rCurCrsr, SwPosTable fnPosTable,
 
     do {
         while( aIdx.GetIndex() &&
-            0 == ( pTableNd = aIdx.GetNode().StartOfSectionNode()->GetTableNode()) )
+            nullptr == ( pTableNd = aIdx.GetNode().StartOfSectionNode()->GetTableNode()) )
             --aIdx;
 
         if( pTableNd ) // any further table node?
@@ -552,7 +552,7 @@ bool GotoNextTable( SwPaM& rCurCrsr, SwPosTable fnPosTable,
     sal_uLong nLastNd = rCurCrsr.GetDoc()->GetNodes().Count() - 1;
     do {
         while( aIdx.GetIndex() < nLastNd &&
-                0 == ( pTableNd = aIdx.GetNode().GetTableNode()) )
+                nullptr == ( pTableNd = aIdx.GetNode().GetTableNode()) )
             ++aIdx;
         if( pTableNd ) // any further table node?
         {
@@ -599,7 +599,7 @@ bool GotoCurrTable( SwPaM& rCurCrsr, SwPosTable fnPosTable,
     if( !pTableNd )
         return false;
 
-    SwTextNode* pTextNode = 0;
+    SwTextNode* pTextNode = nullptr;
     if( fnPosTable == fnMoveBackward ) // to the end of the table
     {
         SwNodeIndex aIdx( *pTableNd->EndOfSectionNode() );
@@ -714,7 +714,7 @@ OUString SwCrsrShell::GetBoxNms() const
     if( IsTableMode() )
     {
         SwContentNode *pCNd = m_pTableCrsr->Start()->nNode.GetNode().GetContentNode();
-        pFrm = pCNd ? pCNd->getLayoutFrm( GetLayout() ) : 0;
+        pFrm = pCNd ? pCNd->getLayoutFrm( GetLayout() ) : nullptr;
         if( !pFrm )
             return sNm;
 
@@ -740,7 +740,7 @@ OUString SwCrsrShell::GetBoxNms() const
     }
 
     SwContentNode* pCNd = pPos->nNode.GetNode().GetContentNode();
-    pFrm = pCNd ? pCNd->getLayoutFrm( GetLayout() ) : 0;
+    pFrm = pCNd ? pCNd->getLayoutFrm( GetLayout() ) : nullptr;
 
     if( pFrm )
     {
@@ -773,19 +773,19 @@ bool SwCrsrShell::CheckTableBoxContent( const SwPosition* pPos )
         return false;
 
     // check if box content is consistent with given box format, reset if not
-    SwTableBox* pChkBox = 0;
-    SwStartNode* pSttNd = 0;
+    SwTableBox* pChkBox = nullptr;
+    SwStartNode* pSttNd = nullptr;
     if( !pPos )
     {
         // get stored position
         if( m_pBoxIdx && m_pBoxPtr &&
-            0 != ( pSttNd = m_pBoxIdx->GetNode().GetStartNode() ) &&
+            nullptr != ( pSttNd = m_pBoxIdx->GetNode().GetStartNode() ) &&
             SwTableBoxStartNode == pSttNd->GetStartNodeType() &&
             m_pBoxPtr == pSttNd->FindTableNode()->GetTable().
                         GetTableBox( m_pBoxIdx->GetIndex() ) )
             pChkBox = m_pBoxPtr;
     }
-    else if( 0 != ( pSttNd = pPos->nNode.GetNode().
+    else if( nullptr != ( pSttNd = pPos->nNode.GetNode().
                                 FindSttNodeByType( SwTableBoxStartNode )) )
     {
         pChkBox = pSttNd->FindTableNode()->GetTable().GetTableBox( pSttNd->GetIndex() );
@@ -793,7 +793,7 @@ bool SwCrsrShell::CheckTableBoxContent( const SwPosition* pPos )
 
     // box has more than one paragraph
     if( pChkBox && pSttNd->GetIndex() + 2 != pSttNd->EndOfSectionIndex() )
-        pChkBox = 0;
+        pChkBox = nullptr;
 
     // destroy pointer before next action starts
     if( !pPos && !pChkBox )
@@ -803,7 +803,7 @@ bool SwCrsrShell::CheckTableBoxContent( const SwPosition* pPos )
     if( pChkBox && !pPos &&
         ( m_pCurCrsr->HasMark() || m_pCurCrsr->GetNext() != m_pCurCrsr ||
           pSttNd->GetIndex() + 1 == m_pCurCrsr->GetPoint()->nNode.GetIndex() ))
-        pChkBox = 0;
+        pChkBox = nullptr;
 
     // Did the content of a box change at all? This is important if e.g. Undo
     // could not restore the content properly.
@@ -815,7 +815,7 @@ bool SwCrsrShell::CheckTableBoxContent( const SwPosition* pPos )
             ( pNd->GetText() == SwViewShell::GetShellRes()->aCalc_Error &&
               SfxItemState::SET == pChkBox->GetFrameFormat()->
                             GetItemState( RES_BOXATR_FORMULA )) )
-            pChkBox = 0;
+            pChkBox = nullptr;
     }
 
     if( pChkBox )
@@ -827,7 +827,7 @@ bool SwCrsrShell::CheckTableBoxContent( const SwPosition* pPos )
         EndAction();
     }
 
-    return 0 != pChkBox;
+    return nullptr != pChkBox;
 }
 
 void SwCrsrShell::SaveTableBoxContent( const SwPosition* pPos )
@@ -844,12 +844,12 @@ void SwCrsrShell::SaveTableBoxContent( const SwPosition* pPos )
     if( pSttNd && m_pBoxIdx )
     {
         if( pSttNd == &m_pBoxIdx->GetNode() )
-            pSttNd = 0;
+            pSttNd = nullptr;
         else
             bCheckBox = true;
     }
     else
-        bCheckBox = 0 != m_pBoxIdx;
+        bCheckBox = nullptr != m_pBoxIdx;
 
     if( bCheckBox )
     {
@@ -871,8 +871,8 @@ void SwCrsrShell::SaveTableBoxContent( const SwPosition* pPos )
 
 void SwCrsrShell::ClearTableBoxContent()
 {
-    delete m_pBoxIdx, m_pBoxIdx = 0;
-    m_pBoxPtr = 0;
+    delete m_pBoxIdx, m_pBoxIdx = nullptr;
+    m_pBoxPtr = nullptr;
 }
 
 bool SwCrsrShell::EndAllTableBoxEdit()

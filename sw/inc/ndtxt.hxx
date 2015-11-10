@@ -118,7 +118,7 @@ class SW_DLLPUBLIC SwTextNode: public SwContentNode, public ::sfx2::Metadatable
     drawinglayer::attribute::SdrAllFillAttributesHelperPtr  maFillAttributes;
 
     SAL_DLLPRIVATE SwTextNode( const SwNodeIndex &rWhere, SwTextFormatColl *pTextColl,
-                             const SfxItemSet* pAutoAttr = 0 );
+                             const SfxItemSet* pAutoAttr = nullptr );
 
     /// Copies the attributes at nStart to pDest.
     SAL_DLLPRIVATE void CopyAttr( SwTextNode *pDest, const sal_Int32 nStart, const sal_Int32 nOldPos);
@@ -234,7 +234,7 @@ public:
 
     /// Is in itratr.
     void GetMinMaxSize( sal_uLong nIndex, sal_uLong& rMin, sal_uLong &rMax, sal_uLong &rAbs,
-                        OutputDevice* pOut = 0 ) const;
+                        OutputDevice* pOut = nullptr ) const;
 
     /// overriding to handle change of certain paragraph attributes
     virtual bool SetAttr( const SfxPoolItem& ) override;
@@ -276,7 +276,7 @@ public:
         const SwIndex &rIdx,
         const sal_Int32 nLen,
         const sal_uInt16 nWhich = 0,
-        const SfxItemSet* pSet = 0,
+        const SfxItemSet* pSet = nullptr,
         const bool bInclRefToxMark = false,
         const bool bExactRange = false );
     void    GCAttr();
@@ -690,7 +690,7 @@ public:
                             const bool bAddSpaceAfterListLabelStr = false,
                             const bool bWithSpacesForLevel = false,
                             const bool bWithFootnote = true ) const;
-    bool GetExpandText( SwTextNode& rDestNd, const SwIndex* pDestIdx = 0,
+    bool GetExpandText( SwTextNode& rDestNd, const SwIndex* pDestIdx = nullptr,
                            sal_Int32 nIdx = 0, sal_Int32 nLen = -1,
                            bool bWithNum = false, bool bWithFootnote = true,
                            bool bReplaceTabsWithSpaces = false ) const;
@@ -749,7 +749,7 @@ public:
     /// change text to Upper/Lower/Hiragana/Katagana/...
     void TransliterateText( utl::TransliterationWrapper& rTrans,
                             sal_Int32 nStart, sal_Int32 nEnd,
-                            SwUndoTransliterate* pUndo = 0 );
+                            SwUndoTransliterate* pUndo = nullptr );
 
     /// count words in given range - returns true if we refreshed out count
     bool CountWords( SwDocStat& rStat, sal_Int32 nStart, sal_Int32 nEnd ) const;
@@ -848,12 +848,12 @@ inline SwTextFormatColl* SwTextNode::GetTextColl() const
 /// Inline methods from Node.hxx
 inline SwTextNode *SwNode::GetTextNode()
 {
-     return ND_TEXTNODE == m_nNodeType ? static_cast<SwTextNode*>(this) : 0;
+     return ND_TEXTNODE == m_nNodeType ? static_cast<SwTextNode*>(this) : nullptr;
 }
 
 inline const SwTextNode *SwNode::GetTextNode() const
 {
-     return ND_TEXTNODE == m_nNodeType ? static_cast<const SwTextNode*>(this) : 0;
+     return ND_TEXTNODE == m_nNodeType ? static_cast<const SwTextNode*>(this) : nullptr;
 }
 
 inline void

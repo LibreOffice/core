@@ -83,7 +83,7 @@ void _PaMIntoCrsrShellRing::RemoveFromRing( SwPaM& rPam, SwPaM* pPrev )
 
 SwAutoCorrDoc::SwAutoCorrDoc( SwEditShell& rEditShell, SwPaM& rPam,
                                 sal_Unicode cIns )
-    : rEditSh( rEditShell ), rCrsr( rPam ), pIdx( 0 )
+    : rEditSh( rEditShell ), rCrsr( rPam ), pIdx( nullptr )
     , m_nEndUndoCounter(0)
     , bUndoIdInitialized( cIns == 0 )
 {
@@ -274,7 +274,7 @@ bool SwAutoCorrDoc::SetINetAttr( sal_Int32 nStt, sal_Int32 nEnd, const OUString&
  */
 OUString const* SwAutoCorrDoc::GetPrevPara(bool const bAtNormalPos)
 {
-    OUString const* pStr(0);
+    OUString const* pStr(nullptr);
 
     if( bAtNormalPos || !pIdx )
         pIdx = new SwNodeIndex( rCrsr.GetPoint()->nNode, -1 );
@@ -366,7 +366,7 @@ bool SwAutoCorrDoc::ChgAutoCorrWord( sal_Int32& rSttPos, sal_Int32 nEndPos,
                 const SwTableNode* pTableNd = pContentNd->FindTableNode();
                 if( pTableNd )
                 {
-                    aCpyPam.GetPoint()->nContent.Assign( 0, 0 );
+                    aCpyPam.GetPoint()->nContent.Assign( nullptr, 0 );
                     aCpyPam.GetPoint()->nNode = *pTableNd;
                 }
                 aCpyPam.SetMark();
@@ -471,7 +471,7 @@ void SwDontExpandItem::SaveDontExpandItems( const SwPosition& rPos )
         const sal_Int32 n = rPos.nContent.GetIndex();
         if( !pTextNd->GetAttr( *pDontExpItems, n, n,
                                 n != pTextNd->GetText().getLength() ))
-            delete pDontExpItems, pDontExpItems = 0;
+            delete pDontExpItems, pDontExpItems = nullptr;
     }
 }
 
@@ -497,7 +497,7 @@ void SwDontExpandItem::RestoreDontExpandItems( const SwPosition& rPos )
                     break;
 
                 const sal_Int32* pAttrEnd;
-                if( 0 != ( pAttrEnd = pHt->End() ) &&
+                if( nullptr != ( pAttrEnd = pHt->End() ) &&
                     ( ( nAttrStart < nStart &&
                         ( pHt->DontExpand() ? nStart < *pAttrEnd
                                             : nStart <= *pAttrEnd )) ||

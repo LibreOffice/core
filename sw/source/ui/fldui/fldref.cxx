@@ -52,7 +52,7 @@ SwFieldRefPage::SwFieldRefPage(vcl::Window* pParent, const SfxItemSet& rCoreSet 
         "modules/swriter/ui/fldrefpage.ui", rCoreSet)
     , maOutlineNodes()
     , maNumItems()
-    , mpSavedSelectedTextNode(0)
+    , mpSavedSelectedTextNode(nullptr)
     , mnSavedSelectedPos(0)
 {
     get(m_pTypeLB, "type");
@@ -127,7 +127,7 @@ void SwFieldRefPage::dispose()
 // #i83479#
 void SwFieldRefPage::SaveSelectedTextNode()
 {
-    mpSavedSelectedTextNode = 0;
+    mpSavedSelectedTextNode = nullptr;
     mnSavedSelectedPos = 0;
     if ( m_pSelectionToolTipLB->IsVisible() )
     {
@@ -642,12 +642,12 @@ void SwFieldRefPage::UpdateSubType()
         bool bEnable = m_pSelectionToolTipLB->GetEntryCount() != 0;
         m_pSelection->Enable( bEnable );
 
-        if ( m_pSelectionToolTipLB->GetCurEntry() != 0 )
+        if ( m_pSelectionToolTipLB->GetCurEntry() != nullptr )
         {
             m_pSelectionToolTipLB->MakeVisible( m_pSelectionToolTipLB->GetCurEntry() );
         }
 
-        if ( IsFieldEdit() && m_pSelectionToolTipLB->GetCurEntry() == 0 )
+        if ( IsFieldEdit() && m_pSelectionToolTipLB->GetCurEntry() == nullptr )
         {
             m_pNameED->SetText(sOldSel);
         }

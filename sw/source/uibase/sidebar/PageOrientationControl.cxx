@@ -42,10 +42,10 @@ PageOrientationControl::PageOrientationControl(
 
     // initialize <ValueSetWithText> control
     {
-        mpOrientationValueSet->AddItem(Image(SW_RES(IMG_PORTRAIT)), 0,
-                SW_RES(STR_PORTRAIT), 0);
-        mpOrientationValueSet->AddItem(Image(SW_RES(IMG_LANDSCAPE)), 0,
-                    SW_RES(STR_LANDSCAPE), 0 );
+        mpOrientationValueSet->AddItem(Image(SW_RES(IMG_PORTRAIT)), nullptr,
+                SW_RES(STR_PORTRAIT), nullptr);
+        mpOrientationValueSet->AddItem(Image(SW_RES(IMG_LANDSCAPE)), nullptr,
+                    SW_RES(STR_LANDSCAPE), nullptr );
     }
 
     mpOrientationValueSet->SetSelectHdl(LINK(this, PageOrientationControl,ImplOrientationHdl ));

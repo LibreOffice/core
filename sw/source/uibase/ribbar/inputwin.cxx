@@ -61,9 +61,9 @@ SwInputWindow::SwInputWindow( vcl::Window* pParent )
     aPos(       VclPtr<Edit>::Create(this,       SW_RES(ED_POS))),
     aEdit(      VclPtr<InputEdit>::Create(this, WB_3DLOOK|WB_TABSTOP|WB_BORDER|WB_NOHIDESELECTION)),
     aPopMenu(   SW_RES(MN_CALC_POPUP)),
-    pMgr(0),
-    pWrtShell(0),
-    pView(0),
+    pMgr(nullptr),
+    pWrtShell(nullptr),
+    pView(nullptr),
     aAktTableName(aEmptyOUStr)
     , m_bDoesUndo(true)
     , m_bResetUndo(false)
@@ -80,7 +80,7 @@ SwInputWindow::SwInputWindow( vcl::Window* pParent )
     pManager->RegisterToolBox(this);
 
     pView = ::GetActiveView();
-    pWrtShell = pView ? pView->GetWrtShellPtr() : 0;
+    pWrtShell = pView ? pView->GetWrtShellPtr() : nullptr;
 
     InsertWindow( ED_POS, aPos.get(), ToolBoxItemBits::NONE, 0);
     SetItemText(ED_POS, SW_RESSTR(STR_ACCESS_FORMULA_TYPE));
@@ -225,7 +225,7 @@ void SwInputWindow::ShowWin()
             aPos->SetText(SW_RESSTR(STR_TBL_FORMULA));
 
         // Edit current field
-        OSL_ENSURE(pMgr == 0, "FieldManager not deleted");
+        OSL_ENSURE(pMgr == nullptr, "FieldManager not deleted");
         pMgr = new SwFieldMgr;
 
         // Formular should always begin with "=" , so set here
@@ -391,7 +391,7 @@ void  SwInputWindow::ApplyFormula()
     pView->GetEditWin().GrabFocus();
     const SfxPoolItem* aArgs[2];
     aArgs[0] = &aParam;
-    aArgs[1] = 0;
+    aArgs[1] = nullptr;
     pView->GetViewFrame()->GetBindings().Execute( FN_EDIT_FORMULA, aArgs, 0, SfxCallMode::ASYNCHRON );
 }
 

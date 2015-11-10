@@ -213,7 +213,7 @@ static void lcl_SelectMetricLB(ListBox* rMetric, sal_uInt16 nSID, const SfxItemS
 
 void SwContentOptPage::Reset(const SfxItemSet* rSet)
 {
-    const SwElemItem* pElemAttr = 0;
+    const SwElemItem* pElemAttr = nullptr;
 
     rSet->GetItemState( FN_PARAM_ELEM , false,
                                     reinterpret_cast<const SfxPoolItem**>(&pElemAttr) );
@@ -255,7 +255,7 @@ bool SwContentOptPage::FillItemSet(SfxItemSet* rSet)
 
     bool bRet = !pOldAttr || aElem != *pOldAttr;
     if(bRet)
-        bRet = 0 != rSet->Put(aElem);
+        bRet = nullptr != rSet->Put(aElem);
 
     sal_Int32 nMPos = m_pMetricLB->GetSelectEntryPos();
     sal_Int32 nGlobalMetricPos = nMPos;
@@ -447,7 +447,7 @@ bool    SwAddPrinterTabPage::FillItemSet( SfxItemSet* rCoreSet )
 void    SwAddPrinterTabPage::Reset( const SfxItemSet*  )
 {
     const   SfxItemSet&         rSet = GetItemSet();
-    const   SwAddPrinterItem*   pAddPrinterAttr = 0;
+    const   SwAddPrinterItem*   pAddPrinterAttr = nullptr;
 
     if( SfxItemState::SET == rSet.GetItemState( FN_PARAM_ADDPRINTER , false,
                                     reinterpret_cast<const SfxPoolItem**>(&pAddPrinterAttr) ))
@@ -536,10 +536,10 @@ void SwAddPrinterTabPage::PageCreated( const SfxAllItemSet& aSet)
 SwStdFontTabPage::SwStdFontTabPage( vcl::Window* pParent,
                                        const SfxItemSet& rSet ) :
     SfxTabPage( pParent, "OptFontTabPage" , "modules/swriter/ui/optfonttabpage.ui" , &rSet),
-    m_pPrt(0),
-    m_pFontList(0),
-    m_pFontConfig(0),
-    m_pWrtShell(0),
+    m_pPrt(nullptr),
+    m_pFontList(nullptr),
+    m_pFontConfig(nullptr),
+    m_pWrtShell(nullptr),
     m_eLanguage( GetAppLanguage() ),
 
     m_bListDefault(false),
@@ -1061,7 +1061,7 @@ IMPL_LINK_TYPED( SwStdFontTabPage, ModifyHeightHdl, Edit&, rBox, void )
 IMPL_LINK_TYPED( SwStdFontTabPage, LoseFocusHdl, Control&, rControl, void )
 {
     ComboBox* pBox = static_cast<ComboBox*>(&rControl);
-    FontSizeBox* pHeightLB = 0;
+    FontSizeBox* pHeightLB = nullptr;
     const OUString sEntry = pBox->GetText();
     if(pBox == m_pStandardBox)
     {
@@ -1096,7 +1096,7 @@ void SwStdFontTabPage::PageCreated( const SfxAllItemSet& aSet)
 
 SwTableOptionsTabPage::SwTableOptionsTabPage( vcl::Window* pParent, const SfxItemSet& rSet ) :
     SfxTabPage(pParent, "OptTablePage", "modules/swriter/ui/opttablepage.ui", &rSet),
-    pWrtShell(0),
+    pWrtShell(nullptr),
     bHTMLMode(false)
 {
     get(pHeaderCB,"header");
@@ -1294,7 +1294,7 @@ void SwTableOptionsTabPage::Reset( const SfxItemSet* rSet)
     pNumFormatFormattingCB->SaveValue();
     pNumAlignmentCB->SaveValue();
 
-    CheckBoxHdl(0);
+    CheckBoxHdl(nullptr);
 }
 
 IMPL_LINK_NOARG_TYPED(SwTableOptionsTabPage, CheckBoxHdl, Button*, void)
@@ -1315,7 +1315,7 @@ SwShdwCrsrOptionsTabPage::SwShdwCrsrOptionsTabPage( vcl::Window* pParent,
                                                     const SfxItemSet& rSet )
    : SfxTabPage(pParent, "OptFormatAidsPage",
                 "modules/swriter/ui/optformataidspage.ui", &rSet),
-    m_pWrtShell( NULL )
+    m_pWrtShell( nullptr )
 {
     get(m_pParaCB, "paragraph");
     get(m_pSHyphCB, "hyphens");
@@ -1341,7 +1341,7 @@ SwShdwCrsrOptionsTabPage::SwShdwCrsrOptionsTabPage( vcl::Window* pParent,
 
     get(m_pMathBaselineAlignmentCB, "mathbaseline");
 
-    const SfxPoolItem* pItem = 0;
+    const SfxPoolItem* pItem = nullptr;
 
     SwShadowCursorItem aOpt;
     if( SfxItemState::SET == rSet.GetItemState( FN_PARAM_SHADOWCURSOR, false, &pItem ))
@@ -1433,7 +1433,7 @@ bool SwShdwCrsrOptionsTabPage::FillItemSet( SfxItemSet* rSet )
     aOpt.SetMode( eMode );
 
     bool bRet = false;
-    const SfxPoolItem* pItem = 0;
+    const SfxPoolItem* pItem = nullptr;
     if( SfxItemState::SET != rSet->GetItemState( FN_PARAM_SHADOWCURSOR, false, &pItem )
         ||  static_cast<const SwShadowCursorItem&>(*pItem) != aOpt )
     {
@@ -1478,14 +1478,14 @@ bool SwShdwCrsrOptionsTabPage::FillItemSet( SfxItemSet* rSet )
 
     bRet |= (!pOldAttr || aDisp != *pOldAttr);
     if(bRet)
-        bRet = 0 != rSet->Put(aDisp);
+        bRet = nullptr != rSet->Put(aDisp);
 
     return bRet;
 }
 
 void SwShdwCrsrOptionsTabPage::Reset( const SfxItemSet* rSet )
 {
-    const SfxPoolItem* pItem = 0;
+    const SfxPoolItem* pItem = nullptr;
 
     SwShadowCursorItem aOpt;
     if( SfxItemState::SET == rSet->GetItemState( FN_PARAM_SHADOWCURSOR, false, &pItem ))
@@ -1513,7 +1513,7 @@ void SwShdwCrsrOptionsTabPage::Reset( const SfxItemSet* rSet )
         m_pIgnoreProtCB->Check(static_cast<const SfxBoolItem*>(pItem)->GetValue());
     m_pIgnoreProtCB->SaveValue();
 
-    const SwDocDisplayItem* pDocDisplayAttr = 0;
+    const SwDocDisplayItem* pDocDisplayAttr = nullptr;
 
     rSet->GetItemState( FN_PARAM_DOCDISP, false,
                                     reinterpret_cast<const SfxPoolItem**>(&pDocDisplayAttr) );
@@ -2075,7 +2075,7 @@ void SwRedlineOptionsTabPage::Reset( const SfxItemSet*  )
 
 IMPL_LINK_TYPED( SwRedlineOptionsTabPage, AttribHdl, ListBox&, rLB, void )
 {
-    SvxFontPrevWindow *pPrev = 0;
+    SvxFontPrevWindow *pPrev = nullptr;
     ColorListBox *pColorLB;
 
     if (&rLB == pInsertLB)
@@ -2181,7 +2181,7 @@ IMPL_LINK_TYPED( SwRedlineOptionsTabPage, AttribHdl, ListBox&, rLB, void )
 IMPL_LINK_TYPED( SwRedlineOptionsTabPage, ColorHdl, ListBox&, rListBox, void )
 {
     ColorListBox* pColorLB = static_cast<ColorListBox*>(&rListBox);
-    SvxFontPrevWindow *pPrev = 0;
+    SvxFontPrevWindow *pPrev = nullptr;
     ListBox* pLB;
 
     if (pColorLB == pInsertColorLB)
@@ -2513,7 +2513,7 @@ bool    SwTestTabPage::FillItemSet( SfxItemSet* rCoreSet )
 void SwTestTabPage::Reset( const SfxItemSet* )
 {
     const SfxItemSet& rSet = GetItemSet();
-    const SwTestItem* pTestAttr = 0;
+    const SwTestItem* pTestAttr = nullptr;
 
     if( SfxItemState::SET == rSet.GetItemState( FN_PARAM_SWTEST , false,
                                     reinterpret_cast<const SfxPoolItem**>(&pTestAttr) ))

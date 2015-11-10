@@ -54,7 +54,7 @@ SvXMLImportContext *SwXMLSectionList::CreateContext(
         const OUString& rLocalName,
         const uno::Reference< xml::sax::XAttributeList > & xAttrList )
 {
-    SvXMLImportContext *pContext = 0;
+    SvXMLImportContext *pContext = nullptr;
 
     if(( nPrefix == XML_NAMESPACE_OFFICE && IsXMLToken ( rLocalName, XML_BODY )) ||
         ( nPrefix == XML_NAMESPACE_TEXT &&
@@ -92,7 +92,7 @@ SvXMLImportContext *SvXMLSectionListContext::CreateChildContext(
     const OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList > & xAttrList )
 {
-    SvXMLImportContext *pContext = 0;
+    SvXMLImportContext *pContext = nullptr;
 
     if (nPrefix == XML_NAMESPACE_TEXT && ( IsXMLToken ( rLocalName, XML_SECTION ) ||
                                            IsXMLToken ( rLocalName, XML_BOOKMARK) ) )

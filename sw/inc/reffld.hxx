@@ -76,7 +76,7 @@ public:
 
     static SwTextNode* FindAnchor( SwDoc* pDoc, const OUString& rRefMark,
                                         sal_uInt16 nSubType, sal_uInt16 nSeqNo,
-                                        sal_Int32* pStt, sal_Int32* pEnd = 0 );
+                                        sal_Int32* pStt, sal_Int32* pEnd = nullptr );
 };
 
 class SW_DLLPUBLIC SwGetRefField : public SwField

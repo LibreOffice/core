@@ -74,9 +74,9 @@ SwCache::SwCache( const sal_uInt16 nInitSize
 #endif
     ) :
     m_aCacheObjects(),
-    pRealFirst( 0 ),
-    pFirst( 0 ),
-    pLast( 0 ),
+    pRealFirst( nullptr ),
+    pFirst( nullptr ),
+    pLast( nullptr ),
     nCurMax( nInitSize )
 #ifdef DBG_UTIL
     , m_aName( rNm )
@@ -127,7 +127,7 @@ void SwCache::Flush( const sal_uInt8 )
 {
     INCREMENT( m_nFlushCnt );
     SwCacheObj *pObj = pRealFirst;
-    pRealFirst = pFirst = pLast = 0;
+    pRealFirst = pFirst = pLast = nullptr;
     SwCacheObj *pTmp;
     while ( pObj )
     {
@@ -139,7 +139,7 @@ void SwCache::Flush( const sal_uInt8 )
             {
                 pRealFirst = pFirst = pLast = pObj;
                 pTmp = pObj->GetNext();
-                pObj->SetNext( 0 ); pObj->SetPrev( 0 );
+                pObj->SetNext( nullptr ); pObj->SetPrev( nullptr );
                 pObj = pTmp;
             }
             else
@@ -147,7 +147,7 @@ void SwCache::Flush( const sal_uInt8 )
                 pObj->SetPrev( pLast );
                 pLast = pObj;
                 pTmp = pObj->GetNext();
-                pObj->SetNext( 0 );
+                pObj->SetNext( nullptr );
                 pObj = pTmp;
             }
         }
@@ -157,7 +157,7 @@ void SwCache::Flush( const sal_uInt8 )
             pTmp = pObj;
             pObj = pTmp->GetNext();
             aFreePositions.push_back( pTmp->GetCachePos() );
-            m_aCacheObjects[pTmp->GetCachePos()] = NULL;
+            m_aCacheObjects[pTmp->GetCachePos()] = nullptr;
             delete pTmp;
             INCREMENT( m_nFlushedObjects );
         }
@@ -189,7 +189,7 @@ void SwCache::ToTop( SwCacheObj *pObj )
     {
         OSL_ENSURE( pObj->GetPrev(), "Last but no Prev." );
         pLast = pObj->GetPrev();
-        pLast->SetNext( 0 );
+        pLast->SetNext( nullptr );
     }
     else
     {
@@ -204,7 +204,7 @@ void SwCache::ToTop( SwCacheObj *pObj )
     {
         pRealFirst->SetPrev( pObj );
         pObj->SetNext( pRealFirst );
-        pObj->SetPrev( 0 );
+        pObj->SetPrev( nullptr );
         pRealFirst = pFirst = pObj;
         CHECK;
     }
@@ -218,7 +218,7 @@ void SwCache::ToTop( SwCacheObj *pObj )
             pObj->SetPrev( pFirst->GetPrev() );
         }
         else
-            pObj->SetPrev( 0 );
+            pObj->SetPrev( nullptr );
         pFirst->SetPrev( pObj );
         pObj->SetNext( pFirst );
         pFirst = pObj;
@@ -230,10 +230,10 @@ SwCacheObj *SwCache::Get( const void *pOwner, const sal_uInt16 nIndex,
                           const bool bToTop )
 {
     SwCacheObj *pRet;
-    if ( 0 != (pRet = (nIndex < m_aCacheObjects.size()) ? m_aCacheObjects[ nIndex ] : 0) )
+    if ( nullptr != (pRet = (nIndex < m_aCacheObjects.size()) ? m_aCacheObjects[ nIndex ] : nullptr) )
     {
         if ( !pRet->IsOwner( pOwner ) )
-            pRet = 0;
+            pRet = nullptr;
         else if ( bToTop && pRet != pFirst )
             ToTop( pRet );
     }
@@ -294,7 +294,7 @@ void SwCache::DeleteObj( SwCacheObj *pObj )
         pObj->GetNext()->SetPrev( pObj->GetPrev() );
 
     aFreePositions.push_back( pObj->GetCachePos() );
-    m_aCacheObjects[pObj->GetCachePos()] = NULL;
+    m_aCacheObjects[pObj->GetCachePos()] = nullptr;
     delete pObj;
 
     CHECK;
@@ -325,7 +325,7 @@ void SwCache::Delete( const void *pOwner )
 {
     INCREMENT( m_nDelete );
     SwCacheObj *pObj;
-    if ( 0 != (pObj = Get( pOwner, false )) )
+    if ( nullptr != (pObj = Get( pOwner, false )) )
         DeleteObj( pObj );
 }
 
@@ -369,7 +369,7 @@ bool SwCache::Insert( SwCacheObj *pNew )
         if ( pObj == pLast )
         { OSL_ENSURE( pObj->GetPrev(), "Last but no Prev" );
             pLast = pObj->GetPrev();
-            pLast->SetNext( 0 );
+            pLast->SetNext( nullptr );
         }
         else
         {
@@ -422,8 +422,8 @@ void SwCache::SetLRUOfst( const sal_uInt16 nOfst )
 }
 
 SwCacheObj::SwCacheObj( const void *pOwn ) :
-    m_pNext( 0 ),
-    m_pPrev( 0 ),
+    m_pNext( nullptr ),
+    m_pPrev( nullptr ),
     m_nCachePos( USHRT_MAX ),
     m_nLock( 0 ),
     m_pOwner( pOwn )
@@ -462,7 +462,7 @@ void SwCacheAccess::_Get()
     if ( !rCache.Insert( pObj ) )
     {
         delete pObj;
-        pObj = 0;
+        pObj = nullptr;
     }
     else
     {
@@ -472,7 +472,7 @@ void SwCacheAccess::_Get()
 
 bool SwCacheAccess::IsAvailable() const
 {
-    return pObj != 0;
+    return pObj != nullptr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

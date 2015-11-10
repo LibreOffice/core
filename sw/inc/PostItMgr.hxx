@@ -92,7 +92,7 @@ struct FieldShadowState
     const SwPostItField* mpShadowField;
     bool bCursor;
     bool bMouse;
-    FieldShadowState(): mpShadowField(0),bCursor(false),bMouse(false)
+    FieldShadowState(): mpShadowField(nullptr),bCursor(false),bMouse(false)
     {
     }
 };

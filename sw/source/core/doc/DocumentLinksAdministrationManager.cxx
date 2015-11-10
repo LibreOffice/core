@@ -58,7 +58,7 @@ namespace
         SwSectionNode* pSectNd;
 
         explicit _FindItem(const OUString& rS)
-            : m_Item(rS), pTableNd(0), pSectNd(0)
+            : m_Item(rS), pTableNd(nullptr), pSectNd(nullptr)
         {}
      };
 
@@ -75,7 +75,7 @@ namespace
                     tools::SvRef<sfx2::SvBaseLink> xLink = pLnk;
 
                     OUString sFName;
-                    sfx2::LinkManager::GetDisplayNames( xLink, 0, &sFName );
+                    sfx2::LinkManager::GetDisplayNames( xLink, nullptr, &sFName );
 
                     INetURLObject aURL( sFName );
                     if( INetProtocol::File == aURL.GetProtocol() ||
@@ -83,7 +83,7 @@ namespace
                         return pLnk;
             }
         }
-        return 0;
+        return nullptr;
     }
 
 
@@ -106,7 +106,7 @@ namespace
                 }
             }
         }
-        return NULL;
+        return nullptr;
     }
 
 
@@ -125,7 +125,7 @@ namespace
             {
                 // found, so get the data
                 const SwNodeIndex* pIdx;
-                if( 0 != (pIdx = pSectFormat->GetContent().GetContentIdx() ) &&
+                if( nullptr != (pIdx = pSectFormat->GetContent().GetContentIdx() ) &&
                     &pSectFormat->GetDoc()->GetNodes() == &pIdx->GetNodes() )
                 {
                     // a table in the normal NodesArr
@@ -146,8 +146,8 @@ namespace
         {
             SwTable* pTmpTable;
             SwTableBox* pFBox;
-            if( 0 != ( pTmpTable = SwTable::FindTable( pTableFormat ) ) &&
-                0 != ( pFBox = pTmpTable->GetTabSortBoxes()[0] ) &&
+            if( nullptr != ( pTmpTable = SwTable::FindTable( pTableFormat ) ) &&
+                nullptr != ( pFBox = pTmpTable->GetTabSortBoxes()[0] ) &&
                 pFBox->GetSttNd() &&
                 &pTableFormat->GetDoc()->GetNodes() == &pFBox->GetSttNd()->GetNodes() )
             {
@@ -170,7 +170,7 @@ namespace sw
 
 DocumentLinksAdministrationManager::DocumentLinksAdministrationManager( SwDoc& i_rSwdoc ) : mbVisibleLinks(true),
                                                                                             mbLinksUpdated( false ), //#i38810#
-                                                                                            mpLinkMgr( new sfx2::LinkManager( 0 ) ),
+                                                                                            mpLinkMgr( new sfx2::LinkManager( nullptr ) ),
                                                                                             m_rDoc( i_rSwdoc )
 {
 }
@@ -231,8 +231,8 @@ void DocumentLinksAdministrationManager::UpdateLinks( bool bUI )
             if( bUpdate && (bUI || !bAskUpdate) )
             {
                 SfxMedium* pMedium = m_rDoc.GetDocShell()->GetMedium();
-                SfxFrame* pFrm = pMedium ? pMedium->GetLoadTargetFrame() : 0;
-                vcl::Window* pDlgParent = pFrm ? &pFrm->GetWindow() : 0;
+                SfxFrame* pFrm = pMedium ? pMedium->GetLoadTargetFrame() : nullptr;
+                vcl::Window* pDlgParent = pFrm ? &pFrm->GetWindow() : nullptr;
 
                 GetLinkManager().UpdateAllLinks( bAskUpdate, true, false, pDlgParent );
             }
@@ -327,7 +327,7 @@ bool DocumentLinksAdministrationManager::SetData( const OUString& rItem, const O
 
 ::sfx2::SvLinkSource* DocumentLinksAdministrationManager::CreateLinkSource(const OUString& rItem)
 {
-    SwServerObject* pObj = NULL;
+    SwServerObject* pObj = nullptr;
 
     // search for bookmarks and sections case sensitive at first. If nothing is found then try again case insensitive
     bool bCaseSensitive = true;
@@ -336,7 +336,7 @@ bool DocumentLinksAdministrationManager::SetData( const OUString& rItem, const O
         // bookmarks
         ::sw::mark::DdeBookmark* const pBkmk = lcl_FindDdeBookmark(*m_rDoc.getIDocumentMarkAccess(), rItem, bCaseSensitive);
         if(pBkmk && pBkmk->IsExpanded()
-            && (0 == (pObj = pBkmk->GetRefObject())))
+            && (nullptr == (pObj = pBkmk->GetRefObject())))
         {
             // mark found, but no link yet -> create hotlink
             pObj = new SwServerObject(*pBkmk);
@@ -355,7 +355,7 @@ bool DocumentLinksAdministrationManager::SetData( const OUString& rItem, const O
         }
 
         if(aPara.pSectNd
-            && (0 == (pObj = aPara.pSectNd->GetSection().GetObject())))
+            && (nullptr == (pObj = aPara.pSectNd->GetSection().GetObject())))
         {
             // section found, but no link yet -> create hotlink
             pObj = new SwServerObject( *aPara.pSectNd );
@@ -377,7 +377,7 @@ bool DocumentLinksAdministrationManager::SetData( const OUString& rItem, const O
             break;
     }
     if(aPara.pTableNd
-        && (0 == (pObj = aPara.pTableNd->GetTable().GetObject())))
+        && (nullptr == (pObj = aPara.pTableNd->GetTable().GetObject())))
     {
         // table found, but no link yet -> create hotlink
         pObj = new SwServerObject(*aPara.pTableNd);
@@ -397,8 +397,8 @@ bool DocumentLinksAdministrationManager::EmbedAllLinks()
     {
         ::sw::UndoGuard const undoGuard(m_rDoc.GetIDocumentUndoRedo());
 
-        ::sfx2::SvBaseLink* pLnk = 0;
-        while( 0 != (pLnk = lcl_FindNextRemovableLink( rLinks ) ) )
+        ::sfx2::SvBaseLink* pLnk = nullptr;
+        while( nullptr != (pLnk = lcl_FindNextRemovableLink( rLinks ) ) )
         {
             tools::SvRef<sfx2::SvBaseLink> xLink = pLnk;
             // Tell the link that it's being destroyed!
@@ -435,8 +435,8 @@ DocumentLinksAdministrationManager::~DocumentLinksAdministrationManager()
 bool DocumentLinksAdministrationManager::SelectServerObj( const OUString& rStr, SwPaM*& rpPam, SwNodeRange*& rpRange ) const
 {
     // Do we actually have the Item?
-    rpPam = 0;
-    rpRange = 0;
+    rpPam = nullptr;
+    rpRange = nullptr;
 
     OUString sItem( INetURLObject::decode( rStr,
                                          INetURLObject::DECODE_WITH_CHARSET ));
@@ -477,7 +477,7 @@ bool DocumentLinksAdministrationManager::SelectServerObj( const OUString& rStr, 
             SwNode* pNd;
             const SwFlyFrameFormat* pFlyFormat = m_rDoc.FindFlyByName( sName );
             if( pFlyFormat &&
-                0 != ( pIdx = const_cast<SwNodeIndex*>(pFlyFormat->GetContent().GetContentIdx()) ) &&
+                nullptr != ( pIdx = const_cast<SwNodeIndex*>(pFlyFormat->GetContent().GetContentIdx()) ) &&
                 !( pNd = &pIdx->GetNode())->IsNoTextNode() )
             {
                 rpRange = new SwNodeRange( *pNd, 1, *pNd->EndOfSectionNode() );

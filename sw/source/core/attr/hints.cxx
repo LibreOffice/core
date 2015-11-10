@@ -63,16 +63,16 @@ SwDocPosUpdate::SwDocPosUpdate( const SwTwips nDcPos )
 
 SwTableFormulaUpdate::SwTableFormulaUpdate( const SwTable* pNewTable )
     : SwMsgPoolItem( RES_TABLEFML_UPDATE ),
-    m_pTable( pNewTable ), m_pHistory( 0 ), m_nSplitLine( USHRT_MAX ),
+    m_pTable( pNewTable ), m_pHistory( nullptr ), m_nSplitLine( USHRT_MAX ),
     m_eFlags( TBL_CALC )
 {
-    m_aData.pDelTable = 0;
+    m_aData.pDelTable = nullptr;
     m_bModified = m_bBehindSplitLine = false;
     OSL_ENSURE( m_pTable, "No Table pointer" );
 }
 
 SwAutoFormatGetDocNode::SwAutoFormatGetDocNode( const SwNodes* pNds )
-    : SwMsgPoolItem( RES_AUTOFMT_DOCNODE ), pContentNode( 0 ), pNodes( pNds )
+    : SwMsgPoolItem( RES_AUTOFMT_DOCNODE ), pContentNode( nullptr ), pNodes( pNds )
 {
 }
 
@@ -120,7 +120,7 @@ bool SwMsgPoolItem::operator==( const SfxPoolItem& ) const
 SfxPoolItem* SwMsgPoolItem::Clone( SfxItemPool* ) const
 {
     OSL_FAIL( "SwMsgPoolItem knows no Clone" );
-    return 0;
+    return nullptr;
 }
 
 #if OSL_DEBUG_LEVEL > 0
@@ -145,12 +145,12 @@ SwCondCollCondChg::SwCondCollCondChg( SwFormat *pFormat )
 }
 
 SwVirtPageNumInfo::SwVirtPageNumInfo( const SwPageFrm *pPg ) :
-    SwMsgPoolItem( RES_VIRTPAGENUM_INFO ), m_pPage( 0 ), m_pOrigPage( pPg ), m_pFrm( 0 )
+    SwMsgPoolItem( RES_VIRTPAGENUM_INFO ), m_pPage( nullptr ), m_pOrigPage( pPg ), m_pFrm( nullptr )
 {
 }
 
 SwFindNearestNode::SwFindNearestNode( const SwNode& rNd )
-    : SwMsgPoolItem( RES_FINDNEARESTNODE ), m_pNode( &rNd ), m_pFound( 0 )
+    : SwMsgPoolItem( RES_FINDNEARESTNODE ), m_pNode( &rNd ), m_pFound( nullptr )
 {
 }
 
@@ -213,7 +213,7 @@ sal_uInt16 GetWhichOfScript( sal_uInt16 nWhich, sal_uInt16 nScript )
         break;
 
     default:
-        pM = 0;
+        pM = nullptr;
     }
 
     sal_uInt16 nRet;

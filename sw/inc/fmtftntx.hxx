@@ -63,7 +63,7 @@ public:
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     OUString &rText,
-                                    const IntlWrapper* pIntl = 0 ) const override;
+                                    const IntlWrapper* pIntl = nullptr ) const override;
 
     inline bool IsAtEnd() const { return FTNEND_ATPGORDOCEND != GetValue(); }
 
@@ -91,7 +91,7 @@ public:
         : SwFormatFootnoteEndAtTextEnd( RES_FTN_AT_TXTEND, ePos )
     {}
 
-    virtual SfxPoolItem* Clone( SfxItemPool *pPool = 0 ) const override;
+    virtual SfxPoolItem* Clone( SfxItemPool *pPool = nullptr ) const override;
 };
 
 class SW_DLLPUBLIC SwFormatEndAtTextEnd : public SwFormatFootnoteEndAtTextEnd
@@ -103,7 +103,7 @@ public:
         SetNumType( SVX_NUM_ROMAN_LOWER );
     }
 
-    virtual SfxPoolItem* Clone( SfxItemPool *pPool = 0 ) const override;
+    virtual SfxPoolItem* Clone( SfxItemPool *pPool = nullptr ) const override;
 };
 
 inline const SwFormatFootnoteAtTextEnd &SwAttrSet::GetFootnoteAtTextEnd(bool bInP) const

@@ -96,7 +96,7 @@ namespace {
                 continue;
             }
 
-            SwWrongList* pMarkupList( 0 );
+            SwWrongList* pMarkupList( nullptr );
             switch ( pActRedline->GetType() )
             {
                 case nsRedlineType_t::REDLINE_INSERT:
@@ -127,7 +127,7 @@ namespace {
                 const sal_Int32 nTextFrmChangeTrackEnd =
                     std::min(nTextNodeChangeTrackEnd, nTextFrmTextEndPos);
 
-                pMarkupList->Insert( OUString(), 0,
+                pMarkupList->Insert( OUString(), nullptr,
                                      nTextFrmChangeTrackStart,
                                      nTextFrmChangeTrackEnd - nTextFrmChangeTrackStart,
                                      pMarkupList->Count() );
@@ -138,9 +138,9 @@ namespace {
 
 SwParaChangeTrackingInfo::SwParaChangeTrackingInfo( const SwTextFrm& rTextFrm )
     : mrTextFrm( rTextFrm )
-    , mpChangeTrackInsertionTextMarkupList( 0 )
-    , mpChangeTrackDeletionTextMarkupList( 0 )
-    , mpChangeTrackFormatChangeTextMarkupList( 0 )
+    , mpChangeTrackInsertionTextMarkupList( nullptr )
+    , mpChangeTrackDeletionTextMarkupList( nullptr )
+    , mpChangeTrackFormatChangeTextMarkupList( nullptr )
 {
 }
 
@@ -152,24 +152,24 @@ SwParaChangeTrackingInfo::~SwParaChangeTrackingInfo()
 void SwParaChangeTrackingInfo::reset()
 {
     delete mpChangeTrackInsertionTextMarkupList;
-    mpChangeTrackInsertionTextMarkupList = 0;
+    mpChangeTrackInsertionTextMarkupList = nullptr;
 
     delete mpChangeTrackDeletionTextMarkupList;
-    mpChangeTrackDeletionTextMarkupList = 0;
+    mpChangeTrackDeletionTextMarkupList = nullptr;
 
     delete mpChangeTrackFormatChangeTextMarkupList;
-    mpChangeTrackFormatChangeTextMarkupList = 0;
+    mpChangeTrackFormatChangeTextMarkupList = nullptr;
 }
 
 const SwWrongList* SwParaChangeTrackingInfo::getChangeTrackingTextMarkupList( const sal_Int32 nTextMarkupType )
 {
-    SwWrongList* pChangeTrackingTextMarkupList = 0;
+    SwWrongList* pChangeTrackingTextMarkupList = nullptr;
 
-    if ( mpChangeTrackInsertionTextMarkupList == 0 )
+    if ( mpChangeTrackInsertionTextMarkupList == nullptr )
     {
-        OSL_ENSURE( mpChangeTrackDeletionTextMarkupList == 0,
+        OSL_ENSURE( mpChangeTrackDeletionTextMarkupList == nullptr,
                 "<SwParaChangeTrackingInfo::getChangeTrackingTextMarkupList(..) - <mpChangeTrackDeletionTextMarkupList> expected to be NULL." );
-        OSL_ENSURE( mpChangeTrackFormatChangeTextMarkupList == 0,
+        OSL_ENSURE( mpChangeTrackFormatChangeTextMarkupList == nullptr,
                 "<SwParaChangeTrackingInfo::getChangeTrackingTextMarkupList(..) - <mpChangeTrackFormatChangeTextMarkupList> expected to be NULL." );
         initChangeTrackTextMarkupLists( mrTextFrm,
                                         mpChangeTrackInsertionTextMarkupList,

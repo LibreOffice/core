@@ -65,15 +65,15 @@ void  SwTbxAnchor::StateChanged( sal_uInt16 /*nSID*/, SfxItemState eState, const
 VclPtr<SfxPopupWindow> SwTbxAnchor::CreatePopupWindow()
 {
     SwTbxAnchor::Click();
-    return 0;
+    return nullptr;
 }
 
 void  SwTbxAnchor::Click()
 {
     PopupMenu aPopMenu(SW_RES(MN_ANCHOR_POPUP));
 
-    SfxViewFrame*   pViewFrame( 0 );
-    SfxDispatcher*  pDispatch( 0 );
+    SfxViewFrame*   pViewFrame( nullptr );
+    SfxDispatcher*  pDispatch( nullptr );
     SfxViewShell*   pCurSh( SfxViewShell::Current() );
 
     if ( pCurSh )
@@ -83,7 +83,7 @@ void  SwTbxAnchor::Click()
             pDispatch = pViewFrame->GetDispatcher();
     }
 
-    SwView* pActiveView = 0;
+    SwView* pActiveView = nullptr;
     if(pViewFrame)
     {
         SwView* pView = static_cast<SwView*>(SfxViewShell::GetFirst(true, checkSfxViewShell<SwView>));
@@ -103,7 +103,7 @@ void  SwTbxAnchor::Click()
         return;
     }
     SwWrtShell* pWrtShell = pActiveView->GetWrtShellPtr();
-    aPopMenu.EnableItem( FN_TOOL_ANCHOR_FRAME, 0 != pWrtShell->IsFlyInFly() );
+    aPopMenu.EnableItem( FN_TOOL_ANCHOR_FRAME, nullptr != pWrtShell->IsFlyInFly() );
 
     Rectangle aRect(GetToolBox().GetItemRect(GetId()));
 

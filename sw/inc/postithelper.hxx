@@ -57,7 +57,7 @@ struct SwLayoutInfo
     sal_uInt16 mRedlineAuthor;
 
     SwLayoutInfo()
-        : mpAnchorFrm(0)
+        : mpAnchorFrm(nullptr)
         , mPosition()
         , mnStartNodeIdx( 0 )
         , mnStartContent( -1 )
@@ -79,7 +79,7 @@ namespace SwPostItHelper
     SwLayoutStatus getLayoutInfos(
         SwLayoutInfo& o_rInfo,
         const SwPosition& rAnchorPos,
-        const SwPosition* pAnnotationStartPos = NULL );
+        const SwPosition* pAnnotationStartPos = nullptr );
 
     long getLayoutHeight( const SwRootFrm* pRoot );
     void setSidebarChanged( SwRootFrm* pRoot, bool bBrowseMode );
@@ -98,7 +98,7 @@ public:
 
     SwSidebarItem( const bool aShow,
                    const bool aFocus)
-        : pPostIt(0)
+        : pPostIt(nullptr)
         , bShow(aShow)
         , bFocus(aFocus)
         , mLayoutStatus( SwPostItHelper::INVISIBLE )

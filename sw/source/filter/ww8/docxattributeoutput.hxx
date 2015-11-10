@@ -57,7 +57,7 @@ struct FieldInfos
     bool        bOpen;
     bool        bClose;
     OUString    sCmd;
-    FieldInfos() : pFieldmark(NULL), eType(ww::eUNKNOWN), bOpen(false), bClose(false){}
+    FieldInfos() : pFieldmark(nullptr), eType(ww::eUNKNOWN), bOpen(false), bClose(false){}
 };
 
 enum DocxColBreakStatus
@@ -288,7 +288,7 @@ public:
 
     /// Write a section break
     /// msword::ColumnBreak or msword::PageBreak
-    virtual void SectionBreak( sal_uInt8 nC, const WW8_SepInfo* pSectionInfo = NULL ) override;
+    virtual void SectionBreak( sal_uInt8 nC, const WW8_SepInfo* pSectionInfo = nullptr ) override;
 
     // preserve DOCX page vertical alignment
     virtual void TextVerticalAdjustment( const css::drawing::TextVerticalAdjust ) SAL_OVERRIDE;
@@ -364,7 +364,7 @@ public:
         sal_Int16 nFirstLineIndex,
         sal_Int16 nListTabPos,
         const OUString &rNumberingString,
-        const SvxBrushItem* pBrush = 0 ) override;
+        const SvxBrushItem* pBrush = nullptr ) override;
 
     void WriteField_Impl( const SwField* pField, ww::eField eType, const OUString& rFieldCmd, sal_uInt8 nMode );
     void WriteFormData_Impl( const ::sw::mark::IFieldmark& rFieldmark );
@@ -408,7 +408,7 @@ private:
     /// replacement graphics, set the first as 0, and pass the remaining three.
     ///
     /// @see WriteOLE2Obj()
-    void FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size& rSize, const SwFlyFrameFormat* pOLEFrameFormat = 0, SwOLENode* pOLENode = 0, const SdrObject* pSdrObj = 0);
+    void FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size& rSize, const SwFlyFrameFormat* pOLEFrameFormat = nullptr, SwOLENode* pOLENode = nullptr, const SdrObject* pSdrObj = nullptr);
     void WriteSrcRect( const SdrObject* pSdrObj );
     void WriteOLE2Obj( const SdrObject* pSdrObj, SwOLENode& rNode, const Size& rSize, const SwFlyFrameFormat* pFlyFrameFormat);
     bool WriteOLEChart( const SdrObject* pSdrObj, const Size& rSize );

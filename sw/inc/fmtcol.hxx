@@ -67,7 +67,7 @@ protected:
     SwTextFormatColl *mpNextTextFormatColl;
 
     SwTextFormatColl( SwAttrPool& rPool, const sal_Char* pFormatCollName,
-                    SwTextFormatColl* pDerFrom = 0,
+                    SwTextFormatColl* pDerFrom = nullptr,
                     sal_uInt16 nFormatWh = RES_TXTFMTCOLL )
         : SwFormatColl(rPool, pFormatCollName, aTextFormatCollSetRange, pDerFrom, nFormatWh)
         , mbStayAssignedToListLevelOfOutlineStyle(false)
@@ -77,7 +77,7 @@ protected:
     }
 
     SwTextFormatColl( SwAttrPool& rPool, const OUString &rFormatCollName,
-                    SwTextFormatColl* pDerFrom = 0,
+                    SwTextFormatColl* pDerFrom = nullptr,
                     sal_uInt16 nFormatWh = RES_TXTFMTCOLL )
         : SwFormatColl(rPool, rFormatCollName, aTextFormatCollSetRange, pDerFrom, nFormatWh)
         , mbStayAssignedToListLevelOfOutlineStyle(false)
@@ -141,13 +141,13 @@ class SwGrfFormatColl: public SwFormatColl
     friend class SwDoc;
 protected:
     SwGrfFormatColl( SwAttrPool& rPool, const sal_Char* pFormatCollName,
-                    SwGrfFormatColl* pDerFrom = 0 )
+                    SwGrfFormatColl* pDerFrom = nullptr )
         : SwFormatColl( rPool, pFormatCollName, aGrfFormatCollSetRange,
                     pDerFrom, RES_GRFFMTCOLL )
     {}
 
     SwGrfFormatColl( SwAttrPool& rPool, const OUString &rFormatCollName,
-                    SwGrfFormatColl* pDerFrom = 0 )
+                    SwGrfFormatColl* pDerFrom = nullptr )
         : SwFormatColl( rPool, rFormatCollName, aGrfFormatCollSetRange,
                     pDerFrom, RES_GRFFMTCOLL )
     {}
@@ -223,11 +223,11 @@ protected:
     SwFormatCollConditions m_CondColls;
 
     SwConditionTextFormatColl( SwAttrPool& rPool, const sal_Char* pFormatCollName,
-                            SwTextFormatColl* pDerFrom = 0 )
+                            SwTextFormatColl* pDerFrom = nullptr )
         : SwTextFormatColl( rPool, pFormatCollName, pDerFrom, RES_CONDTXTFMTCOLL )
     {}
     SwConditionTextFormatColl( SwAttrPool& rPool, const OUString &rFormatCollName,
-                            SwTextFormatColl* pDerFrom = 0 )
+                            SwTextFormatColl* pDerFrom = nullptr )
         : SwTextFormatColl( rPool, rFormatCollName, pDerFrom, RES_CONDTXTFMTCOLL )
     {}
 

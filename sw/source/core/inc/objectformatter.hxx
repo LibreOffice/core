@@ -77,7 +77,7 @@ class SwObjectFormatter
 
     protected:
         SwObjectFormatter( const SwPageFrm& _rPageFrm,
-                           SwLayAction* _pLayAction = 0L,
+                           SwLayAction* _pLayAction = nullptr,
                            const bool _bCollectPgNumOfAnchors = false );
 
         static SwObjectFormatter* CreateObjFormatter( SwFrm& _rAnchorFrm,
@@ -121,7 +121,7 @@ class SwObjectFormatter
             @param _pMasterTextFrm
             input parameter - pointer to 'master' text frame. default value: NULL
         */
-        bool _FormatObjsAtFrm( SwTextFrm* _pMasterTextFrm = 0L );
+        bool _FormatObjsAtFrm( SwTextFrm* _pMasterTextFrm = nullptr );
 
         /** accessor to collected anchored object
         */
@@ -168,14 +168,14 @@ class SwObjectFormatter
         */
         static bool FormatObjsAtFrm( SwFrm& _rAnchorFrm,
                                      const SwPageFrm& _rPageFrm,
-                                     SwLayAction* _pLayAction = 0L );
+                                     SwLayAction* _pLayAction = nullptr );
 
         /** method to format a given floating screen object
         */
         static bool FormatObj( SwAnchoredObject& _rAnchoredObj,
-                               SwFrm* _pAnchorFrm = 0L,
-                               const SwPageFrm* _pPageFrm = 0L,
-                               SwLayAction* _pLayAction = 0L );
+                               SwFrm* _pAnchorFrm = nullptr,
+                               const SwPageFrm* _pPageFrm = nullptr,
+                               SwLayAction* _pLayAction = nullptr );
 };
 
 #endif

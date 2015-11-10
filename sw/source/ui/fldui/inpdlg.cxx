@@ -36,9 +36,9 @@ SwFieldInputDlg::SwFieldInputDlg( vcl::Window *pParent, SwWrtShell &rS,
     : SvxStandardDialog( pParent, "InputFieldDialog",
         "modules/swriter/ui/inputfielddialog.ui")
     , rSh( rS )
-    , pInpField(0)
-    , pSetField(0)
-    , pUsrType(0)
+    , pInpField(nullptr)
+    , pSetField(nullptr)
+    , pUsrType(nullptr)
 {
     get(m_pLabelED, "name");
     get(m_pEditED, "text");
@@ -73,7 +73,7 @@ SwFieldInputDlg::SwFieldInputDlg( vcl::Window *pParent, SwWrtShell &rS,
 
             case INP_USR:
                 // user field
-                if( 0 != ( pUsrType = static_cast<SwUserFieldType*>(rSh.GetFieldType(
+                if( nullptr != ( pUsrType = static_cast<SwUserFieldType*>(rSh.GetFieldType(
                             RES_USERFLD, pInpField->GetPar1() ) )  ) )
                     aStr = pUsrType->GetContent();
                 break;

@@ -106,7 +106,7 @@ void SwView::ExecLingu(SfxRequest &rReq)
             rReq.Ignore();
             break;
         case SID_HANGUL_HANJA_CONVERSION:
-            StartTextConversion( LANGUAGE_KOREAN, LANGUAGE_KOREAN, NULL,
+            StartTextConversion( LANGUAGE_KOREAN, LANGUAGE_KOREAN, nullptr,
                     i18n::TextConversionOption::CHARACTER_BY_CHARACTER, true );
             break;
         case SID_CHINESE_CONVERSION:
@@ -127,7 +127,7 @@ void SwView::ExecLingu(SfxRequest &rReq)
                     if( xInit.is() )
                     {
                         //  initialize dialog
-                        Reference< awt::XWindow > xDialogParentWindow(0);
+                        Reference< awt::XWindow > xDialogParentWindow(nullptr);
                         Sequence<Any> aSeq(1);
                         Any* pArray = aSeq.getArray();
                         PropertyValue aParam;
@@ -247,7 +247,7 @@ void SwView::StartTextConversion(
         m_pWrtShell->GetCrsr() != m_pWrtShell->GetCrsr()->GetNext();
 
     const bool  bStart = bSelection || m_pWrtShell->IsStartOfDoc();
-    const bool  bOther = !bSelection && !(m_pWrtShell->GetFrmType(0,true) & FrmTypeFlags::BODY);
+    const bool  bOther = !bSelection && !(m_pWrtShell->GetFrmType(nullptr,true) & FrmTypeFlags::BODY);
 
     {
         const uno::Reference< uno::XComponentContext > xContext(
@@ -456,7 +456,7 @@ void SwView::HyphenateDocument()
         bool bOther = m_pWrtShell->HasOtherCnt() && bHyphSpecial && !bSelection;
         bool bStart = bSelection || ( !bOther && m_pWrtShell->IsStartOfDoc() );
         bool bStop = false;
-        if( !bOther && !(m_pWrtShell->GetFrmType(0,true) & FrmTypeFlags::BODY) && !bSelection )
+        if( !bOther && !(m_pWrtShell->GetFrmType(nullptr,true) & FrmTypeFlags::BODY) && !bSelection )
         // turned on no special area
         {
             // I want also in special areas hyphenation
@@ -521,7 +521,7 @@ void SwView::InsertThesaurusSynonym( const OUString &rSynonmText, const OUString
         sal_Int32 nLeft = 0;
         while (pChar && *pChar++ == CH_TXTATR_INWORD)
             ++nLeft;
-        pChar = rLookUpText.getLength() ? rLookUpText.getStr() + rLookUpText.getLength() - 1 : 0;
+        pChar = rLookUpText.getLength() ? rLookUpText.getStr() + rLookUpText.getLength() - 1 : nullptr;
         sal_Int32 nRight = 0;
         while (pChar && *pChar-- == CH_TXTATR_INWORD)
             ++nRight;
@@ -717,7 +717,7 @@ bool SwView::ExecSpellPopup(const Point& rPt)
                 aEvent.SourceWindow = VCLUnoHelper::GetInterface( m_pEditWin );
                 aEvent.ExecutePosition.X = aPixPos.X();
                 aEvent.ExecutePosition.Y = aPixPos.Y();
-                Menu* pMenu = 0;
+                Menu* pMenu = nullptr;
 
                 OUString sMenuName  = bUseGrammarContext ?
                     OUString("private:resource/GrammarContextMenu") : OUString("private:resource/SpellContextMenu");
@@ -761,7 +761,7 @@ bool SwView::ExecSpellPopup(const Point& rPt)
                                     pExecuteInfo->xDispatch     = xDispatch;
                                     pExecuteInfo->aTargetURL    = aURL;
                                     pExecuteInfo->aArgs         = aArgs;
-                                    Application::PostUserEvent( LINK(0, AsyncExecute , ExecuteHdl_Impl), pExecuteInfo );
+                                    Application::PostUserEvent( LINK(nullptr, AsyncExecute , ExecuteHdl_Impl), pExecuteInfo );
                                 }
                             }
                             catch (const Exception&)
@@ -836,7 +836,7 @@ SwFieldDialog::SwFieldDialog( SwEditWin* parent, IFieldmark *fieldBM ) :
     aListBox(VclPtr<ListBox>::Create(this)),
     pFieldmark( fieldBM )
 {
-    if ( fieldBM != NULL )
+    if ( fieldBM != nullptr )
     {
         const IFieldmark::parameter_map_t* const pParameters = fieldBM->GetParameters();
 

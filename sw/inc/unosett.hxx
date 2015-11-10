@@ -66,7 +66,7 @@ public:
     virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) throw( css::uno::RuntimeException, std::exception ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( css::uno::RuntimeException, std::exception ) override;
 
-    void            Invalidate() {pDoc = 0;}
+    void            Invalidate() {pDoc = nullptr;}
 };
 
 class SwXEndnoteProperties : public cppu::WeakAggImplHelper2
@@ -96,7 +96,7 @@ public:
     virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) throw( css::uno::RuntimeException, std::exception ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( css::uno::RuntimeException, std::exception ) override;
 
-    void            Invalidate() {pDoc = 0;}
+    void            Invalidate() {pDoc = nullptr;}
 };
 
 class SwXLineNumberingProperties : public cppu::WeakAggImplHelper2
@@ -126,7 +126,7 @@ public:
     virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) throw( css::uno::RuntimeException, std::exception ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( css::uno::RuntimeException, std::exception ) override;
 
-    void            Invalidate() {pDoc = 0;}
+    void            Invalidate() {pDoc = nullptr;}
 };
 
 class SwXNumberingRules : public cppu::WeakAggImplHelper5
@@ -155,7 +155,7 @@ protected:
 
 public:
     SwXNumberingRules(SwDocShell& rDocSh);  // chapter numbering
-    SwXNumberingRules(const SwNumRule& rRule, SwDoc* doc = NULL); // NumRule for paragraphs, numbering styles
+    SwXNumberingRules(const SwNumRule& rRule, SwDoc* doc = nullptr); // NumRule for paragraphs, numbering styles
     SwXNumberingRules(SwDoc& rDoc); //create a new instance
 
     static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId();
@@ -202,7 +202,7 @@ public:
     const SwNumRule*        GetNumRule() {return pNumRule;}
 
     static bool             isInvalidStyle(const OUString &rName);
-    void    Invalidate()    {pDocShell = 0;}
+    void    Invalidate()    {pDocShell = nullptr;}
     OUString                GetCreatedNumRuleName() const {return m_sCreatedNumRuleName;}
 
     static css::uno::Sequence<css::beans::PropertyValue> GetPropertiesForNumFormat(

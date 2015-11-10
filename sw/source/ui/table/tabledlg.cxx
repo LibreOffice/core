@@ -66,7 +66,7 @@ using namespace ::com::sun::star;
 SwFormatTablePage::SwFormatTablePage(vcl::Window* pParent, const SfxItemSet& rSet)
     : SfxTabPage(pParent, "FormatTablePage", "modules/swriter/ui/formattablepage.ui", &rSet)
     , m_aTextFilter(" .<>")
-    , pTableData(0)
+    , pTableData(nullptr)
     , nSaveWidth(0)
     , nMinTableWidth(MINLAY)
     , bModified(false)
@@ -738,7 +738,7 @@ SfxTabPage::sfxpg SwFormatTablePage::DeactivatePage( SfxItemSet* _pSet )
 SwTableColumnPage::SwTableColumnPage(vcl::Window* pParent, const SfxItemSet& rSet)
     : SfxTabPage(pParent, "TableColumnPage",
         "modules/swriter/ui/tablecolumnpage.ui", &rSet)
-    , pTableData(0)
+    , pTableData(nullptr)
     , nTableWidth(0)
     , nMinWidth(MINLAY)
     , nNoOfCols(0)
@@ -958,7 +958,7 @@ bool  SwTableColumnPage::FillItemSet( SfxItemSet* )
 
 void   SwTableColumnPage::ModifyHdl( MetricField* pField )
 {
-        PercentField *pEdit = NULL;
+        PercentField *pEdit = nullptr;
         sal_uInt16 i;
 
         for( i = 0; i < MET_FIELDS; i++)
@@ -1235,17 +1235,17 @@ void SwTableColumnPage::SetVisibleWidth(sal_uInt16 nPos, SwTwips nNewWidth)
 
 SwTableTabDlg::SwTableTabDlg(vcl::Window* pParent, SfxItemPool&,
     const SfxItemSet* pItemSet, SwWrtShell* pSh)
-    : SfxTabDialog(0, pParent, "TablePropertiesDialog",
+    : SfxTabDialog(nullptr, pParent, "TablePropertiesDialog",
         "modules/swriter/ui/tableproperties.ui", pItemSet)
     , pShell(pSh)
 {
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
     OSL_ENSURE(pFact, "Dialog creation failed!");
-    AddTabPage("table", &SwFormatTablePage::Create, 0);
-    m_nTextFlowId = AddTabPage("textflow", &SwTextFlowPage::Create, 0);
-    AddTabPage("columns", &SwTableColumnPage::Create, 0);
-    m_nBackgroundId = AddTabPage("background", pFact->GetTabPageCreatorFunc(RID_SVXPAGE_BACKGROUND), 0);
-    m_nBorderId = AddTabPage("borders", pFact->GetTabPageCreatorFunc(RID_SVXPAGE_BORDER), 0);
+    AddTabPage("table", &SwFormatTablePage::Create, nullptr);
+    m_nTextFlowId = AddTabPage("textflow", &SwTextFlowPage::Create, nullptr);
+    AddTabPage("columns", &SwTableColumnPage::Create, nullptr);
+    m_nBackgroundId = AddTabPage("background", pFact->GetTabPageCreatorFunc(RID_SVXPAGE_BACKGROUND), nullptr);
+    m_nBorderId = AddTabPage("borders", pFact->GetTabPageCreatorFunc(RID_SVXPAGE_BORDER), nullptr);
 }
 
 void  SwTableTabDlg::PageCreated(sal_uInt16 nId, SfxTabPage& rPage)
@@ -1265,7 +1265,7 @@ void  SwTableTabDlg::PageCreated(sal_uInt16 nId, SfxTabPage& rPage)
     else if (nId == m_nTextFlowId)
     {
         static_cast<SwTextFlowPage&>(rPage).SetShell(pShell);
-        const FrmTypeFlags eType = pShell->GetFrmType(0,true);
+        const FrmTypeFlags eType = pShell->GetFrmType(nullptr,true);
         if( !(FrmTypeFlags::BODY & eType) )
             static_cast<SwTextFlowPage&>(rPage).DisablePageBreak();
     }
@@ -1274,7 +1274,7 @@ void  SwTableTabDlg::PageCreated(sal_uInt16 nId, SfxTabPage& rPage)
 SwTextFlowPage::SwTextFlowPage(vcl::Window* pParent, const SfxItemSet& rSet)
     : SfxTabPage(pParent, "TableTextFlowPage",
         "modules/swriter/ui/tabletextflowpage.ui", &rSet)
-    , pShell(0)
+    , pShell(nullptr)
     , bPageBreak(true)
     , bHtmlMode(false)
 {
@@ -1380,17 +1380,17 @@ bool  SwTextFlowPage::FillItemSet( SfxItemSet* rSet )
     if(m_pHeadLineCB->IsValueChangedFromSaved() ||
        m_pRepeatHeaderNF->IsValueChangedFromSaved() )
     {
-        bModified |= 0 != rSet->Put(
+        bModified |= nullptr != rSet->Put(
             SfxUInt16Item(FN_PARAM_TABLE_HEADLINE, m_pHeadLineCB->IsChecked()? sal_uInt16(m_pRepeatHeaderNF->GetValue()) : 0 ));
     }
     if(m_pKeepCB->IsValueChangedFromSaved())
-        bModified |= 0 != rSet->Put( SvxFormatKeepItem( m_pKeepCB->IsChecked(), RES_KEEP));
+        bModified |= nullptr != rSet->Put( SvxFormatKeepItem( m_pKeepCB->IsChecked(), RES_KEEP));
 
     if(m_pSplitCB->IsValueChangedFromSaved())
-        bModified |= 0 != rSet->Put( SwFormatLayoutSplit( m_pSplitCB->IsChecked()));
+        bModified |= nullptr != rSet->Put( SwFormatLayoutSplit( m_pSplitCB->IsChecked()));
 
     if(m_pSplitRowCB->IsValueChangedFromSaved())
-        bModified |= 0 != rSet->Put( SwFormatRowSplit( m_pSplitRowCB->IsChecked()));
+        bModified |= nullptr != rSet->Put( SwFormatRowSplit( m_pSplitRowCB->IsChecked()));
 
     const SvxFormatBreakItem* pBreak = static_cast<const SvxFormatBreakItem*>(GetOldItem( *rSet, RES_BREAK ));
     const SwFormatPageDesc* pDesc = static_cast<const SwFormatPageDesc*>(GetOldItem( *rSet, RES_PAGEDESC ));
@@ -1417,7 +1417,7 @@ bool  SwTextFlowPage::FillItemSet( SfxItemSet* rSet )
         {
             SwFormatPageDesc aFormat( pShell->FindPageDescByName( sPage, true ) );
             aFormat.SetNumOffset(bState ? nPgNum : 0);
-            bModified |= 0 != rSet->Put( aFormat );
+            bModified |= nullptr != rSet->Put( aFormat );
             bPageItemPut = bState;
         }
     }
@@ -1457,13 +1457,13 @@ bool  SwTextFlowPage::FillItemSet( SfxItemSet* rSet )
 
         if ( !pBreak || !( *pBreak == aBreak ) )
         {
-            bModified |= 0 != rSet->Put( aBreak );
+            bModified |= nullptr != rSet->Put( aBreak );
         }
     }
 
     if(m_pTextDirectionLB->IsValueChangedFromSaved())
     {
-          bModified |= 0 != rSet->Put(
+          bModified |= nullptr != rSet->Put(
                     SvxFrameDirectionItem(
                         (SvxFrameDirection)reinterpret_cast<sal_uLong>(m_pTextDirectionLB->GetSelectEntryData())
                         , FN_TABLE_BOX_TEXTORIENTATION));
@@ -1479,7 +1479,7 @@ bool  SwTextFlowPage::FillItemSet( SfxItemSet* rSet )
             case 2 : nOrient = text::VertOrientation::BOTTOM; break;
         }
         if(nOrient != USHRT_MAX)
-            bModified |= 0 != rSet->Put(SfxUInt16Item(FN_TABLE_SET_VERT_ALIGN, nOrient));
+            bModified |= nullptr != rSet->Put(SfxUInt16Item(FN_TABLE_SET_VERT_ALIGN, nOrient));
     }
 
     return bModified;

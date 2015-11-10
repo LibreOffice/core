@@ -64,7 +64,7 @@
 
 long SwSelPaintRects::s_nPixPtX = 0;
 long SwSelPaintRects::s_nPixPtY = 0;
-MapMode* SwSelPaintRects::s_pMapMode = 0;
+MapMode* SwSelPaintRects::s_pMapMode = nullptr;
 
 // Starting from here: classes / methods for the non-text-cursor
 SwVisCrsr::SwVisCrsr( const SwCrsrShell * pCShell )
@@ -82,7 +82,7 @@ SwVisCrsr::~SwVisCrsr()
     if( m_bIsVisible && m_aTextCrsr.IsVisible() )
         m_aTextCrsr.Hide();
 
-    m_pCrsrShell->GetWin()->SetCursor( 0 );
+    m_pCrsrShell->GetWin()->SetCursor( nullptr );
 }
 
 void SwVisCrsr::Show()
@@ -140,7 +140,7 @@ void SwVisCrsr::_SetPosAndShow()
         if( rNode.IsTextNode() )
         {
             const SwTextNode& rTNd = *rNode.GetTextNode();
-            const SwFrm* pFrm = rTNd.getLayoutFrm( m_pCrsrShell->GetLayout(), 0, 0, false );
+            const SwFrm* pFrm = rTNd.getLayoutFrm( m_pCrsrShell->GetLayout(), nullptr, nullptr, false );
             if ( pFrm )
             {
                 const SwScriptInfo* pSI = static_cast<const SwTextFrm*>(pFrm)->GetScriptInfo();
@@ -211,7 +211,7 @@ void SwVisCrsr::_SetPosAndShow()
         if( nStyle != m_aTextCrsr.GetStyle() )
         {
             m_aTextCrsr.SetStyle( nStyle );
-            m_aTextCrsr.SetWindow( m_bIsDragCrsr ? m_pCrsrShell->GetWin() : 0 );
+            m_aTextCrsr.SetWindow( m_bIsDragCrsr ? m_pCrsrShell->GetWin() : nullptr );
         }
 
         m_aTextCrsr.Show();
@@ -421,7 +421,7 @@ void SwSelPaintRects::HighlightInputField()
     {
         SwTextInputField* pCurTextInputFieldAtCrsr =
             dynamic_cast<SwTextInputField*>(SwCrsrShell::GetTextFieldAtPos( GetShell()->GetCrsr()->Start(), false ));
-        if ( pCurTextInputFieldAtCrsr != NULL )
+        if ( pCurTextInputFieldAtCrsr != nullptr )
         {
             SwTextNode* pTextNode = pCurTextInputFieldAtCrsr->GetpTextNode();
             std::unique_ptr<SwShellCrsr> pCrsrForInputTextField(
@@ -539,7 +539,7 @@ void SwSelPaintRects::Get1PixelInLogic( const SwViewShell& rSh,
 SwShellCrsr::SwShellCrsr(
     const SwCrsrShell& rCShell,
     const SwPosition &rPos )
-    : SwCursor(rPos,0,false)
+    : SwCursor(rPos,nullptr,false)
     , SwSelPaintRects(rCShell)
     , m_pInitialPoint(SwPaM::GetPoint())
 {}
@@ -714,14 +714,14 @@ bool SwShellCrsr::IsAtValidPos( bool bPoint ) const
 
 SwShellTableCrsr::SwShellTableCrsr( const SwCrsrShell& rCrsrSh,
                                     const SwPosition& rPos )
-    : SwCursor(rPos,0,false), SwShellCrsr(rCrsrSh, rPos), SwTableCursor(rPos)
+    : SwCursor(rPos,nullptr,false), SwShellCrsr(rCrsrSh, rPos), SwTableCursor(rPos)
 {
 }
 
 SwShellTableCrsr::SwShellTableCrsr( const SwCrsrShell& rCrsrSh,
                     const SwPosition& rMkPos, const Point& rMkPt,
                     const SwPosition& rPtPos, const Point& rPtPt )
-    : SwCursor(rPtPos,0,false), SwShellCrsr(rCrsrSh, rPtPos), SwTableCursor(rPtPos)
+    : SwCursor(rPtPos,nullptr,false), SwShellCrsr(rCrsrSh, rPtPos), SwTableCursor(rPtPos)
 {
     SetMark();
     *GetMark() = rMkPos;
@@ -759,7 +759,7 @@ void SwShellTableCrsr::FillRects()
     if (GetShell()->isTiledRendering())
         aReg = GetShell()->getIDocumentLayoutAccess().GetCurrentLayout()->Frm();
     SwNodes& rNds = GetDoc()->GetNodes();
-    SwFrm* pEndFrm = 0;
+    SwFrm* pEndFrm = nullptr;
     for (size_t n = 0; n < m_SelectedBoxes.size(); ++n)
     {
         const SwStartNode* pSttNd = m_SelectedBoxes[n]->GetSttNd();
@@ -771,7 +771,7 @@ void SwShellTableCrsr::FillRects()
         // table in table
         // (see also lcl_FindTopLevelTable in unoobj2.cxx for a different
         // version to do this)
-        const SwTableNode* pCurTableNd = pCNd ? pCNd->FindTableNode() : NULL;
+        const SwTableNode* pCurTableNd = pCNd ? pCNd->FindTableNode() : nullptr;
         while ( pSelTableNd != pCurTableNd && pCurTableNd )
         {
             aIdx = pCurTableNd->EndOfSectionIndex();

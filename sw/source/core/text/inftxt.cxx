@@ -87,8 +87,8 @@ using namespace ::com::sun::star::beans;
 #define DRAW_SPECIAL_OPTIONS_ROTATE 2
 
 SwLineInfo::SwLineInfo()
-    : pRuler( 0 ),
-      pSpace( 0 ),
+    : pRuler( nullptr ),
+      pSpace( nullptr ),
       nVertAlign( 0 ),
       nDefTabStop( 0 ),
       bListTabStopIncluded( false ),
@@ -185,15 +185,15 @@ inline sal_Int32 GetMinLen( const SwTextSizeInfo &rInf )
 }
 
 SwTextSizeInfo::SwTextSizeInfo()
-: m_pKanaComp(0)
-, m_pVsh(0)
-, m_pOut(0)
-, m_pRef(0)
-, m_pFnt(0)
-, m_pUnderFnt(0)
-, m_pFrm(0)
-, m_pOpt(0)
-, m_pText(0)
+: m_pKanaComp(nullptr)
+, m_pVsh(nullptr)
+, m_pOut(nullptr)
+, m_pRef(nullptr)
+, m_pFnt(nullptr)
+, m_pUnderFnt(nullptr)
+, m_pFrm(nullptr)
+, m_pOpt(nullptr)
+, m_pText(nullptr)
 , m_nIdx(0)
 , m_nLen(0)
 , m_nKanaIdx(0)
@@ -250,7 +250,7 @@ SwTextSizeInfo::SwTextSizeInfo( const SwTextSizeInfo &rNew )
 void SwTextSizeInfo::CtorInitTextSizeInfo( OutputDevice* pRenderContext, SwTextFrm *pFrame, SwFont *pNewFnt,
                    const sal_Int32 nNewIdx, const sal_Int32 nNewLen )
 {
-    m_pKanaComp = NULL;
+    m_pKanaComp = nullptr;
     m_nKanaIdx = 0;
     m_pFrm = pFrame;
     CtorInitTextInfo( m_pFrm );
@@ -310,7 +310,7 @@ void SwTextSizeInfo::CtorInitTextSizeInfo( OutputDevice* pRenderContext, SwTextF
                    m_pFrm->IsInDocBody() );
 
     m_pFnt = pNewFnt;
-    m_pUnderFnt = 0;
+    m_pUnderFnt = nullptr;
     m_pText = &pNd->GetText();
 
     m_nIdx = nNewIdx;
@@ -452,7 +452,7 @@ sal_Int32 SwTextSizeInfo::GetTextBreak( const long nLineWidth,
     aDrawInf.SetFont( m_pFnt );
     aDrawInf.SetSnapToGrid( SnapToGrid() );
     aDrawInf.SetKanaComp( nComp );
-    aDrawInf.SetHyphPos( 0 );
+    aDrawInf.SetHyphPos( nullptr );
 
     return m_pFnt->GetTextBreak( aDrawInf, nLineWidth );
 }
@@ -489,15 +489,15 @@ void SwTextPaintInfo::CtorInitTextPaintInfo( OutputDevice* pRenderContext, SwTex
     aTextFly.CtorInitTextFly( pFrame ),
     aPaintRect = rPaint;
     nSpaceIdx = 0;
-    pSpaceAdd = NULL;
-    pWrongList = NULL;
-    pGrammarCheckList = NULL;
-    pSmartTags = NULL;
+    pSpaceAdd = nullptr;
+    pWrongList = nullptr;
+    pGrammarCheckList = nullptr;
+    pSmartTags = nullptr;
 
 #if OSL_DEBUG_LEVEL > 1
     pBrushItem = reinterpret_cast<SvxBrushItem*>(-1);
 #else
-    pBrushItem = 0;
+    pBrushItem = nullptr;
 #endif
 }
 
@@ -557,10 +557,10 @@ static bool lcl_IsDarkBackground( const SwTextPaintInfo& rInf )
 
             // Determined color <pCol> can be <COL_TRANSPARENT>. Thus, check it.
             if ( pCol->GetColor() == COL_TRANSPARENT)
-                pCol = NULL;
+                pCol = nullptr;
         }
         else
-            pCol = NULL;
+            pCol = nullptr;
     }
 
     if( !pCol )
@@ -607,12 +607,12 @@ void SwTextPaintInfo::_DrawText( const OUString &rText, const SwLinePortion &rPo
         else
         {
             delete pBlink;
-            pBlink = NULL;
+            pBlink = nullptr;
         }
     }
 
     // The SwScriptInfo is useless if we are inside a field portion
-    SwScriptInfo* pSI = 0;
+    SwScriptInfo* pSI = nullptr;
     if ( ! rPor.InFieldGrp() )
         pSI = &GetParaPortion()->GetScriptInfo();
 
@@ -708,9 +708,9 @@ void SwTextPaintInfo::_DrawText( const OUString &rText, const SwLinePortion &rPo
         aDrawInf.SetSize( aSize );
         aDrawInf.SetAscent( rPor.GetAscent() );
         aDrawInf.SetKern( bKern ? rPor.Width() : 0 );
-        aDrawInf.SetWrong( bTmpWrong ? pWrongList : NULL );
-        aDrawInf.SetGrammarCheck( bTmpGrammarCheck ? pGrammarCheckList : NULL );
-        aDrawInf.SetSmartTags( bTmpSmart ? pSmartTags : NULL );
+        aDrawInf.SetWrong( bTmpWrong ? pWrongList : nullptr );
+        aDrawInf.SetGrammarCheck( bTmpGrammarCheck ? pGrammarCheckList : nullptr );
+        aDrawInf.SetSmartTags( bTmpSmart ? pSmartTags : nullptr );
         GetTextFly().DrawTextOpaque( aDrawInf );
     }
     else
@@ -720,9 +720,9 @@ void SwTextPaintInfo::_DrawText( const OUString &rText, const SwLinePortion &rPo
             m_pFnt->_DrawStretchText( aDrawInf );
         else
         {
-            aDrawInf.SetWrong( bTmpWrong ? pWrongList : NULL );
-            aDrawInf.SetGrammarCheck( bTmpGrammarCheck ? pGrammarCheckList : NULL );
-            aDrawInf.SetSmartTags( bTmpSmart ? pSmartTags : NULL );
+            aDrawInf.SetWrong( bTmpWrong ? pWrongList : nullptr );
+            aDrawInf.SetGrammarCheck( bTmpGrammarCheck ? pGrammarCheckList : nullptr );
+            aDrawInf.SetSmartTags( bTmpSmart ? pSmartTags : nullptr );
             m_pFnt->_DrawText( aDrawInf );
         }
     }
@@ -842,7 +842,7 @@ static void lcl_DrawSpecial( const SwTextPaintInfo& rInf, const SwLinePortion& r
     const SwFont* pOldFnt = rInf.GetFont();
 
     // Font is generated only once:
-    static SwFont* m_pFnt = 0;
+    static SwFont* m_pFnt = nullptr;
     if ( ! m_pFnt )
     {
         m_pFnt = new SwFont( *pOldFnt );
@@ -1115,7 +1115,7 @@ void SwTextPaintInfo::DrawBackground( const SwLinePortion &rPor ) const
     OSL_ENSURE( OnWin(), "SwTextPaintInfo::DrawBackground: printer pollution ?" );
 
     SwRect aIntersect;
-    CalcRect( rPor, 0, &aIntersect, true );
+    CalcRect( rPor, nullptr, &aIntersect, true );
 
     if ( aIntersect.HasArea() )
     {
@@ -1142,11 +1142,11 @@ void SwTextPaintInfo::DrawBackBrush( const SwLinePortion &rPor ) const
 {
     {
         SwRect aIntersect;
-        CalcRect( rPor, &aIntersect, 0, true );
+        CalcRect( rPor, &aIntersect, nullptr, true );
         if(aIntersect.HasArea())
         {
             SwTextNode *pNd = m_pFrm->GetTextNode();
-            const ::sw::mark::IMark* pFieldmark = NULL;
+            const ::sw::mark::IMark* pFieldmark = nullptr;
             if(pNd)
             {
                 const SwDoc *doc=pNd->GetDoc();
@@ -1163,7 +1163,7 @@ void SwTextPaintInfo::DrawBackBrush( const SwLinePortion &rPor ) const
                 SAL_INFO("sw.core", pFieldmark->ToString() << "\n");
             }
             if(bIsStartMark) OSL_TRACE("Found StartMark");
-            if (OnWin() && (pFieldmark!=NULL || bIsStartMark) &&
+            if (OnWin() && (pFieldmark!=nullptr || bIsStartMark) &&
                     SwViewOption::IsFieldShadings() &&
                     !GetOpt().IsPagePreview())
             {
@@ -1178,14 +1178,14 @@ void SwTextPaintInfo::DrawBackBrush( const SwLinePortion &rPor ) const
     }
 
     SwRect aIntersect;
-    CalcRect( rPor, 0, &aIntersect, true );
+    CalcRect( rPor, nullptr, &aIntersect, true );
 
     if ( aIntersect.HasArea() )
     {
         OutputDevice* pTmpOut = const_cast<OutputDevice*>(GetOut());
 
         // #i16816# tagged pdf support
-        SwTaggedPDFHelper aTaggedPDFHelper( 0, 0, 0, *pTmpOut );
+        SwTaggedPDFHelper aTaggedPDFHelper( nullptr, nullptr, nullptr, *pTmpOut );
 
         Color aFillColor;
 
@@ -1277,7 +1277,7 @@ void SwTextPaintInfo::_NotifyURL( const SwLinePortion &rPor ) const
     OSL_ENSURE( pNoteURL, "NotifyURL: pNoteURL gone with the wind!" );
 
     SwRect aIntersect;
-    CalcRect( rPor, 0, &aIntersect );
+    CalcRect( rPor, nullptr, &aIntersect );
 
     if( aIntersect.HasArea() )
     {
@@ -1371,7 +1371,7 @@ void SwTextFormatInfo::CtorInitTextFormatInfo( OutputDevice* pRenderContext, SwT
     m_nFirst = 0;
     m_nRealWidth = 0;
     m_nForcedLeftMargin = 0;
-    m_pRest = 0;
+    m_pRest = nullptr;
     m_nLineHeight = 0;
     m_nLineNetHeight = 0;
     SetLineStart(0);
@@ -1422,7 +1422,7 @@ const SwFormatDrop *SwTextFormatInfo::GetDropFormat() const
     const SwFormatDrop *pDrop = &GetTextFrm()->GetTextNode()->GetSwAttrSet().GetDrop();
     if( 1 >= pDrop->GetLines() ||
         ( !pDrop->GetChars() && !pDrop->GetWholeWord() ) )
-        pDrop = 0;
+        pDrop = nullptr;
     return pDrop;
 }
 
@@ -1438,7 +1438,7 @@ void SwTextFormatInfo::Init()
     {
         const SwTextFrm* pMaster = GetTextFrm()->FindMaster();
         OSL_ENSURE(pMaster, "pTextFrm without Master");
-        const SwLinePortion* pTmpPara = pMaster ? pMaster->GetPara() : NULL;
+        const SwLinePortion* pTmpPara = pMaster ? pMaster->GetPara() : nullptr;
 
         // there is a master for this follow and the master does not have
         // any contents (especially it does not have a number portion)
@@ -1446,12 +1446,12 @@ void SwTextFormatInfo::Init()
                    ! static_cast<const SwParaPortion*>(pTmpPara)->GetFirstPortion()->IsFlyPortion();
     }
 
-    m_pRoot = 0;
-    m_pLast = 0;
-    m_pFly = 0;
-    m_pLastField = 0;
-    m_pLastTab = 0;
-    m_pUnderflow = 0;
+    m_pRoot = nullptr;
+    m_pLast = nullptr;
+    m_pFly = nullptr;
+    m_pLastField = nullptr;
+    m_pLastTab = nullptr;
+    m_pUnderflow = nullptr;
     m_cTabDecimal = 0;
     m_nWidth = m_nRealWidth;
     m_nForcedLeftMargin = 0;
@@ -1483,11 +1483,11 @@ SwTextFormatInfo::SwTextFormatInfo( const SwTextFormatInfo& rInf,
 {
     m_pRoot = &rLay;
     m_pLast = &rLay;
-    m_pFly = NULL;
-    m_pLastField = NULL;
-    m_pUnderflow = NULL;
-    m_pRest = NULL;
-    m_pLastTab = NULL;
+    m_pFly = nullptr;
+    m_pLastField = nullptr;
+    m_pUnderflow = nullptr;
+    m_pRest = nullptr;
+    m_pLastTab = nullptr;
 
     m_nSoftHyphPos = 0;
     m_nUnderScorePos = COMPLETE_STRING;
@@ -1649,13 +1649,13 @@ bool SwTextFormatInfo::LastKernPortion()
             return false;
     }
     SwLinePortion* pPor = GetRoot();
-    SwLinePortion *pKern = NULL;
+    SwLinePortion *pKern = nullptr;
     while( pPor )
     {
         if( pPor->IsKernPortion() )
             pKern = pPor;
         else if( pPor->Width() || ( pPor->GetLen() && !pPor->IsHolePortion() ) )
-            pKern = NULL;
+            pKern = nullptr;
         pPor = pPor->GetPortion();
     }
     if( pKern )
@@ -1672,13 +1672,13 @@ SwTextSlot::SwTextSlot(
     bool bTextLen,
     bool bExgLists,
     OUString const & rCh )
-    : pOldText(0)
-    , pOldSmartTagList(0)
-    , pOldGrammarCheckList(0)
-    , pTempList(0)
+    : pOldText(nullptr)
+    , pOldSmartTagList(nullptr)
+    , pOldGrammarCheckList(nullptr)
+    , pTempList(nullptr)
     , nIdx(0)
     , nLen(0)
-    , pInf(NULL)
+    , pInf(nullptr)
 {
     if( rCh.isEmpty() )
     {
@@ -1716,11 +1716,11 @@ SwTextSlot::SwTextSlot(
                 else if( !pTempList && nPos < pOldSmartTagList->Count() && nListPos < nIdx && !aText.isEmpty() )
                 {
                     pTempList = new SwWrongList( WRONGLIST_SMARTTAG );
-                    pTempList->Insert( OUString(), 0, 0, aText.getLength(), 0 );
+                    pTempList->Insert( OUString(), nullptr, 0, aText.getLength(), 0 );
                     static_cast<SwTextPaintInfo*>(pInf)->SetSmartTags( pTempList );
                 }
                 else
-                    static_cast<SwTextPaintInfo*>(pInf)->SetSmartTags( 0);
+                    static_cast<SwTextPaintInfo*>(pInf)->SetSmartTags( nullptr);
             }
             pOldGrammarCheckList = static_cast<SwTextPaintInfo*>(pInf)->GetGrammarCheckList();
             if ( pOldGrammarCheckList )
@@ -1732,11 +1732,11 @@ SwTextSlot::SwTextSlot(
                 else if( !pTempList && nPos < pOldGrammarCheckList->Count() && nListPos < nIdx && !aText.isEmpty() )
                 {
                     pTempList = new SwWrongList( WRONGLIST_GRAMMAR );
-                    pTempList->Insert( OUString(), 0, 0, aText.getLength(), 0 );
+                    pTempList->Insert( OUString(), nullptr, 0, aText.getLength(), 0 );
                     static_cast<SwTextPaintInfo*>(pInf)->SetGrammarCheckList( pTempList );
                 }
                 else
-                    static_cast<SwTextPaintInfo*>(pInf)->SetGrammarCheckList( 0);
+                    static_cast<SwTextPaintInfo*>(pInf)->SetGrammarCheckList( nullptr);
             }
         }
     }
@@ -1763,9 +1763,9 @@ SwTextSlot::~SwTextSlot()
 
 SwFontSave::SwFontSave(const SwTextSizeInfo &rInf, SwFont *pNew,
         SwAttrIter* pItr)
-    : pInf(NULL)
-    , pFnt(pNew ? const_cast<SwTextSizeInfo&>(rInf).GetFont() : NULL)
-    , pIter(NULL)
+    : pInf(nullptr)
+    , pFnt(pNew ? const_cast<SwTextSizeInfo&>(rInf).GetFont() : nullptr)
+    , pIter(nullptr)
 {
     if( pFnt )
     {
@@ -1786,7 +1786,7 @@ SwFontSave::SwFontSave(const SwTextSizeInfo &rInf, SwFont *pNew,
             pInf->SetFont( pNew );
         }
         else
-            pFnt = 0;
+            pFnt = nullptr;
         pNew->Invalidate();
         pNew->ChgPhysFnt( pInf->GetVsh(), *pInf->GetOut() );
         if( pItr && pItr->GetFnt() == pFnt )

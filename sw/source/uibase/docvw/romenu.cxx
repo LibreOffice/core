@@ -59,7 +59,7 @@ SwReadOnlyPopup::~SwReadOnlyPopup()
 
 void SwReadOnlyPopup::Check( sal_uInt16 nMID, sal_uInt16 nSID, SfxDispatcher &rDis )
 {
-    SfxPoolItem *_pItem = 0;
+    SfxPoolItem *_pItem = nullptr;
     SfxItemState eState = rDis.GetBindings()->QueryState( nSID, _pItem );
     if (eState >= SfxItemState::DEFAULT)
     {
@@ -85,8 +85,8 @@ SwReadOnlyPopup::SwReadOnlyPopup( const Point &rDPos, SwView &rV ) :
     rView  ( rV ),
     aBrushItem(RES_BACKGROUND),
     rDocPos( rDPos ),
-    pImageMap( 0 ),
-    pTargetURL( 0 )
+    pImageMap( nullptr ),
+    pTargetURL( nullptr )
 {
     bGrfToGalleryAsLnk = SW_MOD()->GetModuleConfig()->IsGrfToGalleryAsLnk();
     SwWrtShell &rSh = rView.GetWrtShell();
@@ -105,7 +105,7 @@ SwReadOnlyPopup::SwReadOnlyPopup( const Point &rDPos, SwView &rV ) :
 
     bool bLink = false;
     const Graphic *pGrf;
-    if ( 0 == (pGrf = rSh.GetGrfAtPos( rDocPos, sGrfName, bLink )) )
+    if ( nullptr == (pGrf = rSh.GetGrfAtPos( rDocPos, sGrfName, bLink )) )
     {
         EnableItem( MN_READONLY_SAVEGRAPHIC, false );
         EnableItem( MN_READONLY_COPYGRAPHIC, false );
@@ -182,7 +182,7 @@ SwReadOnlyPopup::SwReadOnlyPopup( const Point &rDPos, SwView &rV ) :
     else
         EnableItem( MN_READONLY_LOADGRAPHIC, false );
 
-    bool bReloadFrame = 0 != rSh.GetView().GetViewFrame()->GetFrame().GetParentFrame();
+    bool bReloadFrame = nullptr != rSh.GetView().GetViewFrame()->GetFrame().GetParentFrame();
     EnableItem( MN_READONLY_RELOAD_FRAME,
             bReloadFrame );
     EnableItem( MN_READONLY_RELOAD, !bReloadFrame);
@@ -198,14 +198,14 @@ SwReadOnlyPopup::SwReadOnlyPopup( const Point &rDPos, SwView &rV ) :
     Check( MN_READONLY_OPENURL,         SID_OPENDOC,        rDis );
     Check( MN_READONLY_OPENURLNEW,      SID_OPENDOC,        rDis );
 
-    SfxPoolItem* pState = NULL;
+    SfxPoolItem* pState = nullptr;
 
     SfxItemState eState = pVFrame->GetBindings().QueryState( SID_COPY, pState );
     Check( MN_READONLY_COPY,            SID_COPY,           rDis );
     if(eState < SfxItemState::DEFAULT)
         EnableItem( MN_READONLY_COPY, false );
     delete pState;
-    pState = NULL;
+    pState = nullptr;
 
     eState = pVFrame->GetBindings().QueryState( SID_EDITDOC, pState );
     if (
@@ -266,7 +266,7 @@ void SwReadOnlyPopup::Execute( vcl::Window* pWin, sal_uInt16 nId )
         return;
     }
 
-    TransferDataContainer* pClipCntnr = 0;
+    TransferDataContainer* pClipCntnr = nullptr;
 
     sal_uInt16 nExecId = USHRT_MAX;
     sal_uInt16 nFilter = USHRT_MAX;

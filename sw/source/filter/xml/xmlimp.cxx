@@ -196,7 +196,7 @@ SvXMLImportContext *SwXMLDocContext_Impl::CreateChildContext(
         const OUString& rLocalName,
         const Reference< xml::sax::XAttributeList > & xAttrList )
 {
-    SvXMLImportContext *pContext = 0;
+    SvXMLImportContext *pContext = nullptr;
 
     const SvXMLTokenMap& rTokenMap = GetSwImport().GetDocElemTokenMap();
     switch( rTokenMap.Get( nPrefix, rLocalName ) )
@@ -368,7 +368,7 @@ SvXMLImportContext *SwXMLImport::CreateContext(
         const OUString& rLocalName,
         const Reference< xml::sax::XAttributeList > & xAttrList )
 {
-    SvXMLImportContext *pContext = 0;
+    SvXMLImportContext *pContext = nullptr;
 
     // #i69629# - own subclasses for <office:document> and <office:document-styles>
     if( XML_NAMESPACE_OFFICE==nPrefix &&
@@ -406,13 +406,13 @@ SwXMLImport::SwXMLImport(
     const uno::Reference< uno::XComponentContext >& rContext,
     OUString const & implementationName, SvXMLImportFlags nImportFlags)
 :   SvXMLImport( rContext, implementationName, nImportFlags ),
-    pSttNdIdx( 0 ),
-    pTableItemMapper( 0 ),
-    pDocElemTokenMap( 0 ),
-    pTableElemTokenMap( 0 ),
-    pTableCellAttrTokenMap( 0 ),
-    pGraphicResolver( 0 ),
-    pEmbeddedResolver( 0 ),
+    pSttNdIdx( nullptr ),
+    pTableItemMapper( nullptr ),
+    pDocElemTokenMap( nullptr ),
+    pTableElemTokenMap( nullptr ),
+    pTableCellAttrTokenMap( nullptr ),
+    pGraphicResolver( nullptr ),
+    pEmbeddedResolver( nullptr ),
     nStyleFamilyMask( SFX_STYLE_FAMILY_ALL ),
     bLoadDoc( true ),
     bInsert( false ),
@@ -421,7 +421,7 @@ SwXMLImport::SwXMLImport(
     bOrganizerMode( false ),
     bInititedXForms( false ),
     bPreserveRedlineMode( true ),
-    doc( NULL )
+    doc( nullptr )
 {
     _InitItemImport();
 
@@ -491,7 +491,7 @@ static OTextCursorHelper *lcl_xml_GetSwXTextCursor( const Reference < XTextCurso
     Reference<XUnoTunnel> xCrsrTunnel( rTextCursor, UNO_QUERY );
     OSL_ENSURE( xCrsrTunnel.is(), "missing XUnoTunnel for Cursor" );
     if( !xCrsrTunnel.is() )
-        return 0;
+        return nullptr;
     OTextCursorHelper *pTextCrsr = reinterpret_cast< OTextCursorHelper *>(
             sal::static_int_cast< sal_IntPtr >( xCrsrTunnel->getSomething(  OTextCursorHelper::getUnoTunnelId() )));
     OSL_ENSURE( pTextCrsr, "SwXTextCursor missing" );
@@ -596,7 +596,7 @@ void SwXMLImport::startDocument()
     // We also might change into the insert mode later, so we have to make
     // sure to first set the insert mode and then create the text import
     // helper. Otherwise it won't have the insert flag set!
-    OTextCursorHelper *pTextCrsr = 0;
+    OTextCursorHelper *pTextCrsr = nullptr;
     Reference < XTextCursor > xTextCursor;
     if( HasTextImport() )
            xTextCursor = GetTextImport()->GetCursor();
@@ -605,8 +605,8 @@ void SwXMLImport::startDocument()
         Reference < XTextDocument > xTextDoc( GetModel(), UNO_QUERY );
         Reference < XText > xText = xTextDoc->getText();
         xTextCursor = xText->createTextCursor();
-        SwCrsrShell *pCrsrSh = 0;
-        SwDoc *pDoc = 0;
+        SwCrsrShell *pCrsrSh = nullptr;
+        SwDoc *pDoc = nullptr;
         if( SvXMLImportFlags::ALL == getImportFlags() )
         {
             pTextCrsr = lcl_xml_GetSwXTextCursor( xTextCursor );
@@ -629,10 +629,10 @@ void SwXMLImport::startDocument()
         {
             const uno::Reference<text::XTextRange> xInsertTextRange(
                 SwXTextRange::CreateXTextRange(
-                    *pDoc, *pCrsrSh->GetCrsr()->GetPoint(), 0 ) );
+                    *pDoc, *pCrsrSh->GetCrsr()->GetPoint(), nullptr ) );
             setTextInsertMode( xInsertTextRange );
             xTextCursor = GetTextImport()->GetCursor();
-            pTextCrsr = 0;
+            pTextCrsr = nullptr;
         }
         else
             GetTextImport()->SetCursor( xTextCursor );
@@ -730,7 +730,7 @@ void SwXMLImport::endDocument()
     if( HasShapeImport() )
         ClearShapeImport();
 
-    SwDoc *pDoc = 0;
+    SwDoc *pDoc = nullptr;
     if( (getImportFlags() & SvXMLImportFlags::CONTENT) && !IsStylesOnlyMode() )
     {
         Reference<XUnoTunnel> xCrsrTunnel( GetTextImport()->GetCursor(),
@@ -819,13 +819,13 @@ void SwXMLImport::endDocument()
                     if( pCNd && pCNd->StartOfSectionIndex()+2 <
                         pCNd->EndOfSectionIndex() )
                     {
-                        pPaM->GetBound().nContent.Assign( 0, 0 );
-                        pPaM->GetBound(false).nContent.Assign( 0, 0 );
+                        pPaM->GetBound().nContent.Assign( nullptr, 0 );
+                        pPaM->GetBound(false).nContent.Assign( nullptr, 0 );
                         pDoc->GetNodes().Delete( pPaM->GetPoint()->nNode );
                     }
                 }
             }
-            else if( 0 != (pCurrNd = pDoc->GetNodes()[nNodeIdx]->GetTextNode()) )
+            else if( nullptr != (pCurrNd = pDoc->GetNodes()[nNodeIdx]->GetTextNode()) )
             {
                 // Id we're in insert mode, the empty node is joined with
                 // the next and the previous one.
@@ -846,7 +846,7 @@ void SwXMLImport::endDocument()
                 }
                 else if (pCurrNd->GetText().isEmpty())
                 {
-                    pPos->nContent.Assign( 0, 0 );
+                    pPos->nContent.Assign( nullptr, 0 );
                     pPaM->SetMark(); pPaM->DeleteMark();
                     pDoc->GetNodes().Delete( pPos->nNode );
                     pPaM->Move( fnMoveBackward );
@@ -870,7 +870,7 @@ void SwXMLImport::endDocument()
     GetTextImport()->ResetCursor();
 
     delete pSttNdIdx;
-    pSttNdIdx = 0;
+    pSttNdIdx = nullptr;
 
     // SJ: #i49801# -> now permitting repaints
     if ( pDoc )
@@ -1168,10 +1168,10 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
     bool bPropLineSpacingShrinksFirstLine = false;
     bool bSubtractFlysAnchoredAtFlys = false;
 
-    const PropertyValue* currentDatabaseDataSource = NULL;
-    const PropertyValue* currentDatabaseCommand = NULL;
-    const PropertyValue* currentDatabaseCommandType = NULL;
-    const PropertyValue* embeddedDatabaseName = 0;
+    const PropertyValue* currentDatabaseDataSource = nullptr;
+    const PropertyValue* currentDatabaseCommand = nullptr;
+    const PropertyValue* currentDatabaseCommandType = nullptr;
+    const PropertyValue* embeddedDatabaseName = nullptr;
 
     while( nCount-- )
     {
@@ -1274,11 +1274,11 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
 
     try
     {
-        if( currentDatabaseDataSource != NULL )
+        if( currentDatabaseDataSource != nullptr )
             xProps->setPropertyValue( currentDatabaseDataSource->Name, currentDatabaseDataSource->Value );
-        if( currentDatabaseCommand != NULL )
+        if( currentDatabaseCommand != nullptr )
             xProps->setPropertyValue( currentDatabaseCommand->Name, currentDatabaseCommand->Value );
-        if( currentDatabaseCommandType != NULL )
+        if( currentDatabaseCommandType != nullptr )
             xProps->setPropertyValue( currentDatabaseCommandType->Name, currentDatabaseCommandType->Value );
         if (embeddedDatabaseName)
             xProps->setPropertyValue(embeddedDatabaseName->Name, embeddedDatabaseName->Value);
@@ -1530,7 +1530,7 @@ void SwXMLImport::initXForms()
         return;
     SwXTextDocument* pXTextDocument = reinterpret_cast<SwXTextDocument*>(
         xDocTunnel->getSomething( SwXTextDocument::getUnoTunnelId() ) );
-    if( pXTextDocument == NULL )
+    if( pXTextDocument == nullptr )
         return;
 
     SwDoc *pDoc = pXTextDocument->GetDocShell()->GetDoc();
@@ -1545,7 +1545,7 @@ void SwXMLImport::initXForms()
 
 SwDoc* SwXMLImport::getDoc()
 {
-    if( doc != NULL )
+    if( doc != nullptr )
         return doc;
     Reference < XTextDocument > xTextDoc( GetModel(), UNO_QUERY );
     Reference < XText > xText = xTextDoc->getText();
@@ -1553,9 +1553,9 @@ SwDoc* SwXMLImport::getDoc()
     assert( xTextTunnel.is());
     SwXText *pText = reinterpret_cast< SwXText *>(
             sal::static_int_cast< sal_IntPtr >( xTextTunnel->getSomething( SwXText::getUnoTunnelId() )));
-    assert( pText != NULL );
+    assert( pText != nullptr );
     doc = pText->GetDoc();
-    assert( doc != NULL );
+    assert( doc != nullptr );
     return doc;
 }
 

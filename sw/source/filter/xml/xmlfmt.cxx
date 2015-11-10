@@ -316,7 +316,7 @@ SwXMLTextStyleContext_Impl::SwXMLTextStyleContext_Impl( SwXMLImport& rImport,
         sal_uInt16 nFamily,
         SvXMLStylesContext& rStyles ) :
     XMLTextStyleContext( rImport, nPrfx, rLName, xAttrList, rStyles, nFamily ),
-    pConditions( 0 )
+    pConditions( nullptr )
 {
 }
 
@@ -339,7 +339,7 @@ SvXMLImportContext *SwXMLTextStyleContext_Impl::CreateChildContext(
         const OUString& rLocalName,
         const uno::Reference< xml::sax::XAttributeList > & xAttrList )
 {
-    SvXMLImportContext *pContext = 0;
+    SvXMLImportContext *pContext = nullptr;
 
     if( XML_NAMESPACE_STYLE == nPrefix && IsXMLToken( rLocalName, XML_MAP ) )
     {
@@ -374,7 +374,7 @@ void SwXMLTextStyleContext_Impl::Finish( bool bOverwrite )
     if( !xStyle.is() )
         return;
 
-    const SwXStyle* pStyle = 0;
+    const SwXStyle* pStyle = nullptr;
     uno::Reference<lang::XUnoTunnel> xStyleTunnel( xStyle, uno::UNO_QUERY);
     if( xStyleTunnel.is() )
     {
@@ -510,7 +510,7 @@ SvXMLImportContext *SwXMLItemSetStyleContext_Impl::CreateItemSetContext(
     OSL_ENSURE( !pItemSet,
             "SwXMLItemSetStyleContext_Impl::CreateItemSetContext: item set exists" );
 
-    SvXMLImportContext *pContext = 0;
+    SvXMLImportContext *pContext = nullptr;
 
     SwDoc* pDoc = SwImport::GetDocFromXMLImport( GetSwImport() );
 
@@ -541,7 +541,7 @@ SvXMLImportContext *SwXMLItemSetStyleContext_Impl::CreateItemSetContext(
     if( !pContext )
     {
         delete pItemSet;
-        pItemSet = 0;
+        pItemSet = nullptr;
     }
 
     return pContext;
@@ -555,8 +555,8 @@ SwXMLItemSetStyleContext_Impl::SwXMLItemSetStyleContext_Impl( SwXMLImport& rImpo
         SvXMLStylesContext& rStylesC,
         sal_uInt16 nFamily ) :
     SvXMLStyleContext( rImport, nPrfx, rLName, xAttrList, nFamily ),
-    pItemSet( 0 ),
-    pTextStyle( 0 ),
+    pItemSet( nullptr ),
+    pTextStyle( nullptr ),
     rStyles( rStylesC ),
     bHasMasterPageName( false ),
     bPageDescConnected( false ),
@@ -580,7 +580,7 @@ SvXMLImportContext *SwXMLItemSetStyleContext_Impl::CreateChildContext(
         const OUString& rLocalName,
         const uno::Reference< xml::sax::XAttributeList > & xAttrList )
 {
-    SvXMLImportContext *pContext = 0;
+    SvXMLImportContext *pContext = nullptr;
 
     if( XML_NAMESPACE_STYLE == nPrefix )
     {
@@ -653,7 +653,7 @@ void SwXMLItemSetStyleContext_Impl::ConnectPageDesc()
     }
 
     const SfxPoolItem *pItem;
-    SwFormatPageDesc *pFormatPageDesc = 0;
+    SwFormatPageDesc *pFormatPageDesc = nullptr;
     if( SfxItemState::SET == pItemSet->GetItemState( RES_PAGEDESC, false,
                                                 &pItem ) )
     {
@@ -750,7 +750,7 @@ SvXMLStyleContext *SwXMLStylesContext_Impl::CreateStyleStyleChildContext(
         sal_uInt16 nFamily, sal_uInt16 nPrefix, const OUString& rLocalName,
         const uno::Reference< xml::sax::XAttributeList > & xAttrList )
 {
-    SvXMLStyleContext *pStyle = 0;
+    SvXMLStyleContext *pStyle = nullptr;
 
     switch( nFamily )
     {
@@ -786,7 +786,7 @@ SvXMLStyleContext *SwXMLStylesContext_Impl::CreateDefaultStyleStyleChildContext(
         sal_uInt16 nFamily, sal_uInt16 nPrefix, const OUString& rLocalName,
         const uno::Reference< xml::sax::XAttributeList > & xAttrList )
 {
-    SvXMLStyleContext *pStyle = 0;
+    SvXMLStyleContext *pStyle = nullptr;
 
     switch( nFamily )
     {
@@ -1041,7 +1041,7 @@ bool SwXMLImport::FindAutomaticStyle(
         const SfxItemSet **ppItemSet,
         OUString *pParent ) const
 {
-    SwXMLItemSetStyleContext_Impl *pStyle = 0;
+    SwXMLItemSetStyleContext_Impl *pStyle = nullptr;
     if( GetAutoStyles() )
     {
         pStyle = const_cast<SwXMLItemSetStyleContext_Impl*>(dynamic_cast< const SwXMLItemSetStyleContext_Impl* >(
@@ -1072,7 +1072,7 @@ bool SwXMLImport::FindAutomaticStyle(
         }
     }
 
-    return pStyle != 0;
+    return pStyle != nullptr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

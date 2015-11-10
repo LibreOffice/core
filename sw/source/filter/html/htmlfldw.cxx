@@ -39,7 +39,7 @@ using namespace nsSwDocInfoSubType;
 
 const sal_Char *SwHTMLWriter::GetNumFormat( sal_uInt16 nFormat )
 {
-    const sal_Char *pFormatStr = 0;
+    const sal_Char *pFormatStr = nullptr;
 
     switch( (SvxExtNumType)nFormat )
     {
@@ -69,9 +69,9 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pField,
     sal_uInt16 nField = pFieldTyp->Which();
     sal_uLong nFormat = pField->GetFormat();
 
-    const sal_Char *pTypeStr=0, // TYPE
-                      *pSubStr=0,   // SUBTYPE
-                   *pFormatStr=0;  // FORMAT (SW)
+    const sal_Char *pTypeStr=nullptr, // TYPE
+                      *pSubStr=nullptr,   // SUBTYPE
+                   *pFormatStr=nullptr;  // FORMAT (SW)
     OUString aValue;              // VALUE (SW)
     bool bNumFormat=false;         // SDNUM (Number-Formatter-Format)
     bool bNumValue=false;       // SDVAL (Number-Formatter-Value)
@@ -174,7 +174,7 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pField,
                     case DI_CREATE:     pSubStr = OOO_STRING_SW_HTML_FS_create;     break;
                     case DI_CHANGE:     pSubStr = OOO_STRING_SW_HTML_FS_change;     break;
                     case DI_CUSTOM:     pSubStr = OOO_STRING_SW_HTML_FS_custom;     break;
-                    default:            pTypeStr = 0;               break;
+                    default:            pTypeStr = nullptr;               break;
                 }
 
                 if( DI_CUSTOM == nSubType ) {
@@ -232,7 +232,7 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pField,
                     case DS_TBL:        pSubStr = OOO_STRING_SW_HTML_FS_tbl;    break;
                     case DS_GRF:        pSubStr = OOO_STRING_SW_HTML_FS_grf;    break;
                     case DS_OLE:        pSubStr = OOO_STRING_SW_HTML_FS_ole;    break;
-                    default:            pTypeStr = 0;               break;
+                    default:            pTypeStr = nullptr;               break;
                 }
                 pFormatStr = SwHTMLWriter::GetNumFormat( static_cast< sal_uInt16 >(nFormat) );
             }
@@ -343,7 +343,7 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pField,
             { RES_CHRATR_CTL_FONT, RES_CHRATR_CTL_FONTSIZE,
               RES_CHRATR_CTL_POSTURE, RES_CHRATR_CTL_WEIGHT };
 
-        sal_uInt16 *pRefWhichIds = 0;
+        sal_uInt16 *pRefWhichIds = nullptr;
         switch( rHTMLWrt.m_nCSS1Script )
         {
         case CSS1_OUTMODE_WESTERN:
@@ -369,7 +369,7 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pField,
             if( nScript != CSS1_OUTMODE_ANY_SCRIPT &&
                 /* #108791# */ nScript != rHTMLWrt.m_nCSS1Script )
             {
-                sal_uInt16 *pWhichIds = 0;
+                sal_uInt16 *pWhichIds = nullptr;
                 switch( nScript )
                 {
                 case CSS1_OUTMODE_WESTERN:  pWhichIds = aWesternWhichIds; break;
@@ -523,7 +523,7 @@ Writer& OutHTML_SwFormatField( Writer& rWrt, const SfxPoolItem& rHt )
         // sonst ist es der Script-Inhalt selbst. Da nur noh JavaScript
         // in Feldern landet, muss es sich um JavaSrript handeln ...:)
         HTMLOutFuncs::OutScript( rWrt.Strm(), rWrt.GetBaseURL(), aContents, rType, JAVASCRIPT,
-                                 aURL, 0, 0, rHTMLWrt.m_eDestEnc, &rHTMLWrt.m_aNonConvertableCharacters );
+                                 aURL, nullptr, nullptr, rHTMLWrt.m_eDestEnc, &rHTMLWrt.m_aNonConvertableCharacters );
 
         if( rHTMLWrt.m_bLFPossible )
             rHTMLWrt.OutNewLine( true );

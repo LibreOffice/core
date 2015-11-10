@@ -209,7 +209,7 @@ Reference< XPropertySet >  SwXModule::getViewSettings() throw( uno::RuntimeExcep
     if(!mxViewSettings.is())
     {
         OSL_FAIL("Web or Text?");
-        mxViewSettings = static_cast < HelperBaseNoState * > ( new SwXViewSettings( false, 0 ) );
+        mxViewSettings = static_cast < HelperBaseNoState * > ( new SwXViewSettings( false, nullptr ) );
     }
     return mxViewSettings;
 }
@@ -245,7 +245,7 @@ Sequence< OUString > SwXModule::getSupportedServiceNames() throw( RuntimeExcepti
 SwXPrintSettings::SwXPrintSettings(SwXPrintSettingsType eType, SwDoc* pDoc)
 : ChainableHelperNoState ( lcl_createPrintSettingsInfo (), &Application::GetSolarMutex() )
 , meType(eType)
-, mpPrtOpt ( NULL )
+, mpPrtOpt ( nullptr )
 , mpDoc ( pDoc )
 {
 }
@@ -415,7 +415,7 @@ void SwXPrintSettings::_postSetValues()
            IllegalArgumentException, WrappedTargetException,
            RuntimeException)
 {
-    mpPrtOpt = NULL;
+    mpPrtOpt = nullptr;
 }
 
 void SwXPrintSettings::_preGetValues()
@@ -518,7 +518,7 @@ void SwXPrintSettings::_getSingleValue( const comphelper::PropertyInfo & rInfo, 
 void SwXPrintSettings::_postGetValues ()
     throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException )
 {
-    mpPrtOpt = NULL;
+    mpPrtOpt = nullptr;
 }
 
 OUString SwXPrintSettings::getImplementationName() throw( RuntimeException, std::exception )
@@ -542,8 +542,8 @@ Sequence< OUString > SwXPrintSettings::getSupportedServiceNames() throw( Runtime
 SwXViewSettings::SwXViewSettings(bool bWebView, SwView* pVw)
     : ChainableHelperNoState( lcl_createViewSettingsInfo (), &Application::GetSolarMutex() )
     , pView(pVw)
-    , mpViewOption(NULL)
-    , mpConstViewOption(NULL)
+    , mpViewOption(nullptr)
+    , mpConstViewOption(nullptr)
     , bObjectValid(true)
     , bWeb(bWebView)
     , mbApplyZoom(false)
@@ -569,7 +569,7 @@ void SwXViewSettings::_preSetValues ()
            IllegalArgumentException, WrappedTargetException,
            RuntimeException)
 {
-    const SwViewOption* pVOpt = 0;
+    const SwViewOption* pVOpt = nullptr;
     if(pView)
     {
         if(!IsValid())
@@ -695,7 +695,7 @@ void SwXViewSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, c
                 break;
                 default:
                     throw IllegalArgumentException(
-                        "SwXViewSettings: invalid zoom type", 0, 0);
+                        "SwXViewSettings: invalid zoom type", nullptr, 0);
             }
             mpViewOption->SetZoomType( eZoom );
             mbApplyZoom = true;
@@ -819,7 +819,7 @@ void SwXViewSettings::_postSetValues()
                                                           : VIEWOPT_DEST_TEXT );
 
     delete mpViewOption;
-    mpViewOption = NULL;
+    mpViewOption = nullptr;
 }
 
 void SwXViewSettings::_preGetValues ()
@@ -984,7 +984,7 @@ void SwXViewSettings::_getSingleValue( const comphelper::PropertyInfo & rInfo, u
 void SwXViewSettings::_postGetValues ()
     throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException )
 {
-    mpConstViewOption = NULL;
+    mpConstViewOption = nullptr;
 }
 
 OUString SwXViewSettings::getImplementationName() throw( RuntimeException, std::exception )

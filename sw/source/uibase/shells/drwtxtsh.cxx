@@ -238,8 +238,8 @@ void SwDrawTextShell::GetFormTextState(SfxItemSet& rSet)
     SwWrtShell &rSh = GetShell();
     SdrView* pDrView = rSh.GetDrawView();
     const SdrMarkList& rMarkList = pDrView->GetMarkedObjectList();
-    const SdrObject* pObj = NULL;
-    SvxFontWorkDialog* pDlg = NULL;
+    const SdrObject* pObj = nullptr;
+    SvxFontWorkDialog* pDlg = nullptr;
 
     const sal_uInt16 nId = SvxFontWorkChildWindow::GetChildWindowId();
 
@@ -247,7 +247,7 @@ void SwDrawTextShell::GetFormTextState(SfxItemSet& rSet)
     if (pVFrame->HasChildWindow(nId))
     {
         SfxChildWindow* pWnd = pVFrame->GetChildWindow(nId);
-        pDlg = pWnd ? static_cast<SvxFontWorkDialog*>(pWnd->GetWindow()) : NULL;
+        pDlg = pWnd ? static_cast<SvxFontWorkDialog*>(pWnd->GetWindow()) : nullptr;
     }
 
     if ( rMarkList.GetMarkCount() == 1 )
@@ -296,7 +296,7 @@ void SwDrawTextShell::ExecDrawLingu(SfxRequest &rReq)
             break;
 
         case SID_HANGUL_HANJA_CONVERSION:
-            pOutlinerView->StartTextConversion(LANGUAGE_KOREAN, LANGUAGE_KOREAN, NULL,
+            pOutlinerView->StartTextConversion(LANGUAGE_KOREAN, LANGUAGE_KOREAN, nullptr,
                     i18n::TextConversionOption::CHARACTER_BY_CHARACTER, true, false);
             break;
 
@@ -321,7 +321,7 @@ void SwDrawTextShell::ExecDrawLingu(SfxRequest &rReq)
                     return;
 
                 //  initialize dialog
-                Reference<awt::XWindow> xDialogParentWindow(0);
+                Reference<awt::XWindow> xDialogParentWindow(nullptr);
                 Sequence<Any> aSequence(1);
                 Any* pArray = aSequence.getArray();
                 PropertyValue aParam;
@@ -416,7 +416,7 @@ void SwDrawTextShell::ExecDraw(SfxRequest &rReq)
                 {
             const SfxItemSet *pNewAttrs = rReq.GetArgs();
                         sal_uInt16 nSlot = rReq.GetSlot();
-            const SfxPoolItem* pItem = 0;
+            const SfxPoolItem* pItem = nullptr;
                         if(pNewAttrs)
             {
                                 pNewAttrs->GetItemState(nSlot, false, &pItem );
@@ -695,7 +695,7 @@ void SwDrawTextShell::InsertSymbol(SfxRequest& rReq)
     if(!pOLV)
         return;
     const SfxItemSet *pArgs = rReq.GetArgs();
-    const SfxPoolItem* pItem = 0;
+    const SfxPoolItem* pItem = nullptr;
     if( pArgs )
         pArgs->GetItemState(GetPool().GetWhich(SID_CHARMAP), false, &pItem);
 
@@ -704,7 +704,7 @@ void SwDrawTextShell::InsertSymbol(SfxRequest& rReq)
     if ( pItem )
     {
         sSym = static_cast<const SfxStringItem*>(pItem)->GetValue();
-        const SfxPoolItem* pFtItem = NULL;
+        const SfxPoolItem* pFtItem = nullptr;
         pArgs->GetItemState( GetPool().GetWhich(SID_ATTR_SPECIALCHAR), false, &pFtItem);
         const SfxStringItem* pFontItem = dynamic_cast<const SfxStringItem*>( pFtItem  );
         if ( pFontItem )

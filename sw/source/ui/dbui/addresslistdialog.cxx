@@ -168,7 +168,7 @@ SwAddressListDialog::SwAddressListDialog(SwMailMergeAddressBlockPage* pParent)
 
     ,
 
-    m_pCreatedDataSource(0),
+    m_pCreatedDataSource(nullptr),
     m_bInSelectHdl(false),
     m_pAddressPage(pParent)
 {
@@ -259,7 +259,7 @@ SwAddressListDialog::SwAddressListDialog(SwMailMergeAddressBlockPage* pParent)
     m_pOK->Enable(m_pListLB->GetEntryCount()>0 && bEnableOK);
     m_pEditPB->Enable(bEnableEdit);
     m_pListLB->SetSelectHdl(LINK(this, SwAddressListDialog, ListBoxSelectHdl_Impl));
-    TableSelectHdl_Impl(NULL);
+    TableSelectHdl_Impl(nullptr);
 }
 
 SwAddressListDialog::~SwAddressListDialog()
@@ -328,7 +328,7 @@ IMPL_LINK_NOARG_TYPED(SwAddressListDialog, FilterHdl_Impl, Button*, void)
 
                 if ( RET_OK == xDialog->execute() )
                 {
-                    WaitObject aWO( NULL );
+                    WaitObject aWO( nullptr );
                     pUserData->sFilter = xComposer->getFilter();
                 }
                 ::comphelper::disposeComponent(xRowSet);
@@ -345,7 +345,7 @@ IMPL_LINK_NOARG_TYPED(SwAddressListDialog, LoadHdl_Impl, Button*, void)
 {
     SwView* pView = m_pAddressPage->GetWizard()->GetSwView();
 
-    const OUString sNewSource = SwDBManager::LoadAndRegisterDataSource(pView ? pView->GetDocShell() : 0);
+    const OUString sNewSource = SwDBManager::LoadAndRegisterDataSource(pView ? pView->GetDocShell() : nullptr);
     if(!sNewSource.isEmpty())
     {
         SvTreeListEntry* pNewSource = m_pListLB->InsertEntry(sNewSource);
@@ -439,7 +439,7 @@ IMPL_LINK_TYPED(SwAddressListDialog, CreateHdl_Impl, Button*, pButton, void)
 IMPL_LINK_TYPED(SwAddressListDialog, EditHdl_Impl, Button*, pButton, void)
 {
     SvTreeListEntry* pEntry = m_pListLB->FirstSelected();
-    AddressUserData_Impl* pUserData = pEntry ? static_cast<AddressUserData_Impl*>(pEntry->GetUserData()) : 0;
+    AddressUserData_Impl* pUserData = pEntry ? static_cast<AddressUserData_Impl*>(pEntry->GetUserData()) : nullptr;
     if(pUserData && !pUserData->sURL.isEmpty())
     {
         if(pUserData->xResultSet.is())
@@ -447,7 +447,7 @@ IMPL_LINK_TYPED(SwAddressListDialog, EditHdl_Impl, Button*, pButton, void)
             SwMailMergeConfigItem& rConfigItem = m_pAddressPage->GetWizard()->GetConfigItem();
             if(rConfigItem.GetResultSet() != pUserData->xResultSet)
                 ::comphelper::disposeComponent( pUserData->xResultSet );
-            pUserData->xResultSet = 0;
+            pUserData->xResultSet = nullptr;
 
             rConfigItem.DisposeResultSet();
         }
@@ -482,7 +482,7 @@ IMPL_LINK_TYPED(SwAddressListDialog, StaticListBoxSelectHdl_Impl, void*, p, void
         return;
     EnterWait();
     m_bInSelectHdl = true;
-    AddressUserData_Impl* pUserData = 0;
+    AddressUserData_Impl* pUserData = nullptr;
     if(pSelect)
     {
         const OUString sTable(SvTabListBox::GetEntryText(pSelect, ITEMID_TABLE - 1));
@@ -547,7 +547,7 @@ void SwAddressListDialog::DetectTablesAndQueries(
             pUserData->xSource.set(xComplConnection, UNO_QUERY);
 
             uno::Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
-            uno::Reference< XInteractionHandler > xHandler( InteractionHandler::createWithParent(xContext, 0), UNO_QUERY );
+            uno::Reference< XInteractionHandler > xHandler( InteractionHandler::createWithParent(xContext, nullptr), UNO_QUERY );
             pUserData->xConnection = SharedConnection( xComplConnection->connectWithCompletion( xHandler ) );
         }
         if(pUserData->xConnection.is())
@@ -639,7 +639,7 @@ IMPL_LINK_TYPED(SwAddressListDialog, TableSelectHdl_Impl, Button*, pButton, void
         const OUString sTable = SvTabListBox::GetEntryText(pSelect, ITEMID_TABLE - 1);
         if( pUserData->nTableAndQueryCount > 1 || pUserData->nTableAndQueryCount == -1)
         {
-            DetectTablesAndQueries(pSelect, (pButton != 0) || sTable.isEmpty());
+            DetectTablesAndQueries(pSelect, (pButton != nullptr) || sTable.isEmpty());
         }
     }
 

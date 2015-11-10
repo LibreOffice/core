@@ -232,8 +232,8 @@ static Writer& OutASC_SwTextNode( Writer& rWrt, SwContentNode& rNode )
 
 SwNodeFnTab aASCNodeFnTab = {
 /* RES_TXTNODE  */                   OutASC_SwTextNode,
-/* RES_GRFNODE  */                   0,
-/* RES_OLENODE  */                   0
+/* RES_GRFNODE  */                   nullptr,
+/* RES_OLENODE  */                   nullptr
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

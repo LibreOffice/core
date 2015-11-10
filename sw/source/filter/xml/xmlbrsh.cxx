@@ -115,7 +115,7 @@ SvXMLImportContext *SwXMLBrushItemImportContext::CreateChildContext(
         sal_uInt16 nPrefix, const OUString& rLocalName,
         const uno::Reference< xml::sax::XAttributeList > & xAttrList )
 {
-    SvXMLImportContext *pContext = 0;
+    SvXMLImportContext *pContext = nullptr;
     if( xmloff::token::IsXMLToken( rLocalName,
                                         xmloff::token::XML_BINARY_DATA ) )
     {
@@ -146,7 +146,7 @@ void SwXMLBrushItemImportContext::EndElement()
     if( xBase64Stream.is() )
     {
         const OUString sURL( GetImport().ResolveGraphicObjectURLFromBase64( xBase64Stream ) );
-        xBase64Stream = 0;
+        xBase64Stream = nullptr;
         SvXMLImportItemMapper::PutXMLValue( *pItem, sURL, MID_GRAPHIC_LINK, GetImport().GetMM100UnitConverter() );
     }
 

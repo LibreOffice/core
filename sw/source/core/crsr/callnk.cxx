@@ -96,7 +96,7 @@ static void lcl_notifyRow(const SwContentNode* pNode, SwCrsrShell& rShell)
             if (pContent->GetType() == FRM_TAB)
             {
                 SwFormatFrmSize pSize = pLine->GetFrameFormat()->GetFrmSize();
-                pRow->ModifyNotification(NULL, &pSize);
+                pRow->ModifyNotification(nullptr, &pSize);
                 return;
             }
         }
@@ -118,8 +118,8 @@ SwCallLink::~SwCallLink()
     lcl_notifyRow(pCNd, rShell);
 
     const SwDoc *pDoc=rShell.GetDoc();
-    const SwContentNode *pNode = NULL;
-    if ( ( pDoc != NULL && nNode < pDoc->GetNodes( ).Count( ) ) )
+    const SwContentNode *pNode = nullptr;
+    if ( ( pDoc != nullptr && nNode < pDoc->GetNodes( ).Count( ) ) )
     {
         pNode = pDoc->GetNodes()[nNode]->GetContentNode();
     }
@@ -212,8 +212,8 @@ SwCallLink::~SwCallLink()
 
     const SwFrm* pFrm;
     const SwFlyFrm *pFlyFrm;
-    if( !rShell.ActionPend() && 0 != ( pFrm = pCNd->getLayoutFrm(rShell.GetLayout(), 0, 0, false) ) &&
-        0 != ( pFlyFrm = pFrm->FindFlyFrm() ) && !rShell.IsTableMode() )
+    if( !rShell.ActionPend() && nullptr != ( pFrm = pCNd->getLayoutFrm(rShell.GetLayout(), nullptr, nullptr, false) ) &&
+        nullptr != ( pFlyFrm = pFrm->FindFlyFrm() ) && !rShell.IsTableMode() )
     {
         const SwNodeIndex* pIndex = pFlyFrm->GetFormat()->GetContent().GetContentIdx();
         OSL_ENSURE( pIndex, "Fly without Content" );
@@ -231,12 +231,12 @@ SwCallLink::~SwCallLink()
 
 long SwCallLink::getLayoutFrm( const SwRootFrm* pRoot, SwTextNode& rNd, sal_Int32 nCntPos, bool bCalcFrm )
 {
-    SwTextFrm* pFrm = static_cast<SwTextFrm*>(rNd.getLayoutFrm(pRoot,0,0,bCalcFrm));
+    SwTextFrm* pFrm = static_cast<SwTextFrm*>(rNd.getLayoutFrm(pRoot,nullptr,nullptr,bCalcFrm));
     SwTextFrm* pNext;
     if ( pFrm && !pFrm->IsHiddenNow() )
     {
         if( pFrm->HasFollow() )
-            while( 0 != ( pNext = pFrm->GetFollow() ) &&
+            while( nullptr != ( pNext = pFrm->GetFollow() ) &&
                     nCntPos >= pNext->GetOfst() )
                 pFrm = pNext;
 

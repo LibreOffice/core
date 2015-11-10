@@ -91,7 +91,7 @@ public:
     static css::uno::Reference< css::rdf::XMetadatable >
         CreateXMeta(
             ::sw::Meta & rMeta,
-            css::uno::Reference< css::text::XText> const& xParentText = 0,
+            css::uno::Reference< css::text::XText> const& xParentText = nullptr,
             ::std::unique_ptr<TextRangeList_t const> && pPortions = ::std::unique_ptr<TextRangeList_t const>());
 
     static css::uno::Reference<css::rdf::XMetadatable>

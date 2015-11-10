@@ -80,12 +80,12 @@ SwAccessiblePortionData::SwAccessiblePortionData(
     aFieldPosition(),
     aAttrFieldType(),
     aPortionAttrs(),
-    pSentences( 0 ),
+    pSentences( nullptr ),
     nBeforePortions( 0 ),
     bFinished( false ),
     bLastIsSpecial( false )
 {
-    OSL_ENSURE( pTextNode != NULL, "Text node is needed!" );
+    OSL_ENSURE( pTextNode != nullptr, "Text node is needed!" );
 
     // reserve some space to reduce memory allocations
     aLineBreaks.reserve( 5 );
@@ -484,9 +484,9 @@ void SwAccessiblePortionData::GetSentenceBoundary(
     OSL_ENSURE( nPos >= 0, "illegal position; check before" );
     OSL_ENSURE( nPos < sAccessibleString.getLength(), "illegal position" );
 
-    if( pSentences == NULL )
+    if( pSentences == nullptr )
     {
-        OSL_ENSURE( g_pBreakIt != NULL, "We always need a break." );
+        OSL_ENSURE( g_pBreakIt != nullptr, "We always need a break." );
         OSL_ENSURE( g_pBreakIt->GetBreakIter().is(), "No break-iterator." );
         if( g_pBreakIt->GetBreakIter().is() )
         {
@@ -536,7 +536,7 @@ void SwAccessiblePortionData::GetAttributeBoundary(
     Boundary& rBound,
     sal_Int32 nPos) const
 {
-    OSL_ENSURE( pTextNode != NULL, "Need SwTextNode!" );
+    OSL_ENSURE( pTextNode != nullptr, "Need SwTextNode!" );
 
     // attribute boundaries can only occur on portion boundaries
     FillBoundary( rBound, aAccessiblePositions,
@@ -642,10 +642,10 @@ sal_Int32 SwAccessiblePortionData::FillSpecialPos(
                         "text portion expected" );
 
             nModelPos += nPos - aAccessiblePositions[ nPortionNo ];
-            rpPos = NULL;
+            rpPos = nullptr;
         }
     }
-    if( rpPos != NULL )
+    if( rpPos != nullptr )
     {
         OSL_ENSURE( rpPos == &rPos, "Yes!" );
         OSL_ENSURE( nRefPos <= nPos, "wrong reference" );

@@ -43,7 +43,7 @@ bool SwPaM::Find( const SwFormat& rFormat, SwMoveFn fnMove,
 
     bool bFirst = true;
     SwContentNode* pNode;
-    while( 0 != ( pNode = ::GetNode( *pPam, bFirst, fnMove, bInReadOnly )))
+    while( nullptr != ( pNode = ::GetNode( *pPam, bFirst, fnMove, bInReadOnly )))
     {
         if ( pNode->GetFormatColl() == &rFormat )
         {

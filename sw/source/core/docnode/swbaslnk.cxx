@@ -114,7 +114,7 @@ static void lcl_CallModify( SwGrfNode& rGrfNd, SfxPoolItem& rItem )
             }
 
             SwFrameFormat* pFormat;
-            if( nEvent && 0 != ( pFormat = pContentNode->GetFlyFormat() ))
+            if( nEvent && nullptr != ( pFormat = pContentNode->GetFlyFormat() ))
             {
                 SwCallMouseEvent aCallEvent;
                 aCallEvent.Set( EVENT_OBJECT_IMAGE, pFormat );
@@ -130,7 +130,7 @@ static void lcl_CallModify( SwGrfNode& rGrfNd, SfxPoolItem& rItem )
     bool bDontNotify = false;
     Size aGrfSz, aOldSz;
 
-    SwGrfNode* pSwGrfNode = NULL;
+    SwGrfNode* pSwGrfNode = nullptr;
 
     if (pContentNode->IsGrfNode())
     {
@@ -151,7 +151,7 @@ static void lcl_CallModify( SwGrfNode& rGrfNd, SfxPoolItem& rItem )
             ( GRAPHIC_DEFAULT != aGrf.GetType() ||
               GRAPHIC_DEFAULT != rGrfObj.GetType() ) )
         {
-            aGrfSz = ::GetGraphicSizeTwip( aGrf, 0 );
+            aGrfSz = ::GetGraphicSizeTwip( aGrf, nullptr );
 
             if( bGraphicPieceArrived && GRAPHIC_DEFAULT != aGrf.GetType() &&
                 ( !aOldSz.Width() || !aOldSz.Height() ) )
@@ -292,7 +292,7 @@ static bool SetGrfFlySize( const Size& rGrfSz, SwGrfNode* pGrfNd, const Size& rO
 {
     bool bRet = false;
     SwViewShell *pSh = pGrfNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
-    CurrShell *pCurr = 0;
+    CurrShell *pCurr = nullptr;
     if ( pGrfNd->GetDoc()->GetEditShell() )
         pCurr = new CurrShell( pSh );
 
@@ -302,7 +302,7 @@ static bool SetGrfFlySize( const Size& rGrfSz, SwGrfNode* pGrfNd, const Size& rO
     {
         SwFrameFormat* pFormat;
         if( pGrfNd->IsChgTwipSize() &&
-            0 != (pFormat = pGrfNd->GetFlyFormat()) )
+            nullptr != (pFormat = pGrfNd->GetFlyFormat()) )
         {
             Size aCalcSz( aSz );
             if ( !aSz.Height() && aSz.Width() )
@@ -340,8 +340,8 @@ static bool SetGrfFlySize( const Size& rGrfSz, SwGrfNode* pGrfNd, const Size& rO
                 SwNode *pANd;
                 SwTableNode *pTableNd;
                 if( pAPos &&
-                    0 != (pANd = & pAPos->nNode.GetNode()) &&
-                    0 != (pTableNd = pANd->FindTableNode()) )
+                    nullptr != (pANd = & pAPos->nNode.GetNode()) &&
+                    nullptr != (pTableNd = pANd->FindTableNode()) )
                 {
                     const bool bLastGrf = !pTableNd->GetTable().DecGrfsThatResize();
                     SwHTMLTableLayout *pLayout =
@@ -457,12 +457,12 @@ const SwNode* SwBaseLink::GetAnchor() const
             {
                     return &pAPos->nNode.GetNode();
             }
-            return 0;
+            return nullptr;
         }
     }
 
     OSL_ENSURE( false, "GetAnchor is not shadowed" );
-    return 0;
+    return nullptr;
 }
 
 bool SwBaseLink::IsRecursion( const SwBaseLink* pChkLnk ) const

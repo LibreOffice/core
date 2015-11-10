@@ -59,7 +59,7 @@ protected:
     virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) override;
 };
 
-SwGrammarContact::SwGrammarContact() : mpProxyList(0), mbFinished( false )
+SwGrammarContact::SwGrammarContact() : mpProxyList(nullptr), mbFinished( false )
 {
     aTimer.SetTimeout( 2000 );  // Repaint of grammar check after 'setChecked'
     aTimer.SetTimeoutHdl( LINK(this, SwGrammarContact, TimerRepaint) );
@@ -73,7 +73,7 @@ IMPL_LINK_TYPED( SwGrammarContact, TimerRepaint, Timer *, pTimer, void )
         if( GetRegisteredIn() )
         {   //Replace the old wrong list by the proxy list and repaint all frames
             getMyTextNode()->SetGrammarCheck( mpProxyList );
-            mpProxyList = 0;
+            mpProxyList = nullptr;
             SwTextFrm::repaintTextFrames( *getMyTextNode() );
         }
     }
@@ -94,7 +94,7 @@ void SwGrammarContact::updateCursorPosition( const SwPosition& rNewPos )
                 SwTextFrm::repaintTextFrames( *getMyTextNode() );
             }
             GetRegisteredInNonConst()->Remove( this ); // good bye old paragraph
-            mpProxyList = 0;
+            mpProxyList = nullptr;
         }
         if( pTextNode )
             pTextNode->Add( this ); // welcome new paragraph
@@ -104,7 +104,7 @@ void SwGrammarContact::updateCursorPosition( const SwPosition& rNewPos )
 /* deliver a grammar check list for the given text node */
 SwGrammarMarkUp* SwGrammarContact::getGrammarCheck( SwTextNode& rTextNode, bool bCreate )
 {
-    SwGrammarMarkUp *pRet = 0;
+    SwGrammarMarkUp *pRet = nullptr;
     if( GetRegisteredIn() == &rTextNode ) // hey, that's my current paragraph!
     {   // so you will get a proxy list...
         if( bCreate )
@@ -112,7 +112,7 @@ SwGrammarMarkUp* SwGrammarContact::getGrammarCheck( SwTextNode& rTextNode, bool 
             if( mbFinished )
             {
                 delete mpProxyList;
-                mpProxyList = 0;
+                mpProxyList = nullptr;
             }
             if( !mpProxyList )
             {
@@ -153,7 +153,7 @@ void SwGrammarContact::Modify( const SfxPoolItem* pOld, const SfxPoolItem * )
         aTimer.Stop();
         GetRegisteredInNonConst()->Remove( this );
         delete mpProxyList;
-        mpProxyList = 0;
+        mpProxyList = nullptr;
     }
 }
 
@@ -170,7 +170,7 @@ void SwGrammarContact::finishGrammarCheck( SwTextNode& rTextNode )
         }
         else if( getMyTextNode()->GetGrammarCheck() )
         {   // all grammar problems seems to be gone, no delay needed
-            getMyTextNode()->SetGrammarCheck( 0 );
+            getMyTextNode()->SetGrammarCheck( nullptr );
             SwTextFrm::repaintTextFrames( *getMyTextNode() );
         }
     }

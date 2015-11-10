@@ -200,7 +200,7 @@ public:
     explicit SwConnectionDisposedListener_Impl(SwDBManager& rMgr);
     virtual ~SwConnectionDisposedListener_Impl();
 
-    void Dispose() { m_pDBManager = 0; }
+    void Dispose() { m_pDBManager = nullptr; }
 
 };
 
@@ -279,7 +279,7 @@ void SwDataSourceRemovedListener::disposing(const lang::EventObject& /*rObject*/
 
 void SwDataSourceRemovedListener::Dispose()
 {
-    m_pDBManager = 0;
+    m_pDBManager = nullptr;
 }
 
 struct SwDBManager_Impl
@@ -290,8 +290,8 @@ struct SwDBManager_Impl
     rtl::Reference<SwDataSourceRemovedListener> m_xDataSourceRemovedListener;
 
     explicit SwDBManager_Impl(SwDBManager& rDBManager)
-       :pMergeData(0)
-       ,pMergeDialog(0)
+       :pMergeData(nullptr)
+       ,pMergeDialog(nullptr)
        , m_xDisposeListener(new SwConnectionDisposedListener_Impl(rDBManager))
         {}
 
@@ -781,7 +781,7 @@ SwDBManager::SwDBManager(SwDoc* pDoc)
     , bMergeSilent(false)
     , bMergeLock(false)
     , pImpl(new SwDBManager_Impl(*this))
-    , pMergeEvtSrc(NULL)
+    , pMergeEvtSrc(nullptr)
     , m_pDoc(pDoc)
 {
 }
@@ -914,7 +914,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
     OUString sBodyMimeType;
     rtl_TextEncoding eEncoding = ::osl_getThreadTextEncoding();
 
-    static const char *sMaxDumpDocs = 0;
+    static const char *sMaxDumpDocs = nullptr;
     static sal_Int32 nMaxDumpDocs = 0;
     if (!sMaxDumpDocs)
     {
@@ -973,7 +973,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
             const SfxFilter* pStoreToFilter = SwIoSystem::GetFileFilter(
                 pSourceDocSh->GetMedium()->GetURLObject().GetMainURL(INetURLObject::NO_DECODE));
             SfxFilterContainer* pFilterContainer = SwDocShell::Factory().GetFilterContainer();
-            const OUString* pStoreToFilterOptions = 0;
+            const OUString* pStoreToFilterOptions = nullptr;
 
             // if a save_to filter is set then use it - otherwise use the default
             if( bEMail && !rMergeDescriptor.bSendAsAttachment )
@@ -995,12 +995,12 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
             bCancel = false;
 
             // in case of creating a single resulting file this has to be created here
-            SwWrtShell* pTargetShell = 0;
-            SwDoc* pTargetDoc = 0;
+            SwWrtShell* pTargetShell = nullptr;
+            SwDoc* pTargetDoc = nullptr;
 
             SfxObjectShellRef xTargetDocShell;
 
-            SwView* pTargetView = 0;
+            SwView* pTargetView = nullptr;
             std::unique_ptr< utl::TempFile > aTempFile;
             bool createTempFile = ( rMergeDescriptor.nMergeType == DBMGR_MERGE_EMAIL || rMergeDescriptor.nMergeType == DBMGR_MERGE_FILE );
             OUString sModifiedStartingPageDesc;
@@ -1008,7 +1008,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
             sal_uInt16 nStartingPageNo = 0;
             bool bPageStylesWithHeaderFooter = false;
 
-            vcl::Window *pSourceWindow = 0;
+            vcl::Window *pSourceWindow = nullptr;
             VclPtr<CancelableDialog> pProgressDlg;
 
             if (!IsMergeSilent()) {
@@ -1104,9 +1104,9 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
             // The SfxObjectShell will be closed explicitly later but it is more safe to use SfxObjectShellLock here
             SfxObjectShellLock xWorkDocSh;
             // a view frame for the document
-            SwView* pWorkView = NULL;
-            SwDoc* pWorkDoc = NULL;
-            SwDBManager* pOldDBManager = NULL;
+            SwView* pWorkView = nullptr;
+            SwDoc* pWorkDoc = nullptr;
+            SwDBManager* pOldDBManager = nullptr;
 
             do
             {
@@ -1241,7 +1241,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
 
                             //#i72517# put the styles to the target document
                             //if the source uses headers or footers each new copy need to copy a new page styles
-                            SwPageDesc* pTargetPageDesc(NULL);
+                            SwPageDesc* pTargetPageDesc(nullptr);
                             if(bPageStylesWithHeaderFooter)
                             {
                                 //create a new pagestyle
@@ -1430,7 +1430,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                         {
                             pWorkDoc->SetDBManager( pOldDBManager );
                             xWorkDocSh->DoClose();
-                            xWorkDocSh = NULL;
+                            xWorkDocSh = nullptr;
                         }
                     }
                 }
@@ -1819,7 +1819,7 @@ uno::Reference< sdbc::XConnection> SwDBManager::GetConnection(const OUString& rD
         if ( xComplConnection.is() )
         {
             rxSource.set(xComplConnection, uno::UNO_QUERY);
-            uno::Reference< task::XInteractionHandler > xHandler( task::InteractionHandler::createWithParent(xContext, 0), uno::UNO_QUERY_THROW );
+            uno::Reference< task::XInteractionHandler > xHandler( task::InteractionHandler::createWithParent(xContext, nullptr), uno::UNO_QUERY_THROW );
             xConnection = xComplConnection->connectWithCompletion( xHandler );
         }
     }
@@ -1981,7 +1981,7 @@ bool SwDBManager::GetColumnCnt(const OUString& rSourceName, const OUString& rTab
                            OUString& rResult, double* pNumber)
 {
     bool bRet = false;
-    SwDSParam* pFound = 0;
+    SwDSParam* pFound = nullptr;
     //check if it's the merge data source
     if(pImpl->pMergeData &&
         rSourceName == pImpl->pMergeData->sDataSource &&
@@ -2132,7 +2132,7 @@ bool SwDBManager::FillCalcWithMergeData( SvNumberFormatter *pDocFormatter,
 bool SwDBManager::ToNextRecord(
     const OUString& rDataSource, const OUString& rCommand, sal_Int32 /*nCommandType*/)
 {
-    SwDSParam* pFound = 0;
+    SwDSParam* pFound = nullptr;
     if(pImpl->pMergeData &&
         rDataSource == pImpl->pMergeData->sDataSource &&
         rCommand == pImpl->pMergeData->sCommand)
@@ -2285,9 +2285,9 @@ bool SwDBManager::OpenDataSource(const OUString& rDataSource, const OUString& rT
         }
         catch (const uno::Exception&)
         {
-            pFound->xResultSet = 0;
-            pFound->xStatement = 0;
-            pFound->xConnection = 0;
+            pFound->xResultSet = nullptr;
+            pFound->xStatement = nullptr;
+            pFound->xConnection = nullptr;
         }
     }
     return pFound->xResultSet.is();
@@ -2387,7 +2387,7 @@ SwDSParam* SwDBManager::FindDSData(const SwDBData& rData, bool bCreate)
          return pImpl->pMergeData;
     }
 
-    SwDSParam* pFound = 0;
+    SwDSParam* pFound = nullptr;
     for (size_t nPos = m_DataSourceParams.size(); nPos; nPos--)
     {
         SwDSParam* pParam = m_DataSourceParams[nPos - 1].get();
@@ -2432,7 +2432,7 @@ SwDSParam*  SwDBManager::FindDSConnection(const OUString& rDataSource, bool bCre
     {
          return pImpl->pMergeData;
     }
-    SwDSParam* pFound = 0;
+    SwDSParam* pFound = nullptr;
     for (auto & pParam : m_DataSourceParams)
     {
         if(rDataSource == pParam->sDataSource)
@@ -2524,7 +2524,7 @@ OUString SwDBManager::LoadAndRegisterDataSource(SwDocShell* pDocShell)
             if( xSettingsDlg->execute() )
                 aSettings.set( uno::Reference < beans::XPropertySet >( xSettingsDlg, uno::UNO_QUERY_THROW ) );
         }
-        sFind = LoadAndRegisterDataSource( type, aURLAny, DBCONN_FLAT == type ? &aSettings : 0, aURI, 0, 0, pDocShell );
+        sFind = LoadAndRegisterDataSource( type, aURLAny, DBCONN_FLAT == type ? &aSettings : nullptr, aURI, nullptr, nullptr, pDocShell );
     }
     return sFind;
 }
@@ -2805,7 +2805,7 @@ void SwDBManager::ExecuteFormLetter( SwWrtShell& rSh,
     }
 
     //always create a connection for the dialog and dispose it after the dialog has been closed
-    SwDSParam* pFound = 0;
+    SwDSParam* pFound = nullptr;
     if(!xConnection.is())
     {
         xConnection = SwDBManager::RegisterConnection(sDataSource);
@@ -2819,7 +2819,7 @@ void SwDBManager::ExecuteFormLetter( SwWrtShell& rSh,
                                                         sDataTableOrQuery,
                                                         nCmdType,
                                                         xConnection,
-                                                        bWithDataSourceBrowser ? 0 : &aSelection);
+                                                        bWithDataSourceBrowser ? nullptr : &aSelection);
     OSL_ENSURE(pImpl->pMergeDialog, "Dialog creation failed!");
     if(pImpl->pMergeDialog->Execute() == RET_OK)
     {
@@ -2909,7 +2909,7 @@ void SwDBManager::ExecuteFormLetter( SwWrtShell& rSh,
         SfxGetpApp()->NotifyEvent(SfxEventHint(SW_EVENT_MAIL_MERGE_END, SwDocShell::GetEventName(STR_SW_EVENT_MAIL_MERGE_END), rSh.GetView().GetViewFrame()->GetObjectShell()));
 
         // reset the cursor inside
-        xResSet = NULL;
+        xResSet = nullptr;
         aDescriptor[svx::daCursor] <<= xResSet;
     }
     if(pFound)
@@ -3046,7 +3046,7 @@ uno::Reference<sdbc::XResultSet> SwDBManager::createCursor(const OUString& _sDat
 
                 if ( xRowSet.is() )
                 {
-                    uno::Reference< task::XInteractionHandler > xHandler( task::InteractionHandler::createWithParent(comphelper::getComponentContext(xMgr), 0), uno::UNO_QUERY_THROW );
+                    uno::Reference< task::XInteractionHandler > xHandler( task::InteractionHandler::createWithParent(comphelper::getComponentContext(xMgr), nullptr), uno::UNO_QUERY_THROW );
                     xRowSet->executeWithCompletion(xHandler);
                 }
                 xResultSet.set(xRowSet, uno::UNO_QUERY);

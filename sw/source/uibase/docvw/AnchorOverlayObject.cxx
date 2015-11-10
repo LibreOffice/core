@@ -235,7 +235,7 @@ ImplPrimitive2DIDBlock(AnchorPrimitive, PRIMITIVE2D_ID_SWSIDEBARANCHORPRIMITIVE)
                                                        const Point& aLineEnd,
                                                        const Color& aColorAnchor )
 {
-    AnchorOverlayObject* pAnchorOverlayObject( 0 );
+    AnchorOverlayObject* pAnchorOverlayObject( nullptr );
     if ( rDocView.GetDrawView() )
     {
         SdrPaintWindow* pPaintWindow = rDocView.GetDrawView()->GetPaintWindow(0);

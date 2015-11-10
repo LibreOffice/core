@@ -124,7 +124,7 @@
 
 #include <app.hrc>
 #include <svx/xmlsecctrl.hxx>
-ResMgr *pSwResMgr = 0;
+ResMgr *pSwResMgr = nullptr;
 bool     g_bNoInterrupt     = false;
 
 #include <sfx2/app.hxx>
@@ -147,27 +147,27 @@ SwModule::SwModule( SfxObjectFactory* pWebFact,
                     SfxObjectFactory* pGlobalFact )
     : SfxModule( ResMgr::CreateResMgr( "sw" ), false, pWebFact,
                      pFact, pGlobalFact, NULL ),
-    m_pModuleConfig(0),
-    m_pUsrPref(0),
-    m_pWebUsrPref(0),
-    m_pPrintOptions(0),
-    m_pWebPrintOptions(0),
-    m_pChapterNumRules(0),
-    m_pStdFontConfig(0),
-    m_pNavigationConfig(0),
-    m_pToolbarConfig(0),
-    m_pWebToolbarConfig(0),
-    m_pDBConfig(0),
-    m_pColorConfig(0),
-    m_pAccessibilityOptions(0),
-    m_pCTLOptions(0),
-    m_pUserOptions(0),
-    m_pAttrPool(0),
-    m_pView(0),
+    m_pModuleConfig(nullptr),
+    m_pUsrPref(nullptr),
+    m_pWebUsrPref(nullptr),
+    m_pPrintOptions(nullptr),
+    m_pWebPrintOptions(nullptr),
+    m_pChapterNumRules(nullptr),
+    m_pStdFontConfig(nullptr),
+    m_pNavigationConfig(nullptr),
+    m_pToolbarConfig(nullptr),
+    m_pWebToolbarConfig(nullptr),
+    m_pDBConfig(nullptr),
+    m_pColorConfig(nullptr),
+    m_pAccessibilityOptions(nullptr),
+    m_pCTLOptions(nullptr),
+    m_pUserOptions(nullptr),
+    m_pAttrPool(nullptr),
+    m_pView(nullptr),
     m_bAuthorInitialised(false),
     m_bEmbeddedLoadSave( false ),
-    m_pDragDrop( 0 ),
-    m_pXSelection( 0 )
+    m_pDragDrop( nullptr ),
+    m_pXSelection( nullptr )
 {
     SetName( "StarWriter" );
     pSwResMgr = GetResMgr();
@@ -390,13 +390,13 @@ void SwDLL::RegisterControls()
 void    SwModule::InitAttrPool()
 {
     OSL_ENSURE(!m_pAttrPool, "Pool already exists!");
-    m_pAttrPool = new SwAttrPool(0);
+    m_pAttrPool = new SwAttrPool(nullptr);
     SetPool(m_pAttrPool);
 }
 
 void    SwModule::RemoveAttrPool()
 {
-    SetPool(0);
+    SetPool(nullptr);
     SfxItemPool::Free(m_pAttrPool);
 }
 

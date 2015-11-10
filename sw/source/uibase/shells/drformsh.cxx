@@ -71,7 +71,7 @@ TYPEINIT1(SwDrawFormShell, SwDrawBaseShell)
 void SwDrawFormShell::Execute(SfxRequest &rReq)
 {
     SwWrtShell &rSh = GetShell();
-    const SfxPoolItem* pItem = 0;
+    const SfxPoolItem* pItem = nullptr;
     const SfxItemSet *pArgs = rReq.GetArgs();
 
     switch ( rReq.GetSlot() )

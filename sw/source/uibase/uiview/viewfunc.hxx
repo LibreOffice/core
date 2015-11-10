@@ -43,8 +43,8 @@ void ViewResizePixel( const vcl::RenderContext &rRef,
                     SwScrollbar& rVScrollbar,
                     SwScrollbar& rHScrollbar,
                     vcl::Window& rScrollBarBox,
-                    SvxRuler* pVRuler = 0,
-                    SvxRuler* pHRuler = 0,
+                    SvxRuler* pVRuler = nullptr,
+                    SvxRuler* pHRuler = nullptr,
                     bool bVRulerRight = false );
 
 #endif

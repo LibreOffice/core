@@ -38,7 +38,7 @@ namespace {
         throw (css::lang::IllegalArgumentException,
                css::uno::RuntimeException)
     {
-        const SwWrongList* pTextMarkupList( 0 );
+        const SwWrongList* pTextMarkupList( nullptr );
         switch ( nTextMarkupType )
         {
             case text::TextMarkupType::SPELLCHECK:
@@ -49,13 +49,13 @@ namespace {
             case text::TextMarkupType::PROOFREADING:
             {
                 // support not implemented yet
-                pTextMarkupList = 0;
+                pTextMarkupList = nullptr;
             }
             break;
             case text::TextMarkupType::SMARTTAG:
             {
                 // support not implemented yet
-                pTextMarkupList = 0;
+                pTextMarkupList = nullptr;
             }
             break;
             default:
@@ -74,7 +74,7 @@ SwTextMarkupHelper::SwTextMarkupHelper( const SwAccessiblePortionData& rPortionD
     : mrPortionData( rPortionData )
     // #i108125#
     , mpTextNode( &rTextNode )
-    , mpTextMarkupList( 0 )
+    , mpTextMarkupList( nullptr )
 {
 }
 
@@ -82,7 +82,7 @@ SwTextMarkupHelper::SwTextMarkupHelper( const SwAccessiblePortionData& rPortionD
 SwTextMarkupHelper::SwTextMarkupHelper( const SwAccessiblePortionData& rPortionData,
                                         const SwWrongList& rTextMarkupList )
     : mrPortionData( rPortionData )
-    , mpTextNode( 0 )
+    , mpTextNode( nullptr )
     , mpTextMarkupList( &rTextMarkupList )
 {
 }

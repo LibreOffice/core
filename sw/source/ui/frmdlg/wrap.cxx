@@ -71,7 +71,7 @@ SwWrapTabPage::SwWrapTabPage(vcl::Window *pParent, const SfxItemSet &rSet)
     , m_nOldLowerMargin(0)
     , m_nAnchorId(FLY_AT_PARA)
     , m_nHtmlMode(0)
-    , m_pWrtSh(0)
+    , m_pWrtSh(nullptr)
     , m_bFormat(false)
     , m_bNew(true)
     , m_bHtmlMode(false)
@@ -222,7 +222,7 @@ void SwWrapTabPage::Reset(const SfxItemSet *rSet)
     m_pWrapThroughRB->Enable(!m_pWrapOutlineCB->IsChecked());
     m_bContourImage = !bContour;
 
-    RadioButton* pBtn = NULL;
+    RadioButton* pBtn = nullptr;
 
     switch (nSur)
     {
@@ -286,7 +286,7 @@ void SwWrapTabPage::Reset(const SfxItemSet *rSet)
     m_pTopMarginED->SetValue(m_pTopMarginED->Normalize(rUL.GetUpper()), FUNIT_TWIP);
     m_pBottomMarginED->SetValue(m_pBottomMarginED->Normalize(rUL.GetLower()), FUNIT_TWIP);
 
-    ContourHdl(0);
+    ContourHdl(nullptr);
     ActivatePage( *rSet );
 }
 
@@ -331,7 +331,7 @@ bool SwWrapTabPage::FillItemSet(SfxItemSet *rSet)
     if ( bContour )
         aSur.SetOutside(m_pWrapOutsideCB->IsChecked());
 
-    if(0 == (pOldItem = GetOldItem( *rSet, RES_SURROUND )) ||
+    if(nullptr == (pOldItem = GetOldItem( *rSet, RES_SURROUND )) ||
                 aSur != *pOldItem )
     {
         rSet->Put(aSur);
@@ -340,7 +340,7 @@ bool SwWrapTabPage::FillItemSet(SfxItemSet *rSet)
 
     if (!m_bDrawMode)
     {
-        if(0 == (pOldItem = GetOldItem( *rSet, FN_OPAQUE )) ||
+        if(nullptr == (pOldItem = GetOldItem( *rSet, FN_OPAQUE )) ||
                     aOp != *pOldItem )
         {
             rSet->Put(aOp);
@@ -357,7 +357,7 @@ bool SwWrapTabPage::FillItemSet(SfxItemSet *rSet)
 
     if ( bTopMod || bBottomMod )
     {
-        if(0 == (pOldItem = GetOldItem(*rSet, RES_UL_SPACE)) ||
+        if(nullptr == (pOldItem = GetOldItem(*rSet, RES_UL_SPACE)) ||
                 aUL != *pOldItem )
         {
             rSet->Put( aUL, RES_UL_SPACE );
@@ -374,7 +374,7 @@ bool SwWrapTabPage::FillItemSet(SfxItemSet *rSet)
 
     if ( bLeftMod || bRightMod )
     {
-        if( 0 == (pOldItem = GetOldItem(*rSet, RES_LR_SPACE)) ||
+        if( nullptr == (pOldItem = GetOldItem(*rSet, RES_LR_SPACE)) ||
                 aLR != *pOldItem )
         {
             rSet->Put(aLR, RES_LR_SPACE);
@@ -386,7 +386,7 @@ bool SwWrapTabPage::FillItemSet(SfxItemSet *rSet)
     {
         bool bChecked = m_pWrapTransparentCB->IsChecked() && m_pWrapTransparentCB->IsEnabled();
         if ((m_pWrapTransparentCB->GetSavedValue() == 1) != bChecked)
-            bModified |= 0 != rSet->Put(SfxInt16Item(FN_DRAW_WRAP_DLG, bChecked ? 0 : 1));
+            bModified |= nullptr != rSet->Put(SfxInt16Item(FN_DRAW_WRAP_DLG, bChecked ? 0 : 1));
     }
 
     return bModified;
@@ -448,7 +448,7 @@ void SwWrapTabPage::ActivatePage(const SfxItemSet& rSet)
         aVal.nHeight = aSize.Height();
         m_aFrmSize = aSize;
 
-        aMgr.ValidateMetrics(aVal, 0);
+        aMgr.ValidateMetrics(aVal, nullptr);
 
         SwTwips nLeft;
         SwTwips nRight;
@@ -575,7 +575,7 @@ void SwWrapTabPage::ActivatePage(const SfxItemSet& rSet)
                 ((m_nAnchorId == FLY_AT_PARA) || (m_nAnchorId == FLY_AT_CHAR))
                 && nSur != SURROUND_NONE );
     }
-    ContourHdl(0);
+    ContourHdl(nullptr);
 }
 
 SfxTabPage::sfxpg SwWrapTabPage::DeactivatePage(SfxItemSet* _pSet)
@@ -595,7 +595,7 @@ IMPL_LINK_TYPED( SwWrapTabPage, RangeModifyHdl, SpinField&, rSpin, void )
 {
     MetricField& rEdit = static_cast<MetricField&>(rSpin);
     sal_Int64 nValue = rEdit.GetValue();
-    MetricField *pOpposite = 0;
+    MetricField *pOpposite = nullptr;
     if (&rEdit == m_pLeftMarginED)
         pOpposite = m_pRightMarginED;
     else if (&rEdit == m_pRightMarginED)
@@ -627,7 +627,7 @@ IMPL_LINK_TYPED( SwWrapTabPage, WrapTypeHdl, Button *, pBtn, void )
         ((m_nAnchorId == FLY_AT_PARA) || (m_nAnchorId == FLY_AT_CHAR)) &&
         (pBtn != m_pNoWrapRB) );
 
-    ContourHdl(0);
+    ContourHdl(nullptr);
 }
 
 IMPL_LINK_NOARG_TYPED(SwWrapTabPage, ContourHdl, Button*, void)

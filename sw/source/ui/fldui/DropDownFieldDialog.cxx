@@ -35,7 +35,7 @@ sw::DropDownFieldDialog::DropDownFieldDialog(vcl::Window *pParent, SwWrtShell &r
     : SvxStandardDialog(pParent, "DropdownFieldDialog",
         "modules/swriter/ui/dropdownfielddialog.ui")
     , rSh( rS )
-    , pDropField(0)
+    , pDropField(nullptr)
 {
     get(m_pListItemsLB, "list");
     m_pListItemsLB->SetDropDownLineCount(12);

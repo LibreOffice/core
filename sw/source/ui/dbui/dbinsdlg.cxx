@@ -123,14 +123,14 @@ struct DB_Column
 
     DB_Column()
     {
-        pColInfo = 0;
-        DB_ColumnData.pText = 0;
+        pColInfo = nullptr;
+        DB_ColumnData.pText = nullptr;
         eColType = DB_SPLITPARA;
     }
 
     explicit DB_Column( const OUString& rText )
     {
-        pColInfo = 0;
+        pColInfo = nullptr;
         DB_ColumnData.pText = new OUString( rText );
         eColType = DB_FILLTEXT;
     }
@@ -197,9 +197,9 @@ SwInsertDBColAutoPilot::SwInsertDBColAutoPilot( SwView& rView,
     , aDBData(rData)
     , sNoTmpl(SW_RESSTR(SW_STR_NONE))
     , pView(&rView)
-    , pTAutoFormat(0)
-    , pTableSet(0)
-    , pRep(0)
+    , pTAutoFormat(nullptr)
+    , pTableSet(nullptr)
+    , pRep(nullptr)
 {
     get(m_pRbAsTable, "astable");
     get(m_pRbAsField, "asfields");
@@ -486,7 +486,7 @@ IMPL_LINK_TYPED( SwInsertDBColAutoPilot, PageHdl, Button*, pButton, void )
 IMPL_LINK_TYPED( SwInsertDBColAutoPilot, DBFormatHdl, Button*, pButton, void )
 {
     ListBox& rBox = m_pRbAsTable->IsChecked()
-                        ? ( 0 == m_pLbTableCol->GetEntryData( 0 )
+                        ? ( nullptr == m_pLbTableCol->GetEntryData( 0 )
                             ? *m_pLbTableDbColumn
                             : *m_pLbTableCol )
                         : *m_pLbTextDbColumn;
@@ -644,7 +644,7 @@ IMPL_LINK_TYPED( SwInsertDBColAutoPilot, TableToFromHdl, Button*, pButton, void 
 
 IMPL_LINK_TYPED( SwInsertDBColAutoPilot, DblClickHdl, ListBox&, rBox, void )
 {
-    Button* pButton = 0;
+    Button* pButton = nullptr;
     if( &rBox == m_pLbTextDbColumn )
         pButton = m_pIbDbcolToEdit;
     else if( &rBox == m_pLbTableDbColumn && m_pIbDbcolOneTo->IsEnabled() )
@@ -716,7 +716,7 @@ IMPL_LINK_TYPED( SwInsertDBColAutoPilot, TableFormatHdl, Button*, pButton, void 
         }
         else
             nWidth = rSh.GetAnyCurRect(
-                                FrmTypeFlags::FLY_ANY & rSh.GetFrmType( 0, true )
+                                FrmTypeFlags::FLY_ANY & rSh.GetFrmType( nullptr, true )
                                               ? RECT_FLY_PRT_EMBEDDED
                                               : RECT_PAGE_PRT ).Width();
 
@@ -769,8 +769,8 @@ IMPL_LINK_TYPED( SwInsertDBColAutoPilot, TableFormatHdl, Button*, pButton, void 
         pTableSet->Put( *pDlg->GetOutputItemSet() );
     else if( bNewSet )
     {
-        delete pTableSet, pTableSet = 0;
-        delete pRep, pRep = 0;
+        delete pTableSet, pTableSet = nullptr;
+        delete pRep, pRep = nullptr;
     }
 }
 
@@ -789,7 +789,7 @@ IMPL_LINK_TYPED( SwInsertDBColAutoPilot, SelectHdl, ListBox&, rBox, void )
 {
     ListBox* pGetBox = &rBox == m_pLbDbFormatFromUsr
                             ? ( m_pRbAsTable->IsChecked()
-                                    ? ( 0 == m_pLbTableCol->GetEntryData( 0 )
+                                    ? ( nullptr == m_pLbTableCol->GetEntryData( 0 )
                                         ? m_pLbTableDbColumn.get()
                                         : m_pLbTableCol.get() )
                                     : m_pLbTextDbColumn.get() )
@@ -840,7 +840,7 @@ IMPL_LINK_TYPED( SwInsertDBColAutoPilot, SelectHdl, ListBox&, rBox, void )
 
         // to know later on, what ListBox was the "active", a Flag
         // is remembered in the 1st entry
-        void* pPtr = &rBox == m_pLbTableCol ? m_pLbTableCol.get() : 0;
+        void* pPtr = &rBox == m_pLbTableCol ? m_pLbTableCol.get() : nullptr;
         m_pLbTableCol->SetEntryData( 0, pPtr );
     }
 }
@@ -955,7 +955,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
     Reference< XConnection> xConnection,
     Reference< sdbc::XResultSet > xResultSet )
 {
-    const Any* pSelection = rSelection.getLength() ? rSelection.getConstArray() : 0;
+    const Any* pSelection = rSelection.getLength() ? rSelection.getConstArray() : nullptr;
     SwWrtShell& rSh = pView->GetWrtShell();
 
     //with the drag and drop interface no result set is initially available
@@ -1032,7 +1032,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
         bool bHTML = 0 != (::GetHtmlMode( pView->GetDocShell() ) & HTMLMODE_ON);
         rSh.InsertTable(
             pModOpt->GetInsTableFlags(bHTML),
-            nRows, nCols, text::HoriOrientation::FULL, (pSelection ? pTAutoFormat : 0) );
+            nRows, nCols, text::HoriOrientation::FULL, (pSelection ? pTAutoFormat : nullptr) );
         rSh.MoveTable( GetfnTablePrev(), GetfnTableStart() );
 
         if( pSelection && pTableSet )
@@ -1199,7 +1199,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
 
             rSh.DoUndo( false );
 
-            SwTextFormatColl* pColl = 0;
+            SwTextFormatColl* pColl = nullptr;
             {
                 const OUString sTmplNm( m_pLbDbParaColl->GetSelectEntry() );
                 if( sNoTmpl != sTmplNm )
@@ -1249,7 +1249,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
 
             bool bSetCrsr = true;
             const size_t nCols = aColArr.size();
-            ::sw::mark::IMark* pMark = NULL;
+            ::sw::mark::IMark* pMark = nullptr;
             for( sal_Int32 i = 0 ; ; ++i )
             {
                 bool bBreak = false;
@@ -1396,7 +1396,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
                     pWait.reset(new SwWait( *pView->GetDocShell(), true ));
             }
 
-            if( !bSetCrsr && pMark != NULL)
+            if( !bSetCrsr && pMark != nullptr)
             {
                 rSh.SetMark();
                 rSh.GotoMark( pMark );
@@ -1754,7 +1754,7 @@ void SwInsertDBColAutoPilot::Load()
             else
                 m_pLbDbParaColl->SelectEntryPos( 0 );
 
-            delete pTAutoFormat, pTAutoFormat = 0;
+            delete pTAutoFormat, pTAutoFormat = nullptr;
             sTmp = pNewData->sTAutoFormatNm;
             if( !sTmp.isEmpty() )
             {

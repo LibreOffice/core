@@ -44,9 +44,9 @@ using namespace objectpositioning;
 SwAnchoredObjectPosition::SwAnchoredObjectPosition( SdrObject& _rDrawObj )
     : mrDrawObj( _rDrawObj ),
       mbIsObjFly( false ),
-      mpAnchoredObj( 0 ),
-      mpAnchorFrm( 0 ),
-      mpContact( 0 ),
+      mpAnchoredObj( nullptr ),
+      mpAnchorFrm( nullptr ),
+      mpContact( nullptr ),
       // #i62875#
       mbFollowTextFlow( false ),
       mbDoNotCaptureAnchoredObj( false )
@@ -135,12 +135,12 @@ bool SwAnchoredObjectPosition::IsAnchoredToChar() const
 
 const SwFrm* SwAnchoredObjectPosition::ToCharOrientFrm() const
 {
-    return NULL;
+    return nullptr;
 }
 
 const SwRect* SwAnchoredObjectPosition::ToCharRect() const
 {
-    return NULL;
+    return nullptr;
 }
 
 // #i22341#

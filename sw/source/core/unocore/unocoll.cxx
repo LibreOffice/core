@@ -470,7 +470,7 @@ const SvEventDescription* sw_GetSupportedMacroItems()
     {
         { SFX_EVENT_MOUSEOVER_OBJECT, "OnMouseOver" },
         { SFX_EVENT_MOUSEOUT_OBJECT, "OnMouseOut" },
-        { 0, NULL }
+        { 0, nullptr }
     };
 
     return aMacroDescriptionsImpl;
@@ -526,39 +526,39 @@ SwXServiceProvider::MakeInstance(sal_uInt16 nObjectType, SwDoc & rDoc)
     {
         case  SW_SERVICE_TYPE_TEXTTABLE:
         {
-            xRet = SwXTextTable::CreateXTextTable(0);
+            xRet = SwXTextTable::CreateXTextTable(nullptr);
         }
         break;
         case  SW_SERVICE_TYPE_TEXTFRAME:
         {
-            xRet = SwXTextFrame::CreateXTextFrame(rDoc, 0);
+            xRet = SwXTextFrame::CreateXTextFrame(rDoc, nullptr);
         }
         break;
         case  SW_SERVICE_TYPE_GRAPHIC  :
         case  SW_SERVICE_TYPE_TEXT_GRAPHIC /* #i47503# */ :
         {
-            xRet = SwXTextGraphicObject::CreateXTextGraphicObject(rDoc, 0);
+            xRet = SwXTextGraphicObject::CreateXTextGraphicObject(rDoc, nullptr);
 
         }
         break;
         case  SW_SERVICE_TYPE_OLE      :
         {
-            xRet = SwXTextEmbeddedObject::CreateXTextEmbeddedObject(rDoc, 0);
+            xRet = SwXTextEmbeddedObject::CreateXTextEmbeddedObject(rDoc, nullptr);
         }
         break;
         case  SW_SERVICE_TYPE_BOOKMARK :
         {
-            xRet = SwXBookmark::CreateXBookmark(rDoc, 0);
+            xRet = SwXBookmark::CreateXBookmark(rDoc, nullptr);
         }
         break;
         case  SW_SERVICE_TYPE_FIELDMARK :
         {
-            xRet = SwXFieldmark::CreateXFieldmark(rDoc, 0);
+            xRet = SwXFieldmark::CreateXFieldmark(rDoc, nullptr);
         }
         break;
         case  SW_SERVICE_TYPE_FORMFIELDMARK :
         {
-            xRet = SwXFieldmark::CreateXFieldmark(rDoc, 0, true);
+            xRet = SwXFieldmark::CreateXFieldmark(rDoc, nullptr, true);
         }
         break;
         case  SW_SERVICE_VBAOBJECTPROVIDER :
@@ -613,10 +613,10 @@ SwXServiceProvider::MakeInstance(sal_uInt16 nObjectType, SwDoc & rDoc)
         break;
 
         case  SW_SERVICE_TYPE_FOOTNOTE :
-            xRet = SwXFootnote::CreateXFootnote(rDoc, 0);
+            xRet = SwXFootnote::CreateXFootnote(rDoc, nullptr);
         break;
         case  SW_SERVICE_TYPE_ENDNOTE  :
-            xRet = SwXFootnote::CreateXFootnote(rDoc, 0, true);
+            xRet = SwXFootnote::CreateXFootnote(rDoc, nullptr, true);
         break;
         case  SW_SERVICE_CONTENT_INDEX_MARK :
         case  SW_SERVICE_USER_INDEX_MARK    :
@@ -627,7 +627,7 @@ SwXServiceProvider::MakeInstance(sal_uInt16 nObjectType, SwDoc & rDoc)
                 eType = TOX_CONTENT;
             else if(SW_SERVICE_USER_INDEX_MARK == nObjectType)
                 eType = TOX_USER;
-            xRet = SwXDocumentIndexMark::CreateXDocumentIndexMark(rDoc, 0, eType);
+            xRet = SwXDocumentIndexMark::CreateXDocumentIndexMark(rDoc, nullptr, eType);
         }
         break;
         case  SW_SERVICE_CONTENT_INDEX      :
@@ -659,17 +659,17 @@ SwXServiceProvider::MakeInstance(sal_uInt16 nObjectType, SwDoc & rDoc)
             {
                 eType = TOX_TABLES;
             }
-            xRet = SwXDocumentIndex::CreateXDocumentIndex(rDoc, 0, eType);
+            xRet = SwXDocumentIndex::CreateXDocumentIndex(rDoc, nullptr, eType);
         }
         break;
         case SW_SERVICE_INDEX_HEADER_SECTION :
         case SW_SERVICE_TEXT_SECTION :
-            xRet = SwXTextSection::CreateXTextSection(0,
+            xRet = SwXTextSection::CreateXTextSection(nullptr,
                     (SW_SERVICE_INDEX_HEADER_SECTION == nObjectType));
 
         break;
         case SW_SERVICE_REFERENCE_MARK :
-            xRet = SwXReferenceMark::CreateXReferenceMark(rDoc, 0);
+            xRet = SwXReferenceMark::CreateXReferenceMark(rDoc, nullptr);
         break;
         case SW_SERVICE_STYLE_CHARACTER_STYLE:
         case SW_SERVICE_STYLE_PARAGRAPH_STYLE:
@@ -756,10 +756,10 @@ SwXServiceProvider::MakeInstance(sal_uInt16 nObjectType, SwDoc & rDoc)
         case SW_SERVICE_FIELDTYPE_DROPDOWN                  :
         case SW_SERVICE_FIELDTYPE_TABLE_FORMULA:
             // NOTE: the sw.SwXAutoTextEntry unoapi test depends on pDoc = 0
-            xRet = SwXTextField::CreateXTextField(0, 0, nObjectType);
+            xRet = SwXTextField::CreateXTextField(nullptr, nullptr, nObjectType);
             break;
         case SW_SERVICE_FIELDTYPE_ANNOTATION:
-            xRet = SwXTextField::CreateXTextField(&rDoc, 0, nObjectType);
+            xRet = SwXTextField::CreateXTextField(&rDoc, nullptr, nObjectType);
             break;
         case SW_SERVICE_FIELDMASTER_USER:
         case SW_SERVICE_FIELDMASTER_DDE:
@@ -774,7 +774,7 @@ SwXServiceProvider::MakeInstance(sal_uInt16 nObjectType, SwDoc & rDoc)
                 case SW_SERVICE_FIELDMASTER_SET_EXP : nResId = RES_SETEXPFLD; break;
                 case SW_SERVICE_FIELDMASTER_DATABASE: nResId = RES_DBFLD; break;
             }
-            xRet = SwXFieldMaster::CreateXFieldMaster(&rDoc, 0, nResId);
+            xRet = SwXFieldMaster::CreateXFieldMaster(&rDoc, nullptr, nResId);
         }
         break;
         case SW_SERVICE_FIELDMASTER_BIBLIOGRAPHY:
@@ -789,7 +789,7 @@ SwXServiceProvider::MakeInstance(sal_uInt16 nObjectType, SwDoc & rDoc)
         }
         break;
         case SW_SERVICE_PARAGRAPH :
-            xRet = SwXParagraph::CreateXParagraph(rDoc, 0);
+            xRet = SwXParagraph::CreateXParagraph(rDoc, nullptr);
         break;
         case SW_SERVICE_NUMBERING_RULES :
             xRet = static_cast<cppu::OWeakObject*>(new SwXNumberingRules(rDoc));
@@ -1089,7 +1089,7 @@ SwXFrameEnumeration<T>::SwXFrameEnumeration(const SwDoc* const pDoc)
     const size_t nSize = pFormats->size();
     ::std::insert_iterator<frmcontainer_t> pInserter = ::std::insert_iterator<frmcontainer_t>(m_aFrames, m_aFrames.begin());
     // #i104937#
-    SwFrameFormat* pFormat( 0 );
+    SwFrameFormat* pFormat( nullptr );
 
     std::set<const SwFrameFormat*> aTextBoxes = SwTextBoxHelper::findTextBoxes(pDoc);
 
@@ -1261,11 +1261,11 @@ sal_Bool SwXFrames::hasByName(const OUString& rName) throw( uno::RuntimeExceptio
     switch(m_eType)
     {
         case FLYCNTTYPE_GRF:
-            return GetDoc()->FindFlyByName(rName, ND_GRFNODE) != NULL;
+            return GetDoc()->FindFlyByName(rName, ND_GRFNODE) != nullptr;
         case FLYCNTTYPE_OLE:
-            return GetDoc()->FindFlyByName(rName, ND_OLENODE) != NULL;
+            return GetDoc()->FindFlyByName(rName, ND_OLENODE) != nullptr;
         default:
-            return GetDoc()->FindFlyByName(rName, ND_TEXTNODE) != NULL;
+            return GetDoc()->FindFlyByName(rName, ND_TEXTNODE) != nullptr;
     }
 }
 
@@ -1975,7 +1975,7 @@ sal_Bool SwXReferenceMarks::hasByName(const OUString& rName) throw( uno::Runtime
     SolarMutexGuard aGuard;
     if(!IsValid())
         throw uno::RuntimeException();
-    return 0 != GetDoc()->GetRefMark( rName);
+    return nullptr != GetDoc()->GetRefMark( rName);
 }
 
 uno::Type SAL_CALL SwXReferenceMarks::getElementType() throw(uno::RuntimeException, std::exception)
@@ -1994,7 +1994,7 @@ sal_Bool SwXReferenceMarks::hasElements() throw( uno::RuntimeException, std::exc
 void SwUnoCollection::Invalidate()
 {
     m_bObjectValid = false;
-    m_pDoc = 0;
+    m_pDoc = nullptr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

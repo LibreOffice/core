@@ -44,7 +44,7 @@
 void SwTextShell::ExecIdx(SfxRequest &rReq)
 {
     const SfxItemSet *pArgs = rReq.GetArgs();
-    const SfxPoolItem* pItem = 0;
+    const SfxPoolItem* pItem = nullptr;
     const sal_uInt16 nSlot = rReq.GetSlot();
     if(pArgs)
        pArgs->GetItemState(nSlot, false, &pItem );
@@ -121,7 +121,7 @@ void SwTextShell::ExecIdx(SfxRequest &rReq)
             aSet.Put(SwFormatFrmSize(ATT_VAR_SIZE, nWidth));
             // Height = width for a more consistent preview (analogous to edit range)
             aSet.Put(SvxSizeItem(SID_ATTR_PAGE_SIZE, Size(nWidth, nWidth)));
-            const SwTOXBase* pCurTOX = 0;
+            const SwTOXBase* pCurTOX = nullptr;
             bool bGlobal = false;
             if(pItem)
             {
@@ -170,8 +170,8 @@ void SwTextShell::GetIdxState(SfxItemSet &rSet)
     SfxChildWindow* pAuthMark = pVFrame->GetChildWindow(FN_INSERT_AUTH_ENTRY_DLG);
 
     const bool bHtmlMode = 0 != ::GetHtmlMode( GetView().GetDocShell() );
-    const SwTOXBase* pBase = 0;
-    if( bHtmlMode || 0 != ( pBase = rSh.GetCurTOX()) )
+    const SwTOXBase* pBase = nullptr;
+    if( bHtmlMode || nullptr != ( pBase = rSh.GetCurTOX()) )
     {
         if( pBase )
         {
@@ -229,14 +229,14 @@ void SwTextShell::GetIdxState(SfxItemSet &rSet)
         }
         else
             rSet.Put(SfxBoolItem(FN_INSERT_IDX_ENTRY_DLG,
-                                    0 != pIdxMrk));
+                                    nullptr != pIdxMrk));
 
         SwField* pField = rSh.GetCurField();
 
         if(bInReadonly)
             rSet.DisableItem(FN_INSERT_AUTH_ENTRY_DLG);
         else
-            rSet.Put(SfxBoolItem(FN_INSERT_AUTH_ENTRY_DLG, 0 != pAuthMark));
+            rSet.Put(SfxBoolItem(FN_INSERT_AUTH_ENTRY_DLG, nullptr != pAuthMark));
 
         if( bInReadonly || !pField ||
             pField->GetTyp()->Which() != RES_AUTHORITY)

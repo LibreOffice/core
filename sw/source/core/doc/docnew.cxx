@@ -192,10 +192,10 @@ static void lcl_DelFormatIndices( SwFormat* pFormat )
 {
     SwFormatContent &rFormatContent = (SwFormatContent&)pFormat->GetContent();
     if ( rFormatContent.GetContentIdx() )
-        rFormatContent.SetNewContentIdx( 0 );
+        rFormatContent.SetNewContentIdx( nullptr );
     SwFormatAnchor &rFormatAnchor = (SwFormatAnchor&)pFormat->GetAnchor();
     if ( rFormatAnchor.GetContentAnchor() )
-        rFormatAnchor.SetAnchor( 0 );
+        rFormatAnchor.SetAnchor( nullptr );
 }
 
 /*
@@ -225,10 +225,10 @@ SwDoc::SwDoc()
     m_pDocumentLayoutManager( new ::sw::DocumentLayoutManager( *this ) ),
     m_pDocumentStylePoolManager( new ::sw::DocumentStylePoolManager( *this ) ),
     m_pDocumentExternalDataManager( new ::sw::DocumentExternalDataManager() ),
-    mpDfltFrameFormat( new SwFrameFormat( GetAttrPool(), sFrameFormatStr, 0 ) ),
+    mpDfltFrameFormat( new SwFrameFormat( GetAttrPool(), sFrameFormatStr, nullptr ) ),
     mpEmptyPageFormat( new SwFrameFormat( GetAttrPool(), sEmptyPageStr, mpDfltFrameFormat ) ),
     mpColumnContFormat( new SwFrameFormat( GetAttrPool(), sColumnCntStr, mpDfltFrameFormat ) ),
-    mpDfltCharFormat( new SwCharFormat( GetAttrPool(), sCharFormatStr, 0 ) ),
+    mpDfltCharFormat( new SwCharFormat( GetAttrPool(), sCharFormatStr, nullptr ) ),
     mpDfltTextFormatColl( new SwTextFormatColl( GetAttrPool(), sTextCollStr ) ),
     mpDfltGrfFormatColl( new SwGrfFormatColl( GetAttrPool(), sGrfCollStr ) ),
     mpFrameFormatTable( new SwFrameFormats() ),
@@ -240,21 +240,21 @@ SwDoc::SwDoc()
     mpGrfFormatCollTable( new SwGrfFormatColls() ),
     mpTOXTypes( new SwTOXTypes() ),
     mpDefTOXBases( new SwDefTOXBase_Impl() ),
-    mpGlossaryDoc( 0 ),
-    mpOutlineRule( 0 ),
+    mpGlossaryDoc( nullptr ),
+    mpOutlineRule( nullptr ),
     mpFootnoteInfo( new SwFootnoteInfo ),
     mpEndNoteInfo( new SwEndNoteInfo ),
     mpLineNumberInfo( new SwLineNumberInfo ),
     mpFootnoteIdxs( new SwFootnoteIdxs ),
-    mpDocShell( 0 ),
-    mpACEWord( 0 ),
-    mpURLStateChgd( 0 ),
-    mpNumberFormatter( 0 ),
+    mpDocShell( nullptr ),
+    mpACEWord( nullptr ),
+    mpURLStateChgd( nullptr ),
+    mpNumberFormatter( nullptr ),
     mpNumRuleTable( new SwNumRuleTable ),
-    mpPgPViewPrtData( 0 ),
-    mpExtInputRing( 0 ),
-    mpStyleAccess( 0 ),
-    mpLayoutCache( 0 ),
+    mpPgPViewPrtData( nullptr ),
+    mpExtInputRing( nullptr ),
+    mpStyleAccess( nullptr ),
+    mpLayoutCache( nullptr ),
     mpGrammarContact(createGrammarContact()),
     mpTableStyles(new SwTableAutoFormatTable),
     m_pXmlIdRegistry(),
@@ -358,7 +358,7 @@ SwDoc::SwDoc()
         mpStyleAccess = createStyleManager( &aIgnorableParagraphItems );
     }
 
-    static bool bHack = (getenv("LIBO_ONEWAY_STABLE_ODF_EXPORT") != NULL);
+    static bool bHack = (getenv("LIBO_ONEWAY_STABLE_ODF_EXPORT") != nullptr);
 
     if (bHack)
     {
@@ -390,11 +390,11 @@ SwDoc::~SwDoc()
 
     if (mpDocShell)
     {
-        mpDocShell->SetUndoManager(0);
+        mpDocShell->SetUndoManager(nullptr);
     }
 
     delete mpGrammarContact;
-    mpGrammarContact = 0;
+    mpGrammarContact = nullptr;
 
     //!! needs to be done to destroy a possible SwFormatDrop format that may
     //!! be connected to a char format which may not otherwise be removed
@@ -403,7 +403,7 @@ SwDoc::~SwDoc()
     SwFormatDrop aDrop;
     SetDefault(aDrop);
     //!! same for SwFormatCharFormat
-    SwFormatCharFormat aCharFormat(NULL);
+    SwFormatCharFormat aCharFormat(nullptr);
     SetDefault(aCharFormat);
 
     getIDocumentTimerAccess().StopIdling();   // stop idle timer
@@ -463,7 +463,7 @@ SwDoc::~SwDoc()
     if( mpExtInputRing )
     {
         SwPaM* pTmp = mpExtInputRing;
-        mpExtInputRing = 0;
+        mpExtInputRing = nullptr;
         while( pTmp->GetNext() != pTmp )
             delete pTmp->GetNext();
         delete pTmp;
@@ -603,7 +603,7 @@ void SwDoc::SetDocShell( SwDocShell* pDSh )
     {
         if (mpDocShell)
         {
-            mpDocShell->SetUndoManager(0);
+            mpDocShell->SetUndoManager(nullptr);
         }
         mpDocShell = pDSh;
         if (mpDocShell)
@@ -628,7 +628,7 @@ uno::Reference < embed::XStorage > SwDoc::GetDocStorage()
         return mpDocShell->GetStorage();
     if( getIDocumentLinksAdministration().GetLinkManager().GetPersist() )
         return getIDocumentLinksAdministration().GetLinkManager().GetPersist()->GetStorage();
-    return NULL;
+    return nullptr;
 }
 
 SfxObjectShell* SwDoc::GetPersist() const
@@ -687,7 +687,7 @@ void SwDoc::ClearDoc()
     // #i62440#
     // destruction of numbering rules and creation of new outline rule
     // *after* the document nodes are deleted.
-    mpOutlineRule = NULL;
+    mpOutlineRule = nullptr;
     for( SwNumRule* pNumRule : *mpNumRuleTable )
         delete pNumRule;
     mpNumRuleTable->clear();
@@ -735,7 +735,7 @@ void SwDoc::ClearDoc()
 
     GetDocumentFieldsManager().ClearFieldTypes();
 
-    delete mpNumberFormatter, mpNumberFormatter = 0;
+    delete mpNumberFormatter, mpNumberFormatter = nullptr;
 
     getIDocumentStylePoolAccess().GetPageDescFromPool( RES_POOLPAGE_STANDARD );
     pFirstNd->ChgFormatColl( getIDocumentStylePoolAccess().GetTextCollFromPool( RES_POOLCOLL_STANDARD ));
@@ -788,7 +788,7 @@ IGrammarContact* getGrammarContact( const SwTextNode& rTextNode )
 {
     const SwDoc* pDoc = rTextNode.GetDoc();
     if( !pDoc || pDoc->IsInDtor() )
-        return 0;
+        return nullptr;
     return pDoc->getGrammarContact();
 }
 
@@ -895,7 +895,7 @@ SfxObjectShell* SwDoc::CreateCopy(bool bCallInitNew ) const
     SAL_INFO( "sw.createcopy", "CC-Nd-Src: " << CNTNT_DOC( this ) );
     SAL_INFO( "sw.createcopy", "CC-Nd: " << CNTNT_DOC( pRet ) );
 #endif
-    pRet->AppendDoc(*this, 0, NULL, bCallInitNew);
+    pRet->AppendDoc(*this, 0, nullptr, bCallInitNew);
 #ifdef DBG_UTIL
     SAL_INFO( "sw.createcopy", "CC-Nd: " << CNTNT_DOC( pRet ) );
 #endif
@@ -1009,7 +1009,7 @@ SwNodeIndex SwDoc::AppendDoc(const SwDoc& rSource, sal_uInt16 const nStartPageNu
                               << " " << aCpyPam.GetNode().GetIndex() << ")" );
 #endif
 
-    this->GetIDocumentUndoRedo().StartUndo( UNDO_INSGLOSSARY, NULL );
+    this->GetIDocumentUndoRedo().StartUndo( UNDO_INSGLOSSARY, nullptr );
     this->getIDocumentFieldsAccess().LockExpFields();
 
     // Position where the appended doc starts. Will be filled in later (uses GetEndOfContent() because SwNodeIndex has no default ctor).
@@ -1062,8 +1062,8 @@ SwNodeIndex SwDoc::AppendDoc(const SwDoc& rSource, sal_uInt16 const nStartPageNu
             // this keeps all other settings as in the pasted document
             if ( nStartPageNumber || pTargetPageDesc ) {
                 SfxPoolItem *pNewItem;
-                SwTextNode *aTextNd = 0;
-                SwFormat *pFormat = 0;
+                SwTextNode *aTextNd = nullptr;
+                SwFormat *pFormat = nullptr;
 
                 // find the first node allowed to contain a RES_PAGEDESC
                 while (true) {
@@ -1153,10 +1153,10 @@ else
         }
     }
 
-    this->GetIDocumentUndoRedo().EndUndo( UNDO_INSGLOSSARY, NULL );
+    this->GetIDocumentUndoRedo().EndUndo( UNDO_INSGLOSSARY, nullptr );
 
     getIDocumentFieldsAccess().UnlockExpFields();
-    getIDocumentFieldsAccess().UpdateFields(NULL, false);
+    getIDocumentFieldsAccess().UpdateFields(nullptr, false);
 
     if ( pTargetShell )
         pTargetShell->EndAllAction();

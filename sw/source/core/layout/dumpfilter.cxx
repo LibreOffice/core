@@ -104,11 +104,11 @@ namespace sw
 
             // Dump the layout XML into the XOutputStream
             xmlOutputBufferPtr outBuffer = xmlOutputBufferCreateIO(
-                    writeCallback, closeCallback, static_cast<void*>(xOut.get()), NULL );
+                    writeCallback, closeCallback, static_cast<void*>(xOut.get()), nullptr );
 
             xmlTextWriterPtr writer = xmlNewTextWriter( outBuffer );
             xmlTextWriterSetIndent(writer, 1);
-            xmlTextWriterStartDocument( writer, NULL, NULL, NULL );
+            xmlTextWriterStartDocument( writer, nullptr, nullptr, nullptr );
 
             // TODO This doesn't export the whole XML file, whereas dumpAsXML() does it nicely
             pLayout->dumpAsXml( writer );

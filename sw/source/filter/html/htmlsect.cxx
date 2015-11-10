@@ -259,11 +259,11 @@ void SwHTMLParser::NewDivision( int nToken )
                 bAppended = true;
             }
         }
-        _HTMLAttrs *pPostIts = bAppended ? 0 : new _HTMLAttrs;
+        _HTMLAttrs *pPostIts = bAppended ? nullptr : new _HTMLAttrs;
         SetAttr( true, true, pPostIts );
 
         // Namen der Section eindeutig machen
-        const OUString aName( m_pDoc->GetUniqueSectionName( !aId.isEmpty() ? &aId : 0 ) );
+        const OUString aName( m_pDoc->GetUniqueSectionName( !aId.isEmpty() ? &aId : nullptr ) );
 
         if( !aHRef.isEmpty() )
         {
@@ -332,7 +332,7 @@ void SwHTMLParser::NewDivision( int nToken )
             aItemSet.ClearItem( RES_FRAMEDIR );
         }
 
-        m_pDoc->InsertSwSection( *m_pPam, aSection, 0, &aFrmItemSet, false );
+        m_pDoc->InsertSwSection( *m_pPam, aSection, nullptr, &aFrmItemSet, false );
 
         // ggfs. einen Bereich anspringen
         if( JUMPTO_REGION == m_eJumpTo && aName == m_sJmpMark )
@@ -342,7 +342,7 @@ void SwHTMLParser::NewDivision( int nToken )
         }
 
         SwTextNode* pOldTextNd =
-            (bAppended) ? 0 : m_pPam->GetPoint()->nNode.GetNode().GetTextNode();
+            (bAppended) ? nullptr : m_pPam->GetPoint()->nNode.GetNode().GetTextNode();
 
         m_pPam->Move( fnMoveBackward );
 
@@ -358,7 +358,7 @@ void SwHTMLParser::NewDivision( int nToken )
             // der Tabelle setzen
             InsertAttrs( *pPostIts );
             delete pPostIts;
-            pPostIts = 0;
+            pPostIts = nullptr;
         }
 
         pCntxt->SetSpansSection( true );
@@ -388,7 +388,7 @@ void SwHTMLParser::EndDivision( int /*nToken*/ )
 {
     // Stack-Eintrag zu dem Token suchen (weil wir noch den Div-Stack
     // haben unterscheiden wir erst einmal nicht zwischen DIV und CENTER
-    _HTMLAttrContext *pCntxt = 0;
+    _HTMLAttrContext *pCntxt = nullptr;
     auto nPos = m_aContexts.size();
     while( !pCntxt && nPos>m_nContextStMin )
     {
@@ -591,7 +591,7 @@ void SwHTMLParser::NewMultiCol( sal_uInt16 columnsFromCss )
     bool bInCntnr = false;
     auto i = m_aContexts.size();
     while( !bInCntnr && i > m_nContextStMin )
-        bInCntnr = 0 != m_aContexts[--i]->GetFrmItemSet();
+        bInCntnr = nullptr != m_aContexts[--i]->GetFrmItemSet();
 
     // Parse style sheets, but don't position anything by now.
     bool bStyleParsed = false;
@@ -683,11 +683,11 @@ void SwHTMLParser::NewMultiCol( sal_uInt16 columnsFromCss )
                 bAppended = true;
             }
         }
-        _HTMLAttrs *pPostIts = bAppended ? 0 : new _HTMLAttrs;
+        _HTMLAttrs *pPostIts = bAppended ? nullptr : new _HTMLAttrs;
         SetAttr( true, true, pPostIts );
 
         // Make section name unique.
-        OUString aName( m_pDoc->GetUniqueSectionName( !aId.isEmpty() ? &aId : 0 ) );
+        OUString aName( m_pDoc->GetUniqueSectionName( !aId.isEmpty() ? &aId : nullptr ) );
         SwSectionData aSection( CONTENT_SECTION, aName );
 
         SfxItemSet aFrmItemSet( m_pDoc->GetAttrPool(),
@@ -721,7 +721,7 @@ void SwHTMLParser::NewMultiCol( sal_uInt16 columnsFromCss )
             aFrmItemSet.Put( *pItem );
             aItemSet.ClearItem( RES_FRAMEDIR );
         }
-        m_pDoc->InsertSwSection( *m_pPam, aSection, 0, &aFrmItemSet, false );
+        m_pDoc->InsertSwSection( *m_pPam, aSection, nullptr, &aFrmItemSet, false );
 
         // Jump to section, if this is requested.
         if( JUMPTO_REGION == m_eJumpTo && aName == m_sJmpMark )
@@ -731,7 +731,7 @@ void SwHTMLParser::NewMultiCol( sal_uInt16 columnsFromCss )
         }
 
         SwTextNode* pOldTextNd =
-            (bAppended) ? 0 : m_pPam->GetPoint()->nNode.GetNode().GetTextNode();
+            (bAppended) ? nullptr : m_pPam->GetPoint()->nNode.GetNode().GetTextNode();
 
         m_pPam->Move( fnMoveBackward );
 
@@ -746,7 +746,7 @@ void SwHTMLParser::NewMultiCol( sal_uInt16 columnsFromCss )
             // Move pending PostIts into the section.
             InsertAttrs( *pPostIts );
             delete pPostIts;
-            pPostIts = 0;
+            pPostIts = nullptr;
         }
 
         pCntxt->SetSpansSection( true );

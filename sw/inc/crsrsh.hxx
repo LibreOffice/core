@@ -121,8 +121,8 @@ struct SwContentAtPos
     SwContentAtPos( int eGetAtPos = 0xffff )
         : eContentAtPos( (IsAttrAtPos)eGetAtPos )
     {
-        aFnd.pField = 0;
-        pFndTextAttr = 0;
+        aFnd.pField = nullptr;
+        pFndTextAttr = nullptr;
         nDist = 0; // #i23726#
     }
 
@@ -257,7 +257,7 @@ private:
     SAL_DLLPRIVATE bool LRMargin( bool, bool bAPI = false );
     SAL_DLLPRIVATE bool IsAtLRMargin( bool, bool bAPI = false ) const;
 
-    SAL_DLLPRIVATE short GetTextDirection( const Point* pPt = 0 ) const;
+    SAL_DLLPRIVATE short GetTextDirection( const Point* pPt = nullptr ) const;
 
     SAL_DLLPRIVATE bool isInHiddenTextFrm(SwShellCrsr* pShellCrsr);
 
@@ -300,7 +300,7 @@ protected:
 
 public:
     TYPEINFO_OVERRIDE();
-    SwCrsrShell( SwDoc& rDoc, vcl::Window *pWin, const SwViewOption *pOpt = 0 );
+    SwCrsrShell( SwDoc& rDoc, vcl::Window *pWin, const SwViewOption *pOpt = nullptr );
     // disguised copy constructor
     SwCrsrShell( SwCrsrShell& rShell, vcl::Window *pWin );
     virtual ~SwCrsrShell();
@@ -378,14 +378,14 @@ public:
     sal_uLong Find( const SwTextFormatColl& rFormatColl,
                 SwDocPositions eStart, SwDocPositions eEnd,
                 bool& bCancel,
-                FindRanges eRng, const SwTextFormatColl* pReplFormat = 0 );
+                FindRanges eRng, const SwTextFormatColl* pReplFormat = nullptr );
 
     sal_uLong Find( const SfxItemSet& rSet, bool bNoCollections,
                 SwDocPositions eStart, SwDocPositions eEnd,
                 bool& bCancel,
                 FindRanges eRng,
-                const css::util::SearchOptions* pSearchOpt = 0,
-                const SfxItemSet* rReplSet = 0 );
+                const css::util::SearchOptions* pSearchOpt = nullptr,
+                const SfxItemSet* rReplSet = nullptr );
 
     //  Position the Cursor
     //  return values:
@@ -634,10 +634,10 @@ public:
     const SwShellCrsr* getShellCrsr( bool bBlock ) const
         { return (const_cast<SwCrsrShell*>(this))->getShellCrsr( bBlock ); }
 
-    bool IsBlockMode() const { return 0 != m_pBlockCrsr; }
+    bool IsBlockMode() const { return nullptr != m_pBlockCrsr; }
 
     // is the Crsr in a table and is the selection over 2 columns
-    bool IsTableMode() const { return 0 != m_pTableCrsr; }
+    bool IsTableMode() const { return nullptr != m_pTableCrsr; }
 
     const SwShellTableCrsr* GetTableCrsr() const { return m_pTableCrsr; }
     SwShellTableCrsr* GetTableCrsr() { return m_pTableCrsr; }
@@ -656,10 +656,10 @@ public:
                         bool bInHeader = true );
     // is point of cursor in header/footer. pbInHeader return true if it is
     // in a headerframe otherwise in a footerframe
-    bool IsInHeaderFooter( bool* pbInHeader = 0 ) const;
+    bool IsInHeaderFooter( bool* pbInHeader = nullptr ) const;
 
-    bool GotoNextTOXBase( const OUString* = 0 );
-    bool GotoPrevTOXBase( const OUString* = 0 );
+    bool GotoNextTOXBase( const OUString* = nullptr );
+    bool GotoPrevTOXBase( const OUString* = nullptr );
     bool GotoTOXMarkBase();
     // jump to the next or previous index entry
     bool GotoNxtPrvTOXMark( bool bNext = true );
@@ -721,7 +721,7 @@ public:
     bool GoNextSentence();
     bool GoStartSentence();
     bool GoEndSentence();
-    bool SelectWord( const Point* pPt = 0 );
+    bool SelectWord( const Point* pPt = nullptr );
     bool ExpandToSentenceBorders();
 
     // get position from current cursor
@@ -766,7 +766,7 @@ public:
     bool GetContentAtPos( const Point& rPt,
                           SwContentAtPos& rContentAtPos,
                           bool bSetCrsr = false,
-                          SwRect* pFieldRect = 0 );
+                          SwRect* pFieldRect = nullptr );
 
     const SwPostItField* GetPostItFieldAtCursor() const;
 
@@ -784,15 +784,15 @@ public:
 
     bool IsPageAtPos( const Point &rPt ) const;
 
-    bool SelectTextAttr( sal_uInt16 nWhich, bool bExpand, const SwTextAttr* pAttr = 0 );
+    bool SelectTextAttr( sal_uInt16 nWhich, bool bExpand, const SwTextAttr* pAttr = nullptr );
     bool GotoINetAttr( const SwTextINetFormat& rAttr );
     const SwFormatINetFormat* FindINetAttr( const OUString& rName ) const;
 
     bool SelectText( const sal_Int32 nStart,
                         const sal_Int32 nEnd );
 
-    bool CheckTableBoxContent( const SwPosition* pPos = 0 );
-    void SaveTableBoxContent( const SwPosition* pPos = 0 );
+    bool CheckTableBoxContent( const SwPosition* pPos = nullptr );
+    void SaveTableBoxContent( const SwPosition* pPos = nullptr );
     void ClearTableBoxContent();
     bool EndAllTableBoxEdit();
 
@@ -811,9 +811,9 @@ public:
     const SwRangeRedline* GotoRedline( sal_uInt16 nArrPos, bool bSelect = false );
 
     // is cursor or the point in/over a vertical formatted text?
-    bool IsInVerticalText( const Point* pPt = 0 ) const;
+    bool IsInVerticalText( const Point* pPt = nullptr ) const;
     // is cursor or the point in/over a right to left formatted text?
-    bool IsInRightToLeftText( const Point* pPt = 0 ) const;
+    bool IsInRightToLeftText( const Point* pPt = nullptr ) const;
 
     static void FirePageChangeEvent(sal_uInt16 nOldPage, sal_uInt16 nNewPage);
     bool   bColumnChange();

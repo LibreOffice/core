@@ -40,7 +40,7 @@ Reference< XHyphenatedWord >  SwTextFormatInfo::HyphWord(
                                 const OUString &rText, const sal_Int32 nMinTrail )
 {
     if( rText.getLength() < 4 || m_pFnt->IsSymbol(m_pVsh) )
-        return 0;
+        return nullptr;
     Reference< XHyphenator >  xHyph = ::GetHyphenator();
     Reference< XHyphenatedWord > xHyphWord;
 
@@ -301,7 +301,7 @@ bool SwTextPortion::CreateHyphen( SwTextFormatInfo &rInf, SwTextGuess &rGuess )
         pHyphPor = new SwHyphPortion;
         pHyphPor->SetLen( 1 );
 
-        static const void* pLastMagicNo = 0;
+        static const void* pLastMagicNo = nullptr;
         static sal_uInt16 aMiniCacheH = 0, aMiniCacheW = 0;
         const void* pTmpMagic;
         sal_uInt16 nFntIdx;

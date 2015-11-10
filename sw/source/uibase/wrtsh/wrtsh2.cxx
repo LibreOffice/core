@@ -119,7 +119,7 @@ void SwWrtShell::Insert(SwField &rField)
 
     if ( pAnnotationTextRange )
     {
-        if ( GetDoc() != NULL )
+        if ( GetDoc() != nullptr )
         {
             IDocumentMarkAccess* pMarksAccess = GetDoc()->getIDocumentMarkAccess();
             pMarksAccess->makeAnnotationMark( *pAnnotationTextRange, OUString() );
@@ -154,7 +154,7 @@ void SwWrtShell::UpdateInputFields( SwInputFieldList* pLst )
             if(pField->GetTyp()->Which() == RES_DROPDOWN)
                 bCancel = StartDropDownFieldDlg( pField, true, &aDlgPos );
             else
-                bCancel = StartInputFieldDlg( pField, true, 0, &aDlgPos);
+                bCancel = StartInputFieldDlg( pField, true, nullptr, &aDlgPos);
 
             if (!bCancel)
             {
@@ -179,7 +179,7 @@ class FieldDeletionModify : public SwModify
     public:
         FieldDeletionModify(AbstractFieldInputDlg* pInputFieldDlg, SwField* pField)
             : mpInputFieldDlg(pInputFieldDlg)
-            , mpFormatField(NULL)
+            , mpFormatField(nullptr)
         {
             SwInputField *const pInputField(dynamic_cast<SwInputField*>(pField));
             SwSetExpField *const pSetExpField(dynamic_cast<SwSetExpField*>(pField));
@@ -216,7 +216,7 @@ class FieldDeletionModify : public SwModify
                 {
                 case RES_REMOVE_UNO_OBJECT:
                 case RES_OBJECTDYING:
-                    mpFormatField = NULL;
+                    mpFormatField = nullptr;
                     mpInputFieldDlg->EndDialog(RET_CANCEL);
                     break;
                 }
@@ -259,7 +259,7 @@ bool SwWrtShell::StartDropDownFieldDlg(SwField* pField, bool bNextButton, OStrin
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
     OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-    std::unique_ptr<AbstractDropDownFieldDialog> pDlg(pFact->CreateDropDownFieldDialog(NULL, *this, pField, bNextButton));
+    std::unique_ptr<AbstractDropDownFieldDialog> pDlg(pFact->CreateDropDownFieldDialog(nullptr, *this, pField, bNextButton));
     OSL_ENSURE(pDlg, "Dialog creation failed!");
     if(pWindowState && !pWindowState->isEmpty())
         pDlg->SetWindowState(*pWindowState);
@@ -299,7 +299,7 @@ bool SwWrtShell::UpdateTableOf(const SwTOXBase& rTOX, const SfxItemSet* pSet)
     {
         bResult = SwEditShell::UpdateTableOf(rTOX, pSet);
 
-        if (pSet == NULL)
+        if (pSet == nullptr)
         {
             SwDoc *const pDoc_ = GetDoc();
             if (pDoc_)
@@ -388,7 +388,7 @@ void SwWrtShell::ClickToField( const SwField& rField )
     case RES_INPUTFLD:
         {
             const SwInputField* pInputField = dynamic_cast<const SwInputField*>(&rField);
-            if ( pInputField == NULL )
+            if ( pInputField == nullptr )
             {
                 StartInputFieldDlg( const_cast<SwField*>(&rField), false );
             }
@@ -516,7 +516,7 @@ void LoadURL( SwViewShell& rVSh, const OUString& rURL, sal_uInt16 nFilter,
                 &aReferer,
                 &aView, &aTargetFrameName,
                 &aBrowse,
-                0L
+                nullptr
     };
 
     pViewFrm->GetDispatcher()->GetBindings()->Execute( SID_OPENDOC, aArr, 0,
@@ -573,7 +573,7 @@ void SwWrtShell::NavigatorPaste( const NaviContentBookmark& rBkmk,
             // any undoobject. -  BUG 69145
             bool bDoesUndo = DoesUndo();
             SwUndoId nLastUndoId(UNDO_EMPTY);
-            if (GetLastUndoInfo(0, & nLastUndoId))
+            if (GetLastUndoInfo(nullptr, & nLastUndoId))
             {
                 if (UNDO_INSSECTION != nLastUndoId)
                 {

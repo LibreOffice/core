@@ -1191,7 +1191,7 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
                 {
                     int pIndex = pPos->nContent.GetIndex();
                     bool bMarked = false;
-                    if( pCrsr != NULL )
+                    if( pCrsr != nullptr )
                     {
                         const SwTextNode* pNode = pPos->nNode.GetNode().GetTextNode();
                         sal_uLong nHere = pNode->GetIndex();
@@ -1326,7 +1326,7 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
     //Checked for Paras.
     bool bMarkChanged = false;
     SwAccessibleContextMap_Impl mapTemp;
-    if( pCrsr != NULL )
+    if( pCrsr != nullptr )
     {
         for(SwPaM& rTmpCrsr : pCrsr->GetRingContainer())
         {
@@ -1336,7 +1336,7 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
                 SwNodeIndex nEndIndex( rTmpCrsr.End()->nNode );
                 while(nStartIndex <= nEndIndex)
                 {
-                    SwFrm *pFrm = NULL;
+                    SwFrm *pFrm = nullptr;
                     if(nStartIndex.GetNode().IsContentNode())
                     {
                         SwContentNode* pCNd = static_cast<SwContentNode*>(&(nStartIndex.GetNode()));
@@ -1559,7 +1559,7 @@ void SwAccessibleMap::DoInvalidateShapeSelection(bool bInvalidateFocusMode /*=fa
             if (pAccShape)
             {
                 SdrObject *pObj = GetSdrObjectFromXShape(pAccShape->GetXShape());
-                SwFrameFormat *pFrameFormat = pObj ? FindFrameFormat( pObj ) : NULL;
+                SwFrameFormat *pFrameFormat = pObj ? FindFrameFormat( pObj ) : nullptr;
                 if (pFrameFormat)
                 {
                     const SwFormatAnchor& pAnchor = pFrameFormat->GetAnchor();
@@ -1663,7 +1663,7 @@ SwAccessibleMap::SwAccessibleMap( SwViewShell *pSh ) :
     mpPreview( nullptr ),
     mnPara( 1 ),
     mbShapeSelected( false ),
-    mpSeletedFrmMap(NULL)
+    mpSeletedFrmMap(nullptr)
 {
     pSh->GetLayout()->AddAccessibleShell();
 }
@@ -1698,7 +1698,7 @@ SwAccessibleMap::~SwAccessibleMap()
             if( xTmp.is() )
             {
                 SwAccessibleContext *pTmp = static_cast< SwAccessibleContext * >( xTmp.get() );
-                pTmp->SetMap(NULL);
+                pTmp->SetMap(nullptr);
             }
             ++aIter;
         }
@@ -1752,7 +1752,7 @@ SwAccessibleMap::~SwAccessibleMap()
     }
 
     delete mpPreview;
-    mpPreview = NULL;
+    mpPreview = nullptr;
 
     {
         osl::MutexGuard aGuard( maEventMutex );
@@ -1859,7 +1859,7 @@ uno::Reference<XAccessible> SwAccessibleMap::GetDocumentPreview(
                                     const Size&      _rPreviewWinSize )
 {
     // create & update preview data object
-    if( mpPreview == NULL )
+    if( mpPreview == nullptr )
         mpPreview = new SwAccPreviewData();
     mpPreview->Update( *this, _rPreviewPages, _rScale, _pSelectedPageFrm, _rPreviewWinSize );
 
@@ -2387,7 +2387,7 @@ void SwAccessibleMap::InvalidatePosOrSize( const SwFrm *pFrm,
     {
         ::rtl::Reference< SwAccessibleContext > xAccImpl;
         ::rtl::Reference< SwAccessibleContext > xParentAccImpl;
-        const SwFrm *pParent =NULL;
+        const SwFrm *pParent =nullptr;
         {
             osl::MutexGuard aGuard( maMutex );
 
@@ -2688,17 +2688,17 @@ void SwAccessibleMap::InvalidateCursorPosition( const SwFrm *pFrm )
         {
             const SwFEShell *pFESh = static_cast< const SwFEShell * >( pVSh );
             const SdrMarkList *pMarkList = pFESh->GetMarkList();
-            if (pMarkList != NULL && pMarkList->GetMarkCount() == 1)
+            if (pMarkList != nullptr && pMarkList->GetMarkCount() == 1)
             {
                 SdrObject *pObj = pMarkList->GetMark( 0 )->GetMarkedSdrObj();
-                ::rtl::Reference < ::accessibility::AccessibleShape > pAccShapeImpl = GetContextImpl(pObj,NULL,false);
+                ::rtl::Reference < ::accessibility::AccessibleShape > pAccShapeImpl = GetContextImpl(pObj,nullptr,false);
                 if (!pAccShapeImpl.is())
                 {
                     while (pObj && pObj->GetUpGroup())
                     {
                         pObj = pObj->GetUpGroup();
                     }
-                    if (pObj != NULL)
+                    if (pObj != nullptr)
                     {
                         const SwFrm *pParent = SwAccessibleFrame::GetParent( SwAccessibleChild(pObj), GetShell()->IsPreview() );
                         if( pParent )
@@ -3017,7 +3017,7 @@ void SwAccessibleMap::UpdatePreview( const std::vector<PreviewPage*>& _rPreviewP
                                      const Size&      _rPreviewWinSize )
 {
     assert(GetShell()->IsPreview() && "no preview?");
-    assert(mpPreview != NULL && "no preview data?");
+    assert(mpPreview != nullptr && "no preview data?");
 
     mpPreview->Update( *this, _rPreviewPages, _rScale, _pSelectedPageFrm, _rPreviewWinSize );
 
@@ -3054,7 +3054,7 @@ void SwAccessibleMap::UpdatePreview( const std::vector<PreviewPage*>& _rPreviewP
 void SwAccessibleMap::InvalidatePreviewSelection( sal_uInt16 nSelPage )
 {
     OSL_ENSURE( GetShell()->IsPreview(), "no preview?" );
-    OSL_ENSURE( mpPreview != NULL, "no preview data?" );
+    OSL_ENSURE( mpPreview != nullptr, "no preview data?" );
 
     mpPreview->InvalidateSelection( GetShell()->GetLayout()->GetPageByPageNum( nSelPage ) );
 
@@ -3256,14 +3256,14 @@ bool SwAccessibleMap::ReplaceChild (
             ++aIter;
         }
     }
-    return NULL;
+    return nullptr;
 }
 
 css::uno::Reference< XAccessible >
     SwAccessibleMap::GetAccessibleCaption (const css::uno::Reference< css::drawing::XShape >&)
     throw (css::uno::RuntimeException)
 {
-    return NULL;
+    return nullptr;
 }
 
 Point SwAccessibleMap::PixelToCore( const Point& rPoint ) const
@@ -3341,7 +3341,7 @@ void SwAccessibleMap::GetMapMode( const Point& _rPoint,
     MapMode aMapMode = GetShell()->GetWin()->GetMapMode();
     if( GetShell()->IsPreview() )
     {
-        OSL_ENSURE( mpPreview != NULL, "need preview data" );
+        OSL_ENSURE( mpPreview != nullptr, "need preview data" );
 
         mpPreview->AdjustMapMode( aMapMode, _rPoint );
     }
@@ -3351,9 +3351,9 @@ void SwAccessibleMap::GetMapMode( const Point& _rPoint,
 Size SwAccessibleMap::GetPreviewPageSize( sal_uInt16 _nPreviewPageNum ) const
 {
     OSL_ENSURE( mpVSh->IsPreview(), "no page preview accessible." );
-    OSL_ENSURE( mpVSh->IsPreview() && ( mpPreview != NULL ),
+    OSL_ENSURE( mpVSh->IsPreview() && ( mpPreview != nullptr ),
                 "missing accessible preview data at page preview" );
-    if ( mpVSh->IsPreview() && ( mpPreview != NULL ) )
+    if ( mpVSh->IsPreview() && ( mpPreview != nullptr ) )
     {
         return mpVSh->PagePreviewLayout()->GetPreviewPageSizeByPageNum( _nPreviewPageNum );
     }
@@ -3561,7 +3561,7 @@ void SwAccessibleMap::InvalidateTextSelectionOfAllParas()
 
 const SwRect& SwAccessibleMap::GetVisArea() const
 {
-    OSL_ENSURE( !GetShell()->IsPreview() || (mpPreview != NULL),
+    OSL_ENSURE( !GetShell()->IsPreview() || (mpPreview != nullptr),
                 "preview without preview data?" );
 
     return GetShell()->IsPreview()

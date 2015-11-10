@@ -309,7 +309,7 @@ void ItemSetToPageDesc( const SfxItemSet& rSet, SwPageDesc& rPageDesc )
             // Pick out everything and adapt the header format
             SwFormatHeader aHeaderFormat(rMaster.GetHeader());
             SwFrameFormat *pHeaderFormat = aHeaderFormat.GetHeaderFormat();
-            OSL_ENSURE(pHeaderFormat != 0, "no header format");
+            OSL_ENSURE(pHeaderFormat != nullptr, "no header format");
 
             ::FillHdFt(pHeaderFormat, rHeaderSet);
 
@@ -349,7 +349,7 @@ void ItemSetToPageDesc( const SfxItemSet& rSet, SwPageDesc& rPageDesc )
             // Pick out everything and adapt the footer format
             SwFormatFooter aFooterFormat(rMaster.GetFooter());
             SwFrameFormat *pFooterFormat = aFooterFormat.GetFooterFormat();
-            OSL_ENSURE(pFooterFormat != 0, "no footer format");
+            OSL_ENSURE(pFooterFormat != nullptr, "no footer format");
 
             ::FillHdFt(pFooterFormat, rFooterSet);
 
@@ -388,7 +388,7 @@ void ItemSetToPageDesc( const SfxItemSet& rSet, SwPageDesc& rPageDesc )
     {
         bool bSet = static_cast<const SfxBoolItem*>(pItem)->GetValue();
         if(!bSet)
-            rPageDesc.SetRegisterFormatColl(0);
+            rPageDesc.SetRegisterFormatColl(nullptr);
         else if(SfxItemState::SET == rSet.GetItemState(
                                 SID_SWREGISTER_COLLECTION, false, &pItem))
         {
@@ -462,7 +462,7 @@ void PageDescToItemSet( const SwPageDesc& rPageDesc, SfxItemSet& rSet)
     {
         const SwFormatHeader &rHeaderFormat = rMaster.GetHeader();
         const SwFrameFormat *pHeaderFormat = rHeaderFormat.GetHeaderFormat();
-        OSL_ENSURE(pHeaderFormat != 0, "no header format");
+        OSL_ENSURE(pHeaderFormat != nullptr, "no header format");
 
         // HeaderInfo, margins, background, border
         SfxItemSet aHeaderSet(*rSet.GetPool(),
@@ -513,7 +513,7 @@ void PageDescToItemSet( const SwPageDesc& rPageDesc, SfxItemSet& rSet)
     {
         const SwFormatFooter &rFooterFormat = rMaster.GetFooter();
         const SwFrameFormat *pFooterFormat = rFooterFormat.GetFooterFormat();
-        OSL_ENSURE(pFooterFormat != 0, "no footer format");
+        OSL_ENSURE(pFooterFormat != nullptr, "no footer format");
 
         // FooterInfo, margins, background, border
         SfxItemSet aFooterSet(*rSet.GetPool(),
@@ -566,7 +566,7 @@ void PageDescToItemSet( const SwPageDesc& rPageDesc, SfxItemSet& rSet)
 
     // Register compliant
     const SwTextFormatColl* pCol = rPageDesc.GetRegisterFormatColl();
-    SwRegisterItem aReg(pCol != 0);
+    SwRegisterItem aReg(pCol != nullptr);
     aReg.SetWhich(SID_SWREGISTER_MODE);
     rSet.Put(aReg);
     if(pCol)
@@ -641,7 +641,7 @@ void SfxToSwPageDescAttr( const SwWrtShell& rShell, SfxItemSet& rSet )
 // Inquire if in the set is a Sfx-PageDesc combination present and return it.
 void SwToSfxPageDescAttr( SfxItemSet& rCoreSet )
 {
-    const SfxPoolItem* pItem = 0;
+    const SfxPoolItem* pItem = nullptr;
     OUString aName;
     ::boost::optional<sal_uInt16> oNumOffset;
     bool bPut = true;
@@ -762,7 +762,7 @@ SwTwips GetTableWidth( SwFrameFormat* pFormat, SwTabCols& rCols, sal_uInt16 *pPe
         {
             if(pSh)
             {
-                if ( 0 == pSh->GetFlyFrameFormat() )
+                if ( nullptr == pSh->GetFlyFrameFormat() )
                 {
                     nWidth = pSh->GetAnyCurRect(RECT_PAGE_PRT).Width();
                 }

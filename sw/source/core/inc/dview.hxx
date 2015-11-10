@@ -51,7 +51,7 @@ class SwDrawView : public FmFormView
         on the calculation of the maximal order number
     */
     static sal_uInt32 _GetMaxChildOrdNum( const SwFlyFrm& _rParentObj,
-                                   const SdrObject* _pExclChildObj = 0L );
+                                   const SdrObject* _pExclChildObj = nullptr );
 
     /** method to move 'repeated' objects of the given moved object to the
         according level
@@ -79,7 +79,7 @@ protected:
     virtual SdrUndoManager* getSdrUndoManagerForEnhancedTextEdit() const override;
 
 public:
-    SwDrawView( SwViewShellImp &rI, SdrModel *pMd, OutputDevice* pOutDev=NULL );
+    SwDrawView( SwViewShellImp &rI, SdrModel *pMd, OutputDevice* pOutDev=nullptr );
 
     // from base class
     virtual SdrObject*   GetMaxToTopObj(SdrObject* pObj) const override;

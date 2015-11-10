@@ -232,7 +232,7 @@ bool SwCrsrShell::IsFormProtected()
 
 bool SwCrsrShell::GotoFieldmark(::sw::mark::IFieldmark const * const pMark)
 {
-    if(pMark==NULL) return false;
+    if(pMark==nullptr) return false;
 
     // watch Crsr-Moves
     CrsrStateHelper aCrsrSt(*this);

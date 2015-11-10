@@ -37,7 +37,7 @@ using namespace ::com::sun::star::uno;
 
 static Sequence<Any> *lcl_docbasic_convertArgs( SbxArray& rArgs )
 {
-    Sequence<Any> *pRet = 0;
+    Sequence<Any> *pRet = nullptr;
 
     sal_uInt16 nCount = rArgs.Count();
     if( nCount > 1 )
@@ -63,7 +63,7 @@ static Sequence<Any> *lcl_docbasic_convertArgs( SbxArray& rArgs )
                 pUnoArgs[i] <<= (sal_Int32)pVar->GetLong();
                 break;
             default:
-                pUnoArgs[i].setValue(0, cppu::UnoType<void>::get());
+                pUnoArgs[i].setValue(nullptr, cppu::UnoType<void>::get());
                 break;
             }
         }
@@ -84,7 +84,7 @@ bool SwDoc::ExecMacro( const SvxMacro& rMacro, OUString* pRet, SbxArray* pArgs )
             aRef = pRetValue;
             eErr = mpDocShell->CallBasic( rMacro.GetMacName(),
                                          rMacro.GetLibName(),
-                                         pArgs, pRet ? pRetValue : 0 );
+                                         pArgs, pRet ? pRetValue : nullptr );
 
             if( pRet && SbxNULL <  pRetValue->GetType() &&
                         SbxVOID != pRetValue->GetType() )
@@ -137,7 +137,7 @@ sal_uInt16 SwDoc::CallEvent( sal_uInt16 nEvent, const SwCallMouseEvent& rCallEve
         return 0;
 
     sal_uInt16 nRet = 0;
-    const SvxMacroTableDtor* pTable = 0;
+    const SvxMacroTableDtor* pTable = nullptr;
     switch( rCallEvent.eType )
     {
     case EVENT_OBJECT_INETATTR:
@@ -147,7 +147,7 @@ sal_uInt16 SwDoc::CallEvent( sal_uInt16 nEvent, const SwCallMouseEvent& rCallEve
             for( n = 0; n < nMaxItems; ++n )
             {
                 const SfxPoolItem* pItem;
-                if( 0 != (pItem = GetAttrPool().GetItem2( RES_TXTATR_INETFMT, n ) )
+                if( nullptr != (pItem = GetAttrPool().GetItem2( RES_TXTATR_INETFMT, n ) )
                     && rCallEvent.PTR.pINetAttr == pItem )
                 {
                     bCheckPtr = false;       // misuse as a flag
@@ -181,7 +181,7 @@ sal_uInt16 SwDoc::CallEvent( sal_uInt16 nEvent, const SwCallMouseEvent& rCallEve
                 const SwFrameFormat* pFormat = rCallEvent.PTR.IMAP.pFormat;
                 const ImageMap* pIMap;
                 if( GetSpzFrameFormats()->Contains( pFormat ) &&
-                    0 != (pIMap = pFormat->GetURL().GetMap()) )
+                    nullptr != (pIMap = pFormat->GetURL().GetMap()) )
                 {
                     for( size_t nPos = pIMap->GetIMapObjectCount(); nPos; )
                         if( pIMapObj == pIMap->GetIMapObject( --nPos ))

@@ -170,13 +170,13 @@ struct WW8_SepInfo
     bool bIsFirstParagraph;
 
     WW8_SepInfo()
-        : pPageDesc(0), pSectionFormat(0), pPDNd(0), nLnNumRestartNo(0), bIsFirstParagraph(false)
+        : pPageDesc(nullptr), pSectionFormat(nullptr), pPDNd(nullptr), nLnNumRestartNo(0), bIsFirstParagraph(false)
 
     {}
 
     WW8_SepInfo( const SwPageDesc* pPD, const SwSectionFormat* pFormat,
                  sal_uLong nLnRestart, ::boost::optional<sal_uInt16> oPgRestart = boost::none,
-                 const SwNode* pNd = NULL, bool bIsFirstPara = false )
+                 const SwNode* pNd = nullptr, bool bIsFirstPara = false )
         : pPageDesc( pPD ), pSectionFormat( pFormat ), pPDNd( pNd ),
           nLnNumRestartNo( nLnRestart ), oPgRestartNo( oPgRestart ),
           bIsFirstParagraph( bIsFirstPara )
@@ -206,7 +206,7 @@ public:
     virtual bool HeaderFooterWritten();
 
     void AppendSection( const SwPageDesc* pPd,
-                    const SwSectionFormat* pSectionFormat = 0,
+                    const SwSectionFormat* pSectionFormat = nullptr,
                     sal_uLong nLnNumRestartNo = 0,
                     bool bIsFirstParagraph = false );
     void AppendSection( const SwFormatPageDesc& rPd,
@@ -253,7 +253,7 @@ public:
 
     void AppendSep( WW8_CP nStartCp,
                     const SwPageDesc* pPd,
-                    const SwSectionFormat* pSectionFormat = 0,
+                    const SwSectionFormat* pSectionFormat = nullptr,
                     sal_uLong nLnNumRestartNo = 0 );
     void AppendSep( WW8_CP nStartCp, const SwFormatPageDesc& rPd,
                     const SwNode& rNd,
@@ -724,7 +724,7 @@ public:
     /// Write section properties.
     ///
     /// pA is ignored for docx.
-    void SectionProperties( const WW8_SepInfo& rSectionInfo, WW8_PdAttrDesc* pA = NULL );
+    void SectionProperties( const WW8_SepInfo& rSectionInfo, WW8_PdAttrDesc* pA = nullptr );
 
     /// Output the numbering table.
     virtual void WriteNumbering() = 0;
@@ -808,8 +808,8 @@ protected:
 
     virtual void PrepareNewPageDesc( const SfxItemSet* pSet,
                                      const SwNode& rNd,
-                                     const SwFormatPageDesc* pNewPgDescFormat = 0,
-                                     const SwPageDesc* pNewPgDesc = 0 ) = 0;
+                                     const SwFormatPageDesc* pNewPgDescFormat = nullptr,
+                                     const SwPageDesc* pNewPgDesc = nullptr ) = 0;
 
     /// Return value indicates if an inherited outline numbering is suppressed.
     virtual bool DisallowInheritingOutlineNumbering(const SwFormat &rFormat) = 0;
@@ -929,7 +929,7 @@ public:
     bool InitStd97CodecUpdateMedium( ::msfilter::MSCodec_Std97& rCodec );
 
     using StgWriter::Write;
-    virtual sal_uLong Write( SwPaM&, SfxMedium&, const OUString* = 0 ) override;
+    virtual sal_uLong Write( SwPaM&, SfxMedium&, const OUString* = nullptr ) override;
     //Seems not an expected to provide method to access the private member
     SfxMedium* GetMedia() { return mpMedium; }
 
@@ -1009,8 +1009,8 @@ public:
 
     sal_uInt16 AddRedlineAuthor( sal_uInt16 nId );
 
-    void WriteFootnoteBegin( const SwFormatFootnote& rFootnote, ww::bytes* pO = 0 );
-    void WritePostItBegin( ww::bytes* pO = 0 );
+    void WriteFootnoteBegin( const SwFormatFootnote& rFootnote, ww::bytes* pO = nullptr );
+    void WritePostItBegin( ww::bytes* pO = nullptr );
     const SvxBrushItem* GetCurrentPageBgBrush() const;
     SvxBrushItem TrueFrameBgBrush(const SwFrameFormat &rFlyFormat) const;
 
@@ -1065,8 +1065,8 @@ public:
     // #i76300#
     virtual void PrepareNewPageDesc( const SfxItemSet* pSet,
                                      const SwNode& rNd,
-                                     const SwFormatPageDesc* pNewPgDescFormat = 0,
-                                     const SwPageDesc* pNewPgDesc = 0 ) override;
+                                     const SwFormatPageDesc* pNewPgDescFormat = nullptr,
+                                     const SwPageDesc* pNewPgDesc = nullptr ) override;
 
     static void Out_BorderLine(ww::bytes& rO, const ::editeng::SvxBorderLine* pLine,
         sal_uInt16 nDist, sal_uInt16 nSprmNo, sal_uInt16 nSprmNoVer9,
@@ -1267,7 +1267,7 @@ private:
 public:
     WW8_WrPlcPn( WW8Export& rWrt, ePLCFT ePl, WW8_FC nStartFc );
     ~WW8_WrPlcPn();
-    void AppendFkpEntry(WW8_FC nEndFc,short nVarLen = 0,const sal_uInt8* pSprms = 0);
+    void AppendFkpEntry(WW8_FC nEndFc,short nVarLen = 0,const sal_uInt8* pSprms = nullptr);
     void WriteFkps();
     void WritePlc();
     sal_uInt8 *CopyLastSprms(sal_uInt8 &rLen);
@@ -1359,7 +1359,7 @@ private:
 
     static void WritePICFHeader(SvStream& rStrm, const sw::Frame &rFly,
             sal_uInt16 mm, sal_uInt16 nWidth, sal_uInt16 nHeight,
-            const SwAttrSet* pAttrSet = 0);
+            const SwAttrSet* pAttrSet = nullptr);
     void WriteGraphicNode(SvStream& rStrm, const GraphicDetails &rItem);
     void WriteGrfFromGrfNode(SvStream& rStrm, const SwGrfNode &rNd,
         const sw::Frame &rFly, sal_uInt16 nWidth, sal_uInt16 nHeight);
@@ -1423,7 +1423,7 @@ public:
     MSWord_SdrAttrIter( MSWordExportBase& rWr, const EditTextObject& rEditObj,
         sal_uInt8 nType );
     void NextPara( sal_Int32 nPar );
-    void OutParaAttr(bool bCharAttr, const std::set<sal_uInt16>* pWhichsToIgnore = NULL);
+    void OutParaAttr(bool bCharAttr, const std::set<sal_uInt16>* pWhichsToIgnore = nullptr);
     void OutEEField(const SfxPoolItem& rHt);
 
     bool IsTextAttr(sal_Int32 nSwPos);

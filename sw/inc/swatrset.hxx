@@ -184,7 +184,7 @@ public:
     SwAttrSet( SwAttrPool&, const sal_uInt16* nWhichPairTable );
     SwAttrSet( const SwAttrSet& );
 
-    virtual SfxItemSet* Clone(bool bItems = true, SfxItemPool *pToPool = 0) const override;
+    virtual SfxItemSet* Clone(bool bItems = true, SfxItemPool *pToPool = nullptr) const override;
 
     bool Put_BC( const SfxPoolItem& rAttr, SwAttrSet* pOld, SwAttrSet* pNew );
     bool Put_BC( const SfxItemSet& rSet, SwAttrSet* pOld, SwAttrSet* pNew );
@@ -192,7 +192,7 @@ public:
     // Delete an item or a range.
     sal_uInt16 ClearItem_BC( sal_uInt16 nWhich, SwAttrSet* pOld, SwAttrSet* pNew );
     sal_uInt16 ClearItem_BC( sal_uInt16 nWhich1, sal_uInt16 nWhich2,
-                        SwAttrSet* pOld = 0, SwAttrSet* pNew = 0 );
+                        SwAttrSet* pOld = nullptr, SwAttrSet* pNew = nullptr );
 
     int Intersect_BC( const SfxItemSet& rSet, SwAttrSet* pOld, SwAttrSet* pNew );
 

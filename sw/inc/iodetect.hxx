@@ -85,7 +85,7 @@ public:
     /// find for an internal format name the corresponding filter entry
     SW_DLLPUBLIC static const SfxFilter*
         GetFilterOfFormat( const OUString& rFormat,
-            const SfxFilterContainer* pCnt = 0 );
+            const SfxFilterContainer* pCnt = nullptr );
 
     /** Detect for the given file which filter should be used. The filter name
      is returned. If no filter could be found, the name of the ASCII filter
@@ -96,7 +96,7 @@ public:
     static bool IsValidStgFilter( const css::uno::Reference < css::embed::XStorage >& rStg, const SfxFilter& rFilter);
 
     static bool IsDetectableText( const sal_Char* pBuf, sal_uLong &rLen,
-            rtl_TextEncoding *pCharSet=0, bool *pSwap=0, LineEnd *pLineEnd=0, bool bEncodedFilter = false );
+            rtl_TextEncoding *pCharSet=nullptr, bool *pSwap=nullptr, LineEnd *pLineEnd=nullptr, bool bEncodedFilter = false );
 
     static const OUString GetSubStorageName( const SfxFilter& rFltr );
 };

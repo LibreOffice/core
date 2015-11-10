@@ -74,7 +74,7 @@ struct Writer_Impl
 };
 
 Writer_Impl::Writer_Impl()
-    : m_pStream(0)
+    : m_pStream(nullptr)
 {
 }
 
@@ -119,7 +119,7 @@ void Writer_Impl::InsertBkmk(const ::sw::mark::IMark& rBkmk)
 
 Writer::Writer()
     : m_pImpl(o3tl::make_unique<Writer_Impl>())
-    , pOrigPam(0), pOrigFileName(0), pDoc(0), pCurPam(0)
+    , pOrigPam(nullptr), pOrigFileName(nullptr), pDoc(nullptr), pCurPam(nullptr)
 {
     bWriteAll = bShowProgress = bUCS2_WithStartChar = true;
     bASCII_NoLastLineEnd = bASCII_ParaAsBlanc = bASCII_ParaAsCR =
@@ -151,9 +151,9 @@ void Writer::ResetWriter()
             delete pCurPam->GetNext();
         delete pCurPam;
     }
-    pCurPam = 0;
-    pOrigFileName = 0;
-    pDoc = 0;
+    pCurPam = nullptr;
+    pOrigFileName = nullptr;
+    pDoc = nullptr;
 
     bShowProgress = bUCS2_WithStartChar = true;
     bASCII_NoLastLineEnd = bASCII_ParaAsBlanc = bASCII_ParaAsCR =
@@ -200,7 +200,7 @@ Writer::NewSwPaM(SwDoc & rDoc, sal_uLong const nStartIdx, sal_uLong const nEndId
 
     SwNodeIndex aStt( *pNds, nStartIdx );
     SwContentNode* pCNode = aStt.GetNode().GetContentNode();
-    if( !pCNode && 0 == pNds->GoNext( &aStt ) )
+    if( !pCNode && nullptr == pNds->GoNext( &aStt ) )
     {
         OSL_FAIL( "No more ContentNode at StartPos" );
     }
@@ -320,7 +320,7 @@ void Writer::PutNumFormatFontsInAttrPool()
                 if( SVX_NUM_CHAR_SPECIAL == (pFormat = &pRule->Get( nLvl ))->GetNumberingType() ||
                     SVX_NUM_BITMAP == pFormat->GetNumberingType() )
                 {
-                    if( 0 == ( pFont = pFormat->GetBulletFont() ) )
+                    if( nullptr == ( pFont = pFormat->GetBulletFont() ) )
                         pFont = pDefFont;
 
                     if( bCheck )
@@ -356,12 +356,12 @@ void Writer::_AddFontItems( SfxItemPool& rPool, sal_uInt16 nW )
     const SvxFontItem* pFont = static_cast<const SvxFontItem*>(&rPool.GetDefaultItem( nW ));
     _AddFontItem( rPool, *pFont );
 
-    if( 0 != ( pFont = static_cast<const SvxFontItem*>(rPool.GetPoolDefaultItem( nW ))) )
+    if( nullptr != ( pFont = static_cast<const SvxFontItem*>(rPool.GetPoolDefaultItem( nW ))) )
         _AddFontItem( rPool, *pFont );
 
     sal_uInt32 nMaxItem = rPool.GetItemCount2( nW );
     for( sal_uInt32 nGet = 0; nGet < nMaxItem; ++nGet )
-        if( 0 != (pFont = static_cast<const SvxFontItem*>(rPool.GetItem2( nW, nGet ))) )
+        if( nullptr != (pFont = static_cast<const SvxFontItem*>(rPool.GetItem2( nW, nGet ))) )
             _AddFontItem( rPool, *pFont );
 }
 
@@ -448,7 +448,7 @@ sal_uLong StgWriter::WriteStream()
 
 sal_uLong StgWriter::Write( SwPaM& rPaM, SotStorage& rStg, const OUString* pFName )
 {
-    SetStream(0);
+    SetStream(nullptr);
     pStg = &rStg;
     pDoc = rPaM.GetDoc();
     pOrigFileName = pFName;
@@ -460,7 +460,7 @@ sal_uLong StgWriter::Write( SwPaM& rPaM, SotStorage& rStg, const OUString* pFNam
 
     sal_uLong nRet = WriteStorage();
 
-    pStg = NULL;
+    pStg = nullptr;
     ResetWriter();
 
     return nRet;
@@ -468,8 +468,8 @@ sal_uLong StgWriter::Write( SwPaM& rPaM, SotStorage& rStg, const OUString* pFNam
 
 sal_uLong StgWriter::Write( SwPaM& rPaM, const uno::Reference < embed::XStorage >& rStg, const OUString* pFName, SfxMedium* pMedium )
 {
-    SetStream(0);
-    pStg = 0;
+    SetStream(nullptr);
+    pStg = nullptr;
     xStg = rStg;
     pDoc = rPaM.GetDoc();
     pOrigFileName = pFName;
@@ -481,7 +481,7 @@ sal_uLong StgWriter::Write( SwPaM& rPaM, const uno::Reference < embed::XStorage 
 
     sal_uLong nRet = pMedium ? WriteMedium( *pMedium ) : WriteStorage();
 
-    pStg = NULL;
+    pStg = nullptr;
     ResetWriter();
 
     return nRet;

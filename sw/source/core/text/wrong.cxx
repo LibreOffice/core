@@ -26,7 +26,7 @@ SwWrongArea::SwWrongArea( const OUString& rType, WrongListType listType,
         css::uno::Reference< css::container::XStringKeyMap > xPropertyBag,
         sal_Int32 nPos,
         sal_Int32 nLen)
-: maType(rType), mxPropertyBag(xPropertyBag), mnPos(nPos), mnLen(nLen), mpSubList(0)
+: maType(rType), mxPropertyBag(xPropertyBag), mnPos(nPos), mnLen(nLen), mpSubList(nullptr)
 {
     mColor =  getWrongAreaColor(listType, xPropertyBag);
     mLineType = getWrongAreaLineType(listType, xPropertyBag);
@@ -39,7 +39,7 @@ SwWrongArea::SwWrongArea( const OUString& rType,
         SwWrongList* pSubList)
 : maType(rType), mxPropertyBag(xPropertyBag), mnPos(nPos), mnLen(nLen), mpSubList(pSubList), mLineType(WRONGAREA_NONE)
 {
-    if (pSubList != 0)
+    if (pSubList != nullptr)
     {
         mColor =  getWrongAreaColor(pSubList->GetWrongListType(), xPropertyBag);
         mLineType = getWrongAreaLineType(pSubList->GetWrongListType(), xPropertyBag);
@@ -85,7 +85,7 @@ void SwWrongList::ClearList()
     {
         if (maList[i].mpSubList)
             delete maList[i].mpSubList;
-        maList[i].mpSubList = NULL;
+        maList[i].mpSubList = nullptr;
     }
     maList.clear();
 }
@@ -448,7 +448,7 @@ bool SwWrongList::InvalidateWrong( )
 
 SwWrongList* SwWrongList::SplitList( sal_Int32 nSplitPos )
 {
-    SwWrongList *pRet = NULL;
+    SwWrongList *pRet = nullptr;
     sal_uInt16 nLst = 0;
     while( nLst < Count() && Pos( nLst ) < nSplitPos )
         ++nLst;
@@ -536,7 +536,7 @@ void SwWrongList::InsertSubList( sal_Int32 nNewPos, sal_Int32 nNewLen, sal_uInt1
         i = maList.end(); // robust
     else
         i += nWhere;
-    maList.insert(i, SwWrongArea( OUString(), 0, nNewPos, nNewLen, pSubList ) );
+    maList.insert(i, SwWrongArea( OUString(), nullptr, nNewPos, nNewLen, pSubList ) );
 }
 
 // New functions: Necessary because SwWrongList has been changed to use std::vector
@@ -553,7 +553,7 @@ void SwWrongList::Insert(sal_uInt16 nWhere, std::vector<SwWrongArea>::iterator s
     // pSubList-Pointers to 0
     while ( startPos != endPos )
     {
-        (*startPos).mpSubList = 0;
+        (*startPos).mpSubList = nullptr;
         ++startPos;
     }
 }

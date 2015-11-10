@@ -60,14 +60,14 @@ static HTMLOptionEnum aHTMLMarqBehaviorTable[] =
     { OOO_STRING_SVTOOLS_HTML_BEHAV_scroll,     SDRTEXTANI_SCROLL       },
     { OOO_STRING_SVTOOLS_HTML_BEHAV_alternate,  SDRTEXTANI_ALTERNATE    },
     { OOO_STRING_SVTOOLS_HTML_BEHAV_slide,      SDRTEXTANI_SLIDE        },
-    { 0,                                        0                       }
+    { nullptr,                                        0                       }
 };
 
 static HTMLOptionEnum aHTMLMarqDirectionTable[] =
 {
     { OOO_STRING_SVTOOLS_HTML_AL_left,          SDRTEXTANI_LEFT         },
     { OOO_STRING_SVTOOLS_HTML_AL_right,         SDRTEXTANI_RIGHT        },
-    { 0,                                        0                       }
+    { nullptr,                                        0                       }
 };
 
 void SwHTMLParser::InsertDrawObject( SdrObject* pNewDrawObj,
@@ -561,7 +561,7 @@ void SwHTMLParser::EndMarquee()
     }
 
     m_aContents.clear();
-    m_pMarquee = 0;
+    m_pMarquee = nullptr;
 }
 
 void SwHTMLParser::InsertMarqueeText()

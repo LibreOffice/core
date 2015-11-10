@@ -90,29 +90,29 @@ SdrObject* SwDrawShell::IsSingleFillableNonOLESelected()
 
     if(!pSdrView)
     {
-        return 0;
+        return nullptr;
     }
 
     if(1 != pSdrView->GetMarkedObjectCount())
     {
-        return 0;
+        return nullptr;
     }
 
     SdrObject* pPickObj = pSdrView->GetMarkedObjectByIndex(0);
 
     if(!pPickObj)
     {
-        return 0;
+        return nullptr;
     }
 
     if(!pPickObj->IsClosedObj())
     {
-        return 0;
+        return nullptr;
     }
 
     if(dynamic_cast< SdrOle2Obj* >(pPickObj))
     {
-        return 0;
+        return nullptr;
     }
 
     return pPickObj;
@@ -579,8 +579,8 @@ void SwDrawShell::GetFormTextState(SfxItemSet& rSet)
     SwWrtShell &rSh = GetShell();
     SdrView* pDrView = rSh.GetDrawView();
     const SdrMarkList& rMarkList = pDrView->GetMarkedObjectList();
-    const SdrObject* pObj = NULL;
-    SvxFontWorkDialog* pDlg = NULL;
+    const SdrObject* pObj = nullptr;
+    SvxFontWorkDialog* pDlg = nullptr;
 
     const sal_uInt16 nId = SvxFontWorkChildWindow::GetChildWindowId();
 
@@ -588,7 +588,7 @@ void SwDrawShell::GetFormTextState(SfxItemSet& rSet)
     if ( pVFrame->HasChildWindow(nId) )
     {
         SfxChildWindow *pChildWindow = pVFrame->GetChildWindow(nId);
-        pDlg = pChildWindow ? static_cast<SvxFontWorkDialog*>(pChildWindow->GetWindow()) : NULL;
+        pDlg = pChildWindow ? static_cast<SvxFontWorkDialog*>(pChildWindow->GetWindow()) : nullptr;
     }
 
     if ( rMarkList.GetMarkCount() == 1 )

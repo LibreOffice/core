@@ -33,7 +33,7 @@ class SwExtTextInput : public SwPaM
     bool bIsOverwriteCursor : 1;
     LanguageType eInputLanguage;
 public:
-    SwExtTextInput( const SwPaM& rPam, Ring* pRing = 0 );
+    SwExtTextInput( const SwPaM& rPam, Ring* pRing = nullptr );
     virtual ~SwExtTextInput();
 
     void SetInputData( const CommandExtTextInputData& rData );

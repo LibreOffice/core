@@ -546,10 +546,10 @@ public:
 
     SwAccessibleMap* GetAccessibleMap();
 
-    SwViewShell( SwViewShell&, vcl::Window *pWin = 0, OutputDevice *pOut = 0,
+    SwViewShell( SwViewShell&, vcl::Window *pWin = nullptr, OutputDevice *pOut = nullptr,
                 long nFlags = 0 );
     SwViewShell( SwDoc& rDoc, vcl::Window *pWin,
-               const SwViewOption *pOpt = 0, OutputDevice *pOut = 0,
+               const SwViewOption *pOpt = nullptr, OutputDevice *pOut = nullptr,
                long nFlags = 0 );
     virtual ~SwViewShell();
 

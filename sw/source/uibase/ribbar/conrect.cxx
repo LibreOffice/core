@@ -70,7 +70,7 @@ bool ConstRectangle::MouseButtonUp(const MouseEvent& rMEvt)
         SdrView *pSdrView = m_pSh->GetDrawView();
         const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
         SdrObject* pObj = rMarkList.GetMark(0) ? rMarkList.GetMark(0)->GetMarkedSdrObj()
-                                               : 0;
+                                               : nullptr;
         switch( m_pWin->GetSdrDrawMode() )
         {
         case OBJ_TEXT:

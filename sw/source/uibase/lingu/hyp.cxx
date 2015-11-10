@@ -80,7 +80,7 @@ bool SwHyphWrapper::SpellContinue()
     }
 
         uno::Reference< uno::XInterface >  xHyphWord = bInSelection ?
-                PSH->HyphContinue( NULL, NULL ) :
+                PSH->HyphContinue( nullptr, nullptr ) :
                 PSH->HyphContinue( &nPageCount, &nPageStart );
         SetLast( xHyphWord );
 

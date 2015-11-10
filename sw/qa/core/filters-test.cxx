@@ -89,8 +89,8 @@ bool SwFiltersTest::filter(const OUString &rFilter, const OUString &rURL,
     SwDocShellRef xDocShRef = new SwDocShell;
     SfxMedium* pSrcMed = new SfxMedium(rURL, STREAM_STD_READ);
 
-    const SfxFilter* pImportFilter = 0;
-    SfxFilter* pExportFilter = 0;
+    const SfxFilter* pImportFilter = nullptr;
+    SfxFilter* pExportFilter = nullptr;
     if (bExport)
     {
         SfxGetpApp()->GetFilterMatcher().GuessFilter(*pSrcMed, &pImportFilter, SfxFilterFlags::IMPORT, SfxFilterFlags::NONE);

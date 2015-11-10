@@ -50,12 +50,12 @@ VclPtr<vcl::Window> WrapPropertyPanel::Create (
     const css::uno::Reference< css::frame::XFrame >& rxFrame,
     SfxBindings* pBindings)
 {
-    if (pParent == NULL)
-        throw css::lang::IllegalArgumentException("no parent Window given to WrapPropertyPanel::Create", NULL, 0);
+    if (pParent == nullptr)
+        throw css::lang::IllegalArgumentException("no parent Window given to WrapPropertyPanel::Create", nullptr, 0);
     if ( ! rxFrame.is())
-        throw css::lang::IllegalArgumentException("no XFrame given to WrapPropertyPanel::Create", NULL, 1);
-    if (pBindings == NULL)
-        throw css::lang::IllegalArgumentException("no SfxBindings given to WrapPropertyPanel::Create", NULL, 2);
+        throw css::lang::IllegalArgumentException("no XFrame given to WrapPropertyPanel::Create", nullptr, 1);
+    if (pBindings == nullptr)
+        throw css::lang::IllegalArgumentException("no SfxBindings given to WrapPropertyPanel::Create", nullptr, 2);
 
     return VclPtr<WrapPropertyPanel>::Create(
                         pParent,

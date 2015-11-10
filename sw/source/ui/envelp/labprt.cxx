@@ -30,7 +30,7 @@
 SwLabPrtPage::SwLabPrtPage(vcl::Window* pParent, const SfxItemSet& rSet)
     : SfxTabPage(pParent, "LabelOptionsPage",
         "modules/swriter/ui/labeloptionspage.ui", &rSet)
-    , pPrinter(0)
+    , pPrinter(nullptr)
 {
     get(m_pPageButton, "entirepage");
     get(m_pSingleButton, "singlelabel");

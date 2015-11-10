@@ -466,7 +466,7 @@ OUString SwAddressPreview::FillData(
     //exchange the placeholder (like <Firstname>) with the database content
     //unassigned columns are expanded to <not assigned>
     Reference< XColumnsSupplier > xColsSupp( rConfigItem.GetResultSet(), UNO_QUERY);
-    Reference <XNameAccess> xColAccess = xColsSupp.is() ? xColsSupp->getColumns() : 0;
+    Reference <XNameAccess> xColAccess = xColsSupp.is() ? xColsSupp->getColumns() : nullptr;
     Sequence< OUString> aAssignment = pAssignments ?
                     *pAssignments :
                     rConfigItem.GetColumnAssignment(

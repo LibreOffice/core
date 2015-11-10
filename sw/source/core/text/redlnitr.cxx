@@ -47,7 +47,7 @@ void SwAttrIter::CtorInitAttrIter( SwTextNode& rTextNode, SwScriptInfo& rScrInf,
 {
     // during HTML-Import it can happen, that no layout exists
     SwRootFrm* pRootFrm = rTextNode.getIDocumentLayoutAccess().GetCurrentLayout();
-    pShell = pRootFrm ? pRootFrm->GetCurrShell() : 0;
+    pShell = pRootFrm ? pRootFrm->GetCurrShell() : nullptr;
 
     pScriptInfo = &rScrInf;
 
@@ -82,7 +82,7 @@ void SwAttrIter::CtorInitAttrIter( SwTextNode& rTextNode, SwScriptInfo& rScrInf,
     aAttrHandler.Init( aFontAccess.Get()->GetDefault(), pAttrSet,
                        *rTextNode.getIDocumentSettingAccess(), pShell, *pFnt, bVertLayout );
 
-    aMagicNo[SW_LATIN] = aMagicNo[SW_CJK] = aMagicNo[SW_CTL] = NULL;
+    aMagicNo[SW_LATIN] = aMagicNo[SW_CJK] = aMagicNo[SW_CTL] = nullptr;
 
     // determine script changes if not already done for current paragraph
     OSL_ENSURE( pScriptInfo, "No script info available");
@@ -91,7 +91,7 @@ void SwAttrIter::CtorInitAttrIter( SwTextNode& rTextNode, SwScriptInfo& rScrInf,
 
     if ( g_pBreakIt->GetBreakIter().is() )
     {
-        pFnt->SetActual( SwScriptInfo::WhichFont( 0, 0, pScriptInfo ) );
+        pFnt->SetActual( SwScriptInfo::WhichFont( 0, nullptr, pScriptInfo ) );
 
         sal_Int32 nChg = 0;
         size_t nCnt = 0;
@@ -135,7 +135,7 @@ void SwAttrIter::CtorInitAttrIter( SwTextNode& rTextNode, SwScriptInfo& rScrInf,
         const sal_uInt16 nRedlPos = rIDRA.GetRedlinePos( rTextNode, USHRT_MAX );
         if( pExtInp || USHRT_MAX != nRedlPos )
         {
-            const std::vector<sal_uInt16> *pArr = 0;
+            const std::vector<sal_uInt16> *pArr = nullptr;
             sal_Int32 nInputStt = 0;
             if( pExtInp )
             {
@@ -169,20 +169,20 @@ SwRedlineItr::SwRedlineItr( const SwTextNode& rTextNd, SwFont& rFnt,
                             SwAttrHandler& rAH, sal_Int32 nRed, bool bShw,
                             const std::vector<sal_uInt16> *pArr,
                             sal_Int32 nExtStart )
-    : rDoc( *rTextNd.GetDoc() ), rAttrHandler( rAH ), pSet( 0 ),
+    : rDoc( *rTextNd.GetDoc() ), rAttrHandler( rAH ), pSet( nullptr ),
       nNdIdx( rTextNd.GetIndex() ), nFirst( nRed ),
       nAct( COMPLETE_STRING ), bOn( false ), bShow( bShw )
 {
     if( pArr )
         pExt = new SwExtend( *pArr, nExtStart );
     else
-        pExt = NULL;
+        pExt = nullptr;
     Seek (rFnt, 0, COMPLETE_STRING);
 }
 
 SwRedlineItr::~SwRedlineItr()
 {
-    Clear( NULL );
+    Clear( nullptr );
     delete pSet;
     delete pExt;
 }
@@ -456,7 +456,7 @@ bool SwExtend::_Leave(SwFont& rFnt, sal_Int32 nNew)
     {
         rFnt = *pFnt;
         delete pFnt;
-        pFnt = NULL;
+        pFnt = nullptr;
         return true;
     }
     return false;

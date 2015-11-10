@@ -284,7 +284,7 @@ class StatisticPropertyGetSetHelper : public PropertGetSetHelper
     SwDocShell* mpDocShell;
     uno::Reference< beans::XPropertySet > mxModelProps;
 public:
-    explicit StatisticPropertyGetSetHelper( const uno::Reference< frame::XModel >& xModel ) :PropertGetSetHelper( xModel ) , mpDocShell( NULL )
+    explicit StatisticPropertyGetSetHelper( const uno::Reference< frame::XModel >& xModel ) :PropertGetSetHelper( xModel ) , mpDocShell( nullptr )
     {
             mxModelProps.set( m_xModel, uno::UNO_QUERY_THROW );
             mpDocShell = word::getDocShell( xModel );

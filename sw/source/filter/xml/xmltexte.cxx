@@ -83,7 +83,7 @@ void SwXMLTextParagraphExport::exportStyleContent(
         const Reference< XStyle > & rStyle )
 {
 
-    const SwXStyle* pStyle = 0;
+    const SwXStyle* pStyle = nullptr;
     Reference<XUnoTunnel> xStyleTunnel( rStyle, UNO_QUERY);
     if( xStyleTunnel.is() )
     {
@@ -326,7 +326,7 @@ void SwXMLTextParagraphExport::_collectTextEmbeddedAutoStyles(
     if( !rObjRef.is() )
         return;
 
-    const XMLPropertyState *aStates[8] = { 0, 0, 0, 0, 0, 0, 0, 0 };
+    const XMLPropertyState *aStates[8] = { nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr };
     SvGlobalName aClassId( rObjRef->getClassID() );
 
     if( aIFrameClassId == aClassId )
@@ -395,7 +395,7 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
         aAny >>= sStyle;
     }
 
-    const XMLPropertyState *aStates[8] = { 0, 0, 0, 0, 0, 0, 0, 0 };
+    const XMLPropertyState *aStates[8] = { nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr };
     switch( nType )
     {
     case SV_EMBEDDED_FRAME:

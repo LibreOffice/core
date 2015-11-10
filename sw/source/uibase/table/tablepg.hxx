@@ -89,7 +89,7 @@ public:
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;
     virtual void        Reset( const SfxItemSet* rSet ) override;
     virtual void        ActivatePage( const SfxItemSet& rSet ) override;
-    virtual sfxpg       DeactivatePage( SfxItemSet* pSet = 0 ) override;
+    virtual sfxpg       DeactivatePage( SfxItemSet* pSet = nullptr ) override;
 };
 
 // TabPage Format/Table/Columns
@@ -140,7 +140,7 @@ public:
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;
     virtual void        Reset( const SfxItemSet* rSet ) override;
     virtual void        ActivatePage( const SfxItemSet& rSet ) override;
-    virtual sfxpg       DeactivatePage( SfxItemSet* pSet = 0 ) override;
+    virtual sfxpg       DeactivatePage( SfxItemSet* pSet = nullptr ) override;
 
 };
 
@@ -179,7 +179,7 @@ class SwTextFlowPage : public SfxTabPage
     DECL_LINK_TYPED( PageBreakTypeHdl_Impl, Button*, void );
     DECL_LINK_TYPED( SplitHdl_Impl, Button*, void );
     DECL_STATIC_LINK_TYPED( SwTextFlowPage, SplitRowHdl_Impl, Button*, void );
-    DECL_LINK_TYPED( HeadLineCBClickHdl, Button* = 0, void );
+    DECL_LINK_TYPED( HeadLineCBClickHdl, Button* = nullptr, void );
 
 public:
     SwTextFlowPage( vcl::Window* pParent, const SfxItemSet& rSet );

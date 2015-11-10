@@ -94,9 +94,9 @@ const SwContentFrm *SwLayoutFrm::ContainsContent() const
 
         pLayLeaf = pLayLeaf->GetNextLayoutLeaf();
         if( !IsAnLower( pLayLeaf) )
-            return 0;
+            return nullptr;
     } while( pLayLeaf );
-    return 0;
+    return nullptr;
 }
 
 /**
@@ -151,19 +151,19 @@ const SwFrm *SwLayoutFrm::ContainsAny( const bool _bInvestigateFootnoteForSectio
             } while( pLayLeaf && pLayLeaf->IsInFootnote() );
         }
         if( !IsAnLower( pLayLeaf) )
-            return 0;
+            return nullptr;
     } while( pLayLeaf );
-    return 0;
+    return nullptr;
 }
 
 const SwFrm* SwFrm::GetLower() const
 {
-    return IsLayoutFrm() ? static_cast<const SwLayoutFrm*>(this)->Lower() : 0;
+    return IsLayoutFrm() ? static_cast<const SwLayoutFrm*>(this)->Lower() : nullptr;
 }
 
 SwFrm* SwFrm::GetLower()
 {
-    return IsLayoutFrm() ? static_cast<SwLayoutFrm*>(this)->Lower() : 0;
+    return IsLayoutFrm() ? static_cast<SwLayoutFrm*>(this)->Lower() : nullptr;
 }
 
 SwContentFrm* SwFrm::FindPrevCnt( const bool _bInSameFootnote )
@@ -264,7 +264,7 @@ bool SwLayoutFrm::IsBefore( const SwLayoutFrm* _pCheckRefLayFrm ) const
             {
                 pUpNext = static_cast<const SwLayoutFrm*>(pUpNext->GetNext());
             }
-            bReturn = pUpNext != 0;
+            bReturn = pUpNext != nullptr;
         }
     }
 
@@ -275,7 +275,7 @@ bool SwLayoutFrm::IsBefore( const SwLayoutFrm* _pCheckRefLayFrm ) const
 
 static const SwFrm* lcl_FindLayoutFrame( const SwFrm* pFrm, bool bNext )
 {
-    const SwFrm* pRet = 0;
+    const SwFrm* pRet = nullptr;
     if ( pFrm->IsFlyFrm() )
         pRet = bNext ? static_cast<const SwFlyFrm*>(pFrm)->GetNextLink() : static_cast<const SwFlyFrm*>(pFrm)->GetPrevLink();
     else
@@ -287,7 +287,7 @@ static const SwFrm* lcl_FindLayoutFrame( const SwFrm* pFrm, bool bNext )
 static const SwFrm* lcl_GetLower( const SwFrm* pFrm, bool bFwd )
 {
     if ( !pFrm->IsLayoutFrm() )
-        return 0;
+        return nullptr;
 
     return bFwd ?
            static_cast<const SwLayoutFrm*>(pFrm)->Lower() :
@@ -304,29 +304,29 @@ static const SwFrm* lcl_GetLower( const SwFrm* pFrm, bool bFwd )
 const SwLayoutFrm *SwFrm::ImplGetNextLayoutLeaf( bool bFwd ) const
 {
     const SwFrm       *pFrm = this;
-    const SwLayoutFrm *pLayoutFrm = 0;
-    const SwFrm       *p = 0;
+    const SwLayoutFrm *pLayoutFrm = nullptr;
+    const SwFrm       *p = nullptr;
     bool bGoingUp = !bFwd;          // false for forward, true for backward
     do {
 
          bool bGoingFwdOrBwd = false;
 
-         bool bGoingDown = ( !bGoingUp && ( 0 != (p = lcl_GetLower( pFrm, bFwd ) ) ) );
+         bool bGoingDown = ( !bGoingUp && ( nullptr != (p = lcl_GetLower( pFrm, bFwd ) ) ) );
          if ( !bGoingDown )
          {
              // I cannot go down, because either I'm currently going up or
              // because the is no lower.
              // I'll try to go forward:
-             bGoingFwdOrBwd = (0 != (p = lcl_FindLayoutFrame( pFrm, bFwd ) ) );
+             bGoingFwdOrBwd = (nullptr != (p = lcl_FindLayoutFrame( pFrm, bFwd ) ) );
              if ( !bGoingFwdOrBwd )
              {
                  // I cannot go forward, because there is no next frame.
                  // I'll try to go up:
-                 bGoingUp = (0 != (p = pFrm->GetUpper() ) );
+                 bGoingUp = (nullptr != (p = pFrm->GetUpper() ) );
                  if ( !bGoingUp )
                  {
                     // I cannot go up, because there is no upper frame.
-                    return 0;
+                    return nullptr;
                  }
              }
          }
@@ -339,7 +339,7 @@ const SwLayoutFrm *SwFrm::ImplGetNextLayoutLeaf( bool bFwd ) const
 
     } while( ( p && !p->IsFlowFrm() ) ||
              pFrm == this ||
-             0 == ( pLayoutFrm = pFrm->IsLayoutFrm() ? static_cast<const SwLayoutFrm*>(pFrm) : 0 ) ||
+             nullptr == ( pLayoutFrm = pFrm->IsLayoutFrm() ? static_cast<const SwLayoutFrm*>(pFrm) : nullptr ) ||
              pLayoutFrm->IsAnLower( this ) );
 
     return pLayoutFrm;
@@ -358,22 +358,22 @@ const SwLayoutFrm *SwFrm::ImplGetNextLayoutLeaf( bool bFwd ) const
 const SwContentFrm* SwContentFrm::ImplGetNextContentFrm( bool bFwd ) const
 {
     const SwFrm *pFrm = this;
-    const SwContentFrm *pContentFrm = 0;
+    const SwContentFrm *pContentFrm = nullptr;
     bool bGoingUp = false;
     do {
-        const SwFrm *p = 0;
+        const SwFrm *p = nullptr;
         bool bGoingFwdOrBwd = false;
 
-        bool bGoingDown = ( !bGoingUp && ( 0 != ( p = lcl_GetLower( pFrm, true ) ) ) );
+        bool bGoingDown = ( !bGoingUp && ( nullptr != ( p = lcl_GetLower( pFrm, true ) ) ) );
         if ( !bGoingDown )
         {
-            bGoingFwdOrBwd = ( 0 != ( p = lcl_FindLayoutFrame( pFrm, bFwd ) ) );
+            bGoingFwdOrBwd = ( nullptr != ( p = lcl_FindLayoutFrame( pFrm, bFwd ) ) );
             if ( !bGoingFwdOrBwd )
             {
-                bGoingUp = ( 0 != ( p = pFrm->GetUpper() ) );
+                bGoingUp = ( nullptr != ( p = pFrm->GetUpper() ) );
                 if ( !bGoingUp )
                 {
-                    return 0;
+                    return nullptr;
                 }
             }
         }
@@ -388,7 +388,7 @@ const SwContentFrm* SwContentFrm::ImplGetNextContentFrm( bool bFwd ) const
         }
 
         pFrm = p;
-    } while ( 0 == (pContentFrm = (pFrm->IsContentFrm() ? static_cast<const SwContentFrm*>(pFrm) : 0) ));
+    } while ( nullptr == (pContentFrm = (pFrm->IsContentFrm() ? static_cast<const SwContentFrm*>(pFrm) : nullptr) ));
 
     return pContentFrm;
 }
@@ -434,7 +434,7 @@ SwFootnoteBossFrm* SwFrm::FindFootnoteBossFrm( bool bFootnotes )
                 pRet = static_cast<SwFlyFrm*>(pRet)->AnchorFrm();
         }
         else
-            return 0;
+            return nullptr;
     }
     if( bFootnotes && pRet && pRet->IsColumnFrm() &&
         !pRet->GetNext() && !pRet->GetPrev() )
@@ -454,7 +454,7 @@ SwTabFrm* SwFrm::ImplFindTabFrm()
     {
         pRet = pRet->GetUpper();
         if ( !pRet )
-            return 0;
+            return nullptr;
     }
     return static_cast<SwTabFrm*>(pRet);
 }
@@ -466,7 +466,7 @@ SwSectionFrm* SwFrm::ImplFindSctFrm()
     {
         pRet = pRet->GetUpper();
         if ( !pRet )
-            return 0;
+            return nullptr;
     }
     return static_cast<SwSectionFrm*>(pRet);
 }
@@ -478,7 +478,7 @@ SwFootnoteFrm *SwFrm::ImplFindFootnoteFrm()
     {
         pRet = pRet->GetUpper();
         if ( !pRet )
-            return 0;
+            return nullptr;
     }
     return static_cast<SwFootnoteFrm*>(pRet);
 }
@@ -493,7 +493,7 @@ SwFlyFrm *SwFrm::ImplFindFlyFrm()
         else
             pRet = pRet->GetUpper();
     } while ( pRet );
-    return 0;
+    return nullptr;
 }
 
 SwFrm *SwFrm::FindColFrm()
@@ -526,7 +526,7 @@ SwFrm* SwFrm::FindFooterOrHeader()
         else if ( pRet->IsFlyFrm() )
             pRet = static_cast<SwFlyFrm*>(pRet)->AnchorFrm();
         else
-            return 0;
+            return nullptr;
     } while ( pRet );
     return pRet;
 }
@@ -536,12 +536,12 @@ const SwFootnoteFrm* SwFootnoteContFrm::FindFootNote() const
     const SwFootnoteFrm* pRet = static_cast<const SwFootnoteFrm*>(Lower());
     if( pRet && !pRet->GetAttr()->GetFootnote().IsEndNote() )
         return pRet;
-    return NULL;
+    return nullptr;
 }
 
 const SwPageFrm* SwRootFrm::GetPageAtPos( const Point& rPt, const Size* pSize, bool bExtend ) const
 {
-    const SwPageFrm* pRet = 0;
+    const SwPageFrm* pRet = nullptr;
 
     SwRect aRect;
     if ( pSize )
@@ -555,7 +555,7 @@ const SwPageFrm* SwRootFrm::GetPageAtPos( const Point& rPt, const Size* pSize, b
     if ( !bExtend )
     {
         if( !Frm().IsInside( rPt ) )
-            return 0;
+            return nullptr;
 
         // skip pages above point:
         while( pPage && rPt.Y() > pPage->Frm().Bottom() )
@@ -674,30 +674,30 @@ bool SwFrm::supportsFullDrawingLayerFillAttributeSet() const
 // besides ContentFrames this function also returns TabFrms and SectionFrms.
 static SwFrm* lcl_NextFrm( SwFrm* pFrm )
 {
-    SwFrm *pRet = 0;
+    SwFrm *pRet = nullptr;
     bool bGoingUp = false;
     do {
-        SwFrm *p = 0;
+        SwFrm *p = nullptr;
 
         bool bGoingFwd = false;
-        bool bGoingDown = (!bGoingUp && ( 0 != (p = pFrm->IsLayoutFrm() ? static_cast<SwLayoutFrm*>(pFrm)->Lower() : 0)));
+        bool bGoingDown = (!bGoingUp && ( nullptr != (p = pFrm->IsLayoutFrm() ? static_cast<SwLayoutFrm*>(pFrm)->Lower() : nullptr)));
 
         if( !bGoingDown )
         {
-            bGoingFwd = (0 != (p = ( pFrm->IsFlyFrm() ? static_cast<SwFlyFrm*>(pFrm)->GetNextLink() : pFrm->GetNext())));
+            bGoingFwd = (nullptr != (p = ( pFrm->IsFlyFrm() ? static_cast<SwFlyFrm*>(pFrm)->GetNextLink() : pFrm->GetNext())));
             if ( !bGoingFwd )
             {
-                bGoingUp = (0 != (p = pFrm->GetUpper()));
+                bGoingUp = (nullptr != (p = pFrm->GetUpper()));
                 if ( !bGoingUp )
                 {
-                    return 0;
+                    return nullptr;
                 }
             }
         }
         bGoingUp = !(bGoingFwd || bGoingDown);
         pFrm = p;
-    } while ( 0 == (pRet = ( ( pFrm->IsContentFrm() || ( !bGoingUp &&
-            ( pFrm->IsTabFrm() || pFrm->IsSctFrm() ) ) )? pFrm : 0 ) ) );
+    } while ( nullptr == (pRet = ( ( pFrm->IsContentFrm() || ( !bGoingUp &&
+            ( pFrm->IsTabFrm() || pFrm->IsSctFrm() ) ) )? pFrm : nullptr ) ) );
     return pRet;
 }
 
@@ -739,12 +739,12 @@ SwFrm *SwFrm::_FindNext()
         SwFrm* pMyUpper = GetUpper();
         if ( pMyUpper->IsTabFrm() && static_cast<SwTabFrm*>(pMyUpper)->GetFollow() )
             return static_cast<SwTabFrm*>(pMyUpper)->GetFollow()->GetLower();
-        else return NULL;
+        else return nullptr;
     }
     else
-        return NULL;
+        return nullptr;
 
-    SwFrm* pRet = NULL;
+    SwFrm* pRet = nullptr;
     const bool bFootnote  = pThis->IsInFootnote();
     if ( !bIgnoreTab && pThis->IsInTab() )
     {
@@ -752,7 +752,7 @@ SwFrm *SwFrm::_FindNext()
         while (pUp && !pUp->IsCellFrm())
             pUp = pUp->GetUpper();
         SAL_WARN_IF(!pUp, "sw.core", "Content in table but not in cell.");
-        SwFrm* pNxt = pUp ? static_cast<SwCellFrm*>(pUp)->GetFollowCell() : NULL;
+        SwFrm* pNxt = pUp ? static_cast<SwCellFrm*>(pUp)->GetFollowCell() : nullptr;
         if ( pNxt )
             pNxt = static_cast<SwCellFrm*>(pNxt)->ContainsContent();
         if ( !pNxt )
@@ -846,7 +846,7 @@ SwContentFrm *SwFrm::_FindNextCnt( const bool _bInSameFootnote )
         }
         pThis = static_cast<SwTabFrm*>(this)->FindLastContent();
         if ( !pThis )
-            return 0;
+            return nullptr;
     }
     else if ( IsSctFrm() )
     {
@@ -858,7 +858,7 @@ SwContentFrm *SwFrm::_FindNextCnt( const bool _bInSameFootnote )
         }
         pThis = static_cast<SwSectionFrm*>(this)->FindLastContent();
         if ( !pThis )
-            return 0;
+            return nullptr;
     }
     else if ( IsContentFrm() && static_cast<SwContentFrm*>(this)->GetFollow() )
         return static_cast<SwContentFrm*>(this)->GetFollow();
@@ -901,7 +901,7 @@ SwContentFrm *SwFrm::_FindNextCnt( const bool _bInSameFootnote )
                     // in the follow footnote, which contains a content frame.
                     SwFootnoteFrm* pFollowFootnoteFrmOfCurr(
                                         const_cast<SwFootnoteFrm*>(pFootnoteFrmOfCurr) );
-                    pNxtCnt = 0L;
+                    pNxtCnt = nullptr;
                     do {
                         pFollowFootnoteFrmOfCurr = pFollowFootnoteFrmOfCurr->GetFollow();
                         pNxtCnt = pFollowFootnoteFrmOfCurr->ContainsContent();
@@ -912,7 +912,7 @@ SwContentFrm *SwFrm::_FindNextCnt( const bool _bInSameFootnote )
                 {
                     // current content frame is the last content frame in the
                     // footnote - no next content frame exists.
-                    return 0L;
+                    return nullptr;
                 }
             }
             else if ( pThis->IsInFly() )
@@ -935,7 +935,7 @@ SwContentFrm *SwFrm::_FindNextCnt( const bool _bInSameFootnote )
             }
         }
     }
-    return 0;
+    return nullptr;
 }
 
 /** method to determine previous content frame in the same environment
@@ -948,10 +948,10 @@ SwContentFrm* SwFrm::_FindPrevCnt( const bool _bInSameFootnote )
     if ( !IsFlowFrm() )
     {
         // nothing to do, if current frame isn't a flow frame.
-        return 0L;
+        return nullptr;
     }
 
-    SwContentFrm* pPrevContentFrm( 0L );
+    SwContentFrm* pPrevContentFrm( nullptr );
 
     // Because method <SwContentFrm::GetPrevContentFrm()> is used to travel
     // through the layout, a content frame, at which the travel starts, is needed.
@@ -1039,7 +1039,7 @@ SwContentFrm* SwFrm::_FindPrevCnt( const bool _bInSameFootnote )
                         {
                             SwFootnoteFrm* pMasterFootnoteFrmOfCurr(
                                         const_cast<SwFootnoteFrm*>(pFootnoteFrmOfCurr) );
-                            pPrevContentFrm = 0L;
+                            pPrevContentFrm = nullptr;
                             // correct wrong loop-condition
                             do {
                                 pMasterFootnoteFrmOfCurr = pMasterFootnoteFrmOfCurr->GetMaster();
@@ -1051,7 +1051,7 @@ SwContentFrm* SwFrm::_FindPrevCnt( const bool _bInSameFootnote )
                         {
                             // current content frame is the first content in the
                             // footnote - no previous content exists.
-                            pPrevContentFrm = 0L;
+                            pPrevContentFrm = nullptr;
                         }
                     }
                 }
@@ -1072,7 +1072,7 @@ SwContentFrm* SwFrm::_FindPrevCnt( const bool _bInSameFootnote )
                     if ( pPrevContentFrm->FindFooterOrHeader() !=
                                             pCurrContentFrm->FindFooterOrHeader() )
                     {
-                        pPrevContentFrm = 0L;
+                        pPrevContentFrm = nullptr;
                     }
                 }
             }
@@ -1103,7 +1103,7 @@ SwFrm *SwFrm::_FindPrev()
     {
         SwContentFrm *pPrvCnt = static_cast<SwContentFrm*>(pThis)->GetPrevContentFrm();
         if( !pPrvCnt )
-            return 0;
+            return nullptr;
         if ( !bIgnoreTab && pThis->IsInTab() )
         {
             SwLayoutFrm *pUp = pThis->GetUpper();
@@ -1156,13 +1156,13 @@ SwFrm *SwFrm::_FindPrev()
             }
         }
     }
-    return 0;
+    return nullptr;
 }
 
 void SwFrm::ImplInvalidateNextPos( bool bNoFootnote )
 {
     SwFrm *pFrm;
-    if ( 0 != (pFrm = _FindNext()) )
+    if ( nullptr != (pFrm = _FindNext()) )
     {
         if( pFrm->IsSctFrm() )
         {
@@ -1433,7 +1433,7 @@ SwLayoutFrm* SwFrm::GetNextCellLeaf( MakePageType )
         pTmpFrm = pTmpFrm->GetUpper();
 
     SAL_WARN_IF(!pTmpFrm, "sw.core", "SwFrm::GetNextCellLeaf() without cell");
-    return pTmpFrm ? static_cast<SwCellFrm*>(pTmpFrm)->GetFollowCell() : NULL;
+    return pTmpFrm ? static_cast<SwCellFrm*>(pTmpFrm)->GetFollowCell() : nullptr;
 }
 
 SwLayoutFrm* SwFrm::GetPrevCellLeaf( MakePageType )
@@ -1451,7 +1451,7 @@ static SwCellFrm* lcl_FindCorrespondingCellFrm( const SwRowFrm& rOrigRow,
                                          const SwRowFrm& rCorrRow,
                                          bool bInFollow )
 {
-    SwCellFrm* pRet = NULL;
+    SwCellFrm* pRet = nullptr;
     const SwCellFrm* pCell = static_cast<const SwCellFrm*>(rOrigRow.Lower());
     SwCellFrm* pCorrCell = const_cast<SwCellFrm*>(static_cast<const SwCellFrm*>(rCorrRow.Lower()));
 
@@ -1473,7 +1473,7 @@ static SwCellFrm* lcl_FindCorrespondingCellFrm( const SwRowFrm& rOrigRow,
         while ( !pRow->IsAnLower( &rOrigCell ) )
             pRow = static_cast<const SwRowFrm*>(pRow->GetNext());
 
-        SwRowFrm* pCorrRow = 0;
+        SwRowFrm* pCorrRow = nullptr;
         if ( bInFollow )
             pCorrRow = pRow->GetFollowRow();
         else
@@ -1496,13 +1496,13 @@ static SwCellFrm* lcl_FindCorrespondingCellFrm( const SwRowFrm& rOrigRow,
 // VERSION OF GetFollowCell() that assumes that we always have a follow flow line:
 SwCellFrm* SwCellFrm::GetFollowCell() const
 {
-    SwCellFrm* pRet = NULL;
+    SwCellFrm* pRet = nullptr;
 
     // NEW TABLES
     // Covered cells do not have follow cells!
     const long nRowSpan = GetLayoutRowSpan();
     if ( nRowSpan < 1 )
-        return NULL;
+        return nullptr;
 
     // find most upper row frame
     const SwFrm* pRow = GetUpper();
@@ -1511,11 +1511,11 @@ SwCellFrm* SwCellFrm::GetFollowCell() const
         pRow = pRow->GetUpper();
 
     if (!pRow)
-        return NULL;
+        return nullptr;
 
     const SwTabFrm* pTabFrm = static_cast<const SwTabFrm*>(pRow->GetUpper());
     if (!pTabFrm || !pTabFrm->GetFollow() || !pTabFrm->HasFollowFlowLine())
-        return NULL;
+        return nullptr;
 
     const SwCellFrm* pThisCell = this;
 
@@ -1534,9 +1534,9 @@ SwCellFrm* SwCellFrm::GetFollowCell() const
         }
     }
 
-    const SwRowFrm* pFollowRow = NULL;
+    const SwRowFrm* pFollowRow = nullptr;
     if ( !pRow->GetNext() &&
-         NULL != ( pFollowRow = pRow->IsInSplitTableRow() ) &&
+         nullptr != ( pFollowRow = pRow->IsInSplitTableRow() ) &&
          ( !pFollowRow->IsRowSpanLine() || nRowSpan > 1 ) )
          pRet = lcl_FindCorrespondingCellFrm( *static_cast<const SwRowFrm*>(pRow), *pThisCell, *pFollowRow, true );
 
@@ -1546,12 +1546,12 @@ SwCellFrm* SwCellFrm::GetFollowCell() const
 // VERSION OF GetPreviousCell() THAT ASSUMES THAT WE ALWAYS HAVE A FFL
 SwCellFrm* SwCellFrm::GetPreviousCell() const
 {
-    SwCellFrm* pRet = NULL;
+    SwCellFrm* pRet = nullptr;
 
     // NEW TABLES
     // Covered cells do not have previous cells!
     if ( GetLayoutRowSpan() < 1 )
-        return NULL;
+        return nullptr;
 
     // find most upper row frame
     const SwFrm* pRow = GetUpper();
@@ -1587,7 +1587,7 @@ SwCellFrm* SwCellFrm::GetPreviousCell() const
 // --> NEW TABLES
 const SwCellFrm& SwCellFrm::FindStartEndOfRowSpanCell( bool bStart, bool bCurrentTableOnly ) const
 {
-    const SwCellFrm* pRet = 0;
+    const SwCellFrm* pRet = nullptr;
 
     const SwTabFrm* pTableFrm = dynamic_cast<const SwTabFrm*>(GetUpper()->GetUpper());
 
@@ -1684,7 +1684,7 @@ const SwRowFrm* SwFrm::IsInSplitTableRow() const
     while( pRow && ( !pRow->IsRowFrm() || !pRow->GetUpper()->IsTabFrm() ) )
         pRow = pRow->GetUpper();
 
-    if ( !pRow ) return NULL;
+    if ( !pRow ) return nullptr;
 
     OSL_ENSURE( pRow->GetUpper()->IsTabFrm(), "Confusion in table layout" );
 
@@ -1697,7 +1697,7 @@ const SwRowFrm* SwFrm::IsInSplitTableRow() const
                     *(static_cast<const SwRowFrm*>(pRow)->GetTabLine()) ) ||
          !pTab->HasFollowFlowLine() ||
          !pTab->GetFollow() )
-        return NULL;
+        return nullptr;
 
     // skip headline
     const SwRowFrm* pFollowRow = pTab->GetFollow()->GetFirstNonHeadlineRow();
@@ -1716,22 +1716,22 @@ const SwRowFrm* SwFrm::IsInFollowFlowRow() const
     while( pRow && ( !pRow->IsRowFrm() || !pRow->GetUpper()->IsTabFrm() ) )
         pRow = pRow->GetUpper();
 
-    if ( !pRow ) return NULL;
+    if ( !pRow ) return nullptr;
 
     OSL_ENSURE( pRow->GetUpper()->IsTabFrm(), "Confusion in table layout" );
 
     const SwTabFrm* pTab = static_cast<const SwTabFrm*>(pRow->GetUpper());
 
-    const SwTabFrm* pMaster = pTab->IsFollow() ? pTab->FindMaster() : 0;
+    const SwTabFrm* pMaster = pTab->IsFollow() ? pTab->FindMaster() : nullptr;
 
     if ( !pMaster || !pMaster->HasFollowFlowLine() )
-        return NULL;
+        return nullptr;
 
     const SwFrm* pTmp = pTab->GetFirstNonHeadlineRow();
     const bool bIsInFirstLine = ( pTmp == pRow );
 
     if ( !bIsInFirstLine )
-        return NULL;
+        return nullptr;
 
     const SwRowFrm* pMasterRow = static_cast<const SwRowFrm*>(pMaster->GetLastLower());
     return pMasterRow;
@@ -1754,7 +1754,7 @@ const SwFrm* SwLayoutFrm::GetLastLower() const
 {
     const SwFrm* pRet = Lower();
     if ( !pRet )
-        return 0;
+        return nullptr;
     while ( pRet->GetNext() )
         pRet = pRet->GetNext();
     return pRet;

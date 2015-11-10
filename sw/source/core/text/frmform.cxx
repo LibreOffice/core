@@ -91,7 +91,7 @@ void SwTextFrm::ValidateFrm()
             if( !pSct->IsColLocked() )
                 pSct->ColLock();
             else
-                pSct = NULL;
+                pSct = nullptr;
         }
 
         SwFrm *pUp = GetUpper();
@@ -114,7 +114,7 @@ void SwTextFrm::ValidateFrm()
 // First we search outwards, on the way back we calculate everything.
 void _ValidateBodyFrm( SwFrm *pFrm )
 {
-    vcl::RenderContext* pRenderContext = pFrm ? pFrm->getRootFrm()->GetCurrShell()->GetOut() : 0;
+    vcl::RenderContext* pRenderContext = pFrm ? pFrm->getRootFrm()->GetCurrShell()->GetOut() : nullptr;
     if( pFrm && !pFrm->IsCellFrm() )
     {
         if( !pFrm->IsBodyFrm() && pFrm->GetUpper() )
@@ -176,7 +176,7 @@ const SwBodyFrm *SwTextFrm::FindBodyFrm() const
             pFrm = pFrm->GetUpper();
         return static_cast<const SwBodyFrm*>(pFrm);
     }
-    return 0;
+    return nullptr;
 }
 
 bool SwTextFrm::CalcFollow( const sal_Int32 nTextOfst )
@@ -204,7 +204,7 @@ bool SwTextFrm::CalcFollow( const sal_Int32 nTextOfst )
         SwTwips nOldBottom = (GetUpper()->Frm().*fnRect->fnGetBottom)();
         SwTwips nMyPos = (Frm().*fnRect->fnGetTop)();
 
-        const SwPageFrm *pPage = 0;
+        const SwPageFrm *pPage = nullptr;
         bool bOldInvaContent = true;
         if ( !IsInFly() && GetNext() )
         {
@@ -606,8 +606,8 @@ SwContentFrm *SwTextFrm::JoinFrm()
         const SwpHints *pHints = pFoll->GetTextNode()->GetpSwpHints();
         if( pHints )
         {
-            SwFootnoteBossFrm *pFootnoteBoss = 0;
-            SwFootnoteBossFrm *pEndBoss = 0;
+            SwFootnoteBossFrm *pFootnoteBoss = nullptr;
+            SwFootnoteBossFrm *pEndBoss = nullptr;
             for ( size_t i = 0; i < pHints->Count(); ++i )
             {
                 const SwTextAttr *pHt = pHints->Get(i);
@@ -699,8 +699,8 @@ SwContentFrm *SwTextFrm::SplitFrm( const sal_Int32 nTextPos )
         const SwpHints *pHints = GetTextNode()->GetpSwpHints();
         if( pHints )
         {
-            SwFootnoteBossFrm *pFootnoteBoss = 0;
-            SwFootnoteBossFrm *pEndBoss = 0;
+            SwFootnoteBossFrm *pFootnoteBoss = nullptr;
+            SwFootnoteBossFrm *pEndBoss = nullptr;
             for ( size_t i = 0; i < pHints->Count(); ++i )
             {
                 const SwTextAttr *pHt = pHints->Get(i);
@@ -1201,7 +1201,7 @@ bool SwTextFrm::FormatLine( SwTextFormatter &rLine, const bool bPrev )
         SwTwips nRght = std::max( nOldWidth, pNew->Width() +
                              pNew->GetHangingMargin() );
         SwViewShell *pSh = getRootFrm()->GetCurrShell();
-        const SwViewOption *pOpt = pSh ? pSh->GetViewOptions() : 0;
+        const SwViewOption *pOpt = pSh ? pSh->GetViewOptions() : nullptr;
         if( pOpt && (pOpt->IsParagraph() || pOpt->IsLineBreak()) )
             nRght += ( std::max( nOldAscent, pNew->GetAscent() ) );
         else
@@ -1263,7 +1263,7 @@ void SwTextFrm::_Format( SwTextFormatter &rLine, SwTextFormatInfo &rInf,
 
     SwCharRange &rReformat = pPara->GetReformat();
     SwRepaint   &rRepaint = pPara->GetRepaint();
-    SwRepaint *pFreeze = NULL;
+    SwRepaint *pFreeze = nullptr;
 
     // Due to performance reasons we set rReformat to COMPLETE_STRING in Init()
     // In this case we adjust rReformat
@@ -1355,9 +1355,9 @@ void SwTextFrm::_Format( SwTextFormatter &rLine, SwTextFormatInfo &rInf,
                     && aFrmBreak.IsBreakNowWidAndOrp( rLine );
     if( bBreak )
     {
-        bool bPrevDone = 0 != rLine.Prev();
+        bool bPrevDone = nullptr != rLine.Prev();
         while( bPrevDone && aFrmBreak.IsBreakNowWidAndOrp(rLine) )
-            bPrevDone = 0 != rLine.Prev();
+            bPrevDone = nullptr != rLine.Prev();
         if( bPrevDone )
         {
             aFrmBreak.SetKeep( false );
@@ -1398,7 +1398,7 @@ void SwTextFrm::_Format( SwTextFormatter &rLine, SwTextFormatInfo &rInf,
     {
         SwTextFrm *pMaster = FindMaster();
         OSL_ENSURE( pMaster, "SwTextFrm::Format: homeless follow" );
-        const SwLineLayout* pLine=NULL;
+        const SwLineLayout* pLine=nullptr;
         if (pMaster)
         {
             if( !pMaster->HasPara() )
@@ -1409,7 +1409,7 @@ void SwTextFrm::_Format( SwTextFormatter &rLine, SwTextFormatInfo &rInf,
             pLine = aMasterLine.GetCurr();
         }
         SwLinePortion* pRest = pLine ?
-            rLine.MakeRestPortion(pLine, GetOfst()) : NULL;
+            rLine.MakeRestPortion(pLine, GetOfst()) : nullptr;
         if( pRest )
             rInf.SetRest( pRest );
         else
@@ -1506,7 +1506,7 @@ void SwTextFrm::_Format( SwTextFormatter &rLine, SwTextFormatInfo &rInf,
         if( !rInf.IsNewLine() )
         {
             if( !bFormat )
-                 bFormat = 0 != rInf.GetRest();
+                 bFormat = nullptr != rInf.GetRest();
             if( rInf.IsStop() || rInf.GetIdx() >= nStrLen )
                 break;
             if( !bFormat && ( !bMaxHyph || ( !bWatchEndHyph &&
@@ -1797,7 +1797,7 @@ void SwTextFrm::Format( vcl::RenderContext* pRenderContext, const SwBorderAttrs 
                 _SetOfst( 0 );
 
             const bool bOrphan = IsWidow();
-            const SwFootnoteBossFrm* pFootnoteBoss = HasFootnote() ? FindFootnoteBossFrm() : 0;
+            const SwFootnoteBossFrm* pFootnoteBoss = HasFootnote() ? FindFootnoteBossFrm() : nullptr;
             SwTwips nFootnoteHeight = 0;
             if( pFootnoteBoss )
             {

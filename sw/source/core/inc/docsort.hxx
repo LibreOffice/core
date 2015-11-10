@@ -57,11 +57,11 @@ public:
 
 // Functions for moving boxes
 void MoveCol(SwDoc* pDoc, const FlatFndBox& rBox,
-             sal_uInt16 nS, sal_uInt16 nT, SwMovedBoxes& rMovedList, SwUndoSort* pUD=0);
+             sal_uInt16 nS, sal_uInt16 nT, SwMovedBoxes& rMovedList, SwUndoSort* pUD=nullptr);
 void MoveRow(SwDoc* pDoc, const FlatFndBox& rBox,
-             sal_uInt16 nS, sal_uInt16 nT, SwMovedBoxes& rMovedList, SwUndoSort* pUD=0);
+             sal_uInt16 nS, sal_uInt16 nT, SwMovedBoxes& rMovedList, SwUndoSort* pUD=nullptr);
 void MoveCell(SwDoc* pDoc, const SwTableBox* pSource,
-              const SwTableBox* pTar, bool bMovedBefore, SwUndoSort* pUD=0);
+              const SwTableBox* pTar, bool bMovedBefore, SwUndoSort* pUD=nullptr);
 
 // Elements for sorting text and table content
 struct SwSortElement
@@ -74,7 +74,7 @@ struct SwSortElement
     static OUString*            pLastAlgorithm;
     static LocaleDataWrapper*   pLclData;
 
-    static void Init( SwDoc*, const SwSortOptions& rOpt, FlatFndBox* = 0 );
+    static void Init( SwDoc*, const SwSortOptions& rOpt, FlatFndBox* = nullptr );
     static void Finit();
 
     virtual ~SwSortElement();
@@ -150,7 +150,7 @@ private:
     bool            bSym;
 };
 
-inline bool FlatFndBox::HasItemSets() const { return 0 != ppItemSets; }
+inline bool FlatFndBox::HasItemSets() const { return nullptr != ppItemSets; }
 
 #endif
 

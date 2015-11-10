@@ -154,7 +154,7 @@ struct DocxSdrExport::Impl
           m_rExport(rExport),
           m_pSerializer(pSerializer),
           m_pDrawingML(pDrawingML),
-          m_pFlyFrameSize(0),
+          m_pFlyFrameSize(nullptr),
           m_bTextFrameSyntax(false),
           m_bDMLTextFrameSyntax(false),
           m_bFrameBtLr(false),
@@ -162,8 +162,8 @@ struct DocxSdrExport::Impl
           m_bParagraphSdtOpen(false),
           m_bParagraphHasDrawing(false),
           m_bFlyFrameGraphic(false),
-          m_pFlyWrapAttrList(0),
-          m_pBodyPrAttrList(0),
+          m_pFlyWrapAttrList(nullptr),
+          m_pBodyPrAttrList(nullptr),
           m_bDMLAndVMLDrawingOpen(false),
           m_aTextBoxes(SwTextBoxHelper::findTextBoxes(m_rExport.m_pDoc)),
           m_nDMLandVMLTextFrameRotation(0)
@@ -356,7 +356,7 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
         bool bOpaque = pFrameFormat->GetOpaque().GetValue();
         awt::Point aPos(pFrameFormat->GetHoriOrient().GetPos(), pFrameFormat->GetVertOrient().GetPos());
         const SdrObject* pObj = pFrameFormat->FindRealSdrObject();
-        if (pObj != NULL)
+        if (pObj != nullptr)
         {
             // SdrObjects know their layer, consider that instead of the frame format.
             bOpaque = pObj->GetLayer() != pFrameFormat->GetDoc()->getIDocumentDrawModelAccess().GetHellId() && pObj->GetLayer() != pFrameFormat->GetDoc()->getIDocumentDrawModelAccess().GetInvisibleHellId();
@@ -372,13 +372,13 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
         attrList->add(XML_locked, "0");
         attrList->add(XML_layoutInCell, "1");
         attrList->add(XML_allowOverlap, "1");   // TODO
-        if (pObj != NULL)
+        if (pObj != nullptr)
             // It seems 0 and 1 have special meaning: just start counting from 2 to avoid issues with that.
             attrList->add(XML_relativeHeight, OString::number(pObj->GetOrdNum() + 2));
         else
             // relativeHeight is mandatory attribute, if value is not present, we must write default value
             attrList->add(XML_relativeHeight, "0");
-        if (pObj != NULL)
+        if (pObj != nullptr)
         {
             OUString sAnchorId = lclGetAnchorIdFromGrabBag(pObj);
             if (!sAnchorId.isEmpty())
@@ -389,8 +389,8 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
         m_pImpl->m_pSerializer->singleElementNS(XML_wp, XML_simplePos, XML_x, "0", XML_y, "0", FSEND);   // required, unused
         const char* relativeFromH;
         const char* relativeFromV;
-        const char* alignH = NULL;
-        const char* alignV = NULL;
+        const char* alignH = nullptr;
+        const char* alignV = nullptr;
         switch (pFrameFormat->GetVertOrient().GetRelationOrient())
         {
         case text::RelOrientation::PAGE_PRINT_AREA:
@@ -481,7 +481,7 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
         **/
         const sal_Int64 MAX_INTEGER_VALUE = SAL_MAX_INT32;
         const sal_Int64 MIN_INTEGER_VALUE = SAL_MIN_INT32;
-        if (alignH != NULL)
+        if (alignH != nullptr)
         {
             m_pImpl->m_pSerializer->startElementNS(XML_wp, XML_align, FSEND);
             m_pImpl->m_pSerializer->write(alignH);
@@ -527,11 +527,11 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
                 (strcmp(relativeFromV, "line") == 0 || strcmp(relativeFromV, "paragraph") == 0) &&
                 (!alignV || strcmp(alignV, "top") == 0))
         {
-            alignV = NULL;
+            alignV = nullptr;
             nTwipstoEMU = 635;
         }
 
-        if (alignV != NULL)
+        if (alignV != nullptr)
         {
             m_pImpl->m_pSerializer->startElementNS(XML_wp, XML_align, FSEND);
             m_pImpl->m_pSerializer->write(alignV);
@@ -561,7 +561,7 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
         aAttrList->add(XML_distL, OString::number(TwipsToEMU(pLRSpaceItem.GetLeft())).getStr());
         aAttrList->add(XML_distR, OString::number(TwipsToEMU(pLRSpaceItem.GetRight())).getStr());
         const SdrObject* pObj = pFrameFormat->FindRealSdrObject();
-        if (pObj != NULL)
+        if (pObj != nullptr)
         {
             OUString sAnchorId = lclGetAnchorIdFromGrabBag(pObj);
             if (!sAnchorId.isEmpty())
@@ -780,7 +780,7 @@ void DocxSdrExport::writeVMLDrawing(const SdrObject* sdrObj, const SwFrameFormat
     m_pImpl->m_pSerializer->endElementNS(XML_w, XML_pict);
 
     if (bSwapInPage)
-        const_cast< SdrObject* >(sdrObj)->SetPage(0);
+        const_cast< SdrObject* >(sdrObj)->SetPage(nullptr);
 }
 
 bool lcl_isLockedCanvas(uno::Reference<drawing::XShape> xShape)
@@ -1314,7 +1314,7 @@ void DocxSdrExport::writeOnlyTextOfFrame(sw::Frame* pParentFrame)
 
 void DocxSdrExport::writeBoxItemLine(const SvxBoxItem& rBox)
 {
-    const editeng::SvxBorderLine* pBorderLine = 0;
+    const editeng::SvxBorderLine* pBorderLine = nullptr;
 
     if (rBox.GetTop())
     {
@@ -1529,7 +1529,7 @@ void DocxSdrExport::writeDMLTextFrame(sw::Frame* pParentFrame, int nAnchorId, bo
         m_pImpl->m_rExport.m_bLinkedTextboxesHelperInitialized = true;
     }
 
-    m_pImpl->m_rExport.m_pParentFrame = NULL;
+    m_pImpl->m_rExport.m_pParentFrame = nullptr;
     bool skipTxBxContent = false ;
     bool isTxbxLinked = false ;
 
@@ -1593,7 +1593,7 @@ void DocxSdrExport::writeDMLTextFrame(sw::Frame* pParentFrame, int nAnchorId, bo
         pFS->endElementNS(XML_wps, XML_txbx);
     }
     sax_fastparser::XFastAttributeListRef xBodyPrAttrList(m_pImpl->m_pBodyPrAttrList);
-    m_pImpl->m_pBodyPrAttrList = NULL;
+    m_pImpl->m_pBodyPrAttrList = nullptr;
     if (!bTextBoxOnly)
     {
         pFS->startElementNS(XML_wps, XML_bodyPr, xBodyPrAttrList);
@@ -1668,7 +1668,7 @@ void DocxSdrExport::writeVMLTextFrame(sw::Frame* pParentFrame, bool bTextBoxOnly
     m_pImpl->m_pFlyAttrList->add(XML_style, m_pImpl->m_aTextFrameStyle.makeStringAndClear());
 
     const SdrObject* pObject = pParentFrame->GetFrameFormat().FindRealSdrObject();
-    if (pObject != NULL)
+    if (pObject != nullptr)
     {
         OUString sAnchorId = lclGetAnchorIdFromGrabBag(pObject);
         if (!sAnchorId.isEmpty())
@@ -1680,8 +1680,8 @@ void DocxSdrExport::writeVMLTextFrame(sw::Frame* pParentFrame, bool bTextBoxOnly
     sax_fastparser::XFastAttributeListRef xTextboxAttrList(m_pImpl->m_pTextboxAttrList.get());
     m_pImpl->m_pTextboxAttrList.clear();
     m_pImpl->m_bTextFrameSyntax = false;
-    m_pImpl->m_pFlyFrameSize = 0;
-    m_pImpl->m_rExport.m_pParentFrame = NULL;
+    m_pImpl->m_pFlyFrameSize = nullptr;
+    m_pImpl->m_rExport.m_pParentFrame = nullptr;
 
     if (!bTextBoxOnly)
     {
@@ -1719,7 +1719,7 @@ void DocxSdrExport::writeVMLTextFrame(sw::Frame* pParentFrame, bool bTextBoxOnly
         if (m_pImpl->m_pFlyWrapAttrList)
         {
             sax_fastparser::XFastAttributeListRef xFlyWrapAttrList(m_pImpl->m_pFlyWrapAttrList);
-            m_pImpl->m_pFlyWrapAttrList = NULL;
+            m_pImpl->m_pFlyWrapAttrList = nullptr;
             pFS->singleElementNS(XML_w10, XML_wrap, xFlyWrapAttrList);
         }
 
@@ -1744,7 +1744,7 @@ bool DocxSdrExport::Impl::checkFrameBtlr(SwNode* pStartNode, bool bDML)
 
     SwTextNode* pTextNode = pStartNode->GetTextNode();
 
-    const SfxPoolItem* pItem = 0; // explicitly init to avoid warnings
+    const SfxPoolItem* pItem = nullptr; // explicitly init to avoid warnings
     bool bItemSet = false;
     if (pTextNode->HasSwAttrSet())
     {

@@ -163,7 +163,7 @@ void SwLayVout::Enter(  SwViewShell *pShell, SwRect &rRect, bool bOn )
     if( bOn )
     {
         pSh = pShell;
-        pOut = NULL;
+        pOut = nullptr;
         OutputDevice *pO = pSh->GetOut();
 // We don't cheat on printers or virtual output devices...
         if( OUTDEV_WINDOW != pO->GetOutDevType() )
@@ -182,7 +182,7 @@ void SwLayVout::Enter(  SwViewShell *pShell, SwRect &rRect, bool bOn )
         // Does the rectangle fit in our buffer?
         if( !DoesFit( aTmpRect.GetSize() ) )
         {
-            pOut = NULL;
+            pOut = nullptr;
             return;
         }
 
@@ -212,7 +212,7 @@ void SwLayVout::_Flush()
     pOut->DrawOutDev( aRect.Pos(), aRect.SSize(),
                       aRect.Pos(), aRect.SSize(), *pVirDev );
     SetOutDev( pSh, pOut );
-    pOut = NULL;
+    pOut = nullptr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

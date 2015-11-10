@@ -234,7 +234,7 @@ IMPL_LINK_TYPED( DocumentStatisticsManager, DoIdleStatsUpdate, Timer *, pTimer, 
     if (IncrementalDocStatCalculate(32000))
         maStatsUpdateTimer.Start();
 
-    SwView* pView = m_rDoc.GetDocShell() ? m_rDoc.GetDocShell()->GetView() : NULL;
+    SwView* pView = m_rDoc.GetDocShell() ? m_rDoc.GetDocShell()->GetView() : nullptr;
     if( pView )
         pView->UpdateDocStats();
 }

@@ -46,7 +46,7 @@ SwXMLImport::GetDocumentProperties() const
     if (IsOrganizerMode() || IsStylesOnlyMode() ||
         IsBlockMode() || IsInsertMode())
     {
-        return 0;
+        return nullptr;
     }
     uno::Reference<document::XDocumentPropertiesSupplier> const xDPS(
         GetModel(), UNO_QUERY_THROW);
@@ -56,7 +56,7 @@ SwXMLImport::GetDocumentProperties() const
 SvXMLImportContext *SwXMLImport::CreateMetaContext(
                                        const OUString& rLocalName )
 {
-    SvXMLImportContext *pContext = 0;
+    SvXMLImportContext *pContext = nullptr;
 
     if (getImportFlags() & SvXMLImportFlags::META)
     {
@@ -94,15 +94,15 @@ struct statistic {
 };
 
 static const struct statistic s_stats [] = {
-    { XML_TOK_META_STAT_TABLE, "TableCount",     &SwDocStat::nTable, 0  },
-    { XML_TOK_META_STAT_IMAGE, "ImageCount",     &SwDocStat::nGrf, 0  },
-    { XML_TOK_META_STAT_OLE,   "ObjectCount",    &SwDocStat::nOLE, 0  },
-    { XML_TOK_META_STAT_PAGE,  "PageCount",      0, &SwDocStat::nPage },
-    { XML_TOK_META_STAT_PARA,  "ParagraphCount", 0, &SwDocStat::nPara },
-    { XML_TOK_META_STAT_WORD,  "WordCount",      0, &SwDocStat::nWord },
-    { XML_TOK_META_STAT_CHAR,  "CharacterCount", 0, &SwDocStat::nChar },
-    { XML_TOK_META_STAT_NON_WHITE_SPACE_CHAR,  "NonWhitespaceCharacterCount", 0, &SwDocStat::nCharExcludingSpaces },
-    { XML_TOK_META_STAT_END,   0,                0, 0                 }
+    { XML_TOK_META_STAT_TABLE, "TableCount",     &SwDocStat::nTable, nullptr  },
+    { XML_TOK_META_STAT_IMAGE, "ImageCount",     &SwDocStat::nGrf, nullptr  },
+    { XML_TOK_META_STAT_OLE,   "ObjectCount",    &SwDocStat::nOLE, nullptr  },
+    { XML_TOK_META_STAT_PAGE,  "PageCount",      nullptr, &SwDocStat::nPage },
+    { XML_TOK_META_STAT_PARA,  "ParagraphCount", nullptr, &SwDocStat::nPara },
+    { XML_TOK_META_STAT_WORD,  "WordCount",      nullptr, &SwDocStat::nWord },
+    { XML_TOK_META_STAT_CHAR,  "CharacterCount", nullptr, &SwDocStat::nChar },
+    { XML_TOK_META_STAT_NON_WHITE_SPACE_CHAR,  "NonWhitespaceCharacterCount", nullptr, &SwDocStat::nCharExcludingSpaces },
+    { XML_TOK_META_STAT_END,   nullptr,                nullptr, nullptr                 }
 };
 
 void SwXMLImport::SetStatistics(
@@ -119,12 +119,12 @@ void SwXMLImport::SetStatistics(
     sal_uInt32 nTokens = 0;
 
     for (sal_Int32 i = 0; i < i_rStats.getLength(); ++i) {
-        for (struct statistic const* pStat = s_stats; pStat->name != 0;
+        for (struct statistic const* pStat = s_stats; pStat->name != nullptr;
                 ++pStat) {
             if (i_rStats[i].Name.equalsAscii(pStat->name)) {
                 sal_Int32 val = 0;
                 if (i_rStats[i].Value >>= val) {
-                    if (pStat->target16 != 0) {
+                    if (pStat->target16 != nullptr) {
                         aDocStat.*(pStat->target16)
                             = static_cast<sal_uInt16> (val);
                     } else {

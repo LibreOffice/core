@@ -91,11 +91,11 @@ const XMLServiceMapEntry_Impl aServiceMap[] =
     SERVICE_MAP_ENTRY( IMPRESS, SIMPRESS ),
     SERVICE_MAP_ENTRY( CHART, SCH ),
     SERVICE_MAP_ENTRY( MATH, SM ),
-    { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }
+    { nullptr, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }
 };
 static void lcl_putHeightAndWidth ( SfxItemSet &rItemSet,
         sal_Int32 nHeight, sal_Int32 nWidth,
-        long *pTwipHeight=0, long *pTwipWidth=0 )
+        long *pTwipHeight=nullptr, long *pTwipWidth=nullptr )
 {
     if( nWidth > 0 && nHeight > 0 )
     {
@@ -151,7 +151,7 @@ SwXMLTextImportHelper::SwXMLTextImportHelper(
         bool /*bPreserveRedlineMode*/ ) :
     XMLTextImportHelper( rModel, rImport, bInsertM, bStylesOnlyM, _bProgress,
                          bBlockM, bOrganizerM ),
-    pRedlineHelper( NULL )
+    pRedlineHelper( nullptr )
 {
     uno::Reference<XPropertySet> xDocPropSet( rModel, UNO_QUERY );
     pRedlineHelper = new XMLRedlineImportHelper(
@@ -189,14 +189,14 @@ bool SwXMLTextImportHelper::IsInHeaderFooter() const
     OTextCursorHelper *pTextCrsr = reinterpret_cast< OTextCursorHelper * >(
                 sal::static_int_cast< sal_IntPtr >( xCrsrTunnel->getSomething( OTextCursorHelper::getUnoTunnelId() )));
     SAL_WARN_IF(!pTextCrsr, "sw.uno", "SwXTextCursor missing");
-    SwDoc *pDoc = pTextCrsr ? pTextCrsr->GetDoc() : NULL;
+    SwDoc *pDoc = pTextCrsr ? pTextCrsr->GetDoc() : nullptr;
 
     return pDoc && pDoc->IsInHeaderFooter( pTextCrsr->GetPaM()->GetPoint()->nNode );
 }
 
 static SwOLENode *lcl_GetOLENode( const SwFrameFormat *pFrameFormat )
 {
-    SwOLENode *pOLENd = 0;
+    SwOLENode *pOLENd = nullptr;
     if( pFrameFormat )
     {
         const SwFormatContent& rContent = pFrameFormat->GetContent();
@@ -242,8 +242,8 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
     lcl_putHeightAndWidth( aItemSet, nHeight, nWidth,
                            &aTwipSize.Height(), &aTwipSize.Width() );
 
-    SwFrameFormat *pFrameFormat = 0;
-    SwOLENode *pOLENd = 0;
+    SwFrameFormat *pFrameFormat = nullptr;
+    SwOLENode *pOLENd = nullptr;
     if( rHRef.copy( 0, nPos ) == "vnd.sun.star.ServiceName" )
     {
         bool bInsert = false;
@@ -291,8 +291,8 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
                     pFrameFormat = pDoc->getIDocumentContentOperations().Insert( *pTextCrsr->GetPaM(),
                                             ::svt::EmbeddedObjectRef( xObj, embed::Aspects::MSOLE_CONTENT ),
                                             &aItemSet,
-                                            NULL,
-                                            NULL );
+                                            nullptr,
+                                            nullptr );
                     pOLENd = lcl_GetOLENode( pFrameFormat );
                 }
 
@@ -344,7 +344,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
         // TODO/LATER: Actually it should be set here
         if( pTextCrsr )
         {
-            pFrameFormat = pDoc->getIDocumentContentOperations().InsertOLE( *pTextCrsr->GetPaM(), aName, embed::Aspects::MSOLE_CONTENT, &aItemSet, NULL, NULL );
+            pFrameFormat = pDoc->getIDocumentContentOperations().InsertOLE( *pTextCrsr->GetPaM(), aName, embed::Aspects::MSOLE_CONTENT, &aItemSet, nullptr, nullptr );
             pOLENd = lcl_GetOLENode( pFrameFormat );
         }
         aObjName = aName;
@@ -445,7 +445,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
     }
 
     sal_Int64 nDrawAspect = 0;
-    const XMLPropStyleContext *pStyle = 0;
+    const XMLPropStyleContext *pStyle = nullptr;
     bool bHasSizeProps = false;
     if( !rStyleName.isEmpty() )
     {
@@ -596,8 +596,8 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOOoLink(
             SwFrameFormat *pFrameFormat = pDoc->getIDocumentContentOperations().Insert( *pTextCrsr->GetPaM(),
                                             ::svt::EmbeddedObjectRef( xObj, embed::Aspects::MSOLE_CONTENT ),
                                             &aItemSet,
-                                            NULL,
-                                            NULL );
+                                            nullptr,
+                                            nullptr );
 
             // TODO/LATER: in future may need a way to set replacement image url to the link ( may be even to the object ), needs oasis cws???
 
@@ -658,8 +658,8 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertApplet(
     SwFrameFormat *pFrameFormat = pDoc->getIDocumentContentOperations().Insert( *pTextCrsr->GetPaM(),
                                        ::svt::EmbeddedObjectRef( aAppletImpl.GetApplet(), embed::Aspects::MSOLE_CONTENT ),
                                        &aAppletImpl.GetItemSet(),
-                                       NULL,
-                                       NULL);
+                                       nullptr,
+                                       nullptr);
     xPropSet.set(SwXTextEmbeddedObject::CreateXTextEmbeddedObject(
                 *pDoc, pFrameFormat), uno::UNO_QUERY);
     if( pDoc->getIDocumentDrawModelAccess().GetDrawModel() )
@@ -733,8 +733,8 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertPlugin(
             SwFrameFormat *pFrameFormat = pDoc->getIDocumentContentOperations().Insert( *pTextCrsr->GetPaM(),
                                             ::svt::EmbeddedObjectRef( xObj, embed::Aspects::MSOLE_CONTENT ),
                                             &aItemSet,
-                                            NULL,
-                                            NULL);
+                                            nullptr,
+                                            nullptr);
             xPropSet.set(SwXTextEmbeddedObject::CreateXTextEmbeddedObject(
                             *pDoc, pFrameFormat), uno::UNO_QUERY);
             if( pDoc->getIDocumentDrawModelAccess().GetDrawModel() )
@@ -775,7 +775,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertFloatingFra
     bool bHasBorder = false;
     bool bIsBorderSet = false;
     Size aMargin( SIZE_NOT_SET, SIZE_NOT_SET );
-    const XMLPropStyleContext *pStyle = 0;
+    const XMLPropStyleContext *pStyle = nullptr;
     if( !rStyleName.isEmpty() )
     {
         pStyle = FindAutoFrameStyle( rStyleName );
@@ -886,8 +886,8 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertFloatingFra
             SwFrameFormat *pFrameFormat = pDoc->getIDocumentContentOperations().Insert( *pTextCrsr->GetPaM(),
                                             ::svt::EmbeddedObjectRef( xObj, embed::Aspects::MSOLE_CONTENT ),
                                             &aItemSet,
-                                            NULL,
-                                            NULL);
+                                            nullptr,
+                                            nullptr);
             xPropSet.set(SwXTextEmbeddedObject::CreateXTextEmbeddedObject(
                             *pDoc, pFrameFormat), uno::UNO_QUERY);
             if( pDoc->getIDocumentDrawModelAccess().GetDrawModel() )
@@ -976,8 +976,8 @@ void SwXMLTextImportHelper::RedlineAdd(
     bool bMergeLastPara)
 {
     // create redline helper on demand
-    OSL_ENSURE(NULL != pRedlineHelper, "helper should have been created in constructor");
-    if (NULL != pRedlineHelper)
+    OSL_ENSURE(nullptr != pRedlineHelper, "helper should have been created in constructor");
+    if (nullptr != pRedlineHelper)
         pRedlineHelper->Add(rType, rId, rAuthor, rComment, rDateTime,
                             bMergeLastPara);
 }
@@ -988,7 +988,7 @@ uno::Reference<XTextCursor> SwXMLTextImportHelper::RedlineCreateText(
 {
     uno::Reference<XTextCursor> xRet;
 
-    if (NULL != pRedlineHelper)
+    if (nullptr != pRedlineHelper)
     {
         xRet = pRedlineHelper->CreateRedlineTextSection(rOldCursor, rId);
     }
@@ -1001,7 +1001,7 @@ void SwXMLTextImportHelper::RedlineSetCursor(
     bool bStart,
     bool bIsOutsideOfParagraph)
 {
-    if (NULL != pRedlineHelper) {
+    if (nullptr != pRedlineHelper) {
         uno::Reference<XTextRange> xTextRange( GetCursor()->getStart() );
         pRedlineHelper->SetCursor(rId, bStart, xTextRange,
                                   bIsOutsideOfParagraph);
@@ -1013,7 +1013,7 @@ void SwXMLTextImportHelper::RedlineAdjustStartNodeCursor(
     bool bStart)
 {
     OUString rId = GetOpenRedlineId();
-    if ((NULL != pRedlineHelper) && !rId.isEmpty())
+    if ((nullptr != pRedlineHelper) && !rId.isEmpty())
     {
         uno::Reference<XTextRange> xTextRange( GetCursor()->getStart() );
         pRedlineHelper->AdjustStartNodeCursor(rId, bStart, xTextRange );
@@ -1024,20 +1024,20 @@ void SwXMLTextImportHelper::RedlineAdjustStartNodeCursor(
 
 void SwXMLTextImportHelper::SetShowChanges( bool bShowChanges )
 {
-    if ( NULL != pRedlineHelper )
+    if ( nullptr != pRedlineHelper )
         pRedlineHelper->SetShowChanges( bShowChanges );
 }
 
 void SwXMLTextImportHelper::SetRecordChanges( bool bRecordChanges )
 {
-    if ( NULL != pRedlineHelper )
+    if ( nullptr != pRedlineHelper )
         pRedlineHelper->SetRecordChanges( bRecordChanges );
 }
 
 void SwXMLTextImportHelper::SetChangesProtectionKey(
     const Sequence<sal_Int8> & rKey )
 {
-    if ( NULL != pRedlineHelper )
+    if ( nullptr != pRedlineHelper )
         pRedlineHelper->SetProtectionKey( rKey );
 }
 

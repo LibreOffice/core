@@ -99,7 +99,7 @@ public:
                             long nYPos )
         : SwContent(pCnt, rName, nYPos)
         , pField(pFormatField)
-        , pRedline(NULL)
+        , pRedline(nullptr)
         , mbPostIt(true)
     {}
     SwPostItContent( const SwContentType* pCnt,
@@ -107,7 +107,7 @@ public:
                             SwRangeRedline* pRed,
                             long nYPos )
         : SwContent(pCnt, rName, nYPos)
-        , pField(NULL)
+        , pField(nullptr)
         , pRedline(pRed)
         , mbPostIt(false)
     {}
@@ -167,8 +167,8 @@ public:
         SwContentType(SwWrtShell* pParent, ContentTypeId nType, sal_uInt8 nLevel );
         virtual ~SwContentType();
 
-        void                Init(bool* pbInvalidateWindow = 0);
-        void                FillMemberList(bool* pbLevelChanged = NULL);
+        void                Init(bool* pbInvalidateWindow = nullptr);
+        void                FillMemberList(bool* pbLevelChanged = nullptr);
         size_t              GetMemberCount() const
                                 {return nMemberCount;};
         ContentTypeId       GetType() const {return nContentType;}

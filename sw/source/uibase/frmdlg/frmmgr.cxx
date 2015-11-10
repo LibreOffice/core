@@ -113,7 +113,7 @@ void SwFlyFrmAttrMgr::UpdateAttrMgr()
 
 void SwFlyFrmAttrMgr::_UpdateFlyFrm()
 {
-    const SfxPoolItem* pItem = 0;
+    const SfxPoolItem* pItem = nullptr;
 
     if (m_aSet.GetItemState(FN_SET_FRM_NAME, false, &pItem) == SfxItemState::SET)
         m_pOwnSh->SetFlyName(static_cast<const SfxStringItem *>(pItem)->GetValue());
@@ -163,7 +163,7 @@ bool SwFlyFrmAttrMgr::InsertFlyFrm()
 {
     m_pOwnSh->StartAllAction();
 
-    bool bRet = 0 != m_pOwnSh->NewFlyFrm( m_aSet );
+    bool bRet = nullptr != m_pOwnSh->NewFlyFrm( m_aSet );
 
     // turn on the right mode at the shell, frame got selected automatically.
     if ( bRet )
@@ -259,7 +259,7 @@ void SwFlyFrmAttrMgr::ValidateMetrics( SvxSwFrameValidation& rVal,
                            rVal.nVRelOrient,
                            pToCharContentPos,
                            rVal.bFollowTextFlow,
-                           rVal.bMirror, NULL, &rVal.aPercentSize,
+                           rVal.bMirror, nullptr, &rVal.aPercentSize,
                            &rSize);
 
     if (bOnlyPercentRefValue)

@@ -257,7 +257,7 @@ class SwUndoTableNumFormat : public SwUndo
     bool bNewValue : 1;
 
 public:
-    SwUndoTableNumFormat( const SwTableBox& rBox, const SfxItemSet* pNewSet = 0 );
+    SwUndoTableNumFormat( const SwTableBox& rBox, const SfxItemSet* pNewSet = nullptr );
 
     virtual ~SwUndoTableNumFormat();
 
@@ -373,7 +373,7 @@ public:
     virtual void RepeatImpl( ::sw::RepeatContext & ) override;
 };
 
-void InsertSort( std::vector<sal_uInt16>& rArr, sal_uInt16 nIdx, sal_uInt16* pInsPos = 0 );
+void InsertSort( std::vector<sal_uInt16>& rArr, sal_uInt16 nIdx, sal_uInt16* pInsPos = nullptr );
 
 #endif // INCLUDED_SW_SOURCE_CORE_INC_UNDOTABLE_HXX
 

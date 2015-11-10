@@ -163,7 +163,7 @@ class SW_DLLPUBLIC SwAnchoredDrawObject : public SwAnchoredObject
             provided the current object rectangle is taken.
         */
         void AdjustPositioningAttr( const SwFrm* _pNewAnchorFrm,
-                                    const SwRect* _pNewObjRect = 0L );
+                                    const SwRect* _pNewObjRect = nullptr );
 
         /** method to notify background of drawing object
 

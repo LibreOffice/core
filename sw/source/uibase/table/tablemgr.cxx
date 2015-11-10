@@ -229,7 +229,7 @@ uno::Reference< frame::XModel > SwTableFUNC::InsertChart(
     if ( xObj.is() )
     {
 
-        SwFlyFrameFormat* pTmp = 0;
+        SwFlyFrameFormat* pTmp = nullptr;
         pSh->InsertOleObject( aEmbObjRef, &pTmp );
         if (ppFlyFrameFormat)
             *ppFlyFrameFormat = pTmp;

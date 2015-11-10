@@ -98,7 +98,7 @@ static const SwFrameFormat* lcl_GetFrameFormatByName(SwWrtShell& rSh, const OUSt
         if(pFormat->GetName() == rName)
             return pFormat;
     }
-    return 0;
+    return nullptr;
 }
 
 #define SwFrameShell
@@ -622,7 +622,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                 assert(pFact);
                 std::unique_ptr<AbstractSvxObjectTitleDescDialog> pDlg(
-                    pFact->CreateSvxObjectTitleDescDialog( NULL,
+                    pFact->CreateSvxObjectTitleDescDialog( nullptr,
                                                            aTitle,
                                                            aDescription ));
                 assert(pDlg);
@@ -676,7 +676,7 @@ void SwFrameShell::GetState(SfxItemSet& rSet)
 
         bProtect |= bParentCntProt;
 
-        const FrmTypeFlags eFrmType = rSh.GetFrmType(0,true);
+        const FrmTypeFlags eFrmType = rSh.GetFrmType(nullptr,true);
         SwFlyFrmAttrMgr aMgr( false, &rSh, FRMMGR_TYPE_NONE );
 
         SfxWhichIter aIter( rSet );
@@ -967,7 +967,7 @@ void SwFrameShell::ExecFrameStyle(SfxRequest& rReq)
     SvxBoxItem aBoxItem(rBoxItem);
 
     SvxBorderLine aBorderLine;
-    const SfxPoolItem *pItem = 0;
+    const SfxPoolItem *pItem = nullptr;
 
     if(pArgs)    // Any controller can sometimes deliver nothing #48169#
     {
@@ -980,13 +980,13 @@ void SwFrameShell::ExecFrameStyle(SfxRequest& rReq)
                     SvxBoxItem aNewBox(*static_cast<const SvxBoxItem *>(pItem));
                     const SvxBorderLine* pBorderLine;
 
-                    if ((pBorderLine = aBoxItem.GetTop()) != NULL)
+                    if ((pBorderLine = aBoxItem.GetTop()) != nullptr)
                         lcl_FrmGetMaxLineWidth(pBorderLine, aBorderLine);
-                    if ((pBorderLine = aBoxItem.GetBottom()) != NULL)
+                    if ((pBorderLine = aBoxItem.GetBottom()) != nullptr)
                         lcl_FrmGetMaxLineWidth(pBorderLine, aBorderLine);
-                    if ((pBorderLine = aBoxItem.GetLeft()) != NULL)
+                    if ((pBorderLine = aBoxItem.GetLeft()) != nullptr)
                         lcl_FrmGetMaxLineWidth(pBorderLine, aBorderLine);
-                    if ((pBorderLine = aBoxItem.GetRight()) != NULL)
+                    if ((pBorderLine = aBoxItem.GetRight()) != nullptr)
                         lcl_FrmGetMaxLineWidth(pBorderLine, aBorderLine);
 
                     if(aBorderLine.GetOutWidth() == 0)
@@ -1007,13 +1007,13 @@ void SwFrameShell::ExecFrameStyle(SfxRequest& rReq)
                     aBoxItem = aNewBox;
                     SvxBorderLine aDestBorderLine;
 
-                    if( aBoxItem.GetTop() != NULL )
+                    if( aBoxItem.GetTop() != nullptr )
                         aBoxItem.SetLine(&aBorderLine, SvxBoxItemLine::TOP);
-                    if( aBoxItem.GetBottom() != NULL )
+                    if( aBoxItem.GetBottom() != nullptr )
                         aBoxItem.SetLine(&aBorderLine, SvxBoxItemLine::BOTTOM);
-                    if( aBoxItem.GetLeft() != NULL )
+                    if( aBoxItem.GetLeft() != nullptr )
                         aBoxItem.SetLine(&aBorderLine, SvxBoxItemLine::LEFT);
-                    if( aBoxItem.GetRight() != NULL )
+                    if( aBoxItem.GetRight() != nullptr )
                         aBoxItem.SetLine(&aBorderLine, SvxBoxItemLine::RIGHT);
                 }
             }
@@ -1064,10 +1064,10 @@ void SwFrameShell::ExecFrameStyle(SfxRequest& rReq)
                     }
                     else
                     {
-                        aBoxItem.SetLine(0, SvxBoxItemLine::TOP);
-                        aBoxItem.SetLine(0, SvxBoxItemLine::BOTTOM);
-                        aBoxItem.SetLine(0, SvxBoxItemLine::LEFT);
-                        aBoxItem.SetLine(0, SvxBoxItemLine::RIGHT);
+                        aBoxItem.SetLine(nullptr, SvxBoxItemLine::TOP);
+                        aBoxItem.SetLine(nullptr, SvxBoxItemLine::BOTTOM);
+                        aBoxItem.SetLine(nullptr, SvxBoxItemLine::LEFT);
+                        aBoxItem.SetLine(nullptr, SvxBoxItemLine::RIGHT);
                     }
                 }
             }
@@ -1255,7 +1255,7 @@ void SwFrameShell::ExecDrawDlgTextFrame(SfxRequest& rReq)
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                 assert(pFact);
                 std::unique_ptr<AbstractSvxAreaTabDialog> pDlg(pFact->CreateSvxAreaTabDialog(
-                    NULL,
+                    nullptr,
                     &aNewAttr,
                     pDoc,
                     false));

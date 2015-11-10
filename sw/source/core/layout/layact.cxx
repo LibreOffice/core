@@ -261,8 +261,8 @@ void SwLayAction::PaintContent( const SwContentFrm *pCnt,
 SwLayAction::SwLayAction( SwRootFrm *pRt, SwViewShellImp *pI ) :
     pRoot( pRt ),
     pImp( pI ),
-    pOptTab( 0 ),
-    pWait( 0 ),
+    pOptTab( nullptr ),
+    pWait( nullptr ),
     nPreInvaPage( USHRT_MAX ),
     nStartTicks( std::clock() ),
     nInputType( VclInputFlags::NONE ),
@@ -283,12 +283,12 @@ SwLayAction::SwLayAction( SwRootFrm *pRt, SwViewShellImp *pI ) :
 SwLayAction::~SwLayAction()
 {
     OSL_ENSURE( !pWait, "Wait object not destroyed" );
-    pImp->m_pLayAction = 0;      // unregister
+    pImp->m_pLayAction = nullptr;      // unregister
 }
 
 void SwLayAction::Reset()
 {
-    pOptTab = 0;
+    pOptTab = nullptr;
     nStartTicks = std::clock();
     nInputType = VclInputFlags::NONE;
     nEndPage = nPreInvaPage = nCheckPageNum = USHRT_MAX;
@@ -331,7 +331,7 @@ void SwLayAction::Action(OutputDevice* pRenderContext)
     //TurboMode? Hands-off during idle-format
     if ( IsPaint() && !IsIdle() && TurboAction() )
     {
-        delete pWait, pWait = 0;
+        delete pWait, pWait = nullptr;
         pRoot->ResetTurboFlag();
         bActionInProgress = false;
         pRoot->DeleteEmptySct();
@@ -359,7 +359,7 @@ void SwLayAction::Action(OutputDevice* pRenderContext)
     }
     pRoot->DeleteEmptySct();
 
-    delete pWait, pWait = 0;
+    delete pWait, pWait = nullptr;
 
     //Turbo-Action permitted again for all cases.
     pRoot->ResetTurboFlag();
@@ -482,7 +482,7 @@ void SwLayAction::InternalAction(OutputDevice* pRenderContext)
             nPercentPageNum = pPage->GetPhyPageNum();
             ::SetProgressState( nPercentPageNum, pImp->GetShell()->GetDoc()->GetDocShell());
         }
-        pOptTab = 0;
+        pOptTab = nullptr;
 
         // No Shortcut for Idle or CalcLayout
         if ( !IsIdle() && !IsComplete() && IsShortCut( pPage ) )
@@ -539,7 +539,7 @@ void SwLayAction::InternalAction(OutputDevice* pRenderContext)
                         ( pPage->IsInvalid() ||
                           (IS_FLYS && IS_INVAFLY) ) )
                 {
-                    PROTOCOL( pPage, PROT_FILE_INIT, 0, 0)
+                    PROTOCOL( pPage, PROT_FILE_INIT, 0, nullptr)
                     XCHECKPAGE;
 
                     // #i81146# new loop control
@@ -783,7 +783,7 @@ void SwLayAction::InternalAction(OutputDevice* pRenderContext)
         // reset flag for special interrupt content formatting.
         mbFormatContentOnInterrupt = false;
     }
-    pOptTab = 0;
+    pOptTab = nullptr;
     if( bNoLoop )
         rLayoutAccess.GetLayouter()->EndLoopControl();
 }
@@ -791,7 +791,7 @@ void SwLayAction::InternalAction(OutputDevice* pRenderContext)
 bool SwLayAction::_TurboAction( const SwContentFrm *pCnt )
 {
 
-    const SwPageFrm *pPage = 0;
+    const SwPageFrm *pPage = nullptr;
     if ( !pCnt->IsValid() || pCnt->IsCompletePaint() || pCnt->IsRetouche() )
     {
         const SwRect aOldRect( pCnt->UnionFrm( true ) );
@@ -888,12 +888,12 @@ static const SwFrm *lcl_FindFirstInvaLay( const SwFrm *pFrm, long nBottom )
             if (lcl_IsInvaLay(pFrm, nBottom))
                 return pFrm;
             const SwFrm *pTmp;
-            if ( 0 != (pTmp = lcl_FindFirstInvaLay( pFrm, nBottom )) )
+            if ( nullptr != (pTmp = lcl_FindFirstInvaLay( pFrm, nBottom )) )
                 return pTmp;
         }
         pFrm = pFrm->GetNext();
     }
-    return 0;
+    return nullptr;
 }
 
 static const SwFrm *lcl_FindFirstInvaContent( const SwLayoutFrm *pLay, long nBottom,
@@ -926,7 +926,7 @@ static const SwFrm *lcl_FindFirstInvaContent( const SwLayoutFrm *pLay, long nBot
                             if ( pFly->Frm().Top() <= nBottom )
                                 return pFly;
                         }
-                        const SwFrm *pFrm = lcl_FindFirstInvaContent( pFly, nBottom, 0 );
+                        const SwFrm *pFrm = lcl_FindFirstInvaContent( pFly, nBottom, nullptr );
                         if ( pFrm && pFrm->Frm().Bottom() <= nBottom )
                             return pFrm;
                     }
@@ -934,12 +934,12 @@ static const SwFrm *lcl_FindFirstInvaContent( const SwLayoutFrm *pLay, long nBot
             }
         }
         if ( pCnt->Frm().Top() > nBottom && !pCnt->IsInTab() )
-            return 0;
+            return nullptr;
         pCnt = pCnt->GetNextContentFrm();
         if ( !pLay->IsAnLower( pCnt ) )
             break;
     }
-    return 0;
+    return nullptr;
 }
 
 // #i37877# - consider drawing objects
@@ -960,7 +960,7 @@ static const SwAnchoredObject* lcl_FindFirstInvaObj( const SwPageFrm* _pPage,
                     return pFly;
 
                 const SwFrm* pTmp;
-                if ( 0 != (pTmp = lcl_FindFirstInvaContent( pFly, _nBottom, 0 )) &&
+                if ( nullptr != (pTmp = lcl_FindFirstInvaContent( pFly, _nBottom, nullptr )) &&
                      pTmp->Frm().Top() <= _nBottom )
                     return pFly;
             }
@@ -973,7 +973,7 @@ static const SwAnchoredObject* lcl_FindFirstInvaObj( const SwPageFrm* _pPage,
             }
         }
     }
-    return 0;
+    return nullptr;
 }
 
 /* Returns True if the page lies directly below or right of the visible area.
@@ -1011,7 +1011,7 @@ bool SwLayAction::IsShortCut( SwPageFrm *&prPage )
             }
         }
         else
-            FormatLayout( pSh ? pSh->GetOut() : 0, prPage );
+            FormatLayout( pSh ? pSh->GetOut() : nullptr, prPage );
         if ( IsAgain() )
             return false;
     }
@@ -1038,7 +1038,7 @@ bool SwLayAction::IsShortCut( SwPageFrm *&prPage )
         const SwLayoutFrm* pBody = p2ndPage->FindBodyCont();
         if( p2ndPage->IsFootnotePage() && pBody )
             pBody = static_cast<const SwLayoutFrm*>(pBody->GetNext());
-        pContent = pBody ? pBody->ContainsContent() : 0;
+        pContent = pBody ? pBody->ContainsContent() : nullptr;
         while ( p2ndPage && !pContent )
         {
             p2ndPage = static_cast<const SwPageFrm*>(p2ndPage->GetNext());
@@ -1047,7 +1047,7 @@ bool SwLayAction::IsShortCut( SwPageFrm *&prPage )
                 pBody = p2ndPage->FindBodyCont();
                 if( p2ndPage->IsFootnotePage() && pBody )
                     pBody = static_cast<const SwLayoutFrm*>(pBody->GetNext());
-                pContent = pBody ? pBody->ContainsContent() : 0;
+                pContent = pBody ? pBody->ContainsContent() : nullptr;
             }
         }
         if ( pContent )
@@ -1174,23 +1174,23 @@ bool SwLayAction::IsShortCut( SwPageFrm *&prPage )
     if ( !bRet && bBrowse )
     {
         const long nBottom = rVis.Bottom();
-        const SwAnchoredObject* pObj( 0L );
+        const SwAnchoredObject* pObj( nullptr );
         if ( prPage->GetSortedObjs() &&
              (prPage->IsInvalidFlyLayout() || prPage->IsInvalidFlyContent()) &&
-             0 != (pObj = lcl_FindFirstInvaObj( prPage, nBottom )) &&
+             nullptr != (pObj = lcl_FindFirstInvaObj( prPage, nBottom )) &&
              pObj->GetObjRect().Top() <= nBottom )
         {
             return false;
         }
-        const SwFrm* pFrm( 0L );
+        const SwFrm* pFrm( nullptr );
         if ( prPage->IsInvalidLayout() &&
-             0 != (pFrm = lcl_FindFirstInvaLay( prPage, nBottom )) &&
+             nullptr != (pFrm = lcl_FindFirstInvaLay( prPage, nBottom )) &&
              pFrm->Frm().Top() <= nBottom )
         {
             return false;
         }
         if ( (prPage->IsInvalidContent() || prPage->IsInvalidFlyInCnt()) &&
-             0 != (pFrm = lcl_FindFirstInvaContent( prPage, nBottom, 0 )) &&
+             nullptr != (pFrm = lcl_FindFirstInvaContent( prPage, nBottom, nullptr )) &&
              pFrm->Frm().Top() <= nBottom )
         {
             return false;
@@ -1627,8 +1627,8 @@ bool SwLayAction::FormatContent( const SwPageFrm *pPage )
         {
             // We do this so we don't have to search later on.
             const bool bNxtCnt = IsCalcLayout() && !pContent->GetFollow();
-            const SwContentFrm *pContentNext = bNxtCnt ? pContent->GetNextContentFrm() : 0;
-            const SwContentFrm *pContentPrev = pContent->GetPrev() ? pContent->GetPrevContentFrm() : 0;
+            const SwContentFrm *pContentNext = bNxtCnt ? pContent->GetNextContentFrm() : nullptr;
+            const SwContentFrm *pContentPrev = pContent->GetPrev() ? pContent->GetPrevContentFrm() : nullptr;
 
             const SwLayoutFrm*pOldUpper  = pContent->GetUpper();
             const SwTabFrm *pTab = pContent->FindTabFrm();
@@ -2032,7 +2032,7 @@ bool SwLayIdle::DoIdleJob( IdleJobType eJob, bool bVisAreaOnly )
     else
         pPage = static_cast<SwPageFrm*>(pRoot->Lower());
 
-    pContentNode = NULL;
+    pContentNode = nullptr;
     nTextPos = COMPLETE_STRING;
 
     while ( pPage )
@@ -2308,7 +2308,7 @@ SwLayIdle::SwLayIdle( SwRootFrm *pRt, SwViewShellImp *pI ) :
 
 SwLayIdle::~SwLayIdle()
 {
-    pImp->m_pIdleAct = 0;
+    pImp->m_pIdleAct = nullptr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

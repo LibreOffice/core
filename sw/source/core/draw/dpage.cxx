@@ -51,15 +51,15 @@ using namespace ::com::sun::star::frame;
 
 SwDPage::SwDPage(SwDrawModel& rNewModel, bool bMasterPage) :
     FmFormPage(rNewModel, bMasterPage),
-    pGridLst( 0 ),
+    pGridLst( nullptr ),
     pDoc(&rNewModel.GetDoc())
 {
 }
 
 SwDPage::SwDPage(const SwDPage& rSrcPage) :
     FmFormPage( rSrcPage ),
-    pGridLst( 0 ),
-    pDoc( 0 )
+    pGridLst( nullptr ),
+    pDoc( nullptr )
 {
     if ( rSrcPage.pGridLst )
     {
@@ -89,13 +89,13 @@ void SwDPage::lateInit(const SwDPage& rPage, SwDrawModel* const pNewModel)
 
 SwDPage* SwDPage::Clone() const
 {
-    return Clone( 0 );
+    return Clone( nullptr );
 }
 
 SwDPage* SwDPage::Clone(SdrModel* const pNewModel) const
 {
     SwDPage* const pNewPage = new SwDPage( *this );
-    SwDrawModel* pSwDrawModel = 0;
+    SwDrawModel* pSwDrawModel = nullptr;
     if ( pNewModel )
     {
         pSwDrawModel = &dynamic_cast<SwDrawModel&>(*pNewModel);
@@ -110,7 +110,7 @@ SdrObject*  SwDPage::ReplaceObject( SdrObject* pNewObj, size_t nObjNum )
     SdrObject *pOld = GetObj( nObjNum );
     OSL_ENSURE( pOld, "Oups, Object not replaced" );
     SdrObjUserCall* pContact;
-    if ( 0 != ( pContact = GetUserCall(pOld) ) &&
+    if ( nullptr != ( pContact = GetUserCall(pOld) ) &&
          RES_DRAWFRMFMT == static_cast<SwContact*>(pContact)->GetFormat()->Which())
         static_cast<SwDrawContact*>(pContact)->ChangeMasterObject( pNewObj );
     return FmFormPage::ReplaceObject( pNewObj, nObjNum );

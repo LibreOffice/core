@@ -75,7 +75,7 @@ public:
                  SwWrongList* pSubList);
 private:
 
-    SwWrongArea() : mnPos(0), mnLen(0), mpSubList(NULL), mColor(0,0,0), mLineType(WRONGAREA_WAVE) {}
+    SwWrongArea() : mnPos(0), mnLen(0), mpSubList(nullptr), mColor(0,0,0), mLineType(WRONGAREA_WAVE) {}
 
     static Color getSmartColor ( css::uno::Reference< css::container::XStringKeyMap > xPropertyBag)
     {
@@ -259,14 +259,14 @@ public:
 
     inline SwWrongList* SubList( sal_uInt16 nIdx ) const
     {
-        return nIdx < maList.size() ? maList[nIdx].mpSubList : 0;
+        return nIdx < maList.size() ? maList[nIdx].mpSubList : nullptr;
     }
 
     void InsertSubList( sal_Int32 nNewPos, sal_Int32 nNewLen, sal_uInt16 nWhere, SwWrongList* pSubList );
 
     inline const SwWrongArea* GetElement( sal_uInt16 nIdx ) const
     {
-        return nIdx < maList.size() ? &maList[nIdx] : 0;
+        return nIdx < maList.size() ? &maList[nIdx] : nullptr;
     }
     void RemoveEntry( sal_Int32 nBegin, sal_Int32 nEnd );
     bool LookForEntry( sal_Int32 nBegin, sal_Int32 nEnd );

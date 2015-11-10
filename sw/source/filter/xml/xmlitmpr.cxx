@@ -64,7 +64,7 @@ SvXMLItemMapEntry* SvXMLItemMapEntries::getByName(  sal_uInt16 nNameSpace,
         pMap++;
     }
 
-    return (pMap && (pMap->eLocalName != XML_TOKEN_INVALID)) ? pMap : NULL;
+    return (pMap && (pMap->eLocalName != XML_TOKEN_INVALID)) ? pMap : nullptr;
 }
 
 SvXMLItemMapEntry& SvXMLItemMapEntries::getByIndex( sal_uInt16 nIndex ) const

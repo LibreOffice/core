@@ -124,8 +124,8 @@ public:
         {
             return uno::Any();
         }
-        SwNumFormat const* pNumFormat(0);
-        OUString const* pCharStyleName(0);
+        SwNumFormat const* pNumFormat(nullptr);
+        OUString const* pCharStyleName(nullptr);
         pRules->GetNumFormat(nIndex, pNumFormat, pCharStyleName);
         if (!pNumFormat)
         {   // the dialog only fills in those levels that are non-default
@@ -159,7 +159,7 @@ public:
         SwXNumberingRules::SetPropertiesToNumFormat(
             aNumberFormat,
             charStyleName,
-            0, 0, 0, 0, 0,
+            nullptr, nullptr, nullptr, nullptr, nullptr,
             props);
         SwNumRulesWithName *const pRules(GetOrCreateRules());
         pRules->SetNumFormat(nIndex, aNumberFormat, charStyleName);
@@ -438,8 +438,8 @@ void ExportStoredChapterNumberingRules(SwChapterNumRules & rRules,
         {
             for (size_t j = 0; j < MAXLEVEL; ++j)
             {
-                SwNumFormat const* pDummy(0);
-                OUString const* pCharStyleName(0);
+                SwNumFormat const* pDummy(nullptr);
+                OUString const* pCharStyleName(nullptr);
                 pRule->GetNumFormat(j, pDummy, pCharStyleName);
                 if (pCharStyleName && !pCharStyleName->isEmpty())
                 {

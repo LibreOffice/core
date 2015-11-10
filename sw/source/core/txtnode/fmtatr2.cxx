@@ -58,14 +58,14 @@ TYPEINIT1_AUTOFACTORY(SwFormatAutoFormat, SfxPoolItem);
 SwFormatCharFormat::SwFormatCharFormat( SwCharFormat *pFormat )
     : SfxPoolItem( RES_TXTATR_CHARFMT ),
     SwClient(pFormat),
-    pTextAttr( 0 )
+    pTextAttr( nullptr )
 {
 }
 
 SwFormatCharFormat::SwFormatCharFormat( const SwFormatCharFormat& rAttr )
     : SfxPoolItem( RES_TXTATR_CHARFMT ),
     SwClient( rAttr.GetCharFormat() ),
-    pTextAttr( 0 )
+    pTextAttr( nullptr )
 {
 }
 
@@ -162,8 +162,8 @@ SwFormatINetFormat::SwFormatINetFormat()
     , msINetFormatName()
     , msVisitedFormatName()
     , msHyperlinkName()
-    , mpMacroTable( 0 )
-    , mpTextAttr( 0 )
+    , mpMacroTable( nullptr )
+    , mpTextAttr( nullptr )
     , mnINetFormatId( 0 )
     , mnVisitedFormatId( 0 )
 {}
@@ -175,8 +175,8 @@ SwFormatINetFormat::SwFormatINetFormat( const OUString& rURL, const OUString& rT
     , msINetFormatName()
     , msVisitedFormatName()
     , msHyperlinkName()
-    , mpMacroTable( 0 )
-    , mpTextAttr( 0 )
+    , mpMacroTable( nullptr )
+    , mpTextAttr( nullptr )
     , mnINetFormatId( RES_POOLCHR_INET_NORMAL )
     , mnVisitedFormatId( RES_POOLCHR_INET_VISIT )
 {
@@ -191,8 +191,8 @@ SwFormatINetFormat::SwFormatINetFormat( const SwFormatINetFormat& rAttr )
     , msINetFormatName( rAttr.msINetFormatName )
     , msVisitedFormatName( rAttr.msVisitedFormatName )
     , msHyperlinkName( rAttr.msHyperlinkName )
-    , mpMacroTable( 0 )
-    , mpTextAttr( 0 )
+    , mpMacroTable( nullptr )
+    , mpTextAttr( nullptr )
     , mnINetFormatId( rAttr.mnINetFormatId )
     , mnVisitedFormatId( rAttr.mnVisitedFormatId )
 {
@@ -247,7 +247,7 @@ void SwFormatINetFormat::SetMacroTable( const SvxMacroTableDtor* pNewTable )
             mpMacroTable = new SvxMacroTableDtor( *pNewTable );
     }
     else
-        delete mpMacroTable, mpMacroTable = 0;
+        delete mpMacroTable, mpMacroTable = nullptr;
 }
 
 void SwFormatINetFormat::SetMacro( sal_uInt16 nEvent, const SvxMacro& rMacro )
@@ -260,7 +260,7 @@ void SwFormatINetFormat::SetMacro( sal_uInt16 nEvent, const SvxMacro& rMacro )
 
 const SvxMacro* SwFormatINetFormat::GetMacro( sal_uInt16 nEvent ) const
 {
-    const SvxMacro* pRet = 0;
+    const SvxMacro* pRet = nullptr;
     if( mpMacroTable && mpMacroTable->IsKeyValid( nEvent ) )
         pRet = mpMacroTable->Get( nEvent );
     return pRet;
@@ -395,7 +395,7 @@ bool SwFormatINetFormat::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 SwFormatRuby::SwFormatRuby( const OUString& rRubyText )
     : SfxPoolItem( RES_TXTATR_CJK_RUBY ),
     sRubyText( rRubyText ),
-    pTextAttr( 0 ),
+    pTextAttr( nullptr ),
     nCharFormatId( 0 ),
     nPosition( 0 ),
     nAdjustment( 0 )
@@ -406,7 +406,7 @@ SwFormatRuby::SwFormatRuby( const SwFormatRuby& rAttr )
     : SfxPoolItem( RES_TXTATR_CJK_RUBY ),
     sRubyText( rAttr.sRubyText ),
     sCharFormatName( rAttr.sCharFormatName ),
-    pTextAttr( 0 ),
+    pTextAttr( nullptr ),
     nCharFormatId( rAttr.nCharFormatId),
     nPosition( rAttr.nPosition ),
     nAdjustment( rAttr.nAdjustment )
@@ -424,7 +424,7 @@ SwFormatRuby& SwFormatRuby::operator=( const SwFormatRuby& rAttr )
     nCharFormatId = rAttr.nCharFormatId;
     nPosition = rAttr.nPosition;
     nAdjustment = rAttr.nAdjustment;
-    pTextAttr =  0;
+    pTextAttr =  nullptr;
     return *this;
 }
 
@@ -525,7 +525,7 @@ SwFormatMeta * SwFormatMeta::CreatePoolDefault(const sal_uInt16 i_nWhich)
 SwFormatMeta::SwFormatMeta(const sal_uInt16 i_nWhich)
     : SfxPoolItem( i_nWhich )
     , m_pMeta()
-    , m_pTextAttr( 0 )
+    , m_pTextAttr( nullptr )
 {
    OSL_ENSURE((RES_TXTATR_META == i_nWhich) || (RES_TXTATR_METAFIELD == i_nWhich),
             "ERROR: SwFormatMeta: invalid which id!");
@@ -535,7 +535,7 @@ SwFormatMeta::SwFormatMeta( std::shared_ptr< ::sw::Meta > const & i_pMeta,
                         const sal_uInt16 i_nWhich )
     : SfxPoolItem( i_nWhich )
     , m_pMeta( i_pMeta )
-    , m_pTextAttr( 0 )
+    , m_pTextAttr( nullptr )
 {
    OSL_ENSURE((RES_TXTATR_META == i_nWhich) || (RES_TXTATR_METAFIELD == i_nWhich),
             "ERROR: SwFormatMeta: invalid which id!");
@@ -547,8 +547,8 @@ SwFormatMeta::~SwFormatMeta()
 {
     if (m_pMeta && (m_pMeta->GetFormatMeta() == this))
     {
-        NotifyChangeTextNode(0);
-        m_pMeta->SetFormatMeta(0);
+        NotifyChangeTextNode(nullptr);
+        m_pMeta->SetFormatMeta(nullptr);
     }
 }
 
@@ -583,8 +583,8 @@ void SwFormatMeta::SetTextAttr(SwTextMeta * const i_pTextAttr)
         }
         else if (m_pMeta->GetFormatMeta() == this)
         {   // text attribute gone => de-register from text node!
-            NotifyChangeTextNode(0);
-            m_pMeta->SetFormatMeta(0);
+            NotifyChangeTextNode(nullptr);
+            m_pMeta->SetFormatMeta(nullptr);
         }
     }
 }
@@ -633,7 +633,7 @@ Meta::Meta(SwFormatMeta * const i_pFormat)
     : ::sfx2::Metadatable()
     , SwModify()
     , m_pFormat(i_pFormat)
-    , m_pTextNode(0)
+    , m_pTextNode(nullptr)
 {
 }
 
@@ -643,7 +643,7 @@ Meta::~Meta()
 
 SwTextMeta * Meta::GetTextAttr() const
 {
-    return (m_pFormat) ? m_pFormat->GetTextAttr() : 0;
+    return (m_pFormat) ? m_pFormat->GetTextAttr() : nullptr;
 }
 
 
@@ -677,7 +677,7 @@ void Meta::Modify( const SfxPoolItem *pOld, const SfxPoolItem *pNew )
     NotifyClients(pOld, pNew);
     if (pOld && (RES_REMOVE_UNO_OBJECT == pOld->Which()))
     {   // invalidate cached uno object
-        SetXMeta(uno::Reference<rdf::XMetadatable>(0));
+        SetXMeta(uno::Reference<rdf::XMetadatable>(nullptr));
     }
 }
 
@@ -740,7 +740,7 @@ void MetaField::GetPrefixAndSuffix(
             SwTextNode * const pTextNode( GetTextNode() );
             SwDocShell const * const pShell(pTextNode->GetDoc()->GetDocShell());
             const uno::Reference<frame::XModel> xModel(
-                (pShell) ? pShell->GetModel() : 0,  uno::UNO_SET_THROW);
+                (pShell) ? pShell->GetModel() : nullptr,  uno::UNO_SET_THROW);
             getPrefixAndSuffix(xModel, xMetaField, o_pPrefix, o_pSuffix);
         }
     }

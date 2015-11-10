@@ -229,7 +229,7 @@ SwMailMergeOutputPage::SwMailMergeOutputPage(SwMailMergeWizard* _pParent)
     , m_sConfigureMail(SW_RES(ST_CONFIGUREMAIL))
     , m_bCancelSaving(false)
     , m_pWizard(_pParent)
-    , m_pTempPrinter(0)
+    , m_pTempPrinter(nullptr)
 {
     get(m_pSaveStartDocRB, "savestarting");
     get(m_pSaveMergedDocRB, "savemerged");
@@ -404,7 +404,7 @@ IMPL_LINK_TYPED(SwMailMergeOutputPage, OutputTypeHdl_Impl, Button*, pButton, voi
         m_pSendAsFT, m_pSendAsLB, m_pSendAsPB,
         m_pAttachmentGroup,
         m_pSendAllRB, m_pSendDocumentsPB,
-        0
+        nullptr
     };
     SetUpdateMode(true);
     vcl::Window** pControl = aControls;
@@ -427,7 +427,7 @@ IMPL_LINK_TYPED(SwMailMergeOutputPage, OutputTypeHdl_Impl, Button*, pButton, voi
             m_pSaveAsOneRB, m_pSaveIndividualRB,
             m_pFromRB, m_pFromNF, m_pToFT, m_pToNF,
             m_pSaveNowPB,
-            0
+            nullptr
         };
         Control** pSaveMergeControl = aSaveMergedControls;
         do
@@ -448,7 +448,7 @@ IMPL_LINK_TYPED(SwMailMergeOutputPage, OutputTypeHdl_Impl, Button*, pButton, voi
             m_pFromRB, m_pFromNF, m_pToFT, m_pToNF,
             m_pPrinterFT, m_pPrinterLB, m_pPrinterSettingsPB, m_pPrintAllRB,
             m_pPrintNowPB,
-            0
+            nullptr
         };
         Control** pPrinterControl = aPrintControls;
         do
@@ -470,7 +470,7 @@ IMPL_LINK_TYPED(SwMailMergeOutputPage, OutputTypeHdl_Impl, Button*, pButton, voi
             m_pSubjectFT, m_pSubjectED,
             m_pSendAsFT, m_pSendAsLB, m_pSendAsPB,
             m_pAttachmentGroup,
-            m_pSendAllRB, m_pSendDocumentsPB, 0
+            m_pSendAllRB, m_pSendDocumentsPB, nullptr
         };
         vcl::Window** pMailControl = aMailControls;
         do
@@ -498,7 +498,7 @@ IMPL_LINK_TYPED(SwMailMergeOutputPage, OutputTypeHdl_Impl, Button*, pButton, voi
             //select first column
             uno::Reference< sdbcx::XColumnsSupplier > xColsSupp( rConfigItem.GetResultSet(), uno::UNO_QUERY);
             //get the name of the actual columns
-            uno::Reference < container::XNameAccess> xColAccess = xColsSupp.is() ? xColsSupp->getColumns() : 0;
+            uno::Reference < container::XNameAccess> xColAccess = xColsSupp.is() ? xColsSupp->getColumns() : nullptr;
             uno::Sequence< OUString > aFields;
             if(xColAccess.is())
                 aFields = xColAccess->getElementNames();
@@ -520,7 +520,7 @@ IMPL_LINK_TYPED(SwMailMergeOutputPage, OutputTypeHdl_Impl, Button*, pButton, voi
             SendTypeHdl_Impl(*m_pSendAsLB);
         }
     }
-    m_pFromRB->GetClickHdl().Call(m_pFromRB->IsChecked() ? m_pFromRB.get() : 0);
+    m_pFromRB->GetClickHdl().Call(m_pFromRB->IsChecked() ? m_pFromRB.get() : nullptr);
 
     SetUpdateMode(false);
 }
@@ -906,7 +906,7 @@ IMPL_LINK_NOARG_TYPED(SwMailMergeOutputPage, PrintHdl_Impl, Button*, void)
     pTargetView->ExecPrint( aProps, false, true );
     SfxGetpApp()->NotifyEvent(SfxEventHint(SW_EVENT_MAIL_MERGE_END, SwDocShell::GetEventName(STR_SW_EVENT_MAIL_MERGE_END), pObjSh));
 
-    pTargetView->SetMailMergeConfigItem(0, 0, false);
+    pTargetView->SetMailMergeConfigItem(nullptr, 0, false);
     m_pWizard->enableButtons(WizardButtonFlags::CANCEL, true);
     m_pWizard->enableButtons(WizardButtonFlags::FINISH, true);
 }
@@ -998,7 +998,7 @@ IMPL_LINK_TYPED(SwMailMergeOutputPage, SendDocumentsHdl_Impl, Button*, pButton, 
     bool bAsBody = false;
     rtl_TextEncoding eEncoding = ::osl_getThreadTextEncoding();
     SfxFilterContainer* pFilterContainer = SwDocShell::Factory().GetFilterContainer();
-    const SfxFilter *pSfxFlt = 0;
+    const SfxFilter *pSfxFlt = nullptr;
     sal_uLong nDocType = reinterpret_cast<sal_uLong>(m_pSendAsLB->GetSelectEntryData());
     OUString sExtension = lcl_GetExtensionForDocType(nDocType);
     switch( nDocType )
@@ -1099,7 +1099,7 @@ IMPL_LINK_TYPED(SwMailMergeOutputPage, SendDocumentsHdl_Impl, Button*, pButton, 
     OUString sEMailColumn = m_pMailToLB->GetSelectEntry();
     OSL_ENSURE( !sEMailColumn.isEmpty(), "No email column selected");
     Reference< sdbcx::XColumnsSupplier > xColsSupp( rConfigItem.GetResultSet(), UNO_QUERY);
-    Reference < container::XNameAccess> xColAccess = xColsSupp.is() ? xColsSupp->getColumns() : 0;
+    Reference < container::XNameAccess> xColAccess = xColsSupp.is() ? xColsSupp->getColumns() : nullptr;
     if(sEMailColumn.isEmpty() || !xColAccess.is() || !xColAccess->hasByName(sEMailColumn))
         return;
 

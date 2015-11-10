@@ -87,9 +87,9 @@ bool SwEndNoteInfo::operator==( const SwEndNoteInfo& rInfo ) const
 
 SwEndNoteInfo::SwEndNoteInfo(const SwEndNoteInfo& rInfo) :
     SwClient( rInfo.GetFootnoteTextColl() ),
-    aPageDescDep( this, 0 ),
-    aCharFormatDep( this, 0 ),
-    aAnchorCharFormatDep( this, 0 ),
+    aPageDescDep( this, nullptr ),
+    aCharFormatDep( this, nullptr ),
+    aAnchorCharFormatDep( this, nullptr ),
     sPrefix( rInfo.sPrefix ),
     sSuffix( rInfo.sSuffix ),
     m_bEndNote( true ),
@@ -109,9 +109,9 @@ SwEndNoteInfo::SwEndNoteInfo(const SwEndNoteInfo& rInfo) :
 
 SwEndNoteInfo::SwEndNoteInfo(SwTextFormatColl *pFormat) :
     SwClient(pFormat),
-    aPageDescDep( this, 0 ),
-    aCharFormatDep( this, 0 ),
-    aAnchorCharFormatDep( this, 0 ),
+    aPageDescDep( this, nullptr ),
+    aCharFormatDep( this, nullptr ),
+    aAnchorCharFormatDep( this, nullptr ),
     m_bEndNote( true ),
     nFootnoteOffset( 0 )
 {
@@ -132,7 +132,7 @@ SwPageDesc *SwEndNoteInfo::GetPageDesc( SwDoc &rDoc ) const
 
 bool SwEndNoteInfo::KnowsPageDesc() const
 {
-    return (aPageDescDep.GetRegisteredIn() != 0);
+    return (aPageDescDep.GetRegisteredIn() != nullptr);
 }
 
 bool SwEndNoteInfo::DependsOn( const SwPageDesc* pDesc ) const
@@ -312,7 +312,7 @@ void SwDoc::SetFootnoteInfo(const SwFootnoteInfo& rInfo)
         // #i81002# no update during loading
         if ( !IsInReading() )
         {
-            getIDocumentFieldsAccess().UpdateRefFields(NULL);
+            getIDocumentFieldsAccess().UpdateRefFields(nullptr);
         }
         getIDocumentState().SetModified();
     }
@@ -380,7 +380,7 @@ void SwDoc::SetEndNoteInfo(const SwEndNoteInfo& rInfo)
         // #i81002# no update during loading
         if ( !IsInReading() )
         {
-            getIDocumentFieldsAccess().UpdateRefFields(NULL);
+            getIDocumentFieldsAccess().UpdateRefFields(nullptr);
         }
         getIDocumentState().SetModified();
     }
@@ -401,7 +401,7 @@ bool SwDoc::SetCurFootnote( const SwPaM& rPam, const OUString& rNumStr,
     size_t nPos = 0;
     rFootnoteArr.SeekEntry( pStt->nNode, &nPos );
 
-    SwUndoChangeFootNote* pUndo = 0;
+    SwUndoChangeFootNote* pUndo = nullptr;
     if (GetIDocumentUndoRedo().DoesUndo())
     {
         GetIDocumentUndoRedo().ClearRedo(); // AppendUndo far below, so leave it

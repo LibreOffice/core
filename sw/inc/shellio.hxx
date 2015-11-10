@@ -161,7 +161,7 @@ public:
     // Initial reading. Document is created only at Read(...)
     // or in case it is given, into that.
     // Special case for Load with Sw3Reader.
-    SwReader( SfxMedium&, const OUString& rFilename, SwDoc *pDoc = 0 );
+    SwReader( SfxMedium&, const OUString& rFilename, SwDoc *pDoc = nullptr );
 
     // Read into existing document.
     // Document and position in document are taken from SwPaM.
@@ -412,10 +412,10 @@ public:
     Writer();
     virtual ~Writer();
 
-    virtual sal_uLong Write( SwPaM&, SfxMedium&, const OUString* = 0 );
-            sal_uLong Write( SwPaM&, SvStream&,  const OUString* = 0 );
-    virtual sal_uLong Write( SwPaM&, const css::uno::Reference < css::embed::XStorage >&, const OUString* = 0, SfxMedium* = 0 );
-    virtual sal_uLong Write( SwPaM&, SotStorage&, const OUString* = 0 );
+    virtual sal_uLong Write( SwPaM&, SfxMedium&, const OUString* = nullptr );
+            sal_uLong Write( SwPaM&, SvStream&,  const OUString* = nullptr );
+    virtual sal_uLong Write( SwPaM&, const css::uno::Reference < css::embed::XStorage >&, const OUString* = nullptr, SfxMedium* = nullptr );
+    virtual sal_uLong Write( SwPaM&, SotStorage&, const OUString* = nullptr );
 
     virtual void SetupFilterOptions(SfxMedium& rMedium);
 
@@ -476,8 +476,8 @@ public:
 
     virtual bool IsStgWriter() const override;
 
-    virtual sal_uLong Write( SwPaM&, const css::uno::Reference < css::embed::XStorage >&, const OUString* = 0, SfxMedium* = 0 ) override;
-    virtual sal_uLong Write( SwPaM&, SotStorage&, const OUString* = 0 ) override;
+    virtual sal_uLong Write( SwPaM&, const css::uno::Reference < css::embed::XStorage >&, const OUString* = nullptr, SfxMedium* = nullptr ) override;
+    virtual sal_uLong Write( SwPaM&, SotStorage&, const OUString* = nullptr ) override;
 
     SotStorage& GetStorage() const       { return *pStg; }
 };
@@ -498,7 +498,7 @@ class SW_DLLPUBLIC SwWriter
     bool bWriteAll;
 
 public:
-    sal_uLong Write( WriterRef& rxWriter, const OUString* = 0);
+    sal_uLong Write( WriterRef& rxWriter, const OUString* = nullptr);
 
     SwWriter( SvStream&, SwCrsrShell &, bool bWriteAll = false );
     SwWriter( SvStream&, SwDoc & );
@@ -523,7 +523,7 @@ struct SwReaderWriterEntry
     bool bDelReader;
 
     SwReaderWriterEntry( const FnGetReader fnReader, const FnGetWriter fnWriter, bool bDel )
-        : pReader( NULL ), fnGetReader( fnReader ), fnGetWriter( fnWriter ), bDelReader( bDel )
+        : pReader( nullptr ), fnGetReader( fnReader ), fnGetWriter( fnWriter ), bDelReader( bDel )
     {}
 
     /// Get access to the reader.

@@ -55,9 +55,9 @@ SwAccessibleSelectionHelper::~SwAccessibleSelectionHelper()
 
 SwFEShell* SwAccessibleSelectionHelper::GetFEShell()
 {
-    OSL_ENSURE( m_rContext.GetMap() != NULL, "no map?" );
+    OSL_ENSURE( m_rContext.GetMap() != nullptr, "no map?" );
     SwViewShell* pViewShell = m_rContext.GetMap()->GetShell();
-    OSL_ENSURE( pViewShell != NULL,
+    OSL_ENSURE( pViewShell != nullptr,
                 "No view shell? Then what are you looking at?" );
 
     SwFEShell* pFEShell = dynamic_cast<SwFEShell*>( pViewShell );
@@ -93,11 +93,11 @@ void SwAccessibleSelectionHelper::selectAccessibleChild(
     // we can only select fly frames, so we ignore (should: return
     // false) all other attempts at child selection
     SwFEShell* pFEShell = GetFEShell();
-    if( pFEShell != NULL )
+    if( pFEShell != nullptr )
     {
         const SdrObject *pObj = aChild.GetDrawObject();
         if( pObj )
-            m_rContext.Select( const_cast< SdrObject *>( pObj ), 0==aChild.GetSwFrm());
+            m_rContext.Select( const_cast< SdrObject *>( pObj ), nullptr==aChild.GetSwFrm());
     }
     // no frame shell, or no frame, or no fly frame -> can't select
 }
@@ -155,7 +155,7 @@ bool SwAccessibleSelectionHelper::isAccessibleChildSelected(
     const SwFEShell* pFEShell = GetFEShell();
     if( pFEShell )
     {
-        if ( aChild.GetSwFrm() != 0 )
+        if ( aChild.GetSwFrm() != nullptr )
         {
             bRet = (pFEShell->GetSelectedFlyFrm() == aChild.GetSwFrm());
         }
@@ -195,9 +195,9 @@ void SwAccessibleSelectionHelper::selectAllAccessibleChildren(  )
             const SwAccessibleChild& rChild = *aIter;
             const SdrObject* pObj = rChild.GetDrawObject();
             const SwFrm* pFrm = rChild.GetSwFrm();
-            if( pObj && !(pFrm != 0 && pFEShell->IsObjSelected()) )
+            if( pObj && !(pFrm != nullptr && pFEShell->IsObjSelected()) )
             {
-                m_rContext.Select( const_cast< SdrObject *>( pObj ), 0==pFrm );
+                m_rContext.Select( const_cast< SdrObject *>( pObj ), nullptr==pFrm );
                 if( pFrm )
                     break;
             }
@@ -215,7 +215,7 @@ sal_Int32 SwAccessibleSelectionHelper::getSelectedAccessibleChildCount(  )
     // Only one frame can be selected at a time, and we only frames
     // for selectable children.
     const SwFEShell* pFEShell = GetFEShell();
-    if( pFEShell != 0 )
+    if( pFEShell != nullptr )
     {
         const SwFlyFrm* pFlyFrm = pFEShell->GetSelectedFlyFrm();
         if( pFlyFrm )
@@ -282,7 +282,7 @@ Reference<XAccessible> SwAccessibleSelectionHelper::getSelectedAccessibleChild(
     // be 0, and a selection must exist, otherwise we have to throw an
     // lang::IndexOutOfBoundsException
     SwFEShell* pFEShell = GetFEShell();
-    if( 0 == pFEShell )
+    if( nullptr == pFEShell )
         throwIndexOutOfBoundsException();
 
     SwAccessibleChild aChild;
@@ -341,7 +341,7 @@ Reference<XAccessible> SwAccessibleSelectionHelper::getSelectedAccessibleChild(
     if( !aChild.IsValid() )
         throwIndexOutOfBoundsException();
 
-    OSL_ENSURE( m_rContext.GetMap() != NULL, "We need the map." );
+    OSL_ENSURE( m_rContext.GetMap() != nullptr, "We need the map." );
     Reference< XAccessible > xChild;
     if( aChild.GetSwFrm() )
     {

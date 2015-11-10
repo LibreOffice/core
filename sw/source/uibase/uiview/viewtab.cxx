@@ -225,7 +225,7 @@ void SwView::ExecTabWin( SfxRequest& rReq )
     SwWrtShell &rSh         = GetWrtShell();
     const FrmTypeFlags nFrmType   = rSh.IsObjSelected() ?
                                     FrmTypeFlags::DRAWOBJ :
-                                        rSh.GetFrmType(0,true);
+                                        rSh.GetFrmType(nullptr,true);
     const bool bFrmSelection = rSh.IsFrmSelected();
     const bool bBrowse = rSh.GetViewOptions()->getBrowseMode();
 
@@ -858,7 +858,7 @@ void SwView::ExecTabWin( SfxRequest& rReq )
             {
                 if ( bFrmSelection || nFrmType & FrmTypeFlags::FLY_ANY || bSect)
                 {
-                    SwSectionFormat *pSectFormat = 0;
+                    SwSectionFormat *pSectFormat = nullptr;
                     SfxItemSet aSet( GetPool(), RES_COL, RES_COL );
                     if(bSect)
                     {
@@ -985,7 +985,7 @@ void SwView::ExecTabWin( SfxRequest& rReq )
         rSh.LockView( false );
 
     m_bSetTabColFromDoc = m_bSetTabRowFromDoc = m_bTabColFromDoc = m_bTabRowFromDoc = false;
-    SetNumRuleNodeFromDoc(NULL);
+    SetNumRuleNodeFromDoc(nullptr);
 }
 
 // Here the status of the tab bar will be determined.
@@ -995,7 +995,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
 {
     SwWrtShell &rSh         = GetWrtShell();
 
-    const Point* pPt = IsTabColFromDoc() || IsTabRowFromDoc() ? &m_aTabColFromDocPos : 0;
+    const Point* pPt = IsTabColFromDoc() || IsTabRowFromDoc() ? &m_aTabColFromDocPos : nullptr;
     const FrmTypeFlags nFrmType   = rSh.IsObjSelected()
                 ? FrmTypeFlags::DRAWOBJ
                 : rSh.GetFrmType( pPt, true );
@@ -1391,7 +1391,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                     aDistLR.SetLeft(rBox.GetDistance(SvxBoxItemLine::LEFT));
                     aDistLR.SetRight(rBox.GetDistance(SvxBoxItemLine::RIGHT));
 
-                    const SvxBoxItem* pBox = 0;
+                    const SvxBoxItem* pBox = nullptr;
                     if(nFrmType & FrmTypeFlags::HEADER)
                     {
                         rMaster.GetHeader();
@@ -1923,7 +1923,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                     size_t nNum = IsTabColFromDoc() ?
                                 rSh.GetCurMouseColNum( m_aTabColFromDocPos ):
                                 rSh.GetCurOutColNum();
-                    const SwFrameFormat* pFormat = NULL;
+                    const SwFrameFormat* pFormat = nullptr;
                     if( bColSct )
                     {
                         eRecType = bSectOutTable ? RECT_OUTTABSECTION

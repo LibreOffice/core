@@ -537,7 +537,7 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
             WritePostponedCustomShape();
             m_pSerializer->endElementNS( XML_w, XML_r );
         }
-        m_pPostponedCustomShape.reset(0);
+        m_pPostponedCustomShape.reset(nullptr);
 
         m_aFramesOfParagraph.clear();
     }
@@ -591,7 +591,7 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
             pushToTableExportContext(aTableExportContext);
             m_pCurrentFrame = it->get();
             m_rExport.SdrExporter().writeOnlyTextOfFrame(it->get());
-            m_pCurrentFrame = NULL;
+            m_pCurrentFrame = nullptr;
             popFromTableExportContext(aTableExportContext);
         }
         aFramePrTextbox.clear();
@@ -936,7 +936,7 @@ void lcl_writeParagraphMarkerProperties(DocxAttributeOutput& rAttributeOutput, c
 {
     SfxWhichIter aIter(rParagraphMarkerProperties);
     sal_uInt16 nWhichId = aIter.FirstWhich();
-    const SfxPoolItem* pItem = 0;
+    const SfxPoolItem* pItem = nullptr;
     // Did we already produce a <w:sz> element?
     bool bFontSizeWritten = false;
     while (nWhichId)
@@ -1286,7 +1286,7 @@ void DocxAttributeOutput::EndRun()
 
     WritePendingPlaceholder();
 
-    m_pRedlineData = NULL;
+    m_pRedlineData = nullptr;
 
     if ( m_closeHyperlinkInThisRun )
     {
@@ -1709,9 +1709,9 @@ void DocxAttributeOutput::StartRunProperties()
 
 void DocxAttributeOutput::InitCollectedRunProperties()
 {
-    m_pFontsAttrList = 0;
-    m_pEastAsianLayoutAttrList = 0;
-    m_pCharLangAttrList = 0;
+    m_pFontsAttrList = nullptr;
+    m_pEastAsianLayoutAttrList = nullptr;
+    m_pCharLangAttrList = nullptr;
 
     // Write the elements in the spec order
     static const sal_Int32 aOrder[] =
@@ -2065,7 +2065,7 @@ void DocxAttributeOutput::WritePostponedGraphic()
          it != m_pPostponedGraphic->end();
          ++it )
         FlyFrameGraphic( it->grfNode, it->size, it->mOLEFrameFormat, it->mOLENode, it->pSdrObj );
-    m_pPostponedGraphic.reset(0);
+    m_pPostponedGraphic.reset(nullptr);
 }
 
 void DocxAttributeOutput::WritePostponedDiagram()
@@ -2074,7 +2074,7 @@ void DocxAttributeOutput::WritePostponedDiagram()
          it != m_pPostponedDiagrams->end();
          ++it )
         m_rExport.SdrExporter().writeDiagram( it->object, *(it->frame), m_anchorId++ );
-    m_pPostponedDiagrams.reset(0);
+    m_pPostponedDiagrams.reset(nullptr);
 }
 
 void DocxAttributeOutput::FootnoteEndnoteRefTag()
@@ -2228,7 +2228,7 @@ void DocxAttributeOutput::StartRuby( const SwTextNode& rNode, sal_Int32 nPos, co
     m_pSerializer->endElementNS( XML_w, XML_rubyPr );
 
     m_pSerializer->startElementNS( XML_w, XML_rt, FSEND );
-    StartRun( NULL );
+    StartRun( nullptr );
     StartRunProperties( );
     SwWW8AttrIter aAttrIt( m_rExport, rNode );
     aAttrIt.OutAttr( nPos, true );
@@ -2238,13 +2238,13 @@ void DocxAttributeOutput::StartRuby( const SwTextNode& rNode, sal_Int32 nPos, co
     m_pSerializer->singleElementNS( XML_w, XML_rStyle,
             FSNS( XML_w, XML_val ), aStyleId.getStr(), FSEND );
 
-    EndRunProperties( NULL );
+    EndRunProperties( nullptr );
     RunText( rRuby.GetText( ) );
     EndRun( );
     m_pSerializer->endElementNS( XML_w, XML_rt );
 
     m_pSerializer->startElementNS( XML_w, XML_rubyBase, FSEND );
-    StartRun( NULL );
+    StartRun( nullptr );
 }
 
 void DocxAttributeOutput::EndRuby()
@@ -2291,7 +2291,7 @@ bool DocxAttributeOutput::StartURL( const OUString& rUrl, const OUString& rTarge
 
     if ( !sMark.isEmpty() && !bBookmarkOnly )
     {
-        m_rExport.OutputField( NULL, ww::eHYPERLINK, sUrl );
+        m_rExport.OutputField( nullptr, ww::eHYPERLINK, sUrl );
     }
     else
     {
@@ -2357,7 +2357,7 @@ bool DocxAttributeOutput::EndURL(bool const)
 
 void DocxAttributeOutput::FieldVanish( const OUString& rText, ww::eField eType )
 {
-    WriteField_Impl( NULL, eType, rText, WRITEFIELD_ALL );
+    WriteField_Impl( nullptr, eType, rText, WRITEFIELD_ALL );
 }
 
 // The difference between 'Redline' and 'StartRedline'+'EndRedline' is that:
@@ -2574,7 +2574,7 @@ void DocxAttributeOutput::ParagraphStyle( sal_uInt16 nStyle )
 }
 
 static void impl_borderLine( FSHelperPtr pSerializer, sal_Int32 elementToken, const SvxBorderLine* pBorderLine, sal_uInt16 nDist,
-                             bool bWriteShadow = false, const table::BorderLine2* rStyleProps = NULL )
+                             bool bWriteShadow = false, const table::BorderLine2* rStyleProps = nullptr )
 {
     // Compute val attribute value
     // Can be one of:
@@ -2638,7 +2638,7 @@ static void impl_borderLine( FSHelperPtr pSerializer, sal_Int32 elementToken, co
                 break;
         }
     }
-    else if( rStyleProps == NULL )
+    else if( rStyleProps == nullptr )
         // no line, and no line set by the style either:
         // there is no need to write the property
         return;
@@ -2646,7 +2646,7 @@ static void impl_borderLine( FSHelperPtr pSerializer, sal_Int32 elementToken, co
     // compare the properties with the theme properties before writing them:
     // if they are equal, it means that they were style-defined and there is
     // no need to write them.
-    if( rStyleProps != NULL && pBorderLine && !pBorderLine->isEmpty() &&
+    if( rStyleProps != nullptr && pBorderLine && !pBorderLine->isEmpty() &&
             pBorderLine->GetBorderLineStyle() == rStyleProps->LineStyle &&
             pBorderLine->GetColor() == rStyleProps->Color &&
             pBorderLine->GetWidth() == convertMm100ToTwip( rStyleProps->LineWidth ) )
@@ -2779,7 +2779,7 @@ static void impl_borders( FSHelperPtr pSerializer, const SvxBoxItem& rBox, const
     for( int i = 0; i < 4; ++i, ++pBrd )
     {
         const SvxBorderLine* pLn = rBox.GetLine( *pBrd );
-        const table::BorderLine2 *aStyleProps = NULL;
+        const table::BorderLine2 *aStyleProps = nullptr;
         if( rTableStyleConf.find( *pBrd ) != rTableStyleConf.end() )
             aStyleProps = &rTableStyleConf[ *pBrd ];
 
@@ -2853,14 +2853,14 @@ static void impl_borders( FSHelperPtr pSerializer, const SvxBoxItem& rBox, const
     }
     if (bWriteInsideH)
     {
-        const table::BorderLine2 *aStyleProps = NULL;
+        const table::BorderLine2 *aStyleProps = nullptr;
         if( rTableStyleConf.find( SvxBoxItemLine::BOTTOM ) != rTableStyleConf.end() )
             aStyleProps = &rTableStyleConf[ SvxBoxItemLine::BOTTOM ];
         impl_borderLine( pSerializer, XML_insideH, rBox.GetLine(SvxBoxItemLine::BOTTOM), 0, false, aStyleProps );
     }
     if (bWriteInsideV)
     {
-        const table::BorderLine2 *aStyleProps = NULL;
+        const table::BorderLine2 *aStyleProps = nullptr;
         if( rTableStyleConf.find( SvxBoxItemLine::RIGHT ) != rTableStyleConf.end() )
             aStyleProps = &rTableStyleConf[ SvxBoxItemLine::RIGHT ];
         impl_borderLine( pSerializer, XML_insideV, rBox.GetLine(SvxBoxItemLine::RIGHT), 0, false, aStyleProps );
@@ -2870,7 +2870,7 @@ static void impl_borders( FSHelperPtr pSerializer, const SvxBoxItem& rBox, const
     }
 }
 
-static void impl_cellMargins( FSHelperPtr pSerializer, const SvxBoxItem& rBox, sal_Int32 tag, bool bUseStartEnd = false, const SvxBoxItem* pDefaultMargins = 0)
+static void impl_cellMargins( FSHelperPtr pSerializer, const SvxBoxItem& rBox, sal_Int32 tag, bool bUseStartEnd = false, const SvxBoxItem* pDefaultMargins = nullptr)
 {
     static const SvxBoxItemLine aBorders[] =
     {
@@ -2986,7 +2986,7 @@ void DocxAttributeOutput::TableCellProperties( ww8::WW8TableNodeInfoInner::Point
     const SvxBoxItem& rDefaultBox = (*tableFirstCells.rbegin())->getTableBox( )->GetFrameFormat( )->GetBox( );
     {
         // The cell borders
-        impl_borders( m_pSerializer, rBox, lcl_getTableCellBorderOptions(bEcma), NULL, m_aTableStyleConf );
+        impl_borders( m_pSerializer, rBox, lcl_getTableCellBorderOptions(bEcma), nullptr, m_aTableStyleConf );
     }
 
     TableBackgrounds( pTableTextNodeInfoInner );
@@ -3056,7 +3056,7 @@ void DocxAttributeOutput::EndTable()
         m_tableReference->m_bTableCellOpen = true;
 
     // Cleans the table helper
-    m_xTableWrt.reset(0);
+    m_xTableWrt.reset(nullptr);
 
     m_aTableStyleConf.clear();
 }
@@ -3286,7 +3286,7 @@ void DocxAttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t
                         {"lastColumn", XML_lastColumn},
                         {"noHBand", XML_noHBand},
                         {"noVBand", XML_noVBand},
-                        {0, 0}
+                        {nullptr, 0}
                     };
 
                     if (sal_Int32 nToken = DocxStringGetToken(aTokens, aAttributeList[i].Name))
@@ -3352,7 +3352,7 @@ void DocxAttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t
             XFastAttributeListRef xAttrListTablePosRef( attrListTablePos );
 
             m_pSerializer->singleElementNS( XML_w, XML_tblpPr, xAttrListTablePosRef);
-            attrListTablePos = NULL;
+            attrListTablePos = nullptr;
         }
         else
             SAL_WARN("sw.ww8", "DocxAttributeOutput::TableDefinition: unhandled property: " << aGrabBagElement->first);
@@ -3444,7 +3444,7 @@ void DocxAttributeOutput::TableDefaultBorders( ww8::WW8TableNodeInfoInner::Point
     if (m_aTableStyleConf.empty())
     {
         // the defaults of the table are taken from the top-left cell
-        impl_borders(m_pSerializer, pFrameFormat->GetBox(), lcl_getTableDefaultBorderOptions(bEcma), NULL, m_aTableStyleConf);
+        impl_borders(m_pSerializer, pFrameFormat->GetBox(), lcl_getTableDefaultBorderOptions(bEcma), nullptr, m_aTableStyleConf);
     }
 }
 
@@ -3527,7 +3527,7 @@ void DocxAttributeOutput::TableRowRedline( ww8::WW8TableNodeInfoInner::Pointer_t
     {
         SwExtraRedline* pExtraRedline = aExtraRedlineTable.GetRedline(nCurRedlinePos);
         const SwTableRowRedline* pTableRowRedline = dynamic_cast<const SwTableRowRedline*>(pExtraRedline);
-        const SwTableLine *pRedTabLine = pTableRowRedline ? &pTableRowRedline->GetTableLine() : NULL;
+        const SwTableLine *pRedTabLine = pTableRowRedline ? &pTableRowRedline->GetTableLine() : nullptr;
         if (pRedTabLine == pTabLine)
         {
             // Redline for this table row
@@ -3573,7 +3573,7 @@ void DocxAttributeOutput::TableCellRedline( ww8::WW8TableNodeInfoInner::Pointer_
     {
         SwExtraRedline* pExtraRedline = aExtraRedlineTable.GetRedline(nCurRedlinePos);
         const SwTableCellRedline* pTableCellRedline = dynamic_cast<const SwTableCellRedline*>(pExtraRedline);
-        const SwTableBox *pRedTabBox = pTableCellRedline ? &pTableCellRedline->GetTableBox() : NULL;
+        const SwTableBox *pRedTabBox = pTableCellRedline ? &pTableCellRedline->GetTableBox() : nullptr;
         if (pRedTabBox == pTabBox)
         {
             // Redline for this table cell
@@ -3619,7 +3619,7 @@ void DocxAttributeOutput::TableHeight( ww8::WW8TableNodeInfoInner::Pointer_t pTa
     if ( ATT_VAR_SIZE != rLSz.GetHeightSizeType() && rLSz.GetHeight() )
     {
         sal_Int32 nHeight = rLSz.GetHeight();
-        const char *pRule = NULL;
+        const char *pRule = nullptr;
 
         switch ( rLSz.GetHeightSizeType() )
         {
@@ -3779,7 +3779,7 @@ DocxStringTokenMap const aDefaultTokens[] = {
     {"count", XML_count},
     {"defUIPriority", XML_defUIPriority},
     {"defLockedState", XML_defLockedState},
-    {0, 0}
+    {nullptr, 0}
 };
 
 DocxStringTokenMap const aExceptionTokens[] = {
@@ -3789,7 +3789,7 @@ DocxStringTokenMap const aExceptionTokens[] = {
     {"semiHidden", XML_semiHidden},
     {"unhideWhenUsed", XML_unhideWhenUsed},
     {"qFormat", XML_qFormat},
-    {0, 0}
+    {nullptr, 0}
 };
 
 }
@@ -3825,7 +3825,7 @@ void DocxAttributeOutput::LatentStyles()
 
     XFastAttributeListRef xAttributeList(pAttributeList);
     m_pSerializer->startElementNS(XML_w, XML_latentStyles, xAttributeList);
-    pAttributeList = 0;
+    pAttributeList = nullptr;
 
     // Then handle the exceptions.
     for (sal_Int32 i = 0; i < aLsdExceptions.getLength(); ++i)
@@ -3840,7 +3840,7 @@ void DocxAttributeOutput::LatentStyles()
 
         xAttributeList = pAttributeList;
         m_pSerializer->singleElementNS(XML_w, XML_lsdException, xAttributeList);
-        pAttributeList = 0;
+        pAttributeList = nullptr;
     }
 
     m_pSerializer->endElementNS(XML_w, XML_latentStyles);
@@ -3857,7 +3857,7 @@ bool lcl_isDefaultFontSize(const SvxFontHeightItem& rFontHeight, SwDoc* pDoc)
     SwTextFormatColl* pDefaultStyle = pDoc->getIDocumentStylePoolAccess().GetTextCollFromPool(RES_POOLCOLL_STANDARD);
     if (pDefaultStyle)
     {
-        const SfxPoolItem* pItem = 0;
+        const SfxPoolItem* pItem = nullptr;
         if (pDefaultStyle->GetAttrSet().HasItem(RES_CHRATR_FONTSIZE, &pItem))
             return static_cast<const SvxFontHeightItem*>(pItem)->GetHeight() != rFontHeight.GetHeight();
     }
@@ -3921,8 +3921,8 @@ void DocxAttributeOutput::OutputDefaultItem(const SfxPoolItem& rHt)
                 const SvxBrushItem& rBrushItem = static_cast< const SvxBrushItem& >(rHt);
                 bMustWrite = (rBrushItem.GetColor() != COL_AUTO ||
                               rBrushItem.GetShadingValue() != ShadingPattern::CLEAR ||
-                              rBrushItem.GetGraphic() != NULL ||
-                              rBrushItem.GetGraphicObject() != NULL);
+                              rBrushItem.GetGraphic() != nullptr ||
+                              rBrushItem.GetGraphicObject() != nullptr);
             }
             break;
 
@@ -3989,8 +3989,8 @@ void DocxAttributeOutput::OutputDefaultItem(const SfxPoolItem& rHt)
                 const SvxBrushItem& rBrushItem = static_cast< const SvxBrushItem& >(rHt);
                 bMustWrite = (rBrushItem.GetColor() != COL_AUTO ||
                               rBrushItem.GetShadingValue() != ShadingPattern::CLEAR ||
-                              rBrushItem.GetGraphic() != NULL ||
-                              rBrushItem.GetGraphicObject() != NULL);
+                              rBrushItem.GetGraphic() != nullptr ||
+                              rBrushItem.GetGraphicObject() != nullptr);
             }
             break;
 
@@ -4174,7 +4174,7 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size
     {
         // linked image, just create the relation
         OUString aFileName;
-        pGrfNode->GetFileFilterNms( &aFileName, 0 );
+        pGrfNode->GetFileFilterNms( &aFileName, nullptr );
 
         // TODO Convert the file name to relative for better interoperability
 
@@ -4187,7 +4187,7 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size
     else
     {
         // inline, we also have to write the image itself
-        const Graphic* pGraphic = 0;
+        const Graphic* pGraphic = nullptr;
         if (pGrfNode)
             pGraphic = &pGrfNode->GetGrf();
         else
@@ -4212,7 +4212,7 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size
 
     // In case there are any grab-bag items on the graphic frame, emit them now.
     // These are always character grab-bags, as graphics are at-char or as-char in Word.
-    const SfxPoolItem* pItem = 0;
+    const SfxPoolItem* pItem = nullptr;
     if (pFrameFormat->GetAttrSet().HasItem(RES_FRMATR_GRABBAG, &pItem))
     {
         const SfxGrabBagItem* pGrabBag = static_cast<const SfxGrabBagItem*>(pItem);
@@ -4295,7 +4295,7 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size
             FSNS( XML_r, nImageType ), aRelId.getStr(),
             FSEND );
 
-    pItem = 0;
+    pItem = nullptr;
     sal_uInt32 nMode = GRAPHICDRAWMODE_STANDARD;
 
     if ( pGrfNode && SfxItemState::SET == pGrfNode->GetSwAttrSet().GetItemState(RES_GRFATR_DRAWMODE, true, &pItem))
@@ -4373,10 +4373,10 @@ void DocxAttributeOutput::WriteOLE2Obj( const SdrObject* pSdrObj, SwOLENode& rOL
         return;
     // Then we fall back to just export the object as a graphic.
     if( !m_pPostponedGraphic )
-        FlyFrameGraphic( 0, rSize, pFlyFrameFormat, &rOLENode );
+        FlyFrameGraphic( nullptr, rSize, pFlyFrameFormat, &rOLENode );
     else
         // w:drawing should not be inside w:rPr, so write it out later
-        m_pPostponedGraphic->push_back(PostponedGraphic(0, rSize, pFlyFrameFormat, &rOLENode, 0));
+        m_pPostponedGraphic->push_back(PostponedGraphic(nullptr, rSize, pFlyFrameFormat, &rOLENode, nullptr));
 }
 
 bool DocxAttributeOutput::WriteOLEChart( const SdrObject* pSdrObj, const Size& rSize )
@@ -4404,7 +4404,7 @@ bool DocxAttributeOutput::WriteOLEChart( const SdrObject* pSdrObj, const Size& r
  */
 void DocxAttributeOutput::WritePostponedChart()
 {
-    if(m_postponedChart == NULL)
+    if(m_postponedChart == nullptr)
         return;
     uno::Reference< chart2::XChartDocument > xChartDoc;
     uno::Reference< drawing::XShape > xShape( const_cast<SdrObject*>(m_postponedChart)->getUnoShape(), uno::UNO_QUERY );
@@ -4479,7 +4479,7 @@ void DocxAttributeOutput::WritePostponedChart()
         m_pSerializer->endElementNS( XML_w, XML_drawing );
 
     }
-    m_postponedChart = NULL;
+    m_postponedChart = nullptr;
 }
 
 bool DocxAttributeOutput::WriteOLEMath( const SdrObject*, const SwOLENode& rOLENode, const Size& )
@@ -4506,7 +4506,7 @@ void DocxAttributeOutput::WritePostponedMath(const SwOLENode* pPostponedMath)
 // so help it with an intermediate cast. I'm not sure what exactly the problem is, seems to be unrelated
 // to RTLD_GLOBAL, so most probably a gcc bug.
     oox::FormulaExportBase* formulaexport = dynamic_cast<oox::FormulaExportBase*>(dynamic_cast<SfxBaseModel*>(xInterface.get()));
-    assert( formulaexport != NULL );
+    assert( formulaexport != nullptr );
     if (formulaexport)
         formulaexport->writeFormulaOoxml( m_pSerializer, GetExport().GetFilter().getVersion());
 }
@@ -4699,7 +4699,7 @@ void DocxAttributeOutput::WritePostponedOLE()
     }
 
     // clear list of postponed objects
-    m_pPostponedOLEs.reset(0);
+    m_pPostponedOLEs.reset(nullptr);
 }
 
 void DocxAttributeOutput::WriteOLE( SwOLENode& rNode, const Size& rSize, const SwFlyFrameFormat* rFlyFrameFormat )
@@ -4828,7 +4828,7 @@ void DocxAttributeOutput::WriteOLE( SwOLENode& rNode, const Size& rSize, const S
     {
         // the embedded file could not be saved
         // fallback: save as an image
-        FlyFrameGraphic( 0, rSize, rFlyFrameFormat, &rNode );
+        FlyFrameGraphic( nullptr, rSize, rFlyFrameFormat, &rNode );
         return;
     }
 
@@ -4887,7 +4887,7 @@ void DocxAttributeOutput::WritePostponedVMLDrawing()
     {
         m_rExport.SdrExporter().writeVMLDrawing(it->object, *(it->frame), *(it->point));
     }
-    m_pPostponedVMLDrawings.reset(0);
+    m_pPostponedVMLDrawings.reset(nullptr);
 }
 
 void DocxAttributeOutput::WritePostponedCustomShape()
@@ -4906,7 +4906,7 @@ void DocxAttributeOutput::WritePostponedCustomShape()
             m_rExport.SdrExporter().writeDMLAndVMLDrawing(it->object, *(it->frame), *(it->point), m_anchorId++);
     }
     m_bStartedParaSdt = bStartedParaSdt;
-    m_pPostponedCustomShape.reset(0);
+    m_pPostponedCustomShape.reset(nullptr);
 }
 
 void DocxAttributeOutput::WritePostponedDMLDrawing()
@@ -4944,18 +4944,18 @@ void DocxAttributeOutput::OutputFlyFrame_Impl( const sw::Frame &rFrame, const Po
             {
                 const SdrObject* pSdrObj = rFrame.GetFrameFormat().FindRealSdrObject();
                 const SwNode *pNode = rFrame.GetContent();
-                const SwGrfNode *pGrfNode = pNode ? pNode->GetGrfNode() : 0;
+                const SwGrfNode *pGrfNode = pNode ? pNode->GetGrfNode() : nullptr;
                 if ( pGrfNode )
                 {
                     if (!m_pPostponedGraphic)
                     {
                         m_bPostponedProcessingFly = false ;
-                        FlyFrameGraphic( pGrfNode, rFrame.GetLayoutSize(), 0, 0, pSdrObj);
+                        FlyFrameGraphic( pGrfNode, rFrame.GetLayoutSize(), nullptr, nullptr, pSdrObj);
                     }
                     else // we are writing out attributes, but w:drawing should not be inside w:rPr,
                     {    // so write it out later
                         m_bPostponedProcessingFly = true ;
-                        m_pPostponedGraphic->push_back(PostponedGraphic(pGrfNode, rFrame.GetLayoutSize(), 0, 0, pSdrObj));
+                        m_pPostponedGraphic->push_back(PostponedGraphic(pGrfNode, rFrame.GetLayoutSize(), nullptr, nullptr, pSdrObj));
                     }
                 }
             }
@@ -5121,7 +5121,7 @@ void DocxAttributeOutput::WriteOutliner(const OutlinerParaObject& rParaObj)
         StartParagraphProperties();
         aAttrIter.OutParaAttr(false);
         SfxItemSet aParagraphMarkerProperties(m_rExport.m_pDoc->GetAttrPool());
-        EndParagraphProperties(aParagraphMarkerProperties, 0, 0, 0);
+        EndParagraphProperties(aParagraphMarkerProperties, nullptr, nullptr, nullptr);
 
         do {
             const sal_Int32 nNextAttr = std::min(aAttrIter.WhereNext(), nEnd);
@@ -5297,7 +5297,7 @@ void DocxAttributeOutput::StartStyle( const OUString& rName, StyleType eType,
             SAL_WARN("sw.ww8", "Unhandled style property: " << rGrabBag[i].Name);
     }
 
-    const char* pType = 0;
+    const char* pType = nullptr;
     switch (eType)
     {
         case STYLE_TYPE_PARA: pType = "paragraph"; break;
@@ -5746,7 +5746,7 @@ void DocxAttributeOutput::SectionType( sal_uInt8 nBreakCode )
     /*  break code:   0 No break, 1 New column
         2 New page, 3 Even page, 4 Odd page
         */
-    const char* pType = NULL;
+    const char* pType = nullptr;
     switch ( nBreakCode )
     {
         case 1:  pType = "nextColumn"; break;
@@ -5822,7 +5822,7 @@ void DocxAttributeOutput::FontCharset( sal_uInt8 nCharSet, rtl_TextEncoding nEnc
 
 void DocxAttributeOutput::FontFamilyType( FontFamily eFamily ) const
 {
-    const char *pFamily = NULL;
+    const char *pFamily = nullptr;
     switch ( eFamily )
     {
         case FAMILY_ROMAN:      pFamily = "roman"; break;
@@ -5841,7 +5841,7 @@ void DocxAttributeOutput::FontFamilyType( FontFamily eFamily ) const
 
 void DocxAttributeOutput::FontPitchType( FontPitch ePitch ) const
 {
-    const char *pPitch = NULL;
+    const char *pPitch = nullptr;
     switch ( ePitch )
     {
         case PITCH_VARIABLE: pPitch = "variable"; break;
@@ -6049,7 +6049,7 @@ void DocxAttributeOutput::NumberingLevel( sal_uInt8 nLevel,
                 FSEND );
 
     // suffix
-    const char *pSuffix = NULL;
+    const char *pSuffix = nullptr;
     switch ( nFollow )
     {
         case 1:  pSuffix = "space";   break;
@@ -6196,7 +6196,7 @@ void DocxAttributeOutput::CharColor( const SvxColorItem& rColor )
 
     aColorString = msfilter::util::ConvertColor( aColor );
 
-    const char* pExistingValue(NULL);
+    const char* pExistingValue(nullptr);
     if (m_pColorAttrList.is() && m_pColorAttrList->getAsChar(FSNS(XML_w, XML_val), pExistingValue))
     {
         assert(aColorString.equalsL(pExistingValue, rtl_str_getLength(pExistingValue)));
@@ -6676,7 +6676,7 @@ void DocxAttributeOutput::WritePostitFields()
         // Check for the text object existing, it seems that it can be NULL when saving a newly created
         // comment without giving focus back to the main document. As GetText() is empty in that case as well,
         // that is probably a bug in the Writer core.
-        if( f->GetTextObject() != NULL )
+        if( f->GetTextObject() != nullptr )
             GetExport().WriteOutliner( *f->GetTextObject(), TXT_ATN );
         m_pSerializer->endElementNS( XML_w, XML_comment );
     }
@@ -6695,17 +6695,17 @@ bool DocxAttributeOutput::DropdownField( const SwField* pField )
 
 bool DocxAttributeOutput::PlaceholderField( const SwField* pField )
 {
-    assert( pendingPlaceholder == NULL );
+    assert( pendingPlaceholder == nullptr );
     pendingPlaceholder = pField;
     return false; // do not expand
 }
 
 void DocxAttributeOutput::WritePendingPlaceholder()
 {
-    if( pendingPlaceholder == NULL )
+    if( pendingPlaceholder == nullptr )
         return;
     const SwField* pField = pendingPlaceholder;
-    pendingPlaceholder = NULL;
+    pendingPlaceholder = nullptr;
     m_pSerializer->startElementNS( XML_w, XML_sdt, FSEND );
     m_pSerializer->startElementNS( XML_w, XML_sdtPr, FSEND );
     if( !pField->GetPar2().isEmpty())
@@ -6937,7 +6937,7 @@ void DocxAttributeOutput::WriteFootnoteEndnotePr( ::sax_fastparser::FSHelperPtr 
     const SwEndNoteInfo& info, int listtag )
 {
     fs->startElementNS( XML_w, tag, FSEND );
-    const char* fmt = NULL;
+    const char* fmt = nullptr;
     switch( info.aFormat.GetNumberingType())
     {
         case SVX_NUM_CHARS_UPPER_LETTER_N: // fall through, map to upper letters
@@ -6968,7 +6968,7 @@ void DocxAttributeOutput::WriteFootnoteEndnotePr( ::sax_fastparser::FSHelperPtr 
         default:
             break; // no format
     }
-    if( fmt != NULL )
+    if( fmt != nullptr )
         fs->singleElementNS( XML_w, XML_numFmt, FSNS( XML_w, XML_val ), fmt, FSEND );
     if( info.nFootnoteOffset != 0 )
         fs->singleElementNS( XML_w, XML_numStart, FSNS( XML_w, XML_val ),
@@ -7021,10 +7021,10 @@ void DocxAttributeOutput::ParaAdjust( const SvxAdjustItem& rAdjust )
 
     const SfxItemSet* pItems = GetExport().GetCurItemSet();
     const SvxFrameDirectionItem* rFrameDir = pItems?
-        static_cast< const SvxFrameDirectionItem* >( pItems->GetItem( RES_FRAMEDIR ) ): NULL;
+        static_cast< const SvxFrameDirectionItem* >( pItems->GetItem( RES_FRAMEDIR ) ): nullptr;
 
     short nDir = FRMDIR_ENVIRONMENT;
-    if( rFrameDir != NULL )
+    if( rFrameDir != nullptr )
         nDir = rFrameDir->GetValue();
     if ( nDir == FRMDIR_ENVIRONMENT )
         nDir = GetExport( ).GetDefaultFrameDirection( );
@@ -7269,7 +7269,7 @@ void DocxAttributeOutput::FormatFrameSize( const SwFormatFrmSize& rSize )
         attrList->add( FSNS( XML_w, XML_h ), OString::number( rSize.GetHeight( ) ) );
 
         XFastAttributeListRef xAttrList( attrList );
-        attrList = NULL;
+        attrList = nullptr;
 
         m_pSerializer->singleElementNS( XML_w, XML_pgSz, xAttrList );
     }
@@ -8458,7 +8458,7 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, FSHelperPtr pSeri
       m_pFootnotesList( new ::docx::FootnotesList() ),
       m_pEndnotesList( new ::docx::FootnotesList() ),
       m_footnoteEndnoteRefTag( 0 ),
-      m_pRedlineData( NULL ),
+      m_pRedlineData( nullptr ),
       m_nRedlineId( 0 ),
       m_bOpenedSectPr( false ),
       m_bHadSectPr(false),
@@ -8468,7 +8468,7 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, FSHelperPtr pSeri
       m_sFieldBkm( ),
       m_nNextBookmarkId( 0 ),
       m_nNextAnnotationMarkId( 0 ),
-      m_pCurrentFrame( NULL ),
+      m_pCurrentFrame( nullptr ),
       m_bParagraphOpened( false ),
       m_bParagraphFrameOpen( false ),
       m_bIsFirstParagraph( true ),
@@ -8481,8 +8481,8 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, FSHelperPtr pSeri
       m_startedHyperlink( false ),
       m_nHyperLinkCount(0),
       m_nFieldsInHyperlink( 0 ),
-      m_postponedChart( NULL ),
-      pendingPlaceholder( NULL ),
+      m_postponedChart( nullptr ),
+      pendingPlaceholder( nullptr ),
       m_postitFieldsMaxId( 0 ),
       m_anchorId( 1 ),
       m_nextFontId( 1 ),

@@ -118,7 +118,7 @@ PageSizeControl::PageSizeControl(
             mpSizeValueSet->AddItem(
                 SvxPaperInfo::GetName( maPaperList[ nPaperIdx ] ),
                 aItemText2,
-                0 );
+                nullptr );
 
             if ( maPaperList[ nPaperIdx ] == mePaper )
             {

@@ -56,7 +56,7 @@ namespace sw
 
 DocumentDrawModelManager::DocumentDrawModelManager(SwDoc& i_rSwdoc)
     : m_rDoc(i_rSwdoc)
-    , mpDrawModel(0)
+    , mpDrawModel(nullptr)
     , mnHeaven(0)
     , mnHell(0)
     , mnControls(0)
@@ -187,7 +187,7 @@ void DocumentDrawModelManager::ReleaseDrawModel()
     {
         // !! Also maintain the code in the sw3io for inserting documents!!
 
-        delete mpDrawModel; mpDrawModel = 0;
+        delete mpDrawModel; mpDrawModel = nullptr;
 //UUUU
 //      SfxItemPool *pSdrPool = GetAttrPool().GetSecondaryPool();
 //

@@ -51,7 +51,7 @@ sal_Int32 SAL_CALL SwAccessibleNoTextHyperlink::getAccessibleActionCount()
 
     SwFormatURL aURL( GetFormat()->GetURL() );
     ImageMap* pMap = aURL.GetMap();
-    if( pMap != NULL )
+    if( pMap != nullptr )
     {
         return pMap->GetIMapObjectCount();
     }
@@ -74,7 +74,7 @@ sal_Bool SAL_CALL SwAccessibleNoTextHyperlink::doAccessibleAction( sal_Int32 nIn
     bool bRet = false;
     SwFormatURL aURL( GetFormat()->GetURL() );
     ImageMap* pMap = aURL.GetMap();
-    if( pMap != NULL )
+    if( pMap != nullptr )
     {
         IMapObject* pMapObj = pMap->GetIMapObject(nIndex);
         if (!pMapObj->GetURL().isEmpty())
@@ -115,7 +115,7 @@ OUString SAL_CALL SwAccessibleNoTextHyperlink::getAccessibleActionDescription(
 
     SwFormatURL aURL( GetFormat()->GetURL() );
     ImageMap* pMap = aURL.GetMap();
-    if( pMap != NULL )
+    if( pMap != nullptr )
     {
         IMapObject* pMapObj = pMap->GetIMapObject(nIndex);
         if (!pMapObj->GetDesc().isEmpty())
@@ -143,7 +143,7 @@ Reference< XAccessibleKeyBinding > SAL_CALL
     bool bIsValid = false;
     SwFormatURL aURL( GetFormat()->GetURL() );
     ImageMap* pMap = aURL.GetMap();
-    if( pMap != NULL )
+    if( pMap != nullptr )
     {
         IMapObject* pMapObj = pMap->GetIMapObject(nIndex);
         if (!pMapObj->GetURL().isEmpty())
@@ -200,7 +200,7 @@ Any SAL_CALL SwAccessibleNoTextHyperlink::getAccessibleActionObject(
     SwFormatURL aURL( GetFormat()->GetURL() );
     OUString retText;
     ImageMap* pMap = aURL.GetMap();
-    if( pMap != NULL )
+    if( pMap != nullptr )
     {
         IMapObject* pMapObj = pMap->GetIMapObject(nIndex);
         if (!pMapObj->GetURL().isEmpty())

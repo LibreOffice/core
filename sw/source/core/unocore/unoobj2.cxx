@@ -209,8 +209,8 @@ void CollectFrameAtNode( const SwNodeIndex& rIdx,
     const SwContentFrm* pCFrm;
     const SwContentNode* pCNd;
     if( pDoc->getIDocumentLayoutAccess().GetCurrentViewShell() &&
-        0 != (pCNd = rIdx.GetNode().GetContentNode()) &&
-        0 != (pCFrm = pCNd->getLayoutFrm( pDoc->getIDocumentLayoutAccess().GetCurrentLayout())) )
+        nullptr != (pCNd = rIdx.GetNode().GetContentNode()) &&
+        nullptr != (pCFrm = pCNd->getLayoutFrm( pDoc->getIDocumentLayoutAccess().GetCurrentLayout())) )
     {
         lcl_CollectFrameAtNodeWithLayout(pDoc, pCFrm, rFrames, nChkType);
     }
@@ -224,7 +224,7 @@ void CollectFrameAtNode( const SwNodeIndex& rIdx,
             const SwFormatAnchor& rAnchor = pFormat->GetAnchor();
             const SwPosition* pAnchorPos;
             if( rAnchor.GetAnchorId() == nChkType &&
-                0 != (pAnchorPos = rAnchor.GetContentAnchor()) &&
+                nullptr != (pAnchorPos = rAnchor.GetContentAnchor()) &&
                     pAnchorPos->nNode == rIdx )
             {
 
@@ -340,7 +340,7 @@ void SwUnoCursorHelper::SetCrsrAttr(SwPaM & rPam,
     UnoActionContext aAction(pDoc);
     if (rPam.GetNext() != &rPam)    // Ring of Cursors
     {
-        pDoc->GetIDocumentUndoRedo().StartUndo(UNDO_INSATTR, NULL);
+        pDoc->GetIDocumentUndoRedo().StartUndo(UNDO_INSATTR, nullptr);
 
         for(SwPaM& rCurrent : rPam.GetRingContainer())
         {
@@ -352,7 +352,7 @@ void SwUnoCursorHelper::SetCrsrAttr(SwPaM & rPam,
             }
         }
 
-        pDoc->GetIDocumentUndoRedo().EndUndo(UNDO_INSATTR, NULL);
+        pDoc->GetIDocumentUndoRedo().EndUndo(UNDO_INSATTR, nullptr);
     }
     else
     {
@@ -540,7 +540,7 @@ lcl_FindTopLevelTable(
 
     SwTableNode * pLast = pTableNode;
     for (SwTableNode* pTmp = pLast;
-         pTmp != NULL  &&  &pTmp->GetTable() != pOwnTable;  /* we must not go up higher than the own table! */
+         pTmp != nullptr  &&  &pTmp->GetTable() != pOwnTable;  /* we must not go up higher than the own table! */
          pTmp = pTmp->StartOfSectionNode()->FindTableNode() )
     {
         pLast = pTmp;
@@ -599,7 +599,7 @@ SwXParagraphEnumerationImpl::NextElement_Impl() throw (container::NoSuchElementE
         }
         if (m_nEndIndex < aNewCrsr->Start()->nNode.GetIndex())
         {
-            return 0;
+            return nullptr;
         }
     }
 
@@ -616,7 +616,7 @@ SwXParagraphEnumerationImpl::NextElement_Impl() throw (container::NoSuchElementE
             rUnoCrsr.GetPoint()->nNode = pTableNode->EndOfSectionIndex();
             if (!rUnoCrsr.Move(fnMoveForward, fnGoNode))
             {
-                return 0;
+                return nullptr;
             }
             bInTable = true;
         }
@@ -691,15 +691,15 @@ public:
     ::sw::mark::IMark * m_pMark;
 
     Impl(   SwDoc & rDoc, const enum RangePosition eRange,
-            SwFrameFormat *const pTableFormat = 0,
-            const uno::Reference< text::XText > & xParent = 0)
+            SwFrameFormat *const pTableFormat = nullptr,
+            const uno::Reference< text::XText > & xParent = nullptr)
         : SwClient()
         , m_rPropSet(*aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_CURSOR))
         , m_eRangePosition(eRange)
         , m_rDoc(rDoc)
         , m_xParentText(xParent)
         , m_ObjectDepend(this, pTableFormat)
-        , m_pMark(0)
+        , m_pMark(nullptr)
     {
     }
 
@@ -714,7 +714,7 @@ public:
         if (m_pMark)
         {
             m_rDoc.getIDocumentMarkAccess()->deleteMark(m_pMark);
-            m_pMark = 0;
+            m_pMark = nullptr;
         }
     }
 
@@ -727,7 +727,7 @@ protected:
 
 void SwXTextRange::Impl::Modify(const SfxPoolItem *pOld, const SfxPoolItem *pNew)
 {
-    const bool bAlreadyRegistered = 0 != GetRegisteredIn();
+    const bool bAlreadyRegistered = nullptr != GetRegisteredIn();
     ClientModify(this, pOld, pNew);
     if (m_ObjectDepend.GetRegisteredIn())
     {
@@ -748,14 +748,14 @@ void SwXTextRange::Impl::Modify(const SfxPoolItem *pOld, const SfxPoolItem *pNew
     }
     if (!GetRegisteredIn())
     {
-        m_pMark = 0;
+        m_pMark = nullptr;
     }
 }
 
 SwXTextRange::SwXTextRange(SwPaM& rPam,
         const uno::Reference< text::XText > & xParent,
         const enum RangePosition eRange)
-    : m_pImpl( new SwXTextRange::Impl(*rPam.GetDoc(), eRange, 0, xParent) )
+    : m_pImpl( new SwXTextRange::Impl(*rPam.GetDoc(), eRange, nullptr, xParent) )
 {
     SetPositions(rPam);
 }
@@ -811,11 +811,11 @@ throw (uno::RuntimeException)
     }
 
     const SwPosition aPos(GetDoc().GetNodes().GetEndOfContent());
-    SwCursor aCursor(aPos, 0, false);
+    SwCursor aCursor(aPos, nullptr, false);
     if (GetPositions(aCursor))
     {
         UnoActionContext aAction(& m_pImpl->m_rDoc);
-        m_pImpl->m_rDoc.GetIDocumentUndoRedo().StartUndo(UNDO_INSERT, NULL);
+        m_pImpl->m_rDoc.GetIDocumentUndoRedo().StartUndo(UNDO_INSERT, nullptr);
         if (aCursor.HasMark())
         {
             m_pImpl->m_rDoc.getIDocumentContentOperations().DeleteAndJoin(aCursor);
@@ -830,7 +830,7 @@ throw (uno::RuntimeException)
             aCursor.Left(rText.getLength(), CRSR_SKIP_CHARS, false, false);
         }
         SetPositions(aCursor);
-        m_pImpl->m_rDoc.GetIDocumentUndoRedo().EndUndo(UNDO_INSERT, NULL);
+        m_pImpl->m_rDoc.GetIDocumentUndoRedo().EndUndo(UNDO_INSERT, nullptr);
     }
 }
 
@@ -1015,11 +1015,11 @@ bool XTextRangeToSwPaM( SwUnoInternalPaM & rToFill,
     bool bRet = false;
 
     uno::Reference<lang::XUnoTunnel> xRangeTunnel( xTextRange, uno::UNO_QUERY);
-    SwXTextRange* pRange = 0;
-    OTextCursorHelper* pCursor = 0;
-    SwXTextPortion* pPortion = 0;
-    SwXText* pText = 0;
-    SwXParagraph* pPara = 0;
+    SwXTextRange* pRange = nullptr;
+    OTextCursorHelper* pCursor = nullptr;
+    SwXTextPortion* pPortion = nullptr;
+    SwXText* pText = nullptr;
+    SwXParagraph* pPara = nullptr;
     if(xRangeTunnel.is())
     {
         pRange  = ::sw::UnoTunnelGetImplementation<SwXTextRange>(xRangeTunnel);
@@ -1057,9 +1057,9 @@ bool XTextRangeToSwPaM( SwUnoInternalPaM & rToFill,
         else
         {
             SwDoc* const pDoc = (pCursor) ? pCursor->GetDoc()
-                : ((pPortion) ? pPortion->GetCursor().GetDoc() : 0);
+                : ((pPortion) ? pPortion->GetCursor().GetDoc() : nullptr);
             const SwPaM* const pUnoCrsr = (pCursor) ? pCursor->GetPaM()
-                : ((pPortion) ? &pPortion->GetCursor() : 0);
+                : ((pPortion) ? &pPortion->GetCursor() : nullptr);
             if (pUnoCrsr && pDoc == rToFill.GetDoc())
             {
                 OSL_ENSURE(!pUnoCrsr->IsMultiSelection(),
@@ -1160,7 +1160,7 @@ CreateParentXText(SwDoc & rDoc, const SwPosition& rPos)
         case SwFlyStartNode:
         {
             SwFrameFormat *const pFormat = pSttNode->GetFlyFormat();
-            if (0 != pFormat)
+            if (nullptr != pFormat)
             {
                 xParentText.set(SwXTextFrame::CreateXTextFrame(rDoc, pFormat),
                         uno::UNO_QUERY);
@@ -1178,7 +1178,7 @@ CreateParentXText(SwDoc & rDoc, const SwPosition& rPos)
                 const SwFrameFormat* pFrameFormatMaster = &rDesc.GetMaster();
                 const SwFrameFormat* pFrameFormatLeft = &rDesc.GetLeft();
 
-                SwFrameFormat* pHeadFootFormat = 0;
+                SwFrameFormat* pHeadFootFormat = nullptr;
                 if (!lcl_IsStartNodeInFormat(bHeader, pSttNode, pFrameFormatMaster,
                             pHeadFootFormat))
                 {
@@ -1580,7 +1580,7 @@ void SwUnoCursorHelper::SetString(SwCursor & rCursor, const OUString& rString)
     // Start/EndAction
     SwDoc *const pDoc = rCursor.GetDoc();
     UnoActionContext aAction(pDoc);
-    pDoc->GetIDocumentUndoRedo().StartUndo(UNDO_INSERT, NULL);
+    pDoc->GetIDocumentUndoRedo().StartUndo(UNDO_INSERT, nullptr);
     if (rCursor.HasMark())
     {
         pDoc->getIDocumentContentOperations().DeleteAndJoin(rCursor);
@@ -1594,7 +1594,7 @@ void SwUnoCursorHelper::SetString(SwCursor & rCursor, const OUString& rString)
         SwUnoCursorHelper::SelectPam(rCursor, true);
         rCursor.Left(rString.getLength(), CRSR_SKIP_CHARS, false, false);
     }
-    pDoc->GetIDocumentUndoRedo().EndUndo(UNDO_INSERT, NULL);
+    pDoc->GetIDocumentUndoRedo().EndUndo(UNDO_INSERT, nullptr);
 }
 
 struct SwXParaFrameEnumerationImpl final : public SwXParaFrameEnumeration

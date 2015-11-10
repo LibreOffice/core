@@ -64,7 +64,7 @@ public:
                                 SwDocDisplayItem( const SwViewOption& rVOpt,
                                                                 sal_uInt16 nWhich );
 
-    virtual SfxPoolItem*        Clone( SfxItemPool *pPool = 0 ) const override;
+    virtual SfxPoolItem*        Clone( SfxItemPool *pPool = nullptr ) const override;
     virtual bool                operator==( const SfxPoolItem& ) const override;
     void                        operator=( const SwDocDisplayItem& );
     void                        FillViewOptions( SwViewOption& rVOpt) const;
@@ -95,7 +95,7 @@ public:
                             SwElemItem(const SwElemItem& rElemItem);
                             SwElemItem(const SwViewOption& rVOpt, sal_uInt16 nWhich);
 
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const override;
+    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
     virtual bool            operator==( const SfxPoolItem& ) const override;
     void                    operator=( const SwElemItem& );
 
@@ -117,7 +117,7 @@ public:
     SwAddPrinterItem( sal_uInt16 nWhich, const SwPrintData& rPrtData );
     SwAddPrinterItem( const SwAddPrinterItem& rAddPrinterItem);
 
-    virtual SfxPoolItem* Clone( SfxItemPool *pPool = 0 ) const override;
+    virtual SfxPoolItem* Clone( SfxItemPool *pPool = nullptr ) const override;
 
     virtual bool         operator==( const SfxPoolItem& ) const override;
 
@@ -135,7 +135,7 @@ public:
     SwShadowCursorItem( const SwShadowCursorItem& rElemItem );
     SwShadowCursorItem( const SwViewOption& rVOpt, sal_uInt16 nWhich );
 
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const override;
+    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
     virtual bool            operator==( const SfxPoolItem& ) const override;
     void                    operator=( const SwShadowCursorItem& );
 
@@ -173,7 +173,7 @@ public:
                                             SfxPoolItem(_nWhich){};
                             SwTestItem( const SwTestItem& pTestItem);
 
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const override;
+    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
     virtual bool            operator==( const SfxPoolItem& ) const override;
 
 };

@@ -265,7 +265,7 @@ bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
                 nFontHeightWhich = RES_CHRATR_CTL_FONTSIZE;
                 eLanguage = static_cast<const SvxLanguageItem&>(m_pDoc->GetDefault( RES_CHRATR_CTL_LANGUAGE )).GetLanguage();
             }
-            SwTextFormatColl *pColl = 0;
+            SwTextFormatColl *pColl = nullptr;
             if(!pStdFont->IsFontDefault(aFontIdPoolId[nIdx]))
             {
                 sEntry = pStdFont->GetFontFor(aFontIdPoolId[nIdx]);
@@ -465,10 +465,10 @@ void SwDocShell::RemoveLink()
         }
         sal_Int8 nRefCt = static_cast< sal_Int8 >(m_pDoc->release());
         m_pDoc->SetOle2Link(Link<bool,void>());
-        m_pDoc->SetDocShell( 0 );
+        m_pDoc->SetDocShell( nullptr );
         if( !nRefCt )
             delete m_pDoc;
-        m_pDoc = 0;       // we don't have the Doc anymore!!
+        m_pDoc = nullptr;       // we don't have the Doc anymore!!
     }
 }
 void SwDocShell::InvalidateModel()
@@ -565,7 +565,7 @@ bool  SwDocShell::Load( SfxMedium& rMedium )
         }
 
         UpdateFontList();
-        InitDrawModelAndDocShell(this, m_pDoc ? m_pDoc->getIDocumentDrawModelAccess().GetDrawModel() : 0);
+        InitDrawModelAndDocShell(this, m_pDoc ? m_pDoc->getIDocumentDrawModelAccess().GetDrawModel() : nullptr);
 
         SetError( nErr, OSL_LOG_PREFIX );
         bRet = !IsError( nErr );
@@ -631,7 +631,7 @@ void SwDocShell::SubInitNew()
     OSL_ENSURE( !m_xBasePool.is(), "who hasn't destroyed their Pool?" );
     m_xBasePool = new SwDocStyleSheetPool( *m_pDoc, SfxObjectCreateMode::ORGANIZER == GetCreateMode() );
     UpdateFontList();
-    InitDrawModelAndDocShell(this, m_pDoc ? m_pDoc->getIDocumentDrawModelAccess().GetDrawModel() : 0);
+    InitDrawModelAndDocShell(this, m_pDoc ? m_pDoc->getIDocumentDrawModelAccess().GetDrawModel() : nullptr);
 
     m_pDoc->getIDocumentSettingAccess().setLinkUpdateMode( GLOBALSETTING );
     m_pDoc->getIDocumentSettingAccess().setFieldUpdateFlags( AUTOUPD_GLOBALSETTING );

@@ -27,7 +27,7 @@
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
 
-SwSmartTagMgr* SwSmartTagMgr::mpTheSwSmartTagMgr = 0;
+SwSmartTagMgr* SwSmartTagMgr::mpTheSwSmartTagMgr = nullptr;
 
 SwSmartTagMgr& SwSmartTagMgr::Get()
 {

@@ -77,9 +77,9 @@ namespace TextFormatCollFunc
 
     SwNumRule* GetNumRule( SwTextFormatColl& rTextFormatColl )
     {
-        SwNumRule* pNumRule( 0 );
+        SwNumRule* pNumRule( nullptr );
 
-        const SwNumRuleItem* pNumRuleItem( 0 );
+        const SwNumRuleItem* pNumRuleItem( nullptr );
         rTextFormatColl.GetItemState( RES_PARATR_NUMRULE, false, reinterpret_cast<const SfxPoolItem**>(&pNumRuleItem) );
         if ( pNumRuleItem )
         {
@@ -121,14 +121,14 @@ void SwTextFormatColl::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew 
     }
 
     bool bNewParent( false ); // #i66431# - adjust type of <bNewParent>
-    const SvxULSpaceItem *pNewULSpace = 0, *pOldULSpace = 0;
-    const SvxLRSpaceItem *pNewLRSpace = 0, *pOldLRSpace = 0;
-    const SvxFontHeightItem* aFontSizeArr[3] = {0,0,0};
+    const SvxULSpaceItem *pNewULSpace = nullptr, *pOldULSpace = nullptr;
+    const SvxLRSpaceItem *pNewLRSpace = nullptr, *pOldLRSpace = nullptr;
+    const SvxFontHeightItem* aFontSizeArr[3] = {nullptr,nullptr,nullptr};
     // #i70223#
     const bool bAssignedToListLevelOfOutlineStyle(IsAssignedToListLevelOfOutlineStyle());
-    const SwNumRuleItem* pNewNumRuleItem( 0L );
+    const SwNumRuleItem* pNewNumRuleItem( nullptr );
 
-    const SwAttrSetChg *pNewChgSet = 0,  *pOldChgSet = 0;
+    const SwAttrSetChg *pNewChgSet = nullptr,  *pOldChgSet = nullptr;
 
     switch( pOld ? pOld->Which() : pNew ? pNew->Which() : 0 )
     {
@@ -239,7 +239,7 @@ void SwTextFormatColl::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew 
             if( bChg )
             {
                 SetFormatAttr( aNew );
-                bContinue = 0 != pOldChgSet || bNewParent;
+                bContinue = nullptr != pOldChgSet || bNewParent;
             }
             // We set it to absolute -> do not propagate it further, unless
             // we set it!
@@ -271,7 +271,7 @@ void SwTextFormatColl::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew 
         if( bChg )
         {
             SetFormatAttr( aNew );
-            bContinue = 0 != pOldChgSet || bNewParent;
+            bContinue = nullptr != pOldChgSet || bNewParent;
         }
         // We set it to absolute -> do not propagate it further, unless
         // we set it!
@@ -306,7 +306,7 @@ void SwTextFormatColl::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew 
                 if( nTmp != aNew.GetHeight() )
                 {
                     SetFormatAttr( aNew );
-                    bContinue = 0 != pOldChgSet || bNewParent;
+                    bContinue = nullptr != pOldChgSet || bNewParent;
                 }
                 // We set it to absolute -> do not propagate it further, unless
                 // we set it!
@@ -614,7 +614,7 @@ void SwConditionTextFormatColl::SetConditions( const SwFormatCollConditions& rCn
     {
         SwTextFormatColl *const pTmpColl = rpFnd->GetTextFormatColl()
                             ? rDoc.CopyTextColl( *rpFnd->GetTextFormatColl() )
-                            : 0;
+                            : nullptr;
         std::unique_ptr<SwCollCondition> pNew;
         if (USRFLD_EXPRESSION & rpFnd->GetCondition())
             pNew.reset(new SwCollCondition( pTmpColl, rpFnd->GetCondition(),
@@ -654,7 +654,7 @@ void SwTextFormatColl::AssignToListLevelOfOutlineStyle(const int nAssignedListLe
     // #i100277#
     SwIterator<SwTextFormatColl,SwFormatColl> aIter( *this );
     SwTextFormatColl* pDerivedTextFormatColl = aIter.First();
-    while ( pDerivedTextFormatColl != 0 )
+    while ( pDerivedTextFormatColl != nullptr )
     {
         if ( !pDerivedTextFormatColl->IsAssignedToListLevelOfOutlineStyle() )
         {

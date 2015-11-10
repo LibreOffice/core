@@ -67,7 +67,7 @@ bool SwFlyPortion::Format( SwTextFormatInfo &rInf )
     }
 
     // resetting
-    rInf.SetFly( 0 );
+    rInf.SetFly( nullptr );
     rInf.Width( rInf.RealWidth() );
     rInf.GetParaPortion()->SetFly();
 
@@ -149,8 +149,8 @@ bool SwFlyCntPortion::Format( SwTextFormatInfo &rInf )
  */
 void SwTextFrm::MoveFlyInCnt( SwTextFrm *pNew, sal_Int32 nStart, sal_Int32 nEnd )
 {
-    SwSortedObjs *pObjs = 0L;
-    if ( 0 != (pObjs = GetDrawObjs()) )
+    SwSortedObjs *pObjs = nullptr;
+    if ( nullptr != (pObjs = GetDrawObjs()) )
     {
         for ( size_t i = 0; GetDrawObjs() && i < pObjs->size(); ++i )
         {
@@ -186,7 +186,7 @@ sal_Int32 SwTextFrm::CalcFlyPos( SwFrameFormat* pSearch )
     OSL_ENSURE( pHints, "CalcFlyPos: Why me?" );
     if( !pHints )
         return COMPLETE_STRING;
-    SwTextAttr* pFound = NULL;
+    SwTextAttr* pFound = nullptr;
     for ( size_t i = 0; i < pHints->Count(); ++i )
     {
         SwTextAttr *pHt = pHints->Get( i );
@@ -315,7 +315,7 @@ void SwFlyCntPortion::SetBase( const SwTextFrm& rFrm, const Point &rBase,
 {
     // Use new class to position object
     // Determine drawing object
-    SdrObject* pSdrObj = 0L;
+    SdrObject* pSdrObj = nullptr;
     if( bDraw )
     {
         // Determine drawing object ('master' or 'virtual') by frame

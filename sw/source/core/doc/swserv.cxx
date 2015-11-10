@@ -59,7 +59,7 @@ bool SwServerObject::GetData( uno::Any & rData,
 
     if( xWrt.Is() )
     {
-        SwPaM* pPam = 0;
+        SwPaM* pPam = nullptr;
         switch( eType )
         {
         case BOOKMARK_SERVER:
@@ -111,7 +111,7 @@ void SwServerObject::SendDataChanged( const SwPosition& rPos )
     if( HasDataLinks() )
     {
         bool bCall = false;
-        const SwStartNode* pNd = 0;
+        const SwStartNode* pNd = nullptr;
         switch( eType )
         {
             case BOOKMARK_SERVER:
@@ -135,7 +135,7 @@ void SwServerObject::SendDataChanged( const SwPosition& rPos )
         if( bCall )
         {
             // Recognize recursions and flag them
-            IsLinkInServer( 0 );
+            IsLinkInServer( nullptr );
             SvLinkSource::NotifyDataChanged();
         }
     }
@@ -147,7 +147,7 @@ void SwServerObject::SendDataChanged( const SwPaM& rRange )
     if( HasDataLinks() )
     {
         bool bCall = false;
-        const SwStartNode* pNd = 0;
+        const SwStartNode* pNd = nullptr;
         const SwPosition* pStt = rRange.Start(), *pEnd = rRange.End();
         switch( eType )
         {
@@ -173,7 +173,7 @@ void SwServerObject::SendDataChanged( const SwPaM& rRange )
         if( bCall )
         {
             // Recognize recursions and flag them
-            IsLinkInServer( 0 );
+            IsLinkInServer( nullptr );
             SvLinkSource::NotifyDataChanged();
         }
     }
@@ -184,8 +184,8 @@ bool SwServerObject::IsLinkInServer( const SwBaseLink* pChkLnk ) const
     sal_uLong nSttNd = 0, nEndNd = 0;
     sal_Int32 nStt = 0;
     sal_Int32 nEnd = 0;
-    const SwNode* pNd = 0;
-    const SwNodes* pNds = 0;
+    const SwNode* pNd = nullptr;
+    const SwNodes* pNds = nullptr;
 
     switch( eType )
     {
@@ -260,8 +260,8 @@ void SwServerObject::SetNoServer()
         ::sw::mark::DdeBookmark* const pDdeBookmark = dynamic_cast< ::sw::mark::DdeBookmark* >(CNTNT_TYPE.pBkmk);
         if(pDdeBookmark)
         {
-            CNTNT_TYPE.pBkmk = 0, eType = NONE_SERVER;
-            pDdeBookmark->SetRefObject(NULL);
+            CNTNT_TYPE.pBkmk = nullptr, eType = NONE_SERVER;
+            pDdeBookmark->SetRefObject(nullptr);
         }
     }
 }
@@ -281,14 +281,14 @@ void SwServerObject::SetDdeBookmark( ::sw::mark::IMark& rBookmark)
 }
 
 SwDataChanged::SwDataChanged( const SwPaM& rPam )
-    : pPam( &rPam ), pPos( 0 ), pDoc( rPam.GetDoc() )
+    : pPam( &rPam ), pPos( nullptr ), pDoc( rPam.GetDoc() )
 {
     nNode = rPam.GetPoint()->nNode.GetIndex();
     nContent = rPam.GetPoint()->nContent.GetIndex();
 }
 
 SwDataChanged::SwDataChanged( SwDoc* pDc, const SwPosition& rPos )
-    : pPam( 0 ), pPos( &rPos ), pDoc( pDc )
+    : pPam( nullptr ), pPos( &rPos ), pDoc( pDc )
 {
     nNode = rPos.nNode.GetIndex();
     nContent = rPos.nContent.GetIndex();

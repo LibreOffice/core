@@ -119,15 +119,15 @@ uno::Reference<text::XTextCursor> SwXRedlineText::createTextCursor()
 
     // skip all tables at the beginning
     SwTableNode* pTableNode = rUnoCursor.GetNode().FindTableNode();
-    SwContentNode* pContentNode = NULL;
-    bool bTable = pTableNode != NULL;
-    while( pTableNode != NULL )
+    SwContentNode* pContentNode = nullptr;
+    bool bTable = pTableNode != nullptr;
+    while( pTableNode != nullptr )
     {
         rUnoCursor.GetPoint()->nNode = *(pTableNode->EndOfSectionNode());
         pContentNode = GetDoc()->GetNodes().GoNext(&rUnoCursor.GetPoint()->nNode);
         pTableNode = pContentNode->FindTableNode();
     }
-    if( pContentNode != NULL )
+    if( pContentNode != nullptr )
         rUnoCursor.GetPoint()->nContent.Assign( pContentNode, 0 );
     if( bTable && rUnoCursor.GetNode().FindSttNodeByType( SwNormalStartNode )
                                                             != GetStartNode() )
@@ -454,13 +454,13 @@ uno::Any SwXRedline::getPropertyValue( const OUString& rPropertyName )
             break;
             case ND_TEXTNODE :
             {
-                SwPosition* pPoint = 0;
+                SwPosition* pPoint = nullptr;
                 if(bStart || !pRedline->HasMark())
                     pPoint = pRedline->GetPoint();
                 else
                     pPoint = pRedline->GetMark();
                 const uno::Reference<text::XTextRange> xRange =
-                    SwXTextRange::CreateXTextRange(*pDoc, *pPoint, 0);
+                    SwXTextRange::CreateXTextRange(*pDoc, *pPoint, nullptr);
                 xRet = xRange.get();
             }
             break;
@@ -519,8 +519,8 @@ void SwXRedline::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
     ClientModify(this, pOld, pNew);
     if(!GetRegisteredIn())
       {
-        pDoc = 0;
-        pRedline = 0;
+        pDoc = nullptr;
+        pRedline = nullptr;
     }
 }
 
@@ -549,7 +549,7 @@ sal_Bool SwXRedline::hasElements(  ) throw(uno::RuntimeException, std::exception
 {
     if(!pDoc)
         throw uno::RuntimeException();
-    return 0 != pRedline->GetContentIdx();
+    return nullptr != pRedline->GetContentIdx();
 }
 
 uno::Reference< text::XTextCursor >  SwXRedline::createTextCursor() throw( uno::RuntimeException, std::exception )
@@ -570,7 +570,7 @@ uno::Reference< text::XTextCursor >  SwXRedline::createTextCursor() throw( uno::
 
         // is here a table?
         SwTableNode* pTableNode = rUnoCrsr.GetNode().FindTableNode();
-        SwContentNode* pCont = 0;
+        SwContentNode* pCont = nullptr;
         while( pTableNode )
         {
             rUnoCrsr.GetPoint()->nNode = *pTableNode->EndOfSectionNode();

@@ -161,7 +161,7 @@ bool SwEditShell::UpdateTableOf( const SwTOXBase& rTOX, const SfxItemSet* pSet )
     OSL_ENSURE( dynamic_cast<const SwTOXBaseSection*>( &rTOX) !=  nullptr,  "no TOXBaseSection!" );
     SwTOXBaseSection* pTOX = const_cast<SwTOXBaseSection*>(static_cast<const SwTOXBaseSection*>(&rTOX));
     OSL_ENSURE(pTOX, "no current listing");
-    if( pTOX && 0 != pTOX->GetFormat()->GetSectionNode() )
+    if( pTOX && nullptr != pTOX->GetFormat()->GetSectionNode() )
     {
         SwDoc* pMyDoc = GetDoc();
         SwDocShell* pDocSh = pMyDoc->GetDocShell();
@@ -173,7 +173,7 @@ bool SwEditShell::UpdateTableOf( const SwTOXBase& rTOX, const SfxItemSet* pSet )
         ::StartProgress( STR_STATSTR_TOX_UPDATE, 0, 0, pDocSh );
         ::SetProgressText( STR_STATSTR_TOX_UPDATE, pDocSh );
 
-        pMyDoc->GetIDocumentUndoRedo().StartUndo(UNDO_TOXCHANGE, NULL);
+        pMyDoc->GetIDocumentUndoRedo().StartUndo(UNDO_TOXCHANGE, nullptr);
 
         // create listing stub
         pTOX->Update(pSet);
@@ -188,7 +188,7 @@ bool SwEditShell::UpdateTableOf( const SwTOXBase& rTOX, const SfxItemSet* pSet )
         // insert page numbering
         pTOX->UpdatePageNum();
 
-        pMyDoc->GetIDocumentUndoRedo().EndUndo(UNDO_TOXCHANGE, NULL);
+        pMyDoc->GetIDocumentUndoRedo().EndUndo(UNDO_TOXCHANGE, nullptr);
 
         ::EndProgress( pDocSh );
         EndAllAction();
@@ -250,7 +250,7 @@ const SwTOXBase* SwEditShell::GetTOX( sal_uInt16 nPos ) const
             return static_cast<const SwTOXBaseSection*>(pSect);
         }
     }
-    return 0;
+    return nullptr;
 }
 
 /** Update of all listings after reading-in a file */

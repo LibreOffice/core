@@ -40,14 +40,14 @@ class NumberingPreview : public vcl::Window
     public:
         NumberingPreview(vcl::Window* pParent, const ResId& rResId)
         : Window(pParent, rResId),
-            pActNum(0),nPageWidth(0), pOutlineNames(0),
+            pActNum(nullptr),nPageWidth(0), pOutlineNames(nullptr),
             bPosition(false), nActLevel(USHRT_MAX)
         {
         }
 
         NumberingPreview(vcl::Window* pParent)
             : Window(pParent)
-            , pActNum(0),nPageWidth(0), pOutlineNames(0),
+            , pActNum(nullptr),nPageWidth(0), pOutlineNames(nullptr),
             bPosition(false), nActLevel(USHRT_MAX)
         {
         }

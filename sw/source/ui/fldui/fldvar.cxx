@@ -354,7 +354,7 @@ void SwFieldVarPage::SubTypeHdl(ListBox* pBox)
                     }
                 }
             }
-            if (GetCurField() != NULL && IsFieldEdit())
+            if (GetCurField() != nullptr && IsFieldEdit())
             {
                 // GetFormula leads to problems with date formats because
                 // only the numeric value without formatting is returned.
@@ -498,7 +498,7 @@ void SwFieldVarPage::SubTypeHdl(ListBox* pBox)
                         pFieldTyp = GetFieldMgr().GetFieldType( RES_SETEXPFLD,
                                                           sFieldTypeName );
                     else
-                        pFieldTyp = 0;
+                        pFieldTyp = nullptr;
                 }
 
                 if( GetCurField() && IsFieldEdit() )
@@ -650,7 +650,7 @@ void SwFieldVarPage::UpdateSubType()
 
                     case TYP_SETREFPAGEFLD:
                     {
-                        if (GetCurField() != NULL
+                        if (GetCurField() != nullptr
                             && ((static_cast<SwRefPageSetField*>(GetCurField())->IsOn()
                                  && i) || (!static_cast<SwRefPageSetField*>(GetCurField())
                                                 ->IsOn() && !i)))
@@ -682,7 +682,7 @@ void SwFieldVarPage::UpdateSubType()
     }
 
     const bool bEnable = m_pSelectionLB->GetEntryCount() != 0;
-    ListBox *pLB = 0;
+    ListBox *pLB = nullptr;
 
     if (bEnable)
     {
@@ -723,7 +723,7 @@ sal_Int32 SwFieldVarPage::FillFormatLB(sal_uInt16 nTypeId)
 
     if( TYP_GETREFPAGEFLD != nTypeId )
     {
-        if (GetCurField() != NULL && IsFieldEdit())
+        if (GetCurField() != nullptr && IsFieldEdit())
         {
             bSpecialFormat = GetCurField()->GetFormat() == SAL_MAX_UINT32;
 
@@ -994,7 +994,7 @@ IMPL_LINK_TYPED( SwFieldVarPage, TBClickHdl, ToolBox *, pBox, void )
     else if (nCurId == m_nApplyId)
     {
         OUString sName(m_pNameED->GetText()), sValue(m_pValueED->GetText());
-        SwFieldType* pType = 0;
+        SwFieldType* pType = nullptr;
         sal_uInt16 nId = 0;
         sal_Int32 nNumFormatPos = m_pNumFormatLB->GetSelectEntryPos();
 

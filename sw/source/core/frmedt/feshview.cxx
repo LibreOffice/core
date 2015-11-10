@@ -93,7 +93,7 @@ using namespace com::sun::star;
 SwFlyFrm *GetFlyFromMarked( const SdrMarkList *pLst, SwViewShell *pSh )
 {
     if ( !pLst )
-        pLst = pSh->HasDrawView() ? &pSh->Imp()->GetDrawView()->GetMarkedObjectList():0;
+        pLst = pSh->HasDrawView() ? &pSh->Imp()->GetDrawView()->GetMarkedObjectList():nullptr;
 
     if ( pLst && pLst->GetMarkCount() == 1 )
     {
@@ -101,7 +101,7 @@ SwFlyFrm *GetFlyFromMarked( const SdrMarkList *pLst, SwViewShell *pSh )
         if ( pO && dynamic_cast<const SwVirtFlyDrawObj*>( pO) !=  nullptr )
             return static_cast<SwVirtFlyDrawObj*>(pO)->GetFlyFrm();
     }
-    return 0;
+    return nullptr;
 }
 
 static void lcl_GrabCursor( SwFEShell* pSh, SwFlyFrm* pOldSelFly)
@@ -142,7 +142,7 @@ bool SwFEShell::SelectObj( const Point& rPt, sal_uInt8 nFlag, SdrObject *pObj )
     const bool bHadSelection = rMrkList.GetMarkCount();
     const bool bAddSelect = 0 != (SW_ADD_SELECT & nFlag);
     const bool bEnterGroup = 0 != (SW_ENTER_GROUP & nFlag);
-    SwFlyFrm* pOldSelFly = 0;
+    SwFlyFrm* pOldSelFly = nullptr;
     const Point aOldPos( pDView->GetAllMarkedRect().TopLeft() );
 
     if( bHadSelection )
@@ -294,11 +294,11 @@ bool SwFEShell::MoveAnchor( SwMove nDir )
 {
     const SdrMarkList* pMrkList;
     if( !Imp()->GetDrawView() ||
-        0 == (pMrkList = &Imp()->GetDrawView()->GetMarkedObjectList()) ||
+        nullptr == (pMrkList = &Imp()->GetDrawView()->GetMarkedObjectList()) ||
         1 != pMrkList->GetMarkCount())
         return false;
     SwFrm* pOld;
-    SwFlyFrm* pFly = NULL;
+    SwFlyFrm* pFly = nullptr;
     SdrObject *pObj = pMrkList->GetMark( 0 )->GetMarkedSdrObj();
     if( dynamic_cast<const SwVirtFlyDrawObj*>( pObj) !=  nullptr )
     {
@@ -418,7 +418,7 @@ bool SwFEShell::MoveAnchor( SwMove nDir )
                 OSL_ENSURE( pOld->IsFlyFrm(), "Wrong anchor, fly frame expected.");
                 SwPageFrm* pPage = pOld->FindPageFrm();
                 OSL_ENSURE( pPage, "Where's my page?" );
-                SwFlyFrm* pNewFly = NULL;
+                SwFlyFrm* pNewFly = nullptr;
                 if( pPage->GetSortedObjs() )
                 {
                     bool bOld = false;
@@ -435,13 +435,13 @@ bool SwFEShell::MoveAnchor( SwMove nDir )
                                 bOld = true;
                             else
                             {
-                                const SwFlyFrm* pCheck = pFly ? pTmp : 0;
+                                const SwFlyFrm* pCheck = pFly ? pTmp : nullptr;
                                 while( pCheck )
                                 {
                                     if( pCheck == pFly )
                                         break;
                                     const SwFrm *pNxt = pCheck->GetAnchorFrm();
-                                    pCheck = pNxt ? pNxt->FindFlyFrm() : NULL;
+                                    pCheck = pNxt ? pNxt->FindFlyFrm() : nullptr;
                                 }
                                 if( pCheck || pTmp->IsProtected() )
                                     continue;
@@ -509,7 +509,7 @@ bool SwFEShell::MoveAnchor( SwMove nDir )
             // re-created. Thus, delete all fly frames except the <this> before the
             // anchor attribute is change and re-create them afterwards.
             {
-                SwHandleAnchorNodeChg* pHandleAnchorNodeChg( 0L );
+                SwHandleAnchorNodeChg* pHandleAnchorNodeChg( nullptr );
                 SwFlyFrameFormat* pFlyFrameFormat( dynamic_cast<SwFlyFrameFormat*>(&rFormat) );
                 if ( pFlyFrameFormat )
                 {
@@ -534,8 +534,8 @@ bool SwFEShell::MoveAnchor( SwMove nDir )
 
 const SdrMarkList* SwFEShell::_GetMarkList() const
 {
-    const SdrMarkList* pMarkList = NULL;
-    if( Imp()->GetDrawView() != NULL )
+    const SdrMarkList* pMarkList = nullptr;
+    if( Imp()->GetDrawView() != nullptr )
         pMarkList = &Imp()->GetDrawView()->GetMarkedObjectList();
     return pMarkList;
 }
@@ -546,14 +546,14 @@ FrmTypeFlags SwFEShell::GetSelFrmType() const
 
     // get marked frame list, and check if anything is selected
     const SdrMarkList* pMarkList = _GetMarkList();
-    if( pMarkList == NULL  ||  pMarkList->GetMarkCount() == 0 )
+    if( pMarkList == nullptr  ||  pMarkList->GetMarkCount() == 0 )
         eType = FrmTypeFlags::NONE;
     else
     {
         // obtain marked item as fly frame; if no fly frame, it must
         // be a draw object
         const SwFlyFrm* pFly = ::GetFlyFromMarked(pMarkList, const_cast<SwViewShell*>(static_cast<SwViewShell const *>(this)));
-        if ( pFly != NULL )
+        if ( pFly != nullptr )
         {
             if( pFly->IsFlyLayFrm() )
                 eType = FrmTypeFlags::FLY_FREE;
@@ -580,7 +580,7 @@ bool SwFEShell::IsSelContainsControl() const
     // basically, copy the mechanism from GetSelFrmType(), but call
     // CheckControl... if you get a drawing object
     const SdrMarkList* pMarkList = _GetMarkList();
-    if( pMarkList != NULL  &&  pMarkList->GetMarkCount() == 1 )
+    if( pMarkList != nullptr  &&  pMarkList->GetMarkCount() == 1 )
     {
         // if we have one marked object, get the SdrObject and check
         // whether it contains a control
@@ -661,7 +661,7 @@ long SwFEShell::BeginDrag( const Point* pPt, bool bIsShift)
         m_pChainFrom.reset();
         m_pChainTo.reset();
         SdrHdl* pHdl = pView->PickHandle( *pPt );
-        if (pView->BegDragObj( *pPt, 0, pHdl ))
+        if (pView->BegDragObj( *pPt, nullptr, pHdl ))
             pView->GetDragMethod()->SetShiftPressed( bIsShift );
         ::FrameNotify( this );
         return 1;
@@ -764,7 +764,7 @@ const SwFrameFormat* SwFEShell::SelFlyGrabCrsr()
             return pFly->GetFormat();
         }
     }
-    return 0;
+    return nullptr;
 }
 
 // Selection to above/below (Z-Order)
@@ -977,7 +977,7 @@ bool SwFEShell::IsFrmSelected() const
     if ( !Imp()->HasDrawView() )
         return false;
     else
-        return 0 != ::GetFlyFromMarked( &Imp()->GetDrawView()->GetMarkedObjectList(),
+        return nullptr != ::GetFlyFromMarked( &Imp()->GetDrawView()->GetMarkedObjectList(),
                                         const_cast<SwViewShell*>(static_cast<SwViewShell const *>(this)) );
 }
 
@@ -1023,7 +1023,7 @@ void SwFEShell::EndTextEdit()
     SdrView *pView = Imp()->GetDrawView();
     SdrObject *pObj = pView->GetTextEditObject();
     SdrObjUserCall* pUserCall;
-    if( 0 != ( pUserCall = GetUserCall(pObj) ) )
+    if( nullptr != ( pUserCall = GetUserCall(pObj) ) )
     {
         SdrObject *pTmp = static_cast<SwContact*>(pUserCall)->GetMaster();
         if( !pTmp )
@@ -1091,7 +1091,7 @@ bool SwFEShell::IsObjSelectable( const Point& rPt )
 
 SdrObject* SwFEShell::GetObjAt( const Point& rPt )
 {
-    SdrObject* pRet = 0;
+    SdrObject* pRet = nullptr;
     SET_CURR_SHELL(this);
     SwDrawView *pDView = Imp()->GetDrawView();
     if( pDView )
@@ -1261,10 +1261,10 @@ namespace
 const SdrObject* SwFEShell::GetBestObject( bool bNext, GotoObjFlags eType, bool bFlat, const svx::ISdrObjectFilter* pFilter )
 {
     if( !Imp()->HasDrawView() )
-        return NULL;
+        return nullptr;
 
-    const SdrObject *pBest  = 0,
-                    *pTop   = 0;
+    const SdrObject *pBest  = nullptr,
+                    *pTop   = nullptr;
 
     const long nTmp = bNext ? LONG_MAX : 0;
     Point aBestPos( nTmp, nTmp );
@@ -1290,7 +1290,7 @@ const SdrObject* SwFEShell::GetBestObject( bool bNext, GotoObjFlags eType, bool 
     if( !pBest || rMrkList.GetMarkCount() == 1 )
     {
         // Determine starting point
-        SdrObjList* pList = NULL;
+        SdrObjList* pList = nullptr;
         if ( rMrkList.GetMarkCount() )
         {
             const SdrObject* pStartObj = rMrkList.GetMark(0)->GetMarkedSdrObj();
@@ -1309,7 +1309,7 @@ const SdrObject* SwFEShell::GetBestObject( bool bNext, GotoObjFlags eType, bool 
             // If no object is selected, we check if we just entered a group.
             // In this case we want to iterate over the group members.
             aPos = GetCharRect().Center();
-            const SdrObject* pStartObj = pPV ? pPV->GetAktGroup() : 0;
+            const SdrObject* pStartObj = pPV ? pPV->GetAktGroup() : nullptr;
             if ( pStartObj && dynamic_cast<const SdrObjGroup*>( pStartObj) !=  nullptr )
                 pList = pStartObj->GetSubList();
         }
@@ -1584,7 +1584,7 @@ bool SwFEShell::ImpEndCreate()
 
     // default for controls character bound, otherwise paragraph bound.
     SwFormatAnchor aAnch;
-    const SwFrm *pAnch = 0;
+    const SwFrm *pAnch = nullptr;
     bool bCharBound = false;
     if( dynamic_cast<const SdrUnoObj*>( &rSdrObj) !=  nullptr )
     {
@@ -1632,7 +1632,7 @@ bool SwFEShell::ImpEndCreate()
         //bool bBodyOnly = OBJ_NONE != nIdent;
         bool bBodyOnly = 0xFFFF == nIdent;
         bool bAtPage = false;
-        const SwFrm* pPage = 0;
+        const SwFrm* pPage = nullptr;
         SwCrsrMoveState aState( MV_SETONLYTEXT );
         Point aPoint( aPt );
         SwPosition aPos( GetDoc()->GetNodes() );
@@ -1647,7 +1647,7 @@ bool SwFEShell::ImpEndCreate()
         }
 
         SwContentNode* pCNode = aPos.nNode.GetNode().GetContentNode();
-        pAnch = pCNode ? pCNode->getLayoutFrm( GetLayout(), &aPoint, 0, false ) : NULL;
+        pAnch = pCNode ? pCNode->getLayoutFrm( GetLayout(), &aPoint, nullptr, false ) : nullptr;
         if (!pAnch)
         {
             // Hidden content. Anchor to the page instead
@@ -1671,7 +1671,7 @@ bool SwFEShell::ImpEndCreate()
                     }
                     pTmp = pTmp->GetAnchorFrm()
                                 ? pTmp->GetAnchorFrm()->FindFlyFrm()
-                                : 0;
+                                : nullptr;
                     pTmpFrm = pTmp;
                 }
             }
@@ -1773,7 +1773,7 @@ bool SwFEShell::ImpEndCreate()
         SwFlyFrm* pFlyFrm;
         if( NewFlyFrm( aSet, true ) &&
             ::GetHtmlMode( GetDoc()->GetDocShell() ) &&
-            0 != ( pFlyFrm = GetSelectedFlyFrm() ))
+            nullptr != ( pFlyFrm = GetSelectedFlyFrm() ))
         {
             SfxItemSet aHtmlSet( GetDoc()->GetAttrPool(), RES_VERT_ORIENT, RES_HORI_ORIENT );
             // horizontal orientation:
@@ -2091,7 +2091,7 @@ Point SwFEShell::GetAnchorObjDiff() const
     else
     {
         const SdrObject *pObj = pView->GetMarkedObjectList().GetMarkCount() == 1 ?
-                                pView->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj() : 0;
+                                pView->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj() : nullptr;
         if ( pObj )
             aRet -= pObj->GetAnchorPos();
     }
@@ -2157,8 +2157,8 @@ bool SwFEShell::IsGroupAllowed() const
     if ( IsObjSelected() > 1 )
     {
         bIsGroupAllowed = true;
-        const SdrObject* pUpGroup = 0L;
-        const SwFrm* pHeaderFooterFrm = 0L;
+        const SdrObject* pUpGroup = nullptr;
+        const SwFrm* pHeaderFooterFrm = nullptr;
         const SdrMarkList &rMrkList = Imp()->GetDrawView()->GetMarkedObjectList();
         for ( size_t i = 0; bIsGroupAllowed && i < rMrkList.GetMarkCount(); ++i )
         {
@@ -2175,7 +2175,7 @@ bool SwFEShell::IsGroupAllowed() const
             // same header/footer or not in header/footer.
             if ( bIsGroupAllowed )
             {
-                const SwFrm* pAnchorFrm = 0L;
+                const SwFrm* pAnchorFrm = nullptr;
                 if ( dynamic_cast<const SwVirtFlyDrawObj*>( pObj) !=  nullptr )
                 {
                     const SwFlyFrm* pFlyFrm =
@@ -2368,7 +2368,7 @@ FlyProtectFlags SwFEShell::IsSelObjProtected( FlyProtectFlags eType ) const
                     if ( pFly->Lower() && pFly->Lower()->IsNoTextFrm() )
                     {
                         SwOLENode *pNd = static_cast<SwContentFrm*>(pFly->Lower())->GetNode()->GetOLENode();
-                        uno::Reference < embed::XEmbeddedObject > xObj( pNd ? pNd->GetOLEObj().GetOleRef() : 0 );
+                        uno::Reference < embed::XEmbeddedObject > xObj( pNd ? pNd->GetOLEObj().GetOleRef() : nullptr );
                         if ( xObj.is() )
                         {
                             // TODO/LATER: use correct aspect
@@ -2398,7 +2398,7 @@ FlyProtectFlags SwFEShell::IsSelObjProtected( FlyProtectFlags eType ) const
             else
             {
                 SwDrawContact* pTmp = static_cast<SwDrawContact*>(GetUserCall(pObj));
-                pAnch = pTmp ? pTmp->GetAnchorFrm( pObj ) : NULL;
+                pAnch = pTmp ? pTmp->GetAnchorFrm( pObj ) : nullptr;
             }
             if( pAnch && pAnch->IsProtected() )
                 return eType;
@@ -2711,7 +2711,7 @@ long SwFEShell::GetSectionWidth( SwFormat const & rFormat ) const
     SdrModel* pDrawModel = pDrawView->GetModel();
     SdrObject* pObj = SdrObjFactory::MakeNewObject(
         SdrInventor, eSdrObjectKind,
-        0L, pDrawModel);
+        nullptr, pDrawModel);
 
     if(pObj)
     {

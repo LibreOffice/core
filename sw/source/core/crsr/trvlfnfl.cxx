@@ -55,7 +55,7 @@ bool SwCursor::GotoFootnoteText()
     SwTextAttr *const pFootnote( (pTextNd)
         ? pTextNd->GetTextAttrForCharAt(
             GetPoint()->nContent.GetIndex(), RES_TXTATR_FTN)
-        : 0);
+        : nullptr);
     if (pFootnote)
     {
         SwCrsrSaveState aSaveState( *this );
@@ -80,16 +80,16 @@ bool SwCrsrShell::GotoFootnoteText()
     if( !bRet )
     {
         SwTextNode* pTextNd = _GetCrsr() ?
-                   _GetCrsr()->GetPoint()->nNode.GetNode().GetTextNode() : NULL;
+                   _GetCrsr()->GetPoint()->nNode.GetNode().GetTextNode() : nullptr;
         if( pTextNd )
         {
             const SwFrm *pFrm = pTextNd->getLayoutFrm( GetLayout(), &_GetCrsr()->GetSttPos(),
                                                  _GetCrsr()->Start() );
             const SwFootnoteBossFrm* pFootnoteBoss;
             bool bSkip = pFrm && pFrm->IsInFootnote();
-            while( pFrm && 0 != ( pFootnoteBoss = pFrm->FindFootnoteBossFrm() ) )
+            while( pFrm && nullptr != ( pFootnoteBoss = pFrm->FindFootnoteBossFrm() ) )
             {
-                if( 0 != ( pFrm = pFootnoteBoss->FindFootnoteCont() ) )
+                if( nullptr != ( pFrm = pFootnoteBoss->FindFootnoteCont() ) )
                 {
                     if( bSkip )
                         bSkip = false;
@@ -131,7 +131,7 @@ bool SwCursor::GotoFootnoteAnchor()
         const SwTextFootnote* pTextFootnote;
         const SwFootnoteIdxs& rFootnoteArr = pSttNd->GetDoc()->GetFootnoteIdxs();
         for( size_t n = 0; n < rFootnoteArr.size(); ++n )
-            if( 0 != ( pTextFootnote = rFootnoteArr[ n ])->GetStartNode() &&
+            if( nullptr != ( pTextFootnote = rFootnoteArr[ n ])->GetStartNode() &&
                 pSttNd == &pTextFootnote->GetStartNode()->GetNode() )
             {
                 SwCrsrSaveState aSaveState( *this );
@@ -177,7 +177,7 @@ inline bool CmpL( const SwTextFootnote& rFootnote, sal_uLong nNd, sal_Int32 nCnt
 bool SwCursor::GotoNextFootnoteAnchor()
 {
     const SwFootnoteIdxs& rFootnoteArr = GetDoc()->GetFootnoteIdxs();
-    const SwTextFootnote* pTextFootnote = 0;
+    const SwTextFootnote* pTextFootnote = nullptr;
     size_t nPos = 0;
 
     if( rFootnoteArr.SeekEntry( GetPoint()->nNode, &nPos ))
@@ -192,19 +192,19 @@ bool SwCursor::GotoNextFootnoteAnchor()
             // search forwards
             if( CmpLE( *pTextFootnote, nNdPos, nCntPos ) )
             {
-                pTextFootnote = 0;
+                pTextFootnote = nullptr;
                 for( ++nPos; nPos < rFootnoteArr.size(); ++nPos )
                 {
                     pTextFootnote = rFootnoteArr[ nPos ];
                     if( !CmpLE( *pTextFootnote, nNdPos, nCntPos ) )
                         break; // found
-                    pTextFootnote = 0;
+                    pTextFootnote = nullptr;
                 }
             }
             else if( nPos )
             {
                 // search backwards
-                pTextFootnote = 0;
+                pTextFootnote = nullptr;
                 while( nPos )
                 {
                     pTextFootnote = rFootnoteArr[ --nPos ];
@@ -220,7 +220,7 @@ bool SwCursor::GotoNextFootnoteAnchor()
     else if( nPos < rFootnoteArr.size() )
         pTextFootnote = rFootnoteArr[ nPos ];
 
-    bool bRet = 0 != pTextFootnote;
+    bool bRet = nullptr != pTextFootnote;
     if( bRet )
     {
         SwCrsrSaveState aSaveState( *this );
@@ -236,7 +236,7 @@ bool SwCursor::GotoNextFootnoteAnchor()
 bool SwCursor::GotoPrevFootnoteAnchor()
 {
     const SwFootnoteIdxs& rFootnoteArr = GetDoc()->GetFootnoteIdxs();
-    const SwTextFootnote* pTextFootnote = 0;
+    const SwTextFootnote* pTextFootnote = nullptr;
     size_t nPos = 0;
 
     if( rFootnoteArr.SeekEntry( GetPoint()->nNode, &nPos ) )
@@ -262,22 +262,22 @@ bool SwCursor::GotoPrevFootnoteAnchor()
         else if( nPos )
         {
             // search backwards
-            pTextFootnote = 0;
+            pTextFootnote = nullptr;
             while( nPos )
             {
                 pTextFootnote = rFootnoteArr[ --nPos ];
                 if( CmpL( *pTextFootnote, nNdPos, nCntPos ))
                     break; // found
-                pTextFootnote = 0;
+                pTextFootnote = nullptr;
             }
         }
         else
-            pTextFootnote = 0;
+            pTextFootnote = nullptr;
     }
     else if( nPos )
         pTextFootnote = rFootnoteArr[ nPos-1 ];
 
-    bool bRet = 0 != pTextFootnote;
+    bool bRet = nullptr != pTextFootnote;
     if( bRet )
     {
         SwCrsrSaveState aSaveState( *this );

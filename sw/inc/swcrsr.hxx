@@ -94,10 +94,10 @@ public:
 
 public:
 
-    virtual SwCursor* Create( SwPaM* pRing = 0 ) const;
+    virtual SwCursor* Create( SwPaM* pRing = nullptr ) const;
 
     virtual short MaxReplaceArived(); //returns RET_YES/RET_CANCEL/RET_NO
-    virtual void SaveTableBoxContent( const SwPosition* pPos = 0 );
+    virtual void SaveTableBoxContent( const SwPosition* pPos = nullptr );
 
     void FillFindPos( SwDocPositions ePos, SwPosition& rPos ) const;
     SwMoveFnCollection* MakeFindRange( SwDocPositions, SwDocPositions,
@@ -113,13 +113,13 @@ public:
                 SwDocPositions nStart, SwDocPositions nEnde,
                 bool& bCancel,
                 FindRanges = FND_IN_BODY,
-                const SwTextFormatColl* pReplFormat = 0 );
+                const SwTextFormatColl* pReplFormat = nullptr );
     sal_uLong Find( const SfxItemSet& rSet, bool bNoCollections,
                 SwDocPositions nStart, SwDocPositions nEnde,
                 bool& bCancel,
                 FindRanges = FND_IN_BODY,
-                const css::util::SearchOptions* pSearchOpt = 0,
-                const SfxItemSet* rReplSet = 0 );
+                const css::util::SearchOptions* pSearchOpt = nullptr,
+                const SfxItemSet* rReplSet = nullptr );
 
     // UI versions
     bool IsStartWord( sal_Int16 nWordType = css::i18n::WordType::ANYWORD_IGNOREWHITESPACES ) const;
@@ -130,7 +130,7 @@ public:
     bool GoEndWord();
     bool GoNextWord();
     bool GoPrevWord();
-    bool SelectWord( SwViewShell* pViewShell, const Point* pPt = 0 );
+    bool SelectWord( SwViewShell* pViewShell, const Point* pPt = nullptr );
 
     // API versions of above functions (will be used with a different
     // WordType for the break iterator)
@@ -141,7 +141,7 @@ public:
     bool GoEndWordWT( sal_Int16 nWordType );
     bool GoNextWordWT( sal_Int16 nWordType );
     bool GoPrevWordWT( sal_Int16 nWordType );
-    bool SelectWordWT( SwViewShell* pViewShell, sal_Int16 nWordType, const Point* pPt = 0 );
+    bool SelectWordWT( SwViewShell* pViewShell, sal_Int16 nWordType, const Point* pPt = nullptr );
 
     enum SentenceMoveType
     {
@@ -242,7 +242,7 @@ struct _SwCursor_SavePos
     _SwCursor_SavePos( const SwCursor& rCrsr )
         : nNode( rCrsr.GetPoint()->nNode.GetIndex() ),
         nContent( rCrsr.GetPoint()->nContent.GetIndex() ),
-        pNext( 0 )
+        pNext( nullptr )
     {}
     virtual ~_SwCursor_SavePos() {}
 
@@ -264,7 +264,7 @@ protected:
     virtual bool IsSelOvrCheck(int eFlags) override;
 
 public:
-    SwTableCursor( const SwPosition &rPos, SwPaM* pRing = 0 );
+    SwTableCursor( const SwPosition &rPos, SwPaM* pRing = nullptr );
     SwTableCursor( SwTableCursor& );
     virtual ~SwTableCursor();
 

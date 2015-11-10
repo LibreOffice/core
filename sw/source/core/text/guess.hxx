@@ -37,7 +37,7 @@ class SwTextGuess
                                // a field in the text has been expanded
     sal_uInt16 nBreakWidth;    // width of the broken portion
 public:
-    inline SwTextGuess(): pHanging( NULL ), nCutPos(0), nBreakStart(0),
+    inline SwTextGuess(): pHanging( nullptr ), nCutPos(0), nBreakStart(0),
                         nBreakPos(0), nFieldDiff(0), nBreakWidth(0)
         { }
     ~SwTextGuess() { delete pHanging; }
@@ -48,7 +48,7 @@ public:
     bool AlternativeSpelling( const SwTextFormatInfo &rInf, const sal_Int32 nPos );
 
     inline SwHangingPortion* GetHangingPortion() const { return pHanging; }
-    inline void ClearHangingPortion() { pHanging = NULL; }
+    inline void ClearHangingPortion() { pHanging = nullptr; }
     inline sal_uInt16 BreakWidth() const { return nBreakWidth; }
     inline sal_Int32 CutPos() const { return nCutPos; }
     inline sal_Int32 BreakStart() const { return nBreakStart; }

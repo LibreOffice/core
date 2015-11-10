@@ -43,7 +43,7 @@ private:
     bool         bCopyAttributes;   //          -""-
 
 public:
-    InsCaptionOpt(const SwCapObjType eType = FRAME_CAP, const SvGlobalName* pOleId = 0);
+    InsCaptionOpt(const SwCapObjType eType = FRAME_CAP, const SvGlobalName* pOleId = nullptr);
     InsCaptionOpt(const InsCaptionOpt&);
     ~InsCaptionOpt();
 

@@ -62,7 +62,7 @@ class _HTMLAttrContext_SaveDoc
 public:
 
     _HTMLAttrContext_SaveDoc() :
-        pPos( 0 ), pAttrTab( 0 ),
+        pPos( nullptr ), pAttrTab( nullptr ),
         nContextStMin( SIZE_MAX ), nContextStAttrMin( SIZE_MAX ),
         bStripTrailingPara( false ), bKeepNumRules( false ),
         bFixHeaderDist( false ), bFixFooterDist( false )
@@ -120,7 +120,7 @@ _HTMLAttrContext_SaveDoc *_HTMLAttrContext::GetSaveDocContext( bool bCreate )
 void _HTMLAttrContext::ClearSaveDocContext()
 {
     delete pSaveDocContext;
-    pSaveDocContext = 0;
+    pSaveDocContext = nullptr;
 }
 
 void SwHTMLParser::SplitAttrTab( const SwPosition& rNewPos )
@@ -212,7 +212,7 @@ void SwHTMLParser::SplitAttrTab( const SwPosition& rNewPos )
             pAttr->nEndPara = rNewSttPara;
             pAttr->nSttContent = nNewSttCnt;
             pAttr->nEndContent = nNewSttCnt;
-            pAttr->pPrev = 0;
+            pAttr->pPrev = nullptr;
 
             pAttr = pNext;
         }
@@ -522,7 +522,7 @@ void SwHTMLParser::InsertAttrs( SfxItemSet &rItemSet,
     const SfxPoolItem *pItem = aIter.FirstItem();
     while( pItem )
     {
-        _HTMLAttr **ppAttr = 0;
+        _HTMLAttr **ppAttr = nullptr;
 
         switch( pItem->Which() )
         {
@@ -589,7 +589,7 @@ void SwHTMLParser::InsertAttrs( SfxItemSet &rItemSet,
                 aLRItem.SetTextLeft( nLeft );
                 aLRItem.SetRight( nRight );
                 NewAttr( &m_aAttrTab.pLRSpace, aLRItem );
-                EndAttr( m_aAttrTab.pLRSpace, 0, false );
+                EndAttr( m_aAttrTab.pLRSpace, nullptr, false );
             }
             break;
 

@@ -311,7 +311,7 @@ struct WW8_BRC  // BoRder Code (WW8 version)
     explicit WW8_BRC(const WW8_BRCVer6& brcVer6);
 
     // Returns LO border width in twips=1/20pt, taking into account brcType
-    short DetermineBorderProperties(short *pSpace=0) const;
+    short DetermineBorderProperties(short *pSpace=nullptr) const;
 };
 
 typedef WW8_BRC WW8_BRC5[5];        // 5 * Border Code
@@ -363,7 +363,7 @@ struct WW8_BRCVer9  // BoRder Code (WW9 version)
     explicit WW8_BRCVer9(const WW8_BRC& brcVer8);
 
     // Returns LO border width in twips=1/20pt, taking into account brcType
-    short DetermineBorderProperties(short *pSpace=0) const;
+    short DetermineBorderProperties(short *pSpace=nullptr) const;
 };
 
 typedef WW8_BRCVer9 WW8_BRCVer9_5[5];        // 5 * Border Code

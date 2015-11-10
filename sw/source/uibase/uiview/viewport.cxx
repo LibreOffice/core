@@ -623,7 +623,7 @@ bool SwView::PageUpCrsr( bool bSelect )
 {
     if ( !bSelect )
     {
-        const FrmTypeFlags eType = m_pWrtShell->GetFrmType(0,true);
+        const FrmTypeFlags eType = m_pWrtShell->GetFrmType(nullptr,true);
         if ( eType & FrmTypeFlags::FOOTNOTE )
         {
             m_pWrtShell->MoveCrsr();

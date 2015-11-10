@@ -100,7 +100,7 @@ void SwViewShell::PrintProspect(
     OSL_ENSURE( rPagesToPrint.second == -1 || rPrintData.GetRenderData().GetValidPagesSet().count( rPagesToPrint.second ) == 1, "second Page not valid" );
 
     // create a new shell for the printer
-    SwViewShell aShell( *this, 0, pPrinter );
+    SwViewShell aShell( *this, nullptr, pPrinter );
 
     SET_CURR_SHELL( &aShell );
 
@@ -113,8 +113,8 @@ void SwViewShell::PrintProspect(
 
     SwTwips nMaxRowSz, nMaxColSz;
 
-    const SwPageFrm *pStPage    = 0;
-    const SwPageFrm *pNxtPage   = 0;
+    const SwPageFrm *pStPage    = nullptr;
+    const SwPageFrm *pNxtPage   = nullptr;
     if (rPagesToPrint.first > 0)
     {
         pStPage = sw_getPage(*aShell.GetLayout(), rPagesToPrint.first);

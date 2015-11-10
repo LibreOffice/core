@@ -185,7 +185,7 @@ bool lcl_IsInNonStructEnv( const SwFrm& rFrm )
 {
     bool bRet = false;
 
-    if ( 0 != rFrm.FindFooterOrHeader() &&
+    if ( nullptr != rFrm.FindFooterOrHeader() &&
            !rFrm.IsHeaderFrm() && !rFrm.IsFooterFrm() )
     {
         bRet = true;
@@ -204,7 +204,7 @@ bool lcl_IsInNonStructEnv( const SwFrm& rFrm )
 // Generate key from frame for reopening tags:
 void* lcl_GetKeyFromFrame( const SwFrm& rFrm )
 {
-    void* pKey = 0;
+    void* pKey = nullptr;
 
     if ( rFrm.IsPageFrm() )
         pKey = const_cast<void*>(static_cast<void const *>(&(static_cast<const SwPageFrm&>(rFrm).GetFormat()->getIDocumentSettingAccess())));
@@ -324,7 +324,7 @@ bool SwTaggedPDFHelper::CheckReopenTag()
     if ( mpFrmInfo )
     {
         const SwFrm& rFrm = mpFrmInfo->mrFrm;
-        const SwFrm* pKeyFrm = 0;
+        const SwFrm* pKeyFrm = nullptr;
 
         // Reopen an existing structure element if
         // - rFrm is not the first page frame (reopen Document tag)
@@ -882,7 +882,7 @@ void SwTaggedPDFHelper::BeginNumberedListStructureElements()
 
                 do
                     aIter = rNumListBodyIdMap.find( pParent );
-                while ( aIter == rNumListBodyIdMap.end() && 0 != ( pParent = pParent->GetParent() ) );
+                while ( aIter == rNumListBodyIdMap.end() && nullptr != ( pParent = pParent->GetParent() ) );
 
                 if ( aIter != rNumListBodyIdMap.end() )
                     nReopenTag = (*aIter).second;
@@ -1062,7 +1062,7 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
                     static_cast<const SwTextFrm*>(pFrm)->GetTextNode();
 
                 const SwFormat* pTextFormat = pTextNd->GetFormatColl();
-                const SwFormat* pParentTextFormat = pTextFormat ? pTextFormat->DerivedFrom() : NULL;
+                const SwFormat* pParentTextFormat = pTextFormat ? pTextFormat->DerivedFrom() : nullptr;
 
                 OUString sStyleName;
                 OUString sParentStyleName;
@@ -1350,7 +1350,7 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
                         pNd->GetTextAttrsAt(rInf.GetIdx(), RES_TXTATR_CHARFMT));
                     // TODO: handle more than 1 char style?
                     const SwCharFormat* pCharFormat = (charAttrs.size())
-                        ? (*charAttrs.begin())->GetCharFormat().GetCharFormat() : 0;
+                        ? (*charAttrs.begin())->GetCharFormat().GetCharFormat() : nullptr;
                     if ( pCharFormat )
                         SwStyleNameMapper::FillProgName( pCharFormat->GetName(), sStyleName, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, true );
                 }
@@ -1454,7 +1454,7 @@ SwEnhancedPDFExportHelper::SwEnhancedPDFExportHelper( SwEditShell& rSh,
                                                       const SwPrintData& rPrintData )
     : mrSh( rSh ),
       mrOut( rOut ),
-      mpRangeEnum( 0 ),
+      mpRangeEnum( nullptr ),
       mbSkipEmptyPages( bSkipEmptyPages ),
       mbEditEngineOnly( bEditEngineOnly ),
       mrPrintData( rPrintData )
@@ -1572,7 +1572,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
                 if( pFirst->GetTextField() && pFirst->IsFieldInDoc() )
                 {
                     const SwTextNode* pTNd = pFirst->GetTextField()->GetpTextNode();
-                    OSL_ENSURE( 0 != pTNd, "Enhanced pdf export - text node is missing" );
+                    OSL_ENSURE( nullptr != pTNd, "Enhanced pdf export - text node is missing" );
 
                     // 1. Check if the whole paragraph is hidden
                     // 2. Move to the field
@@ -1627,10 +1627,10 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
         for( auto &rAttr : aArr )
         {
             SwGetINetAttr* p = &rAttr;
-            OSL_ENSURE( 0 != p, "Enhanced pdf export - SwGetINetAttr is missing" );
+            OSL_ENSURE( nullptr != p, "Enhanced pdf export - SwGetINetAttr is missing" );
 
             const SwTextNode* pTNd = p->rINetAttr.GetpTextNode();
-            OSL_ENSURE( 0 != pTNd, "Enhanced pdf export - text node is missing" );
+            OSL_ENSURE( nullptr != pTNd, "Enhanced pdf export - text node is missing" );
 
             // 1. Check if the whole paragraph is hidden
             // 2. Move to the hyperlink
@@ -1822,7 +1822,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
             if( pFirst->GetTextField() && pFirst->IsFieldInDoc() )
             {
                 const SwTextNode* pTNd = pFirst->GetTextField()->GetpTextNode();
-               OSL_ENSURE( 0 != pTNd, "Enhanced pdf export - text node is missing" );
+               OSL_ENSURE( nullptr != pTNd, "Enhanced pdf export - text node is missing" );
 
                 // 1. Check if the whole paragraph is hidden
                 // 2. Move to the field
@@ -1992,7 +1992,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
             {
                 // Check if outline is hidden
                 const SwTextNode* pTNd = mrSh.GetNodes().GetOutLineNds()[ i ]->GetTextNode();
-                OSL_ENSURE( 0 != pTNd, "Enhanced pdf export - text node is missing" );
+                OSL_ENSURE( nullptr != pTNd, "Enhanced pdf export - text node is missing" );
 
                 if ( pTNd->IsHidden() ||
                      // #i40292# Skip empty outlines:

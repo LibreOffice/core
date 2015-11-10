@@ -37,7 +37,7 @@
 IMPL_STATIC_LINK_NOARG_TYPED(SwWordCountFloatDlg, CloseHdl, Button*, void)
 {
     SfxViewFrame* pVFrame = ::GetActiveView()->GetViewFrame();
-    if (pVFrame != NULL)
+    if (pVFrame != nullptr)
     {
         pVFrame->ToggleChildWindow(FN_WORDCOUNT_DIALOG);
     }
@@ -50,7 +50,7 @@ SwWordCountFloatDlg::~SwWordCountFloatDlg()
 
 void SwWordCountFloatDlg::dispose()
 {
-    SwViewShell::SetCareWin( 0 );
+    SwViewShell::SetCareWin( nullptr );
     m_pCurrentWordFT.clear();
     m_pCurrentCharacterFT.clear();
     m_pCurrentCharacterExcludingSpacesFT.clear();

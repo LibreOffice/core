@@ -35,7 +35,7 @@ class SwDontExpandItem
 
 public:
     SwDontExpandItem() :
-        pDontExpItems(0){}
+        pDontExpItems(nullptr){}
     ~SwDontExpandItem();
 
     void SaveDontExpandItems( const SwPosition& rPos );

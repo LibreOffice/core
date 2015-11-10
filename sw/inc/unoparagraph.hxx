@@ -84,7 +84,7 @@ public:
     static css::uno::Reference<css::text::XTextContent>
         CreateXParagraph(SwDoc & rDoc, SwTextNode * pTextNode,
             css::uno::Reference< css::text::XText>
-            const& xParentText = 0,
+            const& xParentText = nullptr,
             const sal_Int32 nSelStart = -1, const sal_Int32 nSelEnd = - 1);
 
     const SwTextNode * GetTextNode() const;
@@ -279,8 +279,8 @@ struct SwXParagraphEnumeration
         css::uno::Reference< css::text::XText > const & xParent,
         std::shared_ptr<SwUnoCrsr> pCursor,
         const CursorType eType,
-        SwStartNode const*const pStartNode = 0,
-        SwTable const*const pTable = 0);
+        SwStartNode const*const pStartNode = nullptr,
+        SwTable const*const pTable = nullptr);
 };
 
 #endif // INCLUDED_SW_INC_UNOPARAGRAPH_HXX

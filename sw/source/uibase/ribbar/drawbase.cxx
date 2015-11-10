@@ -140,7 +140,7 @@ bool SwDrawBase::MouseButtonDown(const MouseEvent& rMEvt)
                 // Select gluepoint
                 if (pSdrView->HasMarkablePoints() && (!pSdrView->IsPointMarked(*aVEvt.pHdl) || rMEvt.IsShift()))
                 {
-                    SdrHdl* pHdl = NULL;
+                    SdrHdl* pHdl = nullptr;
 
                     if (!rMEvt.IsShift())
                     {
@@ -152,7 +152,7 @@ bool SwDrawBase::MouseButtonDown(const MouseEvent& rMEvt)
                         if (pSdrView->IsPointMarked(*aVEvt.pHdl))
                         {
                             bReturn = pSdrView->UnmarkPoint(*aVEvt.pHdl);
-                            pHdl = NULL;
+                            pHdl = nullptr;
                         }
                         else
                         {

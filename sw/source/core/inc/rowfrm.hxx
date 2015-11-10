@@ -29,7 +29,7 @@ class SwBorderAttrs;
 /// SwRowFrm is one table row in the document layout.
 class SwRowFrm: public SwLayoutFrm
 {
-    virtual void Format( vcl::RenderContext* pRenderContext, const SwBorderAttrs *pAttrs = 0 ) override;
+    virtual void Format( vcl::RenderContext* pRenderContext, const SwBorderAttrs *pAttrs = nullptr ) override;
     /// Only change the Frame size, not the PrtArea SSize
     virtual SwTwips ShrinkFrm( SwTwips, bool bTst = false, bool bInfo = false ) override;
     virtual SwTwips GrowFrm  ( SwTwips, bool bTst = false, bool bInfo = false ) override;
@@ -63,7 +63,7 @@ public:
      * been created; the same holds true for the Page at which the Flys
      * are to be registered at.
      */
-    void RegistFlys( SwPageFrm *pPage = 0 );
+    void RegistFlys( SwPageFrm *pPage = nullptr );
 
     const SwTableLine *GetTabLine() const { return m_pTabLine; }
 

@@ -91,7 +91,7 @@ class SwPageNumAndTypeOfAnchors
 
         inline SwAnchoredObject* operator[]( sal_uInt32 _nIndex )
         {
-            SwAnchoredObject* bRetObj = 0L;
+            SwAnchoredObject* bRetObj = nullptr;
 
             if ( _nIndex < Count())
             {
@@ -140,7 +140,7 @@ SwObjectFormatter::SwObjectFormatter( const SwPageFrm& _rPageFrm,
       mbConsiderWrapOnObjPos( _rPageFrm.GetFormat()->getIDocumentSettingAccess().get(DocumentSettingId::CONSIDER_WRAP_ON_OBJECT_POSITION) ),
       mpLayAction( _pLayAction ),
       // --> #i26945#
-      mpPgNumAndTypeOfAnchors( _bCollectPgNumOfAnchors ? new SwPageNumAndTypeOfAnchors() : 0L )
+      mpPgNumAndTypeOfAnchors( _bCollectPgNumOfAnchors ? new SwPageNumAndTypeOfAnchors() : nullptr )
 {
 }
 
@@ -154,7 +154,7 @@ SwObjectFormatter* SwObjectFormatter::CreateObjFormatter(
                                                       const SwPageFrm& _rPageFrm,
                                                       SwLayAction* _pLayAction )
 {
-    SwObjectFormatter* pObjFormatter = 0L;
+    SwObjectFormatter* pObjFormatter = nullptr;
     if ( _rAnchorFrm.IsTextFrm() )
     {
         pObjFormatter = SwObjectFormatterTextFrm::CreateObjFormatter(
@@ -397,7 +397,7 @@ void SwObjectFormatter::_FormatObj( SwAnchoredObject& _rAnchoredObj )
 bool SwObjectFormatter::_FormatObjsAtFrm( SwTextFrm* _pMasterTextFrm )
 {
     // --> #i26945#
-    SwFrm* pAnchorFrm( 0L );
+    SwFrm* pAnchorFrm( nullptr );
     if ( GetAnchorFrm().IsTextFrm() &&
          static_cast<SwTextFrm&>(GetAnchorFrm()).IsFollow() &&
          _pMasterTextFrm )
@@ -489,7 +489,7 @@ bool SwObjectFormatter::_FormatObjsAtFrm( SwTextFrm* _pMasterTextFrm )
 */
 SwAnchoredObject* SwObjectFormatter::GetCollectedObj( const sal_uInt32 _nIndex )
 {
-    return mpPgNumAndTypeOfAnchors ? (*mpPgNumAndTypeOfAnchors)[_nIndex] : 0L;
+    return mpPgNumAndTypeOfAnchors ? (*mpPgNumAndTypeOfAnchors)[_nIndex] : nullptr;
 }
 
 /** accessor to 'anchor' page number of collected anchored object

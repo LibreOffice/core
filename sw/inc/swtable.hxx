@@ -221,7 +221,7 @@ public:
 // It's not allowed to change the table model after the first call of one of these functions.
 
     bool Merge( SwDoc* pDoc, const SwSelBoxes& rBoxes, const SwSelBoxes& rMerged,
-                SwTableBox* pMergeBox, SwUndoTableMerge* pUndo = 0 )
+                SwTableBox* pMergeBox, SwUndoTableMerge* pUndo = nullptr )
     {
 #ifdef DBG_UTIL
         m_bDontChangeModel = true;
@@ -253,7 +253,7 @@ public:
     bool SplitCol( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCnt=1 );
 
     void FindSuperfluousRows( SwSelBoxes& rBoxes )
-        { _FindSuperfluousRows( rBoxes, 0, 0 ); }
+        { _FindSuperfluousRows( rBoxes, nullptr, nullptr ); }
     void CheckRowSpan( SwTableLine* &rpLine, bool bUp ) const;
 
           SwTableSortBoxes& GetTabSortBoxes()       { return m_TabSortContentBoxes; }
@@ -279,9 +279,9 @@ public:
                     bool bCpyNds = true, bool bCpyName = false ) const;
     // Copy table in this
     bool InsTable( const SwTable& rCpyTable, const SwNodeIndex&,
-                    SwUndoTableCpyTable* pUndo = 0 );
+                    SwUndoTableCpyTable* pUndo = nullptr );
     bool InsTable( const SwTable& rCpyTable, const SwSelBoxes&,
-                    SwUndoTableCpyTable* pUndo = 0 );
+                    SwUndoTableCpyTable* pUndo = nullptr );
     bool InsNewTable( const SwTable& rCpyTable, const SwSelBoxes&,
                       SwUndoTableCpyTable* pUndo );
     // Copy headline of table (with content!) into an other one.
@@ -350,7 +350,7 @@ class SW_DLLPUBLIC SwTableLine: public SwClient     // Client of FrameFormat.
 public:
     TYPEINFO_OVERRIDE();
 
-    SwTableLine() : m_pUpper(0) {}
+    SwTableLine() : m_pUpper(nullptr) {}
 
     SwTableLine( SwTableLineFormat*, sal_uInt16 nBoxes, SwTableBox *pUp );
     virtual ~SwTableLine();
@@ -370,9 +370,9 @@ public:
     void ChgFrameFormat( SwTableLineFormat* pNewFormat );
 
     // Search next/previous box with content.
-    SwTableBox* FindNextBox( const SwTable&, const SwTableBox* =0,
+    SwTableBox* FindNextBox( const SwTable&, const SwTableBox* =nullptr,
                             bool bOvrTableLns=true ) const;
-    SwTableBox* FindPreviousBox( const SwTable&, const SwTableBox* =0,
+    SwTableBox* FindPreviousBox( const SwTable&, const SwTableBox* =nullptr,
                             bool bOvrTableLns=true ) const;
 
     SwTwips GetTableLineHeight( bool& bLayoutAvailable ) const;
@@ -412,9 +412,9 @@ public:
 
     SwTableBox();
 
-    SwTableBox( SwTableBoxFormat*, sal_uInt16 nLines, SwTableLine *pUp = 0 );
-    SwTableBox( SwTableBoxFormat*, const SwStartNode&, SwTableLine *pUp = 0 );
-    SwTableBox( SwTableBoxFormat*, const SwNodeIndex&, SwTableLine *pUp = 0 );
+    SwTableBox( SwTableBoxFormat*, sal_uInt16 nLines, SwTableLine *pUp = nullptr );
+    SwTableBox( SwTableBoxFormat*, const SwStartNode&, SwTableLine *pUp = nullptr );
+    SwTableBox( SwTableBoxFormat*, const SwNodeIndex&, SwTableLine *pUp = nullptr );
     virtual ~SwTableBox();
 
           SwTableLines &GetTabLines() { return m_aLines; }
@@ -442,9 +442,9 @@ public:
     sal_uLong GetSttIdx() const;
 
     // Search next/previous box with content.
-    SwTableBox* FindNextBox( const SwTable&, const SwTableBox* =0,
+    SwTableBox* FindNextBox( const SwTable&, const SwTableBox* =nullptr,
                             bool bOvrTableLns=true ) const;
-    SwTableBox* FindPreviousBox( const SwTable&, const SwTableBox* =0,
+    SwTableBox* FindPreviousBox( const SwTable&, const SwTableBox* =nullptr,
                             bool bOvrTableLns=true ) const;
     // Return name of this box. It is determined dynamically and
     // is calculated from the position in the lines/boxes/table.
@@ -456,7 +456,7 @@ public:
     // width or height when inserting cols or rows
     Point GetCoordinates() const;
 
-    bool IsInHeadline( const SwTable* pTable = 0 ) const;
+    bool IsInHeadline( const SwTable* pTable = nullptr ) const;
 
     // Contains box contents, that can be formatted as a number?
     bool HasNumContent( double& rNum, sal_uInt32& rFormatIndex,

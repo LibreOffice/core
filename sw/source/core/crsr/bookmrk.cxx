@@ -46,15 +46,15 @@ namespace
     {
         // make sure the position has 1) the proper node, and 2) a proper index
         SwTextNode* pTextNode = rPos.nNode.GetNode().GetTextNode();
-        if(pTextNode == NULL && rPos.nContent.GetIndex() > 0)
+        if(pTextNode == nullptr && rPos.nContent.GetIndex() > 0)
         {
             SAL_INFO(
                 "sw.core",
                 "illegal position: " << rPos.nContent.GetIndex()
                     << " without proper TextNode");
-            rPos.nContent.Assign(NULL, 0);
+            rPos.nContent.Assign(nullptr, 0);
         }
-        else if(pTextNode != NULL && rPos.nContent.GetIndex() > pTextNode->Len())
+        else if(pTextNode != nullptr && rPos.nContent.GetIndex() > pTextNode->Len())
         {
             SAL_INFO(
                 "sw.core",
@@ -69,7 +69,7 @@ namespace
         const sal_Unicode aStartMark,
         const sal_Unicode aEndMark)
     {
-        io_pDoc->GetIDocumentUndoRedo().StartUndo(UNDO_UI_REPLACE, NULL);
+        io_pDoc->GetIDocumentUndoRedo().StartUndo(UNDO_UI_REPLACE, nullptr);
 
         SwPosition rStart = pField->GetMarkStart();
         SwTextNode const*const pStartTextNode = rStart.nNode.GetNode().GetTextNode();
@@ -95,7 +95,7 @@ namespace
             ++rEnd.nContent;
         }
 
-        io_pDoc->GetIDocumentUndoRedo().EndUndo(UNDO_UI_REPLACE, NULL);
+        io_pDoc->GetIDocumentUndoRedo().EndUndo(UNDO_UI_REPLACE, nullptr);
     };
 
     static void lcl_RemoveFieldMarks(Fieldmark* const pField,
@@ -103,7 +103,7 @@ namespace
         const sal_Unicode aStartMark,
         const sal_Unicode aEndMark)
     {
-        io_pDoc->GetIDocumentUndoRedo().StartUndo(UNDO_UI_REPLACE, NULL);
+        io_pDoc->GetIDocumentUndoRedo().StartUndo(UNDO_UI_REPLACE, nullptr);
 
         const SwPosition& rStart = pField->GetMarkStart();
         SwTextNode const*const pStartTextNode = rStart.nNode.GetNode().GetTextNode();
@@ -130,7 +130,7 @@ namespace
             io_pDoc->getIDocumentContentOperations().DeleteRange(aEnd);
         }
 
-        io_pDoc->GetIDocumentUndoRedo().EndUndo(UNDO_UI_REPLACE, NULL);
+        io_pDoc->GetIDocumentUndoRedo().EndUndo(UNDO_UI_REPLACE, nullptr);
     };
 }
 
@@ -138,7 +138,7 @@ namespace sw { namespace mark
 {
     MarkBase::MarkBase(const SwPaM& aPaM,
         const OUString& rName)
-        : SwModify(0)
+        : SwModify(nullptr)
         , m_pPos1(new SwPosition(*(aPaM.GetPoint())))
         , m_aName(rName)
     {
@@ -199,7 +199,7 @@ namespace sw { namespace mark
 
     OUString MarkBase::GenerateNewName(const OUString& rPrefix)
     {
-        static bool bHack = (getenv("LIBO_ONEWAY_STABLE_ODF_EXPORT") != NULL);
+        static bool bHack = (getenv("LIBO_ONEWAY_STABLE_ODF_EXPORT") != nullptr);
 
         if (bHack)
         {
@@ -229,7 +229,7 @@ namespace sw { namespace mark
         NotifyClients(pOld, pNew);
         if (pOld && (RES_REMOVE_UNO_OBJECT == pOld->Which()))
         {   // invalidate cached uno object
-            SetXBookmark(uno::Reference<text::XTextContent>(0));
+            SetXBookmark(uno::Reference<text::XTextContent>(nullptr));
         }
     }
 
@@ -244,7 +244,7 @@ namespace sw { namespace mark
 
     DdeBookmark::DdeBookmark(const SwPaM& aPaM)
         : MarkBase(aPaM, MarkBase::GenerateNewName("__DdeLink__"))
-        , m_aRefObj(NULL)
+        , m_aRefObj(nullptr)
     { }
 
     void DdeBookmark::SetRefObject(SwServerObject* pObj)

@@ -155,7 +155,7 @@ bool SwFrmSidebarWinContainer::empty( const SwFrm& rFrm )
 SwSidebarWin* SwFrmSidebarWinContainer::get( const SwFrm& rFrm,
                                              const sal_Int32 nIndex )
 {
-    SwSidebarWin* pRet( 0 );
+    SwSidebarWin* pRet( nullptr );
 
     FrmKey aFrmKey( &rFrm );
     FrmSidebarWinContainer::iterator aFrmIter = mpFrmSidebarWinContainer->find( aFrmKey );

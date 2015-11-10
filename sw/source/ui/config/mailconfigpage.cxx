@@ -496,7 +496,7 @@ IMPL_LINK_TYPED( SwAuthenticationSettingsDialog, CheckBoxHdl_Impl, Button*, pBox
     bool bChecked = static_cast<CheckBox*>(pBox)->IsChecked();
     m_pSeparateAuthenticationRB->Enable(bChecked);
     m_pSMTPAfterPOPRB->Enable(bChecked);
-    RadioButtonHdl_Impl( 0 );
+    RadioButtonHdl_Impl( nullptr );
 }
 
 IMPL_LINK_NOARG_TYPED(SwAuthenticationSettingsDialog, RadioButtonHdl_Impl, Button*, void)

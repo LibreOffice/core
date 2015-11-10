@@ -88,16 +88,16 @@ struct SwCallMouseEvent
 
     SwCallMouseEvent()
         : eType( EVENT_OBJECT_NONE )
-        { PTR.pFormat = 0; PTR.IMAP.pIMapObj = 0; }
+        { PTR.pFormat = nullptr; PTR.IMAP.pIMapObj = nullptr; }
 
     void Set( SwCallEventObjectType eTyp, const SwFrameFormat* pFormat )
-        { eType = eTyp; PTR.pFormat = pFormat; PTR.IMAP.pIMapObj = 0; }
+        { eType = eTyp; PTR.pFormat = pFormat; PTR.IMAP.pIMapObj = nullptr; }
 
     void Set( const SwFrameFormat* pFormat, const IMapObject* pIMapObj )
         { eType = EVENT_OBJECT_IMAGEMAP; PTR.pFormat = pFormat; PTR.IMAP.pIMapObj = pIMapObj; }
 
     void Set( const SwFormatINetFormat* pINetAttr )
-        { eType = EVENT_OBJECT_INETATTR; PTR.pINetAttr = pINetAttr; PTR.IMAP.pIMapObj = 0; }
+        { eType = EVENT_OBJECT_INETATTR; PTR.pINetAttr = pINetAttr; PTR.IMAP.pIMapObj = nullptr; }
 
     bool operator==( const SwCallMouseEvent& rEvent ) const
         {
@@ -109,7 +109,7 @@ struct SwCallMouseEvent
         {   return !( *this == rEvent );    }
 
     void Clear()
-        { eType = EVENT_OBJECT_NONE; PTR.pFormat = 0; PTR.IMAP.pIMapObj = 0; }
+        { eType = EVENT_OBJECT_NONE; PTR.pFormat = nullptr; PTR.IMAP.pIMapObj = nullptr; }
 
     bool HasEvent() const { return EVENT_OBJECT_NONE != eType; }
 };

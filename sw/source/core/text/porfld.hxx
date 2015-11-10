@@ -54,13 +54,13 @@ protected:
 
 public:
     SwFieldPortion( const SwFieldPortion& rField );
-    SwFieldPortion( const OUString &rExpand, SwFont *pFnt = 0, bool bPlaceHolder = false );
+    SwFieldPortion( const OUString &rExpand, SwFont *pFnt = nullptr, bool bPlaceHolder = false );
     virtual ~SwFieldPortion();
 
     sal_uInt16 m_nAttrFieldType;
     void TakeNextOffset( const SwFieldPortion* pField );
     void CheckScript( const SwTextSizeInfo &rInf );
-    inline bool HasFont() const { return 0 != pFnt; }
+    inline bool HasFont() const { return nullptr != pFnt; }
     // #i89179# - made public
     inline const SwFont *GetFont() const { return pFnt; }
 
@@ -112,7 +112,7 @@ public:
 class SwHiddenPortion : public SwFieldPortion
 {
 public:
-    inline SwHiddenPortion( const OUString &rExpand, SwFont *pFntL = 0 )
+    inline SwHiddenPortion( const OUString &rExpand, SwFont *pFntL = nullptr )
          : SwFieldPortion( rExpand, pFntL )
         { SetLen(1); SetWhichPor( POR_HIDDEN ); }
     virtual void Paint( const SwTextPaintInfo &rInf ) const override;

@@ -45,7 +45,7 @@ using namespace css;
 
 void SwHTMLWriter::FillNextNumInfo()
 {
-    m_pNextNumRuleInfo = 0;
+    m_pNextNumRuleInfo = nullptr;
 
     sal_uLong nPos = pCurPam->GetPoint()->nNode.GetIndex() + 1;
 
@@ -90,7 +90,7 @@ void SwHTMLWriter::FillNextNumInfo()
 void SwHTMLWriter::ClearNextNumInfo()
 {
     delete m_pNextNumRuleInfo;
-    m_pNextNumRuleInfo = 0;
+    m_pNextNumRuleInfo = nullptr;
 }
 
 Writer& OutHTML_NumBulListStart( SwHTMLWriter& rWrt,
@@ -189,7 +189,7 @@ Writer& OutHTML_NumBulListStart( SwHTMLWriter& rWrt,
             sOut += OString(OOO_STRING_SVTOOLS_HTML_unorderlist);
 
             // den Typ ueber das Bullet-Zeichen bestimmen
-            const sal_Char *pStr = 0;
+            const sal_Char *pStr = nullptr;
             switch( rNumFormat.GetBulletChar() )
             {
             case HTML_BULLETCHAR_DISC:
@@ -214,7 +214,7 @@ Writer& OutHTML_NumBulListStart( SwHTMLWriter& rWrt,
             sOut += OString(OOO_STRING_SVTOOLS_HTML_unorderlist);
             rWrt.Strm().WriteOString( sOut );
             OutHTML_BulletImage( rWrt,
-                                    0,
+                                    nullptr,
                                     rNumFormat.GetBrush() );
         }
         else

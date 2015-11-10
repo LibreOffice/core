@@ -89,8 +89,8 @@ SwDLL::SwDLL()
     std::unique_ptr<SvtModuleOptions> xOpt;
     if (!utl::ConfigManager::IsAvoidConfig())
         xOpt.reset(new SvtModuleOptions);
-    SfxObjectFactory* pDocFact = 0;
-    SfxObjectFactory* pGlobDocFact = 0;
+    SfxObjectFactory* pDocFact = nullptr;
+    SfxObjectFactory* pGlobDocFact = nullptr;
     if (xOpt && xOpt->IsWriter())
     {
         pDocFact = &SwDocShell::Factory();
@@ -156,7 +156,7 @@ SwDLL::~SwDLL()
     {
         // fdo#86494 SwAutoCorrect must be deleted before _FinitCore
         SvxAutoCorrCfg& rACfg = SvxAutoCorrCfg::Get();
-        rACfg.SetAutoCorrect(0); // delete SwAutoCorrect before exit handlers
+        rACfg.SetAutoCorrect(nullptr); // delete SwAutoCorrect before exit handlers
     }
 
     // Pool has to be deleted before statics are

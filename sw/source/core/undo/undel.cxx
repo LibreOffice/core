@@ -99,11 +99,11 @@ SwUndoDelete::SwUndoDelete(
     bool bCalledByTableCpy )
     : SwUndo(UNDO_DELETE),
     SwUndRng( rPam ),
-    pMvStt( 0 ),
-    pSttStr(0),
-    pEndStr(0),
-    pRedlData(0),
-    pRedlSaveData(0),
+    pMvStt( nullptr ),
+    pSttStr(nullptr),
+    pEndStr(nullptr),
+    pRedlData(nullptr),
+    pRedlSaveData(nullptr),
     nNode(0),
     nNdDiff(0),
     nSectDiff(0),
@@ -128,7 +128,7 @@ SwUndoDelete::SwUndoDelete(
     {
         pRedlSaveData = new SwRedlineSaveDatas;
         if( !FillSaveData( rPam, *pRedlSaveData ))
-            delete pRedlSaveData, pRedlSaveData = 0;
+            delete pRedlSaveData, pRedlSaveData = nullptr;
     }
 
     if( !pHistory )
@@ -169,7 +169,7 @@ SwUndoDelete::SwUndoDelete(
     bJoinNext = !bFullPara && pEnd == rPam.GetPoint();
     bBackSp = !bFullPara && !bJoinNext;
 
-    SwTextNode *pSttTextNd = 0, *pEndTextNd = 0;
+    SwTextNode *pSttTextNd = nullptr, *pEndTextNd = nullptr;
     if( !bFullPara )
     {
         pSttTextNd = pStt->nNode.GetNode().GetTextNode();
@@ -351,7 +351,7 @@ SwUndoDelete::SwUndoDelete(
     }
 
     if( !rPam.GetNode().IsContentNode() )
-        rPam.GetPoint()->nContent.Assign( 0, 0 );
+        rPam.GetPoint()->nContent.Assign( nullptr, 0 );
 
     // is a history necessary here at all?
     if( pHistory && !pHistory->Count() )
@@ -681,20 +681,20 @@ SwRewriter SwUndoDelete::GetRewriter() const
     {
         OUString aStr;
 
-        if (pSttStr != NULL && pEndStr != NULL && pSttStr->isEmpty() &&
+        if (pSttStr != nullptr && pEndStr != nullptr && pSttStr->isEmpty() &&
             pEndStr->isEmpty())
         {
             aStr = SW_RESSTR(STR_PARAGRAPH_UNDO);
         }
         else
         {
-            OUString * pStr = NULL;
-            if (pSttStr != NULL)
+            OUString * pStr = nullptr;
+            if (pSttStr != nullptr)
                 pStr = pSttStr;
-            else if (pEndStr != NULL)
+            else if (pEndStr != nullptr)
                 pStr = pEndStr;
 
-            if (pStr != NULL)
+            if (pStr != nullptr)
             {
                 aStr = DenoteSpecialCharacters(*pStr);
             }
@@ -772,11 +772,11 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
                 if( pInsNd->IsContentNode() )
                     aPos.nContent.Assign( static_cast<SwContentNode*>(pInsNd), nSttContent );
                 if( !bTableDelLastNd )
-                    pInsNd = 0;         // do not delete Node!
+                    pInsNd = nullptr;         // do not delete Node!
             }
         }
         else
-            pInsNd = 0;         // do not delete Node!
+            pInsNd = nullptr;         // do not delete Node!
 
         bool bNodeMove = 0 != nNode;
 
@@ -829,7 +829,7 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
                     ++aPos.nNode;
             }
         }
-        SwNode* pMovedNode = NULL;
+        SwNode* pMovedNode = nullptr;
         if( nSectDiff )
         {
             sal_uLong nMoveIndex = aPos.nNode.GetIndex();
@@ -889,7 +889,7 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
             SwTextNode * pTextNd = aPos.nNode.GetNode().GetTextNode();
             // If more than a single Node got deleted, also all "Node"
             // attributes were saved
-            if (pTextNd != NULL)
+            if (pTextNd != nullptr)
             {
                 if( pTextNd->HasSwAttrSet() && bNodeMove && !pEndStr )
                     pTextNd->ResetAllAttr();
@@ -964,7 +964,7 @@ void SwUndoDelete::RedoImpl(::sw::UndoRedoContext & rContext)
             "SwUndoDelete::Redo: used to have redline data, but now none?");
         if (!bSuccess)
         {
-            delete pRedlSaveData, pRedlSaveData = 0;
+            delete pRedlSaveData, pRedlSaveData = nullptr;
         }
     }
 

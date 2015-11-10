@@ -69,7 +69,7 @@ public:
 
     /// "Pure virtual methods" of SfxPoolItem.
     virtual bool            operator==( const SfxPoolItem& ) const override;
-    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const override;
+    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = nullptr ) const override;
 
     virtual bool GetInfo( SfxPoolItem& rInfo ) const override;
 
@@ -130,7 +130,7 @@ class SW_DLLPUBLIC SwFormatFieldHint : public SfxHint
     const SwView*     pView;
 
 public:
-    SwFormatFieldHint( const SwFormatField* p, SwFormatFieldHintWhich n, const SwView* pV = 0)
+    SwFormatFieldHint( const SwFormatField* p, SwFormatFieldHintWhich n, const SwView* pV = nullptr)
         : pField(p)
         , nWhich(n)
         , pView(pV)

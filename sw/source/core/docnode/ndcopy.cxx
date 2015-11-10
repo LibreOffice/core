@@ -62,7 +62,7 @@ SwContentNode* SwTextNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) cons
     SwTextNode* pCpyAttrNd = pCpyTextNd;
 
     // Copy the formats to the other document
-    SwTextFormatColl* pColl = 0;
+    SwTextFormatColl* pColl = nullptr;
     if( pDoc->IsInsOnlyTextGlossary() )
     {
         SwNodeIndex aIdx( rIdx, -1 );
@@ -131,7 +131,7 @@ struct _CopyTable
     _CopyTable(SwDoc* pDc, _MapTableFrameFormats& rArr, sal_uLong nOldStt,
                SwTableNode& rTableNd, const SwTable* pOldTable)
         : m_pDoc(pDc), m_nOldTableSttIdx(nOldStt), m_rMapArr(rArr),
-          m_pInsLine(0), m_pInsBox(0), m_pTableNd(&rTableNd), m_pOldTable(pOldTable)
+          m_pInsLine(nullptr), m_pInsBox(nullptr), m_pTableNd(&rTableNd), m_pOldTable(pOldTable)
     {}
 };
 
@@ -241,7 +241,7 @@ SwTableNode* SwTableNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
     {
         if( rIdx < pDoc->GetNodes().GetEndOfInserts().GetIndex() &&
             rIdx >= pDoc->GetNodes().GetEndOfInserts().StartOfSectionIndex() )
-            return 0;
+            return nullptr;
     }
 
     // Copy the TableFrameFormat
@@ -270,7 +270,7 @@ SwTableNode* SwTableNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
     rTable.SetTableChgMode( GetTable().GetTableChgMode() );
     rTable.SetTableModel( GetTable().IsNewModel() );
 
-    SwDDEFieldType* pDDEType = 0;
+    SwDDEFieldType* pDDEType = nullptr;
     if( typeid(SwDDETable) == typeid( &GetTable() ))
     {
         // We're copying a DDE table
@@ -297,7 +297,7 @@ SwTableNode* SwTableNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
     // without any content in m_TabSortContentBoxes. #i26629#
     pTableNd->GetTable().SetTableNode( pTableNd );
     rNds._Copy( aRg, aInsPos, false );
-    pTableNd->GetTable().SetTableNode( 0 );
+    pTableNd->GetTable().SetTableNode( nullptr );
 
     // Special case for a single box
     if( 1 == GetTable().GetTabSortBoxes().size() )
@@ -332,7 +332,7 @@ void SwTextNode::CopyCollFormat( SwTextNode& rDestNd )
     SwAttrSet aPgBrkSet( pDestDoc->GetAttrPool(), aBreakSetRange );
     const SwAttrSet* pSet;
 
-    if( 0 != ( pSet = rDestNd.GetpSwAttrSet() ) )
+    if( nullptr != ( pSet = rDestNd.GetpSwAttrSet() ) )
     {
         // Special cases for Break-Attributes
         const SfxPoolItem* pAttr;
@@ -344,7 +344,7 @@ void SwTextNode::CopyCollFormat( SwTextNode& rDestNd )
     }
 
     rDestNd.ChgFormatColl( pDestDoc->CopyTextColl( *GetTextColl() ));
-    if( 0 != ( pSet = GetpSwAttrSet() ) )
+    if( nullptr != ( pSet = GetpSwAttrSet() ) )
         pSet->CopyToModify( rDestNd );
 
     if( aPgBrkSet.Count() )

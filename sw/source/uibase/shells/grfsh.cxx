@@ -132,7 +132,7 @@ void SwGrfShell::Execute(SfxRequest &rReq)
         case SID_SAVE_GRAPHIC:
         {
             const Graphic *pGraphic;
-            if(0 != (pGraphic = rSh.GetGraphic()))
+            if(nullptr != (pGraphic = rSh.GetGraphic()))
             {
                 OUString sGrfNm;
                 OUString sFilterNm;
@@ -191,7 +191,7 @@ void SwGrfShell::Execute(SfxRequest &rReq)
             // When the graphic is selected to be opened via some external tool
             // for advanced editing
             GraphicObject const*const pGraphicObject(rSh.GetGraphicObj());
-            if(0 != pGraphicObject)
+            if(nullptr != pGraphicObject)
             {
                 m_ExternalEdits.push_back(std::unique_ptr<SwExternalToolEdit>(
                             new SwExternalToolEdit(&rSh)));
@@ -336,7 +336,7 @@ void SwGrfShell::Execute(SfxRequest &rReq)
             aSet.Put(SfxFrameItem( SID_DOCFRAME, &GetView().GetViewFrame()->GetTopFrame()));
 
             SfxObjectShell * sh = rSh.GetDoc()->GetPersist();
-            if (sh != 0 && sh->HasName())
+            if (sh != nullptr && sh->HasName())
             {
                 aSet.Put(
                     SfxStringItem(SID_REFERER, sh->GetMedium()->GetName()));
@@ -477,7 +477,7 @@ void SwGrfShell::Execute(SfxRequest &rReq)
         case SID_OBJECT_CROP:
         {
             GraphicObject const *pGraphicObject = rSh.GetGraphicObj();
-            if (0 != pGraphicObject  && SDRDRAG_CROP != rSh.GetDragMode()) {
+            if (nullptr != pGraphicObject  && SDRDRAG_CROP != rSh.GetDragMode()) {
                 rSh.StartCropImage();
             }
         }
@@ -502,7 +502,7 @@ void SwGrfShell::ExecAttr( SfxRequest &rReq )
         const SfxPoolItem* pItem;
         sal_uInt16 nSlot = rReq.GetSlot();
         if( !pArgs || SfxItemState::SET != pArgs->GetItemState( nSlot, false, &pItem ))
-            pItem = 0;
+            pItem = nullptr;
 
         switch( nSlot )
         {
@@ -827,7 +827,7 @@ void SwGrfShell::GetAttrState(SfxItemSet &rSet)
             rSet.DisableItem( nWhich );
         nWhich = aIter.NextWhich();
     }
-    SetGetStateSet( 0 );
+    SetGetStateSet( nullptr );
 }
 
 void SwGrfShell::ExecuteRotation(SfxRequest &rReq)
@@ -928,7 +928,7 @@ void SwGrfShell::GetAttrStateForRotation(SfxItemSet &rSet)
             rSet.DisableItem( nWhich );
         nWhich = aIterator.NextWhich();
     }
-    SetGetStateSet( 0 );
+    SetGetStateSet( nullptr );
 }
 
 SwGrfShell::~SwGrfShell()

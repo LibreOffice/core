@@ -66,7 +66,7 @@ void SwFlyInCntFrm::SetRefPoint( const Point& rPoint,
 {
     // OD 2004-05-27 #i26791# - member <aRelPos> moved to <SwAnchoredObject>
     OSL_ENSURE( rPoint != aRef || rRelAttr != GetCurrRelPos(), "SetRefPoint: no change" );
-    SwFlyNotify *pNotify = NULL;
+    SwFlyNotify *pNotify = nullptr;
     // No notify at a locked fly frame, if a fly frame is locked, there's
     // already a SwFlyNotify object on the stack (MakeAll).
     if( !IsLocked() )

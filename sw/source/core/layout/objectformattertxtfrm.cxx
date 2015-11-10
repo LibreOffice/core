@@ -75,10 +75,10 @@ SwObjectFormatterTextFrm* SwObjectFormatterTextFrm::CreateObjFormatter(
                                                 const SwPageFrm& _rPageFrm,
                                                 SwLayAction* _pLayAction )
 {
-    SwObjectFormatterTextFrm* pObjFormatter = 0L;
+    SwObjectFormatterTextFrm* pObjFormatter = nullptr;
 
     // determine 'master' of <_rAnchorTextFrm>, if anchor frame is a follow text frame.
-    SwTextFrm* pMasterOfAnchorFrm = 0L;
+    SwTextFrm* pMasterOfAnchorFrm = nullptr;
     if ( _rAnchorTextFrm.IsFollow() )
     {
         pMasterOfAnchorFrm = _rAnchorTextFrm.FindMaster();
@@ -178,7 +178,7 @@ bool SwObjectFormatterTextFrm::DoFormatObj( SwAnchoredObject& _rAnchoredObj,
             // #i26945# - check conditions for move forward of
             // anchor text frame
             // determine, if anchor text frame has previous frame
-            const bool bDoesAnchorHadPrev = ( mrAnchorTextFrm.GetIndPrev() != 0 );
+            const bool bDoesAnchorHadPrev = ( mrAnchorTextFrm.GetIndPrev() != nullptr );
 
             // #i40141# - use new method - it also formats the
             // section the anchor frame is in.
@@ -343,7 +343,7 @@ bool SwObjectFormatterTextFrm::DoFormatObjs()
            ( !mrAnchorTextFrm.IsFollow() &&
              _AtLeastOneObjIsTmpConsiderWrapInfluence() ) ) )
     {
-        const bool bDoesAnchorHadPrev = ( mrAnchorTextFrm.GetIndPrev() != 0 );
+        const bool bDoesAnchorHadPrev = ( mrAnchorTextFrm.GetIndPrev() != nullptr );
 
         // Format anchor text frame after its objects are formatted.
         // Note: The format of the anchor frame also formats the invalid
@@ -357,7 +357,7 @@ bool SwObjectFormatterTextFrm::DoFormatObjs()
         sal_uInt32 nToPageNum( 0L );
         // #i43913#
         bool bInFollow( false );
-        SwAnchoredObject* pObj = 0L;
+        SwAnchoredObject* pObj = nullptr;
         if ( !mrAnchorTextFrm.IsFollow() )
         {
             pObj = _GetFirstObjWithMovedFwdAnchor(
@@ -521,7 +521,7 @@ SwAnchoredObject* SwObjectFormatterTextFrm::_GetFirstObjWithMovedFwdAnchor(
             _nWrapInfluenceOnPosition == text::WrapInfluenceOnPosition::ONCE_CONCURRENT,
             "<SwObjectFormatterTextFrm::_GetFirstObjWithMovedFwdAnchor(..)> - invalid value for parameter <_nWrapInfluenceOnPosition>" );
 
-    SwAnchoredObject* pRetAnchoredObj = 0L;
+    SwAnchoredObject* pRetAnchoredObj = nullptr;
 
     sal_uInt32 i = 0L;
     for ( ; i < CountOfCollected(); ++i )
@@ -639,7 +639,7 @@ bool SwObjectFormatterTextFrm::CheckMovedFwdCondition(
 // method <SwObjectFormatterTextFrm::_FormatAnchorFrmForCheckMoveFwd()>
 // #i44049# - format till a certain lower frame, if provided.
 static void lcl_FormatContentOfLayoutFrm( SwLayoutFrm* pLayFrm,
-                                 SwFrm* pLastLowerFrm = 0L )
+                                 SwFrm* pLastLowerFrm = nullptr )
 {
     SwFrm* pLowerFrm = pLayFrm->GetLower();
     while ( pLowerFrm )

@@ -69,7 +69,7 @@ SwInsTableDlg::SwInsTableDlg( SwView& rView )
     : SfxModalDialog(rView.GetWindow(), "InsertTableDialog", "modules/swriter/ui/inserttable.ui")
     , m_aTextFilter(" .<>")
     , pShell(&rView.GetWrtShell())
-    , pTAutoFormat(0)
+    , pTAutoFormat(nullptr)
     , nEnteredValRepeatHeaderNF(-1)
 {
     get(m_pNameEdit, "nameedit");
@@ -165,7 +165,7 @@ IMPL_LINK_TYPED( SwInsTableDlg, ModifyName, Edit&, rEdit, void )
         rEdit.SetText(sTableName);
     }
 
-    m_pInsertBtn->Enable(pShell->GetTableStyle( sTableName ) == 0);
+    m_pInsertBtn->Enable(pShell->GetTableStyle( sTableName ) == nullptr);
 }
 
 IMPL_LINK_TYPED( SwInsTableDlg, ModifyRowCol, Edit&, rEdit, void )

@@ -127,8 +127,8 @@ namespace
 SwHeaderFooterWin::SwHeaderFooterWin( SwEditWin* pEditWin, const SwFrm *pFrm, bool bHeader ) :
     SwFrameMenuButtonBase( pEditWin, pFrm ),
     m_bIsHeader( bHeader ),
-    m_pPopupMenu( NULL ),
-    m_pLine( NULL ),
+    m_pPopupMenu( nullptr ),
+    m_pLine( nullptr ),
     m_bIsAppearing( false ),
     m_nFadeRate( 100 ),
     m_aFadeTimer( )

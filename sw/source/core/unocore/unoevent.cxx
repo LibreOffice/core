@@ -51,7 +51,7 @@ const struct SvEventDescription aGraphicEvents[] =
     { SVX_EVENT_IMAGE_LOAD,         "OnLoadDone" },
     { SVX_EVENT_IMAGE_ABORT,        "OnLoadCancel" },
     { SVX_EVENT_IMAGE_ERROR,        "OnLoadError" },
-    { 0, NULL }
+    { 0, nullptr }
 };
 
 const struct SvEventDescription aFrameEvents[] =
@@ -64,7 +64,7 @@ const struct SvEventDescription aFrameEvents[] =
     { SFX_EVENT_MOUSEOVER_OBJECT,   "OnMouseOver" },
     { SFX_EVENT_MOUSECLICK_OBJECT,  "OnClick" },
     { SFX_EVENT_MOUSEOUT_OBJECT,    "OnMouseOut" },
-    { 0, NULL }
+    { 0, nullptr }
 };
 
 const struct SvEventDescription aOLEEvents[] =
@@ -73,7 +73,7 @@ const struct SvEventDescription aOLEEvents[] =
     { SFX_EVENT_MOUSEOVER_OBJECT,   "OnMouseOver" },
     { SFX_EVENT_MOUSECLICK_OBJECT,  "OnClick" },
     { SFX_EVENT_MOUSEOUT_OBJECT,    "OnMouseOut" },
-    { 0, NULL }
+    { 0, nullptr }
 };
 
 const struct SvEventDescription aHyperlinkEvents[] =
@@ -81,7 +81,7 @@ const struct SvEventDescription aHyperlinkEvents[] =
     { SFX_EVENT_MOUSEOVER_OBJECT,   "OnMouseOver" },
     { SFX_EVENT_MOUSECLICK_OBJECT,  "OnClick" },
     { SFX_EVENT_MOUSEOUT_OBJECT,    "OnMouseOut" },
-    { 0, NULL }
+    { 0, nullptr }
 };
 
 const struct SvEventDescription aFrameStyleEvents[] =
@@ -97,7 +97,7 @@ const struct SvEventDescription aFrameStyleEvents[] =
     { SVX_EVENT_IMAGE_LOAD,         "OnLoadDone" },
     { SVX_EVENT_IMAGE_ABORT,        "OnLoadCancel" },
     { SVX_EVENT_IMAGE_ERROR,        "OnLoadError" },
-    { 0, NULL }
+    { 0, nullptr }
 };
 
 SwHyperlinkEventDescriptor::SwHyperlinkEventDescriptor() :
@@ -123,7 +123,7 @@ void SwHyperlinkEventDescriptor::copyMacrosFromINetFormat(
     {
         const sal_uInt16 nEvent = mpSupportedMacroItems[i].mnEvent;
         const SvxMacro* aMacro = aFormat.GetMacro(nEvent);
-        if (NULL != aMacro)
+        if (nullptr != aMacro)
             replaceByName(nEvent, *aMacro);
     }
 }

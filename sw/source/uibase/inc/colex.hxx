@@ -56,7 +56,7 @@ protected:
 public:
     SwPageGridExample(vcl::Window* pPar)
         : SwPageExample(pPar)
-        , pGridItem(0)
+        , pGridItem(nullptr)
     {}
 
     virtual ~SwPageGridExample();
@@ -79,7 +79,7 @@ protected:
 public:
     SwColExample(vcl::Window* pPar)
         : SwPageExample(pPar)
-        , pColMgr(0)
+        , pColMgr(nullptr)
     {
     }
 

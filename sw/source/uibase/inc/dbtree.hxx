@@ -57,7 +57,7 @@ public:
     virtual void dispose() override;
     virtual Size GetOptimalSize() const override;
 
-    OUString GetDBName( OUString& rTableName, OUString& rColumnName, sal_Bool* pbIsTable = 0);
+    OUString GetDBName( OUString& rTableName, OUString& rColumnName, sal_Bool* pbIsTable = nullptr);
 
     void    Select( const OUString& rDBName, const OUString& rTableName,
                     const OUString& rColumnName );

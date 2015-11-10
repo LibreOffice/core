@@ -156,7 +156,7 @@ class SW_DLLPUBLIC SwEditShell : public SwCrsrShell
      that will be used by GetGraphic() and GetGraphicSize(). */
     SAL_DLLPRIVATE SwGrfNode *_GetGrfNode() const ;
 
-    SAL_DLLPRIVATE void DeleteSel( SwPaM& rPam, bool* pUndo = 0 );
+    SAL_DLLPRIVATE void DeleteSel( SwPaM& rPam, bool* pUndo = nullptr );
 
     SAL_DLLPRIVATE void _SetSectionAttr( SwSectionFormat& rSectFormat, const SfxItemSet& rSet );
 
@@ -200,13 +200,13 @@ public:
     void SetLinkUpdMode( sal_uInt16 nMode );
 
     /// Copy content of all ranges at current position of cursor to given Shell.
-    bool Copy( SwEditShell* pDestShell = 0 );
+    bool Copy( SwEditShell* pDestShell = nullptr );
 
     /** For copying via ClipBoard:
        If table is copied into table, move all cursors away from it.
        Copy and Paste must be in FEShell because of FlyFrames!
        Copy all selections to the document. */
-    bool _CopySelToDoc( SwDoc* pInsDoc, SwNodeIndex* pNdInsPos = 0 );
+    bool _CopySelToDoc( SwDoc* pInsDoc, SwNodeIndex* pNdInsPos = nullptr );
 
     long SplitNode( bool bAutoFormat = false, bool bCheckTableStart = true );
     bool AppendTextNode();
@@ -295,7 +295,7 @@ public:
     SwCharFormat& GetCharFormat(sal_uInt16 nFormat) const;
     SwCharFormat* GetCurCharFormat() const;
     void FillByEx(SwCharFormat*, bool bReset = false);
-    SwCharFormat* MakeCharFormat( const OUString& rName, SwCharFormat* pDerivedFrom = 0 );
+    SwCharFormat* MakeCharFormat( const OUString& rName, SwCharFormat* pDerivedFrom = nullptr );
     SwCharFormat* FindCharFormatByName( const OUString& rName ) const;
 
     /* FormatCollections (new) - Explaining the general naming pattern:
@@ -337,7 +337,7 @@ public:
     /// Add 2nd optional parameter <bResetListAttrs> - see also <SwDoc::SetTextFormatColl(..)>
     void SetTextFormatColl(SwTextFormatColl*, const bool bResetListAttrs = false);
     SwTextFormatColl *MakeTextFormatColl(const OUString &rFormatCollName,
-        SwTextFormatColl *pDerivedFrom = 0);
+        SwTextFormatColl *pDerivedFrom = nullptr);
     void FillByEx(SwTextFormatColl*, bool bReset = false);
     SwTextFormatColl* FindTextFormatCollByName( const OUString& rName ) const;
 
@@ -381,7 +381,7 @@ public:
     void ChangeDBFields( const std::vector<OUString>& rOldNames,
                          const OUString& rNewName );
     void GetAllUsedDB( std::vector<OUString>& rDBNameList,
-                       std::vector<OUString>* pAllDBNames = 0 );
+                       std::vector<OUString>* pAllDBNames = nullptr );
 
     bool IsAnyDatabaseFieldInDoc()const;
 
@@ -419,9 +419,9 @@ public:
 
     /// Insert content table. Renew if required.
     void                InsertTableOf(const SwTOXBase& rTOX,
-                                        const SfxItemSet* pSet = 0);
+                                        const SfxItemSet* pSet = nullptr);
     bool                UpdateTableOf(const SwTOXBase& rTOX,
-                                        const SfxItemSet* pSet = 0);
+                                        const SfxItemSet* pSet = nullptr);
     const SwTOXBase*    GetCurTOX() const;
     const SwTOXBase*    GetDefaultTOXBase( TOXTypes eTyp, bool bCreate = false );
     void                SetDefaultTOXBase(const SwTOXBase& rBase);
@@ -521,7 +521,7 @@ public:
     bool SelectionHasNumber() const;
     bool SelectionHasBullet() const;
 
-    OUString GetUniqueNumRuleName( const OUString* pChkStr = 0, bool bAutoNum = true ) const;
+    OUString GetUniqueNumRuleName( const OUString* pChkStr = nullptr, bool bAutoNum = true ) const;
     void ChgNumRuleFormats( const SwNumRule& rRule );
 
     /// Set (and query if) a numbering with StartFlag starts at current PointPos.
@@ -552,10 +552,10 @@ public:
     void DelAllUndoObj();
 
     /// Undo: set up Undo parenthesis, return nUndoId of this parenthesis.
-    SwUndoId StartUndo( SwUndoId eUndoId = UNDO_EMPTY, const SwRewriter * pRewriter = 0 );
+    SwUndoId StartUndo( SwUndoId eUndoId = UNDO_EMPTY, const SwRewriter * pRewriter = nullptr );
 
     /// Closes parenthesis of nUndoId, not used by UI.
-    SwUndoId EndUndo( SwUndoId eUndoId = UNDO_EMPTY, const SwRewriter * pRewriter = 0 );
+    SwUndoId EndUndo( SwUndoId eUndoId = UNDO_EMPTY, const SwRewriter * pRewriter = nullptr );
 
     bool     GetLastUndoInfo(OUString *const o_pStr,
                              SwUndoId *const o_pId) const;
@@ -617,12 +617,12 @@ public:
      else give a rap on the knuckles!
      If a string-ptr != 0 return the respective name. */
     void GetGrfNms( OUString* pGrfName, OUString* pFltName,
-                    const SwFlyFrameFormat* = 0 ) const;
+                    const SwFlyFrameFormat* = nullptr ) const;
 
     /// Re-read if graphic is not ok. Current graphic is replaced by the new one.
     void ReRead( const OUString& rGrfName, const OUString& rFltName,
-                  const Graphic* pGraphic = 0,
-                  const GraphicObject* pGrafObj = 0 );
+                  const Graphic* pGraphic = nullptr,
+                  const GraphicObject* pGrafObj = nullptr );
 
     /// Unique identification of object (for ImageMapDlg).
     void    *GetIMapInventor() const;
@@ -656,7 +656,7 @@ public:
      including styles. */
     sal_uInt16 MakeGlossary( SwTextBlocks& rToFill, const OUString& rName,
                          const OUString& rShortName, bool bSaveRelFile = false,
-                         const OUString* pOnlyText=0 );
+                         const OUString* pOnlyText=nullptr );
 
     /// Save complete content of doc as glossary.
     sal_uInt16 SaveGlossaryDoc( SwTextBlocks& rGlossary, const OUString& rName,
@@ -681,7 +681,7 @@ public:
     const SwTable& InsertTable( const SwInsertTableOptions& rInsTableOpts,  ///< ALL_TBL_INS_ATTR
                                 sal_uInt16 nRows, sal_uInt16 nCols,
                                 sal_Int16 eAdj = css::text::HoriOrientation::FULL,
-                                const SwTableAutoFormat* pTAFormat = 0 );
+                                const SwTableAutoFormat* pTAFormat = nullptr );
 
     void InsertDDETable( const SwInsertTableOptions& rInsTableOpts,  ///< HEADLINE_NO_BORDER
                          SwDDEFieldType* pDDEType,
@@ -695,7 +695,7 @@ public:
     bool TextToTable( const SwInsertTableOptions& rInsTableOpts,  ///< ALL_TBL_INS_ATTR
                       sal_Unicode cCh,
                       sal_Int16 eAdj = css::text::HoriOrientation::FULL,
-                      const SwTableAutoFormat* pTAFormat = 0 );
+                      const SwTableAutoFormat* pTAFormat = nullptr );
     bool TableToText( sal_Unicode cCh );
     bool IsTextToTableAvailable() const;
 
@@ -715,7 +715,7 @@ public:
 
      Can Merge checks if Prev or Next are possible.
         If pointer pChkNxtPrv is passed possible direction is given. */
-    bool CanMergeTable( bool bWithPrev = true, bool* pChkNxtPrv = 0 ) const;
+    bool CanMergeTable( bool bWithPrev = true, bool* pChkNxtPrv = nullptr ) const;
     bool MergeTable( bool bWithPrev = true, sal_uInt16 nMode = 0 );
 
     /// Set up InsertDB as table Undo.
@@ -725,13 +725,13 @@ public:
 
     /// Save selections.
     void SpellStart( SwDocPositions eStart, SwDocPositions eEnd,
-                     SwDocPositions eCurr, SwConversionArgs *pConvArgs = 0 );
+                     SwDocPositions eCurr, SwConversionArgs *pConvArgs = nullptr );
 
     /// Restore selections.
-    void SpellEnd( SwConversionArgs *pConvArgs = 0, bool bRestoreSelection = true );
+    void SpellEnd( SwConversionArgs *pConvArgs = nullptr, bool bRestoreSelection = true );
     css::uno::Any SpellContinue(
                     sal_uInt16* pPageCnt, sal_uInt16* pPageSt,
-                    SwConversionArgs *pConvArgs = 0 );
+                    SwConversionArgs *pConvArgs = nullptr );
 
     /** Spells on a sentence basis - the SpellPortions are needed
      @return false if no error could be found. */
@@ -772,7 +772,7 @@ public:
 
     /**  @return names of all references set in document.
       If ArrayPointer == 0 then return only whether a RefMark is set in document. */
-    sal_uInt16 GetRefMarks( std::vector<OUString>* = 0 ) const;
+    sal_uInt16 GetRefMarks( std::vector<OUString>* = nullptr ) const;
 
     /// Call AutoCorrect
     void AutoCorrect( SvxAutoCorrect& rACorr, bool bInsertMode,
@@ -780,7 +780,7 @@ public:
     bool GetPrevAutoCorrWord( SvxAutoCorrect& rACorr, OUString& rWord );
 
     /// Set our styles according to the respective rules.
-    void AutoFormat( const SvxSwAutoFormatFlags* pAFlags = 0 );
+    void AutoFormat( const SvxSwAutoFormatFlags* pAFlags = nullptr );
 
     static SvxSwAutoFormatFlags* GetAutoFormatFlags();
     static void SetAutoFormatFlags(SvxSwAutoFormatFlags *);
@@ -803,7 +803,7 @@ public:
     sal_uInt16 GetLineCount( bool bActPos = true );
 
     /// Query and set footnote-text/number. Set.. to current SSelection!
-    bool GetCurFootnote( SwFormatFootnote* pToFillFootnote = 0 );
+    bool GetCurFootnote( SwFormatFootnote* pToFillFootnote = nullptr );
     bool SetCurFootnote( const SwFormatFootnote& rFillFootnote );
     bool HasFootnotes( bool bEndNotes = false ) const;
 
@@ -811,7 +811,7 @@ public:
     /// @return list of all footnotes and their first portions of text.
 
     SwSection const* InsertSection(
-            SwSectionData & rNewData, SfxItemSet const*const = 0 );
+            SwSectionData & rNewData, SfxItemSet const*const = nullptr );
     bool IsInsRegionAvailable() const;
     const SwSection* GetCurrSection() const;
 
@@ -820,22 +820,22 @@ public:
      a footnote the reference of which is in a columned range.
      If bOutOfTab is set, the range comprising the table is searched
      and not an inner one. */
-    SwSection* GetAnySection( bool bOutOfTab = false, const Point* pPt = 0 );
+    SwSection* GetAnySection( bool bOutOfTab = false, const Point* pPt = nullptr );
 
     size_t GetSectionFormatCount() const;
     size_t GetSectionFormatPos(const SwSectionFormat&) const;
     const SwSectionFormat& GetSectionFormat(size_t nFormat) const;
     void DelSectionFormat( size_t nFormat);
     void UpdateSection( size_t const nSect, SwSectionData &,
-            SfxItemSet const*const  = 0);
+            SfxItemSet const*const  = nullptr);
     bool IsAnySectionInDoc( bool bChkReadOnly = false,
                             bool bChkHidden = false,
                             bool BChkTOX = false ) const;
 
-    OUString GetUniqueSectionName( const OUString* pChkStr = 0 ) const;
+    OUString GetUniqueSectionName( const OUString* pChkStr = nullptr ) const;
 
     /// Set attributes.
-    void SetSectionAttr(const SfxItemSet& rSet, SwSectionFormat* pSectFormat = 0);
+    void SetSectionAttr(const SfxItemSet& rSet, SwSectionFormat* pSectFormat = nullptr);
 
     /** Search inside the cursor selection for full selected sections.
      if any part of section in the selection @return 0.
@@ -927,7 +927,7 @@ public:
 
     /// Interface for TextInputData - (for input of Japanese/Chinese chars.)
     SwExtTextInput* CreateExtTextInput(LanguageType eInputLanguage);
-    OUString DeleteExtTextInput( SwExtTextInput* pDel = 0, bool bInsText = true);
+    OUString DeleteExtTextInput( SwExtTextInput* pDel = nullptr, bool bInsText = true);
     void SetExtTextInputData( const CommandExtTextInputData& );
 
     /// Interface for access to AutoComplete-list.
@@ -938,7 +938,7 @@ public:
     sal_uInt16 GetScalingOfSelectedText() const;
 
     /// Ctor/Dtor.
-    SwEditShell( SwDoc&, vcl::Window*, const SwViewOption *pOpt = 0 );
+    SwEditShell( SwDoc&, vcl::Window*, const SwViewOption *pOpt = nullptr );
 
     /// Copy-Constructor in disguise.
     SwEditShell( SwEditShell&, vcl::Window* );

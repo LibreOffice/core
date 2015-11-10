@@ -123,7 +123,7 @@ class SwTextInfo
 
 protected:
     SwTextInfo()
-        : m_pPara(0)
+        : m_pPara(nullptr)
         , m_nTextStart(0)
     {}
 
@@ -187,7 +187,7 @@ protected:
     sal_uInt8 m_nDirection : 2; // writing direction: 0/90/180/270 degree
 
 protected:
-    void CtorInitTextSizeInfo( OutputDevice* pRenderContext, SwTextFrm *pFrm, SwFont *pFnt = 0,
+    void CtorInitTextSizeInfo( OutputDevice* pRenderContext, SwTextFrm *pFrm, SwFont *pFnt = nullptr,
                    const sal_Int32 nIdx = 0,
                    const sal_Int32 nLen = COMPLETE_STRING );
     SwTextSizeInfo();
@@ -197,7 +197,7 @@ public:
                    const sal_Int32 nIdx = 0,
                    const sal_Int32 nLen = COMPLETE_STRING );
 
-    SwTextSizeInfo( SwTextFrm *pTextFrm, SwFont *pTextFnt = 0,
+    SwTextSizeInfo( SwTextFrm *pTextFrm, SwFont *pTextFnt = nullptr,
                    const sal_Int32 nIndex = 0,
                    const sal_Int32 nLength = COMPLETE_STRING );
 
@@ -376,10 +376,10 @@ class SwTextPaintInfo : public SwTextSizeInfo
 
 protected:
     SwTextPaintInfo()
-        : pWrongList(0)
-        , pGrammarCheckList(0)
-        , pSmartTags(0)
-        , pSpaceAdd(0)
+        : pWrongList(nullptr)
+        , pGrammarCheckList(nullptr)
+        , pSmartTags(nullptr)
+        , pSpaceAdd(nullptr)
 #ifdef DBG_UTIL
         , pBrushItem(reinterpret_cast<SvxBrushItem*>(-1))
 #else
@@ -450,7 +450,7 @@ public:
      *                          is excluded (e.g. for background)
     **/
     void CalcRect( const SwLinePortion& rPor, SwRect* pRect,
-                   SwRect* pIntersect = 0, const bool bInsideBox = false ) const;
+                   SwRect* pIntersect = nullptr, const bool bInsideBox = false ) const;
 
     inline SwTwips GetPaintOfst() const;
     inline void SetPaintOfst( const SwTwips nNew );
@@ -720,7 +720,7 @@ class SwFontSave
     SwAttrIter    *pIter;
 public:
     SwFontSave( const SwTextSizeInfo &rInf, SwFont *pFnt,
-                SwAttrIter* pItr = NULL );
+                SwAttrIter* pItr = nullptr );
    ~SwFontSave();
 };
 
@@ -740,7 +740,7 @@ inline sal_uInt16 SwTextSizeInfo::GetTextHeight() const
 
 inline SwPosSize SwTextSizeInfo::GetTextSize( const OUString &rText ) const
 {
-    return GetTextSize( m_pOut, 0, rText, 0, rText.getLength(), 0 );
+    return GetTextSize( m_pOut, nullptr, rText, 0, rText.getLength(), 0 );
 }
 
 inline SwPosSize SwTextSizeInfo::GetTextSize( const SwScriptInfo* pSI,

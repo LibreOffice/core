@@ -98,8 +98,8 @@ class SW_DLLPUBLIC SwOneExampleFrame
 public:
     SwOneExampleFrame(vcl::Window& rWin,
                     sal_uInt32 nStyleFlags = EX_SHOW_ONLINE_LAYOUT,
-                    const Link<SwOneExampleFrame&,void>* pInitalizedLink = 0,
-                    const OUString* pURL = 0);
+                    const Link<SwOneExampleFrame&,void>* pInitalizedLink = nullptr,
+                    const OUString* pURL = nullptr);
     ~SwOneExampleFrame();
 
     css::uno::Reference< css::frame::XModel > &       GetModel()      {return _xModel;}

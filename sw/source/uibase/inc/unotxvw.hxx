@@ -322,7 +322,7 @@ public:
     //XUnoTunnel
     virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) throw(css::uno::RuntimeException, std::exception) override;
 
-    void    Invalidate(){m_pView = 0;}
+    void    Invalidate(){m_pView = nullptr;}
 
     // ITextCursorHelper
     virtual const SwPaM*        GetPaM() const override;

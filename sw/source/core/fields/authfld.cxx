@@ -261,7 +261,7 @@ sal_uInt16  SwAuthorityFieldType::GetSequencePos(sal_IntPtr nHandle)
             SwPosition aFieldPos(rFieldTextNode);
             SwDoc& rDoc = *const_cast<SwDoc*>(rFieldTextNode.GetDoc());
             SwContentFrm *pFrm = rFieldTextNode.getLayoutFrm( rDoc.getIDocumentLayoutAccess().GetCurrentLayout() );
-            const SwTextNode* pTextNode = 0;
+            const SwTextNode* pTextNode = nullptr;
             if(pFrm && !pFrm->IsInDocBody())
                 pTextNode = GetBodyTextNode( rDoc, aFieldPos, *pFrm );
             //if no text node could be found or the field is in the document

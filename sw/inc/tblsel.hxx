@@ -104,7 +104,7 @@ bool IsFrmInTableSel( const SwRect& rUnion, const SwFrm* pCell );
 // i.e. boxes are added if some overlap at the sides.
 // Additionally a new box is created and filled with the relevant content.
 void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
-                  SwTableBox** ppMergeBox, SwUndoTableMerge* pUndo = 0 );
+                  SwTableBox** ppMergeBox, SwUndoTableMerge* pUndo = nullptr );
 
 // Check if selected boxes allow for a valid merge.
 sal_uInt16 CheckMergeSel( const SwPaM& rPam );
@@ -169,7 +169,7 @@ class _FndBox
 
 public:
     _FndBox( SwTableBox* pB, _FndLine* pFL ) :
-        pBox(pB), pUpper(pFL), pLineBefore( 0 ), pLineBehind( 0 ) {}
+        pBox(pB), pUpper(pFL), pLineBefore( nullptr ), pLineBehind( nullptr ) {}
 
     const FndLines_t&   GetLines() const    { return m_Lines; }
         FndLines_t&     GetLines()          { return m_Lines; }
@@ -187,7 +187,7 @@ public:
                                        const bool bBehind );
     bool AreLinesToRestore( const SwTable &rTable ) const;
 
-    void ClearLineBehind() { pLineBehind = 0; }
+    void ClearLineBehind() { pLineBehind = nullptr; }
 };
 
 class _FndLine
@@ -200,7 +200,7 @@ class _FndLine
     _FndLine& operator=(_FndLine const&) = delete;
 
 public:
-    _FndLine(SwTableLine* pL, _FndBox* pFB=0) : pLine(pL), pUpper(pFB) {}
+    _FndLine(SwTableLine* pL, _FndBox* pFB=nullptr) : pLine(pL), pUpper(pFB) {}
     const FndBoxes_t&   GetBoxes() const    { return m_Boxes; }
         FndBoxes_t&     GetBoxes()          { return m_Boxes; }
     const SwTableLine*  GetLine() const     { return pLine; }
@@ -218,7 +218,7 @@ struct _FndPara
     _FndBox* pFndBox;
 
     _FndPara( const SwSelBoxes& rBxs, _FndBox* pFB )
-        : rBoxes(rBxs), pFndLine(0), pFndBox(pFB) {}
+        : rBoxes(rBxs), pFndLine(nullptr), pFndBox(pFB) {}
     _FndPara( const _FndPara& rPara, _FndBox* pFB )
         : rBoxes(rPara.rBoxes), pFndLine(rPara.pFndLine), pFndBox(pFB) {}
     _FndPara( const _FndPara& rPara, _FndLine* pFL )

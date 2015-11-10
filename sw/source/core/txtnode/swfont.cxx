@@ -72,7 +72,7 @@ void SwFont::SetBackColor( Color* pNewColor )
     delete m_pBackColor;
     m_pBackColor = pNewColor;
     m_bFontChg = true;
-    m_aSub[SW_LATIN].m_pMagic = m_aSub[SW_CJK].m_pMagic = m_aSub[SW_CTL].m_pMagic = 0;
+    m_aSub[SW_LATIN].m_pMagic = m_aSub[SW_CJK].m_pMagic = m_aSub[SW_CTL].m_pMagic = nullptr;
 }
 
 void SwFont::SetTopBorder( const editeng::SvxBorderLine* pTopBorder )
@@ -85,7 +85,7 @@ void SwFont::SetTopBorder( const editeng::SvxBorderLine* pTopBorder )
         m_nTopBorderDist = 0;
     }
     m_bFontChg = true;
-    m_aSub[SW_LATIN].m_pMagic = m_aSub[SW_CJK].m_pMagic = m_aSub[SW_CTL].m_pMagic = 0;
+    m_aSub[SW_LATIN].m_pMagic = m_aSub[SW_CJK].m_pMagic = m_aSub[SW_CTL].m_pMagic = nullptr;
 }
 
 void SwFont::SetBottomBorder( const editeng::SvxBorderLine* pBottomBorder )
@@ -98,7 +98,7 @@ void SwFont::SetBottomBorder( const editeng::SvxBorderLine* pBottomBorder )
         m_nBottomBorderDist = 0;
     }
     m_bFontChg = true;
-    m_aSub[SW_LATIN].m_pMagic = m_aSub[SW_CJK].m_pMagic = m_aSub[SW_CTL].m_pMagic = 0;
+    m_aSub[SW_LATIN].m_pMagic = m_aSub[SW_CJK].m_pMagic = m_aSub[SW_CTL].m_pMagic = nullptr;
 }
 
 void SwFont::SetRightBorder( const editeng::SvxBorderLine* pRightBorder )
@@ -111,7 +111,7 @@ void SwFont::SetRightBorder( const editeng::SvxBorderLine* pRightBorder )
         m_nRightBorderDist = 0;
     }
     m_bFontChg = true;
-    m_aSub[SW_LATIN].m_pMagic = m_aSub[SW_CJK].m_pMagic = m_aSub[SW_CTL].m_pMagic = 0;
+    m_aSub[SW_LATIN].m_pMagic = m_aSub[SW_CJK].m_pMagic = m_aSub[SW_CTL].m_pMagic = nullptr;
 }
 
 void SwFont::SetLeftBorder( const editeng::SvxBorderLine* pLeftBorder )
@@ -124,7 +124,7 @@ void SwFont::SetLeftBorder( const editeng::SvxBorderLine* pLeftBorder )
         m_nLeftBorderDist = 0;
     }
     m_bFontChg = true;
-    m_aSub[SW_LATIN].m_pMagic = m_aSub[SW_CJK].m_pMagic = m_aSub[SW_CTL].m_pMagic = 0;
+    m_aSub[SW_LATIN].m_pMagic = m_aSub[SW_CJK].m_pMagic = m_aSub[SW_CTL].m_pMagic = nullptr;
 }
 
 const boost::optional<editeng::SvxBorderLine>&
@@ -482,7 +482,7 @@ void SwFont::SetDiffFnt( const SfxItemSet *pAttrSet,
                          const IDocumentSettingAccess *pIDocumentSettingAccess )
 {
     delete m_pBackColor;
-    m_pBackColor = NULL;
+    m_pBackColor = nullptr;
 
     if( pAttrSet )
     {
@@ -686,7 +686,7 @@ void SwFont::SetDiffFnt( const SfxItemSet *pAttrSet,
             SetShadowWidth(pShadowItem->GetWidth());
             SetShadowLocation(pShadowItem->GetLocation());
         }
-        const SfxPoolItem* pTwoLinesItem = 0;
+        const SfxPoolItem* pTwoLinesItem = nullptr;
         if( SfxItemState::SET ==
                 pAttrSet->GetItemState( RES_CHRATR_TWO_LINES, true, &pTwoLinesItem ))
             if ( static_cast<const SvxTwoLinesItem*>(pTwoLinesItem)->GetValue() )
@@ -709,7 +709,7 @@ SwFont::SwFont( const SwFont &rFont )
     m_aSub[SW_CJK] = rFont.m_aSub[SW_CJK];
     m_aSub[SW_CTL] = rFont.m_aSub[SW_CTL];
     m_nActual = rFont.m_nActual;
-    m_pBackColor = rFont.m_pBackColor ? new Color( *rFont.m_pBackColor ) : NULL;
+    m_pBackColor = rFont.m_pBackColor ? new Color( *rFont.m_pBackColor ) : nullptr;
     m_aHighlightColor = rFont.m_aHighlightColor;
     m_aTopBorder = rFont.m_aTopBorder;
     m_aBottomBorder = rFont.m_aBottomBorder;
@@ -843,7 +843,7 @@ SwFont::SwFont( const SwAttrSet* pAttrSet,
         true, &pItem ))
         m_pBackColor = new Color( static_cast<const SvxBrushItem*>(pItem)->GetColor() );
     else
-        m_pBackColor = NULL;
+        m_pBackColor = nullptr;
     if( SfxItemState::SET == pAttrSet->GetItemState( RES_CHRATR_HIGHLIGHT,
         true, &pItem ))
         SetHighlightColor(static_cast<const SvxBrushItem*>(pItem)->GetColor());
@@ -864,10 +864,10 @@ SwFont::SwFont( const SwAttrSet* pAttrSet,
     }
     else
     {
-        SetTopBorder(0);
-        SetBottomBorder(0);
-        SetRightBorder(0);
-        SetLeftBorder(0);
+        SetTopBorder(nullptr);
+        SetBottomBorder(nullptr);
+        SetRightBorder(nullptr);
+        SetLeftBorder(nullptr);
         SetTopBorderDist(0);
         SetBottomBorderDist(0);
         SetRightBorderDist(0);
@@ -927,7 +927,7 @@ SwFont& SwFont::operator=( const SwFont &rFont )
     m_aSub[SW_CTL] = rFont.m_aSub[SW_CTL];
     m_nActual = rFont.m_nActual;
     delete m_pBackColor;
-    m_pBackColor = rFont.m_pBackColor ? new Color( *rFont.m_pBackColor ) : NULL;
+    m_pBackColor = rFont.m_pBackColor ? new Color( *rFont.m_pBackColor ) : nullptr;
     m_aHighlightColor = rFont.m_aHighlightColor;
     m_aTopBorder = rFont.m_aTopBorder;
     m_aBottomBorder = rFont.m_aBottomBorder;
@@ -1170,7 +1170,7 @@ void SwSubFont::_DrawText( SwDrawTextInfo &rInf, const bool bGrey )
         rInf.SetLen( nLn );
 
     FontUnderline nOldUnder = UNDERLINE_NONE;
-    SwUnderlineFont* pUnderFnt = 0;
+    SwUnderlineFont* pUnderFnt = nullptr;
 
     if( rInf.GetUnderFnt() )
     {
@@ -1275,7 +1275,7 @@ void SwSubFont::_DrawText( SwDrawTextInfo &rInf, const bool bGrey )
         rInf.SetIdx( 0 );
         rInf.SetLen( 2 );
         SetUnderline( nOldUnder );
-        rInf.SetUnderFnt( 0 );
+        rInf.SetUnderFnt( nullptr );
 
         // set position for underline font
         rInf.SetPos( pUnderFnt->GetPos() );
@@ -1297,7 +1297,7 @@ void SwSubFont::_DrawStretchText( SwDrawTextInfo &rInf )
         return;
 
     FontUnderline nOldUnder = UNDERLINE_NONE;
-    SwUnderlineFont* pUnderFnt = 0;
+    SwUnderlineFont* pUnderFnt = nullptr;
 
     if( rInf.GetUnderFnt() )
     {
@@ -1357,7 +1357,7 @@ void SwSubFont::_DrawStretchText( SwDrawTextInfo &rInf )
         rInf.SetIdx( 0 );
         rInf.SetLen( 2 );
         SetUnderline( nOldUnder );
-        rInf.SetUnderFnt( 0 );
+        rInf.SetUnderFnt( nullptr );
 
         // set position for underline font
         rInf.SetPos( pUnderFnt->GetPos() );

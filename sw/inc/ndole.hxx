@@ -80,13 +80,13 @@ class SW_DLLPUBLIC SwOLENode: public SwNoTextNode
     SwOLENode(  const SwNodeIndex &rWhere,
                 const svt::EmbeddedObjectRef&,
                 SwGrfFormatColl *pGrfColl,
-                SwAttrSet* pAutoAttr = 0 );
+                SwAttrSet* pAutoAttr = nullptr );
 
     SwOLENode(  const SwNodeIndex &rWhere,
                 const OUString &rName,
                 sal_Int64 nAspect,
                 SwGrfFormatColl *pGrfColl,
-                SwAttrSet* pAutoAttr = 0 );
+                SwAttrSet* pAutoAttr = nullptr );
 
     SwOLENode( const SwOLENode & ) = delete;
 
@@ -140,12 +140,12 @@ public:
 /// Inline methods from Node.hxx
 inline SwOLENode *SwNode::GetOLENode()
 {
-     return ND_OLENODE == m_nNodeType ? static_cast<SwOLENode*>(this) : 0;
+     return ND_OLENODE == m_nNodeType ? static_cast<SwOLENode*>(this) : nullptr;
 }
 
 inline const SwOLENode *SwNode::GetOLENode() const
 {
-     return ND_OLENODE == m_nNodeType ? static_cast<const SwOLENode*>(this) : 0;
+     return ND_OLENODE == m_nNodeType ? static_cast<const SwOLENode*>(this) : nullptr;
 }
 
 #endif  // _ INCLUDED_SW_INC_NDOLE_HXX

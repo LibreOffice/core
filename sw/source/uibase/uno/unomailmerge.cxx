@@ -101,7 +101,7 @@ static CloseResult CloseModelAndDocSh(
 {
     CloseResult eResult = eSuccess;
 
-    rxDocSh = 0;
+    rxDocSh = nullptr;
 
     //! models/documents should never be disposed (they may still be
     //! used for printing which is called asynchronously for example)
@@ -153,13 +153,13 @@ static bool LoadFromURL_impl(
     }
 
     // try to get the DocShell
-    SwDocShell *pTmpDocShell = 0;
+    SwDocShell *pTmpDocShell = nullptr;
     Reference < XUnoTunnel > xTunnel( xTmpModel, UNO_QUERY );
     if (xTunnel.is())
     {
         SwXTextDocument* pTextDoc = reinterpret_cast<SwXTextDocument *>(
                 xTunnel->getSomething( SwXTextDocument::getUnoTunnelId() ));
-        pTmpDocShell = pTextDoc ? pTextDoc->GetDocShell() : 0;
+        pTmpDocShell = pTextDoc ? pTextDoc->GetDocShell() : nullptr;
     }
 
     bool bRes = false;
@@ -348,8 +348,8 @@ static bool DeleteTmpFile_Impl(
             bDelete = false;
         }
 
-        rxModel = 0;
-        rxDocSh = 0; // destroy doc shell
+        rxModel = nullptr;
+        rxDocSh = nullptr; // destroy doc shell
 
         if ( bDelete )
         {
@@ -379,7 +379,7 @@ SwXMailMerge::SwXMailMerge() :
     m_bSendAsAttachment(false),
     m_bSaveAsSingleFile(false),
     m_bDisposing(false),
-    m_pMgr(0)
+    m_pMgr(nullptr)
 {
     // create empty document
     // like in: SwModule::InsertEnv (appenv.cxx)
@@ -403,8 +403,8 @@ SwXMailMerge::~SwXMailMerge()
         if ( eVetoed == CloseModelAndDocSh( m_xModel, m_xDocSh ) )
             OSL_FAIL("ownership transferred to vetoing object!" );
 
-        m_xModel = 0;
-        m_xDocSh = 0; // destroy doc shell
+        m_xModel = nullptr;
+        m_xDocSh = nullptr; // destroy doc shell
     }
 }
 
@@ -419,7 +419,7 @@ public:
     ~MailMergeExecuteFinalizer()
     {
         osl::MutexGuard pMgrGuard( GetMailMergeMutex() );
-        m_pMailMerge->m_pMgr = 0;
+        m_pMailMerge->m_pMgr = nullptr;
     }
 
 private:
@@ -595,7 +595,7 @@ uno::Any SAL_CALL SwXMailMerge::execute(
     }
 
     SfxViewFrame*   pFrame = SfxViewFrame::GetFirst( xCurDocSh, false);
-    SwView *pView = pFrame ? dynamic_cast<SwView*>( pFrame->GetViewShell()  ) : NULL;
+    SwView *pView = pFrame ? dynamic_cast<SwView*>( pFrame->GetViewShell()  ) : nullptr;
     if (!pView)
         throw RuntimeException();
     SwWrtShell &rSh = *pView->GetWrtShellPtr();
@@ -889,7 +889,7 @@ void SAL_CALL SwXMailMerge::setPropertyValue(
         throw PropertyVetoException();
     else
     {
-        void *pData = NULL;
+        void *pData = nullptr;
         switch (pCur->nWID)
         {
             case WID_SELECTION :                pData = &m_aSelection;  break;

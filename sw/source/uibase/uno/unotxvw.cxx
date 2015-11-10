@@ -128,7 +128,7 @@ void SwXTextView::Invalidate()
     }
 
     m_refCount--;
-    m_pView = 0;
+    m_pView = nullptr;
 }
 
 Sequence< uno::Type > SAL_CALL SwXTextView::getTypes(  ) throw(uno::RuntimeException, std::exception)
@@ -248,11 +248,11 @@ sal_Bool SwXTextView::select(const uno::Any& aInterface)
     }
     else
     {
-        SwPaM * pPaM(0);
+        SwPaM * pPaM(nullptr);
         std::pair<OUString, FlyCntType> frame;
         OUString tableName;
-        SwUnoTableCrsr const* pTableCursor(0);
-        ::sw::mark::IMark const* pMark(0);
+        SwUnoTableCrsr const* pTableCursor(nullptr);
+        ::sw::mark::IMark const* pMark(nullptr);
         SwUnoCursorHelper::GetSelectableFromAny(xInterface, *pDoc,
                 pPaM, frame, tableName, pTableCursor, pMark, sdrObjects);
         if (pPaM)
@@ -438,13 +438,13 @@ SdrObject* SwXTextView::GetControl(
         uno::Reference< awt::XControl >& xToFill  )
 {
     SwView* pView2 = GetView();
-    FmFormShell* pFormShell = pView2 ? pView2->GetFormShell() : NULL;
-    SdrView* pDrawView = pView2 ? pView2->GetDrawView() : NULL;
-    vcl::Window* pWindow = pView2 ? pView2->GetWrtShell().GetWin() : NULL;
+    FmFormShell* pFormShell = pView2 ? pView2->GetFormShell() : nullptr;
+    SdrView* pDrawView = pView2 ? pView2->GetDrawView() : nullptr;
+    vcl::Window* pWindow = pView2 ? pView2->GetWrtShell().GetWin() : nullptr;
 
     OSL_ENSURE( pFormShell && pDrawView && pWindow, "SwXTextView::GetControl: how could I?" );
 
-    SdrObject* pControl = NULL;
+    SdrObject* pControl = nullptr;
     if ( pFormShell && pDrawView && pWindow )
         pControl = pFormShell->GetFormControl( xModel, *pDrawView, *pWindow, xToFill );
     return pControl;
@@ -464,9 +464,9 @@ uno::Reference< form::runtime::XFormController > SAL_CALL SwXTextView::getFormCo
     SolarMutexGuard aGuard;
 
     SwView* pView2 = GetView();
-    FmFormShell* pFormShell = pView2 ? pView2->GetFormShell() : NULL;
-    SdrView* pDrawView = pView2 ? pView2->GetDrawView() : NULL;
-    vcl::Window* pWindow = pView2 ? pView2->GetWrtShell().GetWin() : NULL;
+    FmFormShell* pFormShell = pView2 ? pView2->GetFormShell() : nullptr;
+    SdrView* pDrawView = pView2 ? pView2->GetDrawView() : nullptr;
+    vcl::Window* pWindow = pView2 ? pView2->GetWrtShell().GetWin() : nullptr;
     OSL_ENSURE( pFormShell && pDrawView && pWindow, "SwXTextView::getFormController: how could I?" );
 
     uno::Reference< form::runtime::XFormController > xController;
@@ -479,7 +479,7 @@ sal_Bool SAL_CALL SwXTextView::isFormDesignMode(  ) throw (uno::RuntimeException
 {
     SolarMutexGuard aGuard;
     SwView* pView2 = GetView();
-    FmFormShell* pFormShell = pView2 ? pView2->GetFormShell() : NULL;
+    FmFormShell* pFormShell = pView2 ? pView2->GetFormShell() : nullptr;
     return !pFormShell || pFormShell->IsDesignMode();
 }
 
@@ -487,7 +487,7 @@ void SAL_CALL SwXTextView::setFormDesignMode( sal_Bool _DesignMode ) throw (Runt
 {
     SolarMutexGuard aGuard;
     SwView* pView2 = GetView();
-    FmFormShell* pFormShell = pView2 ? pView2->GetFormShell() : NULL;
+    FmFormShell* pFormShell = pView2 ? pView2->GetFormShell() : nullptr;
     if ( pFormShell )
         pFormShell->SetDesignMode( _DesignMode );
 }
@@ -1068,9 +1068,9 @@ void SwXTextViewCursor::gotoRange(
         }
 
         uno::Reference<lang::XUnoTunnel> xRangeTunnel( xRange, uno::UNO_QUERY);
-        SwXTextRange* pRange = 0;
-        SwXParagraph* pPara = 0;
-        OTextCursorHelper* pCursor = 0;
+        SwXTextRange* pRange = nullptr;
+        SwXParagraph* pPara = nullptr;
+        OTextCursorHelper* pCursor = nullptr;
         if(xRangeTunnel.is())
         {
             pRange = reinterpret_cast<SwXTextRange*>(xRangeTunnel->getSomething(
@@ -1081,7 +1081,7 @@ void SwXTextViewCursor::gotoRange(
                                     SwXParagraph::getUnoTunnelId()));
         }
 
-        const FrmTypeFlags nFrmType = rSh.GetFrmType(0,true);
+        const FrmTypeFlags nFrmType = rSh.GetFrmType(nullptr,true);
 
         SwStartNodeType eSearchNodeType = SwNormalStartNode;
         if(nFrmType & FrmTypeFlags::FLY_ANY)
@@ -1098,7 +1098,7 @@ void SwXTextViewCursor::gotoRange(
         const SwStartNode* pOwnStartNode = aOwnPaM.GetNode().
                                                 FindSttNodeByType(eSearchNodeType);
 
-        const SwNode* pSrcNode = 0;
+        const SwNode* pSrcNode = nullptr;
         if(pCursor && pCursor->GetPaM())
         {
             pSrcNode = &pCursor->GetPaM()->GetNode();
@@ -1115,7 +1115,7 @@ void SwXTextViewCursor::gotoRange(
         {
             pSrcNode = pPara->GetTextNode();
         }
-        const SwStartNode* pTmp = pSrcNode ? pSrcNode->FindSttNodeByType(eSearchNodeType) : 0;
+        const SwStartNode* pTmp = pSrcNode ? pSrcNode->FindSttNodeByType(eSearchNodeType) : nullptr;
 
         //Skip SectionNodes
         while(pTmp && pTmp->IsSectionNode())
@@ -1386,7 +1386,7 @@ uno::Reference< text::XTextRange >  SwXTextViewCursor::getStart()
         SwWrtShell& rSh = m_pView->GetWrtShell();
         SwPaM* pShellCrsr = rSh.GetCrsr();
         SwDoc* pDoc = m_pView->GetDocShell()->GetDoc();
-        xRet = SwXTextRange::CreateXTextRange(*pDoc, *pShellCrsr->Start(), 0);
+        xRet = SwXTextRange::CreateXTextRange(*pDoc, *pShellCrsr->Start(), nullptr);
     }
     else
         throw uno::RuntimeException();
@@ -1406,7 +1406,7 @@ uno::Reference< text::XTextRange >  SwXTextViewCursor::getEnd()
         SwWrtShell& rSh = m_pView->GetWrtShell();
         SwPaM* pShellCrsr = rSh.GetCrsr();
         SwDoc* pDoc = m_pView->GetDocShell()->GetDoc();
-        xRet = SwXTextRange::CreateXTextRange(*pDoc, *pShellCrsr->End(), 0);
+        xRet = SwXTextRange::CreateXTextRange(*pDoc, *pShellCrsr->End(), nullptr);
     }
     else
         throw uno::RuntimeException();
@@ -1762,13 +1762,13 @@ IMPLEMENT_FORWARD_XINTERFACE2(SwXTextViewCursor,SwXTextViewCursor_Base,OTextCurs
 const SwDoc*        SwXTextViewCursor::GetDoc() const
 {
     SwWrtShell& rSh = m_pView->GetWrtShell();
-    return   rSh.GetCrsr() ? rSh.GetCrsr()->GetDoc() : 0;
+    return   rSh.GetCrsr() ? rSh.GetCrsr()->GetDoc() : nullptr;
 }
 
 SwDoc*  SwXTextViewCursor::GetDoc()
 {
     SwWrtShell& rSh = m_pView->GetWrtShell();
-    return   rSh.GetCrsr() ? rSh.GetCrsr()->GetDoc() : 0;
+    return   rSh.GetCrsr() ? rSh.GetCrsr()->GetDoc() : nullptr;
 }
 
 const SwPaM*    SwXTextViewCursor::GetPaM() const

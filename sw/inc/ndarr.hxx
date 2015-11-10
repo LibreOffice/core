@@ -141,13 +141,13 @@ public:
     SwNodePtr operator[]( sal_uLong n ) const; // defined in node.hxx
 
     sal_uLong Count() const { return BigPtrArray::Count(); }
-    void ForEach( FnForEach_SwNodes fnForEach, void* pArgs = 0 )
+    void ForEach( FnForEach_SwNodes fnForEach, void* pArgs = nullptr )
     {
         ForEach( 0, BigPtrArray::Count(), fnForEach, pArgs );
     }
-    void ForEach( sal_uLong nStt, sal_uLong nEnd, FnForEach_SwNodes fnForEach, void* pArgs = 0 );
+    void ForEach( sal_uLong nStt, sal_uLong nEnd, FnForEach_SwNodes fnForEach, void* pArgs = nullptr );
     void ForEach( const SwNodeIndex& rStart, const SwNodeIndex& rEnd,
-                    FnForEach_SwNodes fnForEach, void* pArgs = 0 );
+                    FnForEach_SwNodes fnForEach, void* pArgs = nullptr );
 
     /// A still empty section.
     SwNode& GetEndOfPostIts() const     { return *m_pEndOfPostIts; }
@@ -205,29 +205,29 @@ public:
     /// Implementations of "Make...Node" are in the given .cxx-files.
     SwTextNode *MakeTextNode( const SwNodeIndex & rWhere,
                             SwTextFormatColl *pColl,
-                            SwAttrSet* pAutoAttr = 0 ); ///< in ndtxt.cxx
+                            SwAttrSet* pAutoAttr = nullptr ); ///< in ndtxt.cxx
     SwStartNode* MakeTextSection( const SwNodeIndex & rWhere,
                             SwStartNodeType eSttNdTyp,
                             SwTextFormatColl *pColl,
-                            SwAttrSet* pAutoAttr = 0 );
+                            SwAttrSet* pAutoAttr = nullptr );
 
     static SwGrfNode *MakeGrfNode( const SwNodeIndex & rWhere,
                             const OUString& rGrfName,
                             const OUString& rFltName,
                             const Graphic* pGraphic,
                             SwGrfFormatColl *pColl,
-                            SwAttrSet* pAutoAttr = 0,
+                            SwAttrSet* pAutoAttr = nullptr,
                             bool bDelayed = false );    ///< in ndgrf.cxx
 
     static SwGrfNode *MakeGrfNode( const SwNodeIndex & rWhere,
                             const GraphicObject& rGrfObj,
                             SwGrfFormatColl *pColl,
-                            SwAttrSet* pAutoAttr = 0 ); ///< in ndgrf.cxx
+                            SwAttrSet* pAutoAttr = nullptr ); ///< in ndgrf.cxx
 
     SwOLENode *MakeOLENode( const SwNodeIndex & rWhere,
                             const svt::EmbeddedObjectRef&,
                             SwGrfFormatColl *pColl,
-                            SwAttrSet* pAutoAttr = 0 ); ///< in ndole.cxx
+                            SwAttrSet* pAutoAttr = nullptr ); ///< in ndole.cxx
     SwOLENode *MakeOLENode( const SwNodeIndex & rWhere,
                             const OUString &rName,
                             sal_Int64 nAspect,
@@ -251,8 +251,8 @@ public:
     static SwTableNode* InsertTable( const SwNodeIndex& rNdIdx,
                         sal_uInt16 nBoxes, SwTextFormatColl* pContentTextColl,
                         sal_uInt16 nLines = 0, sal_uInt16 nRepeat = 0,
-                        SwTextFormatColl* pHeadlineTextColl = 0,
-                        const SwAttrSet * pAttrSet = 0);
+                        SwTextFormatColl* pHeadlineTextColl = nullptr,
+                        const SwAttrSet * pAttrSet = nullptr);
 
     /// Create balanced table from selected range.
     SwTableNode* TextToTable( const SwNodeRange& rRange, sal_Unicode cCh,
@@ -260,7 +260,7 @@ public:
                                 SwTableLineFormat* pLineFormat,
                                 SwTableBoxFormat* pBoxFormat,
                                 SwTextFormatColl* pTextColl,
-                                SwUndoTextToTable* pUndo = 0 );
+                                SwUndoTextToTable* pUndo = nullptr );
 
     static SwNodeRange * ExpandRangeForTableBox(const SwNodeRange & rRange);
 
@@ -274,7 +274,7 @@ public:
 
     /// Create regular text from what was table.
     bool TableToText( const SwNodeRange& rRange, sal_Unicode cCh,
-                        SwUndoTableToText* = 0 );
+                        SwUndoTableToText* = nullptr );
     /// Is in untbl.cxx and may called only by Undo-object.
     SwTableNode* UndoTableToText( sal_uLong nStt, sal_uLong nEnd,
                         const SwTableToTextSaves& rSavedData );
@@ -296,7 +296,7 @@ public:
                                 bool bCalcNewSize = false );
     /// Two Tables that are following one another are merged.
     bool MergeTable( const SwNodeIndex& rPos, bool bWithPrev = true,
-                    sal_uInt16 nMode = 0, SwHistory* pHistory = 0 );
+                    sal_uInt16 nMode = 0, SwHistory* pHistory = nullptr );
 
     /// Insert a new SwSection.
     SwSectionNode* InsertTextSection(SwNodeIndex const& rNdIdx,
@@ -316,7 +316,7 @@ public:
      with that before rFrmIdx and pEnd at the back.
      If no valid node is found, return 0. rFrmIdx points to the node with frames. **/
     SwNode* FindPrvNxtFrmNode( SwNodeIndex& rFrmIdx,
-                                const SwNode* pEnd = 0 ) const;
+                                const SwNode* pEnd = nullptr ) const;
 
     SwNode * DocumentSectionStartNode(SwNode * pNode) const;
     SwNode * DocumentSectionEndNode(SwNode * pNode) const;

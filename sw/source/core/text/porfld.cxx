@@ -46,12 +46,12 @@
 using namespace ::com::sun::star;
 
 SwLinePortion *SwFieldPortion::Compress()
-{ return (GetLen() || !aExpand.isEmpty() || SwLinePortion::Compress()) ? this : 0; }
+{ return (GetLen() || !aExpand.isEmpty() || SwLinePortion::Compress()) ? this : nullptr; }
 
 SwFieldPortion *SwFieldPortion::Clone( const OUString &rExpand ) const
 {
     SwFont *pNewFnt;
-    if( 0 != ( pNewFnt = pFnt ) )
+    if( nullptr != ( pNewFnt = pFnt ) )
     {
         pNewFnt = new SwFont( *pFnt );
     }
@@ -104,7 +104,7 @@ SwFieldPortion::SwFieldPortion( const SwFieldPortion& rField )
     if ( rField.HasFont() )
         pFnt = new SwFont( *rField.GetFont() );
     else
-        pFnt = 0;
+        pFnt = nullptr;
 
     SetWhichPor( POR_FLD );
 }
@@ -149,10 +149,10 @@ public:
 };
 
 SwFieldSlot::SwFieldSlot( const SwTextFormatInfo* pNew, const SwFieldPortion *pPor )
-    : pOldText(NULL)
+    : pOldText(nullptr)
     , nIdx(0)
     , nLen(0)
-    , pInf(NULL)
+    , pInf(nullptr)
 {
     bOn = pPor->GetExpText( *pNew, aText );
 
@@ -233,7 +233,7 @@ void SwFieldPortion::CheckScript( const SwTextSizeInfo &rInf )
         {
             UErrorCode nError = U_ZERO_ERROR;
             UBiDi* pBidi = ubidi_openSized( aText.getLength(), 0, &nError );
-            ubidi_setPara( pBidi, reinterpret_cast<const UChar *>(aText.getStr()), aText.getLength(), nFieldDir, NULL, &nError );
+            ubidi_setPara( pBidi, reinterpret_cast<const UChar *>(aText.getStr()), aText.getLength(), nFieldDir, nullptr, &nError );
             int32_t nEnd;
             UBiDiLevel nCurrDir;
             ubidi_getLogicalRun( pBidi, 0, &nEnd, &nCurrDir );
@@ -473,7 +473,7 @@ SwPosSize SwFieldPortion::GetTextSize( const SwTextSizeInfo &rInf ) const
 SwFieldPortion *SwHiddenPortion::Clone(const OUString &rExpand ) const
 {
     SwFont *pNewFnt;
-    if( 0 != ( pNewFnt = pFnt ) )
+    if( nullptr != ( pNewFnt = pFnt ) )
         pNewFnt = new SwFont( *pFnt );
     return new SwHiddenPortion( rExpand, pNewFnt );
 }
@@ -519,7 +519,7 @@ sal_Int32 SwNumberPortion::GetCrsrOfst( const sal_uInt16 ) const
 SwFieldPortion *SwNumberPortion::Clone( const OUString &rExpand ) const
 {
     SwFont *pNewFnt;
-    if( 0 != ( pNewFnt = pFnt ) )
+    if( nullptr != ( pNewFnt = pFnt ) )
         pNewFnt = new SwFont( *pFnt );
 
     return new SwNumberPortion( rExpand, pNewFnt, IsLeft(), IsCenter(),
@@ -759,7 +759,7 @@ SwGrfNumPortion::SwGrfNumPortion(
         const SwFormatVertOrient* pGrfOrient, const Size& rGrfSize,
         const bool bLft, const bool bCntr, const sal_uInt16 nMinDst,
         const bool bLabelAlignmentPosAndSpaceModeActive ) :
-    SwNumberPortion( rGraphicFollowedBy, NULL, bLft, bCntr, nMinDst,
+    SwNumberPortion( rGraphicFollowedBy, nullptr, bLft, bCntr, nMinDst,
                      bLabelAlignmentPosAndSpaceModeActive ),
     pBrush( new SvxBrushItem(RES_BACKGROUND) ), nId( 0 )
 {
@@ -798,7 +798,7 @@ SwGrfNumPortion::~SwGrfNumPortion()
     {
         Graphic* pGraph = const_cast<Graphic*>(pBrush->GetGraphic());
         if (pGraph)
-            pGraph->StopAnimation( 0, nId );
+            pGraph->StopAnimation( nullptr, nId );
     }
     delete pBrush;
 }
@@ -946,7 +946,7 @@ void SwGrfNumPortion::Paint( const SwTextPaintInfo &rInf ) const
             {
                 Graphic* pGraph = const_cast<Graphic*>(pBrush->GetGraphic());
                 if (pGraph)
-                    pGraph->StopAnimation(0,nId);
+                    pGraph->StopAnimation(nullptr,nId);
                 rInf.GetTextFrm()->getRootFrm()->GetCurrShell()->InvalidateWindows( aTmp );
             }
 
@@ -973,7 +973,7 @@ void SwGrfNumPortion::Paint( const SwTextPaintInfo &rInf ) const
 
             Graphic* pGraph = const_cast<Graphic*>(pBrush->GetGraphic());
             if (pGraph)
-                pGraph->StopAnimation( 0, nId );
+                pGraph->StopAnimation( nullptr, nId );
         }
     }
 
@@ -1050,9 +1050,9 @@ void SwTextFrm::StopAnimation( OutputDevice* pOut )
                 // The NumberPortion is always at the first char,
                 // which means we can cancel as soon as we've reached a portion
                 // with a length > 0
-                pPor = pPor->GetLen() ? 0 : pPor->GetPortion();
+                pPor = pPor->GetLen() ? nullptr : pPor->GetPortion();
             }
-            pLine = pLine->GetLen() ? 0 : pLine->GetNext();
+            pLine = pLine->GetLen() ? nullptr : pLine->GetNext();
         }
     }
 }
@@ -1216,7 +1216,7 @@ bool SwCombinedPortion::Format( SwTextFormatInfo &rInf )
                 aTmpFont.SetSize( aFontSize, nScrp );
             }
 
-            SwDrawTextInfo aDrawInf( pSh, *rInf.GetOut(), 0, aExpand, i, 1 );
+            SwDrawTextInfo aDrawInf( pSh, *rInf.GetOut(), nullptr, aExpand, i, 1 );
             Size aSize = aTmpFont._GetTextSize( aDrawInf );
             const sal_uInt16 nAsc = aTmpFont.GetAscent( pSh, *rInf.GetOut() );
             aPos[ i ] = (sal_uInt16)aSize.Width();

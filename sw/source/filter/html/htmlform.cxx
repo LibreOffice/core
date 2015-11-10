@@ -88,7 +88,7 @@ static HTMLOptionEnum aHTMLFormMethodTable[] =
 {
     { OOO_STRING_SVTOOLS_HTML_METHOD_get,       FormSubmitMethod_GET    },
     { OOO_STRING_SVTOOLS_HTML_METHOD_post,  FormSubmitMethod_POST   },
-    { 0,                    0                       }
+    { nullptr,                    0                       }
 };
 
 static HTMLOptionEnum aHTMLFormEncTypeTable[] =
@@ -96,7 +96,7 @@ static HTMLOptionEnum aHTMLFormEncTypeTable[] =
     { OOO_STRING_SVTOOLS_HTML_ET_url,           FormSubmitEncoding_URL          },
     { OOO_STRING_SVTOOLS_HTML_ET_multipart, FormSubmitEncoding_MULTIPART    },
     { OOO_STRING_SVTOOLS_HTML_ET_text,      FormSubmitEncoding_TEXT         },
-    { 0,                    0                               }
+    { nullptr,                    0                               }
 };
 
 enum HTMLWordWrapMode { HTML_WM_OFF, HTML_WM_HARD, HTML_WM_SOFT };
@@ -108,7 +108,7 @@ static HTMLOptionEnum aHTMLTextAreaWrapTable[] =
     { OOO_STRING_SVTOOLS_HTML_WW_soft,  HTML_WM_SOFT    },
     { OOO_STRING_SVTOOLS_HTML_WW_physical,HTML_WM_HARD  },
     { OOO_STRING_SVTOOLS_HTML_WW_virtual,   HTML_WM_SOFT    },
-    { 0,                0               }
+    { nullptr,                0               }
 };
 
 HTMLEventType aEventTypeTable[] =
@@ -157,7 +157,7 @@ const sal_Char * aEventSDOptionTable[] =
     OOO_STRING_SVTOOLS_HTML_O_SDonclick,
     OOO_STRING_SVTOOLS_HTML_O_SDonclick,
     OOO_STRING_SVTOOLS_HTML_O_SDonchange,
-    0
+    nullptr
 };
 
 const sal_Char * aEventOptionTable[] =
@@ -169,7 +169,7 @@ const sal_Char * aEventOptionTable[] =
     OOO_STRING_SVTOOLS_HTML_O_onclick,
     OOO_STRING_SVTOOLS_HTML_O_onclick,
     OOO_STRING_SVTOOLS_HTML_O_onchange,
-    0
+    nullptr
 };
 
 class SwHTMLForm_Impl
@@ -200,7 +200,7 @@ class SwHTMLForm_Impl
 public:
     explicit SwHTMLForm_Impl( SwDocShell *pDSh ) :
         pDocSh( pDSh ),
-        pHeaderAttrs( pDSh ? pDSh->GetHeaderAttributes() : 0 )
+        pHeaderAttrs( pDSh ? pDSh->GetHeaderAttributes() : nullptr )
     {
         OSL_ENSURE( pDocSh, "Keine DocShell, keine Controls" );
     }
@@ -222,7 +222,7 @@ public:
         xFormComps = r;
     }
 
-    void ReleaseFormComps() { xFormComps = 0; xControlEventManager = 0; }
+    void ReleaseFormComps() { xFormComps = nullptr; xControlEventManager = nullptr; }
 
     const uno::Reference< beans::XPropertySet >& GetFCompPropSet() const
     {
@@ -234,7 +234,7 @@ public:
         xFCompPropSet = r;
     }
 
-    void ReleaseFCompPropSet() { xFCompPropSet = 0; }
+    void ReleaseFCompPropSet() { xFCompPropSet = nullptr; }
 
     const uno::Reference< drawing::XShape >& GetShape() const { return xShape; }
     void SetShape( const uno::Reference< drawing::XShape >& r ) { xShape = r; }
@@ -511,7 +511,7 @@ void SwHTMLImageWatcher::init( sal_Int32 Width, sal_Int32 Height )
                 SwXShape *pSwShape = xTunnel.is() ?
                     reinterpret_cast< SwXShape * >( sal::static_int_cast< sal_IntPtr>(
                     xTunnel->getSomething(SwXShape::getUnoTunnelId()) ))
-                : 0;
+                : nullptr;
 
         OSL_ENSURE( pSwShape, "Wo ist das SW-Shape?" );
         if( pSwShape )
@@ -523,8 +523,8 @@ void SwHTMLImageWatcher::init( sal_Int32 Width, sal_Int32 Height )
             SwNode *pANd;
             SwTableNode *pTableNd;
             if( pAPos &&
-                0 != (pANd = & pAPos->nNode.GetNode()) &&
-                0 != (pTableNd = pANd->FindTableNode()) )
+                nullptr != (pANd = & pAPos->nNode.GetNode()) &&
+                nullptr != (pTableNd = pANd->FindTableNode()) )
             {
                 const bool bLastGrf = !pTableNd->GetTable().DecGrfsThatResize();
                 SwHTMLTableLayout *pLayout =
@@ -548,7 +548,7 @@ void SwHTMLImageWatcher::init( sal_Int32 Width, sal_Int32 Height )
     // uns selbst abmelden und loeschen
     clear();
     uno::Reference< awt::XImageConsumer >  xTmp = static_cast<awt::XImageConsumer*>(this);
-    xThis = 0;
+    xThis = nullptr;
 }
 
 void SwHTMLImageWatcher::setColorModel(
@@ -581,7 +581,7 @@ void SwHTMLImageWatcher::complete( sal_Int32 Status,
         // uns selbst abmelden und loeschen
         clear();
         uno::Reference< awt::XImageConsumer > xTmp = static_cast<awt::XImageConsumer*>(this);
-        xThis = 0;
+        xThis = nullptr;
     }
 }
 
@@ -595,14 +595,14 @@ void SwHTMLImageWatcher::disposing(const lang::EventObject& evt) throw ( uno::Ru
     {
         clear();
         xTmp = static_cast<awt::XImageConsumer*>(this);
-        xThis = 0;
+        xThis = nullptr;
     }
 }
 
 void SwHTMLParser::DeleteFormImpl()
 {
     delete m_pFormImpl;
-    m_pFormImpl = 0;
+    m_pFormImpl = nullptr;
 }
 
 static void lcl_html_setFixedFontProperty(
@@ -659,7 +659,7 @@ void SwHTMLParser::SetControlSize( const uno::Reference< drawing::XShape >& rSha
             {
                 // if there is no hidden property in the MediaDescriptor it should be removed after loading
                 const SfxBoolItem* pHiddenItem = SfxItemSet::GetItem<SfxBoolItem>(pDocSh->GetMedium()->GetItemSet(), SID_HIDDEN, false);
-                m_bRemoveHidden = ( pHiddenItem == NULL || !pHiddenItem->GetValue() );
+                m_bRemoveHidden = ( pHiddenItem == nullptr || !pHiddenItem->GetValue() );
             }
 
             m_pTempViewFrame = SfxViewFrame::LoadHiddenDocument( *pDocSh, 0 );
@@ -672,20 +672,20 @@ void SwHTMLParser::SetControlSize( const uno::Reference< drawing::XShape >& rSha
     SwXShape *pSwShape = xTunnel.is() ?
         reinterpret_cast< SwXShape *>( sal::static_int_cast< sal_IntPtr >(
             xTunnel->getSomething(SwXShape::getUnoTunnelId()) ))
-        : 0;
+        : nullptr;
 
     OSL_ENSURE( pSwShape, "Wo ist das SW-Shape?" );
 
     // es muss ein Draw-Format sein
-    SwFrameFormat *pFrameFormat = pSwShape ? pSwShape->GetFrameFormat() : NULL ;
+    SwFrameFormat *pFrameFormat = pSwShape ? pSwShape->GetFrameFormat() : nullptr ;
     OSL_ENSURE( pFrameFormat && RES_DRAWFRMFMT == pFrameFormat->Which(), "Kein DrawFrameFormat" );
 
     // Schauen, ob es ein SdrObject dafuer gibt
-    const SdrObject *pObj = pFrameFormat ? pFrameFormat->FindSdrObject() : NULL;
+    const SdrObject *pObj = pFrameFormat ? pFrameFormat->FindSdrObject() : nullptr;
     OSL_ENSURE( pObj, "SdrObject nicht gefunden" );
     OSL_ENSURE( pObj && FmFormInventor == pObj->GetObjInventor(), "falscher Inventor" );
 
-    const SdrView* pDrawView = pVSh ? pVSh->GetDrawView() : 0;
+    const SdrView* pDrawView = pVSh ? pVSh->GetDrawView() : nullptr;
 
     const SdrUnoObj *pFormObj = dynamic_cast<const SdrUnoObj*>( pObj  );
     uno::Reference< awt::XControl > xControl;
@@ -1397,7 +1397,7 @@ void SwHTMLParser::EndForm( bool bAppend )
 
 void SwHTMLParser::InsertInput()
 {
-    assert(m_pPendStack == 0);
+    assert(m_pPendStack == nullptr);
 
     if( !m_pFormImpl || !m_pFormImpl->GetFormComps().is() )
         return;
@@ -1824,7 +1824,7 @@ void SwHTMLParser::InsertInput()
         {
             aSz.Width() = HTML_DFLT_IMG_WIDTH;
             bSetGrfWidth = true;
-            if( m_pTable != 0 )
+            if( m_pTable != nullptr )
                 IncGrfsThatResizeTable();
         }
         if( !aSz.Height() )
@@ -1878,7 +1878,7 @@ void SwHTMLParser::InsertInput()
 
 void SwHTMLParser::NewTextArea()
 {
-    assert(m_pPendStack == 0);
+    assert(m_pPendStack == nullptr);
 
     OSL_ENSURE( !m_bTextArea, "TextArea in TextArea???" );
     OSL_ENSURE( !m_pFormImpl || !m_pFormImpl->GetFCompPropSet().is(),
@@ -2161,7 +2161,7 @@ void SwHTMLParser::InsertTextAreaText( sal_uInt16 nToken )
 
 void SwHTMLParser::NewSelect()
 {
-    assert(m_pPendStack == 0);
+    assert(m_pPendStack == nullptr);
 
     OSL_ENSURE( !m_bSelect, "Select in Select???" );
     OSL_ENSURE( !m_pFormImpl || !m_pFormImpl->GetFCompPropSet().is(),
@@ -2375,7 +2375,7 @@ void SwHTMLParser::NewSelect()
 
 void SwHTMLParser::EndSelect()
 {
-    assert(m_pPendStack == 0);
+    assert(m_pPendStack == nullptr);
 
     OSL_ENSURE( m_bSelect, "keine Select" );
     OSL_ENSURE( m_pFormImpl && m_pFormImpl->GetFCompPropSet().is(),

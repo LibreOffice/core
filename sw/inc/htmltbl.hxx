@@ -300,7 +300,7 @@ public:
     bool HasColsOption() const { return m_bColsOption; }
     bool HasColTags() const { return m_bColTags; }
 
-    bool IsTopTable() const  { return m_pSwTable != 0; }
+    bool IsTopTable() const  { return m_pSwTable != nullptr; }
 
     void SetMustResize( bool bSet ) { m_bMustResize = bSet; }
     void SetMustNotResize( bool bSet ) { m_bMustNotResize = bSet; }
@@ -358,7 +358,7 @@ inline void SwHTMLTableLayoutCell::SetProtected()
     nRowSpan = 1;
     nColSpan = 1;
 
-    pContents = 0;
+    pContents = nullptr;
 }
 
 inline void SwHTMLTableLayoutColumn::MergeMinMaxNoAlign( sal_uLong nCMin,
