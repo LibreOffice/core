@@ -46,7 +46,7 @@ MediaEventListenersImpl::~MediaEventListenersImpl()
 void MediaEventListenersImpl::cleanUp()
 {
     Application::RemoveMouseAndKeyEvents( reinterpret_cast< vcl::Window* >( mpNotifyWindow.get() ) );
-    mpNotifyWindow = NULL;
+    mpNotifyWindow = nullptr;
 }
 
 

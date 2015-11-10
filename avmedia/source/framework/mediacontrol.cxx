@@ -200,7 +200,7 @@ MediaControl::~MediaControl()
 
 void MediaControl::dispose()
 {
-    maZoomToolBox->SetItemWindow( AVMEDIA_TOOLBOXITEM_ZOOM, NULL );
+    maZoomToolBox->SetItemWindow( AVMEDIA_TOOLBOXITEM_ZOOM, nullptr );
     mpZoomListBox.disposeAndClear();
     maTimeEdit.disposeAndClear();
     maZoomToolBox.disposeAndClear();
@@ -485,7 +485,7 @@ IMPL_LINK_TYPED( MediaControl, implSelectHdl, ToolBox*, p, void )
                 OUString aURL;
 
                  if (::avmedia::MediaWindow::executeMediaURLDialog(
-                             GetParent(), aURL, 0))
+                             GetParent(), aURL, nullptr))
                  {
                      if( !::avmedia::MediaWindow::isMediaURL( aURL, ""/*TODO?*/, true ) )
                         ::avmedia::MediaWindow::executeFormatErrorBox( this );

@@ -42,7 +42,7 @@ const char* Common::Version()
 const char* Common::LastErrorMessage()
 {
     const char *errorMsg = libvlc_errmsg();
-    return errorMsg == NULL ? AVMEDIA_NO_ERROR : errorMsg;
+    return errorMsg == nullptr ? AVMEDIA_NO_ERROR : errorMsg;
 }
 }
 }

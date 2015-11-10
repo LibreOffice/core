@@ -38,7 +38,7 @@ namespace wrapper
     Instance::Instance( int argc, const char * const argv[] )
         : mInstance( libvlc_new( argc, argv ) )
     {
-        if ( mInstance == NULL)
+        if ( mInstance == nullptr)
         {
             //TODO: error
         }

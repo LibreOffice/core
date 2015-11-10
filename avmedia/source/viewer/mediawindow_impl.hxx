@@ -83,7 +83,7 @@ public:
 
     virtual void dispose() override;
 
-    static css::uno::Reference<css::media::XPlayer> createPlayer(const OUString& rURL, const OUString& rReferer, const OUString* pMimeType = 0);
+    static css::uno::Reference<css::media::XPlayer> createPlayer(const OUString& rURL, const OUString& rReferer, const OUString* pMimeType = nullptr);
 
     void setURL(const OUString& rURL, OUString const& rTempURL, OUString const& rReferer);
 

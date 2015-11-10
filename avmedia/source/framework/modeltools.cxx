@@ -140,7 +140,7 @@ static void lcl_EmbedExternals(const OUString& rSourceURL, uno::Reference<embed:
     // Create a temp file with which json parser can work.
     OUString sTempFileURL;
     const ::osl::FileBase::RC  aErr =
-        ::osl::FileBase::createTempFile(0, 0, &sTempFileURL);
+        ::osl::FileBase::createTempFile(nullptr, nullptr, &sTempFileURL);
     if (::osl::FileBase::E_None != aErr)
     {
         SAL_WARN("avmedia.opengl", "Cannot create temp file");

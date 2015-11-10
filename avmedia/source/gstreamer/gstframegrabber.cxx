@@ -45,11 +45,11 @@ namespace avmedia { namespace gstreamer {
 
 void FrameGrabber::disposePipeline()
 {
-    if( mpPipeline != NULL )
+    if( mpPipeline != nullptr )
     {
         gst_element_set_state( mpPipeline, GST_STATE_NULL );
         g_object_unref( G_OBJECT( mpPipeline ) );
-        mpPipeline = NULL;
+        mpPipeline = nullptr;
     }
 }
 
@@ -69,9 +69,9 @@ FrameGrabber::FrameGrabber( const OUString &rURL ) :
 #endif
         OUStringToOString( rURL, RTL_TEXTENCODING_UTF8 ).getStr() );
 
-    GError *pError = NULL;
+    GError *pError = nullptr;
     mpPipeline = gst_parse_launch( pPipelineStr, &pError );
-    if( pError != NULL) {
+    if( pError != nullptr) {
         g_warning( "Failed to construct frame-grabber pipeline '%s'\n", pError->message );
         g_error_free( pError );
         disposePipeline();
@@ -90,7 +90,7 @@ FrameGrabber::FrameGrabber( const OUString &rURL ) :
         }
     }
     if( mpPipeline &&
-        gst_element_get_state( mpPipeline, NULL, NULL, 5 * GST_SECOND ) == GST_STATE_CHANGE_FAILURE )
+        gst_element_get_state( mpPipeline, nullptr, nullptr, 5 * GST_SECOND ) == GST_STATE_CHANGE_FAILURE )
         disposePipeline();
 }
 
@@ -122,8 +122,8 @@ uno::Reference< graphic::XGraphic > SAL_CALL FrameGrabber::grabFrame( double fMe
     if( !pSink )
         return xRet;
 
-    GstBuffer *pBuf = NULL;
-    GstCaps *pCaps = NULL;
+    GstBuffer *pBuf = nullptr;
+    GstCaps *pCaps = nullptr;
 
     // synchronously fetch the frame
 #ifdef AVMEDIA_GST_0_10
@@ -131,7 +131,7 @@ uno::Reference< graphic::XGraphic > SAL_CALL FrameGrabber::grabFrame( double fMe
     if( pBuf )
         pCaps = GST_BUFFER_CAPS( pBuf );
 #else
-    GstSample *pSample = NULL;
+    GstSample *pSample = nullptr;
     g_signal_emit_by_name( pSink, "pull-preroll", &pSample, NULL );
 
     if( pSample )
@@ -164,7 +164,7 @@ uno::Reference< graphic::XGraphic > SAL_CALL FrameGrabber::grabFrame( double fMe
 #endif
         )
     {
-        sal_uInt8 *pData = NULL;
+        sal_uInt8 *pData = nullptr;
 #ifdef AVMEDIA_GST_0_10
         pData = GST_BUFFER_DATA( pBuf );
 #else

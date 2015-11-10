@@ -104,7 +104,7 @@ namespace
                                             SAL_LOADMODULE_DEFAULT );
 
 
-        if( aModule == NULL)
+        if( aModule == nullptr)
         {
             SAL_WARN("avmedia", "Cannot load libvlc");
             return false;

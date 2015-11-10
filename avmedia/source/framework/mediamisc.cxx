@@ -28,7 +28,7 @@ namespace avmedia {
 
 ResMgr* GetResMgr()
 {
-    static ResMgr* pResMgr = NULL;
+    static ResMgr* pResMgr = nullptr;
 
     if( !pResMgr )
     {

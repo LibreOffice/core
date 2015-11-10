@@ -86,7 +86,7 @@ uno::Reference< media::XPlayer > SAL_CALL Manager::createPlayer( const rtl::OUSt
     throw (uno::RuntimeException, std::exception)
 {
     if ( !m_is_vlc_found )
-        throw uno::RuntimeException("VLC not found", 0);
+        throw uno::RuntimeException("VLC not found", nullptr);
 
     if ( !rURL.isEmpty() )
     {

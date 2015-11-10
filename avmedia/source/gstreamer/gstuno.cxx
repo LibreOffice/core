@@ -42,7 +42,7 @@ static uno::Reference< uno::XInterface > SAL_CALL create_MediaPlayer( const uno:
 extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL avmediagst_component_getFactory( const sal_Char* pImplName, void* pServiceManager, void* /*pRegistryKey*/ )
 {
     uno::Reference< lang::XSingleServiceFactory > xFactory;
-    void*                                   pRet = 0;
+    void*                                   pRet = nullptr;
 
     if( rtl_str_compare( pImplName, IMPL_NAME ) == 0 )
     {

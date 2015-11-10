@@ -61,14 +61,14 @@ private:
 
 inline MediaFloater * getMediaFloater() {
     SfxViewFrame * cur = SfxViewFrame::Current();
-    if (cur != 0) {
+    if (cur != nullptr) {
         SfxChildWindow * win = cur->GetChildWindow(
             MediaPlayer::GetChildWindowId());
-        if (win != 0) {
+        if (win != nullptr) {
             return static_cast<MediaFloater *>(win->GetWindow());
         }
     }
-    return 0;
+    return nullptr;
 }
 
 }

@@ -36,7 +36,7 @@ static uno::Reference< uno::XInterface > SAL_CALL create_MediaPlayer( const uno:
     // Experimental for now - code is neither elegant nor well tested.
     uno::Reference< uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
     if (!xContext.is() || !officecfg::Office::Common::Misc::ExperimentalMode::get(xContext))
-        return NULL;
+        return nullptr;
 
     static uno::Reference< uno::XInterface > manager( *new ::avmedia::vlc::Manager( rxFact ) );
     return manager;
@@ -45,12 +45,12 @@ static uno::Reference< uno::XInterface > SAL_CALL create_MediaPlayer( const uno:
 extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL avmediavlc_component_getFactory( const sal_Char* pImplName, void* pServiceManager, void* /*pRegistryKey*/ )
 {
     uno::Reference< lang::XSingleServiceFactory > xFactory;
-    void*                                   pRet = 0;
+    void*                                   pRet = nullptr;
 
     // Experimental for now - code is neither elegant nor well tested.
     uno::Reference< uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
     if (!xContext.is() || !officecfg::Office::Common::Misc::ExperimentalMode::get(xContext))
-        return NULL;
+        return nullptr;
 
     SAL_INFO("avmedia", "Create VLC Media component: '" << pImplName << "'\n");
     if( rtl_str_compare( pImplName, IMPL_NAME ) == 0 )

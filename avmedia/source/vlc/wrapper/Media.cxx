@@ -63,7 +63,7 @@ bool Media::LoadSymbols()
 Media::Media( const rtl::OUString& url, Instance& instance )
     : mMedia( InitMedia( url, instance ) )
 {
-    if (mMedia == NULL)
+    if (mMedia == nullptr)
     {
         // TODO: Error
     }

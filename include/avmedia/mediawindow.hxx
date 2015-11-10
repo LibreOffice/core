@@ -101,9 +101,9 @@ namespace avmedia
         static bool         executeMediaURLDialog( vcl::Window* pParent,
                 OUString& rURL, bool *const o_pbLink );
         static void         executeFormatErrorBox( vcl::Window* pParent );
-        static bool         isMediaURL( const OUString& rURL, const OUString& rReferer, bool bDeep = false, Size* pPreferredSizePixel = NULL );
+        static bool         isMediaURL( const OUString& rURL, const OUString& rReferer, bool bDeep = false, Size* pPreferredSizePixel = nullptr );
 
-        static css::uno::Reference< css::media::XPlayer > createPlayer( const OUString& rURL, const OUString& rReferer, const OUString* pMimeType = 0 );
+        static css::uno::Reference< css::media::XPlayer > createPlayer( const OUString& rURL, const OUString& rReferer, const OUString* pMimeType = nullptr );
 
         static css::uno::Reference< css::graphic::XGraphic > grabFrame( const OUString& rURL, const OUString& rReferer,
             const OUString& sMimeType, double fMediaTime = AVMEDIA_FRAMEGRABBER_DEFAULTFRAME );

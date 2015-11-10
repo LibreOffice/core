@@ -80,7 +80,7 @@ MediaFloater::~MediaFloater()
 void MediaFloater::dispose()
 {
     delete mpMediaWindow;
-    mpMediaWindow = NULL;
+    mpMediaWindow = nullptr;
     SfxDockingWindow::dispose();
 }
 
@@ -103,7 +103,7 @@ void MediaFloater::ToggleFloatingMode()
     if (mpMediaWindow)
         mpMediaWindow->updateMediaItem( aRestoreItem );
     delete mpMediaWindow;
-    mpMediaWindow = NULL;
+    mpMediaWindow = nullptr;
 
     SfxDockingWindow::ToggleFloatingMode();
 
@@ -145,7 +145,7 @@ void MediaFloater::dispatchCurrentURL()
     if( pDispatcher )
     {
         OUString url;
-        if (mpMediaWindow != 0) {
+        if (mpMediaWindow != nullptr) {
             url = mpMediaWindow->getURL();
         }
         const SfxStringItem aMediaURLItem( SID_INSERT_AVMEDIA, url );

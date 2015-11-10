@@ -27,9 +27,9 @@ namespace avmedia { namespace ogl {
 
 OGLPlayer::OGLPlayer()
     : Player_BASE(m_aMutex)
-    , m_pHandle(NULL)
+    , m_pHandle(nullptr)
     , m_xContext(OpenGLContext::Create())
-    , m_pOGLWindow(NULL)
+    , m_pOGLWindow(nullptr)
     , m_bIsRendering(false)
 {
 }
@@ -97,7 +97,7 @@ bool OGLPlayer::create( const OUString& rURL )
                 Graphic aGraphic;
                 if( aFilter.ImportGraphic(aGraphic, INetURLObject(sFilesURL)) != GRFILTER_OK )
                 {
-                    rFile.buffer = 0;
+                    rFile.buffer = nullptr;
                     rFile.imagewidth = 0;
                     rFile.imageheight = 0;
                     SAL_WARN("avmedia.opengl", "Can't load texture file: " + sFilesURL);
@@ -113,7 +113,7 @@ bool OGLPlayer::create( const OUString& rURL )
             {
                 if( !lcl_LoadFile(&rFile, sFilesURL) )
                 {
-                    rFile.buffer = 0;
+                    rFile.buffer = nullptr;
                     rFile.size = 0;
                     SAL_WARN("avmedia.opengl", "Can't load glTF file: " + sFilesURL);
                     return false;
@@ -135,7 +135,7 @@ void OGLPlayer::releaseInputFiles()
     for (size_t i = 0; i < m_vInputFiles.size() && m_vInputFiles[i].buffer; ++i)
     {
         delete [] m_vInputFiles[i].buffer;
-        m_vInputFiles[i].buffer = 0;
+        m_vInputFiles[i].buffer = nullptr;
     }
     m_vInputFiles.clear();
 }

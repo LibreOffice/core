@@ -136,7 +136,7 @@ namespace wrapper
         {
             const libvlc_track_description_t *description = libvlc_video_get_track_description( mPlayer );
 
-            for ( ; description->p_next != NULL; description = description->p_next );
+            for ( ; description->p_next != nullptr; description = description->p_next );
 
             libvlc_video_set_track( mPlayer, description->i_id );
         }
@@ -145,7 +145,7 @@ namespace wrapper
         {
             const libvlc_track_description_t *description = libvlc_audio_get_track_description( mPlayer );
 
-            for ( ; description->p_next != NULL; description = description->p_next );
+            for ( ; description->p_next != nullptr; description = description->p_next );
 
             libvlc_audio_set_track( mPlayer, description->i_id );
         }

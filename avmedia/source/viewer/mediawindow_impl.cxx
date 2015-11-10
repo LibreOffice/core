@@ -170,12 +170,12 @@ void MediaWindowImpl::dispose()
 
     mxPlayer.clear();
 
-    mpMediaWindow = NULL;
+    mpMediaWindow = nullptr;
 
     delete mpEmptyBmpEx;
-    mpEmptyBmpEx = NULL;
+    mpEmptyBmpEx = nullptr;
     delete mpAudioBmpEx;
-    mpAudioBmpEx = NULL;
+    mpAudioBmpEx = nullptr;
     mpMediaWindowControl.disposeAndClear();
     mpChildWindow.disposeAndClear();
 
@@ -639,7 +639,7 @@ void MediaWindowImpl::Paint(vcl::RenderContext& rRenderContext, const Rectangle&
     if (mxPlayerWindow.is())
         mxPlayerWindow->update();
 
-    BitmapEx* pLogo = NULL;
+    BitmapEx* pLogo = nullptr;
 
     if (!mxPlayer.is())
     {

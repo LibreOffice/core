@@ -288,7 +288,7 @@ void MissingPluginInstallerThread::execute() {
 Player::Player( const uno::Reference< lang::XMultiServiceFactory >& rxMgr ) :
     GstPlayer_BASE( m_aMutex ),
     mxMgr( rxMgr ),
-    mpPlaybin( NULL ),
+    mpPlaybin( nullptr ),
     mbFakeVideo (false ),
     mnUnmutedVolume( 0 ),
     mbPlayPending ( false ),
@@ -296,7 +296,7 @@ Player::Player( const uno::Reference< lang::XMultiServiceFactory >& rxMgr ) :
     mbLooping( false ),
     mbInitialized( false ),
     mnWindowID( 0 ),
-    mpXOverlay( NULL ),
+    mpXOverlay( nullptr ),
     mnDuration( 0 ),
     mnWidth( 0 ),
     mnHeight( 0 ),
@@ -308,13 +308,13 @@ Player::Player( const uno::Reference< lang::XMultiServiceFactory >& rxMgr ) :
     char name[] = "libreoffice";
     char *arguments[] = { name };
     char** argv = arguments;
-    GError* pError = NULL;
+    GError* pError = nullptr;
 
     mbInitialized = gst_init_check( &argc, &argv, &pError );
 
     DBG( "%p Player::Player", this );
 
-    if (pError != NULL)
+    if (pError != nullptr)
     {
         // TODO: throw an exception?
         DBG( "%p Player::Player error '%s'", this, pError->message );
@@ -349,12 +349,12 @@ void SAL_CALL Player::disposing()
             gst_element_set_state( mpPlaybin, GST_STATE_NULL );
             g_object_unref( G_OBJECT( mpPlaybin ) );
 
-            mpPlaybin = NULL;
+            mpPlaybin = nullptr;
         }
 
         if( mpXOverlay ) {
             g_object_unref( G_OBJECT ( mpXOverlay ) );
-            mpXOverlay = NULL;
+            mpXOverlay = nullptr;
         }
 
     }
@@ -394,7 +394,7 @@ void Player::processMessage( GstMessage *message )
         if( message->src == GST_OBJECT( mpPlaybin ) ) {
             GstState newstate, pendingstate;
 
-            gst_message_parse_state_changed (message, NULL, &newstate, &pendingstate);
+            gst_message_parse_state_changed (message, nullptr, &newstate, &pendingstate);
 
             if( newstate == GST_STATE_PAUSED &&
                 pendingstate == GST_STATE_VOID_PENDING &&
@@ -471,7 +471,7 @@ GstBusSyncReply Player::processSyncMessage( GstMessage *message )
         if( message->src == GST_OBJECT( mpPlaybin ) ) {
             GstState newstate, pendingstate;
 
-            gst_message_parse_state_changed (message, NULL, &newstate, &pendingstate);
+            gst_message_parse_state_changed (message, nullptr, &newstate, &pendingstate);
 
             DBG( "%p state change received, new state %d pending %d", this,
                  (int)newstate, (int)pendingstate );
@@ -487,11 +487,11 @@ GstBusSyncReply Player::processSyncMessage( GstMessage *message )
                 }
 
                 if( mnWidth == 0 ) {
-                    GList *pStreamInfo = NULL;
+                    GList *pStreamInfo = nullptr;
 
                     g_object_get( G_OBJECT( mpPlaybin ), "stream-info", &pStreamInfo, NULL );
 
-                    for ( ; pStreamInfo != NULL; pStreamInfo = pStreamInfo->next) {
+                    for ( ; pStreamInfo != nullptr; pStreamInfo = pStreamInfo->next) {
                         GObject *pInfo = G_OBJECT( pStreamInfo->data );
 
                         if( !pInfo )
@@ -530,7 +530,7 @@ GstBusSyncReply Player::processSyncMessage( GstMessage *message )
                 mnDuration = gst_duration;
         }
         if( mnWidth == 0 ) {
-            GstPad *pad = NULL;
+            GstPad *pad = nullptr;
 
             g_signal_emit_by_name( mpPlaybin, "get-video-pad", 0, &pad );
 
@@ -576,14 +576,14 @@ void Player::preparePlaybin( const OUString& rURL, GstElement *pSink )
 {
         GstBus *pBus;
 
-        if( mpPlaybin != NULL ) {
+        if( mpPlaybin != nullptr ) {
             gst_element_set_state( mpPlaybin, GST_STATE_NULL );
             mbPlayPending = false;
             g_object_unref( mpPlaybin );
         }
 
-        mpPlaybin = gst_element_factory_make( "playbin", NULL );
-        if( pSink != NULL ) // used for getting preferred size etc.
+        mpPlaybin = gst_element_factory_make( "playbin", nullptr );
+        if( pSink != nullptr ) // used for getting preferred size etc.
         {
             g_object_set( G_OBJECT( mpPlaybin ), "video-sink", pSink, NULL );
             mbFakeVideo = true;
@@ -606,7 +606,7 @@ void Player::preparePlaybin( const OUString& rURL, GstElement *pSink )
 #ifdef AVMEDIA_GST_0_10
         gst_bus_set_sync_handler( pBus, pipeline_bus_sync_handler, this );
 #else
-        gst_bus_set_sync_handler( pBus, pipeline_bus_sync_handler, this, NULL );
+        gst_bus_set_sync_handler( pBus, pipeline_bus_sync_handler, this, nullptr );
 #endif
         g_object_unref( pBus );
 }
@@ -622,7 +622,7 @@ bool Player::create( const OUString& rURL )
     if( mbInitialized && !rURL.isEmpty() )
     {
         // fakesink for pre-roll & sizing ...
-        preparePlaybin( rURL, gst_element_factory_make( "fakesink", NULL ) );
+        preparePlaybin( rURL, gst_element_factory_make( "fakesink", nullptr ) );
 
         gst_element_set_state( mpPlaybin, GST_STATE_PAUSED );
         mbPlayPending = false;
@@ -646,7 +646,7 @@ void SAL_CALL Player::start()
     ::osl::MutexGuard aGuard(m_aMutex);
 
     // set the pipeline state to READY and run the loop
-    if( mbInitialized && NULL != mpPlaybin )
+    if( mbInitialized && nullptr != mpPlaybin )
     {
         gst_element_set_state( mpPlaybin, GST_STATE_PLAYING );
         mbPlayPending = true;
@@ -879,7 +879,7 @@ uno::Reference< ::media::XPlayerWindow > SAL_CALL Player::createPlayerWindow( co
     awt::Size                                   aSize( getPreferredPlayerWindowSize() );
 
     if( mbFakeVideo )
-        preparePlaybin( maURL, NULL );
+        preparePlaybin( maURL, nullptr );
 
     DBG( "Player::createPlayerWindow %d %d length: %d", aSize.Width, aSize.Height, rArguments.getLength() );
 
@@ -894,14 +894,14 @@ uno::Reference< ::media::XPlayerWindow > SAL_CALL Player::createPlayerWindow( co
             sal_IntPtr pIntPtr = 0;
             rArguments[ 2 ] >>= pIntPtr;
             SystemChildWindow *pParentWindow = reinterpret_cast< SystemChildWindow* >( pIntPtr );
-            const SystemEnvData* pEnvData = pParentWindow ? pParentWindow->GetSystemData() : NULL;
+            const SystemEnvData* pEnvData = pParentWindow ? pParentWindow->GetSystemData() : nullptr;
             OSL_ASSERT(pEnvData);
             if (pEnvData)
             {
                 mnWindowID = pEnvData->aWindow;
                 DBG( "set window id to %d XOverlay %p\n", (int)mnWindowID, mpXOverlay);
                 gst_element_set_state( mpPlaybin, GST_STATE_PAUSED );
-                if ( mpXOverlay != NULL )
+                if ( mpXOverlay != nullptr )
                     gst_video_overlay_set_window_handle( mpXOverlay, mnWindowID );
             }
         }
@@ -916,7 +916,7 @@ uno::Reference< media::XFrameGrabber > SAL_CALL Player::createFrameGrabber()
     throw (uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    FrameGrabber* pFrameGrabber = NULL;
+    FrameGrabber* pFrameGrabber = nullptr;
     const awt::Size aPrefSize( getPreferredPlayerWindowSize() );
 
     if( ( aPrefSize.Width > 0 ) && ( aPrefSize.Height > 0 ) )

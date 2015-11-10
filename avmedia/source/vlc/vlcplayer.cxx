@@ -184,9 +184,9 @@ namespace
 
         SystemChildWindow *pParentWindow = reinterpret_cast< SystemChildWindow* >( pIntPtr );
 
-        const SystemEnvData* pEnvData = pParentWindow ? pParentWindow->GetSystemData() : NULL;
+        const SystemEnvData* pEnvData = pParentWindow ? pParentWindow->GetSystemData() : nullptr;
 
-        if (pEnvData == NULL)
+        if (pEnvData == nullptr)
             return -1;
 
 #if defined MACOSX
