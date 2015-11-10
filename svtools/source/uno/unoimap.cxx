@@ -594,7 +594,7 @@ SvUnoImageMapObject* SvUnoImageMap::getObject( const Any& aElement )
     aElement >>= xObject;
 
     SvUnoImageMapObject* pObject = SvUnoImageMapObject::getImplementation( xObject );
-    if( NULL == pObject )
+    if( nullptr == pObject )
         throw IllegalArgumentException();
 
     return pObject;
@@ -606,7 +606,7 @@ void SAL_CALL SvUnoImageMap::insertByIndex( sal_Int32 Index, const Any& Element 
 {
     SvUnoImageMapObject* pObject = getObject( Element );
     const sal_Int32 nCount = maObjectList.size();
-    if( NULL == pObject || Index > nCount )
+    if( nullptr == pObject || Index > nCount )
         throw IndexOutOfBoundsException();
 
     pObject->acquire();
@@ -649,7 +649,7 @@ void SAL_CALL SvUnoImageMap::replaceByIndex( sal_Int32 Index, const Any& Element
 {
     SvUnoImageMapObject* pObject = getObject( Element );
     const sal_Int32 nCount = maObjectList.size();
-    if( NULL == pObject || Index >= nCount )
+    if( nullptr == pObject || Index >= nCount )
         throw IndexOutOfBoundsException();
 
     std::list< SvUnoImageMapObject* >::iterator aIter = maObjectList.begin();
@@ -764,7 +764,7 @@ Reference< XInterface > SvUnoImageMap_createInstance( const ImageMap& rMap, cons
 bool SvUnoImageMap_fillImageMap( Reference< XInterface > xImageMap, ImageMap& rMap )
 {
     SvUnoImageMap* pUnoImageMap = SvUnoImageMap::getImplementation( xImageMap );
-    if( NULL == pUnoImageMap )
+    if( nullptr == pUnoImageMap )
         return false;
 
     return pUnoImageMap->fillImageMap( rMap );

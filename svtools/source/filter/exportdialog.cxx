@@ -502,7 +502,7 @@ Bitmap ExportDialog::GetGraphicBitmap( SvStream& rInputStream )
     Bitmap aRet;
     Graphic aGraphic;
     GraphicFilter aFilter( false );
-    if ( aFilter.ImportGraphic( aGraphic, "", rInputStream, GRFILTER_FORMAT_NOTFOUND, NULL, GraphicFilterImportFlags::NONE, static_cast<css::uno::Sequence< css::beans::PropertyValue >*>(NULL) ) == GRFILTER_OK )
+    if ( aFilter.ImportGraphic( aGraphic, "", rInputStream, GRFILTER_FORMAT_NOTFOUND, nullptr, GraphicFilterImportFlags::NONE, static_cast<css::uno::Sequence< css::beans::PropertyValue >*>(nullptr) ) == GRFILTER_OK )
     {
         aRet = aGraphic.GetBitmap();
     }
@@ -558,8 +558,8 @@ ExportDialog::ExportDialog(FltCallDialogParameter& rPara,
     , mrFltCallPara(rPara)
     , mxContext(rxContext)
     , mxSourceDocument(rxSourceDocument)
-    , mpSbCompression(NULL)
-    , mpNfCompression(NULL)
+    , mpSbCompression(nullptr)
+    , mpNfCompression(nullptr)
     , msEstimatedSizePix1(SVT_RESSTR(STR_SVT_ESTIMATED_SIZE_PIX_1))
     , msEstimatedSizePix2(SVT_RESSTR(STR_SVT_ESTIMATED_SIZE_PIX_2))
     , msEstimatedSizeVec(SVT_RESSTR(STR_SVT_ESTIMATED_SIZE_VEC))

@@ -310,7 +310,7 @@ public:
     void                Command( const CommandEvent& rCEvt );
 
     void                Invalidate();
-    void                DestroyAnchor() { pAnchor=0; aSelEng.Reset(); }
+    void                DestroyAnchor() { pAnchor=nullptr; aSelEng.Reset(); }
     void SelAllDestrAnch( bool bSelect, bool bDestroyAnchor = true, bool bSingleSelToo = false );
     void ShowCursor( bool bShow );
 
@@ -323,7 +323,7 @@ public:
     Rectangle           GetClipRegionRect() const;
     bool HasHorScrollBar() const { return aHorSBar->IsVisible(); }
     void                ShowFocusRect( const SvTreeListEntry* pEntry );
-    void                CallEventListeners( sal_uLong nEvent, void* pData = NULL );
+    void                CallEventListeners( sal_uLong nEvent, void* pData = nullptr );
 
     /** Enables, that one cell of a tablistbox entry can be focused */
     bool IsCellFocusEnabled() const { return bIsCellFocusEnabled; }

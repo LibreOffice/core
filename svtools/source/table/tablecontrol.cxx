@@ -282,7 +282,7 @@ namespace svt { namespace table
     Reference< XAccessible > TableControl::CreateAccessible()
     {
         vcl::Window* pParent = GetAccessibleParentWindow();
-        ENSURE_OR_RETURN( pParent, "TableControl::CreateAccessible - parent not found", NULL );
+        ENSURE_OR_RETURN( pParent, "TableControl::CreateAccessible - parent not found", nullptr );
 
         return m_pImpl->getAccessible( *pParent );
     }
@@ -292,7 +292,7 @@ namespace svt { namespace table
     {
         (void)_nIndex;
         DBG_ASSERT( false, "TableControl::CreateAccessibleControl: to be overwritten!" );
-        return NULL;
+        return nullptr;
     }
 
 

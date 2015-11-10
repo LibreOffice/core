@@ -62,7 +62,7 @@ const SvObjectServer * SvObjectServerList::Get( const OUString & rHumanName ) co
         if( rHumanName == aObjectServerList[ i ].GetHumanName() )
             return &aObjectServerList[ i ];
     }
-    return NULL;
+    return nullptr;
 }
 
 const SvObjectServer * SvObjectServerList::Get( const SvGlobalName & rName ) const
@@ -72,7 +72,7 @@ const SvObjectServer * SvObjectServerList::Get( const SvGlobalName & rName ) con
         if( rName == aObjectServerList[ i ].GetClassName() )
             return &aObjectServerList[ i ];
     }
-    return NULL;
+    return nullptr;
 }
 
 void SvObjectServerList::Remove( const SvGlobalName & rName )

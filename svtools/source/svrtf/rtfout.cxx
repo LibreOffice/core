@@ -27,7 +27,7 @@
 SvStream& RTFOutFuncs::Out_Char(SvStream& rStream, sal_Unicode c,
     int *pUCMode, rtl_TextEncoding eDestEnc, bool bWriteHelpFile)
 {
-    const sal_Char* pStr = 0;
+    const sal_Char* pStr = nullptr;
     switch (c)
     {
     case 0x1:

@@ -150,11 +150,11 @@ inline void ImplCalendarClearSelectDate( IntDateSet* pTable )
 void Calendar::ImplInit( WinBits nWinStyle )
 {
     mpSelectTable           = new IntDateSet;
-    mpOldSelectTable        = NULL;
-    mpRestoreSelectTable    = NULL;
-    mpStandardColor         = NULL;
-    mpSaturdayColor         = NULL;
-    mpSundayColor           = NULL;
+    mpOldSelectTable        = nullptr;
+    mpRestoreSelectTable    = nullptr;
+    mpStandardColor         = nullptr;
+    mpSaturdayColor         = nullptr;
+    mpSundayColor           = nullptr;
     mnDayCount              = 0;
     mnWinStyle              = nWinStyle;
     mnFirstYear             = 0;
@@ -686,7 +686,7 @@ void Calendar::ImplDrawDate(vcl::RenderContext& rRenderContext,
                             DayOfWeek eDayOfWeek,
                             bool bBack, bool bOther, sal_uLong nToday )
 {
-    Color* pTextColor = NULL;
+    Color* pTextColor = nullptr;
     const OUString& rDay = maDayTexts[nDay - 1];
     Rectangle aDateRect(nX, nY, nX + mnDayWidth - 1, nY + mnDayHeight - 1);
 
@@ -1241,10 +1241,10 @@ void Calendar::ImplShowMenu( const Point& rPos, const Date& rDate )
     mbMenuDown = false;
 
     // destroy menu
-    aPopupMenu.SetPopupMenu( 2, NULL );
+    aPopupMenu.SetPopupMenu( 2, nullptr );
     for ( i = 0; i < MENU_YEAR_COUNT; i++ )
     {
-        aPopupMenu.SetPopupMenu( 10+i, NULL );
+        aPopupMenu.SetPopupMenu( 10+i, nullptr );
         delete pYearPopupMenus[i];
     }
 
@@ -1346,9 +1346,9 @@ void Calendar::ImplEndTracking( bool bCancel )
             GrabFocus();
 
         delete mpOldSelectTable;
-        mpOldSelectTable = NULL;
+        mpOldSelectTable = nullptr;
         delete mpRestoreSelectTable;
-        mpRestoreSelectTable = NULL;
+        mpRestoreSelectTable = nullptr;
     }
 }
 
@@ -2064,10 +2064,10 @@ public:
 ImplCFieldFloatWin::ImplCFieldFloatWin( vcl::Window* pParent ) :
     FloatingWindow( pParent, WB_BORDER | WB_SYSTEMWINDOW | WB_NOSHADOW  )
 {
-    mpCalendar  = NULL;
-    mpTodayBtn  = NULL;
-    mpNoneBtn   = NULL;
-    mpFixedLine = NULL;
+    mpCalendar  = nullptr;
+    mpTodayBtn  = nullptr;
+    mpNoneBtn   = nullptr;
+    mpFixedLine = nullptr;
 }
 
 ImplCFieldFloatWin::~ImplCFieldFloatWin()
@@ -2210,11 +2210,11 @@ bool ImplCFieldFloatWin::Notify( NotifyEvent& rNEvt )
 
 CalendarField::CalendarField(vcl::Window* pParent, WinBits nWinStyle)
     : DateField(pParent, nWinStyle)
-    , mpFloatWin(NULL)
-    , mpCalendar(NULL)
+    , mpFloatWin(nullptr)
+    , mpCalendar(nullptr)
     , mnCalendarStyle(0)
-    , mpTodayBtn(NULL)
-    , mpNoneBtn(NULL)
+    , mpTodayBtn(nullptr)
+    , mpNoneBtn(nullptr)
     , maDefaultDate( 0, 0, 0 )
     , mbToday(false)
     , mbNone(false)

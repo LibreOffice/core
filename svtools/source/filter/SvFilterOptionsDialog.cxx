@@ -247,7 +247,7 @@ sal_Int16 SvFilterOptionsDialog::execute()
         }
         if ( nFormat < nFilterCount )
         {
-            FltCallDialogParameter aFltCallDlgPara( Application::GetDefDialogParent(), NULL, meFieldUnit );
+            FltCallDialogParameter aFltCallDlgPara( Application::GetDefDialogParent(), nullptr, meFieldUnit );
             aFltCallDlgPara.aFilterData = maFilterDataSequence;
 
             std::unique_ptr<ResMgr> pResMgr(ResMgr::CreateResMgr( "svt", Application::GetSettings().GetUILanguageTag() ));

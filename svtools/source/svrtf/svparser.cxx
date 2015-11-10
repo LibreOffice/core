@@ -50,7 +50,7 @@ struct SvParser_Impl
         , nToken(0)
         , nNextCh(0)
         , nSaveToken(0)
-        , hConv( 0 )
+        , hConv( nullptr )
         , hContext( reinterpret_cast<rtl_TextToUnicodeContext>(1) )
     {
     }
@@ -64,7 +64,7 @@ SvParser::SvParser( SvStream& rIn, sal_uInt8 nStackSize )
     : rInput( rIn )
     , nlLineNr( 1 )
     , nlLinePos( 1 )
-    , pImplData( 0 )
+    , pImplData( nullptr )
     , nTokenValue( 0 )
     , bTokenHasValue( false )
     , eState( SVPAR_NOTSTARTED )
@@ -115,7 +115,7 @@ void SvParser::SetSrcEncoding( rtl_TextEncoding eEnc )
             rtl_destroyTextToUnicodeContext( pImplData->hConv,
                                              pImplData->hContext );
             rtl_destroyTextToUnicodeConverter( pImplData->hConv );
-            pImplData->hConv = 0;
+            pImplData->hConv = nullptr;
             pImplData->hContext = reinterpret_cast<rtl_TextToUnicodeContext>(1);
         }
 
@@ -332,7 +332,7 @@ sal_Unicode SvParser::GetNextChar()
 
                                 sBuffer[nLen++] = c1;
                                 nChars = rtl_convertTextToUnicode(
-                                            pImplData->hConv, 0, sBuffer, nLen, &cUC, 1,
+                                            pImplData->hConv, nullptr, sBuffer, nLen, &cUC, 1,
                                             RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR|
                                             RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR|
                                             RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR,

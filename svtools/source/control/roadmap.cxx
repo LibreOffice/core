@@ -105,7 +105,7 @@ public:
         , m_bInteractive(true)
         , m_bComplete(true)
         , m_bPaintInitialized(false)
-        , InCompleteHyperLabel(NULL)
+        , InCompleteHyperLabel(nullptr)
     {}
 
     RoadmapItem* InCompleteHyperLabel;
@@ -212,7 +212,7 @@ void ORoadmap::implInit(vcl::RenderContext& rRenderContext)
     aFont.SetUnderline(UNDERLINE_SINGLE);
     rRenderContext.SetFont(aFont);
     rRenderContext.SetBackground(Wallpaper(rStyleSettings.GetFieldColor()));
-    m_pImpl->InCompleteHyperLabel = NULL;
+    m_pImpl->InCompleteHyperLabel = nullptr;
     m_pImpl->setCurItemID(-1);
     m_pImpl->setComplete(true);
     m_pImpl->m_bPaintInitialized = true;
@@ -250,7 +250,7 @@ void ORoadmap::dispose()
     if ( ! m_pImpl->isComplete() )
         delete m_pImpl->InCompleteHyperLabel;
     delete m_pImpl;
-    m_pImpl = NULL;
+    m_pImpl = nullptr;
     Control::dispose();
 }
 
@@ -261,7 +261,7 @@ RoadmapTypes::ItemId ORoadmap::GetCurrentRoadmapItemID() const
 
 RoadmapItem* ORoadmap::GetPreviousHyperLabel(ItemIndex _Index)
 {
-    RoadmapItem* pOldItem = NULL;
+    RoadmapItem* pOldItem = nullptr;
     if ( _Index > 0 )
         pOldItem = m_pImpl->getHyperLabels().at( _Index - 1 );
     return pOldItem;
@@ -272,7 +272,7 @@ RoadmapItem* ORoadmap::InsertHyperLabel(ItemIndex _Index, const OUString& _sLabe
     if (m_pImpl->getItemCount() == 0)
         m_pImpl->initItemSize();
 
-    RoadmapItem* pItem = NULL;
+    RoadmapItem* pItem = nullptr;
     RoadmapItem* pOldItem = GetPreviousHyperLabel( _Index );
 
     pItem = new RoadmapItem( *this, m_pImpl->getItemSize() );
@@ -327,10 +327,10 @@ void ORoadmap::SetRoadmapComplete(bool _bComplete)
     m_pImpl->setComplete( _bComplete );
     if (_bComplete)
     {
-        if (m_pImpl->InCompleteHyperLabel != NULL)
+        if (m_pImpl->InCompleteHyperLabel != nullptr)
         {
             delete m_pImpl->InCompleteHyperLabel;
-            m_pImpl->InCompleteHyperLabel = NULL;
+            m_pImpl->InCompleteHyperLabel = nullptr;
         }
     }
     else if (bWasComplete)
@@ -364,7 +364,7 @@ void ORoadmap::UpdatefollowingHyperLabels(ItemIndex _nIndex)
 void ORoadmap::ReplaceRoadmapItem(ItemIndex _Index, const OUString& _RoadmapItem, ItemId _RMID, bool _bEnabled)
 {
     RoadmapItem* pItem = GetByIndex( _Index);
-    if ( pItem != NULL )
+    if ( pItem != nullptr )
     {
         pItem->Update( _Index,  _RoadmapItem );
         pItem->SetID( _RMID );
@@ -409,14 +409,14 @@ bool ORoadmap::IsRoadmapComplete() const
 void ORoadmap::EnableRoadmapItem( ItemId _nItemId, bool _bEnable, ItemIndex _nStartIndex )
 {
     RoadmapItem* pItem = GetByID( _nItemId, _nStartIndex );
-    if ( pItem != NULL )
+    if ( pItem != nullptr )
         pItem->Enable( _bEnable );
 }
 
 void ORoadmap::ChangeRoadmapItemLabel( ItemId _nID, const OUString& _sLabel, ItemIndex _nStartIndex )
 {
     RoadmapItem* pItem = GetByID( _nID, _nStartIndex );
-    if ( pItem != NULL )
+    if ( pItem != nullptr )
     {
         pItem->Update( pItem->GetIndex(), _sLabel );
 
@@ -434,7 +434,7 @@ void ORoadmap::ChangeRoadmapItemLabel( ItemId _nID, const OUString& _sLabel, Ite
 void ORoadmap::ChangeRoadmapItemID(ItemId _nID, ItemId _NewID, ItemIndex _nStartIndex)
 {
     RoadmapItem* pItem = GetByID( _nID, _nStartIndex );
-    if ( pItem != NULL )
+    if ( pItem != nullptr )
         pItem->SetID( _NewID );
 }
 
@@ -451,7 +451,7 @@ RoadmapItem* ORoadmap::GetByID(ItemId _nID, ItemIndex _nStartIndex)
         if ( nLocID == _nID )
             return *i;
     }
-    return NULL;
+    return nullptr;
 }
 
 const RoadmapItem* ORoadmap::GetByID(ItemId _nID, ItemIndex _nStartIndex) const
@@ -466,7 +466,7 @@ RoadmapItem* ORoadmap::GetByIndex(ItemIndex _nItemIndex)
     {
         return rItems.at( _nItemIndex );
     }
-    return NULL;
+    return nullptr;
 }
 
 const RoadmapItem* ORoadmap::GetByIndex(ItemIndex _nItemIndex) const
@@ -533,7 +533,7 @@ void ORoadmap::Select()
 void ORoadmap::GetFocus()
 {
     RoadmapItem* pCurHyperLabel = GetByID( GetCurrentRoadmapItemID() );
-    if ( pCurHyperLabel != NULL )
+    if ( pCurHyperLabel != nullptr )
         pCurHyperLabel->GrabFocus();
 }
 
@@ -541,7 +541,7 @@ bool ORoadmap::SelectRoadmapItemByID( ItemId _nNewID )
 {
     DeselectOldRoadmapItems();
     RoadmapItem* pItem = GetByID( _nNewID );
-    if ( pItem != NULL )
+    if ( pItem != nullptr )
     {
         if ( pItem->IsEnabled() )
         {
@@ -606,7 +606,7 @@ RoadmapItem* ORoadmap::GetByPointer(vcl::Window* pWindow)
         if ( (*i)->Contains( pWindow ) )
             return *i;
     }
-    return NULL;
+    return nullptr;
 }
 
 bool ORoadmap::PreNotify(NotifyEvent& _rNEvt)
@@ -616,7 +616,7 @@ bool ORoadmap::PreNotify(NotifyEvent& _rNEvt)
     {
         vcl::Window* pWindow = _rNEvt.GetWindow();
         RoadmapItem* pItem = GetByPointer( pWindow );
-        if ( pItem != NULL )
+        if ( pItem != nullptr )
         {
             sal_Int16 nKeyCode = _rNEvt.GetKeyEvent()->GetKeyCode().GetCode();
             switch( nKeyCode )
@@ -664,7 +664,7 @@ void ORoadmap::DataChanged(const DataChangedEvent& rDCEvt)
         SetFont( aFont );
         RoadmapTypes::ItemId curItemID = GetCurrentRoadmapItemID();
         RoadmapItem* pLabelItem = GetByID( curItemID );
-        if (pLabelItem != NULL)
+        if (pLabelItem != nullptr)
         {
             pLabelItem->ToggleBackgroundColor(rStyleSettings.GetHighlightColor());
         }
@@ -740,7 +740,7 @@ RoadmapTypes::ItemIndex RoadmapItem::GetIndex() const
 void RoadmapItem::SetPosition(RoadmapItem* _pOldItem)
 {
     Point aIDPos;
-    if ( _pOldItem == NULL )
+    if ( _pOldItem == nullptr )
     {
         aIDPos = mpID->LogicToPixel( Point( ROADMAP_INDENT_X, ROADMAP_INDENT_Y ), MAP_APPFONT );
     }

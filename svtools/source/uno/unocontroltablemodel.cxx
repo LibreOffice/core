@@ -266,7 +266,7 @@ namespace svt { namespace table
 
         // dispose the column
         UnoGridColumnFacade* pColumnImpl = dynamic_cast< UnoGridColumnFacade* >( pColumn.get() );
-        OSL_ENSURE( pColumnImpl != NULL, "UnoControlTableModel::removeColumn: illegal column implementation!" );
+        OSL_ENSURE( pColumnImpl != nullptr, "UnoControlTableModel::removeColumn: illegal column implementation!" );
         if ( pColumnImpl )
             pColumnImpl->dispose();
     }
@@ -497,7 +497,7 @@ namespace svt { namespace table
 
             PColumnModel const pColumn = getColumnModel( i_col );
             UnoGridColumnFacade* pColumnImpl = dynamic_cast< UnoGridColumnFacade* >( pColumn.get() );
-            ENSURE_OR_RETURN_VOID( pColumnImpl != NULL, "UnoControlTableModel::getCellContent: no (valid) column at this position!" );
+            ENSURE_OR_RETURN_VOID( pColumnImpl != nullptr, "UnoControlTableModel::getCellContent: no (valid) column at this position!" );
             sal_Int32 const nDataColumnIndex = pColumnImpl->getDataColumnIndex() >= 0 ? pColumnImpl->getDataColumnIndex() : i_col;
 
             if ( nDataColumnIndex >= xDataModel->getColumnCount() )
@@ -773,7 +773,7 @@ namespace svt { namespace table
         Reference< XSortableGridData > const xSortAccess( getDataModel(), UNO_QUERY );
         if ( xSortAccess.is() )
             return this;
-        return NULL;
+        return nullptr;
     }
 
 

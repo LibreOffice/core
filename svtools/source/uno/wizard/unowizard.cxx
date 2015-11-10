@@ -349,7 +349,7 @@ namespace {
         SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
 
-        ENSURE_OR_RETURN( m_pDialog, "Wizard::getDialogWindow: illegal call (execution did not start, yet)!", NULL );
+        ENSURE_OR_RETURN( m_pDialog, "Wizard::getDialogWindow: illegal call (execution did not start, yet)!", nullptr );
         return Reference< XWindow >( m_pDialog->GetComponentInterface(), UNO_QUERY );
     }
 

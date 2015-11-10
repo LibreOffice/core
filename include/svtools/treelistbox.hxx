@@ -171,7 +171,7 @@ public:
     virtual void InitViewData(SvTreeListBox* pView, SvTreeListEntry* pEntry,
                             // If != 0: this Pointer must be used!
                             // If == 0: it needs to be retrieved via the View
-                            SvViewDataItem* pViewData = 0) = 0;
+                            SvViewDataItem* pViewData = nullptr) = 0;
     virtual SvLBoxItem* Create() const = 0;
     // View-dependent data is not cloned
     virtual void        Clone(SvLBoxItem* pSource) = 0;
@@ -376,19 +376,19 @@ public:
     }
     SvTreeListEntry* First() const
     {
-        return pModel ? pModel->First() : NULL;
+        return pModel ? pModel->First() : nullptr;
     }
-    SvTreeListEntry* Next( SvTreeListEntry* pEntry, sal_uInt16* pDepth = 0 ) const
+    SvTreeListEntry* Next( SvTreeListEntry* pEntry, sal_uInt16* pDepth = nullptr ) const
     {
          return pModel->Next(pEntry, pDepth);
     }
-    SvTreeListEntry* Prev( SvTreeListEntry* pEntry, sal_uInt16* pDepth = 0 ) const
+    SvTreeListEntry* Prev( SvTreeListEntry* pEntry, sal_uInt16* pDepth = nullptr ) const
     {
         return pModel->Prev(pEntry, pDepth);
     }
     SvTreeListEntry* Last() const
     {
-        return pModel ? pModel->Last() : NULL;
+        return pModel ? pModel->Last() : nullptr;
     }
 
     SvTreeListEntry* FirstChild( SvTreeListEntry* pParent ) const;
@@ -578,7 +578,7 @@ protected:
     // Is called automatically when inserting/changing Bitmaps, changing the Model etc.
     virtual void    SetTabs();
     void            AddTab( long nPos, SvLBoxTabFlags nFlags=SvLBoxTabFlags::ADJUST_LEFT,
-                            void* pUserData = 0 );
+                            void* pUserData = nullptr );
     sal_uInt16      TabCount() const { return aTabs.size(); }
     SvLBoxTab*      GetFirstDynamicTab() const;
     SvLBoxTab*      GetFirstDynamicTab( sal_uInt16& rTabPos ) const;
@@ -645,17 +645,17 @@ public:
         );
     }
 
-    virtual SvTreeListEntry*    InsertEntry( const OUString& rText, SvTreeListEntry* pParent = 0,
+    virtual SvTreeListEntry*    InsertEntry( const OUString& rText, SvTreeListEntry* pParent = nullptr,
                                          bool bChildrenOnDemand = false,
-                                         sal_uLong nPos=TREELIST_APPEND, void* pUserData = 0,
+                                         sal_uLong nPos=TREELIST_APPEND, void* pUserData = nullptr,
                                          SvLBoxButtonKind eButtonKind = SvLBoxButtonKind_enabledCheckbox );
 
     virtual SvTreeListEntry*    InsertEntry( const OUString& rText,
                                          const Image& rExpandedEntryBmp,
                                          const Image& rCollapsedEntryBmp,
-                                         SvTreeListEntry* pParent = 0,
+                                         SvTreeListEntry* pParent = nullptr,
                                          bool bChildrenOnDemand = false,
-                                         sal_uLong nPos = TREELIST_APPEND, void* pUserData = 0,
+                                         sal_uLong nPos = TREELIST_APPEND, void* pUserData = nullptr,
                                          SvLBoxButtonKind eButtonKind = SvLBoxButtonKind_enabledCheckbox );
 
     const Image&    GetDefaultExpandedEntryBmp( ) const;
@@ -685,7 +685,7 @@ public:
 
     void            EnableInplaceEditing( bool bEnable );
     // Edits the Entry's first StringItem, 0 == Cursor
-    void            EditEntry( SvTreeListEntry* pEntry = NULL );
+    void            EditEntry( SvTreeListEntry* pEntry = nullptr );
     virtual bool    EditingEntry( SvTreeListEntry* pEntry, Selection& );
     virtual bool    EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewText );
 

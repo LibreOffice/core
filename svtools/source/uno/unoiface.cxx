@@ -62,7 +62,7 @@ extern "C" {
 
 SAL_DLLPUBLIC_EXPORT vcl::Window* CreateWindow( VCLXWindow** ppNewComp, const css::awt::WindowDescriptor* pDescriptor, vcl::Window* pParent, WinBits nWinBits )
 {
-    vcl::Window* pWindow = NULL;
+    vcl::Window* pWindow = nullptr;
     OUString aServiceName( pDescriptor->WindowServiceName );
     if ( aServiceName.equalsIgnoreAsciiCase( "MultiLineEdit" ) )
     {
@@ -74,8 +74,8 @@ SAL_DLLPUBLIC_EXPORT vcl::Window* CreateWindow( VCLXWindow** ppNewComp, const cs
         }
         else
         {
-            *ppNewComp = NULL;
-            return NULL;
+            *ppNewComp = nullptr;
+            return nullptr;
         }
     }
     else if ( aServiceName.equalsIgnoreAsciiCase( "FileControl" ) )
@@ -87,8 +87,8 @@ SAL_DLLPUBLIC_EXPORT vcl::Window* CreateWindow( VCLXWindow** ppNewComp, const cs
         }
         else
         {
-            *ppNewComp = NULL;
-            return NULL;
+            *ppNewComp = nullptr;
+            return nullptr;
         }
     }
     else if (aServiceName.equalsIgnoreAsciiCase("FormattedField") )
@@ -130,8 +130,8 @@ SAL_DLLPUBLIC_EXPORT vcl::Window* CreateWindow( VCLXWindow** ppNewComp, const cs
         }
         else
         {
-            *ppNewComp = NULL;
-            return NULL;
+            *ppNewComp = nullptr;
+            return nullptr;
         }
     }
     else if ( aServiceName.equalsIgnoreAsciiCase( "Tree" ) )
@@ -149,8 +149,8 @@ SAL_DLLPUBLIC_EXPORT vcl::Window* CreateWindow( VCLXWindow** ppNewComp, const cs
         }
         else
         {
-            *ppNewComp = NULL;
-            return NULL;
+            *ppNewComp = nullptr;
+            return nullptr;
         }
     }
     else if ( aServiceName.equalsIgnoreAsciiCase( "Grid" ) )
@@ -162,8 +162,8 @@ SAL_DLLPUBLIC_EXPORT vcl::Window* CreateWindow( VCLXWindow** ppNewComp, const cs
         }
         else
         {
-            *ppNewComp = NULL;
-            return NULL;
+            *ppNewComp = nullptr;
+            return nullptr;
         }
     }
     return pWindow;
@@ -811,7 +811,7 @@ void VCLXFileControl::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
 
 
 SVTXFormattedField::SVTXFormattedField()
-    :m_pCurrentSupplier(NULL)
+    :m_pCurrentSupplier(nullptr)
     ,bIsStandardSupplier(true)
     ,nKeyToSetDelayed(-1)
 {
@@ -823,7 +823,7 @@ SVTXFormattedField::~SVTXFormattedField()
     if (m_pCurrentSupplier)
     {
         m_pCurrentSupplier->release();
-        m_pCurrentSupplier = NULL;
+        m_pCurrentSupplier = nullptr;
     }
 }
 
@@ -878,7 +878,7 @@ void SVTXFormattedField::setProperty( const OUString& PropertyName, const css::u
 
             case BASEPROPERTY_FORMATSSUPPLIER:
                 if (!Value.hasValue())
-                    setFormatsSupplier(css::uno::Reference< css::util::XNumberFormatsSupplier > (NULL));
+                    setFormatsSupplier(css::uno::Reference< css::util::XNumberFormatsSupplier > (nullptr));
                 else
                 {
                     css::uno::Reference< css::util::XNumberFormatsSupplier > xNFS;
@@ -1302,7 +1302,7 @@ void SVTXFormattedField::setFormatsSupplier(const css::uno::Reference< css::util
 {
     FormattedField* pField = GetAs< FormattedField >();
 
-    SvNumberFormatsSupplierObj* pNew = NULL;
+    SvNumberFormatsSupplierObj* pNew = nullptr;
     if (!xSupplier.is())
     {
         if (pField)
@@ -2324,7 +2324,7 @@ void SAL_CALL SVTXDateField::setProperty( const OUString& PropertyName, const cs
 
     // some properties need to be forwarded to the sub edit, too
     SolarMutexGuard g;
-    VclPtr< Edit > pSubEdit = GetWindow() ? static_cast< Edit* >( GetWindow().get() )->GetSubEdit() : NULL;
+    VclPtr< Edit > pSubEdit = GetWindow() ? static_cast< Edit* >( GetWindow().get() )->GetSubEdit() : nullptr;
     if ( !pSubEdit )
         return;
 

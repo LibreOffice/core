@@ -82,9 +82,9 @@ class SVT_DLLPUBLIC SvTreeList
     bool mbEnableInvalidate;
 
     SvTreeListEntry*        FirstVisible() const { return First(); }
-    SvTreeListEntry*        NextVisible( const SvListView*,SvTreeListEntry* pEntry, sal_uInt16* pDepth=0 ) const;
-    SvTreeListEntry*        PrevVisible( const SvListView*,SvTreeListEntry* pEntry, sal_uInt16* pDepth=0 ) const;
-    SvTreeListEntry*        LastVisible( const SvListView*,sal_uInt16* pDepth=0 ) const;
+    SvTreeListEntry*        NextVisible( const SvListView*,SvTreeListEntry* pEntry, sal_uInt16* pDepth=nullptr ) const;
+    SvTreeListEntry*        PrevVisible( const SvListView*,SvTreeListEntry* pEntry, sal_uInt16* pDepth=nullptr ) const;
+    SvTreeListEntry*        LastVisible( const SvListView*,sal_uInt16* pDepth=nullptr ) const;
     SvTreeListEntry*        NextVisible( const SvListView*,SvTreeListEntry* pEntry, sal_uInt16& rDelta ) const;
     SvTreeListEntry*        PrevVisible( const SvListView*,SvTreeListEntry* pEntry, sal_uInt16& rDelta ) const;
 
@@ -142,12 +142,12 @@ public:
     void                RemoveView( SvListView* );
 
     SvListView*         GetView( sal_uLong nPos ) const
-    { return ( nPos < aViewList.size() ) ? aViewList[ nPos ] : NULL; }
+    { return ( nPos < aViewList.size() ) ? aViewList[ nPos ] : nullptr; }
 
     void                Broadcast(
                             SvListAction nActionId,
-                            SvTreeListEntry* pEntry1=0,
-                            SvTreeListEntry* pEntry2=0,
+                            SvTreeListEntry* pEntry1=nullptr,
+                            SvTreeListEntry* pEntry2=nullptr,
                             sal_uLong nPos=0
                         );
 
@@ -158,8 +158,8 @@ public:
 
     sal_uLong           GetEntryCount() const { return nEntryCount; }
     SvTreeListEntry*    First() const;
-    SvTreeListEntry*    Next( SvTreeListEntry* pEntry, sal_uInt16* pDepth=0 ) const;
-    SvTreeListEntry*    Prev( SvTreeListEntry* pEntry, sal_uInt16* pDepth=0 ) const;
+    SvTreeListEntry*    Next( SvTreeListEntry* pEntry, sal_uInt16* pDepth=nullptr ) const;
+    SvTreeListEntry*    Prev( SvTreeListEntry* pEntry, sal_uInt16* pDepth=nullptr ) const;
     SvTreeListEntry*    Last() const;
 
     SvTreeListEntry*    FirstChild( SvTreeListEntry* pParent ) const;
@@ -269,13 +269,13 @@ public:
     SvTreeListEntry*        FirstVisible() const
     { return pModel->FirstVisible(); }
 
-    SvTreeListEntry*        NextVisible( SvTreeListEntry* pEntry, sal_uInt16* pDepth=0 ) const
+    SvTreeListEntry*        NextVisible( SvTreeListEntry* pEntry, sal_uInt16* pDepth=nullptr ) const
     { return pModel->NextVisible(this,pEntry,pDepth); }
 
-    SvTreeListEntry*        PrevVisible( SvTreeListEntry* pEntry, sal_uInt16* pDepth=0 ) const
+    SvTreeListEntry*        PrevVisible( SvTreeListEntry* pEntry, sal_uInt16* pDepth=nullptr ) const
     { return pModel->PrevVisible(this,pEntry,pDepth); }
 
-    SvTreeListEntry*        LastVisible( sal_uInt16* pDepth=0 ) const
+    SvTreeListEntry*        LastVisible( sal_uInt16* pDepth=nullptr ) const
     { return pModel->LastVisible(this,pDepth); }
 
     SvTreeListEntry*        NextVisible( SvTreeListEntry* pEntry, sal_uInt16& rDelta ) const

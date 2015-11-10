@@ -170,7 +170,7 @@ namespace svt { namespace uno
         const WizardState eState = getCurrentState();
 
         PWizardPageController pController( impl_getController( GetPage( eState ) ) );
-        ENSURE_OR_RETURN( pController, "WizardShell::getCurrentWizardPage: invalid page/controller!", NULL );
+        ENSURE_OR_RETURN( pController, "WizardShell::getCurrentWizardPage: invalid page/controller!", nullptr );
 
         return pController->getWizardPage();
     }
@@ -184,7 +184,7 @@ namespace svt { namespace uno
 
     VclPtr<TabPage> WizardShell::createPage( WizardState i_nState )
     {
-        ENSURE_OR_RETURN( m_xController.is(), "WizardShell::createPage: no WizardController!", NULL );
+        ENSURE_OR_RETURN( m_xController.is(), "WizardShell::createPage: no WizardController!", nullptr );
 
         std::shared_ptr< WizardPageController > pController( new WizardPageController( *this, m_xController, impl_stateToPageId( i_nState ) ) );
         VclPtr<TabPage> pPage = pController->getTabPage();

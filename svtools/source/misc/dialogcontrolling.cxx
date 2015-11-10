@@ -98,7 +98,7 @@ namespace svt
     {
         m_pImpl->aConcernedWindows.push_back( &_rWindow );
 
-        VclWindowEvent aEvent( &_rWindow, 0, NULL );
+        VclWindowEvent aEvent( &_rWindow, 0, nullptr );
         impl_update( aEvent, _rWindow );
     }
 
@@ -169,7 +169,7 @@ namespace svt
 
     void ControlDependencyManager::addController( const PDialogController& _pController )
     {
-        OSL_ENSURE( _pController.get() != NULL, "ControlDependencyManager::addController: invalid controller, this will crash, sooner or later!" );
+        OSL_ENSURE( _pController.get() != nullptr, "ControlDependencyManager::addController: invalid controller, this will crash, sooner or later!" );
         m_pImpl->aControllers.push_back( _pController );
     }
 

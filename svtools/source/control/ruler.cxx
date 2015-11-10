@@ -235,7 +235,7 @@ void Ruler::ImplInit( WinBits nWinBits )
     mnVirWidth      = 0;                    // width or height from VirtualDevice
     mnVirHeight     = 0;                    // height of width from VirtualDevice
     mnDragPos       = 0;                    // Drag-Position (Null point)
-    mnUpdateEvtId   = 0;                    // Update event was not sent yet
+    mnUpdateEvtId   = nullptr;                    // Update event was not sent yet
     mnDragAryPos    = 0;                    // Drag-Array-Index
     mnDragSize      = 0;                    // Did size change at dragging
     mnDragModifier  = 0;                    // Modifier key at dragging
@@ -283,7 +283,7 @@ void Ruler::ImplInit( WinBits nWinBits )
         aDefSize.Width() = nDefHeight;
     SetOutputSizePixel( aDefSize );
     SetType(WINDOW_RULER);
-    pAccContext = NULL;
+    pAccContext = nullptr;
 }
 
 Ruler::Ruler( vcl::Window* pParent, WinBits nWinStyle ) :
@@ -291,7 +291,7 @@ Ruler::Ruler( vcl::Window* pParent, WinBits nWinStyle ) :
     maVirDev( VclPtr<VirtualDevice>::Create(*this) ),
     maMapMode( MAP_100TH_MM ),
     mpSaveData(new ImplRulerData),
-    mpData(NULL),
+    mpData(nullptr),
     mpDragData(new ImplRulerData)
 {
     // Check to see if the ruler constructor has
@@ -331,13 +331,13 @@ void Ruler::dispose()
     if ( mnUpdateEvtId )
         Application::RemoveUserEvent( mnUpdateEvtId );
     delete mpSaveData;
-    mpSaveData = NULL;
+    mpSaveData = nullptr;
     delete mpDragData;
-    mpDragData = NULL;
+    mpDragData = nullptr;
     if( pAccContext )
     {
         pAccContext->release();
-        pAccContext = NULL;
+        pAccContext = nullptr;
     }
     Window::dispose();
 }
@@ -861,7 +861,7 @@ void Ruler::ImplDrawIndents(vcl::RenderContext& rRenderContext, long nMin, long 
             if (RULER_INDENT_BORDER != nIndentStyle)
             {
                 bool bIsHit = false;
-                if(mxCurrentHitTest.get() != NULL && mxCurrentHitTest->eType == RULER_TYPE_INDENT)
+                if(mxCurrentHitTest.get() != nullptr && mxCurrentHitTest->eType == RULER_TYPE_INDENT)
                 {
                     bIsHit = mxCurrentHitTest->nAryPos == j;
                 }
@@ -2109,7 +2109,7 @@ void Ruler::MouseMove( const MouseEvent& rMEvt )
         }
     }
 
-    if (mxPreviousHitTest.get() != NULL && mxPreviousHitTest->eType != mxCurrentHitTest->eType)
+    if (mxPreviousHitTest.get() != nullptr && mxPreviousHitTest->eType != mxCurrentHitTest->eType)
     {
         mbFormat = true;
     }
@@ -2724,7 +2724,7 @@ void Ruler::SetIndents( sal_uInt32 aIndentArraySize, const RulerIndent* pIndentA
 
 void Ruler::SetTabs( sal_uInt32 aTabArraySize, const RulerTab* pTabArray )
 {
-    if ( aTabArraySize == 0 || pTabArray == NULL )
+    if ( aTabArraySize == 0 || pTabArray == nullptr )
     {
         if ( mpData->pTabs.empty() )
             return;

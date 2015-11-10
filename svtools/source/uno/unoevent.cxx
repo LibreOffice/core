@@ -52,7 +52,7 @@ SvBaseEventDescriptor::SvBaseEventDescriptor( const SvEventDescription* pSupport
         mpSupportedMacroItems(pSupportedMacroItems),
         mnMacroItems(0)
 {
-    assert(pSupportedMacroItems != NULL && "Need a list of supported events!");
+    assert(pSupportedMacroItems != nullptr && "Need a list of supported events!");
 
     for( ; mpSupportedMacroItems[mnMacroItems].mnEvent != 0; mnMacroItems++) ;
 }
@@ -426,7 +426,7 @@ SvDetachedEventDescriptor::SvDetachedEventDescriptor(
     // ... and initialize
     for(sal_Int16 i = 0; i < mnMacroItems; i++)
     {
-        aMacros[i] = NULL;
+        aMacros[i] = nullptr;
     }
 }
 
@@ -435,7 +435,7 @@ SvDetachedEventDescriptor::~SvDetachedEventDescriptor()
     // delete contents of aMacros
     for(sal_Int16 i = 0; i < mnMacroItems; i++)
     {
-        if (NULL != aMacros[i])
+        if (nullptr != aMacros[i])
             delete aMacros[i];
     }
 
@@ -503,7 +503,7 @@ bool SvDetachedEventDescriptor::hasById(
     if (-1 == nIndex)
         throw IllegalArgumentException();
 
-    return (NULL != aMacros[nIndex]) && aMacros[nIndex]->HasMacro();
+    return (nullptr != aMacros[nIndex]) && aMacros[nIndex]->HasMacro();
 }
 
 
@@ -531,7 +531,7 @@ void SvMacroTableEventDescriptor::copyMacrosFromTable(
     {
         const sal_uInt16 nEvent = mpSupportedMacroItems[i].mnEvent;
         const SvxMacro* pMacro = rMacroTable.Get(nEvent);
-        if (NULL != pMacro)
+        if (nullptr != pMacro)
             replaceByName(nEvent, *pMacro);
     }
 

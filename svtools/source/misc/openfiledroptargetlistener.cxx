@@ -51,7 +51,7 @@ OpenFileDropTargetListener::~OpenFileDropTargetListener()
     m_xTargetFrame.clear();
     m_xContext.clear();
     delete m_pFormats;
-    m_pFormats = NULL;
+    m_pFormats = nullptr;
 }
 
 

@@ -787,7 +787,7 @@ IMapObject* ImageMap::GetHitIMapObject( const Size& rTotalSize,
     }
 
     // walk over all objects and execute HitTest
-    IMapObject* pObj = NULL;
+    IMapObject* pObj = nullptr;
     for( size_t i = 0, n = maList.size(); i < n; ++i ) {
         if ( maList[ i ]->IsHit( aRelPoint ) ) {
             pObj = maList[ i ];
@@ -795,7 +795,7 @@ IMapObject* ImageMap::GetHitIMapObject( const Size& rTotalSize,
         }
     }
 
-    return( pObj ? ( pObj->IsActive() ? pObj : NULL ) : NULL );
+    return( pObj ? ( pObj->IsActive() ? pObj : nullptr ) : nullptr );
 }
 
 void ImageMap::Scale( const Fraction& rFracX, const Fraction& rFracY )

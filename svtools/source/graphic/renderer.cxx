@@ -44,7 +44,7 @@ namespace {
 
 GraphicRendererVCL::GraphicRendererVCL() :
     ::comphelper::PropertySetHelper( createPropertySetInfo() ),
-    mpOutDev( NULL )
+    mpOutDev( nullptr )
 {
 }
 
@@ -200,7 +200,7 @@ void GraphicRendererVCL::_setPropertyValues( const comphelper::PropertyMapEntry*
                 else
                 {
                     mxDevice.clear();
-                    mpOutDev = NULL;
+                    mpOutDev = nullptr;
                 }
             }
             break;

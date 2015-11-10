@@ -178,7 +178,7 @@ namespace svt { namespace table
         size_t const nCurSelRowCount = m_rTableControl.getSelectedRowCount();
         if ( isRowSelected != wasRowSelected || nCurSelRowCount != nPrevSelRowCount )
         {
-            m_aSelectHdl.Call( NULL );
+            m_aSelectHdl.Call( nullptr );
         }
     }
 

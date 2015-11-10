@@ -794,9 +794,9 @@ bool ImplCreateRotatedScaled( const BitmapEx& rBmpEx, const GraphicAttr& rAttrib
                 Bitmap              aMsk( rBmpEx.GetMask() );
                 const BitmapColor   aB( pWriteAccess->GetBestMatchingColor( Color( COL_BLACK ) ) );
                 const BitmapColor   aW( pWriteAccess->GetBestMatchingColor( Color( COL_WHITE ) ) );
-                BitmapReadAccess*   pMAcc = NULL;
+                BitmapReadAccess*   pMAcc = nullptr;
 
-                if( !aMsk || ( ( pMAcc = aMsk.AcquireReadAccess() ) != NULL ) )
+                if( !aMsk || ( ( pMAcc = aMsk.AcquireReadAccess() ) != nullptr ) )
                 {
                     std::unique_ptr<long[]> pMapLX(new long[ aUnrotatedWidth ]);
                     std::unique_ptr<long[]> pMapLY(new long[ aUnrotatedHeight ]);
@@ -1126,7 +1126,7 @@ bool GraphicManager::ImplCreateOutput( OutputDevice* pOut,
         for( nCurPos = 0, pAct = rOutMtf.FirstAction(); pAct;
              pAct = rOutMtf.NextAction(), nCurPos++ )
         {
-            MetaAction* pModAct = NULL;
+            MetaAction* pModAct = nullptr;
             switch( pAct->GetType() )
             {
                 case MetaActionType::FONT:
@@ -1992,7 +1992,7 @@ bool GraphicObject::ImplDrawTiled( OutputDevice& rOut, const Point& rPosPixel,
     int     nX, nY;
 
     // #107607# Use logical coordinates for metafile playing, too
-    bool    bDrawInPixel( rOut.GetConnectMetaFile() == NULL && GRAPHIC_BITMAP == GetType() );
+    bool    bDrawInPixel( rOut.GetConnectMetaFile() == nullptr && GRAPHIC_BITMAP == GetType() );
     bool    bRet = false;
 
     // #105229# Switch off mapping (converting to logic and back to

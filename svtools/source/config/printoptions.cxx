@@ -60,13 +60,13 @@ using namespace ::utl;
 using namespace ::osl;
 using namespace ::com::sun::star::uno;
 
-static SvtPrintOptions_Impl*   pPrinterOptionsDataContainer = NULL;
-static SvtPrintOptions_Impl*   pPrintFileOptionsDataContainer = NULL;
+static SvtPrintOptions_Impl*   pPrinterOptionsDataContainer = nullptr;
+static SvtPrintOptions_Impl*   pPrintFileOptionsDataContainer = nullptr;
 
-SvtPrintOptions_Impl*   SvtPrinterOptions::m_pStaticDataContainer = NULL;
+SvtPrintOptions_Impl*   SvtPrinterOptions::m_pStaticDataContainer = nullptr;
 sal_Int32               SvtPrinterOptions::m_nRefCount = 0;
 
-SvtPrintOptions_Impl*   SvtPrintFileOptions::m_pStaticDataContainer = NULL;
+SvtPrintOptions_Impl*   SvtPrintFileOptions::m_pStaticDataContainer = nullptr;
 sal_Int32               SvtPrintFileOptions::m_nRefCount = 0;
 
 class SvtPrintOptions_Impl
@@ -499,7 +499,7 @@ void SvtPrintOptions_Impl::impl_setValue (const OUString& sProp,
 }
 
 SvtBasePrintOptions::SvtBasePrintOptions()
-    : m_pDataContainer(NULL)
+    : m_pDataContainer(nullptr)
 {
 }
 
@@ -510,15 +510,15 @@ SvtBasePrintOptions::~SvtBasePrintOptions()
 Mutex& SvtBasePrintOptions::GetOwnStaticMutex()
 {
     // Initialize static mutex only for one time!
-    static Mutex* pMutex = NULL;
+    static Mutex* pMutex = nullptr;
     // If these method first called (Mutex not already exist!) ...
-    if( pMutex == NULL )
+    if( pMutex == nullptr )
     {
         // ... we must create a new one. Protect follow code with the global mutex -
         // It must be - we create a static variable!
         MutexGuard aGuard( Mutex::getGlobalMutex() );
         // We must check our pointer again - because it can be that another instance of our class will be faster than these!
-        if( pMutex == NULL )
+        if( pMutex == nullptr )
         {
             // Create the new mutex and set it for return on static variable.
             static Mutex aMutex;
@@ -717,7 +717,7 @@ SvtPrinterOptions::SvtPrinterOptions()
     // Increase our refcount ...
     ++m_nRefCount;
     // ... and initialize our data container only if it not already!
-    if( m_pStaticDataContainer == NULL )
+    if( m_pStaticDataContainer == nullptr )
     {
         OUString aRootPath( ROOTNODE_START );
         m_pStaticDataContainer = new SvtPrintOptions_Impl( aRootPath += "/Printer" );
@@ -739,8 +739,8 @@ SvtPrinterOptions::~SvtPrinterOptions()
     if( m_nRefCount <= 0 )
     {
         delete m_pStaticDataContainer;
-        m_pStaticDataContainer = NULL;
-        pPrinterOptionsDataContainer = NULL;
+        m_pStaticDataContainer = nullptr;
+        pPrinterOptionsDataContainer = nullptr;
     }
 }
 
@@ -751,7 +751,7 @@ SvtPrintFileOptions::SvtPrintFileOptions()
     // Increase our refcount ...
     ++m_nRefCount;
     // ... and initialize our data container only if it not already!
-    if( m_pStaticDataContainer == NULL )
+    if( m_pStaticDataContainer == nullptr )
     {
         OUString aRootPath( ROOTNODE_START );
         m_pStaticDataContainer = new SvtPrintOptions_Impl( aRootPath += "/File" );
@@ -774,8 +774,8 @@ SvtPrintFileOptions::~SvtPrintFileOptions()
     if( m_nRefCount <= 0 )
     {
         delete m_pStaticDataContainer;
-        m_pStaticDataContainer = NULL;
-        pPrintFileOptionsDataContainer = NULL;
+        m_pStaticDataContainer = nullptr;
+        pPrintFileOptionsDataContainer = nullptr;
     }
 }
 

@@ -140,7 +140,7 @@ namespace svt
 
     SvStream* GraphicAccess::getImageStream( const Reference< XComponentContext >& _rxContext, const OUString& _rImageResourceURL )
     {
-        SvStream* pReturn = NULL;
+        SvStream* pReturn = nullptr;
 
         try
         {

@@ -55,7 +55,7 @@ namespace
         : public rtl::Static< ::osl::Mutex, ColorMutex_Impl > {};
 }
 
-ExtendedColorConfig_Impl*    ExtendedColorConfig::m_pImpl = NULL;
+ExtendedColorConfig_Impl*    ExtendedColorConfig::m_pImpl = nullptr;
 
 class ExtendedColorConfig_Impl : public utl::ConfigItem, public SfxBroadcaster
 {
@@ -526,7 +526,7 @@ void ExtendedColorConfig_Impl::UnlockBroadcast()
 {
     if ( m_bBroadcastWhenUnlocked )
     {
-        m_bBroadcastWhenUnlocked = ExtendedColorConfig::m_pImpl != NULL;
+        m_bBroadcastWhenUnlocked = ExtendedColorConfig::m_pImpl != nullptr;
         if ( m_bBroadcastWhenUnlocked )
         {
             if ( ExtendedColorConfig_Impl::IsEnableBroadcast() )
@@ -572,7 +572,7 @@ ExtendedColorConfig::~ExtendedColorConfig()
     if(!--nExtendedColorRefCount_Impl)
     {
         delete m_pImpl;
-        m_pImpl = 0;
+        m_pImpl = nullptr;
     }
 }
 

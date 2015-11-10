@@ -168,8 +168,8 @@ namespace svt
                 true /* border */,
                 false /* ext border only */,
                 0 /* corner radius */,
-                NULL,
-                NULL
+                nullptr,
+                nullptr
             );
         }
     }
@@ -900,7 +900,7 @@ namespace svt
             GetActualLogicalItemRect( rItem.GetCurrentRect() ),
             m_eTabAlignment ) );
 
-        const Rectangle aTabBarRect( m_rTabBar.GetWindowExtentsRelative( NULL ) );
+        const Rectangle aTabBarRect( m_rTabBar.GetWindowExtentsRelative( nullptr ) );
         return Rectangle(
             Point( aTabBarRect.Left() + aItemRect.Left(), aTabBarRect.Top() + aItemRect.Top() ),
             aItemRect.GetSize()

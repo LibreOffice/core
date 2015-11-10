@@ -130,7 +130,7 @@ namespace svt
 
     Reference< XAccessible > DrawerDeckLayouter::GetAccessibleChild( const size_t i_nChildIndex, const Reference< XAccessible >& i_rParentAccessible )
     {
-        ENSURE_OR_RETURN( i_nChildIndex < m_aDrawers.size(), "illegal index", NULL );
+        ENSURE_OR_RETURN( i_nChildIndex < m_aDrawers.size(), "illegal index", nullptr );
 
         VclPtr<ToolPanelDrawer> pDrawer( m_aDrawers[ i_nChildIndex ] );
 
@@ -138,7 +138,7 @@ namespace svt
         if ( !xItemAccessible.is() )
         {
             xItemAccessible = pDrawer->GetAccessible();
-            ENSURE_OR_RETURN( xItemAccessible.is(), "illegal accessible provided by the drawer implementation!", NULL );
+            ENSURE_OR_RETURN( xItemAccessible.is(), "illegal accessible provided by the drawer implementation!", nullptr );
             OSL_VERIFY( ::comphelper::OAccessibleImplementationAccess::setAccessibleParent( xItemAccessible->getAccessibleContext(),
                 i_rParentAccessible ) );
         }
@@ -156,7 +156,7 @@ namespace svt
         // proper Z-Order
         if ( i_nPosition == 0 )
         {
-            pDrawer->SetZOrder( NULL, ZOrderFlags::First );
+            pDrawer->SetZOrder( nullptr, ZOrderFlags::First );
         }
         else
         {

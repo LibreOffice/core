@@ -116,7 +116,7 @@ private:
 
     void            appendEntry(ToolbarMenuEntry* pEntry);
 
-    void            implPaint(vcl::RenderContext& rRenderContext, ToolbarMenuEntry* pThisOnly = NULL, bool bHighlight = false);
+    void            implPaint(vcl::RenderContext& rRenderContext, ToolbarMenuEntry* pThisOnly = nullptr, bool bHighlight = false);
 
     void            implHighlightEntry(vcl::RenderContext& rRenderContext, int nHighlightEntry, bool bHighlight);
     void            implHighlightAtPosition(const MouseEvent& rMEvt, bool bMBDown);

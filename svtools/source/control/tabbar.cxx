@@ -472,7 +472,7 @@ IMPL_LINK_TYPED( TabBarEdit, ImplEndEditHdl, void*, pCancel, void )
         maLoseFocusIdle.Start();
     }
     else
-        GetParent()->EndEditMode( pCancel != 0 );
+        GetParent()->EndEditMode( pCancel != nullptr );
 }
 
 IMPL_LINK_NOARG_TYPED(TabBarEdit, ImplEndTimerHdl, Idle *, void)
@@ -599,7 +599,7 @@ ImplTabBarItem* TabBar::seek( size_t i )
         maCurrentItemList = i;
         return mpImpl->mpItemList[maCurrentItemList];
     }
-    return NULL;
+    return nullptr;
 }
 
 ImplTabBarItem* TabBar::prev()
@@ -608,7 +608,7 @@ ImplTabBarItem* TabBar::prev()
     {
         return mpImpl->mpItemList[--maCurrentItemList];
     }
-    return NULL;
+    return nullptr;
 }
 
 ImplTabBarItem* TabBar::next()
@@ -617,7 +617,7 @@ ImplTabBarItem* TabBar::next()
     {
         return mpImpl->mpItemList[++maCurrentItemList];
     }
-    return NULL;
+    return nullptr;
 }
 
 void TabBar::ImplInitSettings( bool bFont, bool bBackground )
@@ -1222,7 +1222,7 @@ void TabBar::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rect)
     // Now, start drawing the tabs.
 
     ImplTabBarItem* pItem = ImplGetLastTabBarItem(nItemCount);
-    ImplTabBarItem* pCurItem = NULL;
+    ImplTabBarItem* pCurItem = nullptr;
     while (pItem)
     {
         // emit CurrentItem last, as it covers all others
@@ -1291,7 +1291,7 @@ void TabBar::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rect)
             if (bCurrent)
                 break;
 
-            pItem = NULL;
+            pItem = nullptr;
         }
 
         if (!pItem)
@@ -1923,7 +1923,7 @@ void TabBar::SetCurPageId(sal_uInt16 nPageId)
         if (mnCurPageId)
             pOldItem = mpImpl->mpItemList[GetPagePos(mnCurPageId)];
         else
-            pOldItem = NULL;
+            pOldItem = nullptr;
 
         // deselect previous page if page was not selected, if this is the
         // only selected page
@@ -2176,7 +2176,7 @@ bool TabBar::StartEditMode(sal_uInt16 nPageId)
 
 bool TabBar::IsInEditMode() const
 {
-    return mpImpl->mpEdit.get() != NULL;
+    return mpImpl->mpEdit.get() != nullptr;
 }
 
 void TabBar::EndEditMode(bool bCancel)

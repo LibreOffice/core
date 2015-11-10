@@ -465,13 +465,13 @@ namespace svt
 
         public:
             BrowserMouseEventPtr()
-                : pEvent(NULL)
+                : pEvent(nullptr)
                 , bDown(false)
             {
             }
             ~BrowserMouseEventPtr(){Clear();}
 
-            bool Is() const {return pEvent != NULL;}
+            bool Is() const {return pEvent != nullptr;}
             bool IsDown() const {return bDown;}
             const BrowserMouseEvent* operator->() const {return pEvent;}
             const BrowserMouseEvent& operator*() const {return *pEvent;}

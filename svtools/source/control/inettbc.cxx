@@ -1307,7 +1307,7 @@ bool SvtURLBox_Impl::TildeParsing(
             sal_Int32 nNameEnd = aText.indexOf( '/' );
             OUString aUserName = aText.copy( 1, ( nNameEnd != -1 ) ? nNameEnd : ( aText.getLength() - 1 ) );
 
-            struct passwd* pPasswd = NULL;
+            struct passwd* pPasswd = nullptr;
 #ifdef SOLARIS
             Sequence< sal_Int8 > sBuf( 1024 );
             struct passwd aTmp;

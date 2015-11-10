@@ -50,12 +50,12 @@ struct ImplWizButtonData
 
 void WizardDialog::ImplInitData()
 {
-    mpFirstPage     = NULL;
-    mpFirstBtn      = NULL;
-    mpCurTabPage    = NULL;
-    mpPrevBtn       = NULL;
-    mpNextBtn       = NULL;
-    mpViewWindow    = NULL;
+    mpFirstPage     = nullptr;
+    mpFirstBtn      = nullptr;
+    mpCurTabPage    = nullptr;
+    mpPrevBtn       = nullptr;
+    mpNextBtn       = nullptr;
+    mpViewWindow    = nullptr;
     mnCurLevel      = 0;
     meViewAlign     = WindowAlign::Left;
     mbEmptyViewMargin =  false;
@@ -343,7 +343,7 @@ TabPage* WizardDialog::ImplGetPage( sal_uInt16 nLevel ) const
 
     if ( pPageData )
         return pPageData->mpPage;
-    return NULL;
+    return nullptr;
 }
 
 WizardDialog::WizardDialog( vcl::Window* pParent, WinBits nStyle ) :
@@ -550,7 +550,7 @@ bool WizardDialog::Finish( long nResult )
 void WizardDialog::AddPage( TabPage* pPage )
 {
     ImplWizPageData* pNewPageData = new ImplWizPageData;
-    pNewPageData->mpNext    = NULL;
+    pNewPageData->mpNext    = nullptr;
     pNewPageData->mpPage    = pPage;
 
     if ( !mpFirstPage )
@@ -568,7 +568,7 @@ void WizardDialog::AddPage( TabPage* pPage )
 
 void WizardDialog::RemovePage( TabPage* pPage )
 {
-    ImplWizPageData*  pPrevPageData = NULL;
+    ImplWizPageData*  pPrevPageData = nullptr;
     ImplWizPageData*  pPageData = mpFirstPage;
     while ( pPageData )
     {
@@ -579,7 +579,7 @@ void WizardDialog::RemovePage( TabPage* pPage )
             else
                 mpFirstPage = pPageData->mpNext;
             if ( pPage == mpCurTabPage )
-                mpCurTabPage = NULL;
+                mpCurTabPage = nullptr;
             delete pPageData;
             return;
         }
@@ -609,7 +609,7 @@ void WizardDialog::SetPage( sal_uInt16 nLevel, TabPage* pPage )
     if ( pPageData )
     {
         if ( pPageData->mpPage == mpCurTabPage )
-            mpCurTabPage = NULL;
+            mpCurTabPage = nullptr;
         pPageData->mpPage = pPage;
     }
 }
@@ -628,7 +628,7 @@ TabPage* WizardDialog::GetPage( sal_uInt16 nLevel ) const
         nTempLevel++;
     }
 
-    return NULL;
+    return nullptr;
 }
 
 
@@ -636,7 +636,7 @@ TabPage* WizardDialog::GetPage( sal_uInt16 nLevel ) const
 void WizardDialog::AddButton( Button* pButton, long nOffset )
 {
     ImplWizButtonData* pNewBtnData = new ImplWizButtonData;
-    pNewBtnData->mpNext     = NULL;
+    pNewBtnData->mpNext     = nullptr;
     pNewBtnData->mpButton   = pButton;
     pNewBtnData->mnOffset   = nOffset;
 
@@ -655,7 +655,7 @@ void WizardDialog::AddButton( Button* pButton, long nOffset )
 
 void WizardDialog::RemoveButton( Button* pButton )
 {
-    ImplWizButtonData*  pPrevBtnData = NULL;
+    ImplWizButtonData*  pPrevBtnData = nullptr;
     ImplWizButtonData*  pBtnData = mpFirstBtn;
     while ( pBtnData )
     {

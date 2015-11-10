@@ -90,10 +90,10 @@ void MainThreadFrameCloserRequest::Start( MainThreadFrameCloserRequest* pMTReque
         if ( Application::GetMainThreadIdentifier() == osl::Thread::getCurrentIdentifier() )
         {
             // this is the main thread
-            worker( NULL, pMTRequest );
+            worker( nullptr, pMTRequest );
         }
         else
-            Application::PostUserEvent( LINK( NULL, MainThreadFrameCloserRequest, worker ), pMTRequest );
+            Application::PostUserEvent( LINK( nullptr, MainThreadFrameCloserRequest, worker ), pMTRequest );
     }
 }
 
@@ -143,7 +143,7 @@ IMPL_STATIC_LINK_TYPED( MainThreadFrameCloserRequest, worker, void*, p, void )
 }
 
 ODocumentCloser::ODocumentCloser(const css::uno::Sequence< css::uno::Any >& aArguments)
-: m_pListenersContainer( NULL )
+: m_pListenersContainer( nullptr )
 , m_bDisposed( false )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -170,7 +170,7 @@ ODocumentCloser::~ODocumentCloser()
     if ( m_pListenersContainer )
     {
         delete m_pListenersContainer;
-        m_pListenersContainer = NULL;
+        m_pListenersContainer = nullptr;
     }
 }
 

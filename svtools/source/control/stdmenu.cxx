@@ -102,7 +102,7 @@ void FontNameMenu::SetCurName(const OUString& rName)
 }
 
 FontSizeMenu::FontSizeMenu()
-:    mpHeightAry( NULL )
+:    mpHeightAry( nullptr )
 ,    mnCurHeight( 100 )
 {
     SetMenuFlags( GetMenuFlags() | MenuFlags::NoAutoMnemonics );

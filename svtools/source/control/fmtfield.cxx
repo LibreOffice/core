@@ -265,7 +265,7 @@ namespace validation
     }
 }
 
-SvNumberFormatter* FormattedField::StaticFormatter::s_cFormatter = NULL;
+SvNumberFormatter* FormattedField::StaticFormatter::s_cFormatter = nullptr;
 sal_uLong FormattedField::StaticFormatter::s_nReferences = 0;
 
 SvNumberFormatter* FormattedField::StaticFormatter::GetFormatter()
@@ -291,7 +291,7 @@ FormattedField::StaticFormatter::~StaticFormatter()
     if (--s_nReferences == 0)
     {
         delete s_cFormatter;
-        s_cFormatter = NULL;
+        s_cFormatter = nullptr;
     }
 }
 
@@ -311,12 +311,12 @@ FormattedField::FormattedField(vcl::Window* pParent, WinBits nStyle, SvNumberFor
     ,m_dCurrentValue(0)
     ,m_dDefaultValue(0)
     ,m_nFormatKey(0)
-    ,m_pFormatter(NULL)
+    ,m_pFormatter(nullptr)
     ,m_dSpinSize(1)
     ,m_dSpinFirst(-1000000)
     ,m_dSpinLast(1000000)
     ,m_bTreatAsNumber(true)
-    ,m_pLastOutputColor(NULL)
+    ,m_pLastOutputColor(nullptr)
     ,m_bUseInputStringForFormatting(false)
 {
 
@@ -532,7 +532,7 @@ void FormattedField::ImplSetFormatKey(sal_uLong nFormatKey)
 {
 
     m_nFormatKey = nFormatKey;
-    bool bNeedFormatter = (m_pFormatter == NULL) && (nFormatKey != 0);
+    bool bNeedFormatter = (m_pFormatter == nullptr) && (nFormatKey != 0);
     if (bNeedFormatter)
     {
         ImplGetFormatter(); // this creates a standard formatter
@@ -543,15 +543,15 @@ void FormattedField::ImplSetFormatKey(sal_uLong nFormatKey)
         m_nFormatKey = nFormatKey;
         // When calling SetFormatKey without a formatter, the key must be one of the standard values
         // that is available for all formatters (and, thus, also in this new one).
-        DBG_ASSERT(m_pFormatter->GetEntry(nFormatKey) != NULL, "FormattedField::ImplSetFormatKey : invalid format key !");
+        DBG_ASSERT(m_pFormatter->GetEntry(nFormatKey) != nullptr, "FormattedField::ImplSetFormatKey : invalid format key !");
     }
 }
 
 void FormattedField::SetFormatKey(sal_uLong nFormatKey)
 {
-    bool bNoFormatter = (m_pFormatter == NULL);
+    bool bNoFormatter = (m_pFormatter == nullptr);
     ImplSetFormatKey(nFormatKey);
-    FormatChanged((bNoFormatter && (m_pFormatter != NULL)) ? FORMAT_CHANGE_TYPE::FORMATTER : FORMAT_CHANGE_TYPE::KEYONLY);
+    FormatChanged((bNoFormatter && (m_pFormatter != nullptr)) ? FORMAT_CHANGE_TYPE::FORMATTER : FORMAT_CHANGE_TYPE::KEYONLY);
 }
 
 void FormattedField::SetFormatter(SvNumberFormatter* pFormatter, bool bResetFormat)
@@ -599,7 +599,7 @@ void FormattedField::SetFormatter(SvNumberFormatter* pFormatter, bool bResetForm
 OUString FormattedField::GetFormat(LanguageType& eLang) const
 {
     const SvNumberformat* pFormatEntry = ImplGetFormatter()->GetEntry(m_nFormatKey);
-    DBG_ASSERT(pFormatEntry != NULL, "FormattedField::GetFormat: no number format for the given format key.");
+    DBG_ASSERT(pFormatEntry != nullptr, "FormattedField::GetFormat: no number format for the given format key.");
     OUString sFormatString = pFormatEntry ? pFormatEntry->GetFormatstring() : OUString();
     eLang = pFormatEntry ? pFormatEntry->GetLanguage() : LANGUAGE_DONTKNOW;
 
@@ -708,7 +708,7 @@ void FormattedField::SetDecimalDigits(sal_uInt16 _nPrecision)
 
 void FormattedField::FormatChanged( FORMAT_CHANGE_TYPE _nWhat )
 {
-    m_pLastOutputColor = NULL;
+    m_pLastOutputColor = nullptr;
 
     if ( (_nWhat == FORMAT_CHANGE_TYPE::FORMATTER) && m_pFormatter )
         m_pFormatter->SetEvalDateFormat( NF_EVALDATEFORMAT_INTL_FORMAT );
@@ -868,7 +868,7 @@ void FormattedField::ImplSetValue(double dVal, bool bForce)
     if (!bForce && (dVal == GetValue()))
         return;
 
-    DBG_ASSERT(ImplGetFormatter() != NULL, "FormattedField::ImplSetValue : can't set a value without a formatter !");
+    DBG_ASSERT(ImplGetFormatter() != nullptr, "FormattedField::ImplSetValue : can't set a value without a formatter !");
 
     m_ValueState = valueDouble;
     m_dCurrentValue = dVal;
@@ -894,7 +894,7 @@ void FormattedField::ImplSetValue(double dVal, bool bForce)
         }
     }
 
-    ImplSetTextImpl(sNewText, NULL);
+    ImplSetTextImpl(sNewText, nullptr);
     m_ValueState = valueDouble;
     DBG_ASSERT(CheckText(sNewText), "FormattedField::ImplSetValue : formatted string doesn't match the criteria !");
 }
@@ -911,7 +911,7 @@ bool FormattedField::ImplGetValue(double& dNewVal)
     if (sText.isEmpty())
         return true;
 
-    DBG_ASSERT(ImplGetFormatter() != NULL, "FormattedField::ImplGetValue : can't give you a current value without a formatter !");
+    DBG_ASSERT(ImplGetFormatter() != nullptr, "FormattedField::ImplGetValue : can't give you a current value without a formatter !");
 
     sal_uInt32 nFormatKey = m_nFormatKey; // IsNumberFormat changes the FormatKey!
 

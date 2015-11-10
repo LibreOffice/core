@@ -164,8 +164,8 @@ void GraphicObjectTest::testSizeBasedAutoSwap()
     SwNodes& aNodes = pDoc->GetNodes();
 
     // Find images
-    const GraphicObject* pGrafObj1 = 0;
-    const GraphicObject* pGrafObj2 = 0;
+    const GraphicObject* pGrafObj1 = nullptr;
+    const GraphicObject* pGrafObj2 = nullptr;
     for( sal_uLong nIndex = 0; nIndex < aNodes.Count(); ++nIndex)
     {
         if( aNodes[nIndex]->IsGrfNode() )
@@ -182,7 +182,7 @@ void GraphicObjectTest::testSizeBasedAutoSwap()
             }
         }
     }
-    CPPUNIT_ASSERT_MESSAGE("Missing image", pGrafObj1 != 0 && pGrafObj2 != 0);
+    CPPUNIT_ASSERT_MESSAGE("Missing image", pGrafObj1 != nullptr && pGrafObj2 != nullptr);
 
     {
         // First image should be swapped out
@@ -254,8 +254,8 @@ void GraphicObjectTest::testTdf88935()
     SwNodes& aNodes = pDoc->GetNodes();
 
     // Find images
-    const GraphicObject* pGraphObj1 = 0;
-    const GraphicObject* pGraphObj2 = 0;
+    const GraphicObject* pGraphObj1 = nullptr;
+    const GraphicObject* pGraphObj2 = nullptr;
     for( sal_uLong nIndex = 0; nIndex < aNodes.Count(); ++nIndex)
     {
         if( aNodes[nIndex]->IsGrfNode() )
@@ -272,7 +272,7 @@ void GraphicObjectTest::testTdf88935()
             }
         }
     }
-    CPPUNIT_ASSERT_MESSAGE("Missing image", pGraphObj1 != 0 && pGraphObj2 != 0);
+    CPPUNIT_ASSERT_MESSAGE("Missing image", pGraphObj1 != nullptr && pGraphObj2 != nullptr);
 
     // Set cache size
     {

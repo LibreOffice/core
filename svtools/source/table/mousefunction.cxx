@@ -229,7 +229,7 @@ namespace svt { namespace table
             return ContinueFunction;
         }
 
-        if ( i_tableControl.getModel()->getSortAdapter() == NULL )
+        if ( i_tableControl.getModel()->getSortAdapter() == nullptr )
             // no sorting support at the model
             return SkipFunction;
 
@@ -253,7 +253,7 @@ namespace svt { namespace table
         if ( ( tableCell.nRow == ROW_COL_HEADERS ) && ( tableCell.nColumn == m_nActiveColumn ) )
         {
             ITableDataSort* pSort = i_tableControl.getModel()->getSortAdapter();
-            ENSURE_OR_RETURN( pSort != NULL, "ColumnSortHandler::handleMouseUp: somebody is mocking with us!", DeactivateFunction );
+            ENSURE_OR_RETURN( pSort != nullptr, "ColumnSortHandler::handleMouseUp: somebody is mocking with us!", DeactivateFunction );
                 // in handleMousButtonDown, the model claimed to have sort support ...
 
             ColumnSortDirection eSortDirection = ColumnSortAscending;

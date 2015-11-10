@@ -133,13 +133,13 @@ public:
                             {
                                 return  ( nPos < maIconChoiceCtrlEntryList.size() )
                                         ? maIconChoiceCtrlEntryList[ nPos ]
-                                        : NULL;
+                                        : nullptr;
                             }
     SvxIconChoiceCtrlEntry* operator[]( size_t nPos ) const
                             {
                                 return  ( nPos < maIconChoiceCtrlEntryList.size() )
                                         ? maIconChoiceCtrlEntryList[ nPos ]
-                                        : NULL;
+                                        : nullptr;
                             }
     void                    insert( size_t nPos, SvxIconChoiceCtrlEntry* pEntry );
 };
@@ -260,7 +260,7 @@ class SvxIconChoiceCtrl_Impl
                             SvxIconChoiceCtrlEntry* pEntry1,
                             SvxIconChoiceCtrlEntry* pEntry2,
                             bool bAdd = true,
-                            std::vector<Rectangle*>* pOtherRects = 0
+                            std::vector<Rectangle*>* pOtherRects = nullptr
                         );
 
     void                SelectRange(
@@ -280,7 +280,7 @@ class SvxIconChoiceCtrl_Impl
     Rectangle           CalcMaxTextRect( const SvxIconChoiceCtrlEntry* pEntry ) const;
 
     void                ClipAtVirtOutRect( Rectangle& rRect ) const;
-    void                AdjustAtGrid( const SvxIconChoiceCtrlEntryPtrVec& rRow, SvxIconChoiceCtrlEntry* pStart=0 );
+    void                AdjustAtGrid( const SvxIconChoiceCtrlEntryPtrVec& rRow, SvxIconChoiceCtrlEntry* pStart=nullptr );
     Point               AdjustAtGrid(
                             const Rectangle& rCenterRect, // balance point of object (typically Bmp-Rect)
                             const Rectangle& rBoundRect
@@ -334,8 +334,8 @@ public:
     void                Clear( bool bInCtor = false );
     void                SetStyle( WinBits nWinStyle );
     WinBits             GetStyle() const { return nWinBits; }
-    void                InsertEntry( SvxIconChoiceCtrlEntry*, size_t nPos, const Point* pPos=0 );
-    void                CreateAutoMnemonics( MnemonicGenerator* _pGenerator = NULL );
+    void                InsertEntry( SvxIconChoiceCtrlEntry*, size_t nPos, const Point* pPos=nullptr );
+    void                CreateAutoMnemonics( MnemonicGenerator* _pGenerator = nullptr );
     void                FontModified();
     void                SelectAll( bool bSelect = true, bool bPaint = true );
     void                SelectEntry(
@@ -396,12 +396,12 @@ public:
                         );
 
     Rectangle           CalcFocusRect( SvxIconChoiceCtrlEntry* );
-    Rectangle           CalcBmpRect( SvxIconChoiceCtrlEntry*, const Point* pPos = 0 );
+    Rectangle           CalcBmpRect( SvxIconChoiceCtrlEntry*, const Point* pPos = nullptr );
     Rectangle           CalcTextRect(
                             SvxIconChoiceCtrlEntry*,
-                            const Point* pPos = 0,
+                            const Point* pPos = nullptr,
                             bool bForInplaceEdit = false,
-                            const OUString* pStr = 0
+                            const OUString* pStr = nullptr
                         );
 
     long                CalcBoundingWidth( SvxIconChoiceCtrlEntry* ) const;
@@ -428,8 +428,8 @@ public:
                                       bool bIsBackgroundPainted = false);
 
     void                PaintItem(const Rectangle& rRect, IcnViewFieldType eItem, SvxIconChoiceCtrlEntry* pEntry,
-                            sal_uInt16 nPaintFlags, vcl::RenderContext& rRenderContext, const OUString* pStr = 0,
-                            vcl::ControlLayoutData* _pLayoutData = NULL);
+                            sal_uInt16 nPaintFlags, vcl::RenderContext& rRenderContext, const OUString* pStr = nullptr,
+                            vcl::ControlLayoutData* _pLayoutData = nullptr);
 
     // recalculates all BoundingRects if bMustRecalcBoundingRects == true
     void                CheckBoundingRects() { if (bBoundRectsDirty) RecalcAllBoundingRectsSmart(); }
@@ -452,7 +452,7 @@ public:
     void                SelectRect(
                             const Rectangle&,
                             bool bAdd = true,
-                            std::vector<Rectangle*>* pOtherRects = 0
+                            std::vector<Rectangle*>* pOtherRects = nullptr
                         );
 
     bool               IsTextHit( SvxIconChoiceCtrlEntry* pEntry, const Point& rDocPos );
@@ -462,15 +462,15 @@ public:
                             bool bCallRectChangedHdl = true
                         );
 
-    void                AdjustEntryAtGrid( SvxIconChoiceCtrlEntry* pStart = 0 );
+    void                AdjustEntryAtGrid( SvxIconChoiceCtrlEntry* pStart = nullptr );
 #ifdef DBG_UTIL
     void                SetEntryTextMode(
                             SvxIconChoiceCtrlTextMode,
-                            SvxIconChoiceCtrlEntry* pEntry = 0
+                            SvxIconChoiceCtrlEntry* pEntry = nullptr
                         );
 #endif
     bool                IsEntryEditingEnabled() const { return bEntryEditingEnabled; }
-    bool                IsEntryEditing() const { return (pCurEditedEntry!=0); }
+    bool                IsEntryEditing() const { return (pCurEditedEntry!=nullptr); }
     void                EditEntry( SvxIconChoiceCtrlEntry* pEntry );
     void                StopEntryEditing( bool bCancel );
     size_t              GetEntryCount() const { return aEntries.size(); }
@@ -514,7 +514,7 @@ public:
                         );
     void                DrawHighlightFrame(vcl::RenderContext& rRenderContext, const Rectangle& rBmpRect, bool bHide);
 
-    void                CallEventListeners( sal_uLong nEvent, void* pData = NULL );
+    void                CallEventListeners( sal_uLong nEvent, void* pData = nullptr );
 
     ::svt::IAccessibleFactory& GetAccessibleFactory()
     {
@@ -573,7 +573,7 @@ public:
     // Creates a list of entries for every row (height = nGridDY) sorted by
     // BoundRect.Left(). A list may be empty. The lists become the property of
     // the caller and have to be deleted with DestroyGridAdjustData.
-    void                    CreateGridAjustData( IconChoiceMap& pLists, SvxIconChoiceCtrlEntry* pRow=0);
+    void                    CreateGridAjustData( IconChoiceMap& pLists, SvxIconChoiceCtrlEntry* pRow=nullptr);
     static void             DestroyGridAdjustData( IconChoiceMap& rLists );
 };
 
@@ -602,7 +602,7 @@ public:
 
     void                Clear();
 
-    GridId              GetGrid( const Point& rDocPos, bool* pbClipped = 0 );
+    GridId              GetGrid( const Point& rDocPos, bool* pbClipped = nullptr );
     GridId              GetGrid( sal_uInt16 nGridX, sal_uInt16 nGridY );
     GridId              GetUnoccupiedGrid( bool bOccupyFound=true );
 

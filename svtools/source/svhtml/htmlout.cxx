@@ -58,7 +58,7 @@ HTMLOutContext::~HTMLOutContext()
 static const sal_Char *lcl_svhtml_GetEntityForChar( sal_Unicode c,
                                              rtl_TextEncoding eDestEnc )
 {
-    const sal_Char* pStr = 0;
+    const sal_Char* pStr = nullptr;
 
     // Note: We currently handle special cases for ISO-8859-2 here simply because
     // the code was already submitted.  But we should also handle other code pages
@@ -395,7 +395,7 @@ static OString lcl_ConvertCharToHTML( sal_Unicode c,
     OStringBuffer aDest;
     DBG_ASSERT( RTL_TEXTENCODING_DONTKNOW != rContext.m_eDestEnc,
                     "wrong destination encoding" );
-    const sal_Char *pStr = 0;
+    const sal_Char *pStr = nullptr;
     switch( c )
     {
     case 0xA0:      // is a hard blank
@@ -636,7 +636,7 @@ SvStream& HTMLOutFuncs::Out_ImageMap( SvStream& rStream,
 
         if( pObj )
         {
-            const sal_Char *pShape = 0;
+            const sal_Char *pShape = nullptr;
             OString aCoords;
             switch( pObj->GetType() )
             {
@@ -1012,7 +1012,7 @@ void HtmlWriterHelper::applyEvents(HtmlWriter& rHtmlWriter, const SvxMacroTableD
 
         if (pMacro && pMacro->HasMacro() && (JAVASCRIPT == pMacro->GetScriptType() || bOutStarBasic))
         {
-            const sal_Char* pAttributeName = NULL;
+            const sal_Char* pAttributeName = nullptr;
             if (STARBASIC == pMacro->GetScriptType())
                 pAttributeName = pEventTable[i].pBasicName;
             else

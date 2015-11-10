@@ -178,9 +178,9 @@ public:
 
 GraphicCacheEntry::GraphicCacheEntry( const GraphicObject& rObj ) :
     maID            ( rObj ),
-    mpBmpEx         ( NULL ),
-    mpMtf           ( NULL ),
-    mpAnimation     ( NULL ),
+    mpBmpEx         ( nullptr ),
+    mpMtf           ( nullptr ),
+    mpAnimation     ( nullptr ),
     mbSwappedAll    ( true )
 {
     mbSwappedAll = !ImplInit( rObj );
@@ -208,13 +208,13 @@ bool GraphicCacheEntry::ImplInit( const GraphicObject& rObj )
         const Graphic& rGraphic = rObj.GetGraphic();
 
         if( mpBmpEx )
-            delete mpBmpEx, mpBmpEx = NULL;
+            delete mpBmpEx, mpBmpEx = nullptr;
 
         if( mpMtf )
-            delete mpMtf, mpMtf = NULL;
+            delete mpMtf, mpMtf = nullptr;
 
         if( mpAnimation )
-            delete mpAnimation, mpAnimation = NULL;
+            delete mpAnimation, mpAnimation = nullptr;
 
         switch( rGraphic.GetType() )
         {
@@ -361,9 +361,9 @@ void GraphicCacheEntry::GraphicObjectWasSwappedOut( const GraphicObject& /*rObj*
 
     if( mbSwappedAll )
     {
-        delete mpBmpEx, mpBmpEx = NULL;
-        delete mpMtf, mpMtf = NULL;
-        delete mpAnimation, mpAnimation = NULL;
+        delete mpBmpEx, mpBmpEx = nullptr;
+        delete mpMtf, mpMtf = nullptr;
+        delete mpAnimation, mpAnimation = nullptr;
 
         // #119176# also reset SvgData
         maSvgData.reset();
@@ -408,7 +408,7 @@ public:
                                                           const GraphicObject& rObj, const GraphicAttr& rAttr,
                                                           const BitmapEx& rBmpEx ) :
                                     mpRefCacheEntry( pRefCacheEntry ),
-                                    mpMtf( NULL ), mpBmpEx( new BitmapEx( rBmpEx ) ),
+                                    mpMtf( nullptr ), mpBmpEx( new BitmapEx( rBmpEx ) ),
                                     maAttr( rAttr ), maOutSizePix( pOut->LogicToPixel( rSz ) ),
                                     mnCacheSize( GetNeededSize( pOut, rPt, rSz, rObj, rAttr ) ),
                                     mnOutDevDrawMode( pOut->GetDrawMode() ),
@@ -421,7 +421,7 @@ public:
                                                           const GraphicObject& rObj, const GraphicAttr& rAttr,
                                                           const GDIMetaFile& rMtf ) :
                                     mpRefCacheEntry( pRefCacheEntry ),
-                                    mpMtf( new GDIMetaFile( rMtf ) ), mpBmpEx( NULL ),
+                                    mpMtf( new GDIMetaFile( rMtf ) ), mpBmpEx( nullptr ),
                                     maAttr( rAttr ), maOutSizePix( pOut->LogicToPixel( rSz ) ),
                                     mnCacheSize( GetNeededSize( pOut, rPt, rSz, rObj, rAttr ) ),
                                     mnOutDevDrawMode( pOut->GetDrawMode() ),
@@ -984,7 +984,7 @@ void GraphicCache::GraphicObjectWasSwappedIn( const GraphicObject& rObj )
         if( pEntry->GetID().IsEmpty() )
         {
             ReleaseGraphicObject( rObj );
-            AddGraphicObject( rObj, (Graphic&) rObj.GetGraphic(), NULL, NULL );
+            AddGraphicObject( rObj, (Graphic&) rObj.GetGraphic(), nullptr, nullptr );
         }
         else
             pEntry->GraphicObjectWasSwappedIn( rObj );
@@ -1160,7 +1160,7 @@ bool GraphicCache::DrawDisplayCacheObj( OutputDevice* pOut, const Point& rPt, co
     const Point                 aPtPixel( pOut->LogicToPixel( rPt ) );
     const Size                  aSzPixel( pOut->LogicToPixel( rSz ) );
     const GraphicCacheEntry*    pCacheEntry = ImplGetCacheEntry( rObj );
-    GraphicDisplayCacheEntry*   pDisplayCacheEntry = NULL;
+    GraphicDisplayCacheEntry*   pDisplayCacheEntry = nullptr;
     GraphicDisplayCacheEntryList::iterator it = maDisplayCache.begin();
     bool                    bRet = false;
 
@@ -1224,7 +1224,7 @@ bool GraphicCache::ImplFreeDisplayCacheSpace( sal_uLong nSizeToFree )
 
 GraphicCacheEntry* GraphicCache::ImplGetCacheEntry( const GraphicObject& rObj )
 {
-    GraphicCacheEntry* pRet = NULL;
+    GraphicCacheEntry* pRet = nullptr;
 
     for(
         GraphicCacheEntryList::iterator it = maGraphicCache.begin();

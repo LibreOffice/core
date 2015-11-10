@@ -468,7 +468,7 @@ namespace svt
 
 
     TemplateFolderCacheImpl::TemplateFolderCacheImpl( bool _bAutoStoreState )
-        :m_pCacheStream         ( NULL )
+        :m_pCacheStream         ( nullptr )
         ,m_bNeedsUpdate         ( true )
         ,m_bKnowState           ( false )
         ,m_bValidCurrentState   ( false )
@@ -773,7 +773,7 @@ namespace svt
         if ( m_pCacheStream )
             m_pCacheStream->SetStreamCharSet( RTL_TEXTENCODING_UTF8 );
 
-        return NULL != m_pCacheStream;
+        return nullptr != m_pCacheStream;
     }
 
 

@@ -47,20 +47,20 @@ class SVT_DLLPUBLIC AsynchronLink
 public:
     AsynchronLink( const Link<void*,void>& rLink )
         : _aLink( rLink )
-        , _nEventId( 0 )
-        , _pIdle( 0 )
+        , _nEventId( nullptr )
+        , _pIdle( nullptr )
         , _bInCall( false )
-        , _pDeleted( 0 )
-        , _pArg( 0 )
-        , _pMutex( 0 )
+        , _pDeleted( nullptr )
+        , _pArg( nullptr )
+        , _pMutex( nullptr )
     {}
     AsynchronLink()
-        : _nEventId( 0 )
-        , _pIdle( 0 )
+        : _nEventId( nullptr )
+        , _pIdle( nullptr )
         , _bInCall( false )
-        , _pDeleted( 0 )
-        , _pArg( 0 )
-        , _pMutex( 0 )
+        , _pDeleted( nullptr )
+        , _pArg( nullptr )
+        , _pMutex( nullptr )
     {}
     ~AsynchronLink();
 

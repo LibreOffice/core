@@ -1222,7 +1222,7 @@ int GetRTFToken( const OUString& rSearch )
     aSrch.pUToken = &rSearch;
     aSrch.nToken = -1;
 
-    if( 0 != ( pFound = bsearch( &aSrch,
+    if( nullptr != ( pFound = bsearch( &aSrch,
                         static_cast<void*>(aRTFTokenTab),
                         sizeof( aRTFTokenTab ) / sizeof( RTF_TokenEntry ),
                         sizeof( RTF_TokenEntry ),

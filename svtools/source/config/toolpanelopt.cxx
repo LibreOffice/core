@@ -299,7 +299,7 @@ Sequence< OUString > SvtToolPanelOptions_Impl::GetPropertyNames()
 
 //  initialize static member, see definition for further information
 //  DON'T DO IT IN YOUR HEADER!
-SvtToolPanelOptions_Impl* SvtToolPanelOptions::m_pDataContainer = NULL;
+SvtToolPanelOptions_Impl* SvtToolPanelOptions::m_pDataContainer = nullptr;
 sal_Int32               SvtToolPanelOptions::m_nRefCount = 0;
 
 SvtToolPanelOptions::SvtToolPanelOptions()
@@ -308,7 +308,7 @@ SvtToolPanelOptions::SvtToolPanelOptions()
     MutexGuard aGuard( GetInitMutex() );
     ++m_nRefCount;
     // ... and initialize our data container only if it not already exist!
-    if( m_pDataContainer == NULL )
+    if( m_pDataContainer == nullptr )
     {
        m_pDataContainer = new SvtToolPanelOptions_Impl;
     }
@@ -323,7 +323,7 @@ SvtToolPanelOptions::~SvtToolPanelOptions()
     if( m_nRefCount <= 0 )
     {
         delete m_pDataContainer;
-        m_pDataContainer = NULL;
+        m_pDataContainer = nullptr;
     }
 }
 

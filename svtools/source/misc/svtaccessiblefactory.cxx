@@ -33,10 +33,10 @@ namespace svt
     namespace
     {
 #ifndef DISABLE_DYNLOADING
-        static oslModule                                s_hAccessibleImplementationModule = NULL;
+        static oslModule                                s_hAccessibleImplementationModule = nullptr;
 #endif
 #if HAVE_FEATURE_DESKTOP
-        static GetSvtAccessibilityComponentFactory      s_pAccessibleFactoryFunc = NULL;
+        static GetSvtAccessibilityComponentFactory      s_pAccessibleFactoryFunc = nullptr;
 #endif
         static ::rtl::Reference< IAccessibleFactory >   s_pFactory;
 
@@ -60,7 +60,7 @@ namespace svt
                     SvHeaderTabListBox& /*rBox*/
                 ) const override
             {
-                return NULL;
+                return nullptr;
             }
 
             virtual IAccessibleBrowseBox*
@@ -69,7 +69,7 @@ namespace svt
                     IAccessibleTableProvider& /*_rBrowseBox*/
                 ) const override
             {
-                return NULL;
+                return nullptr;
             }
 
             virtual table::IAccessibleTableControl*
@@ -78,7 +78,7 @@ namespace svt
                     table::IAccessibleTable& /*_rTable*/
                 ) const override
             {
-                return NULL;
+                return nullptr;
             }
 
             virtual css::uno::Reference< css::accessibility::XAccessible >
@@ -87,7 +87,7 @@ namespace svt
                     const css::uno::Reference< css::accessibility::XAccessible >& /*_xParent*/
                 ) const override
             {
-                return NULL;
+                return nullptr;
             }
 
             virtual css::uno::Reference< css::accessibility::XAccessible >
@@ -95,7 +95,7 @@ namespace svt
                     TabBar& /*_rTabBar*/
                 ) const override
             {
-                return NULL;
+                return nullptr;
             }
 
             virtual css::uno::Reference< css::accessibility::XAccessibleContext >
@@ -103,7 +103,7 @@ namespace svt
                     VCLXWindow* /*pVclXWindow*/, TextEngine& /*rEngine*/, TextView& /*rView*/
                 ) const override
             {
-                return NULL;
+                return nullptr;
             }
 
             virtual css::uno::Reference< css::accessibility::XAccessible >
@@ -112,7 +112,7 @@ namespace svt
                     const css::uno::Reference< css::accessibility::XAccessible >& /*_xParent*/
                 ) const override
             {
-                return NULL;
+                return nullptr;
             }
 
             virtual css::uno::Reference< css::accessibility::XAccessible >
@@ -122,7 +122,7 @@ namespace svt
                     AccessibleBrowseBoxObjType /*_eObjType*/
                 ) const override
             {
-                return NULL;
+                return nullptr;
             }
 
             virtual css::uno::Reference< css::accessibility::XAccessible >
@@ -135,7 +135,7 @@ namespace svt
                     sal_Int32 /*_nOffset*/
                 ) const override
             {
-                return NULL;
+                return nullptr;
             }
 
             virtual css::uno::Reference< css::accessibility::XAccessible >
@@ -147,7 +147,7 @@ namespace svt
                     AccessibleBrowseBoxObjType  /*_eObjType*/
                 ) const override
             {
-                return NULL;
+                return nullptr;
             }
 
             virtual css::uno::Reference< css::accessibility::XAccessible >
@@ -161,7 +161,7 @@ namespace svt
                     bool /*_bIsTriState*/
                 ) const override
             {
-                return NULL;
+                return nullptr;
             }
 
             virtual css::uno::Reference< css::accessibility::XAccessible >
@@ -174,7 +174,7 @@ namespace svt
                     sal_uInt16 /*_nColPos*/
                 ) const override
             {
-                return NULL;
+                return nullptr;
             }
 
             virtual css::uno::Reference< css::accessibility::XAccessibleContext >
@@ -183,7 +183,7 @@ namespace svt
                     ::svt::ToolPanelDeck& /*i_rPanelDeck*/
                 ) override
             {
-                return NULL;
+                return nullptr;
             }
             virtual css::uno::Reference< css::accessibility::XAccessibleContext >
                 createAccessibleToolPanelTabBar(
@@ -192,7 +192,7 @@ namespace svt
                     ::svt::PanelTabBar& /*i_rTabBar*/
                 ) override
             {
-                return NULL;
+                return nullptr;
             }
         };
 
@@ -239,7 +239,7 @@ namespace svt
 #ifndef DISABLE_DYNLOADING
             const OUString sModuleName( SVLIBRARY( "acc" ));
             s_hAccessibleImplementationModule = osl_loadModuleRelative( &thisModule, sModuleName.pData, 0 );
-            if ( s_hAccessibleImplementationModule != NULL )
+            if ( s_hAccessibleImplementationModule != nullptr )
             {
                 const OUString sFactoryCreationFunc( "getSvtAccessibilityComponentFactory" );
                 s_pAccessibleFactoryFunc = reinterpret_cast<GetSvtAccessibilityComponentFactory>(

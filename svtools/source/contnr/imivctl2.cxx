@@ -22,7 +22,7 @@
 IcnCursor_Impl::IcnCursor_Impl( SvxIconChoiceCtrl_Impl* pOwner )
 {
     pView       = pOwner;
-    pCurEntry   = 0;
+    pCurEntry   = nullptr;
     nDeltaWidth = 0;
     nDeltaHeight= 0;
     nCols       = 0;
@@ -62,7 +62,7 @@ sal_uInt16 IcnCursor_Impl::GetSortListPos( SvxIconChoiceCtrlEntryPtrVec& rList, 
 void IcnCursor_Impl::ImplCreate()
 {
     pView->CheckBoundingRects();
-    DBG_ASSERT(xColumns==0&&xRows==0,"ImplCreate: Not cleared");
+    DBG_ASSERT(xColumns==nullptr&&xRows==nullptr,"ImplCreate: Not cleared");
 
     SetDeltas();
 
@@ -106,7 +106,7 @@ void IcnCursor_Impl::Clear()
     {
         xColumns.reset();
         xRows.reset();
-        pCurEntry = 0;
+        pCurEntry = nullptr;
         nDeltaWidth = 0;
         nDeltaHeight = 0;
     }
@@ -118,11 +118,11 @@ SvxIconChoiceCtrlEntry* IcnCursor_Impl::SearchCol(sal_uInt16 nCol, sal_uInt16 nT
     DBG_ASSERT(pCurEntry, "SearchCol: No reference entry");
     IconChoiceMap::iterator mapIt = xColumns->find( nCol );
     if ( mapIt == xColumns->end() )
-        return 0;
+        return nullptr;
     SvxIconChoiceCtrlEntryPtrVec const & rList = mapIt->second;
     const sal_uInt16 nCount = rList.size();
     if( !nCount )
-        return 0;
+        return nullptr;
 
     const Rectangle& rRefRect = pView->GetEntryBoundRect(pCurEntry);
 
@@ -132,7 +132,7 @@ SvxIconChoiceCtrlEntry* IcnCursor_Impl::SearchCol(sal_uInt16 nCol, sal_uInt16 nT
 
         assert(it != rList.end()); //Entry not in Col-List
         if (it == rList.end())
-            return 0;
+            return nullptr;
 
         if( bDown )
         {
@@ -143,7 +143,7 @@ SvxIconChoiceCtrlEntry* IcnCursor_Impl::SearchCol(sal_uInt16 nCol, sal_uInt16 nT
                 if( rRect.Top() > rRefRect.Top() )
                     return pEntry;
             }
-            return 0;
+            return nullptr;
         }
         else
         {
@@ -156,7 +156,7 @@ SvxIconChoiceCtrlEntry* IcnCursor_Impl::SearchCol(sal_uInt16 nCol, sal_uInt16 nT
                     return pEntry;
                 ++it2;
             }
-            return 0;
+            return nullptr;
         }
     }
 
@@ -167,7 +167,7 @@ SvxIconChoiceCtrlEntry* IcnCursor_Impl::SearchCol(sal_uInt16 nCol, sal_uInt16 nT
         nBottom = nTemp;
     }
     long nMinDistance = LONG_MAX;
-    SvxIconChoiceCtrlEntry* pResult = 0;
+    SvxIconChoiceCtrlEntry* pResult = nullptr;
     for( sal_uInt16 nCur = 0; nCur < nCount; nCur++ )
     {
         SvxIconChoiceCtrlEntry* pEntry = rList[ nCur ];
@@ -197,11 +197,11 @@ SvxIconChoiceCtrlEntry* IcnCursor_Impl::SearchRow(sal_uInt16 nRow, sal_uInt16 nL
     DBG_ASSERT(pCurEntry,"SearchRow: No reference entry");
     IconChoiceMap::iterator mapIt = xRows->find( nRow );
     if ( mapIt == xRows->end() )
-        return 0;
+        return nullptr;
     SvxIconChoiceCtrlEntryPtrVec const & rList = mapIt->second;
     const sal_uInt16 nCount = rList.size();
     if( !nCount )
-        return 0;
+        return nullptr;
 
     const Rectangle& rRefRect = pView->GetEntryBoundRect(pCurEntry);
 
@@ -211,7 +211,7 @@ SvxIconChoiceCtrlEntry* IcnCursor_Impl::SearchRow(sal_uInt16 nRow, sal_uInt16 nL
 
         assert(it != rList.end()); //Entry not in Row-List
         if (it == rList.end())
-            return 0;
+            return nullptr;
 
         if( bRight )
         {
@@ -222,7 +222,7 @@ SvxIconChoiceCtrlEntry* IcnCursor_Impl::SearchRow(sal_uInt16 nRow, sal_uInt16 nL
                 if( rRect.Left() > rRefRect.Left() )
                     return pEntry;
             }
-            return 0;
+            return nullptr;
         }
         else
         {
@@ -235,7 +235,7 @@ SvxIconChoiceCtrlEntry* IcnCursor_Impl::SearchRow(sal_uInt16 nRow, sal_uInt16 nL
                     return pEntry;
                 ++it2;
             }
-            return 0;
+            return nullptr;
         }
 
     }
@@ -246,7 +246,7 @@ SvxIconChoiceCtrlEntry* IcnCursor_Impl::SearchRow(sal_uInt16 nRow, sal_uInt16 nL
         nLeft = nTemp;
     }
     long nMinDistance = LONG_MAX;
-    SvxIconChoiceCtrlEntry* pResult = 0;
+    SvxIconChoiceCtrlEntry* pResult = nullptr;
     for( sal_uInt16 nCur = 0; nCur < nCount; nCur++ )
     {
         SvxIconChoiceCtrlEntry* pEntry = rList[ nCur ];
@@ -334,7 +334,7 @@ SvxIconChoiceCtrlEntry* IcnCursor_Impl::GoLeftRight( SvxIconChoiceCtrlEntry* pCt
             nRowMax++;
         nCurCol += nColOffs;
     } while( nCurCol != nLastCol );
-    return 0;
+    return nullptr;
 }
 
 SvxIconChoiceCtrlEntry* IcnCursor_Impl::GoPageUpDown( SvxIconChoiceCtrlEntry* pStart, bool bDown)
@@ -360,7 +360,7 @@ SvxIconChoiceCtrlEntry* IcnCursor_Impl::GoPageUpDown( SvxIconChoiceCtrlEntry* pS
         }
         if( nPos != nNewPos )
             return pView->aEntries[ (size_t)nNewPos ];
-        return 0;
+        return nullptr;
     }
     long nOpt = pView->GetEntryBoundRect( pStart ).Top();
     if( bDown )
@@ -394,7 +394,7 @@ SvxIconChoiceCtrlEntry* IcnCursor_Impl::GoPageUpDown( SvxIconChoiceCtrlEntry* pS
     }
     if( pPrev != pStart )
         return pPrev;
-    return 0;
+    return nullptr;
 }
 
 SvxIconChoiceCtrlEntry* IcnCursor_Impl::GoUpDown( SvxIconChoiceCtrlEntry* pCtrlEntry, bool bDown)
@@ -406,7 +406,7 @@ SvxIconChoiceCtrlEntry* IcnCursor_Impl::GoUpDown( SvxIconChoiceCtrlEntry* pCtrlE
             return pView->aEntries[ nPos + 1 ];
         else if( !bDown && nPos > 0 )
             return pView->aEntries[ nPos - 1 ];
-        return 0;
+        return nullptr;
     }
 
     SvxIconChoiceCtrlEntry* pResult;
@@ -453,7 +453,7 @@ SvxIconChoiceCtrlEntry* IcnCursor_Impl::GoUpDown( SvxIconChoiceCtrlEntry* pCtrlE
             nColMax++;
         nCurRow += nRowOffs;
     } while( nCurRow != nLastRow );
-    return 0;
+    return nullptr;
 }
 
 void IcnCursor_Impl::SetDeltas()
@@ -534,14 +534,14 @@ void IcnCursor_Impl::DestroyGridAdjustData( IconChoiceMap& rLists )
 IcnGridMap_Impl::IcnGridMap_Impl(SvxIconChoiceCtrl_Impl* pView)
 {
     _pView = pView;
-    _pGridMap = 0;
+    _pGridMap = nullptr;
     _nGridCols = 0;
     _nGridRows = 0;
 }
 
 IcnGridMap_Impl::~IcnGridMap_Impl()
 {
-    delete[] _pGridMap, _pGridMap=0;
+    delete[] _pGridMap, _pGridMap=nullptr;
 }
 
 void IcnGridMap_Impl::Expand()
@@ -722,7 +722,7 @@ void IcnGridMap_Impl::Clear()
 {
     if( _pGridMap )
     {
-        delete[] _pGridMap, _pGridMap=0;
+        delete[] _pGridMap, _pGridMap=nullptr;
         _nGridRows = 0;
         _nGridCols = 0;
         _aLastOccupiedGrid.SetEmpty();

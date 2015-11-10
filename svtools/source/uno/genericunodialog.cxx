@@ -48,7 +48,7 @@ namespace svt
 
 OGenericUnoDialog::OGenericUnoDialog(const Reference< XComponentContext >& _rxContext)
         :OPropertyContainer(GetBroadcastHelper())
-        ,m_pDialog(NULL)
+        ,m_pDialog(nullptr)
         ,m_bExecuting(false)
         ,m_bCanceled(false)
         ,m_bTitleAmbiguous(true)
@@ -170,7 +170,7 @@ bool OGenericUnoDialog::impl_ensureDialog_lck()
     // get the parameters for the dialog from the current settings
 
     // the parent window
-    vcl::Window* pParent = NULL;
+    vcl::Window* pParent = nullptr;
     VCLXWindow* pImplementation = VCLXWindow::GetImplementation(m_xParent);
     if (pImplementation)
         pParent = pImplementation->GetWindow();
@@ -202,7 +202,7 @@ sal_Int16 SAL_CALL OGenericUnoDialog::execute(  ) throw(RuntimeException, std::e
     // both creation and execution of the dialog must be guarded with the SolarMutex, so be generous here
     SolarMutexGuard aSolarGuard;
 
-    Dialog* pDialogToExecute = NULL;
+    Dialog* pDialogToExecute = nullptr;
     // create the dialog, if necessary
     {
         UnoDialogEntryGuard aGuard( *this );
@@ -322,7 +322,7 @@ IMPL_LINK_TYPED( OGenericUnoDialog, OnDialogDying, VclWindowEvent&, _rEvent, voi
 {
     OSL_ENSURE( _rEvent.GetWindow() == m_pDialog, "OGenericUnoDialog::OnDialogDying: where does this come from?" );
     if ( _rEvent.GetId() == VCLEVENT_OBJECT_DYING )
-        m_pDialog = NULL;
+        m_pDialog = nullptr;
 }
 
 

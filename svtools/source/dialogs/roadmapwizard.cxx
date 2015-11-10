@@ -61,7 +61,7 @@ namespace svt
         bool                bActivePathIsDefinite;
 
         RoadmapWizardImpl()
-            :pRoadmap( NULL )
+            :pRoadmap( nullptr )
             ,nActivePath( -1 )
             ,bActivePathIsDefinite( false )
         {
@@ -153,7 +153,7 @@ namespace svt
     void RoadmapWizard::dispose()
     {
         delete m_pImpl;
-        m_pImpl = NULL;
+        m_pImpl = nullptr;
         OWizardMachine::dispose();
     }
 
@@ -307,7 +307,7 @@ namespace svt
         if ( pCurrentPage )
         {
             const IWizardPageController* pController = getPageController( GetPage( getCurrentState() ) );
-            OSL_ENSURE( pController != NULL, "RoadmapWizard::implUpdateRoadmap: no controller for the current page!" );
+            OSL_ENSURE( pController != nullptr, "RoadmapWizard::implUpdateRoadmap: no controller for the current page!" );
             bCurrentPageCanAdvance = !pController || pController->canAdvance();
         }
 

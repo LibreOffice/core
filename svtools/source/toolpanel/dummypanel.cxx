@@ -88,7 +88,7 @@ namespace svt
     Reference< XAccessible > DummyPanel::CreatePanelAccessible( const Reference< XAccessible >& i_rParentAccessible )
     {
         (void)i_rParentAccessible;
-        return NULL;
+        return nullptr;
     }
 
 

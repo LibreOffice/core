@@ -762,7 +762,7 @@ public:
     RulerSelection  GetHoverSelection() const { return maHoverSelection; }
 
     using Window::GetType;
-    RulerType       GetType( const Point& rPos, sal_uInt16* pAryPos = NULL );
+    RulerType       GetType( const Point& rPos, sal_uInt16* pAryPos = nullptr );
 
     void            SetNullOffset( long nPos );
     long            GetNullOffset() const;
@@ -775,11 +775,11 @@ public:
 
     void            SetLeftFrameMargin( long nPos );
     void            SetRightFrameMargin( long nPos );
-    void            SetLines( sal_uInt32 n = 0, const RulerLine* pLineAry = NULL );
-    void            SetBorders( sal_uInt32 n = 0, const RulerBorder* pBrdAry = NULL );
-    void            SetIndents( sal_uInt32 n = 0, const RulerIndent* pIndentAry = NULL );
+    void            SetLines( sal_uInt32 n = 0, const RulerLine* pLineAry = nullptr );
+    void            SetBorders( sal_uInt32 n = 0, const RulerBorder* pBrdAry = nullptr );
+    void            SetIndents( sal_uInt32 n = 0, const RulerIndent* pIndentAry = nullptr );
 
-    void            SetTabs( sal_uInt32 n = 0, const RulerTab* pTabAry = NULL );
+    void            SetTabs( sal_uInt32 n = 0, const RulerTab* pTabAry = nullptr );
 
     static void     DrawTab(vcl::RenderContext& rRenderContext, const Color &rFillColor,
                             const Point& rPos, sal_uInt16 nStyle);

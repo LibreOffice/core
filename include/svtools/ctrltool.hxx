@@ -160,7 +160,7 @@ private:
 
 public:
                             FontList( OutputDevice* pDevice,
-                                      OutputDevice* pDevice2 = NULL,
+                                      OutputDevice* pDevice2 = nullptr,
                                       bool bAll = true );
                             ~FontList();
 

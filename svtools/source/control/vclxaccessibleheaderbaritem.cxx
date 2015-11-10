@@ -58,7 +58,7 @@ VCLXAccessibleHeaderBarItem::VCLXAccessibleHeaderBarItem( HeaderBar*    pHeadBar
 VCLXAccessibleHeaderBarItem::~VCLXAccessibleHeaderBarItem()
 {
     delete m_pExternalLock;
-    m_pExternalLock = NULL;
+    m_pExternalLock = nullptr;
 }
 
 void VCLXAccessibleHeaderBarItem::FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet )

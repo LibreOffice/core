@@ -109,7 +109,7 @@ void DragSourceHelper::StartDrag( sal_Int8, const Point& )
 
 DropTargetHelper::DropTargetListener::DropTargetListener( DropTargetHelper& rDropTargetHelper ) :
     mrParent( rDropTargetHelper ),
-    mpLastDragOverEvent( NULL )
+    mpLastDragOverEvent( nullptr )
 {
 }
 
@@ -168,7 +168,7 @@ void SAL_CALL DropTargetHelper::DropTargetListener::drop( const DropTargetDropEv
         if( mpLastDragOverEvent )
         {
             delete mpLastDragOverEvent;
-            mpLastDragOverEvent = NULL;
+            mpLastDragOverEvent = nullptr;
         }
     }
     catch( const css::uno::Exception& )
@@ -231,7 +231,7 @@ void SAL_CALL DropTargetHelper::DropTargetListener::dragExit( const DropTargetEv
             mpLastDragOverEvent->mbLeaving = true;
             mrParent.AcceptDrop( *mpLastDragOverEvent );
             delete mpLastDragOverEvent;
-            mpLastDragOverEvent = NULL;
+            mpLastDragOverEvent = nullptr;
         }
 
         mrParent.ImplEndDrag();
@@ -363,7 +363,7 @@ struct TransferDataContainer_Impl
     Graphic* pGrf;
 
     TransferDataContainer_Impl()
-        : pBookmk( 0 ), pGrf( 0 )
+        : pBookmk( nullptr ), pGrf( nullptr )
     {
     }
 
@@ -572,7 +572,7 @@ void TransferDataContainer::CopyAny( SotClipboardFormatId nFmt,
 bool TransferDataContainer::HasAnyData() const
 {
     return pImpl->aFmtList.begin() != pImpl->aFmtList.end() ||
-            0 != pImpl->pBookmk;
+            nullptr != pImpl->pBookmk;
 }
 
 

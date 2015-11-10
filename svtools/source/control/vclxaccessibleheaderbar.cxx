@@ -54,7 +54,7 @@ css::uno::Reference< css::accessibility::XAccessibleContext > VCLXHeaderBar::Cre
 
 VCLXAccessibleHeaderBar::VCLXAccessibleHeaderBar( VCLXWindow* pVCLWindow )
     :VCLXAccessibleComponent( pVCLWindow )
-    ,m_pHeadBar(NULL)
+    ,m_pHeadBar(nullptr)
 {
     m_pHeadBar = GetAs< HeaderBar >();
 }

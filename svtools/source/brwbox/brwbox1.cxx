@@ -62,9 +62,9 @@ void BrowseBox::ConstructImpl( BrowserMode nMode )
 {
     OSL_TRACE( "BrowseBox: %p->ConstructImpl", this );
     bMultiSelection = false;
-    pColSel = 0;
-    pDataWin = 0;
-    pVScroll = 0;
+    pColSel = nullptr;
+    pDataWin = nullptr;
+    pVScroll = nullptr;
 
     pDataWin = VclPtr<BrowserDataWin>::Create( this ).get();
     pCols = new BrowserColumns;
@@ -1579,7 +1579,7 @@ bool BrowseBox::GoToColumnId( sal_uInt16 nColId, bool bMakeVisible, bool bRowCol
     if ( nColId != nCurColId || (bMakeVisible && !IsFieldVisible(nCurRow, nColId, true)))
     {
         sal_uInt16 nNewPos = GetColumnPos(nColId);
-        BrowserColumn* pColumn = (nNewPos < pCols->size()) ? (*pCols)[ nNewPos ] : NULL;
+        BrowserColumn* pColumn = (nNewPos < pCols->size()) ? (*pCols)[ nNewPos ] : nullptr;
         DBG_ASSERT( pColumn, "no column object - invalid id?" );
         if ( !pColumn )
             return false;
@@ -2252,7 +2252,7 @@ void BrowseBox::SetMode( BrowserMode nMode )
             BrowserMode::NO_SCROLLBACK == ( nMode & BrowserMode::NO_SCROLLBACK);
 
     long nOldRowSel = bMultiSelection ? uRow.pSel->FirstSelected() : uRow.nSel;
-    MultiSelection *pOldRowSel = bMultiSelection ? uRow.pSel : 0;
+    MultiSelection *pOldRowSel = bMultiSelection ? uRow.pSel : nullptr;
     MultiSelection *pOldColSel = pColSel;
 
     pVScroll.disposeAndClear();
@@ -2317,7 +2317,7 @@ void BrowseBox::SetMode( BrowserMode nMode )
     else
     {
         delete pColSel;
-        pColSel = 0;
+        pColSel = nullptr;
     }
 
     if ( bMultiSelection )

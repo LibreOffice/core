@@ -80,7 +80,7 @@ private:
 public:
                             ImplFontListFontInfo( const vcl::FontInfo& rInfo,
                                                   OutputDevice* pDev ) :
-                                vcl::FontInfo( rInfo ), mpNext(NULL)
+                                vcl::FontInfo( rInfo ), mpNext(nullptr)
                             {
                                 mpDevice = pDev;
                             }
@@ -110,7 +110,7 @@ private:
 
     ImplFontListNameInfo(const OUString& rSearchName)
         : maSearchName(rSearchName)
-        , mpFirst(NULL)
+        , mpFirst(nullptr)
         , mnType(FontListFontNameType::NONE)
     {
     }
@@ -172,7 +172,7 @@ ImplFontListNameInfo* FontList::ImplFind(const OUString& rSearchName, sal_uLong*
     {
         if ( pIndex )
             *pIndex = ULONG_MAX;
-        return NULL;
+        return nullptr;
     }
     else
     {
@@ -182,7 +182,7 @@ ImplFontListNameInfo* FontList::ImplFind(const OUString& rSearchName, sal_uLong*
         {
             if ( pIndex )
                 *pIndex = ULONG_MAX;
-            return NULL;
+            return nullptr;
         }
         else if (nComp == 0)
             return const_cast<ImplFontListNameInfo*>(pCmpData);
@@ -190,7 +190,7 @@ ImplFontListNameInfo* FontList::ImplFind(const OUString& rSearchName, sal_uLong*
 
     // search fonts in the list
     const ImplFontListNameInfo* pCompareData;
-    const ImplFontListNameInfo* pFoundData = NULL;
+    const ImplFontListNameInfo* pFoundData = nullptr;
     size_t                      nLow = 0;
     size_t                      nHigh = m_Entries.size() - 1;
     size_t                      nMid;
@@ -234,7 +234,7 @@ ImplFontListNameInfo* FontList::ImplFind(const OUString& rSearchName, sal_uLong*
 ImplFontListNameInfo* FontList::ImplFindByName(const OUString& rStr) const
 {
     OUString aSearchName = ImplMakeSearchStringFromName(rStr);
-    return ImplFind( aSearchName, NULL );
+    return ImplFind( aSearchName, nullptr );
 }
 
 void FontList::ImplInsertFonts( OutputDevice* pDevice, bool bAll,
@@ -272,7 +272,7 @@ void FontList::ImplInsertFonts( OutputDevice* pDevice, bool bAll,
                 ImplFontListFontInfo* pNewInfo = new ImplFontListFontInfo( aFontInfo, pDevice );
                 pData = new ImplFontListNameInfo( aSearchName );
                 pData->mpFirst      = pNewInfo;
-                pNewInfo->mpNext    = NULL;
+                pNewInfo->mpNext    = nullptr;
 
                 if (nIndex < m_Entries.size())
                     m_Entries.insert(m_Entries.begin()+nIndex,
@@ -286,7 +286,7 @@ void FontList::ImplInsertFonts( OutputDevice* pDevice, bool bAll,
             if ( bInsertData )
             {
                 bool                    bInsert = true;
-                ImplFontListFontInfo*   pPrev = NULL;
+                ImplFontListFontInfo*   pPrev = nullptr;
                 ImplFontListFontInfo*   pTemp = pData->mpFirst;
                 ImplFontListFontInfo*   pNewInfo = new ImplFontListFontInfo( aFontInfo, pDevice );
                 while ( pTemp )
@@ -337,7 +337,7 @@ FontList::FontList( OutputDevice* pDevice, OutputDevice* pDevice2, bool bAll )
     // initialise variables
     mpDev = pDevice;
     mpDev2 = pDevice2;
-    mpSizeAry = NULL;
+    mpSizeAry = nullptr;
 
     // store style names
     maLight         = SVT_RESSTR(STR_SVT_STYLE_LIGHT);
@@ -577,8 +577,8 @@ namespace
 vcl::FontInfo FontList::Get(const OUString& rName, const OUString& rStyleName) const
 {
     ImplFontListNameInfo* pData = ImplFindByName( rName );
-    ImplFontListFontInfo* pFontInfo = NULL;
-    ImplFontListFontInfo* pFontNameInfo = NULL;
+    ImplFontListFontInfo* pFontInfo = nullptr;
+    ImplFontListFontInfo* pFontNameInfo = nullptr;
     if ( pData )
     {
         ImplFontListFontInfo* pSearchInfo = pData->mpFirst;
@@ -659,8 +659,8 @@ vcl::FontInfo FontList::Get(const OUString& rName,
                         FontWeight eWeight, FontItalic eItalic) const
 {
     ImplFontListNameInfo* pData = ImplFindByName( rName );
-    ImplFontListFontInfo* pFontInfo = NULL;
-    ImplFontListFontInfo* pFontNameInfo = NULL;
+    ImplFontListFontInfo* pFontInfo = nullptr;
+    ImplFontListFontInfo* pFontNameInfo = nullptr;
     if ( pData )
     {
         ImplFontListFontInfo* pSearchInfo = pData->mpFirst;
@@ -693,7 +693,7 @@ vcl::FontInfo FontList::Get(const OUString& rName,
 
 bool FontList::IsAvailable(const OUString& rName) const
 {
-    return (ImplFindByName( rName ) != 0);
+    return (ImplFindByName( rName ) != nullptr);
 }
 
 const vcl::FontInfo& FontList::GetFontName( sal_uInt16 nFont ) const
@@ -730,7 +730,7 @@ const sal_IntPtr* FontList::GetSizeAry( const vcl::FontInfo& rInfo ) const
     if ( mpSizeAry )
     {
         delete[] const_cast<FontList*>(this)->mpSizeAry;
-        const_cast<FontList*>(this)->mpSizeAry = NULL;
+        const_cast<FontList*>(this)->mpSizeAry = nullptr;
     }
 
     // use standarad sizes if no name
@@ -813,7 +813,7 @@ FontSizeNames::FontSizeNames( LanguageType eLanguage )
     }
     else
     {
-        mpArray = NULL;
+        mpArray = nullptr;
         mnElem = 0;
     }
 }

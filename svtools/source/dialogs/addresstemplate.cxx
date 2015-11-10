@@ -653,7 +653,7 @@ void AssignmentPersistentData::ImplCommit()
         for (sal_Int32 i = 0; i<nAdjustedTokenCount; ++i)
             m_pImpl->aLogicalFieldNames.push_back(sLogicalFieldNames.getToken(i, ';'));
 
-        PostUserEvent(LINK(this, AddressBookSourceDialog, OnDelayedInitialize), NULL, true);
+        PostUserEvent(LINK(this, AddressBookSourceDialog, OnDelayedInitialize), nullptr, true);
             // so the dialog will at least show up before we do the loading of the
             // configuration data and the (maybe time consuming) analysis of the data source/table to select
 
@@ -804,7 +804,7 @@ void AssignmentPersistentData::ImplCommit()
         try
         {
             xHandler.set(
-                InteractionHandler::createWithParent(m_xORB, 0),
+                InteractionHandler::createWithParent(m_xORB, nullptr),
                 UNO_QUERY_THROW );
         }
         catch(const Exception&) { }
@@ -820,7 +820,7 @@ void AssignmentPersistentData::ImplCommit()
 
         m_pTable->Clear();
 
-        m_xCurrentDatasourceTables= NULL;
+        m_xCurrentDatasourceTables= nullptr;
 
         // get the tables of the connection
         Sequence< OUString > aTableNames;

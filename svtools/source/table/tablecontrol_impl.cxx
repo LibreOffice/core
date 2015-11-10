@@ -200,7 +200,7 @@ namespace svt { namespace table
         }
         virtual ITableDataSort* getSortAdapter() override
         {
-            return NULL;
+            return nullptr;
         }
         virtual bool isEnabled() const override
         {
@@ -237,15 +237,15 @@ namespace svt { namespace table
         ,m_nTopRow              ( 0                             )
         ,m_nCursorHidden        ( 1                             )
         ,m_pDataWindow          ( VclPtr<TableDataWindow>::Create( *this )  )
-        ,m_pVScroll             ( NULL                          )
-        ,m_pHScroll             ( NULL                          )
-        ,m_pScrollCorner        ( NULL                          )
+        ,m_pVScroll             ( nullptr                          )
+        ,m_pHScroll             ( nullptr                          )
+        ,m_pScrollCorner        ( nullptr                          )
         ,m_pSelEngine           (                               )
         ,m_aSelectedRows        (                               )
         ,m_pTableFunctionSet    ( new TableFunctionSet( this  ) )
         ,m_nAnchor              ( -1                            )
         ,m_bUpdatingColWidths   ( false                         )
-        ,m_pAccessibleTable     ( NULL                          )
+        ,m_pAccessibleTable     ( nullptr                          )
     {
         m_pSelEngine = new SelectionEngine( m_pDataWindow.get(), m_pTableFunctionSet );
         m_pSelEngine->SetSelectionMode(SINGLE_SELECTION);
@@ -2402,7 +2402,7 @@ namespace svt { namespace table
     Reference< XAccessible > TableControl_Impl::getAccessible( vcl::Window& i_parentWindow )
     {
         DBG_TESTSOLARMUTEX();
-        if ( m_pAccessibleTable == NULL )
+        if ( m_pAccessibleTable == nullptr )
         {
             Reference< XAccessible > const xAccParent = i_parentWindow.GetAccessible();
             if ( xAccParent.is() )
@@ -2424,13 +2424,13 @@ namespace svt { namespace table
     {
         if ( m_pAccessibleTable )
             m_pAccessibleTable->DisposeAccessImpl();
-        m_pAccessibleTable = NULL;
+        m_pAccessibleTable = nullptr;
     }
 
 
     bool TableControl_Impl::impl_isAccessibleAlive() const
     {
-        return ( NULL != m_pAccessibleTable ) && m_pAccessibleTable->isAlive();
+        return ( nullptr != m_pAccessibleTable ) && m_pAccessibleTable->isAlive();
     }
 
 

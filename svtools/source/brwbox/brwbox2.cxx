@@ -167,7 +167,7 @@ void BrowseBox::StateChanged( StateChangedType nStateChange )
         // do we have a handle column?
         bool bHandleCol = !pCols->empty() && (0 == (*pCols)[ 0 ]->GetId());
         // do we have a header bar?
-        bool bHeaderBar = (NULL != static_cast<BrowserDataWin&>(GetDataWindow()).pHeaderBar.get());
+        bool bHeaderBar = (nullptr != static_cast<BrowserDataWin&>(GetDataWindow()).pHeaderBar.get());
 
         if  (   nTitleLines
             &&  (   !bHeaderBar
@@ -280,7 +280,7 @@ void BrowseBox::ToggleSelection( bool bForce )
     long nLastRowInRect = 0; // for the CFront
 
     // don't highlight handle column
-    BrowserColumn *pFirstCol = pCols->empty() ? NULL : (*pCols)[ 0 ];
+    BrowserColumn *pFirstCol = pCols->empty() ? nullptr : (*pCols)[ 0 ];
     long nOfsX = (!pFirstCol || pFirstCol->GetId()) ? 0 : pFirstCol->Width();
 
     // accumulate old row selection
@@ -601,7 +601,7 @@ void BrowseBox::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect
 
     BrowserColumn *pFirstCol = (*pCols)[ 0 ];
     bool bHandleCol = pFirstCol && pFirstCol->GetId() == 0;
-    bool bHeaderBar = getDataWindow()->pHeaderBar.get() != NULL;
+    bool bHeaderBar = getDataWindow()->pHeaderBar.get() != nullptr;
 
     // draw delimitational lines
     if (!getDataWindow()->bNoHScroll)
@@ -754,7 +754,7 @@ void BrowseBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, 
         long nTitleHeight = PixelToLogic(Size(0, GetTitleHeight()), MAP_10TH_MM).Height();
         nTitleHeight = pDev->LogicToPixel(Size(0, nTitleHeight), MAP_10TH_MM).Height();
 
-        BrowserColumn* pFirstCol = !pCols->empty() ? (*pCols)[ 0 ] : NULL;
+        BrowserColumn* pFirstCol = !pCols->empty() ? (*pCols)[ 0 ] : nullptr;
 
         Point aHeaderPos(pFirstCol && (pFirstCol->GetId() == 0) ? pFirstCol->Width() : 0, 0);
         Size aHeaderSize(aRealSize.Width() - aHeaderPos.X(), nTitleHeight);
@@ -908,7 +908,7 @@ void BrowseBox::ImplPaintData(OutputDevice& _rOut, const Rectangle& _rRect, bool
             if ( nCol < nFirstCol && !pCol->IsFrozen() )
             {
                 nCol = nFirstCol;
-                pCol = (nCol < pCols->size() ) ? (*pCols)[ nCol ] : NULL;
+                pCol = (nCol < pCols->size() ) ? (*pCols)[ nCol ] : nullptr;
                 if (!pCol)
                 {   // FS - 21.05.99 - 66325
                     // actually this has been fixed elsewhere (in the right place),
@@ -1990,7 +1990,7 @@ void BrowseBox::SetCursorColor(const Color& _rCol)
 
 Rectangle BrowseBox::calcHeaderRect(bool _bIsColumnBar, bool _bOnScreen)
 {
-    vcl::Window* pParent = NULL;
+    vcl::Window* pParent = nullptr;
     if ( !_bOnScreen )
         pParent = GetAccessibleParentWindow();
 
@@ -2014,12 +2014,12 @@ Rectangle BrowseBox::calcHeaderRect(bool _bIsColumnBar, bool _bOnScreen)
 
 Rectangle BrowseBox::calcTableRect(bool _bOnScreen)
 {
-    vcl::Window* pParent = NULL;
+    vcl::Window* pParent = nullptr;
     if ( !_bOnScreen )
         pParent = GetAccessibleParentWindow();
 
     Rectangle aRect( GetWindowExtentsRelative( pParent ) );
-    Rectangle aRowBar = calcHeaderRect(false, pParent == NULL);
+    Rectangle aRowBar = calcHeaderRect(false, pParent == nullptr);
 
     long nX = aRowBar.Right() - aRect.Left();
     long nY = aRowBar.Top() - aRect.Top();
@@ -2030,7 +2030,7 @@ Rectangle BrowseBox::calcTableRect(bool _bOnScreen)
 
 Rectangle BrowseBox::GetFieldRectPixelAbs( sal_Int32 _nRowId, sal_uInt16 _nColId, bool /*_bIsHeader*/, bool _bOnScreen )
 {
-    vcl::Window* pParent = NULL;
+    vcl::Window* pParent = nullptr;
     if ( !_bOnScreen )
         pParent = GetAccessibleParentWindow();
 

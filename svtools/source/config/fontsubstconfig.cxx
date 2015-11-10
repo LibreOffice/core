@@ -155,7 +155,7 @@ const SubstitutionStruct* SvtFontSubstConfig::GetSubstitution(sal_Int32 nPos)
     DBG_ASSERT(nPos >= 0 && nPos < nCount, "illegal array index");
     if(nPos >= 0 && nPos < nCount)
         return &pImpl->aSubstArr[nPos];
-    return NULL;
+    return nullptr;
 }
 
 void SvtFontSubstConfig::AddSubstitution(const SubstitutionStruct& rToAdd)

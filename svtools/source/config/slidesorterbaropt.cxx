@@ -345,7 +345,7 @@ void SvtSlideSorterBarOptions_Impl::SetVisibleViewImpl( bool& bVisibleView, bool
 
 //  initialize static member, see definition for further information
 //  DON'T DO IT IN YOUR HEADER!
-SvtSlideSorterBarOptions_Impl* SvtSlideSorterBarOptions::m_pDataContainer    = NULL  ;
+SvtSlideSorterBarOptions_Impl* SvtSlideSorterBarOptions::m_pDataContainer    = nullptr  ;
 sal_Int32                      SvtSlideSorterBarOptions::m_nRefCount = 0     ;
 
 SvtSlideSorterBarOptions::SvtSlideSorterBarOptions()
@@ -354,7 +354,7 @@ SvtSlideSorterBarOptions::SvtSlideSorterBarOptions()
     MutexGuard aGuard( GetInitMutex() );
     ++m_nRefCount;
     // ... and initialize our data container only if it not already exist!
-    if( m_pDataContainer == NULL )
+    if( m_pDataContainer == nullptr )
     {
        m_pDataContainer = new SvtSlideSorterBarOptions_Impl;
     }
@@ -371,7 +371,7 @@ SvtSlideSorterBarOptions::~SvtSlideSorterBarOptions()
         if (m_pDataContainer->IsModified())
             m_pDataContainer->Commit();
         delete m_pDataContainer;
-        m_pDataContainer = NULL;
+        m_pDataContainer = nullptr;
     }
 }
 

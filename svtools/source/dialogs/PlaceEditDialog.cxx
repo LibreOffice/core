@@ -297,7 +297,7 @@ IMPL_LINK_NOARG_TYPED( PlaceEditDialog, ModifyHdl, Edit&, void )
 IMPL_LINK_NOARG_TYPED( PlaceEditDialog, EditLabelHdl, Edit&, void )
 {
     bLabelChanged = true;
-    EditHdl(NULL);
+    EditHdl(nullptr);
 }
 
 IMPL_LINK_NOARG_TYPED( PlaceEditDialog, EditUsernameHdl, Edit&, void )
@@ -309,7 +309,7 @@ IMPL_LINK_NOARG_TYPED( PlaceEditDialog, EditUsernameHdl, Edit&, void )
         ( *it )->setPassword( m_pEDPassword->GetText() );
     }
 
-    EditHdl(NULL);
+    EditHdl(nullptr);
 }
 
 IMPL_LINK_NOARG_TYPED( PlaceEditDialog, SelectTypeHdl, ListBox&, void )
@@ -339,7 +339,7 @@ IMPL_LINK_NOARG_TYPED( PlaceEditDialog, SelectTypeHdl, ListBox&, void )
 
     SetSizePixel(GetOptimalSize());
 
-    EditHdl(NULL);
+    EditHdl(nullptr);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

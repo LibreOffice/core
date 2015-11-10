@@ -83,7 +83,7 @@ public:
     // not be destroyed from outside
     IMapObject*         GetIMapObject( size_t nPos ) const
                         {
-                            return ( nPos < maList.size() ) ? maList[ nPos ] : NULL;
+                            return ( nPos < maList.size() ) ? maList[ nPos ] : nullptr;
                         }
 
     // returns the object which was hit first or NULL;

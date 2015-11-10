@@ -22,7 +22,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 
-static ResMgr* pMgr=NULL;
+static ResMgr* pMgr=nullptr;
 
 namespace
 {

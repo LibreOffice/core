@@ -45,7 +45,7 @@ Reference< XAccessible > EditBrowseBox::CreateAccessibleCheckBoxCell(long _nRow,
         xReturn = getAccessibleFactory().createAccessibleCheckBoxCell(
             xAccContext->getAccessibleChild( ::svt::BBINDEX_TABLE ),
             *this,
-            NULL,
+            nullptr,
             _nRow,
             _nColumnPos,
             eState,
@@ -120,7 +120,7 @@ void EditBrowseBoxImpl::clearActiveCell()
         OSL_FAIL( "EditBrowseBoxImpl::clearActiveCell: caught an exception while disposing the AccessibleCell!" );
     }
 
-    m_xActiveCell = NULL;
+    m_xActiveCell = nullptr;
 }
 
 void EditBrowseBox::GrabTableFocus()

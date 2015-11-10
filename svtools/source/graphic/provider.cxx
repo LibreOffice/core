@@ -481,12 +481,12 @@ uno::Reference< ::graphic::XGraphic > SAL_CALL GraphicProvider::queryGraphic( co
             aExtHeader.xExt = nExtWidth;
             aExtHeader.yExt = nExtHeight;
             aExtHeader.mapMode = nExtMapMode;
-            WMF_EXTERNALHEADER *pExtHeader = NULL;
+            WMF_EXTERNALHEADER *pExtHeader = nullptr;
             if ( nExtMapMode > 0 )
                 pExtHeader = &aExtHeader;
 
             if( ( rFilter.ImportGraphic( aVCLGraphic, aPath, *pIStm,
-                                         GRFILTER_FORMAT_DONTKNOW, NULL, GraphicFilterImportFlags::NONE, pExtHeader ) == GRFILTER_OK ) &&
+                                         GRFILTER_FORMAT_DONTKNOW, nullptr, GraphicFilterImportFlags::NONE, pExtHeader ) == GRFILTER_OK ) &&
                 ( aVCLGraphic.GetType() != GRAPHIC_NONE ) )
             {
                 ::unographic::Graphic* pUnoGraphic = new ::unographic::Graphic;
@@ -758,7 +758,7 @@ void SAL_CALL GraphicProvider::storeGraphic( const uno::Reference< ::graphic::XG
     if( pOStm )
     {
         uno::Sequence< beans::PropertyValue >   aFilterDataSeq;
-        const char*                             pFilterShortName = NULL;
+        const char*                             pFilterShortName = nullptr;
 
         for( i = 0; i < rMediaProperties.getLength(); ++i )
         {
@@ -837,7 +837,7 @@ void SAL_CALL GraphicProvider::storeGraphic( const uno::Reference< ::graphic::XG
                     {
                         rFilter.ExportGraphic( aGraphic, aPath, aMemStrm,
                                                 rFilter.GetExportFormatNumberForShortName( OUString::createFromAscii( pFilterShortName ) ),
-                                                    ( aFilterDataSeq.getLength() ? &aFilterDataSeq : NULL ) );
+                                                    ( aFilterDataSeq.getLength() ? &aFilterDataSeq : nullptr ) );
                     }
                     aMemStrm.Seek( STREAM_SEEK_TO_END );
                     pOStm->Write( aMemStrm.GetData(), aMemStrm.Tell() );

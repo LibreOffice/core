@@ -86,7 +86,7 @@ void ToolbarMenuAcc::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
         case VCLEVENT_OBJECT_DYING:
         {
             mpParent->mrMenu.RemoveEventListener( LINK( this, ToolbarMenuAcc, WindowEventListener ) );
-            mpParent = 0;
+            mpParent = nullptr;
         }
         break;
 
@@ -538,7 +538,7 @@ void SAL_CALL ToolbarMenuAcc::disposing()
 
         // Reset the pointer to the parent.  It has to be the one who has
         // disposed us because he is dying.
-        mpParent = NULL;
+        mpParent = nullptr;
     }
 
     // Inform all listeners that this objects is disposing.
@@ -598,7 +598,7 @@ void SAL_CALL ToolbarMenuEntryAcc::disposing()
 
         // Reset the pointer to the parent.  It has to be the one who has
         // disposed us because he is dying.
-        mpParent = NULL;
+        mpParent = nullptr;
     }
 
     // Inform all listeners that this objects is disposing.

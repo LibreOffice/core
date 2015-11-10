@@ -123,7 +123,7 @@ void ColorListBox::dispose()
     {
         ImplDestroyColorEntries();
         delete pColorList;
-        pColorList = NULL;
+        pColorList = nullptr;
     }
     ListBox::dispose();
 }
@@ -237,7 +237,7 @@ Color ColorListBox::GetEntryColor( sal_Int32 nPos ) const
 {
     Color aColor;
     ImplColorListData* pData = ( 0 <= nPos && static_cast<size_t>(nPos) < pColorList->size() ) ?
-        (*pColorList)[ nPos ] : NULL;
+        (*pColorList)[ nPos ] : nullptr;
     if ( pData && pData->bColor )
         aColor = pData->aColor;
     return aColor;
@@ -246,7 +246,7 @@ Color ColorListBox::GetEntryColor( sal_Int32 nPos ) const
 void ColorListBox::UserDraw( const UserDrawEvent& rUDEvt )
 {
     size_t nPos = rUDEvt.GetItemId();
-    ImplColorListData* pData = ( nPos < pColorList->size() ) ? (*pColorList)[ nPos ] : NULL;
+    ImplColorListData* pData = ( nPos < pColorList->size() ) ? (*pColorList)[ nPos ] : nullptr;
     if ( pData )
     {
         if ( pData->bColor )
@@ -822,7 +822,7 @@ sal_Int32 LineListBox::GetEntryPos( sal_uInt16 nStyle ) const
 
 sal_uInt16 LineListBox::GetEntryStyle( sal_Int32 nPos ) const
 {
-    ImpLineListData* pData = (0 <= nPos && static_cast<size_t>(nPos) < pLineList->size()) ? (*pLineList)[ nPos ] : NULL;
+    ImpLineListData* pData = (0 <= nPos && static_cast<size_t>(nPos) < pLineList->size()) ? (*pLineList)[ nPos ] : nullptr;
     return ( pData ) ? pData->GetStyle() : table::BorderLineStyle::NONE;
 }
 
@@ -931,7 +931,7 @@ void LineListBox::DataChanged( const DataChangedEvent& rDCEvt )
 FontNameBox::FontNameBox( vcl::Window* pParent, WinBits nWinStyle ) :
     ComboBox( pParent, nWinStyle )
 {
-    mpFontList = NULL;
+    mpFontList = nullptr;
     mbWYSIWYG = false;
     InitFontMRUEntriesFile();
 }
@@ -1018,7 +1018,7 @@ void FontNameBox::InitFontMRUEntriesFile()
 void FontNameBox::ImplDestroyFontList()
 {
     delete mpFontList;
-    mpFontList = NULL;
+    mpFontList = nullptr;
 }
 
 void FontNameBox::Fill( const FontList* pList )
@@ -1538,7 +1538,7 @@ void FontSizeBox::ImplInit()
     bPtRelative     = false;
     bRelative       = false;
     bStdSize        = false;
-    pFontList       = NULL;
+    pFontList       = nullptr;
 
     SetShowTrailingZeros( false );
     SetDecimalDigits( 1 );
@@ -1626,7 +1626,7 @@ void FontSizeBox::Fill( const vcl::FontInfo* pInfo, const FontList* pList )
 
     // query font sizes
     const sal_IntPtr* pTempAry;
-    const sal_IntPtr* pAry = 0;
+    const sal_IntPtr* pAry = nullptr;
 
     if( pInfo )
     {

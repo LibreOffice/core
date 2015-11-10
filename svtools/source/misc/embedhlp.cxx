@@ -210,7 +210,7 @@ void SAL_CALL EmbedEventListener_Impl::notifyClosing( const lang::EventObject& S
     if ( pObject && Source.Source == pObject->GetObject() )
     {
         pObject->Clear();
-        pObject = 0;
+        pObject = nullptr;
     }
 }
 
@@ -219,7 +219,7 @@ void SAL_CALL EmbedEventListener_Impl::disposing( const lang::EventObject& aEven
     if ( pObject && aEvent.Source == pObject->GetObject() )
     {
         pObject->Clear();
-        pObject = 0;
+        pObject = nullptr;
     }
 }
 
@@ -241,9 +241,9 @@ struct EmbeddedObjectRef_Impl
     awt::Size                                   aDefaultSizeForChart_In_100TH_MM;//#i103460# charts do not necessaryly have an own size within ODF files, in this case they need to use the size settings from the surrounding frame, which is made available with this member
 
     EmbeddedObjectRef_Impl() :
-        xListener(0),
-        pContainer(NULL),
-        pGraphic(NULL),
+        xListener(nullptr),
+        pContainer(nullptr),
+        pGraphic(nullptr),
         nViewAspect(embed::Aspects::MSOLE_CONTENT),
         bIsLocked(false),
         bNeedUpdate(false),
@@ -253,11 +253,11 @@ struct EmbeddedObjectRef_Impl
 
     EmbeddedObjectRef_Impl( const EmbeddedObjectRef_Impl& r ) :
         mxObj(r.mxObj),
-        xListener(0),
+        xListener(nullptr),
         aPersistName(r.aPersistName),
         aMediaType(r.aMediaType),
         pContainer(r.pContainer),
-        pGraphic(NULL),
+        pGraphic(nullptr),
         nViewAspect(r.nViewAspect),
         bIsLocked(r.bIsLocked),
         bNeedUpdate(r.bNeedUpdate),
@@ -361,16 +361,16 @@ void EmbeddedObjectRef::Clear()
 
         if ( mpImpl->xListener )
         {
-            mpImpl->xListener->pObject = 0;
+            mpImpl->xListener->pObject = nullptr;
             mpImpl->xListener->release();
-            mpImpl->xListener = 0;
+            mpImpl->xListener = nullptr;
         }
 
-        mpImpl->mxObj = NULL;
+        mpImpl->mxObj = nullptr;
         mpImpl->bNeedUpdate = false;
     }
 
-    mpImpl->pContainer = 0;
+    mpImpl->pContainer = nullptr;
     mpImpl->bIsLocked = false;
     mpImpl->bNeedUpdate = false;
 }
@@ -638,13 +638,13 @@ SvStream* EmbeddedObjectRef::GetGraphicStream( bool bUpdate ) const
         }
     }
 
-    return NULL;
+    return nullptr;
 }
 
 void EmbeddedObjectRef::DrawPaintReplacement( const Rectangle &rRect, const OUString &rText, OutputDevice *pOut )
 {
     MapMode aMM( MAP_APPFONT );
-    Size aAppFontSz = pOut->LogicToLogic( Size( 0, 8 ), &aMM, NULL );
+    Size aAppFontSz = pOut->LogicToLogic( Size( 0, 8 ), &aMM, nullptr );
     vcl::Font aFnt( OUString("Helvetica"), aAppFontSz );
     aFnt.SetTransparent( true );
     aFnt.SetColor( Color( COL_LIGHTRED ) );

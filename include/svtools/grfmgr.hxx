@@ -202,8 +202,8 @@ private:
     void                    SVT_DLLPRIVATE ImplAssignGraphicData();
     void                    SVT_DLLPRIVATE ImplSetGraphicManager(
                                 const GraphicManager* pMgr,
-                                const OString* pID = NULL,
-                                const GraphicObject* pCopyObj = NULL
+                                const OString* pID = nullptr,
+                                const GraphicObject* pCopyObj = nullptr
                             );
     void                    SVT_DLLPRIVATE ImplAutoSwapIn();
     bool                    SVT_DLLPRIVATE ImplGetCropParams(
@@ -326,10 +326,10 @@ protected:
     void                    SetSwapState();
 
 public:
-                            GraphicObject( const GraphicManager* pMgr = NULL );
-                            GraphicObject( const Graphic& rGraphic, const GraphicManager* pMgr = NULL );
-                            GraphicObject( const GraphicObject& rCacheObj, const GraphicManager* pMgr = NULL );
-                            explicit GraphicObject( const OString& rUniqueID, const GraphicManager* pMgr = NULL );
+                            GraphicObject( const GraphicManager* pMgr = nullptr );
+                            GraphicObject( const Graphic& rGraphic, const GraphicManager* pMgr = nullptr );
+                            GraphicObject( const GraphicObject& rCacheObj, const GraphicManager* pMgr = nullptr );
+                            explicit GraphicObject( const OString& rUniqueID, const GraphicManager* pMgr = nullptr );
                             virtual ~GraphicObject();
 
     GraphicObject&          operator=( const GraphicObject& rCacheObj );
@@ -348,12 +348,12 @@ public:
                                 OutputDevice* pOut,
                                 const Point& rPt,
                                 const Size& rSz,
-                                const GraphicAttr* pAttr = NULL,
+                                const GraphicAttr* pAttr = nullptr,
                                 GraphicManagerDrawFlags nFlags = GraphicManagerDrawFlags::STANDARD
                             ) const;
 
     const Graphic&          GetGraphic() const;
-    void                    SetGraphic( const Graphic& rGraphic, const GraphicObject* pCopyObj = 0);
+    void                    SetGraphic( const Graphic& rGraphic, const GraphicObject* pCopyObj = nullptr);
     void                    SetGraphic( const Graphic& rGraphic, const OUString& rLink );
 
     /** Get graphic transformed according to given attributes
@@ -386,7 +386,7 @@ public:
                                 const MapMode& rDestMap,
                                 const GraphicAttr& rAttr
                             ) const;
-    Graphic                 GetTransformedGraphic( const GraphicAttr* pAttr = NULL ) const; // TODO: Change to Impl
+    Graphic                 GetTransformedGraphic( const GraphicAttr* pAttr = nullptr ) const; // TODO: Change to Impl
 
     void                    SetAttr( const GraphicAttr& rAttr );
     const GraphicAttr&      GetAttr() const { return maAttr; }
@@ -425,7 +425,7 @@ public:
                                 OutputDevice* pOut,
                                 const Point& rPt,
                                 const Size& rSz,
-                                const GraphicAttr* pAttr = NULL,
+                                const GraphicAttr* pAttr = nullptr,
                                 GraphicManagerDrawFlags nFlags = GraphicManagerDrawFlags::STANDARD
                             );
 
@@ -467,7 +467,7 @@ public:
                                 const Rectangle& rArea,
                                 const Size& rSize,
                                 const Size& rOffset,
-                                const GraphicAttr* pAttr = NULL,
+                                const GraphicAttr* pAttr = nullptr,
                                 GraphicManagerDrawFlags nFlags = GraphicManagerDrawFlags::STANDARD,
                                 int nTileCacheSize1D=128
                             );
@@ -477,12 +477,12 @@ public:
                                 const Point& rPt,
                                 const Size& rSz,
                                 long nExtraData = 0L,
-                                const GraphicAttr* pAttr = NULL,
+                                const GraphicAttr* pAttr = nullptr,
                                 GraphicManagerDrawFlags nFlags = GraphicManagerDrawFlags::STANDARD,
-                                OutputDevice* pFirstFrameOutDev = NULL
+                                OutputDevice* pFirstFrameOutDev = nullptr
                             );
 
-    void                    StopAnimation( OutputDevice* pOut = NULL, long nExtraData = 0L );
+    void                    StopAnimation( OutputDevice* pOut = nullptr, long nExtraData = 0L );
 
     static GraphicObject    CreateGraphicObjectFromURL( const OUString &rURL );
     // will inspect an object ( e.g. a control ) for any 'ImageURL'
@@ -539,7 +539,7 @@ private:
                             const BitmapEx& rBmpEx,
                             const GraphicAttr& rAttr,
                             const GraphicManagerDrawFlags nFlags,
-                            BitmapEx* pBmpEx = NULL
+                            BitmapEx* pBmpEx = nullptr
                         );
     static bool SVT_DLLPRIVATE ImplCreateOutput(
                             OutputDevice* pOut,
@@ -580,8 +580,8 @@ private:
     void SVT_DLLPRIVATE ImplRegisterObj(
                             const GraphicObject& rObj,
                             Graphic& rSubstitute,
-                            const OString* pID = NULL,
-                            const GraphicObject* pCopyObj = NULL
+                            const OString* pID = nullptr,
+                            const GraphicObject* pCopyObj = nullptr
                         );
     void SVT_DLLPRIVATE ImplUnregisterObj( const GraphicObject& rObj );
     inline bool SVT_DLLPRIVATE ImplHasObjects() const { return !maObjList.empty(); }

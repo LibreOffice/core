@@ -203,7 +203,7 @@ void SAL_CALL JavaInteractionHandler::handle( const Reference< XInteractionReque
             SolarMutexGuard aSolarGuard;
             m_bRestartRequired_Handled = true;
             svtools::executeRestartDialog(
-                comphelper::getProcessComponentContext(), 0,
+                comphelper::getProcessComponentContext(), nullptr,
                 svtools::RESTART_REASON_JAVA);
         }
         nResult = RET_OK;

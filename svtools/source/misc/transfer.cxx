@@ -269,7 +269,7 @@ void SAL_CALL TransferableHelper::TerminateListener::notifyTermination( const Ev
 
 TransferableHelper::TransferableHelper() :
     mpFormats( new DataFlavorExVector ),
-    mpObjDesc( NULL )
+    mpObjDesc( nullptr )
 {
 }
 
@@ -372,7 +372,7 @@ Any SAL_CALL TransferableHelper::getTransferData2( const DataFlavor& rFlavor, co
                         SvMemoryStream  aDstStm( 65535, 65535 );
 
                         // taking wmf without file header
-                        if ( ConvertGDIMetaFileToWMF( aMtf, aDstStm, NULL, false ) )
+                        if ( ConvertGDIMetaFileToWMF( aMtf, aDstStm, nullptr, false ) )
                         {
                             maAny <<= ( aSeq = Sequence< sal_Int8 >( static_cast< const sal_Int8* >( aDstStm.GetData() ),
                                                                      aDstStm.Seek( STREAM_SEEK_TO_END ) ) );
@@ -1085,7 +1085,7 @@ void TransferableHelper::ClearSelection( vcl::Window *pWindow )
     Reference< XClipboard > xSelection( pWindow->GetPrimarySelection() );
 
     if( xSelection.is() )
-        xSelection->setContents( NULL, NULL );
+        xSelection->setContents( nullptr, nullptr );
 }
 
 
@@ -1135,7 +1135,7 @@ public:
     inline bool isListening() const { return !isDisposed(); }
 
     /// determines whether the instance is disposed
-    inline bool isDisposed() const { return mpListener == NULL; }
+    inline bool isDisposed() const { return mpListener == nullptr; }
 
     /// makes the instance non-functional
     void    dispose();
@@ -1154,7 +1154,7 @@ TransferableClipboardNotifier::TransferableClipboardNotifier( const Reference< X
             mxNotifier->addClipboardListener( this );
         else
             // born dead
-            mpListener = NULL;
+            mpListener = nullptr;
     }
     osl_atomic_decrement( &m_refCount );
 }
@@ -1193,7 +1193,7 @@ void TransferableClipboardNotifier::dispose()
         mxNotifier->removeClipboardListener( this );
     mxNotifier.clear();
 
-    mpListener = NULL;
+    mpListener = nullptr;
 }
 
 
@@ -1206,7 +1206,7 @@ struct TransferableDataHelper_Impl
     TransferableClipboardNotifier*  mpClipboardListener;
 
     TransferableDataHelper_Impl()
-        :mpClipboardListener( NULL )
+        :mpClipboardListener( nullptr )
     {
     }
 };
@@ -1252,7 +1252,7 @@ TransferableDataHelper& TransferableDataHelper::operator=( const TransferableDat
     {
         ::osl::MutexGuard aGuard( mpImpl->maMutex );
 
-        bool bWasClipboardListening = ( NULL != mpImpl->mpClipboardListener );
+        bool bWasClipboardListening = ( nullptr != mpImpl->mpClipboardListener );
 
         if ( bWasClipboardListening )
             StopClipboardListening();
@@ -1276,8 +1276,8 @@ TransferableDataHelper::~TransferableDataHelper()
     StopClipboardListening( );
     {
         ::osl::MutexGuard aGuard( mpImpl->maMutex );
-        delete mpFormats, mpFormats = NULL;
-        delete mpObjDesc, mpObjDesc = NULL;
+        delete mpFormats, mpFormats = nullptr;
+        delete mpObjDesc, mpObjDesc = nullptr;
     }
     delete mpImpl;
 }
@@ -2191,7 +2191,7 @@ void TransferableDataHelper::StopClipboardListening( )
     {
         mpImpl->mpClipboardListener->dispose();
         mpImpl->mpClipboardListener->release();
-        mpImpl->mpClipboardListener = NULL;
+        mpImpl->mpClipboardListener = nullptr;
     }
 }
 

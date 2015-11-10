@@ -42,14 +42,14 @@ SvEmbedTransferHelper::SvEmbedTransferHelper( const uno::Reference< embed::XEmbe
                                               const Graphic* pGraphic,
                                                 sal_Int64 nAspect )
 : m_xObj( xObj )
-, m_pGraphic( pGraphic ? new Graphic( *pGraphic ) : NULL )
+, m_pGraphic( pGraphic ? new Graphic( *pGraphic ) : nullptr )
 , m_nAspect( nAspect )
 {
     if( xObj.is() )
     {
         TransferableObjectDescriptor aObjDesc;
 
-        FillTransferableObjectDescriptor( aObjDesc, m_xObj, NULL, m_nAspect );
+        FillTransferableObjectDescriptor( aObjDesc, m_xObj, nullptr, m_nAspect );
         PrepareOLE( aObjDesc );
     }
 }
@@ -61,7 +61,7 @@ SvEmbedTransferHelper::~SvEmbedTransferHelper()
     if ( m_pGraphic )
     {
         delete m_pGraphic;
-        m_pGraphic = NULL;
+        m_pGraphic = nullptr;
     }
 }
 
@@ -111,7 +111,7 @@ bool SvEmbedTransferHelper::GetData( const css::datatransfer::DataFlavor& rFlavo
                         {
                             uno::Reference < embed::XStorage > xStg = comphelper::OStorageHelper::GetTemporaryStorage();
                             OUString aName( "Dummy" );
-                            SvStream* pStream = NULL;
+                            SvStream* pStream = nullptr;
                             bool bDeleteStream = false;
                             uno::Sequence < beans::PropertyValue > aEmpty;
                             uno::Sequence<beans::PropertyValue> aObjArgs(2);

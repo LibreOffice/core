@@ -282,7 +282,7 @@ CmisDetailsContainer::CmisDetailsContainer( VclBuilderContainer* pBuilder, OUStr
 {
     Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
     Reference< XInteractionHandler > xGlobalInteractionHandler(
-        InteractionHandler::createWithParent(xContext, 0), UNO_QUERY );
+        InteractionHandler::createWithParent(xContext, nullptr), UNO_QUERY );
     m_xCmdEnv = new ucbhelper::CommandEnvironment( xGlobalInteractionHandler, Reference< XProgressHandler >() );
 
     pBuilder->get( m_pFTRepository, "repositoryLabel" );
@@ -437,7 +437,7 @@ IMPL_LINK_NOARG_TYPED( CmisDetailsContainer, RefreshReposHdl, Button*, void  )
         if( !sUrl.isEmpty() && !m_sUsername.isEmpty() && !m_sPassword.isEmpty() )
         {
             Reference< XInteractionHandler > xInteractionHandler(
-                InteractionHandler::createWithParent( xContext, 0 ),
+                InteractionHandler::createWithParent( xContext, nullptr ),
                 UNO_QUERY );
 
             Sequence< OUString > aPasswd( 1 );

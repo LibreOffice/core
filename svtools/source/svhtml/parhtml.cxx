@@ -64,7 +64,7 @@ static HTMLOptionEnum const aInputTypeOptEnums[] =
     { OOO_STRING_SVTOOLS_HTML_IT_image,     HTML_IT_IMAGE       },
     { OOO_STRING_SVTOOLS_HTML_IT_reset,     HTML_IT_RESET       },
     { OOO_STRING_SVTOOLS_HTML_IT_button,    HTML_IT_BUTTON      },
-    { 0,                    0                   }
+    { nullptr,                    0                   }
 };
 
 // <TABLE FRAME=xxx>
@@ -79,7 +79,7 @@ static HTMLOptionEnum const aTableFrameOptEnums[] =
     { OOO_STRING_SVTOOLS_HTML_TF_vsides,    HTML_TF_VSIDES  },
     { OOO_STRING_SVTOOLS_HTML_TF_box,       HTML_TF_BOX     },
     { OOO_STRING_SVTOOLS_HTML_TF_border,    HTML_TF_BOX     },
-    { 0,                0               }
+    { nullptr,                0               }
 };
 
 // <TABLE RULES=xxx>
@@ -90,7 +90,7 @@ static HTMLOptionEnum const aTableRulesOptEnums[] =
     { OOO_STRING_SVTOOLS_HTML_TR_rows,  HTML_TR_ROWS    },
     { OOO_STRING_SVTOOLS_HTML_TR_cols,  HTML_TR_COLS    },
     { OOO_STRING_SVTOOLS_HTML_TR_all,       HTML_TR_ALL     },
-    { 0,                0               }
+    { nullptr,                0               }
 };
 
 sal_uInt16 HTMLOption::GetEnum( const HTMLOptionEnum *pOptEnums, sal_uInt16 nDflt ) const
@@ -123,7 +123,7 @@ bool HTMLOption::GetEnum( sal_uInt16 &rEnum, const HTMLOptionEnum *pOptEnums ) c
     if( pName )
         rEnum = pOptEnums->nValue;
 
-    return (pName != 0);
+    return (pName != nullptr);
 }
 
 HTMLOption::HTMLOption( sal_uInt16 nTok, const OUString& rToken,
@@ -1904,7 +1904,7 @@ static HTMLOptionEnum const aHTMLMetaNameTable[] =
     { OOO_STRING_SVTOOLS_HTML_META_refresh,       HTML_META_REFRESH       },
     { OOO_STRING_SVTOOLS_HTML_META_sdendnote,     HTML_META_SDENDNOTE     },
     { OOO_STRING_SVTOOLS_HTML_META_sdfootnote,    HTML_META_SDFOOTNOTE    },
-    { 0,                                          0                       }
+    { nullptr,                                          0                       }
 };
 
 

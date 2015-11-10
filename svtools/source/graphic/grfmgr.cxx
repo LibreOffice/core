@@ -46,7 +46,7 @@ using com::sun::star::uno::Sequence;
 using com::sun::star::container::XNameContainer;
 using com::sun::star::beans::XPropertySet;
 
-GraphicManager* GraphicObject::mpGlobalMgr = NULL;
+GraphicManager* GraphicObject::mpGlobalMgr = nullptr;
 
 struct GrfSimpleCacheObj
 {
@@ -99,7 +99,7 @@ GraphicObject::GraphicObject( const GraphicObject& rGraphicObj, const GraphicMan
 {
     ImplConstruct();
     ImplAssignGraphicData();
-    ImplSetGraphicManager( pMgr, NULL, &rGraphicObj );
+    ImplSetGraphicManager( pMgr, nullptr, &rGraphicObj );
     if( rGraphicObj.HasUserData() && rGraphicObj.IsSwappedOut() )
         SetSwapState();
 }
@@ -126,7 +126,7 @@ GraphicObject::~GraphicObject()
         mpMgr->ImplUnregisterObj( *this );
 
         if( ( mpMgr == mpGlobalMgr ) && !mpGlobalMgr->ImplHasObjects() )
-            delete mpGlobalMgr, mpGlobalMgr = NULL;
+            delete mpGlobalMgr, mpGlobalMgr = nullptr;
     }
 
     delete mpSwapOutTimer;
@@ -135,10 +135,10 @@ GraphicObject::~GraphicObject()
 
 void GraphicObject::ImplConstruct()
 {
-    mpMgr = NULL;
+    mpMgr = nullptr;
     maSwapStreamHdl = Link<const GraphicObject*, SvStream*>();
-    mpSwapOutTimer = NULL;
-    mpSimpleCache = NULL;
+    mpSwapOutTimer = nullptr;
+    mpSimpleCache = nullptr;
     mnAnimationLoopCount = 0;
     mbAutoSwapped = false;
     mbIsInSwapIn = false;
@@ -177,7 +177,7 @@ void GraphicObject::ImplSetGraphicManager( const GraphicManager* pMgr, const OSt
                 mpMgr->ImplUnregisterObj( *this );
 
                 if( ( mpMgr == mpGlobalMgr ) && !mpGlobalMgr->ImplHasObjects() )
-                    delete mpGlobalMgr, mpGlobalMgr = NULL;
+                    delete mpGlobalMgr, mpGlobalMgr = nullptr;
             }
 
             if( !pMgr )
@@ -350,7 +350,7 @@ GraphicObject& GraphicObject::operator=( const GraphicObject& rGraphicObj )
         mpMgr->ImplUnregisterObj( *this );
 
         maSwapStreamHdl = Link<const GraphicObject*, SvStream*>();
-        delete mpSimpleCache, mpSimpleCache = NULL;
+        delete mpSimpleCache, mpSimpleCache = nullptr;
 
         maGraphic = rGraphicObj.GetGraphic();
         maAttr = rGraphicObj.maAttr;
@@ -359,7 +359,7 @@ GraphicObject& GraphicObject::operator=( const GraphicObject& rGraphicObj )
         ImplAssignGraphicData();
         mbAutoSwapped = false;
         mpMgr = rGraphicObj.mpMgr;
-        mpMgr->ImplRegisterObj( *this, maGraphic, NULL, &rGraphicObj );
+        mpMgr->ImplRegisterObj( *this, maGraphic, nullptr, &rGraphicObj );
         if( rGraphicObj.HasUserData() && rGraphicObj.IsSwappedOut() )
             SetSwapState();
     }
@@ -400,7 +400,7 @@ void GraphicObject::SetAttr( const GraphicAttr& rAttr )
     maAttr = rAttr;
 
     if( mpSimpleCache && ( mpSimpleCache->maAttr != rAttr ) )
-        delete mpSimpleCache, mpSimpleCache = NULL;
+        delete mpSimpleCache, mpSimpleCache = nullptr;
 }
 
 void GraphicObject::SetLink()
@@ -454,7 +454,7 @@ void GraphicObject::SetSwapStreamHdl(const Link<const GraphicObject*, SvStream*>
         mpSwapOutTimer->Start();
     }
     else
-        delete mpSwapOutTimer, mpSwapOutTimer = NULL;
+        delete mpSwapOutTimer, mpSwapOutTimer = nullptr;
 }
 
 void GraphicObject::FireSwapInRequest()
@@ -464,14 +464,14 @@ void GraphicObject::FireSwapInRequest()
 
 void GraphicObject::FireSwapOutRequest()
 {
-    ImplAutoSwapOutHdl( NULL );
+    ImplAutoSwapOutHdl( nullptr );
 }
 
 void GraphicObject::GraphicManagerDestroyed()
 {
     // we're alive, but our manager doesn't live anymore ==> connect to default manager
-    mpMgr = NULL;
-    ImplSetGraphicManager( NULL );
+    mpMgr = nullptr;
+    ImplSetGraphicManager( nullptr );
 }
 
 bool GraphicObject::IsCached( OutputDevice* pOut, const Point& rPt, const Size& rSz,
@@ -577,7 +577,7 @@ bool GraphicObject::Draw( OutputDevice* pOut, const Point& rPt, const Size& rSz,
 bool GraphicObject::DrawTiled( OutputDevice* pOut, const Rectangle& rArea, const Size& rSize,
                                const Size& rOffset, const GraphicAttr* pAttr, GraphicManagerDrawFlags nFlags, int nTileCacheSize1D )
 {
-    if( pOut == NULL || rSize.Width() == 0 || rSize.Height() == 0 )
+    if( pOut == nullptr || rSize.Width() == 0 || rSize.Height() == 0 )
         return false;
 
     const MapMode   aOutMapMode( pOut->GetMapMode() );
@@ -684,9 +684,9 @@ void GraphicObject::SetGraphic( const Graphic& rGraphic, const GraphicObject* pC
     mbAutoSwapped = false;
     ImplAssignGraphicData();
     maLink.clear();
-    delete mpSimpleCache, mpSimpleCache = NULL;
+    delete mpSimpleCache, mpSimpleCache = nullptr;
 
-    mpMgr->ImplRegisterObj( *this, maGraphic, 0, pCopyObj);
+    mpMgr->ImplRegisterObj( *this, maGraphic, nullptr, pCopyObj);
 
     if( mpSwapOutTimer )
         mpSwapOutTimer->Start();

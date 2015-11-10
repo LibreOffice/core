@@ -144,7 +144,7 @@ static sal_uInt16 aWndFunc(
 
 SfxErrorHandler::SfxErrorHandler(sal_uInt16 nIdP, sal_uLong lStartP, sal_uLong lEndP, ResMgr *pMgrP) :
 
-    lStart(lStartP), lEnd(lEndP), nId(nIdP), pMgr(pMgrP), pFreeMgr( NULL )
+    lStart(lStartP), lEnd(lEndP), nId(nIdP), pMgr(pMgrP), pFreeMgr( nullptr )
 
 {
     RegisterDisplay(&aWndFunc);
@@ -398,7 +398,7 @@ bool SfxErrorContext::GetString(sal_uLong nErrId, OUString &rStr)
 
 {
     bool bRet = false;
-    ResMgr* pFreeMgr = NULL;
+    ResMgr* pFreeMgr = nullptr;
     if( ! pMgr )
     {
         pFreeMgr = pMgr = ResMgr::CreateResMgr("ofa", Application::GetSettings().GetUILanguageTag() );
@@ -434,7 +434,7 @@ bool SfxErrorContext::GetString(sal_uLong nErrId, OUString &rStr)
     if( pFreeMgr )
     {
         delete pFreeMgr;
-        pMgr = NULL;
+        pMgr = nullptr;
     }
     return bRet;
 }

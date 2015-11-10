@@ -73,26 +73,26 @@ public:
     void            SetTab( sal_uInt16 nTab, long nValue, MapUnit = MAP_APPFONT );
     long            GetLogicTab( sal_uInt16 nTab );
 
-    virtual SvTreeListEntry*    InsertEntry( const OUString& rText, SvTreeListEntry* pParent = 0,
+    virtual SvTreeListEntry*    InsertEntry( const OUString& rText, SvTreeListEntry* pParent = nullptr,
                                          bool bChildrenOnDemand = false,
-                                         sal_uLong nPos=TREELIST_APPEND, void* pUserData = 0,
+                                         sal_uLong nPos=TREELIST_APPEND, void* pUserData = nullptr,
                                          SvLBoxButtonKind eButtonKind = SvLBoxButtonKind_enabledCheckbox ) override;
 
     virtual SvTreeListEntry*    InsertEntry( const OUString& rText,
                                          const Image& rExpandedEntryBmp,
                                          const Image& rCollapsedEntryBmp,
-                                         SvTreeListEntry* pParent = 0,
+                                         SvTreeListEntry* pParent = nullptr,
                                          bool bChildrenOnDemand = false,
-                                         sal_uLong nPos = TREELIST_APPEND, void* pUserData = 0,
+                                         sal_uLong nPos = TREELIST_APPEND, void* pUserData = nullptr,
                                          SvLBoxButtonKind eButtonKind = SvLBoxButtonKind_enabledCheckbox ) override;
 
     virtual SvTreeListEntry* InsertEntryToColumn( const OUString&, sal_uLong nPos = TREELIST_APPEND,
-                                 sal_uInt16 nCol = 0xffff, void* pUserData = NULL );
+                                 sal_uInt16 nCol = 0xffff, void* pUserData = nullptr );
     virtual SvTreeListEntry* InsertEntryToColumn( const OUString&, SvTreeListEntry* pParent,
-                                 sal_uLong nPos, sal_uInt16 nCol, void* pUserData = NULL );
+                                 sal_uLong nPos, sal_uInt16 nCol, void* pUserData = nullptr );
     virtual SvTreeListEntry* InsertEntryToColumn( const OUString&, const Image& rExpandedEntryBmp,
-                                 const Image& rCollapsedEntryBmp, SvTreeListEntry* pParent = NULL,
-                                 sal_uLong nPos = TREELIST_APPEND, sal_uInt16 nCol = 0xffff, void* pUserData = NULL );
+                                 const Image& rCollapsedEntryBmp, SvTreeListEntry* pParent = nullptr,
+                                 sal_uLong nPos = TREELIST_APPEND, sal_uInt16 nCol = 0xffff, void* pUserData = nullptr );
 
     virtual OUString GetEntryText( SvTreeListEntry* pEntry ) const override;
     static OUString  GetEntryText( SvTreeListEntry*, sal_uInt16 nCol );
@@ -148,12 +148,12 @@ public:
     static bool     IsItemChecked( SvTreeListEntry* pEntry, sal_uInt16 nCol );
 
     virtual SvTreeListEntry* InsertEntryToColumn( const OUString&, sal_uLong nPos = TREELIST_APPEND,
-                                 sal_uInt16 nCol = 0xffff, void* pUserData = NULL ) override;
+                                 sal_uInt16 nCol = 0xffff, void* pUserData = nullptr ) override;
     virtual SvTreeListEntry* InsertEntryToColumn( const OUString&, SvTreeListEntry* pParent,
-                                 sal_uLong nPos, sal_uInt16 nCol, void* pUserData = NULL ) override;
+                                 sal_uLong nPos, sal_uInt16 nCol, void* pUserData = nullptr ) override;
     virtual SvTreeListEntry* InsertEntryToColumn( const OUString&, const Image& rExpandedEntryBmp,
-                                 const Image& rCollapsedEntryBmp, SvTreeListEntry* pParent = NULL,
-                                 sal_uLong nPos = TREELIST_APPEND, sal_uInt16 nCol = 0xffff, void* pUserData = NULL ) override;
+                                 const Image& rCollapsedEntryBmp, SvTreeListEntry* pParent = nullptr,
+                                 sal_uLong nPos = TREELIST_APPEND, sal_uInt16 nCol = 0xffff, void* pUserData = nullptr ) override;
     virtual sal_uLong Insert( SvTreeListEntry* pEnt,SvTreeListEntry* pPar,sal_uLong nPos=TREELIST_APPEND) override;
     virtual sal_uLong Insert( SvTreeListEntry* pEntry, sal_uLong nRootPos = TREELIST_APPEND ) override;
     void            RemoveEntry( SvTreeListEntry* _pEntry );

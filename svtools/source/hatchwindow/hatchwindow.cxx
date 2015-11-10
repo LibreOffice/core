@@ -31,7 +31,7 @@ using namespace ::com::sun::star;
 
 VCLXHatchWindow::VCLXHatchWindow()
 : VCLXWindow()
-, pHatchWindow(0)
+, pHatchWindow(nullptr)
 {
 }
 
@@ -45,7 +45,7 @@ void VCLXHatchWindow::initializeWindow( const uno::Reference< awt::XWindowPeer >
 {
     SolarMutexGuard aGuard;
 
-    vcl::Window* pParent = NULL;
+    vcl::Window* pParent = nullptr;
     VCLXWindow* pParentComponent = VCLXWindow::GetImplementation( xParent );
 
     if ( pParentComponent )
@@ -140,13 +140,13 @@ void SAL_CALL VCLXHatchWindow::release()
 uno::Sequence< uno::Type > SAL_CALL VCLXHatchWindow::getTypes()
     throw( uno::RuntimeException, std::exception )
 {
-    static ::cppu::OTypeCollection* pTypeCollection = NULL ;
+    static ::cppu::OTypeCollection* pTypeCollection = nullptr ;
 
-    if ( pTypeCollection == NULL )
+    if ( pTypeCollection == nullptr )
     {
         ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() ) ;
 
-        if ( pTypeCollection == NULL )
+        if ( pTypeCollection == nullptr )
         {
             static ::cppu::OTypeCollection aTypeCollection(
                     cppu::UnoType<embed::XHatchWindow>::get(),

@@ -336,7 +336,7 @@ void SAL_CALL SvtRulerAccessible::disposing()
     {
         {
             ::osl::MutexGuard   aGuard( m_aMutex );
-            mpRepr = NULL;      // object dies with representation
+            mpRepr = nullptr;      // object dies with representation
 
         }
 

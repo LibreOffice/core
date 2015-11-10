@@ -60,7 +60,7 @@ namespace
         : public rtl::Static< ::osl::Mutex, ColorMutex_Impl > {};
 }
 
-ColorConfig_Impl*    ColorConfig::m_pImpl = NULL;
+ColorConfig_Impl*    ColorConfig::m_pImpl = nullptr;
 
 class ColorConfig_Impl : public utl::ConfigItem
 {
@@ -409,7 +409,7 @@ ColorConfig::~ColorConfig()
     if(!--nColorRefCount_Impl)
     {
         delete m_pImpl;
-        m_pImpl = 0;
+        m_pImpl = nullptr;
     }
 }
 

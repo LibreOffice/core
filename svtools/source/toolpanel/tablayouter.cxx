@@ -195,7 +195,7 @@ namespace svt
         (void)i_nChildIndex;
         (void)i_rParentAccessible;
         if ( lcl_checkDisposed( *m_pData ) )
-            return NULL;
+            return nullptr;
 
         return m_pData->pTabBar->GetAccessible();
     }

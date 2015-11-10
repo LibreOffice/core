@@ -305,7 +305,7 @@ void SvtScriptedTextHelper_Impl::DrawText( const Point& _rPos )
 
 
 SvtScriptedTextHelper::SvtScriptedTextHelper( OutputDevice& _rOutDevice ) :
-    mpImpl( new SvtScriptedTextHelper_Impl( _rOutDevice, NULL, NULL, NULL ) )
+    mpImpl( new SvtScriptedTextHelper_Impl( _rOutDevice, nullptr, nullptr, nullptr ) )
 {
 }
 
@@ -326,7 +326,7 @@ void SvtScriptedTextHelper::SetFonts( vcl::Font* _pLatinFont, vcl::Font* _pAsian
 
 void SvtScriptedTextHelper::SetDefaultFont()
 {
-    mpImpl->SetFonts( NULL, NULL, NULL );
+    mpImpl->SetFonts( nullptr, nullptr, nullptr );
 }
 
 void SvtScriptedTextHelper::SetText( const OUString& _rText, const uno::Reference< i18n::XBreakIterator >& _xBreakIter )

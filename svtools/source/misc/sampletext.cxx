@@ -194,7 +194,7 @@ OUString makeShortRepresentativeSymbolTextForSelectedFont(OutputDevice &rDevice)
             return OUString(aText);
         }
 
-        pFontCharMap = 0;
+        pFontCharMap = nullptr;
     }
 
     static const sal_Unicode aImplSymbolFontText[] = {

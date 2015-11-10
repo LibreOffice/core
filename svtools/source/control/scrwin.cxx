@@ -76,11 +76,11 @@ void ScrollableWindow::Command( const CommandEvent& rCEvt )
         if ( aHScroll->IsVisible() )
             pHScrBar = aHScroll.get();
         else
-            pHScrBar = NULL;
+            pHScrBar = nullptr;
         if ( aVScroll->IsVisible() )
             pVScrBar = aVScroll.get();
         else
-            pVScrBar = NULL;
+            pVScrBar = nullptr;
         if ( HandleScrollCommand( rCEvt, pHScrBar, pVScrBar ) )
             return;
     }

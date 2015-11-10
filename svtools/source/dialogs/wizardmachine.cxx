@@ -108,11 +108,11 @@ namespace svt
 
     OWizardMachine::OWizardMachine(vcl::Window* _pParent, const WinBits i_nStyle, WizardButtonFlags _nButtonFlags )
         :WizardDialog( _pParent, i_nStyle )
-        ,m_pFinish(NULL)
-        ,m_pCancel(NULL)
-        ,m_pNextPage(NULL)
-        ,m_pPrevPage(NULL)
-        ,m_pHelp(NULL)
+        ,m_pFinish(nullptr)
+        ,m_pCancel(nullptr)
+        ,m_pNextPage(nullptr)
+        ,m_pPrevPage(nullptr)
+        ,m_pHelp(nullptr)
         ,m_pImpl( new WizardMachineImplData )
     {
         implConstruct( _nButtonFlags );
@@ -120,11 +120,11 @@ namespace svt
 
     OWizardMachine::OWizardMachine(vcl::Window* _pParent, WizardButtonFlags _nButtonFlags )
         :WizardDialog( _pParent, "WizardDialog", "svt/ui/wizarddialog.ui" )
-        ,m_pFinish(NULL)
-        ,m_pCancel(NULL)
-        ,m_pNextPage(NULL)
-        ,m_pPrevPage(NULL)
-        ,m_pHelp(NULL)
+        ,m_pFinish(nullptr)
+        ,m_pCancel(nullptr)
+        ,m_pNextPage(nullptr)
+        ,m_pPrevPage(nullptr)
+        ,m_pHelp(nullptr)
         ,m_pImpl( new WizardMachineImplData )
     {
         implConstruct( _nButtonFlags );
@@ -222,7 +222,7 @@ namespace svt
                     pPage->disposeOnce();
             }
             delete m_pImpl;
-            m_pImpl = NULL;
+            m_pImpl = nullptr;
         }
 
         WizardDialog::dispose();
@@ -253,7 +253,7 @@ namespace svt
 
     TabPage* OWizardMachine::GetOrCreatePage( const WizardState i_nState )
     {
-        if ( NULL == GetPage( i_nState ) )
+        if ( nullptr == GetPage( i_nState ) )
         {
             TabPage* pNewPage = createPage( i_nState );
             DBG_ASSERT( pNewPage, "OWizardMachine::GetOrCreatePage: invalid new page (NULL)!" );
@@ -261,7 +261,7 @@ namespace svt
             // fill up the page sequence of our base class (with dummies)
             while ( m_pImpl->nFirstUnknownPage < i_nState )
             {
-                AddPage( NULL );
+                AddPage( nullptr );
                 ++m_pImpl->nFirstUnknownPage;
             }
 
@@ -302,7 +302,7 @@ namespace svt
     void OWizardMachine::defaultButton(WizardButtonFlags _nWizardButtonFlags)
     {
         // the new default button
-        PushButton* pNewDefButton = NULL;
+        PushButton* pNewDefButton = nullptr;
         if (m_pFinish && (_nWizardButtonFlags & WizardButtonFlags::FINISH))
             pNewDefButton = m_pFinish;
         if (m_pNextPage && (_nWizardButtonFlags & WizardButtonFlags::NEXT))
@@ -434,7 +434,7 @@ namespace svt
     bool OWizardMachine::prepareLeaveCurrentState( CommitPageReason _eReason )
     {
         IWizardPageController* pController = getPageController( GetPage( getCurrentState() ) );
-        ENSURE_OR_RETURN( pController != NULL, "OWizardMachine::prepareLeaveCurrentState: no controller for the current page!", true );
+        ENSURE_OR_RETURN( pController != nullptr, "OWizardMachine::prepareLeaveCurrentState: no controller for the current page!", true );
         return pController->commitPage( _eReason );
     }
 
@@ -674,7 +674,7 @@ namespace svt
     void OWizardMachine::updateTravelUI()
     {
         const IWizardPageController* pController = getPageController( GetPage( getCurrentState() ) );
-        OSL_ENSURE( pController != NULL, "RoadmapWizard::updateTravelUI: no controller for the current page!" );
+        OSL_ENSURE( pController != nullptr, "RoadmapWizard::updateTravelUI: no controller for the current page!" );
 
         bool bCanAdvance =
                 ( !pController || pController->canAdvance() )   // the current page allows to advance

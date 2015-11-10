@@ -688,7 +688,7 @@ void ToolboxController::dispatchCommand( const OUString& sCommandURL, const Sequ
         Reference< XDispatch > xDispatch( xDispatchProvider->queryDispatch( aURL, sTarget, 0 ), UNO_QUERY_THROW );
 
         DispatchInfo *pDispatchInfo = new DispatchInfo( xDispatch, aURL, rArgs );
-        if ( !Application::PostUserEvent( LINK(0, ToolboxController, ExecuteHdl_Impl),
+        if ( !Application::PostUserEvent( LINK(nullptr, ToolboxController, ExecuteHdl_Impl),
                                           pDispatchInfo ) )
             delete pDispatchInfo;
 
@@ -772,7 +772,7 @@ IMPL_STATIC_LINK_TYPED( ToolboxController, ExecuteHdl_Impl, void*, p, void )
 
 void ToolboxController::enable( bool bEnable )
 {
-    ToolBox* pToolBox = 0;
+    ToolBox* pToolBox = nullptr;
     sal_uInt16 nItemId = 0;
     if( getToolboxId( nItemId, &pToolBox ) )
     {
@@ -782,7 +782,7 @@ void ToolboxController::enable( bool bEnable )
 
 bool ToolboxController::getToolboxId( sal_uInt16& rItemId, ToolBox** ppToolBox )
 {
-    if( (m_nToolBoxId != SAL_MAX_UINT16) && (ppToolBox == 0) )
+    if( (m_nToolBoxId != SAL_MAX_UINT16) && (ppToolBox == nullptr) )
         return m_nToolBoxId;
 
     ToolBox* pToolBox = static_cast< ToolBox* >( VCLUnoHelper::GetWindow( getParent() ).get() );
@@ -806,7 +806,7 @@ bool ToolboxController::getToolboxId( sal_uInt16& rItemId, ToolBox** ppToolBox )
 
     rItemId = m_nToolBoxId;
 
-    return (rItemId != SAL_MAX_UINT16) && (( ppToolBox == 0) || (*ppToolBox != 0) );
+    return (rItemId != SAL_MAX_UINT16) && (( ppToolBox == nullptr) || (*ppToolBox != nullptr) );
 }
 //end
 

@@ -27,7 +27,7 @@
 
 SvSimpleTableContainer::SvSimpleTableContainer(vcl::Window* pParent, WinBits nBits)
     : Control(pParent, nBits)
-    , m_pTable(NULL)
+    , m_pTable(nullptr)
 {
 }
 
@@ -123,7 +123,7 @@ SvSimpleTable::~SvSimpleTable()
 
 void SvSimpleTable::dispose()
 {
-    m_rParentTableContainer.SetTable(NULL);
+    m_rParentTableContainer.SetTable(nullptr);
     aHeaderBar.disposeAndClear();
     SvHeaderTabListBox::dispose();
 }
@@ -423,7 +423,7 @@ IMPL_LINK_TYPED( SvSimpleTable, HeaderBarClick, HeaderBar*, pCtr, void)
 SvLBoxItem* SvSimpleTable::GetEntryAtPos( SvTreeListEntry* pEntry, sal_uInt16 nPos ) const
 {
     DBG_ASSERT(pEntry,"GetEntryText:Invalid Entry");
-    SvLBoxItem* pItem = NULL;
+    SvLBoxItem* pItem = nullptr;
 
     if( pEntry )
     {
@@ -449,7 +449,7 @@ sal_Int32 SvSimpleTable::ColCompare(SvTreeListEntry* pLeft,SvTreeListEntry* pRig
     SvLBoxItem* pRightItem = GetEntryAtPos( pRight, nSortCol);
 
 
-    if(pLeftItem != NULL && pRightItem != NULL)
+    if(pLeftItem != nullptr && pRightItem != nullptr)
     {
         sal_uInt16 nLeftKind = pLeftItem->GetType();
         sal_uInt16 nRightKind = pRightItem->GetType();

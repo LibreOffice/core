@@ -135,10 +135,10 @@ namespace svt
 
     EditBrowseBox::EditBrowseBox(vcl::Window* pParent, const ResId& rId, EditBrowseBoxFlags nBrowserFlags, BrowserMode _nMode )
                   :BrowseBox( pParent, rId, _nMode )
-                  ,nStartEvent(0)
-                  ,nEndEvent(0)
-                  ,nCellModifiedEvent(0)
-                  ,m_pFocusWhileRequest(0)
+                  ,nStartEvent(nullptr)
+                  ,nEndEvent(nullptr)
+                  ,nCellModifiedEvent(nullptr)
+                  ,m_pFocusWhileRequest(nullptr)
                   ,nPaintRow(-1)
                   ,nEditRow(-1)
                   ,nOldEditRow(-1)
@@ -148,7 +148,7 @@ namespace svt
                   ,bPaintStatus(true)
                   ,bActiveBeforeTracking( false )
                   ,m_nBrowserFlags(nBrowserFlags)
-                  ,pHeader(NULL)
+                  ,pHeader(nullptr)
     {
         impl_construct();
     }
@@ -156,10 +156,10 @@ namespace svt
 
     EditBrowseBox::EditBrowseBox( vcl::Window* pParent, EditBrowseBoxFlags nBrowserFlags, WinBits nBits, BrowserMode _nMode )
                   :BrowseBox( pParent, nBits, _nMode )
-                  ,nStartEvent(0)
-                  ,nEndEvent(0)
-                  ,nCellModifiedEvent(0)
-                  ,m_pFocusWhileRequest(0)
+                  ,nStartEvent(nullptr)
+                  ,nEndEvent(nullptr)
+                  ,nCellModifiedEvent(nullptr)
+                  ,m_pFocusWhileRequest(nullptr)
                   ,nPaintRow(-1)
                   ,nEditRow(-1)
                   ,nOldEditRow(-1)
@@ -169,7 +169,7 @@ namespace svt
                   ,bPaintStatus(true)
                   ,bActiveBeforeTracking( false )
                   ,m_nBrowserFlags(nBrowserFlags)
-                  ,pHeader(NULL)
+                  ,pHeader(nullptr)
     {
         impl_construct();
     }
@@ -254,7 +254,7 @@ namespace svt
 
     IMPL_LINK_NOARG_TYPED(EditBrowseBox, StartEditHdl, void*, void)
     {
-        nStartEvent = 0;
+        nStartEvent = nullptr;
         if (IsEditing())
         {
             EnableAndShow();
@@ -490,8 +490,8 @@ namespace svt
         if ( nCellModifiedEvent )
         {
             Application::RemoveUserEvent( nCellModifiedEvent );
-            nCellModifiedEvent = 0;
-            LINK( this, EditBrowseBox, CellModifiedHdl ).Call( NULL );
+            nCellModifiedEvent = nullptr;
+            LINK( this, EditBrowseBox, CellModifiedHdl ).Call( nullptr );
         }
 
         if (rEvt.GetColumnId() == HandleColumnId)
@@ -712,7 +712,7 @@ namespace svt
 
                     Dispatch(nId);
 
-                    if (bLocalSelect && (GetSelectRowCount() || GetSelection() != NULL))
+                    if (bLocalSelect && (GetSelectRowCount() || GetSelection() != nullptr))
                         DeactivateCell();
                     return true;
                 }
@@ -845,7 +845,7 @@ namespace svt
 
         if (GetSelectColumnCount() || (aMouseEvent.Is() && aMouseEvent->GetRow() < 0))
             nInfo |= COLSELECT;
-        if ((GetSelection() != NULL && GetSelectRowCount()) ||
+        if ((GetSelection() != nullptr && GetSelectRowCount()) ||
             (aMouseEvent.Is() && aMouseEvent->GetColumnId() == HandleColumnId))
             nInfo |= ROWSELECT;
         if (!nInfo && nNewRow != nEditRow)
@@ -987,7 +987,7 @@ namespace svt
 
         nEditCol = nCol;
 
-        if ((GetSelectRowCount() && GetSelection() != NULL) || GetSelectColumnCount() ||
+        if ((GetSelectRowCount() && GetSelection() != nullptr) || GetSelectColumnCount() ||
             (aMouseEvent.Is() && (aMouseEvent.IsDown() || aMouseEvent->GetClicks() > 1))) // nothing happens on MouseDown
         {
             return;
@@ -1061,7 +1061,7 @@ namespace svt
             // release the controller (asynchronously)
             if (nEndEvent)
                 Application::RemoveUserEvent(nEndEvent);
-            nEndEvent = Application::PostUserEvent(LINK(this,EditBrowseBox,EndEditHdl), NULL, true);
+            nEndEvent = Application::PostUserEvent(LINK(this,EditBrowseBox,EndEditHdl), nullptr, true);
         }
     }
 
@@ -1080,7 +1080,7 @@ namespace svt
 
     IMPL_LINK_NOARG_TYPED(EditBrowseBox, EndEditHdl, void*, void)
     {
-        nEndEvent = 0;
+        nEndEvent = nullptr;
 
         aOldController  = CellControllerRef();
         nOldEditRow     = -1;
@@ -1092,13 +1092,13 @@ namespace svt
     {
         if (nCellModifiedEvent)
             Application::RemoveUserEvent(nCellModifiedEvent);
-        nCellModifiedEvent = Application::PostUserEvent(LINK(this,EditBrowseBox,CellModifiedHdl), NULL, true);
+        nCellModifiedEvent = Application::PostUserEvent(LINK(this,EditBrowseBox,CellModifiedHdl), nullptr, true);
     }
 
 
     IMPL_LINK_NOARG_TYPED(EditBrowseBox, CellModifiedHdl, void*, void)
     {
-        nCellModifiedEvent = 0;
+        nCellModifiedEvent = nullptr;
         CellModified();
     }
 
@@ -1172,7 +1172,7 @@ namespace svt
 
     CellController* EditBrowseBox::GetController(long, sal_uInt16)
     {
-        return NULL;
+        return nullptr;
     }
 
 
@@ -1272,7 +1272,7 @@ namespace svt
             Application::RemoveUserEvent(nStartEvent);
 
         m_pFocusWhileRequest = Application::GetFocusWindow();
-        nStartEvent = Application::PostUserEvent(LINK(this,EditBrowseBox,StartEditHdl), NULL, true);
+        nStartEvent = Application::PostUserEvent(LINK(this,EditBrowseBox,StartEditHdl), nullptr, true);
     }
 
 

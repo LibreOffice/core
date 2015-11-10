@@ -233,8 +233,8 @@ PrinterSetupDialog::PrinterSetupDialog(vcl::Window* pParent)
     // show options button only if link is set
     m_pBtnOptions->Hide();
 
-    mpPrinter       = NULL;
-    mpTempPrinter   = NULL;
+    mpPrinter       = nullptr;
+    mpTempPrinter   = nullptr;
 
     maStatusTimer.SetTimeout( IMPL_PRINTDLG_STATUS_UPDATE );
     maStatusTimer.SetTimeoutHdl( LINK( this, PrinterSetupDialog, ImplStatusHdl ) );

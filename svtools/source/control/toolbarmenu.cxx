@@ -47,7 +47,7 @@ static vcl::Window* GetTopMostParentSystemWindow( vcl::Window* pWindow )
         // ->manually search topmost system window
         // required because their might be another system window between this and the top window
         pWindow = pWindow->GetParent();
-        SystemWindow* pTopMostSysWin = NULL;
+        SystemWindow* pTopMostSysWin = nullptr;
         while ( pWindow )
         {
             if ( pWindow->IsSystemWindow() )
@@ -59,7 +59,7 @@ static vcl::Window* GetTopMostParentSystemWindow( vcl::Window* pWindow )
         return pWindow;
     }
 
-    return NULL;
+    return nullptr;
 }
 
 
@@ -74,7 +74,7 @@ void ToolbarMenuEntry::init( int nEntryId, MenuItemBits nBits )
     mbChecked = false;
     mbEnabled = true;
 
-    mpControl = NULL;
+    mpControl = nullptr;
 }
 
 
@@ -204,7 +204,7 @@ ToolbarMenu_Impl::ToolbarMenu_Impl( ToolbarMenu& rMenu, const css::uno::Referenc
 
 ToolbarMenu_Impl::~ToolbarMenu_Impl()
 {
-    setAccessible( 0 );
+    setAccessible( nullptr );
 }
 
 
@@ -418,7 +418,7 @@ void ToolbarMenu_Impl::notifyHighlightedEntry()
 ToolbarMenuEntry* ToolbarMenu_Impl::implGetEntry( int nEntry ) const
 {
     if( (nEntry < 0) || (nEntry >= (int)maEntryVector.size() ) )
-        return NULL;
+        return nullptr;
 
     return maEntryVector[nEntry];
 }
@@ -479,7 +479,7 @@ void ToolbarMenu::dispose()
     }
 
     delete mpImpl;
-    mpImpl = NULL;
+    mpImpl = nullptr;
 
     DockingWindow::dispose();
 }
@@ -803,7 +803,7 @@ void ToolbarMenu::appendEntry( ToolbarMenuEntry* pEntry )
 
 void ToolbarMenu::appendSeparator()
 {
-    appendEntry( 0 );
+    appendEntry( nullptr );
 }
 
 
@@ -840,7 +840,7 @@ ToolbarMenuEntry* ToolbarMenu::implSearchEntry( int nEntryId ) const
         }
     }
 
-    return NULL;
+    return nullptr;
 }
 
 
@@ -945,7 +945,7 @@ void ToolbarMenu::implSelectEntry( int nSelectedEntry )
 {
     mpImpl->mnSelectedEntry = nSelectedEntry;
 
-    ToolbarMenuEntry* pEntry = NULL;
+    ToolbarMenuEntry* pEntry = nullptr;
     if( nSelectedEntry != -1 )
         pEntry = mpImpl->maEntryVector[ nSelectedEntry ];
 
@@ -1139,7 +1139,7 @@ ToolbarMenuEntry* ToolbarMenu::implCursorUpDown( bool bUp, bool bHomeEnd )
         }
     } while ( n != nLoop );
 
-    return 0;
+    return nullptr;
 }
 
 
@@ -1179,7 +1179,7 @@ void ToolbarMenu_Impl::implHighlightControl( sal_uInt16 nCode, Control* pControl
 
 void ToolbarMenu::KeyInput( const KeyEvent& rKEvent )
 {
-    Control* pForwardControl = 0;
+    Control* pForwardControl = nullptr;
     sal_uInt16 nCode = rKEvent.GetKeyCode().GetCode();
     switch ( nCode )
     {
@@ -1273,7 +1273,7 @@ static void ImplPaintCheckBackground(vcl::RenderContext& rRenderContext, vcl::Wi
     {
         const StyleSettings& rSettings = rRenderContext.GetSettings().GetStyleSettings();
         Color aColor(i_bHighlight ? rSettings.GetMenuHighlightTextColor() : rSettings.GetHighlightColor());
-        vcl::RenderTools::DrawSelectionBackground(rRenderContext, rWindow, i_rRect, 0, i_bHighlight, true, false, NULL, 2, &aColor);
+        vcl::RenderTools::DrawSelectionBackground(rRenderContext, rWindow, i_rRect, 0, i_bHighlight, true, false, nullptr, 2, &aColor);
     }
 }
 
@@ -1304,7 +1304,7 @@ void ToolbarMenu::implPaint(vcl::RenderContext& rRenderContext, ToolbarMenuEntry
         aPos.Y() += nBorder;
         aPos.Y() += nStartY;
 
-        if ((pEntry == 0) && !pThisOnly)
+        if ((pEntry == nullptr) && !pThisOnly)
         {
             // Separator
             aTmpPos.Y() = aPos.Y() + ((SEPARATOR_HEIGHT - 2) / 2);

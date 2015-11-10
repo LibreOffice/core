@@ -119,7 +119,7 @@ throw ( RuntimeException, std::exception )
         pExecuteInfo->xDispatch     = xDispatch;
         pExecuteInfo->aTargetURL    = aTargetURL;
         pExecuteInfo->aArgs         = aArgs;
-        Application::PostUserEvent( LINK(0, GenericToolboxController , ExecuteHdl_Impl), pExecuteInfo );
+        Application::PostUserEvent( LINK(nullptr, GenericToolboxController , ExecuteHdl_Impl), pExecuteInfo );
     }
 }
 

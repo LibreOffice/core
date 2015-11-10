@@ -169,7 +169,7 @@ static SvtExtensionResIdMapping_Impl const ExtensionMap_Impl[] =
     { "pps",   false, STR_DESCRIPTION_POWERPOINT_SHOW,       IMG_IMPRESS },
     { "pptx",  false, STR_DESCRIPTION_POWERPOINT,            IMG_IMPRESS },
     { "oxt",   false, STR_DESCRIPTION_EXTENSION,             IMG_EXTENSION },
-    { 0, false, 0, 0 }
+    { nullptr, false, 0, 0 }
 };
 
 struct SvtFactory2ExtensionMapping_Impl
@@ -190,7 +190,7 @@ static SvtFactory2ExtensionMapping_Impl const Fac2ExtMap_Impl[] =
     { "sdraw",                  "odg" },
     { "smath",                  "odf" },
     { "sdatabase",              "odb" },
-    { NULL, NULL }
+    { nullptr, nullptr }
 };
 
 
@@ -490,10 +490,10 @@ static Image GetImageFromList_Impl( sal_uInt16 nImageId, bool bBig )
         // return our new small folder image (256 colors)
         return Image( SvtResId( IMG_SVT_FOLDER ) );
 
-    ImageList* pList = NULL;
+    ImageList* pList = nullptr;
 
-    static vcl::DeleteOnDeinit< ImageList > xSmallImageList( NULL );
-    static vcl::DeleteOnDeinit< ImageList > xBigImageList( NULL );
+    static vcl::DeleteOnDeinit< ImageList > xSmallImageList( nullptr );
+    static vcl::DeleteOnDeinit< ImageList > xBigImageList( nullptr );
     static OUString style = Application::GetSettings().GetStyleSettings().DetermineIconTheme();
 
     // If the style has been changed, throw away our cache of the older images

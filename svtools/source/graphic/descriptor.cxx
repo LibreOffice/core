@@ -54,7 +54,7 @@ namespace unographic {
 
 GraphicDescriptor::GraphicDescriptor() :
     ::comphelper::PropertySetHelper( createPropertySetInfo(), SAL_NO_ACQUIRE ),
-    mpGraphic( NULL ),
+    mpGraphic( nullptr ),
     meType( GRAPHIC_NONE ),
     mnBitsPerPixel ( 0 ),
     mbTransparent ( false ),
@@ -96,7 +96,7 @@ void GraphicDescriptor::implCreate( SvStream& rIStm, const OUString* pURL )
         aURL = *pURL;
     ::GraphicDescriptor aDescriptor( rIStm, &aURL );
 
-    mpGraphic = NULL;
+    mpGraphic = nullptr;
     maMimeType.clear();
     meType = GRAPHIC_NONE;
     mnBitsPerPixel = 0;
@@ -104,7 +104,7 @@ void GraphicDescriptor::implCreate( SvStream& rIStm, const OUString* pURL )
 
     if( aDescriptor.Detect( true ) && aDescriptor.GetFileFormat() != GraphicFileFormat::NOT )
     {
-        const char*             pMimeType = NULL;
+        const char*             pMimeType = nullptr;
         sal_uInt8               cType = graphic::GraphicType::EMPTY;
 
         switch( aDescriptor.GetFileFormat() )
@@ -351,7 +351,7 @@ void GraphicDescriptor::_getPropertyValues( const comphelper::PropertyMapEntry**
                             case( GFX_LINK_TYPE_NATIVE_SVG ): pMimeType = MIMETYPE_SVG; break;
 
                             default:
-                                pMimeType = NULL;
+                                pMimeType = nullptr;
                             break;
                         }
 

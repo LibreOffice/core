@@ -37,7 +37,7 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star;
 
 
-static SvtHelpOptions_Impl* pOptions = NULL;
+static SvtHelpOptions_Impl* pOptions = nullptr;
 static sal_Int32           nRefCount = 0;
 
 #define EXTENDEDHELP        0
@@ -105,7 +105,7 @@ Sequence< OUString > SvtHelpOptions_Impl::GetPropertyNames()
 
 ::osl::Mutex & SvtHelpOptions_Impl::getInitMutex()
 {
-    static ::osl::Mutex *pMutex = 0;
+    static ::osl::Mutex *pMutex = nullptr;
 
     if( ! pMutex )
     {

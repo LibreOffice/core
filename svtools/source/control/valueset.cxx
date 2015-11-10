@@ -57,8 +57,8 @@ enum
 
 void ValueSet::ImplInit()
 {
-    mpNoneItem.reset(NULL);
-    mxScrollBar.reset(NULL);
+    mpNoneItem.reset(nullptr);
+    mxScrollBar.reset(nullptr);
 
     mnItemWidth         = 0;
     mnItemHeight        = 0;
@@ -408,7 +408,7 @@ void ValueSet::Format(vcl::RenderContext& rRenderContext)
         nNoneSpace = 0;
 
         if (mpNoneItem.get())
-            mpNoneItem.reset(NULL);
+            mpNoneItem.reset(nullptr);
     }
 
     // calculate ScrollBar width
@@ -585,7 +585,7 @@ void ValueSet::Format(vcl::RenderContext& rRenderContext)
         // create NoSelection field and show it
         if (nStyle & WB_NONEFIELD)
         {
-            if (mpNoneItem.get() == NULL)
+            if (mpNoneItem.get() == nullptr)
                 mpNoneItem.reset(new ValueSetItem(*this));
 
             mpNoneItem->mnId = 0;
@@ -910,7 +910,7 @@ void ValueSet::ImplHideSelect( sal_uInt16 nItemId )
     }
     else
     {
-        if (mpNoneItem.get() == NULL)
+        if (mpNoneItem.get() == nullptr)
         {
             return;
         }
@@ -1079,12 +1079,12 @@ ValueSetItem* ValueSet::ImplGetItem( size_t nPos )
     if (nPos == VALUESET_ITEM_NONEITEM)
         return mpNoneItem.get();
     else
-        return (nPos < mItemList.size()) ? mItemList[nPos] : NULL;
+        return (nPos < mItemList.size()) ? mItemList[nPos] : nullptr;
 }
 
 ValueSetItem* ValueSet::ImplGetFirstItem()
 {
-    return mItemList.size() ? mItemList[0] : NULL;
+    return mItemList.size() ? mItemList[0] : nullptr;
 }
 
 sal_uInt16 ValueSet::ImplGetVisibleItemCount() const
@@ -1169,7 +1169,7 @@ void ValueSet::ImplEndTracking( const Point& rPos, bool bCancel )
 
     // restore the old status in case of termination
     if ( bCancel )
-        pItem = NULL;
+        pItem = nullptr;
     else
         pItem = ImplGetItem( ImplGetItem( rPos ) );
 
@@ -1419,7 +1419,7 @@ void ValueSet::Command( const CommandEvent& rCommandEvent )
          rCommandEvent.GetCommand() == CommandEventId::StartAutoScroll ||
          rCommandEvent.GetCommand() == CommandEventId::AutoScroll )
     {
-        if ( HandleScrollCommand( rCommandEvent, NULL, mxScrollBar.get() ) )
+        if ( HandleScrollCommand( rCommandEvent, nullptr, mxScrollBar.get() ) )
             return;
     }
 
@@ -1896,8 +1896,8 @@ void ValueSet::SelectItem( sal_uInt16 nItemId )
             else
                 pItem = mpNoneItem.get();
 
-            ValueItemAcc* pItemAcc = NULL;
-            if (pItem != NULL)
+            ValueItemAcc* pItemAcc = nullptr;
+            if (pItem != nullptr)
                 pItemAcc = ValueItemAcc::getImplementation( pItem->GetAccessible( mbIsTransientChildrenDisabled ) );
 
             if( pItemAcc )
@@ -2024,7 +2024,7 @@ void* ValueSet::GetItemData( sal_uInt16 nItemId ) const
     if ( nPos != VALUESET_ITEM_NOTFOUND )
         return mItemList[nPos]->mpData;
     else
-        return NULL;
+        return nullptr;
 }
 
 void ValueSet::SetItemText(sal_uInt16 nItemId, const OUString& rText)

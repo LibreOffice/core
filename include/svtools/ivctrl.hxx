@@ -113,8 +113,8 @@ class SvxIconChoiceCtrlEntry
                             {
                                 this->pblink->pflink = this->pflink;
                                 this->pflink->pblink = this->pblink;
-                                this->pflink = 0;
-                                this->pblink = 0;
+                                this->pflink = nullptr;
+                                this->pblink = nullptr;
                             }
 
 public:
@@ -265,7 +265,7 @@ public:
     SvxIconChoiceCtrlEntry* InsertEntry( const OUString& rText,
                                          const Image& rImage,
                                          sal_uLong nPos = CONTAINER_APPEND,
-                                         const Point* pPos = 0,
+                                         const Point* pPos = nullptr,
                                          SvxIconViewFlags nFlags = SvxIconViewFlags::NONE
                                        );
 
@@ -300,7 +300,7 @@ public:
     SvxIconChoiceCtrlEntry* GetSelectedEntry() const;
 
 #ifdef DBG_UTIL
-    void                    SetEntryTextMode( SvxIconChoiceCtrlTextMode eMode, SvxIconChoiceCtrlEntry* pEntry = 0 );
+    void                    SetEntryTextMode( SvxIconChoiceCtrlTextMode eMode, SvxIconChoiceCtrlEntry* pEntry = nullptr );
 #endif
 
     bool                AutoFontColor () { return _bAutoFontColor; }

@@ -811,7 +811,7 @@ Sequence< OUString > SvtOptionsDrawinglayer_Impl::impl_GetPropertyNames()
 //  DON'T DO IT IN YOUR HEADER!
 //  see definition for further information
 
-SvtOptionsDrawinglayer_Impl* SvtOptionsDrawinglayer::m_pDataContainer = NULL;
+SvtOptionsDrawinglayer_Impl* SvtOptionsDrawinglayer::m_pDataContainer = nullptr;
 sal_Int32 SvtOptionsDrawinglayer::m_nRefCount = 0;
 
 
@@ -824,7 +824,7 @@ SvtOptionsDrawinglayer::SvtOptionsDrawinglayer()
     // Increase our refcount ...
     ++m_nRefCount;
     // ... and initialize our data container only if it not already!
-    if( m_pDataContainer == NULL )
+    if( m_pDataContainer == nullptr )
     {
         m_pDataContainer = new SvtOptionsDrawinglayer_Impl();
     }
@@ -846,7 +846,7 @@ SvtOptionsDrawinglayer::~SvtOptionsDrawinglayer()
         if (m_pDataContainer->IsModified())
             m_pDataContainer->Commit();
         delete m_pDataContainer;
-        m_pDataContainer = NULL;
+        m_pDataContainer = nullptr;
     }
 }
 

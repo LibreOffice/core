@@ -70,7 +70,7 @@ namespace svt
 
 
         vcl::Window* pAccessibleParent( m_pTabBar->GetAccessibleParentWindow() );
-        ENSURE_OR_RETURN( pAccessibleParent != NULL, "no accessible parent => no accessible context", NULL );
+        ENSURE_OR_RETURN( pAccessibleParent != nullptr, "no accessible parent => no accessible context", nullptr );
         Reference< XAccessible > xAccessibleParent( pAccessibleParent->GetAccessible(), UNO_SET_THROW );
         return m_aAccessibleFactory.getFactory().createAccessibleToolPanelTabBar( xAccessibleParent, m_pTabBar->GetPanelDeck(), *m_pTabBar );
     }

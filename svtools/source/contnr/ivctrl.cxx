@@ -38,10 +38,10 @@ SvxIconChoiceCtrlEntry::SvxIconChoiceCtrlEntry( const OUString& rText,
                                                 SvxIconViewFlags _nFlags )
     : aImage(rImage)
     , aText(rText)
-    , pUserData(NULL)
+    , pUserData(nullptr)
     , nPos(0)
-    , pblink(0)
-    , pflink(0)
+    , pblink(nullptr)
+    , pflink(nullptr)
     , eTextMode(IcnShowTextShort)
     , nX(0)
     , nY(0)
@@ -75,7 +75,7 @@ SvtIconChoiceCtrl::SvtIconChoiceCtrl( vcl::Window* pParent, WinBits nWinStyle ) 
      // WB_CLIPCHILDREN on, as ScrollBars lie on the window!
     Control( pParent, nWinStyle | WB_CLIPCHILDREN ),
 
-    _pCurKeyEvent   ( NULL ),
+    _pCurKeyEvent   ( nullptr ),
     _pImp           ( new SvxIconChoiceCtrl_Impl( this, nWinStyle ) ),
     _bAutoFontColor ( false )
 
@@ -97,7 +97,7 @@ void SvtIconChoiceCtrl::dispose()
     {
         _pImp->CallEventListeners( VCLEVENT_OBJECT_DYING );
         delete _pImp;
-        _pImp = NULL;
+        _pImp = nullptr;
     }
     Control::dispose();
 }
@@ -263,7 +263,7 @@ sal_Int32 SvtIconChoiceCtrl::GetEntryCount() const
 
 SvxIconChoiceCtrlEntry* SvtIconChoiceCtrl::GetEntry( sal_Int32 nPos ) const
 {
-    return _pImp ? _pImp->GetEntry( nPos ) : NULL;
+    return _pImp ? _pImp->GetEntry( nPos ) : nullptr;
 }
 
 void SvtIconChoiceCtrl::CreateAutoMnemonics( MnemonicGenerator& _rUsedMnemonics )
@@ -273,7 +273,7 @@ void SvtIconChoiceCtrl::CreateAutoMnemonics( MnemonicGenerator& _rUsedMnemonics 
 
 SvxIconChoiceCtrlEntry* SvtIconChoiceCtrl::GetSelectedEntry() const
 {
-    return _pImp ? _pImp->GetFirstSelectedEntry() : NULL;
+    return _pImp ? _pImp->GetFirstSelectedEntry() : nullptr;
 }
 
 void SvtIconChoiceCtrl::ClickIcon()
@@ -298,7 +298,7 @@ void SvtIconChoiceCtrl::KeyInput( const KeyEvent& rKEvt )
     {
         _pCurKeyEvent = const_cast<KeyEvent*>(&rKEvt);
         Control::KeyInput( rKEvt );
-        _pCurKeyEvent = NULL;
+        _pCurKeyEvent = nullptr;
     }
 }
 bool SvtIconChoiceCtrl::DoKeyInput( const KeyEvent& rKEvt )
@@ -308,7 +308,7 @@ bool SvtIconChoiceCtrl::DoKeyInput( const KeyEvent& rKEvt )
         return true;
     _pCurKeyEvent = const_cast<KeyEvent*>(&rKEvt);
     bool bHandled = _pImp->KeyInput( rKEvt );
-    _pCurKeyEvent = NULL;
+    _pCurKeyEvent = nullptr;
     return bHandled;
 }
 sal_Int32 SvtIconChoiceCtrl::GetEntryListPos( SvxIconChoiceCtrlEntry* pEntry ) const

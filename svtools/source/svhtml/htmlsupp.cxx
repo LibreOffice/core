@@ -32,7 +32,7 @@ static HTMLOptionEnum const aScriptLangOptEnums[] =
     { OOO_STRING_SVTOOLS_HTML_LG_javascript,    HTML_SL_JAVASCRIPT  },
     { OOO_STRING_SVTOOLS_HTML_LG_javascript11,HTML_SL_JAVASCRIPT    },
     { OOO_STRING_SVTOOLS_HTML_LG_livescript,    HTML_SL_JAVASCRIPT  },
-    { 0,                    0                   }
+    { nullptr,                    0                   }
 };
 
 bool HTMLParser::ParseScriptOptions( OUString& rLangString, const OUString& rBaseURL,

@@ -50,18 +50,18 @@ void SvTreeListEntry::InvalidateChildrensListPositions()
 }
 
 SvTreeListEntry::SvTreeListEntry()
-    : pParent(NULL)
+    : pParent(nullptr)
     , nAbsPos(0)
     , nListPos(0)
     , bIsMarked(false)
-    , pUserData(NULL)
+    , pUserData(nullptr)
     , nEntryFlags(SvTLEntryFlags::NONE)
     , maBackColor(Application::GetSettings().GetStyleSettings().GetWindowColor())
 {
 }
 
 SvTreeListEntry::SvTreeListEntry(const SvTreeListEntry& r)
-    : pParent(NULL)
+    : pParent(nullptr)
     , nAbsPos(r.nAbsPos)
     , nListPos(r.nListPos & 0x7FFFFFFF)
     , bIsMarked(r.bIsMarked)
@@ -76,7 +76,7 @@ SvTreeListEntry::SvTreeListEntry(const SvTreeListEntry& r)
 SvTreeListEntry::~SvTreeListEntry()
 {
 #ifdef DBG_UTIL
-    pParent     = 0;
+    pParent     = nullptr;
 #endif
 
     m_Children.clear();

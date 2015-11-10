@@ -129,7 +129,7 @@ namespace svt { namespace table
     void ColumnChangeMultiplexer::dispose()
     {
         DBG_TESTSOLARMUTEX();
-        m_pColumnImplementation = NULL;
+        m_pColumnImplementation = nullptr;
     }
 
 
@@ -138,7 +138,7 @@ namespace svt { namespace table
         if ( i_event.AttributeName == "DataColumnIndex" )
         {
             SolarMutexGuard aGuard;
-            if ( m_pColumnImplementation != NULL )
+            if ( m_pColumnImplementation != nullptr )
                 m_pColumnImplementation->dataColumnIndexChanged();
             return;
         }
@@ -161,7 +161,7 @@ namespace svt { namespace table
             "ColumnChangeMultiplexer::columnChanged: unknown column attributed changed!" );
 
         SolarMutexGuard aGuard;
-        if ( m_pColumnImplementation != NULL )
+        if ( m_pColumnImplementation != nullptr )
             m_pColumnImplementation->columnChanged( nChangedAttributes );
     }
 
@@ -193,13 +193,13 @@ namespace svt { namespace table
     void UnoGridColumnFacade::dispose()
     {
         DBG_TESTSOLARMUTEX();
-        ENSURE_OR_RETURN_VOID( m_pOwner != NULL, "UnoGridColumnFacade::dispose: already disposed!" );
+        ENSURE_OR_RETURN_VOID( m_pOwner != nullptr, "UnoGridColumnFacade::dispose: already disposed!" );
 
         m_xGridColumn->removeGridColumnListener( m_pChangeMultiplexer.get() );
         m_pChangeMultiplexer->dispose();
         m_pChangeMultiplexer.clear();
         m_xGridColumn.clear();
-        m_pOwner = NULL;
+        m_pOwner = nullptr;
     }
 
 
@@ -222,7 +222,7 @@ namespace svt { namespace table
     {
         DBG_TESTSOLARMUTEX();
         impl_updateDataColumnIndex_nothrow();
-        if ( m_pOwner != NULL )
+        if ( m_pOwner != nullptr )
             m_pOwner->notifyAllDataChanged();
     }
 
@@ -230,7 +230,7 @@ namespace svt { namespace table
     void UnoGridColumnFacade::columnChanged( ColumnAttributeGroup const i_attributeGroup )
     {
         DBG_TESTSOLARMUTEX();
-        if ( m_pOwner != NULL )
+        if ( m_pOwner != nullptr )
             m_pOwner->notifyColumnChange( m_pOwner->getColumnPos( *this ), i_attributeGroup );
     }
 

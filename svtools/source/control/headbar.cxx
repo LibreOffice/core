@@ -73,7 +73,7 @@ void HeaderBar::ImplInit( WinBits nWinStyle )
     mbOutDrag       = false;
     mbItemMode      = false;
 
-    m_pVCLXHeaderBar = NULL;
+    m_pVCLXHeaderBar = nullptr;
     // StyleBits auswerten
     if ( nWinStyle & WB_DRAG )
         mbDragable = true;
@@ -116,7 +116,7 @@ void HeaderBar::dispose()
         for ( size_t i = 0, n = mpItemList->size(); i < n; ++i )
             delete (*mpItemList)[ i ];
         delete mpItemList;
-        mpItemList = NULL;
+        mpItemList = nullptr;
     }
     Window::dispose();
 }
@@ -1233,7 +1233,7 @@ sal_uInt16 HeaderBar::GetItemPos( sal_uInt16 nItemId ) const
 
 sal_uInt16 HeaderBar::GetItemId( sal_uInt16 nPos ) const
 {
-    ImplHeadItem* pItem = (nPos < mpItemList->size() ) ? (*mpItemList)[ nPos ] : NULL;
+    ImplHeadItem* pItem = (nPos < mpItemList->size() ) ? (*mpItemList)[ nPos ] : nullptr;
     if ( pItem )
         return pItem->mnId;
     else

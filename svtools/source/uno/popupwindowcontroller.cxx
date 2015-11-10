@@ -50,15 +50,15 @@ private:
 };
 
 PopupWindowControllerImpl::PopupWindowControllerImpl()
-: mpPopupWindow( 0 )
-, mpToolBox( 0 )
+: mpPopupWindow( nullptr )
+, mpToolBox( nullptr )
 {
 }
 
 PopupWindowControllerImpl::~PopupWindowControllerImpl()
 {
     if( mpPopupWindow )
-        SetPopupWindow(0,0);
+        SetPopupWindow(nullptr,nullptr);
 }
 
 void PopupWindowControllerImpl::SetPopupWindow( vcl::Window* pPopupWindow, ToolBox* pToolBox )
@@ -83,7 +83,7 @@ IMPL_LINK_TYPED( PopupWindowControllerImpl, WindowEventListener, VclWindowEvent&
     {
     case VCLEVENT_WINDOW_CLOSE:
     case VCLEVENT_WINDOW_ENDPOPUPMODE:
-        SetPopupWindow(0,0);
+        SetPopupWindow(nullptr,nullptr);
         break;
 
     case VCLEVENT_WINDOW_SHOW:

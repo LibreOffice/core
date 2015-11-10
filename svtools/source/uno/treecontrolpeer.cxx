@@ -143,9 +143,9 @@ TreeControlPeer::TreeControlPeer()
     , maTreeExpansionListeners( *this )
     , maTreeEditListeners( *this )
     , mbIsRootDisplayed(false)
-    , mpTreeImpl( 0 )
+    , mpTreeImpl( nullptr )
     , mnEditLock( 0 )
-    , mpTreeNodeMap( 0 )
+    , mpTreeNodeMap( nullptr )
 {
 }
 
@@ -201,7 +201,7 @@ UnoTreeListEntry* TreeControlPeer::getEntry( const Reference< XTreeNode >& xNode
     if( bThrow )
         throw IllegalArgumentException();
 
-    return 0;
+    return nullptr;
 }
 
 
@@ -218,8 +218,8 @@ vcl::Window* TreeControlPeer::createVclControl( vcl::Window* pParent, sal_Int64 
 void TreeControlPeer::disposeControl()
 {
     delete mpTreeNodeMap;
-    mpTreeNodeMap = 0;
-    mpTreeImpl = 0;
+    mpTreeNodeMap = nullptr;
+    mpTreeImpl = nullptr;
 }
 
 
@@ -233,7 +233,7 @@ void TreeControlPeer::SetWindow( const VclPtr< vcl::Window > &pWindow )
 
 UnoTreeListEntry* TreeControlPeer::createEntry( const Reference< XTreeNode >& xNode, UnoTreeListEntry* pParent, sal_uLong nPos /* = TREELIST_APPEND */ )
 {
-    UnoTreeListEntry* pEntry = 0;
+    UnoTreeListEntry* pEntry = nullptr;
     if( mpTreeImpl )
     {
         Image aImage;
@@ -423,13 +423,13 @@ void TreeControlPeer::fillTree( UnoTreeListBoxImpl& rTree, const Reference< XTre
         {
             if( mbIsRootDisplayed )
             {
-                addNode( rTree, xRootNode, 0 );
+                addNode( rTree, xRootNode, nullptr );
             }
             else
             {
                 const sal_Int32 nChildCount = xRootNode->getChildCount();
                 for( sal_Int32 nChild = 0; nChild < nChildCount; nChild++ )
-                    addNode( rTree, xRootNode->getChildAt( nChild ), 0 );
+                    addNode( rTree, xRootNode->getChildAt( nChild ), nullptr );
             }
         }
     }
@@ -467,7 +467,7 @@ void TreeControlPeer::ChangeNodesSelection( const Any& rSelection, bool bSelect,
 
     Reference< XTreeNode > xTempNode;
 
-    const Reference< XTreeNode > *pNodes = 0;
+    const Reference< XTreeNode > *pNodes = nullptr;
     sal_Int32 nCount = 0;
 
     if( rSelection.hasValue() )
@@ -556,7 +556,7 @@ Any SAL_CALL TreeControlPeer::getSelection() throw (RuntimeException, std::excep
             --nSelectionCount;
         }
 
-        OSL_ASSERT( (pEntry == 0) && (nSelectionCount == 0) );
+        OSL_ASSERT( (pEntry == nullptr) && (nSelectionCount == 0) );
         aRet <<= aSelection;
     }
 
@@ -667,7 +667,7 @@ Reference< XEnumeration > SAL_CALL TreeControlPeer::createSelectionEnumeration()
         --nSelectionCount;
     }
 
-    OSL_ASSERT( (pEntry == 0) && (nSelectionCount == 0) );
+    OSL_ASSERT( (pEntry == nullptr) && (nSelectionCount == 0) );
 
     return Reference< XEnumeration >( new TreeSelectionEnumeration( aSelection ) );
 }
@@ -691,7 +691,7 @@ Reference< XEnumeration > SAL_CALL TreeControlPeer::createReverseSelectionEnumer
         --nSelectionCount;
     }
 
-    OSL_ASSERT( (pEntry == 0) && (nSelectionCount == 0) );
+    OSL_ASSERT( (pEntry == nullptr) && (nSelectionCount == 0) );
 
     return Reference< XEnumeration >( new TreeSelectionEnumeration( aSelection ) );
 }
@@ -1076,7 +1076,7 @@ void TreeControlPeer::updateNode( UnoTreeListBoxImpl& rTree, const Reference< XT
         if( !pNodeEntry )
         {
             Reference< XTreeNode > xParentNode( xNode->getParent() );
-            UnoTreeListEntry* pParentEntry = 0;
+            UnoTreeListEntry* pParentEntry = nullptr;
             sal_uLong nChild = TREELIST_APPEND;
 
             if( xParentNode.is() )
@@ -1106,7 +1106,7 @@ void TreeControlPeer::updateChildNodes( UnoTreeListBoxImpl& rTree, const Referen
             if( !pCurrentChild || ( pCurrentChild->mxNode != xNode ) )
             {
                 UnoTreeListEntry* pNodeEntry = getEntry( xNode, false );
-                if( pNodeEntry == 0 )
+                if( pNodeEntry == nullptr )
                 {
                     // child node is not yet part of the tree, add it
                     pCurrentChild = createEntry( xNode, pParentEntry, nChild );

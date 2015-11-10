@@ -526,7 +526,7 @@ public:
     long            NextSelectedRow();
     const MultiSelection* GetColumnSelection() const { return pColSel; }
     const MultiSelection* GetSelection() const
-                    { return bMultiSelection ? uRow.pSel : 0; }
+                    { return bMultiSelection ? uRow.pSel : nullptr; }
 
     long            FirstSelectedColumn( ) const;
 

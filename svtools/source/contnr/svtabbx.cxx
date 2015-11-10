@@ -90,9 +90,9 @@ void SvTabListBox::InitEntry(SvTreeListEntry* pEntry, const OUString& rStr,
 SvTabListBox::SvTabListBox( vcl::Window* pParent, WinBits nBits )
     : SvTreeListBox( pParent, nBits )
 {
-    pTabList = 0;
+    pTabList = nullptr;
     nTabCount = 0;
-    pViewParent = 0;
+    pViewParent = nullptr;
     SetHighlightRange();    // select full width
 }
 
@@ -115,7 +115,7 @@ void SvTabListBox::dispose()
     // delete array
     delete [] pTabList;
 #ifdef DBG_UTIL
-    pTabList = 0;
+    pTabList = nullptr;
     nTabCount = 0;
 #endif
     SvTreeListBox::dispose();
@@ -245,7 +245,7 @@ SvTreeListEntry* SvTabListBox::InsertEntryToColumn( const OUString& rStr,
 SvTreeListEntry* SvTabListBox::InsertEntryToColumn( const OUString& rStr, sal_uLong nPos,
     sal_uInt16 nCol, void* pUser )
 {
-    return InsertEntryToColumn( rStr,0,nPos, nCol, pUser );
+    return InsertEntryToColumn( rStr,nullptr,nPos, nCol, pUser );
 }
 
 OUString SvTabListBox::GetEntryText( SvTreeListEntry* pEntry ) const
@@ -429,8 +429,8 @@ OUString SvTabListBox::GetTabEntryText( sal_uLong nPos, sal_uInt16 nCol ) const
 
 SvTreeListEntry* SvTabListBox::GetEntryOnPos( sal_uLong _nEntryPos ) const
 {
-    SvTreeListEntry* pEntry = NULL;
-    sal_uLong i, nPos = 0, nCount = GetLevelChildCount( NULL );
+    SvTreeListEntry* pEntry = nullptr;
+    sal_uLong i, nPos = 0, nCount = GetLevelChildCount( nullptr );
     for ( i = 0; i < nCount; ++i )
     {
         SvTreeListEntry* pParent = GetEntry(i);
@@ -468,7 +468,7 @@ SvTreeListEntry* SvTabListBox::GetChildOnPos( SvTreeListEntry* _pParent, sal_uLo
         }
     }
 
-    return NULL;
+    return nullptr;
 }
 
 void SvTabListBox::SetTabJustify( sal_uInt16 nTab, SvTabJustify eJustify)
@@ -501,7 +501,7 @@ namespace svt
         VclPtr<HeaderBar>       m_pHeaderBar;
         AccessibleFactoryAccess m_aFactoryAccess;
 
-        SvHeaderTabListBoxImpl() : m_pHeaderBar( NULL ) { }
+        SvHeaderTabListBoxImpl() : m_pHeaderBar( nullptr ) { }
     };
 }
 
@@ -509,7 +509,7 @@ SvHeaderTabListBox::SvHeaderTabListBox( vcl::Window* pParent, WinBits nWinStyle 
     : SvTabListBox(pParent, nWinStyle)
     , m_bFirstPaint(true)
     , m_pImpl(new ::svt::SvHeaderTabListBoxImpl)
-    , m_pAccessible(NULL)
+    , m_pAccessible(nullptr)
 {
 }
 
@@ -800,7 +800,7 @@ Rectangle SvHeaderTabListBox::calcHeaderRect( bool _bIsColumnBar, bool _bOnScree
     Rectangle aRect;
     if ( _bIsColumnBar )
     {
-        vcl::Window* pParent = NULL;
+        vcl::Window* pParent = nullptr;
         if ( !_bOnScreen )
             pParent = m_pImpl->m_pHeaderBar->GetAccessibleParentWindow();
 
@@ -811,7 +811,7 @@ Rectangle SvHeaderTabListBox::calcHeaderRect( bool _bIsColumnBar, bool _bOnScree
 
 Rectangle SvHeaderTabListBox::calcTableRect( bool _bOnScreen )
 {
-    vcl::Window* pParent = NULL;
+    vcl::Window* pParent = nullptr;
     if ( !_bOnScreen )
         pParent = GetAccessibleParentWindow();
 
@@ -833,7 +833,7 @@ Rectangle SvHeaderTabListBox::GetFieldRectPixelAbs( sal_Int32 _nRow, sal_uInt16 
         aTopLeft.X() = aItemRect.Left();
         Size aSize = aItemRect.GetSize();
         aRect = Rectangle( aTopLeft, aSize );
-        vcl::Window* pParent = NULL;
+        vcl::Window* pParent = nullptr;
         if ( !_bOnScreen )
             pParent = GetAccessibleParentWindow();
         aTopLeft = aRect.TopLeft();
@@ -872,10 +872,10 @@ Reference< XAccessible > SvHeaderTabListBox::CreateAccessibleCell( sal_Int32 _nR
         bool bIsCheckBox = IsCellCheckBox( _nRow, _nColumnPos, eState );
         if ( bIsCheckBox )
             xChild = m_pImpl->m_aFactoryAccess.getFactory().createAccessibleCheckBoxCell(
-                m_pAccessible->getHeaderBar(), *this, NULL, _nRow, _nColumnPos, eState, false );
+                m_pAccessible->getHeaderBar(), *this, nullptr, _nRow, _nColumnPos, eState, false );
         else
             xChild = m_pImpl->m_aFactoryAccess.getFactory().createAccessibleBrowseBoxTableCell(
-                m_pAccessible->getHeaderBar(), *this, NULL, _nRow, _nColumnPos, OFFSET_NONE );
+                m_pAccessible->getHeaderBar(), *this, nullptr, _nRow, _nColumnPos, OFFSET_NONE );
 
         // insert into list
         if ( !AreChildrenTransient() )
@@ -910,7 +910,7 @@ Reference< XAccessible > SvHeaderTabListBox::CreateAccessibleColumnHeader( sal_u
         // no -> create new header cell
         xChild = m_pImpl->m_aFactoryAccess.getFactory().createAccessibleBrowseBoxHeaderCell(
             _nColumn, m_pAccessible->getHeaderBar(),
-            *this, NULL, ::svt::BBTYPE_COLUMNHEADERCELL
+            *this, nullptr, ::svt::BBTYPE_COLUMNHEADERCELL
         );
 
         // insert into list

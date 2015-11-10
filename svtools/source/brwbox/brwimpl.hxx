@@ -58,7 +58,7 @@ namespace svt
         THeaderCellMap          m_aRowHeaderCellMap;
 
     public:
-        BrowseBoxImpl() : m_pAccessible(NULL)
+        BrowseBoxImpl() : m_pAccessible(nullptr)
         {
         }
 

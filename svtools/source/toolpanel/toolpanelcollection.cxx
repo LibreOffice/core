@@ -125,7 +125,7 @@ namespace svt
     {
         OSL_ENSURE( i_nPosition < m_pData->aPanels.size(), "ToolPanelCollection::RemovePanel: illegal position!" );
         if ( i_nPosition >= m_pData->aPanels.size() )
-            return NULL;
+            return nullptr;
 
         // if the active panel is going to be removed, activate another one (before the actual removal)
         if ( m_pData->aActivePanel == i_nPosition )

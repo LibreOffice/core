@@ -32,7 +32,7 @@ struct SvLBoxButtonData_Impl
     bool                bDefaultImages;
     bool                bShowRadioButton;
 
-    SvLBoxButtonData_Impl() : pEntry( NULL ), bDefaultImages( false ), bShowRadioButton( false ) {}
+    SvLBoxButtonData_Impl() : pEntry( nullptr ), bDefaultImages( false ), bShowRadioButton( false ) {}
 };
 
 void SvLBoxButtonData::InitData( bool bImagesFromDefault, bool _bRadioBtn, const Control* pCtrl )
@@ -67,7 +67,7 @@ SvLBoxButtonData::~SvLBoxButtonData()
 
     delete pImpl;
 #ifdef DBG_UTIL
-    pImpl = NULL;
+    pImpl = nullptr;
 #endif
 }
 
@@ -223,7 +223,7 @@ void SvLBoxString::InitViewData(
     long nTextWidth;
     if (pView->GetEntryCount() > 100)
     {
-        static SvTreeListBox *pPreviousView = NULL;
+        static SvTreeListBox *pPreviousView = nullptr;
         static float fApproximateCharWidth = 0.0;
         if (pPreviousView != pView)
         {
@@ -300,7 +300,7 @@ SvLBoxButton::SvLBoxButton( SvTreeListEntry* pEntry, SvLBoxButtonKind eTheKind,
 SvLBoxButton::SvLBoxButton()
     : SvLBoxItem()
     , isVis(false)
-    , pData(0)
+    , pData(nullptr)
     , eKind(SvLBoxButtonKind_enabledCheckbox)
     , nItemFlags(SvItemStateFlags::NONE)
 {

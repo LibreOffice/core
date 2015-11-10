@@ -62,7 +62,7 @@ class MyEdit_Impl : public Edit
 public:
                  MyEdit_Impl( vcl::Window* pParent, SvInplaceEdit2* pOwner );
     virtual     ~MyEdit_Impl() { disposeOnce(); }
-    virtual void dispose() override { pOwner = NULL; Edit::dispose(); }
+    virtual void dispose() override { pOwner = nullptr; Edit::dispose(); }
     virtual void KeyInput( const KeyEvent& rKEvt ) override;
     virtual void LoseFocus() override;
 };
@@ -73,7 +73,7 @@ class MyMultiEdit_Impl : public MultiLineEdit
 public:
                  MyMultiEdit_Impl( vcl::Window* pParent, SvInplaceEdit2* pOwner );
     virtual     ~MyMultiEdit_Impl() { disposeOnce(); }
-    virtual void dispose() override { pOwner = NULL; MultiLineEdit::dispose(); }
+    virtual void dispose() override { pOwner = nullptr; MultiLineEdit::dispose(); }
     virtual void KeyInput( const KeyEvent& rKEvt ) override;
     virtual void LoseFocus() override;
 };
@@ -270,14 +270,14 @@ OUString SvInplaceEdit2::GetText() const
 SvLBoxTab::SvLBoxTab()
 {
     nPos = 0;
-    pUserData = 0;
+    pUserData = nullptr;
     nFlags = SvLBoxTabFlags::NONE;
 }
 
 SvLBoxTab::SvLBoxTab( long nPosition, SvLBoxTabFlags nTabFlags )
 {
     nPos = nPosition;
-    pUserData = 0;
+    pUserData = nullptr;
     nFlags = nTabFlags;
 }
 
@@ -382,15 +382,15 @@ SvTreeListBox::SvTreeListBox(vcl::Window* pParent, WinBits nWinStyle) :
 {
     nDragOptions =  DND_ACTION_COPYMOVE | DND_ACTION_LINK;
     nImpFlags = SvTreeListBoxFlags::NONE;
-    pTargetEntry = 0;
+    pTargetEntry = nullptr;
     nDragDropMode = DragDropMode::NONE;
     SvTreeList* pTempModel = new SvTreeList;
     pTempModel->SetRefCount( 0 );
     SetBaseModel(pTempModel);
     pModel->SetCloneLink( LINK(this, SvTreeListBox, CloneHdl_Impl ));
     pModel->InsertView( this );
-    pHdlEntry = 0;
-    pEdCtrl = 0;
+    pHdlEntry = nullptr;
+    pEdCtrl = nullptr;
     eSelMode = SINGLE_SELECTION;
     nDragDropMode = DragDropMode::NONE;
     SetType(WINDOW_TREELISTBOX);
@@ -411,7 +411,7 @@ SvTreeListBox::SvTreeListBox(vcl::Window* pParent, const ResId& rResId) :
     eSelMode(NO_SELECTION),
     nMinWidthInChars(0)
 {
-    pTargetEntry = 0;
+    pTargetEntry = nullptr;
     nImpFlags = SvTreeListBoxFlags::NONE;
     nDragOptions = DND_ACTION_COPYMOVE | DND_ACTION_LINK;
     nDragDropMode = DragDropMode::NONE;
@@ -419,8 +419,8 @@ SvTreeListBox::SvTreeListBox(vcl::Window* pParent, const ResId& rResId) :
     pTempModel->SetRefCount( 0 );
     SetBaseModel(pTempModel);
     pModel->InsertView( this );
-    pHdlEntry = 0;
-    pEdCtrl = 0;
+    pHdlEntry = nullptr;
+    pEdCtrl = nullptr;
     pModel->SetCloneLink( LINK(this, SvTreeListBox, CloneHdl_Impl ));
     SetType(WINDOW_TREELISTBOX);
 
@@ -569,7 +569,7 @@ TriState SvTreeListBox::NotifyMoving(
     DBG_ASSERT(pEntry,"NotifyMoving:SoureEntry?");
     if( !pTarget )
     {
-        rpNewParent = 0;
+        rpNewParent = nullptr;
         rNewChildPos = 0;
         return TRISTATE_TRUE;
     }
@@ -643,7 +643,7 @@ bool SvTreeListBox::CopySelection( SvTreeListBox* pSource, SvTreeListEntry* pTar
     for (; it != itEnd; ++it)
     {
         pSourceEntry = *it;
-        SvTreeListEntry* pNewParent = 0;
+        SvTreeListEntry* pNewParent = nullptr;
         sal_uLong nInsertionPos = TREELIST_APPEND;
         TriState nOk = NotifyCopying(pTarget,pSourceEntry,pNewParent,nInsertionPos);
         if ( nOk )
@@ -700,7 +700,7 @@ bool SvTreeListBox::MoveSelectionCopyFallbackPossible( SvTreeListBox* pSource, S
     {
         pSourceEntry = *it;
 
-        SvTreeListEntry* pNewParent = 0;
+        SvTreeListEntry* pNewParent = nullptr;
         sal_uLong nInsertionPos = TREELIST_APPEND;
         TriState nOk = NotifyMoving(pTarget,pSourceEntry,pNewParent,nInsertionPos);
         TriState nCopyOk = nOk;
@@ -810,8 +810,8 @@ SvTreeListEntry* SvTreeListBox::GetEntry( sal_uLong nRootPos ) const
 SvTreeListEntry* SvTreeListBox::GetEntryFromPath( const ::std::deque< sal_Int32 >& _rPath ) const
 {
 
-    SvTreeListEntry* pEntry = NULL;
-    SvTreeListEntry* pParent = NULL;
+    SvTreeListEntry* pEntry = nullptr;
+    SvTreeListEntry* pParent = nullptr;
     for( ::std::deque< sal_Int32 >::const_iterator pItem = _rPath.begin(); pItem != _rPath.end(); ++pItem )
     {
         pEntry = GetEntry( pParent, *pItem );
@@ -1251,7 +1251,7 @@ sal_Int8 SvTreeListBox::ExecuteDrop( const ExecuteDropEvent& rEvt )
 void SvTreeListBox::SetupDragOrigin()
 {
     pDDSource = this;
-    pDDTarget = 0;
+    pDDTarget = nullptr;
 }
 
 void SvTreeListBox::StartDrag( sal_Int8, const Point& rPosPixel )
@@ -1323,9 +1323,9 @@ nAction
 #endif
 
     ImplShowTargetEmphasis( pTargetEntry, false );
-    pDDSource = 0;
-    pDDTarget = 0;
-    pTargetEntry = 0;
+    pDDSource = nullptr;
+    pDDTarget = nullptr;
+    pTargetEntry = nullptr;
     nDragDropMode = nOldDragMode;
 }
 
@@ -1392,11 +1392,11 @@ Link<sal_Int8,void> SvTreeListBox::GetDragFinishedHdl() const
 
 void SvTreeListBox::InitTreeView()
 {
-    pCheckButtonData = NULL;
-    pEdEntry = NULL;
-    pEdItem = NULL;
+    pCheckButtonData = nullptr;
+    pEdEntry = nullptr;
+    pEdItem = nullptr;
     nEntryHeight = 0;
-    pEdCtrl = NULL;
+    pEdCtrl = nullptr;
     nFirstSelTab = 0;
     nLastSelTab = 0;
     nFocusWidth = -1;
@@ -1504,14 +1504,14 @@ void SvTreeListBox::dispose()
     {
         pImp->CallEventListeners( VCLEVENT_OBJECT_DYING );
         delete pImp;
-        pImp = NULL;
+        pImp = nullptr;
     }
     if( mpImpl )
     {
         ClearTabList();
 
         delete pEdCtrl;
-        pEdCtrl = NULL;
+        pEdCtrl = nullptr;
 
         if( pModel )
         {
@@ -1520,18 +1520,18 @@ void SvTreeListBox::dispose()
             {
                 pModel->Clear();
                 delete pModel;
-                pModel = NULL;
+                pModel = nullptr;
             }
         }
 
         SvTreeListBox::RemoveBoxFromDDList_Impl( *this );
 
         if( this == pDDSource )
-            pDDSource = 0;
+            pDDSource = nullptr;
         if( this == pDDTarget )
-            pDDTarget = 0;
+            pDDTarget = nullptr;
         delete mpImpl;
-        mpImpl = NULL;
+        mpImpl = nullptr;
     }
 
     Control::dispose();
@@ -1841,7 +1841,7 @@ void SvTreeListBox::SetEntryText(SvTreeListEntry* pEntry, const OUString& rStr)
     SvLBoxString* pItem = static_cast<SvLBoxString*>(pEntry->GetFirstItem(SV_ITEM_ID_LBOXSTRING));
     DBG_ASSERT(pItem,"SetText:Item not found");
     pItem->SetText(rStr);
-    pItem->InitViewData( this, pEntry, 0 );
+    pItem->InitViewData( this, pEntry, nullptr );
     GetModel()->InvalidateEntry( pEntry );
 }
 
@@ -2176,9 +2176,9 @@ void SvTreeListBox::LoseFocus()
 
 void SvTreeListBox::ModelHasCleared()
 {
-    pImp->pCursor = 0; // else we crash in GetFocus when editing in-place
+    pImp->pCursor = nullptr; // else we crash in GetFocus when editing in-place
     delete pEdCtrl;
-    pEdCtrl = NULL;
+    pEdCtrl = nullptr;
     pImp->Clear();
     nFocusWidth = -1;
 
@@ -2468,7 +2468,7 @@ void SvTreeListBox::ModelHasMoved( SvTreeListEntry* pSource )
 void SvTreeListBox::ModelIsRemoving( SvTreeListEntry* pEntry )
 {
     if(pEdEntry == pEntry)
-        pEdEntry = NULL;
+        pEdEntry = nullptr;
 
     pImp->RemovingEntry( pEntry );
 }
@@ -2476,7 +2476,7 @@ void SvTreeListBox::ModelIsRemoving( SvTreeListEntry* pEntry )
 void SvTreeListBox::ModelHasRemoved( SvTreeListEntry* pEntry  )
 {
     if ( pEntry == pHdlEntry)
-        pHdlEntry = NULL;
+        pHdlEntry = nullptr;
     pImp->EntryRemoved();
 }
 
@@ -2681,7 +2681,7 @@ void SvTreeListBox::ImplEditEntry( SvTreeListEntry* pEntry )
         long nClickX = pImp->aEditClickPos.X();
         bool bIsMouseTriggered = nClickX >= 0;
 
-        SvLBoxString* pItem = NULL;
+        SvLBoxString* pItem = nullptr;
         sal_uInt16 nCount = pEntry->ItemCount();
         long nTabPos, nNextTabPos = 0;
         for( sal_uInt16 i = 0 ; i < nCount ; i++ )
@@ -2771,7 +2771,7 @@ SvTreeListEntry* SvTreeListBox::GetDropTarget( const Point& rPos )
         return LastVisible();
     else if( (GetDragDropMode() & DragDropMode::ENABLE_TOP) &&
              pTarget == First() && rPos.Y() < 6 )
-        return 0;
+        return nullptr;
 
     return pTarget;
 }
@@ -2784,14 +2784,14 @@ SvTreeListEntry* SvTreeListBox::GetEntry( const Point& rPos, bool bHit ) const
     {
         long nLine = pImp->GetEntryLine( pEntry );
         if( !(pImp->EntryReallyHit( pEntry, rPos, nLine)) )
-            return 0;
+            return nullptr;
     }
     return pEntry;
 }
 
 SvTreeListEntry* SvTreeListBox::GetCurEntry() const
 {
-    return pImp ? pImp->GetCurEntry() : NULL;
+    return pImp ? pImp->GetCurEntry() : nullptr;
 }
 
 void SvTreeListBox::ImplInitStyle()
@@ -2884,8 +2884,8 @@ long SvTreeListBox::PaintEntry1(SvTreeListEntry& rEntry, long nLine, vcl::Render
     {
         SvLBoxTab* pTab = aTabs[nCurTab];
         sal_uInt16 nNextTab = nCurTab + 1;
-        SvLBoxTab* pNextTab = nNextTab < nTabCount ? aTabs[nNextTab] : 0;
-        SvLBoxItem* pItem = nCurItem < nItemCount ? &rEntry.GetItem(nCurItem) : 0;
+        SvLBoxTab* pNextTab = nNextTab < nTabCount ? aTabs[nNextTab] : nullptr;
+        SvLBoxItem* pItem = nCurItem < nItemCount ? &rEntry.GetItem(nCurItem) : nullptr;
 
         SvLBoxTabFlags nFlags = pTab->nFlags;
         Size aSize(SvLBoxItem::GetSize(pViewDataEntry, nCurItem));
@@ -3070,7 +3070,7 @@ long SvTreeListBox::PaintEntry1(SvTreeListEntry& rEntry, long nLine, vcl::Render
         do
         {
             nNextTab++;
-            pNextTab = nNextTab < nTabCount ? aTabs[nNextTab] : 0;
+            pNextTab = nNextTab < nTabCount ? aTabs[nNextTab] : nullptr;
         } while (pNextTab && pNextTab->IsDynamic());
 
         if (!pNextTab || (GetTabPos( &rEntry, pNextTab ) > nDynTabPos))
@@ -3080,7 +3080,7 @@ long SvTreeListBox::PaintEntry1(SvTreeListEntry& rEntry, long nLine, vcl::Render
                 Point aPos(GetTabPos(&rEntry, pFirstDynamicTab), nLine);
                 aPos.X() += pImp->nNodeBmpTabDistance;
 
-                const Image* pImg = 0;
+                const Image* pImg = nullptr;
 
                 if (IsExpanded(&rEntry))
                     pImg = &pImp->GetExpandedNodeBmp();
@@ -3204,7 +3204,7 @@ Rectangle SvTreeListBox::GetFocusRect( SvTreeListEntry* pEntry, long nLine )
         // if SelTab != 0, we have to calculate also
         if( nFocusWidth == -1 || nFirstSelTab )
         {
-            SvLBoxTab* pLastTab = NULL; // default to select whole width
+            SvLBoxTab* pLastTab = nullptr; // default to select whole width
 
             sal_uInt16 nLastTab;
             GetLastTab(SvLBoxTabFlags::SHOW_SELECTION,nLastTab);
@@ -3262,7 +3262,7 @@ sal_IntPtr SvTreeListBox::GetTabPos( SvTreeListEntry* pEntry, SvLBoxTab* pTab)
 SvLBoxItem* SvTreeListBox::GetItem_Impl( SvTreeListEntry* pEntry, long nX,
     SvLBoxTab** ppTab, sal_uInt16 nEmptyWidth )
 {
-    SvLBoxItem* pItemClicked = 0;
+    SvLBoxItem* pItemClicked = nullptr;
     sal_uInt16 nTabCount = aTabs.size();
     sal_uInt16 nItemCount = pEntry->ItemCount();
     SvLBoxTab* pTab = aTabs.front();
@@ -3274,7 +3274,7 @@ SvLBoxItem* SvTreeListBox::GetItem_Impl( SvTreeListEntry* pEntry, long nX,
 
     while( true )
     {
-        SvLBoxTab* pNextTab=nNextItem<nTabCount ? aTabs[nNextItem] : 0;
+        SvLBoxTab* pNextTab=nNextItem<nTabCount ? aTabs[nNextItem] : nullptr;
         long nStart = GetTabPos( pEntry, pTab );
 
         long nNextTabPos;
@@ -3443,7 +3443,7 @@ SvLBoxTab* SvTreeListBox::GetFirstDynamicTab( sal_uInt16& rPos ) const
         }
         nCurTab++;
     }
-    return 0;
+    return nullptr;
 }
 
 SvLBoxTab* SvTreeListBox::GetFirstDynamicTab() const
@@ -3562,7 +3562,7 @@ SvLBoxTab* SvTreeListBox::GetFirstTab( SvLBoxTabFlags nFlagMask, sal_uInt16& rPo
         }
     }
     rPos = 0xffff;
-    return 0;
+    return nullptr;
 }
 
 SvLBoxTab* SvTreeListBox::GetLastTab( SvLBoxTabFlags nFlagMask, sal_uInt16& rTabPos )
@@ -3579,7 +3579,7 @@ SvLBoxTab* SvTreeListBox::GetLastTab( SvLBoxTabFlags nFlagMask, sal_uInt16& rTab
         }
     }
     rTabPos = 0xffff;
-    return 0;
+    return nullptr;
 }
 
 void SvTreeListBox::RequestHelp( const HelpEvent& rHEvt )
@@ -3688,7 +3688,7 @@ SvTreeListEntry* SvTreeListBox::GetNextEntryInView(SvTreeListEntry* pEntry ) con
         Point aPos( GetEntryPosition(pNext) );
         const Size& rSize = pImp->GetOutputSize();
         if( aPos.Y() < 0 || aPos.Y() >= rSize.Height() )
-            return 0;
+            return nullptr;
     }
     return pNext;
 }
@@ -3696,7 +3696,7 @@ SvTreeListEntry* SvTreeListBox::GetNextEntryInView(SvTreeListEntry* pEntry ) con
 SvTreeListEntry* SvTreeListBox::GetLastEntryInView() const
 {
     SvTreeListEntry* pEntry = GetFirstEntryInView();
-    SvTreeListEntry* pNext = 0;
+    SvTreeListEntry* pNext = nullptr;
     while( pEntry )
     {
         pNext = NextVisible( pEntry );
@@ -3811,7 +3811,7 @@ void SvTreeListBox::InitStartEntry()
 
 std::unique_ptr<PopupMenu> SvTreeListBox::CreateContextMenu()
 {
-    return NULL;
+    return nullptr;
 }
 
 void SvTreeListBox::ExcecuteContextMenuAction( sal_uInt16 )

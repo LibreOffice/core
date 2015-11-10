@@ -97,7 +97,7 @@ public:
 
 // initialization of static members --------------------------------------
 
-SvtAccessibilityOptions_Impl* SvtAccessibilityOptions::sm_pSingleImplConfig =NULL;
+SvtAccessibilityOptions_Impl* SvtAccessibilityOptions::sm_pSingleImplConfig =nullptr;
 sal_Int32                     SvtAccessibilityOptions::sm_nAccessibilityRefCount(0);
 
 namespace

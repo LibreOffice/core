@@ -225,18 +225,18 @@ static const PopupMenu* lcl_FindPopupFromItemId( const PopupMenu* pPopupMenu, sa
                 return pPopupMenu;
             else
             {
-                const PopupMenu* pResult( 0 );
+                const PopupMenu* pResult( nullptr );
 
                 const PopupMenu* pSubPopup = pPopupMenu->GetPopupMenu( i );
                 if ( pPopupMenu )
                     pResult = lcl_FindPopupFromItemId( pSubPopup, nItemId );
-                if ( pResult != 0 )
+                if ( pResult != nullptr )
                     return pResult;
             }
         }
     }
 
-    return NULL;
+    return nullptr;
 }
 
 static OUString lcl_GetItemCommandRecursive( const PopupMenu* pPopupMenu, sal_uInt16 nItemId )
@@ -367,7 +367,7 @@ ContextMenuHelper::dispatchCommand(
         pExecuteInfo->aTargetURL   = aTargetURL;
         pExecuteInfo->aArgs        = m_aDefaultArgs;
 
-        Application::PostUserEvent( LINK(0, ContextMenuHelper , ExecuteHdl_Impl), pExecuteInfo );
+        Application::PostUserEvent( LINK(nullptr, ContextMenuHelper , ExecuteHdl_Impl), pExecuteInfo );
         return true;
     }
 

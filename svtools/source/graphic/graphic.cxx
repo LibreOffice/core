@@ -34,7 +34,7 @@ using namespace com::sun::star;
 namespace unographic {
 
 Graphic::Graphic() :
-    mpGraphic( NULL )
+    mpGraphic( nullptr )
 {
 }
 
@@ -237,7 +237,7 @@ const ::Graphic* Graphic::getImplementation( const uno::Reference< uno::XInterfa
     throw()
 {
     uno::Reference< lang::XUnoTunnel > xTunnel( rxIFace, uno::UNO_QUERY );
-    return( xTunnel.is() ? reinterpret_cast< ::Graphic* >( xTunnel->getSomething( ::Graphic::getUnoTunnelId() ) ) : NULL );
+    return( xTunnel.is() ? reinterpret_cast< ::Graphic* >( xTunnel->getSomething( ::Graphic::getUnoTunnelId() ) ) : nullptr );
 }
 
 

@@ -362,7 +362,7 @@ void SvtMenuOptions_Impl::RemoveListenerLink( const Link<LinkParamNone*,void>& r
 //  DON'T DO IT IN YOUR HEADER!
 //  see definition for further information
 
-SvtMenuOptions_Impl*    SvtMenuOptions::m_pDataContainer    = NULL  ;
+SvtMenuOptions_Impl*    SvtMenuOptions::m_pDataContainer    = nullptr  ;
 sal_Int32               SvtMenuOptions::m_nRefCount         = 0     ;
 
 
@@ -375,7 +375,7 @@ SvtMenuOptions::SvtMenuOptions()
     // Increase our refcount ...
     ++m_nRefCount;
     // ... and initialize our data container only if it not already!
-    if( m_pDataContainer == NULL )
+    if( m_pDataContainer == nullptr )
     {
         m_pDataContainer = new SvtMenuOptions_Impl();
 
@@ -397,7 +397,7 @@ SvtMenuOptions::~SvtMenuOptions()
     if( m_nRefCount <= 0 )
     {
         delete m_pDataContainer;
-        m_pDataContainer = NULL;
+        m_pDataContainer = nullptr;
     }
 }
 
@@ -434,15 +434,15 @@ void SvtMenuOptions::SetMenuIconsState(TriState eState)
 Mutex& SvtMenuOptions::GetOwnStaticMutex()
 {
     // Initialize static mutex only for one time!
-    static Mutex* pMutex = NULL;
+    static Mutex* pMutex = nullptr;
     // If these method first called (Mutex not already exist!) ...
-    if( pMutex == NULL )
+    if( pMutex == nullptr )
     {
         // ... we must create a new one. Protect follow code with the global mutex -
         // It must be - we create a static variable!
         MutexGuard aGuard( Mutex::getGlobalMutex() );
         // We must check our pointer again - because it can be that another instance of our class will be faster than these!
-        if( pMutex == NULL )
+        if( pMutex == nullptr )
         {
             // Create the new mutex and set it for return on static variable.
             static Mutex aMutex;

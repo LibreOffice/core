@@ -268,7 +268,7 @@ namespace svt { namespace table
         // draw sort indicator if the model data is sorted by the given column
         ITableDataSort const * pSortAdapter = m_pImpl->rModel.getSortAdapter();
         ColumnSort aCurrentSortOrder;
-        if ( pSortAdapter != NULL )
+        if ( pSortAdapter != nullptr )
             aCurrentSortOrder = pSortAdapter->getCurrentSortOrder();
         if ( aCurrentSortOrder.nColumnPos == _nCol )
         {
