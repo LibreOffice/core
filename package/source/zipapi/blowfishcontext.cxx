@@ -53,7 +53,7 @@ BlowfishCFB8CipherContext::~BlowfishCFB8CipherContext()
     if ( m_pCipher )
     {
         rtl_cipher_destroy ( m_pCipher );
-        m_pCipher = NULL;
+        m_pCipher = nullptr;
     }
 }
 
@@ -100,7 +100,7 @@ uno::Sequence< ::sal_Int8 > SAL_CALL BlowfishCFB8CipherContext::finalizeCipherCo
         throw lang::DisposedException();
 
     rtl_cipher_destroy ( m_pCipher );
-    m_pCipher = NULL;
+    m_pCipher = nullptr;
 
     return uno::Sequence< sal_Int8 >();
 }

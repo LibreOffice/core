@@ -197,7 +197,7 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > xHa
         ::comphelper::AttributeList *pAttrList = new ::comphelper::AttributeList;
         const beans::PropertyValue *pValue = pSequence[i].getConstArray();
         OUString aString;
-        const uno::Any *pVector = NULL, *pSalt = NULL, *pIterationCount = NULL, *pDigest = NULL, *pDigestAlg = NULL, *pEncryptAlg = NULL, *pStartKeyAlg = NULL, *pDerivedKeySize = NULL;
+        const uno::Any *pVector = nullptr, *pSalt = nullptr, *pIterationCount = nullptr, *pDigest = nullptr, *pDigestAlg = nullptr, *pEncryptAlg = nullptr, *pStartKeyAlg = nullptr, *pDerivedKeySize = nullptr;
         for (sal_uInt32 j = 0, nNum = pSequence[i].getLength(); j < nNum; j++, pValue++)
         {
             if (pValue->Name.equals (sMediaTypeProperty) )

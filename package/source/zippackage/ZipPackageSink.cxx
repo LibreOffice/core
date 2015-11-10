@@ -20,7 +20,7 @@
 #include <ZipPackageSink.hxx>
 
 ZipPackageSink::ZipPackageSink()
-: xStream ( css::uno::Reference < css::io::XInputStream > (NULL))
+: xStream ( css::uno::Reference < css::io::XInputStream > (nullptr))
 {
 }
 ZipPackageSink::~ZipPackageSink()

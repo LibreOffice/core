@@ -67,7 +67,7 @@ SwitchablePersistenceStream::SwitchablePersistenceStream(
         const uno::Reference< uno::XComponentContext >& xContext,
         const uno::Reference< io::XStream >& xStream )
 : m_xContext( xContext )
-, m_pStreamData( NULL )
+, m_pStreamData( nullptr )
 {
     SwitchPersistenceTo( xStream );
 }
@@ -76,7 +76,7 @@ SwitchablePersistenceStream::SwitchablePersistenceStream(
         const uno::Reference< uno::XComponentContext >& xContext,
         const uno::Reference< io::XInputStream >& xInputStream )
 : m_xContext( xContext )
-, m_pStreamData( NULL )
+, m_pStreamData( nullptr )
 {
     SwitchPersistenceTo( xInputStream );
 }
@@ -203,7 +203,7 @@ void SwitchablePersistenceStream::CloseAll_Impl()
     if ( m_pStreamData )
     {
         delete m_pStreamData;
-        m_pStreamData = NULL;
+        m_pStreamData = nullptr;
     }
 }
 

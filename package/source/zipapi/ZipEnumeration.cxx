@@ -39,7 +39,7 @@ const ZipEntry* SAL_CALL ZipEnumeration::nextElement()
     if (aIterator != rEntryHash.end())
         return &((*aIterator++).second);
     else
-        return NULL;
+        return nullptr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -35,7 +35,7 @@ OInputCompStream::OInputCompStream( OWriteStream_Impl& aImpl,
 : m_pImpl( &aImpl )
 , m_rMutexRef( m_pImpl->m_rMutexRef )
 , m_xStream( xStream )
-, m_pInterfaceContainer( NULL )
+, m_pInterfaceContainer( nullptr )
 , m_aProperties( aProps )
 , m_bDisposed( false )
 , m_nStorageType( nStorageType )
@@ -50,10 +50,10 @@ OInputCompStream::OInputCompStream( OWriteStream_Impl& aImpl,
 OInputCompStream::OInputCompStream( uno::Reference < io::XInputStream > xStream,
                                     const uno::Sequence< beans::PropertyValue >& aProps,
                                     sal_Int32 nStorageType )
-: m_pImpl( NULL )
+: m_pImpl( nullptr )
 , m_rMutexRef( new SotMutexHolder )
 , m_xStream( xStream )
-, m_pInterfaceContainer( NULL )
+, m_pInterfaceContainer( nullptr )
 , m_aProperties( aProps )
 , m_bDisposed( false )
 , m_nStorageType( nStorageType )
@@ -228,7 +228,7 @@ void OInputCompStream::InternalDispose()
     catch( uno::Exception& )
     {}
 
-    m_pImpl = NULL;
+    m_pImpl = nullptr;
     m_bDisposed = true;
 }
 
@@ -253,7 +253,7 @@ void SAL_CALL OInputCompStream::dispose(  )
     if ( m_pImpl )
     {
         m_pImpl->InputStreamDisposed( this );
-        m_pImpl = NULL;
+        m_pImpl = nullptr;
     }
 
     m_bDisposed = true;

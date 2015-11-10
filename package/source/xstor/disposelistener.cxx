@@ -32,7 +32,7 @@ OChildDispListener_Impl::~OChildDispListener_Impl()
 void OChildDispListener_Impl::OwnerIsDisposed()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    m_pStorage = NULL;
+    m_pStorage = nullptr;
 }
 
 void SAL_CALL OChildDispListener_Impl::disposing( const lang::EventObject& Source )

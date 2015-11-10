@@ -53,13 +53,13 @@ OInputSeekStream::~OInputSeekStream()
 uno::Sequence< uno::Type > SAL_CALL OInputSeekStream::getTypes()
         throw ( uno::RuntimeException, std::exception )
 {
-    static ::cppu::OTypeCollection* pTypeCollection = NULL ;
+    static ::cppu::OTypeCollection* pTypeCollection = nullptr ;
 
-    if ( pTypeCollection == NULL )
+    if ( pTypeCollection == nullptr )
     {
         ::osl::MutexGuard aGuard( m_rMutexRef->GetMutex() ) ;
 
-        if ( pTypeCollection == NULL )
+        if ( pTypeCollection == nullptr )
         {
             static ::cppu::OTypeCollection aTypeCollection(
                     cppu::UnoType<io::XSeekable>::get(),

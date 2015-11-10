@@ -263,7 +263,7 @@ OWriteStream_Impl::OWriteStream_Impl( OStorage_Impl* pParent,
                                       sal_Int32 nStorageType,
                                       bool bDefaultCompress,
                                       const uno::Reference< io::XInputStream >& xRelInfoStream )
-: m_pAntiImpl( NULL )
+: m_pAntiImpl( nullptr )
 , m_bHasDataToFlush( false )
 , m_bFlushed( false )
 , m_xPackageStream( xPackageStream )
@@ -491,9 +491,9 @@ void OWriteStream_Impl::DisposeWrappers()
             AddLog( "Quiet exception" );
         }
 
-        m_pAntiImpl = NULL;
+        m_pAntiImpl = nullptr;
     }
-    m_pParent = NULL;
+    m_pParent = nullptr;
 
     if ( !m_aInputStreamsList.empty() )
     {
@@ -503,7 +503,7 @@ void OWriteStream_Impl::DisposeWrappers()
             if ( (*pStreamIter) )
             {
                 (*pStreamIter)->InternalDispose();
-                (*pStreamIter) = NULL;
+                (*pStreamIter) = nullptr;
             }
         }
 
@@ -2459,7 +2459,7 @@ void SAL_CALL OWriteStream::dispose()
 
         m_xSeekable.clear();
 
-        m_pImpl->m_pAntiImpl = NULL;
+        m_pImpl->m_pAntiImpl = nullptr;
 
         if ( !m_bInitOnDemand )
         {
@@ -2487,7 +2487,7 @@ void SAL_CALL OWriteStream::dispose()
             }
         }
 
-        m_pImpl = NULL;
+        m_pImpl = nullptr;
     }
 
     // the listener might try to get rid of parent storage, and the storage would delete this object;

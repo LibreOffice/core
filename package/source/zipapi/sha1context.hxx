@@ -30,7 +30,7 @@ class SHA1DigestContext : public cppu::WeakImplHelper< css::xml::crypto::XDigest
     void* m_pDigest;
 
     SHA1DigestContext()
-    : m_pDigest( NULL )
+    : m_pDigest( nullptr )
     {}
 
 public:

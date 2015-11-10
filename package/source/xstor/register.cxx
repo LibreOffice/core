@@ -30,7 +30,7 @@ extern "C" {
 
 SAL_DLLPUBLIC_EXPORT void * SAL_CALL xstor_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * /*pRegistryKey*/ )
 {
-    void * pRet = 0;
+    void * pRet = nullptr;
 
     OUString aImplName( OUString::createFromAscii( pImplName ) );
     uno::Reference< lang::XSingleServiceFactory > xFactory;

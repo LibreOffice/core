@@ -31,7 +31,7 @@ class BlowfishCFB8CipherContext : public cppu::WeakImplHelper< css::xml::crypto:
     bool m_bEncrypt;
 
     BlowfishCFB8CipherContext()
-    : m_pCipher( NULL )
+    : m_pCipher( nullptr )
     , m_bEncrypt( false )
     {}
 

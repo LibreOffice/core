@@ -33,7 +33,7 @@ Inflater::Inflater(bool bNoWrap)
   nOffset(0),
   nLength(0),
   nLastInflateError(0),
-  pStream(NULL)
+  pStream(nullptr)
 {
     pStream = new z_stream;
     /* memset to 0 to set zalloc/opaque etc */
@@ -80,7 +80,7 @@ sal_Int32 SAL_CALL Inflater::doInflateSegment( Sequence< sal_Int8 >& rBuffer, sa
 
 void SAL_CALL Inflater::end(  )
 {
-    if (pStream != NULL)
+    if (pStream != nullptr)
     {
 #if !defined Z_PREFIX
         inflateEnd(pStream);
@@ -89,7 +89,7 @@ void SAL_CALL Inflater::end(  )
 #endif
         delete pStream;
     }
-    pStream = NULL;
+    pStream = nullptr;
 }
 
 sal_Int32 Inflater::doInflateBytes (Sequence < sal_Int8 >  &rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength)

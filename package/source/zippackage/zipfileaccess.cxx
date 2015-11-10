@@ -44,8 +44,8 @@ using namespace ::com::sun::star;
 OZipFileAccess::OZipFileAccess( const uno::Reference< uno::XComponentContext >& rxContext )
 : m_aMutexHolder( new SotMutexHolder )
 , m_xContext( rxContext )
-, m_pZipFile( NULL )
-, m_pListenersContainer( NULL )
+, m_pZipFile( nullptr )
+, m_pListenersContainer( nullptr )
 , m_bDisposed( false )
 , m_bOwnContent( false )
 {
@@ -404,13 +404,13 @@ void SAL_CALL OZipFileAccess::dispose()
            lang::EventObject aSource( static_cast< ::cppu::OWeakObject* >(this) );
         m_pListenersContainer->disposeAndClear( aSource );
         delete m_pListenersContainer;
-        m_pListenersContainer = NULL;
+        m_pListenersContainer = nullptr;
     }
 
     if ( m_pZipFile )
     {
         delete m_pZipFile;
-        m_pZipFile = NULL;
+        m_pZipFile = nullptr;
     }
 
     if ( m_xContentStream.is() && m_bOwnContent )

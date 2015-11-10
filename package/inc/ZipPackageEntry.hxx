@@ -74,7 +74,7 @@ public:
     void clearParent()
     {
         // xParent.clear();
-        mpParent = NULL;
+        mpParent = nullptr;
     }
     // XNamed
     virtual OUString SAL_CALL getName(  )

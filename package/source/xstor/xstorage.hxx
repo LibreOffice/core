@@ -136,7 +136,7 @@ struct OStorage_Impl
     oslInterlockedCount         m_nModifiedListenerCount;
     bool                        HasModifiedListener()
     {
-        return m_nModifiedListenerCount > 0 && m_pAntiImpl != NULL;
+        return m_nModifiedListenerCount > 0 && m_pAntiImpl != nullptr;
     }
 
     SotElementList_Impl                         m_aChildrenList;

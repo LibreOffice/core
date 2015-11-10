@@ -138,7 +138,7 @@ uno::Reference< embed::XExtendedStorageStream > OHierarchyElement_Impl::GetStrea
             if ( !xChildStorage.is() )
                 throw uno::RuntimeException();
 
-            aElement = new OHierarchyElement_Impl( NULL, xChildStorage );
+            aElement = new OHierarchyElement_Impl( nullptr, xChildStorage );
         }
 
         xResult = aElement->GetStreamHierarchically( nStorageMode, aListPath, nStreamMode, aEncryptionData );
@@ -195,7 +195,7 @@ void OHierarchyElement_Impl::RemoveStreamHierarchically( OStringList_Impl& aList
             if ( !xChildStorage.is() )
                 throw uno::RuntimeException();
 
-            aElement = new OHierarchyElement_Impl( NULL, xChildStorage );
+            aElement = new OHierarchyElement_Impl( nullptr, xChildStorage );
         }
 
         aElement->RemoveStreamHierarchically( aListPath );

@@ -71,7 +71,7 @@ public:
     {}
 
     explicit OHierarchyElement_Impl( const css::uno::WeakReference< css::embed::XStorage >& xWeakStorage )
-    : m_rParent( NULL )
+    : m_rParent( nullptr )
     , m_xWeakOwnStorage( xWeakStorage )
     {}
 

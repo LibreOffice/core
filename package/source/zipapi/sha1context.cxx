@@ -40,7 +40,7 @@ SHA1DigestContext::~SHA1DigestContext()
     if ( m_pDigest )
     {
         rtl_digest_destroySHA1( m_pDigest );
-        m_pDigest = NULL;
+        m_pDigest = nullptr;
     }
 }
 
@@ -54,7 +54,7 @@ void SAL_CALL SHA1DigestContext::updateDigest( const uno::Sequence< ::sal_Int8 >
     if ( rtl_Digest_E_None != rtl_digest_updateSHA1( m_pDigest, aData.getConstArray(), aData.getLength() ) )
     {
         rtl_digest_destroySHA1( m_pDigest );
-        m_pDigest = NULL;
+        m_pDigest = nullptr;
 
         throw uno::RuntimeException();
     }
@@ -71,13 +71,13 @@ uno::Sequence< ::sal_Int8 > SAL_CALL SHA1DigestContext::finalizeDigestAndDispose
     if ( rtl_Digest_E_None != rtl_digest_getSHA1( m_pDigest, reinterpret_cast< sal_uInt8* >( aResult.getArray() ), aResult.getLength() ) )
     {
         rtl_digest_destroySHA1( m_pDigest );
-        m_pDigest = NULL;
+        m_pDigest = nullptr;
 
         throw uno::RuntimeException();
     }
 
     rtl_digest_destroySHA1( m_pDigest );
-    m_pDigest = NULL;
+    m_pDigest = nullptr;
 
     return aResult;
 }

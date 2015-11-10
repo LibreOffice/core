@@ -43,7 +43,7 @@ using namespace com::sun::star::packages::zip::ZipConstants;
 ZipOutputStream::ZipOutputStream( const uno::Reference < io::XOutputStream > &xOStream )
 : m_xStream(xOStream)
 , m_aChucker(xOStream)
-, m_pCurrentEntry(NULL)
+, m_pCurrentEntry(nullptr)
 , m_rSharedThreadPool(comphelper::ThreadPool::getSharedOptimalPool())
 {
 }
@@ -90,7 +90,7 @@ void ZipOutputStream::rawCloseEntry( bool bEncrypt )
     if (bEncrypt)
         m_pCurrentEntry->nMethod = STORED;
 
-    m_pCurrentEntry = NULL;
+    m_pCurrentEntry = nullptr;
 }
 
 void ZipOutputStream::finish()

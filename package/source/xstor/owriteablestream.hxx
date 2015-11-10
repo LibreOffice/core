@@ -161,7 +161,7 @@ public:
     bool HasTempFile_Impl() const { return ( m_aTempURL.getLength() != 0 ); }
     bool IsTransacted();
 
-    bool HasWriteOwner_Impl() const { return ( m_pAntiImpl != NULL ); }
+    bool HasWriteOwner_Impl() const { return ( m_pAntiImpl != nullptr ); }
 
     void InsertIntoPackageFolder(
             const OUString& aName,

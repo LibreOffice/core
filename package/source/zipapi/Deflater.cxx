@@ -134,7 +134,7 @@ void SAL_CALL Deflater::reset(  )
 }
 void SAL_CALL Deflater::end(  )
 {
-    if (pStream != NULL)
+    if (pStream != nullptr)
     {
 #if !defined Z_PREFIX
         deflateEnd(pStream);
@@ -143,7 +143,7 @@ void SAL_CALL Deflater::end(  )
 #endif
         delete pStream;
     }
-    pStream = NULL;
+    pStream = nullptr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

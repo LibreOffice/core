@@ -155,8 +155,8 @@ ZipPackage::ZipPackage ( const uno::Reference < XComponentContext > &xContext )
 , m_bAllowRemoveOnInsert( true )
 , m_eMode ( e_IMode_None )
 , m_xContext( xContext )
-, m_pRootFolder( NULL )
-, m_pZipFile( NULL )
+, m_pRootFolder( nullptr )
+, m_pZipFile( nullptr )
 {
     m_xRootFolder = m_pRootFolder = new ZipPackageFolder( m_xContext, m_nFormat, m_bAllowRemoveOnInsert );
 }
@@ -217,14 +217,14 @@ void ZipPackage::parseManifest()
                         uno::Sequence < uno::Sequence < PropertyValue > > aManifestSequence = xReader->readManifestSequence ( xSink->getInputStream() );
                         sal_Int32 nLength = aManifestSequence.getLength();
                         const uno::Sequence < PropertyValue > *pSequence = aManifestSequence.getConstArray();
-                        ZipPackageStream *pStream = NULL;
-                        ZipPackageFolder *pFolder = NULL;
+                        ZipPackageStream *pStream = nullptr;
+                        ZipPackageFolder *pFolder = nullptr;
 
                         for ( sal_Int32 i = 0; i < nLength ; i++, pSequence++ )
                         {
                             OUString sPath, sMediaType, sVersion;
                             const PropertyValue *pValue = pSequence->getConstArray();
-                            const Any *pSalt = NULL, *pVector = NULL, *pCount = NULL, *pSize = NULL, *pDigest = NULL, *pDigestAlg = NULL, *pEncryptionAlg = NULL, *pStartKeyAlg = NULL, *pDerivedKeySize = NULL;
+                            const Any *pSalt = nullptr, *pVector = nullptr, *pCount = nullptr, *pSize = nullptr, *pDigest = nullptr, *pDigestAlg = nullptr, *pEncryptionAlg = nullptr, *pStartKeyAlg = nullptr, *pDerivedKeySize = nullptr;
                             for ( sal_Int32 j = 0, nNum = pSequence->getLength(); j < nNum; j++ )
                             {
                                 if ( pValue[j].Name.equals( sPropFullPath ) )
@@ -755,14 +755,14 @@ void SAL_CALL ZipPackage::initialize( const uno::Sequence< Any >& aArguments )
             }
             catch ( Exception & )
             {
-                if( m_pZipFile ) { delete m_pZipFile; m_pZipFile = NULL; }
+                if( m_pZipFile ) { delete m_pZipFile; m_pZipFile = nullptr; }
                 throw;
             }
 
             if ( bBadZipFile )
             {
                 // clean up the memory, and tell the UCB about the error
-                if( m_pZipFile ) { delete m_pZipFile; m_pZipFile = NULL; }
+                if( m_pZipFile ) { delete m_pZipFile; m_pZipFile = nullptr; }
 
                 throw css::packages::zip::ZipIOException (
                     THROW_WHERE "Bad Zip File, " + message,
@@ -817,7 +817,7 @@ Any SAL_CALL ZipPackage::getByHierarchicalName( const OUString& aName )
         }
         nOldIndex = 0;
         ZipPackageFolder * pCurrent = m_pRootFolder;
-        ZipPackageFolder * pPrevious = NULL;
+        ZipPackageFolder * pPrevious = nullptr;
         while ( ( nIndex = aName.indexOf( '/', nOldIndex )) != -1 )
         {
             sTemp = aName.copy ( nOldIndex, nIndex - nOldIndex );
@@ -898,7 +898,7 @@ sal_Bool SAL_CALL ZipPackage::hasByHierarchicalName( const OUString& aName )
                 return sal_True;
         }
         ZipPackageFolder * pCurrent = m_pRootFolder;
-        ZipPackageFolder * pPrevious = NULL;
+        ZipPackageFolder * pPrevious = nullptr;
         nOldIndex = 0;
         while ( ( nIndex = aName.indexOf( '/', nOldIndex )) != -1 )
         {
@@ -939,7 +939,7 @@ sal_Bool SAL_CALL ZipPackage::hasByHierarchicalName( const OUString& aName )
         uno::Any e(::cppu::getCaughtException());
         throw lang::WrappedTargetRuntimeException(
             OUString("ZipPackage::hasByHierarchicalName"),
-            0, e);
+            nullptr, e);
     }
     return sal_False;
 }
@@ -1034,7 +1034,7 @@ void ZipPackage::WriteManifest( ZipOutputStream& aZipOut, const vector< uno::Seq
     // the manifest.xml is never encrypted - so pass an empty reference
     ZipOutputStream::setEntry(pEntry);
     aZipOut.writeLOC(pEntry);
-    ZipOutputEntry aZipEntry(aZipOut.getStream(), m_xContext, *pEntry, NULL);
+    ZipOutputEntry aZipEntry(aZipOut.getStream(), m_xContext, *pEntry, nullptr);
     aZipEntry.write(pBuffer->getSequence());
     aZipEntry.closeEntry();
     aZipOut.rawCloseEntry();
@@ -1087,7 +1087,7 @@ void ZipPackage::WriteContentTypes( ZipOutputStream& aZipOut, const vector< uno:
     // there is no encryption in this format currently
     ZipOutputStream::setEntry(pEntry);
     aZipOut.writeLOC(pEntry);
-    ZipOutputEntry aZipEntry(aZipOut.getStream(), m_xContext, *pEntry, NULL);
+    ZipOutputEntry aZipEntry(aZipOut.getStream(), m_xContext, *pEntry, nullptr);
     aZipEntry.write(pBuffer->getSequence());
     aZipEntry.closeEntry();
     aZipOut.rawCloseEntry();
