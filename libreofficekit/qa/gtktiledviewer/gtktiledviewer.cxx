@@ -828,8 +828,10 @@ static void changePart( GtkWidget* pSelector, gpointer /* pItem */ )
     TiledWindow& rWindow = lcl_getTiledWindow(pSelector);
 
     if (rWindow.m_bPartSelectorBroadcast && rWindow.m_pDocView)
+    {
         lok_doc_view_set_part( LOK_DOC_VIEW(rWindow.m_pDocView), nPart );
-    lok_doc_view_reset_view(LOK_DOC_VIEW(rWindow.m_pDocView));
+        lok_doc_view_reset_view(LOK_DOC_VIEW(rWindow.m_pDocView));
+    }
 }
 
 static void removeChildrenFromStatusbar(GtkWidget* children, gpointer pData)
