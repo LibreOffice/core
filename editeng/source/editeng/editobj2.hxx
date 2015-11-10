@@ -31,6 +31,7 @@
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <boost/noncopyable.hpp>
 #include <memory>
+#include <vector>
 
 namespace editeng {
 
@@ -98,7 +99,7 @@ struct XParaPortion
 
 class XParaPortionList
 {
-    typedef boost::ptr_vector<XParaPortion> ListType;
+    typedef std::vector<std::unique_ptr<XParaPortion> > ListType;
     ListType maList;
 
     sal_uIntPtr nRefDevPtr;

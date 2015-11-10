@@ -105,12 +105,12 @@ XParaPortionList::XParaPortionList(
 
 void XParaPortionList::push_back(XParaPortion* p)
 {
-    maList.push_back(p);
+    maList.push_back(std::unique_ptr<XParaPortion>(p));
 }
 
 const XParaPortion& XParaPortionList::operator [](size_t i) const
 {
-    return maList[i];
+    return *maList[i].get();
 }
 
 ContentInfo::ContentInfo( SfxItemPool& rPool ) :
