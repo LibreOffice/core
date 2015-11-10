@@ -35,7 +35,7 @@ extern "C"
 SAL_DLLPUBLIC_EXPORT void * SAL_CALL MacOSXSpell_component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
 {
-    void * pRet = NULL;
+    void * pRet = nullptr;
     pRet = MacSpellChecker_getFactory(
         pImplName,
         static_cast< XMultiServiceFactory * >( pServiceManager ),

@@ -52,11 +52,11 @@ using ::rtl::OUStringToOString;
 MacSpellChecker::MacSpellChecker() :
     aEvtListeners( GetLinguMutex() )
 {
-    aDEncs = NULL;
-    aDLocs = NULL;
-    aDNames = NULL;
+    aDEncs = nullptr;
+    aDLocs = nullptr;
+    aDNames = nullptr;
     bDisposing = false;
-    pPropHelper = NULL;
+    pPropHelper = nullptr;
     numdict = 0;
     NSApplicationLoad();
     NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
@@ -70,11 +70,11 @@ MacSpellChecker::~MacSpellChecker()
 {
   numdict = 0;
   if (aDEncs) delete[] aDEncs;
-  aDEncs = NULL;
+  aDEncs = nullptr;
   if (aDLocs) delete[] aDLocs;
-  aDLocs = NULL;
+  aDLocs = nullptr;
   if (aDNames) delete[] aDNames;
-  aDNames = NULL;
+  aDNames = nullptr;
   if (pPropHelper)
      pPropHelper->RemoveAsPropListener();
 }
@@ -176,9 +176,9 @@ Sequence< Locale > SAL_CALL MacSpellChecker::getLocales()
         } else {
             /* no dictionary.lst found so register no dictionaries */
             numdict = 0;
-                aDEncs  = NULL;
-                aDLocs = NULL;
-                aDNames = NULL;
+                aDEncs  = nullptr;
+                aDLocs = nullptr;
+                aDNames = nullptr;
                 aSuppLocales.realloc(0);
             }
         }
@@ -388,10 +388,10 @@ Reference< XSpellAlternatives > SAL_CALL
     MutexGuard  aGuard( GetLinguMutex() );
 
      if (rLocale == Locale()  ||  !rWord.getLength())
-        return NULL;
+        return nullptr;
 
     if (!hasLocale( rLocale ))
-        return NULL;
+        return nullptr;
 
     Reference< XSpellAlternatives > xAlt;
     if (!isValid( rWord, rLocale, rProperties ))
@@ -556,7 +556,7 @@ Sequence< OUString > MacSpellChecker::getSupportedServiceNames_Static()
 void * SAL_CALL MacSpellChecker_getFactory( const sal_Char * pImplName,
             XMultiServiceFactory * pServiceManager, void *  )
 {
-    void * pRet = 0;
+    void * pRet = nullptr;
     if ( MacSpellChecker::getImplementationName_Static().equalsAscii( pImplName ) )
     {
         Reference< XSingleServiceFactory > xFactory =
