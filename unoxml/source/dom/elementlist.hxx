@@ -66,7 +66,7 @@ namespace DOM
     public:
         CElementListImpl(::rtl::Reference<CElement> const& pElement,
                 ::osl::Mutex & rMutex,
-                OUString const& rName, OUString const*const pURI = 0);
+                OUString const& rName, OUString const*const pURI = nullptr);
 
         void registerListener(CElement & rElement);
 
@@ -96,7 +96,7 @@ namespace DOM
     public:
         CElementList(::rtl::Reference<CElement> const& pElement,
                 ::osl::Mutex & rMutex,
-                OUString const& rName, OUString const*const pURI = 0);
+                OUString const& rName, OUString const*const pURI = nullptr);
 
         /**
         The number of nodes in the list.

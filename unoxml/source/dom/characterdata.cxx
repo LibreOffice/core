@@ -65,7 +65,7 @@ namespace DOM
     {
         ::osl::ClearableMutexGuard guard(m_rMutex);
 
-        if (m_aNodePtr != NULL)
+        if (m_aNodePtr != nullptr)
         {
             OUString oldValue(reinterpret_cast<char*>(m_aNodePtr->content), strlen(reinterpret_cast<char*>(m_aNodePtr->content)), RTL_TEXTENCODING_UTF8);
             xmlNodeAddContent(m_aNodePtr, reinterpret_cast<const xmlChar*>(OUStringToOString(arg, RTL_TEXTENCODING_UTF8).getStr()));
@@ -84,7 +84,7 @@ namespace DOM
     {
         ::osl::ClearableMutexGuard guard(m_rMutex);
 
-        if (m_aNodePtr != NULL)
+        if (m_aNodePtr != nullptr)
         {
             // get current data
             std::shared_ptr<xmlChar const> const pContent(
@@ -119,10 +119,10 @@ namespace DOM
         ::osl::MutexGuard const g(m_rMutex);
 
         OUString aData;
-        if (m_aNodePtr != NULL)
+        if (m_aNodePtr != nullptr)
         {
             OSL_ENSURE(m_aNodePtr->content, "character data node with NULL content, please inform lars.oppermann@sun.com!");
-            if (m_aNodePtr->content != NULL)
+            if (m_aNodePtr->content != nullptr)
             {
                 aData = OUString(reinterpret_cast<char*>(m_aNodePtr->content), strlen(reinterpret_cast<char*>(m_aNodePtr->content)),  RTL_TEXTENCODING_UTF8);
             }
@@ -139,7 +139,7 @@ namespace DOM
         ::osl::MutexGuard const g(m_rMutex);
 
         sal_Int32 length = 0;
-        if (m_aNodePtr != NULL)
+        if (m_aNodePtr != nullptr)
         {
              OUString aData(reinterpret_cast<char*>(m_aNodePtr->content), strlen(reinterpret_cast<char*>(m_aNodePtr->content)),  RTL_TEXTENCODING_UTF8);
              length = aData.getLength();
@@ -155,7 +155,7 @@ namespace DOM
     {
         ::osl::ClearableMutexGuard guard(m_rMutex);
 
-        if (m_aNodePtr != NULL)
+        if (m_aNodePtr != nullptr)
         {
             // get current data
             std::shared_ptr<xmlChar const> const pContent(
@@ -190,7 +190,7 @@ namespace DOM
     {
         ::osl::ClearableMutexGuard guard(m_rMutex);
 
-        if (m_aNodePtr != NULL)
+        if (m_aNodePtr != nullptr)
         {
             // get current data
             std::shared_ptr<xmlChar const> const pContent(
@@ -225,7 +225,7 @@ namespace DOM
     {
         ::osl::ClearableMutexGuard guard(m_rMutex);
 
-        if (m_aNodePtr != NULL)
+        if (m_aNodePtr != nullptr)
         {
             OUString oldValue(reinterpret_cast<char*>(m_aNodePtr->content), strlen(reinterpret_cast<char*>(m_aNodePtr->content)), RTL_TEXTENCODING_UTF8);
             xmlNodeSetContent(m_aNodePtr, reinterpret_cast<const xmlChar*>(OUStringToOString(data, RTL_TEXTENCODING_UTF8).getStr()));
@@ -245,7 +245,7 @@ namespace DOM
         ::osl::MutexGuard const g(m_rMutex);
 
         OUString aStr;
-        if (m_aNodePtr != NULL)
+        if (m_aNodePtr != nullptr)
         {
             // get current data
             std::shared_ptr<xmlChar const> const pContent(

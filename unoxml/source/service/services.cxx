@@ -44,7 +44,7 @@ extern "C"
 
 SAL_DLLPUBLIC_EXPORT void* SAL_CALL unoxml_component_getFactory(const sal_Char *pImplementationName, void *pServiceManager, void * /*pRegistryKey*/)
 {
-    void* pReturn = NULL ;
+    void* pReturn = nullptr ;
     if  ( pImplementationName && pServiceManager )
     {
         // Define variables which are used in following macros.

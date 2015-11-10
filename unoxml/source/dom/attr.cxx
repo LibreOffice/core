@@ -47,7 +47,7 @@ namespace DOM
     xmlNsPtr CAttr::GetNamespace(xmlNodePtr const pNode)
     {
         if (!m_pNamespace.get()) {
-            return 0;
+            return nullptr;
         }
         xmlChar const*const pUri(reinterpret_cast<xmlChar const*>(
                 m_pNamespace->first.getStr()));
@@ -102,7 +102,7 @@ namespace DOM
     {
         ::osl::MutexGuard const g(m_rMutex);
 
-        if ((0 == m_aNodePtr) || (0 == m_aAttrPtr)) {
+        if ((nullptr == m_aNodePtr) || (nullptr == m_aAttrPtr)) {
             return OUString();
         }
         OUString const aName(reinterpret_cast<char const *>(m_aAttrPtr->name),
@@ -119,11 +119,11 @@ namespace DOM
     {
         ::osl::MutexGuard const g(m_rMutex);
 
-        if ((0 == m_aNodePtr) || (0 == m_aAttrPtr)) {
-            return 0;
+        if ((nullptr == m_aNodePtr) || (nullptr == m_aAttrPtr)) {
+            return nullptr;
         }
-        if (0 == m_aAttrPtr->parent) {
-            return 0;
+        if (nullptr == m_aAttrPtr->parent) {
+            return nullptr;
         }
         Reference< XElement > const xRet(
             static_cast< XNode* >(GetOwnerDocument().GetCNode(
@@ -152,10 +152,10 @@ namespace DOM
     {
         ::osl::MutexGuard const g(m_rMutex);
 
-        if ((0 == m_aNodePtr) || (0 == m_aAttrPtr)) {
+        if ((nullptr == m_aNodePtr) || (nullptr == m_aAttrPtr)) {
             return OUString();
         }
-        if (0 == m_aAttrPtr->children) {
+        if (nullptr == m_aAttrPtr->children) {
             return OUString();
         }
         char const*const pContent((m_aAttrPtr->children)
@@ -173,7 +173,7 @@ namespace DOM
     {
         ::osl::ClearableMutexGuard guard(m_rMutex);
 
-        if ((0 == m_aNodePtr) || (0 == m_aAttrPtr)) {
+        if ((nullptr == m_aNodePtr) || (nullptr == m_aAttrPtr)) {
             return;
         }
 
@@ -191,10 +191,10 @@ namespace DOM
         m_aAttrPtr->children =
             xmlStringGetNodeList(m_aAttrPtr->doc, buffer.get());
         xmlNodePtr tmp = m_aAttrPtr->children;
-        while (tmp != NULL) {
+        while (tmp != nullptr) {
             tmp->parent = m_aNodePtr;
             tmp->doc = m_aAttrPtr->doc;
-            if (tmp->next == NULL)
+            if (tmp->next == nullptr)
                 m_aNodePtr->last = tmp;
             tmp = tmp->next;
         }

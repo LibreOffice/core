@@ -45,10 +45,10 @@ namespace DOM
 
         sal_Int32 count = 0;
         xmlNodePtr pNode = m_pElement->GetNodePtr();
-        if (pNode != NULL)
+        if (pNode != nullptr)
         {
             xmlAttrPtr cur = pNode->properties;
-            while (cur != NULL)
+            while (cur != nullptr)
             {
                 count++;
                 cur = cur->next;
@@ -67,12 +67,12 @@ namespace DOM
 
         Reference< XNode > aNode;
         xmlNodePtr pNode = m_pElement->GetNodePtr();
-        if (pNode != NULL)
+        if (pNode != nullptr)
         {
             OString o1 = OUStringToOString(name, RTL_TEXTENCODING_UTF8);
             xmlChar const * xName = reinterpret_cast<xmlChar const *>(o1.getStr());
             xmlAttrPtr cur = pNode->properties;
-            while (cur != NULL)
+            while (cur != nullptr)
             {
                 if( strcmp(reinterpret_cast<char const *>(xName), reinterpret_cast<char const *>(cur->name)) == 0)
                 {
@@ -98,7 +98,7 @@ namespace DOM
 
         Reference< XNode > aNode;
         xmlNodePtr pNode = m_pElement->GetNodePtr();
-        if (pNode != NULL)
+        if (pNode != nullptr)
         {
             OString o1 = OUStringToOString(localName, RTL_TEXTENCODING_UTF8);
             xmlChar const * xName = reinterpret_cast<xmlChar const *>(o1.getStr());
@@ -107,7 +107,7 @@ namespace DOM
                 reinterpret_cast<xmlChar const*>(o2.getStr());
             xmlNsPtr const pNs = xmlSearchNsByHref(pNode->doc, pNode, xNs);
             xmlAttrPtr cur = pNode->properties;
-            while (cur != NULL && pNs != NULL)
+            while (cur != nullptr && pNs != nullptr)
             {
                 if( strcmp(reinterpret_cast<char const *>(xName), reinterpret_cast<char const *>(cur->name)) == 0 &&
                     cur->ns == pNs)
@@ -132,11 +132,11 @@ namespace DOM
 
         Reference< XNode > aNode;
         xmlNodePtr pNode = m_pElement->GetNodePtr();
-        if (pNode != NULL)
+        if (pNode != nullptr)
         {
             xmlAttrPtr cur = pNode->properties;
             sal_Int32 count = 0;
-            while (cur != NULL)
+            while (cur != nullptr)
             {
                 if (count == index)
                 {

@@ -100,8 +100,8 @@ const char s_nsODF      [] =
 
 void SAL_CALL CURI::initFromConstant(const sal_Int16 i_Constant)
 {
-    const char *ns(0);
-    const char *ln(0);
+    const char *ns(nullptr);
+    const char *ln(nullptr);
     switch (i_Constant)
     {
         case css::rdf::URIs::XSD_NCNAME:

@@ -34,20 +34,20 @@ static ::cppu::ImplementationEntry const entries[] = {
     { &comp_CBlankNode::_create,
       &comp_CBlankNode::_getImplementationName,
       &comp_CBlankNode::_getSupportedServiceNames,
-      &::cppu::createSingleComponentFactory, 0, 0 },
+      &::cppu::createSingleComponentFactory, nullptr, 0 },
     { &comp_CURI::_create,
       &comp_CURI::_getImplementationName,
       &comp_CURI::_getSupportedServiceNames,
-      &::cppu::createSingleComponentFactory, 0, 0 },
+      &::cppu::createSingleComponentFactory, nullptr, 0 },
     { &comp_CLiteral::_create,
       &comp_CLiteral::_getImplementationName,
       &comp_CLiteral::_getSupportedServiceNames,
-      &::cppu::createSingleComponentFactory, 0, 0 },
+      &::cppu::createSingleComponentFactory, nullptr, 0 },
     { &comp_librdf_Repository::_create,
       &comp_librdf_Repository::_getImplementationName,
       &comp_librdf_Repository::_getSupportedServiceNames,
-      &::cppu::createSingleComponentFactory, 0, 0 },
-    { 0, 0, 0, 0, 0, 0 }
+      &::cppu::createSingleComponentFactory, nullptr, 0 },
+    { nullptr, nullptr, nullptr, nullptr, nullptr, 0 }
 };
 
 SAL_DLLPUBLIC_EXPORT void * SAL_CALL unordf_component_getFactory(

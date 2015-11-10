@@ -87,7 +87,7 @@ namespace DOM
         : m_pElement(pElement)
         , m_rMutex(rMutex)
         , m_pName(lcl_initXmlString(rName))
-        , m_pURI((pURI) ? lcl_initXmlString(*pURI) : 0)
+        , m_pURI((pURI) ? lcl_initXmlString(*pURI) : nullptr)
         , m_bRebuild(true)
     {
     }
@@ -134,7 +134,7 @@ namespace DOM
             }
         }
 
-        while (pNode != NULL )
+        while (pNode != nullptr )
         {
             if (pNode->type == XML_ELEMENT_NODE &&
                 (strcmp(reinterpret_cast<char const *>(pNode->name), reinterpret_cast<char*>(m_pName.get())) == 0))
@@ -142,14 +142,14 @@ namespace DOM
                 if (!m_pURI) {
                     m_nodevector.push_back(pNode);
                 } else {
-                    if (pNode->ns != NULL && (0 ==
+                    if (pNode->ns != nullptr && (0 ==
                          strcmp(reinterpret_cast<char const *>(pNode->ns->href), reinterpret_cast<char*>(m_pURI.get()))))
                     {
                         m_nodevector.push_back(pNode);
                     }
                 }
             }
-            if (pNode->children != NULL) buildlist(pNode->children, false);
+            if (pNode->children != nullptr) buildlist(pNode->children, false);
 
             if (!start) pNode = pNode->next;
             else break; // fold back
@@ -179,7 +179,7 @@ namespace DOM
 
         ::osl::MutexGuard const g(m_rMutex);
 
-        if (!m_pElement.is()) { return 0; }
+        if (!m_pElement.is()) { return nullptr; }
 
         buildlist(m_pElement->GetNodePtr());
         if (m_nodevector.size() <= static_cast<size_t>(index)) {

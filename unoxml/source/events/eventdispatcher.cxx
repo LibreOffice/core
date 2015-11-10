@@ -40,7 +40,7 @@ namespace DOM { namespace events {
             ? (& m_CaptureListeners) : (& m_TargetListeners);
 
         // get the multimap for the specified type
-        ListenerMap *pMap = 0;
+        ListenerMap *pMap = nullptr;
         TypeListenerMap::const_iterator tIter = pTMap->find(aType);
         if (tIter == pTMap->end()) {
             // the map has to be created
@@ -49,7 +49,7 @@ namespace DOM { namespace events {
         } else {
             pMap = tIter->second;
         }
-        if (pMap !=0)
+        if (pMap !=nullptr)
             pMap->insert(ListenerMap::value_type(pNode, aListener));
     }
 
@@ -113,7 +113,7 @@ namespace DOM { namespace events {
             xmlNodePtr const pNode, Reference<XNode> const& xNode,
             Reference< XEvent > const& i_xEvent) const
     {
-        CEvent *pEvent = 0; // pointer to internal event representation
+        CEvent *pEvent = nullptr; // pointer to internal event representation
 
         OUString const aType = i_xEvent->getType();
         if (aType == "DOMSubtreeModified"          ||
@@ -192,7 +192,7 @@ namespace DOM { namespace events {
             ::osl::MutexGuard g(rMutex);
 
             xmlNodePtr cur = pNode;
-            while (cur != NULL)
+            while (cur != nullptr)
             {
                 Reference< XEventTarget > const xRef(
                         rDocument.GetCNode(cur).get());

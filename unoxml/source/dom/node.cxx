@@ -72,7 +72,7 @@ namespace DOM
     void addNamespaces(Context& io_rContext, xmlNodePtr pNode)
     {
         // add node's namespaces to current context
-        for (xmlNsPtr pNs = pNode->nsDef; pNs != 0; pNs = pNs->next) {
+        for (xmlNsPtr pNs = pNode->nsDef; pNs != nullptr; pNs = pNs->next) {
             const xmlChar *pPrefix = pNs->prefix;
             // prefix can be NULL when xmlns attribute is empty (xmlns="")
             OString prefix(reinterpret_cast<const sal_Char*>(pPrefix),
@@ -140,7 +140,7 @@ namespace DOM
         // keep containing document alive
         // (but not if this is a document; that would create a leak!)
         ,   m_xDocument( (m_aNodePtr->type != XML_DOCUMENT_NODE)
-                ? &const_cast<CDocument&>(rDocument) : 0 )
+                ? &const_cast<CDocument&>(rDocument) : nullptr )
         ,   m_rMutex(const_cast< ::osl::Mutex & >(rMutex))
     {
         OSL_ASSERT(m_aNodePtr);
@@ -149,14 +149,14 @@ namespace DOM
     void CNode::invalidate()
     {
         //remove from list if this wrapper goes away
-        if (m_aNodePtr != 0 && m_xDocument.is()) {
+        if (m_aNodePtr != nullptr && m_xDocument.is()) {
             m_xDocument->RemoveCNode(m_aNodePtr, this);
         }
         // #i113663#: unlinked nodes will not be freed by xmlFreeDoc
         if (m_bUnlinked) {
             xmlFreeNode(m_aNodePtr);
         }
-        m_aNodePtr = 0;
+        m_aNodePtr = nullptr;
     }
 
     CNode::~CNode()
@@ -174,7 +174,7 @@ namespace DOM
     CNode::GetImplementation(uno::Reference<uno::XInterface> const& xNode)
     {
         uno::Reference<lang::XUnoTunnel> const xUnoTunnel(xNode, UNO_QUERY);
-        if (!xUnoTunnel.is()) { return 0; }
+        if (!xUnoTunnel.is()) { return nullptr; }
         CNode *const pCNode( reinterpret_cast< CNode* >(
                         ::sal::static_int_cast< sal_IntPtr >(
                             xUnoTunnel->getSomething(theCNodeUnoTunnelId::get().getSeq()))));
@@ -193,14 +193,14 @@ namespace DOM
     {
         // recursively exchange any references to oldNs with references to newNs
         xmlNodePtr cur = aNode;
-        while (cur != 0)
+        while (cur != nullptr)
         {
             if (cur->ns == oldNs)
                 cur->ns = newNs;
             if (cur->type == XML_ELEMENT_NODE)
             {
                 xmlAttrPtr curAttr = cur->properties;
-                while(curAttr != 0)
+                while(curAttr != nullptr)
                 {
                     if (curAttr->ns == oldNs)
                         curAttr->ns = newNs;
@@ -217,35 +217,35 @@ namespace DOM
         xmlNodePtr cur = aNode;
 
         //handle attributes
-        if (cur != NULL && cur->type == XML_ELEMENT_NODE)
+        if (cur != nullptr && cur->type == XML_ELEMENT_NODE)
         {
             xmlAttrPtr curAttr = cur->properties;
-            while(curAttr != 0)
+            while(curAttr != nullptr)
             {
-                if (curAttr->ns != NULL)
+                if (curAttr->ns != nullptr)
                 {
                     xmlNsPtr ns = xmlSearchNs(cur->doc, aParent, curAttr->ns->prefix);
-                    if (ns != NULL)
+                    if (ns != nullptr)
                         curAttr->ns = ns;
                 }
                 curAttr = curAttr->next;
             }
         }
 
-        while (cur != NULL)
+        while (cur != nullptr)
         {
             nscleanup(cur->children, cur);
-            if (cur->ns != NULL)
+            if (cur->ns != nullptr)
             {
                 xmlNsPtr ns = xmlSearchNs(cur->doc, aParent, cur->ns->prefix);
-                if (ns != NULL && ns != cur->ns && strcmp(reinterpret_cast<char const *>(ns->href), reinterpret_cast<char const *>(cur->ns->href))==0)
+                if (ns != nullptr && ns != cur->ns && strcmp(reinterpret_cast<char const *>(ns->href), reinterpret_cast<char const *>(cur->ns->href))==0)
                 {
                     xmlNsPtr curDef = cur->nsDef;
                     xmlNsPtr *refp = &(cur->nsDef); // insert point
-                    while (curDef != NULL)
+                    while (curDef != nullptr)
                     {
                         ns = xmlSearchNs(cur->doc, aParent, curDef->prefix);
-                        if (ns != NULL && ns != curDef && strcmp(reinterpret_cast<char const *>(ns->href), reinterpret_cast<char const *>(curDef->href))==0)
+                        if (ns != nullptr && ns != curDef && strcmp(reinterpret_cast<char const *>(ns->href), reinterpret_cast<char const *>(curDef->href))==0)
                         {
                             // reconnect ns pointers in sub-tree to newly found ns before
                             // removing redundant nsdecl to prevent dangling pointers.
@@ -291,7 +291,7 @@ namespace DOM
     {
         ::osl::ClearableMutexGuard guard(m_rMutex);
 
-        if (0 == m_aNodePtr) { return 0; }
+        if (nullptr == m_aNodePtr) { return nullptr; }
 
         CNode *const pNewChild(CNode::GetImplementation(xNewChild));
         if (!pNewChild) { throw RuntimeException(); }
@@ -311,7 +311,7 @@ namespace DOM
             e.Code = DOMExceptionType_HIERARCHY_REQUEST_ERR;
             throw e;
         }
-        if (cur->parent != NULL) {
+        if (cur->parent != nullptr) {
             DOMException e;
             e.Code = DOMExceptionType_HIERARCHY_REQUEST_ERR;
             throw e;
@@ -323,7 +323,7 @@ namespace DOM
         }
 
         // check whether this is an attribute node; it needs special handling
-        xmlNodePtr res = NULL;
+        xmlNodePtr res = nullptr;
         if (cur->type == XML_ATTRIBUTE_NODE)
         {
             xmlChar const*const pChildren((cur->children)
@@ -352,7 +352,7 @@ namespace DOM
             }
         }
 
-        if (!res) { return 0; }
+        if (!res) { return nullptr; }
 
         // use custom ns cleanup instead of
         // xmlReconciliateNs(m_aNodePtr->doc, m_aNodePtr);
@@ -361,7 +361,7 @@ namespace DOM
 
         ::rtl::Reference<CNode> const pNode = GetOwnerDocument().GetCNode(res);
 
-        if (!pNode.is()) { return 0; }
+        if (!pNode.is()) { return nullptr; }
 
         // dispatch DOMNodeInserted event, target is the new node
         // this node is the related node
@@ -393,12 +393,12 @@ namespace DOM
     {
         ::osl::MutexGuard const g(m_rMutex);
 
-        if (0 == m_aNodePtr) {
-            return 0;
+        if (nullptr == m_aNodePtr) {
+            return nullptr;
         }
         ::rtl::Reference<CNode> const pNode = GetOwnerDocument().GetCNode(
             xmlCopyNode(m_aNodePtr, (bDeep) ? 1 : 0));
-        if (!pNode.is()) { return 0; }
+        if (!pNode.is()) { return nullptr; }
         pNode->m_bUnlinked = true; // not linked yet
         return pNode.get();
     }
@@ -422,8 +422,8 @@ namespace DOM
     {
         ::osl::MutexGuard const g(m_rMutex);
 
-        if (0 == m_aNodePtr) {
-            return 0;
+        if (nullptr == m_aNodePtr) {
+            return nullptr;
         }
         Reference< XNodeList > const xNodeList(new CChildList(this, m_rMutex));
         return xNodeList;
@@ -437,8 +437,8 @@ namespace DOM
     {
         ::osl::MutexGuard const g(m_rMutex);
 
-        if (0 == m_aNodePtr) {
-            return 0;
+        if (nullptr == m_aNodePtr) {
+            return nullptr;
         }
         Reference< XNode > const xNode(
                 GetOwnerDocument().GetCNode(m_aNodePtr->children).get());
@@ -453,8 +453,8 @@ namespace DOM
     {
         ::osl::MutexGuard const g(m_rMutex);
 
-        if (0 == m_aNodePtr) {
-            return 0;
+        if (nullptr == m_aNodePtr) {
+            return nullptr;
         }
         Reference< XNode > const xNode(
             GetOwnerDocument().GetCNode(xmlGetLastChild(m_aNodePtr)).get());
@@ -481,9 +481,9 @@ namespace DOM
         ::osl::MutexGuard const g(m_rMutex);
 
         OUString aURI;
-        if (m_aNodePtr != NULL &&
+        if (m_aNodePtr != nullptr &&
             (m_aNodePtr->type == XML_ELEMENT_NODE || m_aNodePtr->type == XML_ATTRIBUTE_NODE) &&
-            m_aNodePtr->ns != NULL)
+            m_aNodePtr->ns != nullptr)
         {
             const xmlChar* xHref = m_aNodePtr->ns->href;
             aURI = OUString(reinterpret_cast<char const *>(xHref), strlen(reinterpret_cast<char const *>(xHref)), RTL_TEXTENCODING_UTF8);
@@ -499,8 +499,8 @@ namespace DOM
     {
         ::osl::MutexGuard const g(m_rMutex);
 
-        if (0 == m_aNodePtr) {
-            return 0;
+        if (nullptr == m_aNodePtr) {
+            return nullptr;
         }
         Reference< XNode > const xNode(
                 GetOwnerDocument().GetCNode(m_aNodePtr->next).get());
@@ -564,8 +564,8 @@ namespace DOM
     {
         ::osl::MutexGuard const g(m_rMutex);
 
-        if (0 == m_aNodePtr) {
-            return 0;
+        if (nullptr == m_aNodePtr) {
+            return nullptr;
         }
         Reference< XDocument > const xDoc(& GetOwnerDocument());
         return xDoc;
@@ -579,8 +579,8 @@ namespace DOM
     {
         ::osl::MutexGuard const g(m_rMutex);
 
-        if (0 == m_aNodePtr) {
-            return 0;
+        if (nullptr == m_aNodePtr) {
+            return nullptr;
         }
         Reference< XNode > const xNode(
                 GetOwnerDocument().GetCNode(m_aNodePtr->parent).get());
@@ -596,12 +596,12 @@ namespace DOM
         ::osl::MutexGuard const g(m_rMutex);
 
         OUString aPrefix;
-        if (m_aNodePtr != NULL &&
+        if (m_aNodePtr != nullptr &&
             (m_aNodePtr->type == XML_ELEMENT_NODE || m_aNodePtr->type == XML_ATTRIBUTE_NODE) &&
-            m_aNodePtr->ns != NULL)
+            m_aNodePtr->ns != nullptr)
         {
             const xmlChar* xPrefix = m_aNodePtr->ns->prefix;
-            if( xPrefix != NULL )
+            if( xPrefix != nullptr )
                 aPrefix = OUString(reinterpret_cast<char const *>(xPrefix), strlen(reinterpret_cast<char const *>(xPrefix)), RTL_TEXTENCODING_UTF8);
         }
         return aPrefix;
@@ -616,8 +616,8 @@ namespace DOM
     {
         ::osl::MutexGuard const g(m_rMutex);
 
-        if (0 == m_aNodePtr) {
-            return 0;
+        if (nullptr == m_aNodePtr) {
+            return nullptr;
         }
         Reference< XNode > const xNode(
                 GetOwnerDocument().GetCNode(m_aNodePtr->prev).get());
@@ -632,7 +632,7 @@ namespace DOM
     {
         ::osl::MutexGuard const g(m_rMutex);
 
-        return (m_aNodePtr != NULL && m_aNodePtr->properties != NULL);
+        return (m_aNodePtr != nullptr && m_aNodePtr->properties != nullptr);
     }
 
     /**
@@ -643,7 +643,7 @@ namespace DOM
     {
         ::osl::MutexGuard const g(m_rMutex);
 
-        return (m_aNodePtr != NULL && m_aNodePtr->children != NULL);
+        return (m_aNodePtr != nullptr && m_aNodePtr->children != nullptr);
     }
 
     /**
@@ -681,7 +681,7 @@ namespace DOM
             throw e;
         }
         // already has parent
-        if (pNewChild->parent != NULL)
+        if (pNewChild->parent != nullptr)
         {
             DOMException e;
             e.Code = DOMExceptionType_HIERARCHY_REQUEST_ERR;
@@ -702,14 +702,14 @@ namespace DOM
         xmlNodePtr cur = m_aNodePtr->children;
 
         //search child before which to insert
-        while (cur != NULL)
+        while (cur != nullptr)
         {
             if (cur == pRefChild) {
                 // insert before
                 pNewChild->next = cur;
                 pNewChild->prev = cur->prev;
                 cur->prev = pNewChild;
-                if (pNewChild->prev != NULL) {
+                if (pNewChild->prev != nullptr) {
                     pNewChild->prev->next = pNewChild;
                 }
                 pNewChild->parent = cur->parent;
@@ -866,7 +866,7 @@ namespace DOM
             throw e;
         }
         // already has parent
-        if (pNew->parent != NULL) {
+        if (pNew->parent != nullptr) {
             DOMException e;
             e.Code = DOMExceptionType_HIERARCHY_REQUEST_ERR;
             throw e;
@@ -897,16 +897,16 @@ namespace DOM
 
         xmlNodePtr cur = m_aNodePtr->children;
         //find old node in child list
-        while (cur != NULL)
+        while (cur != nullptr)
         {
             if(cur == pOld)
             {
                 // exchange nodes
                 pNew->prev = pOld->prev;
-                if (pNew->prev != NULL)
+                if (pNew->prev != nullptr)
                     pNew->prev->next = pNew;
                 pNew->next = pOld->next;
-                if (pNew->next != NULL)
+                if (pNew->next != nullptr)
                     pNew->next->prev = pNew;
                 pNew->parent = pOld->parent;
                 // coverity[var_deref_op] pNew->parent cannot be NULL here
@@ -914,9 +914,9 @@ namespace DOM
                     pNew->parent->children = pNew;
                 if(pNew->parent->last == pOld)
                     pNew->parent->last = pNew;
-                pOld->next = NULL;
-                pOld->prev = NULL;
-                pOld->parent = NULL;
+                pOld->next = nullptr;
+                pOld->prev = nullptr;
+                pOld->parent = nullptr;
                 pOldNode->m_bUnlinked = true;
                 pNewNode->m_bUnlinked = false; // will be deleted by xmlFreeDoc
             }
@@ -967,7 +967,7 @@ namespace DOM
     {
         ::osl::MutexGuard const g(m_rMutex);
 
-        if ((0 == m_aNodePtr) ||
+        if ((nullptr == m_aNodePtr) ||
             ((m_aNodePtr->type != XML_ELEMENT_NODE) &&
              (m_aNodePtr->type != XML_ATTRIBUTE_NODE)))
         {
@@ -977,7 +977,7 @@ namespace DOM
         }
         OString o1 = OUStringToOString(prefix, RTL_TEXTENCODING_UTF8);
         xmlChar const *pBuf = reinterpret_cast<xmlChar const *>(o1.getStr());
-        if (m_aNodePtr != NULL && m_aNodePtr->ns != NULL)
+        if (m_aNodePtr != nullptr && m_aNodePtr->ns != nullptr)
         {
             xmlFree(const_cast<xmlChar *>(m_aNodePtr->ns->prefix));
             m_aNodePtr->ns->prefix = xmlStrdup(pBuf);

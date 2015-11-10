@@ -50,7 +50,7 @@ namespace DOM
         ::osl::MutexGuard const g(m_rMutex);
 
         css::uno::Reference< XNamedNodeMap > aMap;
-        if (m_aDtdPtr != NULL)
+        if (m_aDtdPtr != nullptr)
         {
             aMap.set(new CEntitiesMap(this));
         }
@@ -76,7 +76,7 @@ namespace DOM
         ::osl::MutexGuard const g(m_rMutex);
 
         OUString aName;
-        if (m_aDtdPtr != NULL)
+        if (m_aDtdPtr != nullptr)
         {
             aName = OUString(reinterpret_cast<char const *>(m_aDtdPtr->name), strlen(reinterpret_cast<char const *>(m_aDtdPtr->name)), RTL_TEXTENCODING_UTF8);
         }
@@ -91,7 +91,7 @@ namespace DOM
         ::osl::MutexGuard const g(m_rMutex);
 
         css::uno::Reference< XNamedNodeMap > aMap;
-        if (m_aDtdPtr != NULL)
+        if (m_aDtdPtr != nullptr)
         {
             aMap.set(new CNotationsMap(this));
         }
@@ -106,7 +106,7 @@ namespace DOM
         ::osl::MutexGuard const g(m_rMutex);
 
         OUString aId;
-        if (m_aDtdPtr != NULL)
+        if (m_aDtdPtr != nullptr)
         {
             aId = OUString(reinterpret_cast<char const *>(m_aDtdPtr->name), strlen(reinterpret_cast<char const *>(m_aDtdPtr->ExternalID)), RTL_TEXTENCODING_UTF8);
         }
@@ -121,7 +121,7 @@ namespace DOM
         ::osl::MutexGuard const g(m_rMutex);
 
         OUString aId;
-        if (m_aDtdPtr != NULL)
+        if (m_aDtdPtr != nullptr)
         {
             aId = OUString(reinterpret_cast<char const *>(m_aDtdPtr->name), strlen(reinterpret_cast<char const *>(m_aDtdPtr->SystemID)), RTL_TEXTENCODING_UTF8);
         }

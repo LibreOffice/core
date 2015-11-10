@@ -60,7 +60,7 @@ namespace XPath
     const char* CXPathAPI::aImplementationName = "com.sun.star.comp.xml.xpath.XPathAPI";
     const char* CXPathAPI::aSupportedServiceNames[] = {
         "com.sun.star.xml.xpath.XPathAPI",
-        NULL
+        nullptr
     };
 
     OUString CXPathAPI::_getImplementationName()
@@ -71,7 +71,7 @@ namespace XPath
     Sequence<OUString> CXPathAPI::_getSupportedServiceNames()
     {
         Sequence<OUString> aSequence;
-        for (int i=0; aSupportedServiceNames[i]!=NULL; i++) {
+        for (int i=0; aSupportedServiceNames[i]!=nullptr; i++) {
             aSequence.realloc(i+1);
             aSequence[i]=(OUString::createFromAscii(aSupportedServiceNames[i]));
         }
@@ -147,9 +147,9 @@ namespace XPath
         ::osl::MutexGuard const g(pCNode->GetOwnerDocument().GetMutex());
 
         xmlNodePtr pNode = pCNode->GetNodePtr();
-        while (pNode != 0) {
+        while (pNode != nullptr) {
             xmlNsPtr curDef = pNode->nsDef;
-            while (curDef != 0) {
+            while (curDef != nullptr) {
                 const xmlChar* xHref = curDef->href;
                 OUString aURI(reinterpret_cast<char const *>(xHref), strlen(reinterpret_cast<char const *>(xHref)), RTL_TEXTENCODING_UTF8);
                 const xmlChar* xPre = curDef->prefix;
@@ -358,13 +358,13 @@ namespace XPath
         /* Create xpath evaluation context */
         std::shared_ptr<xmlXPathContext> const xpathCtx(
                 xmlXPathNewContext(pDoc), xmlXPathFreeContext);
-        if (xpathCtx == 0) { throw XPathException(); }
+        if (xpathCtx == nullptr) { throw XPathException(); }
 
         // set context node
         xpathCtx->node = pNode;
         // error handling
         xpathCtx->error = structured_error_func;
-        xmlSetGenericErrorFunc(NULL, generic_error_func);
+        xmlSetGenericErrorFunc(nullptr, generic_error_func);
 
         // register namespaces and extension
         lcl_registerNamespaces(xpathCtx.get(), nsmap);
@@ -375,8 +375,8 @@ namespace XPath
         xmlChar const *xStr = reinterpret_cast<xmlChar const *>(o1.getStr());
         std::shared_ptr<xmlXPathObject> const xpathObj(
                 xmlXPathEval(xStr, xpathCtx.get()), xmlXPathFreeObject);
-        xmlSetGenericErrorFunc(NULL, NULL);
-        if (0 == xpathObj) {
+        xmlSetGenericErrorFunc(nullptr, nullptr);
+        if (nullptr == xpathObj) {
             // OSL_ENSURE(xpathCtx->lastError == NULL, xpathCtx->lastError->message);
             throw XPathException();
         }

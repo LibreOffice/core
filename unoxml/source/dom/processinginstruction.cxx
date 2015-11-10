@@ -54,13 +54,13 @@ namespace DOM
     {
         ::osl::MutexGuard const g(m_rMutex);
 
-        if (0 == m_aNodePtr) {
+        if (nullptr == m_aNodePtr) {
             return OUString();
         }
 
         char const*const pContent(
                 reinterpret_cast<char const*>(m_aNodePtr->content));
-        if (0 == pContent) {
+        if (nullptr == pContent) {
             return OUString();
         }
         OUString const ret(pContent, strlen(pContent), RTL_TEXTENCODING_UTF8);
@@ -75,13 +75,13 @@ namespace DOM
     {
         ::osl::MutexGuard const g(m_rMutex);
 
-        if (0 == m_aNodePtr) {
+        if (nullptr == m_aNodePtr) {
             return OUString();
         }
 
         char const*const pName(
                 reinterpret_cast<char const*>(m_aNodePtr->name));
-        if (0 == pName) {
+        if (nullptr == pName) {
             return OUString();
         }
         OUString const ret(pName, strlen(pName), RTL_TEXTENCODING_UTF8);
@@ -96,7 +96,7 @@ namespace DOM
     {
         ::osl::MutexGuard const g(m_rMutex);
 
-        if (0 == m_aNodePtr) {
+        if (nullptr == m_aNodePtr) {
             throw RuntimeException();
         }
 
@@ -113,7 +113,7 @@ namespace DOM
     {
         ::osl::MutexGuard const g(m_rMutex);
 
-        if (0 == m_aNodePtr) {
+        if (nullptr == m_aNodePtr) {
             return OUString();
         }
 

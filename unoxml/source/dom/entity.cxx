@@ -70,7 +70,7 @@ namespace DOM
         ::osl::MutexGuard const g(m_rMutex);
 
         OUString aID;
-        if(m_aEntityPtr != NULL)
+        if(m_aEntityPtr != nullptr)
         {
             aID = OUString(reinterpret_cast<char const *>(m_aEntityPtr->ExternalID), strlen(reinterpret_cast<char const *>(m_aEntityPtr->ExternalID)), RTL_TEXTENCODING_UTF8);
         }
@@ -85,7 +85,7 @@ namespace DOM
         ::osl::MutexGuard const g(m_rMutex);
 
         OUString aID;
-        if(m_aEntityPtr != NULL)
+        if(m_aEntityPtr != nullptr)
         {
             aID = OUString(reinterpret_cast<char const *>(m_aEntityPtr->SystemID), strlen(reinterpret_cast<char const *>(m_aEntityPtr->SystemID)), RTL_TEXTENCODING_UTF8);
         }
@@ -96,7 +96,7 @@ namespace DOM
         ::osl::MutexGuard const g(m_rMutex);
 
        OUString aName;
-        if (m_aNodePtr != NULL)
+        if (m_aNodePtr != nullptr)
         {
             const xmlChar* xName = m_aNodePtr->name;
             aName = OUString(reinterpret_cast<char const *>(xName), strlen(reinterpret_cast<char const *>(xName)), RTL_TEXTENCODING_UTF8);

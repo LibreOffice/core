@@ -44,13 +44,13 @@ namespace DOM
         ::osl::MutexGuard const g(m_rMutex);
 
         sal_Int32 length = 0;
-        if (m_pNode != NULL)
+        if (m_pNode != nullptr)
         {
             xmlNodePtr cur = m_pNode->GetNodePtr();
-            if (0 != cur) {
+            if (nullptr != cur) {
                 cur = cur->children;
             }
-            while (cur != NULL)
+            while (cur != nullptr)
             {
                 length++;
                 cur = cur->next;
@@ -67,13 +67,13 @@ namespace DOM
     {
         ::osl::MutexGuard const g(m_rMutex);
 
-        if (m_pNode != NULL)
+        if (m_pNode != nullptr)
         {
             xmlNodePtr cur = m_pNode->GetNodePtr();
-            if (0 != cur) {
+            if (nullptr != cur) {
                 cur = cur->children;
             }
-            while (cur != NULL)
+            while (cur != nullptr)
             {
                 if (index-- == 0) {
                     return Reference< XNode >(
@@ -82,7 +82,7 @@ namespace DOM
                 cur = cur->next;
             }
         }
-        return 0;
+        return nullptr;
     }
 }
 

@@ -32,9 +32,9 @@ namespace XPath
                 std::shared_ptr<xmlXPathObject> const& rxpathObj)
         : m_pDocument(pDocument)
         , m_rMutex(rMutex)
-        , m_pNodeSet(0)
+        , m_pNodeSet(nullptr)
     {
-        if (rxpathObj != 0 && rxpathObj->type == XPATH_NODESET)
+        if (rxpathObj != nullptr && rxpathObj->type == XPATH_NODESET)
         {
             m_pNodeSet = rxpathObj->nodesetval;
             m_pXPathObj = rxpathObj;
@@ -49,7 +49,7 @@ namespace XPath
         ::osl::MutexGuard const g(m_rMutex);
 
         sal_Int32 value = 0;
-        if (m_pNodeSet != NULL)
+        if (m_pNodeSet != nullptr)
             value = xmlXPathNodeSetGetLength(m_pNodeSet);
         return value;
     }
@@ -62,8 +62,8 @@ namespace XPath
     {
         ::osl::MutexGuard const g(m_rMutex);
 
-        if (0 == m_pNodeSet) {
-            return 0;
+        if (nullptr == m_pNodeSet) {
+            return nullptr;
         }
         xmlNodePtr const pNode = xmlXPathNodeSetItem(m_pNodeSet, index);
         Reference< XNode > const xNode(m_pDocument->GetCNode(pNode).get());

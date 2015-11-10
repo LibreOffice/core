@@ -41,7 +41,7 @@ namespace DOM
     const char* CSAXDocumentBuilder::aImplementationName = "com.sun.star.comp.xml.dom.SAXDocumentBuilder";
     const char* CSAXDocumentBuilder::aSupportedServiceNames[] = {
         "com.sun.star.xml.dom.SAXDocumentBuilder",
-        NULL
+        nullptr
     };
 
     CSAXDocumentBuilder::CSAXDocumentBuilder(const Reference< XMultiServiceFactory >& mgr)
@@ -56,7 +56,7 @@ namespace DOM
     Sequence<OUString> CSAXDocumentBuilder::_getSupportedServiceNames()
     {
         Sequence<OUString> aSequence;
-        for (int i=0; aSupportedServiceNames[i]!=NULL; i++) {
+        for (int i=0; aSupportedServiceNames[i]!=nullptr; i++) {
             aSequence.realloc(i+1);
             aSequence[i]=(OUString::createFromAscii(aSupportedServiceNames[i]));
         }

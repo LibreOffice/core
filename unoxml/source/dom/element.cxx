@@ -59,7 +59,7 @@ namespace DOM
             new comphelper::AttributeList();
         OUString type = "";
         // add namespace definitions to attributes
-        for (xmlNsPtr pNs = m_aNodePtr->nsDef; pNs != 0; pNs = pNs->next) {
+        for (xmlNsPtr pNs = m_aNodePtr->nsDef; pNs != nullptr; pNs = pNs->next) {
             const xmlChar *pPrefix = pNs->prefix ? pNs->prefix : reinterpret_cast<const xmlChar*>("");
             OUString prefix(reinterpret_cast<const sal_Char*>(pPrefix),
                 strlen(reinterpret_cast<const char*>(pPrefix)),
@@ -74,10 +74,10 @@ namespace DOM
         }
         // add attributes
         for (xmlAttrPtr pAttr = m_aNodePtr->properties;
-                        pAttr != 0; pAttr = pAttr->next) {
+                        pAttr != nullptr; pAttr = pAttr->next) {
             ::rtl::Reference<CNode> const pNode = GetOwnerDocument().GetCNode(
                     reinterpret_cast<xmlNodePtr>(pAttr));
-            OSL_ENSURE(pNode != 0, "CNode::get returned 0");
+            OSL_ENSURE(pNode != nullptr, "CNode::get returned 0");
             OUString prefix = pNode->getPrefix();
             OUString name = (prefix.isEmpty())
                 ? pNode->getLocalName()
@@ -93,10 +93,10 @@ namespace DOM
         i_xHandler->startElement(name, xAttrList);
         // recurse
         for (xmlNodePtr pChild = m_aNodePtr->children;
-                        pChild != 0; pChild = pChild->next) {
+                        pChild != nullptr; pChild = pChild->next) {
             ::rtl::Reference<CNode> const pNode(
                     GetOwnerDocument().GetCNode(pChild));
-            OSL_ENSURE(pNode != 0, "CNode::get returned 0");
+            OSL_ENSURE(pNode != nullptr, "CNode::get returned 0");
             pNode->saxify(i_xHandler);
         }
         i_xHandler->endElement(name);
@@ -111,10 +111,10 @@ namespace DOM
         // add attributes
         i_rContext.mxAttribList->clear();
         for (xmlAttrPtr pAttr = m_aNodePtr->properties;
-                        pAttr != 0; pAttr = pAttr->next) {
+                        pAttr != nullptr; pAttr = pAttr->next) {
             ::rtl::Reference<CNode> const pNode = GetOwnerDocument().GetCNode(
                     reinterpret_cast<xmlNodePtr>(pAttr));
-            OSL_ENSURE(pNode != 0, "CNode::get returned 0");
+            OSL_ENSURE(pNode != nullptr, "CNode::get returned 0");
 
             const xmlChar* xName = pAttr->name;
             sal_Int32 nAttributeToken=FastToken::DONTKNOW;
@@ -175,10 +175,10 @@ namespace DOM
 
         // recurse
         for (xmlNodePtr pChild = m_aNodePtr->children;
-                        pChild != 0; pChild = pChild->next) {
+                        pChild != nullptr; pChild = pChild->next) {
             ::rtl::Reference<CNode> const pNode(
                     GetOwnerDocument().GetCNode(pChild));
-            OSL_ENSURE(pNode != 0, "CNode::get returned 0");
+            OSL_ENSURE(pNode != nullptr, "CNode::get returned 0");
             pNode->fastSaxify(i_rContext);
         }
 
@@ -235,7 +235,7 @@ namespace DOM
     {
         ::osl::MutexGuard const g(m_rMutex);
 
-        if (0 == m_aNodePtr) {
+        if (nullptr == m_aNodePtr) {
             return OUString();
         }
         // search properties
@@ -258,15 +258,15 @@ namespace DOM
     {
         ::osl::MutexGuard const g(m_rMutex);
 
-        if (0 == m_aNodePtr) {
-            return 0;
+        if (nullptr == m_aNodePtr) {
+            return nullptr;
         }
         OString o1 = OUStringToOString(name, RTL_TEXTENCODING_UTF8);
         xmlChar const*const pName =
             reinterpret_cast<xmlChar const*>(o1.getStr());
         xmlAttrPtr const pAttr = xmlHasProp(m_aNodePtr, pName);
-        if (0 == pAttr) {
-            return 0;
+        if (nullptr == pAttr) {
+            return nullptr;
         }
         Reference< XAttr > const xRet(
             static_cast< XNode* >(GetOwnerDocument().GetCNode(
@@ -284,8 +284,8 @@ namespace DOM
     {
         ::osl::MutexGuard const g(m_rMutex);
 
-        if (0 == m_aNodePtr) {
-            return 0;
+        if (nullptr == m_aNodePtr) {
+            return nullptr;
         }
         OString o1 = OUStringToOString(localName, RTL_TEXTENCODING_UTF8);
         xmlChar const*const pName =
@@ -294,8 +294,8 @@ namespace DOM
         xmlChar const*const pNS =
             reinterpret_cast<xmlChar const*>(o2.getStr());
         xmlAttrPtr const pAttr = xmlHasNsProp(m_aNodePtr, pName, pNS);
-        if (0 == pAttr) {
-            return 0;
+        if (nullptr == pAttr) {
+            return nullptr;
         }
         Reference< XAttr > const xRet(
             static_cast< XNode* >(GetOwnerDocument().GetCNode(
@@ -315,7 +315,7 @@ namespace DOM
     {
         ::osl::MutexGuard const g(m_rMutex);
 
-        if (0 == m_aNodePtr) {
+        if (nullptr == m_aNodePtr) {
             return OUString();
         }
         OString o1 = OUStringToOString(localName, RTL_TEXTENCODING_UTF8);
@@ -326,7 +326,7 @@ namespace DOM
             reinterpret_cast<xmlChar const*>(o2.getStr());
         std::shared_ptr<xmlChar const> const pValue(
                 xmlGetNsProp(m_aNodePtr, pName, pNS), xmlFree);
-        if (0 == pValue) {
+        if (nullptr == pValue) {
             return OUString();
         }
         OUString const ret(reinterpret_cast<sal_Char const*>(pValue.get()),
@@ -376,7 +376,7 @@ namespace DOM
     {
         ::osl::MutexGuard const g(m_rMutex);
 
-        if (0 == m_aNodePtr) {
+        if (nullptr == m_aNodePtr) {
             return OUString();
         }
         OUString const ret(reinterpret_cast<char const *>(m_aNodePtr->name),
@@ -396,7 +396,7 @@ namespace DOM
 
         OString o1 = OUStringToOString(name, RTL_TEXTENCODING_UTF8);
         xmlChar const *xName = reinterpret_cast<xmlChar const *>(o1.getStr());
-        return (m_aNodePtr != NULL && xmlHasProp(m_aNodePtr, xName) != NULL);
+        return (m_aNodePtr != nullptr && xmlHasProp(m_aNodePtr, xName) != nullptr);
     }
 
     /**
@@ -413,7 +413,7 @@ namespace DOM
         xmlChar const *xName = reinterpret_cast<xmlChar const *>(o1.getStr());
         OString o2 = OUStringToOString(namespaceURI, RTL_TEXTENCODING_UTF8);
         xmlChar const *xNs = reinterpret_cast<xmlChar const *>(o2.getStr());
-        return (m_aNodePtr != NULL && xmlHasNsProp(m_aNodePtr, xName, xNs) != NULL);
+        return (m_aNodePtr != nullptr && xmlHasNsProp(m_aNodePtr, xName, xNs) != nullptr);
     }
 
     /**
@@ -424,7 +424,7 @@ namespace DOM
     {
         ::osl::MutexGuard const g(m_rMutex);
 
-        if (0 == m_aNodePtr) {
+        if (nullptr == m_aNodePtr) {
             return;
         }
         OString o1 = OUStringToOString(name, RTL_TEXTENCODING_UTF8);
@@ -449,7 +449,7 @@ namespace DOM
     {
         ::osl::MutexGuard const g(m_rMutex);
 
-        if (0 == m_aNodePtr) {
+        if (nullptr == m_aNodePtr) {
             return;
         }
         OString o1 = OUStringToOString(localName, RTL_TEXTENCODING_UTF8);
@@ -479,8 +479,8 @@ namespace DOM
     {
         ::osl::MutexGuard const g(m_rMutex);
 
-        if (0 == m_aNodePtr) {
-            return 0;
+        if (nullptr == m_aNodePtr) {
+            return nullptr;
         }
 
         ::rtl::Reference<CNode> const pCNode(
@@ -538,7 +538,7 @@ namespace DOM
 
         ::osl::ClearableMutexGuard guard(m_rMutex);
 
-        if (0 == m_aNodePtr) {
+        if (nullptr == m_aNodePtr) {
             throw RuntimeException();
         }
 
@@ -557,9 +557,9 @@ namespace DOM
             throw e;
         }
 
-        xmlAttrPtr res = NULL;
+        xmlAttrPtr res = nullptr;
         xmlChar const*const pContent(
-                (pAttr->children) ? pAttr->children->content : 0);
+                (pAttr->children) ? pAttr->children->content : nullptr);
 
         if (bNS) {
             xmlNsPtr const pNs( pCAttr->GetNamespace(m_aNodePtr) );
@@ -623,14 +623,14 @@ namespace DOM
         OString o2 = OUStringToOString(value, RTL_TEXTENCODING_UTF8);
         xmlChar const *xValue = reinterpret_cast<xmlChar const *>(o2.getStr());
 
-        if (0 == m_aNodePtr) {
+        if (nullptr == m_aNodePtr) {
             throw RuntimeException();
         }
         OUString oldValue;
         AttrChangeType aChangeType = AttrChangeType_MODIFICATION;
         std::shared_ptr<xmlChar const> const pOld(
             xmlGetProp(m_aNodePtr, xName), xmlFree);
-        if (pOld == 0) {
+        if (pOld == nullptr) {
             aChangeType = AttrChangeType_ADDITION;
             xmlNewProp(m_aNodePtr, xName, xValue);
         } else {
@@ -667,8 +667,8 @@ namespace DOM
         ::osl::ClearableMutexGuard guard(m_rMutex);
 
         OString o1, o2, o3, o4, o5;
-        xmlChar const *xPrefix = NULL;
-        xmlChar const *xLName = NULL;
+        xmlChar const *xPrefix = nullptr;
+        xmlChar const *xLName = nullptr;
         o1 = OUStringToOString(qualifiedName, RTL_TEXTENCODING_UTF8);
         xmlChar const *xQName = reinterpret_cast<xmlChar const *>(o1.getStr());
         sal_Int32 idx = qualifiedName.indexOf(':');
@@ -691,14 +691,14 @@ namespace DOM
         xmlChar const *xURI= reinterpret_cast<xmlChar const *>(o4.getStr());
         xmlChar const *xValue = reinterpret_cast<xmlChar const *>(o5.getStr());
 
-        if (0 == m_aNodePtr) {
+        if (nullptr == m_aNodePtr) {
             throw RuntimeException();
         }
 
         //find the right namespace
         xmlNsPtr pNs = xmlSearchNs(m_aNodePtr->doc, m_aNodePtr, xPrefix);
         // if no namespace found, create a new one
-        if (pNs == NULL) {
+        if (pNs == nullptr) {
             pNs = xmlNewNs(m_aNodePtr, xURI, xPrefix);
         }
 
@@ -713,7 +713,7 @@ namespace DOM
         AttrChangeType aChangeType = AttrChangeType_MODIFICATION;
         std::shared_ptr<xmlChar const> const pOld(
                 xmlGetNsProp(m_aNodePtr, xLName, pNs->href), xmlFree);
-        if (pOld == 0) {
+        if (pOld == nullptr) {
             aChangeType = AttrChangeType_ADDITION;
             xmlNewNsProp(m_aNodePtr, pNs, xLName, xValue);
         } else {
@@ -756,7 +756,7 @@ namespace DOM
         ::osl::MutexGuard const g(m_rMutex);
 
         OUString aName;
-        if (m_aNodePtr != NULL)
+        if (m_aNodePtr != nullptr)
         {
             const xmlChar* xName = m_aNodePtr->name;
             aName = OUString(reinterpret_cast<const char*>(xName), strlen(reinterpret_cast<const char*>(xName)), RTL_TEXTENCODING_UTF8);

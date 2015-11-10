@@ -60,14 +60,14 @@ namespace DOM
     {
         // find the doc type
         xmlNodePtr cur = i_pDocument->children;
-        while (cur != NULL)
+        while (cur != nullptr)
         {
             if ((cur->type == XML_DOCUMENT_TYPE_NODE) ||
                 (cur->type == XML_DTD_NODE)) {
                     return cur;
             }
         }
-        return 0;
+        return nullptr;
     }
 
     /// get the pointer to the root element node of the document
@@ -75,7 +75,7 @@ namespace DOM
     {
         // find the document element
         xmlNodePtr cur = i_pDocument->children;
-        while (cur != NULL)
+        while (cur != nullptr)
         {
             if (cur->type == XML_ELEMENT_NODE)
                 break;
@@ -162,8 +162,8 @@ namespace DOM
     ::rtl::Reference<CNode>
     CDocument::GetCNode(xmlNodePtr const pNode, bool const bCreate)
     {
-        if (0 == pNode) {
-            return 0;
+        if (nullptr == pNode) {
+            return nullptr;
         }
         //check whether there is already an instance for this node
         nodemap_t::const_iterator const i = m_NodeMap.find(pNode);
@@ -178,7 +178,7 @@ namespace DOM
             }
         }
 
-        if (!bCreate) { return 0; }
+        if (!bCreate) { return nullptr; }
 
         // there is not yet an instance wrapping this node,
         // create it and store it in the map
@@ -259,7 +259,7 @@ namespace DOM
             break;
         }
 
-        if (pCNode != 0) {
+        if (pCNode != nullptr) {
             bool const bInserted = m_NodeMap.insert(
                     nodemap_t::value_type(pNode,
                         ::std::make_pair(WeakReference<XNode>(pCNode.get()),
@@ -268,7 +268,7 @@ namespace DOM
             OSL_ASSERT(bInserted);
             if (!bInserted) {
                 // if insertion failed, delete new instance and return null
-                return 0;
+                return nullptr;
             }
         }
 
@@ -286,9 +286,9 @@ namespace DOM
     {
         i_xHandler->startDocument();
         for (xmlNodePtr pChild = m_aNodePtr->children;
-                        pChild != 0; pChild = pChild->next) {
+                        pChild != nullptr; pChild = pChild->next) {
             ::rtl::Reference<CNode> const pNode = GetCNode(pChild);
-            OSL_ENSURE(pNode != 0, "CNode::get returned 0");
+            OSL_ENSURE(pNode != nullptr, "CNode::get returned 0");
             pNode->saxify(i_xHandler);
         }
         i_xHandler->endDocument();
@@ -298,9 +298,9 @@ namespace DOM
     {
         rContext.mxDocHandler->startDocument();
         for (xmlNodePtr pChild = m_aNodePtr->children;
-                        pChild != 0; pChild = pChild->next) {
+                        pChild != nullptr; pChild = pChild->next) {
             ::rtl::Reference<CNode> const pNode = GetCNode(pChild);
-            OSL_ENSURE(pNode != 0, "CNode::get returned 0");
+            OSL_ENSURE(pNode != nullptr, "CNode::get returned 0");
             pNode->fastSaxify(rContext);
         }
         rContext.mxDocHandler->endDocument();
@@ -314,10 +314,10 @@ namespace DOM
                 return true;
             case NodeType_ELEMENT_NODE:
                  // there may be only one!
-                return 0 == lcl_getDocumentRootPtr(m_aDocPtr);
+                return nullptr == lcl_getDocumentRootPtr(m_aDocPtr);
             case NodeType_DOCUMENT_TYPE_NODE:
                  // there may be only one!
-                return 0 == lcl_getDocumentType(m_aDocPtr);
+                return nullptr == lcl_getDocumentType(m_aDocPtr);
             default:
                 return false;
         }
@@ -397,8 +397,8 @@ namespace DOM
             // setup libxml IO and write data to output stream
             IOContext ioctx = {m_rOutputStream, false};
             xmlOutputBufferPtr pOut = xmlOutputBufferCreateIO(
-                writeCallback, closeCallback, &ioctx, NULL);
-            xmlSaveFileTo(pOut, m_aNodePtr->doc, NULL);
+                writeCallback, closeCallback, &ioctx, nullptr);
+            xmlSaveFileTo(pOut, m_aNodePtr->doc, nullptr);
         }
 
         // call listeners
@@ -439,7 +439,7 @@ namespace DOM
 
         OString o1 = OUStringToOString(name, RTL_TEXTENCODING_UTF8);
         xmlChar const *xName = reinterpret_cast<xmlChar const *>(o1.getStr());
-        xmlAttrPtr const pAttr = xmlNewDocProp(m_aDocPtr, xName, NULL);
+        xmlAttrPtr const pAttr = xmlNewDocProp(m_aDocPtr, xName, nullptr);
         ::rtl::Reference< CAttr > const pCAttr(
             dynamic_cast< CAttr* >(GetCNode(
                     reinterpret_cast<xmlNodePtr>(pAttr)).get()));
@@ -472,7 +472,7 @@ namespace DOM
         }
         oUri = OUStringToOString(ns, RTL_TEXTENCODING_UTF8);
         xmlAttrPtr const pAttr = xmlNewDocProp(m_aDocPtr,
-                reinterpret_cast<xmlChar const*>(oName.getStr()), 0);
+                reinterpret_cast<xmlChar const*>(oName.getStr()), nullptr);
         ::rtl::Reference< CAttr > const pCAttr(
             dynamic_cast< CAttr* >(GetCNode(
                     reinterpret_cast<xmlNodePtr>(pAttr)).get()));
@@ -538,7 +538,7 @@ namespace DOM
 
         OString o1 = OUStringToOString(tagName, RTL_TEXTENCODING_UTF8);
         xmlChar const *xName = reinterpret_cast<xmlChar const *>(o1.getStr());
-        xmlNodePtr const pNode = xmlNewDocNode(m_aDocPtr, NULL, xName, NULL);
+        xmlNodePtr const pNode = xmlNewDocNode(m_aDocPtr, nullptr, xName, nullptr);
         Reference< XElement > const xRet(
             static_cast< XNode* >(GetCNode(pNode).get()),
             UNO_QUERY_THROW);
@@ -573,7 +573,7 @@ namespace DOM
 
         // xmlNsPtr aNsPtr = xmlNewReconciledNs?
         // xmlNsPtr aNsPtr = xmlNewGlobalNs?
-        xmlNodePtr const pNode = xmlNewDocNode(m_aDocPtr, NULL, xName, NULL);
+        xmlNodePtr const pNode = xmlNewDocNode(m_aDocPtr, nullptr, xName, nullptr);
         xmlNsPtr const pNs = xmlNewNs(pNode, xUri, xPrefix);
         xmlSetNs(pNode, pNs);
         Reference< XElement > const xRet(
@@ -654,7 +654,7 @@ namespace DOM
         ::osl::MutexGuard const g(m_Mutex);
 
         xmlNodePtr const pNode = lcl_getDocumentRootPtr(m_aDocPtr);
-        if (!pNode) { return 0; }
+        if (!pNode) { return nullptr; }
         Reference< XElement > const xRet(
             static_cast< XNode* >(GetCNode(pNode).get()),
             UNO_QUERY);
@@ -664,13 +664,13 @@ namespace DOM
     static xmlNodePtr
     lcl_search_element_by_id(const xmlNodePtr cur, const xmlChar* id)
     {
-        if (cur == NULL)
-            return NULL;
+        if (cur == nullptr)
+            return nullptr;
         // look in current node
         if (cur->type == XML_ELEMENT_NODE)
         {
             xmlAttrPtr a = cur->properties;
-            while (a != NULL)
+            while (a != nullptr)
             {
                 if (a->atype == XML_ATTRIBUTE_ID) {
                     if (strcmp(reinterpret_cast<char*>(a->children->content), reinterpret_cast<char const *>(id)) == 0)
@@ -681,7 +681,7 @@ namespace DOM
         }
         // look in children
         xmlNodePtr result = lcl_search_element_by_id(cur->children, id);
-        if (result != NULL)
+        if (result != nullptr)
             return result;
         result = lcl_search_element_by_id(cur->next, id);
             return result;
@@ -698,7 +698,7 @@ namespace DOM
         OString o1 = OUStringToOString(elementId, RTL_TEXTENCODING_UTF8);
         xmlChar const *xId = reinterpret_cast<xmlChar const *>(o1.getStr());
         xmlNodePtr const pStart = lcl_getDocumentRootPtr(m_aDocPtr);
-        if (!pStart) { return 0; }
+        if (!pStart) { return nullptr; }
         xmlNodePtr const pNode = lcl_search_element_by_id(pStart, xId);
         Reference< XElement > const xRet(
             static_cast< XNode* >(GetCNode(pNode).get()),
@@ -962,12 +962,12 @@ namespace DOM
     {
         ::osl::MutexGuard const g(m_rMutex);
 
-        OSL_ASSERT(0 != m_aNodePtr);
-        if (0 == m_aNodePtr) {
-            return 0;
+        OSL_ASSERT(nullptr != m_aNodePtr);
+        if (nullptr == m_aNodePtr) {
+            return nullptr;
         }
         xmlDocPtr const pClone(xmlCopyDoc(m_aDocPtr, (bDeep) ? 1 : 0));
-        if (0 == pClone) { return 0; }
+        if (nullptr == pClone) { return nullptr; }
         Reference< XNode > const xRet(
             static_cast<CNode*>(CDocument::CreateCDocument(pClone).get()));
         return xRet;
@@ -976,7 +976,7 @@ namespace DOM
     Reference< XEvent > SAL_CALL CDocument::createEvent(const OUString& aType) throw (RuntimeException, std::exception)
     {
         // does not need mutex currently
-        events::CEvent *pEvent = 0;
+        events::CEvent *pEvent = nullptr;
         if ( aType == "DOMSubtreeModified" || aType == "DOMNodeInserted" || aType == "DOMNodeRemoved"
           || aType == "DOMNodeRemovedFromDocument" || aType == "DOMNodeInsertedIntoDocument" || aType == "DOMAttrModified"
           || aType == "DOMCharacterDataModified")
@@ -1008,7 +1008,7 @@ namespace DOM
 
         // add new namespaces to root node
         xmlNodePtr const pRoot = lcl_getDocumentRootPtr(m_aDocPtr);
-        if (0 != pRoot) {
+        if (nullptr != pRoot) {
             const beans::StringPair * pSeq = i_rNamespaces.getConstArray();
             for (const beans::StringPair *pNsDef = pSeq;
                  pNsDef < pSeq + i_rNamespaces.getLength(); ++pNsDef) {
@@ -1037,7 +1037,7 @@ namespace DOM
 
         // add new namespaces to root node
         xmlNodePtr const pRoot = lcl_getDocumentRootPtr(m_aDocPtr);
-        if (0 != pRoot) {
+        if (nullptr != pRoot) {
             const beans::StringPair * pSeq = i_rNamespaces.getConstArray();
             for (const beans::StringPair *pNsDef = pSeq;
                  pNsDef < pSeq + i_rNamespaces.getLength(); ++pNsDef) {
