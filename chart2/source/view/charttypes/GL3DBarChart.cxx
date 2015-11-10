@@ -23,6 +23,7 @@
 #ifdef WNT
 #include <windows.h>
 #endif
+#include <memory>
 
 #define CALC_POS_EVENT_ID 1
 #define SHAPE_START_ID 10
