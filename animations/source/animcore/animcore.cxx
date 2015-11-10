@@ -403,7 +403,7 @@ Any SAL_CALL TimeContainerEnumeration::nextElement()
 
 
 
-Sequence< Type >* AnimationNode::mpTypes[] = { NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL };
+Sequence< Type >* AnimationNode::mpTypes[] = { nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr };
 
 AnimationNode::AnimationNode( sal_Int16 nNodeType )
 :   maChangeListener(maMutex),
@@ -415,7 +415,7 @@ AnimationNode::AnimationNode( sal_Int16 nNodeType )
     mfAcceleration( 0.0 ),
     mfDecelerate( 0.0 ),
     mbAutoReverse( false ),
-    mpParent(0),
+    mpParent(nullptr),
     mnValueType( 0 ),
     mnSubItem( 0 ),
     mnCalcMode( (nNodeType == AnimationNodeType::ANIMATEMOTION) ? AnimationCalcMode::PACED : AnimationCalcMode::LINEAR),
@@ -456,7 +456,7 @@ AnimationNode::AnimationNode( const AnimationNode& rNode )
     mfDecelerate( rNode.mfDecelerate ),
     mbAutoReverse( rNode.mbAutoReverse ),
     maUserData( rNode.maUserData ),
-    mpParent(0),
+    mpParent(nullptr),
 
     // attributes for XAnimate
     maTarget( rNode.maTarget ),
@@ -1242,7 +1242,7 @@ void SAL_CALL AnimationNode::setParent( const Reference< XInterface >& Parent ) 
     {
         mxParent = Parent;
 
-        mpParent = 0;
+        mpParent = nullptr;
         Reference< XUnoTunnel > xTunnel( mxParent.get(), UNO_QUERY );
         if( xTunnel.is() )
             mpParent = reinterpret_cast< AnimationNode* >( sal::static_int_cast< sal_IntPtr >(xTunnel->getSomething( getUnoTunnelId() )));
@@ -1987,7 +1987,7 @@ Reference< XAnimationNode > SAL_CALL AnimationNode::replaceChild( const Referenc
     if( ::std::find(maChildren.begin(), maChildren.end(), newChild) != maChildren.end() )
         throw ElementExistException();
 
-    Reference< XInterface > xNull( 0 );
+    Reference< XInterface > xNull( nullptr );
     oldChild->setParent( xNull );
 
     (*replace) = newChild;
@@ -2013,7 +2013,7 @@ Reference< XAnimationNode > SAL_CALL AnimationNode::removeChild( const Reference
     if( old == maChildren.end() )
         throw NoSuchElementException();
 
-    Reference< XInterface > xNull( 0 );
+    Reference< XInterface > xNull( nullptr );
     oldChild->setParent( xNull );
 
     maChildren.erase( old );
