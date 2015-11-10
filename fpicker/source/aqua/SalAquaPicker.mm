@@ -52,7 +52,7 @@ using namespace ::com::sun::star::uno;
 
 // constructor
 SalAquaPicker::SalAquaPicker()
-: m_pDialog(NULL)
+: m_pDialog(nullptr)
 , m_pControlHelper(new ControlHelper())
 {
     DBG_PRINT_ENTRY(CLASS_NAME, __func__);
@@ -67,10 +67,10 @@ SalAquaPicker::~SalAquaPicker()
 
     NSAutoreleasePool *pool = [NSAutoreleasePool new];
 
-    if (NULL != m_pControlHelper)
+    if (nullptr != m_pControlHelper)
         delete m_pControlHelper;
 
-    if (NULL != m_pDialog)
+    if (nullptr != m_pDialog)
         [m_pDialog release];
 
     [pool release];
@@ -152,13 +152,13 @@ int SalAquaPicker::run()
 
     NSAutoreleasePool *pool = [NSAutoreleasePool new];
 
-    if (m_pDialog == NULL) {
+    if (m_pDialog == nullptr) {
         //this is the case e.g. for the folder picker at this stage
         implInitialize();
     }
 
     NSView *userPane = m_pControlHelper->getUserPane();
-    if (userPane != NULL) {
+    if (userPane != nullptr) {
         [m_pDialog setAccessoryView:userPane];
     }
 

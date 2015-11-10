@@ -29,7 +29,7 @@
 {
     if ((self = [super init])) {
         filePicker = fPicker;
-        filterHelper = NULL;
+        filterHelper = nullptr;
         return self;
     }
     return nil;
@@ -45,7 +45,7 @@
 - (BOOL)panel:(id)sender shouldShowFilename:(NSString *)filename
 {
     (void)sender;
-    if( filterHelper == NULL )
+    if( filterHelper == nullptr )
         return true;
     if( filename == nil )
         return false;
@@ -55,7 +55,7 @@
 - (void)panelSelectionDidChange:(id)sender
 {
     (void)sender;
-    if (filePicker != NULL) {
+    if (filePicker != nullptr) {
         css::ui::dialogs::FilePickerEvent evt;
         filePicker->fileSelectionChanged(evt);
     }
@@ -65,7 +65,7 @@
 {
     (void)sender;
     (void)path;
-    if (filePicker != NULL) {
+    if (filePicker != nullptr) {
         css::ui::dialogs::FilePickerEvent evt;
         filePicker->directoryChanged(evt);
     }
@@ -83,7 +83,7 @@
         return;
     }
     
-    if (filterHelper == NULL) {
+    if (filterHelper == nullptr) {
         return;
     }
     

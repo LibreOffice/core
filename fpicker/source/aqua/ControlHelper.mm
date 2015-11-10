@@ -136,12 +136,12 @@ NSTextField* createLabelWithString(NSString* labelString) {
 // Constructor / Destructor
 
 ControlHelper::ControlHelper()
-: m_pUserPane(NULL)
+: m_pUserPane(nullptr)
 , m_pFilterControl(nil)
 , m_bUserPaneNeeded( false )
 , m_bIsUserPaneLaidOut(false)
 , m_bIsFilterControlNeeded(false)
-, m_pFilterHelper(NULL)
+, m_pFilterHelper(nullptr)
 {
     DBG_PRINT_ENTRY(CLASS_NAME, __func__);
 
@@ -164,11 +164,11 @@ ControlHelper::~ControlHelper()
 
     NSAutoreleasePool *pool = [NSAutoreleasePool new];
 
-    if (NULL != m_pUserPane) {
+    if (nullptr != m_pUserPane) {
         [m_pUserPane release];
     }
 
-    if (m_pFilterControl != NULL) {
+    if (m_pFilterControl != nullptr) {
         [m_pFilterControl setTarget:nil];
     }
 
@@ -319,7 +319,7 @@ void ControlHelper::setLabel( sal_Int16 nControlId, NSString* aLabel )
     if (nil != pControl) {
         if ([pControl class] == [NSPopUpButton class]) {
             NSString *sOldName = m_aMapListLabels[pControl];
-            if (sOldName != NULL && sOldName != aLabel) {
+            if (sOldName != nullptr && sOldName != aLabel) {
                 [sOldName release];
             }
 
@@ -995,7 +995,7 @@ void ControlHelper::updateFilterUI()
 {
     DBG_PRINT_ENTRY(CLASS_NAME, __func__);
 
-    if (!m_bIsFilterControlNeeded || m_pFilterHelper == NULL) {
+    if (!m_bIsFilterControlNeeded || m_pFilterHelper == nullptr) {
         SAL_INFO("fpicker.aqua","no filter control needed or no filter helper present");
         DBG_PRINT_EXIT(CLASS_NAME, __func__);
         return;

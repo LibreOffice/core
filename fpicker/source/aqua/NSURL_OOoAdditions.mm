@@ -81,18 +81,18 @@ NSString* resolveAlias( NSString* i_pSystemPath )
     CFURLRef rUrl = CFURLCreateWithFileSystemPath( kCFAllocatorDefault,
                                                    reinterpret_cast<CFStringRef>(i_pSystemPath),
                                                    kCFURLPOSIXPathStyle, false);
-    if( rUrl != NULL )
+    if( rUrl != nullptr )
     {
         CFErrorRef rError;
-        CFDataRef rBookmark = CFURLCreateBookmarkDataFromFile( NULL, rUrl, &rError );
+        CFDataRef rBookmark = CFURLCreateBookmarkDataFromFile( nullptr, rUrl, &rError );
         CFRelease( rUrl );
-        if( rBookmark != NULL )
+        if( rBookmark != nullptr )
         {
             Boolean bIsStale;
             CFURLRef rResolvedUrl = CFURLCreateByResolvingBookmarkData( kCFAllocatorDefault, rBookmark, kCFBookmarkResolutionWithoutUIMask,
-                                                                        NULL, NULL, &bIsStale, &rError );
+                                                                        nullptr, nullptr, &bIsStale, &rError );
             CFRelease( rBookmark );
-            if( rResolvedUrl == NULL )
+            if( rResolvedUrl == nullptr )
             {
                 CFRelease( rError );
             }

@@ -182,8 +182,8 @@ public:
 #define CLASS_NAME "FilterHelper"
 
 FilterHelper::FilterHelper()
-: m_pFilterList(NULL)
-, m_pFilterNames(NULL)
+: m_pFilterList(nullptr)
+, m_pFilterNames(nullptr)
 {
     DBG_PRINT_ENTRY(CLASS_NAME, __func__);
     DBG_PRINT_EXIT(CLASS_NAME, __func__);
@@ -195,11 +195,11 @@ FilterHelper::~FilterHelper()
 
     NSAutoreleasePool *pool = [NSAutoreleasePool new];
 
-    if (NULL != m_pFilterList) {
+    if (nullptr != m_pFilterList) {
         delete m_pFilterList;
     }
 
-    if (NULL != m_pFilterNames) {
+    if (nullptr != m_pFilterNames) {
         //we called retain when we added the strings to the list, so we should release them now
         for (NSStringList::iterator iter = m_pFilterNames->begin(); iter != m_pFilterNames->end(); iter++) {
             [*iter release];
@@ -251,7 +251,7 @@ bool FilterHelper::FilterNameExists( const UnoFilterList& _rGroupedFilters )
 void FilterHelper::ensureFilterList( const ::rtl::OUString& _rInitialCurrentFilter )
 {
     //OSL_TRACE(">>> FilterHelper::%s", __func__);
-    if( NULL == m_pFilterList )
+    if( nullptr == m_pFilterList )
     {
         m_pFilterList = new FilterList;
 
@@ -358,7 +358,7 @@ throw (css::lang::IllegalArgumentException, css::uno::RuntimeException) {
     SolarMutexGuard aGuard;
 
     //add a separator if this is not the first group to be added
-    bool bPrependSeparator = m_pFilterList != NULL;
+    bool bPrependSeparator = m_pFilterList != nullptr;
 
     // ensure that we have a filter list
     ::rtl::OUString sInitialCurrentFilter;
@@ -386,7 +386,7 @@ bool FilterHelper::filenameMatchesFilter(NSString* sFilename)
 {
     DBG_PRINT_ENTRY(CLASS_NAME, __func__);
 
-    if (m_aCurrentFilter == NULL) {
+    if (m_aCurrentFilter == nullptr) {
         OSL_TRACE("filter name is null");
         return true;
     }
@@ -448,9 +448,9 @@ FilterList* FilterHelper::getFilterList() {
 NSStringList* FilterHelper::getFilterNames() {
     DBG_PRINT_ENTRY(CLASS_NAME, __func__);
 
-    if (NULL == m_pFilterList)
-        return NULL;
-    if (NULL == m_pFilterNames) {
+    if (nullptr == m_pFilterList)
+        return nullptr;
+    if (nullptr == m_pFilterNames) {
         //build filter names list
         m_pFilterNames = new NSStringList;
         for (FilterList::iterator iter = m_pFilterList->begin(); iter != m_pFilterList->end(); iter++) {
