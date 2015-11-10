@@ -1157,7 +1157,7 @@ static void addEdit( NSView* pCurParent, long& rCurX, long& rCurY, long nAttachO
                 {
                     addBool( pCurParent, nCurX, nCurY, 0,
                              pControllerProperties->getPrintSelectionString(), bSelectionBoxEnabled,
-                             OUString( "PrintContent" ), bSelectionBoxChecked,
+                             "PrintContent", bSelectionBoxChecked,
                              aRightColumn, pControllerProperties, pCtrlTarget );
                     bAddSelectionCheckBox = false;
                 }
