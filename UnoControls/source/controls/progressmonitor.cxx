@@ -150,15 +150,15 @@ Sequence< Type > SAL_CALL ProgressMonitor::getTypes() throw( RuntimeException, s
     // Optimize this method !
     // We initialize a static variable only one time. And we don't must use a mutex at every call!
     // For the first call; pTypeCollection is NULL - for the second call pTypeCollection is different from NULL!
-    static OTypeCollection* pTypeCollection = NULL;
+    static OTypeCollection* pTypeCollection = nullptr;
 
-    if ( pTypeCollection == NULL )
+    if ( pTypeCollection == nullptr )
     {
         // Ready for multithreading; get global mutex for first call of this method only! see before
         MutexGuard aGuard( Mutex::getGlobalMutex() );
 
         // Control these pointer again ... it can be, that another instance will be faster then these!
-        if ( pTypeCollection == NULL )
+        if ( pTypeCollection == nullptr )
         {
             // Create a static typecollection ...
             static OTypeCollection aTypeCollection ( cppu::UnoType<XLayoutConstrains>::get(),
@@ -206,10 +206,10 @@ void SAL_CALL ProgressMonitor::addText(
     // Safe impossible cases
     // Check valid call of this method.
     DBG_ASSERT ( impl_debug_checkParameter ( rTopic, rText, bbeforeProgress )   , "ProgressMonitor::addText()\nCall without valid parameters!\n");
-    DBG_ASSERT ( !(impl_searchTopic ( rTopic, bbeforeProgress ) != NULL )       , "ProgresMonitor::addText()\nThe text already exist.\n"        );
+    DBG_ASSERT ( !(impl_searchTopic ( rTopic, bbeforeProgress ) != nullptr )       , "ProgresMonitor::addText()\nThe text already exist.\n"        );
 
     // Do nothing (in Release), if topic already exist.
-    if ( impl_searchTopic ( rTopic, bbeforeProgress ) != NULL )
+    if ( impl_searchTopic ( rTopic, bbeforeProgress ) != nullptr )
     {
         return;
     }
@@ -249,7 +249,7 @@ void SAL_CALL ProgressMonitor::removeText ( const OUString& rTopic, sal_Bool bbe
     // Search the topic ...
     IMPL_TextlistItem* pSearchItem = impl_searchTopic ( rTopic, bbeforeProgress );
 
-    if ( pSearchItem != NULL )
+    if ( pSearchItem != nullptr )
     {
         // Ready for multithreading
         MutexGuard aGuard ( m_aMutex );
@@ -292,7 +292,7 @@ void SAL_CALL ProgressMonitor::updateText (
     // Search topic ...
     IMPL_TextlistItem* pSearchItem = impl_searchTopic ( rTopic, bbeforeProgress );
 
-    if ( pSearchItem != NULL )
+    if ( pSearchItem != nullptr )
     {
         // Ready for multithreading
         MutexGuard aGuard ( m_aMutex );
@@ -865,7 +865,7 @@ IMPL_TextlistItem* ProgressMonitor::impl_searchTopic ( const OUString& rTopic, b
     }
 
     // We haven't found this topic... return a nonvalid pointer.
-    return NULL;
+    return nullptr;
 }
 
 //  debug methods

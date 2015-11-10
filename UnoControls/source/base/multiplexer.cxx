@@ -37,7 +37,7 @@ namespace unocontrols{
     /* First get all interfaces from container with right type.*/                                                                   \
     OInterfaceContainerHelper* pContainer = m_aListenerHolder.getContainer( cppu::UnoType<INTERFACE>::get() );  \
     /* Do the follow only, if elements in container exist.*/                                                                        \
-    if( pContainer != NULL )                                                                                                        \
+    if( pContainer != nullptr )                                                                                                        \
     {                                                                                                                               \
         OInterfaceIteratorHelper aIterator( *pContainer );                                                                          \
         EVENTTYP aLocalEvent = EVENT;                                                                                               \

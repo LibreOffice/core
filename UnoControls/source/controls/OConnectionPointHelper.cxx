@@ -197,7 +197,7 @@ Sequence< Reference< XInterface > > SAL_CALL OConnectionPointHelper::getConnecti
     // Get pointer to specialized container which hold all interfaces of searched type.
     OInterfaceContainerHelper* pSpecialContainer = aSharedContainer.getContainer( m_aInterfaceType );
     // Get elements of searched type, if some else exist.
-    if ( pSpecialContainer != NULL )
+    if ( pSpecialContainer != nullptr )
     {
         seqReturnConnections = pSpecialContainer->getElements();
     }

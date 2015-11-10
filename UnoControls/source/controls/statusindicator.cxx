@@ -118,15 +118,15 @@ Sequence< Type > SAL_CALL StatusIndicator::getTypes() throw( RuntimeException, s
     // Optimize this method !
     // We initialize a static variable only one time. And we don't must use a mutex at every call!
     // For the first call; pTypeCollection is NULL - for the second call pTypeCollection is different from NULL!
-    static OTypeCollection* pTypeCollection = NULL;
+    static OTypeCollection* pTypeCollection = nullptr;
 
-    if ( pTypeCollection == NULL )
+    if ( pTypeCollection == nullptr )
     {
         // Ready for multithreading; get global mutex for first call of this method only! see before
         MutexGuard aGuard( Mutex::getGlobalMutex() );
 
         // Control these pointer again ... it can be, that another instance will be faster then these!
-        if ( pTypeCollection == NULL )
+        if ( pTypeCollection == nullptr )
         {
             // Create a static typecollection ...
             static OTypeCollection aTypeCollection  ( cppu::UnoType<XLayoutConstrains>::get(),
