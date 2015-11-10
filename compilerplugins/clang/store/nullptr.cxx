@@ -42,6 +42,8 @@ public:
     bool VisitImplicitCastExpr(CastExpr const * expr);
 
 private:
+    bool isInLokIncludeFile(SourceLocation spellingLocation) const;
+
     bool isFromCIncludeFile(SourceLocation spellingLocation) const;
 
     bool isMacroBodyExpansion(SourceLocation location) const;
@@ -134,6 +136,8 @@ bool Nullptr::VisitImplicitCastExpr(CastExpr const * expr) {
                 ((!compiler.getLangOpts().CPlusPlus
                   || isInUnoIncludeFile(
                       compiler.getSourceManager().getSpellingLoc(loc))
+                  || isInLokIncludeFile(
+                      compiler.getSourceManager().getSpellingLoc(loc))
                   || isFromCIncludeFile(
                       compiler.getSourceManager().getSpellingLoc(loc)))
                  ? "NULL" : "nullptr"));
@@ -141,6 +145,11 @@ bool Nullptr::VisitImplicitCastExpr(CastExpr const * expr) {
         break;
     }
     return true;
+}
+
+bool Nullptr::isInLokIncludeFile(SourceLocation spellingLocation) const {
+    return compiler.getSourceManager().getFilename(spellingLocation)
+        .startswith(SRCDIR "/include/LibreOfficeKit/");
 }
 
 bool Nullptr::isFromCIncludeFile(SourceLocation spellingLocation) const {
