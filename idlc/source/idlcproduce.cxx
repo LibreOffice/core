@@ -39,7 +39,7 @@
 
 using namespace ::osl;
 
-StringList* pCreatedDirectories = NULL;
+StringList* pCreatedDirectories = nullptr;
 
 static bool checkOutputPath(const OString& completeName)
 {

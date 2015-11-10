@@ -34,9 +34,9 @@ AstInterface::AstInterface(const OString& name,
     , AstScope(NT_interface)
     , m_mandatoryInterfaces(0)
     , m_bIsDefined(false)
-    , m_bSingleInheritance(pInherits != 0)
+    , m_bSingleInheritance(pInherits != nullptr)
 {
-    if (pInherits != 0) {
+    if (pInherits != nullptr) {
         addInheritedInterface(pInherits, false, OUString());
     }
 }
@@ -317,7 +317,7 @@ void AstInterface::checkMemberClashes(
     VisibleMembers::const_iterator i(
         m_visibleMembers.find(member->getLocalName()));
     if (i != m_visibleMembers.end()) {
-        if (i->second.mandatory != 0) {
+        if (i->second.mandatory != nullptr) {
             if (i->second.mandatory->getScopedName() != member->getScopedName())
             {
                 DoubleMemberDeclaration d;
@@ -383,7 +383,7 @@ void AstInterface::addOptionalVisibleMembers(AstInterface const * ifc) {
                 VisibleMembers::value_type(
                     (*i)->getLocalName(), VisibleMember())).first;
         }
-        if (visible->second.mandatory == 0) {
+        if (visible->second.mandatory == nullptr) {
             visible->second.optionals.insert(
                 VisibleMember::Optionals::value_type(ifc->getScopedName(), *i));
         }

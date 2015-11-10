@@ -47,7 +47,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
                 fprintf(
                     stdout, "%s: Compiling stdin\n",
                     options.getProgramName().getStr());
-            nErrors = compileFile(0);
+            nErrors = compileFile(nullptr);
             if ( ( idlc()->getWarningCount() > 0 ) && !options.quiet() ) {
                 fprintf(
                     stdout, "%s: detected %lu warnings compiling stdin\n",
@@ -68,7 +68,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
             if (nErrors > 0) {
                 removeIfExists(outputUrl);
             } else {
-                nErrors = produceFile(outputUrl, 0);
+                nErrors = produceFile(outputUrl, nullptr);
             }
             idlc()->reset();
         }
@@ -132,7 +132,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
             } else {
                 sPair_t const pair(depFileUrl, outputFile);
                 nErrors = produceFile(outputFileUrl,
-                            (options.isValid("-M")) ? &pair : 0);
+                            (options.isValid("-M")) ? &pair : nullptr);
             }
 
             idlc()->reset();

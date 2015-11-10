@@ -39,7 +39,7 @@ public:
 
     bool isVariadic() const;
 
-    bool isConstructor() const { return m_pReturnType == 0; }
+    bool isConstructor() const { return m_pReturnType == nullptr; }
 
     void setExceptions(DeclList const * pExceptions);
     sal_uInt16 nExceptions()

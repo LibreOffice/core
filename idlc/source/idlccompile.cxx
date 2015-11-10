@@ -174,7 +174,7 @@ bool copyFile(const OString* source, const OString& target)
 {
     bool bRet = true;
 
-    FILE* pSource = source == 0 ? stdin : fopen(source->getStr(), "rb");
+    FILE* pSource = source == nullptr ? stdin : fopen(source->getStr(), "rb");
     if ( !pSource )
         return false;
 
@@ -195,7 +195,7 @@ bool copyFile(const OString* source, const OString& target)
         {
             if ( (fwrite(pBuffer, 1, readSize, pTarget)) != readSize || ferror(pTarget) )
             {
-                if (source != 0) {
+                if (source != nullptr) {
                     fclose(pSource);
                 }
                 fclose(pTarget);
@@ -204,7 +204,7 @@ bool copyFile(const OString* source, const OString& target)
         }
     }
 
-    if (source != 0) {
+    if (source != nullptr) {
         fclose(pSource);
     }
     if ( fflush(pTarget) )
@@ -221,7 +221,7 @@ sal_Int32 compileFile(const OString * pathname)
     OString preprocFile = makeTempName(OString("idlf_"));
 
     OString fileName;
-    if (pathname == 0) {
+    if (pathname == nullptr) {
         fileName = "stdin";
     } else {
         fileName = *pathname;
@@ -231,7 +231,7 @@ sal_Int32 compileFile(const OString * pathname)
     {
           fprintf(stderr, "%s: could not copy %s%s to %s\n",
                 idlc()->getOptions()->getProgramName().getStr(),
-                pathname == 0 ? "" : "file ", fileName.getStr(),
+                pathname == nullptr ? "" : "file ", fileName.getStr(),
                 tmpFile.getStr());
           exit(99);
     }
@@ -315,11 +315,11 @@ sal_Int32 compileFile(const OString * pathname)
 #else // SYSTEM_UCPP
     cpp = OUString(UCPP);
 #endif
-    oslProcess      hProcess = NULL;
+    oslProcess      hProcess = nullptr;
     oslProcessError procError = osl_Process_E_None;
 
     const int nCmdArgs = lCppArgs.size();
-    rtl_uString** pCmdArgs = 0;
+    rtl_uString** pCmdArgs = nullptr;
     pCmdArgs = static_cast<rtl_uString**>(rtl_allocateZeroMemory(nCmdArgs * sizeof(rtl_uString*)));
 
     ::std::vector< OUString >::iterator iter = lCppArgs.begin();
@@ -331,7 +331,7 @@ sal_Int32 compileFile(const OString * pathname)
     }
 
 	procError = osl_executeProcess( cpp.pData, pCmdArgs, nCmdArgs, osl_Process_WAIT,
-                                    0, startDir.pData, 0, 0, &hProcess );
+                                    nullptr, startDir.pData, nullptr, 0, &hProcess );
 
     oslProcessInfo hInfo;
     hInfo.Size = (sal_uInt32)(sizeof(oslProcessInfo));
@@ -348,7 +348,7 @@ sal_Int32 compileFile(const OString * pathname)
         else
             fprintf(stderr, "%s: preprocessing %s%s failed\n",
                     pOptions->getProgramName().getStr(),
-                    pathname == 0 ? "" : "file ", fileName.getStr());
+                    pathname == nullptr ? "" : "file ", fileName.getStr());
 
         osl_freeProcessHandle(hProcess);
         rtl_freeMemory(pCmdArgs);
@@ -377,7 +377,7 @@ sal_Int32 compileFile(const OString * pathname)
 
     // parse file
     yyin = fopen(preprocFile.getStr(), "r");
-    if (yyin == NULL)
+    if (yyin == nullptr)
     {
         fprintf(stderr, "%s: Could not open cpp output file %s\n",
                    pOptions->getProgramName().getStr(), preprocFile.getStr());

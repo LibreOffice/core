@@ -42,7 +42,7 @@
 
 AstDeclaration* SAL_CALL scopeAsDecl(AstScope* pScope)
 {
-    if (pScope == NULL) return NULL;
+    if (pScope == nullptr) return nullptr;
 
     switch( pScope->getScopeNodeType() )
     {
@@ -65,13 +65,13 @@ AstDeclaration* SAL_CALL scopeAsDecl(AstScope* pScope)
         case NT_enum:
             return static_cast<AstEnum*>(pScope);
         default:
-            return NULL;
+            return nullptr;
     }
 }
 
 AstScope* SAL_CALL declAsScope(AstDeclaration* pDecl)
 {
-    if (pDecl == NULL) return NULL;
+    if (pDecl == nullptr) return nullptr;
 
     switch(pDecl->getNodeType())
     {
@@ -94,7 +94,7 @@ AstScope* SAL_CALL declAsScope(AstDeclaration* pDecl)
         case NT_operation:
             return static_cast<AstOperation*>(pDecl);
         default:
-            return NULL;
+            return nullptr;
    }
 }
 
@@ -120,7 +120,7 @@ static void SAL_CALL predefineXInterface(AstModule* pRoot)
     pParentScope = pModule;
 
     // define XInterface
-    AstInterface* pInterface = new AstInterface(OString("XInterface"), NULL, pParentScope);
+    AstInterface* pInterface = new AstInterface(OString("XInterface"), nullptr, pParentScope);
     pInterface->setDefined();
     pInterface->setPredefined(true);
     pInterface->setPublished();
@@ -211,7 +211,7 @@ Idlc::Idlc(Options* pOptions)
 {
     m_pScopes = new AstStack();
     // init root object after construction
-    m_pRoot = NULL;
+    m_pRoot = nullptr;
     m_pErrorHandler = new ErrorHandler();
     m_bGenerateDoc = m_pOptions->isValid("-C");
 }
@@ -226,7 +226,7 @@ Idlc::~Idlc()
 void Idlc::init()
 {
     delete m_pRoot;
-    m_pRoot = new AstModule(NT_root, OString(), NULL);
+    m_pRoot = new AstModule(NT_root, OString(), nullptr);
 
     // push the root node on the stack
     m_pScopes->push(m_pRoot);
@@ -253,7 +253,7 @@ void Idlc::reset()
     m_pScopes->clear();
     delete m_pRoot;
 
-    m_pRoot = new AstModule(NT_root, OString(), NULL);
+    m_pRoot = new AstModule(NT_root, OString(), nullptr);
 
     // push the root node on the stack
     m_pScopes->push(m_pRoot);
@@ -348,7 +348,7 @@ Idlc::dumpDeps(OString const& rDepFile, OString const& rTarget)
     return ::osl::FileBase::E_None == rc;
 }
 
-static Idlc* pStaticIdlc = NULL;
+static Idlc* pStaticIdlc = nullptr;
 
 Idlc* SAL_CALL idlc()
 {
@@ -364,7 +364,7 @@ Idlc* SAL_CALL setIdlc(Options* pOptions)
 }
 
 AstDeclaration const * resolveTypedefs(AstDeclaration const * type) {
-    if (type != 0) {
+    if (type != nullptr) {
         while (type->getNodeType() == NT_typedef) {
             type = static_cast< AstTypeDef const * >(type)->getBaseType();
         }
@@ -377,8 +377,8 @@ AstDeclaration const * deconstructAndResolveTypedefs(
 {
     *rank = 0;
     for (;;) {
-        if (type == 0) {
-            return 0;
+        if (type == nullptr) {
+            return nullptr;
         }
         switch (type->getNodeType()) {
         case NT_typedef:

@@ -62,7 +62,7 @@ Options::~Options()
 // static
 bool Options::checkArgument (std::vector< std::string > & rArgs, char const * arg, size_t len)
 {
-  bool result = ((arg != 0) && (len > 0));
+  bool result = ((arg != nullptr) && (len > 0));
   OSL_PRECOND(result, "idlc::Options::checkArgument(): invalid arguments");
   if (result)
   {
@@ -117,7 +117,7 @@ bool Options::checkArgument (std::vector< std::string > & rArgs, char const * ar
 bool Options::checkCommandFile (std::vector< std::string > & rArgs, char const * filename)
 {
     FILE * fp = fopen(filename, "r");
-    if (fp == 0)
+    if (fp == nullptr)
     {
         fprintf(stderr, "ERROR: can't open command file \"%s\"\n", filename);
         return false;
@@ -175,7 +175,7 @@ bool Options::checkCommandFile (std::vector< std::string > & rArgs, char const *
 bool Options::badOption(char const * reason, std::string const & rArg) throw(IllegalArgument)
 {
   OStringBuffer message;
-  if (reason != 0)
+  if (reason != nullptr)
   {
     message.append(reason); message.append(" option '"); message.append(rArg.c_str()); message.append("'");
     throw IllegalArgument(message.makeStringAndClear());

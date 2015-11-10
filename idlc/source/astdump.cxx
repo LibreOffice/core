@@ -250,7 +250,7 @@ bool AstService::dump(RegistryKey& rKey)
             break;
 
         case NT_property:
-            static_cast<AstAttribute *>(*i)->dumpBlob(writer, propertyIndex++, 0);
+            static_cast<AstAttribute *>(*i)->dumpBlob(writer, propertyIndex++, nullptr);
             break;
 
         case NT_interface_member:
@@ -388,7 +388,7 @@ void AstAttribute::dumpExceptions(
     DeclList const & exceptions, RTMethodMode flags, sal_uInt16 * methodIndex)
 {
     if (!exceptions.empty()) {
-        OSL_ASSERT(methodIndex != 0);
+        OSL_ASSERT(methodIndex != nullptr);
         sal_uInt16 idx = (*methodIndex)++;
         // exceptions.size() <= SAL_MAX_UINT16 already checked in
         // AstInterface::dump:

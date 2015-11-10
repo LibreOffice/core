@@ -47,16 +47,16 @@ public:
         OUString const * getDoc, DeclList const * getExc,
         OUString const * setDoc, DeclList const * setExc)
     {
-        if (getDoc != 0) {
+        if (getDoc != nullptr) {
             m_getDocumentation = *getDoc;
         }
-        if (getExc != 0) {
+        if (getExc != nullptr) {
             m_getExceptions = *getExc;
         }
-        if (setDoc != 0) {
+        if (setDoc != nullptr) {
             m_setDocumentation = *setDoc;
         }
-        if (setExc != 0) {
+        if (setExc != nullptr) {
             m_setExceptions = *setExc;
         }
     }

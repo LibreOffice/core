@@ -132,7 +132,7 @@ bool AstDeclaration::dump(RegistryKey& rKey)
     {
         DeclList::const_iterator iter = pScope->getIteratorBegin();
         DeclList::const_iterator end = pScope->getIteratorEnd();
-        AstDeclaration* pDecl = NULL;
+        AstDeclaration* pDecl = nullptr;
         while ( iter != end && bRet)
         {
             pDecl = *iter;

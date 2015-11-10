@@ -52,7 +52,7 @@ AstConstant* AstEnum::checkValue(AstExpression* pExpr)
     if ( pExpr->getExprValue()->u.lval > m_enumValueCount )
         m_enumValueCount = pExpr->getExprValue()->u.lval + 1;
 
-    return NULL;
+    return nullptr;
 }
 
 bool AstEnum::dump(RegistryKey& rKey)

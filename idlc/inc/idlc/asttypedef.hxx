@@ -34,7 +34,7 @@ public:
         { return m_pBaseType; }
 
     virtual bool isUnsigned() const override
-    { return m_pBaseType != 0 && m_pBaseType->isUnsigned(); }
+    { return m_pBaseType != nullptr && m_pBaseType->isUnsigned(); }
 
     virtual bool dump(RegistryKey& rKey) override;
 private:

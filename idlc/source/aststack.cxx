@@ -45,14 +45,14 @@ AstStack::~AstStack()
 AstScope* AstStack::top()
 {
     if (m_top < 1)
-        return NULL;
+        return nullptr;
     return m_stack[m_top - 1];
 }
 
 AstScope* AstStack::bottom()
 {
     if (m_top == 0)
-        return NULL;
+        return nullptr;
     return m_stack[0];
 }
 
@@ -61,7 +61,7 @@ AstScope* AstStack::nextToTop()
     AstScope *tmp, *retval;
 
     if (depth() < 2)
-        return NULL;
+        return nullptr;
 
     tmp = top();        // Save top
     (void) pop();       // Pop it
@@ -77,7 +77,7 @@ AstScope* AstStack::topNonNull()
         if ( m_stack[i - 1] )
             return m_stack[i - 1];
       }
-    return NULL;
+    return nullptr;
 }
 
 AstStack* AstStack::push(AstScope* pScope)

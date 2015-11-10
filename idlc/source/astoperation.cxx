@@ -27,7 +27,7 @@
 
 void AstOperation::setExceptions(DeclList const * pExceptions)
 {
-    if (pExceptions != 0) {
+    if (pExceptions != nullptr) {
         m_exceptions = *pExceptions;
     }
 }
@@ -45,7 +45,7 @@ bool AstOperation::dumpBlob(typereg::Writer & rBlob, sal_uInt16 index)
     RTMethodMode    methodMode = RTMethodMode::TWOWAY;
 
     OUString returnTypeName;
-    if (m_pReturnType == 0) {
+    if (m_pReturnType == nullptr) {
         returnTypeName = "void";
     } else {
         returnTypeName = OStringToOUString(

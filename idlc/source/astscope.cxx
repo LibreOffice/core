@@ -42,14 +42,14 @@ AstScope::~AstScope()
 
 AstDeclaration* AstScope::addDeclaration(AstDeclaration* pDecl)
 {
-    AstDeclaration* pDeclaration = NULL;
+    AstDeclaration* pDeclaration = nullptr;
 
-    if ((pDeclaration = lookupForAdd(pDecl)) != NULL)
+    if ((pDeclaration = lookupForAdd(pDecl)) != nullptr)
     {
         if ( pDecl->hasAncestor(pDeclaration) )
         {
             ErrorHandler::error2(EIDL_REDEF_SCOPE, pDecl, pDeclaration);
-            return NULL;
+            return nullptr;
         }
         if ( (pDecl->getNodeType() == pDeclaration->getNodeType()) &&
              (pDecl->getNodeType() == NT_sequence
@@ -76,7 +76,7 @@ AstDeclaration* AstScope::addDeclaration(AstDeclaration* pDecl)
         }
 
         ErrorHandler::error2(EIDL_REDEF_SCOPE, scopeAsDecl(this), pDecl);
-        return NULL;
+        return nullptr;
     }
 
     m_declarations.push_back(pDecl);
@@ -101,17 +101,17 @@ sal_uInt16 AstScope::getNodeCount(NodeType nodeType)
 
 AstDeclaration* AstScope::lookupByName(const OString& scopedName)
 {
-    AstDeclaration* pDecl = NULL;
-    AstScope*       pScope = NULL;
+    AstDeclaration* pDecl = nullptr;
+    AstScope*       pScope = nullptr;
     if (scopedName.isEmpty())
-        return NULL;
+        return nullptr;
 
     // If name starts with "::" start look up in global scope
     if ( isGlobal(scopedName) )
     {
         pDecl = scopeAsDecl(this);
         if ( !pDecl )
-            return NULL;
+            return nullptr;
 
         pScope = pDecl->getScope();
         // If this is the global scope ...
@@ -146,7 +146,7 @@ AstDeclaration* AstScope::lookupByName(const OString& scopedName)
             if ( pScope )
                    pDecl = pScope->lookupByName(scopedName);
             else
-                pDecl = NULL;
+                pDecl = nullptr;
 
              // Special case for scope which is an interface. We
              // have to look in the inherited interfaces as well.
@@ -185,7 +185,7 @@ AstDeclaration* AstScope::lookupByName(const OString& scopedName)
                     pDecl = pScope->lookupByName(scopedName);
             } else
             {
-                pDecl = NULL;
+                pDecl = nullptr;
             }
         }
 
@@ -206,7 +206,7 @@ AstDeclaration* AstScope::lookupByNameLocal(const OString& name) const
             return pDecl;
         ++iter;
     }
-    return NULL;
+    return nullptr;
 }
 
 AstDeclaration* AstScope::lookupInInherited(const OString& scopedName) const
@@ -214,7 +214,7 @@ AstDeclaration* AstScope::lookupInInherited(const OString& scopedName) const
     const AstInterface* pInterface = dynamic_cast<const AstInterface*>(this);
 
     if ( !pInterface )
-        return NULL;
+        return nullptr;
 
     // Can't look in an interface which was not yet defined
     if ( !pInterface->getScope() )
@@ -239,17 +239,17 @@ AstDeclaration* AstScope::lookupInInherited(const OString& scopedName) const
         ++iter;
     }
     // Not found
-    return NULL;
+    return nullptr;
 }
 
 AstDeclaration* AstScope::lookupPrimitiveType(ExprType type)
 {
-    AstDeclaration* pDecl = NULL;
-    AstScope*       pScope = NULL;
+    AstDeclaration* pDecl = nullptr;
+    AstScope*       pScope = nullptr;
     OString         typeName;
     pDecl = scopeAsDecl(this);
     if ( !pDecl )
-        return NULL;
+        return nullptr;
     pScope = pDecl->getScope();
     if ( pScope)
         return pScope->lookupPrimitiveType(type);
@@ -316,13 +316,13 @@ AstDeclaration* AstScope::lookupPrimitiveType(ExprType type)
             return pDecl;
     }
 
-    return NULL;
+    return nullptr;
 }
 
 AstDeclaration* AstScope::lookupForAdd(AstDeclaration* pDecl)
 {
     if ( !pDecl )
-        return NULL;
+        return nullptr;
 
     AstDeclaration* pRetDecl = lookupByNameLocal(pDecl->getLocalName());
 

@@ -32,7 +32,7 @@ OString createName(
     AstType const * typeTemplate, DeclList const * typeArguments)
 {
     OStringBuffer buf(typeTemplate->getScopedName());
-    if (typeArguments != 0) {
+    if (typeArguments != nullptr) {
         buf.append('<');
         for (DeclList::const_iterator i(typeArguments->begin());
              i != typeArguments->end(); ++i)
@@ -40,7 +40,7 @@ OString createName(
             if (i != typeArguments->begin()) {
                 buf.append(',');
             }
-            if (*i != 0) {
+            if (*i != nullptr) {
                 buf.append((*i)->getScopedName());
             }
         }

@@ -34,7 +34,7 @@ AstStruct::AstStruct(
          i != typeParameters.end(); ++i)
     {
         m_typeParameters.push_back(
-            new AstType(NT_type_parameter, *i, 0));
+            new AstType(NT_type_parameter, *i, nullptr));
     }
 }
 
@@ -67,7 +67,7 @@ AstDeclaration const * AstStruct::findTypeParameter(OString const & name)
             return *i;
         }
     }
-    return 0;
+    return nullptr;
 }
 
 bool AstStruct::isType() const {
@@ -108,9 +108,9 @@ bool AstStruct::dump(RegistryKey& rKey)
          ? TYPEREG_VERSION_0 : TYPEREG_VERSION_1),
         getDocumentation(), emptyStr, typeClass, m_bPublished,
         OStringToOUString(getRelativName(), RTL_TEXTENCODING_UTF8),
-        m_pBaseType == 0 ? 0 : 1, nMember, 0,
+        m_pBaseType == nullptr ? 0 : 1, nMember, 0,
         static_cast< sal_uInt16 >(m_typeParameters.size()));
-    if (m_pBaseType != 0) {
+    if (m_pBaseType != nullptr) {
         aBlob.setSuperTypeName(
             0,
             OStringToOUString(
@@ -121,7 +121,7 @@ bool AstStruct::dump(RegistryKey& rKey)
     {
         DeclList::const_iterator iter = getIteratorBegin();
         DeclList::const_iterator end = getIteratorEnd();
-        AstMember*  pMember = NULL;
+        AstMember*  pMember = nullptr;
         sal_uInt16  index = 0;
         while ( iter != end )
         {

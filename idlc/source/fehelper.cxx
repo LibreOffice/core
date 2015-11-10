@@ -49,20 +49,20 @@ AstType const * FeDeclarator::compose(AstDeclaration const * pDecl)
 {
     const AstType*    pType;
 
-    if ( pDecl == 0 )
+    if ( pDecl == nullptr )
     {
-        return NULL;
+        return nullptr;
     }
     if ( !pDecl->isType() )
     {
         ErrorHandler::noTypeError(pDecl);
-        return NULL;
+        return nullptr;
     }
     pType = static_cast<const AstType*>(pDecl);
-    if (m_declType == FD_simple || m_pComplexPart == NULL)
+    if (m_declType == FD_simple || m_pComplexPart == nullptr)
         return pType;
 
-    return NULL; // return through this statement should not happen
+    return nullptr; // return through this statement should not happen
 }
 
 FeInheritanceHeader::FeInheritanceHeader(
@@ -70,9 +70,9 @@ FeInheritanceHeader::FeInheritanceHeader(
     std::vector< OString > * typeParameters)
     : m_nodeType(nodeType)
     , m_pName(pName)
-    , m_pInherits(NULL)
+    , m_pInherits(nullptr)
 {
-    if (typeParameters != 0) {
+    if (typeParameters != nullptr) {
         m_typeParameters = *typeParameters;
     }
     initializeInherits(pInherits);
