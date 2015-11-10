@@ -48,7 +48,7 @@ void * ImplCreateUtf8ToUnicodeContext()
 
 void ImplResetUtf8ToUnicodeContext(void * pContext)
 {
-    if (pContext != NULL)
+    if (pContext != nullptr)
     {
         static_cast< ImplUtf8ToUnicodeContext * >(pContext)->nShift = -1;
         static_cast< ImplUtf8ToUnicodeContext * >(pContext)->bCheckBom = true;
@@ -75,7 +75,7 @@ sal_Size ImplConvertUtf8ToUnicode(
        RTL_TEXTENCODING_UTF8 and RTL_TEXTENCODING_JAVA_UTF8.
       */
 
-    bool bJavaUtf8 = pData != NULL;
+    bool bJavaUtf8 = pData != nullptr;
     sal_uInt32 nUtf32 = 0;
     int nShift = -1;
     bool bCheckBom = true;
@@ -85,7 +85,7 @@ sal_Size ImplConvertUtf8ToUnicode(
     sal_Unicode * pDestBufPtr = pDestBuf;
     sal_Unicode * pDestBufEnd = pDestBufPtr + nDestChars;
 
-    if (pContext != NULL)
+    if (pContext != nullptr)
     {
         nUtf32 = static_cast< ImplUtf8ToUnicodeContext * >(pContext)->nUtf32;
         nShift = static_cast< ImplUtf8ToUnicodeContext * >(pContext)->nShift;
@@ -235,15 +235,15 @@ sal_Size ImplConvertUtf8ToUnicode(
             }
     }
 
-    if (pContext != NULL)
+    if (pContext != nullptr)
     {
         static_cast< ImplUtf8ToUnicodeContext * >(pContext)->nUtf32 = nUtf32;
         static_cast< ImplUtf8ToUnicodeContext * >(pContext)->nShift = nShift;
         static_cast< ImplUtf8ToUnicodeContext * >(pContext)->bCheckBom = bCheckBom;
     }
-    if (pInfo != NULL)
+    if (pInfo != nullptr)
         *pInfo = nInfo;
-    if (pSrcCvtBytes != NULL)
+    if (pSrcCvtBytes != nullptr)
         *pSrcCvtBytes = reinterpret_cast< char const * >(pSrcBufPtr) - pSrcBuf;
     return pDestBufPtr - pDestBuf;
 }
@@ -257,7 +257,7 @@ void * ImplCreateUnicodeToUtf8Context()
 
 void ImplResetUnicodeToUtf8Context(void * pContext)
 {
-    if (pContext != NULL)
+    if (pContext != nullptr)
         static_cast< ImplUnicodeToUtf8Context * >(pContext)->nHighSurrogate = 0xFFFF;
 }
 
@@ -271,7 +271,7 @@ sal_Size ImplConvertUnicodeToUtf8(
     sal_Size nSrcChars, char * pDestBuf, sal_Size nDestBytes, sal_uInt32 nFlags,
     sal_uInt32 * pInfo, sal_Size * pSrcCvtChars)
 {
-    bool bJavaUtf8 = pData != NULL;
+    bool bJavaUtf8 = pData != nullptr;
     sal_Unicode nHighSurrogate = 0xFFFF;
     sal_uInt32 nInfo = 0;
     sal_Unicode const * pSrcBufPtr = pSrcBuf;
@@ -279,7 +279,7 @@ sal_Size ImplConvertUnicodeToUtf8(
     char * pDestBufPtr = pDestBuf;
     char * pDestBufEnd = pDestBufPtr + nDestBytes;
 
-    if (pContext != NULL)
+    if (pContext != nullptr)
         nHighSurrogate
             = static_cast< ImplUnicodeToUtf8Context * >(pContext)->nHighSurrogate;
 
@@ -360,8 +360,8 @@ sal_Size ImplConvertUnicodeToUtf8(
 
     bad_input:
         switch (sal::detail::textenc::handleBadInputUnicodeToTextConversion(
-                    false, 0, nFlags, &pDestBufPtr, pDestBufEnd, &nInfo, NULL,
-                    0, NULL))
+                    false, 0, nFlags, &pDestBufPtr, pDestBufEnd, &nInfo, nullptr,
+                    0, nullptr))
         {
         case sal::detail::textenc::BAD_INPUT_STOP:
             nHighSurrogate = 0;
@@ -392,7 +392,7 @@ sal_Size ImplConvertUnicodeToUtf8(
         else
             switch (sal::detail::textenc::handleBadInputUnicodeToTextConversion(
                         false, 0, nFlags, &pDestBufPtr, pDestBufEnd, &nInfo,
-                        NULL, 0, NULL))
+                        nullptr, 0, nullptr))
             {
             case sal::detail::textenc::BAD_INPUT_STOP:
             case sal::detail::textenc::BAD_INPUT_CONTINUE:
@@ -406,12 +406,12 @@ sal_Size ImplConvertUnicodeToUtf8(
     }
 
  done:
-    if (pContext != NULL)
+    if (pContext != nullptr)
         static_cast< ImplUnicodeToUtf8Context * >(pContext)->nHighSurrogate
             = nHighSurrogate;
-    if (pInfo != NULL)
+    if (pInfo != nullptr)
         *pInfo = nInfo;
-    if (pSrcCvtChars != NULL)
+    if (pSrcCvtChars != nullptr)
         *pSrcCvtChars = pSrcBufPtr - pSrcBuf;
     return pDestBufPtr - pDestBuf;
 }

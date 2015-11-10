@@ -114,10 +114,10 @@ static bool getModulePathFromAddress(void * address, rtl_String ** path) {
 
 oslModule SAL_CALL osl_loadModule(rtl_uString *ustrModuleName, sal_Int32 nRtldMode)
 {
-    oslModule pModule=0;
-    rtl_uString* ustrTmp = NULL;
+    oslModule pModule=nullptr;
+    rtl_uString* ustrTmp = nullptr;
 
-    SAL_WARN_IF(ustrModuleName == 0, "sal.osl", "string is not valid");
+    SAL_WARN_IF(ustrModuleName == nullptr, "sal.osl", "string is not valid");
 
     /* ensure ustrTmp hold valid string */
     if (osl_File_E_None != osl_getSystemPathFromFileURL(ustrModuleName, &ustrTmp))
@@ -157,13 +157,13 @@ oslModule SAL_CALL osl_loadModuleAscii(const sal_Char *pModuleName, sal_Int32 nR
         void* pLib = dlopen(pModuleName, rtld_mode);
 
         SAL_INFO_IF(
-            pLib == 0, "sal.osl",
+            pLib == nullptr, "sal.osl",
             "dlopen(" << pModuleName << ", " << rtld_mode << "): "
                 << dlerror());
 #endif
         return pLib;
     }
-    return NULL;
+    return nullptr;
 }
 
 oslModule osl_loadModuleRelativeAscii(
@@ -173,13 +173,13 @@ oslModule osl_loadModuleRelativeAscii(
     if (relativePath[0] == '/') {
         return osl_loadModuleAscii(relativePath, mode);
     } else {
-        rtl_String * path = NULL;
-        rtl_String * suffix = NULL;
+        rtl_String * path = nullptr;
+        rtl_String * suffix = nullptr;
         oslModule module;
         if (!getModulePathFromAddress(
                 reinterpret_cast< void * >(baseModule), &path))
         {
-            return NULL;
+            return nullptr;
         }
         rtl_string_newFromStr_WithLength(
             &path, path->buffer,
@@ -303,10 +303,10 @@ osl_getFunctionSymbol(oslModule module, rtl_uString *puFunctionSymbolName)
 sal_Bool SAL_CALL osl_getModuleURLFromAddress(void * addr, rtl_uString ** ppLibraryUrl)
 {
     bool result = false;
-    rtl_String * path = NULL;
+    rtl_String * path = nullptr;
     if (getModulePathFromAddress(addr, &path))
     {
-        rtl_uString * workDir = NULL;
+        rtl_uString * workDir = nullptr;
         osl_getProcessWorkingDir(&workDir);
         if (workDir)
         {
@@ -319,7 +319,7 @@ sal_Bool SAL_CALL osl_getModuleURLFromAddress(void * addr, rtl_uString ** ppLibr
                                OSTRING_TO_OUSTRING_CVTFLAGS);
 
             SAL_WARN_IF(
-                *ppLibraryUrl == 0, "sal.osl", "rtl_string2UString failed");
+                *ppLibraryUrl == nullptr, "sal.osl", "rtl_string2UString failed");
             osl_getFileURLFromSystemPath(*ppLibraryUrl, ppLibraryUrl);
             osl_getAbsoluteFileURL(workDir, *ppLibraryUrl, ppLibraryUrl);
 

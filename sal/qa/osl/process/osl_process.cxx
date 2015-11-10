@@ -171,7 +171,7 @@ namespace
 #else
     void read_parent_environment(string_container_t* env_container)
     {
-        for (int i = 0; NULL != environ[i]; i++)
+        for (int i = 0; nullptr != environ[i]; i++)
             env_container->push_back(OString(environ[i]));
         tidy_container(*env_container);
     }
@@ -213,7 +213,7 @@ public:
 
     OUString create_temp_file(OUString &temp_file_url)
     {
-        FileBase::RC rc = FileBase::createTempFile(0, 0, &temp_file_url);
+        FileBase::RC rc = FileBase::createTempFile(nullptr, nullptr, &temp_file_url);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("createTempFile failed", FileBase::E_None, rc);
 
         OUString temp_file_path;
@@ -349,9 +349,9 @@ public:
             parameters_,
             parameters_count_,
             osl_Process_NORMAL,
-            NULL,
+            nullptr,
             suCWD.pData,
-            NULL,
+            nullptr,
             0,
             &process);
 
@@ -398,7 +398,7 @@ public:
             parameters_,
             parameters_count_,
             osl_Process_NORMAL,
-            NULL,
+            nullptr,
             suCWD.pData,
             child_env,
             SAL_N_ELEMENTS(child_env),
@@ -442,12 +442,12 @@ public:
 #endif
         oslProcessError osl_error = osl_executeProcess(
             suBatch.pData,
-            NULL,
+            nullptr,
             0,
             osl_Process_NORMAL,
-            NULL,
+            nullptr,
             suCWD.pData,
-            NULL,
+            nullptr,
             0,
             &process);
 

@@ -52,7 +52,7 @@ void SAL_CALL rtl_byte_sequence_reference2One(
         {
             pNew = static_cast<sal_Sequence *>(rtl_allocateMemory( SAL_SEQUENCE_HEADER_SIZE + nElements ));
 
-            if ( pNew != 0 )
+            if ( pNew != nullptr )
                 memcpy( pNew->elements, pSequence->elements, nElements );
 
             if (! osl_atomic_decrement( &pSequence->nRefCount ))
@@ -63,7 +63,7 @@ void SAL_CALL rtl_byte_sequence_reference2One(
             pNew = static_cast<sal_Sequence *>(rtl_allocateMemory( SAL_SEQUENCE_HEADER_SIZE ));
         }
 
-        if ( pNew != 0 )
+        if ( pNew != nullptr )
         {
             pNew->nRefCount = 1;
             pNew->nElements = nElements;
@@ -90,7 +90,7 @@ void SAL_CALL rtl_byte_sequence_realloc(
     {
         pNew = static_cast<sal_Sequence *>(rtl_allocateMemory( SAL_SEQUENCE_HEADER_SIZE + nSize ));
 
-        if ( pNew != 0 )
+        if ( pNew != nullptr )
         {
             if (nSize > nElements)
             {
@@ -113,7 +113,7 @@ void SAL_CALL rtl_byte_sequence_realloc(
             pSequence, SAL_SEQUENCE_HEADER_SIZE + nSize ));
     }
 
-    if ( pSequence != 0 )
+    if ( pSequence != nullptr )
     {
         pSequence->nRefCount = 1;
         pSequence->nElements = nSize;
@@ -132,7 +132,7 @@ void SAL_CALL rtl_byte_sequence_acquire( sal_Sequence *pSequence )
 void SAL_CALL rtl_byte_sequence_release( sal_Sequence *pSequence )
     SAL_THROW_EXTERN_C()
 {
-    if ( pSequence != 0 )
+    if ( pSequence != nullptr )
     {
         if (! osl_atomic_decrement( &(pSequence->nRefCount )) )
         {
@@ -148,14 +148,14 @@ void SAL_CALL rtl_byte_sequence_construct( sal_Sequence **ppSequence , sal_Int32
     if( *ppSequence )
     {
         rtl_byte_sequence_release( *ppSequence );
-        *ppSequence = 0;
+        *ppSequence = nullptr;
     }
 
     if( nLength )
     {
         *ppSequence = static_cast<sal_Sequence *>(rtl_allocateZeroMemory( SAL_SEQUENCE_HEADER_SIZE + nLength ));
 
-        if ( *ppSequence != 0 )
+        if ( *ppSequence != nullptr )
         {
             (*ppSequence)->nRefCount = 1;
             (*ppSequence)->nElements = nLength;
@@ -175,12 +175,12 @@ void SAL_CALL rtl_byte_sequence_constructNoDefault( sal_Sequence **ppSequence , 
     if( *ppSequence )
     {
         rtl_byte_sequence_release( *ppSequence );
-        *ppSequence = 0;
+        *ppSequence = nullptr;
     }
 
     *ppSequence = static_cast<sal_Sequence *>(rtl_allocateMemory( SAL_SEQUENCE_HEADER_SIZE + nLength ));
 
-    if ( *ppSequence != 0 )
+    if ( *ppSequence != nullptr )
     {
         (*ppSequence)->nRefCount = 1;
         (*ppSequence)->nElements = nLength;
@@ -192,7 +192,7 @@ void SAL_CALL rtl_byte_sequence_constructFromArray(
     SAL_THROW_EXTERN_C()
 {
     rtl_byte_sequence_constructNoDefault( ppSequence , nLength );
-    if ( *ppSequence != 0 && nLength != 0 )
+    if ( *ppSequence != nullptr && nLength != 0 )
         memcpy( (*ppSequence)->elements, pData, nLength );
 }
 

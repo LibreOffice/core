@@ -88,11 +88,11 @@ char const * getEnvironmentVariable() {
 
 char const * getEnvironmentVariable_() {
     char const * p1 = std::getenv("SAL_LOG");
-    if (p1 == 0) {
-        return 0;
+    if (p1 == nullptr) {
+        return nullptr;
     }
     char const * p2 = strdup(p1); // leaked
-    if (p2 == 0) {
+    if (p2 == nullptr) {
         std::abort(); // cannot do much here
     }
     return p2;
@@ -108,9 +108,9 @@ char const * getEnvironmentVariable() {
 bool report(sal_detail_LogLevel level, char const * area) {
     if (level == SAL_DETAIL_LOG_LEVEL_DEBUG)
         return true;
-    assert(area != 0);
+    assert(area != nullptr);
     char const * env = getEnvironmentVariable();
-    if (env == 0) {
+    if (env == nullptr) {
         env = "+WARN";
     }
     std::size_t areaLen = std::strlen(area);

@@ -995,7 +995,7 @@ public:
 void createFromCodePoints::test() {
     CPPUNIT_ASSERT_EQUAL(
         sal_Int32(0),
-        rtl::OUString(static_cast< sal_uInt32 const * >(NULL), 0).getLength());
+        rtl::OUString(static_cast< sal_uInt32 const * >(nullptr), 0).getLength());
     static sal_uInt32 const cp[] = { 0, 0xD800, 0xFFFF, 0x10000, 0x10FFFF };
     rtl::OUString s(cp, sizeof cp / sizeof (sal_uInt32));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(7), s.getLength());

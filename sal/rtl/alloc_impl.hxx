@@ -163,7 +163,7 @@ lowbit(sal_Size n)
 
 typedef pthread_mutex_t rtl_memory_lock_type;
 
-#define RTL_MEMORY_LOCK_INIT(lock)    pthread_mutex_init((lock), NULL)
+#define RTL_MEMORY_LOCK_INIT(lock)    pthread_mutex_init((lock), nullptr)
 #define RTL_MEMORY_LOCK_DESTROY(lock) pthread_mutex_destroy((lock))
 
 #define RTL_MEMORY_LOCK_ACQUIRE(lock) pthread_mutex_lock((lock))

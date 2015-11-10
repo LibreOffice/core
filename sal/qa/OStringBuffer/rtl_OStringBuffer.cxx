@@ -1515,7 +1515,7 @@ namespace rtl_OStringBuffer
             CPPUNIT_ASSERT_MESSAGE
             (
                 "test empty string",
-                pstr != 0 &&
+                pstr != nullptr &&
                 pstr[0] == '\0'
             );
 

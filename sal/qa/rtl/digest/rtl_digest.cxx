@@ -114,12 +114,12 @@ public:
         for (int i = 0; i < aAlgorithmSize; i++)
         {
             rtlDigest handle = rtl_digest_create( constDigestAlgorithms[i] );
-            CPPUNIT_ASSERT_MESSAGE("create digest", handle != NULL);
+            CPPUNIT_ASSERT_MESSAGE("create digest", handle != nullptr);
             rtl_digest_destroy( handle );
         }
 
         rtlDigest handle = rtl_digest_create( rtl_Digest_AlgorithmInvalid );
-        CPPUNIT_ASSERT_MESSAGE("create invalid digest", handle == NULL);
+        CPPUNIT_ASSERT_MESSAGE("create invalid digest", handle == nullptr);
         rtl_digest_destroy( handle );
     }
 
@@ -162,12 +162,12 @@ public:
         rtlDigestError aError;
         rtlDigest handle;
 
-        handle = NULL;
-        aError = rtl_digest_init(handle, NULL, 0);
+        handle = nullptr;
+        aError = rtl_digest_init(handle, nullptr, 0);
         CPPUNIT_ASSERT_MESSAGE("init(NULL, 0, 0)", aError == rtl_Digest_E_Argument);
 
         handle = rtl_digest_create( rtl_Digest_AlgorithmMD5 );
-        aError = rtl_digest_init(handle, NULL, 0);
+        aError = rtl_digest_init(handle, nullptr, 0);
         CPPUNIT_ASSERT_MESSAGE("init(handle, 0, 0)", aError == rtl_Digest_E_None);
         rtl_digest_destroy( handle );
 
@@ -285,24 +285,24 @@ public:
         rtlDigestError aError;
         rtlDigest aHandle;
 
-        aHandle = NULL;
-        aError = rtl_digest_update(aHandle, NULL, 0);
+        aHandle = nullptr;
+        aError = rtl_digest_update(aHandle, nullptr, 0);
         CPPUNIT_ASSERT_MESSAGE("does not handle wrong parameter", aError == rtl_Digest_E_Argument);
 
-        aHandle = NULL;
-        aError = rtl_digest_updateMD2(aHandle, NULL, 0);
+        aHandle = nullptr;
+        aError = rtl_digest_updateMD2(aHandle, nullptr, 0);
         CPPUNIT_ASSERT_MESSAGE("does not handle wrong parameter", aError == rtl_Digest_E_Argument);
 
-        aError = rtl_digest_updateMD5(aHandle, NULL, 0);
+        aError = rtl_digest_updateMD5(aHandle, nullptr, 0);
         CPPUNIT_ASSERT_MESSAGE("does not handle wrong parameter", aError == rtl_Digest_E_Argument);
 
         aHandle = rtl_digest_create( rtl_Digest_AlgorithmMD2 );
-        CPPUNIT_ASSERT_MESSAGE("create with rtl_Digest_AlgorithmMD2", aHandle != 0);
+        CPPUNIT_ASSERT_MESSAGE("create with rtl_Digest_AlgorithmMD2", aHandle != nullptr);
 
         const sal_uInt8* pData = reinterpret_cast<const sal_uInt8*>(sSampleString.getStr());
         sal_uInt32       nSize = sSampleString.getLength();
 
-        aError = rtl_digest_updateMD2(aHandle, NULL, 0);
+        aError = rtl_digest_updateMD2(aHandle, nullptr, 0);
         CPPUNIT_ASSERT_MESSAGE("handle parameter 'pData' wrong", aError == rtl_Digest_E_Argument);
 
         aError = rtl_digest_updateMD2(aHandle, pData, 0);
@@ -312,7 +312,7 @@ public:
 
         // use wrong Algorithm!!! This is volitional!
         aHandle = rtl_digest_create(rtl_Digest_AlgorithmMD2);
-        CPPUNIT_ASSERT_MESSAGE("create with rtl_Digest_AlgorithmMD2", aHandle != 0);
+        CPPUNIT_ASSERT_MESSAGE("create with rtl_Digest_AlgorithmMD2", aHandle != nullptr);
 
         aError = rtl_digest_updateMD5(aHandle, pData, nSize);
         CPPUNIT_ASSERT_MESSAGE("handle parameter 'handle' wrong", aError == rtl_Digest_E_Algorithm);
@@ -320,9 +320,9 @@ public:
         rtl_digest_destroyMD5(aHandle);
 
         aHandle = rtl_digest_create( rtl_Digest_AlgorithmMD5 );
-        CPPUNIT_ASSERT_MESSAGE("create with rtl_Digest_AlgorithmMD5", aHandle != 0);
+        CPPUNIT_ASSERT_MESSAGE("create with rtl_Digest_AlgorithmMD5", aHandle != nullptr);
 
-        aError = rtl_digest_updateMD5(aHandle, NULL, 0);
+        aError = rtl_digest_updateMD5(aHandle, nullptr, 0);
         CPPUNIT_ASSERT_MESSAGE("handle parameter 'pData' wrong", aError == rtl_Digest_E_Argument);
 
         aError = rtl_digest_updateMD5(aHandle, pData, 0);
@@ -336,22 +336,22 @@ public:
         rtlDigest aHandle;
         rtlDigestError aError;
 
-        aHandle = NULL;
-        aError = rtl_digest_get(aHandle, NULL, 0);
+        aHandle = nullptr;
+        aError = rtl_digest_get(aHandle, nullptr, 0);
         CPPUNIT_ASSERT_MESSAGE("does not handle wrong parameter", aError == rtl_Digest_E_Argument);
 
-        aHandle = NULL;
-        aError = rtl_digest_getMD5(aHandle, NULL, 0);
+        aHandle = nullptr;
+        aError = rtl_digest_getMD5(aHandle, nullptr, 0);
         CPPUNIT_ASSERT_MESSAGE("does not handle wrong parameter", aError == rtl_Digest_E_Argument);
 
         // test with wrong algorithm
         aHandle = rtl_digest_create(rtl_Digest_AlgorithmMD2);
-        CPPUNIT_ASSERT_MESSAGE("create with rtl_Digest_AlgorithmMD2", aHandle != 0);
+        CPPUNIT_ASSERT_MESSAGE("create with rtl_Digest_AlgorithmMD2", aHandle != nullptr);
 
         sal_uInt32 nKeyLen = rtl_digest_queryLength(aHandle);
         std::unique_ptr<sal_uInt8[]> pKeyBuffer(new sal_uInt8[nKeyLen]);
 
-        aError = rtl_digest_getMD5(aHandle, NULL, 0);
+        aError = rtl_digest_getMD5(aHandle, nullptr, 0);
         CPPUNIT_ASSERT_MESSAGE("handle 2. parameter wrong", aError == rtl_Digest_E_Argument);
 
         aError = rtl_digest_getMD5(aHandle, pKeyBuffer.get(), 0);
@@ -360,9 +360,9 @@ public:
         rtl_digest_destroyMD2(aHandle);
 
         aHandle = rtl_digest_create(rtl_Digest_AlgorithmMD5);
-        CPPUNIT_ASSERT_MESSAGE("create with rtl_Digest_AlgorithmMD5", aHandle != 0);
+        CPPUNIT_ASSERT_MESSAGE("create with rtl_Digest_AlgorithmMD5", aHandle != nullptr);
 
-        aError = rtl_digest_getMD5(aHandle, NULL, nKeyLen);
+        aError = rtl_digest_getMD5(aHandle, nullptr, nKeyLen);
         CPPUNIT_ASSERT_MESSAGE("handle parameter 'pData' wrong", aError == rtl_Digest_E_Argument );
 
         aError = rtl_digest_getMD5(aHandle, pKeyBuffer.get(), 0);

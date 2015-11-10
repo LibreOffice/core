@@ -25,12 +25,12 @@ namespace osl
 {
 
     inline Pipe::Pipe()
-        : m_handle( 0 )
+        : m_handle( NULL )
     {}
 
 
     inline Pipe::Pipe(const ::rtl::OUString& strName, oslPipeOptions Options )
-        : m_handle( osl_createPipe( strName.pData, Options , 0 ) )
+        : m_handle( osl_createPipe( strName.pData, Options , NULL ) )
     {}
 
 
@@ -101,7 +101,7 @@ namespace osl
 
     inline bool SAL_CALL Pipe::is() const
     {
-        return m_handle != 0;
+        return m_handle != NULL;
     }
 
 
@@ -122,7 +122,7 @@ namespace osl
         if( m_handle )
         {
             osl_releasePipe( m_handle );
-            m_handle = 0;
+            m_handle = NULL;
         }
     }
 
@@ -139,7 +139,7 @@ namespace osl
 
     inline oslPipeError SAL_CALL Pipe::getError() const
     {
-        return osl_getLastPipeError( 0 );
+        return osl_getLastPipeError( NULL );
     }
 
 

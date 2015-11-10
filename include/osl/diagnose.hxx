@@ -121,7 +121,7 @@ public:
             VoidPointerSet::const_iterator iPos(m_data.m_addresses.begin());
             VoidPointerSet::const_iterator const iEnd(m_data.m_addresses.end());
             for ( ; iPos != iEnd; ++iPos ) {
-                SAL_WARN_IF( *iPos == 0, "sal.debug", "null pointer" );
+                SAL_WARN_IF( *iPos == NULL, "sal.debug", "null pointer" );
             }
         }
         return bRet;

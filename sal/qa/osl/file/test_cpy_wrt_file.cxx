@@ -40,7 +40,7 @@ public:
 
         //create a tempfile
         rtl::OUString aTmpFile;
-        err = FileBase::createTempFile(NULL, NULL, &aTmpFile);
+        err = FileBase::createTempFile(nullptr, nullptr, &aTmpFile);
         CPPUNIT_ASSERT_MESSAGE("temp File creation failed", err == osl::FileBase::E_None);
 
         //now attempt to open with Create flag an existing file, should get E_EXIST

@@ -15,7 +15,7 @@
 #include "convertisciidevangari.hxx"
 
 static ImplTextEncodingData const aImplIsciiDevanagariTextEncodingData
-    = { { NULL,
+    = { { nullptr,
           &ImplConvertIsciiDevanagariToUnicode,
           &ImplConvertUnicodeToIsciiDevanagari,
           &ImplCreateIsciiDevanagariToUnicodeContext,
@@ -28,7 +28,7 @@ static ImplTextEncodingData const aImplIsciiDevanagariTextEncodingData
         2,
         2,
         1,
-        NULL,
+        nullptr,
         "x-iscii-de ",
         RTL_TEXTENCODING_INFO_ASCII | RTL_TEXTENCODING_INFO_MULTIBYTE };
 

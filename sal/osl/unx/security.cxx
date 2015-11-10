@@ -81,8 +81,8 @@ static oslSecurityImpl * growSecurityImpl(
     oslSecurityImpl * impl, std::size_t * bufSize)
 {
     std::size_t n = 0;
-    oslSecurityImpl * p = NULL;
-    if (impl == NULL) {
+    oslSecurityImpl * p = nullptr;
+    if (impl == nullptr) {
         if (!sysconf_SC_GETPW_R_SIZE_MAX(&n)) {
             /* choose something sensible (the callers of growSecurityImpl will
                detect it if the allocated buffer is too small: */
@@ -105,7 +105,7 @@ static oslSecurityImpl * growSecurityImpl(
         p = static_cast<oslSecurityImpl *>(realloc(impl, n));
         memset (p, 0, n);
     }
-    if (p == NULL) {
+    if (p == nullptr) {
         free(impl);
     }
     return p;
@@ -118,24 +118,24 @@ static void deleteSecurityImpl(oslSecurityImpl * impl) {
 oslSecurity SAL_CALL osl_getCurrentSecurity()
 {
     std::size_t n = 0;
-    oslSecurityImpl * p = NULL;
+    oslSecurityImpl * p = nullptr;
     for (;;) {
         struct passwd * found;
         p = growSecurityImpl(p, &n);
-        if (p == NULL) {
-            return NULL;
+        if (p == nullptr) {
+            return nullptr;
         }
         switch (getpwuid_r(getuid(), &p->m_pPasswd, p->m_buffer, n, &found)) {
         case ERANGE:
             break;
         case 0:
-            if (found != NULL) {
+            if (found != nullptr) {
                 return p;
             }
             /* fall through */
         default:
             deleteSecurityImpl(p);
-            return NULL;
+            return nullptr;
         }
     }
 }
@@ -147,12 +147,12 @@ oslSecurityError SAL_CALL osl_loginUser(
     )
 {
     oslSecurityError Error;
-    rtl_String* strUserName=0;
-    rtl_String* strPassword=0;
-    sal_Char* pszUserName=0;
-    sal_Char* pszPassword=0;
+    rtl_String* strUserName=nullptr;
+    rtl_String* strPassword=nullptr;
+    sal_Char* pszUserName=nullptr;
+    sal_Char* pszPassword=nullptr;
 
-    if ( ustrUserName != 0 )
+    if ( ustrUserName != nullptr )
     {
         rtl_uString2String( &strUserName,
                             rtl_uString_getStr(ustrUserName),
@@ -162,7 +162,7 @@ oslSecurityError SAL_CALL osl_loginUser(
         pszUserName = rtl_string_getStr(strUserName);
     }
 
-    if ( ustrPassword != 0 )
+    if ( ustrPassword != nullptr )
     {
         rtl_uString2String( &strPassword,
                             rtl_uString_getStr(ustrPassword),
@@ -174,7 +174,7 @@ oslSecurityError SAL_CALL osl_loginUser(
 
     Error=osl_psz_loginUser(pszUserName,pszPassword,pSecurity);
 
-    if ( strUserName != 0 )
+    if ( strUserName != nullptr )
     {
         rtl_string_release(strUserName);
     }
@@ -222,7 +222,7 @@ sal_Bool SAL_CALL osl_getUserIdent(oslSecurity Security, rtl_uString **ustrIdent
     bRet = osl_psz_getUserIdent(Security,pszIdent,sizeof(pszIdent));
 
     rtl_string2UString( ustrIdent, pszIdent, rtl_str_getLength( pszIdent ), osl_getThreadTextEncoding(), OUSTRING_TO_OSTRING_CVTFLAGS );
-    SAL_WARN_IF(*ustrIdent == NULL, "sal.osl", "*ustrIdent == NULL");
+    SAL_WARN_IF(*ustrIdent == nullptr, "sal.osl", "*ustrIdent == NULL");
 
     return bRet;
 }
@@ -234,7 +234,7 @@ bool SAL_CALL osl_psz_getUserIdent(oslSecurity Security, sal_Char *pszIdent, sal
 
     oslSecurityImpl *pSecImpl = static_cast<oslSecurityImpl *>(Security);
 
-    if (pSecImpl == NULL)
+    if (pSecImpl == nullptr)
         return false;
 
     nChr = snprintf(buffer, sizeof(buffer), "%u", pSecImpl->m_pPasswd.pw_uid);
@@ -256,7 +256,7 @@ sal_Bool SAL_CALL osl_getUserName(oslSecurity Security, rtl_uString **ustrName)
     bRet = osl_psz_getUserName(Security,pszName,sizeof(pszName));
 
     rtl_string2UString( ustrName, pszName, rtl_str_getLength( pszName ), osl_getThreadTextEncoding(), OUSTRING_TO_OSTRING_CVTFLAGS );
-    SAL_WARN_IF(*ustrName == NULL, "sal.osl", "ustrName == NULL");
+    SAL_WARN_IF(*ustrName == nullptr, "sal.osl", "ustrName == NULL");
 
     return bRet;
 }
@@ -265,7 +265,7 @@ static bool SAL_CALL osl_psz_getUserName(oslSecurity Security, sal_Char* pszName
 {
     oslSecurityImpl *pSecImpl = static_cast<oslSecurityImpl *>(Security);
 
-    if (pSecImpl == NULL || pSecImpl->m_pPasswd.pw_name == NULL)
+    if (pSecImpl == nullptr || pSecImpl->m_pPasswd.pw_name == nullptr)
         return false;
 
     strncpy(pszName, pSecImpl->m_pPasswd.pw_name, nMax);
@@ -285,7 +285,7 @@ sal_Bool SAL_CALL osl_getHomeDir(oslSecurity Security, rtl_uString **pustrDirect
     if ( bRet )
     {
         rtl_string2UString( pustrDirectory, pszDirectory, rtl_str_getLength( pszDirectory ), osl_getThreadTextEncoding(), OUSTRING_TO_OSTRING_CVTFLAGS );
-        SAL_WARN_IF(*pustrDirectory == NULL, "sal.osl", "*pustrDirectory == NULL");
+        SAL_WARN_IF(*pustrDirectory == nullptr, "sal.osl", "*pustrDirectory == NULL");
         osl_getFileURLFromSystemPath( *pustrDirectory, pustrDirectory );
     }
 
@@ -296,7 +296,7 @@ static bool SAL_CALL osl_psz_getHomeDir(oslSecurity Security, sal_Char* pszDirec
 {
     oslSecurityImpl *pSecImpl = static_cast<oslSecurityImpl *>(Security);
 
-    if (pSecImpl == NULL)
+    if (pSecImpl == nullptr)
         return false;
 
 #ifdef ANDROID
@@ -346,7 +346,7 @@ static bool SAL_CALL osl_psz_getHomeDir(oslSecurity Security, sal_Char* pszDirec
     /* if current user, check also environment for HOME */
     if (getuid() == pSecImpl->m_pPasswd.pw_uid)
     {
-        sal_Char *pStr = NULL;
+        sal_Char *pStr = nullptr;
 #ifdef SOLARIS
         char    buffer[8192];
 
@@ -366,14 +366,14 @@ static bool SAL_CALL osl_psz_getHomeDir(oslSecurity Security, sal_Char* pszDirec
         pStr = getenv("HOME");
 #endif
 
-        if (pStr != NULL && strlen(pStr) > 0 && access(pStr, 0) == 0)
+        if (pStr != nullptr && strlen(pStr) > 0 && access(pStr, 0) == 0)
             strncpy(pszDirectory, pStr, nMax);
-        else if (pSecImpl->m_pPasswd.pw_dir != NULL)
+        else if (pSecImpl->m_pPasswd.pw_dir != nullptr)
             strncpy(pszDirectory, pSecImpl->m_pPasswd.pw_dir, nMax);
         else
             return false;
     }
-    else if (pSecImpl->m_pPasswd.pw_dir != NULL)
+    else if (pSecImpl->m_pPasswd.pw_dir != nullptr)
         strncpy(pszDirectory, pSecImpl->m_pPasswd.pw_dir, nMax);
     else
         return false;
@@ -393,7 +393,7 @@ sal_Bool SAL_CALL osl_getConfigDir(oslSecurity Security, rtl_uString **pustrDire
     if ( bRet )
     {
         rtl_string2UString( pustrDirectory, pszDirectory, rtl_str_getLength( pszDirectory ), osl_getThreadTextEncoding(), OUSTRING_TO_OSTRING_CVTFLAGS );
-        SAL_WARN_IF(*pustrDirectory == NULL, "sal.osl", "*pustrDirectory == NULL");
+        SAL_WARN_IF(*pustrDirectory == nullptr, "sal.osl", "*pustrDirectory == NULL");
         osl_getFileURLFromSystemPath( *pustrDirectory, pustrDirectory );
     }
 
@@ -408,7 +408,7 @@ static bool SAL_CALL osl_psz_getConfigDir(oslSecurity Security, sal_Char* pszDir
 {
     sal_Char *pStr = getenv("XDG_CONFIG_HOME");
 
-    if (pStr == NULL || strlen(pStr) == 0 || access(pStr, 0) != 0)
+    if (pStr == nullptr || strlen(pStr) == 0 || access(pStr, 0) != 0)
     {
         std::size_t n = 0;
 
@@ -497,7 +497,7 @@ sal_Bool SAL_CALL osl_isAdministrator(oslSecurity Security)
 {
     oslSecurityImpl *pSecImpl = static_cast<oslSecurityImpl *>(Security);
 
-    if (pSecImpl == NULL)
+    if (pSecImpl == nullptr)
         return sal_False;
 
     if (pSecImpl->m_pPasswd.pw_uid != 0)

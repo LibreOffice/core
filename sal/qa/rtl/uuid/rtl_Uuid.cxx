@@ -60,7 +60,7 @@ public:
     sal_Int32 i,i2;
     for( i = 0 ; i < TEST_UUID ; i ++ )
     {
-        rtl_createUuid( aNode[i], 0, sal_False );
+        rtl_createUuid( aNode[i], nullptr, sal_False );
     }
     bool bRes = true;
     for( i = 0 ; i < TEST_UUID ; i ++ )
@@ -137,7 +137,7 @@ public:
         sal_uInt8 pNamedUUID[16], pNamedUUID2[16];
 
         // Same name does generate the same uuid
-        rtl_String *pName = 0;
+        rtl_String *pName = nullptr;
         rtl_string_newFromStr( &pName , "this is a bla.blubs.DNS-Name" );
         rtl_createNamedUuid( pNamedUUID , NameSpace_DNS , pName );
         rtl_createNamedUuid( pNamedUUID2 , NameSpace_DNS , pName );

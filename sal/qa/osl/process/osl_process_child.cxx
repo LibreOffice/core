@@ -82,7 +82,7 @@ void w_to_a(LPCTSTR _strW, LPSTR strA, DWORD size)
     void dump_env(char* file_path)
     {
         std::ofstream file(file_path);
-        for (int i = 0; NULL != environ[i]; ++i)
+        for (int i = 0; nullptr != environ[i]; ++i)
             file << environ[i] << '\0';
     }
 #endif

@@ -18,7 +18,7 @@ void* osl_aligned_alloc( sal_Size align, sal_Size size )
 {
     if (size == 0)
     {
-        return NULL;
+        return nullptr;
     }
     else
     {
@@ -27,7 +27,7 @@ void* osl_aligned_alloc( sal_Size align, sal_Size size )
 #else
         void* ptr;
         int err = posix_memalign(&ptr, align, size);
-        return err ? NULL : ptr;
+        return err ? nullptr : ptr;
 #endif
     }
 }

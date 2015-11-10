@@ -59,7 +59,7 @@ public:
     inline static void SAL_CALL operator delete( void *, void * )
         {}
 
-    Thread(): m_hThread(0){}
+    Thread(): m_hThread(NULL){}
 
     virtual  ~Thread()
     {
@@ -68,9 +68,9 @@ public:
 
     bool SAL_CALL create()
     {
-        assert(m_hThread == 0); // only one running thread per instance
+        assert(m_hThread == NULL); // only one running thread per instance
         m_hThread = osl_createSuspendedThread( threadFunc, static_cast<void*>(this));
-        if (m_hThread == 0)
+        if (m_hThread == NULL)
         {
             return false;
         }
@@ -80,12 +80,12 @@ public:
 
     bool SAL_CALL createSuspended()
     {
-        assert(m_hThread == 0); // only one running thread per instance
+        assert(m_hThread == NULL); // only one running thread per instance
         if( m_hThread)
             return false;
         m_hThread= osl_createSuspendedThread( threadFunc,
                                              static_cast<void*>(this));
-        return m_hThread != 0;
+        return m_hThread != NULL;
     }
 
     virtual void SAL_CALL suspend()
@@ -134,7 +134,7 @@ public:
 
     static oslThreadIdentifier SAL_CALL getCurrentIdentifier()
     {
-        return osl_getThreadIdentifier(0);
+        return osl_getThreadIdentifier(NULL);
     }
 
     static void SAL_CALL wait(const TimeValue& Delay)
@@ -191,7 +191,7 @@ class ThreadData
     ThreadData& operator= (const ThreadData& ) SAL_DELETED_FUNCTION;
 public:
      /// Create a thread specific local data key
-    ThreadData( oslThreadKeyCallbackFunction pCallback= 0 )
+    ThreadData( oslThreadKeyCallbackFunction pCallback= NULL )
     {
         m_hKey = osl_createThreadKey( pCallback );
     }

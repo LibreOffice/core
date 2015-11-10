@@ -41,7 +41,7 @@ oslModule SAL_CALL osl_loadModuleRelative(
     rtl::OUString base;
     if (!osl::Module::getUrlFromAddress(baseModule, base)) {
         SAL_INFO("sal.osl","osl::Module::getUrlFromAddress failed");
-        return NULL;
+        return nullptr;
     }
     rtl::OUString abs;
     try {
@@ -51,7 +51,7 @@ oslModule SAL_CALL osl_loadModuleRelative(
         SAL_INFO("sal.osl",
             "rtl::MalformedUriException <" << e.getMessage() << ">");
             //TODO: let some OSL_TRACE variant take care of text conversion?
-        return NULL;
+        return nullptr;
     }
     return osl_loadModule(abs.pData, mode);
 }

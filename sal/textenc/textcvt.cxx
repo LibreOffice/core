@@ -108,7 +108,7 @@ rtl_TextToUnicodeConverter SAL_CALL rtl_createTextToUnicodeConverter( rtl_TextEn
     if ( pData )
         return static_cast<rtl_TextToUnicodeConverter>(const_cast<ImplTextConverter *>(&pData->maConverter));
     else
-        return 0;
+        return nullptr;
 }
 
 /* ----------------------------------------------------------------------- */
@@ -123,7 +123,7 @@ rtl_TextToUnicodeContext SAL_CALL rtl_createTextToUnicodeContext( rtl_TextToUnic
 {
     const ImplTextConverter* pConverter = static_cast<const ImplTextConverter*>(hConverter);
     if ( !pConverter )
-        return 0;
+        return nullptr;
     else if ( pConverter->mpCreateTextToUnicodeContext )
         return pConverter->mpCreateTextToUnicodeContext();
     else
@@ -186,7 +186,7 @@ rtl_UnicodeToTextConverter SAL_CALL rtl_createUnicodeToTextConverter( rtl_TextEn
     if ( pData )
         return static_cast<rtl_TextToUnicodeConverter>(const_cast<ImplTextConverter *>(&pData->maConverter));
     else
-        return 0;
+        return nullptr;
 }
 
 /* ----------------------------------------------------------------------- */
@@ -201,7 +201,7 @@ rtl_UnicodeToTextContext SAL_CALL rtl_createUnicodeToTextContext( rtl_UnicodeToT
 {
     const ImplTextConverter* pConverter = static_cast<const ImplTextConverter*>(hConverter);
     if ( !pConverter )
-        return 0;
+        return nullptr;
     else if ( pConverter->mpCreateUnicodeToTextContext )
         return pConverter->mpCreateUnicodeToTextContext();
     else

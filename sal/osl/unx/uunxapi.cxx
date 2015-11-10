@@ -131,7 +131,7 @@ done_accessing_file_path( const char * /*cpFilePath*/, accessFilePathState *stat
 
 typedef void accessFilePathState;
 
-#define prepare_to_access_file_path( cpFilePath ) NULL
+#define prepare_to_access_file_path( cpFilePath ) nullptr
 
 #define done_accessing_file_path( cpFilePath, state ) ((void) cpFilePath, (void) state)
 

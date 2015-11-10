@@ -78,7 +78,7 @@ void SAL_CALL rtl_stringbuffer_ensureCapacity
     if (minimumCapacity > *capacity)
     {
         rtl_String * pTmp = *This;
-        rtl_String * pNew = NULL;
+        rtl_String * pNew = nullptr;
         *capacity = ((*This)->length + 1) * 2;
         if (minimumCapacity > *capacity)
             /* still lower, set to the minimum capacity */

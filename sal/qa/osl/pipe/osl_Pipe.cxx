@@ -208,7 +208,7 @@ namespace osl_Pipe
                 ::osl::Pipe aPipe( test::uniquePipeName(aTestPipeName), osl_Pipe_CREATE );
                 /// constructs two pipes without acquiring the handle on the base pipe.
                 ::osl::Pipe aAcquirePipe( aPipe.getHandle( ) );
-                ::osl::Pipe aAcquirePipe1( NULL );
+                ::osl::Pipe aAcquirePipe1( nullptr );
 
                 bRes = aAcquirePipe.is( );
                 bRes1 = aAcquirePipe1.is( );
@@ -257,7 +257,7 @@ namespace osl_Pipe
 
         void is_004( )
             {
-                ::osl::Pipe aPipe( NULL );
+                ::osl::Pipe aPipe( nullptr );
 
                 CPPUNIT_ASSERT_MESSAGE( "#test comment#: test is(), an invalid constructor.", !aPipe.is( ) );
             }

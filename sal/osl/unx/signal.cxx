@@ -85,56 +85,56 @@ static struct SignalAction
     void (*Handler)(int);
 } Signals[] =
 {
-    { SIGHUP,    ACT_HIDE, NULL },    /* hangup */
-    { SIGINT,    ACT_EXIT,   NULL },    /* interrupt (rubout) */
-    { SIGQUIT,   ACT_EXIT,  NULL },    /* quit (ASCII FS) */
-    { SIGILL,    ACT_SYSTEM,  NULL },    /* illegal instruction (not reset when caught) */
+    { SIGHUP,    ACT_HIDE, nullptr },    /* hangup */
+    { SIGINT,    ACT_EXIT,   nullptr },    /* interrupt (rubout) */
+    { SIGQUIT,   ACT_EXIT,  nullptr },    /* quit (ASCII FS) */
+    { SIGILL,    ACT_SYSTEM,  nullptr },    /* illegal instruction (not reset when caught) */
 /* changed from ACT_ABOUT to ACT_SYSTEM to try and get collector to run*/
-    { SIGTRAP,   ACT_ABORT,  NULL },    /* trace trap (not reset when caught) */
+    { SIGTRAP,   ACT_ABORT,  nullptr },    /* trace trap (not reset when caught) */
 #if ( SIGIOT != SIGABRT )
     { SIGIOT,    ACT_ABORT,  NULL },    /* IOT instruction */
 #endif
-    { SIGABRT,   ACT_ABORT,  NULL },    /* used by abort, replace SIGIOT in the future */
+    { SIGABRT,   ACT_ABORT,  nullptr },    /* used by abort, replace SIGIOT in the future */
 #ifdef SIGEMT
     { SIGEMT,    ACT_SYSTEM,  NULL },    /* EMT instruction */
 /* changed from ACT_ABORT to ACT_SYSTEM to remove handler*/
 /* SIGEMT may also be used by the profiler - so it is probably not a good
 plan to have the new handler use this signal*/
 #endif
-    { SIGFPE,    ACT_ABORT,  NULL },    /* floating point exception */
-    { SIGKILL,   ACT_SYSTEM, NULL },    /* kill (cannot be caught or ignored) */
-    { SIGBUS,    ACT_ABORT,  NULL },    /* bus error */
-    { SIGSEGV,   ACT_ABORT,  NULL },    /* segmentation violation */
+    { SIGFPE,    ACT_ABORT,  nullptr },    /* floating point exception */
+    { SIGKILL,   ACT_SYSTEM, nullptr },    /* kill (cannot be caught or ignored) */
+    { SIGBUS,    ACT_ABORT,  nullptr },    /* bus error */
+    { SIGSEGV,   ACT_ABORT,  nullptr },    /* segmentation violation */
 #ifdef SIGSYS
-    { SIGSYS,    ACT_ABORT,  NULL },    /* bad argument to system call */
+    { SIGSYS,    ACT_ABORT,  nullptr },    /* bad argument to system call */
 #endif
-    { SIGPIPE,   ACT_HIDE,   NULL },    /* write on a pipe with no one to read it */
-    { SIGALRM,   ACT_EXIT,   NULL },    /* alarm clock */
-    { SIGTERM,   ACT_EXIT,   NULL },    /* software termination signal from kill */
-    { SIGUSR1,   ACT_SYSTEM, NULL },    /* user defined signal 1 */
-    { SIGUSR2,   ACT_SYSTEM, NULL },    /* user defined signal 2 */
-    { SIGCHLD,   ACT_SYSTEM, NULL },    /* child status change */
+    { SIGPIPE,   ACT_HIDE,   nullptr },    /* write on a pipe with no one to read it */
+    { SIGALRM,   ACT_EXIT,   nullptr },    /* alarm clock */
+    { SIGTERM,   ACT_EXIT,   nullptr },    /* software termination signal from kill */
+    { SIGUSR1,   ACT_SYSTEM, nullptr },    /* user defined signal 1 */
+    { SIGUSR2,   ACT_SYSTEM, nullptr },    /* user defined signal 2 */
+    { SIGCHLD,   ACT_SYSTEM, nullptr },    /* child status change */
 #ifdef SIGPWR
-    { SIGPWR,    ACT_IGNORE, NULL },    /* power-fail restart */
+    { SIGPWR,    ACT_IGNORE, nullptr },    /* power-fail restart */
 #endif
-    { SIGWINCH,  ACT_IGNORE, NULL },    /* window size change */
-    { SIGURG,    ACT_EXIT,   NULL },    /* urgent socket condition */
+    { SIGWINCH,  ACT_IGNORE, nullptr },    /* window size change */
+    { SIGURG,    ACT_EXIT,   nullptr },    /* urgent socket condition */
 #ifdef SIGPOLL
-    { SIGPOLL,   ACT_EXIT,   NULL },    /* pollable event occurred */
+    { SIGPOLL,   ACT_EXIT,   nullptr },    /* pollable event occurred */
 #endif
-    { SIGSTOP,   ACT_SYSTEM, NULL },    /* stop (cannot be caught or ignored) */
-    { SIGTSTP,   ACT_SYSTEM, NULL },    /* user stop requested from tty */
-    { SIGCONT,   ACT_SYSTEM, NULL },    /* stopped process has been continued */
-    { SIGTTIN,   ACT_SYSTEM, NULL },    /* background tty read attempted */
-    { SIGTTOU,   ACT_SYSTEM, NULL },    /* background tty write attempted */
-    { SIGVTALRM, ACT_EXIT,   NULL },    /* virtual timer expired */
-    { SIGPROF,   ACT_SYSTEM,   NULL },    /* profiling timer expired */
+    { SIGSTOP,   ACT_SYSTEM, nullptr },    /* stop (cannot be caught or ignored) */
+    { SIGTSTP,   ACT_SYSTEM, nullptr },    /* user stop requested from tty */
+    { SIGCONT,   ACT_SYSTEM, nullptr },    /* stopped process has been continued */
+    { SIGTTIN,   ACT_SYSTEM, nullptr },    /* background tty read attempted */
+    { SIGTTOU,   ACT_SYSTEM, nullptr },    /* background tty write attempted */
+    { SIGVTALRM, ACT_EXIT,   nullptr },    /* virtual timer expired */
+    { SIGPROF,   ACT_SYSTEM,   nullptr },    /* profiling timer expired */
 /*Change from ACT_EXIT to ACT_SYSTEM for SIGPROF is so that profiling signals do
 not get taken by the new handler - the new handler does not pass on context
 information which causes 'collect' to crash. This is a way of avoiding
 what looks like a bug in the new handler*/
-    { SIGXCPU,   ACT_ABORT,  NULL },    /* exceeded cpu limit */
-    { SIGXFSZ,   ACT_ABORT,  NULL }     /* exceeded file size limit */
+    { SIGXCPU,   ACT_ABORT,  nullptr },    /* exceeded cpu limit */
+    { SIGXFSZ,   ACT_ABORT,  nullptr }     /* exceeded file size limit */
 };
 const int NoSignals = sizeof(Signals) / sizeof(struct SignalAction);
 
@@ -150,13 +150,13 @@ static void SignalHandlerFunction(int);
 
 static void getExecutableName_Impl (rtl_String ** ppstrProgName)
 {
-    rtl_uString * ustrProgFile = 0;
+    rtl_uString * ustrProgFile = nullptr;
     osl_getExecutableFile (&ustrProgFile);
     if (ustrProgFile)
     {
-        rtl_uString * ustrProgName = 0;
+        rtl_uString * ustrProgName = nullptr;
         osl_systemPathGetFileNameOrLastDirectoryPart (ustrProgFile, &ustrProgName);
-        if (ustrProgName != 0)
+        if (ustrProgName != nullptr)
         {
             rtl_uString2String (
                 ppstrProgName,
@@ -172,7 +172,7 @@ static void getExecutableName_Impl (rtl_String ** ppstrProgName)
 static bool is_soffice_Impl()
 {
     sal_Int32    idx       = -1;
-    rtl_String * strProgName = 0;
+    rtl_String * strProgName = nullptr;
 
     getExecutableName_Impl (&strProgName);
     if (strProgName)
@@ -264,7 +264,7 @@ static bool InitSignal()
        second soffice would have the guilty signal blocked and would freeze upon
        encountering a similar crash again): */
     if (sigemptyset(&unset) < 0 ||
-        pthread_sigmask(SIG_SETMASK, &unset, NULL) < 0)
+        pthread_sigmask(SIG_SETMASK, &unset, nullptr) < 0)
     {
         OSL_TRACE("sigemptyset or pthread_sigmask failed");
     }
@@ -286,7 +286,7 @@ static bool DeInitSignal()
         {
             act.sa_handler = Signals[i].Handler;
 
-            sigaction(Signals[i].Signal, &act, NULL);
+            sigaction(Signals[i].Signal, &act, nullptr);
         }
 
     osl_destroyMutex(SignalListMutex);
@@ -321,7 +321,7 @@ static oslSignalAction CallSignalHandler(oslSignalInfo *pInfo)
     oslSignalHandlerImpl* pHandler = SignalList;
     oslSignalAction Action = osl_Signal_ActCallNextHdl;
 
-    while (pHandler != NULL)
+    while (pHandler != nullptr)
     {
         if ((Action = pHandler->Handler(pHandler->pData, pInfo))
             != osl_Signal_ActCallNextHdl)
@@ -346,7 +346,7 @@ void CallSystemHandler(int Signal)
 
     if (i < NoSignals)
     {
-        if ((Signals[i].Handler == NULL)    ||
+        if ((Signals[i].Handler == nullptr)    ||
             (Signals[i].Handler == SIG_DFL) ||
             (Signals[i].Handler == SIG_IGN) ||
              (Signals[i].Handler == SIG_ERR))
@@ -362,7 +362,7 @@ void CallSystemHandler(int Signal)
                     act.sa_handler = SIG_DFL;
                     act.sa_flags   = 0;
                     sigemptyset(&(act.sa_mask));
-                    sigaction(SIGABRT, &act, NULL);
+                    sigaction(SIGABRT, &act, nullptr);
                     PrintStack( Signal );
                     abort();
                     break;
@@ -405,7 +405,7 @@ void SignalHandlerFunction(int Signal)
     struct sigaction act;
 
     Info.UserSignal = Signal;
-    Info.UserData   = NULL;
+    Info.UserData   = nullptr;
 
     switch (Signal)
     {
@@ -456,7 +456,7 @@ void SignalHandlerFunction(int Signal)
         act.sa_handler = SIG_DFL;
         act.sa_flags   = 0;
         sigemptyset(&(act.sa_mask));
-        sigaction(SIGABRT, &act, NULL);
+        sigaction(SIGABRT, &act, nullptr);
         PrintStack( Signal );
         abort();
         break;
@@ -474,10 +474,10 @@ oslSignalHandler SAL_CALL osl_addSignalHandler(oslSignalHandlerFunction Handler,
 {
     oslSignalHandlerImpl* pHandler;
 
-    OSL_ASSERT(Handler != NULL);
-    if ( Handler == 0 )
+    OSL_ASSERT(Handler != nullptr);
+    if ( Handler == nullptr )
     {
-        return 0;
+        return nullptr;
     }
 
     if (! bInitSignal)
@@ -485,7 +485,7 @@ oslSignalHandler SAL_CALL osl_addSignalHandler(oslSignalHandlerFunction Handler,
 
     pHandler = static_cast<oslSignalHandlerImpl*>(calloc(1, sizeof(oslSignalHandlerImpl)));
 
-    if (pHandler != NULL)
+    if (pHandler != nullptr)
     {
         pHandler->Handler = Handler;
         pHandler->pData   = pData;
@@ -500,14 +500,14 @@ oslSignalHandler SAL_CALL osl_addSignalHandler(oslSignalHandlerFunction Handler,
         return (pHandler);
     }
 
-    return NULL;
+    return nullptr;
 }
 
 sal_Bool SAL_CALL osl_removeSignalHandler(oslSignalHandler Handler)
 {
-    oslSignalHandlerImpl *pHandler, *pPrevious = NULL;
+    oslSignalHandlerImpl *pHandler, *pPrevious = nullptr;
 
-    OSL_ASSERT(Handler != NULL);
+    OSL_ASSERT(Handler != nullptr);
 
     if (! bInitSignal)
         bInitSignal = InitSignal();
@@ -516,7 +516,7 @@ sal_Bool SAL_CALL osl_removeSignalHandler(oslSignalHandler Handler)
 
     pHandler = SignalList;
 
-    while (pHandler != NULL)
+    while (pHandler != nullptr)
     {
         if (pHandler == Handler)
         {
@@ -527,7 +527,7 @@ sal_Bool SAL_CALL osl_removeSignalHandler(oslSignalHandler Handler)
 
             osl_releaseMutex(SignalListMutex);
 
-            if (SignalList == NULL)
+            if (SignalList == nullptr)
                 bInitSignal = DeInitSignal();
 
             free(pHandler);

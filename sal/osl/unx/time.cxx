@@ -101,7 +101,7 @@ sal_Bool SAL_CALL osl_getDateTimeFromTimeValue( const TimeValue* pTimeVal, oslDa
     pSystemTime = gmtime_r( &atime, &tmBuf );
 
     /* Convert struct tm to struct oslDateTime */
-    if ( pSystemTime != NULL )
+    if ( pSystemTime != nullptr )
     {
         pDateTime->NanoSeconds  =   pTimeVal->Nanosec;
         pDateTime->Seconds      =   pSystemTime->tm_sec;

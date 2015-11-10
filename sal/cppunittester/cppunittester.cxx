@@ -414,10 +414,10 @@ SAL_IMPLEMENT_MAIN()
                 std::exit(EXIT_FAILURE);
             }
 #endif
-            CppUnit::Protector *protector = fn == 0
-                ? 0
+            CppUnit::Protector *protector = fn == nullptr
+                ? nullptr
                 : (*reinterpret_cast< cppunittester::ProtectorFactory * >(fn))();
-            if (protector == 0) {
+            if (protector == nullptr) {
                 std::cerr
                     << "Failure instantiating protector \"" << convertLazy(lib)
                     << "\", \"" << convertLazy(sym) << '"' << std::endl;

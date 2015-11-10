@@ -355,7 +355,7 @@ template< typename Inst, typename InstCtor,
           typename Data, typename DataCtor >
 Inst *
 rtl_Instance< Inst, InstCtor, Guard, GuardCtor, Data, DataCtor >::m_pInstance
-= 0;
+= NULL;
 #endif // _MSC_VER
 
 }

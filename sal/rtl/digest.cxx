@@ -278,7 +278,7 @@ static const Digest_Impl __rtl_digest_MD2 =
     rtl_Digest_AlgorithmMD2,
     RTL_DIGEST_LENGTH_MD2,
 
-    NULL,
+    nullptr,
     rtl_digest_destroyMD2,
     rtl_digest_updateMD2,
     rtl_digest_getMD2
@@ -412,7 +412,7 @@ rtlDigestError SAL_CALL rtl_digest_updateMD2 (
 
     DigestContextMD2 *ctx;
 
-    if ((pImpl == NULL) || (pData == NULL))
+    if ((pImpl == nullptr) || (pData == nullptr))
         return rtl_Digest_E_Argument;
 
     if (!(pImpl->m_digest.m_algorithm == rtl_Digest_AlgorithmMD2))
@@ -471,7 +471,7 @@ rtlDigestError SAL_CALL rtl_digest_getMD2 (
 
     DigestContextMD2 *ctx;
 
-    if ((pImpl == NULL) || (pBuffer == NULL))
+    if ((pImpl == nullptr) || (pBuffer == nullptr))
         return rtl_Digest_E_Argument;
 
     if (!(pImpl->m_digest.m_algorithm == rtl_Digest_AlgorithmMD2))
@@ -564,7 +564,7 @@ static const Digest_Impl __rtl_digest_MD5 =
     rtl_Digest_AlgorithmMD5,
     RTL_DIGEST_LENGTH_MD5,
 
-    NULL,
+    nullptr,
     rtl_digest_destroyMD5,
     rtl_digest_updateMD5,
     rtl_digest_getMD5
@@ -784,7 +784,7 @@ rtlDigestError SAL_CALL rtl_digest_updateMD5 (
     DigestContextMD5 *ctx;
     sal_uInt32        len;
 
-    if ((pImpl == NULL) || (pData == NULL))
+    if ((pImpl == nullptr) || (pData == nullptr))
         return rtl_Digest_E_Argument;
 
     if (!(pImpl->m_digest.m_algorithm == rtl_Digest_AlgorithmMD5))
@@ -856,7 +856,7 @@ rtlDigestError SAL_CALL rtl_digest_getMD5 (
 
     DigestContextMD5 *ctx;
 
-    if ((pImpl == NULL) || (pBuffer == NULL))
+    if ((pImpl == nullptr) || (pBuffer == nullptr))
         return rtl_Digest_E_Argument;
 
     if (!(pImpl->m_digest.m_algorithm == rtl_Digest_AlgorithmMD5))
@@ -889,7 +889,7 @@ rtlDigestError SAL_CALL rtl_digest_rawMD5 (
 
     DigestContextMD5 *ctx;
 
-    if ((pImpl == NULL) || (pBuffer == NULL))
+    if ((pImpl == nullptr) || (pBuffer == nullptr))
         return rtl_Digest_E_Argument;
 
     if (!(pImpl->m_digest.m_algorithm == rtl_Digest_AlgorithmMD5))
@@ -1200,7 +1200,7 @@ static const Digest_Impl __rtl_digest_SHA_0 =
     rtl_Digest_AlgorithmSHA,
     RTL_DIGEST_LENGTH_SHA,
 
-    NULL,
+    nullptr,
     rtl_digest_destroySHA,
     rtl_digest_updateSHA,
     rtl_digest_getSHA
@@ -1268,7 +1268,7 @@ rtlDigestError SAL_CALL rtl_digest_updateSHA (
     DigestContextSHA *ctx;
     sal_uInt32        len;
 
-    if ((pImpl == NULL) || (pData == NULL))
+    if ((pImpl == nullptr) || (pData == nullptr))
         return rtl_Digest_E_Argument;
 
     if (!(pImpl->m_digest.m_algorithm == rtl_Digest_AlgorithmSHA))
@@ -1340,7 +1340,7 @@ rtlDigestError SAL_CALL rtl_digest_getSHA (
 
     DigestContextSHA *ctx;
 
-    if ((pImpl == NULL) || (pBuffer == NULL))
+    if ((pImpl == nullptr) || (pBuffer == nullptr))
         return rtl_Digest_E_Argument;
 
     if (!(pImpl->m_digest.m_algorithm == rtl_Digest_AlgorithmSHA))
@@ -1390,7 +1390,7 @@ static const Digest_Impl __rtl_digest_SHA_1 =
     rtl_Digest_AlgorithmSHA1,
     RTL_DIGEST_LENGTH_SHA1,
 
-    NULL,
+    nullptr,
     rtl_digest_destroySHA1,
     rtl_digest_updateSHA1,
     rtl_digest_getSHA1
@@ -1458,7 +1458,7 @@ rtlDigestError SAL_CALL rtl_digest_updateSHA1 (
     DigestContextSHA *ctx;
     sal_uInt32        len;
 
-    if ((pImpl == NULL) || (pData == NULL))
+    if ((pImpl == nullptr) || (pData == nullptr))
         return rtl_Digest_E_Argument;
 
     if (!(pImpl->m_digest.m_algorithm == rtl_Digest_AlgorithmSHA1))
@@ -1530,7 +1530,7 @@ rtlDigestError SAL_CALL rtl_digest_getSHA1 (
 
     DigestContextSHA *ctx;
 
-    if ((pImpl == NULL) || (pBuffer == NULL))
+    if ((pImpl == nullptr) || (pBuffer == nullptr))
         return rtl_Digest_E_Argument;
 
     if (!(pImpl->m_digest.m_algorithm == rtl_Digest_AlgorithmSHA1))
@@ -1698,7 +1698,7 @@ rtlDigestError SAL_CALL rtl_digest_initHMAC_MD5 (
     DigestHMAC_MD5_Impl *pImpl = static_cast<DigestHMAC_MD5_Impl*>(Digest);
     ContextHMAC_MD5     *ctx;
 
-    if ((pImpl == NULL) || (pKeyData == NULL))
+    if ((pImpl == nullptr) || (pKeyData == nullptr))
         return rtl_Digest_E_Argument;
 
     if (!(pImpl->m_digest.m_algorithm == rtl_Digest_AlgorithmHMAC_MD5))
@@ -1737,7 +1737,7 @@ rtlDigestError SAL_CALL rtl_digest_updateHMAC_MD5 (
     DigestHMAC_MD5_Impl *pImpl = static_cast<DigestHMAC_MD5_Impl*>(Digest);
     ContextHMAC_MD5     *ctx;
 
-    if ((pImpl == NULL) || (pData == NULL))
+    if ((pImpl == nullptr) || (pData == nullptr))
         return rtl_Digest_E_Argument;
 
     if (!(pImpl->m_digest.m_algorithm == rtl_Digest_AlgorithmHMAC_MD5))
@@ -1759,7 +1759,7 @@ rtlDigestError SAL_CALL rtl_digest_getHMAC_MD5 (
     DigestHMAC_MD5_Impl *pImpl = static_cast<DigestHMAC_MD5_Impl*>(Digest);
     ContextHMAC_MD5     *ctx;
 
-    if ((pImpl == NULL) || (pBuffer == NULL))
+    if ((pImpl == nullptr) || (pBuffer == nullptr))
         return rtl_Digest_E_Argument;
 
     if (!(pImpl->m_digest.m_algorithm == rtl_Digest_AlgorithmHMAC_MD5))
@@ -1930,7 +1930,7 @@ rtlDigestError SAL_CALL rtl_digest_initHMAC_SHA1 (
     DigestHMAC_SHA1_Impl *pImpl = static_cast<DigestHMAC_SHA1_Impl*>(Digest);
     ContextHMAC_SHA1     *ctx;
 
-    if ((pImpl == NULL) || (pKeyData == NULL))
+    if ((pImpl == nullptr) || (pKeyData == nullptr))
         return rtl_Digest_E_Argument;
 
     if (!(pImpl->m_digest.m_algorithm == rtl_Digest_AlgorithmHMAC_SHA1))
@@ -1969,7 +1969,7 @@ rtlDigestError SAL_CALL rtl_digest_updateHMAC_SHA1 (
     DigestHMAC_SHA1_Impl *pImpl = static_cast<DigestHMAC_SHA1_Impl*>(Digest);
     ContextHMAC_SHA1     *ctx;
 
-    if ((pImpl == NULL) || (pData == NULL))
+    if ((pImpl == nullptr) || (pData == nullptr))
         return rtl_Digest_E_Argument;
 
     if (!(pImpl->m_digest.m_algorithm == rtl_Digest_AlgorithmHMAC_SHA1))
@@ -1991,7 +1991,7 @@ rtlDigestError SAL_CALL rtl_digest_getHMAC_SHA1 (
     DigestHMAC_SHA1_Impl *pImpl = static_cast<DigestHMAC_SHA1_Impl*>(Digest);
     ContextHMAC_SHA1     *ctx;
 
-    if ((pImpl == NULL) || (pBuffer == NULL))
+    if ((pImpl == nullptr) || (pBuffer == nullptr))
         return rtl_Digest_E_Argument;
 
     if (!(pImpl->m_digest.m_algorithm == rtl_Digest_AlgorithmHMAC_SHA1))
@@ -2091,7 +2091,7 @@ rtlDigestError SAL_CALL rtl_digest_PBKDF2 (
     DigestHMAC_SHA1_Impl digest;
     sal_uInt32           i = 1;
 
-    if ((pKeyData == NULL) || (pPassData == NULL) || (pSaltData == NULL))
+    if ((pKeyData == nullptr) || (pPassData == nullptr) || (pSaltData == nullptr))
         return rtl_Digest_E_Argument;
 
     digest.m_digest = __rtl_digest_HMAC_SHA1;

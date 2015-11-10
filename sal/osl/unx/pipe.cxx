@@ -78,8 +78,8 @@ oslPipe __osl_createPipeImpl()
     oslPipe pPipeImpl;
 
     pPipeImpl = static_cast<oslPipe>(calloc(1, sizeof(struct oslPipeImpl)));
-    if (pPipeImpl == NULL)
-        return NULL;
+    if (pPipeImpl == nullptr)
+        return nullptr;
     pPipeImpl->m_nRefCount =1;
     pPipeImpl->m_bClosed = false;
 #if defined(LINUX)
@@ -91,16 +91,16 @@ oslPipe __osl_createPipeImpl()
 
 void __osl_destroyPipeImpl(oslPipe pImpl)
 {
-    if (pImpl != NULL)
+    if (pImpl != nullptr)
         free(pImpl);
 }
 
 oslPipe SAL_CALL osl_createPipe(rtl_uString *ustrPipeName, oslPipeOptions Options, oslSecurity Security)
 {
-    oslPipe pPipe=0;
-    rtl_String* strPipeName=0;
+    oslPipe pPipe=nullptr;
+    rtl_String* strPipeName=nullptr;
 
-    if ( ustrPipeName != 0 )
+    if ( ustrPipeName != nullptr )
     {
         rtl_uString2String( &strPipeName,
                             rtl_uString_getStr(ustrPipeName),
@@ -110,7 +110,7 @@ oslPipe SAL_CALL osl_createPipe(rtl_uString *ustrPipeName, oslPipeOptions Option
         sal_Char* pszPipeName = rtl_string_getStr(strPipeName);
         pPipe = osl_psz_createPipe(pszPipeName, Options, Security);
 
-        if ( strPipeName != 0 )
+        if ( strPipeName != nullptr )
         {
             rtl_string_release(strPipeName);
         }
@@ -124,15 +124,15 @@ static bool
 cpyBootstrapSocketPath(sal_Char *name, size_t len)
 {
     bool bRet = false;
-    rtl_uString *pName = 0, *pValue = 0;
+    rtl_uString *pName = nullptr, *pValue = nullptr;
 
     rtl_uString_newFromAscii(&pName, "OSL_SOCKET_PATH");
 
-    if (rtl_bootstrap_get(pName, &pValue, NULL))
+    if (rtl_bootstrap_get(pName, &pValue, nullptr))
     {
         if (pValue && pValue->length > 0)
         {
-            rtl_String *pStrValue = 0;
+            rtl_String *pStrValue = nullptr;
 
             rtl_uString2String(&pStrValue, pValue->buffer,
                                pValue->length, RTL_TEXTENCODING_UTF8,
@@ -176,7 +176,7 @@ oslPipe SAL_CALL osl_psz_createPipe(const sal_Char *pszPipeName, oslPipeOptions 
     }
     else if (!cpyBootstrapSocketPath (name, sizeof (name)))
     {
-        return NULL;
+        return nullptr;
     }
     name[sizeof(name) - 1] = '\0';  // ensure the string is NULL-terminated
     nNameLength = strlen(name);
@@ -210,14 +210,14 @@ oslPipe SAL_CALL osl_psz_createPipe(const sal_Char *pszPipeName, oslPipeOptions 
     if (bNameTooLong)
     {
         SAL_WARN("sal.osl.pipe", "osl_createPipe: pipe name too long");
-        return NULL;
+        return nullptr;
     }
 
     /* alloc memory */
     pPipe = __osl_createPipeImpl();
 
-    if (pPipe == NULL)
-        return NULL;
+    if (pPipe == nullptr)
+        return nullptr;
 
     /* create socket */
     pPipe->m_Socket = socket(AF_UNIX, SOCK_STREAM, 0);
@@ -225,7 +225,7 @@ oslPipe SAL_CALL osl_psz_createPipe(const sal_Char *pszPipeName, oslPipeOptions 
     {
         SAL_WARN("sal.osl.pipe", "socket() failed: " << strerror(errno));
         __osl_destroyPipeImpl(pPipe);
-        return NULL;
+        return nullptr;
     }
 
     /* set close-on-exec flag */
@@ -262,7 +262,7 @@ oslPipe SAL_CALL osl_psz_createPipe(const sal_Char *pszPipeName, oslPipeOptions 
             {
                 close (pPipe->m_Socket);
                 __osl_destroyPipeImpl(pPipe);
-                return NULL;
+                return nullptr;
             }
 
             unlink(name);
@@ -274,7 +274,7 @@ oslPipe SAL_CALL osl_psz_createPipe(const sal_Char *pszPipeName, oslPipeOptions 
             SAL_WARN("sal.osl.pipe", "bind() failed: " << strerror(errno));
             close (pPipe->m_Socket);
             __osl_destroyPipeImpl(pPipe);
-            return NULL;
+            return nullptr;
         }
 
         /*  Only give access to all if no security handle was specified, otherwise security
@@ -295,7 +295,7 @@ oslPipe SAL_CALL osl_psz_createPipe(const sal_Char *pszPipeName, oslPipeOptions 
             unlink(name);   /* remove filesystem entry */
             close (pPipe->m_Socket);
             __osl_destroyPipeImpl(pPipe);
-            return NULL;
+            return nullptr;
         }
 
         return pPipe;
@@ -314,7 +314,7 @@ oslPipe SAL_CALL osl_psz_createPipe(const sal_Char *pszPipeName, oslPipeOptions 
 
         close (pPipe->m_Socket);
         __osl_destroyPipeImpl(pPipe);
-        return NULL;
+        return nullptr;
     }
 }
 
@@ -326,7 +326,7 @@ void SAL_CALL osl_acquirePipe( oslPipe pPipe )
 void SAL_CALL osl_releasePipe( oslPipe pPipe )
 {
 
-    if( 0 == pPipe )
+    if( nullptr == pPipe )
         return;
 
     if( 0 == osl_atomic_decrement( &(pPipe->m_nRefCount) ) )
@@ -414,9 +414,9 @@ oslPipe SAL_CALL osl_acceptPipe(oslPipe pPipe)
     oslPipe pAcceptedPipe;
 
     OSL_ASSERT(pPipe);
-    if ( pPipe == 0 )
+    if ( pPipe == nullptr )
     {
-        return NULL;
+        return nullptr;
     }
 
     OSL_ASSERT(strlen(pPipe->m_Name) > 0);
@@ -425,7 +425,7 @@ oslPipe SAL_CALL osl_acceptPipe(oslPipe pPipe)
     pPipe->m_bIsAccepting = true;
 #endif
 
-    s = accept(pPipe->m_Socket, NULL, NULL);
+    s = accept(pPipe->m_Socket, nullptr, nullptr);
 
 #if defined(LINUX)
     pPipe->m_bIsAccepting = false;
@@ -434,14 +434,14 @@ oslPipe SAL_CALL osl_acceptPipe(oslPipe pPipe)
     if (s < 0)
     {
         SAL_WARN("sal.osl.pipe", "accept() failed: " << strerror(errno));
-        return NULL;
+        return nullptr;
     }
 
 #if defined(LINUX)
     if ( pPipe->m_bIsInShutdown  )
     {
         close(s);
-        return NULL;
+        return nullptr;
     }
 #endif /* LINUX */
     else
@@ -450,10 +450,10 @@ oslPipe SAL_CALL osl_acceptPipe(oslPipe pPipe)
         pAcceptedPipe = __osl_createPipeImpl();
 
         OSL_ASSERT(pAcceptedPipe);
-        if(pAcceptedPipe==NULL)
+        if(pAcceptedPipe==nullptr)
         {
             close(s);
-            return NULL;
+            return nullptr;
         }
 
         /* set close-on-exec flag */
@@ -481,7 +481,7 @@ sal_Int32 SAL_CALL osl_receivePipe(oslPipe pPipe,
 
     OSL_ASSERT(pPipe);
 
-    if ( pPipe == 0 )
+    if ( pPipe == nullptr )
     {
         SAL_WARN("sal.osl.pipe", "osl_receivePipe: Invalid socket");
         errno=EINVAL;
@@ -508,7 +508,7 @@ sal_Int32 SAL_CALL osl_sendPipe(oslPipe pPipe,
 
     OSL_ASSERT(pPipe);
 
-    if ( pPipe == 0 )
+    if ( pPipe == nullptr )
     {
         SAL_WARN("sal.osl.pipe", "osl_sendPipe: Invalid socket");
         errno=EINVAL;

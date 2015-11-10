@@ -42,9 +42,9 @@ oslCondition SAL_CALL osl_createCondition()
 
     pCond = static_cast<oslConditionImpl*>(malloc(sizeof(oslConditionImpl)));
 
-    if ( pCond == 0 )
+    if ( pCond == nullptr )
     {
-        return 0;
+        return nullptr;
     }
 
     pCond->m_State = false;
@@ -56,7 +56,7 @@ oslCondition SAL_CALL osl_createCondition()
         SAL_WARN( "sal.osl.condition", "pthread_cond_init failed: " << strerror(nRet) );
 
         free(pCond);
-        return 0;
+        return nullptr;
     }
 
     nRet = pthread_mutex_init(&pCond->m_Lock, PTHREAD_MUTEXATTR_DEFAULT);
@@ -68,7 +68,7 @@ oslCondition SAL_CALL osl_createCondition()
         SAL_WARN_IF( nRet != 0, "sal.osl.condition", "pthread_cond_destroy failed: " << strerror(nRet) );
 
         free(pCond);
-        pCond = 0;
+        pCond = nullptr;
     }
 
     SAL_INFO( "sal.osl.condition", "osl_createCondition(): " << pCond );
@@ -190,7 +190,7 @@ oslConditionResult SAL_CALL osl_waitCondition(oslCondition Condition, const Time
             struct timeval      tp;
             struct timespec     to;
 
-            gettimeofday(&tp, NULL);
+            gettimeofday(&tp, nullptr);
 
             SET_TIMESPEC( to, tp.tv_sec + pTimeout->Seconds,
                               tp.tv_usec * 1000 + pTimeout->Nanosec );

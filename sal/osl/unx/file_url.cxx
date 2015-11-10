@@ -216,7 +216,7 @@ oslFileError SAL_CALL osl_getFileURLFromSystemPath( rtl_uString *ustrSystemPath,
 {
     static const sal_Unicode pDoubleSlash[2] = { '/', '/' };
 
-    rtl_uString *pTmp = NULL;
+    rtl_uString *pTmp = nullptr;
     sal_Int32 nIndex;
 
     if( 0 == ustrSystemPath->length )
@@ -280,7 +280,7 @@ oslFileError SAL_CALL osl_getFileURLFromSystemPath( rtl_uString *ustrSystemPath,
         sal_Int32 nDeleted = 0;
 
         /* if pTmp is not already allocated, copy ustrSystemPath for modification */
-        if( NULL == pTmp )
+        if( nullptr == pTmp )
             rtl_uString_newFromString( &pTmp, ustrSystemPath );
 
         /* adapt index to pTmp */
@@ -299,7 +299,7 @@ oslFileError SAL_CALL osl_getFileURLFromSystemPath( rtl_uString *ustrSystemPath,
         pTmp->length -= nDeleted;
     }
 
-    if( NULL == pTmp )
+    if( nullptr == pTmp )
         rtl_uString_assign( &pTmp, ustrSystemPath );
 
     /* file URLs must be URI encoded */
@@ -310,7 +310,7 @@ oslFileError SAL_CALL osl_getFileURLFromSystemPath( rtl_uString *ustrSystemPath,
     /* absolute urls should start with 'file://' */
     if( '/' == (*pustrFileURL)->buffer[0] )
     {
-        rtl_uString *pProtocol = NULL;
+        rtl_uString *pProtocol = nullptr;
 
         rtl_uString_newFromAscii( &pProtocol, "file://" );
         rtl_uString_newConcat( pustrFileURL, pProtocol, *pustrFileURL );
@@ -326,7 +326,7 @@ oslFileError SAL_CALL osl_getFileURLFromSystemPath( rtl_uString *ustrSystemPath,
 oslFileError osl_getSystemPathFromFileURL_Ex(
     rtl_uString *ustrFileURL, rtl_uString **pustrSystemPath)
 {
-    rtl_uString* temp = 0;
+    rtl_uString* temp = nullptr;
     oslFileError osl_error = osl_getSystemPathFromFileURL(ustrFileURL, &temp);
 
     if (osl_File_E_None == osl_error)
@@ -703,7 +703,7 @@ oslFileError osl_searchFileURL(rtl_uString* ustrFilePath, rtl_uString* ustrSearc
 
 oslFileError FileURLToPath(char * buffer, size_t bufLen, rtl_uString* ustrFileURL)
 {
-    rtl_uString* ustrSystemPath = NULL;
+    rtl_uString* ustrSystemPath = nullptr;
     oslFileError osl_error      = osl_getSystemPathFromFileURL(ustrFileURL, &ustrSystemPath);
 
     if(osl_File_E_None != osl_error)
@@ -745,9 +745,9 @@ namespace
             sal_Unicode const * pSrcBuf, sal_Size nSrcChars, sal_Char * pDstBuf, sal_Size nDstBytes,
             sal_uInt32 nFlags, sal_uInt32 * pInfo, sal_Size * pSrcCvtChars)
         {
-            OSL_ASSERT(m_converter != 0);
+            OSL_ASSERT(m_converter != nullptr);
             return rtl_convertUnicodeToText (
-                m_converter, 0, pSrcBuf, nSrcChars, pDstBuf, nDstBytes, nFlags, pInfo, pSrcCvtChars);
+                m_converter, nullptr, pSrcBuf, nSrcChars, pDstBuf, nDstBytes, nFlags, pInfo, pSrcCvtChars);
         }
     };
 }
@@ -798,9 +798,9 @@ namespace
             sal_Char const * pSrcBuf, sal_Size nSrcBytes, sal_Unicode * pDstBuf, sal_Size nDstChars,
             sal_uInt32 nFlags, sal_uInt32 * pInfo, sal_Size * pSrcCvtBytes)
         {
-            OSL_ASSERT(m_converter != 0);
+            OSL_ASSERT(m_converter != nullptr);
             return rtl_convertTextToUnicode (
-                m_converter, 0, pSrcBuf, nSrcBytes, pDstBuf, nDstChars, nFlags, pInfo, pSrcCvtBytes);
+                m_converter, nullptr, pSrcBuf, nSrcBytes, pDstBuf, nDstChars, nFlags, pInfo, pSrcCvtBytes);
         }
     };
 }

@@ -288,33 +288,33 @@ ImplTextEncodingData const adobeStandardEncodingData
 = { { &adobeStandardEncodingConverterData,
       &rtl_textenc_convertSingleByteToBmpUnicode,
       &rtl_textenc_convertBmpUnicodeToSingleByte,
-      0, 0, 0,
+      nullptr, nullptr, nullptr,
       ImplCreateUnicodeToTextContext, ImplDestroyUnicodeToTextContext,
       ImplResetUnicodeToTextContext },
     1, 1, 1,
-    0, 0, "Adobe-Standard-Encoding",
+    0, nullptr, "Adobe-Standard-Encoding",
     RTL_TEXTENCODING_INFO_MIME };
 
 ImplTextEncodingData const adobeSymbolEncodingData
 = { { &adobeSymbolEncodingConverterData,
       &rtl_textenc_convertSingleByteToBmpUnicode,
       &rtl_textenc_convertBmpUnicodeToSingleByte,
-      0, 0, 0,
+      nullptr, nullptr, nullptr,
       ImplCreateUnicodeToTextContext, ImplDestroyUnicodeToTextContext,
       ImplResetUnicodeToTextContext },
     1, 1, 1,
-    0, 0, "Adobe-Symbol-Encoding",
+    0, nullptr, "Adobe-Symbol-Encoding",
     RTL_TEXTENCODING_INFO_SYMBOL | RTL_TEXTENCODING_INFO_MIME };
 
 ImplTextEncodingData const adobeDingbatsEncodingData
 = { { &adobeDingbatsEncodingConverterData,
       &rtl_textenc_convertSingleByteToBmpUnicode,
       &rtl_textenc_convertBmpUnicodeToSingleByte,
-      0, 0, 0,
+      nullptr, nullptr, nullptr,
       ImplCreateUnicodeToTextContext, ImplDestroyUnicodeToTextContext,
       ImplResetUnicodeToTextContext },
     1, 1, 1,
-    0, 0, "Adobe-ZapfDingbats-Encoding",
+    0, nullptr, "Adobe-ZapfDingbats-Encoding",
     0 }; // TODO: RTL_TEXTENCODING_INFO_DINGBATS
 
 }

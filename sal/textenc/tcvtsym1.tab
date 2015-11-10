@@ -23,15 +23,15 @@
 /* Symbol Font Encodings */
 
 static ImplTextEncodingData const aImplSYMBOLTextEncodingData
-    = { { NULL,
+    = { { nullptr,
           ImplSymbolToUnicode,
           ImplUnicodeToSymbol,
-          NULL,
-          NULL,
-          NULL,
-          NULL,
-          NULL,
-          NULL },
+          nullptr,
+          nullptr,
+          nullptr,
+          nullptr,
+          nullptr,
+          nullptr },
         1,
         1,
         1,

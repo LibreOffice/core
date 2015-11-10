@@ -223,13 +223,13 @@ rtl_TextEncoding SAL_CALL rtl_getTextEncodingFromUnixCharset( const char* pUnixC
         { "7", RTL_TEXTENCODING_ISO_8859_7 },
         { "8", RTL_TEXTENCODING_ISO_8859_8 },
         { "9", RTL_TEXTENCODING_ISO_8859_9 },
-        { NULL, RTL_TEXTENCODING_DONTKNOW }
+        { nullptr, RTL_TEXTENCODING_DONTKNOW }
     };
 
     static ImplStrCharsetDef const aUnixCharsetADOBETab[] =
     {
         { "fontspecific", RTL_TEXTENCODING_SYMBOL },
-        { NULL, RTL_TEXTENCODING_DONTKNOW }
+        { nullptr, RTL_TEXTENCODING_DONTKNOW }
     };
 
     static ImplStrCharsetDef const aUnixCharsetMSTab[] =
@@ -262,7 +262,7 @@ rtl_TextEncoding SAL_CALL rtl_getTextEncodingFromUnixCharset( const char* pUnixC
         { "cp949", RTL_TEXTENCODING_MS_949 },
         { "cp950", RTL_TEXTENCODING_MS_950 },
         { "cp1361", RTL_TEXTENCODING_MS_1361 },
-        { NULL, RTL_TEXTENCODING_DONTKNOW }
+        { nullptr, RTL_TEXTENCODING_DONTKNOW }
     };
 
     static ImplStrCharsetDef const aUnixCharsetIBMTab[] =
@@ -285,71 +285,71 @@ rtl_TextEncoding SAL_CALL rtl_getTextEncodingFromUnixCharset( const char* pUnixC
         { "874", RTL_TEXTENCODING_MS_874 },
         { "1004", RTL_TEXTENCODING_MS_1252 },
         { "65400", RTL_TEXTENCODING_SYMBOL },
-        { NULL, RTL_TEXTENCODING_DONTKNOW }
+        { nullptr, RTL_TEXTENCODING_DONTKNOW }
     };
 
     static ImplStrCharsetDef const aUnixCharsetKOI8Tab[] =
     {
         { "r", RTL_TEXTENCODING_KOI8_R },
         { "u", RTL_TEXTENCODING_KOI8_U },
-        { NULL, RTL_TEXTENCODING_DONTKNOW }
+        { nullptr, RTL_TEXTENCODING_DONTKNOW }
     };
 
     static ImplStrCharsetDef const aUnixCharsetJISX0208Tab[] =
     {
-        { NULL, RTL_TEXTENCODING_JIS_X_0208 }
+        { nullptr, RTL_TEXTENCODING_JIS_X_0208 }
     };
 
     static ImplStrCharsetDef const aUnixCharsetJISX0201Tab[] =
     {
-        { NULL, RTL_TEXTENCODING_JIS_X_0201 }
+        { nullptr, RTL_TEXTENCODING_JIS_X_0201 }
     };
 
     static ImplStrCharsetDef const aUnixCharsetJISX0212Tab[] =
     {
-        { NULL, RTL_TEXTENCODING_JIS_X_0212 }
+        { nullptr, RTL_TEXTENCODING_JIS_X_0212 }
     };
 
     static ImplStrCharsetDef const aUnixCharsetGBTab[] =
     {
-        { NULL, RTL_TEXTENCODING_GB_2312 }
+        { nullptr, RTL_TEXTENCODING_GB_2312 }
     };
 
     static ImplStrCharsetDef const aUnixCharsetGBKTab[] =
     {
-        { NULL, RTL_TEXTENCODING_GBK }
+        { nullptr, RTL_TEXTENCODING_GBK }
     };
 
     static ImplStrCharsetDef const aUnixCharsetBIG5Tab[] =
     {
-        { NULL, RTL_TEXTENCODING_BIG5 }
+        { nullptr, RTL_TEXTENCODING_BIG5 }
     };
 
     static ImplStrCharsetDef const aUnixCharsetKSC56011987Tab[] =
     {
-        { NULL, RTL_TEXTENCODING_EUC_KR }
+        { nullptr, RTL_TEXTENCODING_EUC_KR }
     };
 
     static ImplStrCharsetDef const aUnixCharsetKSC56011992Tab[] =
     {
-        { NULL, RTL_TEXTENCODING_MS_1361 }
+        { nullptr, RTL_TEXTENCODING_MS_1361 }
     };
 
     static ImplStrCharsetDef const aUnixCharsetISO10646Tab[] =
     {
-        { NULL, RTL_TEXTENCODING_UNICODE }
+        { nullptr, RTL_TEXTENCODING_UNICODE }
     };
 
     static ImplStrCharsetDef const aUnixCharsetUNICODETab[] =
     {
 /* Currently every Unicode Encoding is for us Unicode */
 /*        { "fontspecific", RTL_TEXTENCODING_UNICODE }, */
-        { NULL, RTL_TEXTENCODING_UNICODE }
+        { nullptr, RTL_TEXTENCODING_UNICODE }
     };
 
     static ImplStrCharsetDef const aUnixCharsetSymbolTab[] =
     {
-        { NULL, RTL_TEXTENCODING_SYMBOL }
+        { nullptr, RTL_TEXTENCODING_SYMBOL }
     };
 
     /* See <http://cvs.freedesktop.org/xorg/xc/fonts/encodings/iso8859-11.enc?
@@ -359,18 +359,18 @@ rtl_TextEncoding SAL_CALL rtl_getTextEncodingFromUnixCharset( const char* pUnixC
         { "0", RTL_TEXTENCODING_TIS_620 },
         { "2529", RTL_TEXTENCODING_TIS_620 },
         { "2533", RTL_TEXTENCODING_TIS_620 },
-        { NULL, RTL_TEXTENCODING_DONTKNOW }
+        { nullptr, RTL_TEXTENCODING_DONTKNOW }
     };
     static ImplStrCharsetDef const aUnixCharsetTIS6202529Tab[] =
     {
         { "1", RTL_TEXTENCODING_TIS_620 },
-        { NULL, RTL_TEXTENCODING_DONTKNOW }
+        { nullptr, RTL_TEXTENCODING_DONTKNOW }
     };
     static ImplStrCharsetDef const aUnixCharsetTIS6202533Tab[] =
     {
         { "0", RTL_TEXTENCODING_TIS_620 },
         { "1", RTL_TEXTENCODING_TIS_620 },
-        { NULL, RTL_TEXTENCODING_DONTKNOW }
+        { nullptr, RTL_TEXTENCODING_DONTKNOW }
     };
 
     static ImplStrFirstPartCharsetDef const aUnixCharsetFirstPartTab[] =
@@ -404,7 +404,7 @@ rtl_TextEncoding SAL_CALL rtl_getTextEncodingFromUnixCharset( const char* pUnixC
 /*        { "sunudcko.1997",  },        */
 /*        { "sunudczh.1997",  },        */
 /*        { "sunudczhtw.1997",  },      */
-        { NULL, NULL }
+        { nullptr, nullptr }
     };
 
     rtl_TextEncoding    eEncoding = RTL_TEXTENCODING_DONTKNOW;
@@ -419,7 +419,7 @@ rtl_TextEncoding SAL_CALL rtl_getTextEncodingFromUnixCharset( const char* pUnixC
 
     /* Search FirstPart */
     pFirstPart = pBuf.get();
-    pSecondPart = NULL;
+    pSecondPart = nullptr;
     pTempBuf = pBuf.get();
     while ( *pTempBuf )
     {
@@ -516,7 +516,7 @@ rtl_TextEncoding SAL_CALL rtl_getTextEncodingFromMimeCharset( const char* pMimeC
         { "windows1256", RTL_TEXTENCODING_MS_1256 },
         { "windows1257", RTL_TEXTENCODING_MS_1257 },
         { "windows1258", RTL_TEXTENCODING_MS_1258 },
-        { NULL, RTL_TEXTENCODING_DONTKNOW }
+        { nullptr, RTL_TEXTENCODING_DONTKNOW }
     };
 
     /* All Identifiers are in lower case and contain only alphanumeric */
@@ -734,7 +734,7 @@ rtl_TextEncoding SAL_CALL rtl_getTextEncodingFromMimeCharset( const char* pMimeC
         { "xisciide", RTL_TEXTENCODING_ISCII_DEVANAGARI },
             /* This is not an official MIME character set name, but is in use by
                various windows APIs. */
-        { NULL, RTL_TEXTENCODING_DONTKNOW }
+        { nullptr, RTL_TEXTENCODING_DONTKNOW }
     };
 
     rtl_TextEncoding            eEncoding = RTL_TEXTENCODING_DONTKNOW;
@@ -797,7 +797,7 @@ const char* SAL_CALL rtl_getBestUnixCharsetFromTextEncoding( rtl_TextEncoding eT
     else if( eTextEncoding == RTL_TEXTENCODING_UNICODE )
         return "iso10646-1";
     else
-        return 0;
+        return nullptr;
 }
 
 /* ----------------------------------------------------------------------- */
@@ -807,7 +807,7 @@ char const * SAL_CALL rtl_getMimeCharsetFromTextEncoding(rtl_TextEncoding
 {
     ImplTextEncodingData const * p = Impl_getTextEncodingData(nEncoding);
     return p && (p->mnInfoFlags & RTL_TEXTENCODING_INFO_MIME) != 0 ?
-               p->mpBestMimeCharset : NULL;
+               p->mpBestMimeCharset : nullptr;
 }
 
 const char* SAL_CALL rtl_getBestMimeCharsetFromTextEncoding( rtl_TextEncoding eTextEncoding )
@@ -816,7 +816,7 @@ const char* SAL_CALL rtl_getBestMimeCharsetFromTextEncoding( rtl_TextEncoding eT
     if ( pData )
         return pData->mpBestMimeCharset;
     else
-        return 0;
+        return nullptr;
 }
 
 /* The following two functions are based on <http://www.sharmahd.com/tm/

@@ -87,7 +87,7 @@ void test::oustring::StringConcat::checkConcatAsciiL()
 
 void test::oustring::StringConcat::checkEnsureCapacity()
 {
-    rtl_uString* str = NULL;
+    rtl_uString* str = nullptr;
     rtl_uString_newFromLiteral( &str, "test", strlen( "test" ), 0 );
     CPPUNIT_ASSERT_EQUAL( sal_Int32( 4 ), str->length );
     CPPUNIT_ASSERT_EQUAL( 1, int( str->refCount ));
@@ -154,8 +154,8 @@ void test::oustring::StringConcat::checkInvalid()
     CPPUNIT_ASSERT( INVALID_CONCAT( OUString( "a" ) + static_cast<char*>(d) ));
     CPPUNIT_ASSERT( INVALID_CONCAT( OUString( "a" ) + OStringLiteral( "b" )));
     CPPUNIT_ASSERT( INVALID_CONCAT( OUString( "a" ) + 1 ));
-    rtl_String* rs = NULL;
-    rtl_uString* rus = NULL;
+    rtl_String* rs = nullptr;
+    rtl_uString* rus = nullptr;
     CPPUNIT_ASSERT( INVALID_CONCAT( OUString( "b" ) + rs ));
     CPPUNIT_ASSERT( INVALID_CONCAT( OUString( "b" ) + rus ));
 }

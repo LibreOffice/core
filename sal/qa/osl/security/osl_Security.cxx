@@ -59,7 +59,7 @@ namespace osl_Security
             ::osl::Security aSec;
 
             CPPUNIT_ASSERT_MESSAGE( "#test comment#: create a security  its handle should not be NULL.",
-                                    aSec.getHandle( ) != NULL );
+                                    aSec.getHandle( ) != nullptr );
         }
 
         CPPUNIT_TEST_SUITE( ctors );
@@ -327,7 +327,7 @@ void MyTestPlugInImpl::initialize( CPPUNIT_NS::TestFactoryRegistry *,
     /// some initialization work for UNIX OS
 
     struct passwd* pw;
-    CPPUNIT_ASSERT_MESSAGE( "getpwuid: no password entry\n",( pw = getpwuid( getuid() ) ) != NULL );
+    CPPUNIT_ASSERT_MESSAGE( "getpwuid: no password entry\n",( pw = getpwuid( getuid() ) ) != nullptr );
 
     /// get user ID;
     strUserID = OUString::number( getuid( ) );

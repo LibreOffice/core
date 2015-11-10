@@ -89,11 +89,11 @@ sal_Int32 SAL_CALL rtl_str_valueOfFloat(sal_Char * pStr, float f)
     SAL_THROW_EXTERN_C()
 {
     assert(pStr);
-    rtl_String * pResult = NULL;
+    rtl_String * pResult = nullptr;
     sal_Int32 nLen;
     rtl_math_doubleToString(
-        &pResult, 0, 0, f, rtl_math_StringFormat_G,
-        RTL_STR_MAX_VALUEOFFLOAT - RTL_CONSTASCII_LENGTH("-x.E-xxx"), '.', 0, 0,
+        &pResult, nullptr, 0, f, rtl_math_StringFormat_G,
+        RTL_STR_MAX_VALUEOFFLOAT - RTL_CONSTASCII_LENGTH("-x.E-xxx"), '.', nullptr, 0,
         sal_True);
     nLen = pResult->length;
     OSL_ASSERT(nLen < RTL_STR_MAX_VALUEOFFLOAT);
@@ -106,11 +106,11 @@ sal_Int32 SAL_CALL rtl_str_valueOfDouble(sal_Char * pStr, double d)
     SAL_THROW_EXTERN_C()
 {
     assert(pStr);
-    rtl_String * pResult = NULL;
+    rtl_String * pResult = nullptr;
     sal_Int32 nLen;
     rtl_math_doubleToString(
-        &pResult, 0, 0, d, rtl_math_StringFormat_G,
-        RTL_STR_MAX_VALUEOFDOUBLE - RTL_CONSTASCII_LENGTH("-x.E-xxx"), '.', 0,
+        &pResult, nullptr, 0, d, rtl_math_StringFormat_G,
+        RTL_STR_MAX_VALUEOFDOUBLE - RTL_CONSTASCII_LENGTH("-x.E-xxx"), '.', nullptr,
         0, sal_True);
     nLen = pResult->length;
     OSL_ASSERT(nLen < RTL_STR_MAX_VALUEOFDOUBLE);
@@ -123,14 +123,14 @@ float SAL_CALL rtl_str_toFloat(sal_Char const * pStr) SAL_THROW_EXTERN_C()
 {
     assert(pStr);
     return (float) rtl_math_stringToDouble(pStr, pStr + rtl_str_getLength(pStr),
-                                           '.', 0, 0, 0);
+                                           '.', 0, nullptr, nullptr);
 }
 
 double SAL_CALL rtl_str_toDouble(sal_Char const * pStr) SAL_THROW_EXTERN_C()
 {
     assert(pStr);
     return rtl_math_stringToDouble(pStr, pStr + rtl_str_getLength(pStr), '.', 0,
-                                   0, 0);
+                                   nullptr, nullptr);
 }
 
 /* ======================================================================= */
@@ -227,7 +227,7 @@ bool SAL_CALL rtl_impl_convertUStringToString(rtl_String ** pTarget,
                 if ( *pTarget )
                     rtl_string_release( *pTarget );
                 *pTarget = rtl_string_ImplAlloc( nLength );
-                OSL_ASSERT(*pTarget != NULL);
+                OSL_ASSERT(*pTarget != nullptr);
                 pBuffer = (*pTarget)->buffer;
                 do
                 {
@@ -266,8 +266,8 @@ bool SAL_CALL rtl_impl_convertUStringToString(rtl_String ** pTarget,
         for (;;)
         {
             pTemp = rtl_string_ImplAlloc( nNewLen );
-            OSL_ASSERT(pTemp != NULL);
-            nDestBytes = rtl_convertUnicodeToText( hConverter, 0,
+            OSL_ASSERT(pTemp != nullptr);
+            nDestBytes = rtl_convertUnicodeToText( hConverter, nullptr,
                                                    pSource, nLength,
                                                    pTemp->buffer, nNewLen,
                                                    nFlags,
@@ -296,7 +296,7 @@ bool SAL_CALL rtl_impl_convertUStringToString(rtl_String ** pTarget,
         if ( nNewLen > nDestBytes+8 )
         {
             rtl_String* pTemp2 = rtl_string_ImplAlloc( nDestBytes );
-            OSL_ASSERT(pTemp2 != NULL);
+            OSL_ASSERT(pTemp2 != nullptr);
             rtl_str_ImplCopy( pTemp2->buffer, pTemp->buffer, nDestBytes );
             rtl_freeMemory( pTemp );
             pTemp = pTemp2;
@@ -347,8 +347,8 @@ void rtl_string_newReplaceFirst(
     sal_Int32 fromLength, char const * to, sal_Int32 toLength,
     sal_Int32 * index) SAL_THROW_EXTERN_C()
 {
-    assert(str != 0);
-    assert(index != 0);
+    assert(str != nullptr);
+    assert(index != nullptr);
     assert(*index >= 0 && *index <= str->length);
     assert(fromLength >= 0);
     assert(toLength >= 0);

@@ -73,10 +73,10 @@ sal_Size rtl_textenc_convertSingleByteToBmpUnicode(
         infoFlags |= RTL_TEXTTOUNICODE_INFO_DESTBUFFERTOSMALL;
         break;
     }
-    if (info != 0) {
+    if (info != nullptr) {
         *info = infoFlags;
     }
-    if (srcCvtBytes != 0) {
+    if (srcCvtBytes != nullptr) {
         *srcCvtBytes = converted;
     }
     return destBufPtr - destBuf;
@@ -99,7 +99,7 @@ sal_Size rtl_textenc_convertBmpUnicodeToSingleByte(
     sal_Size converted = 0;
     sal_Char * destBufPtr = destBuf;
     sal_Char * destBufEnd = destBuf + destBytes;
-    if (context != 0) {
+    if (context != nullptr) {
         highSurrogate = static_cast< ImplUnicodeToTextContext * >(context)->
             m_nHighSurrogate;
     }
@@ -143,8 +143,8 @@ sal_Size rtl_textenc_convertBmpUnicodeToSingleByte(
         continue;
     bad_input:
         switch (sal::detail::textenc::handleBadInputUnicodeToTextConversion(
-                    undefined, c, flags, &destBufPtr, destBufEnd, &infoFlags, 0,
-                    0, 0))
+                    undefined, c, flags, &destBufPtr, destBufEnd, &infoFlags, nullptr,
+                    0, nullptr))
         {
         case sal::detail::textenc::BAD_INPUT_STOP:
             highSurrogate = 0;
@@ -173,8 +173,8 @@ sal_Size rtl_textenc_convertBmpUnicodeToSingleByte(
             infoFlags |= RTL_UNICODETOTEXT_INFO_SRCBUFFERTOSMALL;
         } else {
             switch (sal::detail::textenc::handleBadInputUnicodeToTextConversion(
-                        false, 0, flags, &destBufPtr, destBufEnd, &infoFlags, 0,
-                        0, 0))
+                        false, 0, flags, &destBufPtr, destBufEnd, &infoFlags, nullptr,
+                        0, nullptr))
             {
             case sal::detail::textenc::BAD_INPUT_STOP:
             case sal::detail::textenc::BAD_INPUT_CONTINUE:
@@ -187,14 +187,14 @@ sal_Size rtl_textenc_convertBmpUnicodeToSingleByte(
             }
         }
     }
-    if (context != 0) {
+    if (context != nullptr) {
         static_cast< ImplUnicodeToTextContext * >(context)->m_nHighSurrogate
             = highSurrogate;
     }
-    if (info != 0) {
+    if (info != nullptr) {
         *info = infoFlags;
     }
-    if (srcCvtChars != 0) {
+    if (srcCvtChars != nullptr) {
         *srcCvtChars = converted;
     }
     return destBufPtr - destBuf;

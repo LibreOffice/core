@@ -45,14 +45,14 @@ void oldtests::test_profile()
 
     // successful write
     oslProfile hProfile = osl_openProfile( rtl::OUString(baseUrl + "/soffice.ini").pData, osl_Profile_WRITELOCK );
-    CPPUNIT_ASSERT(hProfile != 0);
+    CPPUNIT_ASSERT(hProfile != nullptr);
     CPPUNIT_ASSERT_MESSAGE(
         "cannot write into init file",
         osl_writeProfileBool( hProfile, "testsection", "testbool", 1 ));
     CPPUNIT_ASSERT(osl_closeProfile( hProfile ));
 
     // unsuccessful open
-    CPPUNIT_ASSERT_EQUAL(oslProfile(0), osl_openProfile( rtl::OUString(baseUrl + "/not_existing_path/soffice.ini").pData, osl_Profile_WRITELOCK ));
+    CPPUNIT_ASSERT_EQUAL(oslProfile(nullptr), osl_openProfile( rtl::OUString(baseUrl + "/not_existing_path/soffice.ini").pData, osl_Profile_WRITELOCK ));
 }
 
 } // namespace osl_Profile

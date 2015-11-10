@@ -64,7 +64,7 @@ const char * const aSource1[] =
     "a/b/c/d"   , "file:///" TEST_VOLUME "bla/a/b/c/d",
     "a/./c"   , "file:///" TEST_VOLUME "bla/a/c",
     "file:///bla/blub", "file:///"  "bla/blub",
-    0 , 0
+    nullptr , nullptr
 };
 
 const char * const aSource2[ ] =
@@ -76,7 +76,7 @@ const char * const aSource2[ ] =
     "../../a", "file:///" TEST_VOLUME "bla/a",
     "../../../a", "file:///" TEST_VOLUME "a",
     "../../../a/b/c/d", "file:///" TEST_VOLUME "a/b/c/d",
-    0,0
+    nullptr,nullptr
 };
 
 using ::rtl::OUString;

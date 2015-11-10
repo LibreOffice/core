@@ -185,7 +185,7 @@ namespace
     inline oslFileError setup_osl_getFileStatus(
         DirectoryItem_Impl * pImpl, oslFileStatus* pStat, rtl::OUString& file_path)
     {
-        if ((NULL == pImpl) || (NULL == pStat))
+        if ((nullptr == pImpl) || (nullptr == pStat))
             return osl_File_E_INVAL;
 
         file_path = rtl::OUString(pImpl->m_ustrFilePath);
@@ -350,7 +350,7 @@ static oslFileError osl_psz_setFileTime (
     fprintf(stderr,"Modification is '%s'\n",ctime(&aTimeBuffer.modtime));
 #endif
 
-    if ( pLastAccessTime != 0 )
+    if ( pLastAccessTime != nullptr )
     {
         aTimeBuffer.actime=pLastAccessTime->Seconds;
     }
@@ -359,7 +359,7 @@ static oslFileError osl_psz_setFileTime (
         aTimeBuffer.actime=aFileStat.st_atime;
     }
 
-    if ( pLastWriteTime != 0 )
+    if ( pLastWriteTime != nullptr )
     {
         aTimeBuffer.modtime=pLastWriteTime->Seconds;
     }

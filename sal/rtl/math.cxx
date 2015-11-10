@@ -175,7 +175,7 @@ inline void doubleToString(StringT ** pResult,
     {
         // #i112652# XMLSchema-2
         sal_Int32 nCapacity = RTL_CONSTASCII_LENGTH("NaN");
-        if (pResultCapacity == 0)
+        if (pResultCapacity == nullptr)
         {
             pResultCapacity = &nCapacity;
             T::createBuffer(pResult, pResultCapacity);
@@ -192,7 +192,7 @@ inline void doubleToString(StringT ** pResult,
     {
         // #i112652# XMLSchema-2
         sal_Int32 nCapacity = RTL_CONSTASCII_LENGTH("-INF");
-        if (pResultCapacity == 0)
+        if (pResultCapacity == nullptr)
         {
             pResultCapacity = &nCapacity;
             T::createBuffer(pResult, pResultCapacity);
@@ -501,7 +501,7 @@ inline void doubleToString(StringT ** pResult,
             nExp % 10 + static_cast< typename T::Char >('0') );
     }
 
-    if (pResultCapacity == 0)
+    if (pResultCapacity == nullptr)
         T::createString(pResult, pBuf, p - pBuf);
     else
         T::appendChars(pResult, pResultCapacity, &nResultOffset, pBuf,
@@ -785,7 +785,7 @@ inline double stringToDouble(CharT const * pBegin, CharT const * pEnd,
     if ( bSign )
         fVal = -fVal;
 
-    if (pStatus != 0)
+    if (pStatus != nullptr)
         *pStatus = eStatus;
     if (pParsedEnd != 0)
         *pParsedEnd = p == p0 ? pBegin : p;

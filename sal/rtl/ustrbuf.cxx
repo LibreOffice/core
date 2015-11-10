@@ -62,7 +62,7 @@ rtl_uString * SAL_CALL rtl_uStringBuffer_makeStringAndClear( rtl_uString ** ppTh
     assert(nCapacity);
     // avoid an un-necessary atomic ref/unref pair
     rtl_uString *pStr = *ppThis;
-    *ppThis = NULL;
+    *ppThis = nullptr;
 
     rtl_uString_new (ppThis);
     *nCapacity = 0;
@@ -103,7 +103,7 @@ void SAL_CALL rtl_uStringbuffer_ensureCapacity
     if (minimumCapacity > *capacity)
     {
         rtl_uString * pTmp = *This;
-        rtl_uString * pNew = NULL;
+        rtl_uString * pNew = nullptr;
         *capacity = ((*This)->length + 1) * 2;
         if (minimumCapacity > *capacity)
             /* still lower, set to the minimum capacity */

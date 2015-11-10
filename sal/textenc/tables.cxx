@@ -102,8 +102,8 @@ extern "C" SAL_DLLPUBLIC_EXPORT ImplTextEncodingData const *
         nEncoding != RTL_TEXTENCODING_UTF8);
         // handled by Impl_getTextEncodingData
     static ImplTextEncodingData const * const aData[]
-        = { NULL, /* DONTKNOW */
-            NULL, /* MS_1252, see above */
+        = { nullptr, /* DONTKNOW */
+            nullptr, /* MS_1252, see above */
             &aImplAPPLEROMANTextEncodingData, /* APPLE_ROMAN */
             &aImplIBM437TextEncodingData, /* IBM_437 */
             &aImplIBM850TextEncodingData, /* IBM_850 */
@@ -111,10 +111,10 @@ extern "C" SAL_DLLPUBLIC_EXPORT ImplTextEncodingData const *
             &aImplIBM861TextEncodingData, /* IBM_861 */
             &aImplIBM863TextEncodingData, /* IBM_863 */
             &aImplIBM865TextEncodingData, /* IBM_865 */
-            NULL, /* reserved (SYSTEM) */
+            nullptr, /* reserved (SYSTEM) */
             &aImplSYMBOLTextEncodingData, /* SYMBOL */
-            NULL, /* ASCII_US, see above */
-            NULL, /* ISO_8859_1, see above */
+            nullptr, /* ASCII_US, see above */
+            nullptr, /* ISO_8859_1, see above */
             &aImplISO88592TextEncodingData, /* ISO_8859_2 */
             &aImplISO88593TextEncodingData, /* ISO_8859_3 */
             &aImplISO88594TextEncodingData, /* ISO_8859_4 */
@@ -143,19 +143,19 @@ extern "C" SAL_DLLPUBLIC_EXPORT ImplTextEncodingData const *
             &aImplMS1256TextEncodingData, /* MS_1256 */
             &aImplMS1257TextEncodingData, /* MS_1257 */
             &aImplMS1258TextEncodingData, /* MS_1258 */
-            NULL, /* TODO! APPLE_ARABIC */
+            nullptr, /* TODO! APPLE_ARABIC */
             &aImplAPPLECENTEUROTextEncodingData, /* APPLE_CENTEURO */
             &aImplAPPLECROATIANTextEncodingData, /* APPLE_CROATIAN */
             &aImplAPPLECYRILLICTextEncodingData, /* APPLE_CYRILLIC */
-            NULL, /* TODO! APPLE_DEVANAGARI */
-            NULL, /* TODO! APPLE_FARSI */
+            nullptr, /* TODO! APPLE_DEVANAGARI */
+            nullptr, /* TODO! APPLE_FARSI */
             &aImplAPPLEGREEKTextEncodingData, /* APPLE_GREEK */
-            NULL, /* TODO! APPLE_GUJARATI */
-            NULL, /* TODO! APPLE_GURMUKHI */
-            NULL, /* TODO! APPLE_HEBREW */
+            nullptr, /* TODO! APPLE_GUJARATI */
+            nullptr, /* TODO! APPLE_GURMUKHI */
+            nullptr, /* TODO! APPLE_HEBREW */
             &aImplAPPLEICELANDTextEncodingData, /* APPLE_ICELAND */
             &aImplAPPLEROMANIANTextEncodingData, /* APPLE_ROMANIAN */
-            NULL, /* TODO! APPLE_THAI */
+            nullptr, /* TODO! APPLE_THAI */
             &aImplAPPLETURKISHTextEncodingData, /* APPLE_TURKISH */
             &aImplAPPLEUKRAINIANTextEncodingData, /* APPLE_UKRAINIAN */
 #if WITH_LOCALE_ALL || WITH_LOCALE_zh
@@ -219,7 +219,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT ImplTextEncodingData const *
 #endif
             &aImplKOI8RTextEncodingData, /* KOI8_R */
             &aImplUTF7TextEncodingData, /* UTF7 */
-            NULL, /* UTF8, see above */
+            nullptr, /* UTF8, see above */
             &aImplISO885910TextEncodingData, /* ISO_8859_10 */
             &aImplISO885913TextEncodingData, /* ISO_8859_13 */
 #if WITH_LOCALE_ALL || WITH_LOCALE_ko
@@ -253,7 +253,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT ImplTextEncodingData const *
 #else
             NULL,
 #endif
-            NULL, /* JAVA_UTF8, see above */
+            nullptr, /* JAVA_UTF8, see above */
             &adobeStandardEncodingData, /* ADOBE_STANDARD */
             &adobeSymbolEncodingData, /* ADOBE_SYMBOL */
             &aImplPT154TextEncodingData, /* PT154 */
@@ -264,7 +264,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT ImplTextEncodingData const *
         "update table above if a new encoding is added");
 
     return
-        nEncoding < SAL_N_ELEMENTS(aData) ? aData[nEncoding] : NULL;
+        nEncoding < SAL_N_ELEMENTS(aData) ? aData[nEncoding] : nullptr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

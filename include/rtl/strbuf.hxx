@@ -481,7 +481,7 @@ public:
      */
     OStringBuffer & append( const sal_Char * str, sal_Int32 len)
     {
-        assert( len == 0 || str != 0 ); // cannot assert that in rtl_stringbuffer_insert
+        assert( len == 0 || str != NULL ); // cannot assert that in rtl_stringbuffer_insert
         rtl_stringbuffer_insert( &pData, &nCapacity, getLength(), str, len );
         return *this;
     }
@@ -654,7 +654,7 @@ public:
     */
     char * appendUninitialized(sal_Int32 length) {
         sal_Int32 n = getLength();
-        rtl_stringbuffer_insert(&pData, &nCapacity, n, 0, length);
+        rtl_stringbuffer_insert(&pData, &nCapacity, n, NULL, length);
         return pData->buffer + n;
     }
 
@@ -745,7 +745,7 @@ public:
      */
     OStringBuffer & insert( sal_Int32 offset, const sal_Char * str, sal_Int32 len)
     {
-        assert( len == 0 || str != 0 ); // cannot assert that in rtl_stringbuffer_insert
+        assert( len == 0 || str != NULL ); // cannot assert that in rtl_stringbuffer_insert
         rtl_stringbuffer_insert( &pData, &nCapacity, offset, str, len );
         return *this;
     }

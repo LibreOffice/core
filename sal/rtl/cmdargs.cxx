@@ -23,7 +23,7 @@
 
 namespace {
 
-rtl_uString ** g_ppCommandArgs = 0;
+rtl_uString ** g_ppCommandArgs = nullptr;
 sal_uInt32     g_nCommandArgCount = 0;
 
 struct ArgHolder
@@ -37,7 +37,7 @@ ArgHolder::~ArgHolder()
         rtl_uString_release (g_ppCommandArgs[--g_nCommandArgCount]);
 
     rtl_freeMemory (g_ppCommandArgs);
-    g_ppCommandArgs = 0;
+    g_ppCommandArgs = nullptr;
 }
 
 // The destructor of this static ArgHolder is "activated" by the assignments to
@@ -55,7 +55,7 @@ void init()
             static_cast<rtl_uString**>(rtl_allocateZeroMemory (n * sizeof(rtl_uString*)));
         for (i = 0; i < n; i++)
         {
-            rtl_uString * pArg = 0;
+            rtl_uString * pArg = nullptr;
             osl_getCommandArg (i, &pArg);
             if (('-' == pArg->buffer[0] || '/' == pArg->buffer[0]) &&
                  'e' == pArg->buffer[1] &&

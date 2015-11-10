@@ -43,7 +43,7 @@ inline rtl::OString doubleToString(double fValue, rtl_math_StringFormat eFormat,
                                    bool bEraseTrailingDecZeros = false)
 {
     rtl::OString aResult;
-    rtl_math_doubleToString(&aResult.pData, 0, 0, fValue, eFormat, nDecPlaces,
+    rtl_math_doubleToString(&aResult.pData, NULL, 0, fValue, eFormat, nDecPlaces,
                             cDecSeparator, pGroups, cGroupSeparator,
                             bEraseTrailingDecZeros);
     return aResult;
@@ -57,8 +57,8 @@ inline rtl::OString doubleToString(double fValue, rtl_math_StringFormat eFormat,
                                    bool bEraseTrailingDecZeros = false)
 {
     rtl::OString aResult;
-    rtl_math_doubleToString(&aResult.pData, 0, 0, fValue, eFormat, nDecPlaces,
-                            cDecSeparator, 0, 0, bEraseTrailingDecZeros);
+    rtl_math_doubleToString(&aResult.pData, NULL, 0, fValue, eFormat, nDecPlaces,
+                            cDecSeparator, NULL, 0, bEraseTrailingDecZeros);
     return aResult;
 }
 
@@ -73,7 +73,7 @@ inline rtl::OUString doubleToUString(double fValue,
                                      bool bEraseTrailingDecZeros = false)
 {
     rtl::OUString aResult;
-    rtl_math_doubleToUString(&aResult.pData, 0, 0, fValue, eFormat, nDecPlaces,
+    rtl_math_doubleToUString(&aResult.pData, NULL, 0, fValue, eFormat, nDecPlaces,
                              cDecSeparator, pGroups, cGroupSeparator,
                              bEraseTrailingDecZeros);
     return aResult;
@@ -88,8 +88,8 @@ inline rtl::OUString doubleToUString(double fValue,
                                      bool bEraseTrailingDecZeros = false)
 {
     rtl::OUString aResult;
-    rtl_math_doubleToUString(&aResult.pData, 0, 0, fValue, eFormat, nDecPlaces,
-                             cDecSeparator, 0, 0, bEraseTrailingDecZeros);
+    rtl_math_doubleToUString(&aResult.pData, NULL, 0, fValue, eFormat, nDecPlaces,
+                             cDecSeparator, NULL, 0, bEraseTrailingDecZeros);
     return aResult;
 }
 
@@ -125,7 +125,7 @@ inline void doubleToUStringBuffer( rtl::OUStringBuffer& rBuffer, double fValue,
     sal_Int32 * pCapacity;
     rBuffer.accessInternals( &pData, &pCapacity );
     rtl_math_doubleToUString( pData, pCapacity, rBuffer.getLength(), fValue,
-                              eFormat, nDecPlaces, cDecSeparator, 0, 0,
+                              eFormat, nDecPlaces, cDecSeparator, NULL, 0,
                               bEraseTrailingDecZeros);
 }
 
@@ -133,8 +133,8 @@ inline void doubleToUStringBuffer( rtl::OUStringBuffer& rBuffer, double fValue,
  */
 inline double stringToDouble(rtl::OString const & rString,
                              sal_Char cDecSeparator, sal_Char cGroupSeparator,
-                             rtl_math_ConversionStatus * pStatus = 0,
-                             sal_Int32 * pParsedEnd = 0)
+                             rtl_math_ConversionStatus * pStatus = NULL,
+                             sal_Int32 * pParsedEnd = NULL)
 {
     sal_Char const * pBegin = rString.getStr();
     sal_Char const * pEnd;
@@ -142,7 +142,7 @@ inline double stringToDouble(rtl::OString const & rString,
                                              pBegin + rString.getLength(),
                                              cDecSeparator, cGroupSeparator,
                                              pStatus, &pEnd);
-    if (pParsedEnd != 0)
+    if (pParsedEnd != NULL)
         *pParsedEnd = (sal_Int32)(pEnd - pBegin);
     return fResult;
 }
@@ -152,8 +152,8 @@ inline double stringToDouble(rtl::OString const & rString,
 inline double stringToDouble(rtl::OUString const & rString,
                              sal_Unicode cDecSeparator,
                              sal_Unicode cGroupSeparator,
-                             rtl_math_ConversionStatus * pStatus = 0,
-                             sal_Int32 * pParsedEnd = 0)
+                             rtl_math_ConversionStatus * pStatus = NULL,
+                             sal_Int32 * pParsedEnd = NULL)
 {
     sal_Unicode const * pBegin = rString.getStr();
     sal_Unicode const * pEnd;
@@ -161,7 +161,7 @@ inline double stringToDouble(rtl::OUString const & rString,
                                               pBegin + rString.getLength(),
                                               cDecSeparator, cGroupSeparator,
                                               pStatus, &pEnd);
-    if (pParsedEnd != 0)
+    if (pParsedEnd != NULL)
         *pParsedEnd = (sal_Int32)(pEnd - pBegin);
     return fResult;
 }

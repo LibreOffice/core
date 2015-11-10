@@ -43,9 +43,9 @@ struct RTL_HASHTABLE
     RTL_HASHENTRY** Table;
 };
 
-static RTL_HASHTABLE* g_pLocaleTable = NULL;
+static RTL_HASHTABLE* g_pLocaleTable = nullptr;
 
-static rtl_Locale* g_pDefaultLocale = NULL;
+static rtl_Locale* g_pDefaultLocale = nullptr;
 
 /*************************************************************************
  */
@@ -97,7 +97,7 @@ extern "C" void rtl_hashtable_init(RTL_HASHTABLE** table, sal_Int8 sizeIndex)
 
     while (nSize)
     {
-        (*table)->Table[nSize - 1] = NULL;
+        (*table)->Table[nSize - 1] = nullptr;
         nSize--;
     }
 }
@@ -114,7 +114,7 @@ extern "C" rtl_Locale* rtl_hashtable_add(RTL_HASHTABLE** table, rtl_Locale* valu
     sal_Int32 key = 0;
 
     if (!(*table))
-        return NULL;
+        return nullptr;
 
     if ((*table)->Elements > ((*table)->Size / 2))
         rtl_hashtable_grow(table);
@@ -131,15 +131,15 @@ extern "C" rtl_Locale* rtl_hashtable_add(RTL_HASHTABLE** table, rtl_Locale* valu
 
     RTL_HASHENTRY *newEntry = static_cast<RTL_HASHENTRY*>(rtl_allocateMemory( sizeof(RTL_HASHENTRY) ));
     newEntry->Entry = value;
-    newEntry->Next = NULL;
+    newEntry->Next = nullptr;
     *pEntry = newEntry;
     (*table)->Elements++;
-    return NULL;
+    return nullptr;
 }
 
 sal_Bool rtl_hashtable_grow(RTL_HASHTABLE** table)
 {
-    RTL_HASHTABLE* pNewTable = NULL;
+    RTL_HASHTABLE* pNewTable = nullptr;
     sal_Int32 i = 0;
 
     rtl_hashtable_init(&pNewTable, (sal_Int8)((*table)->iSize + 1));
@@ -200,7 +200,7 @@ extern "C" sal_Bool rtl_hashtable_find(RTL_HASHTABLE * table, sal_Int32 key, sal
  */
 void rtl_locale_init()
 {
-  OSL_ASSERT(g_pLocaleTable == 0);
+  OSL_ASSERT(g_pLocaleTable == nullptr);
   rtl_hashtable_init(&g_pLocaleTable, 1);
 }
 
@@ -209,10 +209,10 @@ void rtl_locale_init()
  */
 void rtl_locale_fini()
 {
-  if (g_pLocaleTable != 0)
+  if (g_pLocaleTable != nullptr)
   {
     rtl_hashtable_destroy (g_pLocaleTable);
-    g_pLocaleTable = 0;
+    g_pLocaleTable = nullptr;
   }
 }
 
@@ -222,10 +222,10 @@ void rtl_locale_fini()
 rtl_Locale * SAL_CALL rtl_locale_register( const sal_Unicode * language, const sal_Unicode * country, const sal_Unicode * variant )
 {
     sal_Unicode c = 0;
-    rtl_uString* sLanguage = NULL;
-    rtl_uString* sCountry = NULL;
-    rtl_uString* sVariant = NULL;
-    rtl_Locale *newLocale = NULL;
+    rtl_uString* sLanguage = nullptr;
+    rtl_uString* sCountry = nullptr;
+    rtl_uString* sVariant = nullptr;
+    rtl_Locale *newLocale = nullptr;
     sal_Int32 hashCode = -1;
     sal_Int32 key = 0;
 
@@ -236,7 +236,7 @@ rtl_Locale * SAL_CALL rtl_locale_register( const sal_Unicode * language, const s
 
     ensureLocaleSingleton();
     if (!g_pLocaleTable)
-      return NULL;
+      return nullptr;
 
     hashCode = rtl_ustr_hashCode(language) ^ rtl_ustr_hashCode(country) ^ rtl_ustr_hashCode(variant);
     key = rtl_hashfunc(g_pLocaleTable, hashCode);

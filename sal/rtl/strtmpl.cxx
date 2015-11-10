@@ -1150,8 +1150,8 @@ static IMPL_RTL_STRINGDATA* IMPL_RTL_STRINGNAME( ImplAlloc )( sal_Int32 nLen )
                / sizeof (IMPL_RTL_STRCODE)))
         ? static_cast<IMPL_RTL_STRINGDATA *>(rtl_allocateMemory(
             sizeof (IMPL_RTL_STRINGDATA) + nLen * sizeof (IMPL_RTL_STRCODE)))
-        : NULL;
-    if (pData != NULL) {
+        : nullptr;
+    if (pData != nullptr) {
         pData->refCount = 1;
         pData->length = nLen;
         pData->buffer[nLen] = 0;
@@ -1169,7 +1169,7 @@ static IMPL_RTL_STRCODE* IMPL_RTL_STRINGNAME( ImplNewCopy )( IMPL_RTL_STRINGDATA
     IMPL_RTL_STRCODE*       pDest;
     const IMPL_RTL_STRCODE* pSrc;
     IMPL_RTL_STRINGDATA*    pData = IMPL_RTL_STRINGNAME( ImplAlloc )( pStr->length );
-    OSL_ASSERT(pData != NULL);
+    OSL_ASSERT(pData != nullptr);
 
     pDest   = pData->buffer;
     pSrc    = pStr->buffer;
@@ -1251,7 +1251,7 @@ IMPL_RTL_STRINGDATA* SAL_CALL IMPL_RTL_STRINGNAME( alloc )( sal_Int32 nLen )
     SAL_THROW_EXTERN_C()
 {
     if ( nLen < 0 )
-        return NULL;
+        return nullptr;
     else
         return IMPL_RTL_STRINGNAME( ImplAlloc )( nLen );
 }
@@ -1270,7 +1270,7 @@ void SAL_CALL IMPL_RTL_STRINGNAME( new_WithLength )( IMPL_RTL_STRINGDATA** ppThi
             IMPL_RTL_STRINGNAME( release )( *ppThis );
 
         *ppThis = IMPL_RTL_STRINGNAME( ImplAlloc )( nLen );
-        OSL_ASSERT(*ppThis != NULL);
+        OSL_ASSERT(*ppThis != nullptr);
         (*ppThis)->length   = 0;
 
         IMPL_RTL_STRCODE* pTempStr = (*ppThis)->buffer;
@@ -1296,7 +1296,7 @@ void SAL_CALL IMPL_RTL_STRINGNAME( newFromString )( IMPL_RTL_STRINGDATA** ppThis
 
     pOrg = *ppThis;
     *ppThis = IMPL_RTL_STRINGNAME( ImplAlloc )( pStr->length );
-    OSL_ASSERT(*ppThis != NULL);
+    OSL_ASSERT(*ppThis != nullptr);
     rtl_str_ImplCopy( (*ppThis)->buffer, pStr->buffer, pStr->length );
     RTL_LOG_STRING_NEW( *ppThis );
 
@@ -1334,7 +1334,7 @@ void SAL_CALL IMPL_RTL_STRINGNAME( newFromStr )( IMPL_RTL_STRINGDATA** ppThis,
 
     pOrg = *ppThis;
     *ppThis = IMPL_RTL_STRINGNAME( ImplAlloc )( nLen );
-    OSL_ASSERT(*ppThis != NULL);
+    OSL_ASSERT(*ppThis != nullptr);
     pBuffer = (*ppThis)->buffer;
     do
     {
@@ -1369,7 +1369,7 @@ void SAL_CALL IMPL_RTL_STRINGNAME( newFromStr_WithLength )( IMPL_RTL_STRINGDATA*
 
     pOrg = *ppThis;
     *ppThis = IMPL_RTL_STRINGNAME( ImplAlloc )( nLen );
-    OSL_ASSERT(*ppThis != NULL);
+    OSL_ASSERT(*ppThis != nullptr);
     rtl_str_ImplCopy( (*ppThis)->buffer, pCharStr, nLen );
 
     RTL_LOG_STRING_NEW( *ppThis );
@@ -1425,7 +1425,7 @@ void SAL_CALL IMPL_RTL_STRINGNAME( newFromLiteral )( IMPL_RTL_STRINGDATA** ppThi
         IMPL_RTL_STRINGNAME( release )( *ppThis );
 
     *ppThis = IMPL_RTL_STRINGNAME( ImplAlloc )( nLen + allocExtra );
-    assert( *ppThis != NULL );
+    assert( *ppThis != nullptr );
 
     (*ppThis)->length = nLen; // fix after possible allocExtra != 0
     (*ppThis)->buffer[nLen] = 0;
@@ -1505,7 +1505,7 @@ void SAL_CALL IMPL_RTL_STRINGNAME( newConcat )( IMPL_RTL_STRINGDATA** ppThis,
     else
     {
         IMPL_RTL_STRINGDATA* pTempStr = IMPL_RTL_STRINGNAME( ImplAlloc )( pLeft->length + pRight->length );
-        OSL_ASSERT(pTempStr != NULL);
+        OSL_ASSERT(pTempStr != nullptr);
         rtl_str_ImplCopy( pTempStr->buffer, pLeft->buffer, pLeft->length );
         rtl_str_ImplCopy( pTempStr->buffer+pLeft->length, pRight->buffer, pRight->length );
         *ppThis = pTempStr;
@@ -1600,7 +1600,7 @@ void SAL_CALL IMPL_RTL_STRINGNAME( newReplaceStrAt )( IMPL_RTL_STRINGDATA** ppTh
 
     /* Alloc New Buffer */
     *ppThis = IMPL_RTL_STRINGNAME( ImplAlloc )( nNewLen );
-    OSL_ASSERT(*ppThis != NULL);
+    OSL_ASSERT(*ppThis != nullptr);
     pBuffer = (*ppThis)->buffer;
     if ( nIndex )
     {

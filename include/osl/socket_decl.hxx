@@ -82,7 +82,7 @@ namespace osl
             @return the hostname of this SocketAddr or an empty string on failure.
             @see osl_getHostnameOfSocketAddr()
         */
-        inline ::rtl::OUString SAL_CALL getHostname( oslSocketResult *pResult = 0 ) const;
+        inline ::rtl::OUString SAL_CALL getHostname( oslSocketResult *pResult = NULL ) const;
 
         /** Sets the ipaddress or hostname of the SocketAddress
          */
@@ -105,7 +105,7 @@ namespace osl
 
         /** Returns the address of the underlying socket in network byte order
           */
-        inline ::rtl::ByteSequence  SAL_CALL getAddr( oslSocketResult *pResult = 0 ) const;
+        inline ::rtl::ByteSequence  SAL_CALL getAddr( oslSocketResult *pResult = NULL ) const;
 
         /** assign the handle to this reference. The previous handle is released.
         */
@@ -138,7 +138,7 @@ namespace osl
                    an error on failure.
             @return the hostname
         */
-        static inline ::rtl::OUString SAL_CALL getLocalHostname( oslSocketResult *pResult = 0);
+        static inline ::rtl::OUString SAL_CALL getLocalHostname( oslSocketResult *pResult = NULL);
 
         /** Tries to find an address for a host.
             @see osl_resolveHostname()
@@ -273,7 +273,7 @@ namespace osl
             @param pTimeout if 0, the operation will block without a timeout. Otherwise
             the specified amout of time.
         */
-        inline bool SAL_CALL isRecvReady(const TimeValue *pTimeout = 0) const;
+        inline bool SAL_CALL isRecvReady(const TimeValue *pTimeout = NULL) const;
 
         /** Checks if send operations will block.
 
@@ -285,7 +285,7 @@ namespace osl
             @param pTimeout if 0, the operation will block without a timeout. Otherwise
             the specified amout of time.
         */
-        inline bool SAL_CALL isSendReady(const TimeValue *pTimeout = 0) const;
+        inline bool SAL_CALL isSendReady(const TimeValue *pTimeout = NULL) const;
 
 
         /** Checks if a request for out-of-band data will block.
@@ -300,7 +300,7 @@ namespace osl
             @param pTimeout if 0, the operation will block without a timeout. Otherwise
             the specified amout of time.
         */
-        inline bool SAL_CALL isExceptionPending(const TimeValue *pTimeout = 0) const;
+        inline bool SAL_CALL isExceptionPending(const TimeValue *pTimeout = NULL) const;
 
 
         /** Queries the socket for its type.
@@ -604,7 +604,7 @@ namespace osl
             <code>osl_Socket_Interrupted</code> if unblocked forcefully (by osl::Socket::close()),
             <code>osl_Socket_Error</code> if connect failed.
         */
-        oslSocketResult SAL_CALL connect(const SocketAddr& TargetHost, const TimeValue* pTimeout = 0);
+        oslSocketResult SAL_CALL connect(const SocketAddr& TargetHost, const TimeValue* pTimeout = NULL);
     };
 
     /** Allows to accept socket connections.
@@ -684,7 +684,7 @@ namespace osl
         */
         inline sal_Int32 SAL_CALL recvFrom(void*  pBuffer,
                                            sal_uInt32 BufferSize,
-                                           SocketAddr* pSenderAddr= 0,
+                                           SocketAddr* pSenderAddr= NULL,
                                            oslSocketMsgFlag Flag= osl_Socket_MsgNormal);
 
         /** Tries to send one datagram with BytesToSend size to the given ReceiverAddr.

@@ -79,7 +79,7 @@ void testConvertToString(TestConvertToString const & rTest)
 
     if (bSuccess)
     {
-        if (rTest.pStrict == 0 || !aStrict.equals(rTest.pStrict))
+        if (rTest.pStrict == nullptr || !aStrict.equals(rTest.pStrict))
         {
             rtl::OStringBuffer aMessage(aPrefix);
             aMessage.append(RTL_CONSTASCII_STRINGPARAM("strict = \""));
@@ -96,7 +96,7 @@ void testConvertToString(TestConvertToString const & rTest)
             aMessage.append(RTL_CONSTASCII_STRINGPARAM("modified output"));
             CPPUNIT_ASSERT_MESSAGE(aMessage.getStr(), false);
         }
-        if (rTest.pStrict != 0)
+        if (rTest.pStrict != nullptr)
         {
             rtl::OStringBuffer aMessage(aPrefix);
             aMessage.append(RTL_CONSTASCII_STRINGPARAM("failed"));
@@ -149,7 +149,7 @@ void test::oustring::Convert::convertToString()
               RTL_TEXTENCODING_ISO_2022_JP,
               RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR
                   | RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR,
-              0,
+              nullptr,
               "" },
             { { 0x3001,  0xB800 },
               2,
@@ -162,7 +162,7 @@ void test::oustring::Convert::convertToString()
               RTL_TEXTENCODING_ISO_8859_1,
               RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR
                   | RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR,
-              0,
+              nullptr,
               "A" },
             { { 0x0041,0x0100,0x0042 },
               3,

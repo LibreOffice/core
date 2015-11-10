@@ -59,7 +59,7 @@ sal_Size ImplDBCSToUnicode( const void* pData, SAL_UNUSED_PARAMETER void*,
         pLeadEntry = pLeadTab+cLead;
 
         /* SingleByte char? */
-        if (pLeadEntry->mpToUniTrailTab == NULL
+        if (pLeadEntry->mpToUniTrailTab == nullptr
             || cLead < pConvertData->mnLeadStart
             || cLead > pConvertData->mnLeadEnd)
         {

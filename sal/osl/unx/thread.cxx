@@ -167,7 +167,7 @@ static void osl_thread_destruct_Impl (Thread_Impl ** ppImpl)
         pthread_mutex_destroy (&((*ppImpl)->m_Lock));
 
         delete *ppImpl;
-        (*ppImpl) = 0;
+        (*ppImpl) = nullptr;
     }
 }
 
@@ -246,7 +246,7 @@ static void* osl_thread_start_Impl (void* pData)
     }
 
     osl_thread_cleanup_Impl (pImpl);
-    return 0;
+    return nullptr;
 }
 
 static oslThread osl_thread_create_Impl (
@@ -263,7 +263,7 @@ static oslThread osl_thread_create_Impl (
 
     pImpl = osl_thread_construct_Impl();
     if (!pImpl)
-        return 0; /* ENOMEM */
+        return nullptr; /* ENOMEM */
 
     pImpl->m_WorkerFunction = pWorker;
     pImpl->m_pData = pThreadData;
@@ -306,7 +306,7 @@ static oslThread osl_thread_create_Impl (
         pthread_mutex_unlock (&(pImpl->m_Lock));
         osl_thread_destruct_Impl (&pImpl);
 
-        return 0;
+        return nullptr;
     }
 
 #if defined OPENBSD || ((defined MACOSX || defined LINUX) && !ENABLE_RUNTIME_OPTIMIZATIONS)
@@ -348,7 +348,7 @@ oslThread osl_createSuspendedThread (
 
 void SAL_CALL osl_destroyThread(oslThread Thread)
 {
-    if (Thread != NULL) {
+    if (Thread != nullptr) {
         Thread_Impl * impl = static_cast<Thread_Impl *>(Thread);
         bool active;
         pthread_mutex_lock(&impl->m_Lock);
@@ -454,7 +454,7 @@ void SAL_CALL osl_joinWithThread(oslThread Thread)
 
     if (attached)
     {
-        pthread_join (thread, NULL);
+        pthread_join (thread, nullptr);
     }
 }
 
@@ -577,7 +577,7 @@ static sal_uInt16 lookupThreadId (pthread_t hThread)
     pthread_mutex_lock(&HashLock);
 
         pEntry = HashTable[HASHID(hThread)];
-        while (pEntry != NULL)
+        while (pEntry != nullptr)
         {
             if (pthread_equal(pEntry->Handle, hThread))
             {
@@ -594,13 +594,13 @@ static sal_uInt16 lookupThreadId (pthread_t hThread)
 
 static sal_uInt16 insertThreadId (pthread_t hThread)
 {
-    HashEntry *pEntry, *pInsert = NULL;
+    HashEntry *pEntry, *pInsert = nullptr;
 
     pthread_mutex_lock(&HashLock);
 
     pEntry = HashTable[HASHID(hThread)];
 
-    while (pEntry != NULL)
+    while (pEntry != nullptr)
     {
         if (pthread_equal(pEntry->Handle, hThread))
             break;
@@ -609,7 +609,7 @@ static sal_uInt16 insertThreadId (pthread_t hThread)
         pEntry = pEntry->Next;
     }
 
-    if (pEntry == NULL)
+    if (pEntry == nullptr)
     {
         pEntry = static_cast<HashEntry*>(calloc(sizeof(HashEntry), 1));
 
@@ -635,12 +635,12 @@ static sal_uInt16 insertThreadId (pthread_t hThread)
 
 static void removeThreadId (pthread_t hThread)
 {
-    HashEntry *pEntry, *pRemove = NULL;
+    HashEntry *pEntry, *pRemove = nullptr;
 
     pthread_mutex_lock(&HashLock);
 
     pEntry = HashTable[HASHID(hThread)];
-    while (pEntry != NULL)
+    while (pEntry != nullptr)
     {
         if (pthread_equal(pEntry->Handle, hThread))
             break;
@@ -649,7 +649,7 @@ static void removeThreadId (pthread_t hThread)
         pEntry = pEntry->Next;
     }
 
-    if (pEntry != NULL)
+    if (pEntry != nullptr)
     {
         if (pRemove)
             pRemove->Next = pEntry->Next;
@@ -952,7 +952,7 @@ oslThreadKey SAL_CALL osl_createThreadKey( oslThreadKeyCallbackFunction pCallbac
         if (pthread_key_create(&(pKey->m_key), pKey->pfnCallback) != 0)
         {
             rtl_freeMemory(pKey);
-            pKey = 0;
+            pKey = nullptr;
         }
     }
 
@@ -972,13 +972,13 @@ void SAL_CALL osl_destroyThreadKey(oslThreadKey Key)
 void* SAL_CALL osl_getThreadKeyData(oslThreadKey Key)
 {
     wrapper_pthread_key *pKey = static_cast<wrapper_pthread_key*>(Key);
-    return pKey ? pthread_getspecific(pKey->m_key) : NULL;
+    return pKey ? pthread_getspecific(pKey->m_key) : nullptr;
 }
 
 sal_Bool SAL_CALL osl_setThreadKeyData(oslThreadKey Key, void *pData)
 {
     bool bRet;
-    void *pOldData = NULL;
+    void *pOldData = nullptr;
     wrapper_pthread_key *pKey = static_cast<wrapper_pthread_key*>(Key);
     if (!pKey)
         return sal_False;
@@ -1002,10 +1002,10 @@ static void osl_thread_textencoding_init_Impl()
     rtl_TextEncoding defaultEncoding;
 
     /* create thread specific data key */
-    pthread_key_create (&(g_thread.m_textencoding.m_key), NULL);
+    pthread_key_create (&(g_thread.m_textencoding.m_key), nullptr);
 
     /* determine default text encoding */
-    defaultEncoding = osl_getTextEncodingFromLocale(NULL);
+    defaultEncoding = osl_getTextEncodingFromLocale(nullptr);
     // Tools string functions call abort() on an unknown encoding so ASCII is a
     // meaningfull fallback:
     if ( RTL_TEXTENCODING_DONTKNOW == defaultEncoding )

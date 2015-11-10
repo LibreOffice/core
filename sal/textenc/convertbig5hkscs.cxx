@@ -427,7 +427,7 @@ sal_Size ImplConvertUnicodeToBig5Hkscs(void const * pData,
     bad_input:
         switch (sal::detail::textenc::handleBadInputUnicodeToTextConversion(
                     bUndefined, nChar, nFlags, &pDestBufPtr, pDestBufEnd,
-                    &nInfo, NULL, 0, NULL))
+                    &nInfo, nullptr, 0, nullptr))
         {
         case sal::detail::textenc::BAD_INPUT_STOP:
             nHighSurrogate = 0;
@@ -458,7 +458,7 @@ sal_Size ImplConvertUnicodeToBig5Hkscs(void const * pData,
         else
             switch (sal::detail::textenc::handleBadInputUnicodeToTextConversion(
                         false, 0, nFlags, &pDestBufPtr, pDestBufEnd, &nInfo,
-                        NULL, 0, NULL))
+                        nullptr, 0, nullptr))
             {
             case sal::detail::textenc::BAD_INPUT_STOP:
             case sal::detail::textenc::BAD_INPUT_CONTINUE:

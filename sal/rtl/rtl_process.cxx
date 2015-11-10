@@ -31,7 +31,7 @@ namespace {
 
 class Id: private boost::noncopyable {
 public:
-    Id() { rtl_createUuid(uuid_, 0, false); }
+    Id() { rtl_createUuid(uuid_, nullptr, false); }
 
     void copy(sal_uInt8 * target) const
     { std::memcpy(target, uuid_, UUID_SIZE); }

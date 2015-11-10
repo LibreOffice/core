@@ -200,7 +200,7 @@ namespace osl_Module
             ::osl::Module aMod( getDllURL( ) );
 
             aMod.unload( );
-            bRes = oslModule(aMod) ==NULL;
+            bRes = oslModule(aMod) ==nullptr;
 
             CPPUNIT_ASSERT_MESSAGE( "#test comment#: unload function should do the same thing as destructor.",
                                     bRes );
@@ -287,10 +287,10 @@ namespace osl_Module
 #if !defined( MACOSX )
             // TODO: Find out why this fails on Mac OS X
             ::osl::Module aMod;
-            bRes = ( static_cast<oslModule>(aMod) == NULL );
+            bRes = ( static_cast<oslModule>(aMod) == nullptr );
 
             aMod.load( getDllURL( ) );
-            bRes1 = static_cast<oslModule>(aMod) != NULL;
+            bRes1 = static_cast<oslModule>(aMod) != nullptr;
 
             aMod.unload( );
 

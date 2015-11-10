@@ -312,7 +312,7 @@ rtlRandomError SAL_CALL rtl_random_addBytes (
     RandomPool_Impl *pImpl   = static_cast<RandomPool_Impl *>(Pool);
     const sal_uInt8 *pBuffer = static_cast<const sal_uInt8 *>(Buffer);
 
-    if ((pImpl == NULL) || (pBuffer == NULL))
+    if ((pImpl == nullptr) || (pBuffer == nullptr))
         return rtl_Random_E_Argument;
     if(pImpl->m_hDigest)
     {
@@ -330,7 +330,7 @@ rtlRandomError SAL_CALL rtl_random_getBytes (
     RandomPool_Impl *pImpl   = static_cast<RandomPool_Impl *>(Pool);
     sal_uInt8       *pBuffer = static_cast<sal_uInt8 *>(Buffer);
 
-    if ((pImpl == NULL) || (pBuffer == NULL))
+    if ((pImpl == nullptr) || (pBuffer == nullptr))
         return rtl_Random_E_Argument;
 
     if(pImpl->m_hDigest || !osl_get_system_random_data(static_cast<char*>(Buffer), Bytes))

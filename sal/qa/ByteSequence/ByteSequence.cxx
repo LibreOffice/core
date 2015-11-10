@@ -60,7 +60,7 @@ public:
     }
 
     void test_elem0() {
-        rtl::ByteSequence s(0, 0);
+        rtl::ByteSequence s(nullptr, 0);
         CPPUNIT_ASSERT_EQUAL(sal_Int32(0), s.getLength());
     }
 

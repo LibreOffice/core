@@ -323,7 +323,7 @@ void Test::test_Uri() {
             { "http://a/b/c/d;p?q", "http:g", "http:g" },
 
             { "http!://a/b/c/d;p?q", "g:h", "g:h" },
-            { "http!://a/b/c/d;p?q", "g", 0 },
+            { "http!://a/b/c/d;p?q", "g", nullptr },
             { "http:b/c/d;p?q", "g:h", "g:h" },
             { "http:b/c/d;p?q", "g", "http:b/c/g" },
             { "http://a/b/../", "../c", "http://a/c" },
@@ -347,8 +347,8 @@ void Test::test_Uri() {
             bMalformed = true;
         }
         if (bMalformed
-            ? aRelToAbsTest[i].pAbs != 0
-            : (aRelToAbsTest[i].pAbs == 0
+            ? aRelToAbsTest[i].pAbs != nullptr
+            : (aRelToAbsTest[i].pAbs == nullptr
                || !aAbs.equalsAscii(aRelToAbsTest[i].pAbs)))
         {
             printf(
@@ -358,7 +358,7 @@ void Test::test_Uri() {
                  ? "<MALFORMED>"
                  : rtl::OUStringToOString(
                      aAbs, RTL_TEXTENCODING_UTF8).getStr()),
-                (aRelToAbsTest[i].pAbs == 0
+                (aRelToAbsTest[i].pAbs == nullptr
                  ? "<MALFORMED>" : aRelToAbsTest[i].pAbs));
             CPPUNIT_ASSERT(false);
         }

@@ -35,7 +35,7 @@ struct StaticDebugBaseAddressFilter
     : rtl::StaticWithInit<OStringVec, StaticDebugBaseAddressFilter> {
     OStringVec operator()() const {
         OStringVec vec;
-        rtl_uString * pStr = 0;
+        rtl_uString * pStr = nullptr;
         rtl::OUString const name(
             "OSL_DEBUGBASE_STORE_ADDRESSES" );
         if (osl_getEnvironment( name.pData, &pStr ) == osl_Process_E_None) {

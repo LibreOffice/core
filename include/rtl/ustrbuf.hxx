@@ -153,7 +153,7 @@ public:
     template< typename T >
     OUStringBuffer( T&, typename libreoffice_internal::ExceptConstCharArrayDetector< T >::Type = libreoffice_internal::Dummy() )
     {
-        pData = 0;
+        pData = NULL;
         nCapacity = 10;
         rtl_uString_newFromLiteral( &pData, "!!br0ken!!", 10, 0 ); // set to garbage
         rtl_string_unittest_invalid_conversion = true;
@@ -165,7 +165,7 @@ public:
     template< typename T >
     OUStringBuffer( const T&, typename libreoffice_internal::ExceptCharArrayDetector< T >::Type = libreoffice_internal::Dummy() )
     {
-        pData = 0;
+        pData = NULL;
         nCapacity = 10;
         rtl_uString_newFromLiteral( &pData, "!!br0ken!!", 10, 0 ); // set to garbage
         rtl_string_unittest_invalid_conversion = true;
@@ -461,7 +461,7 @@ public:
      */
     OUStringBuffer & append( const sal_Unicode * str, sal_Int32 len)
     {
-        assert( len == 0 || str != 0 ); // cannot assert that in rtl_uStringbuffer_insert
+        assert( len == 0 || str != NULL ); // cannot assert that in rtl_uStringbuffer_insert
         rtl_uStringbuffer_insert( &pData, &nCapacity, getLength(), str, len );
         return *this;
     }
@@ -741,7 +741,7 @@ public:
     */
     sal_Unicode * appendUninitialized(sal_Int32 length) {
         sal_Int32 n = getLength();
-        rtl_uStringbuffer_insert(&pData, &nCapacity, n, 0, length);
+        rtl_uStringbuffer_insert(&pData, &nCapacity, n, NULL, length);
         return pData->buffer + n;
     }
 
@@ -807,7 +807,7 @@ public:
      */
     OUStringBuffer & insert( sal_Int32 offset, const sal_Unicode * str, sal_Int32 len)
     {
-        assert( len == 0 || str != 0 ); // cannot assert that in rtl_uStringbuffer_insert
+        assert( len == 0 || str != NULL ); // cannot assert that in rtl_uStringbuffer_insert
         rtl_uStringbuffer_insert( &pData, &nCapacity, offset, str, len );
         return *this;
     }
@@ -1381,7 +1381,7 @@ public:
     {
         assert(beginIndex >= 0 && beginIndex <= getLength());
         assert(count >= 0 && count <= getLength() - beginIndex);
-        rtl_uString *pNew = 0;
+        rtl_uString *pNew = NULL;
         rtl_uStringbuffer_newFromStr_WithLength( &pNew, getStr() + beginIndex, count );
         return OUStringBuffer( pNew, count + 16 );
     }

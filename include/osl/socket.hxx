@@ -62,7 +62,7 @@ namespace osl
             else
             {
                 osl_destroySocketAddr( m_handle );
-                m_handle = 0;
+                m_handle = NULL;
             }
         }
     }
@@ -157,7 +157,7 @@ namespace osl
 
     inline bool SocketAddr::is() const
     {
-        return m_handle != 0;
+        return m_handle != NULL;
     }
 
     // (static method)______________________________________________________________
@@ -265,7 +265,7 @@ namespace osl
 
     inline sal_Int32 Socket::getLocalPort() const
     {
-        SocketAddr addr( 0 );
+        SocketAddr addr( NULL );
         getLocalAddr( addr );
         return addr.getPort();
     }
@@ -273,7 +273,7 @@ namespace osl
 
     inline ::rtl::OUString Socket::getLocalHost() const
     {
-        SocketAddr addr( 0 );
+        SocketAddr addr( NULL );
         getLocalAddr( addr );
         return addr.getHostname();
     }
@@ -287,7 +287,7 @@ namespace osl
 
     inline sal_Int32 Socket::getPeerPort() const
     {
-        SocketAddr addr( 0 );
+        SocketAddr addr( NULL );
         getPeerAddr( addr );
         return addr.getPort();
     }
@@ -295,7 +295,7 @@ namespace osl
 
     inline ::rtl::OUString Socket::getPeerHost() const
     {
-        SocketAddr addr( 0 );
+        SocketAddr addr( NULL );
         getPeerAddr( addr );
         return addr.getHostname();
     }
@@ -483,7 +483,7 @@ namespace osl
 
     inline oslSocketResult AcceptorSocket::acceptConnection( StreamSocket& Connection)
     {
-        oslSocket o = osl_acceptConnectionOnSocket( m_handle, 0 );
+        oslSocket o = osl_acceptConnectionOnSocket( m_handle, NULL );
         oslSocketResult status = osl_Socket_Ok;
         if( o )
         {
@@ -541,7 +541,7 @@ namespace osl
         }
         else
         {
-            nByteRead = osl_receiveFromSocket( m_handle, 0 , pBuffer , BufferSize ,  Flag );
+            nByteRead = osl_receiveFromSocket( m_handle, NULL , pBuffer , BufferSize ,  Flag );
         }
         return nByteRead;
     }

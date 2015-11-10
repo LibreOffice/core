@@ -45,9 +45,9 @@ oslMutex SAL_CALL osl_createMutex()
 
     SAL_WARN_IF(!pMutex, "sal.osl.mutex", "null pMutex");
 
-    if ( pMutex == 0 )
+    if ( pMutex == nullptr )
     {
-        return 0;
+        return nullptr;
     }
 
     pthread_mutexattr_init(&aMutexAttr);
@@ -60,7 +60,7 @@ oslMutex SAL_CALL osl_createMutex()
         SAL_WARN("sal.osl.mutex", "pthread_muxex_init failed: " << strerror(nRet));
 
         free(pMutex);
-        pMutex = 0;
+        pMutex = nullptr;
     }
 
     pthread_mutexattr_destroy(&aMutexAttr);
@@ -72,7 +72,7 @@ void SAL_CALL osl_destroyMutex(oslMutexImpl *pMutex)
 {
     SAL_WARN_IF(!pMutex, "sal.osl.mutex", "null pMutex");
 
-    if ( pMutex != 0 )
+    if ( pMutex != nullptr )
     {
         int nRet=0;
 
@@ -92,7 +92,7 @@ sal_Bool SAL_CALL osl_acquireMutex(oslMutexImpl *pMutex)
 {
     SAL_WARN_IF(!pMutex, "sal.osl.mutex", "null pMutex");
 
-    if ( pMutex != 0 )
+    if ( pMutex != nullptr )
     {
         int nRet=0;
 

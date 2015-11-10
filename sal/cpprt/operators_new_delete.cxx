@@ -109,14 +109,14 @@ static void* allocate (
     for (;;)
     {
         void * p = rtl_allocateMemory (sal_Size(n));
-        if (p != 0)
+        if (p != nullptr)
             return rTraits.init (p);
 
         std::new_handler d = default_handler, f = std::set_new_handler (d);
         if (f != d)
             std::set_new_handler (f);
 
-        if (f == 0)
+        if (f == nullptr)
             throw std::bad_alloc();
         (*f)();
     }
@@ -131,7 +131,7 @@ static void* allocate_nothrow (
     }
     catch (std::bad_alloc const &)
     {
-        return 0;
+        return nullptr;
     }
 }
 

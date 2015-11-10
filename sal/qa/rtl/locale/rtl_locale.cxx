@@ -51,7 +51,7 @@ public:
     void getDefault_001()
     {
         rtl_Locale* pData = rtl_locale_getDefault();
-        CPPUNIT_ASSERT_MESSAGE("locale must not null", pData != NULL);
+        CPPUNIT_ASSERT_MESSAGE("locale must not null", pData != nullptr);
     }
 
     // Change the following lines only, if you add, remove or rename
@@ -83,7 +83,7 @@ public:
     {
         rtl_locale_setDefault(rtl::OUString("en").getStr(), rtl::OUString("US").getStr(), rtl::OUString().getStr());
         rtl_Locale* pData = rtl_locale_getDefault();
-        CPPUNIT_ASSERT_MESSAGE("locale must not null", pData != NULL);
+        CPPUNIT_ASSERT_MESSAGE("locale must not null", pData != nullptr);
 
         // be sure to not GPF
     }

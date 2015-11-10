@@ -74,7 +74,7 @@ bool isPathnameUrl(rtl::OUString const & url) {
 }
 
 bool resolvePathnameUrl(rtl::OUString * url) {
-    OSL_ASSERT(url !=  NULL);
+    OSL_ASSERT(url !=  nullptr);
     if (!isPathnameUrl(*url) ||
         (osl::FileBase::getFileURLFromSystemPath(
             url->copy(RTL_CONSTASCII_LENGTH(VND_SUN_STAR_PATHNAME)), *url) ==
@@ -106,7 +106,7 @@ rtl::OUString recursivelyExpandMacros(
     Bootstrap_Impl const * requestFile, rtl::OUString const & requestKey,
     ExpandRequestLink const * requestStack)
 {
-    for (; requestStack != NULL; requestStack = requestStack->next) {
+    for (; requestStack != nullptr; requestStack = requestStack->next) {
         if (requestStack->file == requestFile &&
             requestStack->key == requestKey)
         {
@@ -139,7 +139,7 @@ bool find(
     NameValueList const & list, rtl::OUString const & key,
     rtl::OUString * value)
 {
-    OSL_ASSERT(value != NULL);
+    OSL_ASSERT(value != nullptr);
     for (NameValueList::const_iterator i(list.begin()); i != list.end(); ++i) {
         if (i->sName == key) {
             *value = i->sValue;
@@ -157,8 +157,8 @@ namespace {
 static bool getFromCommandLineArgs(
     rtl::OUString const & key, rtl::OUString * value )
 {
-    OSL_ASSERT(value != NULL);
-    static NameValueList *pNameValueList = 0;
+    OSL_ASSERT(value != nullptr);
+    static NameValueList *pNameValueList = nullptr;
     if( ! pNameValueList )
     {
         static NameValueList nameValueList;
@@ -166,7 +166,7 @@ static bool getFromCommandLineArgs(
         sal_Int32 nArgCount = osl_getCommandArgCount();
         for(sal_Int32 i = 0; i < nArgCount; ++ i)
         {
-            rtl_uString *pArg = 0;
+            rtl_uString *pArg = nullptr;
             osl_getCommandArg( i, &pArg );
             if( ('-' == pArg->buffer[0] || '/' == pArg->buffer[0] ) &&
                 'e' == pArg->buffer[1] &&
@@ -229,7 +229,7 @@ static void getExecutableDirectory_Impl (rtl_uString ** ppDirURL)
 static OUString & getIniFileName_Impl()
 {
     osl::MutexGuard guard( osl::Mutex::getGlobalMutex() );
-    static OUString *pStaticName = 0;
+    static OUString *pStaticName = nullptr;
     if( ! pStaticName )
     {
         OUString fileName;
@@ -335,7 +335,7 @@ struct Bootstrap_Impl
 
 Bootstrap_Impl::Bootstrap_Impl( OUString const & rIniName )
     : _nRefCount( 0 ),
-      _base_ini( 0 ),
+      _base_ini( nullptr ),
       _iniName (rIniName)
 {
     OUString base_ini( getIniFileName_Impl() );
@@ -400,7 +400,7 @@ Bootstrap_Impl::Bootstrap_Impl( OUString const & rIniName )
 
 Bootstrap_Impl::~Bootstrap_Impl()
 {
-    if (_base_ini != 0)
+    if (_base_ini != nullptr)
         rtl_bootstrap_args_close( _base_ini );
 }
 
@@ -409,13 +409,13 @@ namespace {
 Bootstrap_Impl * get_static_bootstrap_handle()
 {
     osl::MutexGuard guard( osl::Mutex::getGlobalMutex() );
-    static Bootstrap_Impl * s_handle = 0;
-    if (s_handle == 0)
+    static Bootstrap_Impl * s_handle = nullptr;
+    if (s_handle == nullptr)
     {
         OUString iniName (getIniFileName_Impl());
         s_handle = static_cast< Bootstrap_Impl * >(
             rtl_bootstrap_args_open( iniName.pData ) );
-        if (s_handle == 0)
+        if (s_handle == nullptr)
         {
             Bootstrap_Impl * that = new Bootstrap_Impl( iniName );
             ++that->_nRefCount;
@@ -434,9 +434,9 @@ struct FundamentalIniData: private boost::noncopyable {
             ((static_cast< Bootstrap_Impl * >(get_static_bootstrap_handle())->
               getValue(
                   "URE_BOOTSTRAP",
-                  &uri.pData, 0, LOOKUP_MODE_NORMAL, false, 0)) &&
+                  &uri.pData, nullptr, LOOKUP_MODE_NORMAL, false, nullptr)) &&
              resolvePathnameUrl(&uri))
-            ? rtl_bootstrap_args_open(uri.pData) : NULL;
+            ? rtl_bootstrap_args_open(uri.pData) : nullptr;
     }
 
     ~FundamentalIniData() { rtl_bootstrap_args_close(ini); }
@@ -520,7 +520,7 @@ bool Bootstrap_Impl::getValue(
         getExecutableDirectory_Impl(value);
         return true;
     }
-    if (_base_ini != NULL &&
+    if (_base_ini != nullptr &&
         _base_ini->getDirectValue(key, value, mode, requestStack))
     {
         return true;
@@ -531,13 +531,13 @@ bool Bootstrap_Impl::getValue(
     if (mode == LOOKUP_MODE_NORMAL) {
         FundamentalIniData const & d = FundamentalIni::get();
         Bootstrap_Impl const * b = static_cast<Bootstrap_Impl const *>(d.ini);
-        if (b != NULL && b != this &&
+        if (b != nullptr && b != this &&
             b->getDirectValue(key, value, mode, requestStack))
         {
             return true;
         }
     }
-    if (defaultValue != NULL) {
+    if (defaultValue != nullptr) {
         rtl_uString_assign(value, defaultValue);
         return true;
     }
@@ -571,7 +571,7 @@ bool Bootstrap_Impl::getAmbienceValue(
     if (f || getFromCommandLineArgs(key, &v) ||
         osl_getEnvironment(key.pData, &v.pData) == osl_Process_E_None)
     {
-        expandValue(value, v, mode, NULL, key, requestStack);
+        expandValue(value, v, mode, nullptr, key, requestStack);
         return true;
     } else {
         return false;
@@ -605,16 +605,16 @@ struct bootstrap_map: private boost::noncopyable {
     // (e.g., osl::Mutex::getGlobalMutex()):
 
     static t * get() {
-        if (m_map == NULL) {
+        if (m_map == nullptr) {
             m_map = new t;
         }
         return m_map;
     }
 
     static void release() {
-        if (m_map != NULL && m_map->empty()) {
+        if (m_map != nullptr && m_map->empty()) {
             delete m_map;
-            m_map = NULL;
+            m_map = nullptr;
         }
     }
 
@@ -622,7 +622,7 @@ private:
     static t * m_map;
 };
 
-bootstrap_map::t * bootstrap_map::m_map = NULL;
+bootstrap_map::t * bootstrap_map::m_map = nullptr;
 
 }
 
@@ -638,7 +638,7 @@ rtlBootstrapHandle SAL_CALL rtl_bootstrap_args_open (
     if (DirectoryItem::E_None != DirectoryItem::get( iniName, dirItem ) ||
         DirectoryItem::E_None != dirItem.getFileStatus( status ))
     {
-        return 0;
+        return nullptr;
     }
     iniName = status.getFileURL();
 
@@ -684,7 +684,7 @@ void SAL_CALL rtl_bootstrap_args_close (
     rtlBootstrapHandle handle
 ) SAL_THROW_EXTERN_C()
 {
-    if (handle == 0)
+    if (handle == nullptr)
         return;
     Bootstrap_Impl * that = static_cast< Bootstrap_Impl * >( handle );
 
@@ -727,10 +727,10 @@ sal_Bool SAL_CALL rtl_bootstrap_get_from_handle(
     bool found = false;
     if(ppValue && pName)
     {
-        if (handle == 0)
+        if (handle == nullptr)
             handle = get_static_bootstrap_handle();
         found = static_cast< Bootstrap_Impl * >( handle )->getValue(
-            pName, ppValue, pDefault, LOOKUP_MODE_NORMAL, false, NULL );
+            pName, ppValue, pDefault, LOOKUP_MODE_NORMAL, false, nullptr );
     }
 
     return found;
@@ -771,7 +771,7 @@ sal_Bool SAL_CALL rtl_bootstrap_get (
     rtl_uString  * pDefault
 )
 {
-    return rtl_bootstrap_get_from_handle(0, pName, ppValue, pDefault);
+    return rtl_bootstrap_get_from_handle(nullptr, pName, ppValue, pDefault);
 }
 
 void SAL_CALL rtl_bootstrap_set (
@@ -811,23 +811,23 @@ void SAL_CALL rtl_bootstrap_expandMacros_from_handle(
     rtlBootstrapHandle handle,
     rtl_uString     ** macro)
 {
-    if (handle == NULL) {
+    if (handle == nullptr) {
         handle = get_static_bootstrap_handle();
     }
     OUString expanded( expandMacros( static_cast< Bootstrap_Impl * >( handle ),
                                      OUString::unacquired( macro ),
-                                     LOOKUP_MODE_NORMAL, NULL ) );
+                                     LOOKUP_MODE_NORMAL, nullptr ) );
     rtl_uString_assign( macro, expanded.pData );
 }
 
 void SAL_CALL rtl_bootstrap_expandMacros(rtl_uString ** macro)
 {
-    rtl_bootstrap_expandMacros_from_handle(NULL, macro);
+    rtl_bootstrap_expandMacros_from_handle(nullptr, macro);
 }
 
 void rtl_bootstrap_encode( rtl_uString const * value, rtl_uString ** encoded )
 {
-    OSL_ASSERT(value != NULL);
+    OSL_ASSERT(value != nullptr);
     rtl::OUStringBuffer b;
     for (sal_Int32 i = 0; i < value->length; ++i) {
         sal_Unicode c = value->buffer[i];
@@ -850,7 +850,7 @@ int hex(sal_Unicode c) {
 
 sal_Unicode read(rtl::OUString const & text, sal_Int32 * pos, bool * escaped) {
     OSL_ASSERT(
-        pos != NULL && *pos >= 0 && *pos < text.getLength() && escaped != NULL);
+        pos != nullptr && *pos >= 0 && *pos < text.getLength() && escaped != nullptr);
     sal_Unicode c = text[(*pos)++];
     if (c == '\\') {
         int n1, n2, n3, n4;
@@ -878,8 +878,8 @@ rtl::OUString lookup(
     rtl::OUString const & key, ExpandRequestLink const * requestStack)
 {
     rtl::OUString v;
-    (file == NULL ? get_static_bootstrap_handle() : file)->getValue(
-        key, &v.pData, NULL, mode, override, requestStack);
+    (file == nullptr ? get_static_bootstrap_handle() : file)->getValue(
+        key, &v.pData, nullptr, mode, override, requestStack);
     return v;
 }
 
@@ -937,7 +937,7 @@ rtl::OUString expandMacros(
                     Bootstrap_Impl * f = static_cast< Bootstrap_Impl * >(
                         b.getHandle());
                     buf.append(
-                        lookup(f, mode, f != NULL, seg[2], requestStack));
+                        lookup(f, mode, f != nullptr, seg[2], requestStack));
                 } else {
                     if (n == 3 && seg[1].isEmpty()) {
                         // For backward compatibility, treat ${file::key} the

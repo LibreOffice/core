@@ -74,7 +74,7 @@ void sal_detail_initialize(int argc, char ** argv) {
     sal_initGlobalTimer();
 #if HAVE_SYSLOG_H
     const char *use_syslog = getenv("SAL_LOG_SYSLOG");
-    sal_use_syslog = use_syslog != NULL && !strcmp(use_syslog, "1");
+    sal_use_syslog = use_syslog != nullptr && !strcmp(use_syslog, "1");
     if (sal_use_syslog)
         openlog("libreoffice", 0, LOG_USER);
 #endif

@@ -1132,9 +1132,9 @@ namespace osl_FileBase
             : nError1(FileBase::E_None)
             , nError2(FileBase::E_None)
             , bOK(false)
-            , pHandle(NULL)
-            , pUStr_DirURL(NULL)
-            , pUStr_FileURL(NULL)
+            , pHandle(nullptr)
+            , pUStr_DirURL(nullptr)
+            , pUStr_FileURL(nullptr)
         {
         }
 
@@ -1166,7 +1166,7 @@ namespace osl_FileBase
             }
 
             CPPUNIT_ASSERT_MESSAGE( "test for createTempFile function: create temp file and test the existence",
-                                     ( osl::FileBase::E_None == nError1 ) && ( pHandle != NULL ) &&   ( osl::FileBase::E_EXIST== nError2 )   );
+                                     ( osl::FileBase::E_None == nError1 ) && ( pHandle != nullptr ) &&   ( osl::FileBase::E_EXIST== nError2 )   );
         }
 
         void createTempFile_002()
@@ -1177,7 +1177,7 @@ namespace osl_FileBase
             nError2 = testFile.open( osl_File_OpenFlag_Create );
 
             CPPUNIT_ASSERT_MESSAGE( "createTempFile function: create a temp file, but it does not exist",
-                ( osl::FileBase::E_None == nError1 ) && ( pHandle != NULL ) &&
+                ( osl::FileBase::E_None == nError1 ) && ( pHandle != nullptr ) &&
                 ( osl::FileBase::E_EXIST == nError2 ) );
 
             //check file if have the write permission
@@ -1193,9 +1193,9 @@ namespace osl_FileBase
 
         void createTempFile_003()
         {
-            nError1 = FileBase::createTempFile( pUStr_DirURL, pHandle, 0 );
+            nError1 = FileBase::createTempFile( pUStr_DirURL, pHandle, nullptr );
             //the temp file will be removed when return from createTempFile
-            bOK = (pHandle != NULL && nError1 == osl::FileBase::E_None);
+            bOK = (pHandle != nullptr && nError1 == osl::FileBase::E_None);
             if ( bOK )
                 osl_closeFile( *pHandle );
 
@@ -1204,8 +1204,8 @@ namespace osl_FileBase
         }
         void createTempFile_004()
         {
-            nError1 = FileBase::createTempFile( pUStr_DirURL, 0, pUStr_FileURL );
-            bOK = ( pUStr_FileURL != 0);
+            nError1 = FileBase::createTempFile( pUStr_DirURL, nullptr, pUStr_FileURL );
+            bOK = ( pUStr_FileURL != nullptr);
             CPPUNIT_ASSERT(bOK);
             ::osl::File testFile( *pUStr_FileURL );
             nError2 = testFile.open( osl_File_OpenFlag_Create );
@@ -1314,7 +1314,7 @@ namespace osl_FileStatus
 
         public:
         isValid()
-            : pDir(NULL)
+            : pDir(nullptr)
         {
         }
 
@@ -1792,10 +1792,10 @@ namespace osl_FileStatus
         // test code.
         void getAccessTime_001()
         {
-            TimeValue *pTV_current = NULL;
-            CPPUNIT_ASSERT( ( pTV_current = static_cast<TimeValue*>(malloc( sizeof( TimeValue ) )) ) != NULL );
-            TimeValue *pTV_access = NULL;
-            CPPUNIT_ASSERT( ( pTV_access = static_cast<TimeValue*>(malloc( sizeof( TimeValue ) )) ) != NULL );
+            TimeValue *pTV_current = nullptr;
+            CPPUNIT_ASSERT( ( pTV_current = static_cast<TimeValue*>(malloc( sizeof( TimeValue ) )) ) != nullptr );
+            TimeValue *pTV_access = nullptr;
+            CPPUNIT_ASSERT( ( pTV_access = static_cast<TimeValue*>(malloc( sizeof( TimeValue ) )) ) != nullptr );
 
               ::osl::FileStatus   rFileStatus( osl_FileStatus_Mask_AccessTime );
             nError = rItem.getFileStatus( rFileStatus );
@@ -1832,8 +1832,8 @@ namespace osl_FileStatus
         // test code.
         void getModifyTime_001()
         {
-            TimeValue *pTV_current = NULL;
-            CPPUNIT_ASSERT( ( pTV_current = static_cast<TimeValue*>(malloc( sizeof( TimeValue ) )) ) != NULL );
+            TimeValue *pTV_current = nullptr;
+            CPPUNIT_ASSERT( ( pTV_current = static_cast<TimeValue*>(malloc( sizeof( TimeValue ) )) ) != nullptr );
 
             //create file
             aTypeURL = aUserDirectoryURL.copy( 0 );
@@ -1852,8 +1852,8 @@ namespace osl_FileStatus
             CPPUNIT_ASSERT( nError == FileBase::E_None );
 
             //get modify time
-            TimeValue* pTV_modify = NULL;
-            CPPUNIT_ASSERT( ( pTV_modify = static_cast<TimeValue*>(malloc( sizeof( TimeValue ) )) ) != NULL );
+            TimeValue* pTV_modify = nullptr;
+            CPPUNIT_ASSERT( ( pTV_modify = static_cast<TimeValue*>(malloc( sizeof( TimeValue ) )) ) != nullptr );
             *pTV_modify = rFileStatus.getModifyTime();
 
             bool bOK = t_compareTime( pTV_modify, pTV_current, delta );
@@ -3451,14 +3451,14 @@ namespace osl_File
         // test code.
         void setTime_001()
         {
-             TimeValue *pTV_current  = NULL;
-            CPPUNIT_ASSERT( ( pTV_current = static_cast<TimeValue*>(malloc( sizeof( TimeValue ) )) ) != NULL );
-            TimeValue *pTV_creation = NULL;
-            CPPUNIT_ASSERT( ( pTV_creation = static_cast<TimeValue*>(malloc( sizeof( TimeValue ) )) ) != NULL );
-            TimeValue *pTV_access   = NULL;
-            CPPUNIT_ASSERT( ( pTV_access = static_cast<TimeValue*>(malloc( sizeof( TimeValue ) )) ) != NULL );
-            TimeValue *pTV_modify   = NULL;
-            CPPUNIT_ASSERT( ( pTV_modify = static_cast<TimeValue*>(malloc( sizeof( TimeValue ) )) ) != NULL );
+             TimeValue *pTV_current  = nullptr;
+            CPPUNIT_ASSERT( ( pTV_current = static_cast<TimeValue*>(malloc( sizeof( TimeValue ) )) ) != nullptr );
+            TimeValue *pTV_creation = nullptr;
+            CPPUNIT_ASSERT( ( pTV_creation = static_cast<TimeValue*>(malloc( sizeof( TimeValue ) )) ) != nullptr );
+            TimeValue *pTV_access   = nullptr;
+            CPPUNIT_ASSERT( ( pTV_access = static_cast<TimeValue*>(malloc( sizeof( TimeValue ) )) ) != nullptr );
+            TimeValue *pTV_modify   = nullptr;
+            CPPUNIT_ASSERT( ( pTV_modify = static_cast<TimeValue*>(malloc( sizeof( TimeValue ) )) ) != nullptr );
 
             //get current time
             bool bOk = osl_getSystemTime( pTV_current );
@@ -4666,7 +4666,7 @@ namespace osl_Directory
                 return;
 
             rtl::OUString aTmpDir;
-            nError1 = FileBase::createTempFile(NULL, NULL, &aTmpDir);
+            nError1 = FileBase::createTempFile(nullptr, nullptr, &aTmpDir);
             CPPUNIT_ASSERT_MESSAGE("temp File creation failed", osl::FileBase::E_None == nError1);
 
             nError1 = ::osl::File::remove(aTmpDir);
@@ -4850,7 +4850,7 @@ namespace osl_Directory
             CPPUNIT_ASSERT_MESSAGE
             (
              "mkdtemp call failed",
-             out != NULL
+             out != nullptr
             );
 
             tmp_x += rtl::OString('/');

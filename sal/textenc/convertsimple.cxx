@@ -440,7 +440,7 @@ const sal_uInt16* ImplGetReplaceString( sal_Unicode c )
     }
     while ( nLow <= nHigh );
 
-    return 0;
+    return nullptr;
 }
 
 // Writes 0--2 characters to dest:

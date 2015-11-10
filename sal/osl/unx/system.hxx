@@ -266,7 +266,7 @@ int macxp_resolveAlias(char *path, int buflen);
 #endif
 
 #ifndef SLEEP_TIMESPEC
-#   define SLEEP_TIMESPEC(timespec) nanosleep(&timespec, 0)
+#   define SLEEP_TIMESPEC(timespec) nanosleep(&timespec, nullptr)
 #endif
 
 #ifndef INIT_GROUPS
@@ -287,13 +287,13 @@ int macxp_resolveAlias(char *path, int buflen);
 #endif
 
 #ifndef PTHREAD_ATTR_DEFAULT
-#   define PTHREAD_ATTR_DEFAULT         NULL
+#   define PTHREAD_ATTR_DEFAULT         nullptr
 #endif
 #ifndef PTHREAD_MUTEXATTR_DEFAULT
-#   define PTHREAD_MUTEXATTR_DEFAULT    NULL
+#   define PTHREAD_MUTEXATTR_DEFAULT    nullptr
 #endif
 #ifndef PTHREAD_CONDATTR_DEFAULT
-#   define PTHREAD_CONDATTR_DEFAULT     NULL
+#   define PTHREAD_CONDATTR_DEFAULT     nullptr
 #endif
 
 #ifndef PTHREAD_SIGACTION

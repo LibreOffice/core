@@ -42,9 +42,9 @@ using ::rtl::OUStringToOString;
 
 /** print a UNI_CODE String. And also print some comments of the string.
 */
-inline void printUString( const ::rtl::OUString & str, const sal_Char * msg = NULL )
+inline void printUString( const ::rtl::OUString & str, const sal_Char * msg = nullptr )
 {
-    if ( msg != NULL )
+    if ( msg != nullptr )
     {
         printf("#%s #printUString_u# ", msg );
     }
@@ -93,7 +93,7 @@ public:
         printUString(suCWD, "path to the current module");
         // printUString(suCWD2, "suCWD2");
 
-        oslProcess hProcess = NULL;
+        oslProcess hProcess = nullptr;
 
         const int nParameterCount = 4;
         rtl_uString* pParameters[ nParameterCount ];
@@ -110,9 +110,9 @@ public:
             pParameters,
             nParameterCount,
             osl_Process_WAIT,
-            0, /* osl_getCurrentSecurity() */
+            nullptr, /* osl_getCurrentSecurity() */
             suCWD.pData,
-            NULL,
+            nullptr,
             0,
             &hProcess );
 
@@ -229,22 +229,22 @@ public:
     printf("# UUID to String is %s\n", pUUID1);
 
     rtl::OUString suCWD = getModulePath();
-        oslProcess hProcess = NULL;
+        oslProcess hProcess = nullptr;
        rtl::OUString suFileURL = suCWD + "/" + EXEC_NAME;
     oslFileHandle* pChildOutputRead = new oslFileHandle();
         oslProcessError osl_error = osl_executeProcess_WithRedirectedIO(
             suFileURL.pData,
-            NULL,
+            nullptr,
             0,
             osl_Process_WAIT,
-            0,
+            nullptr,
             suCWD.pData,
-            NULL,
+            nullptr,
             0,
             &hProcess,
-        NULL,
+        nullptr,
         pChildOutputRead,
-        NULL);
+        nullptr);
 
         CPPUNIT_ASSERT_MESSAGE
         (

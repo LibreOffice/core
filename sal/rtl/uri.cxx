@@ -156,7 +156,7 @@ sal_uInt32 readUcs4(sal_Unicode const ** pBegin, sal_Unicode const * pEnd,
                 sal_uInt32 nInfo;
                 sal_Size nConverted;
                 sal_Size nDstSize = rtl_convertTextToUnicode(
-                    aConverter, 0, aBuf.getStr(), aBuf.getLength(), aDst,
+                    aConverter, nullptr, aBuf.getStr(), aBuf.getLength(), aDst,
                     SAL_N_ELEMENTS( aDst ),
                     (RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR
                      | RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR
@@ -289,7 +289,7 @@ bool writeEscapeChar(rtl_uString ** pBuffer, sal_Int32 * pCapacity,
         sal_uInt32 nInfo;
         sal_Size nConverted;
         sal_Size nDstSize = rtl_convertUnicodeToText(
-            aConverter, 0, aSrc, nSrcSize, aDst, sizeof aDst,
+            aConverter, nullptr, aSrc, nSrcSize, aDst, sizeof aDst,
             RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR
             | RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR
             | RTL_UNICODETOTEXT_FLAGS_FLUSH,
@@ -318,9 +318,9 @@ struct Component
     sal_Unicode const * pBegin;
     sal_Unicode const * pEnd;
 
-    inline Component(): pBegin(0), pEnd(0) {}
+    inline Component(): pBegin(nullptr), pEnd(nullptr) {}
 
-    inline bool isPresent() const { return pBegin != 0; }
+    inline bool isPresent() const { return pBegin != nullptr; }
 
     inline sal_Int32 getLength() const;
 };

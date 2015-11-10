@@ -160,11 +160,11 @@ static ImplUniCharTabData const aImplMS1252ToCharTabEx[MS1252TOCHARTABEX_COUNT] 
 static ImplByteConvertData const aImplMS1252ByteCvtData =
 {
     aImplMS1252ToUniTab,
-    NULL,
+    nullptr,
     MS1252UNI_START, MS1252UNI_END,
     NOTABUNI_START, NOTABUNI_END,
     aImplA0FFSameToCharTab,
-    NULL,
+    nullptr,
     aImplMS1252ToCharTabEx,
     SAMEA0FFCHAR_START, SAMEA0FFCHAR_END,
     NOTABCHAR_START, NOTABCHAR_END,
@@ -177,12 +177,12 @@ static ImplTextEncodingData const aImplMS1252TextEncodingData
     = { { &aImplMS1252ByteCvtData,
           sal::detail::textenc::convertCharToUnicode,
           sal::detail::textenc::convertUnicodeToChar,
-          NULL,
-          NULL,
-          NULL,
-          NULL,
-          NULL,
-          NULL },
+          nullptr,
+          nullptr,
+          nullptr,
+          nullptr,
+          nullptr,
+          nullptr },
         1,
         1,
         1,
@@ -230,7 +230,7 @@ static ImplByteConvertData const aImplISO88591ByteCvtData =
     SAME8090UNI_START, SAME8090UNI_END,
     aImplA0FFSameToCharTab,
     aImpl8090SameToCharTab,
-    NULL,
+    nullptr,
     SAMEA0FFCHAR_START, SAMEA0FFCHAR_END,
     SAME8090CHAR_START, SAME8090CHAR_END,
     0
@@ -242,12 +242,12 @@ static ImplTextEncodingData const aImplISO88591TextEncodingData
     = { { &aImplISO88591ByteCvtData,
           sal::detail::textenc::convertCharToUnicode,
           sal::detail::textenc::convertUnicodeToChar,
-          NULL,
-          NULL,
-          NULL,
-          NULL,
-          NULL,
-          NULL },
+          nullptr,
+          nullptr,
+          nullptr,
+          nullptr,
+          nullptr,
+          nullptr },
         1,
         1,
         1,
@@ -273,12 +273,12 @@ static ImplTextEncodingData const aImplISO88591TextEncodingData
 static ImplByteConvertData const aImplUSASCIIByteCvtData =
 {
     aImplMS1252ToUniTab,
-    NULL,
+    nullptr,
     MS1252UNI_START, MS1252UNI_END,
     NOTABUNI_START, NOTABUNI_END,
-    NULL,
-    NULL,
-    NULL,
+    nullptr,
+    nullptr,
+    nullptr,
     NOTABCHAR_START, NOTABCHAR_END,
     NOTABCHAR_START, NOTABCHAR_END,
     0
@@ -290,12 +290,12 @@ static ImplTextEncodingData const aImplUSASCIITextEncodingData
     = { { &aImplUSASCIIByteCvtData,
           sal::detail::textenc::convertCharToUnicode,
           sal::detail::textenc::convertUnicodeToChar,
-          NULL,
-          NULL,
-          NULL,
-          NULL,
-          NULL,
-          NULL },
+          nullptr,
+          nullptr,
+          nullptr,
+          nullptr,
+          nullptr,
+          nullptr },
         1,
         1,
         1,
@@ -308,7 +308,7 @@ static ImplTextEncodingData const aImplUSASCIITextEncodingData
     /* SCRIPT_LATIN, pc code page 437 */
 
 static ImplTextEncodingData const aImplUTF8TextEncodingData
-    = { { NULL,
+    = { { nullptr,
           &ImplConvertUtf8ToUnicode,
           &ImplConvertUnicodeToUtf8,
           &ImplCreateUtf8ToUnicodeContext,
@@ -348,8 +348,8 @@ static ImplTextEncodingData const aImplJavaUtf8TextEncodingData
         3,
         1,
         0,
-        NULL,
-        NULL,
+        nullptr,
+        nullptr,
         RTL_TEXTENCODING_INFO_UNICODE | RTL_TEXTENCODING_INFO_MULTIBYTE };
 
 namespace {
@@ -387,7 +387,7 @@ public:
         }
         function_ = reinterpret_cast< TextEncodingFunction * >(
             module_.getFunctionSymbol("sal_getFullTextEncodingData"));
-        if (function_ == 0) {
+        if (function_ == nullptr) {
             SAL_WARN( "sal.textenc", "Obtaining sal_getFullTextEncodingData function from sal_textenc"
                 " library failed");
             std::abort();

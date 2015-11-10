@@ -149,11 +149,11 @@ sal_Int32 SAL_CALL rtl_ustr_valueOfFloat(sal_Unicode * pStr, float f)
     SAL_THROW_EXTERN_C()
 {
     assert(pStr);
-    rtl_uString * pResult = NULL;
+    rtl_uString * pResult = nullptr;
     sal_Int32 nLen;
     rtl_math_doubleToUString(
-        &pResult, 0, 0, f, rtl_math_StringFormat_G,
-        RTL_USTR_MAX_VALUEOFFLOAT - RTL_CONSTASCII_LENGTH("-x.E-xxx"), '.', 0,
+        &pResult, nullptr, 0, f, rtl_math_StringFormat_G,
+        RTL_USTR_MAX_VALUEOFFLOAT - RTL_CONSTASCII_LENGTH("-x.E-xxx"), '.', nullptr,
         0, sal_True);
     nLen = pResult->length;
     OSL_ASSERT(nLen < RTL_USTR_MAX_VALUEOFFLOAT);
@@ -166,11 +166,11 @@ sal_Int32 SAL_CALL rtl_ustr_valueOfDouble(sal_Unicode * pStr, double d)
     SAL_THROW_EXTERN_C()
 {
     assert(pStr);
-    rtl_uString * pResult = NULL;
+    rtl_uString * pResult = nullptr;
     sal_Int32 nLen;
     rtl_math_doubleToUString(
-        &pResult, 0, 0, d, rtl_math_StringFormat_G,
-        RTL_USTR_MAX_VALUEOFDOUBLE - RTL_CONSTASCII_LENGTH("-x.E-xxx"), '.', 0,
+        &pResult, nullptr, 0, d, rtl_math_StringFormat_G,
+        RTL_USTR_MAX_VALUEOFDOUBLE - RTL_CONSTASCII_LENGTH("-x.E-xxx"), '.', nullptr,
         0, sal_True);
     nLen = pResult->length;
     OSL_ASSERT(nLen < RTL_USTR_MAX_VALUEOFDOUBLE);
@@ -199,14 +199,14 @@ float SAL_CALL rtl_ustr_toFloat(sal_Unicode const * pStr) SAL_THROW_EXTERN_C()
     assert(pStr);
     return doubleToFloat(rtl_math_uStringToDouble(pStr,
                                             pStr + rtl_ustr_getLength(pStr),
-                                            '.', 0, 0, 0));
+                                            '.', 0, nullptr, nullptr));
 }
 
 double SAL_CALL rtl_ustr_toDouble(sal_Unicode const * pStr) SAL_THROW_EXTERN_C()
 {
     assert(pStr);
     return rtl_math_uStringToDouble(pStr, pStr + rtl_ustr_getLength(pStr), '.',
-                                    0, 0, 0);
+                                    0, nullptr, nullptr);
 }
 
 /* ======================================================================= */
@@ -543,7 +543,7 @@ void SAL_CALL rtl_uString_newFromAscii( rtl_uString** ppThis,
         rtl_uString_release( *ppThis );
 
     *ppThis = rtl_uString_ImplAlloc( nLen );
-    OSL_ASSERT(*ppThis != NULL);
+    OSL_ASSERT(*ppThis != nullptr);
     if ( (*ppThis) )
     {
         sal_Unicode* pBuffer = (*ppThis)->buffer;
@@ -573,7 +573,7 @@ void SAL_CALL rtl_uString_newFromCodePoints(
         rtl_uString_new(newString);
         return;
     }
-    if (*newString != NULL) {
+    if (*newString != nullptr) {
         rtl_uString_release(*newString);
     }
     n = codePointCount;
@@ -589,11 +589,11 @@ void SAL_CALL rtl_uString_newFromCodePoints(
        sal_Int32 -2): */
     if (n < 0) {
         // coverity[dead_error_begin] - assumes wrap around
-        *newString = NULL;
+        *newString = nullptr;
         return;
     }
     *newString = rtl_uString_ImplAlloc(n);
-    if (*newString == NULL) {
+    if (*newString == nullptr) {
         return;
     }
     p = (*newString)->buffer;
@@ -685,7 +685,7 @@ static void rtl_string2UString_status( rtl_uString** ppThis,
     if ( !nLen )
     {
         rtl_uString_new( ppThis );
-        if (pInfo != NULL) {
+        if (pInfo != nullptr) {
             *pInfo = 0;
         }
     }
@@ -699,8 +699,8 @@ static void rtl_string2UString_status( rtl_uString** ppThis,
         {
             sal_Unicode* pBuffer;
             *ppThis = rtl_uString_ImplAlloc( nLen );
-            if (*ppThis == NULL) {
-                if (pInfo != NULL) {
+            if (*ppThis == nullptr) {
+                if (pInfo != nullptr) {
                     *pInfo = RTL_TEXTTOUNICODE_INFO_ERROR |
                         RTL_TEXTTOUNICODE_INFO_DESTBUFFERTOSMALL;
                 }
@@ -724,7 +724,7 @@ static void rtl_string2UString_status( rtl_uString** ppThis,
                 nLenCopy--;
             }
             while (nLenCopy);
-            if (pInfo != NULL) {
+            if (pInfo != nullptr) {
                 *pInfo = 0;
             }
             RTL_LOG_STRING_NEW( *ppThis );
@@ -733,7 +733,7 @@ static void rtl_string2UString_status( rtl_uString** ppThis,
 retry:
         {
             rtl_uString*                pTemp;
-            rtl_uString*                pTemp2 = NULL;
+            rtl_uString*                pTemp2 = nullptr;
             rtl_TextToUnicodeConverter  hConverter;
             sal_uInt32                  nInfo;
             sal_Size                    nSrcBytes;
@@ -753,9 +753,9 @@ retry:
                 {
                     sal_Unicode* pBuffer;
                     *ppThis = rtl_uString_ImplAlloc( nLen );
-                    if (*ppThis == NULL)
+                    if (*ppThis == nullptr)
                     {
-                        if (pInfo != NULL) {
+                        if (pInfo != nullptr) {
                             *pInfo = RTL_TEXTTOUNICODE_INFO_ERROR |
                                 RTL_TEXTTOUNICODE_INFO_DESTBUFFERTOSMALL;
                         }
@@ -771,7 +771,7 @@ retry:
                         nLen--;
                     }
                     while ( nLen );
-                    if (pInfo != NULL) {
+                    if (pInfo != nullptr) {
                         *pInfo = 0;
                     }
                     RTL_LOG_STRING_NEW( *ppThis );
@@ -785,14 +785,14 @@ retry:
             hConverter = rtl_createTextToUnicodeConverter( eTextEncoding );
 
             pTemp = rtl_uString_ImplAlloc( nNewLen );
-            if (pTemp == NULL) {
-                if (pInfo != NULL) {
+            if (pTemp == nullptr) {
+                if (pInfo != nullptr) {
                     *pInfo = RTL_TEXTTOUNICODE_INFO_ERROR |
                         RTL_TEXTTOUNICODE_INFO_DESTBUFFERTOSMALL;
                 }
                 return;
             }
-            nDestChars = rtl_convertTextToUnicode( hConverter, 0,
+            nDestChars = rtl_convertTextToUnicode( hConverter, nullptr,
                                                    pStr, nLen,
                                                    pTemp->buffer, nNewLen,
                                                    nCvtFlags,
@@ -807,14 +807,14 @@ retry:
                 rtl_freeMemory( pTemp );
                 nNewLen += 8;
                 pTemp = rtl_uString_ImplAlloc( nNewLen );
-                if (pTemp == NULL) {
-                    if (pInfo != NULL) {
+                if (pTemp == nullptr) {
+                    if (pInfo != nullptr) {
                         *pInfo = RTL_TEXTTOUNICODE_INFO_ERROR |
                             RTL_TEXTTOUNICODE_INFO_DESTBUFFERTOSMALL;
                     }
                     return;
                 }
-                nDestChars = rtl_convertTextToUnicode( hConverter, 0,
+                nDestChars = rtl_convertTextToUnicode( hConverter, nullptr,
                                                        pStr, nLen,
                                                        pTemp->buffer, nNewLen,
                                                        nCvtFlags,
@@ -830,7 +830,7 @@ retry:
             {
                 pTemp2 = rtl_uString_ImplAlloc( nDestChars );
             }
-            if (pTemp2 != NULL)
+            if (pTemp2 != nullptr)
             {
                 rtl_str_ImplCopy(pTemp2->buffer, pTemp->buffer, nDestChars);
                 rtl_freeMemory(pTemp);
@@ -863,7 +863,7 @@ void SAL_CALL rtl_string2UString( rtl_uString** ppThis,
     assert(ppThis);
     assert(nLen >= 0);
     rtl_string2UString_status( ppThis, pStr, nLen, eTextEncoding,
-                               nCvtFlags, NULL );
+                               nCvtFlags, nullptr );
 }
 
 /* ----------------------------------------------------------------------- */
@@ -876,7 +876,7 @@ enum StrLifecycle {
 static oslMutex
 getInternMutex()
 {
-    static oslMutex pPoolGuard = NULL;
+    static oslMutex pPoolGuard = nullptr;
     if( !pPoolGuard )
     {
         oslMutex pGlobalGuard;
@@ -934,7 +934,7 @@ void SAL_CALL rtl_uString_intern( rtl_uString ** newStr,
     else
     {
         rtl_uString *pOrg = *newStr;
-        *newStr = NULL;
+        *newStr = nullptr;
         rtl_ustring_intern_internal( newStr, str, CANNOT_RETURN );
         if (pOrg)
             rtl_uString_release (pOrg);
@@ -979,7 +979,7 @@ void SAL_CALL rtl_uString_internConvert( rtl_uString   ** newStr,
     if (*newStr)
     {
         rtl_uString_release (*newStr);
-        *newStr = NULL;
+        *newStr = nullptr;
     }
 
     if ( len < 256 )
@@ -1015,7 +1015,7 @@ void SAL_CALL rtl_uString_internConvert( rtl_uString   ** newStr,
 
             hConverter = rtl_createTextToUnicodeConverter( eTextEncoding );
             rtl_convertTextToUnicode(
-                hConverter, 0, str, len, pScratch->buffer, ulen, convertFlags, &nInfo, &nSrcBytes );
+                hConverter, nullptr, str, len, pScratch->buffer, ulen, convertFlags, &nInfo, &nSrcBytes );
             rtl_destroyTextToUnicodeConverter( hConverter );
 
             if (pInfo)
@@ -1029,7 +1029,7 @@ void SAL_CALL rtl_uString_internConvert( rtl_uString   ** newStr,
         /* FIXME: we want a nice UTF-8 / alloca shortcut here */
     }
 
-    scratch = NULL;
+    scratch = nullptr;
     rtl_string2UString_status( &scratch, str, len, eTextEncoding, convertFlags,
                                pInfo );
     if (!scratch) {
@@ -1043,7 +1043,7 @@ internRelease (rtl_uString *pThis)
 {
     oslMutex pPoolMutex;
 
-    rtl_uString *pFree = NULL;
+    rtl_uString *pFree = nullptr;
     if ( SAL_STRING_REFCOUNT(
              osl_atomic_decrement( &(pThis->refCount) ) ) == 0)
     {
@@ -1078,7 +1078,7 @@ sal_uInt32 SAL_CALL rtl_uString_iterateCodePoints(
     sal_Int32 n;
     sal_Unicode cu;
     sal_uInt32 cp;
-    assert(string != NULL && indexUtf16 != NULL);
+    assert(string != nullptr && indexUtf16 != nullptr);
     n = *indexUtf16;
     assert(n >= 0 && n <= string->length);
     while (incrementCodePoints < 0) {
@@ -1130,11 +1130,11 @@ void rtl_uString_newReplaceFirst(
     rtl_uString ** newStr, rtl_uString * str, rtl_uString const * from,
     rtl_uString const * to, sal_Int32 * index) SAL_THROW_EXTERN_C()
 {
-    assert(str != 0);
-    assert(index != 0);
+    assert(str != nullptr);
+    assert(index != nullptr);
     assert(*index >= 0 && *index <= str->length);
-    assert(from != 0);
-    assert(to != 0);
+    assert(from != nullptr);
+    assert(to != nullptr);
     sal_Int32 i = rtl_ustr_indexOfStr_WithLength(
         str->buffer + *index, str->length - *index, from->buffer, from->length);
     if (i == -1) {
@@ -1172,11 +1172,11 @@ void rtl_uString_newReplaceFirstAsciiL(
     sal_Int32 fromLength, rtl_uString const * to, sal_Int32 * index)
     SAL_THROW_EXTERN_C()
 {
-    assert(str != 0);
-    assert(index != 0);
+    assert(str != nullptr);
+    assert(index != nullptr);
     assert(*index >= 0 && *index <= str->length);
     assert(fromLength >= 0);
-    assert(to != 0);
+    assert(to != nullptr);
     sal_Int32 i = rtl_ustr_indexOfAscii_WithLength(
         str->buffer + *index, str->length - *index, from, fromLength);
     if (i == -1) {
@@ -1214,10 +1214,10 @@ void rtl_uString_newReplaceFirstToAsciiL(
     char const * to, sal_Int32 toLength, sal_Int32 * index)
     SAL_THROW_EXTERN_C()
 {
-    assert(str != 0);
-    assert(index != 0);
+    assert(str != nullptr);
+    assert(index != nullptr);
     assert(*index >= 0 && *index <= str->length);
-    assert(from != 0);
+    assert(from != nullptr);
     assert(toLength >= 0);
     sal_Int32 i = rtl_ustr_indexOfStr_WithLength(
         str->buffer + *index, str->length - *index, from->buffer, from->length);
@@ -1257,11 +1257,11 @@ void rtl_uString_newReplaceFirstAsciiLAsciiL(
     sal_Int32 fromLength, char const * to, sal_Int32 toLength,
     sal_Int32 * index) SAL_THROW_EXTERN_C()
 {
-    assert(str != 0);
-    assert(index != 0);
+    assert(str != nullptr);
+    assert(index != nullptr);
     assert(*index >= 0 && *index <= str->length);
     assert(fromLength >= 0);
-    assert(to != 0);
+    assert(to != nullptr);
     assert(toLength >= 0);
     sal_Int32 i = rtl_ustr_indexOfAscii_WithLength(
         str->buffer + *index, str->length - *index, from, fromLength);
@@ -1307,7 +1307,7 @@ void rtl_uString_newReplaceAllFromIndex(
     rtl_uString ** newStr, rtl_uString * str, rtl_uString const * from,
     rtl_uString const * to, sal_Int32 fromIndex) SAL_THROW_EXTERN_C()
 {
-    assert(to != 0);
+    assert(to != nullptr);
     assert(fromIndex >= 0 && fromIndex <= str->length);
     rtl_uString_assign(newStr, str);
     for (sal_Int32 i = fromIndex;; i += to->length) {
@@ -1322,7 +1322,7 @@ void rtl_uString_newReplaceAllAsciiL(
     rtl_uString ** newStr, rtl_uString * str, char const * from,
     sal_Int32 fromLength, rtl_uString const * to) SAL_THROW_EXTERN_C()
 {
-    assert(to != 0);
+    assert(to != nullptr);
     rtl_uString_assign(newStr, str);
     for (sal_Int32 i = 0;; i += to->length) {
         rtl_uString_newReplaceFirstAsciiL(
@@ -1337,7 +1337,7 @@ void rtl_uString_newReplaceAllToAsciiL(
     rtl_uString ** newStr, rtl_uString * str, rtl_uString const * from,
     char const * to, sal_Int32 toLength) SAL_THROW_EXTERN_C()
 {
-    assert(from != 0);
+    assert(from != nullptr);
     rtl_uString_assign(newStr, str);
     for (sal_Int32 i = 0;; i += toLength) {
         rtl_uString_newReplaceFirstToAsciiL(

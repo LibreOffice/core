@@ -377,8 +377,8 @@ sal_Size UnicodeToIsciiDevanagari::convert(sal_Unicode const* pSrcBuf, sal_Size 
         continue;
     bad_input:
         switch (sal::detail::textenc::handleBadInputUnicodeToTextConversion(
-                    bUndefined, c, nFlags, &pDestBufPtr, pDestBufEnd, &nInfo, 0,
-                    0, 0))
+                    bUndefined, c, nFlags, &pDestBufPtr, pDestBufEnd, &nInfo, nullptr,
+                    0, nullptr))
         {
         case sal::detail::textenc::BAD_INPUT_STOP:
             cHighSurrogate = 0;
@@ -411,8 +411,8 @@ sal_Size UnicodeToIsciiDevanagari::convert(sal_Unicode const* pSrcBuf, sal_Size 
         else
         {
             switch (sal::detail::textenc::handleBadInputUnicodeToTextConversion(
-                        false, 0, nFlags, &pDestBufPtr, pDestBufEnd, &nInfo, 0,
-                        0, 0))
+                        false, 0, nFlags, &pDestBufPtr, pDestBufEnd, &nInfo, nullptr,
+                        0, nullptr))
             {
             case sal::detail::textenc::BAD_INPUT_STOP:
             case sal::detail::textenc::BAD_INPUT_CONTINUE:

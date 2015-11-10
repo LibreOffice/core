@@ -67,8 +67,8 @@ _pair_search (const char *key, const _pair *base, unsigned int member )
     unsigned int upper = member;
 
     /* check for validity of input */
-    if ( (key == NULL) || (base == NULL) || (member == 0) )
-        return NULL;
+    if ( (key == nullptr) || (base == nullptr) || (member == 0) )
+        return nullptr;
 
     /* binary search */
     while ( lower < upper )
@@ -83,7 +83,7 @@ _pair_search (const char *key, const _pair *base, unsigned int member )
             return base + current;
     }
 
-    return NULL;
+    return nullptr;
 }
 
 /*****************************************************************************
@@ -100,7 +100,7 @@ static char * _compose_locale( rtl_Locale * pLocale, char * buffer, size_t n )
 
         /* convert language code to ascii */
         {
-            rtl_String *pLanguage = NULL;
+            rtl_String *pLanguage = nullptr;
 
             rtl_uString2String( &pLanguage,
                 pLocale->Language->buffer, pLocale->Language->length,
@@ -118,7 +118,7 @@ static char * _compose_locale( rtl_Locale * pLocale, char * buffer, size_t n )
         /* convert country code to ascii */
         if( pLocale->Country && (pLocale->Country->length == 2) )
         {
-            rtl_String *pCountry = NULL;
+            rtl_String *pCountry = nullptr;
 
             rtl_uString2String( &pCountry,
                 pLocale->Country->buffer, pLocale->Country->length,
@@ -138,7 +138,7 @@ static char * _compose_locale( rtl_Locale * pLocale, char * buffer, size_t n )
         if( pLocale->Variant && pLocale->Variant->length &&
             ( sal::static_int_cast<sal_uInt32>(pLocale->Variant->length) < n - 6 ) )
         {
-            rtl_String *pVariant = NULL;
+            rtl_String *pVariant = nullptr;
 
             rtl_uString2String( &pVariant,
                 pLocale->Variant->buffer, pLocale->Variant->length,
@@ -155,7 +155,7 @@ static char * _compose_locale( rtl_Locale * pLocale, char * buffer, size_t n )
         return buffer;
     }
 
-    return NULL;
+    return nullptr;
 }
 
 /*****************************************************************************
@@ -173,9 +173,9 @@ static rtl_Locale * _parse_locale( const char * locale )
 
         if( len >= 2 )
         {
-            rtl_uString * pLanguage = NULL;
-            rtl_uString * pCountry  = NULL;
-            rtl_uString * pVariant  = NULL;
+            rtl_uString * pLanguage = nullptr;
+            rtl_uString * pCountry  = nullptr;
+            rtl_uString * pVariant  = nullptr;
 
             size_t offset = 2;
 
@@ -187,20 +187,20 @@ static rtl_Locale * _parse_locale( const char * locale )
 
             /* convert language code to unicode */
             rtl_string2UString( &pLanguage, locale, offset, RTL_TEXTENCODING_ASCII_US, OSTRING_TO_OUSTRING_CVTFLAGS );
-            OSL_ASSERT(pLanguage != NULL);
+            OSL_ASSERT(pLanguage != nullptr);
 
             /* convert country code to unicode */
             if( len >= offset+3 && '_' == locale[offset] )
             {
                 rtl_string2UString( &pCountry, locale + offset + 1, 2, RTL_TEXTENCODING_ASCII_US, OSTRING_TO_OUSTRING_CVTFLAGS );
-                OSL_ASSERT(pCountry != NULL);
+                OSL_ASSERT(pCountry != nullptr);
                 offset += 3;
             }
 
             /* convert variant code to unicode - do not rely on "." as delimiter */
             if( len > offset ) {
                 rtl_string2UString( &pVariant, locale + offset, len - offset, RTL_TEXTENCODING_ASCII_US, OSTRING_TO_OUSTRING_CVTFLAGS );
-                OSL_ASSERT(pVariant != NULL);
+                OSL_ASSERT(pVariant != nullptr);
             }
 
             ret =  rtl_locale_register( pLanguage->buffer, pCountry ? pCountry->buffer : c_locale + 1, pVariant ? pVariant->buffer : c_locale + 1 );
@@ -215,7 +215,7 @@ static rtl_Locale * _parse_locale( const char * locale )
             return rtl_locale_register( c_locale, c_locale + 1, c_locale + 1 );
     }
 
-    return NULL;
+    return nullptr;
 }
 
 #if defined(LINUX) || defined(SOLARIS) || defined(NETBSD) || \
@@ -564,16 +564,16 @@ static pthread_mutex_t aLocalMutex = PTHREAD_MUTEX_INITIALIZER;
 
 rtl_TextEncoding osl_getTextEncodingFromLocale( rtl_Locale * pLocale )
 {
-    const _pair *language=0;
+    const _pair *language=nullptr;
 
     char  locale_buf[64] = "";
     char  codeset_buf[64];
 
-    char *ctype_locale = 0;
-    char *codeset      = 0;
+    char *ctype_locale = nullptr;
+    char *codeset      = nullptr;
 
     /* default to process locale if pLocale == NULL */
-    if( NULL == pLocale )
+    if( nullptr == pLocale )
         osl_getProcessLocale( &pLocale );
 
     /* convert rtl_Locale to locale string */
@@ -583,10 +583,10 @@ rtl_TextEncoding osl_getTextEncodingFromLocale( rtl_Locale * pLocale )
     pthread_mutex_lock( &aLocalMutex );
 
     /* remember the charset as indicated by the LC_CTYPE locale */
-    ctype_locale = setlocale( LC_CTYPE, NULL );
+    ctype_locale = setlocale( LC_CTYPE, nullptr );
 
     /* set the desired LC_CTYPE locale */
-    if( NULL == setlocale( LC_CTYPE, locale_buf ) )
+    if( nullptr == setlocale( LC_CTYPE, locale_buf ) )
     {
         pthread_mutex_unlock(&aLocalMutex);
         return RTL_TEXTENCODING_DONTKNOW;
@@ -599,7 +599,7 @@ rtl_TextEncoding osl_getTextEncodingFromLocale( rtl_Locale * pLocale )
     codeset = nl_langinfo( CODESET );
 #endif
 
-    if ( codeset != NULL )
+    if ( codeset != nullptr )
     {
         /* get codeset into mt save memory */
         strncpy( codeset_buf, codeset, sizeof(codeset_buf) );
@@ -608,13 +608,13 @@ rtl_TextEncoding osl_getTextEncodingFromLocale( rtl_Locale * pLocale )
     }
 
     /* restore the original value of locale */
-    if ( ctype_locale != NULL )
+    if ( ctype_locale != nullptr )
         setlocale( LC_CTYPE, ctype_locale );
 
     pthread_mutex_unlock( &aLocalMutex );
 
     /* search the codeset in our language list */
-    if ( codeset != NULL )
+    if ( codeset != nullptr )
     {
         language = _pair_search (codeset, _nl_language_list, SAL_N_ELEMENTS( _nl_language_list ) );
     }
@@ -623,7 +623,7 @@ rtl_TextEncoding osl_getTextEncodingFromLocale( rtl_Locale * pLocale )
 
     /* a matching item in our list provides a mapping from codeset to
      * rtl-codeset */
-    if ( language != NULL )
+    if ( language != nullptr )
         return language->value;
 
     return RTL_TEXTENCODING_DONTKNOW;
@@ -644,8 +644,8 @@ void _imp_getProcessLocale( rtl_Locale ** ppLocale )
     locale = setlocale( LC_CTYPE, "" );
 
     /* fallback to the current locale */
-    if( NULL == locale )
-        locale = setlocale( LC_CTYPE, NULL );
+    if( nullptr == locale )
+        locale = setlocale( LC_CTYPE, nullptr );
 
     /* return the LC_CTYPE locale */
     *ppLocale = _parse_locale( locale );
@@ -669,7 +669,7 @@ int _imp_setProcessLocale( rtl_Locale * pLocale )
     pthread_mutex_lock( &aLocalMutex );
 
     /* try to set LC_ALL locale */
-    if( NULL == setlocale( LC_ALL, locale_buf ) )
+    if( nullptr == setlocale( LC_ALL, locale_buf ) )
         ret = -1;
 
     pthread_mutex_unlock( &aLocalMutex );

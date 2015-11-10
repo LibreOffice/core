@@ -75,7 +75,7 @@ namespace osl
 
         /** Blocks the calling thread until condition is set.
          */
-        Result wait(const TimeValue *pTimeout = 0)
+        Result wait(const TimeValue *pTimeout = NULL)
         {
             return (Result) osl_waitCondition(condition, pTimeout);
         }
