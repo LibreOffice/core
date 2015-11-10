@@ -101,8 +101,6 @@ FltError ImportExcel::Read()
     sal_uInt16      nOpcode;
     sal_uInt16      nBofLevel = 0;
 
-    OSL_ENSURE( &aIn != NULL, "-ImportExcel::Read(): No Stream - what happened?!" );
-
     std::unique_ptr< ScfSimpleProgressBar > pProgress( new ScfSimpleProgressBar(
         aIn.GetSvStreamSize(), GetDocShell(), STR_LOAD_DOC ) );
 
