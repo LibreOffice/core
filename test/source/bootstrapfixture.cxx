@@ -68,7 +68,7 @@ void test_init_impl(bool bAssertOnDialog, bool bNeedUCB,
 
     // Make GraphicConverter work, normally done in desktop::Desktop::Main()
     Application::SetFilterHdl(
-            LINK(0, test::BootstrapFixture, ImplInitFilterHdl));
+            LINK(nullptr, test::BootstrapFixture, ImplInitFilterHdl));
 
     if (bNeedUCB)
     {

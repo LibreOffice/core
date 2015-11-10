@@ -41,7 +41,7 @@ int lclCloseCallback(void* pContext)
 
 XmlWriter::XmlWriter(SvStream* pStream) :
     mpStream(pStream),
-    mpWriter(NULL)
+    mpWriter(nullptr)
 {}
 
 XmlWriter::~XmlWriter()
@@ -49,12 +49,12 @@ XmlWriter::~XmlWriter()
 
 void XmlWriter::startDocument()
 {
-    if (mpWriter == NULL && mpStream != NULL)
+    if (mpWriter == nullptr && mpStream != nullptr)
     {
-        xmlOutputBufferPtr xmlOutBuffer = xmlOutputBufferCreateIO(lclWriteCallback, lclCloseCallback, mpStream, NULL);
+        xmlOutputBufferPtr xmlOutBuffer = xmlOutputBufferCreateIO(lclWriteCallback, lclCloseCallback, mpStream, nullptr);
         mpWriter = xmlNewTextWriter(xmlOutBuffer);
         xmlTextWriterSetIndent(mpWriter, 1);
-        xmlTextWriterStartDocument(mpWriter, NULL, "UTF-8", NULL);
+        xmlTextWriterStartDocument(mpWriter, nullptr, "UTF-8", nullptr);
     }
 }
 
@@ -62,7 +62,7 @@ void XmlWriter::endDocument()
 {
     xmlTextWriterEndDocument(mpWriter);
     xmlFreeTextWriter(mpWriter);
-    mpWriter = NULL;
+    mpWriter = nullptr;
 }
 
 void XmlWriter::element(const OString& name)

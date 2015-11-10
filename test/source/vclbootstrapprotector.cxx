@@ -81,7 +81,7 @@ IMPL_STATIC_LINK_NOARG_TYPED(Protector, deinitHook, LinkParamNone*, void)
         }
         css::uno::Reference<css::lang::XComponent>(
             context, css::uno::UNO_QUERY_THROW)->dispose();
-        comphelper::setProcessServiceFactory(0);
+        comphelper::setProcessServiceFactory(nullptr);
     }
 }
 

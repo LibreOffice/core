@@ -139,7 +139,7 @@ void XmlTestTools::assertXPathNoAttribute(xmlDocPtr pXmlDoc, const OString& rXPa
                                  1, xmlXPathNodeSetGetLength(pXmlNodes));
     xmlNodePtr pXmlNode = pXmlNodes->nodeTab[0];
     CPPUNIT_ASSERT_EQUAL_MESSAGE(OString("In <" + OString(pXmlDoc->name) + ">, XPath '" + rXPath + "' unexpected '" + rAttribute + "' attribute").getStr(),
-                                 static_cast<xmlChar*>(0), xmlGetProp(pXmlNode, BAD_CAST(rAttribute.getStr())));
+                                 static_cast<xmlChar*>(nullptr), xmlGetProp(pXmlNode, BAD_CAST(rAttribute.getStr())));
     xmlXPathFreeObject(pXmlObj);
 }
 

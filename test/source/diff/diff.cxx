@@ -38,8 +38,8 @@ struct tolerance
     }
 
     tolerance()
-        : elementName(NULL)
-        , attribName(NULL)
+        : elementName(nullptr)
+        , attribName(nullptr)
         , relative(false)
         , value(0.0)
     {
@@ -156,8 +156,8 @@ void XMLDiff::loadToleranceFile(xmlDocPtr xmlToleranceFile)
         return;
     }
 #endif
-    xmlNodePtr child = NULL;
-    for (child = root->children; child != NULL; child = child->next)
+    xmlNodePtr child = nullptr;
+    for (child = root->children; child != nullptr; child = child->next)
     {
         // assume a valid xml file
         if(child->type != XML_ELEMENT_NODE)
@@ -196,7 +196,7 @@ bool checkForEmptyChildren(xmlNodePtr node)
     if(!node)
         return true;
 
-    for(; node != NULL; node = node->next)
+    for(; node != nullptr; node = node->next)
     {
         if (node->type == XML_ELEMENT_NODE)
             return false;
@@ -225,9 +225,9 @@ bool XMLDiff::compareElements(xmlNode* node1, xmlNode* node2)
 #endif
 
     // compare children
-    xmlNode* child2 = NULL;
-    xmlNode* child1 = NULL;
-    for(child1 = node1->children, child2 = node2->children; child1 != NULL && child2 != NULL; child1 = child1->next, child2 = child2->next)
+    xmlNode* child2 = nullptr;
+    xmlNode* child1 = nullptr;
+    for(child1 = node1->children, child2 = node2->children; child1 != nullptr && child2 != nullptr; child1 = child1->next, child2 = child2->next)
     {
         if (child1->type == XML_ELEMENT_NODE)
         {
@@ -290,9 +290,9 @@ bool compareValuesWithTolerance(double val1, double val2, double tolerance, bool
 
 bool XMLDiff::compareAttributes(xmlNodePtr node1, xmlNodePtr node2)
 {
-    xmlAttrPtr attr1 = NULL;
-    xmlAttrPtr attr2 = NULL;
-    for(attr1 = node1->properties, attr2 = node2->properties; attr1 != NULL && attr2 != NULL; attr1 = attr1->next, attr2 = attr2->next)
+    xmlAttrPtr attr1 = nullptr;
+    xmlAttrPtr attr2 = nullptr;
+    for(attr1 = node1->properties, attr2 = node2->properties; attr1 != nullptr && attr2 != nullptr; attr1 = attr1->next, attr2 = attr2->next)
     {
 #if USE_CPPUNIT
         cppunitAssertEqual(attr1->name, attr2->name);

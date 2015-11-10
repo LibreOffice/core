@@ -30,7 +30,7 @@ htmlDocPtr HtmlTestTools::parseHtmlStream(SvStream* pStream)
     std::unique_ptr<sal_uInt8[]> pBuffer(new sal_uInt8[nSize + 1]);
     pStream->Read(pBuffer.get(), nSize);
     pBuffer[nSize] = 0;
-    return htmlParseDoc(reinterpret_cast<xmlChar*>(pBuffer.get()), NULL);
+    return htmlParseDoc(reinterpret_cast<xmlChar*>(pBuffer.get()), nullptr);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
