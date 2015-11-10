@@ -278,7 +278,7 @@ extern "C" {
 
 /* null handle used in place of parent handle when allocating HENV */
 #if (ODBCVER >= 0x0300)
-#define SQL_NULL_HANDLE     0L
+#define SQL_NULL_HANDLE     NULL
 #endif
 
 /* Values that may appear in the result set of SQLSpecialColumns() */
