@@ -235,7 +235,7 @@ private:
 
 inline FileHandleGuard::~FileHandleGuard()
 {
-    if (m_rHandle != 0)
+    if (m_rHandle != nullptr)
     {
         if (osl_closeFile(m_rHandle) != osl_File_E_None)
         {
@@ -471,9 +471,9 @@ bool getJavaProps(const OUString & exePath,
         cArgs = 4;
     }
 
-    oslProcess javaProcess= 0;
-    oslFileHandle fileOut= 0;
-    oslFileHandle fileErr= 0;
+    oslProcess javaProcess= nullptr;
+    oslFileHandle fileOut= nullptr;
+    oslFileHandle fileErr= nullptr;
 
     FileHandleReader stdoutReader(fileOut);
     rtl::Reference< AsynchReader > stderrReader(new AsynchReader(fileErr));
@@ -484,12 +484,12 @@ bool getJavaProps(const OUString & exePath,
                                              args,
                                              cArgs,                 //sal_uInt32   nArguments,
                                              osl_Process_HIDDEN, //oslProcessOption Options,
-                                             NULL, //oslSecurity Security,
+                                             nullptr, //oslSecurity Security,
                                              usStartDir.pData,//usStartDir.pData,//usWorkDir.pData, //rtl_uString *strWorkDir,
-                                             NULL, //rtl_uString *strEnvironment[],
+                                             nullptr, //rtl_uString *strEnvironment[],
                                              0, //  sal_uInt32   nEnvironmentVars,
                                              &javaProcess, //oslProcess *pProcess,
-                                             NULL,//oslFileHandle *pChildInputWrite,
+                                             nullptr,//oslFileHandle *pChildInputWrite,
                                              &fileOut,//oslFileHandle *pChildOutputRead,
                                              &fileErr);//oslFileHandle *pChildErrorRead);
 
@@ -564,7 +564,7 @@ bool getJavaProps(const OUString & exePath,
  */
 bool decodeOutput(const OString& s, OUString* out)
 {
-    OSL_ASSERT(out != 0);
+    OSL_ASSERT(out != nullptr);
     OUStringBuffer buff(512);
     sal_Int32 nIndex = 0;
     do
@@ -761,7 +761,7 @@ void addJREInfoFromBinPath(
     //map:       jre/bin/java.exe
 
     for ( sal_Int32 pos = 0;
-          gVendorMap[pos].sVendorName != NULL; ++pos )
+          gVendorMap[pos].sVendorName != nullptr; ++pos )
     {
         vector<OUString> vecPaths;
         getJavaExePaths_func pFunc = gVendorMap[pos].getJavaFunc;
@@ -910,7 +910,7 @@ rtl::Reference<VendorBase> getJREInfoByPath(
     // If this path is invalid then there is no chance to find a JRE here
     if (sResolvedDir.isEmpty())
     {
-        return 0;
+        return nullptr;
     }
 
     //check if the directory path is good, that is a JRE was already recognized.
@@ -927,7 +927,7 @@ rtl::Reference<VendorBase> getJREInfoByPath(
     }
 
     for ( sal_Int32 pos = 0;
-          gVendorMap[pos].sVendorName != NULL; ++pos )
+          gVendorMap[pos].sVendorName != nullptr; ++pos )
     {
         vector<OUString> vecPaths;
         getJavaExePaths_func pFunc = gVendorMap[pos].getJavaFunc;
@@ -1053,7 +1053,7 @@ rtl::Reference<VendorBase> getJREInfoByPath(
     {
         //find the creator func for the respective vendor name
         for ( sal_Int32 c = 0;
-              gVendorMap[c].sVendorName != NULL; ++c )
+              gVendorMap[c].sVendorName != nullptr; ++c )
         {
             OUString sNameMap(gVendorMap[c].sVendorName, strlen(gVendorMap[c].sVendorName),
                               RTL_TEXTENCODING_ASCII_US);
@@ -1087,7 +1087,7 @@ Reference<VendorBase> createInstance(createInstance_func pFunc,
     if (aBase.is())
     {
         if (!aBase->initialize(properties))
-            aBase = 0;
+            aBase = nullptr;
     }
     return aBase;
 }

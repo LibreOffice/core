@@ -205,7 +205,7 @@ bool SunVersion::init(const char *szVersion)
 
 SunVersion::PreRelease SunVersion::getPreRelease(const char *szRelease)
 {
-    if (szRelease == NULL)
+    if (szRelease == nullptr)
         return Rel_NONE;
     if( ! strcmp(szRelease,"internal"))
         return  Rel_INTERNAL;

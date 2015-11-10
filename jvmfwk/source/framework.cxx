@@ -37,7 +37,7 @@ namespace {
 
 static bool g_bEnabledSwitchedOn = false;
 
-static JavaVM * g_pJavaVM = NULL;
+static JavaVM * g_pJavaVM = nullptr;
 
 bool areEqualJavaInfo(
     JavaInfo const * pInfoA,JavaInfo const * pInfoB)
@@ -54,7 +54,7 @@ javaFrameworkError SAL_CALL jfw_findAllJREs(JavaInfo ***pparInfo, sal_Int32 *pSi
     {
         osl::MutexGuard guard(jfw::FwkMutex::get());
         javaFrameworkError errcode = JFW_E_NONE;
-        if (pparInfo == NULL || pSize == NULL)
+        if (pparInfo == nullptr || pSize == nullptr)
             return JFW_E_INVALID_ARG;
 
         jfw::VendorSettings aVendorSettings;
@@ -85,7 +85,7 @@ javaFrameworkError SAL_CALL jfw_findAllJREs(JavaInfo ***pparInfo, sal_Int32 *pSi
             //get all installations of one vendor according to minVersion,
             //maxVersion and excludeVersions
             sal_Int32 cInfos = 0;
-            JavaInfo** arInfos = NULL;
+            JavaInfo** arInfos = nullptr;
             std::vector<rtl::Reference<jfw_plugin::VendorBase>> infos;
             javaPluginError plerr = jfw_plugin_getAllJavaInfos(
                 true,
@@ -173,7 +173,7 @@ javaFrameworkError SAL_CALL jfw_findAllJREs(JavaInfo ***pparInfo, sal_Int32 *pSi
         sal_Int32 nSize = vecInfo.size() + vecInfoManual2.size();
         *pparInfo = static_cast<JavaInfo**>(rtl_allocateMemory(
             nSize * sizeof(JavaInfo*)));
-        if (*pparInfo == NULL)
+        if (*pparInfo == nullptr)
             return JFW_E_ERROR;
 
         typedef std::vector<jfw::CJavaInfo>::iterator it;
@@ -202,7 +202,7 @@ javaFrameworkError SAL_CALL jfw_startVM(
     JavaVM ** ppVM, JNIEnv ** ppEnv)
 {
     javaFrameworkError errcode = JFW_E_NONE;
-    if (cOptions > 0 && arOptions == NULL)
+    if (cOptions > 0 && arOptions == nullptr)
         return JFW_E_INVALID_ARG;
 
     try
@@ -211,16 +211,16 @@ javaFrameworkError SAL_CALL jfw_startVM(
 
         //We keep this pointer so we can determine if a VM has already
         //been created.
-        if (g_pJavaVM != NULL)
+        if (g_pJavaVM != nullptr)
             return JFW_E_RUNNING_JVM;
 
-        if (ppVM == NULL)
+        if (ppVM == nullptr)
             return JFW_E_INVALID_ARG;
 
         std::vector<OString> vmParams;
         OString sUserClassPath;
         jfw::CJavaInfo aInfo;
-        if (pInfo == NULL)
+        if (pInfo == nullptr)
         {
             jfw::JFW_MODE mode = jfw::getMode();
             if (mode == jfw::JFW_MODE_APPLICATION)
@@ -230,7 +230,7 @@ javaFrameworkError SAL_CALL jfw_startVM(
                     return JFW_E_JAVA_DISABLED;
                 aInfo.attach(settings.createJavaInfo());
                 //check if a Java has ever been selected
-                if (aInfo == NULL)
+                if (aInfo == nullptr)
                     return JFW_E_NO_SELECT;
 
 #ifdef WNT
@@ -297,7 +297,7 @@ javaFrameworkError SAL_CALL jfw_startVM(
                 OSL_ASSERT(false);
             pInfo = aInfo.pInfo;
         }
-        assert(pInfo != NULL);
+        assert(pInfo != nullptr);
 
         //get the function jfw_plugin_startJavaVirtualMachine
         jfw::VendorSettings aVendorSettings;
@@ -313,12 +313,12 @@ javaFrameworkError SAL_CALL jfw_startVM(
 
         //The first argument is the classpath
         arOpt[0].optionString= const_cast<char*>(sUserClassPath.getStr());
-        arOpt[0].extraInfo = NULL;
+        arOpt[0].extraInfo = nullptr;
         // Set a flag that this JVM has been created via the JNI Invocation API
         // (used, for example, by UNO remote bridges to share a common thread pool
         // factory among Java and native bridge implementations):
         arOpt[1].optionString = const_cast<char *>("-Dorg.openoffice.native=");
-        arOpt[1].extraInfo = 0;
+        arOpt[1].extraInfo = nullptr;
 
         //add the options set by options dialog
         int index = 2;
@@ -326,7 +326,7 @@ javaFrameworkError SAL_CALL jfw_startVM(
         for (cit i = vmParams.begin(); i != vmParams.end(); ++i)
         {
             arOpt[index].optionString = const_cast<sal_Char*>(i->getStr());
-            arOpt[index].extraInfo = 0;
+            arOpt[index].extraInfo = nullptr;
             index ++;
         }
         //add all options of the arOptions argument
@@ -338,7 +338,7 @@ javaFrameworkError SAL_CALL jfw_startVM(
         }
 
         //start Java
-        JavaVM *pVm = NULL;
+        JavaVM *pVm = nullptr;
         SAL_INFO("jfw", "Starting Java");
         javaPluginError plerr = jfw_plugin_startJavaVirtualMachine(pInfo, arOpt, index, & pVm, ppEnv);
         if (plerr == JFW_PLUGIN_E_VM_CREATION_FAILED)
@@ -414,7 +414,7 @@ javaFrameworkError SAL_CALL jfw_findAndSelectJRE(JavaInfo **pInfo)
 
         // first inspect Java installation that the JAVA_HOME
         // environment variable points to (if it is set)
-        JavaInfo* pHomeInfo = NULL;
+        JavaInfo* pHomeInfo = nullptr;
         if (jfw_plugin_getJavaInfoFromJavaHome(versionInfos, &pHomeInfo, infos)
             == JFW_PLUGIN_E_NONE)
         {
@@ -443,7 +443,7 @@ javaFrameworkError SAL_CALL jfw_findAndSelectJRE(JavaInfo **pInfo)
                 while(it != vecJavaInfosFromPath.end() && !bInfoFound)
                 {
                     JavaInfo* pJInfo = *it;
-                    if (pJInfo != NULL)
+                    if (pJInfo != nullptr)
                     {
                         // if the current Java installation implements all required features: use it
                         if ((pJInfo->nFeatures & nFeatureFlags) == nFeatureFlags)
@@ -451,7 +451,7 @@ javaFrameworkError SAL_CALL jfw_findAndSelectJRE(JavaInfo **pInfo)
                             aCurrentInfo = pJInfo;
                             bInfoFound = true;
                         }
-                        else if (static_cast<JavaInfo*>(aCurrentInfo) == NULL)
+                        else if (static_cast<JavaInfo*>(aCurrentInfo) == nullptr)
                         {
                             // current Java installation does not provide all features
                             // but no Java installation has been detected before
@@ -485,7 +485,7 @@ javaFrameworkError SAL_CALL jfw_findAndSelectJRE(JavaInfo **pInfo)
                 //get all installations of one vendor according to minVersion,
                 //maxVersion and excludeVersions
                 sal_Int32 cInfos = 0;
-                JavaInfo** arInfos = NULL;
+                JavaInfo** arInfos = nullptr;
                 javaPluginError plerr = jfw_plugin_getAllJavaInfos(
                     false,
                     vendor,
@@ -537,7 +537,7 @@ javaFrameworkError SAL_CALL jfw_findAndSelectJRE(JavaInfo **pInfo)
                 //All Java installations found by the current plug-in lib
                 //do not provide the required features. Try the next plug-in
             }
-            if (static_cast<JavaInfo*>(aCurrentInfo) == NULL)
+            if (static_cast<JavaInfo*>(aCurrentInfo) == nullptr)
             {//The plug-ins did not find a suitable Java. Now try the paths which have been
             //added manually.
                 //get the list of paths to jre locations which have been added manually
@@ -603,7 +603,7 @@ javaFrameworkError SAL_CALL jfw_findAndSelectJRE(JavaInfo **pInfo)
             //remember that this JRE was selected in this process
             jfw::setJavaSelected();
 
-            if (pInfo !=NULL)
+            if (pInfo !=nullptr)
             {
                 //copy to out param
                 *pInfo = aCurrentInfo.cloneJavaInfo();
@@ -629,7 +629,7 @@ sal_Bool SAL_CALL jfw_areEqualJavaInfo(
 {
     if (pInfoA == pInfoB)
         return sal_True;
-    if (pInfoA == NULL || pInfoB == NULL)
+    if (pInfoA == nullptr || pInfoB == nullptr)
         return sal_False;
     OUString sVendor(pInfoA->sVendor);
     OUString sLocation(pInfoA->sLocation);
@@ -650,7 +650,7 @@ sal_Bool SAL_CALL jfw_areEqualJavaInfo(
 
 void SAL_CALL jfw_freeJavaInfo(JavaInfo *pInfo)
 {
-    if (pInfo == NULL)
+    if (pInfo == nullptr)
         return;
     rtl_uString_release(pInfo->sVendor);
     rtl_uString_release(pInfo->sLocation);
@@ -665,7 +665,7 @@ javaFrameworkError SAL_CALL jfw_getSelectedJRE(JavaInfo **ppInfo)
     try
     {
         osl::MutexGuard guard(jfw::FwkMutex::get());
-        if (ppInfo == NULL)
+        if (ppInfo == nullptr)
             return JFW_E_INVALID_ARG;
 
         if (jfw::getMode() == jfw::JFW_MODE_DIRECT)
@@ -692,7 +692,7 @@ javaFrameworkError SAL_CALL jfw_getSelectedJRE(JavaInfo **ppInfo)
         aInfo.attach(settings.createJavaInfo());
         if (! aInfo)
         {
-            *ppInfo = NULL;
+            *ppInfo = nullptr;
             return JFW_E_NONE;
         }
         //If the javavendors.xml has changed, then the current selected
@@ -716,9 +716,9 @@ javaFrameworkError SAL_CALL jfw_getSelectedJRE(JavaInfo **ppInfo)
 javaFrameworkError SAL_CALL jfw_isVMRunning(sal_Bool *bRunning)
 {
     osl::MutexGuard guard(jfw::FwkMutex::get());
-    if (bRunning == NULL)
+    if (bRunning == nullptr)
         return JFW_E_INVALID_ARG;
-    if (g_pJavaVM == NULL)
+    if (g_pJavaVM == nullptr)
         *bRunning = sal_False;
     else
         *bRunning = sal_True;
@@ -732,7 +732,7 @@ javaFrameworkError SAL_CALL jfw_getJavaInfoByPath(
     try
     {
         osl::MutexGuard guard(jfw::FwkMutex::get());
-        if (pPath == NULL || ppInfo == NULL)
+        if (pPath == nullptr || ppInfo == nullptr)
             return JFW_E_INVALID_ARG;
 
         OUString ouPath(pPath);
@@ -753,7 +753,7 @@ javaFrameworkError SAL_CALL jfw_getJavaInfoByPath(
             //ask the plugin if this is a JRE.
             //If so check if it meets the version requirements.
             //Only if it does return a JavaInfo
-            JavaInfo* pInfo = NULL;
+            JavaInfo* pInfo = nullptr;
             javaPluginError plerr = jfw_plugin_getJavaInfoByPath(
                 ouPath,
                 vendor,
@@ -770,7 +770,7 @@ javaFrameworkError SAL_CALL jfw_getJavaInfoByPath(
             }
             else if(plerr == JFW_PLUGIN_E_FAILED_VERSION)
             {//found JRE but it has the wrong version
-                *ppInfo = NULL;
+                *ppInfo = nullptr;
                 errcode = JFW_E_FAILED_VERSION;
                 break;
             }
@@ -780,7 +780,7 @@ javaFrameworkError SAL_CALL jfw_getJavaInfoByPath(
             }
             OSL_ASSERT(false);
         }
-        if (*ppInfo == NULL && errcode != JFW_E_FAILED_VERSION)
+        if (*ppInfo == nullptr && errcode != JFW_E_FAILED_VERSION)
             errcode = JFW_E_NOT_RECOGNIZED;
     }
     catch (const jfw::FrameworkException& e)
@@ -803,7 +803,7 @@ javaFrameworkError SAL_CALL jfw_setSelectedJRE(JavaInfo const *pInfo)
         if (jfw::getMode() == jfw::JFW_MODE_DIRECT)
             return JFW_E_DIRECT_MODE;
         //check if pInfo is the selected JRE
-        JavaInfo *currentInfo = NULL;
+        JavaInfo *currentInfo = nullptr;
         errcode = jfw_getSelectedJRE( & currentInfo);
         if (errcode != JFW_E_NONE && errcode != JFW_E_INVALID_SETTINGS)
             return errcode;
@@ -869,7 +869,7 @@ javaFrameworkError SAL_CALL jfw_getEnabled(sal_Bool *pbEnabled)
         if (jfw::getMode() == jfw::JFW_MODE_DIRECT)
             return JFW_E_DIRECT_MODE;
         osl::MutexGuard guard(jfw::FwkMutex::get());
-        if (pbEnabled == NULL)
+        if (pbEnabled == nullptr)
             return JFW_E_INVALID_ARG;
         jfw::MergedSettings settings;
         *pbEnabled = settings.getEnabled();
@@ -894,7 +894,7 @@ javaFrameworkError SAL_CALL jfw_setVMParameters(
         if (jfw::getMode() == jfw::JFW_MODE_DIRECT)
             return JFW_E_DIRECT_MODE;
         jfw::NodeJava node(jfw::NodeJava::USER);
-        if (arOptions == NULL && nLen != 0)
+        if (arOptions == nullptr && nLen != 0)
             return JFW_E_INVALID_ARG;
         node.setVmParameters(arOptions, nLen);
         node.write();
@@ -919,7 +919,7 @@ javaFrameworkError SAL_CALL jfw_getVMParameters(
         if (jfw::getMode() == jfw::JFW_MODE_DIRECT)
             return JFW_E_DIRECT_MODE;
 
-        if (parOptions == NULL || pLen == NULL)
+        if (parOptions == nullptr || pLen == nullptr)
             return JFW_E_INVALID_ARG;
         const jfw::MergedSettings settings;
         settings.getVmParametersArray(parOptions, pLen);
@@ -942,7 +942,7 @@ javaFrameworkError SAL_CALL jfw_setUserClassPath(rtl_uString * pCp)
         if (jfw::getMode() == jfw::JFW_MODE_DIRECT)
             return JFW_E_DIRECT_MODE;
         jfw::NodeJava node(jfw::NodeJava::USER);
-        if (pCp == NULL)
+        if (pCp == nullptr)
             return JFW_E_INVALID_ARG;
         node.setUserClassPath(pCp);
         node.write();
@@ -964,7 +964,7 @@ javaFrameworkError SAL_CALL jfw_getUserClassPath(rtl_uString ** ppCP)
         osl::MutexGuard guard(jfw::FwkMutex::get());
         if (jfw::getMode() == jfw::JFW_MODE_DIRECT)
             return JFW_E_DIRECT_MODE;
-        if (ppCP == NULL)
+        if (ppCP == nullptr)
             return JFW_E_INVALID_ARG;
         const jfw::MergedSettings settings;
         *ppCP = settings.getUserClassPath().pData;
@@ -988,7 +988,7 @@ javaFrameworkError SAL_CALL jfw_addJRELocation(rtl_uString * sLocation)
         if (jfw::getMode() == jfw::JFW_MODE_DIRECT)
             return JFW_E_DIRECT_MODE;
         jfw::NodeJava node(jfw::NodeJava::USER);
-        if (sLocation == NULL)
+        if (sLocation == nullptr)
             return JFW_E_INVALID_ARG;
         node.load();
         node.addJRELocation(sLocation);
@@ -1044,7 +1044,7 @@ void SAL_CALL jfw_unlock()
 
 namespace jfw
 {
-CJavaInfo::CJavaInfo(): pInfo(0)
+CJavaInfo::CJavaInfo(): pInfo(nullptr)
 {
 }
 
@@ -1069,7 +1069,7 @@ void CJavaInfo::attach(::JavaInfo * info)
 ::JavaInfo * CJavaInfo::detach()
 {
     JavaInfo * tmp = pInfo;
-    pInfo = NULL;
+    pInfo = nullptr;
     return tmp;
 }
 
@@ -1081,8 +1081,8 @@ CJavaInfo::~CJavaInfo()
 
 JavaInfo * CJavaInfo::copyJavaInfo(const JavaInfo * pInfo)
 {
-    if (pInfo == NULL)
-        return NULL;
+    if (pInfo == nullptr)
+        return nullptr;
     JavaInfo* newInfo =
           static_cast<JavaInfo*>(rtl_allocateMemory(sizeof(JavaInfo)));
     if (newInfo)
@@ -1099,8 +1099,8 @@ JavaInfo * CJavaInfo::copyJavaInfo(const JavaInfo * pInfo)
 
 JavaInfo* CJavaInfo::cloneJavaInfo() const
 {
-    if (pInfo == NULL)
-        return NULL;
+    if (pInfo == nullptr)
+        return nullptr;
     return copyJavaInfo(pInfo);
 }
 

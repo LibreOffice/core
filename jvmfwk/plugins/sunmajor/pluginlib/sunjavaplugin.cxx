@@ -147,8 +147,8 @@ OString getPluginJarPath(
 JavaInfo* createJavaInfo(const rtl::Reference<VendorBase> & info)
 {
     JavaInfo* pInfo = static_cast<JavaInfo*>(rtl_allocateMemory(sizeof(JavaInfo)));
-    if (pInfo == NULL)
-        return NULL;
+    if (pInfo == nullptr)
+        return nullptr;
     OUString sVendor = info->getVendor();
     pInfo->sVendor = sVendor.pData;
     rtl_uString_acquire(sVendor.pData);
@@ -317,15 +317,15 @@ javaPluginError jfw_plugin_getAllJavaInfos(
 
     //nLenlist contains the number of elements in arExcludeList.
     //If no exclude list is provided then nLenList must be 0
-    OSL_ASSERT( ! (arExcludeList == NULL && nLenList > 0));
-    if (arExcludeList == NULL && nLenList > 0)
+    OSL_ASSERT( ! (arExcludeList == nullptr && nLenList > 0));
+    if (arExcludeList == nullptr && nLenList > 0)
         return JFW_PLUGIN_E_INVALID_ARG;
 
     OSL_ASSERT(!sVendor.isEmpty());
     if (sVendor.isEmpty())
         return JFW_PLUGIN_E_INVALID_ARG;
 
-    JavaInfo** arInfo = NULL;
+    JavaInfo** arInfo = nullptr;
 
     //Find all JREs
     vector<rtl::Reference<VendorBase> > vecInfos =
@@ -383,8 +383,8 @@ javaPluginError jfw_plugin_getJavaInfoByPath(
 
     //nLenlist contains the number of elements in arExcludeList.
     //If no exclude list is provided then nLenList must be 0
-    OSL_ASSERT( ! (arExcludeList == NULL && nLenList > 0));
-    if (arExcludeList == NULL && nLenList > 0)
+    OSL_ASSERT( ! (arExcludeList == nullptr && nLenList > 0));
+    if (arExcludeList == nullptr && nLenList > 0)
         return JFW_PLUGIN_E_INVALID_ARG;
 
     OSL_ASSERT(!sVendor.isEmpty());
@@ -654,7 +654,7 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
     // unless errorcode is volatile the following warning occurs on gcc:
     // warning: variable 'errorcode' might be clobbered by `longjmp' or `vfork'
     volatile javaPluginError errorcode = JFW_PLUGIN_E_NONE;
-    if ( pInfo == NULL || ppVm == NULL || ppEnv == NULL)
+    if ( pInfo == nullptr || ppVm == nullptr || ppEnv == nullptr)
         return JFW_PLUGIN_E_INVALID_ARG;
     //Check if the Vendor (pInfo->sVendor) is supported by this plugin
     if ( ! isVendorSupported(pInfo->sVendor))
@@ -827,7 +827,7 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
     */
     g_bInGetJavaVM = 1;
     jint err;
-    JavaVM * pJavaVM = 0;
+    JavaVM * pJavaVM = nullptr;
     memset( jmp_jvm_abort, 0, sizeof(jmp_jvm_abort));
     int jmpval= setjmp( jmp_jvm_abort );
     /* If jmpval is not "0" then this point was reached by a longjmp in the

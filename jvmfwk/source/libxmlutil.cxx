@@ -22,7 +22,7 @@
 namespace jfw
 {
 
-CXPathObjectPtr::CXPathObjectPtr():_object(NULL)
+CXPathObjectPtr::CXPathObjectPtr():_object(nullptr)
 {
 }
 
@@ -45,7 +45,7 @@ CXPathContextPtr::CXPathContextPtr(xmlXPathContextPtr aContext)
 {
 }
 
-CXPathContextPtr::CXPathContextPtr():_object(NULL)
+CXPathContextPtr::CXPathContextPtr():_object(nullptr)
 {
 }
 
@@ -69,7 +69,7 @@ CXmlDocPtr::CXmlDocPtr(xmlDoc* aDoc)
 {
 }
 
-CXmlDocPtr::CXmlDocPtr():_object(NULL)
+CXmlDocPtr::CXmlDocPtr():_object(nullptr)
 {
 }
 
@@ -95,12 +95,12 @@ CXmlCharPtr::CXmlCharPtr(xmlChar * aChar)
 }
 
 CXmlCharPtr::CXmlCharPtr(const OUString & s):
-    _object(NULL)
+    _object(nullptr)
 {
     OString o = OUStringToOString(s, RTL_TEXTENCODING_UTF8);
     _object = xmlCharStrdup(o.getStr());
 }
-CXmlCharPtr::CXmlCharPtr():_object(NULL)
+CXmlCharPtr::CXmlCharPtr():_object(nullptr)
 {
 }
 
@@ -122,7 +122,7 @@ CXmlCharPtr & CXmlCharPtr::operator = (xmlChar* pObj)
 CXmlCharPtr::operator OUString()
 {
     OUString ret;
-    if (_object != NULL)
+    if (_object != nullptr)
     {
         OString aOStr(reinterpret_cast<char*>(_object));
         ret = OStringToOUString(aOStr, RTL_TEXTENCODING_UTF8);

@@ -43,7 +43,7 @@ VendorSupportMapEntry gVendorMap[] ={
     {x, & y::getJavaExePaths, & y::createInstance},
 
 #define END_VENDOR_MAP() \
-    {NULL, NULL, NULL} };
+    {nullptr, nullptr, nullptr} };
 
 /* Examines if the vendor supplied in parameter sVendor is part of the
    list of supported vendors. That is the arry of VendorSupportMapEntry

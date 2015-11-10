@@ -48,7 +48,7 @@ OString getElement(OString const & docPath,
     //Prepare the xml document and context
     OSL_ASSERT(!docPath.isEmpty());
      jfw::CXmlDocPtr doc(xmlParseFile(docPath.getStr()));
-    if (doc == NULL)
+    if (doc == nullptr)
         throw FrameworkException(
             JFW_E_ERROR,
             OString("[Java framework] Error in function getElement "
@@ -91,11 +91,11 @@ void createSettingsStructure(xmlDoc * document, bool * bNeedsSave)
     OString sExcMsg("[Java framework] Error in function createSettingsStructure "
                          "(elements.cxx).");
     xmlNode * root = xmlDocGetRootElement(document);
-    if (root == NULL)
+    if (root == nullptr)
         throw FrameworkException(JFW_E_ERROR, sExcMsg);
     bool bFound = false;
     xmlNode * cur = root->children;
-    while (cur != NULL)
+    while (cur != nullptr)
     {
         if (xmlStrcmp(cur->name, reinterpret_cast<xmlChar const *>("enabled")) == 0)
         {
@@ -118,8 +118,8 @@ void createSettingsStructure(xmlDoc * document, bool * bNeedsSave)
 
     //<enabled xsi:nil="true"
     xmlNode  * nodeEn = xmlNewTextChild(
-        root, NULL, reinterpret_cast<xmlChar const *>("enabled"), reinterpret_cast<xmlChar const *>(""));
-    if (nodeEn == NULL)
+        root, nullptr, reinterpret_cast<xmlChar const *>("enabled"), reinterpret_cast<xmlChar const *>(""));
+    if (nodeEn == nullptr)
         throw FrameworkException(JFW_E_ERROR, sExcMsg);
     xmlSetNsProp(nodeEn, nsXsi, reinterpret_cast<xmlChar const *>("nil"), reinterpret_cast<xmlChar const *>("true"));
     //add a new line
@@ -128,8 +128,8 @@ void createSettingsStructure(xmlDoc * document, bool * bNeedsSave)
 
     //<userClassPath xsi:nil="true">
     xmlNode  * nodeUs = xmlNewTextChild(
-        root, NULL, reinterpret_cast<xmlChar const *>("userClassPath"), reinterpret_cast<xmlChar const *>(""));
-    if (nodeUs == NULL)
+        root, nullptr, reinterpret_cast<xmlChar const *>("userClassPath"), reinterpret_cast<xmlChar const *>(""));
+    if (nodeUs == nullptr)
         throw FrameworkException(JFW_E_ERROR, sExcMsg);
     xmlSetNsProp(nodeUs, nsXsi, reinterpret_cast<xmlChar const *>("nil"), reinterpret_cast<xmlChar const *>("true"));
     //add a new line
@@ -138,8 +138,8 @@ void createSettingsStructure(xmlDoc * document, bool * bNeedsSave)
 
     //<vmParameters xsi:nil="true">
     xmlNode  * nodeVm = xmlNewTextChild(
-        root, NULL, reinterpret_cast<xmlChar const *>("vmParameters"), reinterpret_cast<xmlChar const *>(""));
-    if (nodeVm == NULL)
+        root, nullptr, reinterpret_cast<xmlChar const *>("vmParameters"), reinterpret_cast<xmlChar const *>(""));
+    if (nodeVm == nullptr)
         throw FrameworkException(JFW_E_ERROR, sExcMsg);
     xmlSetNsProp(nodeVm, nsXsi, reinterpret_cast<xmlChar const *>("nil"), reinterpret_cast<xmlChar const *>("true"));
     //add a new line
@@ -148,8 +148,8 @@ void createSettingsStructure(xmlDoc * document, bool * bNeedsSave)
 
     //<jreLocations xsi:nil="true">
     xmlNode  * nodeJre = xmlNewTextChild(
-        root, NULL, reinterpret_cast<xmlChar const *>("jreLocations"), reinterpret_cast<xmlChar const *>(""));
-    if (nodeJre == NULL)
+        root, nullptr, reinterpret_cast<xmlChar const *>("jreLocations"), reinterpret_cast<xmlChar const *>(""));
+    if (nodeJre == nullptr)
         throw FrameworkException(JFW_E_ERROR, sExcMsg);
     xmlSetNsProp(nodeJre, nsXsi, reinterpret_cast<xmlChar const *>("nil"), reinterpret_cast<xmlChar const *>("true"));
     //add a new line
@@ -158,8 +158,8 @@ void createSettingsStructure(xmlDoc * document, bool * bNeedsSave)
 
     //<javaInfo xsi:nil="true">
     xmlNode  * nodeJava = xmlNewTextChild(
-        root, NULL, reinterpret_cast<xmlChar const *>("javaInfo"), reinterpret_cast<xmlChar const *>(""));
-    if (nodeJava == NULL)
+        root, nullptr, reinterpret_cast<xmlChar const *>("javaInfo"), reinterpret_cast<xmlChar const *>(""));
+    if (nodeJava == nullptr)
         throw FrameworkException(JFW_E_ERROR, sExcMsg);
     xmlSetNsProp(nodeJava, nsXsi, reinterpret_cast<xmlChar const *>("nil"), reinterpret_cast<xmlChar const *>("true"));
     //add a new line
@@ -169,7 +169,7 @@ void createSettingsStructure(xmlDoc * document, bool * bNeedsSave)
 
 
 
-VersionInfo::VersionInfo(): arVersions(NULL)
+VersionInfo::VersionInfo(): arVersions(nullptr)
 {
 }
 
@@ -186,7 +186,7 @@ void VersionInfo::addExcludeVersion(const OUString& sVersion)
 rtl_uString** VersionInfo::getExcludeVersions()
 {
     osl::MutexGuard guard(FwkMutex::get());
-    if (arVersions != NULL)
+    if (arVersions != nullptr)
         return arVersions;
 
     arVersions = new rtl_uString*[vecExcludeVersions.size()];
@@ -256,23 +256,23 @@ void NodeJava::load()
     OString sSettingsPath = getSettingsPath();
     //There must not be a share settings file
     CXmlDocPtr docUser(xmlParseFile(sSettingsPath.getStr()));
-    if (docUser == NULL)
+    if (docUser == nullptr)
         throw FrameworkException(JFW_E_ERROR, sExcMsg);
 
     xmlNode * cur = xmlDocGetRootElement(docUser);
-    if (cur == NULL || cur->children == NULL)
+    if (cur == nullptr || cur->children == nullptr)
         throw FrameworkException(JFW_E_ERROR, sExcMsg);
 
     CXmlCharPtr sNil;
     cur = cur->children;
-    while (cur != NULL)
+    while (cur != nullptr)
     {
         if (xmlStrcmp(cur->name, reinterpret_cast<xmlChar const *>("enabled")) == 0)
         {
             //only overwrite share settings if xsi:nil="false"
             sNil = xmlGetNsProp(
                 cur, reinterpret_cast<xmlChar const *>("nil"), reinterpret_cast<xmlChar const *>(NS_SCHEMA_INSTANCE));
-            if (sNil == NULL)
+            if (sNil == nullptr)
                 throw FrameworkException(JFW_E_ERROR, sExcMsg);;
             if (xmlStrcmp(sNil, reinterpret_cast<xmlChar const *>("false")) == 0)
             {
@@ -288,7 +288,7 @@ void NodeJava::load()
         {
             sNil = xmlGetNsProp(
                 cur, reinterpret_cast<xmlChar const *>("nil"), reinterpret_cast<xmlChar const *>(NS_SCHEMA_INSTANCE));
-            if (sNil == NULL)
+            if (sNil == nullptr)
                 throw FrameworkException(JFW_E_ERROR, sExcMsg);
             if (xmlStrcmp(sNil, reinterpret_cast<xmlChar const *>("false")) == 0)
             {
@@ -301,7 +301,7 @@ void NodeJava::load()
         {
             sNil = xmlGetNsProp(
                 cur, reinterpret_cast<xmlChar const *>("nil"), reinterpret_cast<xmlChar const *>(NS_SCHEMA_INSTANCE));
-            if (sNil == NULL)
+            if (sNil == nullptr)
                 throw FrameworkException(JFW_E_ERROR, sExcMsg);
 
             if (xmlStrcmp(sNil, reinterpret_cast<xmlChar const *>("false")) == 0)
@@ -315,7 +315,7 @@ void NodeJava::load()
         {
             sNil = xmlGetNsProp(
                 cur, reinterpret_cast<xmlChar const *>("nil"), reinterpret_cast<xmlChar const *>(NS_SCHEMA_INSTANCE));
-            if (sNil == NULL)
+            if (sNil == nullptr)
                 throw FrameworkException(JFW_E_ERROR, sExcMsg);
             if (xmlStrcmp(sNil, reinterpret_cast<xmlChar const *>("false")) == 0)
             {
@@ -324,7 +324,7 @@ void NodeJava::load()
                         std::vector<OUString> ());
 
                 xmlNode * pOpt = cur->children;
-                while (pOpt != NULL)
+                while (pOpt != nullptr)
                 {
                     if (xmlStrcmp(pOpt->name, reinterpret_cast<xmlChar const *>("param")) == 0)
                     {
@@ -341,7 +341,7 @@ void NodeJava::load()
         {
             sNil = xmlGetNsProp(
                 cur, reinterpret_cast<xmlChar const *>("nil"), reinterpret_cast<xmlChar const *>(NS_SCHEMA_INSTANCE));
-            if (sNil == NULL)
+            if (sNil == nullptr)
                 throw FrameworkException(JFW_E_ERROR, sExcMsg);
             if (xmlStrcmp(sNil, reinterpret_cast<xmlChar const *>("false")) == 0)
             {
@@ -350,7 +350,7 @@ void NodeJava::load()
                         std::vector<OUString>());
 
                 xmlNode * pLoc = cur->children;
-                while (pLoc != NULL)
+                while (pLoc != nullptr)
                 {
                     if (xmlStrcmp(pLoc->name, reinterpret_cast<xmlChar const *>("location")) == 0)
                     {
@@ -435,7 +435,7 @@ void NodeJava::write() const
     //Read the user elements
     OString sSettingsPath = getSettingsPath();
     docUser = xmlParseFile(sSettingsPath.getStr());
-    if (docUser == NULL)
+    if (docUser == nullptr)
         throw FrameworkException(JFW_E_ERROR, sExcMsg);
     contextUser = xmlXPathNewContext(docUser);
     if (xmlXPathRegisterNs(contextUser, reinterpret_cast<xmlChar const *>("jf"),
@@ -516,7 +516,7 @@ void NodeJava::write() const
 
         //remove option elements
         xmlNode* cur = vmParameters->children;
-        while (cur != NULL)
+        while (cur != nullptr)
         {
             xmlNode* lastNode = cur;
             cur = cur->next;
@@ -533,7 +533,7 @@ void NodeJava::write() const
         typedef std::vector<OUString>::const_iterator cit;
         for (cit i = m_vmParameters->begin(); i != m_vmParameters->end(); ++i)
         {
-            xmlNewTextChild(vmParameters, NULL, reinterpret_cast<xmlChar const *>("param"),
+            xmlNewTextChild(vmParameters, nullptr, reinterpret_cast<xmlChar const *>("param"),
                             CXmlCharPtr(*i));
             //add a new line
             xmlNode * nodeCrLf = xmlNewText(reinterpret_cast<xmlChar const *>("\n"));
@@ -557,7 +557,7 @@ void NodeJava::write() const
 
         //remove option elements
         xmlNode* cur = jreLocationsNode->children;
-        while (cur != NULL)
+        while (cur != nullptr)
         {
             xmlNode* lastNode = cur;
             cur = cur->next;
@@ -574,7 +574,7 @@ void NodeJava::write() const
         typedef std::vector<OUString>::const_iterator cit;
         for (cit i = m_JRELocations->begin(); i != m_JRELocations->end(); ++i)
         {
-            xmlNewTextChild(jreLocationsNode, NULL, reinterpret_cast<xmlChar const *>("location"),
+            xmlNewTextChild(jreLocationsNode, nullptr, reinterpret_cast<xmlChar const *>("location"),
                             CXmlCharPtr(*i));
             //add a new line
             xmlNode * nodeCrLf = xmlNewText(reinterpret_cast<xmlChar const *>("\n"));
@@ -604,7 +604,7 @@ void NodeJava::setJavaInfo(const JavaInfo * pInfo, bool bAutoSelect)
     m_javaInfo->bAutoSelect = bAutoSelect;
     m_javaInfo->bNil = false;
 
-    if (pInfo != NULL)
+    if (pInfo != nullptr)
     {
         m_javaInfo->m_bEmptyNode = false;
         m_javaInfo->sVendor = pInfo->sVendor;
@@ -628,12 +628,12 @@ void NodeJava::setJavaInfo(const JavaInfo * pInfo, bool bAutoSelect)
 
 void NodeJava::setVmParameters(rtl_uString * * arOptions, sal_Int32 size)
 {
-    OSL_ASSERT( !(arOptions == 0 && size != 0));
+    OSL_ASSERT( !(arOptions == nullptr && size != 0));
     if ( ! m_vmParameters)
         m_vmParameters = boost::optional<std::vector<OUString> >(
             std::vector<OUString>());
     m_vmParameters->clear();
-    if (arOptions != NULL)
+    if (arOptions != nullptr)
     {
         for (int i  = 0; i < size; i++)
         {
@@ -718,24 +718,24 @@ bool NodeJava::createSettingsDocument() const
 
     //Create the root element and name spaces
     xmlNodePtr root =   xmlNewDocNode(
-        doc, NULL, reinterpret_cast<xmlChar const *>("java"), reinterpret_cast<xmlChar const *>("\n"));
+        doc, nullptr, reinterpret_cast<xmlChar const *>("java"), reinterpret_cast<xmlChar const *>("\n"));
 
-    if (root == NULL)
+    if (root == nullptr)
         throw FrameworkException(JFW_E_ERROR, sExcMsg);
 
-    if (xmlNewNs(root, reinterpret_cast<xmlChar const *>(NS_JAVA_FRAMEWORK),NULL) == NULL)
+    if (xmlNewNs(root, reinterpret_cast<xmlChar const *>(NS_JAVA_FRAMEWORK),nullptr) == nullptr)
         throw FrameworkException(JFW_E_ERROR, sExcMsg);
-    if (xmlNewNs(root,reinterpret_cast<xmlChar const *>(NS_SCHEMA_INSTANCE),reinterpret_cast<xmlChar const *>("xsi")) == NULL)
+    if (xmlNewNs(root,reinterpret_cast<xmlChar const *>(NS_SCHEMA_INSTANCE),reinterpret_cast<xmlChar const *>("xsi")) == nullptr)
         throw FrameworkException(JFW_E_ERROR, sExcMsg);
     xmlDocSetRootElement(doc,  root);
 
     //Create a comment
     xmlNodePtr com = xmlNewComment(
         reinterpret_cast<xmlChar const *>("This is a generated file. Do not alter this file!"));
-    if (com == NULL)
+    if (com == nullptr)
         throw FrameworkException(JFW_E_ERROR, sExcMsg);
 
-    if (xmlAddPrevSibling(root, com) == NULL)
+    if (xmlAddPrevSibling(root, com) == nullptr)
         throw FrameworkException(JFW_E_ERROR, sExcMsg);
 
     const OString path = getSettingsPath();
@@ -761,7 +761,7 @@ void CNodeJavaInfo::loadFromNode(xmlDoc * pDoc, xmlNode * pJavaInfo)
                          "(elements.cxx).");
 
     OSL_ASSERT(pJavaInfo && pDoc);
-    if (pJavaInfo->children == NULL)
+    if (pJavaInfo->children == nullptr)
         return;
     //Get the xsi:nil attribute;
     CXmlCharPtr sNil;
@@ -795,7 +795,7 @@ void CNodeJavaInfo::loadFromNode(xmlDoc * pDoc, xmlNode * pJavaInfo)
 
     xmlNode * cur = pJavaInfo->children;
 
-    while (cur != NULL)
+    while (cur != nullptr)
     {
         if (xmlStrcmp(cur->name, reinterpret_cast<xmlChar const *>("vendor")) == 0)
         {
@@ -904,7 +904,7 @@ void CNodeJavaInfo::writeToNode(xmlDoc* pDoc,
 
     //Delete the children of JavaInfo
     xmlNode* cur = pJavaInfoNode->children;
-    while (cur != NULL)
+    while (cur != nullptr)
     {
         xmlNode* lastNode = cur;
         cur = cur->next;
@@ -922,21 +922,21 @@ void CNodeJavaInfo::writeToNode(xmlDoc* pDoc,
     xmlAddChild(pJavaInfoNode, nodeCrLf);
 
     //Create the vendor element
-    xmlNewTextChild(pJavaInfoNode, NULL, reinterpret_cast<xmlChar const *>("vendor"),
+    xmlNewTextChild(pJavaInfoNode, nullptr, reinterpret_cast<xmlChar const *>("vendor"),
                     CXmlCharPtr(sVendor));
     //add a new line for better readability
     nodeCrLf = xmlNewText(reinterpret_cast<xmlChar const *>("\n"));
     xmlAddChild(pJavaInfoNode, nodeCrLf);
 
     //Create the location element
-    xmlNewTextChild(pJavaInfoNode, NULL, reinterpret_cast<xmlChar const *>("location"),
+    xmlNewTextChild(pJavaInfoNode, nullptr, reinterpret_cast<xmlChar const *>("location"),
                     CXmlCharPtr(sLocation));
     //add a new line for better readability
     nodeCrLf = xmlNewText(reinterpret_cast<xmlChar const *>("\n"));
     xmlAddChild(pJavaInfoNode, nodeCrLf);
 
     //Create the version element
-    xmlNewTextChild(pJavaInfoNode, NULL, reinterpret_cast<xmlChar const *>("version"),
+    xmlNewTextChild(pJavaInfoNode, nullptr, reinterpret_cast<xmlChar const *>("version"),
                     CXmlCharPtr(sVersion));
     //add a new line for better readability
     nodeCrLf = xmlNewText(reinterpret_cast<xmlChar const *>("\n"));
@@ -945,7 +945,7 @@ void CNodeJavaInfo::writeToNode(xmlDoc* pDoc,
     //Create the features element
     OUString sFeatures = OUString::number(
         nFeatures, 16);
-    xmlNewTextChild(pJavaInfoNode, NULL, reinterpret_cast<xmlChar const *>("features"),
+    xmlNewTextChild(pJavaInfoNode, nullptr, reinterpret_cast<xmlChar const *>("features"),
                     CXmlCharPtr(sFeatures));
     //add a new line for better readability
     nodeCrLf = xmlNewText(reinterpret_cast<xmlChar const *>("\n"));
@@ -955,7 +955,7 @@ void CNodeJavaInfo::writeToNode(xmlDoc* pDoc,
     //Create the requirements element
     OUString sRequirements = OUString::number(
          nRequirements, 16);
-    xmlNewTextChild(pJavaInfoNode, NULL, reinterpret_cast<xmlChar const *>("requirements"),
+    xmlNewTextChild(pJavaInfoNode, nullptr, reinterpret_cast<xmlChar const *>("requirements"),
                     CXmlCharPtr(sRequirements));
     //add a new line for better readability
     nodeCrLf = xmlNewText(reinterpret_cast<xmlChar const *>("\n"));
@@ -964,7 +964,7 @@ void CNodeJavaInfo::writeToNode(xmlDoc* pDoc,
 
     //Create the features element
     rtl::ByteSequence data = encodeBase16(arVendorData);
-    xmlNode* dataNode = xmlNewChild(pJavaInfoNode, NULL,
+    xmlNode* dataNode = xmlNewChild(pJavaInfoNode, nullptr,
                                     reinterpret_cast<xmlChar const *>("vendorData"),
                                     reinterpret_cast<xmlChar const *>(""));
     xmlNodeSetContentLen(dataNode,
@@ -977,10 +977,10 @@ void CNodeJavaInfo::writeToNode(xmlDoc* pDoc,
 JavaInfo * CNodeJavaInfo::makeJavaInfo() const
 {
     if (bNil || m_bEmptyNode)
-        return NULL;
+        return nullptr;
     JavaInfo * pInfo = static_cast<JavaInfo*>(rtl_allocateMemory(sizeof(JavaInfo)));
-    if (pInfo == NULL)
-        return NULL;
+    if (pInfo == nullptr)
+        return nullptr;
     memset(pInfo, 0, sizeof(JavaInfo));
     pInfo->sVendor = sVendor.pData;
     rtl_uString_acquire(pInfo->sVendor);
@@ -1072,11 +1072,11 @@ void MergedSettings::getVmParametersArray(
     rtl_uString *** parParams, sal_Int32 * size) const
 {
     osl::MutexGuard guard(FwkMutex::get());
-    OSL_ASSERT(parParams != NULL && size != NULL);
+    OSL_ASSERT(parParams != nullptr && size != nullptr);
 
     *parParams = static_cast<rtl_uString **>(
         rtl_allocateMemory(sizeof(rtl_uString*) * m_vmParams.size()));
-    if (*parParams == NULL)
+    if (*parParams == nullptr)
         return;
 
     int j=0;

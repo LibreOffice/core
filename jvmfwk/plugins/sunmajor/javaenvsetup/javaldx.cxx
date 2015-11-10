@@ -64,7 +64,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
             return -1;
         }
 
-        JavaInfo * pInfo = NULL;
+        JavaInfo * pInfo = nullptr;
         errcode = jfw_getSelectedJRE( & pInfo);
 
         if (errcode != JFW_E_NONE && errcode != JFW_E_INVALID_SETTINGS)
@@ -73,7 +73,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
             return -1;
         }
 
-        if (pInfo == NULL)
+        if (pInfo == nullptr)
         {
             if (!findAndSelect(&pInfo))
                 return -1;

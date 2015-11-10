@@ -103,7 +103,7 @@ VendorSettings::VendorSettings():
     if (!sSettingsPath.isEmpty())
     {
         m_xmlDocVendorSettings = xmlParseFile(sSettingsPath.getStr());
-        if (m_xmlDocVendorSettings == NULL)
+        if (m_xmlDocVendorSettings == nullptr)
             throw FrameworkException(
                 JFW_E_ERROR,
                 OString("[Java framework] Error while parsing file: ")
@@ -179,7 +179,7 @@ VersionInfo VendorSettings::getVersionInformation(const OUString & sVendor)
     if (!xmlXPathNodeSetIsEmpty(xPathObjectVersions->nodesetval))
     {
         xmlNode* cur = xPathObjectVersions->nodesetval->nodeTab[0];
-        while (cur != NULL)
+        while (cur != nullptr)
         {
             if (cur->type == XML_ELEMENT_NODE )
             {
@@ -212,7 +212,7 @@ std::vector<OUString> VendorSettings::getSupportedVendors()
     {
         //get the values of the vendor elements + name attribute
         xmlNode* cur = result->nodesetval->nodeTab[0];
-        while (cur != NULL)
+        while (cur != nullptr)
         {
             //between vendor elements are also text elements
             if (cur->type == XML_ELEMENT_NODE)
@@ -346,7 +346,7 @@ OUString BootParams::getJREHome()
     else if (bEnvJRE)
     {
         const char * pJRE = getenv("JAVA_HOME");
-        if (pJRE == NULL)
+        if (pJRE == nullptr)
         {
             throw FrameworkException(
             JFW_E_CONFIGURATION,

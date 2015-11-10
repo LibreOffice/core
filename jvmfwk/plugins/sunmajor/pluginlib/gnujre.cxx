@@ -88,7 +88,7 @@ char const* const* GnuInfo::getRuntimePaths(int * size)
 
 char const* const* GnuInfo::getLibraryPaths(int* /*size*/)
 {
-    return NULL;
+    return nullptr;
 }
 
 bool GnuInfo::initialize(vector<pair<OUString, OUString> > props)
