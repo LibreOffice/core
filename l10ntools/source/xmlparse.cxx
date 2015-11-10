@@ -90,7 +90,7 @@ XMLParentNode::XMLParentNode( const XMLParentNode& rObj)
         for ( size_t i = 0; i < rObj.m_pChildList->size(); i++ )
         {
             XMLChildNode* pNode = (*rObj.m_pChildList)[ i ];
-            if( pNode != NULL)
+            if( pNode != nullptr)
             {
                 switch(pNode->GetNodeType())
                 {
@@ -312,7 +312,7 @@ XMLFile::~XMLFile()
 }
 
 XMLFile::XMLFile( const OString &rFileName ) // the file name, empty if created from memory stream
-    : XMLParentNode( NULL )
+    : XMLParentNode( nullptr )
     , m_sFileName( rFileName )
 {
     m_aNodes_localize.insert( TagMap::value_type(OString("bookmark") , sal_True) );
@@ -343,7 +343,7 @@ void XMLFile::InsertL10NElement( XMLElement* pElement )
     OString sId, sLanguage("");
     LangHashMap* pElem;
 
-    if( pElement->GetAttributeList() != NULL )
+    if( pElement->GetAttributeList() != nullptr )
     {
         for ( size_t j = 0; j < pElement->GetAttributeList()->size(); j++ )
         {
@@ -654,11 +654,11 @@ void XMLElement::ChangeLanguageTag( const OString &rValue )
                 XMLElement* pElem = static_cast< XMLElement* >(pNode);
                 pElem->ChangeLanguageTag( rValue );
                 pElem->SetLanguageId(rValue);
-                pElem  = NULL;
-                pNode  = NULL;
+                pElem  = nullptr;
+                pNode  = nullptr;
             }
         }
-        pCList = NULL;
+        pCList = nullptr;
     }
 }
 
@@ -800,10 +800,10 @@ static OUString lcl_pathnameToAbsoluteUrl(const OString& rPathname)
 
 
 SimpleXMLParser::SimpleXMLParser()
-    : m_pCurNode(NULL)
-    , m_pCurData(NULL)
+    : m_pCurNode(nullptr)
+    , m_pCurData(nullptr)
 {
-    m_aParser = XML_ParserCreate( NULL );
+    m_aParser = XML_ParserCreate( nullptr );
     XML_SetUserData( m_aParser, this );
     XML_SetElementHandler( m_aParser, reinterpret_cast<XML_StartElementHandler>(StartElementHandler), reinterpret_cast<XML_EndElementHandler>(EndElementHandler) );
     XML_SetCharacterDataHandler( m_aParser, reinterpret_cast<XML_CharacterDataHandler>(CharacterDataHandler) );
@@ -851,7 +851,7 @@ void SimpleXMLParser::StartElement(
 {
     XMLElement *pElement = new XMLElement( OString(name), m_pCurNode );
     m_pCurNode = pElement;
-    m_pCurData = NULL;
+    m_pCurData = nullptr;
 
     int i = 0;
     while( atts[i] )
@@ -864,7 +864,7 @@ void SimpleXMLParser::StartElement(
 void SimpleXMLParser::EndElement( const XML_Char * /*name*/ )
 {
     m_pCurNode = m_pCurNode->GetParent();
-    m_pCurData = NULL;
+    m_pCurData = nullptr;
 }
 
 void SimpleXMLParser::CharacterData( const XML_Char *s, int len )
@@ -884,13 +884,13 @@ void SimpleXMLParser::CharacterData( const XML_Char *s, int len )
 
 void SimpleXMLParser::Comment( const XML_Char *data )
 {
-    m_pCurData = NULL;
+    m_pCurData = nullptr;
     new XMLComment( OString( data ), m_pCurNode );
 }
 
 void SimpleXMLParser::Default( const XML_Char *s, int len )
 {
-    m_pCurData = NULL;
+    m_pCurData = nullptr;
     new XMLDefault(OString( s, len ), m_pCurNode );
 }
 
@@ -908,12 +908,12 @@ XMLFile *SimpleXMLParser::Execute( const OString &rFileName, XMLFile* pXMLFileIn
     if (osl_openFile(aFileURL.pData, &h, osl_File_OpenFlag_Read)
         != osl_File_E_None)
     {
-        return 0;
+        return nullptr;
     }
 
     sal_uInt64 s;
     oslFileError e = osl_getFileSize(h, &s);
-    void * p = NULL;
+    void * p = nullptr;
     if (e == osl_File_E_None)
     {
         e = osl_mapFile(h, &p, s, 0, 0);
@@ -921,14 +921,14 @@ XMLFile *SimpleXMLParser::Execute( const OString &rFileName, XMLFile* pXMLFileIn
     if (e != osl_File_E_None)
     {
         osl_closeFile(h);
-        return 0;
+        return nullptr;
     }
 
     XMLFile* pXMLFile = pXMLFileIn;
     pXMLFile->SetName( rFileName );
 
     m_pCurNode = pXMLFile;
-    m_pCurData = NULL;
+    m_pCurData = nullptr;
 
     m_aErrorInformation.m_eCode = XML_ERROR_NONE;
     m_aErrorInformation.m_nLine = 0;
@@ -1030,7 +1030,7 @@ XMLFile *SimpleXMLParser::Execute( const OString &rFileName, XMLFile* pXMLFileIn
             break;
         }
         delete pXMLFile;
-        pXMLFile = NULL;
+        pXMLFile = nullptr;
     }
 
     osl_unmapMappedFile(h, p, s);

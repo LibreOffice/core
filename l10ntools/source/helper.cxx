@@ -128,7 +128,7 @@ bool isWellFormedXML( OString const & text )
     content += text;
     content += "</root>";
     doc = xmlParseMemory(content.getStr(),(int)content.getLength());
-    if (doc == NULL) {
+    if (doc == nullptr) {
         result = false;
     }
     xmlFreeDoc(doc);

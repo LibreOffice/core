@@ -371,7 +371,7 @@ MergeData *MergeDataFile::GetMergeData( ResData *pResData , bool bCaseSensitive 
     }
     pResData->sGId = sOldG;
     pResData->sId = sOldL;
-    return NULL;
+    return nullptr;
 }
 
 MergeEntrys *MergeDataFile::GetMergeEntrys( ResData *pResData )
@@ -380,7 +380,7 @@ MergeEntrys *MergeDataFile::GetMergeEntrys( ResData *pResData )
     MergeData *pData = GetMergeData( pResData );
     if ( pData )
         return pData->GetMergeEntries();
-    return NULL;
+    return nullptr;
 }
 
 MergeEntrys *MergeDataFile::GetMergeEntrysCaseSensitive( ResData *pResData )
@@ -389,7 +389,7 @@ MergeEntrys *MergeDataFile::GetMergeEntrysCaseSensitive( ResData *pResData )
     MergeData *pData = GetMergeData( pResData , true );
     if ( pData )
         return pData->GetMergeEntries();
-    return NULL;
+    return nullptr;
 }
 
 void MergeDataFile::InsertEntry(
@@ -399,7 +399,7 @@ void MergeDataFile::InsertEntry(
     const OString &rTITLE, const OString &rInFilename,
     bool bFirstLang, bool bCaseSensitive )
 {
-    MergeData *pData = 0;
+    MergeData *pData = nullptr;
 
     // search for MergeData
     OString sKey = CreateKey(rTYP , rGID , rLID , rInFilename , bCaseSensitive);

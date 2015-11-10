@@ -49,7 +49,7 @@ static void lcl_RemoveUTF8ByteOrderMarker( OString &rString )
 
 LngParser::LngParser(const OString &rLngFile)
     : nError( LNG_OK )
-    , pLines( NULL )
+    , pLines( nullptr )
     , sSource( rLngFile )
 {
     pLines = new LngLineList();

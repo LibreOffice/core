@@ -39,7 +39,7 @@ void YYWarning( const char * );
 
 namespace {
 
-MergeDataFile * pMergeDataFile = 0; //TODO
+MergeDataFile * pMergeDataFile = nullptr; //TODO
 
 namespace global {
 
@@ -85,7 +85,7 @@ FILE * init(int argc, char ** argv)
     global::inputPathname =  aArgs.m_sInputFile;
 
     FILE * pFile = std::fopen(global::inputPathname.getStr(), "r");
-    if (pFile == 0) {
+    if (pFile == nullptr) {
         std::fprintf(
             stderr, "Error: Cannot open file \"%s\"\n",
             global::inputPathname.getStr());
@@ -303,10 +303,10 @@ int Export::Execute( int nToken, const char * pToken )
         return 0;
     }
 
-    ResData *pResData = NULL;
+    ResData *pResData = nullptr;
     if ( nLevel ) {
         // res. exists at cur. level
-        pResData = ( (nLevel-1) < aResStack.size() ) ? aResStack[ nLevel-1 ] : NULL;
+        pResData = ( (nLevel-1) < aResStack.size() ) ? aResStack[ nLevel-1 ] : nullptr;
     }
     else if (( nToken != RESOURCE ) &&
             ( nToken != RESOURCEEXPR ) &&
@@ -851,7 +851,7 @@ OString Export::FullId()
 
 void Export::InsertListEntry(const OString &rLine)
 {
-    ResData *pResData = ( nLevel-1 < aResStack.size() ) ? aResStack[ nLevel-1 ] : NULL;
+    ResData *pResData = ( nLevel-1 < aResStack.size() ) ? aResStack[ nLevel-1 ] : nullptr;
 
     if (!pResData)
         std::exit(EXIT_FAILURE);
@@ -1065,7 +1065,7 @@ void Export::MergeRest( ResData *pResData )
 
     }
 
-    MergeEntrys *pEntry = 0;
+    MergeEntrys *pEntry = nullptr;
     if( pResData->bText || pResData->bQuickHelpText || pResData->bTitle )
         pEntry = pMergeDataFile->GetMergeEntrysCaseSensitive( pResData );
 

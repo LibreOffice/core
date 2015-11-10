@@ -164,7 +164,7 @@ void GenPoEntry::writeToFile(std::ofstream& rOFStream) const
 void GenPoEntry::readFromFile(std::ifstream& rIFStream)
 {
     *this = GenPoEntry();
-    OString* pLastMsg = 0;
+    OString* pLastMsg = nullptr;
     std::string sTemp;
     getline(rIFStream,sTemp);
     if( rIFStream.eof() || sTemp.empty() )
@@ -274,7 +274,7 @@ PoEntry::~PoEntry()
 }
 
 PoEntry::PoEntry( const PoEntry& rPo )
-    : m_pGenPo( rPo.m_pGenPo ? new GenPoEntry( *(rPo.m_pGenPo) ) : 0 )
+    : m_pGenPo( rPo.m_pGenPo ? new GenPoEntry( *(rPo.m_pGenPo) ) : nullptr )
     , m_bIsInitialized( rPo.m_bIsInitialized )
 {
 }
@@ -408,7 +408,7 @@ namespace
     // Get actual time in "YEAR-MO-DA HO:MI+ZONE" form
     static OString lcl_GetTime()
     {
-        time_t aNow = time(NULL);
+        time_t aNow = time(nullptr);
         struct tm* pNow = localtime(&aNow);
         char pBuff[50];
         strftime( pBuff, sizeof pBuff, "%Y-%m-%d %H:%M%z", pNow );

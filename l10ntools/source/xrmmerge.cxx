@@ -49,7 +49,7 @@ OString sOutputFile;
 OString sMergeSrc;
 OString sLangAttribute;
 OString sResourceType;
-XRMResParser *pParser = NULL;
+XRMResParser *pParser = nullptr;
 
 extern "C" {
 // the whole interface to lexer is in this extern "C" section
@@ -116,7 +116,7 @@ extern FILE *GetXrmFile()
         }
     }
     // this means the file could not be opened
-    return NULL;
+    return nullptr;
 }
 
 int WorkOnTokenSet( int nTyp, char *pTokenText )
@@ -372,7 +372,7 @@ XRMResMerge::XRMResMerge(
     const OString &rMergeSource, const OString &rOutputFile,
     const OString &rFilename )
                 : XRMResParser(),
-                pMergeDataFile( NULL ),
+                pMergeDataFile( nullptr ),
                 sFilename( rFilename )
 {
     if (!rMergeSource.isEmpty() && sLanguage.equalsIgnoreAsciiCase("ALL"))

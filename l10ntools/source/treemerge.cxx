@@ -119,7 +119,7 @@ namespace
                                 replaceAll("$[officeversion]","%PRODUCTVERSION");
                     xmlNodeSetContent(
                         pReturn,
-                        xmlEncodeSpecialChars( NULL,
+                        xmlEncodeSpecialChars( nullptr,
                             reinterpret_cast<const xmlChar*>(
                                 sNewTitle.getStr() )));
                     xmlFree( sTitle );
@@ -131,7 +131,7 @@ namespace
                 std::cerr
                     << "Treex error: Cannot find title in "
                     << sXhpPath.getStr() << std::endl;
-                return 0;
+                return nullptr;
             }
             xmlFree( pXhpFile );
             xmlCleanupParser();
@@ -200,7 +200,7 @@ namespace
 
 TreeParser::TreeParser(
     const OString& rInputFile, const OString& rLang )
-    : m_pSource( 0 )
+    : m_pSource( nullptr )
     , m_sLang( rLang )
     , m_bIsInitialized( false )
 {
@@ -253,7 +253,7 @@ void TreeParser::Merge(
     assert( m_bIsInitialized );
 
     const xmlNodePtr pRootNode = xmlDocGetRootElement( m_pSource );
-    MergeDataFile* pMergeDataFile = 0;
+    MergeDataFile* pMergeDataFile = nullptr;
     if( m_sLang != "qtz" && m_sLang != "en-US" )
     {
         pMergeDataFile = new MergeDataFile(

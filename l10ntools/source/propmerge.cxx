@@ -49,7 +49,7 @@ namespace
         {
             const OString sHex = sResult.copy( nIndex + 2, 4 );
             const sal_Unicode cDec =
-                static_cast<sal_Unicode>( strtol( sHex.getStr(), NULL, 16 ) );
+                static_cast<sal_Unicode>( strtol( sHex.getStr(), nullptr, 16 ) );
             const OString sNewChar =
                 OString( &cDec, 1, RTL_TEXTENCODING_UTF8 );
             sResult = sResult.replaceAll( "\\u" + sHex, sNewChar );
@@ -166,7 +166,7 @@ void PropParser::Merge( const OString &rMergeSrc, const OString &rDestinationFil
         return;
     }
 
-    MergeDataFile* pMergeDataFile = 0;
+    MergeDataFile* pMergeDataFile = nullptr;
     if( m_sLang != "qtz" )
     {
         pMergeDataFile = new MergeDataFile( rMergeSrc, m_sSource, false, false );

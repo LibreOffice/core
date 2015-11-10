@@ -84,7 +84,7 @@ bool HelpParser::CreatePO(
 
     std::unique_ptr <XMLFile> file ( aParser.Execute( sHelpFile, pXmlFile ) );
 
-    if(file.get() == NULL)
+    if(file.get() == nullptr)
     {
         printf(
             "%s: %s\n",
@@ -117,7 +117,7 @@ bool HelpParser::CreatePO(
 
         XMLElement* pXMLElement = (*pElem)[ "en-US" ];
 
-        if( pXMLElement != NULL )
+        if( pXMLElement != nullptr )
         {
             OString data(
                 pXMLElement->ToOString().
@@ -128,7 +128,7 @@ bool HelpParser::CreatePO(
                 "Helpex", aPoOutput, sHelpFile, rGsi1,
                 posm->first, pXMLElement->GetOldref(), OString(), data);
 
-            pXMLElement=NULL;
+            pXMLElement=nullptr;
         }
         else
         {
@@ -197,20 +197,20 @@ bool HelpParser::MergeSingleFile( XMLFile* file , MergeDataFile* pMergeDataFile 
 /* ProcessHelp Methode: search for en-US entry and replace it with the current language*/
 void HelpParser::ProcessHelp( LangHashMap* aLangHM , const OString& sCur , ResData *pResData , MergeDataFile* pMergeDataFile ){
 
-    XMLElement*   pXMLElement = NULL;
-    MergeEntrys   *pEntrys    = NULL;
+    XMLElement*   pXMLElement = nullptr;
+    MergeEntrys   *pEntrys    = nullptr;
 
     OString sLId;
 
-    pEntrys = NULL;
+    pEntrys = nullptr;
 
     if( !sCur.equalsIgnoreAsciiCase("en-US") ){
         pXMLElement = (*aLangHM)[ "en-US" ];
-        if( pXMLElement == NULL )
+        if( pXMLElement == nullptr )
         {
             printf("Error: Can't find en-US entry\n");
         }
-        if( pXMLElement != NULL )
+        if( pXMLElement != nullptr )
         {
             sLId    = pXMLElement->GetOldref();
             pResData->sId     =  sLId;
@@ -239,7 +239,7 @@ void HelpParser::ProcessHelp( LangHashMap* aLangHM , const OString& sCur , ResDa
             else if( pMergeDataFile )
             {
                 pEntrys = pMergeDataFile->GetMergeEntrys( pResData );
-                if( pEntrys != NULL)
+                if( pEntrys != nullptr)
                 {
                     pEntrys->GetText( sNewText, STRING_TYP_TEXT, sCur, true );
                     if (helper::isWellFormedXML(XMLUtil::QuotHTML(sNewText)))
@@ -250,9 +250,9 @@ void HelpParser::ProcessHelp( LangHashMap* aLangHM , const OString& sCur , ResDa
             }
             if (!sNewdata.isEmpty())
             {
-                if( pXMLElement != NULL )
+                if( pXMLElement != nullptr )
                 {
-                    XMLData *data = new XMLData( sNewdata , NULL ); // Add new one
+                    XMLData *data = new XMLData( sNewdata , nullptr ); // Add new one
                     pXMLElement->RemoveAndDeleteAllChildren();
                     pXMLElement->AddChild( data );
                     aLangHM->erase( sCur );

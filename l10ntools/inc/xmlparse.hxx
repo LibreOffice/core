@@ -91,7 +91,7 @@ private:
 
 protected:
     XMLChildNode( XMLParentNode *pPar );
-    XMLChildNode(): m_pParent( NULL ){};
+    XMLChildNode(): m_pParent( nullptr ){};
     XMLChildNode( const XMLChildNode& rObj);
     XMLChildNode& operator=(const XMLChildNode& rObj);
 public:
@@ -154,15 +154,15 @@ public:
     XMLFile( const XMLFile& rObj ) ;
     virtual ~XMLFile();
 
-    void Print( XMLNode *pCur = NULL, sal_uInt16 nLevel = 0 );
+    void Print( XMLNode *pCur = nullptr, sal_uInt16 nLevel = 0 );
     void SearchL10NElements( XMLChildNode *pCur, int pos = 0 );
-    void Extract( XMLFile *pCur = NULL );
+    void Extract( XMLFile *pCur = nullptr );
 
     XMLHashMap* GetStrings(){ return m_pXMLStrings.get(); }
     void Write( OString const &rFilename );
-    bool Write( std::ofstream &rStream, XMLNode *pCur = NULL );
+    bool Write( std::ofstream &rStream, XMLNode *pCur = nullptr );
 
-    bool CheckExportStatus( XMLParentNode *pCur = NULL );
+    bool CheckExportStatus( XMLParentNode *pCur = nullptr );
 
     XMLFile& operator=(const XMLFile& rObj);
 

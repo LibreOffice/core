@@ -59,7 +59,7 @@ FILE * init(int argc, char ** argv) {
     global::inputPathname = aArgs.m_sInputFile;
 
     FILE * pFile = std::fopen(global::inputPathname.getStr(), "r");
-    if (pFile == 0) {
+    if (pFile == nullptr) {
         std::fprintf(
             stderr, "Error: Cannot open file \"%s\"\n",
             global::inputPathname.getStr() );
@@ -126,7 +126,7 @@ CfgStackData *CfgStack::GetStackData()
     if (!maList.empty())
         return maList[maList.size() - 1];
     else
-        return 0;
+        return nullptr;
 }
 
 
@@ -134,7 +134,7 @@ CfgStackData *CfgStack::GetStackData()
 
 
 CfgParser::CfgParser()
-                : pStackData( NULL ),
+                : pStackData( nullptr ),
                 bLocalize( false )
 {
 }
@@ -398,7 +398,7 @@ void CfgExport::WorkOnText(
 CfgMerge::CfgMerge(
     const OString &rMergeSource, const OString &rOutputFile,
     const OString &rFilename, const OString &rLanguage )
-                : pMergeDataFile( NULL ),
+                : pMergeDataFile( nullptr ),
                 sFilename( rFilename ),
                 bEnglish( false )
 {

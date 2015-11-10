@@ -81,7 +81,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
                     std::cerr << "Helpex error: cannot open input file\n";
                     return 1;
                 }
-                MergeDataFile* pMergeDataFile = 0;
+                MergeDataFile* pMergeDataFile = nullptr;
                 if( aArgs.m_sLanguage != "qtz")
                 {
                     pMergeDataFile = new MergeDataFile(aArgs.m_sMergeSrc, OString(), false, false );
@@ -109,7 +109,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
             else
             {
                 HelpParser aParser( aArgs.m_sInputFile );
-                MergeDataFile* pMergeDataFile = 0;
+                MergeDataFile* pMergeDataFile = nullptr;
                 if( aArgs.m_sLanguage != "qtz")
                 {
                     pMergeDataFile = new MergeDataFile(aArgs.m_sMergeSrc, aArgs.m_sInputFile, false, false );
