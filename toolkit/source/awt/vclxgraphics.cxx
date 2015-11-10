@@ -58,15 +58,15 @@ IMPL_XTYPEPROVIDER_START( VCLXGraphics )
 IMPL_XTYPEPROVIDER_END
 
 VCLXGraphics::VCLXGraphics()
-    : mpOutputDevice(NULL)
+    : mpOutputDevice(nullptr)
     , meRasterOp(ROP_OVERPAINT)
-    , mpClipRegion(NULL)
+    , mpClipRegion(nullptr)
 {
 }
 
 VCLXGraphics::~VCLXGraphics()
 {
-    std::vector< VCLXGraphics* > *pLst = mpOutputDevice ? mpOutputDevice->GetUnoGraphicsList() : NULL;
+    std::vector< VCLXGraphics* > *pLst = mpOutputDevice ? mpOutputDevice->GetUnoGraphicsList() : nullptr;
     if ( pLst )
     {
         for( std::vector< VCLXGraphics* >::iterator it = pLst->begin(); it != pLst->end(); ++it )
@@ -87,7 +87,7 @@ VCLXGraphics::~VCLXGraphics()
 void VCLXGraphics::SetOutputDevice( OutputDevice* pOutDev )
 {
     mpOutputDevice = pOutDev;
-    mxDevice = NULL;
+    mxDevice = nullptr;
     initAttrs();
 }
 
@@ -97,7 +97,7 @@ void VCLXGraphics::Init( OutputDevice* pOutDev )
     mpOutputDevice  = pOutDev;
 
     initAttrs();
-    mpClipRegion    = NULL;
+    mpClipRegion    = nullptr;
 
     // Register at OutputDevice
     std::vector< VCLXGraphics* > *pLst = mpOutputDevice->GetUnoGraphicsList();
@@ -236,7 +236,7 @@ void VCLXGraphics::setClipRegion( const uno::Reference< awt::XRegion >& rxRegion
     if ( rxRegion.is() )
         mpClipRegion = new vcl::Region( VCLUnoHelper::GetRegion( rxRegion ) );
     else
-        mpClipRegion = NULL;
+        mpClipRegion = nullptr;
 }
 
 void VCLXGraphics::intersectClipRegion( const uno::Reference< awt::XRegion >& rxRegion ) throw(uno::RuntimeException, std::exception)

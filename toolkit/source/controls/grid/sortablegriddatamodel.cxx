@@ -345,7 +345,7 @@ private:
             GridDataEvent const & i_publicEvent, MethodGuard& i_instanceLock )
     {
         ::cppu::OInterfaceContainerHelper* pListeners = rBHelper.getContainer( cppu::UnoType<XGridDataListener>::get() );
-        if ( pListeners == NULL )
+        if ( pListeners == nullptr )
             return;
 
         i_instanceLock.clear();

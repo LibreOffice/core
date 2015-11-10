@@ -151,7 +151,7 @@ void VCLXTopWindow_Base::setMenuBar( const css::uno::Reference< css::awt::XMenuB
     if ( pWindow )
     {
         SystemWindow* pSystemWindow = static_cast<SystemWindow*>( pWindow );
-        pSystemWindow->SetMenuBar( NULL );
+        pSystemWindow->SetMenuBar( nullptr );
         if ( rxMenu.is() )
         {
             VCLXMenu* pMenu = VCLXMenu::GetImplementation( rxMenu );

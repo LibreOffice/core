@@ -226,7 +226,7 @@ namespace toolkit {
             const sal_Int32 i_accessor, const Sequence< OUString >& i_imageURLs, const Reference< XInterface >& i_context )
         {
             ::cppu::OInterfaceContainerHelper* pContainerListeners = i_broadcaseHelper.getContainer( cppu::UnoType<XContainerListener>::get() );
-            if ( pContainerListeners == NULL )
+            if ( pContainerListeners == nullptr )
                 return;
 
             ContainerEvent aEvent;
@@ -351,7 +351,7 @@ namespace toolkit {
 
     ::cppu::IPropertyArrayHelper& SAL_CALL AnimatedImagesControlModel::getInfoHelper()
     {
-        static UnoPropertyArrayHelper* pHelper = NULL;
+        static UnoPropertyArrayHelper* pHelper = nullptr;
         if ( !pHelper )
         {
             Sequence< sal_Int32 > aIDs = ImplGetPropertyIds();

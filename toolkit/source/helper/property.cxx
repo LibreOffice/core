@@ -92,7 +92,7 @@ struct ImplPropertyInfo
 
 ImplPropertyInfo* ImplGetPropertyInfos( sal_uInt16& rElementCount )
 {
-    static ImplPropertyInfo* pPropertyInfos = NULL;
+    static ImplPropertyInfo* pPropertyInfos = nullptr;
     static sal_uInt16 nElements = 0;
     if( !pPropertyInfos )
     {
@@ -342,7 +342,7 @@ const ImplPropertyInfo* ImplGetImplPropertyInfo( sal_uInt16 nPropertyId )
     for ( n = 0; n < nElements && pInfos[n].nPropId != nPropertyId; ++n)
         ;
 
-    return (n < nElements) ? &pInfos[n] : NULL;
+    return (n < nElements) ? &pInfos[n] : nullptr;
 }
 
 sal_uInt16 GetPropertyOrderNr( sal_uInt16 nPropertyId )
@@ -370,7 +370,7 @@ const css::uno::Type* GetPropertyType( sal_uInt16 nPropertyId )
 {
     const ImplPropertyInfo* pImplPropertyInfo = ImplGetImplPropertyInfo( nPropertyId );
     DBG_ASSERT( pImplPropertyInfo, "Invalid PropertyId!" );
-    return pImplPropertyInfo ? &pImplPropertyInfo->aType : NULL;
+    return pImplPropertyInfo ? &pImplPropertyInfo->aType : nullptr;
 }
 
 sal_Int16 GetPropertyAttribs( sal_uInt16 nPropertyId )

@@ -95,7 +95,7 @@ Any UnoControlTabPageModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
 
 ::cppu::IPropertyArrayHelper& UnoControlTabPageModel::getInfoHelper()
 {
-    static UnoPropertyArrayHelper* pHelper = NULL;
+    static UnoPropertyArrayHelper* pHelper = nullptr;
     if ( !pHelper )
     {
         Sequence<sal_Int32> aIDs = ImplGetPropertyIds();

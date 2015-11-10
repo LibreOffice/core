@@ -305,7 +305,7 @@ namespace toolkit
         Reference< XUnoTunnel > const xTunnel( i_component, UNO_QUERY );
         if ( xTunnel.is() )
             return reinterpret_cast< GridColumn* >( ::sal::static_int_cast< sal_IntPtr >( xTunnel->getSomething( getUnoTunnelId() ) ) );
-        return NULL;
+        return nullptr;
     }
 }
 

@@ -160,7 +160,7 @@ static void lcl_throwIndexOutOfBoundsException( )
 
     ::cppu::IPropertyArrayHelper& UnoControlRoadmapModel::getInfoHelper()
     {
-        static UnoPropertyArrayHelper* pHelper = NULL;
+        static UnoPropertyArrayHelper* pHelper = nullptr;
         if ( !pHelper )
         {
             Sequence<sal_Int32> aIDs = ImplGetPropertyIds();

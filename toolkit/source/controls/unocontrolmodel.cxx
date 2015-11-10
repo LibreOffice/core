@@ -772,7 +772,7 @@ void UnoControlModel::read( const css::uno::Reference< css::io::XObjectInputStre
     // No data for the model may be added following the properties
 
     // Used for import of old parts in css::awt::FontDescriptor
-    css::awt::FontDescriptor* pFD = NULL;
+    css::awt::FontDescriptor* pFD = nullptr;
 
     sal_uInt32 i;
     for ( i = 0; i < nProps; i++ )
@@ -1125,7 +1125,7 @@ sal_Bool UnoControlModel::convertFastPropertyValue( Any & rConvertedValue, Any &
                             if ( xPure.is() )
                                 rConvertedValue = xPure->queryInterface( *pDestType );
                             else
-                                rConvertedValue.setValue( NULL, *pDestType );
+                                rConvertedValue.setValue( nullptr, *pDestType );
                             bConverted = true;
                         }
                     }
@@ -1171,7 +1171,7 @@ void UnoControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 nPropId, const
     // Missing: the fake solo properties of the FontDescriptor
 
     ImplPropertyTable::const_iterator it = maData.find( nPropId );
-    const css::uno::Any* pProp = it == maData.end() ? NULL : &(it->second);
+    const css::uno::Any* pProp = it == maData.end() ? nullptr : &(it->second);
     ENSURE_OR_RETURN_VOID( pProp, "UnoControlModel::setFastPropertyValue_NoBroadcast: invalid property id!" );
 
     DBG_ASSERT( ( rValue.getValueType().getTypeClass() != css::uno::TypeClass_VOID ) || ( GetPropertyAttribs( (sal_uInt16)nPropId ) & css::beans::PropertyAttribute::MAYBEVOID ), "Property darf nicht VOID sein!" );
@@ -1183,7 +1183,7 @@ void UnoControlModel::getFastPropertyValue( css::uno::Any& rValue, sal_Int32 nPr
     ::osl::Guard< ::osl::Mutex > aGuard( const_cast<UnoControlModel*>(this)->GetMutex() );
 
     ImplPropertyTable::const_iterator it = maData.find( nPropId );
-    const css::uno::Any* pProp = it == maData.end() ? NULL : &(it->second);
+    const css::uno::Any* pProp = it == maData.end() ? nullptr : &(it->second);
 
     if ( pProp )
         rValue = *pProp;

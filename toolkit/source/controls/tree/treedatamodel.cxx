@@ -266,7 +266,7 @@ Sequence< OUString > SAL_CALL MutableTreeDataModel::getSupportedServiceNames(  )
 MutableTreeNode::MutableTreeNode( const MutableTreeDataModelRef& xModel, const Any& rValue, bool bChildrenOnDemand )
 : maDisplayValue( rValue )
 , mbHasChildrenOnDemand( bChildrenOnDemand )
-, mpParent( 0 )
+, mpParent( nullptr )
 , mxModel( xModel )
 , mbIsInserted( false )
 {
@@ -276,7 +276,7 @@ MutableTreeNode::~MutableTreeNode()
 {
     TreeNodeVector::iterator aIter( maChildren.begin() );
     while( aIter != maChildren.end() )
-        (*aIter++)->setParent(0);
+        (*aIter++)->setParent(nullptr);
 }
 
 void MutableTreeNode::setParent( MutableTreeNode* pParent )
@@ -382,7 +382,7 @@ void SAL_CALL MutableTreeNode::removeChildByIndex( sal_Int32 nChildIndex ) throw
     if( !xImpl.is() )
         throw IndexOutOfBoundsException();
 
-    xImpl->setParent(0);
+    xImpl->setParent(nullptr);
     xImpl->mbIsInserted = false;
 
     broadcast_changes( getReference( xImpl.get() ), false );

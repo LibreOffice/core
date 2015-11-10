@@ -117,7 +117,7 @@ sal_Bool SAL_CALL VCLXTabPageContainer::isTabPageActive( ::sal_Int16 tabPageInde
 
 Reference< css::awt::tab::XTabPage > SAL_CALL VCLXTabPageContainer::getTabPage( ::sal_Int16 tabPageIndex ) throw (RuntimeException, std::exception)
 {
-    return (tabPageIndex >= 0 && tabPageIndex < static_cast<sal_Int16>(m_aTabPages.size())) ? m_aTabPages[tabPageIndex] : NULL;
+    return (tabPageIndex >= 0 && tabPageIndex < static_cast<sal_Int16>(m_aTabPages.size())) ? m_aTabPages[tabPageIndex] : nullptr;
 }
 
 Reference< css::awt::tab::XTabPage > SAL_CALL VCLXTabPageContainer::getTabPageByID( ::sal_Int16 tabPageID ) throw (RuntimeException, std::exception)
@@ -160,7 +160,7 @@ void VCLXTabPageContainer::ProcessWindowEvent( const VclWindowEvent& _rVclWindow
             case VCLEVENT_TABPAGE_ACTIVATE:
             {
                 sal_uLong page = reinterpret_cast<sal_uLong>(_rVclWindowEvent.GetData());
-                awt::tab::TabPageActivatedEvent aEvent(NULL,page);
+                awt::tab::TabPageActivatedEvent aEvent(nullptr,page);
                 m_aTabPageListeners.tabPageActivated(aEvent);
                 break;
             }

@@ -39,10 +39,10 @@ namespace toolkit
     namespace
     {
 #ifndef DISABLE_DYNLOADING
-        static oslModule                                s_hAccessibleImplementationModule = NULL;
+        static oslModule                                s_hAccessibleImplementationModule = nullptr;
 #endif
 #if HAVE_FEATURE_DESKTOP
-        static GetStandardAccComponentFactory           s_pAccessibleFactoryFunc = NULL;
+        static GetStandardAccComponentFactory           s_pAccessibleFactoryFunc = nullptr;
 #endif
         static ::rtl::Reference< IAccessibleFactory >   s_pFactory;
     }
@@ -64,62 +64,62 @@ namespace toolkit
         css::uno::Reference< css::accessibility::XAccessibleContext >
                 createAccessibleContext( VCLXButton* /*_pXWindow*/ ) override
         {
-            return NULL;
+            return nullptr;
         }
         css::uno::Reference< css::accessibility::XAccessibleContext >
                 createAccessibleContext( VCLXCheckBox* /*_pXWindow*/ ) override
         {
-            return NULL;
+            return nullptr;
         }
         css::uno::Reference< css::accessibility::XAccessibleContext >
                 createAccessibleContext( VCLXRadioButton* /*_pXWindow*/ ) override
         {
-            return NULL;
+            return nullptr;
         }
         css::uno::Reference< css::accessibility::XAccessibleContext >
                 createAccessibleContext( VCLXListBox* /*_pXWindow*/ ) override
         {
-            return NULL;
+            return nullptr;
         }
         css::uno::Reference< css::accessibility::XAccessibleContext >
                 createAccessibleContext( VCLXFixedHyperlink* /*_pXWindow*/ ) override
         {
-            return NULL;
+            return nullptr;
         }
         css::uno::Reference< css::accessibility::XAccessibleContext >
                 createAccessibleContext( VCLXFixedText* /*_pXWindow*/ ) override
         {
-            return NULL;
+            return nullptr;
         }
         css::uno::Reference< css::accessibility::XAccessibleContext >
                 createAccessibleContext( VCLXScrollBar* /*_pXWindow*/ ) override
         {
-            return NULL;
+            return nullptr;
         }
         css::uno::Reference< css::accessibility::XAccessibleContext >
                 createAccessibleContext( VCLXEdit* /*_pXWindow*/ ) override
         {
-            return NULL;
+            return nullptr;
         }
         css::uno::Reference< css::accessibility::XAccessibleContext >
                 createAccessibleContext( VCLXComboBox* /*_pXWindow*/ ) override
         {
-            return NULL;
+            return nullptr;
         }
         css::uno::Reference< css::accessibility::XAccessibleContext >
                 createAccessibleContext( VCLXToolBox* /*_pXWindow*/ ) override
         {
-            return NULL;
+            return nullptr;
         }
         css::uno::Reference< css::accessibility::XAccessibleContext >
                 createAccessibleContext( VCLXWindow* /*_pXWindow*/ ) override
         {
-            return NULL;
+            return nullptr;
         }
         css::uno::Reference< css::accessibility::XAccessible >
                 createAccessible( Menu* /*_pMenu*/, bool /*_bIsMenuBar*/ ) override
         {
-            return NULL;
+            return nullptr;
         }
     };
 
@@ -164,7 +164,7 @@ namespace toolkit
 #ifndef DISABLE_DYNLOADING
             const OUString sModuleName( SVLIBRARY( "acc" ) );
             s_hAccessibleImplementationModule = osl_loadModuleRelative( &thisModule, sModuleName.pData, 0 );
-            if ( s_hAccessibleImplementationModule != NULL )
+            if ( s_hAccessibleImplementationModule != nullptr )
             {
                 const OUString sFactoryCreationFunc =
                     OUString("getStandardAccessibleFactory");

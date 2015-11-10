@@ -35,7 +35,7 @@
 
 VCLXFont::VCLXFont()
 {
-    mpFontMetric = NULL;
+    mpFontMetric = nullptr;
 }
 
 VCLXFont::~VCLXFont()
@@ -48,7 +48,7 @@ void VCLXFont::Init( css::awt::XDevice& rxDev, const vcl::Font& rFont )
     mxDevice = &rxDev;
 
     delete mpFontMetric;
-    mpFontMetric = NULL;
+    mpFontMetric = nullptr;
 
     maFont = rFont;
 }

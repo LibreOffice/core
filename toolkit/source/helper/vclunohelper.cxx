@@ -155,7 +155,7 @@ css::uno::Reference< css::awt::XWindow> VCLUnoHelper::GetInterface( vcl::Window*
 
 OutputDevice* VCLUnoHelper::GetOutputDevice( const css::uno::Reference< css::awt::XDevice>& rxDevice )
 {
-    OutputDevice* pOutDev = NULL;
+    OutputDevice* pOutDev = nullptr;
     VCLXDevice* pDev = VCLXDevice::GetImplementation( rxDevice );
     if ( pDev )
         pOutDev = pDev->GetOutputDevice();
@@ -164,7 +164,7 @@ OutputDevice* VCLUnoHelper::GetOutputDevice( const css::uno::Reference< css::awt
 
 OutputDevice* VCLUnoHelper::GetOutputDevice( const css::uno::Reference< css::awt::XGraphics>& rxGraphics )
 {
-    OutputDevice* pOutDev = NULL;
+    OutputDevice* pOutDev = nullptr;
     VCLXGraphics* pGrf = VCLXGraphics::GetImplementation( rxGraphics );
     if ( pGrf )
         pOutDev = pGrf->GetOutputDevice();
@@ -646,7 +646,7 @@ MapUnit /* MapModeUnit */ VCLUnoHelper::ConvertToMapModeUnit(sal_Int16 /* com.su
         break;
 
     default:
-        throw css::lang::IllegalArgumentException("Unsupported measure unit.", NULL, 1 );
+        throw css::lang::IllegalArgumentException("Unsupported measure unit.", nullptr, 1 );
     }
     return eMode;
 }

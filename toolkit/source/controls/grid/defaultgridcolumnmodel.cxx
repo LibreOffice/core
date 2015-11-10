@@ -114,7 +114,7 @@ private:
                 Reference< XGridColumn > const xClone( xCloneable->createClone(), UNO_QUERY_THROW );
 
                 GridColumn* const pGridColumn = GridColumn::getImplementation( xClone );
-                if ( pGridColumn == NULL )
+                if ( pGridColumn == nullptr )
                     throw RuntimeException( "invalid clone source implementation", *this );
                     // that's indeed a RuntimeException, not an IllegalArgumentException or some such:
                     // a DefaultGridColumnModel implementation whose columns are not GridColumn implementations
@@ -157,7 +157,7 @@ private:
         ::comphelper::ComponentGuard aGuard( *this, rBHelper );
 
         GridColumn* const pGridColumn = GridColumn::getImplementation( i_column );
-        if ( pGridColumn == NULL )
+        if ( pGridColumn == nullptr )
             throw css::lang::IllegalArgumentException( "invalid column implementation", *this, 1 );
 
         m_aColumns.push_back( i_column );

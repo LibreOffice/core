@@ -41,7 +41,7 @@
 VCLXMenu::VCLXMenu()
     : maMenuListeners( *this )
 {
-    mpMenu = NULL;
+    mpMenu = nullptr;
 }
 
 VCLXMenu::VCLXMenu( Menu* pMenu )
@@ -98,7 +98,7 @@ IMPL_LINK_TYPED( VCLXMenu, MenuEventListener, VclMenuEvent&, rMenuEvent, void )
             break;
             case VCLEVENT_OBJECT_DYING:
             {
-                mpMenu = NULL;
+                mpMenu = nullptr;
             }
             break;
             case VCLEVENT_MENU_HIGHLIGHT:
@@ -234,8 +234,8 @@ throw(css::uno::RuntimeException, std::exception)
     const bool bIsPopupMenu = IsPopupMenu();
     aGuard.clear();
 
-    static ::cppu::OTypeCollection* pCollectionMenuBar = NULL;
-    static ::cppu::OTypeCollection* pCollectionPopupMenu = NULL;
+    static ::cppu::OTypeCollection* pCollectionMenuBar = nullptr;
+    static ::cppu::OTypeCollection* pCollectionPopupMenu = nullptr;
 
     if ( bIsPopupMenu )
     {
@@ -437,7 +437,7 @@ throw(css::uno::RuntimeException, std::exception)
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
     css::uno::Reference< css::awt::XPopupMenu >  aRef;
-    Menu* pMenu = mpMenu ? mpMenu->GetPopupMenu( nItemId ) : NULL;
+    Menu* pMenu = mpMenu ? mpMenu->GetPopupMenu( nItemId ) : nullptr;
     if ( pMenu )
     {
         for ( size_t n = maPopupMenuRefs.size(); n; )

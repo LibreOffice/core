@@ -47,7 +47,7 @@ IMPL_XUNOTUNNEL_MINIMAL( ClassName ) \
 ClassName* ClassName::GetImplementation( const css::uno::Reference< css::uno::XInterface >& rxIFace ) \
 { \
     css::uno::Reference< css::lang::XUnoTunnel > xUT( rxIFace, css::uno::UNO_QUERY ); \
-    return xUT.is() ? reinterpret_cast<ClassName*>(sal::static_int_cast<sal_IntPtr>(xUT->getSomething( ClassName::GetUnoTunnelId() ))) : NULL; \
+    return xUT.is() ? reinterpret_cast<ClassName*>(sal::static_int_cast<sal_IntPtr>(xUT->getSomething( ClassName::GetUnoTunnelId() ))) : nullptr; \
 }
 
 #define IMPL_IMPLEMENTATION_ID( ClassName ) \
@@ -60,7 +60,7 @@ css::uno::Sequence< sal_Int8 > ClassName::getImplementationId() throw(css::uno::
 IMPL_IMPLEMENTATION_ID( ClassName ) \
 css::uno::Sequence< css::uno::Type > ClassName::getTypes() throw(css::uno::RuntimeException, std::exception) \
 { \
-    static ::cppu::OTypeCollection* pCollection = NULL; \
+    static ::cppu::OTypeCollection* pCollection = nullptr; \
     if( !pCollection ) \
     { \
         ::osl::Guard< ::osl::Mutex > aGuard( ::osl::Mutex::getGlobalMutex() ); \

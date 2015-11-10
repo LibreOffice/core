@@ -83,7 +83,7 @@ namespace toolkit
 
     ::cppu::IPropertyArrayHelper& UnoControlScrollBarModel::getInfoHelper()
     {
-        static UnoPropertyArrayHelper* pHelper = NULL;
+        static UnoPropertyArrayHelper* pHelper = nullptr;
         if ( !pHelper )
         {
             uno::Sequence<sal_Int32>    aIDs = ImplGetPropertyIds();

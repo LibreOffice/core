@@ -42,7 +42,7 @@
 
 css::beans::Property* ImplGetProperties( sal_uInt16& rElementCount )
 {
-    static css::beans::Property* pProperties = NULL;
+    static css::beans::Property* pProperties = nullptr;
     static sal_uInt16 nElements = 0;
     if( !pProperties )
     {
@@ -104,7 +104,7 @@ css::uno::Reference< css::beans::XPropertySetInfo > VCLXPrinterPropertySet::getP
 
 ::cppu::IPropertyArrayHelper& VCLXPrinterPropertySet::getInfoHelper()
 {
-    static ::cppu::OPropertyArrayHelper* pPropertyArrayHelper = NULL;
+    static ::cppu::OPropertyArrayHelper* pPropertyArrayHelper = nullptr;
     if ( !pPropertyArrayHelper )
     {
         ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );

@@ -81,7 +81,7 @@
         ,m_nStep(0)
         ,m_bCloneable(false)
     {
-        OSL_ENSURE(NULL != _pAggregateInstance, "OGeometryControlModel_Base::OGeometryControlModel_Base: invalid aggregate!");
+        OSL_ENSURE(nullptr != _pAggregateInstance, "OGeometryControlModel_Base::OGeometryControlModel_Base: invalid aggregate!");
 
         osl_atomic_increment(&m_refCount);
         {
@@ -291,8 +291,8 @@
     {
         // release the aggregate (_before_ clearing m_xAggregate)
         if (m_xAggregate.is())
-            m_xAggregate->setDelegator(NULL);
-        setAggregation(NULL);
+            m_xAggregate->setDelegator(nullptr);
+        setAggregation(nullptr);
     }
 
 

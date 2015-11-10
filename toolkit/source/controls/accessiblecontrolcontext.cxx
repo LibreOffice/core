@@ -86,7 +86,7 @@ namespace toolkit
 
     OAccessibleControlContext* OAccessibleControlContext::create( const Reference< XAccessible >& _rxCreator )
     {
-        OAccessibleControlContext* pNew = NULL;
+        OAccessibleControlContext* pNew = nullptr;
         try
         {
             pNew = new OAccessibleControlContext;
@@ -164,7 +164,7 @@ namespace toolkit
 
     Reference< XAccessibleRelationSet > SAL_CALL OAccessibleControlContext::getAccessibleRelationSet(  ) throw (RuntimeException, std::exception)
     {
-        return NULL;
+        return nullptr;
     }
 
 
@@ -173,7 +173,7 @@ namespace toolkit
         ::osl::MutexGuard aGuard( GetMutex() );
             // no OContextEntryGuard here, as we do not want to throw an exception in case we're not alive anymore
 
-        ::utl::AccessibleStateSetHelper* pStateSet = NULL;
+        ::utl::AccessibleStateSetHelper* pStateSet = nullptr;
         if ( isAlive() )
         {
             // no own states, only the ones which are foreign controlled
@@ -264,7 +264,7 @@ namespace toolkit
             // ugly, but .... though the XWindow has a getPosSize, it is impossible to determine the
             // parent which this position/size is relative to. This means we must tunnel UNO and ask the
             // implementation
-            vcl::Window* pVCLParent = pVCLWindow ? pVCLWindow->GetParent() : NULL;
+            vcl::Window* pVCLParent = pVCLWindow ? pVCLWindow->GetParent() : nullptr;
 
             // the relative location of the window
             ::Point aWindowRelativePos( 0, 0);
@@ -300,7 +300,7 @@ namespace toolkit
     Reference< XAccessible > SAL_CALL OAccessibleControlContext::getAccessibleAtPoint( const awt::Point& /* _rPoint */ ) throw (RuntimeException, std::exception)
     {
         // no children at all
-        return NULL;
+        return nullptr;
     }
 
 

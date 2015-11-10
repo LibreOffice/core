@@ -81,7 +81,7 @@ ImageHelper::getGraphicAndGraphicObjectFromURL_nothrow( uno::Reference< graphic:
         xOutGraphicObj = graphic::GraphicObject::createWithId( ::comphelper::getProcessComponentContext(), sID );
     }
     else // linked
-        xOutGraphicObj = NULL; // release the GraphicObject
+        xOutGraphicObj = nullptr; // release the GraphicObject
 
     return ImageHelper::getGraphicFromURL_nothrow( _rURL );
 }
@@ -144,7 +144,7 @@ uno::Any UnoControlEditModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
 
 ::cppu::IPropertyArrayHelper& UnoControlEditModel::getInfoHelper()
 {
-    static UnoPropertyArrayHelper* pHelper = NULL;
+    static UnoPropertyArrayHelper* pHelper = nullptr;
     if ( !pHelper )
     {
         uno::Sequence<sal_Int32>    aIDs = ImplGetPropertyIds();
@@ -555,7 +555,7 @@ uno::Any UnoControlFileControlModel::ImplGetDefaultValue( sal_uInt16 nPropId ) c
 
 ::cppu::IPropertyArrayHelper& UnoControlFileControlModel::getInfoHelper()
 {
-    static UnoPropertyArrayHelper* pHelper = NULL;
+    static UnoPropertyArrayHelper* pHelper = nullptr;
     if ( !pHelper )
     {
         uno::Sequence<sal_Int32>    aIDs = ImplGetPropertyIds();
@@ -745,7 +745,7 @@ uno::Any UnoControlButtonModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
 
 ::cppu::IPropertyArrayHelper& UnoControlButtonModel::getInfoHelper()
 {
-    static UnoPropertyArrayHelper* pHelper = NULL;
+    static UnoPropertyArrayHelper* pHelper = nullptr;
     if ( !pHelper )
     {
         uno::Sequence<sal_Int32>    aIDs = ImplGetPropertyIds();
@@ -996,7 +996,7 @@ uno::Any UnoControlImageControlModel::ImplGetDefaultValue( sal_uInt16 nPropId ) 
 
 ::cppu::IPropertyArrayHelper& UnoControlImageControlModel::getInfoHelper()
 {
-    static UnoPropertyArrayHelper* pHelper = NULL;
+    static UnoPropertyArrayHelper* pHelper = nullptr;
     if ( !pHelper )
     {
         uno::Sequence<sal_Int32>    aIDs = ImplGetPropertyIds();
@@ -1159,7 +1159,7 @@ uno::Any UnoControlRadioButtonModel::ImplGetDefaultValue( sal_uInt16 nPropId ) c
 
 ::cppu::IPropertyArrayHelper& UnoControlRadioButtonModel::getInfoHelper()
 {
-    static UnoPropertyArrayHelper* pHelper = NULL;
+    static UnoPropertyArrayHelper* pHelper = nullptr;
     if ( !pHelper )
     {
         uno::Sequence<sal_Int32>    aIDs = ImplGetPropertyIds();
@@ -1416,7 +1416,7 @@ uno::Any UnoControlCheckBoxModel::ImplGetDefaultValue( sal_uInt16 nPropId ) cons
 
 ::cppu::IPropertyArrayHelper& UnoControlCheckBoxModel::getInfoHelper()
 {
-    static UnoPropertyArrayHelper* pHelper = NULL;
+    static UnoPropertyArrayHelper* pHelper = nullptr;
     if ( !pHelper )
     {
         uno::Sequence<sal_Int32>    aIDs = ImplGetPropertyIds();
@@ -1657,7 +1657,7 @@ uno::Any UnoControlFixedHyperlinkModel::ImplGetDefaultValue( sal_uInt16 nPropId 
 
 ::cppu::IPropertyArrayHelper& UnoControlFixedHyperlinkModel::getInfoHelper()
 {
-    static UnoPropertyArrayHelper* pHelper = NULL;
+    static UnoPropertyArrayHelper* pHelper = nullptr;
     if ( !pHelper )
     {
         uno::Sequence<sal_Int32>    aIDs = ImplGetPropertyIds();
@@ -1854,7 +1854,7 @@ uno::Any UnoControlFixedTextModel::ImplGetDefaultValue( sal_uInt16 nPropId ) con
 
 ::cppu::IPropertyArrayHelper& UnoControlFixedTextModel::getInfoHelper()
 {
-    static UnoPropertyArrayHelper* pHelper = NULL;
+    static UnoPropertyArrayHelper* pHelper = nullptr;
     if ( !pHelper )
     {
         uno::Sequence<sal_Int32>    aIDs = ImplGetPropertyIds();
@@ -2036,7 +2036,7 @@ uno::Any UnoControlGroupBoxModel::ImplGetDefaultValue( sal_uInt16 nPropId ) cons
 
 ::cppu::IPropertyArrayHelper& UnoControlGroupBoxModel::getInfoHelper()
 {
-    static UnoPropertyArrayHelper* pHelper = NULL;
+    static UnoPropertyArrayHelper* pHelper = nullptr;
     if ( !pHelper )
     {
         uno::Sequence<sal_Int32>    aIDs = ImplGetPropertyIds();
@@ -2284,7 +2284,7 @@ uno::Any UnoControlListBoxModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
 
 ::cppu::IPropertyArrayHelper& UnoControlListBoxModel::getInfoHelper()
 {
-    static UnoPropertyArrayHelper* pHelper = NULL;
+    static UnoPropertyArrayHelper* pHelper = nullptr;
     if ( !pHelper )
     {
         uno::Sequence<sal_Int32>    aIDs = ImplGetPropertyIds();
@@ -3169,7 +3169,7 @@ uno::Reference< beans::XPropertySetInfo > UnoControlComboBoxModel::getPropertySe
 
 ::cppu::IPropertyArrayHelper& UnoControlComboBoxModel::getInfoHelper()
 {
-    static UnoPropertyArrayHelper* pHelper = NULL;
+    static UnoPropertyArrayHelper* pHelper = nullptr;
     if ( !pHelper )
     {
         uno::Sequence<sal_Int32>    aIDs = ImplGetPropertyIds();
@@ -3690,7 +3690,7 @@ uno::Any UnoControlDateFieldModel::ImplGetDefaultValue( sal_uInt16 nPropId ) con
 
 ::cppu::IPropertyArrayHelper& UnoControlDateFieldModel::getInfoHelper()
 {
-    static UnoPropertyArrayHelper* pHelper = NULL;
+    static UnoPropertyArrayHelper* pHelper = nullptr;
     if ( !pHelper )
     {
         uno::Sequence<sal_Int32>    aIDs = ImplGetPropertyIds();
@@ -3979,7 +3979,7 @@ uno::Any UnoControlTimeFieldModel::ImplGetDefaultValue( sal_uInt16 nPropId ) con
 
 ::cppu::IPropertyArrayHelper& UnoControlTimeFieldModel::getInfoHelper()
 {
-    static UnoPropertyArrayHelper* pHelper = NULL;
+    static UnoPropertyArrayHelper* pHelper = nullptr;
     if ( !pHelper )
     {
         uno::Sequence<sal_Int32>    aIDs = ImplGetPropertyIds();
@@ -4227,7 +4227,7 @@ uno::Any UnoControlNumericFieldModel::ImplGetDefaultValue( sal_uInt16 nPropId ) 
 
 ::cppu::IPropertyArrayHelper& UnoControlNumericFieldModel::getInfoHelper()
 {
-    static UnoPropertyArrayHelper* pHelper = NULL;
+    static UnoPropertyArrayHelper* pHelper = nullptr;
     if ( !pHelper )
     {
         uno::Sequence<sal_Int32>    aIDs = ImplGetPropertyIds();
@@ -4478,7 +4478,7 @@ uno::Any UnoControlCurrencyFieldModel::ImplGetDefaultValue( sal_uInt16 nPropId )
 
 ::cppu::IPropertyArrayHelper& UnoControlCurrencyFieldModel::getInfoHelper()
 {
-    static UnoPropertyArrayHelper* pHelper = NULL;
+    static UnoPropertyArrayHelper* pHelper = nullptr;
     if ( !pHelper )
     {
         uno::Sequence<sal_Int32>    aIDs = ImplGetPropertyIds();
@@ -4722,7 +4722,7 @@ uno::Any UnoControlPatternFieldModel::ImplGetDefaultValue( sal_uInt16 nPropId ) 
 
 ::cppu::IPropertyArrayHelper& UnoControlPatternFieldModel::getInfoHelper()
 {
-    static UnoPropertyArrayHelper* pHelper = NULL;
+    static UnoPropertyArrayHelper* pHelper = nullptr;
     if ( !pHelper )
     {
         uno::Sequence<sal_Int32>    aIDs = ImplGetPropertyIds();
@@ -4916,7 +4916,7 @@ uno::Any UnoControlProgressBarModel::ImplGetDefaultValue( sal_uInt16 nPropId ) c
 
 ::cppu::IPropertyArrayHelper& UnoControlProgressBarModel::getInfoHelper()
 {
-    static UnoPropertyArrayHelper* pHelper = NULL;
+    static UnoPropertyArrayHelper* pHelper = nullptr;
     if ( !pHelper )
     {
         uno::Sequence<sal_Int32>    aIDs = ImplGetPropertyIds();
@@ -5093,7 +5093,7 @@ uno::Any UnoControlFixedLineModel::ImplGetDefaultValue( sal_uInt16 nPropId ) con
 
 ::cppu::IPropertyArrayHelper& UnoControlFixedLineModel::getInfoHelper()
 {
-    static UnoPropertyArrayHelper* pHelper = NULL;
+    static UnoPropertyArrayHelper* pHelper = nullptr;
     if ( !pHelper )
     {
         uno::Sequence<sal_Int32>    aIDs = ImplGetPropertyIds();

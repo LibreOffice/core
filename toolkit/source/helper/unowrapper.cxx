@@ -125,7 +125,7 @@ extern "C" {
 
 TOOLKIT_DLLPUBLIC UnoWrapperBase* CreateUnoWrapper()
 {
-    return new UnoWrapper( NULL );
+    return new UnoWrapper( nullptr );
 }
 
 }   // extern "C"
@@ -200,7 +200,7 @@ void UnoWrapper::ReleaseAllGraphics( OutputDevice* pOutDev )
         for ( size_t n = 0; n < pLst->size(); n++ )
         {
             VCLXGraphics* pGrf = (*pLst)[ n ];
-            pGrf->SetOutputDevice( NULL );
+            pGrf->SetOutputDevice( nullptr );
         }
     }
 
@@ -208,7 +208,7 @@ void UnoWrapper::ReleaseAllGraphics( OutputDevice* pOutDev )
 
 static bool lcl_ImplIsParent( vcl::Window* pParentWindow, vcl::Window* pPossibleChild )
 {
-    vcl::Window* pWindow = ( pPossibleChild != pParentWindow ) ? pPossibleChild : NULL;
+    vcl::Window* pWindow = ( pPossibleChild != pParentWindow ) ? pPossibleChild : nullptr;
     while ( pWindow && ( pWindow != pParentWindow ) )
         pWindow = pWindow->GetParent();
 
@@ -262,12 +262,12 @@ void UnoWrapper::WindowDestroyed( vcl::Window* pWindow )
 
     VCLXWindow* pWindowPeer = pWindow->GetWindowPeer();
     uno::Reference< lang::XComponent > xWindowPeerComp( pWindow->GetComponentInterface( false ), uno::UNO_QUERY );
-    OSL_ENSURE( ( pWindowPeer != NULL ) == xWindowPeerComp.is(),
+    OSL_ENSURE( ( pWindowPeer != nullptr ) == xWindowPeerComp.is(),
         "UnoWrapper::WindowDestroyed: inconsistency in the window's peers!" );
     if ( pWindowPeer )
     {
-        pWindowPeer->SetWindow( NULL );
-        pWindow->SetWindowPeer( NULL, NULL );
+        pWindowPeer->SetWindow( nullptr );
+        pWindow->SetWindowPeer( nullptr, nullptr );
     }
     if ( xWindowPeerComp.is() )
         xWindowPeerComp->dispose();

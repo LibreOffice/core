@@ -210,7 +210,7 @@ VCLXWindowImpl::VCLXWindowImpl( VCLXWindow& _rAntiImpl, bool _bWithDefaultProps 
     ,maPaintListeners( _rAntiImpl )
     ,maContainerListeners( _rAntiImpl )
     ,maTopWindowListeners( _rAntiImpl )
-    ,mnCallbackEventId( 0 )
+    ,mnCallbackEventId( nullptr )
     ,mbDisposing( false )
     ,mbDesignMode( false )
     ,mbSynthesizingVCLEvent( false )
@@ -218,7 +218,7 @@ VCLXWindowImpl::VCLXWindowImpl( VCLXWindow& _rAntiImpl, bool _bWithDefaultProps 
     ,mnListenerLockLevel( 0 )
     ,mnWritingMode( WritingMode2::CONTEXT )
     ,mnContextWritingMode( WritingMode2::CONTEXT )
-    ,mpPropHelper( NULL )
+    ,mpPropHelper( nullptr )
 {
 }
 
@@ -233,7 +233,7 @@ void VCLXWindowImpl::disposing()
     SolarMutexGuard aGuard;
     if ( mnCallbackEventId )
         Application::RemoveUserEvent( mnCallbackEventId );
-    mnCallbackEventId = 0;
+    mnCallbackEventId = nullptr;
 
     mbDisposed= true;
 
@@ -252,7 +252,7 @@ void VCLXWindowImpl::disposing()
     maTopWindowListeners.disposeAndClear( aEvent );
 
     ::toolkit::WindowStyleSettings* pStyleSettings = static_cast< ::toolkit::WindowStyleSettings* >( mxWindowStyleSettings.get() );
-    if ( pStyleSettings != NULL )
+    if ( pStyleSettings != nullptr )
         pStyleSettings->dispose();
     mxWindowStyleSettings.clear();
 }
@@ -289,7 +289,7 @@ IMPL_LINK_NOARG_TYPED(VCLXWindowImpl, OnProcessCallbacks, void*, void)
             // we were disposed while waiting for the mutex to lock
             return;
 
-        mnCallbackEventId = 0;
+        mnCallbackEventId = nullptr;
     }
 
     {
@@ -334,7 +334,7 @@ void ImplInitWindowEvent( css::awt::WindowEvent& rEvent, vcl::Window* pWindow )
 }
 
 VCLXWindow::VCLXWindow( bool _bWithDefaultProps )
-    :mpImpl( NULL )
+    :mpImpl( nullptr )
 {
     mpImpl = new VCLXWindowImpl( *this, _bWithDefaultProps );
 }
@@ -346,8 +346,8 @@ VCLXWindow::~VCLXWindow()
     if ( GetWindow() )
     {
         GetWindow()->RemoveEventListener( LINK( this, VCLXWindow, WindowEventListener ) );
-        GetWindow()->SetWindowPeer( NULL, NULL );
-        GetWindow()->SetAccessible( NULL );
+        GetWindow()->SetWindowPeer( nullptr, nullptr );
+        GetWindow()->SetAccessible( nullptr );
     }
 }
 
@@ -910,7 +910,7 @@ const css::uno::Sequence< sal_Int8 >& VCLXWindow::GetUnoTunnelId() throw()
 VCLXWindow* VCLXWindow::GetImplementation( const css::uno::Reference< css::uno::XInterface >& rxIFace )
 {
     css::uno::Reference< css::lang::XUnoTunnel > xUT( rxIFace, css::uno::UNO_QUERY );
-    return xUT.is() ? reinterpret_cast<VCLXWindow*>(sal::static_int_cast<sal_IntPtr>(xUT->getSomething( VCLXWindow::GetUnoTunnelId() ))) : NULL;
+    return xUT.is() ? reinterpret_cast<VCLXWindow*>(sal::static_int_cast<sal_IntPtr>(xUT->getSomething( VCLXWindow::GetUnoTunnelId() ))) : nullptr;
 }
 
 
@@ -921,7 +921,7 @@ void VCLXWindow::dispose(  ) throw(css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
-    mpImpl->mxViewGraphics = NULL;
+    mpImpl->mxViewGraphics = nullptr;
 
     if ( !mpImpl->mbDisposing )
     {
@@ -932,8 +932,8 @@ void VCLXWindow::dispose(  ) throw(css::uno::RuntimeException, std::exception)
         if ( GetWindow() )
         {
             VclPtr<OutputDevice> pOutDev = GetOutputDevice();
-            SetWindow( NULL );  // so that handlers are logged off, if necessary (virtual)
-            SetOutputDevice( NULL );
+            SetWindow( nullptr );  // so that handlers are logged off, if necessary (virtual)
+            SetOutputDevice( nullptr );
             pOutDev.disposeAndClear();
         }
 
@@ -2214,7 +2214,7 @@ sal_Bool VCLXWindow::setGraphics( const css::uno::Reference< css::awt::XGraphics
     if ( VCLUnoHelper::GetOutputDevice( rxDevice ) )
         mpImpl->mxViewGraphics = rxDevice;
     else
-        mpImpl->mxViewGraphics = NULL;
+        mpImpl->mxViewGraphics = nullptr;
 
     return mpImpl->mxViewGraphics.is();
 }
@@ -2312,7 +2312,7 @@ void VCLXWindow::draw( sal_Int32 nX, sal_Int32 nY ) throw(css::uno::RuntimeExcep
             vcl::PDFExtOutDevData* pPDFExport   = dynamic_cast<vcl::PDFExtOutDevData*>(pDev->GetExtOutDevData());
             bool bDrawSimple =    ( pDev->GetOutDevType() == OUTDEV_PRINTER )
                                || ( pDev->GetOutDevViewType() == OUTDEV_VIEWTYPE_PRINTPREVIEW )
-                               || ( pPDFExport != NULL );
+                               || ( pPDFExport != nullptr );
             if ( bDrawSimple )
             {
                 pWindow->Draw( pDev, aP, aSz, DrawFlags::NoControls );
@@ -2482,7 +2482,7 @@ void SAL_CALL VCLXWindow::setOutputSize( const css::awt::Size& aSize ) throw (cs
 {
     SolarMutexGuard aGuard;
     vcl::Window *pWindow;
-    if( (pWindow = GetWindow()) != NULL )
+    if( (pWindow = GetWindow()) != nullptr )
     {
         DockingWindow *pDockingWindow = dynamic_cast< DockingWindow* >(pWindow);
         if( pDockingWindow )
@@ -2496,7 +2496,7 @@ css::awt::Size SAL_CALL VCLXWindow::getOutputSize(  ) throw (css::uno::RuntimeEx
 {
     SolarMutexGuard aGuard;
     vcl::Window *pWindow;
-    if( (pWindow = GetWindow()) != NULL )
+    if( (pWindow = GetWindow()) != nullptr )
     {
         DockingWindow *pDockingWindow = dynamic_cast< DockingWindow* >(pWindow);
         if( pDockingWindow )
@@ -2551,7 +2551,7 @@ UnoPropertyArrayHelper *
 VCLXWindow::GetPropHelper()
 {
     SolarMutexGuard aGuard;
-    if ( mpImpl->mpPropHelper == NULL )
+    if ( mpImpl->mpPropHelper == nullptr )
     {
         std::list< sal_uInt16 > aIDs;
         GetPropertyIds( aIDs );

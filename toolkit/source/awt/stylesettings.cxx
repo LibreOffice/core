@@ -92,7 +92,7 @@ namespace toolkit
     public:
         explicit StyleMethodGuard( WindowStyleSettings_Data& i_rData )
         {
-            if ( i_rData.pOwningWindow == NULL )
+            if ( i_rData.pOwningWindow == nullptr )
                 throw DisposedException();
         }
 
@@ -135,7 +135,7 @@ namespace toolkit
         EventObject aEvent( *this );
         m_pData->aStyleChangeListeners.disposeAndClear( aEvent );
 
-        m_pData->pOwningWindow = NULL;
+        m_pData->pOwningWindow = nullptr;
     }
 
 

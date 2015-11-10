@@ -70,7 +70,7 @@ size_t  UnoControlModelEntryList::size() const {
 }
 
 UnoControlModelEntry* UnoControlModelEntryList::operator[]( size_t i ) const {
-    return ( i < maList.size() ) ? maList[ i ] : NULL;
+    return ( i < maList.size() ) ? maList[ i ] : nullptr;
 }
 
 void UnoControlModelEntryList::push_back( UnoControlModelEntry* item ) {

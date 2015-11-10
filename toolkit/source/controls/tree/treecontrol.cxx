@@ -93,7 +93,7 @@ Any UnoTreeModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
     case BASEPROPERTY_ROW_HEIGHT:
         return Any( sal_Int32( 0 ) );
     case BASEPROPERTY_TREE_DATAMODEL:
-        return Any( Reference< XTreeDataModel >( 0 ) );
+        return Any( Reference< XTreeDataModel >( nullptr ) );
     case BASEPROPERTY_TREE_EDITABLE:
     case BASEPROPERTY_TREE_INVOKESSTOPNODEEDITING:
         return Any( sal_False );
@@ -110,7 +110,7 @@ Any UnoTreeModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
 
 ::cppu::IPropertyArrayHelper& UnoTreeModel::getInfoHelper()
 {
-    static UnoPropertyArrayHelper* pHelper = NULL;
+    static UnoPropertyArrayHelper* pHelper = nullptr;
     if ( !pHelper )
     {
         Sequence<sal_Int32> aIDs = ImplGetPropertyIds();

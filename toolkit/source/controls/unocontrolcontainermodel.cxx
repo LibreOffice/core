@@ -83,7 +83,7 @@ css::uno::Reference< css::beans::XPropertySetInfo > UnoControlContainerModel::ge
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
-    static UnoPropertyArrayHelper* pHelper = NULL;
+    static UnoPropertyArrayHelper* pHelper = nullptr;
     if ( !pHelper )
     {
         css::uno::Sequence<sal_Int32>  aIDs = ImplGetPropertyIds();

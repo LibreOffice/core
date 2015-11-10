@@ -936,7 +936,7 @@ private:
     FormatterBase*  mpFormatter;
 
 protected:
-    FormatterBase*  GetFormatter() const { return GetWindow() ? mpFormatter : NULL; }
+    FormatterBase*  GetFormatter() const { return GetWindow() ? mpFormatter : nullptr; }
 
 public:
                     VCLXFormattedSpinField();

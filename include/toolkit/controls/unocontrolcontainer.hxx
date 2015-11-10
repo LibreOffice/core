@@ -136,7 +136,7 @@ private:
     */
     sal_Int32 impl_addControl(
         const css::uno::Reference< css::awt::XControl >& _rxControl,
-        const OUString* _pName = NULL
+        const OUString* _pName = nullptr
     );
 
     /** removes the given control from the container, including necessary notifications and the like

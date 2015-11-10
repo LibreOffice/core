@@ -73,7 +73,7 @@ static const LanguageDependentProp aLanguageDependentProp[] =
     { "HelpText",        8 },
     { "CurrencySymbol", 14 },
     { "StringItemList", 14 },
-    { 0, 0                 }
+    { nullptr, 0                 }
 };
 
 static Sequence< OUString> lcl_ImplGetPropertyNames( const Reference< XMultiPropertySet > & rxModel )
@@ -175,21 +175,21 @@ Reference< XWindowPeer >    UnoControl::ImplGetCompatiblePeer( bool bAcceptExist
             maComponentInfos.bVisible = false;
 
         Reference< XWindowPeer >    xCurrentPeer = getPeer();
-        setPeer( NULL );
+        setPeer( nullptr );
 
         // queryInterface ourself, to allow aggregation
         Reference< XControl > xMe;
         OWeakAggObject::queryInterface( cppu::UnoType<decltype(xMe)>::get() ) >>= xMe;
 
-        vcl::Window* pParentWindow( NULL );
+        vcl::Window* pParentWindow( nullptr );
         {
             SolarMutexGuard aGuard;
             pParentWindow = dynamic_cast< vcl::Window* >( Application::GetDefaultDevice() );
-            ENSURE_OR_THROW( pParentWindow != NULL, "could obtain a default parent window!" );
+            ENSURE_OR_THROW( pParentWindow != nullptr, "could obtain a default parent window!" );
         }
         try
         {
-            xMe->createPeer( NULL, pParentWindow->GetComponentInterface() );
+            xMe->createPeer( nullptr, pParentWindow->GetComponentInterface() );
         }
         catch( const Exception& )
         {
@@ -353,7 +353,7 @@ void UnoControl::dispose(  ) throw(RuntimeException, std::exception)
         {
             xPeer = mxPeer;
         }
-        setPeer( NULL );
+        setPeer( nullptr );
         xAccessibleComp.set(maAccessibleContext, UNO_QUERY);
         maAccessibleContext.clear();
     }
@@ -585,7 +585,7 @@ void UnoControl::ImplModelPropertiesChanged( const Sequence< PropertyChangeEvent
             // Our resource resolver has been changed and we must be sure
             // that language dependent props use the new resolver.
             const LanguageDependentProp* pLangDepProp = aLanguageDependentProp;
-            while ( pLangDepProp->pPropName != 0 )
+            while ( pLangDepProp->pPropName != nullptr )
             {
                 bool bMustBeInserted( true );
                 for ( size_t i = 0; i < aPeerPropertiesToSet.size(); i++ )
@@ -626,7 +626,7 @@ void UnoControl::ImplModelPropertiesChanged( const Sequence< PropertyChangeEvent
             // Doesn't work for Container!
             getPeer()->dispose();
             mxPeer.clear();
-            mxVclWindowPeer = NULL;
+            mxVclWindowPeer = nullptr;
             mbRefeshingPeer = true;
             Reference< XWindowPeer >    xP( xParent, UNO_QUERY );
             xThis->createPeer( Reference< XToolkit > (), xP );
@@ -644,7 +644,7 @@ void UnoControl::ImplModelPropertiesChanged( const Sequence< PropertyChangeEvent
         {
             SolarMutexGuard g;
             vcl::Window* pVclPeer = VCLUnoHelper::GetWindow( getPeer() );
-            pPeer = pVclPeer ? pVclPeer->GetWindowPeer() : NULL;
+            pPeer = pVclPeer ? pVclPeer->GetWindowPeer() : nullptr;
         }
         VclListenerLock aNoVclEventMultiplexing( pPeer );
 
@@ -670,7 +670,7 @@ void UnoControl::disposing( const EventObject& rEvt ) throw(RuntimeException, st
     if ( maAccessibleContext.get() == rEvt.Source )
     {
         // just in case the context is disposed, but not released - ensure that we do not re-use it in the future
-        maAccessibleContext = NULL;
+        maAccessibleContext = nullptr;
     }
     else if( mxModel.get() == Reference< XControlModel >(rEvt.Source,UNO_QUERY).get() )
     {
@@ -1559,7 +1559,7 @@ uno::Reference< awt::XStyleSettings > SAL_CALL UnoControl::getStyleSettings() th
     }
     if ( xPeerSupplier.is() )
         return xPeerSupplier->getStyleSettings();
-    return NULL;
+    return nullptr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

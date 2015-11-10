@@ -117,7 +117,7 @@ namespace toolkit
         // stops listening at the control model
         void stopModelListening( );
 
-        VclPtr< vcl::Window > implGetWindow( css::uno::Reference< css::awt::XWindow >* _pxUNOWindow = NULL ) const;
+        VclPtr< vcl::Window > implGetWindow( css::uno::Reference< css::awt::XWindow >* _pxUNOWindow = nullptr ) const;
     };
 
 

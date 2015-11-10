@@ -81,7 +81,7 @@ uno::Any UnoControlTabPageContainerModel::ImplGetDefaultValue( sal_uInt16 nPropI
 
 ::cppu::IPropertyArrayHelper& UnoControlTabPageContainerModel::getInfoHelper()
 {
-    static UnoPropertyArrayHelper* pHelper = NULL;
+    static UnoPropertyArrayHelper* pHelper = nullptr;
     if ( !pHelper )
     {
         css::uno::Sequence<sal_Int32>    aIDs = ImplGetPropertyIds();
@@ -125,7 +125,7 @@ namespace
         {
             DBG_UNHANDLED_EXCEPTION();
         }
-        return NULL;
+        return nullptr;
     }
 }
 

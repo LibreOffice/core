@@ -2313,8 +2313,8 @@ sal_Int16 VCLXDialog::execute() throw(css::uno::RuntimeException, std::exception
     {
         VclPtr< Dialog > pDlg = GetAs< Dialog >();
         vcl::Window* pParent = pDlg->GetWindow( GetWindowType::ParentOverlap );
-        vcl::Window* pOldParent = NULL;
-        vcl::Window* pSetParent = NULL;
+        vcl::Window* pOldParent = nullptr;
+        vcl::Window* pSetParent = nullptr;
         if ( pParent && !pParent->IsReallyVisible() )
         {
             pOldParent = pDlg->GetParent();
@@ -2606,7 +2606,7 @@ sal_uInt16 VCLXMultiPage::insertTab( TabPage* pPage, OUString& sTitle )
 void SAL_CALL VCLXMultiPage::removeTab( sal_Int32 ID ) throw (uno::RuntimeException, lang::IndexOutOfBoundsException, std::exception)
 {
     TabControl *pTabControl = getTabControl();
-    if ( pTabControl->GetTabPage( sal::static_int_cast< sal_uInt16 >( ID ) ) == NULL )
+    if ( pTabControl->GetTabPage( sal::static_int_cast< sal_uInt16 >( ID ) ) == nullptr )
         throw lang::IndexOutOfBoundsException();
     pTabControl->RemovePage( sal::static_int_cast< sal_uInt16 >( ID ) );
 }
@@ -2618,7 +2618,7 @@ void SAL_CALL VCLXMultiPage::activateTab( sal_Int32 ID ) throw (uno::RuntimeExce
         "toolkit",
         "Attempting to activate tab " << ID << ", active tab is "
             << getActiveTabID() << ", numtabs is " << getWindows().getLength());
-    if ( pTabControl->GetTabPage( sal::static_int_cast< sal_uInt16 >( ID ) ) == NULL )
+    if ( pTabControl->GetTabPage( sal::static_int_cast< sal_uInt16 >( ID ) ) == nullptr )
         throw lang::IndexOutOfBoundsException();
     pTabControl->SelectTabPage( sal::static_int_cast< sal_uInt16 >( ID ) );
 }
@@ -2644,7 +2644,7 @@ void SAL_CALL VCLXMultiPage::setTabProps( sal_Int32 ID, const uno::Sequence< bea
 {
     SolarMutexGuard aGuard;
     TabControl *pTabControl = getTabControl();
-    if ( pTabControl->GetTabPage( sal::static_int_cast< sal_uInt16 >( ID ) ) == NULL )
+    if ( pTabControl->GetTabPage( sal::static_int_cast< sal_uInt16 >( ID ) ) == nullptr )
         throw lang::IndexOutOfBoundsException();
 
     for (sal_Int32 i = 0; i < Properties.getLength(); ++i)
@@ -2665,7 +2665,7 @@ uno::Sequence< beans::NamedValue > SAL_CALL VCLXMultiPage::getTabProps( sal_Int3
 {
     SolarMutexGuard aGuard;
     TabControl *pTabControl = getTabControl();
-    if ( pTabControl->GetTabPage( sal::static_int_cast< sal_uInt16 >( ID ) ) == NULL )
+    if ( pTabControl->GetTabPage( sal::static_int_cast< sal_uInt16 >( ID ) ) == nullptr )
         throw lang::IndexOutOfBoundsException();
 
     uno::Sequence< beans::NamedValue > props
@@ -4626,7 +4626,7 @@ void VCLXFormattedSpinField::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
 }
 
 VCLXFormattedSpinField::VCLXFormattedSpinField()
-    : mpFormatter(NULL)
+    : mpFormatter(nullptr)
 {
 }
 

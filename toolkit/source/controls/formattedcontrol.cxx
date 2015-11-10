@@ -401,7 +401,7 @@ namespace toolkit
 
     ::cppu::IPropertyArrayHelper& UnoControlFormattedFieldModel::getInfoHelper()
     {
-        static UnoPropertyArrayHelper* pHelper = NULL;
+        static UnoPropertyArrayHelper* pHelper = nullptr;
         if ( !pHelper )
         {
             Sequence<sal_Int32> aIDs = ImplGetPropertyIds();

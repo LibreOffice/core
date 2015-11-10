@@ -132,7 +132,7 @@ void VCLXContainer::setTabOrder( const css::uno::Sequence< css::uno::Reference< 
     const css::uno::Reference< css::awt::XWindow > * pComps = Components.getConstArray();
     const css::uno::Any* pTabs = Tabs.getConstArray();
 
-    vcl::Window* pPrevWin = NULL;
+    vcl::Window* pPrevWin = nullptr;
     for ( sal_uInt32 n = 0; n < nCount; n++ )
     {
         // css::style::TabStop
@@ -175,8 +175,8 @@ void VCLXContainer::setGroup( const css::uno::Sequence< css::uno::Reference< css
     sal_uInt32 nCount = Components.getLength();
     const css::uno::Reference< css::awt::XWindow > * pComps = Components.getConstArray();
 
-    vcl::Window* pPrevWin = NULL;
-    vcl::Window* pPrevRadio = NULL;
+    vcl::Window* pPrevWin = nullptr;
+    vcl::Window* pPrevRadio = nullptr;
     for ( sal_uInt32 n = 0; n < nCount; n++ )
     {
         vcl::Window* pWin = VCLUnoHelper::GetWindow( pComps[n] );

@@ -549,7 +549,7 @@ namespace
         { css::awt::MessageBoxType_WARNINGBOX,      RTL_CONSTASCII_STRINGPARAM("warningbox") },
         { css::awt::MessageBoxType_ERRORBOX,        RTL_CONSTASCII_STRINGPARAM("errorbox") },
         { css::awt::MessageBoxType_QUERYBOX,        RTL_CONSTASCII_STRINGPARAM("querybox") },
-        { css::awt::MessageBoxType_MAKE_FIXED_SIZE, 0, 0 }
+        { css::awt::MessageBoxType_MAKE_FIXED_SIZE, nullptr, 0 }
     };
 
     static bool lcl_convertMessageBoxType(
@@ -594,7 +594,7 @@ static osl::Mutex & getInitMutex()
 
 static osl::Condition & getInitCondition()
 {
-    static osl::Condition * pC = 0;
+    static osl::Condition * pC = nullptr;
     if( !pC )
     {
         osl::Guard< osl::Mutex > aGuard( osl::Mutex::getGlobalMutex() );
@@ -676,8 +676,8 @@ VCLXToolkit::VCLXToolkit():
     m_bEventListener(false),
     m_bKeyListener(false)
 {
-    hSvToolsLib = NULL;
-    fnSvtCreateWindow = NULL;
+    hSvToolsLib = nullptr;
+    fnSvtCreateWindow = nullptr;
 
     osl::Guard< osl::Mutex > aGuard( getInitMutex() );
     nVCLToolkitInstanceCount++;
@@ -700,8 +700,8 @@ void SAL_CALL VCLXToolkit::disposing()
     if ( hSvToolsLib )
     {
         osl_unloadModule( hSvToolsLib );
-        hSvToolsLib = NULL;
-        fnSvtCreateWindow = NULL;
+        hSvToolsLib = nullptr;
+        fnSvtCreateWindow = nullptr;
     }
 #endif
 
@@ -792,7 +792,7 @@ vcl::Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
     OUString aServiceName( rDescriptor.WindowServiceName );
     aServiceName = aServiceName.toAsciiLowerCase();
 
-    vcl::Window* pNewWindow = NULL;
+    vcl::Window* pNewWindow = nullptr;
     sal_uInt16 nType = ImplGetComponentType( aServiceName );
     bool bFrameControl = false;
     if ( aServiceName == "frame" )
@@ -827,8 +827,8 @@ vcl::Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
 
         if ( bException )
         {
-            *ppNewComp = NULL;
-            return NULL;
+            *ppNewComp = nullptr;
+            return nullptr;
         }
     }
 
@@ -954,7 +954,7 @@ vcl::Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
             case WINDOW_MODELESSDIALOG:
             {
                 // Modal/Modeless nur durch Show/Execute
-                if ( (pParent == NULL ) && ( rDescriptor.ParentIndex == -1 ) )
+                if ( (pParent == nullptr ) && ( rDescriptor.ParentIndex == -1 ) )
                     pNewWindow = VclPtr<toolkit::ScrollableWrapper<Dialog>>::Create( nullptr, nWinBits, Dialog::InitFlag::NoParent );
                 else
                     pNewWindow = VclPtr<toolkit::ScrollableWrapper<Dialog>>::Create( pParent, nWinBits );
@@ -1091,7 +1091,7 @@ vcl::Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
                         pNewWindow = VclPtr<DockingWindow>::Create( pParent, nWinBits );
                     else
                     {
-                        if ((pParent == NULL) && rDescriptor.Parent.is())
+                        if ((pParent == nullptr) && rDescriptor.Parent.is())
                         {
                             // try to get a system dependent window handle
                             css::uno::Reference< css::awt::XSystemDependentWindowPeer > xSystemDepParent(rDescriptor.Parent, css::uno::UNO_QUERY);
@@ -1217,7 +1217,7 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
 
     css::uno::Reference< css::awt::XWindowPeer > xRef;
 
-    vcl::Window* pParent = NULL;
+    vcl::Window* pParent = nullptr;
     if ( rDescriptor.Parent.is() )
     {
         VCLXWindow* pParentComponent = VCLXWindow::GetImplementation( rDescriptor.Parent );
@@ -1232,9 +1232,9 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
         ImplGetComponentType( rDescriptor.WindowServiceName ) );
     nWinBits |= nForceWinBits;
 
-    VCLXWindow* pNewComp = NULL;
+    VCLXWindow* pNewComp = nullptr;
 
-    vcl::Window* pNewWindow = NULL;
+    vcl::Window* pNewWindow = nullptr;
     // Try to create the window with SvTools
     // (do this _before_ creating it on our own: The old mechanism (extended toolkit in SvTools) did it this way,
     // and we need to stay compatible)
@@ -1321,7 +1321,7 @@ css::uno::Sequence< css::uno::Reference< css::awt::XWindowPeer > > VCLXToolkit::
         css::awt::WindowDescriptor aDescr = rDescriptors.getConstArray()[n];
 
         if ( aDescr.ParentIndex == (-1) )
-            aDescr.Parent = NULL;
+            aDescr.Parent = nullptr;
         else if ( ( aDescr.ParentIndex >= 0 ) && ( aDescr.ParentIndex < (short)n ) )
             aDescr.Parent = aSeq.getConstArray()[aDescr.ParentIndex];
         aSeq.getArray()[n] = createWindow( aDescr );
@@ -1572,7 +1572,7 @@ VCLXToolkit::getTopWindow(::sal_Int32 nIndex)
     vcl::Window * p = ::Application::GetTopWindow(static_cast< long >(nIndex));
         // XXX  numeric overflow
     return css::uno::Reference< css::awt::XTopWindow >(
-        p == 0 ? 0 : static_cast< css::awt::XWindow * >(p->GetWindowPeer()),
+        p == nullptr ? nullptr : static_cast< css::awt::XWindow * >(p->GetWindowPeer()),
         css::uno::UNO_QUERY);
 }
 
@@ -1582,7 +1582,7 @@ VCLXToolkit::getActiveTopWindow() throw (css::uno::RuntimeException, std::except
 {
     vcl::Window * p = ::Application::GetActiveTopWindow();
     return css::uno::Reference< css::awt::XTopWindow >(
-        p == 0 ? 0 : static_cast< css::awt::XWindow * >(p->GetWindowPeer()),
+        p == nullptr ? nullptr : static_cast< css::awt::XWindow * >(p->GetWindowPeer()),
         css::uno::UNO_QUERY);
 }
 
@@ -1864,13 +1864,13 @@ void VCLXToolkit::callFocusListeners(::VclSimpleEvent const * pEvent,
             // vclxwindow.cxx for mapping between VCL and UNO AWT event):
             css::uno::Reference< css::uno::XInterface > xNext;
             vcl::Window * pFocus = ::Application::GetFocusWindow();
-            for (vcl::Window * p = pFocus; p != 0; p = p->GetParent())
+            for (vcl::Window * p = pFocus; p != nullptr; p = p->GetParent())
                 if (!p->IsCompoundControl())
                 {
                     pFocus = p;
                     break;
                 }
-            if (pFocus != 0)
+            if (pFocus != nullptr)
                 xNext = pFocus->GetComponentInterface();
             css::awt::FocusEvent aAwtEvent(
                 static_cast< css::awt::XWindow * >(pWindow->GetWindowPeer()),

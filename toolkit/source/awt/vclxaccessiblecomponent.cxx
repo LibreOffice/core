@@ -73,7 +73,7 @@ VCLXAccessibleComponent::~VCLXAccessibleComponent()
     }
 
     delete m_pSolarLock;
-    m_pSolarLock = NULL;
+    m_pSolarLock = nullptr;
     // This is not completely safe. If we assume that the base class dtor calls some method which
     // uses this lock, the we crash. However, as the base class' dtor does not have a chance to call _out_
     // virtual methods, this is no problem as long as the base class is safe, i.e. does not use the external
@@ -190,7 +190,7 @@ void VCLXAccessibleComponent::ProcessWindowEvent( const VclWindowEvent& rVclWind
             pAccWindow->RemoveEventListener( LINK( this, VCLXAccessibleComponent, WindowEventListener ) );
             pAccWindow->RemoveChildEventListener( LINK( this, VCLXAccessibleComponent, WindowChildEventListener ) );
             mxWindow.clear();
-            mpVCLXindow = NULL;
+            mpVCLXindow = nullptr;
         }
         break;
         case VCLEVENT_WINDOW_CHILDDESTROYED:
@@ -348,7 +348,7 @@ void VCLXAccessibleComponent::disposing()
     AccessibleExtendedComponentHelper_BASE::disposing();
 
     mxWindow.clear();
-    mpVCLXindow = NULL;
+    mpVCLXindow = nullptr;
 }
 
 VclPtr<vcl::Window> VCLXAccessibleComponent::GetWindow() const
@@ -697,12 +697,12 @@ awt::Rectangle VCLXAccessibleComponent::implGetBounds() throw (uno::RuntimeExcep
     vcl::Window* pWindow = GetWindow();
     if ( pWindow )
     {
-        Rectangle aRect = pWindow->GetWindowExtentsRelative( NULL );
+        Rectangle aRect = pWindow->GetWindowExtentsRelative( nullptr );
         aBounds = AWTRectangle( aRect );
         vcl::Window* pParent = pWindow->GetAccessibleParentWindow();
         if ( pParent )
         {
-            Rectangle aParentRect = pParent->GetWindowExtentsRelative( NULL );
+            Rectangle aParentRect = pParent->GetWindowExtentsRelative( nullptr );
             awt::Point aParentScreenLoc = AWTPoint( aParentRect.TopLeft() );
             aBounds.X -= aParentScreenLoc.X;
             aBounds.Y -= aParentScreenLoc.Y;
@@ -749,7 +749,7 @@ awt::Point VCLXAccessibleComponent::getLocationOnScreen(  ) throw (uno::RuntimeE
     awt::Point aPos;
     if ( GetWindow() )
     {
-        Rectangle aRect = GetWindow()->GetWindowExtentsRelative( NULL );
+        Rectangle aRect = GetWindow()->GetWindowExtentsRelative( nullptr );
         aPos.X = aRect.Left();
         aPos.Y = aRect.Top();
     }

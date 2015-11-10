@@ -277,7 +277,7 @@ Any UnoControlDialogModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
 
 ::cppu::IPropertyArrayHelper& UnoControlDialogModel::getInfoHelper()
 {
-    static UnoPropertyArrayHelper* pHelper = NULL;
+    static UnoPropertyArrayHelper* pHelper = nullptr;
     if ( !pHelper )
     {
         Sequence<sal_Int32> aIDs = ImplGetPropertyIds();
@@ -824,7 +824,7 @@ void UnoMultiPageControl::bindPage( const uno::Reference< awt::XControl >& _rxCo
     uno::Reference< beans::XPropertySet > xProps( _rxControl->getModel(), uno::UNO_QUERY );
 
    VCLXTabPage* pXPage = dynamic_cast< VCLXTabPage* >( xPage.get() );
-   TabPage* pPage = pXPage ? pXPage->getTabPage() : NULL;
+   TabPage* pPage = pXPage ? pXPage->getTabPage() : nullptr;
     if ( xTabCntrl.is() && pPage )
     {
         VCLXMultiPage* pXTab = dynamic_cast< VCLXMultiPage* >( xTabCntrl.get() );
@@ -873,7 +873,7 @@ void    UnoMultiPageControl::impl_createControlPeerIfNecessary( const uno::Refer
 
     if( xMyPeer.is() )
     {
-        _rxControl->createPeer( NULL, xMyPeer );
+        _rxControl->createPeer( nullptr, xMyPeer );
         bindPage( _rxControl );
         ImplActivateTabControllers();
     }
@@ -946,7 +946,7 @@ uno::Any UnoMultiPageModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
 
 ::cppu::IPropertyArrayHelper& UnoMultiPageModel::getInfoHelper()
 {
-    static UnoPropertyArrayHelper* pHelper = NULL;
+    static UnoPropertyArrayHelper* pHelper = nullptr;
     if ( !pHelper )
     {
         uno::Sequence<sal_Int32>    aIDs = ImplGetPropertyIds();
@@ -1066,7 +1066,7 @@ uno::Any UnoPageModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
 
 ::cppu::IPropertyArrayHelper& UnoPageModel::getInfoHelper()
 {
-    static UnoPropertyArrayHelper* pHelper = NULL;
+    static UnoPropertyArrayHelper* pHelper = nullptr;
     if ( !pHelper )
     {
         uno::Sequence<sal_Int32>  aIDs = ImplGetPropertyIds();
@@ -1245,7 +1245,7 @@ uno::Any UnoFrameModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
 
 ::cppu::IPropertyArrayHelper& UnoFrameModel::getInfoHelper()
 {
-    static UnoPropertyArrayHelper* pHelper = NULL;
+    static UnoPropertyArrayHelper* pHelper = nullptr;
     if ( !pHelper )
     {
         uno::Sequence<sal_Int32>    aIDs = ImplGetPropertyIds();

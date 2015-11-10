@@ -89,7 +89,7 @@ bool StdTabController::ImplCreateComponentSequence(
     sal_uInt32 nCtrls = rControls.getLength();
     rComponents.realloc( nCtrls );
     Reference< XWindow > * pComps = rComponents.getArray();
-    Any* pTabs = NULL;
+    Any* pTabs = nullptr;
 
 
     if ( pTabStops )
@@ -247,7 +247,7 @@ void StdTabController::autoTabOrder(  ) throw(RuntimeException, std::exception)
 
     // #58317# Some Models may be missing from the Container. Plus there is a
     // autoTabOrder call later on.
-    if( !ImplCreateComponentSequence( aControls, aSeq, aCompSeq, NULL, false ) )
+    if( !ImplCreateComponentSequence( aControls, aSeq, aCompSeq, nullptr, false ) )
         return;
 
     sal_uInt32 nCtrls = aCompSeq.getLength();
@@ -345,7 +345,7 @@ void StdTabController::activateTabOrder(  ) throw(RuntimeException, std::excepti
 
         aControlComponents.realloc( 0 );
 
-        ImplCreateComponentSequence( aControls, aThisGroupModels, aControlComponents, NULL, true );
+        ImplCreateComponentSequence( aControls, aThisGroupModels, aControlComponents, nullptr, true );
         xVclContainerPeer->setGroup( aControlComponents );
     }
 }

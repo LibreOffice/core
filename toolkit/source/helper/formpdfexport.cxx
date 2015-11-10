@@ -104,7 +104,7 @@ namespace toolkitform
             case FormComponentType::PATTERNFIELD:
                 return new vcl::PDFWriter::EditWidget;
             }
-            return NULL;
+            return nullptr;
         }
 
 

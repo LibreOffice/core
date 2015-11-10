@@ -510,7 +510,7 @@ void SAL_CALL UnoControlContainer::removeByIdentifier( ::sal_Int32 _nIdentifier 
             *this
         );
 
-    impl_removeControl( _nIdentifier, xControl, NULL );
+    impl_removeControl( _nIdentifier, xControl, nullptr );
 }
 
 void SAL_CALL UnoControlContainer::replaceByIdentifer( ::sal_Int32 _nIdentifier, const uno::Any& _rElement ) throw (lang::IllegalArgumentException, container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
@@ -628,7 +628,7 @@ void UnoControlContainer::impl_createControlPeerIfNecessary( const uno::Referenc
 
     if( xMyPeer.is() )
     {
-        _rxControl->createPeer( NULL, xMyPeer );
+        _rxControl->createPeer( nullptr, xMyPeer );
         ImplActivateTabControllers();
     }
 
@@ -666,7 +666,7 @@ void UnoControlContainer::removingControl( const uno::Reference< awt::XControl >
     if ( _rxControl.is() )
     {
         _rxControl->removeEventListener( this );
-        _rxControl->setContext( NULL );
+        _rxControl->setContext( nullptr );
     }
 }
 
@@ -701,7 +701,7 @@ void UnoControlContainer::removeControl( const uno::Reference< awt::XControl >& 
 
         UnoControlHolderList::ControlIdentifier id = mpControls->getControlIdentifier( _rxControl );
         if ( id != -1 )
-            impl_removeControl( id, _rxControl, NULL );
+            impl_removeControl( id, _rxControl, nullptr );
     }
 }
 

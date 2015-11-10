@@ -249,7 +249,7 @@ Any ControlModelContainerBase::ImplGetDefaultValue( sal_uInt16 nPropId ) const
 
 ::cppu::IPropertyArrayHelper& ControlModelContainerBase::getInfoHelper()
 {
-    static UnoPropertyArrayHelper* pHelper = NULL;
+    static UnoPropertyArrayHelper* pHelper = nullptr;
     if ( !pHelper )
     {
         Sequence<sal_Int32> aIDs = ImplGetPropertyIds();
@@ -328,7 +328,7 @@ Reference< XInterface > ControlModelContainerBase::createInstance( const OUStrin
 {
     SolarMutexGuard aGuard;
 
-    OGeometryControlModel_Base* pNewModel = NULL;
+    OGeometryControlModel_Base* pNewModel = nullptr;
 
     if ( aServiceSpecifier == "com.sun.star.awt.UnoControlEditModel" )
         pNewModel = new OGeometryControlModel< UnoControlEditModel >( m_xContext );
@@ -422,7 +422,7 @@ Reference< XInterface > ControlModelContainerBase::createInstanceWithArguments( 
 
 Sequence< OUString > ControlModelContainerBase::getAvailableServiceNames() throw(RuntimeException, std::exception)
 {
-    static Sequence< OUString >* pNamesSeq = NULL;
+    static Sequence< OUString >* pNamesSeq = nullptr;
     if ( !pNamesSeq )
     {
         pNamesSeq = new Sequence< OUString >( 26 );
@@ -1498,7 +1498,7 @@ sal_Bool ControlContainerBase::setModel( const Reference< XControlModel >& rxMod
     // destroy the old tab controller, if existent
     if ( mxTabController.is() )
     {
-        mxTabController->setModel( NULL );                  // just to be sure, should not be necessary
+        mxTabController->setModel( nullptr );                  // just to be sure, should not be necessary
         removeTabController( mxTabController );
         ::comphelper::disposeComponent( mxTabController );  // just to be sure, should not be necessary
         mxTabController.clear();
