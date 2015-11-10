@@ -194,7 +194,6 @@ public:
     void SetInSwFntCache( bool bNew )   { m_bInSwFntCache = bNew;  }
     void SetInDocDTOR()                 { m_bInDocDTOR = true; }
     bool IsModifyLocked() const     { return m_bModifyLocked;  }
-    bool IsInDocDTOR()    const     { return m_bInDocDTOR;     }
     bool IsInCache()      const     { return m_bInCache;       }
     bool IsInSwFntCache() const     { return m_bInSwFntCache;  }
 

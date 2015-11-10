@@ -89,7 +89,7 @@ SwModify::~SwModify()
     if( m_pWriterListeners )
     {
         // there are depending objects
-        if( IsInDocDTOR() )
+        if( m_bInDocDTOR )
         {
             // If the document gets destroyed anyway, just tell clients to
             // forget me so that they don't try to get removed from my list

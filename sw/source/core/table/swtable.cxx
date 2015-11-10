@@ -2171,7 +2171,7 @@ void ChgNumToText( SwTableBox& rBox, sal_uLong nFormat )
 // for detection of modifications (mainly TableBoxAttribute)
 void SwTableBoxFormat::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
 {
-    if( !IsModifyLocked() && !IsInDocDTOR() )
+    if( !IsModifyLocked() && GetDoc() && !GetDoc()->IsInDtor())
     {
         const SwTableBoxNumFormat *pNewFormat = nullptr;
         const SwTableBoxFormula *pNewFormula = nullptr;
