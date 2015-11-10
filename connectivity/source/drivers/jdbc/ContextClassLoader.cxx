@@ -35,7 +35,7 @@ namespace connectivity { namespace jdbc
         :m_environment( environment )
         ,m_currentThread( environment )
         ,m_oldContextClassLoader( environment )
-        ,m_setContextClassLoaderMethod( NULL )
+        ,m_setContextClassLoaderMethod( nullptr )
     {
         if ( !newClassLoader.is() )
             return;
@@ -50,7 +50,7 @@ namespace connectivity { namespace jdbc
 
         jmethodID currentThreadMethod( m_environment.GetStaticMethodID(
             threadClass.get(), "currentThread", "()Ljava/lang/Thread;" ) );
-        if ( currentThreadMethod == NULL )
+        if ( currentThreadMethod == nullptr )
             break;
 
         m_currentThread.set( m_environment.CallStaticObjectMethod( threadClass.get(), currentThreadMethod ) );
@@ -59,7 +59,7 @@ namespace connectivity { namespace jdbc
 
         jmethodID getContextClassLoaderMethod( m_environment.GetMethodID(
             threadClass.get(), "getContextClassLoader", "()Ljava/lang/ClassLoader;" ) );
-        if ( getContextClassLoaderMethod == NULL )
+        if ( getContextClassLoaderMethod == nullptr )
             break;
         m_oldContextClassLoader.set( m_environment.CallObjectMethod( m_currentThread.get(), getContextClassLoaderMethod ) );
         LocalRef< jthrowable > throwable( m_environment, m_environment.ExceptionOccurred() );
@@ -68,7 +68,7 @@ namespace connectivity { namespace jdbc
 
         m_setContextClassLoaderMethod = m_environment.GetMethodID(
             threadClass.get(), "setContextClassLoader", "(Ljava/lang/ClassLoader;)V" );
-        if ( m_setContextClassLoaderMethod == NULL )
+        if ( m_setContextClassLoaderMethod == nullptr )
             break;
 
         }
@@ -86,7 +86,7 @@ namespace connectivity { namespace jdbc
         if ( throwable.is() )
         {
             m_currentThread.reset();
-            m_setContextClassLoaderMethod = NULL;
+            m_setContextClassLoaderMethod = nullptr;
             java_lang_Object::ThrowLoggedSQLException( _rLoggerForErrors, &environment, _rxErrorContext );
         }
     }
@@ -98,7 +98,7 @@ namespace connectivity { namespace jdbc
         {
             LocalRef< jobject > currentThread( m_currentThread.env(), m_currentThread.release() );
             jmethodID setContextClassLoaderMethod( m_setContextClassLoaderMethod );
-            m_setContextClassLoaderMethod = NULL;
+            m_setContextClassLoaderMethod = nullptr;
 
             m_environment.CallObjectMethod( currentThread.get(), setContextClassLoaderMethod, m_oldContextClassLoader.get() );
             if ( clearExceptions )

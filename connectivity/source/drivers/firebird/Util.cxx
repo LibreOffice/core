@@ -284,7 +284,7 @@ void firebird::freeSQLVAR(XSQLDA* pSqlda)
             if(pVar->sqldata)
             {
                 free(pVar->sqldata);
-                pVar->sqldata = NULL;
+                pVar->sqldata = nullptr;
             }
             break;
         case SQL_ARRAY:
@@ -307,7 +307,7 @@ void firebird::freeSQLVAR(XSQLDA* pSqlda)
             if(pVar->sqlind)
             {
                 free(pVar->sqlind);
-                pVar->sqlind = NULL;
+                pVar->sqlind = nullptr;
             }
         }
     }

@@ -39,13 +39,13 @@ IMPLEMENT_SERVICE_INFO(OGroup,"com.sun.star.sdbcx.VGroup","com.sun.star.sdbcx.Gr
 
 OGroup::OGroup(bool _bCase) :   OGroup_BASE(m_aMutex)
                 ,   ODescriptor(OGroup_BASE::rBHelper,_bCase)
-                ,   m_pUsers(NULL)
+                ,   m_pUsers(nullptr)
 {
 }
 
 OGroup::OGroup(const OUString& _Name, bool _bCase) :  OGroup_BASE(m_aMutex)
                         ,ODescriptor(OGroup_BASE::rBHelper,_bCase)
-                        ,m_pUsers(NULL)
+                        ,m_pUsers(nullptr)
 {
     m_Name = _Name;
 }

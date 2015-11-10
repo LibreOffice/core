@@ -51,7 +51,7 @@ void OConnectionWrapper::setDelegation(Reference< XAggregation >& _rxProxyConnec
     {
         // transfer the (one and only) real ref to the aggregate to our member
         m_xProxyConnection = _rxProxyConnection;
-        _rxProxyConnection = NULL;
+        _rxProxyConnection = nullptr;
         ::comphelper::query_aggregation(m_xProxyConnection,m_xConnection);
         m_xTypeProvider.set(m_xConnection,UNO_QUERY);
         m_xUnoTunnel.set(m_xConnection,UNO_QUERY);
@@ -100,7 +100,7 @@ m_xConnection.clear();
 OConnectionWrapper::~OConnectionWrapper()
 {
     if (m_xProxyConnection.is())
-        m_xProxyConnection->setDelegator(NULL);
+        m_xProxyConnection->setDelegator(nullptr);
 }
 
 // XServiceInfo
@@ -166,7 +166,7 @@ sal_Int64 SAL_CALL OConnectionWrapper::getSomething( const Sequence< sal_Int8 >&
 
 Sequence< sal_Int8 > OConnectionWrapper::getUnoTunnelImplementationId()
 {
-    static ::cppu::OImplementationId * pId = 0;
+    static ::cppu::OImplementationId * pId = nullptr;
     if (! pId)
     {
         ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );

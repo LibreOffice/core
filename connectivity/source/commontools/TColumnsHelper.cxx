@@ -64,15 +64,15 @@ OColumnsHelper::OColumnsHelper( ::cppu::OWeakObject& _rParent
                                 ,const TStringVector &_rVector
                                 ,bool _bUseHardRef
             ) : OCollection(_rParent,_bCase,_rMutex,_rVector,false,_bUseHardRef)
-    ,m_pImpl(NULL)
-    ,m_pTable(NULL)
+    ,m_pImpl(nullptr)
+    ,m_pTable(nullptr)
 {
 }
 
 OColumnsHelper::~OColumnsHelper()
 {
     delete m_pImpl;
-    m_pImpl = NULL;
+    m_pImpl = nullptr;
 }
 
 
@@ -180,7 +180,7 @@ sdbcx::ObjectType OColumnsHelper::appendObject( const OUString& _rForName, const
     OUString aSql = "ALTER TABLE " +
         ::dbtools::composeTableName( xMetaData, m_pTable, ::dbtools::eInTableDefinitions, false, false, true ) +
         " ADD " +
-        ::dbtools::createStandardColumnPart(descriptor,m_pTable->getConnection(),NULL,m_pTable->getTypeCreatePattern());
+        ::dbtools::createStandardColumnPart(descriptor,m_pTable->getConnection(),nullptr,m_pTable->getTypeCreatePattern());
 
     Reference< XStatement > xStmt = m_pTable->getConnection()->createStatement(  );
     if ( xStmt.is() )

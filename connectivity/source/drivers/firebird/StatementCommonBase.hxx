@@ -91,7 +91,7 @@ namespace connectivity
 
             void prepareAndDescribeStatement(const OUString& sqlIn,
                                              XSQLDA*& pOutSqlda,
-                                             XSQLDA* pInSqlda=0)
+                                             XSQLDA* pInSqlda=nullptr)
                 throw (::com::sun::star::sdbc::SQLException);
 
             short getSqlInfoItem(char aInfoItem)

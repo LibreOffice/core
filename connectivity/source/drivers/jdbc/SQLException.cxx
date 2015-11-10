@@ -43,7 +43,7 @@ java_sql_SQLException_BASE::java_sql_SQLException_BASE( JNIEnv * pEnv, jobject m
 {
 }
 
-jclass java_sql_SQLException_BASE::theClass = 0;
+jclass java_sql_SQLException_BASE::theClass = nullptr;
 
 java_sql_SQLException_BASE::~java_sql_SQLException_BASE()
 {}
@@ -64,13 +64,13 @@ jclass java_sql_SQLException_BASE::st_getMyClass()
 css::sdbc::SQLException java_sql_SQLException_BASE::getNextException()  const
 {
     SDBThreadAttach t;
-    static jmethodID mID(NULL);
+    static jmethodID mID(nullptr);
     jobject out = callObjectMethod(t.pEnv,"getNextException","()Ljava/sql/SQLException;", mID);
     // WARNING: the caller will become the owner of the returned pointers !!!
     if( out )
     {
         java_sql_SQLException_BASE  warn_base(t.pEnv,out);
-        return css::sdbc::SQLException(java_sql_SQLException(warn_base,0));
+        return css::sdbc::SQLException(java_sql_SQLException(warn_base,nullptr));
     }
 
     return css::sdbc::SQLException();
@@ -78,12 +78,12 @@ css::sdbc::SQLException java_sql_SQLException_BASE::getNextException()  const
 
 OUString java_sql_SQLException_BASE::getSQLState() const
 {
-    static jmethodID mID(NULL);
+    static jmethodID mID(nullptr);
     return callStringMethod("getSQLState",mID);
 }
 sal_Int32 java_sql_SQLException_BASE::getErrorCode() const
 {
-    static jmethodID mID(NULL);
+    static jmethodID mID(nullptr);
     return callIntMethod_ThrowSQL("getErrorCode", mID);
 }
 

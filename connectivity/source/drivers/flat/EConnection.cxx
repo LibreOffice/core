@@ -166,7 +166,7 @@ Reference< XPreparedStatement > SAL_CALL OFlatConnection::prepareCall( const OUS
     checkDisposed(OConnection_B::rBHelper.bDisposed);
 
     ::dbtools::throwFeatureNotImplementedSQLException( "XConnection::prepareCall", *this );
-    return NULL;
+    return nullptr;
 }
 
 

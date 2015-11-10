@@ -23,7 +23,7 @@ using namespace connectivity;
 //************ Class: java.lang.Boolean
 
 
-jclass java_lang_Boolean::theClass = 0;
+jclass java_lang_Boolean::theClass = nullptr;
 
 java_lang_Boolean::~java_lang_Boolean()
 {}

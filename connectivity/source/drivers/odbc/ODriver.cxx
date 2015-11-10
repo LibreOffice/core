@@ -93,7 +93,7 @@ Sequence< OUString > SAL_CALL ODBCDriver::getSupportedServiceNames(  ) throw(Run
 Reference< XConnection > SAL_CALL ODBCDriver::connect( const OUString& url, const Sequence< PropertyValue >& info ) throw(SQLException, RuntimeException, std::exception)
 {
     if ( ! acceptsURL(url) )
-        return NULL;
+        return nullptr;
 
     if(!m_pDriverHandle)
     {

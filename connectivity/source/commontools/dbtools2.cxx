@@ -927,7 +927,7 @@ sal_Int32 DBTypeConversion::convertUnicodeString( const OUString& _rSource, OStr
 
         throw SQLException(
             sMessage,
-            NULL,
+            nullptr,
             OUString( "22018" ),
             22018,
             Any()
@@ -953,7 +953,7 @@ sal_Int32 DBTypeConversion::convertUnicodeStringToLength( const OUString& _rSour
 
         throw SQLException(
             sMessage,
-            NULL,
+            nullptr,
             OUString( "22001" ),
             22001,
             Any()

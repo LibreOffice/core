@@ -541,7 +541,7 @@ Statics & getStatics()
             static const char *tablePrivilegesNames[] =
                 {
                     "TABLE_CAT", "TABLE_SCHEM", "TABLE_NAME", "GRANTOR", "GRANTEE", "PRIVILEGE",
-                    "IS_GRANTABLE" , 0
+                    "IS_GRANTABLE" , nullptr
                 };
             statics.tablePrivilegesNames =
                 createStringSequence( tablePrivilegesNames );
@@ -552,7 +552,7 @@ Statics & getStatics()
                 "DATA_TYPE", "TYPE_NAME", "COLUMN_SIZE", "BUFFER_LENGTH",
                 "DECIMAL_DIGITS", "NUM_PREC_RADIX", "NULLABLE", "REMARKS",
                 "COLUMN_DEF", "SQL_DATA_TYPE", "SQL_DATETIME_SUB", "CHAR_OCTET_LENGTH",
-                "ORDINAL_POSITION", "IS_NULLABLE", 0
+                "ORDINAL_POSITION", "IS_NULLABLE", nullptr
             };
             statics.columnRowNames =
                 createStringSequence( columnNames );
@@ -564,7 +564,7 @@ Statics & getStatics()
                     "SEARCHABLE", "UNSIGNED_ATTRIBUTE", "FIXED_PREC_SCALE",
                     "AUTO_INCREMENT", "LOCAL_TYPE_NAME", "MINIMUM_SCALE",
                     "MAXIMUM_SCALE", "SQL_DATA_TYPE", "SQL_DATETIME_SUB",
-                    "NUM_PREC_RADIX", 0
+                    "NUM_PREC_RADIX", nullptr
                 };
             statics.typeinfoColumnNames = createStringSequence( typeinfoColumnNames );
 
@@ -573,7 +573,7 @@ Statics & getStatics()
                     "TABLE_CAT", "TABLE_SCHEM", "TABLE_NAME",
                     "NON_UNIQUE", "INDEX_QUALIFIER", "INDEX_NAME",
                     "TYPE", "ORDINAL_POSITION", "COLUMN_NAME",
-                    "ASC_OR_DESC", "CARDINALITY", "PAGES", "FILTER_CONDITION",0
+                    "ASC_OR_DESC", "CARDINALITY", "PAGES", "FILTER_CONDITION",nullptr
                 };
             statics.indexinfoColumnNames = createStringSequence( indexinfoColumnNames );
 
@@ -593,12 +593,12 @@ Statics & getStatics()
                     "FK_NAME" ,
                     "PK_NAME" ,
                     "DEFERRABILITY" ,
-                    0
+                    nullptr
                 };
             statics.importedKeysColumnNames =
                 createStringSequence( importedKeysColumnNames );
 
-            static const char * resultSetArrayColumnNames[] = { "INDEX" , "VALUE", 0  };
+            static const char * resultSetArrayColumnNames[] = { "INDEX" , "VALUE", nullptr  };
             statics.resultSetArrayColumnNames =
                 createStringSequence( resultSetArrayColumnNames );
 
@@ -666,7 +666,7 @@ Statics & getStatics()
 //                 { "_date",  com::sun::star::sdbc::DataType::ARRAY }, // switch to date later
 //                 { "_time",  com::sun::star::sdbc::DataType::ARRAY }, // switch to time later
 
-                { 0, 0 }
+                { nullptr, 0 }
             };
             int i;
             for( i = 0 ; baseTypeDefs[i].typeName ; i ++ )
@@ -699,7 +699,7 @@ Statics & getStatics()
                     { "SQL_DATA_TYPE", "TYPEINFO", "pg_catalog", "", com::sun::star::sdbc::DataType::INTEGER, 0,50,false,false,false,false, true },  // 15
                     { "SQL_DATETIME_SUB", "TYPEINFO", "pg_catalog", "", com::sun::star::sdbc::DataType::INTEGER, 0,50,false,false,false,false , true},  // 16
                     { "NUM_PREC_RADIX", "TYPEINFO", "pg_catalog", "", com::sun::star::sdbc::DataType::INTEGER, 0,50,false,false,false,false, true },  // 17
-                    {0,0,0,0,0,0,0,false,false,false,false, false}
+                    {nullptr,nullptr,nullptr,nullptr,0,0,0,false,false,false,false, false}
                 };
 
             for( i = 0 ; defTypeInfoMetaData[i].columnName ; i++ )

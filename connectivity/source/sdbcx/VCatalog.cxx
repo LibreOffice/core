@@ -38,10 +38,10 @@ IMPLEMENT_SERVICE_INFO(OCatalog,"com.sun.star.comp.connectivity.OCatalog","com.s
 
 OCatalog::OCatalog(const Reference< XConnection> &_xConnection) : OCatalog_BASE(m_aMutex)
             ,connectivity::OSubComponent<OCatalog, OCatalog_BASE>(_xConnection, this)
-            ,m_pTables(NULL)
-            ,m_pViews(NULL)
-            ,m_pGroups(NULL)
-            ,m_pUsers(NULL)
+            ,m_pTables(nullptr)
+            ,m_pViews(nullptr)
+            ,m_pGroups(nullptr)
+            ,m_pUsers(nullptr)
 {
     try
     {

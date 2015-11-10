@@ -66,7 +66,7 @@ namespace connectivity
     };
 
 
-    SharedResources_Impl*   SharedResources_Impl::s_pInstance( NULL );
+    SharedResources_Impl*   SharedResources_Impl::s_pInstance( nullptr );
     oslInterlockedCount     SharedResources_Impl::s_nClients( 0 );
 
 
@@ -87,7 +87,7 @@ namespace connectivity
 
     OUString SharedResources_Impl::getResourceString( ResourceId _nId )
     {
-        if ( m_pResourceBundle.get() == NULL )
+        if ( m_pResourceBundle.get() == nullptr )
             // this should never happen, but we gracefully ignore it. It has been reported
             // in the constructor in non-product builds.
             return OUString();
@@ -108,7 +108,7 @@ namespace connectivity
         if ( 0 == osl_atomic_decrement( &s_nClients ) )
         {
             delete s_pInstance;
-            s_pInstance = NULL;
+            s_pInstance = nullptr;
         }
     }
 

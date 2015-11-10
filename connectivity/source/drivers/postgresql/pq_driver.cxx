@@ -285,10 +285,10 @@ static const struct cppu::ImplementationEntry g_entries[] =
 {
     {
         pq_sdbc_driver::DriverCreateInstance, pq_sdbc_driver::DriverGetImplementationName,
-        pq_sdbc_driver::DriverGetSupportedServiceNames, 0,
-        0 , 0
+        pq_sdbc_driver::DriverGetSupportedServiceNames, nullptr,
+        nullptr , 0
     },
-    { 0, 0, 0, 0, 0, 0 }
+    { nullptr, nullptr, nullptr, nullptr, nullptr, 0 }
 };
 
 extern "C"
@@ -300,7 +300,7 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL postgresql_sdbc_component_getFactory(
     // need to extract the defaultcontext, because the way, sdbc
     // bypasses the servicemanager, does not allow to use the
     // XSingleComponentFactory interface ...
-    void * pRet = 0;
+    void * pRet = nullptr;
     Reference< XSingleComponentFactory > xFactory;
     Reference< com::sun::star::lang::XMultiServiceFactory > xSmgr(
         static_cast< XInterface * >(pServiceManager),

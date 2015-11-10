@@ -42,7 +42,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL mysql_component_getFactory(
 {
     if (!pServiceManager)
     {
-        return 0;
+        return nullptr;
     }
 
     Reference< XSingleServiceFactory > xRet;

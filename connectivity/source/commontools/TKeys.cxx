@@ -52,7 +52,7 @@ OKeysHelper::OKeysHelper(   OTableHelper* _pTable,
 
 sdbcx::ObjectType OKeysHelper::createObject(const OUString& _rName)
 {
-    sdbcx::ObjectType xRet = NULL;
+    sdbcx::ObjectType xRet = nullptr;
 
     if(!_rName.isEmpty())
     {
@@ -83,7 +83,7 @@ Reference< XPropertySet > OKeysHelper::createDescriptor()
 */
 OUString getKeyRuleString(bool _bUpdate,sal_Int32 _nKeyRule)
 {
-    const char* pKeyRule = NULL;
+    const char* pKeyRule = nullptr;
     switch ( _nKeyRule )
     {
         case KeyRule::CASCADE:
@@ -128,7 +128,7 @@ sdbcx::ObjectType OKeysHelper::appendObject( const OUString& _rForName, const Re
 {
     Reference< XConnection> xConnection = m_pTable->getConnection();
     if ( !xConnection.is() )
-        return NULL;
+        return nullptr;
     if ( m_pTable->isNew() )
     {
         Reference< XPropertySet > xNewDescriptor( cloneDescriptor( descriptor ) );

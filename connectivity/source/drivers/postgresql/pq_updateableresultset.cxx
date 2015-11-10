@@ -126,7 +126,7 @@ com::sun::star::uno::Reference< com::sun::star::sdbc::XCloseable > UpdateableRes
 
     Reference <XCloseable > ret = pRS; // give it an refcount
 
-    pRS->m_meta = new ResultSetMetaData( mutex, pRS,0, ppSettings, result, schema, table );
+    pRS->m_meta = new ResultSetMetaData( mutex, pRS,nullptr, ppSettings, result, schema, table );
 
     PQclear( result ); // we don't need it anymore
 

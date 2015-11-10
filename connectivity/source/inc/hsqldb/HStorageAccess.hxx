@@ -29,10 +29,10 @@ namespace connectivity { namespace hsqldb
     class DataLogFile;
 } }
 
-jint read_from_storage_stream( JNIEnv * env, jobject obj_this, jstring name, jstring key, ::connectivity::hsqldb::DataLogFile* logger = 0 );
-jint read_from_storage_stream_into_buffer( JNIEnv * env, jobject obj_this,jstring name, jstring key, jbyteArray buffer, jint off, jint len, ::connectivity::hsqldb::DataLogFile* logger = 0 );
-void write_to_storage_stream_from_buffer( JNIEnv* env, jobject obj_this, jstring name, jstring key, jbyteArray buffer, jint off, jint len, ::connectivity::hsqldb::DataLogFile* logger = 0 );
-void write_to_storage_stream( JNIEnv* env, jobject obj_this, jstring name, jstring key, jint v, ::connectivity::hsqldb::DataLogFile* logger = 0 );
+jint read_from_storage_stream( JNIEnv * env, jobject obj_this, jstring name, jstring key, ::connectivity::hsqldb::DataLogFile* logger = nullptr );
+jint read_from_storage_stream_into_buffer( JNIEnv * env, jobject obj_this,jstring name, jstring key, jbyteArray buffer, jint off, jint len, ::connectivity::hsqldb::DataLogFile* logger = nullptr );
+void write_to_storage_stream_from_buffer( JNIEnv* env, jobject obj_this, jstring name, jstring key, jbyteArray buffer, jint off, jint len, ::connectivity::hsqldb::DataLogFile* logger = nullptr );
+void write_to_storage_stream( JNIEnv* env, jobject obj_this, jstring name, jstring key, jint v, ::connectivity::hsqldb::DataLogFile* logger = nullptr );
 
 #endif // INCLUDED_CONNECTIVITY_SOURCE_INC_HSQLDB_HSTORAGEACCESS_HXX
 

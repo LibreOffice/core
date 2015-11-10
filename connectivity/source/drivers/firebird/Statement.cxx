@@ -89,7 +89,7 @@ void OStatement::disposeResultSet()
     {
         freeSQLVAR(m_pSqlda);
         free(m_pSqlda);
-        m_pSqlda = 0;
+        m_pSqlda = nullptr;
     }
 }
 
@@ -121,7 +121,7 @@ uno::Reference< XResultSet > SAL_CALL OStatement::executeQuery(const OUString& s
                             &m_pConnection->getTransaction(),
                             &m_aStatementHandle,
                             1,
-                            NULL);
+                            nullptr);
     if (aErr)
         SAL_WARN("connectivity.firebird", "isc_dsql_execute failed");
 

@@ -53,7 +53,7 @@ namespace connectivity
             for(jsize i=0;i<nLen;++i)
             {
                 JT xInfo(pEnv,pEnv->GetObjectArrayElement(_Array,i));
-                java_lang_Object::ThrowSQLException(pEnv,NULL);
+                java_lang_Object::ThrowSQLException(pEnv,nullptr);
                 xOut.getArray()[i] = xInfo;
             }
             pEnv->DeleteLocalRef(_Array);

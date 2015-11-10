@@ -78,7 +78,7 @@ namespace connectivity
             void setOrigColumns(const css::uno::Reference< css::container::XNameAccess>& rCols);
             static OOperandAttr* createOperandAttr(sal_Int32 _nPos,
                                                     const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xCol,
-                                                    const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>& _xIndexes=NULL);
+                                                    const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>& _xIndexes=nullptr);
         };
     }
 }

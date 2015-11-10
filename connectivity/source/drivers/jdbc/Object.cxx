@@ -62,7 +62,7 @@ using namespace ::com::sun::star::lang;
 
 SDBThreadAttach::SDBThreadAttach()
  : m_aGuard(java_lang_Object::getVM())
- , pEnv(NULL)
+ , pEnv(nullptr)
 {
     pEnv = m_aGuard.getEnvironment();
     OSL_ENSURE(pEnv,"Environment is nULL!");
@@ -93,7 +93,7 @@ void SDBThreadAttach::releaseRef()
 }
 
 // static variables of the class
-jclass java_lang_Object::theClass = 0;
+jclass java_lang_Object::theClass = nullptr;
 
 jclass java_lang_Object::getMyClass() const
 {
@@ -103,14 +103,14 @@ jclass java_lang_Object::getMyClass() const
 }
 // the actual constructor
 java_lang_Object::java_lang_Object()
-            : object( 0 )
+            : object( nullptr )
 {
     SDBThreadAttach::addRef();
 }
 
 // the protected-constructor for the derived classes
 java_lang_Object::java_lang_Object( JNIEnv * pXEnv, jobject myObj )
-    : object( NULL )
+    : object( nullptr )
 {
     SDBThreadAttach::addRef();
     if( pXEnv && myObj )
@@ -131,7 +131,7 @@ void java_lang_Object::clearObject(JNIEnv& rEnv)
     if( object )
     {
         rEnv.DeleteGlobalRef( object );
-        object = NULL;
+        object = nullptr;
     }
 }
 
@@ -154,7 +154,7 @@ void java_lang_Object::saveRef( JNIEnv * pXEnv, jobject myObj )
 
 OUString java_lang_Object::toString() const
 {
-    static jmethodID mID(NULL);
+    static jmethodID mID(nullptr);
     return callStringMethod("toString",mID);
 }
 
@@ -164,7 +164,7 @@ namespace
     bool    lcl_translateJNIExceptionToUNOException(
         JNIEnv* _pEnvironment, const Reference< XInterface >& _rxContext, SQLException& _out_rException )
     {
-        jthrowable jThrow = _pEnvironment ? _pEnvironment->ExceptionOccurred() : NULL;
+        jthrowable jThrow = _pEnvironment ? _pEnvironment->ExceptionOccurred() : nullptr;
         if ( !jThrow )
             return false;
 
@@ -261,7 +261,7 @@ bool java_lang_Object::callBooleanMethod( const char* _pMethodName, jmethodID& _
     obtainMethodId_throwSQL(t.pEnv, _pMethodName,"()Z", _inout_MethodID);
     // call method
     out = t.pEnv->CallBooleanMethod( object, _inout_MethodID );
-    ThrowSQLException( t.pEnv, NULL );
+    ThrowSQLException( t.pEnv, nullptr );
 
     return out;
 }
@@ -274,7 +274,7 @@ bool java_lang_Object::callBooleanMethodWithIntArg( const char* _pMethodName, jm
     obtainMethodId_throwSQL(t.pEnv, _pMethodName,"(I)Z", _inout_MethodID);
     // call method
     out = t.pEnv->CallBooleanMethod( object, _inout_MethodID, _nArgument );
-    ThrowSQLException( t.pEnv, NULL );
+    ThrowSQLException( t.pEnv, nullptr );
 
     return out;
 }
@@ -293,7 +293,7 @@ sal_Int32 java_lang_Object::callIntMethod_ThrowSQL(const char* _pMethodName, jme
     obtainMethodId_throwSQL(t.pEnv, _pMethodName,"()I", _inout_MethodID);
     // call method
     jint out( t.pEnv->CallIntMethod( object, _inout_MethodID ) );
-    ThrowSQLException( t.pEnv, NULL );
+    ThrowSQLException( t.pEnv, nullptr );
     return (sal_Int32)out;
 }
 
@@ -304,7 +304,7 @@ sal_Int32 java_lang_Object::callIntMethod_ThrowRuntime(const char* _pMethodName,
     obtainMethodId_throwRuntime(t.pEnv, _pMethodName,"()I", _inout_MethodID);
     // call method
     jint out( t.pEnv->CallIntMethod( object, _inout_MethodID ) );
-    ThrowRuntimeException(t.pEnv, NULL);
+    ThrowRuntimeException(t.pEnv, nullptr);
     return (sal_Int32)out;
 }
 
@@ -315,7 +315,7 @@ sal_Int32 java_lang_Object::callIntMethodWithIntArg_ThrowSQL( const char* _pMeth
     obtainMethodId_throwSQL(t.pEnv, _pMethodName,"(I)I", _inout_MethodID);
     // call method
     jint out( t.pEnv->CallIntMethod( object, _inout_MethodID , _nArgument) );
-    ThrowSQLException( t.pEnv, NULL );
+    ThrowSQLException( t.pEnv, nullptr );
     return (sal_Int32)out;
 }
 
@@ -326,7 +326,7 @@ sal_Int32 java_lang_Object::callIntMethodWithIntArg_ThrowRuntime( const char* _p
     obtainMethodId_throwRuntime(t.pEnv, _pMethodName,"(I)I", _inout_MethodID);
     // call method
     jint out( t.pEnv->CallIntMethod( object, _inout_MethodID , _nArgument) );
-    ThrowRuntimeException(t.pEnv, NULL);
+    ThrowRuntimeException(t.pEnv, nullptr);
     return (sal_Int32)out;
 }
 
@@ -338,7 +338,7 @@ void java_lang_Object::callVoidMethod_ThrowSQL( const char* _pMethodName, jmetho
 
     // call method
     t.pEnv->CallVoidMethod( object, _inout_MethodID );
-    ThrowSQLException( t.pEnv, NULL );
+    ThrowSQLException( t.pEnv, nullptr );
 }
 
 void java_lang_Object::callVoidMethod_ThrowRuntime( const char* _pMethodName, jmethodID& _inout_MethodID) const
@@ -349,7 +349,7 @@ void java_lang_Object::callVoidMethod_ThrowRuntime( const char* _pMethodName, jm
 
     // call method
     t.pEnv->CallVoidMethod( object, _inout_MethodID );
-    ThrowRuntimeException(t.pEnv, NULL);
+    ThrowRuntimeException(t.pEnv, nullptr);
 }
 
 void java_lang_Object::callVoidMethodWithIntArg_ThrowSQL( const char* _pMethodName, jmethodID& _inout_MethodID, sal_Int32 _nArgument ) const
@@ -360,7 +360,7 @@ void java_lang_Object::callVoidMethodWithIntArg_ThrowSQL( const char* _pMethodNa
 
     // call method
     t.pEnv->CallVoidMethod( object, _inout_MethodID,_nArgument );
-    ThrowSQLException( t.pEnv, NULL );
+    ThrowSQLException( t.pEnv, nullptr );
 }
 
 void java_lang_Object::callVoidMethodWithIntArg_ThrowRuntime( const char* _pMethodName, jmethodID& _inout_MethodID, sal_Int32 _nArgument ) const
@@ -371,7 +371,7 @@ void java_lang_Object::callVoidMethodWithIntArg_ThrowRuntime( const char* _pMeth
 
     // call method
     t.pEnv->CallVoidMethod( object, _inout_MethodID,_nArgument );
-    ThrowRuntimeException(t.pEnv, NULL);
+    ThrowRuntimeException(t.pEnv, nullptr);
 }
 
 void java_lang_Object::callVoidMethodWithBoolArg_ThrowSQL( const char* _pMethodName, jmethodID& _inout_MethodID, bool _nArgument ) const
@@ -381,7 +381,7 @@ void java_lang_Object::callVoidMethodWithBoolArg_ThrowSQL( const char* _pMethodN
     obtainMethodId_throwSQL(t.pEnv, _pMethodName,"(Z)V", _inout_MethodID);
     // call method
     t.pEnv->CallVoidMethod( object, _inout_MethodID,int(_nArgument) );
-    ThrowSQLException( t.pEnv, NULL );
+    ThrowSQLException( t.pEnv, nullptr );
 }
 
 void java_lang_Object::callVoidMethodWithBoolArg_ThrowRuntime( const char* _pMethodName, jmethodID& _inout_MethodID, bool _nArgument ) const
@@ -391,7 +391,7 @@ void java_lang_Object::callVoidMethodWithBoolArg_ThrowRuntime( const char* _pMet
     obtainMethodId_throwRuntime(t.pEnv, _pMethodName,"(Z)V", _inout_MethodID);
     // call method
     t.pEnv->CallVoidMethod( object, _inout_MethodID,int(_nArgument) );
-    ThrowRuntimeException(t.pEnv, NULL);
+    ThrowRuntimeException(t.pEnv, nullptr);
 }
 
 OUString java_lang_Object::callStringMethod( const char* _pMethodName, jmethodID& _inout_MethodID ) const
@@ -410,7 +410,7 @@ jobject java_lang_Object::callObjectMethod( JNIEnv * _pEnv,const char* _pMethodN
     obtainMethodId_throwSQL(_pEnv, _pMethodName,_pSignature, _inout_MethodID);
     // call method
     jobject out = _pEnv->CallObjectMethod( object, _inout_MethodID);
-    ThrowSQLException( _pEnv, NULL );
+    ThrowSQLException( _pEnv, nullptr );
     return out;
 }
 
@@ -420,7 +420,7 @@ jobject java_lang_Object::callObjectMethodWithIntArg( JNIEnv * _pEnv,const char*
     obtainMethodId_throwSQL(_pEnv, _pMethodName,_pSignature, _inout_MethodID);
     // call method
     jobject out = _pEnv->CallObjectMethod( object, _inout_MethodID,_nArgument );
-    ThrowSQLException( _pEnv, NULL );
+    ThrowSQLException( _pEnv, nullptr );
     return out;
 }
 
@@ -441,7 +441,7 @@ void java_lang_Object::callVoidMethodWithStringArg( const char* _pMethodName, jm
     jdbc::LocalRef< jstring > str( t.env(),convertwchar_tToJavaString(t.pEnv,_nArgument));
     // call method
     t.pEnv->CallVoidMethod( object, _inout_MethodID , str.get());
-    ThrowSQLException( t.pEnv, NULL );
+    ThrowSQLException( t.pEnv, nullptr );
 }
 
 sal_Int32 java_lang_Object::callIntMethodWithStringArg( const char* _pMethodName, jmethodID& _inout_MethodID,const OUString& _nArgument ) const
@@ -462,7 +462,7 @@ sal_Int32 java_lang_Object::callIntMethodWithStringArg( const char* _pMethodName
     jdbc::LocalRef< jstring > str( t.env(),convertwchar_tToJavaString(t.pEnv,_nArgument));
     // call method
     jint out = t.pEnv->CallIntMethod( object, _inout_MethodID , str.get());
-    ThrowSQLException( t.pEnv, NULL );
+    ThrowSQLException( t.pEnv, nullptr );
     return (sal_Int32)out;
 }
 

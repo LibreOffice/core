@@ -76,20 +76,20 @@ IMPLEMENT_SERVICE_INFO(OResultSet,"com.sun.star.sdbcx.drivers.file.ResultSet","c
 
 OResultSet::OResultSet(OStatement_Base* pStmt,OSQLParseTreeIterator&    _aSQLIterator) :    OResultSet_BASE(m_aMutex)
                         ,::comphelper::OPropertyContainer(OResultSet_BASE::rBHelper)
-                        ,m_aAssignValues(NULL)
+                        ,m_aAssignValues(nullptr)
                         ,m_aSkipDeletedSet(this)
-                        ,m_pFileSet(NULL)
-                        ,m_pSortIndex(NULL)
-                        ,m_pTable(NULL)
+                        ,m_pFileSet(nullptr)
+                        ,m_pSortIndex(nullptr)
+                        ,m_pTable(nullptr)
                         ,m_pParseTree(pStmt->getParseTree())
-                        ,m_pSQLAnalyzer(NULL)
+                        ,m_pSQLAnalyzer(nullptr)
                         ,m_aSQLIterator(_aSQLIterator)
                         ,m_nFetchSize(0)
                         ,m_nResultSetType(ResultSetType::SCROLL_INSENSITIVE)
                         ,m_nFetchDirection(FetchDirection::FORWARD)
                         ,m_nResultSetConcurrency(ResultSetConcurrency::UPDATABLE)
                         ,m_xStatement(*pStmt)
-                        ,m_xMetaData(NULL)
+                        ,m_xMetaData(nullptr)
                         ,m_xDBMetaData(pStmt->getOwnConnection()->getMetaData())
                         ,m_nTextEncoding(pStmt->getOwnConnection()->getTextEncoding())
                         ,m_nRowPos(-1)
@@ -144,10 +144,10 @@ void OResultSet::disposing()
     ::osl::MutexGuard aGuard(m_aMutex);
     m_xStatement.clear();
     m_xMetaData.clear();
-    m_pParseTree    = NULL;
+    m_pParseTree    = nullptr;
     m_xColNames.clear();
-    m_xColumns = NULL;
-    m_xParamColumns = NULL;
+    m_xColumns = nullptr;
+    m_xParamColumns = nullptr;
     m_xColsIdx.clear();
 
     Reference<XComponent> xComp = m_pTable;
@@ -156,10 +156,10 @@ void OResultSet::disposing()
     if(m_pTable)
     {
         m_pTable->release();
-        m_pTable = NULL;
+        m_pTable = nullptr;
     }
 
-    m_pFileSet = NULL;
+    m_pFileSet = nullptr;
     DELETEZ(m_pSortIndex);
 
     if(m_aInsertRow.is())
@@ -229,12 +229,12 @@ void OResultSet::checkIndex(sal_Int32 columnIndex ) throw(::com::sun::star::sdbc
 
 Reference< ::com::sun::star::io::XInputStream > SAL_CALL OResultSet::getBinaryStream( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException, std::exception)
 {
-    return NULL;
+    return nullptr;
 }
 
 Reference< ::com::sun::star::io::XInputStream > SAL_CALL OResultSet::getCharacterStream( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException, std::exception)
 {
-    return NULL;
+    return nullptr;
 }
 
 
@@ -310,25 +310,25 @@ Reference< XResultSetMetaData > SAL_CALL OResultSet::getMetaData(  ) throw(SQLEx
 
 Reference< XArray > SAL_CALL OResultSet::getArray( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException, std::exception)
 {
-    return NULL;
+    return nullptr;
 }
 
 
 
 Reference< XClob > SAL_CALL OResultSet::getClob( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException, std::exception)
 {
-    return NULL;
+    return nullptr;
 }
 
 Reference< XBlob > SAL_CALL OResultSet::getBlob( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException, std::exception)
 {
-    return NULL;
+    return nullptr;
 }
 
 
 Reference< XRef > SAL_CALL OResultSet::getRef( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException, std::exception)
 {
-    return NULL;
+    return nullptr;
 }
 
 
@@ -1174,7 +1174,7 @@ void OResultSet::sortRows()
     }
 
     // create sorted Keyset
-    m_pFileSet = NULL;
+    m_pFileSet = nullptr;
     m_pFileSet = m_pSortIndex->CreateKeySet();
     DELETEZ(m_pSortIndex);
     // now access to a sorted set is possible via Index
@@ -1217,7 +1217,7 @@ bool OResultSet::OpenImpl()
     m_nResultSetConcurrency = (m_pTable->isReadOnly() || isCount()) ? ResultSetConcurrency::READ_ONLY : ResultSetConcurrency::UPDATABLE;
 
     // create new Index:
-    m_pFileSet = NULL;
+    m_pFileSet = nullptr;
 
     // position at the beginning
     m_nRowPos = -1;
@@ -1258,7 +1258,7 @@ bool OResultSet::OpenImpl()
             else
             {
                 bool bDistinct = false;
-                assert(m_pParseTree != 0);
+                assert(m_pParseTree != nullptr);
                 OSQLParseNode *pDistinct = m_pParseTree->getChild(1);
 
                 assert(m_aOrderbyColumnNumber.size() ==
@@ -1416,7 +1416,7 @@ bool OResultSet::OpenImpl()
 
 Sequence< sal_Int8 > OResultSet::getUnoTunnelImplementationId()
 {
-    static ::cppu::OImplementationId * pId = 0;
+    static ::cppu::OImplementationId * pId = nullptr;
     if (! pId)
     {
         ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
@@ -1633,7 +1633,7 @@ void SAL_CALL OResultSet::disposing( const EventObject& Source ) throw (RuntimeE
     if(m_pTable && Source.Source == xProp)
     {
         m_pTable->release();
-        m_pTable = NULL;
+        m_pTable = nullptr;
     }
 }
 

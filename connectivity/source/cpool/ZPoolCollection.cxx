@@ -297,7 +297,7 @@ OConnectionPool* OPoolCollection::getConnectionPool(const OUString& _sImplName,
                                                     const Reference< XDriver >& _xDriver,
                                                     const Reference< XInterface >& _xDriverNode)
 {
-    OConnectionPool *pRet = 0;
+    OConnectionPool *pRet = nullptr;
     OConnectionPools::const_iterator aFind = m_aPools.find(_sImplName);
     if (aFind != m_aPools.end())
         pRet = aFind->second;

@@ -218,7 +218,7 @@ namespace connectivity
 
         protected:
             virtual void Exec(OCodeStack&) override;
-            virtual bool operate(const OOperand*, const OOperand* = NULL) const override;
+            virtual bool operate(const OOperand*, const OOperand* = nullptr) const override;
         };
 
         class OOp_AND : public OBoolOperator
@@ -244,14 +244,14 @@ namespace connectivity
             TYPEINFO_OVERRIDE();
         public:
             virtual void Exec(OCodeStack&) override;
-            virtual bool operate(const OOperand*, const OOperand* = NULL) const override;
+            virtual bool operate(const OOperand*, const OOperand* = nullptr) const override;
         };
 
         class OOO_DLLPUBLIC_FILE OOp_ISNOTNULL : public OOp_ISNULL
         {
         public:
             TYPEINFO_OVERRIDE();
-            virtual bool operate(const OOperand*, const OOperand* = NULL) const override;
+            virtual bool operate(const OOperand*, const OOperand* = nullptr) const override;
         };
 
         class OOO_DLLPUBLIC_FILE OOp_LIKE : public OBoolOperator

@@ -35,7 +35,7 @@ IniParser::IniParser(OUString const & rIniName) throw(com::sun::star::io::IOExce
     }
 
     SAL_INFO("connectivity.mork", "IniParser: " << iniUrl);
-    oslFileHandle handle=NULL;
+    oslFileHandle handle=nullptr;
     fileError = osl_openFile(iniUrl.pData, &handle, osl_File_OpenFlag_Read);
 
     if (osl_File_E_None == fileError)

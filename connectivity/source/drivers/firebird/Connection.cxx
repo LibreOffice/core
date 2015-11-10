@@ -84,7 +84,7 @@ Connection::Connection(FirebirdDriver*    _pDriver)
     , m_sConnectionURL()
     , m_sFirebirdURL()
     , m_bIsEmbedded(false)
-    , m_xEmbeddedStorage(0)
+    , m_xEmbeddedStorage(nullptr)
     , m_bIsFile(false)
     , m_sUser()
     , m_bIsAutoCommit(false)
@@ -92,8 +92,8 @@ Connection::Connection(FirebirdDriver*    _pDriver)
     , m_aTransactionIsolation(TransactionIsolation::REPEATABLE_READ)
     , m_aDBHandle(0)
     , m_aTransactionHandle(0)
-    , m_xCatalog(0)
-    , m_xMetaData(0)
+    , m_xCatalog(nullptr)
+    , m_xMetaData(nullptr)
     , m_aStatements()
 {
 }
@@ -166,7 +166,7 @@ void Connection::construct(const ::rtl::OUString& url, const Sequence< PropertyV
 
             bIsNewDatabase = !m_xEmbeddedStorage->hasElements();
 
-            m_pExtractedFDBFile.reset(new ::utl::TempFile(NULL, true));
+            m_pExtractedFDBFile.reset(new ::utl::TempFile(nullptr, true));
             m_sFirebirdURL = m_pExtractedFDBFile->GetFileName() + "/firebird.fdb";
 
             SAL_INFO("connectivity.firebird", "Temporary .fdb location:  " << m_sFirebirdURL);
@@ -427,7 +427,7 @@ Reference< XPreparedStatement > SAL_CALL Connection::prepareCall(
     // OUString sSqlStatement (transformPreparedStatement( _sSql ));
 
     // not implemented yet :-) a task to do
-    return NULL;
+    return nullptr;
 }
 
 OUString SAL_CALL Connection::nativeSQL( const OUString& _sSql )
@@ -635,7 +635,7 @@ sal_Int32 SAL_CALL Connection::getTransactionIsolation(  ) throw(SQLException, R
 Reference< XNameAccess > SAL_CALL Connection::getTypeMap() throw(SQLException, RuntimeException, std::exception)
 {
     ::dbtools::throwFeatureNotImplementedSQLException( "XConnection::getTypeMap", *this );
-    return 0;
+    return nullptr;
 }
 
 void SAL_CALL Connection::setTypeMap(const Reference< XNameAccess >& typeMap)
@@ -879,7 +879,7 @@ void Connection::rebuildIndexes() throw (SQLException, RuntimeException, std::ex
                                               0, // Length: 0 for null terminated
                                               sAlterIndex.getStr(),
                                               FIREBIRD_SQL_DIALECT,
-                                              NULL);
+                                              nullptr);
             if (aErr)
                 evaluateStatusVector(aStatusVector,
                                      "rebuildIndexes:isc_dsql_execute_immediate",

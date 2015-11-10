@@ -136,7 +136,7 @@ namespace connectivity
             const css::uno::Reference< css::sdbc::XConnection >& _rxConnection,
             const css::uno::Reference< css::container::XNameAccess >& _rxTables,
             const OSQLParser& _rParser,
-            const OSQLParseNode* pRoot = NULL );
+            const OSQLParseNode* pRoot = nullptr );
         ~OSQLParseTreeIterator();
 
         inline static void * SAL_CALL operator new( size_t nSize )
@@ -344,7 +344,7 @@ namespace connectivity
                 in the error message will be replaced with _rReplaceToken2
         */
         void impl_appendError( IParseContext::ErrorCode _eError,
-            const OUString* _pReplaceToken1 = NULL, const OUString* _pReplaceToken2 = NULL );
+            const OUString* _pReplaceToken1 = nullptr, const OUString* _pReplaceToken2 = nullptr );
 
         /** appends an SQLException corresponding to the given error code to our error collection
         */

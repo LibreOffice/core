@@ -57,7 +57,7 @@ namespace connectivity
             bool                            m_bNeedToReadLine;
         private:
             void fillColumns(const ::com::sun::star::lang::Locale& _aLocale);
-            bool readLine(sal_Int32 *pEndPos = NULL, sal_Int32 *pStartPos = NULL, bool nonEmpty = false);
+            bool readLine(sal_Int32 *pEndPos = nullptr, sal_Int32 *pStartPos = nullptr, bool nonEmpty = false);
             void setRowPos(::std::vector<TRowPositionInFile>::size_type rowNum, const TRowPositionInFile &rowPos);
             void impl_fillColumnInfo_nothrow(QuotedTokenizedString& aFirstLine, sal_Int32& nStartPosFirstLine, sal_Int32& nStartPosFirstLine2,
                                              sal_Int32& io_nType, sal_Int32& io_nPrecisions, sal_Int32& io_nScales, OUString& o_sTypeName,

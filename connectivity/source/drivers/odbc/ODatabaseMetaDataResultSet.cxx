@@ -52,9 +52,9 @@ ODatabaseMetaDataResultSet::ODatabaseMetaDataResultSet(OConnection* _pConnection
     ,OPropertySetHelper(ODatabaseMetaDataResultSet_BASE::rBHelper)
 
     ,m_aStatementHandle(_pConnection->createStatementHandle())
-    ,m_aStatement(NULL)
-    ,m_xMetaData(NULL)
-    ,m_pRowStatusArray(NULL)
+    ,m_aStatement(nullptr)
+    ,m_xMetaData(nullptr)
+    ,m_pRowStatusArray(nullptr)
     ,m_pConnection(_pConnection)
     ,m_nTextEncoding(_pConnection->getTextEncoding())
     ,m_nRowPos(-1)
@@ -94,7 +94,7 @@ void ODatabaseMetaDataResultSet::disposing()
 
     m_pConnection->freeStatementHandle(m_aStatementHandle);
 
-    m_aStatement    = NULL;
+    m_aStatement    = nullptr;
 m_xMetaData.clear();
     m_pConnection->release();
 }
@@ -193,13 +193,13 @@ template < typename T, SQLSMALLINT sqlTypeId > T ODatabaseMetaDataResultSet::get
 Reference< ::com::sun::star::io::XInputStream > SAL_CALL ODatabaseMetaDataResultSet::getBinaryStream( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException, std::exception)
 {
     ::dbtools::throwFunctionNotSupportedSQLException( "XRow::getBinaryStream", *this );
-    return NULL;
+    return nullptr;
 }
 
 Reference< ::com::sun::star::io::XInputStream > SAL_CALL ODatabaseMetaDataResultSet::getCharacterStream( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException, std::exception)
 {
     ::dbtools::throwFunctionNotSupportedSQLException( "XRow::getCharacterStream", *this );
-    return NULL;
+    return nullptr;
 }
 
 
@@ -351,26 +351,26 @@ Reference< XResultSetMetaData > SAL_CALL ODatabaseMetaDataResultSet::getMetaData
 Reference< XArray > SAL_CALL ODatabaseMetaDataResultSet::getArray( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException, std::exception)
 {
     ::dbtools::throwFunctionNotSupportedSQLException( "XRow::getArray", *this );
-    return NULL;
+    return nullptr;
 }
 
 Reference< XClob > SAL_CALL ODatabaseMetaDataResultSet::getClob( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException, std::exception)
 {
     ::dbtools::throwFunctionNotSupportedSQLException( "XRow::getClob", *this );
-    return NULL;
+    return nullptr;
 }
 
 Reference< XBlob > SAL_CALL ODatabaseMetaDataResultSet::getBlob( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException, std::exception)
 {
     ::dbtools::throwFunctionNotSupportedSQLException( "XRow::getBlob", *this );
-    return NULL;
+    return nullptr;
 }
 
 
 Reference< XRef > SAL_CALL ODatabaseMetaDataResultSet::getRef( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException, std::exception)
 {
     ::dbtools::throwFunctionNotSupportedSQLException( "XRow::getRef", *this );
-    return NULL;
+    return nullptr;
 }
 
 
@@ -593,7 +593,7 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSet::previous(  ) throw(SQLException, R
 
 Reference< XInterface > SAL_CALL ODatabaseMetaDataResultSet::getStatement(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    return NULL;
+    return nullptr;
 }
 
 
@@ -839,24 +839,24 @@ void ODatabaseMetaDataResultSet::openTables(const Any& catalog, const OUString& 
                             const Sequence< OUString >& types )  throw(SQLException, RuntimeException)
 {
     OString aPKQ,aPKO,aPKN,aCOL;
-    const OUString *pSchemaPat = NULL;
+    const OUString *pSchemaPat = nullptr;
 
     if(schemaPattern != "%")
         pSchemaPat = &schemaPattern;
     else
-        pSchemaPat = NULL;
+        pSchemaPat = nullptr;
 
     if ( catalog.hasValue() )
         aPKQ = OUStringToOString(comphelper::getString(catalog),m_nTextEncoding);
     aPKO = OUStringToOString(schemaPattern,m_nTextEncoding);
     aPKN = OUStringToOString(tableNamePattern,m_nTextEncoding);
 
-    const char  *pPKQ = catalog.hasValue() && !aPKQ.isEmpty() ? aPKQ.getStr()  : NULL,
-                *pPKO = pSchemaPat && !pSchemaPat->isEmpty() && !aPKO.isEmpty() ? aPKO.getStr() : NULL,
+    const char  *pPKQ = catalog.hasValue() && !aPKQ.isEmpty() ? aPKQ.getStr()  : nullptr,
+                *pPKO = pSchemaPat && !pSchemaPat->isEmpty() && !aPKO.isEmpty() ? aPKO.getStr() : nullptr,
                 *pPKN = aPKN.getStr();
 
 
-    const char  *pCOL = NULL;
+    const char  *pCOL = nullptr;
     const char* pComma = ",";
     const OUString* pBegin = types.getConstArray();
     const OUString* pEnd = pBegin + types.getLength();
@@ -886,9 +886,9 @@ void ODatabaseMetaDataResultSet::openTables(const Any& catalog, const OUString& 
 void ODatabaseMetaDataResultSet::openTablesTypes( ) throw(SQLException, RuntimeException)
 {
     SQLRETURN nRetcode = N3SQLTables(m_aStatementHandle,
-                            0,0,
-                            0,0,
-                            0,0,
+                            nullptr,0,
+                            nullptr,0,
+                            nullptr,0,
                             reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(SQL_ALL_TABLE_TYPES)),SQL_NTS);
     OTools::ThrowException(m_pConnection,nRetcode,m_aStatementHandle,SQL_HANDLE_STMT,*this);
 
@@ -936,12 +936,12 @@ void ODatabaseMetaDataResultSet::openColumnPrivileges(  const Any& catalog, cons
                                         const OUString& table,   const OUString& columnNamePattern )
                                         throw(SQLException, RuntimeException)
 {
-    const OUString *pSchemaPat = NULL;
+    const OUString *pSchemaPat = nullptr;
 
     if(schema != "%")
         pSchemaPat = &schema;
     else
-        pSchemaPat = NULL;
+        pSchemaPat = nullptr;
 
     OString aPKQ,aPKO,aPKN,aCOL;
 
@@ -951,8 +951,8 @@ void ODatabaseMetaDataResultSet::openColumnPrivileges(  const Any& catalog, cons
     aPKN = OUStringToOString(table,m_nTextEncoding);
     aCOL = OUStringToOString(columnNamePattern,m_nTextEncoding);
 
-    const char  *pPKQ = catalog.hasValue() && !aPKQ.isEmpty() ? aPKQ.getStr()  : NULL,
-                *pPKO = pSchemaPat && !pSchemaPat->isEmpty() && !aPKO.isEmpty() ? aPKO.getStr() : NULL,
+    const char  *pPKQ = catalog.hasValue() && !aPKQ.isEmpty() ? aPKQ.getStr()  : nullptr,
+                *pPKO = pSchemaPat && !pSchemaPat->isEmpty() && !aPKO.isEmpty() ? aPKO.getStr() : nullptr,
                 *pPKN = aPKN.getStr(),
                 *pCOL = aCOL.getStr();
 
@@ -971,12 +971,12 @@ void ODatabaseMetaDataResultSet::openColumns(   const Any& catalog,             
                                 const OUString& tableNamePattern,    const OUString& columnNamePattern )
                                 throw(SQLException, RuntimeException)
 {
-    const OUString *pSchemaPat = NULL;
+    const OUString *pSchemaPat = nullptr;
 
     if(schemaPattern != "%")
         pSchemaPat = &schemaPattern;
     else
-        pSchemaPat = NULL;
+        pSchemaPat = nullptr;
 
     OString aPKQ,aPKO,aPKN,aCOL;
     if ( catalog.hasValue() )
@@ -985,8 +985,8 @@ void ODatabaseMetaDataResultSet::openColumns(   const Any& catalog,             
     aPKN = OUStringToOString(tableNamePattern,m_nTextEncoding);
     aCOL = OUStringToOString(columnNamePattern,m_nTextEncoding);
 
-    const char  *pPKQ = catalog.hasValue() && !aPKQ.isEmpty() ? aPKQ.getStr()  : NULL,
-                *pPKO = pSchemaPat && !pSchemaPat->isEmpty() && !aPKO.isEmpty() ? aPKO.getStr() : NULL,
+    const char  *pPKQ = catalog.hasValue() && !aPKQ.isEmpty() ? aPKQ.getStr()  : nullptr,
+                *pPKO = pSchemaPat && !pSchemaPat->isEmpty() && !aPKO.isEmpty() ? aPKO.getStr() : nullptr,
                 *pPKN = aPKN.getStr(),
                 *pCOL = aCOL.getStr();
 
@@ -1039,12 +1039,12 @@ void ODatabaseMetaDataResultSet::openProcedureColumns(  const Any& catalog,     
                                 const OUString& procedureNamePattern,const OUString& columnNamePattern )
                                 throw(SQLException, RuntimeException)
 {
-    const OUString *pSchemaPat = NULL;
+    const OUString *pSchemaPat = nullptr;
 
     if(schemaPattern != "%")
         pSchemaPat = &schemaPattern;
     else
-        pSchemaPat = NULL;
+        pSchemaPat = nullptr;
 
     OString aPKQ,aPKO,aPKN,aCOL;
     if ( catalog.hasValue() )
@@ -1053,8 +1053,8 @@ void ODatabaseMetaDataResultSet::openProcedureColumns(  const Any& catalog,     
     aPKN = OUStringToOString(procedureNamePattern,m_nTextEncoding);
     aCOL = OUStringToOString(columnNamePattern,m_nTextEncoding);
 
-    const char  *pPKQ = catalog.hasValue() && !aPKQ.isEmpty() ? aPKQ.getStr()  : NULL,
-                *pPKO = pSchemaPat && !pSchemaPat->isEmpty() && !aPKO.isEmpty() ? aPKO.getStr() : NULL,
+    const char  *pPKQ = catalog.hasValue() && !aPKQ.isEmpty() ? aPKQ.getStr()  : nullptr,
+                *pPKO = pSchemaPat && !pSchemaPat->isEmpty() && !aPKO.isEmpty() ? aPKO.getStr() : nullptr,
                 *pPKN = aPKN.getStr(),
                 *pCOL = aCOL.getStr();
 
@@ -1073,12 +1073,12 @@ void ODatabaseMetaDataResultSet::openProcedures(const Any& catalog, const OUStri
                                 const OUString& procedureNamePattern)
                                 throw(SQLException, RuntimeException)
 {
-    const OUString *pSchemaPat = NULL;
+    const OUString *pSchemaPat = nullptr;
 
     if(schemaPattern != "%")
         pSchemaPat = &schemaPattern;
     else
-        pSchemaPat = NULL;
+        pSchemaPat = nullptr;
 
     OString aPKQ,aPKO,aPKN;
 
@@ -1087,8 +1087,8 @@ void ODatabaseMetaDataResultSet::openProcedures(const Any& catalog, const OUStri
     aPKO = OUStringToOString(schemaPattern,m_nTextEncoding);
     aPKN = OUStringToOString(procedureNamePattern,m_nTextEncoding);
 
-    const char  *pPKQ = catalog.hasValue() && !aPKQ.isEmpty() ? aPKQ.getStr()  : NULL,
-                *pPKO = pSchemaPat && !pSchemaPat->isEmpty() && !aPKO.isEmpty() ? aPKO.getStr() : NULL,
+    const char  *pPKQ = catalog.hasValue() && !aPKQ.isEmpty() ? aPKQ.getStr()  : nullptr,
+                *pPKO = pSchemaPat && !pSchemaPat->isEmpty() && !aPKO.isEmpty() ? aPKO.getStr() : nullptr,
                 *pPKN = aPKN.getStr();
 
 
@@ -1117,12 +1117,12 @@ void ODatabaseMetaDataResultSet::openSpecialColumns(bool _bRowVer,const Any& cat
                             Any() );
     }
 
-    const OUString *pSchemaPat = NULL;
+    const OUString *pSchemaPat = nullptr;
 
     if(schema != "%")
         pSchemaPat = &schema;
     else
-        pSchemaPat = NULL;
+        pSchemaPat = nullptr;
 
     OString aPKQ,aPKO,aPKN;
     if ( catalog.hasValue() )
@@ -1130,8 +1130,8 @@ void ODatabaseMetaDataResultSet::openSpecialColumns(bool _bRowVer,const Any& cat
     aPKO = OUStringToOString(schema,m_nTextEncoding);
     aPKN = OUStringToOString(table,m_nTextEncoding);
 
-    const char  *pPKQ = catalog.hasValue() && !aPKQ.isEmpty() ? aPKQ.getStr()  : NULL,
-                *pPKO = pSchemaPat && !pSchemaPat->isEmpty() && !aPKO.isEmpty() ? aPKO.getStr() : NULL,
+    const char  *pPKQ = catalog.hasValue() && !aPKQ.isEmpty() ? aPKQ.getStr()  : nullptr,
+                *pPKO = pSchemaPat && !pSchemaPat->isEmpty() && !aPKO.isEmpty() ? aPKO.getStr() : nullptr,
                 *pPKN = aPKN.getStr();
 
 
@@ -1168,12 +1168,12 @@ void ODatabaseMetaDataResultSet::openForeignKeys( const Any& catalog, const OUSt
     if ( catalog2.hasValue() )
         aFKQ = OUStringToOString(comphelper::getString(catalog2),m_nTextEncoding);
 
-    const char  *pPKQ = catalog.hasValue() && !aPKQ.isEmpty() ? aPKQ.getStr()  : NULL,
-                *pPKO = schema && !schema->isEmpty() ? (aPKO = OUStringToOString(*schema,m_nTextEncoding)).getStr() : NULL,
-                *pPKN = table   ? (aPKN = OUStringToOString(*table,m_nTextEncoding)).getStr(): NULL,
-                *pFKQ = catalog2.hasValue() && !aFKQ.isEmpty() ? aFKQ.getStr() : NULL,
-                *pFKO = schema2 && !schema2->isEmpty() ? (aFKO = OUStringToOString(*schema2,m_nTextEncoding)).getStr() : NULL,
-                *pFKN = table2  ? (aFKN = OUStringToOString(*table2,m_nTextEncoding)).getStr() : NULL;
+    const char  *pPKQ = catalog.hasValue() && !aPKQ.isEmpty() ? aPKQ.getStr()  : nullptr,
+                *pPKO = schema && !schema->isEmpty() ? (aPKO = OUStringToOString(*schema,m_nTextEncoding)).getStr() : nullptr,
+                *pPKN = table   ? (aPKN = OUStringToOString(*table,m_nTextEncoding)).getStr(): nullptr,
+                *pFKQ = catalog2.hasValue() && !aFKQ.isEmpty() ? aFKQ.getStr() : nullptr,
+                *pFKO = schema2 && !schema2->isEmpty() ? (aFKO = OUStringToOString(*schema2,m_nTextEncoding)).getStr() : nullptr,
+                *pFKN = table2  ? (aFKN = OUStringToOString(*table2,m_nTextEncoding)).getStr() : nullptr;
 
 
     SQLRETURN nRetcode = N3SQLForeignKeys(m_aStatementHandle,
@@ -1192,24 +1192,24 @@ void ODatabaseMetaDataResultSet::openImportedKeys(const Any& catalog, const OUSt
                                   const OUString& table) throw(SQLException, RuntimeException)
 {
 
-    openForeignKeys(Any(),NULL,NULL,catalog, schema == "%" ? &schema : NULL, &table);
+    openForeignKeys(Any(),nullptr,nullptr,catalog, schema == "%" ? &schema : nullptr, &table);
 }
 
 void ODatabaseMetaDataResultSet::openExportedKeys(const Any& catalog, const OUString& schema,
                                   const OUString& table) throw(SQLException, RuntimeException)
 {
-    openForeignKeys(catalog, schema == "%" ? &schema : NULL, &table,Any(),NULL,NULL);
+    openForeignKeys(catalog, schema == "%" ? &schema : nullptr, &table,Any(),nullptr,nullptr);
 }
 
 void ODatabaseMetaDataResultSet::openPrimaryKeys(const Any& catalog, const OUString& schema,
                                   const OUString& table) throw(SQLException, RuntimeException)
 {
-    const OUString *pSchemaPat = NULL;
+    const OUString *pSchemaPat = nullptr;
 
     if(schema != "%")
         pSchemaPat = &schema;
     else
-        pSchemaPat = NULL;
+        pSchemaPat = nullptr;
 
     OString aPKQ,aPKO,aPKN;
 
@@ -1217,8 +1217,8 @@ void ODatabaseMetaDataResultSet::openPrimaryKeys(const Any& catalog, const OUStr
         aPKQ = OUStringToOString(comphelper::getString(catalog),m_nTextEncoding);
     aPKO = OUStringToOString(schema,m_nTextEncoding);
 
-    const char  *pPKQ = catalog.hasValue() && !aPKQ.isEmpty() ? aPKQ.getStr()  : NULL,
-                *pPKO = pSchemaPat && !pSchemaPat->isEmpty() && !aPKO.isEmpty() ? aPKO.getStr() : NULL,
+    const char  *pPKQ = catalog.hasValue() && !aPKQ.isEmpty() ? aPKQ.getStr()  : nullptr,
+                *pPKO = pSchemaPat && !pSchemaPat->isEmpty() && !aPKO.isEmpty() ? aPKO.getStr() : nullptr,
                 *pPKN = (aPKN = OUStringToOString(table,m_nTextEncoding)).getStr();
 
 
@@ -1233,12 +1233,12 @@ void ODatabaseMetaDataResultSet::openPrimaryKeys(const Any& catalog, const OUStr
 void ODatabaseMetaDataResultSet::openTablePrivileges(const Any& catalog, const OUString& schemaPattern,
                                   const OUString& tableNamePattern) throw(SQLException, RuntimeException)
 {
-    const OUString *pSchemaPat = NULL;
+    const OUString *pSchemaPat = nullptr;
 
     if(schemaPattern != "%")
         pSchemaPat = &schemaPattern;
     else
-        pSchemaPat = NULL;
+        pSchemaPat = nullptr;
 
     OString aPKQ,aPKO,aPKN;
 
@@ -1246,8 +1246,8 @@ void ODatabaseMetaDataResultSet::openTablePrivileges(const Any& catalog, const O
         aPKQ = OUStringToOString(comphelper::getString(catalog),m_nTextEncoding);
     aPKO = OUStringToOString(schemaPattern,m_nTextEncoding);
 
-    const char  *pPKQ = catalog.hasValue() && !aPKQ.isEmpty() ? aPKQ.getStr()  : NULL,
-                *pPKO = pSchemaPat && !pSchemaPat->isEmpty() && !aPKO.isEmpty() ? aPKO.getStr() : NULL,
+    const char  *pPKQ = catalog.hasValue() && !aPKQ.isEmpty() ? aPKQ.getStr()  : nullptr,
+                *pPKO = pSchemaPat && !pSchemaPat->isEmpty() && !aPKO.isEmpty() ? aPKO.getStr() : nullptr,
                 *pPKN = (aPKN = OUStringToOString(tableNamePattern,m_nTextEncoding)).getStr();
 
 
@@ -1263,12 +1263,12 @@ void ODatabaseMetaDataResultSet::openIndexInfo( const Any& catalog, const OUStri
                                 const OUString& table, bool unique, bool approximate )
                                 throw(SQLException, RuntimeException)
 {
-    const OUString *pSchemaPat = NULL;
+    const OUString *pSchemaPat = nullptr;
 
     if(schema != "%")
         pSchemaPat = &schema;
     else
-        pSchemaPat = NULL;
+        pSchemaPat = nullptr;
 
     OString aPKQ,aPKO,aPKN;
 
@@ -1276,8 +1276,8 @@ void ODatabaseMetaDataResultSet::openIndexInfo( const Any& catalog, const OUStri
         aPKQ = OUStringToOString(comphelper::getString(catalog),m_nTextEncoding);
     aPKO = OUStringToOString(schema,m_nTextEncoding);
 
-    const char  *pPKQ = catalog.hasValue() && !aPKQ.isEmpty() ? aPKQ.getStr()  : NULL,
-                *pPKO = pSchemaPat && !pSchemaPat->isEmpty() && !aPKO.isEmpty() ? aPKO.getStr() : NULL,
+    const char  *pPKQ = catalog.hasValue() && !aPKQ.isEmpty() ? aPKQ.getStr()  : nullptr,
+                *pPKO = pSchemaPat && !pSchemaPat->isEmpty() && !aPKO.isEmpty() ? aPKO.getStr() : nullptr,
                 *pPKN = (aPKN = OUStringToOString(table,m_nTextEncoding)).getStr();
 
 

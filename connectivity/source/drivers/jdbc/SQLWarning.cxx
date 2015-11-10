@@ -23,7 +23,7 @@ using namespace connectivity;
 //************ Class: java.sql.SQLWarning
 
 
-jclass java_sql_SQLWarning_BASE::theClass = 0;
+jclass java_sql_SQLWarning_BASE::theClass = nullptr;
 
 java_sql_SQLWarning_BASE::~java_sql_SQLWarning_BASE()
 {}

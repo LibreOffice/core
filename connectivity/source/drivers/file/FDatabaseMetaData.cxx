@@ -225,7 +225,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
         aURL.SetSmartURL( sUrl );
         sThisContentExtension = aURL.getExtension();
 
-        ODatabaseMetaDataResultSet::ORow aRow { NULL, NULL, NULL };
+        ODatabaseMetaDataResultSet::ORow aRow { nullptr, nullptr, nullptr };
         aRow.reserve(6);
         bool bNewRow = false;
 
@@ -1058,7 +1058,7 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsBatchUpdates(  ) throw(SQLException
 
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getUDTs( const Any& /*catalog*/, const OUString& /*schemaPattern*/, const OUString& /*typeNamePattern*/, const Sequence< sal_Int32 >& /*types*/ ) throw(SQLException, RuntimeException, std::exception)
 {
-    return NULL;
+    return nullptr;
 }
 
 

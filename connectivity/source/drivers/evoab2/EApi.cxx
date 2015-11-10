@@ -136,19 +136,19 @@ bool EApiInit()
                                   ( eBookLibNames[ j ] ).pData,
                                   SAL_LOADMODULE_DEFAULT );
 
-        if( aModule == NULL)
+        if( aModule == nullptr)
             continue;
 
         if (tryLink( aModule, eBookLibNames[ j ], aCommonApiMap))
         {
-            if (eds_check_version( 3, 6, 0 ) != NULL)
+            if (eds_check_version( 3, 6, 0 ) != nullptr)
             {
                 if (tryLink( aModule, eBookLibNames[ j ], aOldApiMap))
                     return true;
             }
             else if (tryLink( aModule, eBookLibNames[ j ], aNewApiMap))
             {
-                if (eds_check_version( 3, 7, 6 ) != NULL)
+                if (eds_check_version( 3, 7, 6 ) != nullptr)
                 {
                     if (tryLink( aModule, eBookLibNames[ j ], aClientApiMap36))
                         return true;
@@ -171,7 +171,7 @@ ESourceRegistry *get_e_source_registry()
 {
     static ESourceRegistry *theInstance;
     if (!theInstance)
-        theInstance = e_source_registry_new_sync(NULL, NULL);
+        theInstance = e_source_registry_new_sync(nullptr, nullptr);
     return theInstance;
 }
 

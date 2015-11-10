@@ -117,7 +117,7 @@ void bufferEscapeConstant( OUStringBuffer & buf, const OUString & value, Connect
         // 22018 is for "Invalid character value" and seems to be the best match.
         // We have no good XInterface Reference to pass here, so just give NULL
         throw SQLException(OUString(errstr, strlen(errstr), settings->encoding),
-                           NULL,
+                           nullptr,
                            OUString("22018"),
                            -1,
                            Any());
@@ -158,12 +158,12 @@ static inline void ibufferQuoteIdentifier( OUStringBuffer & buf, const OUString 
 
     OString y = iOUStringToOString( toQuote, settings );
     char *cstr = PQescapeIdentifier(settings->pConnection, y.getStr(), y.getLength());
-    if ( cstr == NULL )
+    if ( cstr == nullptr )
     {
         char *errstr = PQerrorMessage(settings->pConnection);
         // Implementation-defined SQLACCESS error
         throw SQLException(OUString(errstr, strlen(errstr), settings->encoding),
-                           NULL,
+                           nullptr,
                            OUString("22018"),
                            -1,
                            Any());
@@ -825,7 +825,7 @@ OString extractSingleTableFromSelect( const OStringVector &vec )
                     else
                     {
                         static const char * forbiddenKeywords[] =
-                            { "join", "natural", "outer", "inner", "left", "right", "full" , 0 };
+                            { "join", "natural", "outer", "inner", "left", "right", "full" , nullptr };
                         for( int i = 0 ; forbiddenKeywords[i] ; i ++ )
                         {
                             size_t nKeywordLen = strlen(forbiddenKeywords[i]);

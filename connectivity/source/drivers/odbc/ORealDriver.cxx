@@ -102,7 +102,7 @@ namespace connectivity
 
 oslGenericFunction ORealObdcDriver::getOdbcFunction(ODBC3SQLFunctionId _nIndex) const
 {
-    oslGenericFunction pFunction = NULL;
+    oslGenericFunction pFunction = nullptr;
     switch(_nIndex)
     {
         case ODBC3SQLFunctionId::AllocHandle:

@@ -44,7 +44,7 @@ OEvoabConnection::OEvoabConnection(OEvoabDriver& _rDriver)
     : OSubComponent<OEvoabConnection, OConnection_BASE>( static_cast<cppu::OWeakObject*>(&_rDriver), this )
     , m_rDriver(_rDriver)
     , m_eSDBCAddressType(SDBCAddress::EVO_LOCAL)
-    , m_xCatalog(NULL)
+    , m_xCatalog(nullptr)
 {
 }
 
@@ -162,7 +162,7 @@ Reference< XPreparedStatement > SAL_CALL OEvoabConnection::prepareStatement( con
 Reference< XPreparedStatement > SAL_CALL OEvoabConnection::prepareCall( const OUString& /*sql*/ ) throw( SQLException, RuntimeException, std::exception)
 {
     ::dbtools::throwFeatureNotImplementedSQLException( "XConnection::prepareCall", *this );
-    return NULL;
+    return nullptr;
 }
 sal_Bool SAL_CALL OEvoabConnection::isClosed(  ) throw(SQLException, RuntimeException, std::exception)
 {
@@ -246,7 +246,7 @@ sal_Int32 SAL_CALL OEvoabConnection::getTransactionIsolation(  ) throw(SQLExcept
 Reference< ::com::sun::star::container::XNameAccess > SAL_CALL OEvoabConnection::getTypeMap(  ) throw(SQLException, RuntimeException, std::exception)
 {
     ::dbtools::throwFeatureNotImplementedSQLException( "XConnection::getTypeMap", *this );
-    return NULL;
+    return nullptr;
 }
 void SAL_CALL OEvoabConnection::setTypeMap( const Reference< ::com::sun::star::container::XNameAccess >& /*typeMap*/ ) throw(SQLException, RuntimeException, std::exception)
 {

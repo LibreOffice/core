@@ -99,7 +99,7 @@ void MQueryHelper::setAddressbook(OUString &ab)
 
 void MQueryHelper::append(MQueryHelperResultEntry* resEnt)
 {
-    if ( resEnt != NULL ) {
+    if ( resEnt != nullptr ) {
         m_aResults.push_back( resEnt );
         m_bAtEnd   = false;
     }
@@ -130,7 +130,7 @@ MQueryHelper::getByIndex(sal_uInt32 nRow)
     // Row numbers are from 1 to N, need to ensure this, and then
     // subtract 1
     if ( nRow < 1 ) {
-        return NULL;
+        return nullptr;
     }
     return m_aResults[nRow -1];
 }
@@ -163,8 +163,8 @@ bool MQueryHelper::getRowValue( ORowSetValue& rValue, sal_Int32 nDBRow,const OUS
 {
     MQueryHelperResultEntry* xResEntry = getByIndex( nDBRow );
 
-    OSL_ENSURE( xResEntry != NULL, "xResEntry == NULL");
-    if (xResEntry == NULL )
+    OSL_ENSURE( xResEntry != nullptr, "xResEntry == NULL");
+    if (xResEntry == nullptr )
     {
         rValue.setNull();
         return false;
@@ -216,7 +216,7 @@ sal_Int32 MQueryHelper::executeQuery(OConnection* xConnection, MQueryExpression 
     MorkTableMap *Tables = xMork->getTables( 0x80 );
     if (!Tables)
         return -1;
-    MorkRowMap *Rows = 0;
+    MorkRowMap *Rows = nullptr;
     MorkRowMap::Map::iterator rowIter;
 
     // Iterate all tables

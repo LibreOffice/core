@@ -34,7 +34,7 @@ using namespace ::com::sun::star::lang;
 //************ Class: java.sql.Driver
 
 
-jclass java_sql_DriverPropertyInfo::theClass = 0;
+jclass java_sql_DriverPropertyInfo::theClass = nullptr;
 
 java_sql_DriverPropertyInfo::~java_sql_DriverPropertyInfo()
 {}
@@ -120,8 +120,8 @@ Sequence< OUString> java_sql_DriverPropertyInfo::choices()
         jfieldID id = t.pEnv->GetFieldID(getMyClass(),"choices","[Ljava/lang/String;");
         if(id)
         {
-            const java_lang_String * pEmpty = NULL;
-            const OUString * pEmpty2 = NULL;
+            const java_lang_String * pEmpty = nullptr;
+            const OUString * pEmpty2 = nullptr;
             return copyArrayAndDelete(t.pEnv, static_cast<jobjectArray>(t.pEnv->GetObjectField( object, id)), pEmpty2, pEmpty);
         }
     } //t.pEnv

@@ -194,7 +194,7 @@ namespace connectivity { namespace hsqldb
 
         impl_checkExistingTable_throw( _TableName );
         if ( !impl_isTextTable_nothrow( _TableName ) )
-            return NULL;
+            return nullptr;
 
         return impl_getTextTableIcon_nothrow();
     }
@@ -206,7 +206,7 @@ namespace connectivity { namespace hsqldb
 
         impl_checkExistingTable_throw( _TableName );
         if ( !impl_isTextTable_nothrow( _TableName ) )
-            return NULL;
+            return nullptr;
 
         if ( !_DocumentUI.is() )
         {
@@ -222,7 +222,7 @@ namespace connectivity { namespace hsqldb
 
 //        Reference< XExecutableDialog > xEditor = impl_createLinkedTableEditor_throw( _DocumentUI, _TableName );
 //        return xEditor.get();
-        return NULL;
+        return nullptr;
         // editor not yet implemented in this CWS
     }
 

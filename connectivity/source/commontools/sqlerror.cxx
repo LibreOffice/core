@@ -182,7 +182,7 @@ namespace connectivity
     {
         raiseTypedException(
             _eCondition,
-            NULL,
+            nullptr,
             ::cppu::UnoType< SQLException >::get(),
             _rParamValue1,
             _rParamValue2,
@@ -198,7 +198,7 @@ namespace connectivity
             throw ::std::bad_cast();
 
         // default-construct an exception of the desired type
-        Any aException( NULL, _rExceptionType );
+        Any aException( nullptr, _rExceptionType );
 
         // fill it
         SQLException* pException = static_cast< SQLException* >( aException.pData );
@@ -273,7 +273,7 @@ namespace connectivity
         m_bAttemptedInit = true;
 
         m_pResources.reset( new ::comphelper::OfficeResourceBundle( m_aContext, "sdberr" ) );
-        return m_pResources.get() != NULL;
+        return m_pResources.get() != nullptr;
     }
 
     SQLError::SQLError( const Reference<XComponentContext> & _rxContext )

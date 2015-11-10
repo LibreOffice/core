@@ -135,7 +135,7 @@ namespace connectivity
             else
             {
                 sal_Int32 nValue = 0;
-                jvmaccess::VirtualMachine* pJVM = NULL;
+                jvmaccess::VirtualMachine* pJVM = nullptr;
                 if ( uaJVM >>= nValue )
                     pJVM = reinterpret_cast< jvmaccess::VirtualMachine* > (nValue);
                 else
@@ -166,7 +166,7 @@ namespace connectivity
                 OString sClassName = OUStringToOString(_sClassName, RTL_TEXTENCODING_ASCII_US);
                 sClassName = sClassName.replace('.','/');
                 jobject out = pEnv->FindClass(sClassName.getStr());
-                bRet = out != NULL;
+                bRet = out != nullptr;
                 pEnv->DeleteLocalRef( out );
             }
         }

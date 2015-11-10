@@ -215,7 +215,7 @@ void OStatementCommonBase::prepareAndDescribeStatement(const OUString& sql,
     if(aErr)
     {
         free(pOutSqlda);
-        pOutSqlda = NULL;
+        pOutSqlda = nullptr;
     }
 }
 

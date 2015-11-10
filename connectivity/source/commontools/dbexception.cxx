@@ -226,7 +226,7 @@ void SQLExceptionInfo::append( TYPE _eType, const OUString& _rErrorMessage, cons
 
     // find the end of the current chain
     Any* pChainIterator = &m_aContent;
-    SQLException* pLastException = NULL;
+    SQLException* pLastException = nullptr;
     const Type& aSQLExceptionType( cppu::UnoType<SQLException>::get() );
     while ( pChainIterator )
     {
@@ -259,7 +259,7 @@ void SQLExceptionInfo::doThrow()
 }
 
 SQLExceptionIteratorHelper::SQLExceptionIteratorHelper( const SQLExceptionInfo& _rChainStart )
-    :m_pCurrent( NULL )
+    :m_pCurrent( nullptr )
     ,m_eCurrentType( SQLExceptionInfo::UNDEFINED )
 {
     if ( _rChainStart.isValid() )
@@ -315,7 +315,7 @@ const ::com::sun::star::sdbc::SQLException* SQLExceptionIteratorHelper::next()
     if ( !isAssignableFrom( aTypeException, aNextElementType ) )
     {
         // no SQLException at all in the next chain element
-        m_pCurrent = NULL;
+        m_pCurrent = nullptr;
         m_eCurrentType = SQLExceptionInfo::UNDEFINED;
         return pReturn;
     }

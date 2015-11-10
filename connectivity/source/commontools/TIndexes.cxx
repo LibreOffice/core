@@ -52,7 +52,7 @@ sdbcx::ObjectType OIndexesHelper::createObject(const OUString& _rName)
 {
     Reference< XConnection> xConnection = m_pTable->getConnection();
     if ( !xConnection.is() )
-        return NULL;
+        return nullptr;
 
     sdbcx::ObjectType xRet;
     OUString aName,aQualifier;
@@ -125,7 +125,7 @@ sdbcx::ObjectType OIndexesHelper::appendObject( const OUString& _rForName, const
 {
     Reference< XConnection> xConnection = m_pTable->getConnection();
     if ( !xConnection.is() )
-        return NULL;
+        return nullptr;
     if ( m_pTable->isNew() )
         return cloneDescriptor( descriptor );
 

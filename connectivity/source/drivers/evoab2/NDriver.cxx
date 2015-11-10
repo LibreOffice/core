@@ -124,7 +124,7 @@ Reference< XConnection > SAL_CALL OEvoabDriver::connect( const OUString& url, co
         throw DisposedException();
 
     if ( ! acceptsURL(url) )
-        return NULL;
+        return nullptr;
 
     OEvoabConnection* pCon = new OEvoabConnection( *this );
     pCon->construct(url,info);

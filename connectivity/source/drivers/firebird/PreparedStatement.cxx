@@ -56,8 +56,8 @@ OPreparedStatement::OPreparedStatement( Connection* _pConnection,
     :OStatementCommonBase(_pConnection)
     ,m_aTypeInfo(_TypeInfo)
     ,m_sSqlStatement(sql)
-    ,m_pOutSqlda(0)
-    ,m_pInSqlda(0)
+    ,m_pOutSqlda(nullptr)
+    ,m_pInSqlda(nullptr)
 {
     SAL_INFO("connectivity.firebird", "OPreparedStatement(). "
              "sql: " << sql);
@@ -167,13 +167,13 @@ void SAL_CALL OPreparedStatement::close() throw(SQLException, RuntimeException, 
     {
         freeSQLVAR(m_pInSqlda);
         free(m_pInSqlda);
-        m_pInSqlda = 0;
+        m_pInSqlda = nullptr;
     }
     if (m_pOutSqlda)
     {
         freeSQLVAR(m_pOutSqlda);
         free(m_pOutSqlda);
-        m_pOutSqlda = 0;
+        m_pOutSqlda = nullptr;
     }
 }
 
@@ -444,7 +444,7 @@ void OPreparedStatement::openBlobForWriting(isc_blob_handle& rBlobHandle, ISC_QU
                             &rBlobHandle,
                             &rBlobId,
                             0, // Blob parameter buffer length
-                            0); // Blob parameter buffer handle
+                            nullptr); // Blob parameter buffer handle
 
     if (aErr)
     {

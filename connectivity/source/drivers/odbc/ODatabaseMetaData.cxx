@@ -441,8 +441,8 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getCrossReference(
     {
         ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(m_pConnection);
         xRef = pResult;
-        pResult->openForeignKeys(m_bUseCatalog ? primaryCatalog : Any(),primarySchema.toChar() == '%' ? &primarySchema : NULL,&primaryTable,
-            m_bUseCatalog ? foreignCatalog : Any(), foreignSchema.toChar() == '%' ? &foreignSchema : NULL,&foreignTable);
+        pResult->openForeignKeys(m_bUseCatalog ? primaryCatalog : Any(),primarySchema.toChar() == '%' ? &primarySchema : nullptr,&primaryTable,
+            m_bUseCatalog ? foreignCatalog : Any(), foreignSchema.toChar() == '%' ? &foreignSchema : nullptr,&foreignTable);
     }
     catch(SQLException&)
     {
@@ -1714,7 +1714,7 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsBatchUpdates(  ) throw(SQLException
 
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getUDTs( const Any& /*catalog*/, const OUString& /*schemaPattern*/, const OUString& /*typeNamePattern*/, const Sequence< sal_Int32 >& /*types*/ ) throw(SQLException, RuntimeException, std::exception)
 {
-    return NULL;
+    return nullptr;
 }
 
 

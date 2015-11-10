@@ -72,11 +72,11 @@ OCommonStatement::OCommonStatement(OEvoabConnection* _pConnection)
     : OCommonStatement_IBase(m_aMutex)
     , ::comphelper::OPropertyContainer(OCommonStatement_IBase::rBHelper)
     , OStatement_CBase( static_cast<cppu::OWeakObject*>(_pConnection), this )
-    , m_xResultSet(NULL)
+    , m_xResultSet(nullptr)
     , m_pConnection(_pConnection)
     , m_aParser(_pConnection->getDriver().getComponentContext())
-    , m_aSQLIterator( _pConnection, _pConnection->createCatalog()->getTables(), m_aParser, NULL )
-    , m_pParseTree(NULL)
+    , m_aSQLIterator( _pConnection, _pConnection->createCatalog()->getTables(), m_aParser, nullptr )
+    , m_pParseTree(nullptr)
     , m_nMaxFieldSize(0)
     , m_nMaxRows(0)
     , m_nQueryTimeOut(0)
@@ -129,7 +129,7 @@ void OCommonStatement::disposing()
 
     if (m_pConnection)
         m_pConnection->release();
-    m_pConnection = NULL;
+    m_pConnection = nullptr;
 
     dispose_ChildImpl();
     OCommonStatement_IBase::disposing();
@@ -220,11 +220,11 @@ void OCommonStatement::orderByAnalysis( const OSQLParseNode* _pOrderByClause, So
         const OSQLParseNode* pOrderBy = pOrderList->getChild(i);
         if ( !pOrderBy || !SQL_ISRULE( pOrderBy, ordering_spec ) )
             continue;
-        const OSQLParseNode* pColumnRef = pOrderBy->count() == 2 ? pOrderBy->getChild(0) : NULL;
-        const OSQLParseNode* pAscDesc = pOrderBy->count() == 2 ? pOrderBy->getChild(1) : NULL;
+        const OSQLParseNode* pColumnRef = pOrderBy->count() == 2 ? pOrderBy->getChild(0) : nullptr;
+        const OSQLParseNode* pAscDesc = pOrderBy->count() == 2 ? pOrderBy->getChild(1) : nullptr;
         ENSURE_OR_THROW(
-                ( pColumnRef != NULL )
-            &&  ( pAscDesc != NULL )
+                ( pColumnRef != nullptr )
+            &&  ( pAscDesc != nullptr )
             &&  SQL_ISRULE( pAscDesc, opt_asc_desc )
             &&  ( pAscDesc->count() < 2 ),
             "ordering_spec structure error" );
@@ -248,7 +248,7 @@ void OCommonStatement::orderByAnalysis( const OSQLParseNode* _pOrderByClause, So
 
 EBookQuery *OCommonStatement::whereAnalysis( const OSQLParseNode* parseTree )
 {
-    EBookQuery *pResult = NULL;
+    EBookQuery *pResult = nullptr;
 
     ENSURE_OR_THROW( parseTree, "invalid parse tree" );
 
@@ -320,7 +320,7 @@ EBookQuery *OCommonStatement::whereAnalysis( const OSQLParseNode* parseTree )
         {
             const sal_Int32 nLHS = pLHS->getTokenValue().toInt64();
             const sal_Int32 nRHS = pRHS->getTokenValue().toInt64();
-            return ( nLHS == nRHS ) ? createTrue() : NULL;
+            return ( nLHS == nRHS ) ? createTrue() : nullptr;
         }
 
         OUString aColumnName( impl_getColumnRefColumnName_throw( *pLHS ) );
@@ -421,7 +421,7 @@ OUString OCommonStatement::getTableName()
 
         if( OSQLParseTreeIterator::isTableNode( pAllTableNames->getChild( 0 ) ) )
             OSQLParseNode::getTableComponents( pAllTableNames->getChild( 0 ),
-                                               aCatalog,aSchema, aTableName,NULL );
+                                               aCatalog,aSchema, aTableName,nullptr );
 
         else if( SQL_ISRULE( pAllTableNames->getChild( 0 ), table_ref ) )
         {
@@ -430,7 +430,7 @@ OUString OCommonStatement::getTableName()
             {
                 aTableName = OSQLParseNode::getTableRange(pAllTableNames->getChild( 0 ));
                 if( !aTableName.getLength() )
-                    OSQLParseNode::getTableComponents( pNodeForTableName, aCatalog, aSchema, aTableName,NULL);
+                    OSQLParseNode::getTableComponents( pNodeForTableName, aCatalog, aSchema, aTableName,nullptr);
             }
             else
                 OSL_FAIL( "odd table layout" );

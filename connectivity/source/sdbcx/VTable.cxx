@@ -68,9 +68,9 @@ OTable::OTable(OCollection* _pTables,
                bool _bCase)
                : OTableDescriptor_BASE(m_aMutex)
                 ,ODescriptor(OTableDescriptor_BASE::rBHelper,_bCase,true)
-                ,m_pKeys(NULL)
-                ,m_pColumns(NULL)
-                ,m_pIndexes(NULL)
+                ,m_pKeys(nullptr)
+                ,m_pColumns(nullptr)
+                ,m_pIndexes(nullptr)
                 ,m_pTables(_pTables)
 {
 }
@@ -85,9 +85,9 @@ OTable::OTable( OCollection*    _pTables,
                 ,m_SchemaName(_SchemaName)
                 ,m_Description(_Description)
                 ,m_Type(_Type)
-                ,m_pKeys(NULL)
-                ,m_pColumns(NULL)
-                ,m_pIndexes(NULL)
+                ,m_pKeys(nullptr)
+                ,m_pColumns(nullptr)
+                ,m_pIndexes(nullptr)
                 ,m_pTables(_pTables)
 {
     m_Name = _Name;
@@ -158,7 +158,7 @@ void SAL_CALL OTable::disposing()
     if(m_pIndexes)
         m_pIndexes->disposing();
 
-    m_pTables = NULL;
+    m_pTables = nullptr;
 }
 
 // XColumnsSupplier
@@ -275,7 +275,7 @@ void SAL_CALL OTable::rename( const OUString& newName ) throw(SQLException, Elem
 
 Reference< XDatabaseMetaData> OTable::getMetaData() const
 {
-    return NULL;
+    return nullptr;
 }
 
 // XAlterTable

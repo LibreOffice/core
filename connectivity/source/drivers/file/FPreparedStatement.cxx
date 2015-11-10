@@ -66,12 +66,12 @@ void OPreparedStatement::disposing()
 
     OStatement_BASE2::disposing();
 
-    m_xParamColumns = NULL;
+    m_xParamColumns = nullptr;
     m_xMetaData.clear();
     if(m_aParameterRow.is())
     {
         m_aParameterRow->get().clear();
-        m_aParameterRow = NULL;
+        m_aParameterRow = nullptr;
     }
 }
 

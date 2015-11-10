@@ -640,10 +640,10 @@ void SAL_CALL OCalcTable::disposing()
 {
     OFileTable::disposing();
     ::osl::MutexGuard aGuard(m_aMutex);
-    m_aColumns = NULL;
+    m_aColumns = nullptr;
     if ( m_pConnection )
         m_pConnection->releaseDoc();
-    m_pConnection = NULL;
+    m_pConnection = nullptr;
 
 }
 
@@ -686,7 +686,7 @@ Any SAL_CALL OCalcTable::queryInterface( const Type & rType ) throw(RuntimeExcep
 
 Sequence< sal_Int8 > OCalcTable::getUnoTunnelImplementationId()
 {
-    static ::cppu::OImplementationId * pId = 0;
+    static ::cppu::OImplementationId * pId = nullptr;
     if (! pId)
     {
         ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );

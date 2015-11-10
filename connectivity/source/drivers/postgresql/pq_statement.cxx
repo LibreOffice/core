@@ -226,7 +226,7 @@ void Statement::close(  ) throw (SQLException, RuntimeException, std::exception)
     Reference< XCloseable > resultSet;
     {
         MutexGuard guard( m_refMutex->mutex );
-        m_pSettings = 0;
+        m_pSettings = nullptr;
         r = m_connection;
         m_connection.clear();
 
@@ -293,7 +293,7 @@ static void raiseSQLException(
     const Reference< XInterface> & owner,
     const OString & sql,
     const char * errorMsg,
-    const char *errorType = 0 )
+    const char *errorType = nullptr )
     throw( SQLException )
 {
     OUStringBuffer buf(128);

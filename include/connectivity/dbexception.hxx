@@ -177,7 +177,7 @@ public:
 
     /** determines whether there are more elements in the exception chain
     */
-    bool                                        hasMoreElements() const { return ( m_pCurrent != NULL ); }
+    bool                                        hasMoreElements() const { return ( m_pCurrent != nullptr ); }
 
     /** retrieves the current element in the chain, or <NULL/> if the chain has been completely
         traveled.
@@ -284,7 +284,7 @@ OOO_DLLPUBLIC_DBTOOLS void throwGenericSQLException(
 OOO_DLLPUBLIC_DBTOOLS void throwFeatureNotImplementedSQLException(
         const OUString& _rFeatureName,
         const css::uno::Reference< css::uno::XInterface >& _rxContext,
-        const css::uno::Any* _pNextException = NULL
+        const css::uno::Any* _pNextException = nullptr
     )
     throw (css::sdbc::SQLException);
 
@@ -323,7 +323,7 @@ OOO_DLLPUBLIC_DBTOOLS void throwSQLException(
         const OUString& _rSQLState,
         const css::uno::Reference< css::uno::XInterface >& _rxContext,
         const sal_Int32 _nErrorCode = 0,
-        const css::uno::Any* _pNextException = NULL
+        const css::uno::Any* _pNextException = nullptr
     )
     throw (css::sdbc::SQLException);
 
@@ -335,7 +335,7 @@ OOO_DLLPUBLIC_DBTOOLS void throwSQLException(
         StandardSQLState _eSQLState,
         const css::uno::Reference< css::uno::XInterface >& _rxContext,
         const sal_Int32 _nErrorCode = 0,
-        const css::uno::Any* _pNextException = NULL
+        const css::uno::Any* _pNextException = nullptr
     )
     throw (css::sdbc::SQLException);
 

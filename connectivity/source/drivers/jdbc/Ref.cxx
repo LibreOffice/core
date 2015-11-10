@@ -24,7 +24,7 @@ using namespace connectivity;
 //************ Class: java.sql.Ref
 
 
-jclass java_sql_Ref::theClass = 0;
+jclass java_sql_Ref::theClass = nullptr;
 java_sql_Ref::java_sql_Ref( JNIEnv * pEnv, jobject myObj )
 : java_lang_Object( pEnv, myObj )
 {
@@ -45,7 +45,7 @@ jclass java_sql_Ref::getMyClass() const
 
 OUString SAL_CALL java_sql_Ref::getBaseTypeName(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
-    static jmethodID mID(NULL);
+    static jmethodID mID(nullptr);
     return callStringMethod("getBaseTypeName",mID);
 }
 

@@ -65,7 +65,7 @@ sal_Int64 SAL_CALL OMetaConnection::getSomething( const ::com::sun::star::uno::S
 
 Sequence< sal_Int8 > OMetaConnection::getUnoTunnelImplementationId()
 {
-    static ::cppu::OImplementationId * pId = 0;
+    static ::cppu::OImplementationId * pId = nullptr;
     if (! pId)
     {
         ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );

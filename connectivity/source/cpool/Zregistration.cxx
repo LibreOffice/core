@@ -33,7 +33,7 @@ extern "C"
 
 SAL_DLLPUBLIC_EXPORT void* SAL_CALL dbpool2_component_getFactory(const sal_Char* _pImplName, void * _pServiceManager, void* /*_pRegistryKey*/)
 {
-    void* pRet = NULL;
+    void* pRet = nullptr;
 
     if (OPoolCollection::getImplementationName_Static().equalsAscii(_pImplName))
     {

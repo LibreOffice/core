@@ -47,7 +47,7 @@ using namespace com::sun::star::sdbc;
 OConnection::OConnection(const SQLHANDLE _pDriverHandle,ODBCDriver* _pDriver)
                          : OSubComponent<OConnection, OConnection_BASE>(static_cast<cppu::OWeakObject*>(_pDriver), this)
                          ,m_pDriver(_pDriver)
-                         ,m_aConnectionHandle(NULL)
+                         ,m_aConnectionHandle(nullptr)
                          ,m_pDriverHandleCopy(_pDriverHandle)
                          ,m_nStatementCount(0)
                          ,m_bClosed(true)
@@ -81,7 +81,7 @@ OConnection::~OConnection()
     }
 
     m_pDriver->release();
-    m_pDriver = NULL;
+    m_pDriver = nullptr;
 }
 
 void SAL_CALL OConnection::release() throw()
@@ -120,7 +120,7 @@ SQLRETURN OConnection::OpenConnection(const OUString& aConnectStr, sal_Int32 nTi
 #ifdef LINUX
     (void) bSilent;
     nSQLRETURN = N3SQLDriverConnect(m_aConnectionHandle,
-                      NULL,
+                      nullptr,
                       szConnStrIn,
                       (SQLSMALLINT) ::std::min((sal_Int32)2048,aConStr.getLength()),
                       szConnStrOut,
@@ -304,7 +304,7 @@ Reference< XPreparedStatement > SAL_CALL OConnection::prepareStatement( const OU
 Reference< XPreparedStatement > SAL_CALL OConnection::prepareCall( const OUString& /*sql*/ ) throw(SQLException, RuntimeException, std::exception)
 {
     ::dbtools::throwFeatureNotImplementedSQLException( "XConnection::prepareCall", *this );
-    return NULL;
+    return nullptr;
 }
 
 OUString SAL_CALL OConnection::nativeSQL( const OUString& sql ) throw(SQLException, RuntimeException, std::exception)
@@ -338,7 +338,7 @@ sal_Bool SAL_CALL OConnection::getAutoCommit(  ) throw(SQLException, RuntimeExce
 
     sal_uInt32 nOption = 0;
     OTools::ThrowException(this,N3SQLGetConnectAttr(m_aConnectionHandle,
-                                   SQL_ATTR_AUTOCOMMIT, &nOption,0,0),m_aConnectionHandle,SQL_HANDLE_DBC,*this);
+                                   SQL_ATTR_AUTOCOMMIT, &nOption,0,nullptr),m_aConnectionHandle,SQL_HANDLE_DBC,*this);
     return nOption == SQL_AUTOCOMMIT_ON ;
 }
 
@@ -458,7 +458,7 @@ Reference< ::com::sun::star::container::XNameAccess > SAL_CALL OConnection::getT
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
 
 
-    return NULL;
+    return nullptr;
 }
 
 void SAL_CALL OConnection::setTypeMap( const Reference< ::com::sun::star::container::XNameAccess >& /*typeMap*/ ) throw(SQLException, RuntimeException, std::exception)

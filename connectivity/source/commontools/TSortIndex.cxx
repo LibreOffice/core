@@ -126,7 +126,7 @@ void OSortIndex::Freeze()
     for(;aIter != m_aKeyValues.end();++aIter)
     {
         delete aIter->second;
-        aIter->second = NULL;
+        aIter->second = nullptr;
     }
 
     m_bFrozen = true;

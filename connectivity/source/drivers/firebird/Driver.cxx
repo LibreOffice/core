@@ -65,8 +65,8 @@ const OUString FirebirdDriver::our_sFirebirdMsgVar("FIREBIRD_MSG");
 FirebirdDriver::FirebirdDriver(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext)
     : ODriver_BASE(m_aMutex)
     , m_aContext(_rxContext)
-    , m_firebirdTMPDirectory(NULL, true)
-    , m_firebirdLockDirectory(NULL, true)
+    , m_firebirdTMPDirectory(nullptr, true)
+    , m_firebirdLockDirectory(nullptr, true)
 {
     // Note: TempFile caches the URL on first access; call this here so that
     // ~FirebirdDriver is not the first access, because that is called
@@ -170,7 +170,7 @@ Reference< XConnection > SAL_CALL FirebirdDriver::connect(
        throw DisposedException();
 
     if ( ! acceptsURL(url) )
-        return NULL;
+        return nullptr;
 
     Connection* pCon = new Connection(this);
     Reference< XConnection > xCon = pCon;
@@ -253,7 +253,7 @@ namespace connectivity
                     {
                         MutexGuard aGuard( rBHelper.rMutex );
                         xParent = _xInterface;
-                        _xInterface = NULL;
+                        _xInterface = nullptr;
                     }
 
                     // First dispose

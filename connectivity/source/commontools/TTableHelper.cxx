@@ -87,7 +87,7 @@ public:
     virtual void SAL_CALL disposing( const EventObject& /*_rSource*/ ) throw (RuntimeException, std::exception) override
     {
     }
-    void clear() { m_pComponent = NULL; }
+    void clear() { m_pComponent = nullptr; }
     inline void add(const OUString& _sRefName) { m_aRefNames.insert(::std::map< OUString,bool>::value_type(_sRefName,true)); }
 };
 }
@@ -180,8 +180,8 @@ void SAL_CALL OTableHelper::disposing()
     }
     OTable_TYPEDEF::disposing();
 
-    m_pImpl->m_xConnection  = NULL;
-    m_pImpl->m_xMetaData    = NULL;
+    m_pImpl->m_xConnection  = nullptr;
+    m_pImpl->m_xMetaData    = nullptr;
 
 }
 
@@ -306,7 +306,7 @@ void OTableHelper::refreshColumns()
 
 const ColumnDesc* OTableHelper::getColumnDescription(const OUString& _sName) const
 {
-    const ColumnDesc* pRet = NULL;
+    const ColumnDesc* pRet = nullptr;
     ::std::vector< ColumnDesc >::const_iterator aEnd = m_pImpl->m_aColumnDesc.end();
     for (::std::vector< ColumnDesc >::const_iterator aIter = m_pImpl->m_aColumnDesc.begin();aIter != aEnd;++aIter)
     {

@@ -35,7 +35,7 @@ namespace connectivity
         {
             ODriverDelegator* m_pDriver;
             protected:
-                virtual ~OConnectionController() {m_pDriver = NULL;}
+                virtual ~OConnectionController() {m_pDriver = nullptr;}
             public:
                 explicit OConnectionController(ODriverDelegator* _pDriver) : m_pDriver(_pDriver){}
 

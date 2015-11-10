@@ -37,7 +37,7 @@ using namespace ::comphelper;
 
 OResultSetMetaData::~OResultSetMetaData()
 {
-   m_xColumns = NULL;
+   m_xColumns = nullptr;
 }
 
 

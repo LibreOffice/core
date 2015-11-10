@@ -25,7 +25,7 @@ using namespace connectivity;
 //************ Class: java.util.Date
 
 
-jclass java_util_Date::theClass = 0;
+jclass java_util_Date::theClass = nullptr;
 
 java_util_Date::~java_util_Date()
 {}

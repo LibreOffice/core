@@ -25,7 +25,7 @@ using namespace connectivity;
 //************ Class: java.lang.Boolean
 
 
-jclass java_math_BigDecimal::theClass = 0;
+jclass java_math_BigDecimal::theClass = nullptr;
 
 java_math_BigDecimal::~java_math_BigDecimal()
 {}
@@ -38,7 +38,7 @@ jclass java_math_BigDecimal::getMyClass() const
     return theClass;
 }
 
-java_math_BigDecimal::java_math_BigDecimal( const OUString& _par0 ): java_lang_Object( NULL, nullptr )
+java_math_BigDecimal::java_math_BigDecimal( const OUString& _par0 ): java_lang_Object( nullptr, nullptr )
 {
     SDBThreadAttach t;
     if( !t.pEnv )
@@ -47,7 +47,7 @@ java_math_BigDecimal::java_math_BigDecimal( const OUString& _par0 ): java_lang_O
     // initialize temporary Variable
     static const char * cSignature = "(Ljava/lang/String;)V";
     jobject tempObj;
-    static jmethodID mID(NULL);
+    static jmethodID mID(nullptr);
     obtainMethodId_throwSQL(t.pEnv, "<init>",cSignature, mID);
 
     jstring str = convertwchar_tToJavaString(t.pEnv,_par0.replace(',','.'));
@@ -55,11 +55,11 @@ java_math_BigDecimal::java_math_BigDecimal( const OUString& _par0 ): java_lang_O
     t.pEnv->DeleteLocalRef(str);
     saveRef( t.pEnv, tempObj );
     t.pEnv->DeleteLocalRef( tempObj );
-    ThrowSQLException( t.pEnv, NULL );
+    ThrowSQLException( t.pEnv, nullptr );
     // and cleanup
 }
 
-java_math_BigDecimal::java_math_BigDecimal( const double& _par0 ): java_lang_Object( NULL, nullptr )
+java_math_BigDecimal::java_math_BigDecimal( const double& _par0 ): java_lang_Object( nullptr, nullptr )
 {
     SDBThreadAttach t;
     if( !t.pEnv )
@@ -68,12 +68,12 @@ java_math_BigDecimal::java_math_BigDecimal( const double& _par0 ): java_lang_Obj
     // initialize temporary Variable
     static const char * cSignature = "(D)V";
     jobject tempObj;
-    static jmethodID mID(NULL);
+    static jmethodID mID(nullptr);
     obtainMethodId_throwSQL(t.pEnv, "<init>",cSignature, mID);
     tempObj = t.pEnv->NewObject( getMyClass(), mID, _par0 );
     saveRef( t.pEnv, tempObj );
     t.pEnv->DeleteLocalRef( tempObj );
-    ThrowSQLException( t.pEnv, NULL );
+    ThrowSQLException( t.pEnv, nullptr );
     // and cleanup
 }
 

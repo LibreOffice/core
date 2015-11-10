@@ -99,7 +99,7 @@ Table::Table( const ::rtl::Reference< RefCountedMutex > & refMutex,
         connection,
         pSettings,
         * getStatics().refl.table.pProps ),
-      m_pColumns( 0 )
+      m_pColumns( nullptr )
 {}
 
 Reference< XPropertySet > Table::createDataDescriptor(  ) throw (RuntimeException, std::exception)

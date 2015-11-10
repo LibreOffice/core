@@ -59,7 +59,7 @@ namespace dbtools
         :m_rMutex             ( _rMutex )
         ,m_aParameterListeners( _rMutex )
         ,m_xContext           ( _rxContext  )
-        ,m_pOuterParameters   ( NULL    )
+        ,m_pOuterParameters   ( nullptr    )
         ,m_nInnerCount        ( 0       )
         ,m_bUpToDate          ( false   )
     {
@@ -98,7 +98,7 @@ namespace dbtools
        m_xInnerParamColumns.clear();
         if ( m_pOuterParameters.is() )
             m_pOuterParameters->dispose();
-        m_pOuterParameters   = NULL;
+        m_pOuterParameters   = nullptr;
         m_nInnerCount        = 0;
         ParameterInformation aEmptyInfo;
         m_aParameterInformation.swap( aEmptyInfo );
@@ -299,7 +299,7 @@ namespace dbtools
                     // remember meta information about this new parameter
                     ::std::pair< ParameterInformation::iterator, bool > aInsertionPos =
                         m_aParameterInformation.insert(
-                            ParameterInformation::value_type( sNewParamName, ParameterMetaData( NULL ) )
+                            ParameterInformation::value_type( sNewParamName, ParameterMetaData( nullptr ) )
                         );
                     OSL_ENSURE( aInsertionPos.second, "ParameterManager::classifyLinks: there already was a parameter with this name!" );
                     aInsertionPos.first->second.eType = eLinkedByColumnName;

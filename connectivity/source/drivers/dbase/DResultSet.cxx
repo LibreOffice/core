@@ -163,7 +163,7 @@ bool ODbaseResultSet::fillIndexValues(const Reference< XColumnsSupplier> &_xInde
         dbase::ODbaseIndex* pIndex = reinterpret_cast< dbase::ODbaseIndex* >( xTunnel->getSomething(dbase::ODbaseIndex::getUnoTunnelImplementationId()) );
         if(pIndex)
         {
-            dbase::OIndexIterator* pIter = pIndex->createIterator(NULL);
+            dbase::OIndexIterator* pIter = pIndex->createIterator(nullptr);
 
             if (pIter)
             {

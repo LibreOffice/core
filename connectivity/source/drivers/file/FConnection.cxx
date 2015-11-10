@@ -247,7 +247,7 @@ Reference< XPreparedStatement > SAL_CALL OConnection::prepareStatement( const OU
 Reference< XPreparedStatement > SAL_CALL OConnection::prepareCall( const OUString& /*sql*/ ) throw(SQLException, RuntimeException, std::exception)
 {
     throwFeatureNotImplementedSQLException( "XConnection::prepareCall", *this );
-    return NULL;
+    return nullptr;
 }
 
 OUString SAL_CALL OConnection::nativeSQL( const OUString& sql ) throw(SQLException, RuntimeException, std::exception)
@@ -342,7 +342,7 @@ sal_Int32 SAL_CALL OConnection::getTransactionIsolation(  ) throw(SQLException, 
 
 Reference< XNameAccess > SAL_CALL OConnection::getTypeMap(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    return NULL;
+    return nullptr;
 }
 
 void SAL_CALL OConnection::setTypeMap( const Reference< XNameAccess >& /*typeMap*/ ) throw(SQLException, RuntimeException, std::exception)
@@ -422,7 +422,7 @@ sal_Int64 SAL_CALL OConnection::getSomething( const Sequence< sal_Int8 >& rId ) 
 
 Sequence< sal_Int8 > OConnection::getUnoTunnelImplementationId()
 {
-    static ::cppu::OImplementationId * pId = 0;
+    static ::cppu::OImplementationId * pId = nullptr;
     if (! pId)
     {
         ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );

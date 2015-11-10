@@ -57,7 +57,7 @@ namespace dbtools
         OPredicateInputController(
             const css::uno::Reference< css::uno::XComponentContext >& rxContext,
             const css::uno::Reference< css::sdbc::XConnection >& _rxConnection,
-            const ::connectivity::IParseContext* _pParseContext = NULL
+            const ::connectivity::IParseContext* _pParseContext = nullptr
         );
 
         /** transforms a "raw" predicate value (usually obtained from a user input) into a valid predicate for the given column
@@ -72,7 +72,7 @@ namespace dbtools
         bool        normalizePredicateString(
             OUString& _rPredicateValue,
             const css::uno::Reference< css::beans::XPropertySet >& _rxField,
-            OUString* _pErrorMessage = NULL
+            OUString* _pErrorMessage = nullptr
         ) const;
 
         /** get the value of the predicate, as a string to be used in a WHERE clause
@@ -88,13 +88,13 @@ namespace dbtools
         OUString getPredicateValueStr(
             const OUString& _rPredicateValue,
             const css::uno::Reference< css::beans::XPropertySet > & _rxField,
-            OUString* _pErrorMessage = NULL
+            OUString* _pErrorMessage = nullptr
         ) const;
 
         OUString getPredicateValueStr(
             const OUString& _sField
             , const OUString& _rPredicateValue
-            , OUString* _pErrorMessage = NULL) const;
+            , OUString* _pErrorMessage = nullptr) const;
 
         /** get the value of the predicate, either as an empty or as a string
         @param _rPredicateValue
@@ -109,7 +109,7 @@ namespace dbtools
         css::uno::Any getPredicateValue(
             const OUString& _rPredicateValue,
             const css::uno::Reference< css::beans::XPropertySet > & _rxField,
-            OUString* _pErrorMessage = NULL
+            OUString* _pErrorMessage = nullptr
         ) const;
 
     private:

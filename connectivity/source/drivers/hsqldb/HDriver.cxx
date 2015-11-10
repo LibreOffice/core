@@ -334,7 +334,7 @@ namespace connectivity
                 }
                 catch(const Exception& e)
                 {
-                    StorageContainer::revokeStorage(sKey,NULL);
+                    StorageContainer::revokeStorage(sKey,nullptr);
                     (void)e;
                     throw;
                 }
@@ -552,7 +552,7 @@ namespace connectivity
         {
             // Reference<XTransactionListener> xListener(*this,UNO_QUERY);
             // a shutdown should commit all changes to the db files
-            StorageContainer::revokeStorage(_aIter->second.first,NULL);
+            StorageContainer::revokeStorage(_aIter->second.first,nullptr);
         }
         if ( !m_bInShutDownConnections )
             m_aConnections.erase(_aIter);
@@ -783,7 +783,7 @@ namespace connectivity
                 "yo-NG", "Yoruba",
                 "zh-CN", "Chinese",
                 "zu-ZA", "Zulu",
-                NULL, NULL
+                nullptr, nullptr
             };
 
             OUString sLocaleString( _rLocaleString );
@@ -865,7 +865,7 @@ namespace connectivity
             }
             if ( sLocaleString.isEmpty() )
             {
-                rtl_Locale* pProcessLocale = NULL;
+                rtl_Locale* pProcessLocale = nullptr;
                 osl_getProcessLocale( &pProcessLocale );
                 sLocaleString = LanguageTag( *pProcessLocale).getBcp47();
             }

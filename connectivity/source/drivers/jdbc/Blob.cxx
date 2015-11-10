@@ -29,7 +29,7 @@ using namespace connectivity;
 //************ Class: java.sql.Blob
 
 
-jclass java_sql_Blob::theClass = 0;
+jclass java_sql_Blob::theClass = nullptr;
 java_sql_Blob::java_sql_Blob( JNIEnv * pEnv, jobject myObj )
     : java_lang_Object( pEnv, myObj )
 {
@@ -58,7 +58,7 @@ sal_Int64 SAL_CALL java_sql_Blob::length(  ) throw(::com::sun::star::sdbc::SQLEx
         static const char * cSignature = "()J";
         static const char * cMethodName = "length";
         // submit Java-Call
-        static jmethodID mID(NULL);
+        static jmethodID mID(nullptr);
         obtainMethodId_throwSQL(t.pEnv, cMethodName,cSignature, mID);
         out = t.pEnv->CallLongMethod( object, mID );
         ThrowSQLException(t.pEnv,*this);
@@ -75,7 +75,7 @@ sal_Int64 SAL_CALL java_sql_Blob::length(  ) throw(::com::sun::star::sdbc::SQLEx
         static const char * cSignature = "(JI)[B";
         static const char * cMethodName = "getBytes";
         // submit Java-Call
-        static jmethodID mID(NULL);
+        static jmethodID mID(nullptr);
         obtainMethodId_throwSQL(t.pEnv, cMethodName,cSignature, mID);
         jbyteArray out = static_cast<jbyteArray>(t.pEnv->CallObjectMethod( object, mID,pos,count));
         ThrowSQLException(t.pEnv,*this);
@@ -94,10 +94,10 @@ sal_Int64 SAL_CALL java_sql_Blob::length(  ) throw(::com::sun::star::sdbc::SQLEx
 ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > SAL_CALL java_sql_Blob::getBinaryStream(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
-    static jmethodID mID(NULL);
+    static jmethodID mID(nullptr);
     jobject out = callObjectMethod(t.pEnv,"getBinaryStream","()Ljava/io/InputStream;", mID);
     // WARNING: the caller becomes the owner of the returned pointer
-    return out==0 ? 0 : new java_io_InputStream( t.pEnv, out );
+    return out==nullptr ? nullptr : new java_io_InputStream( t.pEnv, out );
 }
 
 sal_Int64 SAL_CALL java_sql_Blob::position( const ::com::sun::star::uno::Sequence< sal_Int8 >& pattern, sal_Int64 start ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
@@ -110,7 +110,7 @@ sal_Int64 SAL_CALL java_sql_Blob::position( const ::com::sun::star::uno::Sequenc
         static const char * cSignature = "([BI)J";
         static const char * cMethodName = "position";
         // submit Java-Call
-        static jmethodID mID(NULL);
+        static jmethodID mID(nullptr);
         obtainMethodId_throwSQL(t.pEnv, cMethodName,cSignature, mID);
         // convert Parameter
         jbyteArray pByteArray = t.pEnv->NewByteArray(pattern.getLength());

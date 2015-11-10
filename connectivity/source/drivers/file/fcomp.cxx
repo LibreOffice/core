@@ -60,7 +60,7 @@ OPredicateCompiler::~OPredicateCompiler()
 void OPredicateCompiler::dispose()
 {
     Clean();
-    m_orgColumns        = NULL;
+    m_orgColumns        = nullptr;
     m_xIndexes.clear();
 }
 
@@ -72,15 +72,15 @@ void OPredicateCompiler::start(OSQLParseNode* pSQLParseNode)
     m_nParamCounter = 0;
     // analyse Parse Tree (depending on Statement-type)
     // and set pointer on WHERE-clause:
-    OSQLParseNode * pWhereClause = NULL;
+    OSQLParseNode * pWhereClause = nullptr;
 
     if (SQL_ISRULE(pSQLParseNode,select_statement))
     {
-        OSQLParseNode * pOrderbyClause = NULL;
+        OSQLParseNode * pOrderbyClause = nullptr;
         DBG_ASSERT(pSQLParseNode->count() >= 4,"OFILECursor: Fehler im Parse Tree");
 
         OSQLParseNode * pTableExp = pSQLParseNode->getChild(3);
-        DBG_ASSERT(pTableExp != NULL,"Fehler im Parse Tree");
+        DBG_ASSERT(pTableExp != nullptr,"Fehler im Parse Tree");
         DBG_ASSERT(SQL_ISRULE(pTableExp,table_exp)," Fehler im Parse Tree");
         DBG_ASSERT(pTableExp->count() == TABLE_EXPRESSION_CHILD_COUNT,"Fehler im Parse Tree");
 
@@ -93,7 +93,7 @@ void OPredicateCompiler::start(OSQLParseNode* pSQLParseNode)
                 OSQLParseNode *pColumnRef = pSelection->getChild(i)->getChild(0);
                 if ( SQL_ISRULE(pColumnRef,general_set_fct) && pColumnRef->count() != 4 )
                 {
-                    m_pAnalyzer->getConnection()->throwGenericSQLException(STR_QUERY_COMPLEX_COUNT,NULL);
+                    m_pAnalyzer->getConnection()->throwGenericSQLException(STR_QUERY_COMPLEX_COUNT,nullptr);
                 }
             }
         }
@@ -123,7 +123,7 @@ void OPredicateCompiler::start(OSQLParseNode* pSQLParseNode)
         DBG_ASSERT(pWhereClause->count() == 2,"OFILECursor: Fehler im Parse Tree");
 
         OSQLParseNode * pComparisonPredicate = pWhereClause->getChild(1);
-        DBG_ASSERT(pComparisonPredicate != NULL,"OFILECursor: Fehler im Parse Tree");
+        DBG_ASSERT(pComparisonPredicate != nullptr,"OFILECursor: Fehler im Parse Tree");
 
         execute( pComparisonPredicate );
     }
@@ -137,7 +137,7 @@ void OPredicateCompiler::start(OSQLParseNode* pSQLParseNode)
 
 OOperand* OPredicateCompiler::execute(OSQLParseNode* pPredicateNode)
 {
-    OOperand* pOperand = NULL;
+    OOperand* pOperand = nullptr;
     if (pPredicateNode->count() == 3 &&                         // Expression is bracketed
         SQL_ISPUNCTUATION(pPredicateNode->getChild(0),"(") &&
         SQL_ISPUNCTUATION(pPredicateNode->getChild(2),")"))
@@ -239,8 +239,8 @@ OOperand* OPredicateCompiler::execute_COMPARE(OSQLParseNode* pPredicateNode)  th
           // upper, lower etc.
           SQL_ISRULE(pPredicateNode->getChild(2),fold)) )
     {
-        m_pAnalyzer->getConnection()->throwGenericSQLException(STR_QUERY_TOO_COMPLEX,NULL);
-        return NULL;
+        m_pAnalyzer->getConnection()->throwGenericSQLException(STR_QUERY_TOO_COMPLEX,nullptr);
+        return nullptr;
     }
 
     sal_Int32 ePredicateType( SQLFilterOperator::EQUAL );
@@ -265,7 +265,7 @@ OOperand* OPredicateCompiler::execute_COMPARE(OSQLParseNode* pPredicateNode)  th
     execute(pPredicateNode->getChild(2));
     m_aCodeList.push_back( new OOp_COMPARE(ePredicateType) );
 
-    return NULL;
+    return nullptr;
 }
 
 
@@ -289,20 +289,20 @@ OOperand* OPredicateCompiler::execute_LIKE(OSQLParseNode* pPredicateNode) throw(
           // upper, lower etc.
           SQL_ISRULE(pAtom,fold)) )
     {
-        m_pAnalyzer->getConnection()->throwGenericSQLException(STR_QUERY_TOO_COMPLEX,NULL);
-        return NULL;
+        m_pAnalyzer->getConnection()->throwGenericSQLException(STR_QUERY_TOO_COMPLEX,nullptr);
+        return nullptr;
     }
 
     if (pOptEscape->count() != 0)
     {
         if (pOptEscape->count() != 2)
         {
-            m_pAnalyzer->getConnection()->throwGenericSQLException(STR_QUERY_INVALID_LIKE_STRING,NULL);
+            m_pAnalyzer->getConnection()->throwGenericSQLException(STR_QUERY_INVALID_LIKE_STRING,nullptr);
         }
         OSQLParseNode *pEscNode = pOptEscape->getChild(1);
         if (pEscNode->getNodeType() != SQL_NODE_STRING)
         {
-            m_pAnalyzer->getConnection()->throwGenericSQLException(STR_QUERY_INVALID_LIKE_STRING,NULL);
+            m_pAnalyzer->getConnection()->throwGenericSQLException(STR_QUERY_INVALID_LIKE_STRING,nullptr);
         }
         else
             cEscape = pEscNode->getTokenValue().toChar();
@@ -316,7 +316,7 @@ OOperand* OPredicateCompiler::execute_LIKE(OSQLParseNode* pPredicateNode) throw(
                                     : new OOp_LIKE(cEscape);
     m_aCodeList.push_back(pOperator);
 
-    return NULL;
+    return nullptr;
 }
 
 OOperand* OPredicateCompiler::execute_BETWEEN(OSQLParseNode* pPredicateNode) throw(SQLException, RuntimeException)
@@ -333,7 +333,7 @@ OOperand* OPredicateCompiler::execute_BETWEEN(OSQLParseNode* pPredicateNode) thr
         &&  !(p2ndtValue->getNodeType() == SQL_NODE_STRING || SQL_ISRULE(p2ndtValue,parameter))
         )
     {
-        m_pAnalyzer->getConnection()->throwGenericSQLException(STR_QUERY_INVALID_BETWEEN,NULL);
+        m_pAnalyzer->getConnection()->throwGenericSQLException(STR_QUERY_INVALID_BETWEEN,nullptr);
     }
 
     bool bNot = SQL_ISTOKEN(pPart2->getChild(0),NOT);
@@ -389,14 +389,14 @@ OOperand* OPredicateCompiler::execute_BETWEEN(OSQLParseNode* pPredicateNode) thr
 
 
 
-    OBoolOperator* pBoolOp = NULL;
+    OBoolOperator* pBoolOp = nullptr;
     if ( bNot )
         pBoolOp = new OOp_OR();
     else
         pBoolOp = new OOp_AND();
     m_aCodeList.push_back(pBoolOp);
 
-    return NULL;
+    return nullptr;
 }
 
 OOperand* OPredicateCompiler::execute_ISNULL(OSQLParseNode* pPredicateNode) throw(SQLException, RuntimeException)
@@ -416,12 +416,12 @@ OOperand* OPredicateCompiler::execute_ISNULL(OSQLParseNode* pPredicateNode) thro
                                 new OOp_ISNULL() : new OOp_ISNOTNULL();
     m_aCodeList.push_back(pOperator);
 
-    return NULL;
+    return nullptr;
 }
 
 OOperand* OPredicateCompiler::execute_Operand(OSQLParseNode* pPredicateNode) throw(SQLException, RuntimeException)
 {
-    OOperand* pOperand = NULL;
+    OOperand* pOperand = nullptr;
 
     if (SQL_ISRULE(pPredicateNode,column_ref))
     {
@@ -444,7 +444,7 @@ OOperand* OPredicateCompiler::execute_Operand(OSQLParseNode* pPredicateNode) thr
                     STR_INVALID_COLUMNNAME,
                     "$columnname$", aColumnName
                  ) );
-            ::dbtools::throwGenericSQLException( sError, NULL );
+            ::dbtools::throwGenericSQLException( sError, nullptr );
         }
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> xCol;
         try
@@ -459,7 +459,7 @@ OOperand* OPredicateCompiler::execute_Operand(OSQLParseNode* pPredicateNode) thr
                     STR_INVALID_COLUMNNAME,
                     "$columnname$", aColumnName
                  ) );
-                ::dbtools::throwGenericSQLException( sError, NULL );
+                ::dbtools::throwGenericSQLException( sError, nullptr );
             }
         }
         catch(Exception &)
@@ -516,7 +516,7 @@ OOperand* OPredicateCompiler::execute_Operand(OSQLParseNode* pPredicateNode) thr
             }
         }
         else
-            m_pAnalyzer->getConnection()->throwGenericSQLException(STR_QUERY_TOO_COMPLEX,NULL);
+            m_pAnalyzer->getConnection()->throwGenericSQLException(STR_QUERY_TOO_COMPLEX,nullptr);
 
     }
     else if( SQL_ISRULE(pPredicateNode,fold) )
@@ -536,7 +536,7 @@ OOperand* OPredicateCompiler::execute_Operand(OSQLParseNode* pPredicateNode) thr
     }
     else
     {
-        m_pAnalyzer->getConnection()->throwGenericSQLException(STR_QUERY_TOO_COMPLEX,NULL);
+        m_pAnalyzer->getConnection()->throwGenericSQLException(STR_QUERY_TOO_COMPLEX,nullptr);
     }
     if (pOperand)
         m_aCodeList.push_back(pOperand);
@@ -606,19 +606,19 @@ OOperand* OPredicateCompiler::execute_Fold(OSQLParseNode* pPredicateNode)   thro
     bool bUpper = SQL_ISTOKEN(pPredicateNode->getChild(0),UPPER);
 
     execute(pPredicateNode->getChild(2));
-    OOperator* pOperator = NULL;
+    OOperator* pOperator = nullptr;
     if ( bUpper )
         pOperator = new OOp_Upper();
     else
         pOperator = new OOp_Lower();
 
     m_aCodeList.push_back(pOperator);
-    return NULL;
+    return nullptr;
 }
 
 OOperand* OPredicateCompiler::executeFunction(OSQLParseNode* pPredicateNode)    throw(SQLException, RuntimeException)
 {
-    OOperator* pOperator = NULL;
+    OOperator* pOperator = nullptr;
 
     OSL_ENSURE(pPredicateNode->getChild(0)->isToken(),"The first one must be the name of the function!");
     sal_Int32 nTokenId = pPredicateNode->getChild(0)->getTokenID();
@@ -897,11 +897,11 @@ OOperand* OPredicateCompiler::executeFunction(OSQLParseNode* pPredicateNode)    
             pOperator = new OOp_Locate();
             break;
         default:
-            m_pAnalyzer->getConnection()->throwGenericSQLException(STR_QUERY_FUNCTION_NOT_SUPPORTED,NULL);
+            m_pAnalyzer->getConnection()->throwGenericSQLException(STR_QUERY_FUNCTION_NOT_SUPPORTED,nullptr);
     }
 
     m_aCodeList.push_back(pOperator);
-    return NULL;
+    return nullptr;
 }
 
 

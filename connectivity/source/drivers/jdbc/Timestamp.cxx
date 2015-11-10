@@ -28,8 +28,8 @@ using namespace connectivity;
 //************ Class: java.sql.Date
 
 
-jclass java_sql_Date::theClass = 0;
-java_sql_Date::java_sql_Date( const ::com::sun::star::util::Date& _rOut ) : java_util_Date( NULL, nullptr )
+jclass java_sql_Date::theClass = nullptr;
+java_sql_Date::java_sql_Date( const ::com::sun::star::util::Date& _rOut ) : java_util_Date( nullptr, nullptr )
 {
     SDBThreadAttach t;
     if( !t.pEnv )
@@ -43,7 +43,7 @@ java_sql_Date::java_sql_Date( const ::com::sun::star::util::Date& _rOut ) : java
     // Turn of Java-Call for the constructor
     // initialise temporary variables
     jobject tempObj;
-    static jmethodID mID(NULL);
+    static jmethodID mID(nullptr);
     if ( !mID )
     {
         static const char * cSignature = "(Ljava/lang/String;)Ljava/sql/Date;";
@@ -81,7 +81,7 @@ java_sql_Date::operator ::com::sun::star::util::Date()
 //************ Class: java.sql.Time
 
 
-jclass java_sql_Time::theClass = 0;
+jclass java_sql_Time::theClass = nullptr;
 
 java_sql_Time::~java_sql_Time()
 {}
@@ -97,7 +97,7 @@ jclass java_sql_Time::st_getMyClass()
         theClass = findMyClass("java/sql/Time");
     return theClass;
 }
-java_sql_Time::java_sql_Time( const ::com::sun::star::util::Time& _rOut ): java_util_Date( NULL, nullptr )
+java_sql_Time::java_sql_Time( const ::com::sun::star::util::Time& _rOut ): java_util_Date( nullptr, nullptr )
 {
     SDBThreadAttach t;
     if( !t.pEnv )
@@ -112,7 +112,7 @@ java_sql_Time::java_sql_Time( const ::com::sun::star::util::Time& _rOut ): java_
     // Turn off Java-Call for the constructor
     // intialise temporary variables
     jobject tempObj;
-    static jmethodID mID(NULL);
+    static jmethodID mID(nullptr);
     if ( !mID )
     {
         static const char * cSignature = "(Ljava/lang/String;)Ljava/sql/Time;";
@@ -134,7 +134,7 @@ java_sql_Time::operator ::com::sun::star::util::Time()
 //************ Class: java.sql.Timestamp
 
 
-jclass java_sql_Timestamp::theClass = 0;
+jclass java_sql_Timestamp::theClass = nullptr;
 
 java_sql_Timestamp::~java_sql_Timestamp()
 {}
@@ -153,7 +153,7 @@ jclass java_sql_Timestamp::st_getMyClass()
 }
 
 java_sql_Timestamp::java_sql_Timestamp(const ::com::sun::star::util::DateTime& _rOut)
-                   :java_util_Date( NULL, nullptr )
+                   :java_util_Date( nullptr, nullptr )
 {
         SDBThreadAttach t;
     if( !t.pEnv )
@@ -168,7 +168,7 @@ java_sql_Timestamp::java_sql_Timestamp(const ::com::sun::star::util::DateTime& _
     // Turn off Java-Call for the constructor
     // initialise temporary variables
     jobject tempObj;
-    static jmethodID mID(NULL);
+    static jmethodID mID(nullptr);
     if ( !mID )
     {
         static const char * cSignature = "(Ljava/lang/String;)Ljava/sql/Timestamp;";

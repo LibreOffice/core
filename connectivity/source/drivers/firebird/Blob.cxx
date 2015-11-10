@@ -55,7 +55,7 @@ void Blob::ensureBlobIsOpened()
                           &m_blobHandle,
                           &m_blobID,
                           0,
-                          NULL);
+                          nullptr);
 
     if (aErr)
         evaluateStatusVector(m_statusVector, "isc_open_blob2", *this);

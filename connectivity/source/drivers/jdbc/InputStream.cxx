@@ -34,7 +34,7 @@ using namespace connectivity;
 //************ Class: java.io.InputStream
 
 
-jclass java_io_InputStream::theClass = 0;
+jclass java_io_InputStream::theClass = nullptr;
 java_io_InputStream::java_io_InputStream( JNIEnv * pEnv, jobject myObj )
     : java_lang_Object( pEnv, myObj )
 {
@@ -61,19 +61,19 @@ sal_Int32 SAL_CALL java_io_InputStream::readSomeBytes( ::com::sun::star::uno::Se
 
 void SAL_CALL java_io_InputStream::skipBytes( sal_Int32 nBytesToSkip ) throw(::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
-    static jmethodID mID(NULL);
+    static jmethodID mID(nullptr);
     callIntMethodWithIntArg_ThrowRuntime("skip",mID,nBytesToSkip);
 }
 
 sal_Int32 SAL_CALL java_io_InputStream::available(  ) throw(::com::sun::star::io::NotConnectedException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
-    static jmethodID mID(NULL);
+    static jmethodID mID(nullptr);
     return callIntMethod_ThrowRuntime("available", mID);
 }
 
 void SAL_CALL java_io_InputStream::closeInput(  ) throw(::com::sun::star::io::NotConnectedException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
-    static jmethodID mID(NULL);
+    static jmethodID mID(nullptr);
     callVoidMethod_ThrowRuntime("close",mID);
 }
 
@@ -90,7 +90,7 @@ sal_Int32 SAL_CALL java_io_InputStream::readBytes( ::com::sun::star::uno::Sequen
         static const char * cSignature = "([BII)I";
         static const char * cMethodName = "read";
         // execute Java-Call
-        static jmethodID mID(NULL);
+        static jmethodID mID(nullptr);
         obtainMethodId_throwRuntime(t.pEnv, cMethodName,cSignature, mID);
         out = t.pEnv->CallIntMethod( object, mID, pByteArray, 0, nBytesToRead );
         if ( !out )

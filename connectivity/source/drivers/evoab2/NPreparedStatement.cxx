@@ -309,7 +309,7 @@ void SAL_CALL OEvoabPreparedStatement::clearParameters(  ) throw(SQLException, R
 
 Reference< XResultSet > SAL_CALL OEvoabPreparedStatement::getResultSet(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    return NULL;
+    return nullptr;
 }
 
 sal_Int32 SAL_CALL OEvoabPreparedStatement::getUpdateCount(  ) throw(SQLException, RuntimeException, std::exception)

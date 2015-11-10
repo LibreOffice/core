@@ -114,7 +114,7 @@ typedef std::unordered_map
 struct ImplementationStatics
 {
     ImplementationStatics() :
-        pProps(0)
+        pProps(nullptr)
     {}
 
     OUString implName;

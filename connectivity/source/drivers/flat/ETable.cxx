@@ -514,7 +514,7 @@ void SAL_CALL OFlatTable::disposing()
 {
     OFileTable::disposing();
     ::osl::MutexGuard aGuard(m_aMutex);
-    m_aColumns = NULL;
+    m_aColumns = nullptr;
 }
 
 Sequence< Type > SAL_CALL OFlatTable::getTypes(  ) throw(RuntimeException, std::exception)
@@ -555,7 +555,7 @@ Any SAL_CALL OFlatTable::queryInterface( const Type & rType ) throw(RuntimeExcep
 
 Sequence< sal_Int8 > OFlatTable::getUnoTunnelImplementationId()
 {
-    static ::cppu::OImplementationId * pId = 0;
+    static ::cppu::OImplementationId * pId = nullptr;
     if (! pId)
     {
         ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );

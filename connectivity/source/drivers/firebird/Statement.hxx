@@ -46,7 +46,7 @@ namespace connectivity
             // a constructor, which is required for returning objects:
             explicit OStatement( Connection* _pConnection)
                 : OStatementCommonBase( _pConnection),
-                  m_pSqlda(0)
+                  m_pSqlda(nullptr)
             {}
 
             virtual void disposeResultSet() override;

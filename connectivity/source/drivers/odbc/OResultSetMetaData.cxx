@@ -45,7 +45,7 @@ OUString OResultSetMetaData::getCharColAttrib(sal_Int32 _column,sal_Int32 ident)
                                     static_cast<SQLPOINTER>(pName),
                                     BUFFER_LEN,
                                     &nRealLen,
-                                    NULL
+                                    nullptr
                                     );
     OUString sValue;
     if ( nRet == SQL_SUCCESS )
@@ -65,7 +65,7 @@ OUString OResultSetMetaData::getCharColAttrib(sal_Int32 _column,sal_Int32 ident)
                                     static_cast<SQLPOINTER>(pName),
                                     nRealLen,
                                     &nRealLen,
-                                    NULL
+                                    nullptr
                                     );
         if ( nRet == SQL_SUCCESS && nRealLen > 0)
             sValue = OUString(pName,nRealLen,m_pConnection->getTextEncoding());
@@ -86,9 +86,9 @@ SQLLEN OResultSetMetaData::getNumColAttrib(OConnection* _pConnection
     OTools::ThrowException(_pConnection,(*reinterpret_cast<T3SQLColAttribute>(_pConnection->getOdbcFunction(ODBC3SQLFunctionId::ColAttribute)))(_aStatementHandle,
                                          (SQLUSMALLINT)_column,
                                          (SQLUSMALLINT)_ident,
-                                         NULL,
+                                         nullptr,
                                          0,
-                                         NULL,
+                                         nullptr,
                                          &nValue),_aStatementHandle,SQL_HANDLE_STMT,_xInterface);
     return nValue;
 }

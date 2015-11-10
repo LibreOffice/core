@@ -55,8 +55,8 @@ using namespace ::com::sun::star::lang;
 ODatabaseMetaDataResultSet::ODatabaseMetaDataResultSet()
     :ODatabaseMetaDataResultSet_BASE(m_aMutex)
     ,::comphelper::OPropertyContainer(ODatabaseMetaDataResultSet_BASE::rBHelper)
-    ,m_aStatement(NULL)
-    ,m_xMetaData(NULL)
+    ,m_aStatement(nullptr)
+    ,m_xMetaData(nullptr)
     ,m_nColPos(0)
     ,m_bBOF(true)
     ,m_bEOF(true)
@@ -68,8 +68,8 @@ ODatabaseMetaDataResultSet::ODatabaseMetaDataResultSet()
 ODatabaseMetaDataResultSet::ODatabaseMetaDataResultSet( MetaDataResultSetType _eType )
     :ODatabaseMetaDataResultSet_BASE(m_aMutex)
     ,::comphelper::OPropertyContainer(ODatabaseMetaDataResultSet_BASE::rBHelper)
-    ,m_aStatement(NULL)
-    ,m_xMetaData(NULL)
+    ,m_aStatement(nullptr)
+    ,m_xMetaData(nullptr)
     ,m_nColPos(0)
     ,m_bBOF(true)
     ,m_bEOF(true)
@@ -124,7 +124,7 @@ void ODatabaseMetaDataResultSet::disposing()
     OPropertySetHelper::disposing();
 
     ::osl::MutexGuard aGuard(m_aMutex);
-    m_aStatement    = NULL;
+    m_aStatement    = nullptr;
 m_xMetaData.clear();
     m_aRowsIter = m_aRows.end();
     m_aRows.clear();
@@ -193,12 +193,12 @@ void ODatabaseMetaDataResultSet::checkIndex(sal_Int32 columnIndex ) throw(::com:
 
 Reference< ::com::sun::star::io::XInputStream > SAL_CALL ODatabaseMetaDataResultSet::getBinaryStream( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException, std::exception)
 {
-    return NULL;
+    return nullptr;
 }
 
 Reference< ::com::sun::star::io::XInputStream > SAL_CALL ODatabaseMetaDataResultSet::getCharacterStream( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException, std::exception)
 {
-    return NULL;
+    return nullptr;
 }
 
 
@@ -271,25 +271,25 @@ Reference< XResultSetMetaData > SAL_CALL ODatabaseMetaDataResultSet::getMetaData
 
 Reference< XArray > SAL_CALL ODatabaseMetaDataResultSet::getArray( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException, std::exception)
 {
-    return NULL;
+    return nullptr;
 }
 
 
 
 Reference< XClob > SAL_CALL ODatabaseMetaDataResultSet::getClob( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException, std::exception)
 {
-    return NULL;
+    return nullptr;
 }
 
 Reference< XBlob > SAL_CALL ODatabaseMetaDataResultSet::getBlob( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException, std::exception)
 {
-    return NULL;
+    return nullptr;
 }
 
 
 Reference< XRef > SAL_CALL ODatabaseMetaDataResultSet::getRef( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException, std::exception)
 {
-    return NULL;
+    return nullptr;
 }
 
 
@@ -889,10 +889,10 @@ namespace
 {
     cppu::ImplementationEntry entries[] = {
         { &ODatabaseMetaDataResultSet_CreateInstance, &ODatabaseMetaDataResultSet::getImplementationName_Static, &ODatabaseMetaDataResultSet::getSupportedServiceNames_Static,
-            &cppu::createSingleComponentFactory, 0, 0 },
+            &cppu::createSingleComponentFactory, nullptr, 0 },
         { &ParameterSubstitution::create, &ParameterSubstitution::getImplementationName_Static, &ParameterSubstitution::getSupportedServiceNames_Static,
-            &cppu::createSingleComponentFactory, 0, 0 },
-        { 0, 0, 0, 0, 0, 0 }
+            &cppu::createSingleComponentFactory, nullptr, 0 },
+        { nullptr, nullptr, nullptr, nullptr, nullptr, 0 }
     };
 }
 

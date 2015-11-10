@@ -109,7 +109,7 @@ Reference< XPreparedStatement > SAL_CALL ODbaseConnection::prepareStatement( con
 Reference< XPreparedStatement > SAL_CALL ODbaseConnection::prepareCall( const OUString& /*sql*/ ) throw(SQLException, RuntimeException, std::exception)
 {
     ::dbtools::throwFeatureNotImplementedSQLException( "XConnection::prepareCall", *this );
-    return NULL;
+    return nullptr;
 }
 
 

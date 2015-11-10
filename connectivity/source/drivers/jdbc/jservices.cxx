@@ -63,7 +63,7 @@ struct ProviderRequest
         {
             try
             {
-                xRet = creator( xServiceManager, sImplementationName,Factory, Services,0);
+                xRet = creator( xServiceManager, sImplementationName,Factory, Services,nullptr);
             }
             catch(...)
             {
@@ -80,7 +80,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL jdbc_component_getFactory(
                     void* pServiceManager,
                     void* /*pRegistryKey*/)
 {
-    void* pRet = 0;
+    void* pRet = nullptr;
     if (pServiceManager)
     {
         ProviderRequest aReq(pServiceManager,pImplementationName);

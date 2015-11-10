@@ -26,7 +26,7 @@ using namespace connectivity;
 //************ Class: java.lang.Class
 
 
-jclass java_lang_Class::theClass = 0;
+jclass java_lang_Class::theClass = nullptr;
 
 java_lang_Class::~java_lang_Class()
 {}
@@ -41,23 +41,23 @@ jclass java_lang_Class::getMyClass() const
 
 java_lang_Class * java_lang_Class::forName( const OUString& _par0 )
 {
-    jobject out(NULL);
+    jobject out(nullptr);
     SDBThreadAttach t;
 
     {
         OString sClassName = OUStringToOString(_par0, RTL_TEXTENCODING_JAVA_UTF8);
         sClassName = sClassName.replace('.','/');
         out = t.pEnv->FindClass(sClassName.getStr());
-        ThrowSQLException(t.pEnv,0);
+        ThrowSQLException(t.pEnv,nullptr);
     } //t.pEnv
     // WARNING: the caller becomes the owner of the returned pointer
-    return out==0 ? NULL : new java_lang_Class( t.pEnv, out );
+    return out==nullptr ? nullptr : new java_lang_Class( t.pEnv, out );
 }
 
 jobject java_lang_Class::newInstanceObject()
 {
     SDBThreadAttach t;
-    static jmethodID mID(NULL);
+    static jmethodID mID(nullptr);
     return callObjectMethod(t.pEnv,"newInstance","()Ljava/lang/Object;", mID);
 }
 

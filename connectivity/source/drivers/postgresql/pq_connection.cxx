@@ -126,7 +126,7 @@ public:
         {
             m_conn->removeFromWeakMap(m_id);
             m_conn->release();
-            m_conn = 0;
+            m_conn = nullptr;
         }
     }
 };
@@ -187,7 +187,7 @@ Connection::Connection(
         m_settings.logFile = fopen( "sdbc-pqsql.log", "a" );
         if( m_settings.logFile )
         {
-            setvbuf( m_settings.logFile, 0, _IONBF, 0 );
+            setvbuf( m_settings.logFile, nullptr, _IONBF, 0 );
             log( &m_settings, m_settings.loglevel , "set this loglevel" );
         }
         else
@@ -203,12 +203,12 @@ Connection::~Connection()
     if( m_settings.pConnection )
     {
         PQfinish( m_settings.pConnection );
-        m_settings.pConnection = 0;
+        m_settings.pConnection = nullptr;
     }
     if( m_settings.logFile )
     {
         fclose( m_settings.logFile );
-        m_settings.logFile = 0;
+        m_settings.logFile = nullptr;
     }
 }
 typedef ::std::list< ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XCloseable > > CloseableList;
@@ -226,7 +226,7 @@ void Connection::close() throw ( SQLException, RuntimeException, std::exception 
         {
             log( &m_settings, LogLevel::INFO, "closing connection" );
             PQfinish( m_settings.pConnection );
-            m_settings.pConnection = 0;
+            m_settings.pConnection = nullptr;
         }
 
         lstDispose.push_back( Reference< XComponent > ( m_settings.users, UNO_QUERY ) );
@@ -277,7 +277,7 @@ Reference< XStatement > Connection::createStatement() throw (SQLException, Runti
     Statement *stmt = new Statement( m_refMutex, this , &m_settings );
     Reference< XStatement > ret( stmt );
     ::rtl::ByteSequence id( 16 );
-    rtl_createUuid( reinterpret_cast<sal_uInt8*>(id.getArray()), 0, sal_False );
+    rtl_createUuid( reinterpret_cast<sal_uInt8*>(id.getArray()), nullptr, sal_False );
     m_myStatements[ id ] = Reference< XCloseable > ( stmt );
     stmt->queryAdapter()->addReference( new ClosableReference( id, this ) );
     return ret;
@@ -294,7 +294,7 @@ Reference< XPreparedStatement > Connection::prepareStatement( const OUString& sq
     Reference< XPreparedStatement > ret = stmt;
 
     ::rtl::ByteSequence id( 16 );
-    rtl_createUuid( reinterpret_cast<sal_uInt8*>(id.getArray()), 0, sal_False );
+    rtl_createUuid( reinterpret_cast<sal_uInt8*>(id.getArray()), nullptr, sal_False );
     m_myStatements[ id ] = Reference< XCloseable > ( stmt );
     stmt->queryAdapter()->addReference( new ClosableReference( id, this ) );
     return ret;
@@ -338,7 +338,7 @@ void Connection::rollback() throw (SQLException, RuntimeException, std::exceptio
 
 sal_Bool Connection::isClosed() throw (SQLException, RuntimeException, std::exception)
 {
-    return m_settings.pConnection == 0;
+    return m_settings.pConnection == nullptr;
 }
 
 Reference< XDatabaseMetaData > Connection::getMetaData()
@@ -372,7 +372,7 @@ void Connection::setCatalog( const OUString& )
 OUString Connection::getCatalog() throw (SQLException, RuntimeException, std::exception)
 {
     MutexGuard guard( m_refMutex->mutex );
-    if( m_settings.pConnection == 0 )
+    if( m_settings.pConnection == nullptr )
     {
         throw SQLException( "pq_connection: connection is closed", *this,
                             OUString(), 1, Any() );
@@ -547,10 +547,10 @@ void Connection::initialize( const Sequence< Any >& aArguments )
         {
             char *err;
             std::shared_ptr<PQconninfoOption> oOpts(PQconninfoParse(o.getStr(), &err), PQconninfoFree);
-            if ( oOpts.get() == NULL )
+            if ( oOpts.get() == nullptr )
             {
                 OUString errorMessage;
-                if ( err != NULL)
+                if ( err != nullptr)
                 {
                     errorMessage = OUString( err, strlen(err), m_settings.encoding );
                     free(err);
@@ -567,9 +567,9 @@ void Connection::initialize( const Sequence< Any >& aArguments )
                 throw SQLException( buf.makeStringAndClear(), *this, OUString("HY092"), 5, Any() );
             }
 
-            for (  PQconninfoOption * opt = oOpts.get(); opt->keyword != NULL; ++opt)
+            for (  PQconninfoOption * opt = oOpts.get(); opt->keyword != nullptr; ++opt)
             {
-                if ( opt->val != NULL )
+                if ( opt->val != nullptr )
                 {
                     keywords.push_back(strdup(opt->keyword));
                     values.push_back(strdup(opt->val));
@@ -577,8 +577,8 @@ void Connection::initialize( const Sequence< Any >& aArguments )
             }
         }
         properties2arrays( args , tc, m_settings.encoding, keywords, values );
-        keywords.push_back(NULL, SAL_NO_ACQUIRE);
-        values.push_back(NULL, SAL_NO_ACQUIRE);
+        keywords.push_back(nullptr, SAL_NO_ACQUIRE);
+        values.push_back(nullptr, SAL_NO_ACQUIRE);
 
         m_settings.pConnection = PQconnectdbParams( keywords.c_array(), values.c_array(), 0 );
     }
@@ -595,7 +595,7 @@ void Connection::initialize( const Sequence< Any >& aArguments )
         buf.append( "'\n" );
         buf.append( errorMessage );
         PQfinish( m_settings.pConnection );
-        m_settings.pConnection = 0;
+        m_settings.pConnection = nullptr;
         throw SQLException( buf.makeStringAndClear(), *this, errorMessage, CONNECTION_BAD, Any() );
     }
     PQsetClientEncoding( m_settings.pConnection, "UNICODE" );
@@ -700,7 +700,7 @@ void log( ConnectionSettings *settings, sal_Int32 level, const char *str )
     {
         static const char *strLevel[] = { "NONE", "ERROR", "SQL", "INFO", "DATA" };
 
-        time_t t = ::time( 0 );
+        time_t t = ::time( nullptr );
         char *pString;
 #ifdef SAL_W32
         pString = asctime( localtime( &t ) );
@@ -734,9 +734,9 @@ static const struct cppu::ImplementationEntry g_entries[] =
     {
         pq_sdbc_driver::ConnectionCreateInstance, pq_sdbc_driver::ConnectionGetImplementationName,
         pq_sdbc_driver::ConnectionGetSupportedServiceNames, cppu::createSingleComponentFactory,
-        0 , 0
+        nullptr , 0
     },
-    { 0, 0, 0, 0, 0, 0 }
+    { nullptr, nullptr, nullptr, nullptr, nullptr, 0 }
 };
 
 

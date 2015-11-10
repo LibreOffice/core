@@ -172,7 +172,7 @@ namespace connectivity
     public:
         // if NULL, a default context will be used
         // the context must live as long as the parser
-        OSQLParser(const css::uno::Reference< css::uno::XComponentContext >& rxContext, const IParseContext* _pContext = NULL);
+        OSQLParser(const css::uno::Reference< css::uno::XComponentContext >& rxContext, const IParseContext* _pContext = nullptr);
         ~OSQLParser();
 
         // Parsing an SQLStatement
@@ -195,7 +195,7 @@ namespace connectivity
         const SQLError& getErrorHelper() const;
 
         // TokenIDToStr: token name belonging to a token number.
-        static OString TokenIDToStr(sal_uInt32 nTokenID, const IParseContext* pContext = NULL);
+        static OString TokenIDToStr(sal_uInt32 nTokenID, const IParseContext* pContext = nullptr);
 
 #if OSL_DEBUG_LEVEL > 1
         // (empty string if not found)
@@ -212,7 +212,7 @@ namespace connectivity
         // RuleId with enum, far more efficient
         static sal_uInt32 RuleID(OSQLParseNode::Rule eRule);
         // compares the _sFunctionName with all known function names and return the DataType of the return value
-        static sal_Int32 getFunctionReturnType(const OUString& _sFunctionName, const IParseContext* pContext = NULL);
+        static sal_Int32 getFunctionReturnType(const OUString& _sFunctionName, const IParseContext* pContext = nullptr);
 
         // returns the type for a parameter in a given function name
         static sal_Int32 getFunctionParameterType(sal_uInt32 _nTokenId,sal_uInt32 _nPos);
@@ -233,7 +233,7 @@ namespace connectivity
 
         sal_Int16 buildComparsionRule(OSQLParseNode*& pAppend,OSQLParseNode* pLiteral);
         // pCompre will be deleted if it is not used
-        sal_Int16 buildPredicateRule(OSQLParseNode*& pAppend,OSQLParseNode* const pLiteral,OSQLParseNode* pCompare,OSQLParseNode* pLiteral2 = NULL);
+        sal_Int16 buildPredicateRule(OSQLParseNode*& pAppend,OSQLParseNode* const pLiteral,OSQLParseNode* pCompare,OSQLParseNode* pLiteral2 = nullptr);
 
         sal_Int16 buildLikeRule(OSQLParseNode* pAppend, OSQLParseNode*& pLiteral, const OSQLParseNode* pEscape);
         sal_Int16 buildStringNodes(OSQLParseNode*& pLiteral);

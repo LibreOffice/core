@@ -102,13 +102,13 @@ struct ConnectionSettings
 {
     ConnectionSettings() :
         encoding( RTL_TEXTENCODING_UTF8),
-        pConnection(0),
+        pConnection(nullptr),
         maxNameLen(0),
         maxIndexKeys(0),
-        pTablesImpl(0),
-        pViewsImpl(0),
+        pTablesImpl(nullptr),
+        pViewsImpl(nullptr),
         showSystemColumns( false ),
-        logFile( 0 ),
+        logFile( nullptr ),
         loglevel( LogLevel::INFO )
     {}
     rtl_TextEncoding encoding;

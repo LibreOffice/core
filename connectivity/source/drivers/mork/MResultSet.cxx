@@ -90,7 +90,7 @@ OResultSet::OResultSet(OCommonStatement* pStmt, const std::shared_ptr< connectiv
     ,OPropertySetHelper(OResultSet_BASE::rBHelper)
     ,m_pStatement(pStmt)
     ,m_xStatement(*pStmt)
-    ,m_xMetaData(NULL)
+    ,m_xMetaData(nullptr)
     ,m_nRowPos(0)
     ,m_nOldRowPos(0)
     ,m_bWasNull(false)
@@ -101,11 +101,11 @@ OResultSet::OResultSet(OCommonStatement* pStmt, const std::shared_ptr< connectiv
     ,m_pSQLIterator( _pSQLIterator )
     ,m_pParseTree( _pSQLIterator->getParseTree() )
     ,m_aQueryHelper(pStmt->getOwnConnection()->getColumnAlias())
-    ,m_pTable(NULL)
+    ,m_pTable(nullptr)
     ,m_CurrentRowCount(0)
     ,m_nParamIndex(0)
     ,m_bIsAlwaysFalseQuery(false)
-    ,m_pKeySet(NULL)
+    ,m_pKeySet(nullptr)
     ,m_nNewRow(0)
     ,m_nUpdatedRow(0)
     ,m_RowStates(0)
@@ -127,14 +127,14 @@ void OResultSet::disposing()
 
     m_xStatement.clear();
     m_xMetaData.clear();
-    m_pParseTree    = NULL;
-    m_xColumns = NULL;
-    m_xParamColumns = NULL;
-    m_pKeySet       = NULL;
+    m_pParseTree    = nullptr;
+    m_xColumns = nullptr;
+    m_xParamColumns = nullptr;
+    m_pKeySet       = nullptr;
     if(m_pTable)
     {
         m_pTable->release();
-        m_pTable = NULL;
+        m_pTable = nullptr;
     }
 }
 
@@ -188,12 +188,12 @@ sal_Int32 SAL_CALL OResultSet::findColumn( const OUString& columnName ) throw(SQ
 
 Reference< XInputStream > SAL_CALL OResultSet::getBinaryStream( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException, std::exception)
 {
-    return NULL;
+    return nullptr;
 }
 
 Reference< XInputStream > SAL_CALL OResultSet::getCharacterStream( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException, std::exception)
 {
-    return NULL;
+    return nullptr;
 }
 
 
@@ -275,25 +275,25 @@ Reference< XResultSetMetaData > SAL_CALL OResultSet::getMetaData(  ) throw(SQLEx
 
 Reference< XArray > SAL_CALL OResultSet::getArray( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException, std::exception)
 {
-    return NULL;
+    return nullptr;
 }
 
 
 
 Reference< XClob > SAL_CALL OResultSet::getClob( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException, std::exception)
 {
-    return NULL;
+    return nullptr;
 }
 
 Reference< XBlob > SAL_CALL OResultSet::getBlob( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException, std::exception)
 {
-    return NULL;
+    return nullptr;
 }
 
 
 Reference< XRef > SAL_CALL OResultSet::getRef( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException, std::exception)
 {
-    return NULL;
+    return nullptr;
 }
 
 
@@ -750,10 +750,10 @@ void OResultSet::analyseWhereClause( const OSQLParseNode*                 parseT
     MQueryOp::cond_type     op( MQueryOp::Is );
     OUString         matchString;
 
-    if ( parseTree == NULL )
+    if ( parseTree == nullptr )
         return;
 
-    if ( m_pSQLIterator->getParseTree() != NULL ) {
+    if ( m_pSQLIterator->getParseTree() != nullptr ) {
         ::rtl::Reference<OSQLColumns> xColumns = m_pSQLIterator->getParameters();
         if(xColumns.is())
         {
@@ -1059,7 +1059,7 @@ void OResultSet::fillRowData()
     const OSQLParseNode*  pParseTree = m_pSQLIterator->getWhereTree();
 
     m_bIsAlwaysFalseQuery = false;
-    if ( pParseTree != NULL )
+    if ( pParseTree != nullptr )
     {
         // Extract required info
 

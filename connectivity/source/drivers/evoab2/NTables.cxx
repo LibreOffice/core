@@ -54,7 +54,7 @@ ObjectType OEvoabTables::createObject(const OUString& aName)
 
     Reference< XResultSet > xResult = m_xMetaData->getTables(Any(),aSchema,aName,aTypes);
 
-    ObjectType xRet = NULL;
+    ObjectType xRet = nullptr;
     if(xResult.is())
     {
         Reference< XRow > xRow(xResult,UNO_QUERY);

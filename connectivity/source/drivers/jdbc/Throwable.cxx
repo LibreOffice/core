@@ -24,7 +24,7 @@ using namespace connectivity;
 //************ Class: java.lang.Throwable
 
 
-jclass java_lang_Throwable::theClass = 0;
+jclass java_lang_Throwable::theClass = nullptr;
 
 java_lang_Throwable::~java_lang_Throwable()
 {}
@@ -44,21 +44,21 @@ jclass java_lang_Throwable::st_getMyClass()
 
 OUString java_lang_Throwable::getMessage() const
 {
-    static jmethodID mID(NULL);
+    static jmethodID mID(nullptr);
     return callStringMethod("getMessage",mID);
 }
 
 
 OUString java_lang_Throwable::getLocalizedMessage() const
 {
-    static jmethodID mID(NULL);
+    static jmethodID mID(nullptr);
     return callStringMethod("getLocalizedMessage",mID);
 }
 
 #if OSL_DEBUG_LEVEL > 0
 void java_lang_Throwable::printStackTrace() const
 {
-    static jmethodID mID(NULL);
+    static jmethodID mID(nullptr);
     return callVoidMethod_ThrowSQL("printStackTrace",mID);
 }
 #endif

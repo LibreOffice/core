@@ -315,7 +315,7 @@ namespace connectivity
 
         void parseNodeToStr(OUString& rString,
                             const css::uno::Reference< css::sdbc::XConnection >& _rxConnection,
-                            const IParseContext* pContext = NULL,
+                            const IParseContext* pContext = nullptr,
                             bool _bIntl = false,
                             bool _bQuote= true) const;
 
@@ -325,7 +325,7 @@ namespace connectivity
                                      const css::uno::Reference< css::util::XNumberFormatter > & xFormatter,
                                      const css::lang::Locale& rIntl,
                                      sal_Char _cDec,
-                                     const IParseContext* pContext = NULL ) const;
+                                     const IParseContext* pContext = nullptr ) const;
 
         void parseNodeToPredicateStr(OUString& rString,
                                      const css::uno::Reference< css::sdbc::XConnection >& _rxConnection,
@@ -334,7 +334,7 @@ namespace connectivity
                                      const OUString &_sTableAlias,
                                      const css::lang::Locale& rIntl,
                                      sal_Char _cDec,
-                                     const IParseContext* pContext = NULL ) const;
+                                     const IParseContext* pContext = nullptr ) const;
 
         OSQLParseNode* getByRule(OSQLParseNode::Rule eRule) const;
 

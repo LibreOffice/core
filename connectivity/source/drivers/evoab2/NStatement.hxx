@@ -81,7 +81,7 @@ namespace connectivity
             SortDescriptor                              aSortOrder;
 
             QueryData()
-                :pQuery( NULL )
+                :pQuery( nullptr )
                 ,sTable()
                 ,eFilterType( eFilterOther )
                 ,xSelectColumns()
@@ -90,7 +90,7 @@ namespace connectivity
             }
 
             QueryData( const QueryData& _rhs )
-                :pQuery( NULL )
+                :pQuery( nullptr )
                 ,sTable()
                 ,eFilterType( eFilterOther )
                 ,xSelectColumns()
@@ -115,7 +115,7 @@ namespace connectivity
 
             ~QueryData()
             {
-                setQuery( NULL );
+                setQuery( nullptr );
             }
 
             EBookQuery* getQuery() const { return pQuery; }

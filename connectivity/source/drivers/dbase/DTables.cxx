@@ -104,7 +104,7 @@ void ODbaseTables::dropObject(sal_Int32 _nPos, const OUString& _sElementName)
     }
     catch(const Exception&)
     {
-        if(ODbaseTable::Drop_Static(ODbaseTable::getEntry(static_cast<OFileCatalog&>(m_rParent).getConnection(),_sElementName),false,NULL))
+        if(ODbaseTable::Drop_Static(ODbaseTable::getEntry(static_cast<OFileCatalog&>(m_rParent).getConnection(),_sElementName),false,nullptr))
             return;
     }
 
@@ -120,7 +120,7 @@ void ODbaseTables::dropObject(sal_Int32 _nPos, const OUString& _sElementName)
                     STR_TABLE_NOT_DROP,
                     "$tablename$", _sElementName
                  ) );
-        ::dbtools::throwGenericSQLException( sError, NULL );
+        ::dbtools::throwGenericSQLException( sError, nullptr );
     }
 }
 

@@ -173,13 +173,13 @@ bool OSQLParseTreeIterator::isCaseSensitive() const
 
 void OSQLParseTreeIterator::dispose()
 {
-    m_aSelectColumns    = NULL;
-    m_aGroupColumns     = NULL;
-    m_aOrderColumns     = NULL;
-    m_aParameters       = NULL;
-    m_pImpl->m_xTableContainer  = NULL;
-    m_pImpl->m_xDatabaseMetaData = NULL;
-    m_aCreateColumns    = NULL;
+    m_aSelectColumns    = nullptr;
+    m_aGroupColumns     = nullptr;
+    m_aOrderColumns     = nullptr;
+    m_aParameters       = nullptr;
+    m_pImpl->m_xTableContainer  = nullptr;
+    m_pImpl->m_xDatabaseMetaData = nullptr;
+    m_aCreateColumns    = nullptr;
     m_pImpl->m_pTables->clear();
     m_pImpl->m_pSubTables->clear();
 }
@@ -395,8 +395,8 @@ OSQLTable OSQLParseTreeIterator::impl_locateRecordSource( const OUString& _rComp
             {
                 if  ( !m_pImpl->isQueryAllowed( sComposedName ) )
                 {
-                    impl_appendError( m_rParser.getErrorHelper().getSQLException( sdb::ErrorCondition::PARSER_CYCLIC_SUB_QUERIES, NULL ) );
-                    return NULL;
+                    impl_appendError( m_rParser.getErrorHelper().getSQLException( sdb::ErrorCondition::PARSER_CYCLIC_SUB_QUERIES, nullptr ) );
+                    return nullptr;
                 }
 
                 m_pImpl->m_xQueryContainer->getByName( sComposedName ) >>= aReturn;
@@ -433,7 +433,7 @@ void OSQLParseTreeIterator::traverseOneTableName( OSQLTables& _rTables,const OSQ
         // tables should not be included in the traversal
         return;
 
-    OSL_ENSURE(pTableName != NULL,"OSQLParseTreeIterator::traverseOneTableName: pTableName == NULL");
+    OSL_ENSURE(pTableName != nullptr,"OSQLParseTreeIterator::traverseOneTableName: pTableName == NULL");
 
     Any aCatalog;
     OUString aSchema,aTableName,aComposedName;
@@ -544,7 +544,7 @@ const OSQLParseNode* OSQLParseTreeIterator::getTableNode( OSQLTables& _rTables, 
               || SQL_ISRULE( pTableRef, qualified_join ) || SQL_ISRULE( pTableRef, cross_union ),
         "OSQLParseTreeIterator::getTableNode: only to be called for table_ref nodes!" );
 
-    const OSQLParseNode* pTableNameNode = NULL;
+    const OSQLParseNode* pTableNameNode = nullptr;
 
     if ( SQL_ISRULE( pTableRef, joined_table ) )
     {
@@ -612,10 +612,10 @@ void OSQLParseTreeIterator::getSelect_statement(OSQLTables& _rTables,const OSQLP
     }
     OSQLParseNode * pTableRefCommalist = pSelect->getChild(3)->getChild(0)->getChild(1);
 
-    OSL_ENSURE(pTableRefCommalist != NULL,"OSQLParseTreeIterator: error in parse tree!");
+    OSL_ENSURE(pTableRefCommalist != nullptr,"OSQLParseTreeIterator: error in parse tree!");
     OSL_ENSURE(SQL_ISRULE(pTableRefCommalist,table_ref_commalist),"OSQLParseTreeIterator: error in parse tree!");
 
-    const OSQLParseNode* pTableName = NULL;
+    const OSQLParseNode* pTableName = nullptr;
     OUString aTableRange;
     for (size_t i = 0; i < pTableRefCommalist->count(); i++)
     {   // Process FROM clause
@@ -659,10 +659,10 @@ void OSQLParseTreeIterator::getSelect_statement(OSQLTables& _rTables,const OSQLP
 
 bool OSQLParseTreeIterator::traverseTableNames(OSQLTables& _rTables)
 {
-    if ( m_pParseTree == NULL )
+    if ( m_pParseTree == nullptr )
         return false;
 
-    OSQLParseNode* pTableName = NULL;
+    OSQLParseNode* pTableName = nullptr;
 
     switch ( m_eStatementType )
     {
@@ -718,7 +718,7 @@ namespace
             if( _pColumnRef->count() > 1 )
             {
                 for ( sal_Int32 i=0; i<((sal_Int32)_pColumnRef->count())-2; ++i )
-                    _pColumnRef->getChild(i)->parseNodeToStr( _out_rTableRange, _rxConnection, NULL, false, false );
+                    _pColumnRef->getChild(i)->parseNodeToStr( _out_rTableRange, _rxConnection, nullptr, false, false );
                 _out_rColumnName = _pColumnRef->getChild( _pColumnRef->count()-1 )->getChild(0)->getTokenValue();
             }
             else
@@ -766,7 +766,7 @@ void OSQLParseTreeIterator::getColumnRange( const OSQLParseNode* _pColumnRef,
                         OUString& _rTableRange) const
 {
     OUString sDummy;
-    lcl_getColumnRange( _pColumnRef, m_pImpl->m_xConnection, _rColumnName, _rTableRange, NULL, sDummy );
+    lcl_getColumnRange( _pColumnRef, m_pImpl->m_xConnection, _rColumnName, _rTableRange, nullptr, sDummy );
 }
 
 
@@ -783,7 +783,7 @@ void OSQLParseTreeIterator::getColumnRange( const OSQLParseNode* _pColumnRef,
     const Reference< XConnection >& _rxConnection, OUString& _out_rColumnName, OUString& _out_rTableRange )
 {
     OUString sDummy;
-    lcl_getColumnRange( _pColumnRef, _rxConnection, _out_rColumnName, _out_rTableRange, NULL, sDummy );
+    lcl_getColumnRange( _pColumnRef, _rxConnection, _out_rColumnName, _out_rTableRange, nullptr, sDummy );
 }
 
 
@@ -955,7 +955,7 @@ bool OSQLParseTreeIterator::traverseSelectColumnNames(const OSQLParseNode* pSele
             {
                 // All the table's columns
                 OUString aTableRange;
-                pColumnRef->getChild(0)->parseNodeToStr( aTableRange, m_pImpl->m_xConnection, NULL, false, false );
+                pColumnRef->getChild(0)->parseNodeToStr( aTableRange, m_pImpl->m_xConnection, nullptr, false, false );
                 setSelectColumnName(m_aSelectColumns,"*", aEmptyString,aTableRange);
                 continue;
             }
@@ -1028,7 +1028,7 @@ void OSQLParseTreeIterator::traverseByColumnNames(const OSQLParseNode* pSelectNo
 {
     //  aIteratorStatus.Clear();
 
-    if (pSelectNode == NULL)
+    if (pSelectNode == nullptr)
     {
         //aIteratorStatus.setInvalidStatement();
         return;
@@ -1049,21 +1049,21 @@ void OSQLParseTreeIterator::traverseByColumnNames(const OSQLParseNode* pSelectNo
     OSL_ENSURE(pSelectNode->count() >= 4,"OSQLParseTreeIterator: error in parse tree!");
 
     OSQLParseNode * pTableExp = pSelectNode->getChild(3);
-    OSL_ENSURE(pTableExp != NULL,"OSQLParseTreeIterator: error in parse tree!");
+    OSL_ENSURE(pTableExp != nullptr,"OSQLParseTreeIterator: error in parse tree!");
     OSL_ENSURE(SQL_ISRULE(pTableExp,table_exp),"OSQLParseTreeIterator:table_exp error in parse tree!");
     OSL_ENSURE(pTableExp->count() == TABLE_EXPRESSION_CHILD_COUNT,"OSQLParseTreeIterator: error in parse tree!");
 
     sal_uInt32 nPos = ( _bOrder ? ORDER_BY_CHILD_POS : 2 );
 
     OSQLParseNode * pOptByClause = pTableExp->getChild(nPos);
-    OSL_ENSURE(pOptByClause != NULL,"OSQLParseTreeIterator: error in parse tree!");
+    OSL_ENSURE(pOptByClause != nullptr,"OSQLParseTreeIterator: error in parse tree!");
     if ( pOptByClause->count() == 0 )
         return;
 
     OSL_ENSURE(pOptByClause->count() == 3,"OSQLParseTreeIterator: error in parse tree!");
 
     OSQLParseNode * pOrderingSpecCommalist = pOptByClause->getChild(2);
-    OSL_ENSURE(pOrderingSpecCommalist != NULL,"OSQLParseTreeIterator: error in parse tree!");
+    OSL_ENSURE(pOrderingSpecCommalist != nullptr,"OSQLParseTreeIterator: error in parse tree!");
     OSL_ENSURE(!_bOrder || SQL_ISRULE(pOrderingSpecCommalist,ordering_spec_commalist),"OSQLParseTreeIterator:ordering_spec_commalist error in parse tree!");
     OSL_ENSURE(pOrderingSpecCommalist->count() > 0,"OSQLParseTreeIterator: error in parse tree!");
 
@@ -1073,7 +1073,7 @@ void OSQLParseTreeIterator::traverseByColumnNames(const OSQLParseNode* pSelectNo
     for (sal_uInt32 i = 0; i < nCount; ++i)
     {
         OSQLParseNode* pColumnRef  = pOrderingSpecCommalist->getChild(i);
-        OSL_ENSURE(pColumnRef  != NULL,"OSQLParseTreeIterator: error in parse tree!");
+        OSL_ENSURE(pColumnRef  != nullptr,"OSQLParseTreeIterator: error in parse tree!");
         if ( _bOrder )
         {
             OSL_ENSURE(SQL_ISRULE(pColumnRef,ordering_spec),"OSQLParseTreeIterator:ordering_spec error in parse tree!");
@@ -1081,7 +1081,7 @@ void OSQLParseTreeIterator::traverseByColumnNames(const OSQLParseNode* pSelectNo
 
             pColumnRef = pColumnRef->getChild(0);
         }
-        OSL_ENSURE(pColumnRef != NULL,"OSQLParseTreeIterator: error in parse tree!");
+        OSL_ENSURE(pColumnRef != nullptr,"OSQLParseTreeIterator: error in parse tree!");
         aTableRange.clear();
         sColumnName.clear();
         if ( SQL_ISRULE(pColumnRef,column_ref) )
@@ -1091,14 +1091,14 @@ void OSQLParseTreeIterator::traverseByColumnNames(const OSQLParseNode* pSelectNo
         }
         else
         {   // here I found a predicate
-            pColumnRef->parseNodeToStr( sColumnName, m_pImpl->m_xConnection, NULL, false, false );
+            pColumnRef->parseNodeToStr( sColumnName, m_pImpl->m_xConnection, nullptr, false, false );
         }
         OSL_ENSURE(!sColumnName.isEmpty(),"sColumnName must not be empty!");
         if ( _bOrder )
         {
             // Ascending/Descending
             OSQLParseNode * pOptAscDesc = pColumnRef->getParent()->getChild(1);
-            OSL_ENSURE(pOptAscDesc != NULL,"OSQLParseTreeIterator: error in parse tree!");
+            OSL_ENSURE(pOptAscDesc != nullptr,"OSQLParseTreeIterator: error in parse tree!");
 
             bool bAscending = ! (pOptAscDesc && SQL_ISTOKEN(pOptAscDesc,DESC));
             setOrderByColumnName(sColumnName, aTableRange,bAscending);
@@ -1136,12 +1136,12 @@ namespace
 
 void OSQLParseTreeIterator::traverseParameters(const OSQLParseNode* _pNode)
 {
-    if ( _pNode == NULL )
+    if ( _pNode == nullptr )
         return;
 
     OUString sColumnName, sTableRange, aColumnAlias;
     const OSQLParseNode* pParent = _pNode->getParent();
-    if ( pParent != NULL )
+    if ( pParent != nullptr )
     {
         if ( SQL_ISRULE(pParent,comparison_predicate) ) // x = X
         {
@@ -1152,7 +1152,7 @@ void OSQLParseTreeIterator::traverseParameters(const OSQLParseNode* _pNode)
             if ( SQL_ISRULE( pOther, column_ref ) )
                 getColumnRange( pOther, sColumnName, sTableRange, aColumnAlias);
             else
-                pOther->parseNodeToStr( sColumnName, m_pImpl->m_xConnection, NULL, false, false );
+                pOther->parseNodeToStr( sColumnName, m_pImpl->m_xConnection, nullptr, false, false );
         } // if ( SQL_ISRULE(pParent,comparison_predicate) ) // x = X
         else if ( SQL_ISRULE(pParent,other_like_predicate_part_2) )
         {
@@ -1160,7 +1160,7 @@ void OSQLParseTreeIterator::traverseParameters(const OSQLParseNode* _pNode)
             if ( SQL_ISRULE( pOther, column_ref ) )
                 getColumnRange( pOther, sColumnName, sTableRange, aColumnAlias);
             else
-                pOther->parseNodeToStr( sColumnName, m_pImpl->m_xConnection, NULL, false, false );
+                pOther->parseNodeToStr( sColumnName, m_pImpl->m_xConnection, nullptr, false, false );
         }
         else if ( SQL_ISRULE(pParent,between_predicate_part_2) )
         {
@@ -1169,7 +1169,7 @@ void OSQLParseTreeIterator::traverseParameters(const OSQLParseNode* _pNode)
                 getColumnRange( pOther, sColumnName, sTableRange, aColumnAlias);
             else
             {
-                pOther->parseNodeToStr( sColumnName, m_pImpl->m_xConnection, NULL, false, false );
+                pOther->parseNodeToStr( sColumnName, m_pImpl->m_xConnection, nullptr, false, false );
                 lcl_generateParameterName( *pParent, *_pNode );
             }
         }
@@ -1189,13 +1189,13 @@ void OSQLParseTreeIterator::traverseParameters(const OSQLParseNode* _pNode)
 
 bool OSQLParseTreeIterator::traverseSelectionCriteria(const OSQLParseNode* pSelectNode)
 {
-    if ( pSelectNode == NULL )
+    if ( pSelectNode == nullptr )
         return false;
 
 
     // Analyse parse tree (depending on statement type)
     // and set pointer to WHERE clause:
-    OSQLParseNode * pWhereClause = NULL;
+    OSQLParseNode * pWhereClause = nullptr;
 
     if (m_eStatementType == SQL_STATEMENT_SELECT)
     {
@@ -1207,7 +1207,7 @@ bool OSQLParseTreeIterator::traverseSelectionCriteria(const OSQLParseNode* pSele
         OSL_ENSURE(pSelectNode->count() >= 4,"OSQLParseTreeIterator: error in parse tree!");
 
         OSQLParseNode * pTableExp = pSelectNode->getChild(3);
-        OSL_ENSURE(pTableExp != NULL,"OSQLParseTreeIterator: error in parse tree!");
+        OSL_ENSURE(pTableExp != nullptr,"OSQLParseTreeIterator: error in parse tree!");
         OSL_ENSURE(SQL_ISRULE(pTableExp,table_exp),"OSQLParseTreeIterator: error in parse tree!");
         OSL_ENSURE(pTableExp->count() == TABLE_EXPRESSION_CHILD_COUNT,"OSQLParseTreeIterator: error in parse tree!");
 
@@ -1237,7 +1237,7 @@ bool OSQLParseTreeIterator::traverseSelectionCriteria(const OSQLParseNode* pSele
     OSL_ENSURE(pWhereClause->count() == 2,"OSQLParseTreeIterator: error in parse tree!");
 
     OSQLParseNode * pComparisonPredicate = pWhereClause->getChild(1);
-    OSL_ENSURE(pComparisonPredicate != NULL,"OSQLParseTreeIterator: error in parse tree!");
+    OSL_ENSURE(pComparisonPredicate != nullptr,"OSQLParseTreeIterator: error in parse tree!");
 
 
     // Process the comparison criteria now
@@ -1289,7 +1289,7 @@ void OSQLParseTreeIterator::traverseSearchCondition(OSQLParseNode * pSearchCondi
     else if (SQL_ISRULE(pSearchCondition,comparison_predicate) )
     {
         OUString aValue;
-        pSearchCondition->getChild(2)->parseNodeToStr( aValue, m_pImpl->m_xConnection, NULL, false, false );
+        pSearchCondition->getChild(2)->parseNodeToStr( aValue, m_pImpl->m_xConnection, nullptr, false, false );
         traverseOnePredicate(pSearchCondition->getChild(0),aValue,pSearchCondition->getChild(2));
         impl_fillJoinConditions(pSearchCondition);
 //      if (! aIteratorStatus.IsSuccessful())
@@ -1305,8 +1305,8 @@ void OSQLParseTreeIterator::traverseSearchCondition(OSQLParseNode * pSearchCondi
         OSQLParseNode * pNum_value_exp  = pPart2->getChild(nCurentPos);
         OSQLParseNode * pOptEscape      = pPart2->getChild(nCurentPos+1);
 
-        OSL_ENSURE(pNum_value_exp != NULL,"OSQLParseTreeIterator: error in parse tree!");
-        OSL_ENSURE(pOptEscape != NULL,"OSQLParseTreeIterator: error in parse tree!");
+        OSL_ENSURE(pNum_value_exp != nullptr,"OSQLParseTreeIterator: error in parse tree!");
+        OSL_ENSURE(pOptEscape != nullptr,"OSQLParseTreeIterator: error in parse tree!");
 
         if (pOptEscape->count() != 0)
         {
@@ -1315,7 +1315,7 @@ void OSQLParseTreeIterator::traverseSearchCondition(OSQLParseNode * pSearchCondi
         }
 
         OUString aValue;
-        OSQLParseNode * pParam = NULL;
+        OSQLParseNode * pParam = nullptr;
         if (SQL_ISRULE(pNum_value_exp,parameter))
             pParam = pNum_value_exp;
         else if(pNum_value_exp->isToken())
@@ -1323,7 +1323,7 @@ void OSQLParseTreeIterator::traverseSearchCondition(OSQLParseNode * pSearchCondi
             aValue = pNum_value_exp->getTokenValue();
         else
         {
-            pNum_value_exp->parseNodeToStr( aValue, m_pImpl->m_xConnection, NULL, false, false );
+            pNum_value_exp->parseNodeToStr( aValue, m_pImpl->m_xConnection, nullptr, false, false );
             pParam = pNum_value_exp;
         }
 
@@ -1363,7 +1363,7 @@ void OSQLParseTreeIterator::traverseSearchCondition(OSQLParseNode * pSearchCondi
         OSL_ENSURE(SQL_ISTOKEN(pPart2->getChild(0),IS),"OSQLParseTreeIterator: error in parse tree!");
 
         OUString aString;
-        traverseOnePredicate(pSearchCondition->getChild(0),aString,NULL);
+        traverseOnePredicate(pSearchCondition->getChild(0),aString,nullptr);
         //  if (! aIteratorStatus.IsSuccessful()) return;
     }
     else if (SQL_ISRULE(pSearchCondition,num_value_exp) || SQL_ISRULE(pSearchCondition,term))
@@ -1417,7 +1417,7 @@ void OSQLParseTreeIterator::traverseParameter(const OSQLParseNode* _pParseNode
     if ( _pParentNode && (SQL_ISRULE(_pParentNode,general_set_fct) || SQL_ISRULE(_pParentNode,set_fct_spec)) )
     {// found a function as column_ref
         OUString sFunctionName;
-        _pParentNode->getChild(0)->parseNodeToStr( sFunctionName, m_pImpl->m_xConnection, NULL, false, false );
+        _pParentNode->getChild(0)->parseNodeToStr( sFunctionName, m_pImpl->m_xConnection, nullptr, false, false );
         const sal_uInt32 nCount = _pParentNode->count();
         sal_uInt32 i = 0;
         for(; i < nCount;++i)
@@ -1479,7 +1479,7 @@ void OSQLParseTreeIterator::traverseParameter(const OSQLParseNode* _pParseNode
         if ( bNotFound )
         {
             sal_Int32 nType = DataType::VARCHAR;
-            OSQLParseNode* pParent = _pParentNode ? _pParentNode->getParent() : NULL;
+            OSQLParseNode* pParent = _pParentNode ? _pParentNode->getParent() : nullptr;
             if ( pParent && (SQL_ISRULE(pParent,general_set_fct) || SQL_ISRULE(pParent,set_fct_spec)) )
             {
                 const sal_uInt32 nCount = _pParentNode->count();
@@ -1602,7 +1602,7 @@ OSQLTable OSQLParseTreeIterator::impl_createTableObject( const OUString& rTableN
         // container of the connection (m_xTablesContainer)
 
     OSQLTable aReturnTable = new OTable(
-        NULL,
+        nullptr,
         false,
         rTableName,
         OUString("Table"),
@@ -1885,16 +1885,16 @@ void OSQLParseTreeIterator::setGroupByColumnName(const OUString & rColumnName, O
 const OSQLParseNode* OSQLParseTreeIterator::getWhereTree() const
 {
     if (!m_pParseTree)
-        return NULL;
+        return nullptr;
 
     // Analyse parse tree (depending on statement type)
     // and set pointer to WHERE clause:
-    OSQLParseNode * pWhereClause = NULL;
+    OSQLParseNode * pWhereClause = nullptr;
     if(getStatementType() == SQL_STATEMENT_SELECT)
     {
         OSL_ENSURE(m_pParseTree->count() >= 4,"ParseTreeIterator: error in parse tree!");
         OSQLParseNode * pTableExp = m_pParseTree->getChild(3);
-        OSL_ENSURE(pTableExp != NULL,"OSQLParseTreeIterator: error in parse tree!");
+        OSL_ENSURE(pTableExp != nullptr,"OSQLParseTreeIterator: error in parse tree!");
         OSL_ENSURE(SQL_ISRULE(pTableExp,table_exp),"OSQLParseTreeIterator: error in parse tree!");
         OSL_ENSURE(pTableExp->count() == TABLE_EXPRESSION_CHILD_COUNT,"OSQLParseTreeIterator: error in parse tree!");
 
@@ -1906,7 +1906,7 @@ const OSQLParseNode* OSQLParseTreeIterator::getWhereTree() const
         pWhereClause = m_pParseTree->getChild(m_pParseTree->count()-1);
     }
     if(pWhereClause && pWhereClause->count() != 2)
-        pWhereClause = NULL;
+        pWhereClause = nullptr;
     return pWhereClause;
 }
 
@@ -1914,63 +1914,63 @@ const OSQLParseNode* OSQLParseTreeIterator::getWhereTree() const
 const OSQLParseNode* OSQLParseTreeIterator::getOrderTree() const
 {
     if (!m_pParseTree || getStatementType() != SQL_STATEMENT_SELECT)
-        return NULL;
+        return nullptr;
 
     // Analyse parse tree (depending on statement type)
     // and set pointer to ORDER clause:
-    OSQLParseNode * pOrderClause = NULL;
+    OSQLParseNode * pOrderClause = nullptr;
     OSL_ENSURE(m_pParseTree->count() >= 4,"ParseTreeIterator: error in parse tree!");
     OSQLParseNode * pTableExp = m_pParseTree->getChild(3);
-    OSL_ENSURE(pTableExp != NULL,"OSQLParseTreeIterator: error in parse tree!");
+    OSL_ENSURE(pTableExp != nullptr,"OSQLParseTreeIterator: error in parse tree!");
     OSL_ENSURE(SQL_ISRULE(pTableExp,table_exp),"OSQLParseTreeIterator: error in parse tree!");
     OSL_ENSURE(pTableExp->count() == TABLE_EXPRESSION_CHILD_COUNT,"OSQLParseTreeIterator: error in parse tree!");
 
     pOrderClause = pTableExp->getChild(ORDER_BY_CHILD_POS);
     // If it is a order_by, it must not be empty
     if(pOrderClause->count() != 3)
-        pOrderClause = NULL;
+        pOrderClause = nullptr;
     return pOrderClause;
 }
 
 const OSQLParseNode* OSQLParseTreeIterator::getGroupByTree() const
 {
     if (!m_pParseTree || getStatementType() != SQL_STATEMENT_SELECT)
-        return NULL;
+        return nullptr;
 
     // Analyse parse tree (depending on statement type)
     // and set pointer to ORDER clause:
-    OSQLParseNode * pGroupClause = NULL;
+    OSQLParseNode * pGroupClause = nullptr;
     OSL_ENSURE(m_pParseTree->count() >= 4,"ParseTreeIterator: error in parse tree!");
     OSQLParseNode * pTableExp = m_pParseTree->getChild(3);
-    OSL_ENSURE(pTableExp != NULL,"OSQLParseTreeIterator: error in parse tree!");
+    OSL_ENSURE(pTableExp != nullptr,"OSQLParseTreeIterator: error in parse tree!");
     OSL_ENSURE(SQL_ISRULE(pTableExp,table_exp),"OSQLParseTreeIterator: error in parse tree!");
     OSL_ENSURE(pTableExp->count() == TABLE_EXPRESSION_CHILD_COUNT,"OSQLParseTreeIterator: error in parse tree!");
 
     pGroupClause = pTableExp->getChild(2);
     // If it is an order_by, it must not be empty
     if(pGroupClause->count() != 3)
-        pGroupClause = NULL;
+        pGroupClause = nullptr;
     return pGroupClause;
 }
 
 const OSQLParseNode* OSQLParseTreeIterator::getHavingTree() const
 {
     if (!m_pParseTree || getStatementType() != SQL_STATEMENT_SELECT)
-        return NULL;
+        return nullptr;
 
     // Analyse parse tree (depending on statement type)
     // and set pointer to ORDER clause:
-    OSQLParseNode * pHavingClause = NULL;
+    OSQLParseNode * pHavingClause = nullptr;
     OSL_ENSURE(m_pParseTree->count() >= 4,"ParseTreeIterator: error in parse tree!");
     OSQLParseNode * pTableExp = m_pParseTree->getChild(3);
-    OSL_ENSURE(pTableExp != NULL,"OSQLParseTreeIterator: error in parse tree!");
+    OSL_ENSURE(pTableExp != nullptr,"OSQLParseTreeIterator: error in parse tree!");
     OSL_ENSURE(SQL_ISRULE(pTableExp,table_exp),"OSQLParseTreeIterator: error in parse tree!");
     OSL_ENSURE(pTableExp->count() == TABLE_EXPRESSION_CHILD_COUNT,"OSQLParseTreeIterator: error in parse tree!");
 
     pHavingClause = pTableExp->getChild(3);
     // If it is an order_by, then it must not be empty
     if(pHavingClause->count() < 1)
-        pHavingClause = NULL;
+        pHavingClause = nullptr;
     return pHavingClause;
 }
 
@@ -1984,25 +1984,25 @@ bool OSQLParseTreeIterator::isTableNode(const OSQLParseNode* _pTableNode)
 const OSQLParseNode* OSQLParseTreeIterator::getSimpleWhereTree() const
 {
     const OSQLParseNode* pNode = getWhereTree();
-    return pNode ? pNode->getChild(1) : NULL;
+    return pNode ? pNode->getChild(1) : nullptr;
 }
 
 const OSQLParseNode* OSQLParseTreeIterator::getSimpleOrderTree() const
 {
     const OSQLParseNode* pNode = getOrderTree();
-    return pNode ? pNode->getChild(2) : NULL;
+    return pNode ? pNode->getChild(2) : nullptr;
 }
 
 const OSQLParseNode* OSQLParseTreeIterator::getSimpleGroupByTree() const
 {
     const OSQLParseNode* pNode = getGroupByTree();
-    return pNode ? pNode->getChild(2) : NULL;
+    return pNode ? pNode->getChild(2) : nullptr;
 }
 
 const OSQLParseNode* OSQLParseTreeIterator::getSimpleHavingTree() const
 {
     const OSQLParseNode* pNode = getHavingTree();
-    return pNode ? pNode->getChild(1) : NULL;
+    return pNode ? pNode->getChild(1) : nullptr;
 }
 
 
@@ -2025,7 +2025,7 @@ Reference< XPropertySet > OSQLParseTreeIterator::findSelectColumn( const OUStrin
             DBG_UNHANDLED_EXCEPTION();
         }
     }
-    return NULL;
+    return nullptr;
 }
 
 
@@ -2079,7 +2079,7 @@ void OSQLParseTreeIterator::impl_appendError( IParseContext::ErrorCode _eError, 
     OUString sErrorMessage = m_rParser.getContext().getErrorMessage( _eError );
     if ( _pReplaceToken1 )
     {
-        bool bTwoTokens = ( _pReplaceToken2 != NULL );
+        bool bTwoTokens = ( _pReplaceToken2 != nullptr );
         const sal_Char* pPlaceHolder1 = bTwoTokens ? "#1" : "#";
         const OUString sPlaceHolder1 = OUString::createFromAscii( pPlaceHolder1 );
 
@@ -2089,7 +2089,7 @@ void OSQLParseTreeIterator::impl_appendError( IParseContext::ErrorCode _eError, 
     }
 
     impl_appendError( SQLException(
-        sErrorMessage, NULL, getStandardSQLState( SQL_GENERAL_ERROR ), 1000, Any() ) );
+        sErrorMessage, nullptr, getStandardSQLState( SQL_GENERAL_ERROR ), 1000, Any() ) );
 }
 
 
@@ -2112,7 +2112,7 @@ sal_Int32 OSQLParseTreeIterator::getFunctionReturnType(const OSQLParseNode* _pNo
     OUString sFunctionName;
     if ( SQL_ISRULE(_pNode,length_exp) )
     {
-        _pNode->getChild(0)->getChild(0)->parseNodeToStr(sFunctionName, m_pImpl->m_xConnection, NULL, false, false );
+        _pNode->getChild(0)->getChild(0)->parseNodeToStr(sFunctionName, m_pImpl->m_xConnection, nullptr, false, false );
         nType = ::connectivity::OSQLParser::getFunctionReturnType( sFunctionName, &m_rParser.getContext() );
     }
     else if ( SQL_ISRULE(_pNode,num_value_exp) || SQL_ISRULE(_pNode,term) || SQL_ISRULE(_pNode,factor) )
@@ -2121,7 +2121,7 @@ sal_Int32 OSQLParseTreeIterator::getFunctionReturnType(const OSQLParseNode* _pNo
     }
     else
     {
-        _pNode->getChild(0)->parseNodeToStr(sFunctionName, m_pImpl->m_xConnection, NULL, false, false );
+        _pNode->getChild(0)->parseNodeToStr(sFunctionName, m_pImpl->m_xConnection, nullptr, false, false );
 
         // MIN and MAX have another return type, we have to check the expression itself.
         // @see http://qa.openoffice.org/issues/show_bug.cgi?id=99566

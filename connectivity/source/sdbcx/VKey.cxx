@@ -62,7 +62,7 @@ sal_Bool SAL_CALL OKey::supportsService( const OUString& _rServiceName ) throw(:
 OKey::OKey(bool _bCase) :   ODescriptor_BASE(m_aMutex)
             ,   ODescriptor(ODescriptor_BASE::rBHelper, _bCase, true)
             ,   m_aProps(new KeyProperties())
-            ,   m_pColumns(NULL)
+            ,   m_pColumns(nullptr)
 {
 }
 
@@ -70,7 +70,7 @@ OKey::OKey(const OUString& _Name,const TKeyProperties& _rProps, bool _bCase)
 : ODescriptor_BASE(m_aMutex)
  ,ODescriptor(ODescriptor_BASE::rBHelper,_bCase)
  ,m_aProps(_rProps)
- ,m_pColumns(NULL)
+ ,m_pColumns(nullptr)
 {
     m_Name = _Name;
 }

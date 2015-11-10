@@ -139,7 +139,7 @@ void ResultSet::close(  ) throw (SQLException, RuntimeException, std::exception)
         if( m_result )
         {
             PQclear(m_result );
-            m_result = 0;
+            m_result = nullptr;
             m_row = -1;
         }
         owner = m_owner;

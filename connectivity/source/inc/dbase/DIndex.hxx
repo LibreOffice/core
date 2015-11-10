@@ -106,7 +106,7 @@ namespace connectivity
             const ODbaseTable* getTable() const { return m_pTable; }
             const NDXHeader& getHeader() const { return m_aHeader; }
             OIndexIterator* createIterator(OBoolOperator_BASE* pOp,
-                                                         const OOperand_BASE* pOperand = NULL);
+                                                         const OOperand_BASE* pOperand = nullptr);
 
             void SetRootPos(sal_uInt32 nPos)        {m_nRootPage = nPos;}
             void SetPageCount(sal_uInt32 nCount)    {m_nPageCount = nCount;}
@@ -127,7 +127,7 @@ namespace connectivity
             DECLARE_SERVICE_INFO();
         protected:
 
-            ONDXPage* CreatePage(sal_uInt32 nPagePos, ONDXPage* pParent = NULL, bool bLoad = false);
+            ONDXPage* CreatePage(sal_uInt32 nPagePos, ONDXPage* pParent = nullptr, bool bLoad = false);
             void Collect(ONDXPage*);
             ONDXPagePtr getRoot();
 

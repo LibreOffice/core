@@ -239,7 +239,7 @@ Reference< XDataSource> getDataSource_allowException(
             const OUString& _rsTitleOrPath,
             const Reference< XComponentContext >& _rxContext )
 {
-    ENSURE_OR_RETURN( !_rsTitleOrPath.isEmpty(), "getDataSource_allowException: invalid arg !", NULL );
+    ENSURE_OR_RETURN( !_rsTitleOrPath.isEmpty(), "getDataSource_allowException: invalid arg !", nullptr );
 
     Reference< XDatabaseContext> xDatabaseContext = DatabaseContext::create(_rxContext);
 
@@ -295,7 +295,7 @@ Reference< XConnection > getConnection_allowException(
                 if (xConnectionCompletion.is())
                 {   // instantiate the default SDB interaction handler
                     Reference< XInteractionHandler > xHandler(
-                        InteractionHandler::createWithParent(_rxContext, 0), UNO_QUERY );
+                        InteractionHandler::createWithParent(_rxContext, nullptr), UNO_QUERY );
                     xConnection = xConnectionCompletion->connectWithCompletion(xHandler);
                 }
             }
@@ -1910,7 +1910,7 @@ void setObjectWithInfo(const Reference<XParameters>& _xParams,
                             STR_UNKNOWN_PARA_TYPE,
                             "$position$", OUString::number(parameterIndex)
                          ) );
-                    ::dbtools::throwGenericSQLException(sError,NULL);
+                    ::dbtools::throwGenericSQLException(sError,nullptr);
                 }
         }
     }
@@ -1979,7 +1979,7 @@ void release(oslInterlockedCount& _refCount,
             {
                 ::osl::MutexGuard aGuard( rBHelper.rMutex );
                 xParent = _xInterface;
-                _xInterface = NULL;
+                _xInterface = nullptr;
             }
 
             // First dispose

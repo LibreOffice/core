@@ -84,7 +84,7 @@ namespace connectivity
             ,m_bModified(false)
             ,m_bSigned(true)
         {
-            m_aValue.m_pString = NULL;
+            m_aValue.m_pString = nullptr;
         }
 
         ORowSetValue(const ORowSetValue& _rRH)
@@ -94,7 +94,7 @@ namespace connectivity
             ,m_bModified(false)
             ,m_bSigned(true)
         {
-            m_aValue.m_pString = NULL;
+            m_aValue.m_pString = nullptr;
             operator=(_rRH);
         }
 
@@ -105,7 +105,7 @@ namespace connectivity
             ,m_bModified(false)
             ,m_bSigned(true)
         {
-            m_aValue.m_pString = NULL;
+            m_aValue.m_pString = nullptr;
             operator=(_rRH);
         }
 
@@ -116,7 +116,7 @@ namespace connectivity
             ,m_bModified(false)
             ,m_bSigned(true)
         {
-            m_aValue.m_pString = NULL;
+            m_aValue.m_pString = nullptr;
             operator=(_rRH);
         }
 
@@ -127,7 +127,7 @@ namespace connectivity
             ,m_bModified(false)
             ,m_bSigned(true)
         {
-            m_aValue.m_pString = NULL;
+            m_aValue.m_pString = nullptr;
             operator=(_rRH);
         }
 
@@ -138,7 +138,7 @@ namespace connectivity
             ,m_bModified(false)
             ,m_bSigned(true)
         {
-            m_aValue.m_pString = NULL;
+            m_aValue.m_pString = nullptr;
             operator=(_rRH);
         }
 
@@ -149,7 +149,7 @@ namespace connectivity
             ,m_bModified(false)
             ,m_bSigned(false)
         {
-            m_aValue.m_pString = NULL;
+            m_aValue.m_pString = nullptr;
             operator=(_rRH);
         }
         ORowSetValue(const sal_Int16& _rRH)
@@ -159,7 +159,7 @@ namespace connectivity
             ,m_bModified(false)
             ,m_bSigned(true)
         {
-            m_aValue.m_pString = NULL;
+            m_aValue.m_pString = nullptr;
             operator=(_rRH);
         }
         ORowSetValue(const sal_uInt16& _rRH)
@@ -169,7 +169,7 @@ namespace connectivity
             ,m_bModified(false)
             ,m_bSigned(false)
         {
-            m_aValue.m_pString = NULL;
+            m_aValue.m_pString = nullptr;
             operator=(_rRH);
         }
         ORowSetValue(const sal_Int32& _rRH)
@@ -179,7 +179,7 @@ namespace connectivity
             ,m_bModified(false)
             ,m_bSigned(true)
         {
-            m_aValue.m_pString = NULL;
+            m_aValue.m_pString = nullptr;
             operator=(_rRH);
         }
         ORowSetValue(const sal_uInt32& _rRH)
@@ -189,7 +189,7 @@ namespace connectivity
             ,m_bModified(false)
             ,m_bSigned(false)
         {
-            m_aValue.m_pString = NULL;
+            m_aValue.m_pString = nullptr;
             operator=(_rRH);
         }
         ORowSetValue(const sal_Int64& _rRH)
@@ -199,7 +199,7 @@ namespace connectivity
             ,m_bModified(false)
             ,m_bSigned(true)
         {
-            m_aValue.m_pString = NULL;
+            m_aValue.m_pString = nullptr;
             operator=(_rRH);
         }
         ORowSetValue(const sal_uInt64& _rRH)
@@ -209,7 +209,7 @@ namespace connectivity
             ,m_bModified(false)
             ,m_bSigned(false)
         {
-            m_aValue.m_pString = NULL;
+            m_aValue.m_pString = nullptr;
             operator=(_rRH);
         }
 
@@ -220,7 +220,7 @@ namespace connectivity
             ,m_bModified(false)
             ,m_bSigned(true)
         {
-            m_aValue.m_pString = NULL;
+            m_aValue.m_pString = nullptr;
             operator=(_rRH);
         }
 
@@ -231,7 +231,7 @@ namespace connectivity
             ,m_bModified(false)
             ,m_bSigned(true)
         {
-            m_aValue.m_pString = NULL;
+            m_aValue.m_pString = nullptr;
             operator=(_rRH);
         }
 
@@ -242,7 +242,7 @@ namespace connectivity
             ,m_bModified(false)
             ,m_bSigned(true)
         {
-            m_aValue.m_pString = NULL;
+            m_aValue.m_pString = nullptr;
             operator=(_rRH);
         }
 
@@ -253,7 +253,7 @@ namespace connectivity
             ,m_bModified(false)
             ,m_bSigned(true)
         {
-            m_aValue.m_pString = NULL;
+            m_aValue.m_pString = nullptr;
             operator=(_rRH);
         }
 
@@ -264,7 +264,7 @@ namespace connectivity
             ,m_bModified(false)
             ,m_bSigned(true)
         {
-            m_aValue.m_pString = NULL;
+            m_aValue.m_pString = nullptr;
             operator=(_rRH);
         }
 
@@ -371,7 +371,7 @@ namespace connectivity
         {
             free();
             m_bNull = true;
-            m_aValue.m_pString = NULL;
+            m_aValue.m_pString = nullptr;
         }
 
         bool        isBound() const                     { return m_bBound;      }

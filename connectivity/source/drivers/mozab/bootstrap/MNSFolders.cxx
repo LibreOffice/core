@@ -76,8 +76,8 @@ namespace
         { "Firefox/", NULL, NULL, NULL },
         { "../Thunderbird/", NULL, NULL, NULL }
     #else
-        { ".mozilla/seamonkey/", NULL, NULL, NULL },
-        { ".mozilla/firefox/", NULL, NULL, NULL },
+        { ".mozilla/seamonkey/", nullptr, nullptr, nullptr },
+        { ".mozilla/firefox/", nullptr, nullptr, nullptr },
         { ".thunderbird/", ".mozilla-thunderbird/", ".mozilla/thunderbird/", ".icedove/" }
     #endif
     };
@@ -115,7 +115,7 @@ namespace
                 // check all possible candidates
                 for ( size_t i=0; i<NB_CANDIDATES; ++i )
                 {
-                    if ( NULL == DefaultProductDir[ productIndex ][ i ] )
+                    if ( nullptr == DefaultProductDir[ productIndex ][ i ] )
                         break;
 
                     sProductDirCandidate = lcl_getUserDataDirectory() +

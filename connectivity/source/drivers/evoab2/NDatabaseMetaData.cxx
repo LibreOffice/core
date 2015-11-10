@@ -43,7 +43,7 @@ namespace
 {
     bool equal(const char *str1, const char *str2)
     {
-        return str1 == 0 || str2 == 0 ? str1 == str2 : strcmp(str1, str2) == 0;
+        return str1 == nullptr || str2 == nullptr ? str1 == str2 : strcmp(str1, str2) == 0;
     }
 }
 
@@ -56,7 +56,7 @@ namespace connectivity
         static sal_Int32    const s_nNULLABLE = 1;
         static sal_Int32 const s_nCHAR_OCTET_LENGTH = 65535;
 
-        static ColumnProperty **pFields=NULL;
+        static ColumnProperty **pFields=nullptr;
         static guint        nFields = 0;
 
         static const char *pBlackList[] =
@@ -87,7 +87,7 @@ namespace connectivity
         {
             pToBeFields[nFields] = g_new0(ColumnProperty,1);
             pToBeFields[nFields]->bIsSplittedValue = true;
-            pToBeFields[nFields]->pField = g_param_spec_ref(g_param_spec_string (evo_addr[i].pColumnName,evo_addr[i].pColumnName,"",NULL,G_PARAM_WRITABLE));
+            pToBeFields[nFields]->pField = g_param_spec_ref(g_param_spec_string (evo_addr[i].pColumnName,evo_addr[i].pColumnName,"",nullptr,G_PARAM_WRITABLE));
             nFields++;
         }
     }
@@ -152,7 +152,7 @@ namespace connectivity
         if( n < nFields )
             return pFields[n];
         else
-            return NULL;
+            return nullptr;
     }
 
     GType
@@ -236,7 +236,7 @@ namespace connectivity
        if(pFields)
         {
             g_free(pFields);
-            pFields=NULL;
+            pFields=nullptr;
         }
 
     }
@@ -1127,7 +1127,7 @@ Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getTables(
 
     ODatabaseMetaDataResultSet::ORows aRows;
 
-    if (eds_check_version(3, 6, 0) == NULL)
+    if (eds_check_version(3, 6, 0) == nullptr)
     {
         GList *pSources = e_source_registry_list_sources(get_e_source_registry(), E_SOURCE_EXTENSION_ADDRESS_BOOK);
 
@@ -1170,14 +1170,14 @@ Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getTables(
             aRows.push_back(aRow);
         }
 
-        g_list_foreach (pSources, reinterpret_cast<GFunc>(g_object_unref), NULL);
+        g_list_foreach (pSources, reinterpret_cast<GFunc>(g_object_unref), nullptr);
         g_list_free (pSources);
     }
     else
     {
         ESourceList *pSourceList;
-        if( !e_book_get_addressbooks (&pSourceList, NULL) )
-                pSourceList = NULL;
+        if( !e_book_get_addressbooks (&pSourceList, nullptr) )
+                pSourceList = nullptr;
 
         GSList *g;
         for( g = e_source_list_peek_groups( pSourceList ); g; g = g->next)
@@ -1232,7 +1232,7 @@ Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getTables(
 Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getUDTs( const Any& /*catalog*/, const OUString& /*schemaPattern*/, const OUString& /*typeNamePattern*/, const Sequence< sal_Int32 >& /*types*/ ) throw(SQLException, RuntimeException, std::exception)
 {
     ::dbtools::throwFeatureNotImplementedSQLException( "XDatabaseMetaDaza::getUDTs", *this );
-    return NULL;
+    return nullptr;
 }
 
 

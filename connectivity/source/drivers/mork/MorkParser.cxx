@@ -55,7 +55,7 @@ MorkParser::MorkParser( int DefaultScope ) :
     columns_(),
     values_(),
     mork_(),
-    currentCells_(0),
+    currentCells_(nullptr),
     error_(NoError),
     morkData_(),
     morkPos_(0),
@@ -93,7 +93,7 @@ void MorkParser::initVars()
     error_ = NoError;
     morkPos_ = 0;
     nowParsing_ = NPValues;
-    currentCells_ = 0;
+    currentCells_ = nullptr;
     nextAddValueId_ = 0x7fffffff;
 }
 
@@ -303,7 +303,7 @@ bool MorkParser::parseCell()
             std::string HexChar;
             HexChar += nextChar();
             HexChar += nextChar();
-            Text += (char)strtoul(HexChar.c_str(), 0, 16);
+            Text += (char)strtoul(HexChar.c_str(), nullptr, 16);
         }
         break;
         default:
@@ -323,7 +323,7 @@ bool MorkParser::parseCell()
     }
 
     // Apply column and text
-    int ColumnId = strtoul(Column.c_str(), 0, 16);
+    int ColumnId = strtoul(Column.c_str(), nullptr, 16);
 
     if ( NPRows != nowParsing_ )
     {
@@ -346,7 +346,7 @@ bool MorkParser::parseCell()
         {
             // Rows
             //int ValueId = string( Text.c_str() ).toInt( 0, 16 );
-            int ValueId = strtoul(Text.c_str(), 0, 16);
+            int ValueId = strtoul(Text.c_str(), nullptr, 16);
 
             if ( bValueOid  )
             {
@@ -445,13 +445,13 @@ void MorkParser::parseScopeId( const std::string &TextId, int *Id, int *Scope )
             tSc.erase( 0, 1 );
         }
 
-        *Id = strtoul(tId.c_str(), 0, 16);
+        *Id = strtoul(tId.c_str(), nullptr, 16);
 
-        *Scope = strtoul(tSc.c_str(), 0, 16);
+        *Scope = strtoul(tSc.c_str(), nullptr, 16);
     }
     else
     {
-        *Id = strtoul(TextId.c_str(), 0, 16);
+        *Id = strtoul(TextId.c_str(), nullptr, 16);
     }
 }
 
@@ -556,7 +556,7 @@ MorkTableMap *MorkParser::getTables( int TableScope )
 
     if ( iter == mork_.map.end() )
     {
-        return 0;
+        return nullptr;
     }
 
     return &iter->second;
@@ -569,7 +569,7 @@ MorkRowMap *MorkParser::getRows( int RowScope, RowScopeMap *table )
 
     if ( iter == table->map.end() )
     {
-        return 0;
+        return nullptr;
     }
 
     return &iter->second;
@@ -679,7 +679,7 @@ void MorkParser::getRecordKeysForListTable(std::string& listName, std::set<int>&
                     if (cellsIter->first >= 0xC7)
                     {
                         std::string value = getValue(cellsIter->second);
-                        int id = strtoul(value.c_str(), 0, 16);
+                        int id = strtoul(value.c_str(), nullptr, 16);
                         records.insert(id);
                     }
                 }

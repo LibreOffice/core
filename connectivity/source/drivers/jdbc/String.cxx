@@ -24,7 +24,7 @@ using namespace connectivity;
 //************ Class: java.lang.String
 
 
-jclass java_lang_String::theClass = 0;
+jclass java_lang_String::theClass = nullptr;
 
 java_lang_String::~java_lang_String()
 {}

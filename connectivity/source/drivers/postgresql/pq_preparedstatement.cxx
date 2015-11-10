@@ -297,7 +297,7 @@ void PreparedStatement::close(  ) throw (SQLException, RuntimeException, std::ex
     Reference< XCloseable > resultSet;
     {
         MutexGuard guard( m_refMutex->mutex );
-        m_pSettings = 0;
+        m_pSettings = nullptr;
         r = m_connection;
         m_connection.clear();
 
@@ -725,7 +725,7 @@ void PreparedStatement::setArray(
     const Reference< XArray >& x )
     throw (SQLException, RuntimeException, std::exception)
 {
-    setString( parameterIndex, array2String( x->getArray( 0 ) ) );
+    setString( parameterIndex, array2String( x->getArray( nullptr ) ) );
 }
 
 void PreparedStatement::clearParameters(  )

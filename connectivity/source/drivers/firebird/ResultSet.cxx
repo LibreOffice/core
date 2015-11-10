@@ -68,7 +68,7 @@ OResultSet::OResultSet(Connection* pConnection,
     , m_pConnection(pConnection)
     , m_rMutex(rMutex)
     , m_xStatement(xStatement)
-    , m_xMetaData(0)
+    , m_xMetaData(nullptr)
     , m_pSqlda(pSqlda)
     , m_statementHandle(aStatementHandle)
     , m_bWasNull(false)
@@ -348,7 +348,7 @@ uno::Reference< XInputStream > SAL_CALL OResultSet::getBinaryStream( sal_Int32 c
     MutexGuard aGuard(m_rMutex);
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
-    return NULL;
+    return nullptr;
 }
 
 uno::Reference< XInputStream > SAL_CALL OResultSet::getCharacterStream( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
@@ -357,7 +357,7 @@ uno::Reference< XInputStream > SAL_CALL OResultSet::getCharacterStream( sal_Int3
     MutexGuard aGuard(m_rMutex);
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
-    return NULL;
+    return nullptr;
 }
 
 // ---- Internal Utilities ---------------------------------------------------
@@ -646,7 +646,7 @@ uno::Reference< XArray > SAL_CALL OResultSet::getArray( sal_Int32 columnIndex ) 
     MutexGuard aGuard(m_rMutex);
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
-    return NULL;
+    return nullptr;
 }
 
 
@@ -657,7 +657,7 @@ uno::Reference< XClob > SAL_CALL OResultSet::getClob( sal_Int32 columnIndex ) th
     MutexGuard aGuard(m_rMutex);
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
-    return NULL;
+    return nullptr;
 }
 
 uno::Reference< XBlob > SAL_CALL OResultSet::getBlob(sal_Int32 columnIndex)
@@ -670,7 +670,7 @@ uno::Reference< XBlob > SAL_CALL OResultSet::getBlob(sal_Int32 columnIndex)
     // cleverness around this.
     ISC_QUAD* pBlobID = safelyRetrieveValue< ISC_QUAD* >(columnIndex, SQL_BLOB);
     if (!pBlobID)
-        return 0;
+        return nullptr;
     return m_pConnection->createBlob(pBlobID);
 }
 
@@ -681,7 +681,7 @@ uno::Reference< XRef > SAL_CALL OResultSet::getRef( sal_Int32 columnIndex ) thro
     MutexGuard aGuard(m_rMutex);
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
-    return NULL;
+    return nullptr;
 }
 
 

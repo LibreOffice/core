@@ -293,7 +293,7 @@ namespace connectivity
                 xConnection = xDriver->connect( sCuttedUrl, aConvertedProperties );
                 if ( xConnection.is() )
                 {
-                    OMetaConnection* pMetaConnection = NULL;
+                    OMetaConnection* pMetaConnection = nullptr;
                     // now we have to set the URL to get the correct answer for metadata()->getURL()
                     Reference< XUnoTunnel> xTunnel(xConnection,UNO_QUERY);
                     if ( xTunnel.is() )

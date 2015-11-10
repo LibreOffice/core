@@ -103,7 +103,7 @@ namespace connectivity
         virtual jclass getMyClass() const override;
         // A ctor that is needed for returning the object
         java_sql_ResultSet( JNIEnv * pEnv, jobject myObj, const java::sql::ConnectionLog& _rParentLogger,java_sql_Connection& _rConnection,
-            java_sql_Statement_Base* pStmt = NULL );
+            java_sql_Statement_Base* pStmt = nullptr );
 
         // ::cppu::OComponentHelper
         virtual void SAL_CALL disposing() override;

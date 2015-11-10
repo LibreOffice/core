@@ -70,9 +70,9 @@ void SAL_CALL OPreparedStatement::disposing()
     if(m_aParameterRow.is())
     {
         m_aParameterRow->get().clear();
-        m_aParameterRow = NULL;
+        m_aParameterRow = nullptr;
     }
-    m_xParamColumns = NULL;
+    m_xParamColumns = nullptr;
 }
 
 
@@ -113,7 +113,7 @@ void OPreparedStatement::clearCachedResultSet()
 void OPreparedStatement::cacheResultSet( const ::rtl::Reference< OResultSet >& _pResult )
 {
     OCommonStatement::cacheResultSet( _pResult );
-    OSL_PRECOND( m_pResultSet == NULL, "OPreparedStatement::parseSql: you should call clearCachedResultSet before!" );
+    OSL_PRECOND( m_pResultSet == nullptr, "OPreparedStatement::parseSql: you should call clearCachedResultSet before!" );
     m_pResultSet = _pResult;
 }
 
@@ -480,7 +480,7 @@ aParseNodes.begin();
 
 void OPreparedStatement::scanParameter(OSQLParseNode* pParseNode,::std::vector< OSQLParseNode*>& _rParaNodes)
 {
-    OSL_ENSURE(pParseNode != NULL,"OResultSet: internal error: invalid ParseNode");
+    OSL_ENSURE(pParseNode != nullptr,"OResultSet: internal error: invalid ParseNode");
 
     // Parameter Name-Row found?
     if (SQL_ISRULE(pParseNode,parameter))
@@ -500,7 +500,7 @@ void OPreparedStatement::scanParameter(OSQLParseNode* pParseNode,::std::vector< 
 
 ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet > SAL_CALL OPreparedStatement::getResultSet(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
-    return NULL;
+    return nullptr;
 }
 
 sal_Int32 SAL_CALL OPreparedStatement::getUpdateCount(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)

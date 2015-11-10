@@ -32,7 +32,7 @@ namespace connectivity
 
         public:
             OBoundParam()
-                : binaryData(NULL)
+                : binaryData(nullptr)
                 , paramLength(0)
                 , paramInputStreamLen(0)
                 , sqlType(::com::sun::star::sdbc::DataType::SQLNULL)
@@ -51,11 +51,11 @@ namespace connectivity
             void* allocBindDataBuffer (sal_Int32 bufLen)
             {
                 // Reset the input stream and sequence, we are doing a new bind
-                setInputStream (NULL, 0);
+                setInputStream (nullptr, 0);
                 aSequence.realloc(0);
 
                 free(binaryData);
-                binaryData = (bufLen > 0) ? malloc(bufLen) : NULL;
+                binaryData = (bufLen > 0) ? malloc(bufLen) : nullptr;
 
                 return binaryData;
             }

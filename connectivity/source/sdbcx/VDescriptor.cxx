@@ -58,7 +58,7 @@ namespace connectivity
             Reference< XUnoTunnel > xTunnel( _rxSomeComp, UNO_QUERY );
             if ( xTunnel.is() )
                 return reinterpret_cast< ODescriptor* >( xTunnel->getSomething( getUnoTunnelImplementationId() ) );
-            return NULL;
+            return nullptr;
         }
 
 
@@ -104,7 +104,7 @@ namespace connectivity
 
         Sequence< sal_Int8 > ODescriptor::getUnoTunnelImplementationId()
         {
-            static ::cppu::OImplementationId * pId = 0;
+            static ::cppu::OImplementationId * pId = nullptr;
             if (! pId)
             {
                 ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );

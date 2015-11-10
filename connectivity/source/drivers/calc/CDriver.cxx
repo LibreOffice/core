@@ -66,7 +66,7 @@ Reference< XConnection > SAL_CALL ODriver::connect( const OUString& url,
         throw DisposedException();
 
     if ( ! acceptsURL(url) )
-        return NULL;
+        return nullptr;
 
     OCalcConnection* pCon = new OCalcConnection(this);
     pCon->construct(url,info);

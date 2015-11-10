@@ -76,7 +76,7 @@ public:
         const com::sun::star::uno::Sequence< OUString > &colNames,
         const com::sun::star::uno::Sequence< com::sun::star::uno::Sequence< com::sun::star::uno::Any > > &data,
         const com::sun::star::uno::Reference< com::sun::star::script::XTypeConverter > &tc,
-        const ColumnMetaDataVector *pVec = 0);
+        const ColumnMetaDataVector *pVec = nullptr);
     virtual ~SequenceResultSet();
 
 public: // XCloseable

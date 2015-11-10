@@ -46,7 +46,7 @@ OResultSetMetaData::OResultSetMetaData(const ::rtl::Reference<connectivity::OSQL
 
 OResultSetMetaData::~OResultSetMetaData()
 {
-    m_xColumns = NULL;
+    m_xColumns = nullptr;
 }
 
 void OResultSetMetaData::checkColumnIndex(sal_Int32 column)  throw(SQLException, RuntimeException)

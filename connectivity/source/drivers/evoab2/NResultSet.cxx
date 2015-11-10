@@ -179,7 +179,7 @@ getDefaultContactAddress( EContact *pContact,int *value )
 static EContactAddress*
 getContactAddress( EContact *pContact, int * address_enum )
 {
-    EContactAddress *ec = NULL;
+    EContactAddress *ec = nullptr;
     switch (*address_enum) {
 
         case DEFAULT_ADDR_LINE1:
@@ -200,7 +200,7 @@ handleSplitAddress( EContact *pContact,GValue *pStackValue, int value )
 {
     EContactAddress *ec = getContactAddress(pContact,&value) ;
 
-    if (ec==NULL)
+    if (ec==nullptr)
         return true;
 
     switch (value) {
@@ -386,7 +386,7 @@ private:
     GSList   *m_pContacts;
 public:
     OEvoabVersion36Helper()
-        : m_pContacts(NULL)
+        : m_pContacts(nullptr)
     {
     }
 
@@ -399,7 +399,7 @@ public:
     {
         //It would be better if here we had id to begin with, see
         //NDatabaseMetaData.cxx
-        const char *id = NULL;
+        const char *id = nullptr;
         GList *pSources = e_source_registry_list_sources(get_e_source_registry(), E_SOURCE_EXTENSION_ADDRESS_BOOK);
         for (GList* liter = pSources; liter; liter = liter->next)
         {
@@ -411,17 +411,17 @@ public:
                 break;
             }
         }
-        g_list_foreach (pSources, reinterpret_cast<GFunc>(g_object_unref), NULL);
+        g_list_foreach (pSources, reinterpret_cast<GFunc>(g_object_unref), nullptr);
         g_list_free (pSources);
         if (!id)
-            return NULL;
+            return nullptr;
 
         ESource *pSource = e_source_registry_ref_source(get_e_source_registry(), id);
-        EBookClient *pBook = pSource ? createClient (pSource) : NULL;
-        if (pBook && !e_client_open_sync (pBook, TRUE, NULL, NULL))
+        EBookClient *pBook = pSource ? createClient (pSource) : nullptr;
+        if (pBook && !e_client_open_sync (pBook, TRUE, nullptr, nullptr))
         {
             g_object_unref (G_OBJECT (pBook));
-            pBook = NULL;
+            pBook = nullptr;
         }
         if (pSource)
             g_object_unref (pSource);
@@ -441,14 +441,14 @@ public:
     virtual void freeContacts() override
     {
         e_client_util_free_object_slist(m_pContacts);
-        m_pContacts = NULL;
+        m_pContacts = nullptr;
     }
 
     virtual bool executeQuery (EBook* pBook, EBookQuery* pQuery, OString &/*rPassword*/) override
     {
         freeContacts();
         char *sexp = e_book_query_to_string( pQuery );
-        bool bSuccess = e_book_client_get_contacts_sync( pBook, sexp, &m_pContacts, NULL, NULL );
+        bool bSuccess = e_book_client_get_contacts_sync( pBook, sexp, &m_pContacts, nullptr, nullptr );
         g_free (sexp);
         return bSuccess;
     }
@@ -456,7 +456,7 @@ public:
     virtual EContact *getContact(sal_Int32 nIndex) override
     {
         gpointer pData = g_slist_nth_data (m_pContacts, nIndex);
-        return pData ? E_CONTACT (pData) : NULL;
+        return pData ? E_CONTACT (pData) : nullptr;
     }
 
     virtual sal_Int32 getNumContacts() override
@@ -466,7 +466,7 @@ public:
 
     virtual bool hasContacts() override
     {
-        return m_pContacts != NULL;
+        return m_pContacts != nullptr;
     }
 
     virtual void sortContacts( const ComparisonData& _rCompData ) override
@@ -481,7 +481,7 @@ public:
 protected:
     virtual EBookClient * createClient( ESource *pSource )
     {
-        return e_book_client_new (pSource, NULL);
+        return e_book_client_new (pSource, nullptr);
     }
 };
 
@@ -490,7 +490,7 @@ class OEvoabVersion38Helper : public OEvoabVersion36Helper
 protected:
     virtual EBookClient * createClient( ESource *pSource ) override
     {
-        return e_book_client_connect_direct_sync (get_e_source_registry (), pSource, NULL, NULL);
+        return e_book_client_connect_direct_sync (get_e_source_registry (), pSource, nullptr, nullptr);
     }
 };
 
@@ -498,12 +498,12 @@ namespace {
 
 ESource * findSource( const char *id )
 {
-    ESourceList *pSourceList = NULL;
+    ESourceList *pSourceList = nullptr;
 
-    g_return_val_if_fail (id != NULL, NULL);
+    g_return_val_if_fail (id != nullptr, NULL);
 
-    if (!e_book_get_addressbooks (&pSourceList, NULL))
-        pSourceList = NULL;
+    if (!e_book_get_addressbooks (&pSourceList, nullptr))
+        pSourceList = nullptr;
 
     for ( GSList *g = e_source_list_peek_groups (pSourceList); g; g = g->next)
     {
@@ -514,13 +514,13 @@ ESource * findSource( const char *id )
                 return pSource;
         }
     }
-    return NULL;
+    return nullptr;
 }
 
 bool isAuthRequired( EBook *pBook )
 {
     return e_source_get_property( e_book_get_source( pBook ),
-                                  "auth" ) != NULL;
+                                  "auth" ) != nullptr;
 }
 
 }
@@ -532,7 +532,7 @@ private:
 
 public:
     OEvoabVersion35Helper()
-        : m_pContacts(NULL)
+        : m_pContacts(nullptr)
     {
     }
 
@@ -544,11 +544,11 @@ public:
     virtual EBook* openBook(const char *abname) override
     {
         ESource *pSource = findSource (abname);
-        EBook *pBook = pSource ? e_book_new (pSource, NULL) : NULL;
-        if (pBook && !e_book_open (pBook, TRUE, NULL))
+        EBook *pBook = pSource ? e_book_new (pSource, nullptr) : nullptr;
+        if (pBook && !e_book_open (pBook, TRUE, nullptr))
         {
             g_object_unref (G_OBJECT (pBook));
-            pBook = NULL;
+            pBook = nullptr;
         }
         return pBook;
     }
@@ -567,7 +567,7 @@ public:
     virtual void freeContacts() override
     {
         g_list_free(m_pContacts);
-        m_pContacts = NULL;
+        m_pContacts = nullptr;
     }
 
     virtual bool executeQuery (EBook* pBook, EBookQuery* pQuery, OString &rPassword) override
@@ -582,11 +582,11 @@ public:
         {
             OString aUser( getUserName( pBook ) );
             const char *pAuth = e_source_get_property( pSource, "auth" );
-            bAuthSuccess = e_book_authenticate_user( pBook, aUser.getStr(), rPassword.getStr(), pAuth, NULL );
+            bAuthSuccess = e_book_authenticate_user( pBook, aUser.getStr(), rPassword.getStr(), pAuth, nullptr );
         }
 
         if (bAuthSuccess)
-            bSuccess = e_book_get_contacts( pBook, pQuery, &m_pContacts, NULL );
+            bSuccess = e_book_get_contacts( pBook, pQuery, &m_pContacts, nullptr );
 
         return bSuccess;
     }
@@ -594,7 +594,7 @@ public:
     virtual EContact *getContact(sal_Int32 nIndex) override
     {
         gpointer pData = g_list_nth_data (m_pContacts, nIndex);
-        return pData ? E_CONTACT (pData) : NULL;
+        return pData ? E_CONTACT (pData) : nullptr;
     }
 
     virtual sal_Int32 getNumContacts() override
@@ -604,7 +604,7 @@ public:
 
     virtual bool hasContacts() override
     {
-        return m_pContacts != NULL;
+        return m_pContacts != nullptr;
     }
 
     virtual void sortContacts( const ComparisonData& _rCompData ) override
@@ -630,9 +630,9 @@ OEvoabResultSet::OEvoabResultSet( OCommonStatement* pStmt, OEvoabConnection *pCo
     ,m_nIndex(-1)
     ,m_nLength(0)
 {
-    if (eds_check_version( 3, 7, 6 ) == NULL)
+    if (eds_check_version( 3, 7, 6 ) == nullptr)
         m_pVersionHelper  = new OEvoabVersion38Helper;
-    else if (eds_check_version( 3, 6, 0 ) == NULL)
+    else if (eds_check_version( 3, 6, 0 ) == nullptr)
         m_pVersionHelper  = new OEvoabVersion36Helper;
     else
         m_pVersionHelper  = new OEvoabVersion35Helper;
@@ -720,8 +720,8 @@ void OEvoabResultSet::disposing()
 
     ::osl::MutexGuard aGuard(m_aMutex);
     delete m_pVersionHelper;
-    m_pVersionHelper = NULL;
-    m_pStatement = NULL;
+    m_pVersionHelper = nullptr;
+    m_pStatement = nullptr;
     m_xMetaData.clear();
 }
 
@@ -791,25 +791,25 @@ sal_Int64 SAL_CALL OEvoabResultSet::getLong( sal_Int32 /*nColumnNum*/ ) throw(SQ
 Reference< XArray > SAL_CALL OEvoabResultSet::getArray( sal_Int32 /*nColumnNum*/ ) throw(SQLException, RuntimeException, std::exception)
 {
     ::dbtools::throwFunctionNotSupportedSQLException( "XRow::getArray", *this );
-    return NULL;
+    return nullptr;
 }
 
 Reference< XClob > SAL_CALL OEvoabResultSet::getClob( sal_Int32 /*nColumnNum*/ ) throw(SQLException, RuntimeException, std::exception)
 {
     ::dbtools::throwFunctionNotSupportedSQLException( "XRow::getClob", *this );
-    return NULL;
+    return nullptr;
 }
 
 Reference< XBlob > SAL_CALL OEvoabResultSet::getBlob( sal_Int32 /*nColumnNum*/ ) throw(SQLException, RuntimeException, std::exception)
 {
     ::dbtools::throwFunctionNotSupportedSQLException( "XRow::getBlob", *this );
-    return NULL;
+    return nullptr;
 }
 
 Reference< XRef > SAL_CALL OEvoabResultSet::getRef( sal_Int32 /*nColumnNum*/ ) throw(SQLException, RuntimeException, std::exception)
 {
     ::dbtools::throwFunctionNotSupportedSQLException( "XRow::getRef", *this );
-    return NULL;
+    return nullptr;
 }
 
 Any SAL_CALL OEvoabResultSet::getObject( sal_Int32 /*nColumnNum*/, const Reference< ::com::sun::star::container::XNameAccess >& /*typeMap*/ ) throw(SQLException, RuntimeException, std::exception)
@@ -839,13 +839,13 @@ util::DateTime SAL_CALL OEvoabResultSet::getTimestamp( sal_Int32 /*nColumnNum*/ 
 Reference< XInputStream > SAL_CALL OEvoabResultSet::getBinaryStream( sal_Int32 /*nColumnNum*/ ) throw(SQLException, RuntimeException, std::exception)
 {
     ::dbtools::throwFunctionNotSupportedSQLException( "XRow::getBinaryStream", *this );
-    return NULL;
+    return nullptr;
 }
 
 Reference< XInputStream > SAL_CALL OEvoabResultSet::getCharacterStream( sal_Int32 /*nColumnNum*/ ) throw(SQLException, RuntimeException, std::exception)
 {
     ::dbtools::throwFunctionNotSupportedSQLException( "XRow::getCharacterStream", *this );
-    return NULL;
+    return nullptr;
 }
 
 sal_Int8 SAL_CALL OEvoabResultSet::getByte( sal_Int32 /*nColumnNum*/ ) throw(SQLException, RuntimeException, std::exception)

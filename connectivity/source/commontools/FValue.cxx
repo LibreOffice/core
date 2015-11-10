@@ -186,7 +186,7 @@ namespace tracing
         const sal_Char* pName;
         sal_Int32       nAllocatedUnits;
 
-        AllocationType( ) : pName( NULL ), nAllocatedUnits( 0 ) { }
+        AllocationType( ) : pName( nullptr ), nAllocatedUnits( 0 ) { }
     };
 
 
@@ -350,36 +350,36 @@ void ORowSetValue::free()
             case DataType::LONGVARCHAR:
                 OSL_ENSURE(m_aValue.m_pString,"String pointer is null!");
                 rtl_uString_release(m_aValue.m_pString);
-                m_aValue.m_pString = NULL;
+                m_aValue.m_pString = nullptr;
                 break;
             case DataType::DATE:
                 delete static_cast<css::util::Date*>(m_aValue.m_pValue);
                 TRACE_FREE( Date )
-                m_aValue.m_pValue = NULL;
+                m_aValue.m_pValue = nullptr;
                 break;
             case DataType::TIME:
                 delete static_cast<css::util::Time*>(m_aValue.m_pValue);
                 TRACE_FREE( tools::Time )
-                m_aValue.m_pValue = NULL;
+                m_aValue.m_pValue = nullptr;
                 break;
             case DataType::TIMESTAMP:
                 delete static_cast<css::util::DateTime*>(m_aValue.m_pValue);
                 TRACE_FREE( DateTime )
-                m_aValue.m_pValue = NULL;
+                m_aValue.m_pValue = nullptr;
                 break;
             case DataType::BINARY:
             case DataType::VARBINARY:
             case DataType::LONGVARBINARY:
                 delete static_cast<Sequence<sal_Int8>*>(m_aValue.m_pValue);
                 TRACE_FREE( Sequence_sal_Int8 )
-                m_aValue.m_pValue = NULL;
+                m_aValue.m_pValue = nullptr;
                 break;
             case DataType::BLOB:
             case DataType::CLOB:
             case DataType::OBJECT:
                 delete static_cast<Any*>(m_aValue.m_pValue);
                 TRACE_FREE( Any )
-                m_aValue.m_pValue = NULL;
+                m_aValue.m_pValue = nullptr;
                 break;
             case DataType::BIT:
             case DataType::TINYINT:
@@ -396,7 +396,7 @@ void ORowSetValue::free()
                 {
                     delete static_cast<Any*>(m_aValue.m_pValue);
                     TRACE_FREE( Any )
-                    m_aValue.m_pValue = NULL;
+                    m_aValue.m_pValue = nullptr;
                 }
                 break;
 
@@ -2257,7 +2257,7 @@ namespace detail
         virtual Sequence< sal_Int8 >        getBytes() const override            { return m_xRow->getBytes( m_nPos ); };
         virtual Reference< XBlob >          getBlob() const override             { return m_xRow->getBlob( m_nPos ); };
         virtual Reference< XClob >          getClob() const override             { return m_xRow->getClob( m_nPos ); };
-        virtual Any                         getObject() const override           { return m_xRow->getObject( m_nPos ,NULL); };
+        virtual Any                         getObject() const override           { return m_xRow->getObject( m_nPos ,nullptr); };
         virtual bool                        wasNull() const override             { return m_xRow->wasNull( ); };
 
     private:
@@ -2288,7 +2288,7 @@ namespace detail
         virtual Sequence< sal_Int8 >        getBytes() const override            { return m_xColumn->getBytes(); };
         virtual Reference< XBlob >          getBlob() const override             { return m_xColumn->getBlob(); };
         virtual Reference< XClob >          getClob() const override             { return m_xColumn->getClob(); };
-        virtual Any                         getObject() const override           { return m_xColumn->getObject( NULL ); };
+        virtual Any                         getObject() const override           { return m_xColumn->getObject( nullptr ); };
         virtual bool                        wasNull() const override             { return m_xColumn->wasNull( ); };
 
     private:

@@ -554,13 +554,13 @@ Sequence< sal_Int8 > BaseResultSet::getBytes( sal_Int32 columnIndex )
 Reference< ::com::sun::star::io::XInputStream > BaseResultSet::getBinaryStream( sal_Int32 /* columnIndex */ )
         throw (SQLException, RuntimeException, std::exception)
 {
-    return 0;
+    return nullptr;
 }
 
 Reference< ::com::sun::star::io::XInputStream > BaseResultSet::getCharacterStream( sal_Int32 /* columnIndex */ )
         throw (SQLException, RuntimeException, std::exception)
 {
-    return 0;
+    return nullptr;
 }
 
 Any BaseResultSet::getObject(

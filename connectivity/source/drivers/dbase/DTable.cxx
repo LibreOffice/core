@@ -447,7 +447,7 @@ void ODbaseTable::fillColumns()
 
 ODbaseTable::ODbaseTable(sdbcx::OCollection* _pTables, ODbaseConnection* _pConnection)
     : ODbaseTable_BASE(_pTables,_pConnection)
-    , m_pMemoStream(NULL)
+    , m_pMemoStream(nullptr)
     , m_bWriteableMemo(false)
 {
     // initialize the header
@@ -467,7 +467,7 @@ ODbaseTable::ODbaseTable(sdbcx::OCollection* _pTables, ODbaseConnection* _pConne
                        _Description,
                        _SchemaName,
                        _CatalogName)
-    , m_pMemoStream(NULL)
+    , m_pMemoStream(nullptr)
     , m_bWriteableMemo(false)
 {
     memset(&m_aHeader, 0, sizeof(m_aHeader));
@@ -494,7 +494,7 @@ void ODbaseTable::construct()
         // getEntry is expected to ensure the correct file name
 
     m_pFileStream = createStream_simpleError( sFileName, STREAM_READWRITE | StreamMode::NOCREATE | StreamMode::SHARE_DENYWRITE);
-    m_bWriteable = ( m_pFileStream != NULL );
+    m_bWriteable = ( m_pFileStream != nullptr );
 
     if ( !m_pFileStream )
     {
@@ -719,7 +719,7 @@ void SAL_CALL ODbaseTable::disposing()
 {
     OFileTable::disposing();
     ::osl::MutexGuard aGuard(m_aMutex);
-    m_aColumns = NULL;
+    m_aColumns = nullptr;
 }
 
 Sequence< Type > SAL_CALL ODbaseTable::getTypes(  ) throw(RuntimeException, std::exception)
@@ -756,7 +756,7 @@ Any SAL_CALL ODbaseTable::queryInterface( const Type & rType ) throw(RuntimeExce
 
 Sequence< sal_Int8 > ODbaseTable::getUnoTunnelImplementationId()
 {
-    static ::cppu::OImplementationId * pId = 0;
+    static ::cppu::OImplementationId * pId = nullptr;
     if (! pId)
     {
         ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
@@ -1018,7 +1018,7 @@ void ODbaseTable::FileClose()
         m_pMemoStream->Flush();
 
     delete m_pMemoStream;
-    m_pMemoStream = NULL;
+    m_pMemoStream = nullptr;
 
     ODbaseTable_BASE::FileClose();
 }
@@ -1430,7 +1430,7 @@ bool ODbaseTable::CreateMemoFile(const INetURLObject& aFile)
 
     m_pMemoStream->Flush();
     delete m_pMemoStream;
-    m_pMemoStream = NULL;
+    m_pMemoStream = nullptr;
     return true;
 }
 
@@ -1514,7 +1514,7 @@ bool ODbaseTable::InsertRow(OValueRefVector& rRow, bool bFlush, const Reference<
     sal_Size nTempPos = m_nFilePos;
 
     m_nFilePos = (sal_Size)m_aHeader.db_anz + 1;
-    bool bInsertRow = UpdateBuffer( rRow, NULL, _xCols, true );
+    bool bInsertRow = UpdateBuffer( rRow, nullptr, _xCols, true );
     if ( bInsertRow )
     {
         sal_Size nFileSize = 0, nMemoFileSize = 0;
@@ -1927,7 +1927,7 @@ bool ODbaseTable::UpdateBuffer(OValueRefVector& rRow, OValueRefRow pOrgRow, cons
 
                     // one, because const_cast GetFormatPrecision on SvNumberFormat is not constant,
                     // even though it really could and should be
-                    const OString aDefaultValue( ::rtl::math::doubleToString( n, rtl_math_StringFormat_F, nScale, '.', NULL, 0));
+                    const OString aDefaultValue( ::rtl::math::doubleToString( n, rtl_math_StringFormat_F, nScale, '.', nullptr, 0));
                     const sal_Int32 nValueLen = aDefaultValue.getLength();
                     if ( nValueLen <= nLen )
                     {
@@ -1963,7 +1963,7 @@ bool ODbaseTable::UpdateBuffer(OValueRefVector& rRow, OValueRefRow pOrgRow, cons
                     char cNext = pData[nLen]; // Mark's scratch and replaced by 0
                     pData[nLen] = '\0';       // This is because the buffer is always a sign of greater ...
 
-                    sal_Size nBlockNo = strtol(pData,NULL,10); // Block number read
+                    sal_Size nBlockNo = strtol(pData,nullptr,10); // Block number read
 
                     // Next initial character restore again:
                     pData[nLen] = cNext;
@@ -2194,7 +2194,7 @@ void ODbaseTable::alterColumn(sal_Int32 index,
     if(index < 0 || index >= m_pColumns->getCount())
         throw IndexOutOfBoundsException(OUString::number(index),*this);
 
-    ODbaseTable* pNewTable = NULL;
+    ODbaseTable* pNewTable = nullptr;
     try
     {
         OSL_ENSURE(descriptor.is(),"ODbaseTable::alterColumn: descriptor can not be null!");
@@ -2281,12 +2281,12 @@ void ODbaseTable::alterColumn(sal_Int32 index,
                 ::dbtools::throwGenericSQLException( sError, *this );
             }
             // release the temp file
-            pNewTable = NULL;
+            pNewTable = nullptr;
             ::comphelper::disposeComponent(xHoldTable);
         }
         else
         {
-            pNewTable = NULL;
+            pNewTable = nullptr;
         }
         FileClose();
         construct();
@@ -2763,17 +2763,17 @@ bool ODbaseTable::AllocBuffer()
     if (m_nBufferSize != nSize)
     {
         delete m_pBuffer;
-        m_pBuffer = NULL;
+        m_pBuffer = nullptr;
     }
 
     // if there is no buffer available: allocate:
-    if (m_pBuffer == NULL && nSize > 0)
+    if (m_pBuffer == nullptr && nSize > 0)
     {
         m_nBufferSize = nSize;
         m_pBuffer = new sal_uInt8[m_nBufferSize+1];
     }
 
-    return m_pBuffer != NULL;
+    return m_pBuffer != nullptr;
 }
 
 bool ODbaseTable::WriteBuffer()

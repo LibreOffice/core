@@ -210,7 +210,7 @@ namespace connectivity
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >
                         impl_callResultSetMethodWithStrings( const char* _pMethodName, jmethodID& _inout_MethodID, const ::com::sun::star::uno::Any& _rCatalog,
                             const OUString& _rSchemaPattern, const OUString& _rLeastPattern,
-                            const OUString* _pOptionalAdditionalString = NULL);
+                            const OUString* _pOptionalAdditionalString = nullptr);
     };
 }
 #endif // INCLUDED_CONNECTIVITY_SOURCE_INC_JAVA_SQL_DATABASEMETADATA_HXX

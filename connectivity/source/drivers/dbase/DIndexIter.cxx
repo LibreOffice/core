@@ -104,23 +104,23 @@ ONDXKey* OIndexIterator::GetFirstKey(ONDXPage* pPage, const OOperand& rKey)
                i++;
 
 
-    ONDXKey* pFoundKey = NULL;
+    ONDXKey* pFoundKey = nullptr;
     if (!pPage->IsLeaf())
     {
         // descend further
         ONDXPagePtr aPage = (i==0) ? pPage->GetChild(m_pIndex)
                                      : ((*pPage)[i-1]).GetChild(m_pIndex, pPage);
-        pFoundKey = aPage.Is() ? GetFirstKey(aPage, rKey) : NULL;
+        pFoundKey = aPage.Is() ? GetFirstKey(aPage, rKey) : nullptr;
     }
     else if (i == pPage->Count())
     {
-        pFoundKey = NULL;
+        pFoundKey = nullptr;
     }
     else
     {
         pFoundKey = &(*pPage)[i].GetKey();
         if (!m_pOperator->operate(pFoundKey,&rKey))
-            pFoundKey = NULL;
+            pFoundKey = nullptr;
 
         m_aCurLeaf = pPage;
         m_nCurNode = pFoundKey ? i : i - 1;
@@ -131,7 +131,7 @@ ONDXKey* OIndexIterator::GetFirstKey(ONDXPage* pPage, const OOperand& rKey)
 
 sal_uIntPtr OIndexIterator::GetCompare(bool bFirst)
 {
-    ONDXKey* pKey = NULL;
+    ONDXKey* pKey = nullptr;
     sal_Int32 ePredicateType = dynamic_cast<file::OOp_COMPARE&>(*m_pOperator).getPredicateType();
 
     if (bFirst)
@@ -154,13 +154,13 @@ sal_uIntPtr OIndexIterator::GetCompare(bool bFirst)
         switch (ePredicateType)
         {
             case SQLFilterOperator::NOT_EQUAL:
-                while ( ( ( pKey = GetNextKey() ) != NULL ) && !m_pOperator->operate(pKey,m_pOperand)) ;
+                while ( ( ( pKey = GetNextKey() ) != nullptr ) && !m_pOperator->operate(pKey,m_pOperand)) ;
                 break;
             case SQLFilterOperator::LESS:
-                while ( ( ( pKey = GetNextKey() ) != NULL ) && pKey->getValue().isNull()) ;
+                while ( ( ( pKey = GetNextKey() ) != nullptr ) && pKey->getValue().isNull()) ;
                 break;
             case SQLFilterOperator::LESS_EQUAL:
-                while ( ( pKey = GetNextKey() ) != NULL ) ;
+                while ( ( pKey = GetNextKey() ) != nullptr ) ;
                 break;
             case SQLFilterOperator::GREATER_EQUAL:
             case SQLFilterOperator::EQUAL:
@@ -169,7 +169,7 @@ sal_uIntPtr OIndexIterator::GetCompare(bool bFirst)
             case SQLFilterOperator::GREATER:
                 pKey = GetFirstKey(m_aRoot,*m_pOperand);
                 if ( !pKey )
-                    while ( ( ( pKey = GetNextKey() ) != NULL ) && !m_pOperator->operate(pKey,m_pOperand)) ;
+                    while ( ( ( pKey = GetNextKey() ) != nullptr ) && !m_pOperator->operate(pKey,m_pOperand)) ;
         }
     }
     else
@@ -177,15 +177,15 @@ sal_uIntPtr OIndexIterator::GetCompare(bool bFirst)
         switch (ePredicateType)
         {
             case SQLFilterOperator::NOT_EQUAL:
-                while ( ( ( pKey = GetNextKey() ) != NULL ) && !m_pOperator->operate(pKey,m_pOperand))
+                while ( ( ( pKey = GetNextKey() ) != nullptr ) && !m_pOperator->operate(pKey,m_pOperand))
                     ;
                 break;
             case SQLFilterOperator::LESS:
             case SQLFilterOperator::LESS_EQUAL:
             case SQLFilterOperator::EQUAL:
-                if ( ( ( pKey = GetNextKey() ) == NULL )  || !m_pOperator->operate(pKey,m_pOperand))
+                if ( ( ( pKey = GetNextKey() ) == nullptr )  || !m_pOperator->operate(pKey,m_pOperand))
                 {
-                    pKey = NULL;
+                    pKey = nullptr;
                     m_aCurLeaf.Clear();
                 }
                 break;
@@ -213,7 +213,7 @@ sal_uIntPtr OIndexIterator::GetLike(bool bFirst)
     }
 
     ONDXKey* pKey;
-    while ( ( ( pKey = GetNextKey() ) != NULL ) && !m_pOperator->operate(pKey,m_pOperand))
+    while ( ( ( pKey = GetNextKey() ) != nullptr ) && !m_pOperator->operate(pKey,m_pOperand))
         ;
     return pKey ? pKey->GetRecord() : NODE_NOTFOUND;
 }
@@ -232,9 +232,9 @@ sal_uIntPtr OIndexIterator::GetNull(bool bFirst)
     }
 
     ONDXKey* pKey;
-    if ( ( ( pKey = GetNextKey() ) == NULL ) || !pKey->getValue().isNull())
+    if ( ( ( pKey = GetNextKey() ) == nullptr ) || !pKey->getValue().isNull())
     {
-        pKey = NULL;
+        pKey = nullptr;
         m_aCurLeaf.Clear();
     }
     return pKey ? pKey->GetRecord() : NODE_NOTFOUND;
@@ -251,7 +251,7 @@ sal_uIntPtr OIndexIterator::GetNotNull(bool bFirst)
              nRec != NODE_NOTFOUND;
              nRec = GetNull(false))
                  ;
-        pKey = m_aCurLeaf.Is() ? &(*m_aCurLeaf)[m_nCurNode].GetKey() : NULL;
+        pKey = m_aCurLeaf.Is() ? &(*m_aCurLeaf)[m_nCurNode].GetKey() : nullptr;
     }
     else
         pKey = GetNextKey();
@@ -288,7 +288,7 @@ ONDXKey* OIndexIterator::GetNextKey()
         m_aCurLeaf = pPage;
         m_nCurNode = 0;
     }
-    return m_aCurLeaf.Is() ? &(*m_aCurLeaf)[m_nCurNode].GetKey() : NULL;
+    return m_aCurLeaf.Is() ? &(*m_aCurLeaf)[m_nCurNode].GetKey() : nullptr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

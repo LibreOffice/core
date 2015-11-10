@@ -57,7 +57,7 @@ IMPLEMENT_SERVICE_INFO(ODbaseIndex,"com.sun.star.sdbcx.driver.dbase.Index","com.
 
 ODbaseIndex::ODbaseIndex(ODbaseTable* _pTable)
     : OIndex(true/*_pTable->getConnection()->getMetaData()->supportsMixedCaseQuotedIdentifiers()*/)
-    , m_pFileStream(NULL)
+    , m_pFileStream(nullptr)
     , m_nCurNode(NODE_NOTFOUND)
     , m_nPageCount(0)
     , m_nRootPage(0)
@@ -72,7 +72,7 @@ ODbaseIndex::ODbaseIndex(   ODbaseTable* _pTable,
                             const NDXHeader& _rHeader,
                             const OUString& _rName)
     : OIndex(_rName, OUString(), _rHeader.db_unique, false, false, true)
-    , m_pFileStream(NULL)
+    , m_pFileStream(nullptr)
     , m_aHeader(_rHeader)
     , m_nCurNode(NODE_NOTFOUND)
     , m_nPageCount(0)
@@ -108,7 +108,7 @@ void ODbaseIndex::refreshColumns()
 
 Sequence< sal_Int8 > ODbaseIndex::getUnoTunnelImplementationId()
 {
-    static ::cppu::OImplementationId * pId = 0;
+    static ::cppu::OImplementationId * pId = nullptr;
     if (! pId)
     {
         ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
@@ -137,7 +137,7 @@ ONDXPagePtr ODbaseIndex::getRoot()
     {
         m_nRootPage = m_aHeader.db_rootpage;
         m_nPageCount = m_aHeader.db_pagecount;
-        m_aRoot = CreatePage(m_nRootPage,NULL,true);
+        m_aRoot = CreatePage(m_nRootPage,nullptr,true);
     }
     return m_aRoot;
 }
@@ -169,7 +169,7 @@ bool ODbaseIndex::openIndexFile()
         }
     }
 
-    return m_pFileStream != NULL;
+    return m_pFileStream != nullptr;
 }
 
 OIndexIterator* ODbaseIndex::createIterator(OBoolOperator* pOp,
@@ -325,7 +325,7 @@ void ODbaseIndex::closeImpl()
     if(m_pFileStream)
     {
         delete m_pFileStream;
-        m_pFileStream = NULL;
+        m_pFileStream = nullptr;
     }
 }
 

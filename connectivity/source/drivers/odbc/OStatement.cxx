@@ -61,7 +61,7 @@ OStatement_Base::OStatement_Base(OConnection* _pConnection )
     ,OPropertySetHelper(OStatement_BASE::rBHelper)
     ,m_pConnection(_pConnection)
     ,m_aStatementHandle(SQL_NULL_HANDLE)
-    ,m_pRowStatusArray(0)
+    ,m_pRowStatusArray(nullptr)
     ,rBHelper(OStatement_BASE::rBHelper)
 {
     osl_atomic_increment( &m_refCount );
@@ -107,7 +107,7 @@ void SAL_CALL OStatement_Base::disposing()
     {
         m_pConnection->freeStatementHandle(m_aStatementHandle);
         m_pConnection->release();
-        m_pConnection = NULL;
+        m_pConnection = nullptr;
     }
     OSL_ENSURE(!m_aStatementHandle,"Sohould ne null here!");
 
@@ -390,7 +390,7 @@ Reference< XResultSet > OStatement_Base::getResultSet(bool checkCount)
         ::dbtools::throwFunctionSequenceException(*this,Any());
     }
 
-    OResultSet* pRs = NULL;
+    OResultSet* pRs = nullptr;
     sal_Int32 numCols = 1;
 
     // If we already know we have result columns, checkCount
@@ -443,7 +443,7 @@ Reference< XResultSet > SAL_CALL OStatement_Base::executeQuery( const OUString& 
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
 
 
-    Reference< XResultSet > xRS = NULL;
+    Reference< XResultSet > xRS = nullptr;
 
     // Execute the statement.  If execute returns true, a result
     // set exists.
@@ -1111,7 +1111,7 @@ SQLUINTEGER OStatement_Base::getCursorProperties(SQLINTEGER _nCursorType, bool b
             nAskFor = bFirst ? SQL_DYNAMIC_CURSOR_ATTRIBUTES1 : SQL_DYNAMIC_CURSOR_ATTRIBUTES2;
 
 
-        OTools::GetInfo(getOwnConnection(),getConnectionHandle(),nAskFor,nValueLen,NULL);
+        OTools::GetInfo(getOwnConnection(),getConnectionHandle(),nAskFor,nValueLen,nullptr);
     }
     catch(const Exception&)
     { // we don't want our result destroy here

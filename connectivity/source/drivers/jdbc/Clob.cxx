@@ -27,7 +27,7 @@ using namespace connectivity;
 //************ Class: java.sql.Clob
 
 
-jclass java_sql_Clob::theClass = 0;
+jclass java_sql_Clob::theClass = nullptr;
 
 java_sql_Clob::java_sql_Clob( JNIEnv * pEnv, jobject myObj )
     : java_lang_Object( pEnv, myObj )
@@ -57,7 +57,7 @@ sal_Int64 SAL_CALL java_sql_Clob::length(  ) throw(::com::sun::star::sdbc::SQLEx
         static const char * cSignature = "()J";
         static const char * cMethodName = "length";
         // execute Java-Call
-        static jmethodID mID(NULL);
+        static jmethodID mID(nullptr);
         obtainMethodId_throwSQL(t.pEnv, cMethodName,cSignature, mID);
         out = t.pEnv->CallLongMethod( object, mID );
         ThrowSQLException(t.pEnv,*this);
@@ -74,7 +74,7 @@ OUString SAL_CALL java_sql_Clob::getSubString( sal_Int64 pos, sal_Int32 subStrin
         static const char * cSignature = "(JI)Ljava/lang/String;";
         static const char * cMethodName = "getSubString";
         // execute Java-Call
-        static jmethodID mID(NULL);
+        static jmethodID mID(nullptr);
         obtainMethodId_throwSQL(t.pEnv, cMethodName,cSignature, mID);
         jstring out = static_cast<jstring>(t.pEnv->CallObjectMethod( object, mID,pos,subStringLength));
         ThrowSQLException(t.pEnv,*this);
@@ -87,11 +87,11 @@ OUString SAL_CALL java_sql_Clob::getSubString( sal_Int64 pos, sal_Int32 subStrin
 ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > SAL_CALL java_sql_Clob::getCharacterStream(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
     SDBThreadAttach t;
-    static jmethodID mID(NULL);
+    static jmethodID mID(nullptr);
     jobject out = callObjectMethod(t.pEnv,"getCharacterStream","()Ljava/io/Reader;", mID);
 
     // WARNING: the caller becomes the owner of the returned pointer
-    return out==0 ? 0 : new java_io_Reader( t.pEnv, out );
+    return out==nullptr ? nullptr : new java_io_Reader( t.pEnv, out );
 }
 
 sal_Int64 SAL_CALL java_sql_Clob::position( const OUString& searchstr, sal_Int32 start ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
@@ -107,7 +107,7 @@ sal_Int64 SAL_CALL java_sql_Clob::position( const OUString& searchstr, sal_Int32
         static const char * cSignature = "(Ljava/lang/String;I)J";
         static const char * cMethodName = "position";
         // execute Java-Call
-        static jmethodID mID(NULL);
+        static jmethodID mID(nullptr);
         obtainMethodId_throwSQL(t.pEnv, cMethodName,cSignature, mID);
         out = t.pEnv->CallLongMethod( object, mID, args[0].l,start );
         ThrowSQLException(t.pEnv,*this);

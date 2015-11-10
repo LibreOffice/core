@@ -34,7 +34,7 @@ using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::lang::XSingleServiceFactory;
 using ::com::sun::star::lang::XMultiServiceFactory;
 
-static MozillaBootstrap *pMozillaBootstrap=NULL;
+static MozillaBootstrap *pMozillaBootstrap=nullptr;
 static Reference<XMozillaBootstrap> xMozillaBootstrap;
 extern "C" SAL_DLLPUBLIC_EXPORT void*  SAL_CALL OMozillaBootstrap_CreateInstance(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory)
 {
@@ -50,7 +50,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT void*  SAL_CALL OMozillaBootstrap_CreateInstance
 MozillaBootstrap::MozillaBootstrap(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory)
     : OMozillaBootstrap_BASE(m_aMutex), m_xMSFactory( _rxFactory ),
-      m_ProfileAccess(NULL), m_ProfileManager(NULL)
+      m_ProfileAccess(nullptr), m_ProfileManager(nullptr)
 {
 }
 
@@ -179,7 +179,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL mozbootstrap_component_getFactory
                                         void* pServiceManager,
                                         void* /*pRegistryKey*/)
 {
-        void* pRet = 0;
+        void* pRet = nullptr;
 
         if (pServiceManager)
         {

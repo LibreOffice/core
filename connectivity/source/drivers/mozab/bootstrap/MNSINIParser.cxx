@@ -32,7 +32,7 @@ IniParser::IniParser(OUString const & rIniName) throw(com::sun::star::io::IOExce
     OString sFile = OUStringToOString(iniUrl, RTL_TEXTENCODING_ASCII_US);
     OSL_TRACE(__FILE__" -- parser() - %s\n", sFile.getStr());
 #endif
-    oslFileHandle handle=NULL;
+    oslFileHandle handle=nullptr;
     oslFileError fileError = osl_File_E_INVAL;
     try{
         if (!iniUrl.isEmpty())

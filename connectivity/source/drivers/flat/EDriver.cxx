@@ -62,7 +62,7 @@ Reference< XConnection > SAL_CALL ODriver::connect( const OUString& url, const S
        throw DisposedException();
 
     if ( ! acceptsURL(url) )
-        return NULL;
+        return nullptr;
 
     OFlatConnection* pCon = new OFlatConnection(this);
     pCon->construct(url,info);

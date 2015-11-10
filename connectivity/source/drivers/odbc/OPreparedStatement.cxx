@@ -65,7 +65,7 @@ namespace
 OPreparedStatement::OPreparedStatement( OConnection* _pConnection,const OUString& sql)
     :OStatement_BASE2(_pConnection)
     ,numParams(0)
-    ,boundParams(NULL)
+    ,boundParams(nullptr)
     ,m_bPrepared(false)
 {
     m_sSqlStatement = sql;
@@ -183,7 +183,7 @@ sal_Bool SAL_CALL OPreparedStatement::execute(  ) throw(SQLException, RuntimeExc
 
             // Get the parameter number that requires data
 
-            sal_Int32* paramIndex = 0;
+            sal_Int32* paramIndex = nullptr;
             N3SQLParamData(m_aStatementHandle, reinterpret_cast<SQLPOINTER*>(&paramIndex));
 
             // If the parameter index is -1, there is no
@@ -257,7 +257,7 @@ Reference< XResultSet > SAL_CALL OPreparedStatement::executeQuery(  ) throw(SQLE
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
 
-    Reference< XResultSet > rs = NULL;
+    Reference< XResultSet > rs = nullptr;
 
     prepareStatement();
 
@@ -375,7 +375,7 @@ void OPreparedStatement::setParameter(const sal_Int32 parameterIndex, const sal_
 
     // don't copy the sequence, just point the ODBC directly at the sequence's storage array
     // Why BINARY/Sequence is treated differently than strings (which are copied), I'm not sure
-    OSL_VERIFY(allocBindBuf(parameterIndex, 0) == NULL);
+    OSL_VERIFY(allocBindBuf(parameterIndex, 0) == nullptr);
     boundParams[parameterIndex-1].setSequence(x); // this ensures that the sequence stays alive
 
     setParameter( parameterIndex, _nType, x.getLength(), invalid_scale, x.getConstArray(), x.getLength(), x.getLength() );
@@ -517,7 +517,7 @@ void SAL_CALL OPreparedStatement::setNull( sal_Int32 parameterIndex, const sal_I
     ::osl::MutexGuard aGuard( m_aMutex );
     setParameterPre(parameterIndex);
 
-    OSL_VERIFY(allocBindBuf(parameterIndex, 0) == NULL);
+    OSL_VERIFY(allocBindBuf(parameterIndex, 0) == nullptr);
     SQLLEN * const lenBuf = getLengthBuf (parameterIndex);
     *lenBuf = SQL_NULL_DATA;
 
@@ -538,7 +538,7 @@ void SAL_CALL OPreparedStatement::setNull( sal_Int32 parameterIndex, const sal_I
                                             fSqlType,
                                             0,
                                             0,
-                                            NULL,
+                                            nullptr,
                                             0,
                                             lenBuf
                                             );
@@ -722,7 +722,7 @@ void OPreparedStatement::initBoundParam () throw(SQLException)
 
 void* OPreparedStatement::allocBindBuf( sal_Int32 index,sal_Int32 bufLen)
 {
-    void* b = NULL;
+    void* b = nullptr;
 
     // Sanity check the parameter number
 
@@ -742,7 +742,7 @@ void* OPreparedStatement::allocBindBuf( sal_Int32 index,sal_Int32 bufLen)
 
 SQLLEN* OPreparedStatement::getLengthBuf (sal_Int32 index)
 {
-    SQLLEN* b = NULL;
+    SQLLEN* b = nullptr;
 
     // Sanity check the parameter number
 
@@ -879,7 +879,7 @@ void OPreparedStatement::FreeParams()
 {
     numParams = 0;
     delete [] boundParams;
-    boundParams = NULL;
+    boundParams = nullptr;
 }
 
 void OPreparedStatement::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& rValue) throw (Exception, std::exception)

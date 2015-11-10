@@ -259,7 +259,7 @@ namespace dbtools
             const sal_Int32 _nCommandType,
             const OUString& _rCommand,
             css::uno::Reference< css::lang::XComponent >& _rxKeepFieldsAlive,
-            SQLExceptionInfo* _pErrorInfo = NULL
+            SQLExceptionInfo* _pErrorInfo = nullptr
         );
 
 
@@ -295,7 +295,7 @@ namespace dbtools
             const css::uno::Reference< css::sdbc::XConnection >& _rxConnection,
             const sal_Int32 _nCommandType,
             const OUString& _rCommand,
-            SQLExceptionInfo* _pErrorInfo = NULL
+            SQLExceptionInfo* _pErrorInfo = nullptr
         );
 
 
@@ -663,7 +663,7 @@ namespace dbtools
     OOO_DLLPUBLIC_DBTOOLS
     OUString createStandardColumnPart(   const css::uno::Reference< css::beans::XPropertySet >& descriptor
                                                 ,const css::uno::Reference< css::sdbc::XConnection>& _xConnection
-                                                ,ISQLStatementHelper* _pHelper = NULL
+                                                ,ISQLStatementHelper* _pHelper = nullptr
                                                 ,const OUString& _sCreatePattern = OUString());
 
     /** creates a SQL CREATE TABLE statement
@@ -682,7 +682,7 @@ namespace dbtools
     OOO_DLLPUBLIC_DBTOOLS
     OUString createSqlCreateTableStatement(  const css::uno::Reference< css::beans::XPropertySet >& descriptor
                                                     ,const css::uno::Reference< css::sdbc::XConnection>& _xConnection
-                                                    ,ISQLStatementHelper* _pHelper = NULL
+                                                    ,ISQLStatementHelper* _pHelper = nullptr
                                                     ,const OUString& _sCreatePattern = OUString());
 
     /** creates a SDBC column with the help of getColumns.

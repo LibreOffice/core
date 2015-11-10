@@ -65,7 +65,7 @@ sdbcx::ObjectType OTables::createObject(const OUString& _rName)
         aCatalog <<= sCatalog;
     Reference< XResultSet > xResult = m_xMetaData->getTables(aCatalog,sSchema,sTable,sTableTypes);
 
-    sdbcx::ObjectType xRet = NULL;
+    sdbcx::ObjectType xRet = nullptr;
     if ( xResult.is() )
     {
         Reference< XRow > xRow(xResult,UNO_QUERY);
@@ -171,7 +171,7 @@ void OTables::createTable( const Reference< XPropertySet >& descriptor )
 
 void OTables::appendNew(const OUString& _rsNewTable)
 {
-    insertElement(_rsNewTable,NULL);
+    insertElement(_rsNewTable,nullptr);
 
     // notify our container listeners
     ContainerEvent aEvent(static_cast<XContainer*>(this), makeAny(_rsNewTable), Any(), Any());

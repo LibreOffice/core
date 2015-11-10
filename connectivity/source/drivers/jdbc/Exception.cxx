@@ -23,7 +23,7 @@ using namespace connectivity;
 //************ Class: java.lang.Exception
 
 
-jclass java_lang_Exception::theClass = 0;
+jclass java_lang_Exception::theClass = nullptr;
 
 java_lang_Exception::~java_lang_Exception()
 {}

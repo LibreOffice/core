@@ -113,7 +113,7 @@ namespace dbtools
             {
                 ::connectivity::SharedResources aResources;
                 const OUString sError( aResources.getResourceString(STR_NO_CONNECTION_GIVEN));
-                throwSQLException( sError, SQL_CONNECTION_DOES_NOT_EXIST, NULL );
+                throwSQLException( sError, SQL_CONNECTION_DOES_NOT_EXIST, nullptr );
             }
         }
 

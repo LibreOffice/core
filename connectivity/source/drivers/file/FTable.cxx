@@ -38,9 +38,9 @@ using namespace ::com::sun::star::container;
 OFileTable::OFileTable(sdbcx::OCollection* _pTables,OConnection* _pConnection)
 : OTable_TYPEDEF(_pTables,_pConnection->getMetaData()->supportsMixedCaseQuotedIdentifiers())
                 ,m_pConnection(_pConnection)
-                ,m_pFileStream(NULL)
+                ,m_pFileStream(nullptr)
                 ,m_nFilePos(0)
-                ,m_pBuffer(NULL)
+                ,m_pBuffer(nullptr)
                 ,m_nBufferSize(0)
                 ,m_bWriteable(false)
 {
@@ -61,9 +61,9 @@ OFileTable::OFileTable( sdbcx::OCollection* _pTables,OConnection* _pConnection,
                      _SchemaName,
                      _CatalogName)
     , m_pConnection(_pConnection)
-    , m_pFileStream(NULL)
+    , m_pFileStream(nullptr)
     , m_nFilePos(0)
-    , m_pBuffer(NULL)
+    , m_pBuffer(nullptr)
     , m_nBufferSize(0)
     , m_bWriteable(false)
 {
@@ -126,7 +126,7 @@ void SAL_CALL OFileTable::disposing()
 
 Sequence< sal_Int8 > OFileTable::getUnoTunnelImplementationId()
 {
-    static ::cppu::OImplementationId * pId = 0;
+    static ::cppu::OImplementationId * pId = nullptr;
     if (! pId)
     {
         ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
@@ -156,12 +156,12 @@ void OFileTable::FileClose()
         m_pFileStream->Flush();
 
     delete m_pFileStream;
-    m_pFileStream = NULL;
+    m_pFileStream = nullptr;
 
     if (m_pBuffer)
     {
         delete[] m_pBuffer;
-        m_pBuffer = NULL;
+        m_pBuffer = nullptr;
     }
 }
 
@@ -207,7 +207,7 @@ SvStream* OFileTable::createStream_simpleError( const OUString& _rFileName, Stre
     if (pReturn && (ERRCODE_NONE != pReturn->GetErrorCode()))
     {
         delete pReturn;
-        pReturn = NULL;
+        pReturn = nullptr;
     }
     return pReturn;
 }

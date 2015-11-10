@@ -21,8 +21,8 @@ static cppu::ImplementationEntry const services[] = {
     { &connectivity::mork::create,
       &connectivity::mork::MorkDriver::getImplementationName_Static,
       &connectivity::mork::MorkDriver::getSupportedServiceNames_Static,
-      &cppu::createSingleComponentFactory, 0, 0 },
-    { 0, 0, 0, 0, 0, 0 }
+      &cppu::createSingleComponentFactory, nullptr, 0 },
+    { nullptr, nullptr, nullptr, nullptr, nullptr, 0 }
 };
 
 }

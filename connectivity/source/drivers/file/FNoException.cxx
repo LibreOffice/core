@@ -69,7 +69,7 @@ void OSQLAnalyzer::bindParameterRow(OValueRefRow& _pRow)
 
 void OPreparedStatement::scanParameter(OSQLParseNode* pParseNode,::std::vector< OSQLParseNode*>& _rParaNodes)
 {
-    DBG_ASSERT(pParseNode != NULL,"OResultSet: interner Fehler: ungueltiger ParseNode");
+    DBG_ASSERT(pParseNode != nullptr,"OResultSet: interner Fehler: ungueltiger ParseNode");
 
     // found parameter Name-Rule?
     if (SQL_ISRULE(pParseNode,parameter))

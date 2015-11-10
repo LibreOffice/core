@@ -87,10 +87,10 @@ OResultSet::OResultSet(SQLHANDLE _pStatementHandle ,OStatement_Base* pStmt) :   
                         ,m_aStatementHandle(_pStatementHandle)
                         ,m_aConnectionHandle(pStmt->getConnectionHandle())
                         ,m_pStatement(pStmt)
-                        ,m_pSkipDeletedSet(NULL)
+                        ,m_pSkipDeletedSet(nullptr)
                         ,m_xStatement(*pStmt)
-                        ,m_xMetaData(NULL)
-                        ,m_pRowStatusArray( NULL )
+                        ,m_xMetaData(nullptr)
+                        ,m_pRowStatusArray( nullptr )
                         ,m_nTextEncoding(pStmt->getOwnConnection()->getTextEncoding())
                         ,m_nRowPos(0)
                         ,m_nUseBookmarks(ODBC_SQL_NOT_DEFINED)
@@ -138,7 +138,7 @@ OResultSet::OResultSet(SQLHANDLE _pStatementHandle ,OStatement_Base* pStmt) :   
         // If !SQL_GD_ANY_ORDER, cache the whole row so that callers can access columns in any order.
         // In other words, isolate them from ODBC restrictions.
         // TODO: we assume SQL_GD_BLOCK, unless fetchSize is 1
-        OTools::GetInfo(m_pStatement->getOwnConnection(),m_aConnectionHandle,SQL_GETDATA_EXTENSIONS,nValueLen,NULL);
+        OTools::GetInfo(m_pStatement->getOwnConnection(),m_aConnectionHandle,SQL_GETDATA_EXTENSIONS,nValueLen,nullptr);
         m_bFetchDataInOrder = !((SQL_GD_ANY_ORDER & nValueLen) == SQL_GD_ANY_ORDER);
     }
     catch(const Exception&)
@@ -424,7 +424,7 @@ Reference< XInputStream > SAL_CALL OResultSet::getBinaryStream( sal_Int32 /*colu
 
     ::dbtools::throwFunctionNotSupportedSQLException( "XRow::getBinaryStream", *this );
 
-    return NULL;
+    return nullptr;
 }
 
 Reference< XInputStream > SAL_CALL OResultSet::getCharacterStream( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException, std::exception)
@@ -434,7 +434,7 @@ Reference< XInputStream > SAL_CALL OResultSet::getCharacterStream( sal_Int32 /*c
 
     ::dbtools::throwFunctionNotSupportedSQLException( "XRow::getBinaryStream", *this );
 
-    return NULL;
+    return nullptr;
 }
 
 template < typename T > T OResultSet::impl_getValue( const sal_Int32 _nColumnIndex, SQLSMALLINT nType )
@@ -589,7 +589,7 @@ Reference< XResultSetMetaData > SAL_CALL OResultSet::getMetaData(  ) throw(SQLEx
 Reference< XArray > SAL_CALL OResultSet::getArray( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException, std::exception)
 {
     ::dbtools::throwFunctionNotSupportedSQLException( "XRow::getArray", *this );
-    return NULL;
+    return nullptr;
 }
 
 
@@ -597,20 +597,20 @@ Reference< XArray > SAL_CALL OResultSet::getArray( sal_Int32 /*columnIndex*/ ) t
 Reference< XClob > SAL_CALL OResultSet::getClob( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException, std::exception)
 {
     ::dbtools::throwFunctionNotSupportedSQLException( "XRow::getClob", *this );
-    return NULL;
+    return nullptr;
 }
 
 Reference< XBlob > SAL_CALL OResultSet::getBlob( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException, std::exception)
 {
     ::dbtools::throwFunctionNotSupportedSQLException( "XRow::getBlob", *this );
-    return NULL;
+    return nullptr;
 }
 
 
 Reference< XRef > SAL_CALL OResultSet::getRef( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException, std::exception)
 {
     ::dbtools::throwFunctionNotSupportedSQLException( "XRow::getRef", *this );
-    return NULL;
+    return nullptr;
 }
 
 
@@ -843,7 +843,7 @@ void SAL_CALL OResultSet::insertRow(  ) throw(SQLException, RuntimeException, st
                                 &nRealLen
                                 );
 
-    bool bPositionByBookmark = ( NULL != getOdbcFunction( ODBC3SQLFunctionId::BulkOperations ) );
+    bool bPositionByBookmark = ( nullptr != getOdbcFunction( ODBC3SQLFunctionId::BulkOperations ) );
     if ( bPositionByBookmark )
     {
         nRet = N3SQLBulkOperations( m_aStatementHandle, SQL_ADD );
@@ -910,7 +910,7 @@ void SAL_CALL OResultSet::updateRow(  ) throw(SQLException, RuntimeException, st
 
     try
     {
-        bool bPositionByBookmark = ( NULL != getOdbcFunction( ODBC3SQLFunctionId::BulkOperations ) );
+        bool bPositionByBookmark = ( nullptr != getOdbcFunction( ODBC3SQLFunctionId::BulkOperations ) );
         if ( bPositionByBookmark )
         {
             getBookmark();
@@ -1008,7 +1008,7 @@ void OResultSet::updateValue(sal_Int32 columnIndex,SQLSMALLINT _nType,void* _pVa
 
     m_aBindVector.push_back(allocBindColumn(OTools::MapOdbcType2Jdbc(_nType),columnIndex));
     void* pData = reinterpret_cast<void*>(m_aBindVector.rbegin()->first);
-    OSL_ENSURE(pData != NULL,"Data for update is NULL!");
+    OSL_ENSURE(pData != nullptr,"Data for update is NULL!");
     OTools::bindValue(  m_pStatement->getOwnConnection(),
                         m_aStatementHandle,
                         columnIndex,
@@ -1352,13 +1352,13 @@ bool  OResultSet::isBookmarkable() const
         case SQL_CURSOR_FORWARD_ONLY:
             return false;
         case SQL_CURSOR_STATIC:
-            OTools::GetInfo(m_pStatement->getOwnConnection(),m_aConnectionHandle,SQL_STATIC_CURSOR_ATTRIBUTES1,nAttr,NULL);
+            OTools::GetInfo(m_pStatement->getOwnConnection(),m_aConnectionHandle,SQL_STATIC_CURSOR_ATTRIBUTES1,nAttr,nullptr);
             break;
         case SQL_CURSOR_KEYSET_DRIVEN:
-            OTools::GetInfo(m_pStatement->getOwnConnection(),m_aConnectionHandle,SQL_KEYSET_CURSOR_ATTRIBUTES1,nAttr,NULL);
+            OTools::GetInfo(m_pStatement->getOwnConnection(),m_aConnectionHandle,SQL_KEYSET_CURSOR_ATTRIBUTES1,nAttr,nullptr);
             break;
         case SQL_CURSOR_DYNAMIC:
-            OTools::GetInfo(m_pStatement->getOwnConnection(),m_aConnectionHandle,SQL_DYNAMIC_CURSOR_ATTRIBUTES1,nAttr,NULL);
+            OTools::GetInfo(m_pStatement->getOwnConnection(),m_aConnectionHandle,SQL_DYNAMIC_CURSOR_ATTRIBUTES1,nAttr,nullptr);
             break;
         }
     }
@@ -1769,7 +1769,7 @@ bool OResultSet::moveImpl(IResultSetHelper::Movement _eCursorPosition, sal_Int32
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-    return (m_pSkipDeletedSet != NULL)
+    return (m_pSkipDeletedSet != nullptr)
                 ?   m_pSkipDeletedSet->skipDeleted(_eCursorPosition,_nOffset,_bRetrieveData)
                 :   move(_eCursorPosition,_nOffset,_bRetrieveData);
 }
@@ -1779,7 +1779,7 @@ void OResultSet::fillNeededData(SQLRETURN _nRet)
     SQLRETURN nRet = _nRet;
     if( nRet == SQL_NEED_DATA)
     {
-        void* pColumnIndex = 0;
+        void* pColumnIndex = nullptr;
         nRet = N3SQLParamData(m_aStatementHandle,&pColumnIndex);
 
         do

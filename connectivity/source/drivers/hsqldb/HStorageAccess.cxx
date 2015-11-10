@@ -427,7 +427,7 @@ void write_to_storage_stream_from_buffer( JNIEnv* env, jobject /*obj_this*/, jst
     {
         if ( xOut.is() )
         {
-            jbyte *buf = env->GetByteArrayElements(buffer,NULL);
+            jbyte *buf = env->GetByteArrayElements(buffer,nullptr);
             if (env->ExceptionCheck())
             {
                 env->ExceptionClear();
