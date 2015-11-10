@@ -72,6 +72,24 @@
     },
     {
       "key": {
+        "uuid": "faac7902_87e7b43f",
+        "filename": "external/neon/neon_fix_lock_timeout_windows.patch",
+        "patchSetId": 2
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-11-10T17:09:17Z",
+      "side": 1,
+      "message": "So we should refine the check for an error return from strtoul to\n\n  errno \u003d 0;\n  unsigned long to1 \u003d stroul(...);\n  if (to1 \u003d\u003d ULONG_MAX \u0026\u0026 errno \u003d\u003d ERANGE)\n      return NE_TIMEOUT_INVALID;",
+      "parentUuid": "faac7902_27ac08ed",
+      "revId": "492bc6cb0a7195e9f68011dc4a6c5d8de7357fe7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "faac7902_8c06bb1e",
         "filename": "external/neon/neon_fix_lock_timeout_windows.patch",
         "patchSetId": 2
@@ -101,6 +119,24 @@
       "side": 1,
       "message": "for practical use, probably for this should be better:\n\nif (to1 \u003e (unsinged long) LONG_MAX)\n      return NE_TIMEOUT_INFINITE;\n\nLONG_MAX would be a lock timeout of around 68 years, practically an infinite time, I think.\nThe if clause presented in the comment above would no longer be necessary.",
       "parentUuid": "faac7902_8c06bb1e",
+      "revId": "492bc6cb0a7195e9f68011dc4a6c5d8de7357fe7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "faac7902_a7d47847",
+        "filename": "external/neon/neon_fix_lock_timeout_windows.patch",
+        "patchSetId": 2
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-11-10T17:09:17Z",
+      "side": 1,
+      "message": "Forget my original comment here.  As it is apparently important to report valid input in the range \u003e\u003d LONG_MAX and \u003c 2^32 as a \"valid\" return value (i.e., not NE_TIMEOUT_INVALID, but rather some positive value), a branch\n\n  if (to1 \u003e LONG_MAX)\n      to1 \u003d LONG_MAX;\n\nmakes sense to me now (though I think the \"- 1\" is unnecessary).",
+      "parentUuid": "faac7902_67b6103f",
       "revId": "492bc6cb0a7195e9f68011dc4a6c5d8de7357fe7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
