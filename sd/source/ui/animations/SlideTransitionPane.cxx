@@ -52,9 +52,6 @@
 
 #include <algorithm>
 
-#define TRANSITION_THUMB_WIDTH 64
-#define TRANSITION_THUMB_HEIGHT 40
-
 using namespace ::com::sun::star;
 
 using ::com::sun::star::uno::Reference;
@@ -389,8 +386,6 @@ public:
         set_hexpand( true );
         set_vexpand( true );
         SetExtraSpacing( 2 );
-        SetItemWidth( TRANSITION_THUMB_WIDTH );
-        SetItemHeight( TRANSITION_THUMB_HEIGHT );
     }
     virtual ~TransitionPane() { disposeOnce(); }
 
@@ -444,8 +439,11 @@ SlideTransitionPane::SlideTransitionPane(
         mxView.set( mxModel->getCurrentController(), uno::UNO_QUERY );
 
     // dummy list box of slide transitions for startup.
-    mpVS_TRANSITION_ICONS->InsertItem( 0, Image( BitmapEx( "sd/cmd/transition-none.png" ) ),
-                                       SD_RESSTR( STR_SLIDETRANSITION_NONE ) );
+    mpVS_TRANSITION_ICONS->InsertItem(
+        0, Image( BitmapEx( "sd/cmd/transition-none.png" ) ),
+        SD_RESSTR( STR_SLIDETRANSITION_NONE ),
+        VALUESET_APPEND, /* show legend */ true );
+    mpVS_TRANSITION_ICONS->RecalculateItemSizes();
 
     // set defaults
     mpCB_AUTO_PREVIEW->Check();      // automatic preview on
@@ -1123,7 +1121,9 @@ IMPL_LINK_NOARG_TYPED(SlideTransitionPane, LateInitCallback, Timer *, void)
                 if ( aIcon.IsEmpty() ) // need a fallback
                     aIcon = BitmapEx( "sd/cmd/transition-none.png" );
 
-                mpVS_TRANSITION_ICONS->InsertItem( nPresetOffset + 1, Image( aIcon ), sLabel );
+                mpVS_TRANSITION_ICONS->InsertItem(
+                    nPresetOffset + 1, Image( aIcon ), sLabel,
+                    VALUESET_APPEND, /* show legend */ true );
 
                 m_aNumVariants[ pPreset->getSetId() ] = 1;
             }
@@ -1134,6 +1134,7 @@ IMPL_LINK_NOARG_TYPED(SlideTransitionPane, LateInitCallback, Timer *, void)
         }
         nPresetOffset++;
     }
+    mpVS_TRANSITION_ICONS->RecalculateItemSizes();
 
     SAL_INFO( "sd.transitions", "Item transition offsets in ValueSet:");
     for( size_t i = 0; i < mpVS_TRANSITION_ICONS->GetItemCount(); ++i )
