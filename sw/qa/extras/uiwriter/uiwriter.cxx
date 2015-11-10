@@ -56,6 +56,7 @@
 #include <ftnidx.hxx>
 #include <txtftn.hxx>
 #include <IDocumentFieldsAccess.hxx>
+#include <IDocumentState.hxx>
 #include <unofldmid.h>
 #include "UndoManager.hxx"
 #include <textsh.hxx>
@@ -141,6 +142,7 @@ public:
     void testUnoParagraph();
     void testTdf60967();
     void testSearchWithTransliterate();
+    void testNewDocModifiedState();
     void testTdf77342();
     void testTdf74230();
     void testTdf74363();
@@ -219,6 +221,7 @@ public:
     CPPUNIT_TEST(testUnoParagraph);
     CPPUNIT_TEST(testTdf60967);
     CPPUNIT_TEST(testSearchWithTransliterate);
+    CPPUNIT_TEST(testNewDocModifiedState);
     CPPUNIT_TEST(testTdf77342);
     CPPUNIT_TEST(testTdf74230);
     CPPUNIT_TEST(testTdf74363);
@@ -1724,6 +1727,16 @@ void SwUiWriterTest::testSearchWithTransliterate()
     pShellCrsr = pWrtShell->getShellCrsr(true);
     CPPUNIT_ASSERT_EQUAL(OUString("paragraph"),pShellCrsr->GetText());
     CPPUNIT_ASSERT_EQUAL(1,(int)case2);
+}
+
+void SwUiWriterTest::testNewDocModifiedState()
+{
+    //creating a new doc
+    SwDoc* pDoc = new SwDoc();
+    //getting the state of the document via IDocumentState
+    IDocumentState& rState(pDoc->getIDocumentState());
+    //the state should not be modified, no modifications yet
+    CPPUNIT_ASSERT(!(rState.IsModified()));
 }
 
 void SwUiWriterTest::testTdf77342()
