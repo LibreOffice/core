@@ -21,6 +21,7 @@
 
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <rtl/ustring.hxx>
 #include <sfx2/dllapi.h>
 #include <tools/link.hxx>

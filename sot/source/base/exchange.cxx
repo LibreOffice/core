@@ -17,13 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#define _SOT_FORMATS_INCLUDE_SYSTEMFORMATS
 #include <tools/debug.hxx>
 #include <tools/solar.h>
 #include <tools/globname.hxx>
 #include <sot/sotdata.hxx>
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>
+#include <sysformats.hxx>
 #include <comphelper/classids.hxx>
 #include <rtl/instance.hxx>
 #include <com/sun/star/uno/Sequence.hxx>

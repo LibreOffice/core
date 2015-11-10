@@ -19,6 +19,7 @@
 
 #include "xlformula.hxx"
 
+#include <algorithm>
 #include "compiler.hxx"
 #include "rangenam.hxx"
 #include "token.hxx"

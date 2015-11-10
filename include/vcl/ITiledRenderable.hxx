@@ -15,6 +15,7 @@
 #include <LibreOfficeKit/LibreOfficeKitTypes.h>
 #include <tools/gen.hxx>
 #include <vcl/virdev.hxx>
+#include <com/sun/star/datatransfer/clipboard/XClipboardEx.hpp>
 
 namespace vcl
 {

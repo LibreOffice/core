@@ -17,13 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-#define _SOT_FORMATS_INCLUDE_SYSTEMFORMATS
 #include <tools/solar.h>
 
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>
-#include "sot/filelist.hxx"
+#include <sot/filelist.hxx>
+#include <sysformats.hxx>
 #include <comphelper/classids.hxx>
 
 #include <tools/globname.hxx>
