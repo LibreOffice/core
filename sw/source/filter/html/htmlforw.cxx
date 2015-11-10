@@ -63,6 +63,7 @@
 #include "htmlform.hxx"
 #include "frmfmt.hxx"
 #include <rtl/strbuf.hxx>
+#include <memory>
 
 using namespace ::com::sun::star;
 
@@ -1292,15 +1293,14 @@ static void AddControl( HTMLControls& rControls,
     if( xForm.is() )
     {
         uno::Reference< container::XIndexContainer >  xFormComps( xForm, uno::UNO_QUERY );
-        HTMLControl *pHCntrl = new HTMLControl( xFormComps, nNodeIdx );
-        HTMLControls::const_iterator it = rControls.find( pHCntrl );
+        std::unique_ptr<HTMLControl> pHCntrl(new HTMLControl( xFormComps, nNodeIdx ));
+        HTMLControls::const_iterator it = rControls.find( pHCntrl.get() );
         if( it == rControls.end() )
-            rControls.insert( pHCntrl );
+            rControls.insert( pHCntrl.release() );
         else
         {
             if( (*it)->xFormComps==xFormComps )
                 (*it)->nCount++;
-            delete pHCntrl;
         }
     }
 }

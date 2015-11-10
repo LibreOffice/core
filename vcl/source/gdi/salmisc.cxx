@@ -378,27 +378,23 @@ BitmapBuffer* StretchAndConvert(
     if( bFastConvert )
         return pDstBuffer;
 
-    Scanline*       pSrcScan = NULL;
-    Scanline*       pDstScan = NULL;
-    long*           pMapX = NULL;
-    long*           pMapY = NULL;
+    std::unique_ptr<Scanline[]> pSrcScan;
+    std::unique_ptr<Scanline[]> pDstScan;
+    std::unique_ptr<long[]>     pMapX;
+    std::unique_ptr<long[]>     pMapY;
 
     try
     {
-        pSrcScan = new Scanline[rSrcBuffer.mnHeight];
-        pDstScan = new Scanline[pDstBuffer->mnHeight];
-        pMapX = new long[pDstBuffer->mnWidth];
-        pMapY = new long[pDstBuffer->mnHeight];
+        pSrcScan.reset(new Scanline[rSrcBuffer.mnHeight]);
+        pDstScan.reset(new Scanline[pDstBuffer->mnHeight]);
+        pMapX.reset(new long[pDstBuffer->mnWidth]);
+        pMapY.reset(new long[pDstBuffer->mnHeight]);
     }
     catch( const std::bad_alloc& )
     {
         // memory exception, clean up
         // remark: the buffer ptr causing the exception
         // is still NULL here
-        delete[] pSrcScan;
-        delete[] pDstScan;
-        delete[] pMapX;
-        delete[] pMapY;
         delete pDstBuffer;
         return NULL;
     }
@@ -461,29 +457,23 @@ BitmapBuffer* StretchAndConvert(
     if( rSrcBuffer.mnBitCount <= 8 && pDstBuffer->mnBitCount <= 8 )
     {
         ImplPALToPAL( rSrcBuffer, *pDstBuffer, pFncGetPixel, pFncSetPixel,
-                      pSrcScan, pDstScan, pMapX, pMapY );
+                      pSrcScan.get(), pDstScan.get(), pMapX.get(), pMapY.get() );
     }
     else if( rSrcBuffer.mnBitCount <= 8 && pDstBuffer->mnBitCount > 8 )
     {
         ImplPALToTC( rSrcBuffer, *pDstBuffer, pFncGetPixel, pFncSetPixel,
-                     pSrcScan, pDstScan, pMapX, pMapY );
+                     pSrcScan.get(), pDstScan.get(), pMapX.get(), pMapY.get() );
     }
     else if( rSrcBuffer.mnBitCount > 8 && pDstBuffer->mnBitCount > 8 )
     {
         ImplTCToTC( rSrcBuffer, *pDstBuffer, pFncGetPixel, pFncSetPixel,
-                    pSrcScan, pDstScan, pMapX, pMapY );
+                    pSrcScan.get(), pDstScan.get(), pMapX.get(), pMapY.get() );
     }
     else
     {
         ImplTCToPAL( rSrcBuffer, *pDstBuffer, pFncGetPixel, pFncSetPixel,
-                     pSrcScan, pDstScan, pMapX, pMapY );
+                     pSrcScan.get(), pDstScan.get(), pMapX.get(), pMapY.get() );
     }
-
-    // cleanup
-    delete[] pSrcScan;
-    delete[] pDstScan;
-    delete[] pMapX;
-    delete[] pMapY;
 
     return pDstBuffer;
 }

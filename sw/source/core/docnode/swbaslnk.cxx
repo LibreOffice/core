@@ -51,6 +51,7 @@
 #include <cntfrm.hxx>
 #include <htmltbl.hxx>
 #include <calbck.hxx>
+#include <memory>
 
 using namespace com::sun::star;
 
@@ -292,9 +293,9 @@ static bool SetGrfFlySize( const Size& rGrfSz, SwGrfNode* pGrfNd, const Size& rO
 {
     bool bRet = false;
     SwViewShell *pSh = pGrfNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
-    CurrShell *pCurr = 0;
+    std::unique_ptr<CurrShell> pCurr;
     if ( pGrfNd->GetDoc()->GetEditShell() )
-        pCurr = new CurrShell( pSh );
+        pCurr.reset(new CurrShell( pSh ));
 
     Size aSz = rOrigGrfSize;
     if ( !(aSz.Width() && aSz.Height()) &&
@@ -365,8 +366,6 @@ static bool SetGrfFlySize( const Size& rGrfSz, SwGrfNode* pGrfNd, const Size& rO
         // it requires the Frame Format
         pGrfNd->SetTwipSize( rGrfSz );
     }
-
-    delete pCurr;
 
     return bRet;
 }

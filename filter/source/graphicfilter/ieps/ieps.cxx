@@ -581,19 +581,19 @@ ipsGraphicImport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* )
         nPSStreamPos = nOrigPos;            // no preview available _>so we must get the size manually
         nPSSize = rStream.Seek( STREAM_SEEK_TO_END ) - nOrigPos;
     }
-    sal_uInt8* pHeader = new sal_uInt8[ 22 ];
+    std::unique_ptr<sal_uInt8[]> pHeader( new sal_uInt8[ 22 ] );
     rStream.Seek( nPSStreamPos );
-    rStream.Read( pHeader, 22 );    // check PostScript header
-    if ( ImplSearchEntry( pHeader, reinterpret_cast<sal_uInt8 const *>("%!PS-Adobe"), 10, 10 ) &&
+    rStream.Read( pHeader.get(), 22 );    // check PostScript header
+    if ( ImplSearchEntry( pHeader.get(), reinterpret_cast<sal_uInt8 const *>("%!PS-Adobe"), 10, 10 ) &&
         ImplSearchEntry( &pHeader[ 15 ], reinterpret_cast<sal_uInt8 const *>("EPS"), 3, 3 ) )
     {
         bool bGraphicLinkCreated = false;
 
         rStream.Seek( nPSStreamPos );
-        sal_uInt8* pBuf = new sal_uInt8[ nPSSize ];
+        std::unique_ptr<sal_uInt8[]> pBuf( new sal_uInt8[ nPSSize ] );
 
         sal_uInt32 nBufStartPos = rStream.Tell();
-        sal_uInt32 nBytesRead = rStream.Read( pBuf, nPSSize );
+        sal_uInt32 nBytesRead = rStream.Read( pBuf.get(), nPSSize );
         if ( nBytesRead == nPSSize )
         {
             sal_uInt32 nSecurityCount = 32;
@@ -601,7 +601,7 @@ ipsGraphicImport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* )
             // the eps prolog
             if (!bHasPreview && nBytesRead >= nSecurityCount)
             {
-                sal_uInt8* pDest = ImplSearchEntry( pBuf, reinterpret_cast<sal_uInt8 const *>("%%BeginPreview:"), nBytesRead - nSecurityCount, 15 );
+                sal_uInt8* pDest = ImplSearchEntry( pBuf.get(), reinterpret_cast<sal_uInt8 const *>("%%BeginPreview:"), nBytesRead - nSecurityCount, 15 );
                 if ( pDest  )
                 {
                     pDest += 15;
@@ -612,7 +612,7 @@ ipsGraphicImport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* )
                     pDest = ImplSearchEntry( pDest, reinterpret_cast<sal_uInt8 const *>("%"), 16, 1 );       // go to the first Scanline
                     if ( nSecurityCount && pDest && nWidth && nHeight && ( ( nBitDepth == 1 ) || ( nBitDepth == 8 ) ) && nScanLines )
                     {
-                        rStream.Seek( nBufStartPos + ( pDest - pBuf ) );
+                        rStream.Seek( nBufStartPos + ( pDest - pBuf.get() ) );
 
                         Bitmap aBitmap( Size( nWidth, nHeight ), 1 );
                         BitmapWriteAccess* pAcc = aBitmap.AcquireWriteAccess();
@@ -700,7 +700,7 @@ ipsGraphicImport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* )
                 }
             }
 
-            sal_uInt8* pDest = ImplSearchEntry( pBuf, reinterpret_cast<sal_uInt8 const *>("%%BoundingBox:"), nBytesRead, 14 );
+            sal_uInt8* pDest = ImplSearchEntry( pBuf.get(), reinterpret_cast<sal_uInt8 const *>("%%BoundingBox:"), nBytesRead, 14 );
             if ( pDest )
             {
                 nSecurityCount = 100;
@@ -713,8 +713,6 @@ ipsGraphicImport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* )
                 }
                 if ( nSecurityCount)
                 {
-                    bGraphicLinkCreated = true;
-                    GfxLink     aGfxLink( pBuf, nPSSize, GFX_LINK_TYPE_EPS_BUFFER, true ) ;
                     GDIMetaFile aMtf;
 
                     long nWidth =  nNumb[2] - nNumb[0] + 1;
@@ -723,18 +721,21 @@ ipsGraphicImport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* )
                     // if there is no preview -> try with gs to make one
                     if (!bHasPreview && !utl::ConfigManager::IsAvoidConfig())
                     {
-                        bHasPreview = RenderAsEMF(pBuf, nBytesRead, aGraphic);
+                        bHasPreview = RenderAsEMF(pBuf.get(), nBytesRead, aGraphic);
                         if (!bHasPreview)
-                            bHasPreview = RenderAsBMP(pBuf, nBytesRead, aGraphic);
+                            bHasPreview = RenderAsBMP(pBuf.get(), nBytesRead, aGraphic);
                     }
 
                     // if there is no preview -> make a red box
                     if( !bHasPreview )
                     {
-                        MakePreview(pBuf, nBytesRead, nWidth, nHeight,
+                        MakePreview(pBuf.get(), nBytesRead, nWidth, nHeight,
                             aGraphic);
                     }
 
+                    bGraphicLinkCreated = true;
+                    GfxLink     aGfxLink( pBuf.get(), nPSSize, GFX_LINK_TYPE_EPS_BUFFER, true ) ;
+                    pBuf.release();
                     aMtf.AddAction( static_cast<MetaAction*>( new MetaEPSAction( Point(), Size( nWidth, nHeight ),
                                                                       aGfxLink, aGraphic.GetGDIMetaFile() ) ) );
                     CreateMtfReplacementAction( aMtf, rStream, nOrigPos, nPSSize, nPosWMF, nSizeWMF, nPosTIFF, nSizeTIFF );
@@ -746,11 +747,7 @@ ipsGraphicImport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* )
                 }
             }
         }
-
-        if ( !bGraphicLinkCreated )
-            delete[] pBuf;
     }
-    delete[] pHeader;
     rStream.SetEndian(nOldFormat);
     rStream.Seek( nOrigPos );
     return bRetValue;

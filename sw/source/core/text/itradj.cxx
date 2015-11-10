@@ -30,6 +30,7 @@
 #include "pordrop.hxx"
 #include "pormulti.hxx"
 #include <portab.hxx>
+#include <memory>
 
 #define MIN_TAB_WIDTH 60
 
@@ -128,9 +129,9 @@ static bool lcl_CheckKashidaPositions( SwScriptInfo& rSI, SwTextSizeInfo& rInf, 
 
     // kashida positions found in SwScriptInfo are not necessarily valid in every font
     // if two characters are replaced by a ligature glyph, there will be no place for a kashida
-    sal_Int32* pKashidaPos = new sal_Int32[ rKashidas ];
-    sal_Int32* pKashidaPosDropped = new sal_Int32[ rKashidas ];
-    rSI.GetKashidaPositions ( nIdx, rItr.GetLength(), pKashidaPos );
+    std::unique_ptr<sal_Int32[]> pKashidaPos( new sal_Int32[ rKashidas ] );
+    std::unique_ptr<sal_Int32[]> pKashidaPosDropped( new sal_Int32[ rKashidas ] );
+    rSI.GetKashidaPositions ( nIdx, rItr.GetLength(), pKashidaPos.get() );
     sal_Int32 nKashidaIdx = 0;
     while ( rKashidas && nIdx < nEnd )
     {
@@ -151,8 +152,6 @@ static bool lcl_CheckKashidaPositions( SwScriptInfo& rSI, SwTextSizeInfo& rInf, 
             // Kashida glyph looks suspicious, skip Kashida justification
             if ( rInf.GetOut()->GetMinKashida() <= 0 )
             {
-                delete[] pKashidaPos;
-                delete[] pKashidaPosDropped;
                 return false;
             }
 
@@ -167,12 +166,12 @@ static bool lcl_CheckKashidaPositions( SwScriptInfo& rSI, SwTextSizeInfo& rInf, 
                 ComplexTextLayoutMode nOldLayout = rInf.GetOut()->GetLayoutMode();
                 rInf.GetOut()->SetLayoutMode ( nOldLayout | TEXT_LAYOUT_BIDI_RTL );
                 nKashidasDropped = rInf.GetOut()->ValidateKashidas ( rInf.GetText(), nIdx, nNext - nIdx,
-                                               nKashidasInAttr, pKashidaPos + nKashidaIdx,
-                                               pKashidaPosDropped );
+                                               nKashidasInAttr, pKashidaPos.get() + nKashidaIdx,
+                                               pKashidaPosDropped.get() );
                 rInf.GetOut()->SetLayoutMode ( nOldLayout );
                 if ( nKashidasDropped )
                 {
-                    rSI.MarkKashidasInvalid(nKashidasDropped, pKashidaPosDropped);
+                    rSI.MarkKashidasInvalid(nKashidasDropped, pKashidaPosDropped.get());
                     rKashidas -= nKashidasDropped;
                     nGluePortion -= nKashidasDropped;
                 }
@@ -181,8 +180,6 @@ static bool lcl_CheckKashidaPositions( SwScriptInfo& rSI, SwTextSizeInfo& rInf, 
         }
         nIdx = nNext;
     }
-    delete[] pKashidaPos;
-    delete[] pKashidaPosDropped;
 
     // return false if all kashidas have been eliminated
     return (rKashidas > 0);

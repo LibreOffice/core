@@ -48,6 +48,7 @@
 #include <frmtool.hxx>
 #include <calbck.hxx>
 #include <deque>
+#include <memory>
 
 // see also swtable.cxx
 #define COLFUZZY 20L
@@ -2036,14 +2037,13 @@ static void lcl_InsertRow( SwTableLine &rLine, SwLayoutFrm *pUpper, SwFrm *pSibl
 
 static void _FndBoxCopyCol( SwTableBox* pBox, _FndPara* pFndPara )
 {
-    _FndBox* pFndBox = new _FndBox( pBox, pFndPara->pFndLine );
+    std::unique_ptr<_FndBox> pFndBox(new _FndBox( pBox, pFndPara->pFndLine ));
     if( pBox->GetTabLines().size() )
     {
-        _FndPara aPara( *pFndPara, pFndBox );
+        _FndPara aPara( *pFndPara, pFndBox.get() );
         ForEach_FndLineCopyCol( pFndBox->GetBox()->GetTabLines(), &aPara );
         if( pFndBox->GetLines().empty() )
         {
-            delete pFndBox;
             return;
         }
     }
@@ -2051,11 +2051,10 @@ static void _FndBoxCopyCol( SwTableBox* pBox, _FndPara* pFndPara )
     {
         if( pFndPara->rBoxes.find( pBox ) == pFndPara->rBoxes.end())
         {
-            delete pFndBox;
             return;
         }
     }
-    pFndPara->pFndLine->GetBoxes().push_back(std::unique_ptr<_FndBox>(pFndBox));
+    pFndPara->pFndLine->GetBoxes().push_back( std::move(pFndBox) );
 }
 
 static void _FndLineCopyCol( SwTableLine* pLine, _FndPara* pFndPara )

@@ -45,6 +45,7 @@
 #include "dociter.hxx"
 #include "stringutil.hxx"
 #include "tokenarray.hxx"
+#include <memory>
 
 using namespace com::sun::star;
 
@@ -148,12 +149,12 @@ static bool lcl_CopyData( ScDocument* pSrcDoc, const ScRange& rSrcRange,
                 rSrcRange.aEnd.Row() - rSrcRange.aStart.Row() + rDestPos.Row(),
                 nDestTab ) );
 
-    ScDocument* pClipDoc = new ScDocument( SCDOCMODE_CLIP );
+    std::unique_ptr<ScDocument> pClipDoc(new ScDocument( SCDOCMODE_CLIP ));
     ScMarkData aSourceMark;
     aSourceMark.SelectOneTable( nSrcTab );      // for CopyToClip
     aSourceMark.SetMarkArea( rSrcRange );
     ScClipParam aClipParam(rSrcRange, false);
-    pSrcDoc->CopyToClip(aClipParam, pClipDoc, &aSourceMark);
+    pSrcDoc->CopyToClip(aClipParam, pClipDoc.get(), &aSourceMark);
 
     if ( pClipDoc->HasAttrib( 0,0,nSrcTab, MAXCOL,MAXROW,nSrcTab,
                                 HASATTR_MERGED | HASATTR_OVERLAPPED ) )
@@ -167,9 +168,8 @@ static bool lcl_CopyData( ScDocument* pSrcDoc, const ScRange& rSrcRange,
     ScMarkData aDestMark;
     aDestMark.SelectOneTable( nDestTab );
     aDestMark.SetMarkArea( aNewRange );
-    pDestDoc->CopyFromClip( aNewRange, aDestMark, InsertDeleteFlags::ALL & ~InsertDeleteFlags::FORMULA, NULL, pClipDoc, false );
+    pDestDoc->CopyFromClip( aNewRange, aDestMark, InsertDeleteFlags::ALL & ~InsertDeleteFlags::FORMULA, NULL, pClipDoc.get(), false );
 
-    delete pClipDoc;
     return true;
 }
 

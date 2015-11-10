@@ -51,6 +51,7 @@
 
 #include "currentcontextchecker.hxx"
 #include "multi.hxx"
+#include <memory>
 
 using namespace osl;
 using namespace cppu;
@@ -1043,8 +1044,8 @@ uno_Sequence* cloneSequence(const uno_Sequence* val, const Type& type)
         reinterpret_cast<typelib_IndirectTypeDescription*>(pTdRaw);
 
     typelib_TypeDescription* pTdElem = pIndirectTd->pType->pType;
-    sal_Int8* buf = new sal_Int8[pTdElem->nSize * val->nElements];
-    sal_Int8* pBufCur = buf;
+    std::unique_ptr<sal_Int8[]> buf(new sal_Int8[pTdElem->nSize * val->nElements]);
+    sal_Int8* pBufCur = buf.get();
 
     uno_Sequence* retSeq = NULL;
     switch (pTdElem->eTypeClass)
@@ -1070,7 +1071,6 @@ uno_Sequence* cloneSequence(const uno_Sequence* val, const Type& type)
             val->nElements, reinterpret_cast< uno_AcquireFunc >(cpp_acquire));
         break;
     }
-    delete[] buf;
     return retSeq;
 }
 

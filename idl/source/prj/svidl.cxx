@@ -25,6 +25,7 @@
 #include <command.hxx>
 #include <rtl/ustring.hxx>
 #include <osl/file.hxx>
+#include <memory>
 
 #define BR 0x8000
 bool FileMove_Impl( const OUString & rFile1, const OUString & rFile2, bool bImmerVerschieben )
@@ -38,13 +39,13 @@ bool FileMove_Impl( const OUString & rFile1, const OUString & rFile2, bool bImme
         SvFileStream aOutStm2( rFile2, STREAM_STD_READ );
         if( aOutStm1.GetError() == SVSTREAM_OK )
         {
-            sal_uInt8 * pBuf1 = new sal_uInt8[ BR ];
-            sal_uInt8 * pBuf2 = new sal_uInt8[ BR ];
-            nC1 = aOutStm1.Read( pBuf1, BR );
-            nC2 = aOutStm2.Read( pBuf2, BR );
+            std::unique_ptr<sal_uInt8[]> pBuf1(new sal_uInt8[ BR ]);
+            std::unique_ptr<sal_uInt8[]> pBuf2(new sal_uInt8[ BR ]);
+            nC1 = aOutStm1.Read( pBuf1.get(), BR );
+            nC2 = aOutStm2.Read( pBuf2.get(), BR );
             while( nC1 == nC2 )
             {
-                if( memcmp( pBuf1, pBuf2, nC1 ) )
+                if( memcmp( pBuf1.get(), pBuf2.get(), nC1 ) )
                 {
                     nC1++;
                     break;
@@ -53,12 +54,10 @@ bool FileMove_Impl( const OUString & rFile1, const OUString & rFile2, bool bImme
                 {
                     if( 0x8000 != nC1 )
                         break;
-                    nC1 = aOutStm1.Read( pBuf1, BR );
-                    nC2 = aOutStm2.Read( pBuf2, BR );
+                    nC1 = aOutStm1.Read( pBuf1.get(), BR );
+                    nC2 = aOutStm2.Read( pBuf2.get(), BR );
                 }
             }
-            delete[] pBuf1;
-            delete[] pBuf2;
         }
     }
     OUString fileURL2;
@@ -114,7 +113,7 @@ int main ( int argc, char ** argv)
         printf( "StarView Interface Definition Language (IDL) Compiler 3.0\n" );
 
     Init();
-    SvIdlWorkingBase * pDataBase = new SvIdlWorkingBase(aCommand);
+    std::unique_ptr<SvIdlWorkingBase> pDataBase( new SvIdlWorkingBase(aCommand));
 
     int nExit = 0;
     if( !aCommand.aExportFile.isEmpty() )
@@ -126,7 +125,7 @@ int main ( int argc, char ** argv)
         pDataBase->SetExportFile( fileStatus.getFileName() );
     }
 
-    if( ReadIdl( pDataBase, aCommand ) )
+    if( ReadIdl( pDataBase.get(), aCommand ) )
     {
         if( nExit == 0 && !aCommand.aSlotMapFile.isEmpty() )
         {
@@ -210,7 +209,6 @@ int main ( int argc, char ** argv)
         }
     }
 
-    delete pDataBase;
     if( nExit != 0 )
         fprintf( stderr, "svidl terminated with errors\n" );
     return nExit;

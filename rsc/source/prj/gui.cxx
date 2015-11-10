@@ -20,6 +20,7 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <memory>
 
 #include <gui.hxx>
 #include <rscrsc.hxx>
@@ -48,26 +49,21 @@ int rsc2_main( int argc, char **argv )
     ERRTYPE     aError;
 
     InitRscCompiler();
-    RscError*   pErrHdl    = new RscError( lcl_determineVerbosity( argc, argv ) );
-    RscCmdLine* pCmdLine   = new RscCmdLine( argc, argv, pErrHdl );
-    RscTypCont* pTypCont   = new RscTypCont( pErrHdl,
+    std::unique_ptr<RscError>   pErrHdl(new RscError( lcl_determineVerbosity( argc, argv ) ));
+    std::unique_ptr<RscCmdLine> pCmdLine(new RscCmdLine( argc, argv, pErrHdl.get() ));
+    std::unique_ptr<RscTypCont> pTypCont(new RscTypCont( pErrHdl.get(),
                                              pCmdLine->nByteOrder,
                                              pCmdLine->aPath,
-                                             pCmdLine->nCommands );
+                                             pCmdLine->nCommands ));
 
     if( pErrHdl->nErrors )
         aError = ERR_ERROR;
     else{
-        RscCompiler* pCompiler = new RscCompiler( pCmdLine, pTypCont );
+        std::unique_ptr<RscCompiler> pCompiler(new RscCompiler( pCmdLine.get(), pTypCont.get() ));
 
         aError = pCompiler->Start();
-
-        delete pCompiler;
     }
 
-    delete pTypCont;
-    delete pCmdLine;
-    delete pErrHdl;
     delete pHS; // wird durch InitRscCompiler erzeugt
 
     if( aError.IsOk() )

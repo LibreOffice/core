@@ -54,6 +54,7 @@
 #include <oox/export/utils.hxx>
 #include <oox/ole/olehelper.hxx>
 #include <rtl/math.hxx>
+#include <memory>
 
 #include <sfx2/objsh.hxx>
     // complete SfxObjectShell for SaveVBA under -fsanitize=function
@@ -1447,10 +1448,9 @@ extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL ExportPPT( const std::vector< 
                     SvMemoryStream* pVBA,
                     sal_uInt32 nCnvrtFlags )
 {
-    PPTWriter* pPPTWriter = new PPTWriter( rSvStorage, rXModel, rXStatInd, pVBA, nCnvrtFlags );
+    std::unique_ptr<PPTWriter> pPPTWriter(new PPTWriter( rSvStorage, rXModel, rXStatInd, pVBA, nCnvrtFlags ));
     pPPTWriter->exportPPT(rMediaData);
     bool bStatus = pPPTWriter->IsValid();
-    delete pPPTWriter;
     return bStatus;
 }
 

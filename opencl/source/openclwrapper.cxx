@@ -221,18 +221,17 @@ bool generatBinFromKernelSource( cl_program program, const char * clFileName )
     /* copy over the generated binary. */
     if ( binarySize != 0 )
     {
-        char *binary = new char[binarySize];
+        std::unique_ptr<char[]> binary(new char[binarySize]);
         clStatus = clGetProgramInfo( program, CL_PROGRAM_BINARIES,
                                      sizeof(char *), &binary, NULL );
         CHECK_OPENCL(clStatus,"clGetProgramInfo");
 
         OString fileName = createFileName(pDevID, clFileName);
         if ( !writeBinaryToFile( fileName,
-                                 binary, binarySize ) )
+                                 binary.get(), binarySize ) )
             SAL_INFO("opencl.file", "Writing binary file '" << fileName << "': FAIL");
         else
             SAL_INFO("opencl.file", "Writing binary file '" << fileName << "': success");
-        delete[] binary;
     }
     return true;
 }

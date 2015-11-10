@@ -1944,14 +1944,14 @@ static void lcl_SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
                 throw lang::IllegalArgumentException();
             SfxItemSet& rStyleSet = rBase.GetItemSet();
 
-            SwFormatPageDesc* pNewDesc = 0;
+            std::unique_ptr<SwFormatPageDesc> pNewDesc;
             const SfxPoolItem* pItem;
             if(SfxItemState::SET == rStyleSet.GetItemState( RES_PAGEDESC, true, &pItem ) )
             {
-                pNewDesc = new SwFormatPageDesc(*static_cast<const SwFormatPageDesc*>(pItem));
+                pNewDesc.reset( new SwFormatPageDesc(*static_cast<const SwFormatPageDesc*>(pItem)) );
             }
-            if(!pNewDesc)
-                pNewDesc = new SwFormatPageDesc();
+            else
+                pNewDesc.reset( new SwFormatPageDesc );
             OUString uDescName;
             aValue >>= uDescName;
             OUString sDescName;
@@ -1981,7 +1981,6 @@ static void lcl_SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
                     rStyleSet.Put(*pNewDesc);
 
             }
-            delete pNewDesc;
             bDone = true;
             break;
         }
@@ -2126,12 +2125,12 @@ static void lcl_SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
                 if(aValue >>= sTmp)
                 {
                     SfxItemSet& rStyleSet = rBase.GetItemSet();
-                    SwFormatRuby* pRuby = 0;
+                    std::unique_ptr<SwFormatRuby> pRuby;
                     const SfxPoolItem* pItem;
                     if(SfxItemState::SET == rStyleSet.GetItemState( RES_TXTATR_CJK_RUBY, true, &pItem ) )
-                        pRuby = new SwFormatRuby(*static_cast<const SwFormatRuby*>(pItem));
-                    if(!pRuby)
-                        pRuby = new SwFormatRuby(OUString());
+                        pRuby.reset(new SwFormatRuby(*static_cast<const SwFormatRuby*>(pItem)));
+                    else
+                        pRuby.reset(new SwFormatRuby(OUString()));
                     OUString sStyle;
                     SwStyleNameMapper::FillUIName(sTmp, sStyle, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT, true );
                     pRuby->SetCharFormatName( sTmp );
@@ -2142,7 +2141,6 @@ static void lcl_SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
                         pRuby->SetCharFormatId(nId);
                     }
                     rStyleSet.Put(*pRuby);
-                    delete pRuby;
                 }
                 else
                     throw lang::IllegalArgumentException();
@@ -2157,12 +2155,12 @@ static void lcl_SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
                 {
                     SfxItemSet& rStyleSet = rBase.GetItemSet();
 
-                    SwFormatDrop* pDrop = 0;
+                    std::unique_ptr<SwFormatDrop> pDrop;
                     const SfxPoolItem* pItem;
                     if(SfxItemState::SET == rStyleSet.GetItemState( RES_PARATR_DROP, true, &pItem ) )
-                        pDrop = new SwFormatDrop(*static_cast<const SwFormatDrop*>(pItem));
-                    if(!pDrop)
-                        pDrop = new SwFormatDrop();
+                        pDrop.reset(new SwFormatDrop(*static_cast<const SwFormatDrop*>(pItem)));
+                    else
+                        pDrop.reset( new SwFormatDrop );
                     OUString uStyle;
                     aValue >>= uStyle;
                     OUString sStyle;
@@ -2174,7 +2172,6 @@ static void lcl_SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
                     else
                         throw lang::IllegalArgumentException();
                     rStyleSet.Put(*pDrop);
-                    delete pDrop;
                 }
                 else
                     throw lang::IllegalArgumentException();

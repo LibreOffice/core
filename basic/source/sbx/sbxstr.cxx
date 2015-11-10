@@ -25,6 +25,7 @@
 #include "sbxres.hxx"
 #include "runtime.hxx"
 #include <rtl/ustrbuf.hxx>
+#include <memory>
 
 // The conversion of an item onto String was handled via the Put-Methods
 // of the several data types to avoid duplicated code.
@@ -161,10 +162,13 @@ void ImpPutString( SbxValues* p, const OUString* n )
 {
     SbxValues aTmp;
     aTmp.eType = SbxSTRING;
-    OUString* pTmp = NULL;
+    std::unique_ptr<OUString> pTmp;
     // as a precaution, if a NULL-Ptr appears
     if( !n )
-        n = pTmp = new OUString;
+    {
+        pTmp.reset(new OUString);
+        n = pTmp.get();
+    }
     aTmp.pOUString = const_cast<OUString*>(n);
     switch( +p->eType )
     {
@@ -252,7 +256,6 @@ void ImpPutString( SbxValues* p, const OUString* n )
         default:
             SbxBase::SetError( ERRCODE_SBX_CONVERSION );
     }
-    delete pTmp;
 }
 
 

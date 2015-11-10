@@ -369,14 +369,12 @@ static OUString lcl_MakeOldPageStyleFormatName( sal_uInt16 i )
 
 template < typename T > sal_uLong insert_new( ScCollection* pCollection, SvStream& rStream )
 {
-    T* pData = new (::std::nothrow) T( rStream);
+    std::unique_ptr<T> pData(new (::std::nothrow) T( rStream));
     sal_uLong nError = rStream.GetError();
     if (pData)
     {
-        if (nError)
-            delete pData;
-        else
-            pCollection->Insert( pData);
+        if (!nError)
+            pCollection->Insert( pData.release() );
     }
     else
         nError = errOutOfMemory;

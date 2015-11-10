@@ -44,6 +44,7 @@
 #include <config_vclplug.h>
 
 #include <npwrap.hxx>
+#include <memory>
 
 extern PluginConnector* pConnector;
 extern XtAppContext app_context;
@@ -270,7 +271,7 @@ static NPError l_NPN_RequestRead( NPStream* stream, NPByteRange* rangeList )
         pRange = pRange->next;
     }
 
-    sal_uInt32* pArray = new sal_uInt32[ 2 * nRanges ];
+    std::unique_ptr<sal_uInt32[]> pArray(new sal_uInt32[ 2 * nRanges ]);
     pRange = rangeList;
     sal_uInt32 n = 0;
     while( pRange )
@@ -285,17 +286,15 @@ static NPError l_NPN_RequestRead( NPStream* stream, NPByteRange* rangeList )
         Transact( eNPN_RequestRead,
                   &nFileID, sizeof( nFileID ),
                   &nRanges, sizeof( nRanges ),
-                  pArray, sizeof( sal_uInt32 ) * 2 * nRanges,
+                  pArray.get(), sizeof( sal_uInt32 ) * 2 * nRanges,
                   NULL );
 
     if( ! pMes )
     {
-        delete[] pArray;
         return NPERR_GENERIC_ERROR;
     }
 
     NPError aRet = PluginConnector::GetNPError( pMes );
-    delete [] pArray;
     delete pMes;
     return aRet;
 }

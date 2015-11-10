@@ -5989,7 +5989,7 @@ void testDataBarLengthImpl(ScDocument* pDoc, ScDataBarLengthData* pData, const S
         double nMaxVal, ScColorScaleEntryType eMaxType,
         double nZeroPos, databar::ScAxisPosition eAxisPos)
 {
-    ScConditionalFormat* pFormat = new ScConditionalFormat(1, pDoc);
+    std::unique_ptr<ScConditionalFormat> pFormat(new ScConditionalFormat(1, pDoc));
     ScRangeList aRangeList(rRange);
     pFormat->SetRange(aRangeList);
 
@@ -6021,7 +6021,6 @@ void testDataBarLengthImpl(ScDocument* pDoc, ScDataBarLengthData* pData, const S
         ASSERT_DOUBLES_EQUAL(pData[i].nLength, xInfo->mnLength);
         ASSERT_DOUBLES_EQUAL(nZeroPos, xInfo->mnZero);
     }
-    delete pFormat;
 }
 
 }

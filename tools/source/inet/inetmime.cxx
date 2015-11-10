@@ -19,6 +19,7 @@
 
 #include <cstddef>
 #include <limits>
+#include <memory>
 
 #include <osl/diagnose.h>
 #include <rtl/alloc.h>
@@ -537,11 +538,10 @@ void appendISO88591(OUString & rText, sal_Char const * pBegin,
                     sal_Char const * pEnd)
 {
     sal_Int32 nLength = pEnd - pBegin;
-    sal_Unicode * pBuffer = new sal_Unicode[nLength];
-    for (sal_Unicode * p = pBuffer; pBegin != pEnd;)
+    std::unique_ptr<sal_Unicode[]> pBuffer(new sal_Unicode[nLength]);
+    for (sal_Unicode * p = pBuffer.get(); pBegin != pEnd;)
         *p++ = static_cast<unsigned char>(*pBegin++);
-    rText += OUString(pBuffer, nLength);
-    delete[] pBuffer;
+    rText += OUString(pBuffer.get(), nLength);
 }
 
 //  INetMIMECharsetList_Impl

@@ -66,6 +66,7 @@
 #include <IDocumentLayoutAccess.hxx>
 #include <calbck.hxx>
 #include "ndole.hxx"
+#include <memory>
 
 using namespace ::com::sun::star::i18n;
 
@@ -149,10 +150,10 @@ bool Put( std::shared_ptr<const SfxItemSet>& rpAttrSet, const SwContentNode& rNo
     SwAttrSet aNewSet( static_cast<const SwAttrSet&>(*rpAttrSet) );
 
     // #i76273# Robust
-    SfxItemSet* pStyleNames = 0;
+    std::unique_ptr<SfxItemSet> pStyleNames;
     if ( SfxItemState::SET == rSet.GetItemState( RES_FRMATR_STYLE_NAME, false ) )
     {
-        pStyleNames = new SfxItemSet( *aNewSet.GetPool(), RES_FRMATR_STYLE_NAME, RES_FRMATR_CONDITIONAL_STYLE_NAME );
+        pStyleNames.reset(new SfxItemSet( *aNewSet.GetPool(), RES_FRMATR_STYLE_NAME, RES_FRMATR_CONDITIONAL_STYLE_NAME ));
         pStyleNames->Put( aNewSet );
     }
 
@@ -162,7 +163,6 @@ bool Put( std::shared_ptr<const SfxItemSet>& rpAttrSet, const SwContentNode& rNo
     if ( pStyleNames )
     {
         aNewSet.Put( *pStyleNames );
-        delete pStyleNames;
     }
 
     if ( bRet )
@@ -197,10 +197,10 @@ bool Put_BC( std::shared_ptr<const SfxItemSet>& rpAttrSet,
     SwAttrSet aNewSet( static_cast<const SwAttrSet&>(*rpAttrSet) );
 
     // #i76273# Robust
-    SfxItemSet* pStyleNames = 0;
+    std::unique_ptr<SfxItemSet> pStyleNames;
     if ( SfxItemState::SET == rSet.GetItemState( RES_FRMATR_STYLE_NAME, false ) )
     {
-        pStyleNames = new SfxItemSet( *aNewSet.GetPool(), RES_FRMATR_STYLE_NAME, RES_FRMATR_CONDITIONAL_STYLE_NAME );
+        pStyleNames.reset(new SfxItemSet( *aNewSet.GetPool(), RES_FRMATR_STYLE_NAME, RES_FRMATR_CONDITIONAL_STYLE_NAME ));
         pStyleNames->Put( aNewSet );
     }
 
@@ -215,7 +215,6 @@ bool Put_BC( std::shared_ptr<const SfxItemSet>& rpAttrSet,
     if ( pStyleNames )
     {
         aNewSet.Put( *pStyleNames );
-        delete pStyleNames;
     }
 
     if ( bRet )

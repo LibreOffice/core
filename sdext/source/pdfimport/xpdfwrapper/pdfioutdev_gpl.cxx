@@ -26,6 +26,7 @@
 #include <math.h>
 
 #include <boost/shared_array.hpp>
+#include <memory>
 
 #if defined _MSC_VER
 #pragma warning(push, 1)
@@ -309,11 +310,11 @@ void writePpm_( OutputBuffer&     o_rOutputBuf,
     // initialize stream
     Guchar *p;
     GfxRGB rgb;
-    ImageStream* imgStr =
+    std::unique_ptr<ImageStream> imgStr(
         new ImageStream(str,
                         width,
                         colorMap->getNumPixelComps(),
-                        colorMap->getBits());
+                        colorMap->getBits()));
     imgStr->reset();
 
     for( int y=0; y<height; ++y)
@@ -329,9 +330,6 @@ void writePpm_( OutputBuffer&     o_rOutputBuf,
             p +=colorMap->getNumPixelComps();
         }
     }
-
-    delete imgStr;
-
 }
 
 // call this only for 1 bit image streams !

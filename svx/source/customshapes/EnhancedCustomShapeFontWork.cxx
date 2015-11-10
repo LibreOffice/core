@@ -46,6 +46,7 @@
 #include <vector>
 #include <numeric>
 #include <algorithm>
+#include <memory>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/i18n/BreakIterator.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
@@ -268,7 +269,7 @@ void GetTextAreaOutline( const FWData& rFWData, const SdrObject* pCustomShape, F
 
             const SvxCharScaleWidthItem& rCharScaleWidthItem = static_cast<const SvxCharScaleWidthItem&>(pCustomShape->GetMergedItem( EE_CHAR_FONTWIDTH ));
             sal_uInt16 nCharScaleWidth = rCharScaleWidthItem.GetValue();
-            long* pDXArry = NULL;
+            std::unique_ptr<long[]> pDXArry;
             sal_Int32 nWidth = 0;
 
             // VERTICAL
@@ -282,7 +283,7 @@ void GetTextAreaOutline( const FWData& rFWData, const SdrObject* pCustomShape, F
                 {
                     FWCharacterData aCharacterData;
                     OUString aCharText( (sal_Unicode)rText[ i ] );
-                    if ( pVirDev->GetTextOutlines( aCharacterData.vOutlines, aCharText, 0, 0, -1, true, nWidth, pDXArry ) )
+                    if ( pVirDev->GetTextOutlines( aCharacterData.vOutlines, aCharText, 0, 0, -1, true, nWidth, pDXArry.get() ) )
                     {
                         sal_Int32 nTextWidth = pVirDev->GetTextWidth( aCharText);
                         std::vector< tools::PolyPolygon >::iterator aOutlineIter = aCharacterData.vOutlines.begin();
@@ -333,19 +334,18 @@ void GetTextAreaOutline( const FWData& rFWData, const SdrObject* pCustomShape, F
             {
                 if ( ( nCharScaleWidth != 100 ) && nCharScaleWidth )
                 {   // applying character spacing
-                    pDXArry = new long[ rText.getLength() ];
-                    pVirDev->GetTextArray( rText, pDXArry);
+                    pDXArry.reset(new long[ rText.getLength() ]);
+                    pVirDev->GetTextArray( rText, pDXArry.get());
                     FontMetric aFontMetric( pVirDev->GetFontMetric() );
                     aFont.SetWidth( (sal_Int32)( (double)aFontMetric.GetWidth() * ( (double)100 / (double)nCharScaleWidth ) ) );
                     pVirDev->SetFont( aFont );
                 }
                 FWCharacterData aCharacterData;
-                if ( pVirDev->GetTextOutlines( aCharacterData.vOutlines, rText, 0, 0, -1, true, nWidth, pDXArry ) )
+                if ( pVirDev->GetTextOutlines( aCharacterData.vOutlines, rText, 0, 0, -1, true, nWidth, pDXArry.get() ) )
                 {
                     aParagraphIter->vCharacters.push_back( aCharacterData );
                 }
             }
-            delete[] pDXArry;
 
             // vertical alignment
             std::vector< FWCharacterData >::iterator aCharacterIter( aParagraphIter->vCharacters.begin() );

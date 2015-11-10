@@ -236,8 +236,8 @@ ds_status evaluateScoreForDevice(ds_device* device, void* evalData)
         clStatus = clGetDeviceInfo(device->oclDeviceID, CL_DEVICE_EXTENSIONS, 0, NULL, &aDevExtInfoSize);
         DS_CHECK_STATUS(clStatus, "evaluateScoreForDevice::clGetDeviceInfo");
 
-        char* aExtInfo = new char[aDevExtInfoSize];
-        clStatus = clGetDeviceInfo(device->oclDeviceID, CL_DEVICE_EXTENSIONS, sizeof(char) * aDevExtInfoSize, aExtInfo, NULL);
+        std::unique_ptr<char[]> aExtInfo(new char[aDevExtInfoSize]);
+        clStatus = clGetDeviceInfo(device->oclDeviceID, CL_DEVICE_EXTENSIONS, sizeof(char) * aDevExtInfoSize, aExtInfo.get(), NULL);
         DS_CHECK_STATUS(clStatus, "evaluateScoreForDevice::clGetDeviceInfo");
         bool bKhrFp64Flag = false;
         bool bAmdFp64Flag = false;
@@ -247,7 +247,7 @@ ds_status evaluateScoreForDevice(ds_device* device, void* evalData)
         tmpOStrStr << std::dec << INPUTSIZE;
         tmpStr.append(tmpOStrStr.str());
 
-        if ((std::string(aExtInfo)).find("cl_khr_fp64") != std::string::npos)
+        if ((std::string(aExtInfo.get())).find("cl_khr_fp64") != std::string::npos)
         {
             bKhrFp64Flag = true;
             //buildOption = "-D KHR_DP_EXTENSION -Dfp_t=double -Dfp_t4=double4 -Dfp_t16=double16";
@@ -255,7 +255,7 @@ ds_status evaluateScoreForDevice(ds_device* device, void* evalData)
             buildOption = tmpStr.c_str();
             SAL_INFO("opencl.device", "... has cl_khr_fp64");
         }
-        else if ((std::string(aExtInfo)).find("cl_amd_fp64") != std::string::npos)
+        else if ((std::string(aExtInfo.get())).find("cl_amd_fp64") != std::string::npos)
         {
             bAmdFp64Flag = true;
             //buildOption = "-D AMD_DP_EXTENSION -Dfp_t=double -Dfp_t4=double4 -Dfp_t16=double16";
@@ -263,7 +263,6 @@ ds_status evaluateScoreForDevice(ds_device* device, void* evalData)
             buildOption = tmpStr.c_str();
             SAL_INFO("opencl.device", "... has cl_amd_fp64");
         }
-        delete[] aExtInfo;
 
         if (!bKhrFp64Flag && !bAmdFp64Flag)
         {

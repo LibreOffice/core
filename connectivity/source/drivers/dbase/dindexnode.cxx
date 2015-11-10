@@ -895,11 +895,10 @@ SvStream& connectivity::dbase::WriteONDXPage(SvStream &rStream, const ONDXPage& 
         sal_Size nRemainSize = nBufferSize - nTell;
         if ( nRemainSize <= nBufferSize )
         {
-            char* pEmptyData = new char[nRemainSize];
-            memset(pEmptyData,0x00,nRemainSize);
-            rStream.Write(pEmptyData, nRemainSize);
+            std::unique_ptr<char[]> pEmptyData( new char[nRemainSize] );
+            memset(pEmptyData.get(), 0x00, nRemainSize);
+            rStream.Write(pEmptyData.get(), nRemainSize);
             rStream.Seek(nTell);
-            delete [] pEmptyData;
         }
     }
     return rStream;

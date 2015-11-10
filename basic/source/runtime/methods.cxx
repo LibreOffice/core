@@ -3718,10 +3718,10 @@ RTLFUNC(Shell)
         ++iter;
 
         sal_uInt16 nParamCount = sal::static_int_cast< sal_uInt16 >(aTokenList.size() - 1 );
-        rtl_uString** pParamList = NULL;
+        std::unique_ptr<rtl_uString*[]> pParamList;
         if( nParamCount )
         {
-            pParamList = new rtl_uString*[nParamCount];
+            pParamList.reset( new rtl_uString*[nParamCount]);
             for(int iList = 0; iter != aTokenList.end(); ++iList, ++iter)
             {
                 const OUString& rParamStr = (*iter);
@@ -3734,7 +3734,7 @@ RTLFUNC(Shell)
         oslProcess pApp;
         bool bSucc = osl_executeProcess(
                     aOUStrProgURL.pData,
-                    pParamList,
+                    pParamList.get(),
                     nParamCount,
                     nOptions,
                     NULL,
@@ -3752,8 +3752,6 @@ RTLFUNC(Shell)
         {
             rtl_uString_release(pParamList[j]);
         }
-
-        delete [] pParamList;
 
         if( !bSucc )
         {
@@ -4352,7 +4350,7 @@ RTLFUNC(StrConv)
         // convert the string to byte string, preserving unicode (2 bytes per character)
         sal_Int32 nSize = aNewStr.getLength()*2;
         const sal_Unicode* pSrc = aNewStr.getStr();
-        sal_Char* pChar = new sal_Char[nSize+1];
+        std::unique_ptr<sal_Char[]> pChar(new sal_Char[nSize+1]);
         for( sal_Int32 i=0; i < nSize; i++ )
         {
             pChar[i] = static_cast< sal_Char >( (i%2) ? ((*pSrc) >> 8) & 0xff : (*pSrc) & 0xff );
@@ -4362,8 +4360,7 @@ RTLFUNC(StrConv)
             }
         }
         pChar[nSize] = '\0';
-        OString aOStr(pChar);
-        delete[] pChar;
+        OString aOStr(pChar.get());
 
         // there is no concept about default codepage in unix. so it is incorrectly in unix
         OUString aOUStr = OStringToOUString(aOStr, osl_getThreadTextEncoding());
