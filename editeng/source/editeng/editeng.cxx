@@ -684,7 +684,7 @@ bool EditEngine::IsCallParaInsertedOrDeleted() const
 
 void EditEngine::AppendDeletedNodeInfo(DeletedNodeInfo* pInfo)
 {
-    pImpEditEngine->aDeletedNodes.push_back(pInfo);
+    pImpEditEngine->aDeletedNodes.push_back(std::unique_ptr<DeletedNodeInfo>(pInfo));
 }
 
 void EditEngine::UpdateSelections()

@@ -69,6 +69,7 @@
 #include <com/sun/star/text/CharacterCompressionType.hpp>
 #include <vcl/pdfextoutdevdata.hxx>
 #include <i18nlangtag/mslangid.hxx>
+#include <o3tl/make_unique.hxx>
 
 #include <comphelper/processfactory.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -3947,8 +3948,7 @@ void ImpEditEngine::ShowParagraph( sal_Int32 nParagraph, bool bShow )
         {
             // Mark as deleted, so that no selection will end or begin at
             // this paragraph...
-            DeletedNodeInfo* pDelInfo = new DeletedNodeInfo( pPPortion->GetNode(), nParagraph );
-            aDeletedNodes.push_back(pDelInfo);
+            aDeletedNodes.push_back(o3tl::make_unique<DeletedNodeInfo>( pPPortion->GetNode(), nParagraph ));
             UpdateSelections();
             // The region below will not be invalidated if UpdateMode = sal_False!
             // If anyway, then save as sal_False before SetVisible !

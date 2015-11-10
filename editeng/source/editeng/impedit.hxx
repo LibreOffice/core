@@ -59,7 +59,8 @@
 #include <LibreOfficeKit/LibreOfficeKitTypes.h>
 
 #include <boost/noncopyable.hpp>
-#include <boost/ptr_container/ptr_vector.hpp>
+#include <memory>
+#include <vector>
 
 #define DEL_LEFT    1
 #define DEL_RIGHT   2
@@ -467,7 +468,7 @@ private:
     OnDemandTransliterationWrapper  xTransliterationWrapper;
 
     // For Formatting / Update ....
-    boost::ptr_vector<DeletedNodeInfo> aDeletedNodes;
+    std::vector<std::unique_ptr<DeletedNodeInfo> > aDeletedNodes;
     Rectangle           aInvalidRect;
     sal_uInt32          nCurTextHeight;
     sal_uInt32          nCurTextHeightNTP;  // without trailing empty paragraphs

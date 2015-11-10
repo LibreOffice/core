@@ -61,6 +61,7 @@
 
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>
+#include <o3tl/make_unique.hxx>
 
 #include <unicode/ubidi.h>
 #include <algorithm>
@@ -2202,8 +2203,7 @@ EditPaM ImpEditEngine::ImpConnectParagraphs( ContentNode* pLeft, ContentNode* pR
     }
 
     sal_Int32 nParagraphTobeDeleted = aEditDoc.GetPos( pRight );
-    DeletedNodeInfo* pInf = new DeletedNodeInfo( pRight, nParagraphTobeDeleted );
-    aDeletedNodes.push_back(pInf);
+    aDeletedNodes.push_back(o3tl::make_unique<DeletedNodeInfo>( pRight, nParagraphTobeDeleted ));
 
     GetEditEnginePtr()->ParagraphConnected( aEditDoc.GetPos( pLeft ), aEditDoc.GetPos( pRight ) );
 
@@ -2441,8 +2441,7 @@ void ImpEditEngine::ImpRemoveParagraph( sal_Int32 nPara )
 
     OSL_ENSURE( pNode, "Blind Node in ImpRemoveParagraph" );
 
-    DeletedNodeInfo* pInf = new DeletedNodeInfo( pNode, nPara );
-    aDeletedNodes.push_back(pInf);
+    aDeletedNodes.push_back(o3tl::make_unique<DeletedNodeInfo>( pNode, nPara ));
 
     // The node is managed by the undo and possibly destroyed!
     aEditDoc.Release( nPara );
@@ -3293,7 +3292,7 @@ void ImpEditEngine::UpdateSelections()
         bool bChanged = false;
         for (size_t i = 0, n = aDeletedNodes.size(); i < n; ++i)
         {
-            const DeletedNodeInfo& rInf = aDeletedNodes[i];
+            const DeletedNodeInfo& rInf = *aDeletedNodes[i].get();
             if ( ( aCurSel.Min().GetNode() == rInf.GetNode() ) ||
                  ( aCurSel.Max().GetNode() == rInf.GetNode() ) )
             {
