@@ -437,7 +437,7 @@ static void QueueCallbackFunction(void* target,  IOReturn result, void* refcon, 
 			//Get cookie
 			object = [element valueForKey: (NSString*)CFSTR(kIOHIDElementCookieKey) ];
 			if (object == nil || ![object isKindOfClass:[NSNumber class]]) continue;
-			if (object == 0 || CFGetTypeID(object) != CFNumberGetTypeID()) continue;
+			if (object == NULL || CFGetTypeID(object) != CFNumberGetTypeID()) continue;
 			cookie = (IOHIDElementCookie) [object longValue];
 
 			//Get usage
