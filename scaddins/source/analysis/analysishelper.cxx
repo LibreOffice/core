@@ -26,6 +26,7 @@
 #include <rtl/math.hxx>
 #include <sal/macros.h>
 #include <algorithm>
+#include <memory>
 #include "analysishelper.hxx"
 #include "analysis.hrc"
 
@@ -746,14 +747,12 @@ OUString ConvertFromDec( double fNum, double fMin, double fMax, sal_uInt16 nBase
         else if( ( bNeg && nLen < nMaxPlaces ) || ( !bNeg && nLen < nPlaces ) )
         {
             sal_Int32   nLeft = nPlaces - nLen;
-            sal_Char*   p = new sal_Char[ nLeft + 1 ];
-            memset( p, bNeg? GetMaxChar( nBase ) : '0', nLeft );
+            std::unique_ptr<sal_Char[]> p( new sal_Char[ nLeft + 1 ] );
+            memset( p.get(), bNeg ? GetMaxChar( nBase ) : '0', nLeft );
             p[ nLeft ] = 0x00;
-            OUString  aTmp( p, nLeft, RTL_TEXTENCODING_MS_1252 );
+            OUString  aTmp( p.get(), nLeft, RTL_TEXTENCODING_MS_1252 );
             aTmp += aRet;
             aRet = aTmp;
-
-            delete[] p;
         }
     }
 

@@ -1446,11 +1446,9 @@ SvStream& ReadImpGraphic( SvStream& rIStm, ImpGraphic& rImpGraphic )
             {
                 Graphic         aGraphic;
                 GfxLink         aLink;
-                VersionCompat*  pCompat;
 
                 // read compat info
-                pCompat = new VersionCompat( rIStm, StreamMode::READ );
-                delete pCompat;
+                std::unique_ptr<VersionCompat> pCompat(new VersionCompat( rIStm, StreamMode::READ ));
 
                 ReadGfxLink( rIStm, aLink );
 
@@ -1586,14 +1584,11 @@ SvStream& WriteImpGraphic( SvStream& rOStm, const ImpGraphic& rImpGraphic )
                 ( rOStm.GetCompressMode() & SvStreamCompressFlags::NATIVE ) &&
                 rImpGraphic.mpGfxLink && rImpGraphic.mpGfxLink->IsNative() )
             {
-                VersionCompat* pCompat;
-
                 // native format
                 rOStm.WriteUInt32( NATIVE_FORMAT_50 );
 
                 // write compat info
-                pCompat = new VersionCompat( rOStm, StreamMode::WRITE, 1 );
-                delete pCompat;
+                std::unique_ptr<VersionCompat> pCompat(new VersionCompat( rOStm, StreamMode::WRITE, 1 ));
 
                 rImpGraphic.mpGfxLink->SetPrefMapMode( rImpGraphic.ImplGetPrefMapMode() );
                 rImpGraphic.mpGfxLink->SetPrefSize( rImpGraphic.ImplGetPrefSize() );

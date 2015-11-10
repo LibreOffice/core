@@ -23,6 +23,7 @@
 #include <sal/macros.h>
 #include <string.h>
 #include <unordered_map>
+#include <memory>
 
 typedef std::unordered_map< const char*, PPPOptimizerTokenEnum, rtl::CStringHash, rtl::CStringEqual> TypeNameHashMap;
 static TypeNameHashMap* pHashMap = nullptr;
@@ -172,12 +173,11 @@ PPPOptimizerTokenEnum TKGet( const OUString& rToken )
     }
     PPPOptimizerTokenEnum eRetValue = TK_NotFound;
     int i, nLen = rToken.getLength();
-    char* pBuf = new char[ nLen + 1 ];
+    std::unique_ptr<char[]> pBuf(new char[ nLen + 1 ]);
     for ( i = 0; i < nLen; i++ )
         pBuf[ i ] = (char)rToken[ i ];
     pBuf[ i ] = 0;
-    TypeNameHashMap::iterator aHashIter( pHashMap->find( pBuf ) );
-    delete[] pBuf;
+    TypeNameHashMap::iterator aHashIter( pHashMap->find( pBuf.get() ) );
     if ( aHashIter != pHashMap->end() )
         eRetValue = (*aHashIter).second;
     return eRetValue;

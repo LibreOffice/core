@@ -797,7 +797,7 @@ bool ImplReadDIBBody( SvStream& rIStm, Bitmap& rBmp, Bitmap* pBmpAlpha, sal_uLon
 
         sal_uInt16 nColors(0);
         SvStream* pIStm;
-        SvMemoryStream* pMemStm = nullptr;
+        std::unique_ptr<SvMemoryStream> pMemStm;
         sal_uInt8* pData = nullptr;
 
         if (aHeader.nBitCount <= 8)
@@ -834,7 +834,8 @@ bool ImplReadDIBBody( SvStream& rIStm, Bitmap& rBmp, Bitmap* pBmpAlpha, sal_uLon
 
             // set decoded bytes to memory stream,
             // from which we will read the bitmap data
-            pIStm = pMemStm = new SvMemoryStream;
+            pMemStm.reset( new SvMemoryStream);
+            pIStm = pMemStm.get();
             pMemStm->SetBuffer( pData, nUncodedSize, false, nUncodedSize );
             nOffset = 0;
         }
@@ -880,7 +881,6 @@ bool ImplReadDIBBody( SvStream& rIStm, Bitmap& rBmp, Bitmap* pBmpAlpha, sal_uLon
             rtl_freeMemory(pData);
         }
 
-        delete pMemStm;
         Bitmap::ReleaseAccess(pAcc);
 
         if(bAlphaPossible)

@@ -31,6 +31,7 @@
 
 #include "helpmerge.hxx"
 #include "common.hxx"
+#include <memory>
 
 #ifndef TESTDRIVER
 
@@ -81,10 +82,10 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
                     std::cerr << "Helpex error: cannot open input file\n";
                     return 1;
                 }
-                MergeDataFile* pMergeDataFile = nullptr;
+                std::unique_ptr<MergeDataFile> pMergeDataFile;
                 if( aArgs.m_sLanguage != "qtz")
                 {
-                    pMergeDataFile = new MergeDataFile(aArgs.m_sMergeSrc, OString(), false, false );
+                    pMergeDataFile.reset(new MergeDataFile(aArgs.m_sMergeSrc, OString(), false, false ));
                 }
                 std::string sTemp;
                 aInput >> sTemp;
@@ -97,28 +98,26 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
                         aArgs.m_sOutputFile +
                         sXhpFile.copy( sXhpFile.lastIndexOf('/') ));
                     if( !aParser.Merge( aArgs.m_sMergeSrc, sOutput,
-                        aArgs.m_sLanguage, pMergeDataFile ))
+                        aArgs.m_sLanguage, pMergeDataFile.get() ))
                     {
                         hasNoError = false;
                     }
                     aInput >> sTemp;
                 }
                 aInput.close();
-                delete pMergeDataFile;
             }
             else
             {
                 HelpParser aParser( aArgs.m_sInputFile );
-                MergeDataFile* pMergeDataFile = nullptr;
+                std::unique_ptr<MergeDataFile> pMergeDataFile;
                 if( aArgs.m_sLanguage != "qtz")
                 {
-                    pMergeDataFile = new MergeDataFile(aArgs.m_sMergeSrc, aArgs.m_sInputFile, false, false );
+                    pMergeDataFile.reset(new MergeDataFile(aArgs.m_sMergeSrc, aArgs.m_sInputFile, false, false ));
                 }
                 hasNoError =
                     aParser.Merge(
                         aArgs.m_sMergeSrc, aArgs.m_sOutputFile,
-                        aArgs.m_sLanguage, pMergeDataFile );
-                delete pMergeDataFile;
+                        aArgs.m_sLanguage, pMergeDataFile.get() );
             }
         }
         else
