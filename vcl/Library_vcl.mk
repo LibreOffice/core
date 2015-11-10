@@ -205,6 +205,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/window/winproc \
     vcl/source/window/wrkwin \
     vcl/source/control/button \
+    vcl/source/control/buttonstatuslistener \
     vcl/source/control/combobox \
     vcl/source/control/ctrl \
     vcl/source/control/edit \
