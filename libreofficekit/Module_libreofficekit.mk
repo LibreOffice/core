@@ -11,6 +11,10 @@ $(eval $(call gb_Module_Module,libreofficekit))
 
 ifeq ($(OS), $(filter LINUX %BSD SOLARIS, $(OS)))
 
+$(eval $(call gb_Module_add_check_targets,libreofficekit, \
+    CppunitTest_libreofficekit_checkapi \
+))
+
 $(eval $(call gb_Module_add_subsequentcheck_targets,libreofficekit,\
     CppunitTest_libreofficekit_tiledrendering \
 ))
