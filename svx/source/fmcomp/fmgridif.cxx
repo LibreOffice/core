@@ -1693,6 +1693,8 @@ void FmXGridPeer::setDesignMode(sal_Bool bOn) throw( RuntimeException, std::exce
             static_cast<FmGridControl*>(pWin)->SetDesignMode(bOn);
     }
 
+    setVisible(!bOn);
+
     if (bOn)
         DisConnectFromDispatcher();
     else
