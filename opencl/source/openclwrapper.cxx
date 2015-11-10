@@ -36,7 +36,7 @@
 #include <postwin.h>
 #define OPENCL_DLL_NAME "OpenCL.dll"
 #elif defined(MACOSX)
-#define OPENCL_DLL_NAME NULL
+#define OPENCL_DLL_NAME nullptr
 #else
 #define OPENCL_DLL_NAME "libOpenCL.so"
 #endif
