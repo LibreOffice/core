@@ -1598,11 +1598,11 @@ void SwContentTree::Display( bool bActive )
         m_bIsLastReadOnly = bReadOnly;
         bool bDisable =  pShell == 0 || bReadOnly;
         SwNavigationPI* pNavi = GetParentWindow();
-        pNavi->aContentToolBox->EnableItem(FN_ITEM_UP , !bDisable);
-        pNavi->aContentToolBox->EnableItem(FN_ITEM_DOWN, !bDisable);
-        pNavi->aContentToolBox->EnableItem(FN_ITEM_LEFT, !bDisable);
-        pNavi->aContentToolBox->EnableItem(FN_ITEM_RIGHT, !bDisable);
-        pNavi->aContentToolBox->EnableItem(FN_SELECT_SET_AUTO_BOOKMARK, !bDisable);
+        pNavi->m_aContentToolBox->EnableItem(FN_ITEM_UP , !bDisable);
+        pNavi->m_aContentToolBox->EnableItem(FN_ITEM_DOWN, !bDisable);
+        pNavi->m_aContentToolBox->EnableItem(FN_ITEM_LEFT, !bDisable);
+        pNavi->m_aContentToolBox->EnableItem(FN_ITEM_RIGHT, !bDisable);
+        pNavi->m_aContentToolBox->EnableItem(FN_SELECT_SET_AUTO_BOOKMARK, !bDisable);
     }
     if(pShell)
     {
@@ -1927,7 +1927,7 @@ bool SwContentTree::ToggleToRoot()
         }
     }
     m_pConfig->SetRootType( m_nRootType );
-    GetParentWindow()->aContentToolBox->CheckItem(FN_SHOW_ROOT, m_bIsRoot);
+    GetParentWindow()->m_aContentToolBox->CheckItem(FN_SHOW_ROOT, m_bIsRoot);
     return m_bIsRoot;
 }
 
@@ -3048,10 +3048,10 @@ bool SwContentTree::Select( SvTreeListEntry* pEntry, bool bSelect )
         }
     }
     SwNavigationPI* pNavi = GetParentWindow();
-    pNavi->aContentToolBox->EnableItem(FN_ITEM_UP ,  bEnable);
-    pNavi->aContentToolBox->EnableItem(FN_ITEM_DOWN, bEnable);
-    pNavi->aContentToolBox->EnableItem(FN_ITEM_LEFT, bEnable);
-    pNavi->aContentToolBox->EnableItem(FN_ITEM_RIGHT,bEnable);
+    pNavi->m_aContentToolBox->EnableItem(FN_ITEM_UP ,  bEnable);
+    pNavi->m_aContentToolBox->EnableItem(FN_ITEM_DOWN, bEnable);
+    pNavi->m_aContentToolBox->EnableItem(FN_ITEM_LEFT, bEnable);
+    pNavi->m_aContentToolBox->EnableItem(FN_ITEM_RIGHT,bEnable);
 
     return SvTreeListBox::Select(pEntry, bSelect);
 }

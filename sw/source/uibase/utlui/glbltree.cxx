@@ -516,12 +516,12 @@ void     SwGlobalTree::SelectHdl()
     SwNavigationPI* pNavi = GetParentWindow();
     bool bReadonly = !pActiveShell ||
                 pActiveShell->GetView().GetDocShell()->IsReadOnly();
-    pNavi->aGlobalToolBox->EnableItem(FN_GLOBAL_EDIT,  nSelCount == 1 && !bReadonly);
-    pNavi->aGlobalToolBox->EnableItem(FN_GLOBAL_OPEN,  nSelCount <= 1 && !bReadonly);
-    pNavi->aGlobalToolBox->EnableItem(FN_GLOBAL_UPDATE,  GetEntryCount() > 0 && !bReadonly);
-    pNavi->aGlobalToolBox->EnableItem(FN_ITEM_UP,
+    pNavi->m_aGlobalToolBox->EnableItem(FN_GLOBAL_EDIT,  nSelCount == 1 && !bReadonly);
+    pNavi->m_aGlobalToolBox->EnableItem(FN_GLOBAL_OPEN,  nSelCount <= 1 && !bReadonly);
+    pNavi->m_aGlobalToolBox->EnableItem(FN_GLOBAL_UPDATE,  GetEntryCount() > 0 && !bReadonly);
+    pNavi->m_aGlobalToolBox->EnableItem(FN_ITEM_UP,
                     nSelCount == 1 && nAbsPos && !bReadonly);
-    pNavi->aGlobalToolBox->EnableItem(FN_ITEM_DOWN,
+    pNavi->m_aGlobalToolBox->EnableItem(FN_ITEM_DOWN,
                     nSelCount == 1 && nAbsPos < GetEntryCount() - 1 && !bReadonly);
 
 }
