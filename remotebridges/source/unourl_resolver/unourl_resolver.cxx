@@ -120,7 +120,7 @@ Reference< XInterface > ResolverImpl::resolve( const OUString & rUnoUrl )
     }
     catch (const rtl::MalformedUriException & rEx)
     {
-        throw ConnectionSetupException(rEx.getMessage(), 0);
+        throw ConnectionSetupException(rEx.getMessage(), nullptr);
     }
 
     Reference< XConnector > xConnector(
@@ -159,9 +159,9 @@ static const struct ImplementationEntry g_entries[] =
     {
         ResolverImpl_create, resolver_getImplementationName,
         resolver_getSupportedServiceNames, createSingleComponentFactory,
-        0, 0
+        nullptr, 0
     },
-    { 0, 0, 0, 0, 0, 0 }
+    { nullptr, nullptr, nullptr, nullptr, nullptr, 0 }
 };
 
 extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL uuresolver_component_getFactory(
