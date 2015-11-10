@@ -156,7 +156,7 @@ static rtl_uString *getDomainName()
 
 static rtl_uString *getDomainName()
 {
-    return NULL;
+    return nullptr;
 }
 
 #endif
