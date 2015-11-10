@@ -36,7 +36,7 @@ public:
                             TYPEINFO_OVERRIDE();
                             XFormTextShadowItem(XFormTextShadow = XFTSHADOW_NONE);
                             XFormTextShadowItem(SvStream& rIn);
-    virtual SfxPoolItem*    Clone(SfxItemPool* pPool = 0) const override;
+    virtual SfxPoolItem*    Clone(SfxItemPool* pPool = nullptr) const override;
     virtual SfxPoolItem*    Create(SvStream& rIn, sal_uInt16 nVer) const override;
     virtual sal_uInt16          GetValueCount() const override;
     XFormTextShadow         GetValue() const { return (XFormTextShadow) SfxEnumItem::GetValue(); }

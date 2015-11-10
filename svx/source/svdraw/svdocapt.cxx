@@ -302,7 +302,7 @@ SdrHdl* SdrCaptionObj::GetHdl(sal_uInt32 nHdlNum) const
         }
         else
         {
-            return 0L;
+            return nullptr;
         }
     }
 }
@@ -338,7 +338,7 @@ bool SdrCaptionObj::beginSpecialDrag(SdrDragStat& rDrag) const
 
             Point aHit(rDrag.GetStart());
 
-            if(rDrag.GetPageView() && SdrObjectPrimitiveHit(*this, aHit, 0, *rDrag.GetPageView(), 0, false))
+            if(rDrag.GetPageView() && SdrObjectPrimitiveHit(*this, aHit, 0, *rDrag.GetPageView(), nullptr, false))
             {
                 return true;
             }
@@ -685,7 +685,7 @@ const Point& SdrCaptionObj::GetTailPos() const
 void SdrCaptionObj::SetTailPos(const Point& rPos)
 {
     if (aTailPoly.GetSize()==0 || aTailPoly[0]!=rPos) {
-        Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetLastBoundRect();
+        Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
         NbcSetTailPos(rPos);
         SetChanged();
         BroadcastObjectChange();
@@ -746,15 +746,15 @@ SdrObject* SdrCaptionObj::DoConvertToPolyObj(bool bBezier, bool bAddText) const
 {
     SdrObject* pRect=SdrRectObj::DoConvertToPolyObj(bBezier, bAddText);
     SdrObject* pTail = ImpConvertMakeObj(basegfx::B2DPolyPolygon(aTailPoly.getB2DPolygon()), false, bBezier);
-    SdrObject* pRet=(pTail!=NULL) ? pTail : pRect;
-    if (pTail!=NULL && pRect!=NULL) {
+    SdrObject* pRet=(pTail!=nullptr) ? pTail : pRect;
+    if (pTail!=nullptr && pRect!=nullptr) {
         bool bInsRect = true;
         bool bInsTail = true;
         SdrObjList* pOL=pTail->GetSubList();
-        if (pOL!=NULL) { pRet=pRect; bInsTail = false; }
-        if (pOL==NULL) pOL=pRect->GetSubList();
-        if (pOL!=NULL) { pRet=pRect; bInsRect = false; }
-        if (pOL==NULL) {
+        if (pOL!=nullptr) { pRet=pRect; bInsTail = false; }
+        if (pOL==nullptr) pOL=pRect->GetSubList();
+        if (pOL!=nullptr) { pRet=pRect; bInsRect = false; }
+        if (pOL==nullptr) {
             SdrObjGroup* pGrp=new SdrObjGroup;
             pOL=pGrp->GetSubList();
             pRet=pGrp;

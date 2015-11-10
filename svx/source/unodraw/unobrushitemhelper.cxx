@@ -154,7 +154,7 @@ void setSvxBrushItemAsFillAttributesToTargetSet(const SvxBrushItem& rBrush, SfxI
 sal_uInt16 getTransparenceForSvxBrushItem(const SfxItemSet& rSourceSet, bool bSearchInParents)
 {
     sal_uInt16 nFillTransparence(static_cast< const XFillTransparenceItem& >(rSourceSet.Get(XATTR_FILLTRANSPARENCE, bSearchInParents)).GetValue());
-    const SfxPoolItem* pGradientItem = 0;
+    const SfxPoolItem* pGradientItem = nullptr;
 
     if(SfxItemState::SET == rSourceSet.GetItemState(XATTR_FILLFLOATTRANSPARENCE, bSearchInParents, &pGradientItem)
         && static_cast< const XFillFloatTransparenceItem* >(pGradientItem)->IsEnabled())

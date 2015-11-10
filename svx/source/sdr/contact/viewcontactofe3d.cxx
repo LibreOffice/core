@@ -60,7 +60,7 @@ const sdr::contact::ViewContactOfE3dScene* tryToFindVCOfE3DScene(
     }
 
     // object hierarchy structure is incorrect; no result
-    return 0;
+    return nullptr;
 }
 
 } // end of anonymous namespace

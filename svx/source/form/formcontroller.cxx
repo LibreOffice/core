@@ -609,7 +609,7 @@ FormController::~FormController()
     // Freigeben der Aggregation
     if ( m_xAggregate.is() )
     {
-        m_xAggregate->setDelegator( NULL );
+        m_xAggregate->setDelegator( nullptr );
         m_xAggregate.clear();
     }
 
@@ -1173,8 +1173,8 @@ void FormController::disposing()
     m_aFilterRows.clear();
 
     ::osl::MutexGuard aGuard( m_aMutex );
-    m_xActiveControl = NULL;
-    implSetCurrentControl( NULL );
+    m_xActiveControl = nullptr;
+    implSetCurrentControl( nullptr );
 
     // clean up our children
     for (FmFormControllers::const_iterator i = m_aChildren.begin();
@@ -1209,9 +1209,9 @@ void FormController::disposing()
     if (m_bDBConnection)
         unload();
 
-    setContainer( NULL );
-    setModel( NULL );
-    setParent( NULL );
+    setContainer( nullptr );
+    setModel( nullptr );
+    setParent( nullptr );
 
     ::comphelper::disposeComponent( m_xComposer );
 
@@ -1328,8 +1328,8 @@ bool FormController::replaceControl( const Reference< XControl >& _rxExistentCon
 
                 if ( bReplacedWasActive )
                 {
-                    m_xActiveControl = NULL;
-                    implSetCurrentControl( NULL );
+                    m_xActiveControl = nullptr;
+                    implSetCurrentControl( nullptr );
                 }
                 else if ( bReplacedWasCurrent )
                 {
@@ -1783,7 +1783,7 @@ void FormController::focusLost(const FocusEvent& e) throw( RuntimeException, std
     Reference< XControl >  xNextControl = isInList(xNext);
     if (!xNextControl.is())
     {
-        m_xActiveControl = NULL;
+        m_xActiveControl = nullptr;
         m_aDeactivationEvent.Call();
     }
 }
@@ -1873,8 +1873,8 @@ void FormController::setModel(const Reference< XTabControllerModel > & Model) th
         // only if both ifaces exit, the controller will work successful
         if (!m_xModelAsIndex.is() || !m_xModelAsManager.is())
         {
-            m_xModelAsManager = NULL;
-            m_xModelAsIndex = NULL;
+            m_xModelAsManager = nullptr;
+            m_xModelAsIndex = nullptr;
         }
 
         if (m_xModelAsIndex.is())
@@ -2311,7 +2311,7 @@ void FormController::stopControlModifyListening(const Reference< XControl > & xC
 {
     OSL_ENSURE( !impl_isDisposed_nofail(), "FormController: already disposed!" );
 
-    bool bModifyListening = lcl_shouldListenForModifications( xControl, NULL );
+    bool bModifyListening = lcl_shouldListenForModifications( xControl, nullptr );
 
     // kuenstliches while
     while (bModifyListening)
@@ -2591,7 +2591,7 @@ void FormController::loaded(const EventObject& rEvent) throw( RuntimeException, 
     }
 
     Reference< XColumnsSupplier > xFormColumns( xForm, UNO_QUERY );
-    m_pColumnInfoCache.reset( xFormColumns.is() ? new ColumnInfoCache( xFormColumns ) : NULL );
+    m_pColumnInfoCache.reset( xFormColumns.is() ? new ColumnInfoCache( xFormColumns ) : nullptr );
 
     updateAllDispatchers();
 }
@@ -3511,7 +3511,7 @@ sal_Bool SAL_CALL FormController::supportsMode(const OUString& Mode) throw( Runt
 vcl::Window* FormController::getDialogParentWindow()
 {
     OSL_ENSURE( !impl_isDisposed_nofail(), "FormController: already disposed!" );
-    vcl::Window* pParentWindow = NULL;
+    vcl::Window* pParentWindow = nullptr;
     try
     {
         Reference< XControl > xContainerControl( getContainer(), UNO_QUERY_THROW );
@@ -3590,7 +3590,7 @@ Reference< XControl > FormController::locateControl( const Reference< XControlMo
     {
         DBG_UNHANDLED_EXCEPTION();
     }
-    return NULL;
+    return nullptr;
 }
 
 
@@ -4200,7 +4200,7 @@ bool FormController::ensureInteractionHandler()
         return false;
     m_bAttemptedHandlerCreation = true;
 
-    m_xInteractionHandler = InteractionHandler::createWithParent(m_xComponentContext, 0);
+    m_xInteractionHandler = InteractionHandler::createWithParent(m_xComponentContext, nullptr);
     return m_xInteractionHandler.is();
 }
 

@@ -198,7 +198,7 @@ void SvxShapeGroup::addUnoShape( const uno::Reference< drawing::XShape >& xShape
     }
 
     SdrObject* pSdrShape = pShape->GetSdrObject();
-    if( pSdrShape == NULL )
+    if( pSdrShape == nullptr )
         pSdrShape = mxPage->_CreateSdrObject( xShape );
 
     if( pSdrShape->IsInserted() )
@@ -240,13 +240,13 @@ void SAL_CALL SvxShapeGroup::remove( const uno::Reference< drawing::XShape >& xS
 {
     ::SolarMutexGuard aGuard;
 
-    SdrObject* pSdrShape = NULL;
+    SdrObject* pSdrShape = nullptr;
     SvxShape* pShape = SvxShape::getImplementation( xShape );
 
     if( pShape )
         pSdrShape = pShape->GetSdrObject();
 
-    if( !mpObj.is() || pSdrShape == NULL || pSdrShape->GetObjList()->GetOwnerObj() != mpObj.get() )
+    if( !mpObj.is() || pSdrShape == nullptr || pSdrShape->GetObjList()->GetOwnerObj() != mpObj.get() )
         throw uno::RuntimeException();
 
     SdrObjList& rList = *pSdrShape->GetObjList();
@@ -328,7 +328,7 @@ uno::Any SAL_CALL SvxShapeGroup::getByIndex( sal_Int32 Index )
 {
     ::SolarMutexGuard aGuard;
 
-    if( !mpObj.is() || mpObj->GetSubList() == NULL )
+    if( !mpObj.is() || mpObj->GetSubList() == nullptr )
         throw uno::RuntimeException();
 
     if( Index<0 || mpObj->GetSubList()->GetObjCount() <= static_cast<size_t>(Index) )
@@ -336,7 +336,7 @@ uno::Any SAL_CALL SvxShapeGroup::getByIndex( sal_Int32 Index )
 
     SdrObject* pDestObj = mpObj->GetSubList()->GetObj( Index );
 
-    if(pDestObj == NULL)
+    if(pDestObj == nullptr)
         throw lang::IndexOutOfBoundsException();
 
     Reference< drawing::XShape > xShape( pDestObj->getUnoShape(), uno::UNO_QUERY );
@@ -687,7 +687,7 @@ SvxShapeControlPropertyMapping[] =
     { RTL_CONSTASCII_STRINGPARAM("ControlTypeinMSO"), RTL_CONSTASCII_STRINGPARAM("ControlTypeinMSO") },
     { RTL_CONSTASCII_STRINGPARAM("ObjIDinMSO"), RTL_CONSTASCII_STRINGPARAM("ObjIDinMSO") },
     { RTL_CONSTASCII_STRINGPARAM("CharCaseMap"), RTL_CONSTASCII_STRINGPARAM("CharCaseMap") },
-    { NULL,0, NULL, 0 }
+    { nullptr,0, nullptr, 0 }
 };
 
 namespace
@@ -1493,7 +1493,7 @@ bool SvxGraphicObject::setPropertyValueImpl( const OUString& rName, const SfxIte
             {
                 // normal link
                 OUString            aFilterName;
-                const SfxFilter*    pSfxFilter = NULL;
+                const SfxFilter*    pSfxFilter = nullptr;
                 SfxMedium           aSfxMedium( aURL, referer_, StreamMode::READ | StreamMode::SHARE_DENYNONE );
 
                 SfxGetpApp()->GetFilterMatcher().GuessFilter( aSfxMedium, &pSfxFilter );
@@ -1590,7 +1590,7 @@ bool SvxGraphicObject::getPropertyValueImpl( const OUString& rName, const SfxIte
         {
             SvMemoryStream aDestStrm( 65535, 65535 );
 
-            ConvertGDIMetaFileToWMF( rGraphic.GetGDIMetaFile(), aDestStrm, NULL, false );
+            ConvertGDIMetaFileToWMF( rGraphic.GetGDIMetaFile(), aDestStrm, nullptr, false );
             const uno::Sequence<sal_Int8> aSeq(
                 static_cast< const sal_Int8* >(aDestStrm.GetData()),
                 aDestStrm.GetEndOfData());

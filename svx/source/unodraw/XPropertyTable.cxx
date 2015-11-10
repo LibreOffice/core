@@ -89,7 +89,7 @@ XPropertyEntry* SvxUnoXPropertyTable::get( long index ) const
     if( mpList )
         return mpList->Get(index);
     else
-        return NULL;
+        return nullptr;
 }
 
 // XServiceInfo
@@ -105,7 +105,7 @@ void SAL_CALL SvxUnoXPropertyTable::insertByName( const  OUString& aName, const 
 {
     SolarMutexGuard aGuard;
 
-    if( NULL == mpList )
+    if( nullptr == mpList )
         throw lang::IllegalArgumentException();
 
     if( hasByName( aName ) )
@@ -114,7 +114,7 @@ void SAL_CALL SvxUnoXPropertyTable::insertByName( const  OUString& aName, const 
     OUString aInternalName = SvxUnogetInternalNameForItem(mnWhich, aName);
 
     XPropertyEntry* pNewEntry = getEntry( aInternalName, aElement );
-    if( NULL == pNewEntry )
+    if( nullptr == pNewEntry )
         throw lang::IllegalArgumentException();
 
     if( mpList )
@@ -160,7 +160,7 @@ void SAL_CALL SvxUnoXPropertyTable::replaceByName( const  OUString& aName, const
         if (pEntry && aInternalName.equals(pEntry->GetName()))
         {
             XPropertyEntry* pNewEntry = getEntry( aInternalName, aElement );
-            if( NULL == pNewEntry )
+            if( nullptr == pNewEntry )
                 throw lang::IllegalArgumentException();
 
             if( mpList )
@@ -277,7 +277,7 @@ XPropertyEntry* SvxUnoXColorTable::getEntry( const OUString& rName, const uno::A
 {
     sal_Int32 nColor = 0;
     if( !(rAny >>= nColor) )
-        return NULL;
+        return nullptr;
 
     const Color aColor( (ColorData)nColor );
     return new XColorEntry( aColor, rName );
@@ -343,7 +343,7 @@ XPropertyEntry* SvxUnoXLineEndTable::getEntry( const OUString& rName, const uno:
 {
 
     if( !rAny.getValue() || rAny.getValueType() != cppu::UnoType<drawing::PolyPolygonBezierCoords>::get())
-        return NULL;
+        return nullptr;
 
     basegfx::B2DPolyPolygon aPolyPolygon;
     drawing::PolyPolygonBezierCoords const * pCoords = static_cast<drawing::PolyPolygonBezierCoords const *>(rAny.getValue());
@@ -423,7 +423,7 @@ XPropertyEntry* SvxUnoXDashTable::getEntry( const OUString& rName, const uno::An
 {
     drawing::LineDash aLineDash;
     if(!(rAny >>= aLineDash))
-        return NULL;
+        return nullptr;
 
     XDash aXDash;
 
@@ -502,7 +502,7 @@ XPropertyEntry* SvxUnoXHatchTable::getEntry( const OUString& rName, const uno::A
 {
     drawing::Hatch aUnoHatch;
     if(!(rAny >>= aUnoHatch))
-        return NULL;
+        return nullptr;
 
     XHatch aXHatch;
     aXHatch.SetHatchStyle( (css::drawing::HatchStyle)aUnoHatch.Style );
@@ -583,7 +583,7 @@ XPropertyEntry* SvxUnoXGradientTable::getEntry( const OUString& rName, const uno
 {
     awt::Gradient aGradient;
     if(!(rAny >>= aGradient))
-        return NULL;
+        return nullptr;
 
     XGradient aXGradient;
 
@@ -661,7 +661,7 @@ XPropertyEntry* SvxUnoXBitmapTable::getEntry( const OUString& rName, const uno::
 {
     OUString aURL;
     if(!(rAny >>= aURL))
-        return NULL;
+        return nullptr;
 
     const GraphicObject aGrafObj(GraphicObject::CreateGraphicObjectFromURL(aURL));
 

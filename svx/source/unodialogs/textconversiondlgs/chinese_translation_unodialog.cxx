@@ -37,8 +37,8 @@ using namespace ::com::sun::star;
 
 ChineseTranslation_UnoDialog::ChineseTranslation_UnoDialog( const uno::Reference< uno::XComponentContext >& xContext )
                     : m_xCC( xContext )
-                    , m_xParentWindow( 0 )
-                    , m_pDialog( 0 )
+                    , m_xParentWindow( nullptr )
+                    , m_pDialog( nullptr )
                     , m_bDisposed(false)
                     , m_bInDispose(false)
                     , m_aContainerMutex()
@@ -128,7 +128,7 @@ sal_Int16 SAL_CALL ChineseTranslation_UnoDialog::execute() throw(uno::RuntimeExc
 
         if( !m_pDialog )
         {
-            vcl::Window* pParent = NULL;
+            vcl::Window* pParent = nullptr;
             if( m_xParentWindow.is() )
             {
                 VCLXWindow* pImplementation = VCLXWindow::GetImplementation(m_xParentWindow);
@@ -160,7 +160,7 @@ void SAL_CALL ChineseTranslation_UnoDialog::dispose() throw (uno::RuntimeExcepti
         m_bInDispose = true;
 
         impl_DeleteDialog();
-        m_xParentWindow = 0;
+        m_xParentWindow = nullptr;
         m_bDisposed = true;
 
         aEvt.Source = static_cast< XComponent * >( this );
@@ -190,7 +190,7 @@ void SAL_CALL ChineseTranslation_UnoDialog::removeEventListener( const uno::Refe
 
 uno::Reference< beans::XPropertySetInfo > SAL_CALL ChineseTranslation_UnoDialog::getPropertySetInfo(  ) throw (uno::RuntimeException, std::exception)
 {
-    return 0;
+    return nullptr;
 }
 void SAL_CALL ChineseTranslation_UnoDialog::setPropertyValue( const OUString&, const uno::Any& ) throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {

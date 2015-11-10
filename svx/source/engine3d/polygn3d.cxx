@@ -220,7 +220,7 @@ void E3dPolygonObj::SetPolyTexture2D(const basegfx::B2DPolyPolygon& rNewPolyText
 
 SdrObject *E3dPolygonObj::DoConvertToPolyObj(bool /*bBezier*/, bool /*bAddText*/) const
 {
-    return NULL;
+    return nullptr;
 }
 
 E3dPolygonObj* E3dPolygonObj::Clone() const

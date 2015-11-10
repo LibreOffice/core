@@ -44,7 +44,7 @@ namespace svx
 
 SvxShowCharSetVirtualAcc::SvxShowCharSetVirtualAcc( SvxShowCharSet* pParent ) : OAccessibleComponentHelper(new VCLExternalSolarLock())
 ,mpParent( pParent )
-,m_pTable(NULL)
+,m_pTable(nullptr)
 {
     osl_atomic_increment(&m_refCount);
     {
@@ -154,12 +154,12 @@ css::awt::Rectangle SvxShowCharSetVirtualAcc::implGetBounds(  ) throw (RuntimeEx
     vcl::Window* pWindow = mpParent;
     if ( pWindow )
     {
-        Rectangle aRect = pWindow->GetWindowExtentsRelative( NULL );
+        Rectangle aRect = pWindow->GetWindowExtentsRelative( nullptr );
         aBounds = AWTRectangle( aRect );
         vcl::Window* pParent = pWindow->GetAccessibleParentWindow();
         if ( pParent )
         {
-            Rectangle aParentRect = pParent->GetWindowExtentsRelative( NULL );
+            Rectangle aParentRect = pParent->GetWindowExtentsRelative( nullptr );
             css::awt::Point aParentScreenLoc = AWTPoint( aParentRect.TopLeft() );
             aBounds.X -= aParentScreenLoc.X;
             aBounds.Y -= aParentScreenLoc.Y;
@@ -221,7 +221,7 @@ void SAL_CALL SvxShowCharSetVirtualAcc::disposing()
     OAccessibleContextHelper::disposing();
     if ( m_pTable )
         m_pTable->dispose();
-    m_pTable = NULL;
+    m_pTable = nullptr;
 }
 
 
@@ -231,7 +231,7 @@ void SAL_CALL SvxShowCharSetVirtualAcc::disposing()
 SvxShowCharSetItem::SvxShowCharSetItem( SvxShowCharSet& rParent,SvxShowCharSetAcc*  _pParent,sal_uInt16 _nPos ) :
     mrParent( rParent )
     ,mnId( _nPos )
-    ,m_pItem(NULL)
+    ,m_pItem(nullptr)
     ,m_pParent(_pParent)
 {
 }
@@ -265,8 +265,8 @@ void SvxShowCharSetItem::ClearAccessible()
 {
     if ( m_xAcc.is() )
     {
-        m_pItem = NULL;
-        m_xAcc  = NULL;
+        m_pItem = nullptr;
+        m_xAcc  = nullptr;
     }
 }
 
@@ -302,7 +302,7 @@ void SAL_CALL SvxShowCharSetAcc::disposing()
         ::comphelper::disposeComponent(*aIter);
 
     m_aChildren.clear();
-    m_pParent = NULL;
+    m_pParent = nullptr;
 }
 
 
@@ -632,7 +632,7 @@ IMPLEMENT_FORWARD_XTYPEPROVIDER2( SvxShowCharSetItemAcc, OAccessibleComponentHel
 void SvxShowCharSetItemAcc::ParentDestroyed()
 {
     const ::osl::MutexGuard aGuard( GetMutex() );
-    mpParent = NULL;
+    mpParent = nullptr;
 }
 
 

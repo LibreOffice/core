@@ -1002,7 +1002,7 @@ XLineDashItem* XLineDashItem::checkForUniqueItem( SdrModel* pModel ) const
     {
         const OUString aUniqueName = NameOrIndex::CheckNamedItem(
                 this, XATTR_LINEDASH, &pModel->GetItemPool(),
-                pModel->GetStyleSheetPool() ? &pModel->GetStyleSheetPool()->GetPool() : NULL,
+                pModel->GetStyleSheetPool() ? &pModel->GetStyleSheetPool()->GetPool() : nullptr,
                 XLineDashItem::CompareValueFunc, RID_SVXSTR_DASH11,
                 pModel->GetPropertyList( XDASH_LIST ) );
 
@@ -1011,7 +1011,7 @@ XLineDashItem* XLineDashItem::checkForUniqueItem( SdrModel* pModel ) const
             return new XLineDashItem( aUniqueName, aDash );
     }
 
-    return NULL;
+    return nullptr;
 }
 
 TYPEINIT1_AUTOFACTORY(XLineWidthItem, SfxMetricItem);
@@ -1350,7 +1350,7 @@ XLineStartItem* XLineStartItem::checkForUniqueItem( SdrModel* pModel ) const
 {
     if( pModel )
     {
-        XLineStartItem* pTempItem = NULL;
+        XLineStartItem* pTempItem = nullptr;
         const XLineStartItem* pLineStartItem = this;
 
         OUString aUniqueName( GetName() );
@@ -1359,7 +1359,7 @@ XLineStartItem* XLineStartItem::checkForUniqueItem( SdrModel* pModel ) const
         {
             // if the polygon is empty, check if the name is empty
             if( aUniqueName.isEmpty() )
-                return NULL;
+                return nullptr;
 
             // force empty name for empty polygons
             return new XLineStartItem( "", maPolyPolygon );
@@ -1432,7 +1432,7 @@ XLineStartItem* XLineStartItem::checkForUniqueItem( SdrModel* pModel ) const
             }
         }
 
-        const SfxItemPool* pPool2 = pModel->GetStyleSheetPool() ? &pModel->GetStyleSheetPool()->GetPool() : NULL;
+        const SfxItemPool* pPool2 = pModel->GetStyleSheetPool() ? &pModel->GetStyleSheetPool()->GetPool() : nullptr;
         if( !aUniqueName.isEmpty() && pPool2)
         {
             nCount = pPool2->GetItemCount2( XATTR_LINESTART );
@@ -1561,7 +1561,7 @@ XLineStartItem* XLineStartItem::checkForUniqueItem( SdrModel* pModel ) const
         }
     }
 
-    return NULL;
+    return nullptr;
 }
 
 TYPEINIT1_AUTOFACTORY(XLineEndItem, NameOrIndex);
@@ -1633,7 +1633,7 @@ XLineEndItem* XLineEndItem::checkForUniqueItem( SdrModel* pModel ) const
 {
     if( pModel )
     {
-        XLineEndItem* pTempItem = NULL;
+        XLineEndItem* pTempItem = nullptr;
         const XLineEndItem* pLineEndItem = this;
 
         OUString aUniqueName( GetName() );
@@ -1642,7 +1642,7 @@ XLineEndItem* XLineEndItem::checkForUniqueItem( SdrModel* pModel ) const
         {
             // if the polygon is empty, check if the name is empty
             if( aUniqueName.isEmpty() )
-                return NULL;
+                return nullptr;
 
             // force empty name for empty polygons
             return new XLineEndItem( "", maPolyPolygon );
@@ -1715,7 +1715,7 @@ XLineEndItem* XLineEndItem::checkForUniqueItem( SdrModel* pModel ) const
             }
         }
 
-        const SfxItemPool* pPool2 = pModel->GetStyleSheetPool() ? &pModel->GetStyleSheetPool()->GetPool() : NULL;
+        const SfxItemPool* pPool2 = pModel->GetStyleSheetPool() ? &pModel->GetStyleSheetPool()->GetPool() : nullptr;
         if( !aUniqueName.isEmpty() && pPool2)
         {
             nCount = pPool2->GetItemCount2( XATTR_LINESTART );
@@ -1844,7 +1844,7 @@ XLineEndItem* XLineEndItem::checkForUniqueItem( SdrModel* pModel ) const
         }
     }
 
-    return NULL;
+    return nullptr;
 }
 
 bool XLineEndItem::GetPresentation
@@ -2736,7 +2736,7 @@ XFillGradientItem* XFillGradientItem::checkForUniqueItem( SdrModel* pModel ) con
     {
         const OUString aUniqueName = NameOrIndex::CheckNamedItem(
                 this, Which(), &pModel->GetItemPool(),
-                pModel->GetStyleSheetPool() ? &pModel->GetStyleSheetPool()->GetPool() : NULL,
+                pModel->GetStyleSheetPool() ? &pModel->GetStyleSheetPool()->GetPool() : nullptr,
                 XFillGradientItem::CompareValueFunc, RID_SVXSTR_GRADIENT,
                 pModel->GetPropertyList( XGRADIENT_LIST ) );
 
@@ -2745,7 +2745,7 @@ XFillGradientItem* XFillGradientItem::checkForUniqueItem( SdrModel* pModel ) con
             return new XFillGradientItem( aUniqueName, aGradient, Which() );
     }
 
-    return NULL;
+    return nullptr;
 }
 
 TYPEINIT1_AUTOFACTORY( XFillFloatTransparenceItem, XFillGradientItem );
@@ -2830,7 +2830,7 @@ XFillFloatTransparenceItem* XFillFloatTransparenceItem::checkForUniqueItem( SdrM
             const OUString aUniqueName = NameOrIndex::CheckNamedItem( this,
                                                                     XATTR_FILLFLOATTRANSPARENCE,
                                                                     &pModel->GetItemPool(),
-                                                                    pModel->GetStyleSheetPool() ? &pModel->GetStyleSheetPool()->GetPool() : NULL,
+                                                                    pModel->GetStyleSheetPool() ? &pModel->GetStyleSheetPool()->GetPool() : nullptr,
                                                                     XFillFloatTransparenceItem::CompareValueFunc,
                                                                     RID_SVXSTR_TRASNGR0,
                                                                     XPropertyListRef() );
@@ -2851,7 +2851,7 @@ XFillFloatTransparenceItem* XFillFloatTransparenceItem::checkForUniqueItem( SdrM
         }
     }
 
-    return NULL;
+    return nullptr;
 }
 
 XHatch::XHatch(const Color& rCol, css::drawing::HatchStyle eTheStyle, long nTheDistance,
@@ -3142,7 +3142,7 @@ XFillHatchItem* XFillHatchItem::checkForUniqueItem( SdrModel* pModel ) const
     {
         const OUString aUniqueName = NameOrIndex::CheckNamedItem(
                 this, XATTR_FILLHATCH, &pModel->GetItemPool(),
-                pModel->GetStyleSheetPool() ? &pModel->GetStyleSheetPool()->GetPool() : NULL,
+                pModel->GetStyleSheetPool() ? &pModel->GetStyleSheetPool()->GetPool() : nullptr,
                 XFillHatchItem::CompareValueFunc, RID_SVXSTR_HATCH10,
                 pModel->GetPropertyList( XHATCH_LIST ) );
 
@@ -3151,7 +3151,7 @@ XFillHatchItem* XFillHatchItem::checkForUniqueItem( SdrModel* pModel ) const
             return new XFillHatchItem( aUniqueName, aHatch );
     }
 
-    return NULL;
+    return nullptr;
 }
 
 // --- form text attributes ---

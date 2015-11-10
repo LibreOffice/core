@@ -75,7 +75,7 @@ SdrPaintWindow* SdrPaintView::FindPaintWindow(const OutputDevice& rOut) const
         }
     }
 
-    return 0L;
+    return nullptr;
 }
 
 SdrPaintWindow* SdrPaintView::GetPaintWindow(sal_uInt32 nIndex) const
@@ -85,7 +85,7 @@ SdrPaintWindow* SdrPaintView::GetPaintWindow(sal_uInt32 nIndex) const
         return maPaintWindows[nIndex];
     }
 
-    return 0L;
+    return nullptr;
 }
 
 void SdrPaintView::AppendPaintWindow(SdrPaintWindow& rNew)
@@ -95,7 +95,7 @@ void SdrPaintView::AppendPaintWindow(SdrPaintWindow& rNew)
 
 SdrPaintWindow* SdrPaintView::RemovePaintWindow(SdrPaintWindow& rOld)
 {
-    SdrPaintWindow* pRetval = 0L;
+    SdrPaintWindow* pRetval = nullptr;
     const SdrPaintWindowVector::iterator aFindResult = ::std::find(maPaintWindows.begin(), maPaintWindows.end(), &rOld);
 
     if(aFindResult != maPaintWindows.end())
@@ -115,7 +115,7 @@ OutputDevice* SdrPaintView::GetFirstOutputDevice() const
         return &(GetPaintWindow(0)->GetOutputDevice());
     }
 
-    return 0L;
+    return nullptr;
 }
 
 
@@ -161,7 +161,7 @@ TYPEINIT2(SdrPaintView,SfxListener,SfxRepeatTarget);
 void SdrPaintView::ImpClearVars()
 {
 #ifdef DBG_UTIL
-    mpItemBrowser=NULL;
+    mpItemBrowser=nullptr;
 #endif
     mbPageVisible=true;
     mbPageBorderVisible=true;
@@ -185,10 +185,10 @@ void SdrPaintView::ImpClearVars()
     mnMinMovPix=3;
     mnHitTolLog=0;
     mnMinMovLog=0;
-    mpActualOutDev=NULL;
-    mpDragWin=NULL;
+    mpActualOutDev=nullptr;
+    mpDragWin=nullptr;
     mbRestoreColors=true;
-    mpDefaultStyleSheet=NULL;
+    mpDefaultStyleSheet=nullptr;
     mbSomeObjChgdFlag=false;
     mnGraphicManagerDrawMode = GraphicManagerDrawFlags::STANDARD;
     maComeBackIdle.SetPriority(SchedulerPriority::REPAINT);
@@ -201,7 +201,7 @@ void SdrPaintView::ImpClearVars()
 }
 
 SdrPaintView::SdrPaintView(SdrModel* pModel, OutputDevice* pOut)
-:   mpPageView(NULL),
+:   mpPageView(nullptr),
     maDefaultAttr(pModel->GetItemPool()),
     mbBufferedOutputAllowed(false),
     mbBufferedOverlayAllowed(false),
@@ -216,7 +216,7 @@ SdrPaintView::SdrPaintView(SdrModel* pModel, OutputDevice* pOut)
 
     if(pOut)
     {
-        AddWindowToPaintView(pOut, 0);
+        AddWindowToPaintView(pOut, nullptr);
     }
 
     // flag to visualize groups
@@ -255,7 +255,7 @@ void SdrPaintView::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
     {
         const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
         if (pSimpleHint && pSimpleHint->GetId() == SFX_HINT_DYING)
-            mpDefaultStyleSheet = NULL;
+            mpDefaultStyleSheet = nullptr;
         return;
     }
 
@@ -369,7 +369,7 @@ bool SdrPaintView::IsTextEdit() const
 // info about TextEditPageView. Default is 0L.
 SdrPageView* SdrPaintView::GetTextEditPageView() const
 {
-    return 0L;
+    return nullptr;
 }
 
 
@@ -377,11 +377,11 @@ SdrPageView* SdrPaintView::GetTextEditPageView() const
 sal_uInt16 SdrPaintView::ImpGetMinMovLogic(short nMinMov, const OutputDevice* pOut) const
 {
     if (nMinMov>=0) return sal_uInt16(nMinMov);
-    if (pOut==NULL)
+    if (pOut==nullptr)
     {
         pOut = GetFirstOutputDevice();
     }
-    if (pOut!=NULL) {
+    if (pOut!=nullptr) {
         return short(-pOut->PixelToLogic(Size(nMinMov,0)).Width());
     } else {
         return 0;
@@ -391,11 +391,11 @@ sal_uInt16 SdrPaintView::ImpGetMinMovLogic(short nMinMov, const OutputDevice* pO
 sal_uInt16 SdrPaintView::ImpGetHitTolLogic(short nHitTol, const OutputDevice* pOut) const
 {
     if (nHitTol>=0) return sal_uInt16(nHitTol);
-    if (pOut==NULL)
+    if (pOut==nullptr)
     {
         pOut = GetFirstOutputDevice();
     }
-    if (pOut!=NULL) {
+    if (pOut!=nullptr) {
         return short(-pOut->PixelToLogic(Size(nHitTol,0)).Width());
     } else {
         return 0;
@@ -426,7 +426,7 @@ void SdrPaintView::ClearPageView()
     {
         InvalidateAllWin();
         delete mpPageView;
-        mpPageView = 0L;
+        mpPageView = nullptr;
     }
 }
 
@@ -453,7 +453,7 @@ void SdrPaintView::HideSdrPage()
     {
         mpPageView->Hide();
         delete mpPageView;
-        mpPageView = 0L;
+        mpPageView = nullptr;
     }
 }
 
@@ -803,7 +803,7 @@ void SdrPaintView::EndDrawLayers(SdrPaintWindow& rPaintWindow, bool bPaintFormLa
     if(mpPageView)
     {
         // forget prepared SdrPageWindow
-        mpPageView->setPreparedPageWindow(0);
+        mpPageView->setPreparedPageWindow(nullptr);
     }
 }
 
@@ -870,7 +870,7 @@ void SdrPaintView::ImpFormLayerDrawing( SdrPaintWindow& rPaintWindow )
             // need to set PreparedPageWindow to make DrawLayer use the correct ObjectContact
             mpPageView->setPreparedPageWindow(pKnownTarget);
             mpPageView->DrawLayer(nControlLayerId, &rPaintWindow.GetTargetOutputDevice());
-            mpPageView->setPreparedPageWindow(0);
+            mpPageView->setPreparedPageWindow(nullptr);
         }
     }
 }
@@ -901,7 +901,7 @@ void SdrPaintView::GlueInvalidate() const
                 for (size_t nObjNum=0; nObjNum<nObjCount; ++nObjNum) {
                     const SdrObject* pObj=pOL->GetObj(nObjNum);
                     const SdrGluePointList* pGPL=pObj->GetGluePointList();
-                    if (pGPL!=NULL && pGPL->GetCount()!=0) {
+                    if (pGPL!=nullptr && pGPL->GetCount()!=0) {
                         pGPL->Invalidate(static_cast<vcl::Window&>(rOutDev), pObj);
                     }
                 }
@@ -1003,11 +1003,11 @@ void SdrPaintView::SetNotPersistDefaultAttr(const SfxItemSet& rAttr, bool /*bRep
 {
     // bReplaceAll has no effect here at all.
     bool bMeasure= dynamic_cast<const SdrView*>(this) != nullptr && static_cast<SdrView*>(this)->IsMeasureTool();
-    const SfxPoolItem *pPoolItem=NULL;
+    const SfxPoolItem *pPoolItem=nullptr;
     if (rAttr.GetItemState(SDRATTR_LAYERID,true,&pPoolItem)==SfxItemState::SET) {
         SdrLayerID nLayerId=static_cast<const SdrLayerIdItem*>(pPoolItem)->GetValue();
         const SdrLayer* pLayer=mpModel->GetLayerAdmin().GetLayerPerID(nLayerId);
-        if (pLayer!=NULL) {
+        if (pLayer!=nullptr) {
             if (bMeasure) maMeasureLayer=pLayer->GetName();
             else maActualLayer=pLayer->GetName();
         }
@@ -1037,7 +1037,7 @@ void SdrPaintView::SetDefaultAttr(const SfxItemSet& rAttr, bool bReplaceAll)
         bool bHasEEFeatureItems=false;
         SfxItemIter aIter(rAttr);
         const SfxPoolItem* pItem=aIter.FirstItem();
-        while (!bHasEEFeatureItems && pItem!=NULL) {
+        while (!bHasEEFeatureItems && pItem!=nullptr) {
             if (!IsInvalidItem(pItem)) {
                 sal_uInt16 nW=pItem->Which();
                 if (nW>=EE_FEATURE_START && nW<=EE_FEATURE_END) bHasEEFeatureItems=true;
@@ -1068,7 +1068,7 @@ void SdrPaintView::SetDefaultStyleSheet(SfxStyleSheet* pStyleSheet, bool bDontRe
     if (mpDefaultStyleSheet)
         StartListening(*mpDefaultStyleSheet);
 
-    if (pStyleSheet!=NULL && !bDontRemoveHardAttr) {
+    if (pStyleSheet!=nullptr && !bDontRemoveHardAttr) {
         SfxWhichIter aIter(pStyleSheet->GetItemSet());
         sal_uInt16 nWhich=aIter.FirstWhich();
         while (nWhich!=0) {

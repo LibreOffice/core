@@ -26,8 +26,8 @@
 
 
 E3DModifySceneSnapRectUpdater::E3DModifySceneSnapRectUpdater(const SdrObject* pObject)
-:   mpScene(0),
-    mpViewInformation3D(0)
+:   mpScene(nullptr),
+    mpViewInformation3D(nullptr)
 {
     // Secure old 3D transformation stack before modification
     if(pObject)
@@ -47,7 +47,7 @@ E3DModifySceneSnapRectUpdater::E3DModifySceneSnapRectUpdater(const SdrObject* pO
                 if(aAllContentRange.isEmpty())
                 {
                     // no content, nothing to do
-                    mpScene = 0;
+                    mpScene = nullptr;
                 }
                 else
                 {

@@ -228,7 +228,7 @@ SfxPoolItem* SvxBitmapListItem::Clone( SfxItemPool * ) const
 QUERY_PUT_IMPL( SvxBitmapListItem, BitmapList )
 
 SvxDashListItem::SvxDashListItem() :
-    pDashList( 0 )
+    pDashList( nullptr )
 {
 }
 

@@ -34,7 +34,7 @@ void SdrViewIter::ImpInitVars()
     mnListenerNum = 0L;
     mnPageViewNum = 0L;
     mnOutDevNum = 0L;
-    mpAktView = 0L;
+    mpAktView = nullptr;
 }
 
 
@@ -42,8 +42,8 @@ void SdrViewIter::ImpInitVars()
 SdrViewIter::SdrViewIter(const SdrPage* pPage, bool bNoMasterPage)
 {
     mpPage = pPage;
-    mpModel = (pPage) ? pPage->GetModel() : 0L;
-    mpObject = 0L;
+    mpModel = (pPage) ? pPage->GetModel() : nullptr;
+    mpObject = nullptr;
     mbNoMasterPage = bNoMasterPage;
     ImpInitVars();
 }
@@ -53,14 +53,14 @@ SdrViewIter::SdrViewIter(const SdrPage* pPage, bool bNoMasterPage)
 SdrViewIter::SdrViewIter(const SdrObject* pObject, bool bNoMasterPage)
 {
     mpObject = pObject;
-    mpModel = (pObject) ? pObject->GetModel() : 0L;
-    mpPage = (pObject) ? pObject->GetPage() : 0L;
+    mpModel = (pObject) ? pObject->GetModel() : nullptr;
+    mpPage = (pObject) ? pObject->GetPage() : nullptr;
     mbNoMasterPage = bNoMasterPage;
 
     if(!mpModel || !mpPage)
     {
-        mpModel = 0L;
-        mpPage = 0L;
+        mpModel = nullptr;
+        mpPage = nullptr;
     }
 
     ImpInitVars();
@@ -162,7 +162,7 @@ SdrView* SdrViewIter::ImpFindView()
         }
     }
 
-    mpAktView = 0L;
+    mpAktView = nullptr;
     return mpAktView;
 }
 

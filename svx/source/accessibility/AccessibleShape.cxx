@@ -102,12 +102,12 @@ AccessibleShape::AccessibleShape (
     const AccessibleShapeInfo& rShapeInfo,
     const AccessibleShapeTreeInfo& rShapeTreeInfo)
     : AccessibleContextBase (rShapeInfo.mxParent,AccessibleRole::SHAPE),
-      mpChildrenManager(NULL),
+      mpChildrenManager(nullptr),
       mxShape (rShapeInfo.mxShape),
       maShapeTreeInfo (rShapeTreeInfo),
       mnIndex (rShapeInfo.mnIndex),
       m_nIndexInParent(-1),
-      mpText (NULL),
+      mpText (nullptr),
       mpParent (rShapeInfo.mpChildrenManager)
 {
     m_pShape = GetSdrObjectFromXShape(mxShape);
@@ -135,7 +135,7 @@ void AccessibleShape::Init()
     if (xShapes.is() && xShapes->getCount() > 0)
         mpChildrenManager = new ChildrenManager (
             this, xShapes, maShapeTreeInfo, *this);
-    if (mpChildrenManager != NULL)
+    if (mpChildrenManager != nullptr)
         mpChildrenManager->Update();
 
     // Register at model as document::XEventListener.
@@ -151,19 +151,19 @@ void AccessibleShape::Init()
     {
         SdrView* pView = maShapeTreeInfo.GetSdrView ();
         const vcl::Window* pWindow = maShapeTreeInfo.GetWindow ();
-        if (pView != NULL && pWindow != NULL && mxShape.is())
+        if (pView != nullptr && pWindow != nullptr && mxShape.is())
         {
             // #107948# Determine whether shape text is empty
             SdrObject* pSdrObject = GetSdrObjectFromXShape(mxShape);
             if( pSdrObject )
             {
                 SdrTextObj* pTextObj = dynamic_cast<SdrTextObj*>( pSdrObject  );
-                OutlinerParaObject* pOutlinerParaObject = NULL;
+                OutlinerParaObject* pOutlinerParaObject = nullptr;
 
                 if( pTextObj )
                     pOutlinerParaObject = pTextObj->GetEditOutlinerParaObject(); // Get the OutlinerParaObject if text edit is active
 
-                bool bOwnParaObj = pOutlinerParaObject != NULL;
+                bool bOwnParaObj = pOutlinerParaObject != nullptr;
 
                 if( !pOutlinerParaObject && pSdrObject )
                     pOutlinerParaObject = pSdrObject->GetOutlinerParaObject();
@@ -178,7 +178,7 @@ void AccessibleShape::Init()
                 else
                 {
                     // non-empty text -> use full-fledged edit source right away
-                    ::std::unique_ptr<SvxEditSource> pEditSource( new SvxTextEditSource ( *pSdrObject, 0, *pView, *pWindow) );
+                    ::std::unique_ptr<SvxEditSource> pEditSource( new SvxTextEditSource ( *pSdrObject, nullptr, *pView, *pWindow) );
                     mpText = new AccessibleTextHelper( std::move(pEditSource) );
                 }
 
@@ -198,7 +198,7 @@ void AccessibleShape::UpdateStates()
 {
     ::utl::AccessibleStateSetHelper* pStateSet =
         static_cast< ::utl::AccessibleStateSetHelper*>(mxStateSet.get());
-    if (pStateSet == NULL)
+    if (pStateSet == nullptr)
         return;
 
     // Set the opaque state for certain shape types when their fill style is
@@ -262,7 +262,7 @@ bool AccessibleShape::SetState (sal_Int16 aState)
 {
     bool bStateHasChanged = false;
 
-    if (aState == AccessibleStateType::FOCUSED && mpText != NULL)
+    if (aState == AccessibleStateType::FOCUSED && mpText != nullptr)
     {
         // Offer FOCUSED state to edit engine and detect whether the state
         // changes.
@@ -283,7 +283,7 @@ bool AccessibleShape::ResetState (sal_Int16 aState)
 {
     bool bStateHasChanged = false;
 
-    if (aState == AccessibleStateType::FOCUSED && mpText != NULL)
+    if (aState == AccessibleStateType::FOCUSED && mpText != nullptr)
     {
         // Try to remove FOCUSED state from the edit engine and detect
         // whether the state changes.
@@ -302,7 +302,7 @@ bool AccessibleShape::ResetState (sal_Int16 aState)
 
 bool AccessibleShape::GetState (sal_Int16 aState)
 {
-    if (aState == AccessibleStateType::FOCUSED && mpText != NULL)
+    if (aState == AccessibleStateType::FOCUSED && mpText != nullptr)
     {
         // Just delegate the call to the edit engine.  The state is not
         // merged into the state set.
@@ -345,10 +345,10 @@ sal_Int32 SAL_CALL
     sal_Int32 nChildCount = 0;
 
     // Add the number of shapes that are children of this shape.
-    if (mpChildrenManager != NULL)
+    if (mpChildrenManager != nullptr)
         nChildCount += mpChildrenManager->GetChildCount ();
     // Add the number text paragraphs.
-    if (mpText != NULL)
+    if (mpText != nullptr)
         nChildCount += mpText->GetChildCount ();
 
     return nChildCount;
@@ -370,15 +370,15 @@ uno::Reference<XAccessible> SAL_CALL
 
     // Depending on the index decide whether to delegate this call to the
     // children manager or the edit engine.
-    if ((mpChildrenManager != NULL)
+    if ((mpChildrenManager != nullptr)
         && (nIndex < mpChildrenManager->GetChildCount()))
     {
         xChild = mpChildrenManager->GetChild (nIndex);
     }
-    else if (mpText != NULL)
+    else if (mpText != nullptr)
     {
         sal_Int32 nI = nIndex;
-        if (mpChildrenManager != NULL)
+        if (mpChildrenManager != nullptr)
             nI -= mpChildrenManager->GetChildCount();
         xChild = mpText->GetChild (nI);
     }
@@ -395,7 +395,7 @@ uno::Reference<XAccessibleRelationSet> SAL_CALL
         throw (css::uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard (maMutex);
-    if (mpParent == NULL)
+    if (mpParent == nullptr)
         return uno::Reference<XAccessibleRelationSet>();
 
     ::utl::AccessibleRelationSetHelper* pRelationSet = new utl::AccessibleRelationSetHelper;
@@ -423,7 +423,7 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
     ::osl::MutexGuard aGuard (maMutex);
     Reference<XAccessibleStateSet> xStateSet;
 
-    if (rBHelper.bDisposed || mpText == NULL)
+    if (rBHelper.bDisposed || mpText == nullptr)
         // Return a minimal state set that only contains the DEFUNC state.
     {
         xStateSet = AccessibleContextBase::getAccessibleStateSet ();
@@ -461,10 +461,10 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
         ::utl::AccessibleStateSetHelper* pStateSet =
               static_cast< ::utl::AccessibleStateSetHelper*>(mxStateSet.get());
 
-        if (pStateSet != NULL)
+        if (pStateSet != nullptr)
         {
             // Merge current FOCUSED state from edit engine.
-            if (mpText != NULL)
+            if (mpText != nullptr)
             {
                 if (mpText->HaveFocus())
                     pStateSet->AddState (AccessibleStateType::FOCUSED);
@@ -619,7 +619,7 @@ awt::Rectangle SAL_CALL AccessibleShape::getBounds()
         }
 
         // Transform coordinates from internal to pixel.
-        if (maShapeTreeInfo.GetViewForwarder() == NULL)
+        if (maShapeTreeInfo.GetViewForwarder() == nullptr)
             throw uno::RuntimeException (OUString (
                 "AccessibleShape has no valid view forwarder"),
                 static_cast<uno::XWeak*>(this));
@@ -789,7 +789,7 @@ void SAL_CALL AccessibleShape::addAccessibleEventListener (
     else
     {
         AccessibleContextBase::addAccessibleEventListener (rxListener);
-        if (mpText != NULL)
+        if (mpText != nullptr)
             mpText->AddEventListener (rxListener);
     }
 }
@@ -802,7 +802,7 @@ void SAL_CALL AccessibleShape::removeAccessibleEventListener (
     throw (uno::RuntimeException, std::exception)
 {
     AccessibleContextBase::removeAccessibleEventListener (rxListener);
-    if (mpText != NULL)
+    if (mpText != nullptr)
         mpText->RemoveEventListener (rxListener);
 }
 
@@ -1042,7 +1042,7 @@ void SAL_CALL
         {
             // Remove reference to model broadcaster to allow it to pass
             // away.
-            maShapeTreeInfo.SetModelBroadcaster(NULL);
+            maShapeTreeInfo.SetModelBroadcaster(nullptr);
         }
 
     }
@@ -1102,7 +1102,7 @@ AccessibleShape*
     throw()
 {
     uno::Reference< lang::XUnoTunnel >  xTunnel( rxIFace, uno::UNO_QUERY );
-    AccessibleShape*                    pReturn = NULL;
+    AccessibleShape*                    pReturn = nullptr;
 
     if( xTunnel.is() )
         pReturn = reinterpret_cast< AccessibleShape* >( xTunnel->getSomething( getUnoTunnelImplementationId() ) );
@@ -1134,7 +1134,7 @@ void AccessibleShape::ViewForwarderChanged (ChangeType aChangeType,
         uno::Any());
 
     // Tell children manager of the modified view forwarder.
-    if (mpChildrenManager != NULL)
+    if (mpChildrenManager != nullptr)
         mpChildrenManager->ViewForwarderChanged (aChangeType, pViewForwarder);
 
     // update our children that our screen position might have changed
@@ -1273,7 +1273,7 @@ void AccessibleShape::disposing()
     // case that it has the focus.
     ::utl::AccessibleStateSetHelper* pStateSet =
           static_cast< ::utl::AccessibleStateSetHelper*>(mxStateSet.get());
-    if (pStateSet != NULL)
+    if (pStateSet != nullptr)
         pStateSet->RemoveState (AccessibleStateType::FOCUSED);
 
     // Unregister from broadcasters.
@@ -1287,21 +1287,21 @@ void AccessibleShape::disposing()
             static_cast<document::XEventListener*>(this));
 
     // Release the child containers.
-    if (mpChildrenManager != NULL)
+    if (mpChildrenManager != nullptr)
     {
         delete mpChildrenManager;
-        mpChildrenManager = NULL;
+        mpChildrenManager = nullptr;
     }
-    if (mpText != NULL)
+    if (mpText != nullptr)
     {
         mpText->Dispose();
         delete mpText;
-        mpText = NULL;
+        mpText = nullptr;
     }
 
     // Cleanup.  Remove references to objects to allow them to be
     // destroyed.
-    mxShape = NULL;
+    mxShape = nullptr;
     maShapeTreeInfo = AccessibleShapeTreeInfo();
 
     // Call base classes.
@@ -1430,7 +1430,7 @@ throw (uno::RuntimeException, std::exception)
     SdrObject *pObj = GetSdrObjectFromXShape(mxShape);
 
 
-    if(pObj == NULL )
+    if(pObj == nullptr )
     {
         return aRet;
     }
@@ -1462,7 +1462,7 @@ throw (uno::RuntimeException, std::exception)
         return aRet;
     }
 
-    SdrObjList *pGrpList = NULL;
+    SdrObjList *pGrpList = nullptr;
     if( pObj->GetUpGroup() )
         pGrpList = pObj->GetUpGroup()->GetSubList();
     else
@@ -1510,7 +1510,7 @@ OUString AccessibleShape::getObjectLink( const uno::Any& )
     OUString aRet;
 
     SdrObject *pObj = GetSdrObjectFromXShape(mxShape);
-    if(pObj == NULL )
+    if(pObj == nullptr )
     {
         return aRet;
     }

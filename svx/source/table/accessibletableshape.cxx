@@ -342,7 +342,7 @@ SvxTableController* AccessibleTableShape::getTableController()
     if( pView )
         return dynamic_cast< SvxTableController* >( pView->getSelectionController().get() );
     else
-        return 0;
+        return nullptr;
 }
 
 
@@ -961,7 +961,7 @@ void  SAL_CALL AccessibleTableShape::selectionChanged (const EventObject& rEvent
 AccessibleCell* AccessibleTableShape::GetActiveAccessibleCell()
 {
     Reference< AccessibleCell > xAccCell;
-    AccessibleCell* pAccCell = NULL;
+    AccessibleCell* pAccCell = nullptr;
     SvxTableController* pController = getTableController();
     if (pController)
     {
@@ -990,7 +990,7 @@ bool AccessibleTableShape::SetState (sal_Int16 aState)
 {
     AccessibleCell* pActiveAccessibleCell = GetActiveAccessibleCell();
     bool bStateHasChanged = false;
-    if (aState == AccessibleStateType::FOCUSED && pActiveAccessibleCell != NULL)
+    if (aState == AccessibleStateType::FOCUSED && pActiveAccessibleCell != nullptr)
     {
         return pActiveAccessibleCell->SetState(aState);
     }
@@ -1004,7 +1004,7 @@ bool AccessibleTableShape::ResetState (sal_Int16 aState)
 {
     AccessibleCell* pActiveAccessibleCell = GetActiveAccessibleCell();
     bool bStateHasChanged = false;
-    if (aState == AccessibleStateType::FOCUSED && pActiveAccessibleCell != NULL)
+    if (aState == AccessibleStateType::FOCUSED && pActiveAccessibleCell != nullptr)
     {
         return pActiveAccessibleCell->ResetState(aState);
     }
@@ -1039,7 +1039,7 @@ AccessibleTableHeaderShape::AccessibleTableHeaderShape( AccessibleTableShape* pT
 
 AccessibleTableHeaderShape::~AccessibleTableHeaderShape()
 {
-    mpTable = NULL;
+    mpTable = nullptr;
 }
 
 // XAccessible

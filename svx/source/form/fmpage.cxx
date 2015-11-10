@@ -119,13 +119,13 @@ void FmFormPage::SetModel(SdrModel* pNewModel)
 
 SdrPage* FmFormPage::Clone() const
 {
-    return Clone(0);
+    return Clone(nullptr);
 }
 
 SdrPage* FmFormPage::Clone(SdrModel* const pNewModel) const
 {
     FmFormPage* const pNewPage = new FmFormPage(*this);
-    FmFormModel* pFormModel = 0;
+    FmFormModel* pFormModel = nullptr;
     if (pNewModel)
     {
         pFormModel = dynamic_cast<FmFormModel*>(pNewModel);
@@ -167,8 +167,8 @@ bool FmFormPage::RequestHelp( vcl::Window* pWindow, SdrView* pView,
     aPos = pWindow->ScreenToOutputPixel( aPos );
     aPos = pWindow->PixelToLogic( aPos );
 
-    SdrObject* pObj = NULL;
-    SdrPageView* pPV = NULL;
+    SdrObject* pObj = nullptr;
+    SdrPageView* pPV = nullptr;
     if ( !pView->PickObj( aPos, 0, pObj, pPV, SdrSearchOptions::DEEP ) )
         return false;
 

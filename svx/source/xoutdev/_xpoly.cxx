@@ -35,9 +35,9 @@
 
 
 ImpXPolygon::ImpXPolygon(sal_uInt16 nInitSize, sal_uInt16 _nResize)
-    : pPointAry(NULL)
-    , pFlagAry(NULL)
-    , pOldPointAry(NULL)
+    : pPointAry(nullptr)
+    , pFlagAry(nullptr)
+    , pOldPointAry(nullptr)
     , bDeleteOldPoints(false)
     , nSize(0)
     , nResize(_nResize)
@@ -48,9 +48,9 @@ ImpXPolygon::ImpXPolygon(sal_uInt16 nInitSize, sal_uInt16 _nResize)
 }
 
 ImpXPolygon::ImpXPolygon( const ImpXPolygon& rImpXPoly )
-    : pPointAry(NULL)
-    , pFlagAry(NULL)
-    , pOldPointAry(NULL)
+    : pPointAry(nullptr)
+    , pFlagAry(nullptr)
+    , pOldPointAry(nullptr)
     , bDeleteOldPoints(false)
     , nSize(0)
     , nResize(rImpXPoly.nResize)
@@ -861,7 +861,7 @@ basegfx::B2DPolygon XPolygon::getB2DPolygon() const
     // #i74631# use tools Polygon class for conversion to not have the code doubled
     // here. This needs one more conversion but avoids different convertors in
     // the long run
-    DBG_ASSERT(pImpXPolygon != 0, "XPolygon::getB2DPolygon(): XPolygon has no implementation incarnated (!)");
+    DBG_ASSERT(pImpXPolygon != nullptr, "XPolygon::getB2DPolygon(): XPolygon has no implementation incarnated (!)");
     const tools::Polygon aSource(GetPointCount(), pImpXPolygon->pPointAry, pImpXPolygon->pFlagAry);
 
     return aSource.getB2DPolygon();

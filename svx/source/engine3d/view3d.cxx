@@ -107,7 +107,7 @@ Impl3DMirrorConstructOverlay::Impl3DMirrorConstructOverlay(const E3dView& rView)
 :   maObjects(),
     mrView(rView),
     mnCount(rView.GetMarkedObjectCount()),
-    mpPolygons(0),
+    mpPolygons(nullptr),
     maFullOverlay()
 {
     if(mnCount)
@@ -241,7 +241,7 @@ void E3dView::DrawMarkedObj(OutputDevice& rOut) const
 {
     // Does 3D objects exist which scenes are not selected?
     bool bSpecialHandling = false;
-    E3dScene *pScene = NULL;
+    E3dScene *pScene = nullptr;
 
     const size_t nCnt = GetMarkedObjectCount();
     for(size_t nObjs = 0; nObjs < nCnt; ++nObjs)
@@ -329,7 +329,7 @@ SdrModel* E3dView::GetMarkedObjModel() const
     // Does 3D objects exist which scenes are not selected?
     bool bSpecialHandling(false);
     const size_t nCount(GetMarkedObjectCount());
-    E3dScene *pScene = 0;
+    E3dScene *pScene = nullptr;
 
     for(size_t nObjs = 0; nObjs < nCount; ++nObjs)
     {
@@ -365,7 +365,7 @@ SdrModel* E3dView::GetMarkedObjModel() const
         return SdrView::GetMarkedObjModel();
     }
 
-    SdrModel* pNewModel = 0;
+    SdrModel* pNewModel = nullptr;
     Rectangle aSelectedSnapRect;
 
     // set 3d selection flags at all directly selected objects
@@ -745,7 +745,7 @@ void E3dView::ImpCreateSingle3DObjectFlat(E3dScene* pScene, SdrObject* pObj, boo
         }
 
         // Create a new extrude object
-        E3dObject* p3DObj = NULL;
+        E3dObject* p3DObj = nullptr;
         if(bExtrude)
         {
             p3DObj = new E3dExtrudeObj(aDefault, pPath->GetPathPoly(), fDepth);
@@ -1019,8 +1019,8 @@ struct E3dDepthNeighbour
     basegfx::B2DPolyPolygon     maPreparedPolyPolygon;
 
     E3dDepthNeighbour()
-    :   mpNext(0),
-        mpObj(0),
+    :   mpNext(nullptr),
+        mpObj(nullptr),
         maPreparedPolyPolygon()
     {
     }
@@ -1032,8 +1032,8 @@ struct E3dDepthLayer
     E3dDepthNeighbour*          mpNext;
 
     E3dDepthLayer()
-    :   mpDown(0),
-        mpNext(0)
+    :   mpDown(nullptr),
+        mpNext(nullptr)
     {
     }
 
@@ -1054,8 +1054,8 @@ void E3dView::DoDepthArrange(E3dScene* pScene, double fDepth)
     {
         SdrObjList* pSubList = pScene->GetSubList();
         SdrObjListIter aIter(*pSubList, IM_FLAT);
-        E3dDepthLayer* pBaseLayer = NULL;
-        E3dDepthLayer* pLayer = NULL;
+        E3dDepthLayer* pBaseLayer = nullptr;
+        E3dDepthLayer* pLayer = nullptr;
         sal_Int32 nNumLayers = 0;
 
         while(aIter.IsMore())
@@ -1201,7 +1201,7 @@ bool E3dView::BegDragObj(const Point& rPnt, OutputDevice* pOut,
     else
     {
         bool bOwnActionNecessary;
-        if (pHdl == NULL)
+        if (pHdl == nullptr)
         {
            bOwnActionNecessary = true;
         }
@@ -1233,7 +1233,7 @@ bool E3dView::BegDragObj(const Point& rPnt, OutputDevice* pOut,
             }
             if( bThereAre3DObjects )
             {
-                meDragHdl = ( pHdl == NULL ? HDL_MOVE : pHdl->GetKind() );
+                meDragHdl = ( pHdl == nullptr ? HDL_MOVE : pHdl->GetKind() );
                 switch ( meDragMode )
                 {
                     case SDRDRAG_ROTATE:
@@ -1302,8 +1302,8 @@ bool E3dView::BegDragObj(const Point& rPnt, OutputDevice* pOut,
 
 E3dScene* E3dView::SetCurrent3DObj(E3dObject* p3DObj)
 {
-    DBG_ASSERT(p3DObj != NULL, "Who puts in a NULL-pointer here");
-    E3dScene* pScene = NULL;
+    DBG_ASSERT(p3DObj != nullptr, "Who puts in a NULL-pointer here");
+    E3dScene* pScene = nullptr;
 
     // get transformed BoundVolume of the object
     basegfx::B3DRange aVolume(p3DObj->GetBoundVolume());
@@ -1353,7 +1353,7 @@ void E3dView::Start3DCreation()
         OutputDevice* pOut    = GetFirstOutputDevice();
 
         // first determine representation boundaries
-        if (pOut != NULL)
+        if (pOut != nullptr)
         {
             nMinLen = pOut->PixelToLogic(Size(0,50)).Height();
             nObjDst = pOut->PixelToLogic(Size(0,20)).Height();
@@ -1519,7 +1519,7 @@ void E3dView::ResetCreationActive ()
     if(mpMirrorOverlay)
     {
         delete mpMirrorOverlay;
-        mpMirrorOverlay = 0L;
+        mpMirrorOverlay = nullptr;
     }
 }
 
@@ -1540,7 +1540,7 @@ void E3dView::InitView ()
     aDefaultLightColor       = RGB_Color(COL_WHITE);
     aDefaultAmbientColor     = RGB_Color(COL_BLACK);
     bDoubleSided             = false;
-    mpMirrorOverlay          = 0L;
+    mpMirrorOverlay          = nullptr;
 }
 
 bool E3dView::IsBreak3DObjPossible() const

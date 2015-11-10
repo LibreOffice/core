@@ -60,7 +60,7 @@ SdrCustomShapeGeometryItem::SdrCustomShapeGeometryItem( const uno::Sequence< bea
 
 css::uno::Any* SdrCustomShapeGeometryItem::GetPropertyValueByName( const OUString& rPropName )
 {
-    css::uno::Any* pRet = NULL;
+    css::uno::Any* pRet = nullptr;
     PropertyHashMap::iterator aHashIter( aPropHashMap.find( rPropName ) );
     if ( aHashIter != aPropHashMap.end() )
         pRet = &aPropSeq[ (*aHashIter).second ].Value;
@@ -69,7 +69,7 @@ css::uno::Any* SdrCustomShapeGeometryItem::GetPropertyValueByName( const OUStrin
 
 const css::uno::Any* SdrCustomShapeGeometryItem::GetPropertyValueByName( const OUString& rPropName ) const
 {
-    const css::uno::Any* pRet = NULL;
+    const css::uno::Any* pRet = nullptr;
     PropertyHashMap::const_iterator aHashIter( aPropHashMap.find( rPropName ) );
     if ( aHashIter != aPropHashMap.end() )
         pRet = &aPropSeq[ (*aHashIter).second ].Value;
@@ -78,7 +78,7 @@ const css::uno::Any* SdrCustomShapeGeometryItem::GetPropertyValueByName( const O
 
 css::uno::Any* SdrCustomShapeGeometryItem::GetPropertyValueByName( const OUString& rSequenceName, const OUString& rPropName )
 {
-    css::uno::Any* pRet = NULL;
+    css::uno::Any* pRet = nullptr;
     css::uno::Any* pSeqAny = GetPropertyValueByName( rSequenceName );
     if ( pSeqAny )
     {
@@ -98,7 +98,7 @@ css::uno::Any* SdrCustomShapeGeometryItem::GetPropertyValueByName( const OUStrin
 
 const css::uno::Any* SdrCustomShapeGeometryItem::GetPropertyValueByName( const OUString& rSequenceName, const OUString& rPropName ) const
 {
-    const css::uno::Any* pRet = NULL;
+    const css::uno::Any* pRet = nullptr;
     const css::uno::Any* pSeqAny = GetPropertyValueByName( rSequenceName );
     if ( pSeqAny )
     {
@@ -166,7 +166,7 @@ void SdrCustomShapeGeometryItem::SetPropertyValue( const OUString& rSequenceName
     else
     {
         css::uno::Any* pSeqAny = GetPropertyValueByName( rSequenceName );
-        if( pSeqAny == NULL )
+        if( pSeqAny == nullptr )
         {
             css::uno::Sequence < beans::PropertyValue > aSeq;
             beans::PropertyValue aValue;

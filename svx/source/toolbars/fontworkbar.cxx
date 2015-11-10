@@ -168,7 +168,7 @@ void SetFontWorkShapeTypeState( SdrView* pSdrView, SfxItemSet& rSet )
 // tragen wir etwas ein, was hier (hoffentlich) nie vorkommt).
 static SfxSlot aFontworkBarSlots_Impl[] =
 {
-    { 0, 0, 0, SfxSlotMode::NONE, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }
+    { 0, 0, 0, SfxSlotMode::NONE, 0, 0, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, 0, 0, nullptr }
 };
 
 SFX_IMPL_INTERFACE(FontworkBar, SfxShell)
@@ -193,7 +193,7 @@ FontworkBar::FontworkBar(SfxViewShell* pViewShell )
 
 FontworkBar::~FontworkBar()
 {
-    SetRepeatTarget(NULL);
+    SetRepeatTarget(nullptr);
 }
 
 static vcl::Window* ImpGetViewWin(SdrView* pView)
@@ -212,7 +212,7 @@ static vcl::Window* ImpGetViewWin(SdrView* pView)
         }
     }
 
-    return 0L;
+    return nullptr;
 }
 
 namespace svx {
@@ -495,7 +495,7 @@ void FontworkBar::execute( SdrView* pSdrView, SfxRequest& rReq, SfxBindings& rBi
                 if( nRet != 0 )
                 {
                     SfxInt32Item aItem( SID_FONTWORK_CHARACTER_SPACING, aDlg->getScale() );
-                    SfxPoolItem* aItems[] = { &aItem, 0 };
+                    SfxPoolItem* aItems[] = { &aItem, nullptr };
                     rBindings.Execute( SID_FONTWORK_CHARACTER_SPACING, const_cast<const SfxPoolItem**>(aItems) );
                 }
             }

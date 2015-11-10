@@ -62,7 +62,7 @@ namespace {
 
 const MetaCommentAction* ImplCheckForEPS( GDIMetaFile& rMtf )
 {
-    const MetaCommentAction* pComment = NULL;
+    const MetaCommentAction* pComment = nullptr;
 
     if ( rMtf.GetActionSize() >= 2
             && rMtf.GetAction(0)->GetType() == MetaActionType::EPS
@@ -336,8 +336,8 @@ const GraphicObject& SvXMLGraphicOutputStream::GetGraphicObject()
         maGrfObj = aGraphic;
         if( maGrfObj.GetType() != GRAPHIC_NONE )
         {
-            delete mpOStm, mpOStm = NULL;
-            delete mpTmp, mpTmp = NULL;
+            delete mpOStm, mpOStm = nullptr;
+            delete mpTmp, mpTmp = nullptr;
         }
     }
 
@@ -350,7 +350,7 @@ SvXMLGraphicHelper::SvXMLGraphicHelper( SvXMLGraphicHelperMode eCreateMode ) :
     ::cppu::WeakComponentImplHelper2< css::document::XGraphicObjectResolver,
                                       css::document::XBinaryStreamResolver >( maMutex )
 {
-    Init( NULL, eCreateMode, false );
+    Init( nullptr, eCreateMode, false );
 }
 
 SvXMLGraphicHelper::SvXMLGraphicHelper()
@@ -764,7 +764,7 @@ SvXMLGraphicHelper* SvXMLGraphicHelper::Create( SvXMLGraphicHelperMode eCreateMo
     SvXMLGraphicHelper* pThis = new SvXMLGraphicHelper;
 
     pThis->acquire();
-    pThis->Init( NULL, eCreateMode, false );
+    pThis->Init( nullptr, eCreateMode, false );
 
     return pThis;
 }

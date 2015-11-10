@@ -240,7 +240,7 @@ void NBOTypeMgrBase::StoreMapUnit_impl() {
     }
 }
 // Character Bullet Type lib
-BulletsSettings_Impl* BulletsTypeMgr::pActualBullets[] ={0,0,0,0,0,0,0,0};
+BulletsSettings_Impl* BulletsTypeMgr::pActualBullets[] ={nullptr,nullptr,nullptr,nullptr,nullptr,nullptr,nullptr,nullptr};
 sal_Unicode BulletsTypeMgr::aDynamicBulletTypes[]={' ',' ',' ',' ',' ',' ',' ',' '};
 sal_Unicode BulletsTypeMgr::aDynamicRTLBulletTypes[]={' ',' ',' ',' ',' ',' ',' ',' '};
 
@@ -590,7 +590,7 @@ sal_uInt16 GraphyicBulletsTypeMgr::GetNBOIndexForNumRule(SvxNumRule& aNum,sal_uI
 
     SvxNumberFormat aFmt(aNum.GetLevel(nActLv));
     const SvxBrushItem* pBrsh = aFmt.GetBrush();
-    const Graphic* pGrf = 0;
+    const Graphic* pGrf = nullptr;
     if ( pBrsh )
         pGrf = pBrsh->GetGraphic();
 
@@ -632,7 +632,7 @@ bool GraphyicBulletsTypeMgr::RelplaceNumRule(SvxNumRule& aNum, sal_uInt16 nIndex
 
     SvxNumberFormat aFmt(aNum.GetLevel(nActLv));
     const SvxBrushItem* pBrsh = aFmt.GetBrush();
-    const Graphic* pGrf = 0;
+    const Graphic* pGrf = nullptr;
     if ( pBrsh )
         pGrf = pBrsh->GetGraphic();
     else
@@ -759,8 +759,8 @@ OUString GraphyicBulletsTypeMgr::GetGrfName(sal_uInt16 nIndex)
     return sRet;
 }
 // Mix Bullets Type lib
-MixBulletsSettings_Impl* MixBulletsTypeMgr::pActualBullets[] ={0,0,0,0,0,0,0,0};
-MixBulletsSettings_Impl* MixBulletsTypeMgr::pDefaultActualBullets[] ={0,0,0,0,0,0,0,0};
+MixBulletsSettings_Impl* MixBulletsTypeMgr::pActualBullets[] ={nullptr,nullptr,nullptr,nullptr,nullptr,nullptr,nullptr,nullptr};
+MixBulletsSettings_Impl* MixBulletsTypeMgr::pDefaultActualBullets[] ={nullptr,nullptr,nullptr,nullptr,nullptr,nullptr,nullptr,nullptr};
 
 MixBulletsTypeMgr::MixBulletsTypeMgr()
     : NBOTypeMgrBase(eNBOType::MIXBULLETS)
@@ -809,7 +809,7 @@ MixBulletsTypeMgr::MixBulletsTypeMgr(const MixBulletsTypeMgr& aTypeMgr):
             static_cast<GrfBulDataRelation*>(pActualBullets[i]->pBullets)->sDescription = static_cast<GrfBulDataRelation*>(aTypeMgr.pActualBullets[i]->pBullets)->sDescription;
             static_cast<GrfBulDataRelation*>(pActualBullets[i]->pBullets)->bIsCustomized = static_cast<GrfBulDataRelation*>(aTypeMgr.pActualBullets[i]->pBullets)->bIsCustomized;
             static_cast<GrfBulDataRelation*>(pActualBullets[i]->pBullets)->eType = static_cast<GrfBulDataRelation*>(aTypeMgr.pActualBullets[i]->pBullets)->eType;
-            if ( static_cast<GrfBulDataRelation*>(aTypeMgr.pActualBullets[i]->pBullets)->bIsCustomized && static_cast<GrfBulDataRelation*>(aTypeMgr.pActualBullets[i]->pBullets)->pGrfObj != NULL)
+            if ( static_cast<GrfBulDataRelation*>(aTypeMgr.pActualBullets[i]->pBullets)->bIsCustomized && static_cast<GrfBulDataRelation*>(aTypeMgr.pActualBullets[i]->pBullets)->pGrfObj != nullptr)
             {
                 static_cast<GrfBulDataRelation*>(pActualBullets[i]->pBullets)->pGrfObj = static_cast<GrfBulDataRelation*>(aTypeMgr.pActualBullets[i]->pBullets)->pGrfObj;
             }
@@ -953,7 +953,7 @@ sal_uInt16 MixBulletsTypeMgr::GetNBOIndexForNumRule(SvxNumRule& aNum,sal_uInt16 
     }else if ( (eNumType&(~LINK_TOKEN)) == SVX_NUM_BITMAP )
     {
         const SvxBrushItem* pBrsh = aFmt.GetBrush();
-        const Graphic* pGrf = 0;
+        const Graphic* pGrf = nullptr;
         if ( pBrsh )
             pGrf = pBrsh->GetGraphic();
 
@@ -1020,7 +1020,7 @@ bool MixBulletsTypeMgr::RelplaceNumRule(SvxNumRule& aNum,sal_uInt16 nIndex,sal_u
     }else if ( (eNumType&(~LINK_TOKEN)) == SVX_NUM_BITMAP && pActualBullets[nIndex]->eType == eNBType::GRAPHICBULLETS )
     {
         const SvxBrushItem* pBrsh = aFmt.GetBrush();
-        const Graphic* pGrf = 0;
+        const Graphic* pGrf = nullptr;
         if ( pBrsh )
             pGrf = pBrsh->GetGraphic();
         else
@@ -1055,7 +1055,7 @@ bool MixBulletsTypeMgr::RelplaceNumRule(SvxNumRule& aNum,sal_uInt16 nIndex,sal_u
     }else
     {
         delete pActualBullets[nIndex]->pBullets;
-        pActualBullets[nIndex]->pBullets = 0;
+        pActualBullets[nIndex]->pBullets = nullptr;
         if ( eNumType == SVX_NUM_CHAR_SPECIAL )
         {
             sal_Unicode cChar = aFmt.GetBulletChar();
@@ -1075,7 +1075,7 @@ bool MixBulletsTypeMgr::RelplaceNumRule(SvxNumRule& aNum,sal_uInt16 nIndex,sal_u
         }else if ( (eNumType&(~LINK_TOKEN)) == SVX_NUM_BITMAP )
         {
             const SvxBrushItem* pBrsh = aFmt.GetBrush();
-            const Graphic* pGrf = 0;
+            const Graphic* pGrf = nullptr;
             if ( pBrsh )
                 pGrf = pBrsh->GetGraphic();
             else
@@ -1268,7 +1268,7 @@ NumberingTypeMgr::NumberingTypeMgr()
 NumberingTypeMgr::NumberingTypeMgr(const NumberingTypeMgr& rTypeMgr)
     : NBOTypeMgrBase(rTypeMgr)
     , pNumberSettingsArr (new NumberSettingsArr_Impl)
-    , pDefaultNumberSettingsArr(NULL)
+    , pDefaultNumberSettingsArr(nullptr)
 {
     ImplLoad("standard.syb");
 }
@@ -1656,7 +1656,7 @@ bool OutlineTypeMgr::RelplaceNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uI
         }else if ((eNumType&(~LINK_TOKEN)) == SVX_NUM_BITMAP ) {
             if (_pSet->pBrushItem) {
                 delete (_pSet->pBrushItem);
-                _pSet->pBrushItem=NULL;
+                _pSet->pBrushItem=nullptr;
             }
             if (aFmt.GetBrush())
                 _pSet->pBrushItem = new SvxBrushItem(*aFmt.GetBrush());
@@ -1698,7 +1698,7 @@ bool OutlineTypeMgr::ApplyNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uInt1
     if(DEFAULT_NUM_VALUSET_COUNT <= nIndex)
         return false;
 
-    const FontList* pList = 0;
+    const FontList* pList = nullptr;
 
     OutlineSettings_Impl* pItemArr = pOutlineSettingsArrs[nIndex];
     if (isDefault) pItemArr=pDefaultOutlineSettingsArrs[nIndex];
@@ -1706,7 +1706,7 @@ bool OutlineTypeMgr::ApplyNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uInt1
     //Font& rActBulletFont = lcl_GetDefaultBulletFont();
     NumSettingsArr_Impl *pNumSettingsArr=pItemArr->pNumSettingsArr;
 
-    NumSettings_Impl* pLevelSettings = 0;
+    NumSettings_Impl* pLevelSettings = nullptr;
     OUString sBulletCharFormatName = GetBulCharFmtName();
     for(sal_uInt16 i = 0; i < aNum.GetLevelCount(); i++)
     {
@@ -1732,7 +1732,7 @@ bool OutlineTypeMgr::ApplyNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uInt1
                 {
                     SfxObjectShell* pCurDocShell = SfxObjectShell::Current();
                     const SvxFontListItem* pFontListItem = static_cast<const SvxFontListItem*>( pCurDocShell->GetItem( SID_ATTR_CHAR_FONTLIST ) );
-                    pList = pFontListItem ? pFontListItem->GetFontList() : 0;
+                    pList = pFontListItem ? pFontListItem->GetFontList() : nullptr;
                 }
                 if(pList && pList->IsAvailable( pLevelSettings->sBulletFont ) )
                 {

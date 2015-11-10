@@ -43,7 +43,7 @@ struct ExchangeData
     tools::Time     aThemeChangeTime;
 
     ExchangeData()
-        : pTheme(NULL)
+        : pTheme(nullptr)
         , aThemeChangeDate( Date::EMPTY )
         , aThemeChangeTime( tools::Time::EMPTY )
         {
@@ -142,7 +142,7 @@ class SVX_DLLPUBLIC GalleryProgress
 
     public:
 
-                                    GalleryProgress( GraphicFilter* pFilter = NULL );
+                                    GalleryProgress( GraphicFilter* pFilter = nullptr );
                                     ~GalleryProgress();
 
     void                            Update( sal_uIntPtr nVal, sal_uIntPtr nMaxVal );

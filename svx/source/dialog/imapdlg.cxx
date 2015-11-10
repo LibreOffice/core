@@ -117,7 +117,7 @@ VCL_BUILDER_FACTORY(StatusBar)
 
 SvxIMapDlg::SvxIMapDlg(SfxBindings *_pBindings, SfxChildWindow *pCW, vcl::Window* _pParent)
     : SfxModelessDialog(_pBindings, pCW, _pParent, "ImapDialog", "svx/ui/imapdialog.ui")
-    , pCheckObj(NULL)
+    , pCheckObj(nullptr)
     , aIMapItem(SID_IMAP_EXEC, *this, *_pBindings)
 {
     get(m_pTbxIMapDlg1, "toolbar");
@@ -758,7 +758,7 @@ IMPL_LINK_TYPED( SvxIMapDlg, StateHdl, GraphCtrl*, pWnd, void )
     const SdrObject*    pObj = pWnd->GetSelectedSdrObject();
     const SdrModel*     pModel = pWnd->GetSdrModel();
     const SdrView*      pView = pWnd->GetSdrView();
-    const bool          bPolyEdit = ( pObj != NULL ) && dynamic_cast<const SdrPathObj*>( pObj) !=  nullptr;
+    const bool          bPolyEdit = ( pObj != nullptr ) && dynamic_cast<const SdrPathObj*>( pObj) !=  nullptr;
     const bool          bDrawEnabled = !( bPolyEdit && m_pTbxIMapDlg1->IsItemChecked( mnPolyEditId ) );
 
     m_pTbxIMapDlg1->EnableItem( mnApplyId, pOwnData->bExecState && pWnd->IsChanged() );
@@ -811,10 +811,10 @@ IMPL_LINK_NOARG_TYPED(SvxIMapDlg, MiscHdl, LinkParamNone*, void)
 
 SvxIMapDlg* GetIMapDlg()
 {
-    SfxChildWindow* pWnd = NULL;
+    SfxChildWindow* pWnd = nullptr;
     if (SfxViewFrame::Current() && SfxViewFrame::Current()->HasChildWindow(SvxIMapDlgChildWindow::GetChildWindowId()))
         pWnd = SfxViewFrame::Current()->GetChildWindow(SvxIMapDlgChildWindow::GetChildWindowId());
-    return pWnd ? static_cast<SvxIMapDlg*>(pWnd->GetWindow()) : NULL;
+    return pWnd ? static_cast<SvxIMapDlg*>(pWnd->GetWindow()) : nullptr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

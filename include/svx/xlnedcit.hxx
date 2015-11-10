@@ -32,7 +32,7 @@ public:
                             TYPEINFO_OVERRIDE();
                             XLineEndCenterItem(bool bEndCenter = false);
                             XLineEndCenterItem(SvStream& rIn);
-    virtual SfxPoolItem*    Clone(SfxItemPool* pPool = 0) const override;
+    virtual SfxPoolItem*    Clone(SfxItemPool* pPool = nullptr) const override;
     virtual SfxPoolItem*    Create(SvStream& rIn, sal_uInt16 nVer) const override;
 
     virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
@@ -41,7 +41,7 @@ public:
     virtual bool GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
-                                    OUString &rText, const IntlWrapper * = 0 ) const override;
+                                    OUString &rText, const IntlWrapper * = nullptr ) const override;
 };
 
 #endif

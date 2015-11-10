@@ -128,10 +128,10 @@ AccessibleControlShape::AccessibleControlShape (
 AccessibleControlShape::~AccessibleControlShape()
 {
     m_pChildManager->release();
-    m_pChildManager = NULL;
+    m_pChildManager = nullptr;
 
     if ( m_xControlContextProxy.is() )
-        m_xControlContextProxy->setDelegator( NULL );
+        m_xControlContextProxy->setDelegator( nullptr );
     m_xControlContextProxy.clear();
     m_xControlContextTypeAccess.clear();
     m_xControlContextComponent.clear();
@@ -903,7 +903,7 @@ AccessibleControlShape* SAL_CALL AccessibleControlShape::GetLabeledByControlShap
             }
         }
     }
-    return NULL;
+    return nullptr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

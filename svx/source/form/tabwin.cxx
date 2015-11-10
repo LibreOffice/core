@@ -98,9 +98,9 @@ static void lcl_addToList( SvTreeListBox& _rListBox, const uno::Reference< conta
         if ( xColumn->getPropertySetInfo()->hasPropertyByName(FM_PROP_LABEL) )
             xColumn->getPropertyValue(FM_PROP_LABEL) >>= sLabel;
         if ( !sLabel.isEmpty() )
-            _rListBox.InsertEntry( sLabel, NULL, false, TREELIST_APPEND, new ColumnInfo(*pEntries,sLabel) );
+            _rListBox.InsertEntry( sLabel, nullptr, false, TREELIST_APPEND, new ColumnInfo(*pEntries,sLabel) );
         else
-            _rListBox.InsertEntry( *pEntries, NULL, false, TREELIST_APPEND, new ColumnInfo(*pEntries,sLabel) );
+            _rListBox.InsertEntry( *pEntries, nullptr, false, TREELIST_APPEND, new ColumnInfo(*pEntries,sLabel) );
     }
 }
 
@@ -184,14 +184,14 @@ FmFieldWin::FmFieldWin(SfxBindings* _pBindings, SfxChildWindow* _pMgr, vcl::Wind
             ,::comphelper::OPropertyChangeListener(m_aMutex)
             ,pData(new FmFieldWinData)
             ,m_nObjectType(0)
-            ,m_pChangeListener(NULL)
+            ,m_pChangeListener(nullptr)
 {
     SetHelpId( HID_FIELD_SEL_WIN );
 
     SetBackground( Wallpaper( Application::GetSettings().GetStyleSettings().GetFaceColor()) );
     pListBox = VclPtr<FmFieldWinListBox>::Create( this );
     pListBox->Show();
-    UpdateContent(NULL);
+    UpdateContent(nullptr);
     SetSizePixel(Size(STD_WIN_SIZE_X,STD_WIN_SIZE_Y));
 }
 
@@ -245,14 +245,14 @@ bool FmFieldWin::createSelectionControls( )
         SfxUnoAnyItem aDescriptorItem( SID_FM_DATACCESS_DESCRIPTOR, makeAny( aDescr.createPropertyValueSequence() ) );
         const SfxPoolItem* pArgs[] =
         {
-            &aDescriptorItem, NULL
+            &aDescriptorItem, nullptr
         };
 
         // execute the create slot
         GetBindings().Execute( SID_FM_CREATE_FIELDCONTROL, pArgs );
     }
 
-    return NULL != pSelected;
+    return nullptr != pSelected;
 }
 
 
@@ -296,7 +296,7 @@ void FmFieldWin::StateChanged(sal_uInt16 nSID, SfxItemState eState, const SfxPoo
         UpdateContent(pShell);
     }
     else
-        UpdateContent(NULL);
+        UpdateContent(nullptr);
 }
 
 

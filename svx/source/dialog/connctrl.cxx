@@ -38,9 +38,9 @@
 
 SvxXConnectionPreview::SvxXConnectionPreview( vcl::Window* pParent, WinBits nStyle)
     : Control(pParent, nStyle)
-    , pEdgeObj(NULL)
-    , pObjList(NULL)
-    , pView(NULL)
+    , pEdgeObj(nullptr)
+    , pObjList(nullptr)
+    , pView(nullptr)
 {
     SetMapMode( MAP_100TH_MM );
     SetStyles();
@@ -181,7 +181,7 @@ void SvxXConnectionPreview::Construct()
                 // not yet one.
                 if(!pObjList)
                 {
-                    pObjList = new SdrObjList( pView->GetModel(), NULL );
+                    pObjList = new SdrObjList( pView->GetModel(), nullptr );
                 }
 
                 if( pTmpObj1 )
@@ -228,7 +228,7 @@ void SvxXConnectionPreview::Paint(vcl::RenderContext& rRenderContext, const Rect
             aObjectVector.push_back(pObject);
         }
 
-        sdr::contact::ObjectContactOfObjListPainter aPainter(rRenderContext, aObjectVector, 0);
+        sdr::contact::ObjectContactOfObjListPainter aPainter(rRenderContext, aObjectVector, nullptr);
         sdr::contact::DisplayInfo aDisplayInfo;
 
         // do processing

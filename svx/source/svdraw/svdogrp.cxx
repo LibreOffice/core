@@ -72,7 +72,7 @@ TYPEINIT1(SdrObjGroup,SdrObject);
 
 SdrObjGroup::SdrObjGroup()
 {
-    pSub=new SdrObjList(NULL,NULL);
+    pSub=new SdrObjList(nullptr,nullptr);
     pSub->SetOwnerObj(this);
     pSub->SetListKind(SDROBJLIST_GROUPOBJ);
     bRefPoint=false;
@@ -511,7 +511,7 @@ void SdrObjGroup::NbcSetAnchorPos(const Point& rPnt)
 
 void SdrObjGroup::SetSnapRect(const Rectangle& rRect)
 {
-    Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetLastBoundRect();
+    Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
     Rectangle aOld(GetSnapRect());
     long nMulX=rRect.Right()-rRect.Left();
     long nDivX=aOld.Right()-aOld.Left();
@@ -543,7 +543,7 @@ void SdrObjGroup::SetLogicRect(const Rectangle& rRect)
 void SdrObjGroup::Move(const Size& rSiz)
 {
     if (rSiz.Width()!=0 || rSiz.Height()!=0) {
-        Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetLastBoundRect();
+        Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
         MovePoint(aRefPoint,rSiz);
         if (pSub->GetObjCount()!=0) {
             // first move the connectors, then everything else
@@ -587,7 +587,7 @@ void SdrObjGroup::Resize(const Point& rRef, const Fraction& xFact, const Fractio
                 NbcMirrorGluePoints(aRef1,aRef2);
             }
         }
-        Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetLastBoundRect();
+        Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
         ResizePoint(aRefPoint,rRef,xFact,yFact);
         if (pSub->GetObjCount()!=0) {
             // move the connectors first, everything else afterwards
@@ -617,7 +617,7 @@ void SdrObjGroup::Rotate(const Point& rRef, long nAngle, double sn, double cs)
 {
     if (nAngle!=0) {
         SetGlueReallyAbsolute(true);
-        Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetLastBoundRect();
+        Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
         RotatePoint(aRefPoint,rRef,sn,cs);
         // move the connectors first, everything else afterwards
         SdrObjList* pOL=pSub;
@@ -642,7 +642,7 @@ void SdrObjGroup::Rotate(const Point& rRef, long nAngle, double sn, double cs)
 void SdrObjGroup::Mirror(const Point& rRef1, const Point& rRef2)
 {
     SetGlueReallyAbsolute(true);
-    Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetLastBoundRect();
+    Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
     MirrorPoint(aRefPoint,rRef1,rRef2); // implementation missing in SvdEtc!
     // move the connectors first, everything else afterwards
     SdrObjList* pOL=pSub;
@@ -667,7 +667,7 @@ void SdrObjGroup::Shear(const Point& rRef, long nAngle, double tn, bool bVShear)
 {
     if (nAngle!=0) {
         SetGlueReallyAbsolute(true);
-        Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetLastBoundRect();
+        Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
         ShearPoint(aRefPoint,rRef,tn);
         // move the connectors first, everything else afterwards
         SdrObjList* pOL=pSub;
@@ -691,7 +691,7 @@ void SdrObjGroup::Shear(const Point& rRef, long nAngle, double tn, bool bVShear)
 
 void SdrObjGroup::SetAnchorPos(const Point& rPnt)
 {
-    Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetLastBoundRect();
+    Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
     bool bChg=aAnchor!=rPnt;
     aAnchor=rPnt;
     Size aSiz(rPnt.X()-aAnchor.X(),rPnt.Y()-aAnchor.Y());

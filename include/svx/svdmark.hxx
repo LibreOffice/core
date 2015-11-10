@@ -56,7 +56,7 @@ protected:
     sal_uInt16                                          mnUser;       // E.g. for CopyObjects, also copy Edges
 
 public:
-    explicit SdrMark(SdrObject* pNewObj = 0L, SdrPageView* pNewPageView = 0L);
+    explicit SdrMark(SdrObject* pNewObj = nullptr, SdrPageView* pNewPageView = nullptr);
     SdrMark(const SdrMark& rMark);
     virtual ~SdrMark();
 

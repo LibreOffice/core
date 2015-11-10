@@ -37,7 +37,7 @@ using namespace ::cppu;
 
 SvxUnoNameItemTable::SvxUnoNameItemTable( SdrModel* pModel, sal_uInt16 nWhich, sal_uInt8 nMemberId ) throw()
 : mpModel( pModel ),
-  mpModelPool( pModel ? &pModel->GetItemPool() : NULL ),
+  mpModelPool( pModel ? &pModel->GetItemPool() : nullptr ),
   mnWhich( nWhich ), mnMemberId( nMemberId )
 {
     if( pModel )

@@ -160,7 +160,7 @@ void GalleryPreview::Command(const CommandEvent& rCEvt)
     if (mpTheme && (rCEvt.GetCommand() == CommandEventId::ContextMenu))
     {
         GalleryBrowser2* pGalleryBrowser = static_cast<GalleryBrowser2*>(GetParent());
-        pGalleryBrowser->ShowContextMenu(this, (rCEvt.IsMouseEvent() ? &rCEvt.GetMousePosPixel() : NULL));
+        pGalleryBrowser->ShowContextMenu(this, (rCEvt.IsMouseEvent() ? &rCEvt.GetMousePosPixel() : nullptr));
     }
 }
 
@@ -553,7 +553,7 @@ void GalleryListView::Command( const CommandEvent& rCEvt )
 
     if( rCEvt.GetCommand() == CommandEventId::ContextMenu )
     {
-        const Point* pPos = NULL;
+        const Point* pPos = nullptr;
 
         if( rCEvt.IsMouseEvent() && ( GetRowAtYPosPixel( rCEvt.GetMousePosPixel().Y() ) != BROWSER_ENDOFSELECTION ) )
             pPos = &rCEvt.GetMousePosPixel();

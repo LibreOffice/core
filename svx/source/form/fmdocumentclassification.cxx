@@ -98,7 +98,7 @@ namespace svxform
                 { "com.sun.star.sdb.FormDesign", eDatabaseForm },
                 { "com.sun.star.sdb.TextReportDesign", eDatabaseReport },
                 { "com.sun.star.text.GlobalDocument", eTextDocument },
-                { NULL, eUnknownDocumentType }
+                { nullptr, eUnknownDocumentType }
             };
             return aModuleInfo;
         }

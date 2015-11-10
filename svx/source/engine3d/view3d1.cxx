@@ -44,7 +44,7 @@
 
 void E3dView::ConvertMarkedToPolyObj(bool bLineToArea)
 {
-    SdrObject* pNewObj = NULL;
+    SdrObject* pNewObj = nullptr;
 
     if (GetMarkedObjectCount() == 1)
     {

@@ -215,7 +215,7 @@ void SAL_CALL TableRow::setFastPropertyValue( sal_Int32 nHandle, const Any& aVal
     bool bOk = false;
     bool bChange = false;
 
-    TableRowUndo* pUndo = 0;
+    TableRowUndo* pUndo = nullptr;
 
     SdrModel* pModel = mxTableModel->getSdrTableObj()->GetModel();
 
@@ -293,7 +293,7 @@ void SAL_CALL TableRow::setFastPropertyValue( sal_Int32 nHandle, const Any& aVal
         if( pUndo )
         {
             pModel->AddUndo( pUndo );
-            pUndo = 0;
+            pUndo = nullptr;
         }
         mxTableModel->setModified(sal_True);
     }

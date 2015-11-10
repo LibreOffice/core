@@ -247,7 +247,7 @@ namespace sdr
 
         SfxStyleSheet* E3dSceneProperties::GetStyleSheet() const
         {
-            SfxStyleSheet* pRetval = 0L;
+            SfxStyleSheet* pRetval = nullptr;
 
             const SdrObjList* pSub = static_cast<const E3dScene&>(GetSdrObject()).GetSubList();
             const size_t nCount(pSub->GetObjCount());
@@ -261,7 +261,7 @@ namespace sdr
                     if(pCandidate != pRetval)
                     {
                         // different StyleSheelts, return none
-                        return 0L;
+                        return nullptr;
                     }
                 }
                 else

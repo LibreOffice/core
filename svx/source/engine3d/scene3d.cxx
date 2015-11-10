@@ -187,7 +187,7 @@ TYPEINIT1(E3dScene, E3dObject);
 E3dScene::E3dScene()
 :   E3dObject(),
     aCamera(basegfx::B3DPoint(0.0, 0.0, 4.0), basegfx::B3DPoint()),
-    mp3DDepthRemapper(0L),
+    mp3DDepthRemapper(nullptr),
     bDrawOnlySelected(false)
 {
     // Set defaults
@@ -198,7 +198,7 @@ E3dScene::E3dScene()
 E3dScene::E3dScene(E3dDefaultAttributes& rDefault)
 :   E3dObject(),
     aCamera(basegfx::B3DPoint(0.0, 0.0, 4.0), basegfx::B3DPoint()),
-    mp3DDepthRemapper(0L),
+    mp3DDepthRemapper(nullptr),
     bDrawOnlySelected(false)
 {
     // Set defaults
@@ -256,7 +256,7 @@ void E3dScene::ImpCleanup3DDepthMapper()
     if(mp3DDepthRemapper)
     {
         delete mp3DDepthRemapper;
-        mp3DDepthRemapper = 0L;
+        mp3DDepthRemapper = nullptr;
     }
 }
 

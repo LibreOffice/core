@@ -161,7 +161,7 @@ namespace svxform
             // Don't reset m_xIntercepted: It may be needed by our owner to check for which object we were
             // responsible. As we hold the object with a weak reference only, this should be no problem.
             // 88936 - 23.07.2001 - frank.schoenheit@sun.com
-        m_pMaster = NULL;
+        m_pMaster = nullptr;
         m_pMutex = &m_aFallback;
         m_bListening = false;
     }

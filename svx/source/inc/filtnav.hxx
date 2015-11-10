@@ -63,7 +63,7 @@ class FmFilterData
 
 public:
     TYPEINFO();
-    FmFilterData(FmParentData* pParent = NULL, const OUString& rText = OUString())
+    FmFilterData(FmParentData* pParent = nullptr, const OUString& rText = OUString())
         :m_pParent( pParent )
         ,m_aText( rText )
     {}
@@ -125,7 +125,7 @@ class FmFilterItems : public FmParentData
 {
 public:
     TYPEINFO_OVERRIDE();
-    FmFilterItems() : FmParentData(NULL, OUString()) {}
+    FmFilterItems() : FmParentData(nullptr, OUString()) {}
     FmFilterItems(FmFormItem* pParent, const OUString& rText ) : FmParentData(pParent, rText) {}
 
     FmFilterItem* Find( const ::sal_Int32 _nFilterComponentIndex ) const;
@@ -176,7 +176,7 @@ public:
     void Append(FmFilterItems* pItems, FmFilterItem* pFilterItem);
     void SetTextForItem(FmFilterItem* pItem, const OUString& rText);
 
-    FmFormItem* GetCurrentForm() const {return m_pCurrentItems ? static_cast<FmFormItem*>(m_pCurrentItems->GetParent()) : NULL;}
+    FmFormItem* GetCurrentForm() const {return m_pCurrentItems ? static_cast<FmFormItem*>(m_pCurrentItems->GetParent()) : nullptr;}
     FmFilterItems* GetCurrentItems() const {return m_pCurrentItems;}
     void SetCurrentItems(FmFilterItems* pCurrent);
 
@@ -301,8 +301,8 @@ private:
      *        If <TRUE/> the items will not be removed from the model, otherwise they will.
      */
     void insertFilterItem(const ::std::vector<FmFilterItem*>& _rFilterList,FmFilterItems* _pTargetItems, bool _bCopy = false);
-    SvTreeListEntry* getPrevEntry(SvTreeListEntry* _pStartWith = NULL);
-    SvTreeListEntry* getNextEntry(SvTreeListEntry* _pStartWith = NULL);
+    SvTreeListEntry* getPrevEntry(SvTreeListEntry* _pStartWith = nullptr);
+    SvTreeListEntry* getNextEntry(SvTreeListEntry* _pStartWith = nullptr);
 
     using SvTreeListBox::Select;
     using SvTreeListBox::ExecuteDrop;

@@ -368,12 +368,12 @@ SdrItemPool::~SdrItemPool()
         {
             SetRefCount(*mppLocalPoolDefaults[i],0);
             delete mppLocalPoolDefaults[i];
-            mppLocalPoolDefaults[i] = 0L;
+            mppLocalPoolDefaults[i] = nullptr;
         }
     }
 
     // split pools before destroying
-    SetSecondaryPool(NULL);
+    SetSecondaryPool(nullptr);
 }
 
 bool SdrItemPool::GetPresentation(
@@ -871,7 +871,7 @@ bool SdrAngleItem::GetPresentation(
         sal_Unicode aUnicodeNull('0');
         sal_Int32 nCount(2);
 
-        const IntlWrapper* pMyIntlWrapper = NULL;
+        const IntlWrapper* pMyIntlWrapper = nullptr;
         if(!pIntlWrapper)
             pIntlWrapper = pMyIntlWrapper = new IntlWrapper(
                 Application::GetSettings().GetLanguageTag() );
@@ -908,7 +908,7 @@ bool SdrAngleItem::GetPresentation(
         if ( pMyIntlWrapper )
         {
             delete pMyIntlWrapper;
-            pIntlWrapper = NULL;
+            pIntlWrapper = nullptr;
         }
     }
 

@@ -141,7 +141,7 @@ FmGridHeader::~FmGridHeader()
 void FmGridHeader::dispose()
 {
     delete m_pImpl;
-    m_pImpl = NULL;
+    m_pImpl = nullptr;
     svt::EditBrowserHeader::dispose();
 }
 
@@ -363,7 +363,7 @@ sal_Int8 FmGridHeader::ExecuteDrop( const ExecuteDropEvent& _rEvt )
         m_pImpl->xDroppedStatement = xStatement;
         m_pImpl->xDroppedResultSet = xResultSet;
 
-        PostUserEvent(LINK(this, FmGridHeader, OnAsyncExecuteDrop), NULL, true);
+        PostUserEvent(LINK(this, FmGridHeader, OnAsyncExecuteDrop), nullptr, true);
     }
     catch (Exception&)
     {
@@ -761,7 +761,7 @@ void FmGridHeader::PreExecuteColumnContextMenu(sal_uInt16 nColId, PopupMenu& rMe
         // ask the bindings of the current view frame (which should be the one we're residing in) for the state
         if (pCurrentFrame)
         {
-            SfxPoolItem* pItem = NULL;
+            SfxPoolItem* pItem = nullptr;
             eState = pCurrentFrame->GetBindings().QueryState(SID_FM_CTL_PROPERTIES, pItem);
 
             if (eState >= SfxItemState::DEFAULT && pItem )
@@ -863,7 +863,7 @@ void FmGridHeader::PostExecuteColumnContextMenu(sal_uInt16 nColId, const PopupMe
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
             if(pFact)
             {
-                std::unique_ptr<AbstractFmShowColsDialog> pDlg(pFact->CreateFmShowColsDialog(NULL));
+                std::unique_ptr<AbstractFmShowColsDialog> pDlg(pFact->CreateFmShowColsDialog(nullptr));
                 DBG_ASSERT(pDlg, "Dialog creation failed!");
                 pDlg->SetColumns(xCols);
                 pDlg->Execute();

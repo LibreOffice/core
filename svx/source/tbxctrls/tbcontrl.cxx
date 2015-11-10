@@ -333,7 +333,7 @@ SvxStyleBox_Impl::SvxStyleBox_Impl(vcl::Window* pParent,
 {
     m_aMenu.SetSelectHdl( LINK( this, SvxStyleBox_Impl, MenuSelectHdl ) );
     for(int i = 0; i < MAX_STYLES_ENTRIES; i++)
-        m_pButtons[i] = NULL;
+        m_pButtons[i] = nullptr;
     aLogicalSize = PixelToLogic( GetSizePixel(), MAP_APPFONT );
     SetOptimalSize();
     EnableAutocomplete( true );
@@ -432,7 +432,7 @@ void SvxStyleBox_Impl::Select()
         //Do we need to create a new style?
         SfxObjectShell *pShell = SfxObjectShell::Current();
         SfxStyleSheetBasePool* pPool = pShell->GetStyleSheetPool();
-        SfxStyleSheetBase* pStyle = NULL;
+        SfxStyleSheetBase* pStyle = nullptr;
 
         bool bCreateNew = false;
 
@@ -628,7 +628,7 @@ void SvxStyleBox_Impl::SetupEntry(vcl::RenderContext& rRenderContext, vcl::Windo
     {
         SfxObjectShell *pShell = SfxObjectShell::Current();
         SfxStyleSheetBasePool* pPool = pShell->GetStyleSheetPool();
-        SfxStyleSheetBase* pStyle = NULL;
+        SfxStyleSheetBase* pStyle = nullptr;
 
         if ( pPool )
         {
@@ -709,14 +709,14 @@ void SvxStyleBox_Impl::SetupEntry(vcl::RenderContext& rRenderContext, vcl::Windo
 
                 pItem = pItemSet->GetItem( SID_ATTR_CHAR_COLOR );
                 // text color, when nothing is selected
-                if ( (NULL != pItem) && bIsNotSelected)
+                if ( (nullptr != pItem) && bIsNotSelected)
                     aFontCol = Color( static_cast< const SvxColorItem* >( pItem )->GetValue() );
 
                 sal_uInt16 style = drawing::FillStyle_NONE;
                 // which kind of Fill style is selected
                 pItem = pItemSet->GetItem( XATTR_FILLSTYLE );
                 // only when ok and not selected
-                if ( (NULL != pItem) && bIsNotSelected)
+                if ( (nullptr != pItem) && bIsNotSelected)
                     style = static_cast< const XFillStyleItem* >( pItem )->GetValue();
 
                 switch(style)
@@ -725,7 +725,7 @@ void SvxStyleBox_Impl::SetupEntry(vcl::RenderContext& rRenderContext, vcl::Windo
                     {
                         // set background color
                         pItem = pItemSet->GetItem( XATTR_FILLCOLOR );
-                        if ( NULL != pItem )
+                        if ( nullptr != pItem )
                             aBackCol = Color( static_cast< const XFillColorItem* >( pItem )->GetColorValue() );
 
                         if ( aBackCol != COL_AUTO )
@@ -864,7 +864,7 @@ static bool lcl_GetDocFontList( const FontList** ppFontList, SvxFontNameBox_Impl
 {
     bool bChanged = false;
     const SfxObjectShell* pDocSh = SfxObjectShell::Current();
-    const SvxFontListItem* pFontListItem = NULL;
+    const SvxFontListItem* pFontListItem = nullptr;
 
     if ( pDocSh )
         pFontListItem =
@@ -933,7 +933,7 @@ static bool lcl_GetDocFontList( const FontList** ppFontList, SvxFontNameBox_Impl
 SvxFontNameBox_Impl::SvxFontNameBox_Impl( vcl::Window* pParent, const Reference< XDispatchProvider >& rDispatchProvider,const Reference< XFrame >& _xFrame, WinBits nStyle ) :
 
     FontNameBox        ( pParent, nStyle | WinBits( WB_DROPDOWN | WB_AUTOHSCROLL ) ),
-    pFontList          ( NULL ),
+    pFontList          ( nullptr ),
     aLogicalSize       ( 60,160 ),
     nFtCount           ( 0 ),
     bRelease           ( true ),
@@ -975,7 +975,7 @@ IMPL_LINK_TYPED( SvxFontNameBox_Impl, CheckAndMarkUnknownFont, VclWindowEvent&, 
     lcl_GetDocFontList( &pFontList, this );
     // If the font is unknown, show it in italic.
     vcl::Font font = GetControlFont();
-    if( pFontList != NULL && pFontList->IsAvailable( fontname ))
+    if( pFontList != nullptr && pFontList->IsAvailable( fontname ))
     {
         if( font.GetItalic() != ITALIC_NONE )
         {
@@ -1110,7 +1110,7 @@ void SvxFontNameBox_Impl::EnableControls_Impl()
     if ( GetMaxMRUCount() != nEntries )
     {
         // refill in the next GetFocus-Handler
-        pFontList = NULL;
+        pFontList = nullptr;
         Clear();
         SetMaxMRUCount( nEntries );
     }
@@ -1674,10 +1674,10 @@ IMPL_LINK_NOARG_TYPED(SvxFrameWindow_Impl, SelectHdl, ValueSet*, void)
     SvxBoxItem          aBorderOuter( SID_ATTR_BORDER_OUTER );
     SvxBoxInfoItem      aBorderInner( SID_ATTR_BORDER_INNER );
     SvxBorderLine       theDefLine;
-    SvxBorderLine       *pLeft = 0,
-                        *pRight = 0,
-                        *pTop = 0,
-                        *pBottom = 0;
+    SvxBorderLine       *pLeft = nullptr,
+                        *pRight = nullptr,
+                        *pTop = nullptr,
+                        *pBottom = nullptr;
     sal_uInt16           nSel = aFrameSet->GetSelectItemId();
     sal_uInt16           nModifier = aFrameSet->GetModifier();
     sal_uInt8            nValidFlags = 0;
@@ -1714,20 +1714,20 @@ IMPL_LINK_NOARG_TYPED(SvxFrameWindow_Impl, SelectHdl, ValueSet*, void)
         case 9: // HOR
             pTop = pBottom = &theDefLine;
             aBorderInner.SetLine( &theDefLine, SvxBoxInfoItemLine::HORI );
-            aBorderInner.SetLine( NULL, SvxBoxInfoItemLine::VERT );
+            aBorderInner.SetLine( nullptr, SvxBoxInfoItemLine::VERT );
             nValidFlags |= FRM_VALID_HINNER|FRM_VALID_TOP|FRM_VALID_BOTTOM;
             break;
 
         case 10: // HORINNER
             pLeft = pRight = pTop = pBottom = &theDefLine;
             aBorderInner.SetLine( &theDefLine, SvxBoxInfoItemLine::HORI );
-            aBorderInner.SetLine( NULL, SvxBoxInfoItemLine::VERT );
+            aBorderInner.SetLine( nullptr, SvxBoxInfoItemLine::VERT );
             nValidFlags |= FRM_VALID_RIGHT|FRM_VALID_LEFT|FRM_VALID_HINNER|FRM_VALID_TOP|FRM_VALID_BOTTOM;
             break;
 
         case 11: // VERINNER
             pLeft = pRight = pTop = pBottom = &theDefLine;
-            aBorderInner.SetLine( NULL, SvxBoxInfoItemLine::HORI );
+            aBorderInner.SetLine( nullptr, SvxBoxInfoItemLine::HORI );
             aBorderInner.SetLine( &theDefLine, SvxBoxInfoItemLine::VERT );
             nValidFlags |= FRM_VALID_RIGHT|FRM_VALID_LEFT|FRM_VALID_VINNER|FRM_VALID_TOP|FRM_VALID_BOTTOM;
         break;
@@ -1909,7 +1909,7 @@ IMPL_LINK_NOARG_TYPED(SvxLineWindow_Impl, SelectHdl, ListBox&, void)
         aLineItem.SetLine( &aTmp );
     }
     else
-        aLineItem.SetLine( NULL );
+        aLineItem.SetLine( nullptr );
 
     if ( IsInPopupMode() )
         EndPopupMode();
@@ -1984,11 +1984,11 @@ void SfxStyleControllerItem_Impl::StateChanged(
             {
                 const SfxTemplateItem* pStateItem =
                     dynamic_cast<const SfxTemplateItem*>( pState  );
-                DBG_ASSERT( pStateItem != NULL, "SfxTemplateItem expected" );
+                DBG_ASSERT( pStateItem != nullptr, "SfxTemplateItem expected" );
                 rControl.SetFamilyState( nIdx, pStateItem );
             }
             else
-                rControl.SetFamilyState( nIdx, NULL );
+                rControl.SetFamilyState( nIdx, nullptr );
             break;
         }
     }
@@ -2105,14 +2105,14 @@ SvxStyleToolBoxControl::SvxStyleToolBoxControl(
     sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx )
     :   SfxToolBoxControl   ( nSlotId, nId, rTbx ),
         pImpl               ( new Impl ),
-        pStyleSheetPool     ( NULL ),
+        pStyleSheetPool     ( nullptr ),
         nActFamily          ( 0xffff )
 {
     for ( sal_uInt16 i=0; i<MAX_FAMILIES; i++ )
     {
-        pBoundItems[i] = 0;
+        pBoundItems[i] = nullptr;
         m_xBoundItems[i].clear();
-        pFamilyState[i]  = NULL;
+        pFamilyState[i]  = nullptr;
     }
 }
 
@@ -2138,7 +2138,7 @@ throw ( Exception, RuntimeException, std::exception)
                                                                 OUString::createFromAscii( StyleSlotToStyleCommand[i] ),
                                                                 *this );
             m_xBoundItems[i].set( static_cast< OWeakObject* >( pBoundItems[i] ), UNO_QUERY );
-            pFamilyState[i]  = NULL;
+            pFamilyState[i]  = nullptr;
         }
     }
 }
@@ -2162,12 +2162,12 @@ void SAL_CALL SvxStyleToolBoxControl::dispose()
             }
 
             m_xBoundItems[i].clear();
-            pBoundItems[i] = 0;
+            pBoundItems[i] = nullptr;
         }
         delete pFamilyState[i];
-        pFamilyState[i] = NULL;
+        pFamilyState[i] = nullptr;
     }
-    pStyleSheetPool = NULL;
+    pStyleSheetPool = nullptr;
     pImpl.reset();
 }
 
@@ -2212,7 +2212,7 @@ void SvxStyleToolBoxControl::FillStyleBox()
     {
         const SfxStyleFamily    eFamily     = GetActFamily();
         sal_uInt16              nCount      = pStyleSheetPool->Count();
-        SfxStyleSheetBase*      pStyle      = NULL;
+        SfxStyleSheetBase*      pStyle      = nullptr;
         bool                    bDoFill     = false;
 
         pStyleSheetPool->SetSearchMask( eFamily, SFXSTYLEBIT_USED );
@@ -2337,7 +2337,7 @@ void SvxStyleToolBoxControl::SelectStyle( const OUString& rStyleName )
 
 void SvxStyleToolBoxControl::Update()
 {
-    SfxStyleSheetBasePool*  pPool     = NULL;
+    SfxStyleSheetBasePool*  pPool     = nullptr;
     SfxObjectShell*         pDocShell = SfxObjectShell::Current();
 
     if ( pDocShell )
@@ -2355,9 +2355,9 @@ void SvxStyleToolBoxControl::Update()
     }
 
 
-    const SfxTemplateItem* pItem = NULL;
+    const SfxTemplateItem* pItem = nullptr;
 
-    if ( nActFamily == 0xffff || 0 == (pItem = pFamilyState[nActFamily-1]) )
+    if ( nActFamily == 0xffff || nullptr == (pItem = pFamilyState[nActFamily-1]) )
     // Current range not within allowed ranges or default
     {
         pStyleSheetPool = pPool;
@@ -2388,7 +2388,7 @@ void SvxStyleToolBoxControl::SetFamilyState( sal_uInt16 nIdx,
                                              const SfxTemplateItem* pItem )
 {
     delete pFamilyState[nIdx];
-    pFamilyState[nIdx] = NULL;
+    pFamilyState[nIdx] = nullptr;
 
     if ( pItem )
         pFamilyState[nIdx] = new SfxTemplateItem( *pItem );

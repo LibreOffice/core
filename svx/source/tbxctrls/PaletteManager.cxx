@@ -36,7 +36,7 @@ PaletteManager::PaletteManager() :
     mnNumOfPalettes(2),
     mnCurrentPalette(0),
     mnColorCount(0),
-    mpBtnUpdater(NULL),
+    mpBtnUpdater(nullptr),
     mLastColor(COL_AUTO),
     maColorSelectFunction(PaletteManager::DispatchColorCommand)
 {
@@ -112,8 +112,8 @@ void PaletteManager::ReloadColorSet(SvxColorValueSet &rColorSet)
 
         if ( pDocSh )
         {
-            const SfxPoolItem* pItem = NULL;
-            if ( 0 != ( pItem = pDocSh->GetItem( SID_COLOR_TABLE ) ) )
+            const SfxPoolItem* pItem = nullptr;
+            if ( nullptr != ( pItem = pDocSh->GetItem( SID_COLOR_TABLE ) ) )
                 pColorList = static_cast<const SvxColorListItem*>(pItem)->GetColorList();
         }
 
@@ -228,7 +228,7 @@ void PaletteManager::PopupColorPicker(const OUString& aCommand)
 {
     // The calling object goes away during aColorDlg.Execute(), so we must copy this
     OUString aCommandCopy = aCommand;
-    SvColorDialog aColorDlg( 0 );
+    SvColorDialog aColorDlg( nullptr );
     aColorDlg.SetColor ( mLastColor );
     aColorDlg.SetMode( svtools::ColorPickerMode_MODIFY );
     if( aColorDlg.Execute() == RET_OK )

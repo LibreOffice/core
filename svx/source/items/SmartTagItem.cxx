@@ -97,7 +97,7 @@ SvStream& SvxSmartTagItem::Store( SvStream& rStream, sal_uInt16 /*nItemVersion*/
 
 SfxPoolItem* SvxSmartTagItem::Create(SvStream& , sal_uInt16) const
 {
-    return 0;
+    return nullptr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

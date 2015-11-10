@@ -168,7 +168,7 @@ public:
         const GDIMetaFile& rMtf,
         SdrObjList& rDestList,
         size_t nInsPos = SAL_MAX_SIZE,
-        SvdProgressInfo* pProgrInfo = 0);
+        SvdProgressInfo* pProgrInfo = nullptr);
 };
 
 #endif // INCLUDED_SVX_SOURCE_SVDRAW_SVDFMTF_HXX

@@ -53,10 +53,10 @@ bool SvxDrawingLayerExport( SdrModel* pModel, const uno::Reference<io::XOutputSt
     bool bDocRet = xOut.is();
 
     Reference< document::XGraphicObjectResolver > xGraphicResolver;
-    SvXMLGraphicHelper *pGraphicHelper = 0;
+    SvXMLGraphicHelper *pGraphicHelper = nullptr;
 
     Reference< document::XEmbeddedObjectResolver > xObjectResolver;
-    SvXMLEmbeddedObjectHelper *pObjectHelper = 0;
+    SvXMLEmbeddedObjectHelper *pObjectHelper = nullptr;
 
     Reference< lang::XComponent > xSourceDoc( xComponent );
     try
@@ -126,11 +126,11 @@ bool SvxDrawingLayerExport( SdrModel* pModel, const uno::Reference<io::XOutputSt
 
     if( pGraphicHelper )
         SvXMLGraphicHelper::Destroy( pGraphicHelper );
-    xGraphicResolver = 0;
+    xGraphicResolver = nullptr;
 
     if( pObjectHelper )
         SvXMLEmbeddedObjectHelper::Destroy( pObjectHelper );
-    xObjectResolver = 0;
+    xObjectResolver = nullptr;
 
     return bDocRet;
 }
@@ -153,10 +153,10 @@ bool SvxDrawingLayerImport( SdrModel* pModel, const uno::Reference<io::XInputStr
     sal_uInt32  nRet = 0;
 
     Reference< document::XGraphicObjectResolver > xGraphicResolver;
-    SvXMLGraphicHelper *pGraphicHelper = 0;
+    SvXMLGraphicHelper *pGraphicHelper = nullptr;
 
     Reference< document::XEmbeddedObjectResolver > xObjectResolver;
-    SvXMLEmbeddedObjectHelper *pObjectHelper = 0;
+    SvXMLEmbeddedObjectHelper *pObjectHelper = nullptr;
 
     Reference< lang::XComponent > xTargetDocument( xComponent );
     if( !xTargetDocument.is() )
@@ -236,11 +236,11 @@ bool SvxDrawingLayerImport( SdrModel* pModel, const uno::Reference<io::XInputStr
 
     if( pGraphicHelper )
         SvXMLGraphicHelper::Destroy( pGraphicHelper );
-    xGraphicResolver = 0;
+    xGraphicResolver = nullptr;
 
     if( pObjectHelper )
         SvXMLEmbeddedObjectHelper::Destroy( pObjectHelper );
-    xObjectResolver = 0;
+    xObjectResolver = nullptr;
 
     if ( xTargetModel.is() )
         xTargetModel->unlockControllers();

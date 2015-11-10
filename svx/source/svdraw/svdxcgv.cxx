@@ -97,11 +97,11 @@ bool SdrExchangeView::ImpLimitToWorkArea(Point& rPt) const
 
 void SdrExchangeView::ImpGetPasteObjList(Point& /*rPos*/, SdrObjList*& rpLst)
 {
-    if (rpLst==NULL)
+    if (rpLst==nullptr)
     {
         SdrPageView* pPV = GetSdrPageView();
 
-        if (pPV!=NULL) {
+        if (pPV!=nullptr) {
             rpLst=pPV->GetObjList();
         }
     }
@@ -111,13 +111,13 @@ bool SdrExchangeView::ImpGetPasteLayer(const SdrObjList* pObjList, SdrLayerID& r
 {
     bool bRet=false;
     rLayer=0;
-    if (pObjList!=NULL) {
+    if (pObjList!=nullptr) {
         const SdrPage* pPg=pObjList->GetPage();
-        if (pPg!=NULL) {
+        if (pPg!=nullptr) {
             rLayer=pPg->GetLayerAdmin().GetLayerID(maActualLayer,true);
             if (rLayer==SDRLAYER_NOTFOUND) rLayer=0;
             SdrPageView* pPV = GetSdrPageView();
-            if (pPV!=NULL) {
+            if (pPV!=nullptr) {
                 bRet=!pPV->GetLockedLayers().IsSet(rLayer) && pPV->GetVisibleLayers().IsSet(rLayer);
             }
         }
@@ -133,21 +133,21 @@ bool SdrExchangeView::Paste(const OUString& rStr, const Point& rPos, SdrObjList*
     Point aPos(rPos);
     ImpGetPasteObjList(aPos,pLst);
     ImpLimitToWorkArea( aPos );
-    if (pLst==NULL) return false;
+    if (pLst==nullptr) return false;
     SdrLayerID nLayer;
     if (!ImpGetPasteLayer(pLst,nLayer)) return false;
     bool bUnmark = (nOptions & (SdrInsertFlags::DONTMARK|SdrInsertFlags::ADDMARK))==SdrInsertFlags::NONE && !IsTextEdit();
     if (bUnmark) UnmarkAllObj();
     Rectangle aTextRect(0,0,500,500);
     SdrPage* pPage=pLst->GetPage();
-    if (pPage!=NULL) {
+    if (pPage!=nullptr) {
         aTextRect.SetSize(pPage->GetSize());
     }
     SdrRectObj* pObj=new SdrRectObj(OBJ_TEXT,aTextRect);
     pObj->SetModel(mpModel);
     pObj->SetLayer(nLayer);
     pObj->NbcSetText(rStr); // SetText before SetAttr, else SetAttr doesn't work!
-    if (mpDefaultStyleSheet!=NULL) pObj->NbcSetStyleSheet(mpDefaultStyleSheet, false);
+    if (mpDefaultStyleSheet!=nullptr) pObj->NbcSetStyleSheet(mpDefaultStyleSheet, false);
 
     pObj->SetMergedItemSet(maDefaultAttr);
 
@@ -170,20 +170,20 @@ bool SdrExchangeView::Paste(SvStream& rInput, const OUString& rBaseURL, sal_uInt
     Point aPos(rPos);
     ImpGetPasteObjList(aPos,pLst);
     ImpLimitToWorkArea( aPos );
-    if (pLst==NULL) return false;
+    if (pLst==nullptr) return false;
     SdrLayerID nLayer;
     if (!ImpGetPasteLayer(pLst,nLayer)) return false;
     bool bUnmark=(nOptions&(SdrInsertFlags::DONTMARK|SdrInsertFlags::ADDMARK))==SdrInsertFlags::NONE && !IsTextEdit();
     if (bUnmark) UnmarkAllObj();
     Rectangle aTextRect(0,0,500,500);
     SdrPage* pPage=pLst->GetPage();
-    if (pPage!=NULL) {
+    if (pPage!=nullptr) {
         aTextRect.SetSize(pPage->GetSize());
     }
     SdrRectObj* pObj=new SdrRectObj(OBJ_TEXT,aTextRect);
     pObj->SetModel(mpModel);
     pObj->SetLayer(nLayer);
-    if (mpDefaultStyleSheet!=NULL) pObj->NbcSetStyleSheet(mpDefaultStyleSheet, false);
+    if (mpDefaultStyleSheet!=nullptr) pObj->NbcSetStyleSheet(mpDefaultStyleSheet, false);
 
     pObj->SetMergedItemSet(maDefaultAttr);
 
@@ -245,7 +245,7 @@ bool SdrExchangeView::Paste(
 
     Point aPos(rPos);
     ImpGetPasteObjList(aPos,pLst);
-    SdrPageView* pMarkPV=NULL;
+    SdrPageView* pMarkPV=nullptr;
     SdrPageView* pPV = GetSdrPageView();
 
     if(pPV)
@@ -255,7 +255,7 @@ bool SdrExchangeView::Paste(
     }
 
     ImpLimitToWorkArea( aPos );
-    if (pLst==NULL)
+    if (pLst==nullptr)
         return false;
 
     bool bUnmark=(nOptions&(SdrInsertFlags::DONTMARK|SdrInsertFlags::ADDMARK))==SdrInsertFlags::NONE && !IsTextEdit();
@@ -290,7 +290,7 @@ bool SdrExchangeView::Paste(
         Size  aSiz(aDist.X(),aDist.Y());
         size_t nCloneErrCnt = 0;
         const size_t nObjCount = pSrcPg->GetObjCount();
-        bool bMark = pMarkPV!=NULL && !IsTextEdit() && (nOptions&SdrInsertFlags::DONTMARK)==SdrInsertFlags::NONE;
+        bool bMark = pMarkPV!=nullptr && !IsTextEdit() && (nOptions&SdrInsertFlags::DONTMARK)==SdrInsertFlags::NONE;
 
         // #i13033#
         // New mechanism to re-create the connections of cloned connectors
@@ -302,7 +302,7 @@ bool SdrExchangeView::Paste(
 
             SdrObject* pNeuObj = pSrcOb->CloneWithShellIDs(rSrcShellID, rDestShellID);
 
-            if (pNeuObj!=NULL)
+            if (pNeuObj!=nullptr)
             {
                 if(bResize)
                 {
@@ -427,7 +427,7 @@ void SdrExchangeView::ImpPasteObject(SdrObject* pObj, SdrObjList& rLst, const Po
     if( IsUndoEnabled() )
         AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoNewObject(*pObj));
 
-    SdrPageView* pMarkPV=NULL;
+    SdrPageView* pMarkPV=nullptr;
     SdrPageView* pPV = GetSdrPageView();
 
     if(pPV)
@@ -436,7 +436,7 @@ void SdrExchangeView::ImpPasteObject(SdrObject* pObj, SdrObjList& rLst, const Po
             pMarkPV=pPV;
     }
 
-    bool bMark = pMarkPV!=NULL && !IsTextEdit() && (nOptions&SdrInsertFlags::DONTMARK)==SdrInsertFlags::NONE;
+    bool bMark = pMarkPV!=nullptr && !IsTextEdit() && (nOptions&SdrInsertFlags::DONTMARK)==SdrInsertFlags::NONE;
     if (bMark)
     { // select object the first PageView we found
         MarkObj(pObj,pMarkPV);
@@ -539,7 +539,7 @@ GDIMetaFile SdrExchangeView::GetMarkedObjMetaFile(bool bNoVDevIfOneMtfMarked) co
         if( bNoVDevIfOneMtfMarked )
         {
             SdrObject*  pGrafObjTmp = GetMarkedObjectByIndex( 0 );
-            SdrGrafObj* pGrafObj = ( GetMarkedObjectCount() ==1 ) ? dynamic_cast<SdrGrafObj*>( pGrafObjTmp  ) : NULL;
+            SdrGrafObj* pGrafObj = ( GetMarkedObjectCount() ==1 ) ? dynamic_cast<SdrGrafObj*>( pGrafObjTmp  ) : nullptr;
 
             if( pGrafObj )
             {

@@ -140,7 +140,7 @@ SvxRectCtlAccessibleContext::SvxRectCtlAccessibleContext(
     SvxRectCtlAccessibleContext_Base( m_aMutex ),
     mxParent( rxParent ),
     mpRepr( &rRepr ),
-    mpChildren( NULL ),
+    mpChildren( nullptr ),
     mnClientId( 0 ),
     mnSelectedChild( NOCHILDSELECTED ),
     mbAngleMode( rRepr.GetNumOfChildren() == 8 )
@@ -166,7 +166,7 @@ SvxRectCtlAccessibleContext::SvxRectCtlAccessibleContext(
 
     SvxRectCtlChildAccessibleContext**  p = mpChildren;
     for( int i = MAX_NUM_OF_CHILDREN ; i ; --i, ++p )
-        *p = NULL;
+        *p = nullptr;
 }
 
 
@@ -648,7 +648,7 @@ void SAL_CALL SvxRectCtlAccessibleContext::disposing()
     {
         {
             ::osl::MutexGuard   aGuard( m_aMutex );
-            mpRepr = NULL;      // object dies with representation
+            mpRepr = nullptr;      // object dies with representation
 
             SvxRectCtlChildAccessibleContext**  p = mpChildren;
             for( int i = MAX_NUM_OF_CHILDREN ; i ; --i, ++p )
@@ -658,12 +658,12 @@ void SAL_CALL SvxRectCtlAccessibleContext::disposing()
                 {
                     pChild->dispose();
                     pChild->release();
-                    *p = NULL;
+                    *p = nullptr;
                 }
             }
 
             delete[] mpChildren;
-            mpChildren = NULL;
+            mpChildren = nullptr;
         }
 
         {

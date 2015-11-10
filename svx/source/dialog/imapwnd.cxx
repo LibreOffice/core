@@ -94,7 +94,7 @@ void IMapWindow::SetImageMap( const ImageMap& rImageMap )
 
 void IMapWindow::ReplaceImageMap( const ImageMap& rImageMap, bool /*bScaleToGraphic*/ )
 {
-    SdrPage* pPage = 0;
+    SdrPage* pPage = nullptr;
     aIMap = rImageMap;
 
     if(GetSdrModel())
@@ -135,7 +135,7 @@ bool IMapWindow::ReplaceActualIMapInfo( const NotifyInfo& rNewInfo )
     IMapObject*         pIMapObj;
     bool                bRet = false;
 
-    if ( pSdrObj && ( ( pIMapObj = GetIMapObj( pSdrObj ) ) != NULL ) )
+    if ( pSdrObj && ( ( pIMapObj = GetIMapObj( pSdrObj ) ) != nullptr ) )
     {
         pIMapObj->SetURL( rNewInfo.aMarkURL );
         pIMapObj->SetAltText( rNewInfo.aMarkAltText );
@@ -190,7 +190,7 @@ SdrObject* IMapWindow::CreateObj( const IMapObject* pIMapObj )
 {
     Point       aPoint;
     Rectangle   aClipRect( aPoint, GetGraphicSize() );
-    SdrObject*  pSdrObj = NULL;
+    SdrObject*  pSdrObj = nullptr;
     IMapObjectPtr pCloneIMapObj;
 
     switch( pIMapObj->GetType() )
@@ -429,7 +429,7 @@ void IMapWindow::MarkListHasChanged()
 
 SdrObject* IMapWindow::GetHitSdrObj( const Point& rPosPixel ) const
 {
-    SdrObject*  pObj = NULL;
+    SdrObject*  pObj = nullptr;
     Point       aPt = PixelToLogic( rPosPixel );
 
     if ( Rectangle( Point(), GetGraphicSize() ).IsInside( aPt ) )
@@ -457,7 +457,7 @@ SdrObject* IMapWindow::GetHitSdrObj( const Point& rPosPixel ) const
 
 IMapObject* IMapWindow::GetIMapObj( const SdrObject* pSdrObj )
 {
-    IMapObject* pIMapObj = NULL;
+    IMapObject* pIMapObj = nullptr;
 
     if ( pSdrObj )
     {
@@ -523,7 +523,7 @@ void IMapWindow::Command(const CommandEvent& rCEvt)
 
 sal_Int8 IMapWindow::AcceptDrop( const AcceptDropEvent& rEvt )
 {
-    return( ( GetHitSdrObj( rEvt.maPosPixel ) != NULL ) ? rEvt.mnAction : DND_ACTION_NONE );
+    return( ( GetHitSdrObj( rEvt.maPosPixel ) != nullptr ) ? rEvt.mnAction : DND_ACTION_NONE );
 }
 
 sal_Int8 IMapWindow::ExecuteDrop( const ExecuteDropEvent& rEvt )
@@ -559,8 +559,8 @@ void IMapWindow::RequestHelp( const HelpEvent& rHEvt )
 
     if ( Help::IsBalloonHelpEnabled() || Help::IsQuickHelpEnabled() )
     {
-        SdrObject*          pSdrObj = NULL;
-        SdrPageView*        pPageView = NULL;
+        SdrObject*          pSdrObj = nullptr;
+        SdrPageView*        pPageView = nullptr;
         if ( pView->PickObj( aPos, pView->getHitTolLog(), pSdrObj, pPageView ) )
         {
             const IMapObject*   pIMapObj = GetIMapObj( pSdrObj );
@@ -615,7 +615,7 @@ void IMapWindow::UpdateInfo( bool bNewObj )
     if ( aInfoLink.IsSet() )
     {
         const SdrObject*    pSdrObj = GetSelectedSdrObject();
-        const IMapObject*   pIMapObj = pSdrObj ? GetIMapObj( pSdrObj ) : NULL;
+        const IMapObject*   pIMapObj = pSdrObj ? GetIMapObj( pSdrObj ) : nullptr;
 
         aInfo.bNewObj = bNewObj;
 
@@ -781,7 +781,7 @@ void IMapWindow::CreateDefaultObject()
         aPagePos.Y() += (aPageSize.Height() / 2) - (nDefaultObjectSizeHeight / 2);
         Rectangle aNewObjectRectangle(aPagePos, Size(nDefaultObjectSizeWidth, nDefaultObjectSizeHeight));
 
-        SdrObject* pObj = SdrObjFactory::MakeNewObject( pView->GetCurrentObjInventor(), pView->GetCurrentObjIdentifier(), 0L, pModel);
+        SdrObject* pObj = SdrObjFactory::MakeNewObject( pView->GetCurrentObjInventor(), pView->GetCurrentObjIdentifier(), nullptr, pModel);
         pObj->SetLogicRect(aNewObjectRectangle);
 
         switch( pObj->GetObjIdentifier() )

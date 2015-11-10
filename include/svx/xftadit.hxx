@@ -35,7 +35,7 @@ public:
                             TYPEINFO_OVERRIDE();
                             XFormTextAdjustItem(XFormTextAdjust = XFT_CENTER);
                             XFormTextAdjustItem(SvStream& rIn);
-    virtual SfxPoolItem*    Clone(SfxItemPool* pPool = 0) const override;
+    virtual SfxPoolItem*    Clone(SfxItemPool* pPool = nullptr) const override;
     virtual SfxPoolItem*    Create(SvStream& rIn, sal_uInt16 nVer) const override;
     virtual sal_uInt16          GetValueCount() const override;
     XFormTextAdjust         GetValue() const { return (XFormTextAdjust) SfxEnumItem::GetValue(); }

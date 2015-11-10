@@ -76,12 +76,12 @@ namespace sdr
         SfxStyleSheet* PageProperties::GetStyleSheet() const
         {
             // override to legally return a 0L pointer here
-            return 0L;
+            return nullptr;
         }
 
         void PageProperties::PostItemChange(const sal_uInt16 nWhich )
         {
-            if( (nWhich == XATTR_FILLSTYLE) && (mpEmptyItemSet != NULL) )
+            if( (nWhich == XATTR_FILLSTYLE) && (mpEmptyItemSet != nullptr) )
                 CleanupFillProperties(*mpEmptyItemSet);
         }
 

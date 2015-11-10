@@ -536,7 +536,7 @@ bool EnhancedCustomShape2d::ConvertSequenceToEnhancedCustomShape2dHandle(
 
 const sal_Int32* EnhancedCustomShape2d::ApplyShapeAttributes( const SdrCustomShapeGeometryItem& rGeometryItem )
 {
-    const sal_Int32* pDefData = NULL;
+    const sal_Int32* pDefData = nullptr;
     const mso_CustomShape* pDefCustomShape = GetCustomShapeContent( eSpType );
     if ( pDefCustomShape )
         pDefData = pDefCustomShape->pDefData;
@@ -1967,7 +1967,7 @@ void EnhancedCustomShape2d::CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegm
         }
         else
         {
-            SdrPathObj* pObj = 0;
+            SdrPathObj* pObj = nullptr;
             SfxItemSet aTempSet(*this);
             aTempSet.Put(makeSdrShadowItem(false));
 
@@ -2168,7 +2168,7 @@ SdrObject* EnhancedCustomShape2d::CreatePathObj( bool bLineGeometryNeededOnly )
 {
     sal_Int32 nCoordSize = seqCoordinates.getLength();
     if ( !nCoordSize )
-        return NULL;
+        return nullptr;
 
     sal_uInt16 nSrcPt = 0;
     sal_uInt16 nSegmentInd = 0;
@@ -2184,7 +2184,7 @@ SdrObject* EnhancedCustomShape2d::CreatePathObj( bool bLineGeometryNeededOnly )
         nSubPathIndex ++;
     }
 
-    SdrObject* pRet = NULL;
+    SdrObject* pRet = nullptr;
 
     if ( !vObjectList.empty() )
     {
@@ -2308,7 +2308,7 @@ SdrObject* EnhancedCustomShape2d::CreatePathObj( bool bLineGeometryNeededOnly )
 
 SdrObject* EnhancedCustomShape2d::CreateObject( bool bLineGeometryNeededOnly )
 {
-    SdrObject* pRet = NULL;
+    SdrObject* pRet = nullptr;
 
     if ( eSpType == mso_sptRectangle )
     {

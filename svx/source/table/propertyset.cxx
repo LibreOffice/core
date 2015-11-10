@@ -69,7 +69,7 @@ const Property* FastPropertySetInfo::hasProperty( const OUString& aName )
 {
     PropertyMap::iterator aIter( maMap.find( aName ) );
     if( aIter == maMap.end() )
-        return 0;
+        return nullptr;
     else
         return &maProperties[(*aIter).second];
 }
@@ -94,7 +94,7 @@ Property SAL_CALL FastPropertySetInfo::getPropertyByName( const OUString& aName 
 
 sal_Bool SAL_CALL FastPropertySetInfo::hasPropertyByName( const OUString& aName ) throw (RuntimeException, std::exception)
 {
-    return hasProperty( aName ) != 0;
+    return hasProperty( aName ) != nullptr;
 }
 
 FastPropertySet::FastPropertySet( const rtl::Reference< FastPropertySetInfo >& xInfo )

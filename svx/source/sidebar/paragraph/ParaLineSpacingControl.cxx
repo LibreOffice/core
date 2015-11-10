@@ -81,7 +81,7 @@ ParaLineSpacingControl::ParaLineSpacingControl(sal_uInt16 nId)
     mpLineDistAtMetricBox->SetModifyHdl( aLink2 );
 
     FieldUnit eUnit = FUNIT_INCH;
-    const SfxPoolItem* pItem = NULL;
+    const SfxPoolItem* pItem = nullptr;
     if (SfxViewFrame::Current()->GetBindings().GetDispatcher()->QueryState(SID_ATTR_METRIC, pItem) >= SfxItemState::DEFAULT)
         eUnit = static_cast<FieldUnit>(static_cast<const SfxUInt16Item*>(pItem)->GetValue());
     else

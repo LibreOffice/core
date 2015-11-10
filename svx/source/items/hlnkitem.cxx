@@ -201,7 +201,7 @@ SvxHyperlinkItem::SvxHyperlinkItem( const SvxHyperlinkItem& rHyperlinkItem ):
     if( rHyperlinkItem.GetMacroTable() )
         pMacroTable = new SvxMacroTableDtor( *rHyperlinkItem.GetMacroTable() );
     else
-        pMacroTable=NULL;
+        pMacroTable=nullptr;
 
 };
 
@@ -219,7 +219,7 @@ SvxHyperlinkItem::SvxHyperlinkItem( sal_uInt16 _nWhich, const OUString& rName, c
     if (pMacroTbl)
         pMacroTable = new SvxMacroTableDtor ( *pMacroTbl );
     else
-        pMacroTable=NULL;
+        pMacroTable=nullptr;
 }
 
 SfxPoolItem* SvxHyperlinkItem::Clone( SfxItemPool* ) const

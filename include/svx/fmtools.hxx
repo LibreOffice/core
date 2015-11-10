@@ -77,10 +77,10 @@ namespace vcl { class Window; }
 
 // displaying a database exception for the user
 // display info about a simple css::sdbc::SQLException
-void displayException(const css::sdbc::SQLException&, vcl::Window* _pParent = NULL);
-SVX_DLLPUBLIC void displayException(const css::sdb::SQLContext&, vcl::Window* _pParent = NULL);
-void displayException(const css::sdb::SQLErrorEvent&, vcl::Window* _pParent = NULL);
-void displayException(const css::uno::Any&, vcl::Window* _pParent = NULL);
+void displayException(const css::sdbc::SQLException&, vcl::Window* _pParent = nullptr);
+SVX_DLLPUBLIC void displayException(const css::sdb::SQLContext&, vcl::Window* _pParent = nullptr);
+void displayException(const css::sdb::SQLErrorEvent&, vcl::Window* _pParent = nullptr);
+void displayException(const css::uno::Any&, vcl::Window* _pParent = nullptr);
 
 sal_Int32 getElementPos(const css::uno::Reference< css::container::XIndexAccess>& xCont, const css::uno::Reference< css::uno::XInterface>& xElement);
 
@@ -164,7 +164,7 @@ class SAL_WARN_UNUSED FmXDisposeListener
     ::osl::Mutex&   m_rMutex;
 
 public:
-    FmXDisposeListener(::osl::Mutex& _rMutex) : m_pAdapter(NULL), m_rMutex(_rMutex) { }
+    FmXDisposeListener(::osl::Mutex& _rMutex) : m_pAdapter(nullptr), m_rMutex(_rMutex) { }
     virtual ~FmXDisposeListener();
 
     virtual void disposing(const css::lang::EventObject& _rEvent, sal_Int16 _nId) throw( css::uno::RuntimeException ) = 0;

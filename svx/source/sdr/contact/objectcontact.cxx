@@ -34,8 +34,8 @@ namespace sdr { namespace contact {
 ObjectContact::ObjectContact()
 :   maViewObjectContactVector(),
     maPrimitiveAnimator(),
-    mpEventHandler(0),
-    mpViewObjectContactRedirector(0),
+    mpEventHandler(nullptr),
+    mpViewObjectContactRedirector(nullptr),
     maViewInformation2D(uno::Sequence< beans::PropertyValue >()),
     mbIsPreviewRenderer(false)
 {
@@ -115,7 +115,7 @@ bool ObjectContact::DoVisualizeEnteredGroup() const
 const ViewContact* ObjectContact::getActiveViewContact() const
 {
     // default has no active VC
-    return 0;
+    return nullptr;
 }
 
 // Invalidate given rectangle at the window/output which is represented by
@@ -167,14 +167,14 @@ void ObjectContact::DeleteEventHandler()
     {
         // If there are still Events registered, something has went wrong
         delete mpEventHandler;
-        mpEventHandler = 0L;
+        mpEventHandler = nullptr;
     }
 }
 
 // test if there is an EventHandler without creating one on demand
 bool ObjectContact::HasEventHandler() const
 {
-    return (0L != mpEventHandler);
+    return (nullptr != mpEventHandler);
 }
 
 // check if text animation is allowed. Default is sal_true.
@@ -254,13 +254,13 @@ bool ObjectContact::isDrawModeHighContrast() const
 // access to SdrPageView. Default implementation returns NULL
 SdrPageView* ObjectContact::TryToGetSdrPageView() const
 {
-    return 0;
+    return nullptr;
 }
 
 // access to OutputDevice. Default implementation returns NULL
 OutputDevice* ObjectContact::TryToGetOutputDevice() const
 {
-    return 0;
+    return nullptr;
 }
 
 void ObjectContact::resetViewPort()

@@ -40,7 +40,7 @@ protected:
 
 protected:
     // #i71538# make constructors of SdrView sub-components protected to avoid incomplete incarnations which may get casted to SdrView
-    SdrExchangeView(SdrModel* pModel1, OutputDevice* pOut = 0L);
+    SdrExchangeView(SdrModel* pModel1, OutputDevice* pOut = nullptr);
 
 public:
     // Output all marked objects on the specified OutputDevice
@@ -110,14 +110,14 @@ public:
         const SdrModel& rMod, const Point& rPos, SdrObjList* pLst, SdrInsertFlags nOptions,
         const OUString& rSrcShellID, const OUString& rDestShellID );
 
-    bool            Paste(const OUString& rStr, const Point& rPos, SdrObjList* pLst=NULL, SdrInsertFlags nOptions=SdrInsertFlags::NONE);
-    bool            Paste(SvStream& rInput, const OUString& rBaseURL, sal_uInt16 eFormat, const Point& rPos, SdrObjList* pLst=NULL, SdrInsertFlags nOptions=SdrInsertFlags::NONE);
+    bool            Paste(const OUString& rStr, const Point& rPos, SdrObjList* pLst=nullptr, SdrInsertFlags nOptions=SdrInsertFlags::NONE);
+    bool            Paste(SvStream& rInput, const OUString& rBaseURL, sal_uInt16 eFormat, const Point& rPos, SdrObjList* pLst=nullptr, SdrInsertFlags nOptions=SdrInsertFlags::NONE);
 
     static bool     Cut( sal_uIntPtr nFormat = SDR_ANYFORMAT );
 
     static bool     Yank( sal_uIntPtr nFormat = SDR_ANYFORMAT );
 
-    static bool     Paste( vcl::Window* pWin = NULL, sal_uIntPtr nFormat = SDR_ANYFORMAT );
+    static bool     Paste( vcl::Window* pWin = nullptr, sal_uIntPtr nFormat = SDR_ANYFORMAT );
 };
 
 #endif // INCLUDED_SVX_SVDXCGV_HXX

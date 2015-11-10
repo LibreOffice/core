@@ -110,7 +110,7 @@ void SvxModifyControl::StateChanged( sal_uInt16, SfxItemState eState,
 
 IMPL_LINK_TYPED( SvxModifyControl, OnTimer, Idle *, pTimer, void )
 {
-    if (pTimer == 0)
+    if (pTimer == nullptr)
         return;
 
     pTimer->Stop();
@@ -124,7 +124,7 @@ IMPL_LINK_TYPED( SvxModifyControl, OnTimer, Idle *, pTimer, void )
 void SvxModifyControl::_repaint()
 {
     if ( GetStatusBar().AreItemsVisible() )
-        GetStatusBar().SetItemData( GetId(), 0 );    // force repaint
+        GetStatusBar().SetItemData( GetId(), nullptr );    // force repaint
 }
 
 /**

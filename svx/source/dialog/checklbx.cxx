@@ -66,7 +66,7 @@ void SvxCheckListBox::InsertEntry( const OUString& rStr, sal_uLong nPos,
                                    void* pUserData,
                                    SvLBoxButtonKind eButtonKind )
 {
-    SvTreeListBox::InsertEntry( rStr, NULL, false, nPos, pUserData,
+    SvTreeListBox::InsertEntry( rStr, nullptr, false, nPos, pUserData,
                                 eButtonKind );
 }
 
@@ -147,7 +147,7 @@ bool SvxCheckListBox::IsChecked( sal_uLong nPos ) const
 
 void* SvxCheckListBox::SetEntryData ( sal_uLong nPos, void* pNewData )
 {
-    void* pOld = NULL;
+    void* pOld = nullptr;
 
     if ( nPos < GetEntryCount() )
     {
@@ -164,7 +164,7 @@ void* SvxCheckListBox::GetEntryData( sal_uLong nPos ) const
     if ( nPos < GetEntryCount() )
         return GetEntry( nPos )->GetUserData();
     else
-        return NULL;
+        return nullptr;
 }
 
 

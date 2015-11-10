@@ -24,7 +24,7 @@
 SdrUndoManager::SdrUndoManager(sal_uInt16 nMaxUndoActionCount)
     : EditUndoManager(nMaxUndoActionCount)
     , maEndTextEditHdl()
-    , mpLastUndoActionBeforeTextEdit(0)
+    , mpLastUndoActionBeforeTextEdit(nullptr)
     , mbEndTextEditTriggeredFromUndo(false)
 {
 }
@@ -107,7 +107,7 @@ void SdrUndoManager::SetEndTextEditHdl(const Link<SdrUndoManager*,void>& rLink)
     if(isTextEditActive())
     {
         // text edit start, remember last non-textedit action for later cleanup
-        mpLastUndoActionBeforeTextEdit = GetUndoActionCount() ? GetUndoAction() : 0;
+        mpLastUndoActionBeforeTextEdit = GetUndoActionCount() ? GetUndoAction() : nullptr;
     }
     else
     {
@@ -123,7 +123,7 @@ void SdrUndoManager::SetEndTextEditHdl(const Link<SdrUndoManager*,void>& rLink)
         ClearRedo();
 
         // forget marker again
-        mpLastUndoActionBeforeTextEdit = 0;
+        mpLastUndoActionBeforeTextEdit = nullptr;
     }
 }
 

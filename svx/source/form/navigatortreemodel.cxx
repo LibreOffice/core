@@ -75,7 +75,7 @@ namespace svxform
         Reference< XFormComponent >  xFormComponent(evt.Source, UNO_QUERY);
         Reference< XForm >  xForm(evt.Source, UNO_QUERY);
 
-        FmEntryData* pEntryData( NULL );
+        FmEntryData* pEntryData( nullptr );
         if( xForm.is() )
             pEntryData = m_pNavModel->FindData( xForm, m_pNavModel->GetRootList() );
         else if( xFormComponent.is() )
@@ -187,9 +187,9 @@ namespace svxform
     }
 
     NavigatorTreeModel::NavigatorTreeModel( const ImageList& _rNormalImages )
-                    :m_pFormShell(NULL)
-                    ,m_pFormPage(NULL)
-                    ,m_pFormModel(NULL)
+                    :m_pFormShell(nullptr)
+                    ,m_pFormPage(nullptr)
+                    ,m_pFormModel(nullptr)
                     ,m_aNormalImages( _rNormalImages )
     {
         m_pPropChangeList = new OFormComponentObserver(this);
@@ -249,7 +249,7 @@ namespace svxform
     Reference< css::form::XForms >  NavigatorTreeModel::GetForms() const
     {
         if( !m_pFormShell || !m_pFormShell->GetCurPage())
-            return NULL;
+            return nullptr;
         else
             return m_pFormShell->GetCurPage()->GetForms();
     }
@@ -511,7 +511,7 @@ namespace svxform
     {
 
         // insert forms from root
-        if( pFormData == NULL )
+        if( pFormData == nullptr )
         {
             Reference< XIndexContainer >   xForms(GetForms(), UNO_QUERY);
             if (!xForms.is())
@@ -580,7 +580,7 @@ namespace svxform
         // set ParentData
         Reference< XInterface >  xIFace( xForm->getParent());
         Reference< XForm >  xParentForm(xIFace, UNO_QUERY);
-        FmFormData* pParentData = NULL;
+        FmFormData* pParentData = nullptr;
         if (xParentForm.is())
             pParentData = static_cast<FmFormData*>(FindData( xParentForm, GetRootList() ));
 
@@ -601,7 +601,7 @@ namespace svxform
         FmFormData* pParentData = static_cast<FmFormData*>(FindData( xForm, GetRootList() ));
         if( !pParentData )
         {
-            pParentData = new FmFormData( xForm, m_aNormalImages, NULL );
+            pParentData = new FmFormData( xForm, m_aNormalImages, nullptr );
             Insert( pParentData );
         }
 
@@ -651,7 +651,7 @@ namespace svxform
                     return pEntryData;
             }
         }
-        return NULL;
+        return nullptr;
     }
 
 
@@ -683,7 +683,7 @@ namespace svxform
             }
         }
 
-        return NULL;
+        return nullptr;
     }
 
 
@@ -838,14 +838,14 @@ namespace svxform
         {
             xForms->addContainerListener(static_cast<XContainerListener*>(m_pPropChangeList));
 
-            FillBranch(NULL);
+            FillBranch(nullptr);
 
             // select same control in tree as in view
             // (or all of them), if there is one ...
             if(!m_pFormShell) return;       // no shell
 
             FmFormView* pFormView = m_pFormShell->GetFormView();
-            DBG_ASSERT(pFormView != NULL, "NavigatorTreeModel::UpdateContent : keine FormView");
+            DBG_ASSERT(pFormView != nullptr, "NavigatorTreeModel::UpdateContent : keine FormView");
             BroadcastMarkedObjects(pFormView->GetMarkedObjectList());
         }
     }
@@ -855,7 +855,7 @@ namespace svxform
     {
 
         // If shell is unchanged, do nothing
-        FmFormPage* pNewPage = pShell ? pShell->GetCurPage() : NULL;
+        FmFormPage* pNewPage = pShell ? pShell->GetCurPage() : nullptr;
         if ((pShell == m_pFormShell) && (m_pFormPage == pNewPage))
             return;
 
@@ -865,7 +865,7 @@ namespace svxform
         {
             if (m_pFormModel)
                 EndListening( *m_pFormModel );
-            m_pFormModel = NULL;
+            m_pFormModel = nullptr;
             EndListening( *m_pFormShell );
             Clear();
         }
@@ -878,7 +878,7 @@ namespace svxform
             m_pFormPage = pNewPage;
             UpdateContent(m_pFormPage->GetForms());
         } else
-            m_pFormPage = NULL;
+            m_pFormPage = nullptr;
 
 
         // register as Listener again
@@ -958,7 +958,7 @@ namespace svxform
                     return pObj;
             }
         }
-        return NULL;
+        return nullptr;
     }
 
 

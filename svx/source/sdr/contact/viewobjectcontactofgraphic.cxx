@@ -218,7 +218,7 @@ namespace sdr
             // #i103720# forget event to avoid possible deletion by the following ActionChanged call
             // which may use createPrimitive2DSequence/impPrepareGraphicWithAsynchroniousLoading again.
             // Deletion is actually done by the scheduler who leaded to coming here
-            mpAsynchLoadEvent = 0;
+            mpAsynchLoadEvent = nullptr;
 
             // Invalidate all paint areas and check existing animation (which may have changed).
             GetViewContact().ActionChanged();
@@ -237,7 +237,7 @@ namespace sdr
                     "ViewObjectContactOfGraphic::forgetAsynchGraphicLoadingEvent: Forced to forget another event then I have scheduled (?)");
 
                 // forget event
-                mpAsynchLoadEvent = 0;
+                mpAsynchLoadEvent = nullptr;
             }
         }
 
@@ -307,7 +307,7 @@ namespace sdr
 
         ViewObjectContactOfGraphic::ViewObjectContactOfGraphic(ObjectContact& rObjectContact, ViewContact& rViewContact)
         :   ViewObjectContactOfSdrObj(rObjectContact, rViewContact),
-            mpAsynchLoadEvent(0)
+            mpAsynchLoadEvent(nullptr)
         {
         }
 

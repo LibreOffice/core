@@ -130,7 +130,7 @@ VCL_BUILDER_DECL_FACTORY(SvxLanguageComboBox)
 }
 
 SvxLanguageBoxBase::SvxLanguageBoxBase( bool bCheck )
-    : m_pSpellUsedLang(NULL)
+    : m_pSpellUsedLang(nullptr)
     , m_nLangList(SvxLanguageListFlags::EMPTY)
     , m_bHasLangNone(false)
     , m_bLangNoneIsLangAll(false)
@@ -249,7 +249,7 @@ void SvxLanguageBoxBase::SetLanguageList( SvxLanguageListFlags nLangList,
         else
         {
             nCount = SvtLanguageTable::GetLanguageEntryCount();
-            pKnown = NULL;
+            pKnown = nullptr;
         }
         for ( sal_uInt32 i = 0; i < nCount; i++ )
         {

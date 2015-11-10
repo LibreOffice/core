@@ -55,18 +55,18 @@ public:
     static Animation    MirrorAnimation( const Animation& rAnimation, bool bHMirr, bool bVMirr );
     static sal_uInt16   WriteGraphic( const Graphic& rGraphic, OUString& rFileName,
                                       const OUString& rFilterName, const sal_uIntPtr nFlags = 0L,
-                                      const Size* pMtfSize_100TH_MM = NULL );
+                                      const Size* pMtfSize_100TH_MM = nullptr );
     static bool         GraphicToBase64(const Graphic& rGraphic, OUString& rOUString);
 
     static sal_uInt16   ExportGraphic( const Graphic& rGraphic, const INetURLObject& rURL,
                                        GraphicFilter& rFilter, const sal_uInt16 nFormat,
-                                       const css::uno::Sequence< css::beans::PropertyValue >* pFilterData = NULL );
+                                       const css::uno::Sequence< css::beans::PropertyValue >* pFilterData = nullptr );
 
     static Bitmap       DetectEdges( const Bitmap& rBmp, const sal_uInt8 cThreshold );
 
     static tools::Polygon GetCountour( const Bitmap& rBmp, const sal_uIntPtr nContourFlags,
                                        const sal_uInt8 cEdgeDetectThreshold = 50,
-                                       const Rectangle* pWorkRect = NULL );
+                                       const Rectangle* pWorkRect = nullptr );
 };
 
 SVX_DLLPUBLIC bool DitherBitmap( Bitmap& rBitmap );

@@ -187,7 +187,7 @@ SdrEscapeDirection SdrGluePoint::EscAngleToDir(long nAngle)
 
 void SdrGluePoint::Rotate(const Point& rRef, long nAngle, double sn, double cs, const SdrObject* pObj)
 {
-    Point aPt(pObj!=NULL ? GetAbsolutePos(*pObj) : GetPos());
+    Point aPt(pObj!=nullptr ? GetAbsolutePos(*pObj) : GetPos());
     RotatePoint(aPt,rRef,sn,cs);
     // rotate reference edge
     if(nAlign != (SdrAlign::HORZ_CENTER|SdrAlign::VERT_CENTER))
@@ -202,12 +202,12 @@ void SdrGluePoint::Rotate(const Point& rRef, long nAngle, double sn, double cs, 
     if (nEscDir0&SdrEscapeDirection::RIGHT ) nEscDir1 |= EscAngleToDir(EscDirToAngle(SdrEscapeDirection::RIGHT )+nAngle);
     if (nEscDir0&SdrEscapeDirection::BOTTOM) nEscDir1 |= EscAngleToDir(EscDirToAngle(SdrEscapeDirection::BOTTOM)+nAngle);
     nEscDir=nEscDir1;
-    if (pObj!=NULL) SetAbsolutePos(aPt,*pObj); else SetPos(aPt);
+    if (pObj!=nullptr) SetAbsolutePos(aPt,*pObj); else SetPos(aPt);
 }
 
 void SdrGluePoint::Mirror(const Point& rRef1, const Point& rRef2, long nAngle, const SdrObject* pObj)
 {
-    Point aPt(pObj!=NULL ? GetAbsolutePos(*pObj) : GetPos());
+    Point aPt(pObj!=nullptr ? GetAbsolutePos(*pObj) : GetPos());
     MirrorPoint(aPt,rRef1,rRef2);
     // mirror reference edge
     if(nAlign != (SdrAlign::HORZ_CENTER|SdrAlign::VERT_CENTER))
@@ -240,20 +240,20 @@ void SdrGluePoint::Mirror(const Point& rRef1, const Point& rRef2, long nAngle, c
         nEscDir1|=EscAngleToDir(nEW);
     }
     nEscDir=nEscDir1;
-    if (pObj!=NULL) SetAbsolutePos(aPt,*pObj); else SetPos(aPt);
+    if (pObj!=nullptr) SetAbsolutePos(aPt,*pObj); else SetPos(aPt);
 }
 
 void SdrGluePoint::Shear(const Point& rRef, long /*nAngle*/, double tn, bool bVShear, const SdrObject* pObj)
 {
-    Point aPt(pObj!=NULL ? GetAbsolutePos(*pObj) : GetPos());
+    Point aPt(pObj!=nullptr ? GetAbsolutePos(*pObj) : GetPos());
     ShearPoint(aPt,rRef,tn,bVShear);
-    if (pObj!=NULL) SetAbsolutePos(aPt,*pObj); else SetPos(aPt);
+    if (pObj!=nullptr) SetAbsolutePos(aPt,*pObj); else SetPos(aPt);
 }
 
 void SdrGluePoint::Invalidate(vcl::Window& rWin, const SdrObject* pObj) const
 {
     bool bMapMerk=rWin.IsMapModeEnabled();
-    Point aPt(pObj!=NULL ? GetAbsolutePos(*pObj) : GetPos());
+    Point aPt(pObj!=nullptr ? GetAbsolutePos(*pObj) : GetPos());
     aPt=rWin.LogicToPixel(aPt);
     rWin.EnableMapMode(false);
 
@@ -269,7 +269,7 @@ void SdrGluePoint::Invalidate(vcl::Window& rWin, const SdrObject* pObj) const
 
 bool SdrGluePoint::IsHit(const Point& rPnt, const OutputDevice& rOut, const SdrObject* pObj) const
 {
-    Point aPt(pObj!=NULL ? GetAbsolutePos(*pObj) : GetPos());
+    Point aPt(pObj!=nullptr ? GetAbsolutePos(*pObj) : GetPos());
     Size aSiz=rOut.PixelToLogic(aGlueHalfSize);
     Rectangle aRect(aPt.X()-aSiz.Width(),aPt.Y()-aSiz.Height(),aPt.X()+aSiz.Width(),aPt.Y()+aSiz.Height());
     return aRect.IsInside(rPnt);

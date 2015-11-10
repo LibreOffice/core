@@ -164,12 +164,12 @@ public:
     void PrePaint();
 
     /// @param rReg refers to the OutDev and not to the Page
-    void CompleteRedraw( SdrPaintWindow& rPaintWindow, const vcl::Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector = NULL );
+    void CompleteRedraw( SdrPaintWindow& rPaintWindow, const vcl::Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector = nullptr );
 
     /// Write access to mpPreparedPageWindow
     void setPreparedPageWindow(SdrPageWindow* pKnownTarget);
 
-    void DrawLayer(SdrLayerID nID, OutputDevice* pGivenTarget = 0, sdr::contact::ViewObjectContactRedirector* pRedirector = 0L,
+    void DrawLayer(SdrLayerID nID, OutputDevice* pGivenTarget = nullptr, sdr::contact::ViewObjectContactRedirector* pRedirector = nullptr,
                    const Rectangle& rRect =  Rectangle());
     void DrawPageViewGrid(OutputDevice& rOut, const Rectangle& rRect, Color aColor = Color( COL_BLACK ) );
 

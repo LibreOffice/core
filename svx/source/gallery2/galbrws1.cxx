@@ -115,7 +115,7 @@ GalleryBrowser1::GalleryBrowser1(
     mpThemes              ( VclPtr<GalleryThemeListBox>::Create( this, WB_TABSTOP | WB_3DLOOK | WB_BORDER | WB_HSCROLL | WB_VSCROLL | WB_AUTOHSCROLL | WB_SORT ) ),
     mpGallery             ( pGallery ),
     mpExchangeData        ( new ExchangeData ),
-    mpThemePropsDlgItemSet( NULL ),
+    mpThemePropsDlgItemSet( nullptr ),
     aImgNormal            ( GalleryResGetBitmapEx( RID_SVXBMP_THEME_NORMAL ) ),
     aImgDefault           ( GalleryResGetBitmapEx( RID_SVXBMP_THEME_DEFAULT ) ),
     aImgReadOnly          ( GalleryResGetBitmapEx( RID_SVXBMP_THEME_READONLY ) ),
@@ -154,14 +154,14 @@ void GalleryBrowser1::dispose()
     EndListening( *mpGallery );
     mpThemes.disposeAndClear();
     delete mpExchangeData;
-    mpExchangeData = NULL;
+    mpExchangeData = nullptr;
     maNewTheme.disposeAndClear();
     Control::dispose();
 }
 
 sal_uIntPtr GalleryBrowser1::ImplInsertThemeEntry( const GalleryThemeEntry* pEntry )
 {
-    static const bool bShowHiddenThemes = ( getenv( "GALLERY_SHOW_HIDDEN_THEMES" ) != NULL );
+    static const bool bShowHiddenThemes = ( getenv( "GALLERY_SHOW_HIDDEN_THEMES" ) != nullptr );
 
     sal_uIntPtr nRet = LISTBOX_ENTRY_NOTFOUND;
 
@@ -229,7 +229,7 @@ void GalleryBrowser1::ImplGetExecuteVector(::std::vector< sal_uInt16 >& o_aExec)
     if( pTheme )
     {
         bool                bUpdateAllowed, bRenameAllowed, bRemoveAllowed;
-        static const bool   bIdDialog = ( getenv( "GALLERY_ENABLE_ID_DIALOG" ) != NULL );
+        static const bool   bIdDialog = ( getenv( "GALLERY_ENABLE_ID_DIALOG" ) != nullptr );
 
         if( pTheme->IsReadOnly() )
             bUpdateAllowed = bRenameAllowed = bRemoveAllowed = false;
@@ -269,7 +269,7 @@ void GalleryBrowser1::ImplGalleryThemeProperties( const OUString & rThemeName, b
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     assert(pFact && "Got no AbstractDialogFactory!");
-    VclAbstractDialog2* pThemeProps = pFact->CreateGalleryThemePropertiesDialog( NULL, mpExchangeData, mpThemePropsDlgItemSet );
+    VclAbstractDialog2* pThemeProps = pFact->CreateGalleryThemePropertiesDialog( nullptr, mpExchangeData, mpThemePropsDlgItemSet );
     assert(pThemeProps && "Got no GalleryThemePropertiesDialog!");
 
     if ( bCreateNew )
@@ -342,7 +342,7 @@ IMPL_LINK_TYPED( GalleryBrowser1, DestroyThemePropertiesDlgHdl, void*, p, void )
     VclAbstractDialog2* pDialog = static_cast<VclAbstractDialog2*>(p);
     delete pDialog;
     delete mpThemePropsDlgItemSet;
-    mpThemePropsDlgItemSet = 0;
+    mpThemePropsDlgItemSet = nullptr;
 }
 
 void GalleryBrowser1::ImplExecute( sal_uInt16 nId )
@@ -526,13 +526,13 @@ bool GalleryBrowser1::KeyInput( const KeyEvent& rKEvt, vcl::Window* pWindow )
         switch( rKEvt.GetKeyCode().GetCode() )
         {
             case( KEY_INSERT ):
-                ClickNewThemeHdl( NULL );
+                ClickNewThemeHdl( nullptr );
             break;
 
             case( KEY_I ):
             {
                 if( bMod1 )
-                   ClickNewThemeHdl( NULL );
+                   ClickNewThemeHdl( nullptr );
             }
             break;
 

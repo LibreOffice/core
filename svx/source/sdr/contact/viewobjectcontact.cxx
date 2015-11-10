@@ -165,7 +165,7 @@ ViewObjectContact::ViewObjectContact(ObjectContact& rObjectContact, ViewContact&
     mrViewContact(rViewContact),
     maObjectRange(),
     mxPrimitive2DSequence(),
-    mpPrimitiveAnimation(0),
+    mpPrimitiveAnimation(nullptr),
     mbLazyInvalidate(false)
 {
     // make the ViewContact remember me
@@ -187,7 +187,7 @@ ViewObjectContact::~ViewObjectContact()
     if(mpPrimitiveAnimation)
     {
         delete mpPrimitiveAnimation;
-        mpPrimitiveAnimation = 0;
+        mpPrimitiveAnimation = nullptr;
     }
 
     // take care of remembered ObjectContact. Remove from
@@ -297,7 +297,7 @@ void ViewObjectContact::checkForPrimitive2DAnimations()
     if(mpPrimitiveAnimation)
     {
         delete mpPrimitiveAnimation;
-        mpPrimitiveAnimation = 0;
+        mpPrimitiveAnimation = nullptr;
     }
 
     // check for animated primitives

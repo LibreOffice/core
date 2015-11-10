@@ -34,7 +34,7 @@ public:
                             TYPEINFO_OVERRIDE();
                             XLineStyleItem(css::drawing::LineStyle = css::drawing::LineStyle_SOLID);
                             XLineStyleItem(SvStream& rIn);
-    virtual SfxPoolItem*    Clone(SfxItemPool* pPool = 0) const override;
+    virtual SfxPoolItem*    Clone(SfxItemPool* pPool = nullptr) const override;
     virtual SfxPoolItem*    Create(SvStream& rIn, sal_uInt16 nVer) const override;
 
     virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
@@ -43,7 +43,7 @@ public:
     virtual bool GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
-                                    OUString &rText, const IntlWrapper * = 0 ) const override;
+                                    OUString &rText, const IntlWrapper * = nullptr ) const override;
     virtual sal_uInt16          GetValueCount() const override;
     css::drawing::LineStyle     GetValue() const { return (css::drawing::LineStyle) SfxEnumItem::GetValue(); }
 };

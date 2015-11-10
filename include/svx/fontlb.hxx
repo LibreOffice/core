@@ -41,7 +41,7 @@ public:
                                     sal_uInt16 nFlags,
                                     const OUString& rString,
                                     const vcl::Font& rFont,
-                                    const Color* pColor = NULL );
+                                    const Color* pColor = nullptr );
 
     virtual                     ~SvLBoxFontString();
 
@@ -75,7 +75,7 @@ public:
     /** Inserts a list entry and sets the font used for this entry.
         @param pColor  The font color. NULL = use default listbox text color. */
     void                        InsertFontEntry(
-                                    const OUString& rString, const vcl::Font& rFont, const Color* pColor = NULL );
+                                    const OUString& rString, const vcl::Font& rFont, const Color* pColor = nullptr );
 
     /** Selects/deselects an entry specified by its position in the list box. */
     void                        SelectEntryPos( sal_uLong nPos, bool bSelect = true );

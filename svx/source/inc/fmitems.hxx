@@ -41,7 +41,7 @@ public:
     // "pure virtual Methoden" vom SfxPoolItem
     virtual bool            operator==( const SfxPoolItem& ) const override;
 
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const override;
+    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
     virtual SfxPoolItem*    Create(SvStream &, sal_uInt16) const override;
     virtual SvStream&       Store(SvStream &, sal_uInt16 nItemVersion ) const override;
 

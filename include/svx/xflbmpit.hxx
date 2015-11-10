@@ -31,13 +31,13 @@ public:
                             XFillBmpPosItem( RECT_POINT eRP = RP_MM );
                             SVX_DLLPRIVATE XFillBmpPosItem( SvStream& rIn );
 
-    SVX_DLLPRIVATE virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const override;
+    SVX_DLLPRIVATE virtual SfxPoolItem*    Clone( SfxItemPool* pPool = nullptr ) const override;
     SVX_DLLPRIVATE virtual SfxPoolItem*    Create( SvStream& rIn, sal_uInt16 nVer ) const override;
 
     SVX_DLLPRIVATE virtual bool GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
-                                    OUString &rText, const IntlWrapper * = 0 ) const override;
+                                    OUString &rText, const IntlWrapper * = nullptr ) const override;
 
     SVX_DLLPRIVATE virtual sal_uInt16           GetValueCount() const override;
     SVX_DLLPRIVATE RECT_POINT               GetValue() const { return (RECT_POINT) SfxEnumItem::GetValue(); }

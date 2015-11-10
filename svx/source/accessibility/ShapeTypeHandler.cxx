@@ -38,7 +38,7 @@ using namespace ::com::sun::star::accessibility;
 namespace accessibility {
 
 // Pointer to the shape type handler singleton.
-ShapeTypeHandler* ShapeTypeHandler::instance = NULL;
+ShapeTypeHandler* ShapeTypeHandler::instance = nullptr;
 
 
 // Create an empty reference to an accessible object.
@@ -48,7 +48,7 @@ AccessibleShape*
         const AccessibleShapeTreeInfo& /*rShapeTreeInfo*/,
         ShapeTypeId /*nId*/)
 {
-    return NULL;
+    return nullptr;
 }
 
 
@@ -58,10 +58,10 @@ ShapeTypeHandler& ShapeTypeHandler::Instance()
 {
     // Using double check pattern to make sure that exactly one instance of
     // the shape type handler is instantiated.
-    if (instance == NULL)
+    if (instance == nullptr)
     {
         SolarMutexGuard aGuard;
-        if (instance == NULL)
+        if (instance == nullptr)
         {
             // Create the single instance of the shape type handler.
             instance = new ShapeTypeHandler;
@@ -154,7 +154,7 @@ ShapeTypeHandler::~ShapeTypeHandler()
     //  we reset the static variable instance, so that further calls to
     //  getInstance do not return an undefined object but create a new
     //  singleton.
-    instance = NULL;
+    instance = nullptr;
 }
 
 

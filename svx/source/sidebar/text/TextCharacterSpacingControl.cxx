@@ -44,10 +44,10 @@ TextCharacterSpacingControl::TextCharacterSpacingControl (
 ,   maFTBy          (VclPtr<FixedText>::Create(this, SVX_RES(FT_BY)))
 ,   maEditKerning   (VclPtr<MetricField>::Create(this, SVX_RES(ED_KERNING)))
 
-,   mpImg           (NULL)
-,   mpImgSel        (NULL)
-,   mpStr           (NULL)
-,   mpStrTip        (NULL)
+,   mpImg           (nullptr)
+,   mpImgSel        (nullptr)
+,   mpStr           (nullptr)
+,   mpStrTip        (nullptr)
 
 ,   maImgCus        (SVX_RES(IMG_CUSTOM))
 ,   maImgCusGrey    (SVX_RES(IMG_CUSTOM_GRAY))
@@ -141,7 +141,7 @@ void TextCharacterSpacingControl::initial()
     for (int i=0;i<5;i++)
         maVSSpacing->AddItem(mpImg[i], &mpImgSel[i],mpStr[i],&mpStrTip[i]);
 
-    maVSSpacing->AddItem( maImgCus, 0, maStrCus, 0 );
+    maVSSpacing->AddItem( maImgCus, nullptr, maStrCus, nullptr );
 
     maVSSpacing->SetNoSelection();
     maVSSpacing->SetSelectHdl(LINK(this, TextCharacterSpacingControl,VSSelHdl ));
@@ -174,12 +174,12 @@ void TextCharacterSpacingControl::Rearrange(bool bLBAvailable,bool bAvailable, l
 
     if( !mnLastCus )
     {
-        maVSSpacing->ReplaceItemImages(6, maImgCusGrey,0);
+        maVSSpacing->ReplaceItemImages(6, maImgCusGrey,nullptr);
     }
     else
     {
         //set custom tips
-        maVSSpacing->ReplaceItemImages(6, maImgCus,0);
+        maVSSpacing->ReplaceItemImages(6, maImgCus,nullptr);
         if(mnCustomKern > 0)
         {
             OUString aStrTip( maStrCusE);   //LAST CUSTOM no tip defect //add

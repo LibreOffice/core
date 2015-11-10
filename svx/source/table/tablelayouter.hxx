@@ -92,8 +92,8 @@ public:
 
     void updateCells( ::Rectangle& rRectangle );
 
-    sal_Int32 getHorizontalEdge( int nEdgeY, sal_Int32* pnMin = 0, sal_Int32* pnMax = 0 );
-    sal_Int32 getVerticalEdge( int nEdgeX , sal_Int32* pnMin = 0, sal_Int32* pnMax = 0);
+    sal_Int32 getHorizontalEdge( int nEdgeY, sal_Int32* pnMin = nullptr, sal_Int32* pnMax = nullptr );
+    sal_Int32 getVerticalEdge( int nEdgeX , sal_Int32* pnMin = nullptr, sal_Int32* pnMax = nullptr);
 
     void DistributeColumns( ::Rectangle& rArea, sal_Int32 nFirstCol, sal_Int32 nLastCol );
     void DistributeRows( ::Rectangle& rArea, sal_Int32 nFirstRow, sal_Int32 nLastRow );

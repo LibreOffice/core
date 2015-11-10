@@ -139,7 +139,7 @@ protected:
 
 protected:
     // #i71538# make constructors of SdrView sub-components protected to avoid incomplete incarnations which may get casted to SdrView
-    SdrObjEditView(SdrModel* pModel1, OutputDevice* pOut = 0L);
+    SdrObjEditView(SdrModel* pModel1, OutputDevice* pOut = nullptr);
     virtual ~SdrObjEditView();
 
 public:
@@ -178,8 +178,8 @@ public:
     // StatusEventHdl.
     // Similarly a specific OutlinerView can be specified.
 
-    virtual bool SdrBeginTextEdit(SdrObject* pObj, SdrPageView* pPV = 0L, vcl::Window* pWin = 0L, bool bIsNewObj = false,
-        SdrOutliner* pGivenOutliner = 0L, OutlinerView* pGivenOutlinerView = 0L,
+    virtual bool SdrBeginTextEdit(SdrObject* pObj, SdrPageView* pPV = nullptr, vcl::Window* pWin = nullptr, bool bIsNewObj = false,
+        SdrOutliner* pGivenOutliner = nullptr, OutlinerView* pGivenOutlinerView = nullptr,
         bool bDontDeleteOutliner = false, bool bOnlyOneView = false, bool bGrabFocus = true);
     // bDontDeleteReally is a special parameter for writer
     // If this flag is set, then a maybe empty textobject is not deleted.
@@ -251,7 +251,7 @@ public:
     void MovMacroObj(const Point& rPnt);
     void BrkMacroObj();
     bool EndMacroObj();
-    bool IsMacroObj() const { return pMacroObj!=NULL; }
+    bool IsMacroObj() const { return pMacroObj!=nullptr; }
 
     /** fills the given any with a XTextCursor for the current text selection.
         Leaves the any untouched if there currently is no text selected */

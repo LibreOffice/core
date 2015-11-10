@@ -145,7 +145,7 @@ bool ObjectContactOfObjListPainter::isOutputToRecordingMetaFile() const
 // pdf export?
 bool ObjectContactOfObjListPainter::isOutputToPDFFile() const
 {
-    return (0 != mrTargetOutputDevice.GetPDFWriter());
+    return (nullptr != mrTargetOutputDevice.GetPDFWriter());
 }
 
 OutputDevice* ObjectContactOfObjListPainter::TryToGetOutputDevice() const

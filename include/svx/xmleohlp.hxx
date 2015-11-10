@@ -78,8 +78,8 @@ private:
                                        OUString& rContainerStorageName,
                                        OUString& rObjectStorageName,
                                        bool bInternalToExternal,
-                                       bool *pGraphicRepl=0,
-                                       bool *pOasisFormat=0 ) const;
+                                       bool *pGraphicRepl=nullptr,
+                                       bool *pOasisFormat=nullptr ) const;
 
     SVX_DLLPRIVATE css::uno::Reference < css::embed::XStorage > ImplGetContainerStorage(
                                     const OUString& rStorageName );

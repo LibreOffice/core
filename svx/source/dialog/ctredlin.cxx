@@ -39,7 +39,7 @@
 RedlinData::RedlinData() : aDateTime(DateTime::EMPTY)
 {
     bDisabled=false;
-    pData=NULL;
+    pData=nullptr;
 }
 
 RedlinData::~RedlinData()
@@ -103,7 +103,7 @@ SvxRedlinTable::SvxRedlinTable(SvSimpleTableContainer& rParent, WinBits nBits)
     , aDaTiLast( DateTime::EMPTY )
     , aDaTiFilterFirst( DateTime::EMPTY )
     , aDaTiFilterLast( DateTime::EMPTY )
-    , pCommentSearcher(0)
+    , pCommentSearcher(nullptr)
 {
     SetNodeDefaultImages();
 }
@@ -116,7 +116,7 @@ SvxRedlinTable::~SvxRedlinTable()
 void SvxRedlinTable::dispose()
 {
     delete pCommentSearcher;
-    pCommentSearcher = NULL;
+    pCommentSearcher = nullptr;
     SvSimpleTable::dispose();
 }
 
@@ -138,7 +138,7 @@ sal_Int32 SvxRedlinTable::ColCompare(SvTreeListEntry* pLeft,SvTreeListEntry* pRi
             RedlinData *pLeftData=static_cast<RedlinData *>(pLeft->GetUserData());
             RedlinData *pRightData=static_cast<RedlinData *>(pRight->GetUserData());
 
-            if(pLeftData!=NULL && pRightData!=NULL)
+            if(pLeftData!=nullptr && pRightData!=nullptr)
             {
                 if(pLeftData->aDateTime < pRightData->aDateTime)
                 {
@@ -265,7 +265,7 @@ void SvxRedlinTable::SetFilterComment(bool bFlag)
 
 void SvxRedlinTable::SetCommentParams( const utl::SearchParam* pSearchPara )
 {
-    if(pSearchPara!=NULL)
+    if(pSearchPara!=nullptr)
     {
         delete pCommentSearcher;
 
@@ -536,7 +536,7 @@ IMPL_LINK_TYPED( SvxTPView, PbClickHdl, Button*, pButton, void )
 
 SvxTPFilter::SvxTPFilter( vcl::Window * pParent)
     : TabPage(pParent, "RedlineFilterPage", "svx/ui/redlinefilterpage.ui")
-    , pRedlinTable(NULL)
+    , pRedlinTable(nullptr)
     , bModified(false)
 {
     get(m_pCbDate, "date");
@@ -945,7 +945,7 @@ IMPL_LINK_TYPED( SvxTPFilter, RowEnableHdl, Button*, pButton, void )
         m_pEdComment->Invalidate();
     }
 
-    if(pCB!=NULL)
+    if(pCB!=nullptr)
         bModified=true;
 }
 
@@ -1063,7 +1063,7 @@ IMPL_LINK_TYPED( SvxTPFilter, ModifyDate, Edit&, rTF, void)
 
 IMPL_LINK_TYPED( SvxTPFilter, RefHandle, Button*, pRef, void )
 {
-    if(pRef!=NULL)
+    if(pRef!=nullptr)
     {
         aRefLink.Call(this);
     }
@@ -1114,7 +1114,7 @@ void SvxAcceptChgCtr::ShowViewPage()
 
 SvxRedlinTable* SvxAcceptChgCtr::GetViewTable()
 {
-    return pTPView ? pTPView->GetTableControl() : NULL;
+    return pTPView ? pTPView->GetTableControl() : nullptr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

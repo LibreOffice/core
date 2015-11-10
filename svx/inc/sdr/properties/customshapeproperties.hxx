@@ -38,7 +38,7 @@ namespace sdr
             virtual SfxItemSet* CreateObjectSpecificItemSet(SfxItemPool& rPool) override;
 
             // test changeability for a single item
-            virtual bool AllowItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem = 0) const override;
+            virtual bool AllowItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem = nullptr) const override;
 
             // react on ItemSet changes
             virtual void ItemSetChanged(const SfxItemSet& rSet) override;

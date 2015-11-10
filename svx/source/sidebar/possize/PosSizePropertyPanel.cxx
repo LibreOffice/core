@@ -59,7 +59,7 @@ PosSizePropertyPanel::PosSizePropertyPanel(
     const css::uno::Reference<css::ui::XSidebar>& rxSidebar)
 :   PanelLayout(pParent, "PosSizePropertyPanel", "svx/ui/sidebarpossize.ui", rxFrame),
     maRect(),
-    mpView(0),
+    mpView(nullptr),
     mlOldWidth(1),
     mlOldHeight(1),
     meRP(RP_LT),
@@ -220,9 +220,9 @@ void PosSizePropertyPanel::Initialize()
     if ( pCurSh )
         mpView = pCurSh->GetDrawView();
     else
-        mpView = NULL;
+        mpView = nullptr;
 
-    if ( mpView != NULL )
+    if ( mpView != nullptr )
     {
         maUIScale = mpView->GetModel()->GetUIScale();
         mbAdjustEnabled = hasText(*mpView);
@@ -237,12 +237,12 @@ VclPtr<vcl::Window> PosSizePropertyPanel::Create (
     SfxBindings* pBindings,
     const css::uno::Reference<css::ui::XSidebar>& rxSidebar)
 {
-    if (pParent == NULL)
-        throw lang::IllegalArgumentException("no parent Window given to PosSizePropertyPanel::Create", NULL, 0);
+    if (pParent == nullptr)
+        throw lang::IllegalArgumentException("no parent Window given to PosSizePropertyPanel::Create", nullptr, 0);
     if ( ! rxFrame.is())
-        throw lang::IllegalArgumentException("no XFrame given to PosSizePropertyPanel::Create", NULL, 1);
-    if (pBindings == NULL)
-        throw lang::IllegalArgumentException("no SfxBindings given to PosSizePropertyPanel::Create", NULL, 2);
+        throw lang::IllegalArgumentException("no XFrame given to PosSizePropertyPanel::Create", nullptr, 1);
+    if (pBindings == nullptr)
+        throw lang::IllegalArgumentException("no SfxBindings given to PosSizePropertyPanel::Create", nullptr, 2);
 
     return VclPtr<PosSizePropertyPanel>::Create(
                         pParent,
@@ -586,9 +586,9 @@ void PosSizePropertyPanel::NotifyItemUpdate(
     if ( pCurSh )
         mpView = pCurSh->GetDrawView();
     else
-        mpView = NULL;
+        mpView = nullptr;
 
-    if ( mpView == NULL )
+    if ( mpView == nullptr )
         return;
 
     mbAdjustEnabled = hasText(*mpView);
@@ -1042,7 +1042,7 @@ FieldUnit PosSizePropertyPanel::GetCurrentUnit( SfxItemState eState, const SfxPo
     else
     {
         SfxViewFrame* pFrame = SfxViewFrame::Current();
-        SfxObjectShell* pSh = NULL;
+        SfxObjectShell* pSh = nullptr;
         if ( pFrame )
             pSh = pFrame->GetObjectShell();
         if ( pSh )

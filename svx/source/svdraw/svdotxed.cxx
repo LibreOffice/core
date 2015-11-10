@@ -40,7 +40,7 @@ bool SdrTextObj::HasTextEdit() const
 
 bool SdrTextObj::BegTextEdit(SdrOutliner& rOutl)
 {
-    if (pEdtOutl!=NULL) return false; // Textedit might already run in another View!
+    if (pEdtOutl!=nullptr) return false; // Textedit might already run in another View!
     pEdtOutl=&rOutl;
 
     mbInEditMode = true;
@@ -74,7 +74,7 @@ bool SdrTextObj::BegTextEdit(SdrOutliner& rOutl)
 
 
     OutlinerParaObject* pOutlinerParaObject = GetOutlinerParaObject();
-    if(pOutlinerParaObject!=NULL)
+    if(pOutlinerParaObject!=nullptr)
     {
         rOutl.SetText(*GetOutlinerParaObject());
         rOutl.SetFixedCellHeight(static_cast<const SdrTextFixedCellHeightItem&>(GetMergedItem(SDRATTR_TEXT_USEFIXEDCELLHEIGHT)).GetValue());
@@ -135,7 +135,7 @@ void ImpUpdateOutlParamsForOverflow(SdrOutliner *pOutl, SdrTextObj *pTextObj)
     Size aPaperMin;
     Size aPaperMax;
     Rectangle aEditArea;
-    pTextObj->TakeTextEditArea(&aPaperMin,&aPaperMax,&aEditArea,NULL);
+    pTextObj->TakeTextEditArea(&aPaperMin,&aPaperMax,&aEditArea,nullptr);
 
     pOutl->SetMinAutoPaperSize(aPaperMin);
     pOutl->SetMaxAutoPaperSize(aPaperMax);
@@ -159,7 +159,7 @@ void SdrTextObj::TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, Rectangle* p
     Size aAnkSiz(aViewInit.GetSize());
     aAnkSiz.Width()--; aAnkSiz.Height()--; // because GetSize() adds 1
     Size aMaxSiz(1000000,1000000);
-    if (pModel!=NULL) {
+    if (pModel!=nullptr) {
         Size aTmpSiz(pModel->GetMaxObjSize());
         if (aTmpSiz.Width()!=0) aMaxSiz.Width()=aTmpSiz.Width();
         if (aTmpSiz.Height()!=0) aMaxSiz.Height()=aTmpSiz.Height();
@@ -242,7 +242,7 @@ void SdrTextObj::TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, Rectangle* p
         aPaperMax=aMaxSiz;
     }
 
-    if (pViewMin!=NULL) {
+    if (pViewMin!=nullptr) {
         *pViewMin=aViewInit;
 
         long nXFree=aAnkSiz.Width()-aPaperMin.Width();
@@ -272,9 +272,9 @@ void SdrTextObj::TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, Rectangle* p
         aPaperMin.Height() = 0;
     }
 
-    if (pPaperMin!=NULL) *pPaperMin=aPaperMin;
-    if (pPaperMax!=NULL) *pPaperMax=aPaperMax;
-    if (pViewInit!=NULL) *pViewInit=aViewInit;
+    if (pPaperMin!=nullptr) *pPaperMin=aPaperMin;
+    if (pPaperMax!=nullptr) *pPaperMax=aPaperMax;
+    if (pViewInit!=nullptr) *pViewInit=aViewInit;
 }
 
 void SdrTextObj::EndTextEdit(SdrOutliner& rOutl)
@@ -334,7 +334,7 @@ void SdrTextObj::EndTextEdit(SdrOutliner& rOutl)
     }
     /* End Chaining-related code */
 
-    pEdtOutl = NULL;
+    pEdtOutl = nullptr;
     rOutl.Clear();
     EEControlBits nStat = rOutl.GetControlWord();
     nStat &= ~EEControlBits::AUTOPAGESIZE;
@@ -379,13 +379,13 @@ sal_uInt16 SdrTextObj::GetOutlinerViewAnchorMode() const
 
 void SdrTextObj::ImpSetTextEditParams() const
 {
-    if (pEdtOutl!=NULL) {
+    if (pEdtOutl!=nullptr) {
         bool bUpdMerk=pEdtOutl->GetUpdateMode();
         if (bUpdMerk) pEdtOutl->SetUpdateMode(false);
         Size aPaperMin;
         Size aPaperMax;
         Rectangle aEditArea;
-        TakeTextEditArea(&aPaperMin,&aPaperMax,&aEditArea,NULL);
+        TakeTextEditArea(&aPaperMin,&aPaperMax,&aEditArea,nullptr);
         bool bContourFrame=IsContourTextFrame();
         pEdtOutl->SetMinAutoPaperSize(aPaperMin);
         pEdtOutl->SetMaxAutoPaperSize(aPaperMax);

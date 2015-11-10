@@ -65,7 +65,7 @@ protected:
     static const sal_uInt16 pRanges[];
 
     virtual void    ActivatePage( const SfxItemSet& rSet ) override;
-    virtual sfxpg   DeactivatePage( SfxItemSet* pSet = 0 ) override;
+    virtual sfxpg   DeactivatePage( SfxItemSet* pSet = nullptr ) override;
 
     SvxHFPage( vcl::Window* pParent, const SfxItemSet& rSet, sal_uInt16 nSetId );
 

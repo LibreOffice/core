@@ -83,7 +83,7 @@ namespace drawinglayer
             }
 
             // prepare fully scaled polygon
-            BasePrimitive2D* pNewFillPrimitive = 0;
+            BasePrimitive2D* pNewFillPrimitive = nullptr;
 
             if(!rFill.getGradient().isDefault())
             {
@@ -155,7 +155,7 @@ namespace drawinglayer
             // create line and stroke attribute
             const attribute::LineAttribute aLineAttribute(rLine.getColor(), rLine.getWidth(), rLine.getJoin(), rLine.getCap());
             const attribute::StrokeAttribute aStrokeAttribute(rLine.getDotDashArray(), rLine.getFullDotDashLen());
-            BasePrimitive2D* pNewLinePrimitive = 0L;
+            BasePrimitive2D* pNewLinePrimitive = nullptr;
 
             if(!rPolygon.isClosed() && !rStroke.isDefault())
             {
@@ -195,7 +195,7 @@ namespace drawinglayer
             bool bClipOnBounds)
         {
             basegfx::B2DHomMatrix aAnchorTransform(rObjectTransform);
-            SdrTextPrimitive2D* pNew = 0;
+            SdrTextPrimitive2D* pNew = nullptr;
 
             if(rText.isContour())
             {
@@ -337,7 +337,7 @@ namespace drawinglayer
                 }
             }
 
-            OSL_ENSURE(pNew != 0, "createTextPrimitive: no text primitive created (!)");
+            OSL_ENSURE(pNew != nullptr, "createTextPrimitive: no text primitive created (!)");
 
             if(rText.isBlink())
             {

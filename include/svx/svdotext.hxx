@@ -226,12 +226,12 @@ public:
     void SetTextEditOffset(const Point& rNew) { maTextEditOffset = rNew; }
 
 protected:
-    OverflowingText *mpOverflowingText = NULL;
+    OverflowingText *mpOverflowingText = nullptr;
     bool mbIsUnchainableClone = false;
 
     // the successor in a chain
-    SdrTextObj *mpNextInChain = NULL;
-    SdrTextObj *mpPrevInChain = NULL;
+    SdrTextObj *mpNextInChain = nullptr;
+    SdrTextObj *mpPrevInChain = nullptr;
 
     // indicating the for its text to be chained to another text box
     bool mbToBeChained : 1;
@@ -348,7 +348,7 @@ public:
     // Eine Attributierung kann nur am Textrahmen vollzogen werden.
     void SetTextLink(const OUString& rFileName, const OUString& rFilterName, rtl_TextEncoding eCharSet);
     void ReleaseTextLink();
-    bool IsLinkedText() const { return pPlusData!=NULL && GetLinkUserData()!=NULL; }
+    bool IsLinkedText() const { return pPlusData!=nullptr && GetLinkUserData()!=nullptr; }
     bool ReloadLinkedText(bool bForceLoad = false);
     bool LoadText(const OUString& rFileName, const OUString& rFilterName, rtl_TextEncoding eCharSet);
 
@@ -378,7 +378,7 @@ public:
     virtual bool HasText() const override;
 
     bool HasEditText() const;
-    bool IsTextEditActive() const { return (pEdtOutl != 0L); }
+    bool IsTextEditActive() const { return (pEdtOutl != nullptr); }
 
     /** returns the currently active text. */
     virtual SdrText* getActiveText() const;
@@ -411,7 +411,7 @@ public:
     // Gleichzeitig wird der Text in den Outliner gesetzt (ggf.
     // der des EditOutliners) und die PaperSize gesetzt.
     virtual void TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRect, bool bNoEditText = false,
-        Rectangle* pAnchorRect=NULL, bool bLineWidth = true ) const;
+        Rectangle* pAnchorRect=nullptr, bool bLineWidth = true ) const;
     virtual void TakeTextAnchorRect(::Rectangle& rAnchorRect) const;
     const GeoStat& GetGeoStat() const { return aGeo; }
 

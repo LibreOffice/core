@@ -99,7 +99,7 @@ protected:
 
     RECT_POINT          GetRPFromPoint( Point, bool bRTL = false ) const;
     Point               GetPointFromRP( RECT_POINT ) const;
-    void                SetFocusRect( const Rectangle* pRect = NULL );      // pRect == NULL -> calculate rectangle in method
+    void                SetFocusRect( const Rectangle* pRect = nullptr );      // pRect == NULL -> calculate rectangle in method
     Point               SetActualRPWithoutInvalidate( RECT_POINT eNewRP );  // returns the last point
 
     virtual void        GetFocus() override;

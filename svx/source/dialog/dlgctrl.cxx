@@ -70,12 +70,12 @@ Bitmap& SvxRectCtl::GetRectBitmap()
 SvxRectCtl::SvxRectCtl(vcl::Window* pParent, RECT_POINT eRpt,
     sal_uInt16 nBorder, sal_uInt16 nCircle, CTL_STYLE eStyle)
     : Control(pParent, WB_BORDER | WB_TABSTOP)
-    , pAccContext(NULL)
+    , pAccContext(nullptr)
     , nBorderWidth(nBorder)
     , nRadius(nCircle)
     , eDefRP(eRpt)
     , eCS(eStyle)
-    , pBitmap(NULL)
+    , pBitmap(nullptr)
     , m_nState(CTL_STATE::NONE)
     , mbCompleteDisable(false)
     , mbUpdateForeground(true)
@@ -827,7 +827,7 @@ SvxPixelCtl::SvxPixelCtl(vcl::Window* pParent, sal_uInt16 nNumber)
     nSquares = nLines * nLines;
     pPixel = new sal_uInt16[ nSquares ];
     memset(pPixel, 0, nSquares * sizeof(sal_uInt16));
-    m_pAccess=NULL;
+    m_pAccess=nullptr;
 }
 
 void SvxPixelCtl::Resize()
@@ -1122,7 +1122,7 @@ void SvxPixelCtl::Reset()
 SvxBitmapCtl::SvxBitmapCtl( vcl::Window* /*pParent*/, const Size& rSize )
     : aSize(rSize)
     , nLines(0)
-    , pBmpArray(NULL)
+    , pBmpArray(nullptr)
 {
 }
 
@@ -1189,7 +1189,7 @@ void ColorLB::Modify( const XColorEntry& rEntry, sal_Int32 nPos )
 
 HatchingLB::HatchingLB( vcl::Window* pParent, WinBits nWinStyle)
 : ListBox( pParent, nWinStyle ),
-  mpList ( NULL )
+  mpList ( nullptr )
 {
     SetEdgeBlending(true);
 }
@@ -1282,7 +1282,7 @@ void FillAttrLB::Fill( const XHatchListRef &pList )
 
 GradientLB::GradientLB( vcl::Window* pParent, WinBits aWB)
 : ListBox( pParent, aWB ),
-  mpList(NULL)
+  mpList(nullptr)
 {
     SetEdgeBlending(true);
 }
@@ -1398,7 +1398,7 @@ void FillAttrLB::Fill( const XGradientListRef &pList )
 BitmapLB::BitmapLB( vcl::Window* pParent, WinBits aWB)
 :   ListBox( pParent, aWB ),
     maBitmapEx(),
-    mpList(NULL)
+    mpList(nullptr)
 {
     SetEdgeBlending(true);
 }
@@ -1947,10 +1947,10 @@ void SvxXLinePreview::Resize()
 
 SvxXLinePreview::SvxXLinePreview(vcl::Window* pParent)
     : SvxPreviewBase(pParent)
-    , mpLineObjA(NULL)
-    , mpLineObjB(NULL)
-    , mpLineObjC(NULL)
-    , mpGraphic(NULL)
+    , mpLineObjA(nullptr)
+    , mpLineObjB(nullptr)
+    , mpLineObjC(nullptr)
+    , mpGraphic(nullptr)
     , mbWithSymbol(false)
 {
     InitSettings( true, true );
@@ -2035,7 +2035,7 @@ void SvxXLinePreview::Paint(vcl::RenderContext& rRenderContext, const Rectangle&
     aObjectVector.push_back(mpLineObjB);
     aObjectVector.push_back(mpLineObjC);
 
-    sdr::contact::ObjectContactOfObjListPainter aPainter(getBufferDevice(), aObjectVector, 0);
+    sdr::contact::ObjectContactOfObjListPainter aPainter(getBufferDevice(), aObjectVector, nullptr);
     sdr::contact::DisplayInfo aDisplayInfo;
 
     // do processing
@@ -2055,7 +2055,7 @@ void SvxXLinePreview::Paint(vcl::RenderContext& rRenderContext, const Rectangle&
 
 SvxXRectPreview::SvxXRectPreview(vcl::Window* pParent)
     : SvxPreviewBase(pParent)
-    , mpRectangleObject(0)
+    , mpRectangleObject(nullptr)
 {
     InitSettings(true, true);
 
@@ -2106,7 +2106,7 @@ void SvxXRectPreview::Paint(vcl::RenderContext& rRenderContext, const Rectangle&
 
     aObjectVector.push_back(mpRectangleObject);
 
-    sdr::contact::ObjectContactOfObjListPainter aPainter(getBufferDevice(), aObjectVector, 0);
+    sdr::contact::ObjectContactOfObjListPainter aPainter(getBufferDevice(), aObjectVector, nullptr);
     sdr::contact::DisplayInfo aDisplayInfo;
 
     aPainter.ProcessDisplay(aDisplayInfo);
@@ -2116,8 +2116,8 @@ void SvxXRectPreview::Paint(vcl::RenderContext& rRenderContext, const Rectangle&
 
 SvxXShadowPreview::SvxXShadowPreview( vcl::Window* pParent )
     : SvxPreviewBase(pParent)
-    , mpRectangleObject(0)
-    , mpRectangleShadow(0)
+    , mpRectangleObject(nullptr)
+    , mpRectangleShadow(nullptr)
 {
     InitSettings(true, true);
 
@@ -2187,7 +2187,7 @@ void SvxXShadowPreview::Paint(vcl::RenderContext& rRenderContext, const Rectangl
     aObjectVector.push_back(mpRectangleShadow);
     aObjectVector.push_back(mpRectangleObject);
 
-    sdr::contact::ObjectContactOfObjListPainter aPainter(getBufferDevice(), aObjectVector, 0);
+    sdr::contact::ObjectContactOfObjListPainter aPainter(getBufferDevice(), aObjectVector, nullptr);
     sdr::contact::DisplayInfo aDisplayInfo;
 
     aPainter.ProcessDisplay(aDisplayInfo);

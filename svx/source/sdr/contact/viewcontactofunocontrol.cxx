@@ -88,7 +88,7 @@ namespace sdr { namespace contact {
         SdrUnoObj* pUnoObject = dynamic_cast< SdrUnoObj* >( TryToGetSdrObject() );
         OSL_ENSURE( pUnoObject, "ViewContactOfUnoControl::getTemporaryControlForDevice: no SdrUnoObj!" );
         if ( !pUnoObject )
-            return NULL;
+            return nullptr;
         return ViewObjectContactOfUnoControl::getTemporaryControlForWindow( _rWindow, _inout_ControlContainer, *pUnoObject );
     }
 
@@ -100,7 +100,7 @@ namespace sdr { namespace contact {
         ObjectContactOfPageView* const pPageViewContact = dynamic_cast< ObjectContactOfPageView* >( &_rObjectContact  );
 
         const bool bPrintOrPreview = pPageViewContact
-            && ( ( ( pDevice != NULL ) && ( pDevice->GetOutDevType() == OUTDEV_PRINTER ) )
+            && ( ( ( pDevice != nullptr ) && ( pDevice->GetOutDevType() == OUTDEV_PRINTER ) )
                     || pPageViewContact->GetPageWindow().GetPageView().GetView().IsPrintPreview()
                )
             ;

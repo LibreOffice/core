@@ -425,7 +425,7 @@ namespace sdr
         void OverlayManagerBuffered::flush()
         {
             // call timer handler direct
-            ImpBufferTimerHandler(0);
+            ImpBufferTimerHandler(nullptr);
         }
 
         void OverlayManagerBuffered::restoreBackground(const vcl::Region& rRegion) const

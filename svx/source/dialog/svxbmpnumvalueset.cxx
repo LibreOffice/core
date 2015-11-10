@@ -385,7 +385,7 @@ SvxNumValueSet::SvxNumValueSet(vcl::Window* pParent, WinBits nWinBits)
     : ValueSet(pParent, nWinBits)
     , ePageType(NumberingPageType::BULLET)
     , bHTMLMode(false)
-    , pVDev(NULL)
+    , pVDev(nullptr)
 {
 }
 
@@ -395,7 +395,7 @@ void SvxNumValueSet::init(NumberingPageType eType)
 {
     ePageType = eType;
     bHTMLMode = false;
-    pVDev = NULL;
+    pVDev = nullptr;
 
     SetColCount( 4 );
     SetLineCount( 2 );

@@ -58,10 +58,10 @@ struct SdrPageWindow::Impl
     uno::Reference<awt::XControlContainer> mxControlContainer;
 
     Impl( SdrPageView& rPageView, SdrPaintWindow& rPaintWindow ) :
-        mpObjectContact(NULL),
+        mpObjectContact(nullptr),
         mrPageView(rPageView),
         mpPaintWindow(&rPaintWindow),
-        mpOriginalPaintWindow(NULL)
+        mpOriginalPaintWindow(nullptr)
     {
     }
 
@@ -187,7 +187,7 @@ void SdrPageWindow::unpatchPaintWindow()
     if (mpImpl->mpOriginalPaintWindow)
     {
         mpImpl->mpPaintWindow = mpImpl->mpOriginalPaintWindow;
-        mpImpl->mpOriginalPaintWindow = NULL;
+        mpImpl->mpOriginalPaintWindow = nullptr;
     }
 }
 
@@ -345,7 +345,7 @@ void SdrPageWindow::RedrawAll( sdr::contact::ViewObjectContactRedirector* pRedir
     }
 
     // reset redirector
-    GetObjectContact().SetViewObjectContactRedirector(0L);
+    GetObjectContact().SetViewObjectContactRedirector(nullptr);
 
     // LineClip test
 #ifdef CLIPPER_TEST
@@ -404,7 +404,7 @@ void SdrPageWindow::RedrawLayer( const SdrLayerID* pId, sdr::contact::ViewObject
     }
 
     // reset redirector
-    GetObjectContact().SetViewObjectContactRedirector(0L);
+    GetObjectContact().SetViewObjectContactRedirector(nullptr);
 }
 
 // Invalidate call, used from ObjectContact(OfPageView) in InvalidatePartOfView(...)
@@ -456,7 +456,7 @@ sdr::contact::ObjectContact& SdrPageWindow::GetObjectContact()
 
 bool SdrPageWindow::HasObjectContact() const
 {
-    return mpImpl->mpObjectContact != NULL;
+    return mpImpl->mpObjectContact != nullptr;
 }
 
 // #i26631#
@@ -465,7 +465,7 @@ void SdrPageWindow::ResetObjectContact()
     if (mpImpl->mpObjectContact)
     {
         delete mpImpl->mpObjectContact;
-        mpImpl->mpObjectContact = 0L;
+        mpImpl->mpObjectContact = nullptr;
     }
 }
 

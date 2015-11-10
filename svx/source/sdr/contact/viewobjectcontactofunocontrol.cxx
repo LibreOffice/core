@@ -391,7 +391,7 @@ namespace sdr { namespace contact {
     Reference< XControlContainer > SdrPageViewAccess::getControlContainer( const OutputDevice& _rDevice ) const
     {
         Reference< XControlContainer > xControlContainer = m_rPageView.GetControlContainer( _rDevice );
-        DBG_ASSERT( xControlContainer.is() || NULL == m_rPageView.FindPageWindow( _rDevice ),
+        DBG_ASSERT( xControlContainer.is() || nullptr == m_rPageView.FindPageWindow( _rDevice ),
             "SdrPageViewAccess::getControlContainer: the output device is known, but there is no control container for it?" );
         return xControlContainer;
     }
@@ -482,7 +482,7 @@ namespace sdr { namespace contact {
 
     Reference< XControlContainer > DummyPageViewAccess::getControlContainer( const OutputDevice& /*_rDevice*/ ) const
     {
-        return NULL;
+        return nullptr;
     }
 
 
@@ -757,7 +757,7 @@ namespace sdr { namespace contact {
         /** determines whether the instance is disposed
             @nofail
         */
-        bool    impl_isDisposed_nofail() const { return m_pAntiImpl == NULL; }
+        bool    impl_isDisposed_nofail() const { return m_pAntiImpl == nullptr; }
 
         /** determines whether our control is currently visible
             @nofail
@@ -848,7 +848,7 @@ namespace sdr { namespace contact {
     ViewObjectContactOfUnoControl_Impl::ViewObjectContactOfUnoControl_Impl( ViewObjectContactOfUnoControl* _pAntiImpl )
         :m_pAntiImpl( _pAntiImpl )
         ,m_bCreatingControl( false )
-        ,m_pOutputDeviceForWindow( NULL )
+        ,m_pOutputDeviceForWindow( nullptr )
         ,m_bControlIsVisible( false )
         ,m_bIsDesignModeListening( false )
         ,m_eControlDesignMode( eUnknown )
@@ -905,10 +905,10 @@ namespace sdr { namespace contact {
 
         m_aControl.clear();
         m_xContainer.clear();
-        m_pOutputDeviceForWindow = NULL;
+        m_pOutputDeviceForWindow = nullptr;
         m_bControlIsVisible = false;
 
-        m_pAntiImpl = NULL;
+        m_pAntiImpl = nullptr;
     }
 
 
@@ -923,14 +923,14 @@ namespace sdr { namespace contact {
     {
         OSL_PRECOND( !impl_isDisposed_nofail(), "ViewObjectContactOfUnoControl_Impl::getUnoObject: already disposed()" );
         if ( impl_isDisposed_nofail() )
-            _out_rpObject = NULL;
+            _out_rpObject = nullptr;
         else
         {
             _out_rpObject = dynamic_cast< SdrUnoObj* >( m_pAntiImpl->GetViewContact().TryToGetSdrObject() );
             DBG_ASSERT( _out_rpObject || !m_pAntiImpl->GetViewContact().TryToGetSdrObject(),
                 "ViewObjectContactOfUnoControl_Impl::getUnoObject: invalid SdrObject!" );
         }
-        return ( _out_rpObject != NULL );
+        return ( _out_rpObject != nullptr );
     }
 
 
@@ -942,7 +942,7 @@ namespace sdr { namespace contact {
 
         try
         {
-            SdrUnoObj* pUnoObject( NULL );
+            SdrUnoObj* pUnoObject( nullptr );
             if ( getUnoObject( pUnoObject ) )
             {
                 Point aGridOffset = pUnoObject->GetGridOffset();
@@ -1054,7 +1054,7 @@ namespace sdr { namespace contact {
             UnoControlContactHelper::disposeAndClearControl_nothrow( m_aControl );
         }
 
-        SdrUnoObj* pUnoObject( NULL );
+        SdrUnoObj* pUnoObject( nullptr );
         if ( !getUnoObject( pUnoObject ) )
             return false;
 
@@ -1067,7 +1067,7 @@ namespace sdr { namespace contact {
         m_xContainer.set(_rPageView.getControlContainer( _rDevice ), css::uno::UNO_QUERY);
         DBG_ASSERT( (   m_xContainer.is()                                           // either have a XControlContainer
                     ||  (   ( !_rPageView.getControlContainer( _rDevice ).is() )    // or don't have any container,
-                        &&  ( dynamic_cast< const vcl::Window* >( &_rDevice ) == NULL )  // which is allowed for non-Window instances only
+                        &&  ( dynamic_cast< const vcl::Window* >( &_rDevice ) == nullptr )  // which is allowed for non-Window instances only
                         )
                     ),
             "ViewObjectContactOfUnoControl_Impl::impl_ensureControl_nothrow: no XContainer at the ControlContainer!" );
@@ -1163,7 +1163,7 @@ namespace sdr { namespace contact {
     {
         OSL_PRECOND( !impl_isDisposed_nofail(), "ViewObjectContactOfUnoControl_Impl::impl_getPageView_nothrow: already disposed!" );
 
-        _out_rpPageView = NULL;
+        _out_rpPageView = nullptr;
         if ( impl_isDisposed_nofail() )
             return false;
 
@@ -1171,8 +1171,8 @@ namespace sdr { namespace contact {
         if ( pPageViewContact )
             _out_rpPageView = &pPageViewContact->GetPageWindow().GetPageView();
 
-        DBG_ASSERT( _out_rpPageView != NULL, "ViewObjectContactOfUnoControl_Impl::impl_getPageView_nothrow: this method is expected to always have success!" );
-        return ( _out_rpPageView != NULL );
+        DBG_ASSERT( _out_rpPageView != nullptr, "ViewObjectContactOfUnoControl_Impl::impl_getPageView_nothrow: this method is expected to always have success!" );
+        return ( _out_rpPageView != nullptr );
     }
 
 
@@ -1181,11 +1181,11 @@ namespace sdr { namespace contact {
         OSL_PRECOND( m_aControl.is(),
             "ViewObjectContactOfUnoControl_Impl::impl_adjustControlVisibilityToLayerVisibility_throw: only valid if we have a control!" );
 
-        SdrPageView* pPageView( NULL );
+        SdrPageView* pPageView( nullptr );
         if ( !impl_getPageView_nothrow( pPageView ) )
             return;
 
-        SdrUnoObj* pUnoObject( NULL );
+        SdrUnoObj* pUnoObject( nullptr );
         if ( !getUnoObject( pUnoObject ) )
             return;
 
@@ -1299,7 +1299,7 @@ namespace sdr { namespace contact {
 
     bool ViewObjectContactOfUnoControl_Impl::isPrintableControl() const
     {
-        SdrUnoObj* pUnoObject( NULL );
+        SdrUnoObj* pUnoObject( nullptr );
         if ( !getUnoObject( pUnoObject ) )
             return false;
 
@@ -1613,7 +1613,7 @@ namespace sdr { namespace contact {
     ViewObjectContactOfUnoControl::~ViewObjectContactOfUnoControl()
     {
         m_pImpl->dispose();
-        m_pImpl = NULL;
+        m_pImpl = nullptr;
 
     }
 
@@ -1621,7 +1621,7 @@ namespace sdr { namespace contact {
     Reference< XControl > ViewObjectContactOfUnoControl::getControl()
     {
         SolarMutexGuard aSolarGuard;
-        m_pImpl->ensureControl( NULL );
+        m_pImpl->ensureControl( nullptr );
         return m_pImpl->getExistentControl().getControl();
     }
 

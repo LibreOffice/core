@@ -167,7 +167,7 @@ protected:
 
 public:
     TYPEINFO_OVERRIDE();
-    explicit SdrView(SdrModel* pModel1, OutputDevice* pOut = 0L);
+    explicit SdrView(SdrModel* pModel1, OutputDevice* pOut = nullptr);
     virtual ~SdrView();
 
     // The default value for all dispatchers is activated. If the app for example

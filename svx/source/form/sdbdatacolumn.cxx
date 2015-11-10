@@ -43,9 +43,9 @@ namespace svxform
 
         if (!m_xPropertySet.is() || !m_xColumn.is())
         {
-            m_xPropertySet = NULL;
-            m_xColumn = NULL;
-            m_xColumnUpdate = NULL;
+            m_xPropertySet = nullptr;
+            m_xColumn = nullptr;
+            m_xColumnUpdate = nullptr;
         }
     }
 

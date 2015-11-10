@@ -213,7 +213,7 @@ static sal_uInt16 ImplGetRID( const OUString& aCommand )
         { ".uno:GrafContrast",      RID_SVXIMG_GRAF_CONTRAST        },
         { ".uno:GrafGamma",         RID_SVXIMG_GRAF_GAMMA           },
         { ".uno:GrafTransparence",  RID_SVXIMG_GRAF_TRANSPARENCE    },
-        { 0, 0 }
+        { nullptr, 0 }
     };
 
     sal_uInt16 nRID = 0;
@@ -452,7 +452,7 @@ void SvxGrafToolBoxControl::StateChanged( sal_uInt16, SfxItemState eState, const
         if( eState == SfxItemState::DEFAULT )
             pCtrl->Update( pState );
         else
-            pCtrl->Update( NULL );
+            pCtrl->Update( nullptr );
     }
 }
 
@@ -539,7 +539,7 @@ void SvxGrafModeToolBoxControl::StateChanged( sal_uInt16, SfxItemState eState, c
         if( eState == SfxItemState::DEFAULT )
             pCtrl->Update( pState );
         else
-            pCtrl->Update( NULL );
+            pCtrl->Update( nullptr );
     }
 }
 
@@ -566,7 +566,7 @@ void SvxGrafAttrHelper::ExecuteGrafAttr( SfxRequest& rReq, SdrView& rView )
     sal_uInt16              nSlot = rReq.GetSlot();
 
     if( !pArgs || SfxItemState::SET != pArgs->GetItemState( nSlot, false, &pItem ))
-        pItem = 0;
+        pItem = nullptr;
 
     switch( nSlot )
     {
@@ -702,7 +702,7 @@ void SvxGrafAttrHelper::ExecuteGrafAttr( SfxRequest& rReq, SdrView& rView )
                                                     aRBSize.Width(), aRBSize.Height() ) );
 
                     ScopedVclPtrInstance<SfxSingleTabDialog> aCropDialog(
-                        SfxViewShell::Current() ? SfxViewShell::Current()->GetWindow() : NULL,
+                        SfxViewShell::Current() ? SfxViewShell::Current()->GetWindow() : nullptr,
                         aCropDlgAttr);
                     const OUString aCropStr(SVX_RESSTR(RID_SVXSTR_GRAFCROP));
 

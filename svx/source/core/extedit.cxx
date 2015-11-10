@@ -171,8 +171,8 @@ void SdrExternalToolEdit::Notify(SfxBroadcaster & rBC, SfxHint const& rHint)
             || (pSdrHint->GetObject() == m_pObj
                 && HINT_OBJREMOVED == pSdrHint->GetKind())))
     {
-        m_pView = 0;
-        m_pObj = 0;
+        m_pView = nullptr;
+        m_pObj = nullptr;
         m_pChecker.reset(); // avoid modifying deleted object
         EndListening(rBC);
     }

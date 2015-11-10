@@ -182,7 +182,7 @@ Gallery::~Gallery()
 
 Gallery* Gallery::GetGalleryInstance()
 {
-    static Gallery* pGallery = NULL;
+    static Gallery* pGallery = nullptr;
 
     if( !pGallery )
     {
@@ -427,7 +427,7 @@ void Gallery::ImplLoadSubDirs( const INetURLObject& rBaseURL, bool& rbDirIsReadO
 
 GalleryThemeEntry* Gallery::ImplGetThemeEntry( const OUString& rThemeName )
 {
-    GalleryThemeEntry* pFound = NULL;
+    GalleryThemeEntry* pFound = nullptr;
 
     if( !rThemeName.isEmpty() )
     {
@@ -441,7 +441,7 @@ GalleryThemeEntry* Gallery::ImplGetThemeEntry( const OUString& rThemeName )
 
 OUString Gallery::GetThemeName( sal_uIntPtr nThemeId ) const
 {
-    GalleryThemeEntry* pFound = NULL;
+    GalleryThemeEntry* pFound = nullptr;
 
     for ( size_t i = 0, n = aThemeList.size(); i < n && !pFound; ++i )
     {
@@ -502,7 +502,7 @@ OUString Gallery::GetThemeName( sal_uIntPtr nThemeId ) const
 
 bool Gallery::HasTheme( const OUString& rThemeName )
 {
-    return( ImplGetThemeEntry( rThemeName ) != NULL );
+    return( ImplGetThemeEntry( rThemeName ) != nullptr );
 }
 
 bool Gallery::CreateTheme( const OUString& rThemeName )
@@ -599,7 +599,7 @@ bool Gallery::RemoveTheme( const OUString& rThemeName )
 
 GalleryTheme* Gallery::ImplGetCachedTheme(const GalleryThemeEntry* pThemeEntry)
 {
-    GalleryTheme* pTheme = NULL;
+    GalleryTheme* pTheme = nullptr;
 
     if( pThemeEntry )
     {
@@ -631,7 +631,7 @@ GalleryTheme* Gallery::ImplGetCachedTheme(const GalleryThemeEntry* pThemeEntry)
 
                         if( pIStm->GetError() )
                         {
-                            delete pTheme, pTheme = NULL;
+                            delete pTheme, pTheme = nullptr;
                         }
                     }
                     catch (const css::ucb::ContentCreationException&)
@@ -663,10 +663,10 @@ void Gallery::ImplDeleteCachedTheme( GalleryTheme* pTheme )
 
 GalleryTheme* Gallery::AcquireTheme( const OUString& rThemeName, SfxListener& rListener )
 {
-    GalleryTheme*           pTheme = NULL;
+    GalleryTheme*           pTheme = nullptr;
     GalleryThemeEntry*      pThemeEntry = ImplGetThemeEntry( rThemeName );
 
-    if( pThemeEntry && ( ( pTheme = ImplGetCachedTheme( pThemeEntry ) ) != NULL ) )
+    if( pThemeEntry && ( ( pTheme = ImplGetCachedTheme( pThemeEntry ) ) != nullptr ) )
         rListener.StartListening( *pTheme );
 
     return pTheme;

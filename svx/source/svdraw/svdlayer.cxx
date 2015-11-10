@@ -101,7 +101,7 @@ void SetOfByte::QueryValue( css::uno::Any & rAny ) const
 }
 
 SdrLayer::SdrLayer(SdrLayerID nNewID, const OUString& rNewName) :
-    maName(rNewName), pModel(NULL), nType(0), nID(nNewID)
+    maName(rNewName), pModel(nullptr), nType(0), nID(nNewID)
 {
 }
 
@@ -111,7 +111,7 @@ void SdrLayer::SetStandardLayer(bool bStd)
     if (bStd) {
         maName = ImpGetResStr(STR_StandardLayerName);
     }
-    if (pModel!=NULL) {
+    if (pModel!=nullptr) {
         SdrHint aHint(HINT_LAYERCHG);
         pModel->Broadcast(aHint);
         pModel->SetChanged();
@@ -144,15 +144,15 @@ bool SdrLayer::operator==(const SdrLayer& rCmpLayer) const
 SdrLayerAdmin::SdrLayerAdmin(SdrLayerAdmin* pNewParent):
     aLayer(),
     pParent(pNewParent),
-    pModel(NULL),
+    pModel(nullptr),
     maControlLayerName("Controls")
 {
 }
 
 SdrLayerAdmin::SdrLayerAdmin(const SdrLayerAdmin& rSrcLayerAdmin):
     aLayer(),
-    pParent(NULL),
-    pModel(NULL),
+    pParent(nullptr),
+    pModel(nullptr),
     maControlLayerName("Controls")
 {
     *this = rSrcLayerAdmin;
@@ -211,7 +211,7 @@ void SdrLayerAdmin::SetModel(SdrModel* pNewModel)
 
 void SdrLayerAdmin::Broadcast() const
 {
-    if (pModel!=NULL) {
+    if (pModel!=nullptr) {
         SdrHint aHint(HINT_LAYERORDERCHG);
         pModel->Broadcast(aHint);
         pModel->SetChanged();
@@ -256,7 +256,7 @@ SdrLayer* SdrLayerAdmin::NewStandardLayer(sal_uInt16 nPos)
 sal_uInt16 SdrLayerAdmin::GetLayerPos(SdrLayer* pLayer) const
 {
     sal_uIntPtr nRet=SDRLAYER_NOTFOUND;
-    if (pLayer!=NULL) {
+    if (pLayer!=nullptr) {
         std::vector<SdrLayer*>::const_iterator it = std::find(aLayer.begin(), aLayer.end(), pLayer);
         if (it==aLayer.end()) {
             nRet=SDRLAYER_NOTFOUND;
@@ -275,7 +275,7 @@ SdrLayer* SdrLayerAdmin::GetLayer(const OUString& rName, bool bInherited)
 const SdrLayer* SdrLayerAdmin::GetLayer(const OUString& rName, bool /*bInherited*/) const
 {
     sal_uInt16 i(0);
-    const SdrLayer* pLay = NULL;
+    const SdrLayer* pLay = nullptr;
 
     while(i < GetLayerCount() && !pLay)
     {
@@ -297,15 +297,15 @@ SdrLayerID SdrLayerAdmin::GetLayerID(const OUString& rName, bool bInherited) con
 {
     SdrLayerID nRet=SDRLAYER_NOTFOUND;
     const SdrLayer* pLay=GetLayer(rName,bInherited);
-    if (pLay!=NULL) nRet=pLay->GetID();
+    if (pLay!=nullptr) nRet=pLay->GetID();
     return nRet;
 }
 
 const SdrLayer* SdrLayerAdmin::GetLayerPerID(sal_uInt16 nID) const
 {
     sal_uInt16 i=0;
-    const SdrLayer* pLay=NULL;
-    while (i<GetLayerCount() && pLay==NULL) {
+    const SdrLayer* pLay=nullptr;
+    while (i<GetLayerCount() && pLay==nullptr) {
         if (nID==GetLayer(i)->GetID()) pLay=GetLayer(i);
         else i++;
     }
@@ -319,7 +319,7 @@ const SdrLayer* SdrLayerAdmin::GetLayerPerID(sal_uInt16 nID) const
 SdrLayerID SdrLayerAdmin::GetUniqueLayerID() const
 {
     SetOfByte aSet;
-    bool bDown = (pParent == NULL);
+    bool bDown = (pParent == nullptr);
     sal_uInt16 j;
     for (j=0; j<GetLayerCount(); j++)
     {

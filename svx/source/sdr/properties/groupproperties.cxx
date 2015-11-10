@@ -202,7 +202,7 @@ namespace sdr
 
         SfxStyleSheet* GroupProperties::GetStyleSheet() const
         {
-            SfxStyleSheet* pRetval = 0L;
+            SfxStyleSheet* pRetval = nullptr;
 
             const SdrObjList* pSub = static_cast<const SdrObjGroup&>(GetSdrObject()).GetSubList();
             const size_t nCount(pSub->GetObjCount());
@@ -216,7 +216,7 @@ namespace sdr
                     if(pCandidate != pRetval)
                     {
                         // different StyleSheelts, return none
-                        return 0L;
+                        return nullptr;
                     }
                 }
                 else
@@ -265,7 +265,7 @@ namespace sdr
                     // just delete it and set to 0L.
                     // mpItemSet->ClearItem();
                     delete mpItemSet;
-                    mpItemSet = 0L;
+                    mpItemSet = nullptr;
                 }
             }
         }

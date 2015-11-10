@@ -86,7 +86,7 @@ public:
 
     // The original size of the object (size of the icon for iconified object)
     // no conversion is done if no target mode is provided
-    Size        GetOrigObjSize( MapMode* pTargetMapMode = NULL ) const;
+    Size        GetOrigObjSize( MapMode* pTargetMapMode = nullptr ) const;
 
     // #i118524# Allow suppress SetVisAreaSize in changing methods when call
     // comes from OLE client

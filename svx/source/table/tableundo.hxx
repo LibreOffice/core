@@ -69,8 +69,8 @@ private:
         ::sal_Int32     mnColSpan;
 
         Data()
-            : mpProperties(NULL)
-            , mpOutlinerParaObject(NULL)
+            : mpProperties(nullptr)
+            , mpOutlinerParaObject(nullptr)
             , mnCellContentType(css::table::CellContentType_EMPTY)
             , mfValue(0)
             , mnError(0)

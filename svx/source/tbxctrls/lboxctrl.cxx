@@ -137,7 +137,7 @@ vcl::Window* SvxPopupWindowListBox::GetPreferredKeyInputWindow()
 
 SvxListBoxControl::SvxListBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx )
     :SfxToolBoxControl( nSlotId, nId, rTbx ),
-    pPopupWin   ( 0 )
+    pPopupWin   ( nullptr )
 {
     rTbx.SetItemBits( nId, ToolBoxItemBits::DROPDOWN | rTbx.GetItemBits( nId ) );
     rTbx.Invalidate();
@@ -150,7 +150,7 @@ SvxListBoxControl::~SvxListBoxControl()
 VclPtr<SfxPopupWindow> SvxListBoxControl::CreatePopupWindow()
 {
     OSL_FAIL( "not implemented" );
-    return 0;
+    return nullptr;
 }
 
 

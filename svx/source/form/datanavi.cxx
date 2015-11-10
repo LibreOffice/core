@@ -130,7 +130,7 @@ namespace svxform
 
     DataTreeListBox::DataTreeListBox(vcl::Window* pParent, WinBits nBits)
         : SvTreeListBox(pParent, nBits)
-        , m_pXFormsPage(NULL)
+        , m_pXFormsPage(nullptr)
         , m_eGroup(DGTUnknown)
         , m_nAddId(0)
         , m_nAddElementId(0)
@@ -197,7 +197,7 @@ namespace svxform
             DBG_ASSERT( pSelected && !GetParent( pSelected ), "DataTreeListBox::StartDrag: what kind of entry *is* this?" );
                 // on the submission page, we have only top-level entries (the submission themself)
                 // plus direct children of those (facets of a submission)
-            pItemNode = pSelected ? static_cast< ItemNode* >( pSelected->GetUserData() ) : NULL;
+            pItemNode = pSelected ? static_cast< ItemNode* >( pSelected->GetUserData() ) : nullptr;
             if ( !pItemNode )
                 return;
         }
@@ -397,7 +397,7 @@ namespace svxform
 
     IMPL_LINK_NOARG_TYPED(XFormsPage, ItemSelectHdl, SvTreeListBox*, void)
     {
-        EnableMenuItems( NULL );
+        EnableMenuItems( nullptr );
     }
 
     void XFormsPage::AddChildren(
@@ -506,7 +506,7 @@ namespace svxform
             {
                 DataItemType eType = DITElement;
                 SvTreeListEntry* pEntry = m_pItemList->FirstSelected();
-                ItemNode* pNode = NULL;
+                ItemNode* pNode = nullptr;
                 Reference< css::xml::dom::XNode > xParentNode;
                 Reference< XPropertySet > xNewBinding;
                 sal_uInt16 nResId = 0;
@@ -780,7 +780,7 @@ namespace svxform
         }
 
         m_pNaviWin->DisableNotify( false );
-        EnableMenuItems( NULL );
+        EnableMenuItems( nullptr );
         if ( bIsDocModified )
             svxform::DataNavigatorWindow::SetDocModified();
         return bHandled;
@@ -810,7 +810,7 @@ namespace svxform
 
     SvTreeListEntry* XFormsPage::AddEntry( const Reference< XPropertySet >& _rEntry )
     {
-        SvTreeListEntry* pEntry = NULL;
+        SvTreeListEntry* pEntry = nullptr;
         const ImageList& rImageList = m_pNaviWin->GetItemImageList();
         Image aImage = rImageList.GetImage( IID_ELEMENT );
 
@@ -823,7 +823,7 @@ namespace svxform
             {
                 // ID
                 _rEntry->getPropertyValue( PN_SUBMISSION_ID ) >>= sTemp;
-                pEntry = m_pItemList->InsertEntry( sTemp, aImage, aImage, NULL, false, TREELIST_APPEND, pNode );
+                pEntry = m_pItemList->InsertEntry( sTemp, aImage, aImage, nullptr, false, TREELIST_APPEND, pNode );
                 // Action
                 _rEntry->getPropertyValue( PN_SUBMISSION_ACTION ) >>= sTemp;
                 OUString sEntry = SVX_RESSTR( RID_STR_DATANAV_SUBM_ACTION );
@@ -867,7 +867,7 @@ namespace svxform
                 _rEntry->getPropertyValue( PN_BINDING_EXPR ) >>= sTemp;
                 sName += sTemp;
                 pEntry = m_pItemList->InsertEntry(
-                    sName, aImage, aImage, NULL, false, TREELIST_APPEND, pNode );
+                    sName, aImage, aImage, nullptr, false, TREELIST_APPEND, pNode );
             }
             catch ( Exception& )
             {
@@ -892,7 +892,7 @@ namespace svxform
                 // #i36262# may be called for submission entry *or* for
                 // submission children. If we don't have any children, we
                 // assume the latter case and use the parent
-                if( m_pItemList->GetEntry( pEntry, 0 ) == NULL )
+                if( m_pItemList->GetEntry( pEntry, 0 ) == nullptr )
                 {
                     pEntry = m_pItemList->GetModel()->GetParent( pEntry );
                 }
@@ -1181,7 +1181,7 @@ namespace svxform
 
                                     ItemNode* pNode = new ItemNode( xPropSet );
                                     m_pItemList->InsertEntry(
-                                        sEntry, aImage1, aImage2, NULL, false, TREELIST_APPEND, pNode );
+                                        sEntry, aImage1, aImage2, nullptr, false, TREELIST_APPEND, pNode );
                                 }
                             }
                         }
@@ -1198,7 +1198,7 @@ namespace svxform
                 break;
         }
 
-        EnableMenuItems( NULL );
+        EnableMenuItems( nullptr );
 
         return sRet;
     }
@@ -1240,7 +1240,7 @@ namespace svxform
                         if ( sNodeName.isEmpty() )
                             sNodeName = xRoot->getNodeName();
                         if ( xRoot->hasChildNodes() )
-                            AddChildren( NULL, _rImgLst, xRoot );
+                            AddChildren( nullptr, _rImgLst, xRoot );
                     }
                     catch ( Exception& )
                     {
@@ -1358,9 +1358,9 @@ namespace svxform
 
     DataNavigatorWindow::DataNavigatorWindow(vcl::Window* pParent, SfxBindings* pBindings)
         : Window(pParent)
-        , m_pInstPage(NULL)
-        , m_pSubmissionPage(NULL)
-        , m_pBindingPage(NULL)
+        , m_pInstPage(nullptr)
+        , m_pSubmissionPage(nullptr)
+        , m_pBindingPage(nullptr)
         , m_nLastSelectedPos(LISTBOX_ENTRY_NOTFOUND)
         , m_bShowDetails(false)
         , m_bIsNotifyDisabled(false)
@@ -1404,7 +1404,7 @@ namespace svxform
         ActivatePageHdl(m_pTabCtrl);
 
         // get our frame
-        DBG_ASSERT( pBindings != NULL,
+        DBG_ASSERT( pBindings != nullptr,
                     "DataNavigatorWindow::LoadModels(): no SfxBindings; can't get frame" );
         m_xFrame.set( pBindings->GetDispatcher()->GetFrame()->GetFrame().GetFrameInterface(),
                       UNO_QUERY );
@@ -1465,7 +1465,7 @@ namespace svxform
         if ( nPos != m_nLastSelectedPos || !pBox )
         {
             m_nLastSelectedPos = nPos;
-            ClearAllPageModels( pBox != NULL );
+            ClearAllPageModels( pBox != nullptr );
             InitPages();
             SetPageModel();
         }
@@ -1649,7 +1649,7 @@ namespace svxform
                     {
                         SAL_WARN( "svx.form", "DataNavigatorWindow::MenuSelectHdl(): exception caught" );
                     }
-                    ModelSelectHdl( NULL );
+                    ModelSelectHdl( nullptr );
                     m_pTabCtrl->SetCurPageId( nInst );
                     XFormsPage* pPage = GetCurrentPage( nInst );
                     pPage->SetInstanceName(sName);
@@ -1739,7 +1739,7 @@ namespace svxform
                             }
                             m_pTabCtrl->RemovePage( nId );
                             m_pTabCtrl->SetCurPageId(m_pTabCtrl->GetPageId("instance"));
-                            ModelSelectHdl( NULL );
+                            ModelSelectHdl( nullptr );
                             bIsDocModified = true;
                         }
                     }
@@ -1811,13 +1811,13 @@ namespace svxform
 
     IMPL_LINK_NOARG_TYPED(DataNavigatorWindow, UpdateHdl, Timer *, void)
     {
-        ModelSelectHdl( NULL );
+        ModelSelectHdl( nullptr );
     }
 
     XFormsPage* DataNavigatorWindow::GetCurrentPage( sal_uInt16& rCurId )
     {
         rCurId = m_pTabCtrl->GetCurPageId();
-        XFormsPage* pPage = NULL;
+        XFormsPage* pPage = nullptr;
         OString sName(m_pTabCtrl->GetPageName(rCurId));
         if (sName == "submissions")
         {
@@ -2290,7 +2290,7 @@ namespace svxform
         InitDialog();
         InitFromNode();
         InitDataTypeBox();
-        CheckHdl( NULL );
+        CheckHdl( nullptr );
     }
 
 
@@ -2949,7 +2949,7 @@ namespace svxform
 
     IMPL_LINK_NOARG_TYPED( NamespaceItemDialog, SelectHdl, SvTreeListBox *, void)
     {
-        bool bEnable = ( m_pNamespacesList->FirstSelected() != NULL );
+        bool bEnable = ( m_pNamespacesList->FirstSelected() != nullptr );
         m_pEditNamespaceBtn->Enable( bEnable );
         m_pDeleteNamespaceBtn->Enable( bEnable );
     }

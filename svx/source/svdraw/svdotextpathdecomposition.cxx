@@ -792,7 +792,7 @@ void SdrTextObj::impDecomposePathTextPrimitive(
     // clean up outliner
     rOutliner.SetDrawPortionHdl(Link<DrawPortionInfo*,void>());
     rOutliner.Clear();
-    rOutliner.setVisualizedPage(0);
+    rOutliner.setVisualizedPage(nullptr);
 
     // concatenate all results
     drawinglayer::primitive2d::appendPrimitive2DSequenceToPrimitive2DSequence(rTarget, aRetvalA);

@@ -100,7 +100,7 @@ void XmlSecStatusBarControl::StateChanged( sal_uInt16, SfxItemState eState, cons
     }
 
     if( GetStatusBar().AreItemsVisible() )              // necessary ?
-        GetStatusBar().SetItemData( GetId(), 0 );
+        GetStatusBar().SetItemData( GetId(), nullptr );
 
     GetStatusBar().SetItemText( GetId(), "" );    // necessary ?
 

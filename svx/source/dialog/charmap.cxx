@@ -202,7 +202,7 @@ void SvxShowCharSet::MouseMove( const MouseEvent& rMEvt )
 
 void SvxShowCharSet::Command( const CommandEvent& rCEvt )
 {
-    if( !HandleScrollCommand( rCEvt, 0, aVscrollSB.get() ) )
+    if( !HandleScrollCommand( rCEvt, nullptr, aVscrollSB.get() ) )
         Control::Command( rCEvt );
 }
 
@@ -734,8 +734,8 @@ void SvxShowCharSet::dispose()
 void SvxShowCharSet::ReleaseAccessible()
 {
     m_aItems.clear();
-    m_pAccessible = NULL;
-    m_xAccessible = NULL;
+    m_pAccessible = nullptr;
+    m_xAccessible = nullptr;
 }
 
 css::uno::Reference< XAccessible > SvxShowCharSet::CreateAccessible()
@@ -788,7 +788,7 @@ const Subset* SubsetMap::GetNextSubset( bool bFirst ) const
     if( bFirst )
         maSubsetIterator = maSubsets.begin();
     if( maSubsetIterator == maSubsets.end() )
-        return NULL;
+        return nullptr;
     const Subset* s = &*(maSubsetIterator++);
     return s;
 }
@@ -799,7 +799,7 @@ const Subset* SubsetMap::GetSubsetByUnicode( sal_UCS4 cChar ) const
     for( const Subset* s = GetNextSubset( true ); s; s = GetNextSubset( false ) )
         if( (s->GetRangeMin() <= cChar) && (cChar <= s->GetRangeMax()) )
             return s;
-    return NULL;
+    return nullptr;
 }
 
 inline Subset::Subset( sal_UCS4 nMin, sal_UCS4 nMax, int resId)

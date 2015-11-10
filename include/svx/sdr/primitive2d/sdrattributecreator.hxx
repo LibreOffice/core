@@ -73,10 +73,10 @@ namespace drawinglayer
         attribute::SdrTextAttribute createNewSdrTextAttribute(
             const SfxItemSet& rSet,
             const SdrText& rText,
-            const sal_Int32* pLeft = 0,
-            const sal_Int32* pUpper = 0,
-            const sal_Int32* pRight = 0,
-            const sal_Int32* pLower = 0);
+            const sal_Int32* pLeft = nullptr,
+            const sal_Int32* pUpper = nullptr,
+            const sal_Int32* pRight = nullptr,
+            const sal_Int32* pLower = nullptr);
 
         attribute::FillGradientAttribute SVX_DLLPUBLIC createNewTransparenceGradientAttribute(
             const SfxItemSet& rSet);
@@ -112,10 +112,10 @@ namespace drawinglayer
         attribute::SdrFillTextAttribute createNewSdrFillTextAttribute(
             const SfxItemSet& rSet,
             const SdrText* pSdrText,
-            const sal_Int32* pLeft = 0,
-            const sal_Int32* pUpper = 0,
-            const sal_Int32* pRight = 0,
-            const sal_Int32* pLower = 0);
+            const sal_Int32* pLeft = nullptr,
+            const sal_Int32* pUpper = nullptr,
+            const sal_Int32* pRight = nullptr,
+            const sal_Int32* pLower = nullptr);
 
         // helpers
         void calculateRelativeCornerRadius(

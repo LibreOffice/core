@@ -170,7 +170,7 @@ protected:
 
 protected:
     // #i71538# make constructors of SdrView sub-components protected to avoid incomplete incarnations which may get casted to SdrView
-    SdrEditView(SdrModel* pModel1, OutputDevice* pOut = 0L);
+    SdrEditView(SdrModel* pModel1, OutputDevice* pOut = nullptr);
     virtual ~SdrEditView();
 
 public:
@@ -326,7 +326,7 @@ public:
     // Using pUserGrp an own group object can be set.
     // This is not used immediately, but via Clone copied.
     // The method creates SdrObjGroup-instancess if NULL is passed,
-    void GroupMarked(const SdrObject* pUserGrp=NULL);
+    void GroupMarked(const SdrObject* pUserGrp=nullptr);
 
     // All marked object groups are dissolved (1 level).
     // Now all previously marked member objects are marked.
@@ -400,7 +400,7 @@ public:
     // are marked and these are capable to deliver a StarView-metafile,
     // this methods converts the metafile to a drawing object.
     // The SdrGrafObjs/SdrOle2Objs are replaced by the new objects.
-    void DoImportMarkedMtf(SvdProgressInfo *pProgrInfo=NULL);
+    void DoImportMarkedMtf(SvdProgressInfo *pProgrInfo=nullptr);
     bool IsImportMtfPossible() const { ForcePossibilities(); return bImportMtfPossible; }
 
     // If the mode VirtualObjectBundling is switched on, all ToTop/ToBtm

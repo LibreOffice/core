@@ -259,7 +259,7 @@ awt::Point SvxPixelCtlAccessible::getLocation(  ) throw (uno::RuntimeException, 
 awt::Point SvxPixelCtlAccessible::getLocationOnScreen(  ) throw (uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard   aGuard( m_aMutex );
-    Rectangle rect = mrPixelCtl.GetWindowExtentsRelative(NULL);
+    Rectangle rect = mrPixelCtl.GetWindowExtentsRelative(nullptr);
     return awt::Point(rect.Left(),rect.Top() );
 }
 
@@ -433,7 +433,7 @@ void SvxPixelCtlAccessible::NotifyChild(long nIndex,bool bSelect ,bool bCheck)
 {
     DBG_ASSERT( !(!bSelect && !bCheck),"" );//non is false
 
-    SvxPixelCtlAccessibleChild *pChild= NULL;
+    SvxPixelCtlAccessibleChild *pChild= nullptr;
 
     if (m_xCurChild.is())
     {
@@ -597,8 +597,8 @@ awt::Rectangle SAL_CALL SvxPixelCtlAccessibleChild::getBounds() throw( RuntimeEx
     //Modified by lq, 09/26
     //return AWTRectangle( GetBoundingBox() );
     awt::Rectangle rect = AWTRectangle( GetBoundingBox() );
-    rect.X = rect.X + mrParentWindow.GetClientWindowExtentsRelative(NULL).Left()-mrParentWindow.GetWindowExtentsRelative(NULL).Left();
-    rect.Y = rect.Y + mrParentWindow.GetClientWindowExtentsRelative(NULL).Top()-mrParentWindow.GetWindowExtentsRelative(NULL).Top();
+    rect.X = rect.X + mrParentWindow.GetClientWindowExtentsRelative(nullptr).Left()-mrParentWindow.GetWindowExtentsRelative(nullptr).Left();
+    rect.Y = rect.Y + mrParentWindow.GetClientWindowExtentsRelative(nullptr).Top()-mrParentWindow.GetWindowExtentsRelative(nullptr).Top();
     return rect;
     // End
 }

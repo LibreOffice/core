@@ -912,8 +912,8 @@ SvxUnoPropertyMapProvider::SvxUnoPropertyMapProvider()
 {
     for(sal_uInt16 i=0;i<SVXMAP_END; i++)
     {
-        aSetArr[i] = 0;
-        aMapArr[i] = 0;
+        aSetArr[i] = nullptr;
+        aMapArr[i] = nullptr;
     }
 }
 
@@ -1384,10 +1384,10 @@ comphelper::PropertySetInfo* SvxPropertySetInfoPool::getOrCreate( sal_Int32 nSer
     if( nServiceId > SVXUNO_SERVICEID_LASTID )
     {
         OSL_FAIL( "unknown service id!" );
-        return NULL;
+        return nullptr;
     }
 
-    if( mpInfos[ nServiceId ] == NULL )
+    if( mpInfos[ nServiceId ] == nullptr )
     {
         mpInfos[nServiceId] = new comphelper::PropertySetInfo();
         mpInfos[nServiceId]->acquire();
@@ -1412,6 +1412,6 @@ comphelper::PropertySetInfo* SvxPropertySetInfoPool::getOrCreate( sal_Int32 nSer
     return mpInfos[ nServiceId ];
 }
 
-comphelper::PropertySetInfo* SvxPropertySetInfoPool::mpInfos[SVXUNO_SERVICEID_LASTID+1] = { NULL };
+comphelper::PropertySetInfo* SvxPropertySetInfoPool::mpInfos[SVXUNO_SERVICEID_LASTID+1] = { nullptr };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

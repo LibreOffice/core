@@ -100,7 +100,7 @@ static const SvEventDescription* ImplGetSupportedMacroItems()
     {
         { SFX_EVENT_MOUSEOVER_OBJECT, "OnMouseOver" },
         { SFX_EVENT_MOUSEOUT_OBJECT, "OnMouseOut" },
-        { 0, NULL }
+        { 0, nullptr }
     };
 
     return aMacroDescriptionsImpl;
@@ -115,8 +115,8 @@ static const SvEventDescription* ImplGetSupportedMacroItems()
 */
 bool SvxUnoDrawMSFactory::createEvent( const SdrModel* pDoc, const SdrHint* pSdrHint, css::document::EventObject& aEvent )
 {
-    const SdrObject* pObj = NULL;
-    const SdrPage* pPage = NULL;
+    const SdrObject* pObj = nullptr;
+    const SdrPage* pPage = nullptr;
 
     switch( pSdrHint->GetKind() )
     {
@@ -176,7 +176,7 @@ css::uno::Reference<css::uno::XInterface> create(
             sal_uInt16 nT = (sal_uInt16)(nType & ~E3D_INVENTOR_FLAG);
             sal_uInt32 nI = (nType & E3D_INVENTOR_FLAG)?E3dInventor:SdrInventor;
 
-            return uno::Reference< uno::XInterface >( static_cast<drawing::XShape*>(SvxDrawPage::CreateShapeByTypeAndInventor( nT, nI, 0, 0, referer )) );
+            return uno::Reference< uno::XInterface >( static_cast<drawing::XShape*>(SvxDrawPage::CreateShapeByTypeAndInventor( nT, nI, nullptr, nullptr, referer )) );
         }
     }
     else if ( rServiceSpecifier == "com.sun.star.document.ImportGraphicObjectResolver" )
@@ -422,7 +422,7 @@ uno::Reference< uno::XInterface > SAL_CALL SvxUnoDrawingModel::createInstance( c
     const OUString aPackagePrefix( "com.sun.star.presentation." );
     if( aType.startsWith( aPackagePrefix ) )
     {
-        SvxShape* pShape = NULL;
+        SvxShape* pShape = nullptr;
 
         sal_uInt16 nType = OBJ_TEXT;
         OUString aTypeName = aType.copy( aPackagePrefix.getLength() );
@@ -713,7 +713,7 @@ uno::Sequence< OUString > SAL_CALL SvxUnoDrawPagesAccess::getSupportedServiceNam
 
 css::uno::Reference< css::container::XIndexReplace > SvxCreateNumRule( SdrModel* pModel ) throw()
 {
-    const SvxNumRule* pDefaultRule = NULL;
+    const SvxNumRule* pDefaultRule = nullptr;
     if( pModel )
     {
         const SvxNumBulletItem* pItem = static_cast<const SvxNumBulletItem*>( pModel->GetItemPool().GetSecondaryPool()->GetPoolDefaultItem(EE_PARA_NUMBULLET) );

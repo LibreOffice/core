@@ -46,7 +46,7 @@ namespace sdr
             virtual SfxItemSet* CreateObjectSpecificItemSet(SfxItemPool& pPool) override;
 
             // Do the ItemChange, may do special handling
-            virtual void ItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem = 0) override;
+            virtual void ItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem = nullptr) override;
 
             // react on ItemSet changes
             virtual void ItemSetChanged(const SfxItemSet& rSet) override;
@@ -71,7 +71,7 @@ namespace sdr
             virtual SfxStyleSheet* GetStyleSheet() const override;
 
             // Move properties to a new ItemPool.
-            virtual void MoveToItemPool(SfxItemPool* pSrcPool, SfxItemPool* pDestPool, SdrModel* pNewModel = 0L) override;
+            virtual void MoveToItemPool(SfxItemPool* pSrcPool, SfxItemPool* pDestPool, SdrModel* pNewModel = nullptr) override;
 
             // Set new model.
             virtual void SetModel(SdrModel* pOldModel, SdrModel* pNewModel) override;

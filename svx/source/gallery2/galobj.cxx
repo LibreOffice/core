@@ -417,7 +417,7 @@ SgaObjectSvDraw::SgaObjectSvDraw( const FmFormModel& rModel, const INetURLObject
 
 
 SvxGalleryDrawModel::SvxGalleryDrawModel()
-: mpFormModel( 0 )
+: mpFormModel( nullptr )
 {
 
     const OUString sFactoryURL("sdraw");

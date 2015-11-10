@@ -99,7 +99,7 @@ namespace sdr
                 // reset parent of ItemSet
                 if(mpItemSet)
                 {
-                    mpItemSet->SetParent(0L);
+                    mpItemSet->SetParent(nullptr);
                 }
 
                 SdrObject& rObj = GetSdrObject();
@@ -107,7 +107,7 @@ namespace sdr
                 rObj.SetRectsDirty(true);
             }
 
-            mpStyleSheet = 0L;
+            mpStyleSheet = nullptr;
         }
 
         // create a new itemset
@@ -126,13 +126,13 @@ namespace sdr
 
         AttributeProperties::AttributeProperties(SdrObject& rObj)
         :   DefaultProperties(rObj),
-            mpStyleSheet(0L)
+            mpStyleSheet(nullptr)
         {
         }
 
         AttributeProperties::AttributeProperties(const AttributeProperties& rProps, SdrObject& rObj)
         :   DefaultProperties(rProps, rObj),
-            mpStyleSheet(0L)
+            mpStyleSheet(nullptr)
         {
             if(rProps.GetStyleSheet())
             {
@@ -164,7 +164,7 @@ namespace sdr
         {
             if(pNewItem)
             {
-                const SfxPoolItem* pResultItem = NULL;
+                const SfxPoolItem* pResultItem = nullptr;
                 SdrModel* pModel = GetSdrObject().GetModel();
 
                 switch( nWhich )
@@ -246,7 +246,7 @@ namespace sdr
 
         void AttributeProperties::MoveToItemPool(SfxItemPool* pSrcPool, SfxItemPool* pDestPool, SdrModel* pNewModel)
         {
-            OSL_ASSERT(pNewModel!=NULL);
+            OSL_ASSERT(pNewModel!=nullptr);
 
             if(pSrcPool && pDestPool && (pSrcPool != pDestPool))
             {
@@ -285,12 +285,12 @@ namespace sdr
                             // name or use the default.
 
                             // Look up the style in the new document.
-                            OSL_ASSERT(pNewModel->GetStyleSheetPool() != NULL);
+                            OSL_ASSERT(pNewModel->GetStyleSheetPool() != nullptr);
                             SfxStyleSheet* pNewStyleSheet = dynamic_cast<SfxStyleSheet*>(
                                 pNewModel->GetStyleSheetPool()->Find(
                                     pStySheet->GetName(),
                                     SFX_STYLE_FAMILY_ALL));
-                            if (pNewStyleSheet == NULL
+                            if (pNewStyleSheet == nullptr
                                 || &pNewStyleSheet->GetPool().GetPool() != pDestPool)
                             {
                                 // There is no copy of the style in the new
@@ -340,7 +340,7 @@ namespace sdr
                         {
                             // build a list of to-be-copied Styles
                             std::vector<SfxStyleSheetBase*> aStyleList;
-                            SfxStyleSheetBase* pAnchor = 0L;
+                            SfxStyleSheetBase* pAnchor = nullptr;
 
                             while(pSheet)
                             {
@@ -354,14 +354,14 @@ namespace sdr
                                 else
                                 {
                                     // the style does exist
-                                    pSheet = 0L;
+                                    pSheet = nullptr;
                                 }
                             }
 
                             // copy and set the parents
-                            SfxStyleSheetBase* pNewSheet = 0L;
-                            SfxStyleSheetBase* pLastSheet = 0L;
-                            SfxStyleSheetBase* pForThisObject = 0L;
+                            SfxStyleSheetBase* pNewSheet = nullptr;
+                            SfxStyleSheetBase* pLastSheet = nullptr;
+                            SfxStyleSheetBase* pForThisObject = nullptr;
 
                             std::vector<SfxStyleSheetBase*>::iterator iter;
                             for (iter = aStyleList.begin(); iter != aStyleList.end(); ++iter)
@@ -456,7 +456,7 @@ namespace sdr
                                 }
 
                                 delete mpItemSet;
-                                mpItemSet = 0L;
+                                mpItemSet = nullptr;
                             }
 
                             mpItemSet = pNewSet;
@@ -480,7 +480,7 @@ namespace sdr
                 // prepare copied, new itemset, but WITHOUT parent
                 GetObjectItemSet();
                 SfxItemSet* pDestItemSet = new SfxItemSet(*mpItemSet);
-                pDestItemSet->SetParent(0L);
+                pDestItemSet->SetParent(nullptr);
 
                 // prepare forgetting the current stylesheet like in RemoveStyleSheet()
                 EndListening(*mpStyleSheet);
@@ -490,7 +490,7 @@ namespace sdr
                 // WhichIDs than the style.
                 SfxWhichIter aIter(*pDestItemSet);
                 sal_uInt16 nWhich(aIter.FirstWhich());
-                const SfxPoolItem *pItem = NULL;
+                const SfxPoolItem *pItem = nullptr;
 
                 // now set all hard attributes of the current at the new itemset
                 while(nWhich)
@@ -513,7 +513,7 @@ namespace sdr
                 GetSdrObject().SetBoundRectDirty();
                 GetSdrObject().SetRectsDirty(true);
 
-                mpStyleSheet = NULL;
+                mpStyleSheet = nullptr;
             }
         }
 
@@ -545,7 +545,7 @@ namespace sdr
                     case SfxStyleSheetHintId::INDESTRUCTION   :
                     {
                         // Style needs to be exchanged
-                        SfxStyleSheet* pNewStSh = 0L;
+                        SfxStyleSheet* pNewStSh = nullptr;
                         SdrModel* pModel = rObj.GetModel();
 
                         // Do nothing if object is in destruction, else a StyleSheet may be found from

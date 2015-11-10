@@ -170,7 +170,7 @@ OUString static_STR_UNDO_PROPERTY;
 
 FmXUndoEnvironment::FmXUndoEnvironment(FmFormModel& _rModel)
                    :rModel( _rModel )
-                   ,m_pPropertySetCache( NULL )
+                   ,m_pPropertySetCache( nullptr )
                    ,m_pScriptingEnv( ::svxform::createDefaultFormScriptingEnvironment( _rModel ) )
                    ,m_Locks( 0 )
                    ,bReadOnly( false )
@@ -315,7 +315,7 @@ void FmXUndoEnvironment::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
         {
             case SFX_HINT_DYING:
                 dispose();
-                rModel.SetObjectShell( NULL );
+                rModel.SetObjectShell( nullptr );
                 break;
             case SFX_HINT_MODECHANGED:
                 ModeChanged();
@@ -1056,7 +1056,7 @@ FmUndoContainerAction::FmUndoContainerAction(FmFormModel& _rMod,
                     m_aEvents = xManager->getScriptEvents(m_nIndex);
             }
             else
-                m_xElement = NULL;
+                m_xElement = nullptr;
 
             // we now own the element
             m_xOwnElement = m_xElement;
@@ -1111,7 +1111,7 @@ void FmUndoContainerAction::implReInsert( )
             xManager->registerScriptEvents( m_nIndex, m_aEvents );
 
         // we don't own the object anymore
-        m_xOwnElement = NULL;
+        m_xOwnElement = nullptr;
     }
 }
 

@@ -120,7 +120,7 @@ using namespace ::svx;
 NamespaceIteratorImpl::NamespaceIteratorImpl( sal_uInt16* pWhichIds, SfxItemPool* pPool )
 {
     mpPool = pPool;
-    mpCurrentAttr = NULL;
+    mpCurrentAttr = nullptr;
     mnCurrentAttr = 0;
 
     mpWhichId = pWhichIds;
@@ -142,11 +142,11 @@ bool NamespaceIteratorImpl::next( OUString& rPrefix, OUString& rURL )
     }
 
     // we need the next namespace item
-    mpCurrentAttr = NULL;
+    mpCurrentAttr = nullptr;
 
-    const SfxPoolItem* pItem = 0;
+    const SfxPoolItem* pItem = nullptr;
     // look for the next available item in the current pool
-    while( (mnItem < mnItemCount) && ( NULL == (pItem = mpPool->GetItem2( *mpWhichId, mnItem ) ) ) )
+    while( (mnItem < mnItemCount) && ( nullptr == (pItem = mpPool->GetItem2( *mpWhichId, mnItem ) ) ) )
         mnItem++;
 
     // are we finished with the current whichid?
@@ -162,7 +162,7 @@ bool NamespaceIteratorImpl::next( OUString& rPrefix, OUString& rURL )
             return next( rPrefix, rURL );
         }
 
-        pItem = NULL;
+        pItem = nullptr;
     }
 
     if( pItem )

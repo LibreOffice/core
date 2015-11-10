@@ -34,10 +34,10 @@ public:
     SdrFractionItem(sal_uInt16 nId, const Fraction& rVal): SfxPoolItem(nId), nValue(rVal) {}
     SdrFractionItem(sal_uInt16 nId, SvStream& rIn);
     virtual bool             operator==(const SfxPoolItem&) const override;
-    virtual bool GetPresentation(SfxItemPresentation ePresentation, SfxMapUnit eCoreMetric, SfxMapUnit ePresentationMetric, OUString &rText, const IntlWrapper * = 0) const override;
+    virtual bool GetPresentation(SfxItemPresentation ePresentation, SfxMapUnit eCoreMetric, SfxMapUnit ePresentationMetric, OUString &rText, const IntlWrapper * = nullptr) const override;
     virtual SfxPoolItem*     Create(SvStream&, sal_uInt16 nVer) const override;
     virtual SvStream&        Store(SvStream&, sal_uInt16 nItemVers) const override;
-    virtual SfxPoolItem*     Clone(SfxItemPool *pPool=NULL) const override;
+    virtual SfxPoolItem*     Clone(SfxItemPool *pPool=nullptr) const override;
             const Fraction&  GetValue() const { return nValue; }
             void             SetValue(const Fraction& rVal) { nValue = rVal; }
 };

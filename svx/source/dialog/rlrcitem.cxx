@@ -48,7 +48,7 @@ void SvxRulerItem::StateChanged( sal_uInt16 nSID, SfxItemState eState,
 {
     // SfxItemState::DONTCARE => pState == -1 => PTR_CAST buff
     if ( eState != SfxItemState::DEFAULT )
-        pState = 0;
+        pState = nullptr;
 
     switch(nSID)
     {

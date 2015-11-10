@@ -170,7 +170,7 @@ public:
                       sal_uInt16 nId );
     SvxChartStyleItem(SvStream& rIn, sal_uInt16 nId );
 
-    virtual SfxPoolItem* Clone(SfxItemPool* pPool = 0) const override;
+    virtual SfxPoolItem* Clone(SfxItemPool* pPool = nullptr) const override;
     virtual SfxPoolItem* Create(SvStream& rIn, sal_uInt16 nVer) const override;
 
     sal_uInt16 GetValueCount() const override { return CHSTYLE_COUNT; }
@@ -185,7 +185,7 @@ public:
                         sal_uInt16 nId );
     SvxChartRegressItem(SvStream& rIn, sal_uInt16 nId );
 
-    virtual SfxPoolItem* Clone(SfxItemPool* pPool = 0) const override;
+    virtual SfxPoolItem* Clone(SfxItemPool* pPool = nullptr) const override;
     virtual SfxPoolItem* Create(SvStream& rIn, sal_uInt16 nVer) const override;
 
     sal_uInt16 GetValueCount() const override { return CHREGRESS_COUNT; }
@@ -201,7 +201,7 @@ public:
     SvxChartDataDescrItem(SvStream& rIn,
                           sal_uInt16 nId );
 
-    virtual SfxPoolItem* Clone(SfxItemPool* pPool = 0) const override;
+    virtual SfxPoolItem* Clone(SfxItemPool* pPool = nullptr) const override;
     virtual SfxPoolItem* Create(SvStream& rIn, sal_uInt16 nVer) const override;
 
     sal_uInt16 GetValueCount() const override { return CHDESCR_COUNT; }
@@ -216,7 +216,7 @@ public:
     SvxChartTextOrderItem(SvStream& rIn,
                           sal_uInt16 nId );
 
-    virtual SfxPoolItem* Clone(SfxItemPool* pPool = 0) const override;
+    virtual SfxPoolItem* Clone(SfxItemPool* pPool = nullptr) const override;
     virtual SfxPoolItem* Create(SvStream& rIn, sal_uInt16 nVer) const override;
 
     virtual bool         QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
@@ -234,7 +234,7 @@ public:
     SvxChartTextOrientItem(SvStream& rIn,
                            sal_uInt16 nId );
 
-    virtual SfxPoolItem* Clone(SfxItemPool* pPool = 0) const override;
+    virtual SfxPoolItem* Clone(SfxItemPool* pPool = nullptr) const override;
     virtual SfxPoolItem* Create(SvStream& rIn, sal_uInt16 nVer) const override;
 
     sal_uInt16 GetValueCount() const override { return CHTXTORDER_COUNT; }
@@ -249,7 +249,7 @@ public:
     SvxChartKindErrorItem(SvStream& rIn,
                            sal_uInt16 nId );
 
-    virtual SfxPoolItem* Clone(SfxItemPool* pPool = 0) const override;
+    virtual SfxPoolItem* Clone(SfxItemPool* pPool = nullptr) const override;
     virtual SfxPoolItem* Create(SvStream& rIn, sal_uInt16 nVer) const override;
 
     sal_uInt16 GetValueCount() const override { return CHERROR_COUNT; }
@@ -268,7 +268,7 @@ public:
     SvxChartIndicateItem(SvStream& rIn,
                            sal_uInt16 nId );
 
-    virtual SfxPoolItem* Clone(SfxItemPool* pPool = 0) const override;
+    virtual SfxPoolItem* Clone(SfxItemPool* pPool = nullptr) const override;
     virtual SfxPoolItem* Create(SvStream& rIn, sal_uInt16 nVer) const override;
 
     sal_uInt16 GetValueCount() const override { return CHINDICATE_COUNT; }
@@ -294,10 +294,10 @@ public:
     virtual bool GetPresentation(SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
-                                    OUString &rText, const IntlWrapper * = 0) const override;
+                                    OUString &rText, const IntlWrapper * = nullptr) const override;
 
     virtual bool             operator == (const SfxPoolItem&) const override;
-    virtual SfxPoolItem* Clone(SfxItemPool *pPool = NULL) const override;
+    virtual SfxPoolItem* Clone(SfxItemPool *pPool = nullptr) const override;
     virtual SfxPoolItem* Create(SvStream& rIn, sal_uInt16 nVersion) const override;
     virtual SvStream& Store(SvStream& rOut, sal_uInt16 nItemVersion ) const override;
 

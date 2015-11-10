@@ -44,7 +44,7 @@ LineWidthControl::LineWidthControl (
       maFTWidth( VclPtr<FixedText>::Create(this, SVX_RES(FT_LINE_WIDTH))),
       maMFWidth( VclPtr<MetricField>::Create(this, SVX_RES(MF_WIDTH))),
       meMapUnit(SFX_MAPUNIT_TWIP),
-      rStr(NULL),
+      rStr(nullptr),
       mstrPT(SVX_RESSTR(STR_PT)),
       mnCustomWidth(0),
       mbCustom(false),

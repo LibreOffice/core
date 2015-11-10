@@ -54,8 +54,8 @@ SvxLineStyleToolBoxControl::SvxLineStyleToolBoxControl( sal_uInt16 nSlotId,
                                                         sal_uInt16 nId,
                                                         ToolBox& rTbx ) :
     SfxToolBoxControl( nSlotId, nId, rTbx ),
-    pStyleItem      ( NULL ),
-    pDashItem       ( NULL ),
+    pStyleItem      ( nullptr ),
+    pDashItem       ( nullptr ),
     bUpdate         ( false )
 {
     addStatusListener( ".uno:LineDash");
@@ -237,7 +237,7 @@ void SvxLineWidthToolBoxControl::StateChanged(
                 pFld->Update( static_cast<const XLineWidthItem*>(pState) );
             }
             else
-                pFld->Update( NULL );
+                pFld->Update( nullptr );
         }
     }
 }
@@ -391,7 +391,7 @@ void SvxLineEndWindow::FillValueSet()
 {
     if( pLineEndList.is() )
     {
-        XLineEndEntry*      pEntry  = NULL;
+        XLineEndEntry*      pEntry  = nullptr;
         ScopedVclPtrInstance< VirtualDevice > pVD;
 
         long nCount = pLineEndList->Count();

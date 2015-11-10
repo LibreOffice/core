@@ -190,7 +190,7 @@ void SdrLightEmbeddedClient_Impl::Release()
 {
     {
         SolarMutexGuard aGuard;
-        mpObj = NULL;
+        mpObj = nullptr;
     }
 
     release();
@@ -602,7 +602,7 @@ public:
     virtual ::sfx2::SvBaseLink::UpdateResult DataChanged(
         const OUString& rMimeType, const css::uno::Any & rValue ) override;
 
-    bool                Connect() { return GetRealObject() != NULL; }
+    bool                Connect() { return GetRealObject() != nullptr; }
 };
 
 
@@ -693,9 +693,9 @@ public:
     SvxUnoShapeModifyListener* mpModifyListener;
 
     explicit SdrOle2ObjImpl( bool bFrame ) :
-        mpGraphic(NULL),
-        mpGraphicObject(NULL),
-        pLightClient (NULL),
+        mpGraphic(nullptr),
+        mpGraphicObject(nullptr),
+        pLightClient (nullptr),
         mbFrame(bFrame),
         mbInDestruction(false),
         mbSuppressSetVisAreaSize(false),
@@ -703,17 +703,17 @@ public:
         mbIsChart(false),
         mbLoadingOLEObjectFailed(false),
         mbConnected(false),
-        mpObjectLink(NULL),
-        mpModifyListener(NULL)
+        mpObjectLink(nullptr),
+        mpModifyListener(nullptr)
     {
         mxObjRef.Lock();
     }
 
     SdrOle2ObjImpl( bool bFrame, const svt::EmbeddedObjectRef& rObjRef ) :
         mxObjRef(rObjRef),
-        mpGraphic(NULL),
-        mpGraphicObject(NULL),
-        pLightClient (NULL),
+        mpGraphic(nullptr),
+        mpGraphicObject(nullptr),
+        pLightClient (nullptr),
         mbFrame(bFrame),
         mbInDestruction(false),
         mbSuppressSetVisAreaSize(false),
@@ -721,8 +721,8 @@ public:
         mbIsChart(false),
         mbLoadingOLEObjectFailed(false),
         mbConnected(false),
-        mpObjectLink(NULL),
-        mpModifyListener(NULL)
+        mpObjectLink(nullptr),
+        mpModifyListener(nullptr)
     {
         mxObjRef.Lock();
     }
@@ -826,7 +826,7 @@ SdrOle2Obj::~SdrOle2Obj()
     if ( mpImpl->pLightClient )
     {
         mpImpl->pLightClient->Release();
-        mpImpl->pLightClient = NULL;
+        mpImpl->pLightClient = nullptr;
     }
 
     delete mpImpl;
@@ -863,9 +863,9 @@ void SdrOle2Obj::SetGraphic_Impl(const Graphic* pGrf)
     if (mpImpl->mpGraphic)
     {
         delete mpImpl->mpGraphic;
-        mpImpl->mpGraphic = NULL;
+        mpImpl->mpGraphic = nullptr;
         delete mpImpl->mpGraphicObject;
-        mpImpl->mpGraphicObject = NULL;
+        mpImpl->mpGraphicObject = nullptr;
     }
 
     if (pGrf)
@@ -926,11 +926,11 @@ bool SdrOle2Obj::UpdateLinkURL_Impl()
 
     if ( mpImpl->mpObjectLink )
     {
-        sfx2::LinkManager* pLinkManager = pModel ? pModel->GetLinkManager() : NULL;
+        sfx2::LinkManager* pLinkManager = pModel ? pModel->GetLinkManager() : nullptr;
         if ( pLinkManager )
         {
             OUString aNewLinkURL;
-            sfx2::LinkManager::GetDisplayNames( mpImpl->mpObjectLink, 0, &aNewLinkURL );
+            sfx2::LinkManager::GetDisplayNames( mpImpl->mpObjectLink, nullptr, &aNewLinkURL );
             if ( !aNewLinkURL.equalsIgnoreAsciiCase( mpImpl->maLinkURL ) )
             {
                 GetObjRef_Impl();
@@ -1015,11 +1015,11 @@ void SdrOle2Obj::BreakFileLink_Impl()
 
 void SdrOle2Obj::DisconnectFileLink_Impl()
 {
-    sfx2::LinkManager* pLinkManager = pModel ? pModel->GetLinkManager() : NULL;
+    sfx2::LinkManager* pLinkManager = pModel ? pModel->GetLinkManager() : nullptr;
     if ( pLinkManager && mpImpl->mpObjectLink )
     {
         pLinkManager->Remove( mpImpl->mpObjectLink );
-        mpImpl->mpObjectLink = NULL;
+        mpImpl->mpObjectLink = nullptr;
     }
 }
 
@@ -1250,7 +1250,7 @@ void SdrOle2Obj::Disconnect_Impl()
                 if ( pContainer )
                 {
                     pContainer->CloseEmbeddedObject( mpImpl->mxObjRef.GetObject() );
-                    mpImpl->mxObjRef.AssignToContainer( NULL, mpImpl->aPersistName );
+                    mpImpl->mxObjRef.AssignToContainer( nullptr, mpImpl->aPersistName );
                 }
 
                 // happens later than the destruction of the model, so we can't assert that).
@@ -1285,7 +1285,7 @@ void SdrOle2Obj::Disconnect_Impl()
                         // TODO/LATER: mpImpl->aPersistName contains outdated information, to keep it updated
                         // it should be returned from RemoveEmbeddedObject call. Currently it is no problem,
                         // since no container is adjusted, actually the empty string could be provided as a name here
-                        mpImpl->mxObjRef.AssignToContainer( NULL, mpImpl->aPersistName );
+                        mpImpl->mxObjRef.AssignToContainer( nullptr, mpImpl->aPersistName );
                     }
 
                     DisconnectFileLink_Impl();
@@ -1297,7 +1297,7 @@ void SdrOle2Obj::Disconnect_Impl()
         {
             mpImpl->mxObjRef->removeStateChangeListener ( mpImpl->pLightClient );
             mpImpl->mxObjRef->removeEventListener( uno::Reference< document::XEventListener >( mpImpl->pLightClient ) );
-            mpImpl->mxObjRef->setClientSite( NULL );
+            mpImpl->mxObjRef->setClientSite( nullptr );
 
             GetSdrGlobalData().GetOLEObjCache().RemoveObj(this);
         }
@@ -1390,15 +1390,15 @@ SdrObject* SdrOle2Obj::DoConvertToPolyObj(bool bBezier, bool bAddText) const
         }
     }
 
-    return 0;
+    return nullptr;
 }
 
 
 
 void SdrOle2Obj::SetModel(SdrModel* pNewModel)
 {
-    ::comphelper::IEmbeddedHelper* pDestPers = pNewModel ? pNewModel->GetPersist() : 0;
-    ::comphelper::IEmbeddedHelper* pSrcPers  = pModel ? pModel->GetPersist() : 0;
+    ::comphelper::IEmbeddedHelper* pDestPers = pNewModel ? pNewModel->GetPersist() : nullptr;
+    ::comphelper::IEmbeddedHelper* pSrcPers  = pModel ? pModel->GetPersist() : nullptr;
 
     if ( pNewModel == pModel )
     {
@@ -1473,8 +1473,8 @@ void SdrOle2Obj::SetModel(SdrModel* pNewModel)
 
 void SdrOle2Obj::SetPage(SdrPage* pNewPage)
 {
-    bool bRemove=pNewPage==NULL && pPage!=NULL;
-    bool bInsert=pNewPage!=NULL && pPage==NULL;
+    bool bRemove=pNewPage==nullptr && pPage!=nullptr;
+    bool bInsert=pNewPage!=nullptr && pPage==nullptr;
 
     if (bRemove && mpImpl->mbConnected )
         Disconnect();
@@ -1579,7 +1579,7 @@ void SdrOle2Obj::AbandonObject()
 {
     mpImpl->aPersistName.clear();
     mpImpl->mbLoadingOLEObjectFailed = false;
-    SetObjRef(0);
+    SetObjRef(nullptr);
 }
 
 
@@ -1654,7 +1654,7 @@ SdrOle2Obj* SdrOle2Obj::CloneWithShellIDs( const OUString& rSrcShellID, const OU
 {
     SdrOle2Obj* pObj =
         dynamic_cast<SdrOle2Obj*>(
-            SdrObjFactory::MakeNewObject(GetObjInventor(), GetObjIdentifier(), NULL));
+            SdrObjFactory::MakeNewObject(GetObjInventor(), GetObjIdentifier(), nullptr));
 
     if (pObj)
         pObj->assignFrom(*this, rSrcShellID, rDestShellID);
@@ -2072,7 +2072,7 @@ void SdrOle2Obj::GetObjRef_Impl()
 
                 // perhaps preview not valid anymore
                 // This line changes the modified state of the model
-                SetGraphic_Impl( NULL );
+                SetGraphic_Impl( nullptr );
 
                 // if status was not set before, force it back
                 // to not set, so that SetGraphic(0L) above does not

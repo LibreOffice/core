@@ -202,7 +202,7 @@ public:
     virtual ~FmEntryDataList();
 
     FmEntryData*    at( size_t Index )
-        { return ( Index < maEntryDataList.size() ) ? maEntryDataList[ Index ] : NULL; }
+        { return ( Index < maEntryDataList.size() ) ? maEntryDataList[ Index ] : nullptr; }
 
     size_t          size() const { return maEntryDataList.size(); }
     FmEntryData*    remove( FmEntryData* pItem );
@@ -245,7 +245,7 @@ public:
     FmFormData(
         const css::uno::Reference< css::form::XForm >& _rxForm,
         const ImageList& _rNormalImages,
-        FmFormData* _pParent = NULL
+        FmFormData* _pParent = nullptr
     );
 
     FmFormData( const FmFormData& rFormData );
@@ -324,7 +324,7 @@ namespace svxform
         void UnLock() { m_nLocks--; }
         bool IsLocked() const { return m_nLocks != 0; }
         bool CanUndo() const { return m_bCanUndo; }
-        void ReleaseModel() { m_pNavModel = NULL; }
+        void ReleaseModel() { m_pNavModel = nullptr; }
     protected:
         void Insert(const css::uno::Reference< css::uno::XInterface >& xIface, sal_Int32 nIndex);
         void Remove( const css::uno::Reference< css::uno::XInterface >& _rxElement );
@@ -529,7 +529,7 @@ namespace svxform
         sal_Int8    implExecuteDataTransfer( const OControlTransferData& _rData, sal_Int8 _nAction, SvTreeListEntry* _pTargetEntry, bool _bDnD );
 
         // check if a cut, copy, or drag operation can be started in the current situation
-        bool        implAllowExchange( sal_Int8 _nAction, bool* _pHasNonHidden = NULL );
+        bool        implAllowExchange( sal_Int8 _nAction, bool* _pHasNonHidden = nullptr );
         // check if a paste with the current clipboard content can be accepted
         bool        implAcceptPaste( );
 

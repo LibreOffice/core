@@ -298,7 +298,7 @@ void LinePropertyPanelBase::updateLineStyle(bool bDisabled, bool bSetOrDefault, 
     }
     else
     {
-        mpStyleItem.reset(0);
+        mpStyleItem.reset(nullptr);
     }
 
     SelectLineStyle();
@@ -410,7 +410,7 @@ void LinePropertyPanelBase::updateLineStart(bool bDisabled, bool bSetOrDefault,
         }
     }
 
-    mpStartItem.reset(0);
+    mpStartItem.reset(nullptr);
     SelectEndStyle(true);
 }
 
@@ -437,7 +437,7 @@ void LinePropertyPanelBase::updateLineEnd(bool bDisabled, bool bSetOrDefault,
         }
     }
 
-    mpEndItem.reset(0);
+    mpEndItem.reset(nullptr);
     SelectEndStyle(false);
 }
 

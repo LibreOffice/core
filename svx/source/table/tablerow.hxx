@@ -46,7 +46,7 @@ public:
 
     TableRow& operator=( const TableRow& );
 
-    void insertColumns( sal_Int32 nIndex, sal_Int32 nCount, CellVector::iterator* pIter = 0 );
+    void insertColumns( sal_Int32 nIndex, sal_Int32 nCount, CellVector::iterator* pIter = nullptr );
     void removeColumns( sal_Int32 nIndex, sal_Int32 nCount );
 
     // XCellRange

@@ -38,7 +38,7 @@ protected:
 
 public:
     XOutdevItemPool(
-        SfxItemPool* pMaster = 0L,
+        SfxItemPool* pMaster = nullptr,
         sal_uInt16 nAttrStart = XATTR_START,
         sal_uInt16 nAttrEnd = XATTR_END,
         bool bLoadRefCounts = true);

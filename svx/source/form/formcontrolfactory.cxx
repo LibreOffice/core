@@ -352,7 +352,7 @@ namespace svxform
             "ParaUserDefinedAttributes",
             "NumberingIsNumber",
             "ParaIsConnectBorder",
-            NULL
+            nullptr
         };
 
 

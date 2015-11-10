@@ -246,7 +246,7 @@ bool SvxOle2Shape::getPropertyValueImpl( const OUString& rName, const SfxItemPro
                     // #i119735# just use GetGDIMetaFile, it will create a bufferd version of contained bitmap now automatically
                     GDIMetaFile aMtf(pObj->GetGraphic()->GetGDIMetaFile());
                     SvMemoryStream aDestStrm( 65535, 65535 );
-                    ConvertGDIMetaFileToWMF( aMtf, aDestStrm, NULL, false );
+                    ConvertGDIMetaFileToWMF( aMtf, aDestStrm, nullptr, false );
                     const uno::Sequence<sal_Int8> aSeq(
                         static_cast< const sal_Int8* >(aDestStrm.GetData()),
                         aDestStrm.GetEndOfData());
@@ -340,7 +340,7 @@ bool SvxOle2Shape::getPropertyValueImpl( const OUString& rName, const SfxItemPro
 
             // if there isn't already a preview graphic set, check if we need to generate
             // one if model says so
-            if( pGraphic == NULL && !pOle->IsEmptyPresObj() && mpModel->IsSaveOLEPreview() )
+            if( pGraphic == nullptr && !pOle->IsEmptyPresObj() && mpModel->IsSaveOLEPreview() )
                 pGraphic = pOle->GetGraphic();
 
             if( pGraphic )
@@ -365,7 +365,7 @@ bool SvxOle2Shape::getPropertyValueImpl( const OUString& rName, const SfxItemPro
             if( !aPersistName.isEmpty() )
             {
                 ::comphelper::IEmbeddedHelper *pPersist = mpObj->GetModel()->GetPersist();
-                if( (NULL == pPersist) || !pPersist->getEmbeddedObjectContainer().HasEmbeddedObject( pOle->GetPersistName() ) )
+                if( (nullptr == pPersist) || !pPersist->getEmbeddedObjectContainer().HasEmbeddedObject( pOle->GetPersistName() ) )
                     aPersistName.clear();
             }
         }
@@ -517,7 +517,7 @@ bool SvxOle2Shape::createLink( const OUString& aLinkURL )
 
 void SvxOle2Shape::resetModifiedState()
 {
-    ::comphelper::IEmbeddedHelper* pPersist = mpModel ? mpModel->GetPersist() : 0;
+    ::comphelper::IEmbeddedHelper* pPersist = mpModel ? mpModel->GetPersist() : nullptr;
     if( pPersist && !pPersist->isEnableSetModified() )
     {
         SdrOle2Obj* pOle = dynamic_cast< SdrOle2Obj* >( mpObj.get() );

@@ -66,7 +66,7 @@ struct ShapeTypeDescriptor
     ShapeTypeDescriptor()
     :   mnShapeTypeId (-1),
         msServiceName (),
-           maCreateFunction (NULL)
+           maCreateFunction (nullptr)
     {}
 };
 

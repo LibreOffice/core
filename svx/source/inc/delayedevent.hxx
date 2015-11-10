@@ -40,7 +40,7 @@ namespace svxform
     public:
         DelayedEvent( const Link<void*,void>& _rHandler )
             :m_aHandler( _rHandler )
-            ,m_nEventId( 0 )
+            ,m_nEventId( nullptr )
         {
         }
 

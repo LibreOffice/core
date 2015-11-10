@@ -27,7 +27,7 @@ void SdrDragStat::Clear(bool bLeaveOne)
         aPnts.pop_back();
     }
     delete pUser;
-    pUser=NULL;
+    pUser=nullptr;
     aPnts.clear();
     if (bLeaveOne) {
         aPnts.push_back(new Point);
@@ -36,18 +36,18 @@ void SdrDragStat::Clear(bool bLeaveOne)
 
 void SdrDragStat::Reset()
 {
-    pView=NULL;
-    pPageView=NULL;
+    pView=nullptr;
+    pPageView=nullptr;
     bShown=false;
     nMinMov=1;
     bMinMoved=false;
     bHorFixed=false;
     bVerFixed=false;
     bWantNoSnap=false;
-    pHdl=NULL;
+    pHdl=nullptr;
     bOrtho4=false;
     bOrtho8=false;
-    pDragMethod=NULL;
+    pDragMethod=nullptr;
     bEndDragChangesAttributes=false;
     bEndDragChangesGeoAndAttributes=false;
     bMouseIsUp=false;
@@ -132,7 +132,7 @@ void SdrDragStat::TakeCreateRect(Rectangle& rRect) const
         rRect.Right()=aBtmRgt.X();
         rRect.Bottom()=aBtmRgt.Y();
     }
-    if (pView!=NULL && pView->IsCreate1stPointAsCenter()) {
+    if (pView!=nullptr && pView->IsCreate1stPointAsCenter()) {
         rRect.Top()+=rRect.Top()-rRect.Bottom();
         rRect.Left()+=rRect.Left()-rRect.Right();
     }

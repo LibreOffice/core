@@ -42,7 +42,7 @@ public:
 
     virtual void SAL_CALL setPropertyValues( const css::uno::Sequence< OUString >& aPropertyNames, const css::uno::Sequence< css::uno::Any >& aValues ) throw (css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
 
-    virtual void Create( SdrObject* pNewOpj, SvxDrawPage* pNewPage = NULL ) override;
+    virtual void Create( SdrObject* pNewOpj, SvxDrawPage* pNewPage = nullptr ) override;
 };
 class SvxAppletShape : public SvxOle2Shape
 {
@@ -60,7 +60,7 @@ public:
 
     virtual void SAL_CALL setPropertyValues( const css::uno::Sequence< OUString >& aPropertyNames, const css::uno::Sequence< css::uno::Any >& aValues ) throw (css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
 
-    virtual void Create( SdrObject* pNewOpj, SvxDrawPage* pNewPage = NULL ) override;
+    virtual void Create( SdrObject* pNewOpj, SvxDrawPage* pNewPage = nullptr ) override;
 };
 class SvxFrameShape : public SvxOle2Shape
 {
@@ -83,7 +83,7 @@ public:
 
     virtual void SAL_CALL setPropertyValues( const css::uno::Sequence< OUString >& aPropertyNames, const css::uno::Sequence< css::uno::Any >& aValues ) throw (css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
 
-    virtual void Create( SdrObject* pNewOpj, SvxDrawPage* pNewPage = NULL ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void Create( SdrObject* pNewOpj, SvxDrawPage* pNewPage = nullptr ) throw (css::uno::RuntimeException, std::exception) override;
 };
 
 

@@ -64,7 +64,7 @@ void createSubPrimitive3DVector(
                 createSubPrimitive3DVector(
                     rCandidate.GetViewContact(a),
                     aNewAllTarget,
-                    o_pVisibleTarget ? &aNewVisibleTarget : 0,
+                    o_pVisibleTarget ? &aNewVisibleTarget : nullptr,
                     pVisibleLayerSet,
                     bTestSelectedVisibility);
             }
@@ -279,7 +279,7 @@ drawinglayer::primitive2d::Primitive2DSequence ViewContactOfE3dScene::createScen
         // create 3d scene primitive with visible content tested against rLayerVisibility
         drawinglayer::primitive3d::Primitive3DSequence aAllSequence;
         drawinglayer::primitive3d::Primitive3DSequence aVisibleSequence;
-        const bool bTestLayerVisibility(0 != pLayerVisibility);
+        const bool bTestLayerVisibility(nullptr != pLayerVisibility);
         const bool bTestSelectedVisibility(GetE3dScene().GetDrawOnlySelected());
         const bool bTestVisibility(bTestLayerVisibility || bTestSelectedVisibility);
 
@@ -292,8 +292,8 @@ drawinglayer::primitive2d::Primitive2DSequence ViewContactOfE3dScene::createScen
             createSubPrimitive3DVector(
                 GetViewContact(a),
                 aAllSequence,
-                bTestLayerVisibility ? &aVisibleSequence : 0,
-                bTestLayerVisibility ? pLayerVisibility : 0,
+                bTestLayerVisibility ? &aVisibleSequence : nullptr,
+                bTestLayerVisibility ? pLayerVisibility : nullptr,
                 bTestSelectedVisibility);
         }
 
@@ -340,7 +340,7 @@ drawinglayer::primitive2d::Primitive2DSequence ViewContactOfE3dScene::createView
     if(GetObjectCount())
     {
         // create a default ScenePrimitive2D (without visibility test of members)
-        xRetval = createScenePrimitive2DSequence(0);
+        xRetval = createScenePrimitive2DSequence(nullptr);
     }
 
     return xRetval;
@@ -433,7 +433,7 @@ drawinglayer::primitive3d::Primitive3DSequence ViewContactOfE3dScene::getAllPrim
     // is seen as part of the ViewTransformation (see text in createViewInformation3D)
     for(sal_uInt32 a(0L); a < nChildrenCount; a++)
     {
-        createSubPrimitive3DVector(GetViewContact(a), aAllPrimitive3DSequence, 0, 0, false);
+        createSubPrimitive3DVector(GetViewContact(a), aAllPrimitive3DSequence, nullptr, nullptr, false);
     }
 
     return aAllPrimitive3DSequence;

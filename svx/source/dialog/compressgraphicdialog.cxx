@@ -53,7 +53,7 @@ CompressGraphicsDialog::CompressGraphicsDialog( vcl::Window* pParent, SdrGrafObj
 
 CompressGraphicsDialog::CompressGraphicsDialog( vcl::Window* pParent, Graphic& rGraphic, Size rViewSize100mm, Rectangle& rCropRectangle, SfxBindings& rBindings ) :
     ModalDialog       ( pParent, "CompressGraphicDialog", "svx/ui/compressgraphicdialog.ui" ),
-    m_pGraphicObj     ( NULL ),
+    m_pGraphicObj     ( nullptr ),
     m_aGraphic        ( rGraphic ),
     m_aViewSize100mm  ( rViewSize100mm ),
     m_aCropRectangle  ( rCropRectangle ),
@@ -414,7 +414,7 @@ SdrGrafObj* CompressGraphicsDialog::GetCompressedSdrGrafObj()
 
         return pNewObject;
     }
-    return NULL;
+    return nullptr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

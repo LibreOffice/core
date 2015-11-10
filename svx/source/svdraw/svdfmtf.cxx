@@ -81,9 +81,9 @@ ImpSdrGDIMetaFileImport::ImpSdrGDIMetaFileImport(
     mpVD(VclPtr<VirtualDevice>::Create()),
     maScaleRect(rRect),
     mnMapScalingOfs(0),
-    mpLineAttr(0),
-    mpFillAttr(0),
-    mpTextAttr(0),
+    mpLineAttr(nullptr),
+    mpFillAttr(nullptr),
+    mpTextAttr(nullptr),
     mpModel(&rModel),
     mnLayer(nLay),
     maOldLineColor(),
@@ -782,7 +782,7 @@ bool ImpSdrGDIMetaFileImport::CheckLastLineMerge(const basegfx::B2DPolygon& rSrc
     // #i73407# reformulation to use new B2DPolygon classes
     if(mbLastObjWasLine && (maOldLineColor == mpVD->GetLineColor()) && rSrcPoly.count())
     {
-        SdrObject* pTmpObj = maTmpList.size() ? maTmpList[maTmpList.size() - 1] : 0;
+        SdrObject* pTmpObj = maTmpList.size() ? maTmpList[maTmpList.size() - 1] : nullptr;
         SdrPathObj* pLastPoly = dynamic_cast< SdrPathObj* >(pTmpObj);
 
         if(pLastPoly)
@@ -848,14 +848,14 @@ bool ImpSdrGDIMetaFileImport::CheckLastPolyLineAndFillMerge(const basegfx::B2DPo
     // #i73407# reformulation to use new B2DPolygon classes
     if(mbLastObjWasPolyWithoutLine)
     {
-        SdrObject* pTmpObj = maTmpList.size() ? maTmpList[maTmpList.size() - 1] : 0;
+        SdrObject* pTmpObj = maTmpList.size() ? maTmpList[maTmpList.size() - 1] : nullptr;
         SdrPathObj* pLastPoly = dynamic_cast< SdrPathObj* >(pTmpObj);
 
         if(pLastPoly)
         {
             if(pLastPoly->GetPathPoly() == rPolyPolygon)
             {
-                SetAttributes(NULL);
+                SetAttributes(nullptr);
 
                 if(!mbNoLine && mbNoFill)
                 {
@@ -1278,7 +1278,7 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaTextRectAction& rAct)
     GDIMetaFile aTemp;
 
     mpVD->AddTextRectActions(rAct.GetRect(), rAct.GetText(), rAct.GetStyle(), aTemp);
-    DoLoopActions(aTemp, 0, 0);
+    DoLoopActions(aTemp, nullptr, nullptr);
 }
 
 void ImpSdrGDIMetaFileImport::DoAction(MetaBmpScalePartAction& rAct)

@@ -262,7 +262,7 @@ namespace {
     Size* CalcSize( sal_Int32 nWidth, sal_Int32 nHeight, const Size& aBoundSize, Size& aOutSize )
     {
         if( (nWidth == 0) && (nHeight == 0) )
-            return NULL;
+            return nullptr;
 
         if( (nWidth == 0) && (nHeight != 0) && (aBoundSize.Height() != 0) )
         {
@@ -311,10 +311,10 @@ drawinglayer::primitive2d::Primitive2DSequence ImplExportCheckVisisbilityRedirec
     if(pObject)
     {
         SdrPage* pPage = mpCurrentPage;
-        if( pPage == 0 )
+        if( pPage == nullptr )
             pPage = pObject->GetPage();
 
-        if( (pPage == 0) || pPage->checkVisibility(rOriginal, rDisplayInfo, false) )
+        if( (pPage == nullptr) || pPage->checkVisibility(rOriginal, rDisplayInfo, false) )
         {
             return sdr::contact::ViewObjectContactRedirector::createRedirectedPrimitive2DSequence(rOriginal, rDisplayInfo);
         }
@@ -329,7 +329,7 @@ drawinglayer::primitive2d::Primitive2DSequence ImplExportCheckVisisbilityRedirec
 }
 
 GraphicExporter::GraphicExporter()
-: mpUnoPage( NULL ), mnPageNumber(-1), mpCurrentPage(0), mpDoc( NULL )
+: mpUnoPage( nullptr ), mnPageNumber(-1), mpCurrentPage(nullptr), mpDoc( nullptr )
 {
 }
 
@@ -384,7 +384,7 @@ IMPL_LINK_TYPED(GraphicExporter, CalcFieldValueHdl, EditFieldInfo*, pInfo, void)
     maOldCalcFieldValueHdl.Call( pInfo );
 
     if( pInfo && mpCurrentPage )
-        pInfo->SetSdrPage( 0 );
+        pInfo->SetSdrPage( nullptr );
 }
 
 /** creates an virtual device for the given page
@@ -633,7 +633,7 @@ bool GraphicExporter::GetGraphic( ExportSettings& rSettings, Graphic& aGraphic, 
     EEControlBits nCntrl = nOldCntrl & ~EEControlBits::ONLINESPELLING;
     rOutl.SetControlWord(nCntrl);
 
-    SdrObject* pTempBackgroundShape = 0;
+    SdrObject* pTempBackgroundShape = nullptr;
     std::vector< SdrObject* > aShapes;
     bool bRet = true;
 
@@ -1001,10 +1001,10 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
 {
     ::SolarMutexGuard aGuard;
 
-    if( NULL == mpUnoPage )
+    if( nullptr == mpUnoPage )
         return sal_False;
 
-    if( NULL == mpUnoPage->GetSdrPage() || NULL == mpDoc )
+    if( nullptr == mpUnoPage->GetSdrPage() || nullptr == mpDoc )
         return sal_False;
 
     GraphicFilter &rFilter = GraphicFilter::GetGraphicFilter();
@@ -1090,8 +1090,8 @@ void SAL_CALL GraphicExporter::setSourceDocument( const Reference< lang::XCompon
 {
     ::SolarMutexGuard aGuard;
 
-    mxShapes = NULL;
-    mpUnoPage = NULL;
+    mxShapes = nullptr;
+    mpUnoPage = nullptr;
 
     try
     {
@@ -1114,13 +1114,13 @@ void SAL_CALL GraphicExporter::setSourceDocument( const Reference< lang::XCompon
         }
         else
         {
-            mxShapes = NULL;
+            mxShapes = nullptr;
         }
 
         // Step 2: try a shape
         if( mxShape.is() )
         {
-            if( NULL == GetSdrObjectFromXShape( mxShape ) )
+            if( nullptr == GetSdrObjectFromXShape( mxShape ) )
                 break;
 
             // get page for this shape
@@ -1148,7 +1148,7 @@ void SAL_CALL GraphicExporter::setSourceDocument( const Reference< lang::XCompon
 
         mpUnoPage = SvxDrawPage::getImplementation( mxPage );
 
-        if( NULL == mpUnoPage || NULL == mpUnoPage->GetSdrPage() )
+        if( nullptr == mpUnoPage || nullptr == mpUnoPage->GetSdrPage() )
             break;
 
         mpDoc = mpUnoPage->GetSdrPage()->GetModel();

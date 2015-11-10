@@ -99,7 +99,7 @@ const Graphic ImpLoadLinkedGraphic( const OUString& aFileName, const OUString& a
         // to interpret included links may fail.
         // Alternatively the path may be set at the result after this call when it is known
         // that it is a SVG graphic, but only because no one yet tried to interpret it.
-        rGF.ImportGraphic( aGraphic, aFileName, *pInStrm, nFilter, NULL, GraphicFilterImportFlags::NONE, &aFilterData );
+        rGF.ImportGraphic( aGraphic, aFileName, *pInStrm, nFilter, nullptr, GraphicFilterImportFlags::NONE, &aFilterData );
     }
     return aGraphic;
 }
@@ -120,7 +120,7 @@ public:
         const OUString& rMimeType, const css::uno::Any & rValue ) override;
     void                DataChanged( const Graphic& rGraphic );
 
-    bool                Connect() { return 0 != GetRealObject(); }
+    bool                Connect() { return nullptr != GetRealObject(); }
     void                UpdateAsynchron();
     void                RemoveGraphicUpdater();
 
@@ -197,7 +197,7 @@ void SAL_CALL SdrGraphicUpdater::run()
 SdrGraphicLink::SdrGraphicLink(SdrGrafObj& rObj)
 : ::sfx2::SvBaseLink( ::SfxLinkUpdateMode::ONCALL, SotClipboardFormatId::SVXB )
 , rGrafObj( rObj )
-, pGraphicUpdater( NULL )
+, pGraphicUpdater( nullptr )
 {
     SetSynchron( false );
 }
@@ -215,18 +215,18 @@ void SdrGraphicLink::DataChanged( const Graphic& rGraphic )
 
 void SdrGraphicLink::RemoveGraphicUpdater()
 {
-    pGraphicUpdater = NULL;
+    pGraphicUpdater = nullptr;
 }
 
 ::sfx2::SvBaseLink::UpdateResult SdrGraphicLink::DataChanged(
     const OUString& rMimeType, const css::uno::Any & rValue )
 {
     SdrModel*       pModel      = rGrafObj.GetModel();
-    sfx2::LinkManager* pLinkManager= pModel  ? pModel->GetLinkManager() : 0;
+    sfx2::LinkManager* pLinkManager= pModel  ? pModel->GetLinkManager() : nullptr;
 
     if( pLinkManager && rValue.hasValue() )
     {
-        sfx2::LinkManager::GetDisplayNames( this, 0, &rGrafObj.aFileName, 0, &rGrafObj.aFilterName );
+        sfx2::LinkManager::GetDisplayNames( this, nullptr, &rGrafObj.aFileName, nullptr, &rGrafObj.aFilterName );
 
         Graphic aGraphic;
         if( sfx2::LinkManager::GetGraphicFromAny( rMimeType, rValue, aGraphic ))
@@ -247,7 +247,7 @@ void SdrGraphicLink::Closed()
 {
     // close connection; set pLink of the object to NULL, as link instance is just about getting destructed.
     rGrafObj.ForceSwapIn();
-    rGrafObj.pGraphicLink=NULL;
+    rGrafObj.pGraphicLink=nullptr;
     rGrafObj.ReleaseGraphicLink();
     SvBaseLink::Closed();
 }
@@ -334,11 +334,11 @@ TYPEINIT1(SdrGrafObj,SdrRectObj);
 
 SdrGrafObj::SdrGrafObj()
 :   SdrRectObj(),
-    pGraphicLink    ( NULL ),
+    pGraphicLink    ( nullptr ),
     bMirrored       ( false )
 {
     pGraphic = new GraphicObject;
-    mpReplacementGraphic = 0;
+    mpReplacementGraphic = nullptr;
     pGraphic->SetSwapStreamHdl( LINK(this, SdrGrafObj, ImpSwapHdl) );
     onGraphicChanged();
 
@@ -358,11 +358,11 @@ SdrGrafObj::SdrGrafObj()
 
 SdrGrafObj::SdrGrafObj(const Graphic& rGrf, const Rectangle& rRect)
 :   SdrRectObj      ( rRect ),
-    pGraphicLink    ( NULL ),
+    pGraphicLink    ( nullptr ),
     bMirrored       ( false )
 {
     pGraphic = new GraphicObject( rGrf );
-    mpReplacementGraphic = 0;
+    mpReplacementGraphic = nullptr;
     pGraphic->SetSwapStreamHdl( LINK(this, SdrGrafObj, ImpSwapHdl) );
     onGraphicChanged();
 
@@ -382,11 +382,11 @@ SdrGrafObj::SdrGrafObj(const Graphic& rGrf, const Rectangle& rRect)
 
 SdrGrafObj::SdrGrafObj( const Graphic& rGrf )
 :   SdrRectObj(),
-    pGraphicLink    ( NULL ),
+    pGraphicLink    ( nullptr ),
     bMirrored       ( false )
 {
     pGraphic = new GraphicObject( rGrf );
-    mpReplacementGraphic = 0;
+    mpReplacementGraphic = nullptr;
     pGraphic->SetSwapStreamHdl( LINK(this, SdrGrafObj, ImpSwapHdl) );
     onGraphicChanged();
 
@@ -415,7 +415,7 @@ void SdrGrafObj::SetGraphicObject( const GraphicObject& rGrfObj )
 {
     *pGraphic = rGrfObj;
     delete mpReplacementGraphic;
-    mpReplacementGraphic = 0;
+    mpReplacementGraphic = nullptr;
     pGraphic->SetSwapStreamHdl( LINK(this, SdrGrafObj, ImpSwapHdl) );
     pGraphic->SetUserData();
     mbIsPreview = false;
@@ -453,7 +453,7 @@ void SdrGrafObj::NbcSetGraphic( const Graphic& rGrf )
 {
     pGraphic->SetGraphic( rGrf );
     delete mpReplacementGraphic;
-    mpReplacementGraphic = 0;
+    mpReplacementGraphic = nullptr;
     pGraphic->SetUserData();
     mbIsPreview = false;
     onGraphicChanged();
@@ -590,15 +590,15 @@ void SdrGrafObj::ForceSwapIn() const
 
 void SdrGrafObj::ImpLinkAnmeldung()
 {
-    sfx2::LinkManager* pLinkManager = pModel != NULL ? pModel->GetLinkManager() : NULL;
+    sfx2::LinkManager* pLinkManager = pModel != nullptr ? pModel->GetLinkManager() : nullptr;
 
-    if( pLinkManager != NULL && pGraphicLink == NULL )
+    if( pLinkManager != nullptr && pGraphicLink == nullptr )
     {
         if (!aFileName.isEmpty())
         {
             pGraphicLink = new SdrGraphicLink( *this );
             pLinkManager->InsertFileLink(
-                *pGraphicLink, OBJECT_CLIENT_GRF, aFileName, (aFilterName.isEmpty() ? NULL : &aFilterName));
+                *pGraphicLink, OBJECT_CLIENT_GRF, aFileName, (aFilterName.isEmpty() ? nullptr : &aFilterName));
             pGraphicLink->Connect();
         }
     }
@@ -606,13 +606,13 @@ void SdrGrafObj::ImpLinkAnmeldung()
 
 void SdrGrafObj::ImpLinkAbmeldung()
 {
-    sfx2::LinkManager* pLinkManager = pModel != NULL ? pModel->GetLinkManager() : NULL;
+    sfx2::LinkManager* pLinkManager = pModel != nullptr ? pModel->GetLinkManager() : nullptr;
 
-    if( pLinkManager != NULL && pGraphicLink!=NULL)
+    if( pLinkManager != nullptr && pGraphicLink!=nullptr)
     {
         // When using Remove, the *pGraphicLink is implicitly deleted
         pLinkManager->Remove( pGraphicLink );
-        pGraphicLink=NULL;
+        pGraphicLink=nullptr;
     }
 }
 
@@ -944,8 +944,8 @@ void SdrGrafObj::RestGeoData(const SdrObjGeoData& rGeo)
 
 void SdrGrafObj::SetPage( SdrPage* pNewPage )
 {
-    bool bRemove = pNewPage == NULL && pPage != NULL;
-    bool bInsert = pNewPage != NULL && pPage == NULL;
+    bool bRemove = pNewPage == nullptr && pPage != nullptr;
+    bool bInsert = pNewPage != nullptr && pPage == nullptr;
 
     if( bRemove )
     {
@@ -953,7 +953,7 @@ void SdrGrafObj::SetPage( SdrPage* pNewPage )
         if( pGraphic->IsAnimated())
             pGraphic->StopAnimation();
 
-        if( pGraphicLink != NULL )
+        if( pGraphicLink != nullptr )
             ImpLinkAbmeldung();
     }
 
@@ -994,7 +994,7 @@ void SdrGrafObj::SetModel( SdrModel* pNewModel )
             ForceSwapIn();
         }
 
-        if( pGraphicLink != NULL )
+        if( pGraphicLink != nullptr )
             ImpLinkAbmeldung();
     }
 
@@ -1046,7 +1046,7 @@ GDIMetaFile SdrGrafObj::getMetafileFromEmbeddedSvg() const
 
 SdrObject* SdrGrafObj::DoConvertToPolyObj(bool bBezier, bool bAddText ) const
 {
-    SdrObject* pRetval = NULL;
+    SdrObject* pRetval = nullptr;
     GraphicType aGraphicType(GetGraphicType());
     GDIMetaFile aMtf;
 
@@ -1306,7 +1306,7 @@ IMPL_LINK_TYPED( SdrGrafObj, ImpSwapHdl, const GraphicObject*, pO, SvStream* )
     else if( pO->IsInSwapIn() )
     {
         // can be loaded from the original document stream later
-        if( pModel != NULL )
+        if( pModel != nullptr )
         {
             if( pGraphic->HasUserData() )
             {
@@ -1317,9 +1317,9 @@ IMPL_LINK_TYPED( SdrGrafObj, ImpSwapHdl, const GraphicObject*, pO, SvStream* )
 
                 std::unique_ptr<SvStream> const pStream( (xStream.is())
                         ? ::utl::UcbStreamHelper::CreateStream(xStream)
-                        : 0 );
+                        : nullptr );
 
-                if( pStream != 0 )
+                if( pStream != nullptr )
                 {
                     Graphic aGraphic;
 
@@ -1346,7 +1346,7 @@ IMPL_LINK_TYPED( SdrGrafObj, ImpSwapHdl, const GraphicObject*, pO, SvStream* )
 
                     if(!GraphicFilter::GetGraphicFilter().ImportGraphic(
                         aGraphic, aUserData, *pStream,
-                        GRFILTER_FORMAT_DONTKNOW, NULL, GraphicFilterImportFlags::NONE, pFilterData.get()))
+                        GRFILTER_FORMAT_DONTKNOW, nullptr, GraphicFilterImportFlags::NONE, pFilterData.get()))
                     {
                         const OUString aNewUserData( pGraphic->GetUserData() );
                         pGraphic->SetGraphic( aGraphic );

@@ -62,11 +62,11 @@ namespace sdr
 
             // Test changeability for a single item. If a implementation wants to prevent
             // changing an item it should override this method.
-            virtual bool AllowItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem = 0) const = 0;
+            virtual bool AllowItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem = nullptr) const = 0;
 
             // Do the internal ItemChange. If only nWhich is given, the item needs to be cleared.
             // Also needs to handle if nWhich and pNewItem is 0, which means to clear all items.
-            virtual void ItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem = 0) = 0;
+            virtual void ItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem = nullptr) = 0;
 
             // Called after ItemChange() is done for all items. Allows local reactions on
             // specific item changes
@@ -146,7 +146,7 @@ namespace sdr
 
             // Move local items to a new ItemPool.
             // Override this to do it for hierarchical objects like e.g. groups.
-            virtual void MoveToItemPool(SfxItemPool* pSrcPool, SfxItemPool* pDestPool, SdrModel* pNewModel = 0L);
+            virtual void MoveToItemPool(SfxItemPool* pSrcPool, SfxItemPool* pDestPool, SdrModel* pNewModel = nullptr);
 
             // Set new model.
             virtual void SetModel(SdrModel* pOldModel, SdrModel* pNewModel);

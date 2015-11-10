@@ -47,13 +47,13 @@ using namespace ::com::sun::star;
 XOBitmap::XOBitmap( const Bitmap& rBmp ) :
     eType           ( XBITMAP_IMPORT ),
     aGraphicObject  ( rBmp ),
-    pPixelArray     ( NULL ),
+    pPixelArray     ( nullptr ),
     bGraphicDirty   ( false )
 {
 }
 
 XOBitmap::XOBitmap( const XOBitmap& rXBmp ) :
-    pPixelArray ( NULL )
+    pPixelArray ( nullptr )
 {
     eType = rXBmp.eType;
     aGraphicObject = rXBmp.aGraphicObject;
@@ -542,7 +542,7 @@ XFillBitmapItem* XFillBitmapItem::checkForUniqueItem( SdrModel* pModel ) const
     {
         const OUString aUniqueName = NameOrIndex::CheckNamedItem(
                 this, XATTR_FILLBITMAP, &pModel->GetItemPool(),
-                pModel->GetStyleSheetPool() ? &pModel->GetStyleSheetPool()->GetPool() : NULL,
+                pModel->GetStyleSheetPool() ? &pModel->GetStyleSheetPool()->GetPool() : nullptr,
                 XFillBitmapItem::CompareValueFunc, RID_SVXSTR_BMP21,
                 pModel->GetPropertyList( XBITMAP_LIST ) );
 
@@ -553,7 +553,7 @@ XFillBitmapItem* XFillBitmapItem::checkForUniqueItem( SdrModel* pModel ) const
         }
     }
 
-    return NULL;
+    return nullptr;
 }
 
 void XFillBitmapItem::dumpAsXml(xmlTextWriterPtr pWriter) const

@@ -478,7 +478,7 @@ void SAL_CALL FmXGridControl::createPeer(const Reference< css::awt::XToolkit >& 
         // mbCreatingPeer is virtually the same as m_nPeerCreationLevel, but it's the base class' method
         // to prevent recursion.
 
-        vcl::Window* pParentWin = NULL;
+        vcl::Window* pParentWin = nullptr;
         if (rParentPeer.is())
         {
             VCLXWindow* pParent = VCLXWindow::GetImplementation(rParentPeer);
@@ -487,7 +487,7 @@ void SAL_CALL FmXGridControl::createPeer(const Reference< css::awt::XToolkit >& 
         }
 
         FmXGridPeer* pPeer = imp_CreatePeer(pParentWin);
-        DBG_ASSERT(pPeer != NULL, "FmXGridControl::createPeer : imp_CreatePeer didn't return a peer !");
+        DBG_ASSERT(pPeer != nullptr, "FmXGridControl::createPeer : imp_CreatePeer didn't return a peer !");
         setPeer( pPeer );
 
         // reading the properties from the model
@@ -1046,9 +1046,9 @@ FmXGridPeer::FmXGridPeer(const Reference< XComponentContext >& _rxContext)
             ,m_aMode( getDataModeIdentifier() )
             ,m_nCursorListening(0)
             ,m_bInterceptingDispatch(false)
-            ,m_pStateCache(NULL)
-            ,m_pDispatchers(NULL)
-            ,m_pGridListener(NULL)
+            ,m_pStateCache(nullptr)
+            ,m_pDispatchers(nullptr)
+            ,m_pGridListener(nullptr)
             ,m_xContext(_rxContext)
 {
     // Create must be called after this constructure
@@ -1065,7 +1065,7 @@ VclPtr<FmGridControl> FmXGridPeer::imp_CreateControl(vcl::Window* pParent, WinBi
 void FmXGridPeer::Create(vcl::Window* pParent, WinBits nStyle)
 {
     FmGridControl* pWin = imp_CreateControl(pParent, nStyle);
-    DBG_ASSERT(pWin != NULL, "FmXGridPeer::Create : imp_CreateControl didn't return a control !");
+    DBG_ASSERT(pWin != nullptr, "FmXGridPeer::Create : imp_CreateControl didn't return a control !");
 
     pWin->SetStateProvider(LINK(this, FmXGridPeer, OnQueryGridSlotState));
     pWin->SetSlotExecutor(LINK(this, FmXGridPeer, OnExecuteGridSlot));
@@ -1102,7 +1102,7 @@ const Sequence< sal_Int8 >& FmXGridPeer::getUnoTunnelImplementationId() throw()
 
 FmXGridPeer* FmXGridPeer::getImplementation( const Reference< XInterface >& _rxIFace ) throw()
 {
-    FmXGridPeer* pReturn = NULL;
+    FmXGridPeer* pReturn = nullptr;
     Reference< XUnoTunnel >  xTunnel(_rxIFace, UNO_QUERY);
     if (xTunnel.is())
         pReturn = reinterpret_cast<FmXGridPeer*>(xTunnel->getSomething(getUnoTunnelImplementationId()));
@@ -1145,7 +1145,7 @@ using namespace ::com::sun::star::util;
     if (xCursor.is())
     {
         setRowSet( m_xCursor );
-        m_xCursor = NULL;
+        m_xCursor = nullptr;
         bKnownSender = true;
     }
 
@@ -1159,7 +1159,7 @@ using namespace ::com::sun::star::util;
             if ( m_pDispatchers[i] == e.Source )
             {
                 m_pDispatchers[i]->removeStatusListener( static_cast< css::frame::XStatusListener* >( this ), *pSupportedURLs );
-                m_pDispatchers[i] = NULL;
+                m_pDispatchers[i] = nullptr;
                 m_pStateCache[i] = false;
                 bKnownSender = true;
             }
@@ -1555,21 +1555,21 @@ void FmXGridPeer::loaded(const EventObject& /*rEvent*/) throw( RuntimeException,
 
 void FmXGridPeer::unloaded(const EventObject& /*rEvent*/) throw( RuntimeException, std::exception )
 {
-    updateGrid( Reference< XRowSet > (NULL) );
+    updateGrid( Reference< XRowSet > (nullptr) );
 }
 
 
 void FmXGridPeer::reloading(const EventObject& /*aEvent*/) throw( RuntimeException, std::exception )
 {
     // empty the grid
-    updateGrid( Reference< XRowSet > (NULL) );
+    updateGrid( Reference< XRowSet > (nullptr) );
 }
 
 
 void FmXGridPeer::unloading(const EventObject& /*aEvent*/) throw( RuntimeException, std::exception )
 {
     // empty the grid
-    updateGrid( Reference< XRowSet > (NULL) );
+    updateGrid( Reference< XRowSet > (nullptr) );
 }
 
 
@@ -2092,12 +2092,12 @@ void FmXGridPeer::dispose() throw( RuntimeException, std::exception )
     while ( xInterceptor.is() )
     {
         // tell the interceptor it has a new (means no) predecessor
-        xInterceptor->setMasterDispatchProvider( NULL );
+        xInterceptor->setMasterDispatchProvider( nullptr );
 
         // ask for it's successor
         Reference< XDispatchProvider > xSlave = xInterceptor->getSlaveDispatchProvider();
         // and give it the new (means no) successoert
-        xInterceptor->setSlaveDispatchProvider( NULL );
+        xInterceptor->setSlaveDispatchProvider( nullptr );
 
         // start over with the next chain element
         xInterceptor.set(xSlave, css::uno::UNO_QUERY);
@@ -2735,15 +2735,15 @@ void FmXGridPeer::UpdateDispatches()
     {
         delete[] m_pStateCache;
         delete[] m_pDispatchers;
-        m_pStateCache = NULL;
-        m_pDispatchers = NULL;
+        m_pStateCache = nullptr;
+        m_pDispatchers = nullptr;
     }
 }
 
 
 void FmXGridPeer::ConnectToDispatcher()
 {
-    DBG_ASSERT((m_pStateCache != NULL) == (m_pDispatchers != NULL), "FmXGridPeer::ConnectToDispatcher : inconsistent !");
+    DBG_ASSERT((m_pStateCache != nullptr) == (m_pDispatchers != nullptr), "FmXGridPeer::ConnectToDispatcher : inconsistent !");
     if (m_pStateCache)
     {   // already connected -> just do an update
         UpdateDispatches();
@@ -2773,8 +2773,8 @@ void FmXGridPeer::ConnectToDispatcher()
     {
         delete[] m_pStateCache;
         delete[] m_pDispatchers;
-        m_pStateCache = NULL;
-        m_pDispatchers = NULL;
+        m_pStateCache = nullptr;
+        m_pDispatchers = nullptr;
     }
 }
 
@@ -2795,8 +2795,8 @@ void FmXGridPeer::DisConnectFromDispatcher()
 
     delete[] m_pStateCache;
     delete[] m_pDispatchers;
-    m_pStateCache = NULL;
-    m_pDispatchers = NULL;
+    m_pStateCache = nullptr;
+    m_pDispatchers = nullptr;
 }
 
 

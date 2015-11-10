@@ -322,7 +322,7 @@ const Reference< css::form::XForms >& FmFormPageImpl::getForms( bool _bForceCrea
         FmFormModel* pFormsModel = dynamic_cast<FmFormModel*>( m_rPage.GetModel()  );
 
         // give the newly created collection a place in the universe
-        SfxObjectShell* pObjShell = pFormsModel ? pFormsModel->GetObjectShell() : NULL;
+        SfxObjectShell* pObjShell = pFormsModel ? pFormsModel->GetObjectShell() : nullptr;
         if ( pObjShell )
             m_xForms->setParent( pObjShell->GetModel() );
 
@@ -336,7 +336,7 @@ const Reference< css::form::XForms >& FmFormPageImpl::getForms( bool _bForceCrea
 
 FmFormPageImpl::~FmFormPageImpl()
 {
-    xCurrentForm = NULL;
+    xCurrentForm = nullptr;
 
     ::comphelper::disposeComponent( m_xForms );
 }
@@ -452,7 +452,7 @@ Reference< css::form::XForm >  FmFormPageImpl::findPlaceInFormComponentHierarchy
 {
     // if the control already is child of a form, don't do anything
     if (!rContent.is() || rContent->getParent().is())
-        return NULL;
+        return nullptr;
 
     Reference< XForm >  xForm;
 

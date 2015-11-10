@@ -67,7 +67,7 @@ public:
                                               sal_uInt32         nFormatKey,
                                               SvxNumberValueType eNumValType,
                                               double             nNumVal,
-                                              const OUString*    pNumStr = NULL );
+                                              const OUString*    pNumStr = nullptr );
 
                         ~SvxNumberFormatShell();
 
@@ -81,7 +81,7 @@ public:
                                               sal_uInt32         nFormatKey,
                                               SvxNumberValueType eNumValType,
                                               double             nNumVal,
-                                              const OUString*    pNumStr = NULL );
+                                              const OUString*    pNumStr = nullptr );
 
 
     void                GetInitSettings( sal_uInt16&           nCatLbPos,
@@ -141,7 +141,7 @@ public:
 
     bool                IsUserDefined( const OUString& rFmtString );
     bool                IsTmpCurrencyFormat( const OUString& rFmtString );
-    bool                FindEntry( const OUString& rFmtString, sal_uInt32* pAt = NULL );
+    bool                FindEntry( const OUString& rFmtString, sal_uInt32* pAt = nullptr );
 
     void                ValidateNewEntries( bool bValidate = true ) { bUndoAddList = !bValidate; }
     size_t              GetUpdateDataCount() const;

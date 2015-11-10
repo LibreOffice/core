@@ -37,7 +37,7 @@ namespace sdr
     MasterPageDescriptor::MasterPageDescriptor(SdrPage& aOwnerPage, SdrPage& aUsedPage)
     :   maOwnerPage(aOwnerPage),
         maUsedPage(aUsedPage),
-        mpViewContact(0L)
+        mpViewContact(nullptr)
     {
         // all layers visible
         maVisibleLayers.SetAll();
@@ -54,7 +54,7 @@ namespace sdr
         if(mpViewContact)
         {
             delete mpViewContact;
-            mpViewContact = 0L;
+            mpViewContact = nullptr;
         }
     }
 
@@ -119,7 +119,7 @@ namespace sdr
             // else the PoolDefault (XFILL_COLOR and Blue8) will be used. Normally, all
             // MasterPages should have a StyleSheet excactly for this reason, but historically
             // e.g. the Notes MasterPage has no StyleSheet set (and there maybe others).
-            pCorrectProperties = 0;
+            pCorrectProperties = nullptr;
         }
 
         return pCorrectProperties;

@@ -720,7 +720,7 @@ VclPtr<SfxPopupWindow> SvxTableToolBoxControl::CreatePopupWindow()
         SetPopupWindow( pWin );
         return pWin;
     }
-    return 0;
+    return nullptr;
 }
 
 void SvxTableToolBoxControl::StateChanged( sal_uInt16, SfxItemState eState, const SfxPoolItem* pState )
@@ -759,7 +759,7 @@ SvxColumnsToolBoxControl::~SvxColumnsToolBoxControl()
 
 VclPtr<SfxPopupWindow> SvxColumnsToolBoxControl::CreatePopupWindow()
 {
-    ColumnsWindow* pWin = 0;
+    ColumnsWindow* pWin = nullptr;
     if(bEnabled)
     {
             pWin = VclPtr<ColumnsWindow>::Create( GetSlotId(), m_aCommandURL, GetToolBox().GetItemText( GetId() ), m_xFrame );

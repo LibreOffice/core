@@ -110,7 +110,7 @@ namespace svx
             aBmpEx.CopyPixel( aRect, aRect, &aSource );
 
             Bitmap              aBmp( aBmpEx.GetBitmap() );
-            BitmapWriteAccess*  pBmpAcc = aBmp.IsEmpty() ? NULL : aBmp.AcquireWriteAccess();
+            BitmapWriteAccess*  pBmpAcc = aBmp.IsEmpty() ? nullptr : aBmp.AcquireWriteAccess();
 
             maBmpSize = aBmp.GetSizePixel();
 
@@ -131,7 +131,7 @@ namespace svx
                 }
                 else
                 {
-                    pMskAcc = NULL;
+                    pMskAcc = nullptr;
                 }
 
                 mbWasHiContrastMode = mpTbx->GetSettings().GetStyleSettings().GetHighContrastMode();

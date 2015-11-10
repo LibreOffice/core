@@ -35,10 +35,10 @@ namespace sdr
             virtual SfxItemSet* CreateObjectSpecificItemSet(SfxItemPool& rPool) override;
 
             // test changeability for a single item
-            virtual bool AllowItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem = 0) const override;
+            virtual bool AllowItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem = nullptr) const override;
 
             // Do the ItemChange, may do special handling
-            virtual void ItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem = 0) override;
+            virtual void ItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem = nullptr) override;
 
             // Called after ItemChange() is done for all items.
             virtual void PostItemChange(const sal_uInt16 nWhich) override;
@@ -105,7 +105,7 @@ namespace sdr
             virtual void ForceDefaultAttributes() override;
 
             // Move properties to a new ItemPool.
-            virtual void MoveToItemPool(SfxItemPool* pSrcPool, SfxItemPool* pDestPool, SdrModel* pNewModel = 0L) override;
+            virtual void MoveToItemPool(SfxItemPool* pSrcPool, SfxItemPool* pDestPool, SdrModel* pNewModel = nullptr) override;
 
             // force all attributes which come from styles to hard attributes
             // to be able to live without the style.

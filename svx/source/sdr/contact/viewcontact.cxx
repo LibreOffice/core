@@ -78,7 +78,7 @@ void ViewContact::deleteAllVOCs()
 // ObjectContact (->View). Always needs to return something.
 ViewObjectContact& ViewContact::GetViewObjectContact(ObjectContact& rObjectContact)
 {
-    ViewObjectContact* pRetval = 0L;
+    ViewObjectContact* pRetval = nullptr;
     const sal_uInt32 nCount(maViewObjectContactVector.size());
 
     // first search if there exists a VOC for the given OC
@@ -180,7 +180,7 @@ ViewContact& ViewContact::GetViewContact(sal_uInt32 /*nIndex*/) const
 ViewContact* ViewContact::GetParentContact() const
 {
     // default has no parent
-    return 0;
+    return nullptr;
 }
 
 void ViewContact::ActionChildInserted(ViewContact& rChild)
@@ -220,7 +220,7 @@ void ViewContact::ActionChanged()
 // implementations do. Override as needed.
 SdrObject* ViewContact::TryToGetSdrObject() const
 {
-    return 0L;
+    return nullptr;
 }
 
 // primitive stuff

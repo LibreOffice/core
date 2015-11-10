@@ -23,7 +23,7 @@
 
 typedef std::unordered_map< const char*, MSO_SPT, rtl::CStringHash, rtl::CStringEqual> TypeNameHashMap;
 
-static TypeNameHashMap* pHashMap = NULL;
+static TypeNameHashMap* pHashMap = nullptr;
 static ::osl::Mutex& getHashMapMutex()
 {
     static osl::Mutex s_aHashMapProtection;
@@ -308,7 +308,7 @@ OUString EnhancedCustomShapeTypeNames::Get( const MSO_SPT eShapeType )
 
 typedef std::unordered_map< const char*, const char*, rtl::CStringHash, rtl::CStringEqual> TypeACCNameHashMap;
 
-static TypeACCNameHashMap* pACCHashMap = NULL;
+static TypeACCNameHashMap* pACCHashMap = nullptr;
 struct ACCNameTypeTable
 {
     const char* pS;

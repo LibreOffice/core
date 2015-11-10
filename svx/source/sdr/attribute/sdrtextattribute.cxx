@@ -132,7 +132,7 @@ namespace drawinglayer
             }
 
             ImpSdrTextAttribute()
-            :   mpSdrText(0),
+            :   mpSdrText(nullptr),
                 maSdrFormTextAttribute(),
                 maTextLeftDistance(0),
                 maTextUpperDistance(0),

@@ -149,7 +149,7 @@ SvxXMLXTableExportComponent::SvxXMLXTableExportComponent(
     const uno::Reference<xml::sax::XDocumentHandler> & rHandler,
     const uno::Reference<container::XNameContainer >& xTable,
     uno::Reference<document::XGraphicObjectResolver >& xGrfResolver )
-:   SvXMLExport(rContext, "", rFileName, rHandler, NULL, FUNIT_100TH_MM),
+:   SvXMLExport(rContext, "", rFileName, rHandler, nullptr, FUNIT_100TH_MM),
     mxTable( xTable )
 {
 
@@ -208,8 +208,8 @@ bool SvxXMLXTableExportComponent::save(
     throw (css::uno::RuntimeException, std::exception)
 {
     bool bRet = false;
-    SfxMedium* pMedium = NULL;
-    SvXMLGraphicHelper* pGraphicHelper = NULL;
+    SfxMedium* pMedium = nullptr;
+    SvXMLGraphicHelper* pGraphicHelper = nullptr;
     sal_Int32 eCreate = embed::ElementModes::WRITE | embed::ElementModes::TRUNCATE;
 
     INetURLObject aURLObj( rURL );

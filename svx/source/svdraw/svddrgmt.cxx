@@ -142,7 +142,7 @@ drawinglayer::primitive2d::Primitive2DSequence SdrDragEntryPolyPolygon::createPr
 SdrDragEntrySdrObject::SdrDragEntrySdrObject(const SdrObject& rOriginal, sdr::contact::ObjectContact& rObjectContact, bool bModify)
 :   SdrDragEntry(),
     maOriginal(rOriginal),
-    mpClone(0),
+    mpClone(nullptr),
     mrObjectContact(rObjectContact),
     mbModify(bModify)
 {
@@ -167,7 +167,7 @@ void SdrDragEntrySdrObject::prepareCurrentState(SdrDragMethod& rDragMethod)
     if(mpClone)
     {
         SdrObject::Free(mpClone);
-        mpClone = 0;
+        mpClone = nullptr;
     }
 
     if(mbModify)
@@ -574,17 +574,17 @@ void SdrDragMethod::ImpTakeDescriptionStr(sal_uInt16 nStrCacheID, OUString& rStr
 
 SdrObject* SdrDragMethod::GetDragObj() const
 {
-    SdrObject* pObj=NULL;
-    if (getSdrDragView().mpDragHdl!=NULL) pObj=getSdrDragView().mpDragHdl->GetObj();
-    if (pObj==NULL) pObj=getSdrDragView().mpMarkedObj;
+    SdrObject* pObj=nullptr;
+    if (getSdrDragView().mpDragHdl!=nullptr) pObj=getSdrDragView().mpDragHdl->GetObj();
+    if (pObj==nullptr) pObj=getSdrDragView().mpMarkedObj;
     return pObj;
 }
 
 SdrPageView* SdrDragMethod::GetDragPV() const
 {
-    SdrPageView* pPV=NULL;
-    if (getSdrDragView().mpDragHdl!=NULL) pPV=getSdrDragView().mpDragHdl->GetPageView();
-    if (pPV==NULL) pPV=getSdrDragView().mpMarkedPV;
+    SdrPageView* pPV=nullptr;
+    if (getSdrDragView().mpDragHdl!=nullptr) pPV=getSdrDragView().mpDragHdl->GetPageView();
+    if (pPV==nullptr) pPV=getSdrDragView().mpMarkedPV;
     return pPV;
 }
 
@@ -997,7 +997,7 @@ bool SdrDragMovHdl::BeginSdrDrag()
 
     if (eKind==HDL_MIRX)
     {
-        if (pH1==NULL || pH2==NULL)
+        if (pH1==nullptr || pH2==nullptr)
         {
             OSL_FAIL("SdrDragMovHdl::BeginSdrDrag(): Moving the axis of reflection: reference handles not found.");
             return false;
@@ -1025,7 +1025,7 @@ void SdrDragMovHdl::MoveSdrDrag(const Point& rNoSnapPnt)
             SdrHdl* pH1=GetHdlList().GetHdl(HDL_REF1);
             SdrHdl* pH2=GetHdlList().GetHdl(HDL_REF2);
 
-            if (pH1==NULL || pH2==NULL)
+            if (pH1==nullptr || pH2==nullptr)
                 return;
 
             if (!DragStat().IsNoSnap())
@@ -1035,8 +1035,8 @@ void SdrDragMovHdl::MoveSdrDrag(const Point& rNoSnapPnt)
                 bool bXSnapped=false;
                 bool bYSnapped=false;
                 Point aDif(aPnt-DragStat().GetStart());
-                getSdrDragView().CheckSnap(Ref1()+aDif,NULL,nBestXSnap,nBestYSnap,bXSnapped,bYSnapped);
-                getSdrDragView().CheckSnap(Ref2()+aDif,NULL,nBestXSnap,nBestYSnap,bXSnapped,bYSnapped);
+                getSdrDragView().CheckSnap(Ref1()+aDif,nullptr,nBestXSnap,nBestYSnap,bXSnapped,bYSnapped);
+                getSdrDragView().CheckSnap(Ref2()+aDif,nullptr,nBestXSnap,nBestYSnap,bXSnapped,bYSnapped);
                 aPnt.X()+=nBestXSnap;
                 aPnt.Y()+=nBestYSnap;
             }
@@ -1084,7 +1084,7 @@ void SdrDragMovHdl::MoveSdrDrag(const Point& rNoSnapPnt)
 
                 SdrHdl* pH=GetHdlList().GetHdl(eRef);
 
-                if (pH!=NULL)
+                if (pH!=nullptr)
                 {
                     Point aRef(pH->GetPos());
                     long nAngle=NormAngle360(GetAngle(aPnt-aRef));
@@ -1171,7 +1171,7 @@ Pointer SdrDragMovHdl::GetSdrDragPointer() const
 {
     const SdrHdl* pHdl = GetDragHdl();
 
-    if (pHdl!=NULL)
+    if (pHdl!=nullptr)
     {
         return pHdl->GetPointer();
     }
@@ -1185,7 +1185,7 @@ TYPEINIT1(SdrDragObjOwn,SdrDragMethod);
 
 SdrDragObjOwn::SdrDragObjOwn(SdrDragView& rNewView)
 :   SdrDragMethod(rNewView),
-    mpClone(0)
+    mpClone(nullptr)
 {
     const SdrObject* pObj = GetDragObj();
 
@@ -1345,7 +1345,7 @@ void SdrDragObjOwn::MoveSdrDrag(const Point& rNoSnapPnt)
     if(mpClone)
     {
         SdrObject::Free(mpClone);
-        mpClone = 0;
+        mpClone = nullptr;
     }
 
     // create a new clone and modify to current drag state
@@ -1377,8 +1377,8 @@ bool SdrDragObjOwn::EndSdrDrag(bool /*bCopy*/)
 
     if(pObj)
     {
-        SdrUndoAction* pUndo = NULL;
-        SdrUndoAction* pUndo2 = NULL;
+        SdrUndoAction* pUndo = nullptr;
+        SdrUndoAction* pUndo2 = nullptr;
         const bool bUndo = getSdrDragView().IsUndoEnabled();
 
         if( bUndo )
@@ -1686,7 +1686,7 @@ void SdrDragMove::MoveSdrDrag(const Point& rNoSnapPnt_)
             {
                 const SdrMark* pM=rML.GetMark(nMarkNum);
                 const SdrUShortCont* pPts=pM->GetMarkedGluePoints();
-                const size_t nPointCount=pPts==NULL ? 0 : pPts->size();
+                const size_t nPointCount=pPts==nullptr ? 0 : pPts->size();
 
                 if (nPointCount!=0)
                 {
@@ -1831,7 +1831,7 @@ void SdrDragResize::TakeSdrDragComment(OUString& rStr) const
 bool SdrDragResize::BeginSdrDrag()
 {
     SdrHdlKind eRefHdl=HDL_MOVE;
-    SdrHdl* pRefHdl=NULL;
+    SdrHdl* pRefHdl=nullptr;
 
     switch (GetDragHdlKind())
     {
@@ -1849,7 +1849,7 @@ bool SdrDragResize::BeginSdrDrag()
     if (eRefHdl!=HDL_MOVE)
         pRefHdl=GetHdlList().GetHdl(eRefHdl);
 
-    if (pRefHdl!=NULL && !getSdrDragView().IsResizeAtCenter())
+    if (pRefHdl!=nullptr && !getSdrDragView().IsResizeAtCenter())
     {
         // Calc hack to adjust for calc grid
         DragStat().Ref1()=pRefHdl->GetPos() - getSdrDragView().GetGridOffset();
@@ -1859,7 +1859,7 @@ bool SdrDragResize::BeginSdrDrag()
         SdrHdl* pRef1=GetHdlList().GetHdl(HDL_UPLFT);
         SdrHdl* pRef2=GetHdlList().GetHdl(HDL_LWRGT);
 
-        if (pRef1!=NULL && pRef2!=NULL)
+        if (pRef1!=nullptr && pRef2!=nullptr)
         {
             DragStat().Ref1()=Rectangle(pRef1->GetPos(),pRef2->GetPos()).Center();
         }
@@ -2094,7 +2094,7 @@ Pointer SdrDragResize::GetSdrDragPointer() const
 {
     const SdrHdl* pHdl=GetDragHdl();
 
-    if (pHdl!=NULL)
+    if (pHdl!=nullptr)
     {
         return pHdl->GetPointer();
     }
@@ -2144,7 +2144,7 @@ bool SdrDragRotate::BeginSdrDrag()
 {
     SdrHdl* pH=GetHdlList().GetHdl(HDL_REF1);
 
-    if (pH!=NULL)
+    if (pH!=nullptr)
     {
         Show();
         DragStat().Ref1()=pH->GetPos();
@@ -2279,7 +2279,7 @@ void SdrDragShear::TakeSdrDragComment(OUString& rStr) const
 bool SdrDragShear::BeginSdrDrag()
 {
     SdrHdlKind eRefHdl=HDL_MOVE;
-    SdrHdl* pRefHdl=NULL;
+    SdrHdl* pRefHdl=nullptr;
 
     switch (GetDragHdlKind())
     {
@@ -2293,7 +2293,7 @@ bool SdrDragShear::BeginSdrDrag()
     if (eRefHdl!=HDL_MOVE)
         pRefHdl=GetHdlList().GetHdl(eRefHdl);
 
-    if (pRefHdl!=NULL)
+    if (pRefHdl!=nullptr)
     {
         DragStat().Ref1()=pRefHdl->GetPos();
         nAngle0=GetAngle(DragStat().GetStart()-DragStat().GetRef1());
@@ -2570,7 +2570,7 @@ bool SdrDragMirror::BeginSdrDrag()
     SdrHdl* pH1=GetHdlList().GetHdl(HDL_REF1);
     SdrHdl* pH2=GetHdlList().GetHdl(HDL_REF2);
 
-    if (pH1!=NULL && pH2!=NULL)
+    if (pH1!=nullptr && pH2!=nullptr)
     {
         DragStat().Ref1()=pH1->GetPos();
         DragStat().Ref2()=pH2->GetPos();
@@ -2658,7 +2658,7 @@ TYPEINIT1(SdrDragGradient, SdrDragMethod);
 
 SdrDragGradient::SdrDragGradient(SdrDragView& rNewView, bool bGrad)
 :   SdrDragMethod(rNewView),
-    pIAOHandle(NULL),
+    pIAOHandle(nullptr),
     bIsGradient(bGrad)
 {
 }
@@ -3037,9 +3037,9 @@ void SdrDragCrook::_MovAllPoints(basegfx::B2DPolyPolygon& rTarget)
 
                         switch (eMode)
                         {
-                            case SDRCROOK_ROTATE : CrookRotateXPoint (aCtr1,NULL,NULL,aC,aRad,nSin,nCos,bVertical);           break;
-                            case SDRCROOK_SLANT  : CrookSlantXPoint  (aCtr1,NULL,NULL,aC,aRad,nSin,nCos,bVertical);           break;
-                            case SDRCROOK_STRETCH: CrookStretchXPoint(aCtr1,NULL,NULL,aC,aRad,nSin,nCos,bVertical,aMarkRect); break;
+                            case SDRCROOK_ROTATE : CrookRotateXPoint (aCtr1,nullptr,nullptr,aC,aRad,nSin,nCos,bVertical);           break;
+                            case SDRCROOK_SLANT  : CrookSlantXPoint  (aCtr1,nullptr,nullptr,aC,aRad,nSin,nCos,bVertical);           break;
+                            case SDRCROOK_STRETCH: CrookStretchXPoint(aCtr1,nullptr,nullptr,aC,aRad,nSin,nCos,bVertical,aMarkRect); break;
                         } // switch
                     }
 
@@ -3071,8 +3071,8 @@ void SdrDragCrook::_MovAllPoints(basegfx::B2DPolyPolygon& rTarget)
                     while (i<nPointCount)
                     {
                         Point* pPnt=&aPol[i];
-                        Point* pC1=NULL;
-                        Point* pC2=NULL;
+                        Point* pC1=nullptr;
+                        Point* pC2=nullptr;
 
                         if (i+1<nPointCount && aPol.IsControl(i))
                         { // control point on the left
@@ -3102,8 +3102,8 @@ void SdrDragCrook::_MovAllPoints(basegfx::B2DPolyPolygon& rTarget)
 void SdrDragCrook::_MovCrookPoint(Point& rPnt, Point* pC1, Point* pC2)
 {
     bool bVert=bVertical;
-    bool bC1=pC1!=NULL;
-    bool bC2=pC2!=NULL;
+    bool bC1=pC1!=nullptr;
+    bool bC2=pC2!=nullptr;
     Point aC(aCenter);
 
     if (bResize)
@@ -3684,7 +3684,7 @@ bool SdrDragCrop::EndSdrDrag(bool /*bCopy*/)
         SdrHdl* pRef1=GetHdlList().GetHdl(HDL_UPLFT);
         SdrHdl* pRef2=GetHdlList().GetHdl(HDL_LWRGT);
 
-        if (pRef1==NULL || pRef2==NULL)
+        if (pRef1==nullptr || pRef2==nullptr)
             return false;
 
         Rectangle rect(pRef1->GetPos(),pRef2->GetPos());

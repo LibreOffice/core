@@ -46,7 +46,7 @@ SvxPageWindow::SvxPageWindow(vcl::Window* pParent)
     nRight(0),
 
     //UUUU
-    pBorder(0),
+    pBorder(nullptr),
     bResetBackground(false),
     bFrameDirection(false),
     nFrameDirection(0),
@@ -56,13 +56,13 @@ SvxPageWindow::SvxPageWindow(vcl::Window* pParent)
     nHdDist(0),
     nHdHeight(0),
 
-    pHdBorder(0),
+    pHdBorder(nullptr),
     nFtLeft(0),
     nFtRight(0),
     nFtDist(0),
     nFtHeight(0),
 
-    pFtBorder(0),
+    pFtBorder(nullptr),
 
     maHeaderFillAttributes(),
     maFooterFillAttributes(),
@@ -387,7 +387,7 @@ void SvxPageWindow::drawFillAttributes(vcl::RenderContext& rRenderContext,
         if (aSequence.getLength())
         {
             const drawinglayer::geometry::ViewInformation2D aViewInformation2D(
-                            basegfx::B2DHomMatrix(), GetViewTransformation(), aPaintRange, 0,
+                            basegfx::B2DHomMatrix(), GetViewTransformation(), aPaintRange, nullptr,
                             0.0, css::uno::Sequence<css::beans::PropertyValue >());
 
             std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> pProcessor;

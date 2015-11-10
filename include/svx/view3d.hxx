@@ -78,7 +78,7 @@ protected:
 
 public:
     TYPEINFO_OVERRIDE();
-    E3dView(SdrModel* pModel, OutputDevice* pOut = 0L);
+    E3dView(SdrModel* pModel, OutputDevice* pOut = nullptr);
     virtual ~E3dView();
 
     // Output all marked Objects on the given OutputDevice.
@@ -86,7 +86,7 @@ public:
 
     // Access to the default attributes.
     E3dDefaultAttributes& Get3DDefaultAttributes() { return a3DDefaultAttr; }
-    virtual bool BegDragObj(const Point& rPnt, OutputDevice* pOut = NULL, SdrHdl* pHdl = NULL, short nMinMov = -3, SdrDragMethod* pForcedMeth = NULL) override;
+    virtual bool BegDragObj(const Point& rPnt, OutputDevice* pOut = nullptr, SdrHdl* pHdl = nullptr, short nMinMov = -3, SdrDragMethod* pForcedMeth = nullptr) override;
     virtual void CheckPossibilities() override;
 
     // Get/Set Event
@@ -115,7 +115,7 @@ public:
     void Start3DCreation();
 
     // Migration of overlay
-    bool Is3DRotationCreationActive() const { return (0L != mpMirrorOverlay); }
+    bool Is3DRotationCreationActive() const { return (nullptr != mpMirrorOverlay); }
 
     virtual void MovAction(const Point& rPnt) override;
     void End3DCreation(bool bUseDefaultValuesForMirrorAxes=false);
@@ -128,8 +128,8 @@ public:
     bool IsBreak3DObjPossible() const;
     void Break3DObj();
 
-    SfxItemSet Get3DAttributes(E3dScene* pInScene = NULL, bool bOnly3DAttr=false) const;
-    void Set3DAttributes(const SfxItemSet& rAttr, E3dScene* pInScene = NULL, bool bOnly3DAttr=false);
+    SfxItemSet Get3DAttributes(E3dScene* pInScene = nullptr, bool bOnly3DAttr=false) const;
+    void Set3DAttributes(const SfxItemSet& rAttr, E3dScene* pInScene = nullptr, bool bOnly3DAttr=false);
 };
 
 #endif // INCLUDED_SVX_VIEW3D_HXX

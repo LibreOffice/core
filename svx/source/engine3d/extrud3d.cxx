@@ -207,7 +207,7 @@ SdrAttrObj* E3dExtrudeObj::GetBreakObj()
         return pPathObj;
     }
 
-    return 0;
+    return nullptr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -63,7 +63,7 @@ namespace svxform
             {
                 Reference< clipboard::XClipboard > xClipBoard( getOwnClipboard() );
                 if ( xClipBoard.is() )
-                    xClipBoard->setContents( NULL, NULL );
+                    xClipBoard->setContents( nullptr, nullptr );
             }
             catch( const Exception& )
             {
@@ -115,13 +115,13 @@ namespace svxform
     }
 
     OControlTransferData::OControlTransferData( )
-        :m_pFocusEntry( NULL )
+        :m_pFocusEntry( nullptr )
     {
     }
 
 
     OControlTransferData::OControlTransferData( const Reference< XTransferable >& _rxTransferable )
-        :m_pFocusEntry( NULL )
+        :m_pFocusEntry( nullptr )
     {
         TransferableDataHelper aExchangedData( _rxTransferable );
 
@@ -235,7 +235,7 @@ namespace svxform
             {
                 aCurrentPath.push_back(pLoop->GetChildListPos());
                 pLoop = pTreeBox->GetParent(pLoop);
-                DBG_ASSERT((pLoop != NULL) || (pRoot == 0), "OControlTransferData::buildPathFormat: invalid root or entry !");
+                DBG_ASSERT((pLoop != nullptr) || (pRoot == nullptr), "OControlTransferData::buildPathFormat: invalid root or entry !");
                     // pLoop == NULL heisst, dass ich am oberen Ende angelangt bin, dann sollte das Ganze abbrechen, was nur bei pRoot == NULL der Fall sein wird
             }
 
@@ -360,7 +360,7 @@ namespace svxform
 
     OLocalExchangeHelper::OLocalExchangeHelper(vcl::Window* _pDragSource)
         :m_pDragSource(_pDragSource)
-        ,m_pTransferable(NULL)
+        ,m_pTransferable(nullptr)
     {
     }
 
@@ -391,7 +391,7 @@ namespace svxform
         {
             m_pTransferable->setClipboardListener( Link<OLocalExchange&,void>() );
             m_pTransferable->release();
-            m_pTransferable = NULL;
+            m_pTransferable = nullptr;
         }
     }
 

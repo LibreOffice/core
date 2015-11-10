@@ -38,9 +38,9 @@ class SVX_DLLPUBLIC SvxLongLRSpaceItem : public SfxPoolItem
     virtual bool GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
-                                    OUString &rText, const IntlWrapper * = 0 ) const override;
+                                    OUString &rText, const IntlWrapper * = nullptr ) const override;
 
-    virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const override;
+    virtual SfxPoolItem*     Clone( SfxItemPool *pPool = nullptr ) const override;
 
 private:
     const SvxLongLRSpaceItem& operator=(const SvxLongLRSpaceItem &) = delete;
@@ -71,9 +71,9 @@ class SVX_DLLPUBLIC SvxLongULSpaceItem : public SfxPoolItem
     virtual bool GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
-                                    OUString &rText, const IntlWrapper * = 0 ) const override;
+                                    OUString &rText, const IntlWrapper * = nullptr ) const override;
 
-    virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const override;
+    virtual SfxPoolItem*     Clone( SfxItemPool *pPool = nullptr ) const override;
 
 private:
     const SvxLongULSpaceItem& operator=(const SvxLongULSpaceItem &) = delete;
@@ -103,9 +103,9 @@ protected:
     virtual bool GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
-                                    OUString &rText, const IntlWrapper * = 0 ) const override;
+                                    OUString &rText, const IntlWrapper * = nullptr ) const override;
 
-    virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const override;
+    virtual SfxPoolItem*     Clone( SfxItemPool *pPool = nullptr ) const override;
 
 private:
     const SvxPagePosSizeItem& operator=(const SvxPagePosSizeItem &) = delete;
@@ -172,9 +172,9 @@ protected:
                                                  SfxMapUnit eCoreMetric,
                                                  SfxMapUnit ePresMetric,
                                                  OUString &rText,
-                                                 const IntlWrapper * = 0 ) const override;
+                                                 const IntlWrapper * = nullptr ) const override;
 
-    virtual SfxPoolItem* Clone( SfxItemPool *pPool = 0 ) const override;
+    virtual SfxPoolItem* Clone( SfxItemPool *pPool = nullptr ) const override;
     virtual bool         QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
     virtual bool         PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
@@ -227,9 +227,9 @@ protected:
     virtual bool GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
-                                    OUString &rText, const IntlWrapper * = 0 ) const override;
+                                    OUString &rText, const IntlWrapper * = nullptr ) const override;
 
-    virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const override;
+    virtual SfxPoolItem*     Clone( SfxItemPool *pPool = nullptr ) const override;
     virtual bool             QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
     virtual bool             PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 

@@ -83,7 +83,7 @@ protected:
     SdrLayerID         GetUniqueLayerID() const;
     void               Broadcast() const;
 public:
-    explicit SdrLayerAdmin(SdrLayerAdmin* pNewParent=NULL);
+    explicit SdrLayerAdmin(SdrLayerAdmin* pNewParent=nullptr);
     SdrLayerAdmin(const SdrLayerAdmin& rSrcLayerAdmin);
     ~SdrLayerAdmin();
     const SdrLayerAdmin& operator=(const SdrLayerAdmin& rSrcLayerAdmin);

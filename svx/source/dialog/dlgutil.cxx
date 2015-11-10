@@ -31,7 +31,7 @@
 FieldUnit GetModuleFieldUnit( const SfxItemSet& rSet )
 {
     FieldUnit eUnit = FUNIT_INCH;
-    const SfxPoolItem* pItem = NULL;
+    const SfxPoolItem* pItem = nullptr;
     if ( SfxItemState::SET == rSet.GetItemState( SID_ATTR_METRIC, false, &pItem ) )
         eUnit = (FieldUnit) static_cast<const SfxUInt16Item*>(pItem)->GetValue();
     else
@@ -45,14 +45,14 @@ FieldUnit GetModuleFieldUnit( const SfxItemSet& rSet )
 bool GetApplyCharUnit( const SfxItemSet& rSet )
 {
     bool  bUseCharUnit = false;
-    const SfxPoolItem* pItem = NULL;
+    const SfxPoolItem* pItem = nullptr;
     if ( SfxItemState::SET == rSet.GetItemState( SID_ATTR_APPLYCHARUNIT, false, &pItem ) )
         bUseCharUnit =  static_cast<const SfxBoolItem*>(pItem)->GetValue();
     else
     {
         // FIXME - this might be wrong, cf. the DEV300 changes in GetModuleFieldUnit()
         SfxViewFrame* pFrame = SfxViewFrame::Current();
-        SfxObjectShell* pSh = NULL;
+        SfxObjectShell* pSh = nullptr;
         if ( pFrame )
             pSh = pFrame->GetObjectShell();
         if ( pSh )  // the object shell is not always available during reload

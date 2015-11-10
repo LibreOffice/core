@@ -336,7 +336,7 @@ static void createNamesForPool( SfxItemPool* pPool, sal_uInt16 nWhich, std::set<
     {
         const NameOrIndex* pItem = static_cast<const NameOrIndex*>(pPool->GetItem2( nWhich, nSurrogate ));
 
-        if( pItem == NULL || pItem->GetName().isEmpty() )
+        if( pItem == nullptr || pItem->GetName().isEmpty() )
             continue;
 
         OUString aName = SvxUnogetApiNameForItem(XATTR_LINEEND, pItem->GetName());

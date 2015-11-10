@@ -145,7 +145,7 @@ void SvxColorValueSet_docking::Command(const CommandEvent& rCEvt)
 
 void SvxColorValueSet_docking::StartDrag( sal_Int8 , const Point&  )
 {
-    Application::PostUserEvent(LINK(this, SvxColorValueSet_docking, ExecDragHdl), NULL, true);
+    Application::PostUserEvent(LINK(this, SvxColorValueSet_docking, ExecDragHdl), nullptr, true);
 }
 
 void SvxColorValueSet_docking::DoDrag()
@@ -201,17 +201,17 @@ SvxColorDockingWindow::SvxColorDockingWindow
 
     // Get the model from the view shell.  Using SfxObjectShell::Current()
     // is unreliable when called at the wrong times.
-    SfxObjectShell* pDocSh = NULL;
-    if (_pBindings != NULL)
+    SfxObjectShell* pDocSh = nullptr;
+    if (_pBindings != nullptr)
     {
         SfxDispatcher* pDispatcher = _pBindings->GetDispatcher();
-        if (pDispatcher != NULL)
+        if (pDispatcher != nullptr)
         {
             SfxViewFrame* pFrame = pDispatcher->GetFrame();
-            if (pFrame != NULL)
+            if (pFrame != nullptr)
             {
                 SfxViewShell* pViewShell = pFrame->GetViewShell();
-                if (pViewShell != NULL)
+                if (pViewShell != nullptr)
                     pDocSh = pViewShell->GetObjectShell();
             }
         }
@@ -235,7 +235,7 @@ SvxColorDockingWindow::SvxColorDockingWindow
 
     SetSize();
     aColorSet->Show();
-    if (_pBindings != NULL)
+    if (_pBindings != nullptr)
         StartListening( *_pBindings, true );
 }
 

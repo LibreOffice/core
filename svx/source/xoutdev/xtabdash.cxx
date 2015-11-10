@@ -193,7 +193,7 @@ Bitmap XDashList::GetBitmapForUISolidLine() const
 {
     if(maBitmapSolidLine.IsEmpty())
     {
-        const_cast< XDashList* >(this)->maBitmapSolidLine = XDashList::ImpCreateBitmapForXDash(0);
+        const_cast< XDashList* >(this)->maBitmapSolidLine = XDashList::ImpCreateBitmapForXDash(nullptr);
     }
 
     return maBitmapSolidLine;

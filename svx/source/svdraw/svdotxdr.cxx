@@ -39,7 +39,7 @@ sal_uInt32 SdrTextObj::GetHdlCount() const
 
 SdrHdl* SdrTextObj::GetHdl(sal_uInt32 nHdlNum) const
 {
-    SdrHdl* pH=NULL;
+    SdrHdl* pH=nullptr;
     Point aPnt;
     SdrHdlKind eKind=HDL_MOVE;
     switch (nHdlNum) {
@@ -73,9 +73,9 @@ Rectangle SdrTextObj::ImpDragCalcRect(const SdrDragStat& rDrag) const
 {
     Rectangle aTmpRect(maRect);
     const SdrHdl* pHdl=rDrag.GetHdl();
-    SdrHdlKind eHdl=pHdl==NULL ? HDL_MOVE : pHdl->GetKind();
+    SdrHdlKind eHdl=pHdl==nullptr ? HDL_MOVE : pHdl->GetKind();
     bool bEcke=(eHdl==HDL_UPLFT || eHdl==HDL_UPRGT || eHdl==HDL_LWLFT || eHdl==HDL_LWRGT);
-    bool bOrtho=rDrag.GetView()!=NULL && rDrag.GetView()->IsOrtho();
+    bool bOrtho=rDrag.GetView()!=nullptr && rDrag.GetView()->IsOrtho();
     bool bBigOrtho=bEcke && bOrtho && rDrag.GetView()->IsBigOrtho();
     Point aPos(rDrag.GetNow());
     // Unrotate:

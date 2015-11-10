@@ -74,7 +74,7 @@ namespace svx
         m_aLastKnownState = aUnoState.State;
         m_bLastKnownEnabled = aUnoState.IsEnabled;
 
-        notifyStatus( NULL, aGuard );
+        notifyStatus( nullptr, aGuard );
     }
 
 

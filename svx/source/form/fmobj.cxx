@@ -60,7 +60,7 @@ TYPEINIT1(FmFormObj, SdrUnoObj);
 FmFormObj::FmFormObj(const OUString& rModelName)
           :SdrUnoObj                ( rModelName    )
           ,m_nPos                   ( -1            )
-          ,m_pLastKnownRefDevice    ( NULL          )
+          ,m_pLastKnownRefDevice    ( nullptr          )
 {
 
     // normally, this is done in SetUnoControlModel, but if the call happened in the base class ctor,
@@ -72,7 +72,7 @@ FmFormObj::FmFormObj(const OUString& rModelName)
 FmFormObj::FmFormObj()
           :SdrUnoObj                ( ""  )
           ,m_nPos                   ( -1        )
-          ,m_pLastKnownRefDevice    ( NULL      )
+          ,m_pLastKnownRefDevice    ( nullptr      )
 {
 }
 
@@ -83,7 +83,7 @@ FmFormObj::~FmFormObj()
     if (m_xEnvironmentHistory.is())
         m_xEnvironmentHistory->dispose();
 
-    m_xEnvironmentHistory = NULL;
+    m_xEnvironmentHistory = nullptr;
     m_aEventsHistory.realloc(0);
 }
 
@@ -111,7 +111,7 @@ void FmFormObj::impl_checkRefDevice_nothrow( bool _force )
     if ( !pFormModel || !pFormModel->ControlsUseRefDevice() )
         return;
 
-    OutputDevice* pCurrentRefDevice = pFormModel ? pFormModel->GetRefDevice() : NULL;
+    OutputDevice* pCurrentRefDevice = pFormModel ? pFormModel->GetRefDevice() : nullptr;
     if ( ( m_pLastKnownRefDevice.get() == pCurrentRefDevice ) && !_force )
         return;
 
@@ -316,7 +316,7 @@ void FmFormObj::SetPage(SdrPage* _pNewPage)
     if (m_xEnvironmentHistory.is())
         m_xEnvironmentHistory->dispose();
 
-    m_xEnvironmentHistory = NULL;
+    m_xEnvironmentHistory = nullptr;
     m_aEventsHistory.realloc(0);
 
     if ( pNewFormPage )
@@ -338,11 +338,11 @@ sal_uInt16 FmFormObj::GetObjIdentifier() const
 
 void FmFormObj::clonedFrom(const FmFormObj* _pSource)
 {
-    DBG_ASSERT(_pSource != NULL, "FmFormObj::clonedFrom : invalid source !");
+    DBG_ASSERT(_pSource != nullptr, "FmFormObj::clonedFrom : invalid source !");
     if (m_xEnvironmentHistory.is())
        m_xEnvironmentHistory->dispose();
 
-    m_xEnvironmentHistory = NULL;
+    m_xEnvironmentHistory = nullptr;
     m_aEventsHistory.realloc(0);
 
     Reference< XChild >  xSourceAsChild(_pSource->GetUnoControlModel(), UNO_QUERY);
@@ -362,7 +362,7 @@ void FmFormObj::clonedFrom(const FmFormObj* _pSource)
 FmFormObj* FmFormObj::Clone() const
 {
     FmFormObj* pFormObject = CloneHelper< FmFormObj >();
-    DBG_ASSERT(pFormObject != NULL, "FmFormObj::Clone : invalid clone !");
+    DBG_ASSERT(pFormObject != nullptr, "FmFormObj::Clone : invalid clone !");
     if (pFormObject)
         pFormObject->clonedFrom(this);
 
@@ -665,7 +665,7 @@ bool FmFormObj::EndCreate( SdrDragStat& rStat, SdrCreateCmd eCmd )
         }
 
         FmFormView* pView( dynamic_cast< FmFormView* >( rStat.GetView() ) );
-        FmXFormView* pViewImpl = pView ? pView->GetImpl() : NULL;
+        FmXFormView* pViewImpl = pView ? pView->GetImpl() : nullptr;
         OSL_ENSURE( pViewImpl, "FmFormObj::EndCreate: no view!?" );
         if ( pViewImpl )
             pViewImpl->onCreatedFormObject( *this );
@@ -680,7 +680,7 @@ void FmFormObj::BrkCreate( SdrDragStat& rStat )
     impl_isolateControlModel_nothrow();
 
     FmFormView* pView( dynamic_cast< FmFormView* >( rStat.GetView() ) );
-    FmXFormView* pViewImpl = pView ? pView->GetImpl() : NULL;
+    FmXFormView* pViewImpl = pView ? pView->GetImpl() : nullptr;
     OSL_ENSURE( pViewImpl, "FmFormObj::EndCreate: no view!?" );
     if ( pViewImpl )
         pViewImpl->breakCreateFormObject();

@@ -273,7 +273,7 @@ namespace
             const bool bWordLineMode(rInfo.mrFont.IsWordLineMode() && !rInfo.mbEndOfBullet);
 
             // prepare new primitive
-            drawinglayer::primitive2d::BasePrimitive2D* pNewPrimitive = 0;
+            drawinglayer::primitive2d::BasePrimitive2D* pNewPrimitive = nullptr;
             const bool bDecoratedIsNeeded(
                    UNDERLINE_NONE != rInfo.mrFont.GetOverline()
                 || UNDERLINE_NONE != rInfo.mrFont.GetUnderline()
@@ -715,7 +715,7 @@ void SdrTextObj::impDecomposeContourTextPrimitive(
 
     // cleanup outliner
     rOutliner.Clear();
-    rOutliner.setVisualizedPage(0);
+    rOutliner.setVisualizedPage(nullptr);
 
     rTarget = aConverter.getPrimitive2DSequence();
 }
@@ -848,7 +848,7 @@ void SdrTextObj::impDecomposeAutoFitTextPrimitive(
 
     // cleanup outliner
     rOutliner.Clear();
-    rOutliner.setVisualizedPage(0);
+    rOutliner.setVisualizedPage(nullptr);
     rOutliner.SetControlWord(nOriginalControlWord);
 
     rTarget = aConverter.getPrimitive2DSequence();
@@ -1091,7 +1091,7 @@ void SdrTextObj::impDecomposeBlockTextPrimitive(
     // cleanup outliner
     rOutliner.SetBackgroundColor(aOriginalBackColor);
     rOutliner.Clear();
-    rOutliner.setVisualizedPage(0);
+    rOutliner.setVisualizedPage(nullptr);
 
     rTarget = aConverter.getPrimitive2DSequence();
 }
@@ -1169,7 +1169,7 @@ void SdrTextObj::impDecomposeStretchTextPrimitive(
     // cleanup outliner
     rOutliner.SetControlWord(nOriginalControlWord);
     rOutliner.Clear();
-    rOutliner.setVisualizedPage(0);
+    rOutliner.setVisualizedPage(nullptr);
 
     rTarget = aConverter.getPrimitive2DSequence();
 }
@@ -1592,7 +1592,7 @@ void SdrTextObj::impDecomposeChainedTextPrimitive(
 
     // cleanup outliner
     rOutliner.Clear();
-    rOutliner.setVisualizedPage(0);
+    rOutliner.setVisualizedPage(nullptr);
     rOutliner.SetControlWord(nOriginalControlWord);
 
     rTarget = aConverter.getPrimitive2DSequence();

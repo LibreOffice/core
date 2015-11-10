@@ -44,7 +44,7 @@ AccessibleShapeInfo::AccessibleShapeInfo (
         sal_Int32 nIndex)
     : mxShape (rxShape),
       mxParent (rxParent),
-      mpChildrenManager (NULL),
+      mpChildrenManager (nullptr),
       mnIndex (nIndex)
 {
     // empty.

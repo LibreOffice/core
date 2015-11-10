@@ -70,7 +70,7 @@ SfxPoolItem* SvxViewLayoutItem::Clone( SfxItemPool * /*pPool*/ ) const
 
 SfxPoolItem* SvxViewLayoutItem::Create( SvStream& /*rStrm*/, sal_uInt16 /*nVersion*/ ) const
 {
-    return 0;
+    return nullptr;
 }
 
 

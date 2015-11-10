@@ -38,8 +38,8 @@ TextChainFlow::TextChainFlow(SdrTextObj *pChainTarget)
 
     mbOFisUFinduced = false;
 
-    mpOverflChText = NULL;
-    mpUnderflChText = NULL;
+    mpOverflChText = nullptr;
+    mpUnderflChText = nullptr;
 
     maCursorEvent = CursorChainingEvent::NULL_EVENT;
     mbPossiblyCursorOut = false;
@@ -72,7 +72,7 @@ void TextChainFlow::impCheckForFlowEvents(SdrOutliner *pFlowOutl, SdrOutliner *p
     bool bOldUpdateMode = pFlowOutl->GetUpdateMode();
 
     // XXX: This could be reorganized moving most of this stuff inside EditingTextChainFlow
-    if (pParamOutl != NULL)
+    if (pParamOutl != nullptr)
     {
         // We need this since it's required to check overflow
         pFlowOutl->SetUpdateMode(true);
@@ -101,12 +101,12 @@ void TextChainFlow::impCheckForFlowEvents(SdrOutliner *pFlowOutl, SdrOutliner *p
 
     mpOverflChText = bOverflow ?
                      new OFlowChainedText(pFlowOutl, bMustMergeParaOF) :
-                     NULL;
+                     nullptr;
 
     // Set current underflowing text (if any)
     mpUnderflChText = bUnderflow ?
                       new UFlowChainedText(pFlowOutl, bMustMergeParaAmongLinks) :
-                      NULL;
+                      nullptr;
 
     // Reset update mode // Reset it here because we use WriteRTF (needing updatemode = true) in the two constructors above
     if (!bOldUpdateMode) // Reset only if the old value was false
@@ -140,7 +140,7 @@ void TextChainFlow::impUpdateCursorInfo()
 
 void TextChainFlow::CheckForFlowEvents(SdrOutliner *pFlowOutl)
 {
-    impCheckForFlowEvents(pFlowOutl, NULL);
+    impCheckForFlowEvents(pFlowOutl, nullptr);
 }
 
 
@@ -275,7 +275,7 @@ void EditingTextChainFlow::CheckForFlowEvents(SdrOutliner *pFlowOutl)
 {
     // if this is editing outliner no need to set parameters
     if (pFlowOutl == GetLinkTarget()->pEdtOutl)
-        impCheckForFlowEvents(pFlowOutl, NULL);
+        impCheckForFlowEvents(pFlowOutl, nullptr);
     else
         impCheckForFlowEvents(pFlowOutl, GetLinkTarget()->pEdtOutl);
 

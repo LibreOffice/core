@@ -876,7 +876,7 @@ public:
     void DeleteUserData(sal_uInt16 nNum);
 
     // switch ItemPool for this object
-    void MigrateItemPool(SfxItemPool* pSrcPool, SfxItemPool* pDestPool, SdrModel* pNewModel = 0L);
+    void MigrateItemPool(SfxItemPool* pSrcPool, SfxItemPool* pDestPool, SdrModel* pNewModel = nullptr);
 
     // access to the UNO representation of the shape
     virtual css::uno::Reference< css::uno::XInterface > getUnoShape();
@@ -1008,7 +1008,7 @@ private:
     SVX_DLLPRIVATE SdrObjFactory(sal_uInt32 nInvent, sal_uInt16 nIdent, SdrPage* pNewPage, SdrModel* pNewModel);
 
 public:
-    static SdrObject* MakeNewObject(sal_uInt32 nInvent, sal_uInt16 nIdent, SdrPage* pPage, SdrModel* pModel=NULL);
+    static SdrObject* MakeNewObject(sal_uInt32 nInvent, sal_uInt16 nIdent, SdrPage* pPage, SdrModel* pModel=nullptr);
     static SdrObject* MakeNewObject( sal_uInt32 nInventor, sal_uInt16 nIdentifier, const Rectangle& rSnapRect, SdrPage* pPage );
     static void InsertMakeObjectHdl(const Link<SdrObjFactory*,void>& rLink);
     static void RemoveMakeObjectHdl(const Link<SdrObjFactory*,void>& rLink);
@@ -1021,7 +1021,7 @@ typedef tools::WeakReference< SdrObject > SdrObjectWeakRef;
 template< typename T > T* SdrObject::CloneHelper() const
 {
     OSL_ASSERT( typeid( T ) == typeid( *this ));
-    T* pObj = dynamic_cast< T* >( SdrObjFactory::MakeNewObject(GetObjInventor(),GetObjIdentifier(),NULL));
+    T* pObj = dynamic_cast< T* >( SdrObjFactory::MakeNewObject(GetObjInventor(),GetObjIdentifier(),nullptr));
     if (pObj!=NULL)
         *pObj=*static_cast< const T* >( this );
     return pObj;

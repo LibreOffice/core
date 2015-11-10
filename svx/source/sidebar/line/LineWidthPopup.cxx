@@ -47,14 +47,14 @@ void LineWidthPopup::SetWidthSelect (long lValue, bool bValuable, SfxMapUnit eMa
     ProvideContainerAndControl();
 
     LineWidthControl* pControl = dynamic_cast<LineWidthControl*>(mxControl.get());
-    if (pControl != NULL)
+    if (pControl != nullptr)
         pControl->SetWidthSelect(lValue, bValuable, eMapUnit);
 }
 
 void LineWidthPopup::PopupModeEndCallback()
 {
     LineWidthControl* pControl = dynamic_cast<LineWidthControl*>(mxControl.get());
-    if (pControl != NULL)
+    if (pControl != nullptr)
     {
         if (pControl->IsCloseByEdit())
         {

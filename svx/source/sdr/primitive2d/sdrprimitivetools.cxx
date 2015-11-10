@@ -31,7 +31,7 @@ namespace drawinglayer
     {
         BitmapEx createDefaultCross_3x3(const basegfx::BColor& rBColor)
         {
-            static vcl::DeleteOnDeinit< BitmapEx > aRetVal(0);
+            static vcl::DeleteOnDeinit< BitmapEx > aRetVal(nullptr);
             static basegfx::BColor aColor;
             static ::osl::Mutex aMutex;
 

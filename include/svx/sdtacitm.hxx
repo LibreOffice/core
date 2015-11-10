@@ -31,7 +31,7 @@ public:
     virtual SfxPoolItem * Create(SvStream & rStream, sal_uInt16) const override
     { return new SdrTextAniCountItem(rStream); }
 
-    virtual SfxPoolItem * Clone(SfxItemPool * = 0) const override
+    virtual SfxPoolItem * Clone(SfxItemPool * = nullptr) const override
     { return new SdrTextAniCountItem(*this); }
 };
 

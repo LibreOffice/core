@@ -287,12 +287,12 @@ void SdrTextObj::NbcMirror(const Point& rRef1, const Point& rRef2)
 
 SdrObject* SdrTextObj::ImpConvertContainedTextToSdrPathObjs(bool bToPoly) const
 {
-    SdrObject* pRetval = 0;
+    SdrObject* pRetval = nullptr;
 
     if(!ImpCanConvTextToCurve())
     {
         // suppress HelpTexts from PresObj's
-        return 0;
+        return nullptr;
     }
 
     // get primitives
@@ -343,7 +343,7 @@ SdrObject* SdrTextObj::ImpConvertContainedTextToSdrPathObjs(bool bToPoly) const
 
                     // create ItemSet with object attributes
                     SfxItemSet aAttributeSet(GetObjectItemSet());
-                    SdrPathObj* pPathObj = 0;
+                    SdrPathObj* pPathObj = nullptr;
 
                     // always clear objectshadow; this is included in the extraction
                     aAttributeSet.Put(makeSdrShadowItem(false));
@@ -415,7 +415,7 @@ SdrObject* SdrTextObj::DoConvertToPolyObj(bool bBezier, bool bAddText) const
         return ImpConvertContainedTextToSdrPathObjs(!bBezier);
     }
 
-    return 0;
+    return nullptr;
 }
 
 bool SdrTextObj::ImpCanConvTextToCurve() const

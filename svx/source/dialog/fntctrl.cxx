@@ -167,7 +167,7 @@ public:
         mpPrinter(nullptr),
         mbDelPrinter(false),
         mpColor(nullptr),
-        mpBackColor(0),
+        mpBackColor(nullptr),
         mnAscent(0),
         mcStartBracket(0),
         mcEndBracket(0),
@@ -613,7 +613,7 @@ void SvxFontPrevWindow::SetColor(const Color &rColor)
 void SvxFontPrevWindow::ResetColor()
 {
     delete pImpl->mpColor;
-    pImpl->mpColor = 0;
+    pImpl->mpColor = nullptr;
     Invalidate();
 }
 

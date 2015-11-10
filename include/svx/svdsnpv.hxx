@@ -93,7 +93,7 @@ protected:
 
 protected:
     // #i71538# make constructors of SdrView sub-components protected to avoid incomplete incarnations which may get casted to SdrView
-    SdrSnapView(SdrModel* pModel1, OutputDevice* pOut = 0L);
+    SdrSnapView(SdrModel* pModel1, OutputDevice* pOut = nullptr);
     virtual ~SdrSnapView();
 
 public:
@@ -114,7 +114,7 @@ public:
 
     // RecalcLogicSnapMagnetic has to be called for every change of OutputDevices and every change of the MapMode!
     void RecalcLogicSnapMagnetic(const OutputDevice& rOut) { SetSnapMagnetic(rOut.PixelToLogic(Size(nMagnSizPix,nMagnSizPix))); }
-    void SetActualWin(const OutputDevice* pWin) { SdrPaintView::SetActualWin(pWin); if (pWin!=NULL) RecalcLogicSnapMagnetic(*pWin); }
+    void SetActualWin(const OutputDevice* pWin) { SdrPaintView::SetActualWin(pWin); if (pWin!=nullptr) RecalcLogicSnapMagnetic(*pWin); }
 
     // Coordinates referred to the view!
     // Returnvalues are SdrSnap::NOTSNAPPED,SdrSnap::XSNAPPED,
@@ -150,7 +150,7 @@ public:
     void MovSetPageOrg(const Point& rPnt);
     bool EndSetPageOrg();
     void BrkSetPageOrg();
-    bool IsSetPageOrg() const { return (0L != mpPageOriginOverlay); }
+    bool IsSetPageOrg() const { return (nullptr != mpPageOriginOverlay); }
 
     // HitTest. If sal_True, in rnHelpLineNum is the number of the auxiliary line and in rpPv
     // the appendend PageView.
@@ -167,7 +167,7 @@ public:
     void MovDragHelpLine(const Point& rPnt);
     bool EndDragHelpLine();
     void BrkDragHelpLine();
-    bool IsDragHelpLine() const { return (0L != mpHelpLineOverlay); }
+    bool IsDragHelpLine() const { return (nullptr != mpHelpLineOverlay); }
 
     // SnapAngle is for angles in circle, RotateDragging, ...
     // The snapping of an angle is beared down, if it is switched off

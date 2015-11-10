@@ -371,7 +371,7 @@ bool SvxXMLXTableImport::load( const OUString &rPath, const OUString &rReferer,
                                bool *bOptLoadedFromStorage ) throw()
 {
     bool bRet = true;
-    SvXMLGraphicHelper* pGraphicHelper = 0;
+    SvXMLGraphicHelper* pGraphicHelper = nullptr;
 
     INetURLObject aURLObj( rPath );
     bool bUseStorage = aURLObj.GetProtocol() == INetProtocol::NotValid; // a relative path

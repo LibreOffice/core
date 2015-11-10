@@ -66,7 +66,7 @@ public:
     SVX_DLLPRIVATE virtual bool ApplyFormatPaintBrush( SfxItemSet& rFormatSet, bool bNoCharacterFormats, bool bNoParagraphFormats ) override;
 
     // slots
-    SVX_DLLPRIVATE void onInsert( sal_uInt16 nSId, const SfxItemSet* pArgs = 0 );
+    SVX_DLLPRIVATE void onInsert( sal_uInt16 nSId, const SfxItemSet* pArgs = nullptr );
     SVX_DLLPRIVATE void onDelete( sal_uInt16 nSId );
     SVX_DLLPRIVATE void onSelect( sal_uInt16 nSId );
     SVX_DLLPRIVATE void onFormatTable( SfxRequest& rReq );
@@ -134,7 +134,7 @@ private:
 
     SVX_DLLPRIVATE void MergeRange( sal_Int32 nFirstCol, sal_Int32 nFirstRow, sal_Int32 nLastCol, sal_Int32 nLastRow );
 
-    SVX_DLLPRIVATE void EditCell( const CellPos& rPos, vcl::Window* pWindow, const css::awt::MouseEvent* pMouseEvent = 0, sal_uInt16 nAction = 0 );
+    SVX_DLLPRIVATE void EditCell( const CellPos& rPos, vcl::Window* pWindow, const css::awt::MouseEvent* pMouseEvent = nullptr, sal_uInt16 nAction = 0 );
     SVX_DLLPRIVATE bool StopTextEdit();
 
     SVX_DLLPRIVATE sal_uInt16 getKeyboardAction( const KeyEvent& rKEvt, vcl::Window* pWindow );

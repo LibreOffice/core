@@ -31,11 +31,11 @@ public:
 
     SVX_DLLPRIVATE virtual bool GetPresentation(SfxItemPresentation ePresentation,
                                     SfxMapUnit eCoreMetric, SfxMapUnit ePresentationMetric,
-                                    OUString &rText, const IntlWrapper * = 0) const override;
+                                    OUString &rText, const IntlWrapper * = nullptr) const override;
 
     SVX_DLLPRIVATE virtual SfxPoolItem*     Create( SvStream&, sal_uInt16 nItem ) const override;
     SVX_DLLPRIVATE virtual SvStream&            Store( SvStream&, sal_uInt16 nVersion ) const override;
-    SVX_DLLPRIVATE virtual SfxPoolItem*     Clone( SfxItemPool* pPool = NULL ) const override;
+    SVX_DLLPRIVATE virtual SfxPoolItem*     Clone( SfxItemPool* pPool = nullptr ) const override;
     SVX_DLLPRIVATE virtual  sal_uInt16          GetVersion( sal_uInt16 nFileFormatVersion ) const override;
 
     SVX_DLLPRIVATE virtual  bool QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;

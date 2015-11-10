@@ -36,7 +36,7 @@ public:
                             TYPEINFO_OVERRIDE();
                             XFormTextStyleItem(XFormTextStyle = XFT_NONE);
                             XFormTextStyleItem(SvStream& rIn);
-    virtual SfxPoolItem*    Clone(SfxItemPool* pPool = 0) const override;
+    virtual SfxPoolItem*    Clone(SfxItemPool* pPool = nullptr) const override;
     virtual SfxPoolItem*    Create(SvStream& rIn, sal_uInt16 nVer) const override;
     virtual sal_uInt16          GetValueCount() const override;
     XFormTextStyle          GetValue() const { return (XFormTextStyle) SfxEnumItem::GetValue(); }
@@ -57,7 +57,7 @@ public:
                             TYPEINFO_OVERRIDE();
                             XFormTextHideFormItem(bool bHide = false);
                             XFormTextHideFormItem(SvStream& rIn);
-    virtual SfxPoolItem*    Clone(SfxItemPool* pPool = 0) const override;
+    virtual SfxPoolItem*    Clone(SfxItemPool* pPool = nullptr) const override;
     virtual SfxPoolItem*    Create(SvStream& rIn, sal_uInt16 nVer) const override;
 };
 

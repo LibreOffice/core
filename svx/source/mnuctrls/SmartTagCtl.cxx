@@ -43,7 +43,7 @@ SvxSmartTagsControl::SvxSmartTagsControl
 ) :
     mpMenu  ( new PopupMenu ),
     mrParent    ( rMenu ),
-    mpSmartTagItem( 0 )
+    mpSmartTagItem( nullptr )
 {
     rMenu.SetPopupMenu( _nId, mpMenu );
 }
@@ -143,7 +143,7 @@ void SvxSmartTagsControl::StateChanged( sal_uInt16, SfxItemState eState, const S
     if ( SfxItemState::DEFAULT == eState )
     {
         const SvxSmartTagItem* pSmartTagItem = dynamic_cast<const SvxSmartTagItem*>( pState  );
-        if ( 0 != pSmartTagItem )
+        if ( nullptr != pSmartTagItem )
         {
             delete mpSmartTagItem;
             mpSmartTagItem = new SvxSmartTagItem( *pSmartTagItem );

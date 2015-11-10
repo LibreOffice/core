@@ -119,7 +119,7 @@ class RecoveryUI : public ::cppu::WeakImplHelper< css::lang::XServiceInfo       
 
 RecoveryUI::RecoveryUI(const css::uno::Reference< css::uno::XComponentContext >& xContext)
     : m_xContext     (xContext                 )
-    , m_pParentWindow(0                        )
+    , m_pParentWindow(nullptr                        )
     , m_eJob         (RecoveryUI::E_JOB_UNKNOWN)
 {
 }

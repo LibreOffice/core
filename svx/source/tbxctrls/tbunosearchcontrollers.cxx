@@ -372,7 +372,7 @@ css::uno::Reference< css::frame::XStatusListener > SearchToolbarControllersManag
 
 FindTextToolbarController::FindTextToolbarController( const css::uno::Reference< css::uno::XComponentContext >& rxContext )
     : svt::ToolboxController(rxContext, css::uno::Reference< css::frame::XFrame >(), OUString(COMMAND_FINDTEXT))
-    , m_pFindTextFieldControl(NULL)
+    , m_pFindTextFieldControl(nullptr)
     , m_nDownSearchId(0)
     , m_nUpSearchId(0)
 {
@@ -619,7 +619,7 @@ MatchCaseToolboxController::MatchCaseToolboxController( const css::uno::Referenc
     : svt::ToolboxController( rxContext,
         css::uno::Reference< css::frame::XFrame >(),
         OUString(COMMAND_MATCHCASE) )
-    , m_pMatchCaseControl(NULL)
+    , m_pMatchCaseControl(nullptr)
 {
 }
 
@@ -713,7 +713,7 @@ SearchFormattedToolboxController::SearchFormattedToolboxController( const css::u
     : svt::ToolboxController( rxContext,
         css::uno::Reference< css::frame::XFrame >(),
         OUString(COMMAND_SEARCHFORMATTED) )
-    , m_pSearchFormattedControl(NULL)
+    , m_pSearchFormattedControl(nullptr)
 {
 }
 
@@ -1067,7 +1067,7 @@ FindbarDispatcher::FindbarDispatcher()
 
 FindbarDispatcher::~FindbarDispatcher()
 {
-    m_xFrame = NULL;
+    m_xFrame = nullptr;
 }
 
 // XInterface

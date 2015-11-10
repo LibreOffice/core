@@ -60,7 +60,7 @@ SdrPageWindow* SdrPageView::FindPageWindow(SdrPaintWindow& rPaintWindow) const
         }
     }
 
-    return 0L;
+    return nullptr;
 }
 
 const SdrPageWindow* SdrPageView::FindPatchedPageWindow( const OutputDevice& _rOutDev ) const
@@ -78,7 +78,7 @@ const SdrPageWindow* SdrPageView::FindPatchedPageWindow( const OutputDevice& _rO
         }
     }
 
-    return NULL;
+    return nullptr;
 }
 
 SdrPageWindow* SdrPageView::FindPageWindow(const OutputDevice& rOutDev) const
@@ -91,7 +91,7 @@ SdrPageWindow* SdrPageView::FindPageWindow(const OutputDevice& rOutDev) const
         }
     }
 
-    return 0L;
+    return nullptr;
 }
 
 SdrPageWindow* SdrPageView::GetPageWindow(sal_uInt32 nIndex) const
@@ -101,7 +101,7 @@ SdrPageWindow* SdrPageView::GetPageWindow(sal_uInt32 nIndex) const
         return maPageWindows[nIndex];
     }
 
-    return 0L;
+    return nullptr;
 }
 
 void SdrPageView::ClearPageWindows()
@@ -131,7 +131,7 @@ SdrPageWindow* SdrPageView::RemovePageWindow(SdrPageWindow& rOld)
         return pSdrPageWindow;
     }
 
-    return 0L;
+    return nullptr;
 }
 
 
@@ -141,7 +141,7 @@ SdrPageView::SdrPageView(SdrPage* pPage1, SdrView& rNewView)
     // col_auto color lets the view takes the default SvxColorConfig entry
     maDocumentColor( COL_AUTO ),
     maBackgroundColor(COL_AUTO ), // #i48367# also react on autocolor
-    mpPreparedPageWindow(0) // #i72752#
+    mpPreparedPageWindow(nullptr) // #i72752#
 {
     mpPage = pPage1;
 
@@ -155,9 +155,9 @@ SdrPageView::SdrPageView(SdrPage* pPage1, SdrView& rNewView)
     aLayerPrn.SetAll();
 
     mbVisible = false;
-    pAktList = NULL;
-    pAktGroup = NULL;
-    SetAktGroupAndList(NULL, mpPage);
+    pAktList = nullptr;
+    pAktGroup = nullptr;
+    SetAktGroupAndList(nullptr, mpPage);
 
     for(sal_uInt32 a(0L); a < rNewView.PaintWindowCount(); a++)
     {
@@ -216,12 +216,12 @@ css::uno::Reference< css::awt::XControlContainer > SdrPageView::GetControlContai
 
 void SdrPageView::ModelHasChanged()
 {
-    if (GetAktGroup()!=NULL) CheckAktGroup();
+    if (GetAktGroup()!=nullptr) CheckAktGroup();
 }
 
 bool SdrPageView::IsReadOnly() const
 {
-    return (0L == GetPage() || GetView().GetModel()->IsReadOnly() || GetPage()->IsReadOnly() || GetObjList()->IsReadOnly());
+    return (nullptr == GetPage() || GetView().GetModel()->IsReadOnly() || GetPage()->IsReadOnly() || GetObjList()->IsReadOnly());
 }
 
 void SdrPageView::Show()
@@ -252,7 +252,7 @@ void SdrPageView::Hide()
 
 Rectangle SdrPageView::GetPageRect() const
 {
-    if (GetPage()==NULL) return Rectangle();
+    if (GetPage()==nullptr) return Rectangle();
     return Rectangle(Point(),Size(GetPage()->GetWdt()+1,GetPage()->GetHgt()+1));
 }
 
@@ -306,7 +306,7 @@ void SdrPageView::CompleteRedraw(
         if(bIsTempTarget)
         {
             delete pPageWindow;
-            pPageWindow = 0L;
+            pPageWindow = nullptr;
         }
     }
 }
@@ -421,7 +421,7 @@ void SdrPageView::SetDesignMode( bool _bDesignMode ) const
 
 void SdrPageView::DrawPageViewGrid(OutputDevice& rOut, const Rectangle& rRect, Color aColor)
 {
-    if (GetPage()==NULL)
+    if (GetPage()==nullptr)
         return;
 
     long nx1=GetView().maGridBig.Width();
@@ -515,12 +515,12 @@ void SdrPageView::DrawPageViewGrid(OutputDevice& rOut, const Rectangle& rRect, C
         long x2=GetPage()->GetWdt()-GetPage()->GetRgtBorder()-1+nWrY;
         long y1=GetPage()->GetUppBorder()+1+nWrX;
         long y2=GetPage()->GetHgt()-GetPage()->GetLwrBorder()-1+nWrY;
-        const SdrPageGridFrameList* pFrames=GetPage()->GetGridFrameList(this,NULL);
+        const SdrPageGridFrameList* pFrames=GetPage()->GetGridFrameList(this,nullptr);
 
         sal_uInt16 nGridPaintAnz=1;
-        if (pFrames!=NULL) nGridPaintAnz=pFrames->GetCount();
+        if (pFrames!=nullptr) nGridPaintAnz=pFrames->GetCount();
         for (sal_uInt16 nGridPaintNum=0; nGridPaintNum<nGridPaintAnz; nGridPaintNum++) {
-            if (pFrames!=NULL) {
+            if (pFrames!=nullptr) {
                 const SdrPageGridFrame& rGF=(*pFrames)[nGridPaintNum];
                 nWrX=rGF.GetPaperRect().Left();
                 nWrY=rGF.GetPaperRect().Top();
@@ -899,7 +899,7 @@ void SdrPageView::LeaveAllGroup()
         GetView().UnmarkAll();
 
         // allocations, pAktGroup and pAktList always need to be set
-        SetAktGroupAndList(NULL, GetPage());
+        SetAktGroupAndList(nullptr, GetPage());
 
         // find and select uppermost group
         if(pLastGroup)
@@ -926,7 +926,7 @@ sal_uInt16 SdrPageView::GetEnteredLevel() const
 {
     sal_uInt16 nCount=0;
     SdrObject* pGrp=GetAktGroup();
-    while (pGrp!=NULL) {
+    while (pGrp!=nullptr) {
         nCount++;
         pGrp=pGrp->GetUpGroup();
     }
@@ -936,13 +936,13 @@ sal_uInt16 SdrPageView::GetEnteredLevel() const
 void SdrPageView::CheckAktGroup()
 {
     SdrObject* pGrp=GetAktGroup();
-    while (pGrp!=NULL &&
-           (!pGrp->IsInserted() || pGrp->GetObjList()==NULL ||
-            pGrp->GetPage()==NULL || pGrp->GetModel()==NULL)) { // anything outside of the borders?
+    while (pGrp!=nullptr &&
+           (!pGrp->IsInserted() || pGrp->GetObjList()==nullptr ||
+            pGrp->GetPage()==nullptr || pGrp->GetModel()==nullptr)) { // anything outside of the borders?
         pGrp=pGrp->GetUpGroup();
     }
     if (pGrp!=GetAktGroup()) {
-        if (pGrp!=NULL) EnterGroup(pGrp);
+        if (pGrp!=nullptr) EnterGroup(pGrp);
         else LeaveAllGroup();
     }
 }

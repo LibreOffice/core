@@ -35,7 +35,7 @@ SvLBoxFontString::SvLBoxFontString(
         const vcl::Font& rFont, const Color* pColor ) :
     SvLBoxString( pEntry, nFlags, rString ),
     maFont( rFont ),
-    mbUseColor( pColor != NULL )
+    mbUseColor( pColor != nullptr )
 {
     SetText(rString);
     if(pColor)
@@ -82,7 +82,7 @@ void SvLBoxFontString::InitViewData( SvTreeListBox* pView, SvTreeListEntry* pEnt
 SvxFontListBox::SvxFontListBox(vcl::Window* pParent, WinBits nStyle)
     : SvTabListBox(pParent, nStyle)
     , maStdFont(GetFont())
-    , mpEntryColor(NULL)
+    , mpEntryColor(nullptr)
     , mbUseFont(false)
 {
     maStdFont.SetTransparent(true);

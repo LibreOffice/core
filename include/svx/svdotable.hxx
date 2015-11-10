@@ -174,7 +174,7 @@ public:
     // #i121917#
     virtual bool HasText() const override;
 
-    bool IsTextEditActive() const { return (pEdtOutl != 0L); }
+    bool IsTextEditActive() const { return (pEdtOutl != nullptr); }
     bool IsTextEditActive( const sdr::table::CellPos& rPos );
 
     /** returns true only if we are in edit mode and the user actually changed anything */
@@ -182,8 +182,8 @@ public:
 
     // Gleichzeitig wird der Text in den Outliner gesetzt (ggf.
     // der des EditOutliners) und die PaperSize gesetzt.
-    void TakeTextRect( const sdr::table::CellPos& rPos, SdrOutliner& rOutliner, ::Rectangle& rTextRect, bool bNoEditText = false, ::Rectangle* pAnchorRect=NULL, bool bLineWidth = true ) const;
-    virtual void TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRect, bool bNoEditText = false, Rectangle* pAnchorRect=NULL, bool bLineWidth = true ) const override;
+    void TakeTextRect( const sdr::table::CellPos& rPos, SdrOutliner& rOutliner, ::Rectangle& rTextRect, bool bNoEditText = false, ::Rectangle* pAnchorRect=nullptr, bool bLineWidth = true ) const;
+    virtual void TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRect, bool bNoEditText = false, Rectangle* pAnchorRect=nullptr, bool bLineWidth = true ) const override;
     void TakeTextAnchorRect(const sdr::table::CellPos& rPos, ::Rectangle& rAnchorRect ) const;
     virtual void TakeTextAnchorRect(::Rectangle& rAnchorRect) const override;
 

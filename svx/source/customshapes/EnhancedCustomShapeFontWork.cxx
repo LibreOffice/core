@@ -268,7 +268,7 @@ void GetTextAreaOutline( const FWData& rFWData, const SdrObject* pCustomShape, F
 
             const SvxCharScaleWidthItem& rCharScaleWidthItem = static_cast<const SvxCharScaleWidthItem&>(pCustomShape->GetMergedItem( EE_CHAR_FONTWIDTH ));
             sal_uInt16 nCharScaleWidth = rCharScaleWidthItem.GetValue();
-            long* pDXArry = NULL;
+            long* pDXArry = nullptr;
             sal_Int32 nWidth = 0;
 
             // VERTICAL
@@ -791,7 +791,7 @@ void FitTextOutlinesToShapeOutlines( const tools::PolyPolygon& aOutlines2d, FWDa
 
 SdrObject* CreateSdrObjectFromParagraphOutlines( const FWData& rFWData, const SdrObject* pCustomShape )
 {
-    SdrObject* pRet = NULL;
+    SdrObject* pRet = nullptr;
     basegfx::B2DPolyPolygon aPolyPoly;
     if ( !rFWData.vTextAreas.empty() )
     {
@@ -831,7 +831,7 @@ SdrObject* CreateSdrObjectFromParagraphOutlines( const FWData& rFWData, const Sd
     return pRet;
 }
 
-Reference < i18n::XBreakIterator > EnhancedCustomShapeFontWork::mxBreakIterator = 0;
+Reference < i18n::XBreakIterator > EnhancedCustomShapeFontWork::mxBreakIterator = nullptr;
 
 Reference < i18n::XBreakIterator > EnhancedCustomShapeFontWork::GetBreakIterator()
 {
@@ -845,7 +845,7 @@ Reference < i18n::XBreakIterator > EnhancedCustomShapeFontWork::GetBreakIterator
 
 SdrObject* EnhancedCustomShapeFontWork::CreateFontWork( const SdrObject* pShape2d, const SdrObject* pCustomShape )
 {
-    SdrObject* pRet = NULL;
+    SdrObject* pRet = nullptr;
 
     tools::PolyPolygon aOutlines2d( GetOutlinesFromShape2d( pShape2d ) );
     sal_uInt16 nOutlinesCount2d = aOutlines2d.Count();

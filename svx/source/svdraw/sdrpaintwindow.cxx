@@ -242,7 +242,7 @@ SdrPaintWindow::SdrPaintWindow(SdrPaintView& rNewPaintView, OutputDevice& rOut, 
 :   mrOutputDevice(rOut),
     mpWindow(pWindow),
     mrPaintView(rNewPaintView),
-    mpPreRenderDevice(0L),
+    mpPreRenderDevice(nullptr),
     mbTemporaryTarget(false), // #i72889#
     mbUseBuffer(true)
 {
@@ -309,7 +309,7 @@ void SdrPaintWindow::DestroyPreRenderDevice()
     if(mpPreRenderDevice)
     {
         delete mpPreRenderDevice;
-        mpPreRenderDevice = 0L;
+        mpPreRenderDevice = nullptr;
     }
 }
 

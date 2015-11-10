@@ -30,12 +30,12 @@ TYPEINIT1(SvxNumberInfoItem, SfxPoolItem);
     eValueType      ( eVal ),           \
     aStringVal      ( rStr ),           \
     nDoubleVal      ( nDouble ),        \
-    pDelFormatArr   ( NULL ),           \
+    pDelFormatArr   ( nullptr ),           \
     nDelCount       ( 0 )
 
 SvxNumberInfoItem::SvxNumberInfoItem( const sal_uInt16 nId ) :
 
-    INIT( NULL, SVX_VALUE_TYPE_UNDEFINED, 0, "" )
+    INIT( nullptr, SVX_VALUE_TYPE_UNDEFINED, 0, "" )
 
 {
 }
@@ -93,7 +93,7 @@ SvxNumberInfoItem::SvxNumberInfoItem( const SvxNumberInfoItem& rItem ) :
     eValueType   ( rItem.eValueType ),
     aStringVal   ( rItem.aStringVal ),
     nDoubleVal   ( rItem.nDoubleVal ),
-    pDelFormatArr( NULL ),
+    pDelFormatArr( nullptr ),
     nDelCount    ( rItem.nDelCount )
 
 {
@@ -141,7 +141,7 @@ bool SvxNumberInfoItem::operator==( const SfxPoolItem& rItem ) const
     {
         if ( nDelCount > 0 )
         {
-            if ( pDelFormatArr != NULL && rOther.pDelFormatArr != NULL )
+            if ( pDelFormatArr != nullptr && rOther.pDelFormatArr != nullptr )
             {
                 bEqual = true;
 
@@ -150,7 +150,7 @@ bool SvxNumberInfoItem::operator==( const SfxPoolItem& rItem ) const
             }
         }
         else if ( nDelCount == 0 )
-            bEqual = ( pDelFormatArr == NULL && rOther.pDelFormatArr == NULL );
+            bEqual = ( pDelFormatArr == nullptr && rOther.pDelFormatArr == nullptr );
 
         bEqual = bEqual &&
                  pFormatter == rOther.pFormatter &&
@@ -191,7 +191,7 @@ void SvxNumberInfoItem::SetDelFormatArray( const sal_uInt32* pData,
     if ( pDelFormatArr )
     {
         delete []pDelFormatArr;
-        pDelFormatArr = NULL;
+        pDelFormatArr = nullptr;
     }
 
     nDelCount = nCount;
@@ -200,7 +200,7 @@ void SvxNumberInfoItem::SetDelFormatArray( const sal_uInt32* pData,
     {
         pDelFormatArr = new sal_uInt32[ nCount ];
 
-        if ( pData != NULL )
+        if ( pData != nullptr )
         {
             for ( sal_uInt32 i = 0; i < nCount; ++i )
                 pDelFormatArr[i] = pData[i];

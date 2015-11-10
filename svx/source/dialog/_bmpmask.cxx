@@ -212,7 +212,7 @@ IMPL_LINK_TYPED( MaskData, CbxHdl, Button*, pButton, void )
     // When a checkbox is checked, the pipette is enabled
     if ( pCbx->IsChecked() )
     {
-        MaskSet* pSet = NULL;
+        MaskSet* pSet = nullptr;
 
         if (pCbx == pMask->m_pCbx1)
             pSet = pMask->m_pQSet1;
@@ -477,7 +477,7 @@ void SvxBmpMask::dispose()
     m_pQSet4.disposeAndClear();
     m_pCtlPipette.disposeAndClear();
     delete pData;
-    pData = NULL;
+    pData = nullptr;
     m_pTbxPipette.clear();
     m_pBtnExec.clear();
     m_pCbx1.clear();

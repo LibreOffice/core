@@ -315,7 +315,7 @@ Reference< XCellCursor > SAL_CALL TableModel::createCursorByRange( const Referen
     ::SolarMutexGuard aGuard;
 
     ICellRange* pRange = dynamic_cast< ICellRange* >( rRange.get() );
-    if( (pRange == 0) || (pRange->getTable().get() != this) )
+    if( (pRange == nullptr) || (pRange->getTable().get() != this) )
         throw IllegalArgumentException();
 
     TableModelRef xModel( this );
@@ -572,7 +572,7 @@ void TableModel::disposing()
         mxTableRows.clear();
     }
 
-    mpTableObj = 0;
+    mpTableObj = nullptr;
 }
 
 

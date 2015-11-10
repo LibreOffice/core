@@ -126,18 +126,18 @@ Reference<ui::XUIElement> SAL_CALL PanelFactory::createUIElement (
         aArguments.getOrDefault("ContextName", OUString()));
 
     vcl::Window* pParentWindow = VCLUnoHelper::GetWindow(xParentWindow);
-    if ( ! xParentWindow.is() || pParentWindow==NULL)
+    if ( ! xParentWindow.is() || pParentWindow==nullptr)
         throw RuntimeException(
             "PanelFactory::createUIElement called without ParentWindow",
-            NULL);
+            nullptr);
     if ( ! xFrame.is())
         throw RuntimeException(
             "PanelFactory::createUIElement called without Frame",
-            NULL);
-    if (pBindings == NULL)
+            nullptr);
+    if (pBindings == nullptr)
         throw RuntimeException(
             "PanelFactory::createUIElement called without SfxBindings",
-            NULL);
+            nullptr);
 
     VclPtr<vcl::Window> pControl;
     ui::LayoutSize aLayoutSize (-1,-1,-1);

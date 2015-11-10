@@ -91,12 +91,12 @@ VclPtr<vcl::Window> AreaPropertyPanel::Create (
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* pBindings)
 {
-    if (pParent == NULL)
-        throw lang::IllegalArgumentException("no parent Window given to AreaPropertyPanel::Create", NULL, 0);
+    if (pParent == nullptr)
+        throw lang::IllegalArgumentException("no parent Window given to AreaPropertyPanel::Create", nullptr, 0);
     if ( ! rxFrame.is())
-        throw lang::IllegalArgumentException("no XFrame given to AreaPropertyPanel::Create", NULL, 1);
-    if (pBindings == NULL)
-        throw lang::IllegalArgumentException("no SfxBindings given to AreaPropertyPanel::Create", NULL, 2);
+        throw lang::IllegalArgumentException("no XFrame given to AreaPropertyPanel::Create", nullptr, 1);
+    if (pBindings == nullptr)
+        throw lang::IllegalArgumentException("no SfxBindings given to AreaPropertyPanel::Create", nullptr, 2);
 
     return VclPtr<AreaPropertyPanel>::Create(
                 pParent,

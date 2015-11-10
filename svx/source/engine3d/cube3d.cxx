@@ -71,7 +71,7 @@ sal_uInt16 E3dCubeObj::GetObjIdentifier() const
 
 SdrObject *E3dCubeObj::DoConvertToPolyObj(bool /*bBezier*/, bool /*bAddText*/) const
 {
-    return NULL;
+    return nullptr;
 }
 
 E3dCubeObj* E3dCubeObj::Clone() const

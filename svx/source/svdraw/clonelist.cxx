@@ -91,7 +91,7 @@ void CloneList::CopyConnections() const
 
                 if(it != maOriginalList.end())
                 {
-                    SdrObject *cObj = NULL;
+                    SdrObject *cObj = nullptr;
 
                     if (nPos < cloneCount)
                         cObj = GetClone(nPos);
@@ -111,7 +111,7 @@ void CloneList::CopyConnections() const
 
                 if(it != maOriginalList.end())
                 {
-                    SdrObject *cObj = NULL;
+                    SdrObject *cObj = nullptr;
 
                     if (nPos < cloneCount)
                         cObj = GetClone(nPos);

@@ -193,7 +193,7 @@ SdrObject* EnhancedCustomShapeEngine::ImplForceGroupWithText( const SdrObjCustom
         {
             // #i37011# also create a text object and add at rPos + 1
             SdrObject* pTextObj = SdrObjFactory::MakeNewObject(
-                pCustoObj->GetObjInventor(), OBJ_TEXT, 0L, pCustoObj->GetModel());
+                pCustoObj->GetObjInventor(), OBJ_TEXT, nullptr, pCustoObj->GetModel());
 
             // Copy text content
             OutlinerParaObject* pParaObj = pCustoObj->GetOutlinerParaObject();
@@ -439,7 +439,7 @@ drawing::PolyPolygonBezierCoords SAL_CALL EnhancedCustomShapeEngine::getLineGeom
 
             while ( aIter.IsMore() )
             {
-                SdrObject* pNewObj = NULL;
+                SdrObject* pNewObj = nullptr;
                 basegfx::B2DPolyPolygon aPP;
                 const SdrObject* pNext = aIter.Next();
 

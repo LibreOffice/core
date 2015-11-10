@@ -117,8 +117,8 @@ public:
     bool                IsRedoPossible() const;
 
     void                UpdateGraphic( const Graphic& rGraphic, bool bGraphicLinked,
-                                const tools::PolyPolygon* pPolyPoly = NULL,
-                                void* pEditingObj = NULL );
+                                const tools::PolyPolygon* pPolyPoly = nullptr,
+                                void* pEditingObj = nullptr );
 };
 
 

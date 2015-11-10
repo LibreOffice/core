@@ -73,7 +73,7 @@ public:
     virtual ~_SdrItemBrowserControl();
     virtual void dispose() override;
     void Clear();
-    void SetAttributes(const SfxItemSet* pAttr, const SfxItemSet* p2ndSet=NULL);
+    void SetAttributes(const SfxItemSet* pAttr, const SfxItemSet* p2ndSet=nullptr);
     sal_uInt16 GetCurrentWhich() const;
     bool EndChangeEntry();
     void BreakChangeEntry();
@@ -105,7 +105,7 @@ public:
     virtual void dispose() override;
     virtual void Resize() override;
     virtual void GetFocus() override;
-    void SetAttributes(const SfxItemSet* pAttr, const SfxItemSet* p2ndSet=NULL) { aBrowse->SetAttributes(pAttr,p2ndSet); }
+    void SetAttributes(const SfxItemSet* pAttr, const SfxItemSet* p2ndSet=nullptr) { aBrowse->SetAttributes(pAttr,p2ndSet); }
     _SdrItemBrowserControl *GetBrowserControl() { return aBrowse.get(); }
 };
 

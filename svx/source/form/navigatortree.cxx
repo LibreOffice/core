@@ -113,10 +113,10 @@ namespace svxform
     NavigatorTree::NavigatorTree( vcl::Window* pParent )
         :SvTreeListBox( pParent, WB_HASBUTTONS|WB_HASLINES|WB_BORDER|WB_HSCROLL ) // #100258# OJ WB_HSCROLL added
         ,m_aControlExchange(this)
-        ,m_pNavModel( NULL )
-        ,m_pRootEntry(NULL)
-        ,m_pEditEntry(NULL)
-        ,nEditEvent(0)
+        ,m_pNavModel( nullptr )
+        ,m_pRootEntry(nullptr)
+        ,m_pEditEntry(nullptr)
+        ,nEditEvent(nullptr)
         ,m_sdiState(SDI_DIRTY)
         ,m_aTimerTriggered(-1,-1)
         ,m_aDropActionType( DA_SCROLLUP )
@@ -171,7 +171,7 @@ namespace svxform
         if (m_aSynchronizeTimer.IsActive())
             m_aSynchronizeTimer.Stop();
 
-        DBG_ASSERT(GetNavModel() != NULL, "NavigatorTree::~NavigatorTree : unexpected : no ExplorerModel");
+        DBG_ASSERT(GetNavModel() != nullptr, "NavigatorTree::~NavigatorTree : unexpected : no ExplorerModel");
         EndListening( *m_pNavModel );
         Clear();
         delete m_pNavModel;
@@ -195,7 +195,7 @@ namespace svxform
 
         FmFormShell* pOldShell = GetNavModel()->GetFormShell();
         FmFormPage* pOldPage = GetNavModel()->GetFormPage();
-        FmFormPage* pNewPage = pFormShell ? pFormShell->GetCurPage() : NULL;
+        FmFormPage* pNewPage = pFormShell ? pFormShell->GetCurPage() : nullptr;
 
         if ((pOldShell != pFormShell) || (pOldPage != pNewPage))
         {
@@ -318,7 +318,7 @@ namespace svxform
                 {
                     ptWhere = rEvt.GetMousePosPixel();
                     SvTreeListEntry* ptClickedOn = GetEntry(ptWhere);
-                    if (ptClickedOn == NULL)
+                    if (ptClickedOn == nullptr)
                         break;
                     if ( !IsSelected(ptClickedOn) )
                     {
@@ -357,7 +357,7 @@ namespace svxform
 
                 // create menu
                 FmFormShell* pFormShell = GetNavModel()->GetFormShell();
-                FmFormModel* pFormModel = pFormShell ? pFormShell->GetFormModel() : NULL;
+                FmFormModel* pFormModel = pFormShell ? pFormShell->GetFormModel() : nullptr;
                 if( pFormShell && pFormModel )
                 {
                     PopupMenu aContextMenu(SVX_RES(RID_FMEXPLORER_POPUPMENU));
@@ -536,7 +536,7 @@ namespace svxform
 
     SvTreeListEntry* NavigatorTree::FindEntry( FmEntryData* pEntryData )
     {
-        if( !pEntryData ) return NULL;
+        if( !pEntryData ) return nullptr;
         SvTreeListEntry* pCurEntry = First();
         while( pCurEntry )
         {
@@ -547,7 +547,7 @@ namespace svxform
             pCurEntry = Next( pCurEntry );
         }
 
-        return NULL;
+        return nullptr;
     }
 
 
@@ -594,7 +594,7 @@ namespace svxform
             // default-entry "Forms"
             Image aRootImage( m_aNavigatorImages.GetImage( RID_SVXIMG_FORMS ) );
             m_pRootEntry = InsertEntry( SVX_RESSTR(RID_STR_FORMS), aRootImage, aRootImage,
-                NULL, false, 0 );
+                nullptr, false, 0 );
         }
         else if (!m_bMarkingObjects && dynamic_cast<const FmNavRequestSelectHint*>(&rHint))
         {   // if m_bMarkingObjects is sal_True, I mark objects myself
@@ -965,7 +965,7 @@ namespace svxform
             const Reference< XInterface >* pControls = aControls.getConstArray();
 
             FmFormShell* pFormShell = GetNavModel()->GetFormShell();
-            FmFormModel* pFormModel = pFormShell ? pFormShell->GetFormModel() : NULL;
+            FmFormModel* pFormModel = pFormShell ? pFormShell->GetFormModel() : nullptr;
 
             // within undo
             if (pFormModel)
@@ -1026,7 +1026,7 @@ namespace svxform
 
         // some data for the target
         bool bDropTargetIsForm = IsFormEntry(_pTargetEntry);
-        FmFormData* pTargetData = bDropTargetIsForm ? static_cast<FmFormData*>(_pTargetEntry->GetUserData()) : NULL;
+        FmFormData* pTargetData = bDropTargetIsForm ? static_cast<FmFormData*>(_pTargetEntry->GetUserData()) : nullptr;
 
         DBG_ASSERT( DND_ACTION_COPY != _nAction, "NavigatorTree::implExecuteDataTransfer: somebody changed the logics!" );
 
@@ -1036,7 +1036,7 @@ namespace svxform
 
         // shell and model
         FmFormShell* pFormShell = GetNavModel()->GetFormShell();
-        FmFormModel* pFormModel = pFormShell ? pFormShell->GetFormModel() : NULL;
+        FmFormModel* pFormModel = pFormShell ? pFormShell->GetFormModel() : nullptr;
         if (!pFormModel)
             return DND_ACTION_NONE;
 
@@ -1061,8 +1061,8 @@ namespace svxform
         {
             // some data of the current element
             SvTreeListEntry* pCurrent = *dropped;
-            DBG_ASSERT(pCurrent != NULL, "NavigatorTree::implExecuteDataTransfer: invalid entry");
-            DBG_ASSERT(GetParent(pCurrent) != NULL, "NavigatorTree::implExecuteDataTransfer: invalid entry");
+            DBG_ASSERT(pCurrent != nullptr, "NavigatorTree::implExecuteDataTransfer: invalid entry");
+            DBG_ASSERT(GetParent(pCurrent) != nullptr, "NavigatorTree::implExecuteDataTransfer: invalid entry");
                 // don't drag root
 
             FmEntryData* pCurrentUserData = static_cast<FmEntryData*>(pCurrent->GetUserData());
@@ -1071,7 +1071,7 @@ namespace svxform
             Reference< XIndexContainer >  xContainer(xCurrentChild->getParent(), UNO_QUERY);
 
             FmFormData* pCurrentParentUserData = static_cast<FmFormData*>(pCurrentUserData->GetParent());
-            DBG_ASSERT(pCurrentParentUserData == NULL || dynamic_cast<const FmFormData*>( pCurrentParentUserData) !=  nullptr, "NavigatorTree::implExecuteDataTransfer: invalid parent");
+            DBG_ASSERT(pCurrentParentUserData == nullptr || dynamic_cast<const FmFormData*>( pCurrentParentUserData) !=  nullptr, "NavigatorTree::implExecuteDataTransfer: invalid parent");
 
             // remove from parent
             if (pCurrentParentUserData)
@@ -1318,7 +1318,7 @@ namespace svxform
         if (!SvTreeListBox::EditingEntry( pEntry, rSelection ))
             return false;
 
-        return (pEntry && (pEntry->GetUserData() != NULL));
+        return (pEntry && (pEntry->GetUserData() != nullptr));
             // root, which isn't allowed to be renamed, has UserData=NULL
     }
 
@@ -1391,9 +1391,9 @@ namespace svxform
 
         // get ParentForm
         if (!GetNavModel()->GetFormShell())
-            return NULL;
+            return nullptr;
         if (!IsFormEntry(pParentEntry))
-            return NULL;
+            return nullptr;
 
         FmFormData* pParentFormData = static_cast<FmFormData*>(pParentEntry->GetUserData());
         Reference< XForm >  xParentForm( pParentFormData->GetFormIface());
@@ -1403,7 +1403,7 @@ namespace svxform
         Reference<XComponentContext> xContext = comphelper::getProcessComponentContext();
         Reference<XFormComponent> xNewComponent( xContext->getServiceManager()->createInstanceWithContext(rServiceName, xContext), UNO_QUERY);
         if (!xNewComponent.is())
-            return NULL;
+            return nullptr;
 
         FmControlData* pNewFormControlData = new FmControlData( xNewComponent, m_aNavigatorImages, pParentFormData );
 
@@ -1457,7 +1457,7 @@ namespace svxform
                 aNewName += OUString::number(i).getStr();
             }
 
-            if( GetNavModel()->FindData(aNewName, pFormParentData,false) == NULL )
+            if( GetNavModel()->FindData(aNewName, pFormParentData,false) == nullptr )
                 break;
         }
 
@@ -1476,7 +1476,7 @@ namespace svxform
         if( !bRes )
         {
             m_pEditEntry = pEntry;
-            nEditEvent = Application::PostUserEvent( LINK(this, NavigatorTree, OnEdit), NULL, true );
+            nEditEvent = Application::PostUserEvent( LINK(this, NavigatorTree, OnEdit), nullptr, true );
         } else
             SetCursor(pEntry, true);
 
@@ -1486,9 +1486,9 @@ namespace svxform
 
     IMPL_LINK_NOARG_TYPED(NavigatorTree, OnEdit, void*, void)
     {
-        nEditEvent = 0;
+        nEditEvent = nullptr;
         EditEntry( m_pEditEntry );
-        m_pEditEntry = NULL;
+        m_pEditEntry = nullptr;
     }
 
 
@@ -1693,8 +1693,8 @@ namespace svxform
 
         // see below for why we need this mapping from models to shapes
         FmFormView*     pFormView       = pFormShell->GetFormView();
-        SdrPageView*    pPageView       = pFormView ? pFormView->GetSdrPageView() : NULL;
-        SdrPage*        pPage           = pPageView ? pPageView->GetPage() : NULL;
+        SdrPageView*    pPageView       = pFormView ? pFormView->GetSdrPageView() : nullptr;
+        SdrPage*        pPage           = pPageView ? pPageView->GetPage() : nullptr;
         DBG_ASSERT( pPage, "NavigatorTree::DeleteSelection: invalid form page!" );
 
         MapModelToShape aModelShapes;
@@ -1893,7 +1893,7 @@ namespace svxform
             while (pSelection)
             {
                 FmEntryData* pCurrent = static_cast<FmEntryData*>(pSelection->GetUserData());
-                if (pCurrent != NULL)
+                if (pCurrent != nullptr)
                 {
                     FmEntryDataArray::iterator it = arredToSelect.find(pCurrent);
                     if ( it != arredToSelect.end() )
@@ -2024,7 +2024,7 @@ namespace svxform
 
     bool NavigatorTree::IsHiddenControl(FmEntryData* pEntryData)
     {
-        if (pEntryData == NULL) return false;
+        if (pEntryData == nullptr) return false;
 
         Reference< XPropertySet > xProperties( pEntryData->GetPropertySet() );
         if (::comphelper::hasProperty(FM_PROP_CLASSID, xProperties))

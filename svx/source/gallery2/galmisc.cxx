@@ -55,7 +55,7 @@ using namespace ::com::sun::star;
 
 ResMgr* GetGalleryResMgr()
 {
-    static ResMgr* pGalleryResMgr = NULL;
+    static ResMgr* pGalleryResMgr = nullptr;
 
     if( !pGalleryResMgr )
     {
@@ -96,7 +96,7 @@ GalleryGraphicImportRet GalleryGraphicImport( const INetURLObject& rURL, Graphic
     if( pIStm )
     {
         GraphicFilter& rGraphicFilter = GraphicFilter::GetGraphicFilter();
-        std::unique_ptr<GalleryProgress> pProgress(bShowProgress ? new GalleryProgress( &rGraphicFilter ) : NULL);
+        std::unique_ptr<GalleryProgress> pProgress(bShowProgress ? new GalleryProgress( &rGraphicFilter ) : nullptr);
         sal_uInt16              nFormat;
 
         if( !rGraphicFilter.ImportGraphic( rGraphic, rURL.GetMainURL( INetURLObject::NO_DECODE ), *pIStm, GRFILTER_FORMAT_DONTKNOW, &nFormat ) )
@@ -402,9 +402,9 @@ GalleryTransferable::GalleryTransferable( GalleryTheme* pTheme, sal_uIntPtr nObj
     mpTheme( pTheme ),
     meObjectKind( mpTheme->GetObjectKind( nObjectPos ) ),
     mnObjectPos( nObjectPos ),
-    mpGraphicObject( NULL ),
-    mpImageMap( NULL ),
-    mpURL( NULL )
+    mpGraphicObject( nullptr ),
+    mpImageMap( nullptr ),
+    mpURL( nullptr )
 {
 
     InitData( bLazy );
@@ -454,7 +454,7 @@ void GalleryTransferable::InitData( bool bLazy )
                 mpURL = new INetURLObject;
 
                 if( !mpTheme->GetURL( mnObjectPos, *mpURL ) )
-                    delete mpURL, mpURL = NULL;
+                    delete mpURL, mpURL = nullptr;
             }
 
             if( ( SGA_OBJ_SOUND != meObjectKind ) && !mpGraphicObject )
@@ -570,9 +570,9 @@ void GalleryTransferable::DragFinished( sal_Int8 nDropAction )
 void GalleryTransferable::ObjectReleased()
 {
     mxModelStream.Clear();
-    delete mpGraphicObject, mpGraphicObject = NULL;
-    delete mpImageMap, mpImageMap = NULL;
-    delete mpURL, mpURL = NULL;
+    delete mpGraphicObject, mpGraphicObject = nullptr;
+    delete mpImageMap, mpImageMap = nullptr;
+    delete mpURL, mpURL = nullptr;
 }
 
 void GalleryTransferable::CopyToClipboard( vcl::Window* pWindow )

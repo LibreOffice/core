@@ -51,7 +51,7 @@ using namespace ::com::sun::star::uno;
 // tragen wir etwas ein, was hier (hoffentlich) nie vorkommt).
 static SfxSlot aExtrusionBarSlots_Impl[] =
 {
-    { 0, 0, 0, SfxSlotMode::NONE, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }
+    { 0, 0, 0, SfxSlotMode::NONE, 0, 0, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, 0, 0, nullptr }
 };
 
 SFX_IMPL_INTERFACE(ExtrusionBar, SfxShell)
@@ -76,7 +76,7 @@ ExtrusionBar::ExtrusionBar(SfxViewShell* pViewShell )
 
 ExtrusionBar::~ExtrusionBar()
 {
-    SetRepeatTarget(NULL);
+    SetRepeatTarget(nullptr);
 }
 
 void getLightingDirectionDefaults( const Direction3D **pLighting1Defaults, const Direction3D **pLighting2Defaults )
@@ -587,7 +587,7 @@ void ExtrusionBar::execute( SdrView* pSdrView, SfxRequest& rReq, SfxBindings& rB
                     fDepth = aDlg->getDepth();
 
                     SvxDoubleItem aItem( fDepth, SID_EXTRUSION_DEPTH );
-                    SfxPoolItem* aItems[] = { &aItem, 0 };
+                    SfxPoolItem* aItems[] = { &aItem, nullptr };
                     rBindings.Execute( SID_EXTRUSION_DEPTH, const_cast<const SfxPoolItem**>(aItems) );
                 }
             }

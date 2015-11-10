@@ -107,7 +107,7 @@ namespace svxform
 
 
 OFilterItemExchange::OFilterItemExchange()
-    : m_pFormItem(NULL)
+    : m_pFormItem(nullptr)
 {
 }
 
@@ -175,7 +175,7 @@ FmFilterItem* FmFilterItems::Find( const ::sal_Int32 _nFilterComponentIndex ) co
         if ( _nFilterComponentIndex == rCondition.GetComponentIndex() )
             return &rCondition;
     }
-    return NULL;
+    return nullptr;
 }
 
 
@@ -503,10 +503,10 @@ void SAL_CALL FmFilterAdapter::disjunctiveTermAdded( const FilterEvent& _Event )
 TYPEINIT1(FmFilterModel, FmParentData);
 
 FmFilterModel::FmFilterModel()
-              :FmParentData(NULL, OUString())
+              :FmParentData(nullptr, OUString())
               ,OSQLParserClient(comphelper::getProcessComponentContext())
-              ,m_pAdapter(NULL)
-              ,m_pCurrentItems(NULL)
+              ,m_pAdapter(nullptr)
+              ,m_pCurrentItems(nullptr)
 {
 }
 
@@ -528,12 +528,12 @@ void FmFilterModel::Clear()
     {
         m_pAdapter->dispose();
         m_pAdapter->release();
-        m_pAdapter= NULL;
+        m_pAdapter= nullptr;
     }
 
-    m_pCurrentItems  = NULL;
-    m_xController    = NULL;
-    m_xControllers   = NULL;
+    m_pCurrentItems  = nullptr;
+    m_xController    = nullptr;
+    m_xControllers   = nullptr;
 
     for (::std::vector<FmFilterData*>::const_iterator i = m_aChildren.begin();
          i != m_aChildren.end(); ++i)
@@ -662,7 +662,7 @@ FmFormItem* FmFilterModel::Find(const ::std::vector<FmFilterData*>& rItems, cons
             }
         }
     }
-    return NULL;
+    return nullptr;
 }
 
 
@@ -684,7 +684,7 @@ FmFormItem* FmFilterModel::Find(const ::std::vector<FmFilterData*>& rItems, cons
             }
         }
     }
-    return NULL;
+    return nullptr;
 }
 
 
@@ -942,10 +942,10 @@ void FmFilterModel::SetCurrentItems(FmFilterItems* pCurrent)
                 m_pCurrentItems = pCurrent;
         }
         else
-            m_pCurrentItems = NULL;
+            m_pCurrentItems = nullptr;
     }
     else
-        m_pCurrentItems = NULL;
+        m_pCurrentItems = nullptr;
 
 
     // UI benachrichtigen
@@ -1100,8 +1100,8 @@ void FmFilterString::Paint(const Point& rPos, SvTreeListBox& rDev, vcl::RenderCo
 
 FmFilterNavigator::FmFilterNavigator( vcl::Window* pParent )
                   :SvTreeListBox( pParent, WB_HASBUTTONS|WB_HASLINES|WB_BORDER|WB_HASBUTTONSATROOT )
-                  ,m_pModel( NULL )
-                  ,m_pEditingCurrently( NULL )
+                  ,m_pModel( nullptr )
+                  ,m_pEditingCurrently( nullptr )
                   ,m_aControlExchange( this )
                   ,m_aTimerCounter( 0 )
                   ,m_aDropActionType( DA_SCROLLUP )
@@ -1181,7 +1181,7 @@ bool FmFilterNavigator::EditingEntry( SvTreeListEntry* pEntry, Selection& rSelec
 bool FmFilterNavigator::EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewText )
 {
     DBG_ASSERT(pEntry == m_pEditingCurrently, "FmFilterNavigator::EditedEntry: suspicious entry!");
-    m_pEditingCurrently = NULL;
+    m_pEditingCurrently = nullptr;
 
     if (EditingCanceled())
         return true;
@@ -1327,7 +1327,7 @@ sal_Int8 FmFilterNavigator::AcceptDrop( const AcceptDropEvent& rEvt )
         return DND_ACTION_NONE;
 
     FmFilterData* pData = static_cast<FmFilterData*>(pDropTarget->GetUserData());
-    FmFormItem* pForm = NULL;
+    FmFormItem* pForm = nullptr;
     if (dynamic_cast<const FmFilterItem*>(pData) !=  nullptr)
     {
         pForm = dynamic_cast<FmFormItem*>( pData->GetParent()->GetParent() );
@@ -1414,7 +1414,7 @@ bool FmFilterNavigator::Select( SvTreeListEntry* pEntry, bool bSelect )
     {
         if (bSelect)
         {
-            FmFormItem* pFormItem = NULL;
+            FmFormItem* pFormItem = nullptr;
             if ( dynamic_cast<const FmFilterItem*>(static_cast<FmFilterData*>(pEntry->GetUserData())) != nullptr)
                 pFormItem = static_cast<FmFormItem*>(static_cast<FmFilterItem*>(pEntry->GetUserData())->GetParent()->GetParent());
             else if (dynamic_cast<const FmFilterItems*>(static_cast<FmFilterData*>(pEntry->GetUserData())) != nullptr)
@@ -1462,7 +1462,7 @@ void FmFilterNavigator::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
     else if( dynamic_cast<const FmFilterCurrentChangedHint*>(&rHint) )
     {
         // invalidate the entries
-        for (SvTreeListEntry* pEntry = First(); pEntry != NULL;
+        for (SvTreeListEntry* pEntry = First(); pEntry != nullptr;
              pEntry = Next(pEntry))
             GetModel()->InvalidateEntry( pEntry );
     }
@@ -1470,10 +1470,10 @@ void FmFilterNavigator::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 
 SvTreeListEntry* FmFilterNavigator::FindEntry(const FmFilterData* pItem) const
 {
-    SvTreeListEntry* pEntry = NULL;
+    SvTreeListEntry* pEntry = nullptr;
     if (pItem)
     {
-        for (pEntry = First(); pEntry != NULL; pEntry = Next( pEntry ))
+        for (pEntry = First(); pEntry != nullptr; pEntry = Next( pEntry ))
         {
             FmFilterData* pEntryItem = static_cast<FmFilterData*>(pEntry->GetUserData());
             if (pEntryItem == pItem)
@@ -1512,12 +1512,12 @@ void FmFilterNavigator::Remove(FmFilterData* pItem)
 FmFormItem* FmFilterNavigator::getSelectedFilterItems(::std::vector<FmFilterItem*>& _rItemList)
 {
     // be sure that the data is only used within only one form!
-    FmFormItem* pFirstItem = NULL;
+    FmFormItem* pFirstItem = nullptr;
 
     bool bHandled = true;
     bool bFoundSomething = false;
     for (SvTreeListEntry* pEntry = FirstSelected();
-         bHandled && pEntry != NULL;
+         bHandled && pEntry != nullptr;
          pEntry = NextSelected(pEntry))
     {
         FmFilterItem* pFilter = dynamic_cast<FmFilterItem*>( static_cast<FmFilterData*>(pEntry->GetUserData()) );
@@ -1539,7 +1539,7 @@ FmFormItem* FmFilterNavigator::getSelectedFilterItems(::std::vector<FmFilterItem
         }
     }
     if ( !bHandled || !bFoundSomething )
-        pFirstItem = NULL;
+        pFirstItem = nullptr;
     return pFirstItem;
 }
 
@@ -1600,12 +1600,12 @@ void FmFilterNavigator::Command( const CommandEvent& rEvt )
         {
             // die Stelle, an der geklickt wurde
             Point aWhere;
-            SvTreeListEntry* pClicked = NULL;
+            SvTreeListEntry* pClicked = nullptr;
             if (rEvt.IsMouseEvent())
             {
                 aWhere = rEvt.GetMousePosPixel();
                 pClicked = GetEntry(aWhere);
-                if (pClicked == NULL)
+                if (pClicked == nullptr)
                     break;
 
                 if (!IsSelected(pClicked))
@@ -1625,7 +1625,7 @@ void FmFilterNavigator::Command( const CommandEvent& rEvt )
 
             ::std::vector<FmFilterData*> aSelectList;
             for (SvTreeListEntry* pEntry = FirstSelected();
-                 pEntry != NULL;
+                 pEntry != nullptr;
                  pEntry = NextSelected(pEntry))
             {
                 // don't delete forms
@@ -1648,7 +1648,7 @@ void FmFilterNavigator::Command( const CommandEvent& rEvt )
             aContextMenu.EnableItem( SID_FM_DELETE, !aSelectList.empty() );
 
 
-            bool bEdit = dynamic_cast<FmFilterItem*>( static_cast<FmFilterData*>(pClicked->GetUserData()) ) != NULL &&
+            bool bEdit = dynamic_cast<FmFilterItem*>( static_cast<FmFilterData*>(pClicked->GetUserData()) ) != nullptr &&
                 IsSelected(pClicked) && GetSelectionCount() == 1;
 
             aContextMenu.EnableItem( SID_FM_FILTER_EDIT,
@@ -1715,7 +1715,7 @@ SvTreeListEntry* FmFilterNavigator::getPrevEntry(SvTreeListEntry* _pStartWith)
         pEntry = Prev(pEntry);
         // if the entry is still no leaf return
         if ( pEntry && GetChildCount( pEntry ) != 0 )
-            pEntry = NULL;
+            pEntry = nullptr;
     }
     return pEntry;
 }
@@ -1740,7 +1740,7 @@ void FmFilterNavigator::KeyInput(const KeyEvent& rKEvt)
         if ( rKeyCode.GetCode() == KEY_UP )
             getter = ::std::mem_fun(&FmFilterNavigator::getPrevEntry);
 
-        SvTreeListEntry* pTarget = getter( this, NULL );
+        SvTreeListEntry* pTarget = getter( this, nullptr );
         if ( !pTarget )
             break;
 
@@ -1810,7 +1810,7 @@ void FmFilterNavigator::DeleteSelection()
     // the deletion of its child, I have to shrink the selecton list
     ::std::vector<SvTreeListEntry*> aEntryList;
     for (SvTreeListEntry* pEntry = FirstSelected();
-         pEntry != NULL;
+         pEntry != nullptr;
          pEntry = NextSelected(pEntry))
     {
         FmFilterItem* pFilterItem = dynamic_cast<FmFilterItem*>( static_cast<FmFilterData*>(pEntry->GetUserData()) );
@@ -1866,7 +1866,7 @@ void FmFilterNavigatorWin::UpdateContent(FmFormShell* pFormShell)
         return;
 
     if (!pFormShell)
-        m_pNavigator->UpdateContent( NULL, NULL );
+        m_pNavigator->UpdateContent( nullptr, nullptr );
     else
     {
         Reference< XFormController >  xController(pFormShell->GetImpl()->getActiveInternalController());
@@ -1898,7 +1898,7 @@ void FmFilterNavigatorWin::StateChanged( sal_uInt16 nSID, SfxItemState eState, c
         UpdateContent( pShell );
     }
     else
-        UpdateContent( NULL );
+        UpdateContent( nullptr );
 }
 
 
@@ -1911,7 +1911,7 @@ bool FmFilterNavigatorWin::Close()
         // the EndEditing was vetoed (perhaps of an syntax error or such)
         return false;
 
-    UpdateContent( NULL );
+    UpdateContent( nullptr );
     return SfxDockingWindow::Close();
 }
 

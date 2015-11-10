@@ -61,13 +61,13 @@ void CellUndo::dispose()
 {
     mxCell.clear();
     delete maUndoData.mpProperties;
-    maUndoData.mpProperties = 0;
+    maUndoData.mpProperties = nullptr;
     delete maRedoData.mpProperties;
-    maRedoData.mpProperties = 0;
+    maRedoData.mpProperties = nullptr;
     delete maUndoData.mpOutlinerParaObject;
-    maUndoData.mpOutlinerParaObject = 0;
+    maUndoData.mpOutlinerParaObject = nullptr;
     delete maRedoData.mpOutlinerParaObject;
-    maRedoData.mpOutlinerParaObject = 0;
+    maRedoData.mpOutlinerParaObject = nullptr;
 }
 
 void CellUndo::ObjectInDestruction(const SdrObject& )
@@ -79,7 +79,7 @@ void CellUndo::Undo()
 {
     if( mxCell.is() && mbUndo )
     {
-        if( maRedoData.mpProperties == 0 )
+        if( maRedoData.mpProperties == nullptr )
             getDataFromCell( maRedoData );
 
         setDataToCell( maUndoData );
@@ -115,7 +115,7 @@ void CellUndo::setDataToCell( const Data& rData )
     if( rData.mpProperties )
         mxCell->mpProperties = Cell::CloneProperties( rData.mpProperties, *mxObjRef.get(), *mxCell.get() );
     else
-        mxCell->mpProperties = 0;
+        mxCell->mpProperties = nullptr;
 
     if( rData.mpOutlinerParaObject )
         mxCell->SetOutlinerParaObject( new OutlinerParaObject(*rData.mpOutlinerParaObject) );
@@ -148,7 +148,7 @@ void CellUndo::getDataFromCell( Data& rData )
         if( mxCell->GetOutlinerParaObject() )
             rData.mpOutlinerParaObject = new OutlinerParaObject(*mxCell->GetOutlinerParaObject());
         else
-            rData.mpOutlinerParaObject =  0;
+            rData.mpOutlinerParaObject =  nullptr;
 
         rData.mnCellContentType = mxCell->mnCellContentType;
 

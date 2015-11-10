@@ -377,7 +377,7 @@ namespace svx
             ,const OUString& _rCommand
         )
     {
-        construct(_rDatasource,_rConnectionResource,_nCommandType,_rCommand,NULL,(CommandType::COMMAND == _nCommandType),_rCommand);
+        construct(_rDatasource,_rConnectionResource,_nCommandType,_rCommand,nullptr,(CommandType::COMMAND == _nCommandType),_rCommand);
     }
 
     ODataAccessObjectTransferable::ODataAccessObjectTransferable(

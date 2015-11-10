@@ -87,7 +87,7 @@ namespace accessibility
         // SvxEditSource
         SvxTextForwarder*       GetTextForwarder() override { return this; }
         SvxViewForwarder*       GetViewForwarder() override { return this; }
-        SvxEditSource*          Clone() const override { return NULL; }
+        SvxEditSource*          Clone() const override { return nullptr; }
         void                    UpdateData() override {}
         SfxBroadcaster&         GetBroadcaster() const override { return *(const_cast<AccessibleEmptyEditSource_Impl*>(this)); }
 
@@ -110,14 +110,14 @@ namespace accessibility
         SfxItemState    GetItemState( const ESelection& /*rSel*/, sal_uInt16 /*nWhich*/ ) const override { return SfxItemState::UNKNOWN; }
         SfxItemState    GetItemState( sal_Int32 /*nPara*/, sal_uInt16 /*nWhich*/ ) const override { return SfxItemState::UNKNOWN; }
 
-        SfxItemPool*    GetPool() const override { return NULL; }
+        SfxItemPool*    GetPool() const override { return nullptr; }
 
         void            QuickInsertText( const OUString& /*rText*/, const ESelection& /*rSel*/ ) override {}
         void            QuickInsertField( const SvxFieldItem& /*rFld*/, const ESelection& /*rSel*/ ) override {}
         void            QuickSetAttribs( const SfxItemSet& /*rSet*/, const ESelection& /*rSel*/ ) override {}
         void            QuickInsertLineBreak( const ESelection& /*rSel*/ ) override {}
 
-        const SfxItemSet * GetEmptyItemSetPtr() override { return 0; }
+        const SfxItemSet * GetEmptyItemSetPtr() override { return nullptr; }
 
         void        AppendParagraph() override {}
         sal_Int32  AppendTextPortion( sal_Int32 /*nPara*/, const OUString & /*rText*/, const SfxItemSet & /*rSet*/ ) override { return 0; }
@@ -140,7 +140,7 @@ namespace accessibility
         Rectangle       GetCharBounds( sal_Int32, sal_Int32 ) const override { return Rectangle(); }
         Rectangle       GetParaBounds( sal_Int32 ) const override { return Rectangle(); }
         MapMode         GetMapMode() const override { return MapMode(); }
-        OutputDevice*   GetRefDevice() const override { return NULL; }
+        OutputDevice*   GetRefDevice() const override { return nullptr; }
         bool            GetIndexAtPoint( const Point&, sal_Int32&, sal_Int32& ) const override { return false; }
         bool            GetWordIndices( sal_Int32, sal_Int32, sal_Int32&, sal_Int32& ) const override { return false; }
         bool            GetAttributeRun( sal_Int32&, sal_Int32&, sal_Int32, sal_Int32, bool ) const override { return false; }
@@ -176,7 +176,7 @@ namespace accessibility
     AccessibleProxyEditSource_Impl::AccessibleProxyEditSource_Impl( SdrObject&      rObj,
                                                                     SdrView&        rView,
                                                                     const vcl::Window&   rViewWindow ) :
-        maEditSource( rObj, 0, rView, rViewWindow )
+        maEditSource( rObj, nullptr, rView, rViewWindow )
     {
     }
 
@@ -250,7 +250,7 @@ namespace accessibility
     SvxTextForwarder* AccessibleEmptyEditSource::GetTextForwarder()
     {
         if( !mpEditSource.get() )
-            return NULL;
+            return nullptr;
 
         return mpEditSource->GetTextForwarder();
     }
@@ -258,7 +258,7 @@ namespace accessibility
     SvxViewForwarder* AccessibleEmptyEditSource::GetViewForwarder()
     {
         if( !mpEditSource.get() )
-            return NULL;
+            return nullptr;
 
         return mpEditSource->GetViewForwarder();
     }
@@ -282,7 +282,7 @@ namespace accessibility
     SvxEditViewForwarder* AccessibleEmptyEditSource::GetEditViewForwarder( bool bCreate )
     {
         if( !mpEditSource.get() )
-            return NULL;
+            return nullptr;
 
         // switch edit source, if not yet done
         if( mbEditSourceEmpty && bCreate )
@@ -294,7 +294,7 @@ namespace accessibility
     SvxEditSource* AccessibleEmptyEditSource::Clone() const
     {
         if( !mpEditSource.get() )
-            return NULL;
+            return nullptr;
 
         return mpEditSource->Clone();
     }
@@ -323,11 +323,11 @@ namespace accessibility
             if( mbEditSourceEmpty )
                 Switch2ProxyEditSource();
         }
-        else if (pSdrHint && pSdrHint->GetObject()!=NULL)
+        else if (pSdrHint && pSdrHint->GetObject()!=nullptr)
         {
             // When the SdrObject just got a para outliner object then
             // switch the edit source.
-            if (pSdrHint->GetObject()->GetOutlinerParaObject() != NULL)
+            if (pSdrHint->GetObject()->GetOutlinerParaObject() != nullptr)
                 Switch2ProxyEditSource();
         }
 

@@ -233,7 +233,7 @@ void SdrVirtObj::AddToHdlList(SdrHdlList& rHdlList) const
     // and may not be prepared to GetHdl returning NULL
 
     // get handles using AddToHdlList from ref object
-    SdrHdlList aLocalList(0);
+    SdrHdlList aLocalList(nullptr);
     rRefObj.AddToHdlList(aLocalList);
     const size_t nHdlCount(aLocalList.GetHdlCount());
 
@@ -274,7 +274,7 @@ bool SdrVirtObj::supportsFullDrag() const
 SdrObject* SdrVirtObj::getFullDragClone() const
 {
     static bool bSpecialHandling(false);
-    SdrObject* pRetval = 0;
+    SdrObject* pRetval = nullptr;
 
     if(bSpecialHandling)
     {
@@ -384,7 +384,7 @@ void SdrVirtObj::NbcShear(const Point& rRef, long nAngle, double tn, bool bVShea
 void SdrVirtObj::Move(const Size& rSiz)
 {
     if (rSiz.Width()!=0 || rSiz.Height()!=0) {
-        Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetLastBoundRect();
+        Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
         NbcMove(rSiz);
         SetChanged();
         BroadcastObjectChange();
@@ -395,7 +395,7 @@ void SdrVirtObj::Move(const Size& rSiz)
 void SdrVirtObj::Resize(const Point& rRef, const Fraction& xFact, const Fraction& yFact, bool bUnsetRelative)
 {
     if (xFact.GetNumerator()!=xFact.GetDenominator() || yFact.GetNumerator()!=yFact.GetDenominator()) {
-        Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetLastBoundRect();
+        Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
         rRefObj.Resize(rRef-aAnchor,xFact,yFact, bUnsetRelative);
         SetRectsDirty();
         SendUserCall(SDRUSERCALL_RESIZE,aBoundRect0);
@@ -405,7 +405,7 @@ void SdrVirtObj::Resize(const Point& rRef, const Fraction& xFact, const Fraction
 void SdrVirtObj::Rotate(const Point& rRef, long nAngle, double sn, double cs)
 {
     if (nAngle!=0) {
-        Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetLastBoundRect();
+        Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
         rRefObj.Rotate(rRef-aAnchor,nAngle,sn,cs);
         SetRectsDirty();
         SendUserCall(SDRUSERCALL_RESIZE,aBoundRect0);
@@ -414,7 +414,7 @@ void SdrVirtObj::Rotate(const Point& rRef, long nAngle, double sn, double cs)
 
 void SdrVirtObj::Mirror(const Point& rRef1, const Point& rRef2)
 {
-    Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetLastBoundRect();
+    Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
     rRefObj.Mirror(rRef1-aAnchor,rRef2-aAnchor);
     SetRectsDirty();
     SendUserCall(SDRUSERCALL_RESIZE,aBoundRect0);
@@ -423,7 +423,7 @@ void SdrVirtObj::Mirror(const Point& rRef1, const Point& rRef2)
 void SdrVirtObj::Shear(const Point& rRef, long nAngle, double tn, bool bVShear)
 {
     if (nAngle!=0) {
-        Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetLastBoundRect();
+        Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
         rRefObj.Shear(rRef-aAnchor,nAngle,tn,bVShear);
         SetRectsDirty();
         SendUserCall(SDRUSERCALL_RESIZE,aBoundRect0);
@@ -448,7 +448,7 @@ const Rectangle& SdrVirtObj::GetSnapRect() const
 void SdrVirtObj::SetSnapRect(const Rectangle& rRect)
 {
     {
-        Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetLastBoundRect();
+        Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
         Rectangle aR(rRect);
         aR-=aAnchor;
         rRefObj.SetSnapRect(aR);
@@ -476,7 +476,7 @@ const Rectangle& SdrVirtObj::GetLogicRect() const
 
 void SdrVirtObj::SetLogicRect(const Rectangle& rRect)
 {
-    Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetLastBoundRect();
+    Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
     Rectangle aR(rRect);
     aR-=aAnchor;
     rRefObj.SetLogicRect(aR);
@@ -568,7 +568,7 @@ SdrObjGeoData* SdrVirtObj::GetGeoData() const
 
 void SdrVirtObj::SetGeoData(const SdrObjGeoData& rGeo)
 {
-    Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetLastBoundRect();
+    Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
     rRefObj.SetGeoData(rGeo);
     SetRectsDirty();
     SendUserCall(SDRUSERCALL_RESIZE,aBoundRect0);

@@ -87,7 +87,7 @@ namespace svxform
             { "text",       0 },
             { "null",       1 },
             { "non-null",   2 },
-            { NULL,         -1 }
+            { nullptr,         -1 }
         };
         return s_aSearchForTypeMap;
     }
@@ -100,7 +100,7 @@ namespace svxform
             { "beginning-of-field",     MATCHING_BEGINNING },
             { "end-of-field",           MATCHING_END },
             { "complete-field",         MATCHING_WHOLETEXT },
-            { NULL,                     -1 }
+            { nullptr,                     -1 }
         };
         return s_aSearchPositionMap;
     }

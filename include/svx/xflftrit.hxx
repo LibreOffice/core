@@ -42,13 +42,13 @@ public:
                             XFillFloatTransparenceItem( const XFillFloatTransparenceItem& rItem );
 
     virtual bool            operator==( const SfxPoolItem& rItem ) const override;
-    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = NULL ) const override;
+    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = nullptr ) const override;
     virtual sal_uInt16          GetVersion( sal_uInt16 nFileFormatVersion ) const override;
     virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
     virtual bool            PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
     virtual bool GetPresentation( SfxItemPresentation ePres, SfxMapUnit eCoreMetric,
-                                    SfxMapUnit ePresMetric, OUString &rText, const IntlWrapper * pIntlWrapper = 0 ) const override;
+                                    SfxMapUnit ePresMetric, OUString &rText, const IntlWrapper * pIntlWrapper = nullptr ) const override;
 
     bool                    IsEnabled() const { return bEnabled; }
     void                    SetEnabled( bool bEnable ) { bEnabled = bEnable; }

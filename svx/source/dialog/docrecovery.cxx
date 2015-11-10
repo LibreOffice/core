@@ -66,7 +66,7 @@ using namespace ::osl;
 RecoveryCore::RecoveryCore(const css::uno::Reference< css::uno::XComponentContext >& rxContext,
                                  bool                                            bUsedForSaving)
     : m_xContext        ( rxContext    )
-    , m_pListener       ( 0            )
+    , m_pListener       ( nullptr            )
     , m_bListenForSaving(bUsedForSaving)
 {
     impl_startListening();
@@ -725,7 +725,7 @@ short SaveProgressDialog::Execute()
     m_pCore->setUpdateListener(this);
     m_pCore->doEmergencySave();
     short nRet = ModalDialog::Execute();
-    m_pCore->setUpdateListener(0);
+    m_pCore->setUpdateListener(nullptr);
     return nRet;
 }
 
@@ -767,8 +767,8 @@ RecovDocListEntry::RecovDocListEntry(      SvTreeListEntry* pEntry,
 void RecovDocListEntry::Paint(const Point& aPos, SvTreeListBox& aDevice, vcl::RenderContext& rRenderContext,
                               const SvViewDataEntry* /*pView*/, const SvTreeListEntry& rEntry)
 {
-    const Image* pImg = 0;
-    const OUString* pTxt = 0;
+    const Image* pImg = nullptr;
+    const OUString* pTxt = nullptr;
     RecovDocList* pList = static_cast<RecovDocList*>(&aDevice);
 
     TURLInfo* pInfo = static_cast<TURLInfo*>(rEntry.GetUserData());
@@ -797,14 +797,14 @@ void RecovDocListEntry::Paint(const Point& aPos, SvTreeListBox& aDevice, vcl::Re
 
         case E_RECOVERY_IS_IN_PROGRESS:
         {
-            pImg = 0;
+            pImg = nullptr;
             pTxt = &pList->m_aRecovInProgrStr;
         }
         break;
 
         case E_NOT_RECOVERED_YET:
         {
-            pImg = 0;
+            pImg = nullptr;
             pTxt = &pList->m_aNotRecovYetStr;
         }
         break;
@@ -962,7 +962,7 @@ short RecoveryDialog::execute()
                 while(m_bWaitForCore)
                     Application::Yield();
 
-                m_pCore->setUpdateListener(0);
+                m_pCore->setUpdateListener(nullptr);
                 m_eRecoveryState = RecoveryDialog::E_RECOVERY_CORE_DONE;
                 return execute();
              }

@@ -113,7 +113,7 @@ struct FmLoadAction
     ImplSVEvent * nEventId;
     sal_uInt16  nFlags;
 
-    FmLoadAction( ) : pPage( NULL ), nEventId( 0 ), nFlags( 0 ) { }
+    FmLoadAction( ) : pPage( nullptr ), nEventId( nullptr ), nFlags( 0 ) { }
     FmLoadAction( FmFormPage* _pPage, sal_uInt16 _nFlags, ImplSVEvent * _nEventId )
         :pPage( _pPage ), nEventId( _nEventId ), nFlags( _nFlags )
     {
@@ -527,7 +527,7 @@ public:
 
     /** determines whether the current form slot is currently enabled
     */
-    SAL_DLLPRIVATE bool    IsFormSlotEnabled( sal_Int32 _nSlot, css::form::runtime::FeatureState* _pCompleteState = NULL );
+    SAL_DLLPRIVATE bool    IsFormSlotEnabled( sal_Int32 _nSlot, css::form::runtime::FeatureState* _pCompleteState = nullptr );
 
 protected:
     DECL_DLLPRIVATE_LINK_TYPED( OnLoadForms, void*, void );

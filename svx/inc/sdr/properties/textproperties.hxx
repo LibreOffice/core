@@ -40,7 +40,7 @@ namespace sdr
             virtual SfxItemSet* CreateObjectSpecificItemSet(SfxItemPool& rPool) override;
 
             // Do the ItemChange, may do special handling
-            virtual void ItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem = 0) override;
+            virtual void ItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem = nullptr) override;
 
             // react on ItemSet changes
             virtual void ItemSetChanged(const SfxItemSet& rSet) override;

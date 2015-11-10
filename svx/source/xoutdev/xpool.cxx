@@ -29,7 +29,7 @@ XOutdevItemPool::XOutdevItemPool(
     sal_uInt16 nAttrStart,
     sal_uInt16 nAttrEnd,
     bool bLoadRefCounts)
-:   SfxItemPool("XOutdevItemPool", nAttrStart, nAttrEnd, 0L, 0L, bLoadRefCounts)
+:   SfxItemPool("XOutdevItemPool", nAttrStart, nAttrEnd, nullptr, nullptr, bLoadRefCounts)
 {
     // prepare some defaults
     const OUString aNullStr;
@@ -167,8 +167,8 @@ XOutdevItemPool::XOutdevItemPool(
 // copy ctor, clones all static defaults
 XOutdevItemPool::XOutdevItemPool(const XOutdevItemPool& rPool)
 :   SfxItemPool(rPool, true),
-    mppLocalPoolDefaults(0L),
-    mpLocalItemInfos(0L)
+    mppLocalPoolDefaults(nullptr),
+    mpLocalItemInfos(nullptr)
 {
 }
 

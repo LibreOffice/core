@@ -29,7 +29,7 @@
 SdrOutliner::SdrOutliner( SfxItemPool* pItemPool, sal_uInt16 nMode )
 :   Outliner( pItemPool, nMode ),
     //mpPaintInfoRec( NULL )
-    mpVisualizedPage(0)
+    mpVisualizedPage(nullptr)
 {
 }
 
@@ -91,7 +91,7 @@ const SdrTextObj* SdrOutliner::GetTextObj() const
     if( mpTextObj.is() )
         return static_cast< SdrTextObj* >( mpTextObj.get() );
     else
-        return 0;
+        return nullptr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

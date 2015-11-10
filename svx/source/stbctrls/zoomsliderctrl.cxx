@@ -399,7 +399,7 @@ bool SvxZoomSliderControl::MouseMove( const MouseEvent & rEvt )
 void SvxZoomSliderControl::forceRepaint() const
 {
     if (GetStatusBar().AreItemsVisible())
-        GetStatusBar().SetItemData(GetId(), 0);
+        GetStatusBar().SetItemData(GetId(), nullptr);
 }
 
 void SvxZoomSliderControl::repaintAndExecute()

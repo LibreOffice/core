@@ -77,7 +77,7 @@ public:
 
 PagePrimitiveExtractor::PagePrimitiveExtractor(
     ViewObjectContactOfPageObj& rVOC)
-:   ObjectContactOfPagePainter(0, rVOC.GetObjectContact()),
+:   ObjectContactOfPagePainter(nullptr, rVOC.GetObjectContact()),
     mrViewObjectContactOfPageObj(rVOC)
 {
     // make this renderer a preview renderer
@@ -258,7 +258,7 @@ drawinglayer::primitive2d::Primitive2DSequence ViewObjectContactOfPageObj::creat
 
             // #i105548# reset VOCRedirector to not accidentally have a pointer to a
             // temporary class, so calls to it are avoided safely
-            mpExtractor->SetViewObjectContactRedirector(0);
+            mpExtractor->SetViewObjectContactRedirector(nullptr);
 
             // reset recursion flag
             bInCreatePrimitive2D = false;
@@ -314,11 +314,11 @@ ViewObjectContactOfPageObj::~ViewObjectContactOfPageObj()
         // remember candidate and reset own pointer to avoid action when createPrimitive2DSequence()
         // would be called for any reason
         PagePrimitiveExtractor* pCandidate = mpExtractor;
-        mpExtractor = 0;
+        mpExtractor = nullptr;
 
         // also reset the StartPage to avoid ActionChanged() forwardings in the
         // PagePrimitiveExtractor::InvalidatePartOfView() implementation
-        pCandidate->SetStartPage(0);
+        pCandidate->SetStartPage(nullptr);
         delete pCandidate;
     }
 }

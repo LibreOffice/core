@@ -29,9 +29,9 @@ using ::com::sun::star::uno::Reference;
 namespace accessibility {
 
 AccessibleShapeTreeInfo::AccessibleShapeTreeInfo()
-    : mpView (NULL),
-      mpWindow (NULL),
-      mpViewForwarder (NULL)
+    : mpView (nullptr),
+      mpWindow (nullptr),
+      mpViewForwarder (nullptr)
 {
     // Empty.
 }

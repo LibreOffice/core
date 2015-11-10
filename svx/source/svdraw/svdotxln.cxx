@@ -61,7 +61,7 @@ void ImpSdrObjTextLink::Closed()
     {
         // set pLink of the object to NULL, because we are destroying the link instance now
         ImpSdrObjTextLinkUserData* pData=pSdrObj->GetLinkUserData();
-        if (pData!=NULL) pData->pLink=NULL;
+        if (pData!=nullptr) pData->pLink=nullptr;
         pSdrObj->ReleaseTextLink();
     }
     SvBaseLink::Closed();
@@ -72,8 +72,8 @@ void ImpSdrObjTextLink::Closed()
     const OUString& /*rMimeType*/, const css::uno::Any & /*rValue */)
 {
     bool bForceReload = false;
-    SdrModel* pModel = pSdrObj ? pSdrObj->GetModel() : 0;
-    sfx2::LinkManager* pLinkManager= pModel ? pModel->GetLinkManager() : 0;
+    SdrModel* pModel = pSdrObj ? pSdrObj->GetModel() : nullptr;
+    sfx2::LinkManager* pLinkManager= pModel ? pModel->GetLinkManager() : nullptr;
     if( pLinkManager )
     {
         ImpSdrObjTextLinkUserData* pData=pSdrObj->GetLinkUserData();
@@ -81,7 +81,7 @@ void ImpSdrObjTextLink::Closed()
         {
             OUString aFile;
             OUString aFilter;
-            sfx2::LinkManager::GetDisplayNames( this, 0,&aFile, 0, &aFilter );
+            sfx2::LinkManager::GetDisplayNames( this, nullptr,&aFile, nullptr, &aFilter );
 
             if( pData->aFileName != aFile ||
                 pData->aFilterName != aFilter )
@@ -104,7 +104,7 @@ ImpSdrObjTextLinkUserData::ImpSdrObjTextLinkUserData(SdrTextObj* pObj1):
     SdrObjUserData(SdrInventor,SDRUSERDATA_OBJTEXTLINK,0),
     pObj(pObj1),
     aFileDate0( DateTime::EMPTY ),
-    pLink(NULL),
+    pLink(nullptr),
     eCharSet(RTL_TEXTENCODING_DONTKNOW)
 {
 }
@@ -121,7 +121,7 @@ SdrObjUserData* ImpSdrObjTextLinkUserData::Clone(SdrObject* pObj1) const
     pData->aFilterName=aFilterName;
     pData->aFileDate0 =aFileDate0;
     pData->eCharSet   =eCharSet;
-    pData->pLink=NULL;
+    pData->pLink=nullptr;
     return pData;
 }
 
@@ -132,7 +132,7 @@ void SdrTextObj::SetTextLink(const OUString& rFileName, const OUString& rFilterN
         eCharSet = osl_getThreadTextEncoding();
 
     ImpSdrObjTextLinkUserData* pData=GetLinkUserData();
-    if (pData!=NULL) {
+    if (pData!=nullptr) {
         ReleaseTextLink();
     }
     pData=new ImpSdrObjTextLinkUserData(this);
@@ -256,29 +256,29 @@ ImpSdrObjTextLinkUserData* SdrTextObj::GetLinkUserData() const
             return static_cast<ImpSdrObjTextLinkUserData *>(pData);
         }
     }
-    return 0;
+    return nullptr;
 }
 
 void SdrTextObj::ImpLinkAnmeldung()
 {
     ImpSdrObjTextLinkUserData* pData=GetLinkUserData();
-    sfx2::LinkManager* pLinkManager=pModel!=NULL ? pModel->GetLinkManager() : NULL;
-    if (pLinkManager!=NULL && pData!=NULL && pData->pLink==NULL) { // don't register twice
+    sfx2::LinkManager* pLinkManager=pModel!=nullptr ? pModel->GetLinkManager() : nullptr;
+    if (pLinkManager!=nullptr && pData!=nullptr && pData->pLink==nullptr) { // don't register twice
         pData->pLink = new ImpSdrObjTextLink(this);
         pLinkManager->InsertFileLink(*pData->pLink,OBJECT_CLIENT_FILE,pData->aFileName,
                                      !pData->aFilterName.isEmpty() ?
-                                      &pData->aFilterName : NULL);
+                                      &pData->aFilterName : nullptr);
     }
 }
 
 void SdrTextObj::ImpLinkAbmeldung()
 {
     ImpSdrObjTextLinkUserData* pData=GetLinkUserData();
-    sfx2::LinkManager* pLinkManager=pModel!=NULL ? pModel->GetLinkManager() : NULL;
-    if (pLinkManager!=NULL && pData!=NULL && pData->pLink!=NULL) { // don't register twice
+    sfx2::LinkManager* pLinkManager=pModel!=nullptr ? pModel->GetLinkManager() : nullptr;
+    if (pLinkManager!=nullptr && pData!=nullptr && pData->pLink!=nullptr) { // don't register twice
         // when doing Remove, *pLink is deleted implicitly
         pLinkManager->Remove( pData->pLink );
-        pData->pLink=NULL;
+        pData->pLink=nullptr;
     }
 }
 

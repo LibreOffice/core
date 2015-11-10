@@ -43,8 +43,8 @@ SvxClipBoardControl::SvxClipBoardControl(
         sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx ) :
 
     SfxToolBoxControl( nSlotId, nId, rTbx ),
-    pClipboardFmtItem( 0 ),
-    pPopup( 0 ),
+    pClipboardFmtItem( nullptr ),
+    pPopup( nullptr ),
     bDisabled( false )
 {
     addStatusListener( ".uno:ClipboardFormatItems");
@@ -104,7 +104,7 @@ VclPtr<SfxPopupWindow> SvxClipBoardControl::CreatePopupWindow()
 
     GetToolBox().EndSelection();
     DelPopup();
-    return 0;
+    return nullptr;
 }
 
 
@@ -136,7 +136,7 @@ void SvxClipBoardControl::DelPopup()
     if(pPopup)
     {
         delete pPopup;
-        pPopup = 0;
+        pPopup = nullptr;
     }
 }
 

@@ -57,12 +57,12 @@ VclPtr<vcl::Window> ParaPropertyPanel::Create (
     SfxBindings* pBindings,
     const css::uno::Reference<css::ui::XSidebar>& rxSidebar)
 {
-    if (pParent == NULL)
-        throw lang::IllegalArgumentException("no parent Window given to ParaPropertyPanel::Create", NULL, 0);
+    if (pParent == nullptr)
+        throw lang::IllegalArgumentException("no parent Window given to ParaPropertyPanel::Create", nullptr, 0);
     if ( ! rxFrame.is())
-        throw lang::IllegalArgumentException("no XFrame given to ParaPropertyPanel::Create", NULL, 1);
-    if (pBindings == NULL)
-        throw lang::IllegalArgumentException("no SfxBindings given to ParaPropertyPanel::Create", NULL, 2);
+        throw lang::IllegalArgumentException("no XFrame given to ParaPropertyPanel::Create", nullptr, 1);
+    if (pBindings == nullptr)
+        throw lang::IllegalArgumentException("no SfxBindings given to ParaPropertyPanel::Create", nullptr, 2);
 
     return VclPtr<ParaPropertyPanel>::Create(
                 pParent,
@@ -545,7 +545,7 @@ FieldUnit ParaPropertyPanel::GetCurrentUnit( SfxItemState eState, const SfxPoolI
     else
     {
         SfxViewFrame* pFrame = SfxViewFrame::Current();
-        SfxObjectShell* pSh = NULL;
+        SfxObjectShell* pSh = nullptr;
         if ( pFrame )
             pSh = pFrame->GetObjectShell();
         if ( pSh )  //the object shell is not always available during reload

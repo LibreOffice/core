@@ -105,7 +105,7 @@ private:
     static void impChildInserted(SdrObject& rChild);
 public:
     TYPEINFO();
-    SdrObjList(SdrModel* pNewModel, SdrPage* pNewPage, SdrObjList* pNewUpList=NULL);
+    SdrObjList(SdrModel* pNewModel, SdrPage* pNewPage, SdrObjList* pNewUpList=nullptr);
     virtual ~SdrObjList();
 
     virtual SdrObjList* Clone() const;
@@ -127,9 +127,9 @@ public:
     void           RecalcObjOrdNums();
     bool           IsObjOrdNumsDirty() const        { return bObjOrdNumsDirty; }
     virtual void   NbcInsertObject(SdrObject* pObj, size_t nPos=SAL_MAX_SIZE,
-                                   const SdrInsertReason* pReason=NULL);
+                                   const SdrInsertReason* pReason=nullptr);
     virtual void   InsertObject(SdrObject* pObj, size_t nPos=SAL_MAX_SIZE,
-                                const SdrInsertReason* pReason=NULL);
+                                const SdrInsertReason* pReason=nullptr);
     /// remove from list without delete
     virtual SdrObject* NbcRemoveObject(size_t nObjNum);
     virtual SdrObject* RemoveObject(size_t nObjNum);
@@ -454,7 +454,7 @@ protected:
     // classes that needs access to the page objects must be deferred to lateInit. And it must
     // call lateInit() of its parent class.
     SdrPage(const SdrPage& rSrcPage);
-    void lateInit(const SdrPage& rSrcPage, SdrModel* pNewModel = 0);
+    void lateInit(const SdrPage& rSrcPage, SdrModel* pNewModel = nullptr);
 
 public:
     TYPEINFO_OVERRIDE();
@@ -495,7 +495,7 @@ public:
     virtual void SetModel(SdrModel* pNewModel) override;
 
     // New MasterPage interface
-    bool TRG_HasMasterPage() const { return (0L != mpMasterPageDescriptor); }
+    bool TRG_HasMasterPage() const { return (nullptr != mpMasterPageDescriptor); }
     void TRG_SetMasterPage(SdrPage& rNew);
     void TRG_ClearMasterPage();
     SdrPage& TRG_GetMasterPage() const;

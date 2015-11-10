@@ -37,7 +37,7 @@ SvxHlinkDlgWrapper::SvxHlinkDlgWrapper( vcl::Window* _pParent, sal_uInt16 nId,
                                                 SfxChildWinInfo* pInfo ) :
     SfxChildWindow( _pParent, nId ),
 
-    mpDlg( NULL )
+    mpDlg( nullptr )
 
 {
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
@@ -47,9 +47,9 @@ SvxHlinkDlgWrapper::SvxHlinkDlgWrapper( vcl::Window* _pParent, sal_uInt16 nId,
     SetWindow( mpDlg->GetWindow() );
     SetVisible_Impl(false);
 
-    vcl::Window* pTopWindow = 0;
+    vcl::Window* pTopWindow = nullptr;
     if ( pInfo->aSize.Width() != 0 && pInfo->aSize.Height() != 0 &&
-            (0 != (pTopWindow = SfxGetpApp()->GetTopWindow())))
+            (nullptr != (pTopWindow = SfxGetpApp()->GetTopWindow())))
     {
         Size aParentSize( pTopWindow->GetSizePixel() );
         Size aDlgSize ( GetSizePixel () );

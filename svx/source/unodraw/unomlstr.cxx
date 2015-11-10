@@ -54,7 +54,7 @@ void SvxUnoShapeModifyListener::disposing(const lang::EventObject& ) throw( uno:
 // internal
 void SvxUnoShapeModifyListener::invalidate() throw()
 {
-    mpObj = NULL;
+    mpObj = nullptr;
 }
 
 

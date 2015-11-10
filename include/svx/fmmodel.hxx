@@ -48,9 +48,9 @@ private:
 public:
     TYPEINFO_OVERRIDE();
 
-    FmFormModel(SfxItemPool* pPool=NULL, SfxObjectShell* pPers=NULL );
-    FmFormModel(const OUString& rPath, SfxItemPool* pPool=NULL,
-                SfxObjectShell* pPers=NULL );
+    FmFormModel(SfxItemPool* pPool=nullptr, SfxObjectShell* pPers=nullptr );
+    FmFormModel(const OUString& rPath, SfxItemPool* pPool=nullptr,
+                SfxObjectShell* pPers=nullptr );
     FmFormModel(const OUString& rPath, SfxItemPool* pPool, SfxObjectShell* pPers,
                 bool bUseExtColorTable);
 

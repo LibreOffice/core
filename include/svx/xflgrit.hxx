@@ -44,7 +44,7 @@ public:
             XFillGradientItem(SvStream& rIn, sal_uInt16 nVer = 0);
 
     virtual bool            operator==(const SfxPoolItem& rItem) const override;
-    virtual SfxPoolItem*    Clone(SfxItemPool* pPool = 0) const override;
+    virtual SfxPoolItem*    Clone(SfxItemPool* pPool = nullptr) const override;
     virtual SfxPoolItem*    Create(SvStream& rIn, sal_uInt16 nVer) const override;
     virtual SvStream&       Store(SvStream& rOut, sal_uInt16 nItemVersion ) const override;
     virtual sal_uInt16      GetVersion( sal_uInt16 nFileFormatVersion ) const override;
@@ -54,7 +54,7 @@ public:
     virtual bool GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
-                                    OUString &rText, const IntlWrapper * = 0 ) const override;
+                                    OUString &rText, const IntlWrapper * = nullptr ) const override;
     const XGradient&        GetGradientValue() const; // GetValue -> GetGradientValue
     void                    SetGradientValue(const XGradient& rNew) { aGradient = rNew; Detach(); } // SetValue -> SetGradientValue
 

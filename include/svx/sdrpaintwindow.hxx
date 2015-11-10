@@ -97,7 +97,7 @@ private:
     void impCreateOverlayManager();
 
 public:
-    SdrPaintWindow(SdrPaintView& rNewPaintView, OutputDevice& rOut, vcl::Window* pWindow = 0);
+    SdrPaintWindow(SdrPaintView& rNewPaintView, OutputDevice& rOut, vcl::Window* pWindow = nullptr);
     ~SdrPaintWindow();
 
     // data read accesses

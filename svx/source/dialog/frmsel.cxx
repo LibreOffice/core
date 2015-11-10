@@ -232,13 +232,13 @@ FrameSelectorImpl::FrameSelectorImpl( FrameSelector& rFrameSel ) :
     mbAutoSelect( true ),
     mbClicked( false ),
     mbHCMode( false ),
-    mpAccess( 0 ),
-    maChildVec( 8, static_cast< a11y::AccFrameSelector* >( 0 ) ),
+    mpAccess( nullptr ),
+    maChildVec( 8, static_cast< a11y::AccFrameSelector* >( nullptr ) ),
     mxChildVec( 8 )
 {
     FreeResource();
 
-    maAllBorders.resize( FRAMEBORDERTYPE_COUNT, 0 );
+    maAllBorders.resize( FRAMEBORDERTYPE_COUNT, nullptr );
     maAllBorders[ GetIndexFromFrameBorderType( FRAMEBORDER_LEFT   ) ] = &maLeft;
     maAllBorders[ GetIndexFromFrameBorderType( FRAMEBORDER_RIGHT  ) ] = &maRight;
     maAllBorders[ GetIndexFromFrameBorderType( FRAMEBORDER_TOP    ) ] = &maTop;
@@ -321,7 +321,7 @@ void FrameSelectorImpl::InitArrowImageList()
 
     GetRes( SVX_RES( RID_SVXSTR_BORDER_CONTROL ).SetRT( RSC_RESOURCE ) );
     maILArrows.InsertFromHorizontalBitmap(
-        SVX_RES( BMP_FRMSEL_ARROWS ), 16, NULL, pColorAry1, pColorAry2, 3);
+        SVX_RES( BMP_FRMSEL_ARROWS ), 16, nullptr, pColorAry1, pColorAry2, 3);
     FreeResource();
     DBG_ASSERT( maILArrows.GetImageSize().Height() == maILArrows.GetImageSize().Width(),
         "svx::FrameSelectorImpl::InitArrowImageList - images are not squarish" );
@@ -853,7 +853,7 @@ const SvxBorderLine* FrameSelector::GetFrameBorderStyle( FrameBorderType eBorder
 {
     const SvxBorderLine& rStyle = mxImpl->GetBorder( eBorder ).GetCoreStyle();
     // rest of the world uses null pointer for invisible frame border
-    return rStyle.GetOutWidth() ? &rStyle : 0;
+    return rStyle.GetOutWidth() ? &rStyle : nullptr;
 }
 
 void FrameSelector::ShowBorder( FrameBorderType eBorder, const SvxBorderLine* pStyle )

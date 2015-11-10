@@ -291,7 +291,7 @@ void SvxPosSizeStatusBarControl::StateChanged( sal_uInt16 nSID, SfxItemState eSt
     }
 
     if ( GetStatusBar().AreItemsVisible() )
-        GetStatusBar().SetItemData( GetId(), 0 );
+        GetStatusBar().SetItemData( GetId(), nullptr );
 
     //  set only strings as text at the statusBar, so that the Help-Tips
     //  can work with the text, when it is too long for the statusBar

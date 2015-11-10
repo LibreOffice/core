@@ -67,13 +67,13 @@ SvxNumberFormatShell::SvxNumberFormatShell( SvNumberFormatter*  pNumFormatter,
                                             SvxNumberValueType  eNumValType,
                                             const OUString&     rNumStr )
     : pFormatter ( pNumFormatter )
-    , pCurFmtTable ( NULL )
+    , pCurFmtTable ( nullptr )
     , eValType ( eNumValType )
     , bUndoAddList ( true )
     , nCurFormatKey ( nFormatKey )
     , nCurCategory (css::util::NumberFormat::ALL)
     , eCurLanguage (LANGUAGE_NONE)
-    , pCurCurrencyEntry(NULL)
+    , pCurCurrencyEntry(nullptr)
     , bBankingSymbol  (false)
     , nCurCurrencyEntryPos((sal_uInt16) SELPOS_NONE)
     , bUseStarFormat  (false)
@@ -100,13 +100,13 @@ SvxNumberFormatShell::SvxNumberFormatShell( SvNumberFormatter*  pNumFormatter,
                                             double              nNumVal,
                                             const OUString*     pNumStr )
     : pFormatter ( pNumFormatter )
-    , pCurFmtTable ( NULL )
+    , pCurFmtTable ( nullptr )
     , eValType ( eNumValType )
     , bUndoAddList ( true )
     , nCurFormatKey ( nFormatKey )
     , nCurCategory (css::util::NumberFormat::ALL)
     , eCurLanguage (LANGUAGE_NONE)
-    , pCurCurrencyEntry(NULL)
+    , pCurCurrencyEntry(nullptr)
     , bBankingSymbol  (false)
     , nCurCurrencyEntryPos((sal_uInt16) SELPOS_NONE)
     , bUseStarFormat  (false)
@@ -185,7 +185,7 @@ void SvxNumberFormatShell::CategoryChanged( sal_uInt16 nCatLbPos,
                                                  eCurLanguage ) );
     // reinitialize currency if category newly entered
     if ( nCurCategory == css::util::NumberFormat::CURRENCY && nOldCategory != nCurCategory )
-        pCurCurrencyEntry = NULL;
+        pCurCurrencyEntry = nullptr;
     rFmtSelPos = FillEntryList_Impl( rFmtEntries );
 }
 
@@ -423,7 +423,7 @@ void SvxNumberFormatShell::MakePreviewString( const OUString& rFormatStr,
                                               OUString&       rPreviewStr,
                                               Color*&         rpFontColor )
 {
-    rpFontColor = NULL;
+    rpFontColor = nullptr;
 
     sal_uIntPtr nExistingFormat = pFormatter->GetEntryKey( rFormatStr, eCurLanguage );
     if ( nExistingFormat == NUMBERFORMAT_ENTRY_NOT_FOUND )
@@ -467,7 +467,7 @@ bool SvxNumberFormatShell::IsUserDefined( const OUString& rFmtString )
         {
             const SvNumberformat* pNumEntry = pFormatter->GetEntry(nFound);
 
-            if(pNumEntry!=NULL && pNumEntry->HasNewCurrency())
+            if(pNumEntry!=nullptr && pNumEntry->HasNewCurrency())
             {
                 bool bTestBanking;
                 sal_uInt16 nPos=FindCurrencyTableEntry(rFmtString,bTestBanking);
@@ -519,7 +519,7 @@ void SvxNumberFormatShell::GetInitSettings( sal_uInt16& nCatLbPos,
 {
 
     // precondition: number formater found
-    DBG_ASSERT( pFormatter != NULL, "Zahlenformatierer nicht gefunden!" );
+    DBG_ASSERT( pFormatter != nullptr, "Zahlenformatierer nicht gefunden!" );
 
     short                   nSelPos     = SELPOS_NONE;
 
@@ -593,7 +593,7 @@ void SvxNumberFormatShell::FillEListWithStd_Impl( std::vector<OUString>& rList,
      * Ist die Liste leer oder gibt es kein aktuelles Format,
      * so wird SELPOS_NONE geliefert.
      */
-    DBG_ASSERT( pCurFmtTable != NULL, "Unbekanntes Zahlenformat!" );
+    DBG_ASSERT( pCurFmtTable != nullptr, "Unbekanntes Zahlenformat!" );
 
     aCurrencyFormatList.clear();
 
@@ -673,7 +673,7 @@ short SvxNumberFormatShell::FillEListWithFormats_Impl( std::vector<OUString>& rL
 
         const SvNumberformat* pNumEntry   = pFormatter->GetEntry(nNFEntry);
 
-        if(pNumEntry==NULL) continue;
+        if(pNumEntry==nullptr) continue;
 
         nMyCat=pNumEntry->GetType() & ~css::util::NumberFormat::DEFINED;
         aStrComment=pNumEntry->GetComment();
@@ -708,7 +708,7 @@ short SvxNumberFormatShell::FillEListWithDateTime_Impl( std::vector<OUString>& r
         nNFEntry=pFormatter->GetFormatIndex((NfIndexTableOffset)nIndex,eCurLanguage);
 
         const SvNumberformat* pNumEntry   = pFormatter->GetEntry(nNFEntry);
-        if(pNumEntry!=NULL)
+        if(pNumEntry!=nullptr)
         {
             nMyCat=pNumEntry->GetType() & ~css::util::NumberFormat::DEFINED;
             aStrComment=pNumEntry->GetComment();
@@ -736,7 +736,7 @@ short SvxNumberFormatShell::FillEListWithCurrency_Impl( std::vector<OUString>& r
      * Ist die Liste leer oder gibt es kein aktuelles Format,
      * so wird SELPOS_NONE geliefert.
      */
-    DBG_ASSERT( pCurFmtTable != NULL, "Unbekanntes Zahlenformat!" );
+    DBG_ASSERT( pCurFmtTable != nullptr, "Unbekanntes Zahlenformat!" );
 
     const NfCurrencyEntry* pTmpCurrencyEntry;
     bool             bTmpBanking;
@@ -745,8 +745,8 @@ short SvxNumberFormatShell::FillEListWithCurrency_Impl( std::vector<OUString>& r
     bool bFlag=pFormatter->GetNewCurrencySymbolString(nCurFormatKey,rSymbol,
                                                       &pTmpCurrencyEntry,&bTmpBanking);
 
-    if( (!bFlag && pCurCurrencyEntry==NULL) ||
-        (bFlag && pTmpCurrencyEntry==NULL && rSymbol.isEmpty()) ||
+    if( (!bFlag && pCurCurrencyEntry==nullptr) ||
+        (bFlag && pTmpCurrencyEntry==nullptr && rSymbol.isEmpty()) ||
         (nCurCategory==css::util::NumberFormat::ALL))
     {
         if ( nCurCategory == css::util::NumberFormat::ALL )
@@ -772,7 +772,7 @@ short SvxNumberFormatShell::FillEListWithSysCurrencys( std::vector<OUString>& rL
      */
     sal_uInt16  nMyType;
 
-    DBG_ASSERT( pCurFmtTable != NULL, "Unbekanntes Zahlenformat!" );
+    DBG_ASSERT( pCurFmtTable != nullptr, "Unbekanntes Zahlenformat!" );
 
     sal_uInt32          nNFEntry;
     OUString            aStrComment;
@@ -792,7 +792,7 @@ short SvxNumberFormatShell::FillEListWithSysCurrencys( std::vector<OUString>& rL
 
         const SvNumberformat* pNumEntry   = pFormatter->GetEntry(nNFEntry);
 
-        if(pNumEntry==NULL) continue;
+        if(pNumEntry==nullptr) continue;
 
         nMyCat=pNumEntry->GetType() & ~css::util::NumberFormat::DEFINED;
         aStrComment=pNumEntry->GetComment();
@@ -830,7 +830,7 @@ short SvxNumberFormatShell::FillEListWithSysCurrencys( std::vector<OUString>& rL
                                                            &pTmpCurrencyEntry,
                                                            &bTmpBanking);
 
-                    bUserNewCurrency=(pTmpCurrencyEntry!=NULL);
+                    bUserNewCurrency=(pTmpCurrencyEntry!=nullptr);
                 }
 
                 if(!bUserNewCurrency &&(pNumEntry->GetType() & css::util::NumberFormat::DEFINED))
@@ -861,7 +861,7 @@ short SvxNumberFormatShell::FillEListWithUserCurrencys( std::vector<OUString>& r
      */
     sal_uInt16 nMyType;
 
-    DBG_ASSERT( pCurFmtTable != NULL, "Unbekanntes Zahlenformat!" );
+    DBG_ASSERT( pCurFmtTable != nullptr, "Unbekanntes Zahlenformat!" );
 
     OUString        aStrComment;
     OUString        aNewFormNInfo;
@@ -881,7 +881,7 @@ short SvxNumberFormatShell::FillEListWithUserCurrencys( std::vector<OUString>& r
 
     OUString rShortSymbol;
 
-    if(pCurCurrencyEntry==NULL)
+    if(pCurCurrencyEntry==nullptr)
     {
         // #110398# If no currency format was previously selected (we're not
         // about to add another currency), try to select the initial currency
@@ -904,7 +904,7 @@ short SvxNumberFormatShell::FillEListWithUserCurrencys( std::vector<OUString>& r
         bTmpBanking=bBankingSymbol;
     }
 
-    if(pTmpCurrencyEntry!=NULL)
+    if(pTmpCurrencyEntry!=nullptr)
     {
         rSymbol = pTmpCurrencyEntry->BuildSymbolString(false);
         rBankSymbol = pTmpCurrencyEntry->BuildSymbolString(true);
@@ -1055,7 +1055,7 @@ short SvxNumberFormatShell::FillEListWithUsD_Impl( std::vector<OUString>& rList,
      */
     sal_uInt16 nMyType;
 
-    DBG_ASSERT( pCurFmtTable != NULL, "Unbekanntes Zahlenformat!" );
+    DBG_ASSERT( pCurFmtTable != nullptr, "Unbekanntes Zahlenformat!" );
 
     OUString        aStrComment;
     OUString        aNewFormNInfo;
@@ -1105,7 +1105,7 @@ short SvxNumberFormatShell::FillEListWithUsD_Impl( std::vector<OUString>& rList,
 
 void SvxNumberFormatShell::GetPreviewString_Impl( OUString& rString, Color*& rpColor )
 {
-    rpColor = NULL;
+    rpColor = nullptr;
 
     //  #50441# if a string was set in addition to the value, use it for text formats
     bool bUseText = ( eValType == SVX_VALUE_TYPE_STRING ||
@@ -1203,7 +1203,7 @@ void SvxNumberFormatShell::MakePrevStringFromVal(
         Color*& rpFontColor,
         double  nValue)
 {
-    rpFontColor = NULL;
+    rpFontColor = nullptr;
     pFormatter->GetPreviewString( rFormatStr, nValue, rPreviewStr, &rpFontColor, eCurLanguage );
 }
 
@@ -1219,7 +1219,7 @@ void SvxNumberFormatShell::SetComment4Entry(short nEntry, const OUString& aEntSt
     if(nEntry<0) return;
     sal_uInt32  nMyNfEntry=aCurEntryList[nEntry];
     pNumEntry = const_cast<SvNumberformat*>(pFormatter->GetEntry(nMyNfEntry));
-    if(pNumEntry!=NULL) pNumEntry->SetComment(aEntStr);
+    if(pNumEntry!=nullptr) pNumEntry->SetComment(aEntStr);
 }
 
 /*
@@ -1237,7 +1237,7 @@ OUString SvxNumberFormatShell::GetComment4Entry(short nEntry)
     {
         sal_uInt32  nMyNfEntry=aCurEntryList[nEntry];
         const SvNumberformat *pNumEntry = pFormatter->GetEntry(nMyNfEntry);
-        if(pNumEntry!=NULL)
+        if(pNumEntry!=nullptr)
             return pNumEntry->GetComment();
     }
 
@@ -1261,7 +1261,7 @@ short SvxNumberFormatShell::GetCategory4Entry(short nEntry) const
         {
             const SvNumberformat *pNumEntry = pFormatter->GetEntry(nMyNfEntry);
             sal_uInt16 nMyCat,nMyType;
-            if(pNumEntry!=NULL)
+            if(pNumEntry!=nullptr)
             {
                 nMyCat=pNumEntry->GetType() & ~css::util::NumberFormat::DEFINED;
                 CategoryToPos_Impl(nMyCat,nMyType);
@@ -1293,7 +1293,7 @@ bool SvxNumberFormatShell::GetUserDefined4Entry(short nEntry)
         sal_uInt32  nMyNfEntry=aCurEntryList[nEntry];
         const SvNumberformat *pNumEntry = pFormatter->GetEntry(nMyNfEntry);
 
-        if(pNumEntry!=NULL)
+        if(pNumEntry!=nullptr)
         {
             if((pNumEntry->GetType() & css::util::NumberFormat::DEFINED)>0)
             {
@@ -1325,7 +1325,7 @@ OUString SvxNumberFormatShell::GetFormat4Entry(short nEntry)
         sal_uInt32  nMyNfEntry=aCurEntryList[nEntry];
         const SvNumberformat *pNumEntry = pFormatter->GetEntry(nMyNfEntry);
 
-        if(pNumEntry!=NULL)
+        if(pNumEntry!=nullptr)
             return pNumEntry->GetFormatstring();
     }
     return OUString();
@@ -1393,11 +1393,11 @@ void SvxNumberFormatShell::GetCurrencySymbols(std::vector<OUString>& rList, sal_
 {
     const NfCurrencyEntry* pTmpCurrencyEntry=SvNumberFormatter::MatchSystemCurrency();
 
-    bool bFlag=(pTmpCurrencyEntry==NULL);
+    bool bFlag=(pTmpCurrencyEntry==nullptr);
 
     GetCurrencySymbols(rList, bFlag);
 
-    if(pPos!=NULL)
+    if(pPos!=nullptr)
     {
         const NfCurrencyTable& rCurrencyTable=SvNumberFormatter::GetTheCurrencyTable();
         sal_uInt16 nTableCount=rCurrencyTable.size();
@@ -1517,7 +1517,7 @@ void SvxNumberFormatShell::SetCurrencySymbol(sal_uInt32 nPos)
         }
         else
         {
-            pCurCurrencyEntry=NULL;
+            pCurCurrencyEntry=nullptr;
             nCurCurrencyEntryPos=0;
             nCurFormatKey=pFormatter->GetFormatIndex(
                          NF_CURRENCY_1000DEC2_RED, eCurLanguage);
@@ -1578,7 +1578,7 @@ sal_uInt16 SvxNumberFormatShell::FindCurrencyTableEntry( const OUString& rFmtStr
     OUString aSymbol, aExtension;
     sal_uInt32 nFound = pFormatter->TestNewString( rFmtString, eCurLanguage );
     if ( nFound != NUMBERFORMAT_ENTRY_NOT_FOUND &&
-            ((pFormat = pFormatter->GetEntry( nFound )) != 0) &&
+            ((pFormat = pFormatter->GetEntry( nFound )) != nullptr) &&
             pFormat->GetNewCurrencySymbol( aSymbol, aExtension ) )
     {   // eventually match with format locale
         const NfCurrencyEntry* pTmpCurrencyEntry =
@@ -1665,7 +1665,7 @@ bool SvxNumberFormatShell::IsInTable(sal_uInt16 const nPos,
 
             const NfCurrencyEntry* pTmpCurrencyEntry=&rCurrencyTable[nPos];
 
-            if ( pTmpCurrencyEntry!=NULL)
+            if ( pTmpCurrencyEntry!=nullptr)
             {
                 pFormatter->GetCurrencyFormatStrings( aWSStringsDtor,
                                 *pTmpCurrencyEntry, bTmpBanking );

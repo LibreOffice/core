@@ -100,7 +100,7 @@ public:
     ImpItemListRow()
     :   eState(SfxItemState::UNKNOWN),
         nWhichId(0),
-        pType(NULL),
+        pType(nullptr),
         eItemType(ITEM_DONTKNOW),
         nVal(0),
         nMin(0),
@@ -231,8 +231,8 @@ void _SdrItemBrowserControl::dispose()
 
 void _SdrItemBrowserControl::ImpCtor()
 {
-    pEditControl = NULL;
-    pAktChangeEntry = NULL;
+    pEditControl = nullptr;
+    pAktChangeEntry = nullptr;
     nLastWhichOfs = 0;
     nLastWhich = 0;
     nLastWhichOben = 0;  // not implemented yet
@@ -496,7 +496,7 @@ bool _SdrItemBrowserControl::BeginChangeEntry(std::size_t nPos)
     BreakChangeEntry();
     bool bRet = false;
     ImpItemListRow* pEntry=ImpGetEntry(nPos);
-    if (pEntry!=NULL && !pEntry->bComment) {
+    if (pEntry!=nullptr && !pEntry->bComment) {
         SetMode(MYBROWSEMODE & BrowserMode(~BrowserMode::KEEPHIGHLIGHT));
         pEditControl=VclPtr<ImpItemEdit>::Create(&GetDataWindow(),this,0);
         Rectangle aRect(GetFieldRectPixel(nPos, ITEMBROWSER_VALUECOL_ID, false));
@@ -545,7 +545,7 @@ void _SdrItemBrowserControl::BreakChangeEntry()
     if (pEditControl!=nullptr) {
         pEditControl.disposeAndClear();
         delete pAktChangeEntry;
-        pAktChangeEntry=NULL;
+        pAktChangeEntry=nullptr;
         vcl::Window* pParent=GetParent();
         pParent->SetText(aWNamMerk);
         SetMode(MYBROWSEMODE);
@@ -589,14 +589,14 @@ bool ImpGetItem(const SfxItemSet& rSet, sal_uInt16 nWhich, const SfxPoolItem*& r
     if (eState==SfxItemState::DEFAULT) {
         rpItem=&rSet.Get(nWhich);
     }
-    return (eState==SfxItemState::DEFAULT || eState==SfxItemState::SET) && rpItem!=NULL;
+    return (eState==SfxItemState::DEFAULT || eState==SfxItemState::SET) && rpItem!=nullptr;
 }
 
 bool IsItemIneffective(sal_uInt16 nWhich, const SfxItemSet* pSet, sal_uInt16& rIndent)
 {
     rIndent=0;
-    if (pSet==NULL) return false;
-    const SfxPoolItem* pItem=NULL;
+    if (pSet==nullptr) return false;
+    const SfxPoolItem* pItem=nullptr;
     bool bRet = false;
     switch (nWhich) {
         case XATTR_LINEDASH         :
@@ -905,7 +905,7 @@ sal_uInt16 ImpSortWhich(sal_uInt16 nWhich)
 void _SdrItemBrowserControl::SetAttributes(const SfxItemSet* pSet, const SfxItemSet* p2ndSet)
 {
     SetMode(MYBROWSEMODE & BrowserMode(~BrowserMode::KEEPHIGHLIGHT));
-    if (pSet!=NULL) {
+    if (pSet!=nullptr) {
         sal_uInt16 nEntryNum=0;
         SfxWhichIter aIter(*pSet);
         const SfxItemPool* pPool=pSet->GetPool();
@@ -917,7 +917,7 @@ void _SdrItemBrowserControl::SetAttributes(const SfxItemSet* pSet, const SfxItem
             // at this position in the Set.
             if (!bDontSortItems) nWhich=ImpSortWhich(nWhich);
             SfxItemState eState=pSet->GetItemState(nWhich);
-            if (p2ndSet!=NULL) {
+            if (p2ndSet!=nullptr) {
                 SfxItemState e2ndState=p2ndSet->GetItemState(nWhich);
                 if (eState==SfxItemState::DEFAULT) eState=SfxItemState::DISABLED;
                 else if (e2ndState==SfxItemState::DEFAULT) eState=SfxItemState::DEFAULT;
@@ -1098,13 +1098,13 @@ vcl::Window* SdrItemBrowser::ImpGetViewWin(SdrView& rView)
         }
     }
 
-    return 0L;
+    return nullptr;
 }
 
 void SdrItemBrowser::ForceParent()
 {
     vcl::Window* pWin=ImpGetViewWin(*pView);
-    if (pWin!=NULL) SetParent(pWin);
+    if (pWin!=nullptr) SetParent(pWin);
 }
 
 void SdrItemBrowser::SetDirty()
@@ -1145,7 +1145,7 @@ IMPL_LINK_NOARG_TYPED(SdrItemBrowser, IdleHdl, Idle *, void)
 IMPL_LINK_TYPED(SdrItemBrowser, ChangedHdl, _SdrItemBrowserControl&, rBrowse, void)
 {
     const ImpItemListRow* pEntry = rBrowse.GetAktChangeEntry();
-    if (pEntry!=NULL)
+    if (pEntry!=nullptr)
     {
         SfxItemSet aSet(pView->GetModel()->GetItemPool());
         pView->GetAttributes(aSet);

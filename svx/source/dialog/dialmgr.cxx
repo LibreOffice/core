@@ -22,7 +22,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 
-static ResMgr* pResMgr=0;
+static ResMgr* pResMgr=nullptr;
 
 ResMgr* DialogsResMgr::GetResMgr()
 {

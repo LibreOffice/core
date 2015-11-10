@@ -279,7 +279,7 @@ public:
     virtual SfxAbstractTabDialog*       CreateTextTabDialog( vcl::Window* pParent,
                                             const SfxItemSet* pAttrSet,
                                             SdrView* pView,
-                                            SdrModel* pModel=0 ) = 0 ;
+                                            SdrModel* pModel=nullptr ) = 0 ;
 
     virtual AbstractSvxCaptionDialog* CreateCaptionDialog( vcl::Window* pParent,
                                         const SdrView* pView,
@@ -391,7 +391,7 @@ public:
                                                             bool bShadow) = 0 ;
     virtual SfxAbstractTabDialog*           CreateSvxLineTabDialog( vcl::Window* pParent, const SfxItemSet* pAttr, //add forSvxLineTabDialog
                                                                  SdrModel* pModel,
-                                                                 const SdrObject* pObj = NULL,
+                                                                 const SdrObject* pObj = nullptr,
                                                                  bool bHasObj = true )=0;
     virtual SfxAbstractDialog*              CreateSfxDialog( vcl::Window* pParent,
                                                                         const SfxItemSet& rAttr,
@@ -428,7 +428,7 @@ public:
                 const sal_uInt16 _nInitiallySelectedEvent
             ) = 0;
 
-    virtual SfxAbstractTabDialog* CreateSvxFormatCellsDialog( vcl::Window* pParent, const SfxItemSet* pAttr, SdrModel* pModel, const SdrObject* pObj = NULL )=0;
+    virtual SfxAbstractTabDialog* CreateSvxFormatCellsDialog( vcl::Window* pParent, const SfxItemSet* pAttr, SdrModel* pModel, const SdrObject* pObj = nullptr )=0;
 
     virtual SvxAbstractSplittTableDialog* CreateSvxSplittTableDialog( vcl::Window* pParent, bool bIsTableVertical, long nMaxVertical, long nMaxHorizontal )=0;
 

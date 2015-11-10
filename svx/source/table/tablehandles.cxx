@@ -161,7 +161,7 @@ void TableEdgeHdl::CreateB2dIAObject()
             basegfx::B2DPolyPolygon aInvisible;
 
             // get visible and invisible parts
-            getPolyPolygon(aVisible, aInvisible, 0);
+            getPolyPolygon(aVisible, aInvisible, nullptr);
 
             if(aVisible.count() || aInvisible.count())
             {

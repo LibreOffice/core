@@ -41,8 +41,8 @@ sal_uIntPtr SvxGraphicFilter::ExecuteGrfFilterSlot( SfxRequest& rReq, GraphicObj
     if( rGraphic.GetType() == GRAPHIC_BITMAP )
     {
         SfxViewFrame*   pViewFrame = SfxViewFrame::Current();
-        SfxObjectShell* pShell = pViewFrame ? pViewFrame->GetObjectShell() : NULL;
-        vcl::Window*         pWindow = ( pViewFrame && pViewFrame->GetViewShell() ) ? pViewFrame->GetViewShell()->GetWindow() : NULL;
+        SfxObjectShell* pShell = pViewFrame ? pViewFrame->GetObjectShell() : nullptr;
+        vcl::Window*         pWindow = ( pViewFrame && pViewFrame->GetViewShell() ) ? pViewFrame->GetViewShell()->GetWindow() : nullptr;
         Graphic         aGraphic;
 
         switch( rReq.GetSlot() )

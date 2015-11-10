@@ -59,9 +59,9 @@ SvxFillToolBoxControl::SvxFillToolBoxControl(
     , mpFillGradientItem()
     , mpHatchItem()
     , mpBitmapItem()
-    , mpFillControl(0)
-    , mpLbFillType(0)
-    , mpLbFillAttr(0)
+    , mpFillControl(nullptr)
+    , mpLbFillType(nullptr)
+    , mpLbFillAttr(nullptr)
     , meLastXFS(static_cast<sal_uInt16>(-1))
     , mnLastPosGradient(0)
     , mnLastPosHatch(0)
@@ -140,7 +140,7 @@ void SvxFillToolBoxControl::StateChanged(
         {
             if(SfxItemState::DEFAULT == eState)
             {
-                mpColorItem.reset(pState ? static_cast<XFillColorItem*>(pState->Clone()) : 0);
+                mpColorItem.reset(pState ? static_cast<XFillColorItem*>(pState->Clone()) : nullptr);
             }
 
             if(mpStyleItem && drawing::FillStyle_SOLID == (drawing::FillStyle)mpStyleItem->GetValue())
@@ -156,7 +156,7 @@ void SvxFillToolBoxControl::StateChanged(
         {
             if(SfxItemState::DEFAULT == eState)
             {
-                mpFillGradientItem.reset(pState ? static_cast<XFillGradientItem*>(pState->Clone()) : 0);
+                mpFillGradientItem.reset(pState ? static_cast<XFillGradientItem*>(pState->Clone()) : nullptr);
             }
 
             if(mpStyleItem && drawing::FillStyle_GRADIENT == (drawing::FillStyle)mpStyleItem->GetValue())
@@ -185,7 +185,7 @@ void SvxFillToolBoxControl::StateChanged(
         {
             if(SfxItemState::DEFAULT == eState)
             {
-                mpHatchItem.reset(pState ? static_cast<XFillHatchItem*>(pState->Clone()) : 0);
+                mpHatchItem.reset(pState ? static_cast<XFillHatchItem*>(pState->Clone()) : nullptr);
             }
 
             if(mpStyleItem && drawing::FillStyle_HATCH == (drawing::FillStyle)mpStyleItem->GetValue())
@@ -214,7 +214,7 @@ void SvxFillToolBoxControl::StateChanged(
         {
             if(SfxItemState::DEFAULT == eState)
             {
-                mpBitmapItem.reset(pState ? static_cast<XFillBitmapItem*>(pState->Clone()) : 0);
+                mpBitmapItem.reset(pState ? static_cast<XFillBitmapItem*>(pState->Clone()) : nullptr);
             }
 
             if(mpStyleItem && drawing::FillStyle_BITMAP == (drawing::FillStyle)mpStyleItem->GetValue())
@@ -794,7 +794,7 @@ IMPL_LINK_NOARG_TYPED(SvxFillToolBoxControl, SelectFillAttrHdl, ListBox&, void)
                     // #i122676# Change FillStale and Gradinet in one call
                     SfxViewFrame::Current()->GetDispatcher()->Execute(
                         SID_ATTR_FILL_GRADIENT, SfxCallMode::RECORD, &aXFillGradientItem,
-                        bFillStyleChange ? &aXFillStyleItem : 0L, 0L);
+                        bFillStyleChange ? &aXFillStyleItem : nullptr, 0L);
                 }
             }
 
@@ -825,7 +825,7 @@ IMPL_LINK_NOARG_TYPED(SvxFillToolBoxControl, SelectFillAttrHdl, ListBox&, void)
                     // #i122676# Change FillStale and Hatch in one call
                     SfxViewFrame::Current()->GetDispatcher()->Execute(
                         SID_ATTR_FILL_HATCH, SfxCallMode::RECORD, &aXFillHatchItem,
-                        bFillStyleChange ? &aXFillStyleItem : 0L, 0L);
+                        bFillStyleChange ? &aXFillStyleItem : nullptr, 0L);
                 }
             }
 
@@ -856,7 +856,7 @@ IMPL_LINK_NOARG_TYPED(SvxFillToolBoxControl, SelectFillAttrHdl, ListBox&, void)
                     // #i122676# Change FillStale and Bitmap in one call
                     SfxViewFrame::Current()->GetDispatcher()->Execute(
                         SID_ATTR_FILL_BITMAP, SfxCallMode::RECORD, &aXFillBitmapItem,
-                        bFillStyleChange ? &aXFillStyleItem : 0L, 0L);
+                        bFillStyleChange ? &aXFillStyleItem : nullptr, 0L);
                 }
             }
 

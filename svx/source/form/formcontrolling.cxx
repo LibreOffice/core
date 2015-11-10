@@ -194,14 +194,14 @@ namespace svx
 
     ControllerFeatures::ControllerFeatures( IControllerFeatureInvalidation* _pInvalidationCallback )
         :m_pInvalidationCallback( _pInvalidationCallback )
-        ,m_pImpl( NULL )
+        ,m_pImpl( nullptr )
     {
     }
 
 
     ControllerFeatures::ControllerFeatures( const Reference< XFormController >& _rxController, IControllerFeatureInvalidation* _pInvalidationCallback )
         :m_pInvalidationCallback( _pInvalidationCallback )
-        ,m_pImpl( NULL )
+        ,m_pImpl( nullptr )
     {
         assign( _rxController );
     }
@@ -227,7 +227,7 @@ namespace svx
         {
             m_pImpl->dispose();
             m_pImpl->release();
-            m_pImpl = NULL;
+            m_pImpl = nullptr;
         }
     }
 

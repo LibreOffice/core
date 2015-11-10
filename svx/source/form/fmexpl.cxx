@@ -542,7 +542,7 @@ namespace svxform
             UpdateContent( pShell );
         }
         else
-            UpdateContent( NULL );
+            UpdateContent( nullptr );
     }
 
 
@@ -557,7 +557,7 @@ namespace svxform
 
     bool NavigatorFrame::Close()
     {
-        UpdateContent( NULL );
+        UpdateContent( nullptr );
         return SfxDockingWindow::Close();
     }
 

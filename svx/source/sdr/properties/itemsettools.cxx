@@ -107,7 +107,7 @@ namespace sdr
 
             SfxWhichIter aIter(rSet);
             sal_uInt16 nWhich(aIter.FirstWhich());
-            const SfxPoolItem *pItem = NULL;
+            const SfxPoolItem *pItem = nullptr;
 
             while(nWhich)
             {

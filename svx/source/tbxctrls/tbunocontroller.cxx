@@ -194,7 +194,7 @@ void SvxFontSizeBox_Impl::UpdateFont( const css::awt::FontDescriptor& rCurrentFo
 {
     // Sizes-Liste auff"ullen
     sal_Int64 nOldVal = GetValue(); // alten Wert merken
-    const FontList* _pFontList = NULL;
+    const FontList* _pFontList = nullptr;
     std::unique_ptr<FontList> aHold( new FontList( this ));
     _pFontList = aHold.get();
 
@@ -208,7 +208,7 @@ void SvxFontSizeBox_Impl::UpdateFont( const css::awt::FontDescriptor& rCurrentFo
     }
     else
     {
-        Fill( NULL, _pFontList );
+        Fill( nullptr, _pFontList );
     }
     SetValue( nOldVal ); // alten Wert wiederherstellen
     m_aCurText = GetText(); // zum R"ucksetzen bei ESC merken
@@ -276,7 +276,7 @@ FontHeightToolBoxControl::FontHeightToolBoxControl( const uno::Reference< uno::X
  : svt::ToolboxController( rxContext,
                            uno::Reference< frame::XFrame >(),
                            OUString( ".uno:FontHeight" ) ),
-   m_pBox( NULL )
+   m_pBox( nullptr )
 {
     addStatusListener( ".uno:CharFontName");
 }

@@ -549,7 +549,7 @@ void AccFrameSelector::NotifyAccessibleEvent( const sal_Int16 _nEventId,
 void AccFrameSelector::Invalidate()
 {
     RemoveFrameSelEventListener();
-    mpFrameSel = 0;
+    mpFrameSel = nullptr;
     EventObject aEvent;
     Reference < XAccessibleContext > xThis( this );
     aEvent.Source = xThis;

@@ -423,7 +423,7 @@ void SdrMeasureObj::ImpCalcGeometrics(const ImpMeasureRec& rRec, ImpMeasurePoly&
     if (rPol.eUsedTextVPos==SDRMEASURETEXT_VERTICALCENTERED)
     {
         OutlinerParaObject* pOutlinerParaObject = SdrTextObj::GetOutlinerParaObject();
-        if (pOutlinerParaObject!=NULL && pOutlinerParaObject->GetTextObject().GetParagraphCount()==1)
+        if (pOutlinerParaObject!=nullptr && pOutlinerParaObject->GetTextObject().GetParagraphCount()==1)
         {
             bBrkLine=true; // dashed line if there's only on paragraph.
         }
@@ -587,13 +587,13 @@ bool SdrMeasureObj::CalcFieldValue(const SvxFieldItem& rField, sal_Int32 nPara, 
 {
     const SvxFieldData* pField=rField.GetField();
     const SdrMeasureField* pMeasureField=dynamic_cast<const SdrMeasureField*>( pField );
-    if (pMeasureField!=NULL) {
+    if (pMeasureField!=nullptr) {
         rRet = TakeRepresentation(pMeasureField->GetMeasureFieldKind());
-        if (rpFldColor!=NULL) {
+        if (rpFldColor!=nullptr) {
             if (!bEdit)
             {
                 delete rpFldColor;
-                rpFldColor=NULL;
+                rpFldColor=nullptr;
             }
         }
         return true;
@@ -608,7 +608,7 @@ void SdrMeasureObj::UndirtyText() const
     {
         SdrOutliner& rOutliner=ImpGetDrawOutliner();
         OutlinerParaObject* pOutlinerParaObject = SdrTextObj::GetOutlinerParaObject();
-        if(pOutlinerParaObject==NULL)
+        if(pOutlinerParaObject==nullptr)
         {
             rOutliner.QuickInsertField(SvxFieldItem(SdrMeasureField(SDRMEASUREFIELD_ROTA90BLANCS), EE_FEATURE_FIELD), ESelection(0,0));
             rOutliner.QuickInsertField(SvxFieldItem(SdrMeasureField(SDRMEASUREFIELD_VALUE), EE_FEATURE_FIELD),ESelection(0,1));
@@ -910,7 +910,7 @@ void SdrMeasureObj::ImpEvalDrag(ImpMeasureRec& rRec, const SdrDragStat& rDrag) c
 
     const SdrHdl* pHdl=rDrag.GetHdl();
     sal_uInt32 nHdlNum(pHdl->GetObjHdlNum());
-    bool bOrtho=rDrag.GetView()!=NULL && rDrag.GetView()->IsOrtho();
+    bool bOrtho=rDrag.GetView()!=nullptr && rDrag.GetView()->IsOrtho();
     bool bBigOrtho=bOrtho && rDrag.GetView()->IsBigOrtho();
     bool bBelow=rRec.bBelowRefEdge;
     Point aPt(rDrag.GetNow());
@@ -985,7 +985,7 @@ bool SdrMeasureObj::MovCreate(SdrDragStat& rStat)
     SdrView* pView=rStat.GetView();
     aPt1=rStat.GetStart();
     aPt2=rStat.GetNow();
-    if (pView!=NULL && pView->IsCreate1stPointAsCenter()) {
+    if (pView!=nullptr && pView->IsCreate1stPointAsCenter()) {
         aPt1+=aPt1;
         aPt1-=rStat.Now();
     }
@@ -1477,7 +1477,7 @@ void SdrMeasureObj::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, cons
     if(aNewPt1 != aPt1 || aNewPt2 != aPt2)
     {
         // set model values and broadcast
-        Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetLastBoundRect();
+        Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
 
         aPt1 = aNewPt1;
         aPt2 = aNewPt2;

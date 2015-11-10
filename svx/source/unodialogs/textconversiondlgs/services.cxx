@@ -27,10 +27,10 @@ static const struct ::cppu::ImplementationEntry g_entries_unodialogs_chinesetran
         , ::textconversiondlgs::ChineseTranslation_UnoDialog::getImplementationName_Static
         , ::textconversiondlgs::ChineseTranslation_UnoDialog::getSupportedServiceNames_Static
         , ::cppu::createSingleComponentFactory
-        , 0
+        , nullptr
         , 0
     }
-    ,{ 0, 0, 0, 0, 0, 0 }
+    ,{ nullptr, nullptr, nullptr, nullptr, nullptr, 0 }
 };
 
 // component exports

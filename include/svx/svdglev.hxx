@@ -35,12 +35,12 @@ class SVX_DLLPUBLIC SdrGlueEditView: public SdrPolyEditView
     void ImpCopyMarkedGluePoints();
     typedef void (*PGlueDoFunc)(SdrGluePoint&, const SdrObject* pObj, const void*, const void*, const void*, const void*, const void*);
     typedef void (*PGlueTrFunc)(Point&, const void*, const void*, const void*, const void*, const void*);
-    void ImpDoMarkedGluePoints(PGlueDoFunc pDoFunc, bool bConst, const void* p1=NULL, const void* p2=NULL, const void* p3=NULL, const void* p4=NULL, const void* p5=NULL);
-    void ImpTransformMarkedGluePoints(PGlueTrFunc pTrFunc, const void* p1=NULL, const void* p2=NULL, const void* p3=NULL, const void* p4=NULL, const void* p5=NULL);
+    void ImpDoMarkedGluePoints(PGlueDoFunc pDoFunc, bool bConst, const void* p1=nullptr, const void* p2=nullptr, const void* p3=nullptr, const void* p4=nullptr, const void* p5=nullptr);
+    void ImpTransformMarkedGluePoints(PGlueTrFunc pTrFunc, const void* p1=nullptr, const void* p2=nullptr, const void* p3=nullptr, const void* p4=nullptr, const void* p5=nullptr);
 
 protected:
     // #i71538# make constructors of SdrView sub-components protected to avoid incomplete incarnations which may get casted to SdrView
-    SdrGlueEditView(SdrModel* pModel1, OutputDevice* pOut = 0L);
+    SdrGlueEditView(SdrModel* pModel1, OutputDevice* pOut = nullptr);
     virtual ~SdrGlueEditView();
 
 public:

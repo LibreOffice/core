@@ -45,7 +45,7 @@ struct FmFormModelImplData
                             aControlsUseRefDevice;
 
     FmFormModelImplData()
-        :pUndoEnv( NULL )
+        :pUndoEnv( nullptr )
         ,bOpenInDesignIsDefaulted( true )
         ,bMovingPage( false )
         ,aControlsUseRefDevice()
@@ -55,8 +55,8 @@ struct FmFormModelImplData
 
 FmFormModel::FmFormModel(SfxItemPool* pPool, SfxObjectShell* pPers)
     : SdrModel(pPool, pPers, false, LOADREFCOUNTS)
-    , m_pImpl(NULL)
-    , m_pObjShell(0)
+    , m_pImpl(nullptr)
+    , m_pObjShell(nullptr)
     , m_bOpenInDesignMode(false)
     , m_bAutoControlFocus(false)
 {
@@ -67,8 +67,8 @@ FmFormModel::FmFormModel(SfxItemPool* pPool, SfxObjectShell* pPers)
 
 FmFormModel::FmFormModel(const OUString& rPath, SfxItemPool* pPool, SfxObjectShell* pPers)
     : SdrModel(rPath, pPool, pPers, false, LOADREFCOUNTS)
-    , m_pImpl(NULL)
-    , m_pObjShell(0)
+    , m_pImpl(nullptr)
+    , m_pObjShell(nullptr)
     , m_bOpenInDesignMode(false)
     , m_bAutoControlFocus(false)
 {
@@ -80,8 +80,8 @@ FmFormModel::FmFormModel(const OUString& rPath, SfxItemPool* pPool, SfxObjectShe
 FmFormModel::FmFormModel(const OUString& rPath, SfxItemPool* pPool, SfxObjectShell* pPers,
                          bool bUseExtColorTable)
     : SdrModel(rPath, pPool, pPers, bUseExtColorTable, LOADREFCOUNTS)
-    , m_pImpl(NULL)
-    , m_pObjShell(0)
+    , m_pImpl(nullptr)
+    , m_pObjShell(nullptr)
     , m_bOpenInDesignMode(false)
     , m_bAutoControlFocus(false)
 {
@@ -93,7 +93,7 @@ FmFormModel::FmFormModel(const OUString& rPath, SfxItemPool* pPool, SfxObjectShe
 FmFormModel::~FmFormModel()
 {
     if (m_pObjShell && m_pImpl->pUndoEnv->IsListening(*m_pObjShell))
-        SetObjectShell(NULL);
+        SetObjectShell(nullptr);
 
     ClearUndoBuffer();
     // minimale grenze fuer undos

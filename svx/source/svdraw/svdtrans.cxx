@@ -160,8 +160,8 @@ void ShearXPoly(XPolygon& rPoly, const Point& rRef, double tn, bool bVShear)
 double CrookRotateXPoint(Point& rPnt, Point* pC1, Point* pC2, const Point& rCenter,
                          const Point& rRad, double& rSin, double& rCos, bool bVert)
 {
-    bool bC1=pC1!=NULL;
-    bool bC2=pC2!=NULL;
+    bool bC1=pC1!=nullptr;
+    bool bC2=pC2!=nullptr;
     long x0=rPnt.X();
     long y0=rPnt.Y();
     long cx=rCenter.X();
@@ -214,8 +214,8 @@ double CrookRotateXPoint(Point& rPnt, Point* pC1, Point* pC2, const Point& rCent
 double CrookSlantXPoint(Point& rPnt, Point* pC1, Point* pC2, const Point& rCenter,
                         const Point& rRad, double& rSin, double& rCos, bool bVert)
 {
-    bool bC1=pC1!=NULL;
-    bool bC2=pC2!=NULL;
+    bool bC1=pC1!=nullptr;
+    bool bC2=pC2!=nullptr;
     long x0=rPnt.X();
     long y0=rPnt.Y();
     long dx1=0,dy1=0;
@@ -293,8 +293,8 @@ void CrookRotatePoly(XPolygon& rPoly, const Point& rCenter, const Point& rRad, b
     sal_uInt16 i=0;
     while (i<nPointAnz) {
         Point* pPnt=&rPoly[i];
-        Point* pC1=NULL;
-        Point* pC2=NULL;
+        Point* pC1=nullptr;
+        Point* pC2=nullptr;
         if (i+1<nPointAnz && rPoly.IsControl(i)) { // control point to the left
             pC1=pPnt;
             i++;
@@ -316,8 +316,8 @@ void CrookSlantPoly(XPolygon& rPoly, const Point& rCenter, const Point& rRad, bo
     sal_uInt16 i=0;
     while (i<nPointAnz) {
         Point* pPnt=&rPoly[i];
-        Point* pC1=NULL;
-        Point* pC2=NULL;
+        Point* pC1=nullptr;
+        Point* pC2=nullptr;
         if (i+1<nPointAnz && rPoly.IsControl(i)) { // control point to the left
             pC1=pPnt;
             i++;
@@ -339,8 +339,8 @@ void CrookStretchPoly(XPolygon& rPoly, const Point& rCenter, const Point& rRad, 
     sal_uInt16 i=0;
     while (i<nPointAnz) {
         Point* pPnt=&rPoly[i];
-        Point* pC1=NULL;
-        Point* pC2=NULL;
+        Point* pC1=nullptr;
+        Point* pC2=nullptr;
         if (i+1<nPointAnz && rPoly.IsControl(i)) { //  control point to the left
             pC1=pPnt;
             i++;

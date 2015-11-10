@@ -36,7 +36,7 @@ ViewObjectContactOfSdrMediaObj::ViewObjectContactOfSdrMediaObj( ObjectContact& r
                                                                 ViewContact& rViewContact,
                                                                 const ::avmedia::MediaItem& rMediaItem ) :
     ViewObjectContactOfSdrObj( rObjectContact, rViewContact ),
-    mpMediaWindow( NULL )
+    mpMediaWindow( nullptr )
 {
 #if HAVE_FEATURE_AVMEDIA
     vcl::Window* pWindow = getWindow();
@@ -55,14 +55,14 @@ ViewObjectContactOfSdrMediaObj::ViewObjectContactOfSdrMediaObj( ObjectContact& r
 ViewObjectContactOfSdrMediaObj::~ViewObjectContactOfSdrMediaObj()
 {
     delete mpMediaWindow;
-    mpMediaWindow = NULL;
+    mpMediaWindow = nullptr;
 }
 
 
 
 vcl::Window* ViewObjectContactOfSdrMediaObj::getWindow() const
 {
-    vcl::Window* pRetval = 0;
+    vcl::Window* pRetval = nullptr;
 
     boost::optional<const OutputDevice&> oPageOutputDev = getPageViewOutputDevice();
     if( oPageOutputDev )

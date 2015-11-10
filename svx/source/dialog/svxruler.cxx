@@ -137,10 +137,10 @@ struct SvxRuler_Impl {
     bool bIsTabsRelativeToIndent : 1; // Tab stops relative to paragraph indent?
 
     SvxRuler_Impl() :
-        pPercBuf(0), pBlockBuf(0), nPercSize(0), nTotalDist(0),
+        pPercBuf(nullptr), pBlockBuf(nullptr), nPercSize(0), nTotalDist(0),
         lOldWinPos(0), lMaxLeftLogic(0), lMaxRightLogic(0),
         lLastLMargin(0), lLastRMargin(0), aProtectItem(SID_RULER_PROTECT),
-        pTextRTLItem(0), nControlerItems(0), nIdx(0),
+        pTextRTLItem(nullptr), nControlerItems(0), nIdx(0),
         nColLeftPix(0), nColRightPix(0),
         bIsTableRows(false),
         bIsTabsRelativeToIndent(true)
@@ -150,7 +150,7 @@ struct SvxRuler_Impl {
     ~SvxRuler_Impl()
     {
         nPercSize = 0; nTotalDist = 0;
-        delete[] pPercBuf; delete[] pBlockBuf; pPercBuf = 0;
+        delete[] pPercBuf; delete[] pBlockBuf; pPercBuf = nullptr;
         delete pTextRTLItem;
     }
     void SetPercSize(sal_uInt16 nSize);
@@ -632,7 +632,7 @@ void SvxRuler::MouseMove( const MouseEvent& rMEvt )
         }
         case RULER_TYPE_BORDER:
         {
-            if (mxColumnItem.get() == NULL)
+            if (mxColumnItem.get() == nullptr)
                 break;
 
             SvxColumnItem& aColumnItem = *mxColumnItem.get();
@@ -750,7 +750,7 @@ void SvxRuler::UpdateTextRTL(const SfxBoolItem* pItem)
     if(bActive && bHorz)
     {
         delete mxRulerImpl->pTextRTLItem;
-        mxRulerImpl->pTextRTLItem = 0;
+        mxRulerImpl->pTextRTLItem = nullptr;
         if(pItem)
             mxRulerImpl->pTextRTLItem = new SfxBoolItem(*pItem);
         SetTextRTL(mxRulerImpl->pTextRTLItem && mxRulerImpl->pTextRTLItem->GetValue());
@@ -2021,7 +2021,7 @@ void SvxRuler::DragObjectBorder()
 void SvxRuler::ApplyMargins()
 {
     /* Applying margins; changed by dragging. */
-    const SfxPoolItem* pItem = NULL;
+    const SfxPoolItem* pItem = nullptr;
     sal_uInt16 nId = SID_ATTR_LONG_LRSPACE;
 
     if(bHorz)

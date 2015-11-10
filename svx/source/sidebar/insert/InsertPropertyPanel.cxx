@@ -66,7 +66,7 @@ InsertPropertyPanel::InsertPropertyPanel (
     // In other words, we should find the underlying problem, and remove the
     // WindowEventListener for good.
     vcl::Window* pTopWindow = pParent;
-    while (pTopWindow->GetParent() != NULL)
+    while (pTopWindow->GetParent() != nullptr)
         pTopWindow = pTopWindow->GetParent();
     pTopWindow->AddChildEventListener(LINK(this, InsertPropertyPanel, WindowEventListener));
 }
@@ -80,7 +80,7 @@ void InsertPropertyPanel::dispose()
 {
     // Remove window child listener.
     vcl::Window* pTopWindow = this;
-    while (pTopWindow->GetParent() != NULL)
+    while (pTopWindow->GetParent() != nullptr)
         pTopWindow = pTopWindow->GetParent();
     pTopWindow->RemoveChildEventListener(LINK(this, InsertPropertyPanel, WindowEventListener));
     mpStandardShapesToolBox.clear();
@@ -101,7 +101,7 @@ IMPL_LINK_TYPED(InsertPropertyPanel, WindowEventListener, VclWindowEvent&, rEven
 
     vcl::Window* pWindow = rEvent.GetWindow();
     ToolBox* pToolBox = dynamic_cast<ToolBox*>(pWindow);
-    if (pToolBox == NULL)
+    if (pToolBox == nullptr)
         return;
 
     // Extract name of (sub)toolbar from help id.
@@ -118,13 +118,13 @@ IMPL_LINK_TYPED(InsertPropertyPanel, WindowEventListener, VclWindowEvent&, rEven
         return;
 
     SidebarToolBox* pSidebarToolBox = dynamic_cast<SidebarToolBox*>(mpStandardShapesToolBox.get());
-    if (pSidebarToolBox == NULL)
+    if (pSidebarToolBox == nullptr)
         return;
     sal_uInt16 nItemId (pSidebarToolBox->GetItemIdForSubToolbarName(aURL.Path));
     if (nItemId == 0)
     {
         pSidebarToolBox = dynamic_cast<SidebarToolBox*>(mpCustomShapesToolBox.get());
-        if (pSidebarToolBox == NULL)
+        if (pSidebarToolBox == nullptr)
             return;
         nItemId = pSidebarToolBox->GetItemIdForSubToolbarName(aURL.Path);
         if (nItemId == 0)

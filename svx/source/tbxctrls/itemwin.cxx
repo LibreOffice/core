@@ -57,7 +57,7 @@ SvxLineBox::SvxLineBox( vcl::Window* pParent, const Reference< XFrame >& rFrame,
     nCurPos     ( 0 ),
     aLogicalSize(40,140),
     bRelease    ( true ),
-    mpSh        ( NULL ),
+    mpSh        ( nullptr ),
     mxFrame     ( rFrame )
 {
     SetSizePixel( LogicToPixel( aLogicalSize, MAP_APPFONT ));

@@ -38,7 +38,7 @@ namespace svx
         SvxAbstractDialogFactory* pDialogFactory = SvxAbstractDialogFactory::Create();
         std::unique_ptr< SfxAbstractDialog > pDialog;
         if ( pDialogFactory )
-            pDialog.reset( pDialogFactory->CreateSfxDialog( _parentWindow, aRegistrationItems, NULL, RID_SFXPAGE_DBREGISTER ) );
+            pDialog.reset( pDialogFactory->CreateSfxDialog( _parentWindow, aRegistrationItems, nullptr, RID_SFXPAGE_DBREGISTER ) );
         if ( pDialog.get() )
             nResult = pDialog->Execute();
 

@@ -247,7 +247,7 @@ void SAL_CALL CellCursor::merge(  ) throw (NoSupportException, RuntimeException,
     if( !GetMergedSelection( aStart, aEnd ) )
         throw NoSupportException();
 
-    if( !mxTable.is() || (mxTable->getSdrTableObj() == 0) )
+    if( !mxTable.is() || (mxTable->getSdrTableObj() == nullptr) )
         throw DisposedException();
 
     SdrModel* pModel = mxTable->getSdrTableObj()->GetModel();
@@ -513,7 +513,7 @@ void SAL_CALL CellCursor::split( sal_Int32 nColumns, sal_Int32 nRows ) throw (No
     if( (nColumns < 0) || (nRows < 0) )
         throw IllegalArgumentException();
 
-    if( !mxTable.is() || (mxTable->getSdrTableObj() == 0) )
+    if( !mxTable.is() || (mxTable->getSdrTableObj() == nullptr) )
         throw DisposedException();
 
     SdrModel* pModel = mxTable->getSdrTableObj()->GetModel();

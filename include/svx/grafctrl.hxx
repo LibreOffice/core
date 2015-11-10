@@ -35,7 +35,7 @@ public:
                             TYPEINFO_OVERRIDE();
                             TbxImageItem( sal_uInt16 nWhich = 0, sal_uInt16 nImage = 0 );
 
-    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const override;
+    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = nullptr ) const override;
     virtual bool            operator==( const SfxPoolItem& ) const override;
 };
 

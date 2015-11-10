@@ -419,7 +419,7 @@ namespace svx
             SfxSlotPool& rSlotPool = SfxSlotPool::GetSlotPool();
             const SfxSlot* pSlot = rSlotPool.GetSlot( _nSlotId );
 
-            const sal_Char* pAsciiUnoName = NULL;
+            const sal_Char* pAsciiUnoName = nullptr;
             if ( pSlot )
             {
                 pAsciiUnoName = pSlot->GetUnoName();
@@ -486,7 +486,7 @@ namespace svx
 
         static vcl::Window* lcl_getWindow( const Reference< XControl >& _rxControl )
         {
-            vcl::Window* pWindow = NULL;
+            vcl::Window* pWindow = nullptr;
             try
             {
                 Reference< XWindowPeer > xControlPeer;
@@ -1223,7 +1223,7 @@ namespace svx
         // if we found a rich text control, we need context menu support
         if ( m_bActiveControlIsRichText )
         {
-            DBG_ASSERT( NULL == m_aContextMenuObserver.get(), "FmTextControlShell::controlActivated: already have an observer!" );
+            DBG_ASSERT( nullptr == m_aContextMenuObserver.get(), "FmTextControlShell::controlActivated: already have an observer!" );
             m_aContextMenuObserver = MouseListenerAdapter( new FmMouseListenerAdapter( _rxControl, this ) );
         }
 
@@ -1256,7 +1256,7 @@ namespace svx
         // #i51621# / 2005-08-19 / frank.schoenheit@sun.com
         // bool bHaveAnyServeableSlots = m_xActiveTextComponent.is() || !m_aControlFeatures.empty();
         // LEM: not calling m_aControlActivatonHandler causes fdo#63695, so disable this hack for now.
-        m_aControlActivationHandler.Call( NULL );
+        m_aControlActivationHandler.Call( nullptr );
 
         m_bNeedClipboardInvalidation = true;
     }
@@ -1310,7 +1310,7 @@ namespace svx
         Reference< XDispatch > xDispatcher = _rxProvider->queryDispatch( aFeatureURL, OUString(), 0xFF );
         if ( xDispatcher.is() )
             return new FmTextControlFeature( xDispatcher, aFeatureURL, _nSlot, this );
-        return NULL;
+        return nullptr;
     }
 
 

@@ -91,7 +91,7 @@ namespace sdr
 
         OverlayObject::OverlayObject(Color aBaseColor)
         :   Event(0),
-            mpOverlayManager(0),
+            mpOverlayManager(nullptr),
             maBaseColor(aBaseColor),
             mbIsVisible(true),
             mbIsHittable(true),
@@ -102,7 +102,7 @@ namespace sdr
 
         OverlayObject::~OverlayObject()
         {
-            OSL_ENSURE(0 == getOverlayManager(), "OverlayObject is destructed which is still registered at OverlayManager (!)");
+            OSL_ENSURE(nullptr == getOverlayManager(), "OverlayObject is destructed which is still registered at OverlayManager (!)");
         }
 
         drawinglayer::primitive2d::Primitive2DSequence OverlayObject::getOverlayObjectPrimitive2DSequence() const

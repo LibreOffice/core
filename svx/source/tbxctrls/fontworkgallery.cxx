@@ -73,8 +73,8 @@ FontWorkGalleryDialog::FontWorkGalleryDialog( SdrView* pSdrView, vcl::Window* pP
         ModalDialog(pParent, "FontworkGalleryDialog", "svx/ui/fontworkgallerydialog.ui" ),
         mnThemeId           ( 0xffff ),
         mpSdrView           ( pSdrView ),
-        mppSdrObject        ( NULL ),
-        mpDestModel         ( NULL )
+        mppSdrObject        ( nullptr ),
+        mpDestModel         ( nullptr )
 {
     get(mpOKButton, "ok");
     get(mpCtlFavorites, "ctlFavorites");
@@ -114,7 +114,7 @@ void FontWorkGalleryDialog::initFavorites(sal_uInt16 nThemeId)
     GalleryExplorer::BeginLocking(nThemeId);
 
     sal_uInt32 nModelPos;
-    FmFormModel *pModel = NULL;
+    FmFormModel *pModel = nullptr;
 
     for( nModelPos = 0; nModelPos < nFavCount; nModelPos++ )
     {
@@ -379,7 +379,7 @@ void SAL_CALL FontworkAlignmentControl::initialize( const css::uno::Sequence< cs
 {
     svt::PopupWindowController::initialize( aArguments );
 
-    ToolBox* pToolBox = 0;
+    ToolBox* pToolBox = nullptr;
     sal_uInt16 nId = 0;
     if ( getToolboxId( nId, &pToolBox ) )
         pToolBox->SetItemBits( nId, pToolBox->GetItemBits( nId ) | ToolBoxItemBits::DROPDOWNONLY );
@@ -615,7 +615,7 @@ void SAL_CALL FontworkCharacterSpacingControl::initialize( const css::uno::Seque
 {
     svt::PopupWindowController::initialize( aArguments );
 
-    ToolBox* pToolBox = 0;
+    ToolBox* pToolBox = nullptr;
     sal_uInt16 nId = 0;
     if ( getToolboxId( nId, &pToolBox ) )
         pToolBox->SetItemBits( nId, pToolBox->GetItemBits( nId ) | ToolBoxItemBits::DROPDOWNONLY );

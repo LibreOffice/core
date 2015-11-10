@@ -88,7 +88,7 @@ SfxItemPool* SvxUnoDrawPool::getModelPool( bool bReadOnly ) throw()
         if( bReadOnly )
             return mpDefaultsPool;
         else
-            return NULL;
+            return nullptr;
     }
 }
 
@@ -206,7 +206,7 @@ void SvxUnoDrawPool::_setPropertyValues( const comphelper::PropertyMapEntry** pp
     SfxItemPool* pPool = getModelPool( false );
 
     DBG_ASSERT( pPool, "I need a SfxItemPool!" );
-    if( NULL == pPool )
+    if( nullptr == pPool )
         throw beans::UnknownPropertyException();
 
     while( *ppEntries )
@@ -221,7 +221,7 @@ void SvxUnoDrawPool::_getPropertyValues( const comphelper::PropertyMapEntry** pp
     SfxItemPool* pPool = getModelPool( true );
 
     DBG_ASSERT( pPool, "I need a SfxItemPool!" );
-    if( NULL == pPool )
+    if( nullptr == pPool )
         throw beans::UnknownPropertyException();
 
     while( *ppEntries )

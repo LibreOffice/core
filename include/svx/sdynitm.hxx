@@ -34,10 +34,10 @@ public:
     SdrYesNoItem(): SfxBoolItem() {}
     SdrYesNoItem(sal_uInt16 nId, bool bOn=false): SfxBoolItem(nId,bOn) {}
     SdrYesNoItem(sal_uInt16 nId, SvStream& rIn):  SfxBoolItem(nId,rIn) {}
-    virtual SfxPoolItem* Clone(SfxItemPool* pPool=NULL) const override;
+    virtual SfxPoolItem* Clone(SfxItemPool* pPool=nullptr) const override;
     virtual SfxPoolItem* Create(SvStream& rIn, sal_uInt16 nVer) const override;
     virtual OUString GetValueTextByVal(bool bVal) const override;
-    virtual bool GetPresentation(SfxItemPresentation ePres, SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric, OUString& rText, const IntlWrapper * = 0) const override;
+    virtual bool GetPresentation(SfxItemPresentation ePres, SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric, OUString& rText, const IntlWrapper * = nullptr) const override;
 };
 
 

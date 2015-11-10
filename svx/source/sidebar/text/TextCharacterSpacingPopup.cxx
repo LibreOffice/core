@@ -43,7 +43,7 @@ void TextCharacterSpacingPopup::Rearrange (bool bLBAvailable,bool bAvailable, lo
     ProvideContainerAndControl();
 
     TextCharacterSpacingControl* pControl = dynamic_cast<TextCharacterSpacingControl*>(mxControl.get());
-    if (pControl != NULL)
+    if (pControl != nullptr)
         pControl->Rearrange(bLBAvailable,bAvailable,nKerning);
 }
 
@@ -51,7 +51,7 @@ void TextCharacterSpacingPopup::PopupModeEndCallback()
 {
     ProvideContainerAndControl();
     TextCharacterSpacingControl* pControl = dynamic_cast<TextCharacterSpacingControl*>(mxControl.get());
-    if (pControl == NULL)
+    if (pControl == nullptr)
         return;
 
     if( pControl->GetLastCustomState() == SPACING_CLOSE_BY_CUS_EDIT)

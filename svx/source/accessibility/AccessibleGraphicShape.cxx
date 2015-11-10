@@ -190,7 +190,7 @@ OUString AccessibleGraphicShape::CreateAccessibleDescription()
 sal_Int16 SAL_CALL AccessibleGraphicShape::getAccessibleRole()
         throw (css::uno::RuntimeException, std::exception)
 {
-    if( m_pShape->GetModel()->GetImageMapForObject(m_pShape) != NULL )
+    if( m_pShape->GetModel()->GetImageMapForObject(m_pShape) != nullptr )
         return AccessibleRole::IMAGE_MAP;
     else
         return AccessibleShape::getAccessibleRole();

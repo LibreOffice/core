@@ -99,7 +99,7 @@ public:
     Reference<XModel> GetModel()
     {
         if (!xController.is())
-            xModel = 0;
+            xModel = nullptr;
         else
             xModel = xController->getModel();
         return xModel;
@@ -181,7 +181,7 @@ void SvxRubyData_Impl::disposing(const EventObject&) throw (RuntimeException, st
     catch (const Exception&)
     {
     }
-    xController = 0;
+    xController = nullptr;
 }
 
 void SvxRubyData_Impl::AssertOneEntry()
@@ -326,7 +326,7 @@ bool SvxRubyDialog::Close()
 void SvxRubyDialog::Activate()
 {
     SfxModelessDialog::Activate();
-    SfxPoolItem* pState = 0;
+    SfxPoolItem* pState = nullptr;
     SfxItemState    eState = pBindings->QueryState( SID_STYLE_DESIGNER, pState );
     bool bEnable = (eState < SfxItemState::DEFAULT) || !pState || !static_cast<SfxBoolItem*>(pState)->GetValue();
     delete pState;
@@ -778,7 +778,7 @@ void SvxRubyDialog::EnableControls(bool bEnable)
 
 RubyPreview::RubyPreview(vcl::Window *pParent)
     : Window(pParent, WB_BORDER)
-    , m_pParentDlg(NULL)
+    , m_pParentDlg(nullptr)
 {
     SetBorderStyle(WindowBorderStyle::MONO);
 }

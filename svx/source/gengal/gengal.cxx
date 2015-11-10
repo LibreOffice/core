@@ -170,7 +170,7 @@ static INetURLObject Smartify( const OUString &rPath )
 void GalApp::Init()
 {
     try {
-        if( !mbInBuildTree && getenv( "OOO_INSTALL_PREFIX" ) == NULL ) {
+        if( !mbInBuildTree && getenv( "OOO_INSTALL_PREFIX" ) == nullptr ) {
             OUString fileName = GetAppFileName();
             int lastSlash = fileName.lastIndexOf( '/' );
 #ifdef WNT
@@ -335,7 +335,7 @@ void GalApp::DeInit()
     uno::Reference< lang::XComponent >(
         comphelper::getProcessComponentContext(),
         uno::UNO_QUERY_THROW )-> dispose();
-    ::comphelper::setProcessServiceFactory( NULL );
+    ::comphelper::setProcessServiceFactory( nullptr );
 }
 
 void vclmain::createApplication()

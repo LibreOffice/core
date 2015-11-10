@@ -149,7 +149,7 @@ XPropertyEntry* XPropertyList::Get( long nIndex ) const
         if( !const_cast<XPropertyList*>(this)->Load() )
             const_cast<XPropertyList*>(this)->Create();
     }
-    return ( (size_t)nIndex < maList.size() ) ? maList[ nIndex ] : NULL;
+    return ( (size_t)nIndex < maList.size() ) ? maList[ nIndex ] : nullptr;
 }
 
 long XPropertyList::GetIndex(const OUString& rName) const
@@ -171,7 +171,7 @@ long XPropertyList::GetIndex(const OUString& rName) const
 Bitmap XPropertyList::GetUiBitmap( long nIndex ) const
 {
     Bitmap aRetval;
-    XPropertyEntry* pEntry = ( (size_t)nIndex < maList.size() ) ? maList[ nIndex ] : NULL;
+    XPropertyEntry* pEntry = ( (size_t)nIndex < maList.size() ) ? maList[ nIndex ] : nullptr;
     if(pEntry)
     {
         aRetval = pEntry->GetUiBitmap();
@@ -196,7 +196,7 @@ void XPropertyList::Insert( XPropertyEntry* pEntry, long nIndex )
 
 XPropertyEntry* XPropertyList::Replace( XPropertyEntry* pEntry, long nIndex )
 {
-    XPropertyEntry* pOldEntry = (size_t)nIndex < maList.size() ? maList[ nIndex ] : NULL;
+    XPropertyEntry* pOldEntry = (size_t)nIndex < maList.size() ? maList[ nIndex ] : nullptr;
     if ( pOldEntry ) {
         maList[ nIndex ] = pEntry;
     }
@@ -205,7 +205,7 @@ XPropertyEntry* XPropertyList::Replace( XPropertyEntry* pEntry, long nIndex )
 
 XPropertyEntry* XPropertyList::Remove( long nIndex )
 {
-    XPropertyEntry* pEntry = NULL;
+    XPropertyEntry* pEntry = nullptr;
     if ( (size_t)nIndex < maList.size() ) {
         pEntry = maList[ nIndex ];
         maList.erase( maList.begin() + nIndex );
@@ -257,7 +257,7 @@ bool XPropertyList::Load()
 
             bool bRet = SvxXMLXTableImport::load(aURL.GetMainURL(INetURLObject::NO_DECODE),
                                              maReferer, uno::Reference < embed::XStorage >(),
-                                             createInstance(), NULL );
+                                             createInstance(), nullptr );
             if (bRet)
                 return bRet;
         }
@@ -300,7 +300,7 @@ bool XPropertyList::Save()
 
     return SvxXMLXTableExportComponent::save( aURL.GetMainURL( INetURLObject::NO_DECODE ),
                                               createInstance(),
-                                              uno::Reference< embed::XStorage >(), NULL );
+                                              uno::Reference< embed::XStorage >(), nullptr );
 }
 
 bool XPropertyList::SaveTo( const uno::Reference< embed::XStorage > &xStorage,

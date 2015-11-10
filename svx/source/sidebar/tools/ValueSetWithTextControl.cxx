@@ -54,7 +54,7 @@ void ValueSetWithTextControl::AddItem(
 
     ValueSetWithTextItem aItem;
     aItem.maItemImage = rItemImage;
-    aItem.maSelectedItemImage = (pSelectedItemImage != 0)
+    aItem.maSelectedItemImage = (pSelectedItemImage != nullptr)
                                 ? *pSelectedItemImage
                                 : rItemImage;
 
@@ -64,7 +64,7 @@ void ValueSetWithTextControl::AddItem(
         b.Scale(GetDPIScaleFactor(), GetDPIScaleFactor());
         aItem.maItemImage = Image(b);
 
-        if ( pSelectedItemImage != 0 )
+        if ( pSelectedItemImage != nullptr )
         {
             b = aItem.maSelectedItemImage.GetBitmapEx();
             b.Scale(GetDPIScaleFactor(), GetDPIScaleFactor());
@@ -78,7 +78,7 @@ void ValueSetWithTextControl::AddItem(
 
     InsertItem( maItems.size() );
     SetItemText( maItems.size(),
-                    (pItemHelpText != 0) ? *pItemHelpText : rItemText );
+                    (pItemHelpText != nullptr) ? *pItemHelpText : rItemText );
 }
 
 
@@ -100,7 +100,7 @@ void ValueSetWithTextControl::AddItem(
 
     InsertItem( maItems.size() );
     SetItemText( maItems.size(),
-                    (pItemHelpText != 0) ? *pItemHelpText : rItemText );
+                    (pItemHelpText != nullptr) ? *pItemHelpText : rItemText );
 }
 
 
@@ -121,7 +121,7 @@ void ValueSetWithTextControl::ReplaceItemImages(
     }
 
     maItems[nItemId-1].maItemImage = rItemImage;
-    maItems[nItemId-1].maSelectedItemImage = (pSelectedItemImage != 0)
+    maItems[nItemId-1].maSelectedItemImage = (pSelectedItemImage != nullptr)
                                              ? *pSelectedItemImage
                                              : rItemImage;
 
@@ -132,7 +132,7 @@ void ValueSetWithTextControl::ReplaceItemImages(
         b.Scale(GetDPIScaleFactor(), GetDPIScaleFactor());
         maItems[nItemId-1].maItemImage = Image(b);
 
-        if ( pSelectedItemImage != 0 )
+        if ( pSelectedItemImage != nullptr )
         {
             b = maItems[nItemId-1].maSelectedItemImage.GetBitmapEx();
             b.Scale(GetDPIScaleFactor(), GetDPIScaleFactor());
@@ -177,7 +177,7 @@ void ValueSetWithTextControl::UserDraw( const UserDrawEvent& rUDEvt )
         }
 
         //draw image + text resp. text + text
-        Image* pImage = 0;
+        Image* pImage = nullptr;
         if ( GetSelectItemId() == nItemId )
         {
             aFont.SetColor( sfx2::sidebar::Theme::GetColor( sfx2::sidebar::Theme::Color_HighlightText ) );

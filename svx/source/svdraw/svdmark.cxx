@@ -48,9 +48,9 @@ void SdrMark::setTime()
 SdrMark::SdrMark(SdrObject* pNewObj, SdrPageView* pNewPageView)
 :   mpSelectedSdrObject(pNewObj),
     mpPageView(pNewPageView),
-    mpPoints(0L),
-    mpLines(0L),
-    mpGluePoints(0L),
+    mpPoints(nullptr),
+    mpLines(nullptr),
+    mpGluePoints(nullptr),
     mbCon1(false),
     mbCon2(false),
     mnUser(0)
@@ -65,11 +65,11 @@ SdrMark::SdrMark(SdrObject* pNewObj, SdrPageView* pNewPageView)
 SdrMark::SdrMark(const SdrMark& rMark)
 :   ObjectUser(),
     mnTimeStamp(0),
-    mpSelectedSdrObject(0L),
-    mpPageView(0L),
-    mpPoints(0L),
-    mpLines(0L),
-    mpGluePoints(0L),
+    mpSelectedSdrObject(nullptr),
+    mpPageView(nullptr),
+    mpPoints(nullptr),
+    mpLines(nullptr),
+    mpGluePoints(nullptr),
     mbCon1(false),
     mbCon2(false),
     mnUser(0)
@@ -105,7 +105,7 @@ void SdrMark::ObjectInDestruction(const SdrObject& rObject)
     (void) rObject; // avoid warnings
     OSL_ENSURE(mpSelectedSdrObject && mpSelectedSdrObject == &rObject, "SdrMark::ObjectInDestruction: called form object different from hosted one (!)");
     OSL_ENSURE(mpSelectedSdrObject, "SdrMark::ObjectInDestruction: still selected SdrObject is deleted, deselect first (!)");
-    mpSelectedSdrObject = 0L;
+    mpSelectedSdrObject = nullptr;
 }
 
 void SdrMark::SetMarkedSdrObj(SdrObject* pNewObj)
@@ -137,7 +137,7 @@ SdrMark& SdrMark::operator=(const SdrMark& rMark)
         if(mpPoints)
         {
             delete mpPoints;
-            mpPoints = 0L;
+            mpPoints = nullptr;
         }
     }
     else
@@ -157,7 +157,7 @@ SdrMark& SdrMark::operator=(const SdrMark& rMark)
         if(mpLines)
         {
             delete mpLines;
-            mpLines = 0L;
+            mpLines = nullptr;
         }
     }
     else
@@ -177,7 +177,7 @@ SdrMark& SdrMark::operator=(const SdrMark& rMark)
         if(mpGluePoints)
         {
             delete mpGluePoints;
-            mpGluePoints = 0L;
+            mpGluePoints = nullptr;
         }
     }
     else
@@ -199,13 +199,13 @@ bool SdrMark::operator==(const SdrMark& rMark) const
 {
     bool bRet(mpSelectedSdrObject == rMark.mpSelectedSdrObject && mpPageView == rMark.mpPageView && mbCon1 == rMark.mbCon1 && mbCon2 == rMark.mbCon2 && mnUser == rMark.mnUser);
 
-    if((mpPoints != 0L) != (rMark.mpPoints != 0L))
+    if((mpPoints != nullptr) != (rMark.mpPoints != nullptr))
         bRet = false;
 
-    if((mpLines != 0L) != (rMark.mpLines != 0L))
+    if((mpLines != nullptr) != (rMark.mpLines != nullptr))
         bRet = false;
 
-    if((mpGluePoints != 0L) != (rMark.mpGluePoints != 0L))
+    if((mpGluePoints != nullptr) != (rMark.mpGluePoints != nullptr))
         bRet = false;
 
     if(bRet && mpPoints && *mpPoints != *rMark.mpPoints)
@@ -226,8 +226,8 @@ static bool ImpSdrMarkListSorter(SdrMark* const& lhs, SdrMark* const& rhs)
 {
     SdrObject* pObj1 = lhs->GetMarkedSdrObj();
     SdrObject* pObj2 = rhs->GetMarkedSdrObj();
-    SdrObjList* pOL1 = (pObj1) ? pObj1->GetObjList() : 0L;
-    SdrObjList* pOL2 = (pObj2) ? pObj2->GetObjList() : 0L;
+    SdrObjList* pOL1 = (pObj1) ? pObj1->GetObjList() : nullptr;
+    SdrObjList* pOL2 = (pObj2) ? pObj2->GetObjList() : nullptr;
 
     if (pOL1 == pOL2)
     {
@@ -268,7 +268,7 @@ void SdrMarkList::ImpForceSort()
             for(std::vector<SdrMark*>::iterator it = maList.begin(); it != maList.end(); )
             {
                 SdrMark* pAkt = *it;
-                if(pAkt->GetMarkedSdrObj() == 0)
+                if(pAkt->GetMarkedSdrObj() == nullptr)
                 {
                     it = maList.erase( it );
                     delete pAkt;
@@ -348,7 +348,7 @@ void SdrMarkList::operator=(const SdrMarkList& rLst)
 
 SdrMark* SdrMarkList::GetMark(size_t nNum) const
 {
-    return (nNum < maList.size()) ? maList[nNum] : NULL;
+    return (nNum < maList.size()) ? maList[nNum] : nullptr;
 }
 
 size_t SdrMarkList::FindObject(const SdrObject* pObj) const
@@ -410,13 +410,13 @@ void SdrMarkList::InsertEntry(const SdrMark& rMark, bool bChkSort)
             maList.push_back(pKopie);
 
             // now check if the sort is ok
-            const SdrObjList* pLastOL = pLastObj!=0L ? pLastObj->GetObjList() : 0L;
-            const SdrObjList* pNeuOL = pNeuObj !=0L ? pNeuObj ->GetObjList() : 0L;
+            const SdrObjList* pLastOL = pLastObj!=nullptr ? pLastObj->GetObjList() : nullptr;
+            const SdrObjList* pNeuOL = pNeuObj !=nullptr ? pNeuObj ->GetObjList() : nullptr;
 
             if(pLastOL == pNeuOL)
             {
-                const sal_uLong nLastNum(pLastObj!=0L ? pLastObj->GetOrdNum() : 0);
-                const sal_uLong nNeuNum(pNeuObj !=0L ? pNeuObj ->GetOrdNum() : 0);
+                const sal_uLong nLastNum(pLastObj!=nullptr ? pLastObj->GetOrdNum() : 0);
+                const sal_uLong nNeuNum(pNeuObj !=nullptr ? pNeuObj ->GetOrdNum() : 0);
 
                 if(nNeuNum < nLastNum)
                 {
@@ -438,7 +438,7 @@ void SdrMarkList::InsertEntry(const SdrMark& rMark, bool bChkSort)
 void SdrMarkList::DeleteMark(size_t nNum)
 {
     SdrMark* pMark = GetMark(nNum);
-    DBG_ASSERT(pMark!=0L,"DeleteMark: MarkEntry not found.");
+    DBG_ASSERT(pMark!=nullptr,"DeleteMark: MarkEntry not found.");
 
     if(pMark)
     {
@@ -451,7 +451,7 @@ void SdrMarkList::DeleteMark(size_t nNum)
 void SdrMarkList::ReplaceMark(const SdrMark& rNewMark, size_t nNum)
 {
     SdrMark* pMark = GetMark(nNum);
-    DBG_ASSERT(pMark!=0L,"ReplaceMark: MarkEntry not found.");
+    DBG_ASSERT(pMark!=nullptr,"ReplaceMark: MarkEntry not found.");
 
     if(pMark)
     {

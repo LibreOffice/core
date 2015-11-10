@@ -99,7 +99,7 @@ namespace sdr
             const drawinglayer::geometry::ViewInformation2D getCurrentViewInformation2D() const;
 
             // complete redraw
-            virtual void completeRedraw(const vcl::Region& rRegion, OutputDevice* pPreRenderDevice = 0) const;
+            virtual void completeRedraw(const vcl::Region& rRegion, OutputDevice* pPreRenderDevice = nullptr) const;
 
             // flush. Do buffered updates.
             virtual void flush();

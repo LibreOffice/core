@@ -254,11 +254,11 @@ bool EnhancedCustomShape3d::Transformation2D::IsParallel() const
 
 SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, const SdrObject* pCustomShape )
 {
-    SdrObject*  pRet = NULL;
+    SdrObject*  pRet = nullptr;
     SdrModel*   pModel = pCustomShape->GetModel();
     const SdrCustomShapeGeometryItem& rGeometryItem = static_cast<const SdrCustomShapeGeometryItem&>(pCustomShape->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ));
 
-    double      fMap, *pMap = NULL;
+    double      fMap, *pMap = nullptr;
     if ( pModel )
     {
         fMap = 1.0;
@@ -653,14 +653,14 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
 
             // light
 
-            double fAmbientIntensity = GetDouble( rGeometryItem, "Brightness", 22178.0 / 655.36, NULL ) / 100.0;
+            double fAmbientIntensity = GetDouble( rGeometryItem, "Brightness", 22178.0 / 655.36, nullptr ) / 100.0;
 
             drawing::Direction3D aFirstLightDirectionDefault( 50000, 0, 10000 );
             drawing::Direction3D aFirstLightDirection( GetDirection3D( rGeometryItem, "FirstLightDirection", aFirstLightDirectionDefault ) );
             if ( aFirstLightDirection.DirectionZ == 0.0 )
                 aFirstLightDirection.DirectionZ = 1.0;
 
-            double fLightIntensity = GetDouble( rGeometryItem, "FirstLightLevel", 43712.0 / 655.36, NULL ) / 100.0;
+            double fLightIntensity = GetDouble( rGeometryItem, "FirstLightLevel", 43712.0 / 655.36, nullptr ) / 100.0;
 
             /* sal_Bool bFirstLightHarsh = */ GetBool( rGeometryItem, "FirstLightHarsh", false );
 
@@ -669,7 +669,7 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
             if ( aSecondLightDirection.DirectionZ == 0.0 )
                 aSecondLightDirection.DirectionZ = -1;
 
-            double fLight2Intensity = GetDouble( rGeometryItem, "SecondLightLevel", 43712.0 / 655.36, NULL ) / 100.0;
+            double fLight2Intensity = GetDouble( rGeometryItem, "SecondLightLevel", 43712.0 / 655.36, nullptr ) / 100.0;
 
             /* sal_Bool bLight2Harsh = */ GetBool( rGeometryItem, "SecondLightHarsh", false );
             /* sal_Bool bLightFace = */ GetBool( rGeometryItem, "LightFace", false );
@@ -703,7 +703,7 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
                 pScene->GetProperties().SetObjectItem( makeSvx3DLightcolor3Item( aAmbientSpot3Color ) );
                 pScene->GetProperties().SetObjectItem( makeSvx3DLightDirection3Item( aSpotLight3 ) );
 
-            double fSpecular = GetDouble( rGeometryItem, "Specularity", 0, NULL ) / 100;
+            double fSpecular = GetDouble( rGeometryItem, "Specularity", 0, nullptr ) / 100;
             bool bMetal = GetBool( rGeometryItem, "Metal", false );
 
             Color aSpecularCol( 225,225,225 );

@@ -97,7 +97,7 @@ sal_uInt16 E3dSphereObj::GetObjIdentifier() const
 
 SdrObject *E3dSphereObj::DoConvertToPolyObj(bool /*bBezier*/, bool /*bAddText*/) const
 {
-    return NULL;
+    return nullptr;
 }
 
 E3dSphereObj* E3dSphereObj::Clone() const

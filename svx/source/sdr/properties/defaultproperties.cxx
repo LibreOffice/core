@@ -43,13 +43,13 @@ namespace sdr
 
         DefaultProperties::DefaultProperties(SdrObject& rObj)
         :   BaseProperties(rObj),
-            mpItemSet(0L)
+            mpItemSet(nullptr)
         {
         }
 
         DefaultProperties::DefaultProperties(const DefaultProperties& rProps, SdrObject& rObj)
         :   BaseProperties(rObj),
-            mpItemSet(0L)
+            mpItemSet(nullptr)
         {
             if(rProps.mpItemSet)
             {
@@ -59,7 +59,7 @@ namespace sdr
                 // This class just copies the ItemSet, ignore parent.
                 if(mpItemSet && mpItemSet->GetParent())
                 {
-                    mpItemSet->SetParent(0L);
+                    mpItemSet->SetParent(nullptr);
                 }
             }
         }
@@ -74,7 +74,7 @@ namespace sdr
             if(mpItemSet)
             {
                 delete mpItemSet;
-                mpItemSet = 0L;
+                mpItemSet = nullptr;
             }
         }
 
@@ -193,7 +193,7 @@ namespace sdr
 
         void DefaultProperties::PostItemChange(const sal_uInt16 nWhich )
         {
-            if( (nWhich == XATTR_FILLSTYLE) && (mpItemSet != NULL) )
+            if( (nWhich == XATTR_FILLSTYLE) && (mpItemSet != nullptr) )
                 CleanupFillProperties(*mpItemSet);
         }
 
@@ -205,7 +205,7 @@ namespace sdr
         SfxStyleSheet* DefaultProperties::GetStyleSheet() const
         {
             // no StyleSheet in DefaultProperties
-            return 0L;
+            return nullptr;
         }
 
         void DefaultProperties::ForceDefaultAttributes()

@@ -76,7 +76,7 @@ protected:
 //public:
     SdrDragStatUserData*    pUser;     // Userdata
 public:
-    SdrDragStat(): aPnts()                           { pUser=NULL; Reset(); }
+    SdrDragStat(): aPnts()                           { pUser=nullptr; Reset(); }
     ~SdrDragStat()                                   { Clear(false); }
     void         Reset();
     SdrView*     GetView() const                     { return pView; }

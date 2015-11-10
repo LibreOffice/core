@@ -168,7 +168,7 @@ public:
     /* is merging default attributes from type-shape into the SdrCustomShapeGeometryItem. If pType
     is NULL then the type is being taken from the "Type" property of the SdrCustomShapeGeometryItem.
     MergeDefaultAttributes is called when creating CustomShapes via UI and after importing */
-    void MergeDefaultAttributes( const OUString* pType = NULL );
+    void MergeDefaultAttributes( const OUString* pType = nullptr );
 
     /* the method is checking if the geometry data is unchanged/default, in this case the data might not be stored */
     enum DefaultType
@@ -240,7 +240,7 @@ public:
     virtual void EndTextEdit( SdrOutliner& rOutl ) override;
     virtual void TakeTextAnchorRect( Rectangle& rAnchorRect ) const override;
     virtual void TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRect, bool bNoEditText = false,
-        Rectangle* pAnchorRect=NULL, bool bLineWidth = true ) const override;
+        Rectangle* pAnchorRect=nullptr, bool bLineWidth = true ) const override;
     virtual SdrObjCustomShape* Clone() const override;
     SdrObjCustomShape& operator=(const SdrObjCustomShape& rObj);
 

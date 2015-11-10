@@ -24,24 +24,24 @@
 
 SdrOutlinerCache::SdrOutlinerCache( SdrModel* pModel )
 :   mpModel( pModel ),
-    mpModeOutline( NULL ),
-    mpModeText( NULL )
+    mpModeOutline( nullptr ),
+    mpModeText( nullptr )
 {
 }
 
 SdrOutliner* SdrOutlinerCache::createOutliner( sal_uInt16 nOutlinerMode )
 {
-    SdrOutliner* pOutliner = NULL;
+    SdrOutliner* pOutliner = nullptr;
 
     if( (OUTLINERMODE_OUTLINEOBJECT == nOutlinerMode) && mpModeOutline )
     {
         pOutliner = mpModeOutline;
-        mpModeOutline = NULL;
+        mpModeOutline = nullptr;
     }
     else if( (OUTLINERMODE_TEXTOBJECT == nOutlinerMode) && mpModeText )
     {
         pOutliner = mpModeText;
-        mpModeText = NULL;
+        mpModeText = nullptr;
     }
     else
     {
@@ -59,13 +59,13 @@ SdrOutlinerCache::~SdrOutlinerCache()
     if( mpModeOutline )
     {
         delete mpModeOutline;
-        mpModeOutline = NULL;
+        mpModeOutline = nullptr;
     }
 
     if( mpModeText )
     {
         delete mpModeText;
-        mpModeText = NULL;
+        mpModeText = nullptr;
     }
 }
 
@@ -75,7 +75,7 @@ void SdrOutlinerCache::disposeOutliner( SdrOutliner* pOutliner )
     {
         sal_uInt16 nOutlMode = pOutliner->GetOutlinerMode();
 
-        if( (OUTLINERMODE_OUTLINEOBJECT == nOutlMode) && (NULL == mpModeOutline) )
+        if( (OUTLINERMODE_OUTLINEOBJECT == nOutlMode) && (nullptr == mpModeOutline) )
         {
             mpModeOutline = pOutliner;
             pOutliner->Clear();
@@ -84,7 +84,7 @@ void SdrOutlinerCache::disposeOutliner( SdrOutliner* pOutliner )
             // Deregister on outliner, might be reused from outliner cache
             pOutliner->SetNotifyHdl( Link<EENotify&,void>() );
         }
-        else if( (OUTLINERMODE_TEXTOBJECT == nOutlMode) && (NULL == mpModeText) )
+        else if( (OUTLINERMODE_TEXTOBJECT == nOutlMode) && (nullptr == mpModeText) )
         {
             mpModeText = pOutliner;
             pOutliner->Clear();

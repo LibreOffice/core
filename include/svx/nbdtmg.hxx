@@ -73,7 +73,7 @@ class  SVX_DLLPUBLIC NumSettings_Impl
             , eNumAlign(SVX_ADJUST_LEFT)
             , nNumAlignAt(0)
             , nNumIndentAt(0)
-            , pBrushItem(0)
+            , pBrushItem(nullptr)
             , aSize(0,0)
         {}
         ~NumSettings_Impl(){}
@@ -121,7 +121,7 @@ class  SVX_DLLPUBLIC GrfBulDataRelation: public BulletsSettings
         BulletsSettings(eTy),
         nTabIndex((sal_uInt16)0xFFFF),
         nGallaryIndex((sal_uInt16)0xFFFF),
-        pGrfObj(0),
+        pGrfObj(nullptr),
         aSize(0,0)
     {}
     virtual ~GrfBulDataRelation(){}
@@ -139,7 +139,7 @@ class  SVX_DLLPUBLIC MixBulletsSettings_Impl
             eType(eTy),
             nIndex((sal_uInt16)0xFFFF),
             nIndexDefault((sal_uInt16)0xFFFF),
-            pBullets(0)
+            pBullets(nullptr)
             {}
         ~MixBulletsSettings_Impl(){}
 };
@@ -157,7 +157,7 @@ class  SVX_DLLPUBLIC NumberSettings_Impl
             bIsCustomized(false),
             nIndex((sal_uInt16)0xFFFF),
             nIndexDefault((sal_uInt16)0xFFFF),
-            pNumSetting(NULL)
+            pNumSetting(nullptr)
             {}
         ~NumberSettings_Impl(){}
 };
@@ -173,7 +173,7 @@ class  SVX_DLLPUBLIC OutlineSettings_Impl
     public:
         OutlineSettings_Impl() :
             bIsCustomized(false),
-            pNumSettingsArr(NULL)
+            pNumSettingsArr(nullptr)
             {}
         ~OutlineSettings_Impl(){
         }
@@ -194,7 +194,7 @@ class SVX_DLLPUBLIC NBOTypeMgrBase
     public:
         NBOTypeMgrBase(const NBOType aType)
             : eType(aType)
-            , pSet(0)
+            , pSet(nullptr)
             , eCoreUnit(SFX_MAPUNIT_TWIP)
             , aNumCharFmtName(OUString())
             , bIsLoading(false)

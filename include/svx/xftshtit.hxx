@@ -34,7 +34,7 @@ public:
                             TYPEINFO_OVERRIDE();
                             XFormTextShadowTranspItem(sal_uInt16 nShdwTransparence = 0);
                             XFormTextShadowTranspItem(SvStream& rIn);
-    virtual SfxPoolItem*    Clone(SfxItemPool* pPool = NULL) const override;
+    virtual SfxPoolItem*    Clone(SfxItemPool* pPool = nullptr) const override;
     virtual SfxPoolItem*    Create(SvStream& rIn, sal_uInt16 nVer) const override;
 };
 

@@ -194,7 +194,7 @@ namespace sdr
             invalidateRange(rTarget.getBaseRange());
 
             // clear manager
-            rTarget.mpOverlayManager = 0;
+            rTarget.mpOverlayManager = nullptr;
         }
 
         void OverlayManager::impApplyAddActions(OverlayObject& rTarget)
@@ -268,7 +268,7 @@ namespace sdr
 
         void OverlayManager::add(OverlayObject& rOverlayObject)
         {
-            OSL_ENSURE(0 == rOverlayObject.mpOverlayManager, "OverlayObject is added twice to an OverlayManager (!)");
+            OSL_ENSURE(nullptr == rOverlayObject.mpOverlayManager, "OverlayObject is added twice to an OverlayManager (!)");
 
             // add to the end of chain to preserve display order in paint
             maOverlayObjects.push_back(&rOverlayObject);

@@ -58,7 +58,7 @@ public:
     virtual SdrPage* Clone(SdrModel* pNewModel) const override;
 
     virtual void    InsertObject(SdrObject* pObj, size_t nPos = SAL_MAX_SIZE,
-                                    const SdrInsertReason* pReason=NULL) override;
+                                    const SdrInsertReason* pReason=nullptr) override;
 
     virtual SdrObject* RemoveObject(size_t nObjNum) override;
 
@@ -78,7 +78,7 @@ public:
 protected:
     FmFormPage(const FmFormPage& rPage);
 
-    void lateInit(const FmFormPage& rPage, FmFormModel* pNewModel = 0);
+    void lateInit(const FmFormPage& rPage, FmFormModel* pNewModel = nullptr);
 };
 
 #endif // INCLUDED_SVX_FMPAGE_HXX

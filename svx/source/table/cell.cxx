@@ -225,7 +225,7 @@ namespace sdr
         BaseProperties& CellProperties::Clone(SdrObject& rObj) const
         {
             OSL_FAIL("CellProperties::Clone(), does not work yet!");
-            return *(new CellProperties(*this, rObj,0));
+            return *(new CellProperties(*this, rObj,nullptr));
         }
 
         void CellProperties::ForceDefaultAttributes()
@@ -240,15 +240,15 @@ namespace sdr
             {
                 OutlinerParaObject* pParaObj = mxCell->GetEditOutlinerParaObject();
 
-                bool bOwnParaObj = pParaObj != 0;
+                bool bOwnParaObj = pParaObj != nullptr;
 
-                if( pParaObj == 0 )
+                if( pParaObj == nullptr )
                     pParaObj = mxCell->GetOutlinerParaObject();
 
                 if(pParaObj)
                 {
                     // handle outliner attributes
-                    Outliner* pOutliner = 0;
+                    Outliner* pOutliner = nullptr;
 
                     if(mxCell->IsTextEditActive())
                     {
@@ -321,7 +321,7 @@ namespace sdr
 
                 // Set a cell vertical property
                 OutlinerParaObject* pParaObj = mxCell->GetEditOutlinerParaObject();
-                if( pParaObj == 0 )
+                if( pParaObj == nullptr )
                     pParaObj = mxCell->GetOutlinerParaObject();
                 if(pParaObj)
                 {
@@ -405,9 +405,9 @@ void Cell::dispose()
     if( mpProperties )
     {
         delete mpProperties;
-        mpProperties = 0;
+        mpProperties = nullptr;
     }
-    SetOutlinerParaObject( 0 );
+    SetOutlinerParaObject( nullptr );
 }
 
 
@@ -435,7 +435,7 @@ void Cell::SetModel(SdrModel* pNewModel)
             SetEditSource( new SvxTextEditSource( &GetObject(), this ) );
         }
 
-        SetStyleSheet( 0, true );
+        SetStyleSheet( nullptr, true );
         SdrText::SetModel( pNewModel );
         ForceOutlinerParaObject( OUTLINERMODE_TEXTOBJECT );
     }
@@ -517,7 +517,7 @@ void Cell::replaceContentAndFormating( const CellRef& xSourceCell )
 
         if(rSourceTableObj.GetModel() != rTableObj.GetModel())
         {
-            SetStyleSheet( 0, true );
+            SetStyleSheet( nullptr, true );
         }
     }
 }
@@ -546,7 +546,7 @@ void Cell::copyFormatFrom( const CellRef& xSourceCell )
 
         if(rSourceTableObj.GetModel() != rTableObj.GetModel())
         {
-            SetStyleSheet( 0, true );
+            SetStyleSheet( nullptr, true );
         }
 
         notifyModified();
@@ -572,7 +572,7 @@ bool Cell::IsTextEditActive()
     if(rTableObj.getActiveCell().get() == this )
     {
         OutlinerParaObject* pParaObj = rTableObj.GetEditOutlinerParaObject();
-        if( pParaObj != 0 )
+        if( pParaObj != nullptr )
         {
             isActive = true;
             delete pParaObj;
@@ -610,7 +610,7 @@ OutlinerParaObject* Cell::GetEditOutlinerParaObject() const
     SdrTableObj& rTableObj = dynamic_cast< SdrTableObj& >( GetObject() );
     if( rTableObj.getActiveCell().get() == this )
         return rTableObj.GetEditOutlinerParaObject();
-    return 0;
+    return nullptr;
 }
 
 
@@ -661,7 +661,7 @@ SfxStyleSheet* Cell::GetStyleSheet() const
     if( mpProperties )
         return mpProperties->GetStyleSheet();
     else
-        return 0;
+        return nullptr;
 }
 
 void Cell::TakeTextAnchorRect(Rectangle& rAnchorRect) const
@@ -786,7 +786,7 @@ void Cell::SetOutlinerParaObject( OutlinerParaObject* pTextObject )
     SdrText::SetOutlinerParaObject( pTextObject );
     maSelection.nStartPara = EE_PARA_MAX_COUNT;
 
-    if( pTextObject == 0 )
+    if( pTextObject == nullptr )
         ForceOutlinerParaObject( OUTLINERMODE_TEXTOBJECT );
 }
 
@@ -809,7 +809,7 @@ sdr::properties::TextProperties* Cell::CloneProperties( sdr::properties::TextPro
     if( pProperties )
         return new sdr::properties::CellProperties( *static_cast<sdr::properties::CellProperties*>(pProperties), rNewObj, &rNewCell );
     else
-        return 0;
+        return nullptr;
 }
 
 
@@ -1016,7 +1016,7 @@ void SAL_CALL Cell::setPropertyValue( const OUString& rPropertyName, const Any& 
 {
     ::SolarMutexGuard aGuard;
 
-    if( (mpProperties == 0) || (GetModel() == 0) )
+    if( (mpProperties == nullptr) || (GetModel() == nullptr) )
         throw DisposedException();
 
     const SfxItemPropertySimpleEntry* pMap = mpPropSet->getPropertyMapEntry(rPropertyName);
@@ -1043,7 +1043,7 @@ void SAL_CALL Cell::setPropertyValue( const OUString& rPropertyName, const Any& 
                 break;
 
             const TableBorder* pBorder = static_cast<const TableBorder*>(rValue.getValue());
-            if( pBorder == NULL )
+            if( pBorder == nullptr )
                 break;
 
             SvxBoxItem aBox( SDRATTR_TABLE_BORDER );
@@ -1051,27 +1051,27 @@ void SAL_CALL Cell::setPropertyValue( const OUString& rPropertyName, const Any& 
             SvxBorderLine aLine;
 
             bool bSet = SvxBoxItem::LineToSvxLine(pBorder->TopLine, aLine, false);
-            aBox.SetLine(bSet ? &aLine : 0, SvxBoxItemLine::TOP);
+            aBox.SetLine(bSet ? &aLine : nullptr, SvxBoxItemLine::TOP);
             aBoxInfo.SetValid(SvxBoxInfoItemValidFlags::TOP, pBorder->IsTopLineValid);
 
             bSet = SvxBoxItem::LineToSvxLine(pBorder->BottomLine, aLine, false);
-            aBox.SetLine(bSet ? &aLine : 0, SvxBoxItemLine::BOTTOM);
+            aBox.SetLine(bSet ? &aLine : nullptr, SvxBoxItemLine::BOTTOM);
             aBoxInfo.SetValid(SvxBoxInfoItemValidFlags::BOTTOM, pBorder->IsBottomLineValid);
 
             bSet = SvxBoxItem::LineToSvxLine(pBorder->LeftLine, aLine, false);
-            aBox.SetLine(bSet ? &aLine : 0, SvxBoxItemLine::LEFT);
+            aBox.SetLine(bSet ? &aLine : nullptr, SvxBoxItemLine::LEFT);
             aBoxInfo.SetValid(SvxBoxInfoItemValidFlags::LEFT, pBorder->IsLeftLineValid);
 
             bSet = SvxBoxItem::LineToSvxLine(pBorder->RightLine, aLine, false);
-            aBox.SetLine(bSet ? &aLine : 0, SvxBoxItemLine::RIGHT);
+            aBox.SetLine(bSet ? &aLine : nullptr, SvxBoxItemLine::RIGHT);
             aBoxInfo.SetValid(SvxBoxInfoItemValidFlags::RIGHT, pBorder->IsRightLineValid);
 
             bSet = SvxBoxItem::LineToSvxLine(pBorder->HorizontalLine, aLine, false);
-            aBoxInfo.SetLine(bSet ? &aLine : 0, SvxBoxInfoItemLine::HORI);
+            aBoxInfo.SetLine(bSet ? &aLine : nullptr, SvxBoxInfoItemLine::HORI);
             aBoxInfo.SetValid(SvxBoxInfoItemValidFlags::HORI, pBorder->IsHorizontalLineValid);
 
             bSet = SvxBoxItem::LineToSvxLine(pBorder->VerticalLine, aLine, false);
-            aBoxInfo.SetLine(bSet ? &aLine : 0, SvxBoxInfoItemLine::VERT);
+            aBoxInfo.SetLine(bSet ? &aLine : nullptr, SvxBoxInfoItemLine::VERT);
             aBoxInfo.SetValid(SvxBoxInfoItemValidFlags::VERT, pBorder->IsVerticalLineValid);
 
             aBox.SetDistance(pBorder->Distance); //TODO
@@ -1161,7 +1161,7 @@ Any SAL_CALL Cell::getPropertyValue( const OUString& PropertyName ) throw(Unknow
 {
     ::SolarMutexGuard aGuard;
 
-    if( (mpProperties == 0) || (GetModel() == 0) )
+    if( (mpProperties == nullptr) || (GetModel() == nullptr) )
         throw DisposedException();
 
     const SfxItemPropertySimpleEntry* pMap = mpPropSet->getPropertyMapEntry(PropertyName);
@@ -1271,7 +1271,7 @@ void SAL_CALL Cell::setPropertyValues( const Sequence< OUString >& aPropertyName
 {
     ::SolarMutexGuard aSolarGuard;
 
-    if( (mpProperties == 0) || (GetModel() == 0) )
+    if( (mpProperties == nullptr) || (GetModel() == nullptr) )
         throw DisposedException();
 
     const sal_Int32 nCount = aPropertyNames.getLength();
@@ -1302,7 +1302,7 @@ Sequence< Any > SAL_CALL Cell::getPropertyValues( const Sequence< OUString >& aP
 {
     ::SolarMutexGuard aSolarGuard;
 
-    if( (mpProperties == 0) || (GetModel() == 0) )
+    if( (mpProperties == nullptr) || (GetModel() == nullptr) )
         throw DisposedException();
 
     const sal_Int32 nCount = aPropertyNames.getLength();
@@ -1356,7 +1356,7 @@ PropertyState SAL_CALL Cell::getPropertyState( const OUString& PropertyName ) th
 {
     ::SolarMutexGuard aGuard;
 
-    if( (mpProperties == 0) || (GetModel() == 0) )
+    if( (mpProperties == nullptr) || (GetModel() == nullptr) )
         throw DisposedException();
 
     const SfxItemPropertySimpleEntry* pMap = mpPropSet->getPropertyMapEntry(PropertyName);
@@ -1426,7 +1426,7 @@ PropertyState SAL_CALL Cell::getPropertyState( const OUString& PropertyName ) th
                 case XATTR_LINEDASH:
                     {
                         const NameOrIndex* pItem = static_cast<const NameOrIndex*>(rSet.GetItem((sal_uInt16)pMap->nWID));
-                        if( ( pItem == NULL ) || pItem->GetName().isEmpty() )
+                        if( ( pItem == nullptr ) || pItem->GetName().isEmpty() )
                             eState = PropertyState_DEFAULT_VALUE;
                     }
                     break;
@@ -1441,7 +1441,7 @@ PropertyState SAL_CALL Cell::getPropertyState( const OUString& PropertyName ) th
                 case XATTR_FILLFLOATTRANSPARENCE:
                     {
                         const NameOrIndex* pItem = static_cast<const NameOrIndex*>(rSet.GetItem((sal_uInt16)pMap->nWID));
-                        if( pItem == NULL )
+                        if( pItem == nullptr )
                             eState = PropertyState_DEFAULT_VALUE;
                     }
                     break;
@@ -1460,7 +1460,7 @@ Sequence< PropertyState > SAL_CALL Cell::getPropertyStates( const Sequence< OUSt
 {
     ::SolarMutexGuard aGuard;
 
-    if( (mpProperties == 0) || (GetModel() == 0) )
+    if( (mpProperties == nullptr) || (GetModel() == nullptr) )
         throw DisposedException();
 
     const sal_Int32 nCount = aPropertyName.getLength();
@@ -1491,7 +1491,7 @@ void SAL_CALL Cell::setPropertyToDefault( const OUString& PropertyName ) throw(U
 {
     ::SolarMutexGuard aGuard;
 
-    if( (mpProperties == 0) || (GetModel() == 0) )
+    if( (mpProperties == nullptr) || (GetModel() == nullptr) )
         throw DisposedException();
 
     const SfxItemPropertySimpleEntry* pMap = mpPropSet->getPropertyMapEntry(PropertyName);
@@ -1533,7 +1533,7 @@ Any SAL_CALL Cell::getPropertyDefault( const OUString& aPropertyName ) throw(Unk
 {
     ::SolarMutexGuard aGuard;
 
-    if( (mpProperties == 0) || (GetModel() == 0) )
+    if( (mpProperties == nullptr) || (GetModel() == nullptr) )
         throw DisposedException();
 
     const SfxItemPropertySimpleEntry* pMap = mpPropSet->getPropertyMapEntry(aPropertyName);

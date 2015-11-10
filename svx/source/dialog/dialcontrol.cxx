@@ -223,7 +223,7 @@ DialControl::DialControl_Impl::DialControl_Impl ( vcl::Window& rParent ) :
     mxBmpEnabled(VclPtr<DialControlBmp>::Create(rParent)),
     mxBmpDisabled(VclPtr<DialControlBmp>::Create(rParent)),
     mxBmpBuffered(VclPtr<DialControlBmp>::Create(rParent)),
-    mpLinkField( 0 ),
+    mpLinkField( nullptr ),
     mnLinkedFieldValueMultiplyer( 0 ),
     mnAngle( 0 ),
     mnInitialAngle( 0 ),

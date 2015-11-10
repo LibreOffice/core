@@ -443,7 +443,7 @@ IMPL_LINK_NOARG_TYPED(AreaPropertyPanelBase, SelectFillAttrHdl, ListBox&, void)
                 const XFillGradientItem aXFillGradientItem(mpLbFillAttr->GetSelectEntry(), aGradient);
 
                     // #i122676# Change FillStyle and Gradinet in one call
-                setFillStyleAndGradient(bFillStyleChange ? &aXFillStyleItem : NULL, aXFillGradientItem);
+                setFillStyleAndGradient(bFillStyleChange ? &aXFillStyleItem : nullptr, aXFillGradientItem);
             }
 
             break;
@@ -467,7 +467,7 @@ IMPL_LINK_NOARG_TYPED(AreaPropertyPanelBase, SelectFillAttrHdl, ListBox&, void)
                     const XFillHatchItem aXFillHatchItem( mpLbFillAttr->GetSelectEntry(), aHatch);
 
                     // #i122676# Change FillStyle and Hatch in one call
-                    setFillStyleAndHatch(bFillStyleChange ? &aXFillStyleItem : NULL, aXFillHatchItem);
+                    setFillStyleAndHatch(bFillStyleChange ? &aXFillStyleItem : nullptr, aXFillHatchItem);
                 }
             }
 
@@ -496,7 +496,7 @@ IMPL_LINK_NOARG_TYPED(AreaPropertyPanelBase, SelectFillAttrHdl, ListBox&, void)
                     const XFillBitmapItem aXFillBitmapItem(mpLbFillAttr->GetSelectEntry(), pXBitmapEntry->GetGraphicObject());
 
                     // #i122676# Change FillStyle and Bitmap in one call
-                    setFillStyleAndBitmap(bFillStyleChange ? &aXFillStyleItem : NULL, aXFillBitmapItem);
+                    setFillStyleAndBitmap(bFillStyleChange ? &aXFillStyleItem : nullptr, aXFillBitmapItem);
                 }
             }
 
@@ -560,7 +560,7 @@ void AreaPropertyPanelBase::ImpUpdateTransparencies()
             {
                 const XGradient& rGradient = mpFloatTransparenceItem->GetGradientValue();
                 sal_Int32 nEntryPos(0);
-                Image* pImage = 0;
+                Image* pImage = nullptr;
 
                 mpLBTransType->Enable();
                 mpTrspTextFT->Enable();
@@ -750,7 +750,7 @@ void AreaPropertyPanelBase::updateFillGradient(bool bDisabled, bool bDefault, co
 {
     if(bDefault)
     {
-        mpFillGradientItem.reset(pItem ? static_cast<XFillGradientItem*>(pItem->Clone()) : 0);
+        mpFillGradientItem.reset(pItem ? static_cast<XFillGradientItem*>(pItem->Clone()) : nullptr);
     }
 
     if(mpStyleItem && drawing::FillStyle_GRADIENT == (drawing::FillStyle)mpStyleItem->GetValue())
@@ -787,7 +787,7 @@ void AreaPropertyPanelBase::updateFillHatch(bool bDisabled, bool bDefault, const
 {
     if(bDefault)
     {
-        mpHatchItem.reset(pItem ? static_cast<XFillHatchItem*>(pItem->Clone()) : 0);
+        mpHatchItem.reset(pItem ? static_cast<XFillHatchItem*>(pItem->Clone()) : nullptr);
     }
 
     if(mpStyleItem && drawing::FillStyle_HATCH == (drawing::FillStyle)mpStyleItem->GetValue())
@@ -816,7 +816,7 @@ void AreaPropertyPanelBase::updateFillColor(bool bDefault, const XFillColorItem*
 {
     if(bDefault)
     {
-        mpColorItem.reset(pItem ? static_cast<XFillColorItem*>(pItem->Clone()) : 0);
+        mpColorItem.reset(pItem ? static_cast<XFillColorItem*>(pItem->Clone()) : nullptr);
     }
 
     if(mpStyleItem && drawing::FillStyle_SOLID == (drawing::FillStyle)mpStyleItem->GetValue())
@@ -832,7 +832,7 @@ void AreaPropertyPanelBase::updateFillBitmap(bool bDisabled, bool bDefault, cons
 {
     if(bDefault)
     {
-        mpBitmapItem.reset(pItem ? static_cast<XFillBitmapItem*>(pItem->Clone()) : 0);
+        mpBitmapItem.reset(pItem ? static_cast<XFillBitmapItem*>(pItem->Clone()) : nullptr);
     }
 
     if(mpStyleItem && drawing::FillStyle_BITMAP == (drawing::FillStyle)mpStyleItem->GetValue())
@@ -1244,7 +1244,7 @@ IMPL_LINK_NOARG_TYPED(AreaPropertyPanelBase, ChangeTrgrTypeHdl_Impl, ListBox&, v
             break;
     }
 
-    SfxItemPool* pPool = 0;
+    SfxItemPool* pPool = nullptr;
     const XFillFloatTransparenceItem aGradientItem(pPool, aTmpGradient, bGradient);
     setFillFloatTransparence(aGradientItem);
 }

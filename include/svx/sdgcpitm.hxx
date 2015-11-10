@@ -38,7 +38,7 @@ public:
                                              sal_uInt16 nWhichId = SDRATTR_GRAFCROP ) :
                                 SvxGrfCrop( nLeftCrop, nRightCrop, nTopCrop, nBottomCrop, nWhichId ) {}
 
-    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = NULL ) const override;
+    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = nullptr ) const override;
     virtual SfxPoolItem*    Create( SvStream& rIn, sal_uInt16 nVer ) const override;
     virtual sal_uInt16          GetVersion( sal_uInt16 nFileVersion ) const override;
 };

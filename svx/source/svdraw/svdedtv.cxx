@@ -350,7 +350,7 @@ void SdrEditView::ImpBroadcastEdgesOfMarkedNodes()
         SdrMark* pEM = GetMarkedEdgesOfMarkedNodes().GetMark(i);
         SdrObject* pEdgeTmp=pEM->GetMarkedSdrObj();
         SdrEdgeObj* pEdge=dynamic_cast<SdrEdgeObj*>( pEdgeTmp );
-        if (pEdge!=NULL) {
+        if (pEdge!=nullptr) {
             pEdge->SetEdgeTrackDirty();
         }
     }
@@ -491,8 +491,8 @@ void SdrEditView::CheckPossibilities()
                 // still missing ...
                 const SdrObject* pObj=GetMarkedObjectByIndex(0);
                 //const SdrPathObj* pPath=dynamic_cast<SdrPathObj*>( pObj );
-                bool bGroup=pObj->GetSubList()!=NULL;
-                bool bHasText=pObj->GetOutlinerParaObject()!=NULL;
+                bool bGroup=pObj->GetSubList()!=nullptr;
+                bool bHasText=pObj->GetOutlinerParaObject()!=nullptr;
                 if (bGroup || bHasText) {
                     bCombinePossible=true;
                 }
@@ -540,7 +540,7 @@ void SdrEditView::CheckPossibilities()
             }
 
             bool bNoMovRotFound=false;
-            const SdrPageView* pPV0=NULL;
+            const SdrPageView* pPV0=nullptr;
 
             for (size_t nm=0; nm<nMarkCount; ++nm) {
                 const SdrMark* pM=GetSdrMarkByIndex(nm);
@@ -593,7 +593,7 @@ void SdrEditView::CheckPossibilities()
                     bCanConvToContour = false;
 
                 // Ungroup
-                if (!bUnGroupPossible) bUnGroupPossible=pObj->GetSubList()!=NULL;
+                if (!bUnGroupPossible) bUnGroupPossible=pObj->GetSubList()!=nullptr;
                 // ConvertToCurve: If at least one can be converted, that is fine.
                 if (aInfo.bCanConvToPath          ) bCanConvToPath          =true;
                 if (aInfo.bCanConvToPoly          ) bCanConvToPoly          =true;
@@ -650,10 +650,10 @@ void SdrEditView::CheckPossibilities()
             if (nMarkCount==1) {
                 SdrObject* pObj=GetMarkedObjectByIndex(0);
                 SdrEdgeObj* pEdge=dynamic_cast<SdrEdgeObj*>( pObj );
-                if (pEdge!=NULL) {
+                if (pEdge!=nullptr) {
                     SdrObject* pNode1=pEdge->GetConnectedNode(true);
                     SdrObject* pNode2=pEdge->GetConnectedNode(false);
-                    if (pNode1!=NULL || pNode2!=NULL) bMoveAllowed=false;
+                    if (pNode1!=nullptr || pNode2!=nullptr) bMoveAllowed=false;
                 }
             }
         }
@@ -911,7 +911,7 @@ void SdrEditView::CopyMarkedObj()
     for (size_t nm=0; nm<nMarkCount; ++nm) {
         SdrMark* pM=aSourceObjectsForCopy.GetMark(nm);
         SdrObject* pO=pM->GetMarkedSdrObj()->Clone();
-        if (pO!=NULL) {
+        if (pO!=nullptr) {
             SdrInsertReason aReason(SDRREASON_VIEWCALL);
             pM->GetPageView()->GetObjList()->InsertObject(pO, SAL_MAX_SIZE, &aReason);
 
@@ -972,7 +972,7 @@ bool SdrEditView::InsertObjectAtView(SdrObject* pObj, SdrPageView& rPV, SdrInser
         pObj->NbcSetLayer(nLayer);
     }
     if (nOptions & SdrInsertFlags::SETDEFATTR) {
-        if (mpDefaultStyleSheet!=NULL) pObj->NbcSetStyleSheet(mpDefaultStyleSheet, false);
+        if (mpDefaultStyleSheet!=nullptr) pObj->NbcSetStyleSheet(mpDefaultStyleSheet, false);
         pObj->SetMergedItemSet(maDefaultAttr);
     }
     if (!pObj->IsInserted()) {

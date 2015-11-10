@@ -149,7 +149,7 @@ SvxFooterPage::SvxFooterPage( vcl::Window* pParent, const SfxItemSet& rAttr ) :
 SvxHFPage::SvxHFPage( vcl::Window* pParent, const SfxItemSet& rSet, sal_uInt16 nSetId ) :
     SfxTabPage(pParent, "HFFormatPage", "svx/ui/headfootformatpage.ui", &rSet),
     nId(nSetId),
-    pBBSet(NULL),
+    pBBSet(nullptr),
     // bitfield
     mbDisableQueryBox(false),
     mbEnableBackgroundSelector(true),
@@ -384,7 +384,7 @@ void SvxHFPage::Reset( const SfxItemSet* rSet )
     m_pCntSharedFirstBox->Show(!bIsCalc);
 
     // Evaluate header-/footer- attributes
-    const SvxSetItem* pSetItem = 0;
+    const SvxSetItem* pSetItem = nullptr;
 
     if ( SfxItemState::SET == rSet->GetItemState( GetWhich(nId), false,
                                             reinterpret_cast<const SfxPoolItem**>(&pSetItem) ) )
@@ -401,7 +401,7 @@ void SvxHFPage::Reset( const SfxItemSet* rSet )
                 static_cast<const SfxBoolItem&>(rHeaderSet.Get( GetWhich( SID_ATTR_PAGE_DYNAMIC ) ));
             const SfxBoolItem& rShared =
                 static_cast<const SfxBoolItem&>(rHeaderSet.Get( GetWhich( SID_ATTR_PAGE_SHARED ) ));
-            const SfxBoolItem* pSharedFirst = 0;
+            const SfxBoolItem* pSharedFirst = nullptr;
             if (rHeaderSet.HasItem(GetWhich(SID_ATTR_PAGE_SHARED_FIRST)))
                 pSharedFirst = static_cast<const SfxBoolItem*>(&rHeaderSet.Get( GetWhich( SID_ATTR_PAGE_SHARED_FIRST ) ));
             const SvxSizeItem& rSize =
@@ -439,7 +439,7 @@ void SvxHFPage::Reset( const SfxItemSet* rSet )
                 m_pCntSharedFirstBox->Hide();
         }
         else
-            pSetItem = 0;
+            pSetItem = nullptr;
     }
     else
     {
@@ -457,7 +457,7 @@ void SvxHFPage::Reset( const SfxItemSet* rSet )
         m_pCntSharedFirstBox->Check();
     }
 
-    TurnOnHdl(0);
+    TurnOnHdl(nullptr);
 
     m_pTurnOnBox->SaveValue();
     m_pDistEdit->SaveValue();
@@ -468,11 +468,11 @@ void SvxHFPage::Reset( const SfxItemSet* rSet )
     m_pCntSharedBox->SaveValue();
     RangeHdl();
 
-    const SfxPoolItem* pItem = 0;
+    const SfxPoolItem* pItem = nullptr;
     SfxObjectShell* pShell;
     if(SfxItemState::SET == rSet->GetItemState(SID_HTML_MODE, false, &pItem) ||
-        ( 0 != (pShell = SfxObjectShell::Current()) &&
-                    0 != (pItem = pShell->GetItem(SID_HTML_MODE))))
+        ( nullptr != (pShell = SfxObjectShell::Current()) &&
+                    nullptr != (pItem = pShell->GetItem(SID_HTML_MODE))))
     {
         sal_uInt16 nHtmlMode = 0;
         nHtmlMode = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
@@ -949,7 +949,7 @@ void SvxHFPage::ActivatePage( const SfxItemSet& rSet )
     }
 
     // Evaluate Header attribute
-    const SvxSetItem* pSetItem = 0;
+    const SvxSetItem* pSetItem = nullptr;
 
     if ( SfxItemState::SET == rSet.GetItemState( GetWhich( SID_ATTR_PAGE_HEADERSET ),
                                             false,
@@ -976,7 +976,7 @@ void SvxHFPage::ActivatePage( const SfxItemSet& rSet )
             m_pBspWin->SetHeader( true );
         }
         else
-            pSetItem = 0;
+            pSetItem = nullptr;
     }
 
     if ( !pSetItem )
@@ -989,7 +989,7 @@ void SvxHFPage::ActivatePage( const SfxItemSet& rSet )
             m_pCntSharedFirstBox->Disable();
         }
     }
-    pSetItem = 0;
+    pSetItem = nullptr;
 
     if ( SfxItemState::SET == rSet.GetItemState( GetWhich( SID_ATTR_PAGE_FOOTERSET ),
                                             false,
@@ -1016,7 +1016,7 @@ void SvxHFPage::ActivatePage( const SfxItemSet& rSet )
             m_pBspWin->SetFooter( true );
         }
         else
-            pSetItem = 0;
+            pSetItem = nullptr;
     }
 
     if ( !pSetItem )
@@ -1149,7 +1149,7 @@ void SvxHFPage::EnableDynamicSpacing()
         m_pHeightEdit,
         m_pHeightDynBtn,
         m_pBackgroundBtn,
-        0
+        nullptr
     };
     sal_Int32 nOffset = m_pTurnOnBox->GetPosPixel().Y() - m_pCntSharedBox->GetPosPixel().Y();
     sal_Int32 nIdx = 0;

@@ -467,7 +467,7 @@ public:
     //          3.Level Position (x+y)
     void     Sort();
     size_t   GetHdlCount() const { return aList.size(); }
-    SdrHdl*  GetHdl(size_t nNum) const { return nNum<aList.size() ? aList[nNum] : NULL; }
+    SdrHdl*  GetHdl(size_t nNum) const { return nNum<aList.size() ? aList[nNum] : nullptr; }
     size_t   GetHdlNum(const SdrHdl* pHdl) const;
     void     SetHdlSize(sal_uInt16 nSiz);
     sal_uInt16   GetHdlSize() const                        { return nHdlSize; }
@@ -485,7 +485,7 @@ public:
     void RemoveAllByKind(SdrHdlKind eKind);
 
     // Last inserted handles are likely hit (if the handles are above each other)
-    SdrHdl* IsHdlListHit(const Point& rPnt, bool bBack=false, bool bNext=false, SdrHdl* pHdl0=NULL) const;
+    SdrHdl* IsHdlListHit(const Point& rPnt, bool bBack=false, bool bNext=false, SdrHdl* pHdl0=nullptr) const;
     SdrHdl* GetHdl(SdrHdlKind eKind1) const;
 };
 

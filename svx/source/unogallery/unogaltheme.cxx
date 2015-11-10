@@ -45,7 +45,7 @@ namespace unogallery {
 GalleryTheme::GalleryTheme( const OUString& rThemeName )
 {
     mpGallery = ::Gallery::GetGalleryInstance();
-    mpTheme = ( mpGallery ? mpGallery->AcquireTheme( rThemeName, *this ) : NULL );
+    mpTheme = ( mpGallery ? mpGallery->AcquireTheme( rThemeName, *this ) : nullptr );
 
     if( mpGallery )
         StartListening( *mpGallery );
@@ -59,7 +59,7 @@ GalleryTheme::~GalleryTheme()
 
     DBG_ASSERT( !mpTheme || mpGallery, "Theme is living without Gallery" );
 
-    implReleaseItems( NULL );
+    implReleaseItems( nullptr );
 
     if( mpGallery )
     {
@@ -144,7 +144,7 @@ sal_Bool SAL_CALL GalleryTheme::hasElements()
 {
     const SolarMutexGuard aGuard;
 
-    return( ( mpTheme != NULL ) && ( mpTheme->GetObjectCount() > 0 ) );
+    return( ( mpTheme != nullptr ) && ( mpTheme->GetObjectCount() > 0 ) );
 }
 
 
@@ -302,9 +302,9 @@ void SAL_CALL GalleryTheme::update(  )
                 uno::Reference< drawing::XDrawPagesSupplier > xDrawPagesSupplier( Drawing, uno::UNO_QUERY_THROW );
                 uno::Reference< drawing::XDrawPages > xDrawPages( xDrawPagesSupplier->getDrawPages(), uno::UNO_QUERY_THROW );
                 uno::Reference< drawing::XDrawPage > xPage( xDrawPages->getByIndex( 0 ), uno::UNO_QUERY_THROW );
-                SvxDrawPage* pUnoPage = xPage.is() ? SvxDrawPage::getImplementation( xPage ) : NULL;
-                SdrModel* pOrigModel = pUnoPage ? pUnoPage->GetSdrPage()->GetModel() : NULL;
-                SdrPage* pOrigPage = pUnoPage ? pUnoPage->GetSdrPage() : NULL;
+                SvxDrawPage* pUnoPage = xPage.is() ? SvxDrawPage::getImplementation( xPage ) : nullptr;
+                SdrModel* pOrigModel = pUnoPage ? pUnoPage->GetSdrPage()->GetModel() : nullptr;
+                SdrPage* pOrigPage = pUnoPage ? pUnoPage->GetSdrPage() : nullptr;
 
                 if (pOrigPage && pOrigModel)
                 {
@@ -357,12 +357,12 @@ void GalleryTheme::Notify( SfxBroadcaster&, const SfxHint& rHint )
         {
             DBG_ASSERT( !mpTheme || mpGallery, "Theme is living without Gallery" );
 
-            implReleaseItems( NULL );
+            implReleaseItems( nullptr );
 
             if( mpGallery && mpTheme )
             {
                 mpGallery->ReleaseTheme( mpTheme, *this );
-                mpTheme = NULL;
+                mpTheme = nullptr;
             }
         }
         break;

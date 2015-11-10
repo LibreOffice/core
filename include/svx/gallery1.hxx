@@ -128,7 +128,7 @@ public:
 
     SAL_DLLPRIVATE size_t       GetThemeCount() const { return aThemeList.size(); }
     SAL_DLLPRIVATE const GalleryThemeEntry* GetThemeInfo( size_t nPos )
-                                { return nPos < aThemeList.size() ? aThemeList[ nPos ] : NULL; }
+                                { return nPos < aThemeList.size() ? aThemeList[ nPos ] : nullptr; }
     SAL_DLLPRIVATE const GalleryThemeEntry* GetThemeInfo( const OUString& rThemeName ) { return ImplGetThemeEntry( rThemeName ); }
 
     bool                        HasTheme( const OUString& rThemeName );

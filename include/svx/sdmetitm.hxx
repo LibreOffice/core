@@ -34,7 +34,7 @@ public:
     SdrMetricItem(): SfxInt32Item() {}
     SdrMetricItem(sal_uInt16 nId, sal_Int32 nVal):  SfxInt32Item(nId,nVal) {}
     SdrMetricItem(sal_uInt16 nId, SvStream& rIn): SfxInt32Item(nId,rIn) {}
-    virtual SfxPoolItem* Clone(SfxItemPool* pPool=NULL) const override;
+    virtual SfxPoolItem* Clone(SfxItemPool* pPool=nullptr) const override;
     virtual SfxPoolItem* Create(SvStream& rIn, sal_uInt16 nVer) const override;
     virtual bool HasMetrics() const override;
     virtual bool ScaleMetrics(long nMul, long nDiv) override;
@@ -42,7 +42,7 @@ public:
     virtual bool GetPresentation(SfxItemPresentation ePres,
                                                 SfxMapUnit eCoreMetric,
                                                 SfxMapUnit ePresMetric,
-                                                OUString& rText, const IntlWrapper * = 0) const override;
+                                                OUString& rText, const IntlWrapper * = nullptr) const override;
 };
 
 

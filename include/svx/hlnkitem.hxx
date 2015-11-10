@@ -53,19 +53,19 @@ public:
     TYPEINFO_OVERRIDE();
 
     SvxHyperlinkItem( sal_uInt16 _nWhich = SID_HYPERLINK_GETLINK ):
-                SfxPoolItem(_nWhich), pMacroTable(NULL) { eType = HLINK_DEFAULT; nMacroEvents=0; };
+                SfxPoolItem(_nWhich), pMacroTable(nullptr) { eType = HLINK_DEFAULT; nMacroEvents=0; };
     SvxHyperlinkItem( const SvxHyperlinkItem& rHyperlinkItem );
     SvxHyperlinkItem( sal_uInt16 nWhich, const OUString& rName, const OUString& rURL,
                                     const OUString& rTarget, const OUString& rIntName,
                                     SvxLinkInsertMode eTyp = HLINK_FIELD,
                                     sal_uInt16 nEvents = 0,
-                                    SvxMacroTableDtor *pMacroTbl =NULL );
+                                    SvxMacroTableDtor *pMacroTbl =nullptr );
     virtual ~SvxHyperlinkItem () { delete pMacroTable; }
 
     inline SvxHyperlinkItem& operator=( const SvxHyperlinkItem &rItem );
 
     virtual bool             operator==( const SfxPoolItem& ) const override;
-    virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const override;
+    virtual SfxPoolItem*     Clone( SfxItemPool *pPool = nullptr ) const override;
     virtual bool             QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
     virtual bool             PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 

@@ -104,7 +104,7 @@ namespace svx
         ~ControllerFeatures();
 
         /// checks whether the instance is properly assigned to a form and/or controller
-        inline bool isAssigned( ) const { return m_pImpl != NULL; }
+        inline bool isAssigned( ) const { return m_pImpl != nullptr; }
 
         /** assign to a controller
         */

@@ -68,7 +68,7 @@ public:
     SdrObject* Next()
     {
         sal_uInt32 idx = (mbReverse ? --mnIndex : mnIndex++);
-        return idx < maObjList.size() ? maObjList[idx] : NULL;
+        return idx < maObjList.size() ? maObjList[idx] : nullptr;
     }
 
     sal_uInt32 Count() { return maObjList.size(); }

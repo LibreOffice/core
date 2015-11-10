@@ -207,7 +207,7 @@ FmFormShell::FmFormShell( SfxViewShell* _pParent, FmFormView* pView )
             :SfxShell(_pParent)
             ,m_pImpl(new FmXFormShell(*this, _pParent->GetViewFrame()))
             ,m_pFormView( pView )
-            ,m_pFormModel( NULL )
+            ,m_pFormModel( nullptr )
             ,m_pParentShell(_pParent)
             ,m_nLastSlot( 0 )
             ,m_bDesignMode( true )
@@ -224,11 +224,11 @@ FmFormShell::FmFormShell( SfxViewShell* _pParent, FmFormView* pView )
 FmFormShell::~FmFormShell()
 {
     if ( m_pFormView )
-        SetView( NULL );
+        SetView( nullptr );
 
     m_pImpl->dispose();
     m_pImpl->release();
-    m_pImpl = NULL;
+    m_pImpl = nullptr;
 }
 
 
@@ -254,7 +254,7 @@ bool FmFormShell::PrepareClose(bool bUI)
         SdrPageView* pCurPageView = m_pFormView->GetSdrPageView();
 
         // sal_uInt16 nPos = pCurPageView ? pCurPageView->GetWinList().Find((OutputDevice*)m_pFormView->GetActualOutDev()) : SDRPAGEVIEWWIN_NOTFOUND;
-        SdrPageWindow* pWindow = pCurPageView ? pCurPageView->FindPageWindow(*const_cast<OutputDevice*>(m_pFormView->GetActualOutDev())) : 0L;
+        SdrPageWindow* pWindow = pCurPageView ? pCurPageView->FindPageWindow(*const_cast<OutputDevice*>(m_pFormView->GetActualOutDev())) : nullptr;
 
         if(pWindow)
         {
@@ -495,7 +495,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
             if ( pGrabFocusItem && pGrabFocusItem->GetValue() )
             {   // see below
                 SfxViewShell* pShell = GetViewShell();
-                vcl::Window* pShellWnd = pShell ? pShell->GetWindow() : NULL;
+                vcl::Window* pShellWnd = pShell ? pShell->GetWindow() : nullptr;
                 if ( pShellWnd )
                     pShellWnd->GrabFocus();
                 break;
@@ -505,11 +505,11 @@ void FmFormShell::Execute(SfxRequest &rReq)
             SfxUInt32Item aInventorItem( SID_FM_CONTROL_INVENTOR, FmFormInventor );
             const SfxPoolItem* pArgs[] =
             {
-                &aIdentifierItem, &aInventorItem, NULL
+                &aIdentifierItem, &aInventorItem, nullptr
             };
             const SfxPoolItem* pInternalArgs[] =
             {
-                NULL
+                nullptr
             };
 
             GetViewShell()->GetViewFrame()->GetDispatcher()->Execute( SID_FM_CREATE_CONTROL, SfxCallMode::ASYNCHRON,
@@ -752,7 +752,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
                 DBG_ASSERT( pFact, "no dialog factory!" );
                 if ( pFact )
                 {
-                    std::unique_ptr< AbstractFmInputRecordNoDialog > dlg( pFact->CreateFmInputRecordNoDialog( NULL ) );
+                    std::unique_ptr< AbstractFmInputRecordNoDialog > dlg( pFact->CreateFmInputRecordNoDialog( nullptr ) );
                     DBG_ASSERT( dlg.get(), "Dialog creation failed!" );
                     dlg->SetValue( rController->getCursor()->getRow() );
                     if ( dlg->Execute() == RET_OK )
@@ -904,7 +904,7 @@ void FmFormShell::GetState(SfxItemSet &rSet)
                     {
                         // Ist der css::drawing::Layer gelocked, so m???ssen die Slots disabled werden. #36897
                         SdrPageView* pPV = m_pFormView->GetSdrPageView();
-                        if (pPV != NULL)
+                        if (pPV != nullptr)
                             bLayerLocked = pPV->IsLayerLocked(m_pFormView->GetActiveLayer());
                     }
                     if (bLayerLocked)
@@ -1182,7 +1182,7 @@ void FmFormShell::GetFormState(SfxItemSet &rSet, sal_uInt16 nWhich)
 
 FmFormPage* FmFormShell::GetCurPage() const
 {
-    FmFormPage* pP = NULL;
+    FmFormPage* pP = nullptr;
     if (m_pFormView && m_pFormView->GetSdrPageView())
         pP = dynamic_cast<FmFormPage*>( m_pFormView->GetSdrPageView()->GetPage() );
     return pP;
@@ -1196,9 +1196,9 @@ void FmFormShell::SetView( FmFormView* _pView )
         if ( IsActive() )
             GetImpl()->viewDeactivated( *m_pFormView );
 
-        m_pFormView->SetFormShell( NULL, FmFormView::FormShellAccess() );
-        m_pFormView = NULL;
-        m_pFormModel = NULL;
+        m_pFormView->SetFormShell( nullptr, FmFormView::FormShellAccess() );
+        m_pFormView = nullptr;
+        m_pFormModel = nullptr;
     }
 
     if ( !_pView )
@@ -1300,7 +1300,7 @@ namespace
         while ( aIter.IsMore() )
         {
             SdrObject* pObject = aIter.Next();
-            SdrUnoObj* pUnoObject = pObject ? dynamic_cast<SdrUnoObj*>( pObject  ) : NULL;
+            SdrUnoObj* pUnoObject = pObject ? dynamic_cast<SdrUnoObj*>( pObject  ) : nullptr;
             if ( !pUnoObject )
                 continue;
 
@@ -1311,7 +1311,7 @@ namespace
             if ( _rxModel == xControlModel )
                 return pUnoObject;
         }
-        return NULL;
+        return nullptr;
     }
 }
 
@@ -1391,14 +1391,14 @@ namespace
 SdrUnoObj* FmFormShell::GetFormControl( const Reference< XControlModel >& _rxModel, const SdrView& _rView, const OutputDevice& _rDevice, Reference< XControl >& _out_rxControl ) const
 {
     if ( !_rxModel.is() )
-        return NULL;
+        return nullptr;
 
     // we can only retrieve controls for SdrObjects which belong to page which is actually displayed in the given view
     SdrPageView* pPageView = _rView.GetSdrPageView();
-    SdrPage* pPage = pPageView ? pPageView->GetPage() : NULL;
+    SdrPage* pPage = pPageView ? pPageView->GetPage() : nullptr;
     OSL_ENSURE( pPage, "FmFormShell::GetFormControl: no page displayed in the given view!" );
     if ( !pPage )
-        return NULL;
+        return nullptr;
 
     SdrUnoObj* pUnoObject = lcl_findUnoObject( *pPage, _rxModel );
     if ( pUnoObject )
@@ -1429,7 +1429,7 @@ SdrUnoObj* FmFormShell::GetFormControl( const Reference< XControlModel >& _rxMod
     (void) this; // avoid loplugin:staticmethods
 #endif
 
-    return NULL;
+    return nullptr;
 }
 
 
@@ -1437,7 +1437,7 @@ Reference< runtime::XFormController > FmFormShell::GetFormController( const Refe
 {
     const FmFormView* pFormView = dynamic_cast< const FmFormView* >( &_rView );
     if ( !pFormView )
-        return NULL;
+        return nullptr;
 
     return pFormView->GetFormController( _rxForm, _rDevice );
 }

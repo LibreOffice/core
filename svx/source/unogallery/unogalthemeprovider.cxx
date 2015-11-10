@@ -123,7 +123,7 @@ sal_Bool SAL_CALL GalleryThemeProvider::hasElements()
 {
     const SolarMutexGuard aGuard;
 
-    return( ( mpGallery != NULL ) && ( mpGallery->GetThemeCount() > 0 ) );
+    return( ( mpGallery != nullptr ) && ( mpGallery->GetThemeCount() > 0 ) );
 }
 
 

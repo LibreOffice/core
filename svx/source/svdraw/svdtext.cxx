@@ -53,7 +53,7 @@ void SdrText::CheckPortionInfo( SdrOutliner& rOutliner )
 
         // TODO: optimization: we could create a BigTextObject
         mbPortionInfoChecked=true;
-        if(mpOutlinerParaObject!=NULL && rOutliner.ShouldCreateBigTextObject())
+        if(mpOutlinerParaObject!=nullptr && rOutliner.ShouldCreateBigTextObject())
         {
             // #i102062# MemoryLeak closed
             delete mpOutlinerParaObject;
@@ -82,7 +82,7 @@ void SdrText::SetOutlinerParaObject( OutlinerParaObject* pTextObject )
             // Update HitTestOutliner
             const SdrTextObj* pTestObj = mpModel->GetHitTestOutliner().GetTextObj();
             if( pTestObj && pTestObj->GetOutlinerParaObject() == mpOutlinerParaObject )
-                mpModel->GetHitTestOutliner().SetTextObj( 0 );
+                mpModel->GetHitTestOutliner().SetTextObj( nullptr );
         }
 
         delete mpOutlinerParaObject;
@@ -106,12 +106,12 @@ OutlinerParaObject* SdrText::RemoveOutlinerParaObject()
         // Update HitTestOutliner
         const SdrTextObj* pTestObj = mpModel->GetHitTestOutliner().GetTextObj();
         if( pTestObj && pTestObj->GetOutlinerParaObject() == mpOutlinerParaObject )
-            mpModel->GetHitTestOutliner().SetTextObj( 0 );
+            mpModel->GetHitTestOutliner().SetTextObj( nullptr );
     }
 
     OutlinerParaObject* pOPO = mpOutlinerParaObject;
 
-    mpOutlinerParaObject = 0;
+    mpOutlinerParaObject = nullptr;
     mbPortionInfoChecked = false;
 
     return pOPO;
@@ -125,7 +125,7 @@ void SdrText::SetModel( SdrModel* pNewModel )
     SdrModel* pOldModel = mpModel;
     mpModel = pNewModel;
 
-    if( mpOutlinerParaObject && pOldModel!=NULL && pNewModel!=NULL)
+    if( mpOutlinerParaObject && pOldModel!=nullptr && pNewModel!=nullptr)
     {
         bool bHgtSet = GetObjectItemSet().GetItemState(EE_CHAR_FONTHEIGHT) == SfxItemState::SET;
 
@@ -150,7 +150,7 @@ void SdrText::SetModel( SdrModel* pNewModel )
         SdrOutliner& rOutliner = mrObject.ImpGetDrawOutliner();
         rOutliner.SetText(*mpOutlinerParaObject);
         delete mpOutlinerParaObject;
-        mpOutlinerParaObject=0;
+        mpOutlinerParaObject=nullptr;
         if (bScaleUnitChanged)
         {
             Fraction aMetricFactor=GetMapFactor(aOldUnit,aNewUnit).X();

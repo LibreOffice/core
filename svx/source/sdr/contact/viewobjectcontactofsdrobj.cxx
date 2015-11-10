@@ -125,7 +125,7 @@ bool ViewObjectContactOfSdrObj::isPrimitiveVisible(const DisplayInfo& rDisplayIn
             }
             else
             {
-                const bool bIsFormControl = dynamic_cast< const FmFormObj * >( &rObject ) != 0;
+                const bool bIsFormControl = dynamic_cast< const FmFormObj * >( &rObject ) != nullptr;
                 if(bIsFormControl && bHideFormControl)
                 {
                     return false;

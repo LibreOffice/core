@@ -43,11 +43,11 @@ using namespace com::sun::star;
 
 Svx3DPreviewControl::Svx3DPreviewControl(vcl::Window* pParent, WinBits nStyle)
 :   Control(pParent, nStyle),
-    mpModel(0),
-    mpFmPage(0),
-    mp3DView(0),
-    mpScene(0),
-    mp3DObj(0),
+    mpModel(nullptr),
+    mpFmPage(nullptr),
+    mp3DView(nullptr),
+    mpScene(nullptr),
+    mp3DObj(nullptr),
     mnObjectType(SvxPreviewObjectType::SPHERE)
 {
     Construct();
@@ -197,7 +197,7 @@ void Svx3DPreviewControl::SetObjectType(SvxPreviewObjectType nType)
             aSet.Put(mp3DObj->GetMergedItemSet());
             mpScene->Remove3DObj( mp3DObj );
             delete mp3DObj;
-            mp3DObj = NULL;
+            mp3DObj = nullptr;
         }
 
         switch( nType )
@@ -255,9 +255,9 @@ Svx3DLightControl::Svx3DLightControl(vcl::Window* pParent, WinBits nStyle)
     maChangeCallback(),
     maSelectionChangeCallback(),
     maSelectedLight(NO_LIGHT_SELECTED),
-    mpExpansionObject(0),
-    mpLampBottomObject(0),
-    mpLampShaftObject(0),
+    mpExpansionObject(nullptr),
+    mpLampBottomObject(nullptr),
+    mpLampShaftObject(nullptr),
     maLightObjects(MAX_NUMBER_LIGHTS, nullptr),
     mfRotateX(-20.0),
     mfRotateY(45.0),
@@ -376,7 +376,7 @@ void Svx3DLightControl::ConstructLightObjects()
         {
             mpScene->Remove3DObj(maLightObjects[a]);
             delete maLightObjects[a];
-            maLightObjects[a] = 0;
+            maLightObjects[a] = nullptr;
         }
 
         if(GetLightOnOff(a))
@@ -473,7 +473,7 @@ void Svx3DLightControl::TrySelection(Point aPosPixel)
         {
             // exclude expansion object which will be part of
             // the hits. It's invisible, but for HitTest, it's included
-            const E3dCompoundObject* pResult = 0;
+            const E3dCompoundObject* pResult = nullptr;
 
             for(sal_uInt32 b(0); !pResult && b < aResult.size(); b++)
             {

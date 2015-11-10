@@ -105,7 +105,7 @@ E3dScene* fillViewInformation3DForCompoundObject(drawinglayer::geometry::ViewInf
     // root scene's own object transformation is part of the scene's ViewTransformation, o do not
     // add it. For more details, see ViewContactOfE3dScene::createViewInformation3D.
     E3dScene* pParentScene = dynamic_cast< E3dScene* >(rCandidate.GetParentObj());
-    E3dScene* pRootScene = 0;
+    E3dScene* pRootScene = nullptr;
     basegfx::B3DHomMatrix aInBetweenSceneMatrix;
 
     while(pParentScene)

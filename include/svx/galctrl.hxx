@@ -71,7 +71,7 @@ public:
 
     GalleryPreview(vcl::Window* pParent,
         WinBits nStyle = WB_TABSTOP | WB_BORDER,
-        GalleryTheme* pTheme = NULL);
+        GalleryTheme* pTheme = nullptr);
 
     void                SetGraphic( const Graphic& rGraphic ) { aGraphicObj.SetGraphic( rGraphic ); }
     bool                SetGraphic( const INetURLObject& );

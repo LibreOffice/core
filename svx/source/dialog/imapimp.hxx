@@ -38,7 +38,7 @@ public:
     bool        bExecState;
 
     IMapOwnData()
-        : pUpdateEditingObject(NULL)
+        : pUpdateEditingObject(nullptr)
         , bExecState(false)
     {
     }

@@ -40,7 +40,7 @@ namespace com { namespace sun { namespace star {
 // Helper methods
 
 SVX_DLLPUBLIC bool IsSearchableControl( const css::uno::Reference< css::uno::XInterface>& _xControl,
-                                            OUString* pCurrentText = NULL);
+                                            OUString* pCurrentText = nullptr);
     // check if the control has one of the interfaces we can use for searching
     // *pCurrentText will be filled with the current text of the control (as used when searching this control)
 

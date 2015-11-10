@@ -115,7 +115,7 @@ void SAL_CALL SvxTableControllerModifyListener::modified( const css::lang::Event
 
 void SAL_CALL SvxTableControllerModifyListener::disposing( const css::lang::EventObject&  ) throw (css::uno::RuntimeException, std::exception)
 {
-    mpController = 0;
+    mpController = nullptr;
 }
 
 
@@ -145,11 +145,11 @@ rtl::Reference< sdr::SelectionController > SvxTableController::create( SdrObjEdi
 SvxTableController::SvxTableController( SdrObjEditView* pView, const SdrObject* pObj )
 : mbCellSelectionMode(false)
 , mbLeftButtonDown(false)
-, mpSelectionOverlay(0)
+, mpSelectionOverlay(nullptr)
 , mpView( dynamic_cast< SdrView* >( pView ) )
 , mxTableObj( dynamic_cast< SdrTableObj* >( const_cast< SdrObject* >( pObj ) ) )
-, mpModel( 0 )
-, mnUpdateEvent( 0 )
+, mpModel( nullptr )
+, mnUpdateEvent( nullptr )
 {
     if( pObj )
     {
@@ -287,7 +287,7 @@ bool SvxTableController::onMouseButtonDown(const MouseEvent& rMEvt, vcl::Window*
         RemoveSelection();
 
         Point aPnt(rMEvt.GetPosPixel());
-        if (pWindow!=NULL)
+        if (pWindow!=nullptr)
             aPnt=pWindow->PixelToLogic(aPnt);
 
         SdrHdl* pHdl = mpView->PickHandle(aPnt);
@@ -530,7 +530,7 @@ void SvxTableController::onInsert( sal_uInt16 nSId, const SfxItemSet* pArgs )
         sal_uInt16 nCount = 0;
         if( pArgs )
         {
-            const SfxPoolItem* pItem = 0;
+            const SfxPoolItem* pItem = nullptr;
             pArgs->GetItemState(nSId, false, &pItem);
             if (pItem)
             {
@@ -881,7 +881,7 @@ void SvxTableController::onSelect( sal_uInt16 nSId )
             }
 
             StartSelection( aEnd );
-            gotoCell( aStart, true, 0 );
+            gotoCell( aStart, true, nullptr );
         }
     }
 }
@@ -923,7 +923,7 @@ void SvxTableController::onFormatTable( SfxRequest& rReq )
         aNewAttr.Put( aBoxInfoItem );
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        std::unique_ptr< SfxAbstractTabDialog > xDlg( pFact ? pFact->CreateSvxFormatCellsDialog( NULL, &aNewAttr, pTableObj->GetModel(), pTableObj) : 0 );
+        std::unique_ptr< SfxAbstractTabDialog > xDlg( pFact ? pFact->CreateSvxFormatCellsDialog( nullptr, &aNewAttr, pTableObj->GetModel(), pTableObj) : nullptr );
         // Even Cancel Button is returning positive(101) value,
         if (xDlg.get() && xDlg->Execute() == RET_OK)
         {
@@ -1043,7 +1043,7 @@ void SvxTableController::Execute( SfxRequest& rReq )
 void SvxTableController::SetTableStyle( const SfxItemSet* pArgs )
 {
     SdrTableObj* pTableObj = dynamic_cast< sdr::table::SdrTableObj* >( mxTableObj.get() );
-    SdrModel* pModel = pTableObj ? pTableObj->GetModel() : 0;
+    SdrModel* pModel = pTableObj ? pTableObj->GetModel() : nullptr;
 
     if( !pTableObj || !pModel || !pArgs || (SfxItemState::SET != pArgs->GetItemState(SID_TABLE_STYLE, false)) )
         return;
@@ -1126,14 +1126,14 @@ void SvxTableController::SetTableStyle( const SfxItemSet* pArgs )
 void SvxTableController::SetTableStyleSettings( const SfxItemSet* pArgs )
 {
     SdrTableObj* pTableObj = dynamic_cast< sdr::table::SdrTableObj* >( mxTableObj.get() );
-    SdrModel* pModel = pTableObj ? pTableObj->GetModel() : 0;
+    SdrModel* pModel = pTableObj ? pTableObj->GetModel() : nullptr;
 
     if( !pTableObj || !pModel )
         return;
 
     TableStyleSettings aSettings( pTableObj->getTableStyleSettings() );
 
-    const SfxPoolItem *pPoolItem=NULL;
+    const SfxPoolItem *pPoolItem=nullptr;
 
     if( (SfxItemState::SET == pArgs->GetItemState(ID_VAL_USEFIRSTROWSTYLE, false,&pPoolItem)) )
         aSettings.mbUseFirstRow = static_cast< const SfxBoolItem* >(pPoolItem)->GetValue();
@@ -1234,7 +1234,7 @@ void SvxTableController::SplitMarkedCells()
         getSelectedCells( aStart, aEnd );
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        std::unique_ptr< SvxAbstractSplittTableDialog > xDlg( pFact ? pFact->CreateSvxSplittTableDialog( NULL, false, 99, 99 ) : 0 );
+        std::unique_ptr< SvxAbstractSplittTableDialog > xDlg( pFact ? pFact->CreateSvxSplittTableDialog( nullptr, false, 99, 99 ) : nullptr );
         if( xDlg.get() && xDlg->Execute() )
         {
             const sal_Int32 nCount = xDlg->GetCount() - 1;
@@ -1351,7 +1351,7 @@ bool SvxTableController::DeleteMarked()
             {
                 if (bUndo)
                     xCell->AddUndo();
-                xCell->SetOutlinerParaObject(0);
+                xCell->SetOutlinerParaObject(nullptr);
             }
         }
     }
@@ -1367,11 +1367,11 @@ bool SvxTableController::GetStyleSheet( SfxStyleSheet*& rpStyleSheet ) const
 {
     if( hasSelectedCells() )
     {
-        rpStyleSheet = 0;
+        rpStyleSheet = nullptr;
 
         if( mxTable.is() )
         {
-            SfxStyleSheet* pRet=0;
+            SfxStyleSheet* pRet=nullptr;
             bool b1st=true;
 
             CellPos aStart, aEnd;
@@ -1701,7 +1701,7 @@ bool SvxTableController::executeAction( sal_uInt16 nAction, bool bSelect, vcl::W
     }
 
     case ACTION_EDIT_CELL:
-        EditCell( getSelectionStart(), pWindow, 0, nAction );
+        EditCell( getSelectionStart(), pWindow, nullptr, nAction );
         break;
 
     case ACTION_STOP_TEXT_EDIT:
@@ -1763,7 +1763,7 @@ void SvxTableController::gotoCell( const CellPos& rPos, bool bSelect, vcl::Windo
     else
     {
         RemoveSelection();
-        EditCell( rPos, pWindow, 0, nAction );
+        EditCell( rPos, pWindow, nullptr, nAction );
     }
 }
 
@@ -1894,7 +1894,7 @@ void SvxTableController::EditCell( const CellPos& rPos, vcl::Window* pWindow, co
             pTableObj->setActiveCell( aPos );
 
             // create new outliner, owner will be the SdrObjEditView
-            SdrOutliner* pOutl = mpModel ? SdrMakeOutliner(OUTLINERMODE_OUTLINEOBJECT, *mpModel) : NULL;
+            SdrOutliner* pOutl = mpModel ? SdrMakeOutliner(OUTLINERMODE_OUTLINEOBJECT, *mpModel) : nullptr;
             if (pOutl && pTableObj->IsVerticalWriting())
                 pOutl->SetVertical( true );
 
@@ -2114,7 +2114,7 @@ void SvxTableController::RemoveSelection()
 
 void SvxTableController::onTableModified()
 {
-    if( mnUpdateEvent == 0 )
+    if( mnUpdateEvent == nullptr )
         mnUpdateEvent = Application::PostUserEvent( LINK( this, SvxTableController, UpdateHdl ) );
 }
 
@@ -2200,7 +2200,7 @@ void SvxTableController::destroySelectionOverlay()
     if( mpSelectionOverlay )
     {
         delete mpSelectionOverlay;
-        mpSelectionOverlay = 0;
+        mpSelectionOverlay = nullptr;
 
         if (mxTableObj->GetModel()->isTiledRendering())
         {
@@ -2297,12 +2297,12 @@ static void ImplApplyBoxItem( sal_uInt16 nCellFlags, const SvxBoxItem* pBoxItem,
             if( nCellFlags & CELL_UPPER )
             {
                 if( pBoxInfoItem->IsValid(SvxBoxInfoItemValidFlags::TOP) )
-                    rNewFrame.SetLine(0, SvxBoxItemLine::BOTTOM );
+                    rNewFrame.SetLine(nullptr, SvxBoxItemLine::BOTTOM );
             }
             else if( nCellFlags & CELL_LOWER )
             {
                 if( pBoxInfoItem->IsValid(SvxBoxInfoItemValidFlags::BOTTOM) )
-                    rNewFrame.SetLine( 0, SvxBoxItemLine::TOP );
+                    rNewFrame.SetLine( nullptr, SvxBoxItemLine::TOP );
             }
         }
         else if( (nCellFlags & ( CELL_UPPER|CELL_LOWER)) == 0 ) // check if its not sw or se corner
@@ -2310,12 +2310,12 @@ static void ImplApplyBoxItem( sal_uInt16 nCellFlags, const SvxBoxItem* pBoxItem,
             if( nCellFlags & CELL_BEFORE )
             {
                 if( pBoxInfoItem->IsValid(SvxBoxInfoItemValidFlags::LEFT) )
-                    rNewFrame.SetLine( 0, SvxBoxItemLine::RIGHT );
+                    rNewFrame.SetLine( nullptr, SvxBoxItemLine::RIGHT );
             }
             else if( nCellFlags & CELL_AFTER )
             {
                 if( pBoxInfoItem->IsValid(SvxBoxInfoItemValidFlags::RIGHT) )
-                    rNewFrame.SetLine( 0, SvxBoxItemLine::LEFT );
+                    rNewFrame.SetLine( nullptr, SvxBoxItemLine::LEFT );
             }
         }
     }
@@ -2430,19 +2430,19 @@ void SvxTableController::ApplyBorderAttr( const SfxItemSet& rAttr )
         const sal_Int32 nColCount = mxTable->getColumnCount();
         if( nRowCount && nColCount )
         {
-            const SvxBoxItem* pBoxItem = 0;
+            const SvxBoxItem* pBoxItem = nullptr;
             if(SfxItemState::SET == rAttr.GetItemState(SDRATTR_TABLE_BORDER, false) )
                 pBoxItem = dynamic_cast< const SvxBoxItem* >( &rAttr.Get( SDRATTR_TABLE_BORDER ) );
 
-            const SvxBoxInfoItem* pBoxInfoItem = 0;
+            const SvxBoxInfoItem* pBoxInfoItem = nullptr;
             if(SfxItemState::SET == rAttr.GetItemState(SDRATTR_TABLE_BORDER_INNER, false) )
                 pBoxInfoItem = dynamic_cast< const SvxBoxInfoItem* >( &rAttr.Get( SDRATTR_TABLE_BORDER_INNER ) );
 
-            const SvxColorItem* pLineColorItem = 0;
+            const SvxColorItem* pLineColorItem = nullptr;
             if(SfxItemState::SET == rAttr.GetItemState(SID_FRAME_LINECOLOR, false) )
                 pLineColorItem = dynamic_cast< const SvxColorItem* >( &rAttr.Get( SID_FRAME_LINECOLOR ) );
 
-            const SvxBorderLine* pBorderLineItem = 0;
+            const SvxBorderLine* pBorderLineItem = nullptr;
             if(SfxItemState::SET == rAttr.GetItemState(SID_FRAME_LINESTYLE, false) )
                 pBorderLineItem = static_cast<const SvxLineItem&>(rAttr.Get( SID_FRAME_LINESTYLE )).GetLine();
 
@@ -2808,7 +2808,7 @@ bool SvxTableController::ApplyFormatPaintBrush( SfxItemSet& rFormatSet, bool bNo
 
 IMPL_LINK_NOARG_TYPED(SvxTableController, UpdateHdl, void*, void)
 {
-    mnUpdateEvent = 0;
+    mnUpdateEvent = nullptr;
 
     if( mbCellSelectionMode )
     {
@@ -2912,7 +2912,7 @@ void lcl_MergeBorderLine(
             const SvxBorderLine* const pMergedLine(aBoxItem.getLine());
             if ((pLine && !pMergedLine) || (!pLine && pMergedLine) || (pLine && (*pLine != *pMergedLine)))
             {
-                aBoxItem.setLine(0);
+                aBoxItem.setLine(nullptr);
                 rbIndeterminate = true;
             }
         }
@@ -3083,7 +3083,7 @@ bool SvxTableController::selectRow( sal_Int32 row )
         return false;
     CellPos aStart( 0, row ), aEnd( mxTable->getColumnCount() - 1, row );
     StartSelection( aEnd );
-    gotoCell( aStart, true, 0 );
+    gotoCell( aStart, true, nullptr );
     return true;
 }
 
@@ -3093,7 +3093,7 @@ bool SvxTableController::selectColumn( sal_Int32 column )
         return false;
     CellPos aStart( column, 0 ), aEnd( column, mxTable->getRowCount() - 1 );
     StartSelection( aEnd );
-    gotoCell( aStart, true, 0 );
+    gotoCell( aStart, true, nullptr );
     return true;
 }
 
@@ -3103,7 +3103,7 @@ bool SvxTableController::deselectRow( sal_Int32 row )
         return false;
     CellPos aStart( 0, row ), aEnd( mxTable->getColumnCount() - 1, row );
     StartSelection( aEnd );
-    gotoCell( aStart, false, 0 );
+    gotoCell( aStart, false, nullptr );
     return true;
 }
 
@@ -3113,7 +3113,7 @@ bool SvxTableController::deselectColumn( sal_Int32 column )
         return false;
     CellPos aStart( column, 0 ), aEnd( column, mxTable->getRowCount() - 1 );
     StartSelection( aEnd );
-    gotoCell( aStart, false, 0 );
+    gotoCell( aStart, false, nullptr );
     return true;
 }
 
@@ -3144,7 +3144,7 @@ bool SvxTableController::isColumnSelected( sal_Int32 nColumn )
 bool SvxTableController::isRowHeader()
 {
     SdrTableObj* pTableObj = dynamic_cast< sdr::table::SdrTableObj* >( mxTableObj.get() );
-    SdrModel* pModel = pTableObj ? pTableObj->GetModel() : 0;
+    SdrModel* pModel = pTableObj ? pTableObj->GetModel() : nullptr;
 
     if( !pTableObj || !pModel )
         return false;
@@ -3157,7 +3157,7 @@ bool SvxTableController::isRowHeader()
 bool SvxTableController::isColumnHeader()
 {
     SdrTableObj* pTableObj = dynamic_cast< sdr::table::SdrTableObj* >( mxTableObj.get() );
-    SdrModel* pModel = pTableObj ? pTableObj->GetModel() : 0;
+    SdrModel* pModel = pTableObj ? pTableObj->GetModel() : nullptr;
 
     if( !pTableObj || !pModel )
         return false;

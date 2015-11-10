@@ -284,7 +284,7 @@ void AreaTransparencyGradientControl::ExecuteValueModify( sal_uInt8 nStartCol, s
 
     mrAreaPropertyPanel.SetGradient(aTmpGradient);
 
-    SfxItemPool* pPool = NULL;
+    SfxItemPool* pPool = nullptr;
     bool bEnable = true;
     XFillFloatTransparenceItem aGradientItem(pPool,aTmpGradient, bEnable );
 

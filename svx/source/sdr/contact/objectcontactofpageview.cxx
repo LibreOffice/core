@@ -164,7 +164,7 @@ namespace sdr
 
             // #114359# save old and set clip region
             OutputDevice* pOutDev = TryToGetOutputDevice();
-            OSL_ENSURE(0 != pOutDev, "ObjectContactOfPageView without OutDev, someone has overridden TryToGetOutputDevice wrong (!)");
+            OSL_ENSURE(nullptr != pOutDev, "ObjectContactOfPageView without OutDev, someone has overridden TryToGetOutputDevice wrong (!)");
             bool bClipRegionPushed(false);
             const vcl::Region& rRedrawArea(rDisplayInfo.GetRedrawArea());
 
@@ -347,7 +347,7 @@ namespace sdr
                 return &(GetSdrPage()->GetViewContact());
             }
 
-            return 0;
+            return nullptr;
         }
 
         // Invalidate given rectangle at the window/output which is represented by
@@ -446,7 +446,7 @@ namespace sdr
         // pdf export?
         bool ObjectContactOfPageView::isOutputToPDFFile() const
         {
-            return (0 != mrPageWindow.GetPaintWindow().GetOutputDevice().GetPDFWriter());
+            return (nullptr != mrPageWindow.GetPaintWindow().GetOutputDevice().GetPDFWriter());
         }
 
         // gray display mode

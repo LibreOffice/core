@@ -243,7 +243,7 @@ namespace accessibility
     };
 
     AccessibleTextHelper_Impl::AccessibleTextHelper_Impl() :
-        mxFrontEnd( NULL ),
+        mxFrontEnd( nullptr ),
         maLastSelection( EE_PARA_NOT_FOUND,EE_INDEX_NOT_FOUND,EE_PARA_NOT_FOUND,EE_INDEX_NOT_FOUND ),
         mnFirstVisibleChild( -1 ),
         mnLastVisibleChild( -2 ),
@@ -1514,7 +1514,7 @@ namespace accessibility
 
         // clear references
         maEditSource.SetEditSource( ::std::unique_ptr< SvxEditSource >() );
-        mxFrontEnd = NULL;
+        mxFrontEnd = nullptr;
     }
 
     void AccessibleTextHelper_Impl::FireEvent( const sal_Int16 nEventId, const uno::Any& rNewValue, const uno::Any& rOldValue ) const
@@ -1573,7 +1573,7 @@ namespace accessibility
         if( mxFrontEnd.is() )
             return maParaManager.CreateChild( i, mxFrontEnd, GetEditSource(), mnFirstVisibleChild + i ).first;
         else
-            return NULL;
+            return nullptr;
     }
 
     void SAL_CALL AccessibleTextHelper_Impl::addAccessibleEventListener( const uno::Reference< XAccessibleEventListener >& xListener )
@@ -1640,7 +1640,7 @@ namespace accessibility
         }
 
         // found none
-        return NULL;
+        return nullptr;
     }
 
 

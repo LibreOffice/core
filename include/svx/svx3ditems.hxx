@@ -75,7 +75,7 @@ public:
     // use drawing::NormalsKind
     SVX_DLLPRIVATE virtual  bool QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
     SVX_DLLPRIVATE virtual  bool PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
-    SVX_DLLPRIVATE virtual SfxPoolItem* Clone(SfxItemPool* pPool = NULL) const override;
+    SVX_DLLPRIVATE virtual SfxPoolItem* Clone(SfxItemPool* pPool = nullptr) const override;
 };
 
 inline SfxBoolItem makeSvx3DNormalsInvertItem(bool bVal) {
@@ -89,7 +89,7 @@ public:
     // use drawing::TextureProjectionMode
     SVX_DLLPRIVATE virtual  bool QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
     SVX_DLLPRIVATE virtual  bool PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
-    SVX_DLLPRIVATE virtual SfxPoolItem* Clone(SfxItemPool* pPool = NULL) const override;
+    SVX_DLLPRIVATE virtual SfxPoolItem* Clone(SfxItemPool* pPool = nullptr) const override;
 };
 
 class SVX_DLLPUBLIC Svx3DTextureProjectionYItem : public SfxUInt16Item {
@@ -99,7 +99,7 @@ public:
     // use drawing::TextureProjectionMode
     virtual bool QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
     virtual bool PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
-    virtual SfxPoolItem* Clone(SfxItemPool* pPool = NULL) const override;
+    virtual SfxPoolItem* Clone(SfxItemPool* pPool = nullptr) const override;
 };
 
 inline SfxBoolItem makeSvx3DShadow3DItem(bool bVal) {
@@ -125,7 +125,7 @@ public:
     // use drawing::TextureKind
     SVX_DLLPRIVATE virtual  bool QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
     SVX_DLLPRIVATE virtual  bool PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
-    SVX_DLLPRIVATE virtual SfxPoolItem* Clone(SfxItemPool* pPool = NULL) const override;
+    SVX_DLLPRIVATE virtual SfxPoolItem* Clone(SfxItemPool* pPool = nullptr) const override;
 };
 
 class SVX_DLLPUBLIC Svx3DTextureModeItem : public SfxUInt16Item {
@@ -135,7 +135,7 @@ public:
     // use drawing:TextureMode
     SVX_DLLPRIVATE virtual  bool QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
     SVX_DLLPRIVATE virtual  bool PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
-    SVX_DLLPRIVATE virtual SfxPoolItem* Clone(SfxItemPool* pPool = NULL) const override;
+    SVX_DLLPRIVATE virtual SfxPoolItem* Clone(SfxItemPool* pPool = nullptr) const override;
 };
 
 inline SfxBoolItem makeSvx3DTextureFilterItem(bool bVal) {
@@ -150,7 +150,7 @@ public:
     // use drawing::ProjectionMode
     SVX_DLLPRIVATE virtual  bool QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
     SVX_DLLPRIVATE virtual  bool PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
-    SVX_DLLPRIVATE virtual SfxPoolItem* Clone(SfxItemPool* pPool = NULL) const override;
+    SVX_DLLPRIVATE virtual SfxPoolItem* Clone(SfxItemPool* pPool = nullptr) const override;
 };
 
 inline SfxUInt32Item makeSvx3DDistanceItem(sal_uInt32 nVal) {
@@ -276,7 +276,7 @@ public:
     // use drawing::ShadeMode
     SVX_DLLPRIVATE virtual  bool QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
     SVX_DLLPRIVATE virtual  bool PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
-    SVX_DLLPRIVATE virtual SfxPoolItem* Clone(SfxItemPool* pPool = NULL) const override;
+    SVX_DLLPRIVATE virtual SfxPoolItem* Clone(SfxItemPool* pPool = nullptr) const override;
 };
 
 

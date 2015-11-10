@@ -183,7 +183,7 @@ FormViewPageWindowAdapter::FormViewPageWindowAdapter( const css::uno::Reference<
             {
                 Reference< XForm > xForm( xForms->getByIndex(i), UNO_QUERY );
                 if ( xForm.is() )
-                    setController( xForm, NULL );
+                    setController( xForm, nullptr );
             }
         }
         catch (const Exception&)
@@ -400,13 +400,13 @@ void FormViewPageWindowAdapter::updateTabOrder( const Reference< XForm >& _rxFor
 
 
 FmXFormView::FmXFormView(FmFormView* _pView )
-    :m_pMarkedGrid(NULL)
+    :m_pMarkedGrid(nullptr)
     ,m_pView(_pView)
-    ,m_nActivationEvent(0)
-    ,m_nErrorMessageEvent( 0 )
-    ,m_nAutoFocusEvent( 0 )
-    ,m_nControlWizardEvent( 0 )
-    ,m_pWatchStoredList( NULL )
+    ,m_nActivationEvent(nullptr)
+    ,m_nErrorMessageEvent( nullptr )
+    ,m_nAutoFocusEvent( nullptr )
+    ,m_nControlWizardEvent( nullptr )
+    ,m_pWatchStoredList( nullptr )
     ,m_bFirstActivation( true )
     ,m_isTabOrderUpdateSuspended( false )
 {
@@ -418,25 +418,25 @@ void FmXFormView::cancelEvents()
     if ( m_nActivationEvent )
     {
         Application::RemoveUserEvent( m_nActivationEvent );
-        m_nActivationEvent = 0;
+        m_nActivationEvent = nullptr;
     }
 
     if ( m_nErrorMessageEvent )
     {
         Application::RemoveUserEvent( m_nErrorMessageEvent );
-        m_nErrorMessageEvent = 0;
+        m_nErrorMessageEvent = nullptr;
     }
 
     if ( m_nAutoFocusEvent )
     {
         Application::RemoveUserEvent( m_nAutoFocusEvent );
-        m_nAutoFocusEvent = 0;
+        m_nAutoFocusEvent = nullptr;
     }
 
     if ( m_nControlWizardEvent )
     {
         Application::RemoveUserEvent( m_nControlWizardEvent );
-        m_nControlWizardEvent = 0;
+        m_nControlWizardEvent = nullptr;
     }
 }
 
@@ -444,7 +444,7 @@ void FmXFormView::cancelEvents()
 void FmXFormView::notifyViewDying( )
 {
     DBG_ASSERT( m_pView, "FmXFormView::notifyViewDying: my view already died!" );
-    m_pView = NULL;
+    m_pView = nullptr;
     cancelEvents();
 }
 
@@ -466,7 +466,7 @@ FmXFormView::~FmXFormView()
     cancelEvents();
 
     delete m_pWatchStoredList;
-    m_pWatchStoredList = NULL;
+    m_pWatchStoredList = nullptr;
 }
 
 //      EventListener
@@ -543,7 +543,7 @@ PFormViewPageWindowAdapter FmXFormView::findWindow( const Reference< XControlCon
         if ( _rxCC == (*i)->getControlContainer() )
             return *i;
     }
-    return NULL;
+    return nullptr;
 }
 
 
@@ -598,7 +598,7 @@ void FmXFormView::removeWindow( const Reference< XControlContainer >& _rxCC )
 
 void FmXFormView::displayAsyncErrorMessage( const SQLErrorEvent& _rEvent )
 {
-    DBG_ASSERT( 0 == m_nErrorMessageEvent, "FmXFormView::displayAsyncErrorMessage: not too fast, please!" );
+    DBG_ASSERT( nullptr == m_nErrorMessageEvent, "FmXFormView::displayAsyncErrorMessage: not too fast, please!" );
         // This should not happen - usually, the PostUserEvent is faster than any possible user
         // interaction which could trigger a new error. If it happens, we need a queue for the events.
     m_aAsyncError = _rEvent;
@@ -608,7 +608,7 @@ void FmXFormView::displayAsyncErrorMessage( const SQLErrorEvent& _rEvent )
 
 IMPL_LINK_NOARG_TYPED(FmXFormView, OnDelayedErrorMessage, void*, void)
 {
-    m_nErrorMessageEvent = 0;
+    m_nErrorMessageEvent = nullptr;
     displayException( m_aAsyncError );
 }
 
@@ -716,7 +716,7 @@ namespace
 
 IMPL_LINK_NOARG_TYPED(FmXFormView, OnActivate, void*, void)
 {
-    m_nActivationEvent = 0;
+    m_nActivationEvent = nullptr;
 
     if ( !m_pView )
     {
@@ -735,7 +735,7 @@ IMPL_LINK_NOARG_TYPED(FmXFormView, OnActivate, void*, void)
         find_active_databaseform fad(pShImpl->getActiveController());
 
         vcl::Window* pWindow = const_cast<vcl::Window*>(static_cast<const vcl::Window*>(m_pView->GetActualOutDev()));
-        PFormViewPageWindowAdapter pAdapter = m_aPageWindowAdapters.empty() ? NULL : m_aPageWindowAdapters[0];
+        PFormViewPageWindowAdapter pAdapter = m_aPageWindowAdapters.empty() ? nullptr : m_aPageWindowAdapters[0];
         for (   PageWindowAdapterList::const_iterator i = m_aPageWindowAdapters.begin();
                 i != m_aPageWindowAdapters.end();
                 ++i
@@ -782,12 +782,12 @@ void FmXFormView::Activate(bool bSync)
     if (m_nActivationEvent)
     {
         Application::RemoveUserEvent(m_nActivationEvent);
-        m_nActivationEvent = 0;
+        m_nActivationEvent = nullptr;
     }
 
     if (bSync)
     {
-        LINK(this,FmXFormView,OnActivate).Call(NULL);
+        LINK(this,FmXFormView,OnActivate).Call(nullptr);
     }
     else
         m_nActivationEvent = Application::PostUserEvent(LINK(this,FmXFormView,OnActivate));
@@ -799,18 +799,18 @@ void FmXFormView::Deactivate(bool bDeactivateController)
     if (m_nActivationEvent)
     {
         Application::RemoveUserEvent(m_nActivationEvent);
-        m_nActivationEvent = 0;
+        m_nActivationEvent = nullptr;
     }
 
-    FmXFormShell* pShImpl =  m_pView->GetFormShell() ? m_pView->GetFormShell()->GetImpl() : NULL;
+    FmXFormShell* pShImpl =  m_pView->GetFormShell() ? m_pView->GetFormShell()->GetImpl() : nullptr;
     if (pShImpl && bDeactivateController)
-        pShImpl->setActiveController( NULL );
+        pShImpl->setActiveController( nullptr );
 }
 
 
 FmFormShell* FmXFormView::GetFormShell() const
 {
-    return m_pView ? m_pView->GetFormShell() : NULL;
+    return m_pView ? m_pView->GetFormShell() : nullptr;
 }
 
 void FmXFormView::AutoFocus( bool _bSync )
@@ -819,7 +819,7 @@ void FmXFormView::AutoFocus( bool _bSync )
         Application::RemoveUserEvent(m_nAutoFocusEvent);
 
     if ( _bSync )
-        OnAutoFocus( NULL );
+        OnAutoFocus( nullptr );
     else
         m_nAutoFocusEvent = Application::PostUserEvent(LINK(this, FmXFormView, OnAutoFocus));
 }
@@ -955,19 +955,19 @@ Reference< XFormController > FmXFormView::getFormController( const Reference< XF
 
 IMPL_LINK_NOARG_TYPED(FmXFormView, OnAutoFocus, void*, void)
 {
-    m_nAutoFocusEvent = 0;
+    m_nAutoFocusEvent = nullptr;
 
     // go to the first form of our page, examine it's TabController, go to it's first (in terms of the tab order)
     // control, give it the focus
 
-    SdrPageView *pPageView = m_pView ? m_pView->GetSdrPageView() : NULL;
-    SdrPage *pSdrPage = pPageView ? pPageView->GetPage() : NULL;
+    SdrPageView *pPageView = m_pView ? m_pView->GetSdrPageView() : nullptr;
+    SdrPage *pSdrPage = pPageView ? pPageView->GetPage() : nullptr;
     // get the forms collection of the page we belong to
     FmFormPage* pPage = dynamic_cast<FmFormPage*>( pSdrPage  );
     Reference< XIndexAccess > xForms( pPage ? Reference< XIndexAccess >( pPage->GetForms(), UNO_QUERY ) : Reference< XIndexAccess >() );
 
-    const PFormViewPageWindowAdapter pAdapter = m_aPageWindowAdapters.empty() ? NULL : m_aPageWindowAdapters[0];
-    const vcl::Window* pWindow = pAdapter.get() ? pAdapter->getWindow() : NULL;
+    const PFormViewPageWindowAdapter pAdapter = m_aPageWindowAdapters.empty() ? nullptr : m_aPageWindowAdapters[0];
+    const vcl::Window* pWindow = pAdapter.get() ? pAdapter->getWindow() : nullptr;
 
     ENSURE_OR_RETURN_VOID( xForms.is() && pWindow, "FmXFormView::OnAutoFocus: could not collect all essentials!" );
 
@@ -1006,7 +1006,7 @@ IMPL_LINK_NOARG_TYPED(FmXFormView, OnAutoFocus, void*, void)
 
         // ensure that the control is visible
         // 80210 - 12/07/00 - FS
-        const vcl::Window* pCurrentWindow = m_pView ? dynamic_cast<const vcl::Window*>(m_pView->GetActualOutDev()) : NULL;
+        const vcl::Window* pCurrentWindow = m_pView ? dynamic_cast<const vcl::Window*>(m_pView->GetActualOutDev()) : nullptr;
         if ( pCurrentWindow )
         {
             awt::Rectangle aRect = xControlWindow->getPosSize();
@@ -1023,8 +1023,8 @@ IMPL_LINK_NOARG_TYPED(FmXFormView, OnAutoFocus, void*, void)
 
 void FmXFormView::onCreatedFormObject( FmFormObj& _rFormObject )
 {
-    FmFormShell* pShell = m_pView ? m_pView->GetFormShell() : NULL;
-    FmXFormShell* pShellImpl = pShell ? pShell->GetImpl() : NULL;
+    FmFormShell* pShell = m_pView ? m_pView->GetFormShell() : nullptr;
+    FmXFormShell* pShellImpl = pShell ? pShell->GetImpl() : nullptr;
     OSL_ENSURE( pShellImpl, "FmXFormView::onCreatedFormObject: no form shell!" );
     if ( !pShellImpl )
         return;
@@ -1059,17 +1059,17 @@ void FmXFormView::onCreatedFormObject( FmFormObj& _rFormObject )
 
 void FmXFormView::breakCreateFormObject()
 {
-    if (m_nControlWizardEvent != 0)
+    if (m_nControlWizardEvent != nullptr)
     {
         Application::RemoveUserEvent(m_nControlWizardEvent);
-        m_nControlWizardEvent = 0;
+        m_nControlWizardEvent = nullptr;
     }
     m_xLastCreatedControlModel.clear();
 }
 
 IMPL_LINK_NOARG_TYPED( FmXFormView, OnStartControlWizard, void*, void )
 {
-    m_nControlWizardEvent = 0;
+    m_nControlWizardEvent = nullptr;
     OSL_PRECOND( m_xLastCreatedControlModel.is(), "FmXFormView::OnStartControlWizard: illegal call!" );
     if ( !m_xLastCreatedControlModel.is() )
         return;
@@ -1084,7 +1084,7 @@ IMPL_LINK_NOARG_TYPED( FmXFormView, OnStartControlWizard, void*, void )
         DBG_UNHANDLED_EXCEPTION();
     }
 
-    const sal_Char* pWizardAsciiName = NULL;
+    const sal_Char* pWizardAsciiName = nullptr;
     switch ( nClassId )
     {
         case FormComponentType::GRIDCONTROL:
@@ -1119,7 +1119,7 @@ IMPL_LINK_NOARG_TYPED( FmXFormView, OnStartControlWizard, void*, void )
 
         if ( !xWizard.is() )
         {
-            ShowServiceNotAvailableError( NULL, OUString::createFromAscii(pWizardAsciiName), true );
+            ShowServiceNotAvailableError( nullptr, OUString::createFromAscii(pWizardAsciiName), true );
         }
         else
         {
@@ -1142,7 +1142,7 @@ IMPL_LINK_NOARG_TYPED( FmXFormView, OnStartControlWizard, void*, void )
 namespace
 {
     void lcl_insertIntoFormComponentHierarchy_throw( const FmFormView& _rView, const SdrUnoObj& _rSdrObj,
-        const Reference< XDataSource >& _rxDataSource = NULL, const OUString& _rDataSourceName = OUString(),
+        const Reference< XDataSource >& _rxDataSource = nullptr, const OUString& _rDataSourceName = OUString(),
         const OUString& _rCommand = OUString(), const sal_Int32 _nCommandType = -1 )
     {
         FmFormPage& rPage = static_cast< FmFormPage& >( *_rView.GetSdrPageView()->GetPage() );
@@ -1164,7 +1164,7 @@ SdrObject* FmXFormView::implCreateFieldControl( const svx::ODataAccessDescriptor
 {
     // not if we're in design mode
     if ( !m_pView->IsDesignMode() )
-        return NULL;
+        return nullptr;
 
     OUString sCommand, sFieldName;
     sal_Int32 nCommandType = CommandType::COMMAND;
@@ -1225,14 +1225,14 @@ SdrObject* FmXFormView::implCreateFieldControl( const svx::ODataAccessDescriptor
     if (aError.Reason.hasValue())
     {
         displayAsyncErrorMessage( aError );
-        return NULL;
+        return nullptr;
     }
 
     // need a data source and a connection here
     if (!xDataSource.is() || !xConnection.is())
     {
         OSL_FAIL("FmXFormView::implCreateFieldControl : could not retrieve the data source or the connection!");
-        return NULL;
+        return nullptr;
     }
 
     Reference< XComponent > xKeepFieldsAlive;
@@ -1248,7 +1248,7 @@ SdrObject* FmXFormView::implCreateFieldControl( const svx::ODataAccessDescriptor
         if (xFields.is() && xFields->hasByName(sFieldName))
             xFields->getByName(sFieldName) >>= xField;
         if ( !xField.is() )
-            return NULL;
+            return nullptr;
 
         Reference< XNumberFormatsSupplier > xSupplier( getNumberFormats( xConnection ), UNO_SET_THROW );
         Reference< XNumberFormats >  xNumberFormats( xSupplier->getNumberFormats(), UNO_SET_THROW );
@@ -1257,7 +1257,7 @@ SdrObject* FmXFormView::implCreateFieldControl( const svx::ODataAccessDescriptor
 
 
         // nur fuer Textgroesse
-        OutputDevice* pOutDev = NULL;
+        OutputDevice* pOutDev = nullptr;
         if (m_pView->GetActualOutDev() && m_pView->GetActualOutDev()->GetOutDevType() == OUTDEV_WINDOW)
             pOutDev = const_cast<OutputDevice*>(m_pView->GetActualOutDev());
         else
@@ -1282,11 +1282,11 @@ SdrObject* FmXFormView::implCreateFieldControl( const svx::ODataAccessDescriptor
         }
 
         if ( !pOutDev )
-            return NULL;
+            return nullptr;
 
         sal_Int32 nDataType = ::comphelper::getINT32(xField->getPropertyValue(FM_PROP_FIELDTYPE));
         if ((DataType::BINARY == nDataType) || (DataType::VARBINARY == nDataType))
-            return NULL;
+            return nullptr;
 
 
         // determine the control type by examining the data type of the bound column
@@ -1312,7 +1312,7 @@ SdrObject* FmXFormView::implCreateFieldControl( const svx::ODataAccessDescriptor
                     break;
                 case DataType::BINARY:
                 case DataType::VARBINARY:
-                    return NULL;
+                    return nullptr;
                 case DataType::BIT:
                 case DataType::BOOLEAN:
                     nOBJID = OBJ_FM_CHECKBOX;
@@ -1345,15 +1345,15 @@ SdrObject* FmXFormView::implCreateFieldControl( const svx::ODataAccessDescriptor
                     break;
             }
         if (!nOBJID)
-            return NULL;
+            return nullptr;
 
-        SdrUnoObj* pLabel( NULL );
-        SdrUnoObj* pControl( NULL );
+        SdrUnoObj* pLabel( nullptr );
+        SdrUnoObj* pControl( nullptr );
         if  (   !createControlLabelPair( *pOutDev, 0, 0, xField, xNumberFormats, nOBJID, sLabelPostfix,
                     pLabel, pControl, xDataSource, sDataSource, sCommand, nCommandType )
             )
         {
-            return NULL;
+            return nullptr;
         }
 
 
@@ -1370,7 +1370,7 @@ SdrObject* FmXFormView::implCreateFieldControl( const svx::ODataAccessDescriptor
 
         if ( bDateNTimeField )
         {   // so far we created a date field only, but we also need a time field
-            pLabel = pControl = NULL;
+            pLabel = pControl = nullptr;
             if  (   createControlLabelPair( *pOutDev, 0, 1000, xField, xNumberFormats, OBJ_FM_TIMEFIELD,
                         SVX_RESSTR(RID_STR_POSTFIX_TIME), pLabel, pControl,
                         xDataSource, sDataSource, sCommand, nCommandType )
@@ -1389,7 +1389,7 @@ SdrObject* FmXFormView::implCreateFieldControl( const svx::ODataAccessDescriptor
     }
 
 
-    return NULL;
+    return nullptr;
 }
 
 
@@ -1397,7 +1397,7 @@ SdrObject* FmXFormView::implCreateXFormsControl( const svx::OXFormsDescriptor &_
 {
     // not if we're in design mode
     if ( !m_pView->IsDesignMode() )
-        return NULL;
+        return nullptr;
 
     Reference< XComponent > xKeepFieldsAlive;
 
@@ -1410,7 +1410,7 @@ SdrObject* FmXFormView::implCreateXFormsControl( const svx::OXFormsDescriptor &_
 
 
         // nur fuer Textgroesse
-        OutputDevice* pOutDev = NULL;
+        OutputDevice* pOutDev = nullptr;
         if (m_pView->GetActualOutDev() && m_pView->GetActualOutDev()->GetOutDevType() == OUTDEV_WINDOW)
             pOutDev = const_cast<OutputDevice*>(m_pView->GetActualOutDev());
         else
@@ -1435,7 +1435,7 @@ SdrObject* FmXFormView::implCreateXFormsControl( const svx::OXFormsDescriptor &_
         }
 
         if ( !pOutDev )
-            return NULL;
+            return nullptr;
 
 
         // The service name decides which control should be created
@@ -1452,13 +1452,13 @@ SdrObject* FmXFormView::implCreateXFormsControl( const svx::OXFormsDescriptor &_
         // xform control or submission button?
         if ( !xSubmission.is() )
         {
-            SdrUnoObj* pLabel( NULL );
-            SdrUnoObj* pControl( NULL );
-            if  (   !createControlLabelPair( *pOutDev, 0, 0, NULL, xNumberFormats, nOBJID, sLabelPostfix,
+            SdrUnoObj* pLabel( nullptr );
+            SdrUnoObj* pControl( nullptr );
+            if  (   !createControlLabelPair( *pOutDev, 0, 0, nullptr, xNumberFormats, nOBJID, sLabelPostfix,
                         pLabel, pControl )
                 )
             {
-                return NULL;
+                return nullptr;
             }
 
 
@@ -1491,7 +1491,7 @@ SdrObject* FmXFormView::implCreateXFormsControl( const svx::OXFormsDescriptor &_
             const MapMode eSourceMode(MAP_100TH_MM);
             const sal_uInt16 nObjID = OBJ_FM_BUTTON;
             ::Size controlSize(4000, 500);
-            FmFormObj *pControl = static_cast<FmFormObj*>(SdrObjFactory::MakeNewObject( FmFormInventor, nObjID, NULL ));
+            FmFormObj *pControl = static_cast<FmFormObj*>(SdrObjFactory::MakeNewObject( FmFormInventor, nObjID, nullptr ));
             controlSize.Width() = Fraction(controlSize.Width(), 1) * eTargetMode.GetScaleX();
             controlSize.Height() = Fraction(controlSize.Height(), 1) * eTargetMode.GetScaleY();
             ::Point controlPos( OutputDevice::LogicToLogic( ::Point( controlSize.Width(), 0 ), eSourceMode, eTargetMode ) );
@@ -1517,7 +1517,7 @@ SdrObject* FmXFormView::implCreateXFormsControl( const svx::OXFormsDescriptor &_
     }
 
 
-    return NULL;
+    return nullptr;
 }
 
 
@@ -1530,7 +1530,7 @@ bool FmXFormView::createControlLabelPair( OutputDevice& _rOutDev, sal_Int32 _nXO
 {
     if  (   !createControlLabelPair( _rOutDev, _nXOffsetMM, _nYOffsetMM,
                 _rxField, _rxNumberFormats, _nControlObjectID, _rFieldPostfix, FmFormInventor, OBJ_FM_FIXEDTEXT,
-                NULL, NULL, NULL, _rpLabel, _rpControl )
+                nullptr, nullptr, nullptr, _rpLabel, _rpControl )
         )
         return false;
 
@@ -1745,7 +1745,7 @@ void FmXFormView::stopMarkListWatching()
     {
         m_pWatchStoredList->EndListeningAll();
         delete m_pWatchStoredList;
-        m_pWatchStoredList = NULL;
+        m_pWatchStoredList = nullptr;
     }
 }
 
@@ -1754,8 +1754,8 @@ void FmXFormView::startMarkListWatching()
 {
     if ( !m_pWatchStoredList )
     {
-        FmFormModel* pModel = GetFormShell() ? GetFormShell()->GetFormModel() : NULL;
-        DBG_ASSERT( pModel != NULL, "FmXFormView::startMarkListWatching: shell has no model!" );
+        FmFormModel* pModel = GetFormShell() ? GetFormShell()->GetFormModel() : nullptr;
+        DBG_ASSERT( pModel != nullptr, "FmXFormView::startMarkListWatching: shell has no model!" );
         if (pModel)
         {
             m_pWatchStoredList = new ObjectRemoveListener( this );
@@ -1835,7 +1835,7 @@ void FmXFormView::restoreMarkList( SdrMarkList& _rRestoredMarkList )
     _rRestoredMarkList.Clear();
 
     const SdrMarkList& rCurrentList = m_pView->GetMarkedObjectList();
-    FmFormPage* pPage = GetFormShell() ? GetFormShell()->GetCurPage() : NULL;
+    FmFormPage* pPage = GetFormShell() ? GetFormShell()->GetCurPage() : nullptr;
     if (pPage)
     {
         if (rCurrentList.GetMarkCount())
@@ -1941,7 +1941,7 @@ void FmXFormView::removeGridWindowListening()
         {
             m_pView->SetMoveOutside( false, FmFormView::ImplAccess() );
         }
-        m_xWindow = NULL;
+        m_xWindow = nullptr;
     }
 }
 

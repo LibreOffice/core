@@ -75,7 +75,7 @@ protected:
 
 protected:
     // #i71538# make constructors of SdrView sub-components protected to avoid incomplete incarnations which may get casted to SdrView
-    SdrDragView(SdrModel* pModel1, OutputDevice* pOut = 0L);
+    SdrDragView(SdrModel* pModel1, OutputDevice* pOut = nullptr);
     virtual ~SdrDragView();
 
 public:
@@ -101,7 +101,7 @@ public:
     // If pForcedMeth is passed, then pHdl, ... is not evaluated, but this Drag
     // method is used. In this, the ownership of the instance passes
     // to the View and is destroyed at the end of the dragging.
-    virtual bool BegDragObj(const Point& rPnt, OutputDevice* pOut=NULL, SdrHdl* pHdl=NULL, short nMinMov=-3, SdrDragMethod* pForcedMeth=NULL);
+    virtual bool BegDragObj(const Point& rPnt, OutputDevice* pOut=nullptr, SdrHdl* pHdl=nullptr, short nMinMov=-3, SdrDragMethod* pForcedMeth=nullptr);
     void MovDragObj(const Point& rPnt);
     bool EndDragObj(bool bCopy=false);
     void BrkDragObj();
@@ -122,7 +122,7 @@ public:
 
     // Interactive insertion of a new point. nIdx=0 => in front of the first point
     bool IsInsObjPointPossible() const;
-    bool BegInsObjPoint(const Point& rPnt, bool bNewObj) { return ImpBegInsObjPoint(false, 0L, rPnt, bNewObj, 0L); }
+    bool BegInsObjPoint(const Point& rPnt, bool bNewObj) { return ImpBegInsObjPoint(false, 0L, rPnt, bNewObj, nullptr); }
     void MovInsObjPoint(const Point& rPnt) { MovDragObj(rPnt); }
     bool EndInsObjPoint(SdrCreateCmd eCmd);
     bool IsInsObjPoint() const { return mpCurrentSdrDragMethod && mbInsPolyPoint; }

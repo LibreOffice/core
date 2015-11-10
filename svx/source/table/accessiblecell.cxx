@@ -50,7 +50,7 @@ AccessibleCell::AccessibleCell( const css::uno::Reference< css::accessibility::X
 : AccessibleCellBase( rxParent, AccessibleRole::TABLE_CELL )
 , maShapeTreeInfo( rShapeTreeInfo )
 , mnIndexInParent( nIndex )
-, mpText( NULL )
+, mpText( nullptr )
 , mxCell( rCell )
 {
     //Init the pAccTable var
@@ -61,7 +61,7 @@ AccessibleCell::AccessibleCell( const css::uno::Reference< css::accessibility::X
 
 AccessibleCell::~AccessibleCell()
 {
-    DBG_ASSERT( mpText == 0, "svx::AccessibleCell::~AccessibleCell(), not disposed!?" );
+    DBG_ASSERT( mpText == nullptr, "svx::AccessibleCell::~AccessibleCell(), not disposed!?" );
 }
 
 
@@ -70,11 +70,11 @@ void AccessibleCell::Init()
 {
     SdrView* pView = maShapeTreeInfo.GetSdrView();
     const vcl::Window* pWindow = maShapeTreeInfo.GetWindow ();
-    if( (pView != NULL) && (pWindow != NULL) && mxCell.is())
+    if( (pView != nullptr) && (pWindow != nullptr) && mxCell.is())
     {
         OutlinerParaObject* pOutlinerParaObject = mxCell->GetEditOutlinerParaObject(); // Get the OutlinerParaObject if text edit is active
 
-        bool bOwnParaObject = pOutlinerParaObject != 0;
+        bool bOwnParaObject = pOutlinerParaObject != nullptr;
 
         if( !pOutlinerParaObject )
             pOutlinerParaObject = mxCell->GetOutlinerParaObject();
@@ -99,7 +99,7 @@ bool AccessibleCell::SetState (sal_Int16 aState)
 {
     bool bStateHasChanged = false;
 
-    if (aState == AccessibleStateType::FOCUSED && mpText != NULL)
+    if (aState == AccessibleStateType::FOCUSED && mpText != nullptr)
     {
         // Offer FOCUSED state to edit engine and detect whether the state
         // changes.
@@ -119,7 +119,7 @@ bool AccessibleCell::ResetState (sal_Int16 aState)
 {
     bool bStateHasChanged = false;
 
-    if (aState == AccessibleStateType::FOCUSED && mpText != NULL)
+    if (aState == AccessibleStateType::FOCUSED && mpText != nullptr)
     {
         // Try to remove FOCUSED state from the edit engine and detect
         // whether the state changes.
@@ -173,7 +173,7 @@ sal_Int32 SAL_CALL AccessibleCell::getAccessibleChildCount() throw (css::uno::Ru
 {
     SolarMutexGuard aSolarGuard;
     ThrowIfDisposed ();
-    return mpText != NULL ? mpText->GetChildCount () : 0;
+    return mpText != nullptr ? mpText->GetChildCount () : 0;
 }
 
 
@@ -204,7 +204,7 @@ Reference<XAccessibleStateSet> SAL_CALL AccessibleCell::getAccessibleStateSet() 
     ::osl::MutexGuard aGuard (maMutex);
     Reference<XAccessibleStateSet> xStateSet;
 
-    if (rBHelper.bDisposed || mpText == NULL)
+    if (rBHelper.bDisposed || mpText == nullptr)
     {
         // Return a minimal state set that only contains the DEFUNC state.
         xStateSet = AccessibleContextBase::getAccessibleStateSet ();
@@ -216,7 +216,7 @@ Reference<XAccessibleStateSet> SAL_CALL AccessibleCell::getAccessibleStateSet() 
         if(pStateSet)
         {
             // Merge current FOCUSED state from edit engine.
-            if (mpText != NULL)
+            if (mpText != nullptr)
             {
                 if (mpText->HaveFocus())
                     pStateSet->AddState (AccessibleStateType::FOCUSED);
@@ -326,7 +326,7 @@ css::awt::Rectangle SAL_CALL AccessibleCell::getBounds() throw(RuntimeException,
         const ::Rectangle aCellRect( mxCell->getCellRect() );
 
         // Transform coordinates from internal to pixel.
-        if (maShapeTreeInfo.GetViewForwarder() == NULL)
+        if (maShapeTreeInfo.GetViewForwarder() == nullptr)
             throw uno::RuntimeException ("AccessibleCell has no valid view forwarder",static_cast<uno::XWeak*>(this));
 
         ::Size aPixelSize( maShapeTreeInfo.GetViewForwarder()->LogicToPixel(::Size(aCellRect.GetWidth(), aCellRect.GetHeight())) );
@@ -485,7 +485,7 @@ void SAL_CALL AccessibleCell::addAccessibleEventListener( const Reference<XAcces
     else
     {
         AccessibleContextBase::addAccessibleEventListener (rxListener);
-        if (mpText != NULL)
+        if (mpText != nullptr)
             mpText->AddEventListener (rxListener);
     }
 }
@@ -496,7 +496,7 @@ void SAL_CALL AccessibleCell::removeAccessibleEventListener( const Reference<XAc
 {
     SolarMutexGuard aSolarGuard;
     AccessibleContextBase::removeAccessibleEventListener(rxListener);
-    if (mpText != NULL)
+    if (mpText != nullptr)
         mpText->RemoveEventListener (rxListener);
 }
 
@@ -553,14 +553,14 @@ void AccessibleCell::disposing()
     // Make sure to send an event that this object loses the focus in the
     // case that it has the focus.
     ::utl::AccessibleStateSetHelper* pStateSet = static_cast< ::utl::AccessibleStateSetHelper*>(mxStateSet.get());
-    if (pStateSet != NULL)
+    if (pStateSet != nullptr)
         pStateSet->RemoveState(AccessibleStateType::FOCUSED);
 
-    if (mpText != NULL)
+    if (mpText != nullptr)
     {
         mpText->Dispose();
         delete mpText;
-        mpText = NULL;
+        mpText = nullptr;
     }
 
     // Cleanup.  Remove references to objects to allow them to be

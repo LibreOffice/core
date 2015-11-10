@@ -92,7 +92,7 @@ namespace sdr
             {
                 SdrText* pText = rTextProvider.getText( nText );
 
-                OutlinerParaObject* pParaObj = pText ? pText->GetOutlinerParaObject() : 0;
+                OutlinerParaObject* pParaObj = pText ? pText->GetOutlinerParaObject() : nullptr;
 
                 if(pParaObj)
                 {
@@ -251,7 +251,7 @@ namespace sdr
                 {
                     SdrText* pText = rTextProvider.getText( nText );
 
-                    OutlinerParaObject* pParaObj = pText ? pText->GetOutlinerParaObject() : 0;
+                    OutlinerParaObject* pParaObj = pText ? pText->GetOutlinerParaObject() : nullptr;
                     if( !pParaObj )
                         continue;
 
@@ -263,7 +263,7 @@ namespace sdr
                     {
                         for(sal_Int32 nPara = 0; nPara < nParaCount; nPara++)
                         {
-                            SfxItemSet* pTempSet = 0L;
+                            SfxItemSet* pTempSet = nullptr;
 
                             // since setting the stylesheet removes all para attributes
                             if(bDontRemoveHardAttr)
@@ -282,8 +282,8 @@ namespace sdr
                                     aNewStyleSheetName += OUString::number( nDepth <= 0 ? 1 : nDepth + 1);
 
                                     SdrModel* pModel = rObj.GetModel();
-                                    SfxStyleSheetBasePool* pStylePool = (pModel != NULL) ? pModel->GetStyleSheetPool() : 0L;
-                                    SfxStyleSheet* pNewStyle = NULL;
+                                    SfxStyleSheetBasePool* pStylePool = (pModel != nullptr) ? pModel->GetStyleSheetPool() : nullptr;
+                                    SfxStyleSheet* pNewStyle = nullptr;
                                     if(pStylePool)
                                         pNewStyle = static_cast<SfxStyleSheet*>(pStylePool->Find(aNewStyleSheetName, GetStyleSheet()->GetFamily()));
                                     DBG_ASSERT( pNewStyle, "AutoStyleSheetName - Style not found!" );
@@ -301,7 +301,7 @@ namespace sdr
                             else
                             {
                                 // remove StyleSheet
-                                rOutliner.SetStyleSheet(nPara, 0L);
+                                rOutliner.SetStyleSheet(nPara, nullptr);
                             }
 
                             if(bDontRemoveHardAttr)
@@ -413,7 +413,7 @@ namespace sdr
                 {
                     SdrText* pText = rTextProvider.getText( nText );
 
-                    OutlinerParaObject* pParaObj = pText ? pText->GetOutlinerParaObject() : 0;
+                    OutlinerParaObject* pParaObj = pText ? pText->GetOutlinerParaObject() : nullptr;
                     if( !pParaObj )
                         continue;
 

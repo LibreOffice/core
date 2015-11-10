@@ -30,7 +30,7 @@ namespace sdr
     {
         Event::Event(sal_uInt32 nTime)
         :   mnTime(nTime),
-            mpNext(0L)
+            mpNext(nullptr)
         {
         }
 
@@ -66,7 +66,7 @@ namespace sdr
     namespace animation
     {
         EventList::EventList()
-        :   mpHead(0L)
+        :   mpHead(nullptr)
         {
         }
 
@@ -80,7 +80,7 @@ namespace sdr
             if(pNew)
             {
                 Event* pCurrent = mpHead;
-                Event* pPrev = 0L;
+                Event* pPrev = nullptr;
 
                 while(pCurrent && pCurrent->GetTime() < pNew->GetTime())
                 {
@@ -106,7 +106,7 @@ namespace sdr
             if(pOld && mpHead)
             {
                 Event* pCurrent = mpHead;
-                Event* pPrev = 0L;
+                Event* pPrev = nullptr;
 
                 while(pCurrent && pCurrent != pOld)
                 {
@@ -123,7 +123,7 @@ namespace sdr
                     mpHead = pOld->GetNext();
                 }
 
-                pOld->SetNext(0L);
+                pOld->SetNext(nullptr);
             }
         }
 
@@ -132,7 +132,7 @@ namespace sdr
             while(mpHead)
             {
                 Event* pNext = mpHead->GetNext();
-                mpHead->SetNext(0L);
+                mpHead->SetNext(nullptr);
                 mpHead = pNext;
             }
         }

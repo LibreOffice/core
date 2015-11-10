@@ -41,7 +41,7 @@ SdrObject* SdrObjectPrimitiveHit(
     const SetOfByte* pVisiLayer,
     bool bTextOnly)
 {
-    SdrObject* pResult = 0;
+    SdrObject* pResult = nullptr;
 
     if(rObject.GetSubList() && rObject.GetSubList()->GetObjCount())
     {
@@ -100,7 +100,7 @@ SdrObject* SdrObjListPrimitiveHit(
     bool bTextOnly)
 {
     size_t nObjNum(rList.GetObjCount());
-    SdrObject* pRetval = 0;
+    SdrObject* pRetval = nullptr;
 
     while(!pRetval && nObjNum > 0)
     {

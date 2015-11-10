@@ -45,10 +45,10 @@ class SdrCustomShapeAdjustmentItem : public SfxPoolItem
             virtual bool                operator==( const SfxPoolItem& ) const override;
             virtual bool GetPresentation(SfxItemPresentation ePresentation,
                                             SfxMapUnit eCoreMetric, SfxMapUnit ePresentationMetric,
-                                            OUString &rText, const IntlWrapper * = 0) const override;
+                                            OUString &rText, const IntlWrapper * = nullptr) const override;
             virtual SfxPoolItem*        Create( SvStream&, sal_uInt16 nItem ) const override;
             virtual SvStream&           Store( SvStream&, sal_uInt16 nVersion ) const override;
-            virtual SfxPoolItem*        Clone( SfxItemPool* pPool = NULL ) const override;
+            virtual SfxPoolItem*        Clone( SfxItemPool* pPool = nullptr ) const override;
             virtual sal_uInt16          GetVersion( sal_uInt16 nFileFormatVersion ) const override;
 
             virtual bool QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;

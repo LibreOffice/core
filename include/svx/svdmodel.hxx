@@ -322,7 +322,7 @@ public:
     const SfxItemPool&   GetItemPool() const                    { return *pItemPool; }
     SfxItemPool&         GetItemPool()                          { return *pItemPool; }
 
-    SdrOutliner&         GetDrawOutliner(const SdrTextObj* pObj=NULL) const;
+    SdrOutliner&         GetDrawOutliner(const SdrTextObj* pObj=nullptr) const;
 
     SdrOutliner&         GetHitTestOutliner() const { return *pHitTestOutliner; }
     const SdrTextObj*    GetFormattingTextObj() const;
@@ -330,7 +330,7 @@ public:
     void                 SetTextDefaults() const;
     static void          SetTextDefaults( SfxItemPool* pItemPool, sal_uIntPtr nDefTextHgt );
 
-    SdrOutliner&         GetChainingOutliner(const SdrTextObj* pObj=NULL) const;
+    SdrOutliner&         GetChainingOutliner(const SdrTextObj* pObj=nullptr) const;
     TextChain *          GetTextChain() const;
 
     // ReferenceDevice for the EditEngine
@@ -606,7 +606,7 @@ public:
 
     static const css::uno::Sequence< sal_Int8 >& getUnoTunnelImplementationId();
 
-    virtual ImageMap* GetImageMapForObject(SdrObject*){return NULL;};
+    virtual ImageMap* GetImageMapForObject(SdrObject*){return nullptr;};
 
     /** enables (true) or disables (false) recording of undo actions
         If undo actions are added while undo is disabled, they are deleted.

@@ -277,7 +277,7 @@ private:
         const OUString& _rFieldPostfix,
         SdrUnoObj*& _rpLabel,
         SdrUnoObj*& _rpControl,
-        const css::uno::Reference< css::sdbc::XDataSource >& _rxDataSource = NULL,
+        const css::uno::Reference< css::sdbc::XDataSource >& _rxDataSource = nullptr,
         const OUString& _rDataSourceName = OUString(),
         const OUString& _rCommand = OUString(),
         const sal_Int32 _nCommandType = -1

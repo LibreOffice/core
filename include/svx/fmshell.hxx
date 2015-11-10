@@ -95,7 +95,7 @@ class SVX_DLLPUBLIC FmFormShell : public SfxShell
     };
     friend class FormShellWaitObject;
 
-    const OutputDevice* GetCurrentViewDevice() const { return m_pFormView ? m_pFormView->GetActualOutDev() : NULL; }
+    const OutputDevice* GetCurrentViewDevice() const { return m_pFormView ? m_pFormView->GetActualOutDev() : nullptr; }
 
 public:
     SFX_DECL_INTERFACE(SVX_INTERFACE_FORM_SH)
@@ -106,7 +106,7 @@ private:
     static void InitInterface_Impl();
 
 public:
-    FmFormShell(SfxViewShell* pParent, FmFormView* pView = NULL);
+    FmFormShell(SfxViewShell* pParent, FmFormView* pView = nullptr);
     virtual ~FmFormShell();
 
     void Execute( SfxRequest& );

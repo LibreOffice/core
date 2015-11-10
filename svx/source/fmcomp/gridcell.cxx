@@ -179,7 +179,7 @@ void DbGridColumn::CreateControl(sal_Int32 _nFieldPos, const Reference< css::bea
         }
     }
 
-    DbCellControl* pCellControl = NULL;
+    DbCellControl* pCellControl = nullptr;
     if (m_rParent.IsFilterMode())
     {
         pCellControl = new DbFilterField(m_rParent.getContext(),*this);
@@ -318,11 +318,11 @@ void DbGridColumn::Clear()
 
         m_pCell->dispose();
         m_pCell->release();
-        m_pCell = NULL;
+        m_pCell = nullptr;
     }
 
-    m_xController = NULL;
-    m_xField = NULL;
+    m_xController = nullptr;
+    m_xField = nullptr;
 
     m_nFormatKey = 0;
     m_nFieldPos = -1;
@@ -545,14 +545,14 @@ TYPEINIT1( DbFilterField, DbCellControl )
 
 DbCellControl::DbCellControl( DbGridColumn& _rColumn, bool /*_bText*/ )
     :OPropertyChangeListener(m_aMutex)
-    ,m_pModelChangeBroadcaster(NULL)
-    ,m_pFieldChangeBroadcaster(NULL)
+    ,m_pModelChangeBroadcaster(nullptr)
+    ,m_pFieldChangeBroadcaster(nullptr)
     ,m_bTransparent( false )
     ,m_bAlignedController( true )
     ,m_bAccessingValueProperty( false )
     ,m_rColumn( _rColumn )
-    ,m_pPainter( NULL )
-    ,m_pWindow( NULL )
+    ,m_pPainter( nullptr )
+    ,m_pWindow( nullptr )
 {
     Reference< XPropertySet > xColModelProps( _rColumn.getModel(), UNO_QUERY );
     if ( xColModelProps.is() )
@@ -634,7 +634,7 @@ static void lcl_clearBroadCaster(::comphelper::OPropertyChangeMultiplexer*& _pBr
     {
         _pBroadcaster->dispose();
         _pBroadcaster->release();
-        _pBroadcaster = NULL;
+        _pBroadcaster = nullptr;
         // no delete, this is done implicitly
     }
 }
@@ -1075,8 +1075,8 @@ void DbLimitedLengthField::implSetEffectiveMaxTextLen( sal_Int32 _nMaxLen )
 
 DbTextField::DbTextField(DbGridColumn& _rColumn)
             :DbLimitedLengthField(_rColumn)
-            ,m_pEdit( NULL )
-            ,m_pPainterImplementation( NULL )
+            ,m_pEdit( nullptr )
+            ,m_pPainterImplementation( nullptr )
             ,m_bIsSimpleEdit( true )
 {
 }
@@ -1335,7 +1335,7 @@ void DbFormattedField::Init( vcl::Window& rParent, const Reference< XRowSet >& x
         }
     }
 
-    SvNumberFormatter* pFormatterUsed = NULL;
+    SvNumberFormatter* pFormatterUsed = nullptr;
     if (m_xSupplier.is())
     {
         SvNumberFormatsSupplierObj* pImplmentation = SvNumberFormatsSupplierObj::getImplementation(m_xSupplier);
@@ -1348,10 +1348,10 @@ void DbFormattedField::Init( vcl::Window& rParent, const Reference< XRowSet >& x
     }
 
     // einen Standard-Formatter ...
-    if (pFormatterUsed == NULL)
+    if (pFormatterUsed == nullptr)
     {
         pFormatterUsed = static_cast<FormattedField*>(m_pWindow.get())->StandardFormatter();
-        DBG_ASSERT(pFormatterUsed != NULL, "DbFormattedField::Init : no standard formatter given by the numeric field !");
+        DBG_ASSERT(pFormatterUsed != nullptr, "DbFormattedField::Init : no standard formatter given by the numeric field !");
     }
     // ... und einen Standard-Key
     if (nFormatKey == -1)
@@ -1488,8 +1488,8 @@ void DbFormattedField::_propertyChanged( const PropertyChangeEvent& _rEvent ) th
 OUString DbFormattedField::GetFormatText(const Reference< css::sdb::XColumn >& _rxField, const Reference< XNumberFormatter >& /*xFormatter*/, Color** ppColor)
 {
     // defaultmaessig keine Farb-Angabe
-    if (ppColor != NULL)
-        *ppColor = NULL;
+    if (ppColor != nullptr)
+        *ppColor = nullptr;
 
     // NULL-Wert -> leerer Text
     if (!_rxField.is())
@@ -1526,7 +1526,7 @@ OUString DbFormattedField::GetFormatText(const Reference< css::sdb::XColumn >& _
     }
 
     aText = m_pPainter->GetText();
-    if (ppColor != NULL)
+    if (ppColor != nullptr)
         *ppColor = static_cast<FormattedField*>(m_pPainter.get())->GetLastOutputColor();
 
     return aText;
@@ -1922,16 +1922,16 @@ void DbNumericField::implAdjustGenericFieldSetting( const Reference< XPropertySe
             xForm.set( Reference< XInterface >(*m_rColumn.GetParent().getDataSource()), UNO_QUERY );
         if ( xForm.is() )
             xSupplier = getNumberFormats( getConnection( xForm ), true );
-        SvNumberFormatter* pFormatterUsed = NULL;
+        SvNumberFormatter* pFormatterUsed = nullptr;
         if ( xSupplier.is() )
         {
             SvNumberFormatsSupplierObj* pImplmentation = SvNumberFormatsSupplierObj::getImplementation( xSupplier );
-            pFormatterUsed = pImplmentation ? pImplmentation->GetNumberFormatter() : NULL;
+            pFormatterUsed = pImplmentation ? pImplmentation->GetNumberFormatter() : nullptr;
         }
-        if ( NULL == pFormatterUsed )
+        if ( nullptr == pFormatterUsed )
         {   // der Cursor fuehrte nicht zum Erfolg -> Standard
             pFormatterUsed = static_cast< DoubleNumericField* >( m_pWindow.get() )->StandardFormatter();
-            DBG_ASSERT( pFormatterUsed != NULL, "DbNumericField::implAdjustGenericFieldSetting: no standard formatter given by the numeric field !" );
+            DBG_ASSERT( pFormatterUsed != nullptr, "DbNumericField::implAdjustGenericFieldSetting: no standard formatter given by the numeric field !" );
         }
         static_cast< DoubleNumericField* >( m_pWindow.get() )->SetFormatter( pFormatterUsed );
         static_cast< DoubleNumericField* >( m_pPainter.get() )->SetFormatter( pFormatterUsed );
@@ -3169,7 +3169,7 @@ vcl::Window* FmXGridCell::getEventWindow() const
 {
     if ( m_pCellControl )
         return &m_pCellControl->GetWindow();
-    return NULL;
+    return nullptr;
 }
 
 
@@ -3228,7 +3228,7 @@ void FmXGridCell::disposing()
     m_aMouseMotionListeners.disposeAndClear( aEvent );
 
     OComponentHelper::disposing();
-    m_pColumn = NULL;
+    m_pColumn = nullptr;
     DELETEZ(m_pCellControl);
 }
 
@@ -3240,7 +3240,7 @@ Any SAL_CALL FmXGridCell::queryAggregation( const css::uno::Type& _rType ) throw
     if ( !aReturn.hasValue() )
         aReturn = FmXGridCell_Base::queryInterface( _rType );
 
-    if ( !aReturn.hasValue() && ( m_pCellControl != NULL ) )
+    if ( !aReturn.hasValue() && ( m_pCellControl != nullptr ) )
         aReturn = FmXGridCell_WindowBase::queryInterface( _rType );
 
     return aReturn;
@@ -3569,9 +3569,9 @@ void FmXTextCell::PaintFieldToCell(OutputDevice& rDev,
             nStyle |= DrawTextFlags::Left;
     }
 
-    Color* pColor = NULL;
+    Color* pColor = nullptr;
     OUString aText = GetText(_rxField, xFormatter, &pColor);
-    if (pColor != NULL)
+    if (pColor != nullptr)
     {
         Color aOldTextColor( rDev.GetTextColor() );
         rDev.SetTextColor( *pColor );
@@ -3586,7 +3586,7 @@ FmXEditCell::FmXEditCell( DbGridColumn* pColumn, DbCellControl& _rControl )
             :FmXTextCell( pColumn, _rControl )
             ,m_aTextListeners(m_aMutex)
             ,m_aChangeListeners( m_aMutex )
-            ,m_pEditImplementation( NULL )
+            ,m_pEditImplementation( nullptr )
             ,m_bOwnEditImplementation( false )
 {
 
@@ -3628,7 +3628,7 @@ void FmXEditCell::disposing()
     m_pEditImplementation->SetModifyHdl( Link<Edit&,void>() );
     if ( m_bOwnEditImplementation )
         delete m_pEditImplementation;
-    m_pEditImplementation = NULL;
+    m_pEditImplementation = nullptr;
 
     FmXDataCell::disposing();
 }
@@ -3872,7 +3872,7 @@ void FmXCheckBoxCell::disposing()
     m_aActionListeners.disposeAndClear(aEvt);
 
     static_cast< CheckBoxControl& >( m_pCellControl->GetWindow() ).SetClickHdl(Link<VclPtr<CheckBox>,void>());
-    m_pBox = NULL;
+    m_pBox = nullptr;
 
     FmXDataCell::disposing();
 }
@@ -4049,7 +4049,7 @@ void FmXListBoxCell::disposing()
 
     m_pBox->SetSelectHdl( Link<ListBox&,void>() );
     m_pBox->SetDoubleClickHdl( Link<ListBox&,void>() );
-    m_pBox = NULL;
+    m_pBox = nullptr;
 
     FmXTextCell::disposing();
 }

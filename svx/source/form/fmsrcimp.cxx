@@ -97,7 +97,7 @@ FmRecordCountListener::FmRecordCountListener(const Reference< css::sdbc::XResult
 
     if (::comphelper::getBOOL(m_xListening->getPropertyValue(FM_PROP_ROWCOUNTFINAL)))
     {
-        m_xListening = NULL;
+        m_xListening = nullptr;
         // there's nothing to do as the record count is already known
         return;
     }
@@ -128,7 +128,7 @@ void FmRecordCountListener::DisConnect()
 {
     if(m_xListening.is())
         m_xListening->removePropertyChangeListener(FM_PROP_ROWCOUNT, static_cast<css::beans::XPropertyChangeListener*>(this));
-    m_xListening = NULL;
+    m_xListening = nullptr;
 }
 
 
@@ -364,7 +364,7 @@ OUString FmSearchEngine::FormatField(sal_Int32 nWhich)
     if (m_bUsingTextComponents)
     {
         DBG_ASSERT((sal_uInt32)nWhich < m_aControlTexts.size(), "FmSearchEngine::FormatField(sal_Int32) : invalid position !");
-        DBG_ASSERT(m_aControlTexts[nWhich] != NULL, "FmSearchEngine::FormatField(sal_Int32) : invalid object in array !");
+        DBG_ASSERT(m_aControlTexts[nWhich] != nullptr, "FmSearchEngine::FormatField(sal_Int32) : invalid object in array !");
         DBG_ASSERT(m_aControlTexts[nWhich]->getControl().is(), "FmSearchEngine::FormatField : invalid control !");
 
         if (m_nCurrentFieldIndex != -1)
@@ -1170,7 +1170,7 @@ void FmSearchEngine::ImplStartNextSearch()
     else
     {
         SearchNextImpl();
-        LINK(this, FmSearchEngine, OnSearchTerminated).Call(NULL);
+        LINK(this, FmSearchEngine, OnSearchTerminated).Call(nullptr);
     }
 }
 
@@ -1232,7 +1232,7 @@ void FmSearchEngine::StartOverSpecial(bool _bSearchForNull)
 
 void FmSearchEngine::InvalidatePreviousLoc()
 {
-    m_aPreviousLocBookmark.setValue(0,cppu::UnoType<void>::get());
+    m_aPreviousLocBookmark.setValue(nullptr,cppu::UnoType<void>::get());
     m_iterPreviousLocField = m_arrUsedFields.end();
 }
 

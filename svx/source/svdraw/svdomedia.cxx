@@ -266,7 +266,7 @@ uno::Reference<io::XInputStream> SdrMediaObj::GetInputStream()
     if (!m_xImpl->m_pTempFile)
     {
         SAL_WARN("svx", "this is only intended for embedded media");
-        return 0;
+        return nullptr;
     }
     ucbhelper::Content tempFile(m_xImpl->m_pTempFile->m_TempFileURL,
                 uno::Reference<ucb::XCommandEnvironment>(),
@@ -282,7 +282,7 @@ static bool lcl_HandleJsonPackageURL(
     OUString& o_rTempDirURL)
 {
     // Create a temporary folder which will contain all files of glTF model
-    o_rTempDirURL = ::utl::TempFile(NULL, true).GetURL();
+    o_rTempDirURL = ::utl::TempFile(nullptr, true).GetURL();
 
     const sal_uInt16 nPackageLength = OString("vnd.sun.star.Package:").getLength();
     const OUString sUrlPath = rURL.copy(nPackageLength,rURL.lastIndexOf("/")-nPackageLength);
@@ -342,7 +342,7 @@ static bool lcl_CopyToTempFile(
 {
     OUString tempFileURL;
     ::osl::FileBase::RC const err =
-        ::osl::FileBase::createTempFile(0, 0, & tempFileURL);
+        ::osl::FileBase::createTempFile(nullptr, nullptr, & tempFileURL);
     if (::osl::FileBase::E_None != err)
     {
         SAL_INFO("svx", "cannot create temp file");

@@ -314,7 +314,7 @@ void FmPropBrw::implDetachController()
     {
         try
         {
-            m_xMeAsFrame->setComponent(NULL, NULL);
+            m_xMeAsFrame->setComponent(nullptr, nullptr);
         }
         catch( const Exception& )
         {
@@ -324,7 +324,7 @@ void FmPropBrw::implDetachController()
 
     // we attached a frame to the controller manually, so we need to manually tell it that it's detached, too
     if ( m_xBrowserController.is() )
-        m_xBrowserController->attachFrame( NULL );
+        m_xBrowserController->attachFrame( nullptr );
 
     m_xBrowserController.clear();
     m_xInspectorModel.clear();
@@ -535,7 +535,7 @@ void FmPropBrw::impl_createPropertyBrowser_throw( FmFormShell* _pFormShell )
 
     // the mapping from control models to control shapes
     Reference< XMap > xControlMap;
-    FmFormPage* pFormPage = _pFormShell ? _pFormShell->GetCurPage() : NULL;
+    FmFormPage* pFormPage = _pFormShell ? _pFormShell->GetCurPage() : nullptr;
     if ( pFormPage )
         xControlMap = pFormPage->GetImpl().getControlToShapeMap();
 
@@ -592,7 +592,7 @@ void FmPropBrw::impl_ensurePropertyBrowser_nothrow( FmFormShell* _pFormShell )
 {
     // the document in which we live
     Reference< XInterface > xDocument;
-    SfxObjectShell* pObjectShell = _pFormShell ? _pFormShell->GetObjectShell() : NULL;
+    SfxObjectShell* pObjectShell = _pFormShell ? _pFormShell->GetObjectShell() : nullptr;
     if ( pObjectShell )
         xDocument = pObjectShell->GetModel();
     if ( ( xDocument == m_xLastKnownDocument ) && m_xBrowserController.is() )
@@ -603,7 +603,7 @@ void FmPropBrw::impl_ensurePropertyBrowser_nothrow( FmFormShell* _pFormShell )
     {
         // clean up any previous instances of the object inspector
         if ( m_xMeAsFrame.is() )
-            m_xMeAsFrame->setComponent( NULL, NULL );
+            m_xMeAsFrame->setComponent( nullptr, nullptr );
         else
             ::comphelper::disposeComponent( m_xBrowserController );
         m_xBrowserController.clear();
@@ -645,7 +645,7 @@ void FmPropBrw::StateChanged(sal_uInt16 nSID, SfxItemState eState, const SfxPool
             if ( m_bInitialStateChange )
             {
                 // if we're just newly created, we want to have the focus
-                PostUserEvent( LINK( this, FmPropBrw, OnAsyncGetFocus ), NULL, true );
+                PostUserEvent( LINK( this, FmPropBrw, OnAsyncGetFocus ), nullptr, true );
 
                 // and additionally, we want to show the page which was active during
                 // our previous incarnation

@@ -422,7 +422,7 @@ public:
 
     virtual void SetDesignMode(bool bMode);
     bool IsDesignMode() const {return m_bDesignMode;}
-    bool IsOpen() const {return m_pSeekCursor != NULL;}
+    bool IsOpen() const {return m_pSeekCursor != nullptr;}
 
     void SetFilterMode(bool bMode);
     bool IsFilterMode() const {return m_bFilterMode;}

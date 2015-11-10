@@ -36,7 +36,7 @@ using namespace ::com::sun::star::uno;
 
 ChineseTranslationDialog::ChineseTranslationDialog( vcl::Window* pParent )
     : ModalDialog(pParent, "ChineseConversionDialog", "svx/ui/chineseconversiondialog.ui")
-    , m_pDictionaryDialog(0)
+    , m_pDictionaryDialog(nullptr)
 {
     get(m_pBP_OK, "ok");
     get(m_pPB_Editterms, "editterms");

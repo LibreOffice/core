@@ -83,12 +83,12 @@ public:
     //Add this method to support Form Controls
     virtual AccessibleControlShape* GetAccControlShapeFromModel
         (css::beans::XPropertySet*)
-        throw (css::uno::RuntimeException){return NULL;};
+        throw (css::uno::RuntimeException){return nullptr;};
     virtual  css::uno::Reference<
             css::accessibility::XAccessible>
         GetAccessibleCaption (const css::uno::Reference<
             css::drawing::XShape>&)
-            throw (css::uno::RuntimeException){return NULL;};
+            throw (css::uno::RuntimeException){return nullptr;};
     virtual bool IsDocumentSelAll(){ return false; }
 };
 

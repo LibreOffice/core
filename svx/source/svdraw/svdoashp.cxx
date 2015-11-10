@@ -205,7 +205,7 @@ static bool ImpVerticalSwitch( const SdrObjCustomShape& rCustoShape )
 // and translation executed, too.
 SdrObject* ImpCreateShadowObjectClone(const SdrObject& rOriginal, const SfxItemSet& rOriginalSet)
 {
-    SdrObject* pRetval = 0L;
+    SdrObject* pRetval = nullptr;
     const bool bShadow(static_cast<const SdrOnOffItem&>(rOriginalSet.Get(SDRATTR_SHADOW)).GetValue());
 
     if(bShadow)
@@ -443,7 +443,7 @@ const SdrObject* SdrObjCustomShape::GetSdrObjectFromCustomShape() const
     }
     SdrObject* pRenderedCustomShape = mXRenderedCustomShape.is()
                 ? GetSdrObjectFromXShape( mXRenderedCustomShape )
-                : NULL;
+                : nullptr;
     return pRenderedCustomShape;
 }
 
@@ -837,7 +837,7 @@ TYPEINIT1(SdrObjCustomShape,SdrTextObj);
 SdrObjCustomShape::SdrObjCustomShape() :
     SdrTextObj(),
     fObjectRotation( 0.0 ),
-    mpLastShadowGeometry(0L)
+    mpLastShadowGeometry(nullptr)
 {
     bClosedObj = true; // custom shapes may be filled
     bTextFrame = true;
@@ -875,7 +875,7 @@ void SdrObjCustomShape::MergeDefaultAttributes( const OUString* pType )
     }
     MSO_SPT eSpType = EnhancedCustomShapeTypeNames::Get( sShapeType );
 
-    const sal_Int32* pDefData = NULL;
+    const sal_Int32* pDefData = nullptr;
     const mso_CustomShape* pDefCustomShape = GetCustomShapeContent( eSpType );
     if ( pDefCustomShape )
         pDefData = pDefCustomShape->pDefData;
@@ -1144,7 +1144,7 @@ bool SdrObjCustomShape::IsDefaultGeometry( const DefaultType eDefaultType ) cons
                         bIsDefaultGeometry = true;
                 }
             }
-            else if ( pDefCustomShape && ( ( pDefCustomShape->nVertices == 0 ) || ( pDefCustomShape->pVertices == 0 ) ) )
+            else if ( pDefCustomShape && ( ( pDefCustomShape->nVertices == 0 ) || ( pDefCustomShape->pVertices == nullptr ) ) )
                 bIsDefaultGeometry = true;
         }
         break;
@@ -1214,7 +1214,7 @@ bool SdrObjCustomShape::IsDefaultGeometry( const DefaultType eDefaultType ) cons
                     }
                 }
             }
-            else if ( pDefCustomShape && ( ( pDefCustomShape->nElements == 0 ) || ( pDefCustomShape->pElements == 0 ) ) )
+            else if ( pDefCustomShape && ( ( pDefCustomShape->nElements == 0 ) || ( pDefCustomShape->pElements == nullptr ) ) )
                 bIsDefaultGeometry = true;
         }
         break;
@@ -1275,7 +1275,7 @@ bool SdrObjCustomShape::IsDefaultGeometry( const DefaultType eDefaultType ) cons
                         bIsDefaultGeometry = true;
                 }
             }
-            else if ( pDefCustomShape && ( ( pDefCustomShape->nCalculation == 0 ) || ( pDefCustomShape->pCalculation == 0 ) ) )
+            else if ( pDefCustomShape && ( ( pDefCustomShape->nCalculation == 0 ) || ( pDefCustomShape->pCalculation == nullptr ) ) )
                 bIsDefaultGeometry = true;
         }
         break;
@@ -1303,7 +1303,7 @@ bool SdrObjCustomShape::IsDefaultGeometry( const DefaultType eDefaultType ) cons
                         bIsDefaultGeometry = true;
                 }
             }
-            else if ( pDefCustomShape && ( ( pDefCustomShape->nTextRect == 0 ) || ( pDefCustomShape->pTextRect == 0 ) ) )
+            else if ( pDefCustomShape && ( ( pDefCustomShape->nTextRect == 0 ) || ( pDefCustomShape->pTextRect == nullptr ) ) )
                 bIsDefaultGeometry = true;
         }
         break;
@@ -1332,7 +1332,7 @@ bool SdrObjCustomShape::IsDefaultGeometry( const DefaultType eDefaultType ) cons
                         bIsDefaultGeometry = true;
                 }
             }
-            else if ( pDefCustomShape && ( ( pDefCustomShape->nHandles == 0 ) || ( pDefCustomShape->pHandles == 0 ) ) )
+            else if ( pDefCustomShape && ( ( pDefCustomShape->nHandles == 0 ) || ( pDefCustomShape->pHandles == nullptr ) ) )
                 bIsDefaultGeometry = true;
         }
         break;
@@ -1875,7 +1875,7 @@ SdrGluePointList* SdrObjCustomShape::ForceGluePointList()
     }
     else
     {
-        return 0L;
+        return nullptr;
     }
 }
 
@@ -1890,7 +1890,7 @@ sal_uInt32 SdrObjCustomShape::GetHdlCount() const
 
 SdrHdl* SdrObjCustomShape::GetHdl( sal_uInt32 nHdlNum ) const
 {
-    SdrHdl* pH = NULL;
+    SdrHdl* pH = nullptr;
     const sal_uInt32 nBasicHdlCount(SdrTextObj::GetHdlCount());
 
     if ( nHdlNum < nBasicHdlCount )
@@ -1939,7 +1939,7 @@ bool SdrObjCustomShape::beginSpecialDrag(SdrDragStat& rDrag) const
     else
     {
         const SdrHdl* pHdl2 = rDrag.GetHdl();
-        const SdrHdlKind eHdl((pHdl2 == NULL) ? HDL_MOVE : pHdl2->GetKind());
+        const SdrHdlKind eHdl((pHdl2 == nullptr) ? HDL_MOVE : pHdl2->GetKind());
 
         switch( eHdl )
         {
@@ -2105,7 +2105,7 @@ void SdrObjCustomShape::DragMoveCustomShapeHdl( const Point& rDestination,
 bool SdrObjCustomShape::applySpecialDrag(SdrDragStat& rDrag)
 {
     const SdrHdl* pHdl = rDrag.GetHdl();
-    const SdrHdlKind eHdl((pHdl == NULL) ? HDL_MOVE : pHdl->GetKind());
+    const SdrHdlKind eHdl((pHdl == nullptr) ? HDL_MOVE : pHdl->GetKind());
 
     switch(eHdl)
     {
@@ -2374,7 +2374,7 @@ bool SdrObjCustomShape::AdjustTextFrameWidthAndHeight(Rectangle& rR, bool bHgt, 
                     rOutliner.SetUpdateMode(true);
                     // TODO: add the optimization with bPortionInfoChecked again.
                     OutlinerParaObject* pOutlinerParaObject = GetOutlinerParaObject();
-                    if( pOutlinerParaObject != NULL )
+                    if( pOutlinerParaObject != nullptr )
                     {
                         rOutliner.SetText(*pOutlinerParaObject);
                         rOutliner.SetFixedCellHeight(static_cast<const SdrTextFixedCellHeightItem&>(GetMergedItem(SDRATTR_TEXT_USEFIXEDCELLHEIGHT)).GetValue());
@@ -2579,7 +2579,7 @@ void SdrObjCustomShape::TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, Recta
     Size aAnkSiz(aViewInit.GetSize());
     aAnkSiz.Width()--; aAnkSiz.Height()--; // because GetSize() adds 1
     Size aMaxSiz(1000000,1000000);
-    if (pModel!=NULL) {
+    if (pModel!=nullptr) {
         Size aTmpSiz(pModel->GetMaxObjSize());
         if (aTmpSiz.Width()!=0) aMaxSiz.Width()=aTmpSiz.Width();
         if (aTmpSiz.Height()!=0) aMaxSiz.Height()=aTmpSiz.Height();
@@ -2648,9 +2648,9 @@ void SdrObjCustomShape::TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, Recta
     if(SDRTEXTVERTADJUST_BLOCK != eVAdj )
         aPaperMin.Height() = 0;
 
-    if (pPaperMin!=NULL) *pPaperMin=aPaperMin;
-    if (pPaperMax!=NULL) *pPaperMax=aPaperMax;
-    if (pViewInit!=NULL) *pViewInit=aViewInit;
+    if (pPaperMin!=nullptr) *pPaperMin=aPaperMin;
+    if (pPaperMax!=nullptr) *pPaperMax=aPaperMax;
+    if (pViewInit!=nullptr) *pViewInit=aViewInit;
 }
 void SdrObjCustomShape::EndTextEdit( SdrOutliner& rOutl )
 {
@@ -2743,7 +2743,7 @@ void SdrObjCustomShape::TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRe
     }
     else
     {
-        rOutliner.SetTextObj( NULL );
+        rOutliner.SetTextObj( nullptr );
     }
     if (pEdtOutl && !bNoEditText && pPara)
         delete pPara;
@@ -2871,8 +2871,8 @@ basegfx::B2DPolyPolygon SdrObjCustomShape::TakeContour() const
 SdrObject* SdrObjCustomShape::DoConvertToPolyObj(bool bBezier, bool bAddText) const
 {
     // #i37011#
-    SdrObject* pRetval = 0L;
-    SdrObject* pRenderedCustomShape = 0L;
+    SdrObject* pRetval = nullptr;
+    SdrObject* pRenderedCustomShape = nullptr;
 
     if ( !mXRenderedCustomShape.is() )
     {
@@ -3223,9 +3223,9 @@ bool SdrObjCustomShape::doConstructOrthogonal(const OUString& rName)
 // #i37011# centralize throw-away of render geometry
 void SdrObjCustomShape::InvalidateRenderGeometry()
 {
-    mXRenderedCustomShape = 0L;
+    mXRenderedCustomShape = nullptr;
     SdrObject::Free( mpLastShadowGeometry );
-    mpLastShadowGeometry = 0L;
+    mpLastShadowGeometry = nullptr;
 }
 
 void SdrObjCustomShape::impl_setUnoShape(const uno::Reference<uno::XInterface>& rxUnoShape)
@@ -3234,7 +3234,7 @@ void SdrObjCustomShape::impl_setUnoShape(const uno::Reference<uno::XInterface>& 
 
     // The shape engine is created with _current_ shape. This means we
     // _must_ reset it when the shape changes.
-    mxCustomShapeEngine.set(0);
+    mxCustomShapeEngine.set(nullptr);
 }
 
 OUString SdrObjCustomShape::GetCustomShapeName()

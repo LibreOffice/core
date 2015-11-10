@@ -40,7 +40,7 @@ public:
     sal_Int32                       mnLastAngle;
 
     E3dDragMethodUnit()
-    :   mp3DObj(0),
+    :   mp3DObj(nullptr),
         maWireframePoly(),
         maDisplayTransform(),
         maInvDisplayTransform(),

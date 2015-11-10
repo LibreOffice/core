@@ -176,8 +176,8 @@ void ImplHelpLineOverlay::SetPosition(const basegfx::B2DPoint& rNewPosition)
 
 SdrSnapView::SdrSnapView(SdrModel* pModel1, OutputDevice* pOut)
     : SdrPaintView(pModel1,pOut)
-    , mpPageOriginOverlay(0L)
-    , mpHelpLineOverlay(0L)
+    , mpPageOriginOverlay(nullptr)
+    , mpHelpLineOverlay(nullptr)
     , nMagnSizPix(4)
     , nSnapAngle(1500)
     , nEliminatePolyPointLimitAngle(0)
@@ -279,9 +279,9 @@ SdrSnap SdrSnapView::SnapPos(Point& rPnt, const SdrPageView* pPV) const
     if (!bSnapEnab) return SdrSnap::NOTSNAPPED;
     long x=rPnt.X();
     long y=rPnt.Y();
-    if (pPV==NULL) {
+    if (pPV==nullptr) {
         pPV=GetSdrPageView();
-        if (pPV==NULL) return SdrSnap::NOTSNAPPED;
+        if (pPV==nullptr) return SdrSnap::NOTSNAPPED;
     }
 
     long dx=NOT_SNAPPED;
@@ -457,10 +457,10 @@ bool SdrSnapView::BegSetPageOrg(const Point& rPnt)
 {
     BrkAction();
 
-    DBG_ASSERT(0L == mpPageOriginOverlay, "SdrSnapView::BegSetPageOrg: There exists a ImplPageOriginOverlay (!)");
+    DBG_ASSERT(nullptr == mpPageOriginOverlay, "SdrSnapView::BegSetPageOrg: There exists a ImplPageOriginOverlay (!)");
     basegfx::B2DPoint aStartPos(rPnt.X(), rPnt.Y());
     mpPageOriginOverlay = new ImplPageOriginOverlay(*this, aStartPos);
-    maDragStat.Reset(GetSnapPos(rPnt,NULL));
+    maDragStat.Reset(GetSnapPos(rPnt,nullptr));
 
     return true;
 }
@@ -469,7 +469,7 @@ void SdrSnapView::MovSetPageOrg(const Point& rPnt)
 {
     if(IsSetPageOrg())
     {
-        maDragStat.NextMove(GetSnapPos(rPnt,NULL));
+        maDragStat.NextMove(GetSnapPos(rPnt,nullptr));
         DBG_ASSERT(mpPageOriginOverlay, "SdrSnapView::MovSetPageOrg: no ImplPageOriginOverlay (!)");
         basegfx::B2DPoint aNewPos(maDragStat.GetNow().X(), maDragStat.GetNow().Y());
         mpPageOriginOverlay->SetPosition(aNewPos);
@@ -504,7 +504,7 @@ void SdrSnapView::BrkSetPageOrg()
     {
         DBG_ASSERT(mpPageOriginOverlay, "SdrSnapView::MovSetPageOrg: no ImplPageOriginOverlay (!)");
         delete mpPageOriginOverlay;
-        mpPageOriginOverlay = 0L;
+        mpPageOriginOverlay = nullptr;
     }
 }
 
@@ -512,7 +512,7 @@ void SdrSnapView::BrkSetPageOrg()
 
 bool SdrSnapView::PickHelpLine(const Point& rPnt, short nTol, const OutputDevice& rOut, sal_uInt16& rnHelpLineNum, SdrPageView*& rpPV) const
 {
-    rpPV=NULL;
+    rpPV=nullptr;
     nTol=ImpGetHitTolLogic(nTol,&rOut);
     SdrPageView* pPV = GetSdrPageView();
 
@@ -545,11 +545,11 @@ bool SdrSnapView::BegDragHelpLine(sal_uInt16 nHelpLineNum, SdrPageView* pPV)
             Point aHelpLinePos = rHelpLine.GetPos();
             basegfx::B2DPoint aStartPos(aHelpLinePos.X(), aHelpLinePos.Y());
 
-            DBG_ASSERT(0L == mpHelpLineOverlay, "SdrSnapView::BegDragHelpLine: There exists a ImplHelpLineOverlay (!)");
+            DBG_ASSERT(nullptr == mpHelpLineOverlay, "SdrSnapView::BegDragHelpLine: There exists a ImplHelpLineOverlay (!)");
             mpHelpLineOverlay = new ImplHelpLineOverlay(*this, aStartPos, pPV, nHelpLineNum, rHelpLine.GetKind());
 
             maDragStat.Reset(GetSnapPos(aHelpLinePos, pPV));
-            maDragStat.SetMinMove(ImpGetMinMovLogic(-3, 0L));
+            maDragStat.SetMinMove(ImpGetMinMovLogic(-3, nullptr));
 
             bRet = true;
         }
@@ -567,10 +567,10 @@ bool SdrSnapView::BegDragHelpLine(const Point& rPnt, SdrHelpLineKind eNewKind)
 
     if(GetSdrPageView())
     {
-        DBG_ASSERT(0L == mpHelpLineOverlay, "SdrSnapView::BegDragHelpLine: There exists a ImplHelpLineOverlay (!)");
+        DBG_ASSERT(nullptr == mpHelpLineOverlay, "SdrSnapView::BegDragHelpLine: There exists a ImplHelpLineOverlay (!)");
         basegfx::B2DPoint aStartPos(rPnt.X(), rPnt.Y());
-        mpHelpLineOverlay = new ImplHelpLineOverlay(*this, aStartPos, 0L, 0, eNewKind);
-        maDragStat.Reset(GetSnapPos(rPnt, 0L));
+        mpHelpLineOverlay = new ImplHelpLineOverlay(*this, aStartPos, nullptr, 0, eNewKind);
+        maDragStat.Reset(GetSnapPos(rPnt, nullptr));
         bRet = true;
     }
 
@@ -596,7 +596,7 @@ void SdrSnapView::MovDragHelpLine(const Point& rPnt)
 {
     if(IsDragHelpLine() && maDragStat.CheckMinMoved(rPnt))
     {
-        Point aPnt(GetSnapPos(rPnt, 0L));
+        Point aPnt(GetSnapPos(rPnt, nullptr));
 
         if(aPnt != maDragStat.GetNow())
         {
@@ -658,7 +658,7 @@ void SdrSnapView::BrkDragHelpLine()
     {
         DBG_ASSERT(mpHelpLineOverlay, "SdrSnapView::EndDragHelpLine: no ImplHelpLineOverlay (!)");
         delete mpHelpLineOverlay;
-        mpHelpLineOverlay = 0L;
+        mpHelpLineOverlay = nullptr;
     }
 }
 

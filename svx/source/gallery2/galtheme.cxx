@@ -149,7 +149,7 @@ bool GalleryTheme::ImplWriteSgaObject( const SgaObject& rObj, size_t nPos, Galle
 
 SgaObject* GalleryTheme::ImplReadSgaObject( GalleryObject* pEntry )
 {
-    SgaObject* pSgaObj = NULL;
+    SgaObject* pSgaObj = nullptr;
 
     if( pEntry )
     {
@@ -226,7 +226,7 @@ const GalleryObject* GalleryTheme::ImplGetGalleryObject( const INetURLObject& rU
     for ( size_t i = 0, n = aObjectList.size(); i < n; ++i )
         if ( aObjectList[ i ]->aURL == rURL )
             return aObjectList[ i ];
-    return NULL;
+    return nullptr;
 }
 
 INetURLObject GalleryTheme::ImplGetURL( const GalleryObject* pObject ) const
@@ -245,7 +245,7 @@ INetURLObject GalleryTheme::ImplCreateUniqueURL( SgaObjKind eObjKind, ConvertDat
     INetURLObject   aInfoFileURL( GetParent()->GetUserURL() );
     INetURLObject   aNewURL;
     sal_uInt32      nNextNumber = 1999;
-    sal_Char const* pExt = NULL;
+    sal_Char const* pExt = nullptr;
     bool            bExists;
 
     aDir.Append( "dragdrop" );
@@ -370,7 +370,7 @@ bool GalleryTheme::InsertObject( const SgaObject& rObj, sal_uIntPtr nInsertPos )
     if (!rObj.IsValid())
         return false;
 
-    GalleryObject* pFoundEntry = NULL;
+    GalleryObject* pFoundEntry = nullptr;
     size_t iFoundPos = 0;
     for (size_t n = aObjectList.size(); iFoundPos < n; ++iFoundPos)
     {
@@ -402,7 +402,7 @@ bool GalleryTheme::InsertObject( const SgaObject& rObj, sal_uIntPtr nInsertPos )
         pFoundEntry->nOffset = aNewEntry.nOffset;
     }
     else
-        ImplWriteSgaObject(rObj, nInsertPos, NULL);
+        ImplWriteSgaObject(rObj, nInsertPos, nullptr);
 
     ImplSetModified(true);
     ImplBroadcast(pFoundEntry? iFoundPos: nInsertPos);
@@ -417,7 +417,7 @@ SgaObject* GalleryTheme::AcquireObject( size_t nPos )
 
 void GalleryTheme::GetPreviewBitmapExAndStrings(sal_uIntPtr nPos, BitmapEx& rBitmapEx, Size& rSize, OUString& rTitle, OUString& rPath) const
 {
-    const GalleryObject* pGalleryObject = nPos < aObjectList.size() ? aObjectList[ nPos ] : NULL;
+    const GalleryObject* pGalleryObject = nPos < aObjectList.size() ? aObjectList[ nPos ] : nullptr;
 
     if(pGalleryObject)
     {
@@ -434,7 +434,7 @@ void GalleryTheme::GetPreviewBitmapExAndStrings(sal_uIntPtr nPos, BitmapEx& rBit
 
 void GalleryTheme::SetPreviewBitmapExAndStrings(sal_uIntPtr nPos, const BitmapEx& rBitmapEx, const Size& rSize, const OUString& rTitle, const OUString& rPath)
 {
-    GalleryObject* pGalleryObject = nPos < aObjectList.size() ? aObjectList[ nPos ] : NULL;
+    GalleryObject* pGalleryObject = nPos < aObjectList.size() ? aObjectList[ nPos ] : nullptr;
 
     if(pGalleryObject)
     {
@@ -456,7 +456,7 @@ void GalleryTheme::ReleaseObject( SgaObject* pObject )
 
 bool GalleryTheme::RemoveObject( size_t nPos )
 {
-    GalleryObject* pEntry = NULL;
+    GalleryObject* pEntry = nullptr;
     if ( nPos < aObjectList.size() )
     {
         GalleryObjectList::iterator it = aObjectList.begin();
@@ -476,13 +476,13 @@ bool GalleryTheme::RemoveObject( size_t nPos )
         Broadcast( GalleryHint( GalleryHintType::CLOSE_OBJECT, GetName(), reinterpret_cast< sal_uIntPtr >( pEntry ) ) );
         Broadcast( GalleryHint( GalleryHintType::OBJECT_REMOVED, GetName(), reinterpret_cast< sal_uIntPtr >( pEntry ) ) );
         delete pEntry;
-        pEntry = NULL;
+        pEntry = nullptr;
 
         ImplSetModified( true );
         ImplBroadcast( nPos );
     }
 
-    return( pEntry != NULL );
+    return( pEntry != nullptr );
 }
 
 bool GalleryTheme::ChangeObjectPos( size_t nOldPos, size_t nNewPos )
@@ -692,7 +692,7 @@ GalleryThemeEntry* GalleryTheme::CreateThemeEntry( const INetURLObject& rURL, bo
 {
     DBG_ASSERT( rURL.GetProtocol() != INetProtocol::NotValid, "invalid URL" );
 
-    GalleryThemeEntry*  pRet = NULL;
+    GalleryThemeEntry*  pRet = nullptr;
 
     if( FileExists( rURL ) )
     {

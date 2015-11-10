@@ -80,7 +80,7 @@ AccessibleShape* CreateSvxAccessibleShape (
             return new AccessibleTableShape( rShapeInfo, rShapeTreeInfo );
 
         default:
-            return NULL;
+            return nullptr;
     }
 }
 

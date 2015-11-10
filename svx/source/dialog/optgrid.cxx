@@ -236,7 +236,7 @@ bool SvxGridTabPage::FillItemSet( SfxItemSet* rCoreSet )
 
 void SvxGridTabPage::Reset( const SfxItemSet* rSet )
 {
-    const SfxPoolItem* pAttr = 0;
+    const SfxPoolItem* pAttr = nullptr;
 
     if( SfxItemState::SET == rSet->GetItemState( SID_ATTR_GRID_OPTIONS , false,
                                     &pAttr ))
@@ -263,7 +263,7 @@ void SvxGridTabPage::Reset( const SfxItemSet* rSet )
 
 void SvxGridTabPage::ActivatePage( const SfxItemSet& rSet )
 {
-    const SfxPoolItem* pAttr = NULL;
+    const SfxPoolItem* pAttr = nullptr;
     if( SfxItemState::SET == rSet.GetItemState( SID_ATTR_GRID_OPTIONS , false,
                                     &pAttr ))
     {

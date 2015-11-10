@@ -117,7 +117,7 @@ SVX_DLLPUBLIC bool GetDraftFillColor(const SfxItemSet& rSet, Color& rCol);
  *
  * @returns true, if the set contains such items
  */
-bool SearchOutlinerItems(const SfxItemSet& rSet, bool bInklDefaults, bool* pbOnlyEE=NULL);
+bool SearchOutlinerItems(const SfxItemSet& rSet, bool bInklDefaults, bool* pbOnlyEE=nullptr);
 
 /**
  * @returns a new WhichTable, which we need to squash at some point with a delete

@@ -265,7 +265,7 @@ protected:
 
 protected:
     // #i71538# make constructors of SdrView sub-components protected to avoid incomplete incarnations which may get casted to SdrView
-    SdrPaintView(SdrModel* pModel1, OutputDevice* pOut = 0L);
+    SdrPaintView(SdrModel* pModel1, OutputDevice* pOut = nullptr);
     virtual ~SdrPaintView();
 
 public:
@@ -337,7 +337,7 @@ public:
 
 
     // Used internally for Draw/Impress/sch/chart2
-    virtual void CompleteRedraw(OutputDevice* pOut, const vcl::Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector = 0);
+    virtual void CompleteRedraw(OutputDevice* pOut, const vcl::Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector = nullptr);
 
     // #i72889# used from CompleteRedraw() implementation internally, added to be able to do a complete redraw in single steps
 
@@ -350,7 +350,7 @@ public:
     // SdrPaintWindow again, if needed.
     // This means: the SdrPaintWindow is no longer safe after this closing call.
     virtual SdrPaintWindow* BeginCompleteRedraw(OutputDevice* pOut);
-    void DoCompleteRedraw(SdrPaintWindow& rPaintWindow, const vcl::Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector = 0);
+    void DoCompleteRedraw(SdrPaintWindow& rPaintWindow, const vcl::Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector = nullptr);
     virtual void EndCompleteRedraw(SdrPaintWindow& rPaintWindow, bool bPaintFormLayer);
 
 
@@ -501,7 +501,7 @@ public:
 
     /// Must be called by the App when scrolling etc. in order for
     /// an active FormularControl to be moved too
-    void VisAreaChanged(const OutputDevice* pOut=NULL);
+    void VisAreaChanged(const OutputDevice* pOut=nullptr);
     void VisAreaChanged(const SdrPageWindow& rWindow);
 
     bool IsPrintPreview() const { return mbPrintPreview; }

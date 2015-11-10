@@ -63,9 +63,9 @@ GraphCtrl::GraphCtrl( vcl::Window* pParent, WinBits nStyle ) :
             bEditMode       ( false ),
             bSdrMode        ( false ),
             bAnim           ( false ),
-            mpAccContext    ( NULL ),
-            pModel          ( NULL ),
-            pView           ( NULL )
+            mpAccContext    ( nullptr ),
+            pModel          ( nullptr ),
+            pView           ( nullptr )
 {
     pUserCall = new GraphCtrlUserCall( *this );
     aUpdateIdle.SetPriority( SchedulerPriority::LOWEST );
@@ -98,11 +98,11 @@ void GraphCtrl::dispose()
         mpAccContext->release();
     }
     delete pView;
-    pView = NULL;
+    pView = nullptr;
     delete pModel;
-    pModel = NULL;
+    pModel = nullptr;
     delete pUserCall;
-    pUserCall = NULL;
+    pUserCall = nullptr;
     Control::dispose();
 }
 
@@ -117,10 +117,10 @@ void GraphCtrl::SetWinStyle( WinBits nWinBits )
     SetMapMode( aMap100 );
 
     delete pView;
-    pView = NULL;
+    pView = nullptr;
 
     delete pModel;
-    pModel = NULL;
+    pModel = nullptr;
 
     if ( bSdrMode )
         InitSdrModel();
@@ -165,7 +165,7 @@ void GraphCtrl::InitSdrModel()
     pView->SetBufferedOverlayAllowed(true);
 
     // Tell the accessibility object about the changes.
-    if (mpAccContext != NULL)
+    if (mpAccContext != nullptr)
         mpAccContext->setModelAndView (pModel, pView);
 }
 
@@ -453,7 +453,7 @@ void GraphCtrl::KeyInput( const KeyEvent& rKEvt )
                 const SdrHdlList& rHdlList = pView->GetHdlList();
                 SdrHdl* pHdl = rHdlList.GetFocusHdl();
 
-                if(0L == pHdl)
+                if(nullptr == pHdl)
                 {
                     // restrict movement to WorkArea
                     const Rectangle& rWorkArea = pView->GetWorkArea();
@@ -504,7 +504,7 @@ void GraphCtrl::KeyInput( const KeyEvent& rKEvt )
                         const SdrDragStat& rDragStat = pView->GetDragStat();
 
                         // start dragging
-                        pView->BegDragObj(aStartPoint, 0, pHdl, 0);
+                        pView->BegDragObj(aStartPoint, nullptr, pHdl, 0);
 
                         if(pView->IsDragObj())
                         {
@@ -564,10 +564,10 @@ void GraphCtrl::KeyInput( const KeyEvent& rKEvt )
                         pView->MarkPoint(*pHdl);
                     }
 
-                    if(0L == rHdlList.GetFocusHdl())
+                    if(nullptr == rHdlList.GetFocusHdl())
                     {
                         // restore point with focus
-                        SdrHdl* pNewOne = 0L;
+                        SdrHdl* pNewOne = nullptr;
 
                         for(size_t a = 0; !pNewOne && a < rHdlList.GetHdlCount(); ++a)
                         {
@@ -692,7 +692,7 @@ void GraphCtrl::MouseButtonUp(const MouseEvent& rMEvt)
 
 SdrObject* GraphCtrl::GetSelectedSdrObject() const
 {
-    SdrObject* pSdrObj = NULL;
+    SdrObject* pSdrObj = nullptr;
 
     if ( bSdrMode )
     {
@@ -752,7 +752,7 @@ IMPL_LINK_TYPED( GraphCtrl, UpdateHdl, Idle*, pTimer, void )
 
 css::uno::Reference< css::accessibility::XAccessible > GraphCtrl::CreateAccessible()
 {
-    if( mpAccContext == NULL )
+    if( mpAccContext == nullptr )
     {
         vcl::Window* pParent = GetParent();
 

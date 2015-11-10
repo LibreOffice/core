@@ -82,13 +82,13 @@ class E3dObjList : public SdrObjList
 
 public:
     TYPEINFO_OVERRIDE();
-    E3dObjList(SdrModel* pNewModel = 0, SdrPage* pNewPage = 0, E3dObjList* pNewUpList = 0);
+    E3dObjList(SdrModel* pNewModel = nullptr, SdrPage* pNewPage = nullptr, E3dObjList* pNewUpList = nullptr);
     SVX_DLLPUBLIC virtual ~E3dObjList();
 
     virtual E3dObjList* Clone() const override;
 
-    virtual void NbcInsertObject(SdrObject* pObj, size_t nPos=SAL_MAX_SIZE, const SdrInsertReason* pReason=NULL) override;
-    virtual void InsertObject(SdrObject* pObj, size_t nPos=SAL_MAX_SIZE, const SdrInsertReason* pReason=NULL) override;
+    virtual void NbcInsertObject(SdrObject* pObj, size_t nPos=SAL_MAX_SIZE, const SdrInsertReason* pReason=nullptr) override;
+    virtual void InsertObject(SdrObject* pObj, size_t nPos=SAL_MAX_SIZE, const SdrInsertReason* pReason=nullptr) override;
     virtual SdrObject* NbcRemoveObject(size_t nObjNum) override;
     virtual SdrObject* RemoveObject(size_t nObjNum) override;
 

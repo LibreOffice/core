@@ -178,7 +178,7 @@ bool TableLayouter::isEdgeVisible( sal_Int32 nEdgeX, sal_Int32 nEdgeY, bool bHor
     if( (nEdgeX >= 0) && (nEdgeX < sal::static_int_cast<sal_Int32>(rMap.size())) &&
         (nEdgeY >= 0) && (nEdgeY < sal::static_int_cast<sal_Int32>(rMap[nEdgeX].size())) )
     {
-        return rMap[nEdgeX][nEdgeY] != 0;
+        return rMap[nEdgeX][nEdgeY] != nullptr;
     }
     else
     {
@@ -193,7 +193,7 @@ bool TableLayouter::isEdgeVisible( sal_Int32 nEdgeX, sal_Int32 nEdgeY, bool bHor
 /** returns the requested borderline in rpBorderLine or a null pointer if there is no border at this edge */
 SvxBorderLine* TableLayouter::getBorderLine( sal_Int32 nEdgeX, sal_Int32 nEdgeY, bool bHorizontal )const
 {
-    SvxBorderLine* pLine = 0;
+    SvxBorderLine* pLine = nullptr;
 
     const BorderLineMap& rMap = bHorizontal ? maHorizontalBorders : maVerticalBorders;
 
@@ -202,7 +202,7 @@ SvxBorderLine* TableLayouter::getBorderLine( sal_Int32 nEdgeX, sal_Int32 nEdgeY,
     {
         pLine = rMap[nEdgeX][nEdgeY];
         if( pLine == &gEmptyBorder )
-            pLine = 0;
+            pLine = nullptr;
     }
     else
     {
@@ -895,7 +895,7 @@ CellRef TableLayouter::getCell( const CellPos& rPos ) const
 
 bool TableLayouter::HasPriority( const SvxBorderLine* pThis, const SvxBorderLine* pOther )
 {
-    if (!pThis || ((pThis == &gEmptyBorder) && (pOther != 0)))
+    if (!pThis || ((pThis == &gEmptyBorder) && (pOther != nullptr)))
         return false;
     if (!pOther || (pOther == &gEmptyBorder))
         return true;
@@ -931,14 +931,14 @@ bool TableLayouter::HasPriority( const SvxBorderLine* pThis, const SvxBorderLine
 
 void TableLayouter::SetBorder( sal_Int32 nCol, sal_Int32 nRow, bool bHorizontal, const SvxBorderLine* pLine )
 {
-    if( pLine == 0 )
+    if( pLine == nullptr )
         pLine = &gEmptyBorder;
 
     SvxBorderLine *pOld = bHorizontal ? maHorizontalBorders[nCol][nRow] : maVerticalBorders[nCol][nRow];
 
     if( HasPriority( pLine, pOld ) )
     {
-        if( (pOld != 0) && (pOld != &gEmptyBorder) )
+        if( (pOld != nullptr) && (pOld != &gEmptyBorder) )
             delete pOld;
 
         SvxBorderLine* pNew = ( pLine != &gEmptyBorder ) ?  new SvxBorderLine(*pLine) : &gEmptyBorder;
@@ -975,7 +975,7 @@ void TableLayouter::ClearBorderLayout(BorderLineMap& rMap)
                 if( pLine != &gEmptyBorder )
                     delete pLine;
 
-                rMap[nCol][nRow] = 0;
+                rMap[nCol][nRow] = nullptr;
             }
         }
     }

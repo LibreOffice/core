@@ -222,7 +222,7 @@ bool NumberingToolBoxControl::IsInImpressDraw()
 void SAL_CALL NumberingToolBoxControl::statusChanged( const css::frame::FeatureStateEvent& rEvent )
     throw ( css::uno::RuntimeException, std::exception )
 {
-    ToolBox* pToolBox = 0;
+    ToolBox* pToolBox = nullptr;
     sal_uInt16 nId = 0;
     if ( getToolboxId( nId, &pToolBox ) )
     {
@@ -238,7 +238,7 @@ void SAL_CALL NumberingToolBoxControl::initialize( const css::uno::Sequence< css
 {
     svt::PopupWindowController::initialize( aArguments );
 
-    ToolBox* pToolBox = 0;
+    ToolBox* pToolBox = nullptr;
     sal_uInt16 nId = 0;
     if ( getToolboxId( nId, &pToolBox ) )
         pToolBox->SetItemBits( nId, pToolBox->GetItemBits( nId ) | ToolBoxItemBits::DROPDOWN );

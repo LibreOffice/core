@@ -226,12 +226,12 @@ VclPtr<vcl::Window> GraphicPropertyPanel::Create (
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* pBindings)
 {
-    if (pParent == NULL)
-        throw lang::IllegalArgumentException("no parent Window given to GraphicPropertyPanel::Create", NULL, 0);
+    if (pParent == nullptr)
+        throw lang::IllegalArgumentException("no parent Window given to GraphicPropertyPanel::Create", nullptr, 0);
     if ( ! rxFrame.is())
-        throw lang::IllegalArgumentException("no XFrame given to GraphicPropertyPanel::Create", NULL, 1);
-    if (pBindings == NULL)
-        throw lang::IllegalArgumentException("no SfxBindings given to GraphicPropertyPanel::Create", NULL, 2);
+        throw lang::IllegalArgumentException("no XFrame given to GraphicPropertyPanel::Create", nullptr, 1);
+    if (pBindings == nullptr)
+        throw lang::IllegalArgumentException("no SfxBindings given to GraphicPropertyPanel::Create", nullptr, 2);
 
     return VclPtr<GraphicPropertyPanel>::Create(
                 pParent,

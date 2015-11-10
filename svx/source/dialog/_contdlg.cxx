@@ -80,7 +80,7 @@ SvxContourDlg::SvxContourDlg(SfxBindings* _pBindings, SfxChildWindow* pCW,
                              vcl::Window* _pParent)
     : SfxFloatingWindow(_pBindings, pCW, _pParent , "FloatingContour",
         "svx/ui/floatingcontour.ui")
-    , pSuperClass(NULL)
+    , pSuperClass(nullptr)
 {
 }
 
@@ -211,8 +211,8 @@ void SvxContourDlg::Update( const Graphic& rGraphic, bool bGraphicLinked,
 SvxSuperContourDlg::SvxSuperContourDlg(SfxBindings *_pBindings, SfxChildWindow *pCW,
                                        vcl::Window* _pParent) :
         SvxContourDlg       ( _pBindings, pCW, _pParent ),
-        pUpdateEditingObject( NULL ),
-        pCheckObj           ( NULL ),
+        pUpdateEditingObject( nullptr ),
+        pCheckObj           ( nullptr ),
         aContourItem        ( SID_CONTOUR_EXEC, *this, *_pBindings ),
         nGrfChanged         ( 0UL ),
         bExecState          ( false ),
@@ -598,7 +598,7 @@ IMPL_LINK_NOARG_TYPED(SvxSuperContourDlg, CreateHdl, Idle *, void)
     const bool      bValid = aWorkRect.Left() != aWorkRect.Right() && aWorkRect.Top() != aWorkRect.Bottom();
 
     EnterWait();
-    SetPolyPolygon( CreateAutoContour( rGraphic, bValid ? &aWorkRect : NULL ) );
+    SetPolyPolygon( CreateAutoContour( rGraphic, bValid ? &aWorkRect : nullptr ) );
     LeaveWait();
 }
 
@@ -606,7 +606,7 @@ IMPL_LINK_TYPED( SvxSuperContourDlg, StateHdl, GraphCtrl*, pWnd, void )
 {
     const SdrObject*    pObj = pWnd->GetSelectedSdrObject();
     const SdrView*      pView = pWnd->GetSdrView();
-    const bool          bPolyEdit = ( pObj != NULL ) && dynamic_cast<const SdrPathObj*>( pObj) !=  nullptr;
+    const bool          bPolyEdit = ( pObj != nullptr ) && dynamic_cast<const SdrPathObj*>( pObj) !=  nullptr;
     const bool          bDrawEnabled = !(bPolyEdit && m_pTbx1->IsItemChecked(mnPolyEditId));
     const bool          bPipette = m_pTbx1->IsItemChecked(mnPipetteId);
     const bool          bWorkplace = m_pTbx1->IsItemChecked(mnWorkSpaceId);

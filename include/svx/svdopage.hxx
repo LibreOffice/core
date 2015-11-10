@@ -42,8 +42,8 @@ protected:
 
 public:
     TYPEINFO_OVERRIDE();
-    SdrPageObj(SdrPage* pNewPage = 0L);
-    SdrPageObj(const Rectangle& rRect, SdrPage* pNewPage = 0L);
+    SdrPageObj(SdrPage* pNewPage = nullptr);
+    SdrPageObj(const Rectangle& rRect, SdrPage* pNewPage = nullptr);
     virtual ~SdrPageObj();
 
     SdrPage* GetReferencedPage() const { return mpShownPage;}

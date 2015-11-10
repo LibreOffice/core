@@ -228,7 +228,7 @@ bool E3dObject::IsBreakObjPossible()
 
 SdrAttrObj* E3dObject::GetBreakObj()
 {
-    return 0L;
+    return nullptr;
 }
 
 // SetRectsDirty must be done through the local SdrSubList
@@ -503,7 +503,7 @@ void E3dObject::Remove3DObj(E3dObject* p3DObj)
 
 E3dObject* E3dObject::GetParentObj() const
 {
-    E3dObject* pRetval = NULL;
+    E3dObject* pRetval = nullptr;
 
     if(GetObjList()
         && GetObjList()->GetOwnerObj()
@@ -518,7 +518,7 @@ E3dScene* E3dObject::GetScene() const
 {
     if(GetParentObj())
         return GetParentObj()->GetScene();
-    return NULL;
+    return nullptr;
 }
 
 // Calculate enclosed volume, including all child objects
@@ -659,7 +659,7 @@ void E3dObject::SetTransform(const basegfx::B3DHomMatrix& rMatrix)
         NbcSetTransform(rMatrix);
         SetChanged();
         BroadcastObjectChange();
-        if (pUserCall != NULL) pUserCall->Changed(*this, SDRUSERCALL_RESIZE, Rectangle());
+        if (pUserCall != nullptr) pUserCall->Changed(*this, SDRUSERCALL_RESIZE, Rectangle());
     }
 }
 

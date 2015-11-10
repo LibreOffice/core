@@ -40,7 +40,7 @@ void TextUnderlinePopup::Rearrange (FontUnderline eLine)
     ProvideContainerAndControl();
 
     TextUnderlineControl* pControl = dynamic_cast<TextUnderlineControl*>(mxControl.get());
-    if (pControl != NULL)
+    if (pControl != nullptr)
         pControl->Rearrange(eLine);
 }
 

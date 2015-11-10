@@ -78,7 +78,7 @@ namespace sdr
             }
             else
             {
-                return 0L;
+                return nullptr;
             }
         }
 
@@ -100,7 +100,7 @@ namespace sdr
             for(;;)
             {
                 BaseEvent* pEvent = GetEvent();
-                if(pEvent == NULL)
+                if(pEvent == nullptr)
                     break;
                 pEvent->ExecuteEvent();
                 delete pEvent;

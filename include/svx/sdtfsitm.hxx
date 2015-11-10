@@ -47,7 +47,7 @@ public:
     TYPEINFO_OVERRIDE();
     SdrTextFitToSizeTypeItem(SdrFitToSizeType eFit=SDRTEXTFIT_NONE): SfxEnumItem(SDRATTR_TEXT_FITTOSIZE,(sal_uInt16)eFit) {}
     SdrTextFitToSizeTypeItem(SvStream& rIn)                        : SfxEnumItem(SDRATTR_TEXT_FITTOSIZE,rIn)  {}
-    virtual SfxPoolItem*     Clone(SfxItemPool* pPool=NULL) const override;
+    virtual SfxPoolItem*     Clone(SfxItemPool* pPool=nullptr) const override;
     virtual SfxPoolItem*     Create(SvStream& rIn, sal_uInt16 nVer) const override;
     virtual sal_uInt16       GetValueCount() const override;
             SdrFitToSizeType GetValue() const      { return (SdrFitToSizeType)SfxEnumItem::GetValue(); }
@@ -56,7 +56,7 @@ public:
     virtual bool             PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
     virtual OUString         GetValueTextByPos(sal_uInt16 nPos) const override;
-    virtual bool GetPresentation(SfxItemPresentation ePres, SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric, OUString& rText, const IntlWrapper * = 0) const override;
+    virtual bool GetPresentation(SfxItemPresentation ePres, SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric, OUString& rText, const IntlWrapper * = nullptr) const override;
     virtual bool             HasBoolValue() const override;
     virtual bool             GetBoolValue() const override;
     virtual void             SetBoolValue(bool bVal) override;

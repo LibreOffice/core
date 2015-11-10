@@ -117,7 +117,7 @@ E3dLatheObj* E3dLatheObj::Clone() const
 
 SdrObject *E3dLatheObj::DoConvertToPolyObj(bool /*bBezier*/, bool /*bAddText*/) const
 {
-    return NULL;
+    return nullptr;
 }
 
 // Set Local parameters set to re-create geometry

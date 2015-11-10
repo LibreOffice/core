@@ -84,7 +84,7 @@ SdrObjList::SdrObjList(SdrModel* pNewModel, SdrPage* pNewPage, SdrObjList* pNewU
     pUpList=pNewUpList;
     bObjOrdNumsDirty=false;
     bRectsDirty=false;
-    pOwnerObj=NULL;
+    pOwnerObj=nullptr;
     eListKind=SDROBJLIST_UNKNOWN;
 }
 
@@ -94,12 +94,12 @@ SdrObjList::SdrObjList():
     mbIsNavigationOrderDirty(false)
 {
     maList.reserve(InitialObjectContainerCapacity);
-    pModel=NULL;
-    pPage=NULL;
-    pUpList=NULL;
+    pModel=nullptr;
+    pPage=nullptr;
+    pUpList=nullptr;
     bObjOrdNumsDirty=false;
     bRectsDirty=false;
-    pOwnerObj=NULL;
+    pOwnerObj=nullptr;
     eListKind=SDROBJLIST_UNKNOWN;
 }
 
@@ -109,7 +109,7 @@ SdrObjList::~SdrObjList()
     // To avoid that the Clear() method will broadcast changes when in destruction
     // which would call virtual methos (not allowed in destructor), the model is set
     // to NULL here.
-    pModel = 0L;
+    pModel = nullptr;
 
     Clear(); // delete contents of container
 }
@@ -143,7 +143,7 @@ void SdrObjList::CopyObjects(const SdrObjList& rSrcList)
 
         SdrObject* pDO = pSO->Clone();
 
-        if (pDO!=NULL) {
+        if (pDO!=nullptr) {
             pDO->SetModel(pModel);
             pDO->SetPage(pPage);
             NbcInsertObject(pDO, SAL_MAX_SIZE, &aReason);
@@ -164,28 +164,28 @@ void SdrObjList::CopyObjects(const SdrObjList& rSrcList)
         for (size_t no=0; no<nCount; ++no) {
             const SdrObject* pSrcOb=rSrcList.GetObj(no);
             const SdrEdgeObj* pSrcEdge=dynamic_cast<const SdrEdgeObj*>( pSrcOb );
-            if (pSrcEdge!=NULL) {
+            if (pSrcEdge!=nullptr) {
                 SdrObject* pSrcNode1=pSrcEdge->GetConnectedNode(true);
                 SdrObject* pSrcNode2=pSrcEdge->GetConnectedNode(false);
-                if (pSrcNode1!=NULL && pSrcNode1->GetObjList()!=pSrcEdge->GetObjList()) pSrcNode1=NULL; // can't do this
-                if (pSrcNode2!=NULL && pSrcNode2->GetObjList()!=pSrcEdge->GetObjList()) pSrcNode2=NULL; // across all lists (yet)
-                if (pSrcNode1!=NULL || pSrcNode2!=NULL) {
+                if (pSrcNode1!=nullptr && pSrcNode1->GetObjList()!=pSrcEdge->GetObjList()) pSrcNode1=nullptr; // can't do this
+                if (pSrcNode2!=nullptr && pSrcNode2->GetObjList()!=pSrcEdge->GetObjList()) pSrcNode2=nullptr; // across all lists (yet)
+                if (pSrcNode1!=nullptr || pSrcNode2!=nullptr) {
                     SdrObject* pEdgeObjTmp=GetObj(no);
                     SdrEdgeObj* pDstEdge=dynamic_cast<SdrEdgeObj*>( pEdgeObjTmp );
-                    if (pDstEdge!=NULL) {
-                        if (pSrcNode1!=NULL) {
+                    if (pDstEdge!=nullptr) {
+                        if (pSrcNode1!=nullptr) {
                             sal_uIntPtr nDstNode1=pSrcNode1->GetOrdNum();
                             SdrObject* pDstNode1=GetObj(nDstNode1);
-                            if (pDstNode1!=NULL) { // else we get an error!
+                            if (pDstNode1!=nullptr) { // else we get an error!
                                 pDstEdge->ConnectToNode(true,pDstNode1);
                             } else {
                                 OSL_FAIL("SdrObjList::operator=(): pDstNode1==NULL!");
                             }
                         }
-                        if (pSrcNode2!=NULL) {
+                        if (pSrcNode2!=nullptr) {
                             sal_uIntPtr nDstNode2=pSrcNode2->GetOrdNum();
                             SdrObject* pDstNode2=GetObj(nDstNode2);
-                            if (pDstNode2!=NULL) { // else the node was probably not selected
+                            if (pDstNode2!=nullptr) { // else the node was probably not selected
                                 pDstEdge->ConnectToNode(false,pDstNode2);
                             } else {
                                 OSL_FAIL("SdrObjList::operator=(): pDstNode2==NULL!");
@@ -317,7 +317,7 @@ void SdrObjList::RecalcRects()
 void SdrObjList::SetRectsDirty()
 {
     bRectsDirty=true;
-    if (pUpList!=NULL) pUpList->SetRectsDirty();
+    if (pUpList!=nullptr) pUpList->SetRectsDirty();
 }
 
 void SdrObjList::impChildInserted(SdrObject& rChild)
@@ -332,8 +332,8 @@ void SdrObjList::impChildInserted(SdrObject& rChild)
 
 void SdrObjList::NbcInsertObject(SdrObject* pObj, size_t nPos, const SdrInsertReason* /*pReason*/)
 {
-    DBG_ASSERT(pObj!=NULL,"SdrObjList::NbcInsertObject(NULL)");
-    if (pObj!=NULL) {
+    DBG_ASSERT(pObj!=nullptr,"SdrObjList::NbcInsertObject(NULL)");
+    if (pObj!=nullptr) {
         DBG_ASSERT(!pObj->IsInserted(),"ZObjekt already has the status Inserted.");
         const size_t nCount = GetObjCount();
         if (nPos>nCount) nPos=nCount;
@@ -358,7 +358,7 @@ void SdrObjList::NbcInsertObject(SdrObject* pObj, size_t nPos, const SdrInsertRe
 
 void SdrObjList::InsertObject(SdrObject* pObj, size_t nPos, const SdrInsertReason* pReason)
 {
-    DBG_ASSERT(pObj!=NULL,"SdrObjList::InsertObject(NULL)");
+    DBG_ASSERT(pObj!=nullptr,"SdrObjList::InsertObject(NULL)");
 
     if(pObj)
     {
@@ -403,22 +403,22 @@ SdrObject* SdrObjList::NbcRemoveObject(size_t nObjNum)
     if (nObjNum >= maList.size())
     {
         OSL_ASSERT(nObjNum<maList.size());
-        return NULL;
+        return nullptr;
     }
 
     const size_t nCount = GetObjCount();
     SdrObject* pObj=maList[nObjNum];
     RemoveObjectFromContainer(nObjNum);
 
-    DBG_ASSERT(pObj!=NULL,"Could not find object to remove.");
-    if (pObj!=NULL) {
+    DBG_ASSERT(pObj!=nullptr,"Could not find object to remove.");
+    if (pObj!=nullptr) {
         // flushViewObjectContacts() clears the VOC's and those invalidate
         pObj->GetViewContact().flushViewObjectContacts();
 
         DBG_ASSERT(pObj->IsInserted(),"ZObjekt does not have the status Inserted.");
         pObj->SetInserted(false); // Ruft u.a. den UserCall
-        pObj->SetObjList(NULL);
-        pObj->SetPage(NULL);
+        pObj->SetObjList(nullptr);
+        pObj->SetPage(nullptr);
         if (!bObjOrdNumsDirty) { // optimizing for the case that the last object has to be removed
             if (nObjNum+1!=nCount) {
                 bObjOrdNumsDirty=true;
@@ -434,23 +434,23 @@ SdrObject* SdrObjList::RemoveObject(size_t nObjNum)
     if (nObjNum >= maList.size())
     {
         OSL_ASSERT(nObjNum<maList.size());
-        return NULL;
+        return nullptr;
     }
 
     const size_t nCount = GetObjCount();
     SdrObject* pObj=maList[nObjNum];
     RemoveObjectFromContainer(nObjNum);
 
-    DBG_ASSERT(pObj!=NULL,"Object to remove not found.");
+    DBG_ASSERT(pObj!=nullptr,"Object to remove not found.");
     if(pObj)
     {
         // flushViewObjectContacts() clears the VOC's and those invalidate
         pObj->GetViewContact().flushViewObjectContacts();
 
         DBG_ASSERT(pObj->IsInserted(),"ZObjekt does not have the status Inserted.");
-        if (pModel!=NULL) {
+        if (pModel!=nullptr) {
             // TODO: We need a different broadcast here.
-            if (pObj->GetPage()!=NULL) {
+            if (pObj->GetPage()!=nullptr) {
                 SdrHint aHint(*pObj);
                 aHint.SetKind(HINT_OBJREMOVED);
                 pModel->Broadcast(aHint);
@@ -458,8 +458,8 @@ SdrObject* SdrObjList::RemoveObject(size_t nObjNum)
             pModel->SetChanged();
         }
         pObj->SetInserted(false); // calls, among other things, the UserCall
-        pObj->SetObjList(NULL);
-        pObj->SetPage(NULL);
+        pObj->SetObjList(nullptr);
+        pObj->SetPage(nullptr);
         if (!bObjOrdNumsDirty) { // optimization for the case that the last object is removed
             if (nObjNum+1!=nCount) {
                 bObjOrdNumsDirty=true;
@@ -479,20 +479,20 @@ SdrObject* SdrObjList::RemoveObject(size_t nObjNum)
 
 SdrObject* SdrObjList::NbcReplaceObject(SdrObject* pNewObj, size_t nObjNum)
 {
-    if (nObjNum >= maList.size() || pNewObj == NULL)
+    if (nObjNum >= maList.size() || pNewObj == nullptr)
     {
         OSL_ASSERT(nObjNum<maList.size());
-        OSL_ASSERT(pNewObj!=NULL);
-        return NULL;
+        OSL_ASSERT(pNewObj!=nullptr);
+        return nullptr;
     }
 
     SdrObject* pObj=maList[nObjNum];
-    DBG_ASSERT(pObj!=NULL,"SdrObjList::ReplaceObject: Could not find object to remove.");
-    if (pObj!=NULL) {
+    DBG_ASSERT(pObj!=nullptr,"SdrObjList::ReplaceObject: Could not find object to remove.");
+    if (pObj!=nullptr) {
         DBG_ASSERT(pObj->IsInserted(),"SdrObjList::ReplaceObject: ZObjekt does not have status Inserted.");
         pObj->SetInserted(false);
-        pObj->SetObjList(NULL);
-        pObj->SetPage(NULL);
+        pObj->SetObjList(nullptr);
+        pObj->SetPage(nullptr);
         ReplaceObjectInContainer(*pNewObj,nObjNum);
 
         // flushViewObjectContacts() clears the VOC's and those invalidate
@@ -517,29 +517,29 @@ SdrObject* SdrObjList::ReplaceObject(SdrObject* pNewObj, size_t nObjNum)
     if (nObjNum >= maList.size())
     {
         OSL_ASSERT(nObjNum<maList.size());
-        return NULL;
+        return nullptr;
     }
-    if (pNewObj == NULL)
+    if (pNewObj == nullptr)
     {
-        OSL_ASSERT(pNewObj!=NULL);
-        return NULL;
+        OSL_ASSERT(pNewObj!=nullptr);
+        return nullptr;
     }
 
     SdrObject* pObj=maList[nObjNum];
-    DBG_ASSERT(pObj!=NULL,"SdrObjList::ReplaceObject: Could not find object to remove.");
-    if (pObj!=NULL) {
+    DBG_ASSERT(pObj!=nullptr,"SdrObjList::ReplaceObject: Could not find object to remove.");
+    if (pObj!=nullptr) {
         DBG_ASSERT(pObj->IsInserted(),"SdrObjList::ReplaceObject: ZObjekt does not have status Inserted.");
-        if (pModel!=NULL) {
+        if (pModel!=nullptr) {
             // TODO: We need a different broadcast here.
-            if (pObj->GetPage()!=NULL) {
+            if (pObj->GetPage()!=nullptr) {
                 SdrHint aHint(*pObj);
                 aHint.SetKind(HINT_OBJREMOVED);
                 pModel->Broadcast(aHint);
             }
         }
         pObj->SetInserted(false);
-        pObj->SetObjList(NULL);
-        pObj->SetPage(NULL);
+        pObj->SetObjList(nullptr);
+        pObj->SetPage(nullptr);
         ReplaceObjectInContainer(*pNewObj,nObjNum);
 
         // flushViewObjectContacts() clears the VOC's and those invalidate
@@ -554,9 +554,9 @@ SdrObject* SdrObjList::ReplaceObject(SdrObject* pNewObj, size_t nObjNum)
         impChildInserted(*pNewObj);
 
         pNewObj->SetInserted(true);
-        if (pModel!=NULL) {
+        if (pModel!=nullptr) {
             // TODO: We need a different broadcast here.
-            if (pNewObj->GetPage()!=NULL) {
+            if (pNewObj->GetPage()!=nullptr) {
                 SdrHint aHint(*pNewObj);
                 aHint.SetKind(HINT_OBJINSERTED);
                 pModel->Broadcast(aHint);
@@ -574,13 +574,13 @@ SdrObject* SdrObjList::SetObjectOrdNum(size_t nOldObjNum, size_t nNewObjNum)
     {
         OSL_ASSERT(nOldObjNum<maList.size());
         OSL_ASSERT(nNewObjNum<maList.size());
-        return NULL;
+        return nullptr;
     }
 
     SdrObject* pObj=maList[nOldObjNum];
     if (nOldObjNum==nNewObjNum) return pObj;
-    DBG_ASSERT(pObj!=NULL,"SdrObjList::SetObjectOrdNum: Object not found.");
-    if (pObj!=NULL) {
+    DBG_ASSERT(pObj!=nullptr,"SdrObjList::SetObjectOrdNum: Object not found.");
+    if (pObj!=nullptr) {
         DBG_ASSERT(pObj->IsInserted(),"SdrObjList::SetObjectOrdNum: ZObjekt does not have status Inserted.");
         RemoveObjectFromContainer(nOldObjNum);
         InsertObjectIntoContainer(*pObj,nNewObjNum);
@@ -591,10 +591,10 @@ SdrObject* SdrObjList::SetObjectOrdNum(size_t nOldObjNum, size_t nNewObjNum)
 
         pObj->SetOrdNum(nNewObjNum);
         bObjOrdNumsDirty=true;
-        if (pModel!=NULL)
+        if (pModel!=nullptr)
         {
             // TODO: We need a different broadcast here.
-            if (pObj->GetPage()!=NULL) pModel->Broadcast(SdrHint(*pObj));
+            if (pObj->GetPage()!=nullptr) pModel->Broadcast(SdrHint(*pObj));
             pModel->SetChanged();
         }
     }
@@ -687,7 +687,7 @@ SdrObject* SdrObjList::GetObj(size_t nNum) const
     if (nNum >= maList.size())
     {
         OSL_ASSERT(nNum<maList.size());
-        return NULL;
+        return nullptr;
     }
     else
         return maList[nNum];
@@ -699,7 +699,7 @@ SdrObject* SdrObjList::GetObj(size_t nNum) const
 bool SdrObjList::IsReadOnly() const
 {
     bool bRet = false;
-    if (pPage!=NULL && pPage!=this) bRet=pPage->IsReadOnly();
+    if (pPage!=nullptr && pPage!=this) bRet=pPage->IsReadOnly();
     return bRet;
 }
 
@@ -709,7 +709,7 @@ size_t SdrObjList::CountAllObjects() const
     size_t nCnt=nCount;
     for (size_t nNum=0; nNum<nCount; nNum++) {
         SdrObjList* pSubOL=GetObj(nNum)->GetSubList();
-        if (pSubOL!=NULL) {
+        if (pSubOL!=nullptr) {
             nCnt+=pSubOL->CountAllObjects();
         }
     }
@@ -765,7 +765,7 @@ void SdrObjList::UnGroupObj( size_t nObjNum )
 
 bool SdrObjList::HasObjectNavigationOrder() const
 {
-    return mxNavigationOrder.get() != NULL;
+    return mxNavigationOrder.get() != nullptr;
 }
 
 
@@ -778,7 +778,7 @@ void SdrObjList::SetObjectNavigationPosition (
     // When the navigation order container has not yet been created then
     // create one now.  It is initialized with the z-order taken from
     // maList.
-    if (mxNavigationOrder.get() == NULL)
+    if (mxNavigationOrder.get() == nullptr)
     {
         mxNavigationOrder.reset(new WeakSdrObjectContainerType(maList.size()));
         ::std::copy(
@@ -786,7 +786,7 @@ void SdrObjList::SetObjectNavigationPosition (
             maList.end(),
             mxNavigationOrder->begin());
     }
-    OSL_ASSERT(mxNavigationOrder.get()!=NULL);
+    OSL_ASSERT(mxNavigationOrder.get()!=nullptr);
     OSL_ASSERT( mxNavigationOrder->size() == maList.size());
 
     SdrObjectWeakRef aReference (&rObject);
@@ -819,7 +819,7 @@ void SdrObjList::SetObjectNavigationPosition (
         mbIsNavigationOrderDirty = true;
 
         // The navigation order is written out to file so mark the model as modified.
-        if (pModel != NULL)
+        if (pModel != nullptr)
             pModel->SetChanged();
     }
 }
@@ -851,7 +851,7 @@ SdrObject* SdrObjList::GetObjectForNavigationPosition (const sal_uInt32 nNavigat
         else
             return maList[nNavigationPosition];
     }
-    return NULL;
+    return nullptr;
 }
 
 
@@ -870,7 +870,7 @@ bool SdrObjList::RecalcNavigationPositions()
 {
     if (mbIsNavigationOrderDirty)
     {
-        if (mxNavigationOrder.get() != NULL)
+        if (mxNavigationOrder.get() != nullptr)
         {
             mbIsNavigationOrderDirty = false;
 
@@ -882,7 +882,7 @@ bool SdrObjList::RecalcNavigationPositions()
         }
     }
 
-    return mxNavigationOrder.get() != NULL;
+    return mxNavigationOrder.get() != nullptr;
 }
 
 
@@ -896,14 +896,14 @@ void SdrObjList::SetNavigationOrder (const uno::Reference<container::XIndexAcces
         if ((sal_uInt32)nCount != maList.size())
             return;
 
-        if (mxNavigationOrder.get() == NULL)
+        if (mxNavigationOrder.get() == nullptr)
             mxNavigationOrder.reset(new WeakSdrObjectContainerType(nCount));
 
         for (sal_Int32 nIndex=0; nIndex<nCount; ++nIndex)
         {
             uno::Reference<uno::XInterface> xShape (rxOrder->getByIndex(nIndex), uno::UNO_QUERY);
             SdrObject* pObject = SdrObject::getSdrObjectFromXShape(xShape);
-            if (pObject == NULL)
+            if (pObject == nullptr)
                 break;
             (*mxNavigationOrder)[nIndex] = pObject;
         }
@@ -1080,8 +1080,8 @@ void SdrPageProperties::ImpRemoveStyleSheet()
     if(mpStyleSheet)
     {
         EndListening(*mpStyleSheet);
-        mpProperties->SetParent(0);
-        mpStyleSheet = 0;
+        mpProperties->SetParent(nullptr);
+        mpStyleSheet = nullptr;
     }
 }
 
@@ -1112,7 +1112,7 @@ void ImpPageChange(SdrPage& rSdrPage)
 SdrPageProperties::SdrPageProperties(SdrPage& rSdrPage)
 :   SfxListener(),
     mpSdrPage(&rSdrPage),
-    mpStyleSheet(0),
+    mpStyleSheet(nullptr),
     mpProperties(new SfxItemSet(mpSdrPage->GetModel()->GetItemPool(), XATTR_FILL_FIRST, XATTR_FILL_LAST))
 {
     if(!rSdrPage.IsMasterPage())
@@ -1198,7 +1198,7 @@ void SdrPageProperties::SetStyleSheet(SfxStyleSheet* pStyleSheet)
 TYPEINIT1(SdrPage,SdrObjList);
 SdrPage::SdrPage(SdrModel& rNewModel, bool bMasterPage)
 :   SdrObjList(&rNewModel, this),
-    mpViewContact(0L),
+    mpViewContact(nullptr),
     nWdt(10L),
     nHgt(10L),
     nBordLft(0L),
@@ -1206,8 +1206,8 @@ SdrPage::SdrPage(SdrModel& rNewModel, bool bMasterPage)
     nBordRgt(0L),
     nBordLwr(0L),
     pLayerAdmin(new SdrLayerAdmin(&rNewModel.GetLayerAdmin())),
-    mpSdrPageProperties(0),
-    mpMasterPageDescriptor(0L),
+    mpSdrPageProperties(nullptr),
+    mpMasterPageDescriptor(nullptr),
     nPageNum(0L),
     mbMaster(bMasterPage),
     mbInserted(false),
@@ -1223,7 +1223,7 @@ SdrPage::SdrPage(SdrModel& rNewModel, bool bMasterPage)
 SdrPage::SdrPage(const SdrPage& rSrcPage)
 :   SdrObjList(rSrcPage.pModel, this),
     tools::WeakBase< SdrPage >(),
-    mpViewContact(0L),
+    mpViewContact(nullptr),
     nWdt(rSrcPage.nWdt),
     nHgt(rSrcPage.nHgt),
     nBordLft(rSrcPage.nBordLft),
@@ -1231,8 +1231,8 @@ SdrPage::SdrPage(const SdrPage& rSrcPage)
     nBordRgt(rSrcPage.nBordRgt),
     nBordLwr(rSrcPage.nBordLwr),
     pLayerAdmin(new SdrLayerAdmin(rSrcPage.pModel->GetLayerAdmin())),
-    mpSdrPageProperties(0),
-    mpMasterPageDescriptor(0L),
+    mpSdrPageProperties(nullptr),
+    mpMasterPageDescriptor(nullptr),
     nPageNum(rSrcPage.nPageNum),
     mbMaster(rSrcPage.mbMaster),
     mbInserted(false),
@@ -1278,12 +1278,12 @@ SdrPage::~SdrPage()
     if(mpViewContact)
     {
         delete mpViewContact;
-        mpViewContact = 0L;
+        mpViewContact = nullptr;
     }
 
     {
         delete mpSdrPageProperties;
-        mpSdrPageProperties = 0;
+        mpSdrPageProperties = nullptr;
     }
 
 }
@@ -1347,12 +1347,12 @@ void SdrPage::lateInit(const SdrPage& rSrcPage, SdrModel* const pNewModel)
 
 SdrPage* SdrPage::Clone() const
 {
-    return Clone(NULL);
+    return Clone(nullptr);
 }
 
 SdrPage* SdrPage::Clone(SdrModel* pNewModel) const
 {
-    if (pNewModel==NULL) pNewModel=pModel;
+    if (pNewModel==nullptr) pNewModel=pModel;
     SdrPage* pPage2=new SdrPage(*pNewModel);
     pPage2->lateInit(*this);
     return pPage2;
@@ -1507,10 +1507,10 @@ sal_Int32 SdrPage::GetLwrBorder() const
 
 void SdrPage::impl_setModelForLayerAdmin(SdrModel* const pNewModel)
 {
-    if (pNewModel!=NULL) {
+    if (pNewModel!=nullptr) {
         pLayerAdmin->SetParent(&pNewModel->GetLayerAdmin());
     } else {
-        pLayerAdmin->SetParent(NULL);
+        pLayerAdmin->SetParent(nullptr);
     }
     pLayerAdmin->SetModel(pNewModel);
 }
@@ -1618,31 +1618,31 @@ void SdrPage::TRG_ClearMasterPage()
         mpMasterPageDescriptor->GetUsedPage().GetViewContact().flushViewObjectContacts();
 
         delete mpMasterPageDescriptor;
-        mpMasterPageDescriptor = 0L;
+        mpMasterPageDescriptor = nullptr;
     }
 }
 
 SdrPage& SdrPage::TRG_GetMasterPage() const
 {
-    DBG_ASSERT(mpMasterPageDescriptor != 0L, "TRG_GetMasterPage(): No MasterPage available. Use TRG_HasMasterPage() before access (!)");
+    DBG_ASSERT(mpMasterPageDescriptor != nullptr, "TRG_GetMasterPage(): No MasterPage available. Use TRG_HasMasterPage() before access (!)");
     return mpMasterPageDescriptor->GetUsedPage();
 }
 
 const SetOfByte& SdrPage::TRG_GetMasterPageVisibleLayers() const
 {
-    DBG_ASSERT(mpMasterPageDescriptor != 0L, "TRG_GetMasterPageVisibleLayers(): No MasterPage available. Use TRG_HasMasterPage() before access (!)");
+    DBG_ASSERT(mpMasterPageDescriptor != nullptr, "TRG_GetMasterPageVisibleLayers(): No MasterPage available. Use TRG_HasMasterPage() before access (!)");
     return mpMasterPageDescriptor->GetVisibleLayers();
 }
 
 void SdrPage::TRG_SetMasterPageVisibleLayers(const SetOfByte& rNew)
 {
-    DBG_ASSERT(mpMasterPageDescriptor != 0L, "TRG_SetMasterPageVisibleLayers(): No MasterPage available. Use TRG_HasMasterPage() before access (!)");
+    DBG_ASSERT(mpMasterPageDescriptor != nullptr, "TRG_SetMasterPageVisibleLayers(): No MasterPage available. Use TRG_HasMasterPage() before access (!)");
     mpMasterPageDescriptor->SetVisibleLayers(rNew);
 }
 
 sdr::contact::ViewContact& SdrPage::TRG_GetMasterPageDescriptorViewContact() const
 {
-    DBG_ASSERT(mpMasterPageDescriptor != 0L, "TRG_GetMasterPageDescriptorViewContact(): No MasterPage available. Use TRG_HasMasterPage() before access (!)");
+    DBG_ASSERT(mpMasterPageDescriptor != nullptr, "TRG_GetMasterPageDescriptorViewContact(): No MasterPage available. Use TRG_HasMasterPage() before access (!)");
     return mpMasterPageDescriptor->GetViewContact();
 }
 
@@ -1660,7 +1660,7 @@ void SdrPage::TRG_ImpMasterPageRemoved(const SdrPage& rRemovedPage)
 
 const SdrPageGridFrameList* SdrPage::GetGridFrameList(const SdrPageView* /*pPV*/, const Rectangle* /*pRect*/) const
 {
-    return NULL;
+    return nullptr;
 }
 
 OUString SdrPage::GetLayoutName() const
@@ -1754,7 +1754,7 @@ Color SdrPage::GetPageBackgroundColor( SdrPageView* pView, bool bScreenDisplay )
 Color SdrPage::GetPageBackgroundColor() const
 // #i75566# GetBackgroundColor -> GetPageBackgroundColor
 {
-    return GetPageBackgroundColor( NULL );
+    return GetPageBackgroundColor( nullptr );
 }
 
 /** this method returns true if the object from the ViewObjectContact should

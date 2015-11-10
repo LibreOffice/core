@@ -126,7 +126,7 @@ void SAL_CALL Svx3DSceneObject::add( const Reference< drawing::XShape >& xShape 
 
     SvxShape* pShape = SvxShape::getImplementation( xShape );
 
-    if(!mpObj.is() || !mxPage.is() || pShape == NULL || NULL != pShape->GetSdrObject() )
+    if(!mpObj.is() || !mxPage.is() || pShape == nullptr || nullptr != pShape->GetSdrObject() )
         throw uno::RuntimeException();
 
     SdrObject* pSdrShape = mxPage->_CreateSdrObject( xShape );
@@ -155,11 +155,11 @@ void SAL_CALL Svx3DSceneObject::remove( const Reference< drawing::XShape >& xSha
 
     SvxShape* pShape = SvxShape::getImplementation( xShape );
 
-    if(!mpObj.is() || pShape == NULL)
+    if(!mpObj.is() || pShape == nullptr)
         throw uno::RuntimeException();
 
     SdrObject* pSdrShape = pShape->GetSdrObject();
-    if(pSdrShape == NULL || pSdrShape->GetObjList()->GetOwnerObj() != mpObj.get())
+    if(pSdrShape == nullptr || pSdrShape->GetObjList()->GetOwnerObj() != mpObj.get())
     {
         throw uno::RuntimeException();
     }
@@ -208,14 +208,14 @@ uno::Any SAL_CALL Svx3DSceneObject::getByIndex( sal_Int32 Index )
 {
     SolarMutexGuard aGuard;
 
-    if( !mpObj.is() || mpObj->GetSubList() == NULL )
+    if( !mpObj.is() || mpObj->GetSubList() == nullptr )
         throw uno::RuntimeException();
 
     if( Index<0 || mpObj->GetSubList()->GetObjCount() <= static_cast<size_t>(Index) )
         throw lang::IndexOutOfBoundsException();
 
     SdrObject* pDestObj = mpObj->GetSubList()->GetObj( Index );
-    if(pDestObj == NULL)
+    if(pDestObj == nullptr)
         throw lang::IndexOutOfBoundsException();
 
     Reference< drawing::XShape > xShape( pDestObj->getUnoShape(), uno::UNO_QUERY );

@@ -251,9 +251,9 @@ void CursorWrapper::ImplConstruct(const Reference< css::sdbc::XResultSet>& _rxCu
 
     if ( !m_xMoveOperations.is() || !m_xBookmarkOperations.is() || !m_xColumnsSupplier.is() || !m_xPropertyAccess.is() )
     {   // all or nothing !!
-        m_xMoveOperations = NULL;
-        m_xBookmarkOperations = NULL;
-        m_xColumnsSupplier = NULL;
+        m_xMoveOperations = nullptr;
+        m_xBookmarkOperations = nullptr;
+        m_xColumnsSupplier = nullptr;
     }
     else
         m_xGeneric = m_xMoveOperations.get();
@@ -267,9 +267,9 @@ const CursorWrapper& CursorWrapper::operator=(const Reference< css::sdbc::XRowSe
     m_xColumnsSupplier.set(_rxCursor, UNO_QUERY);
     if (!m_xMoveOperations.is() || !m_xBookmarkOperations.is() || !m_xColumnsSupplier.is())
     {   // all or nothing !!
-        m_xMoveOperations = NULL;
-        m_xBookmarkOperations = NULL;
-        m_xColumnsSupplier = NULL;
+        m_xMoveOperations = nullptr;
+        m_xBookmarkOperations = nullptr;
+        m_xColumnsSupplier = nullptr;
     }
     return *this;
 }
@@ -277,7 +277,7 @@ const CursorWrapper& CursorWrapper::operator=(const Reference< css::sdbc::XRowSe
 
 FmXDisposeListener::~FmXDisposeListener()
 {
-    setAdapter(NULL);
+    setAdapter(nullptr);
 }
 
 
@@ -287,7 +287,7 @@ void FmXDisposeListener::setAdapter(FmXDisposeMultiplexer* pAdapter)
     {
         ::osl::MutexGuard aGuard(m_rMutex);
         m_pAdapter->release();
-        m_pAdapter = NULL;
+        m_pAdapter = nullptr;
     }
 
     if (pAdapter)
@@ -325,10 +325,10 @@ void FmXDisposeMultiplexer::disposing(const css::lang::EventObject& _Source) thr
     if (m_pListener)
     {
         m_pListener->disposing(_Source, m_nId);
-        m_pListener->setAdapter(NULL);
-        m_pListener = NULL;
+        m_pListener->setAdapter(nullptr);
+        m_pListener = nullptr;
     }
-    m_xObject = NULL;
+    m_xObject = nullptr;
 }
 
 
@@ -339,10 +339,10 @@ void FmXDisposeMultiplexer::dispose()
         Reference< css::lang::XEventListener> xPreventDelete(this);
 
         m_xObject->removeEventListener(this);
-        m_xObject = NULL;
+        m_xObject = nullptr;
 
-        m_pListener->setAdapter(NULL);
-        m_pListener = NULL;
+        m_pListener->setAdapter(nullptr);
+        m_pListener = nullptr;
     }
 }
 

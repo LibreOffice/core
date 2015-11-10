@@ -399,7 +399,7 @@ SdrHdl* SdrCircObj::GetHdl(sal_uInt32 nHdlNum) const
         nHdlNum += 2L;
     }
 
-    SdrHdl* pH = NULL;
+    SdrHdl* pH = nullptr;
     Point aPnt;
     SdrHdlKind eLocalKind(HDL_MOVE);
     sal_uInt32 nPNum(0);
@@ -639,7 +639,7 @@ void ImpCircUser::SetCreateParams(SdrDragStat& rStat)
             if (nWdt!=0) aP.X()=aP.X()*nHgt/nWdt;
         }
         nStart=NormAngle360(GetAngle(aP));
-        if (rStat.GetView()!=NULL && rStat.GetView()->IsAngleSnapEnabled()) {
+        if (rStat.GetView()!=nullptr && rStat.GetView()->IsAngleSnapEnabled()) {
             long nSA=rStat.GetView()->GetSnapAngle();
             if (nSA!=0) { // angle snapping
                 nStart+=nSA/2;
@@ -660,7 +660,7 @@ void ImpCircUser::SetCreateParams(SdrDragStat& rStat)
             aP.X()=BigMulDiv(aP.X(),nHgt,nWdt);
         }
         nEnd=NormAngle360(GetAngle(aP));
-        if (rStat.GetView()!=NULL && rStat.GetView()->IsAngleSnapEnabled()) {
+        if (rStat.GetView()!=nullptr && rStat.GetView()->IsAngleSnapEnabled()) {
             long nSA=rStat.GetView()->GetSnapAngle();
             if (nSA!=0) { // angle snapping
                 nEnd+=nSA/2;
@@ -676,7 +676,7 @@ void ImpCircUser::SetCreateParams(SdrDragStat& rStat)
 void SdrCircObj::ImpSetCreateParams(SdrDragStat& rStat) const
 {
     ImpCircUser* pU=static_cast<ImpCircUser*>(rStat.GetUser());
-    if (pU==NULL) {
+    if (pU==nullptr) {
         pU=new ImpCircUser;
         rStat.SetUser(pU);
     }
@@ -746,7 +746,7 @@ bool SdrCircObj::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
     ImpSetCircInfoToAttr();
     if (bRet) {
         delete pU;
-        rStat.SetUser(NULL);
+        rStat.SetUser(nullptr);
     }
     return bRet;
 }
@@ -755,7 +755,7 @@ void SdrCircObj::BrkCreate(SdrDragStat& rStat)
 {
     ImpCircUser* pU=static_cast<ImpCircUser*>(rStat.GetUser());
     delete pU;
-    rStat.SetUser(NULL);
+    rStat.SetUser(nullptr);
 }
 
 bool SdrCircObj::BckCreate(SdrDragStat& rStat)

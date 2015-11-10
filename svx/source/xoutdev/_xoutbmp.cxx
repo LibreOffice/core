@@ -38,7 +38,7 @@
 #define FORMAT_JPG  "jpg"
 #define FORMAT_PNG  "png"
 
-GraphicFilter* XOutBitmap::pGrfFilter = NULL;
+GraphicFilter* XOutBitmap::pGrfFilter = nullptr;
 
 Animation XOutBitmap::MirrorAnimation( const Animation& rAnimation, bool bHMirr, bool bVMirr )
 {
@@ -383,7 +383,7 @@ sal_uInt16 XOutBitmap::ExportGraphic( const Graphic& rGraphic, const INetURLObje
 
         nRet = rFilter.ExportGraphic( rGraphic, rURL.GetMainURL( INetURLObject::NO_DECODE ), *pOStm, nFormat, pFilterData );
 
-        pGrfFilter = NULL;
+        pGrfFilter = nullptr;
         aMedium.Commit();
 
         if( aMedium.GetError() && ( GRFILTER_OK == nRet  ) )

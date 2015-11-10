@@ -102,7 +102,7 @@ public:
 
     // Check if this primitive is animated in any OC (View) which means it has
     // generated a PrimitiveAnimation
-    bool isAnimated() const { return (0 != mpPrimitiveAnimation); }
+    bool isAnimated() const { return (nullptr != mpPrimitiveAnimation); }
 
     // Take some action when new objects are inserted
     void ActionChildInserted(ViewContact& rChild);
