@@ -62,8 +62,14 @@ void main( void )
     // A semi-random number 0..1, different for neighbouring tiles.
     float fuzz = snoise(vec2(float(tileXIndex)/(numTiles.x-1), float(tileYIndex)/(numTiles.y-1)));
 
+    // Semi-random rotation direction, identical for tiles that rotate into each other's location
+    // so that they don't pass through each others in flight, which looks ugly.
+    float direction = (snoise(vec2(floor(abs(float(numTiles.x-1)/2-tileXIndex))/(float(numTiles.x-1)/2), float(tileYIndex)/(numTiles.y-1))) < 0.5 ? -1 : 1);
+
     float startTime = float(tileXIndex)/(numTiles.x-1) * 0.5 + fuzz*0.2;
     float endTime = min(startTime + 0.5, 1.0);
+
+    const float ALMOST_ONE = 0.999;
 
     if (time <= startTime)
     {
@@ -73,9 +79,10 @@ void main( void )
     else if (time > startTime && time <= endTime)
     {
         // Moving
-        float rotation = (time - startTime) / (endTime - startTime);
+        float rotation = direction * (time - startTime) / (endTime - startTime);
 
-        v = rotationMatrix(vec3(0, 1, 0), rotation*M_PI) * v;
+        // Avoid z fighting
+        v = rotationMatrix(vec3(0, 1, 0), max(min(rotation, ALMOST_ONE), -ALMOST_ONE)*M_PI) * v;
 
         v_textureSelect = float(rotation > 0.5 || rotation < -0.5);
     }
@@ -83,7 +90,8 @@ void main( void )
     {
         // At end location. Tile is 180 degrees rotated
 
-        v = rotationMatrix(vec3(0, 1, 0), M_PI) * v;
+        // Avoid z fighting
+        v = rotationMatrix(vec3(0, 1, 0), direction*ALMOST_ONE*M_PI) * v;
 
         v_textureSelect = 1;
     }
