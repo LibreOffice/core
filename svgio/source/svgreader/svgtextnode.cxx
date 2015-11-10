@@ -35,7 +35,7 @@ namespace svgio
             SvgNode* pParent)
         :   SvgNode(SVGTokenText, rDocument, pParent),
             maSvgStyleAttributes(*this),
-            mpaTransform(0),
+            mpaTransform(nullptr),
             maSvgTextPositions()
         {
         }
@@ -233,7 +233,7 @@ namespace svgio
 
                 if(fOpacity > 0.0)
                 {
-                    SvgTextPosition aSvgTextPosition(0, *this, getSvgTextPositions());
+                    SvgTextPosition aSvgTextPosition(nullptr, *this, getSvgTextPositions());
                     drawinglayer::primitive2d::Primitive2DSequence aNewTarget;
                     const SvgNodeVector& rChildren = getChildren();
                     const sal_uInt32 nCount(rChildren.size());

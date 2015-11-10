@@ -29,7 +29,7 @@ namespace svgio
         :   SvgNode(SVGTokenMarker, rDocument, pParent),
             aPrimitives(),
             maSvgStyleAttributes(*this),
-            mpViewBox(0),
+            mpViewBox(nullptr),
             maSvgAspectRatio(),
             maRefX(0),
             maRefY(0),

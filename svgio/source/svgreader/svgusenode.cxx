@@ -30,7 +30,7 @@ namespace svgio
             SvgNode* pParent)
         :   SvgNode(SVGTokenG, rDocument, pParent),
             maSvgStyleAttributes(*this),
-            mpaTransform(0),
+            mpaTransform(nullptr),
             maX(),
             maY(),
             maWidth(),

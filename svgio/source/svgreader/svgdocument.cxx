@@ -69,7 +69,7 @@ namespace svgio
 
             if(aResult == maIdTokenMapperList.end())
             {
-                return 0;
+                return nullptr;
             }
             else
             {
@@ -91,7 +91,7 @@ namespace svgio
 
             if(aResult == maIdStyleTokenMapperList.end())
             {
-                return 0;
+                return nullptr;
             }
             else
             {

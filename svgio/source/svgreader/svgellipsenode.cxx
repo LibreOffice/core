@@ -34,7 +34,7 @@ namespace svgio
             maCy(0),
             maRx(0),
             maRy(0),
-            mpaTransform(0)
+            mpaTransform(nullptr)
         {
         }
 
@@ -147,7 +147,7 @@ namespace svgio
 
                     drawinglayer::primitive2d::Primitive2DSequence aNewTarget;
 
-                    pStyle->add_path(basegfx::B2DPolyPolygon(aPath), aNewTarget, 0);
+                    pStyle->add_path(basegfx::B2DPolyPolygon(aPath), aNewTarget, nullptr);
 
                     if(aNewTarget.hasElements())
                     {

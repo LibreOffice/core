@@ -222,7 +222,7 @@ namespace svgio
             }
             else
             {
-                return 0;
+                return nullptr;
             }
         }
 
@@ -231,7 +231,7 @@ namespace svgio
             const SvgStyleAttributes& rSvgStyleAttributes) const
         {
             // prepare retval, index and length
-            drawinglayer::primitive2d::TextSimplePortionPrimitive2D* pRetval = 0;
+            drawinglayer::primitive2d::TextSimplePortionPrimitive2D* pRetval = nullptr;
             sal_uInt32 nIndex(0);
             sal_uInt32 nLength(getText().getLength());
 

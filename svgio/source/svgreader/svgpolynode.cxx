@@ -32,8 +32,8 @@ namespace svgio
             bool bIsPolyline)
         :   SvgNode(SVGTokenPolygon, rDocument, pParent),
             maSvgStyleAttributes(*this),
-            mpPolygon(0),
-            mpaTransform(0),
+            mpPolygon(nullptr),
+            mpaTransform(nullptr),
             mbIsPolyline(bIsPolyline)
         {
         }
@@ -108,7 +108,7 @@ namespace svgio
             {
                 drawinglayer::primitive2d::Primitive2DSequence aNewTarget;
 
-                pStyle->add_path(basegfx::B2DPolyPolygon(*getPolygon()), aNewTarget, 0);
+                pStyle->add_path(basegfx::B2DPolyPolygon(*getPolygon()), aNewTarget, nullptr);
 
                 if(aNewTarget.hasElements())
                 {

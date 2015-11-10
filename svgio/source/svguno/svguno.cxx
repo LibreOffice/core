@@ -31,8 +31,8 @@ static cppu::ImplementationEntry const services[] = {
     { &svgio::svgreader::XSvgParser_createInstance,
       &svgio::svgreader::XSvgParser_getImplementationName,
       &svgio::svgreader::XSvgParser_getSupportedServiceNames,
-      &cppu::createSingleComponentFactory, 0, 0 },
-    { 0, 0, 0, 0, 0, 0 } };
+      &cppu::createSingleComponentFactory, nullptr, 0 },
+    { nullptr, nullptr, nullptr, nullptr, nullptr, 0 } };
 
 }
 

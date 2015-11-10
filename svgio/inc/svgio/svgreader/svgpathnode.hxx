@@ -52,11 +52,11 @@ namespace svgio
 
             /// path content, set if found in current context
             const basegfx::B2DPolyPolygon* getPath() const { return mpPolyPolygon; }
-            void setPath(const basegfx::B2DPolyPolygon* pPath = 0) { if(mpPolyPolygon) delete mpPolyPolygon; mpPolyPolygon = 0; if(pPath) mpPolyPolygon = new basegfx::B2DPolyPolygon(*pPath); }
+            void setPath(const basegfx::B2DPolyPolygon* pPath = nullptr) { if(mpPolyPolygon) delete mpPolyPolygon; mpPolyPolygon = nullptr; if(pPath) mpPolyPolygon = new basegfx::B2DPolyPolygon(*pPath); }
 
             /// transform content, set if found in current context
             const basegfx::B2DHomMatrix* getTransform() const { return mpaTransform; }
-            void setTransform(const basegfx::B2DHomMatrix* pMatrix = 0) { if(mpaTransform) delete mpaTransform; mpaTransform = 0; if(pMatrix) mpaTransform = new basegfx::B2DHomMatrix(*pMatrix); }
+            void setTransform(const basegfx::B2DHomMatrix* pMatrix = nullptr) { if(mpaTransform) delete mpaTransform; mpaTransform = nullptr; if(pMatrix) mpaTransform = new basegfx::B2DHomMatrix(*pMatrix); }
 
             /// PathLength content
             const SvgNumber& getPathLength() const { return maPathLength; }

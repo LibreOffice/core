@@ -50,9 +50,9 @@ namespace svgio
             maFy(),
             maGradientUnits(objectBoundingBox),
             maSpreadMethod(drawinglayer::primitive2d::Spread_pad),
-            mpaGradientTransform(0),
+            mpaGradientTransform(nullptr),
             maXLink(),
-            mpXLink(0)
+            mpXLink(nullptr)
         {
             OSL_ENSURE(aType == SVGTokenLinearGradient || aType == SVGTokenRadialGradient, "SvgGradientNode should ony be used for Linear and Radial gradient (!)");
         }
@@ -448,7 +448,7 @@ namespace svgio
                 return mpXLink->getFx();
             }
 
-            return 0;
+            return nullptr;
         }
 
         const SvgNumber* SvgGradientNode::getFy() const
@@ -465,7 +465,7 @@ namespace svgio
                 return mpXLink->getFy();
             }
 
-            return 0;
+            return nullptr;
         }
 
         const basegfx::B2DHomMatrix* SvgGradientNode::getGradientTransform() const
@@ -482,7 +482,7 @@ namespace svgio
                 return mpXLink->getGradientTransform();
             }
 
-            return 0;
+            return nullptr;
         }
 
         void SvgGradientNode::setGradientTransform(const basegfx::B2DHomMatrix* pMatrix)
@@ -490,7 +490,7 @@ namespace svgio
             if(mpaGradientTransform)
             {
                 delete mpaGradientTransform;
-                mpaGradientTransform = 0;
+                mpaGradientTransform = nullptr;
             }
 
             if(pMatrix)

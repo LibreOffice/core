@@ -120,7 +120,7 @@ namespace svgio
 
             /// transform content, set if found in current context
             const basegfx::B2DHomMatrix* getGradientTransform() const;
-            void setGradientTransform(const basegfx::B2DHomMatrix* pMatrix = 0);
+            void setGradientTransform(const basegfx::B2DHomMatrix* pMatrix = nullptr);
         };
     } // end of namespace svgreader
 } // end of namespace svgio

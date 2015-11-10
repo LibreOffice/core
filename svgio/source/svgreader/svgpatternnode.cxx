@@ -38,17 +38,17 @@ namespace svgio
         :   SvgNode(SVGTokenPattern, rDocument, pParent),
             aPrimitives(),
             maSvgStyleAttributes(*this),
-            mpViewBox(0),
+            mpViewBox(nullptr),
             maSvgAspectRatio(),
             maX(),
             maY(),
             maWidth(),
             maHeight(),
-            mpPatternUnits(0),
-            mpPatternContentUnits(0),
-            mpaPatternTransform(0),
+            mpPatternUnits(nullptr),
+            mpPatternContentUnits(nullptr),
+            mpaPatternTransform(nullptr),
             maXLink(),
-            mpXLink(0)
+            mpXLink(nullptr)
         {
         }
 
@@ -310,7 +310,7 @@ namespace svgio
                 return mpXLink->getViewBox();
             }
 
-            return 0;
+            return nullptr;
         }
 
         const SvgAspectRatio& SvgPatternNode::getSvgAspectRatio() const
@@ -412,7 +412,7 @@ namespace svgio
                 return mpXLink->getPatternUnits();
             }
 
-            return 0;
+            return nullptr;
         }
 
         const SvgUnits* SvgPatternNode::getPatternContentUnits() const
@@ -429,7 +429,7 @@ namespace svgio
                 return mpXLink->getPatternContentUnits();
             }
 
-            return 0;
+            return nullptr;
         }
 
         const basegfx::B2DHomMatrix* SvgPatternNode::getPatternTransform() const
@@ -446,7 +446,7 @@ namespace svgio
                 return mpXLink->getPatternTransform();
             }
 
-            return 0;
+            return nullptr;
         }
 
     } // end of namespace svgreader

@@ -76,7 +76,7 @@ namespace svgio
 
             /// viewBox content
             const basegfx::B2DRange* getViewBox() const;
-            void setViewBox(const basegfx::B2DRange* pViewBox = 0) { if(mpViewBox) delete mpViewBox; mpViewBox = 0; if(pViewBox) mpViewBox = new basegfx::B2DRange(*pViewBox); }
+            void setViewBox(const basegfx::B2DRange* pViewBox = nullptr) { if(mpViewBox) delete mpViewBox; mpViewBox = nullptr; if(pViewBox) mpViewBox = new basegfx::B2DRange(*pViewBox); }
 
             /// SvgAspectRatio content
             const SvgAspectRatio& getSvgAspectRatio() const;
@@ -100,15 +100,15 @@ namespace svgio
 
             /// PatternUnits content
             const SvgUnits* getPatternUnits() const;
-            void setPatternUnits(const SvgUnits aPatternUnits) { if(mpPatternUnits) delete mpPatternUnits; mpPatternUnits = 0; mpPatternUnits = new SvgUnits(aPatternUnits); }
+            void setPatternUnits(const SvgUnits aPatternUnits) { if(mpPatternUnits) delete mpPatternUnits; mpPatternUnits = nullptr; mpPatternUnits = new SvgUnits(aPatternUnits); }
 
             /// PatternContentUnits content
             const SvgUnits* getPatternContentUnits() const;
-            void setPatternContentUnits(const SvgUnits aPatternContentUnits) { if(mpPatternContentUnits) delete mpPatternContentUnits; mpPatternContentUnits = 0; mpPatternContentUnits = new SvgUnits(aPatternContentUnits); }
+            void setPatternContentUnits(const SvgUnits aPatternContentUnits) { if(mpPatternContentUnits) delete mpPatternContentUnits; mpPatternContentUnits = nullptr; mpPatternContentUnits = new SvgUnits(aPatternContentUnits); }
 
             /// PatternTransform content
             const basegfx::B2DHomMatrix* getPatternTransform() const;
-            void setPatternTransform(const basegfx::B2DHomMatrix* pMatrix = 0) { if(mpaPatternTransform) delete mpaPatternTransform; mpaPatternTransform = 0; if(pMatrix) mpaPatternTransform = new basegfx::B2DHomMatrix(*pMatrix); }
+            void setPatternTransform(const basegfx::B2DHomMatrix* pMatrix = nullptr) { if(mpaPatternTransform) delete mpaPatternTransform; mpaPatternTransform = nullptr; if(pMatrix) mpaPatternTransform = new basegfx::B2DHomMatrix(*pMatrix); }
 
         };
     } // end of namespace svgreader

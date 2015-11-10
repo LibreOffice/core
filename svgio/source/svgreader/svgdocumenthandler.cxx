@@ -136,7 +136,7 @@ namespace svgio
     {
         SvgDocHdl::SvgDocHdl(const OUString& aAbsolutePath)
         :   maDocument(aAbsolutePath),
-            mpTarget(0),
+            mpTarget(nullptr),
             maCssContents(),
             bSkip(false)
         {
@@ -407,9 +407,9 @@ namespace svgio
             if(!aName.isEmpty())
             {
                 const SVGToken aSVGToken(StrToSVGToken(aName, false));
-                SvgNode* pWhitespaceCheck(SVGTokenText == aSVGToken ? mpTarget : 0);
-                SvgStyleNode* pCssStyle(SVGTokenStyle == aSVGToken ? static_cast< SvgStyleNode* >(mpTarget) : 0);
-                SvgTitleDescNode* pSvgTitleDescNode(SVGTokenTitle == aSVGToken || SVGTokenDesc == aSVGToken ? static_cast< SvgTitleDescNode* >(mpTarget) : 0);
+                SvgNode* pWhitespaceCheck(SVGTokenText == aSVGToken ? mpTarget : nullptr);
+                SvgStyleNode* pCssStyle(SVGTokenStyle == aSVGToken ? static_cast< SvgStyleNode* >(mpTarget) : nullptr);
+                SvgTitleDescNode* pSvgTitleDescNode(SVGTokenTitle == aSVGToken || SVGTokenDesc == aSVGToken ? static_cast< SvgTitleDescNode* >(mpTarget) : nullptr);
 
                 // if we are in skipping mode and we reach the flowRoot end tag: stop skipping mode
                 if(bSkip && aSVGToken == SVGTokenFlowRoot)
@@ -537,7 +537,7 @@ namespace svgio
                 if(pWhitespaceCheck)
                 {
                     // cleanup read strings
-                    whiteSpaceHandling(pWhitespaceCheck, 0);
+                    whiteSpaceHandling(pWhitespaceCheck, nullptr);
                 }
             }
         }
@@ -555,7 +555,7 @@ namespace svgio
                     case SVGTokenTextPath:
                     {
                         const SvgNodeVector& rChilds = mpTarget->getChildren();
-                        SvgCharacterNode* pTarget = 0;
+                        SvgCharacterNode* pTarget = nullptr;
 
                         if(rChilds.size())
                         {

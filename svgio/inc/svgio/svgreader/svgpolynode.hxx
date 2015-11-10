@@ -57,11 +57,11 @@ namespace svgio
 
             /// Polygon content, set if found in current context
             const basegfx::B2DPolygon* getPolygon() const { return mpPolygon; }
-            void setPolygon(const basegfx::B2DPolygon* pPolygon = 0) { if(mpPolygon) delete mpPolygon; mpPolygon = 0; if(pPolygon) mpPolygon = new basegfx::B2DPolygon(*pPolygon); }
+            void setPolygon(const basegfx::B2DPolygon* pPolygon = nullptr) { if(mpPolygon) delete mpPolygon; mpPolygon = nullptr; if(pPolygon) mpPolygon = new basegfx::B2DPolygon(*pPolygon); }
 
             /// transform content, set if found in current context
             const basegfx::B2DHomMatrix* getTransform() const { return mpaTransform; }
-            void setTransform(const basegfx::B2DHomMatrix* pMatrix = 0) { if(mpaTransform) delete mpaTransform; mpaTransform = 0; if(pMatrix) mpaTransform = new basegfx::B2DHomMatrix(*pMatrix); }
+            void setTransform(const basegfx::B2DHomMatrix* pMatrix = nullptr) { if(mpaTransform) delete mpaTransform; mpaTransform = nullptr; if(pMatrix) mpaTransform = new basegfx::B2DHomMatrix(*pMatrix); }
         };
     } // end of namespace svgreader
 } // end of namespace svgio

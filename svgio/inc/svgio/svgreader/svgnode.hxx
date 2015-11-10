@@ -165,11 +165,11 @@ namespace svgio
 
             /// Id access
             const OUString* getId() const { return mpId; }
-            void setId(const OUString* pfId = 0);
+            void setId(const OUString* pfId = nullptr);
 
             /// Class access
             const OUString* getClass() const { return mpClass; }
-            void setClass(const OUString* pfClass = 0);
+            void setClass(const OUString* pfClass = nullptr);
 
             /// XmlSpace access
             XmlSpace getXmlSpace() const;
@@ -180,7 +180,7 @@ namespace svgio
             void setDisplay(Display eDisplay = Display_inherit) { maDisplay = eDisplay; }
 
             /// alternative parent
-            void setAlternativeParent(const SvgNode* pAlternativeParent = 0) { mpAlternativeParent = pAlternativeParent; }
+            void setAlternativeParent(const SvgNode* pAlternativeParent = nullptr) { mpAlternativeParent = pAlternativeParent; }
         };
     } // end of namespace svgreader
 } // end of namespace svgio

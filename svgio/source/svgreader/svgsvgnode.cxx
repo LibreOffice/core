@@ -36,7 +36,7 @@ namespace svgio
             SvgNode* pParent)
         :   SvgNode(SVGTokenSvg, rDocument, pParent),
             maSvgStyleAttributes(*this),
-            mpViewBox(0),
+            mpViewBox(nullptr),
             maSvgAspectRatio(),
             maX(),
             maY(),
@@ -215,7 +215,7 @@ namespace svgio
             {
                 return;
             }
-            const SvgSvgNode* pParentSvgSvgNode = 0;
+            const SvgSvgNode* pParentSvgSvgNode = nullptr;
             // enclosing svg might have relative width, need to cumulate them till they are
             // resolved somewhere up in the node tree
             double fPercentage(1.0);
@@ -257,7 +257,7 @@ namespace svgio
             {
                 return;
             }
-            const SvgSvgNode* pParentSvgSvgNode = 0;
+            const SvgSvgNode* pParentSvgSvgNode = nullptr;
             // enclosing svg might have relative width and height, need to cumulate them till they are
             // resolved somewhere up in the node tree
             double fPercentage(1.0);

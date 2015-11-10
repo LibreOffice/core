@@ -248,7 +248,7 @@ namespace svgio
                 return mrOwner.getParent()->getSvgStyleAttributes();
             }
 
-            return NULL;
+            return nullptr;
         }
 
         void SvgStyleAttributes::add_text(
@@ -460,7 +460,7 @@ namespace svgio
                             fRadius,
                             userSpaceOnUse != rFillGradient.getGradientUnits(),
                             rFillGradient.getSpreadMethod(),
-                            bFocal ? &aFocal : 0));
+                            bFocal ? &aFocal : nullptr));
                 }
             }
         }
@@ -880,7 +880,7 @@ namespace svgio
                     // only 'marker' was used instead of 'marker-start', 'marker-mid' or 'marker-end',
                     // see 'case SVGTokenMarker' in this file; thus in this case only one common
                     // marker in primitive form will be prepared
-                    const SvgMarkerNode* pPrepared = 0;
+                    const SvgMarkerNode* pPrepared = nullptr;
 
                     // values for the prepared marker, results of prepare_singleMarker
                     drawinglayer::primitive2d::Primitive2DSequence aPreparedMarkerPrimitives;
@@ -904,7 +904,7 @@ namespace svgio
                             {
                                 const bool bIsFirstMarker(!a && !b);
                                 const bool bIsLastMarker(nSubPathCount - 1 == a && nTargetMarkerCount - 1 == b);
-                                const SvgMarkerNode* pNeeded = 0;
+                                const SvgMarkerNode* pNeeded = nullptr;
 
                                 if(bIsFirstMarker)
                                 {
@@ -951,7 +951,7 @@ namespace svgio
                                     {
                                         // error: could not prepare given marker
                                         OSL_ENSURE(false, "OOps, could not prepare given marker as primitives (!)");
-                                        pPrepared = 0;
+                                        pPrepared = nullptr;
                                         continue;
                                     }
                                 }
@@ -1188,16 +1188,16 @@ namespace svgio
 
         SvgStyleAttributes::SvgStyleAttributes(SvgNode& rOwner)
         :   mrOwner(rOwner),
-            mpCssStyleParent(0),
+            mpCssStyleParent(nullptr),
             maFill(),
             maStroke(),
             maStopColor(basegfx::BColor(0.0, 0.0, 0.0), true),
             maStrokeWidth(),
             maStopOpacity(),
-            mpSvgGradientNodeFill(0),
-            mpSvgGradientNodeStroke(0),
-            mpSvgPatternNodeFill(0),
-            mpSvgPatternNodeStroke(0),
+            mpSvgGradientNodeFill(nullptr),
+            mpSvgGradientNodeStroke(nullptr),
+            mpSvgPatternNodeFill(nullptr),
+            mpSvgPatternNodeStroke(nullptr),
             maFillOpacity(),
             maStrokeDasharray(),
             maStrokeDashOffset(),
@@ -1222,11 +1222,11 @@ namespace svgio
             maClipPathXLink(),
             maMaskXLink(),
             maMarkerStartXLink(),
-            mpMarkerStartXLink(0),
+            mpMarkerStartXLink(nullptr),
             maMarkerMidXLink(),
-            mpMarkerMidXLink(0),
+            mpMarkerMidXLink(nullptr),
             maMarkerEndXLink(),
-            mpMarkerEndXLink(0),
+            mpMarkerEndXLink(nullptr),
             maFillRule(FillRule_notset),
             maClipRule(FillRule_nonzero),
             maBaselineShift(BaselineShift_Baseline),
@@ -1930,14 +1930,14 @@ namespace svgio
                 }
             }
 
-            return 0;
+            return nullptr;
         }
 
         const basegfx::BColor* SvgStyleAttributes::getStroke() const
         {
             if(mbIsClipPathContent)
             {
-                return 0;
+                return nullptr;
             }
             else if(maStroke.isSet())
             {
@@ -1960,7 +1960,7 @@ namespace svgio
                 }
             }
 
-            return 0;
+            return nullptr;
         }
 
         const basegfx::BColor& SvgStyleAttributes::getStopColor() const
@@ -1979,7 +1979,7 @@ namespace svgio
         {
             if(mbIsClipPathContent)
             {
-                return 0;
+                return nullptr;
             }
             else if(mpSvgGradientNodeFill)
             {
@@ -1995,14 +1995,14 @@ namespace svgio
                 }
             }
 
-            return 0;
+            return nullptr;
         }
 
         const SvgGradientNode* SvgStyleAttributes::getSvgGradientNodeStroke() const
         {
             if(mbIsClipPathContent)
             {
-                return 0;
+                return nullptr;
             }
             else if(mpSvgGradientNodeStroke)
             {
@@ -2018,14 +2018,14 @@ namespace svgio
                 }
             }
 
-            return 0;
+            return nullptr;
         }
 
         const SvgPatternNode* SvgStyleAttributes::getSvgPatternNodeFill() const
         {
             if(mbIsClipPathContent)
             {
-                return 0;
+                return nullptr;
             }
             else if(mpSvgPatternNodeFill)
             {
@@ -2041,14 +2041,14 @@ namespace svgio
                 }
             }
 
-            return 0;
+            return nullptr;
         }
 
         const SvgPatternNode* SvgStyleAttributes::getSvgPatternNodeStroke() const
         {
             if(mbIsClipPathContent)
             {
-                return 0;
+                return nullptr;
             }
             else if(mpSvgPatternNodeStroke)
             {
@@ -2064,7 +2064,7 @@ namespace svgio
                 }
             }
 
-            return 0;
+            return nullptr;
         }
 
         SvgNumber SvgStyleAttributes::getStrokeWidth() const
@@ -2422,7 +2422,7 @@ namespace svgio
             }
 
             // default is 0
-            return 0;
+            return nullptr;
         }
 
         TextDecoration SvgStyleAttributes::getTextDecoration() const
@@ -2465,7 +2465,7 @@ namespace svgio
                 if(maColor.isCurrent())
                 {
                     OSL_ENSURE(false, "Svg error: current color uses current color (!)");
-                    return 0;
+                    return nullptr;
                 }
                 else if(maColor.isOn())
                 {
@@ -2482,7 +2482,7 @@ namespace svgio
                 }
             }
 
-            return 0;
+            return nullptr;
         }
 
         OUString SvgStyleAttributes::getMarkerStartXLink() const

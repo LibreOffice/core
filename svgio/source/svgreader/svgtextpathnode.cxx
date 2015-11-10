@@ -75,7 +75,7 @@ namespace svgio
             if(mpB2DCubicBezierHelper)
             {
                 delete mpB2DCubicBezierHelper;
-                mpB2DCubicBezierHelper = 0;
+                mpB2DCubicBezierHelper = nullptr;
             }
         }
 
@@ -124,7 +124,7 @@ namespace svgio
             mnMaxIndex(rPolygon.isClosed() ? rPolygon.count() : rPolygon.count() - 1),
             mnIndex(0),
             maCurrentSegment(),
-            mpB2DCubicBezierHelper(0),
+            mpB2DCubicBezierHelper(nullptr),
             mfCurrentSegmentLength(0.0),
             mfSegmentStartPosition(0.0)
         {
@@ -436,7 +436,7 @@ namespace svgio
 
                                 while(fPosition < fBasegfxPathLength && nCurrent < nLength)
                                 {
-                                    const drawinglayer::primitive2d::TextSimplePortionPrimitive2D* pCandidate = 0;
+                                    const drawinglayer::primitive2d::TextSimplePortionPrimitive2D* pCandidate = nullptr;
                                     const drawinglayer::primitive2d::Primitive2DReference xReference(rPathContent[nCurrent]);
 
                                     if(xReference.is())

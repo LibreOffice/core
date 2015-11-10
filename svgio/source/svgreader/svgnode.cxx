@@ -37,7 +37,7 @@ namespace svgio
 
         const SvgStyleAttributes* SvgNode::getSvgStyleAttributes() const
         {
-            return 0;
+            return nullptr;
         }
 
         void SvgNode::fillCssStyleVectorUsingHierarchyAndSelectors(
@@ -232,7 +232,7 @@ namespace svgio
                 // for the element containing the hierarchy) in a vector of pointers and to use that.
                 // Resetting the CssStyleParent on rOriginal is probably not needed
                 // but simply safer to do.
-                const_cast< SvgStyleAttributes& >(rOriginal).setCssStyleParent(0);
+                const_cast< SvgStyleAttributes& >(rOriginal).setCssStyleParent(nullptr);
 
                 // loop over the existing CssStyles and link them. There is a first one, take
                 // as current
@@ -262,14 +262,14 @@ namespace svgio
         :   maType(aType),
             mrDocument(rDocument),
             mpParent(pParent),
-            mpAlternativeParent(0),
+            mpAlternativeParent(nullptr),
             maChildren(),
-            mpId(0),
-            mpClass(0),
+            mpId(nullptr),
+            mpClass(nullptr),
             maXmlSpace(XmlSpace_notset),
             maDisplay(Display_inline),
             maCssStyleVector(),
-            mpLocalCssStyle(0),
+            mpLocalCssStyle(nullptr),
             mbCssStyleVectorBuilt(false)
         {
             OSL_ENSURE(SVGTokenUnknown != maType, "SvgNode with unknown type created (!)");
@@ -656,7 +656,7 @@ namespace svgio
             {
                 mrDocument.removeSvgNodeFromMapper(*mpId);
                 delete mpId;
-                mpId = 0;
+                mpId = nullptr;
             }
 
             if(pfId)
@@ -672,7 +672,7 @@ namespace svgio
             {
                 mrDocument.removeSvgNodeFromMapper(*mpClass);
                 delete mpClass;
-                mpClass = 0;
+                mpClass = nullptr;
             }
 
             if(pfClass)
