@@ -43,8 +43,8 @@
     {
         pSocket->channelClosed();
     }
-    pCommunicator = NULL;
-    pSocket = NULL;
+    pCommunicator = nullptr;
+    pSocket = nullptr;
 }
 
 @end
