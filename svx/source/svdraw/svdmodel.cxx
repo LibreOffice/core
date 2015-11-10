@@ -1761,6 +1761,18 @@ void SdrModel::Merge(SdrModel& rSourceModel,
 
                         if(nNeuNum != 0xFFFF)
                         {
+                            // tdf#90357 here pPg and the to-be-set new masterpage are parts of the new model
+                            // already, but the currently set masterpage is part of the old model. The undo
+                            // action that gets created remembers the work to do at undo execution by remembering
+                            // the page numbers, in this case of a masterpage in another model. This will lead
+                            // to an undo action that is not well defined and evetually not executable.
+                            // what we want to have here is an undo action that remembers setting the masterpage
+                            // first time. To do so, remove it from the already cloned page before the undo
+                            // action gets created.
+                            // Do *not* remove it above in the code, e.g. directly after cloning - the old
+                            // masterpage is still needed in-between to find the new to-be-set masterpage.
+                            pPg->TRG_ClearMasterPage();
+
                             if(bUndo)
                             {
                                 AddUndo(GetSdrUndoFactory().CreateUndoPageChangeMasterPage(*pPg));
