@@ -52,12 +52,12 @@ VCoordinateSystem* VCoordinateSystem::createCoordinateSystem(
             const Reference< XCoordinateSystem >& xCooSysModel )
 {
     if( !xCooSysModel.is() )
-        return 0;
+        return nullptr;
 
     OUString aViewServiceName = xCooSysModel->getViewServiceName();
 
     //@todo: in future the coordinatesystems should be instantiated via service factory
-    VCoordinateSystem* pRet=NULL;
+    VCoordinateSystem* pRet=nullptr;
     if( aViewServiceName == CHART2_COOSYSTEM_CARTESIAN_VIEW_SERVICE_NAME )
         pRet = new VCartesianCoordinateSystem(xCooSysModel);
     else if( aViewServiceName == CHART2_COOSYSTEM_POLAR_VIEW_SERVICE_NAME )
@@ -69,10 +69,10 @@ VCoordinateSystem* VCoordinateSystem::createCoordinateSystem(
 
 VCoordinateSystem::VCoordinateSystem( const Reference< XCoordinateSystem >& xCooSys )
     : m_xCooSysModel(xCooSys)
-    , m_xLogicTargetForGrids(0)
-    , m_xLogicTargetForAxes(0)
-    , m_xFinalTarget(0)
-    , m_xShapeFactory(0)
+    , m_xLogicTargetForGrids(nullptr)
+    , m_xLogicTargetForAxes(nullptr)
+    , m_xFinalTarget(nullptr)
+    , m_xShapeFactory(nullptr)
     , m_aMatrixSceneToScreen()
     , m_eLeftWallPos(CuboidPlanePosition_Left)
     , m_eBackWallPos(CuboidPlanePosition_Back)
@@ -204,7 +204,7 @@ Reference< XAxis > VCoordinateSystem::getAxisByDimension( sal_Int32 nDimensionIn
 {
     if( m_xCooSysModel.is() )
         return m_xCooSysModel->getAxisByDimension( nDimensionIndex, nAxisIndex );
-    return 0;
+    return nullptr;
 }
 
 Sequence< Reference< beans::XPropertySet > > VCoordinateSystem::getGridListFromAxis( const Reference< XAxis >& xAxis )
@@ -410,7 +410,7 @@ void VCoordinateSystem::prepareAutomaticAxisScaling( ScaleAutomatism& rScaleAuto
 
 VAxisBase* VCoordinateSystem::getVAxis( sal_Int32 nDimensionIndex, sal_Int32 nAxisIndex )
 {
-    VAxisBase* pRet = 0;
+    VAxisBase* pRet = nullptr;
 
     tFullAxisIndex aFullAxisIndex( nDimensionIndex, nAxisIndex );
 

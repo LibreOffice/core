@@ -36,7 +36,7 @@ public:
         const css::uno::Reference<css::beans::XPropertySet>& rPropertySet,
         SfxItemPool& rItemPool, SdrModel& rDrawModel,
         const css::uno::Reference<css::lang::XMultiServiceFactory>& xNamedPropertyContainerFactory,
-        const css::awt::Size* pRefSize = NULL );
+        const css::awt::Size* pRefSize = nullptr );
 
     virtual ~TitleItemConverter();
 

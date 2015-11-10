@@ -30,13 +30,13 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 
 PlotterBase::PlotterBase( sal_Int32 nDimensionCount )
-        : m_xLogicTarget(NULL)
-        , m_xFinalTarget(NULL)
-        , m_xShapeFactory(NULL)
-        , m_pShapeFactory(NULL)
+        : m_xLogicTarget(nullptr)
+        , m_xFinalTarget(nullptr)
+        , m_xShapeFactory(nullptr)
+        , m_pShapeFactory(nullptr)
         , m_aCID()
         , m_nDimension(nDimensionCount)
-        , m_pPosHelper(NULL)
+        , m_pPosHelper(nullptr)
 {
 }
 
@@ -84,7 +84,7 @@ uno::Reference< drawing::XShapes > PlotterBase::createGroupShape(
             , const OUString& rName )
 {
     if(!m_xShapeFactory.is())
-        return NULL;
+        return nullptr;
 
     if(m_nDimension==2)
     {

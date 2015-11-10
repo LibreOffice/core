@@ -48,7 +48,7 @@ public:
             ::com::sun::star::chart2::XLegend >
         getLegend( ChartModel& rModel
                  , const ::com::sun::star::uno::Reference<
-                       ::com::sun::star::uno::XComponentContext >& xContext = 0
+                       ::com::sun::star::uno::XComponentContext >& xContext = nullptr
                  , bool bCreate = false );
 
     /** returns <FALSE/>, if either there is no legend at the diagram, or there

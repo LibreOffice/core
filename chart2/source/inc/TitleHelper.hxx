@@ -70,7 +70,7 @@ public:
                             ::com::sun::star::frame::XModel >& xModel
                     , const ::com::sun::star::uno::Reference<
                             ::com::sun::star::uno::XComponentContext > & xContext
-                    , ReferenceSizeProvider * pRefSizeProvider = 0 );
+                    , ReferenceSizeProvider * pRefSizeProvider = nullptr );
 
     static void removeTitle( eTitleType nTitleIndex
                     , const ::com::sun::star::uno::Reference<
@@ -83,7 +83,7 @@ public:
             ::com::sun::star::chart2::XTitle >& xTitle
         , const ::com::sun::star::uno::Reference<
             ::com::sun::star::uno::XComponentContext > & xContext
-        , float * pDefaultCharHeight = 0 );
+        , float * pDefaultCharHeight = nullptr );
 
     static bool getTitleType( eTitleType& rType
                     , const ::com::sun::star::uno::Reference<

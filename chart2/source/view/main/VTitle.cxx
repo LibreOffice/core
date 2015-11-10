@@ -35,10 +35,10 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 
 VTitle::VTitle( const uno::Reference< XTitle > & xTitle )
-                : m_xTarget(NULL)
-                , m_xShapeFactory(NULL)
+                : m_xTarget(nullptr)
+                , m_xShapeFactory(nullptr)
                 , m_xTitle(xTitle)
-                , m_xShape(NULL)
+                , m_xShape(nullptr)
                 , m_aCID()
                 , m_fRotationAngleDegree(0.0)
                 , m_nXPos(0)

@@ -240,7 +240,7 @@ uno::Reference< drawing::XShape > PieChart::createDataPoint(
     }
 
     //create point
-    uno::Reference< drawing::XShape > xShape(0);
+    uno::Reference< drawing::XShape > xShape(nullptr);
     if(m_nDimension==3)
     {
         xShape = m_pShapeFactory->createPieSegment( xTarget
@@ -767,8 +767,8 @@ double lcl_getDegAngleInStandardRange(double fAngle)
 }//end anonymous namespace
 
 PieChart::PieLabelInfo::PieLabelInfo()
-    : xTextShape(0), xLabelGroupShape(0), aFirstPosition(), aOrigin(), fValue(0.0)
-    , bMovementAllowed(false), bMoved(false), xTextTarget(0), pPrevious(0),pNext(0)
+    : xTextShape(nullptr), xLabelGroupShape(nullptr), aFirstPosition(), aOrigin(), fValue(0.0)
+    , bMovementAllowed(false), bMoved(false), xTextTarget(nullptr), pPrevious(nullptr),pNext(nullptr)
 {
 }
 
@@ -873,8 +873,8 @@ bool PieChart::detectLabelOverlapsAndMove( const awt::Size& rPageSize )
     ///previous one;
     bool bOverlapFound = false;
     PieLabelInfo* pStart = &(*(m_aLabelInfoList.rbegin()));
-    PieLabelInfo* pFirstBorder = 0;
-    PieLabelInfo* pSecondBorder = 0;
+    PieLabelInfo* pFirstBorder = nullptr;
+    PieLabelInfo* pSecondBorder = nullptr;
     PieLabelInfo* pCurrent = pStart;
     do
     {
@@ -1020,10 +1020,10 @@ bool PieChart::tryMoveLabels( PieLabelInfo* pFirstBorder, PieLabelInfo* pSecondB
     ///the inner loop starts from the previous element of `pCenter` and moves
     ///forward until the current `PieLabelInfo` object of the outer loop is
     ///reached
-    PieLabelInfo* pCurrent = 0;
+    PieLabelInfo* pCurrent = nullptr;
     for( pCurrent = p2 ;pCurrent->pPrevious != pSecondBorder; pCurrent = pCurrent->pNext )
     {
-        PieLabelInfo* pFix = 0;
+        PieLabelInfo* pFix = nullptr;
         for( pFix = p2->pPrevious ;pFix != pCurrent; pFix = pFix->pNext )
         {
             ///on the current `PieLabelInfo` object of the outer loop the
@@ -1082,7 +1082,7 @@ bool PieChart::tryMoveLabels( PieLabelInfo* pFirstBorder, PieLabelInfo* pSecondB
 
     for( pCurrent = p1 ;pCurrent->pNext != pFirstBorder; pCurrent = pCurrent->pPrevious )
     {
-        PieLabelInfo* pFix = 0;
+        PieLabelInfo* pFix = nullptr;
         for( pFix = p2->pNext ;pFix != pCurrent; pFix = pFix->pPrevious )
         {
             if( !pCurrent->moveAwayFrom( pFix, rPageSize, false, bLabelOrderIsAntiClockWise, rbAlternativeMoveDirection ) )

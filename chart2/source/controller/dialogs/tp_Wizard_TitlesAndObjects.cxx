@@ -148,11 +148,11 @@ void TitlesAndObjectsTabPage::commitToModel()
 
 IMPL_LINK_NOARG_TYPED(TitlesAndObjectsTabPage, ChangeCheckBoxHdl, CheckBox&, void)
 {
-    ChangeHdl(NULL);
+    ChangeHdl(nullptr);
 }
 IMPL_LINK_NOARG_TYPED(TitlesAndObjectsTabPage, ChangeEditHdl, Edit&, void)
 {
-    ChangeHdl(NULL);
+    ChangeHdl(nullptr);
 }
 IMPL_LINK_NOARG_TYPED(TitlesAndObjectsTabPage, ChangeHdl, LinkParamNone*, void)
 {

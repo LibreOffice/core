@@ -650,9 +650,9 @@ uno::Reference< XChartType > DiagramHelper::getChartTypeOfSeries(
                               , const uno::Reference< XDataSeries >&        xGivenDataSeries )
 {
     if( !xGivenDataSeries.is() )
-        return 0;
+        return nullptr;
     if(!xDiagram.is())
-        return 0;
+        return nullptr;
 
     //iterate through the model to find the given xSeries
     //the found parent indicates the charttype
@@ -660,7 +660,7 @@ uno::Reference< XChartType > DiagramHelper::getChartTypeOfSeries(
     //iterate through all coordinate systems
     uno::Reference< XCoordinateSystemContainer > xCooSysContainer( xDiagram, uno::UNO_QUERY );
     if( !xCooSysContainer.is())
-        return 0;
+        return nullptr;
 
     uno::Sequence< uno::Reference< XCoordinateSystem > > aCooSysList( xCooSysContainer->getCoordinateSystems() );
     for( sal_Int32 nCS = 0; nCS < aCooSysList.getLength(); ++nCS )
@@ -691,7 +691,7 @@ uno::Reference< XChartType > DiagramHelper::getChartTypeOfSeries(
             }
         }
     }
-    return 0;
+    return nullptr;
 }
 
 ::std::vector< Reference< XDataSeries > >
@@ -1206,7 +1206,7 @@ sal_Int32 DiagramHelper::getDateTimeInputNumberFormat( const Reference< util::XN
         // Obtain best matching date, time or datetime format.
         nRet = pNumFormatter->GuessDateTimeFormat( nType, fNumber, LANGUAGE_SYSTEM);
         // Obtain the corresponding edit format.
-        nRet = pNumFormatter->GetEditFormat( fNumber, nRet, nType, LANGUAGE_SYSTEM, NULL);
+        nRet = pNumFormatter->GetEditFormat( fNumber, nRet, nType, LANGUAGE_SYSTEM, nullptr);
     }
     return nRet;
 }

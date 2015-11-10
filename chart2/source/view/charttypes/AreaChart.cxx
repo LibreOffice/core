@@ -62,10 +62,10 @@ AreaChart::AreaChart( const uno::Reference<XChartType>& xChartTypeModel
         , m_eCurveStyle(CurveStyle_LINES)
         , m_nCurveResolution(20)
         , m_nSplineOrder(3)
-        , m_xSeriesTarget(0)
-        , m_xErrorBarTarget(0)
-        , m_xTextTarget(0)
-        , m_xRegressionCurveEquationTarget(0)
+        , m_xSeriesTarget(nullptr)
+        , m_xErrorBarTarget(nullptr)
+        , m_xTextTarget(nullptr)
+        , m_xRegressionCurveEquationTarget(nullptr)
 {
     m_pMainPosHelper->AllowShiftXAxisPos(true);
     m_pMainPosHelper->AllowShiftZAxisPos(true);
@@ -421,7 +421,7 @@ bool AreaChart::impl_createLine( VDataSeries* pSeries
     pPosHelper->transformScaledLogicToScene( aPoly );
 
     //create line:
-    uno::Reference< drawing::XShape > xShape(NULL);
+    uno::Reference< drawing::XShape > xShape(nullptr);
     if(m_nDimension==3)
     {
         double fDepth = this->getTransformedDepth();
@@ -484,13 +484,13 @@ bool AreaChart::impl_createArea( VDataSeries* pSeries
         //clip to scale
         if(fMaxX<pPosHelper->getLogicMinX() || fMinX>pPosHelper->getLogicMaxX())
             return false;//no visible shape needed
-        pPosHelper->clipLogicValues( &fMinX, &fY, 0 );
-        pPosHelper->clipLogicValues( &fMaxX, 0, 0 );
+        pPosHelper->clipLogicValues( &fMinX, &fY, nullptr );
+        pPosHelper->clipLogicValues( &fMaxX, nullptr, nullptr );
 
         //apply scaling
         {
             pPosHelper->doLogicScaling( &fMinX, &fY, &zValue );
-            pPosHelper->doLogicScaling( &fMaxX, 0, 0 );
+            pPosHelper->doLogicScaling( &fMaxX, nullptr, nullptr );
         }
 
         AddPointToPoly( aPoly, drawing::Position3D( fMaxX,fY,zValue) );
@@ -517,7 +517,7 @@ bool AreaChart::impl_createArea( VDataSeries* pSeries
     pPosHelper->transformScaledLogicToScene( aPoly );
 
     //create area:
-    uno::Reference< drawing::XShape > xShape(NULL);
+    uno::Reference< drawing::XShape > xShape(nullptr);
     if(m_nDimension==3)
     {
         xShape = m_pShapeFactory->createArea3D( xSeriesGroupShape_Shapes
@@ -556,7 +556,7 @@ void AreaChart::impl_createSeriesShapes()
             const ::std::vector< VDataSeries* >::const_iterator aSeriesEnd  = pSeriesList->end();
 
             std::map< sal_Int32, drawing::PolyPolygonShape3D* > aPreviousSeriesPolyMap;//a PreviousSeriesPoly for each different nAttachedAxisIndex
-            drawing::PolyPolygonShape3D* pSeriesPoly = NULL;
+            drawing::PolyPolygonShape3D* pSeriesPoly = nullptr;
 
             //iterate through all series
             for( ; aSeriesIter != aSeriesEnd; ++aSeriesIter )
@@ -875,7 +875,7 @@ void AreaChart::createShapes()
                         }
                     }
 
-                    Symbol* pSymbolProperties = m_bSymbol ? (*aSeriesIter)->getSymbolProperties( nIndex ) : 0;
+                    Symbol* pSymbolProperties = m_bSymbol ? (*aSeriesIter)->getSymbolProperties( nIndex ) : nullptr;
                     bool bCreateSymbol = pSymbolProperties && (pSymbolProperties->Style != SymbolStyle_NONE);
 
                     if( !bCreateSymbol && !bCreateYErrorBar &&

@@ -428,7 +428,7 @@ void DrawCommandDispatch::describeSupportedFeatures()
 
 void DrawCommandDispatch::setInsertObj( sal_uInt16 eObj )
 {
-    DrawViewWrapper* pDrawViewWrapper = ( m_pChartController ? m_pChartController->GetDrawViewWrapper() : NULL );
+    DrawViewWrapper* pDrawViewWrapper = ( m_pChartController ? m_pChartController->GetDrawViewWrapper() : nullptr );
     if ( pDrawViewWrapper )
     {
         pDrawViewWrapper->SetCurrentObj( eObj /*, Inventor */);
@@ -437,9 +437,9 @@ void DrawCommandDispatch::setInsertObj( sal_uInt16 eObj )
 
 SdrObject* DrawCommandDispatch::createDefaultObject( const sal_uInt16 nID )
 {
-    SdrObject* pObj = NULL;
-    DrawViewWrapper* pDrawViewWrapper = ( m_pChartController ? m_pChartController->GetDrawViewWrapper() : NULL );
-    DrawModelWrapper* pDrawModelWrapper = ( m_pChartController ? m_pChartController->GetDrawModelWrapper() : NULL );
+    SdrObject* pObj = nullptr;
+    DrawViewWrapper* pDrawViewWrapper = ( m_pChartController ? m_pChartController->GetDrawViewWrapper() : nullptr );
+    DrawModelWrapper* pDrawModelWrapper = ( m_pChartController ? m_pChartController->GetDrawModelWrapper() : nullptr );
 
     if ( pDrawViewWrapper && pDrawModelWrapper )
     {

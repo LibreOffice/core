@@ -573,7 +573,7 @@ void SAL_CALL ChartDataWrapper::dispose()
     throw (uno::RuntimeException, std::exception)
 {
     m_aEventListenerContainer.disposeAndClear( lang::EventObject( static_cast< ::cppu::OWeakObject* >( this )));
-    m_xDataAccess=0;
+    m_xDataAccess=nullptr;
 }
 
 void SAL_CALL ChartDataWrapper::addEventListener(

@@ -178,7 +178,7 @@ ImplObjectHierarchy::ImplObjectHierarchy(
 {
     createTree( xChartDocument );
     // don't remember this helper to avoid access after lifetime
-    m_pExplicitValueProvider = 0;
+    m_pExplicitValueProvider = nullptr;
 }
 
 void ImplObjectHierarchy::createTree( const Reference< XChartDocument >& xChartDocument )

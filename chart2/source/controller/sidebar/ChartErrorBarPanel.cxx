@@ -361,10 +361,10 @@ VclPtr<vcl::Window> ChartErrorBarPanel::Create (
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
     ChartController* pController)
 {
-    if (pParent == NULL)
-        throw lang::IllegalArgumentException("no parent Window given to ChartErrorBarPanel::Create", NULL, 0);
+    if (pParent == nullptr)
+        throw lang::IllegalArgumentException("no parent Window given to ChartErrorBarPanel::Create", nullptr, 0);
     if ( ! rxFrame.is())
-        throw lang::IllegalArgumentException("no XFrame given to ChartErrorBarPanel::Create", NULL, 1);
+        throw lang::IllegalArgumentException("no XFrame given to ChartErrorBarPanel::Create", nullptr, 1);
 
     return  VclPtr<ChartErrorBarPanel>::Create(
                         pParent, rxFrame, pController);

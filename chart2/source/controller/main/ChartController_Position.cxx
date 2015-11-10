@@ -56,7 +56,7 @@ void lcl_getPositionAndSizeFromItemSet( const SfxItemSet& rItemSet, awt::Rectang
 
     RECT_POINT eRP = (RECT_POINT)RP_LT;
 
-    const SfxPoolItem* pPoolItem=NULL;
+    const SfxPoolItem* pPoolItem=nullptr;
     //read position
     if (SfxItemState::SET==rItemSet.GetItemState(SID_ATTR_TRANSFORM_POS_X,true,&pPoolItem))
         nPosX= static_cast<const SfxInt32Item*>(pPoolItem)->GetValue();

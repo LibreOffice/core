@@ -63,7 +63,7 @@ void WrappedBarPositionProperty_Base::setPropertyValue( const Any& rOuterValue, 
 {
     sal_Int32 nNewValue = 0;
     if( ! (rOuterValue >>= nNewValue) )
-        throw lang::IllegalArgumentException( "GapWidth and Overlap property require value of type sal_Int32", 0, 0 );
+        throw lang::IllegalArgumentException( "GapWidth and Overlap property require value of type sal_Int32", nullptr, 0 );
 
     m_aOuterValue = rOuterValue;
 

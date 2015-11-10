@@ -63,7 +63,7 @@ void WrappedAutomaticPositionProperty::setPropertyValue( const Any& rOuterValue,
     {
         bool bNewValue = true;
         if( ! (rOuterValue >>= bNewValue) )
-            throw lang::IllegalArgumentException( "Property AutomaticPosition requires value of type boolean", 0, 0 );
+            throw lang::IllegalArgumentException( "Property AutomaticPosition requires value of type boolean", nullptr, 0 );
 
         try
         {

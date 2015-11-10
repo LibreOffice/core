@@ -48,7 +48,7 @@ DragMethod_RotateDiagram::DragMethod_RotateDiagram( DrawViewWrapper& rDrawViewWr
         , const Reference< frame::XModel >& xChartModel
         , RotationDirection eRotationDirection )
     : DragMethod_Base( rDrawViewWrapper, rObjectCID, xChartModel, ActionDescriptionProvider::ROTATE )
-    , m_pScene(0)
+    , m_pScene(nullptr)
     , m_aReferenceRect(100,100,100,100)
     , m_aStartPos(0,0)
     , m_aWireframePolyPolygon()

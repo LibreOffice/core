@@ -63,7 +63,7 @@ public:
 
     void SetPropertyValueByHandle( sal_Int32 nHandle,
                                    const ::com::sun::star::uno::Any & rValue,
-                                   ::com::sun::star::uno::Any * pOldValue = NULL );
+                                   ::com::sun::star::uno::Any * pOldValue = nullptr );
 
     bool SetStyle( const ::com::sun::star::uno::Reference< ::com::sun::star::style::XStyle > & xStyle );
     ::com::sun::star::uno::Reference< ::com::sun::star::style::XStyle >

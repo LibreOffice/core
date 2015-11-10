@@ -137,7 +137,7 @@ Reference< chart2::data::XDataSequence > ExplicitCategoriesProvider::getOriginal
 {
     if( m_xOriginalCategories.is() )
         return m_xOriginalCategories->getValues();
-    return 0;
+    return nullptr;
 }
 
 bool ExplicitCategoriesProvider::hasComplexCategories() const
@@ -548,7 +548,7 @@ const std::vector<ComplexCategory>* ExplicitCategoriesProvider::getCategoriesByL
     sal_Int32 nMaxIndex = m_aComplexCats.size()-1;
     if (nLevel >= 0 && nLevel <= nMaxIndex)
         return &m_aComplexCats[nMaxIndex-nLevel];
-    return NULL;
+    return nullptr;
 }
 
 OUString ExplicitCategoriesProvider::getCategoryByIndex(

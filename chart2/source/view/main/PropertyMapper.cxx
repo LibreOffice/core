@@ -172,7 +172,7 @@ uno::Any* PropertyMapper::getValuePointer( tAnySequence& rPropValues
         if(rPropNames[nN].equals(rPropName))
             return &rPropValues[nN];
     }
-    return NULL;
+    return nullptr;
 }
 
 uno::Any* PropertyMapper::getValuePointerForLimitedSpace( tAnySequence& rPropValues

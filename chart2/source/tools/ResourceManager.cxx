@@ -27,7 +27,7 @@ namespace chart
 ResMgr & ResourceManager::getResourceManager()
 {
     // not threadsafe
-    static ResMgr * pResourceManager = 0;
+    static ResMgr * pResourceManager = nullptr;
     if( ! pResourceManager )
         pResourceManager = ResMgr::CreateResMgr("chartcontroller");
     OSL_ASSERT( pResourceManager );

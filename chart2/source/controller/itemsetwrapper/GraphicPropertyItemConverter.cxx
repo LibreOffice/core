@@ -168,7 +168,7 @@ GraphicPropertyItemConverter::~GraphicPropertyItemConverter()
 
 const sal_uInt16 * GraphicPropertyItemConverter::GetWhichPairs() const
 {
-    const sal_uInt16 * pResult = NULL;
+    const sal_uInt16 * pResult = nullptr;
 
     switch( m_eGraphicObjectType )
     {

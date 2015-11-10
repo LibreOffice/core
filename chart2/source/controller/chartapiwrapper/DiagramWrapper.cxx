@@ -1225,7 +1225,7 @@ WrappedDataRowSourceProperty::WrappedDataRowSourceProperty( std::shared_ptr< Cha
             , m_spChart2ModelContact( spChart2ModelContact )
             , m_aOuterValue()
 {
-    m_aOuterValue = WrappedDataRowSourceProperty::getPropertyDefault( 0 );
+    m_aOuterValue = WrappedDataRowSourceProperty::getPropertyDefault( nullptr );
 }
 
 WrappedDataRowSourceProperty::~WrappedDataRowSourceProperty()
@@ -1240,7 +1240,7 @@ void WrappedDataRowSourceProperty::setPropertyValue( const Any& rOuterValue, con
     {
         sal_Int32 nNew = ::com::sun::star::chart::ChartDataRowSource_ROWS;
         if( !(rOuterValue >>= nNew) )
-            throw lang::IllegalArgumentException( "Property DataRowSource requires ::com::sun::star::chart::ChartDataRowSource value", 0, 0 );
+            throw lang::IllegalArgumentException( "Property DataRowSource requires ::com::sun::star::chart::ChartDataRowSource value", nullptr, 0 );
         else
             eChartDataRowSource = ::com::sun::star::chart::ChartDataRowSource(nNew);
     }
@@ -1367,7 +1367,7 @@ void WrappedStackingProperty::setPropertyValue( const Any& rOuterValue, const Re
 {
     bool bNewValue = false;
     if( ! (rOuterValue >>= bNewValue) )
-        throw lang::IllegalArgumentException( "Stacking Properties require boolean values", 0, 0 );
+        throw lang::IllegalArgumentException( "Stacking Properties require boolean values", nullptr, 0 );
 
     StackMode eInnerStackMode;
     bool bHasDetectableInnerValue = detectInnerValue( eInnerStackMode );
@@ -1439,7 +1439,7 @@ WrappedDim3DProperty::WrappedDim3DProperty( std::shared_ptr< Chart2ModelContact 
             , m_spChart2ModelContact( spChart2ModelContact )
             , m_aOuterValue()
 {
-    m_aOuterValue = WrappedDim3DProperty::getPropertyDefault( 0 );
+    m_aOuterValue = WrappedDim3DProperty::getPropertyDefault( nullptr );
 }
 
 WrappedDim3DProperty::~WrappedDim3DProperty()
@@ -1451,7 +1451,7 @@ void WrappedDim3DProperty::setPropertyValue( const Any& rOuterValue, const Refer
 {
     bool bNew3D = false;
     if( ! (rOuterValue >>= bNew3D) )
-        throw lang::IllegalArgumentException( "Property Dim3D requires boolean value", 0, 0 );
+        throw lang::IllegalArgumentException( "Property Dim3D requires boolean value", nullptr, 0 );
 
     m_aOuterValue = rOuterValue;
 
@@ -1510,7 +1510,7 @@ WrappedVerticalProperty::WrappedVerticalProperty( std::shared_ptr< Chart2ModelCo
             , m_spChart2ModelContact( spChart2ModelContact )
             , m_aOuterValue()
 {
-    m_aOuterValue = WrappedVerticalProperty::getPropertyDefault( 0 );
+    m_aOuterValue = WrappedVerticalProperty::getPropertyDefault( nullptr );
 }
 
 WrappedVerticalProperty::~WrappedVerticalProperty()
@@ -1522,7 +1522,7 @@ void WrappedVerticalProperty::setPropertyValue( const Any& rOuterValue, const Re
 {
     bool bNewVertical = false;
     if( ! (rOuterValue >>= bNewVertical) )
-        throw lang::IllegalArgumentException( "Property Vertical requires boolean value", 0, 0 );
+        throw lang::IllegalArgumentException( "Property Vertical requires boolean value", nullptr, 0 );
 
     m_aOuterValue = rOuterValue;
 
@@ -1587,7 +1587,7 @@ private: //member
 WrappedNumberOfLinesProperty::WrappedNumberOfLinesProperty( std::shared_ptr< Chart2ModelContact > spChart2ModelContact )
             : WrappedProperty("NumberOfLines",OUString())
             , m_spChart2ModelContact( spChart2ModelContact )
-            , m_aOuterValue( this->getPropertyDefault(0) )
+            , m_aOuterValue( this->getPropertyDefault(nullptr) )
 {
 }
 
@@ -1635,7 +1635,7 @@ void WrappedNumberOfLinesProperty::setPropertyValue( const Any& rOuterValue, con
 {
     sal_Int32 nNewValue;
     if( ! (rOuterValue >>= nNewValue) )
-        throw lang::IllegalArgumentException( "property NumberOfLines requires sal_Int32 value", 0, 0 );
+        throw lang::IllegalArgumentException( "property NumberOfLines requires sal_Int32 value", nullptr, 0 );
 
     m_aOuterValue = rOuterValue;
 
@@ -1648,7 +1648,7 @@ void WrappedNumberOfLinesProperty::setPropertyValue( const Any& rOuterValue, con
         DiagramHelper::tTemplateWithServiceName aTemplateAndService =
                 DiagramHelper::getTemplateForDiagram( xDiagram, xFact );
 
-        uno::Reference< chart2::XChartTypeTemplate > xTemplate(0);
+        uno::Reference< chart2::XChartTypeTemplate > xTemplate(nullptr);
         if( aTemplateAndService.second == "com.sun.star.chart2.template.ColumnWithLine" )
         {
             if( nNewValue != 0 )
@@ -1740,7 +1740,7 @@ WrappedAttributedDataPointsProperty::WrappedAttributedDataPointsProperty( std::s
             , m_spChart2ModelContact( spChart2ModelContact )
             , m_aOuterValue()
 {
-    m_aOuterValue = WrappedAttributedDataPointsProperty::getPropertyDefault( 0 );
+    m_aOuterValue = WrappedAttributedDataPointsProperty::getPropertyDefault( nullptr );
 }
 
 WrappedAttributedDataPointsProperty::~WrappedAttributedDataPointsProperty()
@@ -1752,7 +1752,7 @@ void WrappedAttributedDataPointsProperty::setPropertyValue( const Any& rOuterVal
 {
     uno::Sequence< uno::Sequence< sal_Int32 > > aNewValue;
     if( ! (rOuterValue >>= aNewValue) )
-        throw lang::IllegalArgumentException( "Property AttributedDataPoints requires value of type uno::Sequence< uno::Sequence< sal_Int32 > >", 0, 0 );
+        throw lang::IllegalArgumentException( "Property AttributedDataPoints requires value of type uno::Sequence< uno::Sequence< sal_Int32 > >", nullptr, 0 );
 
     m_aOuterValue = rOuterValue;
 
@@ -1854,7 +1854,7 @@ WrappedSolidTypeProperty::WrappedSolidTypeProperty( std::shared_ptr< Chart2Model
             , m_spChart2ModelContact( spChart2ModelContact )
             , m_aOuterValue()
 {
-    m_aOuterValue = WrappedSolidTypeProperty::getPropertyDefault( 0 );
+    m_aOuterValue = WrappedSolidTypeProperty::getPropertyDefault( nullptr );
 }
 
 WrappedSolidTypeProperty::~WrappedSolidTypeProperty()
@@ -1866,7 +1866,7 @@ void WrappedSolidTypeProperty::setPropertyValue( const Any& rOuterValue, const R
 {
     sal_Int32 nNewSolidType = ::com::sun::star::chart::ChartSolidType::RECTANGULAR_SOLID;
     if( ! (rOuterValue >>= nNewSolidType) )
-        throw lang::IllegalArgumentException( "Property SolidType requires integer value", 0, 0 );
+        throw lang::IllegalArgumentException( "Property SolidType requires integer value", nullptr, 0 );
 
     m_aOuterValue = rOuterValue;
 
@@ -1934,7 +1934,7 @@ void WrappedAutomaticSizeProperty::setPropertyValue( const Any& rOuterValue, con
     {
         bool bNewValue = true;
         if( ! (rOuterValue >>= bNewValue) )
-            throw lang::IllegalArgumentException( "Property AutomaticSize requires value of type boolean", 0, 0 );
+            throw lang::IllegalArgumentException( "Property AutomaticSize requires value of type boolean", nullptr, 0 );
 
         try
         {
@@ -2004,7 +2004,7 @@ void WrappedIncludeHiddenCellsProperty::setPropertyValue( const Any& rOuterValue
 {
     bool bNewValue = false;
     if( ! (rOuterValue >>= bNewValue) )
-        throw lang::IllegalArgumentException( "Property IncludeHiddenCells requires boolean value", 0, 0 );
+        throw lang::IllegalArgumentException( "Property IncludeHiddenCells requires boolean value", nullptr, 0 );
 
     ChartModelHelper::setIncludeHiddenCells( bNewValue, *m_spChart2ModelContact->getModel() );
 }

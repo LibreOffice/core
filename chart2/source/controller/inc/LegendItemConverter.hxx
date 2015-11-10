@@ -42,7 +42,7 @@ public:
         SdrModel& rDrawModel,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::lang::XMultiServiceFactory > & xNamedPropertyContainerFactory,
-        const css::awt::Size* pRefSize = NULL );
+        const css::awt::Size* pRefSize = nullptr );
 
     virtual ~LegendItemConverter();
 

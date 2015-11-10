@@ -129,7 +129,7 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
         createLine2D( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& xTarget
                     , const ::com::sun::star::drawing::PointSequenceSequence& rPoints
-                    , const VLineProperties* pLineProperties = NULL ) override;
+                    , const VLineProperties* pLineProperties = nullptr ) override;
 
     virtual com::sun::star::uno::Reference< com::sun::star::drawing::XShape >
         createLine ( const ::com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& xTarget,

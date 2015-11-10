@@ -73,8 +73,8 @@ EquidistantTickFactory::EquidistantTickFactory(
           const ExplicitScaleData& rScale, const ExplicitIncrementData& rIncrement )
             : m_rScale( rScale )
             , m_rIncrement( rIncrement )
-            , m_xInverseScaling(NULL)
-            , m_pfCurrentValues(NULL)
+            , m_xInverseScaling(nullptr)
+            , m_pfCurrentValues(nullptr)
 {
     //@todo: make sure that the scale is valid for the scaling
 
@@ -156,7 +156,7 @@ void EquidistantTickFactory::addSubTicks( sal_Int32 nDepth, uno::Sequence< uno::
     sal_Int32 nRealSubTickCount = 0;
     sal_Int32 nIntervalCount = m_rIncrement.SubIncrements[nDepth-1].IntervalCount;
 
-    double* pValue = NULL;
+    double* pValue = nullptr;
     for(; pfNextParentTick; fLastParentTick=*pfNextParentTick, pfNextParentTick = aIter.nextValue())
     {
         for( sal_Int32 nPartTick = 1; nPartTick<nIntervalCount; nPartTick++ )
@@ -227,12 +227,12 @@ double* EquidistantTickFactory::getMajorTick( sal_Int32 nTick ) const
     if(m_pfCurrentValues[0]>m_fOuterMajorTickBorderMax)
     {
         if( !approxEqual(m_pfCurrentValues[0],m_fOuterMajorTickBorderMax) )
-            return NULL;
+            return nullptr;
     }
     if(m_pfCurrentValues[0]<m_fOuterMajorTickBorderMin)
     {
         if( !approxEqual(m_pfCurrentValues[0],m_fOuterMajorTickBorderMin) )
-            return NULL;
+            return nullptr;
     }
 
     //return always the value after scaling
@@ -249,15 +249,15 @@ double* EquidistantTickFactory::getMinorTick( sal_Int32 nTick, sal_Int32 nDepth
     {
         //OSL_ENSURE( fStartParentTick < fNextParentTick, "fStartParentTick >= fNextParentTick");
         if(fStartParentTick >= fNextParentTick)
-            return NULL;
+            return nullptr;
         if(nDepth>static_cast<sal_Int32>(m_rIncrement.SubIncrements.size()) || nDepth<=0)
-            return NULL;
+            return nullptr;
 
         //subticks are only calculated if they are laying between parent ticks:
         if(nTick<=0)
-            return NULL;
+            return nullptr;
         if(nTick>=m_rIncrement.SubIncrements[nDepth-1].IntervalCount)
-            return NULL;
+            return nullptr;
     }
 
     bool    bPostEquidistant = m_rIncrement.SubIncrements[nDepth-1].PostEquidistant;
@@ -280,7 +280,7 @@ double* EquidistantTickFactory::getMinorTick( sal_Int32 nTick, sal_Int32 nDepth
         m_pfCurrentValues[nDepth] = m_rScale.Scaling->doScaling( m_pfCurrentValues[nDepth] );
 
     if( !isWithinOuterBorder( m_pfCurrentValues[nDepth] ) )
-        return NULL;
+        return nullptr;
 
     return &m_pfCurrentValues[nDepth];
 }
@@ -417,11 +417,11 @@ EquidistantTickIter::EquidistantTickIter( const uno::Sequence< uno::Sequence< do
                    , const ExplicitIncrementData& rIncrement
                    , sal_Int32 nMinDepth, sal_Int32 nMaxDepth )
                 : m_pSimpleTicks(&rTicks)
-                , m_pInfoTicks(0)
+                , m_pInfoTicks(nullptr)
                 , m_rIncrement(rIncrement)
                 , m_nMaxDepth(0)
-                , m_nTickCount(0), m_pnPositions(NULL)
-                , m_pnPreParentCount(NULL), m_pbIntervalFinished(NULL)
+                , m_nTickCount(0), m_pnPositions(nullptr)
+                , m_pnPreParentCount(nullptr), m_pbIntervalFinished(nullptr)
                 , m_nCurrentDepth(-1), m_nCurrentPos(-1), m_fCurrentValue( 0.0 )
 {
     initIter( nMinDepth, nMaxDepth );
@@ -430,12 +430,12 @@ EquidistantTickIter::EquidistantTickIter( const uno::Sequence< uno::Sequence< do
 EquidistantTickIter::EquidistantTickIter( TickInfoArraysType& rTicks
                    , const ExplicitIncrementData& rIncrement
                    , sal_Int32 nMinDepth, sal_Int32 nMaxDepth )
-                : m_pSimpleTicks(NULL)
+                : m_pSimpleTicks(nullptr)
                 , m_pInfoTicks(&rTicks)
                 , m_rIncrement(rIncrement)
                 , m_nMaxDepth(0)
-                , m_nTickCount(0), m_pnPositions(NULL)
-                , m_pnPreParentCount(NULL), m_pbIntervalFinished(NULL)
+                , m_nTickCount(0), m_pnPositions(nullptr)
+                , m_pnPreParentCount(nullptr), m_pbIntervalFinished(nullptr)
                 , m_nCurrentDepth(-1), m_nCurrentPos(-1), m_fCurrentValue( 0.0 )
 {
     initIter( nMinDepth, nMaxDepth );
@@ -519,14 +519,14 @@ double* EquidistantTickIter::firstValue()
         m_fCurrentValue = getTickValue(m_nCurrentDepth, m_pnPositions[m_nCurrentDepth]);
         return &m_fCurrentValue;
     }
-    return NULL;
+    return nullptr;
 }
 
 TickInfo* EquidistantTickIter::firstInfo()
 {
     if( m_pInfoTicks && gotoFirst() )
         return &(*m_pInfoTicks)[m_nCurrentDepth][m_pnPositions[m_nCurrentDepth]];
-    return NULL;
+    return nullptr;
 }
 
 sal_Int32 EquidistantTickIter::getIntervalCount( sal_Int32 nDepth )
@@ -613,7 +613,7 @@ double* EquidistantTickIter::nextValue()
         m_fCurrentValue = getTickValue(m_nCurrentDepth, m_pnPositions[m_nCurrentDepth]);
         return &m_fCurrentValue;
     }
-    return NULL;
+    return nullptr;
 }
 
 TickInfo* EquidistantTickIter::nextInfo()
@@ -624,7 +624,7 @@ TickInfo* EquidistantTickIter::nextInfo()
     {
         return &(*m_pInfoTicks)[m_nCurrentDepth][m_pnPositions[m_nCurrentDepth]];
     }
-    return NULL;
+    return nullptr;
 }
 
 } //namespace chart

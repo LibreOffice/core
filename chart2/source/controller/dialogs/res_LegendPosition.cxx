@@ -40,7 +40,7 @@ using namespace ::com::sun::star::chart2;
 
 LegendPositionResources::LegendPositionResources(VclBuilderContainer& rParent)
     : m_xCC() //unused in this scenario
-    , m_pCbxShow( NULL ) //unused in this scenario, assumed to be visible
+    , m_pCbxShow( nullptr ) //unused in this scenario, assumed to be visible
 {
     rParent.get(m_pRbtLeft, "left");
     rParent.get(m_pRbtRight, "right");
@@ -174,12 +174,12 @@ IMPL_LINK_NOARG_TYPED(LegendPositionResources, PositionEnableHdl, CheckBox&, voi
     m_pRbtRight->Enable( bEnable );
     m_pRbtBottom->Enable( bEnable );
 
-    m_aChangeLink.Call(NULL);
+    m_aChangeLink.Call(nullptr);
 }
 
 void LegendPositionResources::initFromItemSet( const SfxItemSet& rInAttrs )
 {
-    const SfxPoolItem* pPoolItem = NULL;
+    const SfxPoolItem* pPoolItem = nullptr;
     if( rInAttrs.GetItemState( SCHATTR_LEGEND_POS, true, &pPoolItem ) == SfxItemState::SET )
     {
         sal_Int32 nLegendPosition = static_cast<const SfxInt32Item*>(pPoolItem)->GetValue();
@@ -231,7 +231,7 @@ IMPL_LINK_TYPED( LegendPositionResources, PositionChangeHdl, RadioButton&, rRadi
     //first uncheck of previous button -> ignore that call
     //the second call gives the check of the new button
     if( rRadio.IsChecked() )
-        m_aChangeLink.Call(NULL);
+        m_aChangeLink.Call(nullptr);
 }
 
 void LegendPositionResources::SetChangeHdl( const Link<LinkParamNone*,void>& rLink )

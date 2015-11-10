@@ -51,10 +51,10 @@ namespace chart
 {
 
 DrawModelWrapper::DrawModelWrapper( const uno::Reference<uno::XComponentContext>& /*xContext*/ )
-        : SdrModel( SvtPathOptions().GetPalettePath(), NULL, NULL, false, false )
-        , m_pChartItemPool(0)
-        , m_xMainDrawPage(0)
-        , m_xHiddenDrawPage(0)
+        : SdrModel( SvtPathOptions().GetPalettePath(), nullptr, nullptr, false, false )
+        , m_pChartItemPool(nullptr)
+        , m_xMainDrawPage(nullptr)
+        , m_xHiddenDrawPage(nullptr)
 {
     m_pChartItemPool = ChartItemPool::CreateChartItemPool();
 
@@ -130,7 +130,7 @@ DrawModelWrapper::~DrawModelWrapper()
             SfxItemPool* pSecondary = pPool->GetSecondaryPool();
             if(pSecondary == m_pChartItemPool)
             {
-                pPool->SetSecondaryPool (NULL);
+                pPool->SetSecondaryPool (nullptr);
                 break;
             }
             pPool = pSecondary;
@@ -292,14 +292,14 @@ XBitmapListRef DrawModelWrapper::GetBitmapList() const
 SdrObject* DrawModelWrapper::getNamedSdrObject( const OUString& rName )
 {
     if( rName.isEmpty() )
-        return 0;
+        return nullptr;
     return getNamedSdrObject( rName, GetPage(0) );
 }
 
 SdrObject* DrawModelWrapper::getNamedSdrObject( const OUString& rObjectCID, SdrObjList* pSearchList )
 {
     if(!pSearchList || rObjectCID.isEmpty())
-        return 0;
+        return nullptr;
     const size_t nCount = pSearchList->GetObjCount();
     for( size_t nN=0; nN<nCount; ++nN )
     {
@@ -312,7 +312,7 @@ SdrObject* DrawModelWrapper::getNamedSdrObject( const OUString& rObjectCID, SdrO
         if(pObj)
             return pObj;
     }
-    return 0;
+    return nullptr;
 }
 
 bool DrawModelWrapper::removeShape( const uno::Reference< drawing::XShape >& xShape )

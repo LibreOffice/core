@@ -41,10 +41,10 @@ using namespace ::com::sun::star;
 
 CreationWizardUnoDlg::CreationWizardUnoDlg( const uno::Reference< uno::XComponentContext >& xContext )
                     : OComponentHelper( m_aMutex )
-                    , m_xChartModel( 0 )
+                    , m_xChartModel( nullptr )
                     , m_xCC( xContext )
-                    , m_xParentWindow( 0 )
-                    , m_pDialog( 0 )
+                    , m_xParentWindow( nullptr )
+                    , m_pDialog( nullptr )
                     , m_bUnlockControllersOnExecute(false)
 {
     uno::Reference< frame::XDesktop2 > xDesktop = frame::Desktop::create(m_xCC);
@@ -190,7 +190,7 @@ void CreationWizardUnoDlg::createDialogOnDemand()
     SolarMutexGuard aSolarGuard;
     if( !m_pDialog )
     {
-        vcl::Window* pParent = NULL;
+        vcl::Window* pParent = nullptr;
         if( !m_xParentWindow.is() && m_xChartModel.is() )
         {
             uno::Reference< frame::XController > xController(
@@ -220,7 +220,7 @@ void CreationWizardUnoDlg::createDialogOnDemand()
 IMPL_LINK_TYPED( CreationWizardUnoDlg, DialogEventHdl, VclWindowEvent&, rEvent, void )
 {
     if(rEvent.GetId() == VCLEVENT_OBJECT_DYING)
-        m_pDialog = 0;//avoid duplicate destruction of m_pDialog
+        m_pDialog = nullptr;//avoid duplicate destruction of m_pDialog
 }
 
 sal_Int16 SAL_CALL CreationWizardUnoDlg::execute(  ) throw(uno::RuntimeException, std::exception)
@@ -286,7 +286,7 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL CreationWizardUnoDlg::getProp
     throw (uno::RuntimeException, std::exception)
 {
     OSL_FAIL("not implemented");
-    return 0;
+    return nullptr;
 }
 
 void SAL_CALL CreationWizardUnoDlg::setPropertyValue( const OUString& rPropertyName
@@ -298,7 +298,7 @@ void SAL_CALL CreationWizardUnoDlg::setPropertyValue( const OUString& rPropertyN
     {
         awt::Point aPos;
         if( ! (rValue >>= aPos) )
-            throw lang::IllegalArgumentException( "Property 'Position' requires value of type awt::Point", 0, 0 );
+            throw lang::IllegalArgumentException( "Property 'Position' requires value of type awt::Point", nullptr, 0 );
 
         //set left upper outer corner relative to screen
         //pixels, screen position
@@ -307,7 +307,7 @@ void SAL_CALL CreationWizardUnoDlg::setPropertyValue( const OUString& rPropertyN
         if( m_pDialog )
         {
             m_pDialog->SetPosPixel( Point(0,0) );
-            Rectangle aRect( m_pDialog->GetWindowExtentsRelative( 0 ) );
+            Rectangle aRect( m_pDialog->GetWindowExtentsRelative( nullptr ) );
 
             Point aNewOuterPos = Point( aPos.X - aRect.Left(), aPos.Y - aRect.Top() );
             m_pDialog->SetPosPixel( aNewOuterPos );
@@ -320,10 +320,10 @@ void SAL_CALL CreationWizardUnoDlg::setPropertyValue( const OUString& rPropertyN
     else if( rPropertyName == "UnlockControllersOnExecute" )
     {
         if( ! (rValue >>= m_bUnlockControllersOnExecute) )
-            throw lang::IllegalArgumentException( "Property 'UnlockControllers' requires value of type boolean" , 0, 0 );
+            throw lang::IllegalArgumentException( "Property 'UnlockControllers' requires value of type boolean" , nullptr, 0 );
     }
     else
-        throw beans::UnknownPropertyException( "unknown property was tried to set to chart wizard" , 0 );
+        throw beans::UnknownPropertyException( "unknown property was tried to set to chart wizard" , nullptr );
 }
 
 uno::Any SAL_CALL CreationWizardUnoDlg::getPropertyValue( const OUString& rPropertyName )
@@ -338,7 +338,7 @@ uno::Any SAL_CALL CreationWizardUnoDlg::getPropertyValue( const OUString& rPrope
         createDialogOnDemand();
         if( m_pDialog )
         {
-            Rectangle aRect( m_pDialog->GetWindowExtentsRelative( 0 ) );
+            Rectangle aRect( m_pDialog->GetWindowExtentsRelative( nullptr ) );
             awt::Point aPoint(aRect.Left(),aRect.Top());
             aRet = uno::makeAny( aPoint );
         }
@@ -351,7 +351,7 @@ uno::Any SAL_CALL CreationWizardUnoDlg::getPropertyValue( const OUString& rPrope
         createDialogOnDemand();
         if( m_pDialog )
         {
-            Rectangle aRect( m_pDialog->GetWindowExtentsRelative( 0 ) );
+            Rectangle aRect( m_pDialog->GetWindowExtentsRelative( nullptr ) );
             awt::Size aSize(aRect.GetWidth(),aRect.GetHeight());
             aRet = uno::makeAny( aSize );
         }
@@ -361,7 +361,7 @@ uno::Any SAL_CALL CreationWizardUnoDlg::getPropertyValue( const OUString& rPrope
         aRet = uno::makeAny( m_bUnlockControllersOnExecute );
     }
     else
-        throw beans::UnknownPropertyException( "unknown property was tried to get from chart wizard" , 0 );
+        throw beans::UnknownPropertyException( "unknown property was tried to get from chart wizard" , nullptr );
     return aRet;
 }
 

@@ -229,7 +229,7 @@ sal_Bool SAL_CALL XMLFilter::filter(
         if( impl_Export( m_xSourceDoc,
                          aDescriptor ) == 0 )
         {
-            m_xSourceDoc = NULL;
+            m_xSourceDoc = nullptr;
             bResult = true;
         }
     }
@@ -238,7 +238,7 @@ sal_Bool SAL_CALL XMLFilter::filter(
         if( impl_Import( m_xTargetDoc,
                          aDescriptor ) == 0 )
         {
-            m_xTargetDoc = NULL;
+            m_xTargetDoc = nullptr;
             bResult = true;
         }
     }

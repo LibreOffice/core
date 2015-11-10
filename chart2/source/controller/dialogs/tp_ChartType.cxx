@@ -694,7 +694,7 @@ ChartTypeTabPage::ChartTypeTabPage(vcl::Window* pParent
         , m_xChartModel( xChartModel )
         , m_xCC( xContext )
         , m_aChartTypeDialogControllerList(0)
-        , m_pCurrentMainType(0)
+        , m_pCurrentMainType(nullptr)
         , m_nChangingCalls(0)
         , m_bDoLiveUpdate(bDoLiveUpdate)
         , m_aTimerTriggeredControllerLock( uno::Reference< frame::XModel >( m_xChartModel, uno::UNO_QUERY ) )
@@ -796,17 +796,17 @@ void ChartTypeTabPage::dispose()
 
     //delete all resource helper
     delete m_pDim3DLookResourceGroup;
-    m_pDim3DLookResourceGroup = NULL;
+    m_pDim3DLookResourceGroup = nullptr;
     delete m_pStackingResourceGroup;
-    m_pStackingResourceGroup = NULL;
+    m_pStackingResourceGroup = nullptr;
     delete m_pSplineResourceGroup;
-    m_pSplineResourceGroup = NULL;
+    m_pSplineResourceGroup = nullptr;
     delete m_pGeometryResourceGroup;
-    m_pGeometryResourceGroup = NULL;
+    m_pGeometryResourceGroup = nullptr;
     delete m_pSortByXValuesResourceGroup;
-    m_pSortByXValuesResourceGroup = NULL;
+    m_pSortByXValuesResourceGroup = nullptr;
     delete m_pGL3DResourceGroup;
-    m_pGL3DResourceGroup = NULL;
+    m_pGL3DResourceGroup = nullptr;
     m_pFT_ChooseType.clear();
     m_pMainTypeList.clear();
     m_pSubTypeList.clear();
@@ -868,7 +868,7 @@ void ChartTypeTabPage::stateChanged( ChangingResource* /*pResource*/ )
 }
 ChartTypeDialogController* ChartTypeTabPage::getSelectedMainType()
 {
-    ChartTypeDialogController* pTypeController = 0;
+    ChartTypeDialogController* pTypeController = nullptr;
     ::std::vector< ChartTypeDialogController* >::size_type nM = static_cast< ::std::vector< ChartTypeDialogController* >::size_type >(
         m_pMainTypeList->GetSelectEntryPos() );
     if( nM<m_aChartTypeDialogControllerList.size() )
@@ -1052,7 +1052,7 @@ uno::Reference< XChartTypeTemplate > ChartTypeTabPage::getCurrentTemplate() cons
         uno::Reference< lang::XMultiServiceFactory > xTemplateManager( m_xChartModel->getChartTypeManager(), uno::UNO_QUERY );
         return m_pCurrentMainType->getCurrentTemplate( aParameter, xTemplateManager );
     }
-    return 0;
+    return nullptr;
 }
 
 } //namespace chart

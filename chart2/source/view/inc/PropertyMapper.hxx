@@ -49,7 +49,7 @@ public:
         , const ::com::sun::star::uno::Reference<
                 ::com::sun::star::beans::XPropertySet >& xSource
         , const tPropertyNameMap& rMap
-        , tPropertyNameValueMap* pOverwriteMap=0 );
+        , tPropertyNameValueMap* pOverwriteMap=nullptr );
 
     /**
      * Fetch property values from the source object and map it to the

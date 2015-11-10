@@ -440,7 +440,7 @@ Reference< beans::XPropertySet > SAL_CALL AxisWrapper::getAxisTitle() throw (uno
                 eTitleType = TitleHelper::SECONDARY_Y_AXIS_TITLE;
                 break;
             default:
-                return 0;
+                return nullptr;
         }
         m_xAxisTitle = new TitleWrapper( eTitleType, m_spChart2ModelContact );
     }
@@ -463,7 +463,7 @@ Reference< beans::XPropertySet > SAL_CALL AxisWrapper::getMajorGrid() throw (uno
                 eGridType = GridWrapper::Z_MAJOR_GRID;
                 break;
             default:
-                return 0;
+                return nullptr;
         }
         m_xMajorGrid = new GridWrapper( eGridType, m_spChart2ModelContact );
     }
@@ -486,7 +486,7 @@ Reference< beans::XPropertySet > SAL_CALL AxisWrapper::getMinorGrid() throw (uno
                 eGridType = GridWrapper::Z_MINOR_GRID;
                 break;
             default:
-                return 0;
+                return nullptr;
         }
         m_xMinorGrid = new GridWrapper( eGridType, m_spChart2ModelContact );
     }

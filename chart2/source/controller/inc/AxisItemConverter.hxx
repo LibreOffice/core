@@ -39,9 +39,9 @@ public:
         const css::uno::Reference<css::beans::XPropertySet>& rPropertySet,
         SfxItemPool& rItemPool, SdrModel& rDrawModel,
         const css::uno::Reference<css::chart2::XChartDocument> & xChartDoc,
-        ExplicitScaleData* pScale = NULL,
-        ExplicitIncrementData* pIncrement = NULL,
-        const css::awt::Size* pRefSize = NULL );
+        ExplicitScaleData* pScale = nullptr,
+        ExplicitIncrementData* pIncrement = nullptr,
+        const css::awt::Size* pRefSize = nullptr );
 
     virtual ~AxisItemConverter();
 

@@ -28,7 +28,7 @@ using namespace ::com::sun::star;
 namespace chart { namespace wrapper {
 
 MultipleItemConverter::MultipleItemConverter( SfxItemPool& rItemPool )
-        : ItemConverter( NULL, rItemPool )
+        : ItemConverter( nullptr, rItemPool )
 {
 }
 MultipleItemConverter::~MultipleItemConverter()

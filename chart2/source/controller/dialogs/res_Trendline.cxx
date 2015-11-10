@@ -42,7 +42,7 @@ void lcl_setValue( FormattedField& rFmtField, double fValue )
 TrendlineResources::TrendlineResources( vcl::Window * pParent, const SfxItemSet& rInAttrs ) :
         m_eTrendLineType( CHREGRESS_LINEAR ),
         m_bTrendLineUnique( true ),
-        m_pNumFormatter( NULL ),
+        m_pNumFormatter( nullptr ),
         m_nNbPoints( 0 )
 {
     SfxTabPage* pTabPage = reinterpret_cast<SfxTabPage*>(pParent);
@@ -110,7 +110,7 @@ IMPL_LINK_TYPED( TrendlineResources, SelectTrendLine, Button *, pRadioButton, vo
 
 void TrendlineResources::Reset( const SfxItemSet& rInAttrs )
 {
-    const SfxPoolItem *pPoolItem = NULL;
+    const SfxPoolItem *pPoolItem = nullptr;
 
     if( rInAttrs.GetItemState( SCHATTR_REGRESSION_CURVE_NAME, true, &pPoolItem ) == SfxItemState::SET )
     {

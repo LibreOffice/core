@@ -409,7 +409,7 @@ namespace
 */
 bool lcl_SeriesHeaderHasFocus(
     const ::std::vector< std::shared_ptr< ::chart::impl::SeriesHeader > > & rSeriesHeader,
-    sal_Int32 * pOutIndex = 0 )
+    sal_Int32 * pOutIndex = nullptr )
 {
     sal_Int32 nIndex = 0;
     for( auto aIt = rSeriesHeader.begin(); aIt != rSeriesHeader.end(); ++aIt, ++nIndex )
@@ -1035,7 +1035,7 @@ bool DataBrowser::IsTabAllowed( bool bForward ) const
 ::svt::CellController* DataBrowser::GetController( long nRow, sal_uInt16 nCol )
 {
     if( m_bIsReadOnly )
-        return 0;
+        return nullptr;
 
     if( CellContainsNumbers( nRow, nCol ))
     {
@@ -1091,7 +1091,7 @@ sal_uInt32 DataBrowser::GetNumberFormatKey( sal_Int32 nRow, sal_uInt16 nCol ) co
 bool DataBrowser::isDateTimeString( const OUString& aInputString, double& fOutDateTimeValue )
 {
     sal_uInt32 nNumberFormat=0;
-    SvNumberFormatter* pSvNumberFormatter = m_spNumberFormatterWrapper.get() ? m_spNumberFormatterWrapper->getSvNumberFormatter() : 0;
+    SvNumberFormatter* pSvNumberFormatter = m_spNumberFormatterWrapper.get() ? m_spNumberFormatterWrapper->getSvNumberFormatter() : nullptr;
     if( !aInputString.isEmpty() &&  pSvNumberFormatter && pSvNumberFormatter->IsNumberFormat( aInputString, nNumberFormat, fOutDateTimeValue ) )
     {
         short nType = pSvNumberFormatter->GetType( nNumberFormat);
@@ -1112,7 +1112,7 @@ bool DataBrowser::SaveModified()
 
     OSL_ENSURE( nRow >= 0 || nCol >= 0, "This cell should not be modified!" );
 
-    SvNumberFormatter* pSvNumberFormatter = m_spNumberFormatterWrapper.get() ? m_spNumberFormatterWrapper->getSvNumberFormatter() : 0;
+    SvNumberFormatter* pSvNumberFormatter = m_spNumberFormatterWrapper.get() ? m_spNumberFormatterWrapper->getSvNumberFormatter() : nullptr;
     switch( m_apDataBrowserModel->getCellType( nCol, nRow ))
     {
         case DataBrowserModel::NUMBER:
@@ -1283,7 +1283,7 @@ void DataBrowser::ImplAdjustHeaderControls()
                 {
                     pWin->set_margin_left(nStartPos);
                     pColorWin->set_margin_left(nStartPos);
-                    pWin = pColorWin = NULL;
+                    pWin = pColorWin = nullptr;
                 }
 
             }

@@ -314,7 +314,7 @@ void WrappedScaleProperty::setPropertyValue( tScaleProperty eScaleProperty, cons
                     if( bBool )
                         aScaleData.Scaling = AxisHelper::createLogarithmicScaling( 10.0 );
                     else
-                        aScaleData.Scaling = 0;
+                        aScaleData.Scaling = nullptr;
                     bSetScaleData = true;
                 }
             }

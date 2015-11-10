@@ -119,7 +119,7 @@ uno::Reference< beans::XPropertySet > lcl_getEquationProperties(
     if( pItemSet )
     {
         SvxChartRegress eRegress = CHREGRESS_NONE;
-        const SfxPoolItem *pPoolItem = NULL;
+        const SfxPoolItem *pPoolItem = nullptr;
         if( pItemSet->GetItemState( SCHATTR_REGRESSION_TYPE, true, &pPoolItem ) == SfxItemState::SET )
         {
             eRegress = static_cast< const SvxChartRegressItem * >( pPoolItem )->GetValue();
@@ -150,7 +150,7 @@ uno::Reference< beans::XPropertySet > lcl_getCurveProperties(
     if( pItemSet )
     {
         SvxChartRegress eRegress = CHREGRESS_NONE;
-        const SfxPoolItem *pPoolItem = NULL;
+        const SfxPoolItem *pPoolItem = nullptr;
         if( pItemSet->GetItemState( SCHATTR_REGRESSION_TYPE, true, &pPoolItem ) == SfxItemState::SET )
         {
             eRegress = static_cast< const SvxChartRegressItem * >( pPoolItem )->GetValue();
@@ -722,63 +722,63 @@ void StatisticsItemConverter::FillSpecialItem(
         case SCHATTR_REGRESSION_DEGREE:
         {
 
-            uno::Reference<beans::XPropertySet> xProperties( lcl_getCurveProperties( GetPropertySet(), 0 ));
+            uno::Reference<beans::XPropertySet> xProperties( lcl_getCurveProperties( GetPropertySet(), nullptr ));
             lclConvertToItemSet<sal_Int32, SfxInt32Item>(rOutItemSet, nWhichId, xProperties, "PolynomialDegree");
         }
         break;
 
         case SCHATTR_REGRESSION_PERIOD:
         {
-            uno::Reference< beans::XPropertySet > xProperties( lcl_getCurveProperties( GetPropertySet(), 0 ));
+            uno::Reference< beans::XPropertySet > xProperties( lcl_getCurveProperties( GetPropertySet(), nullptr ));
             lclConvertToItemSet<sal_Int32, SfxInt32Item>(rOutItemSet, nWhichId, xProperties, "MovingAveragePeriod");
         }
         break;
 
         case SCHATTR_REGRESSION_EXTRAPOLATE_FORWARD:
         {
-            uno::Reference< beans::XPropertySet > xProperties( lcl_getCurveProperties( GetPropertySet(), 0 ));
+            uno::Reference< beans::XPropertySet > xProperties( lcl_getCurveProperties( GetPropertySet(), nullptr ));
             lclConvertToItemSetDouble(rOutItemSet, nWhichId, xProperties, "ExtrapolateForward");
         }
         break;
 
         case SCHATTR_REGRESSION_EXTRAPOLATE_BACKWARD:
         {
-            uno::Reference< beans::XPropertySet > xProperties( lcl_getCurveProperties( GetPropertySet(), 0 ));
+            uno::Reference< beans::XPropertySet > xProperties( lcl_getCurveProperties( GetPropertySet(), nullptr ));
             lclConvertToItemSetDouble(rOutItemSet, nWhichId, xProperties, "ExtrapolateBackward");
         }
         break;
 
         case SCHATTR_REGRESSION_SET_INTERCEPT:
         {
-            uno::Reference< beans::XPropertySet > xProperties( lcl_getCurveProperties( GetPropertySet(), 0 ));
+            uno::Reference< beans::XPropertySet > xProperties( lcl_getCurveProperties( GetPropertySet(), nullptr ));
             lclConvertToItemSet<sal_Bool, SfxBoolItem>(rOutItemSet, nWhichId, xProperties, "ForceIntercept");
         }
         break;
 
         case SCHATTR_REGRESSION_INTERCEPT_VALUE:
         {
-            uno::Reference< beans::XPropertySet > xProperties( lcl_getCurveProperties( GetPropertySet(), 0 ));
+            uno::Reference< beans::XPropertySet > xProperties( lcl_getCurveProperties( GetPropertySet(), nullptr ));
             lclConvertToItemSetDouble(rOutItemSet, nWhichId, xProperties, "InterceptValue");
         }
         break;
 
         case SCHATTR_REGRESSION_CURVE_NAME:
         {
-            uno::Reference< beans::XPropertySet > xProperties( lcl_getCurveProperties( GetPropertySet(), 0 ));
+            uno::Reference< beans::XPropertySet > xProperties( lcl_getCurveProperties( GetPropertySet(), nullptr ));
             lclConvertToItemSet<OUString, SfxStringItem>(rOutItemSet, nWhichId, xProperties, "CurveName");
         }
         break;
 
         case SCHATTR_REGRESSION_SHOW_EQUATION:
         {
-            uno::Reference< beans::XPropertySet > xEqProp( lcl_getEquationProperties( GetPropertySet(), 0 ));
+            uno::Reference< beans::XPropertySet > xEqProp( lcl_getEquationProperties( GetPropertySet(), nullptr ));
             lclConvertToItemSet<sal_Bool, SfxBoolItem>(rOutItemSet, nWhichId, xEqProp, "ShowEquation");
         }
         break;
 
         case SCHATTR_REGRESSION_SHOW_COEFF:
         {
-            uno::Reference< beans::XPropertySet > xEqProp( lcl_getEquationProperties( GetPropertySet(), 0 ));
+            uno::Reference< beans::XPropertySet > xEqProp( lcl_getEquationProperties( GetPropertySet(), nullptr ));
             lclConvertToItemSet<sal_Bool, SfxBoolItem>(rOutItemSet, nWhichId, xEqProp, "ShowCorrelationCoefficient");
         }
         break;

@@ -37,7 +37,7 @@ namespace chart
 {
 
 ChartItemPool::ChartItemPool():
-        SfxItemPool( "ChartItemPool" , SCHATTR_START, SCHATTR_END, NULL, NULL )
+        SfxItemPool( "ChartItemPool" , SCHATTR_START, SCHATTR_END, nullptr, nullptr )
 {
     /**************************************************************************
     * PoolDefaults
@@ -181,7 +181,7 @@ ChartItemPool::ChartItemPool():
 }
 
 ChartItemPool::ChartItemPool(const ChartItemPool& rPool):
-    SfxItemPool(rPool), ppPoolDefaults(0), pItemInfos(0)
+    SfxItemPool(rPool), ppPoolDefaults(nullptr), pItemInfos(nullptr)
 {
 }
 

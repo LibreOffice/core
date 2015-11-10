@@ -278,7 +278,7 @@ uno::Reference< XChartTypeTemplate > ChartTypeDialogController::getCurrentTempla
     const ChartTypeParameter& rParameter
     , const uno::Reference< lang::XMultiServiceFactory >& xTemplateManager ) const
 {
-    uno::Reference< XChartTypeTemplate > xTemplate(0);
+    uno::Reference< XChartTypeTemplate > xTemplate(nullptr);
 
     OUString aServiceName( this->getServiceNameForParameter( rParameter ) );
     if(!aServiceName.isEmpty())
@@ -1115,8 +1115,8 @@ void StockChartDialogController::adjustParameterToSubType( ChartTypeParameter& r
 }
 
 CombiColumnLineChartDialogController::CombiColumnLineChartDialogController()
-    : m_pFT_NumberOfLines(0)
-    , m_pMF_NumberOfLines(0)
+    : m_pFT_NumberOfLines(nullptr)
+    , m_pMF_NumberOfLines(nullptr)
 {
     bSupports3D = false;
 }

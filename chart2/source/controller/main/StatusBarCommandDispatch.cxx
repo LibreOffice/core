@@ -128,7 +128,7 @@ void SAL_CALL StatusBarCommandDispatch::selectionChanged( const lang::EventObjec
         m_aSelectedOID = ObjectIdentifier( m_xSelectionSupplier->getSelection() );
     else
         m_aSelectedOID = ObjectIdentifier();
-    fireAllStatusEvents( 0 );
+    fireAllStatusEvents( nullptr );
 }
 
 } //  namespace chart

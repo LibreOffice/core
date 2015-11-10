@@ -72,7 +72,7 @@ void WrappedScaleTextProperty::setPropertyValue( const Any& rOuterValue, const R
         if( ! (rOuterValue >>= bNewValue) )
         {
             if( rOuterValue.hasValue() )
-                throw lang::IllegalArgumentException( "Property ScaleText requires value of type boolean", 0, 0 );
+                throw lang::IllegalArgumentException( "Property ScaleText requires value of type boolean", nullptr, 0 );
         }
 
         try

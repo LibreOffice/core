@@ -100,7 +100,7 @@ public:
     {
         PROPERTYTYPE aNewValue;
         if( ! (rOuterValue >>= aNewValue) )
-            throw ::com::sun::star::lang::IllegalArgumentException( "spline property requires different type", 0, 0 );
+            throw ::com::sun::star::lang::IllegalArgumentException( "spline property requires different type", nullptr, 0 );
 
         m_aOuterValue = rOuterValue;
 

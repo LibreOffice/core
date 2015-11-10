@@ -120,8 +120,8 @@ sal_Bool SAL_CALL ChartFrameLoader::load( const uno::Sequence< beans::PropertyVa
     }
 
     //create the controller(+XWindow)
-    uno::Reference< frame::XController >    xController = NULL;
-    uno::Reference< awt::XWindow >          xComponentWindow = NULL;
+    uno::Reference< frame::XController >    xController = nullptr;
+    uno::Reference< awt::XWindow >          xComponentWindow = nullptr;
     {
         xController.set(
             m_xCC->getServiceManager()->createInstanceWithContext(

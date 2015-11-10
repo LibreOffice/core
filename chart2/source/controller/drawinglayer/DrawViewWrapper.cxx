@@ -59,7 +59,7 @@ namespace
 // this code is copied from sfx2/source/doc/objembed.cxx
 SfxObjectShell * lcl_GetParentObjectShell( const uno::Reference< frame::XModel > & xModel )
 {
-    SfxObjectShell* pResult = NULL;
+    SfxObjectShell* pResult = nullptr;
 
     try
     {
@@ -90,14 +90,14 @@ OutputDevice * lcl_GetParentRefDevice( const uno::Reference< frame::XModel > & x
     SfxObjectShell * pParent = lcl_GetParentObjectShell( xModel );
     if ( pParent )
         return pParent->GetDocumentRefDev();
-    return NULL;
+    return nullptr;
 }
 
 }
 
 DrawViewWrapper::DrawViewWrapper( SdrModel* pSdrModel, OutputDevice* pOut, bool bPaintPageForEditMode)
             : E3dView(pSdrModel, pOut)
-            , m_pMarkHandleProvider(NULL)
+            , m_pMarkHandleProvider(nullptr)
             , m_apOutliner(SdrMakeOutliner(OUTLINERMODE_TEXTOBJECT, *pSdrModel))
             , m_bRestoreMapMode( false )
 {
@@ -108,7 +108,7 @@ DrawViewWrapper::DrawViewWrapper( SdrModel* pSdrModel, OutputDevice* pOut, bool 
 
     // #i12587# support for shapes in chart
     SdrOutliner* pOutliner = getOutliner();
-    SfxItemPool* pOutlinerPool = ( pOutliner ? pOutliner->GetEditTextObjectPool() : NULL );
+    SfxItemPool* pOutlinerPool = ( pOutliner ? pOutliner->GetEditTextObjectPool() : nullptr );
     if ( pOutlinerPool )
     {
         SvtLinguConfig aLinguConfig;
@@ -174,7 +174,7 @@ void DrawViewWrapper::SetMarkHandles()
 
 SdrObject* DrawViewWrapper::getHitObject( const Point& rPnt ) const
 {
-    SdrObject* pRet = NULL;
+    SdrObject* pRet = nullptr;
     SdrSearchOptions nOptions = SdrSearchOptions::DEEP | SdrSearchOptions::TESTMARKABLE;
 
     SdrPageView* pSdrPageView = this->GetPageView();
@@ -242,7 +242,7 @@ void DrawViewWrapper::CompleteRedraw(OutputDevice* pOut, const vcl::Region& rReg
 
 SdrObject* DrawViewWrapper::getSelectedObject() const
 {
-    SdrObject* pObj(NULL);
+    SdrObject* pObj(nullptr);
     const SdrMarkList& rMarkList = this->GetMarkedObjectList();
     if(rMarkList.GetMarkCount() == 1)
     {
@@ -255,7 +255,7 @@ SdrObject* DrawViewWrapper::getSelectedObject() const
 SdrObject* DrawViewWrapper::getTextEditObject() const
 {
     SdrObject* pObj = this->getSelectedObject();
-    SdrObject* pTextObj = NULL;
+    SdrObject* pTextObj = nullptr;
     if( pObj && pObj->HasTextEdit())
         pTextObj = static_cast<SdrTextObj*>(pObj);
     return pTextObj;
@@ -293,13 +293,13 @@ SfxItemSet DrawViewWrapper::getPositionAndSizeItemSetFromMarkedObject() const
 SdrObject* DrawViewWrapper::getNamedSdrObject( const OUString& rName ) const
 {
     if(rName.isEmpty())
-        return 0;
+        return nullptr;
     SdrPageView* pSdrPageView = this->GetPageView();
     if( pSdrPageView )
     {
         return DrawModelWrapper::getNamedSdrObject( rName, pSdrPageView->GetObjList() );
     }
-    return 0;
+    return nullptr;
 }
 
 bool DrawViewWrapper::IsObjectHit( SdrObject* pObj, const Point& rPnt )
@@ -331,7 +331,7 @@ void DrawViewWrapper::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
 
     E3dView::Notify(rBC, rHint);
 
-    if( pSdrHint != 0 )
+    if( pSdrHint != nullptr )
     {
         SdrHintKind eKind = pSdrHint->GetKind();
         if( eKind == HINT_BEGEDIT )
@@ -365,7 +365,7 @@ void DrawViewWrapper::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
 SdrObject* DrawViewWrapper::getSdrObject( const uno::Reference<
                     drawing::XShape >& xShape )
 {
-    SdrObject* pRet = 0;
+    SdrObject* pRet = nullptr;
     uno::Reference< lang::XUnoTunnel > xUnoTunnel( xShape, uno::UNO_QUERY );
     uno::Reference< lang::XTypeProvider > xTypeProvider( xShape, uno::UNO_QUERY );
     if(xUnoTunnel.is()&&xTypeProvider.is())

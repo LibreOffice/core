@@ -395,10 +395,10 @@ VclPtr<vcl::Window> ChartSeriesPanel::Create (
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
     ChartController* pController)
 {
-    if (pParent == NULL)
-        throw lang::IllegalArgumentException("no parent Window given to ChartSeriesPanel::Create", NULL, 0);
+    if (pParent == nullptr)
+        throw lang::IllegalArgumentException("no parent Window given to ChartSeriesPanel::Create", nullptr, 0);
     if ( ! rxFrame.is())
-        throw lang::IllegalArgumentException("no XFrame given to ChartSeriesPanel::Create", NULL, 1);
+        throw lang::IllegalArgumentException("no XFrame given to ChartSeriesPanel::Create", nullptr, 1);
 
     return  VclPtr<ChartSeriesPanel>::Create(
                         pParent, rxFrame, pController);

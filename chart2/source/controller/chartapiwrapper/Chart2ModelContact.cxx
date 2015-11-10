@@ -45,9 +45,9 @@ namespace wrapper
 Chart2ModelContact::Chart2ModelContact(
     const Reference< uno::XComponentContext > & xContext ) :
         m_xContext( xContext ),
-        m_xChartModel( 0 ),
-        mpModel( NULL ),
-        m_xChartView(0)
+        m_xChartModel( nullptr ),
+        mpModel( nullptr ),
+        m_xChartView(nullptr)
 {
 }
 
@@ -82,7 +82,7 @@ void Chart2ModelContact::clear()
 {
     m_xChartModel.clear();
     m_xChartView.clear();
-    mpModel = NULL;
+    mpModel = nullptr;
 }
 
 Reference< frame::XModel > Chart2ModelContact::getChartModel() const
@@ -117,7 +117,7 @@ ExplicitValueProvider* Chart2ModelContact::getExplicitValueProvider() const
 {
     getChartView();
     if(!m_xChartView.is())
-        return 0;
+        return nullptr;
 
     //obtain the ExplicitValueProvider from the chart view
     ExplicitValueProvider* pProvider = reinterpret_cast<ExplicitValueProvider*>(m_xChartView->getSomething(

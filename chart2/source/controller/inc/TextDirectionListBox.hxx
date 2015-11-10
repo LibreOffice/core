@@ -31,7 +31,7 @@ class TextDirectionListBox : public svx::FrameDirectionListBox
 {
 public:
     explicit            TextDirectionListBox( vcl::Window* pParent,
-                            vcl::Window* pWindow1 = 0, vcl::Window* pWindow2 = 0 );
+                            vcl::Window* pWindow1 = nullptr, vcl::Window* pWindow2 = nullptr );
 };
 
 } //namespace chart

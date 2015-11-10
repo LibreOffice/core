@@ -32,7 +32,7 @@ public:
     VCartesianAxis( const AxisProperties& rAxisProperties
            , const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >& xNumberFormatsSupplier
            , sal_Int32 nDimensionIndex, sal_Int32 nDimensionCount
-           , PlottingPositionHelper* pPosHelper = NULL //takes ownership
+           , PlottingPositionHelper* pPosHelper = nullptr //takes ownership
            );
 
     virtual ~VCartesianAxis();

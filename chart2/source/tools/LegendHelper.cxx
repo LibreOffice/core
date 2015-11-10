@@ -65,7 +65,7 @@ Reference< chart2::XLegend > LegendHelper::showLegend( ChartModel& rModel
 
 void LegendHelper::hideLegend( ChartModel& rModel )
 {
-    uno::Reference< chart2::XLegend > xLegend = LegendHelper::getLegend( rModel, 0 );
+    uno::Reference< chart2::XLegend > xLegend = LegendHelper::getLegend( rModel, nullptr );
     uno::Reference< beans::XPropertySet > xProp( xLegend, uno::UNO_QUERY );
     if( xProp.is())
     {

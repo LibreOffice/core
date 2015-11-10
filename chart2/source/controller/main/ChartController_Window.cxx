@@ -603,7 +603,7 @@ void ChartController::execute_MouseButtonDown( const MouseEvent& rMEvt )
     if( isDoubleClick(rMEvt) ) //do not change selection if double click
         return;//double click is handled further in mousebutton up
 
-    SdrHdl* pHitSelectionHdl = 0;
+    SdrHdl* pHitSelectionHdl = nullptr;
     //switch from move to resize if handle is hit on a resizable object
     if( m_aSelection.isResizeableObjectSelected() )
         pHitSelectionHdl = pDrawViewWrapper->PickHandle( aMPos );
@@ -662,7 +662,7 @@ void ChartController::execute_MouseButtonDown( const MouseEvent& rMEvt )
     {
         //start drag
         sal_uInt16  nDrgLog = (sal_uInt16)m_pChartWindow->PixelToLogic(Size(DRGPIX,0)).Width();
-        SdrDragMethod* pDragMethod = NULL;
+        SdrDragMethod* pDragMethod = nullptr;
 
         //change selection to 3D scene if rotate mode
         SdrDragMode eDragMode = pDrawViewWrapper->GetDragMode();
@@ -691,7 +691,7 @@ void ChartController::execute_MouseButtonDown( const MouseEvent& rMEvt )
             if( aDragMethodServiceName.equals( ObjectIdentifier::getPieSegmentDragMethodServiceName() ) )
                 pDragMethod = new DragMethod_PieSegment( *pDrawViewWrapper, m_aSelection.getSelectedCID(), getModel() );
         }
-        pDrawViewWrapper->SdrView::BegDragObj(aMPos, NULL, pHitSelectionHdl, nDrgLog, pDragMethod);
+        pDrawViewWrapper->SdrView::BegDragObj(aMPos, nullptr, pHitSelectionHdl, nDrgLog, pDragMethod);
     }
 
     impl_SetMousePointer( rMEvt );
@@ -1820,7 +1820,7 @@ void ChartController::impl_SetMousePointer( const MouseEvent & rEvent )
         return;//don't change pointer during running action
     }
 
-    SdrHdl* pHitSelectionHdl = 0;
+    SdrHdl* pHitSelectionHdl = nullptr;
     if( m_aSelection.isResizeableObjectSelected() )
         pHitSelectionHdl = m_pDrawViewWrapper->PickHandle( aMousePos );
 

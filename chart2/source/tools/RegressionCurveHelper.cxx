@@ -488,7 +488,7 @@ uno::Reference< chart2::XRegressionCurve > RegressionCurveHelper::getFirstCurveN
     const Reference< XRegressionCurveContainer > & xRegCnt )
 {
     if( !xRegCnt.is())
-        return NULL;
+        return nullptr;
 
     try
     {
@@ -507,7 +507,7 @@ uno::Reference< chart2::XRegressionCurve > RegressionCurveHelper::getFirstCurveN
         ASSERT_EXCEPTION( ex );
     }
 
-    return NULL;
+    return nullptr;
 }
 
 uno::Reference< chart2::XRegressionCurve > RegressionCurveHelper::getRegressionCurveAtIndex(
@@ -515,7 +515,7 @@ uno::Reference< chart2::XRegressionCurve > RegressionCurveHelper::getRegressionC
     sal_Int32 aIndex )
 {
     if( !xCurveContainer.is())
-        return NULL;
+        return nullptr;
 
     try
     {
@@ -531,7 +531,7 @@ uno::Reference< chart2::XRegressionCurve > RegressionCurveHelper::getRegressionC
         ASSERT_EXCEPTION( ex );
     }
 
-    return NULL;
+    return nullptr;
 }
 
 SvxChartRegress RegressionCurveHelper::getRegressionType(

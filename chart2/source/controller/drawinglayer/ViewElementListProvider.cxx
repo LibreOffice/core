@@ -48,7 +48,7 @@ using namespace ::com::sun::star;
 
 ViewElementListProvider::ViewElementListProvider( DrawModelWrapper* pDrawModelWrapper )
                         : m_pDrawModelWrapper( pDrawModelWrapper )
-                        , m_pFontList(NULL)
+                        , m_pFontList(nullptr)
 {
 }
 
@@ -88,7 +88,7 @@ XHatchListRef    ViewElementListProvider::GetHatchList() const
 {
     if(m_pDrawModelWrapper)
         return m_pDrawModelWrapper->GetHatchList();
-    return NULL;
+    return nullptr;
 }
 
 XBitmapListRef   ViewElementListProvider::GetBitmapList() const
@@ -101,8 +101,8 @@ XBitmapListRef   ViewElementListProvider::GetBitmapList() const
 //create chartspecific symbols for linecharts
 SdrObjList* ViewElementListProvider::GetSymbolList() const
 {
-    SdrObjList* m_pSymbolList = NULL;
-    uno::Reference< drawing::XShapes > m_xSymbols(NULL);//@todo this keeps the first drawinglayer alive ...
+    SdrObjList* m_pSymbolList = nullptr;
+    uno::Reference< drawing::XShapes > m_xSymbols(nullptr);//@todo this keeps the first drawinglayer alive ...
     try
     {
         if(!m_pSymbolList || !m_pSymbolList->GetObjCount())
@@ -182,10 +182,10 @@ FontList* ViewElementListProvider::getFontList() const
 
     if(!m_pFontList)
     {
-        OutputDevice* pRefDev    = m_pDrawModelWrapper ? m_pDrawModelWrapper->getReferenceDevice() : NULL;
+        OutputDevice* pRefDev    = m_pDrawModelWrapper ? m_pDrawModelWrapper->getReferenceDevice() : nullptr;
         OutputDevice* pDefaultOut = Application::GetDefaultDevice();
         m_pFontList = new FontList( pRefDev ? pRefDev    : pDefaultOut
-                                , pRefDev ? pDefaultOut : NULL
+                                , pRefDev ? pDefaultOut : nullptr
                                 , false );
     }
     return m_pFontList;

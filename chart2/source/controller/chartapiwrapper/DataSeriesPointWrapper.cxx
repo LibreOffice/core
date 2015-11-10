@@ -317,7 +317,7 @@ void WrappedAttachedAxisProperty::setPropertyValue( const Any& rOuterValue, cons
 
     sal_Int32 nChartAxisAssign = ::com::sun::star::chart::ChartAxisAssign::PRIMARY_Y;
     if( ! (rOuterValue >>= nChartAxisAssign) )
-        throw lang::IllegalArgumentException("Property Axis requires value of type sal_Int32", 0, 0 );
+        throw lang::IllegalArgumentException("Property Axis requires value of type sal_Int32", nullptr, 0 );
 
     bool bNewAttachedToMainAxis = nChartAxisAssign == ::com::sun::star::chart::ChartAxisAssign::PRIMARY_Y;
     bool bOldAttachedToMainAxis = ::chart::DiagramHelper::isSeriesAttachedToMainAxis( xDataSeries );
@@ -500,7 +500,7 @@ DataSeriesPointWrapper::DataSeriesPointWrapper(
         , m_nSeriesIndexInNewAPI( -1 )
         , m_nPointIndex( -1 )
         , m_bLinesAllowed(true)
-        , m_xDataSeries(0)
+        , m_xDataSeries(nullptr)
 {
     //need initialize call afterwards
 }
@@ -541,7 +541,7 @@ DataSeriesPointWrapper::DataSeriesPointWrapper( eType _eType,
     , m_nSeriesIndexInNewAPI( nSeriesIndexInNewAPI )
     , m_nPointIndex( (_eType == DATA_POINT) ? nPointIndex : -1 )
     , m_bLinesAllowed( false )
-    , m_xDataSeries(0)
+    , m_xDataSeries(nullptr)
 {
 }
 
@@ -829,7 +829,7 @@ void SAL_CALL DataSeriesPointWrapper::setPropertyValue( const OUString& rPropert
     if(rPropertyName == "Lines")
     {
         if( ! (rValue >>= m_bLinesAllowed) )
-            throw lang::IllegalArgumentException("Property Lines requires value of type sal_Bool", 0, 0 );
+            throw lang::IllegalArgumentException("Property Lines requires value of type sal_Bool", nullptr, 0 );
     }
 
     sal_Int32 nHandle = getInfoHelper().getHandleByName( rPropertyName );

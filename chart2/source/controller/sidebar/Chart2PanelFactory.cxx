@@ -69,24 +69,24 @@ Reference<css::ui::XUIElement> SAL_CALL ChartPanelFactory::createUIElement (
         Reference<css::frame::XController> xController (aArguments.getOrDefault("Controller", Reference<css::frame::XController>()));
 
         vcl::Window* pParentWindow = VCLUnoHelper::GetWindow(xParentWindow);
-        if ( ! xParentWindow.is() || pParentWindow==NULL)
+        if ( ! xParentWindow.is() || pParentWindow==nullptr)
             throw RuntimeException(
                 "PanelFactory::createUIElement called without ParentWindow",
-                NULL);
+                nullptr);
         if ( ! xFrame.is())
             throw RuntimeException(
                 "PanelFactory::createUIElement called without Frame",
-                NULL);
+                nullptr);
         if (!xController.is())
             throw RuntimeException(
                 "ChartPanelFactory::createUIElement called without Controller",
-                NULL);
+                nullptr);
 
         ChartController* pController = dynamic_cast<ChartController*>(xController.get());
         if (!pController)
             throw RuntimeException(
                 "ChartPanelFactory::createUIElement called without valid ChartController",
-                NULL);
+                nullptr);
 
         sal_Int32 nMinimumSize = -1;
         VclPtr<vcl::Window> pPanel;
@@ -118,7 +118,7 @@ Reference<css::ui::XUIElement> SAL_CALL ChartPanelFactory::createUIElement (
     {
         throw css::lang::WrappedTargetRuntimeException(
             OUString("ChartPanelFactory::createUIElement exception"),
-            0, css::uno::makeAny(e));
+            nullptr, css::uno::makeAny(e));
     }
 
     return xElement;

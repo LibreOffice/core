@@ -106,7 +106,7 @@ void SAL_CALL CommandDispatch::removeStatusListener( const Reference< frame::XSt
 void SAL_CALL CommandDispatch::modified( const lang::EventObject& /* aEvent */ )
     throw (uno::RuntimeException, std::exception)
 {
-    fireAllStatusEvents( 0 );
+    fireAllStatusEvents( nullptr );
 }
 
 // ____ XEventListener (base of XModifyListener) ____

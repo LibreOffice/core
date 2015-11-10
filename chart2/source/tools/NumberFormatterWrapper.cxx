@@ -51,7 +51,7 @@ OUString FixedNumberFormatter::getFormattedString( double fValue, sal_Int32& rLa
 
 NumberFormatterWrapper::NumberFormatterWrapper( const uno::Reference< util::XNumberFormatsSupplier >& xSupplier )
                     : m_xNumberFormatsSupplier(xSupplier)
-                    , m_pNumberFormatter(NULL)
+                    , m_pNumberFormatter(nullptr)
 
 {
     uno::Reference<beans::XPropertySet> xProp(m_xNumberFormatsSupplier,uno::UNO_QUERY);
@@ -91,7 +91,7 @@ OUString NumberFormatterWrapper::getFormattedString( sal_Int32 nNumberFormatKey,
                                                      sal_Int32& rLabelColor, bool& rbColorChanged ) const
 {
     OUString aText;
-    Color* pTextColor = NULL;
+    Color* pTextColor = nullptr;
     if( !m_pNumberFormatter )
     {
         OSL_FAIL("Need a NumberFormatter");

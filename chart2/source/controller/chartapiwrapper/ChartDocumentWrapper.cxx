@@ -298,7 +298,7 @@ WrappedDataSourceLabelsInFirstRowProperty::WrappedDataSourceLabelsInFirstRowProp
             , m_spChart2ModelContact( spChart2ModelContact )
             , m_aOuterValue()
 {
-    m_aOuterValue = WrappedDataSourceLabelsInFirstRowProperty::getPropertyDefault( 0 );
+    m_aOuterValue = WrappedDataSourceLabelsInFirstRowProperty::getPropertyDefault( nullptr );
 }
 
 WrappedDataSourceLabelsInFirstRowProperty::~WrappedDataSourceLabelsInFirstRowProperty()
@@ -310,7 +310,7 @@ void WrappedDataSourceLabelsInFirstRowProperty::setPropertyValue( const Any& rOu
 {
     bool bLabelsInFirstRow = true;
     if( ! (rOuterValue >>= bLabelsInFirstRow) )
-        throw lang::IllegalArgumentException("Property DataSourceLabelsInFirstRow requires value of type boolean", 0, 0 );
+        throw lang::IllegalArgumentException("Property DataSourceLabelsInFirstRow requires value of type boolean", nullptr, 0 );
 
     m_aOuterValue = rOuterValue;
     bool bNewValue = bLabelsInFirstRow;
@@ -396,7 +396,7 @@ WrappedDataSourceLabelsInFirstColumnProperty::WrappedDataSourceLabelsInFirstColu
             , m_spChart2ModelContact( spChart2ModelContact )
             , m_aOuterValue()
 {
-    m_aOuterValue = WrappedDataSourceLabelsInFirstColumnProperty::getPropertyDefault( 0 );
+    m_aOuterValue = WrappedDataSourceLabelsInFirstColumnProperty::getPropertyDefault( nullptr );
 }
 
 WrappedDataSourceLabelsInFirstColumnProperty::~WrappedDataSourceLabelsInFirstColumnProperty()
@@ -408,7 +408,7 @@ void WrappedDataSourceLabelsInFirstColumnProperty::setPropertyValue( const Any& 
 {
     bool bLabelsInFirstRow = true;
     if( ! (rOuterValue >>= bLabelsInFirstRow) )
-        throw lang::IllegalArgumentException("Property DataSourceLabelsInFirstRow requires value of type boolean", 0, 0 );
+        throw lang::IllegalArgumentException("Property DataSourceLabelsInFirstRow requires value of type boolean", nullptr, 0 );
 
     m_aOuterValue = rOuterValue;
     bool bNewValue = bLabelsInFirstRow;
@@ -503,7 +503,7 @@ void WrappedHasLegendProperty::setPropertyValue( const Any& rOuterValue, const R
 {
     bool bNewValue = true;
     if( ! (rOuterValue >>= bNewValue) )
-        throw lang::IllegalArgumentException("Property HasLegend requires value of type boolean", 0, 0 );
+        throw lang::IllegalArgumentException("Property HasLegend requires value of type boolean", nullptr, 0 );
 
     try
     {
@@ -587,7 +587,7 @@ void WrappedHasMainTitleProperty::setPropertyValue( const Any& rOuterValue, cons
 {
     bool bNewValue = true;
     if( ! (rOuterValue >>= bNewValue) )
-        throw lang::IllegalArgumentException("Property HasMainTitle requires value of type boolean", 0, 0 );
+        throw lang::IllegalArgumentException("Property HasMainTitle requires value of type boolean", nullptr, 0 );
 
     try
     {
@@ -660,7 +660,7 @@ void WrappedHasSubTitleProperty::setPropertyValue( const Any& rOuterValue, const
 {
     bool bNewValue = true;
     if( ! (rOuterValue >>= bNewValue) )
-        throw lang::IllegalArgumentException("Property HasSubTitle requires value of type boolean", 0, 0 );
+        throw lang::IllegalArgumentException("Property HasSubTitle requires value of type boolean", nullptr, 0 );
 
     try
     {
@@ -920,7 +920,7 @@ Reference< frame::XController > SAL_CALL ChartDocumentWrapper::getCurrentControl
     Reference< frame::XModel > xModel( m_spChart2ModelContact->getChartModel() );
     if( xModel.is() )
         return xModel->getCurrentController();
-    return 0;
+    return nullptr;
 }
 
 void SAL_CALL ChartDocumentWrapper::setCurrentController(
@@ -939,7 +939,7 @@ Reference< uno::XInterface > SAL_CALL ChartDocumentWrapper::getCurrentSelection(
     Reference< frame::XModel > xModel( m_spChart2ModelContact->getChartModel() );
     if( xModel.is() )
         return xModel->getCurrentSelection();
-    return 0;
+    return nullptr;
 }
 
 // ____ XComponent ____
@@ -961,9 +961,9 @@ void SAL_CALL ChartDocumentWrapper::dispose()
         DisposeHelper::DisposeAndClear( m_xChartData );
         DisposeHelper::DisposeAndClear( m_xDiagram );
         DisposeHelper::DisposeAndClear( m_xArea );
-        m_xChartView.set( 0 );
-        m_xShapeFactory.set( 0 );
-        m_xDelegator.set( 0 );
+        m_xChartView.set( nullptr );
+        m_xShapeFactory.set( nullptr );
+        m_xDelegator.set( nullptr );
 
         clearWrappedPropertySet();
         m_spChart2ModelContact->clear();
@@ -990,7 +990,7 @@ void SAL_CALL ChartDocumentWrapper::dispose()
 void ChartDocumentWrapper::impl_resetAddIn()
 {
     Reference< util::XRefreshable > xAddIn( m_xAddIn );
-    m_xAddIn.set( 0 );
+    m_xAddIn.set( nullptr );
 
     if( xAddIn.is() )
     {
@@ -1006,7 +1006,7 @@ void ChartDocumentWrapper::impl_resetAddIn()
                 if( xInit.is() )
                 {
                     uno::Any aParam;
-                    uno::Reference< com::sun::star::chart::XChartDocument > xDoc( 0 );
+                    uno::Reference< com::sun::star::chart::XChartDocument > xDoc( nullptr );
                     aParam <<= xDoc;
                     uno::Sequence< uno::Any > aSeq( &aParam, 1 );
                     xInit->initialize( aSeq );
@@ -1507,27 +1507,27 @@ uno::Any SAL_CALL ChartDocumentWrapper::queryAggregation( const uno::Type& rType
 void ChartDocumentWrapper::_disposing( const lang::EventObject& rSource )
 {
     if( rSource.Source == m_xTitle )
-        m_xTitle.set( 0 );
+        m_xTitle.set( nullptr );
     else if( rSource.Source == m_xSubTitle )
-        m_xSubTitle.set( 0 );
+        m_xSubTitle.set( nullptr );
     else if( rSource.Source == m_xLegend )
-        m_xLegend.set( 0 );
+        m_xLegend.set( nullptr );
     else if( rSource.Source == m_xChartData )
-        m_xChartData.set( 0 );
+        m_xChartData.set( nullptr );
     else if( rSource.Source == m_xDiagram )
-        m_xDiagram.set( 0 );
+        m_xDiagram.set( nullptr );
     else if( rSource.Source == m_xArea )
-        m_xArea.set( 0 );
+        m_xArea.set( nullptr );
     else if( rSource.Source == m_xAddIn )
-        m_xAddIn.set( 0 );
+        m_xAddIn.set( nullptr );
     else if( rSource.Source == m_xChartView )
-        m_xChartView.set( 0 );
+        m_xChartView.set( nullptr );
 }
 
 // WrappedPropertySet
 Reference< beans::XPropertySet > ChartDocumentWrapper::getInnerPropertySet()
 {
-    return 0;
+    return nullptr;
 }
 const Sequence< beans::Property >& ChartDocumentWrapper::getPropertySequence()
 {

@@ -174,7 +174,7 @@ AxisProperties::AxisProperties( const uno::Reference< XAxis >& xAxisModel
     , m_nAxisType(AxisType::REALNUMBER)
     , m_bComplexCategories(false)
     , m_pExplicitCategoriesProvider(pExplicitCategoriesProvider)
-    , m_xAxisTextProvider(0)
+    , m_xAxisTextProvider(nullptr)
 {
 }
 

@@ -349,7 +349,7 @@ uno::Reference<drawing::XShape>
             , bool bRounded )
 {
     if( !xTarget.is() )
-        return 0;
+        return nullptr;
     if( bRounded )
     {
         try
@@ -382,7 +382,7 @@ uno::Reference<drawing::XShape>
             , bool bRounded )
 {
     if( !xTarget.is() )
-        return 0;
+        return nullptr;
 
     //create shape
     uno::Reference< drawing::XShape > xShape(
@@ -453,7 +453,7 @@ uno::Reference<drawing::XShape>
           , const tPropertyNameMap& rPropertyNameMap )
 {
     if( !xTarget.is() )
-        return 0;
+        return nullptr;
 
     Reference< drawing::XShapes > xGroup( ShapeFactory::createGroup3D( xTarget, OUString() ) );
 
@@ -621,7 +621,7 @@ uno::Reference<drawing::XShape>
             , bool bCylinder )
 {
     if( !xTarget.is() )
-        return 0;
+        return nullptr;
 
     //create shape
     uno::Reference< drawing::XShape > xShape(
@@ -853,7 +853,7 @@ uno::Reference< drawing::XShape >
                     , const drawing::HomogenMatrix& rUnitCircleToScene )
 {
     if( !xTarget.is() )
-        return 0;
+        return nullptr;
 
     while(fUnitCircleWidthAngleDegree>360)
         fUnitCircleWidthAngleDegree -= 360.0;
@@ -904,7 +904,7 @@ uno::Reference< drawing::XShape >
                     , double fDepth )
 {
     if( !xTarget.is() )
-        return 0;
+        return nullptr;
 
     while(fUnitCircleWidthAngleDegree>360)
         fUnitCircleWidthAngleDegree -= 360.0;
@@ -985,7 +985,7 @@ uno::Reference< drawing::XShape >
                     , bool bFlatNormals )
 {
     if( !xTarget.is() )
-        return 0;
+        return nullptr;
 
     //create shape
     uno::Reference< drawing::XShape > xShape(
@@ -1041,10 +1041,10 @@ uno::Reference< drawing::XShape >
                     , double fDepth )
 {
     if( !xTarget.is() )
-        return 0;
+        return nullptr;
 
     if( !rPolyPolygon.SequenceX.getLength())
-        return 0;
+        return nullptr;
 
     //create shape
     uno::Reference< drawing::XShape > xShape(
@@ -1104,7 +1104,7 @@ uno::Reference< drawing::XShape >
                     , const drawing::PolyPolygonShape3D& rPolyPolygon )
 {
     if( !xTarget.is() )
-        return 0;
+        return nullptr;
 
     //create shape
     uno::Reference< drawing::XShape > xShape(
@@ -1650,7 +1650,7 @@ uno::Reference< drawing::XShape >
                     , sal_Int32 nFillColor )
 {
     if( !xTarget.is() )
-        return 0;
+        return nullptr;
 
     //create shape
     uno::Reference< drawing::XShape > xShape(
@@ -1696,7 +1696,7 @@ uno::Reference< drawing::XShape >
                     , const uno::Reference< graphic::XGraphic >& xGraphic )
 {
     if( !xTarget.is() || !xGraphic.is() )
-        return 0;
+        return nullptr;
 
     // @todo: change this to a rectangle shape with a fill bitmap for
     // performance reasons (ask AW, said CL)
@@ -1742,7 +1742,7 @@ uno::Reference< drawing::XShapes >
         , const OUString& aName )
 {
     if( !xTarget.is() )
-        return 0;
+        return nullptr;
     try
     {
         //create and add to target
@@ -1769,7 +1769,7 @@ uno::Reference< drawing::XShapes >
     {
         ASSERT_EXCEPTION( e );
     }
-    return 0;
+    return nullptr;
 }
 
 uno::Reference< drawing::XShapes >
@@ -1777,7 +1777,7 @@ uno::Reference< drawing::XShapes >
         , const OUString& aName )
 {
     if( !xTarget.is() )
-        return 0;
+        return nullptr;
     try
     {
         //create shape
@@ -1822,7 +1822,7 @@ uno::Reference< drawing::XShapes >
     {
         ASSERT_EXCEPTION( e );
     }
-    return 0;
+    return nullptr;
 }
 
 uno::Reference< drawing::XShape >
@@ -1831,7 +1831,7 @@ uno::Reference< drawing::XShape >
                     , const drawing::Direction3D& rSize )
 {
     if( !xTarget.is() )
-        return 0;
+        return nullptr;
 
     //create shape
     uno::Reference< drawing::XShape > xShape(
@@ -1893,10 +1893,10 @@ uno::Reference< drawing::XShape >
                     , const VLineProperties& rLineProperties )
 {
     if( !xTarget.is() )
-        return 0;
+        return nullptr;
 
     if(!rPoints.SequenceX.getLength())
-        return NULL;
+        return nullptr;
 
     //create shape
     uno::Reference< drawing::XShape > xShape(
@@ -1954,10 +1954,10 @@ uno::Reference< drawing::XShape >
                     , const VLineProperties* pLineProperties )
 {
     if( !xTarget.is() )
-        return 0;
+        return nullptr;
 
     if(!rPoints.getLength())
-        return NULL;
+        return nullptr;
 
     //create shape
     uno::Reference< drawing::XShape > xShape(
@@ -2034,7 +2034,7 @@ uno::Reference< drawing::XShape > ShapeFactory::createInvisibleRectangle(
     try
     {
         if(!xTarget.is())
-            return 0;
+            return nullptr;
 
         uno::Reference< drawing::XShape > xShape( m_xShapeFactory->createInstance(
                 "com.sun.star.drawing.RectangleShape"), uno::UNO_QUERY );
@@ -2050,7 +2050,7 @@ uno::Reference< drawing::XShape > ShapeFactory::createInvisibleRectangle(
     {
         ASSERT_EXCEPTION( ex );
     }
-    return 0;
+    return nullptr;
 }
 
 uno::Reference< drawing::XShape > ShapeFactory::createRectangle(
@@ -2103,10 +2103,10 @@ uno::Reference< drawing::XShape >
                     , const uno::Any& rATransformation )
 {
     if( !xTarget.is() )
-        return 0;
+        return nullptr;
 
     if(rText.isEmpty())
-        return 0;
+        return nullptr;
 
     //create shape and add to page
     uno::Reference< drawing::XShape > xShape(
@@ -2149,18 +2149,18 @@ uno::Reference< drawing::XShape >
                     , const uno::Any& rATransformation )
 {
     if( !xTarget.is() )
-        return 0;
+        return nullptr;
 
     if( !rTextParagraphs.hasElements() )
-        return 0;
+        return nullptr;
 
     sal_Int32 nNumberOfParagraphs = rTextParagraphs.getLength();
 
     if( rParaPropNames.getLength() != nNumberOfParagraphs )
-        return 0;
+        return nullptr;
 
     if( rParaPropValues.getLength() != nNumberOfParagraphs )
-        return 0;
+        return nullptr;
 
     bool bNotEmpty = false;
     for( sal_Int32 nN = 0; nN < nNumberOfParagraphs; ++nN )
@@ -2172,7 +2172,7 @@ uno::Reference< drawing::XShape >
         }
     }
     if( !bNotEmpty )
-        return 0;
+        return nullptr;
 
     //create shape and add to page
     uno::Reference< drawing::XShape > xShape(
@@ -2218,7 +2218,7 @@ uno::Reference< drawing::XShape >
     }
 
     if( !bNotEmpty )
-        return 0;
+        return nullptr;
 
     uno::Reference< beans::XPropertySet > xProp( xShape, uno::UNO_QUERY );
     if( xProp.is() )

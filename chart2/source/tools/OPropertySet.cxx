@@ -269,7 +269,7 @@ void SAL_CALL OPropertySet::setFastPropertyValue_NoBroadcast
     {
         cppu::IPropertyArrayHelper & rPH = getInfoHelper();
         OUString aName;
-        rPH.fillPropertyMembersByHandle( &aName, 0, nHandle );
+        rPH.fillPropertyMembersByHandle( &aName, nullptr, nHandle );
         OSL_ENSURE( rValue.isExtractableTo( rPH.getPropertyByName( aName ).Type ),
                     "Property type is wrong" );
     }

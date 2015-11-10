@@ -49,7 +49,7 @@ VPolarRadiusAxis::VPolarRadiusAxis( const AxisProperties& rAxisProperties
 VPolarRadiusAxis::~VPolarRadiusAxis()
 {
     delete m_pPosHelper;
-    m_pPosHelper = NULL;
+    m_pPosHelper = nullptr;
 }
 
 void VPolarRadiusAxis::setTransformationSceneToScreen( const drawing::HomogenMatrix& rMatrix)
@@ -134,7 +134,7 @@ void VPolarRadiusAxis::createShapes()
     TickFactory aAngleTickFactory( rAngleScale, rAngleIncrement );
     aAngleTickFactory.getAllTicks( aAngleTickInfos );
 
-    uno::Reference< XScaling > xInverseScaling( NULL );
+    uno::Reference< XScaling > xInverseScaling( nullptr );
     if( rAngleScale.Scaling.is() )
         xInverseScaling = rAngleScale.Scaling->getInverseScaling();
 

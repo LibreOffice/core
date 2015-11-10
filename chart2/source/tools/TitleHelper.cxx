@@ -146,7 +146,7 @@ uno::Reference< XTitle > TitleHelper::getTitle( TitleHelper::eTitleType nTitleIn
     uno::Reference< XTitled > xTitled( lcl_getTitleParent( nTitleIndex, xDiagram ) );
     if( xTitled.is())
         return xTitled->getTitleObject();
-    return NULL;
+    return nullptr;
 }
 
 uno::Reference< XTitle > TitleHelper::getTitle( TitleHelper::eTitleType nTitleIndex
@@ -167,7 +167,7 @@ uno::Reference< XTitle > TitleHelper::getTitle( TitleHelper::eTitleType nTitleIn
     }
     if( xTitled.is())
         return xTitled->getTitleObject();
-    return NULL;
+    return nullptr;
 }
 
 uno::Reference< XTitle > TitleHelper::createTitle(
@@ -345,7 +345,7 @@ void TitleHelper::setCompleteString( const OUString& rNewText
 
         xFormattedString->setString( aNewText );
         aNewStringList[0].set( xFormattedString );
-        if( pDefaultCharHeight != 0 )
+        if( pDefaultCharHeight != nullptr )
         {
             try
             {
@@ -370,7 +370,7 @@ void TitleHelper::removeTitle( TitleHelper::eTitleType nTitleIndex
     uno::Reference< XTitled > xTitled( lcl_getTitleParent( nTitleIndex, xModel ) );
     if( xTitled.is())
     {
-        xTitled->setTitleObject(NULL);
+        xTitled->setTitleObject(nullptr);
     }
 }
 

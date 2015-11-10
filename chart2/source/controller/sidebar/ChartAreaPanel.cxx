@@ -227,10 +227,10 @@ VclPtr<vcl::Window> ChartAreaPanel::Create(
         const css::uno::Reference<css::frame::XFrame>& rxFrame,
         ChartController* pController)
 {
-    if (pParent == NULL)
-        throw css::lang::IllegalArgumentException("no parent Window given to ChartAxisPanel::Create", NULL, 0);
+    if (pParent == nullptr)
+        throw css::lang::IllegalArgumentException("no parent Window given to ChartAxisPanel::Create", nullptr, 0);
     if (!rxFrame.is())
-        throw css::lang::IllegalArgumentException("no XFrame given to ChartAxisPanel::Create", NULL, 1);
+        throw css::lang::IllegalArgumentException("no XFrame given to ChartAxisPanel::Create", nullptr, 1);
 
     return VclPtr<ChartAreaPanel>::Create(
                         pParent, rxFrame, pController);
@@ -413,8 +413,8 @@ void ChartAreaPanel::updateData()
     xPropSet->getPropertyValue("FillBitmapName") >>= aBitmapName;
     GraphicObject xBitmap = getXBitmapFromName(mxModel, aBitmapName);
     XFillBitmapItem aBitmapItem(aBitmapName, xBitmap);
-    XFillBitmapItem* pBitmapItem = NULL;
-    DrawModelWrapper* pModelWrapper = NULL;
+    XFillBitmapItem* pBitmapItem = nullptr;
+    DrawModelWrapper* pModelWrapper = nullptr;
     try
     {
         pModelWrapper = getDrawModelWrapper(mxModel);

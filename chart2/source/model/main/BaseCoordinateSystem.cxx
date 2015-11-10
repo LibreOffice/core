@@ -221,7 +221,7 @@ void SAL_CALL BaseCoordinateSystem::setAxisByDimension(
     if( m_aAllAxis[ nDimensionIndex ].size() < static_cast< tAxisVecVecType::size_type >( nIndex+1 ))
     {
         m_aAllAxis[ nDimensionIndex ].resize( nIndex+1 );
-        m_aAllAxis[ nDimensionIndex ][nIndex] = 0;
+        m_aAllAxis[ nDimensionIndex ][nIndex] = nullptr;
     }
 
     Reference< chart2::XAxis > xOldAxis( m_aAllAxis[ nDimensionIndex ][nIndex] );

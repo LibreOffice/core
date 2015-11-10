@@ -47,7 +47,7 @@ namespace chart
 AccessibleTextHelper::AccessibleTextHelper(
     DrawViewWrapper * pDrawViewWrapper ) :
         impl::AccessibleTextHelper_Base( m_aMutex ),
-        m_pTextHelper( 0 ),
+        m_pTextHelper( nullptr ),
         m_pDrawViewWrapper( pDrawViewWrapper )
 {}
 
@@ -90,7 +90,7 @@ void SAL_CALL AccessibleTextHelper::initialize( const Sequence< uno::Any >& aArg
             SdrObject * pTextObj = m_pDrawViewWrapper->getNamedSdrObject( aCID );
             if( pTextObj )
             {
-                std::unique_ptr<SvxEditSource> pEditSource(new SvxTextEditSource( *pTextObj, 0, *pView, *pWindow ));
+                std::unique_ptr<SvxEditSource> pEditSource(new SvxTextEditSource( *pTextObj, nullptr, *pView, *pWindow ));
                 m_pTextHelper = new ::accessibility::AccessibleTextHelper(std::move(pEditSource));
                 m_pTextHelper->SetEventSource( xEventSource );
             }

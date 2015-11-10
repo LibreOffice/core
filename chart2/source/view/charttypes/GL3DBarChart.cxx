@@ -504,7 +504,7 @@ GL3DBarChart::GL3DBarChart(
     mxChartType(xChartType),
     mpRenderer(new opengl3D::OpenGL3DRenderer()),
     mpWindow(pWindow),
-    mpCamera(NULL),
+    mpCamera(nullptr),
     mbValidContext(true),
     mpTextCache(new opengl3D::TextCache()),
     mnMaxX(0),
@@ -596,7 +596,7 @@ GL3DBarChart::~GL3DBarChart()
     joinRenderThread();
 
     if(mbValidContext)
-        mpWindow->setRenderer(NULL);
+        mpWindow->setRenderer(nullptr);
 }
 
 void GL3DBarChart::create3DShapes(const std::vector<std::unique_ptr<VDataSeries> >& rDataSeriesContainer,

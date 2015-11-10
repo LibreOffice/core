@@ -183,7 +183,7 @@ protected:
     static uno::Reference< beans::XPropertySet > getOrCreateErrorBarProperties( const Reference< beans::XPropertySet >& xSeriesPropertySet )
     {
         if(!xSeriesPropertySet.is())
-            return 0;
+            return nullptr;
         uno::Reference< beans::XPropertySet > xErrorBarProperties;
         xSeriesPropertySet->getPropertyValue( CHART_UNONAME_ERRORBAR_Y ) >>= xErrorBarProperties;
         if( !xErrorBarProperties.is() )
@@ -346,7 +346,7 @@ void WrappedMeanValueProperty::setValueToSeries( const Reference< beans::XProper
     if( xRegCnt.is() )
     {
         if(aNewValue)
-            RegressionCurveHelper::addMeanValueLine( xRegCnt, 0, 0 );
+            RegressionCurveHelper::addMeanValueLine( xRegCnt, nullptr, nullptr );
         else
             RegressionCurveHelper::removeMeanValueLine( xRegCnt );
     }

@@ -42,7 +42,7 @@ using namespace ::com::sun::star::chart2;
 PlottingPositionHelper::PlottingPositionHelper()
         : m_aScales()
         , m_aMatrixScreenToScene()
-        , m_xTransformationLogicToScene(NULL)
+        , m_xTransformationLogicToScene(nullptr)
         , m_bSwapXAndY( false )
         , m_nXResolution( 1000 )
         , m_nYResolution( 1000 )
@@ -59,7 +59,7 @@ PlottingPositionHelper::PlottingPositionHelper()
 PlottingPositionHelper::PlottingPositionHelper( const PlottingPositionHelper& rSource )
         : m_aScales( rSource.m_aScales )
         , m_aMatrixScreenToScene( rSource.m_aMatrixScreenToScene )
-        , m_xTransformationLogicToScene( NULL ) //should be recalculated
+        , m_xTransformationLogicToScene( nullptr ) //should be recalculated
         , m_bSwapXAndY( rSource.m_bSwapXAndY )
         , m_nXResolution( rSource.m_nXResolution )
         , m_nYResolution( rSource.m_nYResolution )
@@ -95,14 +95,14 @@ PlottingPositionHelper* PlottingPositionHelper::createSecondaryPosHelper( const 
 void PlottingPositionHelper::setTransformationSceneToScreen( const drawing::HomogenMatrix& rMatrix)
 {
     m_aMatrixScreenToScene = HomogenMatrixToB3DHomMatrix(rMatrix);
-    m_xTransformationLogicToScene = NULL;
+    m_xTransformationLogicToScene = nullptr;
 }
 
 void PlottingPositionHelper::setScales( const std::vector< ExplicitScaleData >& rScales, bool bSwapXAndYAxis )
 {
     m_aScales = rScales;
     m_bSwapXAndY = bSwapXAndYAxis;
-    m_xTransformationLogicToScene = NULL;
+    m_xTransformationLogicToScene = nullptr;
 }
 
 uno::Reference< XTransformation > PlottingPositionHelper::getTransformationScaledLogicToScene() const
@@ -212,7 +212,7 @@ awt::Point PlottingPositionHelper::transformSceneToScreenPosition( const drawing
         tPropertyNameMap aDummyPropertyNameMap;
         uno::Reference< drawing::XShape > xShape3DAnchor = pShapeFactory->createCube( xSceneTarget
                 , rScenePosition3D,drawing::Direction3D(1,1,1)
-                , 0, 0, aDummyPropertyNameMap);
+                , 0, nullptr, aDummyPropertyNameMap);
         //get 2D position from xShape3DAnchor
         aScreenPoint = xShape3DAnchor->getPosition();
         xSceneTarget->remove(xShape3DAnchor);
@@ -371,8 +371,8 @@ void PolarPlottingPositionHelper::setScales( const std::vector< ExplicitScaleDat
         double fScaleDirectionZ = AxisOrientation_MATHEMATICAL==m_aScales[2].Orientation ? 1.0 : -1.0;
         double MinZ = getLogicMinZ();
         double MaxZ = getLogicMaxZ();
-        doLogicScaling( 0, 0, &MinZ );
-        doLogicScaling( 0, 0, &MaxZ );
+        doLogicScaling( nullptr, nullptr, &MinZ );
+        doLogicScaling( nullptr, nullptr, &MaxZ );
         double fWidthZ = MaxZ - MinZ;
 
         if( AxisOrientation_MATHEMATICAL==m_aScales[2].Orientation )
@@ -584,7 +584,7 @@ double PolarPlottingPositionHelper::transformToRadius( double fLogicValueOnRadiu
         double fX = m_bSwapXAndY ? fLogicValueOnRadiusAxis: getLogicMaxX();
         double fY = m_bSwapXAndY ? getLogicMaxY() : fLogicValueOnRadiusAxis;
         if(bDoScaling)
-            doLogicScaling( &fX, &fY, 0 );
+            doLogicScaling( &fX, &fY, nullptr );
 
         fScaledLogicRadiusValue = m_bSwapXAndY ? fX : fY;
 
@@ -598,10 +598,10 @@ double PolarPlottingPositionHelper::transformToRadius( double fLogicValueOnRadiu
         {
             double MinX = getLogicMinX();
             double MinY = getLogicMinY();
-            doLogicScaling( &MinX, &MinY, 0 );
+            doLogicScaling( &MinX, &MinY, nullptr );
             double MaxX = getLogicMaxX();
             double MaxY = getLogicMaxY();
-            doLogicScaling( &MaxX, &MaxY, 0 );
+            doLogicScaling( &MaxX, &MaxY, nullptr );
 
             double fMin = m_bSwapXAndY ? MinX : MinY;
             double fMax = m_bSwapXAndY ? MaxX : MaxY;

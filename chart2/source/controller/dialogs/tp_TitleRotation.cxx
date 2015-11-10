@@ -63,7 +63,7 @@ SchAlignmentTabPage::~SchAlignmentTabPage()
 void SchAlignmentTabPage::dispose()
 {
     delete m_pOrientHlp;
-    m_pOrientHlp = NULL;
+    m_pOrientHlp = nullptr;
     m_pCtrlDial.clear();
     m_pFtRotate.clear();
     m_pNfRotate.clear();

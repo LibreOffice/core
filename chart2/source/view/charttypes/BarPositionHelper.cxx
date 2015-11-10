@@ -62,7 +62,7 @@ double BarPositionHelper::getScaledSlotPos( double fUnscaledLogicX, double fSeri
     if( m_bDateAxis )
         fUnscaledLogicX = DateHelper::RasterizeDateValue( fUnscaledLogicX, m_aNullDate, m_nTimeResolution );
     double fScaledLogicX(fUnscaledLogicX);
-    doLogicScaling(&fScaledLogicX,NULL,NULL);
+    doLogicScaling(&fScaledLogicX,nullptr,nullptr);
     fScaledLogicX = CategoryPositionHelper::getScaledSlotPos( fScaledLogicX, fSeriesNumber );
     return fScaledLogicX;
 

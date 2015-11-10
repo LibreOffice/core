@@ -52,7 +52,7 @@ public:
     explicit ObjectHierarchy(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XChartDocument > & xChartDocument,
-        ExplicitValueProvider * pExplicitValueProvider = 0,
+        ExplicitValueProvider * pExplicitValueProvider = nullptr,
         bool bFlattenDiagram = false,
         bool bOrderingForElementSelector = false );
     ~ObjectHierarchy();
@@ -83,7 +83,7 @@ public:
     explicit ObjectKeyNavigation( const ObjectHierarchy::tOID & rCurrentOID,
                                   const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::chart2::XChartDocument > & xChartDocument,
-                                  ExplicitValueProvider * pExplicitValueProvider = 0 );
+                                  ExplicitValueProvider * pExplicitValueProvider = nullptr );
 
     bool handleKeyEvent( const ::com::sun::star::awt::KeyEvent & rEvent );
     ObjectHierarchy::tOID getCurrentSelection() const { return m_aCurrentOID;}

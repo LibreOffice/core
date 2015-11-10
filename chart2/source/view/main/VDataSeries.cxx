@@ -315,12 +315,12 @@ void VDataSeries::doSortByXValues()
 
 void VDataSeries::releaseShapes()
 {
-    m_xGroupShape.set(0);
-    m_xLabelsGroupShape.set(0);
-    m_xErrorXBarsGroupShape.set(0);
-    m_xErrorYBarsGroupShape.set(0);
-    m_xFrontSubGroupShape.set(0);
-    m_xBackSubGroupShape.set(0);
+    m_xGroupShape.set(nullptr);
+    m_xLabelsGroupShape.set(nullptr);
+    m_xErrorXBarsGroupShape.set(nullptr);
+    m_xErrorYBarsGroupShape.set(nullptr);
+    m_xFrontSubGroupShape.set(nullptr);
+    m_xBackSubGroupShape.set(nullptr);
 
     m_aPolyPolygonShape3D.SequenceX.realloc(0);
     m_aPolyPolygonShape3D.SequenceY.realloc(0);
@@ -983,7 +983,7 @@ DataPointLabel* VDataSeries::getDataPointLabelIfLabel( sal_Int32 index ) const
     DataPointLabel* pLabel = this->getDataPointLabel( index );
     if( !pLabel || (!pLabel->ShowNumber && !pLabel->ShowNumberInPercent
         && !pLabel->ShowCategoryName ) )
-        return 0;
+        return nullptr;
     return pLabel;
 }
 

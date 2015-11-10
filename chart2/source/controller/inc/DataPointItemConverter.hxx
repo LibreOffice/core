@@ -46,7 +46,7 @@ public:
         const css::uno::Reference<css::lang::XMultiServiceFactory>& xNamedPropertyContainerFactory,
         GraphicPropertyItemConverter::eGraphicObjectType eMapTo =
             GraphicPropertyItemConverter::FILLED_DATA_POINT,
-        const css::awt::Size* pRefSize = NULL,
+        const css::awt::Size* pRefSize = nullptr,
         bool bDataSeries = false,
         bool bUseSpecialFillColor = false,
         sal_Int32 nSpecialFillColor = 0,

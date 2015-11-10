@@ -513,8 +513,8 @@ void ControllerCommandDispatch::fireStatusEventForURLImpl(
 
 void ControllerCommandDispatch::updateCommandAvailability()
 {
-    bool bModelStateIsValid = ( m_apModelState.get() != 0 );
-    bool bControllerStateIsValid = ( m_apControllerState.get() != 0 );
+    bool bModelStateIsValid = ( m_apModelState.get() != nullptr );
+    bool bControllerStateIsValid = ( m_apControllerState.get() != nullptr );
     // Model and controller states exist.
     OSL_ASSERT( bModelStateIsValid );
     OSL_ASSERT( bControllerStateIsValid );
@@ -700,7 +700,7 @@ bool ControllerCommandDispatch::commandAvailable( const OUString & rCommand )
 
 bool ControllerCommandDispatch::isShapeControllerCommandAvailable( const OUString& rCommand )
 {
-    ShapeController* pShapeController(0);
+    ShapeController* pShapeController(nullptr);
     {
         SolarMutexGuard g;
         if (m_pDispatchContainer)

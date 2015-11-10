@@ -84,8 +84,8 @@ AxisItemConverter::AxisItemConverter(
     const awt::Size* pRefSize ) :
         ItemConverter( rPropertySet, rItemPool ),
         m_xChartDoc( xChartDoc ),
-        m_pExplicitScale( NULL ),
-        m_pExplicitIncrement( NULL )
+        m_pExplicitScale( nullptr ),
+        m_pExplicitIncrement( nullptr )
 {
     Reference< lang::XMultiServiceFactory > xNamedPropertyContainerFactory( xChartDoc, uno::UNO_QUERY );
 

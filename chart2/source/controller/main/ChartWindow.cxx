@@ -93,7 +93,7 @@ void ChartWindow::dispose()
 
 void ChartWindow::clear()
 {
-    m_pWindowController=0;
+    m_pWindowController=nullptr;
     this->ReleaseMouse();
 }
 

@@ -96,7 +96,7 @@ ErrorBarResources::ErrorBarResources( VclBuilderContainer* pParent, Dialog * pPa
         m_fPlusValue(0.0),
         m_fMinusValue(0.0),
         m_pParentDialog( pParentDialog ),
-        m_pCurrentRangeChoosingField( 0 ),
+        m_pCurrentRangeChoosingField( nullptr ),
         m_bHasInternalDataProvider( true ),
         m_bEnableDataTableDialog( true )
 {
@@ -342,7 +342,7 @@ void ErrorBarResources::UpdateControlStates()
 
 IMPL_LINK_NOARG_TYPED( ErrorBarResources, CategoryChosen2, ListBox&, void )
 {
-   CategoryChosen(NULL);
+   CategoryChosen(nullptr);
 }
 
 IMPL_LINK_NOARG_TYPED( ErrorBarResources, CategoryChosen, Button*, void )
@@ -467,7 +467,7 @@ IMPL_LINK_TYPED( ErrorBarResources, ChooseRange, Button*, pButton, void )
             aUIString, *this );
     }
     else
-        m_pCurrentRangeChoosingField = 0;
+        m_pCurrentRangeChoosingField = nullptr;
 }
 
 IMPL_LINK_TYPED( ErrorBarResources, RangeChanged, Edit&, rEdit, void )
@@ -487,7 +487,7 @@ IMPL_LINK_TYPED( ErrorBarResources, RangeChanged, Edit&, rEdit, void )
 
 void ErrorBarResources::Reset(const SfxItemSet& rInAttrs)
 {
-    const SfxPoolItem *pPoolItem = NULL;
+    const SfxPoolItem *pPoolItem = nullptr;
 
     // category
     m_eErrorKind = CHERROR_NONE;
@@ -704,7 +704,7 @@ void ErrorBarResources::listeningFinished(
         PosValueChanged( *m_pMfPositive );
     }
 
-    m_pCurrentRangeChoosingField = 0;
+    m_pCurrentRangeChoosingField = nullptr;
 
     UpdateControlStates();
     OSL_ASSERT( m_pParentDialog );

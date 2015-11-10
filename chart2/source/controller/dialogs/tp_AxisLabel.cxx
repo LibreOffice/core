@@ -78,7 +78,7 @@ SchAxisLabelTabPage::~SchAxisLabelTabPage()
 void SchAxisLabelTabPage::dispose()
 {
     delete m_pOrientHlp;
-    m_pOrientHlp = NULL;
+    m_pOrientHlp = nullptr;
     m_pCbShowDescription.clear();
     m_pFlOrder.clear();
     m_pRbSideBySide.clear();
@@ -156,7 +156,7 @@ bool SchAxisLabelTabPage::FillItemSet( SfxItemSet* rOutAttrs )
 
 void SchAxisLabelTabPage::Reset( const SfxItemSet* rInAttrs )
 {
-   const SfxPoolItem* pPoolItem = NULL;
+   const SfxPoolItem* pPoolItem = nullptr;
 
     // show description
     SfxItemState aState = rInAttrs->GetItemState( SCHATTR_AXIS_SHOWDESCR, false, &pPoolItem );

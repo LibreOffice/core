@@ -99,7 +99,7 @@ ObjectPropertiesDialogParameter::ObjectPropertiesDialogParameter( const OUString
         , m_bShowAxisOrigin(false)
         , m_bIsCrossingAxisIsCategoryAxis(false)
         , m_aCategories()
-        , m_xChartDocument( 0 )
+        , m_xChartDocument( nullptr )
         , m_bComplexCategoriesAxis( false )
         , m_nNbPoints( 0 )
 {
@@ -330,9 +330,9 @@ SchAttribTabDlg::SchAttribTabDlg(vcl::Window* pParent,
     , nPageType(0)
     , m_pParameter( pDialogParameter )
     , m_pViewElementListProvider( pViewElementListProvider )
-    , m_pNumberFormatter(0)
-    , m_pSymbolShapeProperties(NULL)
-    , m_pAutoSymbolGraphic(NULL)
+    , m_pNumberFormatter(nullptr)
+    , m_pSymbolShapeProperties(nullptr)
+    , m_pAutoSymbolGraphic(nullptr)
     , m_fAxisMinorStepWidthForErrorBarDecimals(0.1)
     , m_bOKPressed(false)
 {
@@ -351,7 +351,7 @@ SchAttribTabDlg::SchAttribTabDlg(vcl::Window* pParent,
             AddTabPage(RID_SVXPAGE_TRANSPARENCE, SCH_RESSTR(STR_PAGE_TRANSPARENCY));
             AddTabPage(RID_SVXPAGE_CHAR_NAME, SCH_RESSTR(STR_PAGE_FONT));
             AddTabPage(RID_SVXPAGE_CHAR_EFFECTS, SCH_RESSTR(STR_PAGE_FONT_EFFECTS));
-            AddTabPage(TP_ALIGNMENT, SCH_RESSTR(STR_PAGE_ALIGNMENT), SchAlignmentTabPage::Create, NULL);
+            AddTabPage(TP_ALIGNMENT, SCH_RESSTR(STR_PAGE_ALIGNMENT), SchAlignmentTabPage::Create, nullptr);
             if( aCJKOptions.IsAsianTypographyEnabled() )
                 AddTabPage(RID_SVXPAGE_PARA_ASIAN, SCH_RESSTR(STR_PAGE_ASIAN));
             break;
@@ -362,7 +362,7 @@ SchAttribTabDlg::SchAttribTabDlg(vcl::Window* pParent,
             AddTabPage(RID_SVXPAGE_TRANSPARENCE, SCH_RESSTR(STR_PAGE_TRANSPARENCY));
             AddTabPage(RID_SVXPAGE_CHAR_NAME, SCH_RESSTR(STR_PAGE_FONT));
             AddTabPage(RID_SVXPAGE_CHAR_EFFECTS, SCH_RESSTR(STR_PAGE_FONT_EFFECTS));
-            AddTabPage(TP_LEGEND_POS, SCH_RESSTR(STR_PAGE_POSITION), SchLegendPosTabPage::Create, NULL);
+            AddTabPage(TP_LEGEND_POS, SCH_RESSTR(STR_PAGE_POSITION), SchLegendPosTabPage::Create, nullptr);
             if( aCJKOptions.IsAsianTypographyEnabled() )
                 AddTabPage(RID_SVXPAGE_PARA_ASIAN, SCH_RESSTR(STR_PAGE_ASIAN));
             break;
@@ -370,12 +370,12 @@ SchAttribTabDlg::SchAttribTabDlg(vcl::Window* pParent,
         case OBJECTTYPE_DATA_SERIES:
         case OBJECTTYPE_DATA_POINT:
             if( m_pParameter->ProvidesSecondaryYAxis() || m_pParameter->ProvidesOverlapAndGapWidth() || m_pParameter->ProvidesMissingValueTreatments() )
-                AddTabPage(TP_OPTIONS, SCH_RESSTR(STR_PAGE_OPTIONS),SchOptionTabPage::Create, NULL);
+                AddTabPage(TP_OPTIONS, SCH_RESSTR(STR_PAGE_OPTIONS),SchOptionTabPage::Create, nullptr);
             if( m_pParameter->ProvidesStartingAngle())
-                AddTabPage(TP_POLAROPTIONS, SCH_RESSTR(STR_PAGE_OPTIONS),PolarOptionsTabPage::Create, NULL);
+                AddTabPage(TP_POLAROPTIONS, SCH_RESSTR(STR_PAGE_OPTIONS),PolarOptionsTabPage::Create, nullptr);
 
             if( m_pParameter->HasGeometryProperties() )
-                AddTabPage(TP_LAYOUT, SCH_RESSTR(STR_PAGE_LAYOUT),SchLayoutTabPage::Create, NULL);
+                AddTabPage(TP_LAYOUT, SCH_RESSTR(STR_PAGE_LAYOUT),SchLayoutTabPage::Create, nullptr);
 
             if(m_pParameter->HasAreaProperties())
             {
@@ -388,7 +388,7 @@ SchAttribTabDlg::SchAttribTabDlg(vcl::Window* pParent,
         case OBJECTTYPE_DATA_LABEL:
         case OBJECTTYPE_DATA_LABELS:
             AddTabPage(RID_SVXPAGE_LINE, SCH_RESSTR(STR_PAGE_BORDER));
-            AddTabPage(TP_DATA_DESCR, SCH_RESSTR(STR_OBJECT_DATALABELS), DataLabelsTabPage::Create, NULL);
+            AddTabPage(TP_DATA_DESCR, SCH_RESSTR(STR_OBJECT_DATALABELS), DataLabelsTabPage::Create, nullptr);
             AddTabPage(RID_SVXPAGE_CHAR_NAME, SCH_RESSTR(STR_PAGE_FONT));
             AddTabPage(RID_SVXPAGE_CHAR_EFFECTS, SCH_RESSTR(STR_PAGE_FONT_EFFECTS));
             if( aCJKOptions.IsAsianTypographyEnabled() )
@@ -399,12 +399,12 @@ SchAttribTabDlg::SchAttribTabDlg(vcl::Window* pParent,
         case OBJECTTYPE_AXIS:
         {
             if( m_pParameter->HasScaleProperties() )
-                AddTabPage(TP_SCALE, SCH_RESSTR(STR_PAGE_SCALE), ScaleTabPage::Create, NULL);
+                AddTabPage(TP_SCALE, SCH_RESSTR(STR_PAGE_SCALE), ScaleTabPage::Create, nullptr);
 
             if( m_pParameter->HasScaleProperties() )//no positioning page for z axes so far as the tickmarks are not shown so far
-                AddTabPage(TP_AXIS_POSITIONS, SCH_RESSTR(STR_PAGE_POSITIONING), AxisPositionsTabPage::Create, NULL);
+                AddTabPage(TP_AXIS_POSITIONS, SCH_RESSTR(STR_PAGE_POSITIONING), AxisPositionsTabPage::Create, nullptr);
             AddTabPage(RID_SVXPAGE_LINE, SCH_RESSTR(STR_PAGE_LINE));
-            AddTabPage(TP_AXIS_LABEL, SCH_RESSTR(STR_OBJECT_LABEL), SchAxisLabelTabPage::Create, NULL);
+            AddTabPage(TP_AXIS_LABEL, SCH_RESSTR(STR_OBJECT_LABEL), SchAxisLabelTabPage::Create, nullptr);
             if( m_pParameter->HasNumberProperties() )
                 AddTabPage(RID_SVXPAGE_NUMBERFORMAT, SCH_RESSTR(STR_PAGE_NUMBERS));
             AddTabPage(RID_SVXPAGE_CHAR_NAME, SCH_RESSTR(STR_PAGE_FONT));
@@ -415,12 +415,12 @@ SchAttribTabDlg::SchAttribTabDlg(vcl::Window* pParent,
         }
 
         case OBJECTTYPE_DATA_ERRORS_X:
-            AddTabPage(TP_XERRORBAR, SCH_RESSTR(STR_PAGE_XERROR_BARS), ErrorBarsTabPage::Create, NULL);
+            AddTabPage(TP_XERRORBAR, SCH_RESSTR(STR_PAGE_XERROR_BARS), ErrorBarsTabPage::Create, nullptr);
             AddTabPage(RID_SVXPAGE_LINE, SCH_RESSTR(STR_PAGE_LINE));
             break;
 
         case OBJECTTYPE_DATA_ERRORS_Y:
-            AddTabPage(TP_YERRORBAR, SCH_RESSTR(STR_PAGE_YERROR_BARS), ErrorBarsTabPage::Create, NULL);
+            AddTabPage(TP_YERRORBAR, SCH_RESSTR(STR_PAGE_YERROR_BARS), ErrorBarsTabPage::Create, nullptr);
             AddTabPage(RID_SVXPAGE_LINE, SCH_RESSTR(STR_PAGE_LINE));
             break;
 
@@ -435,7 +435,7 @@ SchAttribTabDlg::SchAttribTabDlg(vcl::Window* pParent,
             break;
 
         case OBJECTTYPE_DATA_CURVE:
-            AddTabPage(TP_TRENDLINE, SCH_RESSTR(STR_PAGE_TRENDLINE_TYPE), TrendlineTabPage::Create, NULL);
+            AddTabPage(TP_TRENDLINE, SCH_RESSTR(STR_PAGE_TRENDLINE_TYPE), TrendlineTabPage::Create, nullptr);
             AddTabPage(RID_SVXPAGE_LINE, SCH_RESSTR(STR_PAGE_LINE));
             break;
 
@@ -466,7 +466,7 @@ SchAttribTabDlg::SchAttribTabDlg(vcl::Window* pParent,
                 /*  When rotation is supported for equation text boxes, use
                     SchAlignmentTabPage::Create here. The special
                     SchAlignmentTabPage::CreateWithoutRotation can be deleted. */
-                AddTabPage(TP_ALIGNMENT, SCH_RESSTR(STR_PAGE_ALIGNMENT), SchAlignmentTabPage::CreateWithoutRotation, NULL);
+                AddTabPage(TP_ALIGNMENT, SCH_RESSTR(STR_PAGE_ALIGNMENT), SchAlignmentTabPage::CreateWithoutRotation, nullptr);
             break;
         default:
             break;
@@ -487,9 +487,9 @@ SchAttribTabDlg::~SchAttribTabDlg()
 void SchAttribTabDlg::dispose()
 {
     delete m_pSymbolShapeProperties;
-    m_pSymbolShapeProperties = NULL;
+    m_pSymbolShapeProperties = nullptr;
     delete m_pAutoSymbolGraphic;
-    m_pAutoSymbolGraphic = NULL;
+    m_pAutoSymbolGraphic = nullptr;
     SfxTabDialog::dispose();
 }
 

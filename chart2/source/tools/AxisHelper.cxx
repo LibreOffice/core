@@ -81,7 +81,7 @@ void AxisHelper::removeExplicitScaling( ScaleData& rScaleData )
 {
     uno::Any aEmpty;
     rScaleData.Minimum = rScaleData.Maximum = rScaleData.Origin = aEmpty;
-    rScaleData.Scaling = 0;
+    rScaleData.Scaling = nullptr;
     ScaleData aDefaultScale( createDefaultScale() );
     rScaleData.IncrementData = aDefaultScale.IncrementData;
     rScaleData.TimeIncrement = aDefaultScale.TimeIncrement;
@@ -155,7 +155,7 @@ sal_Int32 AxisHelper::getExplicitNumberFormatKeyForAxis(
     {
         bool bFormatSet = false;
         //check whether we have a percent scale -> use percent format
-        ChartModel* pModel = NULL;
+        ChartModel* pModel = nullptr;
         if( xNumberFormatsSupplier.is() )
         {
             pModel = dynamic_cast<ChartModel*>( xChartDoc.get() );
@@ -344,9 +344,9 @@ Reference< XAxis > AxisHelper::createAxis(
         , ReferenceSizeProvider * pRefSizeProvider )
 {
     if( !xContext.is() || !xCooSys.is() )
-        return NULL;
+        return nullptr;
     if( nDimensionIndex >= xCooSys->getDimension() )
-        return NULL;
+        return nullptr;
 
     Reference< XAxis > xAxis( xContext->getServiceManager()->createInstanceWithContext(
                     "com.sun.star.chart2.Axis", xContext ), uno::UNO_QUERY );
@@ -411,7 +411,7 @@ Reference< XAxis > AxisHelper::createAxis( sal_Int32 nDimensionIndex, bool bMain
 {
     OSL_ENSURE( xContext.is(), "need a context to create an axis" );
     if( !xContext.is() )
-        return NULL;
+        return nullptr;
 
     sal_Int32 nAxisIndex = bMainAxis ? MAIN_AXIS_INDEX : SECONDARY_AXIS_INDEX;
     sal_Int32 nCooSysIndex = 0;
@@ -589,11 +589,11 @@ Reference< XCoordinateSystem > AxisHelper::getCoordinateSystemByIndex(
 {
     Reference< XCoordinateSystemContainer > xCooSysContainer( xDiagram, uno::UNO_QUERY );
     if(!xCooSysContainer.is())
-        return NULL;
+        return nullptr;
     Sequence< Reference< XCoordinateSystem > > aCooSysList = xCooSysContainer->getCoordinateSystems();
     if(0<=nIndex && nIndex<aCooSysList.getLength())
         return aCooSysList[nIndex];
-    return NULL;
+    return nullptr;
 }
 
 Reference< XAxis > AxisHelper::getAxis( sal_Int32 nDimensionIndex, bool bMainAxis
@@ -668,7 +668,7 @@ Reference< XAxis > AxisHelper::getParallelAxis( const Reference< XAxis >& xAxis
     catch( const uno::RuntimeException& )
     {
     }
-    return 0;
+    return nullptr;
 }
 
 bool AxisHelper::isAxisShown( sal_Int32 nDimensionIndex, bool bMainAxis

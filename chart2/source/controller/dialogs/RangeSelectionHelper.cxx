@@ -160,7 +160,7 @@ void RangeSelectionHelper::stopRangeListening( bool bRemoveListener /* = true */
         m_xRangeSelection->removeRangeSelectionListener( m_xRangeSelectionListener );
     }
 
-    m_xRangeSelectionListener = 0;
+    m_xRangeSelectionListener = nullptr;
 }
 
 bool RangeSelectionHelper::verifyCellRange( const OUString & rRangeStr )

@@ -77,7 +77,7 @@ void WrappedStockProperty::setPropertyValue( const ::com::sun::star::uno::Any& r
 {
     bool bNewValue = false;
     if( ! (rOuterValue >>= bNewValue) )
-        throw lang::IllegalArgumentException( "stock properties require type sal_Bool", 0, 0 );
+        throw lang::IllegalArgumentException( "stock properties require type sal_Bool", nullptr, 0 );
 
     m_aOuterValue = rOuterValue;
 
@@ -164,7 +164,7 @@ WrappedVolumeProperty::~WrappedVolumeProperty()
 
 uno::Reference< chart2::XChartTypeTemplate > WrappedVolumeProperty::getNewTemplate( bool bNewValue, const OUString& rCurrentTemplate, const Reference< lang::XMultiServiceFactory >& xFactory ) const
 {
-    uno::Reference< chart2::XChartTypeTemplate > xTemplate(0);
+    uno::Reference< chart2::XChartTypeTemplate > xTemplate(nullptr);
 
     if(!xFactory.is())
         return xTemplate;
@@ -232,7 +232,7 @@ WrappedUpDownProperty::~WrappedUpDownProperty()
 }
 uno::Reference< chart2::XChartTypeTemplate > WrappedUpDownProperty::getNewTemplate( bool bNewValue, const OUString& rCurrentTemplate, const Reference< lang::XMultiServiceFactory >& xFactory ) const
 {
-    uno::Reference< chart2::XChartTypeTemplate > xTemplate(0);
+    uno::Reference< chart2::XChartTypeTemplate > xTemplate(nullptr);
     if( bNewValue ) //add open series
     {
         if( rCurrentTemplate == "com.sun.star.chart2.template.StockLowHighClose" )

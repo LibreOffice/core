@@ -48,12 +48,12 @@ using namespace ::com::sun::star::chart2;
 VDiagram::VDiagram(
     const uno::Reference<XDiagram> & xDiagram, const drawing::Direction3D& rPreferredAspectRatio,
     sal_Int32 nDimension )
-    : m_xTarget(NULL)
-    , m_xShapeFactory(NULL)
-    , m_pShapeFactory(NULL)
-    , m_xOuterGroupShape(NULL)
-    , m_xCoordinateRegionShape(NULL)
-    , m_xWall2D(NULL)
+    : m_xTarget(nullptr)
+    , m_xShapeFactory(nullptr)
+    , m_pShapeFactory(nullptr)
+    , m_xOuterGroupShape(nullptr)
+    , m_xCoordinateRegionShape(nullptr)
+    , m_xWall2D(nullptr)
     , m_nDimensionCount(nDimension)
     , m_xDiagram(xDiagram)
     , m_aPreferredAspectRatio(rPreferredAspectRatio)
@@ -211,7 +211,7 @@ void VDiagram::createShapes_2d()
 
 E3dScene* lcl_getE3dScene( const uno::Reference< drawing::XShape >& xShape )
 {
-    E3dScene* pRet=NULL;
+    E3dScene* pRet=nullptr;
     uno::Reference< lang::XUnoTunnel > xUnoTunnel( xShape, uno::UNO_QUERY );
     uno::Reference< lang::XTypeProvider > xTypeProvider( xShape, uno::UNO_QUERY );
     if(xUnoTunnel.is()&&xTypeProvider.is())
@@ -489,7 +489,7 @@ void VDiagram::createShapes_3d()
 
     //add walls
     {
-        uno::Reference< beans::XPropertySet > xWallProp( NULL );
+        uno::Reference< beans::XPropertySet > xWallProp( nullptr );
         if( m_xDiagram.is() )
             xWallProp.set( m_xDiagram->getWall() );
 
@@ -612,7 +612,7 @@ void VDiagram::createShapes_3d()
 
     //add floor plate
     {
-        uno::Reference< beans::XPropertySet > xFloorProp( NULL );
+        uno::Reference< beans::XPropertySet > xFloorProp( nullptr );
         if( m_xDiagram.is() )
             xFloorProp.set( m_xDiagram->getFloor() );
 

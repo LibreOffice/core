@@ -104,7 +104,7 @@ bool LegendItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSe
     {
         case SCHATTR_LEGEND_SHOW:
         {
-            const SfxPoolItem* pPoolItem = NULL;
+            const SfxPoolItem* pPoolItem = nullptr;
             if( rInItemSet.GetItemState( SCHATTR_LEGEND_SHOW, true, &pPoolItem ) == SfxItemState::SET )
             {
                 bool bShow = static_cast< const SfxBoolItem * >( pPoolItem )->GetValue();
@@ -121,7 +121,7 @@ bool LegendItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSe
         break;
         case SCHATTR_LEGEND_POS:
         {
-            const SfxPoolItem* pPoolItem = NULL;
+            const SfxPoolItem* pPoolItem = nullptr;
             if( rInItemSet.GetItemState( SCHATTR_LEGEND_POS, true, &pPoolItem ) == SfxItemState::SET )
             {
                 chart2::LegendPosition eNewPos = static_cast<chart2::LegendPosition>(static_cast<const SfxInt32Item*>(pPoolItem)->GetValue());

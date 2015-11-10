@@ -222,7 +222,7 @@ void VAxisBase::removeTextShapesFromTicks()
                 if(rTickInfo.xTextShape.is())
                 {
                     m_xTextTarget->remove(rTickInfo.xTextShape);
-                    rTickInfo.xTextShape = NULL;
+                    rTickInfo.xTextShape = nullptr;
                 }
             }
         }
@@ -231,7 +231,7 @@ void VAxisBase::removeTextShapesFromTicks()
 
 void VAxisBase::updateUnscaledValuesAtTicks( TickIter& rIter )
 {
-    Reference< XScaling > xInverseScaling( NULL );
+    Reference< XScaling > xInverseScaling( nullptr );
     if( m_aScale.Scaling.is() )
         xInverseScaling = m_aScale.Scaling->getInverseScaling();
 

@@ -66,7 +66,7 @@ ScaleTabPage::ScaleTabPage(vcl::Window* pWindow,const SfxItemSet& rInAttrs) :
     m_nHelpTimeUnit(1),
     m_nAxisType(chart2::AxisType::REALNUMBER),
     m_bAllowDateAxis(false),
-    pNumFormatter(NULL),
+    pNumFormatter(nullptr),
     m_bShowAxisOrigin(false)
 {
     get(m_pCbxReverse, "CBX_REVERSE");
@@ -316,7 +316,7 @@ void ScaleTabPage::Reset(const SfxItemSet* rInAttrs)
     if(!pNumFormatter)
         return;
 
-    const SfxPoolItem *pPoolItem = NULL;
+    const SfxPoolItem *pPoolItem = nullptr;
     if (rInAttrs->GetItemState(SCHATTR_AXIS_ALLOW_DATEAXIS, true, &pPoolItem) == SfxItemState::SET)
         m_bAllowDateAxis = (bool) static_cast<const SfxBoolItem*>(pPoolItem)->GetValue();
     m_nAxisType=chart2::AxisType::REALNUMBER;
@@ -434,7 +434,7 @@ SfxTabPage::sfxpg ScaleTabPage::DeactivatePage(SfxItemSet* pItemSet)
     if ((pNumFormatter->GetType(nStepFmt) & ~css::util::NumberFormat::DEFINED) == css::util::NumberFormat::TEXT)
         nStepFmt = 0;
 
-    Control* pControl = NULL;
+    Control* pControl = nullptr;
     sal_uInt16 nErrStrId = 0;
     double fDummy;
 
@@ -557,7 +557,7 @@ void ScaleTabPage::SetNumFormatter( SvNumberFormatter* pFormatter )
 
 void ScaleTabPage::SetNumFormat()
 {
-    const SfxPoolItem *pPoolItem = NULL;
+    const SfxPoolItem *pPoolItem = nullptr;
 
     if( GetItemSet().GetItemState( SID_ATTR_NUMBERFORMAT_VALUE, true, &pPoolItem ) == SfxItemState::SET )
     {

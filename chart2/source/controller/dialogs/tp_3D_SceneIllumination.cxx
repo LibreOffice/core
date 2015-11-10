@@ -84,7 +84,7 @@ struct LightSourceInfo
 };
 
 LightSourceInfo::LightSourceInfo()
-    : pButton(0)
+    : pButton(nullptr)
     , aLightSource()
 {
     aLightSource.nDiffuseColor = 0xffffff; // white
@@ -220,7 +220,7 @@ ThreeD_SceneIllumination_TabPage::ThreeD_SceneIllumination_TabPage( vcl::Window*
                 : TabPage ( pWindow
                           ,"tp_3D_SceneIllumination"
                           ,"modules/schart/ui/tp_3D_SceneIllumination.ui")
-                , m_pLightSourceInfoList(0)
+                , m_pLightSourceInfoList(nullptr)
                 , m_xSceneProperties( xSceneProperties )
                 , m_aTimerTriggeredControllerLock( xChartModel )
                 , m_bInCommitToModel( false )
@@ -261,7 +261,7 @@ ThreeD_SceneIllumination_TabPage::ThreeD_SceneIllumination_TabPage( vcl::Window*
     m_pLightSourceInfoList[6].pButton = m_pBtn_Light7;
     m_pLightSourceInfoList[7].pButton = m_pBtn_Light8;
 
-    fillControlsFromModel(0);
+    fillControlsFromModel(nullptr);
 
     m_pBtn_Light1->SetClickHdl( LINK( this, ThreeD_SceneIllumination_TabPage, ClickLightSourceButtonHdl ) );
     m_pBtn_Light2->SetClickHdl( LINK( this, ThreeD_SceneIllumination_TabPage, ClickLightSourceButtonHdl ) );
@@ -292,7 +292,7 @@ ThreeD_SceneIllumination_TabPage::~ThreeD_SceneIllumination_TabPage()
 void ThreeD_SceneIllumination_TabPage::dispose()
 {
     delete[] m_pLightSourceInfoList;
-    m_pLightSourceInfoList = NULL;
+    m_pLightSourceInfoList = nullptr;
     m_pBtn_Light1.clear();
     m_pBtn_Light2.clear();
     m_pBtn_Light3.clear();
@@ -426,14 +426,14 @@ IMPL_LINK_TYPED( ThreeD_SceneIllumination_TabPage, ColorDialogHdl, Button*, pBut
         else
         {
         //get active lightsource:
-            LightSourceInfo* pInfo = 0;
+            LightSourceInfo* pInfo = nullptr;
             sal_Int32 nL=0;
             for( nL=0; nL<8; nL++)
             {
                 pInfo = &m_pLightSourceInfoList[nL];
                 if(pInfo->pButton->IsChecked())
                     break;
-                pInfo = 0;
+                pInfo = nullptr;
             }
             if(pInfo)
                 applyLightSourceToModel( nL );
@@ -454,14 +454,14 @@ IMPL_LINK_TYPED( ThreeD_SceneIllumination_TabPage, SelectColorHdl, ListBox&, rBo
     else if(pListBox==m_pLB_LightSource)
     {
         //get active lightsource:
-        LightSourceInfo* pInfo = 0;
+        LightSourceInfo* pInfo = nullptr;
         sal_Int32 nL=0;
         for( nL=0; nL<8; nL++)
         {
             pInfo = &m_pLightSourceInfoList[nL];
             if(pInfo->pButton->IsChecked())
                 break;
-            pInfo = 0;
+            pInfo = nullptr;
         }
         if(pInfo)
         {
@@ -478,7 +478,7 @@ IMPL_LINK_TYPED( ThreeD_SceneIllumination_TabPage, ClickLightSourceButtonHdl, Bu
     if( !pButton )
         return;
 
-    LightSourceInfo* pInfo = 0;
+    LightSourceInfo* pInfo = nullptr;
     sal_Int32 nL=0;
     for( nL=0; nL<8; nL++)
     {

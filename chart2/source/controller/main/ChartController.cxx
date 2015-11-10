@@ -97,24 +97,24 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 
 ChartController::ChartController(uno::Reference<uno::XComponentContext> const & xContext) :
-    m_aLifeTimeManager( NULL ),
+    m_aLifeTimeManager( nullptr ),
     m_bSuspended( false ),
     m_bCanClose( true ),
     m_xCC(xContext), //@todo is it allowed to hold this context??
-    m_xFrame( NULL ),
+    m_xFrame( nullptr ),
     m_aModelMutex(),
-    m_aModel( NULL, m_aModelMutex ),
-    m_pChartWindow( NULL ),
+    m_aModel( nullptr, m_aModelMutex ),
+    m_pChartWindow( nullptr ),
     m_xViewWindow(),
     m_xChartView(),
     m_pDrawModelWrapper(),
-    m_pDrawViewWrapper(NULL),
+    m_pDrawViewWrapper(nullptr),
     m_eDragMode(SDRDRAG_MOVE),
     m_bWaitingForDoubleClick(false),
     m_bWaitingForMouseUp(false),
     m_bConnectingToView(false),
     m_bDisposed(false),
-    m_xUndoManager( 0 ),
+    m_xUndoManager( nullptr ),
     m_aDispatchContainer( m_xCC, this ),
     m_eDrawMode( CHARTDRAW_SELECT ),
     mpSelectionChangeHandler(new svx::sidebar::SelectionChangeHandler(
@@ -131,7 +131,7 @@ ChartController::~ChartController()
 
 ChartController::TheModel::TheModel( const uno::Reference< frame::XModel > & xModel ) :
     m_xModel( xModel ),
-    m_xCloseable( NULL ),
+    m_xCloseable( nullptr ),
     m_bOwnership( true )
 {
     m_xCloseable =
@@ -277,7 +277,7 @@ ChartController::TheModelRef::~TheModelRef()
 }
 bool ChartController::TheModelRef::is() const
 {
-    return (m_pTheModel != 0);
+    return (m_pTheModel != nullptr);
 }
 
 namespace {
@@ -399,19 +399,19 @@ uno::Reference<ui::XSidebar> getSidebarFromModel(uno::Reference<frame::XModel> x
 {
     uno::Reference<container::XChild> xChild(xModel, uno::UNO_QUERY);
     if (!xChild.is())
-        return NULL;
+        return nullptr;
 
     uno::Reference<frame::XModel> xParent (xChild->getParent(), uno::UNO_QUERY);
     if (!xParent.is())
-        return NULL;
+        return nullptr;
 
     uno::Reference<frame::XController2> xController(xParent->getCurrentController(), uno::UNO_QUERY);
     if (!xController.is())
-        return NULL;
+        return nullptr;
 
     uno::Reference<ui::XSidebarProvider> xSidebarProvider (xController->getSidebar(), uno::UNO_QUERY);
     if (!xSidebarProvider.is())
-        return NULL;
+        return nullptr;
 
     uno::Reference<ui::XSidebar> xSidebar(xSidebarProvider->getSidebar(), uno::UNO_QUERY);
 
@@ -463,7 +463,7 @@ void SAL_CALL ChartController::attachFrame(
 
     //create view @todo is this the correct place here??
 
-    vcl::Window* pParent = NULL;
+    vcl::Window* pParent = nullptr;
     //get the window parent from the frame to use as parent for our new window
     if(xFrame.is())
     {
@@ -869,7 +869,7 @@ void SAL_CALL ChartController::dispose()
 
             //the accessible view is disposed within window destructor of m_pChartWindow
             m_pChartWindow->clear();
-            m_pChartWindow = NULL;//m_pChartWindow is deleted via UNO due to dispose of m_xViewWindow (trigerred by Framework (Controller pretends to be XWindow also))
+            m_pChartWindow = nullptr;//m_pChartWindow is deleted via UNO due to dispose of m_xViewWindow (trigerred by Framework (Controller pretends to be XWindow also))
             m_xViewWindow->dispose();
             m_xChartView.clear();
         }
@@ -878,14 +878,14 @@ void SAL_CALL ChartController::dispose()
         if( m_xLayoutManagerEventBroadcaster.is())
         {
             m_xLayoutManagerEventBroadcaster->removeLayoutManagerEventListener( this );
-            m_xLayoutManagerEventBroadcaster.set( 0 );
+            m_xLayoutManagerEventBroadcaster.set( nullptr );
         }
 
         m_xFrame.clear();
         m_xUndoManager.clear();
 
         TheModelRef aModelRef( m_aModel, m_aModelMutex);
-        m_aModel = NULL;
+        m_aModel = nullptr;
 
         if( aModelRef.is())
         {
@@ -1017,7 +1017,7 @@ bool ChartController::impl_releaseThisModel(
         ::osl::Guard< ::osl::Mutex > aGuard( m_aModelMutex );
         if( m_aModel.is() && m_aModel->getModel() == xModel )
         {
-            m_aModel = NULL;
+            m_aModel = nullptr;
             m_xUndoManager.clear();
             bReleaseModel = true;
         }
@@ -1025,7 +1025,7 @@ bool ChartController::impl_releaseThisModel(
     if( bReleaseModel )
     {
         SolarMutexGuard g;
-        m_aDispatchContainer.setModel( 0 );
+        m_aDispatchContainer.setModel( nullptr );
     }
     return bReleaseModel;
 }
@@ -1038,7 +1038,7 @@ void SAL_CALL ChartController::disposing(
     if( !impl_releaseThisModel( rSource.Source ))
     {
         if( rSource.Source == m_xLayoutManagerEventBroadcaster )
-            m_xLayoutManagerEventBroadcaster.set( 0 );
+            m_xLayoutManagerEventBroadcaster.set( nullptr );
     }
 }
 

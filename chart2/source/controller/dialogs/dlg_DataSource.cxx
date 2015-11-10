@@ -134,8 +134,8 @@ DataSourceDialog::DataSourceDialog(vcl::Window * pParent,
     , m_apDocTemplateProvider(new DocumentChartTypeTemplateProvider(xChartDocument))
     , m_apDialogModel(new DialogModel(xChartDocument, xContext))
     , m_pTabControl(VclPtr<DataSourceTabControl>::Create(get_content_area()))
-    , m_pRangeChooserTabPage(0)
-    , m_pDataSourceTabPage(0)
+    , m_pRangeChooserTabPage(nullptr)
+    , m_pDataSourceTabPage(nullptr)
     , m_bRangeChooserTabIsValid(true)
     , m_bDataSourceTabIsValid(true)
 {

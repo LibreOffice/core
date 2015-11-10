@@ -84,7 +84,7 @@ bool PolarOptionsTabPage::FillItemSet( SfxItemSet* rOutAttrs )
 
 void PolarOptionsTabPage::Reset(const SfxItemSet* rInAttrs)
 {
-    const SfxPoolItem *pPoolItem = NULL;
+    const SfxPoolItem *pPoolItem = nullptr;
 
     if (rInAttrs->GetItemState(SCHATTR_STARTING_ANGLE, true, &pPoolItem) == SfxItemState::SET)
     {

@@ -515,7 +515,7 @@ InternalDataProvider::createDataSequenceFromArray( const OUString& rArrayStr, co
 
     const sal_Unicode* p = rArrayStr.getStr();
     const sal_Unicode* pEnd = p + rArrayStr.getLength();
-    const sal_Unicode* pElem = NULL;
+    const sal_Unicode* pElem = nullptr;
     OUString aElem;
 
     std::vector<OUString> aRawElems;
@@ -542,7 +542,7 @@ InternalDataProvider::createDataSequenceFromArray( const OUString& rArrayStr, co
                 if (pElem)
                     aElem = OUString(pElem, p-pElem);
                 aRawElems.push_back(aElem);
-                pElem = NULL;
+                pElem = nullptr;
                 aElem.clear();
 
                 ++p; // Skip '"'.
@@ -560,7 +560,7 @@ InternalDataProvider::createDataSequenceFromArray( const OUString& rArrayStr, co
             if (pElem)
                 aElem = OUString(pElem, p-pElem);
             aRawElems.push_back(aElem);
-            pElem = NULL;
+            pElem = nullptr;
             aElem.clear();
         }
         else if (!pElem)
@@ -758,7 +758,7 @@ Reference< chart2::data::XDataSource > SAL_CALL InternalDataProvider::createData
             if( aDataVec[nOldIndex].is() )
             {
                 aResultLSeqVec.push_back( aDataVec[nOldIndex] );
-                aDataVec[nOldIndex] = 0;
+                aDataVec[nOldIndex] = nullptr;
             }
         }
     }

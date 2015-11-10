@@ -400,20 +400,20 @@ VCoordinateSystem* findInCooSysList( const std::vector< VCoordinateSystem* >& rV
         if(pVCooSys->getModel()==xCooSys)
             return pVCooSys;
     }
-    return NULL;
+    return nullptr;
 }
 
 VCoordinateSystem* lcl_getCooSysForPlotter( const std::vector< VCoordinateSystem* >& rVCooSysList, MinimumAndMaximumSupplier* pMinimumAndMaximumSupplier )
 {
     if(!pMinimumAndMaximumSupplier)
-        return 0;
+        return nullptr;
     for( size_t nC=0; nC < rVCooSysList.size(); nC++)
     {
         VCoordinateSystem* pVCooSys = rVCooSysList[nC];
         if(pVCooSys->hasMinimumAndMaximumSupplier( pMinimumAndMaximumSupplier ))
             return pVCooSys;
     }
-    return 0;
+    return nullptr;
 }
 
 VCoordinateSystem* addCooSysToList( std::vector< VCoordinateSystem* >& rVCooSysList
@@ -1094,7 +1094,7 @@ GL2DRenderer::~GL2DRenderer()
 {
     SolarMutexGuard g;
     if(!mbContextDestroyed && mpWindow)
-        mpWindow->setRenderer(NULL);
+        mpWindow->setRenderer(nullptr);
     mpWindow.reset();
 }
 
@@ -1136,7 +1136,7 @@ void GL2DRenderer::updateOpenGLWindow()
     {
         if(mpWindow)
         {
-            mpWindow->setRenderer(NULL);
+            mpWindow->setRenderer(nullptr);
         }
 
         if(pWindow)
@@ -1155,7 +1155,7 @@ const uno::Sequence<sal_Int8>& ExplicitValueProvider::getUnoTunnelId()
 ExplicitValueProvider* ExplicitValueProvider::getExplicitValueProvider(
         const Reference< uno::XInterface >& xChartView )
 {
-    ExplicitValueProvider* pExplicitValueProvider=0;
+    ExplicitValueProvider* pExplicitValueProvider=nullptr;
 
     Reference< lang::XUnoTunnel > xTunnel( xChartView, uno::UNO_QUERY );
     if( xTunnel.is() )
@@ -1226,7 +1226,7 @@ ChartView::~ChartView()
         EndListening( m_pDrawModelWrapper->getSdrModel() );
         m_pDrawModelWrapper.reset();
     }
-    m_xDrawPage = NULL;
+    m_xDrawPage = nullptr;
     impl_deleteCoordinateSystems();
 }
 
@@ -1625,8 +1625,8 @@ awt::Rectangle ChartView::impl_createDiagramAndContent( const CreateShapeParam2D
     drawing::Direction3D aPreferredAspectRatio =
         rParam.mpSeriesPlotterContainer->getPreferredAspectRatio();
 
-    uno::Reference< drawing::XShapes > xSeriesTargetInFrontOfAxis(0);
-    uno::Reference< drawing::XShapes > xSeriesTargetBehindAxis(0);
+    uno::Reference< drawing::XShapes > xSeriesTargetInFrontOfAxis(nullptr);
+    uno::Reference< drawing::XShapes > xSeriesTargetBehindAxis(nullptr);
     VDiagram aVDiagram(xDiagram, aPreferredAspectRatio, nDimensionCount);
     bool bIsPieOrDonut = lcl_IsPieOrDonut(xDiagram);
     {//create diagram
@@ -1722,7 +1722,7 @@ awt::Rectangle ChartView::impl_createDiagramAndContent( const CreateShapeParam2D
     {
         VSeriesPlotter* pSeriesPlotter = aPlotter.get();
         OUString aCID; //III
-        uno::Reference< drawing::XShapes > xSeriesTarget(0);
+        uno::Reference< drawing::XShapes > xSeriesTarget(nullptr);
         if( pSeriesPlotter->WantToPlotInFrontOfAxisLine() )
             xSeriesTarget = xSeriesTargetInFrontOfAxis;
         else
@@ -1899,7 +1899,7 @@ bool ChartView::getExplicitValuesForAxis(
 
 SdrPage* ChartView::getSdrPage()
 {
-    SdrPage* pPage=0;
+    SdrPage* pPage=nullptr;
     Reference< lang::XUnoTunnel> xUnoTunnel(m_xDrawPage,uno::UNO_QUERY);
     if(xUnoTunnel.is())
     {
@@ -1919,7 +1919,7 @@ uno::Reference< drawing::XShape > ChartView::getShapeForCID( const OUString& rOb
     SdrObject* pObj = DrawModelWrapper::getNamedSdrObject( rObjectCID, this->getSdrPage() );
     if( pObj )
         return uno::Reference< drawing::XShape >( pObj->getUnoShape(), uno::UNO_QUERY);
-    return 0;
+    return nullptr;
 }
 
 awt::Rectangle ChartView::getDiagramRectangleExcludingAxes()
@@ -2549,7 +2549,7 @@ void lcl_removeEmptyGroupShapes( const Reference< drawing::XShapes>& xParent )
     for( sal_Int32 nN = xParent->getCount(); nN--; )
     {
         uno::Any aAny = xParent->getByIndex( nN );
-        Reference< drawing::XShapes> xShapes(0);
+        Reference< drawing::XShapes> xShapes(nullptr);
         if( aAny >>= xShapes )
             lcl_removeEmptyGroupShapes( xShapes );
         if( xShapes.is() && xShapes->getCount()==0 )
@@ -2916,7 +2916,7 @@ Reference< beans::XPropertySetInfo > SAL_CALL ChartView::getPropertySetInfo()
     throw (uno::RuntimeException, std::exception)
 {
     OSL_FAIL("not implemented");
-    return 0;
+    return nullptr;
 }
 
 void SAL_CALL ChartView::setPropertyValue( const OUString& rPropertyName
@@ -2928,7 +2928,7 @@ void SAL_CALL ChartView::setPropertyValue( const OUString& rPropertyName
     {
         awt::Size aNewResolution;
         if( ! (rValue >>= aNewResolution) )
-            throw lang::IllegalArgumentException( "Property 'Resolution' requires value of type awt::Size", 0, 0 );
+            throw lang::IllegalArgumentException( "Property 'Resolution' requires value of type awt::Size", nullptr, 0 );
 
         if( m_aPageResolution.Width!=aNewResolution.Width || m_aPageResolution.Height!=aNewResolution.Height )
         {
@@ -2946,7 +2946,7 @@ void SAL_CALL ChartView::setPropertyValue( const OUString& rPropertyName
         //#i75867# poor quality of ole's alternative view with 3D scenes and zoomfactors besides 100%
         uno::Sequence< beans::PropertyValue > aZoomFactors;
         if( ! (rValue >>= aZoomFactors) )
-            throw lang::IllegalArgumentException( "Property 'ZoomFactors' requires value of type Sequence< PropertyValue >", 0, 0 );
+            throw lang::IllegalArgumentException( "Property 'ZoomFactors' requires value of type Sequence< PropertyValue >", nullptr, 0 );
 
         sal_Int32 nFilterArgs = aZoomFactors.getLength();
         beans::PropertyValue* pDataValues = aZoomFactors.getArray();
@@ -2968,10 +2968,10 @@ void SAL_CALL ChartView::setPropertyValue( const OUString& rPropertyName
     {
         //#i77362 change notification for changes on additional shapes are missing
         if( ! (rValue >>= m_bSdrViewIsInEditMode) )
-            throw lang::IllegalArgumentException( "Property 'SdrViewIsInEditMode' requires value of type sal_Bool", 0, 0 );
+            throw lang::IllegalArgumentException( "Property 'SdrViewIsInEditMode' requires value of type sal_Bool", nullptr, 0 );
     }
     else
-        throw beans::UnknownPropertyException( "unknown property was tried to set to chart wizard", 0 );
+        throw beans::UnknownPropertyException( "unknown property was tried to set to chart wizard", nullptr );
 }
 
 Any SAL_CALL ChartView::getPropertyValue( const OUString& rPropertyName )
@@ -2983,7 +2983,7 @@ Any SAL_CALL ChartView::getPropertyValue( const OUString& rPropertyName )
         aRet = uno::makeAny( m_aPageResolution );
     }
     else
-        throw beans::UnknownPropertyException( "unknown property was tried to get from chart wizard", 0 );
+        throw beans::UnknownPropertyException( "unknown property was tried to get from chart wizard", nullptr );
     return aRet;
 }
 
@@ -3019,7 +3019,7 @@ Reference< uno::XInterface > ChartView::createInstance( const OUString& aService
 {
     SolarMutexGuard aSolarGuard;
 
-    SdrModel* pModel = ( m_pDrawModelWrapper ? &m_pDrawModelWrapper->getSdrModel() : NULL );
+    SdrModel* pModel = ( m_pDrawModelWrapper ? &m_pDrawModelWrapper->getSdrModel() : nullptr );
     if ( pModel )
     {
         if ( aServiceSpecifier == "com.sun.star.drawing.DashTable" )
@@ -3072,7 +3072,7 @@ Reference< uno::XInterface > ChartView::createInstance( const OUString& aService
         }
     }
 
-    return 0;
+    return nullptr;
 }
 
 Reference< uno::XInterface > ChartView::createInstanceWithArguments( const OUString& ServiceSpecifier, const uno::Sequence< uno::Any >& Arguments )

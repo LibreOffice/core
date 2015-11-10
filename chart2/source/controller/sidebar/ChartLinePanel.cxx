@@ -116,10 +116,10 @@ VclPtr<vcl::Window> ChartLinePanel::Create(
         const css::uno::Reference<css::frame::XFrame>& rxFrame,
         ChartController* pController)
 {
-    if (pParent == NULL)
-        throw css::lang::IllegalArgumentException("no parent Window given to ChartAxisPanel::Create", NULL, 0);
+    if (pParent == nullptr)
+        throw css::lang::IllegalArgumentException("no parent Window given to ChartAxisPanel::Create", nullptr, 0);
     if (!rxFrame.is())
-        throw css::lang::IllegalArgumentException("no XFrame given to ChartAxisPanel::Create", NULL, 1);
+        throw css::lang::IllegalArgumentException("no XFrame given to ChartAxisPanel::Create", nullptr, 1);
 
     return VclPtr<ChartLinePanel>::Create(
                         pParent, rxFrame, pController);

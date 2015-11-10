@@ -101,8 +101,8 @@ OpenGL3DRenderer::OpenGL3DRenderer():
 {
     m_Polygon3DInfo.lineOnly = false;
     m_Polygon3DInfo.twoSidesLighting = false;
-    m_Polygon3DInfo.vertices = NULL;
-    m_Polygon3DInfo.normals = NULL;
+    m_Polygon3DInfo.vertices = nullptr;
+    m_Polygon3DInfo.normals = nullptr;
     m_Polygon3DInfo.lineWidth = 0.001f;
 
     m_Extrude3DInfo.twoSidesLighting = false;
@@ -1179,8 +1179,8 @@ void OpenGL3DRenderer::AddShapePolygon3DObject(sal_uInt32 nColor, bool lineOnly,
 void OpenGL3DRenderer::EndAddShapePolygon3DObject()
 {
     m_Polygon3DInfoList.push_back(m_Polygon3DInfo);
-    m_Polygon3DInfo.normals = NULL;
-    m_Polygon3DInfo.vertices = NULL;
+    m_Polygon3DInfo.normals = nullptr;
+    m_Polygon3DInfo.vertices = nullptr;
     // TODO: moggi: memory leak???
     m_Polygon3DInfo.verticesList.clear();
     m_Polygon3DInfo.normalsList.clear();
@@ -1201,7 +1201,7 @@ void OpenGL3DRenderer::AddPolygon3DObjectNormalPoint(float x, float y, float z)
 void OpenGL3DRenderer::EndAddPolygon3DObjectNormalPoint()
 {
     m_Polygon3DInfo.normalsList.push_back(m_Polygon3DInfo.normals);
-    m_Polygon3DInfo.normals = NULL;
+    m_Polygon3DInfo.normals = nullptr;
 }
 
 void OpenGL3DRenderer::AddPolygon3DObjectPoint(float x, float y, float z)
@@ -1221,7 +1221,7 @@ void OpenGL3DRenderer::AddPolygon3DObjectPoint(float x, float y, float z)
 void OpenGL3DRenderer::EndAddPolygon3DObjectPoint()
 {
     m_Polygon3DInfo.verticesList.push_back(m_Polygon3DInfo.vertices);
-    m_Polygon3DInfo.vertices = NULL;
+    m_Polygon3DInfo.vertices = nullptr;
 }
 
 void OpenGL3DRenderer::AddShape3DExtrudeObject(bool roundedCorner, sal_uInt32 nColor, sal_uInt32 specular, const glm::mat4& modelMatrix, sal_uInt32 nUniqueId)
@@ -1307,7 +1307,7 @@ void OpenGL3DRenderer::Init3DUniformBlock()
     m_3DActualSizeLight = ((nBlockDataSizeLight / nUniformBufferAlignSize) + std::min(nBlockDataSizeLight % nUniformBufferAlignSize, 1)) * nUniformBufferAlignSize;
 //    cout << "nBlockDataSizeMertrial = " << nBlockDataSizeMertrial << ", nBlockDataSizeLight = " << nBlockDataSizeLight << ", m_3DActualSizeLight = " << m_3DActualSizeLight << endl;
     int dataSize = m_3DActualSizeLight + nBlockDataSizeMertrial;
-    glBufferData(GL_UNIFORM_BUFFER, dataSize, NULL, GL_DYNAMIC_DRAW);
+    glBufferData(GL_UNIFORM_BUFFER, dataSize, nullptr, GL_DYNAMIC_DRAW);
     glBindBufferRange(GL_UNIFORM_BUFFER, 0, m_3DUBOBuffer, 0, nBlockDataSizeLight);
     CHECK_GL_ERROR();
     glUniformBlockBinding(maResources.m_3DProID, a3DLightBlockIndex, 0);
@@ -1343,7 +1343,7 @@ void OpenGL3DRenderer::InitBatch3DUniformBlock()
     m_Batch3DActualSizeLight = ((nBlockDataSizeLight / nUniformBufferAlignSize) + std::min(nBlockDataSizeLight % nUniformBufferAlignSize, 1)) * nUniformBufferAlignSize;
 //    cout << "nBlockDataSizeMertrial = " << nBlockDataSizeMertrial << ", nBlockDataSizeLight = " << nBlockDataSizeLight << ", m_3DActualSizeLight = " << m_3DActualSizeLight << endl;
     int dataSize = m_Batch3DActualSizeLight + nBlockDataSizeMertrial;
-    glBufferData(GL_UNIFORM_BUFFER, dataSize, NULL, GL_DYNAMIC_DRAW);
+    glBufferData(GL_UNIFORM_BUFFER, dataSize, nullptr, GL_DYNAMIC_DRAW);
     glBindBufferRange(GL_UNIFORM_BUFFER, 2, m_Batch3DUBOBuffer, 0, nBlockDataSizeLight);
     CHECK_GL_ERROR();
     glUniformBlockBinding(maResources.m_3DBatchProID, a3DLightBlockIndex, 2);
@@ -1855,7 +1855,7 @@ void OpenGL3DRenderer::CreateTextTextureBatch(const boost::shared_array<sal_uInt
         textureArray.textureArrayWidth = bmpHeight * 8;
         textureArray.textureArrayHeight = bmpHeight;
         glTexImage3D(GL_TEXTURE_2D_ARRAY, 0, GL_RGB, textureArray.textureArrayWidth, textureArray.textureArrayHeight,
-                     m_TextInfoBatch.batchNum, 0, GL_RGB,  GL_UNSIGNED_BYTE, NULL);
+                     m_TextInfoBatch.batchNum, 0, GL_RGB,  GL_UNSIGNED_BYTE, nullptr);
         CHECK_GL_ERROR();
         if (m_TextInfoBatch.texture.size() > 0)
         {
@@ -2567,7 +2567,7 @@ void OpenGL3DRenderer::RenderBatchBars(bool bNewScene)
     }
     glEnableVertexAttribArray(maResources.m_3DBatchColorID);
     glBindBuffer(GL_ARRAY_BUFFER, m_BatchColorBuf);
-    glVertexAttribPointer(maResources.m_3DBatchColorID , 4, GL_FLOAT, GL_FALSE, sizeof(glm::vec4), 0);
+    glVertexAttribPointer(maResources.m_3DBatchColorID , 4, GL_FLOAT, GL_FALSE, sizeof(glm::vec4), nullptr);
     glVertexAttribDivisor(maResources.m_3DBatchColorID, 1);
     if (m_Extrude3DInfo.rounded)
     {

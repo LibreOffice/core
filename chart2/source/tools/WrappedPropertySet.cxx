@@ -32,9 +32,9 @@ using ::com::sun::star::uno::Any;
 
 WrappedPropertySet::WrappedPropertySet()
                     : MutexContainer()
-                    , m_xInfo(0)
-                    , m_pPropertyArrayHelper(0)
-                    , m_pWrappedPropertyMap(0)
+                    , m_xInfo(nullptr)
+                    , m_pPropertyArrayHelper(nullptr)
+                    , m_pWrappedPropertyMap(nullptr)
 {
 }
 WrappedPropertySet::~WrappedPropertySet()
@@ -65,7 +65,7 @@ void WrappedPropertySet::clearWrappedPropertySet()
     DELETEZ(m_pPropertyArrayHelper);
     DELETEZ(m_pWrappedPropertyMap);
 
-    m_xInfo = NULL;
+    m_xInfo = nullptr;
 }
 
 //XPropertySet
@@ -334,7 +334,7 @@ const WrappedProperty* WrappedPropertySet::getWrappedProperty( sal_Int32 nHandle
     tWrappedPropertyMap::const_iterator aFound( getWrappedPropertyMap().find( nHandle ) );
     if( aFound != getWrappedPropertyMap().end() )
         return (*aFound).second;
-    return 0;
+    return nullptr;
 }
 
 Sequence< beans::PropertyState > SAL_CALL WrappedPropertySet::getPropertyStates( const Sequence< OUString >& rNameSeq )

@@ -32,7 +32,7 @@ namespace chart
 
 SchLayoutTabPage::SchLayoutTabPage(vcl::Window* pWindow,const SfxItemSet& rInAttrs)
      : SfxTabPage(pWindow, "tp_ChartType", "modules/schart/ui/tp_ChartType.ui", &rInAttrs)
-     , m_pGeometryResources(0)
+     , m_pGeometryResources(nullptr)
 {
     m_pGeometryResources = new BarGeometryResources( this );
 }
@@ -45,7 +45,7 @@ SchLayoutTabPage::~SchLayoutTabPage()
 void SchLayoutTabPage::dispose()
 {
     delete m_pGeometryResources;
-    m_pGeometryResources = NULL;
+    m_pGeometryResources = nullptr;
     SfxTabPage::dispose();
 }
 
@@ -74,7 +74,7 @@ bool SchLayoutTabPage::FillItemSet(SfxItemSet* rOutAttrs)
 
 void SchLayoutTabPage::Reset(const SfxItemSet* rInAttrs)
 {
-    const SfxPoolItem *pPoolItem = NULL;
+    const SfxPoolItem *pPoolItem = nullptr;
 
     if (rInAttrs->GetItemState(SCHATTR_STYLE_SHAPE,true, &pPoolItem) == SfxItemState::SET)
     {

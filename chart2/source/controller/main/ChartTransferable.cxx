@@ -43,7 +43,7 @@ namespace chart
 {
 
 ChartTransferable::ChartTransferable( SdrModel* pDrawModel, SdrObject* pSelectedObj, bool bDrawing )
-    :m_pMarkedObjModel( NULL )
+    :m_pMarkedObjModel( nullptr )
     ,m_bDrawing( bDrawing )
 {
     SdrExchangeView * pExchgView( new SdrView( pDrawModel ));

@@ -172,7 +172,7 @@ VCartesianGrid::VCartesianGrid( sal_Int32 nDimensionIndex, sal_Int32 nDimensionC
 VCartesianGrid::~VCartesianGrid()
 {
     delete m_pPosHelper;
-    m_pPosHelper = NULL;
+    m_pPosHelper = nullptr;
 }
 
 void VCartesianGrid::fillLinePropertiesFromGridModel( ::std::vector<VLineProperties>& rLinePropertiesList

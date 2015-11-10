@@ -36,7 +36,7 @@ DateTickFactory::DateTickFactory(
           const ExplicitScaleData& rScale, const ExplicitIncrementData& rIncrement )
             : m_aScale( rScale )
             , m_aIncrement( rIncrement )
-            , m_xInverseScaling(NULL)
+            , m_xInverseScaling(nullptr)
 {
     //@todo: make sure that the scale is valid for the scaling
 

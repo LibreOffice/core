@@ -63,7 +63,7 @@ AccessibleBase* ChartElementFactory::CreateChartElement( const AccessibleElement
             break;
     }
 
-    return 0;
+    return nullptr;
 }
 
 } // namespace chart

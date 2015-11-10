@@ -134,7 +134,7 @@ sal_Int8 ChartDropTargetHelper::ExecuteDrop( const ExecuteDropEvent& rEvt )
                                         xDataProvider->detectArguments( xDataSource ));
 
                                     OUString aOldRange;
-                                    beans::PropertyValue * pCellRange = 0;
+                                    beans::PropertyValue * pCellRange = nullptr;
                                     for( sal_Int32 i=0; i<aArguments.getLength(); ++i )
                                     {
                                         if ( aArguments[i].Name == "CellRangeRepresentation" )

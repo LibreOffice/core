@@ -57,8 +57,8 @@ NetChart::NetChart( const uno::Reference<XChartType>& xChartTypeModel
         , m_pMainPosHelper(pPlottingPositionHelper)
         , m_bArea(!bNoArea)
         , m_bLine(bNoArea)
-        , m_xSeriesTarget(0)
-        , m_xTextTarget(0)
+        , m_xSeriesTarget(nullptr)
+        , m_xTextTarget(nullptr)
 {
     // we only support 2D Net charts
     assert(nDimensionCount == 2);
@@ -161,7 +161,7 @@ bool NetChart::impl_createLine( VDataSeries* pSeries
     pPosHelper->transformScaledLogicToScene( aPoly );
 
     //create line:
-    uno::Reference< drawing::XShape > xShape(NULL);
+    uno::Reference< drawing::XShape > xShape(nullptr);
     {
         xShape = m_pShapeFactory->createLine2D( xSeriesGroupShape_Shapes
                 , PolyToPointSequence( aPoly ) );
@@ -200,13 +200,13 @@ bool NetChart::impl_createArea( VDataSeries* pSeries
         //clip to scale
         if(fMaxX<pPosHelper->getLogicMinX() || fMinX>pPosHelper->getLogicMaxX())
             return false;//no visible shape needed
-        pPosHelper->clipLogicValues( &fMinX, &fY, 0 );
-        pPosHelper->clipLogicValues( &fMaxX, 0, 0 );
+        pPosHelper->clipLogicValues( &fMinX, &fY, nullptr );
+        pPosHelper->clipLogicValues( &fMaxX, nullptr, nullptr );
 
         //apply scaling
         {
             pPosHelper->doLogicScaling( &fMinX, &fY, &zValue );
-            pPosHelper->doLogicScaling( &fMaxX, 0, 0 );
+            pPosHelper->doLogicScaling( &fMaxX, nullptr, nullptr );
         }
 
         AddPointToPoly( aPoly, drawing::Position3D( fMaxX,fY,zValue) );
@@ -264,7 +264,7 @@ void NetChart::impl_createSeriesShapes()
             const ::std::vector< VDataSeries* >::const_iterator aSeriesEnd  = pSeriesList->end();
 
             std::map< sal_Int32, drawing::PolyPolygonShape3D* > aPreviousSeriesPolyMap;//a PreviousSeriesPoly for each different nAttachedAxisIndex
-            drawing::PolyPolygonShape3D* pSeriesPoly = NULL;
+            drawing::PolyPolygonShape3D* pSeriesPoly = nullptr;
 
             //iterate through all series
             for( ; aSeriesIter != aSeriesEnd; ++aSeriesIter )
@@ -554,7 +554,7 @@ void NetChart::createShapes()
                         if( !bIsVisible && m_bArea )
                         {
                             drawing::Position3D aClippedPos(aScaledLogicPosition);
-                            pPosHelper->clipScaledLogicValues( 0, &aClippedPos.PositionY, 0 );
+                            pPosHelper->clipScaledLogicValues( nullptr, &aClippedPos.PositionY, nullptr );
                             if( pPosHelper->isLogicVisible( aClippedPos.PositionX, aClippedPos.PositionY, aClippedPos.PositionZ ) )
                             {
                                 AddPointToPoly( (*aSeriesIter)->m_aPolyPolygonShape3D, aClippedPos, (*aSeriesIter)->m_nPolygonIndex );

@@ -45,7 +45,7 @@ VPolarAngleAxis::VPolarAngleAxis( const AxisProperties& rAxisProperties
 VPolarAngleAxis::~VPolarAngleAxis()
 {
     delete m_pPosHelper;
-    m_pPosHelper = NULL;
+    m_pPosHelper = nullptr;
 }
 
 bool VPolarAngleAxis::createTextShapes_ForAngleAxis(
@@ -75,7 +75,7 @@ bool VPolarAngleAxis::createTextShapes_ForAngleAxis(
     if(pColorAny)
         *pColorAny >>= nColor;
 
-    const uno::Sequence< OUString >* pLabels = m_bUseTextLabels? &m_aTextLabels : 0;
+    const uno::Sequence< OUString >* pLabels = m_bUseTextLabels? &m_aTextLabels : nullptr;
 
     //TickInfo* pLastVisibleNeighbourTickInfo = NULL;
     sal_Int32 nTick = 0;

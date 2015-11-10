@@ -406,7 +406,7 @@ Axis::~Axis()
         if( m_aScaleData.Categories.is())
         {
             ModifyListenerHelper::removeListener( m_aScaleData.Categories, m_xModifyEventForwarder );
-            m_aScaleData.Categories.set(0);
+            m_aScaleData.Categories.set(nullptr);
         }
     }
     catch( const uno::Exception & ex )
@@ -415,8 +415,8 @@ Axis::~Axis()
     }
 
     m_aSubGridProperties.realloc(0);
-    m_xGrid = 0;
-    m_xTitle = 0;
+    m_xGrid = nullptr;
+    m_xTitle = nullptr;
 }
 
 void Axis::AllocateSubGrids()
@@ -601,7 +601,7 @@ void SAL_CALL Axis::disposing( const lang::EventObject& Source )
     throw (uno::RuntimeException, std::exception)
 {
     if( Source.Source == m_aScaleData.Categories )
-        m_aScaleData.Categories = 0;
+        m_aScaleData.Categories = nullptr;
 }
 
 // ____ OPropertySet ____

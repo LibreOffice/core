@@ -42,8 +42,8 @@ CommandDispatchContainer::CommandDispatchContainer(
     const Reference< uno::XComponentContext > & xContext, ChartController* pController )
         :m_xContext( xContext )
         ,m_pChartController( pController )
-        ,m_pDrawCommandDispatch( NULL )
-        ,m_pShapeController( NULL )
+        ,m_pDrawCommandDispatch( nullptr )
+        ,m_pShapeController( nullptr )
 {
     m_aContainerDocumentCommands =
         ::comphelper::MakeSet< OUString >
@@ -158,9 +158,9 @@ void CommandDispatchContainer::DisposeAndClear()
     m_aToBeDisposedDispatches.clear();
     m_xChartDispatcher.clear();
     m_aChartCommands.clear();
-    m_pChartController = NULL;
-    m_pDrawCommandDispatch = NULL;
-    m_pShapeController = NULL;
+    m_pChartController = nullptr;
+    m_pDrawCommandDispatch = nullptr;
+    m_pShapeController = nullptr;
 }
 
 Reference< frame::XDispatch > CommandDispatchContainer::getContainerDispatchForURL(

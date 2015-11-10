@@ -149,7 +149,7 @@ void WrappedAxisAndGridExistenceProperty::setPropertyValue( const Any& rOuterVal
 {
     bool bNewValue = false;
     if( ! (rOuterValue >>= bNewValue) )
-        throw lang::IllegalArgumentException( "Has axis or grid properties require boolean values", 0, 0 );
+        throw lang::IllegalArgumentException( "Has axis or grid properties require boolean values", nullptr, 0 );
 
     bool bOldValue = false;
     getPropertyValue( xInnerPropertySet ) >>= bOldValue;
@@ -271,7 +271,7 @@ void WrappedAxisTitleExistenceProperty::setPropertyValue( const Any& rOuterValue
 {
     bool bNewValue = false;
     if( ! (rOuterValue >>= bNewValue) )
-        throw lang::IllegalArgumentException( "Has axis or grid properties require boolean values", 0, 0 );
+        throw lang::IllegalArgumentException( "Has axis or grid properties require boolean values", nullptr, 0 );
 
     bool bOldValue = false;
     getPropertyValue( xInnerPropertySet ) >>= bOldValue;
@@ -377,7 +377,7 @@ void WrappedAxisLabelExistenceProperty::setPropertyValue( const Any& rOuterValue
 {
     bool bNewValue = false;
     if( ! (rOuterValue >>= bNewValue) )
-        throw lang::IllegalArgumentException( "Has axis or grid properties require boolean values", 0, 0 );
+        throw lang::IllegalArgumentException( "Has axis or grid properties require boolean values", nullptr, 0 );
 
     bool bOldValue = false;
     getPropertyValue( xInnerPropertySet ) >>= bOldValue;

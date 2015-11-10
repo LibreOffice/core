@@ -41,9 +41,9 @@ sal_uInt16 View3DDialog::m_nLastPageId = 0;
 
 View3DDialog::View3DDialog(vcl::Window* pParent, const uno::Reference< frame::XModel > & xChartModel, const XColorListRef &pColorTable )
     : TabDialog(pParent, "3DViewDialog", "modules/schart/ui/3dviewdialog.ui")
-    , m_pGeometry(0)
-    , m_pAppearance(0)
-    , m_pIllumination(0)
+    , m_pGeometry(nullptr)
+    , m_pAppearance(nullptr)
+    , m_pIllumination(nullptr)
     , m_aControllerLocker(xChartModel)
 {
     get(m_pTabControl, "tabcontrol");

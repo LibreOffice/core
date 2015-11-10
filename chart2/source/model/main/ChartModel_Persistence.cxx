@@ -514,7 +514,7 @@ void SAL_CALL ChartModel::load(
                  aMDHelper.FilterName == "StarChart 3.0" ))
             {
                 attachResource( aMDHelper.URL, rMediaDescriptor );
-                impl_load( rMediaDescriptor, 0 ); // cannot create a storage from binary streams, but I do not need the storage here anyhow
+                impl_load( rMediaDescriptor, nullptr ); // cannot create a storage from binary streams, but I do not need the storage here anyhow
                 m_bReadOnly = true;
                 return;
             }

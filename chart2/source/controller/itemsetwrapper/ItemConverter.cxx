@@ -34,7 +34,7 @@ ItemConverter::ItemConverter(
     const uno::Reference< beans::XPropertySet > & rPropertySet,
     SfxItemPool& rItemPool ) :
         m_xPropertySet( rPropertySet ),
-        m_xPropertySetInfo( NULL ),
+        m_xPropertySetInfo( nullptr ),
         m_rItemPool( rItemPool ),
         m_bIsValid( true )
 {
@@ -83,7 +83,7 @@ void ItemConverter::FillItemSet( SfxItemSet & rOutItemSet ) const
     tPropertyNameWithMemberId aProperty;
     SfxItemPool & rPool = GetItemPool();
 
-    assert(pRanges != NULL);
+    assert(pRanges != nullptr);
     OSL_ASSERT( m_xPropertySetInfo.is());
     OSL_ASSERT( m_xPropertySet.is());
 
@@ -221,7 +221,7 @@ void ItemConverter::InvalidateUnequalItems( SfxItemSet  &rDestSet, const SfxItem
 {
     SfxWhichIter      aIter (rSourceSet);
     sal_uInt16            nWhich     = aIter.FirstWhich ();
-    const SfxPoolItem *pPoolItem = NULL;
+    const SfxPoolItem *pPoolItem = nullptr;
 
     while (nWhich)
     {

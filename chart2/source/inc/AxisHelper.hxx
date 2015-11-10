@@ -65,7 +65,7 @@ public:
         createAxis( sal_Int32 nDimensionIndex, bool bMainAxis
                 , const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDiagram >& xDiagram
                 , const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext
-                , ReferenceSizeProvider * pRefSizeProvider = 0 );
+                , ReferenceSizeProvider * pRefSizeProvider = nullptr );
 
     static ::com::sun::star::uno::Reference<
            ::com::sun::star::chart2::XAxis >
@@ -76,12 +76,12 @@ public:
                     ::com::sun::star::chart2::XCoordinateSystem >& xCooSys
             , const ::com::sun::star::uno::Reference<
                     ::com::sun::star::uno::XComponentContext > & xContext
-            , ReferenceSizeProvider * pRefSizeProvider = 0 );
+            , ReferenceSizeProvider * pRefSizeProvider = nullptr );
 
     static void showAxis( sal_Int32 nDimensionIndex, bool bMainAxis
                 , const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDiagram >& xDiagram
                 , const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext
-                , ReferenceSizeProvider * pRefSizeProvider = 0 );
+                , ReferenceSizeProvider * pRefSizeProvider = nullptr );
 
     static void showGrid( sal_Int32 nDimensionIndex, sal_Int32 nCooSysIndex, bool bMainGrid
                 , const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDiagram >& xDiagram
@@ -220,7 +220,7 @@ public:
                         , const ::com::sun::star::uno::Sequence< sal_Bool >& rOldExistenceList
                         , const ::com::sun::star::uno::Sequence< sal_Bool >& rNewExistenceList
                         , const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext
-                        , ReferenceSizeProvider * pRefSizeProvider = 0 );
+                        , ReferenceSizeProvider * pRefSizeProvider = nullptr );
 
     static bool shouldAxisBeDisplayed( const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XAxis >& xAxis
                                        , const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XCoordinateSystem >& xCooSys );

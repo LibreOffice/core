@@ -96,21 +96,21 @@ ChartModel::ChartModel(uno::Reference<uno::XComponentContext > const & xContext)
     , m_nInLoad(0)
     , m_bUpdateNotificationsPending(false)
     , mbTimeBased(false)
-    , mpChartView(NULL)
-    , m_pUndoManager( NULL )
+    , mpChartView(nullptr)
+    , m_pUndoManager( nullptr )
     , m_aControllers( m_aModelMutex )
     , m_nControllerLockCount(0)
     , m_xContext( xContext )
     , m_aVisualAreaSize( ChartModelHelper::getDefaultPageSize() )
-    , m_xDataProvider( 0 )
-    , m_xInternalDataProvider( 0 )
+    , m_xDataProvider( nullptr )
+    , m_xInternalDataProvider( nullptr )
     , m_xPageBackground( new PageBackground( m_xContext ) )
     , m_xXMLNamespaceMap( createNameContainer( ::cppu::UnoType<OUString>::get(),
                 "com.sun.star.xml.NamespaceMap", "com.sun.star.comp.chart.XMLNameSpaceMap" ), uno::UNO_QUERY)
     , mnStart(0)
     , mnEnd(0)
     ,bSet(false)
-    , mpOpenGLWindow(NULL)
+    , mpOpenGLWindow(nullptr)
 {
     OSL_TRACE( "ChartModel: CTOR called" );
 
@@ -139,7 +139,7 @@ ChartModel::ChartModel( const ChartModel & rOther )
     , m_nInLoad(0)
     , m_bUpdateNotificationsPending(false)
     , mbTimeBased(rOther.mbTimeBased)
-    , mpChartView(NULL)
+    , mpChartView(nullptr)
     , m_aResource( rOther.m_aResource )
     , m_aMediaDescriptor( rOther.m_aMediaDescriptor )
     , m_aControllers( m_aModelMutex )
@@ -147,8 +147,8 @@ ChartModel::ChartModel( const ChartModel & rOther )
     , m_xContext( rOther.m_xContext )
     // @note: the old model aggregate must not be shared with other models if it
     // is, you get mutex deadlocks
-    , m_xOldModelAgg( 0 ) //rOther.m_xOldModelAgg )
-    , m_xStorage( 0 ) //rOther.m_xStorage )
+    , m_xOldModelAgg( nullptr ) //rOther.m_xOldModelAgg )
+    , m_xStorage( nullptr ) //rOther.m_xStorage )
     , m_aVisualAreaSize( rOther.m_aVisualAreaSize )
     , m_aGraphicObjectVector( rOther.m_aGraphicObjectVector )
     , m_xDataProvider( rOther.m_xDataProvider )
@@ -156,7 +156,7 @@ ChartModel::ChartModel( const ChartModel & rOther )
     , mnStart(rOther.mnStart)
     , mnEnd(rOther.mnEnd)
     , bSet(false)
-    , mpOpenGLWindow(NULL)
+    , mpOpenGLWindow(nullptr)
 {
     OSL_TRACE( "ChartModel: Copy-CTOR called" );
 
@@ -197,7 +197,7 @@ ChartModel::~ChartModel()
 {
     OSL_TRACE( "ChartModel: DTOR called" );
     if( m_xOldModelAgg.is())
-        m_xOldModelAgg->setDelegator( NULL );
+        m_xOldModelAgg->setDelegator( nullptr );
 }
 
 void SAL_CALL ChartModel::initialize( const Sequence< Any >& /*rArguments*/ )
@@ -581,7 +581,7 @@ void SAL_CALL ChartModel::dispose() throw(uno::RuntimeException, std::exception)
         // that's important, since the UndoManager implementation delegates its ref counting to ourself.
 
     if( m_xOldModelAgg.is())  // #i120828#, to release cyclic reference to ChartModel object
-        m_xOldModelAgg->setDelegator( 0 );
+        m_xOldModelAgg->setDelegator( nullptr );
 
     m_aControllers.disposeAndClear( lang::EventObject( static_cast< cppu::OWeakObject * >( this )));
     m_xCurrentController.clear();
@@ -589,7 +589,7 @@ void SAL_CALL ChartModel::dispose() throw(uno::RuntimeException, std::exception)
     DisposeHelper::DisposeAndClear( m_xRangeHighlighter );
 
     if( m_xOldModelAgg.is())
-        m_xOldModelAgg->setDelegator( NULL );
+        m_xOldModelAgg->setDelegator( nullptr );
 
     OSL_TRACE( "ChartModel: dispose() called" );
 }
@@ -1276,7 +1276,7 @@ Reference< uno::XInterface > SAL_CALL ChartModel::createInstance( const OUString
             }
         }
     }
-    return 0;
+    return nullptr;
 }
 
 Reference< uno::XInterface > SAL_CALL ChartModel::createInstanceWithArguments(

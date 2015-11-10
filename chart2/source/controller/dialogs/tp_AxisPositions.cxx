@@ -47,7 +47,7 @@ AxisPositionsTabPage::AxisPositionsTabPage(vcl::Window* pWindow,const SfxItemSet
                 ,"tp_AxisPositions"
                 ,"modules/schart/ui/tp_AxisPositions.ui"
                 , &rInAttrs)
-    , m_pNumFormatter(NULL)
+    , m_pNumFormatter(nullptr)
     , m_bCrossingAxisIsCategoryAxis(false)
     , m_aCategories()
     , m_bSupportAxisPositioning(false)
@@ -180,7 +180,7 @@ void AxisPositionsTabPage::Reset(const SfxItemSet* rInAttrs)
     }
 
     //fill controls
-    const SfxPoolItem *pPoolItem = NULL;
+    const SfxPoolItem *pPoolItem = nullptr;
 
     //axis line
     if(rInAttrs->GetItemState(SCHATTR_AXIS_POSITION,true, &pPoolItem)== SfxItemState::SET)
@@ -290,7 +290,7 @@ void AxisPositionsTabPage::SetNumFormatter( SvNumberFormatter* pFormatter )
     m_pED_CrossesAt->SetFormatter( m_pNumFormatter );
     m_pED_CrossesAt->UseInputStringForFormatting();
 
-    const SfxPoolItem *pPoolItem = NULL;
+    const SfxPoolItem *pPoolItem = nullptr;
     if( GetItemSet().GetItemState( SCHATTR_AXIS_CROSSING_MAIN_AXIS_NUMBERFORMAT, true, &pPoolItem ) == SfxItemState::SET )
     {
         sal_uLong nFmt = (sal_uLong)static_cast<const SfxInt32Item*>(pPoolItem)->GetValue();

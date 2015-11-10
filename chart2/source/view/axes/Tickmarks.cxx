@@ -34,7 +34,7 @@ TickInfo::TickInfo( const uno::Reference<chart2::XScaling>& xInverse )
 , xInverseScaling( xInverse )
 , aTickScreenPosition(0.0,0.0)
 , bPaintIt( true )
-, xTextShape( NULL )
+, xTextShape( nullptr )
 , nFactorForLimitedTextWidth(1)
 {
 }
@@ -71,7 +71,7 @@ TickInfo* PureTickIter::firstInfo()
     m_aTickIter = m_rTickVector.begin();
     if(m_aTickIter!=m_rTickVector.end())
         return &*m_aTickIter;
-    return 0;
+    return nullptr;
 }
 TickInfo* PureTickIter::nextInfo()
 {
@@ -81,14 +81,14 @@ TickInfo* PureTickIter::nextInfo()
         if(m_aTickIter!=m_rTickVector.end())
             return &*m_aTickIter;
     }
-    return 0;
+    return nullptr;
 }
 
 TickFactory::TickFactory(
           const ExplicitScaleData& rScale, const ExplicitIncrementData& rIncrement )
             : m_rScale( rScale )
             , m_rIncrement( rIncrement )
-            , m_xInverseScaling(NULL)
+            , m_xInverseScaling(nullptr)
 {
     //@todo: make sure that the scale is valid for the scaling
 

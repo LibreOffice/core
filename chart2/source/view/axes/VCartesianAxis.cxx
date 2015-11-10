@@ -72,7 +72,7 @@ VCartesianAxis::VCartesianAxis( const AxisProperties& rAxisProperties
 VCartesianAxis::~VCartesianAxis()
 {
     delete m_pPosHelper;
-    m_pPosHelper = NULL;
+    m_pPosHelper = nullptr;
 }
 
 Reference< drawing::XShape > createSingleLabel(
@@ -87,7 +87,7 @@ Reference< drawing::XShape > createSingleLabel(
           )
 {
     if(rLabel.isEmpty())
-        return 0;
+        return nullptr;
 
     // #i78696# use mathematically correct rotation now
     const double fRotationAnglePi(rAxisLabelProperties.fRotationAngleDegree * (F_PI / -180.0));
@@ -189,7 +189,7 @@ void removeShapesAtWrongRhythm( TickIter& rIter
             if(pTickInfo->xTextShape.is())
             {
                 xTarget->remove(pTickInfo->xTextShape);
-                pTickInfo->xTextShape = NULL;
+                pTickInfo->xTextShape = nullptr;
             }
         }
     }
@@ -235,7 +235,7 @@ TickInfo* LabelIterator::firstInfo()
     while( pTickInfo && !pTickInfo->xTextShape.is() )
         pTickInfo = m_aPureTickIter.nextInfo();
     if(!pTickInfo)
-        return NULL;
+        return nullptr;
     if( (STAGGER_EVEN==m_eAxisLabelStaggering && m_bInnerLine)
         ||
         (STAGGER_ODD==m_eAxisLabelStaggering && !m_bInnerLine)
@@ -247,13 +247,13 @@ TickInfo* LabelIterator::firstInfo()
         while( pTickInfo && !pTickInfo->xTextShape.is() );
     }
     if(!pTickInfo)
-        return NULL;
+        return nullptr;
     return pTickInfo;
 }
 
 TickInfo* LabelIterator::nextInfo()
 {
-    TickInfo* pTickInfo = NULL;
+    TickInfo* pTickInfo = nullptr;
     //get next label
     do
         pTickInfo = m_aPureTickIter.nextInfo();
@@ -285,7 +285,7 @@ B2DVector lcl_getLabelsDistance( TickIter& rIter, const B2DVector& rDistanceTick
     aStaggerDirection.normalize();
 
     sal_Int32 nDistance=0;
-    Reference< drawing::XShape >  xShape2DText(NULL);
+    Reference< drawing::XShape >  xShape2DText(nullptr);
     for( TickInfo* pTickInfo = rIter.firstInfo()
         ; pTickInfo
         ; pTickInfo = rIter.nextInfo() )
@@ -314,7 +314,7 @@ void lcl_shiftLabels( TickIter& rIter, const B2DVector& rStaggerDistance )
 {
     if(rStaggerDistance.getLength()==0.0)
         return;
-    Reference< drawing::XShape >  xShape2DText(NULL);
+    Reference< drawing::XShape >  xShape2DText(nullptr);
     for( TickInfo* pTickInfo = rIter.firstInfo()
         ; pTickInfo
         ; pTickInfo = rIter.nextInfo() )
@@ -469,7 +469,7 @@ TickInfo* MaxLabelTickIter::firstInfo()
     m_nCurrentIndex = 0;
     if (m_nCurrentIndex < m_aValidIndices.size())
         return &m_rTickInfoVector[m_aValidIndices[m_nCurrentIndex]];
-    return 0;
+    return nullptr;
 }
 
 TickInfo* MaxLabelTickIter::nextInfo()
@@ -477,7 +477,7 @@ TickInfo* MaxLabelTickIter::nextInfo()
     m_nCurrentIndex++;
     if (m_nCurrentIndex < m_aValidIndices.size())
         return &m_rTickInfoVector[m_aValidIndices[m_nCurrentIndex]];
-    return 0;
+    return nullptr;
 }
 
 bool VCartesianAxis::isBreakOfLabelsAllowed(
@@ -542,7 +542,7 @@ void VCartesianAxis::createAllTickInfosFromComplexCategories( TickInfoArraysType
 
             for(;aIt!=aEnd;++aIt)
             {
-                TickInfo aTickInfo(0);
+                TickInfo aTickInfo(nullptr);
                 ComplexCategory aCat(*aIt);
                 sal_Int32 nCount = aCat.Count;
                 if( nCatIndex + 1.0 + nCount >= m_aScale.Maximum )
@@ -579,7 +579,7 @@ void VCartesianAxis::createAllTickInfosFromComplexCategories( TickInfoArraysType
                 std::vector<ComplexCategory>::const_iterator aEnd = pComplexCategories->end();
                 for(;aIt!=aEnd;++aIt)
                 {
-                    TickInfo aTickInfo(0);
+                    TickInfo aTickInfo(nullptr);
                     ComplexCategory aCat(*aIt);
                     aTickInfo.fScaledTickValue = nCatIndex + 1.0;
                     aTickInfoVector.push_back(aTickInfo);
@@ -592,7 +592,7 @@ void VCartesianAxis::createAllTickInfosFromComplexCategories( TickInfoArraysType
             //fill up with single ticks until maximum scale
             while( nCatIndex + 1.0 < m_aScale.Maximum )
             {
-                TickInfo aTickInfo(0);
+                TickInfo aTickInfo(nullptr);
                 aTickInfo.fScaledTickValue = nCatIndex + 1.0;
                 aTickInfoVector.push_back(aTickInfo);
                 nCatIndex ++;
@@ -601,7 +601,7 @@ void VCartesianAxis::createAllTickInfosFromComplexCategories( TickInfoArraysType
             }
             //add an additional tick at the end
             {
-                TickInfo aTickInfo(0);
+                TickInfo aTickInfo(nullptr);
                 aTickInfo.fScaledTickValue = m_aScale.Maximum;
                 aTickInfoVector.push_back(aTickInfo);
             }
@@ -622,7 +622,7 @@ TickIter* VCartesianAxis::createLabelTickIterator( sal_Int32 nTextLevel )
 {
     if( nTextLevel>=0 && nTextLevel < static_cast< sal_Int32 >(m_aAllTickInfos.size()) )
         return new PureTickIter( m_aAllTickInfos[nTextLevel] );
-    return NULL;
+    return nullptr;
 }
 
 TickIter* VCartesianAxis::createMaximumLabelTickIterator( sal_Int32 nTextLevel )
@@ -639,13 +639,13 @@ TickIter* VCartesianAxis::createMaximumLabelTickIterator( sal_Int32 nTextLevel )
             {
                 size_t nLongestLabelIndex = m_bUseTextLabels ? getIndexOfLongestLabel(m_aTextLabels) : 0;
                 if (nLongestLabelIndex >= m_aAllTickInfos[0].size())
-                    return NULL;
+                    return nullptr;
 
                 return new MaxLabelTickIter( m_aAllTickInfos[0], nLongestLabelIndex );
             }
         }
     }
-    return NULL;
+    return nullptr;
 }
 
 sal_Int32 VCartesianAxis::getTextLevelCount() const
@@ -693,7 +693,7 @@ bool VCartesianAxis::createTextShapes(
 
      // Stores an array of text label strings in case of a normal
      // (non-complex) category axis.
-    const uno::Sequence<OUString>* pCategories = NULL;
+    const uno::Sequence<OUString>* pCategories = nullptr;
     if( m_bUseTextLabels && !m_aAxisProperties.m_bComplexCategories )
         pCategories = &m_aTextLabels;
 
@@ -711,8 +711,8 @@ bool VCartesianAxis::createTextShapes(
 
     uno::Any* pLimitedSpaceAny = PropertyMapper::getValuePointerForLimitedSpace(aPropValues,aPropNames,bLimitedHeight);
 
-    const TickInfo* pPreviousVisibleTickInfo = NULL;
-    const TickInfo* pPREPreviousVisibleTickInfo = NULL;
+    const TickInfo* pPreviousVisibleTickInfo = nullptr;
+    const TickInfo* pPREPreviousVisibleTickInfo = nullptr;
     sal_Int32 nTick = 0;
     for( TickInfo* pTickInfo = rTickIter.firstInfo()
         ; pTickInfo
@@ -863,7 +863,7 @@ bool VCartesianAxis::createTextShapes(
                         // Tick interval is fixed.  We have no choice but to
                         // remove this label.
                         xTarget->remove(pTickInfo->xTextShape);
-                        pTickInfo->xTextShape = NULL;
+                        pTickInfo->xTextShape = nullptr;
                         continue;
                     }
 
@@ -894,7 +894,7 @@ bool VCartesianAxis::createTextShapesSimple(
 
      // Stores an array of text label strings in case of a normal
      // (non-complex) category axis.
-    const uno::Sequence<OUString>* pCategories = NULL;
+    const uno::Sequence<OUString>* pCategories = nullptr;
     if( m_bUseTextLabels && !m_aAxisProperties.m_bComplexCategories )
         pCategories = &m_aTextLabels;
 
@@ -912,7 +912,7 @@ bool VCartesianAxis::createTextShapesSimple(
 
     uno::Any* pLimitedSpaceAny = PropertyMapper::getValuePointerForLimitedSpace(aPropValues,aPropNames,bLimitedHeight);
 
-    const TickInfo* pPreviousVisibleTickInfo = NULL;
+    const TickInfo* pPreviousVisibleTickInfo = nullptr;
     sal_Int32 nTick = 0;
     for( TickInfo* pTickInfo = rTickIter.firstInfo()
         ; pTickInfo
@@ -1005,7 +1005,7 @@ bool VCartesianAxis::createTextShapesSimple(
                     // Tick interval is fixed.  We have no choice but to
                     // remove this label.
                     xTarget->remove(pTickInfo->xTextShape);
-                    pTickInfo->xTextShape = NULL;
+                    pTickInfo->xTextShape = nullptr;
                     continue;
                 }
 
@@ -1085,7 +1085,7 @@ B2DVector VCartesianAxis::getScreenPosition( double fLogicX, double fLogicY, dou
             {
                 tPropertyNameMap aDummyPropertyNameMap;
                 Reference< drawing::XShape > xShape3DAnchor = m_pShapeFactory->createCube( m_xLogicTarget
-                        , aScenePos,drawing::Direction3D(1,1,1), 0, 0, aDummyPropertyNameMap);
+                        , aScenePos,drawing::Direction3D(1,1,1), 0, nullptr, aDummyPropertyNameMap);
                 awt::Point a2DPos = xShape3DAnchor->getPosition(); //get 2D position from xShape3DAnchor
                 m_xLogicTarget->remove(xShape3DAnchor);
                 aRet.setX( a2DPos.X );

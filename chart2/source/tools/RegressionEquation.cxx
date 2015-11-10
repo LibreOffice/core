@@ -191,7 +191,7 @@ RegressionEquation::RegressionEquation( const RegressionEquation & rOther ) :
         impl::RegressionEquation_Base(),
         ::property::OPropertySet( rOther, m_aMutex ),
     m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder()),
-    m_xContext( NULL )
+    m_xContext( nullptr )
 {}
 
 RegressionEquation::~RegressionEquation()

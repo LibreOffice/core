@@ -74,14 +74,14 @@ wrapper::ItemConverter* createItemConverter(
     const uno::Reference<uno::XComponentContext>& xContext, SdrModel& rDrawModel,
     ExplicitValueProvider* pExplicitValueProvider, ReferenceSizeProvider* pRefSizeProvider )
 {
-    wrapper::ItemConverter* pItemConverter=NULL;
+    wrapper::ItemConverter* pItemConverter=nullptr;
 
     //get type of selected object
     ObjectType eObjectType = ObjectIdentifier::getObjectType( aObjectCID );
     if( OBJECTTYPE_UNKNOWN==eObjectType )
     {
         OSL_FAIL("unknown ObjectType");
-        return NULL;
+        return nullptr;
     }
 
     OUString aParticleID = ObjectIdentifier::getParticleID( aObjectCID );
@@ -91,7 +91,7 @@ wrapper::ItemConverter* createItemConverter(
         uno::Reference< beans::XPropertySet > xObjectProperties =
             ObjectIdentifier::getObjectPropertySet( aObjectCID, xChartModel );
         if(!xObjectProperties.is())
-            return NULL;
+            return nullptr;
         //create itemconverter for a single object
         switch(eObjectType)
         {
@@ -768,7 +768,7 @@ bool ChartController::executeDlg_ObjectProperties_withoutUndoGuard(
 
         if(aDialogParameter.HasSymbolProperties())
         {
-            SfxItemSet* pSymbolShapeProperties=NULL;
+            SfxItemSet* pSymbolShapeProperties=nullptr;
             uno::Reference< beans::XPropertySet > xObjectProperties =
                 ObjectIdentifier::getObjectPropertySet( rObjectCID, getModel() );
             wrapper::DataPointItemConverter aSymbolItemConverter( getModel(), m_xCC

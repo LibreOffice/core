@@ -76,7 +76,7 @@ void ChartController::StartTextEdit( const Point* pMousePixel )
                     , m_pChartWindow
                     , false //bIsNewObj
                     , pOutliner
-                    , 0L //pOutlinerView
+                    , nullptr //pOutlinerView
                     , true //bDontDeleteOutliner
                     , true //bOnlyOneView
                     );
@@ -174,7 +174,7 @@ void ChartController::executeDispatch_InsertSpecialCharacter()
     if( pDlg->Execute() == RET_OK )
     {
         const SfxItemSet* pSet = pDlg->GetOutputItemSet();
-        const SfxPoolItem* pItem=0;
+        const SfxPoolItem* pItem=nullptr;
         OUString aString;
         if ( pSet && pSet->GetItemState( SID_CHARMAP, true, &pItem) == SfxItemState::SET &&
              dynamic_cast< const SfxStringItem* >(pItem) !=  nullptr )

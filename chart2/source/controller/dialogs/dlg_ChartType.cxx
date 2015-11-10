@@ -38,7 +38,7 @@ ChartTypeDialog::ChartTypeDialog( vcl::Window* pParent
                 , const uno::Reference< uno::XComponentContext >& xContext )
     : ModalDialog( pParent, "ChartTypeDialog",
             "modules/schart/ui/charttypedialog.ui")
-    , m_pChartTypeTabPage(0)
+    , m_pChartTypeTabPage(nullptr)
     , m_xChartModel(xChartModel)
     , m_xCC( xContext )
 {

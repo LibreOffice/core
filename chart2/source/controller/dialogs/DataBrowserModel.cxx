@@ -582,7 +582,7 @@ Reference< chart2::XDataSeries >
     tDataColumnVector::size_type nIndex( nColumn );
     if( nIndex < m_aColumns.size())
         return m_aColumns[nIndex].m_xDataSeries;
-    return 0;
+    return nullptr;
 }
 
 DataBrowserModel::eCellType DataBrowserModel::getCellType( sal_Int32 nAtColumn, sal_Int32 /* nAtRow */ ) const
@@ -831,7 +831,7 @@ void DataBrowserModel::updateFromModel()
     {
         Reference< chart2::XChartTypeContainer > xCTCnt( aCooSysSeq[nCooSysIdx], uno::UNO_QUERY_THROW );
         Sequence< Reference< chart2::XChartType > > aChartTypes( xCTCnt->getChartTypes());
-        sal_Int32 nXAxisNumberFormat = DataSeriesHelper::getNumberFormatKeyFromAxis( 0, aCooSysSeq[nCooSysIdx], 0, 0 );
+        sal_Int32 nXAxisNumberFormat = DataSeriesHelper::getNumberFormatKeyFromAxis( nullptr, aCooSysSeq[nCooSysIdx], 0, 0 );
 
         for( sal_Int32 nCTIdx=0; nCTIdx<aChartTypes.getLength(); ++nCTIdx )
         {

@@ -51,7 +51,7 @@ VPolarAxis::VPolarAxis( const AxisProperties& rAxisProperties
 VPolarAxis::~VPolarAxis()
 {
     delete m_pPosHelper;
-    m_pPosHelper = NULL;
+    m_pPosHelper = nullptr;
 }
 
 void VPolarAxis::setIncrements( const std::vector< ExplicitIncrementData >& rIncrements )

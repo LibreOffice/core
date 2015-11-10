@@ -27,7 +27,7 @@ ResourceChangeListener::~ResourceChangeListener()
 }
 
 ChangingResource::ChangingResource()
-                : m_pChangeListener(0)
+                : m_pChangeListener(nullptr)
 {
 }
 ChangingResource::~ChangingResource()

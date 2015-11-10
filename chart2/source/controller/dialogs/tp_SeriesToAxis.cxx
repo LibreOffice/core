@@ -137,7 +137,7 @@ bool SchOptionTabPage::FillItemSet(SfxItemSet* rOutAttrs)
 
 void SchOptionTabPage::Reset(const SfxItemSet* rInAttrs)
 {
-    const SfxPoolItem *pPoolItem = NULL;
+    const SfxPoolItem *pPoolItem = nullptr;
 
     m_pRbtAxis1->Check();
     m_pRbtAxis2->Check(false);

@@ -49,7 +49,7 @@ VPolarGrid::VPolarGrid( sal_Int32 nDimensionIndex, sal_Int32 nDimensionCount
 VPolarGrid::~VPolarGrid()
 {
     delete m_pPosHelper;
-    m_pPosHelper = NULL;
+    m_pPosHelper = nullptr;
 }
 
 void VPolarGrid::setIncrements( const std::vector< ExplicitIncrementData >& rIncrements )
@@ -72,7 +72,7 @@ void VPolarGrid::createLinePointSequence_ForAngleAxis(
         , PolarPlottingPositionHelper* pPosHelper
         , double fLogicRadius, double fLogicZ )
 {
-    Reference< XScaling > xInverseScaling( NULL );
+    Reference< XScaling > xInverseScaling( nullptr );
     if( rScale.Scaling.is() )
         xInverseScaling = rScale.Scaling->getInverseScaling();
 
@@ -167,7 +167,7 @@ void VPolarGrid::create2DRadiusGrid( const Reference< drawing::XShapes >& xLogic
     const ExplicitScaleData&     rRadiusScale = m_pPosHelper->getScales()[1];
     const ExplicitScaleData&     rAngleScale = m_pPosHelper->getScales()[0];
     const ExplicitIncrementData& rAngleIncrement = m_aIncrements[0];
-    Reference< XScaling > xInverseRadiusScaling( NULL );
+    Reference< XScaling > xInverseRadiusScaling( nullptr );
     if( rRadiusScale.Scaling.is() )
         xInverseRadiusScaling = rRadiusScale.Scaling->getInverseScaling();
 

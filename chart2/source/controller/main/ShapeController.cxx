@@ -236,7 +236,7 @@ IMPL_LINK_TYPED( ShapeController, CheckNameHdl, AbstractSvxObjectNameDialog&, rD
 
     if ( !aName.isEmpty() )
     {
-        DrawViewWrapper* pDrawViewWrapper = ( m_pChartController ? m_pChartController->GetDrawViewWrapper() : NULL );
+        DrawViewWrapper* pDrawViewWrapper = ( m_pChartController ? m_pChartController->GetDrawViewWrapper() : nullptr );
         if ( pDrawViewWrapper && pDrawViewWrapper->getNamedSdrObject( aName ) )
         {
             return false;
@@ -439,7 +439,7 @@ void ShapeController::executeDispatch_ObjectTitleDescription()
                 if ( pFact )
                 {
                     std::unique_ptr< AbstractSvxObjectTitleDescDialog > pDlg(
-                        pFact->CreateSvxObjectTitleDescDialog( NULL, aTitle, aDescription ) );
+                        pFact->CreateSvxObjectTitleDescDialog( nullptr, aTitle, aDescription ) );
                     if ( pDlg.get() && ( pDlg->Execute() == RET_OK ) )
                     {
                         pDlg->GetTitle( aTitle );
@@ -469,7 +469,7 @@ void ShapeController::executeDispatch_RenameObject()
                 if ( pFact )
                 {
                     std::unique_ptr< AbstractSvxObjectNameDialog > pDlg(
-                        pFact->CreateSvxObjectNameDialog( NULL, aName ) );
+                        pFact->CreateSvxObjectNameDialog( nullptr, aName ) );
                     pDlg->SetCheckNameHdl( LINK( this, ShapeController, CheckNameHdl ) );
                     if ( pDlg.get() && ( pDlg->Execute() == RET_OK ) )
                     {
@@ -488,7 +488,7 @@ void ShapeController::executeDispatch_RenameObject()
 void ShapeController::executeDispatch_ChangeZOrder( sal_uInt16 nId )
 {
     SolarMutexGuard aGuard;
-    DrawViewWrapper* pDrawViewWrapper = ( m_pChartController ? m_pChartController->GetDrawViewWrapper() : NULL );
+    DrawViewWrapper* pDrawViewWrapper = ( m_pChartController ? m_pChartController->GetDrawViewWrapper() : nullptr );
     if ( pDrawViewWrapper )
     {
         switch ( nId )
@@ -597,11 +597,11 @@ void ShapeController::executeDispatch_ParagraphDialog()
 
 SdrObject* ShapeController::getFirstAdditionalShape()
 {
-    SdrObject* pFirstObj = NULL;
+    SdrObject* pFirstObj = nullptr;
 
     try
     {
-        DrawModelWrapper* pDrawModelWrapper = ( m_pChartController ? m_pChartController->GetDrawModelWrapper() : NULL );
+        DrawModelWrapper* pDrawModelWrapper = ( m_pChartController ? m_pChartController->GetDrawModelWrapper() : nullptr );
         if ( pDrawModelWrapper )
         {
             Reference< drawing::XShape > xFirstShape;
@@ -637,11 +637,11 @@ SdrObject* ShapeController::getFirstAdditionalShape()
 
 SdrObject* ShapeController::getLastAdditionalShape()
 {
-    SdrObject* pLastObj = NULL;
+    SdrObject* pLastObj = nullptr;
 
     try
     {
-        DrawModelWrapper* pDrawModelWrapper = ( m_pChartController ? m_pChartController->GetDrawModelWrapper() : NULL );
+        DrawModelWrapper* pDrawModelWrapper = ( m_pChartController ? m_pChartController->GetDrawModelWrapper() : nullptr );
         if ( pDrawModelWrapper )
         {
             Reference< drawing::XShape > xLastShape;

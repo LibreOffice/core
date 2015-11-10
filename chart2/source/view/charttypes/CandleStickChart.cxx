@@ -114,8 +114,8 @@ void CandleStickChart::createShapes()
         {
             m_xChartTypeModelProps->getPropertyValue( "ShowFirst" ) >>= bShowFirst;
 
-            uno::Reference< beans::XPropertySet > xWhiteDayProps(0);
-            uno::Reference< beans::XPropertySet > xBlackDayProps(0);
+            uno::Reference< beans::XPropertySet > xWhiteDayProps(nullptr);
+            uno::Reference< beans::XPropertySet > xBlackDayProps(nullptr);
             m_xChartTypeModelProps->getPropertyValue( "Japanese" ) >>= bJapaneseStyle;
             m_xChartTypeModelProps->getPropertyValue( "WhiteDay" ) >>= xWhiteDayProps;
             m_xChartTypeModelProps->getPropertyValue( "BlackDay" ) >>= xBlackDayProps;
@@ -200,14 +200,14 @@ void CandleStickChart::createShapes()
                     double fScaledY_Last(fUnscaledY_Last);
                     double fScaledY_Min(fUnscaledY_Min);
                     double fScaledY_Max(fUnscaledY_Max);
-                    pPosHelper->clipLogicValues( 0,&fScaledY_First,0 );
-                    pPosHelper->clipLogicValues( 0,&fScaledY_Last,0 );
-                    pPosHelper->clipLogicValues( 0,&fScaledY_Min,0 );
-                    pPosHelper->clipLogicValues( 0,&fScaledY_Max,0 );
-                    pPosHelper->doLogicScaling( 0,&fScaledY_First,0 );
-                    pPosHelper->doLogicScaling( 0,&fScaledY_Last,0 );
-                    pPosHelper->doLogicScaling( 0,&fScaledY_Min,0 );
-                    pPosHelper->doLogicScaling( 0,&fScaledY_Max,0 );
+                    pPosHelper->clipLogicValues( nullptr,&fScaledY_First,nullptr );
+                    pPosHelper->clipLogicValues( nullptr,&fScaledY_Last,nullptr );
+                    pPosHelper->clipLogicValues( nullptr,&fScaledY_Min,nullptr );
+                    pPosHelper->clipLogicValues( nullptr,&fScaledY_Max,nullptr );
+                    pPosHelper->doLogicScaling( nullptr,&fScaledY_First,nullptr );
+                    pPosHelper->doLogicScaling( nullptr,&fScaledY_Last,nullptr );
+                    pPosHelper->doLogicScaling( nullptr,&fScaledY_Min,nullptr );
+                    pPosHelper->doLogicScaling( nullptr,&fScaledY_Max,nullptr );
 
                     drawing::Position3D aPosLeftFirst( pPosHelper->transformScaledLogicToScene( fScaledX-fHalfScaledWidth, fScaledY_First ,0 ,true ) );
                     drawing::Position3D aPosRightLast( pPosHelper->transformScaledLogicToScene( fScaledX+fHalfScaledWidth, fScaledY_Last  ,0 ,true ) );
@@ -221,7 +221,7 @@ void CandleStickChart::createShapes()
                         xLossGainTarget = xLossTarget;
 
                     uno::Reference< beans::XPropertySet > xPointProp( (*aSeriesIter)->getPropertiesOfPoint( nIndex ));
-                    uno::Reference< drawing::XShapes > xPointGroupShape_Shapes(0);
+                    uno::Reference< drawing::XShapes > xPointGroupShape_Shapes(nullptr);
                     {
                         OUString aPointCID = ObjectIdentifier::createPointCID( (*aSeriesIter)->getPointCID_Stub(), nIndex );
                         uno::Reference< drawing::XShapes > xSeriesGroupShape_Shapes( getSeriesGroupShape(*aSeriesIter, xSeriesTarget) );

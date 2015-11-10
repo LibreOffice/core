@@ -560,11 +560,11 @@ private:
     void executeDispatch_DeleteMinorGrid();
 
     void executeDispatch_InsertSpecialCharacter();
-    void executeDispatch_EditText( const Point* pMousePixel = NULL );
+    void executeDispatch_EditText( const Point* pMousePixel = nullptr );
     void executeDispatch_SourceData();
     void executeDispatch_MoveSeries( bool bForward );
 
-    void StartTextEdit( const Point* pMousePixel = NULL );
+    void StartTextEdit( const Point* pMousePixel = nullptr );
     bool EndTextEdit();
 
     void executeDispatch_View3D();
@@ -587,7 +587,7 @@ private:
         const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rArgs );
 
     DECL_LINK_TYPED( DoubleClickWaitingHdl, Timer*, void );
-    void execute_DoubleClick( const Point* pMousePixel = NULL );
+    void execute_DoubleClick( const Point* pMousePixel = nullptr );
     void startDoubleClickWaiting();
     void stopDoubleClickWaiting();
 

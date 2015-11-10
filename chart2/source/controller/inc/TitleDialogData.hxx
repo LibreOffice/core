@@ -38,7 +38,7 @@ struct TitleDialogData
     ::com::sun::star::uno::Sequence< OUString > aTextList;
     std::unique_ptr< ReferenceSizeProvider > apReferenceSizeProvider;
 
-    TitleDialogData(ReferenceSizeProvider* pReferenzeSizeProvider = NULL);
+    TitleDialogData(ReferenceSizeProvider* pReferenzeSizeProvider = nullptr);
 
     void readFromModel( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xChartModel );
     /* return true if anything has changed;
@@ -46,7 +46,7 @@ struct TitleDialogData
     */
     bool writeDifferenceToModel( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xChartModel
                         , const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext
-                        , TitleDialogData* pOldState=NULL );
+                        , TitleDialogData* pOldState=nullptr );
 };
 
 } //namespace chart

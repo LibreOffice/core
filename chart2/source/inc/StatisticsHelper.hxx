@@ -78,7 +78,7 @@ namespace StatisticsHelper
         const OUString & rNewRange,
         bool bPositiveValue,
         bool bYError = true,
-        OUString * pXMLRange = 0 );
+        OUString * pXMLRange = nullptr );
 
     /// @return the newly created or existing error bar object
     OOO_DLLPUBLIC_CHARTTOOLS ::com::sun::star::uno::Reference<

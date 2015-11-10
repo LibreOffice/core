@@ -40,7 +40,7 @@ public:
     virtual bool FillItemSet( SfxItemSet* rOutAttrs ) override;
     virtual void Reset( const SfxItemSet* rInAttrs ) override;
     using TabPage::DeactivatePage;
-    virtual sfxpg DeactivatePage( SfxItemSet* pItemSet = NULL ) override;
+    virtual sfxpg DeactivatePage( SfxItemSet* pItemSet = nullptr ) override;
 
     void SetNumFormatter( SvNumberFormatter* pFormatter );
     void SetNumFormat();
@@ -116,7 +116,7 @@ private:
 
         @return false, if nResIdMessage was 0, true otherwise
      */
-    bool ShowWarning( sal_uInt16 nResIdMessage, Control* pControl = NULL );
+    bool ShowWarning( sal_uInt16 nResIdMessage, Control* pControl = nullptr );
 
     void HideAllControls();
 };

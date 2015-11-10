@@ -43,7 +43,7 @@ void WrappedAddInProperty::setPropertyValue( const Any& rOuterValue, const Refer
 {
     Reference< util::XRefreshable > xAddIn;
     if( ! (rOuterValue >>= xAddIn) )
-        throw lang::IllegalArgumentException( "AddIn properties require type XRefreshable", 0, 0 );
+        throw lang::IllegalArgumentException( "AddIn properties require type XRefreshable", nullptr, 0 );
 
     m_rChartDocumentWrapper.setAddIn( xAddIn );
 }
@@ -68,7 +68,7 @@ void WrappedBaseDiagramProperty::setPropertyValue( const Any& rOuterValue, const
 {
     OUString aBaseDiagram;
     if( ! (rOuterValue >>= aBaseDiagram) )
-        throw lang::IllegalArgumentException( "BaseDiagram properties require type OUString", 0, 0 );
+        throw lang::IllegalArgumentException( "BaseDiagram properties require type OUString", nullptr, 0 );
 
     m_rChartDocumentWrapper.setBaseDiagram( aBaseDiagram );
 }
@@ -91,7 +91,7 @@ WrappedAdditionalShapesProperty::~WrappedAdditionalShapesProperty()
 void WrappedAdditionalShapesProperty::setPropertyValue( const Any& /*rOuterValue*/, const Reference< beans::XPropertySet >& /*xInnerPropertySet*/ ) const
                         throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    throw lang::IllegalArgumentException( "AdditionalShapes is a read only property", 0, 0 );
+    throw lang::IllegalArgumentException( "AdditionalShapes is a read only property", nullptr, 0 );
 }
 
 Any WrappedAdditionalShapesProperty::getPropertyValue( const Reference< beans::XPropertySet >& /*xInnerPropertySet*/ ) const
@@ -114,7 +114,7 @@ void WrappedRefreshAddInAllowedProperty::setPropertyValue( const Any& rOuterValu
 {
     bool bUpdateAddIn = true;
     if( ! (rOuterValue >>= bUpdateAddIn) )
-        throw lang::IllegalArgumentException( "The property RefreshAddInAllowed requires type boolean", 0, 0 );
+        throw lang::IllegalArgumentException( "The property RefreshAddInAllowed requires type boolean", nullptr, 0 );
 
     m_rChartDocumentWrapper.setUpdateAddIn( bUpdateAddIn );
 }

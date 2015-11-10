@@ -62,7 +62,7 @@ CreationWizard::CreationWizard( vcl::Window* pParent, const uno::Reference< fram
                 , m_xCC( xContext )
                 , m_bIsClosable(true)
                 , m_nOnePageOnlyIndex(nOnePageOnlyIndex)
-                , m_pTemplateProvider(0)
+                , m_pTemplateProvider(nullptr)
                 , m_nFirstState(STATE_FIRST)
                 , m_nLastState(STATE_LAST)
                 , m_aTimerTriggeredControllerLock( xChartModel )

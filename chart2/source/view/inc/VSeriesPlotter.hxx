@@ -383,13 +383,13 @@ protected:
         , VDataSeries& rVDataSeries, sal_Int32 nPointIndex
         , const ::com::sun::star::uno::Reference<
                 ::com::sun::star::drawing::XShapes >& xTarget
-        , double* pfScaledLogicX=0 );
+        , double* pfScaledLogicX=nullptr );
 
     void createErrorBar_Y( const ::com::sun::star::drawing::Position3D& rUnscaledLogicPosition
         , VDataSeries& rVDataSeries, sal_Int32 nPointIndex
         , const ::com::sun::star::uno::Reference<
                 ::com::sun::star::drawing::XShapes >& xTarget
-        , double* pfScaledLogicX=0 );
+        , double* pfScaledLogicX=nullptr );
 
     void createRegressionCurvesShapes( VDataSeries& rVDataSeries
         , const ::com::sun::star::uno::Reference<
@@ -413,7 +413,7 @@ protected:
         , const ::com::sun::star::uno::Reference<
                 ::com::sun::star::beans::XPropertySet >& xSource
         , const tPropertyNameMap& rMap
-        , tPropertyNameValueMap* pOverwriteMap=0 );
+        , tPropertyNameValueMap* pOverwriteMap=nullptr );
 
     virtual PlottingPositionHelper& getPlottingPositionHelper( sal_Int32 nAxisIndex ) const;//nAxisIndex indicates whether the position belongs to the main axis ( nAxisIndex==0 ) or secondary axis ( nAxisIndex==1 )
 

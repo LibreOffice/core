@@ -293,7 +293,7 @@ bool AccessibleBase::ImplUpdateChildren()
 
 void AccessibleBase::AddChild( AccessibleBase * pChild  )
 {
-    OSL_ENSURE( pChild != NULL, "Invalid Child" );
+    OSL_ENSURE( pChild != nullptr, "Invalid Child" );
     if( pChild )
     {
         ClearableMutexGuard aGuard( GetMutex() );
@@ -467,12 +467,12 @@ void SAL_CALL AccessibleBase::disposing()
     }
 
     // reset pointers
-    m_aAccInfo.m_pParent = NULL;
+    m_aAccInfo.m_pParent = nullptr;
 
     // invalidate implementation for helper, but keep UNO reference to still
     // allow a tool to query the DEFUNC state.
     // Note: The object will be deleted when the last reference is released
-    m_pStateSetHelper = NULL;
+    m_pStateSetHelper = nullptr;
 
     // attach new empty state set helper to member reference
     ::utl::AccessibleStateSetHelper * pHelper = new ::utl::AccessibleStateSetHelper();
@@ -739,13 +739,13 @@ awt::Point SAL_CALL AccessibleBase::getLocationOnScreen()
 {
     CheckDisposeState();
 
-    if( m_aAccInfo.m_pParent != NULL )
+    if( m_aAccInfo.m_pParent != nullptr )
     {
         AccessibleBase * pParent = m_aAccInfo.m_pParent;
         awt::Point aLocThisRel( getLocation());
         awt::Point aUpperLeft;
 
-        if( pParent != NULL )
+        if( pParent != nullptr )
             aUpperLeft = pParent->getLocationOnScreen();
 
         return  awt::Point( aUpperLeft.X + aLocThisRel.X,
