@@ -188,7 +188,7 @@ public:
     OUString getTypeClass(OUString const & name, bool cStyle = false);
 
     void dumpCppuGetType(
-        FileStream & out, OUString const & name, OUString const * ownName = 0);
+        FileStream & out, OUString const & name, OUString const * ownName = nullptr);
 
     sal_uInt32 getInheritedMemberCount();
 
@@ -538,7 +538,7 @@ void CppuType::dumpHFileContent(
     addDefaultHIncludes(includes);
     dumpHeaderDefine(out, "HDL");
     out << "\n";
-    includes.dump(out, 0);
+    includes.dump(out, nullptr);
     out << ("\nnamespace com { namespace sun { namespace star { namespace uno"
             " { class Type; } } } }\n\n");
     if (codemaker::cppumaker::dumpNamespaceOpen(out, name_, false)) {
@@ -835,7 +835,7 @@ void CppuType::dumpCppuGetType(
     OUString nucleus;
     sal_Int32 rank;
     codemaker::UnoType::Sort sort = m_typeMgr->decompose(
-        name, true, &nucleus, &rank, 0, 0);
+        name, true, &nucleus, &rank, nullptr, nullptr);
     switch (rank == 0 ? sort : codemaker::UnoType::SORT_SEQUENCE_TYPE) {
     case codemaker::UnoType::SORT_VOID:
     case codemaker::UnoType::SORT_BOOLEAN:
@@ -860,7 +860,7 @@ void CppuType::dumpCppuGetType(
     case codemaker::UnoType::SORT_EXCEPTION_TYPE:
     case codemaker::UnoType::SORT_INTERFACE_TYPE:
         // Take care of recursion like struct S { sequence<S> x; }:
-        if (ownName == 0 || nucleus != *ownName) {
+        if (ownName == nullptr || nucleus != *ownName) {
             out << indent() << "::cppu::UnoType< ";
             dumpType(out, name, false, false, false, true);
             out << " >::get();\n";
@@ -1507,7 +1507,7 @@ void InterfaceType::dumpCppuMethods(FileStream & out, sal_uInt32 & index) {
 void InterfaceType::dumpAttributesCppuDecl(
     FileStream & out, std::set< OUString > * seen)
 {
-    assert(seen != 0);
+    assert(seen != nullptr);
     for (std::vector< unoidl::InterfaceTypeEntity::Attribute >::const_iterator
              i(entity_->getDirectAttributes().begin());
          i != entity_->getDirectAttributes().end(); ++i)
@@ -1537,7 +1537,7 @@ void InterfaceType::dumpAttributesCppuDecl(
 void InterfaceType::dumpMethodsCppuDecl(
     FileStream & out, std::set< OUString > * seen)
 {
-    assert(seen != 0);
+    assert(seen != nullptr);
     for (std::vector< unoidl::InterfaceTypeEntity::Method >::const_iterator i(
              entity_->getDirectMethods().begin());
          i != entity_->getDirectMethods().end(); ++i)
@@ -1650,7 +1650,7 @@ void ConstantGroup::dumpHFile(
     OUString headerDefine(dumpHeaderDefine(out, "HDL"));
     out << "\n";
     addDefaultHIncludes(includes);
-    includes.dump(out, 0);
+    includes.dump(out, nullptr);
     out << "\n";
     if (codemaker::cppumaker::dumpNamespaceOpen(out, name_, true)) {
         out << "\n";
@@ -3289,7 +3289,7 @@ void Typedef::dumpHFile(
     o << "\n";
 
     addDefaultHIncludes(includes);
-    includes.dump(o, 0);
+    includes.dump(o, nullptr);
     o << "\n";
 
     if (codemaker::cppumaker::dumpNamespaceOpen(o, name_, false)) {
@@ -3453,7 +3453,7 @@ void ServiceType::dumpHxxFile(
             u2b(id_), "service", isGlobal()));
     OUString headerDefine(dumpHeaderDefine(o, "HPP"));
     o << "\n";
-    includes.dump(o, 0);
+    includes.dump(o, nullptr);
     if (!entity_->getConstructors().empty()) {
         o << ("\n#if defined ANDROID || defined IOS //TODO\n"
               "#include <com/sun/star/lang/XInitialization.hpp>\n"
@@ -3775,7 +3775,7 @@ void SingletonType::dumpHxxFile(
     includes.addReference();
     includes.addRtlUstringH();
     includes.addRtlUstringHxx();
-    includes.dump(o, 0);
+    includes.dump(o, nullptr);
     o << ("\n#if defined ANDROID || defined IOS //TODO\n"
           "#include <com/sun/star/lang/XInitialization.hpp>\n"
           "#include <osl/detail/component-defines.h>\n#endif\n\n"

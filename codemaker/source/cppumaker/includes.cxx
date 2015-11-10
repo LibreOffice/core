@@ -125,7 +125,7 @@ void Includes::add(OString const & entityName) {
 namespace {
 
 void dumpEmptyLineBeforeFirst(FileStream & out, bool * first) {
-    OSL_ASSERT(first != 0);
+    OSL_ASSERT(first != nullptr);
     if (*first) {
         out << "\n";
         *first = false;
@@ -135,7 +135,7 @@ void dumpEmptyLineBeforeFirst(FileStream & out, bool * first) {
 }
 
 void Includes::dump(FileStream & out, OUString const * companionHdl) {
-    OSL_ASSERT(companionHdl == 0 || m_hpp);
+    OSL_ASSERT(companionHdl == nullptr || m_hpp);
     if (!m_includeReference) {
         for (Dependencies::Map::iterator i(m_map.begin()); i != m_map.end();
              ++i)

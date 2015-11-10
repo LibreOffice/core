@@ -288,7 +288,7 @@ OString translateUnoToCppIdentifier(
                     || unoIdentifier == "std"))
             // Others:
             || unoIdentifier == "NDEBUG"
-            || (forbidden != 0 && unoIdentifier == *forbidden) )
+            || (forbidden != nullptr && unoIdentifier == *forbidden) )
     {
         return prefix + "_" + unoIdentifier;
     } else {

@@ -47,8 +47,8 @@ public:
     bool foundAtPrimaryProvider(OUString const & name) const;
 
     codemaker::UnoType::Sort getSort(
-        OUString const & name, rtl::Reference< unoidl::Entity > * entity = 0,
-        rtl::Reference< unoidl::MapCursor > * cursor = 0) const;
+        OUString const & name, rtl::Reference< unoidl::Entity > * entity = nullptr,
+        rtl::Reference< unoidl::MapCursor > * cursor = nullptr) const;
 
     codemaker::UnoType::Sort decompose(
         OUString const & name, bool resolveTypedefs, OUString * nucleus,

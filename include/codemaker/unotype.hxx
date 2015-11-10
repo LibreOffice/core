@@ -80,8 +80,8 @@ namespace UnoType {
        @return the base part of the given type
      */
     rtl::OString decompose(
-        rtl::OString const & type, sal_Int32 * rank = 0,
-        std::vector< rtl::OString > * arguments = 0);
+        rtl::OString const & type, sal_Int32 * rank = nullptr,
+        std::vector< rtl::OString > * arguments = nullptr);
 }
 
 }

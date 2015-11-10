@@ -160,7 +160,7 @@ bool fileExists(const OString& fileName)
 {
     FILE  *f= fopen(fileName.getStr(), "r");
 
-    if (f != NULL)
+    if (f != nullptr)
     {
         fclose(f);
         return true;
@@ -175,7 +175,7 @@ bool checkFileContent(const OString& targetFileName, const OString& tmpFileName)
     FILE  *tmp = fopen(tmpFileName.getStr(), "r");
     bool    bFindChanges = false;
 
-    if (target != NULL && tmp != NULL)
+    if (target != nullptr && tmp != nullptr)
     {
         sal_Char    buffer1[1024+1];
         sal_Char    buffer2[1024+1];
@@ -271,7 +271,7 @@ OUString convertToFileUrl(const OString& fileName)
 // FileStream
 
 FileStream::FileStream()
-    : m_file(NULL)
+    : m_file(nullptr)
 {
 }
 
@@ -308,7 +308,7 @@ void FileStream::createTempFile(const OString& sPath)
                            osl_File_Attribute_GrpRead |
                            osl_File_Attribute_OthRead;
         if (osl_setFileAttributes(sTmpName.pData, uAttr) != osl_File_E_None) {
-            m_file = NULL;
+            m_file = nullptr;
             return;
         }
 #endif
@@ -316,7 +316,7 @@ void FileStream::createTempFile(const OString& sPath)
         FileBase::getSystemPathFromFileURL(sTmpName, sSysTmpName);
         m_name = OUStringToOString(sSysTmpName, osl_getThreadTextEncoding());
     } else
-        m_file = NULL;
+        m_file = nullptr;
 }
 
 void FileStream::close()
@@ -324,7 +324,7 @@ void FileStream::close()
     if ( isValid() )
     {
         osl_closeFile(m_file);
-        m_file = NULL;
+        m_file = nullptr;
         m_name.clear();
     }
 }

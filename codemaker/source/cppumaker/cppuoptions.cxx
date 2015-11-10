@@ -61,7 +61,7 @@ bool CppuOptions::initOptions(int ac, char* av[], bool bCmdFile)
         i = 0;
     }
 
-    char    *s=NULL;
+    char    *s=nullptr;
     for( ; i < ac; i++)
     {
         if (av[i][0] == '-')
@@ -265,7 +265,7 @@ bool CppuOptions::initOptions(int ac, char* av[], bool bCmdFile)
             if (av[i][0] == '@')
             {
                 FILE* cmdFile = fopen(av[i]+1, "r");
-                if( cmdFile == NULL )
+                if( cmdFile == nullptr )
                 {
                     fprintf(stderr, "%s", prepareHelp().getStr());
                     ret = false;

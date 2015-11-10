@@ -63,7 +63,7 @@ codemaker::UnoType::Sort TypeManager::getSort(
     rtl::Reference< unoidl::MapCursor > * cursor) const
 {
     if (name.isEmpty()) {
-        if (cursor != 0) {
+        if (cursor != nullptr) {
             *cursor = manager_->createCursor("");
         }
         return codemaker::UnoType::SORT_MODULE;
@@ -123,12 +123,12 @@ codemaker::UnoType::Sort TypeManager::getSort(
     if (!ent.is()) {
         throw CannotDumpException("Unknown entity '" + name + "'");
     }
-    if (entity != 0) {
+    if (entity != nullptr) {
         *entity = ent;
     }
     switch (ent->getSort()) {
     case unoidl::Entity::SORT_MODULE:
-        if (cursor != 0) {
+        if (cursor != nullptr) {
             *cursor = manager_->createCursor(name);
         }
         return codemaker::UnoType::SORT_MODULE;
@@ -208,16 +208,16 @@ codemaker::UnoType::Sort TypeManager::decompose(
         case codemaker::UnoType::SORT_PLAIN_STRUCT_TYPE:
         case codemaker::UnoType::SORT_EXCEPTION_TYPE:
         case codemaker::UnoType::SORT_INTERFACE_TYPE:
-            if (nucleus != 0) {
+            if (nucleus != nullptr) {
                 *nucleus = n;
             }
-            if (rank != 0) {
+            if (rank != nullptr) {
                 *rank = k;
             }
-            if (arguments != 0) {
+            if (arguments != nullptr) {
                 arguments->clear();
             }
-            if (entity != 0) {
+            if (entity != nullptr) {
                 *entity = ent;
             }
             return s;
@@ -231,13 +231,13 @@ codemaker::UnoType::Sort TypeManager::decompose(
                     "bad number of template arguments for \"" + n
                     + "\" resolved from \"" + name + "\"");
             }
-            if (nucleus != 0) {
+            if (nucleus != nullptr) {
                 *nucleus = n;
             }
-            if (rank != 0) {
+            if (rank != nullptr) {
                 *rank = k;
             }
-            if (arguments != 0) {
+            if (arguments != nullptr) {
                 arguments->clear();
                 for (std::vector< OString >::iterator i(args.begin());
                      i != args.end(); ++i)
@@ -245,7 +245,7 @@ codemaker::UnoType::Sort TypeManager::decompose(
                     arguments->push_back(b2u(*i));
                 }
             }
-            if (entity != 0) {
+            if (entity != nullptr) {
                 *entity = ent;
             }
             return

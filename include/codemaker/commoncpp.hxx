@@ -54,7 +54,7 @@ enum IdentifierTranslationMode {
 rtl::OString translateUnoToCppIdentifier(
     rtl::OString const & identifier, rtl::OString const & prefix,
     IdentifierTranslationMode transmode = ITM_GLOBAL,
-    rtl::OString const * forbidden = 0);
+    rtl::OString const * forbidden = nullptr);
 
 } }
 

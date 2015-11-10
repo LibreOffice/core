@@ -338,7 +338,7 @@ void ClassFile::Code::instrTableswitch(
     for (std::list< Code * >::const_iterator i(blocks.begin());
          i != blocks.end(); ++i)
     {
-        if (*i == 0) {
+        if (*i == nullptr) {
             appendU4(m_code, defaultOffset);
         } else {
             appendU4(m_code, static_cast< sal_uInt32 >(pos2 - pos1));
@@ -350,7 +350,7 @@ void ClassFile::Code::instrTableswitch(
     for (std::list< Code * >::const_iterator i(blocks.begin());
          i != blocks.end(); ++i)
     {
-        if (*i != 0) {
+        if (*i != nullptr) {
             appendStream(m_code, (*i)->m_code);
         }
     }
@@ -608,9 +608,9 @@ void ClassFile::addMethod(
     }
     appendU2(
         m_methods,
-        ((code == 0 ? 0 : 1) + (exceptions.empty() ? 0 : 1)
+        ((code == nullptr ? 0 : 1) + (exceptions.empty() ? 0 : 1)
          + (signature.isEmpty() ? 0 : 1)));
-    if (code != 0) {
+    if (code != nullptr) {
         std::vector< unsigned char >::size_type codeSize = code->m_code.size();
         std::vector< unsigned char >::size_type exceptionTableSize
             = code->m_exceptionTable.size();

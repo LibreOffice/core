@@ -59,7 +59,7 @@ void appendUnoName(
 {
     assert(manager.is());
     assert(rank >= 0);
-    assert(buffer != 0);
+    assert(buffer != nullptr);
     for (sal_Int32 i = 0; i != rank; ++i) {
         buffer->append("[]");
     }
@@ -75,7 +75,7 @@ void appendUnoName(
             OUString n;
             sal_Int32 k;
             std::vector< OUString > args;
-            manager->decompose(*i, false, &n, &k, &args, 0);
+            manager->decompose(*i, false, &n, &k, &args, nullptr);
             appendUnoName(manager, n, k, args, buffer);
         }
         buffer->append('>');
@@ -141,7 +141,7 @@ SpecialType translateUnoTypeToDescriptor(
     PolymorphicUnoType * polymorphicUnoType)
 {
     assert(rank >= 0);
-    assert((signature == 0) == (needsSignature == 0));
+    assert((signature == nullptr) == (needsSignature == nullptr));
     assert(
         arguments.empty()
         == (sort
@@ -154,14 +154,14 @@ SpecialType translateUnoTypeToDescriptor(
         ++rank;
     }
     for (sal_Int32 i = 0; i != rank; ++i) {
-        if (descriptor != 0) {
+        if (descriptor != nullptr) {
             descriptor->append('[');
         }
-        if (signature != 0) {
+        if (signature != nullptr) {
             signature->append('[');
         }
     }
-    if (polymorphicUnoType != 0) {
+    if (polymorphicUnoType != nullptr) {
         if (sort
             == codemaker::UnoType::SORT_INSTANTIATED_POLYMORPHIC_STRUCT_TYPE)
         {
@@ -210,10 +210,10 @@ SpecialType translateUnoTypeToDescriptor(
                 { "Ljava/lang/Object;", "Ljava/lang/Object;" } };
             char const * s
                 = simpleTypeDescriptors[sort][rank == 0 && classType];
-            if (descriptor != 0) {
+            if (descriptor != nullptr) {
                 descriptor->append(s);
             }
-            if (signature != 0) {
+            if (signature != nullptr) {
                 signature->append(s);
             }
             static SpecialType const
@@ -227,10 +227,10 @@ SpecialType translateUnoTypeToDescriptor(
         }
     case codemaker::UnoType::SORT_INTERFACE_TYPE:
         if (nucleus == "com.sun.star.uno.XInterface") {
-            if (descriptor != 0) {
+            if (descriptor != nullptr) {
                 descriptor->append("Ljava/lang/Object;");
             }
-            if (signature != 0) {
+            if (signature != nullptr) {
                 signature->append("Ljava/lang/Object;");
             }
             return SPECIAL_TYPE_INTERFACE;
@@ -240,15 +240,15 @@ SpecialType translateUnoTypeToDescriptor(
     case codemaker::UnoType::SORT_ENUM_TYPE:
     case codemaker::UnoType::SORT_PLAIN_STRUCT_TYPE:
     case codemaker::UnoType::SORT_INSTANTIATED_POLYMORPHIC_STRUCT_TYPE:
-        if (dependencies != 0) {
+        if (dependencies != nullptr) {
             dependencies->insert(nucleus);
         }
-        if (descriptor != 0) {
+        if (descriptor != nullptr) {
             descriptor->append(
                 "L" + codemaker::convertString(nucleus).replace('.', '/')
                 + ";");
         }
-        if (signature != 0) {
+        if (signature != nullptr) {
             signature->append(
                 "L" + codemaker::convertString(nucleus).replace('.', '/'));
             if (!arguments.empty()) {
@@ -258,8 +258,8 @@ SpecialType translateUnoTypeToDescriptor(
                      i != arguments.end(); ++i)
                 {
                     translateUnoTypeToDescriptor(
-                        manager, *i, false, true, dependencies, 0, signature,
-                        needsSignature, 0);
+                        manager, *i, false, true, dependencies, nullptr, signature,
+                        needsSignature, nullptr);
                 }
                 signature->append('>');
                 *needsSignature = true;
@@ -285,7 +285,7 @@ SpecialType translateUnoTypeToDescriptor(
     sal_Int32 rank;
     std::vector< OUString > args;
     codemaker::UnoType::Sort sort = manager->decompose(
-        type, true, &nucleus, &rank, &args, 0);
+        type, true, &nucleus, &rank, &args, nullptr);
     return translateUnoTypeToDescriptor(
         manager, sort, nucleus, rank, args, array, classType, dependencies,
         descriptor, signature, needsSignature, polymorphicUnoType);
@@ -296,7 +296,7 @@ SpecialType getFieldDescriptor(
     OUString const & type, OString * descriptor, OString * signature,
     PolymorphicUnoType * polymorphicUnoType)
 {
-    assert(descriptor != 0);
+    assert(descriptor != nullptr);
     OStringBuffer desc;
     OStringBuffer sig;
     bool needsSig = false;
@@ -304,7 +304,7 @@ SpecialType getFieldDescriptor(
         manager, type, false, false, dependencies, &desc, &sig, &needsSig,
         polymorphicUnoType);
     *descriptor = desc.makeStringAndClear();
-    if (signature != 0) {
+    if (signature != nullptr) {
         if (needsSig) {
             *signature = sig.makeStringAndClear();
         } else {
@@ -348,7 +348,7 @@ MethodDescriptor::MethodDescriptor(
     PolymorphicUnoType * polymorphicUnoType):
     m_manager(manager), m_dependencies(dependencies), m_needsSignature(false)
 {
-    assert(dependencies != 0);
+    assert(dependencies != nullptr);
     m_descriptorStart.append('(');
     m_signatureStart.append('(');
     OStringBuffer descEnd;
@@ -360,7 +360,7 @@ MethodDescriptor::MethodDescriptor(
         &m_needsSignature, polymorphicUnoType);
     m_descriptorEnd = descEnd.makeStringAndClear();
     m_signatureEnd = sigEnd.makeStringAndClear();
-    if (specialReturnType != 0) {
+    if (specialReturnType != nullptr) {
         *specialReturnType = special;
     }
 }
@@ -370,7 +370,7 @@ SpecialType MethodDescriptor::addParameter(
     PolymorphicUnoType * polymorphicUnoType)
 {
     return translateUnoTypeToDescriptor(
-        m_manager, type, array, false, dependency ? m_dependencies : 0,
+        m_manager, type, array, false, dependency ? m_dependencies : nullptr,
         &m_descriptorStart, &m_signatureStart, &m_needsSignature,
         polymorphicUnoType);
 }
@@ -576,7 +576,7 @@ sal_uInt16 TypeInfo::generateCode(
 void TypeInfo::generatePolymorphicUnoTypeCode(
     ClassFile::Code & code, Dependencies * dependencies) const
 {
-    assert(dependencies != 0);
+    assert(dependencies != nullptr);
     assert(m_polymorphicUnoType.kind != PolymorphicUnoType::KIND_NONE);
     code.instrNew("com/sun/star/uno/Type");
     code.instrDup();
@@ -643,7 +643,7 @@ void addTypeInfo(
     OString const & className, std::vector< TypeInfo > const & typeInfo,
     Dependencies * dependencies, ClassFile * classFile)
 {
-    assert(classFile != 0);
+    assert(classFile != nullptr);
     std::vector< TypeInfo >::size_type typeInfos = typeInfo.size();
     if (typeInfos > SAL_MAX_INT32) {
         throw CannotDumpException(
@@ -769,7 +769,7 @@ void handleEnumType(
             sal_Int32 value = i->first;
             if (last != SAL_MAX_INT32) {
                 for (sal_Int32 j = last + 1; j < value; ++j) {
-                    blocks.push_back(0);
+                    blocks.push_back(nullptr);
                 }
             }
             last = value;
@@ -841,8 +841,8 @@ void addField(
     sal_Int32 typeParameterIndex, OUString const & type, OUString const & name,
     sal_Int32 index)
 {
-    assert(classFile != 0);
-    assert(typeInfo != 0);
+    assert(classFile != nullptr);
+    assert(typeInfo != nullptr);
     OString descriptor;
     OString signature;
     SpecialType specialType;
@@ -872,7 +872,7 @@ sal_uInt16 addFieldInit(
     Dependencies * dependencies, ClassFile::Code * code)
 {
     assert(manager.is());
-    assert(code != 0);
+    assert(code != nullptr);
     if (typeParameter) {
         return 0;
     }
@@ -924,7 +924,7 @@ sal_uInt16 addFieldInit(
                 OStringBuffer descBuf;
                 translateUnoTypeToDescriptor(
                     manager, sort, nucleus, 0, std::vector< OUString >(), false,
-                    false, dependencies, &descBuf, 0, 0, 0);
+                    false, dependencies, &descBuf, nullptr, nullptr, nullptr);
                 OString desc(descBuf.makeStringAndClear());
                 code->instrGetstatic(
                     codemaker::convertString(nucleus).replace('.', '/'),
@@ -945,7 +945,7 @@ sal_uInt16 addFieldInit(
                 OStringBuffer desc;
                 translateUnoTypeToDescriptor(
                     manager, sort, nucleus, 0, args, false, false, dependencies,
-                    &desc, 0, 0, 0);
+                    &desc, nullptr, nullptr, nullptr);
                 code->instrPutfield(className, name, desc.makeStringAndClear());
                 return 3;
             }
@@ -976,13 +976,13 @@ sal_uInt16 addFieldInit(
         OStringBuffer desc;
         translateUnoTypeToDescriptor(
             manager, sort, nucleus, rank - 1, std::vector< OUString >(), false,
-            false, dependencies, &desc, 0, 0, 0);
+            false, dependencies, &desc, nullptr, nullptr, nullptr);
         code->instrAnewarray(desc.makeStringAndClear());
     }
     OStringBuffer desc;
     translateUnoTypeToDescriptor(
         manager, sort, nucleus, rank, std::vector< OUString >(), false, false,
-        dependencies, &desc, 0, 0, 0);
+        dependencies, &desc, nullptr, nullptr, nullptr);
     code->instrPutfield(className, name, desc.makeStringAndClear());
     return 2;
 }
@@ -993,10 +993,10 @@ sal_uInt16 addLoadLocal(
     Dependencies * dependencies)
 {
     assert(manager.is());
-    assert(code != 0);
-    assert(index != 0);
+    assert(code != nullptr);
+    assert(index != nullptr);
     assert(!(typeParameter && any));
-    assert(dependencies != 0);
+    assert(dependencies != nullptr);
     sal_uInt16 stack = 1;
     sal_uInt16 size = 1;
     if (typeParameter) {
@@ -1007,7 +1007,7 @@ sal_uInt16 addLoadLocal(
         sal_Int32 rank;
         std::vector< OUString > args;
         codemaker::UnoType::Sort sort = manager->decompose(
-            type, true, &nucleus, &rank, &args, 0);
+            type, true, &nucleus, &rank, &args, nullptr);
         if (rank == 0) {
             switch (sort) {
             case codemaker::UnoType::SORT_BOOLEAN:
@@ -1339,15 +1339,15 @@ sal_uInt16 addDirectArgument(
     sal_uInt16 * index, OString const & className, OString const & fieldName,
     bool typeParameter, OUString const & fieldType)
 {
-    assert(methodDescriptor != 0);
-    assert(code != 0);
+    assert(methodDescriptor != nullptr);
+    assert(code != nullptr);
     OString desc;
     if (typeParameter) {
         methodDescriptor->addTypeParameter(fieldType);
         desc = "Ljava/lang/Object;";
     } else {
-        methodDescriptor->addParameter(fieldType, false, true, 0);
-        getFieldDescriptor(manager, dependencies, fieldType, &desc, 0, 0);
+        methodDescriptor->addParameter(fieldType, false, true, nullptr);
+        getFieldDescriptor(manager, dependencies, fieldType, &desc, nullptr, nullptr);
     }
     code->loadLocalReference(0);
     sal_uInt16 stack = addLoadLocal(
@@ -1362,7 +1362,7 @@ void addPlainStructBaseArguments(
     OUString const & base, sal_uInt16 * index)
 {
     assert(manager.is());
-    assert(methodDescriptor != 0);
+    assert(methodDescriptor != nullptr);
     rtl::Reference< unoidl::Entity > ent;
     if (manager->getSort(base, &ent)
         != codemaker::UnoType::SORT_PLAIN_STRUCT_TYPE)
@@ -1382,7 +1382,7 @@ void addPlainStructBaseArguments(
              ent2.getDirectMembers().begin());
          i != ent2.getDirectMembers().end(); ++i)
     {
-        methodDescriptor->addParameter(i->type, false, true, 0);
+        methodDescriptor->addParameter(i->type, false, true, nullptr);
         addLoadLocal(manager, code, index, false, i->type, false, dependencies);
     }
 }
@@ -1394,7 +1394,7 @@ void handlePlainStructType(
     Dependencies * dependencies)
 {
     assert(entity.is());
-    assert(dependencies != 0);
+    assert(dependencies != nullptr);
     OString className(codemaker::convertString(name).replace('.', '/'));
     OString superClass;
     if (entity->getDirectBase().isEmpty()) {
@@ -1438,7 +1438,7 @@ void handlePlainStructType(
     cf->addMethod(
         ClassFile::ACC_PUBLIC, "<init>", "()V", code.get(),
         std::vector< OString >(), "");
-    MethodDescriptor desc(manager, dependencies, "void", 0, 0);
+    MethodDescriptor desc(manager, dependencies, "void", nullptr, nullptr);
     code.reset(cf->newCode());
     code->loadLocalReference(0);
     sal_uInt16 index2 = 1;
@@ -1538,7 +1538,7 @@ void handlePolyStructType(
     cf->addMethod(
         ClassFile::ACC_PUBLIC, "<init>", "()V", code.get(),
         std::vector< OString >(), "");
-    MethodDescriptor desc(manager, dependencies, "void", 0, 0);
+    MethodDescriptor desc(manager, dependencies, "void", nullptr, nullptr);
     code.reset(cf->newCode());
     code->loadLocalReference(0);
     sal_uInt16 index2 = 1;
@@ -1570,7 +1570,7 @@ void addExceptionBaseArguments(
     OUString const & base, sal_uInt16 * index)
 {
     assert(manager.is());
-    assert(methodDescriptor != 0);
+    assert(methodDescriptor != nullptr);
     rtl::Reference< unoidl::Entity > ent;
     if (manager->getSort(base, &ent) != codemaker::UnoType::SORT_EXCEPTION_TYPE)
     {
@@ -1591,7 +1591,7 @@ void addExceptionBaseArguments(
          i != ent2.getDirectMembers().end(); ++i)
     {
         if (!baseException || i != ent2.getDirectMembers().begin()) {
-            methodDescriptor->addParameter(i->type, false, true, 0);
+            methodDescriptor->addParameter(i->type, false, true, nullptr);
             addLoadLocal(
                 manager, code, index, false, i->type, false, dependencies);
         }
@@ -1604,7 +1604,7 @@ void handleExceptionType(
     Dependencies * dependencies)
 {
     assert(entity.is());
-    assert(dependencies != 0);
+    assert(dependencies != nullptr);
     OString className(codemaker::convertString(name).replace('.', '/'));
     bool baseException = false;
     bool baseRuntimeException = false;
@@ -1780,12 +1780,12 @@ void handleExceptionType(
 
 
     // create (String Message, Object Context, T1 m1, ..., Tn mn) constructor
-    MethodDescriptor desc1(manager, dependencies, "void", 0, 0);
+    MethodDescriptor desc1(manager, dependencies, "void", nullptr, nullptr);
     code.reset(cf->newCode());
     code->loadLocalReference(0);
     sal_uInt16 index2 = 1;
     code->loadLocalReference(index2++);
-    desc1.addParameter("string", false, true, 0);
+    desc1.addParameter("string", false, true, nullptr);
     if (!(baseException || baseRuntimeException)) {
         addExceptionBaseArguments(
             manager, dependencies, &desc1, code.get(), entity->getDirectBase(),
@@ -1820,13 +1820,13 @@ void handleExceptionType(
         std::vector< OString >(), desc1.getSignature());
 
     // create (Throwable Cause, String Message, Object Context, T1 m1, ..., Tn mn) constructor
-    MethodDescriptor desc2(manager, dependencies, "void", 0, 0);
+    MethodDescriptor desc2(manager, dependencies, "void", nullptr, nullptr);
     code.reset(cf->newCode());
     code->loadLocalReference(0);
     sal_uInt16 index3 = 3;
     // Note that we hack in the java.lang.Throwable parameter further down,
     // because MethodDescriptor does not know how to handle it.
-    desc2.addParameter("string", false, true, 0);
+    desc2.addParameter("string", false, true, nullptr);
     if (baseException || baseRuntimeException) {
         code->loadLocalReference(2);
         code->loadLocalReference(1);
@@ -1876,15 +1876,15 @@ void createExceptionsAttribute(
     Dependencies * dependencies, std::vector< OString > * exceptions,
     codemaker::ExceptionTree * tree)
 {
-    assert(dependencies != 0);
-    assert(exceptions != 0);
+    assert(dependencies != nullptr);
+    assert(exceptions != nullptr);
     for (std::vector< OUString >::const_iterator i(exceptionTypes.begin());
          i != exceptionTypes.end(); ++i)
     {
         dependencies->insert(*i);
         OString type(codemaker::convertString(*i).replace('.', '/'));
         exceptions->push_back(type);
-        if (tree != 0) {
+        if (tree != nullptr) {
             tree->add(type.replace('/', '.'), manager);
         }
     }
@@ -1896,7 +1896,7 @@ void handleInterfaceType(
     Dependencies * dependencies)
 {
     assert(entity.is());
-    assert(dependencies != 0);
+    assert(dependencies != nullptr);
     OString className(codemaker::convertString(name).replace('.', '/'));
     std::unique_ptr< ClassFile > cf(
         new ClassFile(
@@ -1931,23 +1931,23 @@ void handleInterfaceType(
                 &polymorphicUnoType);
             std::vector< OString > exc;
             createExceptionsAttribute(
-                manager, i->getExceptions, dependencies, &exc, 0);
+                manager, i->getExceptions, dependencies, &exc, nullptr);
             OString attrName(codemaker::convertString(i->name));
             cf->addMethod(
                 static_cast< ClassFile::AccessFlags >(
                     ClassFile::ACC_PUBLIC | ClassFile::ACC_ABSTRACT),
-                "get" + attrName, gdesc.getDescriptor(), 0, exc,
+                "get" + attrName, gdesc.getDescriptor(), nullptr, exc,
                 gdesc.getSignature());
             if (!i->readOnly) {
-                MethodDescriptor sdesc(manager, dependencies, "void", 0, 0);
-                sdesc.addParameter(i->type, false, true, 0);
+                MethodDescriptor sdesc(manager, dependencies, "void", nullptr, nullptr);
+                sdesc.addParameter(i->type, false, true, nullptr);
                 std::vector< OString > exc2;
                 createExceptionsAttribute(
-                    manager, i->setExceptions, dependencies, &exc2, 0);
+                    manager, i->setExceptions, dependencies, &exc2, nullptr);
                 cf->addMethod(
                     static_cast< ClassFile::AccessFlags >(
                         ClassFile::ACC_PUBLIC | ClassFile::ACC_ABSTRACT),
-                    "set" + attrName, sdesc.getDescriptor(), 0, exc2,
+                    "set" + attrName, sdesc.getDescriptor(), nullptr, exc2,
                     sdesc.getSignature());
             }
             typeInfo.push_back(
@@ -2000,11 +2000,11 @@ void handleInterfaceType(
             }
             std::vector< OString > exc2;
             createExceptionsAttribute(
-                manager, i->exceptions, dependencies, &exc2, 0);
+                manager, i->exceptions, dependencies, &exc2, nullptr);
             cf->addMethod(
                 static_cast< ClassFile::AccessFlags >(
                     ClassFile::ACC_PUBLIC | ClassFile::ACC_ABSTRACT),
-                methodName, desc.getDescriptor(), 0, exc2, desc.getSignature());
+                methodName, desc.getDescriptor(), nullptr, exc2, desc.getSignature());
         }
     }
     addTypeInfo(className, typeInfo, dependencies, cf.get());
@@ -2017,9 +2017,9 @@ void handleTypedef(
 {
     assert(entity.is());
     assert(manager.is());
-    assert(dependencies != 0);
+    assert(dependencies != nullptr);
     OUString nucleus;
-    switch (manager->decompose(entity->getType(), false, &nucleus, 0, 0, 0))
+    switch (manager->decompose(entity->getType(), false, &nucleus, nullptr, nullptr, nullptr))
     {
     case codemaker::UnoType::SORT_BOOLEAN:
     case codemaker::UnoType::SORT_BYTE:
@@ -2112,7 +2112,7 @@ void handleConstantGroup(
         }
         OString desc;
         OString sig;
-        getFieldDescriptor(manager, dependencies, type, &desc, &sig, 0);
+        getFieldDescriptor(manager, dependencies, type, &desc, &sig, nullptr);
         cf->addField(
             static_cast< ClassFile::AccessFlags >(
                 ClassFile::ACC_PUBLIC | ClassFile::ACC_STATIC
@@ -2127,8 +2127,8 @@ void addExceptionHandlers(
     ClassFile::Code::Position start, ClassFile::Code::Position end,
     ClassFile::Code::Position handler, ClassFile::Code * code)
 {
-    assert(node != 0);
-    assert(code != 0);
+    assert(node != nullptr);
+    assert(code != nullptr);
     if (node->present) {
         code->addException(start, end, handler, node->name.replace('.', '/'));
     } else {
@@ -2149,10 +2149,10 @@ void addConstructor(
     OUString const & returnType, Dependencies * dependencies,
     ClassFile * classFile)
 {
-    assert(dependencies != 0);
-    assert(classFile != 0);
-    MethodDescriptor desc(manager, dependencies, returnType, 0, 0);
-    desc.addParameter("com.sun.star.uno.XComponentContext", false, false, 0);
+    assert(dependencies != nullptr);
+    assert(classFile != nullptr);
+    MethodDescriptor desc(manager, dependencies, returnType, nullptr, nullptr);
+    desc.addParameter("com.sun.star.uno.XComponentContext", false, false, nullptr);
     std::unique_ptr< ClassFile::Code > code(classFile->newCode());
     code->loadLocalReference(0);
     // stack: context
@@ -2187,7 +2187,7 @@ void addConstructor(
         if (constructor.parameters.size() == 1
             && constructor.parameters[0].rest)
         {
-            desc.addParameter("any", true, true, 0);
+            desc.addParameter("any", true, true, nullptr);
             code->loadLocalReference(localIndex++);
             // stack: factory serviceName args
             stack = 4;
@@ -2206,7 +2206,7 @@ void addConstructor(
                          constructor.parameters.begin());
                  i != constructor.parameters.end(); ++i)
             {
-                desc.addParameter(i->type, false, true, 0);
+                desc.addParameter(i->type, false, true, nullptr);
                 code->instrDup();
                 // stack: factory serviceName args args
                 code->loadIntegerConstant(n++);
@@ -2302,7 +2302,7 @@ void handleService(
     Dependencies * dependencies)
 {
     assert(entity.is());
-    assert(dependencies != 0);
+    assert(dependencies != nullptr);
     OString unoName(codemaker::convertString(name));
     OString className(
         translateUnoidlEntityNameToJavaFullyQualifiedName(name, "service"));
@@ -2397,7 +2397,7 @@ void handleSingleton(
     Dependencies * dependencies)
 {
     assert(entity.is());
-    assert(dependencies != 0);
+    assert(dependencies != nullptr);
     OString realJavaBaseName(codemaker::convertString(entity->getBase()));
     OString base(realJavaBaseName.replace('.', '/'));
     dependencies->insert(entity->getBase());
@@ -2413,8 +2413,8 @@ void handleSingleton(
                 ClassFile::ACC_PUBLIC | ClassFile::ACC_FINAL
                 | ClassFile::ACC_SUPER),
             className, "java/lang/Object", ""));
-    MethodDescriptor desc(manager, dependencies, entity->getBase(), 0, 0);
-    desc.addParameter("com.sun.star.uno.XComponentContext", false, false, 0);
+    MethodDescriptor desc(manager, dependencies, entity->getBase(), nullptr, nullptr);
+    desc.addParameter("com.sun.star.uno.XComponentContext", false, false, nullptr);
     std::unique_ptr< ClassFile::Code > code(cf->newCode());
     code->loadLocalReference(0);
     // stack: context

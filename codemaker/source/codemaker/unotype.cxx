@@ -34,10 +34,10 @@ OString codemaker::UnoType::decompose(
     while (len - i > 1 && type[i + 1] == ']') {
         i += 2;
     }
-    if (rank != 0) {
+    if (rank != nullptr) {
         *rank = i / 2;
     }
-    sal_Int32 j = arguments == 0 ? -1 : type.indexOf('<', i);
+    sal_Int32 j = arguments == nullptr ? -1 : type.indexOf('<', i);
     if (j < 0) {
         return type.copy(i);
     }
