@@ -417,8 +417,8 @@ void SvtFilePicker::ensureFilterList( const OUString& _rInitialCurrentFilter )
 
 SvtFilePicker::SvtFilePicker( const Reference < XMultiServiceFactory >& xFactory )
     :OCommonPicker( xFactory )
-    ,m_pFilterList      ( NULL )
-    ,m_pElemList        ( NULL )
+    ,m_pFilterList      ( nullptr )
+    ,m_pElemList        ( nullptr )
     ,m_bMultiSelection  ( false )
     ,m_nServiceType     ( TemplateDescription::FILEOPEN_SIMPLE )
 {
@@ -448,7 +448,7 @@ sal_Int16 SvtFilePicker::implExecutePicker( )
 
     // the execution of the dialog yields, so it is possible the at this point the window or the dialog is closed
     if ( getDialog() )
-        getDialog()->SetFileCallback( NULL );
+        getDialog()->SetFileCallback( nullptr );
 
     return nRet;
 }

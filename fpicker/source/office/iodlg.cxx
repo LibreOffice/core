@@ -305,15 +305,15 @@ SvtFileDialog::SvtFileDialog
 ) :
     SvtFileDialog_Base( _pParent, "ExplorerFileDialog", "fps/ui/explorerfiledialog.ui" )
 
-    ,_pCbReadOnly( NULL )
-    ,_pCbLinkBox( NULL)
-    ,_pCbPreviewBox( NULL )
-    ,_pCbSelection( NULL )
-    ,_pPbPlay( NULL )
-    ,_pPrevWin( NULL )
-    ,_pPrevBmp( NULL )
-    ,_pFileView( NULL )
-    ,_pFileNotifier( NULL )
+    ,_pCbReadOnly( nullptr )
+    ,_pCbLinkBox( nullptr)
+    ,_pCbPreviewBox( nullptr )
+    ,_pCbSelection( nullptr )
+    ,_pPbPlay( nullptr )
+    ,_pPrevWin( nullptr )
+    ,_pPrevBmp( nullptr )
+    ,_pFileView( nullptr )
+    ,_pFileNotifier( nullptr )
     ,_pImp( new SvtExpFileDlg_Impl( nBits ) )
     ,_nExtraBits( nExtraBits )
     ,_bIsInExecute( false )
@@ -328,15 +328,15 @@ SvtFileDialog::SvtFileDialog
 
 SvtFileDialog::SvtFileDialog ( vcl::Window* _pParent, WinBits nBits )
     :SvtFileDialog_Base( _pParent, "ExplorerFileDialog", "fps/ui/explorerfiledialog.ui" )
-    ,_pCbReadOnly( NULL )
-    ,_pCbLinkBox( NULL)
-    ,_pCbPreviewBox( NULL )
-    ,_pCbSelection( NULL )
-    ,_pPbPlay( NULL )
-    ,_pPrevWin( NULL )
-    ,_pPrevBmp( NULL )
-    ,_pFileView( NULL )
-    ,_pFileNotifier( NULL )
+    ,_pCbReadOnly( nullptr )
+    ,_pCbLinkBox( nullptr)
+    ,_pCbPreviewBox( nullptr )
+    ,_pCbSelection( nullptr )
+    ,_pPbPlay( nullptr )
+    ,_pPrevWin( nullptr )
+    ,_pPrevBmp( nullptr )
+    ,_pFileView( nullptr )
+    ,_pFileNotifier( nullptr )
     ,_pImp( new SvtExpFileDlg_Impl( nBits ) )
     ,_nExtraBits( 0L )
     ,_bIsInExecute( false )
@@ -368,9 +368,9 @@ class CustomContainer : public vcl::Window
 public:
     CustomContainer(vcl::Window *pParent)
         : Window(pParent)
-        , _pImp(NULL)
-        , _pFileView(NULL)
-        , _pSplitter(NULL)
+        , _pImp(nullptr)
+        , _pFileView(nullptr)
+        , _pSplitter(nullptr)
         , m_nCurrentFocus(FocusState::Prev)
     {
     }
@@ -1392,7 +1392,7 @@ SvtFileDialogFilter_Impl* SvtFileDialog::FindFilter_Impl
 */
 
 {
-    SvtFileDialogFilter_Impl* pFoundFilter = NULL;
+    SvtFileDialogFilter_Impl* pFoundFilter = nullptr;
     SvtFileDialogFilterList_Impl& rList = _pImp->m_aFilter;
     sal_uInt16 nFilter = rList.size();
 
@@ -1455,7 +1455,7 @@ void SvtFileDialog::OpenMultiSelection_Impl()
 
 {
     sal_uLong nCount = _pFileView->GetSelectionCount();
-    SvTreeListEntry* pEntry = nCount ? _pFileView->FirstSelected() : NULL;
+    SvTreeListEntry* pEntry = nCount ? _pFileView->FirstSelected() : nullptr;
 
     if ( nCount && pEntry )
         _aPath = SvtFileView::GetURL( pEntry );
@@ -1573,7 +1573,7 @@ IMPL_LINK_TYPED( SvtFileDialog, SelectHdl_Impl, SvTreeListBox*, pBox, void )
 IMPL_LINK_NOARG_TYPED(SvtFileDialog, DblClickHdl_Impl, SvTreeListBox*, bool)
 {
     _pImp->_bDoubleClick = true;
-    OpenHdl_Impl( NULL );
+    OpenHdl_Impl( nullptr );
     _pImp->_bDoubleClick = false;
 
     return false;
@@ -1822,7 +1822,7 @@ void SvtFileDialog::onAsyncOperationStarted()
 void SvtFileDialog::onAsyncOperationFinished()
 {
     EnableUI( true );
-    m_pCurrentAsyncAction = NULL;
+    m_pCurrentAsyncAction = nullptr;
     if ( !m_bInExecuteAsync )
         _pImp->_pEdFileName->GrabFocus();
         // (if m_bInExecuteAsync is true, then the operation was finished within the minimum wait time,
@@ -1862,13 +1862,13 @@ void SvtFileDialog::displayIOException( const OUString& _rURL, IOErrorCode _eCod
         aException.Classification = InteractionClassification_ERROR;
 
         // let and interaction handler handle this exception
-        ::comphelper::OInteractionRequest* pRequest = NULL;
+        ::comphelper::OInteractionRequest* pRequest = nullptr;
         Reference< css::task::XInteractionRequest > xRequest = pRequest =
             new ::comphelper::OInteractionRequest( makeAny( aException ) );
         pRequest->addContinuation( new ::comphelper::OInteractionAbort( ) );
 
         Reference< XInteractionHandler2 > xHandler(
-            InteractionHandler::createWithParent( ::comphelper::getProcessComponentContext(), 0 ) );
+            InteractionHandler::createWithParent( ::comphelper::getProcessComponentContext(), nullptr ) );
         xHandler->handle( xRequest );
     }
     catch( const Exception& )
@@ -2308,7 +2308,7 @@ std::vector<OUString> SvtFileDialog::GetPathList() const
 {
     std::vector<OUString> aList;
     sal_uLong           nCount = _pFileView->GetSelectionCount();
-    SvTreeListEntry*    pEntry = nCount ? _pFileView->FirstSelected() : NULL;
+    SvTreeListEntry*    pEntry = nCount ? _pFileView->FirstSelected() : nullptr;
 
     if ( ! pEntry )
     {
@@ -2437,12 +2437,12 @@ void SvtFileDialog::Resize()
 
 Control* SvtFileDialog::getControl( sal_Int16 _nControlId, bool _bLabelControl ) const
 {
-    Control* pReturn = NULL;
+    Control* pReturn = nullptr;
 
     switch ( _nControlId )
     {
         case CONTROL_FILEVIEW:
-            pReturn = _bLabelControl ? NULL : static_cast< Control* >( _pFileView );
+            pReturn = _bLabelControl ? nullptr : static_cast< Control* >( _pFileView );
             break;
 
         case EDIT_FILEURL:

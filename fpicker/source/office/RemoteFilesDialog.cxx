@@ -30,9 +30,9 @@ class FileViewContainer : public vcl::Window
     public:
     FileViewContainer( vcl::Window *pParent )
         : Window( pParent, WB_TABSTOP )
-        , m_pFileView( NULL )
-        , m_pTreeView( NULL )
-        , m_pSplitter( NULL )
+        , m_pFileView( nullptr )
+        , m_pTreeView( nullptr )
+        , m_pSplitter( nullptr )
         , m_nCurrentFocus( 0 )
     {
     }
@@ -173,12 +173,12 @@ RemoteFilesDialog::RemoteFilesDialog( vcl::Window* pParent, WinBits nBits )
     , m_xMasterPasswd( PasswordContainer::create( m_xContext ) )
     , m_nWidth( 0 )
     , m_nHeight( 0 )
-    , m_pCurrentAsyncAction( NULL )
-    , m_pFileNotifier( NULL )
-    , m_pSplitter( NULL )
-    , m_pFileView( NULL )
-    , m_pContainer( NULL )
-    , m_pAddMenu( NULL )
+    , m_pCurrentAsyncAction( nullptr )
+    , m_pFileNotifier( nullptr )
+    , m_pSplitter( nullptr )
+    , m_pFileView( nullptr )
+    , m_pContainer( nullptr )
+    , m_pAddMenu( nullptr )
 {
     get( m_pCancel_btn, "cancel" );
     get( m_pAddService_btn, "add_service_btn" );
@@ -372,7 +372,7 @@ short RemoteFilesDialog::Execute()
     if( !m_bIsConnected )
     {
         m_pServices_lb->SetNoSelection();
-        m_pAddService_btn->SetPopupMenu( NULL );
+        m_pAddService_btn->SetPopupMenu( nullptr );
     }
 
     short nRet = SvtFileDialog_Base::Execute();
@@ -501,7 +501,7 @@ void RemoteFilesDialog::FillServicesListbox()
         m_pAddService_btn->SetPopupMenu( m_pAddMenu );
     }
     else
-        m_pAddService_btn->SetPopupMenu( NULL );
+        m_pAddService_btn->SetPopupMenu( nullptr );
 
     EnableControls();
 }
@@ -703,7 +703,7 @@ void RemoteFilesDialog::SavePassword( const OUString& rURL, const OUString& rUse
         )
         {
             Reference< XInteractionHandler > xInteractionHandler(
-                InteractionHandler::createWithParent( m_xContext, 0 ),
+                InteractionHandler::createWithParent( m_xContext, nullptr ),
                 UNO_QUERY );
 
             Sequence< OUString > aPasswd( 1 );
@@ -841,7 +841,7 @@ IMPL_LINK_TYPED ( RemoteFilesDialog, EditServiceMenuHdl, MenuButton *, pButton, 
                         OUString sUrl( m_aServices[nPos]->GetUrl() );
 
                         Reference< XInteractionHandler > xInteractionHandler(
-                            InteractionHandler::createWithParent( m_xContext, 0 ),
+                            InteractionHandler::createWithParent( m_xContext, nullptr ),
                             UNO_QUERY );
 
                         UrlRecord aURLEntries = m_xMasterPasswd->find( sUrl, xInteractionHandler );
@@ -861,7 +861,7 @@ IMPL_LINK_TYPED ( RemoteFilesDialog, EditServiceMenuHdl, MenuButton *, pButton, 
                 m_pServices_lb->RemoveEntry( nSelected );
 
                 m_pServices_lb->SetNoSelection();
-                m_pAddService_btn->SetPopupMenu( NULL );
+                m_pAddService_btn->SetPopupMenu( nullptr );
 
                 m_bIsUpdated = true;
 
@@ -883,7 +883,7 @@ IMPL_LINK_TYPED ( RemoteFilesDialog, EditServiceMenuHdl, MenuButton *, pButton, 
                     OUString sUrl( m_aServices[nPos]->GetUrl() );
 
                     Reference< XInteractionHandler > xInteractionHandler(
-                        InteractionHandler::createWithParent( m_xContext, 0 ),
+                        InteractionHandler::createWithParent( m_xContext, nullptr ),
                         UNO_QUERY );
 
                     UrlRecord aURLEntries = m_xMasterPasswd->find( sUrl, xInteractionHandler );
@@ -1291,7 +1291,7 @@ void RemoteFilesDialog::onAsyncOperationStarted()
 
 void RemoteFilesDialog::onAsyncOperationFinished()
 {
-    m_pCurrentAsyncAction = NULL;
+    m_pCurrentAsyncAction = nullptr;
     EnableControls();
 }
 
@@ -1306,7 +1306,7 @@ void RemoteFilesDialog::UpdateControls( const OUString& rURL )
         m_pPath->SetRootName( m_sRootLabel );
         m_pTreeView->Clear();
 
-        SvTreeListEntry* pRoot = m_pTreeView->InsertEntry( m_sRootLabel, NULL, true );
+        SvTreeListEntry* pRoot = m_pTreeView->InsertEntry( m_sRootLabel, nullptr, true );
         OUString* sData = new OUString( rURL );
         pRoot->SetUserData( static_cast< void* >( sData ) );
 
@@ -1368,7 +1368,7 @@ std::vector<OUString> RemoteFilesDialog::GetPathList() const
 {
     std::vector<OUString> aList;
     sal_uLong nCount = m_pFileView->GetSelectionCount();
-    SvTreeListEntry* pEntry = nCount ? m_pFileView->FirstSelected() : NULL;
+    SvTreeListEntry* pEntry = nCount ? m_pFileView->FirstSelected() : nullptr;
 
     while( pEntry )
     {
@@ -1393,7 +1393,7 @@ bool RemoteFilesDialog::ContentIsFolder( const OUString& rURL )
     try
     {
         Reference< XInteractionHandler > xInteractionHandler(
-                        InteractionHandler::createWithParent( m_xContext, 0 ), UNO_QUERY_THROW );
+                        InteractionHandler::createWithParent( m_xContext, nullptr ), UNO_QUERY_THROW );
         Reference< XCommandEnvironment > xEnv = new ::ucbhelper::CommandEnvironment( xInteractionHandler, Reference< XProgressHandler >() );
         ::ucbhelper::Content aContent( rURL, xEnv, m_xContext );
 
@@ -1412,7 +1412,7 @@ bool RemoteFilesDialog::ContentIsDocument( const OUString& rURL )
     try
     {
         Reference< XInteractionHandler > xInteractionHandler(
-                        InteractionHandler::createWithParent( m_xContext, 0 ), UNO_QUERY_THROW );
+                        InteractionHandler::createWithParent( m_xContext, nullptr ), UNO_QUERY_THROW );
         Reference< XCommandEnvironment > xEnv = new ::ucbhelper::CommandEnvironment( xInteractionHandler, Reference< XProgressHandler >() );
         ::ucbhelper::Content aContent( rURL, xEnv, m_xContext );
 
@@ -1457,7 +1457,7 @@ bool RemoteFilesDialog::getShowState()
 
 Control* RemoteFilesDialog::getControl( sal_Int16, bool) const
 {
-    return NULL;
+    return nullptr;
 }
 void RemoteFilesDialog::enableControl( sal_Int16, bool )
 {

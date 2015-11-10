@@ -91,7 +91,7 @@ namespace svt
                                         Control* _pControl, sal_Int16 _nProperty, const css::uno::Any& _rValue,
                                         bool _bIgnoreIllegalArgument = true );
 
-        Control* implGetControl( const OUString& _rControlName, sal_Int16* _pId = NULL, sal_Int32* _pPropertyMask = NULL ) const;
+        Control* implGetControl( const OUString& _rControlName, sal_Int16* _pId = nullptr, sal_Int32* _pPropertyMask = nullptr ) const;
 
         /** implements the various methods for retrieving properties from controls
 

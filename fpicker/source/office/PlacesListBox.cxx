@@ -20,7 +20,7 @@
 
 PlacesListBox_Impl::PlacesListBox_Impl( PlacesListBox* pParent, const OUString& rTitle ) :
     SvHeaderTabListBox( pParent, WB_TABSTOP | WB_NOINITIALSELECTION ),
-    mpHeaderBar( NULL ),
+    mpHeaderBar( nullptr ),
     mpParent( pParent )
 {
     Size aBoxSize = pParent->GetSizePixel( );
@@ -63,7 +63,7 @@ PlacesListBox::PlacesListBox( vcl::Window* pParent, SvtFileDialog* pFileDlg, con
     Control( pParent, nBits ),
     maPlaces( ),
     mpDlg( pFileDlg ),
-    mpImpl( NULL ),
+    mpImpl( nullptr ),
     mpAddBtn( ),
     mpDelBtn( ),
     mnNbEditables( 0 ),

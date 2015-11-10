@@ -31,21 +31,21 @@ static const cppu::ImplementationEntry g_entries[] =
         SvtRemoteFilePicker::impl_createInstance,
         SvtRemoteFilePicker::impl_getStaticImplementationName,
         SvtRemoteFilePicker::impl_getStaticSupportedServiceNames,
-        cppu::createSingleComponentFactory, 0, 0
+        cppu::createSingleComponentFactory, nullptr, 0
     },
     {
         SvtFilePicker::impl_createInstance,
         SvtFilePicker::impl_getStaticImplementationName,
         SvtFilePicker::impl_getStaticSupportedServiceNames,
-        cppu::createSingleComponentFactory, 0, 0
+        cppu::createSingleComponentFactory, nullptr, 0
     },
     {
         SvtFolderPicker::impl_createInstance,
         SvtFolderPicker::impl_getStaticImplementationName,
         SvtFolderPicker::impl_getStaticSupportedServiceNames,
-        cppu::createSingleComponentFactory, 0, 0
+        cppu::createSingleComponentFactory, nullptr, 0
     },
-    { 0, 0, 0, 0, 0, 0 }
+    { nullptr, nullptr, nullptr, nullptr, nullptr, 0 }
 };
 
 extern "C"

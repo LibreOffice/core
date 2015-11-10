@@ -37,7 +37,7 @@ private:
 
 public:
     QueryFolderNameDialog(vcl::Window* _pParent, const OUString& rTitle,
-        const OUString& rDefaultText, OUString* pGroupName = NULL);
+        const OUString& rDefaultText, OUString* pGroupName = nullptr);
     virtual ~QueryFolderNameDialog();
     virtual void dispose() override;
     OUString GetName() const { return m_pNameEdit->GetText(); }

@@ -236,7 +236,7 @@ namespace svt
 
     Control* OControlAccess::implGetControl( const OUString& _rControlName, sal_Int16* _pId, sal_Int32* _pPropertyMask ) const
     {
-        Control* pControl = NULL;
+        Control* pControl = nullptr;
         ControlDescription tmpDesc;
         OString aControlName = OUStringToOString( _rControlName, RTL_TEXTENCODING_UTF8 );
         tmpDesc.pControlName = aControlName.getStr();

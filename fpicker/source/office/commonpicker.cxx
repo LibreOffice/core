@@ -50,8 +50,8 @@ namespace svt
         :OCommonPicker_Base( m_aMutex )
         ,OPropertyContainer( GetBroadcastHelper() )
         ,m_xORB( _rxFactory )
-        ,m_pDlg( NULL )
-        ,m_nCancelEvent( 0 )
+        ,m_pDlg( nullptr )
+        ,m_nCancelEvent( nullptr )
         ,m_bExecuting( false )
     {
         // the two properties we have
@@ -124,8 +124,8 @@ namespace svt
         }
 
         m_pDlg.disposeAndClear();
-        m_xWindow = NULL;
-        m_xDialogParent = NULL;
+        m_xWindow = nullptr;
+        m_xDialogParent = nullptr;
     }
 
 
@@ -153,8 +153,8 @@ namespace svt
             else
                 m_pDlg.clear();
 
-            m_xWindow = NULL;
-            m_xDialogParent = NULL;
+            m_xWindow = nullptr;
+            m_xDialogParent = nullptr;
         }
         else
         {
@@ -394,7 +394,7 @@ namespace svt
         // By definition, the solar mutex is locked when we arrive here. Note that this
         // is important, as for instance the consistency of m_pDlg depends on this mutex.
         ::osl::MutexGuard aGuard( m_aMutex );
-        m_nCancelEvent = 0;
+        m_nCancelEvent = nullptr;
 
         if ( !m_bExecuting )
             // nothing to do. This may be because the dialog was canceled after our cancel method

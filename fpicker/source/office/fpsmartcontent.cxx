@@ -47,17 +47,17 @@ namespace svt
 
 
     SmartContent::SmartContent()
-        :m_pContent( NULL )
+        :m_pContent( nullptr )
         ,m_eState( NOT_BOUND )
-        ,m_pOwnInteraction( NULL )
+        ,m_pOwnInteraction( nullptr )
     {
     }
 
 
     SmartContent::SmartContent( const OUString& _rInitialURL )
-        :m_pContent( NULL )
+        :m_pContent( nullptr )
         ,m_eState( NOT_BOUND )
-        ,m_pOwnInteraction( NULL )
+        ,m_pOwnInteraction( nullptr )
     {
         bindTo( _rInitialURL );
     }
@@ -84,7 +84,7 @@ namespace svt
     {
         Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
         Reference< XInteractionHandler > xGlobalInteractionHandler(
-            InteractionHandler::createWithParent(xContext, 0), UNO_QUERY_THROW );
+            InteractionHandler::createWithParent(xContext, nullptr), UNO_QUERY_THROW );
 
         m_pOwnInteraction = new ::svt::OFilePickerInteractionHandler(xGlobalInteractionHandler);
         m_pOwnInteraction->enableInterceptions(eInterceptions);
@@ -98,12 +98,12 @@ namespace svt
     {
         // Don't free the memory here! It will be done by the next
         // call automatically - releasing of the uno reference ...
-        m_pOwnInteraction = NULL;
+        m_pOwnInteraction = nullptr;
         m_xOwnInteraction.clear();
 
         Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
         Reference< XInteractionHandler > xGlobalInteractionHandler(
-            InteractionHandler::createWithParent(xContext, 0), UNO_QUERY_THROW );
+            InteractionHandler::createWithParent(xContext, nullptr), UNO_QUERY_THROW );
         m_xCmdEnv = new ucbhelper::CommandEnvironment( xGlobalInteractionHandler, Reference< XProgressHandler >() );
     }
 
@@ -111,7 +111,7 @@ namespace svt
     ::svt::OFilePickerInteractionHandler* SmartContent::getOwnInteractionHandler() const
     {
         if (!m_xOwnInteraction.is())
-            return NULL;
+            return nullptr;
         return m_pOwnInteraction;
     }
 
@@ -132,7 +132,7 @@ namespace svt
     {
         // Don't free the memory here! It will be done by the next
         // call automatically - releasing of the uno reference ...
-        m_pOwnInteraction = NULL;
+        m_pOwnInteraction = nullptr;
         m_xOwnInteraction.clear();
 
         m_xCmdEnv.clear();
