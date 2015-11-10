@@ -2380,14 +2380,21 @@ void SdXImpressDocument::initializeForTiledRendering()
 
     mpDoc->setTiledRendering(true);
 
-    // Disable map mode, so that it's possible to send mouse event coordinates
-    // in logic units.
     if (DrawViewShell* pViewShell = GetViewShell())
     {
+        // Disable map mode, so that it's possible to send mouse event coordinates
+        // in logic units.
         if (sd::Window* pWindow = pViewShell->GetActiveWindow())
         {
             pWindow->EnableMapMode(false);
         }
+
+        // Forces all images to be swapped in synchronously, this
+        // ensures that images are available when paintTile is called
+        // (whereas with async loading images start being loaded after
+        //  we have painted the tile, resulting in an invalidate, followed
+        //  by the tile being rerendered - which is wasteful and ugly).
+        pViewShell->GetDrawView()->SetSwapAsynchron(false);
     }
     // tdf#93154: in tiled rendering LO doesn't always detect changes
     SvtMiscOptions aMiscOpt;
