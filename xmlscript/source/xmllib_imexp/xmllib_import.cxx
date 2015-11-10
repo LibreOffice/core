@@ -154,7 +154,7 @@ Reference< xml::input::XElement > LibraryImport::startRootElement(
     }
     else if ( mpLibArray && rLocalName == "libraries" )
     {
-        return new LibrariesElement( rLocalName, xAttributes, 0, this );
+        return new LibrariesElement( rLocalName, xAttributes, nullptr, this );
     }
     else if ( mpLibDesc && rLocalName == "library" )
     {
@@ -166,7 +166,7 @@ Reference< xml::input::XElement > LibraryImport::startRootElement(
         getBoolAttr( &aDesc.bPasswordProtected, "passwordprotected", xAttributes, XMLNS_LIBRARY_UID );
         getBoolAttr( &aDesc.bPreload, "preload", xAttributes, XMLNS_LIBRARY_UID );
 
-        return new LibraryElement( rLocalName, xAttributes, 0, this );
+        return new LibraryElement( rLocalName, xAttributes, nullptr, this );
     }
     else
     {

@@ -116,7 +116,7 @@ struct LibraryImport
 public:
     explicit LibraryImport( LibDescriptorArray* pLibArray )
         : mpLibArray(pLibArray)
-        , mpLibDesc(NULL)
+        , mpLibDesc(nullptr)
         , XMLNS_LIBRARY_UID(0)
         , XMLNS_XLINK_UID(0)
     {
@@ -124,7 +124,7 @@ public:
 
     // Single library mode
     explicit LibraryImport(LibDescriptor* pLibDesc)
-        : mpLibArray(NULL)
+        : mpLibArray(nullptr)
         , mpLibDesc(pLibDesc)
         , XMLNS_LIBRARY_UID(0)
         , XMLNS_XLINK_UID(0)

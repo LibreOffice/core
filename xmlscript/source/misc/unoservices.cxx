@@ -30,29 +30,29 @@ namespace xmlscript
         {
             create_DocumentHandlerImpl, getImplementationName_DocumentHandlerImpl,
             getSupportedServiceNames_DocumentHandlerImpl, ::cppu::createSingleComponentFactory,
-            0, 0
+            nullptr, 0
         },
         {
             create_XMLBasicExporter, getImplementationName_XMLBasicExporter,
             getSupportedServiceNames_XMLBasicExporter, ::cppu::createSingleComponentFactory,
-            0, 0
+            nullptr, 0
         },
         {
             create_XMLOasisBasicExporter, getImplementationName_XMLOasisBasicExporter,
             getSupportedServiceNames_XMLOasisBasicExporter, ::cppu::createSingleComponentFactory,
-            0, 0
+            nullptr, 0
         },
         {
             create_XMLBasicImporter, getImplementationName_XMLBasicImporter,
             getSupportedServiceNames_XMLBasicImporter, ::cppu::createSingleComponentFactory,
-            0, 0
+            nullptr, 0
         },
         {
             create_XMLOasisBasicImporter, getImplementationName_XMLOasisBasicImporter,
             getSupportedServiceNames_XMLOasisBasicImporter, ::cppu::createSingleComponentFactory,
-            0, 0
+            nullptr, 0
         },
-        { 0, 0, 0, 0, 0, 0 }
+        { nullptr, nullptr, nullptr, nullptr, nullptr, 0 }
     };
 }
 

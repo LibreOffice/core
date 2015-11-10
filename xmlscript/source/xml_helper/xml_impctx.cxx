@@ -193,7 +193,7 @@ DocumentHandlerImpl::DocumentHandlerImpl(
       m_nLastPrefix_lookup( UID_UNKNOWN ),
       m_aLastPrefix_lookup( "<<< unknown URI >>>" ),
       m_nSkipElements( 0 ),
-      m_pMutex( 0 )
+      m_pMutex( nullptr )
 {
     m_elements.reserve( 10 );
 
@@ -203,7 +203,7 @@ DocumentHandlerImpl::DocumentHandlerImpl(
 
 DocumentHandlerImpl::~DocumentHandlerImpl() throw ()
 {
-    if (m_pMutex != 0)
+    if (m_pMutex != nullptr)
     {
         delete m_pMutex;
 #if OSL_DEBUG_LEVEL == 0

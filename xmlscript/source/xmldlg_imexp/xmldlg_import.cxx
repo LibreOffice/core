@@ -1444,7 +1444,7 @@ static StringTriple const s_aEventTranslations[] =
     { "com.sun.star.form.XDatabaseParameterListener", "approveParameter", "on-supplyparameter" },
     { "com.sun.star.sdb.XSQLErrorListener", "errorOccured", "on-error" },
     { "com.sun.star.awt.XAdjustmentListener", "adjustmentValueChanged", "on-adjustmentvaluechange" },
-    { 0, 0, 0 }
+    { nullptr, nullptr, nullptr }
 };
 extern StringTriple const * const g_pEventTranslations;
 StringTriple const * const g_pEventTranslations = s_aEventTranslations;
@@ -1769,7 +1769,7 @@ Reference< xml::input::XElement > DialogImport::startRootElement(
     // window
     else if ( rLocalName == "window" )
     {
-        return new WindowElement( rLocalName, xAttributes, 0, this );
+        return new WindowElement( rLocalName, xAttributes, nullptr, this );
     }
     else
     {
@@ -1817,7 +1817,7 @@ Reference< xml::input::XElement > DialogImport::getStyle(
             return (*_pStyles)[ nPos ];
         }
     }
-    return 0;
+    return nullptr;
 }
 
 Reference< xml::sax::XDocumentHandler > SAL_CALL importDialogModel(

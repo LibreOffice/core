@@ -161,7 +161,7 @@ Reference< xml::input::XElement > ModuleImport::startRootElement(
         mrModuleDesc.aLanguage = xAttributes->getValueByUidName( XMLNS_SCRIPT_UID, "language" );
         mrModuleDesc.aModuleType = xAttributes->getValueByUidName( XMLNS_SCRIPT_UID, "moduleType" );
 
-        return new ModuleElement( rLocalName, xAttributes, 0, this );
+        return new ModuleElement( rLocalName, xAttributes, nullptr, this );
     }
     else
     {

@@ -486,7 +486,7 @@ void BasicImport::setDocumentLocator( const Reference< xml::sax::XLocator >& /*x
 
             if ( xLibContainer.is() )
             {
-                xElement.set( new BasicLibrariesElement( rLocalName, xAttributes, 0, this, xLibContainer ) );
+                xElement.set( new BasicLibrariesElement( rLocalName, xAttributes, nullptr, this, xLibContainer ) );
             }
         }
         else
