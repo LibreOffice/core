@@ -24,8 +24,6 @@
 #include <vcl/gdimetafiletools.hxx>
 #include <comphelper/scopeguard.hxx>
 
-#include <boost/bind.hpp>
-
 bool ConvertWMFToGDIMetaFile( SvStream & rStreamWMF, GDIMetaFile & rGDIMetaFile, FilterConfigItem* pConfigItem, WMF_EXTERNALHEADER *pExtHeader )
 {
     sal_uInt32 nMetaType;
@@ -63,9 +61,7 @@ bool ReadWindowMetafile( SvStream& rStream, GDIMetaFile& rMTF, FilterConfigItem*
     SvStreamEndian nOrigNumberFormat = rStream.GetEndian();
     rStream.SetEndian( SvStreamEndian::LITTLE );
     //exception-safe reset nOrigNumberFormat at end of scope
-    const ::comphelper::ScopeGuard aScopeGuard(
-        boost::bind(&SvStream::SetEndian, ::boost::ref(rStream),
-          nOrigNumberFormat));
+    const ::comphelper::ScopeGuard aScopeGuard( [&rStream, nOrigNumberFormat] () { rStream.SetEndian( nOrigNumberFormat ); } );
 
     rStream.Seek( 0x28 );
     rStream.ReadUInt32( nMetaType );
