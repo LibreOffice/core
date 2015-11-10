@@ -1833,6 +1833,21 @@ bool SwPostItField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
     return true;
 }
 
+void SwPostItField::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    xmlTextWriterStartElement(pWriter, BAD_CAST("swPostItField"));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("name"), BAD_CAST(GetName().toUtf8().getStr()));
+
+    SwField::dumpAsXml(pWriter);
+
+    xmlTextWriterStartElement(pWriter, BAD_CAST("mpText"));
+    OutlinerParaObject aParaObject(*mpText);
+    aParaObject.dumpAsXml(pWriter);
+    xmlTextWriterEndElement(pWriter);
+
+    xmlTextWriterEndElement(pWriter);
+}
+
 // extended user information field type
 
 SwExtUserFieldType::SwExtUserFieldType()
