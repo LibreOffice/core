@@ -40,21 +40,21 @@ namespace cppu
 
 // Sequence<>() (default ctor) relies on this being static:
 uno_Sequence g_emptySeq = { 1, 0, { 0 } };
-typelib_TypeDescriptionReference * g_pVoidType = 0;
+typelib_TypeDescriptionReference * g_pVoidType = nullptr;
 
 
 void * binuno_queryInterface( void * pUnoI, typelib_TypeDescriptionReference * pDestType )
 {
     // init queryInterface() td
-    static typelib_TypeDescription * g_pQITD = 0;
-    if (0 == g_pQITD)
+    static typelib_TypeDescription * g_pQITD = nullptr;
+    if (nullptr == g_pQITD)
     {
         MutexGuard aGuard( Mutex::getGlobalMutex() );
-        if (0 == g_pQITD)
+        if (nullptr == g_pQITD)
         {
             typelib_TypeDescriptionReference * type_XInterface =
                 * typelib_static_type_getByTypeClass( typelib_TypeClass_INTERFACE );
-            typelib_InterfaceTypeDescription * pTXInterfaceDescr = 0;
+            typelib_InterfaceTypeDescription * pTXInterfaceDescr = nullptr;
             TYPELIB_DANGER_GET( reinterpret_cast<typelib_TypeDescription **>(&pTXInterfaceDescr), type_XInterface );
             assert(pTXInterfaceDescr->ppAllMembers);
             typelib_typedescriptionreference_getDescription(
@@ -70,8 +70,8 @@ void * binuno_queryInterface( void * pUnoI, typelib_TypeDescriptionReference * p
     (*static_cast<uno_Interface *>(pUnoI)->pDispatcher)(
         static_cast<uno_Interface *>(pUnoI), g_pQITD, &aRet, aArgs, &pExc );
 
-    uno_Interface * ret = 0;
-    if (0 == pExc)
+    uno_Interface * ret = nullptr;
+    if (nullptr == pExc)
     {
         typelib_TypeDescriptionReference * ret_type = aRet.pType;
         switch (ret_type->eTypeClass)
@@ -85,7 +85,7 @@ void * binuno_queryInterface( void * pUnoI, typelib_TypeDescriptionReference * p
             ret = static_cast<uno_Interface *>(aRet.pReserved); // serving acquired interface
             break;
         default:
-            _destructAny( &aRet, 0 );
+            _destructAny( &aRet, nullptr );
             break;
         }
     }
@@ -98,7 +98,7 @@ void * binuno_queryInterface( void * pUnoI, typelib_TypeDescriptionReference * p
                 << OUString(pExc->pType->pTypeName) << "] "
                 << *static_cast<OUString const *>(pExc->pData));
                     // Message is very first member
-        uno_any_destruct( pExc, 0 );
+        uno_any_destruct( pExc, nullptr );
     }
     return ret;
 }
@@ -180,7 +180,7 @@ void SAL_CALL uno_type_constructData(
     void * pMem, typelib_TypeDescriptionReference * pType )
     SAL_THROW_EXTERN_C()
 {
-    _defaultConstructData( pMem, pType, 0 );
+    _defaultConstructData( pMem, pType, nullptr );
 }
 
 void SAL_CALL uno_constructData(
@@ -195,7 +195,7 @@ void SAL_CALL uno_type_destructData(
     uno_ReleaseFunc release )
     SAL_THROW_EXTERN_C()
 {
-    _destructData( pValue, pType, 0, release );
+    _destructData( pValue, pType, nullptr, release );
 }
 
 void SAL_CALL uno_destructData(
@@ -213,7 +213,7 @@ void SAL_CALL uno_type_copyData(
     uno_AcquireFunc acquire )
     SAL_THROW_EXTERN_C()
 {
-    _copyConstructData( pDest, pSource, pType, 0, acquire, 0 );
+    _copyConstructData( pDest, pSource, pType, nullptr, acquire, nullptr );
 }
 
 void SAL_CALL uno_copyData(
@@ -222,7 +222,7 @@ void SAL_CALL uno_copyData(
     uno_AcquireFunc acquire )
     SAL_THROW_EXTERN_C()
 {
-    _copyConstructData( pDest, pSource, pTypeDescr->pWeakRef, pTypeDescr, acquire, 0 );
+    _copyConstructData( pDest, pSource, pTypeDescr->pWeakRef, pTypeDescr, acquire, nullptr );
 }
 
 void SAL_CALL uno_type_copyAndConvertData(
@@ -231,7 +231,7 @@ void SAL_CALL uno_type_copyAndConvertData(
     uno_Mapping * mapping )
     SAL_THROW_EXTERN_C()
 {
-    _copyConstructData( pDest, pSource, pType, 0, 0, mapping );
+    _copyConstructData( pDest, pSource, pType, nullptr, nullptr, mapping );
 }
 
 void SAL_CALL uno_copyAndConvertData(
@@ -240,7 +240,7 @@ void SAL_CALL uno_copyAndConvertData(
     uno_Mapping * mapping )
     SAL_THROW_EXTERN_C()
 {
-    _copyConstructData( pDest, pSource, pTypeDescr->pWeakRef, pTypeDescr, 0, mapping );
+    _copyConstructData( pDest, pSource, pTypeDescr->pWeakRef, pTypeDescr, nullptr, mapping );
 }
 
 sal_Bool SAL_CALL uno_type_equalData(
@@ -250,7 +250,7 @@ sal_Bool SAL_CALL uno_type_equalData(
     SAL_THROW_EXTERN_C()
 {
     return _equalData(
-        pVal1, pVal1Type, 0,
+        pVal1, pVal1Type, nullptr,
         pVal2, pVal2Type,
         queryInterface, release );
 }
@@ -274,8 +274,8 @@ sal_Bool SAL_CALL uno_type_assignData(
     SAL_THROW_EXTERN_C()
 {
     return _assignData(
-        pDest, pDestType, 0,
-        pSource, pSourceType, 0,
+        pDest, pDestType, nullptr,
+        pSource, pSourceType, nullptr,
         queryInterface, acquire, release );
 }
 
@@ -306,17 +306,17 @@ sal_Bool SAL_CALL uno_type_isAssignableFromData(
     }
 
     // query
-    if (0 == pFrom)
+    if (nullptr == pFrom)
         return sal_False;
     void * pInterface = *static_cast<void **>(pFrom);
-    if (0 == pInterface)
+    if (nullptr == pInterface)
         return sal_False;
 
-    if (0 == queryInterface)
+    if (nullptr == queryInterface)
         queryInterface = binuno_queryInterface;
     void * p = (*queryInterface)( pInterface, pAssignable );
     _release( p, release );
-    return (0 != p);
+    return (nullptr != p);
 }
 
 }

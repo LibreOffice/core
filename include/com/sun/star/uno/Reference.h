@@ -90,7 +90,7 @@ public:
         @return true if reference acquires an interface, i.e. true if it is not null
     */
     inline bool SAL_CALL is() const
-        { return (0 != _pInterface); }
+        { return (NULL != _pInterface); }
 
     /** Equality operator: compares two interfaces
         Checks if both references are null or refer to the same object.

@@ -275,7 +275,7 @@ Base::~Base()
     m_pEnv->acquireWeak = m_env_acquireWeak;
     m_pEnv->releaseWeak = m_env_releaseWeak;
 
-    m_pEnv->pReserved = NULL;
+    m_pEnv->pReserved = nullptr;
 
     delete m_pEnterable;
     m_pEnv->release(m_pEnv);

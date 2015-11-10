@@ -42,15 +42,15 @@ namespace cppu
 
 static typelib_InterfaceTypeDescription * get_type_XCurrentContext()
 {
-    static typelib_InterfaceTypeDescription * s_type_XCurrentContext = 0;
-    if (0 == s_type_XCurrentContext)
+    static typelib_InterfaceTypeDescription * s_type_XCurrentContext = nullptr;
+    if (nullptr == s_type_XCurrentContext)
     {
         ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-        if (0 == s_type_XCurrentContext)
+        if (nullptr == s_type_XCurrentContext)
         {
             OUString sTypeName("com.sun.star.uno.XCurrentContext");
-            typelib_InterfaceTypeDescription * pTD = 0;
-            typelib_TypeDescriptionReference * pMembers[1] = { 0 };
+            typelib_InterfaceTypeDescription * pTD = nullptr;
+            typelib_TypeDescriptionReference * pMembers[1] = { nullptr };
             OUString sMethodName0("com.sun.star.uno.XCurrentContext::getValueByName");
             typelib_typedescriptionreference_new(
                 &pMembers[0],
@@ -66,7 +66,7 @@ static typelib_InterfaceTypeDescription * get_type_XCurrentContext()
             typelib_typedescription_register( reinterpret_cast<typelib_TypeDescription**>(&pTD) );
             typelib_typedescriptionreference_release( pMembers[0] );
 
-            typelib_InterfaceMethodTypeDescription * pMethod = 0;
+            typelib_InterfaceMethodTypeDescription * pMethod = nullptr;
             typelib_Parameter_Init aParameters[1];
             OUString sParamName0("Name");
             OUString sParamType0("string");
@@ -122,7 +122,7 @@ public:
 
     explicit ThreadKey( oslThreadKeyCallbackFunction pCallback )
         : _bInit(false)
-        , _hThreadKey(0)
+        , _hThreadKey(nullptr)
         , _pCallback(pCallback)
     {
     }
@@ -166,8 +166,8 @@ IdContainer * getIdContainer()
     if (! pId)
     {
         pId = new IdContainer();
-        pId->pCurrentContext = 0;
-        pId->pCurrentContextEnv = 0;
+        pId->pCurrentContext = nullptr;
+        pId->pCurrentContextEnv = nullptr;
         pId->bInit = false;
         ::osl_setThreadKeyData( aKey, pId );
     }
@@ -192,14 +192,14 @@ extern "C" sal_Bool SAL_CALL uno_setCurrentContext(
             pId->pCurrentContextEnv, pId->pCurrentContext );
         (*pId->pCurrentContextEnv->aBase.release)(
             &pId->pCurrentContextEnv->aBase );
-        pId->pCurrentContextEnv = 0;
+        pId->pCurrentContextEnv = nullptr;
 
-        pId->pCurrentContext = 0;
+        pId->pCurrentContext = nullptr;
     }
 
     if (pCurrentContext)
     {
-        uno_Environment * pEnv = 0;
+        uno_Environment * pEnv = nullptr;
         ::uno_getEnvironment( &pEnv, pEnvTypeName, pEnvContext );
         OSL_ASSERT( pEnv && pEnv->pExtEnv );
         if (pEnv)
@@ -242,16 +242,16 @@ extern "C" sal_Bool SAL_CALL uno_getCurrentContext(
         if (! target_env.is())
             return sal_False;
         uno_ExtEnvironment * pEnv = target_env.get()->pExtEnv;
-        OSL_ASSERT( 0 != pEnv );
-        if (0 == pEnv)
+        OSL_ASSERT( nullptr != pEnv );
+        if (nullptr == pEnv)
             return sal_False;
         (*pEnv->releaseInterface)( pEnv, *ppCurrentContext );
 
-        *ppCurrentContext = 0;
+        *ppCurrentContext = nullptr;
     }
 
     // case: null-ref
-    if (0 == pId->pCurrentContext)
+    if (nullptr == pId->pCurrentContext)
         return sal_True;
 
     if (! target_env.is())

@@ -189,7 +189,7 @@ inline InterfaceEntry * ObjectEntry::find(
 {
     OSL_ASSERT( ! aInterfaces.empty() );
     if (aInterfaces.empty())
-        return 0;
+        return nullptr;
 
     // shortcut common case:
     OUString const & type_name =
@@ -211,7 +211,7 @@ inline InterfaceEntry * ObjectEntry::find(
             pITD = pITD->pBaseTypeDescription;
         }
     }
-    return 0;
+    return nullptr;
 }
 
 
@@ -250,7 +250,7 @@ static void SAL_CALL defenv_registerInterface(
         ObjectEntry * pOEntry = new ObjectEntry( rOId );
         insertion.first->second = pOEntry;
         ++pOEntry->nRef; // another register call on object
-        pOEntry->append( that, *ppInterface, pTypeDescr, 0 );
+        pOEntry->append( that, *ppInterface, pTypeDescr, nullptr );
     }
     else // object entry exists
     {
@@ -272,7 +272,7 @@ static void SAL_CALL defenv_registerInterface(
         }
         else
         {
-            pOEntry->append( that, *ppInterface, pTypeDescr, 0 );
+            pOEntry->append( that, *ppInterface, pTypeDescr, nullptr );
         }
     }
 }
@@ -307,7 +307,7 @@ static void SAL_CALL defenv_registerProxyInterface(
         // first registration was an original, then registerProxyInterface():
         pOEntry->mixedObject |=
             (!pOEntry->aInterfaces.empty() &&
-             pOEntry->aInterfaces[ 0 ].fpFreeProxy == 0);
+             pOEntry->aInterfaces[ 0 ].fpFreeProxy == nullptr);
 
         ++pOEntry->nRef; // another register call on object
         InterfaceEntry * pIEntry = pOEntry->find( pTypeDescr );
@@ -384,7 +384,7 @@ static void SAL_CALL s_stub_defenv_revokeInterface(va_list * pParam)
     else if (pOEntry->mixedObject)
     {
         OSL_ASSERT( !pOEntry->aInterfaces.empty() &&
-                    pOEntry->aInterfaces[ 0 ].fpFreeProxy == 0 );
+                    pOEntry->aInterfaces[ 0 ].fpFreeProxy == nullptr );
 
         sal_Int32 index = pOEntry->find( pInterface, 1 );
         OSL_ASSERT( index > 0 );
@@ -392,7 +392,7 @@ static void SAL_CALL s_stub_defenv_revokeInterface(va_list * pParam)
         {
             InterfaceEntry & entry = pOEntry->aInterfaces[ index ];
             OSL_ASSERT( entry.pInterface == pInterface );
-            if (entry.fpFreeProxy != 0)
+            if (entry.fpFreeProxy != nullptr)
             {
                 --entry.refCount;
                 if (entry.refCount == 0)
@@ -436,7 +436,7 @@ static void SAL_CALL defenv_getObjectIdentifier(
     if (*ppOId)
     {
         ::rtl_uString_release( *ppOId );
-        *ppOId = 0;
+        *ppOId = nullptr;
     }
 
     uno_DefaultEnvironment * that =
@@ -467,7 +467,7 @@ static void SAL_CALL defenv_getRegisteredInterface(
     if (*ppInterface)
     {
         (*pEnv->releaseInterface)( pEnv, *ppInterface );
-        *ppInterface = 0;
+        *ppInterface = nullptr;
     }
 
     OUString const & rOId = OUString::unacquired( &pOId );
@@ -567,7 +567,7 @@ static void SAL_CALL defenv_harden(
     if (*ppHardEnv)
     {
         (*(*ppHardEnv)->release)( *ppHardEnv );
-        *ppHardEnv = 0;
+        *ppHardEnv = nullptr;
     }
 
     EnvironmentsData & rData = theEnvironmentsData::get();
@@ -601,7 +601,7 @@ uno_DefaultEnvironment::uno_DefaultEnvironment(
       nWeakRef( 0 )
 {
     uno_Environment * that = reinterpret_cast< uno_Environment * >(this);
-    that->pReserved = 0;
+    that->pReserved = nullptr;
     // functions
     that->acquire = defenv_acquire;
     that->release = defenv_release;
@@ -616,7 +616,7 @@ uno_DefaultEnvironment::uno_DefaultEnvironment(
     that->pContext = pContext_;
 
     // will be late initialized
-    that->environmentDisposing = 0;
+    that->environmentDisposing = nullptr;
 
     uno_ExtEnvironment::registerInterface = defenv_registerInterface;
     uno_ExtEnvironment::registerProxyInterface = defenv_registerProxyInterface;
@@ -777,8 +777,8 @@ extern "C" void SAL_CALL uno_dumpEnvironmentByName(
     void * stream, rtl_uString * pEnvDcp, const sal_Char * pFilter )
     SAL_THROW_EXTERN_C()
 {
-    uno_Environment * pEnv = 0;
-    uno_getEnvironment( &pEnv, pEnvDcp, 0 );
+    uno_Environment * pEnv = nullptr;
+    uno_getEnvironment( &pEnv, pEnvDcp, nullptr );
     if (pEnv)
     {
         ::uno_dumpEnvironment( stream, pEnv, pFilter );
@@ -808,7 +808,7 @@ namespace
             // pid
             oslProcessInfo info;
             info.Size = sizeof(oslProcessInfo);
-            if (::osl_getProcessInfo( 0, osl_Process_IDENTIFIER, &info ) ==
+            if (::osl_getProcessInfo( nullptr, osl_Process_IDENTIFIER, &info ) ==
                 osl_Process_E_None)
             {
                 aRet.append( (sal_Int64)info.Ident, 16 );
@@ -849,14 +849,14 @@ static void SAL_CALL unoenv_computeObjectIdentifier(
     if (*ppOId)
     {
         ::rtl_uString_release( *ppOId );
-        *ppOId = 0;
+        *ppOId = nullptr;
     }
 
     uno_Interface * pUnoI = static_cast<uno_Interface *>(
         ::cppu::binuno_queryInterface(
             pInterface, *typelib_static_type_getByTypeClass(
                 typelib_TypeClass_INTERFACE ) ));
-    if (0 != pUnoI)
+    if (nullptr != pUnoI)
     {
         (*pUnoI->release)( pUnoI );
         // interface
@@ -904,7 +904,7 @@ EnvironmentsData::~EnvironmentsData()
           iPos != aName2EnvMap.end(); ++iPos )
     {
         uno_Environment * pWeak = iPos->second;
-        uno_Environment * pHard = 0;
+        uno_Environment * pHard = nullptr;
         (*pWeak->harden)( &pHard, pWeak );
         (*pWeak->releaseWeak)( pWeak );
 
@@ -926,7 +926,7 @@ inline void EnvironmentsData::getEnvironment(
     if (*ppEnv)
     {
         (*(*ppEnv)->release)( *ppEnv );
-        *ppEnv = 0;
+        *ppEnv = nullptr;
     }
 
     OUString aKey(
@@ -966,7 +966,7 @@ inline void EnvironmentsData::registerEnvironment( uno_Environment ** ppEnv )
     }
     else
     {
-        uno_Environment * pHard = 0;
+        uno_Environment * pHard = nullptr;
         uno_Environment * pWeak = iFind->second;
         (*pWeak->harden)( &pHard, pWeak );
         if (pHard)
@@ -1003,7 +1003,7 @@ inline void EnvironmentsData::getRegisteredEnvironments(
         if (rEnvDcp.isEmpty() ||
             rEnvDcp.equals( pWeak->pTypeName ))
         {
-            ppFound[nSize] = 0;
+            ppFound[nSize] = nullptr;
             (*pWeak->harden)( &ppFound[nSize], pWeak );
             if (ppFound[nSize])
                 ++nSize;
@@ -1023,7 +1023,7 @@ inline void EnvironmentsData::getRegisteredEnvironments(
     }
     else
     {
-        *pppEnvs = 0;
+        *pppEnvs = nullptr;
     }
 }
 
@@ -1103,7 +1103,7 @@ static uno_Environment * initDefaultEnvironment(
             if(!loadEnv(libStem, pEnv))
             {
                 pEnv->release(pEnv);
-                return NULL;
+                return nullptr;
             }
         }
     }
@@ -1118,7 +1118,7 @@ static uno_Environment * initDefaultEnvironment(
         if (!loadEnv(aStr, pEnv))
         {
             pEnv->release(pEnv);
-            return NULL;
+            return nullptr;
         }
     }
 

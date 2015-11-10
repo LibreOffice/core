@@ -35,12 +35,12 @@ inline uno_Sequence * allocSeq(
     sal_Int32 nElementSize, sal_Int32 nElements )
 {
     OSL_ASSERT( nElements >= 0 && nElementSize >= 0 );
-    uno_Sequence * pSeq = 0;
+    uno_Sequence * pSeq = nullptr;
     sal_uInt32 nSize = calcSeqMemSize( nElementSize, nElements );
     if (nSize > 0)
     {
         pSeq = static_cast<uno_Sequence *>(rtl_allocateMemory( nSize ));
-        if (pSeq != 0)
+        if (pSeq != nullptr)
         {
             // header init
             pSeq->nRefCount = 1;
@@ -251,7 +251,7 @@ inline void _copyConstructAny(
                     CONSTRUCT_EMPTY_ANY( pDestAny );
                     return;
                 }
-                pTypeDescr = 0;
+                pTypeDescr = nullptr;
                 pSource = static_cast<uno_Any *>(pSource)->pData;
             }
             else
@@ -316,7 +316,7 @@ inline void _copyConstructAny(
                 break;
             case typelib_TypeClass_STRING:
                 pDestAny->pData = &pDestAny->pReserved;
-                *static_cast<rtl_uString **>(pDestAny->pData) = 0;
+                *static_cast<rtl_uString **>(pDestAny->pData) = nullptr;
                 ::rtl_uString_new( static_cast<rtl_uString **>(pDestAny->pData) );
                 break;
             case typelib_TypeClass_TYPE:
@@ -359,7 +359,7 @@ inline void _copyConstructAny(
                 break;
             case typelib_TypeClass_INTERFACE:
                 pDestAny->pData = &pDestAny->pReserved;
-                pDestAny->pReserved = 0; // either cpp or c-uno interface
+                pDestAny->pReserved = nullptr; // either cpp or c-uno interface
                 break;
             default:
                 OSL_ASSERT(false);
@@ -393,7 +393,7 @@ inline uno_Sequence * icopyConstructSequence(
             case typelib_TypeClass_ANY:
             {
                 pDest = allocSeq( sizeof (uno_Any), nElements );
-                if (pDest != 0)
+                if (pDest != nullptr)
                 {
                     uno_Any * pDestElements = reinterpret_cast<uno_Any *>(pDest->elements);
                     uno_Any * pSourceElements = reinterpret_cast<uno_Any *>(pSource->elements);
@@ -410,7 +410,7 @@ inline uno_Sequence * icopyConstructSequence(
                             _copyConstructAnyFromData(
                                 &pDestElements[nPos],
                                 pSourceElements[nPos].pData,
-                                pType, 0,
+                                pType, nullptr,
                                 acquire, mapping );
                         }
                     }
@@ -420,12 +420,12 @@ inline uno_Sequence * icopyConstructSequence(
             case typelib_TypeClass_STRUCT:
             case typelib_TypeClass_EXCEPTION:
             {
-                typelib_TypeDescription * pElementTypeDescr = 0;
+                typelib_TypeDescription * pElementTypeDescr = nullptr;
                 TYPELIB_DANGER_GET( &pElementTypeDescr, pElementType );
                 sal_Int32 nElementSize = pElementTypeDescr->nSize;
                 char * pSourceElements = pSource->elements;
                 pDest = allocSeq( nElementSize, nElements );
-                if (pDest != 0)
+                if (pDest != nullptr)
                 {
                     char * pElements = pDest->elements;
                     for ( sal_Int32 nPos = nElements; nPos--; )
@@ -445,9 +445,9 @@ inline uno_Sequence * icopyConstructSequence(
             {
                 // coverity[suspicious_sizeof] - sizeof(uno_Sequence*) is correct here
                 pDest = allocSeq( sizeof (uno_Sequence *), nElements );
-                if (pDest != 0)
+                if (pDest != nullptr)
                 {
-                    typelib_TypeDescription * pElementTypeDescr = 0;
+                    typelib_TypeDescription * pElementTypeDescr = nullptr;
                     TYPELIB_DANGER_GET( &pElementTypeDescr, pElementType );
                     typelib_TypeDescriptionReference * pSeqElementType =
                         reinterpret_cast<typelib_IndirectTypeDescription *>(
@@ -463,7 +463,7 @@ inline uno_Sequence * icopyConstructSequence(
                             pSourceElements[nPos],
                             pSeqElementType,
                             acquire, mapping );
-                        OSL_ASSERT( pNew != 0 );
+                        OSL_ASSERT( pNew != nullptr );
                         // ought never be a memory allocation problem,
                         // because of reference counted sequence handles
                         pDestElements[ nPos ] = pNew;
@@ -476,15 +476,15 @@ inline uno_Sequence * icopyConstructSequence(
             case typelib_TypeClass_INTERFACE:
             {
                 pDest = allocSeq( sizeof (void *), nElements );
-                if (pDest != 0)
+                if (pDest != nullptr)
                 {
                     char * pElements = pDest->elements;
                     void ** pSourceElements = reinterpret_cast<void **>(pSource->elements);
-                    typelib_TypeDescription * pElementTypeDescr = 0;
+                    typelib_TypeDescription * pElementTypeDescr = nullptr;
                     TYPELIB_DANGER_GET( &pElementTypeDescr, pElementType );
                     for ( sal_Int32 nPos = nElements; nPos--; )
                     {
-                        reinterpret_cast<void **>(pElements)[nPos] = 0;
+                        reinterpret_cast<void **>(pElements)[nPos] = nullptr;
                         if (pSourceElements[nPos])
                         {
                             (*mapping->mapInterface)(
@@ -500,7 +500,7 @@ inline uno_Sequence * icopyConstructSequence(
             }
             default:
                 OSL_FAIL( "### unexepcted sequence element type!" );
-                pDest = 0;
+                pDest = nullptr;
                 break;
             }
         }
@@ -559,7 +559,7 @@ inline void _copyConstructData(
     case typelib_TypeClass_ANY:
         _copyConstructAny(
             static_cast<uno_Any *>(pDest), static_cast<uno_Any *>(pSource)->pData,
-            static_cast<uno_Any *>(pSource)->pType, 0,
+            static_cast<uno_Any *>(pSource)->pType, nullptr,
             acquire, mapping );
         break;
     case typelib_TypeClass_ENUM:

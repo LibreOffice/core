@@ -41,7 +41,7 @@ namespace uno
 
 /// @cond INTERNAL
 template< class E >
-typelib_TypeDescriptionReference * Sequence< E >::s_pType = 0;
+typelib_TypeDescriptionReference * Sequence< E >::s_pType = NULL;
 /// @endcond
 
 template< class E >
@@ -230,8 +230,8 @@ getTypeFavourChar(
 {
     //TODO  On certain platforms with weak memory models, the following code can
     // result in some threads observing that td points to garbage:
-    static typelib_TypeDescriptionReference * td = 0;
-    if (td == 0) {
+    static typelib_TypeDescriptionReference * td = NULL;
+    if (td == NULL) {
         ::typelib_static_sequence_type_init(
             &td,
             (::cppu::getTypeFavourChar(
@@ -274,7 +274,7 @@ SAL_CALL getCppuSequenceType( const ::com::sun::star::uno::Type & rElementType )
 inline const ::com::sun::star::uno::Type &
 SAL_CALL getCharSequenceCppuType()
 {
-    static typelib_TypeDescriptionReference * s_pType_com_sun_star_uno_Sequence_Char = 0;
+    static typelib_TypeDescriptionReference * s_pType_com_sun_star_uno_Sequence_Char = NULL;
     if (! s_pType_com_sun_star_uno_Sequence_Char)
     {
         const ::com::sun::star::uno::Type & rElementType = cppu::UnoType<cppu::UnoCharType>::get();

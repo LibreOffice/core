@@ -472,11 +472,11 @@ void Test::testBigStruct() {
 
     css::uno::Type t(
         cppu::UnoType< test::codemaker::cppumaker::BigStruct >::get());
-    typelib_TypeDescription * td = NULL;
+    typelib_TypeDescription * td = nullptr;
     t.getDescription(&td);
     typelib_typedescription_complete(&td);
     fprintf(stdout, "#### 1\n");
-    CPPUNIT_ASSERT(td != NULL);
+    CPPUNIT_ASSERT(td != nullptr);
     CPPUNIT_ASSERT_EQUAL(+typelib_TypeClass_STRUCT, +td->eTypeClass);
     typelib_StructTypeDescription * std =
         reinterpret_cast< typelib_StructTypeDescription * >(td);
@@ -506,7 +506,7 @@ void Test::testExceptions() {
         aEmptySequence;
 
     test::codemaker::cppumaker::TestException1 e11(
-        rtl::OUString("abc"), 0, 1,
+        rtl::OUString("abc"), nullptr, 1,
         css::uno::makeAny(123.0),
         test::codemaker::cppumaker::HelperEnum_ONE,
         test::codemaker::cppumaker::Struct<sal_Int32, sal_Int32>(5, aEmptySequence), 2);
@@ -516,7 +516,7 @@ void Test::testExceptions() {
     e13 = e11;
     CPPUNIT_ASSERT_EQUAL(e11, e13);
     test::codemaker::cppumaker::TestException2 e21(
-        rtl::OUString("abc"), 0, 1,
+        rtl::OUString("abc"), nullptr, 1,
         css::uno::makeAny(123.0),
         test::codemaker::cppumaker::HelperEnum_ONE,
         test::codemaker::cppumaker::Struct<sal_Int32, sal_Int32>(5, aEmptySequence), 2);

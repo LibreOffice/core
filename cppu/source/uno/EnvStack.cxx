@@ -88,7 +88,7 @@ static void s_setCurrent(uno_Environment * pEnv)
 
 static uno_Environment * s_getCurrent()
 {
-    uno_Environment * pEnv = NULL;
+    uno_Environment * pEnv = nullptr;
 
     oslThreadIdentifier threadId = osl::Thread::getCurrentIdentifier();
 
@@ -108,7 +108,7 @@ extern "C" void SAL_CALL uno_getCurrentEnvironment(uno_Environment ** ppEnv, rtl
     if (*ppEnv)
     {
         (*ppEnv)->release(*ppEnv);
-        *ppEnv = NULL;
+        *ppEnv = nullptr;
     }
 
     rtl::OUString currPurpose;
@@ -122,7 +122,7 @@ extern "C" void SAL_CALL uno_getCurrentEnvironment(uno_Environment ** ppEnv, rtl
         rtl::OUString envDcp(pTypeName);
         envDcp += currPurpose;
 
-        uno_getEnvironment(ppEnv, envDcp.pData, NULL);
+        uno_getEnvironment(ppEnv, envDcp.pData, nullptr);
     }
     else
     {
@@ -134,7 +134,7 @@ extern "C" void SAL_CALL uno_getCurrentEnvironment(uno_Environment ** ppEnv, rtl
         else
         {
             rtl::OUString uno_envDcp(UNO_LB_UNO);
-            uno_getEnvironment(ppEnv, uno_envDcp.pData, NULL);
+            uno_getEnvironment(ppEnv, uno_envDcp.pData, nullptr);
         }
     }
 }
@@ -205,14 +205,14 @@ static int s_getNextEnv(uno_Environment ** ppEnv, uno_Environment * pCurrEnv, un
         rtl::OUString next_envDcp(UNO_LB_UNO);
         next_envDcp += nextPurpose;
 
-        uno_getEnvironment(ppEnv, next_envDcp.pData, NULL);
+        uno_getEnvironment(ppEnv, next_envDcp.pData, nullptr);
     }
     else
     {
         if (*ppEnv)
             (*ppEnv)->release(*ppEnv);
 
-        *ppEnv = NULL;
+        *ppEnv = nullptr;
     }
 
     return res;
@@ -278,7 +278,7 @@ extern "C" { static void s_environment_invoke_vv(va_list * pParam)
 
 static void s_environment_invoke_v(uno_Environment * pCurrEnv, uno_Environment * pTargetEnv, uno_EnvCallee * pCallee, va_list * pParam)
 {
-    uno_Environment * pNextEnv = NULL;
+    uno_Environment * pNextEnv = nullptr;
     switch(s_getNextEnv(&pNextEnv, pCurrEnv, pTargetEnv))
     {
     case -1:
@@ -325,7 +325,7 @@ extern "C" void SAL_CALL uno_Environment_invoke(uno_Environment * pEnv, uno_EnvC
 extern "C" void SAL_CALL uno_Environment_enter(uno_Environment * pTargetEnv)
     SAL_THROW_EXTERN_C()
 {
-    uno_Environment * pNextEnv = NULL;
+    uno_Environment * pNextEnv = nullptr;
     uno_Environment * pCurrEnv = s_getCurrent();
 
     int res;

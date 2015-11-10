@@ -47,13 +47,13 @@ namespace cppu_threadpool {
 
     void *JobQueue::enter( sal_Int64 nDisposeId , bool bReturnWhenNoJob )
     {
-        void *pReturn = 0;
+        void *pReturn = nullptr;
         {
             // synchronize with the dispose calls
             MutexGuard guard( m_mutex );
             if( m_DisposedCallerAdmin->isDisposed( nDisposeId ) )
             {
-                return 0;
+                return nullptr;
             }
             m_lstCallstack.push_front( nDisposeId );
         }
@@ -72,7 +72,7 @@ namespace cppu_threadpool {
 
             m_cndWait.wait();
 
-            struct Job job={0,0};
+            struct Job job={nullptr,nullptr};
             {
                 // synchronize with add and dispose calls
                 MutexGuard guard( m_mutex );

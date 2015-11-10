@@ -145,16 +145,16 @@ void MediatorMapping::mapInterface(
     void                             * pInterface,
     typelib_InterfaceTypeDescription * pInterfaceTypeDescr)
 {
-    if (*ppOut != 0)
+    if (*ppOut != nullptr)
     {
         uno_ExtEnvironment * env = m_to.get()->pExtEnv;
-        OSL_ASSERT( env != 0 );
+        OSL_ASSERT( env != nullptr );
         env->releaseInterface( env, *ppOut );
-        *ppOut = NULL;
+        *ppOut = nullptr;
     }
 
-    void * ret = 0;
-    uno_Interface * pUnoI = 0;
+    void * ret = nullptr;
+    uno_Interface * pUnoI = nullptr;
 
     m_from.invoke(s_mapInterface_v, &pUnoI, pInterface, pInterfaceTypeDescr, m_from2uno.get());
 
@@ -247,7 +247,7 @@ void getCascadeMapping(uno_Mapping     ** ppMapping,
 
     // reaching this point means, we need a mediated mapping!!!
     // we generally mediate via uno[:free]
-    uno_Environment * pInterm = NULL;
+    uno_Environment * pInterm = nullptr;
 
     // chained uno -> uno
     if (from_envType == uno_envType && to_envType == uno_envType)
@@ -286,7 +286,7 @@ void getCascadeMapping(uno_Mapping     ** ppMapping,
             uno_envDcp += rest.copy(0, index);
         }
 
-        uno_getEnvironment(&pInterm, uno_envDcp.pData, NULL);
+        uno_getEnvironment(&pInterm, uno_envDcp.pData, nullptr);
     }
     else if (from_envType != uno_envType && to_envType == uno_envType) // <ANY> -> UNO ?
         // mediate via uno:purpose(fromEnv)
@@ -294,7 +294,7 @@ void getCascadeMapping(uno_Mapping     ** ppMapping,
         rtl::OUString     envDcp = uno_envType;
 
         envDcp += from_envPurpose;
-         uno_getEnvironment(&pInterm, envDcp.pData, NULL);
+         uno_getEnvironment(&pInterm, envDcp.pData, nullptr);
     }
     else if (from_envType == uno_envType && to_envType != uno_envType) // UNO -> <ANY>?
         // mediate via uno(context)
@@ -302,7 +302,7 @@ void getCascadeMapping(uno_Mapping     ** ppMapping,
         rtl::OUString     envDcp = uno_envType;
 
          envDcp += to_envPurpose;
-        uno_getEnvironment(&pInterm, envDcp.pData, NULL);
+        uno_getEnvironment(&pInterm, envDcp.pData, nullptr);
     }
     else // everything else
         // mediate via uno:purpose
@@ -312,7 +312,7 @@ void getCascadeMapping(uno_Mapping     ** ppMapping,
         rtl::OUString uno_envDcp = uno_envType;
         uno_envDcp += purpose;
 
-        uno_getEnvironment(&pInterm, uno_envDcp.pData, NULL);
+        uno_getEnvironment(&pInterm, uno_envDcp.pData, nullptr);
     }
 
     uno_Mapping * pMapping = new MediatorMapping(pFrom, pInterm, pTo);

@@ -54,7 +54,7 @@ inline void * _queryInterface(
 {
     if (pSource)
     {
-        if (0 == queryInterface)
+        if (nullptr == queryInterface)
             queryInterface = binuno_queryInterface;
         pSource = (*queryInterface)( pSource, pDestType );
     }
@@ -116,7 +116,7 @@ inline bool _assignData(
     }
     while (typelib_TypeClass_ANY == pSourceType->eTypeClass)
     {
-        pSourceTypeDescr = 0;
+        pSourceTypeDescr = nullptr;
         pSourceType = static_cast<uno_Any *>(pSource)->pType;
         pSource = static_cast<uno_Any *>(pSource)->pData;
         if (pDest == pSource)
@@ -338,7 +338,7 @@ inline bool _assignData(
         }
     case typelib_TypeClass_ANY:
         _destructAny( static_cast<uno_Any *>(pDest), release );
-        _copyConstructAny( static_cast<uno_Any *>(pDest), pSource, pSourceType, pSourceTypeDescr, acquire, 0 );
+        _copyConstructAny( static_cast<uno_Any *>(pDest), pSource, pSourceType, pSourceTypeDescr, acquire, nullptr );
         return true;
     case typelib_TypeClass_ENUM:
         if (_type_equals( pDestType, pSourceType ))
@@ -411,12 +411,12 @@ inline bool _assignData(
             _assignInterface( static_cast<void **>(pDest), *static_cast<void **>(pSource), acquire, release );
             return true;
         }
-        else if (*static_cast< void ** >(pSource) == 0)
+        else if (*static_cast< void ** >(pSource) == nullptr)
         {
             // A null reference of any interface type can be converted to a null
             // reference of any other interface type:
             void * const pToBeReleased = *static_cast< void ** >(pDest);
-            *static_cast< void ** >(pDest) = 0;
+            *static_cast< void ** >(pDest) = nullptr;
             _release( pToBeReleased, release );
             return true;
         }
@@ -439,12 +439,12 @@ inline bool _assignData(
             // query for interface:
             void * pQueried = _queryInterface( *static_cast<void **>(pSource),
                                                pDestType, queryInterface );
-            if (pQueried != 0) {
+            if (pQueried != nullptr) {
                 void * const pToBeReleased = *static_cast<void **>(pDest);
                 *static_cast<void **>(pDest) = pQueried;
                 _release( pToBeReleased, release );
             }
-            return (pQueried != 0);
+            return (pQueried != nullptr);
         }
     default:
         OSL_ASSERT(false);

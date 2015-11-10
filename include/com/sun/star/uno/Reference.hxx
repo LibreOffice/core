@@ -51,11 +51,11 @@ inline XInterface * BaseReference::iquery(
         if (typelib_TypeClass_INTERFACE == aRet.pType->eTypeClass)
         {
             XInterface * pRet = static_cast< XInterface * >( aRet.pReserved );
-            aRet.pReserved = 0;
+            aRet.pReserved = NULL;
             return pRet;
         }
     }
-    return 0;
+    return NULL;
 }
 
 template< class interface_type >
@@ -167,7 +167,7 @@ template< class interface_type >
 inline Reference< interface_type >::Reference( const Any & rAny, UnoReference_Query )
 {
     _pInterface = (typelib_TypeClass_INTERFACE == rAny.pType->eTypeClass
-                   ? iquery( static_cast< XInterface * >( rAny.pReserved ) ) : 0);
+                   ? iquery( static_cast< XInterface * >( rAny.pReserved ) ) : NULL);
 }
 
 template< class interface_type >
@@ -186,7 +186,7 @@ template< class interface_type >
 inline Reference< interface_type >::Reference( const Any & rAny, UnoReference_QueryThrow )
 {
     _pInterface = iquery_throw( typelib_TypeClass_INTERFACE == rAny.pType->eTypeClass
-                                ? static_cast< XInterface * >( rAny.pReserved ) : 0 );
+                                ? static_cast< XInterface * >( rAny.pReserved ) : NULL );
 }
 
 template< class interface_type >
@@ -275,7 +275,7 @@ inline bool Reference< interface_type >::set(
         castFromXInterface(
             iquery(
                 rAny.pType->eTypeClass == typelib_TypeClass_INTERFACE
-                ? static_cast< XInterface * >( rAny.pReserved ) : 0 )),
+                ? static_cast< XInterface * >( rAny.pReserved ) : NULL )),
         SAL_NO_ACQUIRE );
 }
 
@@ -302,7 +302,7 @@ inline void Reference< interface_type >::set(
     set( castFromXInterface(
              iquery_throw(
                  rAny.pType->eTypeClass == typelib_TypeClass_INTERFACE
-                 ? static_cast< XInterface * >( rAny.pReserved ) : 0 )),
+                 ? static_cast< XInterface * >( rAny.pReserved ) : NULL )),
          SAL_NO_ACQUIRE );
 }
 

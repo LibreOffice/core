@@ -62,7 +62,7 @@ public:
 
         @param pTypeDescr a type description
     */
-    inline TypeDescription( typelib_TypeDescription * pTypeDescr = 0 );
+    inline TypeDescription( typelib_TypeDescription * pTypeDescr = NULL );
     /** Constructor:
 
         @param pTypeDescrRef a type description reference
@@ -135,7 +135,7 @@ public:
         @return true, if a type description is set, false otherwise
     */
     inline bool SAL_CALL is() const
-        { return (_pTypeDescr != 0); }
+        { return (_pTypeDescr != NULL); }
 };
 
 inline TypeDescription::TypeDescription( typelib_TypeDescription * pTypeDescr )
@@ -146,14 +146,14 @@ inline TypeDescription::TypeDescription( typelib_TypeDescription * pTypeDescr )
 }
 
 inline TypeDescription::TypeDescription( typelib_TypeDescriptionReference * pTypeDescrRef )
-    : _pTypeDescr( 0 )
+    : _pTypeDescr( NULL )
 {
     if (pTypeDescrRef)
         typelib_typedescriptionreference_getDescription( &_pTypeDescr, pTypeDescrRef );
 }
 
 inline TypeDescription::TypeDescription( const css::uno::Type & rType )
-    : _pTypeDescr( 0 )
+    : _pTypeDescr( NULL )
 {
     if (rType.getTypeLibType())
         typelib_typedescriptionreference_getDescription( &_pTypeDescr, rType.getTypeLibType() );
@@ -167,13 +167,13 @@ inline TypeDescription::TypeDescription( const TypeDescription & rTypeDescr )
 }
 
 inline TypeDescription::TypeDescription( rtl_uString * pTypeName )
-    : _pTypeDescr( 0 )
+    : _pTypeDescr( NULL )
 {
     typelib_typedescription_getByName( &_pTypeDescr , pTypeName );
 }
 
 inline TypeDescription::TypeDescription( const ::rtl::OUString & rTypeName )
-    : _pTypeDescr( 0 )
+    : _pTypeDescr( NULL )
 {
     typelib_typedescription_getByName( &_pTypeDescr , rTypeName.pData );
 }

@@ -51,7 +51,7 @@ inline void * _map(
     uno_Mapping * mapping )
 
 {
-    void * pRet = 0;
+    void * pRet = nullptr;
     if (p)
     {
         if (pTypeDescr)

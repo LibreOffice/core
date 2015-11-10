@@ -150,7 +150,7 @@ void Mapping::mapInterface(
     if (*ppOut)
     {
         (*ppOut)->release(*ppOut);
-        *ppOut = 0;
+        *ppOut = nullptr;
     }
 
     if (!pUnoI)
@@ -158,7 +158,7 @@ void Mapping::mapInterface(
 
     // get object id of uno interface to be wrapped
     // need to enter environment because of potential "queryInterface" call
-    rtl_uString * pOId = 0;
+    rtl_uString * pOId = nullptr;
     uno_Environment_invoke(m_from.get(), s_getIdentifier_v, m_from.get(), &pOId, pUnoI);
     OSL_ASSERT(pOId);
 
@@ -197,7 +197,7 @@ void Mapping::acquire()
     {
         uno_Mapping * pMapping = this;
 
-        ::uno_registerMapping(&pMapping, s_free, m_from.get(), m_to.get(), NULL);
+        ::uno_registerMapping(&pMapping, s_free, m_from.get(), m_to.get(), nullptr);
     }
 }
 
@@ -219,7 +219,7 @@ void createMapping(uno_Mapping     ** ppMapping,
 {
     *ppMapping = new Mapping(pFrom, pTo, probeFun, pContext);
 
-    ::uno_registerMapping(ppMapping, s_free, pFrom, pTo, NULL);
+    ::uno_registerMapping(ppMapping, s_free, pFrom, pTo, nullptr);
 }
 
 }}}

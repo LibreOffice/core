@@ -62,7 +62,7 @@ class Mapping
     uno_Mapping * _pMapping;
 
 public:
-    inline explicit Mapping( uno_Mapping * pMapping = 0 );
+    inline explicit Mapping( uno_Mapping * pMapping = nullptr );
     inline Mapping( const Mapping & rMapping );
     inline ~Mapping();
     inline Mapping & SAL_CALL operator = ( uno_Mapping * pMapping );
@@ -71,7 +71,7 @@ public:
     inline uno_Mapping * SAL_CALL get() const
         { return _pMapping; }
     inline bool SAL_CALL is() const
-        { return (_pMapping != 0); }
+        { return (_pMapping != nullptr); }
 };
 
 inline Mapping::Mapping( uno_Mapping * pMapping )
@@ -152,7 +152,7 @@ struct MappingsData
 
 static MappingsData & getMappingsData()
 {
-    static MappingsData * s_p = 0;
+    static MappingsData * s_p = nullptr;
     if (! s_p)
     {
         MutexGuard aGuard( Mutex::getGlobalMutex() );
@@ -228,18 +228,18 @@ static void SAL_CALL mediate_mapInterface(
         uno_Mediate_Mapping * that = static_cast< uno_Mediate_Mapping * >( pMapping );
         uno_Mapping * pFrom2Uno = that->aFrom2Uno.get();
 
-        uno_Interface * pUnoI = 0;
+        uno_Interface * pUnoI = nullptr;
         (*pFrom2Uno->mapInterface)( pFrom2Uno, reinterpret_cast<void **>(&pUnoI), pInterface, pInterfaceTypeDescr );
-        if (0 == pUnoI)
+        if (nullptr == pUnoI)
         {
             void * pOut = *ppOut;
-            if (0 != pOut)
+            if (nullptr != pOut)
             {
                 uno_ExtEnvironment * pTo = that->aTo.get()->pExtEnv;
-                OSL_ENSURE( 0 != pTo, "### cannot release out interface: leaking!" );
-                if (0 != pTo)
+                OSL_ENSURE( nullptr != pTo, "### cannot release out interface: leaking!" );
+                if (nullptr != pTo)
                     (*pTo->releaseInterface)( pTo, pOut );
-                *ppOut = 0; // set to 0 anyway, because mapping was not successful!
+                *ppOut = nullptr; // set to 0 anyway, because mapping was not successful!
             }
         }
         else
@@ -508,7 +508,7 @@ static Mapping getMediateMapping(
     else
     {
         // get registered uno env
-        ::uno_getEnvironment( reinterpret_cast<uno_Environment **>(&aUno), aUnoEnvTypeName.pData, 0 );
+        ::uno_getEnvironment( reinterpret_cast<uno_Environment **>(&aUno), aUnoEnvTypeName.pData, nullptr );
 
         aUno2To = getDirectMapping( aUno, rTo );
         // : uno <-> to
@@ -521,7 +521,7 @@ static Mapping getMediateMapping(
     {
         // create anonymous uno env
         Environment aAnUno;
-        ::uno_createEnvironment( reinterpret_cast<uno_Environment **>(&aAnUno), aUnoEnvTypeName.pData, 0 );
+        ::uno_createEnvironment( reinterpret_cast<uno_Environment **>(&aAnUno), aUnoEnvTypeName.pData, nullptr );
 
         Mapping aAnUno2Uno( getDirectMapping( aAnUno, aUno, rAddPurpose ) );
         if (! aAnUno2Uno.is())
@@ -562,13 +562,13 @@ void SAL_CALL uno_getMapping(
     rtl_uString * pAddPurpose )
     SAL_THROW_EXTERN_C()
 {
-    assert(ppMapping != 0);
-    assert(pFrom != 0);
-    assert(pTo != 0);
+    assert(ppMapping != nullptr);
+    assert(pFrom != nullptr);
+    assert(pTo != nullptr);
     if (*ppMapping)
     {
         (*(*ppMapping)->release)( *ppMapping );
-        *ppMapping = 0;
+        *ppMapping = nullptr;
     }
 
     Mapping aRet;
@@ -636,16 +636,16 @@ void SAL_CALL uno_getMappingByName(
     if (*ppMapping)
     {
         (*(*ppMapping)->release)( *ppMapping );
-        *ppMapping = 0;
+        *ppMapping = nullptr;
     }
 
-    uno_Environment * pEFrom = 0;
-    uno_getEnvironment( &pEFrom, pFrom, 0 );
+    uno_Environment * pEFrom = nullptr;
+    uno_getEnvironment( &pEFrom, pFrom, nullptr );
     OSL_ENSURE( pEFrom, "### cannot get source environment!" );
     if (pEFrom)
     {
-        uno_Environment * pETo = 0;
-        uno_getEnvironment( &pETo, pTo, 0 );
+        uno_Environment * pETo = nullptr;
+        uno_getEnvironment( &pETo, pTo, nullptr );
         OSL_ENSURE( pETo, "### cannot get target environment!" );
         if (pETo)
         {

@@ -99,7 +99,7 @@ namespace
 // !for NOT REALLY WEAK TYPES only!
 static inline typelib_TypeDescriptionReference * igetTypeByName( rtl_uString * pTypeName )
 {
-    typelib_TypeDescriptionReference * pRef = 0;
+    typelib_TypeDescriptionReference * pRef = nullptr;
     ::typelib_typedescriptionreference_getByName( &pRef, pTypeName );
     if (pRef && pRef->pType && pRef->pType->pWeakRef) // found initialized td
     {
@@ -107,7 +107,7 @@ static inline typelib_TypeDescriptionReference * igetTypeByName( rtl_uString * p
     }
     else
     {
-        return 0;
+        return nullptr;
     }
 }
 
@@ -119,9 +119,9 @@ typelib_TypeDescriptionReference ** SAL_CALL typelib_static_type_getByTypeClass(
     SAL_THROW_EXTERN_C()
 {
     static typelib_TypeDescriptionReference * s_aTypes[] = {
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0 };
+        nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr,
+        nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr,
+        nullptr, nullptr, nullptr };
 
     if (! s_aTypes[eTypeClass])
     {
@@ -171,9 +171,9 @@ typelib_TypeDescriptionReference ** SAL_CALL typelib_static_type_getByTypeClass(
                 {
                     OUString sTypeName("com.sun.star.uno.XInterface");
 
-                    typelib_InterfaceTypeDescription * pTD = 0;
+                    typelib_InterfaceTypeDescription * pTD = nullptr;
 
-                    typelib_TypeDescriptionReference * pMembers[3] = { 0,0,0 };
+                    typelib_TypeDescriptionReference * pMembers[3] = { nullptr,nullptr,nullptr };
                     OUString sMethodName0("com.sun.star.uno.XInterface::queryInterface");
                     ::typelib_typedescriptionreference_new(
                         &pMembers[0], typelib_TypeClass_INTERFACE_METHOD, sMethodName0.pData );
@@ -185,7 +185,7 @@ typelib_TypeDescriptionReference ** SAL_CALL typelib_static_type_getByTypeClass(
                         &pMembers[2], typelib_TypeClass_INTERFACE_METHOD, sMethodName2.pData );
 
                     ::typelib_typedescription_newInterface(
-                        &pTD, sTypeName.pData, 0, 0, 0, 0, 0, 0, 3, pMembers );
+                        &pTD, sTypeName.pData, 0, 0, 0, 0, 0, nullptr, 3, pMembers );
 
                     ::typelib_typedescription_register( reinterpret_cast<typelib_TypeDescription **>(&pTD) );
                     ::typelib_typedescriptionreference_acquire(
@@ -200,7 +200,7 @@ typelib_TypeDescriptionReference ** SAL_CALL typelib_static_type_getByTypeClass(
                     // Exception
                     assert( ! s_aTypes[typelib_TypeClass_EXCEPTION] );
                     {
-                    typelib_TypeDescription * pTD1 = 0;
+                    typelib_TypeDescription * pTD1 = nullptr;
                     OUString sTypeName1("com.sun.star.uno.Exception");
 
                     typelib_CompoundMember_Init aMembers[2];
@@ -216,7 +216,7 @@ typelib_TypeDescriptionReference ** SAL_CALL typelib_static_type_getByTypeClass(
                     aMembers[1].pMemberName = sMemberName1.pData;
 
                     ::typelib_typedescription_new(
-                        &pTD1, typelib_TypeClass_EXCEPTION, sTypeName1.pData, 0, 2, aMembers );
+                        &pTD1, typelib_TypeClass_EXCEPTION, sTypeName1.pData, nullptr, 2, aMembers );
                     typelib_typedescription_register( &pTD1 );
                     typelib_typedescriptionreference_acquire(
                         s_aTypes[typelib_TypeClass_EXCEPTION] = pTD1->pWeakRef );
@@ -225,12 +225,12 @@ typelib_TypeDescriptionReference ** SAL_CALL typelib_static_type_getByTypeClass(
                     // RuntimeException
                     OUString sTypeName2("com.sun.star.uno.RuntimeException");
                     ::typelib_typedescription_new(
-                        &pTD1, typelib_TypeClass_EXCEPTION, sTypeName2.pData, s_aTypes[typelib_TypeClass_EXCEPTION], 0, 0 );
+                        &pTD1, typelib_TypeClass_EXCEPTION, sTypeName2.pData, s_aTypes[typelib_TypeClass_EXCEPTION], 0, nullptr );
                     ::typelib_typedescription_register( &pTD1 );
                     ::typelib_typedescription_release( pTD1 );
                     }
                     // XInterface members
-                    typelib_InterfaceMethodTypeDescription * pMethod = 0;
+                    typelib_InterfaceMethodTypeDescription * pMethod = nullptr;
                     typelib_Parameter_Init aParameters[1];
                     OUString sParamName0("aType");
                     OUString sParamType0("type");
@@ -252,13 +252,13 @@ typelib_TypeDescriptionReference ** SAL_CALL typelib_static_type_getByTypeClass(
                     OUString sReturnType1("void");
                     ::typelib_typedescription_newInterfaceMethod(
                         &pMethod, 1, sal_True, sMethodName1.pData,
-                        typelib_TypeClass_VOID, sReturnType1.pData, 0, 0, 0, 0 );
+                        typelib_TypeClass_VOID, sReturnType1.pData, 0, nullptr, 0, nullptr );
                     ::typelib_typedescription_register( reinterpret_cast<typelib_TypeDescription**>(&pMethod) );
 
                     ::typelib_typedescription_newInterfaceMethod(
                         &pMethod, 2, sal_True, sMethodName2.pData,
                         typelib_TypeClass_VOID, sReturnType1.pData,
-                        0, 0, 0, 0 );
+                        0, nullptr, 0, nullptr );
                     ::typelib_typedescription_register( reinterpret_cast<typelib_TypeDescription**>(&pMethod) );
                     ::typelib_typedescription_release( &pMethod->aBase.aBase );
                 }
@@ -315,10 +315,10 @@ void SAL_CALL typelib_static_sequence_type_init(
             *ppRef = igetTypeByName( aTypeName.pData );
             if (!*ppRef)
             {
-                typelib_TypeDescription * pReg = 0;
+                typelib_TypeDescription * pReg = nullptr;
                 ::typelib_typedescription_new(
                     &pReg, typelib_TypeClass_SEQUENCE,
-                    aTypeName.pData, pElementType, 0, 0 );
+                    aTypeName.pData, pElementType, 0, nullptr );
 
                 ::typelib_typedescription_register( &pReg );
                 *ppRef = reinterpret_cast<typelib_TypeDescriptionReference *>(pReg);
@@ -352,7 +352,7 @@ void init(
             *ppRef = igetTypeByName( aTypeName.pData );
             if (!*ppRef)
             {
-                typelib_CompoundTypeDescription * pComp = 0;
+                typelib_CompoundTypeDescription * pComp = nullptr;
                 ::typelib_typedescription_newEmpty(
                     reinterpret_cast<typelib_TypeDescription **>(&pComp), eTypeClass, aTypeName.pData );
 
@@ -371,7 +371,7 @@ void init(
                     pComp->nMembers = nMembers;
                     pComp->pMemberOffsets = new sal_Int32[ nMembers ];
                     pComp->ppTypeRefs = new typelib_TypeDescriptionReference *[ nMembers ];
-                    if (pParameterizedTypes != 0) {
+                    if (pParameterizedTypes != nullptr) {
                         reinterpret_cast< typelib_StructTypeDescription * >(
                             pComp)->pParameterizedTypes
                             = new sal_Bool[nMembers];
@@ -381,14 +381,14 @@ void init(
                         ::typelib_typedescriptionreference_acquire(
                             pComp->ppTypeRefs[i] = ppMembers[i] );
                         // write offset
-                        typelib_TypeDescription * pTD = 0;
+                        typelib_TypeDescription * pTD = nullptr;
                         TYPELIB_DANGER_GET( &pTD, pComp->ppTypeRefs[i] );
                         assert( pTD->nSize ); // void member?
                         nOffset = newAlignedSize( nOffset, pTD->nSize, pTD->nAlignment );
                         pComp->pMemberOffsets[i] = nOffset - pTD->nSize;
                         TYPELIB_DANGER_RELEASE( pTD );
 
-                        if (pParameterizedTypes != 0) {
+                        if (pParameterizedTypes != nullptr) {
                             reinterpret_cast< typelib_StructTypeDescription * >(
                                 pComp)->pParameterizedTypes[i]
                                 = pParameterizedTypes[i];
@@ -422,7 +422,7 @@ void SAL_CALL typelib_static_compound_type_init(
     sal_Int32 nMembers, typelib_TypeDescriptionReference ** ppMembers )
     SAL_THROW_EXTERN_C()
 {
-    init(ppRef, eTypeClass, pTypeName, pBaseType, nMembers, ppMembers, 0);
+    init(ppRef, eTypeClass, pTypeName, pBaseType, nMembers, ppMembers, nullptr);
 }
 
 void SAL_CALL typelib_static_struct_type_init(
@@ -445,7 +445,7 @@ void SAL_CALL typelib_static_interface_type_init(
 {
     // coverity[callee_ptr_arith]
     typelib_static_mi_interface_type_init(
-        ppRef, pTypeName, pBaseType == 0 ? 0 : 1, &pBaseType);
+        ppRef, pTypeName, pBaseType == nullptr ? 0 : 1, &pBaseType);
 }
 
 void SAL_CALL typelib_static_mi_interface_type_init(
@@ -465,7 +465,7 @@ void SAL_CALL typelib_static_mi_interface_type_init(
             *ppRef = igetTypeByName( aTypeName.pData );
             if (!*ppRef)
             {
-                typelib_InterfaceTypeDescription * pIface = 0;
+                typelib_InterfaceTypeDescription * pIface = nullptr;
                 ::typelib_typedescription_newEmpty(
                     reinterpret_cast<typelib_TypeDescription **>(&pIface), typelib_TypeClass_INTERFACE, aTypeName.pData );
 
@@ -475,7 +475,7 @@ void SAL_CALL typelib_static_mi_interface_type_init(
                 if (nBaseTypes > 0)
                 {
                     for (sal_Int32 i = 0; i < nBaseTypes; ++i) {
-                        pIface->ppBaseTypes[i] = 0;
+                        pIface->ppBaseTypes[i] = nullptr;
                         ::typelib_typedescriptionreference_getDescription(
                             reinterpret_cast<typelib_TypeDescription **>(&pIface->ppBaseTypes[i]), ppBaseTypes[i] );
                         assert( pIface->ppBaseTypes[i] );
@@ -483,7 +483,7 @@ void SAL_CALL typelib_static_mi_interface_type_init(
                 }
                 else
                 {
-                    pIface->ppBaseTypes[0] = 0;
+                    pIface->ppBaseTypes[0] = nullptr;
                     ::typelib_typedescriptionreference_getDescription(
                         reinterpret_cast<typelib_TypeDescription **>(&pIface->ppBaseTypes[0]),
                         * ::typelib_static_type_getByTypeClass( typelib_TypeClass_INTERFACE ) );
@@ -528,7 +528,7 @@ void SAL_CALL typelib_static_enum_type_init(
             *ppRef = igetTypeByName( aTypeName.pData );
             if (!*ppRef)
             {
-                typelib_TypeDescription * pReg = 0;
+                typelib_TypeDescription * pReg = nullptr;
                 ::typelib_typedescription_newEmpty(
                     &pReg, typelib_TypeClass_ENUM, aTypeName.pData );
                 typelib_EnumTypeDescription * pEnum = reinterpret_cast<typelib_EnumTypeDescription *>(pReg);

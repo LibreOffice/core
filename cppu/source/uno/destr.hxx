@@ -113,7 +113,7 @@ inline void _destructAny(
     case typelib_TypeClass_STRUCT:
     case typelib_TypeClass_EXCEPTION:
     {
-        typelib_TypeDescription * pTypeDescr = 0;
+        typelib_TypeDescription * pTypeDescr = nullptr;
         TYPELIB_DANGER_GET( &pTypeDescr, pType );
         _destructStruct( pAny->pData, reinterpret_cast<typelib_CompoundTypeDescription *>(pTypeDescr), release );
         TYPELIB_DANGER_RELEASE( pTypeDescr );
@@ -123,7 +123,7 @@ inline void _destructAny(
     case typelib_TypeClass_SEQUENCE:
     {
         destructSequence(
-            static_cast<uno_Sequence *>(pAny->pReserved), pType, 0, release );
+            static_cast<uno_Sequence *>(pAny->pReserved), pType, nullptr, release );
         break;
     }
     case typelib_TypeClass_INTERFACE:
@@ -198,7 +198,7 @@ inline sal_Int32 idestructElements(
     case typelib_TypeClass_STRUCT:
     case typelib_TypeClass_EXCEPTION:
     {
-        typelib_TypeDescription * pElementTypeDescr = 0;
+        typelib_TypeDescription * pElementTypeDescr = nullptr;
         TYPELIB_DANGER_GET( &pElementTypeDescr, pElementType );
         sal_Int32 nElementSize = pElementTypeDescr->nSize;
         for ( sal_Int32 nPos = nStartIndex; nPos < nStopIndex; ++nPos )
@@ -214,7 +214,7 @@ inline sal_Int32 idestructElements(
     }
     case typelib_TypeClass_SEQUENCE:
     {
-        typelib_TypeDescription * pElementTypeDescr = 0;
+        typelib_TypeDescription * pElementTypeDescr = nullptr;
         TYPELIB_DANGER_GET( &pElementTypeDescr, pElementType );
         uno_Sequence ** pDest = static_cast<uno_Sequence **>(pElements);
         for ( sal_Int32 nPos = nStartIndex; nPos < nStopIndex; ++nPos )

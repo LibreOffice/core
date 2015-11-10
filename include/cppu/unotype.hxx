@@ -206,8 +206,8 @@ cppu_detail_getUnoType(
     SAL_UNUSED_PARAMETER ::cppu::UnoSequenceType< T > const *)
 {
     //TODO: depending on memory model, the following might not work reliably
-    static typelib_TypeDescriptionReference * p = 0;
-    if (p == 0) {
+    static typelib_TypeDescriptionReference * p = NULL;
+    if (p == NULL) {
         ::typelib_static_sequence_type_init(
             &p, ::cppu::UnoType< T >::get().getTypeLibType());
     }

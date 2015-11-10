@@ -56,7 +56,7 @@ static bool relatesToInterface(typelib_TypeDescription * pTypeDescr)
         case typelib_TypeClass_STRUCT:
         case typelib_TypeClass_EXCEPTION:
         {
-            typelib_TypeDescription * pTD = 0;
+            typelib_TypeDescription * pTD = nullptr;
             TYPELIB_DANGER_GET( &pTD, reinterpret_cast<typelib_IndirectTypeDescription *>(pTypeDescr)->pType );
             bool bRel = relatesToInterface( pTD );
             TYPELIB_DANGER_RELEASE( pTD );
@@ -85,7 +85,7 @@ static bool relatesToInterface(typelib_TypeDescription * pTypeDescr)
             case typelib_TypeClass_STRUCT:
             case typelib_TypeClass_EXCEPTION:
             {
-                typelib_TypeDescription * pTD = 0;
+                typelib_TypeDescription * pTD = nullptr;
                 TYPELIB_DANGER_GET( &pTD, pTypes[nPos] );
                 bool bRel = relatesToInterface( pTD );
                 TYPELIB_DANGER_RELEASE( pTD );
@@ -122,8 +122,8 @@ extern "C" { static void SAL_CALL s_Proxy_dispatch(
 
     typelib_MethodParameter            param;
     sal_Int32                          nParams = 0;
-    typelib_MethodParameter          * pParams = 0;
-    typelib_TypeDescriptionReference * pReturnTypeRef = 0;
+    typelib_MethodParameter          * pParams = nullptr;
+    typelib_TypeDescriptionReference * pReturnTypeRef = nullptr;
     // sal_Int32                          nOutParams = 0;
 
     switch (pMemberType->eTypeClass)
@@ -135,7 +135,7 @@ extern "C" { static void SAL_CALL s_Proxy_dispatch(
                 reinterpret_cast<typelib_InterfaceAttributeTypeDescription const *>(
                  pMemberType)->pAttributeTypeRef;
             nParams = 0;
-            pParams = NULL;
+            pParams = nullptr;
         }
         else
         {
@@ -260,7 +260,7 @@ static uno::TypeDescription getAcquireMethod()
     typelib_TypeDescriptionReference * type_XInterface =
         * typelib_static_type_getByTypeClass(typelib_TypeClass_INTERFACE);
 
-    typelib_TypeDescription * pTXInterfaceDescr = 0;
+    typelib_TypeDescription * pTXInterfaceDescr = nullptr;
     TYPELIB_DANGER_GET    (&pTXInterfaceDescr, type_XInterface);
     uno::TypeDescription acquire(
         reinterpret_cast< typelib_InterfaceTypeDescription * >(
@@ -275,7 +275,7 @@ static uno::TypeDescription getReleaseMethod()
     typelib_TypeDescriptionReference * type_XInterface =
         * typelib_static_type_getByTypeClass(typelib_TypeClass_INTERFACE);
 
-    typelib_TypeDescription * pTXInterfaceDescr = 0;
+    typelib_TypeDescription * pTXInterfaceDescr = nullptr;
     TYPELIB_DANGER_GET    (&pTXInterfaceDescr, type_XInterface);
     uno::TypeDescription release(
         reinterpret_cast< typelib_InterfaceTypeDescription * >(
@@ -295,12 +295,12 @@ void Proxy::acquire()
                    this,
                    m_pProbeContext,
                    *typelib_static_type_getByTypeClass(typelib_TypeClass_VOID),
-                   NULL,
+                   nullptr,
                    0,
                    s_acquireMethod.get(),
-                   NULL,
-                   NULL,
-                   NULL);
+                   nullptr,
+                   nullptr,
+                   nullptr);
 
     if (osl_atomic_increment(&m_nRef) == 1)
     {
@@ -319,12 +319,12 @@ void Proxy::acquire()
                    this,
                    m_pProbeContext,
                    *typelib_static_type_getByTypeClass(typelib_TypeClass_VOID),
-                   NULL,
+                   nullptr,
                    0,
                    s_acquireMethod.get(),
-                   NULL,
-                   NULL,
-                   NULL);
+                   nullptr,
+                   nullptr,
+                   nullptr);
 
 }
 
@@ -338,12 +338,12 @@ void Proxy::release()
                    this,
                    m_pProbeContext,
                    *typelib_static_type_getByTypeClass(typelib_TypeClass_VOID),
-                   NULL,
+                   nullptr,
                    0,
                    s_releaseMethod.get(),
-                   NULL,
-                   NULL,
-                   NULL);
+                   nullptr,
+                   nullptr,
+                   nullptr);
 
     if (osl_atomic_decrement(&m_nRef) == 0)
         m_from.get()->pExtEnv->revokeInterface(m_from.get()->pExtEnv, this);
@@ -353,12 +353,12 @@ void Proxy::release()
                  this,
                  pProbeContext,
                  *typelib_static_type_getByTypeClass(typelib_TypeClass_VOID),
-                 NULL,
+                 nullptr,
                  0,
                  s_releaseMethod.get(),
-                 NULL,
-                 NULL,
-                 NULL);
+                 nullptr,
+                 nullptr,
+                 nullptr);
 
 }
 
@@ -369,7 +369,7 @@ static void s_type_destructData_v(va_list * pParam)
     void * ret = va_arg(*pParam, void *);
     typelib_TypeDescriptionReference * pReturnTypeRef = va_arg(*pParam, typelib_TypeDescriptionReference *);
 
-    uno_type_destructData(ret, pReturnTypeRef, 0);
+    uno_type_destructData(ret, pReturnTypeRef, nullptr);
 }
 
 static void s_dispatcher_v(va_list * pParam)
@@ -406,7 +406,7 @@ void Proxy::dispatch(typelib_TypeDescriptionReference * pReturnTypeRef,
 
     void ** args = static_cast<void **>(alloca( sizeof (void *) * nParams ));
 
-    typelib_TypeDescription * return_td = 0;
+    typelib_TypeDescription * return_td = nullptr;
     void * ret = pReturn;
     if (pReturnTypeRef)
     {
@@ -421,7 +421,7 @@ void Proxy::dispatch(typelib_TypeDescriptionReference * pReturnTypeRef,
     for (sal_Int32 nPos = 0; nPos < nParams; ++ nPos)
     {
         typelib_MethodParameter const & param = pParams[nPos];
-        typelib_TypeDescription * td = 0;
+        typelib_TypeDescription * td = nullptr;
         TYPELIB_DANGER_GET( &td, param.pTypeRef );
         if (relatesToInterface(td))
         {
@@ -444,7 +444,7 @@ void Proxy::dispatch(typelib_TypeDescriptionReference * pReturnTypeRef,
     // do the UNO call...
     uno_Environment_invoke(m_to.get(), s_dispatcher_v, m_pUnoI, pMemberType, ret, args, &exc);
 
-    if (exc == 0)
+    if (exc == nullptr)
     {
         for (sal_Int32 nPos = 0; nPos < nParams; ++ nPos)
         {
@@ -455,7 +455,7 @@ void Proxy::dispatch(typelib_TypeDescriptionReference * pReturnTypeRef,
                 {
                     if (param.bIn) // is inout
                     {
-                        uno_type_destructData(pArgs[nPos], param.pTypeRef, 0);
+                        uno_type_destructData(pArgs[nPos], param.pTypeRef, nullptr);
                     }
                     uno_type_copyAndConvertData(pArgs[ nPos ],
                                                 args[ nPos ],
@@ -475,7 +475,7 @@ void Proxy::dispatch(typelib_TypeDescriptionReference * pReturnTypeRef,
             uno_Environment_invoke(m_to.get(), s_type_destructData_v, ret, pReturnTypeRef, 0);
         }
 
-        *ppException = 0;
+        *ppException = nullptr;
     }
     else // exception occurred
     {
@@ -497,7 +497,7 @@ void Proxy::dispatch(typelib_TypeDescriptionReference * pReturnTypeRef,
                                          m_to_from.get());
 
         // FIXME: need to destruct in m_to
-        uno_any_destruct(exc, 0);
+        uno_any_destruct(exc, nullptr);
     }
 
     if (m_probeFun)

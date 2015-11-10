@@ -36,7 +36,7 @@ void SAL_CALL uno_type_any_assign(
     _destructAny( pDest, release );
     if (pType)
     {
-        _copyConstructAny( pDest, pSource, pType, 0, acquire, 0 );
+        _copyConstructAny( pDest, pSource, pType, nullptr, acquire, nullptr );
     }
     else
     {
@@ -53,7 +53,7 @@ void SAL_CALL uno_any_assign(
     _destructAny( pDest, release );
     if (pTypeDescr)
     {
-        _copyConstructAny( pDest, pSource, pTypeDescr->pWeakRef, pTypeDescr, acquire, 0 );
+        _copyConstructAny( pDest, pSource, pTypeDescr->pWeakRef, pTypeDescr, acquire, nullptr );
     }
     else
     {
@@ -69,7 +69,7 @@ void SAL_CALL uno_type_any_construct(
 {
     if (pType)
     {
-        _copyConstructAny( pDest, pSource, pType, 0, acquire, 0 );
+        _copyConstructAny( pDest, pSource, pType, nullptr, acquire, nullptr );
     }
     else
     {
@@ -85,7 +85,7 @@ void SAL_CALL uno_any_construct(
 {
     if (pTypeDescr)
     {
-        _copyConstructAny( pDest, pSource, pTypeDescr->pWeakRef, pTypeDescr, acquire, 0 );
+        _copyConstructAny( pDest, pSource, pTypeDescr->pWeakRef, pTypeDescr, acquire, nullptr );
     }
     else
     {
@@ -101,7 +101,7 @@ void SAL_CALL uno_type_any_constructAndConvert(
 {
     if (pType)
     {
-        _copyConstructAny( pDest, pSource, pType, 0, 0, mapping );
+        _copyConstructAny( pDest, pSource, pType, nullptr, nullptr, mapping );
     }
     else
     {
@@ -117,7 +117,7 @@ void SAL_CALL uno_any_constructAndConvert(
 {
     if (pTypeDescr)
     {
-        _copyConstructAny( pDest, pSource, pTypeDescr->pWeakRef, pTypeDescr, 0, mapping );
+        _copyConstructAny( pDest, pSource, pTypeDescr->pWeakRef, pTypeDescr, nullptr, mapping );
     }
     else
     {

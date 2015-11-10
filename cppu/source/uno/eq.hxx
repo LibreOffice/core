@@ -39,19 +39,19 @@ inline bool _equalObject(
 {
     if (pI1 == pI2)
         return true;
-    if ((0 == pI1) || (0 == pI2))
+    if ((nullptr == pI1) || (nullptr == pI2))
         return false;
     bool bRet = false;
 
     typelib_TypeDescriptionReference * type_XInterface =
         * typelib_static_type_getByTypeClass( typelib_TypeClass_INTERFACE );
-    if (0 == queryInterface)
+    if (nullptr == queryInterface)
         queryInterface = binuno_queryInterface;
     pI1 = (*queryInterface)( pI1, type_XInterface );
-    if (0 != pI1)
+    if (nullptr != pI1)
     {
         pI2 = (*queryInterface)( pI2, type_XInterface );
-        if (0 != pI2)
+        if (nullptr != pI2)
         {
             bRet = (pI1 == pI2);
             _release( pI2, release );
@@ -204,7 +204,7 @@ inline bool _equalSequence(
     case typelib_TypeClass_STRUCT:
     case typelib_TypeClass_EXCEPTION:
     {
-        typelib_TypeDescription * pElementTypeDescr = 0;
+        typelib_TypeDescription * pElementTypeDescr = nullptr;
         TYPELIB_DANGER_GET( &pElementTypeDescr, pElementType );
         sal_Int32 nElementSize = pElementTypeDescr->nSize;
         for ( sal_Int32 nPos = nElements; nPos--; )
@@ -223,7 +223,7 @@ inline bool _equalSequence(
     }
     case typelib_TypeClass_SEQUENCE: // sequence of sequence
     {
-        typelib_TypeDescription * pElementTypeDescr = 0;
+        typelib_TypeDescription * pElementTypeDescr = nullptr;
         TYPELIB_DANGER_GET( &pElementTypeDescr, pElementType );
         typelib_TypeDescriptionReference * pSeqElementType =
             reinterpret_cast<typelib_IndirectTypeDescription *>(pElementTypeDescr)->pType;
@@ -268,7 +268,7 @@ inline bool _equalData(
     typelib_TypeClass eSourceTypeClass, eDestTypeClass;
     while (typelib_TypeClass_ANY == (eDestTypeClass = pDestType->eTypeClass))
     {
-        pDestTypeDescr = 0;
+        pDestTypeDescr = nullptr;
         pDestType = static_cast<uno_Any *>(pDest)->pType;
         pDest = static_cast<uno_Any *>(pDest)->pData;
     }

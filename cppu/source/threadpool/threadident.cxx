@@ -100,7 +100,7 @@ extern "C" sal_Bool SAL_CALL uno_bindIdToCurrentThread( sal_Sequence *pThreadId 
     IdContainer *p = getIdContainer();
     if( ! p->bInit )
     {
-        p->pLocalThreadId = 0;
+        p->pLocalThreadId = nullptr;
         createLocalId( &(p->pLocalThreadId) );
         p->nRefCountOfCurrentId = 1;
         p->pCurrentId = pThreadId;

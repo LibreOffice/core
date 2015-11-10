@@ -132,20 +132,20 @@ void OuterThread::run()
     m_pAffineBridge->outerDispatch(0);
     m_pAffineBridge->m_outerThreadId = 0;
 
-    m_pAffineBridge->m_pOuterThread = NULL;
-    m_pAffineBridge = NULL;
+    m_pAffineBridge->m_pOuterThread = nullptr;
+    m_pAffineBridge = nullptr;
 }
 
 
 AffineBridge::AffineBridge()
     : m_message      (CB_DONE),
-      m_pCallee      (0),
-      m_pParam       (0),
+      m_pCallee      (nullptr),
+      m_pParam       (nullptr),
       m_innerThreadId(0),
-      m_pInnerThread (NULL),
+      m_pInnerThread (nullptr),
       m_enterCount   (0),
       m_outerThreadId(0),
-      m_pOuterThread (NULL)
+      m_pOuterThread (nullptr)
 {
     LOG_LIFECYCLE_AffineBridge_emit(fprintf(stderr, "LIFE: %s -> %p\n", "AffineBridge::AffineBridge(uno_Environment * pEnv)", this));
 }

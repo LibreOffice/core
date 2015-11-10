@@ -89,7 +89,7 @@ inline void _defaultConstructData(
         *static_cast<double *>(pMem) = 0.0;
         break;
     case typelib_TypeClass_STRING:
-        *static_cast<rtl_uString **>(pMem) = 0;
+        *static_cast<rtl_uString **>(pMem) = nullptr;
         ::rtl_uString_new( static_cast<rtl_uString **>(pMem) );
         break;
     case typelib_TypeClass_TYPE:
@@ -127,7 +127,7 @@ inline void _defaultConstructData(
         *static_cast<uno_Sequence **>(pMem) = createEmptySequence();
         break;
     case typelib_TypeClass_INTERFACE:
-        *static_cast<void **>(pMem) = 0; // either cpp or c-uno interface
+        *static_cast<void **>(pMem) = nullptr; // either cpp or c-uno interface
         break;
     default:
         OSL_ASSERT(false);

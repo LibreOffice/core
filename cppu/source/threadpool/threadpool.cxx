@@ -193,7 +193,7 @@ namespace cppu_threadpool
                 // inform the thread and let it go
                 struct WaitingThread *pWaitingThread = m_lstThreads.back();
                 pWaitingThread->thread->setTask( pQueue , aThreadId , bAsynchron );
-                pWaitingThread->thread = 0;
+                pWaitingThread->thread = nullptr;
 
                 // remove from list
                 m_lstThreads.pop_back();
@@ -224,7 +224,7 @@ namespace cppu_threadpool
                 return false;
             }
 
-            (*ii).second.second = 0;
+            (*ii).second.second = nullptr;
             if( (*ii).second.first )
             {
                 // all oneway request have been processed, now
@@ -239,10 +239,10 @@ namespace cppu_threadpool
                 // another thread has put something into the queue
                 return false;
             }
-            (*ii).second.first = 0;
+            (*ii).second.first = nullptr;
         }
 
-        if( 0 == (*ii).second.first && 0 == (*ii).second.second )
+        if( nullptr == (*ii).second.first && nullptr == (*ii).second.second )
         {
             m_mapQueue.erase( ii );
         }
@@ -258,7 +258,7 @@ namespace cppu_threadpool
         RequestFun * doRequest )
     {
         bool bCreateThread = false;
-        JobQueue *pQueue = 0;
+        JobQueue *pQueue = nullptr;
         {
             MutexGuard guard( m_mutex );
 
@@ -311,7 +311,7 @@ namespace cppu_threadpool
             JobQueue *p = new JobQueue();
             m_mapQueue[ aThreadId ] = pair< JobQueue * , JobQueue * > ( p , nullptr );
         }
-        else if( 0 == (*ii).second.first )
+        else if( nullptr == (*ii).second.first )
         {
             (*ii).second.first = new JobQueue();
         }
@@ -319,7 +319,7 @@ namespace cppu_threadpool
 
     void * ThreadPool::enter( const ByteSequence & aThreadId , sal_Int64 nDisposeId )
     {
-        JobQueue *pQueue = 0;
+        JobQueue *pQueue = nullptr;
         {
             MutexGuard guard( m_mutex );
 
@@ -385,7 +385,7 @@ namespace {
 ThreadPoolHolder getThreadPool( uno_ThreadPool hPool )
 {
     MutexGuard guard( Mutex::getGlobalMutex() );
-    assert( g_pThreadpoolHashSet != 0 );
+    assert( g_pThreadpoolHashSet != nullptr );
     ThreadpoolHashSet::iterator i( g_pThreadpoolHashSet->find(hPool) );
     assert( i != g_pThreadpoolHashSet->end() );
     return i->second;
@@ -418,7 +418,7 @@ uno_threadpool_create() SAL_THROW_EXTERN_C()
 extern "C" void SAL_CALL
 uno_threadpool_attach( uno_ThreadPool hPool ) SAL_THROW_EXTERN_C()
 {
-    sal_Sequence *pThreadId = 0;
+    sal_Sequence *pThreadId = nullptr;
     uno_getIdOfCurrentThread( &pThreadId );
     getThreadPool( hPool )->prepare( pThreadId );
     rtl_byte_sequence_release( pThreadId );
@@ -429,7 +429,7 @@ extern "C" void SAL_CALL
 uno_threadpool_enter( uno_ThreadPool hPool , void **ppJob )
     SAL_THROW_EXTERN_C()
 {
-    sal_Sequence *pThreadId = 0;
+    sal_Sequence *pThreadId = nullptr;
     uno_getIdOfCurrentThread( &pThreadId );
     *ppJob =
         getThreadPool( hPool )->enter(
@@ -493,7 +493,7 @@ uno_threadpool_destroy( uno_ThreadPool hPool ) SAL_THROW_EXTERN_C()
         if( empty )
         {
             delete g_pThreadpoolHashSet;
-            g_pThreadpoolHashSet = 0;
+            g_pThreadpoolHashSet = nullptr;
         }
     }
 

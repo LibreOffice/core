@@ -180,7 +180,7 @@ namespace cppu_threadpool {
                 }
 
                 delete m_pQueue;
-                m_pQueue = 0;
+                m_pQueue = nullptr;
 
                 if( ! m_bAsynchron )
                 {
