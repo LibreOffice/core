@@ -1,0 +1,153 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "faac7902_07574403",
+        "filename": "sw/PythonTest_sw_python.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2015-11-10T15:26:45Z",
+      "side": 1,
+      "message": "Please make sure the indent levels stay consistent.",
+      "range": {
+        "startLine": 19,
+        "startChar": 8,
+        "endLine": 19,
+        "endChar": 20
+      },
+      "revId": "94650c2bb55f5b4de680c36e030535c9231f2cd8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "faac7902_874b3459",
+        "filename": "sw/qa/python/check_bookmarks.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2015-11-10T15:26:45Z",
+      "side": 1,
+      "message": "please start file with a license header from TEMPLATE.SOURCECODE.HEADER",
+      "revId": "94650c2bb55f5b4de680c36e030535c9231f2cd8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "faac7902_e75b202d",
+        "filename": "sw/qa/python/check_bookmarks.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2015-11-10T15:26:45Z",
+      "side": 1,
+      "message": "Please remove trailing whitespace",
+      "range": {
+        "startLine": 8,
+        "startChar": 7,
+        "endLine": 8,
+        "endChar": 13
+      },
+      "revId": "94650c2bb55f5b4de680c36e030535c9231f2cd8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "faac7902_273ec8b8",
+        "filename": "sw/qa/python/check_bookmarks.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2015-11-10T15:26:45Z",
+      "side": 1,
+      "message": "nitpick: no double whitespace here please",
+      "range": {
+        "startLine": 16,
+        "startChar": 22,
+        "endLine": 16,
+        "endChar": 24
+      },
+      "revId": "94650c2bb55f5b4de680c36e030535c9231f2cd8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "faac7902_47414c39",
+        "filename": "sw/qa/python/check_bookmarks.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2015-11-10T15:26:45Z",
+      "side": 1,
+      "message": "no whitespace here please",
+      "range": {
+        "startLine": 71,
+        "startChar": 0,
+        "endLine": 71,
+        "endChar": 8
+      },
+      "revId": "94650c2bb55f5b4de680c36e030535c9231f2cd8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "faac7902_c7737cb3",
+        "filename": "sw/qa/python/check_bookmarks.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2015-11-10T15:26:45Z",
+      "side": 1,
+      "message": "xBookmars isnt even defined.",
+      "revId": "94650c2bb55f5b4de680c36e030535c9231f2cd8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "faac7902_6748d05c",
+        "filename": "sw/qa/python/check_bookmarks.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2015-11-10T15:26:45Z",
+      "side": 1,
+      "message": "This test is never run, right? see unittest documentation: \"A testcase is created by subclassing unittest.TestCase\".\n\nStopping further review here as as-is the Jenkins runs do not say much about this actually passing.",
+      "range": {
+        "startLine": 86,
+        "startChar": 6,
+        "endLine": 86,
+        "endChar": 20
+      },
+      "revId": "94650c2bb55f5b4de680c36e030535c9231f2cd8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
