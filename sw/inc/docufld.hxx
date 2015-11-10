@@ -487,6 +487,7 @@ public:
     virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) const SAL_OVERRIDE;
     virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) SAL_OVERRIDE;
     virtual OUString    GetDescription() const SAL_OVERRIDE;
+    virtual void dumpAsXml(struct _xmlTextWriter* pWriter) const SAL_OVERRIDE;
 };
 
 class SwDocInfoFieldType : public SwValueFieldType

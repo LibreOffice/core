@@ -17,8 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "fldbas.hxx"
 #include <fmtfld.hxx>
+
+#include <libxml/xmlwriter.h>
+
+#include "fldbas.hxx"
 #include <txtfld.hxx>
 #include <txtannotationfld.hxx>
 #include <docfld.hxx>
@@ -328,6 +331,18 @@ bool SwFormatField::IsProtect() const
     return mpTextField != NULL
            && mpTextField->GetpTextNode() != NULL
            && mpTextField->GetpTextNode()->IsProtect();
+}
+
+void SwFormatField::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    xmlTextWriterStartElement(pWriter, BAD_CAST("swFormatField"));
+    xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
+    xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("mpTextField"), "%p", mpTextField);
+
+    SfxPoolItem::dumpAsXml(pWriter);
+    GetField()->dumpAsXml(pWriter);
+
+    xmlTextWriterEndElement(pWriter);
 }
 
 // class SwTextField ////////////////////////////////////////////////////

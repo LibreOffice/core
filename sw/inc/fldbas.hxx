@@ -365,6 +365,7 @@ public:
     virtual OUString    GetDescription() const;
     /// Is this field clickable?
     bool IsClickable() const;
+    virtual void dumpAsXml(struct _xmlTextWriter* pWriter) const;
 };
 
 inline SwFieldType* SwField::GetTyp() const

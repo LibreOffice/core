@@ -115,6 +115,7 @@ public:
     SAL_DLLPRIVATE void SetXTextField(::com::sun::star::uno::Reference<
                     ::com::sun::star::text::XTextField> const& xTextField)
             { m_wXTextField = xTextField; }
+    void dumpAsXml(struct _xmlTextWriter* pWriter) const override;
 };
 
 enum class SwFormatFieldHintWhich
