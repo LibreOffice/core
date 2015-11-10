@@ -72,9 +72,9 @@ static bool inited_juhx( JNIEnv * jni_env )
         s_bootstrap =
             reinterpret_cast<javaunohelper::detail::Func_bootstrap *>(aModule.getFunctionSymbol(symbol));
 
-        if (0 == s_writeInfo ||
-            0 == s_getFactory ||
-            0 == s_bootstrap)
+        if (nullptr == s_writeInfo ||
+            nullptr == s_getFactory ||
+            nullptr == s_bootstrap)
         {
             jclass c = jni_env->FindClass( "java/lang/RuntimeException" );
             jni_env->ThrowNew(
@@ -107,7 +107,7 @@ Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1getFactory(
     if (inited_juhx( pJEnv ))
         return (*s_getFactory)(
             pJEnv, jClass, jLibName, jImplName, jSMgr, jRegKey, loader );
-    return 0;
+    return nullptr;
 }
 
 SAL_DLLPUBLIC_EXPORT jobject JNICALL
@@ -117,7 +117,7 @@ Java_com_sun_star_comp_helper_Bootstrap_cppuhelper_1bootstrap(
 {
     if (inited_juhx( jni_env ))
         return (*s_bootstrap)( jni_env, jClass, juno_rc, jpairs, loader );
-    return 0;
+    return nullptr;
 }
 }
 

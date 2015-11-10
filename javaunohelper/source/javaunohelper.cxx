@@ -55,7 +55,7 @@ jboolean Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1writeInfo(
 {
     bool bRet = false;
 
-    const jchar* pJLibName = pJEnv->GetStringChars(jLibName, NULL);
+    const jchar* pJLibName = pJEnv->GetStringChars(jLibName, nullptr);
     OUString aLibName(pJLibName);
     pJEnv->ReleaseStringChars(jLibName, pJLibName);
 
@@ -77,13 +77,13 @@ jboolean Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1writeInfo(
         {
             Environment java_env, loader_env;
 
-            const sal_Char * pEnvTypeName = 0;
+            const sal_Char * pEnvTypeName = nullptr;
             (*reinterpret_cast<component_getImplementationEnvironmentFunc>(pSym))(
                 &pEnvTypeName, reinterpret_cast<uno_Environment **>(&loader_env) );
             if (! loader_env.is())
             {
                 OUString aEnvTypeName( OUString::createFromAscii( pEnvTypeName ) );
-                uno_getEnvironment( reinterpret_cast<uno_Environment **>(&loader_env), aEnvTypeName.pData, 0 );
+                uno_getEnvironment( reinterpret_cast<uno_Environment **>(&loader_env), aEnvTypeName.pData, nullptr );
             }
 
             // create vm access
@@ -138,7 +138,7 @@ jobject Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1getFactory(
     JNIEnv * pJEnv, SAL_UNUSED_PARAMETER jclass, jstring jLibName, jstring jImplName,
     jobject jSMgr, jobject jRegKey, jobject loader )
 {
-    const jchar* pJLibName = pJEnv->GetStringChars(jLibName, NULL);
+    const jchar* pJLibName = pJEnv->GetStringChars(jLibName, nullptr);
     OUString aLibName(pJLibName);
     pJEnv->ReleaseStringChars(jLibName, pJLibName);
 
@@ -153,7 +153,7 @@ jobject Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1getFactory(
 
     aLibName += SAL_DLLEXTENSION;
 
-    jobject joSLL_cpp = 0;
+    jobject joSLL_cpp = nullptr;
 
 #ifndef DISABLE_DYNLOADING
     osl::Module lib(aLibName, SAL_LOADMODULE_LAZY | SAL_LOADMODULE_GLOBAL);
@@ -167,14 +167,14 @@ jobject Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1getFactory(
         {
             Environment java_env, loader_env;
 
-            const sal_Char * pEnvTypeName = 0;
+            const sal_Char * pEnvTypeName = nullptr;
             (*reinterpret_cast<component_getImplementationEnvironmentFunc>(pSym))(
                 &pEnvTypeName, reinterpret_cast<uno_Environment **>(&loader_env) );
 
             if (! loader_env.is())
             {
                 OUString aEnvTypeName( OUString::createFromAscii( pEnvTypeName ) );
-                uno_getEnvironment( reinterpret_cast<uno_Environment **>(&loader_env), aEnvTypeName.pData, 0 );
+                uno_getEnvironment( reinterpret_cast<uno_Environment **>(&loader_env), aEnvTypeName.pData, nullptr );
             }
 
             // create vm access
@@ -201,7 +201,7 @@ jobject Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1getFactory(
                             java2dest.mapInterface(
                                 jRegKey, cppu::UnoType<registry::XRegistryKey>::get());
 
-                        const char* pImplName = pJEnv->GetStringUTFChars( jImplName, NULL );
+                        const char* pImplName = pJEnv->GetStringUTFChars( jImplName, nullptr );
 
                         void * pSSF = (*reinterpret_cast<component_getFactoryFunc>(pSym))(
                             pImplName, pSMgr, pKey );

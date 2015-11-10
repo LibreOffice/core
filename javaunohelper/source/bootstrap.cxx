@@ -70,7 +70,7 @@ jobject Java_com_sun_star_comp_helper_Bootstrap_cppuhelper_1bootstrap(
 {
     try
     {
-        if (0 != jpairs)
+        if (nullptr != jpairs)
         {
             jsize nPos = 0, len = jni_env->GetArrayLength( jpairs );
             while (nPos < len)
@@ -82,7 +82,7 @@ jobject Java_com_sun_star_comp_helper_Bootstrap_cppuhelper_1bootstrap(
                     jni_env->ExceptionClear();
                     throw RuntimeException( "index out of bounds?!" );
                 }
-                if (0 != jstr)
+                if (nullptr != jstr)
                 {
                     OUString name( ::javaunohelper::jstring_to_oustring( jstr, jni_env ) );
                     // value
@@ -92,7 +92,7 @@ jobject Java_com_sun_star_comp_helper_Bootstrap_cppuhelper_1bootstrap(
                         jni_env->ExceptionClear();
                         throw RuntimeException( "index out of bounds?!" );
                     }
-                    if (0 != jstr)
+                    if (nullptr != jstr)
                     {
                         OUString value( ::javaunohelper::jstring_to_oustring( jstr, jni_env ) );
 
@@ -106,7 +106,7 @@ jobject Java_com_sun_star_comp_helper_Bootstrap_cppuhelper_1bootstrap(
 
         // bootstrap uno
         Reference< XComponentContext > xContext;
-        if (0 == juno_rc)
+        if (nullptr == juno_rc)
         {
             xContext = ::cppu::defaultBootstrap_InitialComponentContext();
         }
@@ -126,7 +126,7 @@ jobject Java_com_sun_star_comp_helper_Bootstrap_cppuhelper_1bootstrap(
         OUString cpp_env_name = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
         OUString java_env_name = UNO_LB_JAVA;
         Environment java_env, cpp_env;
-        uno_getEnvironment(reinterpret_cast<uno_Environment **>(&cpp_env), cpp_env_name.pData, NULL);
+        uno_getEnvironment(reinterpret_cast<uno_Environment **>(&cpp_env), cpp_env_name.pData, nullptr);
         uno_getEnvironment(reinterpret_cast<uno_Environment **>(&java_env), java_env_name.pData, vm_access.get() );
 
         // map to java
@@ -148,7 +148,7 @@ jobject Java_com_sun_star_comp_helper_Bootstrap_cppuhelper_1bootstrap(
     catch (const RuntimeException & exc)
     {
         jclass c = jni_env->FindClass( "com/sun/star/uno/RuntimeException" );
-        if (0 != c)
+        if (nullptr != c)
         {
             OString cstr( OUStringToOString(
                               exc.Message, RTL_TEXTENCODING_JAVA_UTF8 ) );
@@ -159,7 +159,7 @@ jobject Java_com_sun_star_comp_helper_Bootstrap_cppuhelper_1bootstrap(
     catch (const Exception & exc)
     {
         jclass c = jni_env->FindClass( "com/sun/star/uno/Exception" );
-        if (0 != c)
+        if (nullptr != c)
         {
             OString cstr( OUStringToOString(
                               exc.Message, RTL_TEXTENCODING_JAVA_UTF8 ) );
@@ -168,7 +168,7 @@ jobject Java_com_sun_star_comp_helper_Bootstrap_cppuhelper_1bootstrap(
         }
     }
 
-    return 0;
+    return nullptr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
