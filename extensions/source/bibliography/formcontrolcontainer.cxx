@@ -35,7 +35,7 @@ namespace bib
 
     FormControlContainer::FormControlContainer( )
         :OLoadListener( m_aMutex )
-        ,m_pFormAdapter( NULL )
+        ,m_pFormAdapter( nullptr )
     {
     }
 
@@ -54,7 +54,7 @@ namespace bib
         {
             m_pFormAdapter->dispose();
             m_pFormAdapter->release();
-            m_pFormAdapter = NULL;
+            m_pFormAdapter = nullptr;
         }
     }
 

@@ -39,7 +39,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 
 PluginControl_Impl::PluginControl_Impl()
-    : _pMultiplexer( NULL )
+    : _pMultiplexer( nullptr )
     , _nX( 0 )
     , _nY( 0 )
     , _nWidth( 100 )
@@ -48,7 +48,7 @@ PluginControl_Impl::PluginControl_Impl()
     , _bVisible(false)
     , _bInDesignMode(false)
     , _bEnable(true)
-    , _pSysChild(NULL)
+    , _pSysChild(nullptr)
 {
 }
 
@@ -146,7 +146,7 @@ void PluginControl_Impl::releasePeer()
     {
         _xParentWindow->removeFocusListener( this );
         _xPeerWindow->dispose();
-        _pSysChild      = NULL;
+        _pSysChild      = nullptr;
         _xPeerWindow.clear();
         _xPeer.clear();
         getMultiplexer()->setPeer( Reference< css::awt::XWindow > () );

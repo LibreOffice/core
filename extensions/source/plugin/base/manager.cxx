@@ -59,7 +59,7 @@
 
 #include <cppuhelper/supportsservice.hxx>
 
-PluginManager* PluginManager::pManager = NULL;
+PluginManager* PluginManager::pManager = nullptr;
 
 PluginManager& PluginManager::get()
 {
@@ -154,7 +154,7 @@ XPlugin_Impl* XPluginManager_Impl::getXPluginFromNPP( NPP instance )
             return *iter;
     }
 
-    return NULL;
+    return nullptr;
 }
 
 XPlugin_Impl* XPluginManager_Impl::getPluginImplementation( const Reference< css::plugin::XPlugin >& plugin )
@@ -167,7 +167,7 @@ XPlugin_Impl* XPluginManager_Impl::getPluginImplementation( const Reference< css
             return *iter;
     }
 
-    return NULL;
+    return nullptr;
 }
 
 Sequence<css::plugin::PluginDescription> XPluginManager_Impl::getPluginDescriptions()
@@ -226,7 +226,7 @@ Reference< css::plugin::XPlugin >  XPluginManager_Impl::createPluginFromURL( con
     if( ! pImpl->getPluginComm() )
     {
         pImpl->dispose();
-        xRef = NULL;
+        xRef = nullptr;
     }
 
     return xRef;

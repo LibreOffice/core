@@ -48,18 +48,18 @@
 
 #include <npwrap.hxx>
 
-PluginConnector* pConnector = NULL;
+PluginConnector* pConnector = nullptr;
 
 int         nAppArguments = 0;
-char**      pAppArguments = NULL;
-Display*    pAppDisplay = NULL;
-Display*    pXtAppDisplay = NULL;
+char**      pAppArguments = nullptr;
+Display*    pAppDisplay = nullptr;
+Display*    pXtAppDisplay = nullptr;
 
 extern oslModule pPluginLib;
 extern NPError (*pNP_Shutdown)();
 
 XtAppContext app_context;
-Widget topLevel = NULL, topBox = NULL;
+Widget topLevel = nullptr, topBox = nullptr;
 int wakeup_fd[2] = { 0, 0 };
 static bool bPluginAppQuit = false;
 
@@ -187,7 +187,7 @@ static oslModule LoadModule( const char* pPath )
 static void CheckPlugin( const char* pPath )
 {
     oslModule pLib = LoadModule( pPath );
-    if (pLib != 0) {
+    if (pLib != nullptr) {
         char*(*pNP_GetMIMEDescription)() = reinterpret_cast<char*(*)()>(
                                                osl_getAsciiFunctionSymbol( pLib, "NP_GetMIMEDescription" ));
         if( pNP_GetMIMEDescription )
@@ -219,7 +219,7 @@ extern "C" {
         if( pConnector ) {
             // ensure that a read on the other side will wakeup
             delete pConnector;
-            pConnector = NULL;
+            pConnector = nullptr;
         }
 
         _exit(nSig);
@@ -255,9 +255,9 @@ extern "C" {
         prepareXtEvent,
         checkXtEvent,
         dispatchXtEvent,
-        NULL,
+        nullptr,
         noClosure,
-        NULL
+        nullptr
     };
 
     static gboolean pollXtTimerCallback(gpointer)
@@ -298,7 +298,7 @@ extern "C" {
             bPluginAppQuit = true;
 
             delete pConnector;
-            pConnector = NULL;
+            pConnector = nullptr;
         }
 
         return sal_True;
@@ -308,9 +308,9 @@ extern "C" {
         prepareWakeupEvent,
         checkWakeupEvent,
         dispatchWakeupEvent,
-        NULL,
+        nullptr,
         noClosure,
-        NULL
+        nullptr
     };
 
 #endif // GTK
@@ -325,11 +325,11 @@ int main( int argc, char **argv)
         aSigAction.sa_handler = signal_handler;
         sigemptyset( &aSigAction.sa_mask );
         aSigAction.sa_flags = SA_NOCLDSTOP;
-        sigaction( SIGSEGV, &aSigAction, NULL );
-        sigaction( SIGBUS, &aSigAction, NULL );
-        sigaction( SIGABRT, &aSigAction, NULL );
-        sigaction( SIGTERM, &aSigAction, NULL );
-        sigaction( SIGILL, &aSigAction, NULL );
+        sigaction( SIGSEGV, &aSigAction, nullptr );
+        sigaction( SIGBUS, &aSigAction, nullptr );
+        sigaction( SIGABRT, &aSigAction, nullptr );
+        sigaction( SIGTERM, &aSigAction, nullptr );
+        sigaction( SIGILL, &aSigAction, nullptr );
 
         int nArg = (argc < 3) ? 1 : 2;
         char* pBaseName = argv[nArg] + strlen(argv[nArg]);
@@ -380,18 +380,18 @@ int main( int argc, char **argv)
         int nSocket = atol( argv[1] );
 
     #if ENABLE_GTK
-        g_thread_init(NULL);
+        g_thread_init(nullptr);
         gtk_init(&argc, &argv);
     #endif
 
         pConnector = new PluginConnector( nSocket );
-        pConnector->SetConnectionLostHdl( Link<Mediator*,void>( NULL, GlobalConnectionLostHdl ) );
+        pConnector->SetConnectionLostHdl( Link<Mediator*,void>( nullptr, GlobalConnectionLostHdl ) );
 
-        XtSetLanguageProc( NULL, NULL, NULL );
+        XtSetLanguageProc( nullptr, nullptr, nullptr );
 
         XtToolkitInitialize();
         app_context = XtCreateApplicationContext();
-        pXtAppDisplay = XtOpenDisplay( app_context, NULL, "SOPlugin", "SOPlugin", NULL, 0, &argc, argv );
+        pXtAppDisplay = XtOpenDisplay( app_context, nullptr, "SOPlugin", "SOPlugin", nullptr, 0, &argc, argv );
 
 
     #if ENABLE_GTK
@@ -406,21 +406,21 @@ int main( int argc, char **argv)
 
         g_source_set_priority( pXTSource, GDK_PRIORITY_EVENTS );
         g_source_set_can_recurse( pXTSource, sal_True );
-        g_source_attach( pXTSource, NULL );
+        g_source_attach( pXTSource, nullptr );
         aXtPollDesc.fd = ConnectionNumber( pXtAppDisplay );
         aXtPollDesc.events = G_IO_IN;
         aXtPollDesc.revents = 0;
         g_source_add_poll( pXTSource, &aXtPollDesc );
 
-        gint xt_polling_timer_id = g_timeout_add( 25, pollXtTimerCallback, NULL);
+        gint xt_polling_timer_id = g_timeout_add( 25, pollXtTimerCallback, nullptr);
         // Initialize wakeup events listener
         GSource *pWakeupSource = g_source_new( &aWakeupEventFuncs, sizeof(GSource) );
-        if ( pWakeupSource == NULL ) {
+        if ( pWakeupSource == nullptr ) {
             SAL_WARN("extensions.plugin", "could not get wakeup source");
             return 1;
         }
         g_source_set_priority( pWakeupSource, GDK_PRIORITY_EVENTS);
-        g_source_attach( pWakeupSource, NULL );
+        g_source_attach( pWakeupSource, nullptr );
         aWakeupPollDesc.fd = wakeup_fd[0];
         aWakeupPollDesc.events = G_IO_IN;
         aWakeupPollDesc.revents = 0;
@@ -463,7 +463,7 @@ int main( int argc, char **argv)
         // of XtAppMainLoop
         do {
     #if ENABLE_GTK
-            g_main_context_iteration( NULL, sal_True );
+            g_main_context_iteration( nullptr, sal_True );
     #else
             XtAppProcessEvent( app_context, XtIMAll );
     #endif

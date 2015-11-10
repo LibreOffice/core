@@ -301,7 +301,7 @@ const Mapping*  BibConfig::GetMapping(const BibDBDescriptor& rDesc) const
         if(rDesc.sTableOrQuery == rMapping.sTableName && bURLEqual)
             return &rMapping;
     }
-    return 0;
+    return nullptr;
 }
 
 void BibConfig::SetMapping(const BibDBDescriptor& rDesc, const Mapping* pSetMapping)

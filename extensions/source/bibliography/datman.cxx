@@ -112,7 +112,7 @@ Reference< XConnection > getConnection(const OUString& _rURL)
         Reference< XCompletedConnection > xComplConn(xDataSource, UNO_QUERY);
         try
         {
-            Reference<task::XInteractionHandler> xIHdl( task::InteractionHandler::createWithParent(xContext, 0), UNO_QUERY_THROW);
+            Reference<task::XInteractionHandler> xIHdl( task::InteractionHandler::createWithParent(xContext, nullptr), UNO_QUERY_THROW);
             xConn = xComplConn->connectWithCompletion(xIHdl);
         }
         catch (const SQLException&)
@@ -159,7 +159,7 @@ Reference< XNameAccess >  getColumns(const Reference< XForm > & _rxForm)
 
     if (!xReturn.is() || (xReturn->getElementNames().getLength() == 0))
     {   // no ....
-        xReturn = NULL;
+        xReturn = nullptr;
         // -> get the table the form is bound to and ask it for their columns
         Reference< XTablesSupplier >  xSupplyTables( getConnection( _rxForm ), UNO_QUERY );
         Reference< XPropertySet >  xFormProps( _rxForm, UNO_QUERY );
@@ -618,10 +618,10 @@ OUString gViewSize("theViewSize");
 
 BibDataManager::BibDataManager()
     :BibDataManager_Base( GetMutex() )
-    ,m_pInterceptorHelper( NULL )
+    ,m_pInterceptorHelper( nullptr )
     ,m_aLoadListeners(m_aMutex)
-    ,pBibView( NULL )
-    ,pToolbar(0)
+    ,pBibView( nullptr )
+    ,pToolbar(nullptr)
 {
 }
 
@@ -642,13 +642,13 @@ BibDataManager::~BibDataManager()
             xComp->dispose();
         if(xConnection.is())
             xConnection->dispose();
-        m_xForm = NULL;
+        m_xForm = nullptr;
     }
     if( m_pInterceptorHelper )
     {
         m_pInterceptorHelper->ReleaseInterceptor();
         m_pInterceptorHelper->release();
-        m_pInterceptorHelper = NULL;
+        m_pInterceptorHelper = nullptr;
     }
 }
 

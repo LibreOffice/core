@@ -93,7 +93,7 @@ namespace pcr
     SubmissionPropertyHandler::SubmissionPropertyHandler( const Reference< XComponentContext >& _rxContext )
         :EditPropertyHandler_Base( _rxContext )
         ,OPropertyChangeListener( m_aMutex )
-        ,m_pPropChangeMultiplexer( NULL )
+        ,m_pPropChangeMultiplexer( nullptr )
     {
     }
 
@@ -242,7 +242,7 @@ namespace pcr
         {
             m_pPropChangeMultiplexer->dispose();
             m_pPropChangeMultiplexer->release();
-            m_pPropChangeMultiplexer = NULL;
+            m_pPropChangeMultiplexer = nullptr;
         }
 
         EditPropertyHandler_Base::onNewComponent();

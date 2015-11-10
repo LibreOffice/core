@@ -133,7 +133,7 @@ namespace logging
 
     void SAL_CALL ConsoleHandler::disposing()
     {
-        m_aHandlerHelper.setFormatter( NULL );
+        m_aHandlerHelper.setFormatter( nullptr );
     }
 
 

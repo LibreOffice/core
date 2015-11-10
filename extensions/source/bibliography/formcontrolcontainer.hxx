@@ -42,7 +42,7 @@ namespace bib
         FormControlContainer( );
         virtual ~FormControlContainer( );
 
-        bool        isFormConnected() const { return NULL != m_pFormAdapter; }
+        bool        isFormConnected() const { return nullptr != m_pFormAdapter; }
         void        connectForm( const css::uno::Reference< css::form::XLoadable >& _rxForm );
         void        disconnectForm();
 

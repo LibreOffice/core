@@ -325,7 +325,7 @@ namespace abp
     }
 
     ODataSource::ODataSource( const ODataSource& _rSource )
-        :m_pImpl( NULL )
+        :m_pImpl( nullptr )
     {
         *this = _rSource;
     }
@@ -536,7 +536,7 @@ namespace abp
         try
         {
             xInteractions.set(
-                InteractionHandler::createWithParent(m_pImpl->xORB, 0),
+                InteractionHandler::createWithParent(m_pImpl->xORB, nullptr),
                 UNO_QUERY);
         }
         catch(const Exception&)

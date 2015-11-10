@@ -200,7 +200,7 @@ public:
 
 UpdateCheckUI::UpdateCheckUI(const uno::Reference<uno::XComponentContext>& xContext) :
       m_xContext(xContext)
-    , mpIconMBar( NULL )
+    , mpIconMBar( nullptr )
     , mbShowBubble( false )
     , mbShowMenuIcon( false )
     , mbBubbleChanged( false )
@@ -385,7 +385,7 @@ void SAL_CALL UpdateCheckUI::disposing(const lang::EventObject&)
 uno::Reference< beans::XPropertySetInfo > UpdateCheckUI::getPropertySetInfo()
     throw ( uno::RuntimeException, std::exception )
 {
-    return NULL;
+    return nullptr;
 }
 
 
@@ -519,11 +519,11 @@ void UpdateCheckUI::removeVetoableChangeListener( const OUString& /*aPropertyNam
 BubbleWindow * UpdateCheckUI::GetBubbleWindow()
 {
     if ( !mpIconSysWin )
-        return NULL;
+        return nullptr;
 
     Rectangle aIconRect = mpIconMBar->GetMenuBarButtonRectPixel( mnIconID );
     if( aIconRect.IsEmpty() )
-        return NULL;
+        return nullptr;
 
     BubbleWindow* pBubbleWin = mpBubbleWin;
 
@@ -564,16 +564,16 @@ void UpdateCheckUI::RemoveBubbleWindow( bool bRemoveIcon )
             if ( mpIconMBar && ( mnIconID != 0 ) )
             {
                 mpIconMBar->RemoveMenuBarButton( mnIconID );
-                mpIconMBar = NULL;
+                mpIconMBar = nullptr;
                 mnIconID = 0;
             }
         }
         catch ( ... ) {
-            mpIconMBar = NULL;
+            mpIconMBar = nullptr;
             mnIconID = 0;
         }
 
-        mpIconSysWin = NULL;
+        mpIconSysWin = nullptr;
     }
 }
 
@@ -637,9 +637,9 @@ IMPL_LINK_NOARG_TYPED(UpdateCheckUI, UserEventHdl, void*, void)
 
     vcl::Window *pTopWin = Application::GetFirstTopLevelWindow();
     vcl::Window *pActiveWin = Application::GetActiveTopWindow();
-    SystemWindow *pActiveSysWin = NULL;
+    SystemWindow *pActiveSysWin = nullptr;
 
-    vcl::Window *pBubbleWin = NULL;
+    vcl::Window *pBubbleWin = nullptr;
     if ( mpBubbleWin )
         pBubbleWin = mpBubbleWin;
 
@@ -647,7 +647,7 @@ IMPL_LINK_NOARG_TYPED(UpdateCheckUI, UserEventHdl, void*, void)
         pActiveSysWin = pActiveWin->GetSystemWindow();
 
     if ( pActiveWin == pBubbleWin )
-        pActiveSysWin = NULL;
+        pActiveSysWin = nullptr;
 
     while ( !pActiveSysWin && pTopWin )
     {
@@ -700,7 +700,7 @@ IMPL_LINK_TYPED( UpdateCheckUI, WindowEventHdl, VclWindowEvent&, rEvent, void )
     {
         SolarMutexGuard aGuard;
         if ( ( mpIconSysWin == rEvent.GetWindow() ) &&
-             mpBubbleWin && ( mpIconMBar != NULL ) )
+             mpBubbleWin && ( mpIconMBar != nullptr ) )
         {
             Rectangle aIconRect = mpIconMBar->GetMenuBarButtonRectPixel( mnIconID );
             Point aWinPos = aIconRect.BottomCenter();
@@ -725,7 +725,7 @@ IMPL_LINK_TYPED( UpdateCheckUI, ApplicationEventHdl, VclSimpleEvent&, rEvent, vo
             if ( pWindow && pWindow->IsTopWindow() )
             {
                 SystemWindow *pSysWin = pWindow->GetSystemWindow();
-                MenuBar *pMBar = pSysWin ? pSysWin->GetMenuBar() : NULL;
+                MenuBar *pMBar = pSysWin ? pSysWin->GetMenuBar() : nullptr;
                 if (pMBar)
                 {
                     AddMenuBarIcon( pSysWin, true );
@@ -969,10 +969,10 @@ static const cppu::ImplementationEntry kImplementations_entries[] =
         getImplementationName,
         getServiceNames,
         cppu::createSingleComponentFactory,
-        NULL,
+        nullptr,
         0
     },
-    { NULL, NULL, NULL, NULL, NULL, 0 }
+    { nullptr, nullptr, nullptr, nullptr, nullptr, 0 }
 } ;
 
 

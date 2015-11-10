@@ -164,7 +164,7 @@ void PluginConnector::Respond( sal_uLong nID,
 MediatorMessage* PluginConnector::WaitForAnswer( sal_uLong nMessageID )
 {
     if( ! m_bValid )
-        return NULL;
+        return nullptr;
 
     nMessageID &= 0x00ffffff;
     while( m_pListener )
@@ -187,7 +187,7 @@ MediatorMessage* PluginConnector::WaitForAnswer( sal_uLong nMessageID )
             CallWorkHandler();
         WaitForMessage( 2000 );
     }
-    return NULL;
+    return nullptr;
 }
 
 ConnectorInstance::ConnectorInstance( NPP inst, char* type,
@@ -195,11 +195,11 @@ ConnectorInstance::ConnectorInstance( NPP inst, char* type,
                                       char* pargvbuf, sal_uLong nargvbytes,
                                       char* savedata, sal_uLong savebytes ) :
         instance( inst ),
-        pShell( NULL ),
-        pWidget( NULL ),
-        pForm( NULL ),
-        pGtkWindow( NULL ),
-        pGtkWidget( NULL ),
+        pShell( nullptr ),
+        pWidget( nullptr ),
+        pForm( nullptr ),
+        pGtkWindow( nullptr ),
+        pGtkWidget( nullptr ),
         bShouldUseXEmbed( false ),
         nArg( args ),
         pArgnBuf( pargnbuf ),
@@ -276,7 +276,7 @@ const char* GetCommandName( CommandAtoms eCommand )
         case eMaxCommand:               return "eMaxCommand";
         default:                        return "unknown command";
     }
-    return NULL;
+    return nullptr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

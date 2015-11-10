@@ -76,32 +76,32 @@ inline void dbg_msg( const char* pString, ... )
     }
 
 int             Sane::nRefCount = 0;
-oslModule       Sane::pSaneLib = 0;
+oslModule       Sane::pSaneLib = nullptr;
 SANE_Int        Sane::nVersion = 0;
-SANE_Device**   Sane::ppDevices = 0;
+SANE_Device**   Sane::ppDevices = nullptr;
 int             Sane::nDevices = 0;
 
 SANE_Status     (*Sane::p_init)( SANE_Int*,
-                                 SANE_Auth_Callback ) = 0;
-void            (*Sane::p_exit)() = 0;
+                                 SANE_Auth_Callback ) = nullptr;
+void            (*Sane::p_exit)() = nullptr;
 SANE_Status     (*Sane::p_get_devices)( const SANE_Device***,
-                                        SANE_Bool ) = 0;
-SANE_Status     (*Sane::p_open)( SANE_String_Const, SANE_Handle ) = 0;
-void            (*Sane::p_close)( SANE_Handle ) = 0;
+                                        SANE_Bool ) = nullptr;
+SANE_Status     (*Sane::p_open)( SANE_String_Const, SANE_Handle ) = nullptr;
+void            (*Sane::p_close)( SANE_Handle ) = nullptr;
 const SANE_Option_Descriptor* (*Sane::p_get_option_descriptor)(
-    SANE_Handle, SANE_Int ) = 0;
+    SANE_Handle, SANE_Int ) = nullptr;
 SANE_Status     (*Sane::p_control_option)( SANE_Handle, SANE_Int,
                                            SANE_Action, void*,
-                                           SANE_Int* ) = 0;
+                                           SANE_Int* ) = nullptr;
 SANE_Status     (*Sane::p_get_parameters)( SANE_Handle,
-                                           SANE_Parameters* ) = 0;
-SANE_Status     (*Sane::p_start)( SANE_Handle ) = 0;
+                                           SANE_Parameters* ) = nullptr;
+SANE_Status     (*Sane::p_start)( SANE_Handle ) = nullptr;
 SANE_Status     (*Sane::p_read)( SANE_Handle, SANE_Byte*, SANE_Int,
-                                 SANE_Int* ) = 0;
-void            (*Sane::p_cancel)( SANE_Handle ) = 0;
-SANE_Status     (*Sane::p_set_io_mode)( SANE_Handle, SANE_Bool ) = 0;
-SANE_Status     (*Sane::p_get_select_fd)( SANE_Handle, SANE_Int* ) = 0;
-SANE_String_Const (*Sane::p_strstatus)( SANE_Status ) = 0;
+                                 SANE_Int* ) = nullptr;
+void            (*Sane::p_cancel)( SANE_Handle ) = nullptr;
+SANE_Status     (*Sane::p_set_io_mode)( SANE_Handle, SANE_Bool ) = nullptr;
+SANE_Status     (*Sane::p_get_select_fd)( SANE_Handle, SANE_Int* ) = nullptr;
+SANE_String_Const (*Sane::p_strstatus)( SANE_Status ) = nullptr;
 
 static bool bSaneSymbolLoadFailed = false;
 
@@ -149,10 +149,10 @@ SANE_Status Sane::ControlOption( int nOption, SANE_Action nAction,
 }
 
 Sane::Sane() :
-        mppOptions( 0 ),
+        mppOptions( nullptr ),
         mnOptions( 0 ),
         mnDevice( -1 ),
-        maHandle( 0 )
+        maHandle( nullptr )
 {
     if( ! nRefCount || ! pSaneLib )
         Init();
@@ -224,7 +224,7 @@ void Sane::Init()
             DeInit();
         else
         {
-            SANE_Status nStatus = p_init( &nVersion, 0 );
+            SANE_Status nStatus = p_init( &nVersion, nullptr );
             FAIL_SHUTDOWN_STATE( nStatus, "sane_init", );
             nStatus = p_get_devices( const_cast<const SANE_Device***>(&ppDevices),
                                      SANE_FALSE );
@@ -245,7 +245,7 @@ void Sane::DeInit()
     {
         p_exit();
         osl_unloadModule( pSaneLib );
-        pSaneLib = 0;
+        pSaneLib = nullptr;
     }
 }
 
@@ -265,7 +265,7 @@ void Sane::ReloadOptions()
     const SANE_Option_Descriptor* pZero = p_get_option_descriptor( maHandle, 0 );
     SANE_Word pOptions[2];
     SANE_Status nStatus = p_control_option( maHandle, 0, SANE_ACTION_GET_VALUE,
-                                            static_cast<void*>(pOptions), NULL );
+                                            static_cast<void*>(pOptions), nullptr );
     if( nStatus != SANE_STATUS_GOOD )
         fprintf( stderr, "Error: sane driver returned %s while reading number of options !\n", p_strstatus( nStatus ) );
 
@@ -279,7 +279,7 @@ void Sane::ReloadOptions()
     for( int i = 1; i < mnOptions; i++ )
         mppOptions[ i ] = p_get_option_descriptor( maHandle, i );
 
-    CheckConsistency( NULL, true );
+    CheckConsistency( nullptr, true );
 
     maReloadOptionsLink.Call( *this );
 }
@@ -323,8 +323,8 @@ void Sane::Close()
     {
         p_close( maHandle );
         delete [] mppOptions;
-        mppOptions = 0;
-        maHandle = 0;
+        mppOptions = nullptr;
+        maHandle = nullptr;
         mnDevice = -1;
     }
 }
@@ -507,8 +507,8 @@ static inline sal_uInt8 _ReadValue( FILE* fp, int depth )
 
 bool Sane::CheckConsistency( const char* pMes, bool bInit )
 {
-    static const SANE_Option_Descriptor** pDescArray = NULL;
-    static const SANE_Option_Descriptor*  pZero = NULL;
+    static const SANE_Option_Descriptor** pDescArray = nullptr;
+    static const SANE_Option_Descriptor*  pZero = nullptr;
 
     if( bInit )
     {
@@ -573,7 +573,7 @@ bool Sane::Start( BitmapTransporter& rBitmap )
     if( ( nOption = GetOptionByName( "resolution" ) ) != -1 )
         (void)GetOptionValue( nOption, fResl );
 
-    sal_uInt8* pBuffer = NULL;
+    sal_uInt8* pBuffer = nullptr;
 
     SANE_Status nStatus = SANE_STATUS_GOOD;
 
@@ -700,7 +700,7 @@ bool Sane::Start( BitmapTransporter& rBitmap )
                     FD_SET( (int)fd, &fdset );
                     tv.tv_sec = 5;
                     tv.tv_usec = 0;
-                    if( select( fd+1, &fdset, NULL, NULL, &tv ) == 0 )
+                    if( select( fd+1, &fdset, nullptr, nullptr, &tv ) == 0 )
                         fprintf( stderr, "Timout on sane_read descriptor\n" );
                 }
                 nLen = 0;
@@ -890,7 +890,7 @@ int Sane::GetRange( int n, double*& rpDouble )
         return -1;
     }
 
-    rpDouble = 0;
+    rpDouble = nullptr;
     int nItems, i;
     bool bIsFixed = mppOptions[n]->type == SANE_TYPE_FIXED;
 
@@ -972,7 +972,7 @@ OUString Sane::GetOptionUnitName( int n )
 
 bool Sane::ActivateButtonOption( int n )
 {
-    SANE_Status nStatus = ControlOption( n, SANE_ACTION_SET_VALUE, NULL );
+    SANE_Status nStatus = ControlOption( n, SANE_ACTION_SET_VALUE, nullptr );
     if( nStatus != SANE_STATUS_GOOD )
         return false;
     return true;

@@ -666,7 +666,7 @@ namespace pcr
         // initialize the color listbox
         XColorListRef pColorList;
         SfxObjectShell* pDocSh = SfxObjectShell::Current();
-        const SfxPoolItem* pItem = pDocSh ? pDocSh->GetItem( SID_COLOR_TABLE ) : NULL;
+        const SfxPoolItem* pItem = pDocSh ? pDocSh->GetItem( SID_COLOR_TABLE ) : nullptr;
         if ( pItem )
         {
             DBG_ASSERT(dynamic_cast< const SvxColorListItem* >(pItem) !=  nullptr, "OColorControl::OColorControl: invalid color item!");
@@ -1031,8 +1031,8 @@ namespace pcr
 
     DropDownEditControl::DropDownEditControl( vcl::Window* _pParent, WinBits _nStyle )
         :Edit( _pParent, _nStyle )
-        ,m_pFloatingEdit( NULL )
-        ,m_pDropdownButton( NULL )
+        ,m_pFloatingEdit( nullptr )
+        ,m_pDropdownButton( nullptr )
         ,m_nOperationMode( eStringList )
         ,m_bDropdown(false)
         ,m_pHelper(nullptr)

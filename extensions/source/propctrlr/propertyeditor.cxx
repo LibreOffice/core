@@ -44,8 +44,8 @@ namespace pcr
     OPropertyEditor::OPropertyEditor( vcl::Window* pParent, WinBits nWinStyle)
             :Control(pParent, nWinStyle)
             ,m_aTabControl( VclPtr<TabControl>::Create(this) )
-            ,m_pListener(NULL)
-            ,m_pObserver(NULL)
+            ,m_pListener(nullptr)
+            ,m_pObserver(nullptr)
             ,m_nNextId(1)
             ,m_bHasHelpSection( false )
             ,m_nMinHelpLines( 0 )
@@ -173,7 +173,7 @@ namespace pcr
 
     OBrowserPage* OPropertyEditor::getPage( const OUString& _rPropertyName )
     {
-        OBrowserPage* pPage = NULL;
+        OBrowserPage* pPage = nullptr;
         MapStringToPageId::const_iterator aPropertyPageIdPos = m_aPropertyPageIds.find( _rPropertyName );
         if ( aPropertyPageIdPos != m_aPropertyPageIds.end() )
             pPage = static_cast< OBrowserPage* >( m_aTabControl->GetTabPage( aPropertyPageIdPos->second ) );
@@ -511,7 +511,7 @@ namespace pcr
 
     IMPL_LINK_NOARG_TYPED(OPropertyEditor, OnPageActivate, TabControl*, void)
     {
-        m_aPageActivationHandler.Call(NULL);
+        m_aPageActivationHandler.Call(nullptr);
     }
 
 

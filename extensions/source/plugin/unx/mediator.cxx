@@ -38,7 +38,7 @@
 
 Mediator::Mediator( int nSocket ) :
         m_nSocket( nSocket ),
-        m_pListener( NULL ),
+        m_pListener( nullptr ),
         m_nCurrentID( 1 ),
         m_bValid( true )
 {
@@ -52,9 +52,9 @@ Mediator::~Mediator()
     {
         {
             ::osl::MutexGuard aGuard( m_pListener->m_aMutex );
-            m_pListener->m_pMediator = NULL;
+            m_pListener->m_pMediator = nullptr;
         }
-        m_pListener = NULL;
+        m_pListener = nullptr;
         if( m_bValid )
         {
             sal_uLong aHeader[3];
@@ -151,7 +151,7 @@ MediatorMessage* Mediator::WaitForAnswer( sal_uLong nMessageID )
         }
         WaitForMessage( 10 );
     }
-    return NULL;
+    return nullptr;
 }
 
 MediatorMessage* Mediator::GetNextMessage( bool bWait )
@@ -172,11 +172,11 @@ MediatorMessage* Mediator::GetNextMessage( bool bWait )
                 }
             }
             if( ! bWait )
-                return NULL;
+                return nullptr;
         }
         WaitForMessage();
     }
-    return NULL;
+    return nullptr;
 }
 
 MediatorMessage* Mediator::TransactMessage( sal_uLong nBytes, char* pBytes )
@@ -248,7 +248,7 @@ void MediatorListener::onTerminated()
     if( m_pMediator )
     {
         m_pMediator->m_aConnectionLostHdl.Call( m_pMediator );
-        m_pMediator->m_pListener = NULL;
+        m_pMediator->m_pListener = nullptr;
     }
     delete this;
 }
@@ -278,7 +278,7 @@ void* MediatorMessage::GetBytes( sal_uLong& rBytes )
     sal_uLong nBytes = ExtractULONG();
 
     if( nBytes == 0 )
-        return NULL;
+        return nullptr;
 
     SAL_WARN_IF(
         (sal_uLong)(m_pRun - m_pBytes) >= m_nBytes, "extensions.plugin",
@@ -301,7 +301,7 @@ char* MediatorMessage::GetString()
     sal_uLong nBytes = ExtractULONG();
 
     if( nBytes == 0 )
-        return NULL;
+        return nullptr;
 
     SAL_WARN_IF(
         (sal_uLong)(m_pRun - m_pBytes) >= m_nBytes, "extensions.plugin",

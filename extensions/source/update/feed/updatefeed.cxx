@@ -539,7 +539,7 @@ UpdateInformationProvider::getChildNode(const uno::Reference< xml::dom::XNode >&
         return m_xXPathAPI->selectSingleNode(rxNode, "./atom:" + rName);
     } catch (const xml::xpath::XPathException &) {
         // ignore
-        return 0;
+        return nullptr;
     }
 }
 
@@ -773,10 +773,10 @@ static const cppu::ImplementationEntry kImplementations_entries[] =
         UpdateInformationProvider::getImplName,
         UpdateInformationProvider::getServiceNames,
         cppu::createSingleComponentFactory,
-        NULL,
+        nullptr,
         0
     },
-    { NULL, NULL, NULL, NULL, NULL, 0 }
+    { nullptr, nullptr, nullptr, nullptr, nullptr, 0 }
 } ;
 
 

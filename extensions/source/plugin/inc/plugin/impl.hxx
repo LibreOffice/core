@@ -361,7 +361,7 @@ public:
     PluginInputStream( XPlugin_Impl* pPlugin,
                    const char* url, sal_uInt32 len, sal_uInt32 lastmod );
 
-    PluginInputStream() : PluginStream( NULL, NULL, 0, 0 ) {}
+    PluginInputStream() : PluginStream( nullptr, nullptr, 0, 0 ) {}
 
     virtual ~PluginInputStream();
 

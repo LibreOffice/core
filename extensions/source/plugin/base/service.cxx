@@ -60,7 +60,7 @@ extern "C" {
         void* /*pXUnoKey*/
         )
     {
-        void* pRet = 0;
+        void* pRet = nullptr;
 
         OUString aImplName( OUString::createFromAscii( pImplementationName ) );
 

@@ -186,7 +186,7 @@ namespace pcr
                 if ( m_pHelper->getCurrentFormModelName() != m_sBindingLessModelName )
                 {
                     OUString sOldBindingName = m_pHelper->getCurrentBindingName();
-                    m_pHelper->setBinding( NULL );
+                    m_pHelper->setBinding( nullptr );
                     firePropertyChange( PROPERTY_BINDING_NAME, PROPERTY_ID_BINDING_NAME,
                         makeAny( sOldBindingName ), makeAny( OUString() ) );
                 }

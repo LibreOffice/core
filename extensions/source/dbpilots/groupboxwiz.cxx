@@ -85,7 +85,7 @@ namespace dbp
                 return VclPtr<OFinalizeGBWPage>::Create(this);
         }
 
-        return NULL;
+        return nullptr;
     }
 
 

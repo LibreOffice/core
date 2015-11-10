@@ -51,8 +51,8 @@ namespace pcr
         :ModalDialog(pParent, "LabelSelectionDialog", "modules/spropctrlr/ui/labelselectiondialog.ui")
         ,m_aModelImages(PcrRes(RID_IL_FORMEXPLORER))
         ,m_xControlModel(_xControlModel)
-        ,m_pInitialSelection(NULL)
-        ,m_pLastSelected(NULL)
+        ,m_pInitialSelection(nullptr)
+        ,m_pLastSelected(nullptr)
         ,m_bHaveAssignableControl(false)
     {
         get(m_pMainDesc, "label");
@@ -114,7 +114,7 @@ namespace pcr
             SvTreeListEntry* pRoot = m_pControlTree->InsertEntry(PcrRes(RID_STR_FORMS).toString(), aRootImage, aRootImage);
 
             // build the tree
-            m_pInitialSelection = NULL;
+            m_pInitialSelection = nullptr;
             m_bHaveAssignableControl = false;
             InsertEntries(xSearch, pRoot);
             m_pControlTree->Expand(pRoot);
@@ -245,13 +245,13 @@ namespace pcr
         DBG_ASSERT(pLB == m_pControlTree, "OSelectLabelDialog::OnEntrySelected : where did this come from ?");
         (void)pLB;
         SvTreeListEntry* pSelected = m_pControlTree->FirstSelected();
-        void* pData = pSelected ? pSelected->GetUserData() : NULL;
+        void* pData = pSelected ? pSelected->GetUserData() : nullptr;
 
         if (pData)
             m_xSelectedControl.set(*static_cast<Reference< XPropertySet > *>(pData));
 
         m_pNoAssignment->SetClickHdl(Link<Button*,void>());
-        m_pNoAssignment->Check(pData == NULL);
+        m_pNoAssignment->Check(pData == nullptr);
         m_pNoAssignment->SetClickHdl(LINK(this, OSelectLabelDialog, OnNoAssignmentClicked));
     }
 

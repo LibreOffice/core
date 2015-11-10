@@ -190,7 +190,7 @@ namespace pcr
         { "HelpText",        8 },
         { "CurrencySymbol", 14 },
         { "StringItemList", 14 },
-        { 0, 0                 }
+        { nullptr, 0                 }
     };
 
     namespace
@@ -200,7 +200,7 @@ namespace pcr
             bool bRet = false;
 
             const LanguageDependentProp* pLangDepProp = aLanguageDependentProp;
-            while( pLangDepProp->pPropName != 0 )
+            while( pLangDepProp->pPropName != nullptr )
             {
                 if( aName.equalsAsciiL( pLangDepProp->pPropName, pLangDepProp->nPropNameLength ))
                 {
@@ -502,7 +502,7 @@ namespace pcr
         {
             if ( ( aProperty.Attributes & PropertyAttribute::MAYBEVOID ) == 0 )
                 // default construct an instance of the proper type
-                aPropertyValue = Any( NULL, aProperty.Type );
+                aPropertyValue = Any( nullptr, aProperty.Type );
             // nothing to do
             return aPropertyValue;
         }
@@ -1121,7 +1121,7 @@ namespace pcr
                 DBG_ASSERT(xTunnel.is(), "FormComponentPropertyHandler::describePropertyLine : xTunnel is invalid!");
                 SvNumberFormatsSupplierObj* pSupplier = reinterpret_cast<SvNumberFormatsSupplierObj*>(xTunnel->getSomething(SvNumberFormatsSupplierObj::getUnoTunnelId()));
 
-                if (pSupplier != NULL)
+                if (pSupplier != nullptr)
                 {
                     bool bIsFormatKey = (PROPERTY_ID_FORMATKEY == nPropId);
 
@@ -2709,7 +2709,7 @@ namespace pcr
             Reference< XUnoTunnel > xTunnel( xSupplier, UNO_QUERY_THROW );
             SvNumberFormatsSupplierObj* pSupplier =
                 reinterpret_cast< SvNumberFormatsSupplierObj* >( xTunnel->getSomething( SvNumberFormatsSupplierObj::getUnoTunnelId() ) );
-            DBG_ASSERT( pSupplier != NULL, "FormComponentPropertyHandler::impl_dialogFormatting_nothrow: invalid call !" );
+            DBG_ASSERT( pSupplier != nullptr, "FormComponentPropertyHandler::impl_dialogFormatting_nothrow: invalid call !" );
 
             sal_Int32 nFormatKey = 0;
             impl_getPropertyValue_throw( PROPERTY_FORMATKEY ) >>= nFormatKey;
@@ -2747,7 +2747,7 @@ namespace pcr
                         pFormatter->DeleteEntry(*pDeletedKeys);
                 }
 
-                pItem = NULL;
+                pItem = nullptr;
                 if ( SfxItemState::SET == pResult->GetItemState( SID_ATTR_NUMBERFORMAT_VALUE, false, &pItem ) )
                 {
                     _out_rNewValue <<= (sal_Int32)( static_cast< const SfxUInt32Item* >( pItem )->GetValue() );
@@ -2861,9 +2861,9 @@ namespace pcr
         bool bSuccess = false;
 
         // create an item set for use with the dialog
-        SfxItemSet* pSet = NULL;
-        SfxItemPool* pPool = NULL;
-        SfxPoolItem** pDefaults = NULL;
+        SfxItemSet* pSet = nullptr;
+        SfxItemPool* pPool = nullptr;
+        SfxPoolItem** pDefaults = nullptr;
         ControlCharacterDialog::createItemSet(pSet, pPool, pDefaults);
         ControlCharacterDialog::translatePropertiesToItems(m_xComponent, pSet);
 
@@ -3180,7 +3180,7 @@ namespace pcr
                     return true;
                 }
                 m_xCommandDesigner->dispose();
-                m_xCommandDesigner.set( NULL );
+                m_xCommandDesigner.set( nullptr );
             }
 
             if ( !impl_ensureRowsetConnection_nothrow() )

@@ -84,7 +84,7 @@ public:
     ScanPreview(vcl::Window* pParent, WinBits nStyle)
         : Window(pParent, nStyle)
         , maMaxBottomRight(PREVIEW_WIDTH,  PREVIEW_HEIGHT)
-        , mpParentDialog(NULL)
+        , mpParentDialog(nullptr)
         , meDragDirection(TopLeft)
         , mbDragEnable(false)
         , mbDragDrawn(false)
@@ -214,7 +214,7 @@ SaneDlg::SaneDlg( vcl::Window* pParent, Sane& rSane, bool bScanEnabled ) :
         mbScanEnabled( bScanEnabled ),
         mnCurrentOption(0),
         mnCurrentElement(0),
-        mpRange(0),
+        mpRange(nullptr),
         mfMin(0.0),
         mfMax(0.0),
         doScan(false)
@@ -399,7 +399,7 @@ void SaneDlg::InitFields()
             mpReslBox->Enable();
 
             mpReslBox->SetValue( (long)fRes );
-            double *pDouble = NULL;
+            double *pDouble = nullptr;
             nValue = mrSane.GetRange( nOption, pDouble );
             if( nValue > -1 )
             {
@@ -445,8 +445,8 @@ void SaneDlg::InitFields()
     // set scan area
     for( i = 0; i < 4; i++ )
     {
-        char const *pOptionName = NULL;
-        MetricField* pField = NULL;
+        char const *pOptionName = nullptr;
+        MetricField* pField = nullptr;
         switch( i )
         {
             case 0:
@@ -487,7 +487,7 @@ void SaneDlg::InitFields()
                     case 3: aBottomRight.Y() = (int)fValue;break;
                 }
             }
-            double *pDouble = NULL;
+            double *pDouble = nullptr;
             nValue = mrSane.GetRange( nOption, pDouble );
             if( nValue > -1 )
             {
@@ -558,7 +558,7 @@ void SaneDlg::InitFields()
 
     // fill OptionBox
     mpOptionBox->Clear();
-    SvTreeListEntry* pParentEntry = 0;
+    SvTreeListEntry* pParentEntry = nullptr;
     bool bGroupRejected = false;
     for( i = 1; i < mrSane.CountOptions(); i++ )
     {
@@ -789,7 +789,7 @@ IMPL_LINK_TYPED( SaneDlg, ModifyHdl, Edit&, rEdit, void )
             int nOption = mrSane.GetOptionByName( "resolution" );
             if( nOption != -1 )
             {
-                double* pDouble = NULL;
+                double* pDouble = nullptr;
                 int nValues = mrSane.GetRange( nOption, pDouble );
                 if( nValues > 0 )
                 {
@@ -1010,7 +1010,7 @@ void SaneDlg::EstablishStringRange()
 {
     const char** ppStrings = mrSane.GetStringConstraint( mnCurrentOption );
     mpStringRangeBox->Clear();
-    for( int i = 0; ppStrings[i] != 0; i++ )
+    for( int i = 0; ppStrings[i] != nullptr; i++ )
         mpStringRangeBox->InsertEntry( OUString( ppStrings[i], strlen(ppStrings[i]), osl_getThreadTextEncoding() ) );
     OString aValue;
     mrSane.GetOptionValue( mnCurrentOption, aValue );
@@ -1025,7 +1025,7 @@ void SaneDlg::EstablishQuantumRange()
     if( mpRange )
     {
         delete [] mpRange;
-        mpRange = 0;
+        mpRange = nullptr;
     }
     int nValues = mrSane.GetRange( mnCurrentOption, mpRange );
     if( nValues == 0 )
@@ -1033,7 +1033,7 @@ void SaneDlg::EstablishQuantumRange()
         mfMin = mpRange[ 0 ];
         mfMax = mpRange[ 1 ];
         delete [] mpRange;
-        mpRange = 0;
+        mpRange = nullptr;
         EstablishNumericOption();
     }
     else if( nValues > 0 )
@@ -1484,7 +1484,7 @@ bool SaneDlg::SetAdjustedNumericalValue(
     if( nElement < 0 || nElement >= mrSane.GetOptionElements( nOption ) )
         return false;
 
-    double* pValues = NULL;
+    double* pValues = nullptr;
     int nValues;
     if( ( nValues = mrSane.GetRange( nOption, pValues ) ) < 0 )
     {

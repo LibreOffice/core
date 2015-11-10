@@ -295,7 +295,7 @@ namespace abp
             // already a valid table selected
             return;
 
-        const sal_Char* pGuess = NULL;
+        const sal_Char* pGuess = nullptr;
         switch ( getSettings().eType )
         {
             case AST_MORK               :
@@ -411,7 +411,7 @@ namespace abp
 
             default:
                 OSL_FAIL("OAddessBookSourcePilot::createPage: invalid state!");
-                return NULL;
+                return nullptr;
         }
     }
 

@@ -48,7 +48,7 @@ namespace pcr
         {
             sal_uInt16  nPos;
             VclPtr<TabPage>    pPage;
-            HiddenPage() : nPos( 0 ), pPage( NULL ) { }
+            HiddenPage() : nPos( 0 ), pPage( nullptr ) { }
             HiddenPage( sal_uInt16 _nPos, TabPage* _pPage ) : nPos( _nPos ), pPage( _pPage ) { }
         };
 
@@ -127,7 +127,7 @@ namespace pcr
         void Update(const ::std::mem_fun_t<void,OBrowserListBox>& _aUpdateFunction);
 
         typedef void (OPropertyEditor::*PageOperation)( OBrowserPage&, const void* );
-        void    forEachPage( PageOperation _pOperation, const void* _pArgument = NULL );
+        void    forEachPage( PageOperation _pOperation, const void* _pArgument = nullptr );
 
         void    setPageLineListener( OBrowserPage& _rPage, const void* );
         void    setPageControlObserver( OBrowserPage& _rPage, const void* );

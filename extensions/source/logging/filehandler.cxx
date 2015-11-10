@@ -240,7 +240,7 @@ namespace logging
         }
 
         m_pFile.reset();
-        m_aHandlerHelper.setFormatter( NULL );
+        m_aHandlerHelper.setFormatter( nullptr );
     }
 
 

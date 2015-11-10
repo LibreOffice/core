@@ -47,7 +47,7 @@ namespace bib
             if ( m_pAdapter )
             {
                 m_pAdapter->release();
-                m_pAdapter = NULL;
+                m_pAdapter = nullptr;
             }
         }
 
@@ -61,7 +61,7 @@ namespace bib
 
     OComponentAdapterBase::OComponentAdapterBase( const Reference< XComponent >& _rxComp, bool _bAutoRelease )
         :m_xComponent( _rxComp )
-        ,m_pListener( NULL )
+        ,m_pListener( nullptr )
         ,m_nLockCount( 0 )
         ,m_bListening( false )
         ,m_bAutoRelease( _bAutoRelease )
@@ -97,13 +97,13 @@ namespace bib
 
             disposing();
 
-            m_pListener->setAdapter(NULL);
+            m_pListener->setAdapter(nullptr);
 
-            m_pListener = NULL;
+            m_pListener = nullptr;
             m_bListening = false;
 
             if (m_bAutoRelease)
-                m_xComponent = NULL;
+                m_xComponent = nullptr;
         }
     }
 
@@ -116,14 +116,14 @@ namespace bib
         {
             // disconnect the listener
             if ( m_pListener )  // may have been reset whilest calling into _disposing
-                m_pListener->setAdapter( NULL );
+                m_pListener->setAdapter( nullptr );
         }
 
-        m_pListener = NULL;
+        m_pListener = nullptr;
         m_bListening = false;
 
         if ( m_bAutoRelease )
-            m_xComponent = NULL;
+            m_xComponent = nullptr;
     }
 
     OLoadListenerAdapter::OLoadListenerAdapter( const Reference< XLoadable >& _rxLoadable, bool _bAutoRelease )

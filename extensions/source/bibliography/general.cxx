@@ -210,7 +210,7 @@ BibGeneralPage::BibGeneralPage(vcl::Window* pParent, BibDataManager* pMan):
     sal_Int16* pMap = nFT2CtrlMap;
     for( sal_uInt16 i = 0 ; i < FIELD_COUNT ; ++i, ++pMap )
     {
-        aControls[ i ] = 0;
+        aControls[ i ] = nullptr;
         *pMap = -1;
     }
 
@@ -399,7 +399,7 @@ void BibGeneralPage::RemoveListeners()
         {
             uno::Reference< awt::XWindow > xCtrWin(aControls[i], uno::UNO_QUERY );
             xCtrWin->removeFocusListener( mxBibGeneralPageFocusListener.get() );
-            aControls[i] = 0;
+            aControls[i] = nullptr;
         }
     }
 }

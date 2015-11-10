@@ -273,7 +273,7 @@ FileSink::FileSink( const Reference< css::uno::XComponentContext >  & rxContext,
         m_xPlugin( plugin ),
         m_aTarget( target )
 {
-    osl::FileBase::createTempFile( 0, 0, &m_aFileName );
+    osl::FileBase::createTempFile( nullptr, nullptr, &m_aFileName );
     OString aFile = OUStringToOString( m_aFileName, osl_getThreadTextEncoding() );
     fp = fopen( aFile.getStr() , "wb" );
 

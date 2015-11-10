@@ -306,7 +306,7 @@ void SAL_CALL UpdateCheckJob::queryTermination( lang::EventObject const & )
 void SAL_CALL UpdateCheckJob::notifyTermination( lang::EventObject const & )
     throw ( uno::RuntimeException, std::exception )
 {
-    if ( m_pInitThread.get() != 0 )
+    if ( m_pInitThread.get() != nullptr )
     {
         m_pInitThread->setTerminating();
         m_pInitThread->join();
@@ -344,7 +344,7 @@ static const cppu::ImplementationEntry kImplementations_entries[] =
         UpdateCheckJob::getImplName,
         UpdateCheckJob::getServiceNames,
         cppu::createSingleComponentFactory,
-        NULL,
+        nullptr,
         0
     },
     {
@@ -352,10 +352,10 @@ static const cppu::ImplementationEntry kImplementations_entries[] =
         UpdateCheckConfig::getImplName,
         UpdateCheckConfig::getServiceNames,
         cppu::createSingleComponentFactory,
-        NULL,
+        nullptr,
         0
     },
-    { NULL, NULL, NULL, NULL, NULL, 0 }
+    { nullptr, nullptr, nullptr, nullptr, nullptr, 0 }
 } ;
 
 

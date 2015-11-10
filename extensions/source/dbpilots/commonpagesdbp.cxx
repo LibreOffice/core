@@ -378,9 +378,9 @@ namespace dbp
 
     OMaybeListSelectionPage::OMaybeListSelectionPage( OControlWizard* _pParent, const OString& _rID, const OUString& _rUIXMLDescription )
         :OControlWizardPage(_pParent, _rID, _rUIXMLDescription)
-        ,m_pYes(NULL)
-        ,m_pNo(NULL)
-        ,m_pList(NULL)
+        ,m_pYes(nullptr)
+        ,m_pNo(nullptr)
+        ,m_pList(nullptr)
     {
     }
 

@@ -75,7 +75,7 @@ BibWindowContainer::BibWindowContainer( vcl::Window* pParent, BibShortCutHandler
         BibWindow( pParent, nStyle ),
         pChild( pChildWin )
 {
-    if(pChild!=NULL)
+    if(pChild!=nullptr)
     {
         vcl::Window* pChildWindow = GetChild();
         pChildWindow->SetParent(this);
@@ -94,7 +94,7 @@ void BibWindowContainer::dispose()
     if( pChild )
     {
         VclPtr<vcl::Window> pDel = GetChild();
-        pChild = NULL;          // prevents GetFocus for child while deleting!
+        pChild = nullptr;          // prevents GetFocus for child while deleting!
         pDel.disposeAndClear();
     }
     vcl::Window::dispose();
@@ -120,8 +120,8 @@ bool BibWindowContainer::HandleShortCutKey( const KeyEvent& rKeyEvent )
 
 BibBookContainer::BibBookContainer(vcl::Window* pParent, WinBits nStyle):
     BibSplitWindow(pParent,nStyle),
-    pTopWin(NULL),
-    pBottomWin(NULL)
+    pTopWin(nullptr),
+    pBottomWin(nullptr)
 {
     pBibMod = OpenBibModul();
     aIdle.SetIdleHdl(LINK( this, BibBookContainer, SplitHdl));
@@ -143,14 +143,14 @@ void BibBookContainer::dispose()
     if( pTopWin )
     {
         VclPtr<vcl::Window> pDel = pTopWin;
-        pTopWin = NULL;         // prevents GetFocus for child while deleting!
+        pTopWin = nullptr;         // prevents GetFocus for child while deleting!
         pDel.disposeAndClear();
     }
 
     if( pBottomWin )
     {
         VclPtr<vcl::Window> pDel = pBottomWin;
-        pBottomWin = NULL;      // prevents GetFocus for child while deleting!
+        pBottomWin = nullptr;      // prevents GetFocus for child while deleting!
         pDel.disposeAndClear();
     }
 

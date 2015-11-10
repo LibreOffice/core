@@ -171,7 +171,7 @@ IMPL_LINK_NOARG_TYPED( PluginConnector, WorkOnNewMessageHdl, void*, void )
                 NPMIMEType pType    = pMessage->GetString();
                 char* pTarget       = pMessage->GetString();
 
-                NPStream* pStream = NULL;
+                NPStream* pStream = nullptr;
 
                 NPError aRet = NPN_NewStream( instance, pType, pTarget, &pStream );
 
@@ -253,7 +253,7 @@ IMPL_LINK_NOARG_TYPED( PluginConnector, WorkOnNewMessageHdl, void*, void )
                 {
                     pRun->offset = pArray[ 2*n ];
                     pRun->length = pArray[ 2*n+1 ];
-                    pRun->next = n < nRanges-1 ? new NPByteRange : NULL;
+                    pRun->next = n < nRanges-1 ? new NPByteRange : nullptr;
                     pRun = pRun->next;
                 }
                 NPError aRet = NPN_RequestRead( pStream, pFirst );
@@ -358,7 +358,7 @@ NPError UnxPluginComm::NPP_Destroy( NPP instance, NPSavedData** save )
     sal_uLong nSaveBytes;
     void* pSaveData = pMes->GetBytes( nSaveBytes );
     if( nSaveBytes == 4 && *static_cast<sal_uInt32*>(pSaveData) == 0 )
-        *save = NULL;
+        *save = nullptr;
     else
     {
         *save = new NPSavedData;
@@ -411,8 +411,8 @@ NPError UnxPluginComm::NPP_New( NPMIMEType pluginType, NPP instance, uint16_t mo
 {
     m_aInstances.push_back(
         new ConnectorInstance( instance, pluginType, 0,
-                               NULL, 0, NULL, 0,
-                               saved ? static_cast<char*>(saved->buf) : NULL,
+                               nullptr, 0, nullptr, 0,
+                               saved ? static_cast<char*>(saved->buf) : nullptr,
                                saved ? saved->len : 0 ) );
 
     char *pArgnBuf, *pArgvBuf;

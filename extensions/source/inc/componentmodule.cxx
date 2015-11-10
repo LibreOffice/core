@@ -58,7 +58,7 @@ namespace COMPMOD_NAMESPACE
 
 
     OModuleImpl::OModuleImpl()
-        :m_pResources(NULL)
+        :m_pResources(nullptr)
         ,m_bInitialized(false)
     {
     }
@@ -91,7 +91,7 @@ namespace COMPMOD_NAMESPACE
 
     ::osl::Mutex    OModule::s_aMutex;
     sal_Int32       OModule::s_nClients = 0;
-    OModuleImpl*    OModule::s_pImpl = NULL;
+    OModuleImpl*    OModule::s_pImpl = nullptr;
     OString  OModule::s_sResPrefix;
 
     ResMgr* OModule::getResManager()
@@ -123,7 +123,7 @@ namespace COMPMOD_NAMESPACE
         if (!--s_nClients && s_pImpl)
         {
             delete s_pImpl;
-            s_pImpl = NULL;
+            s_pImpl = nullptr;
         }
     }
 
@@ -140,10 +140,10 @@ namespace COMPMOD_NAMESPACE
     //- registration helper
 
 
-    Sequence< OUString >*                OModule::s_pImplementationNames = NULL;
-    Sequence< Sequence< OUString > >*    OModule::s_pSupportedServices = NULL;
-    Sequence< sal_Int64 >*                      OModule::s_pCreationFunctionPointers = NULL;
-    Sequence< sal_Int64 >*                      OModule::s_pFactoryFunctionPointers = NULL;
+    Sequence< OUString >*                OModule::s_pImplementationNames = nullptr;
+    Sequence< Sequence< OUString > >*    OModule::s_pSupportedServices = nullptr;
+    Sequence< sal_Int64 >*                      OModule::s_pCreationFunctionPointers = nullptr;
+    Sequence< sal_Int64 >*                      OModule::s_pFactoryFunctionPointers = nullptr;
 
 
     void OModule::registerComponent(
@@ -212,10 +212,10 @@ namespace COMPMOD_NAMESPACE
 
         if (s_pImplementationNames->getLength() == 0)
         {
-            delete s_pImplementationNames; s_pImplementationNames = NULL;
-            delete s_pSupportedServices; s_pSupportedServices = NULL;
-            delete s_pCreationFunctionPointers; s_pCreationFunctionPointers = NULL;
-            delete s_pFactoryFunctionPointers; s_pFactoryFunctionPointers = NULL;
+            delete s_pImplementationNames; s_pImplementationNames = nullptr;
+            delete s_pSupportedServices; s_pSupportedServices = nullptr;
+            delete s_pCreationFunctionPointers; s_pCreationFunctionPointers = nullptr;
+            delete s_pFactoryFunctionPointers; s_pFactoryFunctionPointers = nullptr;
         }
     }
 
@@ -230,7 +230,7 @@ namespace COMPMOD_NAMESPACE
         if (!s_pImplementationNames)
         {
             OSL_FAIL("OModule::getComponentFactory : have no class infos ! Are you sure called this method at the right time ?");
-            return NULL;
+            return nullptr;
         }
         OSL_ENSURE(s_pImplementationNames && s_pSupportedServices && s_pCreationFunctionPointers && s_pFactoryFunctionPointers,
             "OModule::getComponentFactory : inconsistent state (the pointers) !");
@@ -256,7 +256,7 @@ namespace COMPMOD_NAMESPACE
                 const FactoryInstantiation FactoryInstantiationFunction = reinterpret_cast<const FactoryInstantiation>(*pFactoryFunction);
                 const ComponentInstantiation ComponentInstantiationFunction = reinterpret_cast<const ComponentInstantiation>(*pComponentFunction);
 
-                xReturn = FactoryInstantiationFunction( _rxServiceManager, *pImplName, ComponentInstantiationFunction, *pServices, NULL);
+                xReturn = FactoryInstantiationFunction( _rxServiceManager, *pImplName, ComponentInstantiationFunction, *pServices, nullptr);
                 if (xReturn.is())
                 {
                     xReturn->acquire();
@@ -265,7 +265,7 @@ namespace COMPMOD_NAMESPACE
             }
         }
 
-        return NULL;
+        return nullptr;
     }
 
 

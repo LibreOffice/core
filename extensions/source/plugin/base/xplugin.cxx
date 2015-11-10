@@ -115,16 +115,16 @@ Any XPlugin_Impl::queryAggregation( const Type& type ) throw( RuntimeException, 
 XPlugin_Impl::XPlugin_Impl( const uno::Reference< css::lang::XMultiServiceFactory >  & rSMgr) :
         PluginControl_Impl(),
         m_xSMgr( rSMgr ),
-        m_pPluginComm( NULL ),
+        m_pPluginComm( nullptr ),
         m_pSysPlugData( CreateSysPlugData() ),
         m_aEncoding( osl_getThreadTextEncoding() ),
-        m_pArgv( NULL ),
-        m_pArgn( NULL ),
+        m_pArgv( nullptr ),
+        m_pArgn( nullptr ),
         m_nArgs( 0 ),
         m_aPluginMode( NP_FULL ),
         m_nProvidingState( PROVIDING_NONE ),
         m_nCalledFromPlugin( 0 ),
-        m_pDisposer( NULL ),
+        m_pDisposer( nullptr ),
         m_bIsDisposed( false )
 {
     memset( &m_aInstance, 0, sizeof( m_aInstance ) );
@@ -142,14 +142,14 @@ void XPlugin_Impl::destroyInstance()
 {
     Guard< Mutex > aGuard( m_aMutex );
 
-    NPSavedData* pSavedData = NULL;
+    NPSavedData* pSavedData = nullptr;
 
     destroyStreams();
     if( getPluginComm() )
     {
         getPluginComm()->NPP_Destroy( this, &pSavedData );
         getPluginComm()->decRef();
-        m_pPluginComm = NULL;
+        m_pPluginComm = nullptr;
     }
 
     freeArgs();
@@ -212,7 +212,7 @@ IMPL_LINK_NOARG_TYPED( XPlugin_Impl, secondLevelDispose, void*, void )
     if (m_pDisposer)
     {
         m_pDisposer->release();
-        m_pDisposer = NULL;
+        m_pDisposer = nullptr;
     }
 
     uno::Reference< XPlugin >  xProtection( this );
@@ -222,7 +222,7 @@ IMPL_LINK_NOARG_TYPED( XPlugin_Impl, secondLevelDispose, void*, void )
         Guard< Mutex > aPluginGuard( ::PluginManager::get().getPluginMutex() );
         rList.remove( this );
     }
-    m_aNPWindow.window = NULL;
+    m_aNPWindow.window = nullptr;
 #ifndef UNX
     // acrobat does an unconditional XtParent on the windows widget
     getPluginComm()->NPP_SetWindow( this );
@@ -533,7 +533,7 @@ void XPlugin_Impl::loadPlugin()
                                                    pEnvData->mpNSView );
 #elif defined UNX
             // need a new PluginComm
-            PluginComm* pComm = NULL;
+            PluginComm* pComm = nullptr;
             int sv[2];
             if( !socketpair( AF_UNIX, SOCK_STREAM, 0, sv ) )
                 pComm = new UnxPluginComm( m_aDescription.Mimetype,
@@ -565,9 +565,9 @@ void XPlugin_Impl::loadPlugin()
                  &getNPPInstance(),
                  m_aPluginMode == PluginMode::FULL ? NP_FULL : NP_EMBED,
                  ::sal::static_int_cast< int16_t, int >( m_nArgs ),
-                 const_cast<char**>(m_nArgs ? m_pArgn : NULL),
-                 const_cast<char**>(m_nArgs ? m_pArgv : NULL),
-                 NULL );
+                 const_cast<char**>(m_nArgs ? m_pArgn : nullptr),
+                 const_cast<char**>(m_nArgs ? m_pArgv : nullptr),
+                 nullptr );
 #ifdef MACOSX
     // m_aNPWindow is set up in the MacPluginComm from the view
     SetSysPlugDataParentView(*pEnvData);
@@ -579,9 +579,9 @@ void XPlugin_Impl::loadPlugin()
     }
     else
     {
-        m_aNPWindow.window  = NULL;
+        m_aNPWindow.window  = nullptr;
     }
-    m_aNPWindow.ws_info     = NULL;
+    m_aNPWindow.ws_info     = nullptr;
 #else
     m_aNPWindow.window = (void*)pEnvData->hWnd;
 #endif
@@ -645,7 +645,7 @@ PluginStream* XPlugin_Impl::getStreamFromNPStream( NPStream* stream )
         if( &(*iter2)->getStream() == stream )
             return *iter2;
 
-    return NULL;
+    return nullptr;
 }
 
 sal_Bool XPlugin_Impl::provideNewStream(const OUString& mimetype,
@@ -966,7 +966,7 @@ PluginInputStream::PluginInputStream( XPlugin_Impl* pPlugin,
                                       sal_uInt32 len,
                                       sal_uInt32 lastmod ) :
         PluginStream( pPlugin, url, len, lastmod ),
-        m_pContent( NULL ),
+        m_pContent( nullptr ),
         m_nMode( NP_NORMAL ),
         m_nWritePos( 0 )
 {
@@ -975,7 +975,7 @@ PluginInputStream::PluginInputStream( XPlugin_Impl* pPlugin,
 
     m_pPlugin->getInputStreams().push_back( this );
     OUString aTmpFile;
-    osl::FileBase::createTempFile( 0, 0, &aTmpFile );
+    osl::FileBase::createTempFile( nullptr, nullptr, &aTmpFile );
 
     // set correct extension, some plugins need that
     OUString aName( m_aNPStream.url, strlen( m_aNPStream.url ), m_pPlugin->getTextEncoding() );
@@ -993,7 +993,7 @@ PluginInputStream::PluginInputStream( XPlugin_Impl* pPlugin,
     if( ! m_aFileStream.IsOpen() )
     {
         // might be that the extension scrambled the whole filename
-        osl::FileBase::createTempFile( 0, 0, &aTmpFile );
+        osl::FileBase::createTempFile( nullptr, nullptr, &aTmpFile );
         m_aFileStream.Open( aTmpFile, StreamMode::READ | StreamMode::WRITE );
     }
 }
@@ -1083,7 +1083,7 @@ void PluginInputStream::setMode( sal_Int32 nMode )
     if (m_nMode == -1)
     {
         m_pPlugin->getInputStreams().remove( this );
-        m_pPlugin = NULL;
+        m_pPlugin = nullptr;
         m_wPlugin.clear();
     }
 }

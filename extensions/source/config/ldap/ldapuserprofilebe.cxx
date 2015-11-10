@@ -63,7 +63,7 @@ LdapUserProfileBe::LdapUserProfileBe( const uno::Reference<uno::XComponentContex
                 {
                     throw css::uno::RuntimeException(
                         OUString("LdapUserProfileBe- LDAP not configured"),
-                        NULL);
+                        nullptr);
                 }
 
                 bReentrantCall = false ;
@@ -90,7 +90,7 @@ bool LdapUserProfileBe::readLdapConfiguration(
     css::uno::Reference< css::uno::XComponentContext > const & context,
     LdapDefinition * definition, OUString * loggedOnUser)
 {
-    OSL_ASSERT(context.is() && definition != 0 && loggedOnUser != 0);
+    OSL_ASSERT(context.is() && definition != nullptr && loggedOnUser != nullptr);
     const OUString kReadOnlyViewService("com.sun.star.configuration.ConfigurationAccess") ;
     const OUString kComponent("org.openoffice.LDAP/UserDirectory");
     const OUString kServerDefiniton("ServerDefinition");

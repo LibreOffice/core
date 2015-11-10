@@ -56,7 +56,7 @@ class BibWindowContainer : public BibWindow     //Window
 
 inline vcl::Window* BibWindowContainer::GetChild()
 {
-    return pChild ? pChild->GetWindow() : NULL;
+    return pChild ? pChild->GetWindow() : nullptr;
 }
 
 

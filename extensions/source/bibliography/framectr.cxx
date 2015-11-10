@@ -96,7 +96,7 @@ static const DispatchInfo SupportedCommandsArray[] =
     { ".uno:Bib/removeFilter"   ,   frame::CommandGroup::DATA       , true  },
     { ".uno:Bib/sdbsource"      ,   frame::CommandGroup::DATA       , true  },
     { ".uno:Bib/Mapping"        ,   frame::CommandGroup::DATA       , true  },
-    { 0                         ,   0                               , false }
+    { nullptr                         ,   0                               , false }
 };
 
 typedef std::unordered_map< OUString, CacheDispatchInfo, OUStringHash, ::std::equal_to< OUString > > CmdToInfoCache;
@@ -112,7 +112,7 @@ const CmdToInfoCache& GetCommandToInfoCache()
         if ( !bCacheInitialized )
         {
             sal_Int32 i( 0 );
-            while ( SupportedCommandsArray[i].pCommand != 0 )
+            while ( SupportedCommandsArray[i].pCommand != nullptr )
             {
                 OUString aCommand( OUString::createFromAscii( SupportedCommandsArray[i].pCommand ));
 
@@ -140,7 +140,7 @@ public:
 
                                         BibFrameCtrl_Impl()
                                             : aLC( aMutex )
-                                            , pController(0)
+                                            , pController(nullptr)
                                         {}
 
                                         virtual ~BibFrameCtrl_Impl();
@@ -171,7 +171,7 @@ BibFrameController_Impl::BibFrameController_Impl( const uno::Reference< awt::XWi
     :xWindow( xComponent )
     ,m_xDatMan( pDataManager )
     ,pDatMan( pDataManager )
-    ,pBibMod(NULL)
+    ,pBibMod(nullptr)
 {
     vcl::Window* pParent = VCLUnoHelper::GetWindow( xWindow );
     pParent->SetUniqueId(UID_BIB_FRAME_WINDOW);
@@ -184,7 +184,7 @@ BibFrameController_Impl::BibFrameController_Impl( const uno::Reference< awt::XWi
 
 BibFrameController_Impl::~BibFrameController_Impl()
 {
-    pImp->pController = NULL;
+    pImp->pController = nullptr;
     pImp->release();
     delete pDatMan;
     if(pBibMod)
@@ -255,8 +255,8 @@ void BibFrameController_Impl::dispose() throw (css::uno::RuntimeException, std::
     lang::EventObject aObject;
     aObject.Source = static_cast<XController*>(this);
     pImp->aLC.disposeAndClear(aObject);
-    m_xDatMan = 0;
-    pDatMan = 0;
+    m_xDatMan = nullptr;
+    pDatMan = nullptr;
     aStatusListeners.clear();
  }
 
@@ -400,7 +400,7 @@ static vcl::Window* lcl_GetFocusChild( vcl::Window* pParent )
         if(pSubChild)
             return pSubChild;
     }
-    return 0;
+    return nullptr;
 }
 
 //class XDispatch

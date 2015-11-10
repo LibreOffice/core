@@ -271,7 +271,7 @@ namespace pcr
         );
         if ( pFound != m_aSupportedProperties.end() )
             return pFound;
-        return NULL;
+        return nullptr;
     }
 
     const Property& PropertyHandler::impl_getPropertyFromId_throw( PropertyId _nPropId ) const

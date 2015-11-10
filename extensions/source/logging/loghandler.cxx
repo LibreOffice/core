@@ -49,7 +49,7 @@ namespace logging
     LogHandlerHelper::LogHandlerHelper( const Reference< XComponentContext >& _rxContext, ::osl::Mutex& _rMutex, ::cppu::OBroadcastHelper& _rBHelper )
         :m_eEncoding( RTL_TEXTENCODING_UTF8 )
         ,m_nLevel( LogLevel::SEVERE )
-        ,m_xFormatter( NULL )
+        ,m_xFormatter( nullptr )
         ,m_xContext( _rxContext )
         ,m_rMutex( _rMutex )
         ,m_rBHelper( _rBHelper )

@@ -787,7 +787,7 @@ namespace pcr
             singleUI->second->dispose();
         }
         m_pCollectedUIs.reset();
-        m_xDelegatorUI.set( NULL );
+        m_xDelegatorUI.set( nullptr );
     }
 
 

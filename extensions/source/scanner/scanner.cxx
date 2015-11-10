@@ -32,7 +32,7 @@ Reference< XInterface > SAL_CALL ScannerManager_CreateInstance( const Reference<
 
 
 ScannerManager::ScannerManager() :
-    mpData( NULL )
+    mpData( nullptr )
 {
     AcquireData();
 }
@@ -86,7 +86,7 @@ Sequence< OUString > ScannerManager::getSupportedServiceNames_Static() throw ()
 sal_Bool SAL_CALL ScannerManager::configureScanner( ScannerContext& rContext )
     throw( ScannerException, std::exception )
 {
-    return configureScannerAndScan( rContext, NULL );
+    return configureScannerAndScan( rContext, nullptr );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

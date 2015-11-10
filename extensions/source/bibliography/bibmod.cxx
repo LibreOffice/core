@@ -30,7 +30,7 @@
 #include "bibconfig.hxx"
 #include <ucbhelper/content.hxx>
 
-static BibModul*  pBibModul=NULL;
+static BibModul*  pBibModul=nullptr;
 static sal_uInt32 nBibModulCount=0;
 
 using namespace ::com::sun::star;
@@ -41,7 +41,7 @@ using namespace ::com::sun::star::ucb;
 
 HdlBibModul OpenBibModul()
 {
-    if(pBibModul==NULL)
+    if(pBibModul==nullptr)
     {
         pBibModul=new BibModul();
     }
@@ -52,10 +52,10 @@ HdlBibModul OpenBibModul()
 void CloseBibModul(HdlBibModul ppBibModul)
 {
     nBibModulCount--;
-    if(nBibModulCount==0 && ppBibModul!=NULL)
+    if(nBibModulCount==0 && ppBibModul!=nullptr)
     {
         delete pBibModul;
-        pBibModul=NULL;
+        pBibModul=nullptr;
     }
 }
 
@@ -63,7 +63,7 @@ BibResId::BibResId( sal_uInt16 nId ) :
     ResId( nId, *pBibModul->GetResMgr() )
 {
 }
-BibConfig* BibModul::pBibConfig = 0;
+BibConfig* BibModul::pBibConfig = nullptr;
 BibModul::BibModul()
 {
     pResMgr = ResMgr::CreateResMgr( "bib" );
@@ -75,7 +75,7 @@ BibModul::~BibModul()
     if (pBibConfig && pBibConfig->IsModified())
         pBibConfig->Commit();
     delete pBibConfig;
-    pBibConfig = 0;
+    pBibConfig = nullptr;
 }
 
 BibDataManager*  BibModul::createDataManager()

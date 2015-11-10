@@ -41,7 +41,7 @@ namespace bib
         ::osl::Mutex&           m_rMutex;
     protected:
         explicit OComponentListener( ::osl::Mutex& _rMutex )
-            :m_pAdapter( NULL )
+            :m_pAdapter( nullptr )
             ,m_rMutex( _rMutex )
         {
         }

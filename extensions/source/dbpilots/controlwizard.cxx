@@ -75,12 +75,12 @@ namespace dbp
 
     OControlWizardPage::OControlWizardPage( OControlWizard* _pParent, const OString& rID, const OUString& rUIXMLDescription )
         :OControlWizardPage_Base( _pParent, rID, rUIXMLDescription )
-        ,m_pFormDatasourceLabel(NULL)
-        ,m_pFormDatasource(NULL)
-        ,m_pFormContentTypeLabel(NULL)
-        ,m_pFormContentType(NULL)
-        ,m_pFormTableLabel(NULL)
-        ,m_pFormTable(NULL)
+        ,m_pFormDatasourceLabel(nullptr)
+        ,m_pFormDatasource(nullptr)
+        ,m_pFormContentTypeLabel(nullptr)
+        ,m_pFormContentType(nullptr)
+        ,m_pFormTableLabel(nullptr)
+        ,m_pFormTable(nullptr)
     {
     }
 
@@ -472,7 +472,7 @@ namespace dbp
         Reference< XInteractionHandler > xHandler;
         try
         {
-            xHandler.set( InteractionHandler::createWithParent(m_xContext, 0), UNO_QUERY_THROW );
+            xHandler.set( InteractionHandler::createWithParent(m_xContext, nullptr), UNO_QUERY_THROW );
         }
         catch(const Exception&) { }
         if (!xHandler.is())

@@ -79,7 +79,7 @@ UnxPluginComm::UnxPluginComm(
     pArgs[1] = pDesc;
     pArgs[2] = aLib.getStr();
     pArgs[3] = pWindow;
-    pArgs[4] = NULL;
+    pArgs[4] = nullptr;
 
     SAL_INFO(
         "extensions.plugin",
@@ -137,7 +137,7 @@ UnxPluginComm::~UnxPluginComm()
 }
 
 bool UnxPluginComm::getPluginappPath(OString * path) {
-    OSL_ASSERT(path != NULL);
+    OSL_ASSERT(path != nullptr);
     OUString p("$BRAND_BASE_DIR/" LIBO_LIBEXEC_FOLDER "/pluginapp.bin");
     rtl::Bootstrap::expandMacros(p);
     return

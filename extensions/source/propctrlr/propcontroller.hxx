@@ -305,7 +305,7 @@ namespace pcr
                 <TRUE/> if and only if the property could be found. In this case, <arg>_pProperty</arg> (if
                 not <NULL/> contains the iterator pointing to this property.
         */
-        bool impl_findObjectProperty_nothrow( const OUString& _rName, OrderedPropertyMap::const_iterator* _pProperty = NULL );
+        bool impl_findObjectProperty_nothrow( const OUString& _rName, OrderedPropertyMap::const_iterator* _pProperty = nullptr );
 
         bool Construct(vcl::Window* _pParentWin);
 

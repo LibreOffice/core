@@ -78,7 +78,7 @@ namespace pcr
         else
         {
             TreatAsNumber( false );
-            SetFormatter( NULL );
+            SetFormatter( nullptr );
             SetText( "" );
         }
     }
@@ -252,7 +252,7 @@ namespace pcr
         if ( bFallback )
         {
             getTypedControlWindow()->TreatAsNumber(false);
-            getTypedControlWindow()->SetFormatter(NULL);
+            getTypedControlWindow()->SetFormatter(nullptr);
             getTypedControlWindow()->SetText("");
             m_nLastDecimalDigits = 0;
         }

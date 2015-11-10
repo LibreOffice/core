@@ -171,8 +171,8 @@ namespace bib
         if ( m_xControl.is() )
         {
             Reference< awt::XControl > xDel( m_xControl );
-            m_xControl = NULL;
-            m_xGridWin = NULL;
+            m_xControl = nullptr;
+            m_xGridWin = nullptr;
 
             m_xControlContainer->removeControl( xDel );
             xDel->dispose();
@@ -188,8 +188,8 @@ namespace bib
     BibBeamer::BibBeamer( vcl::Window* _pParent, BibDataManager* _pDM, WinBits _nStyle )
         :BibSplitWindow( _pParent, _nStyle | WB_NOSPLITDRAW )
         ,pDatMan( _pDM )
-        ,pToolBar( NULL )
-        ,pGridWin( NULL )
+        ,pToolBar( nullptr )
+        ,pGridWin( nullptr )
     {
         createToolBar();
         createGridWin();
@@ -212,7 +212,7 @@ namespace bib
             m_xToolBarRef->dispose();
 
         if ( pToolBar )
-            pDatMan->SetToolbar(0);
+            pDatMan->SetToolbar(nullptr);
 
         pToolBar.disposeAndClear();
         pGridWin.disposeAndClear();

@@ -257,7 +257,7 @@ namespace pcr
         */
         inline bool impl_isSupportedProperty_nothrow( PropertyId _nPropId ) const
         {
-            return impl_getPropertyFromId_nothrow( _nPropId ) != NULL;
+            return impl_getPropertyFromId_nothrow( _nPropId ) != nullptr;
         }
 
         /** retrieves a property given by name

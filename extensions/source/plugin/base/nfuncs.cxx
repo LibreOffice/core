@@ -100,13 +100,13 @@ extern "C"
     {
         TRACE( "NPN_GetJavaEnv" );
         // no java in this program
-        return NULL;
+        return nullptr;
     }
 
     jref SAL_CALL NP_LOADDS  NPN_GetJavaPeer( NPP /*instance*/ )
     {
         TRACE( "NPN_GetJavaPeer" );
-        return NULL;
+        return nullptr;
     }
 }
 
@@ -284,7 +284,7 @@ extern "C" {
             // stream will be fed back to plugin,
             // notify immediately after destruction of stream
             pImpl->addPluginEventListener( pListener );
-            pListener = NULL;
+            pListener = nullptr;
         }
         pAsync->aUrl        = OStringToOUString( aLoadURL, pImpl->getTextEncoding() );
         pAsync->aTarget     = OStringToOUString( target, pImpl->getTextEncoding() );
@@ -347,7 +347,7 @@ extern "C" {
             // stream will be fed back to plugin,
             // notify immediately after destruction of stream
             pImpl->addPluginEventListener( pListener );
-            pListener = NULL;
+            pListener = nullptr;
         }
 
         try
@@ -408,8 +408,8 @@ extern "C" {
 
         ::std::list<XPlugin_Impl*>& rList = PluginManager::get().getPlugins();
         ::std::list<XPlugin_Impl*>::iterator iter;
-        XPlugin_Impl* pPlugin = NULL;
-        PluginStream* pStream = NULL;
+        XPlugin_Impl* pPlugin = nullptr;
+        PluginStream* pStream = nullptr;
         for( iter = rList.begin(); iter!= rList.end(); ++iter )
         {
             pStream = (*iter)->getStreamFromNPStream( stream );

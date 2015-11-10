@@ -138,8 +138,8 @@ public:
 };
 
 BibliographyLoader::BibliographyLoader() :
-    m_pBibMod(0),
-    m_pDatMan(0)
+    m_pBibMod(nullptr),
+    m_pDatMan(nullptr)
 {
 }
 
@@ -194,7 +194,7 @@ extern "C"
     SAL_DLLPUBLIC_EXPORT void * SAL_CALL bib_component_getFactory(
         const sal_Char * pImplName, void * pServiceManager, void * /*pRegistryKey*/ )
     {
-        void * pRet = 0;
+        void * pRet = nullptr;
         if (BibliographyLoader::getImplementationName_Static().equalsAscii( pImplName ) )
         {
             // create the factory
@@ -380,7 +380,7 @@ Reference< XNameAccess >  BibliographyLoader::GetDataColumns() const
             Reference< XComponent >  xSetComp(xRowSet, UNO_QUERY);
             if (xSetComp.is())
                 xSetComp->dispose();
-            xRowSet = NULL;
+            xRowSet = nullptr;
         }
         else
             const_cast<BibliographyLoader*>(this)->m_xCursor = xRowSet.get();

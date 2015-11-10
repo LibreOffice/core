@@ -228,7 +228,7 @@ namespace pcr
             return;
 
         SharedNotifier::getNotifier()->removeEventsForProcessor( this );
-        m_pContext = NULL;
+        m_pContext = nullptr;
     }
 
 
@@ -336,8 +336,8 @@ namespace pcr
             ,m_aLinesPlayground(VclPtr<vcl::Window>::Create(this,WB_DIALOGCONTROL | WB_CLIPCHILDREN))
             ,m_aVScroll(VclPtr<ScrollBar>::Create(this,WB_VSCROLL|WB_REPEAT|WB_DRAG))
             ,m_pHelpWindow( VclPtr<InspectorHelpWindow>::Create( this ) )
-            ,m_pLineListener(NULL)
-            ,m_pControlObserver( NULL )
+            ,m_pLineListener(nullptr)
+            ,m_pControlObserver( nullptr )
             ,m_nYOffset(0)
             ,m_nCurrentPreferredHelpHeight(0)
             ,m_nTheNameSize(0)
@@ -692,7 +692,7 @@ namespace pcr
             _out_rpLine = line->pLine;
         else
             _out_rpLine.reset();
-        return ( NULL != _out_rpLine.get() );
+        return ( nullptr != _out_rpLine.get() );
     }
 
 
@@ -717,7 +717,7 @@ namespace pcr
         BrowserLinePointer pLine;
         if ( impl_getBrowserLineForName( _rEntryName, pLine ) )
             return pLine->getControl();
-        return NULL;
+        return nullptr;
     }
 
 
@@ -1030,7 +1030,7 @@ namespace pcr
                 return;
             try
             {
-                _rxControl->setControlContext( NULL );
+                _rxControl->setControlContext( nullptr );
                 Reference< XComponent > xControlComponent( _rxControl, UNO_QUERY );
                 if ( xControlComponent.is() )
                     xControlComponent->dispose();
@@ -1090,7 +1090,7 @@ namespace pcr
 
         if ( nPos < m_aLines.size() )
         {
-            vcl::Window* pRefWindow = NULL;
+            vcl::Window* pRefWindow = nullptr;
             if ( nPos > 0 )
                 pRefWindow = m_aLines[nPos-1].pLine->GetRefWindow();
 
@@ -1267,7 +1267,7 @@ namespace pcr
                 // interested in scroll events if we have a scrollbar
                 if ( m_aVScroll->IsVisible() )
                 {
-                    HandleScrollCommand( *pCommand, NULL, m_aVScroll.get() );
+                    HandleScrollCommand( *pCommand, nullptr, m_aVScroll.get() );
                 }
             }
         }

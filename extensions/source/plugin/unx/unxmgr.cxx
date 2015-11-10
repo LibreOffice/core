@@ -210,7 +210,7 @@ static void CheckPluginRegistryFiles( const OString& rPath, list< PluginDescript
 
     // check subdirectories
     DIR* pDIR = opendir( rPath.getStr() );
-    struct dirent* pDirEnt = NULL;
+    struct dirent* pDirEnt = nullptr;
     struct stat aStat;
     maxDirent u;
     while( pDIR && ! readdir_r( pDIR, &u.asDirent, &pDirEnt ) && pDirEnt )
@@ -274,7 +274,7 @@ Sequence<PluginDescription> XPluginManager_Impl::impl_getPluginDescriptions() th
             if (!aPath.isEmpty())
             {
                 DIR* pDIR = opendir(aPath.getStr());
-                struct dirent* pDirEnt = NULL;
+                struct dirent* pDirEnt = nullptr;
                 while( pDIR && ! readdir_r( pDIR, &u.asDirent, &pDirEnt ) && pDirEnt )
                 {
                     char* pBaseName = u.asDirent.d_name;

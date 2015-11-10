@@ -180,7 +180,7 @@ namespace extensions { namespace resource
 
     OpenOfficeResourceBundle::OpenOfficeResourceBundle( const Reference< XComponentContext >& /*_rxContext*/, const OUString& _rBaseName, const Locale& _rLocale )
         :m_aLocale( _rLocale )
-        ,m_pResourceManager( NULL )
+        ,m_pResourceManager( nullptr )
     {
         OUString sBaseName( _rBaseName );
         m_pResourceManager = new SimpleResMgr( OUStringToOString( sBaseName, RTL_TEXTENCODING_UTF8 ).getStr(),
@@ -188,7 +188,7 @@ namespace extensions { namespace resource
 
         if ( !m_pResourceManager->IsValid() )
         {
-            delete m_pResourceManager, m_pResourceManager = NULL;
+            delete m_pResourceManager, m_pResourceManager = nullptr;
             throw MissingResourceException();
         }
 

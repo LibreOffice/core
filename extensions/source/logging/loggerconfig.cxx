@@ -128,7 +128,7 @@ namespace logging
             oslProcessIdentifier aProcessId = 0;
             oslProcessInfo info;
             info.Size = sizeof (oslProcessInfo);
-            if ( osl_getProcessInfo ( 0, osl_Process_IDENTIFIER, &info ) == osl_Process_E_None)
+            if ( osl_getProcessInfo ( nullptr, osl_Process_IDENTIFIER, &info ) == osl_Process_E_None)
                 aProcessId = info.Ident;
             rtl::OUString aPID = OUString::number( aProcessId );
 
@@ -177,7 +177,7 @@ namespace logging
                 const Reference< XNameAccess >& _rxLoggerSettings,
                 const sal_Char* _pServiceNameAsciiNodeName,
                 const sal_Char* _pServiceSettingsAsciiNodeName,
-                SettingTranslation _pSettingTranslation = NULL
+                SettingTranslation _pSettingTranslation = nullptr
             )
         {
             Reference< XInterface > xInstance;

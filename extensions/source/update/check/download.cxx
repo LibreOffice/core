@@ -54,7 +54,7 @@ struct OutData
     osl::Condition& StopCondition;
     CURL *curl;
 
-    OutData(osl::Condition& rCondition) : FileHandle(NULL), Offset(0), StopCondition(rCondition), curl(NULL) {};
+    OutData(osl::Condition& rCondition) : FileHandle(nullptr), Offset(0), StopCondition(rCondition), curl(nullptr) {};
 };
 
 
@@ -133,12 +133,12 @@ write_function( void *ptr, size_t size, size_t nmemb, void *stream )
 {
     OutData *out = static_cast < OutData * > (stream);
 
-    if( NULL == out->FileHandle )
+    if( nullptr == out->FileHandle )
         openFile(*out);
 
     sal_uInt64 nBytesWritten = 0;
 
-    if( NULL != out->FileHandle )
+    if( nullptr != out->FileHandle )
         osl_writeFile(out->FileHandle, ptr, size * nmemb, &nBytesWritten);
 
     return (size_t) nBytesWritten;
@@ -233,7 +233,7 @@ bool curl_run(const OUString& rURL, OutData& out, const OString& aProxyHost, sal
     CURL * pCURL = curl_easy_init();
     bool ret = false;
 
-    if( NULL != pCURL )
+    if( nullptr != pCURL )
     {
         out.curl = pCURL;
 
@@ -272,7 +272,7 @@ bool curl_run(const OUString& rURL, OutData& out, const OString& aProxyHost, sal
         CURLcode cc = curl_easy_perform(pCURL);
 
         // treat zero byte downloads as errors
-        if( NULL == out.FileHandle )
+        if( nullptr == out.FileHandle )
             openFile(out);
 
         if( CURLE_OK == cc )
@@ -304,7 +304,7 @@ bool curl_run(const OUString& rURL, OutData& out, const OString& aProxyHost, sal
             OString aMessage("Unknown error");
 
             const char * error_message = curl_easy_strerror(cc);
-            if( NULL != error_message )
+            if( nullptr != error_message )
                 aMessage = error_message;
 
             if ( CURLE_HTTP_RETURNED_ERROR == cc )
@@ -367,7 +367,7 @@ Download::start(const OUString& rURL, const OUString& rFile, const OUString& rDe
         // check for existing file
         oslFileError rc = osl_openFile( aFile.pData, &out.FileHandle, osl_File_OpenFlag_Write | osl_File_OpenFlag_Create );
         osl_closeFile(out.FileHandle);
-        out.FileHandle = NULL;
+        out.FileHandle = nullptr;
 
         if( osl_File_E_EXIST == rc )
         {
@@ -412,7 +412,7 @@ Download::start(const OUString& rURL, const OUString& rFile, const OUString& rDe
 
     bool ret = curl_run(rURL, out, aProxyHost, nProxyPort);
 
-    if( NULL != out.FileHandle )
+    if( nullptr != out.FileHandle )
     {
         osl_syncFile(out.FileHandle);
         osl_closeFile(out.FileHandle);

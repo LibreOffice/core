@@ -51,7 +51,7 @@ namespace pcr
             ".uno:FormController/moveToNew",
             ".uno:FormController/deleteRecord",
             ".uno:FormController/refreshForm",
-            NULL
+            nullptr
         };
 
         static sal_Int32 lcl_getNavigationURLIndex( const OUString& _rNavURL )

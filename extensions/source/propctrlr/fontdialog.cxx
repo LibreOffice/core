@@ -178,8 +178,8 @@ namespace pcr
     {
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         assert(pFact); //CreateFactory fail!
-        m_nCharsId = AddTabPage("font", pFact->GetTabPageCreatorFunc(RID_SVXPAGE_CHAR_NAME), 0 );
-        AddTabPage("fonteffects", pFact->GetTabPageCreatorFunc(RID_SVXPAGE_CHAR_EFFECTS), 0 );
+        m_nCharsId = AddTabPage("font", pFact->GetTabPageCreatorFunc(RID_SVXPAGE_CHAR_NAME), nullptr );
+        AddTabPage("fonteffects", pFact->GetTabPageCreatorFunc(RID_SVXPAGE_CHAR_EFFECTS), nullptr );
     }
 
 
@@ -483,9 +483,9 @@ namespace pcr
     SfxItemSet* ControlCharacterDialog::createItemSet(SfxItemSet*& _rpSet, SfxItemPool*& _rpPool, SfxPoolItem**& _rppDefaults)
     {
         // just to be sure ....
-        _rpSet = NULL;
-        _rpPool = NULL;
-        _rppDefaults = NULL;
+        _rpSet = nullptr;
+        _rpPool = nullptr;
+        _rppDefaults = nullptr;
 
         // create and initialize the defaults
         _rppDefaults = new SfxPoolItem*[CFID_LAST_ITEM_ID - CFID_FIRST_ITEM_ID + 1];
@@ -563,17 +563,17 @@ namespace pcr
         if (_rpSet)
         {
             delete _rpSet;
-            _rpSet = NULL;
+            _rpSet = nullptr;
         }
 
         // delete the pool
         _rpPool->ReleaseDefaults(true);
             // the "true" means delete the items, too
         SfxItemPool::Free(_rpPool);
-        _rpPool = NULL;
+        _rpPool = nullptr;
 
         // reset the defaults ptr
-        _rppDefaults = NULL;
+        _rppDefaults = nullptr;
             // no need to explicitly delete the defaults, this has been done by the ReleaseDefaults
 
         delete pFontList;

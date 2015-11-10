@@ -74,7 +74,7 @@ namespace pcr
         ,m_xModel( _rxTabModel )
         ,m_xControlContainer( _rxControlCont )
         ,m_xORB( _rxORB )
-        ,pImageList( NULL )
+        ,pImageList( nullptr )
     {
         get(m_pLB_Controls, "CTRLtree");
         get(m_pPB_OK, "ok");
@@ -200,7 +200,7 @@ namespace pcr
                         aName = ::comphelper::getString( xControl->getPropertyValue( PROPERTY_NAME ) );
                             // TODO: do Basic controls have a name?
                         aImage = GetImage( xControl );
-                        m_pLB_Controls->InsertEntry( aName, aImage, aImage, 0, false, TREELIST_APPEND, xControl.get() );
+                        m_pLB_Controls->InsertEntry( aName, aImage, aImage, nullptr, false, TREELIST_APPEND, xControl.get() );
                     }
                 }
                 else
@@ -349,7 +349,7 @@ namespace pcr
                     void*  pData = pSelEntryPrev->GetUserData();
 
                     GetModel()->Remove( pSelEntryPrev );
-                    InsertEntry( aSelEntryPrevText, aImage, aImage, 0, false, nSelEntryPos, pData );
+                    InsertEntry( aSelEntryPrevText, aImage, aImage, nullptr, false, nSelEntryPos, pData );
 
                     pSelEntry = NextSelected( pSelEntry );
                 }
@@ -380,7 +380,7 @@ namespace pcr
                     aImage = GetExpandedEntryBmp(pSelEntryNext);
 
                     GetModel()->Remove( pSelEntryNext );
-                    InsertEntry( aSelEntryNextText, aImage, aImage, 0, false, nSelEntryPos, pData );
+                    InsertEntry( aSelEntryNextText, aImage, aImage, nullptr, false, nSelEntryPos, pData );
 
                     pSelEntry = PrevSelected( pSelEntry );
                 }

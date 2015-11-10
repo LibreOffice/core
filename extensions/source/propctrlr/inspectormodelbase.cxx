@@ -138,7 +138,7 @@ namespace pcr
     ::cppu::IPropertyArrayHelper& InspectorModelProperties::getInfoHelper()
     {
         ::osl::MutexGuard aGuard( m_rMutex );
-        if ( m_pPropertyInfo.get() == NULL )
+        if ( m_pPropertyInfo.get() == nullptr )
         {
             Sequence< Property > aProperties;
             describeProperties( aProperties );

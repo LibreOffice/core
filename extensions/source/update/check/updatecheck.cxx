@@ -139,8 +139,8 @@ OUString getImageFromFileName(const OUString& aFile)
             aUnpackPath  += "unpack_update";
         }
 
-        oslFileHandle hOut = NULL;
-        oslProcess hProcess = NULL;
+        oslFileHandle hOut = nullptr;
+        oslProcess hProcess = nullptr;
 
         OUString aSystemPath;
         osl::File::getSystemPathFromFileURL(aFile, aSystemPath);
@@ -149,11 +149,11 @@ OUString getImageFromFileName(const OUString& aFile)
             aUnpackPath.pData,                                  // [in] Image name
             &aSystemPath.pData, 1,                              // [in] Arguments
             osl_Process_WAIT | osl_Process_NORMAL,              // [in] Options
-            NULL,                                               // [in] Security
-            NULL,                                               // [in] Working directory
-            NULL, 0,                                            // [in] Environment variables
+            nullptr,                                               // [in] Security
+            nullptr,                                               // [in] Working directory
+            nullptr, 0,                                            // [in] Environment variables
             &hProcess,                                          // [out] Process handle
-            NULL, &hOut, NULL                                   // [out] File handles for redirected I/O
+            nullptr, &hOut, nullptr                                   // [out] File handles for redirected I/O
         );
 
         if( osl_Process_E_None == rc )
@@ -743,7 +743,7 @@ void SAL_CALL ShutdownThread::onTerminated()
 UpdateCheck::UpdateCheck()
     : m_eState(NOT_INITIALIZED)
     , m_eUpdateState(UPDATESTATES_COUNT)
-    , m_pThread(NULL)
+    , m_pThread(nullptr)
     , m_bHasExtensionUpdate(false)
     , m_bShowExtUpdDlg(false)
 {
@@ -861,7 +861,7 @@ UpdateCheck::cancel()
 
     aGuard.clear();
 
-    if( NULL != pThread )
+    if( nullptr != pThread )
         pThread->cancel();
 
     setUIState(eUIState);
@@ -947,7 +947,7 @@ UpdateCheck::pause()
 {
     osl::ClearableMutexGuard aGuard(m_aMutex);
 
-    if( NULL != m_pThread )
+    if( nullptr != m_pThread )
         m_pThread->suspend();
 
     rtl::Reference< UpdateCheckConfig > rModel = UpdateCheckConfig::get(m_xContext);
@@ -964,7 +964,7 @@ UpdateCheck::resume()
 {
     osl::ClearableMutexGuard aGuard(m_aMutex);
 
-    if( NULL != m_pThread )
+    if( nullptr != m_pThread )
         m_pThread->resume();
 
     rtl::Reference< UpdateCheckConfig > rModel = UpdateCheckConfig::get(m_xContext);
@@ -998,10 +998,10 @@ UpdateCheck::shutdownThread(bool join)
 
     // copy thread object pointer to stack
     osl::Thread *pThread = m_pThread;
-    m_pThread = NULL;
+    m_pThread = nullptr;
     aGuard.clear();
 
-    if( NULL != pThread )
+    if( nullptr != pThread )
     {
         pThread->terminate();
         if( join )
@@ -1029,7 +1029,7 @@ UpdateCheck::enableAutoCheck(bool enable)
 void
 UpdateCheck::enableDownload(bool enable, bool paused)
 {
-    OSL_ASSERT(NULL == m_pThread);
+    OSL_ASSERT(nullptr == m_pThread);
 
     State eState = DISABLED;
     if( enable )

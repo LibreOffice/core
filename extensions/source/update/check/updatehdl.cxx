@@ -103,10 +103,10 @@ UpdateHandler::UpdateHandler( const uno::Reference< uno::XComponentContext > & r
 
 UpdateHandler::~UpdateHandler()
 {
-    mxContext = NULL;
-    mxUpdDlg = NULL;
-    mxInteractionHdl = NULL;
-    mxActionListener = NULL;
+    mxContext = nullptr;
+    mxUpdDlg = nullptr;
+    mxInteractionHdl = nullptr;
+    mxActionListener = nullptr;
 }
 
 
@@ -436,7 +436,7 @@ void SAL_CALL UpdateHandler::handle( uno::Reference< task::XInteractionRequest >
             throw uno::RuntimeException( "UpdateHandler: unable to obtain service manager from component context", *this );
 
         mxInteractionHdl.set(
-            task::InteractionHandler::createWithParent(mxContext, 0),
+            task::InteractionHandler::createWithParent(mxContext, nullptr),
             uno::UNO_QUERY_THROW);
     }
     uno::Reference< task::XInteractionRequestStringResolver > xStrResolver =
@@ -1311,7 +1311,7 @@ void UpdateHandler::createDialog()
         xControl->setVisible( false );
     }
 
-    xControl->createPeer( NULL, NULL );
+    xControl->createPeer( nullptr, nullptr );
     {
         for ( int i = 0; i < HELP_BUTTON; i++ )
         {

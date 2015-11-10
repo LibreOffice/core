@@ -51,7 +51,7 @@ namespace bib
         :BibWindow( _pParent, _nStyle )
         ,m_pDatMan( _pManager )
         ,m_xDatMan( _pManager )
-        ,m_pGeneralPage( NULL )
+        ,m_pGeneralPage( nullptr )
         ,m_aFormControlContainer(this)
     {
         if ( m_xDatMan.is() )
@@ -103,7 +103,7 @@ namespace bib
 
         pGeneralPage->RemoveListeners();
         pGeneralPage.disposeAndClear();
-        m_xGeneralPage = NULL;
+        m_xGeneralPage = nullptr;
         BibWindow::dispose();
     }
 
@@ -118,7 +118,7 @@ namespace bib
             m_pGeneralPage->Hide();
             m_pGeneralPage->RemoveListeners();
             m_pGeneralPage.disposeAndClear();
-            m_xGeneralPage = 0;
+            m_xGeneralPage = nullptr;
         }
 
         m_pGeneralPage = VclPtr<BibGeneralPage>::Create( this, m_pDatMan );
@@ -155,7 +155,7 @@ namespace bib
             }
             if(bExecute)
             {
-                Application::PostUserEvent( LINK( this, BibView, CallMappingHdl ), NULL, true );
+                Application::PostUserEvent( LINK( this, BibView, CallMappingHdl ), nullptr, true );
             }
         }
     }

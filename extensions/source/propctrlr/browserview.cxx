@@ -43,7 +43,7 @@ namespace pcr
     IMPL_LINK_NOARG_TYPED(OPropertyBrowserView, OnPageActivation, LinkParamNone*, void)
     {
         m_nActivePage = m_pPropBox->GetCurPage();
-        m_aPageActivationHandler.Call(NULL);
+        m_aPageActivationHandler.Call(nullptr);
     }
 
 

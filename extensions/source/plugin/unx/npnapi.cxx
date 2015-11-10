@@ -200,7 +200,7 @@ static NPError l_NPN_NewStream( NPP instance, NPMIMEType type, const char* targe
         pStream->url = pMes->GetString();
         pStream->end = pMes->GetUINT32();
         pStream->lastmodified = pMes->GetUINT32();
-        pStream->ndata = pStream->pdata = pStream->notifyData = NULL;
+        pStream->ndata = pStream->pdata = pStream->notifyData = nullptr;
 
         pConnector->getStreamList().push_back( pStream );
         *stream = pStream;
@@ -314,7 +314,7 @@ static void l_NPN_Status( NPP instance, const char* message )
 
 static const char* l_NPN_UserAgent( NPP instance )
 {
-    static char* pAgent = NULL;
+    static char* pAgent = nullptr;
 
     sal_uInt32 nInstance = pConnector->GetNPPID( instance );
     if( nInstance == PluginConnector::UnknownNPPID )
@@ -470,8 +470,8 @@ static NPNetscapeFuncs aNetscapeFuncs =
     l_NPN_GetJavaEnv,
     l_NPN_GetJavaPeer,
 #   else
-    NULL,
-    NULL,
+    nullptr,
+    nullptr,
 #   endif
     l_NPN_GetURLNotify,
     l_NPN_PostURLNotify,
@@ -486,27 +486,27 @@ static NPPluginFuncs aPluginFuncs =
 {
     sizeof(aPluginFuncs),
     (NP_VERSION_MAJOR << 8) | NP_VERSION_MINOR,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr
 };
 
 
-oslModule pPluginLib = NULL;
-char*(*pNPP_GetMIMEDescription)()                               = NULL;
-NPError (*pNP_Initialize)(NPNetscapeFuncs*,NPPluginFuncs*)      = NULL;
-NPError (*pNP_Shutdown)()                                       = NULL;
+oslModule pPluginLib = nullptr;
+char*(*pNPP_GetMIMEDescription)()                               = nullptr;
+NPError (*pNP_Initialize)(NPNetscapeFuncs*,NPPluginFuncs*)      = nullptr;
+NPError (*pNP_Shutdown)()                                       = nullptr;
 
 std::vector< PluginConnector* > PluginConnector::allConnectors;
 
@@ -560,7 +560,7 @@ IMPL_LINK_NOARG_TYPED( PluginConnector, WorkOnNewMessageHdl, void*, void )
                 if( pInst->pShell )
                     XtDestroyWidget( static_cast<Widget>(pInst->pShell) );
 
-                pInst->pWidget = pInst->pShell = NULL;
+                pInst->pWidget = pInst->pShell = nullptr;
 
                 // the other side will call eNPP_DestroyPhase2 after this
                 NPError aReason = NPERR_NO_ERROR;
@@ -573,7 +573,7 @@ IMPL_LINK_NOARG_TYPED( PluginConnector, WorkOnNewMessageHdl, void*, void )
                 sal_uInt32 nInstance    = pMessage->GetUINT32();
                 ConnectorInstance* pInst= m_aInstances[ nInstance ];
                 NPP instance        = pInst->instance;
-                NPSavedData* pSave = NULL;
+                NPSavedData* pSave = nullptr;
 
                 NPError aRet = aPluginFuncs.destroy( instance, &pSave );
                 if( pSave )
@@ -614,7 +614,7 @@ IMPL_LINK_NOARG_TYPED( PluginConnector, WorkOnNewMessageHdl, void*, void )
                 pStream->url            = pMessage->GetString();
                 pStream->end            = pMessage->GetUINT32();
                 pStream->lastmodified   = pMessage->GetUINT32();
-                pStream->pdata = pStream->ndata = pStream->notifyData = NULL;
+                pStream->pdata = pStream->ndata = pStream->notifyData = nullptr;
                 NPBool* pSeekable       = static_cast<NPBool*>(pMessage->GetBytes());
                 m_aNPWrapStreams.push_back( pStream );
                 uint16_t nStype = NP_ASFILE;
@@ -645,7 +645,7 @@ IMPL_LINK_NOARG_TYPED( PluginConnector, WorkOnNewMessageHdl, void*, void )
                 uint16_t* pMode   = static_cast<uint16_t*>(pMessage->GetBytes());
                 int16_t*  pArgc   = static_cast<int16_t*>(pMessage->GetBytes());
                 NPP instance    = new NPP_t;
-                instance->pdata = instance->ndata = NULL;
+                instance->pdata = instance->ndata = nullptr;
                 sal_uLong nArgnBytes, nArgvBytes;
                 char* pArgn = static_cast<char*>(pMessage->GetBytes( nArgnBytes ));
                 char* pArgv = static_cast<char*>(pMessage->GetBytes( nArgvBytes ));
@@ -660,10 +660,10 @@ IMPL_LINK_NOARG_TYPED( PluginConnector, WorkOnNewMessageHdl, void*, void )
                 m_aInstances.push_back( pInst );
                 NPError aRet;
                 aRet = aPluginFuncs.newp( pInst->pMimeType, instance, *pMode, *pArgc,
-                                          pInst->nArg ? pInst->argn : NULL,
-                                          pInst->nArg ? pInst->argv : NULL,
+                                          pInst->nArg ? pInst->argn : nullptr,
+                                          pInst->nArg ? pInst->argv : nullptr,
                                           ( nSaveBytes == 4 && *reinterpret_cast<sal_uInt32*>(pSavedData) == 0 ) ?
-                                          &(pInst->aData) : NULL );
+                                          &(pInst->aData) : nullptr );
                 SAL_INFO(
                     "extensions.plugin",
                     "pluginapp: NPP_New( " << pInst->pMimeType << ", "

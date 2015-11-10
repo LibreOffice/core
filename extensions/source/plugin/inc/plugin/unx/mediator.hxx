@@ -46,9 +46,9 @@ struct MediatorMessage
     char*   m_pRun;
 
     MediatorMessage() : m_nID( 0 ), m_nBytes( 0 ),
-        m_pBytes( NULL ), m_pRun( NULL ) {}
+        m_pBytes( nullptr ), m_pRun( nullptr ) {}
     MediatorMessage( sal_uLong nID, sal_uLong nBytes, char* pBytes ) :
-            m_nID( nID ),m_nBytes( nBytes ), m_pRun( NULL )
+            m_nID( nID ),m_nBytes( nBytes ), m_pRun( nullptr )
         {
             m_pBytes = new char[ m_nBytes ];
             memcpy( m_pBytes, pBytes, (size_t)m_nBytes );

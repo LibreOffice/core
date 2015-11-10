@@ -89,7 +89,7 @@ namespace pcr
             :m_xContext(_rxContext)
             ,m_aDisposeListeners( m_aMutex )
             ,m_aControlObservers( m_aMutex )
-            ,m_pView(NULL)
+            ,m_pView(nullptr)
             ,m_bContainerFocusListening( false )
             ,m_bSuspendingPropertyHandlers( false )
             ,m_bConstructed( false )
@@ -534,7 +534,7 @@ namespace pcr
         m_aControlObservers.disposeAndClear(aEvt);
 
         // don't delete explicitly (this is done by the frame we reside in)
-        m_pView = NULL;
+        m_pView = nullptr;
 
         Reference< XComponent > xViewAsComp( m_xView, UNO_QUERY );
         if ( xViewAsComp.is() )
@@ -542,7 +542,7 @@ namespace pcr
         m_xView.clear( );
 
         m_aInspectedObjects.clear();
-        impl_bindToNewModel_nothrow( NULL );
+        impl_bindToNewModel_nothrow( nullptr );
     }
 
 
@@ -620,8 +620,8 @@ namespace pcr
     {
         if ( m_xView.is() && ( m_xView == _rSource.Source ) )
         {
-            m_xView = NULL;
-            m_pView = NULL;
+            m_xView = nullptr;
+            m_pView = nullptr;
         }
 
         for (   InterfaceArray::iterator loop = m_aInspectedObjects.begin();
@@ -1350,7 +1350,7 @@ namespace pcr
         {
             DBG_UNHANDLED_EXCEPTION();
         }
-        m_xInteractiveHandler = NULL;
+        m_xInteractiveHandler = nullptr;
     }
 
 

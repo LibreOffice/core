@@ -94,7 +94,7 @@ namespace pcr
     DEF_INFO( ident, uinameres, pos, helpid, PROP_FLAG_##flag1 | PROP_FLAG_##flag2 | PROP_FLAG_##flag3 | PROP_FLAG_##flag4 )
 
     sal_uInt16              OPropertyInfoService::s_nCount = 0;
-    OPropertyInfoImpl*      OPropertyInfoService::s_pPropertyInfos = NULL;
+    OPropertyInfoImpl*      OPropertyInfoService::s_pPropertyInfos = nullptr;
 
     const OPropertyInfoImpl* OPropertyInfoService::getPropertyInfo()
     {
@@ -540,10 +540,10 @@ namespace pcr
             s_pPropertyInfos, s_pPropertyInfos + s_nCount, aSearch, PropertyInfoLessByName() );
 
         if ( pInfo == s_pPropertyInfos + s_nCount )
-            return NULL;
+            return nullptr;
 
         if ( pInfo->sName != _rName )
-            return NULL;
+            return nullptr;
 
         return pInfo;
     }
@@ -561,7 +561,7 @@ namespace pcr
             if (s_pPropertyInfos[i].nId == _nId)
                 return &s_pPropertyInfos[i];
 
-        return NULL;
+        return nullptr;
     }
 
 
