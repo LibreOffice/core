@@ -20,6 +20,7 @@
 #define INCLUDED_CPPUHELPER_WEAK_HXX
 
 #include <cassert>
+#include <cstddef>
 #include <osl/interlck.h>
 #include <rtl/alloc.h>
 #include <com/sun/star/uno/XWeak.hpp>

@@ -19,6 +19,10 @@
 #ifndef INCLUDED_COM_SUN_STAR_UNO_TYPE_HXX
 #define INCLUDED_COM_SUN_STAR_UNO_TYPE_HXX
 
+#include <sal/config.h>
+
+#include <cstddef>
+
 #include <com/sun/star/uno/Type.h>
 #include <cppu/unotype.hxx>
 

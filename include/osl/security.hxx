@@ -20,6 +20,10 @@
 #ifndef INCLUDED_OSL_SECURITY_HXX
 #define INCLUDED_OSL_SECURITY_HXX
 
+#include <sal/config.h>
+
+#include <cstddef>
+
 #include <rtl/ustring.hxx>
 #include <osl/security_decl.hxx>
 

@@ -21,6 +21,7 @@
 
 #include <rtl/byteseq.h>
 
+#include <cstddef>
 #include <new>
 
 namespace rtl

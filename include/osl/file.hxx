@@ -25,6 +25,7 @@
 #include <string.h>
 
 #include <cassert>
+#include <cstddef>
 
 #include <sal/log.hxx>
 #include <osl/time.h>

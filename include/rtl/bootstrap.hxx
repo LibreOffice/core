@@ -18,6 +18,11 @@
  */
 #ifndef INCLUDED_RTL_BOOTSTRAP_HXX
 #define INCLUDED_RTL_BOOTSTRAP_HXX
+
+#include <sal/config.h>
+
+#include <cstddef>
+
 #include <rtl/ustring.hxx>
 #include <rtl/bootstrap.h>
 

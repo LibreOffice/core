@@ -27,6 +27,7 @@
 #include <sal/mathconf.h>
 #include <sal/types.h>
 
+#include <cstddef>
 #include <math.h>
 
 namespace rtl {

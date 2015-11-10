@@ -19,6 +19,10 @@
 #ifndef INCLUDED_COM_SUN_STAR_UNO_REFERENCE_HXX
 #define INCLUDED_COM_SUN_STAR_UNO_REFERENCE_HXX
 
+#include <sal/config.h>
+
+#include <cstddef>
+
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/XInterface.hpp>

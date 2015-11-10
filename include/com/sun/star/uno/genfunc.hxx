@@ -19,6 +19,10 @@
 #ifndef INCLUDED_COM_SUN_STAR_UNO_GENFUNC_HXX
 #define INCLUDED_COM_SUN_STAR_UNO_GENFUNC_HXX
 
+#include <sal/config.h>
+
+#include <cstddef>
+
 #include <com/sun/star/uno/genfunc.h>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/XInterface.hpp>

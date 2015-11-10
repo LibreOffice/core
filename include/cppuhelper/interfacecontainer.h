@@ -21,6 +21,7 @@
 
 #include <sal/config.h>
 
+#include <cstddef>
 #include <functional>
 #include <vector>
 #include <utility>

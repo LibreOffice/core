@@ -19,6 +19,10 @@
 #ifndef INCLUDED_CPPUHELPER_TYPEPROVIDER_HXX
 #define INCLUDED_CPPUHELPER_TYPEPROVIDER_HXX
 
+#include <sal/config.h>
+
+#include <cstddef>
+
 #include <rtl/alloc.h>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <cppuhelper/cppuhelperdllapi.h>

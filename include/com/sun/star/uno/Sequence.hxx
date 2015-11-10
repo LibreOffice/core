@@ -22,6 +22,7 @@
 #include <sal/config.h>
 
 #include <cassert>
+#include <cstddef>
 
 #include <osl/interlck.h>
 #include <com/sun/star/uno/Sequence.h>

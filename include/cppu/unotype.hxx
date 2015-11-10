@@ -22,6 +22,8 @@
 
 #include <sal/config.h>
 
+#include <cstddef>
+
 #if defined LIBO_INTERNAL_ONLY
 #include <type_traits>
 #endif

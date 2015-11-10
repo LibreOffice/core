@@ -19,6 +19,10 @@
 #ifndef INCLUDED_UNO_ENVIRONMENT_HXX
 #define INCLUDED_UNO_ENVIRONMENT_HXX
 
+#include <sal/config.h>
+
+#include <cstddef>
+
 #include <rtl/alloc.h>
 #include <rtl/ustring.hxx>
 #include <uno/environment.h>

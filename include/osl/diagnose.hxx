@@ -23,6 +23,7 @@
 
 #include <sal/config.h>
 
+#include <cstddef>
 #include <functional>
 #include <typeinfo>
 

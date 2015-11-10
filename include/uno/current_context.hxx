@@ -19,6 +19,10 @@
 #ifndef INCLUDED_UNO_CURRENT_CONTEXT_HXX
 #define INCLUDED_UNO_CURRENT_CONTEXT_HXX
 
+#include <sal/config.h>
+
+#include <cstddef>
+
 #include <uno/current_context.h>
 #include <uno/lbnames.h>
 

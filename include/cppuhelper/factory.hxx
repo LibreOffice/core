@@ -19,6 +19,10 @@
 #ifndef INCLUDED_CPPUHELPER_FACTORY_HXX
 #define INCLUDED_CPPUHELPER_FACTORY_HXX
 
+#include <sal/config.h>
+
+#include <cstddef>
+
 #include <rtl/ustring.hxx>
 #include <rtl/unload.h>
 

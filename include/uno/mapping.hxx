@@ -19,6 +19,10 @@
 #ifndef INCLUDED_UNO_MAPPING_HXX
 #define INCLUDED_UNO_MAPPING_HXX
 
+#include <sal/config.h>
+
+#include <cstddef>
+
 #include <uno/lbnames.h>
 #include <rtl/alloc.h>
 #include <rtl/ustring.hxx>

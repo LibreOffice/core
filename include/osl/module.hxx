@@ -20,6 +20,10 @@
 #ifndef INCLUDED_OSL_MODULE_HXX
 #define INCLUDED_OSL_MODULE_HXX
 
+#include <sal/config.h>
+
+#include <cstddef>
+
 #include <rtl/ustring.hxx>
 #include <osl/module.h>
 

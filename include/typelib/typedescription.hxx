@@ -19,6 +19,10 @@
 #ifndef INCLUDED_TYPELIB_TYPEDESCRIPTION_HXX
 #define INCLUDED_TYPELIB_TYPEDESCRIPTION_HXX
 
+#include <sal/config.h>
+
+#include <cstddef>
+
 #include <rtl/alloc.h>
 #include <rtl/ustring.hxx>
 #include <com/sun/star/uno/Type.h>

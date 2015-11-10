@@ -20,6 +20,10 @@
 #ifndef INCLUDED_OSL_SOCKET_DECL_HXX
 #define INCLUDED_OSL_SOCKET_DECL_HXX
 
+#include <sal/config.h>
+
+#include <cstddef>
+
 #include <osl/socket.h>
 #include <rtl/ustring.hxx>
 #include <rtl/byteseq.hxx>

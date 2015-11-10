@@ -22,6 +22,7 @@
 #include <sal/config.h>
 
 #include <cassert>
+#include <cstddef>
 #include <iomanip>
 #include <ostream>
 

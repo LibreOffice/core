@@ -23,6 +23,7 @@
 #include <sal/config.h>
 
 #include <cassert>
+#include <cstddef>
 
 #include <osl/time.h>
 #include <osl/thread.h>

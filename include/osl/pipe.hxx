@@ -19,6 +19,10 @@
 #ifndef INCLUDED_OSL_PIPE_HXX
 #define INCLUDED_OSL_PIPE_HXX
 
+#include <sal/config.h>
+
+#include <cstddef>
+
 #include <osl/pipe_decl.hxx>
 
 namespace osl
