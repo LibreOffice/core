@@ -179,7 +179,7 @@ XMLTransformerContext *XMLTransformerBase::CreateContext( sal_uInt16 nPrefix,
 
 XMLTransformerActions *XMLTransformerBase::GetUserDefinedActions( sal_uInt16 )
 {
-    return 0;
+    return nullptr;
 }
 
 XMLTransformerBase::XMLTransformerBase( XMLTransformerActionInit *pInit,
@@ -225,14 +225,14 @@ void SAL_CALL XMLTransformerBase::startElement( const OUString& rName,
                                          const Reference< XAttributeList >& rAttrList )
     throw(SAXException, RuntimeException, std::exception)
 {
-    SvXMLNamespaceMap *pRewindMap = 0;
+    SvXMLNamespaceMap *pRewindMap = nullptr;
 
     bool bRect = rName == "presentation:show-shape";
     (void)bRect;
 
     // Process namespace attributes. This must happen before creating the
     // context, because namespace decaration apply to the element name itself.
-    XMLMutableAttributeList *pMutableAttrList = 0;
+    XMLMutableAttributeList *pMutableAttrList = nullptr;
     Reference< XAttributeList > xAttrList( rAttrList );
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; i++ )
@@ -342,7 +342,7 @@ rName
         SvXMLNamespaceMap *pRewindMap = xContext->GetRewindMap();
 
         // Delete the current context.
-        xContext = 0;
+        xContext = nullptr;
 
         // Rewind a namespace map.
         if( pRewindMap )
@@ -508,7 +508,7 @@ XMLMutableAttributeList *XMLTransformerBase::ProcessAttrList(
         Reference< XAttributeList >& rAttrList, sal_uInt16 nActionMap,
            bool bClone  )
 {
-    XMLMutableAttributeList *pMutableAttrList = 0;
+    XMLMutableAttributeList *pMutableAttrList = nullptr;
     XMLTransformerActions *pActions = GetUserDefinedActions( nActionMap );
     OSL_ENSURE( pActions, "go no actions" );
     if( pActions )
@@ -1430,7 +1430,7 @@ const XMLTransformerContext *XMLTransformerBase::GetCurrentContext() const
     OSL_ENSURE( !m_pContexts->empty(), "empty stack" );
 
 
-    return m_pContexts->empty() ? 0 : m_pContexts->back().get();
+    return m_pContexts->empty() ? nullptr : m_pContexts->back().get();
 }
 
 const XMLTransformerContext *XMLTransformerBase::GetAncestorContext(
@@ -1443,7 +1443,7 @@ const XMLTransformerContext *XMLTransformerBase::GetAncestorContext(
 
     OSL_ENSURE( nSize >nPos+2 , "invalid context" );
 
-    return nSize > nPos+2 ? (*m_pContexts)[nSize-(nPos+2)].get() : 0;
+    return nSize > nPos+2 ? (*m_pContexts)[nSize-(nPos+2)].get() : nullptr;
 }
 
 bool XMLTransformerBase::isWriter() const

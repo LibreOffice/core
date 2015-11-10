@@ -204,7 +204,7 @@ XMLTextFieldImportContext::XMLTextFieldImportContext(
 ,   sServicePrefix(sAPI_textfield_prefix)
 ,   bValid(false)
 {
-    DBG_ASSERT(NULL != pService, "Need service name!");
+    DBG_ASSERT(nullptr != pService, "Need service name!");
     sServiceName = OUString::createFromAscii(pService);
 }
 
@@ -311,7 +311,7 @@ XMLTextFieldImportContext::CreateTextFieldImportContext(
     const OUString& rName,
     sal_uInt16 nToken)
 {
-    XMLTextFieldImportContext* pContext = NULL;
+    XMLTextFieldImportContext* pContext = nullptr;
 
     switch (nToken)
     {
@@ -590,7 +590,7 @@ XMLTextFieldImportContext::CreateTextFieldImportContext(
         default:
             // ignore! May not even be a textfield.
             // (Reminder: This method is called inside default:-branch)
-            pContext = NULL;
+            pContext = nullptr;
             break;
     }
 
@@ -1102,7 +1102,7 @@ void XMLTimeFieldImportContext::ProcessAttribute(
     {
         case XML_TOK_TEXTFIELD_TIME_VALUE:
         {
-            if (::sax::Converter::parseTimeOrDateTime(aDateTimeValue, 0,
+            if (::sax::Converter::parseTimeOrDateTime(aDateTimeValue, nullptr,
                         sAttrValue))
             {
                 bTimeOK = true;
@@ -1234,7 +1234,7 @@ void XMLDateFieldImportContext::ProcessAttribute(
     {
         case XML_TOK_TEXTFIELD_DATE_VALUE:
         {
-            if (::sax::Converter::parseDateTime(aDateTimeValue, 0, sAttrValue))
+            if (::sax::Converter::parseDateTime(aDateTimeValue, nullptr, sAttrValue))
             {
                 bTimeOK = true;
             }
@@ -1704,7 +1704,7 @@ void XMLSimpleDocInfoImportContext::PrepareField(
 const sal_Char* XMLSimpleDocInfoImportContext::MapTokenToServiceName(
     sal_uInt16 nToken)
 {
-    const sal_Char* pServiceName = NULL;
+    const sal_Char* pServiceName = nullptr;
 
     switch(nToken)
     {
@@ -1759,7 +1759,7 @@ const sal_Char* XMLSimpleDocInfoImportContext::MapTokenToServiceName(
 
         default:
             OSL_FAIL("no docinfo field token");
-            pServiceName = NULL;
+            pServiceName = nullptr;
             break;
     }
 
@@ -2524,7 +2524,7 @@ void XMLCountFieldImportContext::PrepareField(
 const sal_Char* XMLCountFieldImportContext::MapTokenToServiceName(
     sal_uInt16 nToken)
 {
-    const sal_Char* pServiceName = NULL;
+    const sal_Char* pServiceName = nullptr;
 
     switch (nToken)
     {
@@ -2550,7 +2550,7 @@ const sal_Char* XMLCountFieldImportContext::MapTokenToServiceName(
             pServiceName = sAPI_page_count;
             break;
         default:
-            pServiceName = NULL;
+            pServiceName = nullptr;
             OSL_FAIL("unknown count field!");
             break;
     }
@@ -2706,7 +2706,7 @@ SvXMLImportContext* XMLMacroFieldImportContext::CreateChildContext(
     const OUString& rLocalName,
     const Reference<XAttributeList> & xAttrList )
 {
-    SvXMLImportContext* pContext = NULL;
+    SvXMLImportContext* pContext = nullptr;
 
     if ( (nPrefix == XML_NAMESPACE_OFFICE) &&
          IsXMLToken( rLocalName, XML_EVENT_LISTENERS ) )
@@ -3480,7 +3480,7 @@ void XMLBibliographyFieldImportContext::PrepareField(
 const sal_Char* XMLBibliographyFieldImportContext::MapBibliographyFieldName(
     const OUString& sName)
 {
-    const sal_Char* pName = NULL;
+    const sal_Char* pName = nullptr;
 
     if (IsXMLToken(sName, XML_IDENTIFIER))
     {
@@ -3611,7 +3611,7 @@ const sal_Char* XMLBibliographyFieldImportContext::MapBibliographyFieldName(
     else
     {
         OSL_FAIL("Unknown bibliography info data");
-        pName = NULL;
+        pName = nullptr;
     }
 
     return pName;
@@ -3662,7 +3662,7 @@ SvXMLImportContext* XMLAnnotationImportContext::CreateChildContext(
     const OUString& rLocalName,
     const Reference<XAttributeList >& xAttrList )
 {
-    SvXMLImportContext *pContext = 0;
+    SvXMLImportContext *pContext = nullptr;
     if( XML_NAMESPACE_DC == nPrefix )
     {
         if( IsXMLToken( rLocalName, XML_CREATOR ) )
@@ -3818,7 +3818,7 @@ void XMLAnnotationImportContext::PrepareField(
     xPropertySet->setPropertyValue(sPropertyInitials, makeAny(sInitials));
 
     util::DateTime aDateTime;
-    if (::sax::Converter::parseDateTime(aDateTime, 0,
+    if (::sax::Converter::parseDateTime(aDateTime, nullptr,
                                             aDateBuffer.makeStringAndClear()))
     {
         /*

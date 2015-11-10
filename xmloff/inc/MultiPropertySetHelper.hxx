@@ -163,7 +163,7 @@ public:
                         const ::com::sun::star::uno::Reference<
                             ::com::sun::star::beans::XMultiPropertySet> & );
 
-    inline void resetValues() { pValues = 0; }
+    inline void resetValues() { pValues = nullptr; }
 };
 
 

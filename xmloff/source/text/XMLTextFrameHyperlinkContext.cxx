@@ -109,8 +109,8 @@ SvXMLImportContext *XMLTextFrameHyperlinkContext::CreateChildContext(
         const OUString& rLocalName,
         const Reference< XAttributeList > & xAttrList )
 {
-    SvXMLImportContext *pContext = 0;
-    XMLTextFrameContext *pTextFrameContext = 0;
+    SvXMLImportContext *pContext = nullptr;
+    XMLTextFrameContext *pTextFrameContext = nullptr;
 
     if( XML_NAMESPACE_DRAW == nPrefix )
     {

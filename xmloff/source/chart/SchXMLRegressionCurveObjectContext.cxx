@@ -89,7 +89,7 @@ SvXMLImportContext* SchXMLRegressionCurveObjectContext::CreateChildContext(
     const OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList >& xAttrList )
 {
-    SvXMLImportContext* pContext = 0;
+    SvXMLImportContext* pContext = nullptr;
 
     if( nPrefix == XML_NAMESPACE_CHART && IsXMLToken( rLocalName, XML_EQUATION ) )
     {

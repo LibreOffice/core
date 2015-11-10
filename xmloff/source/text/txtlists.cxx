@@ -38,13 +38,13 @@ using namespace ::com::sun::star;
 
 
 XMLTextListsHelper::XMLTextListsHelper()
-   :  mpProcessedLists( 0 ),
+   :  mpProcessedLists( nullptr ),
       msLastProcessedListId(),
       msListStyleOfLastProcessedList(),
       // Inconsistent behavior regarding lists (#i92811#)
-      mpMapListIdToListStyleDefaultListId( 0 ),
-      mpContinuingLists( 0 ),
-      mpListStack( 0 )
+      mpMapListIdToListStyleDefaultListId( nullptr ),
+      mpContinuingLists( nullptr ),
+      mpListStack( nullptr )
 {
 }
 
@@ -77,16 +77,16 @@ void XMLTextListsHelper::PushListContext(
     XMLTextListBlockContext *i_pListBlock)
 {
     mListStack.push(::boost::make_tuple(i_pListBlock,
-        static_cast<XMLTextListItemContext*>(0),
-        static_cast<XMLNumberedParaContext*>(0)));
+        static_cast<XMLTextListItemContext*>(nullptr),
+        static_cast<XMLNumberedParaContext*>(nullptr)));
 }
 
 void XMLTextListsHelper::PushListContext(
     XMLNumberedParaContext *i_pNumberedParagraph)
 {
     mListStack.push(::boost::make_tuple(
-        static_cast<XMLTextListBlockContext*>(0),
-        static_cast<XMLTextListItemContext*>(0), i_pNumberedParagraph));
+        static_cast<XMLTextListBlockContext*>(nullptr),
+        static_cast<XMLTextListItemContext*>(nullptr), i_pNumberedParagraph));
 }
 
 void XMLTextListsHelper::PopListContext()
@@ -139,7 +139,7 @@ void XMLTextListsHelper::KeepListAsProcessed( const OUString& sListId,
         return;
     }
 
-    if ( mpProcessedLists == 0 )
+    if ( mpProcessedLists == nullptr )
     {
         mpProcessedLists = new tMapForLists();
     }
@@ -154,7 +154,7 @@ void XMLTextListsHelper::KeepListAsProcessed( const OUString& sListId,
     // Inconsistent behavior regarding lists (#i92811#)
     if ( !sListStyleDefaultListId.isEmpty())
     {
-        if ( mpMapListIdToListStyleDefaultListId == 0 )
+        if ( mpMapListIdToListStyleDefaultListId == nullptr )
         {
             mpMapListIdToListStyleDefaultListId = new tMapForLists();
         }
@@ -172,7 +172,7 @@ void XMLTextListsHelper::KeepListAsProcessed( const OUString& sListId,
 
 bool XMLTextListsHelper::IsListProcessed( const OUString& sListId ) const
 {
-    if ( mpProcessedLists == 0 )
+    if ( mpProcessedLists == nullptr )
     {
         return false;
     }
@@ -183,7 +183,7 @@ bool XMLTextListsHelper::IsListProcessed( const OUString& sListId ) const
 OUString XMLTextListsHelper::GetListStyleOfProcessedList(
                                             const OUString& sListId ) const
 {
-    if ( mpProcessedLists != 0 )
+    if ( mpProcessedLists != nullptr )
     {
         tMapForLists::const_iterator aIter = mpProcessedLists->find( sListId );
         if ( aIter != mpProcessedLists->end() )
@@ -198,7 +198,7 @@ OUString XMLTextListsHelper::GetListStyleOfProcessedList(
 OUString XMLTextListsHelper::GetContinueListIdOfProcessedList(
                                             const OUString& sListId ) const
 {
-    if ( mpProcessedLists != 0 )
+    if ( mpProcessedLists != nullptr )
     {
         tMapForLists::const_iterator aIter = mpProcessedLists->find( sListId );
         if ( aIter != mpProcessedLists->end() )
@@ -214,7 +214,7 @@ OUString XMLTextListsHelper::GetContinueListIdOfProcessedList(
 
 OUString XMLTextListsHelper::GenerateNewListId() const
 {
-    static bool bHack = (getenv("LIBO_ONEWAY_STABLE_ODF_EXPORT") != NULL);
+    static bool bHack = (getenv("LIBO_ONEWAY_STABLE_ODF_EXPORT") != nullptr);
     OUString sTmpStr( "list" );
 
     if (bHack)
@@ -233,7 +233,7 @@ OUString XMLTextListsHelper::GenerateNewListId() const
     }
 
     OUString sNewListId( sTmpStr );
-    if ( mpProcessedLists != 0 )
+    if ( mpProcessedLists != nullptr )
     {
         long nHitCount = 0;
         while ( mpProcessedLists->find( sNewListId ) != mpProcessedLists->end() )
@@ -256,7 +256,7 @@ OUString XMLTextListsHelper::GetListIdForListBlock( XMLTextListBlockContext& rLi
         sListBlockListId = rListBlock.GetListId();
     }
 
-    if ( mpMapListIdToListStyleDefaultListId != 0 )
+    if ( mpMapListIdToListStyleDefaultListId != nullptr )
     {
         if ( !sListBlockListId.isEmpty() )
         {
@@ -281,7 +281,7 @@ OUString XMLTextListsHelper::GetListIdForListBlock( XMLTextListBlockContext& rLi
 void XMLTextListsHelper::StoreLastContinuingList( const OUString& sListId,
                                                   const OUString& sContinuingListId )
 {
-    if ( mpContinuingLists == 0 )
+    if ( mpContinuingLists == nullptr )
     {
         mpContinuingLists = new tMapForContinuingLists();
     }
@@ -292,7 +292,7 @@ void XMLTextListsHelper::StoreLastContinuingList( const OUString& sListId,
 OUString XMLTextListsHelper::GetLastContinuingListId(
                                                 const OUString& sListId ) const
 {
-    if ( mpContinuingLists != 0)
+    if ( mpContinuingLists != nullptr)
     {
         tMapForContinuingLists::const_iterator aIter =
                                                 mpContinuingLists->find( sListId );
@@ -308,7 +308,7 @@ OUString XMLTextListsHelper::GetLastContinuingListId(
 void XMLTextListsHelper::PushListOnStack( const OUString& sListId,
                                           const OUString& sListStyleName )
 {
-    if ( mpListStack == 0 )
+    if ( mpListStack == nullptr )
     {
         mpListStack = new tStackForLists();
     }
@@ -318,7 +318,7 @@ void XMLTextListsHelper::PushListOnStack( const OUString& sListId,
 }
 void XMLTextListsHelper::PopListFromStack()
 {
-    if ( mpListStack != 0 &&
+    if ( mpListStack != nullptr &&
          mpListStack->size() > 0 )
     {
         mpListStack->pop_back();
@@ -327,7 +327,7 @@ void XMLTextListsHelper::PopListFromStack()
 
 bool XMLTextListsHelper::EqualsToTopListStyleOnStack( const OUString& sListId ) const
 {
-    return mpListStack != 0 && sListId == mpListStack->back().second;
+    return mpListStack != nullptr && sListId == mpListStack->back().second;
 }
 
 OUString
@@ -377,7 +377,7 @@ XMLTextListsHelper::EnsureNumberedParagraph(
         // create default list style for top level
         sal_Int16 lev(0);
         rNPList.push_back(::std::make_pair(none,
-            MakeNumRule(i_rImport, 0, none, none, lev) ));
+            MakeNumRule(i_rImport, nullptr, none, none, lev) ));
     }
     // create num rule first because this might clamp the level...
     uno::Reference<container::XIndexReplace> xNumRules;
@@ -387,7 +387,7 @@ XMLTextListsHelper::EnsureNumberedParagraph(
         const size_t parent( std::min(static_cast<size_t>(io_rLevel),
             rNPList.size()) - 1 );
         xNumRules = MakeNumRule(i_rImport,
-            io_rLevel > 0 ? rNPList[parent].second : 0,
+            io_rLevel > 0 ? rNPList[parent].second : nullptr,
             io_rLevel > 0 ? rNPList[parent].first  : none,
             i_StyleName, io_rLevel);
     } else {

@@ -78,7 +78,7 @@ void XMLIndexMarkExport::ExportIndexMark(
     /// index marks have no styles!
     if (!bAutoStyles)
     {
-        const enum XMLTokenEnum * pElements = NULL;
+        const enum XMLTokenEnum * pElements = nullptr;
         sal_Int8 nElementNo = -1;
 
         // get index mark
@@ -152,11 +152,11 @@ void XMLIndexMarkExport::ExportIndexMark(
         }
 
         // export element
-        DBG_ASSERT(pElements != NULL, "illegal element array");
+        DBG_ASSERT(pElements != nullptr, "illegal element array");
         DBG_ASSERT(nElementNo >= 0, "illegal name array index");
         DBG_ASSERT(nElementNo <= 2, "illegal name array index");
 
-        if ((pElements != NULL) && (nElementNo != -1))
+        if ((pElements != nullptr) && (nElementNo != -1))
         {
             SvXMLElementExport aElem(rExport,
                                      XML_NAMESPACE_TEXT,

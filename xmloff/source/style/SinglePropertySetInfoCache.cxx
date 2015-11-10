@@ -41,7 +41,7 @@ bool SinglePropertySetInfoCache::hasProperty(
     // getPropertySetInfo returns a new object; Such property set infos must not
     // be cached:
     WeakReference < XPropertySetInfo > xWeakInfo( rPropSetInfo );
-    rPropSetInfo = 0;
+    rPropSetInfo = nullptr;
     rPropSetInfo = xWeakInfo;
     if( rPropSetInfo.is() )
     {

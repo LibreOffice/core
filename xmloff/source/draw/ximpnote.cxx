@@ -97,7 +97,7 @@ SvXMLImportContext *SdXMLNotesContext::CreateChildContext( sal_uInt16 nPrefix,
     const uno::Reference< xml::sax::XAttributeList>& xAttrList )
 {
     // OK, notes page is set on base class, objects can be imported on notes page
-    SvXMLImportContext *pContext = 0L;
+    SvXMLImportContext *pContext = nullptr;
 
     // some special objects inside presentation:notes context
 

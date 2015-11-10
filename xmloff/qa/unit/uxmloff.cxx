@@ -39,7 +39,7 @@ private:
 };
 
 Test::Test()
-    : pExport( NULL )
+    : pExport( nullptr )
 {
 }
 
@@ -76,7 +76,7 @@ void Test::testAutoStylePool()
     OUString aName = xPool->Add( XML_STYLE_FAMILY_TEXT_PARAGRAPH, "", aProperties );
 
     // not that interesting but worth checking
-    bool bHack = (getenv("LIBO_ONEWAY_STABLE_ODF_EXPORT") != NULL);
+    bool bHack = (getenv("LIBO_ONEWAY_STABLE_ODF_EXPORT") != nullptr);
     if (bHack)
         CPPUNIT_ASSERT_MESSAGE( "style / naming changed", aName == "Bob" );
     else

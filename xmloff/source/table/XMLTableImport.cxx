@@ -643,7 +643,7 @@ SvXMLImportContext * XMLCellImportContext::CreateChildContext( sal_uInt16 nPrefi
         }
     }
 
-    SvXMLImportContext * pContext = 0;
+    SvXMLImportContext * pContext = nullptr;
 
     // if we have a text cursor, lets  try to import some text
     if( mxCursor.is() )

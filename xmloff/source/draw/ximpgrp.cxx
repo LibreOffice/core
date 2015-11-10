@@ -47,7 +47,7 @@ SvXMLImportContext* SdXMLGroupShapeContext::CreateChildContext( sal_uInt16 nPref
     const OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList>& xAttrList )
 {
-    SvXMLImportContext* pContext = 0L;
+    SvXMLImportContext* pContext = nullptr;
 
     // #i68101#
     if( nPrefix == XML_NAMESPACE_SVG &&

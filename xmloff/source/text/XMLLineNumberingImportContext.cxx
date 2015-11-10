@@ -228,7 +228,7 @@ void XMLLineNumberingImportContext::CreateAndInsert(bool)
 
             // set style name (if it exists)
             if ( GetImport().GetStyles()->FindStyleChildContext(
-                            XML_STYLE_FAMILY_TEXT_TEXT, sStyleName ) != NULL )
+                            XML_STYLE_FAMILY_TEXT_TEXT, sStyleName ) != nullptr )
             {
                 aAny <<= GetImport().GetStyleDisplayName(
                             XML_STYLE_FAMILY_TEXT_TEXT, sStyleName );

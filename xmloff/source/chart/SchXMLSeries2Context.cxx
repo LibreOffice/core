@@ -270,12 +270,12 @@ SchXMLSeries2Context::SchXMLSeries2Context(
         mrAxes( rAxes ),
         mrStyleList( rStyleList ),
         mrRegressionStyleList( rRegressionStyleList ),
-        m_xSeries(0),
+        m_xSeries(nullptr),
         mnSeriesIndex( nSeriesIndex ),
         mnDataPointIndex( 0 ),
         m_bStockHasVolume( bStockHasVolume ),
         m_rGlobalSeriesImportInfo(rGlobalSeriesImportInfo),
-        mpAttachedAxis( NULL ),
+        mpAttachedAxis( nullptr ),
         mnAttachedAxis( 0 ),
         maGlobalChartTypeName( aGlobalChartTypeName ),
         maSeriesChartTypeName( aGlobalChartTypeName ),
@@ -639,7 +639,7 @@ SvXMLImportContext* SchXMLSeries2Context::CreateChildContext(
     const OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList >&  )
 {
-    SvXMLImportContext* pContext = 0;
+    SvXMLImportContext* pContext = nullptr;
     const SvXMLTokenMap& rTokenMap = mrImportHelper.GetSeriesElemTokenMap();
 
     switch( rTokenMap.Get( nPrefix, rLocalName ))
@@ -879,7 +879,7 @@ void SchXMLSeries2Context::setStylesToRegressionCurves(
         try
         {
             OUString aServiceName;
-            XMLPropStyleContext* pPropStyleContext = NULL;
+            XMLPropStyleContext* pPropStyleContext = nullptr;
 
             if (!rCurrentStyleName.isEmpty())
             {
@@ -918,7 +918,7 @@ void SchXMLSeries2Context::setStylesToRegressionCurves(
                 if( xRegCurve.is())
                 {
                     Reference< beans::XPropertySet > xCurveProperties( xRegCurve, uno::UNO_QUERY );
-                    if( pPropStyleContext != NULL)
+                    if( pPropStyleContext != nullptr)
                         pPropStyleContext->FillPropertySet( xCurveProperties );
 
                     xRegCurve->setEquationProperties( iStyle->m_xEquationProperties );

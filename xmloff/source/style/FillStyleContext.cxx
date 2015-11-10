@@ -138,7 +138,7 @@ XMLBitmapStyleContext::~XMLBitmapStyleContext()
 
 SvXMLImportContext* XMLBitmapStyleContext::CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList )
 {
-    SvXMLImportContext *pContext = 0;
+    SvXMLImportContext *pContext = nullptr;
     if( (XML_NAMESPACE_OFFICE == nPrefix) && xmloff::token::IsXMLToken( rLocalName, xmloff::token::XML_BINARY_DATA ) )
     {
         OUString sURL;
@@ -168,7 +168,7 @@ void XMLBitmapStyleContext::EndElement()
     if( sURL.isEmpty() && mxBase64Stream.is() )
     {
         sURL = GetImport().ResolveGraphicObjectURLFromBase64( mxBase64Stream );
-        mxBase64Stream = 0;
+        mxBase64Stream = nullptr;
         maAny <<= sURL;
     }
 

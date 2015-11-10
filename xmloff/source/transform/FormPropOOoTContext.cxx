@@ -156,7 +156,7 @@ XMLTransformerContext *XMLFormPropOOoTransformerContext::CreateChildContext(
         const OUString& rQName,
         const Reference< XAttributeList >& )
 {
-    XMLTransformerContext *pContext = 0;
+    XMLTransformerContext *pContext = nullptr;
 
     if( XML_NAMESPACE_FORM == nPrefix &&
         IsXMLToken( rLocalName, XML_PROPERTY_VALUE ) )

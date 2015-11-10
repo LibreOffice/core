@@ -145,7 +145,7 @@ XMLTextStyleContext::XMLTextStyleContext( SvXMLImport& rImport,
 ,   bHasCombinedCharactersLetter( false )
 // Inherited paragraph style lost information about unset numbering (#i69523#)
 ,   mbListStyleSet( false )
-,   pEventContext( NULL )
+,   pEventContext( nullptr )
 {
 }
 
@@ -158,7 +158,7 @@ SvXMLImportContext *XMLTextStyleContext::CreateChildContext(
         const OUString& rLocalName,
         const Reference< XAttributeList > & xAttrList )
 {
-    SvXMLImportContext *pContext = 0;
+    SvXMLImportContext *pContext = nullptr;
 
     if( XML_NAMESPACE_STYLE == nPrefix )
     {
@@ -234,7 +234,7 @@ void XMLTextStyleContext::CreateAndInsert( bool bOverwrite )
     }
 
     // tell the style about it's events (if applicable)
-    if (NULL != pEventContext)
+    if (nullptr != pEventContext)
     {
         // set event suppplier and release reference to context
         Reference<document::XEventsSupplier> xEventsSupplier(xStyle,UNO_QUERY);
@@ -593,7 +593,7 @@ void XMLTextStyleContext::FillPropertySet(
                         {
                             Sequence< rtl::OUString > aSeq(1);
                             aSeq[0] = sStyleName;
-                            GetImport().SetError(XMLERROR_STYLE_PROP_VALUE | XMLERROR_FLAG_WARNING, aSeq, e.Message, NULL);
+                            GetImport().SetError(XMLERROR_STYLE_PROP_VALUE | XMLERROR_FLAG_WARNING, aSeq, e.Message, nullptr);
                         }
                         break;
                     }

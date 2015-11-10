@@ -175,10 +175,10 @@ protected:
         const ::css::uno::Reference< ::css::xml::sax::XFastAttributeList >& xAttrList );
 
     virtual XMLTextImportHelper* CreateTextImport();
-    inline void ClearTextImport() { mxTextImport = 0; }
+    inline void ClearTextImport() { mxTextImport = nullptr; }
     virtual XMLShapeImportHelper* CreateShapeImport();
     inline bool HasShapeImport() const { return mxShapeImport.is(); }
-    inline void ClearShapeImport() { mxShapeImport = 0; }
+    inline void ClearShapeImport() { mxShapeImport = nullptr; }
 
     static SchXMLImportHelper* CreateChartImport();
     ::xmloff::OFormLayerXMLImport* CreateFormImport();
@@ -571,7 +571,7 @@ inline css::uno::Reference< css::util::XNumberFormatsSupplier > & SvXMLImport::G
 
 inline SvXMLNumFmtHelper* SvXMLImport::GetDataStylesImport()
 {
-    if ( mpNumImport == NULL)
+    if ( mpNumImport == nullptr)
         _CreateDataStylesImport();
 
     return mpNumImport;

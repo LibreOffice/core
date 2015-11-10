@@ -634,7 +634,7 @@ SvXMLImportContext* SchXMLAxisContext::CreateChildContext(
     const OUString& rLocalName,
     const Reference< xml::sax::XAttributeList >& xAttrList )
 {
-    SvXMLImportContext* pContext = 0;
+    SvXMLImportContext* pContext = nullptr;
     const SvXMLTokenMap& rTokenMap = theAxisChildTokenMap::get();
 
     switch( rTokenMap.Get( p_nPrefix, rLocalName ))

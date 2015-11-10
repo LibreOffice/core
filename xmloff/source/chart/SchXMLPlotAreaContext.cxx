@@ -422,7 +422,7 @@ SvXMLImportContext* SchXMLPlotAreaContext::CreateChildContext(
     const OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList >& xAttrList )
 {
-    SvXMLImportContext* pContext = 0;
+    SvXMLImportContext* pContext = nullptr;
     const SvXMLTokenMap& rTokenMap = mrImportHelper.GetPlotAreaElemTokenMap();
 
     switch( rTokenMap.Get( nPrefix, rLocalName ))
@@ -1203,7 +1203,7 @@ SvXMLImportContext* SchXMLStatisticsObjectContext::CreateChildContext(
     const OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList >& xAttrList )
 {
-    SvXMLImportContext* pContext = 0;
+    SvXMLImportContext* pContext = nullptr;
     pContext = SvXMLImportContext::CreateChildContext( nPrefix, rLocalName, xAttrList );
     return pContext;
 }

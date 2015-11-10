@@ -49,7 +49,7 @@ SvXMLImportContext* XMLChartPropertyContext::CreateChildContext(
     ::std::vector< XMLPropertyState > &rProperties,
     const XMLPropertyState& rProp )
 {
-    SvXMLImportContext *pContext = 0;
+    SvXMLImportContext *pContext = nullptr;
 
     switch( mxMapper->getPropertySetMapper()->GetEntryContextId( rProp.mnIndex ) )
     {

@@ -192,7 +192,7 @@ bool XMLSectionExport::GetIndex(
 {
     // first, reset result
     bool bRet = false;
-    rIndex = NULL;
+    rIndex = nullptr;
 
     // get section Properties
     Reference<XPropertySet> xSectionPropSet(rSection, UNO_QUERY);
@@ -975,18 +975,18 @@ static const XMLTokenEnum* aTypeLevelNameMap[] =
 };
 
 static const sal_Char* aLevelStylePropNameTOCMap[] =
-    { NULL, "ParaStyleLevel1", "ParaStyleLevel2", "ParaStyleLevel3",
+    { nullptr, "ParaStyleLevel1", "ParaStyleLevel2", "ParaStyleLevel3",
           "ParaStyleLevel4", "ParaStyleLevel5", "ParaStyleLevel6",
           "ParaStyleLevel7", "ParaStyleLevel8", "ParaStyleLevel9",
-          "ParaStyleLevel10", NULL };
+          "ParaStyleLevel10", nullptr };
 static const sal_Char* aLevelStylePropNameTableMap[] =
-    { NULL, "ParaStyleLevel1", NULL };
+    { nullptr, "ParaStyleLevel1", nullptr };
 static const sal_Char* aLevelStylePropNameAlphaMap[] =
-    { NULL, "ParaStyleSeparator", "ParaStyleLevel1", "ParaStyleLevel2",
-          "ParaStyleLevel3", NULL };
+    { nullptr, "ParaStyleSeparator", "ParaStyleLevel1", "ParaStyleLevel2",
+          "ParaStyleLevel3", nullptr };
 static const sal_Char* aLevelStylePropNameBibliographyMap[] =
           // TODO: replace with real property names, when available
-    { NULL, "ParaStyleLevel1", "ParaStyleLevel1", "ParaStyleLevel1",
+    { nullptr, "ParaStyleLevel1", "ParaStyleLevel1", "ParaStyleLevel1",
           "ParaStyleLevel1", "ParaStyleLevel1", "ParaStyleLevel1",
           "ParaStyleLevel1", "ParaStyleLevel1", "ParaStyleLevel1",
           "ParaStyleLevel1", "ParaStyleLevel1", "ParaStyleLevel1",
@@ -994,7 +994,7 @@ static const sal_Char* aLevelStylePropNameBibliographyMap[] =
           "ParaStyleLevel1", "ParaStyleLevel1", "ParaStyleLevel1",
           "ParaStyleLevel1", "ParaStyleLevel1", "ParaStyleLevel1",
           "ParaStyleLevel1",
-          NULL };
+          nullptr };
 
 static const sal_Char** aTypeLevelStylePropNameMap[] =
 {
@@ -1073,8 +1073,8 @@ bool XMLSectionExport::ExportIndexTemplate(
         // paragraph level style name
         const sal_Char* pPropName(
             aTypeLevelStylePropNameMap[eType-TEXT_SECTION_TYPE_TOC][nOutlineLevel]);
-        OSL_ENSURE(NULL != pPropName, "can't find property name");
-        if (NULL != pPropName)
+        OSL_ENSURE(nullptr != pPropName, "can't find property name");
+        if (nullptr != pPropName)
         {
             Any aAny = rPropertySet->getPropertyValue(
                 OUString::createFromAscii(pPropName));

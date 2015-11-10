@@ -93,7 +93,7 @@ SvXMLImportContext* SchXMLDocContext::CreateChildContext(
     const OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList >& xAttrList )
 {
-    SvXMLImportContext* pContext = 0;
+    SvXMLImportContext* pContext = nullptr;
     const SvXMLTokenMap& rTokenMap = mrImportHelper.GetDocElemTokenMap();
     SvXMLImportFlags nFlags = GetImport().getImportFlags();
 
@@ -182,7 +182,7 @@ SvXMLImportContext* SchXMLBodyContext::CreateChildContext(
     const OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList >& xAttrList )
 {
-    SvXMLImportContext* pContext = 0;
+    SvXMLImportContext* pContext = nullptr;
 
     // <chart:chart> element
     if( nPrefix == XML_NAMESPACE_CHART &&

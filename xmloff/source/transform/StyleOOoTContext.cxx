@@ -269,7 +269,7 @@ XMLTypedPropertiesOOoTContext_Impl
         }
     }
     if( MAX_PROP_TYPES == nIndex )
-        return 0;
+        return nullptr;
 
     if( !m_aPropContexts[nIndex].is() )
     {
@@ -395,13 +395,13 @@ void XMLPropertiesOOoTContext_Impl::StartElement(
 {
     Reference< XAttributeList > xAttrList( rAttrList );
 
-    XMLTypedPropertiesOOoTContext_Impl * pIntervalMinorDivisorContext = 0;
+    XMLTypedPropertiesOOoTContext_Impl * pIntervalMinorDivisorContext = nullptr;
     double fIntervalMajor = 0.0;
     double fIntervalMinor = 0.0;
     bool bMoveProtect = false;
     bool bSizeProtect = false;
     OUString aProtectAttrValue;
-    XMLTypedPropertiesOOoTContext_Impl * pProtectContext = 0;
+    XMLTypedPropertiesOOoTContext_Impl * pProtectContext = nullptr;
 
     /* Attribute <style:mirror> has to be priority over attribute <style:draw>.
        The filter from OpenDocument file format to OpenOffice.org file format
@@ -411,7 +411,7 @@ void XMLPropertiesOOoTContext_Impl::StartElement(
     OUString aStyleMirrorAttrValue;
     bool bExistDrawMirror( false );
     OUString aDrawMirrorAttrValue;
-    XMLTypedPropertiesOOoTContext_Impl* pMirrorContext( 0L );
+    XMLTypedPropertiesOOoTContext_Impl* pMirrorContext( nullptr );
 
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; i++ )
@@ -1074,7 +1074,7 @@ XMLTransformerContext *XMLStyleOOoTContext::CreateChildContext(
             const OUString& rQName,
             const Reference< XAttributeList >& rAttrList )
 {
-    XMLTransformerContext *pContext = 0;
+    XMLTransformerContext *pContext = nullptr;
 
     if( XML_NAMESPACE_STYLE == nPrefix &&
         IsXMLToken( rLocalName, XML_PROPERTIES ) )
@@ -1142,7 +1142,7 @@ void XMLStyleOOoTContext::StartElement(
     OSL_ENSURE( pActions, "go no actions" );
 
     Reference< XAttributeList > xAttrList( rAttrList );
-    XMLMutableAttributeList *pMutableAttrList = 0;
+    XMLMutableAttributeList *pMutableAttrList = nullptr;
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; i++ )
     {
@@ -1294,7 +1294,7 @@ bool XMLStyleOOoTContext::IsPersistent() const
 XMLTransformerActions *XMLStyleOOoTContext::CreateTransformerActions(
         sal_uInt16 nType )
 {
-    XMLTransformerActionInit *pInit = 0;
+    XMLTransformerActionInit *pInit = nullptr;
 
     switch( nType )
     {
@@ -1354,7 +1354,7 @@ XMLTransformerActions *XMLStyleOOoTContext::CreateTransformerActions(
         break;
     }
 
-    XMLTransformerActions *pActions = 0;
+    XMLTransformerActions *pActions = nullptr;
     if( pInit )
         pActions = new XMLTransformerActions( pInit );
 

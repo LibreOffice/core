@@ -60,7 +60,7 @@ void TokenContext::StartElement(
     // - if in map: call HandleAttribute
     // - xmlns:... : ignore
     // - other: warning
-    DBG_ASSERT( mpAttributes != NULL, "no token map for attributes" );
+    DBG_ASSERT( mpAttributes != nullptr, "no token map for attributes" );
     SvXMLTokenMap aMap( mpAttributes );
 
     sal_Int16 nCount = xAttributeList->getLength();
@@ -98,9 +98,9 @@ SvXMLImportContext* TokenContext::CreateChildContext(
 {
     // call HandleChild for elements in token map. Ignore other content.
 
-    SvXMLImportContext* pContext = NULL;
+    SvXMLImportContext* pContext = nullptr;
 
-    DBG_ASSERT( mpChildren != NULL, "no token map for child elements" );
+    DBG_ASSERT( mpChildren != nullptr, "no token map for child elements" );
     SvXMLTokenMap aMap( mpChildren );
     sal_uInt16 nToken = aMap.Get( nPrefix, rLocalName );
     if( nToken != XML_TOK_UNKNOWN )
@@ -110,7 +110,7 @@ SvXMLImportContext* TokenContext::CreateChildContext(
     }
 
     // error handling: create default context and generate warning
-    if( pContext == NULL )
+    if( pContext == nullptr )
     {
         GetImport().SetError( XMLERROR_UNKNOWN_ELEMENT, rLocalName );
         pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );

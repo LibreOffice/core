@@ -121,7 +121,7 @@ namespace xmloff
         :OPropertyImport(_rImport, _nPrefix, _rName)
         ,m_rFormImport(_rImport)
         ,m_rEventManager(_rEventManager)
-        ,m_pStyleElement( NULL )
+        ,m_pStyleElement( nullptr )
         ,m_xParentContainer(_rxParentContainer)
         ,m_bImplicitGenericAttributeHandling( true )
     {
@@ -466,7 +466,7 @@ namespace xmloff
         Sequence< OUString > aNames = m_xParentContainer->getElementNames();
 
         OUString sReturn;
-        const OUString* pNames = NULL;
+        const OUString* pNames = nullptr;
         const OUString* pNamesEnd = aNames.getConstArray() + aNames.getLength();
         for (sal_Int32 i=0; i<32768; ++i)   // the limit is nearly arbitrary ...
         {
@@ -664,7 +664,7 @@ namespace xmloff
 
     OUString OControlImport::determineDefaultServiceName() const
     {
-        const sal_Char* pServiceName = NULL;
+        const sal_Char* pServiceName = nullptr;
         switch ( m_eElementType )
         {
         case OControlElement::TEXT:
@@ -688,7 +688,7 @@ namespace xmloff
         case OControlElement::DATE:              pServiceName = "com.sun.star.form.component.DateField"; break;
         default:                                 break;
         }
-        if ( pServiceName != NULL )
+        if ( pServiceName != nullptr )
             return OUString::createFromAscii( pServiceName );
         return OUString();
     }
@@ -828,10 +828,10 @@ namespace xmloff
                 return;
             }
 
-            const sal_Char* pValueProperty = NULL;
-            const sal_Char* pCurrentValueProperty = NULL;
-            const sal_Char* pMinValueProperty = NULL;
-            const sal_Char* pMaxValueProperty = NULL;
+            const sal_Char* pValueProperty = nullptr;
+            const sal_Char* pCurrentValueProperty = nullptr;
+            const sal_Char* pMinValueProperty = nullptr;
+            const sal_Char* pMaxValueProperty = nullptr;
 
             bool bRetrievedValues = false;
             bool bRetrievedValueLimits = false;
@@ -993,8 +993,8 @@ namespace xmloff
             DBG_UNHANDLED_EXCEPTION();
         }
 
-        const sal_Char* pValueProperty = NULL;
-        const sal_Char* pDefaultValueProperty = NULL;
+        const sal_Char* pValueProperty = nullptr;
+        const sal_Char* pDefaultValueProperty = nullptr;
         getRuntimeValuePropertyNames(m_eElementType, nClassId, pValueProperty, pDefaultValueProperty);
         if ( pDefaultValueProperty && pValueProperty )
         {

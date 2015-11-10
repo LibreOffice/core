@@ -34,7 +34,7 @@ struct SvXMLEnumMapEntry
 
 #define ENUM_STRING_MAP_ENTRY(name,tok) { name, sizeof(name)-1, tok }
 
-#define ENUM_STRING_MAP_END()           { NULL, 0, 0 }
+#define ENUM_STRING_MAP_END()           { nullptr, 0, 0 }
 
 /** Map a const sal_Char* (with length) to a sal_uInt16 value.
  * To be used with SvXMLUnitConverter::convertEnum(...)

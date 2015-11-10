@@ -117,7 +117,7 @@ XMLPropertiesTContext_Impl::~XMLPropertiesTContext_Impl()
 void XMLPropertiesTContext_Impl::StartElement(
         const Reference< XAttributeList >& rAttrList )
 {
-    XMLTransformerActions *pActions =  0;
+    XMLTransformerActions *pActions =  nullptr;
     sal_uInt16 nActionMap = aAttrActionMaps[m_ePropType];
     if( nActionMap < MAX_OASIS_PROP_ACTIONS )
     {
@@ -127,7 +127,7 @@ void XMLPropertiesTContext_Impl::StartElement(
 
     if( pActions )
     {
-        XMLMutableAttributeList *pAttrList = 0;
+        XMLMutableAttributeList *pAttrList = nullptr;
         if( !m_xAttrList.is() )
         {
             pAttrList = new XMLMutableAttributeList();
@@ -766,7 +766,7 @@ XMLTransformerContext *XMLStyleOASISTContext::CreateChildContext(
             const OUString& rQName,
             const Reference< XAttributeList >& rAttrList )
 {
-    XMLTransformerContext *pContext = 0;
+    XMLTransformerContext *pContext = nullptr;
 
     if( XML_NAMESPACE_STYLE == nPrefix || XML_NAMESPACE_LO_EXT == nPrefix )
     {
@@ -789,7 +789,7 @@ XMLTransformerContext *XMLStyleOASISTContext::CreateChildContext(
         if( m_xPropContext.is() && !m_bPersistent )
         {
             m_xPropContext->Export();
-            m_xPropContext = 0;
+            m_xPropContext = nullptr;
         }
 
         pContext = m_bPersistent
@@ -810,7 +810,7 @@ void XMLStyleOASISTContext::StartElement(
     OSL_ENSURE( pActions, "go no actions" );
 
     Reference< XAttributeList > xAttrList( rAttrList );
-    XMLMutableAttributeList *pMutableAttrList = 0;
+    XMLMutableAttributeList *pMutableAttrList = nullptr;
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     sal_Int16 nFamilyAttr = -1;
     m_bControlStyle = false;
@@ -919,7 +919,7 @@ void XMLStyleOASISTContext::EndElement()
         if( m_xPropContext.is() )
         {
             m_xPropContext->Export();
-            m_xPropContext = 0;
+            m_xPropContext = nullptr;
         }
         GetTransformer().GetDocHandler()->endElement( GetExportQName() );
     }
@@ -945,7 +945,7 @@ bool XMLStyleOASISTContext::IsPersistent() const
 XMLTransformerActions *XMLStyleOASISTContext::CreateTransformerActions(
         sal_uInt16 nType )
 {
-    XMLTransformerActionInit *pInit = 0;
+    XMLTransformerActionInit *pInit = nullptr;
 
     switch( nType )
     {
@@ -990,7 +990,7 @@ XMLTransformerActions *XMLStyleOASISTContext::CreateTransformerActions(
         break;
     }
 
-    XMLTransformerActions *pActions = 0;
+    XMLTransformerActions *pActions = nullptr;
     if( pInit )
         pActions = new XMLTransformerActions( pInit );
 

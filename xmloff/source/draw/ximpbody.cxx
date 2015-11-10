@@ -214,7 +214,7 @@ SvXMLImportContext *SdXMLDrawPageContext::CreateChildContext( sal_uInt16 nPrefix
     const OUString& rLocalName,
     const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList )
 {
-    SvXMLImportContext *pContext = 0L;
+    SvXMLImportContext *pContext = nullptr;
     const SvXMLTokenMap& rTokenMap = GetSdImport().GetDrawPageElemTokenMap();
 
     // some special objects inside draw:page context
@@ -294,7 +294,7 @@ SvXMLImportContext *SdXMLBodyContext::CreateChildContext(
     const OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList>& xAttrList )
 {
-    SvXMLImportContext *pContext = 0L;
+    SvXMLImportContext *pContext = nullptr;
     const SvXMLTokenMap& rTokenMap = GetSdImport().GetBodyElemTokenMap();
 
     switch(rTokenMap.Get(nPrefix, rLocalName))

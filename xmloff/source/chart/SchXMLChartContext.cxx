@@ -867,7 +867,7 @@ void SchXMLChartContext::EndElement()
 
         // set autostyles for series and data points
         const SvXMLStylesContext* pStylesCtxt = mrImportHelper.GetAutoStylesContext();
-        const SvXMLStyleContext* pStyle = NULL;
+        const SvXMLStyleContext* pStyle = nullptr;
         OUString sCurrStyleName;
 
         if( pStylesCtxt )
@@ -993,7 +993,7 @@ SvXMLImportContext* SchXMLChartContext::CreateChildContext(
     const OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList >& xAttrList )
 {
-    SvXMLImportContext* pContext = 0;
+    SvXMLImportContext* pContext = nullptr;
     const SvXMLTokenMap& rTokenMap = mrImportHelper.GetChartElemTokenMap();
     uno::Reference< chart::XChartDocument > xDoc = mrImportHelper.GetChartDocument();
     uno::Reference< beans::XPropertySet > xProp( xDoc, uno::UNO_QUERY );
@@ -1115,10 +1115,10 @@ void SchXMLChartContext::InitChart(
     uno::Reference< chart2::XChartDocument > xNewDoc( mrImportHelper.GetChartDocument(), uno::UNO_QUERY );
     if( xNewDoc.is())
     {
-        xNewDoc->setFirstDiagram( 0 );
+        xNewDoc->setFirstDiagram( nullptr );
         uno::Reference< chart2::XTitled > xTitled( xNewDoc, uno::UNO_QUERY );
         if( xTitled.is())
-            xTitled->setTitleObject( 0 );
+            xTitled->setTitleObject( nullptr );
     }
 
     //  Set the chart type via setting the diagram.
@@ -1211,7 +1211,7 @@ SvXMLImportContext* SchXMLTitleContext::CreateChildContext(
     const OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList >& )
 {
-    SvXMLImportContext* pContext = 0;
+    SvXMLImportContext* pContext = nullptr;
 
     if( (nPrefix == XML_NAMESPACE_TEXT ||
                 nPrefix == XML_NAMESPACE_LO_EXT) &&

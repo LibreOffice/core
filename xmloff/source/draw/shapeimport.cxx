@@ -111,24 +111,24 @@ XMLShapeImportHelper::XMLShapeImportHelper(
         SvXMLImport& rImporter,
         const uno::Reference< frame::XModel>& rModel,
         SvXMLImportPropertyMapper *pExtMapper )
-:   mpPageContext(NULL),
+:   mpPageContext(nullptr),
     mxModel(rModel),
 
-    mpPropertySetMapper(0L),
-    mpPresPagePropsMapper(0L),
-    mpStylesContext(0L),
-    mpAutoStylesContext(0L),
-    mpGroupShapeElemTokenMap(0L),
-    mpFrameShapeElemTokenMap(0L),
-    mp3DSceneShapeElemTokenMap(0L),
-    mp3DObjectAttrTokenMap(0L),
-    mp3DPolygonBasedAttrTokenMap(0L),
-    mp3DCubeObjectAttrTokenMap(0L),
-    mp3DSphereObjectAttrTokenMap(0L),
-    mp3DSceneShapeAttrTokenMap(0L),
-    mp3DLightAttrTokenMap(0L),
-    mpPathShapeAttrTokenMap(0L),
-    mpPolygonShapeAttrTokenMap(0L),
+    mpPropertySetMapper(nullptr),
+    mpPresPagePropsMapper(nullptr),
+    mpStylesContext(nullptr),
+    mpAutoStylesContext(nullptr),
+    mpGroupShapeElemTokenMap(nullptr),
+    mpFrameShapeElemTokenMap(nullptr),
+    mp3DSceneShapeElemTokenMap(nullptr),
+    mp3DObjectAttrTokenMap(nullptr),
+    mp3DPolygonBasedAttrTokenMap(nullptr),
+    mp3DCubeObjectAttrTokenMap(nullptr),
+    mp3DSphereObjectAttrTokenMap(nullptr),
+    mp3DSceneShapeAttrTokenMap(nullptr),
+    mp3DLightAttrTokenMap(nullptr),
+    mpPathShapeAttrTokenMap(nullptr),
+    mpPolygonShapeAttrTokenMap(nullptr),
     msStartShape("StartShape"),
     msEndShape("EndShape"),
     msStartGluePointIndex("StartGluePointIndex"),
@@ -137,7 +137,7 @@ XMLShapeImportHelper::XMLShapeImportHelper(
     mrImporter( rImporter )
 {
     mpImpl = new XMLShapeImportHelperImpl();
-    mpImpl->mpSortContext = 0;
+    mpImpl->mpSortContext = nullptr;
 
     // #88546# init to sal_False
     mpImpl->mbHandleProgressBar = false;
@@ -182,21 +182,21 @@ XMLShapeImportHelper::~XMLShapeImportHelper()
     if(mpSdPropHdlFactory)
     {
         mpSdPropHdlFactory->release();
-        mpSdPropHdlFactory = 0L;
+        mpSdPropHdlFactory = nullptr;
     }
 
     // cleanup mapper, decrease refcount. Should lead to destruction.
     if(mpPropertySetMapper)
     {
         mpPropertySetMapper->release();
-        mpPropertySetMapper = 0L;
+        mpPropertySetMapper = nullptr;
     }
 
     // cleanup presPage mapper, decrease refcount. Should lead to destruction.
     if(mpPresPagePropsMapper)
     {
         mpPresPagePropsMapper->release();
-        mpPresPagePropsMapper = 0L;
+        mpPresPagePropsMapper = nullptr;
     }
 
     delete mpGroupShapeElemTokenMap;
@@ -405,7 +405,7 @@ SvXMLShapeContext* XMLShapeImportHelper::Create3DSceneChildContext(
     const uno::Reference< xml::sax::XAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes >& rShapes)
 {
-    SdXMLShapeContext *pContext = 0L;
+    SdXMLShapeContext *pContext = nullptr;
 
     if(rShapes.is())
     {
@@ -482,7 +482,7 @@ SvXMLShapeContext* XMLShapeImportHelper::CreateGroupChildContext(
     uno::Reference< drawing::XShapes >& rShapes,
     bool bTemporaryShape)
 {
-    SdXMLShapeContext *pContext = 0L;
+    SdXMLShapeContext *pContext = nullptr;
 
     const SvXMLTokenMap& rTokenMap = GetGroupShapeElemTokenMap();
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
@@ -615,7 +615,7 @@ SvXMLShapeContext* XMLShapeImportHelper::CreateFrameChildContext(
     uno::Reference< drawing::XShapes >& rShapes,
     const uno::Reference< xml::sax::XAttributeList>& rFrameAttrList)
 {
-    SdXMLShapeContext *pContext = 0L;
+    SdXMLShapeContext *pContext = nullptr;
 
     const SvXMLTokenMap& rTokenMap = GetFrameShapeElemTokenMap();
 
@@ -700,7 +700,7 @@ SvXMLImportContext *XMLShapeImportHelper::CreateFrameChildContext(
     const OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList>& xAttrList )
 {
-    SvXMLImportContext * pContext = NULL;
+    SvXMLImportContext * pContext = nullptr;
 
     SdXMLFrameShapeContext *pFrameContext = dynamic_cast<SdXMLFrameShapeContext*>( pThisContext  );
     if( pFrameContext )
@@ -778,7 +778,7 @@ public:
     sal_Int32                       mnCurrentZ;
     ShapeSortContext*               mpParentContext;
 
-    ShapeSortContext( uno::Reference< drawing::XShapes >& rShapes, ShapeSortContext* pParentContext = NULL );
+    ShapeSortContext( uno::Reference< drawing::XShapes >& rShapes, ShapeSortContext* pParentContext = nullptr );
 
     void popGroupAndSort();
 private:
@@ -895,7 +895,7 @@ void XMLShapeImportHelper::pushGroupForSorting( uno::Reference< drawing::XShapes
 void XMLShapeImportHelper::popGroupAndSort()
 {
     DBG_ASSERT( mpImpl->mpSortContext, "No context to sort!" );
-    if( mpImpl->mpSortContext == NULL )
+    if( mpImpl->mpSortContext == nullptr )
         return;
 
     try
@@ -1097,7 +1097,7 @@ void XMLShapeImportHelper::startPage( com::sun::star::uno::Reference< com::sun::
 void XMLShapeImportHelper::endPage( com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes )
 {
     DBG_ASSERT( mpPageContext && (mpPageContext->mxShapes == rShapes), "wrong call to endPage(), no startPage called or wrong page" );
-    if( NULL == mpPageContext )
+    if( nullptr == mpPageContext )
         return;
 
     restoreConnections();

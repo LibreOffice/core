@@ -57,8 +57,8 @@ void XMLEventImportHelper::RegisterFactory(
     const OUString& rLanguage,
     XMLEventContextFactory* pFactory )
 {
-    DBG_ASSERT(pFactory != NULL, "I need a factory.");
-    if (NULL != pFactory)
+    DBG_ASSERT(pFactory != nullptr, "I need a factory.");
+    if (nullptr != pFactory)
     {
         aFactoryMap[rLanguage] = pFactory;
     }
@@ -67,11 +67,11 @@ void XMLEventImportHelper::RegisterFactory(
 void XMLEventImportHelper::AddTranslationTable(
     const XMLEventNameTranslation* pTransTable )
 {
-    if (NULL != pTransTable)
+    if (nullptr != pTransTable)
     {
         // put translation table into map
         for(const XMLEventNameTranslation* pTrans = pTransTable;
-            pTrans->sAPIName != NULL;
+            pTrans->sAPIName != nullptr;
             pTrans++)
         {
             XMLEventName aName( pTrans->nPrefix, pTrans->sXMLName );
@@ -118,7 +118,7 @@ SvXMLImportContext* XMLEventImportHelper::CreateContext(
     const OUString& rXmlEventName,
     const OUString& rLanguage)
 {
-    SvXMLImportContext* pContext = NULL;
+    SvXMLImportContext* pContext = nullptr;
 
     // translate event name form xml to api
     OUString sMacroName;
@@ -148,7 +148,7 @@ SvXMLImportContext* XMLEventImportHelper::CreateContext(
     }
 
     // default context (if no context was created above)
-    if( NULL == pContext )
+    if( nullptr == pContext )
     {
         pContext = new SvXMLImportContext(rImport, nPrefix, rLocalName);
 

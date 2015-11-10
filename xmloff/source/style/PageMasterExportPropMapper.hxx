@@ -49,7 +49,7 @@ public:
                             SvXMLExport& rExport,
                             const XMLPropertyState& rProperty,
                             SvXmlExportFlags nFlags,
-                            const ::std::vector< XMLPropertyState >* pProperties = 0,
+                            const ::std::vector< XMLPropertyState >* pProperties = nullptr,
                             sal_uInt32 nIdx = 0
                             ) const override;
     virtual void        handleSpecialItem(
@@ -57,7 +57,7 @@ public:
                             const XMLPropertyState& rProperty,
                             const SvXMLUnitConverter& rUnitConverter,
                             const SvXMLNamespaceMap& rNamespaceMap,
-                            const ::std::vector< XMLPropertyState >* pProperties = 0,
+                            const ::std::vector< XMLPropertyState >* pProperties = nullptr,
                             sal_uInt32 nIdx = 0
                             ) const override;
 };

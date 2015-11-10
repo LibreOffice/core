@@ -28,14 +28,14 @@ namespace xmloff
 
     namespace
     {
-        static PPropertyHandler s_pVCLDateHandler = NULL;
-        static PPropertyHandler s_pVCLTimeHandler = NULL;
+        static PPropertyHandler s_pVCLDateHandler = nullptr;
+        static PPropertyHandler s_pVCLTimeHandler = nullptr;
     }
 
     //= FormHandlerFactory
     PPropertyHandler FormHandlerFactory::getFormPropertyHandler( const PropertyId i_propertyId )
     {
-        PPropertyHandler pHandler( NULL );
+        PPropertyHandler pHandler( nullptr );
 
         switch ( i_propertyId )
         {
@@ -43,10 +43,10 @@ namespace xmloff
         case PID_DATE_MAX:
         case PID_DEFAULT_DATE:
         case PID_DATE:
-            if ( s_pVCLDateHandler.get() == NULL )
+            if ( s_pVCLDateHandler.get() == nullptr )
             {
                 ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-                if ( s_pVCLDateHandler == NULL )
+                if ( s_pVCLDateHandler == nullptr )
                     s_pVCLDateHandler = new VCLDateHandler();
             }
             pHandler = s_pVCLDateHandler;
@@ -56,10 +56,10 @@ namespace xmloff
         case PID_TIME_MAX:
         case PID_DEFAULT_TIME:
         case PID_TIME:
-            if ( s_pVCLTimeHandler.get() == NULL )
+            if ( s_pVCLTimeHandler.get() == nullptr )
             {
                 ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-                if ( s_pVCLTimeHandler == NULL )
+                if ( s_pVCLTimeHandler == nullptr )
                     s_pVCLTimeHandler = new VCLTimeHandler();
             }
             pHandler = s_pVCLTimeHandler;

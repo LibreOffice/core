@@ -394,10 +394,10 @@ namespace xmloff
         dbg_implCheckProperty(name, &cppu::UnoType<type>::get())
 
     #define DBG_CHECK_PROPERTY_NO_TYPE(name)    \
-        dbg_implCheckProperty(name, NULL)
+        dbg_implCheckProperty(name, nullptr)
 
     #define DBG_CHECK_PROPERTY_ASCII_NO_TYPE( name ) \
-        dbg_implCheckProperty( OUString::createFromAscii( name ), NULL )
+        dbg_implCheckProperty( OUString::createFromAscii( name ), nullptr )
 #else
     #define DBG_CHECK_PROPERTY(name, type)
     #define DBG_CHECK_PROPERTY_NO_TYPE(name)

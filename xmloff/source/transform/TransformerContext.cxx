@@ -50,7 +50,7 @@ XMLTransformerContext::XMLTransformerContext( XMLTransformerBase& rImp,
                                                 const OUString& rQName ) :
     m_rTransformer( rImp ),
     m_aQName( rQName ),
-    m_pRewindMap( 0 )
+    m_pRewindMap( nullptr )
 {
 }
 

@@ -124,7 +124,7 @@ static void lcl_export( const Reference<XPropertySet>& rPropertySet,
                  const ExportTable* pTable );
 
 #define TABLE_ENTRY(NAME,NAMESPACE,TOKEN,CONVERTER) { NAME,sizeof(NAME)-1,XML_NAMESPACE_##NAMESPACE,xmloff::token::XML_##TOKEN, CONVERTER }
-#define TABLE_END { NULL, 0, 0, 0, NULL }
+#define TABLE_END { nullptr, 0, 0, 0, nullptr }
 
 // any conversion functions
 OUString xforms_string( const Any& );
@@ -442,7 +442,7 @@ static void lcl_exportDataTypeFacets( SvXMLExport& rExport,
 {
     Reference<XPropertySetInfo> xInfo = rPropertySet->getPropertySetInfo();
     for( const ExportTable* pCurrent = pTable;
-         pCurrent->pPropertyName != NULL;
+         pCurrent->pPropertyName != nullptr;
          pCurrent++ )
     {
         OUString sName( OUString::createFromAscii( pCurrent->pPropertyName ) );
@@ -605,7 +605,7 @@ static void lcl_export( const Reference<XPropertySet>& rPropertySet,
                  const ExportTable* pTable )
 {
     for( const ExportTable* pCurrent = pTable;
-         pCurrent->pPropertyName != NULL;
+         pCurrent->pPropertyName != nullptr;
          pCurrent++ )
     {
         Any aAny = rPropertySet->getPropertyValue(
@@ -685,7 +685,7 @@ void xforms_formatTime( OUStringBuffer& aBuffer, const com::sun::star::util::Tim
 
 void xforms_formatDateTime( OUStringBuffer& aBuffer, const util::DateTime& aDateTime )
 {
-    ::sax::Converter::convertDateTime(aBuffer, aDateTime, 0);
+    ::sax::Converter::convertDateTime(aBuffer, aDateTime, nullptr);
 }
 
 OUString xforms_whitespace( const Any& rAny )

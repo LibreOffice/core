@@ -98,7 +98,7 @@ SvXMLImportContext *SdXMLDrawingPagePropertySetContext::CreateChildContext(
                    ::std::vector< XMLPropertyState > &rProperties,
                    const XMLPropertyState& rProp )
 {
-    SvXMLImportContext *pContext = 0;
+    SvXMLImportContext *pContext = nullptr;
 
     switch( mxMapper->getPropertySetMapper()->GetEntryContextId( rProp.mnIndex ) )
     {
@@ -178,7 +178,7 @@ SvXMLImportContext *SdXMLDrawingPageStyleContext::CreateChildContext(
         const OUString& rLocalName,
         const uno::Reference< xml::sax::XAttributeList > & xAttrList )
 {
-    SvXMLImportContext *pContext = 0;
+    SvXMLImportContext *pContext = nullptr;
 
     if( XML_NAMESPACE_STYLE == nPrefix &&
         IsXMLToken( rLocalName, XML_DRAWING_PAGE_PROPERTIES ) )
@@ -389,7 +389,7 @@ SdXMLPageMasterContext::SdXMLPageMasterContext(
     const OUString& rLName,
     const uno::Reference< xml::sax::XAttributeList>& xAttrList)
 :   SvXMLStyleContext(rImport, nPrfx, rLName, xAttrList, XML_STYLE_FAMILY_SD_PAGEMASTERCONEXT_ID),
-    mpPageMasterStyle( 0L )
+    mpPageMasterStyle( nullptr )
 {
     // set family to something special at SvXMLStyleContext
     // for differences in search-methods
@@ -420,7 +420,7 @@ SdXMLPageMasterContext::~SdXMLPageMasterContext()
     if(mpPageMasterStyle)
     {
         mpPageMasterStyle->ReleaseRef();
-        mpPageMasterStyle = 0L;
+        mpPageMasterStyle = nullptr;
     }
 }
 
@@ -429,7 +429,7 @@ SvXMLImportContext *SdXMLPageMasterContext::CreateChildContext(
     const OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList >& xAttrList )
 {
-    SvXMLImportContext* pContext = 0;
+    SvXMLImportContext* pContext = nullptr;
 
     if(nPrefix == XML_NAMESPACE_STYLE && IsXMLToken( rLocalName, XML_PAGE_LAYOUT_PROPERTIES) )
     {
@@ -484,7 +484,7 @@ SvXMLImportContext *SdXMLPresentationPageLayoutContext::CreateChildContext(
     const OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList >& xAttrList )
 {
-    SvXMLImportContext* pContext = 0;
+    SvXMLImportContext* pContext = nullptr;
 
     if(nPrefix == XML_NAMESPACE_PRESENTATION && IsXMLToken( rLocalName, XML_PLACEHOLDER ) )
     {
@@ -892,7 +892,7 @@ SvXMLImportContext* SdXMLMasterPageContext::CreateChildContext(
     const OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList>& xAttrList )
 {
-    SvXMLImportContext* pContext = 0;
+    SvXMLImportContext* pContext = nullptr;
     const SvXMLTokenMap& rTokenMap = GetSdImport().GetMasterPageElemTokenMap();
 
     // some special objects inside style:masterpage context
@@ -971,7 +971,7 @@ SvXMLStyleContext* SdXMLStylesContext::CreateStyleChildContext(
     const OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList >& xAttrList)
 {
-    SvXMLStyleContext* pContext = 0;
+    SvXMLStyleContext* pContext = nullptr;
     const SvXMLTokenMap& rStyleTokenMap = GetSdImport().GetStylesElemTokenMap();
 
     switch(rStyleTokenMap.Get(nPrefix, rLocalName))
@@ -1041,7 +1041,7 @@ SvXMLStyleContext* SdXMLStylesContext::CreateStyleStyleChildContext(
     const OUString& rLocalName,
     const uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList)
 {
-    SvXMLStyleContext* pContext = 0;
+    SvXMLStyleContext* pContext = nullptr;
 
     switch( nFamily )
     {
@@ -1068,7 +1068,7 @@ SvXMLStyleContext* SdXMLStylesContext::CreateDefaultStyleStyleChildContext(
     const OUString& rLocalName,
     const Reference< XAttributeList > & xAttrList )
 {
-    SvXMLStyleContext* pContext = 0;
+    SvXMLStyleContext* pContext = nullptr;
 
     switch( nFamily )
     {
@@ -1403,7 +1403,7 @@ void SdXMLStylesContext::ImpSetGraphicStyles( uno::Reference< container::XNameAc
         catch(const Exception& e)
         {
             uno::Sequence<OUString> aSeq(0);
-            const_cast<SdXMLImport*>(&GetSdImport())->SetError( XMLERROR_FLAG_WARNING | XMLERROR_API, aSeq, e.Message, NULL );
+            const_cast<SdXMLImport*>(&GetSdImport())->SetError( XMLERROR_FLAG_WARNING | XMLERROR_API, aSeq, e.Message, nullptr );
         }
     }
 
@@ -1443,7 +1443,7 @@ void SdXMLStylesContext::ImpSetGraphicStyles( uno::Reference< container::XNameAc
         catch( const Exception& e )
         {
             uno::Sequence<OUString> aSeq(0);
-            const_cast<SdXMLImport*>(&GetSdImport())->SetError( XMLERROR_FLAG_WARNING | XMLERROR_API, aSeq, e.Message, NULL );
+            const_cast<SdXMLImport*>(&GetSdImport())->SetError( XMLERROR_FLAG_WARNING | XMLERROR_API, aSeq, e.Message, nullptr );
         }
     }
 }
@@ -1491,7 +1491,7 @@ SvXMLImportContext* SdXMLMasterStylesContext::CreateChildContext(
     const OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList >& xAttrList)
 {
-    SvXMLImportContext* pContext = 0;
+    SvXMLImportContext* pContext = nullptr;
 
     if(nPrefix == XML_NAMESPACE_STYLE
        && IsXMLToken( rLocalName, XML_MASTER_PAGE ) )

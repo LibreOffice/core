@@ -228,7 +228,7 @@ SvXMLImportContext *CreateSettingsContext(SvXMLImport& rImport, sal_uInt16 p_nPr
                         const uno::Reference<xml::sax::XAttributeList>& xAttrList,
                         beans::PropertyValue& rProp, XMLConfigBaseContext* pBaseContext)
 {
-    SvXMLImportContext *pContext = 0;
+    SvXMLImportContext *pContext = nullptr;
 
     rProp.Name.clear();
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
@@ -305,7 +305,7 @@ SvXMLImportContext *XMLDocumentSettingsContext::CreateChildContext( sal_uInt16 p
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
 {
-    SvXMLImportContext *pContext = 0;
+    SvXMLImportContext *pContext = nullptr;
     OUString sName;
 
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
@@ -338,12 +338,12 @@ SvXMLImportContext *XMLDocumentSettingsContext::CreateChildContext( sal_uInt16 p
                 if (IsXMLToken(aLocalConfigName, XML_VIEW_SETTINGS))
                     pContext = new XMLConfigItemSetContext(GetImport(),
                                         p_nPrefix, rLocalName, xAttrList,
-                                        m_pData->aViewProps, NULL);
+                                        m_pData->aViewProps, nullptr);
                 else if (IsXMLToken(aLocalConfigName,
                                                 XML_CONFIGURATION_SETTINGS))
                     pContext = new XMLConfigItemSetContext(GetImport(),
                                         p_nPrefix, rLocalName, xAttrList,
-                                        m_pData->aConfigProps, NULL);
+                                        m_pData->aConfigProps, nullptr);
                 else
                 {
                     m_pData->aDocSpecificSettings.push_back( SettingsGroup( aLocalConfigName, uno::Any() ) );
@@ -353,7 +353,7 @@ SvXMLImportContext *XMLDocumentSettingsContext::CreateChildContext( sal_uInt16 p
 
                     pContext = new XMLConfigItemSetContext(GetImport(),
                                         p_nPrefix, rLocalName, xAttrList,
-                                        settingsPos->aSettings, NULL);
+                                        settingsPos->aSettings, nullptr);
                 }
             }
         }
@@ -602,7 +602,7 @@ void XMLConfigItemContext::EndElement()
         else if (IsXMLToken(msType, XML_DATETIME))
         {
             util::DateTime aDateTime;
-            ::sax::Converter::parseDateTime(aDateTime, 0, msValue);
+            ::sax::Converter::parseDateTime(aDateTime, nullptr, msValue);
             mrAny <<= aDateTime;
         }
         else if (IsXMLToken(msType, XML_BASE64BINARY))

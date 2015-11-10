@@ -81,7 +81,7 @@ XMLTransformerContext *XMLPersElemContentTContext::CreateChildContext(
         const OUString& rQName,
         const Reference< XAttributeList >& )
 {
-    XMLTransformerContext *pContext = 0;
+    XMLTransformerContext *pContext = nullptr;
 
     XMLTransformerActions::key_type aKey( nPrefix, rLocalName );
     XMLTransformerActions::const_iterator aIter =
@@ -138,7 +138,7 @@ XMLTransformerContext *XMLPersElemContentTContext::CreateChildContext(
             if( pContext && !pContext->IsPersistent() )
             {
                 delete pContext;
-                pContext = 0;
+                pContext = nullptr;
             }
             break;
         }

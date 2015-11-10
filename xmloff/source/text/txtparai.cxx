@@ -405,7 +405,7 @@ XMLImpHyperlinkContext_Impl::XMLImpHyperlinkContext_Impl(
     {
         // hyperlink without an URL is not imported.
         delete mpHint;
-        mpHint = NULL;
+        mpHint = nullptr;
     }
     else
     {
@@ -415,7 +415,7 @@ XMLImpHyperlinkContext_Impl::XMLImpHyperlinkContext_Impl(
 
 XMLImpHyperlinkContext_Impl::~XMLImpHyperlinkContext_Impl()
 {
-    if( mpHint != NULL )
+    if( mpHint != nullptr )
         mpHint->SetEnd( GetImport().GetTextImport()
                             ->GetCursorAsRange()->getStart() );
 }
@@ -1523,7 +1523,7 @@ XMLImpSpanContext_Impl::XMLImpSpanContext_Impl(
                                               )
 :   SvXMLImportContext( rImport, nPrfx, rLName )
 ,   m_rHints( rHints )
-,   pHint( 0  )
+,   pHint( nullptr  )
 ,   rIgnoreLeadingSpace( rIgnLeadSpace )
 ,   nStarFontsConvFlags( nSFConvFlags & (CONV_FROM_STAR_BATS|CONV_FROM_STAR_MATH) )
 {
@@ -1568,7 +1568,7 @@ SvXMLImportContext *XMLImpSpanContext_Impl::CreateChildContext(
         sal_uInt8 nStarFontsConvFlags
      )
 {
-    SvXMLImportContext *pContext = 0;
+    SvXMLImportContext *pContext = nullptr;
 
     switch( nToken )
     {
@@ -1770,7 +1770,7 @@ SvXMLImportContext *XMLImpSpanContext_Impl::CreateChildContext(
                 rImport, *rImport.GetTextImport().get(), nPrefix, rLocalName,
                 nToken);
         // #108784# import draw elements (except control shapes in headers)
-        if( pContext == NULL &&
+        if( pContext == nullptr &&
             !( rImport.GetTextImport()->IsInHeaderFooter() &&
                nPrefix == XML_NAMESPACE_DRAW &&
                IsXMLToken( rLocalName, XML_CONTROL ) ) )
@@ -1837,7 +1837,7 @@ XMLParaContext::XMLParaContext(
     xStart( rImport.GetTextImport()->GetCursorAsRange()->getStart() ),
     m_bHaveAbout(false),
     nOutlineLevel( IsXMLToken( rLName, XML_H ) ? 1 : -1 ),
-    pHints( 0 ),
+    pHints( nullptr ),
     // Lost outline numbering in master document (#i73509#)
     mbOutlineLevelAttrFound( false ),
     bIgnoreLeadingSpace( true ),
@@ -2348,7 +2348,7 @@ SvXMLImportContext *XMLNumberedParaContext::CreateChildContext(
     sal_uInt16 i_nPrefix, const OUString& i_rLocalName,
     const Reference< xml::sax::XAttributeList > & i_xAttrList )
 {
-    SvXMLImportContext *pContext( 0 );
+    SvXMLImportContext *pContext( nullptr );
 
     if ( XML_NAMESPACE_TEXT == i_nPrefix ||
             XML_NAMESPACE_LO_EXT == i_nPrefix )

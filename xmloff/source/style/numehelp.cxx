@@ -44,7 +44,7 @@ using namespace xmloff::token;
 XMLNumberFormatAttributesExportHelper::XMLNumberFormatAttributesExportHelper(
             ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >& xTempNumberFormatsSupplier)
     : xNumberFormats(xTempNumberFormatsSupplier.is() ? xTempNumberFormatsSupplier->getNumberFormats() : ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormats > ()),
-    pExport(NULL),
+    pExport(nullptr),
     sStandardFormat(XML_STANDARDFORMAT),
     sType(XML_TYPE),
     msCurrencySymbol(XML_CURRENCYSYMBOL),

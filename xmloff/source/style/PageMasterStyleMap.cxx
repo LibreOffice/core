@@ -269,7 +269,7 @@ const XMLPropertyMapEntry aXMLPageMasterStyleMap[] =
     HFMAP( "FooterFillBitmapOffsetX",             XML_NAMESPACE_DRAW,     XML_TILE_REPEAT_OFFSET,     XML_SW_TYPE_BITMAPREPOFFSETX|MID_FLAG_MULTI_PROPERTY,   CTF_PM_FOOTERREPEAT_OFFSET_X ),
     HFMAP( "FooterFillBitmapOffsetY",             XML_NAMESPACE_DRAW,     XML_TILE_REPEAT_OFFSET,     XML_SW_TYPE_BITMAPREPOFFSETY|MID_FLAG_MULTI_PROPERTY,   CTF_PM_FOOTERREPEAT_OFFSET_Y ),
 
-    { 0L, 0, 0, XML_EMPTY, 0, 0, SvtSaveOptions::ODFVER_010, false } // index 190
+    { nullptr, 0, 0, XML_EMPTY, 0, 0, SvtSaveOptions::ODFVER_010, false } // index 190
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

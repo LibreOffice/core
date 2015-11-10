@@ -74,7 +74,7 @@ SvXMLImportContext* XMLScriptChildContext::CreateChildContext(
     sal_uInt16 nPrefix, const OUString& rLocalName,
     const Reference< xml::sax::XAttributeList >& xAttrList )
 {
-    SvXMLImportContext* pContext = NULL;
+    SvXMLImportContext* pContext = nullptr;
 
     if ( m_xDocumentScripts.is() )
     {   // document supports embedding scripts/macros
@@ -112,7 +112,7 @@ SvXMLImportContext* XMLScriptContext::CreateChildContext(
     sal_uInt16 nPrefix, const OUString& rLName,
     const Reference<XAttributeList>& xAttrList )
 {
-    SvXMLImportContext* pContext = NULL;
+    SvXMLImportContext* pContext = nullptr;
 
     if ( nPrefix == XML_NAMESPACE_OFFICE )
     {

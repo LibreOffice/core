@@ -85,7 +85,7 @@ SvXMLImportContext* SchemaSimpleTypeContext::HandleChild(
     const OUString& rLocalName,
     const Reference<XAttributeList>& )
 {
-    SvXMLImportContext* pContext = NULL;
+    SvXMLImportContext* pContext = nullptr;
     switch( nToken )
     {
     case XML_RESTRICTION:
@@ -97,7 +97,7 @@ SvXMLImportContext* SchemaSimpleTypeContext::HandleChild(
         OSL_FAIL( "Booo!" );
     }
 
-    return ( pContext != NULL )
+    return ( pContext != nullptr )
         ? pContext
         : new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
 }

@@ -216,7 +216,7 @@ void XMLErrors::ThrowErrorAsSAXException(sal_Int32 nIdMask)
             Any aAny;
             aAny <<= rErr.aParams;
             throw SAXParseException(
-                rErr.sExceptionMessage, NULL, aAny,
+                rErr.sExceptionMessage, nullptr, aAny,
                 rErr.sPublicId, rErr.sSystemId, rErr.nRow, rErr.nColumn );
         }
     }

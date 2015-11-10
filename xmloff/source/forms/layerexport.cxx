@@ -76,7 +76,7 @@ namespace xmloff
 
     OFormLayerXMLExport_Impl::OFormLayerXMLExport_Impl(SvXMLExport& _rContext)
         :m_rContext(_rContext)
-        ,m_pControlNumberStyles(NULL)
+        ,m_pControlNumberStyles(nullptr)
     {
         initializePropertyMaps();
 

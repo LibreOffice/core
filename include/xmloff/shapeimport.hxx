@@ -310,7 +310,7 @@ protected:
 public:
     XMLShapeImportHelper( SvXMLImport& rImporter,
         const css::uno::Reference< css::frame::XModel>& rModel,
-    SvXMLImportPropertyMapper *pExtMapper=0 );
+    SvXMLImportPropertyMapper *pExtMapper=nullptr );
 
     virtual ~XMLShapeImportHelper();
 

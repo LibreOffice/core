@@ -73,7 +73,7 @@ SvXMLImportContext *PagePropertySetContext::CreateChildContext(
         default:
             break;
     }
-    SvXMLImportContext *pContext = 0;
+    SvXMLImportContext *pContext = nullptr;
 
     switch( mxMapper->getPropertySetMapper()
                     ->GetEntryContextId( rProp.mnIndex ) )

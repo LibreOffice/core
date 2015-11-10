@@ -54,7 +54,7 @@ SvXMLImportContext *PageHeaderFooterContext::CreateChildContext( sal_uInt16 nPre
                                             const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
 {
-    SvXMLImportContext *pContext = 0;
+    SvXMLImportContext *pContext = nullptr;
 
     if( XML_NAMESPACE_STYLE == nPrefix && IsXMLToken( rLName, XML_HEADER_FOOTER_PROPERTIES ) )
     {

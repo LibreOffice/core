@@ -51,7 +51,7 @@ void XMLCreateElemTransformerContext::StartElement(
 
     XMLTransformerContextVector aChildContexts;
 
-    XMLMutableAttributeList *pMutableAttrList = 0;
+    XMLMutableAttributeList *pMutableAttrList = nullptr;
     XMLTransformerActions *pActions =
         GetTransformer().GetUserDefinedActions( m_nActionMap );
     OSL_ENSURE( pActions, "go no actions" );

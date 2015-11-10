@@ -43,7 +43,7 @@ namespace xmloff { namespace token {
 
 
 #if OSL_DEBUG_LEVEL > 0
-    #define TOKEN( s, e ) { sizeof(s)-1, s, NULL, e }
+    #define TOKEN( s, e ) { sizeof(s)-1, s, nullptr, e }
 #else
     #define TOKEN( s, e ) { sizeof(s)-1, s, NULL }
 #endif
@@ -51,7 +51,7 @@ namespace xmloff { namespace token {
     struct XMLTokenEntry aTokenList[] =
     {
 #if OSL_DEBUG_LEVEL > 0
-        { 0, NULL, NULL, XML_TOKEN_START },
+        { 0, nullptr, nullptr, XML_TOKEN_START },
 #else
         { 0, NULL, NULL },                            // XML_TOKEN_START
 #endif
@@ -3253,7 +3253,7 @@ namespace xmloff { namespace token {
         TOKEN( "min-decimal-places",              XML_MIN_DECIMAL_PLACES ),
 
 #if OSL_DEBUG_LEVEL > 0
-        { 0, NULL, NULL,                       XML_TOKEN_END }
+        { 0, nullptr, nullptr,                       XML_TOKEN_END }
 #else
         { 0, NULL, NULL                       /* XML_TOKEN_END */ }
 #endif

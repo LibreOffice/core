@@ -128,7 +128,7 @@ SvXMLImportContext *SdXMLDocContext_Impl::CreateChildContext(
     const OUString& rLocalName,
     const uno::Reference<xml::sax::XAttributeList>& xAttrList)
 {
-    SvXMLImportContext* pContext = 0L;
+    SvXMLImportContext* pContext = nullptr;
 
     const SvXMLTokenMap& rTokenMap = GetSdImport().GetDocElemTokenMap();
     switch(rTokenMap.Get(nPrefix, rLocalName))
@@ -285,17 +285,17 @@ SdXMLImport::SdXMLImport(
     OUString const & implementationName,
     bool bIsDraw, SvXMLImportFlags nImportFlags )
 :   SvXMLImport( xContext, implementationName, nImportFlags ),
-    mpMasterStylesContext(0L),
-    mpDocElemTokenMap(0L),
-    mpBodyElemTokenMap(0L),
-    mpStylesElemTokenMap(0L),
-    mpMasterPageElemTokenMap(0L),
-    mpMasterPageAttrTokenMap(0L),
-    mpPageMasterAttrTokenMap(0L),
-    mpPageMasterStyleAttrTokenMap(0L),
-    mpDrawPageAttrTokenMap(0L),
-    mpDrawPageElemTokenMap(0L),
-    mpPresentationPlaceholderAttrTokenMap(0L),
+    mpMasterStylesContext(nullptr),
+    mpDocElemTokenMap(nullptr),
+    mpBodyElemTokenMap(nullptr),
+    mpStylesElemTokenMap(nullptr),
+    mpMasterPageElemTokenMap(nullptr),
+    mpMasterPageAttrTokenMap(nullptr),
+    mpPageMasterAttrTokenMap(nullptr),
+    mpPageMasterStyleAttrTokenMap(nullptr),
+    mpDrawPageAttrTokenMap(nullptr),
+    mpDrawPageElemTokenMap(nullptr),
+    mpPresentationPlaceholderAttrTokenMap(nullptr),
     mnNewPageCount(0L),
     mnNewMasterPageCount(0L),
     mbIsDraw(bIsDraw),
@@ -637,7 +637,7 @@ SvXMLImportContext *SdXMLImport::CreateContext(sal_uInt16 nPrefix,
     const OUString& rLocalName,
     const uno::Reference<xml::sax::XAttributeList>& xAttrList)
 {
-    SvXMLImportContext* pContext = 0;
+    SvXMLImportContext* pContext = nullptr;
 
     if(XML_NAMESPACE_OFFICE == nPrefix &&
         ( IsXMLToken( rLocalName, XML_DOCUMENT_STYLES ) ||
@@ -665,14 +665,14 @@ SvXMLImportContext *SdXMLImport::CreateContext(sal_uInt16 nPrefix,
 SvXMLImportContext *SdXMLImport::CreateMetaContext(const OUString& rLocalName,
     const uno::Reference<xml::sax::XAttributeList>&)
 {
-    SvXMLImportContext* pContext = 0L;
+    SvXMLImportContext* pContext = nullptr;
 
     if (getImportFlags() & SvXMLImportFlags::META)
     {
         uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
             GetModel(), uno::UNO_QUERY_THROW);
         uno::Reference<document::XDocumentProperties> const xDocProps(
-            (IsStylesOnlyMode()) ? 0 : xDPS->getDocumentProperties());
+            (IsStylesOnlyMode()) ? nullptr : xDPS->getDocumentProperties());
         pContext = new SvXMLMetaDocumentContext(*this,
                         XML_NAMESPACE_OFFICE, rLocalName,
                         xDocProps);
@@ -689,7 +689,7 @@ SvXMLImportContext *SdXMLImport::CreateMetaContext(const OUString& rLocalName,
 SvXMLImportContext *SdXMLImport::CreateBodyContext(const OUString& rLocalName,
     const uno::Reference<xml::sax::XAttributeList>&)
 {
-    SvXMLImportContext *pContext = 0;
+    SvXMLImportContext *pContext = nullptr;
     pContext = new SdXMLBodyContext(*this, XML_NAMESPACE_OFFICE, rLocalName);
     return pContext;
 }
@@ -745,7 +745,7 @@ SvXMLImportContext *SdXMLImport::CreateFontDeclsContext(const OUString& rLocalNa
 SvXMLImportContext *SdXMLImport::CreateScriptContext(
                                        const OUString& rLocalName )
 {
-    SvXMLImportContext *pContext = 0;
+    SvXMLImportContext *pContext = nullptr;
 
     pContext = new XMLScriptContext( *this,
                                     XML_NAMESPACE_OFFICE, rLocalName,
@@ -853,13 +853,13 @@ void SdXMLImport::SetStatistics(
         const uno::Sequence<beans::NamedValue> & i_rStats)
 {
     static const char* s_stats[] =
-        { "ObjectCount", 0 };
+        { "ObjectCount", nullptr };
 
     SvXMLImport::SetStatistics(i_rStats);
 
     sal_uInt32 nCount(10);
     for (sal_Int32 i = 0; i < i_rStats.getLength(); ++i) {
-        for (const char** pStat = s_stats; *pStat != 0; ++pStat) {
+        for (const char** pStat = s_stats; *pStat != nullptr; ++pStat) {
             if (i_rStats[i].Name.equalsAscii(*pStat)) {
                 sal_Int32 val = 0;
                 if (i_rStats[i].Value >>= val) {

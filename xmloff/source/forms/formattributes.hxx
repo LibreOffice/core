@@ -255,7 +255,7 @@ namespace xmloff
             const SvXMLEnumMapEntry*        pEnumMap;               // the enum map, if appliable
             bool                        bInverseSemantics;      // for booleanss: attribute and property value have the same or an inverse semantics?
 
-            AttributeAssignment() : pEnumMap(NULL), bInverseSemantics(false) { }
+            AttributeAssignment() : pEnumMap(nullptr), bInverseSemantics(false) { }
         };
 
     protected:
@@ -288,7 +288,7 @@ namespace xmloff
         */
         void    addStringProperty(
             const sal_Char* _pAttributeName, const OUString& _rPropertyName,
-            const sal_Char* _pAttributeDefault = NULL);
+            const sal_Char* _pAttributeDefault = nullptr);
 
         /** add a attribute assignment referring to a boolean property to the map
 
@@ -348,7 +348,7 @@ namespace xmloff
         void    addEnumProperty(
             const sal_Char* _pAttributeName, const OUString& _rPropertyName,
             const sal_uInt16 _nAttributeDefault, const SvXMLEnumMapEntry* _pValueMap,
-            const ::com::sun::star::uno::Type* _pType = NULL);
+            const ::com::sun::star::uno::Type* _pType = nullptr);
 
     protected:
         /// some common code for the various add*Property methods

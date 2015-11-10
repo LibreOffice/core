@@ -370,7 +370,7 @@ SvXMLImportContext *SvxXMLListLevelStyleContext_Impl::CreateChildContext(
         sal_uInt16 nPrefix, const OUString& rLocalName,
         const Reference< xml::sax::XAttributeList > & xAttrList )
 {
-    SvXMLImportContext *pContext = 0;
+    SvXMLImportContext *pContext = nullptr;
     if( XML_NAMESPACE_STYLE == nPrefix &&
         ( IsXMLToken( rLocalName, XML_LIST_LEVEL_PROPERTIES ) ||
              IsXMLToken( rLocalName, XML_TEXT_PROPERTIES ) ) )
@@ -903,7 +903,7 @@ SvXMLImportContext* SvxXMLListLevelStyleAttrContext_Impl::CreateChildContext(
         sal_uInt16 nPrefix, const OUString& rLocalName,
         const Reference< xml::sax::XAttributeList > & xAttrList )
 {
-    SvXMLImportContext *pContext = 0;
+    SvXMLImportContext *pContext = nullptr;
     if ( XML_NAMESPACE_STYLE == nPrefix &&
          IsXMLToken( rLocalName, XML_LIST_LEVEL_LABEL_ALIGNMENT ) )
     {
@@ -1025,7 +1025,7 @@ SvxXMLListStyleContext::SvxXMLListStyleContext( SvXMLImport& rImport,
 ,   sIsPhysical( "IsPhysical"  )
 ,   sNumberingRules( "NumberingRules"  )
 ,   sIsContinuousNumbering( "IsContinuousNumbering"  )
-,   pLevelStyles( 0 )
+,   pLevelStyles( nullptr )
 ,   nLevels( 0 )
 ,   bConsecutive( false )
 ,   bOutline( bOutl )
@@ -1054,7 +1054,7 @@ SvXMLImportContext *SvxXMLListStyleContext::CreateChildContext(
         const OUString& rLocalName,
         const Reference< xml::sax::XAttributeList > & xAttrList )
 {
-    SvXMLImportContext *pContext = 0;
+    SvXMLImportContext *pContext = nullptr;
 
     if( XML_NAMESPACE_TEXT == nPrefix &&
         ( bOutline

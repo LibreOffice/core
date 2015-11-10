@@ -259,7 +259,7 @@ SvXMLAttributeList* SvXMLAttributeList::getImplementation( uno::Reference< uno::
                     xUT->getSomething( SvXMLAttributeList::getUnoTunnelId())));
     }
     else
-        return NULL;
+        return nullptr;
 }
 
 // XUnoTunnel

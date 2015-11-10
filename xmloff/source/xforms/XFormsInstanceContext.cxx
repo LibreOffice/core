@@ -80,7 +80,7 @@ SvXMLImportContext* XFormsInstanceContext::CreateChildContext(
     const OUString& rLocalName,
     const Reference<XAttributeList>& )
 {
-    SvXMLImportContext* pContext = NULL;
+    SvXMLImportContext* pContext = nullptr;
 
     // only the first element child of an xforms:instance element
     // is used as an instance. The other children remainder must be
@@ -99,7 +99,7 @@ SvXMLImportContext* XFormsInstanceContext::CreateChildContext(
         pContext = pInstance;
     }
 
-    DBG_ASSERT( pContext != NULL, "no context!" );
+    DBG_ASSERT( pContext != nullptr, "no context!" );
     return pContext;
 
 }
@@ -144,7 +144,7 @@ SvXMLImportContext* XFormsInstanceContext::HandleChild(
     const Reference<XAttributeList>& )
 {
     OSL_FAIL( "to be handled by CreateChildContext" );
-    return NULL;
+    return nullptr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

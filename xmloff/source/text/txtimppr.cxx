@@ -55,7 +55,7 @@ bool XMLTextImportPropertyMapper::handleSpecialItem(
     case CTF_FONTNAME:
     case CTF_FONTNAME_CJK:
     case CTF_FONTNAME_CTL:
-        if( GetImport().GetFontDecls() != NULL )
+        if( GetImport().GetFontDecls() != nullptr )
         {
             assert((
                 ( CTF_FONTFAMILYNAME ==
@@ -357,58 +357,58 @@ void XMLTextImportPropertyMapper::finished(
     bool bHasAnyWidth = false;
     bool bHasAnyMinWidth = false;
 
-    XMLPropertyState* pFontFamilyName = 0;
-    XMLPropertyState* pFontStyleName = 0;
-    XMLPropertyState* pFontFamily = 0;
-    XMLPropertyState* pFontPitch = 0;
-    XMLPropertyState* pFontCharSet = 0;
-    XMLPropertyState* pNewFontStyleName = 0;
-    XMLPropertyState* pNewFontFamily = 0;
-    XMLPropertyState* pNewFontPitch = 0;
-    XMLPropertyState* pNewFontCharSet = 0;
-    XMLPropertyState* pFontFamilyNameCJK = 0;
-    XMLPropertyState* pFontStyleNameCJK = 0;
-    XMLPropertyState* pFontFamilyCJK = 0;
-    XMLPropertyState* pFontPitchCJK = 0;
-    XMLPropertyState* pFontCharSetCJK = 0;
-    XMLPropertyState* pNewFontStyleNameCJK = 0;
-    XMLPropertyState* pNewFontFamilyCJK = 0;
-    XMLPropertyState* pNewFontPitchCJK = 0;
-    XMLPropertyState* pNewFontCharSetCJK = 0;
-    XMLPropertyState* pFontFamilyNameCTL = 0;
-    XMLPropertyState* pFontStyleNameCTL = 0;
-    XMLPropertyState* pFontFamilyCTL = 0;
-    XMLPropertyState* pFontPitchCTL = 0;
-    XMLPropertyState* pFontCharSetCTL = 0;
-    XMLPropertyState* pNewFontStyleNameCTL = 0;
-    XMLPropertyState* pNewFontFamilyCTL = 0;
-    XMLPropertyState* pNewFontPitchCTL = 0;
-    XMLPropertyState* pNewFontCharSetCTL = 0;
-    XMLPropertyState* pAllBorderDistance = 0;
-    XMLPropertyState* pBorderDistances[4] = { 0, 0, 0, 0 };
-    XMLPropertyState* pNewBorderDistances[4] = { 0, 0, 0, 0 };
-    XMLPropertyState* pAllBorder = 0;
-    XMLPropertyState* pBorders[4] = { 0, 0, 0, 0 };
-    XMLPropertyState* pNewBorders[4] = { 0, 0, 0, 0 };
-    XMLPropertyState* pAllBorderWidth = 0;
-    XMLPropertyState* pBorderWidths[4] = { 0, 0, 0, 0 };
-    XMLPropertyState* pCharAllBorderDistance = 0;
-    XMLPropertyState* pCharBorderDistances[4] = { 0, 0, 0, 0 };
-    XMLPropertyState* pCharNewBorderDistances[4] = { 0, 0, 0, 0 };
-    XMLPropertyState* pCharAllBorder = 0;
-    XMLPropertyState* pCharBorders[4] = { 0, 0, 0, 0 };
-    XMLPropertyState* pCharNewBorders[4] = { 0, 0, 0, 0 };
-    XMLPropertyState* pCharAllBorderWidth = 0;
-    XMLPropertyState* pCharBorderWidths[4] = { 0, 0, 0, 0 };
-    XMLPropertyState* pVertOrient = 0;
-    XMLPropertyState* pVertOrientRelAsChar = 0;
-    XMLPropertyState* pBackTransparency = NULL; // transparency in %
-    XMLPropertyState* pBackTransparent = NULL;  // transparency as boolean
-    XMLPropertyState* pAllParaMargin = 0;
-    XMLPropertyState* pParaMargins[4] = { 0, 0, 0, 0 };
+    XMLPropertyState* pFontFamilyName = nullptr;
+    XMLPropertyState* pFontStyleName = nullptr;
+    XMLPropertyState* pFontFamily = nullptr;
+    XMLPropertyState* pFontPitch = nullptr;
+    XMLPropertyState* pFontCharSet = nullptr;
+    XMLPropertyState* pNewFontStyleName = nullptr;
+    XMLPropertyState* pNewFontFamily = nullptr;
+    XMLPropertyState* pNewFontPitch = nullptr;
+    XMLPropertyState* pNewFontCharSet = nullptr;
+    XMLPropertyState* pFontFamilyNameCJK = nullptr;
+    XMLPropertyState* pFontStyleNameCJK = nullptr;
+    XMLPropertyState* pFontFamilyCJK = nullptr;
+    XMLPropertyState* pFontPitchCJK = nullptr;
+    XMLPropertyState* pFontCharSetCJK = nullptr;
+    XMLPropertyState* pNewFontStyleNameCJK = nullptr;
+    XMLPropertyState* pNewFontFamilyCJK = nullptr;
+    XMLPropertyState* pNewFontPitchCJK = nullptr;
+    XMLPropertyState* pNewFontCharSetCJK = nullptr;
+    XMLPropertyState* pFontFamilyNameCTL = nullptr;
+    XMLPropertyState* pFontStyleNameCTL = nullptr;
+    XMLPropertyState* pFontFamilyCTL = nullptr;
+    XMLPropertyState* pFontPitchCTL = nullptr;
+    XMLPropertyState* pFontCharSetCTL = nullptr;
+    XMLPropertyState* pNewFontStyleNameCTL = nullptr;
+    XMLPropertyState* pNewFontFamilyCTL = nullptr;
+    XMLPropertyState* pNewFontPitchCTL = nullptr;
+    XMLPropertyState* pNewFontCharSetCTL = nullptr;
+    XMLPropertyState* pAllBorderDistance = nullptr;
+    XMLPropertyState* pBorderDistances[4] = { nullptr, nullptr, nullptr, nullptr };
+    XMLPropertyState* pNewBorderDistances[4] = { nullptr, nullptr, nullptr, nullptr };
+    XMLPropertyState* pAllBorder = nullptr;
+    XMLPropertyState* pBorders[4] = { nullptr, nullptr, nullptr, nullptr };
+    XMLPropertyState* pNewBorders[4] = { nullptr, nullptr, nullptr, nullptr };
+    XMLPropertyState* pAllBorderWidth = nullptr;
+    XMLPropertyState* pBorderWidths[4] = { nullptr, nullptr, nullptr, nullptr };
+    XMLPropertyState* pCharAllBorderDistance = nullptr;
+    XMLPropertyState* pCharBorderDistances[4] = { nullptr, nullptr, nullptr, nullptr };
+    XMLPropertyState* pCharNewBorderDistances[4] = { nullptr, nullptr, nullptr, nullptr };
+    XMLPropertyState* pCharAllBorder = nullptr;
+    XMLPropertyState* pCharBorders[4] = { nullptr, nullptr, nullptr, nullptr };
+    XMLPropertyState* pCharNewBorders[4] = { nullptr, nullptr, nullptr, nullptr };
+    XMLPropertyState* pCharAllBorderWidth = nullptr;
+    XMLPropertyState* pCharBorderWidths[4] = { nullptr, nullptr, nullptr, nullptr };
+    XMLPropertyState* pVertOrient = nullptr;
+    XMLPropertyState* pVertOrientRelAsChar = nullptr;
+    XMLPropertyState* pBackTransparency = nullptr; // transparency in %
+    XMLPropertyState* pBackTransparent = nullptr;  // transparency as boolean
+    XMLPropertyState* pAllParaMargin = nullptr;
+    XMLPropertyState* pParaMargins[4] = { nullptr, nullptr, nullptr, nullptr };
     ::std::unique_ptr<XMLPropertyState> pNewParaMargins[4];
-    XMLPropertyState* pAllMargin = 0;
-    XMLPropertyState* pMargins[4] = { 0, 0, 0, 0 };
+    XMLPropertyState* pAllMargin = nullptr;
+    XMLPropertyState* pMargins[4] = { nullptr, nullptr, nullptr, nullptr };
     ::std::unique_ptr<XMLPropertyState> pNewMargins[4];
     XMLPropertyState* pFillStyle(nullptr);
     XMLPropertyState* pFillColor(nullptr);
@@ -669,7 +669,7 @@ void XMLTextImportPropertyMapper::finished(
     }
 
     // #i5775# don't overwrite %transparency with binary transparency
-    if( ( pBackTransparency != NULL ) && ( pBackTransparent != NULL ) )
+    if( ( pBackTransparency != nullptr ) && ( pBackTransparent != nullptr ) )
     {
         if( ! *static_cast<sal_Bool const *>(pBackTransparent->maValue.getValue()) )
             pBackTransparent->mnIndex = -1;

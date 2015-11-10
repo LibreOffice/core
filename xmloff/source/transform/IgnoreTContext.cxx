@@ -59,7 +59,7 @@ XMLTransformerContext *XMLIgnoreTransformerContext::CreateChildContext(
         const OUString& rQName,
         const Reference< XAttributeList >& xAttrList )
 {
-    XMLTransformerContext *pContext = 0;
+    XMLTransformerContext *pContext = nullptr;
     if( m_bIgnoreElements )
         pContext = new XMLIgnoreTransformerContext( GetTransformer(),
                                                     rQName, true,

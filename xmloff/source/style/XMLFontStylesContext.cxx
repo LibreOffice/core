@@ -408,7 +408,7 @@ bool XMLFontStylesContext::FillProperties( const OUString& rName,
     if( pFontStyle )
         pFontStyle->FillProperties( rProps, nFamilyNameIdx, nStyleNameIdx,
                                     nFamilyIdx, nPitchIdx, nCharsetIdx );
-    return 0 != pFontStyle;
+    return nullptr != pFontStyle;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

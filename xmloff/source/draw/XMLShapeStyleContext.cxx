@@ -92,7 +92,7 @@ SvXMLImportContext *XMLShapeStyleContext::CreateChildContext(
         const OUString& rLocalName,
         const Reference< xml::sax::XAttributeList > & xAttrList )
 {
-    SvXMLImportContext *pContext = 0;
+    SvXMLImportContext *pContext = nullptr;
 
     if( XML_NAMESPACE_STYLE == nPrefix || XML_NAMESPACE_LO_EXT == nPrefix )
     {
@@ -247,7 +247,7 @@ void XMLShapeStyleContext::FillPropertySet( const Reference< beans::XPropertySet
                 Sequence<OUString> const seq{ sStyleName };
                 GetImport().SetError(
                     XMLERROR_STYLE_PROP_VALUE | XMLERROR_FLAG_WARNING,
-                    seq, "empty style name reference", NULL );
+                    seq, "empty style name reference", nullptr );
                 break;
             }
 
@@ -269,7 +269,7 @@ void XMLShapeStyleContext::FillPropertySet( const Reference< beans::XPropertySet
                 aSeq[0] = sStyleName;
                 GetImport().SetError(
                     XMLERROR_STYLE_PROP_VALUE | XMLERROR_FLAG_WARNING,
-                    aSeq, e.Message, NULL );
+                    aSeq, e.Message, nullptr );
             }
             break;
         }
@@ -294,7 +294,7 @@ void XMLShapeStyleContext::FillPropertySet( const Reference< beans::XPropertySet
                 Sequence<OUString> aSeq;
                 GetImport().SetError(
                     XMLERROR_STYLE_PROP_VALUE | XMLERROR_FLAG_WARNING,
-                    aSeq, e.Message, NULL );
+                    aSeq, e.Message, nullptr );
             }
             break;
         }

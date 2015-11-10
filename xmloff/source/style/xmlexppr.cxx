@@ -199,7 +199,7 @@ public:
 FilterPropertiesInfo_Impl::FilterPropertiesInfo_Impl() :
     nCount(0),
     aPropInfos(),
-    pApiNames( 0 )
+    pApiNames( nullptr )
 {
     aLastItr = aPropInfos.begin();
 }
@@ -219,7 +219,7 @@ void FilterPropertiesInfo_Impl::AddProperty(
     if( pApiNames )
     {
         delete pApiNames;
-        pApiNames = NULL;
+        pApiNames = nullptr;
     }
 }
 
@@ -354,7 +354,7 @@ void FilterPropertiesInfo_Impl::FillPropertyStateArray(
     else
     {
         Sequence < PropertyState > aStates;
-        const PropertyState *pStates = 0;
+        const PropertyState *pStates = nullptr;
         Reference< XPropertyState > xPropState( rPropSet, UNO_QUERY );
         if( xPropState.is() )
         {
@@ -594,7 +594,7 @@ vector<XMLPropertyState> SvXMLExportPropertyMapper::_Filter(
 
     sal_Int32 nProps = mpImpl->mxPropMapper->GetEntryCount();
 
-    FilterPropertiesInfo_Impl *pFilterInfo = 0;
+    FilterPropertiesInfo_Impl *pFilterInfo = nullptr;
 
     Impl::CacheType::iterator aIter = mpImpl->maCache.find(xInfo);
     if (aIter != mpImpl->maCache.end())
@@ -903,7 +903,7 @@ void SvXMLExportPropertyMapper::_exportXML(
         uno::Reference< container::XNameContainer > xAttrContainer;
         if( (rProperty.maValue >>= xAttrContainer) && xAttrContainer.is() )
         {
-            SvXMLNamespaceMap *pNewNamespaceMap = 0;
+            SvXMLNamespaceMap *pNewNamespaceMap = nullptr;
             const SvXMLNamespaceMap *pNamespaceMap = &rNamespaceMap;
 
             uno::Sequence< OUString > aAttribNames( xAttrContainer->getElementNames() );

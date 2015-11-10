@@ -285,7 +285,7 @@ void PageStyleContext::FillPropertySet(const uno::Reference<beans::XPropertySet 
                             aSeq[0] = sStyleName;
                             GetImport().SetError(
                                 XMLERROR_STYLE_PROP_VALUE | XMLERROR_FLAG_WARNING,
-                                aSeq,e.Message,NULL);
+                                aSeq,e.Message,nullptr);
                         }
                         break;
                     }

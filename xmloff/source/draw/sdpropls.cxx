@@ -79,7 +79,7 @@ using namespace ::xmloff::token;
 #define DPMAP(name,prefix,token,type,context) _MAP(name,prefix,token,type|XML_TYPE_PROP_DRAWING_PAGE,context)
 #define TMAP(name,prefix,token,type,context) _MAP(name,prefix,token,type|XML_TYPE_PROP_TEXT,context)
 #define PMAP(name,prefix,token,type,context) _MAP(name,prefix,token,type|XML_TYPE_PROP_PARAGRAPH,context)
-#define MAP_END() { 0L, 0, 0, XML_EMPTY, 0 ,0, SvtSaveOptions::ODFVER_010, false }
+#define MAP_END() { nullptr, 0, 0, XML_EMPTY, 0 ,0, SvtSaveOptions::ODFVER_010, false }
 
 // entry list for graphic properties
 
@@ -855,12 +855,12 @@ bool XMLSdHeaderFooterVisibilityTypeHdl::exportXML(
 }
 
 XMLSdPropHdlFactory::XMLSdPropHdlFactory( uno::Reference< frame::XModel > xModel, SvXMLImport& rImport )
-: mxModel( xModel ), mpExport(0), mpImport( &rImport )
+: mxModel( xModel ), mpExport(nullptr), mpImport( &rImport )
 {
 }
 
 XMLSdPropHdlFactory::XMLSdPropHdlFactory( uno::Reference< frame::XModel > xModel, SvXMLExport& rExport )
-: mxModel( xModel ), mpExport( &rExport ), mpImport(0)
+: mxModel( xModel ), mpExport( &rExport ), mpImport(nullptr)
 {
 }
 
@@ -1190,45 +1190,45 @@ void XMLShapeExportPropertyMapper::ContextFilter(
     std::vector< XMLPropertyState >& rProperties,
     uno::Reference< beans::XPropertySet > rPropSet ) const
 {
-    XMLPropertyState* pRepeatOffsetX = NULL;
-    XMLPropertyState* pRepeatOffsetY = NULL;
-    XMLPropertyState* pTextAnimationBlinking = NULL;
-    XMLPropertyState* pTextAnimationKind = NULL;
+    XMLPropertyState* pRepeatOffsetX = nullptr;
+    XMLPropertyState* pRepeatOffsetY = nullptr;
+    XMLPropertyState* pTextAnimationBlinking = nullptr;
+    XMLPropertyState* pTextAnimationKind = nullptr;
 
     // #FontWork#
-    XMLPropertyState* pFontWorkStyle = NULL;
-    XMLPropertyState* pFontWorkAdjust = NULL;
-    XMLPropertyState* pFontWorkDistance = NULL;
-    XMLPropertyState* pFontWorkStart = NULL;
-    XMLPropertyState* pFontWorkMirror = NULL;
-    XMLPropertyState* pFontWorkOutline = NULL;
-    XMLPropertyState* pFontWorkShadow = NULL;
-    XMLPropertyState* pFontWorkShadowColor = NULL;
-    XMLPropertyState* pFontWorkShadowOffsetx = NULL;
-    XMLPropertyState* pFontWorkShadowOffsety = NULL;
-    XMLPropertyState* pFontWorkForm = NULL;
-    XMLPropertyState* pFontWorkHideform = NULL;
-    XMLPropertyState* pFontWorkShadowTransparence = NULL;
+    XMLPropertyState* pFontWorkStyle = nullptr;
+    XMLPropertyState* pFontWorkAdjust = nullptr;
+    XMLPropertyState* pFontWorkDistance = nullptr;
+    XMLPropertyState* pFontWorkStart = nullptr;
+    XMLPropertyState* pFontWorkMirror = nullptr;
+    XMLPropertyState* pFontWorkOutline = nullptr;
+    XMLPropertyState* pFontWorkShadow = nullptr;
+    XMLPropertyState* pFontWorkShadowColor = nullptr;
+    XMLPropertyState* pFontWorkShadowOffsetx = nullptr;
+    XMLPropertyState* pFontWorkShadowOffsety = nullptr;
+    XMLPropertyState* pFontWorkForm = nullptr;
+    XMLPropertyState* pFontWorkHideform = nullptr;
+    XMLPropertyState* pFontWorkShadowTransparence = nullptr;
 
     // OLE
-    XMLPropertyState* pOLEVisAreaLeft = NULL;
-    XMLPropertyState* pOLEVisAreaTop = NULL;
-    XMLPropertyState* pOLEVisAreaWidth = NULL;
-    XMLPropertyState* pOLEVisAreaHeight = NULL;
-    XMLPropertyState* pOLEIsInternal = NULL;
+    XMLPropertyState* pOLEVisAreaLeft = nullptr;
+    XMLPropertyState* pOLEVisAreaTop = nullptr;
+    XMLPropertyState* pOLEVisAreaWidth = nullptr;
+    XMLPropertyState* pOLEVisAreaHeight = nullptr;
+    XMLPropertyState* pOLEIsInternal = nullptr;
 
     // caption
-    XMLPropertyState* pCaptionIsEscRel = NULL;
-    XMLPropertyState* pCaptionEscRel = NULL;
-    XMLPropertyState* pCaptionEscAbs = NULL;
+    XMLPropertyState* pCaptionIsEscRel = nullptr;
+    XMLPropertyState* pCaptionEscRel = nullptr;
+    XMLPropertyState* pCaptionEscAbs = nullptr;
 
     // filter fo:clip
-    XMLPropertyState* pClip11State = NULL;
-    XMLPropertyState* pClipState = NULL;
+    XMLPropertyState* pClip11State = nullptr;
+    XMLPropertyState* pClipState = nullptr;
 
-    XMLPropertyState* pShapeWritingMode = NULL;
-    XMLPropertyState* pTextWritingMode = NULL;
-    XMLPropertyState* pControlWritingMode = NULL;
+    XMLPropertyState* pShapeWritingMode = nullptr;
+    XMLPropertyState* pTextWritingMode = nullptr;
+    XMLPropertyState* pControlWritingMode = nullptr;
 
     // filter properties
     for( std::vector< XMLPropertyState >::iterator aIter = rProperties.begin();
@@ -1268,7 +1268,7 @@ void XMLShapeExportPropertyMapper::ContextFilter(
                         if( text::WritingMode_LR_TB == eWritingMode )
                         {
                             property->mnIndex = -1;
-                            pShapeWritingMode = 0;
+                            pShapeWritingMode = nullptr;
                         }
                     }
                 }
@@ -1504,7 +1504,7 @@ void XMLShapeExportPropertyMapper::ContextFilter(
         pCaptionIsEscRel->mnIndex = -1;
     }
 
-    if( pClipState != NULL && pClip11State != NULL  )
+    if( pClipState != nullptr && pClip11State != nullptr  )
         pClip11State->mnIndex = -1;
 
     SvXMLExportPropertyMapper::ContextFilter(bEnableFoFontFamily, rProperties, rPropSet);
@@ -1571,13 +1571,13 @@ void XMLPageExportPropertyMapper::ContextFilter(
     std::vector< XMLPropertyState >& rProperties,
     uno::Reference< beans::XPropertySet > rPropSet ) const
 {
-    XMLPropertyState* pRepeatOffsetX = NULL;
-    XMLPropertyState* pRepeatOffsetY = NULL;
-    XMLPropertyState* pTransType = NULL;
-    XMLPropertyState* pTransDuration = NULL;
-    XMLPropertyState* pDateTimeUpdate = NULL;
-    XMLPropertyState* pDateTimeFormat = NULL;
-    XMLPropertyState* pTransitionFadeColor = NULL;
+    XMLPropertyState* pRepeatOffsetX = nullptr;
+    XMLPropertyState* pRepeatOffsetY = nullptr;
+    XMLPropertyState* pTransType = nullptr;
+    XMLPropertyState* pTransDuration = nullptr;
+    XMLPropertyState* pDateTimeUpdate = nullptr;
+    XMLPropertyState* pDateTimeFormat = nullptr;
+    XMLPropertyState* pTransitionFadeColor = nullptr;
 
     sal_Int16 nTransitionType = 0;
 

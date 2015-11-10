@@ -83,7 +83,7 @@ SvXMLImportContext *XMLTextShapePropertySetContext_Impl::CreateChildContext(
                    ::std::vector< XMLPropertyState > &rProperties,
                    const XMLPropertyState& rProp )
 {
-    SvXMLImportContext *pContext = 0;
+    SvXMLImportContext *pContext = nullptr;
 
     switch( mxMapper->getPropertySetMapper()
                     ->GetEntryContextId( rProp.mnIndex ) )
@@ -162,7 +162,7 @@ SvXMLImportContext *XMLTextShapeStyleContext::CreateChildContext(
         const OUString& rLocalName,
         const Reference< XAttributeList > & xAttrList )
 {
-    SvXMLImportContext *pContext = 0;
+    SvXMLImportContext *pContext = nullptr;
 
     if( XML_NAMESPACE_STYLE == nPrefix || XML_NAMESPACE_LO_EXT == nPrefix )
     {
@@ -226,7 +226,7 @@ void XMLTextShapeStyleContext::CreateAndInsert( bool bOverwrite )
         // set event suppplier and release reference to context
         Reference<XEventsSupplier> xEventsSupplier(xStyle, UNO_QUERY);
         static_cast<XMLEventsImportContext *>(&xEventContext)->SetEvents(xEventsSupplier);
-        xEventContext = 0;
+        xEventContext = nullptr;
     }
 }
 

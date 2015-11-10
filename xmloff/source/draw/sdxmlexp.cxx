@@ -400,11 +400,11 @@ SdXMLExport::SdXMLExport(
     mpPageMasterInfoList(new ImpXMLEXPPageMasterList()),
     mpPageMasterUsageList(new ImpXMLEXPPageMasterList()),
     mpNotesPageMasterUsageList(new ImpXMLEXPPageMasterList()),
-    mpHandoutPageMaster(NULL),
+    mpHandoutPageMaster(nullptr),
     mpAutoLayoutInfoList(new ImpXMLAutoLayoutInfoList()),
-    mpSdPropHdlFactory(0L),
-    mpPropertySetMapper(0L),
-    mpPresPagePropsMapper(0L),
+    mpSdPropHdlFactory(nullptr),
+    mpPropertySetMapper(nullptr),
+    mpPresPagePropsMapper(nullptr),
     mbIsDraw(bIsDraw),
     msPageLayoutNames( "PageLayoutNames" )
 {
@@ -657,21 +657,21 @@ SdXMLExport::~SdXMLExport()
     if(mpSdPropHdlFactory)
     {
         mpSdPropHdlFactory->release();
-        mpSdPropHdlFactory = 0L;
+        mpSdPropHdlFactory = nullptr;
     }
 
     // cleanup mapper, decrease refcount. Should lead to destruction.
     if(mpPropertySetMapper)
     {
         mpPropertySetMapper->release();
-        mpPropertySetMapper = 0L;
+        mpPropertySetMapper = nullptr;
     }
 
     // cleanup presPage mapper, decrease refcount. Should lead to destruction.
     if(mpPresPagePropsMapper)
     {
         mpPresPagePropsMapper->release();
-        mpPresPagePropsMapper = 0L;
+        mpPresPagePropsMapper = nullptr;
     }
 
     // clear evtl. temporary page master infos
@@ -679,14 +679,14 @@ SdXMLExport::~SdXMLExport()
     {
         // note: all items in this list are also in mpPageMasterInfoList
         delete mpPageMasterUsageList;
-        mpPageMasterUsageList = 0L;
+        mpPageMasterUsageList = nullptr;
     }
 
     if(mpNotesPageMasterUsageList)
     {
         // note: all items in this list are also in mpPageMasterInfoList
         delete mpNotesPageMasterUsageList;
-        mpNotesPageMasterUsageList = 0L;
+        mpNotesPageMasterUsageList = nullptr;
     }
 
     if(mpPageMasterInfoList)
@@ -695,7 +695,7 @@ SdXMLExport::~SdXMLExport()
             delete mpPageMasterInfoList->at( i );
         mpPageMasterInfoList->clear();
         delete mpPageMasterInfoList;
-        mpPageMasterInfoList = 0L;
+        mpPageMasterInfoList = nullptr;
     }
 
     // clear auto-layout infos
@@ -705,7 +705,7 @@ SdXMLExport::~SdXMLExport()
             delete mpAutoLayoutInfoList->at( i );
         mpAutoLayoutInfoList->clear();
         delete mpAutoLayoutInfoList;
-        mpAutoLayoutInfoList = 0L;
+        mpAutoLayoutInfoList = nullptr;
     }
 }
 
@@ -757,7 +757,7 @@ bool SdXMLExport::ImpPrepAutoLayoutInfo(const Reference<XDrawPage>& xPage, OUStr
         {
             if(ImpXMLAutoLayoutInfo::IsCreateNecessary(nType))
             {
-                ImpXMLEXPPageMasterInfo* pInfo = 0L;
+                ImpXMLEXPPageMasterInfo* pInfo = nullptr;
 
                 // get master-page info
                 Reference < drawing::XMasterPageTarget > xMasterPageInt(xPage, UNO_QUERY);
@@ -1293,7 +1293,7 @@ void SdXMLExport::ImpPrepPageMasterInfos()
         for (sal_Int32 nMPageId = 0; nMPageId < mnDocMasterPageCount; nMPageId++)
         {
             Reference< XDrawPage > xMasterPage( mxDocMasterPages->getByIndex(nMPageId), UNO_QUERY );
-            ImpXMLEXPPageMasterInfo* pNewInfo = 0L;
+            ImpXMLEXPPageMasterInfo* pNewInfo = nullptr;
 
             if(xMasterPage.is())
                 pNewInfo = ImpGetOrCreatePageMasterInfo(xMasterPage);
@@ -1303,7 +1303,7 @@ void SdXMLExport::ImpPrepPageMasterInfos()
             // look for page master of handout page
             if(IsImpress())
             {
-                pNewInfo = NULL;
+                pNewInfo = nullptr;
                 Reference< presentation::XPresentationPage > xPresPage(xMasterPage, UNO_QUERY);
                 if(xPresPage.is())
                 {
@@ -1401,7 +1401,7 @@ ImpXMLEXPPageMasterInfo* SdXMLExport::ImpGetPageMasterInfoByName(const OUString&
             }
         }
     }
-    return 0L;
+    return nullptr;
 }
 
 void SdXMLExport::ImpPrepDrawPageInfos()
@@ -1904,7 +1904,7 @@ void SdXMLExport::_ExportContent()
                     if( xAnimExport.is() )
                         xAnimExport->exportAnimations( *this );
 
-                    xAnimExport = NULL;
+                    xAnimExport = nullptr;
                     GetShapeExport()->setAnimationsExporter( xAnimExport );
                 }
 
@@ -2065,7 +2065,7 @@ void SdXMLExport::exportPresentationSettings()
 
         Reference< container::XNameContainer > xShows;
         Sequence< OUString > aShowNames;
-        const OUString* pShowNames = NULL;
+        const OUString* pShowNames = nullptr;
         sal_Int32 nShowCount = 0;
 
         Reference< XCustomPresentationSupplier > xSup( GetModel(), UNO_QUERY );
@@ -2708,7 +2708,7 @@ void SdXMLExport::exportAnnotations( const Reference<XDrawPage>& xDrawPage )
                 {
                     // date time
                     com::sun::star::util::DateTime aDate( xAnnotation->getDateTime() );
-                    ::sax::Converter::convertDateTime(sStringBuffer, aDate, 0, true);
+                    ::sax::Converter::convertDateTime(sStringBuffer, aDate, nullptr, true);
                     SvXMLElementExport aDateElem( *this, XML_NAMESPACE_DC, XML_DATE, true, false );
                     Characters(sStringBuffer.makeStringAndClear());
                 }

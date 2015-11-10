@@ -465,7 +465,7 @@ const SvXMLEnumMapEntry* getAnimationsEnumMap( sal_uInt16 nMap )
     }
 
     OSL_FAIL( "xmloff::getAnimationsEnumMap(), invalid map!" );
-    return NULL;
+    return nullptr;
 }
 
 const struct ImplAttributeNameConversion* getAnimationAttributeNamesConversionList()
@@ -492,7 +492,7 @@ const struct ImplAttributeNameConversion* getAnimationAttributeNamesConversionLi
         { XML_VISIBILITY,               "Visibility" },
         { XML_OPACITY,                  "Opacity" },
         { XML_DIM,                      "DimColor" },
-        { XML_TOKEN_INVALID,            NULL }
+        { XML_TOKEN_INVALID,            nullptr }
     };
 
     return gImplConversionList;
@@ -559,7 +559,7 @@ AnimationsExporterImpl::~AnimationsExporterImpl()
     if(mpSdPropHdlFactory)
     {
         mpSdPropHdlFactory->release();
-        mpSdPropHdlFactory = 0L;
+        mpSdPropHdlFactory = nullptr;
     }
 }
 

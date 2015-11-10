@@ -237,7 +237,7 @@ SvXMLImportContext *SchXMLTableContext::CreateChildContext(
     const OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList >& )
 {
-    SvXMLImportContext* pContext = 0;
+    SvXMLImportContext* pContext = nullptr;
     const SvXMLTokenMap& rTokenMap = mrImportHelper.GetTableElemTokenMap();
 
     switch( rTokenMap.Get( nPrefix, rLocalName ))
@@ -426,7 +426,7 @@ SvXMLImportContext* SchXMLTableColumnsContext::CreateChildContext(
     const OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList >& )
 {
-    SvXMLImportContext* pContext = 0;
+    SvXMLImportContext* pContext = nullptr;
 
     if( nPrefix == XML_NAMESPACE_TABLE &&
         IsXMLToken( rLocalName, XML_TABLE_COLUMN ) )
@@ -520,7 +520,7 @@ SvXMLImportContext* SchXMLTableRowsContext::CreateChildContext(
     const OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList >& )
 {
-    SvXMLImportContext* pContext = 0;
+    SvXMLImportContext* pContext = nullptr;
 
     if( nPrefix == XML_NAMESPACE_TABLE &&
         IsXMLToken( rLocalName, XML_TABLE_ROW ) )
@@ -563,7 +563,7 @@ SvXMLImportContext* SchXMLTableRowContext::CreateChildContext(
     const OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList >& )
 {
-    SvXMLImportContext* pContext = 0;
+    SvXMLImportContext* pContext = nullptr;
 
     // <table:table-cell> element
     if( nPrefix == XML_NAMESPACE_TABLE &&
@@ -676,7 +676,7 @@ SvXMLImportContext* SchXMLTableCellContext::CreateChildContext(
     const OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList >& )
 {
-    SvXMLImportContext* pContext = 0;
+    SvXMLImportContext* pContext = nullptr;
 
     // <text:list> element
     if( nPrefix == XML_NAMESPACE_TEXT && IsXMLToken( rLocalName, XML_LIST ) && mbReadText )

@@ -361,11 +361,11 @@ SvXMLNumImpData::SvXMLNumImpData(
     SvNumberFormatter* pFmt,
     const uno::Reference<uno::XComponentContext>& rxContext )
 :   pFormatter(pFmt),
-    pStylesElemTokenMap(NULL),
-    pStyleElemTokenMap(NULL),
-    pStyleAttrTokenMap(NULL),
-    pStyleElemAttrTokenMap(NULL),
-    pLocaleData(NULL),
+    pStylesElemTokenMap(nullptr),
+    pStyleElemTokenMap(nullptr),
+    pStyleAttrTokenMap(nullptr),
+    pStyleElemAttrTokenMap(nullptr),
+    pLocaleData(nullptr),
     m_xContext(rxContext)
 {
     DBG_ASSERT( rxContext.is(), "got no service manager" );
@@ -1429,7 +1429,7 @@ SvXMLNumFormatContext::SvXMLNumFormatContext( SvXMLImport& rImport,
                                     const sal_Int32 nTempKey,
                                     SvXMLStylesContext& rStyles ) :
     SvXMLStyleContext( rImport, nPrfx, rLName, xAttrList, XML_STYLE_FAMILY_DATA_STYLE ),
-    pData( NULL ),
+    pData( nullptr ),
     pStyles( &rStyles ),
     aMyConditions(),
     nType( 0 ),
@@ -1465,7 +1465,7 @@ SvXMLImportContext* SvXMLNumFormatContext::CreateChildContext(
                                     sal_uInt16 nPrfx, const OUString& rLName,
                                     const uno::Reference<xml::sax::XAttributeList>& xAttrList )
 {
-    SvXMLImportContext* pContext = NULL;
+    SvXMLImportContext* pContext = nullptr;
 
     const SvXMLTokenMap& rTokenMap = pData->GetStyleElemTokenMap();
     sal_uInt16 nToken = rTokenMap.Get( nPrfx, rLName );
@@ -1556,7 +1556,7 @@ sal_Int32 SvXMLNumFormatContext::CreateAndInsert( com::sun::star::uno::Reference
 {
     if (nKey <= -1)
     {
-        SvNumberFormatter* pFormatter = NULL;
+        SvNumberFormatter* pFormatter = nullptr;
         SvNumberFormatsSupplierObj* pObj =
                         SvNumberFormatsSupplierObj::getImplementation( xFormatsSupplier );
         if (pObj)
@@ -2200,7 +2200,7 @@ SvXMLNumFmtHelper::SvXMLNumFmtHelper(
 {
     DBG_ASSERT( rxContext.is(), "got no service manager" );
 
-    SvNumberFormatter* pFormatter = NULL;
+    SvNumberFormatter* pFormatter = nullptr;
     SvNumberFormatsSupplierObj* pObj =
                     SvNumberFormatsSupplierObj::getImplementation( rSupp );
     if (pObj)
@@ -2231,7 +2231,7 @@ SvXMLStyleContext*  SvXMLNumFmtHelper::CreateChildContext( SvXMLImport& rImport,
                 const uno::Reference<xml::sax::XAttributeList>& xAttrList,
                 SvXMLStylesContext& rStyles )
 {
-    SvXMLStyleContext* pContext = NULL;
+    SvXMLStyleContext* pContext = nullptr;
 
     const SvXMLTokenMap& rTokenMap = pData->GetStylesElemTokenMap();
     sal_uInt16 nToken = rTokenMap.Get( nPrefix, rLocalName );

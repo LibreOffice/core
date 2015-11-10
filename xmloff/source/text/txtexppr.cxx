@@ -71,7 +71,7 @@ void XMLTextExportPropertySetMapper::handleElementItem(
 
     case CTF_BACKGROUND_URL:
         {
-            const Any *pPos = 0, *pFilter = 0, *pTrans = 0;
+            const Any *pPos = nullptr, *pFilter = nullptr, *pTrans = nullptr;
             sal_uInt32 nPropIndex = rProperty.mnIndex;
 
             // these are all optional, so have to check them in order
@@ -501,175 +501,175 @@ void XMLTextExportPropertySetMapper::ContextFilter(
     Reference< XPropertySet > rPropSet ) const
 {
     // filter font
-    XMLPropertyState *pFontNameState = 0;
-    XMLPropertyState *pFontFamilyNameState = 0;
-    XMLPropertyState *pFontStyleNameState = 0;
-    XMLPropertyState *pFontFamilyState = 0;
-    XMLPropertyState *pFontPitchState = 0;
-    XMLPropertyState *pFontCharsetState = 0;
-    XMLPropertyState *pFontNameCJKState = 0;
-    XMLPropertyState *pFontFamilyNameCJKState = 0;
-    XMLPropertyState *pFontStyleNameCJKState = 0;
-    XMLPropertyState *pFontFamilyCJKState = 0;
-    XMLPropertyState *pFontPitchCJKState = 0;
-    XMLPropertyState *pFontCharsetCJKState = 0;
-    XMLPropertyState *pFontNameCTLState = 0;
-    XMLPropertyState *pFontFamilyNameCTLState = 0;
-    XMLPropertyState *pFontStyleNameCTLState = 0;
-    XMLPropertyState *pFontFamilyCTLState = 0;
-    XMLPropertyState *pFontPitchCTLState = 0;
-    XMLPropertyState *pFontCharsetCTLState = 0;
+    XMLPropertyState *pFontNameState = nullptr;
+    XMLPropertyState *pFontFamilyNameState = nullptr;
+    XMLPropertyState *pFontStyleNameState = nullptr;
+    XMLPropertyState *pFontFamilyState = nullptr;
+    XMLPropertyState *pFontPitchState = nullptr;
+    XMLPropertyState *pFontCharsetState = nullptr;
+    XMLPropertyState *pFontNameCJKState = nullptr;
+    XMLPropertyState *pFontFamilyNameCJKState = nullptr;
+    XMLPropertyState *pFontStyleNameCJKState = nullptr;
+    XMLPropertyState *pFontFamilyCJKState = nullptr;
+    XMLPropertyState *pFontPitchCJKState = nullptr;
+    XMLPropertyState *pFontCharsetCJKState = nullptr;
+    XMLPropertyState *pFontNameCTLState = nullptr;
+    XMLPropertyState *pFontFamilyNameCTLState = nullptr;
+    XMLPropertyState *pFontStyleNameCTLState = nullptr;
+    XMLPropertyState *pFontFamilyCTLState = nullptr;
+    XMLPropertyState *pFontPitchCTLState = nullptr;
+    XMLPropertyState *pFontCharsetCTLState = nullptr;
 
     // filter char height point/percent
-    XMLPropertyState* pCharHeightState = NULL;
-    XMLPropertyState* pCharPropHeightState = NULL;
-    XMLPropertyState* pCharDiffHeightState = NULL;
-    XMLPropertyState* pCharHeightCJKState = NULL;
-    XMLPropertyState* pCharPropHeightCJKState = NULL;
-    XMLPropertyState* pCharDiffHeightCJKState = NULL;
-    XMLPropertyState* pCharHeightCTLState = NULL;
-    XMLPropertyState* pCharPropHeightCTLState = NULL;
-    XMLPropertyState* pCharDiffHeightCTLState = NULL;
+    XMLPropertyState* pCharHeightState = nullptr;
+    XMLPropertyState* pCharPropHeightState = nullptr;
+    XMLPropertyState* pCharDiffHeightState = nullptr;
+    XMLPropertyState* pCharHeightCJKState = nullptr;
+    XMLPropertyState* pCharPropHeightCJKState = nullptr;
+    XMLPropertyState* pCharDiffHeightCJKState = nullptr;
+    XMLPropertyState* pCharHeightCTLState = nullptr;
+    XMLPropertyState* pCharPropHeightCTLState = nullptr;
+    XMLPropertyState* pCharDiffHeightCTLState = nullptr;
 
     // filter left margin measure/percent
-    XMLPropertyState* pParaLeftMarginState = NULL;
-    XMLPropertyState* pParaLeftMarginRelState = NULL;
+    XMLPropertyState* pParaLeftMarginState = nullptr;
+    XMLPropertyState* pParaLeftMarginRelState = nullptr;
 
     // filter right margin measure/percent
-    XMLPropertyState* pParaRightMarginState = NULL;
-    XMLPropertyState* pParaRightMarginRelState = NULL;
+    XMLPropertyState* pParaRightMarginState = nullptr;
+    XMLPropertyState* pParaRightMarginRelState = nullptr;
 
     // filter first line indent measure/percent
-    XMLPropertyState* pParaFirstLineState = NULL;
-    XMLPropertyState* pParaFirstLineRelState = NULL;
+    XMLPropertyState* pParaFirstLineState = nullptr;
+    XMLPropertyState* pParaFirstLineRelState = nullptr;
 
     // filter ParaTopMargin/Relative
-    XMLPropertyState* pParaTopMarginState = NULL;
-    XMLPropertyState* pParaTopMarginRelState = NULL;
+    XMLPropertyState* pParaTopMarginState = nullptr;
+    XMLPropertyState* pParaTopMarginRelState = nullptr;
 
     // filter ParaTopMargin/Relative
-    XMLPropertyState* pParaBottomMarginState = NULL;
-    XMLPropertyState* pParaBottomMarginRelState = NULL;
+    XMLPropertyState* pParaBottomMarginState = nullptr;
+    XMLPropertyState* pParaBottomMarginRelState = nullptr;
 
     // filter (Left|Right|Top|Bottom|)BorderWidth
-    XMLPropertyState* pAllBorderWidthState = NULL;
-    XMLPropertyState* pLeftBorderWidthState = NULL;
-    XMLPropertyState* pRightBorderWidthState = NULL;
-    XMLPropertyState* pTopBorderWidthState = NULL;
-    XMLPropertyState* pBottomBorderWidthState = NULL;
+    XMLPropertyState* pAllBorderWidthState = nullptr;
+    XMLPropertyState* pLeftBorderWidthState = nullptr;
+    XMLPropertyState* pRightBorderWidthState = nullptr;
+    XMLPropertyState* pTopBorderWidthState = nullptr;
+    XMLPropertyState* pBottomBorderWidthState = nullptr;
 
     // filter (Left|Right|Top|)BorderDistance
-    XMLPropertyState* pAllBorderDistanceState = NULL;
-    XMLPropertyState* pLeftBorderDistanceState = NULL;
-    XMLPropertyState* pRightBorderDistanceState = NULL;
-    XMLPropertyState* pTopBorderDistanceState = NULL;
-    XMLPropertyState* pBottomBorderDistanceState = NULL;
+    XMLPropertyState* pAllBorderDistanceState = nullptr;
+    XMLPropertyState* pLeftBorderDistanceState = nullptr;
+    XMLPropertyState* pRightBorderDistanceState = nullptr;
+    XMLPropertyState* pTopBorderDistanceState = nullptr;
+    XMLPropertyState* pBottomBorderDistanceState = nullptr;
 
     // filter (Left|Right|Top|Bottom|)Border
-    XMLPropertyState* pAllBorderState = NULL;
-    XMLPropertyState* pLeftBorderState = NULL;
-    XMLPropertyState* pRightBorderState = NULL;
-    XMLPropertyState* pTopBorderState = NULL;
-    XMLPropertyState* pBottomBorderState = NULL;
+    XMLPropertyState* pAllBorderState = nullptr;
+    XMLPropertyState* pLeftBorderState = nullptr;
+    XMLPropertyState* pRightBorderState = nullptr;
+    XMLPropertyState* pTopBorderState = nullptr;
+    XMLPropertyState* pBottomBorderState = nullptr;
 
     // filter Char(Left|Right|Top|Bottom|)BorderWidth
-    XMLPropertyState* pCharAllBorderWidthState = NULL;
-    XMLPropertyState* pCharLeftBorderWidthState = NULL;
-    XMLPropertyState* pCharRightBorderWidthState = NULL;
-    XMLPropertyState* pCharTopBorderWidthState = NULL;
-    XMLPropertyState* pCharBottomBorderWidthState = NULL;
+    XMLPropertyState* pCharAllBorderWidthState = nullptr;
+    XMLPropertyState* pCharLeftBorderWidthState = nullptr;
+    XMLPropertyState* pCharRightBorderWidthState = nullptr;
+    XMLPropertyState* pCharTopBorderWidthState = nullptr;
+    XMLPropertyState* pCharBottomBorderWidthState = nullptr;
 
     // filter Char(Left|Right|Top|)BorderDistance
-    XMLPropertyState* pCharAllBorderDistanceState = NULL;
-    XMLPropertyState* pCharLeftBorderDistanceState = NULL;
-    XMLPropertyState* pCharRightBorderDistanceState = NULL;
-    XMLPropertyState* pCharTopBorderDistanceState = NULL;
-    XMLPropertyState* pCharBottomBorderDistanceState = NULL;
+    XMLPropertyState* pCharAllBorderDistanceState = nullptr;
+    XMLPropertyState* pCharLeftBorderDistanceState = nullptr;
+    XMLPropertyState* pCharRightBorderDistanceState = nullptr;
+    XMLPropertyState* pCharTopBorderDistanceState = nullptr;
+    XMLPropertyState* pCharBottomBorderDistanceState = nullptr;
 
     // filter Char(Left|Right|Top|Bottom|)Border
-    XMLPropertyState* pCharAllBorderState = NULL;
-    XMLPropertyState* pCharLeftBorderState = NULL;
-    XMLPropertyState* pCharRightBorderState = NULL;
-    XMLPropertyState* pCharTopBorderState = NULL;
-    XMLPropertyState* pCharBottomBorderState = NULL;
+    XMLPropertyState* pCharAllBorderState = nullptr;
+    XMLPropertyState* pCharLeftBorderState = nullptr;
+    XMLPropertyState* pCharRightBorderState = nullptr;
+    XMLPropertyState* pCharTopBorderState = nullptr;
+    XMLPropertyState* pCharBottomBorderState = nullptr;
 
     // filter height properties
-    XMLPropertyState* pHeightMinAbsState = NULL;
-    XMLPropertyState* pHeightMinRelState = NULL;
-    XMLPropertyState* pHeightAbsState = NULL;
-    XMLPropertyState* pHeightRelState = NULL;
-    XMLPropertyState* pSizeTypeState = NULL;
+    XMLPropertyState* pHeightMinAbsState = nullptr;
+    XMLPropertyState* pHeightMinRelState = nullptr;
+    XMLPropertyState* pHeightAbsState = nullptr;
+    XMLPropertyState* pHeightRelState = nullptr;
+    XMLPropertyState* pSizeTypeState = nullptr;
 
     // filter width properties
-    XMLPropertyState* pWidthMinAbsState = NULL;
-    XMLPropertyState* pWidthMinRelState = NULL;
-    XMLPropertyState* pWidthAbsState = NULL;
-    XMLPropertyState* pWidthRelState = NULL;
-    XMLPropertyState* pWidthTypeState = NULL;
+    XMLPropertyState* pWidthMinAbsState = nullptr;
+    XMLPropertyState* pWidthMinRelState = nullptr;
+    XMLPropertyState* pWidthAbsState = nullptr;
+    XMLPropertyState* pWidthRelState = nullptr;
+    XMLPropertyState* pWidthTypeState = nullptr;
 
     // wrap
-    XMLPropertyState* pWrapState = NULL;
-    XMLPropertyState* pWrapContourState = NULL;
-    XMLPropertyState* pWrapContourModeState = NULL;
-    XMLPropertyState* pWrapParagraphOnlyState = NULL;
+    XMLPropertyState* pWrapState = nullptr;
+    XMLPropertyState* pWrapContourState = nullptr;
+    XMLPropertyState* pWrapContourModeState = nullptr;
+    XMLPropertyState* pWrapParagraphOnlyState = nullptr;
 
     // anchor
-    XMLPropertyState* pAnchorTypeState = NULL;
+    XMLPropertyState* pAnchorTypeState = nullptr;
 
     // horizontal position and relation
-    XMLPropertyState* pHoriOrientState = NULL;
-    XMLPropertyState* pHoriOrientMirroredState = NULL;
-    XMLPropertyState* pHoriOrientRelState = NULL;
-    XMLPropertyState* pHoriOrientRelFrameState = NULL;
-    XMLPropertyState* pHoriOrientMirrorState = NULL;
+    XMLPropertyState* pHoriOrientState = nullptr;
+    XMLPropertyState* pHoriOrientMirroredState = nullptr;
+    XMLPropertyState* pHoriOrientRelState = nullptr;
+    XMLPropertyState* pHoriOrientRelFrameState = nullptr;
+    XMLPropertyState* pHoriOrientMirrorState = nullptr;
     // Horizontal position and relation for shapes (#i28749#)
-    XMLPropertyState* pShapeHoriOrientState = NULL;
-    XMLPropertyState* pShapeHoriOrientMirroredState = NULL;
-    XMLPropertyState* pShapeHoriOrientRelState = NULL;
-    XMLPropertyState* pShapeHoriOrientRelFrameState = NULL;
-    XMLPropertyState* pShapeHoriOrientMirrorState = NULL;
+    XMLPropertyState* pShapeHoriOrientState = nullptr;
+    XMLPropertyState* pShapeHoriOrientMirroredState = nullptr;
+    XMLPropertyState* pShapeHoriOrientRelState = nullptr;
+    XMLPropertyState* pShapeHoriOrientRelFrameState = nullptr;
+    XMLPropertyState* pShapeHoriOrientMirrorState = nullptr;
 
     // vertical position and relation
-    XMLPropertyState* pVertOrientState = NULL;
-    XMLPropertyState* pVertOrientAtCharState = NULL;
-    XMLPropertyState* pVertOrientRelState = NULL;
-    XMLPropertyState* pVertOrientRelPageState = NULL;
-    XMLPropertyState* pVertOrientRelFrameState = NULL;
-    XMLPropertyState* pVertOrientRelAsCharState = NULL;
-    XMLPropertyState* pRelWidthRel = NULL;
-    XMLPropertyState* pRelHeightRel = NULL;
+    XMLPropertyState* pVertOrientState = nullptr;
+    XMLPropertyState* pVertOrientAtCharState = nullptr;
+    XMLPropertyState* pVertOrientRelState = nullptr;
+    XMLPropertyState* pVertOrientRelPageState = nullptr;
+    XMLPropertyState* pVertOrientRelFrameState = nullptr;
+    XMLPropertyState* pVertOrientRelAsCharState = nullptr;
+    XMLPropertyState* pRelWidthRel = nullptr;
+    XMLPropertyState* pRelHeightRel = nullptr;
 
     // Vertical position and relation for shapes (#i28749#)
-    XMLPropertyState* pShapeVertOrientState = NULL;
-    XMLPropertyState* pShapeVertOrientAtCharState = NULL;
-    XMLPropertyState* pShapeVertOrientRelState = NULL;
-    XMLPropertyState* pShapeVertOrientRelPageState = NULL;
-    XMLPropertyState* pShapeVertOrientRelFrameState = NULL;
+    XMLPropertyState* pShapeVertOrientState = nullptr;
+    XMLPropertyState* pShapeVertOrientAtCharState = nullptr;
+    XMLPropertyState* pShapeVertOrientRelState = nullptr;
+    XMLPropertyState* pShapeVertOrientRelPageState = nullptr;
+    XMLPropertyState* pShapeVertOrientRelFrameState = nullptr;
 
     // filter underline color
-    XMLPropertyState* pUnderlineState = NULL;
-    XMLPropertyState* pUnderlineColorState = NULL;
-    XMLPropertyState* pUnderlineHasColorState = NULL;
+    XMLPropertyState* pUnderlineState = nullptr;
+    XMLPropertyState* pUnderlineColorState = nullptr;
+    XMLPropertyState* pUnderlineHasColorState = nullptr;
 
     // filter list style name
-    XMLPropertyState* pListStyleName = NULL;
+    XMLPropertyState* pListStyleName = nullptr;
 
     // filter fo:clip
-    XMLPropertyState* pClip11State = NULL;
-    XMLPropertyState* pClipState = NULL;
+    XMLPropertyState* pClip11State = nullptr;
+    XMLPropertyState* pClipState = nullptr;
 
     // filter fo:margin
-    XMLPropertyState* pAllParaMarginRel = NULL;
-    XMLPropertyState* pAllParaMargin = NULL;
-    XMLPropertyState* pAllMargin = NULL;
+    XMLPropertyState* pAllParaMarginRel = nullptr;
+    XMLPropertyState* pAllParaMargin = nullptr;
+    XMLPropertyState* pAllMargin = nullptr;
 
     //UUUU
-    XMLPropertyState* pRepeatOffsetX = NULL;
-    XMLPropertyState* pRepeatOffsetY = NULL;
+    XMLPropertyState* pRepeatOffsetX = nullptr;
+    XMLPropertyState* pRepeatOffsetY = nullptr;
 
     // character background and highlight
-    XMLPropertyState* pCharBackground = NULL;
-    XMLPropertyState* pCharHighlight = NULL;
+    XMLPropertyState* pCharBackground = nullptr;
+    XMLPropertyState* pCharHighlight = nullptr;
 
     bool bNeedsAnchor = false;
 
@@ -1123,7 +1123,7 @@ void XMLTextExportPropertySetMapper::ContextFilter(
     }
 
     // list style name: remove list style if it is the default outline style
-    if( pListStyleName != NULL )
+    if( pListStyleName != nullptr )
     {
         OUString sListStyleName;
         pListStyleName->maValue >>= sListStyleName;
@@ -1131,7 +1131,7 @@ void XMLTextExportPropertySetMapper::ContextFilter(
             pListStyleName->mnIndex = -1;
     }
 
-    if( pClipState != NULL && pClip11State != NULL  )
+    if( pClipState != nullptr && pClip11State != nullptr  )
         pClip11State->mnIndex = -1;
 
     // When both background attributes are available export the visible one

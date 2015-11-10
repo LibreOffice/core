@@ -45,7 +45,7 @@ namespace xmloff
         static ::com::sun::star::uno::Any convertString(
             const ::com::sun::star::uno::Type& _rExpectedType,
             const OUString& _rReadCharacters,
-            const SvXMLEnumMapEntry* _pEnumMap = NULL,
+            const SvXMLEnumMapEntry* _pEnumMap = nullptr,
             const bool _bInvertBoolean = false
         );
 

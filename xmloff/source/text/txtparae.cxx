@@ -188,7 +188,7 @@ namespace
             {
                 framebound_map_t::const_iterator it = m_vFrameBoundsOf.find(rParentFrame);
                 if(it == m_vFrameBoundsOf.end())
-                    return NULL;
+                    return nullptr;
                 return &(it->second);
             };
             Reference<XEnumeration> createEnumeration() const
@@ -278,7 +278,7 @@ static const sal_Char* aParagraphPropertyNamesAuto[] =
     "NumberingRules",
     "ParaConditionalStyleName",
     "ParaStyleName",
-    NULL
+    nullptr
 };
 
 enum eParagraphPropertyNamesEnumAuto
@@ -296,7 +296,7 @@ static const sal_Char* aParagraphPropertyNames[] =
     "ParaConditionalStyleName",
     "ParaStyleName",
     "TextSection",
-    NULL
+    nullptr
 };
 
 enum eParagraphPropertyNamesEnum
@@ -1164,17 +1164,17 @@ XMLTextParagraphExport::XMLTextParagraphExport(
     m_xImpl(new Impl),
     rAutoStylePool( rASP ),
     pBoundFrameSets(new BoundFrameSets(GetExport().GetModel())),
-    pFieldExport( 0 ),
-    pListElements( 0 ),
+    pFieldExport( nullptr ),
+    pListElements( nullptr ),
     pListAutoPool( new XMLTextListAutoStylePool( this->GetExport() ) ),
-    pSectionExport( NULL ),
-    pIndexMarkExport( NULL ),
-    pRedlineExport( NULL ),
-    pHeadingStyles( NULL ),
+    pSectionExport( nullptr ),
+    pIndexMarkExport( nullptr ),
+    pRedlineExport( nullptr ),
+    pHeadingStyles( nullptr ),
     bProgress( false ),
     bBlock( false ),
     bOpenRuby( false ),
-    mpTextListsHelper( 0 ),
+    mpTextListsHelper( nullptr ),
     maTextListsHelperStack(),
     sActualSize("ActualSize"),
     // Implement Title/Description Elements UI (#i73249#)
@@ -1484,7 +1484,7 @@ bool XMLTextParagraphExport::collectTextAutoStylesOptimized( bool bIsProgress )
                 aAny = xAutoStylesEnum->nextElement();
                 Reference< XAutoStyle > xAutoStyle = *static_cast<Reference<XAutoStyle> const *>(aAny.getValue());
                 Reference < XPropertySet > xPSet( xAutoStyle, uno::UNO_QUERY );
-                Add( nFamily, xPSet, 0, true );
+                Add( nFamily, xPSet, nullptr, true );
             }
         }
     }
@@ -1701,11 +1701,11 @@ void XMLTextParagraphExport::exportText(
 
     // #96530# Export redlines at start & end of XText before & after
     // exporting the text content enumeration
-    if( !bAutoStyles && (pRedlineExport != NULL) )
+    if( !bAutoStyles && (pRedlineExport != nullptr) )
         pRedlineExport->ExportStartOrEndRedline( xPropertySet, true );
     exportTextContentEnumeration( xParaEnum, bAutoStyles, xBaseSection,
-                                  bIsProgress, bExportParagraph, 0, bExportLevels, eExtensionNS );
-    if( !bAutoStyles && (pRedlineExport != NULL) )
+                                  bIsProgress, bExportParagraph, nullptr, bExportLevels, eExtensionNS );
+    if( !bAutoStyles && (pRedlineExport != nullptr) )
         pRedlineExport->ExportStartOrEndRedline( xPropertySet, false );
 }
 
@@ -1730,14 +1730,14 @@ void XMLTextParagraphExport::exportText(
     // #96530# Export redlines at start & end of XText before & after
     // exporting the text content enumeration
     Reference<XPropertySet> xPropertySet;
-    if( !bAutoStyles && (pRedlineExport != NULL) )
+    if( !bAutoStyles && (pRedlineExport != nullptr) )
     {
         xPropertySet.set(rText, uno::UNO_QUERY );
         pRedlineExport->ExportStartOrEndRedline( xPropertySet, true );
     }
     exportTextContentEnumeration( xParaEnum, bAutoStyles, rBaseSection,
                                   bIsProgress, bExportParagraph );
-    if( !bAutoStyles && (pRedlineExport != NULL) )
+    if( !bAutoStyles && (pRedlineExport != nullptr) )
         pRedlineExport->ExportStartOrEndRedline( xPropertySet, false );
 }
 
@@ -1849,12 +1849,12 @@ bool XMLTextParagraphExport::exportTextContentEnumeration(
             if (! pSectionExport->IsMuteSection(xCurrentTextSection))
             {
                 // export start + end redlines (for wholly redlined tables)
-                if ((! bAutoStyles) && (NULL != pRedlineExport))
+                if ((! bAutoStyles) && (nullptr != pRedlineExport))
                     pRedlineExport->ExportStartOrEndRedline(xTxtCntnt, true);
 
                 exportTable( xTxtCntnt, bAutoStyles, bIsProgress  );
 
-                if ((! bAutoStyles) && (NULL != pRedlineExport))
+                if ((! bAutoStyles) && (nullptr != pRedlineExport))
                     pRedlineExport->ExportStartOrEndRedline(xTxtCntnt, false);
             }
             else if( !bAutoStyles )
@@ -2267,7 +2267,7 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
             }
             else if (sType.equals(sRedline))
             {
-                if (NULL != pRedlineExport)
+                if (nullptr != pRedlineExport)
                     pRedlineExport->ExportChange(xPropSet, bAutoStyles);
             }
             else if (sType.equals(sRuby))
@@ -2541,7 +2541,7 @@ void XMLTextParagraphExport::exportTextMark(
         }
 
         // export element
-        DBG_ASSERT(pElements != NULL, "illegal element array");
+        DBG_ASSERT(pElements != nullptr, "illegal element array");
         DBG_ASSERT(nElement >= 0, "illegal element number");
         DBG_ASSERT(nElement <= 2, "illegal element number");
         SvXMLElementExport aElem(GetExport(),
@@ -3585,7 +3585,7 @@ void XMLTextParagraphExport::exportUsedDeclarations( bool bOnlyUsed )
 
 void XMLTextParagraphExport::exportTrackedChanges(bool bAutoStyles)
 {
-    if (NULL != pRedlineExport)
+    if (nullptr != pRedlineExport)
         pRedlineExport->ExportChangesList( bAutoStyles );
 }
 
@@ -3593,20 +3593,20 @@ void XMLTextParagraphExport::exportTrackedChanges(
     const Reference<XText> & rText,
     bool bAutoStyle)
 {
-    if (NULL != pRedlineExport)
+    if (nullptr != pRedlineExport)
         pRedlineExport->ExportChangesList(rText, bAutoStyle);
 }
 
 void XMLTextParagraphExport::recordTrackedChangesForXText(
     const Reference<XText> & rText )
 {
-    if (NULL != pRedlineExport)
+    if (nullptr != pRedlineExport)
         pRedlineExport->SetCurrentXText(rText);
 }
 
 void XMLTextParagraphExport::recordTrackedChangesNoXText()
 {
-    if (NULL != pRedlineExport)
+    if (nullptr != pRedlineExport)
         pRedlineExport->SetCurrentXText();
 }
 
@@ -3769,7 +3769,7 @@ void XMLTextParagraphExport::PreventExportOfControlsInMuteSections(
         // if we don't have shapes or a form export, there's nothing to do
         return;
     }
-    DBG_ASSERT( pSectionExport != NULL, "We need the section export." );
+    DBG_ASSERT( pSectionExport != nullptr, "We need the section export." );
 
     Reference<XEnumeration> xShapesEnum = pBoundFrameSets->GetShapes()->createEnumeration();
     if(!xShapesEnum.is())
@@ -3819,7 +3819,7 @@ void XMLTextParagraphExport::PushNewTextListsHelper()
 void XMLTextParagraphExport::PopTextListsHelper()
 {
     delete mpTextListsHelper;
-    mpTextListsHelper = 0;
+    mpTextListsHelper = nullptr;
     maTextListsHelperStack.pop_back();
     if ( !maTextListsHelperStack.empty() )
     {

@@ -491,7 +491,7 @@ public:
                             const OUString& rEmbeddedObjectURL );
 
     OUString EncodeStyleName( const OUString& rName,
-                                     bool *pEncoded=0 ) const;
+                                     bool *pEncoded=nullptr ) const;
 
     // save linked sections?
     inline bool IsSaveLinkedSections() { return mbSaveLinkedSections; }

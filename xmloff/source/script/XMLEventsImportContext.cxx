@@ -207,7 +207,7 @@ void XMLEventsImportContext::AddEventValues(
 
                 GetImport().SetError(XMLERROR_FLAG_ERROR |
                                      XMLERROR_ILLEGAL_EVENT,
-                                     aMsgParams, rException.Message, 0);
+                                     aMsgParams, rException.Message, nullptr);
             }
         }
     }

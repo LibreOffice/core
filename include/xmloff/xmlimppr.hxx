@@ -111,7 +111,7 @@ public:
     bool FillPropertySet(
             const ::std::vector< XMLPropertyState >& rProperties,
             const css::uno::Reference< css::beans::XPropertySet >& rPropSet,
-            _ContextID_Index_Pair* pSpecialContextIds = NULL ) const;
+            _ContextID_Index_Pair* pSpecialContextIds = nullptr ) const;
 
     void FillPropertySequence(
             const ::std::vector< XMLPropertyState >& aProperties,
@@ -134,7 +134,7 @@ public:
 
         // parameter for use by txtstyli.cxx; allows efficient
         // catching the combined characters property
-        _ContextID_Index_Pair* pSpecialContextIds = NULL );
+        _ContextID_Index_Pair* pSpecialContextIds = nullptr );
 
     /** implementation helper for FillPropertySet: fill an XMultiPropertySet.
      * If unsuccessul, set return value. */
@@ -146,7 +146,7 @@ public:
 
         // parameters for use by txtstyli.cxx; allows efficient
         // catching the combined characters property
-        _ContextID_Index_Pair* pSpecialContextIds = NULL );
+        _ContextID_Index_Pair* pSpecialContextIds = nullptr );
 
     /** implementation helper for FillPropertySet: fill an XTolerantMultiPropertySet.
      * If unsuccessul, set return value. */
@@ -158,7 +158,7 @@ public:
 
         // parameters for use by txtstyli.cxx; allows efficient
         // catching the combined characters property
-        _ContextID_Index_Pair* pSpecialContextIds = NULL );
+        _ContextID_Index_Pair* pSpecialContextIds = nullptr );
 
 
     static void _PrepareForMultiPropertySet(

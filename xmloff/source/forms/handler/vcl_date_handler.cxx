@@ -59,7 +59,7 @@ namespace xmloff
         aDateTime.Year = aDate.Year;
 
         OUStringBuffer aBuffer;
-        ::sax::Converter::convertDateTime( aBuffer, aDateTime, 0 );
+        ::sax::Converter::convertDateTime( aBuffer, aDateTime, nullptr );
         return aBuffer.makeStringAndClear();
     }
 
@@ -67,7 +67,7 @@ namespace xmloff
     {
         DateTime aDateTime;
         Date aDate;
-        if (::sax::Converter::parseDateTime( aDateTime, 0, i_attributeValue ))
+        if (::sax::Converter::parseDateTime( aDateTime, nullptr, i_attributeValue ))
         {
             aDate.Day = aDateTime.Day;
             aDate.Month = aDateTime.Month;

@@ -111,7 +111,7 @@ XMLTransformerContext *XMLFrameOASISTransformerContext::CreateChildContext(
         const OUString& rQName,
         const Reference< XAttributeList >& rAttrList )
 {
-    XMLTransformerContext *pContext = 0;
+    XMLTransformerContext *pContext = nullptr;
 
     if( m_bIgnoreElement )
     {

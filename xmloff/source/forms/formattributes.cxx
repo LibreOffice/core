@@ -217,7 +217,7 @@ namespace xmloff
         AttributeAssignments::const_iterator aPos = m_aKnownProperties.find(_rAttribName);
         if (m_aKnownProperties.end() != aPos)
             return &aPos->second;
-        return NULL;
+        return nullptr;
     }
 
     void OAttribute2Property::addStringProperty(

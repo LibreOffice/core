@@ -52,7 +52,7 @@ SvXMLImportContext* XMLChangeElementImportContext::CreateChildContext(
     const OUString& rLocalName,
     const Reference<XAttributeList> & xAttrList)
 {
-    SvXMLImportContext* pContext = NULL;
+    SvXMLImportContext* pContext = nullptr;
 
     if ( (XML_NAMESPACE_OFFICE == nPrefix) &&
          IsXMLToken( rLocalName, XML_CHANGE_INFO) )
@@ -69,7 +69,7 @@ SvXMLImportContext* XMLChangeElementImportContext::CreateChildContext(
             GetImport(), nPrefix, rLocalName, xAttrList,
             XML_TEXT_TYPE_CHANGED_REGION);
 
-        if (NULL == pContext)
+        if (nullptr == pContext)
         {
             // no text element
             // illegal element content! TODO: discard this redline!

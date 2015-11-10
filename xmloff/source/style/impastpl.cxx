@@ -175,7 +175,7 @@ XMLAutoStylePoolProperties::XMLAutoStylePoolProperties( XMLAutoStyleFamily& rFam
 : maProperties( rProperties ),
   mnPos       ( rFamilyData.mnCount )
 {
-    static bool bHack = (getenv("LIBO_ONEWAY_STABLE_ODF_EXPORT") != NULL);
+    static bool bHack = (getenv("LIBO_ONEWAY_STABLE_ODF_EXPORT") != nullptr);
 
     if (bHack)
     {
@@ -279,7 +279,7 @@ XMLAutoStylePoolParent::~XMLAutoStylePoolParent()
 bool XMLAutoStylePoolParent::Add( XMLAutoStyleFamily& rFamilyData, const vector< XMLPropertyState >& rProperties, OUString& rName, bool bDontSeek )
 {
     bool bAdded = false;
-    XMLAutoStylePoolProperties *pProperties = 0;
+    XMLAutoStylePoolProperties *pProperties = nullptr;
     sal_Int32 nProperties = rProperties.size();
     size_t i = 0;
     for (size_t n = m_PropertiesList.size(); i < n; ++i)
@@ -594,7 +594,7 @@ struct AutoStylePoolExport
     const OUString* mpParent;
     XMLAutoStylePoolProperties* mpProperties;
 
-    AutoStylePoolExport() : mpParent(NULL), mpProperties(NULL) {}
+    AutoStylePoolExport() : mpParent(nullptr), mpProperties(nullptr) {}
 };
 
 struct StyleComparator
@@ -646,7 +646,7 @@ void SvXMLAutoStylePoolP_Impl::exportXML(
         }
     }
 
-    static bool bHack = (getenv("LIBO_ONEWAY_STABLE_ODF_EXPORT") != NULL);
+    static bool bHack = (getenv("LIBO_ONEWAY_STABLE_ODF_EXPORT") != nullptr);
 
     if (bHack)
     {

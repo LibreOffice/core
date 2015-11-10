@@ -433,7 +433,7 @@ bool SvXMLUnitConverter::convertDateTime( double& fDateTime,
                             const OUString& rString, const com::sun::star::util::Date& aTempNullDate)
 {
     com::sun::star::util::DateTime aDateTime;
-    bool bSuccess = ::sax::Converter::parseDateTime(aDateTime, 0, rString);
+    bool bSuccess = ::sax::Converter::parseDateTime(aDateTime, nullptr, rString);
 
     if (bSuccess)
     {

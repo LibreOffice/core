@@ -136,7 +136,7 @@ void XMLIndexTOCContext::StartElement(
         sal_Bool bProtected = sal_False;
         OUString sIndexName;
         OUString sXmlId;
-        XMLPropStyleContext* pStyle(NULL);
+        XMLPropStyleContext* pStyle(nullptr);
         for(sal_Int16 nAttr = 0; nAttr < nCount; nAttr++)
         {
             OUString sLocalName;
@@ -217,7 +217,7 @@ void XMLIndexTOCContext::StartElement(
                     aSeq[0] = GetLocalName();
                     GetImport().SetError(
                         XMLERROR_FLAG_ERROR | XMLERROR_NO_INDEX_ALLOWED_HERE,
-                        aSeq, e.Message, NULL );
+                        aSeq, e.Message, nullptr );
 
                     // set bValid to false, and return prematurely
                     bValid = false;
@@ -238,7 +238,7 @@ void XMLIndexTOCContext::StartElement(
         if( bValid )
             GetImport().GetTextImport()->RedlineAdjustStartNodeCursor(true);
 
-        if (pStyle != NULL)
+        if (pStyle != nullptr)
         {
             pStyle->FillPropertySet( xTOCPropertySet );
         }
@@ -289,7 +289,7 @@ SvXMLImportContext* XMLIndexTOCContext::CreateChildContext(
     const OUString& rLocalName,
     const Reference<XAttributeList> & xAttrList )
 {
-    SvXMLImportContext* pContext = NULL;
+    SvXMLImportContext* pContext = nullptr;
 
     if (bValid)
     {
@@ -357,7 +357,7 @@ SvXMLImportContext* XMLIndexTOCContext::CreateChildContext(
     // else: not valid -> ignore
 
     // default: ignore
-    if (pContext == NULL)
+    if (pContext == nullptr)
     {
         pContext = SvXMLImportContext::CreateChildContext(nPrefix, rLocalName,
                                                           xAttrList);

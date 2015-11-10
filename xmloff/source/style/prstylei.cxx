@@ -163,7 +163,7 @@ SvXMLImportContext *XMLPropStyleContext::CreateChildContext(
         const OUString& rLocalName,
         const Reference< XAttributeList > & xAttrList )
 {
-    SvXMLImportContext *pContext = 0;
+    SvXMLImportContext *pContext = nullptr;
 
     sal_uInt32 nFamily = 0;
     if( XML_NAMESPACE_STYLE == nPrefix || XML_NAMESPACE_LO_EXT == nPrefix )
@@ -478,7 +478,7 @@ void XMLPropStyleContext::Finish( bool bOverwrite )
 
                 GetImport().SetError(
                     XMLERROR_FLAG_ERROR | XMLERROR_PARENT_STYLE_NOT_ALLOWED,
-                    aSequence, e.Message, NULL );
+                    aSequence, e.Message, nullptr );
             }
         }
 

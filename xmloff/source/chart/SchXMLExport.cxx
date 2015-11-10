@@ -1193,7 +1193,7 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument >&
         SvXMLElementExport aSet( mrExport, XML_NAMESPACE_TABLE, XML_CALCULATION_SETTINGS, true, true );
         {
             OUStringBuffer sBuffer;
-            ::sax::Converter::convertDateTime(sBuffer, aNullDate, 0);
+            ::sax::Converter::convertDateTime(sBuffer, aNullDate, nullptr);
             mrExport.AddAttribute( XML_NAMESPACE_TABLE,XML_DATE_VALUE,sBuffer.makeStringAndClear());
             SvXMLElementExport aNull( mrExport, XML_NAMESPACE_TABLE, XML_NULL_DATE, true, true );
         }
@@ -2292,7 +2292,7 @@ void SchXMLExportHelper_Impl::exportAxis(
     bool bExportContent )
 {
     std::vector< XMLPropertyState > aPropertyStates;
-    SvXMLElementExport* pAxis = NULL;
+    SvXMLElementExport* pAxis = nullptr;
 
     // get property states for autostyles
     if( rAxisProps.is() && mxExpPropMapper.is() )
@@ -2337,9 +2337,9 @@ void SchXMLExportHelper_Impl::exportAxis(
     Reference< chart::XAxis > xAxis( rAxisProps, uno::UNO_QUERY );
     if( xAxis.is() )
     {
-        xTitleProps = bHasTitle ? xAxis->getAxisTitle() : 0;
-        xMajorGridProps = bHasMajorGrid ? xAxis->getMajorGrid() : 0;
-        xMinorGridProps = bHasMinorGrid ? xAxis->getMinorGrid() : 0;
+        xTitleProps = bHasTitle ? xAxis->getAxisTitle() : nullptr;
+        xMajorGridProps = bHasMajorGrid ? xAxis->getMajorGrid() : nullptr;
+        xMinorGridProps = bHasMinorGrid ? xAxis->getMinorGrid() : nullptr;
     }
 
     // axis-title
@@ -2360,7 +2360,7 @@ void SchXMLExportHelper_Impl::exportAxis(
     {
         //close axis element
         delete pAxis;
-        pAxis = NULL;
+        pAxis = nullptr;
     }
 }
 
@@ -2431,7 +2431,7 @@ void SchXMLExportHelper_Impl::exportAxes(
     Reference< ::com::sun::star::chart2::XAxis > xNewAxis = lcl_getAxis( xCooSys, XML_X );
     if( xNewAxis.is() )
     {
-        Reference< beans::XPropertySet > xAxisProps( xAxisSupp.is() ? xAxisSupp->getAxis(0) : 0, uno::UNO_QUERY );
+        Reference< beans::XPropertySet > xAxisProps( xAxisSupp.is() ? xAxisSupp->getAxis(0) : nullptr, uno::UNO_QUERY );
         if( mbHasCategoryLabels && bExportContent )
         {
             Reference< chart2::data::XLabeledDataSequence > xCategories( lcl_getCategories( xNewDiagram ) );
@@ -2456,7 +2456,7 @@ void SchXMLExportHelper_Impl::exportAxes(
     xNewAxis = lcl_getAxis( xCooSys, XML_X, false );
     if( xNewAxis.is() )
     {
-        Reference< beans::XPropertySet > xAxisProps( xAxisSupp.is() ? xAxisSupp->getSecondaryAxis(0) : 0, uno::UNO_QUERY );
+        Reference< beans::XPropertySet > xAxisProps( xAxisSupp.is() ? xAxisSupp->getSecondaryAxis(0) : nullptr, uno::UNO_QUERY );
         exportAxis( XML_X, XML_SECONDARY_X, xAxisProps, xNewAxis, aCategoriesRange, bHasSecondaryXAxisTitle, false, false, bExportContent );
     }
 
@@ -2465,7 +2465,7 @@ void SchXMLExportHelper_Impl::exportAxes(
     xNewAxis = lcl_getAxis( xCooSys, XML_Y );
     if( xNewAxis.is() )
     {
-        Reference< beans::XPropertySet > xAxisProps( xAxisSupp.is() ? xAxisSupp->getAxis(1) : 0, uno::UNO_QUERY );
+        Reference< beans::XPropertySet > xAxisProps( xAxisSupp.is() ? xAxisSupp->getAxis(1) : nullptr, uno::UNO_QUERY );
         exportAxis( XML_Y, XML_PRIMARY_Y, xAxisProps, xNewAxis, aCategoriesRange, bHasYAxisTitle, bHasYAxisMajorGrid, bHasYAxisMinorGrid, bExportContent );
     }
 
@@ -2474,7 +2474,7 @@ void SchXMLExportHelper_Impl::exportAxes(
     xNewAxis = lcl_getAxis( xCooSys, XML_Y, false );
     if( xNewAxis.is() )
     {
-        Reference< beans::XPropertySet > xAxisProps( xAxisSupp.is() ? xAxisSupp->getSecondaryAxis(1) : 0, uno::UNO_QUERY );
+        Reference< beans::XPropertySet > xAxisProps( xAxisSupp.is() ? xAxisSupp->getSecondaryAxis(1) : nullptr, uno::UNO_QUERY );
         exportAxis( XML_Y, XML_SECONDARY_Y, xAxisProps, xNewAxis, aCategoriesRange, bHasSecondaryYAxisTitle, false, false, bExportContent );
     }
 
@@ -2483,7 +2483,7 @@ void SchXMLExportHelper_Impl::exportAxes(
     xNewAxis = lcl_getAxis( xCooSys, XML_Z );
     if( xNewAxis.is() )
     {
-        Reference< beans::XPropertySet > xAxisProps( xAxisSupp.is() ? xAxisSupp->getAxis(2) : 0, uno::UNO_QUERY );
+        Reference< beans::XPropertySet > xAxisProps( xAxisSupp.is() ? xAxisSupp->getAxis(2) : nullptr, uno::UNO_QUERY );
         exportAxis( XML_Z, XML_PRIMARY_Z, xAxisProps, xNewAxis, aCategoriesRange, bHasZAxisTitle, bHasZAxisMajorGrid, bHasZAxisMinorGrid, bExportContent );
     }
 }
@@ -2602,7 +2602,7 @@ void SchXMLExportHelper_Impl::exportSeries(
                 Reference< chart2::data::XDataSource > xSource( aSeriesSeq[nSeriesIdx], uno::UNO_QUERY );
                 if( xSource.is())
                 {
-                    SvXMLElementExport* pSeries = NULL;
+                    SvXMLElementExport* pSeries = nullptr;
                     Sequence< Reference< chart2::data::XLabeledDataSequence > > aSeqCnt(
                         xSource->getDataSequences());
                     sal_Int32 nMainSequenceIndex = -1;
@@ -2771,7 +2771,7 @@ void SchXMLExportHelper_Impl::exportSeries(
                                 {
                                     xYValuesForBubbleChart = xSequence->getValues();
                                     if( !lcl_exportDomainForThisSequence( xYValuesForBubbleChart, aFirstYDomainRange, mrExport ) )
-                                        xYValuesForBubbleChart = 0;
+                                        xYValuesForBubbleChart = nullptr;
                                 }
                             }
                             if( bIsScatterChart || bIsBubbleChart )
@@ -3160,7 +3160,7 @@ void SchXMLExportHelper_Impl::exportCandleStickSeries(
                         mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_ATTACHED_AXIS, XML_PRIMARY_Y );
                     SvXMLElementExport aOpenSeries( mrExport, XML_NAMESPACE_CHART, XML_SERIES, true, true );
                     // export empty data points
-                    exportDataPoints( 0, nSeriesLength, xDiagram, bExportContent );
+                    exportDataPoints( nullptr, nSeriesLength, xDiagram, bExportContent );
                 }
 
                 // low
@@ -3177,7 +3177,7 @@ void SchXMLExportHelper_Impl::exportCandleStickSeries(
                         mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_ATTACHED_AXIS, XML_PRIMARY_Y );
                     SvXMLElementExport aLowSeries( mrExport, XML_NAMESPACE_CHART, XML_SERIES, true, true );
                     // export empty data points
-                    exportDataPoints( 0, nSeriesLength, xDiagram, bExportContent );
+                    exportDataPoints( nullptr, nSeriesLength, xDiagram, bExportContent );
                 }
 
                 // high
@@ -3194,7 +3194,7 @@ void SchXMLExportHelper_Impl::exportCandleStickSeries(
                         mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_ATTACHED_AXIS, XML_PRIMARY_Y );
                     SvXMLElementExport aHighSeries( mrExport, XML_NAMESPACE_CHART, XML_SERIES, true, true );
                     // export empty data points
-                    exportDataPoints( 0, nSeriesLength, xDiagram, bExportContent );
+                    exportDataPoints( nullptr, nSeriesLength, xDiagram, bExportContent );
                 }
 
                 // close
@@ -3211,7 +3211,7 @@ void SchXMLExportHelper_Impl::exportCandleStickSeries(
                         mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_ATTACHED_AXIS, XML_PRIMARY_Y );
                     SvXMLElementExport aCloseSeries( mrExport, XML_NAMESPACE_CHART, XML_SERIES, true, true );
                     // export empty data points
-                    exportDataPoints( 0, nSeriesLength, xDiagram, bExportContent );
+                    exportDataPoints( nullptr, nSeriesLength, xDiagram, bExportContent );
                 }
             }
             else    // autostyles

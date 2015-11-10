@@ -181,7 +181,7 @@ namespace xmloff { namespace metadata
         DescriptionsByName::const_iterator pos = rAllDescriptions.find( i_propertyName );
         if ( pos != rAllDescriptions.end() )
             return pos->second;
-        return NULL;
+        return nullptr;
     }
 
     void getPropertyGroup( const PropertyGroup i_propertyGroup, PropertyDescriptionList& o_propertyDescriptions )

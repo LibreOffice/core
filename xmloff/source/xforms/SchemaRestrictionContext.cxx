@@ -202,7 +202,7 @@ Any xforms_date( const OUString& rValue )
 Any xforms_dateTime( const OUString& rValue )
 {
     util::DateTime aDateTime;
-    bool const bSuccess = ::sax::Converter::parseDateTime(aDateTime, 0, rValue);
+    bool const bSuccess = ::sax::Converter::parseDateTime(aDateTime, nullptr, rValue);
     return bSuccess ? makeAny( aDateTime ) : Any();
 }
 
@@ -240,7 +240,7 @@ SvXMLImportContext* SchemaRestrictionContext::HandleChild(
 
     // determine property name + suitable converter
     OUString sPropertyName;
-    convert_t pConvert = NULL;
+    convert_t pConvert = nullptr;
     switch( nToken )
     {
     case XML_LENGTH:
@@ -355,7 +355,7 @@ SvXMLImportContext* SchemaRestrictionContext::HandleChild(
     CreateDataType();
     if( mxDataType.is()
         && !sPropertyName.isEmpty()
-        && pConvert != NULL
+        && pConvert != nullptr
         && mxDataType->getPropertySetInfo()->hasPropertyByName(sPropertyName) )
     {
         try

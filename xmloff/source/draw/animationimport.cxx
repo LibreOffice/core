@@ -130,8 +130,8 @@ public:
 
 AnimationsImportHelperImpl::AnimationsImportHelperImpl( SvXMLImport& rImport )
 :   mrImport( rImport ),
-    mpAnimationNodeTokenMap( NULL ),
-    mpAnimationNodeAttributeTokenMap( NULL ),
+    mpAnimationNodeTokenMap( nullptr ),
+    mpAnimationNodeAttributeTokenMap( nullptr ),
     mastrHSL( "hsl" )
 {
 }
@@ -144,7 +144,7 @@ AnimationsImportHelperImpl::~AnimationsImportHelperImpl()
 
 const SvXMLTokenMap& AnimationsImportHelperImpl::getAnimationNodeTokenMap()
 {
-    if( mpAnimationNodeTokenMap == NULL )
+    if( mpAnimationNodeTokenMap == nullptr )
     {
         static const SvXMLTokenMapEntry aAnimationNodeTokenMap[] =
         {
@@ -223,7 +223,7 @@ enum AnimationNodeAttributes
 
 const SvXMLTokenMap& AnimationsImportHelperImpl::getAnimationNodeAttributeTokenMap()
 {
-    if( mpAnimationNodeAttributeTokenMap == NULL )
+    if( mpAnimationNodeAttributeTokenMap == nullptr )
     {
         static const SvXMLTokenMapEntry aAnimationNodeAttributeTokenMap[] =
         {
@@ -632,7 +632,7 @@ AnimationNodeContext::AnimationNodeContext(
         AnimationsImportHelperImpl* pHelper /* = NULL */ )
 :   SvXMLImportContext(rImport, nPrfx, rLocalName),
     mpHelper( pHelper ),
-    mbRootContext( pHelper == NULL )
+    mbRootContext( pHelper == nullptr )
 {
     try
     {
@@ -645,7 +645,7 @@ AnimationNodeContext::AnimationNodeContext(
         {
             sal_Int16 nPresetClass = EffectPresetClass::CUSTOM;
 
-            const sal_Char* pServiceName = 0;
+            const sal_Char* pServiceName = nullptr;
 
             sal_Int16 nNodeType = (sal_Int16)mpHelper->getAnimationNodeTokenMap().Get( nPrfx, rLocalName );
             switch( nNodeType )
@@ -692,7 +692,7 @@ AnimationNodeContext::AnimationNodeContext(
                 }
                 break;
             default:
-                pServiceName = 0;
+                pServiceName = nullptr;
             }
 
             if( pServiceName )
@@ -1326,7 +1326,7 @@ void SAL_CALL AnimationsImport::release() throw ()
 
 SvXMLImportContext *AnimationsImport::CreateContext(sal_uInt16 nPrefix, const OUString& rLocalName, const Reference<XAttributeList>& xAttrList)
 {
-    SvXMLImportContext* pContext = 0;
+    SvXMLImportContext* pContext = nullptr;
 
     if( (XML_NAMESPACE_ANIMATION == nPrefix) && IsXMLToken( rLocalName, XML_SEQ ) )
     {

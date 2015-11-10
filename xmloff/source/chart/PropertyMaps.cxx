@@ -171,7 +171,7 @@ const XMLPropertyHandler* XMLChartPropHdlFactory::GetPropertyHandler( sal_Int32 
                 pHdl = new XMLEnumPropertyHdl(aLineStyleMap, cppu::UnoType<drawing::LineStyle>::get());
             break;
             case XML_SCH_TYPE_LABEL_BORDER_OPACITY:
-                pHdl = new XMLOpacityPropertyHdl(NULL);
+                pHdl = new XMLOpacityPropertyHdl(nullptr);
             break;
             default:
                 ;

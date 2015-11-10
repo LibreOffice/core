@@ -157,7 +157,7 @@ inline XMLTextNumRuleInfo& XMLTextNumRuleInfo::operator=(
 
 inline void XMLTextNumRuleInfo::Reset()
 {
-    mxNumRules = 0;
+    mxNumRules = nullptr;
     msNumRulesName.clear();
     msListId.clear();
     mnListStartValue = -1;

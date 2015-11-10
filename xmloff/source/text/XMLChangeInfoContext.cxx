@@ -62,7 +62,7 @@ SvXMLImportContext* XMLChangeInfoContext::CreateChildContext(
     const OUString& rLocalName,
     const Reference<XAttributeList >& xAttrList )
 {
-    SvXMLImportContext* pContext = NULL;
+    SvXMLImportContext* pContext = nullptr;
 
     if( XML_NAMESPACE_DC == nPrefix )
     {

@@ -780,7 +780,7 @@ SvXMLImportContext* XMLVariableDeclsImportContext::CreateChildContext(
     const Reference<xml::sax::XAttributeList> & xAttrList )
 {
     enum XMLTokenEnum eElementName;
-    SvXMLImportContext* pImportContext = NULL;
+    SvXMLImportContext* pImportContext = nullptr;
 
     if( XML_NAMESPACE_TEXT == nPrefix )
     {
@@ -810,7 +810,7 @@ SvXMLImportContext* XMLVariableDeclsImportContext::CreateChildContext(
     }
 
     // if no context was created, use default context
-    if (NULL == pImportContext) {
+    if (nullptr == pImportContext) {
         pImportContext = SvXMLImportContext::CreateChildContext(nPrefix,
                                                                 rLocalName,
                                                                 xAttrList);

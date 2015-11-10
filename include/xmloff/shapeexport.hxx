@@ -220,30 +220,30 @@ private:
     SAL_DLLPRIVATE void ImpExportGluePoints( const css::uno::Reference< css::drawing::XShape >& xShape );
 
     // single shape exporters
-    SAL_DLLPRIVATE void ImpExportGroupShape( const css::uno::Reference< css::drawing::XShape >& xShape, XmlShapeType eShapeType, XMLShapeExportFlags nFeatures = SEF_DEFAULT, css::awt::Point* pRefPoint = NULL );
-    SAL_DLLPRIVATE void ImpExport3DSceneShape( const css::uno::Reference< css::drawing::XShape >& xShape, XmlShapeType eShapeType, XMLShapeExportFlags nFeatures = SEF_DEFAULT, css::awt::Point* pRefPoint = NULL );
-    SAL_DLLPRIVATE void ImpExportRectangleShape( const css::uno::Reference< css::drawing::XShape >& xShape, XmlShapeType eShapeType, XMLShapeExportFlags nFeatures = SEF_DEFAULT, css::awt::Point* pRefPoint = NULL );
-    SAL_DLLPRIVATE void ImpExportLineShape(const css::uno::Reference< css::drawing::XShape >& xShape, XmlShapeType eShapeType, XMLShapeExportFlags nFeatures = SEF_DEFAULT, css::awt::Point* pRefPoint = NULL );
-    SAL_DLLPRIVATE void ImpExportEllipseShape(const css::uno::Reference< css::drawing::XShape >& xShape, XmlShapeType eShapeType, XMLShapeExportFlags nFeatures = SEF_DEFAULT, css::awt::Point* pRefPoint = NULL );
-    SAL_DLLPRIVATE void ImpExportPolygonShape(const css::uno::Reference< css::drawing::XShape >& xShape, XmlShapeType eShapeType, XMLShapeExportFlags nFeatures = SEF_DEFAULT, css::awt::Point* pRefPoint = NULL );
-    SAL_DLLPRIVATE void ImpExportTextBoxShape(const css::uno::Reference< css::drawing::XShape >& xShape, XmlShapeType eShapeType, XMLShapeExportFlags nFeatures = SEF_DEFAULT, css::awt::Point* pRefPoint = NULL );
-    SAL_DLLPRIVATE void ImpExportGraphicObjectShape(const css::uno::Reference< css::drawing::XShape >& xShape, XmlShapeType eShapeType, XMLShapeExportFlags nFeatures = SEF_DEFAULT, css::awt::Point* pRefPoint = NULL );
-    SAL_DLLPRIVATE void ImpExportChartShape(const css::uno::Reference< css::drawing::XShape >& xShape, XmlShapeType eShapeType, XMLShapeExportFlags nFeatures = SEF_DEFAULT, css::awt::Point* pRefPoint = NULL, SvXMLAttributeList* pAttrList = NULL );
-    SAL_DLLPRIVATE void ImpExportControlShape(const css::uno::Reference< css::drawing::XShape >& xShape, XmlShapeType eShapeType, XMLShapeExportFlags nFeatures = SEF_DEFAULT,  css::awt::Point* pRefPoint = NULL );
-    SAL_DLLPRIVATE void ImpExportConnectorShape(const css::uno::Reference< css::drawing::XShape >& xShape, XmlShapeType eShapeType, XMLShapeExportFlags nFeatures = SEF_DEFAULT, css::awt::Point* pRefPoint = NULL );
-    SAL_DLLPRIVATE void ImpExportMeasureShape(const css::uno::Reference< css::drawing::XShape >& xShape, XmlShapeType eShapeType, XMLShapeExportFlags nFeatures = SEF_DEFAULT,  css::awt::Point* pRefPoint = NULL );
-    SAL_DLLPRIVATE void ImpExportOLE2Shape(const css::uno::Reference< css::drawing::XShape >& xShape, XmlShapeType eShapeType, XMLShapeExportFlags nFeatures = SEF_DEFAULT, css::awt::Point* pRefPoint = NULL, SvXMLAttributeList* pAttrList = NULL );
-    SAL_DLLPRIVATE void ImpExportPageShape(const css::uno::Reference< css::drawing::XShape >& xShape, XmlShapeType eShapeType, XMLShapeExportFlags nFeatures = SEF_DEFAULT, css::awt::Point* pRefPoint = NULL );
-    SAL_DLLPRIVATE void ImpExportCaptionShape(const css::uno::Reference< css::drawing::XShape >& xShape, XmlShapeType eShapeType, XMLShapeExportFlags nFeatures = SEF_DEFAULT, css::awt::Point* pRefPoint = NULL );
-    SAL_DLLPRIVATE void ImpExport3DShape(const css::uno::Reference< css::drawing::XShape >& xShape, XmlShapeType eShapeType, XMLShapeExportFlags nFeatures = SEF_DEFAULT, css::awt::Point* pRefPoint = NULL );
-    SAL_DLLPRIVATE void ImpExportFrameShape( const css::uno::Reference< css::drawing::XShape >& xShape, XmlShapeType eShapeType, XMLShapeExportFlags nFeatures = SEF_DEFAULT, css::awt::Point* pRefPoint = NULL );
-    SAL_DLLPRIVATE void ImpExportPluginShape( const css::uno::Reference< css::drawing::XShape >& xShape, XmlShapeType eShapeType, XMLShapeExportFlags nFeatures = SEF_DEFAULT, css::awt::Point* pRefPoint = NULL );
-    SAL_DLLPRIVATE void ImpExportAppletShape( const css::uno::Reference< css::drawing::XShape >& xShape, XmlShapeType eShapeType, XMLShapeExportFlags nFeatures = SEF_DEFAULT, css::awt::Point* pRefPoint = NULL );
-    SAL_DLLPRIVATE void ImpExportCustomShape( const css::uno::Reference< css::drawing::XShape >& xShape, XmlShapeType eShapeType, XMLShapeExportFlags nFeatures = SEF_DEFAULT, css::awt::Point* pRefPoint = NULL );
-    SAL_DLLPRIVATE void ImpExportMediaShape( const css::uno::Reference< css::drawing::XShape >& xShape, XmlShapeType eShapeType, XMLShapeExportFlags nFeatures = SEF_DEFAULT, css::awt::Point* pRefPoint = NULL );
-    SAL_DLLPRIVATE void ImpExportTableShape(const css::uno::Reference< css::drawing::XShape >& xShape, XmlShapeType eShapeType, XMLShapeExportFlags nFeatures = SEF_DEFAULT,    css::awt::Point* pRefPoint = NULL );
+    SAL_DLLPRIVATE void ImpExportGroupShape( const css::uno::Reference< css::drawing::XShape >& xShape, XmlShapeType eShapeType, XMLShapeExportFlags nFeatures = SEF_DEFAULT, css::awt::Point* pRefPoint = nullptr );
+    SAL_DLLPRIVATE void ImpExport3DSceneShape( const css::uno::Reference< css::drawing::XShape >& xShape, XmlShapeType eShapeType, XMLShapeExportFlags nFeatures = SEF_DEFAULT, css::awt::Point* pRefPoint = nullptr );
+    SAL_DLLPRIVATE void ImpExportRectangleShape( const css::uno::Reference< css::drawing::XShape >& xShape, XmlShapeType eShapeType, XMLShapeExportFlags nFeatures = SEF_DEFAULT, css::awt::Point* pRefPoint = nullptr );
+    SAL_DLLPRIVATE void ImpExportLineShape(const css::uno::Reference< css::drawing::XShape >& xShape, XmlShapeType eShapeType, XMLShapeExportFlags nFeatures = SEF_DEFAULT, css::awt::Point* pRefPoint = nullptr );
+    SAL_DLLPRIVATE void ImpExportEllipseShape(const css::uno::Reference< css::drawing::XShape >& xShape, XmlShapeType eShapeType, XMLShapeExportFlags nFeatures = SEF_DEFAULT, css::awt::Point* pRefPoint = nullptr );
+    SAL_DLLPRIVATE void ImpExportPolygonShape(const css::uno::Reference< css::drawing::XShape >& xShape, XmlShapeType eShapeType, XMLShapeExportFlags nFeatures = SEF_DEFAULT, css::awt::Point* pRefPoint = nullptr );
+    SAL_DLLPRIVATE void ImpExportTextBoxShape(const css::uno::Reference< css::drawing::XShape >& xShape, XmlShapeType eShapeType, XMLShapeExportFlags nFeatures = SEF_DEFAULT, css::awt::Point* pRefPoint = nullptr );
+    SAL_DLLPRIVATE void ImpExportGraphicObjectShape(const css::uno::Reference< css::drawing::XShape >& xShape, XmlShapeType eShapeType, XMLShapeExportFlags nFeatures = SEF_DEFAULT, css::awt::Point* pRefPoint = nullptr );
+    SAL_DLLPRIVATE void ImpExportChartShape(const css::uno::Reference< css::drawing::XShape >& xShape, XmlShapeType eShapeType, XMLShapeExportFlags nFeatures = SEF_DEFAULT, css::awt::Point* pRefPoint = nullptr, SvXMLAttributeList* pAttrList = nullptr );
+    SAL_DLLPRIVATE void ImpExportControlShape(const css::uno::Reference< css::drawing::XShape >& xShape, XmlShapeType eShapeType, XMLShapeExportFlags nFeatures = SEF_DEFAULT,  css::awt::Point* pRefPoint = nullptr );
+    SAL_DLLPRIVATE void ImpExportConnectorShape(const css::uno::Reference< css::drawing::XShape >& xShape, XmlShapeType eShapeType, XMLShapeExportFlags nFeatures = SEF_DEFAULT, css::awt::Point* pRefPoint = nullptr );
+    SAL_DLLPRIVATE void ImpExportMeasureShape(const css::uno::Reference< css::drawing::XShape >& xShape, XmlShapeType eShapeType, XMLShapeExportFlags nFeatures = SEF_DEFAULT,  css::awt::Point* pRefPoint = nullptr );
+    SAL_DLLPRIVATE void ImpExportOLE2Shape(const css::uno::Reference< css::drawing::XShape >& xShape, XmlShapeType eShapeType, XMLShapeExportFlags nFeatures = SEF_DEFAULT, css::awt::Point* pRefPoint = nullptr, SvXMLAttributeList* pAttrList = nullptr );
+    SAL_DLLPRIVATE void ImpExportPageShape(const css::uno::Reference< css::drawing::XShape >& xShape, XmlShapeType eShapeType, XMLShapeExportFlags nFeatures = SEF_DEFAULT, css::awt::Point* pRefPoint = nullptr );
+    SAL_DLLPRIVATE void ImpExportCaptionShape(const css::uno::Reference< css::drawing::XShape >& xShape, XmlShapeType eShapeType, XMLShapeExportFlags nFeatures = SEF_DEFAULT, css::awt::Point* pRefPoint = nullptr );
+    SAL_DLLPRIVATE void ImpExport3DShape(const css::uno::Reference< css::drawing::XShape >& xShape, XmlShapeType eShapeType, XMLShapeExportFlags nFeatures = SEF_DEFAULT, css::awt::Point* pRefPoint = nullptr );
+    SAL_DLLPRIVATE void ImpExportFrameShape( const css::uno::Reference< css::drawing::XShape >& xShape, XmlShapeType eShapeType, XMLShapeExportFlags nFeatures = SEF_DEFAULT, css::awt::Point* pRefPoint = nullptr );
+    SAL_DLLPRIVATE void ImpExportPluginShape( const css::uno::Reference< css::drawing::XShape >& xShape, XmlShapeType eShapeType, XMLShapeExportFlags nFeatures = SEF_DEFAULT, css::awt::Point* pRefPoint = nullptr );
+    SAL_DLLPRIVATE void ImpExportAppletShape( const css::uno::Reference< css::drawing::XShape >& xShape, XmlShapeType eShapeType, XMLShapeExportFlags nFeatures = SEF_DEFAULT, css::awt::Point* pRefPoint = nullptr );
+    SAL_DLLPRIVATE void ImpExportCustomShape( const css::uno::Reference< css::drawing::XShape >& xShape, XmlShapeType eShapeType, XMLShapeExportFlags nFeatures = SEF_DEFAULT, css::awt::Point* pRefPoint = nullptr );
+    SAL_DLLPRIVATE void ImpExportMediaShape( const css::uno::Reference< css::drawing::XShape >& xShape, XmlShapeType eShapeType, XMLShapeExportFlags nFeatures = SEF_DEFAULT, css::awt::Point* pRefPoint = nullptr );
+    SAL_DLLPRIVATE void ImpExportTableShape(const css::uno::Reference< css::drawing::XShape >& xShape, XmlShapeType eShapeType, XMLShapeExportFlags nFeatures = SEF_DEFAULT,    css::awt::Point* pRefPoint = nullptr );
 public:
-    XMLShapeExport(SvXMLExport& rExp, SvXMLExportPropertyMapper *pExtMapper=0 );
+    XMLShapeExport(SvXMLExport& rExp, SvXMLExportPropertyMapper *pExtMapper=nullptr );
     virtual ~XMLShapeExport();
 
     // This method collects all automatic styles for the given XShape
@@ -254,8 +254,8 @@ public:
     void exportShape(
         const css::uno::Reference < css::drawing::XShape >& xShape,
         XMLShapeExportFlags nFeatures = SEF_DEFAULT,
-        css::awt::Point* pRefPoint = NULL,
-        SvXMLAttributeList* pAttrList = NULL
+        css::awt::Point* pRefPoint = nullptr,
+        SvXMLAttributeList* pAttrList = nullptr
         );
 
     // This method collects all automatic styles for the shapes inside the given XShapes collection
@@ -266,7 +266,7 @@ public:
     void exportShapes(
         const css::uno::Reference < css::drawing::XShapes >& xShapes,
         XMLShapeExportFlags nFeatures = SEF_DEFAULT,
-        css::awt::Point* pRefPoint = NULL
+        css::awt::Point* pRefPoint = nullptr
         );
 
     /** initializes some internal structures for fast access to the given XShapes collection

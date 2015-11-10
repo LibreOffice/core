@@ -139,7 +139,7 @@ const XMLServiceMapEntry_Impl aServiceMap[] =
     SERVICE_MAP_ENTRY( DRAW ),   // it must appear before Draw
     SERVICE_MAP_ENTRY( MATH ),
     SERVICE_MAP_ENTRY( CHART ),
-    { 0, 0, 0, 0 }
+    { nullptr, 0, nullptr, 0 }
 };
 
 class SettingsExportFacade : public ::xmloff::XMLSettingsExportContext
@@ -236,7 +236,7 @@ void SAL_CALL SvXMLExportEventListener::disposing( const lang::EventObject& )
     if (pExport)
     {
         pExport->DisposingModel();
-        pExport = NULL;
+        pExport = nullptr;
     }
 }
 
@@ -448,11 +448,11 @@ SvXMLExport::SvXMLExport(
     mpNamespaceMap( new SvXMLNamespaceMap ),
     mpUnitConv( new SvXMLUnitConverter( xContext,
                 util::MeasureUnit::MM_100TH, eDefaultMeasureUnit) ),
-    mpNumExport(0L),
-    mpProgressBarHelper( NULL ),
-    mpEventExport( NULL ),
-    mpImageMapExport( NULL ),
-    mpXMLErrors( NULL ),
+    mpNumExport(nullptr),
+    mpProgressBarHelper( nullptr ),
+    mpEventExport( nullptr ),
+    mpImageMapExport( nullptr ),
+    mpXMLErrors( nullptr ),
     mbExtended( false ),
     meClass( eClass ),
     mnExportFlags( nExportFlags ),
@@ -479,11 +479,11 @@ SvXMLExport::SvXMLExport(
     mpNamespaceMap( new SvXMLNamespaceMap ),
     mpUnitConv( new SvXMLUnitConverter( xContext,
                 util::MeasureUnit::MM_100TH, eDefaultMeasureUnit) ),
-    mpNumExport(0L),
-    mpProgressBarHelper( NULL ),
-    mpEventExport( NULL ),
-    mpImageMapExport( NULL ),
-    mpXMLErrors( NULL ),
+    mpNumExport(nullptr),
+    mpProgressBarHelper( nullptr ),
+    mpEventExport( nullptr ),
+    mpImageMapExport( nullptr ),
+    mpXMLErrors( nullptr ),
     mbExtended( false ),
     meClass( XML_TOKEN_INVALID ),
     mnExportFlags( SvXMLExportFlags::NONE ),
@@ -518,11 +518,11 @@ SvXMLExport::SvXMLExport(
     mpUnitConv( new SvXMLUnitConverter( xContext,
                     util::MeasureUnit::MM_100TH,
                     SvXMLUnitConverter::GetMeasureUnit(eDefaultFieldUnit)) ),
-    mpNumExport(0L),
-    mpProgressBarHelper( NULL ),
-    mpEventExport( NULL ),
-    mpImageMapExport( NULL ),
-    mpXMLErrors( NULL ),
+    mpNumExport(nullptr),
+    mpProgressBarHelper( nullptr ),
+    mpEventExport( nullptr ),
+    mpImageMapExport( nullptr ),
+    mpXMLErrors( nullptr ),
     mbExtended( false ),
     meClass( XML_TOKEN_INVALID ),
     mnExportFlags( SvXMLExportFlags::NONE ),
@@ -724,7 +724,7 @@ void SAL_CALL SvXMLExport::initialize( const uno::Sequence< uno::Any >& aArgumen
             mxHandler = xTmpDocHandler;
             *pAny >>= mxExtHandler;
 
-            if (mxNumberFormatsSupplier.is() && mpNumExport == NULL)
+            if (mxNumberFormatsSupplier.is() && mpNumExport == nullptr)
                 mpNumExport = new SvXMLNumFmtExport(*this, mxNumberFormatsSupplier);
         }
 
@@ -861,7 +861,7 @@ sal_Bool SAL_CALL SvXMLExport::filter( const uno::Sequence< beans::PropertyValue
         css::uno::Any ex(cppu::getCaughtException());
         SetError( XMLERROR_FLAG_ERROR | XMLERROR_FLAG_SEVERE | XMLERROR_API,
                   Sequence<OUString>(),
-                  ex.getValueTypeName() + ": \"" + e.Message + "\"", NULL );
+                  ex.getValueTypeName() + ": \"" + e.Message + "\"", nullptr );
     }
 
     // return true only if no error occurred
@@ -1421,7 +1421,7 @@ sal_uInt32 SvXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum eClass )
     // office:version = ...
     if( !mbExtended )
     {
-        const sal_Char* pVersion = 0;
+        const sal_Char* pVersion = nullptr;
         switch( getDefaultVersion() )
         {
         case SvtSaveOptions::ODFVER_LATEST: pVersion = sXML_1_2; break;
@@ -1943,7 +1943,7 @@ void SvXMLExport::exportAnnotationMeta(const uno::Reference<drawing::XShape>&)
 
 sal_Int32 SvXMLExport::dataStyleForceSystemLanguage(sal_Int32 nFormat) const
 {
-    return ( mpNumExport != NULL )
+    return ( mpNumExport != nullptr )
                  ? mpNumExport->ForceSystemLanguage( nFormat ) : nFormat;
 }
 
@@ -2086,10 +2086,10 @@ ProgressBarHelper*  SvXMLExport::GetProgressBarHelper()
 
 XMLEventExport& SvXMLExport::GetEventExport()
 {
-    if( NULL == mpEventExport)
+    if( nullptr == mpEventExport)
     {
         // create EventExport on demand
-        mpEventExport = new XMLEventExport(*this, NULL);
+        mpEventExport = new XMLEventExport(*this, nullptr);
 
         // and register standard handlers + names
         OUString sStarBasic("StarBasic");
@@ -2105,7 +2105,7 @@ XMLEventExport& SvXMLExport::GetEventExport()
 XMLImageMapExport& SvXMLExport::GetImageMapExport()
 {
     // image map export, create on-demand
-    if( NULL == mpImageMapExport )
+    if( nullptr == mpImageMapExport )
     {
         mpImageMapExport = new XMLImageMapExport(*this);
     }
@@ -2135,7 +2135,7 @@ SvXMLExport* SvXMLExport::getImplementation( uno::Reference< uno::XInterface > x
                     xUT->getSomething( SvXMLExport::getUnoTunnelId())));
     }
     else
-        return NULL;
+        return nullptr;
 }
 
 // XUnoTunnel
@@ -2257,14 +2257,14 @@ void SvXMLExport::StartElement(const OUString& rName,
         {
             Sequence<OUString> aPars(1);
             aPars[0] = rName;
-            SetError( XMLERROR_SAX|XMLERROR_FLAG_WARNING, aPars, e.Message, NULL );
+            SetError( XMLERROR_SAX|XMLERROR_FLAG_WARNING, aPars, e.Message, nullptr );
         }
         catch (const SAXException& e)
         {
             Sequence<OUString> aPars(1);
             aPars[0] = rName;
             SetError( XMLERROR_SAX|XMLERROR_FLAG_ERROR|XMLERROR_FLAG_SEVERE,
-                      aPars, e.Message, NULL );
+                      aPars, e.Message, nullptr );
         }
     }
     ClearAttrList();
@@ -2283,14 +2283,14 @@ void SvXMLExport::Characters(const OUString& rChars)
         {
             Sequence<OUString> aPars(1);
             aPars[0] = rChars;
-            SetError( XMLERROR_SAX|XMLERROR_FLAG_WARNING, aPars, e.Message, NULL );
+            SetError( XMLERROR_SAX|XMLERROR_FLAG_WARNING, aPars, e.Message, nullptr );
         }
         catch (const SAXException& e)
         {
             Sequence<OUString> aPars(1);
             aPars[0] = rChars;
             SetError( XMLERROR_SAX|XMLERROR_FLAG_ERROR|XMLERROR_FLAG_SEVERE,
-                      aPars, e.Message, NULL );
+                      aPars, e.Message, nullptr );
         }
     }
 }
@@ -2331,7 +2331,7 @@ void SvXMLExport::EndElement(const OUString& rName,
             Sequence<OUString> aPars(1);
             aPars[0] = rName;
             SetError( XMLERROR_SAX|XMLERROR_FLAG_ERROR|XMLERROR_FLAG_SEVERE,
-                      aPars, e.Message, NULL );
+                      aPars, e.Message, nullptr );
         }
     }
 }
@@ -2351,7 +2351,7 @@ void SvXMLExport::IgnorableWhitespace()
         {
             Sequence<OUString> aPars(0);
             SetError( XMLERROR_SAX|XMLERROR_FLAG_ERROR|XMLERROR_FLAG_SEVERE,
-                      aPars, e.Message, NULL );
+                      aPars, e.Message, nullptr );
         }
     }
 }
@@ -2375,7 +2375,7 @@ void SvXMLExport::SetError(
         mnErrorFlags |= SvXMLErrorFlags::DO_NOTHING;
 
     // create error list on demand
-    if ( mpXMLErrors == NULL )
+    if ( mpXMLErrors == nullptr )
         mpXMLErrors = new XMLErrors();
 
     // save error information
@@ -2386,7 +2386,7 @@ void SvXMLExport::SetError(
     sal_Int32 nId,
     const Sequence<OUString>& rMsgParams)
 {
-    SetError( nId, rMsgParams, "", NULL );
+    SetError( nId, rMsgParams, "", nullptr );
 }
 
 void SvXMLExport::DisposingModel()

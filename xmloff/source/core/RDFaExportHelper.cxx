@@ -95,7 +95,7 @@ getRelativeReference(SvXMLExport const& rExport, OUString const& rURI)
 }
 
 RDFaExportHelper::RDFaExportHelper(SvXMLExport & i_rExport)
-    : m_rExport(i_rExport), m_xRepository(0), m_Counter(0)
+    : m_rExport(i_rExport), m_xRepository(nullptr), m_Counter(0)
 {
     const uno::Reference<rdf::XRepositorySupplier> xRS( m_rExport.GetModel(),
             uno::UNO_QUERY);

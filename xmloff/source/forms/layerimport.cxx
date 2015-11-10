@@ -71,7 +71,7 @@ using namespace ::com::sun::star::sdb;
 //= OFormLayerXMLImport_Impl
 OFormLayerXMLImport_Impl::OFormLayerXMLImport_Impl(SvXMLImport& _rImporter)
     :m_rImporter(_rImporter)
-    ,m_pAutoStyles(NULL)
+    ,m_pAutoStyles(nullptr)
 {
     // build the attribute2property map
     // string properties which are exported as attributes
@@ -345,7 +345,7 @@ const SvXMLStyleContext* OFormLayerXMLImport_Impl::getStyleElement(const OUStrin
         // did you use setAutoStyleContext?
 
     const SvXMLStyleContext* pControlStyle =
-        m_pAutoStyles ? m_pAutoStyles->FindStyleChildContext( XML_STYLE_FAMILY_TEXT_PARAGRAPH, _rStyleName ) : NULL;
+        m_pAutoStyles ? m_pAutoStyles->FindStyleChildContext( XML_STYLE_FAMILY_TEXT_PARAGRAPH, _rStyleName ) : nullptr;
     OSL_ENSURE( pControlStyle || !m_pAutoStyles,
                 OStringBuffer("OFormLayerXMLImport_Impl::getStyleElement: did not find the style named \"").append(OUStringToOString(_rStyleName, RTL_TEXTENCODING_ASCII_US)).append("\"!").getStr() );
     return pControlStyle;
@@ -482,7 +482,7 @@ SvXMLImportContext* OFormLayerXMLImport_Impl::createOfficeFormsContext(
 SvXMLImportContext* OFormLayerXMLImport_Impl::createContext(const sal_uInt16 _nPrefix, const OUString& _rLocalName,
     const Reference< xml::sax::XAttributeList >&)
 {
-    SvXMLImportContext* pContext = NULL;
+    SvXMLImportContext* pContext = nullptr;
     if ( _rLocalName == "form" )
     {
         if ( m_xCurrentPageFormsSupp.is() )

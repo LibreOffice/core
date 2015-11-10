@@ -141,7 +141,7 @@ static const char *lcl_getFormFieldmarkName(OUString &name)
         name == "ecma.office-open-xml.field.FORMDROPDOWN")
         return sFormDropDown;
     else
-        return NULL;
+        return nullptr;
 }
 
 static OUString lcl_getFieldmarkName(OUString const& name)
@@ -207,7 +207,7 @@ void XMLTextMarkImportContext::EndElement()
                 case TypeBookmark:
                     {
                         const char *formFieldmarkName=lcl_getFormFieldmarkName(m_sFieldName);
-                        bool bImportAsField=((lcl_MarkType)nTmp==TypeFieldmark && formFieldmarkName!=NULL); //@TODO handle abbreviation cases..
+                        bool bImportAsField=((lcl_MarkType)nTmp==TypeFieldmark && formFieldmarkName!=nullptr); //@TODO handle abbreviation cases..
                         // export point bookmark
                         const Reference<XInterface> xContent(
                             CreateAndInsertMark(GetImport(),
@@ -382,7 +382,7 @@ Reference<XTextContent> XMLTextMarkImportContext::CreateAndInsertMark(
         if (!xIfc.is())
         {
             OSL_FAIL("CreateAndInsertMark: cannot create service?");
-            return 0;
+            return nullptr;
         }
 
         // set name (unless there is no name (text:meta))
@@ -396,7 +396,7 @@ Reference<XTextContent> XMLTextMarkImportContext::CreateAndInsertMark(
             if (!sMarkName.isEmpty())
             {
                 OSL_FAIL("name given, but XNamed not supported?");
-                return 0;
+                return nullptr;
             }
         }
 
@@ -419,11 +419,11 @@ Reference<XTextContent> XMLTextMarkImportContext::CreateAndInsertMark(
             catch (com::sun::star::lang::IllegalArgumentException &)
             {
                 OSL_FAIL("CreateAndInsertMark: cannot insert?");
-                return 0;
+                return nullptr;
             }
         }
     }
-    return 0;
+    return nullptr;
 }
 
 bool XMLTextMarkImportContext::FindName(

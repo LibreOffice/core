@@ -38,7 +38,7 @@ public:
     SchXMLParagraphContext( SvXMLImport& rImport,
                             const OUString& rLocalName,
                             OUString& rText,
-                            OUString * pOutId = 0 );
+                            OUString * pOutId = nullptr );
     virtual ~SchXMLParagraphContext();
     virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList ) override;
     virtual void EndElement() override;

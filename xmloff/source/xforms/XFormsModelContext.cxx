@@ -105,7 +105,7 @@ SvXMLImportContext* XFormsModelContext::HandleChild(
     const OUString& rLocalName,
     const Reference<XAttributeList>& )
 {
-    SvXMLImportContext* pContext = NULL;
+    SvXMLImportContext* pContext = nullptr;
 
     switch( nToken )
     {

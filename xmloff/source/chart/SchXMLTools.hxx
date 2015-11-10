@@ -97,7 +97,7 @@ namespace SchXMLTools
         const OUString & rRangeAddress,
         sal_Int32 nCooSysIndex,
         sal_Int32 nDimensionIndex,
-        tSchXMLLSequencesPerIndex * pLSequencesPerIndex = 0 );
+        tSchXMLLSequencesPerIndex * pLSequencesPerIndex = nullptr );
 
     ::com::sun::star::uno::Any getPropertyFromContext( const OUString& rPropertyName, const XMLPropStyleContext * pPropStyleContext, const SvXMLStylesContext* pStylesCtxt );
 

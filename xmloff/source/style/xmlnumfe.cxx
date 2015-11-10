@@ -229,9 +229,9 @@ SvXMLNumFmtExport::SvXMLNumFmtExport(
             const uno::Reference< util::XNumberFormatsSupplier >& rSupp ) :
     rExport( rExp ),
     sPrefix( OUString("N") ),
-    pFormatter( NULL ),
-    pCharClass( NULL ),
-    pLocaleData( NULL )
+    pFormatter( nullptr ),
+    pCharClass( nullptr ),
+    pLocaleData( nullptr )
 {
     //  supplier must be SvNumberFormatsSupplierObj
     SvNumberFormatsSupplierObj* pObj =
@@ -264,9 +264,9 @@ SvXMLNumFmtExport::SvXMLNumFmtExport(
                        const OUString& rPrefix ) :
     rExport( rExp ),
     sPrefix( rPrefix ),
-    pFormatter( NULL ),
-    pCharClass( NULL ),
-    pLocaleData( NULL )
+    pFormatter( nullptr ),
+    pCharClass( nullptr ),
+    pLocaleData( nullptr )
 {
     //  supplier must be SvNumberFormatsSupplierObj
     SvNumberFormatsSupplierObj* pObj =
@@ -1743,7 +1743,7 @@ void SvXMLNumFmtExport::Export( bool bIsAutoStyle )
         return;                         // no formatter -> no entries
 
     sal_uInt32 nKey;
-    const SvNumberformat* pFormat = NULL;
+    const SvNumberformat* pFormat = nullptr;
     bool bNext(pUsedList->GetFirstUsed(nKey));
     while(bNext)
     {
@@ -1797,7 +1797,7 @@ OUString SvXMLNumFmtExport::GetStyleName( sal_uInt32 nKey )
 
 void SvXMLNumFmtExport::SetUsed( sal_uInt32 nKey )
 {
-    DBG_ASSERT( pFormatter != NULL, "missing formatter" );
+    DBG_ASSERT( pFormatter != nullptr, "missing formatter" );
     if( !pFormatter )
         return;
 
@@ -1823,7 +1823,7 @@ void SvXMLNumFmtExport::SetWasUsed(const uno::Sequence<sal_Int32>& rWasUsed)
 static const SvNumberformat* lcl_GetFormat( SvNumberFormatter* pFormatter,
                            sal_uInt32 nKey )
 {
-    return ( pFormatter != NULL ) ? pFormatter->GetEntry( nKey ) : NULL;
+    return ( pFormatter != nullptr ) ? pFormatter->GetEntry( nKey ) : nullptr;
 }
 
 sal_uInt32 SvXMLNumFmtExport::ForceSystemLanguage( sal_uInt32 nKey )
@@ -1831,9 +1831,9 @@ sal_uInt32 SvXMLNumFmtExport::ForceSystemLanguage( sal_uInt32 nKey )
     sal_uInt32 nRet = nKey;
 
     const SvNumberformat* pFormat = lcl_GetFormat( pFormatter, nKey );
-    if( pFormat != NULL )
+    if( pFormat != nullptr )
     {
-        DBG_ASSERT( pFormatter != NULL, "format without formatter?" );
+        DBG_ASSERT( pFormatter != nullptr, "format without formatter?" );
 
         sal_Int32 nErrorPos;
         short nType = pFormat->GetType();

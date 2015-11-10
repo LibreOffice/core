@@ -33,7 +33,7 @@ namespace xmloff
             sal_Char const * & _rpCurrentValuePropertyName, sal_Char const * & _rpValuePropertyName)
     {
         // reset the pointers in case we can't determine the property names
-        _rpCurrentValuePropertyName = _rpValuePropertyName = NULL;
+        _rpCurrentValuePropertyName = _rpValuePropertyName = nullptr;
         switch (_nFormComponentType)
         {
             case FormComponentType::TEXTFIELD:
@@ -94,7 +94,7 @@ namespace xmloff
     void OValuePropertiesMetaData::getValueLimitPropertyNames(sal_Int16 _nFormComponentType,
         sal_Char const * & _rpMinValuePropertyName, sal_Char const * & _rpMaxValuePropertyName)
     {
-        _rpMinValuePropertyName = _rpMaxValuePropertyName = NULL;
+        _rpMinValuePropertyName = _rpMaxValuePropertyName = nullptr;
         switch (_nFormComponentType)
         {
             case FormComponentType::NUMERICFIELD:
@@ -129,7 +129,7 @@ namespace xmloff
         sal_Char const * & _rpValuePropertyName, sal_Char const * & _rpDefaultValuePropertyName )
     {
         // reset the pointers in case we can't determine the property names
-        _rpValuePropertyName = _rpDefaultValuePropertyName = NULL;
+        _rpValuePropertyName = _rpDefaultValuePropertyName = nullptr;
         switch (_nFormComponentType)
         {
             case FormComponentType::TEXTFIELD:

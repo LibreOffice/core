@@ -47,13 +47,13 @@ namespace xmloff
 
     //= OControlPropertyHandlerFactory
     OControlPropertyHandlerFactory::OControlPropertyHandlerFactory()
-        :m_pTextAlignHandler(NULL)
-        ,m_pControlBorderStyleHandler(NULL)
-        ,m_pControlBorderColorHandler(NULL)
-        ,m_pRotationAngleHandler(NULL)
-        ,m_pFontWidthHandler(NULL)
-        ,m_pFontEmphasisHandler(NULL)
-        ,m_pFontReliefHandler(NULL)
+        :m_pTextAlignHandler(nullptr)
+        ,m_pControlBorderStyleHandler(nullptr)
+        ,m_pControlBorderColorHandler(nullptr)
+        ,m_pRotationAngleHandler(nullptr)
+        ,m_pFontWidthHandler(nullptr)
+        ,m_pFontEmphasisHandler(nullptr)
+        ,m_pFontReliefHandler(nullptr)
     {
     }
 
@@ -70,7 +70,7 @@ namespace xmloff
 
     const XMLPropertyHandler* OControlPropertyHandlerFactory::GetPropertyHandler(sal_Int32 _nType) const
     {
-        const XMLPropertyHandler* pHandler = NULL;
+        const XMLPropertyHandler* pHandler = nullptr;
 
         switch (_nType)
         {

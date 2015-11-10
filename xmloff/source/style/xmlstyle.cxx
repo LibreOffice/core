@@ -213,7 +213,7 @@ public:
     SvXMLStyleIndex_Impl( sal_uInt16 nFam, const OUString& rName ) :
         sName( rName ),
         nFamily( nFam ),
-        pStyle ( 0 )
+        pStyle ( nullptr )
     {
     }
 
@@ -259,7 +259,7 @@ class SvXMLStylesContext_Impl
     mutable sal_uInt32 m_nIndexCreated;
 #endif
 
-    void FlushIndex() { delete pIndices; pIndices = 0; }
+    void FlushIndex() { delete pIndices; pIndices = nullptr; }
 
 public:
     explicit SvXMLStylesContext_Impl( bool bAuto );
@@ -269,7 +269,7 @@ public:
 
     SvXMLStyleContext *GetStyle( size_t i )
     {
-        return i < aStyles.size() ? aStyles[ i ] : 0;
+        return i < aStyles.size() ? aStyles[ i ] : nullptr;
     }
 
     inline void AddStyle( SvXMLStyleContext *pStyle );
@@ -282,7 +282,7 @@ public:
 };
 
 SvXMLStylesContext_Impl::SvXMLStylesContext_Impl( bool bAuto ) :
-    pIndices( 0 ),
+    pIndices( nullptr ),
     bAutomaticStyle( bAuto )
 #if OSL_DEBUG_LEVEL > 0
     , m_nIndexCreated( 0 )
@@ -325,7 +325,7 @@ const SvXMLStyleContext *SvXMLStylesContext_Impl::FindStyleChildContext( sal_uIn
                                                                          const OUString& rName,
                                                                          bool bCreateIndex ) const
 {
-    const SvXMLStyleContext *pStyle = 0;
+    const SvXMLStyleContext *pStyle = nullptr;
 
     if( !pIndices && bCreateIndex && !aStyles.empty() )
     {
@@ -384,7 +384,7 @@ SvXMLStyleContext *SvXMLStylesContext::CreateStyleChildContext( sal_uInt16 p_nPr
                                                                 const OUString& rLocalName,
                                                                 const uno::Reference< xml::sax::XAttributeList > & xAttrList )
 {
-    SvXMLStyleContext *pStyle = NULL;
+    SvXMLStyleContext *pStyle = nullptr;
 
     if(GetImport().GetDataStylesImport())
     {
@@ -502,7 +502,7 @@ SvXMLStyleContext *SvXMLStylesContext::CreateStyleStyleChildContext(
         sal_uInt16 nFamily, sal_uInt16 nPrefix, const OUString& rLocalName,
         const uno::Reference< xml::sax::XAttributeList > & xAttrList )
 {
-    SvXMLStyleContext *pStyle = 0;
+    SvXMLStyleContext *pStyle = nullptr;
 
     switch( nFamily )
     {
@@ -536,7 +536,7 @@ SvXMLStyleContext *SvXMLStylesContext::CreateDefaultStyleStyleChildContext(
         sal_uInt16 /*nFamily*/, sal_uInt16 /*nPrefix*/, const OUString& /*rLocalName*/,
         const uno::Reference< xml::sax::XAttributeList > & )
 {
-    return 0;
+    return nullptr;
 }
 
 bool SvXMLStylesContext::InsertStyleFamily( sal_uInt16 ) const
@@ -782,7 +782,7 @@ SvXMLStylesContext::SvXMLStylesContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
     msParaStyleServiceName( "com.sun.star.style.ParagraphStyle" ),
     msTextStyleServiceName( "com.sun.star.style.CharacterStyle" ),
     mpImpl( new SvXMLStylesContext_Impl( bAuto ) ),
-    mpStyleStylesElemTokenMap( 0 )
+    mpStyleStylesElemTokenMap( nullptr )
 {
 }
 
@@ -796,7 +796,7 @@ SvXMLImportContext *SvXMLStylesContext::CreateChildContext( sal_uInt16 nPrefix,
                                                             const OUString& rLocalName,
                                                             const uno::Reference< xml::sax::XAttributeList > & xAttrList )
 {
-    SvXMLImportContext *pContext = 0;
+    SvXMLImportContext *pContext = nullptr;
 
     SvXMLStyleContext *pStyle =
         CreateStyleChildContext( nPrefix, rLocalName, xAttrList );

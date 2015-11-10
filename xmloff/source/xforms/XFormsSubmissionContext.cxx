@@ -163,7 +163,7 @@ SvXMLImportContext* XFormsSubmissionContext::HandleChild(
     const Reference<XAttributeList>& )
 {
     OSL_FAIL( "no children supported" );
-    return NULL;
+    return nullptr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

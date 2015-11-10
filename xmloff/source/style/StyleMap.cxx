@@ -58,7 +58,7 @@ StyleMap* StyleMap::getImplementation(Reference<XInterface> xInterface) throw()
         return reinterpret_cast<StyleMap*>(xUnoTunnel->getSomething(StyleMap::getUnoTunnelId()));
     }
 
-    return 0;
+    return nullptr;
 }
 
 // XUnoTunnel

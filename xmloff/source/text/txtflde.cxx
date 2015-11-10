@@ -276,7 +276,7 @@ inline Sequence<OUString> const GetStringSequenceProperty(
 XMLTextFieldExport::XMLTextFieldExport( SvXMLExport& rExp,
                                         XMLPropertyState* pCombinedCharState)
     : rExport(rExp),
-      pUsedMasters(NULL),
+      pUsedMasters(nullptr),
       sServicePrefix("com.sun.star.text.textfield."),
       sFieldMasterPrefix("com.sun.star.text.FieldMaster."),
       sPresentationServicePrefix("com.sun.star.presentation.TextField."),
@@ -758,7 +758,7 @@ void XMLTextFieldExport::ExportFieldAutoStyle(
     Reference<XPropertySet> xPropSet(rTextField, UNO_QUERY);
 
     // add field master to list of used field masters (if desired)
-    if (NULL != pUsedMasters)
+    if (nullptr != pUsedMasters)
     {
         Reference<XDependentTextField> xDepField(rTextField, UNO_QUERY);
         if (xDepField.is())
@@ -896,9 +896,9 @@ void XMLTextFieldExport::ExportFieldAutoStyle(
     case FIELD_ID_COMBINED_CHARACTERS:
     {
         // export text style with the addition of the combined characters
-        DBG_ASSERT(NULL != pCombinedCharactersPropertyState,
+        DBG_ASSERT(nullptr != pCombinedCharactersPropertyState,
                    "need proper PropertyState for combined characters");
-        const XMLPropertyState *aStates[] = { pCombinedCharactersPropertyState, 0 };
+        const XMLPropertyState *aStates[] = { pCombinedCharactersPropertyState, nullptr };
         GetExport().GetTextParagraphExport()->Add(
             XML_STYLE_FAMILY_TEXT_TEXT, xRangePropSet,
             aStates);
@@ -984,11 +984,11 @@ void XMLTextFieldExport::ExportField(
 
     // special treatment for combined characters field, because it is
     // exported as a style
-    const XMLPropertyState* aStates[] = { pCombinedCharactersPropertyState, 0 };
+    const XMLPropertyState* aStates[] = { pCombinedCharactersPropertyState, nullptr };
     const XMLPropertyState **pStates =
                 FIELD_ID_COMBINED_CHARACTERS == nToken
                     ? aStates
-                    : 0;
+                    : nullptr;
 
     // find out whether we need to set the style or hyperlink
     bool bHasHyperlink;
@@ -1753,7 +1753,7 @@ void XMLTextFieldExport::ExportFieldHelper(
         util::DateTime aDate( GetDateTimeProperty(sPropertyDateTimeValue, rPropSet) );
         {
             OUStringBuffer aBuffer;
-            ::sax::Converter::convertDateTime(aBuffer, aDate, 0, true);
+            ::sax::Converter::convertDateTime(aBuffer, aDate, nullptr, true);
             SvXMLElementExport aDateElem( GetExport(), XML_NAMESPACE_DC,
                                               XML_DATE, true,
                                               false );
@@ -1903,10 +1903,10 @@ void XMLTextFieldExport::ExportFieldDeclarations(
     if (rText.is())
     {
         // export only used masters
-        DBG_ASSERT(NULL != pUsedMasters,
+        DBG_ASSERT(nullptr != pUsedMasters,
                    "field masters must be recorded in order to be "
                    "written out separatly" );
-        if (NULL != pUsedMasters)
+        if (nullptr != pUsedMasters)
         {
             map<Reference<XText>, set<OUString> > ::iterator aMapIter =
                 pUsedMasters->find(rText);
@@ -2205,7 +2205,7 @@ void XMLTextFieldExport::SetExportOnlyUsedFieldDeclarations(
     bool bExportOnlyUsed)
 {
     delete pUsedMasters;
-    pUsedMasters = NULL;
+    pUsedMasters = nullptr;
 
     // create used masters set (if none is used)
     if (bExportOnlyUsed)
@@ -2674,7 +2674,7 @@ void XMLTextFieldExport::ProcessDateTime(enum XMLTokenEnum eName,
     }
 
     // date/time value
-    ::sax::Converter::convertDateTime(aBuffer, aDateTime, 0);
+    ::sax::Converter::convertDateTime(aBuffer, aDateTime, nullptr);
 
     // output attribute
     ProcessString(eName, aBuffer.makeStringAndClear(), true, nPrefix);
@@ -2704,7 +2704,7 @@ void XMLTextFieldExport::ProcessTimeOrDateTime(enum XMLTokenEnum eName,
     OUStringBuffer aBuffer;
 
     // date/time value
-    ::sax::Converter::convertTimeOrDateTime(aBuffer, rTime, 0);
+    ::sax::Converter::convertTimeOrDateTime(aBuffer, rTime, nullptr);
 
     // output attribute
     ProcessString(eName, aBuffer.makeStringAndClear(), true, nPrefix);

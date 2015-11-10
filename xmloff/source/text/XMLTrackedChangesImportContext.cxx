@@ -86,7 +86,7 @@ SvXMLImportContext* XMLTrackedChangesImportContext::CreateChildContext(
     const OUString& rLocalName,
     const Reference<XAttributeList> & xAttrList)
 {
-    SvXMLImportContext* pContext = NULL;
+    SvXMLImportContext* pContext = nullptr;
 
     if ( (XML_NAMESPACE_TEXT == nPrefix) &&
          IsXMLToken( rLocalName, XML_CHANGED_REGION ) )
@@ -95,7 +95,7 @@ SvXMLImportContext* XMLTrackedChangesImportContext::CreateChildContext(
                                                      nPrefix, rLocalName);
     }
 
-    if (NULL == pContext)
+    if (nullptr == pContext)
     {
         pContext = SvXMLImportContext::CreateChildContext(nPrefix, rLocalName,
                                                           xAttrList);

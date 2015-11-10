@@ -114,12 +114,12 @@ public:
     sal_uInt16 _GetKeyByAttrName( const OUString& rAttrName,
                              OUString *pPrefix,
                              OUString *pLocalName,
-                             OUString *pNamespace = 0,
+                             OUString *pNamespace = nullptr,
                              bool bCache = true) const;
 
     /* This will replace the version with the unused 3rd default parameter */
     sal_uInt16 _GetKeyByAttrName( const OUString& rAttrName,
-                             OUString *pLocalName = 0,
+                             OUString *pLocalName = nullptr,
                              bool bCache = true) const;
 
     sal_uInt16 GetFirstKey() const;
@@ -148,10 +148,10 @@ public:
 /* deprecated */ sal_uInt16 GetKeyByAttrName( const OUString& rAttrName,
                              OUString *pPrefix,
                              OUString *pLocalName,
-                             OUString *pNamespace=0,
+                             OUString *pNamespace=nullptr,
                              sal_uInt16 nIdxGuess = USHRT_MAX ) const;
 /* deprecated */ sal_uInt16 GetKeyByAttrName( const OUString& rAttrName,
-                             OUString *pLocalName = 0,
+                             OUString *pLocalName = nullptr,
                              sal_uInt16 nIdxGuess = USHRT_MAX ) const;
 };
 

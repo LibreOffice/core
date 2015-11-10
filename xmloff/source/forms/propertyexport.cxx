@@ -99,7 +99,7 @@ namespace xmloff
     void OPropertyExport::exportRemainingProperties()
     {
         // the properties tag (will be created if we have at least one no-default property)
-        SvXMLElementExport* pPropertiesTag = NULL;
+        SvXMLElementExport* pPropertiesTag = nullptr;
 
         try
         {

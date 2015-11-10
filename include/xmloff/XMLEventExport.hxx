@@ -69,7 +69,7 @@ class XMLOFF_DLLPUBLIC XMLEventExport
 
 public:
     XMLEventExport(SvXMLExport& rExport,
-                   const XMLEventNameTranslation* pTranslationTable = NULL);
+                   const XMLEventNameTranslation* pTranslationTable = nullptr);
     ~XMLEventExport();
 
     /// register an EventExportHandler for a particular script type

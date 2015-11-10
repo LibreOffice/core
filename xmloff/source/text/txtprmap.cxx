@@ -76,7 +76,7 @@ using namespace ::xmloff::token;
 #define MAP_EXT_I(name,prefix,token,type,context)  { name, sizeof(name)-1, prefix, token, type, context, SvtSaveOptions::ODFVER_012_EXT_COMPAT, true }
 
 #define M_END() \
-    { NULL, 0, 0, XML_TOKEN_INVALID, 0, 0, SvtSaveOptions::ODFVER_010, false }
+    { nullptr, 0, 0, XML_TOKEN_INVALID, 0, 0, SvtSaveOptions::ODFVER_010, false }
 
 //UUUU
 #define _MAP(name,prefix,token,type,context)  { name, sizeof(name)-1, prefix, token, type, context, SvtSaveOptions::ODFVER_010, false }
@@ -994,7 +994,7 @@ XMLPropertyMapEntry aXMLTableRowDefaultsMap[] =
 
 static XMLPropertyMapEntry *lcl_txtprmap_getMap( TextPropMap nType )
 {
-    XMLPropertyMapEntry *pMap = 0;
+    XMLPropertyMapEntry *pMap = nullptr;
     switch( nType )
     {
     case TextPropMap::TEXT:

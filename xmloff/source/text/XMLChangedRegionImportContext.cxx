@@ -100,7 +100,7 @@ SvXMLImportContext* XMLChangedRegionImportContext::CreateChildContext(
     const OUString& rLocalName,
     const Reference<XAttributeList> & xAttrList)
 {
-    SvXMLImportContext* pContext = NULL;
+    SvXMLImportContext* pContext = nullptr;
 
     if (XML_NAMESPACE_TEXT == nPrefix)
     {
@@ -120,7 +120,7 @@ SvXMLImportContext* XMLChangedRegionImportContext::CreateChildContext(
         // else: it may be a text element, see below
     }
 
-    if (NULL == pContext)
+    if (nullptr == pContext)
     {
         // illegal element content! TODO: discard the redlines
         // for the moment -> use text
@@ -129,7 +129,7 @@ SvXMLImportContext* XMLChangedRegionImportContext::CreateChildContext(
                                                           xAttrList);
 
         // or default if text fail
-        if (NULL == pContext)
+        if (nullptr == pContext)
         {
             pContext = SvXMLImportContext::CreateChildContext(
                 nPrefix, rLocalName, xAttrList);
@@ -151,7 +151,7 @@ void XMLChangedRegionImportContext::EndElement()
         rHelper->DeleteParagraph();
 
         GetImport().GetTextImport()->SetCursor(xOldCursor);
-        xOldCursor = NULL;
+        xOldCursor = nullptr;
     }
 }
 
@@ -162,7 +162,7 @@ void XMLChangedRegionImportContext::SetChangeInfo(
     const OUString& rDate)
 {
     util::DateTime aDateTime;
-    if (::sax::Converter::parseDateTime(aDateTime, 0, rDate))
+    if (::sax::Converter::parseDateTime(aDateTime, nullptr, rDate))
     {
         GetImport().GetTextImport()->RedlineAdd(
             rType, sID, rAuthor, rComment, aDateTime, bMergeLastPara);

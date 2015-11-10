@@ -43,7 +43,7 @@ class XMLTextListsHelper : private boost::noncopyable
         /// list stack for importing:
 
         /// push a list context on the list context stack
-        void PushListContext(XMLTextListBlockContext *i_pListBlock = 0);
+        void PushListContext(XMLTextListBlockContext *i_pListBlock = nullptr);
         void PushListContext(XMLNumberedParaContext *i_pNumberedParagraph);
         /// pop the list context stack
         void PopListContext();
@@ -120,8 +120,8 @@ class XMLTextListsHelper : private boost::noncopyable
             const OUString& i_ParentStyleName,
             const OUString& i_StyleName,
             sal_Int16 & io_rLevel,
-            bool* o_pRestartNumbering = 0,
-            bool* io_pSetDefaults = 0);
+            bool* o_pRestartNumbering = nullptr,
+            bool* io_pSetDefaults = nullptr);
 
     private:
 

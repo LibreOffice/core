@@ -174,7 +174,7 @@ SvXMLImportContext *SdXMLShapeContext::CreateChildContext( sal_uInt16 p_nPrefix,
     const OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList>& xAttrList )
 {
-    SvXMLImportContext * pContext = NULL;
+    SvXMLImportContext * pContext = nullptr;
 
     // #i68101#
     if( p_nPrefix == XML_NAMESPACE_SVG &&
@@ -526,7 +526,7 @@ void SdXMLShapeContext::AddShape(OUString const & serviceName)
             uno::Sequence<OUString> aSeq( 1 );
             aSeq[0] = serviceName;
             GetImport().SetError( XMLERROR_FLAG_ERROR | XMLERROR_API,
-                                  aSeq, e.Message, NULL );
+                                  aSeq, e.Message, nullptr );
         }
     }
 }
@@ -605,13 +605,13 @@ void SdXMLShapeContext::SetStyle( bool bSupportsStyle /* = true */)
 
         do
         {
-            XMLPropStyleContext* pDocStyle = NULL;
+            XMLPropStyleContext* pDocStyle = nullptr;
 
             // set style on shape
             if(maDrawStyleName.isEmpty())
                 break;
 
-            const SvXMLStyleContext* pStyle = 0L;
+            const SvXMLStyleContext* pStyle = nullptr;
             bool bAutoStyle(false);
 
             if(GetImport().GetShapeImport()->GetAutoStylesContext())
@@ -725,12 +725,12 @@ void SdXMLShapeContext::SetStyle( bool bSupportsStyle /* = true */)
             if( maTextStyleName.isEmpty() )
                 break;
 
-            if( NULL == GetImport().GetShapeImport()->GetAutoStylesContext())
+            if( nullptr == GetImport().GetShapeImport()->GetAutoStylesContext())
                 break;
 
             const SvXMLStyleContext* pTempStyle = GetImport().GetShapeImport()->GetAutoStylesContext()->FindStyleChildContext(XML_STYLE_FAMILY_TEXT_PARAGRAPH, maTextStyleName);
             XMLPropStyleContext* pStyle = const_cast<XMLPropStyleContext*>(dynamic_cast<const XMLPropStyleContext*>( pTempStyle ) ); // use temp var, PTR_CAST is a bad macro, FindStyleChildContext will be called twice
-            if( pStyle == NULL )
+            if( pStyle == nullptr )
                 break;
 
             // set PropertySet on object
@@ -1489,7 +1489,7 @@ void SdXMLPathShapeContext::StartElement(const uno::Reference< xml::sax::XAttrib
 
         basegfx::B2DPolyPolygon aPolyPolygon;
 
-        if(basegfx::tools::importFromSvgD(aPolyPolygon, maD, GetImport().needFixPositionAfterZ(), 0))
+        if(basegfx::tools::importFromSvgD(aPolyPolygon, maD, GetImport().needFixPositionAfterZ(), nullptr))
         {
             if(aPolyPolygon.count())
             {
@@ -1975,7 +1975,7 @@ void SdXMLConnectorShapeContext::processAttribute( sal_uInt16 nPrefix, const OUS
         {
             basegfx::B2DPolyPolygon aPolyPolygon;
 
-            if(basegfx::tools::importFromSvgD(aPolyPolygon, rValue, GetImport().needFixPositionAfterZ(), 0))
+            if(basegfx::tools::importFromSvgD(aPolyPolygon, rValue, GetImport().needFixPositionAfterZ(), nullptr))
             {
                 if(aPolyPolygon.count())
                 {
@@ -2549,7 +2549,7 @@ SvXMLImportContext* SdXMLGraphicObjectShapeContext::CreateChildContext(
     sal_uInt16 nPrefix, const OUString& rLocalName,
     const uno::Reference<xml::sax::XAttributeList>& xAttrList )
 {
-    SvXMLImportContext* pContext = NULL;
+    SvXMLImportContext* pContext = nullptr;
 
     if( (XML_NAMESPACE_OFFICE == nPrefix) &&
              xmloff::token::IsXMLToken( rLocalName, xmloff::token::XML_BINARY_DATA ) )
@@ -2565,7 +2565,7 @@ SvXMLImportContext* SdXMLGraphicObjectShapeContext::CreateChildContext(
     }
 
     // delegate to parent class if no context could be created
-    if ( NULL == pContext )
+    if ( nullptr == pContext )
         pContext = SdXMLShapeContext::CreateChildContext(nPrefix, rLocalName,
                                                          xAttrList);
 
@@ -2587,7 +2587,7 @@ SdXMLChartShapeContext::SdXMLChartShapeContext(
     uno::Reference< drawing::XShapes >& rShapes,
     bool bTemporaryShape)
 :   SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, bTemporaryShape ),
-    mpChartContext( NULL )
+    mpChartContext( nullptr )
 {
 }
 
@@ -2679,7 +2679,7 @@ SvXMLImportContext * SdXMLChartShapeContext::CreateChildContext( sal_uInt16 nPre
     if( mpChartContext )
         return mpChartContext->CreateChildContext( nPrefix, rLocalName, xAttrList );
 
-    return NULL;
+    return nullptr;
 }
 
 TYPEINIT1( SdXMLObjectShapeContext, SdXMLShapeContext );
@@ -2855,7 +2855,7 @@ SvXMLImportContext* SdXMLObjectShapeContext::CreateChildContext(
     sal_uInt16 nPrefix, const OUString& rLocalName,
     const uno::Reference<xml::sax::XAttributeList>& xAttrList )
 {
-    SvXMLImportContext* pContext = NULL;
+    SvXMLImportContext* pContext = nullptr;
 
     if((XML_NAMESPACE_OFFICE == nPrefix) && IsXMLToken(rLocalName, XML_BINARY_DATA))
     {
@@ -3525,7 +3525,7 @@ SvXMLImportContext *SdXMLFrameShapeContext::CreateChildContext( sal_uInt16 nPref
     const OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList>& xAttrList )
 {
-    SvXMLImportContext * pContext = 0;
+    SvXMLImportContext * pContext = nullptr;
 
     if( !mxImplContext.Is() )
     {
@@ -3697,7 +3697,7 @@ void SdXMLFrameShapeContext::EndElement()
         }
     }
 
-    mxImplContext = 0;
+    mxImplContext = nullptr;
     SdXMLShapeContext::EndElement();
 }
 
@@ -3931,7 +3931,7 @@ SvXMLImportContext* SdXMLCustomShapeContext::CreateChildContext(
     sal_uInt16 nPrefix, const OUString& rLocalName,
     const uno::Reference<xml::sax::XAttributeList>& xAttrList )
 {
-    SvXMLImportContext* pContext = NULL;
+    SvXMLImportContext* pContext = nullptr;
     if ( XML_NAMESPACE_DRAW == nPrefix )
     {
         if ( IsXMLToken( rLocalName, XML_ENHANCED_GEOMETRY ) )
@@ -3942,7 +3942,7 @@ SvXMLImportContext* SdXMLCustomShapeContext::CreateChildContext(
         }
     }
     // delegate to parent class if no context could be created
-    if ( NULL == pContext )
+    if ( nullptr == pContext )
         pContext = SdXMLShapeContext::CreateChildContext( nPrefix, rLocalName,
                                                          xAttrList);
     return pContext;

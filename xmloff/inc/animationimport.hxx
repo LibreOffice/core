@@ -46,7 +46,7 @@ public:
         sal_uInt16 nPrfx,
         const OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
-        AnimationsImportHelperImpl* mpImpl = NULL );
+        AnimationsImportHelperImpl* mpImpl = nullptr );
     virtual ~AnimationNodeContext();
 
     virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList ) override;

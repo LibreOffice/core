@@ -57,7 +57,7 @@ bool XMLMarkerStyleImport::importXML(
     bool bHasPathData   = false;
     OUString aDisplayName;
 
-    SdXMLImExViewBox* pViewBox = NULL;
+    SdXMLImExViewBox* pViewBox = nullptr;
 
     SvXMLNamespaceMap& rNamespaceMap = rImport.GetNamespaceMap();
     SvXMLUnitConverter& rUnitConverter = rImport.GetMM100UnitConverter();
@@ -97,7 +97,7 @@ bool XMLMarkerStyleImport::importXML(
     {
         basegfx::B2DPolyPolygon aPolyPolygon;
 
-        if(basegfx::tools::importFromSvgD(aPolyPolygon, strPathData, rImport.needFixPositionAfterZ(), 0))
+        if(basegfx::tools::importFromSvgD(aPolyPolygon, strPathData, rImport.needFixPositionAfterZ(), nullptr))
         {
             if(aPolyPolygon.count())
             {

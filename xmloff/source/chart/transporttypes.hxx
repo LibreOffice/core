@@ -201,7 +201,7 @@ struct DataRowPointStyle
                         , sal_Int32 nAttachedAxis = 0 ) :
             meType( eType ),
             m_xSeries( xSeries ),
-            m_xOldAPISeries( 0 ),
+            m_xOldAPISeries( nullptr ),
             m_nPointIndex( nPointIndex ),
             m_nPointRepeat( nPointRepeat ),
             msStyleName( sStyleName ),

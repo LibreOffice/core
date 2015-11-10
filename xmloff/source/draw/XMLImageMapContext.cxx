@@ -183,7 +183,7 @@ XMLImageMapObjectContext::XMLImageMapObjectContext(
         bIsActive(true),
         bValid(false)
 {
-    DBG_ASSERT(NULL != pServiceName,
+    DBG_ASSERT(nullptr != pServiceName,
                "Please supply the image map object service name");
 
     Reference<XMultiServiceFactory> xFactory(GetImport().GetModel(),UNO_QUERY);
@@ -653,7 +653,7 @@ XMLImageMapContext::XMLImageMapContext(
     catch(const com::sun::star::uno::Exception& e)
     {
         uno::Sequence<OUString> aSeq(0);
-        rImport.SetError( XMLERROR_FLAG_WARNING | XMLERROR_API, aSeq, e.Message, NULL );
+        rImport.SetError( XMLERROR_FLAG_WARNING | XMLERROR_API, aSeq, e.Message, nullptr );
     }
 }
 
@@ -666,7 +666,7 @@ SvXMLImportContext *XMLImageMapContext::CreateChildContext(
     const OUString& rLocalName,
     const Reference<XAttributeList> & xAttrList )
 {
-    SvXMLImportContext* pContext = NULL;
+    SvXMLImportContext* pContext = nullptr;
 
     if ( XML_NAMESPACE_DRAW == nPrefix )
     {

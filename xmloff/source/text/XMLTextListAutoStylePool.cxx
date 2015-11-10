@@ -253,7 +253,7 @@ void XMLTextListAutoStylePool::exportXML() const
     sal_uInt32 i;
     for( i=0; i < nCount; i++ )
     {
-        aExpEntries[i] = 0;
+        aExpEntries[i] = nullptr;
     }
     for( i=0; i < nCount; i++ )
     {

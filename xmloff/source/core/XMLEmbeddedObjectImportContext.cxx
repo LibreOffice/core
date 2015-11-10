@@ -65,7 +65,7 @@ const XMLServiceMapEntry_Impl aServiceMap[] =
     SERVICE_MAP_ENTRY( GRAPHICS, DRAW ),
     SERVICE_MAP_ENTRY( PRESENTATION, IMPRESS ),
     SERVICE_MAP_ENTRY( CHART, CHART ),
-    { XML_TOKEN_INVALID, 0, 0 }
+    { XML_TOKEN_INVALID, nullptr, 0 }
 };
 
 class XMLEmbeddedObjectImportContext_Impl : public SvXMLImportContext
@@ -213,7 +213,7 @@ XMLEmbeddedObjectImportContext::XMLEmbeddedObjectImportContext(
             "application/x-vnd.oasis.openoffice.",
             "application/vnd.oasis.opendocument.",
             "application/x-vnd.oasis.opendocument.",
-            NULL
+            nullptr
         };
         for (int k=0; aTmp[k]; k++)
         {

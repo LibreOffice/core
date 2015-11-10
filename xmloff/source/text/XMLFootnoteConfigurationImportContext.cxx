@@ -137,7 +137,7 @@ XMLFootnoteConfigurationImportContext::XMLFootnoteConfigurationImportContext(
 ,   sPropertyBeginNotice("BeginNotice")
 ,   sNumFormat("1")
 ,   sNumSync("false")
-,   pAttrTokenMap(NULL)
+,   pAttrTokenMap(nullptr)
 ,   nOffset(0)
 ,   nNumbering(FootnoteNumbering::PER_PAGE)
 ,   bPosition(false)
@@ -208,7 +208,7 @@ static const SvXMLTokenMapEntry aTextFieldAttrTokenMap[] =
 const SvXMLTokenMap&
     XMLFootnoteConfigurationImportContext::GetFtnConfigAttrTokenMap()
 {
-    if (NULL == pAttrTokenMap)
+    if (nullptr == pAttrTokenMap)
     {
         pAttrTokenMap = new SvXMLTokenMap(aTextFieldAttrTokenMap);
     }
@@ -294,7 +294,7 @@ SvXMLImportContext *XMLFootnoteConfigurationImportContext::CreateChildContext(
     const OUString& rLocalName,
     const Reference<XAttributeList> & xAttrList )
 {
-    SvXMLImportContext* pContext = NULL;
+    SvXMLImportContext* pContext = nullptr;
 
     if (!bIsEndnote)
     {
@@ -320,7 +320,7 @@ SvXMLImportContext *XMLFootnoteConfigurationImportContext::CreateChildContext(
     }
     // else: endnote -> default context
 
-    if (pContext == NULL)
+    if (pContext == nullptr)
     {
         // default: delegate to super class
         pContext = SvXMLStyleContext::CreateChildContext(nPrefix,

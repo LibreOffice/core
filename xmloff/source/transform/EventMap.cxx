@@ -89,7 +89,7 @@ XMLTransformerEventMapEntry aTransformerEventMap[] =
     { XML_NAMESPACE_FORM,   "cursormove",   "on-cursormove" },
     { XML_NAMESPACE_FORM,   "supplyparameter",  "on-supplyparameter" },
     { XML_NAMESPACE_FORM,   "adjust",   "on-adjust" },
-    { 0, 0, 0 }
+    { 0, nullptr, nullptr }
 };
 
 XMLTransformerEventMapEntry aFormTransformerEventMap[] =
@@ -97,7 +97,7 @@ XMLTransformerEventMapEntry aFormTransformerEventMap[] =
     { XML_NAMESPACE_DOM,    "mouseover",    "on-mouseover" },
     { XML_NAMESPACE_DOM,    "mouseout", "on-mouseout" },
     { XML_NAMESPACE_DOM,    "DOMFocusOut",  "on-blur" },
-    { 0, 0, 0 }
+    { 0, nullptr, nullptr }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

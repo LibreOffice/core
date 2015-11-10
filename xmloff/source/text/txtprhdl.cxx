@@ -1231,7 +1231,7 @@ public:
 const XMLPropertyHandler *XMLTextPropertyHandlerFactory_Impl::GetPropertyHandler
     ( sal_Int32 nType )
 {
-    const XMLPropertyHandler* pHdl = 0;
+    const XMLPropertyHandler* pHdl = nullptr;
     switch( nType )
     {
     case XML_TYPE_TEXT_DROPCAP:

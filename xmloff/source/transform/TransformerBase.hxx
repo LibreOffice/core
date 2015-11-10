@@ -77,8 +77,8 @@ protected:
                                       const OUString& rQName );
 
 public:
-    XMLTransformerBase( XMLTransformerActionInit *pInit=0,
-                           ::xmloff::token::XMLTokenEnum *pTKMapInit=0 ) throw();
+    XMLTransformerBase( XMLTransformerActionInit *pInit=nullptr,
+                           ::xmloff::token::XMLTokenEnum *pTKMapInit=nullptr ) throw();
     virtual ~XMLTransformerBase() throw();
 
     // ::com::sun::star::xml::sax::XDocumentHandler

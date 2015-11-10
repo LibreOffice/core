@@ -3115,11 +3115,11 @@ static void lcl_CopyStream(
         ::comphelper::OStorageHelper::GetStreamAtPackageURL(xTarget, rPath,
             embed::ElementModes::WRITE | embed::ElementModes::TRUNCATE, proxy));
     uno::Reference<io::XOutputStream> const xOutStream(
-            (xStream.is()) ? xStream->getOutputStream() : 0);
+            (xStream.is()) ? xStream->getOutputStream() : nullptr);
     if (!xOutStream.is())
     {
         SAL_WARN("xmloff", "no output stream");
-        throw uno::Exception("no output stream",0);
+        throw uno::Exception("no output stream",nullptr);
     }
     uno::Reference< beans::XPropertySet > const xStreamProps(xStream,
         uno::UNO_QUERY);

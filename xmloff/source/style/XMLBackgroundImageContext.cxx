@@ -353,7 +353,7 @@ SvXMLImportContext *XMLBackgroundImageContext::CreateChildContext(
         sal_uInt16 nPrefix, const OUString& rLocalName,
         const Reference< xml::sax::XAttributeList > & xAttrList )
 {
-    SvXMLImportContext *pContext = NULL;
+    SvXMLImportContext *pContext = nullptr;
     if( (XML_NAMESPACE_OFFICE == nPrefix) &&
         xmloff::token::IsXMLToken( rLocalName,
                                         xmloff::token::XML_BINARY_DATA ) )
@@ -384,7 +384,7 @@ void XMLBackgroundImageContext::EndElement()
     else if( xBase64Stream.is() )
     {
         sURL = GetImport().ResolveGraphicObjectURLFromBase64( xBase64Stream );
-        xBase64Stream = 0;
+        xBase64Stream = nullptr;
     }
 
     if( sURL.isEmpty() )

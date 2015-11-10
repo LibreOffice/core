@@ -49,7 +49,7 @@ extern "C"
 
 XMLOFF_DLLPUBLIC void * SAL_CALL xo_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * /*pRegistryKey*/ )
 {
-    void * pRet = 0;
+    void * pRet = nullptr;
     if( pServiceManager )
     {
         uno::Reference< lang::XMultiServiceFactory > xMSF( static_cast< lang::XMultiServiceFactory * >( pServiceManager ) );

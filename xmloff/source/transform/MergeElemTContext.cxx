@@ -78,7 +78,7 @@ XMLTransformerContext *XMLParagraphTransformerContext::CreateChildContext(
         const OUString& rQName,
         const Reference< XAttributeList >& )
 {
-    XMLTransformerContext *pContext = 0;
+    XMLTransformerContext *pContext = nullptr;
 
     pContext = new XMLIgnoreTransformerContext( GetTransformer(),
                                                 rQName, true );
@@ -206,7 +206,7 @@ XMLTransformerContext *XMLMergeElemTransformerContext::CreateChildContext(
         const OUString& rQName,
         const Reference< XAttributeList >& rAttrList )
 {
-    XMLTransformerContext *pContext = 0;
+    XMLTransformerContext *pContext = nullptr;
 
     if( !m_bStartElementExported )
     {

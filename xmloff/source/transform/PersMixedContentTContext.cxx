@@ -65,7 +65,7 @@ XMLTransformerContext *XMLPersTextTContext_Impl::CreateChildContext(
         const Reference< XAttributeList >& )
 {
     OSL_ENSURE( false, "illegal call to CreateChildContext" );
-    return 0;
+    return nullptr;
 }
 
 void XMLPersTextTContext_Impl::StartElement(

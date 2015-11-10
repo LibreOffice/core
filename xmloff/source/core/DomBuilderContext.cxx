@@ -126,7 +126,7 @@ void DomBuilderContext::StartElement(
         OUString sNamespace;
         sal_uInt16 nNamespaceKey =
             GetImport().GetNamespaceMap()._GetKeyByAttrName(
-                rName, NULL, NULL, &sNamespace );
+                rName, nullptr, nullptr, &sNamespace );
 
         // create attribute node and set value
         Reference<XElement> xElement( mxNode, UNO_QUERY_THROW );

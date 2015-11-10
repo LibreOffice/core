@@ -101,29 +101,29 @@ struct XMLPropertyStateBuffer
 };
 
 XMLPropertyStateBuffer::XMLPropertyStateBuffer()
-    :   pPMMarginAll( NULL )
-    ,   pPMMarginTop( NULL )
-    ,   pPMMarginBottom( NULL )
-    ,   pPMMarginLeft( NULL )
-    ,   pPMMarginRight( NULL )
+    :   pPMMarginAll( nullptr )
+    ,   pPMMarginTop( nullptr )
+    ,   pPMMarginBottom( nullptr )
+    ,   pPMMarginLeft( nullptr )
+    ,   pPMMarginRight( nullptr )
     ,
-        pPMBorderAll( NULL ),
-        pPMBorderTop( NULL ),
-        pPMBorderBottom( NULL ),
-        pPMBorderLeft( NULL ),
-        pPMBorderRight( NULL ),
+        pPMBorderAll( nullptr ),
+        pPMBorderTop( nullptr ),
+        pPMBorderBottom( nullptr ),
+        pPMBorderLeft( nullptr ),
+        pPMBorderRight( nullptr ),
 
-        pPMBorderWidthAll( NULL ),
-        pPMBorderWidthTop( NULL ),
-        pPMBorderWidthBottom( NULL ),
-        pPMBorderWidthLeft( NULL ),
-        pPMBorderWidthRight( NULL ),
+        pPMBorderWidthAll( nullptr ),
+        pPMBorderWidthTop( nullptr ),
+        pPMBorderWidthBottom( nullptr ),
+        pPMBorderWidthLeft( nullptr ),
+        pPMBorderWidthRight( nullptr ),
 
-        pPMPaddingAll( NULL ),
-        pPMPaddingTop( NULL ),
-        pPMPaddingBottom( NULL ),
-        pPMPaddingLeft( NULL ),
-        pPMPaddingRight( NULL )
+        pPMPaddingAll( nullptr ),
+        pPMPaddingTop( nullptr ),
+        pPMPaddingBottom( nullptr ),
+        pPMPaddingLeft( nullptr ),
+        pPMPaddingRight( nullptr )
 {
 }
 
@@ -263,8 +263,8 @@ void XMLPageMasterExportPropMapper::handleElementItem(
                 default:
                     assert(false);
                 }
-                const Any*  pPos    = NULL;
-                const Any*  pFilter = NULL;
+                const Any*  pPos    = nullptr;
+                const Any*  pFilter = nullptr;
                 sal_uInt32 nIndex(nIdx - 1);
                 const XMLPropertyState& rFilter = (*pProperties)[nIndex];
                 if (getPropertySetMapper()->GetEntryContextId(rFilter.mnIndex) == nFilter)
@@ -279,7 +279,7 @@ void XMLPageMasterExportPropMapper::handleElementItem(
                     --nIndex;
                 }
                 sal_uInt32 nPropIndex = rProperty.mnIndex;
-                pThis->aBackgroundImageExport.exportXML( rProperty.maValue, pPos, pFilter, NULL,
+                pThis->aBackgroundImageExport.exportXML( rProperty.maValue, pPos, pFilter, nullptr,
                     getPropertySetMapper()->GetEntryNameSpace( nPropIndex ),
                     getPropertySetMapper()->GetEntryXMLName( nPropIndex ) );
             }
@@ -313,33 +313,33 @@ void XMLPageMasterExportPropMapper::ContextFilter(
     XMLPropertyStateBuffer  aHeaderBuffer;
     XMLPropertyStateBuffer  aFooterBuffer;
 
-    XMLPropertyState*       pPMHeaderHeight     = NULL;
-    XMLPropertyState*       pPMHeaderMinHeight  = NULL;
-    XMLPropertyState*       pPMHeaderDynamic    = NULL;
+    XMLPropertyState*       pPMHeaderHeight     = nullptr;
+    XMLPropertyState*       pPMHeaderMinHeight  = nullptr;
+    XMLPropertyState*       pPMHeaderDynamic    = nullptr;
 
-    XMLPropertyState*       pPMFooterHeight     = NULL;
-    XMLPropertyState*       pPMFooterMinHeight  = NULL;
-    XMLPropertyState*       pPMFooterDynamic    = NULL;
+    XMLPropertyState*       pPMFooterHeight     = nullptr;
+    XMLPropertyState*       pPMFooterMinHeight  = nullptr;
+    XMLPropertyState*       pPMFooterDynamic    = nullptr;
 
-    XMLPropertyState*       pPMScaleTo          = NULL;
-    XMLPropertyState*       pPMScaleToPages     = NULL;
-    XMLPropertyState*       pPMScaleToX         = NULL;
-    XMLPropertyState*       pPMScaleToY         = NULL;
-    XMLPropertyState*       pPMStandardMode     = NULL;
-    XMLPropertyState*       pPMGridBaseWidth    = NULL;
+    XMLPropertyState*       pPMScaleTo          = nullptr;
+    XMLPropertyState*       pPMScaleToPages     = nullptr;
+    XMLPropertyState*       pPMScaleToX         = nullptr;
+    XMLPropertyState*       pPMScaleToY         = nullptr;
+    XMLPropertyState*       pPMStandardMode     = nullptr;
+    XMLPropertyState*       pPMGridBaseWidth    = nullptr;
     // same as pPMGridSnapTo but for backward compatibility only
-    XMLPropertyState*       pPMGridSnapToChars  = NULL;
-    XMLPropertyState*       pPMGridSnapTo       = NULL;
+    XMLPropertyState*       pPMGridSnapToChars  = nullptr;
+    XMLPropertyState*       pPMGridSnapTo       = nullptr;
 
-    XMLPropertyState*       pPrint              = NULL;
+    XMLPropertyState*       pPrint              = nullptr;
 
     //UUUU
-    XMLPropertyState* pRepeatOffsetX = NULL;
-    XMLPropertyState* pRepeatOffsetY = NULL;
-    XMLPropertyState* pHeaderRepeatOffsetX = NULL;
-    XMLPropertyState* pHeaderRepeatOffsetY = NULL;
-    XMLPropertyState* pFooterRepeatOffsetX = NULL;
-    XMLPropertyState* pFooterRepeatOffsetY = NULL;
+    XMLPropertyState* pRepeatOffsetX = nullptr;
+    XMLPropertyState* pRepeatOffsetY = nullptr;
+    XMLPropertyState* pHeaderRepeatOffsetX = nullptr;
+    XMLPropertyState* pHeaderRepeatOffsetY = nullptr;
+    XMLPropertyState* pFooterRepeatOffsetX = nullptr;
+    XMLPropertyState* pFooterRepeatOffsetY = nullptr;
 
     rtl::Reference < XMLPropertySetMapper > aPropMapper(getPropertySetMapper());
 

@@ -35,14 +35,14 @@ SvXMLImportContext::SvXMLImportContext( SvXMLImport& rImp, sal_uInt16 nPrfx,
     mrImport( rImp ),
     mnPrefix( nPrfx ),
     maLocalName( rLName ),
-    mpRewindMap( 0 )
+    mpRewindMap( nullptr )
 {
 }
 
 SvXMLImportContext::SvXMLImportContext( SvXMLImport& rImp ) :
     mrImport( rImp ),
     mnPrefix ( 0 ),
-    mpRewindMap( 0 )
+    mpRewindMap( nullptr )
 {
 }
 
@@ -102,7 +102,7 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL SvXMLImportContext::cre
     (const OUString &, const OUString &, const uno::Reference< xml::sax::XFastAttributeList > &)
     throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
 {
-    return 0;
+    return nullptr;
 }
 
 void SAL_CALL SvXMLImportContext::characters(const OUString &)

@@ -275,7 +275,7 @@ RDFaInserter::MakeURI( OUString const & i_rURI) const
     if (i_rURI.startsWith("_:")) // blank node
     {
         SAL_INFO("xmloff.core", "MakeURI: cannot create URI for blank node");
-        return 0;
+        return nullptr;
     }
     else
     {
@@ -286,7 +286,7 @@ RDFaInserter::MakeURI( OUString const & i_rURI) const
         catch (uno::Exception &)
         {
             SAL_WARN("xmloff.core", "MakeURI: cannot create URI");
-            return 0;
+            return nullptr;
         }
     }
 }

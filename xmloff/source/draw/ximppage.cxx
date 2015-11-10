@@ -130,7 +130,7 @@ DrawAnnotationContext::DrawAnnotationContext( SvXMLImport& rImport, sal_uInt16 n
 
 SvXMLImportContext * DrawAnnotationContext::CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName, const Reference< XAttributeList >& xAttrList )
 {
-    SvXMLImportContext * pContext = NULL;
+    SvXMLImportContext * pContext = nullptr;
 
     if( mxAnnotation.is() )
     {
@@ -190,7 +190,7 @@ void DrawAnnotationContext::EndElement()
         mxAnnotation->setAuthor( maAuthorBuffer.makeStringAndClear() );
 
         util::DateTime aDateTime;
-        if (::sax::Converter::parseDateTime(aDateTime, 0,
+        if (::sax::Converter::parseDateTime(aDateTime, nullptr,
                 maDateBuffer.makeStringAndClear()))
         {
             mxAnnotation->setDateTime(aDateTime);
@@ -240,7 +240,7 @@ SvXMLImportContext* SdXMLGenericPageContext::CreateChildContext( sal_uInt16 nPre
     const OUString& rLocalName,
     const Reference< xml::sax::XAttributeList>& xAttrList )
 {
-    SvXMLImportContext* pContext = 0L;
+    SvXMLImportContext* pContext = nullptr;
 
     if( nPrefix == XML_NAMESPACE_PRESENTATION && IsXMLToken( rLocalName, XML_ANIMATIONS ) )
     {
@@ -485,7 +485,7 @@ void SdXMLGenericPageContext::SetPageMaster( OUString& rsPageMasterName )
         // #80012# GetStylesContext() replaced with GetAutoStylesContext()
         const SvXMLStylesContext* pAutoStyles = GetSdImport().GetShapeImport()->GetAutoStylesContext();
 
-        const SvXMLStyleContext* pStyle = pAutoStyles ? pAutoStyles->FindStyleChildContext(XML_STYLE_FAMILY_SD_PAGEMASTERCONEXT_ID, rsPageMasterName) : NULL;
+        const SvXMLStyleContext* pStyle = pAutoStyles ? pAutoStyles->FindStyleChildContext(XML_STYLE_FAMILY_SD_PAGEMASTERCONEXT_ID, rsPageMasterName) : nullptr;
 
         if(pStyle && dynamic_cast<const SdXMLPageMasterContext*>(pStyle) != nullptr)
         {

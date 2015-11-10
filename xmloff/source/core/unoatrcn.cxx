@@ -40,7 +40,7 @@ uno::Reference< uno::XInterface >  SvUnoAttributeContainer_CreateInstance()
 SvUnoAttributeContainer::SvUnoAttributeContainer( SvXMLAttrContainerData* pContainer)
 : mpContainer( pContainer )
 {
-    if( mpContainer == NULL )
+    if( mpContainer == nullptr )
         mpContainer = new SvXMLAttrContainerData;
 }
 

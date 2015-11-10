@@ -40,26 +40,26 @@ struct SdXMLDataStyleNumber
 }
     aSdXMLDataStyleNumbers[] =
 {
-    { XML_DAY,          false,      false,      false,      NULL },
-    { XML_DAY,          true,       false,      false,      NULL },
-    { XML_MONTH,        true,       false,      false,      NULL },
-    { XML_MONTH,        false,      true,       false,      NULL },
-    { XML_MONTH,        true,       true,       false,      NULL },
-    { XML_YEAR,         false,      false,      false,      NULL },
-    { XML_YEAR,         true,       false,      false,      NULL },
-    { XML_DAY_OF_WEEK,  false,      false,      false,      NULL },
-    { XML_DAY_OF_WEEK,  true,       false,      false,      NULL },
+    { XML_DAY,          false,      false,      false,      nullptr },
+    { XML_DAY,          true,       false,      false,      nullptr },
+    { XML_MONTH,        true,       false,      false,      nullptr },
+    { XML_MONTH,        false,      true,       false,      nullptr },
+    { XML_MONTH,        true,       true,       false,      nullptr },
+    { XML_YEAR,         false,      false,      false,      nullptr },
+    { XML_YEAR,         true,       false,      false,      nullptr },
+    { XML_DAY_OF_WEEK,  false,      false,      false,      nullptr },
+    { XML_DAY_OF_WEEK,  true,       false,      false,      nullptr },
     { XML_TEXT,         false,      false,      false,      "."  },
     { XML_TEXT,         false,      false,      false,      " "  },
     { XML_TEXT,         false,      false,      false,      ", " },
     { XML_TEXT,         false,      false,      false,      ". " },
-    { XML_HOURS,        false,      false,      false,      NULL },
-    { XML_MINUTES,      false,      false,      false,      NULL },
+    { XML_HOURS,        false,      false,      false,      nullptr },
+    { XML_MINUTES,      false,      false,      false,      nullptr },
     { XML_TEXT,         false,      false,      false,      ":"  },
-    { XML_AM_PM,        false,      false,      false,      NULL },
-    { XML_SECONDS,      false,      false,      false,      NULL },
-    { XML_SECONDS,      false,      false,      true,       NULL },
-    { XML_TOKEN_INVALID,        false,              false,             false,       NULL  }
+    { XML_AM_PM,        false,      false,      false,      nullptr },
+    { XML_SECONDS,      false,      false,      false,      nullptr },
+    { XML_SECONDS,      false,      false,      true,       nullptr },
+    { XML_TOKEN_INVALID,        false,              false,             false,       nullptr  }
 };
 
 // date
@@ -336,7 +336,7 @@ static void SdXMLExportDataStyleNumber( SdXMLExport& rExport, SdXMLDataStyleNumb
     }
 }
 
-static void SdXMLExportStyle( SdXMLExport& rExport, const SdXMLFixedDataStyle* pStyle, const SdXMLFixedDataStyle* pStyle2 = NULL )
+static void SdXMLExportStyle( SdXMLExport& rExport, const SdXMLFixedDataStyle* pStyle, const SdXMLFixedDataStyle* pStyle2 = nullptr )
 {
     OUString sAttrValue;
 
@@ -372,7 +372,7 @@ static void SdXMLExportStyle( SdXMLExport& rExport, const SdXMLFixedDataStyle* p
         }
 
         pStyle = pStyle2;
-        pStyle2 = NULL;
+        pStyle2 = nullptr;
     }
     while( pStyle );
 }
@@ -625,7 +625,7 @@ void SdXMLNumberFormatImportContext::add( OUString& rNumberStyle, bool bLong, bo
             (pStyleMember->mbLong == bLong) &&
             (pStyleMember->mbTextual == bTextual) &&
             (pStyleMember->mbDecimal02 == bDecimal02) &&
-            ( ( (pStyleMember->mpText == NULL) && (rText.isEmpty()) ) ||
+            ( ( (pStyleMember->mpText == nullptr) && (rText.isEmpty()) ) ||
               ( pStyleMember->mpText && (rText.equalsAscii( pStyleMember->mpText ) ) ) ) ) )
         {
             mnElements[mnIndex++] = nIndex + 1;

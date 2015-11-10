@@ -33,7 +33,7 @@ namespace xmloff
     //= OFormLayerXMLExport
 
     OFormLayerXMLImport::OFormLayerXMLImport(SvXMLImport& _rImporter)
-        :m_pImpl(NULL)
+        :m_pImpl(nullptr)
     {
         m_pImpl = new OFormLayerXMLImport_Impl(_rImporter);
     }

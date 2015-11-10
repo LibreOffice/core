@@ -179,7 +179,7 @@ SvXMLImportContext *XMLFootnoteImportContext::CreateChildContext(
     const OUString& rLocalName,
     const Reference<XAttributeList> & xAttrList )
 {
-    SvXMLImportContext* pContext = NULL;
+    SvXMLImportContext* pContext = nullptr;
 
     SvXMLTokenMap aTokenMap(aFootnoteChildTokenMap);
 

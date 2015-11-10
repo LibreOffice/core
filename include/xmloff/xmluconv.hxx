@@ -211,7 +211,7 @@ public:
                         const css::uno::Sequence<css::beans::PropertyValue>& aProps);
 
     OUString encodeStyleName( const OUString& rName,
-                                     bool *pEncoded=0 ) const;
+                                     bool *pEncoded=nullptr ) const;
     /** convert string (hex) to number (sal_uInt32) */
     static bool convertHex( sal_uInt32& nVal,
                               const OUString& rValue );

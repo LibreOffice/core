@@ -116,7 +116,7 @@ SvXMLImportContext *XMLVersionListImport::CreateContext(
         const OUString& rLocalName,
         const Reference< XAttributeList > & xAttrList )
 {
-    SvXMLImportContext *pContext = 0;
+    SvXMLImportContext *pContext = nullptr;
 
     if ( XML_NAMESPACE_FRAMEWORK == nPrefix &&
         rLocalName == xmloff::token::GetXMLToken(xmloff::token::XML_VERSION_LIST) )
@@ -147,7 +147,7 @@ SvXMLImportContext *XMLVersionListContext::CreateChildContext( sal_uInt16 nPrefi
                                         const OUString& rLocalName,
                                         const Reference< XAttributeList > & xAttrList )
 {
-    SvXMLImportContext *pContext = 0;
+    SvXMLImportContext *pContext = nullptr;
 
     if ( nPrefix == XML_NAMESPACE_FRAMEWORK &&
          rLocalName == xmloff::token::GetXMLToken(xmloff::token::XML_VERSION_ENTRY) )

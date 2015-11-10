@@ -93,7 +93,7 @@
 #define MAP_CONTEXT( a, ns, nm, t, c )       { a, sizeof(a)-1, XML_NAMESPACE_##ns, xmloff::token::nm, t|XML_TYPE_PROP_CHART, c, SvtSaveOptions::ODFVER_010, false }
 #define MAP_SPECIAL( a, ns, nm, t, c )       { a, sizeof(a)-1, XML_NAMESPACE_##ns, xmloff::token::nm, t|XML_TYPE_PROP_CHART | MID_FLAG_SPECIAL_ITEM, c, SvtSaveOptions::ODFVER_010, false }
 #define MAP_SPECIAL_ODF12( a, ns, nm, t, c ) { a, sizeof(a)-1, XML_NAMESPACE_##ns, xmloff::token::nm, t|XML_TYPE_PROP_CHART | MID_FLAG_SPECIAL_ITEM, c, SvtSaveOptions::ODFVER_012, false }
-#define MAP_ENTRY_END { 0,0,0,xmloff::token::XML_TOKEN_INVALID,0,0,SvtSaveOptions::ODFVER_010, false }
+#define MAP_ENTRY_END { nullptr,0,0,xmloff::token::XML_TOKEN_INVALID,0,0,SvtSaveOptions::ODFVER_010, false }
 
 // PropertyMap for Chart properties drawing- and
 // textproperties are added later using the chaining

@@ -68,7 +68,7 @@ SvXMLImportPropertyMapper::SvXMLImportPropertyMapper(
 
 SvXMLImportPropertyMapper::~SvXMLImportPropertyMapper()
 {
-    mxNextMapper = 0;
+    mxNextMapper = nullptr;
 }
 
 void SvXMLImportPropertyMapper::ChainImportMapper(
@@ -386,7 +386,7 @@ void SvXMLImportPropertyMapper::CheckSpecialContext(
         const sal_Int32 nPropFlags = maPropMapper->GetEntryFlags( nIdx );
 
         // handle no-property and special items
-        if( ( pSpecialContextIds != NULL ) &&
+        if( ( pSpecialContextIds != nullptr ) &&
             ( ( 0 != ( nPropFlags & MID_FLAG_NO_PROPERTY_IMPORT ) ) ||
               ( 0 != ( nPropFlags & MID_FLAG_SPECIAL_ITEM_IMPORT ) )   ) )
         {
@@ -496,7 +496,7 @@ bool SvXMLImportPropertyMapper::_FillPropertySet(
                     aSeq[0] = rPropName;
                     rImport.SetError(
                         XMLERROR_STYLE_PROP_VALUE | XMLERROR_FLAG_ERROR,
-                        aSeq, e.Message, NULL );
+                        aSeq, e.Message, nullptr );
                 }
             }
             catch ( const UnknownPropertyException& e )
@@ -506,7 +506,7 @@ bool SvXMLImportPropertyMapper::_FillPropertySet(
                 aSeq[0] = rPropName;
                 rImport.SetError(
                     XMLERROR_STYLE_PROP_UNKNOWN | XMLERROR_FLAG_ERROR,
-                    aSeq, e.Message, NULL );
+                    aSeq, e.Message, nullptr );
             }
             catch ( const PropertyVetoException& e )
             {
@@ -515,7 +515,7 @@ bool SvXMLImportPropertyMapper::_FillPropertySet(
                 aSeq[0] = rPropName;
                 rImport.SetError(
                     XMLERROR_STYLE_PROP_OTHER | XMLERROR_FLAG_ERROR,
-                    aSeq, e.Message, NULL );
+                    aSeq, e.Message, nullptr );
             }
             catch ( const WrappedTargetException& e )
             {
@@ -524,12 +524,12 @@ bool SvXMLImportPropertyMapper::_FillPropertySet(
                 aSeq[0] = rPropName;
                 rImport.SetError(
                     XMLERROR_STYLE_PROP_OTHER | XMLERROR_FLAG_ERROR,
-                    aSeq, e.Message, NULL );
+                    aSeq, e.Message, nullptr );
             }
         }
 
         // handle no-property and special items
-        if( ( pSpecialContextIds != NULL ) &&
+        if( ( pSpecialContextIds != nullptr ) &&
             ( ( 0 != ( nPropFlags & MID_FLAG_NO_PROPERTY_IMPORT ) ) ||
               ( 0 != ( nPropFlags & MID_FLAG_SPECIAL_ITEM_IMPORT ) )   ) )
         {
@@ -605,7 +605,7 @@ void SvXMLImportPropertyMapper::_PrepareForMultiPropertySet(
         }
 
         // handle no-property and special items
-        if( ( pSpecialContextIds != NULL ) &&
+        if( ( pSpecialContextIds != nullptr ) &&
             ( ( 0 != ( nPropFlags & MID_FLAG_NO_PROPERTY_IMPORT ) ) ||
               ( 0 != ( nPropFlags & MID_FLAG_SPECIAL_ITEM_IMPORT ) )   ) )
         {
@@ -695,7 +695,7 @@ bool SvXMLImportPropertyMapper::_FillTolerantMultiPropertySet(
     Sequence<OUString> aNames;
     Sequence<Any> aValues;
 
-    _PrepareForMultiPropertySet(rProperties, Reference<XPropertySetInfo>(NULL), rPropMapper, pSpecialContextIds,
+    _PrepareForMultiPropertySet(rProperties, Reference<XPropertySetInfo>(nullptr), rPropMapper, pSpecialContextIds,
         aNames, aValues);
 
     // and, finally, try to set the values
@@ -729,7 +729,7 @@ bool SvXMLImportPropertyMapper::_FillTolerantMultiPropertySet(
                 };
                 rImport.SetError(
                     XMLERROR_STYLE_PROP_OTHER | XMLERROR_FLAG_ERROR,
-                    aSeq, sMessage, NULL );
+                    aSeq, sMessage, nullptr );
             }
         }
     }

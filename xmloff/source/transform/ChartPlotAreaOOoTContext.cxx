@@ -61,7 +61,7 @@ void XMLAxisOOoContext::StartElement(
     const Reference< xml::sax::XAttributeList >& rAttrList )
 {
     Reference< xml::sax::XAttributeList > xAttrList( rAttrList );
-    XMLMutableAttributeList *pMutableAttrList = 0;
+    XMLMutableAttributeList *pMutableAttrList = nullptr;
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; i++ )
     {
@@ -132,7 +132,7 @@ XMLTransformerContext * XMLChartPlotAreaOOoTContext::CreateChildContext(
     const OUString& rQName,
     const uno::Reference< xml::sax::XAttributeList >& xAttrList )
 {
-    XMLTransformerContext *pContext = 0;
+    XMLTransformerContext *pContext = nullptr;
 
     if( XML_NAMESPACE_CHART == nPrefix &&
         IsXMLToken( rLocalName, XML_AXIS ) )
@@ -154,7 +154,7 @@ XMLTransformerContext * XMLChartPlotAreaOOoTContext::CreateChildContext(
         for( ; ! bFound && aIter != m_aChildContexts.end(); ++aIter )
         {
             XMLAxisOOoContext * pAxisContext = (*aIter).get();
-            if( pAxisContext != 0 )
+            if( pAxisContext != nullptr )
             {
                 // iterate over attributes to find category axis
                 Reference< xml::sax::XAttributeList > xNewAttrList( pAxisContext->GetAttrList());

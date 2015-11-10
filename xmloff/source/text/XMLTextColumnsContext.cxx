@@ -280,8 +280,8 @@ XMLTextColumnsContext::XMLTextColumnsContext(
 ,   sSeparatorLineVerticalAlignment("SeparatorLineVerticalAlignment")
 ,   sAutomaticDistance("AutomaticDistance")
 ,   sSeparatorLineStyle("SeparatorLineStyle")
-,   pColumns( 0 )
-,   pColumnSep( 0 )
+,   pColumns( nullptr )
+,   pColumnSep( nullptr )
 ,   pColumnAttrTokenMap( new SvXMLTokenMap(aColAttrTokenMap) )
 ,   pColumnSepAttrTokenMap( new SvXMLTokenMap(aColSepAttrTokenMap) )
 ,   nCount( 0 )
@@ -337,7 +337,7 @@ SvXMLImportContext *XMLTextColumnsContext::CreateChildContext(
     const OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList > & xAttrList )
 {
-    SvXMLImportContext *pContext = 0;
+    SvXMLImportContext *pContext = nullptr;
 
     if( XML_NAMESPACE_STYLE == nPrefix &&
         IsXMLToken( rLocalName, XML_COLUMN ) )
@@ -448,7 +448,7 @@ void XMLTextColumnsContext::EndElement( )
     if( xPropSet.is() )
     {
         Any aAny;
-        sal_Bool bOn = pColumnSep != 0;
+        sal_Bool bOn = pColumnSep != nullptr;
 
         aAny.setValue( &bOn, cppu::UnoType<bool>::get() );
         xPropSet->setPropertyValue( sSeparatorLineIsOn, aAny );

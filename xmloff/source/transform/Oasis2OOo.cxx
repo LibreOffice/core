@@ -1173,7 +1173,7 @@ void XMLTableTransformerContext_Impl::StartElement(
 {
     Reference< XAttributeList > xAttrList( rAttrList );
 
-    XMLMutableAttributeList *pMutableAttrList = 0;
+    XMLMutableAttributeList *pMutableAttrList = nullptr;
 
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; i++ )
@@ -1325,12 +1325,12 @@ void XMLTabStopOASISTContext_Impl::StartElement(
 {
     XMLTransformerActions *pActions =
         GetTransformer().GetUserDefinedActions( OASIS_TAB_STOP_ACTIONS  );
-    SAL_WARN_IF( NULL == pActions, "xmloff.transform", "got no actions" );
+    SAL_WARN_IF( nullptr == pActions, "xmloff.transform", "got no actions" );
 
     sal_Unicode cStyleLeaderChar = 0;
     sal_Int16 nLeaderText = -1;
     Reference< XAttributeList > xAttrList( rAttrList );
-    XMLMutableAttributeList *pMutableAttrList = 0;
+    XMLMutableAttributeList *pMutableAttrList = nullptr;
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; i++ )
     {
@@ -1661,7 +1661,7 @@ XMLTransformerContext *Oasis2OOoTransformer::CreateUserDefinedContext(
 XMLTransformerActions *Oasis2OOoTransformer::GetUserDefinedActions(
         sal_uInt16 n )
 {
-    XMLTransformerActions *pActions = 0;
+    XMLTransformerActions *pActions = nullptr;
     if( n < MAX_OASIS_ACTIONS )
     {
         if( !m_aActions[n] )
@@ -1883,13 +1883,13 @@ OUString Oasis2OOoTransformer::GetEventName( const OUString& rName,
         GetNamespaceMap().GetKeyByAttrName( rName, &aMacroName );
     return XMLEventOASISTransformerContext::GetEventName(
                 nPrefix, aMacroName, *m_pEventMap,
-                   bForm ? m_pFormEventMap : 0  );
+                   bForm ? m_pFormEventMap : nullptr  );
 }
 
 Oasis2OOoTransformer::Oasis2OOoTransformer() throw() :
     XMLTransformerBase( aActionTable, aTokenMap ),
-    m_pEventMap( 0 ),
-    m_pFormEventMap( 0 )
+    m_pEventMap( nullptr ),
+    m_pFormEventMap( nullptr )
 {
     GetNamespaceMap().Add( GetXMLToken(XML_NP_OFFICE), GetXMLToken(XML_N_OFFICE), XML_NAMESPACE_OFFICE );
     GetReplaceNamespaceMap().Add( GetXMLToken(XML_NP_OFFICE), GetXMLToken(XML_N_OFFICE_OOO), XML_NAMESPACE_OFFICE );
@@ -1940,7 +1940,7 @@ Oasis2OOoTransformer::Oasis2OOoTransformer() throw() :
     GetReplaceNamespaceMap().Add( GetXMLToken(XML_NP_SVG), GetXMLToken(XML_N_SVG),  XML_NAMESPACE_SVG );
 
     for( sal_uInt16 i=0; i<MAX_OASIS_ACTIONS; ++i )
-        m_aActions[i] = 0;
+        m_aActions[i] = nullptr;
 }
 
 Oasis2OOoTransformer::~Oasis2OOoTransformer() throw()

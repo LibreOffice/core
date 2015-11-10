@@ -96,7 +96,7 @@ uno::Reference< chart2::XChartType > lcl_getChartTypeOfSeries(
                               , const Reference< chart2::XDataSeries >& xSeries )
 {
     if(!xDiagram.is())
-        return 0;
+        return nullptr;
 
     //iterate through the model to find the given xSeries
     //the found parent indicates the charttype
@@ -104,7 +104,7 @@ uno::Reference< chart2::XChartType > lcl_getChartTypeOfSeries(
     //iterate through all coordinate systems
     uno::Reference< chart2::XCoordinateSystemContainer > xCooSysContainer( xDiagram, uno::UNO_QUERY );
     if( !xCooSysContainer.is())
-        return 0;
+        return nullptr;
 
     uno::Sequence< uno::Reference< chart2::XCoordinateSystem > > aCooSysList( xCooSysContainer->getCoordinateSystems() );
     for( sal_Int32 nCS = 0; nCS < aCooSysList.getLength(); ++nCS )
@@ -137,7 +137,7 @@ uno::Reference< chart2::XChartType > lcl_getChartTypeOfSeries(
             }
         }
     }
-    return 0;
+    return nullptr;
 }
 }
 

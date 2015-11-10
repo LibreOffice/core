@@ -68,8 +68,8 @@ XMLEventExport::~XMLEventExport()
 void XMLEventExport::AddHandler( const OUString& rName,
                                  XMLEventExportHandler* pHandler )
 {
-    DBG_ASSERT(pHandler != NULL, "Need EventExportHandler");
-    if (pHandler != NULL)
+    DBG_ASSERT(pHandler != nullptr, "Need EventExportHandler");
+    if (pHandler != nullptr)
     {
         aHandlerMap[rName] = pHandler;
     }
@@ -78,11 +78,11 @@ void XMLEventExport::AddHandler( const OUString& rName,
 void XMLEventExport::AddTranslationTable(
     const XMLEventNameTranslation* pTransTable )
 {
-    if (NULL != pTransTable)
+    if (nullptr != pTransTable)
     {
         // put translation table into map
         for(const XMLEventNameTranslation* pTrans = pTransTable;
-            pTrans->sAPIName != NULL;
+            pTrans->sAPIName != nullptr;
             pTrans++)
         {
             aNameTranslationMap[OUString::createFromAscii(pTrans->sAPIName)] =
@@ -346,7 +346,7 @@ const XMLEventNameTranslation aStandardEventTable[] =
     { "OnChange",           XML_NAMESPACE_OFFICE, "content-changed" },
     { "OnCalculate",        XML_NAMESPACE_OFFICE, "calculated" },
 
-    { NULL, 0, 0 }
+    { nullptr, 0, nullptr }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

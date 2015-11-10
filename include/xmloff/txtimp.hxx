@@ -485,7 +485,7 @@ public:
             const OUString& rTargetFrameName,
             const OUString& rStyleName,
             const OUString& rVisitedStyleName,
-            XMLEventsImportContext* pEvents = NULL);
+            XMLEventsImportContext* pEvents = nullptr);
     void SetRuby(
             SvXMLImport& rImport,
             const css::uno::Reference< css::text::XTextCursor >& rCursor,
@@ -497,7 +497,7 @@ public:
     /// return -1 if style is not found
     /// (may return whether data style uses the system language)
     sal_Int32 GetDataStyleKey( const OUString& sStyleName,
-                               bool* pIsSystemLanguage = NULL );
+                               bool* pIsSystemLanguage = nullptr );
 
     const SvxXMLListStyleContext *FindAutoListStyle(
             const OUString& rName ) const;
@@ -696,7 +696,7 @@ public:
 
     // forwards to TextListHelper; these are used in many places
     /// push a list context on the list context stack
-    void PushListContext(XMLTextListBlockContext *i_pListBlock = 0);
+    void PushListContext(XMLTextListBlockContext *i_pListBlock = nullptr);
     /// pop the list context stack
     void PopListContext();
 

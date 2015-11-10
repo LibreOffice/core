@@ -77,7 +77,7 @@ namespace
             ENUMERATE_SERVICE( XMLImpressContentImportOOO ),
             ENUMERATE_SERVICE( XMLImpressStylesImportOOO ),
             ENUMERATE_SERVICE( XMLImpressImportOOO ),
-            { NULL, NULL, NULL }
+            { nullptr, nullptr, nullptr }
         };
         return aDescriptors;
     };
@@ -90,7 +90,7 @@ extern "C"
 
 SAL_DLLPUBLIC_EXPORT void* SAL_CALL xof_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * /*pRegistryKey*/ )
 {
-    void * pRet = NULL;
+    void * pRet = nullptr;
     if( pServiceManager )
     {
         try

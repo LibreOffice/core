@@ -47,8 +47,8 @@ protected:
     virtual XMLTransformerActions *GetUserDefinedActions( sal_uInt16 n ) override;
 
 public:
-    OOo2OasisTransformer( const sal_Char *pImplName=0,
-                          const sal_Char *pSubServiceName=0 ) throw();
+    OOo2OasisTransformer( const sal_Char *pImplName=nullptr,
+                          const sal_Char *pSubServiceName=nullptr ) throw();
     virtual ~OOo2OasisTransformer() throw();
 
     static const ::com::sun::star::uno::Sequence< sal_Int8 > & getUnoTunnelId() throw();

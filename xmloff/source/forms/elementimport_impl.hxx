@@ -42,7 +42,7 @@ inline SvXMLImportContext* OContainerImport< BASE >::CreateChildContext(
         else
         {
             OSL_FAIL("OContainerImport::CreateChildContext: don't have an element!");
-            return NULL;
+            return nullptr;
         }
     }
 

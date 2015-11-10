@@ -112,7 +112,7 @@ SvXMLImportContext *XMLTextHeaderFooterContext::CreateChildContext(
     const OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList > & xAttrList )
 {
-    SvXMLImportContext *pContext = 0;
+    SvXMLImportContext *pContext = nullptr;
     if( bInsertContent )
     {
         if( !xOldTextCursor.is() )

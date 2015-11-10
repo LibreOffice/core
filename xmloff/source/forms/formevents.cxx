@@ -60,7 +60,7 @@ namespace xmloff
         { "XDatabaseParameterListener::approveParameter",XML_NAMESPACE_FORM, "supplyparameter" }, // "on-supplyparameter"
         { "XSQLErrorListener::errorOccured",            XML_NAMESPACE_DOM, "error" }, // "on-error"
         { "XAdjustmentListener::adjustmentValueChanged",XML_NAMESPACE_FORM, "adjust" }, // "on-adjust"
-        { 0, 0, 0 }
+        { nullptr, 0, nullptr }
     };
 
     const XMLEventNameTranslation* g_pFormsEventTranslation = aEventTranslations;

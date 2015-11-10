@@ -177,10 +177,10 @@ void XMLEventOASISTransformerContext::StartElement(
 
     XMLTransformerActions *pActions =
         GetTransformer().GetUserDefinedActions( OASIS_EVENT_ACTIONS );
-    SAL_WARN_IF( pActions == NULL, "xmloff.transform", "got no actions" );
+    SAL_WARN_IF( pActions == nullptr, "xmloff.transform", "got no actions" );
 
     Reference< XAttributeList > xAttrList( rAttrList );
-    XMLMutableAttributeList *pMutableAttrList = 0;
+    XMLMutableAttributeList *pMutableAttrList = nullptr;
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; i++ )
     {

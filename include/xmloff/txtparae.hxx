@@ -250,7 +250,7 @@ public:
             bool& rbHyperlink,
             bool& rbHasCharStyle,
             bool& rbHasAutoStyle,
-            const XMLPropertyState** pAddState = NULL) const;
+            const XMLPropertyState** pAddState = nullptr) const;
     bool addHyperlinkAttributes(
         const css::uno::Reference< css::beans::XPropertySet > & rPropSet,
         const css::uno::Reference< css::beans::XPropertyState > & rPropState,
@@ -266,15 +266,15 @@ protected:
     XMLShapeExportFlags addTextFrameAttributes(
         const css::uno::Reference< css::beans::XPropertySet >& rPropSet,
         bool bShape,
-        OUString *pMinHeightValue = 0,
-        OUString *pMinWidthValue = 0 );
+        OUString *pMinHeightValue = nullptr,
+        OUString *pMinWidthValue = nullptr );
 
     virtual void exportStyleAttributes(
         const css::uno::Reference< css::style::XStyle > & rStyle ) override;
 
     void exportPageFrames( bool bAutoStyles, bool bProgress );
     void exportFrameFrames( bool bAutoStyles, bool bProgress,
-            const css::uno::Reference< css::text::XTextFrame > *pParentTxtFrame = 0 );
+            const css::uno::Reference< css::text::XTextFrame > *pParentTxtFrame = nullptr );
 
     void exportNumStyles( bool bUsed );
 
@@ -294,7 +294,7 @@ protected:
         const css::uno::Reference< css::text::XTextSection > & rBaseSection,
         bool bProgress,
         bool bExportParagraph = true,
-        const css::uno::Reference< css::beans::XPropertySet > *pRangePropSet = 0,
+        const css::uno::Reference< css::beans::XPropertySet > *pRangePropSet = nullptr,
         bool bExportLevels = true,
         TextPNS eExtensionNS = TextPNS::ODF);
     void exportParagraph(
@@ -321,7 +321,7 @@ protected:
         const css::uno::Reference< css::text::XTextContent > & rTextContent,
         FrameType eTxpe,
         bool bAutoStyles, bool bProgress, bool bExportContent,
-        const css::uno::Reference< css::beans::XPropertySet > *pRangePropSet = 0 );
+        const css::uno::Reference< css::beans::XPropertySet > *pRangePropSet = nullptr );
     void _exportTextFrame(
         const css::uno::Reference< css::beans::XPropertySet > & rPropSet,
         const css::uno::Reference< css::beans::XPropertySetInfo > & rPropSetInfo,
@@ -329,11 +329,11 @@ protected:
     inline void exportTextFrame(
         const css::uno::Reference< css::text::XTextContent > & rTextContent,
         bool bAutoStyles, bool bProgress, bool bExportContent,
-        const css::uno::Reference< css::beans::XPropertySet > *pRangePropSet = 0 );
+        const css::uno::Reference< css::beans::XPropertySet > *pRangePropSet = nullptr );
     inline void exportShape(
         const css::uno::Reference< css::text::XTextContent > & rTextContent,
         bool bAutoStyles,
-        const css::uno::Reference< css::beans::XPropertySet > *pRangePropSet = 0  );
+        const css::uno::Reference< css::beans::XPropertySet > *pRangePropSet = nullptr  );
 
     void exportContour(
         const css::uno::Reference< css::beans::XPropertySet > & rPropSet,
@@ -344,7 +344,7 @@ protected:
     inline void exportTextGraphic(
         const css::uno::Reference< css::text::XTextContent > & rTextContent,
         bool bAutoStyles,
-        const css::uno::Reference< css::beans::XPropertySet > *pRangePropSet = 0  );
+        const css::uno::Reference< css::beans::XPropertySet > *pRangePropSet = nullptr  );
 
     virtual void _collectTextEmbeddedAutoStyles(
         const css::uno::Reference< css::beans::XPropertySet > & rPropSet );
@@ -354,7 +354,7 @@ protected:
     inline void exportTextEmbedded(
         const css::uno::Reference< css::text::XTextContent > & rTextContent,
         bool bAutoStyles,
-        const css::uno::Reference< css::beans::XPropertySet > *pRangePropSet = 0  );
+        const css::uno::Reference< css::beans::XPropertySet > *pRangePropSet = nullptr  );
 
     /// export a footnote and styles
     void exportTextFootnote(
@@ -445,18 +445,18 @@ public:
         sal_uInt16 nFamily,
         MultiPropertySetHelper& rPropSetHelper,
         const css::uno::Reference< css::beans::XPropertySet > & rPropSet,
-        const XMLPropertyState** pAddState = NULL );
+        const XMLPropertyState** pAddState = nullptr );
     void Add(
         sal_uInt16 nFamily,
         const css::uno::Reference< css::beans::XPropertySet > & rPropSet,
-        const XMLPropertyState** pAddState = NULL, bool bDontSeek = false );
+        const XMLPropertyState** pAddState = nullptr, bool bDontSeek = false );
 
     /// find style name for specified family and parent
     OUString Find(
         sal_uInt16 nFamily,
         const css::uno::Reference< css::beans::XPropertySet > & rPropSet,
         const OUString& rParent,
-        const XMLPropertyState** pAddState = NULL ) const;
+        const XMLPropertyState** pAddState = nullptr ) const;
 
     static SvXMLExportPropertyMapper *CreateShapeExtPropMapper(
                                                 SvXMLExport& rExport );

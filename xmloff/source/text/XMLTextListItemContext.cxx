@@ -128,7 +128,7 @@ XMLTextListItemContext::~XMLTextListItemContext()
 void XMLTextListItemContext::EndElement()
 {
     // finish current list item
-    rTxtImport.GetTextListHelper().SetListItem( 0 );
+    rTxtImport.GetTextListHelper().SetListItem( nullptr );
 }
 
 SvXMLImportContext *XMLTextListItemContext::CreateChildContext(
@@ -136,7 +136,7 @@ SvXMLImportContext *XMLTextListItemContext::CreateChildContext(
         const OUString& rLocalName,
         const Reference< xml::sax::XAttributeList > & xAttrList )
 {
-    SvXMLImportContext *pContext = 0;
+    SvXMLImportContext *pContext = nullptr;
 
     const SvXMLTokenMap& rTokenMap = rTxtImport.GetTextElemTokenMap();
     bool bHeading = false;

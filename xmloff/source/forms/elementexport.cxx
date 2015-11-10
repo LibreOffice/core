@@ -92,7 +92,7 @@ namespace xmloff
         const Sequence< ScriptEventDescriptor >& _rEvents)
         :OPropertyExport(_rContext, _rxProps)
         ,m_aEvents(_rEvents)
-        ,m_pXMLElement(NULL)
+        ,m_pXMLElement(nullptr)
     {
     }
 
@@ -148,7 +148,7 @@ namespace xmloff
     void OElementExport::implEndElement()
     {
         delete m_pXMLElement;
-        m_pXMLElement = NULL;
+        m_pXMLElement = nullptr;
     }
 
     void OElementExport::exportServiceNameAttribute()
@@ -239,7 +239,7 @@ namespace xmloff
         ,m_nIncludeSpecial(0)
         ,m_nIncludeEvents(0)
         ,m_nIncludeBindings(0)
-        ,m_pOuterElement(NULL)
+        ,m_pOuterElement(nullptr)
     {
         OSL_ENSURE(m_xProps.is(), "OControlExport::OControlExport: invalid arguments!");
     }
@@ -456,7 +456,7 @@ namespace xmloff
                 // see if this property can already be handled with an IPropertyHandler (which, on the long
                 // term, should be the case for most, if not all, properties)
                 const PropertyDescription* propDescription = metadata::getPropertyDescription( prop->Name );
-                if ( propDescription == NULL )
+                if ( propDescription == nullptr )
                     continue;
 
                 // let the factory provide the concrete handler. Note that caching, if desired, is the task
@@ -772,8 +772,8 @@ namespace xmloff
 
         if ((CCA_CURRENT_VALUE | CCA_VALUE) & m_nIncludeCommon)
         {
-            const sal_Char* pCurrentValuePropertyName = NULL;
-            const sal_Char* pValuePropertyName = NULL;
+            const sal_Char* pCurrentValuePropertyName = nullptr;
+            const sal_Char* pValuePropertyName = nullptr;
 
             // get the property names
             getValuePropertyNames(m_eType, m_nClassId, pCurrentValuePropertyName, pValuePropertyName);
@@ -804,9 +804,9 @@ namespace xmloff
                     pValueAttributeName,
                     pValuePropertyName);
 
-            OSL_ENSURE((NULL == pValuePropertyName) == (0 == (CCA_VALUE & m_nIncludeCommon)),
+            OSL_ENSURE((nullptr == pValuePropertyName) == (0 == (CCA_VALUE & m_nIncludeCommon)),
                 "OControlExport::exportCommonControlAttributes: no property found for the value attribute!");
-            OSL_ENSURE((NULL == pCurrentValuePropertyName ) == (0 == (CCA_CURRENT_VALUE & m_nIncludeCommon)),
+            OSL_ENSURE((nullptr == pCurrentValuePropertyName ) == (0 == (CCA_CURRENT_VALUE & m_nIncludeCommon)),
                 "OControlExport::exportCommonControlAttributes: no property found for the current-value attribute!");
 
         #if OSL_DEBUG_LEVEL > 0
@@ -1190,13 +1190,13 @@ namespace xmloff
             // need to export the min value and the max value as attributes
             // It depends on the real type (FormComponentType) of the control, which properties hold these
             // values
-            const sal_Char* pMinValuePropertyName = NULL;
-            const sal_Char* pMaxValuePropertyName = NULL;
+            const sal_Char* pMinValuePropertyName = nullptr;
+            const sal_Char* pMaxValuePropertyName = nullptr;
             getValueLimitPropertyNames(m_nClassId, pMinValuePropertyName, pMaxValuePropertyName);
 
-            OSL_ENSURE((NULL == pMinValuePropertyName) == (0 == (SCA_MIN_VALUE & m_nIncludeSpecial)),
+            OSL_ENSURE((nullptr == pMinValuePropertyName) == (0 == (SCA_MIN_VALUE & m_nIncludeSpecial)),
                 "OControlExport::exportCommonControlAttributes: no property found for the min value attribute!");
-            OSL_ENSURE((NULL == pMaxValuePropertyName) == (0 == (SCA_MAX_VALUE & m_nIncludeSpecial)),
+            OSL_ENSURE((nullptr == pMaxValuePropertyName) == (0 == (SCA_MAX_VALUE & m_nIncludeSpecial)),
                 "OControlExport::exportCommonControlAttributes: no property found for the max value attribute!");
 
             // add the two attributes
@@ -1409,7 +1409,7 @@ namespace xmloff
                                         XML_NAMESPACE_FORM,
                                         pOuterElementName, true,
                                         true)
-                            : 0;
+                            : nullptr;
 
         // add the attributes for the inner element
         exportInnerAttributes();
@@ -1425,12 +1425,12 @@ namespace xmloff
 
         // end the outer element if it exists
         delete m_pOuterElement;
-        m_pOuterElement = NULL;
+        m_pOuterElement = nullptr;
     }
 
     const sal_Char* OControlExport::getOuterXMLElementName() const
     {
-        return 0;
+        return nullptr;
     }
 
     const sal_Char* OControlExport::getXMLElementName() const
@@ -1731,7 +1731,7 @@ namespace xmloff
         // is it a control bound to a calc cell?
         if ( FormCellBindingHelper::livesInSpreadsheetDocument( m_xProps ) )
         {
-            FormCellBindingHelper aHelper( m_xProps, NULL );
+            FormCellBindingHelper aHelper( m_xProps, nullptr );
             {
                 if ( FormCellBindingHelper::isCellBinding( aHelper.getCurrentBinding( ) ) )
                 {
@@ -1771,7 +1771,7 @@ namespace xmloff
     {
         try
         {
-            FormCellBindingHelper aHelper( m_xProps, NULL );
+            FormCellBindingHelper aHelper( m_xProps, nullptr );
             Reference< XValueBinding > xBinding( aHelper.getCurrentBinding() );
             OSL_ENSURE( xBinding.is(), "OControlExport::exportCellBindingAttributes: invalid bindable or invalid binding!" );
             if ( xBinding.is() )
@@ -1835,7 +1835,7 @@ namespace xmloff
             OSL_ENSURE( xSource.is(), "OControlExport::exportCellListSourceRange: list source or sink!" );
             if ( xSource.is() )
             {
-                FormCellBindingHelper aHelper( m_xProps, NULL );
+                FormCellBindingHelper aHelper( m_xProps, nullptr );
 
                 AddAttribute(
                     OAttributeMetaData::getBindingAttributeNamespace( BA_LIST_CELL_RANGE ),

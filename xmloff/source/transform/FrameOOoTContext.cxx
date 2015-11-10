@@ -106,7 +106,7 @@ XMLTransformerContext *XMLFrameOOoTransformerContext::CreateChildContext(
         const OUString& rQName,
         const Reference< XAttributeList >& rAttrList )
 {
-    XMLTransformerContext *pContext = 0;
+    XMLTransformerContext *pContext = nullptr;
 
     XMLTransformerActions *pActions =
         GetTransformer().GetUserDefinedActions( OOO_FRAME_ELEM_ACTIONS );

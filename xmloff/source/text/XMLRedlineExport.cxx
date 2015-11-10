@@ -82,7 +82,7 @@ XMLRedlineExport::XMLRedlineExport(SvXMLExport& rExp)
 ,   sMergeLastPara("MergeLastPara")
 ,   sChangePrefix("ct")
 ,   rExport(rExp)
-,   pCurrentChangesList(NULL)
+,   pCurrentChangesList(nullptr)
 {
 }
 
@@ -113,7 +113,7 @@ void XMLRedlineExport::ExportChange(
         // only if we have no current list of changes. For the
         // main-document case, the autostyles are collected in
         // ExportChangesListAutoStyles().
-        if (pCurrentChangesList != NULL)
+        if (pCurrentChangesList != nullptr)
             ExportChangeAutoStyle(rPropSet);
     }
     else
@@ -197,7 +197,7 @@ void XMLRedlineExport::SetCurrentXText(
 
 void XMLRedlineExport::SetCurrentXText()
 {
-    pCurrentChangesList = NULL;
+    pCurrentChangesList = nullptr;
 }
 
 
@@ -266,7 +266,7 @@ void XMLRedlineExport::ExportChangeAutoStyle(
     const Reference<XPropertySet> & rPropSet)
 {
     // record change (if changes should be recorded)
-    if (NULL != pCurrentChangesList)
+    if (nullptr != pCurrentChangesList)
     {
         // put redline in list if it's collapsed or the redline start
         Any aIsStart = rPropSet->getPropertyValue(sIsStart);
@@ -480,7 +480,7 @@ void XMLRedlineExport::ExportChangeInfo(
     aAny >>= aDateTime;
     {
         OUStringBuffer sBuf;
-        ::sax::Converter::convertDateTime(sBuf, aDateTime, 0);
+        ::sax::Converter::convertDateTime(sBuf, aDateTime, nullptr);
         SvXMLElementExport aDateElem( rExport, XML_NAMESPACE_DC,
                                           XML_DATE, true,
                                           false );
@@ -521,7 +521,7 @@ void XMLRedlineExport::ExportChangeInfo(
             util::DateTime aDateTime;
             rVal.Value >>= aDateTime;
             OUStringBuffer sBuf;
-            ::sax::Converter::convertDateTime(sBuf, aDateTime, 0);
+            ::sax::Converter::convertDateTime(sBuf, aDateTime, nullptr);
             rExport.AddAttribute(XML_NAMESPACE_OFFICE, XML_CHG_DATE_TIME,
                                  sBuf.makeStringAndClear());
         }

@@ -57,7 +57,7 @@ void XMLDocumentTransformerContext::StartElement( const Reference< XAttributeLis
                     GetTransformer().GetNamespaceMap().GetQNameByKey(
                                 XML_NAMESPACE_OFFICE, GetXMLToken(XML_CLASS ) ) );
 
-    XMLMutableAttributeList *pMutableAttrList = 0;
+    XMLMutableAttributeList *pMutableAttrList = nullptr;
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; i++ )
     {
@@ -76,7 +76,7 @@ void XMLDocumentTransformerContext::StartElement( const Reference< XAttributeLis
                 "application/x-vnd.oasis.openoffice.",
                 "application/vnd.oasis.opendocument.",
                 "application/x-vnd.oasis.document.",
-                NULL
+                nullptr
             };
             for (int k=0; aTmp[k]; k++)
             {

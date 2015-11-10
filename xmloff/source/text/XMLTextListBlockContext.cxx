@@ -63,9 +63,9 @@ XMLTextListBlockContext::XMLTextListBlockContext(
     static const char s_PropNameDefaultListId[] = "DefaultListId";
     {
         // get the parent list block context (if any); this is a bit ugly...
-        XMLTextListBlockContext * pLB(0);
-        XMLTextListItemContext  * pLI(0);
-        XMLNumberedParaContext  * pNP(0);
+        XMLTextListBlockContext * pLB(nullptr);
+        XMLTextListItemContext  * pLI(nullptr);
+        XMLNumberedParaContext  * pNP(nullptr);
         rTxtImp.GetTextListHelper().ListContextTop(pLB, pLI, pNP);
         mxParentListBlock = pLB;
     }
@@ -251,7 +251,7 @@ void XMLTextListBlockContext::EndElement()
 
     // Any paragraph following the list within the same list item must not
     // be numbered.
-    mrTxtImport.GetTextListHelper().SetListItem( 0 );
+    mrTxtImport.GetTextListHelper().SetListItem( nullptr );
 }
 
 SvXMLImportContext *XMLTextListBlockContext::CreateChildContext(
@@ -259,7 +259,7 @@ SvXMLImportContext *XMLTextListBlockContext::CreateChildContext(
         const OUString& rLocalName,
         const Reference< xml::sax::XAttributeList > & xAttrList )
 {
-    SvXMLImportContext *pContext = 0;
+    SvXMLImportContext *pContext = nullptr;
 
     const SvXMLTokenMap& rTokenMap =
                         mrTxtImport.GetTextListBlockElemTokenMap();

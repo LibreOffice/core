@@ -1131,7 +1131,7 @@ void XMLDocumentTransformerContext_Impl::StartElement(
 
     m_aOldClass = GetTransformer().GetClass();
 
-    XMLMutableAttributeList *pMutableAttrList = 0;
+    XMLMutableAttributeList *pMutableAttrList = nullptr;
     bool bOOo = false, bOOoW = false, bOOoC = false,
         bDOM=false, bDC = false, bSVG = false;
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
@@ -1319,7 +1319,7 @@ void XMLTabStopOOoTContext_Impl::StartElement(
     OSL_ENSURE( pActions, "go no actions" );
 
     Reference< XAttributeList > xAttrList( rAttrList );
-    XMLMutableAttributeList *pMutableAttrList = 0;
+    XMLMutableAttributeList *pMutableAttrList = nullptr;
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; i++ )
     {
@@ -1579,7 +1579,7 @@ XMLTransformerContext *OOo2OasisTransformer::CreateUserDefinedContext(
 XMLTransformerActions *OOo2OasisTransformer::GetUserDefinedActions(
         sal_uInt16 n )
 {
-    XMLTransformerActions *pActions = 0;
+    XMLTransformerActions *pActions = nullptr;
     if( n < MAX_OOO_ACTIONS )
     {
         if( !m_aActions[n] )
@@ -1776,7 +1776,7 @@ OOo2OasisTransformer::OOo2OasisTransformer( const sal_Char *pImplName,
                                             const sal_Char *pSubServiceName )
         throw() :
     XMLTransformerBase( aActionTable, aTokenMap ),
-    m_pEventMap( 0 )
+    m_pEventMap( nullptr )
 {
     if( pImplName )
         m_aImplName = OUString::createFromAscii( pImplName );
@@ -1831,7 +1831,7 @@ OOo2OasisTransformer::OOo2OasisTransformer( const sal_Char *pImplName,
     GetReplaceNamespaceMap().Add( GetXMLToken(XML_NP_SVG), GetXMLToken(XML_N_SVG_COMPAT), XML_NAMESPACE_SVG );
 
     for( sal_uInt16 i=0; i<MAX_OOO_ACTIONS; ++i )
-        m_aActions[i] = 0;
+        m_aActions[i] = nullptr;
 }
 
 OOo2OasisTransformer::~OOo2OasisTransformer() throw()

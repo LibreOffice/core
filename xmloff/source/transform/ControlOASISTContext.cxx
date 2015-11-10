@@ -55,12 +55,12 @@ void XMLControlOASISTransformerContext::StartElement(
     OSL_ENSURE( pActions, "go no actions" );
 
     Reference< XAttributeList > xAttrList( rAttrList );
-    XMLMutableAttributeList *pMutableAttrList = 0;
+    XMLMutableAttributeList *pMutableAttrList = nullptr;
 //      GetTransformer().ProcessAttrList( xAttrList, OOO_SHAPE_ACTIONS,
 //                                        sal_True );
 
     XMLMutableAttributeList *pControlMutableAttrList =
-        m_bCreateControl ? new XMLMutableAttributeList : 0;
+        m_bCreateControl ? new XMLMutableAttributeList : nullptr;
     Reference< XAttributeList > xControlAttrList( pControlMutableAttrList );
 
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;

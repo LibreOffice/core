@@ -177,7 +177,7 @@ SvxXMLTabStopImportContext::SvxXMLTabStopImportContext(
                                 const XMLPropertyState& rProp,
                                  ::std::vector< XMLPropertyState > &rProps )
 : XMLElementPropertyContext( rImport, nPrfx, rLName, rProp, rProps ),
-  mpTabStops( NULL )
+  mpTabStops( nullptr )
 {
 }
 
@@ -201,7 +201,7 @@ SvXMLImportContext *SvxXMLTabStopImportContext::CreateChildContext(
                                    const OUString& rLocalName,
                                    const uno::Reference< xml::sax::XAttributeList > & xAttrList )
 {
-    SvXMLImportContext *pContext = 0;
+    SvXMLImportContext *pContext = nullptr;
 
     if( XML_NAMESPACE_STYLE == nPrefix && IsXMLToken( rLocalName, XML_TAB_STOP ) )
     {

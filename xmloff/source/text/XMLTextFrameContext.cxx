@@ -295,7 +295,7 @@ XMLTextFrameContourContext_Impl::XMLTextFrameContourContext_Impl(
 
         if( bPath )
         {
-            basegfx::tools::importFromSvgD(aPolyPolygon, sD, GetImport().needFixPositionAfterZ(), 0);
+            basegfx::tools::importFromSvgD(aPolyPolygon, sD, GetImport().needFixPositionAfterZ(), nullptr);
         }
         else
         {
@@ -607,7 +607,7 @@ void XMLTextFrameContext_Impl::Create( bool /*bHRefOrBase64*/ )
     }
 
     // frame style
-    XMLPropStyleContext *pStyle = 0;
+    XMLPropStyleContext *pStyle = nullptr;
     if( !sStyleName.isEmpty() )
     {
         pStyle = xTextImportHelper->FindAutoFrameStyle( sStyleName );
@@ -730,7 +730,7 @@ void XMLTextFrameContext_Impl::Create( bool /*bHRefOrBase64*/ )
         else if( xBase64Stream.is() )
         {
             sHRef = GetImport().ResolveGraphicObjectURLFromBase64( xBase64Stream );
-            xBase64Stream = 0;
+            xBase64Stream = nullptr;
         }
         aAny <<= sHRef;
         xPropSet->setPropertyValue( sGraphicURL, aAny );
@@ -1142,7 +1142,7 @@ SvXMLImportContext *XMLTextFrameContext_Impl::CreateChildContext(
         const OUString& rLocalName,
         const Reference< XAttributeList > & xAttrList )
 {
-    SvXMLImportContext *pContext = 0;
+    SvXMLImportContext *pContext = nullptr;
 
     if( XML_NAMESPACE_DRAW == nPrefix )
     {
@@ -1379,7 +1379,7 @@ XMLTextFrameContext::XMLTextFrameContext(
 :   SvXMLImportContext( rImport, nPrfx, rLName )
 ,   MultiImageImportHelper()
 ,   m_xAttrList( new SvXMLAttributeList( xAttrList ) )
-,   m_pHyperlink( 0 )
+,   m_pHyperlink( nullptr )
     // Implement Title/Description Elements UI (#i73249#)
 ,   m_sTitle()
 ,   m_sDesc()
@@ -1406,7 +1406,7 @@ XMLTextFrameContext::XMLTextFrameContext(
             {
                 rtl::Reference < XMLTextImportHelper > xTxtImport =
                                                     GetImport().GetTextImport();
-                XMLPropStyleContext* pStyle( 0L );
+                XMLPropStyleContext* pStyle( nullptr );
                 pStyle = xTxtImport->FindAutoFrameStyle( aStyleName );
                 if ( pStyle && pStyle->GetParentName().isEmpty() )
                 {
@@ -1468,7 +1468,7 @@ void XMLTextFrameContext::EndElement()
             pImpl->SetHyperlink( m_pHyperlink->GetHRef(), m_pHyperlink->GetName(),
                           m_pHyperlink->GetTargetFrameName(), m_pHyperlink->GetMap() );
             delete m_pHyperlink;
-            m_pHyperlink = 0;
+            m_pHyperlink = nullptr;
         }
 
     }
@@ -1479,7 +1479,7 @@ SvXMLImportContext *XMLTextFrameContext::CreateChildContext(
         const OUString& rLocalName,
         const Reference< XAttributeList > & xAttrList )
 {
-    SvXMLImportContext *pContext = 0;
+    SvXMLImportContext *pContext = nullptr;
 
     if( !m_xImplContext.Is() )
     {
@@ -1592,7 +1592,7 @@ SvXMLImportContext *XMLTextFrameContext::CreateChildContext(
             m_xReplImplContext = pContext;
         }
     }
-    else if( 0 != dynamic_cast< const XMLTextFrameContext_Impl*>( m_xImplContext.get() ))
+    else if( nullptr != dynamic_cast< const XMLTextFrameContext_Impl*>( m_xImplContext.get() ))
     {
         // the child is a writer frame
         if( XML_NAMESPACE_SVG == p_nPrefix )

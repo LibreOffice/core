@@ -40,15 +40,15 @@ using ::std::sort;
 
 MultiPropertySetHelper::MultiPropertySetHelper(
     const sal_Char** pNames ) :
-        pPropertyNames( NULL ),
+        pPropertyNames( nullptr ),
         nLength( 0 ),
         aPropertySequence(),
-        pSequenceIndex( NULL ),
+        pSequenceIndex( nullptr ),
         aValues(),
-        pValues( NULL )
+        pValues( nullptr )
 {
     // first count the elements
-    for( const sal_Char** pPtr = pNames; *pPtr != NULL; pPtr++ )
+    for( const sal_Char** pPtr = pNames; *pPtr != nullptr; pPtr++ )
         nLength++;
 
     // allocate array and create strings
@@ -60,7 +60,7 @@ MultiPropertySetHelper::MultiPropertySetHelper(
 
 MultiPropertySetHelper::~MultiPropertySetHelper()
 {
-    pValues = NULL; // memory 'owned' by aValues
+    pValues = nullptr; // memory 'owned' by aValues
 
     delete[] pSequenceIndex;
     delete[] pPropertyNames;
@@ -73,7 +73,7 @@ void MultiPropertySetHelper::hasProperties(
     DBG_ASSERT( rInfo.is(), "I'd really like an XPropertySetInfo here." );
 
     // allocate sequence index
-    if ( NULL == pSequenceIndex )
+    if ( nullptr == pSequenceIndex )
         pSequenceIndex = new sal_Int16[nLength] ;
 
     // construct pSequenceIndex
@@ -106,7 +106,7 @@ void MultiPropertySetHelper::hasProperties(
 
 bool MultiPropertySetHelper::checkedProperties()
 {
-    return (NULL != pSequenceIndex);
+    return (nullptr != pSequenceIndex);
 }
 
 

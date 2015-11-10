@@ -135,7 +135,7 @@ void SAL_CALL SvXMLImportEventListener::disposing( const lang::EventObject& )
     if (pImport)
     {
         pImport->DisposingModel();
-        pImport = NULL;
+        pImport = nullptr;
     }
 }
 
@@ -301,8 +301,8 @@ public:
 
     SvXMLImport_Impl( const uno::Reference< uno::XComponentContext >& rxContext,
                       OUString const & theImplementationName)
-        : hBatsFontConv( 0 )
-        , hMathFontConv( 0 )
+        : hBatsFontConv( nullptr )
+        , hMathFontConv( nullptr )
         , mbOwnGraphicResolver( false )
         , mbOwnEmbeddedResolver( false )
         , mbIsOOoXML(false)
@@ -422,11 +422,11 @@ SvXMLImport::SvXMLImport(
 
     mpContexts( new SvXMLImportContexts_Impl ),
     mpFastContexts( new FastSvXMLImportContexts_Impl ),
-    mpNumImport( NULL ),
-    mpProgressBarHelper( NULL ),
-    mpEventImportHelper( NULL ),
-    mpXMLErrors( NULL ),
-    mpStyleMap(0),
+    mpNumImport( nullptr ),
+    mpProgressBarHelper( nullptr ),
+    mpEventImportHelper( nullptr ),
+    mpXMLErrors( nullptr ),
+    mpStyleMap(nullptr),
     mnImportFlags( nImportFlags ),
     mnErrorFlags(SvXMLErrorFlags::NO),
     mbIsFormsSupported( true ),
@@ -553,7 +553,7 @@ void SAL_CALL SvXMLImport::endDocument()
     if (mpNumImport)
     {
         delete mpNumImport;
-        mpNumImport = NULL;
+        mpNumImport = nullptr;
     }
     if (mxImportInfo.is())
     {
@@ -606,7 +606,7 @@ void SAL_CALL SvXMLImport::endDocument()
 
     //  The shape import helper does the z-order sorting in the dtor,
     //  so it must be deleted here, too.
-    mxShapeImport = NULL;
+    mxShapeImport = nullptr;
 
     if( mpImpl->mbOwnGraphicResolver )
     {
@@ -622,10 +622,10 @@ void SAL_CALL SvXMLImport::endDocument()
     if( mpStyleMap )
     {
         mpStyleMap->release();
-        mpStyleMap = 0;
+        mpStyleMap = nullptr;
     }
 
-    if ( mpXMLErrors != NULL )
+    if ( mpXMLErrors != nullptr )
     {
         mpXMLErrors->ThrowErrorAsSAXException( XMLERROR_FLAG_SEVERE );
     }
@@ -635,7 +635,7 @@ void SAL_CALL SvXMLImport::startElement( const OUString& rName,
                                          const uno::Reference< xml::sax::XAttributeList >& xAttrList )
     throw(xml::sax::SAXException, uno::RuntimeException, std::exception)
 {
-    SvXMLNamespaceMap *pRewindMap = 0;
+    SvXMLNamespaceMap *pRewindMap = nullptr;
     //    SAL_INFO("svg", "startElement " << rName);
     // Process namespace attributes. This must happen before creating the
     // context, because namespace decaration apply to the element name itself.
@@ -769,7 +769,7 @@ rName
 
         // Delete the current context.
         pContext->ReleaseRef();
-        pContext = 0;
+        pContext = nullptr;
 
         // Rewind a namespace map.
         if( pRewindMap )
@@ -851,7 +851,7 @@ void SAL_CALL SvXMLImport::endFastElement (sal_Int32 Element)
         uno::Reference< XFastContextHandler > xContext = mpFastContexts->back();
         mpFastContexts->pop_back();
         xContext->endFastElement( Element );
-        xContext = 0;
+        xContext = nullptr;
     }
 }
 
@@ -942,7 +942,7 @@ void SAL_CALL SvXMLImport::setTargetDocument( const uno::Reference< lang::XCompo
     if( mpNumImport )
     {
         delete mpNumImport;
-        mpNumImport = 0;
+        mpNumImport = nullptr;
     }
 }
 
@@ -1723,7 +1723,7 @@ void SvXMLImport::_CreateNumberFormatsSupplier()
 
 void SvXMLImport::_CreateDataStylesImport()
 {
-    SAL_WARN_IF( mpNumImport != NULL, "xmloff.core", "data styles import already exists!" );
+    SAL_WARN_IF( mpNumImport != nullptr, "xmloff.core", "data styles import already exists!" );
     uno::Reference<util::XNumberFormatsSupplier> xNum =
         GetNumberFormatsSupplier();
     if ( xNum.is() )
@@ -1781,7 +1781,7 @@ void SvXMLImport::SetError(
         mnErrorFlags |= SvXMLErrorFlags::DO_NOTHING;
 
     // create error list on demand
-    if ( mpXMLErrors == NULL )
+    if ( mpXMLErrors == nullptr )
         mpXMLErrors = new XMLErrors();
 
     // save error information
@@ -1794,7 +1794,7 @@ void SvXMLImport::SetError(
     sal_Int32 nId,
     const Sequence<OUString>& rMsgParams)
 {
-    SetError( nId, rMsgParams, "", NULL );
+    SetError( nId, rMsgParams, "", nullptr );
 }
 
 void SvXMLImport::SetError(
@@ -1837,8 +1837,8 @@ void SvXMLImport::DisposingModel()
     if( mxMasterStyles.Is() )
         static_cast<SvXMLStylesContext *>(&mxMasterStyles)->Clear();
 
-    mxModel.set(0);
-    mxEventListener.set(NULL);
+    mxModel.set(nullptr);
+    mxEventListener.set(nullptr);
 }
 
 ::comphelper::UnoInterfaceToUniqueIdentifierMapper& SvXMLImport::getInterfaceToIdentifierMapper()

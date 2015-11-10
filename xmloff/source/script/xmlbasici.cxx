@@ -49,7 +49,7 @@ SvXMLImportContext* XMLBasicImportContext::CreateChildContext(
     sal_uInt16 nPrefix, const OUString& rLocalName,
     const Reference< xml::sax::XAttributeList >& )
 {
-    SvXMLImportContext* pContext = 0;
+    SvXMLImportContext* pContext = nullptr;
 
     if ( m_xHandler.is() )
         pContext = new XMLBasicImportChildContext( GetImport(), nPrefix, rLocalName,

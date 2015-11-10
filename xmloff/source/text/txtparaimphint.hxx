@@ -119,13 +119,13 @@ public:
 
     XMLHyperlinkHint_Impl( const css::uno::Reference < css::text::XTextRange > & rPos ) :
         XMLHint_Impl( XML_HINT_HYPERLINK, rPos, rPos ),
-        pEvents( NULL )
+        pEvents( nullptr )
     {
     }
 
     virtual ~XMLHyperlinkHint_Impl()
     {
-        if (NULL != pEvents)
+        if (nullptr != pEvents)
             pEvents->ReleaseRef();
     }
 
@@ -146,7 +146,7 @@ public:
     void SetEventsContext( XMLEventsImportContext* pCtxt )
     {
         pEvents = pCtxt;
-        if (pEvents != NULL)
+        if (pEvents != nullptr)
             pEvents->AddFirstRef();
     }
 };

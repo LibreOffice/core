@@ -86,7 +86,7 @@ namespace xmloff
         PropertyDescription()
             :propertyName()
             ,attribute()
-            ,factory( NULL )
+            ,factory( nullptr )
             ,propertyId( PID_INVALID )
             ,propertyGroup( NO_GROUP )
         {

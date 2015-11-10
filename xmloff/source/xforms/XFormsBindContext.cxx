@@ -72,7 +72,7 @@ XFormsBindContext::XFormsBindContext(
     const Reference<XModel2>& xModel ) :
         TokenContext( rImport, nPrefix, rLocalName, aAttributeMap, aEmptyMap ),
         mxModel( xModel ),
-        mxBinding( NULL )
+        mxBinding( nullptr )
 {
     // attach binding to model
     mxBinding = mxModel->createBinding();
@@ -146,7 +146,7 @@ SvXMLImportContext* XFormsBindContext::HandleChild(
     const Reference<XAttributeList>& )
 {
     OSL_FAIL( "no children supported" );
-    return NULL;
+    return nullptr;
 }
 
 
