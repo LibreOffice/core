@@ -21,10 +21,11 @@
 #define INCLUDED_EXTENSIONS_SOURCE_BIBLIOGRAPHY_BIBCONFIG_HXX
 
 #include <unotools/configitem.hxx>
-#include <boost/ptr_container/ptr_vector.hpp>
+#include <vector>
+#include <memory>
 
 struct Mapping;
-typedef boost::ptr_vector<Mapping> MappingArray;
+typedef std::vector<std::unique_ptr<Mapping> > MappingArray;
 
 
 

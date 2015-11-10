@@ -26,6 +26,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/sdb/DatabaseContext.hpp>
 #include <comphelper/processfactory.hxx>
+#include <o3tl/make_unique.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
@@ -185,7 +186,7 @@ BibConfig::BibConfig()
                     pMapping->aColumnPairs[nSetMapping++].sRealColumnName = sTempReal;
                 }
             }
-            pMappingsArr->push_back(pMapping);
+            pMappingsArr->push_back(std::unique_ptr<Mapping>(pMapping));
         }
     }
 }
@@ -250,7 +251,7 @@ void    BibConfig::ImplCommit()
     OUString sCommandType("CommandType");
     for(sal_Int32 i = 0; i < (sal_Int32)pMappingsArr->size(); i++)
     {
-        const Mapping* pMapping = &(*pMappingsArr)[i];
+        const Mapping* pMapping = (*pMappingsArr)[i].get();
         OUString sPrefix(cDataSourceHistory);
         sPrefix += "/_";
         sPrefix += OUString::number(i);
@@ -296,7 +297,7 @@ const Mapping*  BibConfig::GetMapping(const BibDBDescriptor& rDesc) const
 {
     for(size_t i = 0; i < pMappingsArr->size(); i++)
     {
-        Mapping& rMapping = (*pMappingsArr)[i];
+        Mapping& rMapping = *(*pMappingsArr)[i].get();
         bool bURLEqual = rDesc.sDataSource.equals(rMapping.sURL);
         if(rDesc.sTableOrQuery == rMapping.sTableName && bURLEqual)
             return &rMapping;
@@ -308,7 +309,7 @@ void BibConfig::SetMapping(const BibDBDescriptor& rDesc, const Mapping* pSetMapp
 {
     for(size_t i = 0; i < pMappingsArr->size(); i++)
     {
-        Mapping& rMapping = (*pMappingsArr)[i];
+        Mapping& rMapping = *(*pMappingsArr)[i].get();
         bool bURLEqual = rDesc.sDataSource.equals(rMapping.sURL);
         if(rDesc.sTableOrQuery == rMapping.sTableName && bURLEqual)
         {
@@ -316,8 +317,7 @@ void BibConfig::SetMapping(const BibDBDescriptor& rDesc, const Mapping* pSetMapp
             break;
         }
     }
-    Mapping* pNew = new Mapping(*pSetMapping);
-    pMappingsArr->push_back(pNew);
+    pMappingsArr->push_back(o3tl::make_unique<Mapping>(*pSetMapping));
     SetModified();
 }
 
