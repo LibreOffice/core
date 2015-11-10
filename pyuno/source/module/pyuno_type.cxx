@@ -36,7 +36,7 @@ namespace pyuno
 {
 const char *typeClassToString( TypeClass t )
 {
-    const char * ret = 0;
+    const char * ret = nullptr;
     switch (t)
     {
     case css::uno::TypeClass_VOID:
@@ -243,7 +243,7 @@ static PyObject* callCtor( const Runtime &r , const char * clazz, const PyRef & 
         buf.append( "couldn't access uno." );
         buf.append( clazz );
         PyErr_SetString( PyExc_RuntimeError, buf.getStr() );
-        return NULL;
+        return nullptr;
     }
     PyRef instance( PyObject_CallObject( code.get(), args.get()  ), SAL_NO_ACQUIRE);
     Py_XINCREF( instance.get() );
@@ -270,7 +270,7 @@ PyObject* PyUNO_Type_new (const char *typeName , TypeClass t , const Runtime &r 
     PyTuple_SetItem( args.get() , 0 , PyStr_FromString( typeName ) );
     PyObject *typeClass = PyUNO_Enum_new( "com.sun.star.uno.TypeClass" , typeClassToString(t), r );
     if( ! typeClass )
-        return NULL;
+        return nullptr;
     PyTuple_SetItem( args.get() , 1 , typeClass);
 
     return callCtor( r, "Type" , args );

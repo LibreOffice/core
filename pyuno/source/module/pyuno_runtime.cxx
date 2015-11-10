@@ -80,30 +80,20 @@ static PyTypeObject RuntimeImpl_Type =
     nullptr,
     nullptr,
     nullptr,
-    0,
-    nullptr,
-    0,
-    0,
-    0,
     nullptr,
     nullptr,
     nullptr,
     nullptr,
     nullptr,
-    NULL,
-    0,
-    NULL,
+    nullptr,
+    nullptr,
+    nullptr,
     nullptr,
     nullptr,
     nullptr,
     0,
     nullptr,
     nullptr,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
     nullptr,
     nullptr,
     0,
@@ -112,17 +102,27 @@ static PyTypeObject RuntimeImpl_Type =
     nullptr,
     nullptr,
     nullptr,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    0,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
     nullptr
 #if PY_VERSION_HEX >= 0x02060000
     , 0
 #endif
 #if PY_VERSION_HEX >= 0x03040000
-    , 0
+    , nullptr
 #endif
 };
 
@@ -182,7 +182,7 @@ static PyRef importUnoModule( ) throw ( RuntimeException )
 static void readLoggingConfig( sal_Int32 *pLevel, FILE **ppFile )
 {
     *pLevel = LogLevel::NONE;
-    *ppFile = 0;
+    *ppFile = nullptr;
     OUString fileName;
     osl_getModuleURLFromFunctionAddress(
         reinterpret_cast< oslGenericFunction >(readLoggingConfig),
@@ -223,7 +223,7 @@ static void readLoggingConfig( sal_Int32 *pLevel, FILE **ppFile )
                 oslProcessInfo data;
                 data.Size = sizeof( data );
                 osl_getProcessInfo(
-                    0 , osl_Process_IDENTIFIER , &data );
+                    nullptr , osl_Process_IDENTIFIER , &data );
                 osl_getSystemPathFromFileURL( str.pData, &str.pData);
                 OString o = OUStringToOString( str, osl_getThreadTextEncoding() );
                 o += ".";
@@ -233,7 +233,7 @@ static void readLoggingConfig( sal_Int32 *pLevel, FILE **ppFile )
                 if ( *ppFile )
                 {
                     // do not buffer (useful if e.g. analyzing a crash)
-                    setvbuf( *ppFile, 0, _IONBF, 0 );
+                    setvbuf( *ppFile, nullptr, _IONBF, 0 );
                 }
                 else
                 {
@@ -255,7 +255,7 @@ PyRef stRuntimeImpl::create( const Reference< XComponentContext > &ctx )
     RuntimeImpl *me = PyObject_New (RuntimeImpl, &RuntimeImpl_Type);
     if( ! me )
         throw RuntimeException( "cannot instantiate pyuno::RuntimeImpl" );
-    me->cargo = 0;
+    me->cargo = nullptr;
     // must use a different struct here, as the PyObject_New
     // makes C++ unusable
     RuntimeCargo *c = new RuntimeCargo();
@@ -327,7 +327,7 @@ bool Runtime::isInitialized() throw ( RuntimeException )
 }
 
 Runtime::Runtime() throw(  RuntimeException )
-    : impl( 0 )
+    : impl( nullptr )
 {
     PyRef globalDict, runtime;
     getRuntimeImpl( globalDict , runtime );
@@ -576,7 +576,7 @@ static Sequence< Type > invokeGetTypes( const Runtime & r , PyObject * o )
     raiseInvocationTargetExceptionWhenNeeded( r );
     if( method.is() && PyCallable_Check( method.get() ) )
     {
-        PyRef types( PyObject_CallObject( method.get(), 0 ) , SAL_NO_ACQUIRE );
+        PyRef types( PyObject_CallObject( method.get(), nullptr ) , SAL_NO_ACQUIRE );
         raiseInvocationTargetExceptionWhenNeeded( r );
         if( types.is() && PyTuple_Check( types.get() ) )
         {
@@ -899,7 +899,7 @@ Any Runtime::pyObject2Any ( const PyRef & source, enum ConversionMode mode ) con
             }
             else
             {
-                OUString const msg(lcl_ExceptionMessage(o, 0));
+                OUString const msg(lcl_ExceptionMessage(o, nullptr));
                 throw RuntimeException(msg);
             }
         }

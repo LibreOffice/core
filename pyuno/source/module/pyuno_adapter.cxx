@@ -193,7 +193,7 @@ Any Adapter::invoke( const OUString &aFunctionName,
 
     }
 
-    RuntimeCargo *cargo = 0;
+    RuntimeCargo *cargo = nullptr;
     try
     {
     PyThreadAttach guard( mInterpreter );

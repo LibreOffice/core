@@ -70,7 +70,7 @@ PyObject* PyUNO_callable_call(
     Sequence<Any> aParams;
     Any any_params;
     Any ret_value;
-    RuntimeCargo *cargo = 0;
+    RuntimeCargo *cargo = nullptr;
     me = reinterpret_cast<PyUNO_callable*>(self);
 
     PyRef ret;
@@ -191,30 +191,20 @@ static PyTypeObject PyUNO_callable_Type =
     nullptr,
     nullptr,
     nullptr,
-    0,
     nullptr,
-    0,
-    0,
-    0,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
     nullptr,
     ::pyuno::PyUNO_callable_call,
     nullptr,
     nullptr,
     nullptr,
-    NULL,
-    0,
-    NULL,
-    nullptr,
-    nullptr,
     nullptr,
     0,
     nullptr,
     nullptr,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
     nullptr,
     nullptr,
     0,
@@ -223,17 +213,27 @@ static PyTypeObject PyUNO_callable_Type =
     nullptr,
     nullptr,
     nullptr,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    0,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
     nullptr
 #if PY_VERSION_HEX >= 0x02060000
     , 0
 #endif
 #if PY_VERSION_HEX >= 0x03040000
-    , 0
+    , nullptr
 #endif
 };
 
@@ -247,8 +247,8 @@ PyRef PyUNO_callable_new (
     OSL_ENSURE (my_inv.is(), "XInvocation must be valid");
 
     self = PyObject_New (PyUNO_callable, &PyUNO_callable_Type);
-    if (self == NULL)
-        return NULL; //NULL == Error!
+    if (self == nullptr)
+        return nullptr; //NULL == Error!
 
     self->members = new PyUNO_callable_Internals;
     self->members->xInvocation = my_inv;

@@ -90,7 +90,7 @@ class PyRef
 {
     PyObject *m;
 public:
-    PyRef () : m(0) {}
+    PyRef () : m(nullptr) {}
     PyRef( PyObject * p ) : m( p ) { Py_XINCREF( m ); }
 
     PyRef( PyObject * p, __sal_NoAcquire ) : m( p ) {}
@@ -130,7 +130,7 @@ public:
         only seldom needed ! */
     void scratch()
     {
-        m = 0;
+        m = nullptr;
     }
 
     /** returns 1 when the reference points to a python object python object,
@@ -138,7 +138,7 @@ public:
     */
     bool is() const
     {
-        return m != 0;
+        return m != nullptr;
     }
 
     struct Hash

@@ -259,7 +259,7 @@ static PyObject* getComponentContext(
                 PyErr_SetString(
                     PyExc_RuntimeError, "osl_getUrlFromAddress fails, that's why I cannot find ini "
                     "file for bootstrapping python uno bridge\n" );
-                return NULL;
+                return nullptr;
             }
 
             OUStringBuffer iniFileName;
@@ -327,7 +327,7 @@ static PyObject* initTestEnvironment(
     // so load "test" library and invoke a function there to do the work
     try
     {
-        PyObject *const ctx(getComponentContext(0, 0));
+        PyObject *const ctx(getComponentContext(nullptr, nullptr));
         if (!ctx) { abort(); }
         Runtime const runtime;
         Any const a(runtime.pyObject2Any(ctx));
@@ -370,7 +370,7 @@ PyObject * extractOneStringArg( PyObject *args, char const *funcName )
         OStringBuffer buf;
         buf.append( funcName ).append( ": expecting one string argument" );
         PyErr_SetString( PyExc_RuntimeError, buf.getStr() );
-        return NULL;
+        return nullptr;
     }
     PyObject *obj = PyTuple_GetItem( args, 0 );
     if (!PyStr_Check(obj) && !PyUnicode_Check(obj))
@@ -378,7 +378,7 @@ PyObject * extractOneStringArg( PyObject *args, char const *funcName )
         OStringBuffer buf;
         buf.append( funcName ).append( ": expecting one string argument" );
         PyErr_SetString( PyExc_TypeError, buf.getStr());
-        return NULL;
+        return nullptr;
     }
     return obj;
 }
@@ -472,7 +472,7 @@ static PyObject *createUnoStructHelper(
 static PyObject *getTypeByName(
     SAL_UNUSED_PARAMETER PyObject *, PyObject *args )
 {
-    PyObject * ret = NULL;
+    PyObject * ret = nullptr;
 
     try
     {
@@ -506,7 +506,7 @@ static PyObject *getTypeByName(
 static PyObject *getConstantByName(
     SAL_UNUSED_PARAMETER PyObject *, PyObject *args )
 {
-    PyObject *ret = 0;
+    PyObject *ret = nullptr;
     try
     {
         char *name;
@@ -558,7 +558,7 @@ static PyObject *checkType( SAL_UNUSED_PARAMETER PyObject *, PyObject *args )
         OStringBuffer buf;
         buf.append( "pyuno.checkType : expecting one uno.Type argument" );
         PyErr_SetString( PyExc_RuntimeError, buf.getStr() );
-        return NULL;
+        return nullptr;
     }
     PyObject *obj = PyTuple_GetItem( args, 0 );
 
@@ -569,7 +569,7 @@ static PyObject *checkType( SAL_UNUSED_PARAMETER PyObject *, PyObject *args )
     catch(const  RuntimeException & e)
     {
         raisePyExceptionWithAny( makeAny( e ) );
-        return NULL;
+        return nullptr;
     }
     Py_INCREF( Py_None );
     return Py_None;
@@ -582,7 +582,7 @@ static PyObject *checkEnum( SAL_UNUSED_PARAMETER PyObject *, PyObject *args )
         OStringBuffer buf;
         buf.append( "pyuno.checkType : expecting one uno.Type argument" );
         PyErr_SetString( PyExc_RuntimeError, buf.getStr() );
-        return NULL;
+        return nullptr;
     }
     PyObject *obj = PyTuple_GetItem( args, 0 );
 
@@ -593,7 +593,7 @@ static PyObject *checkEnum( SAL_UNUSED_PARAMETER PyObject *, PyObject *args )
     catch(const RuntimeException & e)
     {
         raisePyExceptionWithAny( makeAny( e) );
-        return NULL;
+        return nullptr;
     }
     Py_INCREF( Py_None );
     return Py_None;
@@ -603,7 +603,7 @@ static PyObject *getClass( SAL_UNUSED_PARAMETER PyObject *, PyObject *args )
 {
     PyObject *obj = extractOneStringArg( args, "pyuno.getClass");
     if( ! obj )
-        return NULL;
+        return nullptr;
 
     try
     {
@@ -616,7 +616,7 @@ static PyObject *getClass( SAL_UNUSED_PARAMETER PyObject *, PyObject *args )
     {
         raisePyExceptionWithAny( makeAny(e) );
     }
-    return NULL;
+    return nullptr;
 }
 
 static PyObject *isInterface( SAL_UNUSED_PARAMETER PyObject *, PyObject *args )
@@ -635,7 +635,7 @@ static PyObject * generateUuid(
     SAL_UNUSED_PARAMETER PyObject *, SAL_UNUSED_PARAMETER PyObject * )
 {
     Sequence< sal_Int8 > seq( 16 );
-    rtl_createUuid( reinterpret_cast<sal_uInt8*>(seq.getArray()) , 0 , sal_False );
+    rtl_createUuid( reinterpret_cast<sal_uInt8*>(seq.getArray()) , nullptr , sal_False );
     PyRef ret;
     try
     {
@@ -654,7 +654,7 @@ static PyObject *systemPathToFileUrl(
 {
     PyObject *obj = extractOneStringArg( args, "pyuno.systemPathToFileUrl" );
     if( ! obj )
-        return NULL;
+        return nullptr;
 
     OUString sysPath = pyString2ustring( obj );
     OUString url;
@@ -670,7 +670,7 @@ static PyObject *systemPathToFileUrl(
         buf.append( ")" );
         raisePyExceptionWithAny(
             makeAny( RuntimeException( buf.makeStringAndClear() )));
-        return NULL;
+        return nullptr;
     }
     return ustring2PyUnicode( url ).getAcquired();
 }
@@ -680,7 +680,7 @@ static PyObject * fileUrlToSystemPath(
 {
     PyObject *obj = extractOneStringArg( args, "pyuno.fileUrlToSystemPath" );
     if( ! obj )
-        return NULL;
+        return nullptr;
 
     OUString url = pyString2ustring( obj );
     OUString sysPath;
@@ -696,7 +696,7 @@ static PyObject * fileUrlToSystemPath(
         buf.append( ")" );
         raisePyExceptionWithAny(
             makeAny( RuntimeException( buf.makeStringAndClear() )));
-        return NULL;
+        return nullptr;
     }
     return ustring2PyUnicode( sysPath ).getAcquired();
 }
@@ -723,16 +723,16 @@ static PyObject * absolutize( SAL_UNUSED_PARAMETER PyObject *, PyObject * args )
             PyErr_SetString(
                 PyExc_OSError,
                 OUStringToOString(buf.makeStringAndClear(),osl_getThreadTextEncoding()).getStr());
-            return 0;
+            return nullptr;
         }
         return ustring2PyUnicode( ret ).getAcquired();
     }
-    return 0;
+    return nullptr;
 }
 
 static PyObject * invoke(SAL_UNUSED_PARAMETER PyObject *, PyObject *args)
 {
-    PyObject *ret = 0;
+    PyObject *ret = nullptr;
     if(PyTuple_Check(args) && PyTuple_Size(args) == 3)
     {
         PyObject *object = PyTuple_GetItem(args, 0);
@@ -836,23 +836,23 @@ static PyObject *setCurrentContext(
 
 struct PyMethodDef PyUNOModule_methods [] =
 {
-    {"private_initTestEnvironment", initTestEnvironment, METH_VARARGS, NULL},
-    {"getComponentContext", getComponentContext, METH_VARARGS, NULL},
-    {"_createUnoStructHelper", reinterpret_cast<PyCFunction>(createUnoStructHelper), METH_VARARGS | METH_KEYWORDS, NULL},
-    {"getTypeByName", getTypeByName, METH_VARARGS, NULL},
-    {"getConstantByName", getConstantByName, METH_VARARGS, NULL},
-    {"getClass", getClass, METH_VARARGS, NULL},
-    {"checkEnum", checkEnum, METH_VARARGS, NULL},
-    {"checkType", checkType, METH_VARARGS, NULL},
-    {"generateUuid", generateUuid, METH_VARARGS, NULL},
-    {"systemPathToFileUrl", systemPathToFileUrl, METH_VARARGS, NULL},
-    {"fileUrlToSystemPath", fileUrlToSystemPath, METH_VARARGS, NULL},
-    {"absolutize", absolutize, METH_VARARGS | METH_KEYWORDS, NULL},
-    {"isInterface", isInterface, METH_VARARGS, NULL},
-    {"invoke", invoke, METH_VARARGS | METH_KEYWORDS, NULL},
-    {"setCurrentContext", setCurrentContext, METH_VARARGS, NULL},
-    {"getCurrentContext", getCurrentContext, METH_VARARGS, NULL},
-    {NULL, NULL, 0, NULL}
+    {"private_initTestEnvironment", initTestEnvironment, METH_VARARGS, nullptr},
+    {"getComponentContext", getComponentContext, METH_VARARGS, nullptr},
+    {"_createUnoStructHelper", reinterpret_cast<PyCFunction>(createUnoStructHelper), METH_VARARGS | METH_KEYWORDS, nullptr},
+    {"getTypeByName", getTypeByName, METH_VARARGS, nullptr},
+    {"getConstantByName", getConstantByName, METH_VARARGS, nullptr},
+    {"getClass", getClass, METH_VARARGS, nullptr},
+    {"checkEnum", checkEnum, METH_VARARGS, nullptr},
+    {"checkType", checkType, METH_VARARGS, nullptr},
+    {"generateUuid", generateUuid, METH_VARARGS, nullptr},
+    {"systemPathToFileUrl", systemPathToFileUrl, METH_VARARGS, nullptr},
+    {"fileUrlToSystemPath", fileUrlToSystemPath, METH_VARARGS, nullptr},
+    {"absolutize", absolutize, METH_VARARGS | METH_KEYWORDS, nullptr},
+    {"isInterface", isInterface, METH_VARARGS, nullptr},
+    {"invoke", invoke, METH_VARARGS | METH_KEYWORDS, nullptr},
+    {"setCurrentContext", setCurrentContext, METH_VARARGS, nullptr},
+    {"getCurrentContext", getCurrentContext, METH_VARARGS, nullptr},
+    {nullptr, nullptr, 0, nullptr}
 };
 
 }
@@ -869,13 +869,13 @@ PyObject* PyInit_pyuno()
     {
         PyModuleDef_HEAD_INIT,
         "pyuno",             // module name
-        0,                   // module documentation
+        nullptr,                   // module documentation
         -1,                  // module keeps state in global variables,
         PyUNOModule_methods, // modules methods
-        0,                   // m_reload (must be 0)
-        0,                   // m_traverse
-        0,                   // m_clear
-        0,                   // m_free
+        nullptr,                   // m_reload (must be 0)
+        nullptr,                   // m_traverse
+        nullptr,                   // m_clear
+        nullptr,                   // m_free
     };
     return PyModule_Create(&moduledef);
 }

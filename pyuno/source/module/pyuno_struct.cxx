@@ -80,7 +80,7 @@ PyObject *PyUNOStruct_str( PyObject *self )
 PyObject *PyUNOStruct_repr( PyObject *self )
 {
     PyUNO *me = reinterpret_cast<PyUNO*>( self );
-    PyObject *ret = 0;
+    PyObject *ret = nullptr;
 
     if( me->members->wrappedObject.getValueType().getTypeClass()
         == css::uno::TypeClass_EXCEPTION )
@@ -106,7 +106,7 @@ PyObject* PyUNOStruct_dir( PyObject *self )
 {
     PyUNO *me = reinterpret_cast<PyUNO*>( self );
 
-    PyObject* member_list = NULL;
+    PyObject* member_list = nullptr;
 
     try
     {
@@ -188,7 +188,7 @@ PyObject* PyUNOStruct_getattr( PyObject* self, char* name )
         raisePyExceptionWithAny( makeAny(e) );
     }
 
-    return NULL;
+    return nullptr;
 }
 
 int PyUNOStruct_setattr (PyObject* self, char* name, PyObject* value)
@@ -243,7 +243,7 @@ static PyObject* PyUNOStruct_cmp( PyObject *self, PyObject *that, int op )
     if(op != Py_EQ && op != Py_NE)
     {
         PyErr_SetString( PyExc_TypeError, "only '==' and '!=' comparisons are defined" );
-        return 0;
+        return nullptr;
     }
     if( self == that )
     {
@@ -291,8 +291,8 @@ static PyObject* PyUNOStruct_cmp( PyObject *self, PyObject *that, int op )
 
 static PyMethodDef PyUNOStructMethods[] =
 {
-    {"__dir__",    reinterpret_cast<PyCFunction>(PyUNOStruct_dir),    METH_NOARGS,  NULL},
-    {NULL,         NULL,                                              0,            NULL}
+    {"__dir__",    reinterpret_cast<PyCFunction>(PyUNOStruct_dir),    METH_NOARGS,  nullptr},
+    {nullptr,         nullptr,                                              0,            nullptr}
 };
 
 static PyTypeObject PyUNOStructType =
@@ -305,7 +305,7 @@ static PyTypeObject PyUNOStructType =
     nullptr,
     PyUNOStruct_getattr,
     PyUNOStruct_setattr,
-    /* this type does not exist in Python 3: (cmpfunc) */ 0,
+    /* this type does not exist in Python 3: (cmpfunc) */ nullptr,
     PyUNOStruct_repr,
     nullptr,
     nullptr,
@@ -347,7 +347,7 @@ static PyTypeObject PyUNOStructType =
     , 0
 #endif
 #if PY_VERSION_HEX >= 0x03040000
-    , 0
+    , nullptr
 #endif
 };
 
@@ -379,7 +379,7 @@ PyRef PyUNOStruct_new (
         throw RuntimeException();
 
     PyUNO* self = PyObject_New (PyUNO, &PyUNOStructType);
-    if (self == NULL)
+    if (self == nullptr)
         return PyRef(); // == error
     self->members = new PyUNOInternals();
     self->members->xInvocation = xInvocation;

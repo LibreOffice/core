@@ -264,9 +264,9 @@ static const struct cppu::ImplementationEntry g_entries[] =
     {
         pyuno_loader::CreateInstance, pyuno_loader::getImplementationName,
         pyuno_loader::getSupportedServiceNames, cppu::createSingleComponentFactory,
-        0 , 0
+        nullptr , 0
     },
-    { 0, 0, 0, 0, 0, 0 }
+    { nullptr, nullptr, nullptr, nullptr, nullptr, 0 }
 };
 
 extern "C"

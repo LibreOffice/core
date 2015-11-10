@@ -86,7 +86,7 @@ PyObject* PyUNO_iterator_next( PyObject *self )
         }
 
         PyErr_SetString( PyExc_StopIteration, "" );
-        return NULL;
+        return nullptr;
     }
     catch( css::container::NoSuchElementException &e )
     {
@@ -109,7 +109,7 @@ PyObject* PyUNO_iterator_next( PyObject *self )
         raisePyExceptionWithAny( css::uno::makeAny( e ) );
     }
 
-    return NULL;
+    return nullptr;
 }
 
 
@@ -170,8 +170,8 @@ static PyTypeObject PyUNO_iterator_Type =
 PyObject* PyUNO_iterator_new( const Reference< XEnumeration > xEnumeration )
 {
     PyUNO_iterator* self = PyObject_New( PyUNO_iterator, &PyUNO_iterator_Type );
-    if ( self == NULL )
-        return NULL; // == error
+    if ( self == nullptr )
+        return nullptr; // == error
     self->members = new PyUNO_iterator_Internals();
     self->members->xEnumeration = xEnumeration;
     return reinterpret_cast<PyObject*>(self);
@@ -215,7 +215,7 @@ PyObject* PyUNO_list_iterator_next( PyObject *self )
         if ( noMoreElements )
         {
             PyErr_SetString( PyExc_StopIteration, "" );
-            return NULL;
+            return nullptr;
         }
 
         PyRef rRet = runtime.any2PyObject( aRet );
@@ -239,7 +239,7 @@ PyObject* PyUNO_list_iterator_next( PyObject *self )
         raisePyExceptionWithAny( css::uno::makeAny( e ) );
     }
 
-    return NULL;
+    return nullptr;
 }
 
 
@@ -300,8 +300,8 @@ static PyTypeObject PyUNO_list_iterator_Type =
 PyObject* PyUNO_list_iterator_new( const Reference<XIndexAccess> &xIndexAccess )
 {
     PyUNO_list_iterator* self = PyObject_New( PyUNO_list_iterator, &PyUNO_list_iterator_Type );
-    if ( self == NULL )
-        return NULL; // == error
+    if ( self == nullptr )
+        return nullptr; // == error
     self->members = new PyUNO_list_iterator_Internals();
     self->members->xIndexAccess = xIndexAccess;
     self->members->index = 0;

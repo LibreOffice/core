@@ -56,7 +56,7 @@ static void * load(void * address, char const * symbol) {
     libname = malloc(
         len + RTL_CONSTASCII_LENGTH(SAL_DLLPREFIX "pyuno" SAL_DLLEXTENSION)
         + 1);
-    if (libname == 0) {
+    if (libname == NULL) {
         abort();
     }
     strncpy(libname, dl_info.dli_fname, len);
