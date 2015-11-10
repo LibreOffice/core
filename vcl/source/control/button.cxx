@@ -32,6 +32,7 @@
 #include <vcl/dialog.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/button.hxx>
+#include <vcl/buttonstatuslistener.hxx>
 #include <vcl/salnativewidgets.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/layout.hxx>
@@ -42,6 +43,15 @@
 #include <controldata.hxx>
 
 #include <comphelper/dispatchcommand.hxx>
+
+#include <comphelper/processfactory.hxx>
+
+#include <com/sun/star/frame/Desktop.hpp>
+#include <com/sun/star/frame/XDispatch.hpp>
+#include <com/sun/star/frame/XDispatchProvider.hpp>
+#include <com/sun/star/frame/XStatusListener.hpp>
+#include <com/sun/star/util/URL.hpp>
+#include <com/sun/star/util/URLTransformer.hpp>
 
 using namespace css;
 
@@ -67,6 +77,9 @@ using namespace css;
 class ImplCommonButtonData
 {
 public:
+    ImplCommonButtonData();
+    ~ImplCommonButtonData();
+
     Rectangle       maFocusRect;
     long            mnSeparatorX;
     DrawButtonFlags mnButtonState;
@@ -75,10 +88,10 @@ public:
     Image           maImage;
     ImageAlign      meImageAlign;
     SymbolAlign     meSymbolAlign;
+    css::uno::Reference<ButtonStatusListener> mpStatusListener;
+    /// Dispatcher. Need to keep a reference to this.
+    css::uno::Reference<css::frame::XDispatch> mxDispatch;
 
-public:
-                    ImplCommonButtonData();
-                   ~ImplCommonButtonData();
 };
 
 ImplCommonButtonData::ImplCommonButtonData() : maFocusRect(), mnSeparatorX(0), mnButtonState(DrawButtonFlags::NONE),
@@ -110,6 +123,33 @@ void Button::SetCommandHandler(const OUString& aCommand)
 {
     maCommand = aCommand;
     SetClickHdl( LINK( this, Button, dispatchCommandHandler) );
+
+    mpButtonData->mpStatusListener = new ButtonStatusListener(this);
+
+    // Target where we will execute the .uno: command
+    uno::Reference<uno::XComponentContext> xContext = ::comphelper::getProcessComponentContext();
+    uno::Reference<frame::XDesktop2> xDesktop = frame::Desktop::create(xContext);
+
+    uno::Reference<frame::XFrame> xFrame(xDesktop->getActiveFrame());
+    if (!xFrame.is())
+        xFrame = uno::Reference<frame::XFrame>(xDesktop, uno::UNO_QUERY);
+
+    uno::Reference<frame::XDispatchProvider> xDispatchProvider(xFrame, uno::UNO_QUERY);
+    if (!xDispatchProvider.is())
+        return;
+
+    util::URL aCommandURL;
+    aCommandURL.Complete = aCommand;
+    uno::Reference<util::XURLTransformer> xParser = util::URLTransformer::create(xContext);
+    xParser->parseStrict(aCommandURL);
+
+    mpButtonData->mxDispatch = xDispatchProvider->queryDispatch(aCommandURL, "", 0);
+    if (!mpButtonData->mxDispatch.is())
+        return;
+
+    //css::beans::PropertyValue* lProperties = new css::beans::PropertyValue;
+    mpButtonData->mxDispatch->addStatusListener(static_cast<frame::XStatusListener*>(mpButtonData->mpStatusListener.get()), aCommandURL);
+    SAL_DEBUG("Added btn status listener for " << aCommand);
 }
 
 void Button::Click()
