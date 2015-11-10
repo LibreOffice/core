@@ -112,6 +112,8 @@ bool Nullptr::VisitImplicitCastExpr(CastExpr const * expr) {
                             .getImmediateExpansionRange(loc).first;
                         if (isInUnoIncludeFile(
                                 compiler.getSourceManager().getSpellingLoc(loc))
+                            || isInLokIncludeFile(
+                                compiler.getSourceManager().getSpellingLoc(loc))
                             || isFromCIncludeFile(
                                 compiler.getSourceManager().getSpellingLoc(
                                     loc)))
