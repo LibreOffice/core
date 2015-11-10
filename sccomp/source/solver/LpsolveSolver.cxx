@@ -312,7 +312,7 @@ void SAL_CALL LpsolveSolver::solve() throw(uno::RuntimeException, std::exception
 
         maSolution.realloc( nVariables );
 
-        REAL* pResultVar = NULL;
+        REAL* pResultVar = nullptr;
         get_ptr_variables( lp, &pResultVar );
         for (nVar=0; nVar<nVariables; nVar++)
             maSolution[nVar] = pResultVar[nVar];

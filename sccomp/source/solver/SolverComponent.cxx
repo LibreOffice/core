@@ -42,7 +42,7 @@ using namespace com::sun::star;
 
 //  Resources from tools are used for translated strings
 
-ResMgr* SolverComponent::pSolverResMgr = NULL;
+ResMgr* SolverComponent::pSolverResMgr = nullptr;
 
 OUString SolverComponent::GetResourceString( sal_uInt32 nId )
 {

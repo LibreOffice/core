@@ -243,7 +243,7 @@ void SAL_CALL CoinMPSolver::solve() throw(uno::RuntimeException, std::exception)
     }
     pMatrixBegin[nVariables] = nMatrixPos;
     delete[] pCompMatrix;
-    pCompMatrix = NULL;
+    pCompMatrix = nullptr;
 
     // apply settings to all variables
 
@@ -291,9 +291,9 @@ void SAL_CALL CoinMPSolver::solve() throw(uno::RuntimeException, std::exception)
     HPROB hProb = CoinCreateProblem("");
     int nResult = CoinLoadProblem( hProb, nVariables, nRows, nMatrixPos, 0,
                     nObjectSense, nObjectConst, pObjectCoeffs,
-                    pLowerBounds, pUpperBounds, pRowType, pRHS, NULL,
+                    pLowerBounds, pUpperBounds, pRowType, pRHS, nullptr,
                     pMatrixBegin, pMatrixCount, pMatrixIndex, pMatrix,
-                    NULL, NULL, NULL );
+                    nullptr, nullptr, nullptr );
     if (nResult == SOLV_CALL_SUCCESS)
     {
         nResult = CoinLoadInteger( hProb, pColType );
@@ -340,7 +340,7 @@ void SAL_CALL CoinMPSolver::solve() throw(uno::RuntimeException, std::exception)
         // get solution
 
         maSolution.realloc( nVariables );
-        CoinGetSolutionValues( hProb, maSolution.getArray(), NULL, NULL, NULL );
+        CoinGetSolutionValues( hProb, maSolution.getArray(), nullptr, nullptr, nullptr );
         mfResultValue = CoinGetObjectValue( hProb );
     }
     else
