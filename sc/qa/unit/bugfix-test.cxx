@@ -192,11 +192,11 @@ void ScFiltersTest::testTdf91979()
     CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
 
     ScDocShellRef xDocSh = dynamic_cast<ScDocShell*>(pFoundShell);
-    CPPUNIT_ASSERT(xDocSh != NULL);
+    CPPUNIT_ASSERT(xDocSh != nullptr);
 
     // Get the document controller
     ScTabViewShell* pViewShell = xDocSh->GetBestViewShell(false);
-    CPPUNIT_ASSERT(pViewShell != NULL);
+    CPPUNIT_ASSERT(pViewShell != nullptr);
     auto& aViewData = pViewShell->GetViewData();
     auto* pDoc = aViewData.GetDocument();
 
