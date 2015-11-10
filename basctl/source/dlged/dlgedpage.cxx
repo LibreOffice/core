@@ -29,13 +29,13 @@ TYPEINIT1( DlgEdPage, SdrPage );
 
 DlgEdPage::DlgEdPage(DlgEdModel& rModel, bool bMasterPage)
     : SdrPage(rModel, bMasterPage)
-    , pDlgEdForm(0)
+    , pDlgEdForm(nullptr)
 {
 }
 
 DlgEdPage::DlgEdPage(const DlgEdPage& rSrcPage)
     : SdrPage(rSrcPage)
-    , pDlgEdForm(0)
+    , pDlgEdForm(nullptr)
 {
 }
 
@@ -47,13 +47,13 @@ DlgEdPage::~DlgEdPage()
 
 SdrPage* DlgEdPage::Clone() const
 {
-    return Clone(0);
+    return Clone(nullptr);
 }
 
 SdrPage* DlgEdPage::Clone(SdrModel* const pNewModel) const
 {
     DlgEdPage* const pNewPage = new DlgEdPage( *this );
-    DlgEdModel* pDlgEdModel = 0;
+    DlgEdModel* pDlgEdModel = nullptr;
     if ( pNewModel )
     {
         pDlgEdModel = dynamic_cast<DlgEdModel*>( pNewModel );

@@ -126,7 +126,7 @@ void Shell::ExecuteCurrent( SfxRequest& rReq )
                             break;
                     if (it != aWindowTable.end())
                         ++it;
-                    BaseWindow* pWin = it != aWindowTable.end() ? it->second.get() : 0;
+                    BaseWindow* pWin = it != aWindowTable.end() ? it->second.get() : nullptr;
 
                     bool bSearchedFromStart = false;
                     while ( !nFound && !bCanceled && ( pWin || !bSearchedFromStart ) )
@@ -134,8 +134,8 @@ void Shell::ExecuteCurrent( SfxRequest& rReq )
                         if ( !pWin )
                         {
                             SfxViewFrame* pViewFrame = GetViewFrame();
-                            SfxChildWindow* pChildWin = pViewFrame ? pViewFrame->GetChildWindow( SID_SEARCH_DLG ) : NULL;
-                            vcl::Window* pParent = pChildWin ? pChildWin->GetWindow() : NULL;
+                            SfxChildWindow* pChildWin = pViewFrame ? pViewFrame->GetChildWindow( SID_SEARCH_DLG ) : nullptr;
+                            vcl::Window* pParent = pChildWin ? pChildWin->GetWindow() : nullptr;
                             ScopedVclPtrInstance< QueryBox > aQuery(pParent, WB_YES_NO|WB_DEF_YES, IDE_RESSTR(RID_STR_SEARCHFROMSTART));
                             if ( aQuery->Execute() == RET_YES )
                             {
@@ -166,10 +166,10 @@ void Shell::ExecuteCurrent( SfxRequest& rReq )
                         {
                             if ( it != aWindowTable.end() )
                                 ++it;
-                            pWin = it != aWindowTable.end() ? it->second.get() : 0;
+                            pWin = it != aWindowTable.end() ? it->second.get() : nullptr;
                         }
                         else
-                            pWin = 0;
+                            pWin = nullptr;
                     }
                     if ( !nFound && bSearchedFromStart )
                         nFound = pCurWin->StartSearchAndReplace(rSearchItem, true);
@@ -266,7 +266,7 @@ void Shell::ExecuteGlobal( SfxRequest& rReq )
         break;
         case SID_BASICIDE_CHOOSEMACRO:
         {
-            ChooseMacro( NULL, false, OUString() );
+            ChooseMacro( nullptr, false, OUString() );
         }
         break;
         case SID_BASICIDE_CREATEMACRO:
@@ -535,7 +535,7 @@ void Shell::ExecuteGlobal( SfxRequest& rReq )
             OUString aLibName( rSbxItem.GetLibName() );
             OUString aName( rSbxItem.GetName() );
             SetCurLib( aDocument, aLibName );
-            BaseWindow* pWin = 0;
+            BaseWindow* pWin = nullptr;
             if ( rSbxItem.GetType() == TYPE_DIALOG )
             {
                 pWin = FindDlgWin( aDocument, aLibName, aName, true );
@@ -595,7 +595,7 @@ void Shell::ExecuteGlobal( SfxRequest& rReq )
                 if ( pTypeItem )
                     aType = pTypeItem->GetValue();
 
-                BaseWindow* pWin = 0;
+                BaseWindow* pWin = nullptr;
                 if ( aType == aModType )
                     pWin = FindBasWin( *pDocument, aLibName, aName );
                 else if ( aType == aDlgType )
@@ -895,7 +895,7 @@ void Shell::GetState(SfxItemSet &rSet)
             case SID_REDO:
             {
                 if( GetUndoManager() )  // recursive GetState else
-                    GetViewFrame()->GetSlotState( nWh, NULL, &rSet );
+                    GetViewFrame()->GetSlotState( nWh, nullptr, &rSet );
             }
             break;
             case SID_BASICIDE_CURRENT_LANG:
@@ -1008,7 +1008,7 @@ void Shell::SetCurWindow( BaseWindow* pNewWin, bool bUpdateTabBar, bool bRemembe
         else
         {
             SetWindow(pLayout);
-            pLayout = 0;
+            pLayout = nullptr;
         }
         if ( bUpdateTabBar )
         {
@@ -1029,10 +1029,10 @@ void Shell::SetCurWindow( BaseWindow* pNewWin, bool bUpdateTabBar, bool bRemembe
         {
             SetWindow(pLayout);
             GetViewFrame()->GetWindow().SetHelpId( HID_BASICIDE_MODULWINDOW );
-            SfxObjectShell::SetCurrentComponent(0);
+            SfxObjectShell::SetCurrentComponent(nullptr);
         }
         aObjectCatalog->SetCurrentEntry(pCurWin);
-        SetUndoManager( pCurWin ? pCurWin->GetUndoManager() : 0 );
+        SetUndoManager( pCurWin ? pCurWin->GetUndoManager() : nullptr );
         InvalidateBasicIDESlots();
         EnableScrollbars(pCurWin != nullptr);
 
@@ -1104,7 +1104,7 @@ VclPtr<BaseWindow> Shell::FindWindow(
         if (pWin->Is(rDocument, rLibName, rName, eType, bFindSuspended))
             return pWin;
     }
-    return 0;
+    return nullptr;
 }
 
 bool Shell::CallBasicErrorHdl( StarBASIC* pBasic )
@@ -1177,7 +1177,7 @@ VclPtr<ModulWindow> Shell::ShowActiveModuleWindow( StarBASIC* pBasic )
             StartListening( *pBasicMgr, true /* log on only once */ );
         return pWin;
     }
-    return 0;
+    return nullptr;
 }
 
 void Shell::AdjustPosSizePixel( const Point &rPos, const Size &rSize )

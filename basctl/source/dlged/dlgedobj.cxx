@@ -65,7 +65,7 @@ DlgEditor& DlgEdObj::GetDialogEditor ()
 DlgEdObj::DlgEdObj()
           :SdrUnoObj(OUString(), false)
           ,bIsListening(false)
-          ,pDlgEdForm( NULL )
+          ,pDlgEdForm( nullptr )
 {
 }
 
@@ -73,7 +73,7 @@ DlgEdObj::DlgEdObj(const OUString& rModelName,
                    const css::uno::Reference< css::lang::XMultiServiceFactory >& rxSFac)
           :SdrUnoObj(rModelName, rxSFac, false)
           ,bIsListening(false)
-          ,pDlgEdForm( NULL )
+          ,pDlgEdForm( nullptr )
 {
 }
 
@@ -103,7 +103,7 @@ namespace
         if ( !_out_pDlgEdForm )
             _out_pDlgEdForm = _pObject->GetDlgEdForm();
         DBG_ASSERT( _out_pDlgEdForm, "lcl_getDlgEdForm: no form!" );
-        return ( _out_pDlgEdForm != NULL );
+        return ( _out_pDlgEdForm != nullptr );
     }
 }
 
@@ -127,7 +127,7 @@ bool DlgEdObj::TransformSdrToControlCoordinates(
     Size aSize( nWidthIn, nHeightIn );
 
     // form position
-    DlgEdForm* pForm = NULL;
+    DlgEdForm* pForm = nullptr;
     if ( !lcl_getDlgEdForm( this, pForm ) )
         return false;
     Rectangle aFormRect = pForm->GetSnapRect();
@@ -190,7 +190,7 @@ bool DlgEdObj::TransformSdrToFormCoordinates(
     aSize = pDevice->LogicToPixel( aSize, MapMode( MAP_100TH_MM ) );
 
     // take window borders into account
-    DlgEdForm* pForm = NULL;
+    DlgEdForm* pForm = nullptr;
     if ( !lcl_getDlgEdForm( this, pForm ) )
         return false;
 
@@ -229,7 +229,7 @@ bool DlgEdObj::TransformControlToSdrCoordinates(
     Size aSize( nWidthIn, nHeightIn );
 
     // form position
-    DlgEdForm* pForm = NULL;
+    DlgEdForm* pForm = nullptr;
     if ( !lcl_getDlgEdForm( this, pForm ) )
         return false;
 
@@ -295,7 +295,7 @@ bool DlgEdObj::TransformFormToSdrCoordinates(
         return false;
 
     // take window borders into account
-    DlgEdForm* pForm = NULL;
+    DlgEdForm* pForm = nullptr;
     if ( !lcl_getDlgEdForm( this, pForm ) )
         return false;
 
@@ -907,7 +907,7 @@ void DlgEdObj::clonedFrom(const DlgEdObj* _pSource)
 DlgEdObj* DlgEdObj::Clone() const
 {
     DlgEdObj* pDlgEdObj = CloneHelper< DlgEdObj >();
-    DBG_ASSERT( pDlgEdObj != NULL, "DlgEdObj::Clone: invalid clone!" );
+    DBG_ASSERT( pDlgEdObj != nullptr, "DlgEdObj::Clone: invalid clone!" );
     if ( pDlgEdObj )
         pDlgEdObj->clonedFrom( this );
 

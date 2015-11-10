@@ -49,7 +49,7 @@ using namespace ::comphelper;
 
 AccessibleDialogWindow::ChildDescriptor::ChildDescriptor( DlgEdObj* _pDlgEdObj )
     :pDlgEdObj( _pDlgEdObj )
-    ,rxAccessible( 0 )
+    ,rxAccessible( nullptr )
 {
 }
 
@@ -106,8 +106,8 @@ bool AccessibleDialogWindow::ChildDescriptor::operator<( const ChildDescriptor& 
 AccessibleDialogWindow::AccessibleDialogWindow (basctl::DialogWindow* pDialogWindow)
     : AccessibleExtendedComponentHelper_BASE( new VCLExternalSolarLock() )
     , m_pDialogWindow(pDialogWindow)
-    , m_pDlgEditor(NULL)
-    , m_pDlgEdModel(NULL)
+    , m_pDlgEditor(nullptr)
+    , m_pDlgEdModel(nullptr)
 {
     m_pExternalLock = static_cast< VCLExternalSolarLock* >( getExternalLock() );
 
@@ -149,7 +149,7 @@ AccessibleDialogWindow::~AccessibleDialogWindow()
         EndListening( *m_pDlgEdModel );
 
     delete m_pExternalLock;
-    m_pExternalLock = NULL;
+    m_pExternalLock = nullptr;
 }
 
 
@@ -419,15 +419,15 @@ void AccessibleDialogWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindo
             if ( m_pDialogWindow )
             {
                 m_pDialogWindow->RemoveEventListener( LINK( this, AccessibleDialogWindow, WindowEventListener ) );
-                m_pDialogWindow = NULL;
+                m_pDialogWindow = nullptr;
 
                 if ( m_pDlgEditor )
                     EndListening( *m_pDlgEditor );
-                m_pDlgEditor = NULL;
+                m_pDlgEditor = nullptr;
 
                 if ( m_pDlgEdModel )
                     EndListening( *m_pDlgEdModel );
-                m_pDlgEdModel = NULL;
+                m_pDlgEdModel = nullptr;
 
                 // dispose all children
                 for ( size_t i = 0; i < m_aAccessibleChildren.size(); ++i )
@@ -569,15 +569,15 @@ void AccessibleDialogWindow::disposing()
     if ( m_pDialogWindow )
     {
         m_pDialogWindow->RemoveEventListener( LINK( this, AccessibleDialogWindow, WindowEventListener ) );
-        m_pDialogWindow = NULL;
+        m_pDialogWindow = nullptr;
 
         if ( m_pDlgEditor )
             EndListening( *m_pDlgEditor );
-        m_pDlgEditor = NULL;
+        m_pDlgEditor = nullptr;
 
         if ( m_pDlgEdModel )
             EndListening( *m_pDlgEdModel );
-        m_pDlgEdModel = NULL;
+        m_pDlgEdModel = nullptr;
 
         // dispose all children
         for ( size_t i = 0; i < m_aAccessibleChildren.size(); ++i )

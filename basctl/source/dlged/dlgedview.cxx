@@ -130,7 +130,7 @@ SdrObject* impLocalHitCorrection(SdrObject* pRetval, const Point& rPnt, sal_uInt
     {
         bool bExcludeInner(false);
 
-        if(0 != dynamic_cast< DlgEdForm* >(pRetval))
+        if(nullptr != dynamic_cast< DlgEdForm* >(pRetval))
         {
             // from DlgEdForm::CheckHit; exclude inner for DlgEdForm
             bExcludeInner = true;
@@ -160,7 +160,7 @@ SdrObject* impLocalHitCorrection(SdrObject* pRetval, const Point& rPnt, sal_uInt
 
                 if(aOuterRange.isInside(basegfx::B2DPoint(rPnt.X(), rPnt.Y())))
                 {
-                    pRetval = 0;
+                    pRetval = nullptr;
                 }
             }
         }

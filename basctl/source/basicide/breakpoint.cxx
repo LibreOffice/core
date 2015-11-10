@@ -90,7 +90,7 @@ BreakPoint* BreakPointList::FindBreakPoint(size_t nLine)
         if ( pBrk->nLine == nLine )
             return pBrk;
     }
-    return NULL;
+    return nullptr;
 }
 
 void BreakPointList::AdjustBreakPoints(size_t nLine, bool bInserted)
@@ -144,7 +144,7 @@ BreakPoint* BreakPointList::remove(BreakPoint* ptr)
             return ptr;
         }
     }
-    return NULL;
+    return nullptr;
 }
 
 size_t BreakPointList::size() const
@@ -154,12 +154,12 @@ size_t BreakPointList::size() const
 
 BreakPoint* BreakPointList::at(size_t i)
 {
-    return i < maBreakPoints.size() ? maBreakPoints[ i ] : NULL;
+    return i < maBreakPoints.size() ? maBreakPoints[ i ] : nullptr;
 }
 
 const BreakPoint* BreakPointList::at(size_t i) const
 {
-    return i < maBreakPoints.size() ? maBreakPoints[ i ] : NULL;
+    return i < maBreakPoints.size() ? maBreakPoints[ i ] : nullptr;
 }
 
 void BreakPointList::clear()

@@ -415,7 +415,7 @@ namespace basctl
         {
             OSL_ENSURE( isValid(), "ScriptDocument::Impl::getBasicManager: invalid state!" );
             if ( !isValid() )
-                return NULL;
+                return nullptr;
 
             if ( isApplication() )
                 return SfxApplication::GetBasicManager();
@@ -426,7 +426,7 @@ namespace basctl
         {
             SAL_WARN( "basctl.basicide", "ScriptDocument::getBasicManager: Caught exception: " << e.Message );
         }
-        return NULL;
+        return nullptr;
     }
 
     Reference< XModel > ScriptDocument::Impl::getDocument() const
@@ -434,7 +434,7 @@ namespace basctl
         OSL_ENSURE( isValid(), "ScriptDocument::Impl::getDocument: invalid state!" );
         OSL_ENSURE( isDocument(), "ScriptDocument::Impl::getDocument: for documents only!" );
         if ( !isValid() || !isDocument() )
-            return NULL;
+            return nullptr;
 
         return m_xDocument;
     }
@@ -1336,7 +1336,7 @@ namespace basctl
     {
         if ( isDocument() )
             return m_pImpl->getDocument();
-        return NULL;
+        return nullptr;
     }
 
 
@@ -1364,7 +1364,7 @@ namespace basctl
 
     bool ScriptDocument::renameModule( const OUString& _rLibName, const OUString& _rOldName, const OUString& _rNewName ) const
     {
-        return m_pImpl->renameModuleOrDialog( E_SCRIPTS, _rLibName, _rOldName, _rNewName, NULL );
+        return m_pImpl->renameModuleOrDialog( E_SCRIPTS, _rLibName, _rOldName, _rNewName, nullptr );
     }
 
 

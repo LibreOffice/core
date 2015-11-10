@@ -170,14 +170,14 @@ CheckBox::~CheckBox()
 void CheckBox::dispose()
 {
     delete pCheckButton;
-    pCheckButton = NULL;
+    pCheckButton = nullptr;
 
     // delete user data
     SvTreeListEntry* pEntry = First();
     while ( pEntry )
     {
         delete static_cast<LibUserData*>( pEntry->GetUserData() );
-        pEntry->SetUserData( NULL );
+        pEntry->SetUserData( nullptr );
         pEntry = Next( pEntry );
     }
     SvTabListBox::dispose();
@@ -190,7 +190,7 @@ void CheckBox::Init()
     if (eMode == ObjectMode::Library)
         EnableCheckButton( pCheckButton );
     else
-        EnableCheckButton( 0 );
+        EnableCheckButton( nullptr );
 
     SetHighlightRange();
 }
@@ -202,7 +202,7 @@ void CheckBox::SetMode (ObjectMode::Mode e)
     if (eMode == ObjectMode::Library)
         EnableCheckButton( pCheckButton );
     else
-        EnableCheckButton( 0 );
+        EnableCheckButton( nullptr );
 }
 
 SvTreeListEntry* CheckBox::DoInsertEntry( const OUString& rStr, sal_uLong nPos )
@@ -220,7 +220,7 @@ SvTreeListEntry* CheckBox::FindEntry( const OUString& rName )
         if ( rName.equalsIgnoreAsciiCase( GetEntryText( pEntry, 0 ) ) )
             return pEntry;
     }
-    return 0;
+    return nullptr;
 }
 
 void CheckBox::CheckEntryPos( sal_uLong nPos )
@@ -491,7 +491,7 @@ LibPage::LibPage(vcl::Window * pParent)
     get(m_pExportButton, "export");
     get(m_pDelButton, "delete");
 
-    pTabDlg = 0;
+    pTabDlg = nullptr;
 
     m_pEditButton->SetClickHdl( LINK( this, LibPage, ButtonHdl ) );
     m_pNewLibButton->SetClickHdl( LINK( this, LibPage, ButtonHdl ) );
@@ -732,7 +732,7 @@ IMPL_LINK_TYPED( LibPage, CheckPasswordHdl, SvxPasswordDialog *, pDlg, bool )
 
 void LibPage::NewLib()
 {
-    createLibImpl( static_cast<vcl::Window*>( this ), m_aCurDocument, m_pLibBox, NULL);
+    createLibImpl( static_cast<vcl::Window*>( this ), m_aCurDocument, m_pLibBox, nullptr);
 }
 
 void LibPage::InsertLib()
@@ -1190,7 +1190,7 @@ void LibPage::ExportAsPackage( const OUString& aLibName )
 {
     // file open dialog
     Reference< uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
-    Reference< task::XInteractionHandler2 > xHandler( task::InteractionHandler::createWithParent(xContext, 0) );
+    Reference< task::XInteractionHandler2 > xHandler( task::InteractionHandler::createWithParent(xContext, nullptr) );
     Reference< XSimpleFileAccess3 > xSFA = SimpleFileAccess::create(xContext);
 
     Reference < XFilePicker3 > xFP = FilePicker::createWithMode(xContext, TemplateDescription::FILESAVE_SIMPLE);
@@ -1311,7 +1311,7 @@ void LibPage::ExportAsBasic( const OUString& aLibName )
     // Folder picker
     Reference< uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
     Reference< XFolderPicker2 > xFolderPicker = FolderPicker::create(xContext);
-    Reference< task::XInteractionHandler2 > xHandler( task::InteractionHandler::createWithParent(xContext, 0) );
+    Reference< task::XInteractionHandler2 > xHandler( task::InteractionHandler::createWithParent(xContext, nullptr) );
 
     xFolderPicker->setTitle(IDEResId(RID_STR_EXPORTBASIC).toString());
 
@@ -1540,7 +1540,7 @@ void createLibImpl( vcl::Window* pWin, const ScriptDocument& rDocument,
                 if( pBasicBox )
                 {
                     SvTreeListEntry* pEntry = pBasicBox->GetCurEntry();
-                    SvTreeListEntry* pRootEntry = NULL;
+                    SvTreeListEntry* pRootEntry = nullptr;
                     while( pEntry )
                     {
                         pRootEntry = pEntry;

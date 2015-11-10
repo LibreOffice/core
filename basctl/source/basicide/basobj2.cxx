@@ -201,7 +201,7 @@ namespace
 
         MacroExecutionData()
             :aDocument( ScriptDocument::NoDocument )
-            ,xMethod( NULL )
+            ,xMethod( nullptr )
         {
         }
     };
@@ -240,7 +240,7 @@ OUString ChooseMacro( const uno::Reference< frame::XModel >& rxLimitToDocument, 
     GetExtraData()->ChoosingMacro() = true;
 
     OUString aScriptURL;
-    SbMethod* pMethod = NULL;
+    SbMethod* pMethod = nullptr;
 
     ScopedVclPtrInstance< MacroChooser > pChooser( nullptr, true );
     if ( bChooseOnly || !SvtModuleOptions::IsBasicIDE() )
@@ -355,7 +355,7 @@ OUString ChooseMacro( const uno::Reference< frame::XModel >& rxLimitToDocument, 
                 MacroExecutionData* pExecData = new MacroExecutionData;
                 pExecData->aDocument = aDocument;
                 pExecData->xMethod = pMethod;   // keep alive until the event has been processed
-                Application::PostUserEvent( LINK( NULL, MacroExecution, ExecuteMacroEvent ), pExecData );
+                Application::PostUserEvent( LINK( nullptr, MacroExecution, ExecuteMacroEvent ), pExecData );
             }
         }
         break;
@@ -374,8 +374,8 @@ Sequence< OUString > GetMethodNames( const ScriptDocument& rDocument, const OUSt
     if ( rDocument.getModule( rLibName, rModName, aOUSource ) )
     {
         BasicManager* pBasMgr = rDocument.getBasicManager();
-        StarBASIC* pSb = pBasMgr ? pBasMgr->GetLib( rLibName ) : NULL;
-        SbModule* pMod = pSb ? pSb->FindModule( rModName ) : NULL;
+        StarBASIC* pSb = pBasMgr ? pBasMgr->GetLib( rLibName ) : nullptr;
+        SbModule* pMod = pSb ? pSb->FindModule( rModName ) : nullptr;
 
         SbModuleRef xModule;
         // Only reparse modules if ScriptDocument source is out of sync
@@ -425,8 +425,8 @@ bool HasMethod (
     {
         // Check if we really need to scan the source ( again )
         BasicManager* pBasMgr = rDocument.getBasicManager();
-        StarBASIC* pSb = pBasMgr ? pBasMgr->GetLib( rLibName ) : NULL;
-        SbModule* pMod = pSb ? pSb->FindModule( rModName ) : NULL;
+        StarBASIC* pSb = pBasMgr ? pBasMgr->GetLib( rLibName ) : nullptr;
+        SbModule* pMod = pSb ? pSb->FindModule( rModName ) : nullptr;
         SbModuleRef xModule;
         // Only reparse modules if ScriptDocument source is out of sync
         // with basic's Module

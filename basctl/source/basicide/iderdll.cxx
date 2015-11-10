@@ -40,7 +40,7 @@ namespace basctl
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-Module* Module::mpModule = 0;
+Module* Module::mpModule = nullptr;
 
 namespace
 {
@@ -80,7 +80,7 @@ Shell* GetShell ()
 {
     if (Dll* pDll = theDllInstance::get().get())
         return pDll->GetShell();
-    return 0;
+    return nullptr;
 }
 
 void ShellCreated (Shell* pShell)
@@ -94,14 +94,14 @@ void ShellDestroyed (Shell* pShell)
 {
     Dll* pDll = theDllInstance::get().get();
     if (pDll && pDll->GetShell() == pShell)
-        pDll->SetShell(0);
+        pDll->SetShell(nullptr);
 }
 
 ExtraData* GetExtraData()
 {
     if (Dll* pDll = theDllInstance::get().get())
         return pDll->GetExtraData();
-    return 0;
+    return nullptr;
 }
 
 
@@ -113,7 +113,7 @@ namespace
 {
 
 Dll::Dll () :
-    m_pShell(0)
+    m_pShell(nullptr)
 {
     SfxObjectFactory* pFact = &DocShell::Factory();
     (void)pFact;

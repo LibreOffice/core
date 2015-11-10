@@ -567,7 +567,7 @@ ObjectPage::ObjectPage(vcl::Window *pParent, const OString &rName, sal_uInt16 nM
     get(m_pNewDlgButton, "newdialog");
     get(m_pDelButton, "delete");
 
-    pTabDlg = 0;
+    pTabDlg = nullptr;
 
     m_pEditButton->SetClickHdl( LINK( this, ObjectPage, ButtonHdl ) );
     m_pDelButton->SetClickHdl( LINK( this, ObjectPage, ButtonHdl ) );
@@ -967,9 +967,9 @@ SbModule* createModImpl( vcl::Window* pWin, const ScriptDocument& rDocument,
 {
     OSL_ENSURE( rDocument.isAlive(), "createModImpl: invalid document!" );
     if ( !rDocument.isAlive() )
-        return NULL;
+        return nullptr;
 
-    SbModule* pModule = NULL;
+    SbModule* pModule = nullptr;
 
     OUString aLibName( rLibName );
     if ( aLibName.isEmpty() )
@@ -992,10 +992,10 @@ SbModule* createModImpl( vcl::Window* pWin, const ScriptDocument& rDocument,
             OUString sModuleCode;
             // the module has existed
             if( rDocument.hasModule( aLibName, aModName ) )
-                return NULL;
+                return nullptr;
             rDocument.createModule( aLibName, aModName, bMain, sModuleCode );
             BasicManager* pBasMgr = rDocument.getBasicManager();
-            StarBASIC* pBasic = pBasMgr? pBasMgr->GetLib( aLibName ) : 0;
+            StarBASIC* pBasic = pBasMgr? pBasMgr->GetLib( aLibName ) : nullptr;
                 if ( pBasic )
                     pModule = pBasic->FindModule( aModName );
                 SbxItem aSbxItem( SID_BASICIDE_ARG_SBX, rDocument, aLibName, aModName, TYPE_MODULE );

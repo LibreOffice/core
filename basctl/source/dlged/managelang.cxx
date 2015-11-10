@@ -230,7 +230,7 @@ IMPL_LINK_NOARG_TYPED(ManageLanguageDialog, SelectHdl, ListBox&, void)
 
 SetDefaultLanguageDialog::SetDefaultLanguageDialog(vcl::Window* pParent, std::shared_ptr<LocalizationMgr> xLMgr)
     : ModalDialog(pParent, "DefaultLanguageDialog", "modules/BasicIDE/ui/defaultlanguage.ui")
-    , m_pCheckLangLB(NULL)
+    , m_pCheckLangLB(nullptr)
     , m_xLocalizationMgr(xLMgr)
 {
     get(m_pLanguageLB, "entries");
@@ -295,7 +295,7 @@ void SetDefaultLanguageDialog::FillLanguageBox()
             m_pCheckLangLB->InsertEntry(
                 m_pLanguageLB->GetEntry(j), LISTBOX_APPEND, m_pLanguageLB->GetEntryData(j) );
         }
-        m_pLanguageLB = NULL;
+        m_pLanguageLB = nullptr;
     }
     else
         // preselect current UI language

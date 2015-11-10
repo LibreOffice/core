@@ -30,7 +30,7 @@ class SIDEModel : public SfxBaseModel,
 {
     static void notImplemented() throw ( css::io::IOException );
 public:
-    explicit SIDEModel(SfxObjectShell *pObjSh = 0);
+    explicit SIDEModel(SfxObjectShell *pObjSh = nullptr);
     virtual ~SIDEModel();
 
     //XInterface

@@ -59,7 +59,7 @@ SbMethod* CreateMacro( SbModule* pModule, const OUString& rMacroName )
     }
 
     if ( pModule->GetMethods()->Find( rMacroName, SbxCLASS_METHOD ) )
-        return 0;
+        return nullptr;
 
     OUString aMacroName( rMacroName );
     if ( aMacroName.isEmpty() )
@@ -168,7 +168,7 @@ bool RenameDialog (
     }
 
     Shell* pShell = GetShell();
-    DialogWindow* pWin = pShell ? pShell->FindDlgWin(rDocument, rLibName, rOldName) : 0;
+    DialogWindow* pWin = pShell ? pShell->FindDlgWin(rDocument, rLibName, rOldName) : nullptr;
     Reference< XNameContainer > xExistingDialog;
     if ( pWin )
         xExistingDialog = pWin->GetEditor().GetDialog();
@@ -247,7 +247,7 @@ BasicManager* FindBasicManager( StarBASIC* pLib )
                 return pBasicMgr;
         }
     }
-    return NULL;
+    return nullptr;
 }
 
 void MarkDocumentModified( const ScriptDocument& rDocument )
@@ -314,9 +314,9 @@ void BasicStopped(
     if ( pnWaitCount )
         *pnWaitCount = 0;
     if ( ppSWActionCount )
-        *ppSWActionCount = 0;
+        *ppSWActionCount = nullptr;
     if ( ppSWLockViewCount )
-        *ppSWLockViewCount = 0;
+        *ppSWLockViewCount = nullptr;
 
     // AppWait?
     if (Shell* pShell = GetShell())
@@ -378,7 +378,7 @@ long HandleBasicError( StarBASIC* pBasic )
         return 2;
 
     long nRet = 0;
-    Shell* pShell = 0;
+    Shell* pShell = nullptr;
     if ( SvtModuleOptions::IsBasicIDE() )
     {
         BasicManager* pBasMgr = FindBasicManager( pBasic );
@@ -425,9 +425,9 @@ long HandleBasicError( StarBASIC* pBasic )
 
 SfxBindings* GetBindingsPtr()
 {
-    SfxBindings* pBindings = NULL;
+    SfxBindings* pBindings = nullptr;
 
-    SfxViewFrame* pFrame = NULL;
+    SfxViewFrame* pFrame = nullptr;
     if (Shell* pShell = GetShell())
     {
         pFrame = pShell->GetViewFrame();
@@ -445,7 +445,7 @@ SfxBindings* GetBindingsPtr()
             pView = SfxViewFrame::GetNext( *pView );
         }
     }
-    if ( pFrame != NULL )
+    if ( pFrame != nullptr )
         pBindings = &pFrame->GetBindings();
 
     return pBindings;
@@ -457,7 +457,7 @@ SfxDispatcher* GetDispatcher ()
         if (SfxViewFrame* pViewFrame = pShell->GetViewFrame())
             if (SfxDispatcher* pDispatcher = pViewFrame->GetDispatcher())
                 return pDispatcher;
-    return 0;
+    return nullptr;
 }
 } // namespace basctl
 

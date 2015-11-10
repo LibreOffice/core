@@ -44,8 +44,8 @@ namespace basctl
     StarBASIC*      FindBasic( const SbxVariable* pVar );
     void            StopBasic();
     long            HandleBasicError( StarBASIC* pBasic );
-    void            BasicStopped( bool* pbAppWindowDisabled = 0, bool* pbDispatcherLocked = 0, sal_uInt16* pnWaitCount = 0,
-                            SfxUInt16Item** ppSWActionCount = 0, SfxUInt16Item** ppSWLockViewCount = 0 );
+    void            BasicStopped( bool* pbAppWindowDisabled = nullptr, bool* pbDispatcherLocked = nullptr, sal_uInt16* pnWaitCount = nullptr,
+                            SfxUInt16Item** ppSWActionCount = nullptr, SfxUInt16Item** ppSWLockViewCount = nullptr );
 
     bool            IsValidSbxName( const OUString& rName );
 

@@ -117,7 +117,7 @@ bool isLanguageDependentProperty( const OUString& aName )
         { "HelpText",        8 },
         { "CurrencySymbol", 14 },
         { "StringItemList", 14 },
-        { 0, 0                 }
+        { nullptr, 0                 }
     };
 
     for (Prop const* pProp = vProp; pProp->sName; ++pProp)
@@ -810,7 +810,7 @@ DialogWindow* FindDialogWindowForEditor( DlgEditor* pEditor )
                     return pDlgWin;
             }
     }
-    return 0;
+    return nullptr;
 }
 
 

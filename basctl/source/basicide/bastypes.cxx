@@ -48,8 +48,8 @@ BaseWindow::BaseWindow( vcl::Window* pParent, const ScriptDocument& rDocument, c
     ,m_aLibName( aLibName )
     ,m_aName( aName )
 {
-    pShellHScrollBar = 0;
-    pShellVScrollBar = 0;
+    pShellHScrollBar = nullptr;
+    pShellVScrollBar = nullptr;
     nStatus = 0;
 }
 
@@ -209,7 +209,7 @@ bool BaseWindow::IsPasteAllowed ()
 
 ::svl::IUndoManager* BaseWindow::GetUndoManager()
 {
-    return NULL;
+    return nullptr;
 }
 
 SearchOptionFlags BaseWindow::GetSearchOptions()
@@ -268,7 +268,7 @@ WinBits const DockingWindow::StyleBits =
 
 DockingWindow::DockingWindow (vcl::Window* pParent) :
     ::DockingWindow(pParent, StyleBits),
-    pLayout(0),
+    pLayout(nullptr),
     nShowCount(0)
 { }
 
@@ -752,7 +752,7 @@ LibInfos::Item const* LibInfos::GetInfo (
 )
 {
     Map::iterator it = m_aMap.find(Key(rDocument, rLibName));
-    return it != m_aMap.end() ? &it->second : 0;
+    return it != m_aMap.end() ? &it->second : nullptr;
 }
 
 LibInfos::Key::Key (ScriptDocument const& rDocument, OUString const& rLibName) :

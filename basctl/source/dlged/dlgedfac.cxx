@@ -102,7 +102,7 @@ IMPL_LINK_TYPED( DlgEdFactory, MakeObject, SdrObjFactory *, pObjFactory, void )
             case OBJ_DLG_FORMCOMBO:
             case OBJ_DLG_COMBOBOX:
             {
-                 DlgEdObj* pNew = NULL;
+                 DlgEdObj* pNew = nullptr;
                  if ( pObjFactory->nIdentifier == OBJ_DLG_COMBOBOX )
                      pNew = new DlgEdObj( "com.sun.star.awt.UnoControlComboBoxModel", xDialogSFact );
                  else
@@ -152,7 +152,7 @@ IMPL_LINK_TYPED( DlgEdFactory, MakeObject, SdrObjFactory *, pObjFactory, void )
             case OBJ_DLG_FORMVSCROLL:
             case OBJ_DLG_VSCROLLBAR:
             {
-                 DlgEdObj* pNew = NULL;
+                 DlgEdObj* pNew = nullptr;
                  if ( pObjFactory->nIdentifier ==  OBJ_DLG_VSCROLLBAR )
                      pNew = new DlgEdObj( "com.sun.star.awt.UnoControlScrollBarModel", xDialogSFact );
                  else

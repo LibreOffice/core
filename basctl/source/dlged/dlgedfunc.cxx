@@ -223,7 +223,7 @@ bool DlgEdFunc::KeyInput( const KeyEvent& rKEvt )
                 const SdrHdlList& rHdlList = rView.GetHdlList();
                 SdrHdl* pHdl = rHdlList.GetFocusHdl();
 
-                if ( pHdl == 0 )
+                if ( pHdl == nullptr )
                 {
                     // no handle selected
                     if ( rView.IsMoveAllowed() )
@@ -269,7 +269,7 @@ bool DlgEdFunc::KeyInput( const KeyEvent& rKEvt )
                         const SdrDragStat& rDragStat = rView.GetDragStat();
 
                         // start dragging
-                        rView.BegDragObj( aStartPoint, 0, pHdl, 0 );
+                        rView.BegDragObj( aStartPoint, nullptr, pHdl, 0 );
 
                         if ( rView.IsDragObj() )
                         {
@@ -362,7 +362,7 @@ bool DlgEdFuncInsert::MouseButtonDown( const MouseEvent& rMEvt )
         SdrHdl* pHdl = rView.PickHandle(aPos);
 
         // if selected object was hit, drag object
-        if ( pHdl!=NULL || rView.IsMarkedHit(aPos, nHitLog) )
+        if ( pHdl!=nullptr || rView.IsMarkedHit(aPos, nHitLog) )
             rView.BegDragObj(aPos, nullptr, pHdl, nDrgLog);
         else if ( rView.AreObjectsMarked() )
             rView.UnmarkAll();
@@ -459,7 +459,7 @@ bool DlgEdFuncSelect::MouseButtonDown( const MouseEvent& rMEvt )
         SdrHdl* pHdl = rView.PickHandle(aMDPos);
 
         // hit selected object?
-        if ( pHdl!=NULL || rView.IsMarkedHit(aMDPos, nHitLog) )
+        if ( pHdl!=nullptr || rView.IsMarkedHit(aMDPos, nHitLog) )
         {
             rView.BegDragObj(aMDPos, nullptr, pHdl, nDrgLog);
         }

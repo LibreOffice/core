@@ -292,11 +292,11 @@ void            CutLines( OUString& rStr, sal_Int32 nStartLine, sal_Int32 nLines
 OUString CreateMgrAndLibStr( const OUString& rMgrName, const OUString& rLibName );
 sal_uLong           CalcLineCount( SvStream& rStream );
 
-bool QueryReplaceMacro( const OUString& rName, vcl::Window* pParent = 0 );
-bool QueryDelMacro( const OUString& rName, vcl::Window* pParent = 0 );
-bool QueryDelDialog( const OUString& rName, vcl::Window* pParent = 0 );
-bool QueryDelModule( const OUString& rName, vcl::Window* pParent = 0 );
-bool QueryDelLib( const OUString& rName, bool bRef = false, vcl::Window* pParent = 0 );
+bool QueryReplaceMacro( const OUString& rName, vcl::Window* pParent = nullptr );
+bool QueryDelMacro( const OUString& rName, vcl::Window* pParent = nullptr );
+bool QueryDelDialog( const OUString& rName, vcl::Window* pParent = nullptr );
+bool QueryDelModule( const OUString& rName, vcl::Window* pParent = nullptr );
+bool QueryDelLib( const OUString& rName, bool bRef = false, vcl::Window* pParent = nullptr );
 bool QueryPassword( const css::uno::Reference< css::script::XLibraryContainer >& xLibContainer, const OUString& rLibName, OUString& rPassword, bool bRepeat = false, bool bNewTitle = false );
 
 class ModuleInfoHelper

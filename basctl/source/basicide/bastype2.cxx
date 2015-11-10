@@ -221,7 +221,7 @@ void TreeListBox::dispose()
     while ( pEntry )
     {
         delete static_cast<Entry*>( pEntry->GetUserData() );
-        pEntry->SetUserData( NULL );
+        pEntry->SetUserData( nullptr );
         pEntry = Next( pEntry );
     }
     SvTreeListBox::dispose();
@@ -250,7 +250,7 @@ void TreeListBox::ScanEntry( const ScriptDocument& rDocument, LibraryLocation eL
         AddEntry(
             aRootName,
             aImage,
-            0, true, o3tl::make_unique<DocumentEntry>(rDocument, eLocation));
+            nullptr, true, o3tl::make_unique<DocumentEntry>(rDocument, eLocation));
     }
 
     SetUpdateMode(true);
@@ -548,7 +548,7 @@ SvTreeListEntry* TreeListBox::ImpFindEntry( SvTreeListEntry* pParent, const OUSt
 
         pEntry = pParent ? NextSibling( pEntry ) : GetEntry( ++nRootPos );
     }
-    return 0;
+    return nullptr;
 }
 
 void TreeListBox::onDocumentCreated( const ScriptDocument& /*_rDocument*/ )
@@ -604,7 +604,7 @@ void TreeListBox::UpdateEntries()
     EntryDescriptor aCurDesc( GetEntryDescriptor( FirstSelected() ) );
 
     // removing the invalid entries
-    SvTreeListEntry* pLastValid = 0;
+    SvTreeListEntry* pLastValid = nullptr;
     SvTreeListEntry* pEntry = First();
     while ( pEntry )
     {
@@ -667,7 +667,7 @@ SvTreeListEntry* TreeListBox::FindEntry( SvTreeListEntry* pParent, const OUStrin
 
         pEntry = pParent ? NextSibling( pEntry ) : GetEntry( ++nRootPos );
     }
-    return 0;
+    return nullptr;
 }
 
 bool TreeListBox::ExpandingHdl()
@@ -822,7 +822,7 @@ void TreeListBox::GetRootEntryBitmaps( const ScriptDocument& rDocument, Image& r
 
 void TreeListBox::SetCurrentEntry (EntryDescriptor& rDesc)
 {
-    SvTreeListEntry* pCurEntry = 0;
+    SvTreeListEntry* pCurEntry = nullptr;
     EntryDescriptor aDesc = rDesc;
     if ( aDesc.GetType() == OBJ_TYPE_UNKNOWN )
     {

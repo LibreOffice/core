@@ -136,7 +136,7 @@ void BreakPointDialog::CheckButtons()
     // "OK" and "Delete" buttons are enabled:
     size_t nLine;
     if (lcl_ParseText(m_pComboBox->GetText(), nLine)
-        && m_aModifiedBreakPointList.FindBreakPoint(nLine) == 0)
+        && m_aModifiedBreakPointList.FindBreakPoint(nLine) == nullptr)
     {
         m_pNewButton->Enable();
         m_pOKButton->Disable();

@@ -152,7 +152,7 @@ Shell::Shell( SfxViewFrame* pFrame_, SfxViewShell* /* pOldShell */ ) :
     aHScrollBar( VclPtr<ScrollBar>::Create(&GetViewFrame()->GetWindow(), WinBits( WB_HSCROLL | WB_DRAG )) ),
     aVScrollBar( VclPtr<ScrollBar>::Create(&GetViewFrame()->GetWindow(), WinBits( WB_VSCROLL | WB_DRAG )) ),
     aScrollBarBox( VclPtr<ScrollBarBox>::Create(&GetViewFrame()->GetWindow(), WinBits( WB_SIZEABLE )) ),
-    pLayout(0),
+    pLayout(nullptr),
     aObjectCatalog(VclPtr<ObjectCatalog>::Create(&GetViewFrame()->GetWindow())),
     m_bAppBasicModified( false ),
     m_aNotifier( *this )
@@ -184,7 +184,7 @@ void Shell::Init()
         GetViewFrame()->GetWindow().GetSettings().GetStyleSettings().GetWindowColor()
     );
 
-    pCurWin = 0;
+    pCurWin = nullptr;
     m_aCurDocument = ScriptDocument::getApplicationScriptDocument();
     bCreatingWindow = false;
 
@@ -222,8 +222,8 @@ Shell::~Shell()
     // so that on a basic saving error, the shell doesn't pop right up again
     GetExtraData()->ShellInCriticalSection() = true;
 
-    SetWindow( 0 );
-    SetCurWindow( 0 );
+    SetWindow( nullptr );
+    SetCurWindow( nullptr );
 
     aObjectCatalog.disposeAndClear();
     aScrollBarBox.disposeAndClear();
@@ -500,7 +500,7 @@ void Shell::ArrangeTabBar()
 
 ::svl::IUndoManager* Shell::GetUndoManager()
 {
-    ::svl::IUndoManager* pMgr = NULL;
+    ::svl::IUndoManager* pMgr = nullptr;
     if( pCurWin )
         pMgr = pCurWin->GetUndoManager();
 
@@ -665,7 +665,7 @@ void Shell::UpdateWindows()
     if ( bCreatingWindow )
         return;
 
-    BaseWindow* pNextActiveWindow = 0;
+    BaseWindow* pNextActiveWindow = nullptr;
 
     // show all windows that are to be shown
     ScriptDocuments aDocuments( ScriptDocument::getAllScriptDocuments( ScriptDocument::AllWithApplication ) );
@@ -701,7 +701,7 @@ void Shell::UpdateWindows()
 
                 if ( !bProtected )
                 {
-                    LibInfos::Item const* pLibInfoItem = 0;
+                    LibInfos::Item const* pLibInfoItem = nullptr;
                     if (ExtraData* pData = GetExtraData())
                         pLibInfoItem = pData->GetLibInfos().GetInfo(*doc, aLibName);
 
@@ -798,7 +798,7 @@ void Shell::RemoveWindow( BaseWindow* pWindow_, bool bDestroy, bool bAllowChange
         }
         else
         {
-            SetCurWindow( NULL );
+            SetCurWindow( nullptr );
         }
     }
     if ( bDestroy )

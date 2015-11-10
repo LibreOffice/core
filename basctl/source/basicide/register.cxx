@@ -39,11 +39,11 @@ SAL_DLLPUBLIC_EXPORT void* SAL_CALL basctl_component_getFactory( const sal_Char*
     (void)pRegistryKey;
 
     // Set default return value for this operation - if it failed.
-    void* pReturn = NULL ;
+    void* pReturn = nullptr ;
 
     if  (
-            ( pImplementationName   !=  NULL ) &&
-            ( pServiceManager       !=  NULL )
+            ( pImplementationName   !=  nullptr ) &&
+            ( pServiceManager       !=  nullptr )
         )
     {
         // Define variables which are used in following macros.

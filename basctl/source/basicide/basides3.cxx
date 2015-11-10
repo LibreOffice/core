@@ -115,7 +115,7 @@ VclPtr<DialogWindow> Shell::FindDlgWin (
 {
     if (BaseWindow* pWin = FindWindow(rDocument, rLibName, rName, TYPE_DIALOG, bFindSuspended))
         return static_cast<DialogWindow*>(pWin);
-    return bCreateIfNotExist ? CreateDlgWin(rDocument, rLibName, rName) : 0;
+    return bCreateIfNotExist ? CreateDlgWin(rDocument, rLibName, rName) : nullptr;
 }
 
 sal_uInt16 Shell::GetWindowId(const BaseWindow* pWin) const
@@ -131,7 +131,7 @@ SdrView* Shell::GetCurDlgView() const
     if (DialogWindow* pDCurWin = dynamic_cast<DialogWindow*>(pCurWin.get()))
         return &pDCurWin->GetView();
     else
-        return 0;
+        return nullptr;
 }
 
 // only if dialogue window above:

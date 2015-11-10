@@ -81,7 +81,7 @@ namespace basctl
 
     private:
         /// determines whether the instance is already disposed
-        bool    impl_isDisposed_nothrow() const { return m_pListener == NULL; }
+        bool    impl_isDisposed_nothrow() const { return m_pListener == nullptr; }
 
         /// disposes the instance
         void    impl_dispose_nothrow();
@@ -183,7 +183,7 @@ namespace basctl
 
     void DocumentEventNotifier::Impl::impl_dispose_nothrow()
     {
-        m_pListener = NULL;
+        m_pListener = nullptr;
         m_xModel.clear();
     }
 

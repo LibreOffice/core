@@ -324,7 +324,7 @@ bool ModulWindow::BasicExecute()
             TextSelection aSel = GetEditView()->GetSelection();
             // Init cursor to top
             const sal_uInt32 nCurMethodStart = aSel.GetStart().GetPara() + 1;
-            SbMethod* pMethod = 0;
+            SbMethod* pMethod = nullptr;
             // first Macro, else blind "Main" (ExtSearch?)
             for ( sal_uInt16 nMacro = 0; nMacro < xModule->GetMethods()->Count(); nMacro++ )
             {
@@ -1276,7 +1276,7 @@ svl::IUndoManager* ModulWindow::GetUndoManager()
 {
     if ( GetEditEngine() )
         return &GetEditEngine()->GetUndoManager();
-    return NULL;
+    return nullptr;
 }
 
 SearchOptionFlags ModulWindow::GetSearchOptions()
@@ -1441,7 +1441,7 @@ void ModulWindow::UpdateModule ()
 
 ModulWindowLayout::ModulWindowLayout (vcl::Window* pParent, ObjectCatalog& rObjectCatalog_) :
     Layout(pParent),
-    pChild(0),
+    pChild(nullptr),
     aWatchWindow(VclPtr<WatchWindow>::Create(this)),
     aStackWindow(VclPtr<StackWindow>::Create(this)),
     rObjectCatalog(rObjectCatalog_)
@@ -1494,12 +1494,12 @@ void ModulWindowLayout::Activating (BaseWindow& rChild)
 
 void ModulWindowLayout::Deactivating ()
 {
-    aSyntaxColors.SetActiveEditor(0);
+    aSyntaxColors.SetActiveEditor(nullptr);
     Layout::Deactivating();
     aWatchWindow->Hide();
     aStackWindow->Hide();
     rObjectCatalog.Hide();
-    pChild = 0;
+    pChild = nullptr;
 }
 
 void ModulWindowLayout::GetState (SfxItemSet &rSet, unsigned nWhich)
@@ -1534,7 +1534,7 @@ void ModulWindowLayout::OnFirstSize (long const nWidth, long const nHeight)
 }
 
 ModulWindowLayout::SyntaxColors::SyntaxColors () :
-    pEditor(0)
+    pEditor(nullptr)
 {
     aConfig.AddListener(this);
 

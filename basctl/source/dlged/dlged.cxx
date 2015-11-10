@@ -68,7 +68,7 @@ static const char aTitlePropName[] = "Title";
 
 DlgEdHint::DlgEdHint(Kind eHint)
     : eKind(eHint)
-    , pDlgEdObj(0)
+    , pDlgEdObj(nullptr)
 {
 }
 
@@ -179,8 +179,8 @@ DlgEditor::DlgEditor (
     css::uno::Reference<css::frame::XModel> const& xModel,
     css::uno::Reference<css::container::XNameContainer> xDialogModel
 )
-    :pHScroll(NULL)
-    ,pVScroll(NULL)
+    :pHScroll(nullptr)
+    ,pVScroll(nullptr)
     ,pDlgEdModel(new DlgEdModel())
     ,pDlgEdPage(new DlgEdPage(*pDlgEdModel))
     ,m_ClipboardDataFlavors(1)
@@ -420,7 +420,7 @@ void DlgEditor::ResetDialog ()
     bool bWasMarked = pDlgEdView->IsObjMarked( pOldDlgEdForm );
     pDlgEdView->UnmarkAll();
     pPage->Clear();
-    pPage->SetDlgEdForm( NULL );
+    pPage->SetDlgEdForm( nullptr );
     SetDialog( m_xUnoControlDialogModel );
     if( bWasMarked )
         pDlgEdView->MarkObj( pDlgEdForm, pPgView );
@@ -549,7 +549,7 @@ void DlgEditor::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect
     const vcl::Region aPaintRectRegion(aPaintRect);
 
     // #i74769#
-    SdrPaintWindow* pTargetPaintWindow = 0;
+    SdrPaintWindow* pTargetPaintWindow = nullptr;
 
     // mark repaint start
     if (pPgView)
@@ -750,7 +750,7 @@ void DlgEditor::Copy()
             {}
         }
 
-        DlgEdTransferableImpl* pTrans = NULL;
+        DlgEdTransferableImpl* pTrans = nullptr;
         if( xStringResourcePersistence.is() )
         {
             // With resource, support old and new format

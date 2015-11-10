@@ -70,7 +70,7 @@ namespace basctl { namespace docs {
     class DocumentEnumeration
     {
     public:
-        DocumentEnumeration( css::uno::Reference< css::uno::XComponentContext > const & _rContext, const IDocumentDescriptorFilter* _pFilter = NULL );
+        DocumentEnumeration( css::uno::Reference< css::uno::XComponentContext > const & _rContext, const IDocumentDescriptorFilter* _pFilter = nullptr );
         ~DocumentEnumeration();
 
         /** retrieves a list of all currently known documents in the application

@@ -41,7 +41,7 @@ namespace basctl
     {
         SfxObjectShell* pShell;
 
-        Impl () : pShell(0) { }
+        Impl () : pShell(nullptr) { }
     };
 
     // DocumentSignature
@@ -70,7 +70,7 @@ namespace basctl
 
     bool DocumentSignature::supportsSignatures() const
     {
-        return ( m_pImpl->pShell != NULL );
+        return ( m_pImpl->pShell != nullptr );
     }
 
     void DocumentSignature::signScriptingContent() const

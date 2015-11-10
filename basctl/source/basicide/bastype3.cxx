@@ -162,7 +162,7 @@ void TreeListBox::ScanAllEntries()
 SbxVariable* TreeListBox::FindVariable( SvTreeListEntry* pEntry )
 {
     if ( !pEntry )
-        return 0;
+        return nullptr;
 
     ScriptDocument aDocument( ScriptDocument::getApplicationScriptDocument() );
     EntryArray aEntries;
@@ -189,7 +189,7 @@ SbxVariable* TreeListBox::FindVariable( SvTreeListEntry* pEntry )
         pEntry = GetParent( pEntry );
     }
 
-    SbxVariable* pVar = 0;
+    SbxVariable* pVar = nullptr;
     if ( !aEntries.empty() )
     {
         bool bDocumentObjects = false;
@@ -241,7 +241,7 @@ SbxVariable* TreeListBox::FindVariable( SvTreeListEntry* pEntry )
                 continue;
             default:
                 OSL_FAIL( "FindVariable: Unbekannter Typ!" );
-                pVar = 0;
+                pVar = nullptr;
                 break;
             }
             if ( !pVar )
@@ -441,7 +441,7 @@ SvTreeListEntry* TreeListBox::FindRootEntry( const ScriptDocument& rDocument, Li
             return pRootEntry;
         pRootEntry = GetEntry( ++nRootPos );
     }
-    return 0;
+    return nullptr;
 }
 
 OUString CreateMgrAndLibStr( const OUString& rMgrName, const OUString& rLibName )

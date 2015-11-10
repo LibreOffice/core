@@ -35,7 +35,7 @@ static long const nSplitThickness = 3;
 // pParent: the parent window (Shell)
 Layout::Layout (vcl::Window* pParent) :
     Window(pParent, WB_CLIPCHILDREN),
-    pChild(0),
+    pChild(nullptr),
     bFirstSize(true),
     aLeftSide(this, SplittedSide::Left),
     aBottomSide(this, SplittedSide::Bottom)
@@ -132,7 +132,7 @@ void Layout::Deactivating ()
     if (pChild)
         pChild->Deactivating();
     Hide();
-    pChild = 0;
+    pChild = nullptr;
 }
 
 // virtual

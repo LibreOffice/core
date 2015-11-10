@@ -348,7 +348,7 @@ void DialogWindow::GetState( SfxItemSet& rSet )
             case SID_SHOW_PROPERTYBROWSER:
             {
                 Shell* pShell = GetShell();
-                SfxViewFrame* pViewFrame = pShell ? pShell->GetViewFrame() : NULL;
+                SfxViewFrame* pViewFrame = pShell ? pShell->GetViewFrame() : nullptr;
                 if ( pViewFrame && !pViewFrame->HasChildWindow( SID_SHOW_PROPERTYBROWSER ) && !pEditor->GetView().AreObjectsMarked() )
                     rSet.DisableItem( nWh );
 
@@ -1148,7 +1148,7 @@ bool implImportDialog( vcl::Window* pWin, const OUString& rCurPath, const Script
                 if (basctl::RemoveDialog( rDocument, aLibName, aNewDlgName ) )
                 {
                     BaseWindow* pDlgWin = pShell->FindDlgWin( rDocument, aLibName, aNewDlgName, false, true );
-                    if( pDlgWin != NULL )
+                    if( pDlgWin != nullptr )
                         pShell->RemoveWindow( pDlgWin, true );
                     MarkDocumentModified( rDocument );
                 }
@@ -1374,9 +1374,9 @@ ItemType DialogWindow::GetType () const
 
 DialogWindowLayout::DialogWindowLayout (vcl::Window* pParent, ObjectCatalog& rObjectCatalog_) :
     Layout(pParent),
-    pChild(0),
+    pChild(nullptr),
     rObjectCatalog(rObjectCatalog_),
-    pPropertyBrowser(0)
+    pPropertyBrowser(nullptr)
 {
     ShowPropertyBrowser();
 }
@@ -1421,7 +1421,7 @@ void DialogWindowLayout::ShowPropertyBrowser ()
 void DialogWindowLayout::DisablePropertyBrowser ()
 {
     if (pPropertyBrowser)
-        pPropertyBrowser->Update(0);
+        pPropertyBrowser->Update(nullptr);
 }
 
 // updates the property browser
@@ -1449,7 +1449,7 @@ void DialogWindowLayout::Deactivating ()
     rObjectCatalog.Hide();
     if (pPropertyBrowser)
         pPropertyBrowser->Hide();
-    pChild = 0;
+    pChild = nullptr;
 }
 
 void DialogWindowLayout::ExecuteGlobal (SfxRequest& rReq)
