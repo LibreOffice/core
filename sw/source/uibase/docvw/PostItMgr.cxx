@@ -74,6 +74,7 @@
 
 #include <i18nlangtag/mslangid.hxx>
 #include <i18nlangtag/lang.h>
+#include <comphelper/lok.hxx>
 
 #include "annotsh.hxx"
 #include "swabstdlg.hxx"
@@ -1813,7 +1814,15 @@ unsigned long SwPostItMgr::GetSidebarWidth(bool bPx) const
     if (bPx)
         return aWidth;
     else
-        return mpEditWin->PixelToLogic(Size( aWidth ,0)).Width();
+    {
+        bool bEnableMapMode = comphelper::LibreOfficeKit::isActive() && !mpEditWin->IsMapModeEnabled();
+        if (bEnableMapMode)
+            mpEditWin->EnableMapMode();
+        long nRet = mpEditWin->PixelToLogic(Size(aWidth, 0)).Width();
+        if (bEnableMapMode)
+            mpEditWin->EnableMapMode(false);
+        return nRet;
+    }
 }
 
 unsigned long SwPostItMgr::GetSidebarBorderWidth(bool bPx) const
