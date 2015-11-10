@@ -20,6 +20,8 @@
 #include <SidebarTxtControl.hxx>
 
 #include <SidebarTxtControlAcc.hxx>
+#include <docsh.hxx>
+#include <doc.hxx>
 
 #include <SidebarWin.hxx>
 #include <PostItMgr.hxx>
@@ -187,6 +189,15 @@ void SidebarTextControl::Paint(vcl::RenderContext& rRenderContext, const Rectang
 
 void SidebarTextControl::KeyInput( const KeyEvent& rKeyEvt )
 {
+    if (getenv("SW_DEBUG") && rKeyEvt.GetKeyCode().GetCode() == KEY_F12)
+    {
+        if (rKeyEvt.GetKeyCode().IsShift())
+        {
+            mrDocView.GetDocShell()->GetDoc()->dumpAsXml();
+            return;
+        }
+    }
+
     const vcl::KeyCode& rKeyCode = rKeyEvt.GetKeyCode();
     sal_uInt16 nKey = rKeyCode.GetCode();
     if ( ( rKeyCode.IsMod1() && rKeyCode.IsMod2() ) &&
