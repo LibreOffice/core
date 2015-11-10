@@ -43,15 +43,15 @@ jobjectArray jvmaccess::ClassPath::translateToUrls(
     JNIEnv * environment, OUString const & classPath)
 {
     assert(context.is());
-    assert(environment != 0);
+    assert(environment != nullptr);
     jclass classUrl(environment->FindClass("java/net/URL"));
-    if (classUrl == 0) {
-        return 0;
+    if (classUrl == nullptr) {
+        return nullptr;
     }
     jmethodID ctorUrl(
         environment->GetMethodID(classUrl, "<init>", "(Ljava/lang/String;)V"));
-    if (ctorUrl == 0) {
-        return 0;
+    if (ctorUrl == nullptr) {
+        return nullptr;
     }
     ::std::vector< jobject > urls;
     for (::sal_Int32 i = 0; i != -1;) {
@@ -76,22 +76,22 @@ jobjectArray jvmaccess::ClassPath::translateToUrls(
             arg.l = environment->NewString(
                 static_cast< jchar const * >(url.getStr()),
                 static_cast< jsize >(url.getLength()));
-            if (arg.l == 0) {
-                return 0;
+            if (arg.l == nullptr) {
+                return nullptr;
             }
             jobject o(environment->NewObjectA(classUrl, ctorUrl, &arg));
-            if (o == 0) {
-                return 0;
+            if (o == nullptr) {
+                return nullptr;
             }
             urls.push_back(o);
         }
     }
     jobjectArray result = environment->NewObjectArray(
-        static_cast< jsize >(urls.size()), classUrl, 0);
+        static_cast< jsize >(urls.size()), classUrl, nullptr);
         // static_cast is ok, as each element of urls occupied at least one
         // character of the OUString classPath
-    if (result == 0) {
-        return 0;
+    if (result == nullptr) {
+        return nullptr;
     }
     jsize idx = 0;
     for (std::vector< jobject >::iterator i(urls.begin()); i != urls.end(); ++i)

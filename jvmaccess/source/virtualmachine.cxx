@@ -49,7 +49,7 @@ VirtualMachine::AttachGuard::AttachGuard(
 {
     assert(m_xMachine.is());
     m_pEnvironment = m_xMachine->attachThread(&m_bDetach);
-    if (m_pEnvironment == 0)
+    if (m_pEnvironment == nullptr)
         throw CreationException();
 }
 
@@ -64,7 +64,7 @@ VirtualMachine::VirtualMachine(JavaVM * pVm, int nVersion, bool bDestroy,
     m_pVm(pVm), m_nVersion(nVersion), m_bDestroy(bDestroy)
 {
     (void) pMainThreadEnv; // avoid warnings
-    assert(pVm != 0);
+    assert(pVm != nullptr);
     assert(nVersion >= JNI_VERSION_1_2);
     assert(pMainThreadEnv);
 }
@@ -86,12 +86,12 @@ VirtualMachine::~VirtualMachine()
 
 JNIEnv * VirtualMachine::attachThread(bool * pAttached) const
 {
-    assert(pAttached != 0 && "bad parameter");
+    assert(pAttached != nullptr && "bad parameter");
     JNIEnv * pEnv;
     jint n = m_pVm->GetEnv(reinterpret_cast< void ** >(&pEnv), m_nVersion);
     SAL_WARN_IF(
         n != JNI_OK && n != JNI_EDETACHED, "jvmaccess", "JNI: GetEnv failed");
-    if (pEnv == 0)
+    if (pEnv == nullptr)
     {
         if (m_pVm->AttachCurrentThread
             (
@@ -102,9 +102,9 @@ JNIEnv * VirtualMachine::attachThread(bool * pAttached) const
              // JNIEnv** and not void **
              &pEnv,
 #endif
-             0)
+             nullptr)
             != JNI_OK)
-            return 0;
+            return nullptr;
         *pAttached = true;
     }
     else

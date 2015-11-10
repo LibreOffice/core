@@ -45,14 +45,14 @@ UnoVirtualMachine::UnoVirtualMachine(
     rtl::Reference< jvmaccess::VirtualMachine > const & virtualMachine,
     void * classLoader):
     m_virtualMachine(virtualMachine),
-    m_classLoader(0)
+    m_classLoader(nullptr)
 {
     try {
         m_classLoader =
             jvmaccess::VirtualMachine::AttachGuard(m_virtualMachine).
             getEnvironment()->NewGlobalRef(static_cast< jobject >(classLoader));
     } catch (jvmaccess::VirtualMachine::AttachGuard::CreationException &) {}
-    if (m_classLoader == 0) {
+    if (m_classLoader == nullptr) {
         throw CreationException();
     }
 }
