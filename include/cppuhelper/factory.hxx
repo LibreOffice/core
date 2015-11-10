@@ -138,7 +138,7 @@ SAL_CALL createSingleComponentFactory(
     ComponentFactoryFunc fptr,
     ::rtl::OUString const & rImplementationName,
     css::uno::Sequence< ::rtl::OUString > const & rServiceNames,
-    rtl_ModuleCount * pModCount = 0 );
+    rtl_ModuleCount * pModCount = NULL );
 
 /** Creates a single service factory which holds the instance created only once.
 
@@ -155,7 +155,7 @@ createOneInstanceComponentFactory(
     ComponentFactoryFunc fptr,
     ::rtl::OUString const & rImplementationName,
     css::uno::Sequence< ::rtl::OUString > const & rServiceNames,
-    rtl_ModuleCount * pModCount = 0 );
+    rtl_ModuleCount * pModCount = NULL );
 
 /** Deprecated.  The type of the instanciate function used as argument of the create*Factory functions.
 
@@ -186,7 +186,7 @@ createSingleFactory(
     const ::rtl::OUString & rImplementationName,
     ComponentInstantiation pCreateFunction,
     const css::uno::Sequence< ::rtl::OUString > & rServiceNames,
-    rtl_ModuleCount * pModCount = 0  );
+    rtl_ModuleCount * pModCount = NULL  );
 
 /** Deprecated.  Creates a factory wrapping another one.
     This means the methods of the interfaces XServiceProvider, XServiceInfo and
@@ -227,7 +227,7 @@ createOneInstanceFactory(
     const ::rtl::OUString & rComponentName,
     ComponentInstantiation pCreateFunction,
     const css::uno::Sequence< ::rtl::OUString > & rServiceNames,
-    rtl_ModuleCount * pModCount = 0  );
+    rtl_ModuleCount * pModCount = NULL  );
 
 /** Deprecated.  Creates a single service factory based on a registry.
 

@@ -108,7 +108,7 @@ public:
                     new ImplementationInfo(
                         name, loader, uri, environment, constructorName, prefix,
                         alienContext, rdbFile)),
-                constructor(0), status(STATUS_NEW), dispose(true)
+                constructor(nullptr), status(STATUS_NEW), dispose(true)
             {}
 
             Implementation(
@@ -119,7 +119,7 @@ public:
                     theFactory2,
                 css::uno::Reference< css::lang::XComponent > const &
                     theComponent):
-                info(new ImplementationInfo(name)), constructor(0),
+                info(new ImplementationInfo(name)), constructor(nullptr),
                 factory1(theFactory1), factory2(theFactory2),
                 component(theComponent), status(STATUS_LOADED), dispose(true)
             { assert(theFactory1.is() || theFactory2.is()); }

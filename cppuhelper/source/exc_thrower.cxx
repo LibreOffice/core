@@ -89,29 +89,29 @@ static void SAL_CALL ExceptionThrower_dispatch(
         if (rType_demanded.equals( cppu::UnoType<XInterface>::get() ) ||
             rType_demanded.equals( ExceptionThrower::getCppuType() ))
         {
-            typelib_TypeDescription * pTD = 0;
+            typelib_TypeDescription * pTD = nullptr;
             TYPELIB_DANGER_GET( &pTD, rType_demanded.getTypeLibType() );
             uno_any_construct(
-                static_cast< uno_Any * >( pReturn ), &pUnoI, pTD, 0 );
+                static_cast< uno_Any * >( pReturn ), &pUnoI, pTD, nullptr );
             TYPELIB_DANGER_RELEASE( pTD );
         }
         else
         {
             uno_any_construct(
-                static_cast< uno_Any * >( pReturn ), 0, 0, 0 );
+                static_cast< uno_Any * >( pReturn ), nullptr, nullptr, nullptr );
         }
-        *ppException = 0;
+        *ppException = nullptr;
         break;
     }
     case 1: // acquire()
     case 2: // release()
-        *ppException = 0;
+        *ppException = nullptr;
         break;
     case 3: // throwException()
     {
         uno_Any * pAny = static_cast< uno_Any * >( pArgs[ 0 ] );
         OSL_ASSERT( pAny->pType->eTypeClass == typelib_TypeClass_EXCEPTION );
-        uno_type_any_construct( *ppException, pAny->pData, pAny->pType, 0 );
+        uno_type_any_construct( *ppException, pAny->pData, pAny->pType, nullptr );
         break;
     }
     default:
@@ -119,7 +119,7 @@ static void SAL_CALL ExceptionThrower_dispatch(
         OSL_ASSERT( false );
         RuntimeException exc( "not implemented!" );
         uno_type_any_construct(
-            *ppException, &exc, cppu::UnoType<decltype(exc)>::get().getTypeLibType(), 0 );
+            *ppException, &exc, cppu::UnoType<decltype(exc)>::get().getTypeLibType(), nullptr );
         break;
     }
     }
@@ -220,7 +220,7 @@ Any SAL_CALL getCaughtException()
             "cannot get binary UNO to C++ mapping!" );
     }
 
-    typelib_TypeDescription * pTD = 0;
+    typelib_TypeDescription * pTD = nullptr;
     TYPELIB_DANGER_GET(
         &pTD, ExceptionThrower::getCppuType().getTypeLibType() );
 
@@ -230,7 +230,7 @@ Any SAL_CALL getCaughtException()
         static_cast< XExceptionThrower * >( &theExceptionThrower::get() ), pTD );
     OSL_ASSERT( unoI.is() );
 
-    typelib_TypeDescription * pMemberTD = 0;
+    typelib_TypeDescription * pMemberTD = nullptr;
     TYPELIB_DANGER_GET(
         &pMemberTD,
         reinterpret_cast< typelib_InterfaceTypeDescription * >( pTD )->
@@ -238,12 +238,12 @@ Any SAL_CALL getCaughtException()
 
     uno_Any exc_mem;
     uno_Any * exc = &exc_mem;
-    unoI.dispatch( pMemberTD, 0, 0, &exc );
+    unoI.dispatch( pMemberTD, nullptr, nullptr, &exc );
 
     TYPELIB_DANGER_RELEASE( pMemberTD );
     TYPELIB_DANGER_RELEASE( pTD );
 
-    if (exc == 0)
+    if (exc == nullptr)
     {
         throw RuntimeException( "rethrowing C++ exception failed!" );
     }
@@ -252,7 +252,7 @@ Any SAL_CALL getCaughtException()
     uno_any_destruct( &ret, reinterpret_cast< uno_ReleaseFunc >(cpp_release) );
     uno_type_any_constructAndConvert(
         &ret, exc->pData, exc->pType, uno2cpp.get() );
-    uno_any_destruct( exc, 0 );
+    uno_any_destruct( exc, nullptr );
     return ret;
 }
 

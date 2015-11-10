@@ -49,7 +49,7 @@ css::uno::Reference< css::uno::XComponentContext >
 cppu::defaultBootstrap_InitialComponentContext(rtl::OUString const & iniUri)
 {
     rtl::Bootstrap bs(iniUri);
-    if (bs.getHandle() == 0) {
+    if (bs.getHandle() == nullptr) {
         throw css::uno::DeploymentException(
             "Cannot open uno ini " + iniUri);
     }

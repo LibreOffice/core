@@ -42,7 +42,7 @@ Sequence< sal_Int8 > OImplementationId::getImplementationId() const
         if (! _pSeq)
         {
             Sequence< sal_Int8 > * pSeq = new Sequence< sal_Int8 >( 16 );
-            ::rtl_createUuid( reinterpret_cast<sal_uInt8 *>(pSeq->getArray()), 0, _bUseEthernetAddress );
+            ::rtl_createUuid( reinterpret_cast<sal_uInt8 *>(pSeq->getArray()), nullptr, _bUseEthernetAddress );
             _pSeq = pSeq;
         }
     }

@@ -68,7 +68,7 @@ static typelib_TypeDescription * createCTD(
 inline static typelib_TypeDescription * createCTD(
     const Reference< XCompoundTypeDescription > & xType )
 {
-    typelib_TypeDescription * pRet = 0;
+    typelib_TypeDescription * pRet = nullptr;
     if (xType.is())
     {
         typelib_TypeDescription * pBaseType = createCTD(
@@ -108,7 +108,7 @@ inline static typelib_TypeDescription * createCTD(
             &pRet,
             (typelib_TypeClass)xType->getTypeClass(),
             aTypeName.pData,
-            (pBaseType ? pBaseType->pWeakRef : 0),
+            (pBaseType ? pBaseType->pWeakRef : nullptr),
             nMembers, pMemberInits );
 
         // cleanup
@@ -126,7 +126,7 @@ inline static typelib_TypeDescription * createCTD(
     Reference< container::XHierarchicalNameAccess > const & access,
     const Reference< XStructTypeDescription > & xType )
 {
-    typelib_TypeDescription * pRet = 0;
+    typelib_TypeDescription * pRet = nullptr;
     if (xType.is() && xType->getTypeParameters().getLength() == 0)
     {
         typelib_TypeDescription * pBaseType = createCTD(
@@ -184,7 +184,7 @@ inline static typelib_TypeDescription * createCTD(
         typelib_typedescription_newStruct(
             &pRet,
             aTypeName.pData,
-            (pBaseType ? pBaseType->pWeakRef : 0),
+            (pBaseType ? pBaseType->pWeakRef : nullptr),
             nMembers, pMemberInits );
 
         // cleanup
@@ -201,7 +201,7 @@ inline static typelib_TypeDescription * createCTD(
 inline static typelib_TypeDescription * createCTD(
     const Reference< XInterfaceAttributeTypeDescription2 > & xAttribute )
 {
-    typelib_TypeDescription * pRet = 0;
+    typelib_TypeDescription * pRet = nullptr;
     if (xAttribute.is())
     {
         OUString aMemberName( xAttribute->getName() );
@@ -239,7 +239,7 @@ inline static typelib_TypeDescription * createCTD(
 static typelib_TypeDescription * createCTD(
     const Reference< XInterfaceMethodTypeDescription > & xMethod )
 {
-    typelib_TypeDescription * pRet = 0;
+    typelib_TypeDescription * pRet = nullptr;
     if (xMethod.is())
     {
         Reference< XTypeDescription > xReturnType( xMethod->getReturnType() );
@@ -311,7 +311,7 @@ inline static typelib_TypeDescription * createCTD(
     Reference< container::XHierarchicalNameAccess > const & access,
     const Reference< XInterfaceTypeDescription2 > & xType )
 {
-    typelib_TypeDescription * pRet = 0;
+    typelib_TypeDescription * pRet = nullptr;
     if (xType.is())
     {
         Sequence< Reference< XTypeDescription > > aBases(xType->getBaseTypes());
@@ -346,7 +346,7 @@ inline static typelib_TypeDescription * createCTD(
         for ( nPos = nMembers; nPos--; )
         {
             OUString aMemberTypeName( pMembers[nPos]->getName() );
-            ppMemberRefs[nPos] = 0;
+            ppMemberRefs[nPos] = nullptr;
             typelib_typedescriptionreference_new(
                 ppMemberRefs + nPos,
                 (typelib_TypeClass)pMembers[nPos]->getTypeClass(),
@@ -375,7 +375,7 @@ inline static typelib_TypeDescription * createCTD(
 
 inline static typelib_TypeDescription * createCTD( const Reference< XEnumTypeDescription > & xType )
 {
-    typelib_TypeDescription * pRet = 0;
+    typelib_TypeDescription * pRet = nullptr;
     if (xType.is())
     {
         OUString aTypeName( xType->getName() );
@@ -396,7 +396,7 @@ inline static typelib_TypeDescription * createCTD(
     Reference< container::XHierarchicalNameAccess > const & access,
     const Reference< XIndirectTypeDescription > & xType )
 {
-    typelib_TypeDescription * pRet = 0;
+    typelib_TypeDescription * pRet = nullptr;
     if (xType.is())
     {
         typelib_TypeDescription * pRefType = createCTD(
@@ -410,7 +410,7 @@ inline static typelib_TypeDescription * createCTD(
             (typelib_TypeClass)xType->getTypeClass(),
             aTypeName.pData,
             pRefType->pWeakRef,
-            0, 0 );
+            0, nullptr );
 
         // cleanup
         typelib_typedescription_release( pRefType );
@@ -423,7 +423,7 @@ static typelib_TypeDescription * createCTD(
     Reference< container::XHierarchicalNameAccess > const & access,
     const Reference< XTypeDescription > & xType )
 {
-    typelib_TypeDescription * pRet = 0;
+    typelib_TypeDescription * pRet = nullptr;
 
     if (xType.is())
     {
@@ -433,91 +433,91 @@ static typelib_TypeDescription * createCTD(
         case TypeClass_VOID:
         {
             OUString aTypeName("void");
-            typelib_typedescription_new( &pRet, typelib_TypeClass_VOID, aTypeName.pData, 0, 0, 0 );
+            typelib_typedescription_new( &pRet, typelib_TypeClass_VOID, aTypeName.pData, nullptr, 0, nullptr );
             break;
         }
         case TypeClass_CHAR:
         {
             OUString aTypeName("char");
-            typelib_typedescription_new( &pRet, typelib_TypeClass_CHAR, aTypeName.pData, 0, 0, 0 );
+            typelib_typedescription_new( &pRet, typelib_TypeClass_CHAR, aTypeName.pData, nullptr, 0, nullptr );
             break;
         }
         case TypeClass_BOOLEAN:
         {
             OUString aTypeName("boolean");
-            typelib_typedescription_new( &pRet, typelib_TypeClass_BOOLEAN, aTypeName.pData, 0, 0, 0 );
+            typelib_typedescription_new( &pRet, typelib_TypeClass_BOOLEAN, aTypeName.pData, nullptr, 0, nullptr );
             break;
         }
         case TypeClass_BYTE:
         {
             OUString aTypeName("byte");
-            typelib_typedescription_new( &pRet, typelib_TypeClass_BYTE, aTypeName.pData, 0, 0, 0 );
+            typelib_typedescription_new( &pRet, typelib_TypeClass_BYTE, aTypeName.pData, nullptr, 0, nullptr );
             break;
         }
         case TypeClass_SHORT:
         {
             OUString aTypeName("short");
-            typelib_typedescription_new( &pRet, typelib_TypeClass_SHORT, aTypeName.pData, 0, 0, 0 );
+            typelib_typedescription_new( &pRet, typelib_TypeClass_SHORT, aTypeName.pData, nullptr, 0, nullptr );
             break;
         }
         case TypeClass_UNSIGNED_SHORT:
         {
             OUString aTypeName("unsigned short");
-            typelib_typedescription_new( &pRet, typelib_TypeClass_UNSIGNED_SHORT, aTypeName.pData, 0, 0, 0 );
+            typelib_typedescription_new( &pRet, typelib_TypeClass_UNSIGNED_SHORT, aTypeName.pData, nullptr, 0, nullptr );
             break;
         }
         case TypeClass_LONG:
         {
             OUString aTypeName("long");
-            typelib_typedescription_new( &pRet, typelib_TypeClass_LONG, aTypeName.pData, 0, 0, 0 );
+            typelib_typedescription_new( &pRet, typelib_TypeClass_LONG, aTypeName.pData, nullptr, 0, nullptr );
             break;
         }
         case TypeClass_UNSIGNED_LONG:
         {
             OUString aTypeName("unsigned long");
-            typelib_typedescription_new( &pRet, typelib_TypeClass_UNSIGNED_LONG, aTypeName.pData, 0, 0, 0 );
+            typelib_typedescription_new( &pRet, typelib_TypeClass_UNSIGNED_LONG, aTypeName.pData, nullptr, 0, nullptr );
             break;
         }
         case TypeClass_HYPER:
         {
             OUString aTypeName("hyper");
-            typelib_typedescription_new( &pRet, typelib_TypeClass_HYPER, aTypeName.pData, 0, 0, 0 );
+            typelib_typedescription_new( &pRet, typelib_TypeClass_HYPER, aTypeName.pData, nullptr, 0, nullptr );
             break;
         }
         case TypeClass_UNSIGNED_HYPER:
         {
             OUString aTypeName("unsigned hyper");
-            typelib_typedescription_new( &pRet, typelib_TypeClass_UNSIGNED_HYPER, aTypeName.pData, 0, 0, 0 );
+            typelib_typedescription_new( &pRet, typelib_TypeClass_UNSIGNED_HYPER, aTypeName.pData, nullptr, 0, nullptr );
             break;
         }
         case TypeClass_FLOAT:
         {
             OUString aTypeName("float");
-            typelib_typedescription_new( &pRet, typelib_TypeClass_FLOAT, aTypeName.pData, 0, 0, 0 );
+            typelib_typedescription_new( &pRet, typelib_TypeClass_FLOAT, aTypeName.pData, nullptr, 0, nullptr );
             break;
         }
         case TypeClass_DOUBLE:
         {
             OUString aTypeName("double");
-            typelib_typedescription_new( &pRet, typelib_TypeClass_DOUBLE, aTypeName.pData, 0, 0, 0 );
+            typelib_typedescription_new( &pRet, typelib_TypeClass_DOUBLE, aTypeName.pData, nullptr, 0, nullptr );
             break;
         }
         case TypeClass_STRING:
         {
             OUString aTypeName("string");
-            typelib_typedescription_new( &pRet, typelib_TypeClass_STRING, aTypeName.pData, 0, 0, 0 );
+            typelib_typedescription_new( &pRet, typelib_TypeClass_STRING, aTypeName.pData, nullptr, 0, nullptr );
             break;
         }
         case TypeClass_TYPE:
         {
             OUString aTypeName("type");
-            typelib_typedescription_new( &pRet, typelib_TypeClass_TYPE, aTypeName.pData, 0, 0, 0 );
+            typelib_typedescription_new( &pRet, typelib_TypeClass_TYPE, aTypeName.pData, nullptr, 0, nullptr );
             break;
         }
         case TypeClass_ANY:
         {
             OUString aTypeName("any");
-            typelib_typedescription_new( &pRet, typelib_TypeClass_ANY, aTypeName.pData, 0, 0, 0 );
+            typelib_typedescription_new( &pRet, typelib_TypeClass_ANY, aTypeName.pData, nullptr, 0, nullptr );
             break;
         }
 
@@ -574,7 +574,7 @@ static void SAL_CALL typelib_callback(
         if (*ppRet)
         {
             ::typelib_typedescription_release( *ppRet );
-            *ppRet = 0;
+            *ppRet = nullptr;
         }
         if (pContext && pTypeName)
         {

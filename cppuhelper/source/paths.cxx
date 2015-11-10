@@ -89,7 +89,7 @@ rtl::OUString cppu::getUnoIniUri() {
 }
 
 bool cppu::nextDirectoryItem(osl::Directory & directory, rtl::OUString * url) {
-    assert(url != 0);
+    assert(url != nullptr);
     for (;;) {
         osl::DirectoryItem i;
         switch (directory.getNextItem(i, SAL_MAX_UINT32)) {
@@ -121,7 +121,7 @@ bool cppu::nextDirectoryItem(osl::Directory & directory, rtl::OUString * url) {
 
 void cppu::decodeRdbUri(rtl::OUString * uri, bool * optional, bool * directory)
 {
-    assert(uri != 0 && optional != 0 && directory != 0);
+    assert(uri != nullptr && optional != nullptr && directory != nullptr);
     if(!(uri->isEmpty()))
     {
         *optional = (*uri)[0] == '?';

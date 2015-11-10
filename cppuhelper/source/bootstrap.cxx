@@ -91,7 +91,7 @@ Reference< XComponentContext > SAL_CALL bootstrap()
     try
     {
         char const * p1 = cppuhelper_detail_findSofficePath();
-        if (p1 == NULL) {
+        if (p1 == nullptr) {
             throw BootstrapException(
                 "no soffice installation found!");
         }
@@ -136,7 +136,7 @@ Reference< XComponentContext > SAL_CALL bootstrap()
 
         // create a random pipe name
         rtlRandomPool hPool = rtl_random_createPool();
-        if ( hPool == 0 )
+        if ( hPool == nullptr )
             throw BootstrapException( "cannot create random pool!" );
         sal_uInt8 bytes[ 16 ];
         if ( rtl_random_getBytes( hPool, bytes, ARLEN( bytes ) )
@@ -166,13 +166,13 @@ Reference< XComponentContext > SAL_CALL bootstrap()
         ::osl::Security sec;
 
         // start office process
-        oslProcess hProcess = 0;
+        oslProcess hProcess = nullptr;
         oslProcessError rc = osl_executeProcess(
             OUString(path + "soffice").pData, ar_args, ARLEN( ar_args ),
             osl_Process_DETACHED,
             sec.getHandle(),
-            0, // => current working dir
-            0, 0, // => no env vars
+            nullptr, // => current working dir
+            nullptr, 0, // => no env vars
             &hProcess );
         switch ( rc )
         {

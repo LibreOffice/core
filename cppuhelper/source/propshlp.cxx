@@ -127,7 +127,7 @@ sal_Bool OPropertySetHelperInfo_Impl::hasPropertyByName( const OUString & Proper
     pR = static_cast<Property *>(bsearch( &PropertyName, aInfos.getConstArray(), aInfos.getLength(),
                               sizeof( Property ),
                               compare_OUString_Property_Impl ));
-    return pR != NULL;
+    return pR != nullptr;
 }
 
 
@@ -163,7 +163,7 @@ OPropertySetHelper::OPropertySetHelper(
     : rBHelper( rBHelper_ ),
       aBoundLC( rBHelper_.rMutex ),
       aVetoableLC( rBHelper_.rMutex ),
-      m_pReserved( new Impl(false, 0) )
+      m_pReserved( new Impl(false, nullptr) )
 {
 }
 
@@ -172,7 +172,7 @@ OPropertySetHelper::OPropertySetHelper(
     : rBHelper( rBHelper_ ),
       aBoundLC( rBHelper_.rMutex ),
       aVetoableLC( rBHelper_.rMutex ),
-      m_pReserved( new Impl( bIgnoreRuntimeExceptionsWhileFiring, 0 ) )
+      m_pReserved( new Impl( bIgnoreRuntimeExceptionsWhileFiring, nullptr ) )
 {
 }
 
@@ -312,7 +312,7 @@ void OPropertySetHelper::addPropertyChangeListener(
             }
 
             sal_Int16 nAttributes;
-            rPH.fillPropertyMembersByHandle( NULL, &nAttributes, nHandle );
+            rPH.fillPropertyMembersByHandle( nullptr, &nAttributes, nHandle );
             if( !(nAttributes & css::beans::PropertyAttribute::BOUND) )
             {
                 OSL_FAIL( "add listener to an unbound property" );
@@ -394,7 +394,7 @@ void OPropertySetHelper::addVetoableChangeListener(
             }
 
             sal_Int16 nAttributes;
-            rPH.fillPropertyMembersByHandle( NULL, &nAttributes, nHandle );
+            rPH.fillPropertyMembersByHandle( nullptr, &nAttributes, nHandle );
             if( !(nAttributes & PropertyAttribute::CONSTRAINED) )
             {
                 OSL_FAIL( "addVetoableChangeListener, and property is not constrained" );
@@ -455,7 +455,7 @@ void OPropertySetHelper::setDependentFastPropertyValue( sal_Int32 i_handle, cons
 
     sal_Int16 nAttributes(0);
     IPropertyArrayHelper& rInfo = getInfoHelper();
-    if ( !rInfo.fillPropertyMembersByHandle( NULL, &nAttributes, i_handle ) )
+    if ( !rInfo.fillPropertyMembersByHandle( nullptr, &nAttributes, i_handle ) )
         // unknown property
         throw UnknownPropertyException();
 
@@ -512,7 +512,7 @@ void OPropertySetHelper::setFastPropertyValue( sal_Int32 nHandle, const Any& rVa
 
     IPropertyArrayHelper & rInfo = getInfoHelper();
     sal_Int16 nAttributes;
-    if( !rInfo.fillPropertyMembersByHandle( NULL, &nAttributes, nHandle ) ) {
+    if( !rInfo.fillPropertyMembersByHandle( nullptr, &nAttributes, nHandle ) ) {
         // unknown property
         throw UnknownPropertyException();
     }
@@ -577,7 +577,7 @@ Any OPropertySetHelper::getFastPropertyValue( sal_Int32 nHandle )
 
 {
     IPropertyArrayHelper & rInfo = getInfoHelper();
-    if( !rInfo.fillPropertyMembersByHandle( NULL, NULL, nHandle ) )
+    if( !rInfo.fillPropertyMembersByHandle( nullptr, nullptr, nHandle ) )
         // unknown property
         throw UnknownPropertyException();
 
@@ -786,7 +786,7 @@ void OPropertySetHelper::fire
 
         if( !bVetoable )
         {
-            OInterfaceContainerHelper * pCont = 0;
+            OInterfaceContainerHelper * pCont = nullptr;
             pCont = rBHelper.aLC.getContainer(
                                 getPropertiesTypeIdentifier(  )
                                              );
@@ -854,7 +854,7 @@ void OPropertySetHelper::setFastPropertyValues(
             if( pHandles[i] != -1 )
             {
                 sal_Int16 nAttributes;
-                rPH.fillPropertyMembersByHandle( NULL, &nAttributes, pHandles[i] );
+                rPH.fillPropertyMembersByHandle( nullptr, &nAttributes, pHandles[i] );
                 if( nAttributes & PropertyAttribute::READONLY ) {
                     throw PropertyVetoException();
                 }
@@ -1042,7 +1042,7 @@ OPropertyArrayHelper::OPropertyArrayHelper(
     Property * pProps,
     sal_Int32 nEle,
     sal_Bool bSorted )
-    : m_pReserved(NULL)
+    : m_pReserved(nullptr)
     , aInfos(pProps, nEle)
     , bRightOrdered( sal_False )
 {
@@ -1052,7 +1052,7 @@ OPropertyArrayHelper::OPropertyArrayHelper(
 OPropertyArrayHelper::OPropertyArrayHelper(
     const Sequence< Property > & aProps,
     sal_Bool bSorted )
-    : m_pReserved(NULL)
+    : m_pReserved(nullptr)
     , aInfos(aProps)
     , bRightOrdered( sal_False )
 {
@@ -1131,7 +1131,7 @@ sal_Bool OPropertyArrayHelper::hasPropertyByName(const OUString& aPropertyName)
     pR = static_cast<Property *>(bsearch( &aPropertyName, aInfos.getConstArray(), aInfos.getLength(),
                               sizeof( Property ),
                               compare_OUString_Property_Impl ));
-    return pR != NULL;
+    return pR != nullptr;
 }
 
 

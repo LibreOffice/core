@@ -36,7 +36,7 @@ namespace cppu
 // due to static Reflection destruction from usr, there must be a mutex leak (#73272#)
 inline static Mutex & getWeakMutex()
 {
-    static Mutex * s_pMutex = 0;
+    static Mutex * s_pMutex = nullptr;
     if (! s_pMutex)
         s_pMutex = new Mutex();
     return *s_pMutex;
@@ -209,9 +209,9 @@ void SAL_CALL OWeakObject::release() throw()
 void OWeakObject::disposeWeakConnectionPoint()
 {
     OSL_PRECOND( m_refCount == 0, "OWeakObject::disposeWeakConnectionPoint: only to be called with a ref count of 0!" );
-    if (m_pWeakConnectionPoint != 0) {
+    if (m_pWeakConnectionPoint != nullptr) {
         OWeakConnectionPoint * const p = m_pWeakConnectionPoint;
-        m_pWeakConnectionPoint = 0;
+        m_pWeakConnectionPoint = nullptr;
         try {
             p->dispose();
         }
@@ -412,7 +412,7 @@ void SAL_CALL OWeakRefListener::dispose()
 //-- WeakReferenceHelper ----------------------------------------------------------
 
 WeakReferenceHelper::WeakReferenceHelper(const Reference< XInterface >& xInt)
-    : m_pImpl( 0 )
+    : m_pImpl( nullptr )
 {
     if (xInt.is())
     {
@@ -422,7 +422,7 @@ WeakReferenceHelper::WeakReferenceHelper(const Reference< XInterface >& xInt)
 }
 
 WeakReferenceHelper::WeakReferenceHelper(const WeakReferenceHelper& rWeakRef)
-    : m_pImpl( 0 )
+    : m_pImpl( nullptr )
 {
     Reference< XInterface > xInt( rWeakRef.get() );
     if (xInt.is())
@@ -445,7 +445,7 @@ void WeakReferenceHelper::clear()
                 m_pImpl->m_XWeakConnectionPoint.clear();
             }
             m_pImpl->release();
-            m_pImpl = 0;
+            m_pImpl = nullptr;
         }
     }
     catch (RuntimeException &) { OSL_ASSERT( false ); } // assert here, but no unexpected()

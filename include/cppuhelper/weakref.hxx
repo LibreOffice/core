@@ -44,7 +44,7 @@ public:
     /** Default ctor.  Creates an empty weak reference.
     */
     inline WeakReferenceHelper()
-        : m_pImpl( 0 )
+        : m_pImpl( NULL )
         {}
 
     /** Copy ctor.  Initialize this reference with the same interface as in rWeakRef.

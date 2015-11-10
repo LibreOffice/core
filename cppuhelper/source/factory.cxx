@@ -477,7 +477,7 @@ public:
         const Reference<XRegistryKey > & xImplementationKey_,
         bool bOneInstance_ = false )
             : OFactoryComponentHelper(
-                rServiceManager, rImplementationName_, 0, 0, 0, bOneInstance_ ),
+                rServiceManager, rImplementationName_, nullptr, nullptr, nullptr, bOneInstance_ ),
               OPropertySetHelper( OComponentHelper::rBHelper ),
               xImplementationKey( xImplementationKey_ )
         {}
@@ -598,7 +598,7 @@ ORegistryFactoryHelper::getPropertySetInfo() throw (RuntimeException, std::excep
 IPropertyArrayHelper & ORegistryFactoryHelper::getInfoHelper()
 {
     ::osl::MutexGuard guard( aMutex );
-    if (m_property_array_helper.get() == 0)
+    if (m_property_array_helper.get() == nullptr)
     {
         beans::Property prop(
             "ImplementationKey" /* name */,
@@ -960,7 +960,7 @@ Reference<XSingleServiceFactory > SAL_CALL createSingleFactory(
     rtl_ModuleCount * )
 {
     return new OFactoryComponentHelper(
-        rServiceManager, rImplementationName, pCreateFunction, 0, &rServiceNames, false );
+        rServiceManager, rImplementationName, pCreateFunction, nullptr, &rServiceNames, false );
 }
 
 // global function
@@ -980,7 +980,7 @@ Reference<XSingleServiceFactory > SAL_CALL createOneInstanceFactory(
     rtl_ModuleCount * )
 {
     return new OFactoryComponentHelper(
-        rServiceManager, rImplementationName, pCreateFunction, 0, &rServiceNames, true );
+        rServiceManager, rImplementationName, pCreateFunction, nullptr, &rServiceNames, true );
 }
 
 // global function
@@ -1011,7 +1011,7 @@ Reference< lang::XSingleComponentFactory > SAL_CALL createSingleComponentFactory
     rtl_ModuleCount *)
 {
     return new OFactoryComponentHelper(
-        Reference< XMultiServiceFactory >(), rImplementationName, 0, fptr, &rServiceNames, false );
+        Reference< XMultiServiceFactory >(), rImplementationName, nullptr, fptr, &rServiceNames, false );
 }
 
 Reference< lang::XSingleComponentFactory > SAL_CALL createOneInstanceComponentFactory(
@@ -1021,7 +1021,7 @@ Reference< lang::XSingleComponentFactory > SAL_CALL createOneInstanceComponentFa
     rtl_ModuleCount *)
 {
     return new OFactoryComponentHelper(
-        Reference< XMultiServiceFactory >(), rImplementationName, 0, fptr, &rServiceNames, true );
+        Reference< XMultiServiceFactory >(), rImplementationName, nullptr, fptr, &rServiceNames, true );
 }
 
 }

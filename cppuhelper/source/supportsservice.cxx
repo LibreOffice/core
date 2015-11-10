@@ -20,7 +20,7 @@
 bool cppu::supportsService(
     css::lang::XServiceInfo * implementation, rtl::OUString const & name)
 {
-    assert(implementation != 0);
+    assert(implementation != nullptr);
     css::uno::Sequence< rtl::OUString > s(
         implementation->getSupportedServiceNames());
     for (sal_Int32 i = 0; i != s.getLength(); ++i) {

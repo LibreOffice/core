@@ -127,7 +127,7 @@ XInterface * OInterfaceIteratorHelper::next()
             return aData.pAsInterface;
     }
     // exception
-    return 0;
+    return nullptr;
 }
 
 void OInterfaceIteratorHelper::remove()
@@ -285,7 +285,7 @@ sal_Int32 OInterfaceContainerHelper::removeInterface( const Reference<XInterface
     else if( aData.pAsInterface && Reference<XInterface>( aData.pAsInterface ) == rListener )
     {
         aData.pAsInterface->release();
-        aData.pAsInterface = 0;
+        aData.pAsInterface = nullptr;
     }
     return aData.pAsInterface ? 1 : 0;
 }
@@ -299,7 +299,7 @@ void OInterfaceContainerHelper::disposeAndClear( const EventObject & rEvt )
     if( !bIsList && aData.pAsInterface )
         aData.pAsInterface->release();
     // set the member to null, use the iterator to delete the values
-    aData.pAsInterface = NULL;
+    aData.pAsInterface = nullptr;
     bIsList = sal_False;
     bInUse = sal_False;
     aGuard.clear();
@@ -329,7 +329,7 @@ void OInterfaceContainerHelper::clear()
     if( !bIsList && aData.pAsInterface )
         aData.pAsInterface->release();
     // set the member to null, use the iterator to delete the values
-    aData.pAsInterface = 0;
+    aData.pAsInterface = nullptr;
     bIsList = sal_False;
     bInUse = sal_False;
     // release mutex before aIt destructor call
@@ -355,7 +355,7 @@ OMultiTypeInterfaceContainerHelper::~OMultiTypeInterfaceContainerHelper()
     while( iter != end )
     {
         delete static_cast<OInterfaceContainerHelper*>((*iter).second);
-        (*iter).second = 0;
+        (*iter).second = nullptr;
         ++iter;
     }
     delete pMap;
@@ -416,7 +416,7 @@ OInterfaceContainerHelper * OMultiTypeInterfaceContainerHelper::getContainer( co
      t_type2ptr::iterator iter = findType( pMap, rKey );
     if( iter != pMap->end() )
             return static_cast<OInterfaceContainerHelper*>((*iter).second);
-    return 0;
+    return nullptr;
 }
 
 sal_Int32 OMultiTypeInterfaceContainerHelper::addInterface(
@@ -519,7 +519,7 @@ static t_long2ptr::iterator findLong(t_long2ptr *pMap, sal_Int32 nKey )
 }
 
 OMultiTypeInterfaceContainerHelperInt32::OMultiTypeInterfaceContainerHelperInt32( Mutex & rMutex_ )
-    : m_pMap( NULL )
+    : m_pMap( nullptr )
     , rMutex( rMutex_ )
 {
     // delay pMap allocation until necessary.
@@ -537,7 +537,7 @@ OMultiTypeInterfaceContainerHelperInt32::~OMultiTypeInterfaceContainerHelperInt3
     while( iter != end )
     {
         delete static_cast<OInterfaceContainerHelper*>((*iter).second);
-        (*iter).second = 0;
+        (*iter).second = nullptr;
         ++iter;
     }
     delete pMap;
@@ -581,12 +581,12 @@ OInterfaceContainerHelper * OMultiTypeInterfaceContainerHelperInt32::getContaine
     ::osl::MutexGuard aGuard( rMutex );
 
     if (!m_pMap)
-        return 0;
+        return nullptr;
     t_long2ptr * pMap = static_cast<t_long2ptr *>(m_pMap);
      t_long2ptr::iterator iter = findLong( pMap, rKey );
     if( iter != pMap->end() )
             return static_cast<OInterfaceContainerHelper*>((*iter).second);
-    return 0;
+    return nullptr;
 }
 
 sal_Int32 OMultiTypeInterfaceContainerHelperInt32::addInterface(

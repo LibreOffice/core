@@ -95,7 +95,7 @@ static inline type_entry * __getTypeEntries( class_data * cd )
             for ( sal_Int32 n = cd->m_nTypes; n--; )
             {
                 type_entry * pEntry = &pEntries[ n ];
-                Type const & rType = (*pEntry->m_type.getCppuType)( 0 );
+                Type const & rType = (*pEntry->m_type.getCppuType)( nullptr );
                 OSL_ENSURE( rType.getTypeClass() == TypeClass_INTERFACE, "### wrong helper init: expected interface!" );
                 OSL_ENSURE( ! isXInterface( rType.getTypeLibType()->pTypeName ), "### want to implement XInterface: template argument is XInterface?!?!?!" );
                 if (rType.getTypeClass() != TypeClass_INTERFACE)
@@ -182,7 +182,7 @@ static inline void * __queryDeepNoXInterface(
     // query deep getting td
     for ( n = 0; n < nTypes; ++n )
     {
-        typelib_TypeDescription * pTD = 0;
+        typelib_TypeDescription * pTD = nullptr;
         TYPELIB_DANGER_GET( &pTD, pEntries[ n ].m_type.typeRef );
         if (pTD)
         {
@@ -209,7 +209,7 @@ static inline void * __queryDeepNoXInterface(
             throw RuntimeException( msg );
         }
     }
-    return 0;
+    return nullptr;
 }
 
 // ImplHelper

@@ -49,7 +49,7 @@ namespace detail {
     {
         css::uno::Sequence< css::uno::Reference< css::uno::XInterface > > *pAsSequence;
         css::uno::XInterface * pAsInterface;
-        element_alias() : pAsInterface(0) {}
+        element_alias() : pAsInterface(NULL) {}
     };
 
 }

@@ -700,7 +700,7 @@ css::uno::Any PropertySetMixinImpl::Impl::getProperty(
                 "unexpected type of attribute " + name, object);
         }
     }
-    if (state != 0) {
+    if (state != nullptr) {
         //XXX  If isAmbiguous && isDefaulted, arbitrarily choose AMBIGUOUS_VALUE
         // over DEFAULT_VALUE:
         *state = isAmbiguous
@@ -878,7 +878,7 @@ void PropertySetMixinImpl::prepareSet(
              & css::beans::PropertyAttribute::BOUND)
             != 0)
         {
-            assert(boundListeners != 0);
+            assert(boundListeners != nullptr);
             Impl::BoundListenerMap::const_iterator i(
                 m_impl->boundListeners.find(propertyName));
             if (i != m_impl->boundListeners.end()) {
@@ -915,7 +915,7 @@ void PropertySetMixinImpl::prepareSet(
     if ((it->second.property.Attributes & css::beans::PropertyAttribute::BOUND)
         != 0)
     {
-        assert(boundListeners != 0);
+        assert(boundListeners != nullptr);
         boundListeners->m_impl->event = css::beans::PropertyChangeEvent(
             static_cast< css::beans::XPropertySet * >(this), propertyName,
             false, it->second.property.Handle, oldValue, newValue);
@@ -1005,7 +1005,7 @@ css::uno::Any PropertySetMixinImpl::getPropertyValue(
         css::uno::RuntimeException, std::exception)
 {
     return m_impl->getProperty(
-        static_cast< css::beans::XPropertySet * >(this), propertyName, 0);
+        static_cast< css::beans::XPropertySet * >(this), propertyName, nullptr);
 }
 
 void PropertySetMixinImpl::addPropertyChangeListener(
@@ -1120,7 +1120,7 @@ css::uno::Any PropertySetMixinImpl::getFastPropertyValue(sal_Int32 handle)
         static_cast< css::beans::XPropertySet * >(this),
         m_impl->translateHandle(
             static_cast< css::beans::XPropertySet * >(this), handle),
-        0);
+        nullptr);
 }
 
 css::uno::Sequence< css::beans::PropertyValue >

@@ -65,7 +65,7 @@ void * component_getFactoryHelper(
     SAL_UNUSED_PARAMETER void *, ImplementationEntry const * entries)
 {
 
-      void * pRet = 0;
+      void * pRet = nullptr;
     Reference< XSingleComponentFactory > xFactory;
 
     for( sal_Int32 i = 0 ; entries[i].create ; i ++ )

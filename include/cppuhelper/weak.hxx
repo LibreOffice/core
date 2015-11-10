@@ -100,8 +100,8 @@ public:
     */
     inline OWeakObject()
         : m_refCount( 0 )
-        , m_pWeakConnectionPoint( 0 )
-        , m_pReserved(0)
+        , m_pWeakConnectionPoint( NULL )
+        , m_pReserved(NULL)
         {}
 #endif
     /** Dummy copy constructor.  Set the reference count to zero.
@@ -111,8 +111,8 @@ public:
     inline OWeakObject( const OWeakObject & rObj )
         : css::uno::XWeak()
         , m_refCount( 0 )
-        , m_pWeakConnectionPoint( 0 )
-        , m_pReserved(0)
+        , m_pWeakConnectionPoint( NULL )
+        , m_pReserved(NULL)
         {
             (void) rObj;
         }
@@ -170,7 +170,7 @@ public:
 */
 static inline css::uno::XInterface * acquire(OWeakObject * instance)
 {
-    assert(instance != 0);
+    assert(instance != NULL);
     instance->acquire();
     return instance;
 }

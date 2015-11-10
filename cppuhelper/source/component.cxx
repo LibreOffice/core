@@ -115,7 +115,7 @@ void OComponentHelper::release() throw()
 
 Sequence< Type > OComponentHelper::getTypes() throw (RuntimeException, std::exception)
 {
-    static OTypeCollection * s_pTypes = 0;
+    static OTypeCollection * s_pTypes = nullptr;
     if (! s_pTypes)
     {
         MutexGuard aGuard( Mutex::getGlobalMutex() );

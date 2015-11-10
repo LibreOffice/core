@@ -43,7 +43,7 @@ css::uno::Environment cppuhelper::detail::getEnvironment(
     assert(!implementation.isEmpty());
     rtl::OUString n(name);
     static char const * log = std::getenv("UNO_ENV_LOG");
-    if (log != 0 && *log != 0) {
+    if (log != nullptr && *log != 0) {
         rtl::OString imps(log);
         for (sal_Int32 i = 0; i != -1;) {
             rtl::OString imp(imps.getToken(0, ';', i));
@@ -65,7 +65,7 @@ css::uno::Environment getEnvironmentFromModule(
     osl::Module const & module, css::uno::Environment const & target,
     rtl::OUString const & implementation, rtl::OUString const & prefix)
 {
-    char const * name = 0;
+    char const * name = nullptr;
     css::uno::Environment env;
     rtl::OUString fullPrefix(prefix);
     if (!fullPrefix.isEmpty()) {
@@ -74,7 +74,7 @@ css::uno::Environment getEnvironmentFromModule(
     component_getImplementationEnvironmentExtFunc fp1
         = reinterpret_cast<component_getImplementationEnvironmentExtFunc>(
             module.getFunctionSymbol(fullPrefix + COMPONENT_GETENVEXT));
-    if (fp1 != 0) {
+    if (fp1 != nullptr) {
         (*fp1)(
             &name, reinterpret_cast<uno_Environment **>(&env),
             (rtl::OUStringToOString(implementation, RTL_TEXTENCODING_ASCII_US)
@@ -84,13 +84,13 @@ css::uno::Environment getEnvironmentFromModule(
         component_getImplementationEnvironmentFunc fp2
             = reinterpret_cast<component_getImplementationEnvironmentFunc>(
                 module.getFunctionSymbol(fullPrefix + COMPONENT_GETENV));
-        if (fp2 != 0) {
+        if (fp2 != nullptr) {
             (*fp2)(&name, reinterpret_cast<uno_Environment **>(&env));
         } else {
             name = CPPU_CURRENT_LANGUAGE_BINDING_NAME; //TODO: fail
         }
     }
-    if (!env.is() && name != 0) {
+    if (!env.is() && name != nullptr) {
         env = cppuhelper::detail::getEnvironment(
             rtl::OUString::createFromAscii(name), implementation);
     }
@@ -124,7 +124,7 @@ css::uno::Reference<css::uno::XInterface> invokeComponentFactory(
     if (source.get() == target.get()) {
         return css::uno::Reference<css::uno::XInterface>(
             static_cast<css::uno::XInterface *>(
-                (*function)(impl.getStr(), serviceManager.get(), 0)),
+                (*function)(impl.getStr(), serviceManager.get(), nullptr)),
             SAL_NO_ACQUIRE);
     } else {
         css::uno::Mapping mapTo(source, target);
@@ -137,13 +137,13 @@ css::uno::Reference<css::uno::XInterface> invokeComponentFactory(
         void * smgr = mapTo.mapInterface(
             serviceManager.get(),
             cppu::UnoType<css::lang::XMultiServiceFactory>::get());
-        void * factory = 0;
+        void * factory = nullptr;
         target.invoke(getFactory, function, &impl, smgr, 0, &factory);
-        if (smgr != 0) {
+        if (smgr != nullptr) {
             (*target.get()->pExtEnv->releaseInterface)(
                 target.get()->pExtEnv, smgr);
         }
-        if (factory == 0) {
+        if (factory == nullptr) {
             throw css::loader::CannotActivateFactoryException(
                 ("calling factory function for \"" + implementation + "\" in <"
                  + uri + "> returned null"),
@@ -171,9 +171,9 @@ void cppuhelper::detail::loadSharedLibComponentFactory(
 {
     assert(constructor.isEmpty() || !environment.isEmpty());
     assert(
-        (constructorFunction == 0 && constructor.isEmpty())
-        || *constructorFunction == 0);
-    assert(factory != 0 && !factory->is());
+        (constructorFunction == nullptr && constructor.isEmpty())
+        || *constructorFunction == nullptr);
+    assert(factory != nullptr && !factory->is());
 #if defined DISABLE_DYNLOADING
     assert(!environment.isEmpty());
     if (constructor.isEmpty()) {
@@ -249,7 +249,7 @@ void cppuhelper::detail::loadSharedLibComponentFactory(
             sym = COMPONENT_GETFACTORY;
         }
         oslGenericFunction fp = mod.getFunctionSymbol(sym);
-        if (fp == 0) {
+        if (fp == nullptr) {
             throw css::loader::CannotActivateFactoryException(
                 ("no factory symbol \"" + sym + "\" in component library <"
                  + uri + ">"),
@@ -266,7 +266,7 @@ void cppuhelper::detail::loadSharedLibComponentFactory(
     } else {
         SAL_INFO("cppuhelper.shlib", "constructor=" << constructor);
         oslGenericFunction fp = mod.getFunctionSymbol(constructor);
-        if (fp == 0) {
+        if (fp == nullptr) {
             throw css::loader::CannotActivateFactoryException(
                 ("no constructor symbol \"" + constructor
                  + "\" in component library <" + uri + ">"),
@@ -289,7 +289,7 @@ css::uno::Reference<css::uno::XInterface> cppu::loadSharedLibComponentFactory(
     assert(!xKey.is()); (void) xKey;
     css::uno::Reference<css::uno::XInterface> fac;
     cppuhelper::detail::loadSharedLibComponentFactory(
-        uri, "", "", rImplName, "", xMgr, 0, &fac);
+        uri, "", "", rImplName, "", xMgr, nullptr, &fac);
     return fac;
 }
 
@@ -320,7 +320,7 @@ void cppu::writeSharedLibComponentInfo(
             css::uno::Reference<css::uno::XInterface>());
     }
     oslGenericFunction fp = mod.getFunctionSymbol(COMPONENT_WRITEINFO);
-    if (fp == 0) {
+    if (fp == nullptr) {
         throw css::registry::CannotRegisterImplementationException(
             ("no symbol \"" COMPONENT_WRITEINFO "\" in component library <"
              + uri + ">"),
@@ -345,7 +345,7 @@ void cppu::writeSharedLibComponentInfo(
     sal_Bool ok;
     env.invoke(writeInfo, fp, smgr, key, &ok);
     (*env.get()->pExtEnv->releaseInterface)(env.get()->pExtEnv, key);
-    if (smgr != 0) {
+    if (smgr != nullptr) {
         (*env.get()->pExtEnv->releaseInterface)(env.get()->pExtEnv, smgr);
     }
     if (!ok) {

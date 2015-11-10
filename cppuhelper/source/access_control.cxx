@@ -103,7 +103,7 @@ void AccessControl::checkRuntimePermission(
 {
     __checkPermission(
         m_xController,
-        cppu::UnoType<security::RuntimePermission>::get(), name.pData, 0 );
+        cppu::UnoType<security::RuntimePermission>::get(), name.pData, nullptr );
 }
 
 void AccessControl::checkFilePermission(

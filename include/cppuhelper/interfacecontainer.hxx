@@ -90,7 +90,7 @@ OInterfaceContainerHelper * OMultiTypeInterfaceContainerHelperVar< key , hashImp
      typename InterfaceMap::iterator iter = find( rKey );
     if( iter != m_pMap->end() )
             return static_cast<OInterfaceContainerHelper*>( (*iter).second );
-    return 0;
+    return NULL;
 }
 
 

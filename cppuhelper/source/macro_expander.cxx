@@ -51,7 +51,7 @@ namespace cppu
 
 Bootstrap const & get_unorc()
 {
-    static rtlBootstrapHandle s_bstrap = 0;
+    static rtlBootstrapHandle s_bstrap = nullptr;
     if (! s_bstrap)
     {
         OUString iniName(getUnoIniUri());

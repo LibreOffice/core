@@ -191,7 +191,7 @@ public:
         @param bUseEthernetAddress whether an ethernet mac address should be taken into account
     */
     inline OImplementationId( bool bUseEthernetAddress = true )
-        : _pSeq( 0 )
+        : _pSeq( NULL )
         , _bUseEthernetAddress( bUseEthernetAddress )
         {}
     /** Constructor giving implementation id.
