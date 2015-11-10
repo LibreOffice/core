@@ -45,7 +45,7 @@ PropertyAccessorBase::~PropertyAccessorBase()
 }
 
 PropertySetBase::PropertySetBase( )
-    :m_pProperties( NULL )
+    :m_pProperties( nullptr )
 {
 }
 
@@ -94,10 +94,10 @@ void PropertySetBase::notifyAndCachePropertyValue( sal_Int32 nHandle )
             // determine the type of this property
             ::cppu::IPropertyArrayHelper& rPropertyMetaData = getInfoHelper();
             OUString sPropName;
-            OSL_VERIFY( rPropertyMetaData.fillPropertyMembersByHandle( &sPropName, NULL, nHandle ) );
+            OSL_VERIFY( rPropertyMetaData.fillPropertyMembersByHandle( &sPropName, nullptr, nHandle ) );
             Property aProperty = rPropertyMetaData.getPropertyByName( sPropName );
             // default construct a value of this type
-            Any aEmptyValue( NULL, aProperty.Type );
+            Any aEmptyValue( nullptr, aProperty.Type );
             // insert into the cache
             aPos = m_aCache.insert( PropertyValueCache::value_type( nHandle, aEmptyValue ) ).first;
         }

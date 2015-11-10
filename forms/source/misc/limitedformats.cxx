@@ -95,7 +95,7 @@ namespace frm
                     { "HH:MM:SS", -1, ltEnglishUS },
                     { "HH:MM AM/PM", -1, ltEnglishUS },
                     { "HH:MM:SS AM/PM", -1, ltEnglishUS },
-                    { NULL, -1, ltSystem }
+                    { nullptr, -1, ltSystem }
                 };
                 return s_aFormats;
             }
@@ -117,14 +117,14 @@ namespace frm
                     { "JJ-MM-TT", -1, ltGerman },
                     { "JJJJ-MM-TT", -1, ltGerman },
 
-                    { NULL, -1, ltSystem }
+                    { nullptr, -1, ltSystem }
                 };
                 return s_aFormats;
             }
         }
 
         OSL_FAIL("lcl_getFormatTable: invalid id!");
-        return NULL;
+        return nullptr;
     }
 
     OLimitedFormats::OLimitedFormats(const Reference< XComponentContext >& _rxContext, const sal_Int16 _nClassId)
@@ -252,11 +252,11 @@ namespace frm
             // seek to the nValue'th entry
             sal_Int32 nLookup = 0;
             for (   ;
-                    (NULL != pFormats->pDescription) && (nLookup < nValue);
+                    (nullptr != pFormats->pDescription) && (nLookup < nValue);
                     ++pFormats, ++nLookup
                 )
                 ;
-            OSL_ENSURE(NULL != pFormats->pDescription, "OLimitedFormats::getFormatKeyPropertyValue: did not find the value!");
+            OSL_ENSURE(nullptr != pFormats->pDescription, "OLimitedFormats::getFormatKeyPropertyValue: did not find the value!");
             if (pFormats->pDescription)
                 _rValue <<= pFormats->nKey;
         }
@@ -290,7 +290,7 @@ namespace frm
             // look for the entry with the given format key
             sal_Int32 nTablePosition = 0;
             for (   ;
-                    (NULL != pFormats->pDescription) && (nNewFormat != pFormats->nKey);
+                    (nullptr != pFormats->pDescription) && (nNewFormat != pFormats->nKey);
                     ++pFormats, ++nTablePosition
                 )
             {
@@ -298,7 +298,7 @@ namespace frm
                     _rOldValue <<= pFormats->nKey;
             }
 
-            bool bFoundIt = (NULL != pFormats->pDescription);
+            bool bFoundIt = (nullptr != pFormats->pDescription);
             bool bModified = false;
             if (bFoundIt)
             {
@@ -327,7 +327,7 @@ namespace frm
             if (!bFoundIt)
             {   // somebody gave us a format which we can't translate
                 OUString sMessage ("This control supports only a very limited number of formats.");
-                throw IllegalArgumentException(sMessage, NULL, 2);
+                throw IllegalArgumentException(sMessage, nullptr, 2);
             }
 
             return bModified;
@@ -366,7 +366,7 @@ namespace frm
         if (0 == --s_nInstanceCount)
         {
             ::comphelper::disposeComponent(s_xStandardFormats);
-            s_xStandardFormats = NULL;
+            s_xStandardFormats = nullptr;
 
             clearTable(FormComponentType::TIMEFIELD);
             clearTable(FormComponentType::DATEFIELD);

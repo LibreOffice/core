@@ -198,7 +198,7 @@ namespace frm
         if ( m_pImpl.is() )
         {
             m_pImpl->dispose();
-            m_pImpl = NULL;
+            m_pImpl = nullptr;
         }
 
         Reference< XPropertySet > xModelProps( _rxModel, UNO_QUERY );

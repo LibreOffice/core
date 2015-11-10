@@ -272,7 +272,7 @@ namespace frm
             @precond
                 our mutex is locked
         */
-        bool        impl_commitCurrentRecord_throw( sal_Bool* _pRecordInserted = NULL ) const;
+        bool        impl_commitCurrentRecord_throw( sal_Bool* _pRecordInserted = nullptr ) const;
 
         /** impl-version of commitCurrentControl, which can be called in const-contexts
 

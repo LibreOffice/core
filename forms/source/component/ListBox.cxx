@@ -436,7 +436,7 @@ namespace frm
     {
         // if both SelectedItems and StringItemList are set, care for this
         // #i27024#
-        const Any* pSelectSequenceValue = NULL;
+        const Any* pSelectSequenceValue = nullptr;
 
         const OUString* pStartPos = _rPropertyNames.getConstArray();
         const OUString* pEndPos   = _rPropertyNames.getConstArray() + _rPropertyNames.getLength();
@@ -1948,7 +1948,7 @@ namespace frm
                 t = m_pItemBroadcaster;
                 m_pItemBroadcaster->removeEventsForProcessor( this );
                 m_pItemBroadcaster->terminate();
-                m_pItemBroadcaster = NULL;
+                m_pItemBroadcaster = nullptr;
             }
         }
         if (t.is()) {

@@ -141,7 +141,7 @@ OControl::~OControl()
 void OControl::doResetDelegator()
 {
     if ( m_xAggregate.is() )
-        m_xAggregate->setDelegator( NULL );
+        m_xAggregate->setDelegator( nullptr );
 }
 
 void OControl::doSetDelegator()
@@ -199,7 +199,7 @@ void OControl::disposing()
 {
     OComponentHelper::disposing();
 
-    m_aWindowStateGuard.attach( NULL, NULL );
+    m_aWindowStateGuard.attach( nullptr, nullptr );
 
     Reference< XComponent > xComp;
     if (query_aggregation(m_xAggregate, xComp))
@@ -599,7 +599,7 @@ void OControlModel::clonedFrom( const OControlModel* /*_pOriginal*/ )
 void OControlModel::doResetDelegator()
 {
     if (m_xAggregate.is())
-        m_xAggregate->setDelegator(NULL);
+        m_xAggregate->setDelegator(nullptr);
 }
 
 void OControlModel::doSetDelegator()
@@ -708,7 +708,7 @@ void SAL_CALL OControlModel::disposing(const css::lang::EventObject& _rSource) t
     if (_rSource.Source == m_xParent)
     {
         osl::MutexGuard aGuard(m_aMutex);
-        m_xParent = NULL;
+        m_xParent = nullptr;
     }
     else
     {
@@ -1159,7 +1159,7 @@ OBoundControlModel::OBoundControlModel(
     ,m_aUpdateListeners(m_aMutex)
     ,m_aFormComponentListeners( m_aMutex )
     ,m_bInputRequired( true )
-    ,m_pAggPropMultiplexer( NULL )
+    ,m_pAggPropMultiplexer( nullptr )
     ,m_bFormListening( false )
     ,m_bLoaded(false)
     ,m_bRequired(false)
@@ -1192,7 +1192,7 @@ OBoundControlModel::OBoundControlModel(
     ,m_aFormComponentListeners( m_aMutex )
     ,m_xValidator( _pOriginal->m_xValidator )
     ,m_bInputRequired( true )
-    ,m_pAggPropMultiplexer( NULL )
+    ,m_pAggPropMultiplexer( nullptr )
     ,m_bFormListening( false )
     ,m_bLoaded( false )
     ,m_bRequired( false )
@@ -1237,7 +1237,7 @@ OBoundControlModel::~OBoundControlModel()
     {
         m_pAggPropMultiplexer->dispose();
         m_pAggPropMultiplexer->release();
-        m_pAggPropMultiplexer = NULL;
+        m_pAggPropMultiplexer = nullptr;
     }
 }
 
@@ -1384,7 +1384,7 @@ void OBoundControlModel::disposing()
         resetField();
     }
 
-    m_xCursor = NULL;
+    m_xCursor = nullptr;
     Reference< XComponent > xComp( m_xLabelControl, UNO_QUERY );
     if ( xComp.is() )
         xComp->removeEventListener(static_cast< XEventListener* >( static_cast< XPropertyChangeListener* >( this ) ) );
@@ -1504,7 +1504,7 @@ void SAL_CALL OBoundControlModel::disposing(const css::lang::EventObject& _rEven
     else if ( _rEvent.Source == m_xLabelControl )
     {
         Reference<XPropertySet> xOldValue = m_xLabelControl;
-        m_xLabelControl = NULL;
+        m_xLabelControl = nullptr;
         // fire a propertyChanged (when we leave aLock's scope)
         aLock.addPropertyNotification( PROPERTY_ID_CONTROLLABEL, makeAny( xOldValue ), makeAny( m_xLabelControl ) );
     }
@@ -1566,7 +1566,7 @@ void OBoundControlModel::defaultCommonProperties()
     Reference<css::lang::XComponent> xComp(m_xLabelControl, UNO_QUERY);
     if (xComp.is())
         xComp->removeEventListener(static_cast<css::lang::XEventListener*>(static_cast<XPropertyChangeListener*>(this)));
-    m_xLabelControl = NULL;
+    m_xLabelControl = nullptr;
 }
 
 void OBoundControlModel::readCommonProperties(const Reference<css::io::XObjectInputStream>& _rxInStream)
@@ -1734,7 +1734,7 @@ void OBoundControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, co
                 Reference< XComponent > xComp( m_xLabelControl, UNO_QUERY );
                 if ( xComp.is() )
                     xComp->removeEventListener( static_cast< XPropertyChangeListener* >( this ) );
-                m_xLabelControl = NULL;
+                m_xLabelControl = nullptr;
                 break;
             }
 
@@ -1963,7 +1963,7 @@ bool OBoundControlModel::connectToField(const Reference<XRowSet>& rForm)
             }
 
             else
-                impl_setField_noNotify( NULL );
+                impl_setField_noNotify( nullptr );
             if ( m_xField.is() )
             {
                 if ( m_xField->getPropertySetInfo()->hasPropertyByName( PROPERTY_VALUE ) )
@@ -1981,7 +1981,7 @@ bool OBoundControlModel::connectToField(const Reference<XRowSet>& rForm)
                 else
                 {
                     SAL_WARN("forms.component", "OBoundControlModel::connectToField: property " PROPERTY_VALUE " not supported!");
-                    impl_setField_noNotify( NULL );
+                    impl_setField_noNotify( nullptr );
                 }
 
             }
@@ -2076,7 +2076,7 @@ void OBoundControlModel::impl_disconnectDatabaseColumn_noNotify()
         resetField();
     }
 
-    m_xCursor = NULL;
+    m_xCursor = nullptr;
     m_bLoaded = false;
 }
 
@@ -2634,7 +2634,7 @@ Any OBoundControlModel::translateExternalValueToControlValue( const Any& _rExter
     // if the external value is VOID, and our value property is not allowed to be VOID,
     // then default-construct a value
     if ( !aControlValue.hasValue() && !m_bValuePropertyMayBeVoid )
-        aControlValue.setValue( NULL, m_aValuePropertyType );
+        aControlValue.setValue( nullptr, m_aValuePropertyType );
     // out of here
     return aControlValue;
 }

@@ -759,8 +759,8 @@ namespace frm
 
         PropertyValue aProp;
         NamedValue aValue;
-        const OUString* pName = NULL;
-        const Any* pValue = NULL;
+        const OUString* pName = nullptr;
+        const Any* pValue = nullptr;
         Reference< XPropertySet > xControlModel;
 
         if (aArguments.getLength() == 3

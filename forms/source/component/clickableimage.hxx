@@ -165,7 +165,7 @@ namespace frm
         explicit ImageModelMethodGuard( OClickableImageBaseModel& _rModel )
             :GuardBase( _rModel.getMutex( OClickableImageBaseModel::GuardAccess() ) )
         {
-            if ( NULL == _rModel.getImageProducer( OClickableImageBaseModel::GuardAccess() ) )
+            if ( nullptr == _rModel.getImageProducer( OClickableImageBaseModel::GuardAccess() ) )
                 throw css::lang::DisposedException(
                     OUString(),
                     static_cast< css::form::XImageProducerSupplier* >( &_rModel )

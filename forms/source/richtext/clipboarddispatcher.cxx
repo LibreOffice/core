@@ -130,7 +130,7 @@ namespace frm
 
     OPasteClipboardDispatcher::OPasteClipboardDispatcher( EditView& _rView )
         :OClipboardDispatcher( _rView, ePaste )
-        ,m_pClipListener( NULL )
+        ,m_pClipListener( nullptr )
         ,m_bPastePossible( false )
     {
         m_pClipListener = new TransferableClipboardListener( LINK( this, OPasteClipboardDispatcher, OnClipboardChanged ) );
@@ -172,7 +172,7 @@ namespace frm
                 m_pClipListener->AddRemoveListener( getEditView()->GetWindow(), false );
 
             m_pClipListener->release();
-            m_pClipListener = NULL;
+            m_pClipListener = nullptr;
         }
 
         OClipboardDispatcher::disposing( _rClearBeforeNotify );

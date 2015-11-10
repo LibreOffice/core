@@ -62,7 +62,7 @@ CSubmission::SubmissionResult CSubmissionGet::submit(const css::uno::Reference< 
         pHelper->m_aInteractionHandler = aInteractionHandler;
     else
         pHelper->m_aInteractionHandler.set(
-            css::task::InteractionHandler::createWithParent(m_xContext, 0), UNO_QUERY_THROW);
+            css::task::InteractionHandler::createWithParent(m_xContext, nullptr), UNO_QUERY_THROW);
     CProgressHandlerHelper *pProgressHelper = new CProgressHandlerHelper;
     pHelper->m_aProgressHandler.set(pProgressHelper);
 

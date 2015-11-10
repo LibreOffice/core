@@ -261,12 +261,12 @@ ODatabaseForm::ODatabaseForm(const Reference<XComponentContext>& _rxContext)
     ,m_aErrorListeners(m_aMutex)
     ,m_aResetListeners( *this, m_aMutex )
     ,m_aPropertyBagHelper( *this )
-    ,m_pAggregatePropertyMultiplexer(NULL)
-    ,m_pGroupManager( NULL )
+    ,m_pAggregatePropertyMultiplexer(nullptr)
+    ,m_pGroupManager( nullptr )
     ,m_aParameterManager( m_aMutex, _rxContext )
     ,m_aFilterManager()
-    ,m_pLoadTimer(NULL)
-    ,m_pThread(NULL)
+    ,m_pLoadTimer(nullptr)
+    ,m_pThread(nullptr)
     ,m_nResetsPending(0)
     ,m_nPrivileges(0)
     ,m_bInsertOnly( false )
@@ -300,12 +300,12 @@ ODatabaseForm::ODatabaseForm( const ODatabaseForm& _cloneSource )
     ,m_aErrorListeners( m_aMutex )
     ,m_aResetListeners( *this, m_aMutex )
     ,m_aPropertyBagHelper( *this )
-    ,m_pAggregatePropertyMultiplexer( NULL )
-    ,m_pGroupManager( NULL )
+    ,m_pAggregatePropertyMultiplexer( nullptr )
+    ,m_pGroupManager( nullptr )
     ,m_aParameterManager( m_aMutex, _cloneSource.m_xContext )
     ,m_aFilterManager()
-    ,m_pLoadTimer( NULL )
-    ,m_pThread( NULL )
+    ,m_pLoadTimer( nullptr )
+    ,m_pThread( nullptr )
     ,m_nResetsPending( 0 )
     ,m_nPrivileges( 0 )
     ,m_bInsertOnly( _cloneSource.m_bInsertOnly )
@@ -433,18 +433,18 @@ ODatabaseForm::~ODatabaseForm()
 {
 
     m_pGroupManager->release();
-    m_pGroupManager = NULL;
+    m_pGroupManager = nullptr;
 
     if (m_xAggregate.is())
-        m_xAggregate->setDelegator( NULL );
+        m_xAggregate->setDelegator( nullptr );
 
-    m_aWarnings.setExternalWarnings( NULL );
+    m_aWarnings.setExternalWarnings( nullptr );
 
     if (m_pAggregatePropertyMultiplexer)
     {
         m_pAggregatePropertyMultiplexer->dispose();
         m_pAggregatePropertyMultiplexer->release();
-        m_pAggregatePropertyMultiplexer = NULL;
+        m_pAggregatePropertyMultiplexer = nullptr;
     }
 }
 
@@ -1018,7 +1018,7 @@ bool ODatabaseForm::InsertFilePart( INetMIMEMessage& rParent, const OUString& rN
 {
     OUString aFileName(rFileName);
     OUString aContentType(CONTENT_TYPE_STR_TEXT_PLAIN);
-    SvStream *pStream = 0;
+    SvStream *pStream = nullptr;
 
     if (!aFileName.isEmpty())
     {
@@ -1033,7 +1033,7 @@ bool ODatabaseForm::InsertFilePart( INetMIMEMessage& rParent, const OUString& rN
             if (!pStream || (pStream->GetError() != ERRCODE_NONE))
             {
                 delete pStream;
-                pStream = 0;
+                pStream = nullptr;
             }
             sal_Int32 nSepInd = aFileName.lastIndexOf('.');
             OUString aExtension = aFileName.copy( nSepInd + 1, aFileName.getLength() - nSepInd - 1 );
@@ -1284,7 +1284,7 @@ void ODatabaseForm::disposing()
         if (m_pThread)
         {
             m_pThread->release();
-            m_pThread = NULL;
+            m_pThread = nullptr;
         }
     }
 
@@ -2559,7 +2559,7 @@ void SAL_CALL ODatabaseForm::disposing(const EventObject& Source) throw( Runtime
 
 void ODatabaseForm::impl_createLoadTimer()
 {
-    OSL_PRECOND( m_pLoadTimer == NULL, "ODatabaseForm::impl_createLoadTimer: timer already exists!" );
+    OSL_PRECOND( m_pLoadTimer == nullptr, "ODatabaseForm::impl_createLoadTimer: timer already exists!" );
     m_pLoadTimer = new Timer();
     m_pLoadTimer->SetTimeout(100);
     m_pLoadTimer->SetTimeoutHdl(LINK(this,ODatabaseForm,OnTimeout));

@@ -64,7 +64,7 @@ namespace frm
 
         OUString lcl_getCommandURL( const sal_Int16 _nFormFeature )
         {
-            const sal_Char* pAsciiCommandName = NULL;
+            const sal_Char* pAsciiCommandName = nullptr;
             switch ( _nFormFeature )
             {
                 case FormFeature::MoveAbsolute          : pAsciiCommandName = "AbsoluteRecord";     break;
@@ -87,7 +87,7 @@ namespace frm
                 case FormFeature::ToggleApplyFilter     : pAsciiCommandName = "FormFiltered";       break;
                 case FormFeature::RemoveFilterAndSort   : pAsciiCommandName = "RemoveFilterSort";   break;
             }
-            if ( pAsciiCommandName != NULL )
+            if ( pAsciiCommandName != nullptr )
                 return ".uno:" + OUString::createFromAscii( pAsciiCommandName );
 
             OSL_FAIL( "lcl_getCommandURL: unknown FormFeature!" );
@@ -103,7 +103,7 @@ namespace frm
     public:
         explicit ImplNavToolBar( vcl::Window* _pParent )
             :ToolBox( _pParent, WB_3DLOOK )
-            ,m_pDispatcher( NULL )
+            ,m_pDispatcher( nullptr )
         {
         }
 
@@ -135,11 +135,11 @@ namespace frm
     NavigationToolBar::NavigationToolBar( vcl::Window* _pParent, WinBits _nStyle, const PCommandImageProvider& _pImageProvider,
             const PCommandDescriptionProvider& _pDescriptionProvider )
         :Window( _pParent, _nStyle )
-        ,m_pDispatcher( NULL )
+        ,m_pDispatcher( nullptr )
         ,m_pImageProvider( _pImageProvider )
         ,m_pDescriptionProvider( _pDescriptionProvider )
         ,m_eImageSize( eSmall )
-        ,m_pToolbar( NULL )
+        ,m_pToolbar( nullptr )
     {
         implInit( );
     }
@@ -298,7 +298,7 @@ namespace frm
 
                 if ( pSupportedFeatures->bItemWindow )
                 {
-                    vcl::Window* pItemWindow = NULL;
+                    vcl::Window* pItemWindow = nullptr;
                     if ( FormFeature::MoveAbsolute == pSupportedFeatures->nId )
                     {
                         pItemWindow = VclPtr<RecordPositionInput>::Create( m_pToolbar );
@@ -337,7 +337,7 @@ namespace frm
             }
         }
 
-        forEachItemWindow( &NavigationToolBar::adjustItemWindowWidth, NULL );
+        forEachItemWindow( &NavigationToolBar::adjustItemWindowWidth, nullptr );
 
         implUpdateImages();
     }
@@ -409,7 +409,7 @@ namespace frm
 
     void NavigationToolBar::ShowFunctionGroup( FunctionGroup _eGroup, bool _bShow )
     {
-        const sal_uInt16* pGroupIds = NULL;
+        const sal_uInt16* pGroupIds = nullptr;
 
         switch ( _eGroup )
         {
@@ -486,12 +486,12 @@ namespace frm
                 break;
 
             case StateChangedType::ControlFont:
-                forEachItemWindow( &NavigationToolBar::setItemControlFont, NULL );
-                forEachItemWindow( &NavigationToolBar::adjustItemWindowWidth, NULL );
+                forEachItemWindow( &NavigationToolBar::setItemControlFont, nullptr );
+                forEachItemWindow( &NavigationToolBar::adjustItemWindowWidth, nullptr );
                 break;
 
             case StateChangedType::ControlForeground:
-                forEachItemWindow( &NavigationToolBar::setItemControlForeground, NULL );
+                forEachItemWindow( &NavigationToolBar::setItemControlForeground, nullptr );
                 break;
 
             case StateChangedType::Mirroring:
@@ -524,7 +524,7 @@ namespace frm
     {
         Window::SetControlBackground();
         m_pToolbar->SetControlBackground();
-        forEachItemWindow( &NavigationToolBar::setItemBackground, NULL );
+        forEachItemWindow( &NavigationToolBar::setItemBackground, nullptr );
 
         implUpdateImages();
     }
@@ -544,7 +544,7 @@ namespace frm
     {
         Window::SetTextLineColor( );
         m_pToolbar->SetTextLineColor( );
-        forEachItemWindow( &NavigationToolBar::setTextLineColor, NULL );
+        forEachItemWindow( &NavigationToolBar::setTextLineColor, nullptr );
     }
 
 
@@ -659,7 +659,7 @@ namespace frm
 
     RecordPositionInput::RecordPositionInput( vcl::Window* _pParent )
         :NumericField( _pParent, WB_BORDER | WB_VCENTER )
-        ,m_pDispatcher( NULL )
+        ,m_pDispatcher( nullptr )
     {
         SetMin( 1 );
         SetFirst( 1 );

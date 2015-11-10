@@ -24,7 +24,7 @@ namespace frm
 {
     RichTextViewPort::RichTextViewPort( vcl::Window* _pParent )
         : Control ( _pParent )
-        , m_pView(NULL)
+        , m_pView(nullptr)
         , m_bHideInactiveSelection( true )
     {
     }

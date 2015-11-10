@@ -101,8 +101,8 @@ void Model::ensureAtLeastOneInstance()
 /** Model default constructor; create empty model */
 Model::Model() :
     msID(),
-    mpBindings( NULL ),
-    mpSubmissions( NULL ),
+    mpBindings( nullptr ),
+    mpSubmissions( nullptr ),
     mpInstances( new InstanceCollection ),
     mxNamespaces( new NameContainer<OUString>() ),
     mxBindings( mpBindings ),
@@ -129,13 +129,13 @@ Model::~Model() throw()
 {
     // give up bindings & submissions; the mxBindings/mxSubmissions
     // references will then delete them
-    mpBindings = NULL;
-    mpSubmissions = NULL;
+    mpBindings = nullptr;
+    mpSubmissions = nullptr;
 }
 
 static Model* lcl_getModel( const Reference<XUnoTunnel>& xTunnel )
 {
-    Model* pModel = NULL;
+    Model* pModel = nullptr;
     if( xTunnel.is() )
         pModel = reinterpret_cast<Model*>(
             xTunnel->getSomething( Model::getUnoTunnelID() ) );
@@ -219,7 +219,7 @@ void Model::dbg_assertInvariant() const
 // MIP management
 void Model::addMIP( void* pTag, const XNode_t& xNode, const MIP& rMIP )
 {
-    OSL_ENSURE( pTag != NULL, "empty tag?" );
+    OSL_ENSURE( pTag != nullptr, "empty tag?" );
     OSL_ENSURE( xNode.is(), "no node" );
 
     MIPs_t::value_type aValue( xNode, ::std::pair<void*,MIP>( pTag, rMIP ) );
@@ -228,7 +228,7 @@ void Model::addMIP( void* pTag, const XNode_t& xNode, const MIP& rMIP )
 
 void Model::removeMIPs( void* pTag )
 {
-    OSL_ENSURE( pTag != NULL, "empty tag?" );
+    OSL_ENSURE( pTag != nullptr, "empty tag?" );
 
     for( MIPs_t::iterator aIter = maMIPs.begin();
          aIter != maMIPs.end(); )
@@ -273,14 +273,14 @@ MIP Model::queryMIP( const XNode_t& xNode ) const
 
 void Model::rebind()
 {
-    OSL_ENSURE( mpBindings != NULL, "bindings?" );
+    OSL_ENSURE( mpBindings != nullptr, "bindings?" );
 
     // iterate over all bindings and call update
     sal_Int32 nCount = mpBindings->countItems();
     for( sal_Int32 i = 0; i < nCount; i++ )
     {
         Binding* pBind = Binding::getBinding( mpBindings->Collection<XPropertySet_t>::getItem( i ) );
-        OSL_ENSURE( pBind != NULL, "binding?" );
+        OSL_ENSURE( pBind != nullptr, "binding?" );
         pBind->update();
     }
 }
@@ -294,7 +294,7 @@ void Model::deferNotifications( bool bDefer )
     for( sal_Int32 i = 0; i < nCount; i++ )
     {
         Binding* pBind = Binding::getBinding( mpBindings->Collection<XPropertySet_t>::getItem( i ) );
-        OSL_ENSURE( pBind != NULL, "binding?" );
+        OSL_ENSURE( pBind != nullptr, "binding?" );
         pBind->deferNotifications( bDefer );
     }
 }
@@ -370,7 +370,7 @@ void Model::loadInstance( sal_Int32 nInstance )
     // find URL from instance
     OUString sURL;
     bool bOnce = false;
-    getInstanceData( aSequence, NULL, NULL, &sURL, &bOnce );
+    getInstanceData( aSequence, nullptr, nullptr, &sURL, &bOnce );
 
     // if we have a URL, load the document and set it into the instance
     if( !sURL.isEmpty() )
@@ -386,8 +386,8 @@ void Model::loadInstance( sal_Int32 nInstance )
                 if( xInstance.is() )
                 {
                     OUString sEmpty;
-                    setInstanceData( aSequence, NULL, &xInstance,
-                                     bOnce ? &sEmpty : &sURL, NULL);
+                    setInstanceData( aSequence, nullptr, &xInstance,
+                                     bOnce ? &sEmpty : &sURL, nullptr);
                     mpInstances->setItem( nInstance, aSequence );
                 }
             }
@@ -417,7 +417,7 @@ bool Model::isValid() const
     for( sal_Int32 i = 0; bValid && i < nCount; i++ )
     {
         Binding* pBind = Binding::getBinding( mpBindings->Collection<XPropertySet_t>::getItem( i ) );
-        OSL_ENSURE( pBind != NULL, "binding?" );
+        OSL_ENSURE( pBind != nullptr, "binding?" );
         bValid = pBind->isValid();
     }
     return bValid;
@@ -497,7 +497,7 @@ void SAL_CALL Model::submitWithInteraction(
     {
         Submission* pSubmission =
             Submission::getSubmission( mpSubmissions->getItem( sID ) );
-        OSL_ENSURE( pSubmission != NULL, "no submission?" );
+        OSL_ENSURE( pSubmission != nullptr, "no submission?" );
         OSL_ENSURE( pSubmission->getModel() == Reference<XModel>( this ),
                     "wrong model" );
 
@@ -509,7 +509,7 @@ void SAL_CALL Model::submitWithInteraction(
 void Model::submit( const OUString& sID )
     throw( VetoException, WrappedTargetException, RuntimeException, std::exception )
 {
-    submitWithInteraction( sID, NULL );
+    submitWithInteraction( sID, nullptr );
 }
 
 css::uno::Reference<css::xforms::XDataTypeRepository> SAL_CALL Model::getDataTypeRepository(  )
@@ -539,7 +539,7 @@ css::uno::Reference<css::xml::dom::XDocument> Model::getInstanceDocument( const 
     sal_Int32 nInstance = lcl_findInstance( mpInstances, rName );
     if( nInstance != -1 )
         getInstanceData( mpInstances->getItem( nInstance ),
-                         NULL, &aInstance, NULL, NULL );
+                         nullptr, &aInstance, nullptr, nullptr );
     return aInstance;
 }
 
@@ -549,7 +549,7 @@ css::uno::Reference<css::xml::dom::XDocument> SAL_CALL Model::getDefaultInstance
     ensureAtLeastOneInstance();
     DBG_ASSERT( mpInstances->countItems() > 0, "no instance?" );
     Reference<XDocument> aInstance;
-    getInstanceData( mpInstances->getItem( 0 ), NULL, &aInstance, NULL, NULL );
+    getInstanceData( mpInstances->getItem( 0 ), nullptr, &aInstance, nullptr, nullptr );
     return aInstance;
 }
 
@@ -579,7 +579,7 @@ Model::XPropertySet_t Model::getBinding( const OUString& sId )
     throw( RuntimeException, std::exception )
 {
     DBG_INVARIANT();
-    return mpBindings->hasItem( sId ) ? mpBindings->getItem( sId ) : NULL;
+    return mpBindings->hasItem( sId ) ? mpBindings->getItem( sId ) : nullptr;
 }
 
 css::uno::Reference<css::container::XSet> Model::getBindings()
@@ -670,7 +670,7 @@ void Model::update()
 sal_Int64 Model::getSomething( const css::uno::Sequence<sal_Int8>& xId )
     throw( RuntimeException, std::exception )
 {
-    return reinterpret_cast<sal_Int64>( ( xId == getUnoTunnelID() ) ? this : NULL );
+    return reinterpret_cast<sal_Int64>( ( xId == getUnoTunnelID() ) ? this : nullptr );
 }
 
 Sequence<sal_Int8> Model::getImplementationId()

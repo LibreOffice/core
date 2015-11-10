@@ -130,7 +130,7 @@ Sequence<Type> OImageControlModel::_getTypes()
 OImageControlModel::OImageControlModel(const Reference<XComponentContext>& _rxFactory)
     :OBoundControlModel( _rxFactory, VCL_CONTROLMODEL_IMAGECONTROL, FRM_SUN_CONTROL_IMAGECONTROL, false, false, false )
                     // use the old control name for compytibility reasons
-    ,m_pImageProducer( NULL )
+    ,m_pImageProducer( nullptr )
     ,m_bExternalGraphic( true )
     ,m_bReadOnly( false )
     ,m_sImageURL()
@@ -146,7 +146,7 @@ OImageControlModel::OImageControlModel(const Reference<XComponentContext>& _rxFa
 OImageControlModel::OImageControlModel( const OImageControlModel* _pOriginal, const Reference< XComponentContext >& _rxFactory )
     :OBoundControlModel( _pOriginal, _rxFactory )
                 // use the old control name for compytibility reasons
-    ,m_pImageProducer( NULL )
+    ,m_pImageProducer( nullptr )
     ,m_bExternalGraphic( true )
     ,m_bReadOnly( _pOriginal->m_bReadOnly )
     ,m_sImageURL( _pOriginal->m_sImageURL )
@@ -413,7 +413,7 @@ bool OImageControlModel::impl_updateStreamForURL_lck( const OUString& _rURL, Val
     else
     {
         pImageStream.reset( ::utl::UcbStreamHelper::CreateStream( _rURL, StreamMode::READ ) );
-        bool bSetNull = ( pImageStream.get() == NULL ) || ( ERRCODE_NONE != pImageStream->GetErrorCode() );
+        bool bSetNull = ( pImageStream.get() == nullptr ) || ( ERRCODE_NONE != pImageStream->GetErrorCode() );
 
         if ( !bSetNull )
         {
@@ -667,7 +667,7 @@ void SAL_CALL OImageControlModel::startProduction(  ) throw (RuntimeException, s
 
 IMPL_LINK_TYPED( OImageControlModel, OnImageImportDone, ::Graphic*, i_pGraphic, void )
 {
-    const Reference< XGraphic > xGraphic( i_pGraphic != NULL ? Image( i_pGraphic->GetBitmapEx() ).GetXGraphic() : NULL );
+    const Reference< XGraphic > xGraphic( i_pGraphic != nullptr ? Image( i_pGraphic->GetBitmapEx() ).GetXGraphic() : nullptr );
     m_bExternalGraphic = false;
     try
     {

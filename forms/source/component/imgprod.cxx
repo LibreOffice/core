@@ -171,7 +171,7 @@ ErrCode ImgProdLockBytes::Stat( SvLockBytesStat* pStat, SvLockBytesStatFlag eFla
 
 // - ImageProducer -
 ImageProducer::ImageProducer()
-    : mpStm(NULL)
+    : mpStm(nullptr)
     , mnTransIndex(0)
     , mbConsInit(false)
 {
@@ -181,10 +181,10 @@ ImageProducer::ImageProducer()
 ImageProducer::~ImageProducer()
 {
     delete mpGraphic;
-    mpGraphic = NULL;
+    mpGraphic = nullptr;
 
     delete mpStm;
-    mpStm = NULL;
+    mpStm = nullptr;
 }
 
 // css::uno::XInterface
@@ -233,10 +233,10 @@ void ImageProducer::SetImage( const OUString& rPath )
     else if( !maURL.isEmpty() )
     {
         SvStream* pIStm = ::utl::UcbStreamHelper::CreateStream( maURL, STREAM_STD_READ );
-        mpStm = pIStm ? new SvStream( new ImgProdLockBytes( pIStm, true ) ) : NULL;
+        mpStm = pIStm ? new SvStream( new ImgProdLockBytes( pIStm, true ) ) : nullptr;
     }
     else
-        mpStm = NULL;
+        mpStm = nullptr;
 }
 
 
@@ -263,7 +263,7 @@ void ImageProducer::setImage( css::uno::Reference< css::io::XInputStream > & rIn
     if( rInputStmRef.is() )
         mpStm = new SvStream( new ImgProdLockBytes( rInputStmRef ) );
     else
-        mpStm = NULL;
+        mpStm = nullptr;
 }
 
 
@@ -314,7 +314,7 @@ void ImageProducer::startProduction() throw(css::uno::RuntimeException, std::exc
                 (*iter)->complete( css::awt::ImageStatus::IMAGESTATUS_STATICIMAGEDONE, this );
             }
 
-            maDoneHdl.Call( NULL );
+            maDoneHdl.Call( nullptr );
         }
     }
 }
@@ -441,7 +441,7 @@ void ImageProducer::ImplUpdateConsumer( const Graphic& rGraphic )
     if( pBmpAcc )
     {
         Bitmap              aMask( aBmpEx.GetMask() );
-        BitmapReadAccess*   pMskAcc = !!aMask ? aMask.AcquireReadAccess() : NULL;
+        BitmapReadAccess*   pMskAcc = !!aMask ? aMask.AcquireReadAccess() : nullptr;
         const long          nWidth = pBmpAcc->Width();
         const long          nHeight = pBmpAcc->Height();
         const long          nStartX = 0L;

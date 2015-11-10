@@ -121,7 +121,7 @@ CSubmission::SubmissionResult CSubmission::replace(const OUString& aReplace, con
         pHelper->m_aInteractionHandler = _xHandler;
     else
         pHelper->m_aInteractionHandler.set(
-            InteractionHandler::createWithParent(m_xContext, 0), UNO_QUERY_THROW);
+            InteractionHandler::createWithParent(m_xContext, nullptr), UNO_QUERY_THROW);
 
     CProgressHandlerHelper *pProgressHelper = new CProgressHandlerHelper;
     pHelper->m_aProgressHandler.set(pProgressHelper);

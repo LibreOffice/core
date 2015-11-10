@@ -138,7 +138,7 @@ void StandardFormatsSupplier::notifyTermination()
     // earlier than upon unloading the library
     // #i29147#
     s_xDefaultFormatsSupplier = WeakReference< XNumberFormatsSupplier >( );
-    SetNumberFormatter( NULL );
+    SetNumberFormatter( nullptr );
     DELETEZ( m_pMyPrivateFormatter );
 }
 Sequence<Type> OFormattedControl::_getTypes()
@@ -157,7 +157,7 @@ Any SAL_CALL OFormattedControl::queryAggregation(const Type& _rType) throw (Runt
 }
 OFormattedControl::OFormattedControl(const Reference<XComponentContext>& _rxFactory)
                :OBoundControl(_rxFactory, VCL_CONTROL_FORMATTEDFIELD)
-               ,m_nKeyEvent(0)
+               ,m_nKeyEvent(nullptr)
 {
     osl_atomic_increment(&m_refCount);
     {
@@ -235,7 +235,7 @@ void OFormattedControl::keyReleased(const css::awt::KeyEvent& /*e*/) throw ( css
 
 IMPL_LINK_NOARG_TYPED(OFormattedControl, OnKeyPressed, void*, void)
 {
-    m_nKeyEvent = 0;
+    m_nKeyEvent = nullptr;
     Reference<XFormComponent>  xFComp(getModel(), UNO_QUERY);
     css::uno::Reference<css::uno::XInterface>  xParent = xFComp->getParent();
     Reference<XSubmit>  xSubmit(xParent, UNO_QUERY);
@@ -263,7 +263,7 @@ void OFormattedModel::implConstruct()
     // members
     m_bOriginalNumeric = false;
     m_bNumeric = false;
-    m_xOriginalFormatter = NULL;
+    m_xOriginalFormatter = nullptr;
     m_nKeyType = NumberFormat::UNDEFINED;
     m_aNullDate = DBTypeConversion::getStandardDate();
     m_nFieldType =  DataType::OTHER;
@@ -517,7 +517,7 @@ Reference<XNumberFormatsSupplier>  OFormattedModel::calcFormFormatsSupplier() co
     if (!xNextParentForm.is())
     {
         OSL_FAIL("OFormattedModel::calcFormFormatsSupplier : have no ancestor which is a form !");
-        return NULL;
+        return nullptr;
     }
     // The FormatSupplier of my ancestor (if it has one)
     Reference< XRowSet > xRowSet( xNextParentForm, UNO_QUERY );
@@ -549,7 +549,7 @@ void OFormattedModel::loaded(const EventObject& rEvent) throw ( css::uno::Runtim
 
 void OFormattedModel::onConnectedDbColumn( const Reference< XInterface >& _rxForm )
 {
-    m_xOriginalFormatter = NULL;
+    m_xOriginalFormatter = nullptr;
     // get some properties of the field
     m_nFieldType = DataType::OTHER;
     Reference<XPropertySet> xField = getField();
@@ -639,7 +639,7 @@ void OFormattedModel::onDisconnectedDbColumn()
         m_xAggregateSet->setPropertyValue(PROPERTY_FORMATSSUPPLIER, makeAny(m_xOriginalFormatter));
         m_xAggregateSet->setPropertyValue(PROPERTY_FORMATKEY, Any());
         setPropertyValue(PROPERTY_TREATASNUMERIC, makeAny(m_bOriginalNumeric));
-        m_xOriginalFormatter = NULL;
+        m_xOriginalFormatter = nullptr;
     }
     m_nFieldType = DataType::OTHER;
     m_nKeyType   = NumberFormat::UNDEFINED;

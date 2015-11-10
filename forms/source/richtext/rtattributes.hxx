@@ -62,19 +62,19 @@ namespace frm
     };
 
     inline AttributeState::AttributeState( )
-        :pItemHandleItem ( NULL )
+        :pItemHandleItem ( nullptr )
         ,eSimpleState( eIndetermined )
     {
     }
 
     inline AttributeState::AttributeState( AttributeCheckState _eCheckState )
-        :pItemHandleItem ( NULL )
+        :pItemHandleItem ( nullptr )
         ,eSimpleState( _eCheckState )
     {
     }
 
     inline AttributeState::AttributeState( const AttributeState& _rSource )
-        :pItemHandleItem ( NULL )
+        :pItemHandleItem ( nullptr )
         ,eSimpleState( eIndetermined )
     {
         operator=( _rSource );
@@ -107,7 +107,7 @@ namespace frm
         if ( _pItem )
             pItemHandleItem = _pItem->Clone();
         else
-            pItemHandleItem = NULL;
+            pItemHandleItem = nullptr;
     }
 
     inline bool AttributeState::operator==( const AttributeState& _rRHS )

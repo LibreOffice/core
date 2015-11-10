@@ -82,7 +82,7 @@ namespace frm
 
     RichTextEngine* RichTextEngine::Clone()
     {
-        RichTextEngine* pClone( NULL );
+        RichTextEngine* pClone( nullptr );
         {
             SolarMutexGuard aGuard;
             std::unique_ptr<EditTextObject> pMyText(CreateTextObject());

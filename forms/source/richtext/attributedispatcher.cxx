@@ -51,7 +51,7 @@ namespace frm
 
     void OAttributeDispatcher::disposing( ::osl::ClearableMutexGuard& _rClearBeforeNotify )
     {
-        m_pMasterDispatcher = NULL;
+        m_pMasterDispatcher = nullptr;
         ORichTextFeatureDispatcher::disposing( _rClearBeforeNotify );
     }
 
@@ -102,7 +102,7 @@ namespace frm
 #endif
 
         if ( m_pMasterDispatcher )
-            m_pMasterDispatcher->executeAttribute( m_nAttributeId, NULL );
+            m_pMasterDispatcher->executeAttribute( m_nAttributeId, nullptr );
     }
 
 

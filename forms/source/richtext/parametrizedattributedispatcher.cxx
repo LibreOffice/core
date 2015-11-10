@@ -97,7 +97,7 @@ namespace frm
         SfxAllItemSet aParameterSet( getEditView()->GetEmptyItemSet() );
         TransformParameters( nSlotId, _rArguments, aParameterSet );
 
-        const SfxPoolItem* pArgument = NULL;
+        const SfxPoolItem* pArgument = nullptr;
         if ( aParameterSet.Count() )
         {
             OSL_ENSURE( aParameterSet.Count() == 1, "OParametrizedAttributeDispatcher::convertDispatchArgsToItem: Arguments which form more than 1 item? How this?" );

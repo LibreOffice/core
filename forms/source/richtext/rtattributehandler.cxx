@@ -409,7 +409,7 @@ namespace frm
         // if the current adjustment of the was the default adjustment for the *previous* text direction,
         // then we toggle the adjustment, too
         SvxAdjust eCurrentAdjustment = SVX_ADJUST_LEFT;
-        const SfxPoolItem* pCurrentAdjustment = NULL;
+        const SfxPoolItem* pCurrentAdjustment = nullptr;
         if ( SfxItemState::SET == _rCurrentAttribs.GetItemState( EE_PARA_JUST, true, &pCurrentAdjustment ) )
             eCurrentAdjustment = static_cast< const SvxAdjustItem* >( pCurrentAdjustment )->GetAdjust();
 

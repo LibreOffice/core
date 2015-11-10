@@ -101,8 +101,8 @@ void OComponentEventThread::disposing( const EventObject& evt ) throw ( css::uno
 
         // Free the Control and set pCompImpl to 0,
         // so that the thread knows, that it should terminate.
-        m_xComp = 0;
-        m_pCompImpl = 0;
+        m_xComp = nullptr;
+        m_pCompImpl = nullptr;
 
         // Wake up the thread and terminate
         m_aCond.set();

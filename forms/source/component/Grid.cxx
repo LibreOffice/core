@@ -253,7 +253,7 @@ void OGridControlModel::disposing()
     OControlModel::disposing();
     OErrorBroadcaster::disposing();
     OInterfaceContainer::disposing();
-    setParent(NULL);
+    setParent(nullptr);
     EventObject aEvt(static_cast<XWeak*>(this));
     m_aSelectListeners.disposeAndClear(aEvt);
     m_aResetListeners.disposeAndClear(aEvt);
@@ -694,7 +694,7 @@ Any OGridControlModel::getPropertyDefaultByHandle( sal_Int32 nHandle ) const
 
 OGridColumn* OGridControlModel::getColumnImplementation(const css::uno::Reference<css::uno::XInterface>& _rxIFace)
 {
-    OGridColumn* pImplementation = NULL;
+    OGridColumn* pImplementation = nullptr;
     Reference< XUnoTunnel > xUnoTunnel( _rxIFace, UNO_QUERY );
     if ( xUnoTunnel.is() )
         pImplementation = reinterpret_cast<OGridColumn*>(xUnoTunnel->getSomething(OGridColumn::getUnoTunnelImplementationId()));
@@ -785,7 +785,7 @@ void OGridControlModel::write(const Reference<XObjectOutputStream>& _rxOutStream
     {
         // first the service name for the unerlying model
         OGridColumn* pCol = getColumnImplementation(m_aItems[i]);
-        DBG_ASSERT(pCol != NULL, "OGridControlModel::write : such items should never reach it into my container !");
+        DBG_ASSERT(pCol != nullptr, "OGridControlModel::write : such items should never reach it into my container !");
         _rxOutStream << pCol->getModelName();
         // then the object itself
         sal_Int32 nMark = xMark->createMark();
@@ -896,7 +896,7 @@ void OGridControlModel::read(const Reference<XObjectInputStream>& _rxInStream) t
                 xMark->deleteMark(nMark);
             }
             if ( xCol.is() )
-                implInsert( i, xCol, false, NULL, false );
+                implInsert( i, xCol, false, nullptr, false );
         }
     }
     // In the base implementation events are only read, elements in the container exist

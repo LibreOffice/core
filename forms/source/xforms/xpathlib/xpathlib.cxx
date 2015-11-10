@@ -83,7 +83,7 @@ xmlXPathFunction xforms_lookupFunc(void *, const xmlChar *xname, const xmlChar *
     else if ((strcmp("current", name))==0)
         return xforms_currentFunction;
     else
-        return NULL;
+        return nullptr;
 }
 
 // boolean functions

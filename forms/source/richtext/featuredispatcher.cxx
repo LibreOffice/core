@@ -61,7 +61,7 @@ namespace frm
 
     void ORichTextFeatureDispatcher::disposing( ::osl::ClearableMutexGuard& /*_rClearBeforeNotify*/ )
     {
-        m_pEditView = NULL;
+        m_pEditView = nullptr;
     }
 
 

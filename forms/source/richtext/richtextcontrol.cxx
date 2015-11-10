@@ -170,7 +170,7 @@ namespace frm
             mbCreatingPeer = true;
 
             // determine the VLC window for the parent
-            vcl::Window* pParentWin = NULL;
+            vcl::Window* pParentWin = nullptr;
             if ( _rParentPeer.is() )
             {
                 VCLXWindow* pParentXWin = VCLXWindow::GetImplementation( _rParentPeer );
@@ -277,7 +277,7 @@ namespace frm
         RichTextEngine* pEngine = ORichTextModel::getEditEngine( _rxModel );
         OSL_ENSURE( pEngine, "ORichTextPeer::Create: could not obtaine the edit engine from the model!" );
         if ( !pEngine )
-            return NULL;
+            return nullptr;
 
         // the peer itself
         ORichTextPeer* pPeer = new ORichTextPeer;
@@ -339,7 +339,7 @@ namespace frm
             return;
 
         OutputDevice* pTargetDevice = VCLUnoHelper::GetOutputDevice( getGraphics() );
-        OSL_ENSURE( pTargetDevice != NULL, "ORichTextPeer::draw: no graphics -> no drawing!" );
+        OSL_ENSURE( pTargetDevice != nullptr, "ORichTextPeer::draw: no graphics -> no drawing!" );
         if ( !pTargetDevice )
             return;
 
@@ -468,10 +468,10 @@ namespace frm
         VclPtr< RichTextControl > pRichTextControl = GetAs< RichTextControl >();
         OSL_PRECOND( pRichTextControl, "ORichTextPeer::implCreateDispatcher: invalid window!" );
         if ( !pRichTextControl )
-            return SingleAttributeDispatcher( NULL );
+            return SingleAttributeDispatcher( nullptr );
 
-        ORichTextFeatureDispatcher* pDispatcher = NULL;
-        OAttributeDispatcher* pAttributeDispatcher = NULL;
+        ORichTextFeatureDispatcher* pDispatcher = nullptr;
+        OAttributeDispatcher* pAttributeDispatcher = nullptr;
         switch ( _nSlotId )
         {
         case SID_CUT:
@@ -550,7 +550,7 @@ namespace frm
                 {
                     SfxSlotPool& rSlotPool = SfxSlotPool::GetSlotPool();
                     const SfxSlot* pSlot = rSlotPool.GetSlot( _nSlotId );
-                    const SfxType* pType = pSlot ? pSlot->GetType() : NULL;
+                    const SfxType* pType = pSlot ? pSlot->GetType() : nullptr;
                     if ( pType )
                     {
                         bNeedParametrizedDispatcher = ( pType->nAttribs > 0 );

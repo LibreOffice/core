@@ -55,7 +55,7 @@ namespace frm
 
         // we are the master of the chain's first interceptor
         m_xFirstDispatchInterceptor = _rxInterceptor;
-        m_xFirstDispatchInterceptor->setMasterDispatchProvider( NULL );
+        m_xFirstDispatchInterceptor->setMasterDispatchProvider( nullptr );
             // it's the first of the interceptor chain
     }
 
@@ -88,8 +88,8 @@ namespace frm
                 Reference< XDispatchProviderInterceptor >  xMaster( xChainWalk->getMasterDispatchProvider(), UNO_QUERY );
 
                 // unchain the interceptor that has to be removed
-                xChainWalk->setSlaveDispatchProvider( NULL );
-                xChainWalk->setMasterDispatchProvider( NULL );
+                xChainWalk->setSlaveDispatchProvider( nullptr );
+                xChainWalk->setMasterDispatchProvider( nullptr );
 
                 // reconnect the chain
                 if ( xMaster.is() )
@@ -115,12 +115,12 @@ namespace frm
         while ( xInterceptor.is() )
         {
             // tell the interceptor it has a new (means no) predecessor
-            xInterceptor->setMasterDispatchProvider( NULL );
+            xInterceptor->setMasterDispatchProvider( nullptr );
 
             // ask for it's successor
             Reference< XDispatchProvider > xSlave = xInterceptor->getSlaveDispatchProvider();
             // and give it the new (means no) successoert
-            xInterceptor->setSlaveDispatchProvider( NULL );
+            xInterceptor->setSlaveDispatchProvider( nullptr );
 
             // start over with the next chain element
             xInterceptor.set(xSlave, css::uno::UNO_QUERY);

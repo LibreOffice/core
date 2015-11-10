@@ -137,7 +137,7 @@ Binding::Binding() :
 
 Binding::~Binding()
 {
-    _setModel(NULL);
+    _setModel(nullptr);
 }
 
 void Binding::_setModel( const css::uno::Reference<css::xforms::XModel>& xModel )
@@ -162,7 +162,7 @@ void Binding::_setModel( const css::uno::Reference<css::xforms::XModel>& xModel 
 OUString Binding::getModelID() const
 {
     Model* pModel = getModelImpl();
-    return ( pModel == NULL ) ? OUString() : pModel->getID();
+    return ( pModel == nullptr ) ? OUString() : pModel->getID();
 }
 
 
@@ -243,7 +243,7 @@ bool Binding::isUseful()
     // 3) we are bound to some control
     //    (this can be assumed if some listeners are set)
     bool bUseful =
-        getModelImpl() == NULL
+        getModelImpl() == nullptr
 //        || msBindingID.getLength() > 0
         || ! msTypeName.isEmpty()
         || ! maReadonly.isEmptyExpression()
@@ -298,7 +298,7 @@ OUString Binding::explainInvalid()
 
 EvaluationContext Binding::getEvaluationContext() const
 {
-    OSL_ENSURE( getModelImpl() != NULL, "need model impl" );
+    OSL_ENSURE( getModelImpl() != nullptr, "need model impl" );
     EvaluationContext aContext = getModelImpl()->getEvaluationContext();
     aContext.mxNamespaces = getBindingNamespaces();
     return aContext;
@@ -306,7 +306,7 @@ EvaluationContext Binding::getEvaluationContext() const
 
 ::std::vector<EvaluationContext> Binding::getMIPEvaluationContexts()
 {
-    OSL_ENSURE( getModelImpl() != NULL, "need model impl" );
+    OSL_ENSURE( getModelImpl() != nullptr, "need model impl" );
 
     // bind (in case we were not bound before)
     bind();
@@ -325,7 +325,7 @@ Binding* SAL_CALL Binding::getBinding( const Reference<XPropertySet>& xPropertyS
     Reference<XUnoTunnel> xTunnel( xPropertySet, UNO_QUERY );
     return xTunnel.is()
         ? reinterpret_cast<Binding*>( xTunnel->getSomething(getUnoTunnelID()))
-        : NULL;
+        : nullptr;
 }
 
 
@@ -492,7 +492,7 @@ Model* Binding::getModelImpl( const css::uno::Reference<css::xforms::XModel>& xM
     Model* pModel = xTunnel.is()
         ? reinterpret_cast<Model*>(
             xTunnel->getSomething( Model::getUnoTunnelID() ) )
-        : NULL;
+        : nullptr;
     return pModel;
 }
 
@@ -538,7 +538,7 @@ static void lcl_removeListenerFromNode( Reference<XNode> xNode,
 
 ::std::vector<EvaluationContext> Binding::_getMIPEvaluationContexts() const
 {
-    OSL_ENSURE( getModelImpl() != NULL, "need model impl" );
+    OSL_ENSURE( getModelImpl() != nullptr, "need model impl" );
 
     // iterate over nodes of bind expression and create
     // EvaluationContext for each
@@ -621,7 +621,7 @@ void Binding::bind( bool bForceRebind )
 
     // 3) remove old MIPs defined by this binding
     Model* pModel = getModelImpl();
-    OSL_ENSURE( pModel != NULL, "need model" );
+    OSL_ENSURE( pModel != nullptr, "need model" );
     pModel->removeMIPs( this );
 
     // 4) calculate all MIPs
@@ -809,7 +809,7 @@ css::uno::Reference<css::xsd::XDataType> Binding::getDataType()
 
     return ( xRepository.is() && xRepository->hasByName( sTypeName ) )
         ? Reference<XDataType>( xRepository->getByName( sTypeName ), UNO_QUERY)
-        : Reference<XDataType>( NULL );
+        : Reference<XDataType>( nullptr );
 }
 
 bool Binding::isValid_DataType()
@@ -831,7 +831,7 @@ void Binding::clear()
 {
     // remove MIPs contributed by this binding
     Model* pModel = getModelImpl();
-    if( pModel != NULL )
+    if( pModel != nullptr )
         pModel->removeMIPs( this );
 
     // remove all references
@@ -924,7 +924,7 @@ css::uno::Reference<css::container::XNameContainer> Binding::_getNamespaces() co
 
     // merge model's with binding's own namespaces
     Model* pModel = getModelImpl();
-    if( pModel != NULL )
+    if( pModel != nullptr )
         lcl_copyNamespaces( pModel->getNamespaces(), xNamespaces, false );
 
     return xNamespaces;
@@ -936,10 +936,10 @@ void Binding::_setNamespaces( const css::uno::Reference<css::container::XNameCon
                               bool bBinding )
 {
     Model* pModel = getModelImpl();
-    css::uno::Reference<css::container::XNameContainer> xModelNamespaces = ( pModel != NULL )
+    css::uno::Reference<css::container::XNameContainer> xModelNamespaces = ( pModel != nullptr )
                                             ? pModel->getNamespaces()
-                                            : NULL;
-    OSL_ENSURE( ( pModel != NULL ) == xModelNamespaces.is(), "no model nmsp?");
+                                            : nullptr;
+    OSL_ENSURE( ( pModel != nullptr ) == xModelNamespaces.is(), "no model nmsp?");
 
     // remove deleted namespaces
     lcl_removeOtherNamespaces( rNamespaces, mxNamespaces );
@@ -1265,7 +1265,7 @@ void Binding::handleEvent( const css::uno::Reference<css::xml::dom::events::XEve
 sal_Int64 Binding::getSomething( const css::uno::Sequence<sal_Int8>& xId )
     throw( RuntimeException, std::exception )
 {
-    return reinterpret_cast<sal_Int64>( ( xId == getUnoTunnelID() ) ? this : NULL );
+    return reinterpret_cast<sal_Int64>( ( xId == getUnoTunnelID() ) ? this : nullptr );
 }
 
 
@@ -1298,11 +1298,11 @@ css::uno::Reference<css::util::XCloneable> SAL_CALL Binding::createClone()
 
 #define REGISTER_PROPERTY_RO( property, type )   \
     registerProperty( PROPERTY_RO( property, type ), \
-    new DirectPropertyAccessor< Binding, type >( this, NULL, &Binding::get##property ) );
+    new DirectPropertyAccessor< Binding, type >( this, nullptr, &Binding::get##property ) );
 
 #define REGISTER_BOOL_PROPERTY_RO( property )   \
     registerProperty( PROPERTY_RO( property, sal_Bool ), \
-    new BooleanPropertyAccessor< Binding, bool >( this, NULL, &Binding::get##property ) );
+    new BooleanPropertyAccessor< Binding, bool >( this, nullptr, &Binding::get##property ) );
 
 void Binding::initializePropertySet()
 {

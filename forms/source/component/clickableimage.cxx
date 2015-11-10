@@ -83,7 +83,7 @@ namespace frm
 
     OClickableImageBaseControl::OClickableImageBaseControl(const Reference<XComponentContext>& _rxFactory, const OUString& _aService)
         :OControl(_rxFactory, _aService)
-        ,m_pThread(NULL)
+        ,m_pThread(nullptr)
         ,m_aSubmissionVetoListeners( m_aMutex )
         ,m_aApproveActionListeners( m_aMutex )
         ,m_aActionListeners( m_aMutex )
@@ -153,7 +153,7 @@ namespace frm
             if( m_pThread )
             {
                 m_pThread->release();
-                m_pThread = NULL;
+                m_pThread = nullptr;
             }
         }
 
@@ -367,7 +367,7 @@ namespace frm
 
     void SAL_CALL OClickableImageBaseControl::submit(  ) throw (VetoException, WrappedTargetException, RuntimeException, std::exception)
     {
-        implSubmit( MouseEvent(), NULL );
+        implSubmit( MouseEvent(), nullptr );
     }
 
 
@@ -455,8 +455,8 @@ namespace frm
         :OControlModel( _rxFactory, _rUnoControlModelTypeName, rDefault )
         ,OPropertyChangeListener(m_aMutex)
         ,m_xGraphicObject()
-        ,m_pMedium(NULL)
-        ,m_pProducer( NULL )
+        ,m_pMedium(nullptr)
+        ,m_pProducer( nullptr )
         ,m_bDispatchUrlInternal(false)
         ,m_bDownloading(false)
         ,m_bProdStarted(false)
@@ -470,8 +470,8 @@ namespace frm
         :OControlModel( _pOriginal, _rxFactory )
         ,OPropertyChangeListener( m_aMutex )
         ,m_xGraphicObject( _pOriginal->m_xGraphicObject )
-        ,m_pMedium( NULL )
-        ,m_pProducer( NULL )
+        ,m_pMedium( nullptr )
+        ,m_pProducer( nullptr )
         ,m_bDispatchUrlInternal(false)
         ,m_bDownloading( false )
         ,m_bProdStarted( false )
@@ -524,7 +524,7 @@ namespace frm
             acquire();
             dispose();
         }
-        DBG_ASSERT(m_pMedium == NULL, "OClickableImageBaseModel::~OClickableImageBaseModel : leaving a memory leak ...");
+        DBG_ASSERT(m_pMedium == nullptr, "OClickableImageBaseModel::~OClickableImageBaseModel : leaving a memory leak ...");
         // This should be cleaned up at least in the dispose
 
     }
@@ -583,11 +583,11 @@ namespace frm
         if (m_pMedium)
         {
             delete m_pMedium;
-            m_pMedium = NULL;
+            m_pMedium = nullptr;
         }
 
-        m_xProducer = NULL;
-        m_pProducer = NULL;
+        m_xProducer = nullptr;
+        m_pProducer = nullptr;
     }
 
 
@@ -704,7 +704,7 @@ namespace frm
         {
             pImgProd->SetImage(OUString());
             delete m_pMedium;
-            m_pMedium = 0;
+            m_pMedium = nullptr;
             m_bDownloading = false;
         }
     }
@@ -717,7 +717,7 @@ namespace frm
             // Free the stream at the Producer, before the medium is deleted
             GetImageProducer()->SetImage(OUString());
             delete m_pMedium;
-            m_pMedium = NULL;
+            m_pMedium = nullptr;
         }
 
         // the SfxMedium is not allowed to be created with an invalid URL, so we have to check this first
@@ -749,7 +749,7 @@ namespace frm
             // Search for the Object shell by iterating over all Object shells
             // and comparing their XModel to our´s.
             // As an optimization, we try the current Object shell first.
-            SfxObjectShell *pObjSh = 0;
+            SfxObjectShell *pObjSh = nullptr;
 
             if( xModel.is() )
             {
@@ -858,7 +858,7 @@ namespace frm
 
     IMPL_LINK_TYPED( OClickableImageBaseModel, OnImageImportDone, Graphic*, i_pGraphic, void )
     {
-        const Reference< XGraphic > xGraphic( i_pGraphic != NULL ? Graphic(i_pGraphic->GetBitmapEx()).GetXGraphic() : NULL );
+        const Reference< XGraphic > xGraphic( i_pGraphic != nullptr ? Graphic(i_pGraphic->GetBitmapEx()).GetXGraphic() : nullptr );
         if ( !xGraphic.is() )
         {
             m_xGraphicObject.clear();

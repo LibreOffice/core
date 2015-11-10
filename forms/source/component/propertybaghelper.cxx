@@ -72,7 +72,7 @@ namespace frm
 
     PropertyBagHelper::PropertyBagHelper( IPropertyBagHelperContext& _rContext )
         :m_rContext( _rContext )
-        ,m_pPropertyArrayHelper( NULL )
+        ,m_pPropertyArrayHelper( nullptr )
         ,m_bDisposed( false )
     {
     }
@@ -80,7 +80,7 @@ namespace frm
 
     PropertyBagHelper::~PropertyBagHelper()
     {
-        delete m_pPropertyArrayHelper, m_pPropertyArrayHelper = NULL;
+        delete m_pPropertyArrayHelper, m_pPropertyArrayHelper = nullptr;
     }
 
 
@@ -99,7 +99,7 @@ namespace frm
 
     void PropertyBagHelper::impl_nts_invalidatePropertySetInfo()
     {
-        delete m_pPropertyArrayHelper, m_pPropertyArrayHelper = NULL;
+        delete m_pPropertyArrayHelper, m_pPropertyArrayHelper = nullptr;
     }
 
 
@@ -109,7 +109,7 @@ namespace frm
 
         // check the preferred handle
         sal_Int32 nHandle = lcl_getPropertyInfos().getPreferredPropertyId( _rPropertyName );
-        if ( ( nHandle != -1 ) && rPropInfo.fillPropertyMembersByHandle( NULL, NULL, nHandle ) )
+        if ( ( nHandle != -1 ) && rPropInfo.fillPropertyMembersByHandle( nullptr, nullptr, nHandle ) )
             nHandle = -1;
 
         // search a free handle in <math>F_1009</math>
@@ -120,7 +120,7 @@ namespace frm
             sal_Int32 nNum = nFactor;
             while ( nNum != 1 )
             {
-                if ( !rPropInfo.fillPropertyMembersByHandle( NULL, NULL, nNum + NEW_HANDLE_BASE ) )
+                if ( !rPropInfo.fillPropertyMembersByHandle( nullptr, nullptr, nNum + NEW_HANDLE_BASE ) )
                 {
                     // handle not used, yet
                     nHandle = nNum + NEW_HANDLE_BASE;
@@ -134,7 +134,7 @@ namespace frm
         if ( nHandle == -1 )
         {
             nHandle = NEW_HANDLE_BASE + 1009;
-            while ( rPropInfo.fillPropertyMembersByHandle( NULL, NULL, nHandle ) )
+            while ( rPropInfo.fillPropertyMembersByHandle( nullptr, nullptr, nHandle ) )
                 ++nHandle;
         }
 

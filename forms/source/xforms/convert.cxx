@@ -286,11 +286,11 @@ void Convert::init()
 Convert& Convert::get()
 {
     // create our Singleton instance on demand
-    static Convert* pConvert = NULL;
-    if( pConvert == NULL )
+    static Convert* pConvert = nullptr;
+    if( pConvert == nullptr )
         pConvert = new Convert();
 
-    OSL_ENSURE( pConvert != NULL, "no converter?" );
+    OSL_ENSURE( pConvert != nullptr, "no converter?" );
     return *pConvert;
 }
 

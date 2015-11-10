@@ -580,7 +580,7 @@ void SAL_CALL OInterfaceContainer::read( const Reference< XObjectInputStream >& 
                         m_aItems.size(),    // position
                         xElement,           // element to insert
                         false,              // no event attacher manager handling
-                        NULL,               // not yet approved - let implInsert do it
+                        nullptr,               // not yet approved - let implInsert do it
                         true                // fire the event
                     );
                 }
@@ -593,7 +593,7 @@ void SAL_CALL OInterfaceContainer::read( const Reference< XObjectInputStream >& 
                         // couldn't handle it
                         throw;
                     // insert the placeholder
-                    implInsert( m_aItems.size(), xElement, false, NULL, true );
+                    implInsert( m_aItems.size(), xElement, false, nullptr, true );
                 }
             }
         }
@@ -865,7 +865,7 @@ void OInterfaceContainer::implInsert(sal_Int32 _nIndex, const Reference< XProper
     if ( bHandleVbaEvents )
     {
         Reference< XEventAttacherManager > xMgr ( pElementMetaData->xInterface, UNO_QUERY );
-        OInterfaceContainer* pIfcMgr = xMgr.is() ? dynamic_cast<OInterfaceContainer*>(xMgr.get()) : NULL;
+        OInterfaceContainer* pIfcMgr = xMgr.is() ? dynamic_cast<OInterfaceContainer*>(xMgr.get()) : nullptr;
         if (pIfcMgr)
         {
             sal_Int32 nLen = pIfcMgr->getCount();
@@ -942,7 +942,7 @@ void SAL_CALL OInterfaceContainer::insertByIndex( sal_Int32 _nIndex, const Any& 
 {
     Reference< XPropertySet > xElement;
     _rElement >>= xElement;
-    implInsert( _nIndex, xElement, true /* event handling */ , NULL /* not yet approved */ , true /* notification */ );
+    implInsert( _nIndex, xElement, true /* event handling */ , nullptr /* not yet approved */ , true /* notification */ );
 }
 
 
@@ -1319,7 +1319,7 @@ void OFormComponents::disposing()
 {
     OInterfaceContainer::disposing();
     FormComponentsBase::disposing();
-    m_xParent = NULL;
+    m_xParent = nullptr;
 }
 
 //XChild

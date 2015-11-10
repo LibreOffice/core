@@ -85,7 +85,7 @@ Any SAL_CALL OEditControl::queryAggregation(const Type& _rType) throw (RuntimeEx
 OEditControl::OEditControl(const Reference<XComponentContext>& _rxFactory)
                :OBoundControl( _rxFactory, FRM_SUN_CONTROL_RICHTEXTCONTROL )
                ,m_aChangeListeners(m_aMutex)
-               ,m_nKeyEvent( 0 )
+               ,m_nKeyEvent( nullptr )
 {
 
     osl_atomic_increment(&m_refCount);
@@ -249,7 +249,7 @@ void OEditControl::keyReleased(const css::awt::KeyEvent& /*e*/) throw ( css::uno
 
 IMPL_LINK_NOARG_TYPED(OEditControl, OnKeyPressed, void*, void)
 {
-    m_nKeyEvent = 0;
+    m_nKeyEvent = nullptr;
 
     Reference<XFormComponent>  xFComp(getModel(), UNO_QUERY);
     css::uno::Reference<css::uno::XInterface>  xParent = xFComp->getParent();

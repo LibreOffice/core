@@ -132,7 +132,7 @@ namespace frm
                 if ( aFeature->second.xDispatcher == _rSource.Source )
                 {
                     aFeature->second.xDispatcher->removeStatusListener( static_cast< XStatusListener* >( this ), aFeature->second.aURL );
-                    aFeature->second.xDispatcher = NULL;
+                    aFeature->second.xDispatcher = nullptr;
                     aFeature->second.bCachedState = false;
                     aFeature->second.aCachedAdditionalState.clear();
                     --m_nConnectedFeatures;
@@ -234,7 +234,7 @@ namespace frm
                 if ( aFeature->second.xDispatcher.is() )
                     aFeature->second.xDispatcher->removeStatusListener( static_cast< XStatusListener* >( this ), aFeature->second.aURL );
 
-                aFeature->second.xDispatcher = NULL;
+                aFeature->second.xDispatcher = nullptr;
                 aFeature->second.bCachedState = false;
                 aFeature->second.aCachedAdditionalState.clear();
             }
@@ -386,7 +386,7 @@ namespace frm
         if ( pAsciiURL )
             _rURL = m_pUrlTransformer->getStrictURLFromAscii( pAsciiURL );
 
-        return ( pAsciiURL != NULL );
+        return ( pAsciiURL != nullptr );
     }
 
 
@@ -426,7 +426,7 @@ namespace frm
                 FeatureURL( FormFeature::InteractiveFilter,       URL_FORM_FILTER ),
                 FeatureURL( FormFeature::ToggleApplyFilter,       URL_FORM_APPLY_FILTER ),
                 FeatureURL( FormFeature::RemoveFilterAndSort,     URL_FORM_REMOVE_FILTER ),
-                FeatureURL( 0, NULL )
+                FeatureURL( 0, nullptr )
             };
             return s_aFeatureURLs;
         }
@@ -442,7 +442,7 @@ namespace frm
                 return pFeatures->pAsciiURL;
             ++pFeatures;
         }
-        return NULL;
+        return nullptr;
     }
 
 

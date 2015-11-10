@@ -122,7 +122,7 @@ void OFormsCollection::disposing()
         OInterfaceContainer::disposing();
     }
     FormsCollectionComponentBase::disposing();
-    m_xParent = NULL;
+    m_xParent = nullptr;
 }
 
 //XChild

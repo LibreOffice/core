@@ -67,7 +67,7 @@ namespace frm
            If you previously already enabled the notification for this attribute, and specified a different listener,
            then the previous listener will be replaced with the new listener, provided the latter is not <NULL/>.
         */
-        void        enableAttributeNotification( AttributeId _nAttributeId, ITextAttributeListener* _pListener = NULL );
+        void        enableAttributeNotification( AttributeId _nAttributeId, ITextAttributeListener* _pListener = nullptr );
 
         /** disables the change notifications for a particular attribute
 

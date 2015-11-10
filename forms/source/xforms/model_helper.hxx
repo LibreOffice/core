@@ -57,19 +57,19 @@ public:
 
     virtual bool isValid( const T& t ) const override
     {
-        return Binding::getBinding( t ) != NULL;
+        return Binding::getBinding( t ) != nullptr;
     }
 
 protected:
     virtual void _insert( const T& t ) override
     {
-        OSL_ENSURE( Binding::getBinding( t ) != NULL, "invalid item?" );
+        OSL_ENSURE( Binding::getBinding( t ) != nullptr, "invalid item?" );
         Binding::getBinding( t )->_setModel( css::uno::Reference<css::xforms::XModel>( mpModel ) );
     }
 
     virtual void _remove( const T& t ) override
     {
-        OSL_ENSURE( Binding::getBinding( t ) != NULL, "invalid item?" );
+        OSL_ENSURE( Binding::getBinding( t ) != nullptr, "invalid item?" );
         Binding::getBinding( t )->_setModel( css::uno::Reference<css::xforms::XModel>() );
     }
 };
@@ -85,19 +85,19 @@ public:
 public:
     virtual bool isValid( const T& t ) const override
     {
-        return Submission::getSubmission( t ) != NULL;
+        return Submission::getSubmission( t ) != nullptr;
     }
 
 protected:
     virtual void _insert( const T& t ) override
     {
-        OSL_ENSURE( Submission::getSubmission( t ) != NULL, "invalid item?" );
+        OSL_ENSURE( Submission::getSubmission( t ) != nullptr, "invalid item?" );
         Submission::getSubmission( t )->setModel( css::uno::Reference<css::xforms::XModel>( mpModel ) );
     }
 
     virtual void _remove( const T& t ) override
     {
-        OSL_ENSURE( Submission::getSubmission( t ) != NULL, "invalid item?" );
+        OSL_ENSURE( Submission::getSubmission( t ) != nullptr, "invalid item?" );
         Submission::getSubmission( t )->setModel( css::uno::Reference<css::xforms::XModel>( ) );
     }
 };

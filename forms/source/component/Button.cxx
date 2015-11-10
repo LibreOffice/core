@@ -353,7 +353,7 @@ css::uno::Sequence<OUString>  OButtonControl::getSupportedServiceNames() throw(s
 OButtonControl::OButtonControl(const Reference<XComponentContext>& _rxFactory)
                  :OClickableImageBaseControl(_rxFactory, VCL_CONTROL_COMMANDBUTTON)
                  ,OFormNavigationHelper( _rxFactory )
-                 ,m_nClickEvent( 0 )
+                 ,m_nClickEvent( nullptr )
                  ,m_nTargetUrlFeatureId( -1 )
                  ,m_bEnabledByPropertyValue( false )
 {
@@ -426,7 +426,7 @@ void OButtonControl::actionPerformed(const ActionEvent& /*rEvent*/) throw ( css:
 IMPL_LINK_NOARG_TYPED(OButtonControl, OnClick, void*, void)
 {
     ::osl::ClearableMutexGuard aGuard( m_aMutex );
-    m_nClickEvent = 0;
+    m_nClickEvent = nullptr;
 
     if (m_aApproveActionListeners.getLength())
     {

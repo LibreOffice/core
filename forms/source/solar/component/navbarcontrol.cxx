@@ -121,7 +121,7 @@ namespace frm
             mbCreatingPeer = true;
 
             // determine the VLC window for the parent
-            vcl::Window* pParentWin = NULL;
+            vcl::Window* pParentWin = nullptr;
             if ( _rParentPeer.is() )
             {
                 VCLXWindow* pParentXWin = VCLXWindow::GetImplementation( _rParentPeer );

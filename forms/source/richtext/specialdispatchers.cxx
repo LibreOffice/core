@@ -60,7 +60,7 @@ namespace frm
 
         checkDisposed();
 
-        EditEngine* pEngine = getEditView() ? getEditView()->GetEditEngine() : NULL;
+        EditEngine* pEngine = getEditView() ? getEditView()->GetEditEngine() : nullptr;
         OSL_ENSURE( pEngine, "OSelectAllDispatcher::dispatch: no edit engine - but not yet disposed?" );
         if ( !pEngine )
             return;
@@ -93,7 +93,7 @@ namespace frm
     {
         FeatureStateEvent aEvent( OAttributeDispatcher::buildStatusEvent() );
 
-        EditEngine* pEngine = getEditView() ? getEditView()->GetEditEngine() : NULL;
+        EditEngine* pEngine = getEditView() ? getEditView()->GetEditEngine() : nullptr;
         OSL_ENSURE( pEngine, "OParagraphDirectionDispatcher::dispatch: no edit engine - but not yet disposed?" );
         if ( pEngine && pEngine->IsVertical() )
             aEvent.IsEnabled = sal_False;
@@ -115,7 +115,7 @@ namespace frm
 
         checkDisposed();
 
-        EditEngine* pEngine = getEditView() ? getEditView()->GetEditEngine() : NULL;
+        EditEngine* pEngine = getEditView() ? getEditView()->GetEditEngine() : nullptr;
         OSL_ENSURE( pEngine, "OTextDirectionDispatcher::dispatch: no edit engine - but not yet disposed?" );
         if ( !pEngine )
             return;
@@ -128,7 +128,7 @@ namespace frm
     {
         FeatureStateEvent aEvent( ORichTextFeatureDispatcher::buildStatusEvent() );
 
-        EditEngine* pEngine = getEditView() ? getEditView()->GetEditEngine() : NULL;
+        EditEngine* pEngine = getEditView() ? getEditView()->GetEditEngine() : nullptr;
         OSL_ENSURE( pEngine, "OTextDirectionDispatcher::dispatch: no edit engine - but not yet disposed?" );
 
         aEvent.IsEnabled = sal_True;
@@ -164,7 +164,7 @@ namespace frm
         }
 
         OSL_FAIL( "OAsianFontLayoutDispatcher::convertDispatchArgsToItem: did not find the one and only argument!" );
-        return NULL;
+        return nullptr;
     }
 
 

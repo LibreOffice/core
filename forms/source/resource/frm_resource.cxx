@@ -33,7 +33,7 @@ namespace frm
 
     //= ResourceManager
 
-    SimpleResMgr* ResourceManager::m_pImpl = NULL;
+    SimpleResMgr* ResourceManager::m_pImpl = nullptr;
 
 
     ResourceManager::EnsureDelete::~EnsureDelete()
