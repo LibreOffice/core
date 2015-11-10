@@ -75,7 +75,7 @@ protected:
 public:
 
     ODummyEmbeddedObject()
-    : m_pInterfaceContainer( NULL )
+    : m_pInterfaceContainer( nullptr )
     , m_bDisposed( false )
     , m_nObjectState( -1 )
     , m_nCachedAspect( 0 )

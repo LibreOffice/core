@@ -627,7 +627,7 @@ void SAL_CALL ODummyEmbeddedObject::close( sal_Bool bDeliverOwnership )
     {
         ::cppu::OInterfaceContainerHelper* pContainer =
             m_pInterfaceContainer->getContainer( cppu::UnoType<util::XCloseListener>::get());
-        if ( pContainer != NULL )
+        if ( pContainer != nullptr )
         {
             ::cppu::OInterfaceIteratorHelper pIterator(*pContainer);
             while (pIterator.hasMoreElements())
@@ -645,7 +645,7 @@ void SAL_CALL ODummyEmbeddedObject::close( sal_Bool bDeliverOwnership )
 
         pContainer = m_pInterfaceContainer->getContainer(
                                     cppu::UnoType<util::XCloseListener>::get());
-        if ( pContainer != NULL )
+        if ( pContainer != nullptr )
         {
             ::cppu::OInterfaceIteratorHelper pCloseIterator(*pContainer);
             while (pCloseIterator.hasMoreElements())

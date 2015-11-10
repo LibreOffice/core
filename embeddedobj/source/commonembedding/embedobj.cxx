@@ -119,7 +119,7 @@ void OCommonEmbeddedObject::StateChangeNotification_Impl( bool bBeforeChange, sa
     {
         ::cppu::OInterfaceContainerHelper* pContainer = m_pInterfaceContainer->getContainer(
                             cppu::UnoType<embed::XStateChangeListener>::get());
-        if ( pContainer != NULL )
+        if ( pContainer != nullptr )
         {
             lang::EventObject aSource( static_cast< ::cppu::OWeakObject* >( this ) );
             ::cppu::OInterfaceIteratorHelper pIterator(*pContainer);

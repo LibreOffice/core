@@ -1752,7 +1752,7 @@ void SAL_CALL OCommonEmbeddedObject::reload(
 
             // TODO/LATER: probably the document holder could be cleaned explicitly as in the destructor
             m_pDocHolder->release();
-            m_pDocHolder = NULL;
+            m_pDocHolder = nullptr;
 
             LinkInit_Impl( aObject, lArguments, lObjArgs );
         }

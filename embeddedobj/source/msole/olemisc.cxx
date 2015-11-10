@@ -44,8 +44,8 @@ using namespace ::com::sun::star;
 OleEmbeddedObject::OleEmbeddedObject( const uno::Reference< lang::XMultiServiceFactory >& xFactory,
                                       const uno::Sequence< sal_Int8 >& aClassID,
                                       const OUString& aClassName )
-: m_pOleComponent( NULL )
-, m_pInterfaceContainer( NULL )
+: m_pOleComponent( nullptr )
+, m_pInterfaceContainer( nullptr )
 , m_bReadOnly( false )
 , m_bDisposed( false )
 , m_nObjectState( -1 )
@@ -68,7 +68,7 @@ OleEmbeddedObject::OleEmbeddedObject( const uno::Reference< lang::XMultiServiceF
 , m_bGotStatus( false )
 , m_nStatus( 0 )
 , m_nStatusAspect( 0 )
-, m_pOwnView( NULL )
+, m_pOwnView( nullptr )
 , m_bFromClipboard( false )
 , m_bTriedConversion( false )
 {
@@ -78,8 +78,8 @@ OleEmbeddedObject::OleEmbeddedObject( const uno::Reference< lang::XMultiServiceF
 // In case of loading from persistent entry the classID of the object
 // will be retrieved from the entry, during construction it is unknown
 OleEmbeddedObject::OleEmbeddedObject( const uno::Reference< lang::XMultiServiceFactory >& xFactory, bool bLink )
-: m_pOleComponent( NULL )
-, m_pInterfaceContainer( NULL )
+: m_pOleComponent( nullptr )
+, m_pInterfaceContainer( nullptr )
 , m_bReadOnly( false )
 , m_bDisposed( false )
 , m_nObjectState( -1 )
@@ -100,7 +100,7 @@ OleEmbeddedObject::OleEmbeddedObject( const uno::Reference< lang::XMultiServiceF
 , m_bGotStatus( false )
 , m_nStatus( 0 )
 , m_nStatusAspect( 0 )
-, m_pOwnView( NULL )
+, m_pOwnView( nullptr )
 , m_bFromClipboard( false )
 , m_bTriedConversion( false )
 {
@@ -167,7 +167,7 @@ void OleEmbeddedObject::MakeEventListenerNotification_Impl( const OUString& aEve
            ::cppu::OInterfaceContainerHelper* pContainer =
             m_pInterfaceContainer->getContainer(
                                     cppu::UnoType<document::XEventListener>::get());
-        if ( pContainer != NULL )
+        if ( pContainer != nullptr )
         {
             document::EventObject aEvent( static_cast< ::cppu::OWeakObject* >( this ), aEventName );
             ::cppu::OInterfaceIteratorHelper pIterator(*pContainer);
@@ -263,14 +263,14 @@ void OleEmbeddedObject::Dispose()
         lang::EventObject aSource( static_cast< ::cppu::OWeakObject* >( this ) );
         m_pInterfaceContainer->disposeAndClear( aSource );
         delete m_pInterfaceContainer;
-        m_pInterfaceContainer = NULL;
+        m_pInterfaceContainer = nullptr;
     }
 
     if ( m_pOwnView )
     {
         m_pOwnView->Close();
         m_pOwnView->release();
-        m_pOwnView = NULL;
+        m_pOwnView = nullptr;
     }
 
     if ( m_pOleComponent )
@@ -393,7 +393,7 @@ uno::Reference< util::XCloseable > SAL_CALL OleEmbeddedObject::getComponent()
     }
 #endif
 
-    assert(m_pOleComponent == 0);
+    assert(m_pOleComponent == nullptr);
     // TODO/LATER: Is it correct???
     return uno::Reference< util::XCloseable >();
     // throw uno::RuntimeException(); // TODO
@@ -472,7 +472,7 @@ void SAL_CALL OleEmbeddedObject::close( sal_Bool bDeliverOwnership )
     {
         ::cppu::OInterfaceContainerHelper* pContainer =
             m_pInterfaceContainer->getContainer( cppu::UnoType<util::XCloseListener>::get());
-        if ( pContainer != NULL )
+        if ( pContainer != nullptr )
         {
             ::cppu::OInterfaceIteratorHelper pIterator(*pContainer);
             while (pIterator.hasMoreElements())
@@ -490,7 +490,7 @@ void SAL_CALL OleEmbeddedObject::close( sal_Bool bDeliverOwnership )
 
         pContainer = m_pInterfaceContainer->getContainer(
                                     cppu::UnoType<util::XCloseListener>::get());
-        if ( pContainer != NULL )
+        if ( pContainer != nullptr )
         {
             ::cppu::OInterfaceIteratorHelper pCloseIterator(*pContainer);
             while (pCloseIterator.hasMoreElements())

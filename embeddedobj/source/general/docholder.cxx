@@ -149,7 +149,7 @@ static void InsertMenu_Impl( const uno::Reference< container::XIndexContainer >&
 DocumentHolder::DocumentHolder( const uno::Reference< uno::XComponentContext >& xContext,
                                 OCommonEmbeddedObject* pEmbObj )
 : m_pEmbedObj( pEmbObj ),
-  m_pInterceptor( NULL ),
+  m_pInterceptor( nullptr ),
   m_xContext( xContext ),
   m_bReadOnly( false ),
   m_bWaitForClose( false ),
@@ -293,7 +293,7 @@ void DocumentHolder::CloseDocument( bool bDeliverOwnership, bool bWaitForClose )
         }
     }
 
-    m_xComponent = 0;
+    m_xComponent = nullptr;
 }
 
 
@@ -739,7 +739,7 @@ bool DocumentHolder::ShowUI( const uno::Reference< css::frame::XLayoutManager >&
                 {
                     uno::Reference< frame::XFramesSupplier > xSupp( m_xFrame->getCreator(), uno::UNO_QUERY );
                     if ( xSupp.is() )
-                        xSupp->setActiveFrame( 0 );
+                        xSupp->setActiveFrame( nullptr );
 
                     // remove control about containers window from own LM
                     if ( bLock )
@@ -789,7 +789,7 @@ bool DocumentHolder::HideUI( const uno::Reference< css::frame::XLayoutManager >&
             try {
                 uno::Reference< frame::XFramesSupplier > xSupp( m_xFrame->getCreator(), uno::UNO_QUERY );
                 if ( xSupp.is() )
-                    xSupp->setActiveFrame( 0 );
+                    xSupp->setActiveFrame( nullptr );
 
                 uno::Reference< css::ui::XDockingAreaAcceptor > xDocAreaAcc = xOwnLM->getDockingAreaAcceptor();
 
@@ -834,7 +834,7 @@ uno::Reference< frame::XFrame > DocumentHolder::GetDocFrame()
             {
                 m_pInterceptor->DisconnectDocHolder();
                 m_pInterceptor->release();
-                m_pInterceptor = NULL;
+                m_pInterceptor = nullptr;
             }
 
             m_pInterceptor = new Interceptor( this );
@@ -1096,7 +1096,7 @@ void SAL_CALL DocumentHolder::disposing( const css::lang::EventObject& aSource )
 {
     if ( m_xComponent.is() && m_xComponent == aSource.Source )
     {
-        m_xComponent = 0;
+        m_xComponent = nullptr;
         if ( m_bWaitForClose )
         {
             m_bWaitForClose = false;
@@ -1127,7 +1127,7 @@ void SAL_CALL DocumentHolder::notifyClosing( const lang::EventObject& aSource )
 {
     if ( m_xComponent.is() && m_xComponent == aSource.Source )
     {
-        m_xComponent = 0;
+        m_xComponent = nullptr;
         if ( m_bWaitForClose )
         {
             m_bWaitForClose = false;

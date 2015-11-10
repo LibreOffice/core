@@ -41,8 +41,8 @@ using namespace ::com::sun::star;
 
 OCommonEmbeddedObject::OCommonEmbeddedObject( const uno::Reference< uno::XComponentContext >& rxContext,
                                                 const uno::Sequence< beans::NamedValue >& aObjProps )
-: m_pDocHolder( NULL )
-, m_pInterfaceContainer( NULL )
+: m_pDocHolder( nullptr )
+, m_pInterfaceContainer( nullptr )
 , m_bReadOnly( false )
 , m_bDisposed( false )
 , m_bClosed( false )
@@ -68,8 +68,8 @@ OCommonEmbeddedObject::OCommonEmbeddedObject(
         const uno::Sequence< beans::NamedValue >& aObjProps,
         const uno::Sequence< beans::PropertyValue >& aMediaDescr,
         const uno::Sequence< beans::PropertyValue >& aObjectDescr )
-: m_pDocHolder( NULL )
-, m_pInterfaceContainer( NULL )
+: m_pDocHolder( nullptr )
+, m_pInterfaceContainer( nullptr )
 , m_bReadOnly( false )
 , m_bDisposed( false )
 , m_bClosed( false )
@@ -271,7 +271,7 @@ OCommonEmbeddedObject::~OCommonEmbeddedObject()
                 m_pInterfaceContainer->disposeAndClear( aSource );
 
                 delete m_pInterfaceContainer;
-                m_pInterfaceContainer = NULL;
+                m_pInterfaceContainer = nullptr;
             }
         } catch( const uno::Exception& ) {}
 
@@ -285,7 +285,7 @@ OCommonEmbeddedObject::~OCommonEmbeddedObject()
                 m_pDocHolder->FreeOffice();
 
                 m_pDocHolder->release();
-                m_pDocHolder = NULL;
+                m_pDocHolder = nullptr;
             }
         } catch( const uno::Exception& ) {}
     }
@@ -494,7 +494,7 @@ void SAL_CALL OCommonEmbeddedObject::close( sal_Bool bDeliverOwnership )
     {
         ::cppu::OInterfaceContainerHelper* pContainer =
             m_pInterfaceContainer->getContainer( cppu::UnoType<util::XCloseListener>::get());
-        if ( pContainer != NULL )
+        if ( pContainer != nullptr )
         {
             ::cppu::OInterfaceIteratorHelper pIterator(*pContainer);
             while (pIterator.hasMoreElements())
@@ -512,7 +512,7 @@ void SAL_CALL OCommonEmbeddedObject::close( sal_Bool bDeliverOwnership )
 
         pContainer = m_pInterfaceContainer->getContainer(
                                     cppu::UnoType<util::XCloseListener>::get());
-        if ( pContainer != NULL )
+        if ( pContainer != nullptr )
         {
             ::cppu::OInterfaceIteratorHelper pCloseIterator(*pContainer);
             while (pCloseIterator.hasMoreElements())
@@ -549,7 +549,7 @@ void SAL_CALL OCommonEmbeddedObject::close( sal_Bool bDeliverOwnership )
             if ( bDeliverOwnership )
             {
                 m_pDocHolder->release();
-                m_pDocHolder = NULL;
+                m_pDocHolder = nullptr;
                 m_bClosed = true;
             }
 
@@ -559,7 +559,7 @@ void SAL_CALL OCommonEmbeddedObject::close( sal_Bool bDeliverOwnership )
         m_pDocHolder->FreeOffice();
 
         m_pDocHolder->release();
-        m_pDocHolder = NULL;
+        m_pDocHolder = nullptr;
     }
 
     // TODO: for now the storage will be disposed by the object, but after the document

@@ -126,7 +126,7 @@ void OleEmbeddedObject::MoveListeners()
         {
             ::cppu::OInterfaceContainerHelper* pStateChangeContainer =
                 m_pInterfaceContainer->getContainer( cppu::UnoType<embed::XStateChangeListener>::get());
-            if ( pStateChangeContainer != NULL )
+            if ( pStateChangeContainer != nullptr )
             {
                 uno::Reference< embed::XStateChangeBroadcaster > xWrappedObject( m_xWrappedObject, uno::UNO_QUERY );
                 if ( xWrappedObject.is() )
@@ -151,7 +151,7 @@ void OleEmbeddedObject::MoveListeners()
         {
             ::cppu::OInterfaceContainerHelper* pEventContainer =
                 m_pInterfaceContainer->getContainer( cppu::UnoType<document::XEventListener>::get());
-            if ( pEventContainer != NULL )
+            if ( pEventContainer != nullptr )
             {
                 uno::Reference< document::XEventBroadcaster > xWrappedObject( m_xWrappedObject, uno::UNO_QUERY );
                 if ( xWrappedObject.is() )
@@ -176,7 +176,7 @@ void OleEmbeddedObject::MoveListeners()
         {
             ::cppu::OInterfaceContainerHelper* pCloseContainer =
                 m_pInterfaceContainer->getContainer( cppu::UnoType<util::XCloseListener>::get());
-            if ( pCloseContainer != NULL )
+            if ( pCloseContainer != nullptr )
             {
                 uno::Reference< util::XCloseBroadcaster > xWrappedObject( m_xWrappedObject, uno::UNO_QUERY );
                 if ( xWrappedObject.is() )
@@ -198,7 +198,7 @@ void OleEmbeddedObject::MoveListeners()
         }
 
         delete m_pInterfaceContainer;
-        m_pInterfaceContainer = NULL;
+        m_pInterfaceContainer = nullptr;
     }
 }
 
