@@ -119,31 +119,31 @@ public:
     std::shared_ptr<TiledCornerButton> m_pCornerButton;
 
     TiledWindow()
-        : m_pDocView(0),
-        m_pStatusBar(0),
-        m_pProgressBar(0),
-        m_pStatusbarLabel(0),
-        m_pZoomLabel(0),
-        m_pEnableEditing(0),
-        m_pBold(0),
-        m_pItalic(0),
-        m_pUnderline(0),
-        m_pStrikethrough(0),
-        m_pSuperscript(0),
-        m_pSubscript(0),
-        m_pLeftpara(0),
-        m_pCenterpara(0),
-        m_pRightpara(0),
-        m_pJustifypara(0),
-        m_pScrolledWindow(0),
+        : m_pDocView(nullptr),
+        m_pStatusBar(nullptr),
+        m_pProgressBar(nullptr),
+        m_pStatusbarLabel(nullptr),
+        m_pZoomLabel(nullptr),
+        m_pEnableEditing(nullptr),
+        m_pBold(nullptr),
+        m_pItalic(nullptr),
+        m_pUnderline(nullptr),
+        m_pStrikethrough(nullptr),
+        m_pSuperscript(nullptr),
+        m_pSubscript(nullptr),
+        m_pLeftpara(nullptr),
+        m_pCenterpara(nullptr),
+        m_pRightpara(nullptr),
+        m_pJustifypara(nullptr),
+        m_pScrolledWindow(nullptr),
         m_bToolItemBroadcast(true),
-        m_pVBox(0),
-        m_pPartSelector(0),
-        m_pPartModeComboBox(0),
+        m_pVBox(nullptr),
+        m_pPartSelector(nullptr),
+        m_pPartModeComboBox(nullptr),
         m_bPartSelectorBroadcast(true),
-        m_pFindbar(0),
-        m_pFindbarEntry(0),
-        m_pFindbarLabel(0),
+        m_pFindbar(nullptr),
+        m_pFindbarEntry(nullptr),
+        m_pFindbarLabel(nullptr),
         m_bFindAll(false)
     {
     }
@@ -240,7 +240,7 @@ gboolean TiledRowColumnBar::drawImpl(GtkWidget* /*pWidget*/, cairo_t* pCairo)
 void TiledRowColumnBar::docAdjustmentChanged(GtkAdjustment* /*pAdjustment*/, gpointer pData)
 {
     GtkWidget* pDocView = static_cast<GtkWidget*>(pData);
-    docConfigureEvent(pDocView, 0, 0);
+    docConfigureEvent(pDocView, nullptr, nullptr);
 }
 
 gboolean TiledRowColumnBar::docConfigureEvent(GtkWidget* pDocView, GdkEventConfigure* /*pEvent*/, gpointer /*pData*/)
@@ -470,11 +470,11 @@ static void createView(GtkWidget* pButton, gpointer /*pItem*/)
 /// Creates a new model, i.e. LOK init and document load, one view implicitly.
 static void createModelAndView(const char* pLOPath, const char* pDocPath)
 {
-    GtkWidget* pDocView = lok_doc_view_new(pLOPath, 0, 0);
+    GtkWidget* pDocView = lok_doc_view_new(pLOPath, nullptr, nullptr);
 
     setupWidgetAndCreateWindow(pDocView);
 
-    lok_doc_view_open_document(LOK_DOC_VIEW(pDocView), pDocPath, 0, openDocumentCallback, pDocView);
+    lok_doc_view_open_document(LOK_DOC_VIEW(pDocView), pDocPath, nullptr, openDocumentCallback, pDocView);
 }
 
 /// Our GtkClipboardGetFunc implementation for HTML.
@@ -494,7 +494,7 @@ static void htmlClearFunc(GtkClipboard* /*pClipboard*/, gpointer pData)
 /// Same as gtk_clipboard_set_text(), but sets HTML.
 static void clipboardSetHtml(GtkClipboard* pClipboard, const char* pSelection)
 {
-    GtkTargetList* pList = gtk_target_list_new(0, 0);
+    GtkTargetList* pList = gtk_target_list_new(nullptr, 0);
     GdkAtom aAtom(gdk_atom_intern("text/html", false));
     gtk_target_list_add(pList, aAtom, 0, 0);
     gint nTargets = 0;
@@ -512,7 +512,7 @@ static void doCopy(GtkWidget* pButton, gpointer /*pItem*/)
     TiledWindow& rWindow = lcl_getTiledWindow(pButton);
     LOKDocView* pLOKDocView = LOK_DOC_VIEW(rWindow.m_pDocView);
     LibreOfficeKitDocument* pDocument = lok_doc_view_get_document(pLOKDocView);
-    char* pUsedFormat = 0;
+    char* pUsedFormat = nullptr;
     char* pSelection = pDocument->pClass->getTextSelection(pDocument, "text/html", &pUsedFormat);
 
     GtkClipboard* pClipboard = gtk_clipboard_get_for_display(gtk_widget_get_display(rWindow.m_pDocView), GDK_SELECTION_CLIPBOARD);
@@ -709,9 +709,9 @@ static void signalPart(LOKDocView* pLOKDocView, int nPart, gpointer /*pData*/)
 /// User clicked on a command button -> inform LOKDocView.
 static void signalHyperlink(LOKDocView* /*pLOKDocView*/, char* pPayload, gpointer /*pData*/)
 {
-    GError* pError = NULL;
-    gtk_show_uri(NULL, pPayload, GDK_CURRENT_TIME, &pError);
-    if (pError != NULL)
+    GError* pError = nullptr;
+    gtk_show_uri(nullptr, pPayload, GDK_CURRENT_TIME, &pError);
+    if (pError != nullptr)
     {
         g_warning("Unable to show URI %s : %s", pPayload, pError->message);
         g_error_free(pError);
@@ -782,7 +782,7 @@ static void toggleToolItem(GtkWidget* pWidget, gpointer /*pData*/)
         // notify about the finished Save
         gboolean bNotify = (rString == ".uno:Save");
 
-        lok_doc_view_post_command(pLOKDocView, rString.c_str(), 0, bNotify);
+        lok_doc_view_post_command(pLOKDocView, rString.c_str(), nullptr, bNotify);
     }
 }
 
@@ -864,8 +864,8 @@ static void openDocumentCallback (GObject* source_object, GAsyncResult* res, gpo
 {
     LOKDocView* pDocView = LOK_DOC_VIEW (source_object);
     TiledWindow& rWindow = lcl_getTiledWindow(GTK_WIDGET(pDocView));
-    GError* error = NULL;
-    GList *focusChain = NULL;
+    GError* error = nullptr;
+    GList *focusChain = nullptr;
 
     if (!lok_doc_view_open_document_finish(pDocView, res, &error))
     {
@@ -914,7 +914,7 @@ static GtkWidget* createWindow(TiledWindow& rWindow)
     gtk_toolbar_set_style(GTK_TOOLBAR(pUpperToolbar), GTK_TOOLBAR_ICONS);
 
     // Save.
-    GtkToolItem* pSave = gtk_tool_button_new(NULL, NULL);
+    GtkToolItem* pSave = gtk_tool_button_new(nullptr, nullptr);
     gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON(pSave), "document-save-symbolic");
     gtk_tool_item_set_tooltip_text(pSave, "Save");
     gtk_toolbar_insert(GTK_TOOLBAR(pUpperToolbar), pSave, -1);
@@ -923,12 +923,12 @@ static GtkWidget* createWindow(TiledWindow& rWindow)
     lcl_registerToolItem(rWindow, pSave, ".uno:Save");
 
     // Copy and paste.
-    GtkToolItem* pCopyButton = gtk_tool_button_new( NULL, NULL);
+    GtkToolItem* pCopyButton = gtk_tool_button_new( nullptr, nullptr);
     gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON(pCopyButton), "edit-copy-symbolic");
     gtk_tool_item_set_tooltip_text(pCopyButton, "Copy");
     gtk_toolbar_insert(GTK_TOOLBAR(pUpperToolbar), pCopyButton, -1);
     g_signal_connect(G_OBJECT(pCopyButton), "clicked", G_CALLBACK(doCopy), NULL);
-    GtkToolItem* pPasteButton = gtk_tool_button_new( NULL, NULL);
+    GtkToolItem* pPasteButton = gtk_tool_button_new( nullptr, nullptr);
     gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON(pPasteButton), "edit-paste-symbolic");
     gtk_tool_item_set_tooltip_text(pPasteButton, "Paste");
     gtk_toolbar_insert(GTK_TOOLBAR(pUpperToolbar), pPasteButton, -1);
@@ -936,13 +936,13 @@ static GtkWidget* createWindow(TiledWindow& rWindow)
     gtk_toolbar_insert( GTK_TOOLBAR(pUpperToolbar), gtk_separator_tool_item_new(), -1);
 
     // Undo and redo.
-    GtkToolItem* pUndo = gtk_tool_button_new(NULL, NULL);
+    GtkToolItem* pUndo = gtk_tool_button_new(nullptr, nullptr);
     gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON(pUndo), "edit-undo-symbolic");
     gtk_tool_item_set_tooltip_text(pUndo, "Undo");
     gtk_toolbar_insert(GTK_TOOLBAR(pUpperToolbar), pUndo, -1);
     g_signal_connect(G_OBJECT(pUndo), "clicked", G_CALLBACK(toggleToolItem), NULL);
     lcl_registerToolItem(rWindow, pUndo, ".uno:Undo");
-    GtkToolItem* pRedo = gtk_tool_button_new(NULL, NULL);
+    GtkToolItem* pRedo = gtk_tool_button_new(nullptr, nullptr);
     gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON(pRedo), "edit-redo-symbolic");
     gtk_tool_item_set_tooltip_text(pRedo, "Redo");
     gtk_toolbar_insert(GTK_TOOLBAR(pUpperToolbar), pRedo, -1);
@@ -951,7 +951,7 @@ static GtkWidget* createWindow(TiledWindow& rWindow)
     gtk_toolbar_insert(GTK_TOOLBAR(pUpperToolbar), gtk_separator_tool_item_new(), -1);
 
     // Find.
-    GtkToolItem* pFindButton = gtk_tool_button_new( NULL, NULL);
+    GtkToolItem* pFindButton = gtk_tool_button_new( nullptr, nullptr);
     gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON (pFindButton), "edit-find-symbolic");
     gtk_tool_item_set_tooltip_text(pFindButton, "Find");
     gtk_toolbar_insert(GTK_TOOLBAR(pUpperToolbar), pFindButton, -1);
@@ -959,19 +959,19 @@ static GtkWidget* createWindow(TiledWindow& rWindow)
     gtk_toolbar_insert(GTK_TOOLBAR(pUpperToolbar), gtk_separator_tool_item_new(), -1);
 
     // Misc upper toolbar.
-    GtkToolItem* pZoomIn = gtk_tool_button_new(NULL, NULL);
+    GtkToolItem* pZoomIn = gtk_tool_button_new(nullptr, nullptr);
     gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON (pZoomIn), "zoom-in-symbolic");
     gtk_tool_item_set_tooltip_text(pZoomIn, "Zoom In");
     gtk_toolbar_insert(GTK_TOOLBAR(pUpperToolbar), pZoomIn, -1);
     g_signal_connect(G_OBJECT(pZoomIn), "clicked", G_CALLBACK(changeZoom), NULL);
 
-    GtkToolItem* pZoom1 = gtk_tool_button_new(NULL, NULL);
+    GtkToolItem* pZoom1 = gtk_tool_button_new(nullptr, nullptr);
     gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON(pZoom1), "zoom-original-symbolic");
     gtk_tool_item_set_tooltip_text(pZoom1, "Normal Size");
     gtk_toolbar_insert(GTK_TOOLBAR(pUpperToolbar), pZoom1, -1);
     g_signal_connect(G_OBJECT(pZoom1), "clicked", G_CALLBACK(changeZoom), NULL);
 
-    GtkToolItem* pZoomOut = gtk_tool_button_new(NULL, NULL);
+    GtkToolItem* pZoomOut = gtk_tool_button_new(nullptr, nullptr);
     gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON (pZoomOut), "zoom-out-symbolic");
     gtk_tool_item_set_tooltip_text(pZoomOut, "Zoom Out");
     gtk_toolbar_insert(GTK_TOOLBAR(pUpperToolbar), pZoomOut, -1);
@@ -996,7 +996,7 @@ static GtkWidget* createWindow(TiledWindow& rWindow)
     gtk_toolbar_insert(GTK_TOOLBAR(pUpperToolbar), pEnableEditing, -1);
     g_signal_connect(G_OBJECT(pEnableEditing), "toggled", G_CALLBACK(toggleEditing), NULL);
 
-    GtkToolItem* pNewViewButton = gtk_tool_button_new( NULL, NULL);
+    GtkToolItem* pNewViewButton = gtk_tool_button_new( nullptr, nullptr);
     gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON (pNewViewButton), "view-continuous-symbolic");
     gtk_tool_item_set_tooltip_text(pNewViewButton, "New View");
     gtk_toolbar_insert(GTK_TOOLBAR(pUpperToolbar), pNewViewButton, -1);
@@ -1080,7 +1080,7 @@ static GtkWidget* createWindow(TiledWindow& rWindow)
     rWindow.m_pFindbar = gtk_toolbar_new();
     gtk_toolbar_set_style(GTK_TOOLBAR(rWindow.m_pFindbar), GTK_TOOLBAR_ICONS);
 
-    GtkToolItem* pFindbarClose = gtk_tool_button_new( NULL, NULL);
+    GtkToolItem* pFindbarClose = gtk_tool_button_new( nullptr, nullptr);
     gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON (pFindbarClose), "window-close-symbolic");
     gtk_toolbar_insert(GTK_TOOLBAR(rWindow.m_pFindbar), pFindbarClose, -1);
     g_signal_connect(G_OBJECT(pFindbarClose), "clicked", G_CALLBACK(toggleFindbar), NULL);
@@ -1091,12 +1091,12 @@ static GtkWidget* createWindow(TiledWindow& rWindow)
     g_signal_connect(rWindow.m_pFindbarEntry, "key-press-event", G_CALLBACK(signalFindbar), 0);
     gtk_toolbar_insert(GTK_TOOLBAR(rWindow.m_pFindbar), pEntryContainer, -1);
 
-    GtkToolItem* pFindbarNext = gtk_tool_button_new( NULL, NULL);
+    GtkToolItem* pFindbarNext = gtk_tool_button_new( nullptr, nullptr);
     gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON (pFindbarNext), "go-down-symbolic");
     gtk_toolbar_insert(GTK_TOOLBAR(rWindow.m_pFindbar), pFindbarNext, -1);
     g_signal_connect(G_OBJECT(pFindbarNext), "clicked", G_CALLBACK(signalSearchNext), NULL);
 
-    GtkToolItem* pFindbarPrev = gtk_tool_button_new( NULL, NULL);
+    GtkToolItem* pFindbarPrev = gtk_tool_button_new( nullptr, nullptr);
     gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON (pFindbarPrev), "go-up-symbolic");
     gtk_toolbar_insert(GTK_TOOLBAR(rWindow.m_pFindbar), pFindbarPrev, -1);
     g_signal_connect(G_OBJECT(pFindbarPrev), "clicked", G_CALLBACK(signalSearchPrev), NULL);
@@ -1127,7 +1127,7 @@ static GtkWidget* createWindow(TiledWindow& rWindow)
     gtk_grid_attach(GTK_GRID(pGrid), rWindow.m_pColumnBar->m_pDrawingArea, 1, 0, 1, 1);
 
     // Scrolled window for DocView
-    rWindow.m_pScrolledWindow = gtk_scrolled_window_new(0, 0);
+    rWindow.m_pScrolledWindow = gtk_scrolled_window_new(nullptr, nullptr);
     gtk_widget_set_hexpand(rWindow.m_pScrolledWindow, TRUE);
     gtk_widget_set_vexpand(rWindow.m_pScrolledWindow, TRUE);
     // "B2" cell of the grid

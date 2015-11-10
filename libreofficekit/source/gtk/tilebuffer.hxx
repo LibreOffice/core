@@ -58,7 +58,7 @@ GQuark LOKTileBufferErrorQuark(void);
 class Tile
 {
  public:
-    Tile() : valid(false), m_pBuffer(0) {}
+    Tile() : valid(false), m_pBuffer(nullptr) {}
     ~Tile()
     {
         g_clear_object(&m_pBuffer);
@@ -90,7 +90,7 @@ private:
 class TileBuffer
 {
  public:
- TileBuffer(LibreOfficeKitDocument *document = 0,
+ TileBuffer(LibreOfficeKitDocument *document = nullptr,
             int columns = 0)
      : m_pLOKDocument(document)
      , m_nWidth(columns)
@@ -234,10 +234,10 @@ struct LOEvent
     /// Constructor to instantiate an object of type `type`.
     LOEvent(int type)
         : m_nType(type)
-        , m_pCommand(0)
-        , m_pArguments(0)
+        , m_pCommand(nullptr)
+        , m_pArguments(nullptr)
         , m_bNotifyWhenFinished(false)
-        , m_pPath(0)
+        , m_pPath(nullptr)
         , m_bEdit(false)
         , m_nPartMode(0)
         , m_nPart(0)

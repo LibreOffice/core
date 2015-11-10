@@ -38,7 +38,7 @@ void Tile::setPixbuf(GdkPixbuf *buffer)
     if (m_pBuffer == buffer)
         return;
     g_clear_object(&m_pBuffer);
-    if (buffer != NULL)
+    if (buffer != nullptr)
         g_object_ref(buffer);
     m_pBuffer = buffer;
 }
@@ -60,7 +60,7 @@ void TileBuffer::setInvalid(int x, int y, float fZoom, GTask* task,
                             GThreadPool* lokThreadPool)
 {
     int index = x * m_nWidth + y;
-    GError* error = NULL;
+    GError* error = nullptr;
     if (m_mTiles.find(index) != m_mTiles.end())
     {
         m_mTiles[index].valid = false;
@@ -71,7 +71,7 @@ void TileBuffer::setInvalid(int x, int y, float fZoom, GTask* task,
         pLOEvent->m_fPaintTileZoom = fZoom;
         g_task_set_task_data(task, pLOEvent, LOEvent::destroy);
         g_thread_pool_push(lokThreadPool, g_object_ref(task), &error);
-        if (error != NULL)
+        if (error != nullptr)
         {
             g_warning("Unable to call LOK_PAINT_TILE: %s", error->message);
             g_clear_error(&error);
@@ -83,12 +83,12 @@ Tile& TileBuffer::getTile(int x, int y, GTask* task,
                           GThreadPool* lokThreadPool)
 {
     int index = x * m_nWidth + y;
-    GError* error = NULL;
+    GError* error = nullptr;
 
     if (m_mTiles.find(index) != m_mTiles.end() && !m_mTiles[index].valid)
     {
         g_thread_pool_push(lokThreadPool, g_object_ref(task), &error);
-        if (error != NULL)
+        if (error != nullptr)
         {
             g_warning("Unable to call LOK_PAINT_TILE: %s", error->message);
             g_clear_error(&error);
@@ -98,7 +98,7 @@ Tile& TileBuffer::getTile(int x, int y, GTask* task,
     else if(m_mTiles.find(index) == m_mTiles.end())
     {
         g_thread_pool_push(lokThreadPool, g_object_ref(task), &error);
-        if (error != NULL)
+        if (error != nullptr)
         {
             g_warning("Unable to call LOK_PAINT_TILE: %s", error->message);
             g_clear_error(&error);

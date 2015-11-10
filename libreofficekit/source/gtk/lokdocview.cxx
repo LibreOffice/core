@@ -119,15 +119,15 @@ struct LOKDocViewPrivateImpl
     int m_nViewId;
 
     LOKDocViewPrivateImpl()
-        : m_aLOPath(0),
-        m_aDocPath(0),
+        : m_aLOPath(nullptr),
+        m_aDocPath(nullptr),
         m_nLoadProgress(0),
         m_bIsLoading(false),
         m_bCanZoomIn(false),
         m_bCanZoomOut(false),
-        m_pOffice(0),
-        m_pDocument(0),
-        lokThreadPool(0),
+        m_pOffice(nullptr),
+        m_pDocument(nullptr),
+        lokThreadPool(nullptr),
         m_fZoom(0),
         m_nDocumentWidthTwips(0),
         m_nDocumentHeightTwips(0),
@@ -144,16 +144,16 @@ struct LOKDocViewPrivateImpl
         m_aGraphicSelection({0, 0, 0, 0}),
         m_aCellCursor({0, 0, 0, 0}),
         m_bInDragGraphicSelection(false),
-        m_pHandleStart(0),
+        m_pHandleStart(nullptr),
         m_aHandleStartRect({0, 0, 0, 0}),
         m_bInDragStartHandle(0),
-        m_pHandleMiddle(0),
+        m_pHandleMiddle(nullptr),
         m_aHandleMiddleRect({0, 0, 0, 0}),
         m_bInDragMiddleHandle(false),
-        m_pHandleEnd(0),
+        m_pHandleEnd(nullptr),
         m_aHandleEndRect({0, 0, 0, 0}),
         m_bInDragEndHandle(false),
-        m_pGraphicHandle(0),
+        m_pGraphicHandle(nullptr),
         m_nViewId(0)
     {
         memset(&m_aGraphicHandleRects, 0, sizeof(m_aGraphicHandleRects));
@@ -299,7 +299,7 @@ callbackTypeToString (int nType)
     case LOK_CALLBACK_SEARCH_RESULT_SELECTION:
         return "LOK_CALLBACK_SEARCH_RESULT_SELECTION";
     }
-    return 0;
+    return nullptr;
 }
 
 static bool
@@ -330,7 +330,7 @@ signalKey (GtkWidget* pWidget, GdkEventKey* pEvent)
     LOKDocViewPrivate& priv = getPrivate(pDocView);
     int nCharCode = 0;
     int nKeyCode = 0;
-    GError* error = NULL;
+    GError* error = nullptr;
 
     if (!priv->m_bEdit)
     {
@@ -419,14 +419,14 @@ signalKey (GtkWidget* pWidget, GdkEventKey* pEvent)
 
     if (pEvent->type == GDK_KEY_RELEASE)
     {
-        GTask* task = g_task_new(pDocView, NULL, NULL, NULL);
+        GTask* task = g_task_new(pDocView, nullptr, nullptr, nullptr);
         LOEvent* pLOEvent = new LOEvent(LOK_POST_KEY);
         pLOEvent->m_nKeyEvent = LOK_KEYEVENT_KEYUP;
         pLOEvent->m_nCharCode = nCharCode;
         pLOEvent->m_nKeyCode  = nKeyCode;
         g_task_set_task_data(task, pLOEvent, LOEvent::destroy);
         g_thread_pool_push(priv->lokThreadPool, g_object_ref(task), &error);
-        if (error != NULL)
+        if (error != nullptr)
         {
             g_warning("Unable to call LOK_POST_KEY: %s", error->message);
             g_clear_error(&error);
@@ -435,14 +435,14 @@ signalKey (GtkWidget* pWidget, GdkEventKey* pEvent)
     }
     else
     {
-        GTask* task = g_task_new(pDocView, NULL, NULL, NULL);
+        GTask* task = g_task_new(pDocView, nullptr, nullptr, nullptr);
         LOEvent* pLOEvent = new LOEvent(LOK_POST_KEY);
         pLOEvent->m_nKeyEvent = LOK_KEYEVENT_KEYINPUT;
         pLOEvent->m_nCharCode = nCharCode;
         pLOEvent->m_nKeyCode  = nKeyCode;
         g_task_set_task_data(task, pLOEvent, LOEvent::destroy);
         g_thread_pool_push(priv->lokThreadPool, g_object_ref(task), &error);
-        if (error != NULL)
+        if (error != nullptr)
         {
             g_warning("Unable to call LOK_POST_KEY: %s", error->message);
             g_clear_error(&error);
@@ -664,7 +664,7 @@ setTilesInvalid (LOKDocView* pDocView, const GdkRectangle& rRectangle)
     {
         for (int j = aStart.y; j < aEnd.y; j++)
         {
-            GTask* task = g_task_new(pDocView, NULL, NULL, NULL);
+            GTask* task = g_task_new(pDocView, nullptr, nullptr, nullptr);
             priv->m_pTileBuffer->setInvalid(i, j, priv->m_fZoom, task, priv->lokThreadPool);
             g_object_unref(task);
         }
@@ -927,7 +927,7 @@ paintTileFinish(LOKDocView* pDocView, GAsyncResult* res, GError **error)
 
     g_return_val_if_fail(LOK_IS_DOC_VIEW(pDocView), NULL);
     g_return_val_if_fail(g_task_is_valid(res, pDocView), NULL);
-    g_return_val_if_fail(error == NULL || *error == NULL, NULL);
+    g_return_val_if_fail(error == nullptr || *error == nullptr, NULL);
 
     return g_task_propagate_pointer(task, error);
 }
@@ -943,9 +943,9 @@ paintTileCallback(GObject* sourceObject, GAsyncResult* res, gpointer userData)
     int index = pLOEvent->m_nPaintTileX * buffer->m_nWidth + pLOEvent->m_nPaintTileY;
     GError* error;
 
-    error = NULL;
+    error = nullptr;
     GdkPixbuf* pPixBuf = static_cast<GdkPixbuf*>(paintTileFinish(pDocView, res, &error));
-    if (error != NULL)
+    if (error != nullptr)
     {
         if (error->domain == LOK_TILEBUFFER_ERROR &&
             error->code == LOK_TILEBUFFER_CHANGED)
@@ -1008,7 +1008,7 @@ renderDocument(LOKDocView* pDocView, cairo_t* pCairo)
             aTileRectangleTwips.width = pixelToTwip(aTileRectanglePixels.width, priv->m_fZoom);
             aTileRectangleTwips.height = pixelToTwip(aTileRectanglePixels.height, priv->m_fZoom);
 
-            if (!gdk_rectangle_intersect(&aVisibleArea, &aTileRectangleTwips, 0))
+            if (!gdk_rectangle_intersect(&aVisibleArea, &aTileRectangleTwips, nullptr))
                 bPaint = false;
 
             if (bPaint)
@@ -1018,7 +1018,7 @@ renderDocument(LOKDocView* pDocView, cairo_t* pCairo)
                 pLOEvent->m_nPaintTileY = nColumn;
                 pLOEvent->m_fPaintTileZoom = priv->m_fZoom;
                 pLOEvent->m_pTileBuffer = &*priv->m_pTileBuffer;
-                GTask* task = g_task_new(pDocView, NULL, paintTileCallback, pLOEvent);
+                GTask* task = g_task_new(pDocView, nullptr, paintTileCallback, pLOEvent);
                 g_task_set_task_data(task, pLOEvent, LOEvent::destroy);
 
                 Tile& currentTile = priv->m_pTileBuffer->getTile(nRow, nColumn, task, priv->lokThreadPool);
@@ -1145,7 +1145,7 @@ lok_doc_view_signal_button(GtkWidget* pWidget, GdkEventButton* pEvent)
 {
     LOKDocView* pDocView = LOK_DOC_VIEW (pWidget);
     LOKDocViewPrivate& priv = getPrivate(pDocView);
-    GError* error = NULL;
+    GError* error = nullptr;
 
     g_info("LOKDocView_Impl::signalButton: %d, %d (in twips: %d, %d)",
            (int)pEvent->x, (int)pEvent->y,
@@ -1181,7 +1181,7 @@ lok_doc_view_signal_button(GtkWidget* pWidget, GdkEventButton* pEvent)
                 g_info("LOKDocView_Impl::signalButton: end of drag graphic handle #%d", i);
                 priv->m_bInDragGraphicHandles[i] = false;
 
-                GTask* task = g_task_new(pDocView, NULL, NULL, NULL);
+                GTask* task = g_task_new(pDocView, nullptr, nullptr, nullptr);
                 LOEvent* pLOEvent = new LOEvent(LOK_SET_GRAPHIC_SELECTION);
                 pLOEvent->m_nSetGraphicSelectionType = LOK_SETGRAPHICSELECTION_END;
                 pLOEvent->m_nSetGraphicSelectionX = pixelToTwip(pEvent->x, priv->m_fZoom);
@@ -1189,7 +1189,7 @@ lok_doc_view_signal_button(GtkWidget* pWidget, GdkEventButton* pEvent)
                 g_task_set_task_data(task, pLOEvent, LOEvent::destroy);
 
                 g_thread_pool_push(priv->lokThreadPool, g_object_ref(task), &error);
-                if (error != NULL)
+                if (error != nullptr)
                 {
                     g_warning("Unable to call LOK_SET_GRAPHIC_SELECTION: %s", error->message);
                     g_clear_error(&error);
@@ -1205,7 +1205,7 @@ lok_doc_view_signal_button(GtkWidget* pWidget, GdkEventButton* pEvent)
             g_info("LOKDocView_Impl::signalButton: end of drag graphic selection");
             priv->m_bInDragGraphicSelection = false;
 
-            GTask* task = g_task_new(pDocView, NULL, NULL, NULL);
+            GTask* task = g_task_new(pDocView, nullptr, nullptr, nullptr);
             LOEvent* pLOEvent = new LOEvent(LOK_SET_GRAPHIC_SELECTION);
             pLOEvent->m_nSetGraphicSelectionType = LOK_SETGRAPHICSELECTION_END;
             pLOEvent->m_nSetGraphicSelectionX = pixelToTwip(pEvent->x, priv->m_fZoom);
@@ -1213,7 +1213,7 @@ lok_doc_view_signal_button(GtkWidget* pWidget, GdkEventButton* pEvent)
             g_task_set_task_data(task, pLOEvent, LOEvent::destroy);
 
             g_thread_pool_push(priv->lokThreadPool, g_object_ref(task), &error);
-            if (error != NULL)
+            if (error != nullptr)
             {
                 g_warning("Unable to call LOK_SET_GRAPHIC_SELECTION: %s", error->message);
                 g_clear_error(&error);
@@ -1233,19 +1233,19 @@ lok_doc_view_signal_button(GtkWidget* pWidget, GdkEventButton* pEvent)
         aClick.height = 1;
         if (pEvent->type == GDK_BUTTON_PRESS)
         {
-            if (gdk_rectangle_intersect(&aClick, &priv->m_aHandleStartRect, NULL))
+            if (gdk_rectangle_intersect(&aClick, &priv->m_aHandleStartRect, nullptr))
             {
                 g_info("LOKDocView_Impl::signalButton: start of drag start handle");
                 priv->m_bInDragStartHandle = true;
                 return FALSE;
             }
-            else if (gdk_rectangle_intersect(&aClick, &priv->m_aHandleMiddleRect, NULL))
+            else if (gdk_rectangle_intersect(&aClick, &priv->m_aHandleMiddleRect, nullptr))
             {
                 g_info("LOKDocView_Impl::signalButton: start of drag middle handle");
                 priv->m_bInDragMiddleHandle = true;
                 return FALSE;
             }
-            else if (gdk_rectangle_intersect(&aClick, &priv->m_aHandleEndRect, NULL))
+            else if (gdk_rectangle_intersect(&aClick, &priv->m_aHandleEndRect, nullptr))
             {
                 g_info("LOKDocView_Impl::signalButton: start of drag end handle");
                 priv->m_bInDragEndHandle = true;
@@ -1254,12 +1254,12 @@ lok_doc_view_signal_button(GtkWidget* pWidget, GdkEventButton* pEvent)
 
             for (int i = 0; i < GRAPHIC_HANDLE_COUNT; ++i)
             {
-                if (gdk_rectangle_intersect(&aClick, &priv->m_aGraphicHandleRects[i], NULL))
+                if (gdk_rectangle_intersect(&aClick, &priv->m_aGraphicHandleRects[i], nullptr))
                 {
                     g_info("LOKDocView_Impl::signalButton: start of drag graphic handle #%d", i);
                     priv->m_bInDragGraphicHandles[i] = true;
 
-                    GTask* task = g_task_new(pDocView, NULL, NULL, NULL);
+                    GTask* task = g_task_new(pDocView, nullptr, nullptr, nullptr);
                     LOEvent* pLOEvent = new LOEvent(LOK_SET_GRAPHIC_SELECTION);
                     pLOEvent->m_nSetGraphicSelectionType = LOK_SETGRAPHICSELECTION_START;
                     pLOEvent->m_nSetGraphicSelectionX = pixelToTwip(priv->m_aGraphicHandleRects[i].x + priv->m_aGraphicHandleRects[i].width / 2, priv->m_fZoom);
@@ -1267,7 +1267,7 @@ lok_doc_view_signal_button(GtkWidget* pWidget, GdkEventButton* pEvent)
                     g_task_set_task_data(task, pLOEvent, LOEvent::destroy);
 
                     g_thread_pool_push(priv->lokThreadPool, g_object_ref(task), &error);
-                    if (error != NULL)
+                    if (error != nullptr)
                     {
                         g_warning("Unable to call LOK_SET_GRAPHIC_SELECTION: %s", error->message);
                         g_clear_error(&error);
@@ -1291,7 +1291,7 @@ lok_doc_view_signal_button(GtkWidget* pWidget, GdkEventButton* pEvent)
         if ((pEvent->time - priv->m_nLastButtonPressTime) < 250)
             nCount++;
         priv->m_nLastButtonPressTime = pEvent->time;
-        GTask* task = g_task_new(pDocView, NULL, NULL, NULL);
+        GTask* task = g_task_new(pDocView, nullptr, nullptr, nullptr);
         LOEvent* pLOEvent = new LOEvent(LOK_POST_MOUSE_EVENT);
         pLOEvent->m_nPostMouseEventType = LOK_MOUSEEVENT_MOUSEBUTTONDOWN;
         pLOEvent->m_nPostMouseEventX = pixelToTwip(pEvent->x, priv->m_fZoom);
@@ -1314,7 +1314,7 @@ lok_doc_view_signal_button(GtkWidget* pWidget, GdkEventButton* pEvent)
         g_task_set_task_data(task, pLOEvent, LOEvent::destroy);
 
         g_thread_pool_push(priv->lokThreadPool, g_object_ref(task), &error);
-        if (error != NULL)
+        if (error != nullptr)
         {
             g_warning("Unable to call LOK_POST_MOUSE_EVENT: %s", error->message);
             g_clear_error(&error);
@@ -1328,7 +1328,7 @@ lok_doc_view_signal_button(GtkWidget* pWidget, GdkEventButton* pEvent)
         if ((pEvent->time - priv->m_nLastButtonReleaseTime) < 250)
             nCount++;
         priv->m_nLastButtonReleaseTime = pEvent->time;
-        GTask* task = g_task_new(pDocView, NULL, NULL, NULL);
+        GTask* task = g_task_new(pDocView, nullptr, nullptr, nullptr);
         LOEvent* pLOEvent = new LOEvent(LOK_POST_MOUSE_EVENT);
         pLOEvent->m_nPostMouseEventType = LOK_MOUSEEVENT_MOUSEBUTTONUP;
         pLOEvent->m_nPostMouseEventX = pixelToTwip(pEvent->x, priv->m_fZoom);
@@ -1351,7 +1351,7 @@ lok_doc_view_signal_button(GtkWidget* pWidget, GdkEventButton* pEvent)
         g_task_set_task_data(task, pLOEvent, LOEvent::destroy);
 
         g_thread_pool_push(priv->lokThreadPool, g_object_ref(task), &error);
-        if (error != NULL)
+        if (error != nullptr)
         {
             g_warning("Unable to call LOK_POST_MOUSE_EVENT: %s", error->message);
             g_clear_error(&error);
@@ -1389,7 +1389,7 @@ lok_doc_view_signal_motion (GtkWidget* pWidget, GdkEventMotion* pEvent)
     LOKDocView* pDocView = LOK_DOC_VIEW (pWidget);
     LOKDocViewPrivate& priv = getPrivate(pDocView);
     GdkPoint aPoint;
-    GError* error = NULL;
+    GError* error = nullptr;
 
     priv->m_pDocument->pClass->setView(priv->m_pDocument, priv->m_nViewId);
     if (priv->m_bInDragMiddleHandle)
@@ -1432,12 +1432,12 @@ lok_doc_view_signal_motion (GtkWidget* pWidget, GdkEventMotion* pEvent)
     aMotionInTwipsInTwips.y = pixelToTwip(pEvent->y, priv->m_fZoom);
     aMotionInTwipsInTwips.width = 1;
     aMotionInTwipsInTwips.height = 1;
-    if (gdk_rectangle_intersect(&aMotionInTwipsInTwips, &priv->m_aGraphicSelection, 0))
+    if (gdk_rectangle_intersect(&aMotionInTwipsInTwips, &priv->m_aGraphicSelection, nullptr))
     {
         g_info("lcl_signalMotion: start of drag graphic selection");
         priv->m_bInDragGraphicSelection = true;
 
-        GTask* task = g_task_new(pDocView, NULL, NULL, NULL);
+        GTask* task = g_task_new(pDocView, nullptr, nullptr, nullptr);
         LOEvent* pLOEvent = new LOEvent(LOK_SET_GRAPHIC_SELECTION);
         pLOEvent->m_nSetGraphicSelectionType = LOK_SETGRAPHICSELECTION_START;
         pLOEvent->m_nSetGraphicSelectionX = pixelToTwip(pEvent->x, priv->m_fZoom);
@@ -1445,7 +1445,7 @@ lok_doc_view_signal_motion (GtkWidget* pWidget, GdkEventMotion* pEvent)
         g_task_set_task_data(task, pLOEvent, LOEvent::destroy);
 
         g_thread_pool_push(priv->lokThreadPool, g_object_ref(task), &error);
-        if (error != NULL)
+        if (error != nullptr)
         {
             g_warning("Unable to call LOK_SET_GRAPHIC_SELECTION: %s", error->message);
             g_clear_error(&error);
@@ -1457,7 +1457,7 @@ lok_doc_view_signal_motion (GtkWidget* pWidget, GdkEventMotion* pEvent)
 
     // Otherwise a mouse move, as on the desktop.
 
-    GTask* task = g_task_new(pDocView, NULL, NULL, NULL);
+    GTask* task = g_task_new(pDocView, nullptr, nullptr, nullptr);
     LOEvent* pLOEvent = new LOEvent(LOK_POST_MOUSE_EVENT);
     pLOEvent->m_nPostMouseEventType = LOK_MOUSEEVENT_MOUSEMOVE;
     pLOEvent->m_nPostMouseEventX = pixelToTwip(pEvent->x, priv->m_fZoom);
@@ -1469,7 +1469,7 @@ lok_doc_view_signal_motion (GtkWidget* pWidget, GdkEventMotion* pEvent)
     g_task_set_task_data(task, pLOEvent, LOEvent::destroy);
 
     g_thread_pool_push(priv->lokThreadPool, g_object_ref(task), &error);
-    if (error != NULL)
+    if (error != nullptr)
     {
         g_warning("Unable to call LOK_MOUSEEVENT_MOUSEMOVE: %s", error->message);
         g_clear_error(&error);
@@ -1522,7 +1522,7 @@ openDocumentInThread (gpointer data)
     if ( priv->m_pDocument )
     {
         priv->m_pDocument->pClass->destroy( priv->m_pDocument );
-        priv->m_pDocument = 0;
+        priv->m_pDocument = nullptr;
     }
 
     priv->m_pOffice->pClass->registerCallback(priv->m_pOffice, globalCallbackWorker, pDocView);
@@ -1728,10 +1728,10 @@ static void lok_doc_view_init (LOKDocView* pDocView)
                           |GDK_KEY_RELEASE_MASK);
 
     priv->lokThreadPool = g_thread_pool_new(lokThreadFunc,
-                                            NULL,
+                                            nullptr,
                                             1,
                                             FALSE,
-                                            NULL);
+                                            nullptr);
 }
 
 static void lok_doc_view_set_property (GObject* object, guint propId, const GValue *value, GParamSpec *pspec)
@@ -1838,7 +1838,7 @@ static void lok_doc_view_finalize (GObject* object)
     if (priv->m_pOffice)
         priv->m_pOffice->pClass->destroy (priv->m_pOffice);
     delete priv.m_pImpl;
-    priv.m_pImpl = 0;
+    priv.m_pImpl = nullptr;
 
     G_OBJECT_CLASS (lok_doc_view_parent_class)->finalize (object);
 }
@@ -1848,12 +1848,12 @@ static gboolean lok_doc_view_initable_init (GInitable *initable, GCancellable* /
     LOKDocView *pDocView = LOK_DOC_VIEW (initable);
     LOKDocViewPrivate& priv = getPrivate(pDocView);
 
-    if (priv->m_pOffice != NULL)
+    if (priv->m_pOffice != nullptr)
         return TRUE;
 
     priv->m_pOffice = lok_init (priv->m_aLOPath);
 
-    if (priv->m_pOffice == NULL)
+    if (priv->m_pOffice == nullptr)
     {
         g_set_error (error,
                      g_quark_from_static_string ("LOK initialization error"), 0,
@@ -1896,7 +1896,7 @@ static void lok_doc_view_class_init (LOKDocViewClass* pClass)
           g_param_spec_string("lopath",
                               "LO Path",
                               "LibreOffice Install Path",
-                              0,
+                              nullptr,
                               static_cast<GParamFlags>(G_PARAM_READWRITE |
                                                        G_PARAM_CONSTRUCT_ONLY |
                                                        G_PARAM_STATIC_STRINGS)));
@@ -1926,7 +1926,7 @@ static void lok_doc_view_class_init (LOKDocViewClass* pClass)
           g_param_spec_string("docpath",
                               "Document Path",
                               "The URI of the document to open",
-                              0,
+                              nullptr,
                               static_cast<GParamFlags>(G_PARAM_READWRITE |
                                                        G_PARAM_STATIC_STRINGS)));
 
@@ -2072,7 +2072,7 @@ static void lok_doc_view_class_init (LOKDocViewClass* pClass)
                      G_TYPE_FROM_CLASS (pGObjectClass),
                      G_SIGNAL_RUN_FIRST,
                      0,
-                     NULL, NULL,
+                     nullptr, nullptr,
                      g_cclosure_marshal_VOID__DOUBLE,
                      G_TYPE_NONE, 1,
                      G_TYPE_DOUBLE);
@@ -2087,7 +2087,7 @@ static void lok_doc_view_class_init (LOKDocViewClass* pClass)
                      G_TYPE_FROM_CLASS (pGObjectClass),
                      G_SIGNAL_RUN_FIRST,
                      0,
-                     NULL, NULL,
+                     nullptr, nullptr,
                      g_cclosure_marshal_VOID__BOOLEAN,
                      G_TYPE_NONE, 1,
                      G_TYPE_BOOLEAN);
@@ -2102,7 +2102,7 @@ static void lok_doc_view_class_init (LOKDocViewClass* pClass)
                      G_TYPE_FROM_CLASS(pGObjectClass),
                      G_SIGNAL_RUN_FIRST,
                      0,
-                     NULL, NULL,
+                     nullptr, nullptr,
                      g_cclosure_marshal_VOID__STRING,
                      G_TYPE_NONE, 1,
                      G_TYPE_STRING);
@@ -2117,7 +2117,7 @@ static void lok_doc_view_class_init (LOKDocViewClass* pClass)
                      G_TYPE_FROM_CLASS(pGObjectClass),
                      G_SIGNAL_RUN_FIRST,
                      0,
-                     NULL, NULL,
+                     nullptr, nullptr,
                      g_cclosure_marshal_VOID__STRING,
                      G_TYPE_NONE, 1,
                      G_TYPE_STRING);
@@ -2132,7 +2132,7 @@ static void lok_doc_view_class_init (LOKDocViewClass* pClass)
                      G_TYPE_FROM_CLASS(pGObjectClass),
                      G_SIGNAL_RUN_FIRST,
                      0,
-                     NULL, NULL,
+                     nullptr, nullptr,
                      g_cclosure_marshal_VOID__INT,
                      G_TYPE_NONE, 1,
                      G_TYPE_INT);
@@ -2147,7 +2147,7 @@ static void lok_doc_view_class_init (LOKDocViewClass* pClass)
                      G_TYPE_FROM_CLASS(pGObjectClass),
                      G_SIGNAL_RUN_FIRST,
                      0,
-                     NULL, NULL,
+                     nullptr, nullptr,
                      g_cclosure_marshal_VOID__VOID,
                      G_TYPE_NONE, 1,
                      G_TYPE_INT);
@@ -2162,7 +2162,7 @@ static void lok_doc_view_class_init (LOKDocViewClass* pClass)
                      G_TYPE_FROM_CLASS(pGObjectClass),
                      G_SIGNAL_RUN_FIRST,
                      0,
-                     NULL, NULL,
+                     nullptr, nullptr,
                      g_cclosure_marshal_VOID__STRING,
                      G_TYPE_NONE, 1,
                      G_TYPE_STRING);
@@ -2180,7 +2180,7 @@ static void lok_doc_view_class_init (LOKDocViewClass* pClass)
                      G_TYPE_FROM_CLASS(pGObjectClass),
                      G_SIGNAL_RUN_FIRST,
                      0,
-                     NULL, NULL,
+                     nullptr, nullptr,
                      g_cclosure_marshal_generic,
                      G_TYPE_NONE, 4,
                      G_TYPE_INT, G_TYPE_INT,
@@ -2196,7 +2196,7 @@ static void lok_doc_view_class_init (LOKDocViewClass* pClass)
                      G_TYPE_FROM_CLASS(pGObjectClass),
                      G_SIGNAL_RUN_FIRST,
                      0,
-                     NULL, NULL,
+                     nullptr, nullptr,
                      g_cclosure_marshal_VOID__STRING,
                      G_TYPE_NONE, 1,
                      G_TYPE_STRING);
@@ -2212,7 +2212,7 @@ static void lok_doc_view_class_init (LOKDocViewClass* pClass)
                      G_TYPE_FROM_CLASS(pGObjectClass),
                      G_SIGNAL_RUN_FIRST,
                      0,
-                     NULL, NULL,
+                     nullptr, nullptr,
                      g_cclosure_marshal_VOID__STRING,
                      G_TYPE_NONE, 1,
                      G_TYPE_STRING);
@@ -2228,7 +2228,7 @@ lok_doc_view_new (const gchar* pPath, GCancellable *cancellable, GError **error)
 SAL_DLLPUBLIC_EXPORT GtkWidget* lok_doc_view_new_from_widget(LOKDocView* pOldLOKDocView)
 {
     LOKDocViewPrivate& pOldPriv = getPrivate(pOldLOKDocView);
-    GtkWidget* pNewDocView = GTK_WIDGET(g_initable_new(LOK_TYPE_DOC_VIEW, /*cancellable=*/0, /*error=*/0,
+    GtkWidget* pNewDocView = GTK_WIDGET(g_initable_new(LOK_TYPE_DOC_VIEW, /*cancellable=*/nullptr, /*error=*/nullptr,
                                                        "lopath", pOldPriv->m_aLOPath, "lopointer", pOldPriv->m_pOffice, "docpointer", pOldPriv->m_pDocument, NULL));
 
     // No documentLoad(), just a createView().
@@ -2248,7 +2248,7 @@ lok_doc_view_open_document_finish (LOKDocView* pDocView, GAsyncResult* res, GErr
     g_return_val_if_fail(g_task_is_valid(res, pDocView), false);
     //FIXME: make source_tag work
     //g_return_val_if_fail(g_task_get_source_tag(task) == lok_doc_view_open_document, NULL);
-    g_return_val_if_fail(error == NULL || *error == NULL, false);
+    g_return_val_if_fail(error == nullptr || *error == nullptr, false);
 
     return g_task_propagate_boolean(task, error);
 }
@@ -2262,7 +2262,7 @@ lok_doc_view_open_document (LOKDocView* pDocView,
 {
     GTask* task = g_task_new(pDocView, cancellable, callback, userdata);
     LOKDocViewPrivate& priv = getPrivate(pDocView);
-    GError* error = NULL;
+    GError* error = nullptr;
 
     LOEvent* pLOEvent = new LOEvent(LOK_LOAD_DOC);
     pLOEvent->m_pPath = pPath;
@@ -2271,7 +2271,7 @@ lok_doc_view_open_document (LOKDocView* pDocView,
     g_task_set_task_data(task, pLOEvent, LOEvent::destroy);
 
     g_thread_pool_push(priv->lokThreadPool, g_object_ref(task), &error);
-    if (error != NULL)
+    if (error != nullptr)
     {
         g_warning("Unable to call LOK_LOAD_DOC: %s", error->message);
         g_clear_error(&error);
@@ -2331,15 +2331,15 @@ SAL_DLLPUBLIC_EXPORT void
 lok_doc_view_set_part (LOKDocView* pDocView, int nPart)
 {
     LOKDocViewPrivate& priv = getPrivate(pDocView);
-    GTask* task = g_task_new(pDocView, NULL, NULL, NULL);
+    GTask* task = g_task_new(pDocView, nullptr, nullptr, nullptr);
     LOEvent* pLOEvent = new LOEvent(LOK_SET_PART);
-    GError* error = NULL;
+    GError* error = nullptr;
 
     pLOEvent->m_nPart = nPart;
     g_task_set_task_data(task, pLOEvent, LOEvent::destroy);
 
     g_thread_pool_push(priv->lokThreadPool, g_object_ref(task), &error);
-    if (error != NULL)
+    if (error != nullptr)
     {
         g_warning("Unable to call LOK_SET_PART: %s", error->message);
         g_clear_error(&error);
@@ -2360,14 +2360,14 @@ lok_doc_view_set_partmode(LOKDocView* pDocView,
                           int nPartMode)
 {
     LOKDocViewPrivate& priv = getPrivate(pDocView);
-    GTask* task = g_task_new(pDocView, NULL, NULL, NULL);
+    GTask* task = g_task_new(pDocView, nullptr, nullptr, nullptr);
     LOEvent* pLOEvent = new LOEvent(LOK_SET_PARTMODE);
-    GError* error = NULL;
+    GError* error = nullptr;
     pLOEvent->m_nPartMode = nPartMode;
     g_task_set_task_data(task, pLOEvent, LOEvent::destroy);
 
     g_thread_pool_push(priv->lokThreadPool, g_object_ref(task), &error);
-    if (error != NULL)
+    if (error != nullptr)
     {
         g_warning("Unable to call LOK_SET_PARTMODE: %s", error->message);
         g_clear_error(&error);
@@ -2397,22 +2397,22 @@ lok_doc_view_reset_view(LOKDocView* pDocView)
     memset(&priv->m_aCellCursor, 0, sizeof(priv->m_aCellCursor));
 
     cairo_surface_destroy(priv->m_pHandleStart);
-    priv->m_pHandleStart = 0;
+    priv->m_pHandleStart = nullptr;
     memset(&priv->m_aHandleStartRect, 0, sizeof(priv->m_aHandleStartRect));
     priv->m_bInDragStartHandle = false;
 
     cairo_surface_destroy(priv->m_pHandleMiddle);
-    priv->m_pHandleMiddle = 0;
+    priv->m_pHandleMiddle = nullptr;
     memset(&priv->m_aHandleMiddleRect, 0, sizeof(priv->m_aHandleMiddleRect));
     priv->m_bInDragMiddleHandle = false;
 
     cairo_surface_destroy(priv->m_pHandleEnd);
-    priv->m_pHandleEnd = 0;
+    priv->m_pHandleEnd = nullptr;
     memset(&priv->m_aHandleEndRect, 0, sizeof(priv->m_aHandleEndRect));
     priv->m_bInDragEndHandle = false;
 
     cairo_surface_destroy(priv->m_pGraphicHandle);
-    priv->m_pGraphicHandle = 0;
+    priv->m_pGraphicHandle = nullptr;
     memset(&priv->m_aGraphicHandleRects, 0, sizeof(priv->m_aGraphicHandleRects));
     memset(&priv->m_bInDragGraphicHandles, 0, sizeof(priv->m_bInDragGraphicHandles));
 
@@ -2426,14 +2426,14 @@ lok_doc_view_set_edit(LOKDocView* pDocView,
                       gboolean bEdit)
 {
     LOKDocViewPrivate& priv = getPrivate(pDocView);
-    GTask* task = g_task_new(pDocView, NULL, NULL, NULL);
+    GTask* task = g_task_new(pDocView, nullptr, nullptr, nullptr);
     LOEvent* pLOEvent = new LOEvent(LOK_SET_EDIT);
-    GError* error = NULL;
+    GError* error = nullptr;
     pLOEvent->m_bEdit = bEdit;
     g_task_set_task_data(task, pLOEvent, LOEvent::destroy);
 
     g_thread_pool_push(priv->lokThreadPool, g_object_ref(task), &error);
-    if (error != NULL)
+    if (error != nullptr)
     {
         g_warning("Unable to call LOK_SET_EDIT: %s", error->message);
         g_clear_error(&error);
@@ -2456,16 +2456,16 @@ lok_doc_view_post_command (LOKDocView* pDocView,
                            gboolean bNotifyWhenFinished)
 {
     LOKDocViewPrivate& priv = getPrivate(pDocView);
-    GTask* task = g_task_new(pDocView, NULL, NULL, NULL);
+    GTask* task = g_task_new(pDocView, nullptr, nullptr, nullptr);
     LOEvent* pLOEvent = new LOEvent(LOK_POST_COMMAND);
-    GError* error = NULL;
+    GError* error = nullptr;
     pLOEvent->m_pCommand = pCommand;
     pLOEvent->m_pArguments  = g_strdup(pArguments);
     pLOEvent->m_bNotifyWhenFinished = bNotifyWhenFinished;
 
     g_task_set_task_data(task, pLOEvent, LOEvent::destroy);
     g_thread_pool_push(priv->lokThreadPool, g_object_ref(task), &error);
-    if (error != NULL)
+    if (error != nullptr)
     {
         g_warning("Unable to call LOK_POST_COMMAND: %s", error->message);
         g_clear_error(&error);
