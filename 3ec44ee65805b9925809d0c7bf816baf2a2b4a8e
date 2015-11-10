@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "faac7902_c72b7c32",
+        "filename": "include/vcl/buttonstatuslistener.hxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2015-11-10T19:49:48Z",
+      "side": 1,
+      "message": "You need to clear the dispatcher reference here.",
+      "revId": "3ec44ee65805b9925809d0c7bf816baf2a2b4a8e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "faac7902_27f6c8d7",
+        "filename": "vcl/source/control/button.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2015-11-10T19:49:48Z",
+      "side": 1,
+      "message": "Don\u0027t confuse css::uno::Reference\u003cXInterfaceName\u003e with rtl::Reference\u003cClassName\u003e",
+      "revId": "3ec44ee65805b9925809d0c7bf816baf2a2b4a8e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "faac7902_6700d0ab",
+        "filename": "vcl/source/control/buttonstatuslistener.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2015-11-10T19:49:48Z",
+      "side": 1,
+      "message": "This class isn\u0027t the owner of the button, so why do dispose? You only need clear() to release the reference. Moreover, you need to introduce a dispose method and do it there (and call it from Button::dispose), because otherwise you have a memleak: ImplCommonButtonData destructed in Button dtor, but it\u0027s never called, because you hold a hard reference in ButtonStatusListener.",
+      "revId": "3ec44ee65805b9925809d0c7bf816baf2a2b4a8e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
