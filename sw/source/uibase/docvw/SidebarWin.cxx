@@ -605,6 +605,18 @@ void SwSidebarWin::SetPosAndSize()
             break;
         }
 
+        // LOK has map mode disabled, and we still want to perform pixel ->
+        // twips conversion for the size of the line above the note.
+        bool bEnableMapMode = comphelper::LibreOfficeKit::isActive() && !EditWin()->IsMapModeEnabled();
+        if (bEnableMapMode)
+            EditWin()->EnableMapMode();
+        Size aSize(aLineEnd.getX() - aLineStart.getX(), aLineEnd.getY() - aLineStart.getY());
+        aSize = EditWin()->PixelToLogic(aSize);
+        aLineEnd = aLineStart;
+        aLineEnd.Move(aSize.getWidth(), aSize.getHeight());
+        if (bEnableMapMode)
+            EditWin()->EnableMapMode(false);
+
         if (!IsPreview())
         {
             if (mpAnchor)
