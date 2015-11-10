@@ -70,9 +70,9 @@ void HelpCompiler::tagBasicCodeExamples( xmlDocPtr doc )
 
 xmlDocPtr HelpCompiler::compactXhpForJar( xmlDocPtr doc )
 {
-    static xsltStylesheetPtr compact = NULL;
+    static xsltStylesheetPtr compact = nullptr;
     static const char *params[2 + 1];
-    params[0] = NULL;
+    params[0] = nullptr;
     xmlDocPtr compacted;
 
     if (!compact)
@@ -119,7 +119,7 @@ void HelpCompiler::saveXhpForJar( xmlDocPtr doc, const fs::path &filePath )
 
 xmlDocPtr HelpCompiler::getSourceDocument(const fs::path &filePath)
 {
-    static xsltStylesheetPtr cur = NULL;
+    static xsltStylesheetPtr cur = nullptr;
 
     xmlDocPtr res;
     if( bExtensionMode )
@@ -144,7 +144,7 @@ xmlDocPtr HelpCompiler::getSourceDocument(const fs::path &filePath)
             int nbparams = 0;
             params[nbparams++] = "fsroot";
             params[nbparams++] = fsroot.c_str();
-            params[nbparams] = NULL;
+            params[nbparams] = nullptr;
         }
         xmlDocPtr doc = xmlParseFile(filePath.native_file_string().c_str());
         if( !doc )
@@ -175,7 +175,7 @@ xmlNodePtr HelpCompiler::clone(xmlNodePtr node, const std::string& appl)
             {
                 std::string tmp="";
                 xmlChar * prop = xmlGetProp(list, reinterpret_cast<xmlChar const *>("select"));
-                if (prop != 0)
+                if (prop != nullptr)
                 {
                     if (strcmp(reinterpret_cast<char *>(prop), "sys") == 0)
                     {

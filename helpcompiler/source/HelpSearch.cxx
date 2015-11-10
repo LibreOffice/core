@@ -42,7 +42,7 @@ bool HelpSearch::query(OUString const &queryStr, bool captionOnly,
     for (size_t i = 0; i < hits->length(); ++i) {
         lucene::document::Document &doc = hits->doc(i); // Document* belongs to Hits.
         wchar_t const *path = doc.get(L"path");
-        rDocuments.push_back(TCHARArrayToOUString(path != 0 ? path : L""));
+        rDocuments.push_back(TCHARArrayToOUString(path != nullptr ? path : L""));
         rScores.push_back(hits->score(i));
     }
 

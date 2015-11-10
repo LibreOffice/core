@@ -50,14 +50,14 @@ class L10N_DLLPUBLIC HelpLinker
 {
 public:
     void main(std::vector<std::string> &args,
-              std::string* pExtensionPath = NULL,
-              std::string* pDestination = NULL,
-              const OUString* pOfficeHelpPath = NULL )
+              std::string* pExtensionPath = nullptr,
+              std::string* pDestination = nullptr,
+              const OUString* pOfficeHelpPath = nullptr )
             throw( HelpProcessingException, std::exception );
 
     HelpLinker()
         : bExtensionMode(false)
-        , m_pIndexerPreProcessor(NULL)
+        , m_pIndexerPreProcessor(nullptr)
         , m_bUseLangRoot(true)
         , m_bCreateIndex(true)
     {}

@@ -84,7 +84,7 @@ void IndexerPreProcessor::processDocument
 
     if( m_xsltStylesheetPtrCaption )
     {
-        xmlDocPtr resCaption = xsltApplyStylesheet( m_xsltStylesheetPtrCaption, doc, NULL );
+        xmlDocPtr resCaption = xsltApplyStylesheet( m_xsltStylesheetPtrCaption, doc, nullptr );
         xmlNodePtr pResNodeCaption = resCaption->xmlChildrenNode;
         if( pResNodeCaption )
         {
@@ -107,7 +107,7 @@ void IndexerPreProcessor::processDocument
 
     if( m_xsltStylesheetPtrContent )
     {
-        xmlDocPtr resContent = xsltApplyStylesheet( m_xsltStylesheetPtrContent, doc, NULL );
+        xmlDocPtr resContent = xsltApplyStylesheet( m_xsltStylesheetPtrContent, doc, nullptr );
         xmlNodePtr pResNodeContent = resContent->xmlChildrenNode;
         if( pResNodeContent )
         {
@@ -151,7 +151,7 @@ struct Data
 
 void writeKeyValue_DBHelp( FILE* pFile, const std::string& aKeyStr, const std::string& aValueStr )
 {
-    if( pFile == NULL )
+    if( pFile == nullptr )
         return;
     char cLF = 10;
     unsigned int nKeyLen = aKeyStr.length();
@@ -193,7 +193,7 @@ public:
 #else
         FILE* pFile = fopen( rFileName.native_file_string().c_str(), "wb" );
 #endif
-        if( pFile == NULL )
+        if( pFile == nullptr )
             return;
 
         DataHashtable::const_iterator aEnd = _hash.end();
@@ -260,7 +260,7 @@ void HelpLinker::addBookmark( FILE* pFile_DBHelp, std::string thishid,
     for (size_t j = 0; j < titleB.length(); ++j)
         dataB[i++] = titleB[j];
 
-    if( pFile_DBHelp != NULL )
+    if( pFile_DBHelp != nullptr )
     {
         std::string aValueStr( dataB.begin(), dataB.end() );
         writeKeyValue_DBHelp( pFile_DBHelp, thishid, aValueStr );
@@ -481,7 +481,7 @@ void HelpLinker::link() throw(HelpProcessingException, BasicCodeTagger::TaggerEx
 
                     helpTextId = URLEncoder::encode(helpTextId);
 
-                    if( pFileHelpText_DBHelp != NULL )
+                    if( pFileHelpText_DBHelp != nullptr )
                         writeKeyValue_DBHelp( pFileHelpText_DBHelp, helpTextId, helpTextText );
                 }
             }
@@ -507,16 +507,16 @@ void HelpLinker::link() throw(HelpProcessingException, BasicCodeTagger::TaggerEx
     catch( const HelpProcessingException& )
     {
         // catch HelpProcessingException to avoid locking data bases
-        if( pFileHelpText_DBHelp != NULL )
+        if( pFileHelpText_DBHelp != nullptr )
             fclose( pFileHelpText_DBHelp );
-        if( pFileDbBase_DBHelp != NULL )
+        if( pFileDbBase_DBHelp != nullptr )
             fclose( pFileDbBase_DBHelp );
         throw;
     }
 
-    if( pFileHelpText_DBHelp != NULL )
+    if( pFileHelpText_DBHelp != nullptr )
         fclose( pFileHelpText_DBHelp );
-    if( pFileDbBase_DBHelp != NULL )
+    if( pFileDbBase_DBHelp != nullptr )
         fclose( pFileDbBase_DBHelp );
 
     helpKeyword.dump_DBHelp( keyWordFileName_DBHelp);
@@ -875,7 +875,7 @@ void HelpLinker::main( std::vector<std::string> &args,
 }
 
 // Variable to set an exception in "C" StructuredXMLErrorFunction
-static const HelpProcessingException* GpXMLParsingException = NULL;
+static const HelpProcessingException* GpXMLParsingException = nullptr;
 
 extern "C" void StructuredXMLErrorFunction(void *userData, xmlErrorPtr error)
 {
@@ -884,14 +884,14 @@ extern "C" void StructuredXMLErrorFunction(void *userData, xmlErrorPtr error)
 
     std::string aErrorMsg = error->message;
     std::string aXMLParsingFile;
-    if( error->file != NULL )
+    if( error->file != nullptr )
         aXMLParsingFile = error->file;
     int nXMLParsingLine = error->line;
     HelpProcessingException* pException = new HelpProcessingException( aErrorMsg, aXMLParsingFile, nXMLParsingLine );
     GpXMLParsingException = pException;
 
     // Reset error handler
-    xmlSetStructuredErrorFunc( NULL, NULL );
+    xmlSetStructuredErrorFunc( nullptr, nullptr );
 }
 
 HelpProcessingErrorInfo& HelpProcessingErrorInfo::operator=( const struct HelpProcessingException& e )
@@ -941,7 +941,7 @@ bool compileExtensionHelp
     std::string aStdStrDestination = pDestination;
 
     // Set error handler
-    xmlSetStructuredErrorFunc( NULL, StructuredXMLErrorFunction );
+    xmlSetStructuredErrorFunc( nullptr, StructuredXMLErrorFunction );
     try
     {
         std::unique_ptr<HelpLinker> pHelpLinker(new HelpLinker());
@@ -949,11 +949,11 @@ bool compileExtensionHelp
     }
     catch( const HelpProcessingException& e )
     {
-        if( GpXMLParsingException != NULL )
+        if( GpXMLParsingException != nullptr )
         {
             o_rHelpProcessingErrorInfo = *GpXMLParsingException;
             delete GpXMLParsingException;
-            GpXMLParsingException = NULL;
+            GpXMLParsingException = nullptr;
         }
         else
         {
@@ -962,7 +962,7 @@ bool compileExtensionHelp
         bSuccess = false;
     }
     // Reset error handler
-    xmlSetStructuredErrorFunc( NULL, NULL );
+    xmlSetStructuredErrorFunc( nullptr, nullptr );
 
     // i83624: Tree files
     // The following basically checks if the help.tree is well formed XML.
@@ -983,7 +983,7 @@ bool compileExtensionHelp
         aFile.read( s.get(), len, ret );
         aFile.close();
 
-        XML_Parser parser = XML_ParserCreate( 0 );
+        XML_Parser parser = XML_ParserCreate( nullptr );
         XML_Status parsed = XML_Parse( parser, s.get(), int( len ), true );
 
         if (XML_STATUS_ERROR == parsed)

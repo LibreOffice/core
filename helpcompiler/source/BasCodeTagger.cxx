@@ -11,12 +11,12 @@
 
 LibXmlTreeWalker::LibXmlTreeWalker( xmlDocPtr doc )
 {
-    if ( doc == NULL )
+    if ( doc == nullptr )
         throw BasicCodeTagger::NULL_DOCUMENT;
     m_pCurrentNode = xmlDocGetRootElement( doc );
-    if ( m_pCurrentNode == NULL )
+    if ( m_pCurrentNode == nullptr )
         throw BasicCodeTagger::EMPTY_DOCUMENT;
-    else if ( m_pCurrentNode->xmlChildrenNode != NULL )
+    else if ( m_pCurrentNode->xmlChildrenNode != nullptr )
         m_Queue.push_back( m_pCurrentNode->xmlChildrenNode );
     nextNode();
 }
@@ -25,7 +25,7 @@ void LibXmlTreeWalker::nextNode()
 {
 
       //next node
-    if ( m_pCurrentNode->next == NULL )
+    if ( m_pCurrentNode->next == nullptr )
     {
         m_pCurrentNode = m_Queue.front();
         m_Queue.pop_front();
@@ -33,19 +33,19 @@ void LibXmlTreeWalker::nextNode()
     else
         m_pCurrentNode = m_pCurrentNode->next;
     //queue children if they exist
-    if ( m_pCurrentNode->xmlChildrenNode != NULL )
+    if ( m_pCurrentNode->xmlChildrenNode != nullptr )
         m_Queue.push_back( m_pCurrentNode->xmlChildrenNode );
 }
 
 void LibXmlTreeWalker::ignoreCurrNodesChildren()
 {
-    if ( m_pCurrentNode->xmlChildrenNode != NULL )
+    if ( m_pCurrentNode->xmlChildrenNode != nullptr )
           m_Queue.pop_back();
 }
 
 bool LibXmlTreeWalker::end()
 {
-    return m_pCurrentNode->next == NULL && m_Queue.empty();
+    return m_pCurrentNode->next == nullptr && m_Queue.empty();
 }
 
 
@@ -54,17 +54,17 @@ bool LibXmlTreeWalker::end()
 BasicCodeTagger::BasicCodeTagger( xmlDocPtr rootDoc ):
     m_Highlighter(HIGHLIGHT_BASIC)
 {
-      if ( rootDoc == NULL )
+      if ( rootDoc == nullptr )
           throw NULL_DOCUMENT;
       m_pDocument = rootDoc;
-    m_pXmlTreeWalker = NULL;
+    m_pXmlTreeWalker = nullptr;
     m_bTaggingCompleted = false;
 
 }
 
 BasicCodeTagger::~BasicCodeTagger()
 {
-    if ( m_pXmlTreeWalker != NULL )
+    if ( m_pXmlTreeWalker != nullptr )
       delete m_pXmlTreeWalker;
 }
 //!Gathers all the <bascode> tag nodes from xml tree.
@@ -77,7 +77,7 @@ void BasicCodeTagger::getBasicCodeContainerNodes()
 
     m_BasicCodeContainerTags.clear();
 
-    if ( m_pXmlTreeWalker != NULL )
+    if ( m_pXmlTreeWalker != nullptr )
       delete m_pXmlTreeWalker;
     m_pXmlTreeWalker = new LibXmlTreeWalker( m_pDocument );
 
@@ -111,7 +111,7 @@ void BasicCodeTagger::tagBasCodeParagraphs()
     {
         currBascodeNode = m_BasicCodeContainerTags.front();
         currParagraph = currBascodeNode->xmlChildrenNode; //first <paragraph>
-        while ( currParagraph != NULL )
+        while ( currParagraph != nullptr )
         {
             tagParagraph( currParagraph );
             currParagraph=currParagraph->next;
@@ -126,14 +126,14 @@ void BasicCodeTagger::tagParagraph( xmlNodePtr paragraph )
     //1. get paragraph text
     xmlChar* codeSnippet;
     codeSnippet = xmlNodeListGetString( m_pDocument, paragraph->xmlChildrenNode, 1 );
-    if ( codeSnippet == NULL )
+    if ( codeSnippet == nullptr )
     {
         return; //no text, nothing more to do here
     }
     //2. delete every child from paragraph (except attributes)
     xmlNodePtr curNode = paragraph->xmlChildrenNode;
     xmlNodePtr sibling;
-    while ( curNode != NULL )
+    while ( curNode != nullptr )
     {
         sibling = curNode->next;
         xmlUnlinkNode( curNode );
@@ -155,7 +155,7 @@ void BasicCodeTagger::tagParagraph( xmlNodePtr paragraph )
         if ( i->tokenType != TT_WHITESPACE )
         {
             xmlChar* typeStr = getTypeString( i->tokenType );
-            curNode = xmlNewTextChild( paragraph, 0, reinterpret_cast<xmlChar const *>("item"), 0 );
+            curNode = xmlNewTextChild( paragraph, nullptr, reinterpret_cast<xmlChar const *>("item"), nullptr );
             xmlNewProp( curNode, reinterpret_cast<xmlChar const *>("type"), typeStr );
             xmlAddChild( curNode, text );
             xmlFree( typeStr );
