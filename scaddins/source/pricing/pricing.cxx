@@ -121,7 +121,7 @@ extern "C" {
 SAL_DLLPUBLIC_EXPORT void * SAL_CALL pricing_component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * /*pRegistryKey*/ )
 {
-    void* pRet = 0;
+    void* pRet = nullptr;
 
     if ( pServiceManager &&
             OUString::createFromAscii( pImplName ) == ScaPricingAddIn::getImplementationName_Static() )
@@ -146,9 +146,9 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL pricing_component_getFactory(
 
 //  "normal" service implementation
 ScaPricingAddIn::ScaPricingAddIn() :
-    pDefLocales( NULL ),
-    pResMgr( NULL ),
-    pFuncDataList( NULL )
+    pDefLocales( nullptr ),
+    pResMgr( nullptr ),
+    pFuncDataList( nullptr )
 {
 }
 
@@ -212,7 +212,7 @@ void ScaPricingAddIn::InitData()
     if( pDefLocales )
     {
         delete pDefLocales;
-        pDefLocales = NULL;
+        pDefLocales = nullptr;
     }
 }
 

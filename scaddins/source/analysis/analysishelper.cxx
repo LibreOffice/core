@@ -39,7 +39,7 @@ using namespace sca::analysis;
 #define INTPAR              true    // first parameter is internal
 
 #define FUNCDATA( FUNCNAME, DBL, OPT, NUMOFPAR, CAT ) \
-    { "get" #FUNCNAME, ANALYSIS_FUNCNAME_##FUNCNAME, ANALYSIS_##FUNCNAME, DBL, OPT, ANALYSIS_DEFFUNCNAME_##FUNCNAME, NUMOFPAR, CAT, NULL }
+    { "get" #FUNCNAME, ANALYSIS_FUNCNAME_##FUNCNAME, ANALYSIS_##FUNCNAME, DBL, OPT, ANALYSIS_DEFFUNCNAME_##FUNCNAME, NUMOFPAR, CAT, nullptr }
 
 #define FUNCDATAS( FUNCNAME, DBL, OPT, NUMOFPAR, CAT, SUFFIX ) \
     { "get" #FUNCNAME, ANALYSIS_FUNCNAME_##FUNCNAME, ANALYSIS_##FUNCNAME, DBL, OPT, ANALYSIS_DEFFUNCNAME_##FUNCNAME, NUMOFPAR, CAT, SUFFIX }
@@ -2547,8 +2547,8 @@ ConvertDataList::~ConvertDataList()
 
 double ConvertDataList::Convert( double fVal, const OUString& rFrom, const OUString& rTo ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
-    ConvertData*    pFrom = NULL;
-    ConvertData*    pTo = NULL;
+    ConvertData*    pFrom = nullptr;
+    ConvertData*    pTo = nullptr;
     bool            bSearchFrom = true;
     bool            bSearchTo = true;
     sal_Int16       nLevelFrom = 0;

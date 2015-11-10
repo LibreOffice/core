@@ -45,7 +45,7 @@ using namespace std;
 extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL analysis_component_getFactory(
     const sal_Char* pImplName, void* pServiceManager, void* /*pRegistryKey*/ )
 {
-    void* pRet = 0;
+    void* pRet = nullptr;
 
     if( pServiceManager && OUString::createFromAscii( pImplName ) == AnalysisAddIn::getImplementationName_Static() )
     {
@@ -134,22 +134,22 @@ void AnalysisAddIn::InitData()
     }
     else
     {
-        pFD = NULL;
+        pFD = nullptr;
     }
 
     if( pDefLocales )
     {
         delete pDefLocales;
-        pDefLocales = NULL;
+        pDefLocales = nullptr;
     }
 }
 
 AnalysisAddIn::AnalysisAddIn( const uno::Reference< uno::XComponentContext >& xContext ) :
-    pDefLocales( NULL ),
-    pFD( NULL ),
-    pFactDoubles( NULL ),
-    pCDL( NULL ),
-    pResMgr( NULL ),
+    pDefLocales( nullptr ),
+    pFD( nullptr ),
+    pFactDoubles( nullptr ),
+    pCDL( nullptr ),
+    pResMgr( nullptr ),
     aAnyConv( xContext )
 {
 }
