@@ -122,7 +122,7 @@ void WPXSvStreamTest::testRead()
     const unsigned long nLen = sizeof aText;
 
     unsigned long nReadBytes = 0;
-    const unsigned char *pData = 0;
+    const unsigned char *pData = nullptr;
     const unsigned char *const pTextOrig = reinterpret_cast<const unsigned char *>(aText);
     const unsigned char *pText = pTextOrig;
 
@@ -174,7 +174,7 @@ void WPXSvStreamTest::testRead()
     pData = pInput->read(0UL, nReadBytes);
     CPPUNIT_ASSERT_EQUAL(0UL, nReadBytes);
     CPPUNIT_ASSERT_EQUAL(0L, pInput->tell());
-    CPPUNIT_ASSERT_EQUAL(pData, static_cast<const unsigned char *>(0));
+    CPPUNIT_ASSERT_EQUAL(pData, static_cast<const unsigned char *>(nullptr));
     CPPUNIT_ASSERT(!pInput->isEnd());
 }
 
@@ -340,9 +340,9 @@ void WPXSvStreamTest::testStructured()
         CPPUNIT_ASSERT(!pInput->isStructured());
         CPPUNIT_ASSERT(0 == pInput->subStreamCount());
         CPPUNIT_ASSERT(!pInput->existsSubStream("foo"));
-        CPPUNIT_ASSERT(0 == pInput->getSubStreamByName("foo"));
-        CPPUNIT_ASSERT(0 == pInput->getSubStreamById(42));
-        CPPUNIT_ASSERT(0 == pInput->subStreamName(42));
+        CPPUNIT_ASSERT(nullptr == pInput->getSubStreamByName("foo"));
+        CPPUNIT_ASSERT(nullptr == pInput->getSubStreamById(42));
+        CPPUNIT_ASSERT(nullptr == pInput->subStreamName(42));
     }
 }
 

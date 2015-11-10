@@ -46,34 +46,34 @@ static cppu::ImplementationEntry const services[] =
     {
         &AbiWordImportFilter_createInstance, &AbiWordImportFilter_getImplementationName,
         &AbiWordImportFilter_getSupportedServiceNames,
-        &cppu::createSingleComponentFactory, 0, 0
+        &cppu::createSingleComponentFactory, nullptr, 0
     },
     {
         &WordPerfectImportFilter_createInstance, &WordPerfectImportFilter_getImplementationName,
         &WordPerfectImportFilter_getSupportedServiceNames,
-        &cppu::createSingleComponentFactory, 0, 0
+        &cppu::createSingleComponentFactory, nullptr, 0
     },
     {
         &MSWorksImportFilter_createInstance, &MSWorksImportFilter_getImplementationName,
         &MSWorksImportFilter_getSupportedServiceNames,
-        &cppu::createSingleComponentFactory, 0, 0
+        &cppu::createSingleComponentFactory, nullptr, 0
     },
     {
         &MWAWImportFilter_createInstance, &MWAWImportFilter_getImplementationName,
         &MWAWImportFilter_getSupportedServiceNames,
-        &cppu::createSingleComponentFactory, 0, 0
+        &cppu::createSingleComponentFactory, nullptr, 0
     },
     {
         &EBookImportFilter_createInstance, &EBookImportFilter_getImplementationName,
         &EBookImportFilter_getSupportedServiceNames,
-        &cppu::createSingleComponentFactory, 0, 0
+        &cppu::createSingleComponentFactory, nullptr, 0
     },
     {
         &PagesImportFilter_createInstance, &PagesImportFilter_getImplementationName,
         &PagesImportFilter_getSupportedServiceNames,
-        &cppu::createSingleComponentFactory, 0, 0
+        &cppu::createSingleComponentFactory, nullptr, 0
     },
-    { 0, 0, 0, 0, 0, 0 }
+    { nullptr, nullptr, nullptr, nullptr, nullptr, 0 }
 };
 
 }

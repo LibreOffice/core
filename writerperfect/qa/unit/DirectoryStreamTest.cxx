@@ -106,7 +106,7 @@ void lcl_testDataOperations(RVNGInputStream &rStream)
     CPPUNIT_ASSERT_EQUAL(-1, rStream.seek(0, librevenge::RVNG_SEEK_CUR));
 
     unsigned long numBytesRead = 0;
-    CPPUNIT_ASSERT(0 == rStream.read(1, numBytesRead));
+    CPPUNIT_ASSERT(nullptr == rStream.read(1, numBytesRead));
     CPPUNIT_ASSERT_EQUAL(0UL, numBytesRead);
 }
 

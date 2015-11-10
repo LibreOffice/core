@@ -36,15 +36,15 @@ static cppu::ImplementationEntry const services[] =
     {
         &KeynoteImportFilter_createInstance, &KeynoteImportFilter_getImplementationName,
         &KeynoteImportFilter_getSupportedServiceNames,
-        &cppu::createSingleComponentFactory, 0, 0
+        &cppu::createSingleComponentFactory, nullptr, 0
     },
     {
         &MWAWPresentationImportFilter_createInstance,
         &MWAWPresentationImportFilter_getImplementationName,
         &MWAWPresentationImportFilter_getSupportedServiceNames,
-        &cppu::createSingleComponentFactory, 0, 0
+        &cppu::createSingleComponentFactory, nullptr, 0
     },
-    { 0, 0, 0, 0, 0, 0 }
+    { nullptr, nullptr, nullptr, nullptr, nullptr, 0 }
 };
 
 }

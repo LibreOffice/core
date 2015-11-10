@@ -41,19 +41,19 @@ static cppu::ImplementationEntry const services[] =
     {
         &MSWorksCalcImportFilter_createInstance, &MSWorksCalcImportFilter_getImplementationName,
         &MSWorksCalcImportFilter_getSupportedServiceNames,
-        &cppu::createSingleComponentFactory, 0, 0
+        &cppu::createSingleComponentFactory, nullptr, 0
     },
     {
         &MWAWCalcImportFilter_createInstance, &MWAWCalcImportFilter_getImplementationName,
         &MWAWCalcImportFilter_getSupportedServiceNames,
-        &cppu::createSingleComponentFactory, 0, 0
+        &cppu::createSingleComponentFactory, nullptr, 0
     },
     {
         &NumbersImportFilter_createInstance, &NumbersImportFilter_getImplementationName,
         &NumbersImportFilter_getSupportedServiceNames,
-        &cppu::createSingleComponentFactory, 0, 0
+        &cppu::createSingleComponentFactory, nullptr, 0
     },
-    { 0, 0, 0, 0, 0, 0 }
+    { nullptr, nullptr, nullptr, nullptr, nullptr, 0 }
 };
 
 }

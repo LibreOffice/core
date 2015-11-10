@@ -106,7 +106,7 @@ DirectoryStream::Impl::Impl(const uno::Reference<ucb::XContent> &rxContent)
 }
 
 DirectoryStream::DirectoryStream(const com::sun::star::uno::Reference<com::sun::star::ucb::XContent> &xContent)
-    : m_pImpl(isDirectory(xContent) ? new Impl(xContent) : 0)
+    : m_pImpl(isDirectory(xContent) ? new Impl(xContent) : nullptr)
 {
 }
 
@@ -120,9 +120,9 @@ DirectoryStream *DirectoryStream::createForParent(const com::sun::star::uno::Ref
     try
     {
         if (!xContent.is())
-            return 0;
+            return nullptr;
 
-        DirectoryStream *pDir(0);
+        DirectoryStream *pDir(nullptr);
 
         const uno::Reference<container::XChild> xChild(xContent, uno::UNO_QUERY);
         if (xChild.is())
@@ -134,7 +134,7 @@ DirectoryStream *DirectoryStream::createForParent(const com::sun::star::uno::Ref
                 if (!pDir->isStructured())
                 {
                     delete pDir;
-                    pDir = 0;
+                    pDir = nullptr;
                 }
             }
         }
@@ -143,7 +143,7 @@ DirectoryStream *DirectoryStream::createForParent(const com::sun::star::uno::Ref
     }
     catch (...)
     {
-        return 0;
+        return nullptr;
     }
 }
 
@@ -180,7 +180,7 @@ unsigned DirectoryStream::subStreamCount()
 const char *DirectoryStream::subStreamName(unsigned /* id */)
 {
     // TODO: implement me
-    return 0;
+    return nullptr;
 }
 
 bool DirectoryStream::existsSubStream(const char * /* name */)
@@ -192,26 +192,26 @@ bool DirectoryStream::existsSubStream(const char * /* name */)
 librevenge::RVNGInputStream *DirectoryStream::getSubStreamByName(const char *const pName)
 {
     if (!m_pImpl)
-        return 0;
+        return nullptr;
 
     ucbhelper::Content aContent(m_pImpl->xContent, uno::Reference<ucb::XCommandEnvironment>(), comphelper::getProcessComponentContext());
     const uno::Reference<io::XInputStream> xInputStream(findStream(aContent, rtl::OUString::createFromAscii(pName)));
     if (xInputStream.is())
         return new WPXSvInputStream(xInputStream);
 
-    return 0;
+    return nullptr;
 }
 
 librevenge::RVNGInputStream *DirectoryStream::getSubStreamById(unsigned /* id */)
 {
     // TODO: implement me
-    return 0;
+    return nullptr;
 }
 
 const unsigned char *DirectoryStream::read(unsigned long, unsigned long &nNumBytesRead)
 {
     nNumBytesRead = 0;
-    return 0;
+    return nullptr;
 }
 
 int DirectoryStream::seek(long, librevenge::RVNG_SEEK_TYPE)
