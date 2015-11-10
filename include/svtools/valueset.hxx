@@ -307,12 +307,17 @@ public:
     void            DoubleClick();
     virtual void    UserDraw( const UserDrawEvent& rUDEvt );
 
+    /// Insert @rImage item.
     void            InsertItem(sal_uInt16 nItemId, const Image& rImage, size_t nPos = VALUESET_APPEND);
+    /// Insert @rImage item with @rStr as either a legend or tooltip depending on @bShowLegend.
     void            InsertItem(sal_uInt16 nItemId, const Image& rImage,
-                               const OUString& rStr, size_t nPos = VALUESET_APPEND);
+                               const OUString& rStr, size_t nPos = VALUESET_APPEND, bool bShowLegend = false);
+    /// Insert an @rColor item with @rStr tooltip.
     void            InsertItem(sal_uInt16 nItemId, const Color& rColor,
                                const OUString& rStr, size_t nPos = VALUESET_APPEND);
+    /// Insert an User Drawn item.
     void            InsertItem(sal_uInt16 nItemId, size_t nPos = VALUESET_APPEND);
+    /// Insert an User Drawn item with @rStr tooltip.
     void            InsertItem(sal_uInt16 nItemId, const OUString& rStr, size_t nPos = VALUESET_APPEND);
     void            RemoveItem(sal_uInt16 nItemId);
 
@@ -336,8 +341,9 @@ public:
         return mnUserVisLines;
     }
     void           SetItemWidth( long nItemWidth = 0 );
-
     void           SetItemHeight( long nLineHeight = 0 );
+    Size           GetLargestItemSize();
+    void           RecalculateItemSizes();
 
     void           SelectItem( sal_uInt16 nItemId );
     sal_uInt16     GetSelectItemId() const
