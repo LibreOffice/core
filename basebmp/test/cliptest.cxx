@@ -162,7 +162,7 @@ private:
         OUString aSvg( "m 0 0h5v10h5v-5h-10z" );
 
         basegfx::B2DPolyPolygon aPoly;
-        basegfx::tools::importFromSvgD( aPoly, aSvg, false, NULL );
+        basegfx::tools::importFromSvgD( aPoly, aSvg, false, nullptr );
         const basebmp::Color aCol(0xFF);
         pBmp->clear( basebmp::Color(0) );
         pBmp->fillPolyPolygon(
@@ -204,7 +204,7 @@ public:
 
         OUString aSvg( "m 0 0 h5 l5 5 v5 h-5 l-5-5 z" );
         basegfx::B2DPolyPolygon aPoly;
-        basegfx::tools::importFromSvgD( aPoly, aSvg, false, NULL );
+        basegfx::tools::importFromSvgD( aPoly, aSvg, false, nullptr );
         mpClipMask->clear(Color(0));
         mpClipMask->drawPolygon(
             aPoly.getB2DPolygon(0),

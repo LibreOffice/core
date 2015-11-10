@@ -1969,7 +1969,7 @@ BitmapDeviceSharedPtr createBitmapDeviceImplInner( const basegfx::B2IVector&    
         pMem.reset(
             static_cast<sal_uInt8*>(rtl_allocateMemory( nMemSize )),
             &rtl_freeMemory );
-        if (pMem.get() == 0 && nMemSize != 0)
+        if (pMem.get() == nullptr && nMemSize != 0)
             return BitmapDeviceSharedPtr();
         if (bBlack)
             memset(pMem.get(), 0, nMemSize);
@@ -2165,7 +2165,7 @@ BitmapDeviceSharedPtr createBitmapDevice( const basegfx::B2IVector& rSize,
                                    nScanlineStride,
                                    boost::shared_array< sal_uInt8 >(),
                                    PaletteMemorySharedVector(),
-                                   NULL,
+                                   nullptr,
                                    IBitmapDeviceDamageTrackerSharedPtr() );
 }
 
@@ -2181,7 +2181,7 @@ BitmapDeviceSharedPtr createBitmapDevice( const basegfx::B2IVector&        rSize
                                    nScanlineStride,
                                    boost::shared_array< sal_uInt8 >(),
                                    rPalette,
-                                   NULL,
+                                   nullptr,
                                    IBitmapDeviceDamageTrackerSharedPtr() );
 }
 
@@ -2198,7 +2198,7 @@ BitmapDeviceSharedPtr createBitmapDevice( const basegfx::B2IVector&        rSize
                                    nScanlineStride,
                                    rMem,
                                    rPalette,
-                                   NULL,
+                                   nullptr,
                                    IBitmapDeviceDamageTrackerSharedPtr() );
 }
 
@@ -2211,7 +2211,7 @@ BitmapDeviceSharedPtr createClipDevice( const basegfx::B2IVector&        rSize )
                                      getBitmapDeviceStrideForWidth(basebmp::Format::OneBitMsbGrey, rSize.getX()),
                                      boost::shared_array< sal_uInt8 >(),
                                      PaletteMemorySharedVector(),
-                                     NULL,
+                                     nullptr,
                                      IBitmapDeviceDamageTrackerSharedPtr(),
                                      false /* white */) );
     return xClip;
@@ -2240,7 +2240,7 @@ BitmapDeviceSharedPtr cloneBitmapDevice( const basegfx::B2IVector&    rSize,
                                    rProto->getScanlineStride(),
                                    boost::shared_array< sal_uInt8 >(),
                                    rProto->getPalette(),
-                                   NULL,
+                                   nullptr,
                                    rProto->getDamageTracker() );
 }
 

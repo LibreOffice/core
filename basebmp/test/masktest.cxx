@@ -119,7 +119,7 @@ public:
         OUString aSvg( "m 0 0h5v10h5v-5h-10z" );
 
         basegfx::B2DPolyPolygon aPoly;
-        basegfx::tools::importFromSvgD( aPoly, aSvg, false, NULL );
+        basegfx::tools::importFromSvgD( aPoly, aSvg, false, nullptr );
         const Color aCol(0xFF);
         mpMask->fillPolyPolygon(
             aPoly,

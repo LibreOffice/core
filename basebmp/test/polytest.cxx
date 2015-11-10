@@ -54,7 +54,7 @@ private:
 
         basegfx::tools::importFromSvgD(
             aPoly,
-            "M2 2 l7 7 z", false, NULL );
+            "M2 2 l7 7 z", false, nullptr );
         rDevice->fillPolyPolygon(
             aPoly,
             aCol,
@@ -68,7 +68,7 @@ private:
         aPoly.clear();
         basegfx::tools::importFromSvgD(
             aPoly,
-            "M7 2 l-6 6 z", false, NULL );
+            "M7 2 l-6 6 z", false, nullptr );
         rDevice->fillPolyPolygon(
             aPoly,
             aCol,
@@ -86,7 +86,7 @@ private:
 
         basegfx::tools::importFromSvgD(
             aPoly,
-            "M2 2 h1 l7 7 h-1 z", false, NULL );
+            "M2 2 h1 l7 7 h-1 z", false, nullptr );
         rDevice->fillPolyPolygon(
             aPoly,
             aCol,
@@ -100,7 +100,7 @@ private:
         aPoly.clear();
         basegfx::tools::importFromSvgD(
             aPoly,
-            "M7 2 h-1 l-6 6 h1 z", false, NULL );
+            "M7 2 h-1 l-6 6 h1 z", false, nullptr );
         rDevice->fillPolyPolygon(
             aPoly,
             aCol,
@@ -114,7 +114,7 @@ private:
         aPoly.clear();
         basegfx::tools::importFromSvgD(
             aPoly,
-            "M0 0 l7 7 h-1 l-5-7 z", false, NULL );
+            "M0 0 l7 7 h-1 l-5-7 z", false, nullptr );
         rDevice->fillPolyPolygon(
             aPoly,
             aCol,
@@ -132,7 +132,7 @@ private:
 
         basegfx::tools::importFromSvgD( aPoly,
                                         "M0 0 h7 v7 h-7 z M2 2 v3 h3 v-3 z",
-                                        false, NULL );
+                                        false, nullptr );
 
         rDevice->fillPolyPolygon(
             aPoly,
@@ -151,7 +151,7 @@ private:
 
         basegfx::tools::importFromSvgD( aPoly,
                                         "M0 0 h7 v7 h-7 z M2 2 v3 h3 v-3 z",
-                                        false, NULL );
+                                        false, nullptr );
         basegfx::B2DHomMatrix aMat;
         aMat.translate(-3,-3);
         aMat.rotate( 1.7 );
@@ -252,7 +252,7 @@ private:
         // generate a single pixel, due to the rasterization effect.
         basegfx::tools::importFromSvgD( aPoly,
                                         "M2 3 l1 -1 M4 2 l1 1 M2 8 l1 1 M5 8 l-1 1 M2 5 h4 M3 0 v10",
-                                        false, NULL );
+                                        false, nullptr );
         BitmapDeviceSharedPtr pClippedDevice=(
             subsetBitmapDevice( rDevice,
                                 basegfx::B2IBox(3,3,5,9) ));
@@ -280,7 +280,7 @@ private:
                                             "M1 0 h1 v10 h-1 z"
                                             "M4 0 h1 v10 h-1 z"
                                             "M8 0 h1 v10 h-1 z",
-                                        false, NULL );
+                                        false, nullptr );
         rDevice->fillPolyPolygon(
             aPoly,
             aCol,
