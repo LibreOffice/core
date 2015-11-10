@@ -729,6 +729,7 @@
   <block-list:block block-list:abbreviated-name=":calendario:" block-list:name="📅"/>
   <block-list:block block-list:abbreviated-name=":cámara:" block-list:name="📷"/>
   <block-list:block block-list:abbreviated-name=":cámara de cine:" block-list:name="🎥"/>
+  <block-list:block block-list:abbreviated-name=":camarón frito:" block-list:name="🍤"/>
   <block-list:block block-list:abbreviated-name=":cambio de moneda:" block-list:name="💱"/>
   <block-list:block block-list:abbreviated-name=":camello:" block-list:name="🐫"/>
   <block-list:block block-list:abbreviated-name=":camión2:" block-list:name="🚚"/>
@@ -736,6 +737,7 @@
   <block-list:block block-list:abbreviated-name=":camión de bomberos:" block-list:name="🚒"/>
   <block-list:block block-list:abbreviated-name=":camiseta2:" block-list:name="🎽"/>
   <block-list:block block-list:abbreviated-name=":camiseta:" block-list:name="👕"/>
+  <block-list:block block-list:abbreviated-name=":camote:" block-list:name="🍠"/>
   <block-list:block block-list:abbreviated-name=":campana:" block-list:name="🔔"/>
   <block-list:block block-list:abbreviated-name=":campana de viento:" block-list:name="🎐"/>
   <block-list:block block-list:abbreviated-name=":campana tachada:" block-list:name="🔕"/>
@@ -1279,6 +1281,7 @@
   <block-list:block block-list:abbreviated-name=":pan:" block-list:name="🍞"/>
   <block-list:block block-list:abbreviated-name=":panda:" block-list:name="🐼"/>
   <block-list:block block-list:abbreviated-name=":papá Noel:" block-list:name="🎅"/>
+  <block-list:block block-list:abbreviated-name=":papas fritas:" block-list:name="🍟"/>
   <block-list:block block-list:abbreviated-name=":papel libre de ácido:" block-list:name="♾"/>
   <block-list:block block-list:abbreviated-name=":papel reciclado:" block-list:name="♼"/>
   <block-list:block block-list:abbreviated-name=":papiro:" block-list:name="📜"/>
