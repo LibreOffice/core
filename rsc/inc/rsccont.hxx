@@ -55,11 +55,11 @@ protected:
                                  RscTypCont * pTC, sal_uInt32, bool bExtra );
 public:
                     RscBaseCont( Atom nId, sal_uInt32 nTypId,
-                                 RscTop * pSuper = NULL,
+                                 RscTop * pSuper = nullptr,
                                  bool bNoId = true );
                     virtual ~RscBaseCont();
     virtual RSCCLASS_TYPE   GetClassType() const override;
-    void            SetTypeClass( RscTop * pClass, RscTop * pClass1 = NULL )
+    void            SetTypeClass( RscTop * pClass, RscTop * pClass1 = nullptr )
                         {
                             pTypeClass = pClass;
                             pTypeClass1 = pClass1;
@@ -107,7 +107,7 @@ class RscContWriteSrc : public RscBaseCont
 {
 public:
                     RscContWriteSrc( Atom nId, sal_uInt32 nTypId,
-                                     RscTop * pSuper = NULL,
+                                     RscTop * pSuper = nullptr,
                                      bool bNoId = true );
     void            WriteSrc( const RSCINST & rInst, FILE * fOutput,
                               RscTypCont * pTC, sal_uInt32 nTab, const char * ) override;
@@ -117,7 +117,7 @@ class RscCont : public RscContWriteSrc
 {
 public:
                     RscCont( Atom nId, sal_uInt32 nTypId,
-                             RscTop * pSuper = NULL,
+                             RscTop * pSuper = nullptr,
                              bool bNoId = true );
     ERRTYPE         WriteRc( const RSCINST & rInst, RscWriteRc & aMem,
                              RscTypCont * pTC, sal_uInt32, bool bExtra ) override;
@@ -127,7 +127,7 @@ class RscContExtraData : public RscContWriteSrc
 {
 public:
                     RscContExtraData( Atom nId, sal_uInt32 nTypId,
-                                      RscTop * pSuper = NULL,
+                                      RscTop * pSuper = nullptr,
                                       bool bNoId = true );
     ERRTYPE         WriteRc( const RSCINST & rInst, RscWriteRc & aMem,
                              RscTypCont * pTC, sal_uInt32, bool bExtra ) override;

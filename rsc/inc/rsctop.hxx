@@ -42,7 +42,7 @@ class RscTop : public RefNode
 
 protected:
                     RscTop( Atom nId, sal_uInt32 nTypIdent,
-                            RscTop * pSuperCl = NULL );
+                            RscTop * pSuperCl = nullptr );
 
 public:
          OString    aCallPar1;      // class call without types until ResId
@@ -81,7 +81,7 @@ public:
 
                     // sets the variable
     virtual ERRTYPE SetVariable( Atom nVarName, RscTop * pClass,
-                                 RSCINST * pDflt = NULL,
+                                 RSCINST * pDflt = nullptr,
                                  RSCVAR nVarType = 0, sal_uInt32 nMask = 0,
                                  Atom nDataBaseName = InvalidAtom );
 
@@ -93,7 +93,7 @@ public:
     virtual RSCINST GetVariable( const RSCINST & rInst, Atom nVarName,
                                  const RSCINST & rInitInst,
                                  bool bInitDflt = false,
-                                 RscTop * pCreateClass = NULL );
+                                 RscTop * pCreateClass = nullptr );
     virtual RSCINST GetCopyVar( const RSCINST & rInst, Atom nVarName );
 
     virtual RSCINST GetTupelVar( const RSCINST & rInst, sal_uInt32 nPos,

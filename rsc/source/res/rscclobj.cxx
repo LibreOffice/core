@@ -24,7 +24,7 @@
 
 RefNode::RefNode( Atom nTyp )
 {
-    pObjBiTree = 0;
+    pObjBiTree = nullptr;
     nTypNameId = nTyp;
 }
 
@@ -54,7 +54,7 @@ ObjNode * RefNode::GetObjNode( const RscId & rRscId )
 {
     if( pObjBiTree )
         return pObjBiTree->Search( rRscId );
-    return NULL;
+    return nullptr;
 }
 
 ObjNode::ObjNode( const RscId & rId, CLASS_DATA pData, sal_uLong lKey )

@@ -95,7 +95,7 @@ char * RscChar::MakeUTF8( char * pStr, sal_uInt16 nTextEncoding )
                         {
                             // value is too big, or more than 3 digits
                             delete [] pOrgStr;
-                            return NULL;
+                            return nullptr;
                         }
                         c = (char)nChar;
                         pStr--;
@@ -136,7 +136,7 @@ char * RscChar::MakeUTF8( char * pStr, sal_uInt16 nTextEncoding )
 
     sal_uInt32 nInfo;
     sal_Size   nSrcCvtBytes;
-    sal_Size nUniSize = rtl_convertTextToUnicode( hConv, 0,
+    sal_Size nUniSize = rtl_convertTextToUnicode( hConv, nullptr,
                                                 pOrgStr, nOrgLen,
                                                 pUniCode, nMaxUniCodeBuf,
                                                 RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_DEFAULT
@@ -147,12 +147,12 @@ char * RscChar::MakeUTF8( char * pStr, sal_uInt16 nTextEncoding )
                                                 &nSrcCvtBytes );
 
     rtl_destroyTextToUnicodeConverter( hConv );
-    delete[] pOrgStr, pOrgStr = 0;
+    delete[] pOrgStr, pOrgStr = nullptr;
 
     hConv = rtl_createUnicodeToTextConverter( RTL_TEXTENCODING_UTF8 );
     // factor of 6 is the maximum size of an UNICODE character as utf8
     char * pUtf8 = static_cast<char *>(rtl_allocateMemory( nUniSize * 6 ));
-    rtl_convertUnicodeToText( hConv, 0,
+    rtl_convertUnicodeToText( hConv, nullptr,
                             pUniCode, nUniSize,
                             pUtf8, nUniSize * 6,
                             RTL_UNICODETOTEXT_FLAGS_UNDEFINED_DEFAULT
@@ -162,7 +162,7 @@ char * RscChar::MakeUTF8( char * pStr, sal_uInt16 nTextEncoding )
                             &nSrcCvtBytes );
 
     rtl_destroyTextToUnicodeConverter( hConv );
-    delete[] pUniCode, pUniCode = 0;
+    delete[] pUniCode, pUniCode = nullptr;
 
     return pUtf8;
 };

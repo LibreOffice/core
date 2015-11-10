@@ -70,7 +70,7 @@ public:
     RSCINST         GetVariable( const RSCINST & rInst, Atom nVarName,
                                  const RSCINST & rInitInst,
                                  bool bInitDflt = false,
-                                 RscTop * pCreateClass = NULL ) override;
+                                 RscTop * pCreateClass = nullptr ) override;
     RSCINST         GetCopyVar( const RSCINST & rInst, Atom nVarName ) override;
 
                     // gives the class size in bytes

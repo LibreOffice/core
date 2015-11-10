@@ -32,7 +32,7 @@ RscString::RscString( Atom nId, sal_uInt32 nTypeId )
     : RscTop( nId, nTypeId )
 {
     nSize = ALIGNED_SIZE( sizeof( RscStringInst ) );
-    pRefClass = NULL;
+    pRefClass = nullptr;
 }
 
 RSCCLASS_TYPE RscString::GetClassType() const
@@ -53,7 +53,7 @@ ERRTYPE RscString::SetString( const RSCINST & rInst, const char * pStr )
         if( pTmp )
         {
             rtl_freeMemory( pTmp );
-            pTmp = NULL;
+            pTmp = nullptr;
         }
 
         if( pStr )
@@ -112,7 +112,7 @@ RSCINST RscString::Create( RSCINST * pInst, const RSCINST & rDflt,
         bOwnClass = rDflt.pClass->InHierarchy( this );
 
     reinterpret_cast<RscStringInst *>(aInst.pData)->aRefId.Create();
-    reinterpret_cast<RscStringInst *>(aInst.pData)->pStr = NULL;
+    reinterpret_cast<RscStringInst *>(aInst.pData)->pStr = nullptr;
     reinterpret_cast<RscStringInst *>(aInst.pData)->bDflt = true;
 
     if( bOwnClass )
@@ -230,7 +230,7 @@ ERRTYPE RscString::WriteRc( const RSCINST & rInst, RscWriteRc & rMem,
                             RscTypCont * pTC, sal_uInt32 nDeep, bool bExtra )
 {
     ERRTYPE aError;
-    ObjNode *       pObjNode = NULL;
+    ObjNode *       pObjNode = nullptr;
 
 
     if( reinterpret_cast<RscStringInst *>(rInst.pData)->aRefId.IsId() )

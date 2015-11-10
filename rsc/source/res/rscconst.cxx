@@ -29,7 +29,7 @@
 RscConst::RscConst( Atom nId, sal_uInt32 nTypeId )
     : RscTop( nId, nTypeId )
 {
-    pVarArray = NULL;
+    pVarArray = nullptr;
     nEntries = 0;
 }
 

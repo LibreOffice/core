@@ -84,7 +84,7 @@ void dodefine()
     int c;
     DEFBUF* dp;            /* -> new definition    */
     int isredefine;        /* TRUE if redefined    */
-    char* old = 0;         /* Remember redefined   */
+    char* old = NULL;         /* Remember redefined   */
 
     if (type[(c = skipws())] != LET)
         goto bad_define;

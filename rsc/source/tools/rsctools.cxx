@@ -83,7 +83,7 @@ char* rsc_strdup( const char* pStr )
 OString GetTmpFileName()
 {
     OUString aTmpURL, aTmpFile;
-    osl_createTempFile( NULL, NULL, &aTmpURL.pData );
+    osl_createTempFile( nullptr, nullptr, &aTmpURL.pData );
     osl_getSystemPathFromFileURL( aTmpURL.pData, &aTmpFile.pData );
     return OUStringToOString( aTmpFile, RTL_TEXTENCODING_MS_1252 );
 }
@@ -114,7 +114,7 @@ char * ResponseFile( RscPtrPtr * ppCmd, char ** ppArgv, sal_uInt32 nArgc )
     for( i = 1; i < nArgc; i++ )
     {
         if( '@' == **(ppArgv +i) ){ // when @, then response file
-            if( NULL == (fFile = fopen( (*(ppArgv +i)) +1, "r" )) )
+            if( nullptr == (fFile = fopen( (*(ppArgv +i)) +1, "r" )) )
                 return( (*(ppArgv +i)) );
             nItems = fread( &szBuffer[ 0 ], 1, sizeof( char ), fFile );
             while( nItems )
@@ -149,14 +149,14 @@ char * ResponseFile( RscPtrPtr * ppCmd, char ** ppArgv, sal_uInt32 nArgc )
             ppCmd->Append( rsc_strdup( *(ppArgv +i) ) );
     }
     ppCmd->Append( static_cast<void *>(nullptr) );
-    return NULL;
+    return nullptr;
 }
 
 
 RscPtrPtr::RscPtrPtr()
 {
     nCount = 0;
-    pMem = NULL;
+    pMem = nullptr;
 }
 
 RscPtrPtr::~RscPtrPtr()
@@ -178,7 +178,7 @@ void RscPtrPtr::Reset()
         rtl_freeMemory( static_cast<void *>(pMem) );
     };
     nCount = 0;
-    pMem = NULL;
+    pMem = nullptr;
 }
 
 sal_uInt32 RscPtrPtr::Append( void * pBuffer )
@@ -197,7 +197,7 @@ void * RscPtrPtr::GetEntry( sal_uInt32 nEntry )
 {
     if( nEntry < nCount )
         return pMem[ nEntry ];
-    return NULL;
+    return nullptr;
 }
 
 RscWriteRc::RscWriteRc( RSCBYTEORDER_TYPE nOrder )
@@ -215,7 +215,7 @@ RscWriteRc::RscWriteRc( RSCBYTEORDER_TYPE nOrder )
     }
     nByteOrder = nOrder;
     nLen = 0;
-    pMem = NULL;
+    pMem = nullptr;
 }
 
 RscWriteRc::~RscWriteRc()

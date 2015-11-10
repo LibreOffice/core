@@ -381,7 +381,7 @@ RscTupel * RscTypCont::InitGeometry()
 
     // Clientvariablen einfuegen
     pTupel = new RscTupel( pHS->getID( "TupelDeltaSystem" ),
-                                RSC_NOTYPE, NULL );
+                                RSC_NOTYPE, nullptr );
     nId = aNmTb.Put( "X", VARNAME );
     pTupel->SetVariable( nId, &aShort );
     nId = aNmTb.Put( "Y", VARNAME );
@@ -421,7 +421,7 @@ RscTupel * RscTypCont::InitStringTupel()
     Atom        nId;
 
     // Clientvariablen einfuegen
-    pTupel = new RscTupel( pHS->getID( "CharsTupel" ), RSC_NOTYPE, NULL );
+    pTupel = new RscTupel( pHS->getID( "CharsTupel" ), RSC_NOTYPE, nullptr );
     nId = aNmTb.Put( "FILTER", VARNAME );
     pTupel->SetVariable( nId, &aString );
     nId = aNmTb.Put( "MASK", VARNAME );
@@ -436,7 +436,7 @@ RscTupel * RscTypCont::InitStringLongTupel()
     Atom        nId;
 
     // Clientvariablen einfuegen
-    pTupel = new RscTupel( pHS->getID( "CharsLongTupel" ), RSC_NOTYPE, NULL );
+    pTupel = new RscTupel( pHS->getID( "CharsLongTupel" ), RSC_NOTYPE, nullptr );
     nId = aNmTb.Put( "ItemText", VARNAME );
     pTupel->SetVariable( nId, &aString );
     nId = aNmTb.Put( "ItemId", VARNAME );

@@ -61,7 +61,7 @@ struct KeyVal
 } aKeyVal[ 1 ];
 bool bTargetDefined;
 
-StringContainer* pStringContainer = NULL;
+StringContainer* pStringContainer = nullptr;
 
 
 sal_uInt32 GetNumber()
@@ -331,7 +331,7 @@ extern "C" void yyerror( const char* pMessage )
 void yyerror( char* pMessage )
 #endif
 {
-    pTC->pEH->Error( ERR_YACC, NULL, RscId(), pMessage );
+    pTC->pEH->Error( ERR_YACC, nullptr, RscId(), pMessage );
 }
 
 void InitParser( RscFileInst * pFileInst )
@@ -339,7 +339,7 @@ void InitParser( RscFileInst * pFileInst )
     pTC = pFileInst->pTypCont;          // set file container
     pFI = pFileInst;
     pStringContainer = new StringContainer();
-    pExp = NULL;                // for macro parser
+    pExp = nullptr;                // for macro parser
     bTargetDefined = false;
 
     // initialize first character
@@ -355,12 +355,12 @@ void EndParser()
 
     // free string container
     delete pStringContainer;
-    pStringContainer = NULL;
+    pStringContainer = nullptr;
 
     delete pExp;
-    pTC      = NULL;
-    pFI      = NULL;
-    pExp     = NULL;
+    pTC      = nullptr;
+    pFI      = nullptr;
+    pExp     = nullptr;
 
 }
 

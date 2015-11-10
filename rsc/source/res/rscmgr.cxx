@@ -162,7 +162,7 @@ ERRTYPE RscMgr::WriteRcHeader( const RSCINST & rInst, RscWriteRc & rMem,
 {
     RscMgrInst *    pClassData;
     ERRTYPE         aError;
-    ObjNode *       pObjNode = NULL;
+    ObjNode *       pObjNode = nullptr;
 
     pClassData = reinterpret_cast<RscMgrInst *>(rInst.pData + RscClass::Size());
 
@@ -200,7 +200,7 @@ ERRTYPE RscMgr::WriteRcHeader( const RSCINST & rInst, RscWriteRc & rMem,
             }
             else
             {
-                RSCINST aRefInst = rInst.pClass->Create( NULL, aRefI );
+                RSCINST aRefInst = rInst.pClass->Create( nullptr, aRefI );
                 aError = aRefI.pClass->WriteRcHeader( aRefInst, rMem, pTC,
                                                        rId, nDeep, bExtra );
                 pTmpRefClass->Destroy( aRefInst );
@@ -302,7 +302,7 @@ ERRTYPE RscMgr::IsToDeep( const RSCINST & rInst, sal_uInt32 nDeep )
             nDeep++;
         }
         else //aTmpI.IsInst() becomes false, end loop
-            aTmpI.pData = NULL;
+            aTmpI.pData = nullptr;
     }
 
     if( nDeep >= nRefDeep )

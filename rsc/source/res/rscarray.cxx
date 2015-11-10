@@ -69,16 +69,16 @@ RscTop * RscArray::GetTypeClass() const
 
 static RscInstNode * Create( RscInstNode * pNode )
 {
-    RscInstNode * pRetNode = NULL;
+    RscInstNode * pRetNode = nullptr;
 
     if( pNode )
     {
         pRetNode = new RscInstNode( pNode->GetId() );
-        pRetNode->aInst = pNode->aInst.pClass->Create( NULL, pNode->aInst );
+        pRetNode->aInst = pNode->aInst.pClass->Create( nullptr, pNode->aInst );
         RscInstNode * pTmpNode = Create(pNode->Left());
         if (pTmpNode)
             pRetNode->Insert( pTmpNode );
-        if( (pTmpNode = Create( pNode->Right() )) != NULL )
+        if( (pTmpNode = Create( pNode->Right() )) != nullptr )
             pRetNode->Insert( pTmpNode );
     }
 
@@ -105,7 +105,7 @@ RSCINST RscArray::Create( RSCINST * pInst, const RSCINST & rDflt,
     RscTop::Create( &aInst, rDflt, bOwnClass );
 
     pClassData = reinterpret_cast<RscArrayInst *>(aInst.pData + nOffInstData);
-    pClassData->pNode = NULL;
+    pClassData->pNode = nullptr;
     if( bOwnClass )
     {
         RscArrayInst *   pDfltClassData;
@@ -160,15 +160,15 @@ ERRTYPE RscArray::GetValueEle( const RSCINST & rInst,
     if( pClassData->pNode )
         pNode = pClassData->pNode->Search( sal_uInt32(lValue) );
     else
-        pNode = NULL;
+        pNode = nullptr;
 
     if( !pNode )
     {
         pNode = new RscInstNode( sal_uInt32(lValue) );
         if( pCreateClass && GetSuperClass()->InHierarchy( pCreateClass ) )
-            pNode->aInst = pCreateClass->Create( NULL, rInst );
+            pNode->aInst = pCreateClass->Create( nullptr, rInst );
         else
-            pNode->aInst = GetSuperClass()->Create( NULL, rInst );
+            pNode->aInst = GetSuperClass()->Create( nullptr, rInst );
 
         pNode->aInst.pClass->SetToDefault( pNode->aInst );
         if( pClassData->pNode )
@@ -311,7 +311,7 @@ void RscArray::WriteSrcHeader( const RSCINST & rInst, FILE * fOutput,
 
     if( pTC->IsSrsDefault() )
     { // nur einen Wert schreiben
-        RscInstNode *   pNode = NULL;
+        RscInstNode *   pNode = nullptr;
         if( pClassData->pNode )
         {
             std::vector< sal_uInt32 >::const_iterator it;
@@ -392,7 +392,7 @@ ERRTYPE RscArray::WriteRc( const RSCINST & rInst, RscWriteRc & rMem,
 {
     ERRTYPE aError;
     RscArrayInst * pClassData;
-    RscInstNode *   pNode = NULL;
+    RscInstNode *   pNode = nullptr;
 
     pClassData = reinterpret_cast<RscArrayInst *>(rInst.pData + nOffInstData);
 

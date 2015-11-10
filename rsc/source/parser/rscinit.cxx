@@ -270,7 +270,7 @@ void RscTypCont::Init()
 
     aVersion.pClass = new RscClass( pHS->getID( "VersionControl" ),
                                     RSC_VERSIONCONTROL, pClassMgr );
-    aVersion = aVersion.pClass->Create( NULL, RSCINST() );
+    aVersion = aVersion.pClass->Create( nullptr, RSCINST() );
 
     pClassString = InitClassString( pClassMgr );
     pRoot->Insert( pClassString );
@@ -377,7 +377,7 @@ void RscTypCont::Init()
 
     // pClassAccel is only completely defined here
     nId = aNmTb.Put( "SubAccelerator", VARNAME );
-    pClassAccelItem->SetVariable( nId, pClassAccel, NULL, VAR_SVDYNAMIC,
+    pClassAccelItem->SetVariable( nId, pClassAccel, nullptr, VAR_SVDYNAMIC,
                                ACCELITEM_ACCEL );
 
     RscTop* pClassMenuItem = InitClassMenuItem( pClassMgr, pClassBitmap,
@@ -389,7 +389,7 @@ void RscTypCont::Init()
 
     // pClassMenu is only completely defined here
     nId = aNmTb.Put( "SubMenu", VARNAME );
-    pClassMenuItem->SetVariable( nId, pClassMenu, NULL, VAR_SVDYNAMIC,
+    pClassMenuItem->SetVariable( nId, pClassMenu, nullptr, VAR_SVDYNAMIC,
                                  RSC_MENUITEM_MENU );
 }
 {
@@ -410,7 +410,7 @@ void RscTypCont::Init()
             pClient = new RscClient( pHS->getID( "sal_Bool" ), RSC_NOTYPE, &aWinBits, nRepeatId )
         );
         nId = aNmTb.Put( "Repeat", VARNAME );
-        pClassSpinButton->SetVariable( nId, pClient, NULL,
+        pClassSpinButton->SetVariable( nId, pClient, nullptr,
                                       VAR_NODATAINST, 0, nWinBitVarId );
     }
     pRoot->Insert( pClassSpinButton );

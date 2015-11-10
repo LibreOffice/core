@@ -348,7 +348,7 @@ int readoptions(char* filename, char*** pfargv)
                 {
                     pfa[fargc + 1] = strdup(optbuff);
                     fargc++;
-                    pfa[fargc + 1] = 0;
+                    pfa[fargc + 1] = NULL;
                     poptbuff = &optbuff[0];
                 }
             }

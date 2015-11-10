@@ -56,14 +56,14 @@
 
 using comphelper::string::getTokenCount;
 
-OString*  pStdParType  = NULL;
-OString*  pStdPar1     = NULL;
-OString*  pStdPar2     = NULL;
-OString*  pWinParType  = NULL;
-OString*  pWinPar1     = NULL;
-OString*  pWinPar2     = NULL;
+OString*  pStdParType  = nullptr;
+OString*  pStdPar1     = nullptr;
+OString*  pStdPar2     = nullptr;
+OString*  pWinParType  = nullptr;
+OString*  pWinPar1     = nullptr;
+OString*  pWinPar2     = nullptr;
 sal_uInt32      nRefDeep     = 10;
-AtomContainer*  pHS          = NULL;
+AtomContainer*  pHS          = nullptr;
 
 
 void RscCmdLine::Init()
@@ -296,8 +296,8 @@ OString RscCmdLine::substitutePaths( const OString& rIn )
 
 RscCompiler::RscCompiler( RscCmdLine * pLine, RscTypCont * pTypCont )
 {
-    fListing      = NULL;
-    fExitFile     = NULL;
+    fListing      = nullptr;
+    fExitFile     = nullptr;
 
     //Set Command Line, set Type Container
     pCL = pLine;
@@ -306,7 +306,7 @@ RscCompiler::RscCompiler( RscCmdLine * pLine, RscTypCont * pTypCont )
 
 RscCompiler::~RscCompiler()
 {
-    pTC->pEH->SetListFile( NULL );
+    pTC->pEH->SetListFile( nullptr );
 
     if( fListing )
         fclose( fListing );
@@ -331,7 +331,7 @@ ERRTYPE RscCompiler::Start()
         if( pCL->nCommands & NOPREPRO_FLAG )
         {
 
-            pTC->pEH->SetListFile( NULL );
+            pTC->pEH->SetListFile( nullptr );
 
             sal_uIntPtr aIndex = pTC->aFileTab.FirstIndex();
             while( aIndex != UNIQUEINDEX_ENTRY_NOTFOUND && aError.IsOk() )
@@ -371,7 +371,7 @@ ERRTYPE RscCompiler::Start()
         EndCompile();
 
     if( aError.IsError() )
-        pTC->pEH->Error( ERR_ERROR, NULL, RscId() );
+        pTC->pEH->Error( ERR_ERROR, nullptr, RscId() );
 
     return aError;
 }
@@ -390,7 +390,7 @@ void RscCompiler::EndCompile()
         {
             FILE        * foutput;
 
-            if( NULL == (foutput = fopen( pCL->aOutputSrs.getStr(), "w" )) )
+            if( nullptr == (foutput = fopen( pCL->aOutputSrs.getStr(), "w" )) )
                 pTC->pEH->FatalError( ERR_OPENFILE, RscId(), pCL->aOutputSrs.getStr() );
             else
             {
@@ -427,7 +427,7 @@ ERRTYPE RscCompiler::IncludeParser( sal_uLong lFileKey )
         if( !finput )
         {
             aError = ERR_OPENFILE;
-            pTC->pEH->Error( aError, NULL, RscId(),
+            pTC->pEH->Error( aError, nullptr, RscId(),
                              pFName->aPathName.getStr() );
         }
         else
@@ -459,7 +459,7 @@ ERRTYPE RscCompiler::ParseOneFile( sal_uLong lFileKey,
                                      const RscCmdLine::OutputFile* pOutputFile,
                                      const WriteRcContext* pContext )
 {
-    FILE *     finput = NULL;
+    FILE *     finput = nullptr;
     ERRTYPE    aError;
     RscFile *  pFName;
 
@@ -485,7 +485,7 @@ ERRTYPE RscCompiler::ParseOneFile( sal_uLong lFileKey,
             OUString aTmpPath;
             OUString aSrsPath = OStringToOUString( pFName->aPathName, RTL_TEXTENCODING_ASCII_US );
 
-            osl::FileBase::createTempFile( 0, 0, &aTmpPath );
+            osl::FileBase::createTempFile( nullptr, nullptr, &aTmpPath );
             osl::FileBase::getFileURLFromSystemPath( aSrsPath, aSrsPath );
 
             if( pContext && pOutputFile )
@@ -499,7 +499,7 @@ ERRTYPE RscCompiler::ParseOneFile( sal_uLong lFileKey,
 
             if( !finput )
             {
-                pTC->pEH->Error( ERR_OPENFILE, NULL, RscId(), pFName->aPathName.getStr() );
+                pTC->pEH->Error( ERR_OPENFILE, nullptr, RscId(), pFName->aPathName.getStr() );
                 aError = ERR_OPENFILE;
             }
             else
@@ -552,7 +552,7 @@ namespace
     {
         // get a temp file name for the rc file
         OUString sTempUrl;
-        if(FileBase::createTempFile(&sTempDirUrl, NULL, &sTempUrl) != FileBase::E_None)
+        if(FileBase::createTempFile(&sTempDirUrl, nullptr, &sTempUrl) != FileBase::E_None)
             throw RscIoError();
         OSL_TRACE("temporary url: %s", OUStringToOString(sTempUrl, RTL_TEXTENCODING_UTF8).getStr());
         return lcl_getSystemPath(sTempUrl);
@@ -627,7 +627,7 @@ ERRTYPE RscCompiler::Link()
                 sMsg += "ilst file: " + aSysList + "\n";
                 pTC->pEH->FatalError(ERR_OPENFILE, RscId(), sMsg.getStr());
             }
-            if ( NULL == (fExitFile = foutput = fopen( aRcTmp.getStr(), "wb" )) )
+            if ( nullptr == (fExitFile = foutput = fopen( aRcTmp.getStr(), "wb" )) )
                 pTC->pEH->FatalError( ERR_OPENFILE, RscId(), aRcTmp.getStr() );
 
             // write file
@@ -688,7 +688,7 @@ ERRTYPE RscCompiler::Link()
             aError = pTC->WriteRc( aContext );
 
             fclose( foutput );
-            fExitFile = NULL;
+            fExitFile = nullptr;
             unlink( it->aOutputRc.getStr() );
             if( rename( aRcTmp.getStr(), it->aOutputRc.getStr() ) )
             {
@@ -732,7 +732,7 @@ ERRTYPE RscCompiler::Link()
             pFName = pTC->aFileTab.Get( aIndex );
             if( !pFName->IsIncFile() )
             {
-                aError = ParseOneFile( aIndex, NULL, NULL );
+                aError = ParseOneFile( aIndex, nullptr, nullptr );
                 aIndex = pTC->aFileTab.GetIndexOf( pFName );
             }
         };
@@ -834,7 +834,7 @@ void RscCompiler::PreprocessSrsFile( const RscCmdLine::OutputFile& rOutputFile,
     SvFileStream                aIStm( rSrsInPath, StreamMode::READ );
     SvFileStream                aOStm( rSrsOutPath, StreamMode::WRITE | StreamMode::TRUNC );
     ::std::vector< OString > aMissingImages;
-    FILE*                       pSysListFile = rContext.aOutputSysList.isEmpty() ? NULL : fopen( rContext.aOutputSysList.getStr(), "ab" );
+    FILE*                       pSysListFile = rContext.aOutputSysList.isEmpty() ? nullptr : fopen( rContext.aOutputSysList.getStr(), "ab" );
 
     if( !aIStm.GetError() && !aOStm.GetError() )
     {

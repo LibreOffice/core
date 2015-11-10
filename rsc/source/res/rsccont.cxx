@@ -40,8 +40,8 @@ RscBaseCont::RscBaseCont( Atom nId, sal_uInt32 nTypeId, RscTop * pSuper,
     : RscTop( nId, nTypeId, pSuper )
     , nSize( 0 )
 {
-    pTypeClass = NULL;
-    pTypeClass1 = NULL;
+    pTypeClass = nullptr;
+    pTypeClass1 = nullptr;
     bNoId = bNoIdent;
     nOffInstData = RscTop::Size();
     nSize = nOffInstData + ALIGNED_SIZE( sizeof( RscBaseContInst ) );
@@ -65,7 +65,7 @@ void RscBaseCont::DestroyElements( RscBaseContInst * pClassData )
             pClassData->pEntries[ i ].Destroy();
         }
         rtl_freeMemory( pClassData->pEntries );
-        pClassData->pEntries = NULL;
+        pClassData->pEntries = nullptr;
         pClassData->nEntries = 0;
     }
 }
@@ -91,7 +91,7 @@ RSCINST RscBaseCont::Create( RSCINST * pInst, const RSCINST & rDflt,
 
     pClassData = reinterpret_cast<RscBaseContInst *>(aInst.pData + nOffInstData);
     pClassData->nEntries = 0;
-    pClassData->pEntries = NULL;
+    pClassData->pEntries = nullptr;
     pClassData->bDflt = true;
 
     if( bOwnClass )
@@ -114,7 +114,7 @@ RSCINST RscBaseCont::Create( RSCINST * pInst, const RSCINST & rDflt,
                                     pDfltClassData->pEntries[ i ].aName;
                 aDfltI = pDfltClassData->pEntries[ i ].aInst;
                 pClassData->pEntries[ i ].aInst =
-                                    aDfltI.pClass->Create( NULL, aDfltI );
+                                    aDfltI.pClass->Create( nullptr, aDfltI );
             }
         }
     }
@@ -230,12 +230,12 @@ ERRTYPE RscBaseCont::GetElement( const RSCINST & rInst, const RscId & rEleName,
         {
             // initialize instance with CreateInst data
             pClassData->pEntries[ pClassData->nEntries ].aInst =
-                pCreateClass->Create( NULL, rCreateInst );
+                pCreateClass->Create( nullptr, rCreateInst );
         }
         else
         {
             pClassData->pEntries[ pClassData->nEntries ].aInst =
-                pCreateClass->Create( NULL, RSCINST() );
+                pCreateClass->Create( nullptr, RSCINST() );
         }
 
         pClassData->nEntries++;

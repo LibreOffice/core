@@ -43,7 +43,7 @@ void RscTypCont::InsWinBit( RscTop * pClass, const OString& rName,
         pClient = new RscClient( pHS->getID( "sal_Bool" ), RSC_NOTYPE, &aWinBits, nVal )
     );
     Atom nId = aNmTb.Put( rName.getStr(), VARNAME );
-    pClass->SetVariable( nId, pClient, NULL,
+    pClass->SetVariable( nId, pClient, nullptr,
                          VAR_NODATAINST, 0, nWinBitVarId );
 }
 
@@ -56,7 +56,7 @@ RscTop * RscTypCont::InitClassMgr()
     RscBaseCont *   pClass;
     Atom            nId;
 
-    aBaseLst.push_back( pClass = new RscBaseCont( InvalidAtom, RSC_NOTYPE, NULL, false ) );
+    aBaseLst.push_back( pClass = new RscBaseCont( InvalidAtom, RSC_NOTYPE, nullptr, false ) );
 
     nId = pHS->getID( "Resource" );
     pClassMgr = new RscMgr( nId, RSC_RESOURCE, pClass );
@@ -74,7 +74,7 @@ RscTop * RscTypCont::InitClassMgr()
         pClassMgr->SetVariable( nId, pCont );
     };
     nId = aNmTb.Put( "Comment", VARNAME );
-    pClassMgr->SetVariable( nId, &aString, NULL, VAR_NORC );
+    pClassMgr->SetVariable( nId, &aString, nullptr, VAR_NORC );
 
     pClass->SetTypeClass( pClassMgr );
 
@@ -109,7 +109,7 @@ RscTop * RscTypCont::InitClassBitmap( RscTop * pSuper )
 
     // the class RscSysDepend handles variables "FILE" in a specific way
     nId = aNmTb.Put( "File", VARNAME );
-    pClassBitmap->SetVariable( nId, &aLangString, NULL, VAR_NORC );
+    pClassBitmap->SetVariable( nId, &aLangString, nullptr, VAR_NORC );
 
     return pClassBitmap;
 }
@@ -152,11 +152,11 @@ RscTop * RscTypCont::InitClassImage( RscTop * pSuper, RscTop * pClassBitmap,
 
     // initialize variables
     nId = aNmTb.Put( "ImageBitmap", VARNAME );
-    pClassImage->SetVariable( nId, pClassBitmap, NULL, 0, RSC_IMAGE_IMAGEBITMAP );
+    pClassImage->SetVariable( nId, pClassBitmap, nullptr, 0, RSC_IMAGE_IMAGEBITMAP );
     nId = aNmTb.Put( "MaskBitmap", VARNAME );
-    pClassImage->SetVariable( nId, pClassBitmap, NULL, 0, RSC_IMAGE_MASKBITMAP );
+    pClassImage->SetVariable( nId, pClassBitmap, nullptr, 0, RSC_IMAGE_MASKBITMAP );
     nId = aNmTb.Put( "MaskColor", VARNAME );
-    pClassImage->SetVariable( nId, pClassColor, NULL,
+    pClassImage->SetVariable( nId, pClassColor, nullptr,
                               VAR_SVDYNAMIC, RSC_IMAGE_MASKCOLOR );
 
     return pClassImage;
@@ -178,21 +178,21 @@ RscTop * RscTypCont::InitClassImageList( RscTop * pSuper,
     pClassImageList->SetVariable( nId, &aString );
 
     nId = aNmTb.Put( "MaskColor", VARNAME );
-    pClassImageList->SetVariable( nId, pClassColor, NULL,
+    pClassImageList->SetVariable( nId, pClassColor, nullptr,
                                   VAR_SVDYNAMIC, RSC_IMAGELIST_MASKCOLOR );
 
     RscCont * pCont = new RscCont( pHS->getID( "sal_uInt16 *" ), RSC_NOTYPE );
     pCont->SetTypeClass( &aIdUShort );
     aBaseLst.push_back( pCont );
     nId = aNmTb.Put( "IdList", VARNAME );
-    pClassImageList->SetVariable( nId, pCont, NULL, 0,
+    pClassImageList->SetVariable( nId, pCont, nullptr, 0,
                                       RSC_IMAGELIST_IDLIST );
 
     nId = aNmTb.Put( "FileList", VARNAME );
     pClassImageList->SetVariable( nId, pStrLst );
 
     nId = aNmTb.Put( "IdCount", VARNAME );
-    pClassImageList->SetVariable( nId, &aUShort, NULL, 0,
+    pClassImageList->SetVariable( nId, &aUShort, nullptr, 0,
                                   RSC_IMAGELIST_IDCOUNT );
     return pClassImageList;
 }
@@ -225,25 +225,25 @@ RscTop * RscTypCont::InitClassWindow( RscTop * pSuper, RscEnum * pMapUnit,
 
         // add variable
         nVarId = aNmTb.Put( "_RscExtraFlags", VARNAME );
-        pClassWindow->SetVariable( nVarId, pFlag, NULL,
+        pClassWindow->SetVariable( nVarId, pFlag, nullptr,
                                                                         VAR_HIDDEN | VAR_NOENUM );
 
         aBaseLst.push_back(
             pClient = new RscClient( pHS->getID( "sal_Bool" ), RSC_NOTYPE, pFlag, nDisableId )
         );
         nId = aNmTb.Put( "Disable", VARNAME );
-        pClassWindow->SetVariable( nId, pClient, NULL,
+        pClassWindow->SetVariable( nId, pClient, nullptr,
                                    VAR_NODATAINST, 0, nVarId );
 
         aBaseLst.push_back(
             pClient = new RscClient( pHS->getID( "sal_Bool" ), RSC_NOTYPE, pFlag, nOutputSizeId )
         );
         nId = aNmTb.Put( "OutputSize", VARNAME );
-        pClassWindow->SetVariable( nId, pClient, NULL,
+        pClassWindow->SetVariable( nId, pClient, nullptr,
                                    VAR_NODATAINST, 0, nVarId );
     }
 
-    pClassWindow->SetVariable( nWinBitVarId, &aWinBits, NULL,
+    pClassWindow->SetVariable( nWinBitVarId, &aWinBits, nullptr,
                                VAR_HIDDEN | VAR_NOENUM );
 
     INS_WINBIT(pClassWindow,Border)
@@ -253,35 +253,35 @@ RscTop * RscTypCont::InitClassWindow( RscTop * pSuper, RscEnum * pMapUnit,
     InsWinBit( pClassWindow, "DialogControl", nTabControlId );
 
     nId = aNmTb.Put( "HelpID", VARNAME );
-    pClassWindow->SetVariable( nId, &aStringLiteral, NULL, 0, WINDOW_HELPID );
+    pClassWindow->SetVariable( nId, &aStringLiteral, nullptr, 0, WINDOW_HELPID );
 
 
     nRsc_XYMAPMODEId = nId = aNmTb.Put( "_XYMapMode", VARNAME );
-    pClassWindow->SetVariable( nId, pMapUnit, NULL, 0, WINDOW_XYMAPMODE  );
+    pClassWindow->SetVariable( nId, pMapUnit, nullptr, 0, WINDOW_XYMAPMODE  );
     nRsc_X = nId = aNmTb.Put( "_X", VARNAME );
-    pClassWindow->SetVariable( nId, &aLong, NULL, 0, WINDOW_X  );
+    pClassWindow->SetVariable( nId, &aLong, nullptr, 0, WINDOW_X  );
     nRsc_Y = nId = aNmTb.Put( "_Y", VARNAME );
-    pClassWindow->SetVariable( nId, &aLong, NULL, 0, WINDOW_Y  );
+    pClassWindow->SetVariable( nId, &aLong, nullptr, 0, WINDOW_Y  );
 
     nRsc_WHMAPMODEId = nId = aNmTb.Put( "_WHMapMode", VARNAME );
-    pClassWindow->SetVariable( nId, pMapUnit, NULL, 0, WINDOW_WHMAPMODE  );
+    pClassWindow->SetVariable( nId, pMapUnit, nullptr, 0, WINDOW_WHMAPMODE  );
     nRsc_WIDTH = nId = aNmTb.Put( "_Width", VARNAME );
-    pClassWindow->SetVariable( nId, &aLong, NULL, 0, WINDOW_WIDTH  );
+    pClassWindow->SetVariable( nId, &aLong, nullptr, 0, WINDOW_WIDTH  );
     nRsc_HEIGHT = nId = aNmTb.Put( "_Height", VARNAME );
-    pClassWindow->SetVariable( nId, &aLong, NULL, 0, WINDOW_HEIGHT  );
+    pClassWindow->SetVariable( nId, &aLong, nullptr, 0, WINDOW_HEIGHT  );
 
     nRsc_DELTALANG = nId = aNmTb.Put( "DeltaLang", VARNAME );
-    pClassWindow->SetVariable( nId, pLangGeo, NULL, VAR_NORC | VAR_NOENUM);
+    pClassWindow->SetVariable( nId, pLangGeo, nullptr, VAR_NORC | VAR_NOENUM);
     nId = aNmTb.Put( "Text", VARNAME );
-    pClassWindow->SetVariable( nId, &aLangString, NULL, 0, WINDOW_TEXT );
+    pClassWindow->SetVariable( nId, &aLangString, nullptr, 0, WINDOW_TEXT );
     nId = aNmTb.Put( "HelpText", VARNAME );
-    pClassWindow->SetVariable( nId, &aLangString, NULL, 0, WINDOW_HELPTEXT );
+    pClassWindow->SetVariable( nId, &aLangString, nullptr, 0, WINDOW_HELPTEXT );
     nId = aNmTb.Put( "QuickHelpText", VARNAME );
-    pClassWindow->SetVariable( nId, &aLangString, NULL, 0, WINDOW_QUICKTEXT );
+    pClassWindow->SetVariable( nId, &aLangString, nullptr, 0, WINDOW_QUICKTEXT );
     nId = aNmTb.Put( "ExtraLong", VARNAME );
-    pClassWindow->SetVariable( nId, &aLong, NULL, 0, WINDOW_EXTRALONG );
+    pClassWindow->SetVariable( nId, &aLong, nullptr, 0, WINDOW_EXTRALONG );
     nId = aNmTb.Put( "UniqueId", VARNAME );
-    pClassWindow->SetVariable( nId, &aString, NULL, 0, WINDOW_UNIQUEID );
+    pClassWindow->SetVariable( nId, &aString, nullptr, 0, WINDOW_UNIQUEID );
 
     // border style
     RscEnum* pBorderStyleEnum = new RscEnum( pHS->getID( "WindowBorderStyle" ), RSC_NOTYPE );
@@ -295,7 +295,7 @@ RscTop * RscTypCont::InitClassWindow( RscTop * pSuper, RscEnum * pMapUnit,
 
     // add variable
     nId = aNmTb.Put( "BorderStyle", VARNAME );
-    pClassWindow->SetVariable( nId, pBorderStyleEnum, NULL,
+    pClassWindow->SetVariable( nId, pBorderStyleEnum, nullptr,
                                     0,
                                     WINDOW_BORDER_STYLE );
 
@@ -431,7 +431,7 @@ RscTop * RscTypCont::InitClassImageButton( RscTop * pSuper,
     // initialize variables
     {
         nId = aNmTb.Put( "ButtonImage", VARNAME );
-        pClassImageButton->SetVariable( nId, pClassImage, NULL, 0,
+        pClassImageButton->SetVariable( nId, pClassImage, nullptr, 0,
                                          RSC_IMAGEBUTTON_IMAGE );
     }
     // initialize variables
@@ -468,11 +468,11 @@ RscTop * RscTypCont::InitClassImageButton( RscTop * pSuper,
 
         // add variable
         nVarId = aNmTb.Put( "Symbol", VARNAME );
-        pClassImageButton->SetVariable( nVarId, pSymbol, NULL, 0,
+        pClassImageButton->SetVariable( nVarId, pSymbol, nullptr, 0,
                                         RSC_IMAGEBUTTON_SYMBOL );
     }
     nId = aNmTb.Put( "State", VARNAME );
-    pClassImageButton->SetVariable( nId, pTriState, NULL, 0,
+    pClassImageButton->SetVariable( nId, pTriState, nullptr, 0,
                                     RSC_IMAGEBUTTON_STATE );
 
     INS_WINBIT(pClassImageButton,Repeat)
@@ -526,7 +526,7 @@ RscTop * RscTypCont::InitClassListBox( RscTop * pSuper, RscArray * pStrLst )
     INS_WINBIT(pClassListBox,DDExtraWidth)
 
     {
-        RSCINST aDflt = aUShort.Create( NULL, RSCINST(), false );
+        RSCINST aDflt = aUShort.Create( nullptr, RSCINST(), false );
         aDflt.pClass->SetNumber( aDflt, (sal_uInt16)0xFFFF );
         nId = aNmTb.Put( "CurPos", VARNAME );
         pClassListBox->SetVariable( nId, &aUShort, &aDflt );
@@ -601,7 +601,7 @@ RscTop * RscTypCont::InitClassFixedImage( RscTop * pSuper, RscTop * pClassImage 
 
     // initialize variables
     nId = aNmTb.Put( "Fixed", VARNAME );
-    pClassFixedImage->SetVariable( nId, pClassImage, 0, 0, RSC_FIXEDIMAGE_IMAGE );
+    pClassFixedImage->SetVariable( nId, pClassImage, nullptr, 0, RSC_FIXEDIMAGE_IMAGE );
 
     return pClassFixedImage;
 }
@@ -660,7 +660,7 @@ RscTop * RscTypCont::InitClassKeyCode( RscTop * pSuper, RscEnum * pKey )
 
         // add variable
         nVarId = aNmTb.Put( "_ModifierFlags", VARNAME );
-        pClassKeyCode->SetVariable( nVarId, pFlag, NULL,
+        pClassKeyCode->SetVariable( nVarId, pFlag, nullptr,
                                                                         VAR_HIDDEN | VAR_NOENUM );
 
         // add client variables
@@ -668,14 +668,14 @@ RscTop * RscTypCont::InitClassKeyCode( RscTop * pSuper, RscEnum * pKey )
             pClient = new RscClient( pHS->getID( "sal_Bool" ), RSC_NOTYPE, pFlag, nShiftId )
         );
         nId = aNmTb.Put( "Shift", VARNAME );
-        pClassKeyCode->SetVariable( nId, pClient, NULL,
+        pClassKeyCode->SetVariable( nId, pClient, nullptr,
                                    VAR_NODATAINST, 0, nVarId );
 
         aBaseLst.push_back(
             pClient = new RscClient( pHS->getID( "sal_Bool" ), RSC_NOTYPE, pFlag, nMod1Id )
         );
         nId = aNmTb.Put( "Modifier1", VARNAME );
-        pClassKeyCode->SetVariable( nId, pClient, NULL,
+        pClassKeyCode->SetVariable( nId, pClient, nullptr,
                                    VAR_NODATAINST, 0, nVarId );
 
 
@@ -683,7 +683,7 @@ RscTop * RscTypCont::InitClassKeyCode( RscTop * pSuper, RscEnum * pKey )
             pClient = new RscClient( pHS->getID( "sal_Bool" ), RSC_NOTYPE, pFlag, nMod2Id )
         );
         nId = aNmTb.Put( "Modifier2", VARNAME );
-        pClassKeyCode->SetVariable( nId, pClient, NULL,
+        pClassKeyCode->SetVariable( nId, pClient, nullptr,
                                    VAR_NODATAINST, 0, nVarId );
     }
     {
@@ -736,7 +736,7 @@ RscTop * RscTypCont::InitClassAccelItem( RscTop * pSuper,
     nId = aNmTb.Put( "Disable", VARNAME );
     pClassAccelItem->SetVariable( nId, &aBool );
     nId = aNmTb.Put( "Key", VARNAME );
-    pClassAccelItem->SetVariable( nId, pClassKeyCode, NULL, 0,
+    pClassAccelItem->SetVariable( nId, pClassKeyCode, nullptr, 0,
                                   ACCELITEM_KEY );
 
     return pClassAccelItem;
@@ -784,10 +784,10 @@ RscTop * RscTypCont::InitClassMenuItem( RscTop * pSuper,
 
     // initialize variables
     nId = aNmTb.Put( "Separator", VARNAME );
-    pClassMenuItem->SetVariable( nId, &aBool, NULL, 0,
+    pClassMenuItem->SetVariable( nId, &aBool, nullptr, 0,
                                  RSC_MENUITEM_SEPARATOR );
     nId = aNmTb.Put( "Identifier", VARNAME );
-    pClassMenuItem->SetVariable( nId, &aIdNoZeroUShort, NULL, 0,
+    pClassMenuItem->SetVariable( nId, &aIdNoZeroUShort, nullptr, 0,
                                  RSC_MENUITEM_ID );
     {
         RscFlag *   pFlag;
@@ -811,7 +811,7 @@ RscTop * RscTypCont::InitClassMenuItem( RscTop * pSuper,
 
         // add variable
         nVarId = aNmTb.Put( "_MenuItemFlags", VARNAME );
-        pClassMenuItem->SetVariable( nVarId, pFlag, NULL,
+        pClassMenuItem->SetVariable( nVarId, pFlag, nullptr,
                                      VAR_HIDDEN | VAR_NOENUM,
                                      RSC_MENUITEM_STATUS );
 
@@ -820,61 +820,61 @@ RscTop * RscTypCont::InitClassMenuItem( RscTop * pSuper,
             pClient = new RscClient( pHS->getID( "sal_Bool" ), RSC_NOTYPE, pFlag, nCheckableId )
         );
         nId = aNmTb.Put( "Checkable", VARNAME );
-        pClassMenuItem->SetVariable( nId, pClient, NULL,
+        pClassMenuItem->SetVariable( nId, pClient, nullptr,
                                      VAR_NODATAINST, 0, nVarId );
 
         aBaseLst.push_back(
             pClient = new RscClient( pHS->getID( "sal_Bool" ), RSC_NOTYPE, pFlag, nAutoCheckId )
         );
         nId = aNmTb.Put( "AutoCheck", VARNAME );
-        pClassMenuItem->SetVariable( nId, pClient, NULL,
+        pClassMenuItem->SetVariable( nId, pClient, nullptr,
                                      VAR_NODATAINST, 0, nVarId );
 
         aBaseLst.push_back(
             pClient = new RscClient( pHS->getID( "sal_Bool" ), RSC_NOTYPE, pFlag, nRadioCheckId )
         );
         nId = aNmTb.Put( "RadioCheck", VARNAME );
-        pClassMenuItem->SetVariable( nId, pClient, NULL,
+        pClassMenuItem->SetVariable( nId, pClient, nullptr,
                                      VAR_NODATAINST, 0, nVarId );
 
         aBaseLst.push_back(
             pClient = new RscClient( pHS->getID( "sal_Bool" ), RSC_NOTYPE, pFlag, nAboutId )
         );
         nId = aNmTb.Put( "About", VARNAME );
-        pClassMenuItem->SetVariable( nId, pClient, NULL,
+        pClassMenuItem->SetVariable( nId, pClient, nullptr,
                                      VAR_NODATAINST, 0, nVarId );
 
         aBaseLst.push_back(
             pClient = new RscClient( pHS->getID( "sal_Bool" ), RSC_NOTYPE, pFlag, nHelpId )
         );
         nId = aNmTb.Put( "Help", VARNAME );
-        pClassMenuItem->SetVariable( nId, pClient, NULL,
+        pClassMenuItem->SetVariable( nId, pClient, nullptr,
                                      VAR_NODATAINST, 0, nVarId );
 
     }
     nId = aNmTb.Put( "Text", VARNAME );
-    pClassMenuItem->SetVariable( nId, &aLangString, NULL, 0,
+    pClassMenuItem->SetVariable( nId, &aLangString, nullptr, 0,
                                  RSC_MENUITEM_TEXT );
     nId = aNmTb.Put( "ItemBitmap", VARNAME );
-    pClassMenuItem->SetVariable( nId, pClassBitmap, NULL, 0,
+    pClassMenuItem->SetVariable( nId, pClassBitmap, nullptr, 0,
                                  RSC_MENUITEM_BITMAP );
     nId = aNmTb.Put( "HelpText", VARNAME );
-    pClassMenuItem->SetVariable( nId, &aLangString, NULL, 0,
+    pClassMenuItem->SetVariable( nId, &aLangString, nullptr, 0,
                                  RSC_MENUITEM_HELPTEXT );
     nId = aNmTb.Put( "HelpID", VARNAME );
-    pClassMenuItem->SetVariable( nId, &aStringLiteral, NULL, 0,
+    pClassMenuItem->SetVariable( nId, &aStringLiteral, nullptr, 0,
                                  RSC_MENUITEM_HELPID );
     nId = aNmTb.Put( "AccelKey", VARNAME );
-    pClassMenuItem->SetVariable( nId, pClassKeyCode, NULL, 0,
+    pClassMenuItem->SetVariable( nId, pClassKeyCode, nullptr, 0,
                                  RSC_MENUITEM_KEYCODE );
     nId = aNmTb.Put( "Check", VARNAME );
-    pClassMenuItem->SetVariable( nId, &aBool, NULL, 0,
+    pClassMenuItem->SetVariable( nId, &aBool, nullptr, 0,
                                  RSC_MENUITEM_CHECKED );
     nId = aNmTb.Put( "Disable", VARNAME );
-    pClassMenuItem->SetVariable( nId, &aBool, NULL, 0,
+    pClassMenuItem->SetVariable( nId, &aBool, nullptr, 0,
                                  RSC_MENUITEM_DISABLE );
     nId = aNmTb.Put( "Command", VARNAME );
-    pClassMenuItem->SetVariable( nId, &aString, NULL, 0,
+    pClassMenuItem->SetVariable( nId, &aString, nullptr, 0,
                                     RSC_MENUITEM_COMMAND );
 
     return pClassMenuItem;
@@ -899,12 +899,12 @@ RscTop * RscTypCont::InitClassMenu( RscTop * pSuper,
         aBaseLst.push_back( pCont = new RscCont( pHS->getID( "ContMenuItem" ), RSC_NOTYPE ) );
         pCont->SetTypeClass( pClassMenuItem );
         nId = aNmTb.Put( "ItemList", VARNAME );
-        pClassMenu->SetVariable( nId, pCont, NULL, 0, RSC_MENU_ITEMS );
+        pClassMenu->SetVariable( nId, pCont, nullptr, 0, RSC_MENU_ITEMS );
     }
     nId = aNmTb.Put( "Text", VARNAME );
-    pClassMenu->SetVariable( nId, &aLangString, NULL, 0, RSC_MENU_TEXT );
+    pClassMenu->SetVariable( nId, &aLangString, nullptr, 0, RSC_MENU_TEXT );
     nId = aNmTb.Put( "DefaultItemId", VARNAME );
-    pClassMenu->SetVariable( nId, &aIdUShort, NULL, 0,
+    pClassMenu->SetVariable( nId, &aIdUShort, nullptr, 0,
                                  RSC_MENU_DEFAULTITEMID );
 
     return pClassMenu;
@@ -940,22 +940,22 @@ RscTop * RscTypCont::InitClassNumericFormatter( RscTop * pSuper )
 
     // initialize variables
     nId = aNmTb.Put( "Minimum", VARNAME );
-    pClassNumeric->SetVariable( nId, &aIdLong, NULL,
+    pClassNumeric->SetVariable( nId, &aIdLong, nullptr,
                                 0, NUMERICFORMATTER_MIN );
     nId = aNmTb.Put( "Maximum", VARNAME );
-    pClassNumeric->SetVariable( nId, &aIdLong, NULL,
+    pClassNumeric->SetVariable( nId, &aIdLong, nullptr,
                                 0, NUMERICFORMATTER_MAX );
     nId = aNmTb.Put( "StrictFormat", VARNAME );
-    pClassNumeric->SetVariable( nId, &aBool, NULL,
+    pClassNumeric->SetVariable( nId, &aBool, nullptr,
                                 0, NUMERICFORMATTER_STRICTFORMAT );
     nId = aNmTb.Put( "DecimalDigits", VARNAME );
-    pClassNumeric->SetVariable( nId, &aUShort, NULL,
+    pClassNumeric->SetVariable( nId, &aUShort, nullptr,
                                 0, NUMERICFORMATTER_DECIMALDIGITS );
     nId = aNmTb.Put( "Value", VARNAME );
-    pClassNumeric->SetVariable( nId, &aIdLong, NULL,
+    pClassNumeric->SetVariable( nId, &aIdLong, nullptr,
                                 0, NUMERICFORMATTER_VALUE );
     nId = aNmTb.Put( "NoThousandSep", VARNAME );
-    pClassNumeric->SetVariable( nId, &aBool, NULL,
+    pClassNumeric->SetVariable( nId, &aBool, nullptr,
                                 0, NUMERICFORMATTER_NOTHOUSANDSEP );
 
     return pClassNumeric;
@@ -974,10 +974,10 @@ RscTop * RscTypCont::InitClassMetricFormatter( RscTop * pSuper,
 
     // initialize variables
     nId = aNmTb.Put( "Unit", VARNAME );
-    pClassMetric->SetVariable( nId, pFieldUnits, NULL,
+    pClassMetric->SetVariable( nId, pFieldUnits, nullptr,
                                0, METRICFORMATTER_UNIT );
     nId = aNmTb.Put( "CustomUnitText", VARNAME );
-    pClassMetric->SetVariable( nId, &aLangString, NULL,
+    pClassMetric->SetVariable( nId, &aLangString, nullptr,
                                0, METRICFORMATTER_CUSTOMUNITTEXT );
 
     return pClassMetric;
@@ -1015,13 +1015,13 @@ RscTop * RscTypCont::InitClassNumericField( RscTop * pSuper )
 
     // initialize variables
     nId = aNmTb.Put( "First", VARNAME );
-    pClassNumericField->SetVariable( nId, &aIdLong, NULL,
+    pClassNumericField->SetVariable( nId, &aIdLong, nullptr,
                                                                         0, NUMERICFIELD_FIRST );
     nId = aNmTb.Put( "Last", VARNAME );
-    pClassNumericField->SetVariable( nId, &aIdLong, NULL,
+    pClassNumericField->SetVariable( nId, &aIdLong, nullptr,
                                                                         0, NUMERICFIELD_LAST );
     nId = aNmTb.Put( "SpinSize", VARNAME );
-    pClassNumericField->SetVariable( nId, &aIdLong, NULL,
+    pClassNumericField->SetVariable( nId, &aIdLong, nullptr,
                                                                         0, NUMERICFIELD_SPINSIZE  );
     return pClassNumericField;
 }
@@ -1040,13 +1040,13 @@ RscTop * RscTypCont::InitClassMetricField( RscTop * pSuper )
 
     // initialize variables
     nId = aNmTb.Put( "First", VARNAME );
-    pClassMetricField->SetVariable( nId, &aIdLong, NULL,
+    pClassMetricField->SetVariable( nId, &aIdLong, nullptr,
                                     0, METRICFIELD_FIRST );
     nId = aNmTb.Put( "Last", VARNAME );
-    pClassMetricField->SetVariable( nId, &aIdLong, NULL,
+    pClassMetricField->SetVariable( nId, &aIdLong, nullptr,
                                     0, METRICFIELD_LAST );
     nId = aNmTb.Put( "SpinSize", VARNAME );
-    pClassMetricField->SetVariable( nId, &aIdLong, NULL,
+    pClassMetricField->SetVariable( nId, &aIdLong, nullptr,
                                     0, METRICFIELD_SPINSIZE  );
 
     return pClassMetricField;
@@ -1066,16 +1066,16 @@ RscTop * RscTypCont::InitClassDockingWindow( RscTop * pSuper,
 
     // initialize variables
     nId = aNmTb.Put( "_FloatingPosMapMode", VARNAME );
-    pClassDockWindow->SetVariable( nId, pMapUnit, NULL, 0,
+    pClassDockWindow->SetVariable( nId, pMapUnit, nullptr, 0,
                                    RSC_DOCKINGWINDOW_XYMAPMODE  );
     nId = aNmTb.Put( "_FloatingPosX", VARNAME );
-    pClassDockWindow->SetVariable( nId, &aShort, NULL, 0,
+    pClassDockWindow->SetVariable( nId, &aShort, nullptr, 0,
                                    RSC_DOCKINGWINDOW_X );
     nId = aNmTb.Put( "_FloatingPosY", VARNAME );
-    pClassDockWindow->SetVariable( nId, &aShort, NULL, 0,
+    pClassDockWindow->SetVariable( nId, &aShort, nullptr, 0,
                                    RSC_DOCKINGWINDOW_Y );
     nId = aNmTb.Put( "FloatingMode", VARNAME );
-    pClassDockWindow->SetVariable( nId, &aBool, NULL, 0,
+    pClassDockWindow->SetVariable( nId, &aBool, nullptr, 0,
                                    RSC_DOCKINGWINDOW_FLOATING );
 
     INS_WINBIT(pClassDockWindow,Moveable)
@@ -1104,7 +1104,7 @@ RscTop * RscTypCont::InitClassToolBoxItem( RscTop * pSuper,
 
     // initialize variables
     nId = aNmTb.Put( "Identifier", VARNAME );
-    pClassToolBoxItem->SetVariable( nId, &aIdNoZeroUShort, NULL, 0,
+    pClassToolBoxItem->SetVariable( nId, &aIdNoZeroUShort, nullptr, 0,
                                     RSC_TOOLBOXITEM_ID );
     {
         RscEnum   * pEnum;
@@ -1117,7 +1117,7 @@ RscTop * RscTypCont::InitClassToolBoxItem( RscTop * pSuper,
 
         // add variable
         nId = aNmTb.Put( "Type", VARNAME );
-        pClassToolBoxItem->SetVariable( nId, pEnum, NULL, 0,
+        pClassToolBoxItem->SetVariable( nId, pEnum, nullptr, 0,
                                   RSC_TOOLBOXITEM_TYPE  );
     }
     {
@@ -1143,7 +1143,7 @@ RscTop * RscTypCont::InitClassToolBoxItem( RscTop * pSuper,
 
         // add variable
         l_nVarId = aNmTb.Put( "_ToolBoxItemFlags", VARNAME );
-        pClassToolBoxItem->SetVariable( l_nVarId, pFlag, NULL,
+        pClassToolBoxItem->SetVariable( l_nVarId, pFlag, nullptr,
                                      VAR_HIDDEN | VAR_NOENUM,
                                      RSC_TOOLBOXITEM_STATUS );
 
@@ -1152,68 +1152,68 @@ RscTop * RscTypCont::InitClassToolBoxItem( RscTop * pSuper,
             pClient = new RscClient( pHS->getID( "sal_Bool" ), RSC_NOTYPE, pFlag, l_nCheckableId )
         );
         nId = aNmTb.Put( "Checkable", VARNAME );
-        pClassToolBoxItem->SetVariable( nId, pClient, NULL, VAR_NODATAINST, 0, l_nVarId );
+        pClassToolBoxItem->SetVariable( nId, pClient, nullptr, VAR_NODATAINST, 0, l_nVarId );
 
         aBaseLst.push_back(
             pClient = new RscClient( pHS->getID( "sal_Bool" ), RSC_NOTYPE, pFlag, l_nAutoCheckId )
         );
         nId = aNmTb.Put( "AutoCheck", VARNAME );
-        pClassToolBoxItem->SetVariable( nId, pClient, NULL, VAR_NODATAINST, 0, l_nVarId );
+        pClassToolBoxItem->SetVariable( nId, pClient, nullptr, VAR_NODATAINST, 0, l_nVarId );
 
         aBaseLst.push_back(
             pClient = new RscClient( pHS->getID( "sal_Bool" ), RSC_NOTYPE, pFlag, l_nRadioCheckId )
         );
         nId = aNmTb.Put( "RadioCheck", VARNAME );
-        pClassToolBoxItem->SetVariable( nId, pClient, NULL, VAR_NODATAINST, 0, l_nVarId );
+        pClassToolBoxItem->SetVariable( nId, pClient, nullptr, VAR_NODATAINST, 0, l_nVarId );
 
         aBaseLst.push_back(
             pClient = new RscClient( pHS->getID( "sal_Bool" ), RSC_NOTYPE, pFlag, l_nLeftId )
         );
         nId = aNmTb.Put( "Left", VARNAME );
-        pClassToolBoxItem->SetVariable( nId, pClient, NULL, VAR_NODATAINST, 0, l_nVarId );
+        pClassToolBoxItem->SetVariable( nId, pClient, nullptr, VAR_NODATAINST, 0, l_nVarId );
 
         aBaseLst.push_back(
             pClient = new RscClient( pHS->getID( "sal_Bool" ), RSC_NOTYPE, pFlag, l_nAutoSizeId )
         );
         nId = aNmTb.Put( "AutoSize", VARNAME );
-        pClassToolBoxItem->SetVariable( nId, pClient, NULL, VAR_NODATAINST, 0, l_nVarId );
+        pClassToolBoxItem->SetVariable( nId, pClient, nullptr, VAR_NODATAINST, 0, l_nVarId );
 
         aBaseLst.push_back(
             pClient = new RscClient( pHS->getID( "sal_Bool" ), RSC_NOTYPE, pFlag, l_nDropDownId )
         );
         nId = aNmTb.Put( "DropDown", VARNAME );
-        pClassToolBoxItem->SetVariable( nId, pClient, NULL, VAR_NODATAINST, 0, l_nVarId );
+        pClassToolBoxItem->SetVariable( nId, pClient, nullptr, VAR_NODATAINST, 0, l_nVarId );
     }
     nId = aNmTb.Put( "HelpID", VARNAME );
-    pClassToolBoxItem->SetVariable( nId, &aStringLiteral, NULL, 0,
+    pClassToolBoxItem->SetVariable( nId, &aStringLiteral, nullptr, 0,
                                     RSC_TOOLBOXITEM_HELPID  );
     nId = aNmTb.Put( "Text", VARNAME );
-    pClassToolBoxItem->SetVariable( nId, &aLangString, NULL, 0,
+    pClassToolBoxItem->SetVariable( nId, &aLangString, nullptr, 0,
                                     RSC_TOOLBOXITEM_TEXT );
     nId = aNmTb.Put( "HelpText", VARNAME );
-    pClassToolBoxItem->SetVariable( nId, &aLangString, NULL, 0,
+    pClassToolBoxItem->SetVariable( nId, &aLangString, nullptr, 0,
                                     RSC_TOOLBOXITEM_HELPTEXT );
     nId = aNmTb.Put( "ItemBitmap", VARNAME );
-    pClassToolBoxItem->SetVariable( nId, pClassBitmap, NULL, 0,
+    pClassToolBoxItem->SetVariable( nId, pClassBitmap, nullptr, 0,
                                     RSC_TOOLBOXITEM_BITMAP );
     nId = aNmTb.Put( "ItemImage", VARNAME );
-    pClassToolBoxItem->SetVariable( nId, pClassImage, NULL, 0,
+    pClassToolBoxItem->SetVariable( nId, pClassImage, nullptr, 0,
                                     RSC_TOOLBOXITEM_IMAGE );
     nId = aNmTb.Put( "Disable", VARNAME );
-    pClassToolBoxItem->SetVariable( nId, &aBool, NULL, 0,
+    pClassToolBoxItem->SetVariable( nId, &aBool, nullptr, 0,
                                     RSC_TOOLBOXITEM_DISABLE );
 
     nId = aNmTb.Put( "State", VARNAME );
-    pClassToolBoxItem->SetVariable( nId, pTriState, NULL, 0,
+    pClassToolBoxItem->SetVariable( nId, pTriState, nullptr, 0,
                                     RSC_TOOLBOXITEM_STATE );
     nId = aNmTb.Put( "Hide", VARNAME );
-    pClassToolBoxItem->SetVariable( nId, &aBool, NULL, 0,
+    pClassToolBoxItem->SetVariable( nId, &aBool, nullptr, 0,
                                     RSC_TOOLBOXITEM_HIDE );
     nId = aNmTb.Put( "Hide", VARNAME );
-    pClassToolBoxItem->SetVariable( nId, &aBool, NULL, 0,
+    pClassToolBoxItem->SetVariable( nId, &aBool, nullptr, 0,
                                     RSC_TOOLBOXITEM_HIDE );
     nId = aNmTb.Put( "Command", VARNAME );
-    pClassToolBoxItem->SetVariable( nId, &aString, NULL, 0,
+    pClassToolBoxItem->SetVariable( nId, &aString, nullptr, 0,
                                     RSC_TOOLBOXITEM_COMMAND );
 
     return pClassToolBoxItem;
@@ -1243,7 +1243,7 @@ RscTop * RscTypCont::InitClassToolBox( RscTop * pSuper,
 
         // add variable
         nId = aNmTb.Put( "ButtonType", VARNAME );
-        pClassToolBox->SetVariable( nId, pEnum, NULL, 0,
+        pClassToolBox->SetVariable( nId, pEnum, nullptr, 0,
                                   RSC_TOOLBOX_BUTTONTYPE  );
     }
     {
@@ -1257,23 +1257,23 @@ RscTop * RscTypCont::InitClassToolBox( RscTop * pSuper,
 
         // add variable
         nId = aNmTb.Put( "Align", VARNAME );
-        pClassToolBox->SetVariable( nId, pEnum, NULL, 0,
+        pClassToolBox->SetVariable( nId, pEnum, nullptr, 0,
                                   RSC_TOOLBOX_ALIGN  );
     }
     nId = aNmTb.Put( "LineCount", VARNAME );
-    pClassToolBox->SetVariable( nId, &aIdNoZeroUShort, NULL, 0,
+    pClassToolBox->SetVariable( nId, &aIdNoZeroUShort, nullptr, 0,
                                 RSC_TOOLBOX_LINECOUNT  );
     nId = aNmTb.Put( "FloatingLines", VARNAME );
-    pClassToolBox->SetVariable( nId, &aUShort, NULL, 0,
+    pClassToolBox->SetVariable( nId, &aUShort, nullptr, 0,
                                 RSC_TOOLBOX_FLOATLINES  );
     nId = aNmTb.Put( "Customize", VARNAME );
-    pClassToolBox->SetVariable( nId, &aBool, NULL, 0,
+    pClassToolBox->SetVariable( nId, &aBool, nullptr, 0,
                                 RSC_TOOLBOX_CUSTOMIZE );
     nId = aNmTb.Put( "MenuStrings", VARNAME );
-    pClassToolBox->SetVariable( nId, &aBool, NULL, 0,
+    pClassToolBox->SetVariable( nId, &aBool, nullptr, 0,
                                 RSC_TOOLBOX_MENUSTRINGS );
     nId = aNmTb.Put( "ItemImageList", VARNAME );
-    pClassToolBox->SetVariable( nId, pClassImageList, NULL, 0,
+    pClassToolBox->SetVariable( nId, pClassImageList, nullptr, 0,
                                 RSC_TOOLBOX_ITEMIMAGELIST );
     {
         RscLangArray* pLA;
@@ -1289,7 +1289,7 @@ RscTop * RscTypCont::InitClassToolBox( RscTop * pSuper,
                                   )
         );
         nId = aNmTb.Put( "ItemList", VARNAME );
-        pClassToolBox->SetVariable( nId, pLA, NULL, 0,
+        pClassToolBox->SetVariable( nId, pLA, nullptr, 0,
                                     RSC_TOOLBOX_ITEMLIST );
     }
     INS_WINBIT(pClassToolBox,Scroll)
@@ -1314,16 +1314,16 @@ RscTop * RscTypCont::InitClassSfxStyleFamilyItem( RscTop * pSuper,
     aNmTb.Put( nId, CLASSNAME, pClassSfxFamilyStyleItem );
 
     nId = aNmTb.Put( "FilterList", VARNAME );
-    pClassSfxFamilyStyleItem->SetVariable( nId, pStrLst, NULL, 0,
+    pClassSfxFamilyStyleItem->SetVariable( nId, pStrLst, nullptr, 0,
                                            RSC_SFX_STYLE_ITEM_LIST );
     nId = aNmTb.Put( "StyleBitmap", VARNAME );
-    pClassSfxFamilyStyleItem->SetVariable( nId, pClassBitmap, NULL, 0,
+    pClassSfxFamilyStyleItem->SetVariable( nId, pClassBitmap, nullptr, 0,
                                            RSC_SFX_STYLE_ITEM_BITMAP );
     nId = aNmTb.Put( "Text", VARNAME );
-    pClassSfxFamilyStyleItem->SetVariable( nId, &aLangString, NULL, 0,
+    pClassSfxFamilyStyleItem->SetVariable( nId, &aLangString, nullptr, 0,
                                            RSC_SFX_STYLE_ITEM_TEXT );
     nId = aNmTb.Put( "HelpText", VARNAME );
-    pClassSfxFamilyStyleItem->SetVariable( nId, &aLangString, NULL, 0,
+    pClassSfxFamilyStyleItem->SetVariable( nId, &aLangString, nullptr, 0,
                                            RSC_SFX_STYLE_ITEM_HELPTEXT );
     {
         RscEnum * pSfxStyleFamily;
@@ -1338,11 +1338,11 @@ RscTop * RscTypCont::InitClassSfxStyleFamilyItem( RscTop * pSuper,
         aBaseLst.push_back( pSfxStyleFamily );
 
         nId = aNmTb.Put( "StyleFamily", VARNAME );
-        pClassSfxFamilyStyleItem->SetVariable( nId, pSfxStyleFamily, NULL, 0,
+        pClassSfxFamilyStyleItem->SetVariable( nId, pSfxStyleFamily, nullptr, 0,
                                            RSC_SFX_STYLE_ITEM_STYLEFAMILY );
     }
     nId = aNmTb.Put( "StyleImage", VARNAME );
-    pClassSfxFamilyStyleItem->SetVariable( nId, pClassImage, NULL, 0,
+    pClassSfxFamilyStyleItem->SetVariable( nId, pClassImage, nullptr, 0,
                                            RSC_SFX_STYLE_ITEM_IMAGE );
     return pClassSfxFamilyStyleItem;
 }
@@ -1384,10 +1384,10 @@ RscTop * RscTypCont::InitClassSfxSlotInfo( RscTop * pSuper )
     aNmTb.Put( nId, CLASSNAME, pClassSfxSlotInfo );
 
     nId = aNmTb.Put( "SlotName", VARNAME );
-    pClassSfxSlotInfo->SetVariable( nId, &aLangString, NULL, 0,
+    pClassSfxSlotInfo->SetVariable( nId, &aLangString, nullptr, 0,
                                     RSC_SFX_SLOT_INFO_SLOTNAME );
     nId = aNmTb.Put( "HelpText", VARNAME );
-    pClassSfxSlotInfo->SetVariable( nId, &aLangString, NULL, 0,
+    pClassSfxSlotInfo->SetVariable( nId, &aLangString, nullptr, 0,
                                     RSC_SFX_SLOT_INFO_HELPTEXT );
     return pClassSfxSlotInfo;
 }

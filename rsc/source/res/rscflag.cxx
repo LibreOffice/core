@@ -339,7 +339,7 @@ RSCINST RscClient::Create( RSCINST * pInst, const RSCINST & rDflt,
         aTmpI = pRefClass->CreateClient( &aTmpI, aDfltI,
                                          bOwnClass, nConstId );
     else
-        aTmpI = pRefClass->CreateClient( NULL, aDfltI,
+        aTmpI = pRefClass->CreateClient( nullptr, aDfltI,
                                          bOwnClass, nConstId );
     aTmpI.pClass = this;
 

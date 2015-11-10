@@ -391,7 +391,7 @@ void RscError::FatalError( const ERRTYPE& rError, const RscId &aId,
 {
     if( ERR_USAGE != rError ){
         nErrors++;
-        ErrorFormat( rError, NULL, aId );
+        ErrorFormat( rError, nullptr, aId );
         WriteError( rError, pMessage );
         StdLstErr( "\nTerminating compiler\n" );
     }

@@ -29,7 +29,7 @@ static RscVerbosity lcl_determineVerbosity( int argc, char ** argv )
 {
     for ( int i = 0; i < argc; ++i )
     {
-        if ( argv[i] == NULL )
+        if ( argv[i] == nullptr )
             continue;
         if ( rsc_stricmp( argv[i], "-verbose" ) == 0 )
             return RscVerbosityVerbose;

@@ -123,7 +123,7 @@ RscDefine::RscDefine( sal_uLong lKey, const OString& rDefName, sal_Int32 lDefId 
     nRefCount = 0;
     lFileKey  = lKey;
     lId       = lDefId;
-    pExp      = NULL;
+    pExp      = nullptr;
 }
 
 RscDefine::RscDefine( sal_uLong lKey, const OString& rDefName,
@@ -156,7 +156,7 @@ void RscDefine::DecRef()
 void RscDefine::DefineToNumber()
 {
     delete pExp;
-    pExp = NULL;
+    pExp = nullptr;
     SetName(OString::number(lId));
 }
 
@@ -451,7 +451,7 @@ RscDefine * RscDefTree::Search( const char * pName )
 {
     if( pDefRoot )
         return pDefRoot->Search( pName );
-    return NULL;
+    return nullptr;
 }
 
 void RscDefTree::Insert( RscDefine * pDef )
@@ -600,7 +600,7 @@ RscDefine * RscFileTab::NewDef( sal_uLong lFileKey, const OString& rDefName,
         }
     }
     else
-        pDef = NULL;
+        pDef = nullptr;
 
     return pDef;
 }
@@ -625,7 +625,7 @@ RscDefine * RscFileTab::NewDef( sal_uLong lFileKey, const OString& rDefName,
         }
     }
     else
-        pDef = NULL;
+        pDef = nullptr;
 
     if( !pDef )
     {

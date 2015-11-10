@@ -221,7 +221,7 @@ RscTop * RscTypCont::SearchType( Atom nId )
         Search for base type nId;
     */
     if( nId == InvalidAtom )
-        return NULL;
+        return nullptr;
 
 #define ELSE_IF( a )                \
     else if( a.GetId() == nId ) \
@@ -251,14 +251,14 @@ RscTop * RscTypCont::SearchType( Atom nId )
         if( pEle->GetId() == nId )
             return pEle;
     }
-    return NULL;
+    return nullptr;
 }
 
 sal_uInt32 RscTypCont::PutSysName( sal_uInt32 nRscTyp, char * pFileName,
                                      sal_uInt32 nConst, sal_uInt32 nId, bool bFirst )
 {
     RscSysEntry *pSysEntry;
-    RscSysEntry *pFoundEntry = NULL;
+    RscSysEntry *pFoundEntry = nullptr;
     bool            bId1 = false;
 
     for ( size_t i = 0, n = aSysLst.size(); i < n; ++i )

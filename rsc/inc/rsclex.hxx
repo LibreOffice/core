@@ -60,7 +60,7 @@ struct Node
     Node*   pPrev;
     RSCINST aInst;
     sal_uInt32  nTupelRec;  // Rekursionstiefe fuer Tupel
-    Node() { pPrev = NULL; nTupelRec = 0; }
+    Node() { pPrev = nullptr; nTupelRec = 0; }
 };
 
 class ObjectStack
@@ -69,10 +69,10 @@ class ObjectStack
         Node* pRoot;
     public:
 
-        ObjectStack ()   { pRoot = NULL; }
+        ObjectStack ()   { pRoot = nullptr; }
 
         const RSCINST & Top  ()     { return pRoot->aInst; }
-        bool        IsEmpty()   { return( pRoot == NULL ); }
+        bool        IsEmpty()   { return( pRoot == nullptr ); }
         void        Push( RSCINST aInst )
                     {
                         Node* pTmp;

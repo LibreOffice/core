@@ -28,7 +28,7 @@
 
 NameNode::NameNode()
 {
-    pLeft = pRight = NULL;
+    pLeft = pRight = nullptr;
 }
 
 NameNode::~NameNode()
@@ -71,7 +71,7 @@ NameNode * NameNode::ChangeDLListBTree( NameNode * pList )
         {
             pList = nullptr;
         }
-        if( NULL != (pTmp = pMiddle->Left()) )  // set right pointer to NULL
+        if( nullptr != (pTmp = pMiddle->Left()) )  // set right pointer to NULL
             pTmp->pRight = nullptr;
 
         // set left pointer to NULL
@@ -147,7 +147,7 @@ NameNode * NameNode::Remove( NameNode * pRemove )
             pRoot = Left();
         }
     }
-    pRemove->pLeft = pRemove->pRight = NULL;
+    pRemove->pLeft = pRemove->pRight = nullptr;
 
     return pRoot;
 }
@@ -221,7 +221,7 @@ NameNode* NameNode::Search( const NameNode * pSearch ) const
     else
         return const_cast<NameNode *>(this);
 
-    return NULL;
+    return nullptr;
 }
 
 // search for a node.
@@ -244,7 +244,7 @@ NameNode* NameNode::Search( const void * pSearch ) const
     else
         return const_cast<NameNode *>(this);
 
-    return NULL;
+    return nullptr;
 }
 
 // A node is inserted into the tree
@@ -304,8 +304,8 @@ void NameNode::OrderTree()
     NameNode * pTmpLeft = static_cast<NameNode *>(Left());
     NameNode * pTmpRight = static_cast<NameNode *>(Right());
 
-    pLeft = NULL;
-    pRight = NULL;
+    pLeft = nullptr;
+    pRight = nullptr;
     SubOrderTree( pTmpLeft );
     SubOrderTree( pTmpRight );
 }
@@ -316,8 +316,8 @@ void NameNode::SubOrderTree( NameNode * pOrderNode )
     {
         NameNode * pTmpLeft = static_cast<NameNode *>(pOrderNode->Left());
         NameNode * pTmpRight = static_cast<NameNode *>(pOrderNode->Right());
-        pOrderNode->pLeft = NULL;
-        pOrderNode->pRight = NULL;
+        pOrderNode->pLeft = nullptr;
+        pOrderNode->pRight = nullptr;
         Insert( pOrderNode );
         SubOrderTree( pTmpLeft );
         SubOrderTree( pTmpRight );

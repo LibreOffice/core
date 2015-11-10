@@ -32,7 +32,7 @@ RscClass::RscClass( Atom nId, sal_uInt32 nTypeId, RscTop * pSuperCl )
     : RscTop( nId, nTypeId, pSuperCl )
 {
     nEntries = 0;
-    pVarTypeList = NULL;
+    pVarTypeList = nullptr;
     nSuperSize = RscTop::Size();
     nSize = nSuperSize + ALIGNED_SIZE( sizeof( RscClassInst ) );
 }
@@ -51,7 +51,7 @@ void RscClass::Pre_dtor()
                          RSCINST( pVarTypeList[ i ].pClass,
                                   pVarTypeList[ i ].pDefault ) );
             rtl_freeMemory( pVarTypeList[ i ].pDefault );
-            pVarTypeList[ i ].pDefault = NULL;
+            pVarTypeList[ i ].pDefault = nullptr;
         }
     }
 }
@@ -166,7 +166,7 @@ RSCINST RscClass::Create( RSCINST * pInst,
 
     for( i = 0; i < nEntries; i++ )
     {
-        aDfltI = GetInstData( bOwnClass ? rDflt.pData : NULL, i, true );
+        aDfltI = GetInstData( bOwnClass ? rDflt.pData : nullptr, i, true );
 
         if( (VAR_POINTER & pVarTypeList[ i ].nVarType) &&
             !(VAR_NODATAINST & pVarTypeList[ i ].nVarType) )
@@ -181,10 +181,10 @@ RSCINST RscClass::Create( RSCINST * pInst,
             else
                 ppData = reinterpret_cast<CLASS_DATA*>(aInst.pData + pVarTypeList[ i ].nOffset );
 
-            *ppData = NULL;
+            *ppData = nullptr;
             if( aDfltI.IsInst() )
             {
-                aMemInst = pVarTypeList[ i ].pClass->Create( NULL, aDfltI );
+                aMemInst = pVarTypeList[ i ].pClass->Create( nullptr, aDfltI );
                 *ppData = aMemInst.pData;
             }
         }
@@ -250,7 +250,7 @@ ERRTYPE RscClass::SetVariable( Atom nVarName,
     if( pDflt )
         pVarTypeList[ nEntries ].pDefault = pDflt->pData;
     else
-        pVarTypeList[ nEntries ].pDefault = NULL;
+        pVarTypeList[ nEntries ].pDefault = nullptr;
 
     pVarTypeList[ nEntries ].nVarType = ~VAR_POINTER & nVarType;
     if( pClass->Size() > 10 || (nVarType & VAR_EXTENDABLE) )
@@ -338,16 +338,16 @@ RSCINST RscClass::GetVariable( const RSCINST & rInst,
                     RSCINST * pInst = reinterpret_cast<RSCINST *>
                             (rInst.pData + pVarTypeList[ i ].nOffset );
                     if( pCreateClass && pCreateClass->InHierarchy( aTmpI.pClass ) )
-                        *pInst = pCreateClass->Create( NULL, aDefInst );
+                        *pInst = pCreateClass->Create( nullptr, aDefInst );
                     else
-                        *pInst = aTmpI.pClass->Create( NULL, aDefInst );
+                        *pInst = aTmpI.pClass->Create( nullptr, aDefInst );
                     aTmpI = *pInst;
                 }
                 else
                 {
                     CLASS_DATA  * ppData
                         = reinterpret_cast<CLASS_DATA *>(rInst.pData + pVarTypeList[ i ].nOffset);
-                    aTmpI = aTmpI.pClass->Create( NULL, aDefInst );
+                    aTmpI = aTmpI.pClass->Create( nullptr, aDefInst );
                     *ppData = aTmpI.pData;
                 }
             }

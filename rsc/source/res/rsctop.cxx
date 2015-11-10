@@ -44,7 +44,7 @@ void RscTop::SetCallPar(const OString& rPar1, const OString& rPar2,
 RSCINST RscTop::GetDefault()
 {
     if( !aDfltInst.IsInst() )
-        aDfltInst = this->Create( NULL, RSCINST() );
+        aDfltInst = this->Create( nullptr, RSCINST() );
     return aDfltInst;
 }
 
@@ -63,7 +63,7 @@ RscTop * RscTop::GetTypeClass() const
     if( pSuperClass )
         return pSuperClass->GetTypeClass();
     else
-        return NULL;
+        return nullptr;
 }
 
 sal_uInt32 RscTop::Size()

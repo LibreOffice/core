@@ -48,7 +48,7 @@ RscNameTable::RscNameTable()
 {
     bSort    = true;
     nEntries = 0;
-    pTable   = NULL;
+    pTable   = nullptr;
 };
 
 RscNameTable::~RscNameTable()
@@ -110,7 +110,7 @@ Atom RscNameTable::Put( Atom nName, sal_uInt32 nTyp, RscTop * pClass )
 
 bool RscNameTable::Get( Atom nName, KEY_STRUCT * pEle )
 {
-    KEY_STRUCT * pKey = NULL;
+    KEY_STRUCT * pKey = nullptr;
     KEY_STRUCT  aSearchName;
     sal_uInt32  i;
 

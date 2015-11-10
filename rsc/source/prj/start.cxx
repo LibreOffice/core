@@ -49,7 +49,7 @@ static bool CallPrePro( const OString& rInput,
     RscPtrPtr       aRespCmdL;   // Kommandozeile
     RscPtrPtr *     pCmdL = &aNewCmdL;
     int             i, nRet;
-    FILE*           fRspFile = NULL;
+    FILE*           fRspFile = nullptr;
     OString    aRspFileName;
 
     if( bResponse )

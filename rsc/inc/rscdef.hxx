@@ -228,7 +228,7 @@ class RscDefTree
     RscDefine * pDefRoot;
 public:
     static bool Evaluate( RscDefine * pDef );
-                RscDefTree(){ pDefRoot = NULL; }
+                RscDefTree(){ pDefRoot = nullptr; }
                 ~RscDefTree();
     void        Remove();
     RscDefine * Search( const char * pName );

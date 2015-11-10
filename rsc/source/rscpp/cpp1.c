@@ -233,7 +233,7 @@ void InitCpp1()
 int MAIN(int argc, char** argv)
 {
     int    i;
-    char** useargv = 0;
+    char** useargv = NULL;
     char** pfargv = NULL;
 
     if( nRunde == 0 )
