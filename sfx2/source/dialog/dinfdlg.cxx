@@ -570,7 +570,7 @@ bool SfxDocumentInfoItem::PutValue( const Any& rVal, sal_uInt8 nMemberId )
         case MID_DOCINFO_USETHUMBNAILSAVE:
             bRet = (rVal >>=bValue);
             if ( bRet )
-            SetUseThumbnailSave( bValue );
+                SetUseThumbnailSave( bValue );
             break;
         case MID_DOCINFO_DELETEUSERDATA:
             // QUESTION: deleting user data was done here; seems to be superfluous!
