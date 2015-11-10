@@ -34,14 +34,14 @@ namespace mysqlc_sdbc_driver
     void throwFeatureNotImplementedException(
             const sal_Char* _pAsciiFeatureName,
             const css::uno::Reference< css::uno::XInterface >& _rxContext,
-            const css::uno::Any* _pNextException = NULL
+            const css::uno::Any* _pNextException = nullptr
         )
         throw (css::sdbc::SQLException);
 
     void throwInvalidArgumentException(
             const sal_Char* _pAsciiFeatureName,
             const css::uno::Reference< css::uno::XInterface >& _rxContext,
-            const css::uno::Any* _pNextException = NULL
+            const css::uno::Any* _pNextException = nullptr
         )
         throw (css::sdbc::SQLException);
 

@@ -63,7 +63,7 @@ using ::osl::MutexGuard;
 OConnection::OConnection(MysqlCDriver& _rDriver, sql::Driver * _cppDriver)
     :OMetaConnection_BASE(m_aMutex)
     ,OSubComponent<OConnection, OConnection_BASE>(static_cast<cppu::OWeakObject*>(&_rDriver), this)
-    ,m_xMetaData(NULL)
+    ,m_xMetaData(nullptr)
     ,m_rDriver(_rDriver)
     ,cppDriver(_cppDriver)
     ,m_bClosed(false)

@@ -777,7 +777,7 @@ TypeInfoDef mysqlc_types[] = {
 
     // ----------- MySQL-Type: TIMESTAMP SDBC-Type: TIMESTAMP ----------
     {
-        0, 0, 0, 0, 0, 0, 0, false, 0, false, false, false, 0, 0, 0, 0, 0, 0
+        nullptr, 0, 0, nullptr, nullptr, nullptr, 0, false, 0, false, false, false, nullptr, 0, 0, 0, 0, 0
     }
 };
 

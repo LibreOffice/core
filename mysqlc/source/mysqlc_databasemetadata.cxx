@@ -1351,7 +1351,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getProcedureColumns(
 {
     OSL_TRACE("ODatabaseMetaData::getProcedureColumns");
     // Currently there is no information available
-    return NULL;
+    return nullptr;
 }
 
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getProcedures(
@@ -1715,7 +1715,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getUDTs(
 {
     OSL_TRACE("ODatabaseMetaData::getUDTs");
     mysqlc_sdbc_driver::throwFeatureNotImplementedException("ODatabaseMetaData::getUDTs", *this);
-    return NULL;
+    return nullptr;
 }
 
 /*

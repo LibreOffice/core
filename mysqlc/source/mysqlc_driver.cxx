@@ -45,12 +45,12 @@ MysqlCDriver::MysqlCDriver(const Reference< XMultiServiceFactory >& _rxFactory)
     : ODriver_BASE(m_aMutex)
     ,m_xFactory(_rxFactory)
 #ifndef SYSTEM_MYSQL_CPPCONN
-    ,m_hCppConnModule( NULL )
+    ,m_hCppConnModule( nullptr )
     ,m_bAttemptedLoadCppConn( false )
 #endif
 {
     OSL_TRACE("MysqlCDriver::MysqlCDriver");
-    cppDriver = NULL;
+    cppDriver = nullptr;
 }
 
 void MysqlCDriver::disposing()
@@ -198,7 +198,7 @@ Reference< XConnection > SAL_CALL MysqlCDriver::connect(const rtl::OUString& url
 
     OSL_TRACE("MysqlCDriver::connect");
     if (!acceptsURL(url)) {
-        return NULL;
+        return nullptr;
     }
 
     if ( !cppDriver )
@@ -297,7 +297,7 @@ void release(oslInterlockedCount& _refCount,
             {
                 ::osl::MutexGuard aGuard(rBHelper.rMutex);
                 xParent = _xInterface;
-                _xInterface = NULL;
+                _xInterface = nullptr;
             }
 
             // First dispose

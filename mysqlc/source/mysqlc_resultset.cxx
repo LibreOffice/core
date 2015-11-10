@@ -76,7 +76,7 @@ OResultSet::OResultSet(OCommonStatement * pStmt, sql::ResultSet * result, rtl_Te
     : OResultSet_BASE(m_aMutex)
     ,OPropertySetHelper(OResultSet_BASE::rBHelper)
     ,m_aStatement(static_cast<OWeakObject*>(pStmt))
-    ,m_xMetaData(NULL)
+    ,m_xMetaData(nullptr)
     ,m_result(result)
     ,fieldCount( 0 )
     ,m_encoding( _encoding )
@@ -102,8 +102,8 @@ void OResultSet::disposing()
 
     MutexGuard aGuard(m_aMutex);
 
-    m_aStatement = NULL;
-    m_xMetaData  = NULL;
+    m_aStatement = nullptr;
+    m_xMetaData  = nullptr;
 }
 
 Any SAL_CALL OResultSet::queryInterface(const Type & rType)
@@ -165,7 +165,7 @@ Reference< XInputStream > SAL_CALL OResultSet::getBinaryStream(sal_Int32 column)
     checkColumnIndex(column);
 
     mysqlc_sdbc_driver::throwFeatureNotImplementedException("OResultSet::getBinaryStream", *this);
-    return NULL;
+    return nullptr;
 }
 
 Reference< XInputStream > SAL_CALL OResultSet::getCharacterStream(sal_Int32 column)
@@ -177,7 +177,7 @@ Reference< XInputStream > SAL_CALL OResultSet::getCharacterStream(sal_Int32 colu
     checkColumnIndex(column);
 
     mysqlc_sdbc_driver::throwFeatureNotImplementedException("OResultSet::getCharacterStream", *this);
-    return NULL;
+    return nullptr;
 }
 
 sal_Bool SAL_CALL OResultSet::getBoolean(sal_Int32 column)
@@ -370,7 +370,7 @@ Reference< XArray > SAL_CALL OResultSet::getArray(sal_Int32 column)
     checkColumnIndex(column);
 
     mysqlc_sdbc_driver::throwFeatureNotImplementedException("OResultSet::getArray", *this);
-    return NULL;
+    return nullptr;
 }
 
 Reference< XClob > SAL_CALL OResultSet::getClob(sal_Int32 column)
@@ -382,7 +382,7 @@ Reference< XClob > SAL_CALL OResultSet::getClob(sal_Int32 column)
     checkColumnIndex(column);
 
     mysqlc_sdbc_driver::throwFeatureNotImplementedException("OResultSet::getClob", *this);
-    return NULL;
+    return nullptr;
 }
 
 Reference< XBlob > SAL_CALL OResultSet::getBlob(sal_Int32 column)
@@ -394,7 +394,7 @@ Reference< XBlob > SAL_CALL OResultSet::getBlob(sal_Int32 column)
     checkColumnIndex(column);
 
     mysqlc_sdbc_driver::throwFeatureNotImplementedException("OResultSet::getBlob", *this);
-    return NULL;
+    return nullptr;
 }
 
 Reference< XRef > SAL_CALL OResultSet::getRef(sal_Int32 column)
@@ -406,7 +406,7 @@ Reference< XRef > SAL_CALL OResultSet::getRef(sal_Int32 column)
     checkColumnIndex(column);
 
     mysqlc_sdbc_driver::throwFeatureNotImplementedException("OResultSet::getRef", *this);
-    return NULL;
+    return nullptr;
 }
 
 Any SAL_CALL OResultSet::getObject(sal_Int32 column, const Reference< XNameAccess >& /* typeMap */)
