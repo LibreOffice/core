@@ -51,7 +51,7 @@ void dso_exit() {
     if (pInstance)
     {
         delete pInstance;
-        pInstance = NULL;
+        pInstance = nullptr;
     }
 }
 

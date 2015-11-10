@@ -48,7 +48,7 @@ static OUString * s_pStaticOidPart = 0;
 const OUString & SAL_CALL cppu_cppenv_getStaticOIdPart()
 {
 #if ! (defined(__GNUC__) && defined(__APPLE__))
-    static OUString * s_pStaticOidPart = 0;
+    static OUString * s_pStaticOidPart = nullptr;
 #endif
     if (! s_pStaticOidPart)
     {
@@ -93,7 +93,7 @@ static void s_stub_computeObjectIdentifier(va_list * pParam)
         if (*ppOId)
         {
             rtl_uString_release( *ppOId );
-            *ppOId = 0;
+            *ppOId = nullptr;
         }
 
         try
@@ -199,7 +199,7 @@ SAL_DLLPUBLIC_EXPORT void SAL_CALL uno_ext_getMapping(
     assert(ppMapping && pFrom && pTo);
     if (ppMapping && pFrom && pTo && pFrom->pExtEnv && pTo->pExtEnv)
     {
-        uno_Mapping * pMapping = 0;
+        uno_Mapping * pMapping = nullptr;
 
         OUString from_envTypeName(cppu::EnvDcp::getTypeName(pFrom->pTypeName));
         OUString to_envTypeName(cppu::EnvDcp::getTypeName(pTo->pTypeName));
@@ -216,7 +216,7 @@ SAL_DLLPUBLIC_EXPORT void SAL_CALL uno_ext_getMapping(
             ::uno_registerMapping(
                 &pMapping, bridges::cpp_uno::shared::freeMapping,
                 &pFrom->pExtEnv->aBase,
-                &pTo->pExtEnv->aBase, 0 );
+                &pTo->pExtEnv->aBase, nullptr );
         }
         else if (0 == rtl_ustr_ascii_compare(
                      to_envTypeName.pData->buffer,
@@ -230,7 +230,7 @@ SAL_DLLPUBLIC_EXPORT void SAL_CALL uno_ext_getMapping(
             ::uno_registerMapping(
                 &pMapping, bridges::cpp_uno::shared::freeMapping,
                 &pFrom->pExtEnv->aBase,
-                &pTo->pExtEnv->aBase, 0 );
+                &pTo->pExtEnv->aBase, nullptr );
         }
 
         if (*ppMapping)

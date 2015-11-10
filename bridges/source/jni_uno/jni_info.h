@@ -110,7 +110,7 @@ struct JNI_type_info_holder: private boost::noncopyable
 {
     JNI_type_info * m_info;
     inline JNI_type_info_holder()
-        : m_info( 0 )
+        : m_info( NULL )
         {}
 };
 

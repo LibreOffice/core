@@ -55,7 +55,7 @@ struct Job {
 
 void throwOutOfMemory(JNIEnv * env) {
     jclass c = env->FindClass("java/lang/OutOfMemoryError");
-    if (c != 0) {
+    if (c != nullptr) {
         env->ThrowNew(c, "");
     }
 }
@@ -87,7 +87,7 @@ extern "C" SAL_JNI_EXPORT jbyteArray JNICALL
 Java_com_sun_star_lib_uno_environments_remote_NativeThreadPool_threadId(
     JNIEnv * env, SAL_UNUSED_PARAMETER jclass) SAL_THROW_EXTERN_C()
 {
-    sal_Sequence * s = 0;
+    sal_Sequence * s = nullptr;
     uno_getIdOfCurrentThread(&s); //TODO: out of memory
     uno_releaseIdFromCurrentThread();
     rtl::ByteSequence seq(s);
@@ -95,12 +95,12 @@ Java_com_sun_star_lib_uno_environments_remote_NativeThreadPool_threadId(
     sal_Int32 n = seq.getLength();
     jbyteArray a = env->NewByteArray(n);
         // sal_Int32 and jsize are compatible here
-    if (a == 0) {
-        return 0;
+    if (a == nullptr) {
+        return nullptr;
     }
-    void * p = env->GetPrimitiveArrayCritical(a, 0);
-    if (p == 0) {
-        return 0;
+    void * p = env->GetPrimitiveArrayCritical(a, nullptr);
+    if (p == nullptr) {
+        return nullptr;
     }
     memcpy(p, seq.getConstArray(), n);
         // sal_Int8 and jbyte ought to be compatible
@@ -115,17 +115,17 @@ Java_com_sun_star_lib_uno_environments_remote_NativeThreadPool_create(
     JavaVM * vm;
     if (env->GetJavaVM(&vm) != JNI_OK) { //TODO: no Java exception raised?
         jclass c = env->FindClass("java/lang/RuntimeException");
-        if (c != 0) {
+        if (c != nullptr) {
             env->ThrowNew(c, "JNI GetJavaVM failed");
         }
         return 0;
     }
     jclass c = env->FindClass("com/sun/star/lib/uno/environments/remote/Job");
-    if (c == 0) {
+    if (c == nullptr) {
         return 0;
     }
     jmethodID execute = env->GetMethodID(c, "execute", "()Ljava/lang/Object;");
-    if (execute == 0) {
+    if (execute == nullptr) {
         return 0;
     }
     try {
@@ -154,8 +154,8 @@ Java_com_sun_star_lib_uno_environments_remote_NativeThreadPool_enter(
     uno_threadpool_enter(
         reinterpret_cast< Pool * >(pool)->pool,
         reinterpret_cast< void ** >(&job));
-    if (job == 0) {
-        return 0;
+    if (job == nullptr) {
+        return nullptr;
     }
     jobject ref = env->NewLocalRef(job);
     env->DeleteGlobalRef(job);
@@ -175,8 +175,8 @@ Java_com_sun_star_lib_uno_environments_remote_NativeThreadPool_putJob(
     JNIEnv * env, SAL_UNUSED_PARAMETER jclass, jlong pool, jbyteArray threadId,
     jobject job, jboolean request, jboolean oneWay) SAL_THROW_EXTERN_C()
 {
-    void * s = env->GetPrimitiveArrayCritical(threadId, 0);
-    if (s == 0) {
+    void * s = env->GetPrimitiveArrayCritical(threadId, nullptr);
+    if (s == nullptr) {
         return;
     }
     rtl::ByteSequence seq(
@@ -187,13 +187,13 @@ Java_com_sun_star_lib_uno_environments_remote_NativeThreadPool_putJob(
     env->ReleasePrimitiveArrayCritical(threadId, s, JNI_ABORT);
     Pool * p = reinterpret_cast< Pool * >(pool);
     jobject ref = env->NewGlobalRef(job);
-    if (ref == 0) {
+    if (ref == nullptr) {
         return;
     }
-    Job * j = 0;
+    Job * j = nullptr;
     if (request) {
         j = new(std::nothrow) Job(p, ref);
-        if (j == 0) {
+        if (j == nullptr) {
             env->DeleteGlobalRef(ref);
             throwOutOfMemory(env);
             return;
@@ -202,7 +202,7 @@ Java_com_sun_star_lib_uno_environments_remote_NativeThreadPool_putJob(
     uno_threadpool_putJob(
         p->pool, seq.getHandle(),
         request ? static_cast< void * >(j) : static_cast< void * >(ref),
-        request ? executeRequest : 0, oneWay);
+        request ? executeRequest : nullptr, oneWay);
 }
 
 extern "C" SAL_JNI_EXPORT void JNICALL

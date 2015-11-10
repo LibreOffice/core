@@ -94,7 +94,7 @@ public:
         Block * blocks;
         Vtables()
             : count(0)
-            , blocks(NULL)
+            , blocks(nullptr)
         {
         }
     };

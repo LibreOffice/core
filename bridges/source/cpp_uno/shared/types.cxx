@@ -60,7 +60,7 @@ bool relatesToInterfaceType(typelib_TypeDescription const * type) {
                 case typelib_TypeClass_EXCEPTION:
                 case typelib_TypeClass_SEQUENCE:
                     {
-                        typelib_TypeDescription * t = 0;
+                        typelib_TypeDescription * t = nullptr;
                         TYPELIB_DANGER_GET(&t, p->ppTypeRefs[i]);
                         bool b = relatesToInterfaceType(t);
                         TYPELIB_DANGER_RELEASE(t);
@@ -74,7 +74,7 @@ bool relatesToInterfaceType(typelib_TypeDescription const * type) {
                     break;
                 }
             }
-            if (p->pBaseTypeDescription != 0) {
+            if (p->pBaseTypeDescription != nullptr) {
                 return relatesToInterfaceType(&p->pBaseTypeDescription->aBase);
             }
         }
@@ -91,7 +91,7 @@ bool relatesToInterfaceType(typelib_TypeDescription const * type) {
         case typelib_TypeClass_EXCEPTION:
         case typelib_TypeClass_SEQUENCE:
             {
-                typelib_TypeDescription * t = 0;
+                typelib_TypeDescription * t = nullptr;
                 TYPELIB_DANGER_GET(
                     &t,
                     reinterpret_cast< typelib_IndirectTypeDescription const * >(

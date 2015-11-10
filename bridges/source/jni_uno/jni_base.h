@@ -91,7 +91,7 @@ public:
     inline void ensure_no_exception() const; // throws BridgeRuntimeError
     inline bool assert_no_exception() const; // asserts and clears exception
 
-    OUString get_stack_trace( jobject jo_exc = 0 ) const;
+    OUString get_stack_trace( jobject jo_exc = NULL ) const;
 };
 
 inline void JNI_context::ensure_no_exception() const
@@ -144,7 +144,7 @@ class JLocalAutoRef
 public:
     explicit JLocalAutoRef( JNI_context const & jni )
         : m_jni( jni ),
-          m_jo( 0 )
+          m_jo( NULL )
         {}
     explicit JLocalAutoRef( JNI_context const & jni, jobject jo )
         : m_jni( jni ),
@@ -156,7 +156,7 @@ public:
     jobject get() const
         { return m_jo; }
     bool is() const
-        { return (0 != m_jo); }
+        { return (NULL != m_jo); }
     inline jobject release();
     inline void reset( jobject jo );
     inline JLocalAutoRef & operator = ( JLocalAutoRef & auto_ref );
@@ -164,7 +164,7 @@ public:
 
 inline JLocalAutoRef::~JLocalAutoRef()
 {
-    if (0 != m_jo)
+    if (NULL != m_jo)
         m_jni->DeleteLocalRef( m_jo );
 }
 
@@ -172,13 +172,13 @@ inline JLocalAutoRef::JLocalAutoRef( JLocalAutoRef & auto_ref )
     : m_jni( auto_ref.m_jni ),
       m_jo( auto_ref.m_jo )
 {
-    auto_ref.m_jo = 0;
+    auto_ref.m_jo = NULL;
 }
 
 inline jobject JLocalAutoRef::release()
 {
     jobject jo = m_jo;
-    m_jo = 0;
+    m_jo = NULL;
     return jo;
 }
 
@@ -186,7 +186,7 @@ inline void JLocalAutoRef::reset( jobject jo )
 {
     if (jo != m_jo)
     {
-        if (0 != m_jo)
+        if (NULL != m_jo)
             m_jni->DeleteLocalRef( m_jo );
         m_jo = jo;
     }
@@ -196,7 +196,7 @@ inline JLocalAutoRef & JLocalAutoRef::operator = ( JLocalAutoRef & auto_ref )
 {
     assert( m_jni.get_jni_env() == auto_ref.m_jni.get_jni_env() );
     reset( auto_ref.m_jo );
-    auto_ref.m_jo = 0;
+    auto_ref.m_jo = NULL;
     return *this;
 }
 
@@ -219,7 +219,7 @@ struct rtl_mem
 inline rtl_mem * rtl_mem::allocate( ::std::size_t bytes )
 {
     void * p = rtl_allocateMemory( bytes );
-    if (0 == p)
+    if (NULL == p)
         throw BridgeRuntimeError( "out of memory!" );
     return static_cast<rtl_mem *>(p);
 }
@@ -242,10 +242,10 @@ public:
 };
 
 inline TypeDescr::TypeDescr( typelib_TypeDescriptionReference * td_ref )
-    : m_td( 0 )
+    : m_td( NULL )
 {
     TYPELIB_DANGER_GET( &m_td, td_ref );
-    if (0 == m_td)
+    if (NULL == m_td)
     {
         throw BridgeRuntimeError(
             "cannot get comprehensive type description for " +

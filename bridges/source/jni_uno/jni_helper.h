@@ -34,7 +34,7 @@ namespace jni_uno
 inline void jstring_to_ustring(
     JNI_context const & jni, rtl_uString ** out_ustr, jstring jstr )
 {
-    if (0 == jstr)
+    if (NULL == jstr)
     {
         rtl_uString_new( out_ustr );
     }
@@ -51,7 +51,7 @@ inline void jstring_to_ustring(
         ustr->length = len;
         ustr->buffer[ len ] = '\0';
         mem.release();
-        if (0 != *out_ustr)
+        if (NULL != *out_ustr)
             rtl_uString_release( *out_ustr );
         *out_ustr = ustr;
     }
@@ -60,7 +60,7 @@ inline void jstring_to_ustring(
 inline OUString jstring_to_oustring(
     JNI_context const & jni, jstring jstr )
 {
-    rtl_uString * ustr = 0;
+    rtl_uString * ustr = NULL;
     jstring_to_ustring( jni, &ustr, jstr );
     return OUString( ustr, SAL_NO_ACQUIRE );
 }
@@ -80,14 +80,14 @@ inline jclass find_class(
     JNI_context const & jni, char const * class_name, bool inException = false )
 {
     // find_class may be called before the JNI_info is set:
-    jclass c=0;
+    jclass c=NULL;
     jmethodID m;
     JNI_info const * info = jni.get_info();
-    if (info == 0) {
+    if (info == NULL) {
         jni.getClassForName(&c, &m);
-        if (c == 0) {
+        if (c == NULL) {
             if (inException) {
-                return 0;
+                return NULL;
             }
             jni.ensure_no_exception();
         }

@@ -60,7 +60,7 @@ RTTI::RTTI()
 #if defined(FREEBSD) && __FreeBSD_version < 702104
     : m_hApp( dlopen( 0, RTLD_NOW | RTLD_GLOBAL ) )
 #else
-    : m_hApp( dlopen( 0, RTLD_LAZY ) )
+    : m_hApp( dlopen( nullptr, RTLD_LAZY ) )
 #endif
 {
 }
@@ -195,7 +195,7 @@ std::type_info * RTTI::getRTTI(typelib_TypeDescription const & pTypeDescr)
                 default:
                     assert(false); // cannot happen
                 }
-                if (rtti != 0) {
+                if (rtti != nullptr) {
                     std::pair< t_rtti_map::iterator, bool > insertion (
                         m_generatedRttis.insert( t_rtti_map::value_type( unoName, rtti ) ) );
                     SAL_WARN_IF( !insertion.second, "bridges", "key " << unoName << " already in generated rtti map" );

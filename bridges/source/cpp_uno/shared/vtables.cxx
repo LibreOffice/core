@@ -87,11 +87,11 @@ template< typename T > bridges::cpp_uno::shared::VtableSlot doGetVtableSlot(
         for (sal_Int32 i = 0; i < member->nIndex; ++i) {
             slot.offset += getVtableCount(member->pInterface->ppBaseTypes[i]);
         }
-        typelib_TypeDescription * desc = 0;
+        typelib_TypeDescription * desc = nullptr;
         typelib_typedescriptionreference_getDescription(
             &desc, member->pBaseRef);
         assert(
-            desc != 0 && desc->eTypeClass == member->aBase.aBase.eTypeClass);
+            desc != nullptr && desc->eTypeClass == member->aBase.aBase.eTypeClass);
         if (member != ifcMember) {
             typelib_typedescription_release(&member->aBase.aBase);
         }
@@ -121,7 +121,7 @@ sal_Int32 getLocalFunctions(typelib_InterfaceTypeDescription const * type) {
 
 sal_Int32 getPrimaryFunctions(typelib_InterfaceTypeDescription * type) {
     sal_Int32 n = 0;
-    for (; type != 0; type = type->pBaseTypeDescription) {
+    for (; type != nullptr; type = type->pBaseTypeDescription) {
         typelib_typedescription_complete(
             reinterpret_cast< typelib_TypeDescription ** >(&type));
         n += getLocalFunctions(type);

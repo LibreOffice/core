@@ -64,16 +64,16 @@ void SAL_CALL Mapping_map_to_uno(
     jobject javaI = static_cast<jobject>(pIn);
 
     static_assert(sizeof (void *) == sizeof (jobject), "must be the same size");
-    assert(ppUnoI != 0);
-    assert(td != 0);
+    assert(ppUnoI != nullptr);
+    assert(td != nullptr);
 
-    if (0 == javaI)
+    if (nullptr == javaI)
     {
-        if (0 != *ppUnoI)
+        if (nullptr != *ppUnoI)
         {
             uno_Interface * p = *ppUnoI;
             (*p->release)( p );
-            *ppUnoI = 0;
+            *ppUnoI = nullptr;
         }
     }
     else
@@ -93,7 +93,7 @@ void SAL_CALL Mapping_map_to_uno(
                     bridge->getJniInfo()->get_type_info(
                         jni, &td->aBase ) );
             uno_Interface * pUnoI = bridge->map_to_uno( jni, javaI, info );
-            if (0 != *ppUnoI)
+            if (nullptr != *ppUnoI)
             {
                 uno_Interface * p = *ppUnoI;
                 (*p->release)( p );
@@ -123,14 +123,14 @@ void SAL_CALL Mapping_map_to_java(
     uno_Interface * pUnoI = static_cast<uno_Interface *>(pIn);
 
     static_assert(sizeof (void *) == sizeof (jobject), "must be the same size");
-    assert(ppJavaI != 0);
-    assert(td != 0);
+    assert(ppJavaI != nullptr);
+    assert(td != nullptr);
 
     try
     {
-        if (0 == pUnoI)
+        if (nullptr == pUnoI)
         {
-            if (0 != *ppJavaI)
+            if (nullptr != *ppJavaI)
             {
                 Bridge const * bridge =
                     static_cast< Mapping const * >( mapping )->m_bridge;
@@ -140,7 +140,7 @@ void SAL_CALL Mapping_map_to_java(
                         bridge->m_java_env->pContext)
                      ->machine));
                 jni->DeleteGlobalRef( *ppJavaI );
-                *ppJavaI = 0;
+                *ppJavaI = nullptr;
             }
         }
         else
@@ -158,7 +158,7 @@ void SAL_CALL Mapping_map_to_java(
                     bridge->getJniInfo()->get_type_info(
                         jni, &td->aBase ) );
             jobject jlocal = bridge->map_to_java( jni, pUnoI, info );
-            if (0 != *ppJavaI)
+            if (nullptr != *ppJavaI)
                 jni->DeleteGlobalRef( *ppJavaI );
             *ppJavaI = jni->NewGlobalRef( jlocal );
             jni->DeleteLocalRef( jlocal );
@@ -201,14 +201,14 @@ void Bridge::acquire() const
             uno_Mapping * mapping = const_cast< Mapping * >( &m_java2uno );
             uno_registerMapping(
                 &mapping, Bridge_free,
-                m_java_env, &m_uno_env->aBase, 0 );
+                m_java_env, &m_uno_env->aBase, nullptr );
         }
         else
         {
             uno_Mapping * mapping = const_cast< Mapping * >( &m_uno2java );
             uno_registerMapping(
                 &mapping, Bridge_free,
-                &m_uno_env->aBase, m_java_env, 0 );
+                &m_uno_env->aBase, m_java_env, nullptr );
         }
     }
 }
@@ -234,8 +234,8 @@ Bridge::Bridge(
       m_java_env( java_env ),
       m_registered_java2uno( registered_java2uno )
 {
-    assert(m_java_env != 0);
-    assert(m_uno_env != 0);
+    assert(m_java_env != nullptr);
+    assert(m_uno_env != nullptr);
 
     // uno_initEnvironment (below) cannot report errors directly, so it clears
     // its pContext upon error to indirectly report errors from here:
@@ -305,11 +305,11 @@ void JNI_context::java_exc_occurred() const
             "cannot get method id of java.lang.Object.toString()!" +
             get_stack_trace() );
     }
-    assert(method_Object_toString != 0);
+    assert(method_Object_toString != nullptr);
 
     JLocalAutoRef jo_descr(
         *this, m_env->CallObjectMethodA(
-            jo_exc.get(), method_Object_toString, 0 ) );
+            jo_exc.get(), method_Object_toString, nullptr ) );
     if (m_env->ExceptionCheck()) // no chance at all
     {
         m_env->ExceptionClear();
@@ -343,7 +343,7 @@ void JNI_context::getClassForName(
     jclass * classClass, jmethodID * methodForName) const
 {
     jclass c = m_env->FindClass("java/lang/Class");
-    if (c != 0) {
+    if (c != nullptr) {
         *methodForName = m_env->GetStaticMethodID(
             c, "forName",
             "(Ljava/lang/String;ZLjava/lang/ClassLoader;)Ljava/lang/Class;");
@@ -356,7 +356,7 @@ jclass JNI_context::findClass(
     char const * name, jclass classClass, jmethodID methodForName,
     bool inException) const
 {
-    jclass c = 0;
+    jclass c = nullptr;
     JLocalAutoRef s(*this, m_env->NewStringUTF(name));
     if (s.is()) {
         jvalue a[3];
@@ -384,7 +384,7 @@ OUString JNI_context::get_stack_trace( jobject jo_exc ) const
         jmethodID method = m_env->GetStaticMethodID(
             static_cast<jclass>(jo_JNI_proxy.get()), "get_stack_trace",
             "(Ljava/lang/Throwable;)Ljava/lang/String;" );
-        if (assert_no_exception() && (0 != method))
+        if (assert_no_exception() && (nullptr != method))
         {
             jvalue arg;
             arg.l = jo_exc;
@@ -481,7 +481,7 @@ SAL_DLLPUBLIC_EXPORT void SAL_CALL uno_initEnvironment( uno_Environment * java_e
         java_env->pContext = nullptr;
         java_env->dispose = java_env_dispose;
         java_env->environmentDisposing = java_env_disposing;
-        java_env->pExtEnv = 0; // no extended support
+        java_env->pExtEnv = nullptr; // no extended support
         std::unique_ptr<jni_uno::JniUnoEnvironmentData> envData(
             new jni_uno::JniUnoEnvironmentData(vm));
         {
@@ -514,13 +514,13 @@ SAL_DLLPUBLIC_EXPORT void SAL_CALL uno_ext_getMapping(
     uno_Mapping ** ppMapping, uno_Environment * pFrom, uno_Environment * pTo )
     SAL_THROW_EXTERN_C()
 {
-    assert(ppMapping != 0);
-    assert(pFrom != 0);
-    assert(pTo != 0);
-    if (0 != *ppMapping)
+    assert(ppMapping != nullptr);
+    assert(pFrom != nullptr);
+    assert(pTo != nullptr);
+    if (nullptr != *ppMapping)
     {
         (*(*ppMapping)->release)( *ppMapping );
-        *ppMapping = 0;
+        *ppMapping = nullptr;
     }
 
     static_assert(int(JNI_FALSE) == int(sal_False), "must be equal");
@@ -539,7 +539,7 @@ SAL_DLLPUBLIC_EXPORT void SAL_CALL uno_ext_getMapping(
     OUString const & to_env_typename =
         OUString::unacquired( &pTo->pTypeName );
 
-    uno_Mapping * mapping = 0;
+    uno_Mapping * mapping = nullptr;
 
     try
     {
@@ -550,7 +550,7 @@ SAL_DLLPUBLIC_EXPORT void SAL_CALL uno_ext_getMapping(
             mapping = &bridge->m_java2uno;
             uno_registerMapping(
                 &mapping, Bridge_free,
-                pFrom, &pTo->pExtEnv->aBase, 0 );
+                pFrom, &pTo->pExtEnv->aBase, nullptr );
             // coverity[leaked_storage]
         }
         else if ( from_env_typename == UNO_LB_UNO && to_env_typename == UNO_LB_JAVA )
@@ -560,7 +560,7 @@ SAL_DLLPUBLIC_EXPORT void SAL_CALL uno_ext_getMapping(
             mapping = &bridge->m_uno2java;
             uno_registerMapping(
                 &mapping, Bridge_free,
-                &pFrom->pExtEnv->aBase, pTo, 0 );
+                &pFrom->pExtEnv->aBase, pTo, nullptr );
             // coverity[leaked_storage]
         }
     }

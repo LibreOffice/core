@@ -179,7 +179,7 @@ classify_argument( typelib_TypeDescriptionReference *pTypeRef, enum x86_64_reg_c
         case typelib_TypeClass_STRUCT:
         case typelib_TypeClass_EXCEPTION:
             {
-                typelib_TypeDescription * pTypeDescr = 0;
+                typelib_TypeDescription * pTypeDescr = nullptr;
                 TYPELIB_DANGER_GET( &pTypeDescr, pTypeRef );
 
                 const int UNITS_PER_WORD = 8;

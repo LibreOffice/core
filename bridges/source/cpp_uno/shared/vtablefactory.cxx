@@ -86,20 +86,20 @@ extern "C" void * SAL_CALL allocExec(
     void * p;
 #if defined SAL_UNX
     p = mmap(
-        0, n, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANON, -1,
+        nullptr, n, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANON, -1,
         0);
     if (p == MAP_FAILED) {
-        p = 0;
+        p = nullptr;
     }
     else if (mprotect (p, n, PROT_READ | PROT_WRITE | PROT_EXEC) == -1)
     {
         munmap (p, n);
-        p = 0;
+        p = nullptr;
     }
 #elif defined SAL_W32
     p = VirtualAlloc(0, n, MEM_COMMIT, PAGE_EXECUTE_READWRITE);
 #endif
-    if (p != 0) {
+    if (p != nullptr) {
         *size = n;
     }
     return p;
@@ -180,7 +180,7 @@ VtableFactory::VtableFactory(): m_arena(
         sizeof (void *), // to satisfy alignment requirements
         0, nullptr, allocExec, freeExec, 0))
 {
-    if (m_arena == 0) {
+    if (m_arena == nullptr) {
         throw std::bad_alloc();
     }
 }
@@ -278,13 +278,13 @@ bool VtableFactory::createBlock(Block &block, sal_Int32 slotCount) const
             block.fd = -1;
             break;
         }
-        block.start = mmap(NULL, block.size, PROT_READ | PROT_WRITE, MAP_SHARED, block.fd, 0);
+        block.start = mmap(nullptr, block.size, PROT_READ | PROT_WRITE, MAP_SHARED, block.fd, 0);
         if (block.start== MAP_FAILED) {
-            block.start = 0;
+            block.start = nullptr;
         }
-        block.exec = mmap(NULL, block.size, PROT_READ | PROT_EXEC, MAP_SHARED, block.fd, 0);
+        block.exec = mmap(nullptr, block.size, PROT_READ | PROT_EXEC, MAP_SHARED, block.fd, 0);
         if (block.exec == MAP_FAILED) {
-           block.exec = 0;
+           block.exec = nullptr;
         }
 
         //All good
@@ -295,12 +295,12 @@ bool VtableFactory::createBlock(Block &block, sal_Int32 slotCount) const
 
         strDirectory.clear();
     }
-    return (block.start != 0 && block.exec != 0);
+    return (block.start != nullptr && block.exec != nullptr);
 }
 
 void VtableFactory::freeBlock(Block const & block) const {
     //if the double-map failed we were allocated on the arena
-    if (block.fd == -1 && block.start == block.exec && block.start != NULL)
+    if (block.fd == -1 && block.start == block.exec && block.start != nullptr)
         rtl_arena_free(m_arena, block.start, block.size);
     else
     {
@@ -342,7 +342,7 @@ sal_Int32 VtableFactory::createVtables(
             unsigned char * code = codeBegin;
             sal_Int32 vtableOffset = blocks.size() * sizeof (Slot *);
             for (typelib_InterfaceTypeDescription const * type2 = type;
-                 type2 != 0; type2 = type2->pBaseTypeDescription)
+                 type2 != nullptr; type2 = type2->pBaseTypeDescription)
             {
                 code = addLocalFunctions(
                     &slots, code,

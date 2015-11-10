@@ -58,14 +58,14 @@ void cpp2unoMapping(
     {
         (*static_cast< uno_Interface * >( *ppUnoI )->release)(
             static_cast< uno_Interface * >( *ppUnoI ) );
-        *ppUnoI = 0;
+        *ppUnoI = nullptr;
     }
     if (pCppI)
     {
         Bridge * pBridge = static_cast< Bridge::Mapping * >( pMapping )->pBridge;
 
         // get object id of interface to be wrapped
-        rtl_uString * pOId = 0;
+        rtl_uString * pOId = nullptr;
         (*pBridge->pCppEnv->getObjectIdentifier)(
             pBridge->pCppEnv, &pOId, pCppI );
         assert(pOId);
@@ -104,14 +104,14 @@ void uno2cppMapping(
     {
         static_cast< ::com::sun::star::uno::XInterface * >( *ppCppI )->
             release();
-        *ppCppI = 0;
+        *ppCppI = nullptr;
     }
     if (pUnoI)
     {
         Bridge * pBridge = static_cast< Bridge::Mapping * >( pMapping )->pBridge;
 
         // get object id of uno interface to be wrapped
-        rtl_uString * pOId = 0;
+        rtl_uString * pOId = nullptr;
         (*pBridge->pUnoEnv->getObjectIdentifier)(
             pBridge->pUnoEnv, &pOId, pUnoI );
         assert(pOId);
@@ -158,14 +158,14 @@ void Bridge::acquire()
             uno_Mapping * pMapping = &aCpp2Uno;
             ::uno_registerMapping(
                 &pMapping, freeMapping, &pCppEnv->aBase,
-                &pUnoEnv->aBase, 0 );
+                &pUnoEnv->aBase, nullptr );
         }
         else
         {
             uno_Mapping * pMapping = &aUno2Cpp;
             ::uno_registerMapping(
                 &pMapping, freeMapping, &pUnoEnv->aBase,
-                &pCppEnv->aBase, 0 );
+                &pCppEnv->aBase, nullptr );
         }
     }
 }
