@@ -31,6 +31,11 @@ $(eval $(call gb_Library_add_defs,sot,\
 
 $(eval $(call gb_Library_set_precompiled_header,sot,$(SRCDIR)/sot/inc/pch/precompiled_sot))
 
+$(eval $(call gb_Library_set_include,sot,\
+    -I$(SRCDIR)/sot/inc \
+    $$(INCLUDE) \
+))
+
 $(eval $(call gb_Library_use_libraries,sot,\
     comphelper \
     cppu \

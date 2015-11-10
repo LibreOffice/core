@@ -31,6 +31,7 @@
 #include <vcl/help.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/tabctrl.hxx>
 #include <tools/diagnose_ex.h>
 
 #include <memory>

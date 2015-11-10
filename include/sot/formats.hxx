@@ -20,21 +20,6 @@
 #ifndef INCLUDED_SOT_FORMATS_HXX
 #define INCLUDED_SOT_FORMATS_HXX
 
-#ifdef _SOT_FORMATS_INCLUDE_SYSTEMFORMATS
-
-#ifdef WNT
-#ifdef _MSC_VER
-#pragma warning(push, 1)
-#pragma warning(disable: 4917)
-#endif
-#include <shlobj.h>
-#ifdef _MSC_VER
-#pragma warning(pop)
-#endif
-#endif
-
-#endif
-
 #include <tools/solar.h>
 
 // - predefined formats -

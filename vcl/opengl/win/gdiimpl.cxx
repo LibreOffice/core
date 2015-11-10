@@ -7,11 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <o3tl/lru_map.hxx>
-
-
 #include "opengl/win/gdiimpl.hxx"
-
+#include <o3tl/lru_map.hxx>
 #include <win/wincomp.hxx>
 #include <win/saldata.hxx>
 #include <win/salframe.h>
