@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "faac7902_0c3bebec",
+        "filename": "include/vcl/buttonstatuslistener.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2015-11-10T14:08:49Z",
+      "side": 1,
+      "message": "These includes doesn\u0027t seem to be used in this header file.",
+      "revId": "70ed847caa6b782eea326448347e1c1f5e6c8fa6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "faac7902_8c587b58",
+        "filename": "include/vcl/buttonstatuslistener.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2015-11-10T14:08:49Z",
+      "side": 1,
+      "message": "\"using namespace\" in a public header isn\u0027t a good idea in general.",
+      "revId": "70ed847caa6b782eea326448347e1c1f5e6c8fa6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "faac7902_6c55571c",
+        "filename": "include/vcl/buttonstatuslistener.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2015-11-10T14:08:49Z",
+      "side": 1,
+      "message": "I believe loplugin:vclwidgets will warn about it.",
+      "revId": "70ed847caa6b782eea326448347e1c1f5e6c8fa6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "faac7902_cc172353",
+        "filename": "include/vcl/buttonstatuslistener.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2015-11-10T14:08:49Z",
+      "side": 1,
+      "message": "I wonder whether you aware of what the dev guide says that \"Keep a reference to the dispatch object until you call the removeStatusListener() method, because it is not sure that any other object will keep it alive.\" Or am I missing something?",
+      "revId": "70ed847caa6b782eea326448347e1c1f5e6c8fa6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "faac7902_4c25f3c0",
+        "filename": "vcl/source/control/button.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2015-11-10T14:08:49Z",
+      "side": 1,
+      "message": "Since when we are holding non OutputDevice derived stuff with VclPtr?",
+      "revId": "70ed847caa6b782eea326448347e1c1f5e6c8fa6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
