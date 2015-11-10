@@ -59,7 +59,7 @@
 #include <LibreOfficeKit/LibreOfficeKitTypes.h>
 
 #include <boost/noncopyable.hpp>
-
+#include <boost/ptr_container/ptr_vector.hpp>
 
 #define DEL_LEFT    1
 #define DEL_RIGHT   2

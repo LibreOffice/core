@@ -23,7 +23,8 @@
 #include <editdoc.hxx>
 #include <editeng/editund2.hxx>
 #include <editeng/editdata.hxx>
-#include <boost/ptr_container/ptr_vector.hpp>
+#include <vector>
+#include <memory>
 
 class EditEngine;
 class EditView;
@@ -212,7 +213,7 @@ public:
 class EditUndoSetAttribs: public EditUndo
 {
 private:
-    typedef boost::ptr_vector<ContentAttribsInfo> InfoArrayType;
+    typedef std::vector<std::unique_ptr<ContentAttribsInfo> > InfoArrayType;
 
     ESelection          aESel;
     SfxItemSet          aNewAttribs;

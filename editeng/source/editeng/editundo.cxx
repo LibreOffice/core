@@ -501,14 +501,14 @@ EditUndoSetAttribs::EditUndoSetAttribs(EditEngine* pEE, const ESelection& rESel,
 
 namespace {
 
-struct RemoveAttribsFromPool : std::unary_function<ContentAttribsInfo, void>
+struct RemoveAttribsFromPool : std::unary_function<std::unique_ptr<ContentAttribsInfo>, void>
 {
     SfxItemPool& mrPool;
 public:
     explicit RemoveAttribsFromPool(SfxItemPool& rPool) : mrPool(rPool) {}
-    void operator() (ContentAttribsInfo& rInfo)
+    void operator() (std::unique_ptr<ContentAttribsInfo>& rInfo)
     {
-        rInfo.RemoveAllCharAttribsFromPool(mrPool);
+        rInfo->RemoveAllCharAttribsFromPool(mrPool);
     }
 };
 
@@ -528,7 +528,7 @@ void EditUndoSetAttribs::Undo()
     bool bFields = false;
     for ( sal_Int32 nPara = aESel.nStartPara; nPara <= aESel.nEndPara; nPara++ )
     {
-        const ContentAttribsInfo& rInf = aPrevAttribs[nPara-aESel.nStartPara];
+        const ContentAttribsInfo& rInf = *aPrevAttribs[nPara-aESel.nStartPara].get();
 
         // first the paragraph attributes ...
         pEE->SetParaAttribsOnly(nPara, rInf.GetPrevParaAttribs());
@@ -568,7 +568,7 @@ void EditUndoSetAttribs::Redo()
 
 void EditUndoSetAttribs::AppendContentInfo(ContentAttribsInfo* pNew)
 {
-    aPrevAttribs.push_back(pNew);
+    aPrevAttribs.push_back(std::unique_ptr<ContentAttribsInfo>(pNew));
 }
 
 void EditUndoSetAttribs::ImpSetSelection( EditView* /*pView*/ )
