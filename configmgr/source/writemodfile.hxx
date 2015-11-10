@@ -34,7 +34,7 @@ struct TempFile {
     bool closed;
     OStringBuffer buffer;
 
-    TempFile(): handle(0), closed(false) {}
+    TempFile(): handle(nullptr), closed(false) {}
     ~TempFile();
     void closeAndRename(const OUString &url);
     oslFileError flush();

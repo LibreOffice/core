@@ -106,7 +106,7 @@ bool XcdParser::startElement(
             }
             if ((processedDependencies_.find(dependencyFile_) ==
                  processedDependencies_.end()) &&
-                (!dependencyOptional_ || existingDependencies == 0 ||
+                (!dependencyOptional_ || existingDependencies == nullptr ||
                  (existingDependencies->find(dependencyFile_) !=
                   existingDependencies->end())))
             {
@@ -130,7 +130,7 @@ bool XcdParser::startElement(
         if (nsId == ParseManager::NAMESPACE_OOR &&
             name.equals("component-data"))
         {
-            nestedParser_ = new XcuParser(layer_ + 1, data_, 0, 0, 0);
+            nestedParser_ = new XcuParser(layer_ + 1, data_, nullptr, nullptr, nullptr);
             nesting_ = 1;
             return nestedParser_->startElement(
                 reader, nsId, name, existingDependencies);

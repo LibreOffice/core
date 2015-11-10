@@ -41,8 +41,8 @@ bool parseSegment(
     OUString const & path, sal_Int32 * index, OUString * segment)
 {
     assert(
-        index != 0 && *index >= 0 && *index <= path.getLength() &&
-        segment != 0);
+        index != nullptr && *index >= 0 && *index <= path.getLength() &&
+        segment != nullptr);
     if (path[(*index)++] == '/') {
         OUString name;
         bool setElement;

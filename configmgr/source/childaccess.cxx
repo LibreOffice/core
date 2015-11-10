@@ -210,7 +210,7 @@ void ChildAccess::setNode(rtl::Reference< Node > const & node) {
 void ChildAccess::setProperty(
     css::uno::Any const & value, Modifications * localModifications)
 {
-    assert(localModifications != 0);
+    assert(localModifications != nullptr);
     Type type = TYPE_ERROR;
     bool isNillable = false;
     switch (node_->kind()) {
@@ -256,7 +256,7 @@ void ChildAccess::setProperty(
 
 css::uno::Any ChildAccess::asValue()
 {
-    if (changedValue_.get() != 0) {
+    if (changedValue_.get() != nullptr) {
         return *changedValue_;
     }
     css::uno::Any value;
@@ -298,9 +298,9 @@ bool ChildAccess::asSimpleValue(const rtl::Reference< Node > &rNode,
 
 void ChildAccess::commitChanges(bool valid, Modifications * globalModifications)
 {
-    assert(globalModifications != 0);
+    assert(globalModifications != nullptr);
     commitChildChanges(valid, globalModifications);
-    if (valid && changedValue_.get() != 0) {
+    if (valid && changedValue_.get() != nullptr) {
         Path path(getAbsolutePath());
         getComponents().addModification(path);
         globalModifications->add(path);
@@ -329,7 +329,7 @@ ChildAccess::~ChildAccess() {
 }
 
 void ChildAccess::addTypes(std::vector< css::uno::Type > * types) const {
-    assert(types != 0);
+    assert(types != nullptr);
     types->push_back(cppu::UnoType< css::container::XChild >::get());
     types->push_back(cppu::UnoType< css::lang::XUnoTunnel >::get());
 }
@@ -337,7 +337,7 @@ void ChildAccess::addTypes(std::vector< css::uno::Type > * types) const {
 void ChildAccess::addSupportedServiceNames(
     std::vector< OUString > * services)
 {
-    assert(services != 0);
+    assert(services != nullptr);
     services->push_back(
         getParentNode()->kind() == Node::KIND_GROUP
         ? OUString("com.sun.star.configuration.GroupElement")

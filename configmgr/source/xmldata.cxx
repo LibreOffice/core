@@ -163,7 +163,7 @@ OUString parseTemplateReference(
     OUString const & nodeType, OUString const * defaultTemplateName)
 {
     if (!hasNodeType) {
-        if (defaultTemplateName != 0) {
+        if (defaultTemplateName != nullptr) {
             return *defaultTemplateName;
         }
         throw css::uno::RuntimeException(

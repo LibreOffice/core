@@ -31,7 +31,7 @@ namespace configmgr {
 
 void NodeMap::cloneInto(NodeMap * target) const
 {
-    assert(target != 0 && target->empty());
+    assert(target != nullptr && target->empty());
     NodeMapImpl clone(maImpl);
     for (NodeMapImpl::iterator i(clone.begin()); i != clone.end(); ++i) {
         i->second = i->second->clone(true);

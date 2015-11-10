@@ -153,7 +153,7 @@ void Access::markChildAsModified(rtl::Reference< ChildAccess > const & child) {
         if (!parent.is()) {
             break;
         }
-        assert(dynamic_cast< ChildAccess * >(p.get()) != 0);
+        assert(dynamic_cast< ChildAccess * >(p.get()) != nullptr);
         parent->modifiedChildren_.insert(
             ModifiedChildren::value_type(
                 p->getNameInternal(),
@@ -169,7 +169,7 @@ void Access::releaseChild(OUString const & name) {
 void Access::initBroadcaster(
     Modifications::Node const & modifications, Broadcaster * broadcaster)
 {
-    initBroadcasterAndChanges(modifications, broadcaster, 0);
+    initBroadcasterAndChanges(modifications, broadcaster, nullptr);
 }
 
 css::uno::Sequence< css::uno::Type > Access::getTypes()
@@ -1311,7 +1311,7 @@ Access::Access(Components & components):
 Access::~Access() {}
 
 void Access::initDisposeBroadcaster(Broadcaster * broadcaster) {
-    assert(broadcaster != 0);
+    assert(broadcaster != nullptr);
     for (DisposeListeners::iterator i(disposeListeners_.begin());
          i != disposeListeners_.end(); ++i)
     {
@@ -1603,7 +1603,7 @@ void Access::insertLocalizedValueChild(
     OUString const & name, css::uno::Any const & value,
     Modifications * localModifications)
 {
-    assert(localModifications != 0);
+    assert(localModifications != nullptr);
     LocalizedPropertyNode * locprop = static_cast< LocalizedPropertyNode * >(
         getNode().get());
     checkValue(value, locprop->getStaticType(), locprop->isNillable());
@@ -1618,7 +1618,7 @@ void Access::insertLocalizedValueChild(
 void Access::reportChildChanges(
     std::vector< css::util::ElementChange > * changes)
 {
-    assert(changes != 0);
+    assert(changes != nullptr);
     for (ModifiedChildren::iterator i(modifiedChildren_.begin());
          i != modifiedChildren_.end(); ++i)
     {
@@ -1636,7 +1636,7 @@ void Access::reportChildChanges(
 void Access::commitChildChanges(
     bool valid, Modifications * globalModifications)
 {
-    assert(globalModifications != 0);
+    assert(globalModifications != nullptr);
     while (!modifiedChildren_.empty()) {
         bool childValid = valid;
         ModifiedChildren::iterator i(modifiedChildren_.begin());
@@ -1688,7 +1688,7 @@ void Access::initBroadcasterAndChanges(
     Modifications::Node const & modifications, Broadcaster * broadcaster,
     std::vector< css::util::ElementChange > * allChanges)
 {
-    assert(broadcaster != 0);
+    assert(broadcaster != nullptr);
     std::vector< css::beans::PropertyChangeEvent > propChanges;
     bool collectPropChanges = !propertiesChangeListeners_.empty();
     for (Modifications::Node::Children::const_iterator i(
@@ -1753,7 +1753,7 @@ void Access::initBroadcasterAndChanges(
                                         css::uno::Any()));
                             }
                         }
-                        if (allChanges != 0) {
+                        if (allChanges != nullptr) {
                             allChanges->push_back(
                                 css::util::ElementChange(
                                     css::uno::makeAny(
@@ -1786,7 +1786,7 @@ void Access::initBroadcasterAndChanges(
                             css::uno::Any()));
                         //TODO: distinguish add/modify; non-void ReplacedElement
                 }
-                if (allChanges != 0) {
+                if (allChanges != nullptr) {
                     allChanges->push_back(
                         css::util::ElementChange(
                             css::uno::makeAny(
@@ -1840,7 +1840,7 @@ void Access::initBroadcasterAndChanges(
                                     css::uno::Any()));
                         }
                     }
-                    if (allChanges != 0) {
+                    if (allChanges != nullptr) {
                         allChanges->push_back(
                             css::util::ElementChange(
                                 css::uno::makeAny(
@@ -1874,7 +1874,7 @@ void Access::initBroadcasterAndChanges(
                                         css::uno::makeAny(i->first),
                                         child->asValue(), css::uno::Any()));
                         }
-                        if (allChanges != 0) {
+                        if (allChanges != nullptr) {
                             allChanges->push_back(
                                 css::util::ElementChange(
                                     css::uno::makeAny(
@@ -1913,7 +1913,7 @@ void Access::initBroadcasterAndChanges(
                             css::uno::Any()));
                         //TODO: non-void ReplacedElement
                 }
-                if (allChanges != 0) {
+                if (allChanges != nullptr) {
                     OUStringBuffer path(getRelativePathRepresentation());
                     if (!path.isEmpty()) {
                         path.append('/');
@@ -1971,7 +1971,7 @@ void Access::initBroadcasterAndChanges(
                                     css::uno::Any()));
                         }
                     }
-                    if (allChanges != 0) {
+                    if (allChanges != nullptr) {
                         OUStringBuffer path(
                             getRelativePathRepresentation());
                         if (!path.isEmpty()) {
@@ -2008,7 +2008,7 @@ void Access::initBroadcasterAndChanges(
                                 css::uno::Any(), css::uno::Any()));
                             //TODO: non-void ReplacedElement
                     }
-                    if (allChanges != 0) {
+                    if (allChanges != nullptr) {
                         OUStringBuffer path(
                             getRelativePathRepresentation());
                         if (!path.isEmpty()) {
@@ -2177,7 +2177,7 @@ bool Access::setChildProperty(
     OUString const & name, css::uno::Any const & value,
     Modifications * localModifications)
 {
-    assert(localModifications != 0);
+    assert(localModifications != nullptr);
     rtl::Reference< ChildAccess > child(getChild(name));
     if (!child.is()) {
         return false;
@@ -2297,7 +2297,7 @@ rtl::Reference< ChildAccess > Access::getFreeSetMember(
             "configmgr inappropriate set element",
             static_cast< cppu::OWeakObject * >(this), 1);
     }
-    assert(dynamic_cast< SetNode * >(getNode().get()) != 0);
+    assert(dynamic_cast< SetNode * >(getNode().get()) != nullptr);
     if (!static_cast< SetNode * >(getNode().get())->isValidTemplate(
             freeAcc->getNode()->getTemplateName()))
     {

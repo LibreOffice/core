@@ -49,7 +49,7 @@ namespace configmgr {
 namespace {
 
 bool parseHexDigit(char c, int * value) {
-    assert(value != 0);
+    assert(value != nullptr);
     if (c >= '0' && c <= '9') {
         *value = c - '0';
         return true;
@@ -66,7 +66,7 @@ bool parseHexDigit(char c, int * value) {
 }
 
 bool parseValue(xmlreader::Span const & text, sal_Bool * value) {
-    assert(text.is() && value != 0);
+    assert(text.is() && value != nullptr);
     if (text.equals("true") || text.equals("1")) {
         *value = true;
         return true;
@@ -79,7 +79,7 @@ bool parseValue(xmlreader::Span const & text, sal_Bool * value) {
 }
 
 bool parseValue(xmlreader::Span const & text, sal_Int16 * value) {
-    assert(text.is() && value != 0);
+    assert(text.is() && value != nullptr);
     // For backwards compatibility, support hexadecimal values:
     sal_Int32 n =
         rtl_str_shortenedCompareIgnoreAsciiCase_WithLength(
@@ -99,7 +99,7 @@ bool parseValue(xmlreader::Span const & text, sal_Int16 * value) {
 }
 
 bool parseValue(xmlreader::Span const & text, sal_Int32 * value) {
-    assert(text.is() && value != 0);
+    assert(text.is() && value != nullptr);
     // For backwards compatibility, support hexadecimal values:
     *value =
         rtl_str_shortenedCompareIgnoreAsciiCase_WithLength(
@@ -115,7 +115,7 @@ bool parseValue(xmlreader::Span const & text, sal_Int32 * value) {
 }
 
 bool parseValue(xmlreader::Span const & text, sal_Int64 * value) {
-    assert(text.is() && value != 0);
+    assert(text.is() && value != nullptr);
     // For backwards compatibility, support hexadecimal values:
     *value =
         rtl_str_shortenedCompareIgnoreAsciiCase_WithLength(
@@ -131,14 +131,14 @@ bool parseValue(xmlreader::Span const & text, sal_Int64 * value) {
 }
 
 bool parseValue(xmlreader::Span const & text, double * value) {
-    assert(text.is() && value != 0);
+    assert(text.is() && value != nullptr);
     *value = OString(text.begin, text.length).toDouble();
         //TODO: check valid lexical representation
     return true;
 }
 
 bool parseValue(xmlreader::Span const & text, OUString * value) {
-    assert(text.is() && value != 0);
+    assert(text.is() && value != nullptr);
     *value = text.convertFromUtf8();
     return true;
 }
@@ -146,7 +146,7 @@ bool parseValue(xmlreader::Span const & text, OUString * value) {
 bool parseValue(
     xmlreader::Span const & text, css::uno::Sequence< sal_Int8 > * value)
 {
-    assert(text.is() && value != 0);
+    assert(text.is() && value != nullptr);
     if ((text.length & 1) != 0) {
         return false;
     }
@@ -345,7 +345,7 @@ bool ValueParser::endElement() {
     switch (state_) {
     case STATE_TEXT:
         {
-            css::uno::Any *pValue = NULL;
+            css::uno::Any *pValue = nullptr;
 
             switch (node_->kind()) {
             case Node::KIND_PROPERTY:

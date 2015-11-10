@@ -51,7 +51,7 @@ bool decode(
 {
     assert(
         begin >= 0 && begin <= end && end <= encoded.getLength() &&
-        decoded != 0);
+        decoded != nullptr);
     OUStringBuffer buf;
     while (begin != end) {
         sal_Unicode c = encoded[begin++];
@@ -114,8 +114,8 @@ sal_Int32 Data::parseSegment(
     bool * setElement, OUString * templateName)
 {
     assert(
-        index >= 0 && index <= path.getLength() && name != 0 &&
-        setElement != 0);
+        index >= 0 && index <= path.getLength() && name != nullptr &&
+        setElement != nullptr);
     sal_Int32 i = index;
     while (i < path.getLength() && path[i] != '/' && path[i] != '[') {
         ++i;
@@ -125,7 +125,7 @@ sal_Int32 Data::parseSegment(
         *setElement = false;
         return i;
     }
-    if (templateName != 0) {
+    if (templateName != nullptr) {
         if (i - index == 1 && path[index] == '*') {
             templateName->clear();
         } else {
@@ -190,14 +190,14 @@ rtl::Reference< Node > Data::resolvePathRepresentation(
         throw css::uno::RuntimeException(
             "bad path " + pathRepresentation);
     }
-    if (path != 0) {
+    if (path != nullptr) {
         path->clear();
     }
     if (pathRepresentation == "/") {
-        if (canonicRepresentation != 0) {
+        if (canonicRepresentation != nullptr) {
             *canonicRepresentation = pathRepresentation;
         }
-        if (finalizedLayer != 0) {
+        if (finalizedLayer != nullptr) {
             *finalizedLayer = NO_LAYER;
         }
         return root_;
@@ -205,7 +205,7 @@ rtl::Reference< Node > Data::resolvePathRepresentation(
     OUString seg;
     bool setElement;
     OUString templateName;
-    sal_Int32 n = parseSegment(pathRepresentation, 1, &seg, &setElement, 0);
+    sal_Int32 n = parseSegment(pathRepresentation, 1, &seg, &setElement, nullptr);
     if (n == -1 || setElement)
     {
         throw css::uno::RuntimeException(
@@ -216,15 +216,15 @@ rtl::Reference< Node > Data::resolvePathRepresentation(
     OUStringBuffer canonic;
     rtl::Reference< Node > parent;
     int finalized = NO_LAYER;
-    for (rtl::Reference< Node > p(i == components.end() ? 0 : i->second);;) {
+    for (rtl::Reference< Node > p(i == components.end() ? nullptr : i->second);;) {
         if (!p.is()) {
             return p;
         }
-        if (canonicRepresentation != 0) {
+        if (canonicRepresentation != nullptr) {
             canonic.append('/');
             canonic.append(createSegment(templateName, seg));
         }
-        if (path != 0) {
+        if (path != nullptr) {
             path->push_back(seg);
         }
         finalized = std::min(finalized, p->getFinalized());
@@ -236,10 +236,10 @@ rtl::Reference< Node > Data::resolvePathRepresentation(
         }
         // for backwards compatibility, ignore a final slash
         if (n == pathRepresentation.getLength()) {
-            if (canonicRepresentation != 0) {
+            if (canonicRepresentation != nullptr) {
                 *canonicRepresentation = canonic.makeStringAndClear();
             }
-            if (finalizedLayer != 0) {
+            if (finalizedLayer != nullptr) {
                 *finalizedLayer = finalized;
             }
             return p;
@@ -276,7 +276,7 @@ rtl::Reference< Node > Data::resolvePathRepresentation(
                 throw css::uno::RuntimeException(
                     "bad path " + pathRepresentation);
             }
-            if (!templateName.isEmpty() && p != 0) {
+            if (!templateName.isEmpty() && p != nullptr) {
                 assert(!p->getTemplateName().isEmpty());
                 if (!equalTemplateNames(templateName, p->getTemplateName())) {
                     throw css::uno::RuntimeException(

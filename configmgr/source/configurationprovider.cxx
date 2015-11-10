@@ -77,7 +77,7 @@ void badNodePath() {
     throw css::uno::Exception(
         ("com.sun.star.configuration.ConfigurationProvider expects a single,"
          " non-empty, string nodepath argument"),
-        0);
+        nullptr);
 }
 
 typedef
@@ -222,7 +222,7 @@ Service::createInstanceWithArguments(
             throw css::uno::Exception(
                 ("com.sun.star.configuration.ConfigurationProvider expects"
                  " NamedValue or PropertyValue arguments"),
-                0);
+                nullptr);
         }
         // For backwards compatibility, allow "nodepath" and "Locale" in any
         // case:
@@ -239,7 +239,7 @@ Service::createInstanceWithArguments(
                 throw css::uno::Exception(
                     ("com.sun.star.configuration.ConfigurationProvider expects"
                      " at most one, non-empty, string Locale argument"),
-                    0);
+                    nullptr);
             }
         }
     }
@@ -296,7 +296,7 @@ void Service::refresh() throw (css::uno::RuntimeException, std::exception) {
     //TODO
     cppu::OInterfaceContainerHelper * cont = rBHelper.getContainer(
         cppu::UnoType< css::util::XRefreshListener >::get());
-    if (cont != 0) {
+    if (cont != nullptr) {
         css::lang::EventObject ev(static_cast< cppu::OWeakObject * >(this));
         cont->notifyEach(&css::util::XRefreshListener::refreshed, ev);
     }
@@ -322,7 +322,7 @@ void Service::flush() throw (css::uno::RuntimeException, std::exception) {
     flushModifications();
     cppu::OInterfaceContainerHelper * cont = rBHelper.getContainer(
         cppu::UnoType< css::util::XFlushListener >::get());
-    if (cont != 0) {
+    if (cont != nullptr) {
         css::lang::EventObject ev(static_cast< cppu::OWeakObject * >(this));
         cont->notifyEach(&css::util::XFlushListener::flushed, ev);
     }
@@ -438,7 +438,7 @@ Factory::createInstanceWithArgumentsAndContext(
                 throw css::uno::Exception(
                     ("com.sun.star.configuration.ConfigurationProvider factory"
                      " expects NamedValue or PropertyValue arguments"),
-                    0);
+                    nullptr);
             }
             // For backwards compatibility, allow "Locale" and (ignored)
             // "EnableAsync" in any case:
@@ -450,13 +450,13 @@ Factory::createInstanceWithArgumentsAndContext(
                         ("com.sun.star.configuration.ConfigurationProvider"
                          " factory expects at most one, non-empty, string"
                          " Locale argument"),
-                        0);
+                        nullptr);
                 }
             } else if (!name.equalsIgnoreAsciiCase("enableasync")) {
                 throw css::uno::Exception(
                     ("com.sun.star.configuration.ConfigurationProvider factory:"
                      " unknown argument " + name),
-                    0);
+                    nullptr);
             }
         }
         return static_cast< cppu::OWeakObject * >(new Service(Context, locale));

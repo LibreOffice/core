@@ -411,7 +411,7 @@ void XcsParser::handleNodeRef(xmlreader::XmlReader & reader) {
         data_.getTemplate(
             valueParser_.getLayer(),
             xmldata::parseTemplateReference(
-                component, hasNodeType, nodeType, 0)));
+                component, hasNodeType, nodeType, nullptr)));
     if (!tmpl.is()) {
         //TODO: this can erroneously happen as long as import/uses attributes
         // are not correctly processed
@@ -571,7 +571,7 @@ void XcsParser::handleSet(xmlreader::XmlReader & reader, bool isTemplate) {
             new SetNode(
                 valueParser_.getLayer(),
                 xmldata::parseTemplateReference(
-                    component, hasNodeType, nodeType, 0),
+                    component, hasNodeType, nodeType, nullptr),
                 isTemplate ? name : OUString()),
             name));
 }
@@ -598,7 +598,7 @@ void XcsParser::handleSetItem(xmlreader::XmlReader & reader, SetNode * set) {
         }
     }
     set->getAdditionalTemplateNames().push_back(
-        xmldata::parseTemplateReference(component, hasNodeType, nodeType, 0));
+        xmldata::parseTemplateReference(component, hasNodeType, nodeType, nullptr));
     elements_.push(Element(rtl::Reference< Node >(), ""));
 }
 

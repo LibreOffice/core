@@ -61,7 +61,7 @@ XcuParser::XcuParser(
     partial_(partial), broadcastModifications_(broadcastModifications),
     additions_(additions), recordModifications_(layer == Data::NO_LAYER),
     trackPath_(
-        partial_ != 0 || broadcastModifications_ != 0 || additions_ != 0 ||
+        partial_ != nullptr || broadcastModifications_ != nullptr || additions_ != nullptr ||
         recordModifications_)
 {}
 
@@ -284,7 +284,7 @@ void XcuParser::handleComponentData(xmlreader::XmlReader & reader) {
     if (trackPath_) {
         assert(path_.empty());
         path_.push_back(componentName_);
-        if (partial_ != 0 && partial_->contains(path_) == Partial::CONTAINS_NOT)
+        if (partial_ != nullptr && partial_->contains(path_) == Partial::CONTAINS_NOT)
         {
             state_.push(State::Ignore(true));
             return;
@@ -340,7 +340,7 @@ void XcuParser::handleItem(xmlreader::XmlReader & reader) {
     int finalizedLayer;
     rtl::Reference< Node > node(
         data_.resolvePathRepresentation(
-            path, 0, &path_, &finalizedLayer));
+            path, nullptr, &path_, &finalizedLayer));
     if (!node.is()) {
         SAL_WARN(
             "configmgr",
@@ -351,7 +351,7 @@ void XcuParser::handleItem(xmlreader::XmlReader & reader) {
     assert(!path_.empty());
     componentName_ = path_.front();
     if (trackPath_) {
-        if (partial_ != 0 && partial_->contains(path_) == Partial::CONTAINS_NOT)
+        if (partial_ != nullptr && partial_->contains(path_) == Partial::CONTAINS_NOT)
         {
             state_.push(State::Ignore(true));
             return;
@@ -494,7 +494,7 @@ void XcuParser::handleLocpropValue(
     }
     if (trackPath_) {
         path_.push_back(name);
-        if (partial_ != 0 &&
+        if (partial_ != nullptr &&
             partial_->contains(path_) != Partial::CONTAINS_NODE)
         {
             state_.push(State::Ignore(true));
@@ -592,7 +592,7 @@ void XcuParser::handleGroupProp(
         path_.push_back(name);
         //TODO: This ignores locprop values for which specific include paths
         // exist (i.e., for which contains(locprop path) = CONTAINS_SUBNODES):
-        if (partial_ != 0 &&
+        if (partial_ != nullptr &&
             partial_->contains(path_) != Partial::CONTAINS_NODE)
         {
             state_.push(State::Ignore(true));
@@ -781,7 +781,7 @@ void XcuParser::handleGroupNode(
     }
     if (trackPath_) {
         path_.push_back(name);
-        if (partial_ != 0 && partial_->contains(path_) == Partial::CONTAINS_NOT)
+        if (partial_ != nullptr && partial_->contains(path_) == Partial::CONTAINS_NOT)
         {
             state_.push(State::Ignore(true));
             return;
@@ -864,7 +864,7 @@ void XcuParser::handleSetNode(xmlreader::XmlReader & reader, SetNode * set) {
     }
     if (trackPath_) {
         path_.push_back(name);
-        if (partial_ != 0 && partial_->contains(path_) == Partial::CONTAINS_NOT)
+        if (partial_ != nullptr && partial_->contains(path_) == Partial::CONTAINS_NOT)
         {
             state_.push(State::Ignore(true));
             return;
@@ -960,10 +960,10 @@ void XcuParser::handleSetNode(xmlreader::XmlReader & reader, SetNode * set) {
 }
 
 void XcuParser::recordModification(bool addition) {
-    if (broadcastModifications_ != 0) {
+    if (broadcastModifications_ != nullptr) {
         broadcastModifications_->add(path_);
     }
-    if (addition && additions_ != 0) {
+    if (addition && additions_ != nullptr) {
         additions_->push_back(path_);
     }
     if (recordModifications_) {

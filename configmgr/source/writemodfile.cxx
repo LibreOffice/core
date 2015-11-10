@@ -77,7 +77,7 @@ OString convertToUtf8(
 } // anonymous namespace
 
 TempFile::~TempFile() {
-    if (handle != 0) {
+    if (handle != nullptr) {
         if (!closed) {
             oslFileError e = osl_closeFile(handle);
             if (e != osl_File_E_None) {
@@ -119,7 +119,7 @@ void TempFile::closeAndRename(const OUString &_url) {
         throw css::uno::RuntimeException(
             "cannot move " + url);
     }
-    handle = 0;
+    handle = nullptr;
 }
 
 oslFileError TempFile::flush() {

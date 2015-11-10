@@ -49,27 +49,27 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL dummy(
 static cppu::ImplementationEntry const services[] = {
     { &dummy, &configmgr::configuration_provider::getImplementationName,
       &configmgr::configuration_provider::getSupportedServiceNames,
-      &configmgr::configuration_provider::createFactory, 0, 0 },
+      &configmgr::configuration_provider::createFactory, nullptr, 0 },
     { &configmgr::default_provider::create,
       &configmgr::default_provider::getImplementationName,
       &configmgr::default_provider::getSupportedServiceNames,
-      &cppu::createSingleComponentFactory, 0, 0 },
+      &cppu::createSingleComponentFactory, nullptr, 0 },
     { &configmgr::configuration_registry::create,
       &configmgr::configuration_registry::getImplementationName,
       &configmgr::configuration_registry::getSupportedServiceNames,
-      &cppu::createSingleComponentFactory, 0, 0 },
+      &cppu::createSingleComponentFactory, nullptr, 0 },
     { &configmgr::read_only_access::create,
       &configmgr::read_only_access::getImplementationName,
       &configmgr::read_only_access::getSupportedServiceNames,
-      &cppu::createSingleComponentFactory, 0, 0 },
+      &cppu::createSingleComponentFactory, nullptr, 0 },
     { &configmgr::read_write_access::create,
       &configmgr::read_write_access::getImplementationName,
       &configmgr::read_write_access::getSupportedServiceNames,
-      &cppu::createSingleComponentFactory, 0, 0 },
+      &cppu::createSingleComponentFactory, nullptr, 0 },
     { &configmgr::update::create, &configmgr::update::getImplementationName,
       &configmgr::update::getSupportedServiceNames,
-      &cppu::createSingleComponentFactory, 0, 0 },
-    { 0, 0, 0, 0, 0, 0 }
+      &cppu::createSingleComponentFactory, nullptr, 0 },
+    { nullptr, nullptr, nullptr, nullptr, nullptr, 0 }
 };
 
 }

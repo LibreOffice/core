@@ -93,10 +93,10 @@ void parseXcsFile(
     OUString const & url, int layer, Data & data, Partial const * partial,
     Modifications * modifications, Additions * additions)
 {
-    assert(partial == 0 && modifications == 0 && additions == 0);
+    assert(partial == nullptr && modifications == nullptr && additions == nullptr);
     (void) partial; (void) modifications; (void) additions;
     bool ok = rtl::Reference< ParseManager >(
-        new ParseManager(url, new XcsParser(layer, data)))->parse(0);
+        new ParseManager(url, new XcsParser(layer, data)))->parse(nullptr);
     assert(ok);
     (void) ok; // avoid warnings
 }
@@ -109,7 +109,7 @@ void parseXcuFile(
         new ParseManager(
             url,
             new XcuParser(layer, data, partial, modifications, additions)))->
-        parse(0);
+        parse(nullptr);
     assert(ok);
     (void) ok; // avoid warnings
 }
@@ -173,7 +173,7 @@ Components::WriteThread::WriteThread(
     url_(url), data_(data)
 {
     lock_ = lock();
-    assert(reference != 0);
+    assert(reference != nullptr);
 }
 
 void Components::WriteThread::execute() {
@@ -257,7 +257,7 @@ void Components::initGlobalBroadcaster(
                     Modifications::Node::Children::const_iterator k(
                         mods->children.find(*j));
                     if (k == mods->children.end()) {
-                        mods = 0;
+                        mods = nullptr;
                         break;
                     }
                     mods = &k->second;
@@ -265,7 +265,7 @@ void Components::initGlobalBroadcaster(
                 //TODO: If the complete tree of which root is a part is deleted,
                 // or replaced, mods will be null, but some of the listeners
                 // from within root should probably fire nonetheless:
-                if (mods != 0) {
+                if (mods != nullptr) {
                     root->initBroadcaster(*mods, broadcaster);
                 }
             }
@@ -316,7 +316,7 @@ void Components::insertExtensionXcsFile(
 {
     int layer = getExtensionLayer(shared);
     try {
-        parseXcsFile(fileUri, layer, data_, 0, 0, 0);
+        parseXcsFile(fileUri, layer, data_, nullptr, nullptr, nullptr);
     } catch (css::container::NoSuchElementException & e) {
         throw css::uno::RuntimeException(
             "insertExtensionXcsFile does not exist: " + e.Message);
@@ -326,11 +326,11 @@ void Components::insertExtensionXcsFile(
 void Components::insertExtensionXcuFile(
     bool shared, OUString const & fileUri, Modifications * modifications)
 {
-    assert(modifications != 0);
+    assert(modifications != nullptr);
     int layer = getExtensionLayer(shared) + 1;
     Additions * adds = data_.addExtensionXcuAdditions(fileUri, layer);
     try {
-        parseXcuFile(fileUri, layer, data_, 0, modifications, adds);
+        parseXcuFile(fileUri, layer, data_, nullptr, modifications, adds);
     } catch (css::container::NoSuchElementException & e) {
         data_.removeExtensionXcuAdditions(fileUri);
         throw css::uno::RuntimeException(
@@ -354,7 +354,7 @@ void Components::removeExtensionXcuFile(
     // item->additions records all additions of set members in textual order,
     // the latter check works well when iterating through item->additions in
     // reverse order.
-    assert(modifications != 0);
+    assert(modifications != nullptr);
     rtl::Reference< Data::ExtensionXcu > item(
         data_.removeExtensionXcuAdditions(fileUri));
     if (item.is()) {
@@ -396,11 +396,11 @@ void Components::insertModificationXcuFile(
     std::set< OUString > const & excludedPaths,
     Modifications * modifications)
 {
-    assert(modifications != 0);
+    assert(modifications != nullptr);
     Partial part(includedPaths, excludedPaths);
     try {
         parseFileLeniently(
-            &parseXcuFile, fileUri, Data::NO_LAYER, &part, modifications, 0);
+            &parseXcuFile, fileUri, Data::NO_LAYER, &part, modifications, nullptr);
     } catch (css::container::NoSuchElementException & e) {
         SAL_WARN(
             "configmgr",
@@ -624,7 +624,7 @@ void Components::parseFileLeniently(
     Partial const * partial, Modifications * modifications,
     Additions * additions)
 {
-    assert(parseFile != 0);
+    assert(parseFile != nullptr);
     try {
         (*parseFile)(url, layer, data_, partial, modifications, additions);
     } catch (css::container::NoSuchElementException &) {
@@ -679,7 +679,7 @@ void Components::parseFiles(
             if (file.endsWith(extension)) {
                 try {
                     parseFileLeniently(
-                        parseFile, stat.getFileURL(), layer, 0, 0, 0);
+                        parseFile, stat.getFileURL(), layer, nullptr, nullptr, nullptr);
                 } catch (css::container::NoSuchElementException & e) {
                     throw css::uno::RuntimeException(
                         "stat'ed file does not exist: " + e.Message);
@@ -696,16 +696,16 @@ void Components::parseFileList(
     for (sal_Int32 i = 0;;) {
         OUString url(urls.getToken(0, ' ', i));
         if (!url.isEmpty()) {
-            Additions * adds = 0;
+            Additions * adds = nullptr;
             if (recordAdditions) {
                 adds = data_.addExtensionXcuAdditions(url, layer);
             }
             try {
-                parseFileLeniently(parseFile, url, layer, 0, 0, adds);
+                parseFileLeniently(parseFile, url, layer, nullptr, nullptr, adds);
             } catch (css::container::NoSuchElementException & e) {
                 SAL_WARN(
                     "configmgr", "file does not exist: \"" << e.Message << '"');
-                if (adds != 0) {
+                if (adds != nullptr) {
                     data_.removeExtensionXcuAdditions(url);
                 }
             }
@@ -761,7 +761,7 @@ void Components::parseXcdFiles(int layer, OUString const & url) {
                     throw css::uno::RuntimeException(
                         "stat'ed file does not exist: " + e.Message);
                 }
-                if (manager->parse(0)) {
+                if (manager->parse(nullptr)) {
                     processedDeps.insert(name);
                 } else {
                     unres.push_back(UnresolvedListItem(name, manager));
@@ -799,7 +799,7 @@ void Components::parseXcsXcuIniLayer(
     // Check if ini file exists (otherwise .override would still read global
     // SCHEMA/DATA variables, which could interfere with unrelated environment
     // variables):
-    if (rtl::Bootstrap(url).getHandle() != 0) {
+    if (rtl::Bootstrap(url).getHandle() != nullptr) {
         OUStringBuffer prefix("${.override:");
         for (sal_Int32 i = 0; i != url.getLength(); ++i) {
             sal_Unicode c = url[i];
@@ -839,7 +839,7 @@ void Components::parseResLayer(int layer, OUString const & url) {
 
 void Components::parseModificationLayer(int layer, OUString const & url) {
     try {
-        parseFileLeniently(&parseXcuFile, url, layer, 0, 0, 0);
+        parseFileLeniently(&parseXcuFile, url, layer, nullptr, nullptr, nullptr);
     } catch (css::container::NoSuchElementException &) {
         SAL_INFO(
             "configmgr", "user registrymodifications.xcu does not (yet) exist");
