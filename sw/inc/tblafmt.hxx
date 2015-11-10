@@ -66,49 +66,49 @@ class SwBoxAutoFormat
 {
     // common attributes of Calc and Writer
     // --- from 641 on: CJK and CTL font settings
-    SvxFontItem         aFont;
-    SvxFontHeightItem   aHeight;
-    SvxWeightItem       aWeight;
-    SvxPostureItem      aPosture;
+    SvxFontItem         m_aFont;
+    SvxFontHeightItem   m_aHeight;
+    SvxWeightItem       m_aWeight;
+    SvxPostureItem      m_aPosture;
 
-    SvxFontItem         aCJKFont;
-    SvxFontHeightItem   aCJKHeight;
-    SvxWeightItem       aCJKWeight;
-    SvxPostureItem      aCJKPosture;
+    SvxFontItem         m_aCJKFont;
+    SvxFontHeightItem   m_aCJKHeight;
+    SvxWeightItem       m_aCJKWeight;
+    SvxPostureItem      m_aCJKPosture;
 
-    SvxFontItem         aCTLFont;
-    SvxFontHeightItem   aCTLHeight;
-    SvxWeightItem       aCTLWeight;
-    SvxPostureItem      aCTLPosture;
+    SvxFontItem         m_aCTLFont;
+    SvxFontHeightItem   m_aCTLHeight;
+    SvxWeightItem       m_aCTLWeight;
+    SvxPostureItem      m_aCTLPosture;
 
-    SvxUnderlineItem    aUnderline;
-    SvxOverlineItem     aOverline;
-    SvxCrossedOutItem   aCrossedOut;
-    SvxContourItem      aContour;
-    SvxShadowedItem     aShadowed;
-    SvxColorItem        aColor;
-    SvxBoxItem          aBox;
-    SvxLineItem         aTLBR;
-    SvxLineItem         aBLTR;
-    SvxBrushItem        aBackground;
+    SvxUnderlineItem    m_aUnderline;
+    SvxOverlineItem     m_aOverline;
+    SvxCrossedOutItem   m_aCrossedOut;
+    SvxContourItem      m_aContour;
+    SvxShadowedItem     m_aShadowed;
+    SvxColorItem        m_aColor;
+    SvxBoxItem          m_aBox;
+    SvxLineItem         m_aTLBR;
+    SvxLineItem         m_aBLTR;
+    SvxBrushItem        m_aBackground;
 
     // Writer specific
-    SvxAdjustItem       aAdjust;
+    SvxAdjustItem       m_aAdjust;
     SvxFrameDirectionItem m_aTextOrientation;
     SwFormatVertOrient m_aVerticalAlignment;
 
     // Calc specific
-    SvxHorJustifyItem   aHorJustify;
-    SvxVerJustifyItem   aVerJustify;
-    SfxBoolItem         aStacked;
-    SvxMarginItem       aMargin;
-    SfxBoolItem         aLinebreak;
-    SfxInt32Item        aRotateAngle;
-    SvxRotateModeItem   aRotateMode;
+    SvxHorJustifyItem   m_aHorJustify;
+    SvxVerJustifyItem   m_aVerJustify;
+    SfxBoolItem         m_aStacked;
+    SvxMarginItem       m_aMargin;
+    SfxBoolItem         m_aLinebreak;
+    SfxInt32Item        m_aRotateAngle;
+    SvxRotateModeItem   m_aRotateMode;
 
     // number format
-    OUString            sNumFormatString;
-    LanguageType        eSysLanguage, eNumFormatLanguage;
+    OUString            m_sNumFormatString;
+    LanguageType        m_eSysLanguage, m_eNumFormatLanguage;
 
 public:
     SwBoxAutoFormat();
@@ -119,63 +119,63 @@ public:
     SwBoxAutoFormat& operator=( const SwBoxAutoFormat& rNew );
 
     // The get-methods.
-    const SvxFontItem       &GetFont() const        { return aFont; }
-    const SvxFontHeightItem &GetHeight() const      { return aHeight; }
-    const SvxWeightItem     &GetWeight() const      { return aWeight; }
-    const SvxPostureItem    &GetPosture() const     { return aPosture; }
-    const SvxFontItem       &GetCJKFont() const     { return aCJKFont; }
-    const SvxFontHeightItem &GetCJKHeight() const   { return aCJKHeight; }
-    const SvxWeightItem     &GetCJKWeight() const   { return aCJKWeight; }
-    const SvxPostureItem    &GetCJKPosture() const  { return aCJKPosture; }
-    const SvxFontItem       &GetCTLFont() const     { return aCTLFont; }
-    const SvxFontHeightItem &GetCTLHeight() const   { return aCTLHeight; }
-    const SvxWeightItem     &GetCTLWeight() const   { return aCTLWeight; }
-    const SvxPostureItem    &GetCTLPosture() const  { return aCTLPosture; }
-    const SvxUnderlineItem  &GetUnderline() const   { return aUnderline; }
-    const SvxOverlineItem   &GetOverline() const    { return aOverline; }
-    const SvxCrossedOutItem &GetCrossedOut() const  { return aCrossedOut; }
-    const SvxContourItem    &GetContour() const     { return aContour; }
-    const SvxShadowedItem   &GetShadowed() const    { return aShadowed; }
-    const SvxColorItem      &GetColor() const       { return aColor; }
-    const SvxAdjustItem     &GetAdjust() const      { return aAdjust; }
+    const SvxFontItem       &GetFont() const        { return m_aFont; }
+    const SvxFontHeightItem &GetHeight() const      { return m_aHeight; }
+    const SvxWeightItem     &GetWeight() const      { return m_aWeight; }
+    const SvxPostureItem    &GetPosture() const     { return m_aPosture; }
+    const SvxFontItem       &GetCJKFont() const     { return m_aCJKFont; }
+    const SvxFontHeightItem &GetCJKHeight() const   { return m_aCJKHeight; }
+    const SvxWeightItem     &GetCJKWeight() const   { return m_aCJKWeight; }
+    const SvxPostureItem    &GetCJKPosture() const  { return m_aCJKPosture; }
+    const SvxFontItem       &GetCTLFont() const     { return m_aCTLFont; }
+    const SvxFontHeightItem &GetCTLHeight() const   { return m_aCTLHeight; }
+    const SvxWeightItem     &GetCTLWeight() const   { return m_aCTLWeight; }
+    const SvxPostureItem    &GetCTLPosture() const  { return m_aCTLPosture; }
+    const SvxUnderlineItem  &GetUnderline() const   { return m_aUnderline; }
+    const SvxOverlineItem   &GetOverline() const    { return m_aOverline; }
+    const SvxCrossedOutItem &GetCrossedOut() const  { return m_aCrossedOut; }
+    const SvxContourItem    &GetContour() const     { return m_aContour; }
+    const SvxShadowedItem   &GetShadowed() const    { return m_aShadowed; }
+    const SvxColorItem      &GetColor() const       { return m_aColor; }
+    const SvxAdjustItem     &GetAdjust() const      { return m_aAdjust; }
     const SvxFrameDirectionItem& GetTextOrientation() const { return m_aTextOrientation; }
     const SwFormatVertOrient& GetVerticalAlignment() const { return m_aVerticalAlignment; }
-    const SvxBoxItem        &GetBox() const         { return aBox; }
-    const SvxBrushItem      &GetBackground() const  { return aBackground; }
+    const SvxBoxItem        &GetBox() const         { return m_aBox; }
+    const SvxBrushItem      &GetBackground() const  { return m_aBackground; }
     void GetValueFormat( OUString& rFormat, LanguageType& rLng, LanguageType& rSys ) const
-        { rFormat = sNumFormatString; rLng = eNumFormatLanguage; rSys = eSysLanguage; }
+        { rFormat = m_sNumFormatString; rLng = m_eNumFormatLanguage; rSys = m_eSysLanguage; }
 
     // The set-methods.
-    void SetFont( const SvxFontItem& rNew )             { aFont = rNew; }
-    void SetHeight( const SvxFontHeightItem& rNew )     { aHeight = rNew; }
-    void SetWeight( const SvxWeightItem& rNew )         { aWeight = rNew; }
-    void SetPosture( const SvxPostureItem& rNew )       { aPosture = rNew; }
-    void SetCJKFont( const SvxFontItem& rNew )          { aCJKFont = rNew; }
-    void SetCJKHeight( const SvxFontHeightItem& rNew )  { aCJKHeight = rNew; }
-    void SetCJKWeight( const SvxWeightItem& rNew )      { aCJKWeight = rNew; }
-    void SetCJKPosture( const SvxPostureItem& rNew )    { aCJKPosture = rNew; }
-    void SetCTLFont( const SvxFontItem& rNew )          { aCTLFont = rNew; }
-    void SetCTLHeight( const SvxFontHeightItem& rNew )  { aCTLHeight = rNew; }
-    void SetCTLWeight( const SvxWeightItem& rNew )      { aCTLWeight = rNew; }
-    void SetCTLPosture( const SvxPostureItem& rNew )    { aCTLPosture = rNew; }
-    void SetUnderline( const SvxUnderlineItem& rNew )   { aUnderline = rNew; }
-    void SetOverline( const SvxOverlineItem& rNew )     { aOverline = rNew; }
-    void SetCrossedOut( const SvxCrossedOutItem& rNew ) { aCrossedOut = rNew; }
-    void SetContour( const SvxContourItem& rNew )       { aContour = rNew; }
-    void SetShadowed( const SvxShadowedItem& rNew )     { aShadowed = rNew; }
-    void SetColor( const SvxColorItem& rNew )           { aColor = rNew; }
+    void SetFont( const SvxFontItem& rNew )             { m_aFont = rNew; }
+    void SetHeight( const SvxFontHeightItem& rNew )     { m_aHeight = rNew; }
+    void SetWeight( const SvxWeightItem& rNew )         { m_aWeight = rNew; }
+    void SetPosture( const SvxPostureItem& rNew )       { m_aPosture = rNew; }
+    void SetCJKFont( const SvxFontItem& rNew )          { m_aCJKFont = rNew; }
+    void SetCJKHeight( const SvxFontHeightItem& rNew )  { m_aCJKHeight = rNew; }
+    void SetCJKWeight( const SvxWeightItem& rNew )      { m_aCJKWeight = rNew; }
+    void SetCJKPosture( const SvxPostureItem& rNew )    { m_aCJKPosture = rNew; }
+    void SetCTLFont( const SvxFontItem& rNew )          { m_aCTLFont = rNew; }
+    void SetCTLHeight( const SvxFontHeightItem& rNew )  { m_aCTLHeight = rNew; }
+    void SetCTLWeight( const SvxWeightItem& rNew )      { m_aCTLWeight = rNew; }
+    void SetCTLPosture( const SvxPostureItem& rNew )    { m_aCTLPosture = rNew; }
+    void SetUnderline( const SvxUnderlineItem& rNew )   { m_aUnderline = rNew; }
+    void SetOverline( const SvxOverlineItem& rNew )     { m_aOverline = rNew; }
+    void SetCrossedOut( const SvxCrossedOutItem& rNew ) { m_aCrossedOut = rNew; }
+    void SetContour( const SvxContourItem& rNew )       { m_aContour = rNew; }
+    void SetShadowed( const SvxShadowedItem& rNew )     { m_aShadowed = rNew; }
+    void SetColor( const SvxColorItem& rNew )           { m_aColor = rNew; }
     void SetAdjust( const SvxAdjustItem& rNew )
         {
-            aAdjust.SetAdjust( rNew.GetAdjust() );
-            aAdjust.SetOneWord( rNew.GetOneWord() );
-            aAdjust.SetLastBlock( rNew.GetLastBlock() );
+            m_aAdjust.SetAdjust( rNew.GetAdjust() );
+            m_aAdjust.SetOneWord( rNew.GetOneWord() );
+            m_aAdjust.SetLastBlock( rNew.GetLastBlock() );
         }
     void SetTextOrientation(const SvxFrameDirectionItem& rNew) { m_aTextOrientation = rNew; }
     void SetVerticalAlignment(const SwFormatVertOrient& rNew) { m_aVerticalAlignment = rNew; }
-    void SetBox( const SvxBoxItem& rNew )               { aBox = rNew; }
-    void SetBackground( const SvxBrushItem& rNew )      { aBackground = rNew; }
+    void SetBox( const SvxBoxItem& rNew )               { m_aBox = rNew; }
+    void SetBackground( const SvxBrushItem& rNew )      { m_aBackground = rNew; }
     void SetValueFormat( const OUString& rFormat, LanguageType eLng, LanguageType eSys )
-        { sNumFormatString = rFormat; eNumFormatLanguage = eLng; eSysLanguage = eSys; }
+        { m_sNumFormatString = rFormat; m_eNumFormatLanguage = eLng; m_eSysLanguage = eSys; }
 
     bool Load( SvStream& rStream, const SwAfVersions& rVersions, sal_uInt16 nVer );
     bool Save( SvStream& rStream, sal_uInt16 fileVersion ) const;
