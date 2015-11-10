@@ -51,6 +51,7 @@
 #include <sot/formats.hxx>
 #include <vcl/edit.hxx>
 #include <osl/mutex.hxx>
+#include <o3tl/make_unique.hxx>
 
 #include <unordered_map>
 
@@ -447,7 +448,7 @@ void BibFrameController_Impl::dispatch(const util::URL& _rURL, const uno::Sequen
             sal_uInt16 nCount = aStatusListeners.size();
             for ( sal_uInt16 n=0; n<nCount; n++ )
             {
-                BibStatusDispatch *pObj = &aStatusListeners[n];
+                BibStatusDispatch *pObj = aStatusListeners[n].get();
                 if ( pObj->aURL.Path == "Bib/removeFilter" )
                 {
                     FeatureStateEvent  aEvent;
@@ -498,7 +499,7 @@ void BibFrameController_Impl::dispatch(const util::URL& _rURL, const uno::Sequen
             sal_uInt16 nCount = aStatusListeners.size();
             for ( sal_uInt16 n=0; n<nCount; n++ )
             {
-                BibStatusDispatch *pObj = &aStatusListeners[n];
+                BibStatusDispatch *pObj = aStatusListeners[n].get();
                 if ( pObj->aURL.Path == "Bib/removeFilter" && pDatMan->getParser().is())
                 {
                     FeatureStateEvent  aEvent;
@@ -643,7 +644,7 @@ void BibFrameController_Impl::addStatusListener(
 {
     BibConfig* pConfig = BibModul::GetConfig();
     // create a new Reference and insert into listener array
-    aStatusListeners.push_back( new BibStatusDispatch( aURL, aListener ) );
+    aStatusListeners.push_back( o3tl::make_unique<BibStatusDispatch>( aURL, aListener ) );
 
     // send first status synchronously
     FeatureStateEvent aEvent;
@@ -780,7 +781,7 @@ void BibFrameController_Impl::removeStatusListener(
         sal_uInt16 nCount = aStatusListeners.size();
         for ( sal_uInt16 n=0; n<nCount; n++ )
         {
-            BibStatusDispatch *pObj = &aStatusListeners[n];
+            BibStatusDispatch *pObj = aStatusListeners[n].get();
             bool bFlag=pObj->xListener.is();
             if (!bFlag || (pObj->xListener == aObject &&
                 ( aURL.Complete.isEmpty() || pObj->aURL.Path == aURL.Path  )))
@@ -804,7 +805,7 @@ void BibFrameController_Impl::RemoveFilter()
 
     for ( sal_uInt16 n=0; n<nCount; n++ )
     {
-        BibStatusDispatch *pObj = &aStatusListeners[n];
+        BibStatusDispatch *pObj = aStatusListeners[n].get();
         if ( pObj->aURL.Path == "Bib/removeFilter" )
         {
             FeatureStateEvent  aEvent;
@@ -864,7 +865,7 @@ void BibFrameController_Impl::ChangeDataSource(const uno::Sequence< beans::Prope
     bool bQueryText=false;
     for ( sal_uInt16 n=0; n<nCount; n++ )
     {
-        BibStatusDispatch *pObj = &aStatusListeners[n];
+        BibStatusDispatch *pObj = aStatusListeners[n].get();
         if (pObj->aURL.Path == "Bib/MenuFilter")
         {
             FeatureStateEvent  aEvent;

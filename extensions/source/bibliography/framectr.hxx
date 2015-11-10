@@ -27,7 +27,8 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/frame/XDispatchInformationProvider.hpp>
 #include <cppuhelper/implbase.hxx>
-#include <boost/ptr_container/ptr_vector.hpp>
+#include <vector>
+#include <memory>
 
 #include "bibmod.hxx"
 class BibDataManager;
@@ -48,7 +49,7 @@ public:
                         {}
 };
 
-typedef boost::ptr_vector<BibStatusDispatch> BibStatusDispatchArr;
+typedef std::vector<std::unique_ptr<BibStatusDispatch> > BibStatusDispatchArr;
 
 class BibFrameController_Impl : public cppu::WeakImplHelper <
     css::lang::XServiceInfo,
