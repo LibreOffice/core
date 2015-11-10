@@ -107,6 +107,7 @@
 #include <connectivity/FValue.hxx>
 
 #include <editeng/justifyitem.hxx>
+#include <memory>
 
 namespace dbaui
 {
@@ -825,7 +826,7 @@ bool callColumnFormatDialog(vcl::Window* _pParent,
     pPool->SetDefaultMetric( SFX_MAPUNIT_TWIP );    // ripped, don't understand why
     pPool->FreezeIdRanges();                        // the same
 
-    SfxItemSet* pFormatDescriptor = new SfxItemSet(*pPool, aAttrMap);
+    std::unique_ptr<SfxItemSet> pFormatDescriptor(new SfxItemSet(*pPool, aAttrMap));
     // fill it
     pFormatDescriptor->Put(SvxHorJustifyItem(_eJustify, SBA_ATTR_ALIGN_HOR_JUSTIFY));
     bool bText = false;
@@ -852,7 +853,7 @@ bool callColumnFormatDialog(vcl::Window* _pParent,
     }
 
     {   // want the dialog to be destroyed before our set
-        ScopedVclPtrInstance< SbaSbAttrDlg > aDlg(_pParent, pFormatDescriptor, _pFormatter, _bHasFormat);
+        ScopedVclPtrInstance< SbaSbAttrDlg > aDlg(_pParent, pFormatDescriptor.get(), _pFormatter, _bHasFormat);
         if (RET_OK == aDlg->Execute())
         {
             // ItemSet->UNO
@@ -890,7 +891,6 @@ bool callColumnFormatDialog(vcl::Window* _pParent,
         }
     }
 
-    delete pFormatDescriptor;
     SfxItemPool::Free(pPool);
     for (sal_uInt16 i=0; i<sizeof(pDefaults)/sizeof(pDefaults[0]); ++i)
         delete pDefaults[i];

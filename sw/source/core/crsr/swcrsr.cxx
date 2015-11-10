@@ -51,6 +51,7 @@
 #include <statstr.hrc>
 #include <redline.hxx>
 #include <txatbase.hxx>
+#include <memory>
 
 using namespace ::com::sun::star::i18n;
 
@@ -748,14 +749,14 @@ static sal_uLong lcl_FindSelection( SwFindParas& rParas, SwCursor* pCurCrsr,
 
     // only create progress bar for ShellCrsr
     bool bIsUnoCrsr = dynamic_cast<SwUnoCrsr*>(pCurCrsr) !=  nullptr;
-    _PercentHdl* pPHdl = nullptr;
+    std::unique_ptr<_PercentHdl> pPHdl;
     sal_uInt16 nCrsrCnt = 0;
     if( FND_IN_SEL & eFndRngs )
     {
         while( pCurCrsr != ( pTmpCrsr = pTmpCrsr->GetNext() ))
             ++nCrsrCnt;
         if( nCrsrCnt && !bIsUnoCrsr )
-            pPHdl = new _PercentHdl( 0, nCrsrCnt, pDoc->GetDocShell() );
+            pPHdl.reset(new _PercentHdl( 0, nCrsrCnt, pDoc->GetDocShell() ));
     }
     else
         pSaveCrsr = static_cast<SwPaM*>(pSaveCrsr->GetPrev());
@@ -773,7 +774,7 @@ static sal_uLong lcl_FindSelection( SwFindParas& rParas, SwCursor* pCurCrsr,
             aRegion.Exchange();
 
         if( !nCrsrCnt && !pPHdl && !bIsUnoCrsr )
-            pPHdl = new _PercentHdl( aRegion );
+            pPHdl.reset(new _PercentHdl( aRegion ));
 
         // as long as found and not at same position
         while(  *pSttPos <= *pEndPos &&
@@ -854,7 +855,6 @@ static sal_uLong lcl_FindSelection( SwFindParas& rParas, SwCursor* pCurCrsr,
     if( nFound && !pFndRing ) // if no ring should be created
         pFndRing = pCurCrsr->Create();
 
-    delete pPHdl;
     pDoc->GetIDocumentUndoRedo().DoUndo(bDoesUndo);
     return nFound;
 }

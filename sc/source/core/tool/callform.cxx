@@ -25,6 +25,7 @@
 #include <osl/module.hxx>
 #include <osl/file.hxx>
 #include <unotools/transliterationwrapper.hxx>
+#include <memory>
 
 #include "callform.hxx"
 #include "global.hxx"
@@ -170,75 +171,69 @@ bool InitExternalFunc(const OUString& rModuleName)
     OUString aNP;
     aNP = rModuleName;
 
-    bool bRet = false;
-    osl::Module* pLib = new osl::Module( aNP );
-    if (pLib->is())
+    std::unique_ptr<osl::Module> pLib(new osl::Module( aNP ));
+    if (!pLib->is())
+       return false;
+
+    oslGenericFunction fpGetCount = pLib->getFunctionSymbol(GETFUNCTIONCOUNT);
+    oslGenericFunction fpGetData = pLib->getFunctionSymbol(GETFUNCTIONDATA);
+    if ((fpGetCount == nullptr) || (fpGetData == nullptr))
+       return false;
+
+    oslGenericFunction fpIsAsync = pLib->getFunctionSymbol(ISASYNC);
+    oslGenericFunction fpAdvice = pLib->getFunctionSymbol(ADVICE);
+    oslGenericFunction fpSetLanguage = pLib->getFunctionSymbol(SETLANGUAGE);
+    if ( fpSetLanguage )
     {
-        oslGenericFunction fpGetCount = pLib->getFunctionSymbol(GETFUNCTIONCOUNT);
-        oslGenericFunction fpGetData = pLib->getFunctionSymbol(GETFUNCTIONDATA);
-        if ((fpGetCount != nullptr) && (fpGetData != nullptr))
-        {
-            oslGenericFunction fpIsAsync = pLib->getFunctionSymbol(ISASYNC);
-            oslGenericFunction fpAdvice = pLib->getFunctionSymbol(ADVICE);
-            oslGenericFunction fpSetLanguage = pLib->getFunctionSymbol(SETLANGUAGE);
-            if ( fpSetLanguage )
-            {
-                LanguageType eLanguage = Application::GetSettings().GetUILanguageTag().getLanguageType();
-                sal_uInt16 nLanguage = (sal_uInt16) eLanguage;
-                (*reinterpret_cast<SetLanguagePtr>(fpSetLanguage))( nLanguage );
-            }
-
-            // Module in die Collection aufnehmen
-            ModuleData* pModuleData = new ModuleData(rModuleName, pLib);
-            aModuleCollection.insert(pModuleData);
-
-            // Schnittstelle initialisieren
-            AdvData pfCallBack = &ScAddInAsyncCallBack;
-            LegacyFuncCollection* pLegacyFuncCol = ScGlobal::GetLegacyFuncCollection();
-            sal_uInt16 nCount;
-            (*reinterpret_cast<GetFuncCountPtr>(fpGetCount))(nCount);
-            for (sal_uInt16 i=0; i < nCount; i++)
-            {
-                sal_Char cFuncName[256];
-                sal_Char cInternalName[256];
-                sal_uInt16 nParamCount;
-                ParamType eParamType[MAXFUNCPARAM];
-                ParamType eAsyncType = ParamType::NONE;
-                // initialize all,  in case the AddIn behaves bad
-                cFuncName[0] = 0;
-                cInternalName[0] = 0;
-                nParamCount = 0;
-                for ( sal_uInt16 j=0; j<MAXFUNCPARAM; j++ )
-                {
-                    eParamType[j] = ParamType::NONE;
-                }
-                (*reinterpret_cast<GetFuncDataPtr>(fpGetData))(i, cFuncName, nParamCount,
-                                               eParamType, cInternalName);
-                if( fpIsAsync )
-                {
-                    (*reinterpret_cast<IsAsync>(fpIsAsync))(i, &eAsyncType);
-                    if ( fpAdvice && eAsyncType != ParamType::NONE )
-                        (*reinterpret_cast<Advice>(fpAdvice))( i, pfCallBack );
-                }
-                OUString aInternalName( cInternalName, strlen(cInternalName), osl_getThreadTextEncoding() );
-                OUString aFuncName( cFuncName, strlen(cFuncName), osl_getThreadTextEncoding() );
-                LegacyFuncData* pLegacyFuncData = new LegacyFuncData( pModuleData,
-                                          aInternalName,
-                                          aFuncName,
-                                          i,
-                                          nParamCount,
-                                          eParamType,
-                                          eAsyncType );
-                pLegacyFuncCol->insert(pLegacyFuncData);
-            }
-            bRet = true;
-        }
-        else
-            delete pLib;
+        LanguageType eLanguage = Application::GetSettings().GetUILanguageTag().getLanguageType();
+        sal_uInt16 nLanguage = (sal_uInt16) eLanguage;
+        (*reinterpret_cast<SetLanguagePtr>(fpSetLanguage))( nLanguage );
     }
-    else
-        delete pLib;
-    return bRet;
+
+    // Module in die Collection aufnehmen
+    ModuleData* pModuleData = new ModuleData(rModuleName, pLib.release());
+    aModuleCollection.insert(pModuleData);
+
+    // Schnittstelle initialisieren
+    AdvData pfCallBack = &ScAddInAsyncCallBack;
+    LegacyFuncCollection* pLegacyFuncCol = ScGlobal::GetLegacyFuncCollection();
+    sal_uInt16 nCount;
+    (*reinterpret_cast<GetFuncCountPtr>(fpGetCount))(nCount);
+    for (sal_uInt16 i=0; i < nCount; i++)
+    {
+        sal_Char cFuncName[256];
+        sal_Char cInternalName[256];
+        sal_uInt16 nParamCount;
+        ParamType eParamType[MAXFUNCPARAM];
+        ParamType eAsyncType = ParamType::NONE;
+        // initialize all,  in case the AddIn behaves bad
+        cFuncName[0] = 0;
+        cInternalName[0] = 0;
+        nParamCount = 0;
+        for ( sal_uInt16 j=0; j<MAXFUNCPARAM; j++ )
+        {
+            eParamType[j] = ParamType::NONE;
+        }
+        (*reinterpret_cast<GetFuncDataPtr>(fpGetData))(i, cFuncName, nParamCount,
+                                       eParamType, cInternalName);
+        if( fpIsAsync )
+        {
+            (*reinterpret_cast<IsAsync>(fpIsAsync))(i, &eAsyncType);
+            if ( fpAdvice && eAsyncType != ParamType::NONE )
+                (*reinterpret_cast<Advice>(fpAdvice))( i, pfCallBack );
+        }
+        OUString aInternalName( cInternalName, strlen(cInternalName), osl_getThreadTextEncoding() );
+        OUString aFuncName( cFuncName, strlen(cFuncName), osl_getThreadTextEncoding() );
+        LegacyFuncData* pLegacyFuncData = new LegacyFuncData( pModuleData,
+                                  aInternalName,
+                                  aFuncName,
+                                  i,
+                                  nParamCount,
+                                  eParamType,
+                                  eAsyncType );
+        pLegacyFuncCol->insert(pLegacyFuncData);
+    }
+    return true;
 #endif
 }
 

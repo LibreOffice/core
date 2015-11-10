@@ -20,6 +20,7 @@
 #include "EnhancedCustomShapeToken.hxx"
 #include <osl/mutex.hxx>
 #include <unordered_map>
+#include <memory>
 #include <string.h>
 
 namespace xmloff { namespace EnhancedCustomShapeToken {
@@ -183,12 +184,11 @@ EnhancedCustomShapeTokenEnum EASGet( const OUString& rShapeType )
     }
     EnhancedCustomShapeTokenEnum eRetValue = EAS_NotFound;
     int i, nLen = rShapeType.getLength();
-    char* pBuf = new char[ nLen + 1 ];
+    std::unique_ptr<char[]> pBuf(new char[ nLen + 1 ]);
     for ( i = 0; i < nLen; i++ )
         pBuf[ i ] = (char)rShapeType[ i ];
     pBuf[ i ] = 0;
-    TypeNameHashMap::iterator aHashIter( pHashMap->find( pBuf ) );
-    delete[] pBuf;
+    TypeNameHashMap::iterator aHashIter( pHashMap->find( pBuf.get() ) );
     if ( aHashIter != pHashMap->end() )
         eRetValue = (*aHashIter).second;
     return eRetValue;
