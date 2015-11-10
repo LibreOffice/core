@@ -1487,7 +1487,7 @@ void FormControlStreamObject::implDump()
 
 void FormControlStreamObject::constructFormCtrlStrmObj( const OUString* pProgId )
 {
-    mbReadGuid = pProgId == 0;
+    mbReadGuid = pProgId == nullptr;
     if( pProgId )
         maProgId = *pProgId;
 }

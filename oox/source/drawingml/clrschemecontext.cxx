@@ -91,7 +91,7 @@ ContextHandlerRef clrSchemeContext::onCreateContext(
         case A_TOKEN( folHlink ):
             return new clrSchemeColorContext( *this, mrClrScheme, getBaseToken( nElement ) );
     }
-    return 0;
+    return nullptr;
 }
 
 } }

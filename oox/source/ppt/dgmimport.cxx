@@ -93,7 +93,7 @@ bool QuickDiagrammingImport::exportDocument() throw()
 const ::oox::drawingml::Theme* QuickDiagrammingImport::getCurrentTheme() const
 {
     // TODO
-    return 0;
+    return nullptr;
 }
 
 const oox::drawingml::table::TableStyleListPtr QuickDiagrammingImport::getTableStyles()
@@ -103,12 +103,12 @@ const oox::drawingml::table::TableStyleListPtr QuickDiagrammingImport::getTableS
 
 oox::vml::Drawing* QuickDiagrammingImport::getVmlDrawing()
 {
-    return 0;
+    return nullptr;
 }
 
 oox::drawingml::chart::ChartConverter* QuickDiagrammingImport::getChartConverter()
 {
-    return 0;
+    return nullptr;
 }
 
 OUString QuickDiagrammingImport::getImplementationName() throw (css::uno::RuntimeException, std::exception)
@@ -118,7 +118,7 @@ OUString QuickDiagrammingImport::getImplementationName() throw (css::uno::Runtim
 
 ::oox::ole::VbaProject* QuickDiagrammingImport::implCreateVbaProject() const
 {
-    return 0;
+    return nullptr;
 }
 
 }}

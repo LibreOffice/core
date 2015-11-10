@@ -54,7 +54,7 @@ LockedCanvasContext::~LockedCanvasContext()
         SAL_WARN("oox", "LockedCanvasContext::createFastChildContext: unhandled element:" << getBaseToken(aElementToken));
         break;
     }
-    return 0;
+    return nullptr;
 }
 
 }

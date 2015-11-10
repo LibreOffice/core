@@ -58,15 +58,15 @@ ContextHandlerRef ThemeFragmentHandler::onCreateContext( sal_Int32 nElement, con
                 case A_TOKEN( objectDefaults ):             // CT_ObjectStyleDefaults
                     return new objectDefaultContext( *this, mrTheme );
                 case A_TOKEN( extraClrSchemeLst ):          // CT_ColorSchemeList
-                    return 0;
+                    return nullptr;
                 case A_TOKEN( custClrLst ):                 // CustomColorList
-                    return 0;
+                    return nullptr;
                 case A_TOKEN( ext ):                        // CT_OfficeArtExtension
-                    return 0;
+                    return nullptr;
             }
         break;
     }
-    return 0;
+    return nullptr;
 }
 
 } // namespace drawingml

@@ -65,7 +65,7 @@ public:
                     rConnection.mnDestOrder = rAttribs.getInteger( XML_destOrd, 0 );
 
                     // skip CT_extLst
-                    return 0;
+                    return nullptr;
                 }
                 default:
                     break;
@@ -183,7 +183,7 @@ public:
                 return new PresLayoutVarsContext( *this, mrPoint );
             case DGM_TOKEN( style ):
                 // skip CT_shapeStyle
-                return 0;
+                return nullptr;
             default:
                 break;
             }
@@ -223,7 +223,7 @@ public:
             switch( aElementToken )
             {
             case DGM_TOKEN( extLst ):
-                return 0;
+                return nullptr;
             case DGM_TOKEN( prSet ):
                 OSL_TRACE( "diagram property set for point");
                 return new PropertiesContext( *this, mrPoint, rAttribs );
@@ -355,7 +355,7 @@ DataModelContext::onCreateContext( ::sal_Int32 aElement,
     case DGM_TOKEN( whole ):
         // CT_WholeE2oFormatting
         // TODO
-        return 0;
+        return nullptr;
     case DGM_TOKEN( extLst ):
     case A_TOKEN( ext ):
         break;

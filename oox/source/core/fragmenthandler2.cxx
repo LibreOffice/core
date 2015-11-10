@@ -111,7 +111,7 @@ Reference< XFastContextHandler > SAL_CALL FragmentHandler2::createFastChildConte
     {
         if( prepareMceContext( nElement, AttributeList( rxAttribs ) ) )
             return getFastContextHandler();
-        return NULL;
+        return nullptr;
     }
     return implCreateChildContext( nElement, rxAttribs );
 }
@@ -161,7 +161,7 @@ void FragmentHandler2::endRecord( sal_Int32 nRecId )
 
 ContextHandlerRef FragmentHandler2::onCreateContext( sal_Int32, const AttributeList& )
 {
-    return 0;
+    return nullptr;
 }
 
 void FragmentHandler2::onStartElement( const AttributeList& )
@@ -178,7 +178,7 @@ void FragmentHandler2::onEndElement()
 
 ContextHandlerRef FragmentHandler2::onCreateRecordContext( sal_Int32, SequenceInputStream& )
 {
-    return 0;
+    return nullptr;
 }
 
 void FragmentHandler2::onStartRecord( SequenceInputStream& )

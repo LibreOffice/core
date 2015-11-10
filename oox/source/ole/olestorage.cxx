@@ -166,7 +166,7 @@ OleStorage::OleStorage( const Reference< XComponentContext >& rxContext,
         const Reference< XInputStream >& rxInStream, bool bBaseStreamAccess ) :
     StorageBase( rxInStream, bBaseStreamAccess ),
     mxContext( rxContext ),
-    mpParentStorage( 0 )
+    mpParentStorage( nullptr )
 {
     OSL_ENSURE( mxContext.is(), "OleStorage::OleStorage - missing component context" );
     initStorage( rxInStream );
@@ -176,7 +176,7 @@ OleStorage::OleStorage( const Reference< XComponentContext >& rxContext,
         const Reference< XStream >& rxOutStream, bool bBaseStreamAccess ) :
     StorageBase( rxOutStream, bBaseStreamAccess ),
     mxContext( rxContext ),
-    mpParentStorage( 0 )
+    mpParentStorage( nullptr )
 {
     OSL_ENSURE( mxContext.is(), "OleStorage::OleStorage - missing component context" );
     initStorage( rxOutStream );

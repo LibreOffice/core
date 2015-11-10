@@ -173,7 +173,7 @@ void AxesSetConverter::convertFromModel( const Reference< XDiagram >& rxDiagram,
             {
                 ModelRef< AxisModel > xZAxis = lclGetOrCreateAxis( mrModel.maAxes, API_Z_AXIS, C_TOKEN( serAx ), bMSO2007Doc );
                 AxisConverter aZAxisConv( *this, *xZAxis );
-                aZAxisConv.convertFromModel( xCoordSystem, aTypeGroups, 0, nAxesSetIdx, API_Z_AXIS );
+                aZAxisConv.convertFromModel( xCoordSystem, aTypeGroups, nullptr, nAxesSetIdx, API_Z_AXIS );
             }
 
             // convert all chart type groups, this converts all series data and formatting
@@ -356,7 +356,7 @@ void PlotAreaConverter::convertFromModel( View3DModel& rView3DModel )
         if( !xTypeGroup->maSeries.empty() )
         {
             // try to find a compatible axes set for the type group
-            AxesSetModel* pAxesSet = 0;
+            AxesSetModel* pAxesSet = nullptr;
             for( AxesSetVector::iterator aASIt = aAxesSets.begin(), aASEnd = aAxesSets.end(); !pAxesSet && (aASIt != aASEnd); ++aASIt )
                 if( (*aASIt)->maTypeGroups.front()->maAxisIds == xTypeGroup->maAxisIds )
                     pAxesSet = aASIt->get();

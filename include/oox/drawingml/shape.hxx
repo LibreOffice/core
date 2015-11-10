@@ -76,7 +76,7 @@ class OOX_DLLPUBLIC Shape
 {
 public:
 
-    explicit Shape( const sal_Char* pServiceType = 0, bool bDefaultHeight = true );
+    explicit Shape( const sal_Char* pServiceType = nullptr, bool bDefaultHeight = true );
     explicit Shape( const ShapePtr& pSourceShape );
     virtual ~Shape();
 
@@ -152,16 +152,16 @@ public:
                             const css::uno::Reference< css::drawing::XShapes >& rxShapes,
                             const basegfx::B2DHomMatrix& aTransformation,
                             FillProperties& rShapeOrParentShapeFillProps,
-                            const css::awt::Rectangle* pShapeRect = 0,
-                            ShapeIdMap* pShapeMap = 0 );
+                            const css::awt::Rectangle* pShapeRect = nullptr,
+                            ShapeIdMap* pShapeMap = nullptr );
 
     void                addChildren(
                             ::oox::core::XmlFilterBase& rFilterBase,
                             const Theme* pTheme,
                             const css::uno::Reference< css::drawing::XShapes >& rxShapes,
                             basegfx::B2DHomMatrix& aTransformation,
-                            const css::awt::Rectangle* pShapeRect = 0,
-                            ShapeIdMap* pShapeMap = 0 );
+                            const css::awt::Rectangle* pShapeRect = nullptr,
+                            ShapeIdMap* pShapeMap = nullptr );
 
     void                setXShape( const css::uno::Reference< css::drawing::XShape >& rXShape )
                             { mxShape = rXShape; };

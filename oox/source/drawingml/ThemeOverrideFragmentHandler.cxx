@@ -39,7 +39,7 @@ ContextHandlerRef ThemeOverrideFragmentHandler::onCreateContext( sal_Int32 nElem
             }
         break;
     }
-    return 0;
+    return nullptr;
 }
 
 } // namespace drawingml

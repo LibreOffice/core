@@ -66,7 +66,7 @@ ContextHandlerRef DrawingFragment::onCreateContext( sal_Int32 nElement, const At
             }
         break;
     }
-    return 0;
+    return nullptr;
 }
 
 void DrawingFragment::finalizeImport()

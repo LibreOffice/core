@@ -277,7 +277,7 @@ void PPTShape::addShape(
                     }
                     if( pPPTPlaceholder && pPPTPlaceholder->mpPlaceholder.get() ) {
                         SAL_INFO("oox.ppt","placeholder has parent placeholder: " << pPPTPlaceholder->mpPlaceholder->getId() << " type: " << lclDebugSubType( pPPTPlaceholder->mpPlaceholder->getSubType() ) << " index: " << pPPTPlaceholder->mpPlaceholder->getSubTypeIndex().get() );
-                        SAL_INFO("oox.ppt","has textbody " << (pPPTPlaceholder->mpPlaceholder->getTextBody() != 0) );
+                        SAL_INFO("oox.ppt","has textbody " << (pPPTPlaceholder->mpPlaceholder->getTextBody() != nullptr) );
                         TextListStylePtr pPlaceholderStyle = getSubTypeTextListStyle( rSlidePersist, pPPTPlaceholder->mpPlaceholder->getSubType() );
                         if( pPPTPlaceholder->mpPlaceholder->getTextBody() )
                             pNewTextListStyle->apply( pPPTPlaceholder->mpPlaceholder->getTextBody()->getTextListStyle() );
@@ -324,7 +324,7 @@ void PPTShape::addShape(
             } else
                 setMasterTextListStyle( aMasterTextListStyle );
 
-            Reference< XShape > xShape( createAndInsert( rFilterBase, sServiceName, pTheme, rxShapes, pShapeRect, bClearText, mpPlaceholder.get() != NULL, aTransformation, getFillProperties() ) );
+            Reference< XShape > xShape( createAndInsert( rFilterBase, sServiceName, pTheme, rxShapes, pShapeRect, bClearText, mpPlaceholder.get() != nullptr, aTransformation, getFillProperties() ) );
                 if ( !rSlidePersist.isMasterPage() && rSlidePersist.getPage().is() && ( (sal_Int32)mnSubType == XML_title ) )
                  {
                     try

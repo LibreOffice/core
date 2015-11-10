@@ -143,7 +143,7 @@ sal_Int32 TextField::insertAt(
         Reference< XPropertySet > xProps( xAt, UNO_QUERY);
         PropertySet aPropSet( xProps );
 
-        maTextParagraphProperties.pushToPropSet( &rFilterBase, xProps, aioBulletList, NULL, true, 18 );
+        maTextParagraphProperties.pushToPropSet( &rFilterBase, xProps, aioBulletList, nullptr, true, 18 );
 
         TextCharacterProperties aTextCharacterProps( rTextCharacterStyle );
         aTextCharacterProps.assignUsed( maTextParagraphProperties.getTextCharacterProperties() );

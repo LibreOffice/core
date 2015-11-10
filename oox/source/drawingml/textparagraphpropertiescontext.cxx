@@ -142,7 +142,7 @@ TextParagraphPropertiesContext::~TextParagraphPropertiesContext()
     {
         Sequence< TabStop > aSeq( nTabCount );
         TabStop * aArray = aSeq.getArray();
-        OSL_ENSURE( aArray != NULL, "sequence array is NULL" );
+        OSL_ENSURE( aArray != nullptr, "sequence array is NULL" );
         ::std::copy( maTabList.begin(), maTabList.end(), aArray );
         rPropertyMap.setProperty( PROP_ParaTabStops, aSeq);
     }

@@ -49,7 +49,7 @@ void ShapeFilterBase::setCurrentTheme(::oox::drawingml::ThemePtr pTheme)
 
 ::oox::vml::Drawing* ShapeFilterBase::getVmlDrawing()
 {
-    return 0;
+    return nullptr;
 }
 
 const ::oox::drawingml::table::TableStyleListPtr ShapeFilterBase::getTableStyles()

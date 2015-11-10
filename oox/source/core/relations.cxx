@@ -59,7 +59,7 @@ Relations::Relations( const OUString& rFragmentPath )
 const Relation* Relations::getRelationFromRelId( const OUString& rId ) const
 {
     ::std::map< OUString, Relation >::const_iterator aIt = maMap.find( rId );
-    return (aIt == maMap.end()) ? 0 : &aIt->second;
+    return (aIt == maMap.end()) ? nullptr : &aIt->second;
 }
 
 const Relation* Relations::getRelationFromFirstType( const OUString& rType ) const
@@ -67,7 +67,7 @@ const Relation* Relations::getRelationFromFirstType( const OUString& rType ) con
     for( ::std::map< OUString, Relation >::const_iterator aIt = maMap.begin(), aEnd = maMap.end(); aIt != aEnd; ++aIt )
         if( aIt->second.maType.equalsIgnoreAsciiCase( rType ) )
             return &aIt->second;
-    return 0;
+    return nullptr;
 }
 
 RelationsRef Relations::getRelationsFromTypeFromOfficeDoc( const OUString& rType ) const

@@ -57,7 +57,7 @@ ContextHandlerRef AxControlPropertyContext::onCreateContext( sal_Int32 nElement,
                 switch( mnPropId )
                 {
                     case XML_TOKEN_INVALID:
-                        return 0;
+                        return nullptr;
                     case XML_Picture:
                     case XML_MouseIcon:
                         return this;        // import picture path from ax:picture child element
@@ -79,7 +79,7 @@ ContextHandlerRef AxControlPropertyContext::onCreateContext( sal_Int32 nElement,
             }
         break;
     }
-    return 0;
+    return nullptr;
 }
 
 AxControlFragment::AxControlFragment( XmlFilterBase& rFilter, const OUString& rFragmentPath, EmbeddedControl& rControl ) :
@@ -138,7 +138,7 @@ ContextHandlerRef AxControlFragment::onCreateContext( sal_Int32 nElement, const 
             break;
         }
     }
-    return 0;
+    return nullptr;
 }
 
 } // namespace ole

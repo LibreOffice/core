@@ -227,7 +227,7 @@ void ContextHandler2::endRecord( sal_Int32 nRecId )
 
 ContextHandlerRef ContextHandler2::onCreateContext( sal_Int32, const AttributeList& )
 {
-    return 0;
+    return nullptr;
 }
 
 void ContextHandler2::onStartElement( const AttributeList& )
@@ -244,7 +244,7 @@ void ContextHandler2::onEndElement()
 
 ContextHandlerRef ContextHandler2::onCreateRecordContext( sal_Int32, SequenceInputStream& )
 {
-    return 0;
+    return nullptr;
 }
 
 void ContextHandler2::onStartRecord( SequenceInputStream& )

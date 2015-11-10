@@ -44,7 +44,7 @@ ContextHandlerRef objectDefaultContext::onCreateContext( sal_Int32 aElementToken
         case A_TOKEN( txDef ):
             return new spDefContext( *this, mrTheme.getTxDef() );
     }
-    return 0;
+    return nullptr;
 }
 
 } }

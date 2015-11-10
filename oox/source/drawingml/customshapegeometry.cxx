@@ -663,7 +663,7 @@ ContextHandlerRef XYAdjustHandleContext::onCreateContext( sal_Int32 aElementToke
 {
     if ( aElementToken == A_TOKEN( pos ) )
         return new AdjPoint2DContext( *this, rAttribs, mrCustomShapeProperties, mrAdjustHandle.pos );   // CT_AdjPoint2D
-    return 0;
+    return nullptr;
 }
 
 // CT_PolarAdjustHandle
@@ -714,7 +714,7 @@ ContextHandlerRef PolarAdjustHandleContext::onCreateContext( sal_Int32 aElementT
 {
     if ( aElementToken == A_TOKEN( pos ) )
         return new AdjPoint2DContext( *this, rAttribs, mrCustomShapeProperties, mrAdjustHandle.pos );   // CT_AdjPoint2D
-    return 0;
+    return nullptr;
 }
 
 // CT_AdjustHandleList
@@ -750,7 +750,7 @@ ContextHandlerRef AdjustHandleListContext::onCreateContext( sal_Int32 aElementTo
         mrAdjustHandleList.push_back( aAdjustHandle );
         return new PolarAdjustHandleContext( *this, rAttribs, mrCustomShapeProperties, mrAdjustHandleList.back() );
     }
-    return 0;
+    return nullptr;
 }
 
 // CT_ConnectionSite
@@ -777,7 +777,7 @@ ContextHandlerRef ConnectionSiteContext::onCreateContext( sal_Int32 aElementToke
 {
     if ( aElementToken == A_TOKEN( pos ) )
         return new AdjPoint2DContext( *this, rAttribs, mrCustomShapeProperties, mrConnectionSite.pos ); // CT_AdjPoint2D
-    return 0;
+    return nullptr;
 }
 
 // CT_Path2DMoveTo
@@ -803,7 +803,7 @@ ContextHandlerRef Path2DMoveToContext::onCreateContext( sal_Int32 aElementToken,
 {
     if ( aElementToken == A_TOKEN( pt ) )
         return new AdjPoint2DContext( *this, rAttribs, mrCustomShapeProperties, mrAdjPoint2D );     // CT_AdjPoint2D
-    return 0;
+    return nullptr;
 }
 
 // CT_Path2DLineTo
@@ -829,7 +829,7 @@ ContextHandlerRef Path2DLineToContext::onCreateContext( sal_Int32 aElementToken,
 {
     if ( aElementToken == A_TOKEN( pt ) )
         return new AdjPoint2DContext( *this, rAttribs, mrCustomShapeProperties, mrAdjPoint2D );     // CT_AdjPoint2D
-    return 0;
+    return nullptr;
 }
 
 // CT_Path2DQuadBezierTo
@@ -862,7 +862,7 @@ ContextHandlerRef Path2DQuadBezierToContext::onCreateContext( sal_Int32 aElement
 {
     if ( aElementToken == A_TOKEN( pt ) )
         return new AdjPoint2DContext( *this, rAttribs, mrCustomShapeProperties, nCount++ ? mrPt2 : mrPt1 ); // CT_AdjPoint2D
-    return 0;
+    return nullptr;
 }
 
 // CT_Path2DCubicBezierTo
@@ -899,7 +899,7 @@ ContextHandlerRef Path2DCubicBezierToContext::onCreateContext( sal_Int32 aElemen
     if ( aElementToken == A_TOKEN( pt ) )
         return new AdjPoint2DContext( *this, rAttribs, mrCustomShapeProperties,
             nCount++ ? nCount == 2 ? mrControlPt2 : mrEndPt : mrControlPt1 );   // CT_AdjPoint2D
-    return 0;
+    return nullptr;
 }
 
 // CT_Path2DContext
@@ -1097,7 +1097,7 @@ ContextHandlerRef Path2DContext::onCreateContext( sal_Int32 aElementToken,
         }
         break;
     }
-    return 0;
+    return nullptr;
 }
 
 // CT_Path2DList
@@ -1133,7 +1133,7 @@ ContextHandlerRef Path2DListContext::onCreateContext( sal_Int32 aElementToken, c
         mrPath2DList.push_back( aPath2D );
         return new Path2DContext( *this, rAttribs, mrCustomShapeProperties,  mrSegments, mrPath2DList.back() );
     }
-    return 0;
+    return nullptr;
 }
 
 // CT_CustomGeometry2D
@@ -1176,7 +1176,7 @@ ContextHandlerRef CustomShapeGeometryContext::onCreateContext( sal_Int32 aElemen
             return new ConnectionSiteContext( *this, rAttribs, mrCustomShapeProperties, mrCustomShapeProperties.getConnectionSiteList().back() );
         }
     }
-    return 0;
+    return nullptr;
 }
 
 // CT_PresetGeometry2D

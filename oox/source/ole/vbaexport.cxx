@@ -104,7 +104,7 @@ OUString createGuidStringFromInt(sal_uInt8 nGuid[16])
 OUString generateGUIDString()
 {
     sal_uInt8 nGuid[16];
-    rtl_createUuid(nGuid, NULL, true);
+    rtl_createUuid(nGuid, nullptr, true);
     return createGuidStringFromInt(nGuid);
 }
 
@@ -113,7 +113,7 @@ OUString generateGUIDString()
 VBACompressionChunk::VBACompressionChunk(SvStream& rCompressedStream, const sal_uInt8* pData, sal_Size nChunkSize)
     : mrCompressedStream(rCompressedStream)
     , mpUncompressedData(pData)
-    , mpCompressedChunkStream(0)
+    , mpCompressedChunkStream(nullptr)
     , mnChunkSize(nChunkSize)
     , mnCompressedCurrent(0)
     , mnCompressedEnd(0)
@@ -895,7 +895,7 @@ void exportPROJECTStream(SvStream& rStrm, css::uno::Reference<css::container::XN
     aProtectedStream.WriteUInt32(0x00000000);
     const sal_uInt8* pData = static_cast<const sal_uInt8*>(aProtectedStream.GetData());
     sal_uInt8 nProjKey = VBAEncryption::calculateProjKey(aProjectID);
-    VBAEncryption aProtectionState(pData, 4, rStrm, NULL, nProjKey);
+    VBAEncryption aProtectionState(pData, 4, rStrm, nullptr, nProjKey);
     aProtectionState.write();
     exportString(rStrm, "\"\r\n");
 #else
@@ -908,7 +908,7 @@ void exportPROJECTStream(SvStream& rStrm, css::uno::Reference<css::container::XN
     aProtectedStream.Seek(0);
     aProtectedStream.WriteUInt8(0x00);
     pData = static_cast<const sal_uInt8*>(aProtectedStream.GetData());
-    VBAEncryption aProjectPassword(pData, 1, rStrm, NULL, nProjKey);
+    VBAEncryption aProjectPassword(pData, 1, rStrm, nullptr, nProjKey);
     aProjectPassword.write();
     exportString(rStrm, "\"\r\n");
 #else
@@ -921,7 +921,7 @@ void exportPROJECTStream(SvStream& rStrm, css::uno::Reference<css::container::XN
     aProtectedStream.Seek(0);
     aProtectedStream.WriteUInt8(0xFF);
     pData = static_cast<const sal_uInt8*>(aProtectedStream.GetData());
-    VBAEncryption aVisibilityState(pData, 1, rStrm, NULL, nProjKey);
+    VBAEncryption aVisibilityState(pData, 1, rStrm, nullptr, nProjKey);
     aVisibilityState.write();
     exportString(rStrm, "\"\r\n\r\n");
 #else

@@ -49,7 +49,7 @@ namespace oox { namespace ppt {
             { MS_STYLEFONTSTYLE,    "style.fontStyle",              "CharPosture" },
             { MS_STYLEVISIBILITY,   "style.visibility",             "Visibility" },
             { MS_STYLEOPACITY,      "style.opacity",                "Opacity" },
-            { MS_UNKNOWN, NULL, NULL }
+            { MS_UNKNOWN, nullptr, nullptr }
         };
 
         return aList;
@@ -98,7 +98,7 @@ namespace oox { namespace ppt {
             { "slide(fromBottom)", css::animations::TransitionType::SLIDEWIPE, css::animations::TransitionSubType::FROMBOTTOM, true },
             { "dissolve", css::animations::TransitionType::DISSOLVE, css::animations::TransitionSubType::DEFAULT, true },
             { "image", css::animations::TransitionType::DISSOLVE, css::animations::TransitionSubType::DEFAULT, true }, // TODO
-            { NULL, 0, 0, false }
+            { nullptr, 0, 0, false }
         };
 
         return aList;
@@ -116,7 +116,7 @@ namespace oox { namespace ppt {
             p++;
         }
 
-        return NULL;
+        return nullptr;
     }
 
 } }

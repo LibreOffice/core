@@ -67,16 +67,16 @@ TableStyleTextStyleContext::onCreateContext( ::sal_Int32 aElementToken, const At
             return this;
         case A_TOKEN( ea ):             // CT_TextFont
             mrTableStylePart.getAsianFont().setAttributes( rAttribs );
-            return 0;
+            return nullptr;
         case A_TOKEN( cs ):             // CT_TextFont
             mrTableStylePart.getComplexFont().setAttributes( rAttribs );
-            return 0;
+            return nullptr;
         case A_TOKEN( sym ):            // CT_TextFont
             mrTableStylePart.getSymbolFont().setAttributes( rAttribs );
-            return 0;
+            return nullptr;
         case A_TOKEN( latin ):          // CT_TextFont
             mrTableStylePart.getLatinFont().setAttributes( rAttribs );
-            return 0;
+            return nullptr;
 
         case A_TOKEN( fontRef ):    // CT_FontReference
             {

@@ -517,7 +517,7 @@ void TextParagraphProperties::dump() const
     Reference< css::text::XTextRange > xRange( xStart, UNO_QUERY );
     xStart->gotoEnd( sal_True );
     Reference< XPropertySet > xPropSet( xRange, UNO_QUERY );
-    pushToPropSet( NULL, xPropSet, emptyMap, NULL, false, 0 );
+    pushToPropSet( nullptr, xPropSet, emptyMap, nullptr, false, 0 );
     PropertySet pSet( xPropSet );
     pSet.dump();
 }

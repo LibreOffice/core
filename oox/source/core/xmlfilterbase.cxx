@@ -204,7 +204,7 @@ XmlFilterBase::~XmlFilterBase()
     // the following implicit destruction chain of ~XmlFilterBaseImpl, but in that
     // case it's member RelationsMap maRelationsMap will be destroyed, but maybe
     // still be used by ~FragmentHandler -> crash.
-    mxImpl->maFastParser.setDocumentHandler( 0 );
+    mxImpl->maFastParser.setDocumentHandler( nullptr );
 }
 
 void XmlFilterBase::checkDocumentProperties(Reference<XDocumentProperties> xDocProps)

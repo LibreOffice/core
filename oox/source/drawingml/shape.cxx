@@ -228,7 +228,7 @@ void Shape::setServiceName( const sal_Char* pServiceName )
 const ShapeStyleRef* Shape::getShapeStyleRef( sal_Int32 nRefType ) const
 {
     ShapeStyleRefMap::const_iterator aIt = maShapeStyleRefs.find( nRefType );
-    return (aIt == maShapeStyleRefs.end()) ? 0 : &aIt->second;
+    return (aIt == maShapeStyleRefs.end()) ? nullptr : &aIt->second;
 }
 
 void Shape::addShape(
@@ -300,7 +300,7 @@ void Shape::applyShapeReference( const Shape& rReferencedShape, bool bUseText )
     mpShapeRefLinePropPtr = LinePropertiesPtr( new LineProperties( *rReferencedShape.mpLinePropertiesPtr.get() ) );
     mpShapeRefFillPropPtr = FillPropertiesPtr( new FillProperties( *rReferencedShape.mpFillPropertiesPtr.get() ) );
     mpCustomShapePropertiesPtr = CustomShapePropertiesPtr( new CustomShapeProperties( *rReferencedShape.mpCustomShapePropertiesPtr.get() ) );
-    mpTablePropertiesPtr = table::TablePropertiesPtr( rReferencedShape.mpTablePropertiesPtr.get() ? new table::TableProperties( *rReferencedShape.mpTablePropertiesPtr.get() ) : NULL );
+    mpTablePropertiesPtr = table::TablePropertiesPtr( rReferencedShape.mpTablePropertiesPtr.get() ? new table::TableProperties( *rReferencedShape.mpTablePropertiesPtr.get() ) : nullptr );
     mpShapeRefEffectPropPtr = EffectPropertiesPtr( new EffectProperties( *rReferencedShape.mpEffectPropertiesPtr.get() ) );
     mpMasterTextListStyle = TextListStylePtr( new TextListStyle( *rReferencedShape.mpMasterTextListStyle.get() ) );
     maShapeStyleRefs = rReferencedShape.maShapeStyleRefs;
@@ -389,7 +389,7 @@ void Shape::addChildren(
     std::vector< ShapePtr >::iterator aIter( rMaster.maChildren.begin() );
     while( aIter != rMaster.maChildren.end() ) {
         (*aIter)->setMasterTextListStyle( mpMasterTextListStyle );
-        (*aIter++)->addShape( rFilterBase, pTheme, rxShapes, aChildTransformation, getFillProperties(), NULL, pShapeMap );
+        (*aIter++)->addShape( rFilterBase, pTheme, rxShapes, aChildTransformation, getFillProperties(), nullptr, pShapeMap );
     }
 }
 
@@ -1192,7 +1192,7 @@ Reference < XShape > Shape::renderDiagramToGraphic( XmlFilterBase& rFilterBase )
 
         Graphic aGraphic;
         GraphicFilter aFilter( false );
-        if ( aFilter.ImportGraphic( aGraphic, "", mpTempStream, GRFILTER_FORMAT_NOTFOUND, NULL, GraphicFilterImportFlags::NONE, static_cast < Sequence < PropertyValue >* > ( NULL ) ) != GRFILTER_OK )
+        if ( aFilter.ImportGraphic( aGraphic, "", mpTempStream, GRFILTER_FORMAT_NOTFOUND, nullptr, GraphicFilterImportFlags::NONE, static_cast < Sequence < PropertyValue >* > ( nullptr ) ) != GRFILTER_OK )
         {
             SAL_WARN( "oox.drawingml", OSL_THIS_FUNC
                       << "Unable to import rendered stream into graphic object" );

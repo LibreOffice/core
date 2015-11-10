@@ -84,12 +84,12 @@ void FragmentHandler::endUnknownElement( const OUString&, const OUString& ) thro
 
 Reference< XFastContextHandler > FragmentHandler::createFastChildContext( sal_Int32, const Reference< XFastAttributeList >& ) throw( SAXException, RuntimeException, std::exception )
 {
-    return 0;
+    return nullptr;
 }
 
 Reference< XFastContextHandler > FragmentHandler::createUnknownChildContext( const OUString&, const OUString&, const Reference< XFastAttributeList >& ) throw( SAXException, RuntimeException, std::exception )
 {
-    return 0;
+    return nullptr;
 }
 
 void FragmentHandler::characters( const OUString& ) throw( SAXException, RuntimeException, std::exception )
@@ -108,7 +108,7 @@ Reference< XInputStream > FragmentHandler::openFragmentStream() const
 const RecordInfo* FragmentHandler::getRecordInfos() const
 {
     // default: no support for binary records
-    return 0;
+    return nullptr;
 }
 
 } // namespace core

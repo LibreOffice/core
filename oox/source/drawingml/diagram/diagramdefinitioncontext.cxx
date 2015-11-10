@@ -76,7 +76,7 @@ DiagramDefinitionContext::onCreateContext( ::sal_Int32 aElement,
     }
      case DGM_TOKEN( clrData ):
         // TODO, does not matter for the UI. skip.
-        return 0;
+        return nullptr;
     case DGM_TOKEN( sampData ):
         mpLayout->getSampData().reset( new DiagramData );
         return new DataModelContext( *this, mpLayout->getSampData() );

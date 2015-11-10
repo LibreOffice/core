@@ -116,7 +116,7 @@ ContextHandlerRef EffectPropertiesContext::onCreateContext( sal_Int32 nElement, 
     }
 
     mrEffectProperties.m_Effects.pop_back();
-    return 0;
+    return nullptr;
 }
 
 } }

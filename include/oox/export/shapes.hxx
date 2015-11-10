@@ -73,7 +73,7 @@ public:
 protected:
     sal_Int32           mnShapeIdMax, mnPictureIdMax;
 
-    void WriteGraphicObjectShapePart( css::uno::Reference< css::drawing::XShape > xShape, const Graphic *pGraphic=NULL );
+    void WriteGraphicObjectShapePart( css::uno::Reference< css::drawing::XShape > xShape, const Graphic *pGraphic=nullptr );
 
 private:
     sal_Int32           mnXmlNamespace;
@@ -89,7 +89,7 @@ private:
 
 public:
 
-    ShapeExport( sal_Int32 nXmlNamespace, ::sax_fastparser::FSHelperPtr pFS, ShapeHashMap* pShapeMap = NULL, ::oox::core::XmlFilterBase* pFB = NULL, DocumentType eDocumentType = DOCUMENT_PPTX, DMLTextExport* pTextExport = 0 );
+    ShapeExport( sal_Int32 nXmlNamespace, ::sax_fastparser::FSHelperPtr pFS, ShapeHashMap* pShapeMap = nullptr, ::oox::core::XmlFilterBase* pFB = nullptr, DocumentType eDocumentType = DOCUMENT_PPTX, DMLTextExport* pTextExport = nullptr );
     virtual ~ShapeExport() {}
 
     void SetURLTranslator(std::shared_ptr<URLTransformer> pTransformer);

@@ -282,7 +282,7 @@ ControlModelRef VbaSiteModel::createControlModel( const AxClassTable& rClassTabl
         xCtrlModel->setAwtModelMode();
 
         // check that container model matches container flag in site data
-        bool bModelIsContainer = dynamic_cast< const AxContainerModelBase* >( xCtrlModel.get() ) != 0;
+        bool bModelIsContainer = dynamic_cast< const AxContainerModelBase* >( xCtrlModel.get() ) != nullptr;
         bool bTypeMatch = bModelIsContainer == isContainer();
         OSL_ENSURE( bTypeMatch, "VbaSiteModel::createControlModel - container type does not match container flag" );
         if( !bTypeMatch )
@@ -667,7 +667,7 @@ void VbaFormControl::finalizeEmbeddedControls()
                 rLastGroup.insert( rLastGroup.end(), xControl->maControls.begin(), xControl->maControls.end() );
                 xControl->maControls.clear();
                 // check if last control of the group box is an option button
-                bLastWasOptionButton = dynamic_cast< const AxOptionButtonModel* >( rLastGroup.back()->mxCtrlModel.get() ) != 0;
+                bLastWasOptionButton = dynamic_cast< const AxOptionButtonModel* >( rLastGroup.back()->mxCtrlModel.get() ) != nullptr;
             }
         }
     }

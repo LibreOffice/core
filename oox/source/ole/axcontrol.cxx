@@ -2636,7 +2636,7 @@ ControlModelBase* EmbeddedControl::createModelFromGuid( const OUString& rClassId
     if( aClassId.equalsIgnoreAsciiCase( HTML_GUID_TEXTBOX ) ) return &createModel< HtmlTextBoxModel >();
 
     mxModel.reset();
-    return 0;
+    return nullptr;
 }
 
 OUString EmbeddedControl::getServiceName() const

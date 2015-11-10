@@ -128,11 +128,11 @@ DiagramQStylesFragmentHandler::DiagramQStylesFragmentHandler( XmlFilterBase& rFi
     switch( getCurrentElement() )
     {
         case XML_ROOT_CONTEXT:
-            return nElement == DGM_TOKEN(styleDef) ? this : NULL;
+            return nElement == DGM_TOKEN(styleDef) ? this : nullptr;
         case DGM_TOKEN(styleDef):
-            return nElement == DGM_TOKEN(styleLbl) ? this : NULL;
+            return nElement == DGM_TOKEN(styleLbl) ? this : nullptr;
         case DGM_TOKEN(styleLbl):
-            return nElement == DGM_TOKEN(style) ? this : NULL;
+            return nElement == DGM_TOKEN(style) ? this : nullptr;
         case DGM_TOKEN(style):
         {
             switch( nElement )
@@ -150,11 +150,11 @@ DiagramQStylesFragmentHandler::DiagramQStylesFragmentHandler( XmlFilterBase& rFi
                     return createStyleMatrixContext(nElement,rAttribs,
                                                     maStyleEntry.maTextStyle);
             }
-            return 0;
+            return nullptr;
         }
     }
 
-    return 0;
+    return nullptr;
 }
 
 void DiagramQStylesFragmentHandler::onStartElement( const AttributeList& rAttribs )
@@ -190,9 +190,9 @@ ColorFragmentHandler::ColorFragmentHandler( ::oox::core::XmlFilterBase& rFilter,
     switch( getCurrentElement() )
     {
         case XML_ROOT_CONTEXT:
-            return nElement == DGM_TOKEN(colorsDef) ? this : NULL;
+            return nElement == DGM_TOKEN(colorsDef) ? this : nullptr;
         case DGM_TOKEN(colorsDef):
-            return nElement == DGM_TOKEN(styleLbl) ? this : NULL;
+            return nElement == DGM_TOKEN(styleLbl) ? this : nullptr;
         case DGM_TOKEN(styleLbl):
         {
             switch( nElement )
@@ -219,7 +219,7 @@ ColorFragmentHandler::ColorFragmentHandler( ::oox::core::XmlFilterBase& rFilter,
         }
     }
 
-    return 0;
+    return nullptr;
 }
 
 void ColorFragmentHandler::onStartElement( const AttributeList& rAttribs )

@@ -81,7 +81,7 @@ class OOX_DLLPUBLIC VMLExport : public EscherEx
     bool *m_pShapeTypeWritten;
 
 public:
-                        VMLExport( ::sax_fastparser::FSHelperPtr pSerializer, VMLTextExport* pTextExport = 0 );
+                        VMLExport( ::sax_fastparser::FSHelperPtr pSerializer, VMLTextExport* pTextExport = nullptr );
     virtual             ~VMLExport();
 
     ::sax_fastparser::FSHelperPtr
@@ -94,7 +94,7 @@ public:
     /// Call this when you need to export the object as VML.
     sal_uInt32 AddSdrObject( const SdrObject& rObj, sal_Int16 eHOri = -1,
             sal_Int16 eVOri = -1, sal_Int16 eHRel = -1,
-            sal_Int16 eVRel = -1, const Point* pNdTopLeft = 0, const bool bOOxmlExport = false );
+            sal_Int16 eVRel = -1, const Point* pNdTopLeft = nullptr, const bool bOOxmlExport = false );
     virtual void  AddSdrObjectVMLObject( const SdrObject& rObj) override;
     static bool IsWaterMarkShape(const OUString& rStr);
 protected:
@@ -123,7 +123,7 @@ private:
     virtual void OpenContainer( sal_uInt16 nEscherContainer, int nRecInstance = 0 ) override;
     virtual void CloseContainer() override;
 
-    virtual sal_uInt32 EnterGroup( const OUString& rShapeName, const Rectangle* pBoundRect = 0 ) override;
+    virtual sal_uInt32 EnterGroup( const OUString& rShapeName, const Rectangle* pBoundRect = nullptr ) override;
     virtual void LeaveGroup() override;
 
     virtual void AddShape( sal_uInt32 nShapeType, sal_uInt32 nShapeFlags, sal_uInt32 nShapeId = 0 ) override;

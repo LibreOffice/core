@@ -279,7 +279,7 @@ void RelativeInputStream::seek( sal_Int64 nPos )
 
 void RelativeInputStream::close()
 {
-    mpInStrm = 0;
+    mpInStrm = nullptr;
     mbEof = true;
 }
 

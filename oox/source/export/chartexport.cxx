@@ -557,8 +557,8 @@ ChartExport& ChartExport::WriteChartObj( const Reference< XShape >& xShape, sal_
                        XML_uri, "http://schemas.openxmlformats.org/drawingml/2006/chart",
                        FSEND );
     OUString sId;
-    const char* sFullPath = NULL;
-    const char* sRelativePath = NULL;
+    const char* sFullPath = nullptr;
+    const char* sRelativePath = nullptr;
     switch( GetDocumentType() )
     {
         case DOCUMENT_DOCX:
@@ -933,7 +933,7 @@ void ChartExport::exportMissingValueTreatment(uno::Reference<beans::XPropertySet
     if (!(aAny >>= nVal))
         return;
 
-    const char* pVal = NULL;
+    const char* pVal = nullptr;
     switch (nVal)
     {
         case cssc::MissingValueTreatment::LEAVE_GAP:
@@ -977,7 +977,7 @@ void ChartExport::exportLegend( Reference< css::chart::XChartDocument > xChartDo
             SAL_WARN("oox", "Property Align not found in ChartLegend");
         }
 
-        const char* strPos = NULL;
+        const char* strPos = nullptr;
         switch( aLegendPos )
         {
             case css::chart::ChartLegendPosition_LEFT:
@@ -998,7 +998,7 @@ void ChartExport::exportLegend( Reference< css::chart::XChartDocument > xChartDo
                 break;
         }
 
-        if( strPos != NULL )
+        if( strPos != nullptr )
         {
             pFS->singleElement( FSNS( XML_c, XML_legendPos ),
                 XML_val, strPos,
@@ -1034,7 +1034,7 @@ void ChartExport::exportLegend( Reference< css::chart::XChartDocument > xChartDo
             pFS->endElement(FSNS(XML_c, XML_layout));
         }
 
-        if (strPos != NULL)
+        if (strPos != nullptr)
         {
             pFS->singleElement( FSNS( XML_c, XML_overlay ),
                     XML_val, "0",
@@ -1091,7 +1091,7 @@ void ChartExport::exportTitle( Reference< XShape > xShape )
             FSEND );
 
     // TODO: bodyPr
-    const char* sWritingMode = NULL;
+    const char* sWritingMode = nullptr;
     bool bVertical = false;
     xPropSet->getPropertyValue("StackedText") >>= bVertical;
     if( bVertical )
@@ -1583,7 +1583,7 @@ void ChartExport::exportBarChart( Reference< chart2::XChartType > xChartType )
         sal_Int32 nGeom3d = cssc::ChartSolidType::RECTANGULAR_SOLID;
         if( xPropSet.is() && GetProperty( xPropSet, "SolidType") )
             mAny >>= nGeom3d;
-        const char* sShapeType = NULL;
+        const char* sShapeType = nullptr;
         switch( nGeom3d )
         {
             case cssc::ChartSolidType::RECTANGULAR_SOLID:
@@ -1791,7 +1791,7 @@ void ChartExport::exportRadarChart( Reference< chart2::XChartType > xChartType)
 
     // radarStyle
     sal_Int32 eChartType = getChartType( );
-    const char* radarStyle = NULL;
+    const char* radarStyle = nullptr;
     if( eChartType == chart::TYPEID_RADARAREA )
         radarStyle = "filled";
     else
@@ -2189,9 +2189,9 @@ void ChartExport::exportCandleStickSeries(
                 xSource->getDataSequences());
 
             Reference< chart2::XChartDocument > xNewDoc( getModel(), uno::UNO_QUERY );
-            const char* sSeries[] = {"values-first","values-max","values-min","values-last",0};
+            const char* sSeries[] = {"values-first","values-max","values-min","values-last",nullptr};
 
-            for( sal_Int32 idx = 0; sSeries[idx] != 0 ; idx++ )
+            for( sal_Int32 idx = 0; sSeries[idx] != nullptr ; idx++ )
             {
                 Reference< chart2::data::XLabeledDataSequence > xLabeledSeq( lcl_getDataSequenceByRole( aSeqCnt, OUString::createFromAscii(sSeries[idx]) ) );
                 if( xLabeledSeq.is())
@@ -2495,7 +2495,7 @@ void ChartExport::exportAxis(const AxisIdPair& rAxisIdPair)
     Reference< beans::XPropertySet > xMajorGrid;
     Reference< beans::XPropertySet > xMinorGrid;
     sal_Int32 nAxisType = XML_catAx;
-    const char* sAxPos = NULL;
+    const char* sAxPos = nullptr;
 
     switch( rAxisIdPair.nAxisType )
     {
@@ -2734,7 +2734,7 @@ void ChartExport::_exportAxis(
         mAny >>= nValue;
         bool bInner = nValue & css::chart::ChartAxisMarks::INNER;
         bool bOuter = nValue & css::chart::ChartAxisMarks::OUTER;
-        const char* majorTickMark = NULL;
+        const char* majorTickMark = nullptr;
         if( bInner && bOuter )
             majorTickMark = "cross";
         else if( bInner )
@@ -2753,7 +2753,7 @@ void ChartExport::_exportAxis(
         mAny >>= nValue;
         bool bInner = nValue & css::chart::ChartAxisMarks::INNER;
         bool bOuter = nValue & css::chart::ChartAxisMarks::OUTER;
-        const char* minorTickMark = NULL;
+        const char* minorTickMark = nullptr;
         if( bInner && bOuter )
             minorTickMark = "cross";
         else if( bInner )
@@ -2767,7 +2767,7 @@ void ChartExport::_exportAxis(
             FSEND );
     }
     // tickLblPos
-    const char* sTickLblPos = NULL;
+    const char* sTickLblPos = nullptr;
     bool bDisplayLabel = true;
     if(GetProperty( xAxisProp, "DisplayLabels" ) )
         mAny >>= bDisplayLabel;
@@ -2811,7 +2811,7 @@ void ChartExport::_exportAxis(
 
     // crosses & crossesAt
     bool bCrossesValue = false;
-    const char* sCrosses = NULL;
+    const char* sCrosses = nullptr;
     if(GetProperty( xAxisProp, "CrossoverPosition" ) )
     {
         css::chart::ChartAxisPosition ePosition( css::chart::ChartAxisPosition_ZERO );
@@ -3230,7 +3230,7 @@ void ChartExport::exportGrouping( bool isBar )
     if( GetProperty( xPropSet, "Percent" ) )
         mAny >>= mbPercent;
 
-    const char* grouping = NULL;
+    const char* grouping = nullptr;
     if (mbStacked)
         grouping = "stacked";
     else if (mbPercent)
@@ -3417,7 +3417,7 @@ void ChartExport::exportMarker(Reference< chart2::XDataSeries > xSeries)
 
     sal_Int32 nSymbol = aSymbol.StandardSymbol;
     // TODO: more properties support for marker
-    const char* pSymbolType = NULL;
+    const char* pSymbolType = nullptr;
     switch( nSymbol )
     {
         case 0:
@@ -3533,7 +3533,7 @@ const char* getErrorBarStyle(sal_Int32 nErrorBarStyle)
     switch(nErrorBarStyle)
     {
         case cssc::ErrorBarStyle::NONE:
-            return NULL;
+            return nullptr;
         case cssc::ErrorBarStyle::VARIANCE:
             break;
         case cssc::ErrorBarStyle::STANDARD_DEVIATION:
@@ -3551,7 +3551,7 @@ const char* getErrorBarStyle(sal_Int32 nErrorBarStyle)
         default:
             assert(false && "can't happen");
     }
-    return NULL;
+    return nullptr;
 }
 
 Reference< chart2::data::XDataSequence>  getLabeledSequence(

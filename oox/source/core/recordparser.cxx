@@ -57,7 +57,7 @@ private:
 
 void Locator::dispose()
 {
-    mpParser = 0;
+    mpParser = nullptr;
 }
 
 void Locator::checkDispose() throw( RuntimeException )
@@ -219,7 +219,7 @@ void RecordParser::setFragmentHandler( const ::rtl::Reference< FragmentHandler >
     // build record infos
     maStartMap.clear();
     maEndMap.clear();
-    const RecordInfo* pRecs = mxHandler.is() ? mxHandler->getRecordInfos() : 0;
+    const RecordInfo* pRecs = mxHandler.is() ? mxHandler->getRecordInfos() : nullptr;
     OSL_ENSURE( pRecs, "RecordInfoProvider::RecordInfoProvider - missing record list" );
     for( ; pRecs && pRecs->mnStartRecId >= 0; ++pRecs )
     {
@@ -312,13 +312,13 @@ void RecordParser::parseStream( const RecordInputSource& rInputSource ) throw( S
 const RecordInfo* RecordParser::getStartRecordInfo( sal_Int32 nRecId ) const
 {
     RecordInfoMap::const_iterator aIt = maStartMap.find( nRecId );
-    return (aIt == maStartMap.end()) ? 0 : &aIt->second;
+    return (aIt == maStartMap.end()) ? nullptr : &aIt->second;
 }
 
 const RecordInfo* RecordParser::getEndRecordInfo( sal_Int32 nRecId ) const
 {
     RecordInfoMap::const_iterator aIt = maEndMap.find( nRecId );
-    return (aIt == maEndMap.end()) ? 0 : &aIt->second;
+    return (aIt == maEndMap.end()) ? nullptr : &aIt->second;
 }
 
 } // namespace core

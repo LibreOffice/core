@@ -61,7 +61,7 @@ void AxAlignedInputStream::seek( sal_Int64 nPos )
 
 void AxAlignedInputStream::close()
 {
-    mpInStrm = 0;
+    mpInStrm = nullptr;
     mbEof = true;
 }
 

@@ -532,7 +532,7 @@ ShapeContextHandler::getShape() throw (uno::RuntimeException, std::exception)
                 mxWpgContext.clear();
             }
         }
-        else if (mpShape.get() != NULL)
+        else if (mpShape.get() != nullptr)
         {
             basegfx::B2DHomMatrix aTransformation;
             mpShape->addShape(*mxFilterBase, mpThemePtr.get(), xShapes, aTransformation, mpShape->getFillProperties() );

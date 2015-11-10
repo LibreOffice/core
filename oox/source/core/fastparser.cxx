@@ -65,7 +65,7 @@ InputStreamCloseGuard::~InputStreamCloseGuard()
 
 FastParser::FastParser( const Reference< XComponentContext >& rxContext ) throw( RuntimeException ) :
     mrNamespaceMap( StaticNamespaceMap::get() ),
-    mpParser(NULL)
+    mpParser(nullptr)
 {
     // create a fast parser instance
     mxParser = css::xml::sax::FastParser::create(rxContext);

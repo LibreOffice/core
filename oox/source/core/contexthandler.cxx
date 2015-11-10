@@ -102,12 +102,12 @@ void ContextHandler::endUnknownElement( const OUString&, const OUString& ) throw
 
 Reference< XFastContextHandler > ContextHandler::createFastChildContext( sal_Int32, const Reference< XFastAttributeList >& ) throw( SAXException, RuntimeException, std::exception )
 {
-    return 0;
+    return nullptr;
 }
 
 Reference< XFastContextHandler > ContextHandler::createUnknownChildContext( const OUString&, const OUString&, const Reference< XFastAttributeList >& ) throw( SAXException, RuntimeException, std::exception )
 {
-    return 0;
+    return nullptr;
 }
 
 void ContextHandler::characters( const OUString& ) throw( SAXException, RuntimeException, std::exception )
@@ -118,7 +118,7 @@ void ContextHandler::characters( const OUString& ) throw( SAXException, RuntimeE
 
 ContextHandlerRef ContextHandler::createRecordContext( sal_Int32, SequenceInputStream& )
 {
-    return 0;
+    return nullptr;
 }
 
 void ContextHandler::startRecord( sal_Int32, SequenceInputStream& )

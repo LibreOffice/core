@@ -110,7 +110,7 @@ public:
     css::uno::Reference< css::graphic::XGraphic >
                         importGraphic(
                             const css::uno::Reference< css::io::XInputStream >& rxInStrm,
-                            const WMF_EXTERNALHEADER* pExtHeader = NULL ) const;
+                            const WMF_EXTERNALHEADER* pExtHeader = nullptr ) const;
 
     /** Imports a graphic from the passed binary memory block. */
     css::uno::Reference< css::graphic::XGraphic >
@@ -120,7 +120,7 @@ public:
     css::uno::Reference< css::graphic::XGraphic >
                         importEmbeddedGraphic(
                             const OUString& rStreamName,
-                            const WMF_EXTERNALHEADER* pExtHeader = NULL ) const;
+                            const WMF_EXTERNALHEADER* pExtHeader = nullptr ) const;
 
     /** Creates a persistent graphic object from the passed graphic.
         @return  The URL of the created and internally cached graphic object. */
@@ -131,7 +131,7 @@ public:
         @return  The URL of the created and internally cached graphic object. */
     OUString     importGraphicObject(
                             const css::uno::Reference< css::io::XInputStream >& rxInStrm,
-                            const WMF_EXTERNALHEADER* pExtHeader = NULL ) const;
+                            const WMF_EXTERNALHEADER* pExtHeader = nullptr ) const;
 
     /** Creates a persistent graphic object from the passed binary memory block.
         @return  The URL of the created and internally cached graphic object. */

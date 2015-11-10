@@ -67,7 +67,7 @@ const TextCharacterProperties* Theme::getFontStyle( sal_Int32 nSchemeType ) cons
 
 const TextFont* Theme::resolveFont( const OUString& rName ) const
 {
-    const TextCharacterProperties* pCharProps = 0;
+    const TextCharacterProperties* pCharProps = nullptr;
     /*  Resolves the following names:
         +mj-lt, +mj-ea, +mj-cs  --  major Latin, Asian, Complex font
         +mn-lt, +mn-ea, +mn-cs  --  minor Latin, Asian, Complex font
@@ -103,7 +103,7 @@ const TextFont* Theme::resolveFont( const OUString& rName ) const
         else if (rName == "minorEastAsia" || rName == "majorEastAsia")
             return &pCharProps->maAsianFont;
     }
-    return 0;
+    return nullptr;
 }
 
 } // namespace drawingml

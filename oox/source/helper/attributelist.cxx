@@ -107,16 +107,16 @@ sal_Int32 AttributeConversion::decodeIntegerHex( const OUString& rValue )
 
 AttributeList::AttributeList( const Reference< XFastAttributeList >& rxAttribs ) :
     mxAttribs( rxAttribs ),
-    mpAttribList( NULL )
+    mpAttribList( nullptr )
 {
     OSL_ENSURE( mxAttribs.is(), "AttributeList::AttributeList - missing attribute list interface" );
 }
 
 sax_fastparser::FastAttributeList *AttributeList::getAttribList() const
 {
-    if( mpAttribList == NULL )
+    if( mpAttribList == nullptr )
     {
-        assert( dynamic_cast< sax_fastparser::FastAttributeList *>( mxAttribs.get() ) != NULL );
+        assert( dynamic_cast< sax_fastparser::FastAttributeList *>( mxAttribs.get() ) != nullptr );
         mpAttribList = static_cast< sax_fastparser::FastAttributeList *>( mxAttribs.get() );
     }
     return mpAttribList;
@@ -263,10 +263,10 @@ OUString AttributeList::getXString( sal_Int32 nAttrToken, const OUString& rDefau
 
 const char* AttributeList::getChar( sal_Int32 nAttrToken ) const
 {
-    const char* p = NULL;
+    const char* p = nullptr;
     bool bValid = getAttribList()->getAsChar(nAttrToken, p);
     if (!bValid)
-        p = NULL;
+        p = nullptr;
 
     return p;
 }

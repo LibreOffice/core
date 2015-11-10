@@ -129,10 +129,10 @@ struct AutoFormatEntry
 };
 
 #define AUTOFORMAT_COLOR( first, last, themed_style, color_token ) \
-    { first, last, themed_style, color_token, XML_TOKEN_INVALID, 0, 100, 0, false }
+    { first, last, themed_style, color_token, XML_TOKEN_INVALID, 0, 100, nullptr, false }
 
 #define AUTOFORMAT_COLORMOD( first, last, themed_style, color_token, mod_token, mod_value ) \
-    { first, last, themed_style, color_token, mod_token, mod_value, 100, 0, false }
+    { first, last, themed_style, color_token, mod_token, mod_value, 100, nullptr, false }
 
 #define AUTOFORMAT_ACCENTSMOD( first, themed_style, mod_token, mod_value ) \
     AUTOFORMAT_COLORMOD( first,     first,     themed_style, XML_accent1, mod_token, mod_value ), \
@@ -146,7 +146,7 @@ struct AutoFormatEntry
     { first, last, themed_style, XML_TOKEN_INVALID, XML_TOKEN_INVALID, 0, line_width, pattern, false }
 
 #define AUTOFORMAT_FADED( first, last, themed_style, color_token, line_width ) \
-    { first, last, themed_style, color_token, XML_TOKEN_INVALID, 0, line_width, 0, true }
+    { first, last, themed_style, color_token, XML_TOKEN_INVALID, 0, line_width, nullptr, true }
 
 #define AUTOFORMAT_FADEDACCENTS( first, themed_style, line_width ) \
     AUTOFORMAT_FADED( first,     first,     themed_style, XML_accent1, line_width ), \
@@ -411,7 +411,7 @@ const AutoFormatEntry* lclGetAutoFormatEntry( const AutoFormatEntry* pEntries, s
     for( ; pEntries && (pEntries->mnFirstStyleIdx >= 0); ++pEntries )
         if( (pEntries->mnFirstStyleIdx <= nStyle) && (nStyle <= pEntries->mnLastStyleIdx) )
             return pEntries;
-    return 0;
+    return nullptr;
 }
 
 struct AutoTextEntry
@@ -460,7 +460,7 @@ const AutoTextEntry* lclGetAutoTextEntry( const AutoTextEntry* pEntries, sal_Int
     for( ; pEntries && (pEntries->mnFirstStyleIdx >= 0); ++pEntries )
         if( (pEntries->mnFirstStyleIdx <= nStyle) && (nStyle <= pEntries->mnLastStyleIdx) )
             return pEntries;
-    return 0;
+    return nullptr;
 }
 
 // These PropIds arrays will be indexed into using a ShapePropertyId enum (include/oox/drawingml/shapepropertymap.hxx)
@@ -541,36 +541,36 @@ struct ObjectTypeFormatEntry
     { obj_type, prop_type, auto_lines, auto_fills, auto_effects, auto_texts, true }
 
 #define TYPEFORMAT_LINE( obj_type, prop_type, auto_texts, auto_lines ) \
-    { obj_type, prop_type, auto_lines, 0, 0, auto_texts, false }
+    { obj_type, prop_type, auto_lines, nullptr, nullptr, auto_texts, false }
 
 static const ObjectTypeFormatEntry spObjTypeFormatEntries[] =
 {
     //                object type                property info      auto text          auto line            auto fill              auto effect
-    TYPEFORMAT_FRAME( OBJECTTYPE_CHARTSPACE,     &saCommonPropInfo, 0,                 spNoFormats,         spChartSpaceFill,      0 /* eq to Ch2 */ ),
-    TYPEFORMAT_FRAME( OBJECTTYPE_CHARTTITLE,     &saCommonPropInfo, spChartTitleTexts, 0 /* eq to Ch2 */,   0 /* eq to Ch2 */,     0 /* eq to Ch2 */ ),
-    TYPEFORMAT_FRAME( OBJECTTYPE_LEGEND,         &saCommonPropInfo, spOtherTexts,      spNoFormats,         spNoFormats,           0 /* eq to Ch2 */ ),
-    TYPEFORMAT_FRAME( OBJECTTYPE_PLOTAREA2D,     &saCommonPropInfo, 0,                 0 /* eq to Ch2 */,   spPlotArea2dFills,     0 /* eq to Ch2 */ ),
-    TYPEFORMAT_FRAME( OBJECTTYPE_PLOTAREA3D,     &saCommonPropInfo, 0,                 0 /* eq to Ch2 */,   0 /* eq to Ch2 */,     0 /* eq to Ch2 */ ),
-    TYPEFORMAT_FRAME( OBJECTTYPE_WALL,           &saCommonPropInfo, 0,                 spWallFloorLines,    spWallFloorFills,      0 /* eq to Ch2 */ ),
-    TYPEFORMAT_FRAME( OBJECTTYPE_FLOOR,          &saCommonPropInfo, 0,                 spWallFloorLines,    spWallFloorFills,      0 /* eq to Ch2 */ ),
+    TYPEFORMAT_FRAME( OBJECTTYPE_CHARTSPACE,     &saCommonPropInfo, nullptr,                 spNoFormats,         spChartSpaceFill,      nullptr /* eq to Ch2 */ ),
+    TYPEFORMAT_FRAME( OBJECTTYPE_CHARTTITLE,     &saCommonPropInfo, spChartTitleTexts, nullptr /* eq to Ch2 */,   nullptr /* eq to Ch2 */,     nullptr /* eq to Ch2 */ ),
+    TYPEFORMAT_FRAME( OBJECTTYPE_LEGEND,         &saCommonPropInfo, spOtherTexts,      spNoFormats,         spNoFormats,           nullptr /* eq to Ch2 */ ),
+    TYPEFORMAT_FRAME( OBJECTTYPE_PLOTAREA2D,     &saCommonPropInfo, nullptr,                 nullptr /* eq to Ch2 */,   spPlotArea2dFills,     nullptr /* eq to Ch2 */ ),
+    TYPEFORMAT_FRAME( OBJECTTYPE_PLOTAREA3D,     &saCommonPropInfo, nullptr,                 nullptr /* eq to Ch2 */,   nullptr /* eq to Ch2 */,     nullptr /* eq to Ch2 */ ),
+    TYPEFORMAT_FRAME( OBJECTTYPE_WALL,           &saCommonPropInfo, nullptr,                 spWallFloorLines,    spWallFloorFills,      nullptr /* eq to Ch2 */ ),
+    TYPEFORMAT_FRAME( OBJECTTYPE_FLOOR,          &saCommonPropInfo, nullptr,                 spWallFloorLines,    spWallFloorFills,      nullptr /* eq to Ch2 */ ),
     TYPEFORMAT_LINE(  OBJECTTYPE_AXIS,           &saCommonPropInfo, spOtherTexts,      spAxisLines ),
-    TYPEFORMAT_FRAME( OBJECTTYPE_AXISTITLE,      &saCommonPropInfo, spAxisTitleTexts,  0 /* eq to Ch2 */,   0 /* eq to Ch2 */,     0 /* eq to Ch2 */ ),
-    TYPEFORMAT_FRAME( OBJECTTYPE_AXISUNIT,       &saCommonPropInfo, spAxisTitleTexts,  0 /* eq in Ch2 */,   0 /* eq in Ch2 */,     0 /* eq in Ch2 */ ),
-    TYPEFORMAT_LINE(  OBJECTTYPE_MAJORGRIDLINE,  &saCommonPropInfo, 0,                 spMajorGridLines ),
-    TYPEFORMAT_LINE(  OBJECTTYPE_MINORGRIDLINE,  &saCommonPropInfo, 0,                 spMinorGridLines ),
-    TYPEFORMAT_LINE(  OBJECTTYPE_LINEARSERIES2D, &saLinearPropInfo, 0,                 spLinearSeriesLines ),
-    TYPEFORMAT_FRAME( OBJECTTYPE_FILLEDSERIES2D, &saFilledPropInfo, 0,                 spFilledSeriesLines, spFilledSeries2dFills, spFilledSeriesEffects ),
-    TYPEFORMAT_FRAME( OBJECTTYPE_FILLEDSERIES3D, &saFilledPropInfo, 0,                 spFilledSeriesLines, spFilledSeries3dFills, spFilledSeriesEffects ),
-    TYPEFORMAT_FRAME( OBJECTTYPE_DATALABEL,      &saCommonPropInfo, spOtherTexts,      0 /* eq to Ch2 */,   0 /* eq to Ch2 */,     0 /* eq to Ch2 */ ),
-    TYPEFORMAT_LINE(  OBJECTTYPE_TRENDLINE,      &saCommonPropInfo, 0,                 spOtherLines ),
-    TYPEFORMAT_FRAME( OBJECTTYPE_TRENDLINELABEL, &saCommonPropInfo, spOtherTexts,      0 /* eq to Ch2 */,   0 /* eq to Ch2 */,     0 /* eq to Ch2 */ ),
-    TYPEFORMAT_LINE(  OBJECTTYPE_ERRORBAR,       &saCommonPropInfo, 0,                 spOtherLines ),
-    TYPEFORMAT_LINE(  OBJECTTYPE_SERLINE,        &saCommonPropInfo, 0,                 spOtherLines ),
-    TYPEFORMAT_LINE(  OBJECTTYPE_LEADERLINE,     &saCommonPropInfo, 0,                 spOtherLines ),
-    TYPEFORMAT_LINE(  OBJECTTYPE_DROPLINE,       &saCommonPropInfo, 0,                 spOtherLines ),
-    TYPEFORMAT_LINE(  OBJECTTYPE_HILOLINE,       &saLinearPropInfo, 0,                 spOtherLines ),
-    TYPEFORMAT_FRAME( OBJECTTYPE_UPBAR,          &saCommonPropInfo, 0,                 spUpDownBarLines,    spUpBarFills,          spUpDownBarEffects ),
-    TYPEFORMAT_FRAME( OBJECTTYPE_DOWNBAR,        &saCommonPropInfo, 0,                 spUpDownBarLines,    spDownBarFills,        spUpDownBarEffects ),
+    TYPEFORMAT_FRAME( OBJECTTYPE_AXISTITLE,      &saCommonPropInfo, spAxisTitleTexts,  nullptr /* eq to Ch2 */,   nullptr /* eq to Ch2 */,     nullptr /* eq to Ch2 */ ),
+    TYPEFORMAT_FRAME( OBJECTTYPE_AXISUNIT,       &saCommonPropInfo, spAxisTitleTexts,  nullptr /* eq in Ch2 */,   nullptr /* eq in Ch2 */,     nullptr /* eq in Ch2 */ ),
+    TYPEFORMAT_LINE(  OBJECTTYPE_MAJORGRIDLINE,  &saCommonPropInfo, nullptr,                 spMajorGridLines ),
+    TYPEFORMAT_LINE(  OBJECTTYPE_MINORGRIDLINE,  &saCommonPropInfo, nullptr,                 spMinorGridLines ),
+    TYPEFORMAT_LINE(  OBJECTTYPE_LINEARSERIES2D, &saLinearPropInfo, nullptr,                 spLinearSeriesLines ),
+    TYPEFORMAT_FRAME( OBJECTTYPE_FILLEDSERIES2D, &saFilledPropInfo, nullptr,                 spFilledSeriesLines, spFilledSeries2dFills, spFilledSeriesEffects ),
+    TYPEFORMAT_FRAME( OBJECTTYPE_FILLEDSERIES3D, &saFilledPropInfo, nullptr,                 spFilledSeriesLines, spFilledSeries3dFills, spFilledSeriesEffects ),
+    TYPEFORMAT_FRAME( OBJECTTYPE_DATALABEL,      &saCommonPropInfo, spOtherTexts,      nullptr /* eq to Ch2 */,   nullptr /* eq to Ch2 */,     nullptr /* eq to Ch2 */ ),
+    TYPEFORMAT_LINE(  OBJECTTYPE_TRENDLINE,      &saCommonPropInfo, nullptr,                 spOtherLines ),
+    TYPEFORMAT_FRAME( OBJECTTYPE_TRENDLINELABEL, &saCommonPropInfo, spOtherTexts,      nullptr /* eq to Ch2 */,   nullptr /* eq to Ch2 */,     nullptr /* eq to Ch2 */ ),
+    TYPEFORMAT_LINE(  OBJECTTYPE_ERRORBAR,       &saCommonPropInfo, nullptr,                 spOtherLines ),
+    TYPEFORMAT_LINE(  OBJECTTYPE_SERLINE,        &saCommonPropInfo, nullptr,                 spOtherLines ),
+    TYPEFORMAT_LINE(  OBJECTTYPE_LEADERLINE,     &saCommonPropInfo, nullptr,                 spOtherLines ),
+    TYPEFORMAT_LINE(  OBJECTTYPE_DROPLINE,       &saCommonPropInfo, nullptr,                 spOtherLines ),
+    TYPEFORMAT_LINE(  OBJECTTYPE_HILOLINE,       &saLinearPropInfo, nullptr,                 spOtherLines ),
+    TYPEFORMAT_FRAME( OBJECTTYPE_UPBAR,          &saCommonPropInfo, nullptr,                 spUpDownBarLines,    spUpBarFills,          spUpDownBarEffects ),
+    TYPEFORMAT_FRAME( OBJECTTYPE_DOWNBAR,        &saCommonPropInfo, nullptr,                 spUpDownBarLines,    spDownBarFills,        spUpDownBarEffects ),
     TYPEFORMAT_LINE(  OBJECTTYPE_DATATABLE,      &saCommonPropInfo, spOtherTexts,      spDataTableLines )
 };
 
@@ -904,7 +904,7 @@ namespace {
 const TextCharacterProperties* lclGetTextProperties( const ModelRef< TextBody >& rxTextProp )
 {
     return (rxTextProp.is() && !rxTextProp->getParagraphs().empty()) ?
-        &rxTextProp->getParagraphs().front()->getProperties().getTextCharacterProperties() : 0;
+        &rxTextProp->getParagraphs().front()->getProperties().getTextCharacterProperties() : nullptr;
 }
 
 } // namespace
@@ -974,7 +974,7 @@ void ObjectTypeFormatter::convertTextFormatting( PropertySet& rPropSet, const Mo
 
 void ObjectTypeFormatter::convertFormatting( PropertySet& rPropSet, const ModelRef< Shape >& rxShapeProp, const ModelRef< TextBody >& rxTextProp )
 {
-    convertFrameFormatting( rPropSet, rxShapeProp, 0, -1 );
+    convertFrameFormatting( rPropSet, rxShapeProp, nullptr, -1 );
     convertTextFormatting( rPropSet, rxTextProp );
 }
 
@@ -987,7 +987,7 @@ void ObjectTypeFormatter::convertAutomaticFill( PropertySet& rPropSet, sal_Int32
 {
     ShapePropertyMap aPropMap( mrModelObjHelper, *mrEntry.mpPropInfo );
     ModelRef< Shape > xShapeProp;
-    maFillFormatter.convertFormatting( aPropMap, xShapeProp, 0, nSeriesIdx );
+    maFillFormatter.convertFormatting( aPropMap, xShapeProp, nullptr, nSeriesIdx );
     rPropSet.setProperties( aPropMap );
 }
 
@@ -1041,7 +1041,7 @@ sal_Int32 ObjectFormatter::getMaxSeriesIndex() const
 void ObjectFormatter::convertFrameFormatting( PropertySet& rPropSet, const ModelRef< Shape >& rxShapeProp, ObjectType eObjType, sal_Int32 nSeriesIdx )
 {
     if( ObjectTypeFormatter* pFormat = mxData->getTypeFormatter( eObjType ) )
-        pFormat->convertFrameFormatting( rPropSet, rxShapeProp, 0, nSeriesIdx );
+        pFormat->convertFrameFormatting( rPropSet, rxShapeProp, nullptr, nSeriesIdx );
 }
 
 void ObjectFormatter::convertFrameFormatting( PropertySet& rPropSet, const ModelRef< Shape >& rxShapeProp, const PictureOptionsModel& rPicOptions, ObjectType eObjType, sal_Int32 nSeriesIdx )

@@ -61,7 +61,7 @@ int lclSgn( double nVal )
 Reference< XLabeledDataSequence > lclCreateLabeledDataSequence(
         const ConverterRoot& rParent,
         DataSourceModel* pValues, const OUString& rRole,
-        TextModel* pTitle = 0 )
+        TextModel* pTitle = nullptr )
 {
     // create data sequence for values
     Reference< XDataSequence > xValueSeq;
@@ -703,7 +703,7 @@ Reference< XLabeledDataSequence > SeriesConverter::createLabeledDataSequence(
         SeriesModel::SourceType eSourceType, const OUString& rRole, bool bUseTextLabel )
 {
     DataSourceModel* pValues = mrModel.maSources.get( eSourceType ).get();
-    TextModel* pTitle = bUseTextLabel ? mrModel.mxText.get() : 0;
+    TextModel* pTitle = bUseTextLabel ? mrModel.mxText.get() : nullptr;
     return lclCreateLabeledDataSequence( *this, pValues, rRole, pTitle );
 }
 

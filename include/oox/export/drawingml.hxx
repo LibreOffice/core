@@ -125,7 +125,7 @@ protected:
     static bool EqualGradients( css::awt::Gradient aGradient1, css::awt::Gradient aGradient2 );
 
 public:
-    DrawingML( ::sax_fastparser::FSHelperPtr pFS, ::oox::core::XmlFilterBase* pFB = NULL, DocumentType eDocumentType = DOCUMENT_PPTX, DMLTextExport* pTextExport = 0 )
+    DrawingML( ::sax_fastparser::FSHelperPtr pFS, ::oox::core::XmlFilterBase* pFB = nullptr, DocumentType eDocumentType = DOCUMENT_PPTX, DMLTextExport* pTextExport = nullptr )
         : meDocumentType( eDocumentType ), mpTextExport(pTextExport), mpFS( pFS ), mpFB( pFB ), mbIsBackgroundDark( false ) {}
     void SetFS( ::sax_fastparser::FSHelperPtr pFS ) { mpFS = pFS; }
     ::sax_fastparser::FSHelperPtr GetFS() { return mpFS; }
@@ -168,7 +168,7 @@ public:
     void WriteLinespacing( css::style::LineSpacing& rLineSpacing );
 
     OUString WriteBlip( css::uno::Reference< css::beans::XPropertySet > rXPropSet,
-            const OUString& rURL, bool bRelPathToMedia = false , const Graphic *pGraphic=NULL );
+            const OUString& rURL, bool bRelPathToMedia = false , const Graphic *pGraphic=nullptr );
     void WriteBlipMode( css::uno::Reference< css::beans::XPropertySet > rXPropSet, const OUString& rURL );
 
     void WriteShapeTransformation( css::uno::Reference< css::drawing::XShape > rXShape,
@@ -213,7 +213,7 @@ public:
                                         const css::uno::Reference< css::io::XOutputStream >& xParentRelation,
                                         const char* sContentType,
                                         const char* sRelationshipType,
-                                        OUString* pRelationshipId = NULL );
+                                        OUString* pRelationshipId = nullptr );
 
 };
 

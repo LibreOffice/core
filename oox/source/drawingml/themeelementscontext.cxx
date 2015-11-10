@@ -65,7 +65,7 @@ ContextHandlerRef FillStyleListContext::onCreateContext( sal_Int32 nElement, con
             mrFillStyleList.push_back( FillPropertiesPtr( new FillProperties ) );
             return FillPropertiesContext::createFillContext( *this, nElement, rAttribs, *mrFillStyleList.back() );
     }
-    return 0;
+    return nullptr;
 }
 
 class LineStyleListContext : public ContextHandler2
@@ -92,7 +92,7 @@ ContextHandlerRef LineStyleListContext::onCreateContext( sal_Int32 nElement, con
             mrLineStyleList.push_back( LinePropertiesPtr( new LineProperties ) );
             return new LinePropertiesContext( *this, rAttribs, *mrLineStyleList.back() );
     }
-    return 0;
+    return nullptr;
 }
 
 class EffectStyleListContext : public ContextHandler2
@@ -124,7 +124,7 @@ ContextHandlerRef EffectStyleListContext::onCreateContext( sal_Int32 nElement, c
                 return new EffectPropertiesContext( *this, *mrEffectStyleList.back() );
             break;
     }
-    return 0;
+    return nullptr;
 }
 
 class FontSchemeContext : public ContextHandler2
@@ -171,7 +171,7 @@ ContextHandlerRef FontSchemeContext::onCreateContext( sal_Int32 nElement, const 
                 mxCharProps->maComplexFont.setAttributes( rAttribs );
         break;
     }
-    return 0;
+    return nullptr;
 }
 
 void FontSchemeContext::onEndElement()
@@ -214,7 +214,7 @@ ContextHandlerRef ThemeElementsContext::onCreateContext( sal_Int32 nElement, con
         case A_TOKEN( bgFillStyleLst ): // CT_BackgroundFillStyleList
             return new FillStyleListContext( *this, mrTheme.getBgFillStyleList() );
     }
-    return 0;
+    return nullptr;
 }
 
 } // namespace drawingml

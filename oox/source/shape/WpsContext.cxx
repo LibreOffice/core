@@ -222,7 +222,7 @@ oox::core::ContextHandlerRef WpsContext::onCreateContext(sal_Int32 nElementToken
         SAL_WARN("oox", "WpsContext::createFastChildContext: unhandled element: " << getBaseToken(nElementToken));
         break;
     }
-    return 0;
+    return nullptr;
 }
 
 }

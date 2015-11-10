@@ -52,28 +52,28 @@ ContextHandlerRef View3DContext::onCreateContext( sal_Int32 nElement, const Attr
             {
                 case C_TOKEN( depthPercent ):
                     mrModel.mnDepthPercent = rAttribs.getInteger( XML_val, 100 );
-                    return 0;
+                    return nullptr;
                 case C_TOKEN( hPercent ):
                     mrModel.monHeightPercent = rAttribs.getInteger( XML_val, 100 );
-                    return 0;
+                    return nullptr;
                 case C_TOKEN( perspective ):
                     mrModel.mnPerspective = rAttribs.getInteger( XML_val, 30 );
-                    return 0;
+                    return nullptr;
                 case C_TOKEN( rAngAx ):
                     mrModel.mbRightAngled = rAttribs.getBool( XML_val, !bMSO2007Doc );
-                    return 0;
+                    return nullptr;
                 case C_TOKEN( rotX ):
                     // default value dependent on chart type
                     mrModel.monRotationX = rAttribs.getInteger( XML_val );
-                    return 0;
+                    return nullptr;
                 case C_TOKEN( rotY ):
                     // default value dependent on chart type
                     mrModel.monRotationY = rAttribs.getInteger( XML_val );
-                    return 0;
+                    return nullptr;
             }
         break;
     }
-    return 0;
+    return nullptr;
 }
 
 WallFloorContext::WallFloorContext( ContextHandler2Helper& rParent, WallFloorModel& rModel ) :
@@ -102,7 +102,7 @@ ContextHandlerRef WallFloorContext::onCreateContext( sal_Int32 nElement, const A
             }
         break;
     }
-    return 0;
+    return nullptr;
 }
 
 DataTableContext::DataTableContext( ContextHandler2Helper& rParent, DataTableModel& rModel ) :
@@ -133,7 +133,7 @@ ContextHandlerRef DataTableContext::onCreateContext( sal_Int32 nElement, const A
             }
         break;
     }
-    return 0;
+    return nullptr;
 }
 
 PlotAreaContext::PlotAreaContext( ContextHandler2Helper& rParent, PlotAreaModel& rModel ) :
@@ -196,7 +196,7 @@ ContextHandlerRef PlotAreaContext::onCreateContext( sal_Int32 nElement, const At
             }
         break;
     }
-    return 0;
+    return nullptr;
 }
 
 } // namespace chart

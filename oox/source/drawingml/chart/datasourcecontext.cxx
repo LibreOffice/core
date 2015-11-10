@@ -38,13 +38,13 @@ using namespace ::com::sun::star;
 DoubleSequenceContext::DoubleSequenceContext( ContextHandler2Helper& rParent, DataSequenceModel& rModel ) :
     DataSequenceContextBase( rParent, rModel ),
     mnPtIndex( -1 ),
-    mpNumberFormatter( NULL )
+    mpNumberFormatter( nullptr )
 {
 }
 
 DoubleSequenceContext::~DoubleSequenceContext()
 {
-    if( mpNumberFormatter != NULL )
+    if( mpNumberFormatter != nullptr )
     {
         delete mpNumberFormatter;
     }
@@ -71,7 +71,7 @@ ContextHandlerRef DoubleSequenceContext::onCreateContext( sal_Int32 nElement, co
                     return this;
                 case C_TOKEN( ptCount ):
                     mrModel.mnPointCount = rAttribs.getInteger( XML_val, -1 );
-                    return 0;
+                    return nullptr;
                 case C_TOKEN( pt ):
                     mnPtIndex = rAttribs.getInteger( XML_idx, -1 );
                     return this;
@@ -86,7 +86,7 @@ ContextHandlerRef DoubleSequenceContext::onCreateContext( sal_Int32 nElement, co
             }
         break;
     }
-    return 0;
+    return nullptr;
 }
 
 void DoubleSequenceContext::onCharacters( const OUString& rChars )
@@ -130,7 +130,7 @@ void DoubleSequenceContext::onCharacters( const OUString& rChars )
                         else
                         {
                             double fValue = rChars.toDouble();
-                            Color* pColor = NULL;
+                            Color* pColor = nullptr;
                             OUString aFormattedValue;
                             pNumFrmt->GetOutputString( fValue, nKey, aFormattedValue, &pColor );
                             mrModel.maData[ mnPtIndex ] <<= aFormattedValue;
@@ -153,7 +153,7 @@ void DoubleSequenceContext::onCharacters( const OUString& rChars )
 
 SvNumberFormatter* DoubleSequenceContext::getNumberFormatter()
 {
-    if( mpNumberFormatter == NULL )
+    if( mpNumberFormatter == nullptr )
     {
         uno::Reference<uno::XComponentContext> rContext =
                                 this->getFilter().getComponentContext();
@@ -201,7 +201,7 @@ ContextHandlerRef StringSequenceContext::onCreateContext( sal_Int32 nElement, co
             {
                 case C_TOKEN( ptCount ):
                     mrModel.mnPointCount = rAttribs.getInteger( XML_val, -1 );
-                    return 0;
+                    return nullptr;
                 case C_TOKEN( pt ):
                     mnPtIndex = rAttribs.getInteger( XML_idx, -1 );
                     return this;
@@ -216,7 +216,7 @@ ContextHandlerRef StringSequenceContext::onCreateContext( sal_Int32 nElement, co
             }
         break;
     }
-    return 0;
+    return nullptr;
 }
 
 void StringSequenceContext::onCharacters( const OUString& rChars )
@@ -277,7 +277,7 @@ ContextHandlerRef DataSourceContext::onCreateContext( sal_Int32 nElement, const 
             }
         break;
     }
-    return 0;
+    return nullptr;
 }
 
 } // namespace chart

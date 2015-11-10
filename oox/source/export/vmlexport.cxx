@@ -49,16 +49,16 @@ static const sal_Int32 Tag_Container = 44444;
 static const sal_Int32 Tag_Commit = 44445;
 
 VMLExport::VMLExport( ::sax_fastparser::FSHelperPtr pSerializer, VMLTextExport* pTextExport )
-    : EscherEx( EscherExGlobalRef(new EscherExGlobal(0)), 0, /*bOOXML=*/true )
+    : EscherEx( EscherExGlobalRef(new EscherExGlobal(0)), nullptr, /*bOOXML=*/true )
     , m_pSerializer( pSerializer )
     , m_pTextExport( pTextExport )
     , m_eHOri( 0 )
     , m_eVOri( 0 )
     , m_eHRel( 0 )
     , m_eVRel( 0 )
-    , m_pNdTopLeft( 0 )
-    , m_pSdrObject( 0 )
-    , m_pShapeAttrList( NULL )
+    , m_pNdTopLeft( nullptr )
+    , m_pSdrObject( nullptr )
+    , m_pShapeAttrList( nullptr )
     , m_nShapeType( ESCHER_ShpInst_Nil )
     , m_nShapeFlags(0)
     , m_pShapeStyle( new OStringBuffer( 200 ) )
@@ -75,9 +75,9 @@ void VMLExport::SetFS( ::sax_fastparser::FSHelperPtr pSerializer )
 
 VMLExport::~VMLExport()
 {
-    delete mpOutStrm, mpOutStrm = NULL;
-    delete m_pShapeStyle, m_pShapeStyle = NULL;
-    delete[] m_pShapeTypeWritten, m_pShapeTypeWritten = NULL;
+    delete mpOutStrm, mpOutStrm = nullptr;
+    delete m_pShapeStyle, m_pShapeStyle = nullptr;
+    delete[] m_pShapeTypeWritten, m_pShapeTypeWritten = nullptr;
 }
 
 void VMLExport::OpenContainer( sal_uInt16 nEscherContainer, int nRecInstance )
@@ -118,7 +118,7 @@ void VMLExport::CloseContainer()
 
         // cleanup
         m_nShapeType = ESCHER_ShpInst_Nil;
-        m_pShapeAttrList = NULL;
+        m_pShapeAttrList = nullptr;
     }
 
     EscherEx::CloseContainer();
@@ -211,7 +211,7 @@ static void impl_AddArrowHead( sax_fastparser::FastAttributeList *pAttrList, sal
     if ( !pAttrList )
         return;
 
-    const char *pArrowHead = NULL;
+    const char *pArrowHead = nullptr;
     switch ( nValue )
     {
         case ESCHER_LineNoEnd:           pArrowHead = "none"; break;
@@ -231,7 +231,7 @@ static void impl_AddArrowLength( sax_fastparser::FastAttributeList *pAttrList, s
     if ( !pAttrList )
         return;
 
-    const char *pArrowLength = NULL;
+    const char *pArrowLength = nullptr;
     switch ( nValue )
     {
         case ESCHER_LineShortArrow:     pArrowLength = "short"; break;
@@ -248,7 +248,7 @@ static void impl_AddArrowWidth( sax_fastparser::FastAttributeList *pAttrList, sa
     if ( !pAttrList )
         return;
 
-    const char *pArrowWidth = NULL;
+    const char *pArrowWidth = nullptr;
     switch ( nValue )
     {
         case ESCHER_LineNarrowArrow:      pArrowWidth = "narrow"; break;
@@ -280,7 +280,7 @@ static void impl_AddColor( sax_fastparser::FastAttributeList *pAttrList, sal_Int
 
     nColor = ( ( nColor & 0xFF ) << 16 ) + ( nColor & 0xFF00 ) + ( ( nColor & 0xFF0000 ) >> 16 );
 
-    const char *pColor = NULL;
+    const char *pColor = nullptr;
     char pRgbColor[10];
     switch ( nColor )
     {
@@ -383,7 +383,7 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const Rectangle& rRect 
         {
             case ESCHER_Prop_WrapText: // 133
                 {
-                    const char *pWrapType = NULL;
+                    const char *pWrapType = nullptr;
                     switch ( it->nPropValue )
                     {
                         case ESCHER_WrapSquare:
@@ -607,7 +607,7 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const Rectangle& rRect 
                     {
                         if ( rProps.GetOpt( ESCHER_Prop_fillType, nValue ) )
                         {
-                            const char *pFillType = NULL;
+                            const char *pFillType = nullptr;
                             switch ( nValue )
                             {
                                 case ESCHER_FillSolid:       pFillType = "solid"; break;
@@ -677,7 +677,7 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const Rectangle& rRect 
 
                     if ( rProps.GetOpt( ESCHER_Prop_lineDashing, nValue ) )
                     {
-                        const char *pDashStyle = NULL;
+                        const char *pDashStyle = nullptr;
                         switch ( nValue )
                         {
                             case ESCHER_LineSolid:             pDashStyle = "solid"; break;
@@ -716,7 +716,7 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const Rectangle& rRect 
 
                     if ( rProps.GetOpt( ESCHER_Prop_lineJoinStyle, nValue ) )
                     {
-                        const char *pJoinStyle = NULL;
+                        const char *pJoinStyle = nullptr;
                         switch ( nValue )
                         {
                             case ESCHER_LineJoinBevel: pJoinStyle = "bevel"; break;
@@ -729,7 +729,7 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const Rectangle& rRect 
 
                     if ( rProps.GetOpt( ESCHER_Prop_lineEndCapStyle, nValue ) )
                     {
-                        const char *pEndCap = NULL;
+                        const char *pEndCap = nullptr;
                         switch ( nValue )
                         {
                             case ESCHER_LineEndCapRound:  pEndCap = "round"; break;
@@ -1144,7 +1144,7 @@ sal_Int32 VMLExport::StartShape()
     const SdrTextObj* pTxtObj = dynamic_cast<const SdrTextObj*>( m_pSdrObject );
     if (pTxtObj && m_pTextExport && msfilter::util::HasTextBoxContent(m_nShapeType) && !IsWaterMarkShape(m_pSdrObject->GetName()) && !lcl_isTextBox(m_pSdrObject))
     {
-        const OutlinerParaObject* pParaObj = 0;
+        const OutlinerParaObject* pParaObj = nullptr;
         bool bOwnParaObj = false;
 
         /*
@@ -1192,7 +1192,7 @@ void VMLExport::EndShape( sal_Int32 nShapeElement )
                     pTextboxAttrList->add(XML_style, "mso-layout-flow-alt:bottom-to-top");
             }
             sax_fastparser::XFastAttributeListRef xTextboxAttrList(pTextboxAttrList);
-            pTextboxAttrList = 0;
+            pTextboxAttrList = nullptr;
             m_pSerializer->startElementNS(XML_v, XML_textbox, xTextboxAttrList);
 
             m_pTextExport->WriteVMLTextBox(uno::Reference<drawing::XShape>(xPropertySet, uno::UNO_QUERY_THROW));

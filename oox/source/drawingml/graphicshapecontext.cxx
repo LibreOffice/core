@@ -156,7 +156,7 @@ ContextHandlerRef GraphicalObjectFrameContext::onCreateContext( sal_Int32 aEleme
             else
             {
                 SAL_WARN("oox", "OOX: Ignore graphicsData of :" << sUri );
-                return 0;
+                return nullptr;
             }
         }
         break;
@@ -232,7 +232,7 @@ ContextHandlerRef OleObjectGraphicDataContext::onCreateContext( sal_Int32 nEleme
             return new GraphicShapeContext( *this, mpMasterShapePtr, mpShapePtr );
         break;
     }
-    return 0;
+    return nullptr;
 }
 
 DiagramGraphicDataContext::DiagramGraphicDataContext( ContextHandler2Helper& rParent, ShapePtr pShapePtr )
@@ -290,7 +290,7 @@ ContextHandlerRef ChartGraphicDataContext::onCreateContext( ::sal_Int32 nElement
     {
         mrChartShapeInfo.maFragmentPath = getFragmentPathFromRelId( rAttribs.getString( R_TOKEN( id ), OUString() ) );
     }
-    return 0;
+    return nullptr;
 }
 
 } // namespace drawingml

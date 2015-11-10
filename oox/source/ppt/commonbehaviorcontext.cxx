@@ -84,7 +84,7 @@ namespace oox { namespace ppt {
             if( mbIsInAttrName )
             {
                 const ImplAttributeNameConversion *attrConv = getAttributeConversionList();
-                while( attrConv->mpMSName != NULL )
+                while( attrConv->mpMSName != nullptr )
                 {
                     if(msCurrentAttribute.equalsAscii( attrConv->mpMSName ) )
                     {

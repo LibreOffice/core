@@ -257,10 +257,10 @@ bool BinaryCodec_XOR::skip( sal_Int32 nBytes )
 BinaryCodec_RCF::BinaryCodec_RCF()
 {
     mhCipher = rtl_cipher_create( rtl_Cipher_AlgorithmARCFOUR, rtl_Cipher_ModeStream );
-    OSL_ENSURE( mhCipher != 0, "BinaryCodec_RCF::BinaryCodec_RCF - cannot create cipher" );
+    OSL_ENSURE( mhCipher != nullptr, "BinaryCodec_RCF::BinaryCodec_RCF - cannot create cipher" );
 
     mhDigest = rtl_digest_create( rtl_Digest_AlgorithmMD5 );
-    OSL_ENSURE( mhDigest != 0, "BinaryCodec_RCF::BinaryCodec_RCF - cannot create digest" );
+    OSL_ENSURE( mhDigest != nullptr, "BinaryCodec_RCF::BinaryCodec_RCF - cannot create digest" );
 
     (void)memset( mpnDigestValue, 0, sizeof( mpnDigestValue ) );
     (void)memset (mpnUnique, 0, sizeof(mpnUnique));
@@ -376,7 +376,7 @@ bool BinaryCodec_RCF::startBlock( sal_Int32 nCounter )
 
     // initialize cipher with key data (for decoding)
     rtlCipherError eResult =
-        rtl_cipher_init( mhCipher, rtl_Cipher_DirectionDecode, pnKeyData, RTL_DIGEST_LENGTH_MD5, 0, 0 );
+        rtl_cipher_init( mhCipher, rtl_Cipher_DirectionDecode, pnKeyData, RTL_DIGEST_LENGTH_MD5, nullptr, 0 );
 
     // erase key data array and leave
     rtl_secureZeroMemory (pnKeyData, sizeof(pnKeyData));

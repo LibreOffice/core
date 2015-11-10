@@ -153,7 +153,7 @@ Reference< XDataSequence > ChartConverter::createDataSequence(
         }
     }
 
-    return 0;
+    return nullptr;
 }
 
 } // namespace chart

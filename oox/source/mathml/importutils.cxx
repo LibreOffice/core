@@ -41,7 +41,7 @@ public:
 
 AttributeListBuilder::AttributeListBuilder( const uno::Reference< xml::sax::XFastAttributeList >& a )
 {
-    if( a.get() == NULL )
+    if( a.get() == nullptr )
         return;
     uno::Sequence< xml::FastAttribute > aFastAttrSeq = a->getFastAttributes();
     const xml::FastAttribute* pFastAttr = aFastAttrSeq.getConstArray();

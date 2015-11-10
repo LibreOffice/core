@@ -62,7 +62,7 @@ void VbaInputStream::seek( sal_Int64 )
 
 void VbaInputStream::close()
 {
-    mpInStrm = 0;
+    mpInStrm = nullptr;
     mbEof = true;
 }
 

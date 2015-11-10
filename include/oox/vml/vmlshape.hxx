@@ -249,12 +249,12 @@ public:
     css::uno::Reference< css::drawing::XShape >
                         convertAndInsert(
                             const css::uno::Reference< css::drawing::XShapes >& rxShapes,
-                            const ShapeParentAnchor* pParentAnchor = 0 ) const;
+                            const ShapeParentAnchor* pParentAnchor = nullptr ) const;
 
     /** Converts position and formatting into the passed existing XShape. */
     void                convertFormatting(
                             const css::uno::Reference< css::drawing::XShape >& rxShape,
-                            const ShapeParentAnchor* pParentAnchor = 0 ) const;
+                            const ShapeParentAnchor* pParentAnchor = nullptr ) const;
 
 protected:
     explicit            ShapeBase( Drawing& rDrawing );

@@ -129,7 +129,7 @@ void ColorValueContext::onStartElement( const AttributeList& rAttribs )
             mrColor.addTransformation( nElement );
         break;
     }
-    return 0;
+    return nullptr;
 }
 
 ColorContext::ColorContext( ContextHandler2Helper& rParent, Color& rColor ) :
@@ -151,7 +151,7 @@ ColorContext::ColorContext( ContextHandler2Helper& rParent, Color& rColor ) :
         case A_TOKEN( prstClr ):
             return new ColorValueContext( *this, mrColor );
     }
-    return 0;
+    return nullptr;
 }
 
 } // namespace drawingml

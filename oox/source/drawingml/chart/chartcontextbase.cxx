@@ -40,7 +40,7 @@ ShapePrWrapperContext::~ShapePrWrapperContext()
 
 ContextHandlerRef ShapePrWrapperContext::onCreateContext( sal_Int32 nElement, const AttributeList& )
 {
-    return (isRootElement() && (nElement == C_TOKEN( spPr ))) ? new ShapePropertiesContext( *this, mrModel ) : 0;
+    return (isRootElement() && (nElement == C_TOKEN( spPr ))) ? new ShapePropertiesContext( *this, mrModel ) : nullptr;
 }
 
 LayoutContext::LayoutContext( ContextHandler2Helper& rParent, LayoutModel& rModel ) :
@@ -70,35 +70,35 @@ ContextHandlerRef LayoutContext::onCreateContext( sal_Int32 nElement, const Attr
             {
                 case C_TOKEN( x ):
                     mrModel.mfX = rAttribs.getDouble( XML_val, 0.0 );
-                    return 0;
+                    return nullptr;
                 case C_TOKEN( y ):
                     mrModel.mfY = rAttribs.getDouble( XML_val, 0.0 );
-                    return 0;
+                    return nullptr;
                 case C_TOKEN( w ):
                     mrModel.mfW = rAttribs.getDouble( XML_val, 0.0 );
-                    return 0;
+                    return nullptr;
                 case C_TOKEN( h ):
                     mrModel.mfH = rAttribs.getDouble( XML_val, 0.0 );
-                    return 0;
+                    return nullptr;
                 case C_TOKEN( xMode ):
                     mrModel.mnXMode = rAttribs.getToken( XML_val, XML_factor );
-                    return 0;
+                    return nullptr;
                 case C_TOKEN( yMode ):
                     mrModel.mnYMode = rAttribs.getToken( XML_val, XML_factor );
-                    return 0;
+                    return nullptr;
                 case C_TOKEN( wMode ):
                     mrModel.mnWMode = rAttribs.getToken( XML_val, XML_factor );
-                    return 0;
+                    return nullptr;
                 case C_TOKEN( hMode ):
                     mrModel.mnHMode = rAttribs.getToken( XML_val, XML_factor );
-                    return 0;
+                    return nullptr;
                 case C_TOKEN( layoutTarget ):
                     mrModel.mnTarget = rAttribs.getToken( XML_val, XML_outer );
-                    return 0;
+                    return nullptr;
             }
         break;
     }
-    return 0;
+    return nullptr;
 }
 
 } // namespace chart

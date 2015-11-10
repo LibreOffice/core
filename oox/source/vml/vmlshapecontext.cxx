@@ -155,7 +155,7 @@ ContextHandlerRef ShapeLayoutContext::onCreateContext( sal_Int32 nElement, const
         }
         break;
     }
-    return 0;
+    return nullptr;
 }
 
 ClientDataContext::ClientDataContext( ContextHandler2Helper& rParent,
@@ -173,7 +173,7 @@ ContextHandlerRef ClientDataContext::onCreateContext( sal_Int32 /*nElement*/, co
         maElementText.clear();
         return this;
     }
-    return 0;
+    return nullptr;
 }
 
 void ClientDataContext::onCharacters( const OUString& rChars )
@@ -259,7 +259,7 @@ ContextHandlerRef ShapeContextBase::createShapeContext( ContextHandler2Helper& r
         case VML_TOKEN( image ):
             return new ShapeContext( rParent, rShapes.createShape< ComplexShape >(), rAttribs );
     }
-    return 0;
+    return nullptr;
 }
 
 ShapeTypeContext::ShapeTypeContext( ContextHandler2Helper& rParent, ShapeType& rShapeType, const AttributeList& rAttribs ) :
@@ -368,7 +368,7 @@ ContextHandlerRef ShapeTypeContext::onCreateContext( sal_Int32 nElement, const A
             mrTypeModel.maTextpathModel.moString.assignIfUsed(rAttribs.getString(XML_string));
         break;
     }
-    return 0;
+    return nullptr;
 }
 
 OptValue< OUString > ShapeTypeContext::decodeFragmentPath( const AttributeList& rAttribs, sal_Int32 nToken ) const

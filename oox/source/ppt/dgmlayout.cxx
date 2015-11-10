@@ -155,12 +155,12 @@ const oox::drawingml::table::TableStyleListPtr QuickDiagrammingLayout::getTableS
 
 ::oox::vml::Drawing* QuickDiagrammingLayout::getVmlDrawing()
 {
-    return 0;
+    return nullptr;
 }
 
 ::oox::drawingml::chart::ChartConverter* QuickDiagrammingLayout::getChartConverter()
 {
-    return 0;
+    return nullptr;
 }
 
 OUString QuickDiagrammingLayout::getImplementationName() throw (css::uno::RuntimeException, std::exception)
@@ -170,7 +170,7 @@ OUString QuickDiagrammingLayout::getImplementationName() throw (css::uno::Runtim
 
 ::oox::ole::VbaProject* QuickDiagrammingLayout::implCreateVbaProject() const
 {
-    return 0;
+    return nullptr;
 }
 
 }}

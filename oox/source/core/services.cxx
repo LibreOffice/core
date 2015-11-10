@@ -26,7 +26,7 @@ using namespace ::com::sun::star::uno;
 namespace {
 
 #define IMPLEMENTATION_ENTRY( className ) \
-    { &className##_createInstance, &className##_getImplementationName, &className##_getSupportedServiceNames, ::cppu::createSingleComponentFactory, 0, 0 }
+    { &className##_createInstance, &className##_getImplementationName, &className##_getSupportedServiceNames, ::cppu::createSingleComponentFactory, nullptr, 0 }
 
 //TODO: QuickDiagrammingImport and QuickDiagrammingLayout are not listed in
 // oox/util/oox.component (and not directly referenced from anywhere in the code
@@ -42,7 +42,7 @@ static ::cppu::ImplementationEntry const spServices[] =
     IMPLEMENTATION_ENTRY( ::oox::ppt::QuickDiagrammingImport ),
     IMPLEMENTATION_ENTRY( ::oox::ppt::QuickDiagrammingLayout ),
     IMPLEMENTATION_ENTRY( ::oox::shape::ShapeContextHandler ),
-    { 0, 0, 0, 0, 0, 0 }
+    { nullptr, nullptr, nullptr, nullptr, nullptr, 0 }
 };
 
 #undef IMPLEMENTATION_ENTRY

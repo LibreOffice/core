@@ -60,7 +60,7 @@ ContextHandlerRef ShapeStyleContext::onCreateContext( sal_Int32 aElementToken, c
             return new ColorContext( *this, rStyleRef.maPhClr );
         }
     }
-    return 0;
+    return nullptr;
 }
 
 } }

@@ -285,12 +285,12 @@ OUString ShapeBase::getShapeName() const
 
 const ShapeType* ShapeBase::getChildTypeById( const OUString& ) const
 {
-    return 0;
+    return nullptr;
 }
 
 const ShapeBase* ShapeBase::getChildById( const OUString& ) const
 {
-    return 0;
+    return nullptr;
 }
 
 Reference< XShape > ShapeBase::convertAndInsert( const Reference< XShapes >& rxShapes, const ShapeParentAnchor* pParentAnchor ) const
@@ -432,7 +432,7 @@ Reference< XShape > ShapeBase::convertAndInsert( const Reference< XShapes >& rxS
                 /*  Notify the drawing that a new shape has been inserted. For
                     convenience, pass the rectangle that contains position and
                     size of the shape. */
-                bool bGroupChild = pParentAnchor != 0;
+                bool bGroupChild = pParentAnchor != nullptr;
                 mrDrawing.notifyXShapeInserted( xShape, aShapeRect, *this, bGroupChild );
             }
         }

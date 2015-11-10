@@ -61,7 +61,7 @@ void TextBox::appendPortion( const TextParagraphModel& rParagraph, const TextFon
 
 const TextFontModel* TextBox::getFirstFont() const
 {
-    return maPortions.empty() ? 0 : &maPortions.front().maFont;
+    return maPortions.empty() ? nullptr : &maPortions.front().maFont;
 }
 
 OUString TextBox::getText() const

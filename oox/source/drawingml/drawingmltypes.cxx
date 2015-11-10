@@ -204,7 +204,7 @@ TextVerticalAdjust GetTextVerticalAdjust( sal_Int32 nToken )
 
 const char* GetTextVerticalAdjust( TextVerticalAdjust eAdjust )
 {
-    const char* sVerticalAdjust = 0;
+    const char* sVerticalAdjust = nullptr;
     switch( eAdjust )
     {
         case TextVerticalAdjust_BOTTOM:
@@ -248,7 +248,7 @@ TabAlign GetTabAlign( sal_Int32 aToken )
 
 const char* GetHatchPattern( const drawing::Hatch& rHatch )
 {
-    const char* sPattern = 0;
+    const char* sPattern = nullptr;
     const sal_Int32 nAngle = rHatch.Angle > 1800 ? rHatch.Angle - 1800 : rHatch.Angle;
     // Angle ~ 0° (horizontal)
     if( (nAngle >= 0 && nAngle < 225) || nAngle >= 1575 )

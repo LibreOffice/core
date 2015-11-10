@@ -63,18 +63,18 @@ ContextHandlerRef ChartSpaceFragment::onCreateContext( sal_Int32 nElement, const
                     return new ShapePropertiesContext( *this, mrModel.mxShapeProp.create() );
                 case C_TOKEN( style ):
                     mrModel.mnStyle = rAttribs.getInteger( XML_val, 2 );
-                    return 0;
+                    return nullptr;
                 case C_TOKEN( txPr ):
                     return new TextBodyContext( *this, mrModel.mxTextProp.create() );
                 case C_TOKEN( userShapes ):
                     mrModel.maDrawingPath = getFragmentPathFromRelId( rAttribs.getString( R_TOKEN( id ), OUString() ) );
-                    return 0;
+                    return nullptr;
                 case C_TOKEN( pivotSource ):
                     mrModel.mbPivotChart = true;
-                    return 0;
+                    return nullptr;
                 case C_TOKEN (externalData):
                     mrModel.maSheetPath = getFragmentPathFromRelId(rAttribs.getString(R_TOKEN(id),OUString()));
-                    return 0;
+                    return nullptr;
             }
         break;
 
@@ -85,7 +85,7 @@ ContextHandlerRef ChartSpaceFragment::onCreateContext( sal_Int32 nElement, const
                 {
 
                     mrModel.mbAutoTitleDel = rAttribs.getBool( XML_val, !bMSO2007Document );
-                    return 0;
+                    return nullptr;
                 }
                 case C_TOKEN( backWall ):
                     return new WallFloorContext( *this, mrModel.mxBackWall.create() );
@@ -93,7 +93,7 @@ ContextHandlerRef ChartSpaceFragment::onCreateContext( sal_Int32 nElement, const
                 {
                     // default value is XML_gap for MSO 2007 and XML_zero in OOXML
                     mrModel.mnDispBlanksAs = rAttribs.getToken( XML_val, bMSO2007Document ? XML_gap : XML_zero );
-                    return 0;
+                    return nullptr;
                 }
                 case C_TOKEN( floor ):
                     return new WallFloorContext( *this, mrModel.mxFloor.create() );
@@ -103,10 +103,10 @@ ContextHandlerRef ChartSpaceFragment::onCreateContext( sal_Int32 nElement, const
                     return new PlotAreaContext( *this, mrModel.mxPlotArea.create() );
                 case C_TOKEN( plotVisOnly ):
                     mrModel.mbPlotVisOnly = rAttribs.getBool( XML_val, !bMSO2007Document );
-                    return 0;
+                    return nullptr;
                 case C_TOKEN( showDLblsOverMax ):
                     mrModel.mbShowLabelsOverMax = rAttribs.getBool( XML_val, !bMSO2007Document );
-                    return 0;
+                    return nullptr;
                 case C_TOKEN( sideWall ):
                     return new WallFloorContext( *this, mrModel.mxSideWall.create() );
                 case C_TOKEN( title ):
@@ -116,7 +116,7 @@ ContextHandlerRef ChartSpaceFragment::onCreateContext( sal_Int32 nElement, const
             }
         break;
     }
-    return 0;
+    return nullptr;
 }
 
 } // namespace chart

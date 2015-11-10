@@ -143,7 +143,7 @@ static void SetTableStyleProperties(TableStyle* &pTableStyle , const sal_Int32& 
 
 TableStyle* CreateTableStyle(const OUString& styleId)
 {
-    TableStyle* pTableStyle = NULL;
+    TableStyle* pTableStyle = nullptr;
     if(styleId == "{5C22544A-7EE6-4342-B048-85BDC9FD1C3A}") {           //Medium Style 2 Accent 1
         pTableStyle = new TableStyle();
         //first row style
@@ -223,7 +223,7 @@ const TableStyle& TableProperties::getUsedTableStyle( const ::oox::core::XmlFilt
 {
     ::oox::core::XmlFilterBase& rBase( const_cast< ::oox::core::XmlFilterBase& >( rFilterBase ) );
 
-    TableStyle* pTableStyle = NULL;
+    TableStyle* pTableStyle = nullptr;
     if ( mpTableStyle )
         pTableStyle = &*mpTableStyle;
     else if ( rBase.getTableStyles() )
@@ -263,7 +263,7 @@ void TableProperties::pushToPropSet( const ::oox::core::XmlFilterBase& rFilterBa
     CreateTableColumns( xColumnRowRange->getColumns(), mvTableGrid );
     CreateTableRows( xColumnRowRange->getRows(), mvTableRows );
 
-    TableStyle* pTableStyleToDelete = NULL;
+    TableStyle* pTableStyleToDelete = nullptr;
     const TableStyle& rTableStyle( getUsedTableStyle( rFilterBase, pTableStyleToDelete ) );
     sal_Int32 nRow = 0;
     const std::vector< TableRow >::const_iterator aTableRowEnd( mvTableRows.end() );

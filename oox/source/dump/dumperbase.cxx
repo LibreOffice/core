@@ -913,7 +913,7 @@ void NameListBase::insertRawName( sal_Int64 nKey, const OUString& rName )
 const OUString* NameListBase::findRawName( sal_Int64 nKey ) const
 {
     const_iterator aIt = maMap.find( nKey );
-    return (aIt == end()) ? 0 : &aIt->second;
+    return (aIt == end()) ? nullptr : &aIt->second;
 }
 
 void NameListBase::include( const OUString& rListKeys )
@@ -1284,7 +1284,7 @@ void SharedConfigData::setOption( const OUString& rKey, const OUString& rData )
 const OUString* SharedConfigData::getOption( const OUString& rKey ) const
 {
     ConfigDataMap::const_iterator aIt = maConfigData.find( rKey );
-    return (aIt == maConfigData.end()) ? 0 : &aIt->second;
+    return (aIt == maConfigData.end()) ? nullptr : &aIt->second;
 }
 
 void SharedConfigData::setNameList( const OUString& rListName, const NameListRef& rxList )
@@ -1667,7 +1667,7 @@ void Output::writeString( const OUString& rStr )
 
 void Output::writeArray( const sal_uInt8* pnData, sal_Size nSize, sal_Unicode cSep )
 {
-    const sal_uInt8* pnEnd = pnData ? (pnData + nSize) : 0;
+    const sal_uInt8* pnEnd = pnData ? (pnData + nSize) : nullptr;
     for( const sal_uInt8* pnByte = pnData; pnByte < pnEnd; ++pnByte )
     {
         if( pnByte > pnData )
@@ -2078,8 +2078,8 @@ void InputObjectBase::dumpRawBinary( sal_Int64 nBytes, bool bShowOffset, bool bS
 
         if( nReadSize > 0 )
         {
-            const sal_uInt8* pnByte = 0;
-            const sal_uInt8* pnEnd = 0;
+            const sal_uInt8* pnByte = nullptr;
+            const sal_uInt8* pnEnd = nullptr;
             for( pnByte = pnLineData, pnEnd = pnLineData + nReadSize; pnByte != pnEnd; ++pnByte )
             {
                 if( (pnByte - pnLineData) == (OOX_DUMP_BYTESPERLINE / 2) ) mxOut->tab();

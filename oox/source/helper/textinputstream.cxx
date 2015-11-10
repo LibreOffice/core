@@ -97,7 +97,7 @@ void SAL_CALL UnoBinaryInputStream::closeInput() throw (NotConnectedException, I
 {
     ensureConnected();
     mpInStrm->close();
-    mpInStrm = 0;
+    mpInStrm = nullptr;
 }
 
 void UnoBinaryInputStream::ensureConnected() const throw (NotConnectedException)

@@ -156,7 +156,7 @@ ContextHandlerRef HyperLinkContext::onCreateContext(
     switch( aElement )
     {
     case A_TOKEN( extLst ):
-        return 0;
+        return nullptr;
     case A_TOKEN( snd ):
         // TODO use getEmbeddedWAVAudioFile() here
         break;

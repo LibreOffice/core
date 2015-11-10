@@ -64,7 +64,7 @@ oox::core::ContextHandlerRef WpgContext::onCreateContext(sal_Int32 nElementToken
         SAL_WARN("oox", "WpgContext::createFastChildContext: unhandled element: " << getBaseToken(nElementToken));
         break;
     }
-    return 0;
+    return nullptr;
 }
 
 }

@@ -84,7 +84,7 @@ ContextHandlerRef GradientFillContext::onCreateContext(
             mrGradientProps.moTileRect = GetRelativeRect( rAttribs.getFastAttributeList() );
         break;
     }
-    return 0;
+    return nullptr;
 }
 
 PatternFillContext::PatternFillContext( ContextHandler2Helper& rParent,
@@ -105,7 +105,7 @@ ContextHandlerRef PatternFillContext::onCreateContext(
         case A_TOKEN( fgClr ):
             return new ColorContext( *this, mrPatternProps.maPattFgColor );
     }
-    return 0;
+    return nullptr;
 }
 
 ColorChangeContext::ColorChangeContext( ContextHandler2Helper& rParent,
@@ -134,7 +134,7 @@ ContextHandlerRef ColorChangeContext::onCreateContext(
         case A_TOKEN( clrTo ):
             return new ColorContext( *this, mrBlipProps.maColorChangeTo );
     }
-    return 0;
+    return nullptr;
 }
 
 BlipContext::BlipContext( ContextHandler2Helper& rParent,
@@ -190,7 +190,7 @@ ContextHandlerRef BlipContext::onCreateContext(
             mrBlipProps.moContrast = rAttribs.getInteger( XML_contrast );
         break;
     }
-    return 0;
+    return nullptr;
 }
 
 DuotoneContext::DuotoneContext( ContextHandler2Helper& rParent,
@@ -212,7 +212,7 @@ DuotoneContext::~DuotoneContext()
 {
     if( mnColorIndex < 2 )
         return new ColorValueContext( *this, mrBlipProps.maDuotoneColors[mnColorIndex++] );
-    return 0;
+    return nullptr;
 }
 
 BlipFillContext::BlipFillContext( ContextHandler2Helper& rParent,
@@ -253,7 +253,7 @@ ContextHandlerRef BlipFillContext::onCreateContext(
             mrBlipProps.moFillRect = GetRelativeRect( rAttribs.getFastAttributeList() );
         break;
     }
-    return 0;
+    return nullptr;
 }
 
 FillPropertiesContext::FillPropertiesContext( ContextHandler2Helper& rParent, FillProperties& rFillProps ) :
@@ -274,14 +274,14 @@ ContextHandlerRef FillPropertiesContext::createFillContext(
 {
     switch( nElement )
     {
-        case A_TOKEN( noFill ):     { rFillProps.moFillType = getBaseToken( nElement ); return 0; };
+        case A_TOKEN( noFill ):     { rFillProps.moFillType = getBaseToken( nElement ); return nullptr; };
         case A_TOKEN( solidFill ):  { rFillProps.moFillType = getBaseToken( nElement ); return new SolidFillContext( rParent, rAttribs, rFillProps ); };
         case A_TOKEN( gradFill ):   { rFillProps.moFillType = getBaseToken( nElement ); return new GradientFillContext( rParent, rAttribs, rFillProps.maGradientProps ); };
         case A_TOKEN( pattFill ):   { rFillProps.moFillType = getBaseToken( nElement ); return new PatternFillContext( rParent, rAttribs, rFillProps.maPatternProps ); };
         case A_TOKEN( blipFill ):   { rFillProps.moFillType = getBaseToken( nElement ); return new BlipFillContext( rParent, rAttribs, rFillProps.maBlipProps ); };
-        case A_TOKEN( grpFill ):    { rFillProps.moFillType = getBaseToken( nElement ); return 0; };    // TODO
+        case A_TOKEN( grpFill ):    { rFillProps.moFillType = getBaseToken( nElement ); return nullptr; };    // TODO
     }
-    return 0;
+    return nullptr;
 }
 
 SimpleFillPropertiesContext::SimpleFillPropertiesContext( ContextHandler2Helper& rParent, Color& rColor ) :
@@ -316,7 +316,7 @@ ContextHandlerRef BlipExtensionContext::onCreateContext(
         case OOX_TOKEN( a14, imgProps ):
             return new ArtisticEffectContext( *this, mrBlipProps.maEffect );
     }
-    return 0;
+    return nullptr;
 }
 
 ArtisticEffectContext::ArtisticEffectContext( ContextHandler2Helper& rParent, ArtisticEffectProperties& rEffect ) :
@@ -352,7 +352,7 @@ ContextHandlerRef ArtisticEffectContext::onCreateContext(
     // effects
     maEffect.msName = ArtisticEffectProperties::getEffectString( nElement );
     if( maEffect.isEmpty() )
-        return 0;
+        return nullptr;
 
     // effect attributes
     sal_Int32 aAttribs[19] = {
@@ -371,7 +371,7 @@ ContextHandlerRef ArtisticEffectContext::onCreateContext(
         }
     }
 
-    return 0;
+    return nullptr;
 }
 
 } // namespace drawingml

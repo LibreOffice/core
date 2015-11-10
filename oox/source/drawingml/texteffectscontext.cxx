@@ -283,7 +283,7 @@ void TextEffectsContext::processAttributes(const AttributeList& rAttribs)
 
 void TextEffectsContext::onStartElement(const oox::AttributeList& rAttribs)
 {
-    if(mpGrabBagStack.get() == NULL)
+    if(mpGrabBagStack.get() == nullptr)
     {
         OUString aGrabBagName = lclGetGrabBagName(mnCurrentElement);
         mpGrabBagStack.reset(new GrabBagStack(aGrabBagName));

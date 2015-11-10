@@ -942,7 +942,7 @@ public:
     ControlModelBase*   createModelFromGuid( const OUString& rClassId );
 
     /** Returns true, if the internal control model exists. */
-    bool         hasModel() const { return mxModel.get() != 0; }
+    bool         hasModel() const { return mxModel.get() != nullptr; }
     /** Returns read-only access to the internal control model. */
     const ControlModelBase* getModel() const { return mxModel.get(); }
     /** Returns read/write access to the internal control model. */

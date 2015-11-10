@@ -87,7 +87,7 @@ const ShapeType* ShapeContainer::getShapeTypeById( const OUString& rShapeId, boo
         for( ShapeVector::const_iterator aVIt = maShapes.begin(), aVEnd = maShapes.end(); aVIt != aVEnd; ++aVIt )
             if( const ShapeType* pType = (*aVIt)->getChildTypeById( rShapeId ) )
                 return pType;
-   return 0;
+   return nullptr;
 }
 
 const ShapeBase* ShapeContainer::getShapeById( const OUString& rShapeId, bool bDeep ) const
@@ -100,7 +100,7 @@ const ShapeBase* ShapeContainer::getShapeById( const OUString& rShapeId, bool bD
         for( ShapeVector::const_iterator aVIt = maShapes.begin(), aVEnd = maShapes.end(); aVIt != aVEnd; ++aVIt )
             if( const ShapeBase* pShape = (*aVIt)->getChildById( rShapeId ) )
                 return pShape;
-   return 0;
+   return nullptr;
 }
 
 std::shared_ptr< ShapeBase > ShapeContainer::takeLastShape()

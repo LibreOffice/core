@@ -50,7 +50,7 @@ void ShapeAnchor::importExt( const AttributeList& rAttribs )
 
 void ShapeAnchor::setPos( sal_Int32 nElement, sal_Int32 nParentContext, const OUString& rValue )
 {
-    AnchorPosModel* pAnchorPos = 0;
+    AnchorPosModel* pAnchorPos = nullptr;
     switch( nParentContext )
     {
         case CDR_TOKEN( from ):
@@ -160,7 +160,7 @@ ContextHandlerRef ChartDrawingFragment::onCreateContext( sal_Int32 nElement, con
                     return new GraphicShapeContext( *this, ShapePtr(), mxShape );
                 case CDR_TOKEN( graphicFrame ):
                     if( !mbOleSupport )
-                        return 0;
+                        return nullptr;
                     mxShape.reset( new Shape( "com.sun.star.drawing.GraphicObjectShape" ) );
                     return new GraphicalObjectFrameContext( *this, ShapePtr(), mxShape, true );
                 case CDR_TOKEN( grpSp ):
@@ -173,7 +173,7 @@ ContextHandlerRef ChartDrawingFragment::onCreateContext( sal_Int32 nElement, con
 
                 case CDR_TOKEN( ext ):
                     if( mxAnchor.get() ) mxAnchor->importExt( rAttribs );
-                    return 0;
+                    return nullptr;
             }
         break;
 
@@ -187,7 +187,7 @@ ContextHandlerRef ChartDrawingFragment::onCreateContext( sal_Int32 nElement, con
             }
         break;
     }
-    return 0;
+    return nullptr;
 }
 
 void ChartDrawingFragment::onCharacters( const OUString& rChars )

@@ -142,7 +142,7 @@ ContextHandlerRef TextBodyPropertiesContext::onCreateContext( sal_Int32 aElement
                 break;
     }
 
-    return 0;
+    return nullptr;
 }
 
 } }

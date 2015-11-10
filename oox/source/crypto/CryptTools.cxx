@@ -19,14 +19,14 @@ using namespace std;
 Crypto::Crypto(CryptoType type)
     : mType(type)
 #if USE_TLS_NSS
-    , mContext(NULL)
-    , mSecParam(NULL)
-    , mSymKey(NULL)
+    , mContext(nullptr)
+    , mSecParam(nullptr)
+    , mSymKey(nullptr)
 #endif
 {
 #if USE_TLS_NSS
     // Initialize NSS, database functions are not needed
-    NSS_NoDB_Init(NULL);
+    NSS_NoDB_Init(nullptr);
 #endif // USE_TLS_NSS
 }
 
@@ -68,12 +68,12 @@ void Crypto::setupContext(vector<sal_uInt8>& key, vector<sal_uInt8>& iv, CryptoT
     SECItem ivItem;
     ivItem.type = siBuffer;
     if(iv.empty())
-        ivItem.data = NULL;
+        ivItem.data = nullptr;
     else
         ivItem.data = &iv[0];
     ivItem.len = iv.size();
 
-    SECItem* pIvItem = NULL;
+    SECItem* pIvItem = nullptr;
 
     switch(type)
     {
@@ -92,7 +92,7 @@ void Crypto::setupContext(vector<sal_uInt8>& key, vector<sal_uInt8>& iv, CryptoT
             break;
     }
 
-    PK11SlotInfo* pSlot( PK11_GetBestSlot( mechanism, NULL ) );
+    PK11SlotInfo* pSlot( PK11_GetBestSlot( mechanism, nullptr ) );
 
     if (!pSlot)
         throw css::uno::RuntimeException("NSS Slot failure", css::uno::Reference<css::uno::XInterface>());
@@ -102,7 +102,7 @@ void Crypto::setupContext(vector<sal_uInt8>& key, vector<sal_uInt8>& iv, CryptoT
     keyItem.data = &key[0];
     keyItem.len  = key.size();
 
-    mSymKey = PK11_ImportSymKey( pSlot, mechanism, PK11_OriginUnwrap, CKA_ENCRYPT, &keyItem, NULL );
+    mSymKey = PK11_ImportSymKey( pSlot, mechanism, PK11_OriginUnwrap, CKA_ENCRYPT, &keyItem, nullptr );
     mSecParam = PK11_ParamFromIV( mechanism, pIvItem );
     mContext = PK11_CreateContextBySymKey( mechanism, operation, mSymKey, mSecParam );
 }
@@ -252,7 +252,7 @@ Digest::Digest(DigestType eType) :
     #endif
 
     #if USE_TLS_NSS
-    NSS_NoDB_Init(NULL);
+    NSS_NoDB_Init(nullptr);
     mpContext = HASH_Create(lclNSSgetHashType(eType));
     HASH_Begin(mpContext);
     #endif

@@ -101,7 +101,7 @@ public:
     /** Creates and inserts all UNO shapes into the passed container. */
     void                convertAndInsert(
                             const css::uno::Reference< css::drawing::XShapes >& rxShapes,
-                            const ShapeParentAnchor* pParentAnchor = 0 ) const;
+                            const ShapeParentAnchor* pParentAnchor = nullptr ) const;
 
 private:
     typedef RefVector< ShapeType >                  ShapeTypeVector;

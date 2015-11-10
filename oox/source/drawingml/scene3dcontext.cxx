@@ -63,9 +63,9 @@ ContextHandlerRef Scene3DPropertiesContext::onCreateContext( sal_Int32 aElementT
 
     case A_TOKEN( backdrop ):
     case A_TOKEN( extLst ):
-        return 0; // TODO: later (backdrop is not supported by core anyway)
+        return nullptr; // TODO: later (backdrop is not supported by core anyway)
     }
-    return 0;
+    return nullptr;
 }
 
 Shape3DPropertiesContext::Shape3DPropertiesContext( ContextHandler2Helper& rParent, const AttributeList& rAttribs, Shape3DProperties& r3DProperties ) throw()
@@ -110,7 +110,7 @@ ContextHandlerRef Shape3DPropertiesContext::onCreateContext( sal_Int32 aElementT
     case A_TOKEN( contourClr ):
         return new ColorContext( *this, mr3DProperties.maContourColor );
     }
-    return 0;
+    return nullptr;
 }
 
 Scene3DRotationPropertiesContext::Scene3DRotationPropertiesContext( ContextHandler2Helper& rParent, RotationProperties& rRotationProperties ) throw()
@@ -129,7 +129,7 @@ ContextHandlerRef Scene3DRotationPropertiesContext::onCreateContext( sal_Int32 a
         mrRotationProperties.mnRevolution = rAttribs.getInteger( XML_rev, 0 );
         break;
     }
-    return 0;
+    return nullptr;
 }
 
 } }

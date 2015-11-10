@@ -76,7 +76,7 @@ const convert_subtype* convert_subtype::getList()
         {  272, "in-slightly" },
         {  288, "out-slightly" },
         {  528, "in-from-screen-center" },
-        {  0, 0 }
+        {  0, nullptr }
     };
 
     return aList;
@@ -288,7 +288,7 @@ const preset_maping* preset_maping::getList()
         { css::presentation::EffectPresetClass::MOTIONPATH, 39     ,"ooo-motionpath-s-curve-2" },
         { css::presentation::EffectPresetClass::MOTIONPATH, 45     ,"ooo-motionpath-heartbeat" },
 
-        { 0,0,0 }
+        { 0,0,nullptr }
     };
 
     return aList;
@@ -296,7 +296,7 @@ const preset_maping* preset_maping::getList()
 
 OUString getConvertedSubType( sal_Int16 nPresetClass, sal_Int32 nPresetId, sal_Int32 nPresetSubType )
 {
-    const sal_Char* pStr = 0;
+    const sal_Char* pStr = nullptr;
 
     if( (nPresetClass == EffectPresetClass::ENTRANCE) || (nPresetClass == EffectPresetClass::EXIT) )
     {
@@ -330,7 +330,7 @@ OUString getConvertedSubType( sal_Int16 nPresetClass, sal_Int32 nPresetId, sal_I
                 }
             }
 
-            if( pStr == 0 )
+            if( pStr == nullptr )
             {
                 const convert_subtype* p = convert_subtype::getList();
 

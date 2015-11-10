@@ -344,8 +344,8 @@ protected:
 
     void                dumpPosProperty();
     void                dumpSizeProperty();
-    void                dumpGuidProperty( OUString* pValue = 0 );
-    void                dumpStringProperty( OUString* pValue = 0 );
+    void                dumpGuidProperty( OUString* pValue = nullptr );
+    void                dumpStringProperty( OUString* pValue = nullptr );
     void                dumpStringArrayProperty();
     void                dumpStreamProperty();
 
@@ -369,7 +369,7 @@ private:
         OUString     maItemName;
         sal_uInt32          mnDataSize;
         OUString*    mpItemValue;
-        explicit     LargeProperty( LargePropertyType ePropType, const String& rItemName, sal_uInt32 nDataSize, OUString* pItemValue = 0 ) :
+        explicit     LargeProperty( LargePropertyType ePropType, const String& rItemName, sal_uInt32 nDataSize, OUString* pItemValue = nullptr ) :
                                 mePropType( ePropType ), maItemName( rItemName ), mnDataSize( nDataSize ), mpItemValue( pItemValue ) {}
     };
     typedef ::std::vector< LargeProperty > LargePropertyVector;
@@ -547,11 +547,11 @@ public:
                             const ObjectBase& rParent,
                             const BinaryInputStreamRef& rxStrm,
                             const OUString& rSysFileName,
-                            const OUString* pProgId = 0 );
+                            const OUString* pProgId = nullptr );
     explicit            FormControlStreamObject(
                             const OutputObjectBase& rParent,
                             const BinaryInputStreamRef& rxStrm,
-                            const OUString* pProgId = 0 );
+                            const OUString* pProgId = nullptr );
 
 protected:
     virtual void        implDump() override;

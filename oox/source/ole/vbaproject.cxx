@@ -155,7 +155,7 @@ bool VbaProject::importVbaProject( StorageBase& rVbaPrjStrg )
    if ( mxDocModel.is() )
    {
        Reference< css::frame::XController > xController =  mxDocModel->getCurrentController();
-       xFrame =  xController.is() ? xController->getFrame() : NULL;
+       xFrame =  xController.is() ? xController->getFrame() : nullptr;
    }
    StorageRef noStorage;
    // if the GraphicHelper tries to use noStorage it will of course crash

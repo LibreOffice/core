@@ -333,7 +333,7 @@ Reference< css::frame::XFrame > lcl_getFrame( const  Reference< css::frame::XMod
     if ( rxModel.is() )
     {
         Reference< css::frame::XController > xController =  rxModel->getCurrentController();
-        xFrame =  xController.is() ? xController->getFrame() : NULL;
+        xFrame =  xController.is() ? xController->getFrame() : nullptr;
     }
     return xFrame;
 }
@@ -362,12 +362,12 @@ public:
     }
     OUString getFullName() { return maFullName; }
     OUString getTypeName() { return maTypeName; }
-    bool isValid() { return mpModel != NULL; }
+    bool isValid() { return mpModel != nullptr; }
     void exportName( const Reference< XOutputStream >& rxOut );
     void exportCompObj( const Reference< XOutputStream >& rxOut );
     void exportControl( const Reference< XOutputStream >& rxOut, const css::awt::Size& rSize );
 };
-OleFormCtrlExportHelper::OleFormCtrlExportHelper(  const Reference< XComponentContext >& rxCtx, const Reference< XModel >& rxDocModel, const Reference< XControlModel >& xCntrlModel ) : maControl( "Unknown" ), mpModel( NULL ), maGrfHelper( rxCtx, lcl_getFrame( rxDocModel ), StorageRef() ), mxDocModel( rxDocModel ), mxControlModel( xCntrlModel )
+OleFormCtrlExportHelper::OleFormCtrlExportHelper(  const Reference< XComponentContext >& rxCtx, const Reference< XModel >& rxDocModel, const Reference< XControlModel >& xCntrlModel ) : maControl( "Unknown" ), mpModel( nullptr ), maGrfHelper( rxCtx, lcl_getFrame( rxDocModel ), StorageRef() ), mxDocModel( rxDocModel ), mxControlModel( xCntrlModel )
 {
     // try to get the guid
     Reference< css::beans::XPropertySet > xProps( xCntrlModel, UNO_QUERY );

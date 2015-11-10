@@ -60,7 +60,7 @@ uno::Reference< uno::XInterface > SAL_CALL PowerPointImport_createInstance( cons
 }
 
 #if OSL_DEBUG_LEVEL > 0
-XmlFilterBase* PowerPointImport::mpDebugFilterBase = NULL;
+XmlFilterBase* PowerPointImport::mpDebugFilterBase = nullptr;
 #endif
 
 PowerPointImport::PowerPointImport( const Reference< XComponentContext >& rxContext ) throw( RuntimeException ) :
@@ -139,7 +139,7 @@ sal_Int32 PowerPointImport::getSchemeColor( sal_Int32 nToken ) const
 
 const ::oox::drawingml::Theme* PowerPointImport::getCurrentTheme() const
 {
-    return mpActualSlidePersist ? mpActualSlidePersist->getTheme().get() : 0;
+    return mpActualSlidePersist ? mpActualSlidePersist->getTheme().get() : nullptr;
 }
 
 sal_Bool SAL_CALL PowerPointImport::filter( const Sequence< PropertyValue >& rDescriptor ) throw( RuntimeException, std::exception )
@@ -167,7 +167,7 @@ sal_Bool SAL_CALL PowerPointImport::filter( const Sequence< PropertyValue >& rDe
 
 ::oox::vml::Drawing* PowerPointImport::getVmlDrawing()
 {
-    return mpActualSlidePersist ? mpActualSlidePersist->getDrawing() : 0;
+    return mpActualSlidePersist ? mpActualSlidePersist->getDrawing() : nullptr;
 }
 
 const oox::drawingml::table::TableStyleListPtr PowerPointImport::getTableStyles()

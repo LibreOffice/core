@@ -172,7 +172,7 @@ public:
     Reference< XFastContextHandler > SAL_CALL createFastChildContext( sal_Int32 /*aElement*/, const Reference< XFastAttributeList >& /*aAttribs*/ )
         throw (RuntimeException, SAXException, std::exception) override
     {
-        return NULL;
+        return nullptr;
     }
 
     Reference< XFastContextHandler > SAL_CALL createUnknownChildContext( const OUString& /*aNamespace*/, const OUString& /*aName*/, const Reference< XFastAttributeList >& /*aAttribs*/ )

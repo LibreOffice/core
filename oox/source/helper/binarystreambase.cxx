@@ -136,7 +136,7 @@ void SequenceSeekableStream::seek( sal_Int64 nPos )
 
 void SequenceSeekableStream::close()
 {
-    mpData = 0;
+    mpData = nullptr;
     mbEof = true;
 }
 

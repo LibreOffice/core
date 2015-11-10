@@ -276,7 +276,7 @@ LayoutNodeContext::onCreateContext( ::sal_Int32 aElement,
         break;
     }
     case DGM_TOKEN( extLst ):
-        return 0;
+        return nullptr;
     case DGM_TOKEN( alg ):
     {
         // CT_Algorithm

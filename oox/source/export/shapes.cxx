@@ -456,7 +456,7 @@ ShapeExport& ShapeExport::WriteCustomShape( Reference< XShape > xShape )
         pFS->startElementNS( mnXmlNamespace, XML_cNvPr,
                 XML_id, I32S( GetNewShapeID( xShape ) ),
                 XML_name, IDS( CustomShape ),
-                XML_hidden, isVisible ? NULL : "1",
+                XML_hidden, isVisible ? nullptr : "1",
                 FSEND );
 
         if( GETA( URL ) )
@@ -653,7 +653,7 @@ void ShapeExport::WriteGraphicObjectShapePart( Reference< XShape > xShape, const
     pFS->singleElementNS( mnXmlNamespace, XML_cNvPr,
                           XML_id,     I32S( GetNewShapeID( xShape ) ),
                           XML_name,   bHaveName ? USS( sName ) : OString( "Picture " + OString::number( mnPictureIdMax++ )).getStr(),
-                          XML_descr,  bHaveDesc ? USS( sDescr ) : NULL,
+                          XML_descr,  bHaveDesc ? USS( sDescr ) : nullptr,
                           FSEND );
     // OOXTODO: //cNvPr children: XML_extLst, XML_hlinkClick, XML_hlinkHover
 
@@ -1212,8 +1212,8 @@ void ShapeExport::WriteTableCellProperties(Reference< XPropertySet> xCellPropSet
     aRightMargin >>= nRightMargin;
 
     mpFS->startElementNS( XML_a, XML_tcPr,
-    XML_marL, nLeftMargin > 0 ? I32S( oox::drawingml::convertHmmToEmu( nLeftMargin ) ) : NULL,
-    XML_marR, nRightMargin > 0 ? I32S( oox::drawingml::convertHmmToEmu( nRightMargin ) ): NULL,
+    XML_marL, nLeftMargin > 0 ? I32S( oox::drawingml::convertHmmToEmu( nLeftMargin ) ) : nullptr,
+    XML_marR, nRightMargin > 0 ? I32S( oox::drawingml::convertHmmToEmu( nRightMargin ) ): nullptr,
     FSEND );
 
     // Write background fill for table cell.

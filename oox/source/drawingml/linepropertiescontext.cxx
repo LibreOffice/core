@@ -129,7 +129,7 @@ ContextHandlerRef LinePropertiesContext::onCreateContext( sal_Int32 nElement, co
         }
         break;
     }
-    return 0;
+    return nullptr;
 }
 
 } }

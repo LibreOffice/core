@@ -95,7 +95,7 @@ ContextHandlerRef Transform2DContext::onCreateContext( sal_Int32 aElementToken, 
                     break;
             }
         }
-        return 0;
+        return nullptr;
     }
 
     switch( aElementToken )
@@ -114,7 +114,7 @@ ContextHandlerRef Transform2DContext::onCreateContext( sal_Int32 aElementToken, 
         break;
     }
 
-    return 0;
+    return nullptr;
 }
 
 } // namespace drawingml

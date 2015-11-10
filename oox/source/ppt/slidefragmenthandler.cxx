@@ -162,7 +162,7 @@ SlideFragmentHandler::~SlideFragmentHandler()
 
     case PPT_TOKEN( bgRef ):            // a:CT_StyleMatrixReference
         {
-            const FillProperties *pFillProperties = NULL;
+            const FillProperties *pFillProperties = nullptr;
             if( mpSlidePersistPtr->getTheme() )
                 pFillProperties = mpSlidePersistPtr->getTheme()->getFillStyle( rAttribs.getInteger( XML_idx, -1 ) );
             FillPropertiesPtr pFillPropertiesPtr( pFillProperties ? new FillProperties( *pFillProperties ) : new FillProperties() );

@@ -892,7 +892,7 @@ namespace oox { namespace ppt {
             const Reference< XFastAttributeList >& xAttribs,
             const TimeNodePtr & pNode )
     {
-        TimeNodeContext *pCtx = NULL;
+        TimeNodeContext *pCtx = nullptr;
         switch( aElement )
         {
         case PPT_TOKEN( animClr ):

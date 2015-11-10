@@ -562,7 +562,7 @@ void DrawingML::WriteOutline( Reference<XPropertySet> rXPropSet )
     sal_uInt32 nLineWidth = 0;
     sal_uInt32 nColor = 0;
     bool bColorSet = false;
-    const char* cap = NULL;
+    const char* cap = nullptr;
     drawing::LineDash aLineDash;
     bool bDashSet = false;
     bool bNoFill = false;
@@ -646,7 +646,7 @@ void DrawingML::WriteOutline( Reference<XPropertySet> rXPropSet )
     mpFS->startElementNS( XML_a, XML_ln,
                           XML_cap, cap,
                           XML_w, nLineWidth > 1 && nStyleLineWidth != nLineWidth ?
-                                  I64S( oox::drawingml::convertHmmToEmu( nLineWidth ) ) :NULL,
+                                  I64S( oox::drawingml::convertHmmToEmu( nLineWidth ) ) :nullptr,
                           FSEND );
 
     if( bColorSet )
@@ -971,8 +971,8 @@ OUString DrawingML::WriteBlip( Reference< XPropertySet > rXPropSet, const OUStri
     if( nBright || nContrast )
     {
         mpFS->singleElementNS( XML_a, XML_lum,
-                   XML_bright, nBright ? I32S( nBright*1000 ) : NULL,
-                   XML_contrast, nContrast ? I32S( nContrast*1000 ) : NULL,
+                   XML_bright, nBright ? I32S( nBright*1000 ) : nullptr,
+                   XML_contrast, nContrast ? I32S( nContrast*1000 ) : nullptr,
                    FSEND );
     }
     WriteArtisticEffect( rXPropSet );
@@ -1142,9 +1142,9 @@ void DrawingML::WriteTransformation( const Rectangle& rRect,
         sal_Int32 nXmlNamespace, bool bFlipH, bool bFlipV, sal_Int32 nRotation )
 {
     mpFS->startElementNS( nXmlNamespace, XML_xfrm,
-                          XML_flipH, bFlipH ? "1" : NULL,
-                          XML_flipV, bFlipV ? "1" : NULL,
-                          XML_rot, (nRotation % 21600000) ? I32S( nRotation ) : NULL,
+                          XML_flipH, bFlipH ? "1" : nullptr,
+                          XML_flipV, bFlipV ? "1" : nullptr,
+                          XML_rot, (nRotation % 21600000) ? I32S( nRotation ) : nullptr,
                           FSEND );
 
     sal_Int32 nLeft = rRect.Left();
@@ -1210,10 +1210,10 @@ void DrawingML::WriteRunProperties( Reference< XPropertySet > rRun, bool bIsFiel
     SvtScriptType nScriptType = SvtLanguageOptions::GetScriptTypeOfLanguage( Application::GetSettings().GetLanguageTag().getLanguageType() );
     bool bComplex = ( nScriptType == SvtScriptType::COMPLEX );
     const char* bold = "0";
-    const char* italic = NULL;
-    const char* underline = NULL;
-    const char* strikeout = NULL;
-    const char* cap = NULL;
+    const char* italic = nullptr;
+    const char* underline = nullptr;
+    const char* strikeout = nullptr;
+    const char* cap = nullptr;
     sal_Int32 nSize = 1800;
     sal_Int32 nCharEscapement = 0;
     sal_Int32 nCharKerning = 0;
@@ -1366,13 +1366,13 @@ void DrawingML::WriteRunProperties( Reference< XPropertySet > rRun, bool bIsFiel
     mpFS->startElementNS( XML_a, nElement,
                           XML_b, bold,
                           XML_i, italic,
-                          XML_lang, usLanguage.isEmpty() ? NULL : USS( usLanguage ),
+                          XML_lang, usLanguage.isEmpty() ? nullptr : USS( usLanguage ),
                           XML_sz, IS( nSize ),
             // For Condensed character spacing spc value is negative.
-                          XML_spc, nCharKerning ? IS(nCharKerning) : NULL,
+                          XML_spc, nCharKerning ? IS(nCharKerning) : nullptr,
                           XML_strike, strikeout,
                           XML_u, underline,
-                          XML_baseline, nCharEscapement == 0 ? NULL : IS( nCharEscapement*1000 ),
+                          XML_baseline, nCharEscapement == 0 ? nullptr : IS( nCharEscapement*1000 ),
                           XML_cap, cap,
                           FSEND );
 
@@ -1404,8 +1404,8 @@ void DrawingML::WriteRunProperties( Reference< XPropertySet > rRun, bool bIsFiel
 
     if( GETA( CharFontName ) )
     {
-        const char* pitch = NULL;
-        const char* charset = NULL;
+        const char* pitch = nullptr;
+        const char* charset = nullptr;
         OUString usTypeface;
 
         mAny >>= usTypeface;
@@ -1420,8 +1420,8 @@ void DrawingML::WriteRunProperties( Reference< XPropertySet > rRun, bool bIsFiel
 
     if( ( bComplex && GETAD( CharFontNameComplex ) ) || ( !bComplex && GETAD( CharFontNameAsian ) ) )
     {
-        const char* pitch = NULL;
-        const char* charset = NULL;
+        const char* pitch = nullptr;
+        const char* charset = nullptr;
         OUString usTypeface;
 
         mAny >>= usTypeface;
@@ -1504,7 +1504,7 @@ OUString DrawingML::GetFieldValue( css::uno::Reference< css::text::XTextRange > 
 OString DrawingML::GetUUID()
 {
     sal_uInt8 aSeq[16];
-    rtl_createUuid(aSeq, 0, true);
+    rtl_createUuid(aSeq, nullptr, true);
 
     char str[39];
     sprintf(str, "{%02X%02X%02X%02X-%02X%02X-%02X%02X-%02X%02X-%02X%02X%02X%02X%02X%02X}",
@@ -1761,7 +1761,7 @@ void DrawingML::WriteParagraphNumbering( Reference< XPropertySet > rXPropSet, sa
                 aBulletChar = SubstituteBullet( aBulletChar, aFontDesc );
             mpFS->singleElementNS( XML_a, XML_buFont,
                                    XML_typeface, aFontDesc.Name.toUtf8().getStr(),
-                                   XML_charset, (aFontDesc.CharSet == awt::CharSet::SYMBOL) ? "2" : NULL,
+                                   XML_charset, (aFontDesc.CharSet == awt::CharSet::SYMBOL) ? "2" : nullptr,
                                    FSEND );
         }
 
@@ -1771,7 +1771,7 @@ void DrawingML::WriteParagraphNumbering( Reference< XPropertySet > rXPropSet, sa
         {
             mpFS->singleElementNS(XML_a, XML_buAutoNum,
                                   XML_type, OUStringToOString(pAutoNumType, RTL_TEXTENCODING_UTF8).getStr(),
-                                  XML_startAt, nStartWith > 1 ? IS(nStartWith) : NULL,
+                                  XML_startAt, nStartWith > 1 ? IS(nStartWith) : nullptr,
                                   FSEND);
         }
         else
@@ -1820,7 +1820,7 @@ sal_Int32 DrawingML::getBulletMarginIndentation (Reference< XPropertySet > rXPro
 
 const char* DrawingML::GetAlignment( sal_Int32 nAlignment )
 {
-    const char* sAlignment = NULL;
+    const char* sAlignment = nullptr;
 
     switch( nAlignment )
     {
@@ -1901,19 +1901,19 @@ void DrawingML::WriteParagraphProperties( Reference< XTextContent > rParagraph )
     {
         if (nParaLeftMargin) // For Paraghraph
             mpFS->startElementNS( XML_a, XML_pPr,
-                               XML_lvl, nLevel > 0 ? I32S( nLevel ) : NULL,
-                               XML_marL, nParaLeftMargin > 0 ? I32S( oox::drawingml::convertHmmToEmu( nParaLeftMargin ) ) : NULL,
-                               XML_indent, nParaFirstLineIndent ? I32S( oox::drawingml::convertHmmToEmu( nParaFirstLineIndent ) ) : NULL,
+                               XML_lvl, nLevel > 0 ? I32S( nLevel ) : nullptr,
+                               XML_marL, nParaLeftMargin > 0 ? I32S( oox::drawingml::convertHmmToEmu( nParaLeftMargin ) ) : nullptr,
+                               XML_indent, nParaFirstLineIndent ? I32S( oox::drawingml::convertHmmToEmu( nParaFirstLineIndent ) ) : nullptr,
                                XML_algn, GetAlignment( nAlignment ),
-                               XML_rtl, bRtl ? BS(bRtl) : NULL,
+                               XML_rtl, bRtl ? BS(bRtl) : nullptr,
                                FSEND );
         else
             mpFS->startElementNS( XML_a, XML_pPr,
-                               XML_lvl, nLevel > 0 ? I32S( nLevel ) : NULL,
-                               XML_marL, nLeftMargin > 0 ? I32S( oox::drawingml::convertHmmToEmu( nLeftMargin ) ) : NULL,
-                               XML_indent, nLineIndentation ? I32S( oox::drawingml::convertHmmToEmu( nLineIndentation ) ) : NULL,
+                               XML_lvl, nLevel > 0 ? I32S( nLevel ) : nullptr,
+                               XML_marL, nLeftMargin > 0 ? I32S( oox::drawingml::convertHmmToEmu( nLeftMargin ) ) : nullptr,
+                               XML_indent, nLineIndentation ? I32S( oox::drawingml::convertHmmToEmu( nLineIndentation ) ) : nullptr,
                                XML_algn, GetAlignment( nAlignment ),
-                               XML_rtl, bRtl ? BS(bRtl) : NULL,
+                               XML_rtl, bRtl ? BS(bRtl) : nullptr,
                                FSEND );
 
 
@@ -1988,12 +1988,12 @@ void DrawingML::WriteText( Reference< XInterface > rXIface, const OUString& pres
     GET( nBottom, TextLowerDistance );
 
     TextVerticalAdjust eVerticalAlignment( TextVerticalAdjust_TOP );
-    const char* sVerticalAlignment = NULL;
+    const char* sVerticalAlignment = nullptr;
     GET( eVerticalAlignment, TextVerticalAdjust );
     if( eVerticalAlignment != TextVerticalAdjust_TOP )
         sVerticalAlignment = GetTextVerticalAdjust(eVerticalAlignment);
 
-    const char* sWritingMode = NULL;
+    const char* sWritingMode = nullptr;
     bool bVertical = false;
     if( GETA( TextWritingMode ) )
     {
@@ -2051,7 +2051,7 @@ void DrawingML::WriteText( Reference< XInterface > rXIface, const OUString& pres
 
     if (bBodyPr)
     {
-        const char* pWrap = bHasWrap && !bWrap ? "none" : NULL;
+        const char* pWrap = bHasWrap && !bWrap ? "none" : nullptr;
         if (GetDocumentType() == DOCUMENT_DOCX)
         {
             // In case of DOCX, if we want to have the same effect as
@@ -2063,15 +2063,15 @@ void DrawingML::WriteText( Reference< XInterface > rXIface, const OUString& pres
         }
         mpFS->startElementNS( (nXmlNamespace ? nXmlNamespace : XML_a), XML_bodyPr,
                                XML_wrap, pWrap,
-                               XML_lIns, (nLeft != DEFLRINS) ? IS( oox::drawingml::convertHmmToEmu( nLeft ) ) : NULL,
-                               XML_rIns, (nRight != DEFLRINS) ? IS( oox::drawingml::convertHmmToEmu( nRight ) ) : NULL,
-                               XML_tIns, (nTop != DEFTBINS) ? IS( oox::drawingml::convertHmmToEmu( nTop ) ) : NULL,
-                               XML_bIns, (nBottom != DEFTBINS) ? IS( oox::drawingml::convertHmmToEmu( nBottom ) ) : NULL,
+                               XML_lIns, (nLeft != DEFLRINS) ? IS( oox::drawingml::convertHmmToEmu( nLeft ) ) : nullptr,
+                               XML_rIns, (nRight != DEFLRINS) ? IS( oox::drawingml::convertHmmToEmu( nRight ) ) : nullptr,
+                               XML_tIns, (nTop != DEFTBINS) ? IS( oox::drawingml::convertHmmToEmu( nTop ) ) : nullptr,
+                               XML_bIns, (nBottom != DEFTBINS) ? IS( oox::drawingml::convertHmmToEmu( nBottom ) ) : nullptr,
                                XML_anchor, sVerticalAlignment,
-                               XML_anchorCtr, bHorizontalCenter ? "1" : NULL,
+                               XML_anchorCtr, bHorizontalCenter ? "1" : nullptr,
                                XML_vert, sWritingMode,
                                FSEND );
-        if( presetWarp != NULL  && !presetWarp.isEmpty())
+        if( presetWarp != nullptr  && !presetWarp.isEmpty())
         {
             mpFS->singleElementNS(XML_a, XML_prstTxWarp, XML_prst, presetWarp.toUtf8().getStr(),
                 FSEND );
@@ -2094,11 +2094,11 @@ void DrawingML::WriteText( Reference< XInterface > rXIface, const OUString& pres
         return;
 
     uno::Reference<drawing::XShape> xShape(rXIface, uno::UNO_QUERY);
-    SdrObject* pSdrObject = xShape.is() ? GetSdrObjectFromXShape(xShape) : 0;
+    SdrObject* pSdrObject = xShape.is() ? GetSdrObjectFromXShape(xShape) : nullptr;
     const SdrTextObj* pTxtObj = dynamic_cast<SdrTextObj*>( pSdrObject );
     if (pTxtObj && mpTextExport)
     {
-        const OutlinerParaObject* pParaObj = 0;
+        const OutlinerParaObject* pParaObj = nullptr;
         bool bOwnParaObj = false;
 
         /*
@@ -3099,7 +3099,7 @@ void DrawingML::WriteShape3DEffects( Reference< XPropertySet > xPropSet )
             if ( aBevelProps.getLength() == 0 )
                 continue;
 
-            sax_fastparser::FastAttributeList *aBevelAttrList = NULL;
+            sax_fastparser::FastAttributeList *aBevelAttrList = nullptr;
             if( aShape3DProps[i].Name == "bevelT" )
             {
                 bBevelTPresent = true;

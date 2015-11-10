@@ -250,7 +250,7 @@ ContextHandlerRef TextBoxContext::onCreateContext( sal_Int32 nElement, const Att
             SAL_INFO("oox", "unhandled 0x" << std::hex << getCurrentElement());
         break;
     }
-    return 0;
+    return nullptr;
 }
 
 void TextBoxContext::onStartElement(const AttributeList& rAttribs)

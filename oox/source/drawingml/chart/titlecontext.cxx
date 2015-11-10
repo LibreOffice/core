@@ -60,7 +60,7 @@ ContextHandlerRef TextContext::onCreateContext( sal_Int32 nElement, const Attrib
             OSL_ENSURE( !mrModel.mxDataSeq, "TextContext::onCreateContext - multiple data sequences" );
             return this;    // collect value in onCharacters()
     }
-    return 0;
+    return nullptr;
 }
 
 void TextContext::onCharacters( const OUString& rChars )
@@ -97,7 +97,7 @@ ContextHandlerRef TitleContext::onCreateContext( sal_Int32 nElement, const Attri
 
         case C_TOKEN( overlay ):
             mrModel.mbOverlay = rAttribs.getBool( XML_val, !bMSO2007Doc );
-            return 0;
+            return nullptr;
 
         case C_TOKEN( spPr ):
             return new ShapePropertiesContext( *this, mrModel.mxShapeProp.create() );
@@ -108,7 +108,7 @@ ContextHandlerRef TitleContext::onCreateContext( sal_Int32 nElement, const Attri
         case C_TOKEN( txPr ):
             return new TextBodyContext( *this, mrModel.mxTextProp.create() );
     }
-    return 0;
+    return nullptr;
 }
 
 LegendContext::LegendContext( ContextHandler2Helper& rParent, LegendModel& rModel ) :
@@ -131,11 +131,11 @@ ContextHandlerRef LegendContext::onCreateContext( sal_Int32 nElement, const Attr
 
         case C_TOKEN( legendPos ):
             mrModel.mnPosition = rAttribs.getToken( XML_val, XML_r );
-            return 0;
+            return nullptr;
 
         case C_TOKEN( overlay ):
             mrModel.mbOverlay = rAttribs.getBool( XML_val, !bMSO2007Doc );
-            return 0;
+            return nullptr;
 
         case C_TOKEN( spPr ):
             return new ShapePropertiesContext( *this, mrModel.mxShapeProp.create() );
@@ -143,7 +143,7 @@ ContextHandlerRef LegendContext::onCreateContext( sal_Int32 nElement, const Attr
         case C_TOKEN( txPr ):
             return new TextBodyContext( *this, mrModel.mxTextProp.create() );
     }
-    return 0;
+    return nullptr;
 }
 
 } // namespace chart
