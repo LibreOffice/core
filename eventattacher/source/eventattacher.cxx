@@ -606,7 +606,7 @@ Reference<XEventListener> EventAttacherImpl::attachListenerForTarget(
     const OUString& aListenerType,
     const OUString& aAddListenerParam)
 {
-    Reference< XEventListener > xRet = NULL;
+    Reference< XEventListener > xRet = nullptr;
 
     // Construct the name of the addListener-Method.
     sal_Int32 nIndex = aListenerType.lastIndexOf('.');
@@ -893,7 +893,7 @@ extern "C"
 SAL_DLLPUBLIC_EXPORT void * SAL_CALL evtatt_component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * )
 {
-    void * pRet = 0;
+    void * pRet = nullptr;
 
     if (pServiceManager && rtl_str_compare( pImplName, IMPLNAME ) == 0)
     {
