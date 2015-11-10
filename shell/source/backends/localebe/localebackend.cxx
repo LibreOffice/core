@@ -97,14 +97,14 @@ namespace /* private */
 
     CFStringRef ImplGetAppPreference(const char* pref)
     {
-        CFStringRef csPref = CFStringCreateWithCString(NULL, pref, kCFStringEncodingASCII);
+        CFStringRef csPref = CFStringCreateWithCString(nullptr, pref, kCFStringEncodingASCII);
         CFStringGuard csRefGuard(csPref);
 
         CFTypeRef ref = CFPreferencesCopyAppValue(csPref, kCFPreferencesCurrentApplication);
         CFTypeRefGuard refGuard(ref);
 
-        if (ref == NULL)
-            return NULL;
+        if (ref == nullptr)
+            return nullptr;
 
         CFStringRef sref = (CFGetTypeID(ref) == CFArrayGetTypeID()) ? static_cast<CFStringRef>(CFArrayGetValueAtIndex(static_cast<CFArrayRef>(ref), 0)) : static_cast<CFStringRef>(ref);
 
@@ -122,14 +122,14 @@ namespace /* private */
         OUStringBuffer aLocaleBuffer;
         aLocaleBuffer.append("en-US"); // initialize with fallback value
 
-        if (sref != NULL)
+        if (sref != nullptr)
         {
             // split the string into substrings; the first two (if there are two) substrings
             // are language and country
-            CFArrayRef subs = CFStringCreateArrayBySeparatingStrings(NULL, sref, CFSTR("_"));
+            CFArrayRef subs = CFStringCreateArrayBySeparatingStrings(nullptr, sref, CFSTR("_"));
             CFArrayGuard subsGuard(subs);
 
-            if (subs != NULL)
+            if (subs != nullptr)
             {
                 aLocaleBuffer.setLength(0); // clear buffer which still contains fallback value
 

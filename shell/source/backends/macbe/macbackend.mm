@@ -72,7 +72,7 @@ bool GetProxySetting(ServiceType sType, char *host, size_t hostSize, UInt16 *por
     CFNumberRef         portNum;
     int                 portInt;
 
-    proxyDict = SCDynamicStoreCopyProxies(NULL);
+    proxyDict = SCDynamicStoreCopyProxies(nullptr);
 
     if (!proxyDict)
         return false;
@@ -100,7 +100,7 @@ bool GetProxySetting(ServiceType sType, char *host, size_t hostSize, UInt16 *por
     enableNum = static_cast<CFNumberRef>(CFDictionaryGetValue( proxyDict,
                                                    proxiesEnable ));
 
-    result = (enableNum != NULL) && (CFGetTypeID(enableNum) == CFNumberGetTypeID());
+    result = (enableNum != nullptr) && (CFGetTypeID(enableNum) == CFNumberGetTypeID());
 
     if (result)
         result = CFNumberGetValue(enableNum, kCFNumberIntType, &enable) && (enable != 0);
@@ -111,7 +111,7 @@ bool GetProxySetting(ServiceType sType, char *host, size_t hostSize, UInt16 *por
         hostStr = static_cast<CFStringRef>(CFDictionaryGetValue( proxyDict,
                                                      proxiesProxy ));
 
-        result = (hostStr != NULL) && (CFGetTypeID(hostStr) == CFStringGetTypeID());
+        result = (hostStr != nullptr) && (CFGetTypeID(hostStr) == CFStringGetTypeID());
     }
 
     if (result)
@@ -123,7 +123,7 @@ bool GetProxySetting(ServiceType sType, char *host, size_t hostSize, UInt16 *por
         portNum = static_cast<CFNumberRef>(CFDictionaryGetValue( proxyDict,
                                                      proxiesPort ));
 
-        result = (portNum != NULL) && (CFGetTypeID(portNum) == CFNumberGetTypeID());
+        result = (portNum != nullptr) && (CFGetTypeID(portNum) == CFNumberGetTypeID());
     }
     else
     {
@@ -396,10 +396,10 @@ css::uno::Any MacOSXBackend::getPropertyValue(
         rtl::OUString aProxyBypassList;
 
         CFArrayRef rExceptionsList;
-        CFDictionaryRef rProxyDict = SCDynamicStoreCopyProxies(NULL);
+        CFDictionaryRef rProxyDict = SCDynamicStoreCopyProxies(nullptr);
 
         if (!rProxyDict)
-            rExceptionsList = 0;
+            rExceptionsList = nullptr;
         else
             rExceptionsList = static_cast<CFArrayRef>(CFDictionaryGetValue(rProxyDict, kSCPropNetProxiesExceptionsList));
 

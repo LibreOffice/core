@@ -43,10 +43,10 @@ static const cppu::ImplementationEntry kImplementations_entries[] =
         MacOSXBackend::getBackendName,
         MacOSXBackend::getBackendServiceNames,
         cppu::createSingleComponentFactory,
-        NULL,
+        nullptr,
         0
     },
-    { 0, 0, 0, 0, 0, 0 }
+    { nullptr, nullptr, nullptr, nullptr, nullptr, 0 }
 };
 
 
