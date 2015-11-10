@@ -48,7 +48,7 @@ OUString widthfolding::decompose_ja_voiced_sound_marks (const OUString& inStr, s
   // The reference count is 1 now.
   rtl_uString * newStr = rtl_uString_alloc(nCount * 2);
 
-  sal_Int32 *p = NULL;
+  sal_Int32 *p = nullptr;
   sal_Int32 position = 0;
   if (useOffset) {
       // Allocate double of nCount length to offset argument.
@@ -126,7 +126,7 @@ OUString widthfolding::compose_ja_voiced_sound_marks (const OUString& inStr, sal
   // will be converted to
   // .. .. GA       .. ..
 
-  sal_Int32 *p = NULL;
+  sal_Int32 *p = nullptr;
   sal_Int32 position = 0;
   if (useOffset) {
       // Allocate nCount length to offset argument.
@@ -234,7 +234,7 @@ oneToOneMapping& widthfolding::getfull2halfTableForASC()
             table.mpIndex[high] = new UnicodePairWithFlag*[256];
 
             for( j = 0; j < 256; j++ )
-                table.mpIndex[high][j] = NULL;
+                table.mpIndex[high][j] = nullptr;
         }
         table.mpIndex[high][low] = &full2halfASCException[i];
     }
@@ -268,7 +268,7 @@ oneToOneMapping& widthfolding::gethalf2fullTableForJIS()
             table.mpIndex[high] = new UnicodePairWithFlag*[256];
 
             for( j = 0; j < 256; j++ )
-                table.mpIndex[high][j] = NULL;
+                table.mpIndex[high][j] = nullptr;
         }
         table.mpIndex[high][low] = &half2fullJISException[i];
     }
