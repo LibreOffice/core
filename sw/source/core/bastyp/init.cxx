@@ -780,43 +780,43 @@ void _FinitCore()
 #endif
     delete SwDoc::mpACmpltWords;
 
-    delete SwStyleNameMapper::pTextUINameArray;
-    delete SwStyleNameMapper::pListsUINameArray;
-    delete SwStyleNameMapper::pExtraUINameArray;
-    delete SwStyleNameMapper::pRegisterUINameArray;
-    delete SwStyleNameMapper::pDocUINameArray;
-    delete SwStyleNameMapper::pHTMLUINameArray;
-    delete SwStyleNameMapper::pFrameFormatUINameArray;
-    delete SwStyleNameMapper::pChrFormatUINameArray;
-    delete SwStyleNameMapper::pHTMLChrFormatUINameArray;
-    delete SwStyleNameMapper::pPageDescUINameArray;
-    delete SwStyleNameMapper::pNumRuleUINameArray;
+    delete SwStyleNameMapper::m_pTextUINameArray;
+    delete SwStyleNameMapper::m_pListsUINameArray;
+    delete SwStyleNameMapper::m_pExtraUINameArray;
+    delete SwStyleNameMapper::m_pRegisterUINameArray;
+    delete SwStyleNameMapper::m_pDocUINameArray;
+    delete SwStyleNameMapper::m_pHTMLUINameArray;
+    delete SwStyleNameMapper::m_pFrameFormatUINameArray;
+    delete SwStyleNameMapper::m_pChrFormatUINameArray;
+    delete SwStyleNameMapper::m_pHTMLChrFormatUINameArray;
+    delete SwStyleNameMapper::m_pPageDescUINameArray;
+    delete SwStyleNameMapper::m_pNumRuleUINameArray;
 
     // Delete programmatic name arrays also
-    delete SwStyleNameMapper::pTextProgNameArray;
-    delete SwStyleNameMapper::pListsProgNameArray;
-    delete SwStyleNameMapper::pExtraProgNameArray;
-    delete SwStyleNameMapper::pRegisterProgNameArray;
-    delete SwStyleNameMapper::pDocProgNameArray;
-    delete SwStyleNameMapper::pHTMLProgNameArray;
-    delete SwStyleNameMapper::pFrameFormatProgNameArray;
-    delete SwStyleNameMapper::pChrFormatProgNameArray;
-    delete SwStyleNameMapper::pHTMLChrFormatProgNameArray;
-    delete SwStyleNameMapper::pPageDescProgNameArray;
-    delete SwStyleNameMapper::pNumRuleProgNameArray;
+    delete SwStyleNameMapper::m_pTextProgNameArray;
+    delete SwStyleNameMapper::m_pListsProgNameArray;
+    delete SwStyleNameMapper::m_pExtraProgNameArray;
+    delete SwStyleNameMapper::m_pRegisterProgNameArray;
+    delete SwStyleNameMapper::m_pDocProgNameArray;
+    delete SwStyleNameMapper::m_pHTMLProgNameArray;
+    delete SwStyleNameMapper::m_pFrameFormatProgNameArray;
+    delete SwStyleNameMapper::m_pChrFormatProgNameArray;
+    delete SwStyleNameMapper::m_pHTMLChrFormatProgNameArray;
+    delete SwStyleNameMapper::m_pPageDescProgNameArray;
+    delete SwStyleNameMapper::m_pNumRuleProgNameArray;
 
     // And finally, any hash tables that we used
-    delete SwStyleNameMapper::pParaUIMap;
-    delete SwStyleNameMapper::pCharUIMap;
-    delete SwStyleNameMapper::pPageUIMap;
-    delete SwStyleNameMapper::pFrameUIMap;
-    delete SwStyleNameMapper::pNumRuleUIMap;
+    delete SwStyleNameMapper::m_pParaUIMap;
+    delete SwStyleNameMapper::m_pCharUIMap;
+    delete SwStyleNameMapper::m_pPageUIMap;
+    delete SwStyleNameMapper::m_pFrameUIMap;
+    delete SwStyleNameMapper::m_pNumRuleUIMap;
 
-    delete SwStyleNameMapper::pParaProgMap;
-    delete SwStyleNameMapper::pCharProgMap;
-    delete SwStyleNameMapper::pPageProgMap;
-    delete SwStyleNameMapper::pFrameProgMap;
-    delete SwStyleNameMapper::pNumRuleProgMap;
+    delete SwStyleNameMapper::m_pParaProgMap;
+    delete SwStyleNameMapper::m_pCharProgMap;
+    delete SwStyleNameMapper::m_pPageProgMap;
+    delete SwStyleNameMapper::m_pFrameProgMap;
+    delete SwStyleNameMapper::m_pNumRuleProgMap;
 
     // delete all default attributes
     for( sal_uInt16 n = 0; n < POOLATTR_END - POOLATTR_BEGIN; n++ )
