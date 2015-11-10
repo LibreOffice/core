@@ -10,8 +10,9 @@
 #ifndef INCLUDED_CHART2_SOURCE_VIEW_INC_GL3DPLOTTERBASE_HXX
 #define INCLUDED_CHART2_SOURCE_VIEW_INC_GL3DPLOTTERBASE_HXX
 
-#include <boost/ptr_container/ptr_vector.hpp>
 #include "VDataSeries.hxx"
+#include <vector>
+#include <memory>
 
 namespace chart {
 
@@ -22,7 +23,7 @@ class GL3DPlotterBase
 public:
     virtual ~GL3DPlotterBase();
 
-    virtual void create3DShapes(const boost::ptr_vector<VDataSeries>& rDataSeries,
+    virtual void create3DShapes(const std::vector<std::unique_ptr<VDataSeries> >& rDataSeries,
         ExplicitCategoriesProvider& rCatProvider) = 0;
     virtual void render() = 0;
 };

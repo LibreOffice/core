@@ -13,7 +13,6 @@
 #include <GL3DPlotterBase.hxx>
 
 #include <vector>
-#include <boost/ptr_container/ptr_vector.hpp>
 #include "VDataSeries.hxx"
 
 #include <glm/glm.hpp>
@@ -71,7 +70,7 @@ public:
 
     virtual ~GL3DBarChart();
 
-    virtual void create3DShapes(const boost::ptr_vector<VDataSeries>& rDataSeries,
+    virtual void create3DShapes(const std::vector<std::unique_ptr<VDataSeries>>& rDataSeries,
         ExplicitCategoriesProvider& rCatProvider) override;
 
     virtual void render() override;

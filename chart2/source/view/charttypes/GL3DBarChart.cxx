@@ -63,17 +63,15 @@ float calculateTextWidth(const OUString& rText)
     return rText.getLength() * 10;
 }
 
-double findMaxValue(const boost::ptr_vector<VDataSeries>& rDataSeriesContainer)
+double findMaxValue(const std::vector<std::unique_ptr<VDataSeries> >& rDataSeriesContainer)
 {
     double nMax = 0.0;
-    for (boost::ptr_vector<VDataSeries>::const_iterator itr = rDataSeriesContainer.begin(),
-            itrEnd = rDataSeriesContainer.end(); itr != itrEnd; ++itr)
+    for (const std::unique_ptr<VDataSeries>& rDataSeries : rDataSeriesContainer)
     {
-        const VDataSeries& rDataSeries = *itr;
-        sal_Int32 nPointCount = rDataSeries.getTotalPointCount();
+        sal_Int32 nPointCount = rDataSeries->getTotalPointCount();
         for(sal_Int32 nIndex = 0; nIndex < nPointCount; ++nIndex)
         {
-            double nVal = rDataSeries.getYValue(nIndex);
+            double nVal = rDataSeries->getYValue(nIndex);
             nMax = std::max(nMax, nVal);
         }
     }
@@ -599,7 +597,7 @@ GL3DBarChart::~GL3DBarChart()
         mpWindow->setRenderer(NULL);
 }
 
-void GL3DBarChart::create3DShapes(const boost::ptr_vector<VDataSeries>& rDataSeriesContainer,
+void GL3DBarChart::create3DShapes(const std::vector<std::unique_ptr<VDataSeries> >& rDataSeriesContainer,
         ExplicitCategoriesProvider& rCatProvider)
 {
     SharedResourceAccess aResGuard(maCond1, maCond2);
@@ -654,24 +652,22 @@ void GL3DBarChart::create3DShapes(const boost::ptr_vector<VDataSeries>& rDataSer
     }
     else
     {
-        const VDataSeries& rFirstRow = *(rDataSeriesContainer.begin());
+        const VDataSeries& rFirstRow = *rDataSeriesContainer.begin()->get();
         mnBarsInRow = rFirstRow.getTotalPointCount();
     }
-    for (boost::ptr_vector<VDataSeries>::const_iterator itr = rDataSeriesContainer.begin(),
-            itrEnd = rDataSeriesContainer.end(); itr != itrEnd; ++itr)
+    for (const std::unique_ptr<VDataSeries>& rDataSeries : rDataSeriesContainer)
     {
         nYPos = nSeriesIndex * (BAR_SIZE_Y + BAR_DISTANCE_Y) + BAR_DISTANCE_Y;
 
-        const VDataSeries& rDataSeries = *itr;
-        sal_Int32 nPointCount = rDataSeries.getTotalPointCount();
+        sal_Int32 nPointCount = rDataSeries->getTotalPointCount();
         nMaxPointCount = std::max(nMaxPointCount, nPointCount);
 
-        bool bMappedFillProperty = rDataSeries.hasPropertyMapping("FillColor");
+        bool bMappedFillProperty = rDataSeries->hasPropertyMapping("FillColor");
 
         // Create series name text object.
         OUString aSeriesName =
             DataSeriesHelper::getDataSeriesLabel(
-                rDataSeries.getModel(), mxChartType->getRoleOfSequenceForSeriesLabel());
+                rDataSeries->getModel(), mxChartType->getRoleOfSequenceForSeriesLabel());
 
         maSeriesNames.push_back(aSeriesName);
 
@@ -696,12 +692,12 @@ void GL3DBarChart::create3DShapes(const boost::ptr_vector<VDataSeries>& rDataSer
         {
             if(bMappedFillProperty)
             {
-                double nPropVal = rDataSeries.getValueByProperty(nIndex, "FillColor");
+                double nPropVal = rDataSeries->getValueByProperty(nIndex, "FillColor");
                 if(!rtl::math::isNan(nPropVal))
                     nColor = static_cast<sal_uInt32>(nPropVal);
             }
 
-            float nVal = rDataSeries.getYValue(nIndex);
+            float nVal = rDataSeries->getYValue(nIndex);
             if (rtl::math::isNan(nVal))
                 continue;
 

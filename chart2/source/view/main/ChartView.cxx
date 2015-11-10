@@ -3403,7 +3403,7 @@ void ChartView::createShapes3D()
     if( !xDataSeriesContainer.is() )
         return;
 
-    boost::ptr_vector<VDataSeries> aDataSeries;
+    std::vector<std::unique_ptr<VDataSeries> > aDataSeries;
     uno::Sequence< uno::Reference< XDataSeries > > aSeriesList( xDataSeriesContainer->getDataSeries() );
     for( sal_Int32 nS = 0; nS < aSeriesList.getLength(); ++nS )
     {
@@ -3411,7 +3411,7 @@ void ChartView::createShapes3D()
         if(!xDataSeries.is())
             continue;
 
-        aDataSeries.push_back(new VDataSeries(xDataSeries));
+        aDataSeries.push_back(std::make_unique<VDataSeries>(xDataSeries));
     }
 
     std::unique_ptr<ExplicitCategoriesProvider> pCatProvider(new ExplicitCategoriesProvider(xCooSys, mrChartModel));
