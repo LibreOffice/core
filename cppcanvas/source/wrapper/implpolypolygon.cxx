@@ -96,11 +96,11 @@ namespace cppcanvas
         {
             CanvasSharedPtr pCanvas( getCanvas() );
 
-            OSL_ENSURE( pCanvas.get() != NULL &&
+            OSL_ENSURE( pCanvas.get() != nullptr &&
                         pCanvas->getUNOCanvas().is(),
                         "ImplBitmap::draw: invalid canvas" );
 
-            if( pCanvas.get() == NULL ||
+            if( pCanvas.get() == nullptr ||
                 !pCanvas->getUNOCanvas().is() )
                 return false;
 

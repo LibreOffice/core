@@ -252,7 +252,7 @@ namespace cppcanvas
                 if (!bLines)
                     pPointTypes = new sal_uInt8 [_nPoints];
                 else
-                    pPointTypes = NULL;
+                    pPointTypes = nullptr;
             }
 
             virtual ~EMFPPath ()
@@ -393,9 +393,9 @@ namespace cppcanvas
 
             EMFPRegion ()
                 : parts(0)
-                , combineMode(NULL)
+                , combineMode(nullptr)
                 , initialState(0)
-                , initialPath(NULL)
+                , initialPath(nullptr)
                 , ix(0.0)
                 , iy(0.0)
                 , iw(0.0)
@@ -407,11 +407,11 @@ namespace cppcanvas
             {
                 if (combineMode) {
                     delete [] combineMode;
-                    combineMode = NULL;
+                    combineMode = nullptr;
                 }
                 if (initialPath) {
                     delete initialPath;
-                    initialPath = NULL;
+                    initialPath = nullptr;
                 }
             }
 
@@ -475,39 +475,39 @@ namespace cppcanvas
                 , areaHeight(0.0)
                 , hasTransformation(false)
                 , blendPoints(0)
-                , blendPositions(NULL)
-                , blendFactors(NULL)
+                , blendPositions(nullptr)
+                , blendFactors(nullptr)
                 , colorblendPoints(0)
-                , colorblendPositions(NULL)
-                , colorblendColors(NULL)
+                , colorblendPositions(nullptr)
+                , colorblendColors(nullptr)
                 , surroundColorsNumber(0)
-                , surroundColors(NULL)
-                , path(NULL)
+                , surroundColors(nullptr)
+                , path(nullptr)
                 , hatchStyle(HatchStyleHorizontal)
             {
             }
 
             virtual ~EMFPBrush ()
             {
-                if (blendPositions != NULL) {
+                if (blendPositions != nullptr) {
                     delete[] blendPositions;
-                    blendPositions = NULL;
+                    blendPositions = nullptr;
                 }
-                if (colorblendPositions != NULL) {
+                if (colorblendPositions != nullptr) {
                     delete[] colorblendPositions;
-                    colorblendPositions = NULL;
+                    colorblendPositions = nullptr;
                 }
-                if (colorblendColors != NULL) {
+                if (colorblendColors != nullptr) {
                     delete[] colorblendColors;
-                    colorblendColors = NULL;
+                    colorblendColors = nullptr;
                 }
-                if (surroundColors != NULL) {
+                if (surroundColors != nullptr) {
                     delete[] surroundColors;
-                    surroundColors = NULL;
+                    surroundColors = nullptr;
                 }
                 if (path) {
                     delete path;
-                    path = NULL;
+                    path = nullptr;
                 }
             }
 
@@ -912,14 +912,14 @@ namespace cppcanvas
                 , dashCap(0)
                 , dashOffset(0.0)
                 , dashPatternLen(0)
-                , dashPattern(NULL)
+                , dashPattern(nullptr)
                 , alignment(0)
                 , compoundArrayLen(0)
-                , compoundArray(NULL)
+                , compoundArray(nullptr)
                 , customStartCapLen(0)
-                , customStartCap(NULL)
+                , customStartCap(nullptr)
                 , customEndCapLen(0)
-                , customEndCap(NULL)
+                , customEndCap(nullptr)
             {
             }
 
@@ -953,7 +953,7 @@ namespace cppcanvas
                     const float dashdotdot[] = {3, 3, 1, 3, 1, 3};
 
                     sal_Int32 nLen = 0;
-                    const float *pPattern = NULL;
+                    const float *pPattern = nullptr;
                     switch (dashStyle)
                     {
                         case EmfPlusLineStyleDash:       nLen = SAL_N_ELEMENTS(dash); pPattern = dash; break;
@@ -1675,9 +1675,9 @@ namespace cppcanvas
             SAL_INFO("cppcanvas.emf", "EMF+ Object slot: " << (flags & 0xff) << " flags: " << (flags & 0xff00));
 
             index = flags & 0xff;
-            if (aObjects [index] != NULL) {
+            if (aObjects [index] != nullptr) {
                 delete aObjects [index];
-                aObjects [index] = NULL;
+                aObjects [index] = nullptr;
             }
 
             switch (flags & 0x7f00) {
@@ -2189,7 +2189,7 @@ namespace cppcanvas
                                         text,
                                         0,
                                         stringLength,
-                                        NULL,
+                                        nullptr,
                                         rFactoryParms.mrVDev,
                                         rFactoryParms.mrCanvas,
                                         rState,
@@ -2446,7 +2446,7 @@ namespace cppcanvas
                                         text,
                                         0,
                                         glyphsCount,
-                                        NULL,
+                                        nullptr,
                                         rFactoryParms.mrVDev,
                                         rFactoryParms.mrCanvas,
                                         rState,

@@ -167,8 +167,8 @@ namespace cppcanvas
                                    rState,
                                    rCanvas,
                                    rDstPoint,
-                                   NULL,
-                                   NULL );
+                                   nullptr,
+                                   nullptr );
 
                 maLastSubset.mnSubsetBegin = 0;
                 maLastSubset.mnSubsetEnd = -1;

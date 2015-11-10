@@ -46,11 +46,11 @@ namespace cppcanvas
             mpCanvas( rParentCanvas ),
             mxGraphicDevice()
         {
-            OSL_ENSURE( mpCanvas.get() != NULL &&
+            OSL_ENSURE( mpCanvas.get() != nullptr &&
                         mpCanvas->getUNOCanvas().is(),
                         "CanvasGraphicHelper::CanvasGraphicHelper: no valid canvas" );
 
-            if( mpCanvas.get() != NULL &&
+            if( mpCanvas.get() != nullptr &&
                 mpCanvas->getUNOCanvas().is() )
             {
                 mxGraphicDevice = mpCanvas->getUNOCanvas()->getDevice();

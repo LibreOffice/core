@@ -81,7 +81,7 @@ namespace cppcanvas
 
         ::basegfx::B2DPolyPolygon const* ImplCanvas::getClip() const
         {
-            return !maClipPolyPolygon ? NULL : &(*maClipPolyPolygon);
+            return !maClipPolyPolygon ? nullptr : &(*maClipPolyPolygon);
         }
 
         ColorSharedPtr ImplCanvas::createColor() const

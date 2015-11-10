@@ -73,7 +73,7 @@ namespace cppcanvas
                                    rState,
                                    rCanvas,
                                    rStartPoint,
-                                   NULL,
+                                   nullptr,
                                    &rState.fontRotation );
 
                 basegfx::B2DHomMatrix aLocalTransformation(basegfx::tools::createRotateB2DHomMatrix(rState.fontRotation));
@@ -1064,7 +1064,7 @@ namespace cppcanvas
                                  nLen,
                                  rOffsets,
                                  rCanvas,
-                                 rState, NULL );
+                                 rState, nullptr );
             }
 
             TextArrayAction::TextArrayAction( const ::basegfx::B2DPoint&        rStartPoint,
@@ -1282,7 +1282,7 @@ namespace cppcanvas
                                  nLen,
                                  rOffsets,
                                  rCanvas,
-                                 rState, NULL );
+                                 rState, nullptr );
             }
 
             EffectTextArrayAction::EffectTextArrayAction( const ::basegfx::B2DPoint&        rStartPoint,

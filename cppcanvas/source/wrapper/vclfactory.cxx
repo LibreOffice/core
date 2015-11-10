@@ -69,11 +69,11 @@ namespace cppcanvas
     BitmapSharedPtr VCLFactory::createBitmap( const CanvasSharedPtr&    rCanvas,
                                               const ::BitmapEx&         rBmpEx )
     {
-        OSL_ENSURE( rCanvas.get() != NULL &&
+        OSL_ENSURE( rCanvas.get() != nullptr &&
                     rCanvas->getUNOCanvas().is(),
                     "VCLFactory::createBitmap(): Invalid canvas" );
 
-        if( rCanvas.get() == NULL )
+        if( rCanvas.get() == nullptr )
             return BitmapSharedPtr();
 
         uno::Reference< rendering::XCanvas > xCanvas( rCanvas->getUNOCanvas() );

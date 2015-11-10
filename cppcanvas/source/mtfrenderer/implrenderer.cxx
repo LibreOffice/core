@@ -423,7 +423,7 @@ namespace cppcanvas
                               "ImplRenderer::skipContent(): NULL string given" );
 
             MetaAction* pCurrAct;
-            while( (pCurrAct=rMtf.NextAction()) != NULL )
+            while( (pCurrAct=rMtf.NextAction()) != nullptr )
             {
                 // increment action index, we've skipped an action.
                 ++io_rCurrActionIndex;
@@ -455,7 +455,7 @@ namespace cppcanvas
             sal_uIntPtr nPos( 1 );
 
             MetaAction* pCurrAct;
-            while( (pCurrAct=rMtf.NextAction()) != NULL )
+            while( (pCurrAct=rMtf.NextAction()) != nullptr )
             {
                 if( pCurrAct->GetType() == nType )
                 {
@@ -1619,10 +1619,10 @@ namespace cppcanvas
                         // Handle gradients
                         if (pAct->GetComment().equalsIgnoreAsciiCase("XGRAD_SEQ_BEGIN"))
                         {
-                            MetaGradientExAction* pGradAction = NULL;
+                            MetaGradientExAction* pGradAction = nullptr;
                             bool bDone( false );
                             while( !bDone &&
-                                   (pCurrAct=rMtf.NextAction()) != NULL )
+                                   (pCurrAct=rMtf.NextAction()) != nullptr )
                             {
                                 switch( pCurrAct->GetType() )
                                 {
@@ -2488,7 +2488,7 @@ namespace cppcanvas
                             sText,
                             pAct->GetIndex(),
                             nLen,
-                            NULL,
+                            nullptr,
                             rFactoryParms,
                             bSubsettableActions );
                     }
@@ -2890,14 +2890,14 @@ namespace cppcanvas
 
             SAL_INFO( "cppcanvas.emf", "::cppcanvas::internal::ImplRenderer::ImplRenderer(mtf)" );
 
-            OSL_ENSURE( rCanvas.get() != NULL && rCanvas->getUNOCanvas().is(),
+            OSL_ENSURE( rCanvas.get() != nullptr && rCanvas->getUNOCanvas().is(),
                         "ImplRenderer::ImplRenderer(): Invalid canvas" );
             OSL_ENSURE( rCanvas->getUNOCanvas()->getDevice().is(),
                         "ImplRenderer::ImplRenderer(): Invalid graphic device" );
 
             // make sure canvas and graphic device are valid; action
             // creation don't check that every time
-            if( rCanvas.get() == NULL ||
+            if( rCanvas.get() == nullptr ||
                 !rCanvas->getUNOCanvas().is() ||
                 !rCanvas->getUNOCanvas()->getDevice().is() )
             {

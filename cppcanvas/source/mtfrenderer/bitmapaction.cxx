@@ -103,8 +103,8 @@ namespace cppcanvas
                                    rState,
                                    rCanvas,
                                    rDstPoint,
-                                   NULL,
-                                   NULL );
+                                   nullptr,
+                                   nullptr );
             }
 
             BitmapAction::BitmapAction( const ::BitmapEx&           rBmpEx,
@@ -137,7 +137,7 @@ namespace cppcanvas
                                    rCanvas,
                                    rDstPoint,
                                    &aScale,
-                                   NULL );
+                                   nullptr );
             }
 
             bool BitmapAction::renderPrimitive( uno::Reference< rendering::XCachedPrimitive >& rCachedPrimitive,

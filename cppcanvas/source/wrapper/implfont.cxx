@@ -35,7 +35,7 @@ namespace cppcanvas
                             const OUString& rFontName,
                             const double& rCellSize ) :
             mxCanvas( rCanvas ),
-            mxFont( NULL )
+            mxFont( nullptr )
         {
             OSL_ENSURE( mxCanvas.is(), "ImplFont::ImplFont(): Invalid Canvas" );
 

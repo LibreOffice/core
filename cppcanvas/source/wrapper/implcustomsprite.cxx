@@ -60,7 +60,7 @@ namespace cppcanvas
                 return CanvasSharedPtr();
 
             // cache content canvas C++ wrapper
-            if( mpLastCanvas.get() == NULL ||
+            if( mpLastCanvas.get() == nullptr ||
                 mpLastCanvas->getUNOCanvas() != xCanvas )
             {
                 mpLastCanvas = CanvasSharedPtr( new ImplCanvas( xCanvas ) );
