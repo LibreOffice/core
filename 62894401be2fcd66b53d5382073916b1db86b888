@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "faac7902_a78c7836",
+        "filename": "vcl/source/control/combobox.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-11-10T22:19:11Z",
+      "side": 1,
+      "message": "i think you can leave out the \".get()\" as it should be only necessary for boost::bind",
+      "revId": "62894401be2fcd66b53d5382073916b1db86b888",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
