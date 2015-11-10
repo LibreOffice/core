@@ -20,7 +20,7 @@
 #define INCLUDED_CUI_SOURCE_INC_CFGUTIL_HXX
 
 #include <vector>
-#include <boost/ptr_container/ptr_vector.hpp>
+#include <memory>
 #include <rtl/ustring.hxx>
 
 #include <com/sun/star/frame/XModel.hpp>
@@ -96,7 +96,7 @@ struct SfxGroupInfo_Impl
                     nKind( n ), nUniqueID( nr ), pObject( pObj ), bWasOpened(false) {}
 };
 
-typedef boost::ptr_vector<SfxGroupInfo_Impl> SfxGroupInfoArr_Impl;
+typedef std::vector<std::unique_ptr<SfxGroupInfo_Impl> > SfxGroupInfoArr_Impl;
 
 class SfxConfigFunctionListBox : public SvTreeListBox
 {
