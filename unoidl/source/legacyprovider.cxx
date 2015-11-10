@@ -113,7 +113,7 @@ Cursor::Cursor(
 }
 
 rtl::Reference< Entity > Cursor::getNext(OUString * name) {
-    assert(name != 0);
+    assert(name != nullptr);
     rtl::Reference< Entity > ent;
     if (index_ != names_.getLength()) {
         OUString path(names_.getElement(index_));
@@ -164,7 +164,7 @@ std::vector< OUString > Module::getMemberNames() const {
 }
 
 typereg::Reader getReader(RegistryKey & key, std::vector< char > * buffer) {
-    assert(buffer != 0);
+    assert(buffer != nullptr);
     RegValueType type;
     sal_uInt32 size;
     RegError e = key.getValueInfo("", &type, &size);

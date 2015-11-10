@@ -91,7 +91,7 @@ OUString getArgumentUri(sal_uInt32 argument, bool * delimiter) {
     OUString arg;
     rtl_getAppCommandArg(argument, &arg.pData);
     if (arg == "--") {
-        if (delimiter == 0) {
+        if (delimiter == nullptr) {
             badUsage();
         }
         *delimiter = true;
@@ -1172,7 +1172,7 @@ SAL_IMPLEMENT_MAIN() {
         int side = 0;
         for (sal_uInt32 i = 0; i != args; ++i) {
             bool delimiter = false;
-            OUString uri(getArgumentUri(i, side == 0 ? &delimiter : 0));
+            OUString uri(getArgumentUri(i, side == 0 ? &delimiter : nullptr));
             if (delimiter) {
                 side = 1;
             } else {

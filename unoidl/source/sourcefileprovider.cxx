@@ -36,7 +36,7 @@ private:
 };
 
 rtl::Reference< Entity > Cursor::getNext(OUString * name) {
-    assert(name != 0);
+    assert(name != nullptr);
     rtl::Reference< Entity > ent;
     if (iterator_ != map_.end()) {
         *name = iterator_->first;
@@ -129,7 +129,7 @@ rtl::Reference<Entity> SourceFileProvider::findEntity(OUString const & name)
             return rtl::Reference<Entity>();
         }
         Module * mod = dynamic_cast< Module * >(j->second.get());
-        assert(mod != 0);
+        assert(mod != nullptr);
         map = &mod->map;
     }
 }

@@ -58,11 +58,11 @@ OUString getArgumentUri(sal_uInt32 argument, bool * entities) {
     OUString arg;
     rtl_getAppCommandArg(argument, &arg.pData);
     if (arg.startsWith("@", &arg)) {
-        if (entities == 0) {
+        if (entities == nullptr) {
             badUsage();
         }
         *entities = true;
-    } else if (entities != 0) {
+    } else if (entities != nullptr) {
         *entities = false;
     }
     OUString url;
@@ -454,7 +454,7 @@ sal_uInt64 writeMap(
     {
         switch (i->second.entity->getSort()) {
         case unoidl::Entity::SORT_MODULE:
-            i->second.dataOffset = writeMap(file, i->second.module, 0);
+            i->second.dataOffset = writeMap(file, i->second.module, nullptr);
             break;
         case unoidl::Entity::SORT_ENUM_TYPE:
             {
@@ -1002,7 +1002,7 @@ sal_uInt64 writeMap(
         i->second.nameOffset = writeNulName(file, i->first);
     }
     sal_uInt64 off = getOffset(file);
-    if (rootSize == 0) {
+    if (rootSize == nullptr) {
         write8(file, 0); // SORT_MODULE
         write32(file, map.size());
             // overflow from std::map::size_type -> sal_uInt64 is unrealistic
@@ -1033,7 +1033,7 @@ SAL_IMPLEMENT_MAIN() {
         std::map< OUString, Item > map;
         for (sal_uInt32 i = 0; i != args - 1; ++i) {
             assert(args > 1);
-            OUString uri(getArgumentUri(i, i == args - 2 ? &entities : 0));
+            OUString uri(getArgumentUri(i, i == args - 2 ? &entities : nullptr));
             if (entities) {
                 mapEntities(mgr, uri, map);
             } else {
@@ -1053,7 +1053,7 @@ SAL_IMPLEMENT_MAIN() {
                  : rtl::Reference< unoidl::MapCursor >()),
                 map);
         }
-        osl::File f(getArgumentUri(args - 1, 0));
+        osl::File f(getArgumentUri(args - 1, nullptr));
         osl::FileBase::RC e = f.open(osl_File_OpenFlag_Write);
         if (e == osl::FileBase::E_NOENT) {
             e = f.open(osl_File_OpenFlag_Write | osl_File_OpenFlag_Create);

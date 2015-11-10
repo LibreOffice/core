@@ -256,7 +256,7 @@ void checkEntityName(
 
 }
 
-MappedFile::MappedFile(OUString const & fileUrl): uri(fileUrl), handle(0) {
+MappedFile::MappedFile(OUString const & fileUrl): uri(fileUrl), handle(nullptr) {
     oslFileError e = osl_openFile(uri.pData, &handle, osl_File_OpenFlag_Read);
     switch (e) {
     case osl_File_E_None:
@@ -417,7 +417,7 @@ double MappedFile::getIso60599Binary64(sal_uInt32 offset) const {
 OUString MappedFile::readIdxString(
     sal_uInt32 * offset, rtl_TextEncoding encoding) const
 {
-    assert(offset != 0);
+    assert(offset != nullptr);
     sal_uInt32 len = read32(*offset);
     sal_uInt32 off;
     if ((len & 0x80000000) == 0) {
@@ -470,7 +470,7 @@ Compare compare(
     sal_Int32 nameOffset, sal_Int32 nameLength, MapEntry const * entry)
 {
     assert(file.is());
-    assert(entry != 0);
+    assert(entry != nullptr);
     sal_uInt32 off = entry->name.getUnsigned32();
     if (off > file->size - 1) { // at least a trailing NUL
         throw FileFormatException(
@@ -533,7 +533,7 @@ sal_uInt32 findInMap(
 
 std::vector< OUString > readAnnotations(
     bool annotated, rtl::Reference< MappedFile > const & file,
-    sal_uInt32 offset, sal_uInt32 * newOffset = 0)
+    sal_uInt32 offset, sal_uInt32 * newOffset = nullptr)
 {
     std::vector< OUString > ans;
     if (annotated) {
@@ -543,7 +543,7 @@ std::vector< OUString > readAnnotations(
             ans.push_back(file->readIdxString(&offset));
         }
     }
-    if (newOffset != 0) {
+    if (newOffset != nullptr) {
         *newOffset = offset;
     }
     return ans;
@@ -551,18 +551,18 @@ std::vector< OUString > readAnnotations(
 
 ConstantValue readConstant(
     rtl::Reference< MappedFile > const & file, sal_uInt32 offset,
-    sal_uInt32 * newOffset = 0, bool * annotated = 0)
+    sal_uInt32 * newOffset = nullptr, bool * annotated = nullptr)
 {
     assert(file.is());
     int v = file->read8(offset);
     int type = v & 0x7F;
-    if (annotated != 0) {
+    if (annotated != nullptr) {
         *annotated = (v & 0x80) != 0;
     }
     switch (type) {
     case 0: // BOOLEAN
         v = file->read8(offset + 1);
-        if (newOffset != 0) {
+        if (newOffset != nullptr) {
             *newOffset = offset + 2;
         }
         switch (v) {
@@ -577,14 +577,14 @@ ConstantValue readConstant(
                  + OUString::number(v)));
         }
     case 1: // BYTE
-        if (newOffset != 0) {
+        if (newOffset != nullptr) {
             *newOffset = offset + 2;
         }
         return ConstantValue(static_cast< sal_Int8 >(file->read8(offset + 1)));
             //TODO: implementation-defined behavior of conversion from sal_uInt8
             // to sal_Int8 relies on two's complement representation
     case 2: // SHORT
-        if (newOffset != 0) {
+        if (newOffset != nullptr) {
             *newOffset = offset + 3;
         }
         return ConstantValue(
@@ -592,12 +592,12 @@ ConstantValue readConstant(
             //TODO: implementation-defined behavior of conversion from
             // sal_uInt16 to sal_Int16 relies on two's complement representation
     case 3: // UNSIGNED SHORT
-        if (newOffset != 0) {
+        if (newOffset != nullptr) {
             *newOffset = offset + 3;
         }
         return ConstantValue(file->read16(offset + 1));
     case 4: // LONG
-        if (newOffset != 0) {
+        if (newOffset != nullptr) {
             *newOffset = offset + 5;
         }
         return ConstantValue(
@@ -605,12 +605,12 @@ ConstantValue readConstant(
             //TODO: implementation-defined behavior of conversion from
             // sal_uInt32 to sal_Int32 relies on two's complement representation
     case 5: // UNSIGNED LONG
-        if (newOffset != 0) {
+        if (newOffset != nullptr) {
             *newOffset = offset + 5;
         }
         return ConstantValue(file->read32(offset + 1));
     case 6: // HYPER
-        if (newOffset != 0) {
+        if (newOffset != nullptr) {
             *newOffset = offset + 9;
         }
         return ConstantValue(
@@ -618,17 +618,17 @@ ConstantValue readConstant(
             //TODO: implementation-defined behavior of conversion from
             // sal_uInt64 to sal_Int64 relies on two's complement representation
     case 7: // UNSIGNED HYPER
-        if (newOffset != 0) {
+        if (newOffset != nullptr) {
             *newOffset = offset + 9;
         }
         return ConstantValue(file->read64(offset + 1));
     case 8: // FLOAT
-        if (newOffset != 0) {
+        if (newOffset != nullptr) {
             *newOffset = offset + 5;
         }
         return ConstantValue(file->readIso60599Binary32(offset + 1));
     case 9: // DOUBLE
-        if (newOffset != 0) {
+        if (newOffset != nullptr) {
             *newOffset = offset + 9;
         }
         return ConstantValue(file->readIso60599Binary64(offset + 1));
@@ -669,7 +669,7 @@ private:
 };
 
 rtl::Reference< Entity > UnoidlCursor::getNext(OUString * name) {
-    assert(name != 0);
+    assert(name != nullptr);
     rtl::Reference< Entity > ent;
     if (index_ != map_.map.size) {
         *name = file_->readNulName(map_.map.begin[index_].name.getUnsigned32());

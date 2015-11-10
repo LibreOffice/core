@@ -91,7 +91,7 @@ rtl::Reference< Entity > AggregatingCursor::getNext(OUString * name) {
         rtl::Reference< Entity > ent(cursor_->getNext(&n));
         if (ent.is()) {
             if (seen_.insert(n).second) {
-                if (name != 0) {
+                if (name != nullptr) {
                     *name = n;
                 }
                 return ent->getSort() == Entity::SORT_MODULE

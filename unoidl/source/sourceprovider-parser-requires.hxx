@@ -97,7 +97,7 @@ struct SourceProviderType {
     explicit SourceProviderType(SourceProviderType const * componentType):
         type(TYPE_SEQUENCE),
         entity() // avoid false warnings about uninitialized member
-    { assert(componentType != 0); subtypes.push_back(*componentType); }
+    { assert(componentType != nullptr); subtypes.push_back(*componentType); }
 
     SourceProviderType(
         Type theType, OUString const & theName,
@@ -105,7 +105,7 @@ struct SourceProviderType {
         type(theType), name(theName), entity(theEntity)
     {
         assert(theType >= TYPE_ENUM && theType <= TYPE_INTERFACE);
-        assert(theEntity != 0);
+        assert(theEntity != nullptr);
     }
 
     SourceProviderType(
@@ -115,7 +115,7 @@ struct SourceProviderType {
         type(TYPE_INSTANTIATED_POLYMORPHIC_STRUCT),
         name(polymorphicStructTypeTemplateName), entity(theEntity),
         subtypes(typeArguments)
-    { assert(theEntity != 0); }
+    { assert(theEntity != nullptr); }
 
     explicit SourceProviderType(OUString const & identifier):
         type(TYPE_PARAMETER), name(identifier),
