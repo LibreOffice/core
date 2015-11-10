@@ -18,12 +18,11 @@
 
 from com.sun.star.lang import XMultiServiceFactory
 from com.sun.star.text import XTextDocument
-from com.sun.star.uno import UnoRuntime
 from com.sun.star.text import XTextFramesSupplier
 from com.sun.star.text import XTextGraphicObjectsSupplier
 from com.sun.star.text import XTextEmbeddedObjectsSupplier
 from com.sun.star.container import XNameAccess 
-from selenium.common.exceptions import NoSuchElementException
+from com.sun.star.container import NoSuchElementException
 from com.sun.star.container import XIndexAccess 
 import unittest
 import unohelper
@@ -130,7 +129,7 @@ class CheckFlies(unittest.TestCase):
         xTextFrames = xTFS.getTextFrames()
         nCurrentFrameIdx=0
 
-        for( sFrameName in xTextFrames.getElementNames()):
+        for sFrameName in xTextFrames.getElementNames():
             self.assertTrue(
                 "Unexpected frame name",
                 vExpectedTextFrames.remove(sFrameName))
